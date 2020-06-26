@@ -4,6 +4,14 @@ namespace castor3d
 {
 	namespace
 	{
+		void mergeMasks( uint32_t toMerge
+			, TextureFlag flag
+			, TextureFlags & result )
+		{
+			result |= toMerge
+				? flag
+				: TextureFlag::eNone;
+		}
 	}
 
 	TextureConfiguration::TextWriter::TextWriter( castor::String const & tabs
@@ -113,20 +121,6 @@ namespace castor3d
 		if ( result && configuration.transmittanceMask[0] )
 		{
 			result = writeMask( cuT( "transmittance_mask" ), configuration.transmittanceMask[0], file );
-		}
-
-		if ( result )
-		{
-			result = writeOpt( cuT( "reflection" )
-				, castor::checkFlag( configuration.environment, TextureConfiguration::ReflectionMask )
-				, file );
-		}
-
-		if ( result )
-		{
-			result = writeOpt( cuT( "refraction" )
-				, castor::checkFlag( configuration.environment, TextureConfiguration::RefractionMask ) 
-				, file );
 		}
 
 		if ( result )
@@ -241,7 +235,6 @@ namespace castor3d
 			&& lhs.heightMask == rhs.heightMask
 			&& lhs.occlusionMask == rhs.occlusionMask
 			&& lhs.transmittanceMask == rhs.transmittanceMask
-			&& lhs.environment == rhs.environment
 			&& lhs.normalFactor == rhs.normalFactor
 			&& lhs.heightFactor == rhs.heightFactor
 			&& lhs.normalGMultiplier == rhs.normalGMultiplier
@@ -252,5 +245,20 @@ namespace castor3d
 	bool operator!=( TextureConfiguration const & lhs, TextureConfiguration const & rhs )
 	{
 		return !( lhs == rhs );
+	}
+
+	TextureFlags getFlags( TextureConfiguration const & config )
+	{
+		TextureFlags result = TextureFlag::eNone;
+		mergeMasks( config.colourMask[0], TextureFlag::eDiffuse, result );
+		mergeMasks( config.specularMask[0], TextureFlag::eSpecular, result );
+		mergeMasks( config.glossinessMask[0], TextureFlag::eGlossiness, result );
+		mergeMasks( config.opacityMask[0], TextureFlag::eOpacity, result );
+		mergeMasks( config.emissiveMask[0], TextureFlag::eEmissive, result );
+		mergeMasks( config.normalMask[0], TextureFlag::eNormal, result );
+		mergeMasks( config.heightMask[0], TextureFlag::eHeight, result );
+		mergeMasks( config.occlusionMask[0], TextureFlag::eOcclusion, result );
+		mergeMasks( config.transmittanceMask[0], TextureFlag::eTransmittance, result );
+		return result;
 	}
 }

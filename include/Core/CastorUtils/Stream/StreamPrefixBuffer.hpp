@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_STREAM_PREFIX_BUFFER_H___
 #define ___CASTOR_STREAM_PREFIX_BUFFER_H___
 
-#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/Stream/StreamModule.hpp"
 
 #include <streambuf>
 #include <sstream>
@@ -14,16 +14,7 @@ namespace castor
 {
 	namespace format
 	{
-		/**
-		\author		Sylvain DOREMUS
-		\version	0.7.0.0
-		\date		02/09/2014
-		\~english
-		\brief		Stream buffer used by streams to indent lines
-		\~french
-		\brief		Tampon de flux utilisé pour indenter les lignes
-		*/
-		template < typename prefix_type, typename char_type, typename traits = std::char_traits< char_type > >
+		template < typename prefix_type, typename char_type, typename traits >
 		struct BasicPrefixBuffer
 			: public std::basic_streambuf< char_type, traits >
 			, public prefix_type

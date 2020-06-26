@@ -4,21 +4,10 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_HDR_COLOUR_COMPONENT_H___
 #define ___CASTOR_HDR_COLOUR_COMPONENT_H___
 
-#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/Graphics/GraphicsModule.hpp"
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		07/10=1/2016
-	\~english
-	\brief		Defines a HDR colour PixelComponents (R, G, B or A) to be used in castor::HdrRgbColour or castor::HdrRgbaColour.
-	\remark		Holds conversion operators to be converted either into float or uint8_t, with corresponding operations
-	\~french
-	\brief		Représente une composante de couleur HDR (R, V, B ou A) pour l'utilisation dans castor::HdrRgbColour ou castor::HdrRgbaColour.
-	\remark		Définit les opérateurs de conversion en float ou uint8_t, avec les opérations correspondantes.
-	*/
 	class HdrColourComponent
 	{
 	private:

@@ -1,5 +1,4 @@
 #include "CastorUtils/Graphics/Font.hpp"
-#include "CastorUtils/Graphics/Image.hpp"
 
 #include <ft2build.h>
 

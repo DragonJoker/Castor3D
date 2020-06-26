@@ -70,17 +70,7 @@ namespace castor
 	 *\return		La position
 	 */
 	CU_API int64_t fileTell( FILE * file );
-	/*!
-	\author Sylvain DOREMUS
-	\version 0.6.1.0
-	\date 03/01/2011
-	\~english
-	\brief User friendly File class
-	\remark adds some static functions to check file/directory validity, file/directory creation...
-	\~french
-	\brief Classe de gestion de fichier
-	\remark Ajoute quelques fonctions statiques de vérification d'existence, suppression, ...
-	*/
+
 	class File
 	{
 	public:

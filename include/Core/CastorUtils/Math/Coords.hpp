@@ -4,6 +4,8 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_COORDS_H___
 #define ___CASTOR_COORDS_H___
 
+#include "CastorUtils/Math/MathModule.hpp"
+
 #include "CastorUtils/Data/TextLoader.hpp"
 #include "CastorUtils/Data/TextWriter.hpp"
 
@@ -12,16 +14,6 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\date		14/02/2010
-	\~english
-	\brief		Templated static dimensions point representation
-	\remark		Can hold any type which has a defined Policy
-	\~french
-	\brief		Classe de points à dimensions statiques
-	\remark		Peut recevoir les types de données qui ont une Policy créée
-	*/
 	template< typename T, uint32_t Count >
 	class Coords
 	{

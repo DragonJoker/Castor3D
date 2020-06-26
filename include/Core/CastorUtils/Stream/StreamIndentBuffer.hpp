@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_STREAM_INDENT_BUFFER_H___
 #define ___CASTOR_STREAM_INDENT_BUFFER_H___
 
-#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/Stream/StreamModule.hpp"
 
 #include <streambuf>
 
@@ -12,16 +12,7 @@ namespace castor
 {
 	namespace format
 	{
-		/**
-		\author		Sylvain DOREMUS
-		\version	0.7.0.0
-		\date		02/09/2014
-		\~english
-		\brief		Stream buffer used by streams to indent lines
-		\~french
-		\brief		Tampon de flux utilisé pour indenter les lignes
-		*/
-		template < typename char_type, char_type fill_char = ' ', typename traits = std::char_traits< char_type > >
+		template < typename char_type, char_type fill_char, typename traits >
 		struct BasicIndentBuffer
 			: public std::basic_streambuf< char_type, traits >
 		{
@@ -149,12 +140,6 @@ namespace castor
 			//!\~english Tells the stream has been indented	\~french Dit si le flux a été indenté
 			bool m_set;
 		};
-
-		typedef BasicIndentBuffer< char > SpaceIndentBuffer;
-		typedef BasicIndentBuffer< wchar_t > WSpaceIndentBuffer;
-
-		typedef BasicIndentBuffer< char, '\t' > TabIndentBuffer;
-		typedef BasicIndentBuffer< wchar_t, L'\t' > WTabIndentBuffer;
 	}
 }
 

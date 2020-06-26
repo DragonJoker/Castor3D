@@ -3,7 +3,7 @@
 #if defined( CU_PlatformWindows )
 
 #include "CastorUtils/Config/MultiThreadConfig.hpp"
-#include "CastorUtils/Miscellaneous/Debug.hpp"
+#include "CastorUtils/Miscellaneous/MiscellaneousModule.hpp"
 #include "CastorUtils/Miscellaneous/DynamicLibrary.hpp"
 #include "CastorUtils/Miscellaneous/StringUtils.hpp"
 #include "CastorUtils/Miscellaneous/Utils.hpp"

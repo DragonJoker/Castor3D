@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___CU_SIGNAL_H___
 #define ___CU_SIGNAL_H___
 
-#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/Design/DesignModule.hpp"
+
 #include "CastorUtils/Exception/Assertion.hpp"
-#include "CastorUtils/Miscellaneous/Debug.hpp"
 
 #include <functional>
 #include <map>
@@ -14,15 +14,6 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/**
-	*\author	Sylvain doremus
-	*\version	0.9.0
-	*\date		01/03/2017
-	\~english
-	*\brief		Connection to a signal.
-	\~french
-	*\brief		Représente une connexion à un signal.
-	*/
 	template< typename SignalT >
 	class Connection
 	{
@@ -193,15 +184,7 @@ namespace castor
 
 #endif
 	};
-	/**
-	*\author	Sylvain doremus
-	*\version	0.8.0
-	*\date		10/02/2016
-	\~english
-	*\brief		Basic signal class
-	\~french
-	*\brief		Classe basique de signal
-	*/
+
 	template< typename Function >
 	class Signal
 	{

@@ -4,14 +4,10 @@ See LICENSE file in root folder
 #ifndef ___CU_PointData_H___
 #define ___CU_PointData_H___
 
+#include "CastorUtils/Math/MathModule.hpp"
+
 namespace castor
 {
-	/**
-	\~english
-	\brief		Data holder for a point.
-	\~french
-	\brief		Conteneur des données d'un point.
-	*/
 	template< typename T, uint32_t TCount >
 	struct PointData
 	{

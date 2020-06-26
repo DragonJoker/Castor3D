@@ -112,6 +112,29 @@ namespace castor3d
 		}
 	}
 
+	TextureFlagsArray::const_iterator checkFlags( TextureFlagsArray const & flags, TextureFlag flag )
+	{
+		auto it = std::find_if( flags.begin()
+			, flags.end()
+			, [flag]( TextureFlagsId const & lookup )
+			{
+				return checkFlag( lookup.flags, flag );
+			} );
+		return it;
+	}
+
+	TextureFlags merge( TextureFlagsArray const & flags )
+	{
+		TextureFlags result = TextureFlag::eNone;
+
+		for ( auto flag : flags )
+		{
+			result |= flag.flags;
+		}
+
+		return result;
+	}
+
 	bool operator<( PipelineFlags const & lhs, PipelineFlags const & rhs )
 	{
 		return lhs.alphaFunc < rhs.alphaFunc
@@ -122,10 +145,10 @@ namespace castor3d
 							|| ( lhs.colourBlendMode == rhs.colourBlendMode
 								&& ( lhs.alphaBlendMode < rhs.alphaBlendMode
 									|| ( lhs.alphaBlendMode == rhs.alphaBlendMode
-										&& ( lhs.textures < rhs.textures
-											|| ( lhs.textures == rhs.textures
-												&& ( lhs.texturesCount < rhs.texturesCount
-													|| ( lhs.texturesCount == rhs.texturesCount
+										&& ( lhs.textures.size() < rhs.textures.size()
+											|| ( lhs.textures.size() == rhs.textures.size()
+												&& ( lhs.texturesFlags < rhs.texturesFlags
+													|| ( lhs.texturesFlags == rhs.texturesFlags
 														&& ( lhs.heightMapIndex < rhs.heightMapIndex
 															|| ( lhs.heightMapIndex == rhs.heightMapIndex
 																&& ( lhs.programFlags < rhs.programFlags

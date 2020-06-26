@@ -57,9 +57,9 @@ namespace castor
 		{
 			result = Collection< Image, String >::find( name );
 
-			if ( !result->getBuffer() )
+			if ( !result->hasBuffer() )
 			{
-				*result = std::move( Image( name, m_loader.load( path ) ) );
+				*result = m_loader.load( name, path );
 			}
 			else
 			{
@@ -70,7 +70,7 @@ namespace castor
 		{
 			if ( File::fileExists( path ) )
 			{
-				result = std::make_shared< Image >( name, path, m_loader );
+				result = std::make_shared< Image >( m_loader.load( name, path ) );
 				Collection< Image, String >::insert( name, result );
 				doReportCreation( name );
 			}
@@ -95,7 +95,7 @@ namespace castor
 		{
 			result = Collection< Image, String >::find( name );
 
-			if ( !result->getBuffer() )
+			if ( !result->hasBuffer() )
 			{
 				*result = std::move( Image( name, size, format ) );
 			}

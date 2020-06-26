@@ -268,62 +268,6 @@ namespace castor3d
 		C3D_API static const castor::String Lights;
 
 		//@}
-		/**@name Textures */
-		//@{
-
-		//!\~english	Name of the albedo texture frame variable.
-		//!\~french		Nom de la frame variable contenant la texture de couleur albedo.
-		C3D_API static const castor::String MapAlbedo;
-		//!\~english	Name of the diffuse texture frame variable.
-		//!\~french		Nom de la frame variable contenant la texture de couleur diffuse.
-		C3D_API static const castor::String MapDiffuse;
-		//!\~english	Name of the specular texture frame variable.
-		//!\~french		Nom de la frame variable contenant la texture de couleur spéculaire.
-		C3D_API static const castor::String MapSpecular;
-		//!\~english	Name of the roughness texture frame variable.
-		//!\~french		Nom de la frame variable contenant la texture de rugosité.
-		C3D_API static const castor::String MapRoughness;
-		//!\~english	Name of the emissive texture frame variable.
-		//!\~french		Nom de la frame variable contenant la texture de couleur émissive.
-		C3D_API static const castor::String MapEmissive;
-		//!\~english	Name of the emissive texture frame variable.
-		//!\~french		Nom de la frame variable contenant la texture de normales.
-		C3D_API static const castor::String MapNormal;
-		//!\~english	Name of the opacity texture frame variable.
-		//!\~french		Nom de la frame variable contenant texture d'opacité.
-		C3D_API static const castor::String MapOpacity;
-		//!\~english	Name of the shininess texture frame variable.
-		//!\~french		Nom de la frame variable contenant la texture d'exposante.
-		C3D_API static const castor::String MapGloss;
-		//!\~english	Name of the metallic texture frame variable.
-		//!\~french		Nom de la frame variable contenant la texture de "métallosité".
-		C3D_API static const castor::String MapMetallic;
-		//!\~english	Name of the height texture frame variable.
-		//!\~french		Nom de la frame variable contenant texture de hauteur.
-		C3D_API static const castor::String MapHeight;
-		//!\~english	Name of the ambient occlusion texture frame variable.
-		//!\~french		Nom de la frame variable contenant la texture d'occlusion ambiante.
-		C3D_API static const castor::String MapAmbientOcclusion;
-		//!\~english	Name of the transmittance texture frame variable.
-		//!\~french		Nom de la frame variable contenant texture de transmission.
-		C3D_API static const castor::String MapTransmittance;
-		//!\~english	Name of the environment texture frame variable.
-		//!\~french		Nom de la frame variable contenant la texture d'environnement.
-		C3D_API static const castor::String MapEnvironment;
-		//!\~english	Name of the irradiance texture frame variable.
-		//!\~french		Nom de la frame variable contenant la texture d'irradiance.
-		C3D_API static const castor::String MapIrradiance;
-		//!\~english	Name of the prefiltered map texture frame variable.
-		//!\~french		Nom de la frame variable contenant la texture préfiltrée.
-		C3D_API static const castor::String MapPrefiltered;
-		//!\~english	Name of the BRDF texture frame variable.
-		//!\~french		Nom de la frame variable contenant la texture BRDF.
-		C3D_API static const castor::String MapBrdf;
-		//!\~english	Name of the overlay text image frame variable.
-		//!\~french		Nom de la frame variable contenant l'image de texte pour les overlays.
-		C3D_API static const castor::String MapText;
-
-		//@}
 
 	protected:
 		std::map< VkShaderStageFlagBits, castor::Path > m_files;

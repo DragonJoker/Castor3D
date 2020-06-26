@@ -143,7 +143,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La valeur d'exposant.
 		 */
-		inline float getShininess()const
+		inline castor::RangedValue< float > getShininess()const
 		{
 			return m_shininess;
 		}
@@ -221,10 +221,10 @@ namespace castor3d
 		castor::RgbColour m_specular;
 		//!\~english	The ambient contribution factor.
 		//!\~french		Le facteur de contribution a l'ambiente.
-		float m_ambient{ 0.0f };
+		float m_ambient{ 1.0f };
 		//!\~english	The shininess value.
 		//!\~french		La valeur d'exposant.
-		float m_shininess{ 50.0f };
+		castor::RangedValue< float > m_shininess{ 50.0f, castor::makeRange( 0.0001f, 256.0f ) };
 	};
 }
 

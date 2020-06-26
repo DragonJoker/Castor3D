@@ -119,14 +119,14 @@ namespace Testing
 
 		{
 			BinaryFile file{ path, File::OpenMode::eWrite };
-			BinaryWriter< Mesh > writer;
+			castor3d::BinaryWriter< Mesh > writer;
 			auto result = CT_CHECK( writer.write( *src, file ) );
 			auto skeleton = src->getSkeleton();
 
 			if ( result && skeleton )
 			{
 				BinaryFile file{ Path{ path.getFileName() + cuT( ".cskl" ) }, File::OpenMode::eWrite };
-				result = CT_CHECK( BinaryWriter< Skeleton >().write( *skeleton, file ) );
+				result = CT_CHECK( castor3d::BinaryWriter< Skeleton >().write( *skeleton, file ) );
 			}
 		}
 

@@ -4,6 +4,8 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_UNICITY_EXCEPTION___
 #define ___CASTOR_UNICITY_EXCEPTION___
 
+#include "CastorUtils/Design/DesignModule.hpp"
+
 #include "CastorUtils/Exception/Exception.hpp"
 
 namespace castor
@@ -39,15 +41,7 @@ namespace castor
 		"No instance for Unique class ",
 		"Duplicate instance for Unique class ",
 	};
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		03/01/2011
-	\~english
-	\brief		Unicity exception
-	\~french
-	\brief		Exception d'unicité
-	*/
+
 	class UnicityException
 		: public castor::Exception
 	{

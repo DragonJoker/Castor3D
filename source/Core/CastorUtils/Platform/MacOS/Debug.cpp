@@ -3,7 +3,7 @@
 #if defined( CU_PlatformApple )
 
 #include "CastorUtils/Config/MultiThreadConfig.hpp"
-#include "CastorUtils/Miscellaneous/Debug.hpp"
+#include "CastorUtils/Miscellaneous/MiscellaneousModule.hpp"
 #include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
 #if !defined( NDEBUG )

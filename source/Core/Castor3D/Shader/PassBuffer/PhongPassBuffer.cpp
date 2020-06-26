@@ -101,14 +101,14 @@ namespace castor3d
 		specShin.r = pass.getSpecular().red();
 		specShin.g = pass.getSpecular().green();
 		specShin.b = pass.getSpecular().blue();
-		specShin.a = pass.getShininess();
+		specShin.a = pass.getShininess().value();
 		common.r = pass.getOpacity();
 		common.g = pass.getEmissive();
 		common.b = pass.getAlphaValue();
 		common.a = pass.needsGammaCorrection() ? 2.2f : 1.0f;
 		reflRefr.r = pass.getRefractionRatio();
-		reflRefr.g = checkFlag( pass.getTextures(), TextureFlag::eRefraction ) ? 1.0f : 0.0f;
-		reflRefr.b = checkFlag( pass.getTextures(), TextureFlag::eReflection ) ? 1.0f : 0.0f;
+		reflRefr.g = pass.hasRefraction() ? 1.0f : 0.0f;
+		reflRefr.b = pass.hasReflections() ? 1.0f : 0.0f;
 		reflRefr.a = float( pass.getBWAccumulationOperator() );
 		doVisitExtended( pass, extended );
 	}

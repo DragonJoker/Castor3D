@@ -60,13 +60,13 @@ namespace castor3d
 		auto index = getMinTextureIndex();
 		ashes::VkDescriptorSetLayoutBindingArray textureBindings;
 
-		if ( flags.texturesCount )
+		if ( !flags.textures.empty() )
 		{
 			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT
-				, flags.texturesCount ) );
-			index += flags.texturesCount;
+				, uint32_t( flags.textures.size() ) ) );
+			index += uint32_t( flags.textures.size() );
 		}
 
 		if ( checkFlag( flags.passFlags, PassFlag::eMetallicRoughness )
@@ -99,7 +99,7 @@ namespace castor3d
 			node.passNode.fillDescriptor( layout
 				, index
 				, writes
-				, ShadowMap::textureFlags );
+				, node.pipeline.getFlags().textures );
 
 			if ( checkFlag( node.pipeline.getFlags().passFlags, PassFlag::eMetallicRoughness )
 				|| checkFlag( node.pipeline.getFlags().passFlags, PassFlag::eSpecularGlossiness ) )

@@ -23,7 +23,7 @@ namespace castor
 		using reference = Pixel< PF > const &;
 
 		using pixel_type = Pixel< PF >;
-		using array_type = PxBufferBase::px_array;
+		using array_type = PxBufferBase::PxArray;
 		using internal_type = array_type::const_iterator;
 		
 		inline ConstPixelIterator( array_type const & array, internal_type const & iter )

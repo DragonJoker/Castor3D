@@ -118,81 +118,57 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Sets attenuation components.
-		 *\param[in]	value	The new value.
+		 *\name Mutators.
 		 *\~french
-		 *\brief		Définit les composantes d'atténuation.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
+		 *\name Mutateurs.
+		 **/
+		/**@{*/
 		C3D_API void setAttenuation( castor::Point3f const & value );
-		/**
-		*\~english
-		*\brief			Sets the light exponent.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit l'exposition de la source lumineuse.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
 		C3D_API void setExponent( float value );
-		/**
-		*\~english
-		*\brief			Sets the light cutoff.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit l'angle d'ouverture.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
 		C3D_API void setCutOff( castor::Angle const & value );
+		/**@}*/
 		/**
 		 *\~english
-		 *\return		The light source direction.
+		 *\name Getters.
 		 *\~french
-		 *\return		La direction de la source lumineuse.
-		 */
+		 *\name Accesseurs.
+		 **/
+		/**@{*/
 		inline castor::Point3f const & getDirection()const
 		{
 			return m_direction;
 		}
-		/**
-		 *\~english
-		 *\return		The light space transformation matrix.
-		 *\~french
-		 *\return		La matrice de transformation de la lumière.
-		 */
+
+		inline castor::Matrix4x4f const & getViewMatrix()const
+		{
+			return m_lightView;
+		}
+
+		inline castor::Matrix4x4f const & getProjectionMatrix()const
+		{
+			return m_lightProj;
+		}
+
 		inline castor::Matrix4x4f const & getLightSpaceTransform()const
 		{
 			return m_lightSpace;
 		}
-		/**
-		 *\~english
-		 *\return		The attenuation components.
-		 *\~french
-		 *\return		Les composantes d'attenuation.
-		 */
+
 		inline castor::Point3f const & getAttenuation()const
 		{
 			return m_attenuation.value();
 		}
-		/**
-		 *\~english
-		 *\return		The exponent value.
-		 *\~french
-		 *\return		La valeur de l'exposant.
-		 */
+
 		inline float getExponent()const
 		{
 			return m_exponent;
 		}
-		/**
-		 *\~english
-		 *\return		The cone angle.
-		 *\~french
-		 *\return		L'angle du cône.
-		 */
+
 		inline castor::Angle const & getCutOff()const
 		{
 			return m_cutOff.value();
 		}
+		/**@}*/
 
 	private:
 		/**
@@ -205,20 +181,12 @@ namespace castor3d
 		C3D_API void doBind( castor::Point4f * buffer )const override;
 
 	private:
-		//!\~english	The attenuation components : constant, linear and quadratic.
-		//\~french		Les composantes d'attenuation : constante, linéaire et quadratique.
 		castor::ChangeTracked< castor::Point3f > m_attenuation{ castor::Point3f{ 1, 0, 0 } };
-		//!\~english	The light exponent, id est how much the light is focused.
-		//\~french		L'exposant de la lumièrs, càd à quel point elle est concentrée.
 		float m_exponent{ 1.0f };
-		//!\~english	The angle of the cone.
-		//\~french		L'angle du cône.
 		castor::ChangeTracked< castor::Angle > m_cutOff{ 45.0_degrees };
-		//!\~english	The light source space transformation matrix.
-		//!\~french		La matrice de transformation vers l'espace de la source lumineuse.
-		mutable castor::Matrix4x4f m_lightSpace;
-		//!\~english	The light source direction.
-		//!\~french		La direction de la source lumineuse.
+		castor::Matrix4x4f m_lightView;
+		castor::Matrix4x4f m_lightProj;
+		castor::Matrix4x4f m_lightSpace;
 		castor::Point3f m_direction;
 	};
 }

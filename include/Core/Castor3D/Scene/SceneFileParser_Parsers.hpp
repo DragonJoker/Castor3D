@@ -110,7 +110,6 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserShadowsMaxSlopeOffset )
 	CU_DeclareAttributeParser( parserShadowsVarianceMax )
 	CU_DeclareAttributeParser( parserShadowsVarianceBias )
-	CU_DeclareAttributeParser( parserShadowsRsm )
 	CU_DeclareAttributeParser( parserShadowsLpv )
 	CU_DeclareAttributeParser( parserShadowsLayeredLpv )
 
@@ -192,6 +191,8 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserPassSubsurfaceScattering )
 	CU_DeclareAttributeParser( parserPassParallaxOcclusion )
 	CU_DeclareAttributeParser( parserPassBWAccumulationOperator )
+	CU_DeclareAttributeParser( parserPassReflections )
+	CU_DeclareAttributeParser( parserPassRefractions )
 	CU_DeclareAttributeParser( parserPassEnd )
 
 	// Texture Unit Parsers

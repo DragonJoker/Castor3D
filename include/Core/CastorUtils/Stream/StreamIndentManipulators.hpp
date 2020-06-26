@@ -4,8 +4,6 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_STREAM_INDENT_H___
 #define ___CASTOR_STREAM_INDENT_H___
 
-#include "CastorUtils/CastorUtilsPrerequisites.hpp"
-
 #include "CastorUtils/Stream/StreamIndentBuffer.hpp"
 #include "CastorUtils/Stream/StreamIndentBufferManager.hpp"
 
@@ -13,15 +11,6 @@ namespace castor
 {
 	namespace format
 	{
-		/**
-		\author		Sylvain DOREMUS
-		\version	0.7.0.0
-		\date		02/09/2014
-		\~english
-		\brief		Holds the indentation value
-		\~french
-		\brief		Garde la valeur d'intentation
-		*/
 		struct Indent
 		{
 			/**

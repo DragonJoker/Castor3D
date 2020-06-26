@@ -17,31 +17,6 @@ See LICENSE file in root folder
 namespace castor
 {
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		26/03/2013
-	\version	0.7.0
-	\~english
-	\brief		Specified parser parameter.
-	\~french
-	\brief		Parmètre de parseur spécifié.
-	*/
-	template< ParameterType Type, typename Enable = void >
-	class ParserParameter;
-	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
-	\~english
-	\brief		Helper structure to parse a value.
-	\~french
-	\brief		Structure d'aide pour récupérer une valeur.
-	*/
-	template< ParameterType Type, typename Enable = void >
-	struct ValueParser;
-	/**
-	\author 	Sylvain DOREMUS
-	\date 		26/03/2013
-	\version	0.7.0
 	\~english
 	\brief		Specified parser parameter.
 	\~french
@@ -100,9 +75,6 @@ namespace castor
 		ValueType m_value{};
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		26/03/2013
-	\version	0.7.0
 	\~english
 	\brief		Specified parser parameter.
 	\~french
@@ -177,9 +149,6 @@ namespace castor
 		Range< ValueType > m_range;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		26/03/2013
-	\version	0.7.0
 	\~english
 	\brief		ParserParameter specialisation for ParameterType::eName.
 	\~french
@@ -221,9 +190,6 @@ namespace castor
 			, String & params )override;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		26/03/2013
-	\version	0.7.0
 	\~english
 	\brief		ParserParameter specialisation for ParameterType::eCheckedText.
 	\~french
@@ -269,9 +235,6 @@ namespace castor
 		UInt32StrMap const & m_values;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		26/03/2013
-	\version	0.7.0
 	\~english
 	\brief		ParserParameter specialisation for ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT.
 	\~french
@@ -317,9 +280,6 @@ namespace castor
 		UInt32StrMap const & m_values;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		10/12/2015
-	\version	0.8.0
 	\~english
 	\brief		ParserParameter specialisation for ParameterType::eBitwiseOred64BitsCheckedText.
 	\~french

@@ -61,6 +61,34 @@ namespace castor3d
 		TextureUnit & operator=( TextureUnit const & ) = delete;
 		TextureUnit & operator=( TextureUnit && ) = delete;
 		/**
+		*\~english
+		*name
+		*	Creators.
+		*\~french
+		*name
+		*	Créateurs.
+		*/
+		/**@{*/
+		C3D_API static TextureUnit create( Engine & engine
+			, castor::String const & name
+			, VkFormat format
+			, uint32_t size
+			, VkImageCreateFlags createFlags
+			, VkImageUsageFlags usageFlags );
+		C3D_API static TextureUnit create( Engine & engine
+			, castor::String const & name
+			, VkFormat format
+			, VkExtent2D const & size
+			, VkImageCreateFlags createFlags
+			, VkImageUsageFlags usageFlags );
+		C3D_API static TextureUnit create( Engine & engine
+			, castor::String const & name
+			, VkFormat format
+			, VkExtent3D const & size
+			, VkImageCreateFlags createFlags
+			, VkImageUsageFlags usageFlags );
+		/**@}*/
+		/**
 		 *\~english
 		 *\brief		Constructor.
 		 *\param		engine	The engine.
@@ -110,6 +138,7 @@ namespace castor3d
 		/**@{*/
 		C3D_API VkImageType getType()const;
 		C3D_API castor::String toString()const;
+		C3D_API TextureFlags getFlags()const;
 
 		inline TextureLayoutSPtr getTexture()const
 		{

@@ -7,10 +7,10 @@ See LICENSE file in root folder
 #include "CastorUtils/FileParser/AttributeParsersBySection.hpp"
 #include "CastorUtils/FileParser/ParserParameterTypeException.hpp"
 
+#include "CastorUtils/Log/LogModule.hpp"
+
 namespace castor
 {
-	class LoggerInstance;
-
 #define DO_WRITE_PARSER_NAME( funcname )\
 	funcname( castor::FileParser * parser, castor::ParserParameterArray const & params )
 
@@ -76,15 +76,6 @@ namespace castor
 #define CU_MakeSectionName( a, b, c, d )\
 	( (uint32_t( a ) << 24 ) | ( uint32_t( b ) << 16 ) | ( uint32_t( c ) << 8 ) | ( uint32_t( d ) << 0 ) )
 
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		19/10/2011
-	\~english
-	\brief		"Brace file" parser base class.
-	\~french
-	\brief		Classe de base pour les analyseurs de fichier à accolades.
-	*/
 	class FileParser
 	{
 	public:

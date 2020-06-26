@@ -13,16 +13,6 @@ See LICENSE file in root folder
 #	define __FUNCTION__ ""
 #endif
 
-/**@name Unicode support */
-//@{
-
-//!\~english The macro to use with constant strings, id est : cuT( "a string")	\~french Macro à utiliser pour les chaînes constantes, id est : cuT( "une chaîne")
-#define cuT( x ) x
-typedef char xchar;
-typedef wchar_t ychar;
-
-//@}
-
 #define CU_Coucou std::clog << "Coucou " << __COUNTER__ << " : " << __FUNCTION__ << " @ line " << __LINE__ << std::endl;
 
 #if defined( CU_CompilerMSVC )
@@ -57,6 +47,8 @@ typedef wchar_t ychar;
 #	endif
 #endif
 
+#include <memory>
+
 #define CU_DeclareSmartPtr( class_name )\
 	using class_name##SPtr = std::shared_ptr< class_name >;\
 	using class_name##WPtr = std::weak_ptr< class_name >;\
@@ -68,6 +60,8 @@ typedef wchar_t ychar;
 	template< typename T > using class_name##WPtr = std::weak_ptr< class_name< T > >;\
 	template< typename T > using class_name##UPtr = std::unique_ptr< class_name< T > >;\
 	template< typename T > using class_name##RPtr = class_name< T > *
+
+#include <map>
 
 #define CU_DeclareMap( key, value, name )\
 	using name##Map = std::map< key, value >;\
@@ -85,6 +79,8 @@ typedef wchar_t ychar;
 	using name##MMapConstRIt = name##MMap::const_reverse_iterator;\
 	using name##MapValueType = name##MMap::value_type
 
+#include <set>
+
 #define CU_DeclareSet( key, name )\
 	using name##Set = std::set< key >;\
 	using name##SetIt = name##Set::iterator;\
@@ -99,6 +95,8 @@ typedef wchar_t ychar;
 	using name##MSetConstIt = name##MSet::const_iterator;\
 	using name##MSetConstRIt = name##MSet::const_reverse_iterator
 
+#include <vector>
+
 #define CU_DeclareVector( key, name )\
 	using name##Array = std::vector< key >;\
 	using name##ArrayIt = name##Array::iterator;\
@@ -106,12 +104,16 @@ typedef wchar_t ychar;
 	using name##ArrayConstIt = name##Array::const_iterator;\
 	using name##ArrayConstRIt = name##Array::const_reverse_iterator
 
+#include <array>
+
 #define CU_DeclareArray( key, count, name )\
 	using name##Array = std::array< key, size_t( count ) >;\
 	using name##ArrayIt = name##Array::iterator;\
 	using name##ArrayRIt = name##Array::reverse_iterator;\
 	using name##ArrayConstIt = name##Array::const_iterator;\
 	using name##ArrayConstRIt = name##Array::const_reverse_iterator
+
+#include <list>
 
 #define CU_DeclareList( key, name )\
 	using name##List = std::list< key >;\

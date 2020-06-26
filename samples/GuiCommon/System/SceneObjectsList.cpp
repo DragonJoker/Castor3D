@@ -12,14 +12,12 @@
 #include "GuiCommon/Properties/TreeItems/LightTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/NodeTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/OverlayTreeItemProperty.hpp"
-#include "GuiCommon/Properties/TreeItems/PostEffectTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/RenderTargetTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/RenderWindowTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/SceneTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/SkeletonAnimationTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/SkeletonTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/SubmeshTreeItemProperty.hpp"
-#include "GuiCommon/Properties/TreeItems/ToneMappingTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/ViewportTreeItemProperty.hpp"
 #include "GuiCommon/System/ImagesLoader.hpp"
 
@@ -28,7 +26,11 @@
 #include <wx/artprov.h>
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/CameraCache.hpp>
+#include <Castor3D/Cache/GeometryCache.hpp>
+#include <Castor3D/Cache/LightCache.hpp>
 #include <Castor3D/Cache/OverlayCache.hpp>
+#include <Castor3D/Cache/TargetCache.hpp>
 #include <Castor3D/Animation/Animation.hpp>
 #include <Castor3D/Cache/WindowCache.hpp>
 #include <Castor3D/Material/Material.hpp>
@@ -164,35 +166,82 @@ namespace GuiCommon
 				, eBMP_BACKGROUND_SEL
 				, new BackgroundTreeItemProperty( this, m_propertiesHolder->IsEditable(), *scene->getBackground() ) );
 
-			scene->getEngine()->getRenderWindowCache().lock();
+			auto catId = AppendItem( sceneId
+				, _( "Render Windows" )
+				, eBMP_RENDER_WINDOW
+				, eBMP_RENDER_WINDOW_SEL );
+			scene->getEngine()->getRenderWindowCache().forEach( [this, catId]( RenderWindow & elem )
+				{
+					doAddRenderWindow( catId, elem );
+				} );
 
-			for ( auto it : scene->getEngine()->getRenderWindowCache() )
-			{
-				doAddRenderWindow( sceneId, it.second );
-			}
+			catId = AppendItem( sceneId
+				, _( "Render Targets" )
+				, eBMP_RENDER_TARGET
+				, eBMP_RENDER_TARGET_SEL );
+			scene->getEngine()->getRenderTargetCache().forEach( [this, catId]( RenderTarget & elem )
+				{
+					AppendRenderTarget( this
+						, m_propertiesHolder->IsEditable()
+						, catId
+						, elem );
+				} );
 
-			scene->getEngine()->getRenderWindowCache().unlock();
+			catId = AppendItem( sceneId
+				, _( "Cameras" )
+				, eBMP_CAMERA
+				, eBMP_CAMERA_SEL );
+			scene->getCameraCache().forEach( [this, catId]( Camera & elem )
+				{
+					doAddCamera( catId, elem );
+				} );
+
+			catId = AppendItem( sceneId
+				, _( "Geometries" )
+				, eBMP_GEOMETRY
+				, eBMP_GEOMETRY_SEL );
+			scene->getGeometryCache().forEach( [this, catId]( Geometry & elem )
+				{
+					doAddGeometry( catId, elem );
+				} );
+
+			catId = AppendItem( sceneId
+				, _( "Light Sources" )
+				, eBMP_DIRECTIONAL_LIGHT
+				, eBMP_DIRECTIONAL_LIGHT_SEL );
+			scene->getLightCache().forEach( [this, catId]( Light & elem )
+				{
+					doAddLight( catId, elem );
+				} );
+
+			catId = AppendItem( sceneId
+				, _( "Scene Nodes" )
+				, eBMP_NODE
+				, eBMP_NODE_SEL );
 			SceneNodeSPtr rootNode = scene->getRootNode();
-
 			if ( rootNode )
 			{
-				doAddNode( sceneId, rootNode );
+				doAddNode( catId, rootNode );
 			}
 
-			scene->getAnimatedObjectGroupCache().lock();
+			catId = AppendItem( sceneId
+				, _( "Animated Object Groups" )
+				, eBMP_ANIMATED_OBJECTGROUP
+				, eBMP_ANIMATED_OBJECTGROUP_SEL );
+			scene->getAnimatedObjectGroupCache().forEach( [this, catId]( AnimatedObjectGroup & elem )
+				{
+					doAddAnimatedObjectGroup( AppendItem( catId
+							, elem.getName()
+							, eBMP_ANIMATED_OBJECTGROUP
+							, eBMP_ANIMATED_OBJECTGROUP_SEL
+							, new AnimatedObjectGroupTreeItemProperty{ m_propertiesHolder->IsEditable(), elem } )
+						, elem );
+				} );
 
-			for ( auto it : scene->getAnimatedObjectGroupCache() )
-			{
-				doAddAnimatedObjectGroup( AppendItem( sceneId
-						, it.first
-						, eBMP_ANIMATED_OBJECTGROUP
-						, eBMP_ANIMATED_OBJECTGROUP_SEL
-						, new AnimatedObjectGroupTreeItemProperty( m_propertiesHolder->IsEditable(), it.second ) )
-					, it.second );
-			}
-
-			scene->getAnimatedObjectGroupCache().unlock();
-
+			catId = AppendItem( sceneId
+				, _( "Overlays" )
+				, eBMP_PANEL_OVERLAY
+				, eBMP_PANEL_OVERLAY_SEL );
 			for ( auto overlay : engine->getOverlayCache() )
 			{
 				if ( overlay->getOverlayName().find( cuT( "MainDebugPanel" ) ) != 0
@@ -203,37 +252,38 @@ namespace GuiCommon
 					switch ( overlay->getType() )
 					{
 					case OverlayType::ePanel:
-						doAddOverlay( AppendItem( sceneId
+						doAddOverlay( AppendItem( catId
 								, overlay->getOverlayName()
 								, eBMP_PANEL_OVERLAY
 								, eBMP_PANEL_OVERLAY_SEL
 								, new OverlayTreeItemProperty( m_propertiesHolder->IsEditable(), overlay ) )
-							, overlay );
+							, *overlay );
 						break;
 
 					case OverlayType::eBorderPanel:
-						doAddOverlay( AppendItem( sceneId
+						doAddOverlay( AppendItem( catId
 								, overlay->getOverlayName()
 								, eBMP_BORDER_PANEL_OVERLAY
 								, eBMP_BORDER_PANEL_OVERLAY_SEL
 								, new OverlayTreeItemProperty( m_propertiesHolder->IsEditable(), overlay ) )
-							, overlay );
+							, *overlay );
 						break;
 
 					case OverlayType::eText:
-						doAddOverlay( AppendItem( sceneId
+						doAddOverlay( AppendItem( catId
 								, overlay->getOverlayName()
 								, eBMP_TEXT_OVERLAY
 								, eBMP_TEXT_OVERLAY_SEL
 								, new OverlayTreeItemProperty( m_propertiesHolder->IsEditable(), overlay ) )
-							, overlay );
+							, *overlay );
 						break;
 					}
 				}
 			}
-		}
 
-		ExpandAll();
+			CollapseAll();
+			Expand( sceneId );
+		}
 	}
 
 	void SceneObjectsList::unloadScene()
@@ -267,58 +317,21 @@ namespace GuiCommon
 	}
 
 	void SceneObjectsList::doAddRenderWindow( wxTreeItemId id
-		, RenderWindowSPtr window )
+		, RenderWindow & window )
 	{
 		wxTreeItemId windowId = AppendItem( id
-			, window->getName()
+			, make_wxString( window.getName() )
 			, eBMP_RENDER_WINDOW
 			, eBMP_RENDER_WINDOW_SEL
 			, new RenderWindowTreeItemProperty( m_propertiesHolder->IsEditable(), window ) );
-		RenderTargetSPtr target = window->getRenderTarget();
+		RenderTargetSPtr target = window.getRenderTarget();
 
 		if ( target )
 		{
-			wxString name = _( "Render Target" );
-			auto targetId = AppendItem( windowId
-				, name
-				, eBMP_RENDER_TARGET
-				, eBMP_RENDER_TARGET_SEL
-				, new RenderTargetTreeItemProperty( m_propertiesHolder->IsEditable(), target ) );
-
-			for ( auto postEffect : target->getHDRPostEffects() )
-			{
-				wxTreeItemId idPostEffect = AppendItem( targetId
-					, _( "HDR - " ) + make_wxString( postEffect->getFullName() )
-					, eBMP_POST_EFFECT
-					, eBMP_POST_EFFECT_SEL
-					, new PostEffectTreeItemProperty( m_propertiesHolder->IsEditable()
-						, *postEffect
-						, this ) );
-			}
-
-			for ( auto postEffect : target->getSRGBPostEffects() )
-			{
-				wxTreeItemId idPostEffect = AppendItem( targetId
-					, _( "SRGB - " ) + make_wxString( postEffect->getFullName() )
-					, eBMP_POST_EFFECT
-					, eBMP_POST_EFFECT_SEL
-					, new PostEffectTreeItemProperty( m_propertiesHolder->IsEditable()
-						, *postEffect
-						, this ) );
-			}
-
-			auto toneMapping = target->getToneMapping();
-
-			if ( toneMapping )
-			{
-				wxTreeItemId idToneMapping = AppendItem( targetId
-					, make_wxString( toneMapping->getFullName() )
-					, eBMP_TONE_MAPPING
-					, eBMP_TONE_MAPPING_SEL
-					, new ToneMappingTreeItemProperty( m_propertiesHolder->IsEditable()
-						, *toneMapping
-						, this ) );
-			}
+			AppendRenderTarget( this
+				, m_propertiesHolder->IsEditable()
+				, id
+				, *target );
 		}
 	}
 
@@ -482,26 +495,29 @@ namespace GuiCommon
 	}
 
 	void SceneObjectsList::doAddAnimatedObjectGroup( wxTreeItemId id
-		, castor3d::AnimatedObjectGroupSPtr group )
+		, castor3d::AnimatedObjectGroup & group )
 	{
-		for ( auto it : group->getAnimations() )
+		for ( auto it : group.getAnimations() )
 		{
 			AppendItem( id
 				, it.first
 				, eBMP_ANIMATION
 				, eBMP_ANIMATION_SEL
-				, new AnimationTreeItemProperty( m_engine
-					, m_propertiesHolder->IsEditable()
-					, group
-					, it.first
-					, it.second ) );
+				, new AnimationTreeItemProperty
+				{
+					m_engine,
+					m_propertiesHolder->IsEditable(),
+					group,
+					it.first,
+					it.second,
+				} );
 		}
 	}
 
 	void SceneObjectsList::doAddOverlay( wxTreeItemId id
-		, castor3d::OverlayCategorySPtr overlay )
+		, castor3d::OverlayCategory & overlay )
 	{
-		for ( auto overlay : overlay->getOverlay() )
+		for ( auto overlay : overlay.getOverlay() )
 		{
 			switch ( overlay->getType() )
 			{
@@ -511,7 +527,7 @@ namespace GuiCommon
 						, eBMP_PANEL_OVERLAY
 						, eBMP_PANEL_OVERLAY_SEL
 						, new OverlayTreeItemProperty( m_propertiesHolder->IsEditable(), overlay->getCategory() ) )
-					, overlay->getCategory() );
+					, *overlay->getCategory() );
 				break;
 
 			case OverlayType::eBorderPanel:
@@ -520,7 +536,7 @@ namespace GuiCommon
 						, eBMP_BORDER_PANEL_OVERLAY
 						, eBMP_BORDER_PANEL_OVERLAY_SEL
 						, new OverlayTreeItemProperty( m_propertiesHolder->IsEditable(), overlay->getCategory() ) )
-					, overlay->getCategory() );
+					, *overlay->getCategory() );
 				break;
 
 			case OverlayType::eText:
@@ -529,7 +545,7 @@ namespace GuiCommon
 						, eBMP_TEXT_OVERLAY
 						, eBMP_TEXT_OVERLAY_SEL
 						, new OverlayTreeItemProperty( m_propertiesHolder->IsEditable(), overlay->getCategory() ) )
-					, overlay->getCategory() );
+					, *overlay->getCategory() );
 				break;
 			}
 		}

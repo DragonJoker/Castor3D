@@ -4,7 +4,8 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_STREAM_INDENT_BUFFER_CACHE_H___
 #define ___CASTOR_STREAM_INDENT_BUFFER_CACHE_H___
 
-#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/Stream/StreamModule.hpp"
+
 #include "CastorUtils/Config/MultiThreadConfig.hpp"
 
 #include <atomic>
@@ -13,16 +14,7 @@ namespace castor
 {
 	namespace format
 	{
-		/**
-		\author		Sylvain DOREMUS
-		\version	0.7.0.0
-		\date		02/09/2014
-		\~english
-		\brief		Holds associated streams and stream buffers
-		\~french
-		\brief		Garde les associations flux/tampon de flux
-		*/
-		template< typename char_type, typename traits = std::char_traits< char_type > >
+		template< typename char_type, typename traits >
 		class BasicIndentBufferManager
 		{
 		private:
@@ -181,9 +173,6 @@ namespace castor
 
 		template< typename char_type, typename traits >
 		std::atomic_int BasicIndentBufferManager< char_type, traits >::sm_instances = 0;
-
-		typedef BasicIndentBufferManager< char, std::char_traits< char > > IndentBufferManager;
-		typedef BasicIndentBufferManager< wchar_t, std::char_traits< wchar_t > > WIndentBufferManager;
 	}
 }
 

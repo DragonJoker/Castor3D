@@ -189,13 +189,6 @@ namespace castor3d
 		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ) );
 	}
 
-	void ForwardRenderTechniquePass::update( RenderInfo & info
-		, castor::Point2f const & jitter )
-	{
-		getSceneUbo().update( m_scene, m_camera );
-		doUpdate( info, jitter );
-	}
-
 	ashes::Semaphore const & ForwardRenderTechniquePass::render( ashes::Semaphore const & toWait )
 	{
 		ashes::Semaphore const * result = &toWait;
@@ -240,6 +233,12 @@ namespace castor3d
 		return *result;
 	}
 
+	void ForwardRenderTechniquePass::doUpdateUbos( Camera const & camera
+		, castor::Point2f const & jitter )
+	{
+		RenderPass::doUpdateUbos( camera, jitter );
+	}
+
 	void ForwardRenderTechniquePass::doCleanup()
 	{
 		m_nodesCommands.reset();
@@ -252,17 +251,17 @@ namespace castor3d
 		auto index = getMinTextureIndex();
 		ashes::VkDescriptorSetLayoutBindingArray textureBindings;
 
-		if ( flags.texturesCount )
+		if ( !flags.textures.empty() )
 		{
 			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT
-				, flags.texturesCount ) );
-			index += flags.texturesCount;
+				, uint32_t( flags.textures.size() ) ) );
+			index += uint32_t( flags.textures.size() );
 		}
 
-		if ( checkFlag( flags.textures, TextureFlag::eReflection )
-			|| checkFlag( flags.textures, TextureFlag::eRefraction ) )
+		if ( checkFlag( flags.passFlags, PassFlag::eReflection )
+			|| checkFlag( flags.passFlags, PassFlag::eRefraction ) )
 		{
 			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
@@ -307,12 +306,15 @@ namespace castor3d
 			, ShadowMapLightTypeArray const & shadowMaps
 			, Scene const & scene )
 		{
+			auto & flags = node.pipeline.getFlags();
 			ashes::WriteDescriptorSetArray writes;
 			node.passNode.fillDescriptor( layout
 				, index
-				, writes );
+				, writes
+				, flags.textures );
 
-			if ( node.passNode.pass.hasEnvironmentMapping() )
+			if ( checkFlag( flags.passFlags, PassFlag::eReflection )
+				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) )
 			{
 				auto & envMap = scene.getEnvironmentMap( node.sceneNode );
 				bindTexture( envMap.getTexture().getTexture()->getDefaultView().getSampledView()
@@ -321,7 +323,8 @@ namespace castor3d
 					, index );
 			}
 
-			if ( node.passNode.pass.getType() != MaterialType::ePhong )
+			if ( checkFlag( flags.passFlags, PassFlag::eMetallicRoughness )
+				|| checkFlag( flags.passFlags, PassFlag::eSpecularGlossiness ) )
 			{
 				auto & background = *node.sceneNode.getScene()->getBackground();
 
@@ -379,42 +382,42 @@ namespace castor3d
 		using namespace sdw;
 		VertexWriter writer;
 		// Vertex inputs
-		auto position = writer.declInput< Vec4 >( "position"
+		auto inPosition = writer.declInput< Vec4 >( "inPosition"
 			, RenderPass::VertexInputs::PositionLocation );
-		auto normal = writer.declInput< Vec3 >( "normal"
+		auto inNormal = writer.declInput< Vec3 >( "inNormal"
 			, RenderPass::VertexInputs::NormalLocation );
-		auto tangent = writer.declInput< Vec3 >( "tangent"
+		auto inTangent = writer.declInput< Vec3 >( "inTangent"
 			, RenderPass::VertexInputs::TangentLocation );
-		auto uv = writer.declInput< Vec3 >( "uv"
+		auto inTexture = writer.declInput< Vec3 >( "inTexture"
 			, RenderPass::VertexInputs::TextureLocation );
-		auto bone_ids0 = writer.declInput< IVec4 >( "bone_ids0"
+		auto inBoneIds0 = writer.declInput< IVec4 >( "inBoneIds0"
 			, RenderPass::VertexInputs::BoneIds0Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto bone_ids1 = writer.declInput< IVec4 >( "bone_ids1"
+		auto inBoneIds1 = writer.declInput< IVec4 >( "inBoneIds1"
 			, RenderPass::VertexInputs::BoneIds1Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto weights0 = writer.declInput< Vec4 >( "weights0"
+		auto inWeights0 = writer.declInput< Vec4 >( "inWeights0"
 			, RenderPass::VertexInputs::Weights0Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto weights1 = writer.declInput< Vec4 >( "weights1"
+		auto inWeights1 = writer.declInput< Vec4 >( "inWeights1"
 			, RenderPass::VertexInputs::Weights1Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto transform = writer.declInput< Mat4 >( "transform"
+		auto inTransform = writer.declInput< Mat4 >( "inTransform"
 			, RenderPass::VertexInputs::TransformLocation
 			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
-		auto material = writer.declInput< Int >( "material"
+		auto inMaterial = writer.declInput< Int >( "inMaterial"
 			, RenderPass::VertexInputs::MaterialLocation
 			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
-		auto position2 = writer.declInput< Vec4 >( "position2"
+		auto inPosition2 = writer.declInput< Vec4 >( "inPosition2"
 			, RenderPass::VertexInputs::Position2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
-		auto normal2 = writer.declInput< Vec3 >( "normal2"
+		auto inNormal2 = writer.declInput< Vec3 >( "inNormal2"
 			, RenderPass::VertexInputs::Normal2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
-		auto tangent2 = writer.declInput< Vec3 >( "tangent2"
+		auto inTangent2 = writer.declInput< Vec3 >( "inTangent2"
 			, RenderPass::VertexInputs::Tangent2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
-		auto texture2 = writer.declInput< Vec3 >( "texture2"
+		auto inTexture2 = writer.declInput< Vec3 >( "inTexture2"
 			, RenderPass::VertexInputs::Texture2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
 		auto in = writer.getIn();
@@ -456,13 +459,13 @@ namespace castor3d
 		std::function< void() > main = [&]()
 		{
 			auto curPosition = writer.declLocale( "curPosition"
-				, vec4( position.xyz(), 1.0_f ) );
+				, vec4( inPosition.xyz(), 1.0_f ) );
 			auto v4Normal = writer.declLocale( "v4Normal"
-				, vec4( normal, 0.0_f ) );
+				, vec4( inNormal, 0.0_f ) );
 			auto v4Tangent = writer.declLocale( "v4Tangent"
-				, vec4( tangent, 0.0_f ) );
+				, vec4( inTangent, 0.0_f ) );
 			auto v3Texture = writer.declLocale( "v3Texture"
-				, uv );
+				, inTexture );
 
 			if ( checkFlag( flags.programFlags, ProgramFlag::eSkinning ) )
 			{
@@ -474,7 +477,7 @@ namespace castor3d
 			else if ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
 			{
 				auto curMtxModel = writer.declLocale( "curMtxModel"
-					, transform );
+					, inTransform );
 				auto prvMtxModel = writer.declLocale( "prvMtxModel"
 					, curMtxModel );
 			}
@@ -493,7 +496,7 @@ namespace castor3d
 
 			if ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
 			{
-				vtx_material = writer.cast< UInt >( material );
+				vtx_material = writer.cast< UInt >( inMaterial );
 			}
 			else
 			{
@@ -502,10 +505,10 @@ namespace castor3d
 
 			if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
 			{
-				curPosition = vec4( sdw::mix( curPosition.xyz(), position2.xyz(), vec3( c3d_time ) ), 1.0_f );
-				v4Normal = vec4( sdw::mix( v4Normal.xyz(), normal2.xyz(), vec3( c3d_time ) ), 1.0_f );
-				v4Tangent = vec4( sdw::mix( v4Tangent.xyz(), tangent2.xyz(), vec3( c3d_time ) ), 1.0_f );
-				v3Texture = sdw::mix( v3Texture, texture2, vec3( c3d_time ) );
+				curPosition = vec4( sdw::mix( curPosition.xyz(), inPosition2.xyz(), vec3( c3d_time ) ), 1.0_f );
+				v4Normal = vec4( sdw::mix( v4Normal.xyz(), inNormal2.xyz(), vec3( c3d_time ) ), 1.0_f );
+				v4Tangent = vec4( sdw::mix( v4Tangent.xyz(), inTangent2.xyz(), vec3( c3d_time ) ), 1.0_f );
+				v3Texture = sdw::mix( v3Texture, inTexture2, vec3( c3d_time ) );
 			}
 
 			vtx_texture = v3Texture;
@@ -517,18 +520,18 @@ namespace castor3d
 			curPosition = c3d_curView * curPosition;
 			vtx_viewPosition = curPosition.xyz();
 
-			if ( checkFlag( flags.programFlags, ProgramFlag::eInvertNormals ) )
-			{
-				vtx_normal = normalize( mtxNormal * -v4Normal.xyz() );
-			}
-			else
-			{
-				vtx_normal = normalize( mtxNormal * v4Normal.xyz() );
-			}
-
+			vtx_normal = normalize( mtxNormal * v4Normal.xyz() );
 			vtx_tangent = normalize( mtxNormal * v4Tangent.xyz() );
 			vtx_tangent = normalize( sdw::fma( -vtx_normal, vec3( dot( vtx_tangent, vtx_normal ) ), vtx_tangent ) );
 			vtx_bitangent = cross( vtx_normal, vtx_tangent );
+
+			if ( checkFlag( flags.programFlags, ProgramFlag::eInvertNormals ) )
+			{
+				vtx_normal = -vtx_normal;
+				vtx_tangent = -vtx_tangent;
+				vtx_bitangent = -vtx_bitangent;
+			}
+
 			vtx_instance = writer.cast< UInt >( in.instanceIndex );
 			prvPosition = c3d_projection * prvPosition;
 			curPosition = c3d_projection * curPosition;
@@ -600,7 +603,7 @@ namespace castor3d
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", getLightBufferIndex(), 0u );
 		shader::TextureConfigurations textureConfigs{ writer };
-		bool hasTextures = flags.texturesCount > 0;
+		bool hasTextures = !flags.textures.empty();
 
 		if ( hasTextures )
 		{
@@ -613,15 +616,15 @@ namespace castor3d
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
 			, index
 			, 1u
-			, std::max( 1u, flags.texturesCount )
-			, flags.texturesCount > 0u ) );
-		index += flags.texturesCount;
+			, std::max( 1u, uint32_t( flags.textures.size() ) )
+			, hasTextures ) );
+		index += uint32_t( flags.textures.size() );
 		auto c3d_mapEnvironment( writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapEnvironment"
-			, ( checkFlag( flags.textures, TextureFlag::eReflection )
-				|| checkFlag( flags.textures, TextureFlag::eRefraction ) ) ? index++ : 0u
+			, ( checkFlag( flags.passFlags, PassFlag::eReflection )
+				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ? index++ : 0u
 			, 1u
-			, ( checkFlag( flags.textures, TextureFlag::eReflection )
-				|| checkFlag( flags.textures, TextureFlag::eRefraction ) ) ) );
+			, ( checkFlag( flags.passFlags, PassFlag::eReflection )
+				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ) );
 
 		auto in = writer.getIn();
 
@@ -653,6 +656,10 @@ namespace castor3d
 					, material.m_gamma );
 				auto normal = writer.declLocale( "normal"
 					, normalize( vtx_normal ) );
+				auto tangent = writer.declLocale( "tangent"
+					, normalize( vtx_tangent ) );
+				auto bitangent = writer.declLocale( "bitangent"
+					, normalize( vtx_bitangent ) );
 				auto diffuse = writer.declLocale( "diffuse"
 					, utils.removeGamma( gamma, material.m_diffuse() ) );
 				auto specular = writer.declLocale( "specular"
@@ -665,32 +672,28 @@ namespace castor3d
 					, 1.0_f );
 				auto transmittance = writer.declLocale( "transmittance"
 					, 0.0_f );
-
-				utils.computeHeightMapContribution( flags
-					, textureConfigs
-					, c3d_textureConfig
-					, vtx_tangentSpaceViewPosition
-					, vtx_tangentSpaceFragPosition
-					, c3d_maps
-					, texCoord );
-				shader::PhongLightingModel::computeMapContributions( writer
-					, utils
-					, flags
+				auto tangentSpaceViewPosition = writer.declLocale( "tangentSpaceViewPosition"
+					, vtx_tangentSpaceViewPosition );
+				auto tangentSpaceFragPosition = writer.declLocale( "tangentSpaceFragPosition"
+					, vtx_tangentSpaceFragPosition );
+				lighting->computeMapContributions( flags
 					, gamma
 					, textureConfigs
 					, c3d_textureConfig
-					, vtx_tangent
-					, vtx_bitangent
 					, c3d_maps
 					, texCoord
 					, normal
-					, diffuse
-					, specular
+					, tangent
+					, bitangent
 					, emissive
-					, shininess
 					, alpha
 					, occlusion
-					, transmittance );
+					, transmittance
+					, diffuse
+					, specular
+					, shininess
+					, tangentSpaceViewPosition
+					, tangentSpaceFragPosition );
 				utils.applyAlphaFunc( flags.alphaFunc
 					, alpha
 					, material.m_alphaRef );
@@ -709,46 +712,48 @@ namespace castor3d
 					, output );
 
 				auto ambient = writer.declLocale( "ambient"
-					, clamp( c3d_ambientLight.xyz() + material.m_ambient * material.m_diffuse()
+					, clamp( c3d_ambientLight.xyz() * material.m_ambient * diffuse
 						, vec3( 0.0_f )
 						, vec3( 1.0_f ) ) );
-
-				if ( checkFlag( flags.textures, TextureFlag::eReflection )
-					|| checkFlag( flags.textures, TextureFlag::eRefraction ) )
+				
+				if ( checkFlag( flags.passFlags, PassFlag::eReflection )
+					|| checkFlag( flags.passFlags, PassFlag::eRefraction ) )
 				{
 					auto incident = writer.declLocale( "incident"
 						, reflections.computeIncident( vtx_worldPosition, c3d_cameraPosition.xyz() ) );
 
-					if ( checkFlag( flags.textures, TextureFlag::eReflection )
-						&& checkFlag( flags.textures, TextureFlag::eRefraction ) )
+					if ( checkFlag( flags.passFlags, PassFlag::eReflection )
+						&& checkFlag( flags.passFlags, PassFlag::eRefraction ) )
 					{
-						ambient = reflections.computeReflRefr( incident
+						reflections.computeReflRefr( incident
 							, normal
 							, occlusion
 							, c3d_mapEnvironment
 							, material.m_refractionRatio
-							, diffuse
-							, shininess );
-						diffuse = vec3( 0.0_f );
+							, shininess
+							, ambient
+							, diffuse );
 					}
-					else if ( checkFlag( flags.textures, TextureFlag::eReflection ) )
+					else if ( checkFlag( flags.passFlags, PassFlag::eReflection ) )
 					{
-						diffuse *= reflections.computeRefl( incident
+						reflections.computeRefl( incident
 							, normal
 							, occlusion
-							, c3d_mapEnvironment );
-						ambient = vec3( 0.0_f );
+							, c3d_mapEnvironment
+							, shininess
+							, ambient
+							, diffuse );
 					}
 					else
 					{
-						ambient = reflections.computeRefr( incident
+						reflections.computeRefr( incident
 							, normal
 							, occlusion
 							, c3d_mapEnvironment
 							, material.m_refractionRatio
-							, diffuse
-							, shininess );
-						diffuse = vec3( 0.0_f );
+							, shininess
+							, ambient
+							, diffuse );
 					}
 				}
 				else
@@ -814,7 +819,7 @@ namespace castor3d
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", getLightBufferIndex(), 0u );
 		shader::TextureConfigurations textureConfigs{ writer };
-		bool hasTextures = flags.texturesCount > 0;
+		bool hasTextures = !flags.textures.empty();
 
 		if ( hasTextures )
 		{
@@ -827,15 +832,15 @@ namespace castor3d
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
 			, index
 			, 1u
-			, std::max( 1u, flags.texturesCount )
-			, flags.texturesCount > 0u ) );
-		index += flags.texturesCount;
+			, std::max( 1u, uint32_t( flags.textures.size() ) )
+			, hasTextures ) );
+		index += uint32_t( flags.textures.size() );
 		auto c3d_mapEnvironment( writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapEnvironment"
-			, ( checkFlag( flags.textures, TextureFlag::eReflection )
-				|| checkFlag( flags.textures, TextureFlag::eRefraction ) ) ? index++ : 0u
+			, ( checkFlag( flags.passFlags, PassFlag::eReflection )
+				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ? index++ : 0u
 			, 1u
-			, ( checkFlag( flags.textures, TextureFlag::eReflection )
-				|| checkFlag( flags.textures, TextureFlag::eRefraction ) ) ) );
+			, ( checkFlag( flags.passFlags, PassFlag::eReflection )
+				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ) );
 		auto c3d_mapIrradiance = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapIrradiance"
 			, index++
 			, 1u );
@@ -877,6 +882,10 @@ namespace castor3d
 					, material.m_opacity );
 				auto normal = writer.declLocale( "normal"
 					, normalize( vtx_normal ) );
+				auto tangent = writer.declLocale( "tangent"
+					, normalize( vtx_tangent ) );
+				auto bitangent = writer.declLocale( "bitangent"
+					, normalize( vtx_bitangent ) );
 				auto ambient = writer.declLocale( "ambient"
 					, c3d_ambientLight.xyz() );
 				auto metallic = writer.declLocale( "metallic"
@@ -899,32 +908,28 @@ namespace castor3d
 					, 1.0_f );
 				auto transmittance = writer.declLocale( "transmittance"
 					, 0.0_f );
-
-				utils.computeHeightMapContribution( flags
-					, textureConfigs
-					, c3d_textureConfig
-					, vtx_tangentSpaceViewPosition
-					, vtx_tangentSpaceFragPosition
-					, c3d_maps
-					, texCoord );
-				shader::MetallicBrdfLightingModel::computeMapContributions( writer
-					, utils
-					, flags
+				auto tangentSpaceViewPosition = writer.declLocale( "tangentSpaceViewPosition"
+					, vtx_tangentSpaceViewPosition );
+				auto tangentSpaceFragPosition = writer.declLocale( "tangentSpaceFragPosition"
+					, vtx_tangentSpaceFragPosition );
+				lighting->computeMapContributions( flags
 					, gamma
 					, textureConfigs
 					, c3d_textureConfig
-					, vtx_tangent
-					, vtx_bitangent
 					, c3d_maps
 					, texCoord
 					, normal
-					, albedo
-					, metallic
+					, tangent
+					, bitangent
 					, emissive
-					, roughness
 					, alpha
 					, occlusion
-					, transmittance );
+					, transmittance
+					, albedo
+					, metallic
+					, roughness
+					, tangentSpaceViewPosition
+					, tangentSpaceFragPosition );
 
 				if ( m_opaque )
 				{
@@ -947,15 +952,15 @@ namespace castor3d
 					, shader::FragmentInput( in.fragCoord.xy(), vtx_viewPosition, vtx_worldPosition, normal )
 					, output );
 
-				if ( checkFlag( flags.textures, TextureFlag::eReflection )
-					|| checkFlag( flags.textures, TextureFlag::eRefraction ) )
+				if ( checkFlag( flags.passFlags, PassFlag::eReflection )
+					|| checkFlag( flags.passFlags, PassFlag::eRefraction ) )
 				{
 					auto incident = writer.declLocale( "incident"
 						, reflections.computeIncident( vtx_worldPosition, worldEye ) );
 					auto ratio = writer.declLocale( "ratio"
 						, material.m_refractionRatio );
 
-					if ( checkFlag( flags.textures, TextureFlag::eReflection ) )
+					if ( checkFlag( flags.passFlags, PassFlag::eReflection ) )
 					{
 						// Reflection from environment map.
 						ambient = reflections.computeRefl( incident
@@ -981,7 +986,7 @@ namespace castor3d
 								, c3d_mapBrdf );
 					}
 
-					if ( checkFlag( flags.textures, TextureFlag::eRefraction ) )
+					if ( checkFlag( flags.passFlags, PassFlag::eRefraction ) )
 					{
 						// Refraction from environment map.
 						ambient = reflections.computeRefrEnvMap( incident
@@ -1102,7 +1107,7 @@ namespace castor3d
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", getLightBufferIndex(), 0u );
 		shader::TextureConfigurations textureConfigs{ writer };
-		bool hasTextures = flags.texturesCount > 0;
+		bool hasTextures = !flags.textures.empty();
 
 		if ( hasTextures )
 		{
@@ -1115,15 +1120,15 @@ namespace castor3d
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
 			, index
 			, 1u
-			, std::max( 1u, flags.texturesCount )
-			, flags.texturesCount > 0u ) );
-		index += flags.texturesCount;
+			, std::max( 1u, uint32_t( flags.textures.size() ) )
+			, hasTextures ) );
+		index += uint32_t( flags.textures.size() );
 		auto c3d_mapEnvironment( writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapEnvironment"
-			, ( checkFlag( flags.textures, TextureFlag::eReflection )
-				|| checkFlag( flags.textures, TextureFlag::eRefraction ) ) ? index++ : 0u
+			, ( checkFlag( flags.passFlags, PassFlag::eReflection )
+				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ? index++ : 0u
 			, 1u
-			, ( checkFlag( flags.textures, TextureFlag::eReflection )
-				|| checkFlag( flags.textures, TextureFlag::eRefraction ) ) ) );
+			, ( checkFlag( flags.passFlags, PassFlag::eReflection )
+				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ) );
 		auto c3d_mapIrradiance = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapIrradiance"
 			, index++
 			, 1u );
@@ -1164,6 +1169,10 @@ namespace castor3d
 					, material.m_opacity );
 				auto normal = writer.declLocale( "normal"
 					, normalize( vtx_normal ) );
+				auto tangent = writer.declLocale( "tangent"
+					, normalize( vtx_tangent ) );
+				auto bitangent = writer.declLocale( "bitangent"
+					, normalize( vtx_bitangent ) );
 				auto ambient = writer.declLocale( "ambient"
 					, c3d_ambientLight.xyz() );
 				auto specular = writer.declLocale( "specular"
@@ -1186,32 +1195,28 @@ namespace castor3d
 					, 1.0_f );
 				auto transmittance = writer.declLocale( "transmittance"
 					, 0.0_f );
-
-				utils.computeHeightMapContribution( flags
-					, textureConfigs
-					, c3d_textureConfig
-					, vtx_tangentSpaceViewPosition
-					, vtx_tangentSpaceFragPosition
-					, c3d_maps
-					, texCoord );
-				shader::SpecularBrdfLightingModel::computeMapContributions( writer
-					, utils
-					, flags
+				auto tangentSpaceViewPosition = writer.declLocale( "tangentSpaceViewPosition"
+					, vtx_tangentSpaceViewPosition );
+				auto tangentSpaceFragPosition = writer.declLocale( "tangentSpaceFragPosition"
+					, vtx_tangentSpaceFragPosition );
+				lighting->computeMapContributions( flags
 					, gamma
 					, textureConfigs
 					, c3d_textureConfig
-					, vtx_tangent
-					, vtx_bitangent
 					, c3d_maps
 					, texCoord
 					, normal
-					, albedo
-					, specular
+					, tangent
+					, bitangent
 					, emissive
-					, glossiness
 					, alpha
 					, occlusion
-					, transmittance );
+					, transmittance
+					, albedo
+					, specular
+					, glossiness
+					, tangentSpaceViewPosition
+					, tangentSpaceFragPosition );
 
 				if ( m_opaque )
 				{
@@ -1233,15 +1238,15 @@ namespace castor3d
 					, shader::FragmentInput( in.fragCoord.xy(), vtx_viewPosition, vtx_worldPosition, normal )
 					, output );
 
-				if ( checkFlag( flags.textures, TextureFlag::eReflection )
-					|| checkFlag( flags.textures, TextureFlag::eRefraction ) )
+				if ( checkFlag( flags.passFlags, PassFlag::eReflection )
+					|| checkFlag( flags.passFlags, PassFlag::eRefraction ) )
 				{
 					auto incident = writer.declLocale( "incident"
 						, reflections.computeIncident( vtx_worldPosition, worldEye ) );
 					auto ratio = writer.declLocale( "ratio"
 						, material.m_refractionRatio );
 
-					if ( checkFlag( flags.textures, TextureFlag::eReflection ) )
+					if ( checkFlag( flags.passFlags, PassFlag::eReflection ) )
 					{
 						// Reflection from environment map.
 						ambient = reflections.computeRefl( incident
@@ -1267,7 +1272,7 @@ namespace castor3d
 								, c3d_mapBrdf );
 					}
 
-					if ( checkFlag( flags.textures, TextureFlag::eRefraction ) )
+					if ( checkFlag( flags.passFlags, PassFlag::eRefraction ) )
 					{
 						// Refraction from environment map.
 						ambient = reflections.computeRefrEnvMap( incident

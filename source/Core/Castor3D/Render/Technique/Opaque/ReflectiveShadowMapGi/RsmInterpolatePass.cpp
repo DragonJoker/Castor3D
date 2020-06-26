@@ -507,7 +507,7 @@ namespace castor3d
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram( engine, lightType, gi.getTexture()->getWidth(), gi.getTexture()->getHeight() ) }
 		, m_renderPass{ doCreateRenderPass( getCurrentRenderDevice( m_renderSystem ), dst.getTexture()->getPixelFormat() ) }
 		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, dst.getTexture()->getDefaultView().getTargetView() ) }
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Lighting" ), cuT( "Interpolate GI" ) ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Reflective Shadow Maps" ), cuT( "Interpolate" ) ) }
 		, m_finished{ getCurrentRenderDevice( engine )->createSemaphore( getName() ) }
 	{
 		auto & device = getCurrentRenderDevice( m_renderSystem );

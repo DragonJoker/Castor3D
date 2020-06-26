@@ -4,21 +4,12 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_SIZE_H___
 #define ___CASTOR_SIZE_H___
 
+#include "CastorUtils/Graphics/GraphicsModule.hpp"
+
 #include "CastorUtils/Math/Coords.hpp"
 
 namespace castor
 {
-	/**
-	\author 	Sylvain DOREMUS
-	\date 		20/02/2013
-	\version	0.7.0
-	\~english
-	\brief		Size class
-	\remark		Kind of specialisation of Coords< 2, uint32_t >
-	\~french
-	\brief		Classe de taille
-	\remark		Sorte de spécialisation de Coords< 2, uint32_t >
-	*/
 	class Size
 		: public Coords< uint32_t, 2 >
 	{
@@ -151,6 +142,20 @@ namespace castor
 		 */
 		CU_API void grow( int32_t cx, int32_t cy );
 
+		inline Size & operator<<=( uint32_t rhs )
+		{
+			m_data.size.cx <<= rhs;
+			m_data.size.cy <<= rhs;
+			return *this;
+		}
+
+		inline Size & operator>>=( uint32_t rhs )
+		{
+			m_data.size.cx >>= rhs;
+			m_data.size.cy >>= rhs;
+			return *this;
+		}
+
 		using BaseType::ptr;
 		using BaseType::constPtr;
 
@@ -187,6 +192,20 @@ namespace castor
 	 *\return		\p false si les tailles ont les mêmes dimensions
 	 */
 	CU_API bool operator!=( Size const & a, Size const & b );
+
+	inline Size operator<<( Size const & lhs, uint32_t rhs )
+	{
+		Size tmp{ lhs };
+		tmp <<= rhs;
+		return tmp;
+	}
+
+	inline Size operator>>( Size const & lhs, uint32_t rhs )
+	{
+		Size tmp{ lhs };
+		tmp >>= rhs;
+		return tmp;
+	}
 }
 
 #endif

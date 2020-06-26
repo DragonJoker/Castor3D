@@ -6,6 +6,8 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 
+#include <ashespp/Command/CommandBuffer.hpp>
+
 using namespace castor;
 
 namespace castor3d

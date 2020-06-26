@@ -9,6 +9,8 @@ See LICENSE file in root folder
 #include "Castor3D/Render/ToneMapping/ToneMappingModule.hpp"
 #include "Castor3D/Render/PostEffect/PostEffectModule.hpp"
 
+#include <atomic>
+
 namespace castor3d
 {
 	class RenderTargetCache
@@ -108,6 +110,7 @@ namespace castor3d
 
 		inline RenderTargetArray const & getRenderTargets( TargetType type )
 		{
+			CU_Require( m_locked );
 			return m_renderTargets[size_t( type )];
 		}
 		/**@}*/
@@ -119,6 +122,7 @@ namespace castor3d
 		 */
 		inline void lock()const
 		{
+			m_locked = true;
 			m_mutex.lock();
 		}
 		/**
@@ -130,9 +134,53 @@ namespace castor3d
 		inline void unlock()const
 		{
 			m_mutex.unlock();
+			m_locked = false;
+		}
+		/**
+		 *\~english
+		 *\brief		Applies a function to all the elements of this cache.
+		 *\param[in]	func	The function.
+		 *\~french
+		 *\brief		Applique une fonction à tous les éléments de ce cache.
+		 *\param[in]	func	La fonction.
+		 */
+		template< typename FuncType >
+		inline void forEach( FuncType func )const
+		{
+			auto lock( castor::makeUniqueLock( *this ) );
+
+			for ( auto const & typeTargets : m_renderTargets )
+			{
+				for ( auto const & target : typeTargets )
+				{
+					func( *target );
+				}
+			}
+		}
+		/**
+		 *\~english
+		 *\brief		Applies a function to all the elements of this cache.
+		 *\param[in]	func	The function.
+		 *\~french
+		 *\brief		Applique une fonction à tous les éléments de ce cache.
+		 *\param[in]	func	La fonction.
+		 */
+		template< typename FuncType >
+		inline void forEach( FuncType func )
+		{
+			auto lock( castor::makeUniqueLock( *this ) );
+
+			for ( auto const & typeTargets : m_renderTargets )
+			{
+				for ( auto const & target : typeTargets )
+				{
+					func( *target );
+				}
+			}
 		}
 
 	private:
+		mutable std::atomic_bool m_locked;
 		TargetTypeArray m_renderTargets;
 		mutable std::mutex m_mutex;
 		ToneMappingFactory m_toneMappingFactory;

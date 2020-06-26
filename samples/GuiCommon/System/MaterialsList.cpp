@@ -13,6 +13,7 @@
 #include <Castor3D/Material/Pass/Pass.hpp>
 #include <Castor3D/Material/Texture/TextureLayout.hpp>
 #include <Castor3D/Material/Texture/TextureUnit.hpp>
+#include <Castor3D/Render/RenderTarget.hpp>
 
 #include <CastorUtils/Log/Logger.hpp>
 
@@ -136,10 +137,7 @@ namespace GuiCommon
 
 		for ( auto unit : *pass )
 		{
-			if ( unit->getConfiguration().environment == 0u )
-			{
-				doAddTexture( passId, ++unitIndex, unit, pass->getType() );
-			}
+			doAddTexture( passId, ++unitIndex, unit, pass->getType() );
 		}
 	}
 
@@ -155,21 +153,14 @@ namespace GuiCommon
 			, new TextureTreeItemProperty( m_propertiesHolder->IsEditable()
 				, texture
 				, type ) );
+		RenderTargetSPtr target = texture->getRenderTarget();
 
-		if ( texture->getRenderTarget() )
+		if ( target )
 		{
-			RenderTargetSPtr target = texture->getRenderTarget();
-
-			if ( target )
-			{
-				wxString name = _( "Render Target" );
-				AppendItem( unitId
-					, name
-					, eBMP_RENDER_TARGET
-					, eBMP_RENDER_TARGET_SEL
-					, new RenderTargetTreeItemProperty( m_propertiesHolder->IsEditable()
-						, target ) );
-			}
+			AppendRenderTarget( this
+				, m_propertiesHolder->IsEditable()
+				, unitId
+				, *target );
 		}
 	}
 

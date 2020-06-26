@@ -14,7 +14,6 @@
 #include <ShaderWriter/Source.hpp>
 
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
-#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 
 using namespace castor;
 using namespace castor3d;

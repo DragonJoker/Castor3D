@@ -4,21 +4,12 @@ See LICENSE file in root folder
 #ifndef ___CU_GroupChangeTracked_H___
 #define ___CU_GroupChangeTracked_H___
 
-#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/Design/DesignModule.hpp"
 
 #include <vector>
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		21/06/2016
-	\~english
-	\brief		Templated class that provide std::array style buffer view.
-	\~french
-	\brief		Classe template qui fournit une vue sur un tampon, à la manière d'un std::array.
-	*/
 	template< typename T >
 	class GroupChangeTracked
 	{

@@ -4,18 +4,12 @@ See LICENSE file in root folder
 #ifndef ___CU_FlagCombination_H___
 #define ___CU_FlagCombination_H___
 
-#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/Design/DesignModule.hpp"
 
 #include <type_traits>
 
 namespace castor
 {
-	/**
-	*\brief
-	*	Template iterator class on a binary combination of flags.
-	*\param FlagType
-	*	The scoped enum type.
-	*/
 	template< typename FlagType >
 	struct FlagIterator
 	{
@@ -89,22 +83,7 @@ namespace castor
 		size_t m_index{ 0u };
 		FlagType m_value;
 	};
-	/**
-	*\~english
-	*\brief
-	*	Template class providing implicit conversion from a scoped enum to
-	* 	its integral base type.
-	*\remarks
-	*	Allows definition of flags, through binary operations (&, |),
-	*	for which operands will be of same binary size.
-	*\~french
-	*\brief
-	*	Classe template qui fournit une conversion implicite depuis un scoped enum
-	*	vers son type entier de base.
-	*\remarks
-	*	Permet la définition de flags, au travers des opérations binaires (&, |),
-	*	Pour lesquels les opérandes auront la même taille binaire.
-	*/
+
 	template< typename FlagType >
 	class FlagCombination
 	{

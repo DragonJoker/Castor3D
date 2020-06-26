@@ -3,7 +3,7 @@
 #if defined( CU_PlatformAndroid )
 
 #	include "CastorUtils/Config/MultiThreadConfig.hpp"
-#	include "CastorUtils/Miscellaneous/Debug.hpp"
+#	include "CastorUtils/Miscellaneous/MiscellaneousModule.hpp"
 #	include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
 #	include <cstdlib>

@@ -38,7 +38,6 @@ namespace castor3d
 				, std::move( image )
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, name );
-			layout->getDefaultView().initialiseSource();
 			layout->initialise();
 			TextureUnit result{ engine };
 			result.setSampler( createSampler( engine, name, VK_FILTER_NEAREST, nullptr ) );

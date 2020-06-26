@@ -703,20 +703,7 @@ namespace castor3d
 					auto result = m_writer.declLocale( "result"
 						, 0.0_f );
 
-					IF( m_writer, shadowType == Int( int( ShadowType::ePCF ) ) )
-					{
-						auto bias = m_writer.declLocale( "bias"
-							, m_getShadowOffset( normal
-								, lightDirection
-								, shadowOffsets.x()
-								, shadowOffsets.y() ) );
-						result = m_filterPCF( lightSpacePosition
-							, c3d_mapNormalDepthSpot
-							, index
-							, vec2( Float( 1.0f / float( ShadowMapPassSpot::TextureSize ) ) )
-							, bias );
-					}
-					ELSEIF( shadowType == Int( int( ShadowType::eVariance ) ) )
+					IF( m_writer, shadowType == Int( int( ShadowType::eVariance ) ) )
 					{
 						auto moments = m_writer.declLocale( "moments"
 							, texture( c3d_mapVarianceSpot
@@ -734,18 +721,31 @@ namespace castor3d
 								, lightDirection
 								, shadowOffsets.x()
 								, shadowOffsets.y() ) );
+
+						IF( m_writer, shadowType == Int( int( ShadowType::ePCF ) ) )
+						{
+							result = m_filterPCF( lightSpacePosition
+								, c3d_mapNormalDepthSpot
+								, index
+								, vec2( Float( 1.0f / float( ShadowMapPassSpot::TextureSize ) ) )
+								, bias );
+						}
+						ELSE
+						{
 #if C3D_DebugSpotShadows
 
-					result = texture( c3d_mapDepthSpot, vec3( lightSpacePosition.xy(), index ) ) * 10.0_f;
+						result = texture( c3d_mapDepthSpot, vec3( lightSpacePosition.xy(), index ) ) * 10.0_f;
 #else
 
-					result = m_textureProj( lightSpacePosition
-						, vec2( 0.0_f )
-						, c3d_mapNormalDepthSpot
-						, index
-						, bias );
+						result = m_textureProj( lightSpacePosition
+							, vec2( 0.0_f )
+							, c3d_mapNormalDepthSpot
+							, index
+							, bias );
 
 #endif
+						}
+						FI;
 					}
 					FI;
 					m_writer.returnStmt( result );
@@ -781,55 +781,7 @@ namespace castor3d
 					auto result = m_writer.declLocale( "result"
 						, 0.0_f );
 
-					IF( m_writer, shadowType == Int( int( ShadowType::ePCF ) ) )
-					{
-						auto bias = m_writer.declLocale( "bias"
-							, m_getShadowOffset( normal
-								, vertexToLight
-								, shadowOffsets.x()
-								, shadowOffsets.y() ) );
-						auto shadowFactor = m_writer.declLocale( "shadowFactor"
-							, 0.0_f );
-						auto offset = m_writer.declLocale( "offset"
-							, 20.0_f * depth );
-						auto numSamplesUsed = m_writer.declLocale( "numSamplesUsed"
-							, 0.0_f );
-						auto x = m_writer.declLocale( "x"
-							, -offset );
-						auto y = m_writer.declLocale( "y"
-							, -offset );
-						auto z = m_writer.declLocale( "z"
-							, -offset );
-						auto const samples = 4;
-						auto inc = m_writer.declLocale( "inc"
-							, offset / ( samples * 0.5f ) );
-						auto shadowMapDepth = m_writer.declLocale< Float >( "shadowMapDepth" );
-
-						for( int i = 0; i < samples; ++i )
-						{
-							for ( int j = 0; j < samples; ++j )
-							{
-								for ( int k = 0; k < samples; ++k )
-								{
-									shadowMapDepth = texture( c3d_mapNormalDepthPoint
-										, vec4( vertexToLight + vec3( x, y, z )
-											, m_writer.cast< Float >( index ) ) ).w();
-									shadowFactor += step( depth - bias, shadowMapDepth );
-									numSamplesUsed += 1.0_f;
-									z += inc;
-								}
-
-								y += inc;
-								z = -offset;
-							}
-
-							x += inc;
-							y = -offset;
-						}
-
-						result = shadowFactor / numSamplesUsed;
-					}
-					ELSEIF( shadowType == Int( int( ShadowType::eVariance ) ) )
+					IF( m_writer, shadowType == Int( int( ShadowType::eVariance ) ) )
 					{
 						auto shadowFactor = m_writer.declLocale( "shadowFactor"
 							, 0.0_f );
@@ -882,11 +834,59 @@ namespace castor3d
 								, vertexToLight
 								, shadowOffsets.x()
 								, shadowOffsets.y() ) );
-						auto shadowMapDepth = m_writer.declLocale( "shadowMapDepth"
-							, texture( c3d_mapNormalDepthPoint
-								, vec4( vertexToLight
-									, m_writer.cast< Float >( index ) ) ).w() );
-						result = step( depth - bias, shadowMapDepth );
+
+						IF( m_writer, shadowType == Int( int( ShadowType::ePCF ) ) )
+						{
+							auto shadowFactor = m_writer.declLocale( "shadowFactor"
+								, 0.0_f );
+							auto offset = m_writer.declLocale( "offset"
+								, 20.0_f * depth );
+							auto numSamplesUsed = m_writer.declLocale( "numSamplesUsed"
+								, 0.0_f );
+							auto x = m_writer.declLocale( "x"
+								, -offset );
+							auto y = m_writer.declLocale( "y"
+								, -offset );
+							auto z = m_writer.declLocale( "z"
+								, -offset );
+							auto const samples = 4;
+							auto inc = m_writer.declLocale( "inc"
+								, offset / ( samples * 0.5f ) );
+							auto shadowMapDepth = m_writer.declLocale< Float >( "shadowMapDepth" );
+
+							for( int i = 0; i < samples; ++i )
+							{
+								for ( int j = 0; j < samples; ++j )
+								{
+									for ( int k = 0; k < samples; ++k )
+									{
+										shadowMapDepth = texture( c3d_mapNormalDepthPoint
+											, vec4( vertexToLight + vec3( x, y, z )
+												, m_writer.cast< Float >( index ) ) ).w();
+										shadowFactor += step( depth - bias, shadowMapDepth );
+										numSamplesUsed += 1.0_f;
+										z += inc;
+									}
+
+									y += inc;
+									z = -offset;
+								}
+
+								x += inc;
+								y = -offset;
+							}
+
+							result = shadowFactor / numSamplesUsed;
+						}
+						ELSE
+						{
+							auto shadowMapDepth = m_writer.declLocale( "shadowMapDepth"
+								, texture( c3d_mapNormalDepthPoint
+									, vec4( vertexToLight
+										, m_writer.cast< Float >( index ) ) ).w() );
+							result = step( depth - bias, shadowMapDepth );
+						}
+						FI;
 					}
 					FI;
 					m_writer.returnStmt( result );
@@ -1079,20 +1079,7 @@ namespace castor3d
 					auto result = m_writer.declLocale( "result"
 						, 0.0_f );
 
-					if ( type == ShadowType::ePCF )
-					{
-						auto bias = m_writer.declLocale( "bias"
-							, m_getShadowOffset( normal
-								, lightDirection
-								, shadowOffsets.x()
-								, shadowOffsets.y() ) );
-						result = m_filterPCF( lightSpacePosition
-							, c3d_mapNormalDepthSpot
-							, shadowMapIndex
-							, vec2( Float( 1.0f / float( ShadowMapPassSpot::TextureSize ) ) )
-							, bias );
-					}
-					else if ( type == ShadowType::eVariance )
+					if ( type == ShadowType::eVariance )
 					{
 						auto moments = m_writer.declLocale( "moments"
 							, texture( c3d_mapVarianceSpot
@@ -1105,23 +1092,35 @@ namespace castor3d
 					}
 					else
 					{
-#if C3D_DebugSpotShadows
-
-						result = texture( c3d_mapDepthSpot, vec3( lightSpacePosition.xy(), shadowMapIndex ) );
-#else
-
 						auto bias = m_writer.declLocale( "bias"
 							, m_getShadowOffset( normal
 								, lightDirection
 								, shadowOffsets.x()
 								, shadowOffsets.y() ) );
-						result = m_textureProj( lightSpacePosition
-							, vec2( 0.0_f )
-							, c3d_mapNormalDepthSpot
-							, shadowMapIndex
-							, bias );
+
+						if ( type == ShadowType::ePCF )
+						{
+							result = m_filterPCF( lightSpacePosition
+								, c3d_mapNormalDepthSpot
+								, shadowMapIndex
+								, vec2( Float( 1.0f / float( ShadowMapPassSpot::TextureSize ) ) )
+								, bias );
+						}
+						else
+						{
+#if C3D_DebugSpotShadows
+
+							result = texture( c3d_mapDepthSpot, vec3( lightSpacePosition.xy(), shadowMapIndex ) );
+#else
+
+							result = m_textureProj( lightSpacePosition
+								, vec2( 0.0_f )
+								, c3d_mapNormalDepthSpot
+								, shadowMapIndex
+								, bias );
 
 #endif
+						}
 					}
 
 					m_writer.returnStmt( result );
@@ -1153,55 +1152,7 @@ namespace castor3d
 					auto depth = m_writer.declLocale( "depth"
 						, length( vertexToLight ) / farPlane );
 
-					if( type == ShadowType::ePCF )
-					{
-						auto shadowFactor = m_writer.declLocale( "shadowFactor"
-							, 0.0_f );
-						auto offset = m_writer.declLocale( "offset"
-							, 20.0_f * depth );
-						auto numSamplesUsed = m_writer.declLocale( "numSamplesUsed"
-							, 0.0_f );
-						auto bias = m_writer.declLocale( "bias"
-							, m_getShadowOffset( normal
-								, vertexToLight
-								, shadowOffsets.x()
-								, shadowOffsets.y() ) );
-						auto x = m_writer.declLocale( "x"
-							, -offset );
-						auto y = m_writer.declLocale( "y"
-							, -offset );
-						auto z = m_writer.declLocale( "z"
-							, -offset );
-						auto const samples = 4;
-						auto inc = m_writer.declLocale( "inc"
-							, offset / ( samples * 0.5f ) );
-						auto shadowMapDepth = m_writer.declLocale< Float >( "shadowMapDepth" );
-
-						for ( int i = 0; i < samples; ++i )
-						{
-							for ( int j = 0; j < samples; ++j )
-							{
-								for ( int k = 0; k < samples; ++k )
-								{
-									shadowMapDepth = texture( c3d_mapNormalDepthPoint
-										, vec4( vertexToLight + vec3( x, y, z )
-											, m_writer.cast< Float >( shadowMapIndex ) ) ).w();
-									shadowFactor += step( depth - bias, shadowMapDepth );
-									numSamplesUsed += 1.0_f;
-									z += inc;
-								}
-
-								y += inc;
-								z = -offset;
-							}
-
-							x += inc;
-							y = -offset;
-						}
-
-						m_writer.returnStmt( shadowFactor / numSamplesUsed );
-					}
-					else if ( type == ShadowType::eVariance )
+					if ( type == ShadowType::eVariance )
 					{
 						auto shadowFactor = m_writer.declLocale( "shadowFactor"
 							, 0.0_f );
@@ -1254,11 +1205,58 @@ namespace castor3d
 								, vertexToLight
 								, shadowOffsets.x()
 								, shadowOffsets.y() ) );
-						auto shadowMapDepth = m_writer.declLocale( "shadowMapDepth"
-							, texture( c3d_mapNormalDepthPoint
-								, vec4( vertexToLight
-									, m_writer.cast< Float >( shadowMapIndex ) ) ).w() );
-						m_writer.returnStmt( step( depth - bias, shadowMapDepth ) );
+
+						if ( type == ShadowType::ePCF )
+						{
+							auto shadowFactor = m_writer.declLocale( "shadowFactor"
+								, 0.0_f );
+							auto offset = m_writer.declLocale( "offset"
+								, 20.0_f * depth );
+							auto numSamplesUsed = m_writer.declLocale( "numSamplesUsed"
+								, 0.0_f );
+							auto x = m_writer.declLocale( "x"
+								, -offset );
+							auto y = m_writer.declLocale( "y"
+								, -offset );
+							auto z = m_writer.declLocale( "z"
+								, -offset );
+							auto const samples = 4;
+							auto inc = m_writer.declLocale( "inc"
+								, offset / ( samples * 0.5f ) );
+							auto shadowMapDepth = m_writer.declLocale< Float >( "shadowMapDepth" );
+
+							for ( int i = 0; i < samples; ++i )
+							{
+								for ( int j = 0; j < samples; ++j )
+								{
+									for ( int k = 0; k < samples; ++k )
+									{
+										shadowMapDepth = texture( c3d_mapNormalDepthPoint
+											, vec4( vertexToLight + vec3( x, y, z )
+												, m_writer.cast< Float >( shadowMapIndex ) ) ).w();
+										shadowFactor += step( depth - bias, shadowMapDepth );
+										numSamplesUsed += 1.0_f;
+										z += inc;
+									}
+
+									y += inc;
+									z = -offset;
+								}
+
+								x += inc;
+								y = -offset;
+							}
+
+							m_writer.returnStmt( shadowFactor / numSamplesUsed );
+						}
+						else
+						{
+							auto shadowMapDepth = m_writer.declLocale( "shadowMapDepth"
+								, texture( c3d_mapNormalDepthPoint
+									, vec4( vertexToLight
+										, m_writer.cast< Float >( shadowMapIndex ) ) ).w() );
+							m_writer.returnStmt( step( depth - bias, shadowMapDepth ) );
+						}
 					}
 				}
 				, InVec2( m_writer, "shadowOffsets" )

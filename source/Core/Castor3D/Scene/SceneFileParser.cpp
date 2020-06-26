@@ -205,8 +205,6 @@ namespace castor3d
 		m_mapTextureChannels[getName( TextureFlag::eOpacity, MaterialType::ePhong )] = uint32_t( TextureFlag::eOpacity );
 		m_mapTextureChannels[getName( TextureFlag::eShininess, MaterialType::ePhong )] = uint32_t( TextureFlag::eShininess );
 		m_mapTextureChannels[getName( TextureFlag::eEmissive, MaterialType::ePhong )] = uint32_t( TextureFlag::eEmissive );
-		m_mapTextureChannels[getName( TextureFlag::eReflection, MaterialType::ePhong )] = uint32_t( TextureFlag::eReflection );
-		m_mapTextureChannels[getName( TextureFlag::eRefraction, MaterialType::ePhong )] = uint32_t( TextureFlag::eRefraction );
 		m_mapTextureChannels[getName( TextureFlag::eOcclusion, MaterialType::ePhong )] = uint32_t( TextureFlag::eOcclusion );
 		m_mapTextureChannels[getName( TextureFlag::eOcclusion, MaterialType::ePhong )] = uint32_t( TextureFlag::eOcclusion );
 		m_mapTextureChannels[getName( TextureFlag::eTransmittance, MaterialType::ePhong )] = uint32_t( TextureFlag::eTransmittance );
@@ -468,7 +466,6 @@ namespace castor3d
 		addParser( uint32_t( CSCNSection::eShadows ), cuT( "variance_bias" ), parserShadowsVarianceBias, { makeParameter< ParameterType::eFloat >() } );
 		addParser( uint32_t( CSCNSection::eShadows ), cuT( "volumetric_steps" ), parserShadowsVolumetricSteps, { makeParameter< ParameterType::eUInt32 >() } );
 		addParser( uint32_t( CSCNSection::eShadows ), cuT( "volumetric_scattering" ), parserShadowsVolumetricScatteringFactor, { makeParameter< ParameterType::eFloat >() } );
-		addParser( uint32_t( CSCNSection::eShadows ), cuT( "rsm" ), parserShadowsRsm );
 		addParser( uint32_t( CSCNSection::eShadows ), cuT( "lpv" ), parserShadowsLpv );
 		addParser( uint32_t( CSCNSection::eShadows ), cuT( "layered_lpv" ), parserShadowsLayeredLpv );
 
@@ -541,6 +538,8 @@ namespace castor3d
 		addParser( uint32_t( CSCNSection::ePass ), cuT( "subsurface_scattering" ), parserPassSubsurfaceScattering );
 		addParser( uint32_t( CSCNSection::ePass ), cuT( "parallax_occlusion" ), parserPassParallaxOcclusion, { makeParameter< ParameterType::eBool >() } );
 		addParser( uint32_t( CSCNSection::ePass ), cuT( "bw_accumulation" ), parserPassBWAccumulationOperator, { makeParameter< ParameterType::eUInt32 >( makeRange( 0u, 6u ) ) } );
+		addParser( uint32_t( CSCNSection::ePass ), cuT( "reflections" ), parserPassReflections, { makeParameter< ParameterType::eBool >() } );
+		addParser( uint32_t( CSCNSection::ePass ), cuT( "refractions" ), parserPassRefractions, { makeParameter< ParameterType::eBool>() } );
 		addParser( uint32_t( CSCNSection::ePass ), cuT( "}" ), parserPassEnd );
 
 		addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "image" ), parserUnitImage, { makeParameter< ParameterType::ePath >() } );

@@ -5,8 +5,11 @@ See LICENSE file in root folder
 #define ___C3D_LpvConfigUbo_H___
 
 #include "UbosModule.hpp"
+#include "Castor3D/Scene/Light/LightModule.hpp"
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
+
+#include <CastorUtils/Graphics/GraphicsModule.hpp>
 
 namespace castor3d
 {
@@ -43,10 +46,20 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour les données de l'UBO.
 		 */
-		C3D_API void update( castor::Point3f const & minVolumeCorner
-			, castor::Point3ui const & gridSize
-			, uint32_t lightIndex
-			, float cellSize
+		C3D_API void update( castor::Grid const & grid
+			, Light const & light
+			, uint32_t cascadeIndex
+			, float texelAreaModifier = 1.0f
+			, float indirectAttenuation = 1.7f );
+		/**
+		 *\~english
+		 *\brief		Updates UBO data.
+		 *\~french
+		 *\brief		Met à jour les données de l'UBO.
+		 */
+		C3D_API void update( castor::Grid const & grid
+			, Light const & light
+			, float texelAreaModifier = 1.0f
 			, float indirectAttenuation = 1.7f );
 		/**
 		 *\~english
@@ -67,6 +80,7 @@ namespace castor3d
 
 	public:
 		C3D_API static const std::string LpvConfig;
+		C3D_API static const std::string LightView;
 		C3D_API static const std::string MinVolumeCorner;
 		C3D_API static const std::string GridSizes;
 		C3D_API static const std::string Config;
@@ -83,9 +97,10 @@ namespace castor3d
 		, binding\
 		, set\
 		, ast::type::MemoryLayout::eStd140 };\
+	auto c3d_lightView = lpvConfig.declMember< Mat4 >( castor3d::LpvConfigUbo::LightView );\
 	auto c3d_minVolumeCorner = lpvConfig.declMember< Vec4 >( castor3d::LpvConfigUbo::MinVolumeCorner );\
-	auto c3d_gridSizes = lpvConfig.declMember< UVec4 >( castor3d::LpvConfigUbo::GridSizes );\
-	auto c3d_config = lpvConfig.declMember< Vec4 >( castor3d::LpvConfigUbo::Config );\
+	auto c3d_gridSizes = lpvConfig.declMember< Vec4 >( castor3d::LpvConfigUbo::GridSizes );\
+	auto c3d_lpvConfig = lpvConfig.declMember< Vec4 >( castor3d::LpvConfigUbo::Config );\
 	lpvConfig.end()
 
 #endif

@@ -4,19 +4,12 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_SCOPE_GUARD_H___
 #define ___CASTOR_SCOPE_GUARD_H___
 
+#include "CastorUtils/Design/DesignModule.hpp"
+
 #include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		05/09/2016
-	\~english
-	\brief		Class used to execute code at scope exit.
-	\~french
-	\brief		Classe utilisée pour exécuter du code à la sortie d'un scope.
-	*/
 	template< typename ScopeExitFuncType >
 	class ScopeGuard
 	{

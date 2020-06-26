@@ -11,19 +11,6 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		08/01/2016
-	\~english
-	\brief		Memory allocation policy. It can grow of a fixed objects count.
-	\remarks	Variable size, basic memory leaks check.
-				Holds the memory buffers, free chunks and currently allocated objects count.
-	\~french
-	\brief		Politique d'allocation de mémoire, pouvant grandir, d'un nombre fixe d'objets.
-	\remarks	Taille variable, check basique des fuites mémoire.
-				Contient le tampon mémoire, les chunks libres, et le nombre d'objets actuellement alloués.
-	*/
 	template< typename Object, typename MemoryAllocator >
 	class FixedGrowingSizeMemoryData
 	{

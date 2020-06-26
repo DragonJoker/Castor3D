@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_STREAM_BASE_MANIPULATORS_H___
 #define ___CASTOR_STREAM_BASE_MANIPULATORS_H___
 
-#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/Stream/StreamModule.hpp"
 
 #include <streambuf>
 #include <cassert>
@@ -14,15 +14,6 @@ namespace castor
 {
 	namespace manip
 	{
-		/**
-		\author		Sylvain DOREMUS
-		\version	0.7.0.0
-		\date		02/09/2014
-		\~english
-		\brief		Defines a base manipulator type, its what the built-in stream manipulators do when they take parameters, only they return an opaque type.
-		\~french
-		\brief		Définit un type manipulateur de base, c'est ce que font les manipulateurs de flux lorsqu'ils prennent des paramètres, sauf qu'ils retournent un type opaque
-		*/
 		template< typename CharType >
 		struct BasicBaseManip
 		{

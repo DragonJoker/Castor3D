@@ -15,53 +15,6 @@ See LICENSE file in root folder
 namespace castor
 {
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		19/10/2011
-	\~english
-	\brief		Predefined colours enumeration
-	\~french
-	\brief		Enumération de couleurs prédéfinies
-	*/
-	enum class PredefinedRgbColour
-		: uint32_t
-	{
-		eBlack = 0x000000FF,
-		eDarkBlue = 0x00007FFF,
-		eBlue = 0x0000FFFF,
-		eDarkGreen = 0x007F00FF,
-		eGreen = 0x00FF00FF,
-		eDarkRed = 0x7F0000FF,
-		eRed = 0xFF0000FF,
-		eLightBlue = 0x7F7FFFFF,
-		eLightGreen = 0x7FFF7FFF,
-		eLightRed = 0xFF7F7FFF,
-		eWhite = 0xFFFFFFFF,
-	};
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		19/10/2011
-	\~english
-	\brief		RgbColourT components enumeration
-	\~french
-	\brief		Enumération des composantes d'une couleur
-	*/
-	enum class RgbComponent
-		: uint8_t
-	{
-		//!\~english	Red PixelComponents
-		//!\~french		Composante rouge
-		eRed,
-		//!\~english	Green PixelComponents
-		//!\~french		Composante verte
-		eGreen,
-		//!\~english	Blue PixelComponents
-		//!\~french		Composante bleue
-		eBlue,
-		CU_ScopedEnumBounds( eRed )
-	};
-	/**
 	 *\~english
 	 *\brief		Retrieves predefined colour name
 	 *\param[in]	predefined	The predefined colour
@@ -83,18 +36,7 @@ namespace castor
 	 *\return		La couleur prédéfinie
 	 */
 	inline static PredefinedRgbColour getPredefinedRgb( String const & name );
-	/**
-	\author		Sylvain DOREMUS
-	\date		14/08/2010
-	\~english
-	\brief		RGB colour representation
-	\remark		Predefines numerous colours
-				<br />Allows conversion to different colour formats (RGB, ARGB, BGR, ...) and different data types (long, float, char, ...)
-	\~french
-	\brief		Représentation d'une couleur RGB
-	\remark		Prédéfinit differentes couleurs
-				<br />Permet la conversion entre différents types de couleurs (RGB, ARGB, BGR, ...) et différents types de données (long, float, char, ...)
-	*/
+
 	template< typename ComponentType >
 	class RgbColourT
 	{

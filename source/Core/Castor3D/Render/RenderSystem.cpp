@@ -10,6 +10,7 @@
 #include <ashespp/Core/RendererList.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <CompilerGlsl/compileGlsl.hpp>
 #include <CompilerSpirV/compileSpirV.hpp>
 
 #if C3D_HasSPIRVCross

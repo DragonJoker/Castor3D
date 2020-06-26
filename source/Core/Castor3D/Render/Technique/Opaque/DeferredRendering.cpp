@@ -70,7 +70,6 @@ namespace castor3d
 				, std::move( image )
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, name );
-			texture->getDefaultView().initialiseSource();
 			texture->initialise();
 			return texture;
 		}
@@ -202,8 +201,6 @@ namespace castor3d
 		{
 			m_linearisePass->update( camera.getViewport() );
 		}
-
-		m_lightingPass->update( info, scene, camera, jitter );
 
 		if ( m_ssaoConfig.enabled )
 		{

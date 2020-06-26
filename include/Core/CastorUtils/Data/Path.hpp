@@ -4,20 +4,12 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_PATH_H___
 #define ___CASTOR_PATH_H___
 
+#include "CastorUtils/Data/DataModule.hpp"
+
 #include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\date		09/02/2010
-	\~english
-	\brief		Path management class
-	\remark		Defines platform dependant paths.
-	\~french
-	\brief		Classe de gestion de chemin
-	\remark		Définit un chemin de fichier.
-	*/
 	class Path
 		: public String
 	{

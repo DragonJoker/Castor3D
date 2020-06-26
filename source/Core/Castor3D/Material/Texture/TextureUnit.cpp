@@ -1,6 +1,7 @@
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Cache/TargetCache.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
@@ -33,6 +34,54 @@ namespace castor3d
 				}
 			}
 		}
+
+		TextureUnit createTextureUnit( Engine & engine
+			, castor::String const & name
+			, VkFormat format
+			, VkExtent3D size
+			, VkImageType imageType
+			, VkImageCreateFlags createFlags
+			, VkImageUsageFlags usageFlags )
+		{
+			SamplerSPtr sampler;
+
+			if ( engine.getSamplerCache().has( name ) )
+			{
+				sampler = engine.getSamplerCache().find( name );
+			}
+			else
+			{
+				sampler = engine.getSamplerCache().add( name );
+				sampler->setMinFilter( VK_FILTER_LINEAR );
+				sampler->setMagFilter( VK_FILTER_LINEAR );
+				sampler->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				sampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				sampler->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				sampler->setBorderColour( VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK );
+			}
+
+			ashes::ImageCreateInfo image
+			{
+				createFlags,
+				imageType,
+				format,
+				size,
+				1u,
+				1u,
+				VK_SAMPLE_COUNT_1_BIT,
+				VK_IMAGE_TILING_OPTIMAL,
+				usageFlags,
+			};
+			auto layout = std::make_shared< TextureLayout >( *engine.getRenderSystem()
+				, image
+				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+				, name );
+			TextureUnit unit{ engine };
+			unit.setTexture( layout );
+			unit.setSampler( sampler );
+			unit.initialise();
+			return unit;
+		}
 	}
 
 	TextureUnit::TextWriter::TextWriter( String const & tabs, MaterialType type )
@@ -50,7 +99,7 @@ namespace castor3d
 			auto texture = unit.getTexture();
 			auto image = texture->getDefaultView().toString();
 
-			if ( !image.empty() || !texture->getDefaultView().isStaticSource() )
+			if ( !image.empty() || !texture->isStatic() )
 			{
 				if ( result )
 				{
@@ -68,7 +117,7 @@ namespace castor3d
 
 						if ( result )
 						{
-							if ( !texture->getDefaultView().isStaticSource() )
+							if ( !texture->isStatic() )
 							{
 								if ( unit.getRenderTarget() )
 								{
@@ -125,6 +174,54 @@ namespace castor3d
 		{
 			getEngine()->getRenderTargetCache().remove( std::move( renderTarget ) );
 		}
+	}
+
+	TextureUnit TextureUnit::create( Engine & engine
+		, castor::String const & name
+		, VkFormat format
+		, uint32_t size
+		, VkImageCreateFlags createFlags
+		, VkImageUsageFlags usageFlags )
+	{
+		return createTextureUnit( engine
+			, name
+			, format
+			, { size, 1u, 1u }
+			, VK_IMAGE_TYPE_1D
+			, createFlags
+			, usageFlags );
+	}
+
+	TextureUnit TextureUnit::create( Engine & engine
+		, castor::String const & name
+		, VkFormat format
+		, VkExtent2D const & size
+		, VkImageCreateFlags createFlags
+		, VkImageUsageFlags usageFlags )
+	{
+		return createTextureUnit( engine
+			, name
+			, format
+			, { size.width, size.height, 1u }
+			, VK_IMAGE_TYPE_2D
+			, createFlags
+			, usageFlags );
+	}
+
+	TextureUnit TextureUnit::create( Engine & engine
+		, castor::String const & name
+		, VkFormat format
+		, VkExtent3D const & size
+		, VkImageCreateFlags createFlags
+		, VkImageUsageFlags usageFlags )
+	{
+		return createTextureUnit( engine
+			, name
+			, format
+			, size
+			, VK_IMAGE_TYPE_3D
+			, createFlags
+			, usageFlags );
 	}
 
 	void TextureUnit::setTexture( TextureLayoutSPtr texture )
@@ -211,13 +308,13 @@ namespace castor3d
 			return cuT( "RT_" ) + castor::string::toString( renderTarget->getIndex() );
 		}
 
-		if ( m_configuration.environment )
-		{
-			return cuT( "EnvMap_" ) + castor::string::toString( m_configuration.environment );
-		}
-
 		CU_Require( m_texture );
-		return m_texture->getDefaultView().toString();
+		return m_texture->getImage().getName();
+	}
+
+	TextureFlags TextureUnit::getFlags()const
+	{
+		return castor3d::getFlags( m_configuration );
 	}
 
 	void TextureUnit::setConfiguration( TextureConfiguration value )

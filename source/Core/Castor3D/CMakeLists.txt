@@ -299,7 +299,6 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Texture/TextureConfiguration.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Texture/TextureLayout.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Texture/TextureModule.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Texture/TextureSource.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Texture/TextureUnit.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Texture/TextureView.cpp
 )
@@ -992,6 +991,7 @@ source_group( "Header Files\\Render\\Technique\\Opaque\\Lighting" FILES ${${PROJ
 source_group( "Source Files\\Render\\Technique\\Opaque\\Lighting" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Technique/Opaque/LightVolumeGI/GeometryInjectionPass.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Technique/Opaque/LightVolumeGI/LayeredLightVolumeGIPass.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Technique/Opaque/LightVolumeGI/LightInjectionPass.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Technique/Opaque/LightVolumeGI/LightPropagationPass.cpp
@@ -999,6 +999,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Technique/Opaque/LightVolumeGI/LightVolumeGIPass.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Technique/Opaque/LightVolumeGI/GeometryInjectionPass.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Technique/Opaque/LightVolumeGI/LayeredLightVolumeGIPass.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Technique/Opaque/LightVolumeGI/LightInjectionPass.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp
@@ -1525,7 +1526,6 @@ add_library( castor::${PROJECT_NAME}
 )
 target_include_directories( ${PROJECT_NAME}
 	PUBLIC
-		$<BUILD_INTERFACE:${Vulkan_INCLUDE_DIRS}>
 		$<BUILD_INTERFACE:${ASHES_SOURCE_DIR}/include>
 		$<BUILD_INTERFACE:${ASHES_CONFIG_DIR}/include>
 		$<INSTALL_INTERFACE:include>
@@ -1545,9 +1545,9 @@ target_link_libraries( ${PROJECT_NAME}
 	PUBLIC
 		castor::CastorUtils
 		sdw::ShaderWriter
-		ashes::ashespp
 	PRIVATE
 		sdw::CompilerSpirV
+		sdw::CompilerGlsl
 		${glslang_LIBRARIES}
 )
 

@@ -299,7 +299,8 @@ namespace castor3d
 		, m_matrixUbo{ engine }
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_sampler{ engine.getDefaultSampler() }
-		, m_signalReady{ getCurrentRenderDevice( engine )->createSemaphore( m_name ) }
+		, m_signalImgReady{ getCurrentRenderDevice( engine )->createSemaphore( m_name + "ImgReady" ) }
+		, m_signalImgFinished{ getCurrentRenderDevice( engine )->createSemaphore( m_name + "ImgFinished" ) }
 		, m_fence{ getCurrentRenderDevice( engine )->createFence( m_name, VK_FENCE_CREATE_SIGNALED_BIT ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, m_name }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, m_name }
@@ -331,54 +332,60 @@ namespace castor3d
 		auto result = &toWait;
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto & device = getCurrentRenderDevice( m_engine );
+		auto & commandBuffer = *m_commandBuffers[m_commandBufferIndex];
 
-		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-		m_commandBuffer->beginDebugBlock(
+		commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
+		commandBuffer.beginDebugBlock(
 			{
 				"Deferred - " + m_name,
 				makeFloatArray( m_engine.getNextRainbowColour() ),
 			} );
-		m_timer->beginPass( *m_commandBuffer, index );
+		m_timer->beginPass( commandBuffer, index );
 		m_timer->notifyPassRender( index );
 
 		if ( !index )
 		{
-			m_commandBuffer->beginRenderPass( *m_firstRenderPass.renderPass
+			commandBuffer.beginRenderPass( *m_firstRenderPass.renderPass
 				, *m_firstRenderPass.frameBuffer
 				, { defaultClearDepthStencil, opaqueBlackClearColor, opaqueBlackClearColor }
 				, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
-			m_commandBuffer->executeCommands( { *m_pipeline->firstCommandBuffer } );
+			commandBuffer.executeCommands( { *m_pipeline->firstCommandBuffer } );
 		}
 		else
 		{
-			m_commandBuffer->beginRenderPass( *m_blendRenderPass.renderPass
+			commandBuffer.beginRenderPass( *m_blendRenderPass.renderPass
 				, *m_blendRenderPass.frameBuffer
 				, { defaultClearDepthStencil, opaqueBlackClearColor, opaqueBlackClearColor }
 				, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
-			m_commandBuffer->executeCommands( { *m_pipeline->blendCommandBuffer } );
+			commandBuffer.executeCommands( { *m_pipeline->blendCommandBuffer } );
 		}
 
-		m_commandBuffer->endRenderPass();
-		m_timer->endPass( *m_commandBuffer, index );
-		m_commandBuffer->endDebugBlock();
-		m_commandBuffer->end();
+		commandBuffer.endRenderPass();
+		m_timer->endPass( commandBuffer, index );
+		commandBuffer.endDebugBlock();
+		commandBuffer.end();
 
 #if C3D_UseLightPassFence
 		m_fence->reset();
-		device.graphicsQueue->submit( *m_commandBuffer
-			, *result
-			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, *m_signalReady
+		device.graphicsQueue->submit( { commandBuffer }
+			, { *result }
+			, { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT }
+			, { *m_signalImgFinished }
 			, m_fence.get() );
 		m_fence->wait( ashes::MaxTimeout );
 #else
-		device.graphicsQueue->submit( *m_commandBuffer
-			, *result
-			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, *m_signalReady
+		device.graphicsQueue->submit( { commandBuffer }
+			, ( !index
+				? ashes::SemaphoreCRefArray{ *result }
+				: ashes::SemaphoreCRefArray{ *result, *m_signalImgReady } )
+			, ( !index
+				? ashes::VkPipelineStageFlagsArray{ VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT }
+				: ashes::VkPipelineStageFlagsArray{ VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT } )
+			, { *m_signalImgFinished, *m_signalImgReady }
 			, nullptr );
+		m_commandBufferIndex = 1u - m_commandBufferIndex;
 #endif
-		result = m_signalReady.get();
+		result = m_signalImgFinished.get();
 		return *result;
 	}
 
@@ -575,14 +582,17 @@ namespace castor3d
 		m_opaquePassResult = &gp;
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto & device = getCurrentRenderDevice( renderSystem );
-		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( m_name
+		m_commandBuffers[0] = device.graphicsCommandPool->createCommandBuffer( m_name + "0"
+			, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
+		m_commandBuffers[1] = device.graphicsCommandPool->createCommandBuffer( m_name + "1"
 			, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
 	}
 
 	void LightPass::doCleanup()
 	{
 		m_matrixUbo.cleanup();
-		m_commandBuffer.reset();
+		m_commandBuffers[0].reset();
+		m_commandBuffers[1].reset();
 		m_pipelines.clear();
 	}
 

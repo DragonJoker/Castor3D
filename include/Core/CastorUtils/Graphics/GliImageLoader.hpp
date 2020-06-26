@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___CU_DdsImageLoader_H___
-#define ___CU_DdsImageLoader_H___
+#ifndef ___CU_GliImageLoader_H___
+#define ___CU_GliImageLoader_H___
 
 #include "CastorUtils/Graphics/ImageLoader.hpp"
 
@@ -10,11 +10,11 @@ namespace castor
 {
 	/**
 	\~english
-	\brief		DDS image loader.
+	\brief		Image loader based on gli.
 	\~french
-	\brief		Loader d'image DDS.
+	\brief		Loader d'image basé sur gli.
 	*/
-	class DdsImageLoader
+	class GliImageLoader
 		: public ImageLoaderImpl
 	{
 	public:
@@ -23,9 +23,10 @@ namespace castor
 		/**
 		 *\copydoc castor::ImageLoaderImpl::load
 		 */
-		CU_API PxBufferPtrArray load( String const & imageFormat
+		CU_API ImageLayout load( String const & imageFormat
 			, uint8_t const * data
-			, uint32_t size )const override;
+			, uint32_t size
+			, PxBufferBaseSPtr & buffer )const override;
 	};
 }
 

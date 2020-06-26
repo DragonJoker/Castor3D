@@ -104,38 +104,21 @@ namespace castor3d
 	const String ShaderProgram::Bitangent = cuT( "bitangent" );
 	const String ShaderProgram::Texture = cuT( "texture" );
 	const String ShaderProgram::Colour = cuT( "colour" );
-	const String ShaderProgram::Position2 = cuT( "position2" );
-	const String ShaderProgram::Normal2 = cuT( "normal2" );
-	const String ShaderProgram::Tangent2 = cuT( "tangent2" );
-	const String ShaderProgram::Bitangent2 = cuT( "bitangent2" );
-	const String ShaderProgram::Texture2 = cuT( "texture2" );
+	const String ShaderProgram::Position2 = cuT( "inPosition2" );
+	const String ShaderProgram::Normal2 = cuT( "inNormal2" );
+	const String ShaderProgram::Tangent2 = cuT( "inTangent2" );
+	const String ShaderProgram::Bitangent2 = cuT( "inBitangent2" );
+	const String ShaderProgram::Texture2 = cuT( "inTexture2" );
 	const String ShaderProgram::Colour2 = cuT( "colour2" );
 	const String ShaderProgram::Text = cuT( "text" );
-	const String ShaderProgram::BoneIds0 = cuT( "bone_ids0" );
-	const String ShaderProgram::BoneIds1 = cuT( "bone_ids1" );
-	const String ShaderProgram::Weights0 = cuT( "weights0" );
-	const String ShaderProgram::Weights1 = cuT( "weights1" );
+	const String ShaderProgram::BoneIds0 = cuT( "inBoneIds0" );
+	const String ShaderProgram::BoneIds1 = cuT( "inBoneIds1" );
+	const String ShaderProgram::Weights0 = cuT( "inWeights0" );
+	const String ShaderProgram::Weights1 = cuT( "inWeights1" );
 	const String ShaderProgram::Transform = cuT( "transform" );
 	const String ShaderProgram::Material = cuT( "material" );
 
 	const String ShaderProgram::Lights = cuT( "c3d_sLights" );
-	const String ShaderProgram::MapDiffuse = cuT( "c3d_mapDiffuse" );
-	const String ShaderProgram::MapAlbedo = cuT( "c3d_mapAlbedo" );
-	const String ShaderProgram::MapSpecular = cuT ("c3d_mapSpecular");
-	const String ShaderProgram::MapRoughness = cuT( "c3d_mapRoughness" );
-	const String ShaderProgram::MapEmissive = cuT( "c3d_mapEmissive" );
-	const String ShaderProgram::MapNormal = cuT( "c3d_mapNormal" );
-	const String ShaderProgram::MapOpacity = cuT( "c3d_mapOpacity" );
-	const String ShaderProgram::MapGloss = cuT( "c3d_mapGloss" );
-	const String ShaderProgram::MapMetallic = cuT ("c3d_mapMetallic");
-	const String ShaderProgram::MapHeight = cuT( "c3d_mapHeight" );
-	const String ShaderProgram::MapEnvironment = cuT( "c3d_mapEnvironment" );
-	const String ShaderProgram::MapAmbientOcclusion = cuT( "c3d_mapAmbientOcclusion" );
-	const String ShaderProgram::MapTransmittance = cuT( "c3d_mapTransmittance" );
-	const String ShaderProgram::MapIrradiance = cuT( "c3d_mapIrradiance" );
-	const String ShaderProgram::MapPrefiltered = cuT( "c3d_mapPrefiltered" );
-	const String ShaderProgram::MapBrdf = cuT( "c3d_mapBrdf" );
-	const String ShaderProgram::MapText = cuT( "c3d_mapText" );
 
 	//*************************************************************************************************
 

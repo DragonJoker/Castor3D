@@ -8,15 +8,6 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		03/01/2011
-	\~english
-	\brief		Vertex, expressed in rho theta and phi (Euler angles)
-	\~french
-	\brief		Vertex, exprimé en rho theta et phi (angles d'Euler)
-	*/
 	class SphericalVertex
 	{
 	public:

@@ -242,8 +242,7 @@ namespace castor3d
 		, BlendMode alphaBlendMode
 		, VkCompareOp alphaFunc
 		, PassFlags const & passFlags
-		, TextureFlags const & textures
-		, uint32_t texturesCount
+		, TextureFlagsArray const & textures
 		, uint32_t heightMapIndex
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
@@ -253,13 +252,12 @@ namespace castor3d
 		auto flags = PipelineFlags{ colourBlendMode
 			, alphaBlendMode
 			, passFlags
-			, textures
-			, texturesCount
 			, heightMapIndex
 			, programFlags
 			, sceneFlags
 			, topology
-			, alphaFunc };
+			, alphaFunc
+			, textures };
 		prepareBackPipeline( flags, layouts );
 		return flags;
 	}
@@ -288,8 +286,7 @@ namespace castor3d
 		, BlendMode alphaBlendMode
 		, VkCompareOp alphaFunc
 		, PassFlags const & passFlags
-		, TextureFlags const & textures
-		, uint32_t texturesCount
+		, TextureFlagsArray const & textures
 		, uint32_t heightMapIndex
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
@@ -299,13 +296,12 @@ namespace castor3d
 		auto flags = PipelineFlags{ colourBlendMode
 			, alphaBlendMode
 			, passFlags
-			, textures
-			, texturesCount
 			, heightMapIndex
 			, programFlags
 			, sceneFlags
 			, topology
-			, alphaFunc };
+			, alphaFunc
+			, textures };
 		prepareFrontPipeline( flags, layouts );
 		return flags;
 	}
@@ -548,6 +544,11 @@ namespace castor3d
 		};
 	}
 
+	TextureFlags RenderPass::getTexturesMask()const
+	{
+		return TextureFlags{ TextureFlag::eAll };
+	}
+
 	namespace
 	{
 		template< typename RenderNodeT >
@@ -561,7 +562,7 @@ namespace castor3d
 			engine.getMaterialCache().getPassBuffer().createBinding( uboDescriptorSet
 				, layout.getBinding( getPassBufferIndex() ) );
 
-			if ( node.pipeline.getFlags().texturesCount )
+			if ( !node.pipeline.getFlags().textures.empty() )
 			{
 				engine.getMaterialCache().getTextureBuffer().createBinding( uboDescriptorSet
 					, layout.getBinding( getTexturesBufferIndex() ) );
@@ -588,7 +589,7 @@ namespace castor3d
 					, 1u );
 			}
 
-			if ( node.pipeline.getFlags().texturesCount )
+			if ( !node.pipeline.getFlags().textures.empty() )
 			{
 				uboDescriptorSet.createSizedBinding( layout.getBinding( TexturesUbo::BindingPoint )
 					, *node.texturesUbo.buffer
@@ -1130,6 +1131,7 @@ namespace castor3d
 		m_matrixUbo.update( camera.getView()
 			, camera.getProjection()
 			, jitterProjSpace );
+		m_sceneUbo.update( *camera.getScene(), &camera );
 	}
 
 	std::map< PipelineFlags, RenderPipelineUPtr > & RenderPass::doGetFrontPipelines()
@@ -1245,7 +1247,7 @@ namespace castor3d
 		ashes::VkDescriptorSetLayoutBindingArray uboBindings;
 		uboBindings.emplace_back( getEngine()->getMaterialCache().getPassBuffer().createLayoutBinding() );
 
-		if ( flags.texturesCount )
+		if ( !flags.textures.empty() )
 		{
 			uboBindings.emplace_back( getEngine()->getMaterialCache().getTextureBuffer().createLayoutBinding() );
 		}
@@ -1335,16 +1337,16 @@ namespace castor3d
 			, RenderPass::VertexInputs::TangentLocation );
 		auto uv = writer.declInput< Vec3 >( "uv"
 			, RenderPass::VertexInputs::TextureLocation );
-		auto bone_ids0 = writer.declInput< IVec4 >( "bone_ids0"
+		auto inBoneIds0 = writer.declInput< IVec4 >( "inBoneIds0"
 			, RenderPass::VertexInputs::BoneIds0Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto bone_ids1 = writer.declInput< IVec4 >( "bone_ids1"
+		auto inBoneIds1 = writer.declInput< IVec4 >( "inBoneIds1"
 			, RenderPass::VertexInputs::BoneIds1Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto weights0 = writer.declInput< Vec4 >( "weights0"
+		auto inWeights0 = writer.declInput< Vec4 >( "inWeights0"
 			, RenderPass::VertexInputs::Weights0Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto weights1 = writer.declInput< Vec4 >( "weights1"
+		auto inWeights1 = writer.declInput< Vec4 >( "inWeights1"
 			, RenderPass::VertexInputs::Weights1Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
 		auto transform = writer.declInput< Mat4 >( "transform"
@@ -1353,16 +1355,16 @@ namespace castor3d
 		auto material = writer.declInput< Int >( "material"
 			, RenderPass::VertexInputs::MaterialLocation
 			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
-		auto position2 = writer.declInput< Vec4 >( "position2"
+		auto inPosition2 = writer.declInput< Vec4 >( "inPosition2"
 			, RenderPass::VertexInputs::Position2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
-		auto normal2 = writer.declInput< Vec3 >( "normal2"
+		auto inNormal2 = writer.declInput< Vec3 >( "inNormal2"
 			, RenderPass::VertexInputs::Normal2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
-		auto tangent2 = writer.declInput< Vec3 >( "tangent2"
+		auto inTangent2 = writer.declInput< Vec3 >( "inTangent2"
 			, RenderPass::VertexInputs::Tangent2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
-		auto texture2 = writer.declInput< Vec3 >( "texture2"
+		auto inTexture2 = writer.declInput< Vec3 >( "inTexture2"
 			, RenderPass::VertexInputs::Texture2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
 		auto in = writer.getIn();
@@ -1443,10 +1445,10 @@ namespace castor3d
 				{
 					auto time = writer.declLocale( "time"
 						, vec3( 1.0_f - c3d_time ) );
-					v4Vertex = vec4( sdw::fma( v4Vertex.xyz(), time, position2.xyz() * c3d_time ), 1.0_f );
-					v4Normal = vec4( sdw::fma( v4Normal.xyz(), time, normal2.xyz() * c3d_time ), 1.0_f );
-					v4Tangent = vec4( sdw::fma( v4Tangent.xyz(), time, tangent2.xyz() * c3d_time ), 1.0_f );
-					v3Texture = sdw::fma( v3Texture, time, texture2 * c3d_time );
+					v4Vertex = vec4( sdw::fma( v4Vertex.xyz(), time, inPosition2.xyz() * c3d_time ), 1.0_f );
+					v4Normal = vec4( sdw::fma( v4Normal.xyz(), time, inNormal2.xyz() * c3d_time ), 1.0_f );
+					v4Tangent = vec4( sdw::fma( v4Tangent.xyz(), time, inTangent2.xyz() * c3d_time ), 1.0_f );
+					v3Texture = sdw::fma( v3Texture, time, inTexture2 * c3d_time );
 				}
 
 				vtx_texture = v3Texture;

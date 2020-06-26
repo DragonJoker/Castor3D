@@ -4,6 +4,8 @@ See LICENSE file in root folder
 #ifndef ___Cu_Grid_HPP___
 #define ___Cu_Grid_HPP___
 
+#include "CastorUtils/Graphics/GraphicsModule.hpp"
+
 #include "CastorUtils/Math/SquareMatrix.hpp"
 #include "CastorUtils/Math/Point.hpp"
 

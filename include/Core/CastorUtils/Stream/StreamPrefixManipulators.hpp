@@ -4,8 +4,6 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_STREAM_PREFIX_H___
 #define ___CASTOR_STREAM_PREFIX_H___
 
-#include "CastorUtils/CastorUtilsPrerequisites.hpp"
-
 #include "CastorUtils/Stream/StreamPrefixBuffer.hpp"
 #include "CastorUtils/Stream/StreamPrefixBufferManager.hpp"
 
@@ -13,15 +11,6 @@ namespace castor
 {
 	namespace format
 	{
-		/**
-		\author		Sylvain DOREMUS
-		\version	0.8.0.0
-		\date		10/11/2015
-		\~english
-		\brief		Contains an std::basic_string< char_type > operator()() member function which generates the Prefix.
-		\~french
-		\brief		Contient une méthode std::basic_string< char_type > operator()() qui génère le préfixe.
-		*/
 		template < typename char_type, typename prefix_traits >
 		struct BasePrefixer
 			: public prefix_traits
@@ -32,15 +21,6 @@ namespace castor
 			}
 		};
 
-		/**
-		\author		Sylvain DOREMUS
-		\version	0.8.0.0
-		\date		10/11/2015
-		\~english
-		\brief		Default Prefix traits.
-		\~french
-		\brief		Classe de traits par défaut pour les préfixes.
-		*/
 		template < typename char_type >
 		struct BasicPrefixTraits
 		{
@@ -50,18 +30,6 @@ namespace castor
 			}
 		};
 
-		using Prefix = BasePrefixer< char, BasicPrefixTraits< char > >;
-		using WPrefix = BasePrefixer< wchar_t, BasicPrefixTraits< wchar_t > >;
-
-		/**
-		\author		Sylvain DOREMUS
-		\version	0.8.0.0
-		\date		10/11/2015
-		\~english
-		\brief		Prefixes lines with their index.
-		\~french
-		\brief		Préfixe les lignes par leur index.
-		*/
 		template < typename char_type >
 		struct BasicLinePrefixTraits
 		{
@@ -76,16 +44,6 @@ namespace castor
 
 			uint32_t m_line = 0;
 		};
-
-		using LinePrefix = BasePrefixer< char, BasicLinePrefixTraits< char > >;
-		using WLinePrefix = BasePrefixer< wchar_t, BasicLinePrefixTraits< wchar_t > >;
-
-		using PrefixBuffer = BasicPrefixBuffer< Prefix, char >;
-		using WPrefixBuffer = BasicPrefixBuffer< WPrefix, wchar_t >;
-
-		using LinePrefixBuffer = BasicPrefixBuffer< LinePrefix, char >;
-		using WLinePrefixBuffer = BasicPrefixBuffer< WLinePrefix, wchar_t >;
-
 		/**
 		 *\~english
 		 *\brief		Initializes the stream in order to indent it

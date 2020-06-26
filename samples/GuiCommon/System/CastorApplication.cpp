@@ -119,7 +119,7 @@ namespace GuiCommon
 		, wxString const & cond
 		, wxString const & msg )
 	{
-		std::clog << file << ":" << line << "(" << func << ") Assrtion failed (" << cond << ") " << msg << std::endl;
+		std::clog << file << ":" << line << "(" << func << ") Assertion failed (" << cond << ") " << msg << std::endl;
 	}
 
 	bool CastorApplication::OnInit()

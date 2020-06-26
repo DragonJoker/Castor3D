@@ -39,6 +39,7 @@ function( ToolsBuild )
 			endif()
 
 			#we look for wxWidgets
+			set( wxWidgets_IGNORE_VCPKG ON )
 			find_package( wxWidgets COMPONENTS core base )
 
 			if( wxWidgets_FOUND AND GTK2_FOUND )

@@ -4,34 +4,17 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_FILE_PARSER_CONTEXT_H___
 #define ___CASTOR_FILE_PARSER_CONTEXT_H___
 
+#include "CastorUtils/FileParser/FileParserModule.hpp"
+#include "CastorUtils/Log/LogModule.hpp"
+
 #include "CastorUtils/Data/File.hpp"
+#include "CastorUtils/Data/Path.hpp"
 
 #include <deque>
 #include <limits>
 
-#if defined( min )
-#	undef min
-#endif
-#if defined( max )
-#	undef max
-#endif
-#if defined( abs )
-#	undef abs
-#endif
-
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		19/10/2011
-	\~english
-	\brief		The context used into file parsing functions.
-	\remark		While parsing a "brace file", the context holds the important data retrieved.
-	\~french
-	\brief		Contexte utilisé dans les fonctions d'analyse.
-	\remark		Lorsqu'on analyse un fichier, le contexte contient les informations importantes qui ont été récupérées.
-	*/
 	class FileParserContext
 	{
 	public:

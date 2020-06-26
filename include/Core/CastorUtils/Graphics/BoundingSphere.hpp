@@ -8,14 +8,6 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\date		14/02/2010
-	\~english
-	\brief		Sphere container class.
-	\~french
-	\brief		Classe de conteneur sphérique.
-	*/
 	class BoundingSphere
 		: public BoundingContainer3D
 	{

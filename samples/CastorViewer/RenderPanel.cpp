@@ -937,9 +937,9 @@ namespace CastorViewer
 		{
 			if ( m_currentState )
 			{
-				static float constexpr mult = 2.0f;
-				float deltaX = std::min( m_camSpeed / mult, 1.0f ) * ( m_oldX - m_x ) / mult;
-				float deltaY = std::min( m_camSpeed / mult, 1.0f ) * ( m_oldY - m_y ) / mult;
+				static float constexpr mult = 8.0f;
+				float deltaX = ( m_oldX - m_x ) / mult;
+				float deltaY = ( m_oldY - m_y ) / mult;
 
 				if ( p_event.ControlDown() )
 				{

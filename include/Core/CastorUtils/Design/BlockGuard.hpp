@@ -4,59 +4,12 @@ See LICENSE file in root folder
 #ifndef ___CU_BLOCK_GUARD_H___
 #define ___CU_BLOCK_GUARD_H___
 
-#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/Design/DesignModule.hpp"
 
 #include <functional>
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		11/12/2016
-	\~english
-	\brief		Allows to declare a scoped variable with an action on construction
-				<br />and an action on destruction.
-	\remarks	Useful to force execution of code when an exception is thrown.
-	\b Example
-	@code
-		char * buffer = nullptr;
-		{
-			auto guard = makeBlockGuard( [&buffer, &size]()
-			{
-				buffer = new char[size + 1];
-			},
-			[&buffer]()
-			{
-				delete [] buffer;
-			} );
-			//
-			// ... Code that might throw an exception ...
-			//
-		}
-	@endcode
-	\~french
-	\brief		Permet de déclarer une variable de scope, avec une action à la construction
-				<br />et une action à la destruction.
-	\remarks	Utile pour forcer l'exécution de code, si une exception est lancée.
-	\b Example
-	@code
-		char * buffer = nullptr;
-		{
-			auto guard = makeBlockGuard( [&buffer, &size]()
-			{
-				buffer = new char[size + 1];
-			},
-			[&buffer]()
-			{
-				delete [] buffer;
-			} );
-			//
-			// ... Code pouvant lancer une exception ...
-			//
-		}
-	@endcode
-	*/
 	template< typename CleanFunc >
 	struct BlockGuard
 	{

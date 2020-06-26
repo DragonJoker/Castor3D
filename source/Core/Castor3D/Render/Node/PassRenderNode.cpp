@@ -49,38 +49,38 @@ namespace castor3d
 	void PassRenderNode::fillDescriptor( ashes::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, ashes::DescriptorSet & descriptorSet
+		, TextureFlagsArray const & mask )
+	{
+		fillDescriptor( layout, index, descriptorSet, merge( mask ) );
+	}
+
+	void PassRenderNode::fillDescriptor( ashes::DescriptorSetLayout const & layout
+		, uint32_t & index
+		, ashes::WriteDescriptorSetArray & writes
+		, TextureFlagsArray const & mask )
+	{
+		fillDescriptor( layout, index, writes, merge( mask ) );
+	}
+
+	void PassRenderNode::fillDescriptor( ashes::DescriptorSetLayout const & layout
+		, uint32_t & index
+		, ashes::DescriptorSet & descriptorSet
 		, TextureFlags mask )
 	{
+		CU_Assert( mask, "Unexpected empty mask ?" );
 		uint32_t texIndex = 0u;
+		auto units = pass.getTextureUnits( mask );
 
-		if ( mask )
+		for ( auto & unit : units )
 		{
-			auto units = pass.getTextureUnits();
-
-			for ( auto & unit : units )
-			{
-				doBindTexture( *unit
-					, layout
-					, descriptorSet
-					, index
-					, texIndex );
-			}
-
-			++index;
+			doBindTexture( *unit
+				, layout
+				, descriptorSet
+				, index
+				, texIndex );
 		}
-		else
-		{
-			for ( auto & unit : pass )
-			{
-				doBindTexture( *unit
-					, layout
-					, descriptorSet
-					, index
-					, texIndex );
-			}
 
-			++index;
-		}
+		++index;
 	}
 
 	void PassRenderNode::fillDescriptor( ashes::DescriptorSetLayout const & layout
@@ -88,60 +88,29 @@ namespace castor3d
 		, ashes::WriteDescriptorSetArray & writes
 		, TextureFlags mask )
 	{
-		uint32_t texIndex = 0u;
+		CU_Assert( mask, "Unexpected empty mask ?" );
+		auto units = pass.getTextureUnits( mask );
+		auto count = uint32_t( units.size() );
 
-		if ( mask )
+		if ( count )
 		{
-			auto units = pass.getTextureUnits();
-
-			if ( !units.empty() )
+			ashes::WriteDescriptorSet write
 			{
-				ashes::WriteDescriptorSet write
-				{
-					index,
-					0u,
-					uint32_t( units.size() ),
-					VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-				};
+				index,
+				0u,
+				count,
+				VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+			};
 
-				for ( auto & unit : units )
-				{
-					doBindTexture( *unit
-						, layout
-						, write );
-				}
-
-				writes.push_back( write );
-				index += uint32_t( units.size() );
-			}
-		}
-		else
-		{
-			auto count = pass.getNonEnvTextureUnitsCount();
-
-			if ( count )
+			for ( auto & unit : units )
 			{
-				ashes::WriteDescriptorSet write
-				{
-					index,
-					0u,
-					count,
-					VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-				};
-
-				for ( auto & unit : pass )
-				{
-					if ( unit->getConfiguration().environment == 0u )
-					{
-						doBindTexture( *unit
-							, layout
-							, write );
-					}
-				}
-
-				writes.push_back( write );
-				index += count;
+				doBindTexture( *unit
+					, layout
+					, write );
 			}
+
+			writes.push_back( write );
+			index += count;
 		}
 	}
 }

@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CU_CpuInformations_H___
 #define ___CU_CpuInformations_H___
 
-#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/Miscellaneous/MiscellaneousModule.hpp"
 
 #include <bitset>
 

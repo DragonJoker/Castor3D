@@ -38,7 +38,7 @@ namespace GuiCommon
 		void doAddSkeleton( castor3d::Skeleton const & skeleton
 			, wxTreeItemId id );
 		void doAddRenderWindow( wxTreeItemId id
-			, castor3d::RenderWindowSPtr window );
+			, castor3d::RenderWindow & window );
 		void doAddGeometry( wxTreeItemId id
 			, castor3d::Geometry & geometry );
 		void doAddCamera( wxTreeItemId id
@@ -50,9 +50,9 @@ namespace GuiCommon
 		void doAddNode( wxTreeItemId id
 			, castor3d::SceneNodeSPtr node );
 		void doAddAnimatedObjectGroup( wxTreeItemId id
-			, castor3d::AnimatedObjectGroupSPtr group );
+			, castor3d::AnimatedObjectGroup & group );
 		void doAddOverlay( wxTreeItemId id
-			, castor3d::OverlayCategorySPtr overlay );
+			, castor3d::OverlayCategory & overlay );
 
 		DECLARE_EVENT_TABLE()
 		void onClose( wxCloseEvent & event );

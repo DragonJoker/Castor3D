@@ -8,6 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
+#include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaqueResolvePass.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightPassResult.hpp"
@@ -65,24 +66,6 @@ namespace castor3d
 		~LightingPass();
 		/**
 		 *\~english
-		 *\brief		Updates opaque pass.
-		 *\param[out]	info	Receives the render informations.
-		 *\param[in]	scene	The rendered scene.
-		 *\param[in]	camera	The viewer camera.
-		 *\param[in]	jitter	The jittering value.
-		 *\~french
-		 *\brief		Met à jour la passe opaque.
-		 *\param[out]	info	Reçoit les informations de rendu.
-		 *\param[in]	scene	La scène rendue.
-		 *\param[in]	camera	La caméra par laquelle la scène est rendue.
-		 *\param[in]	jitter	La valeur de jittering.
-		 */
-		void update( RenderInfo & info
-			, Scene const & scene
-			, Camera const & camera
-			, castor::Point2f const & jitter );
-		/**
-		 *\~english
 		 *\brief		Renders the light passes on currently bound framebuffer.
 		 *\param[in]	scene	The scene.
 		 *\param[in]	camera	The viewing camera.
@@ -115,11 +98,6 @@ namespace castor3d
 		}
 
 	private:
-		void doUpdateLights( Scene const & scene
-			, Camera const & camera
-			, LightType type
-			, uint32_t & index
-			, RenderInfo & info );
 		ashes::Semaphore const & doRenderLights( Scene const & scene
 			, Camera const & camera
 			, LightType type
@@ -138,8 +116,8 @@ namespace castor3d
 		RenderPassTimerSPtr m_timer;
 		ashes::FencePtr m_fence;
 		ashes::ImageView const & m_srcDepth;
-		ashes::CommandBufferPtr m_blitDepthCommandBuffer;
-		ashes::SemaphorePtr m_blitDepthSemaphore;
+		CommandsSemaphore m_blitDepth;
+		CommandsSemaphore m_lpResultBarrier;
 	};
 }
 

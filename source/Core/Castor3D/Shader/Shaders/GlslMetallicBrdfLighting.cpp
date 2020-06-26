@@ -9,11 +9,11 @@
 
 #include <ShaderWriter/Source.hpp>
 
-using namespace castor;
-using namespace sdw;
-
 namespace castor3d
 {
+	using namespace castor;
+	using namespace sdw;
+
 	namespace shader
 	{
 		const String MetallicBrdfLightingModel::Name = cuT( "pbr_mr" );
@@ -187,79 +187,61 @@ namespace castor3d
 			return result;
 		}
 
-		void MetallicBrdfLightingModel::computeMapContributions( sdw::ShaderWriter & writer
-			, shader::Utils const & utils
-			, PipelineFlags const & flags
+		void MetallicBrdfLightingModel::computeMapContributions( PipelineFlags const & flags
 			, sdw::Float const & gamma
 			, TextureConfigurations const & textureConfigs
 			, sdw::Array< sdw::UVec4 > const & textureConfig
-			, sdw::Vec3 const & tangent
-			, sdw::Vec3 const & bitangent
 			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 			, sdw::Vec3 const & texCoords
 			, sdw::Vec3 & normal
-			, sdw::Vec3 & albedo
-			, sdw::Float & metallic
+			, sdw::Vec3 & tangent
+			, sdw::Vec3 & bitangent
 			, sdw::Vec3 & emissive
-			, sdw::Float & roughness
 			, sdw::Float & opacity
 			, sdw::Float & occlusion
-			, sdw::Float & transmittance )
+			, sdw::Float & transmittance
+			, sdw::Vec3 & albedo
+			, sdw::Float & metallic
+			, sdw::Float & roughness
+			, sdw::Vec3 & tangentSpaceViewPosition
+			, sdw::Vec3 & tangentSpaceFragPosition )
 		{
-			if ( ( flags.texturesCount > 1
-				&& checkFlag( flags.passFlags, PassFlag::eParallaxOcclusionMapping )
-				&& checkFlag( flags.textures, TextureFlag::eHeight ) )
-				|| ( flags.texturesCount > 0
-					&& ( !checkFlag( flags.passFlags, PassFlag::eParallaxOcclusionMapping )
-						|| !checkFlag( flags.textures, TextureFlag::eHeight ) ) ) )
+			for ( uint32_t i = 0u; i < flags.textures.size(); ++i )
 			{
-				for ( uint32_t i = 0u; i < flags.texturesCount; ++i )
+				auto name = string::stringCast< char >( string::toString( i, std::locale{ "C" } ) );
+				auto config = m_writer.declLocale( "config" + name
+					, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( flags.textures[i].id ) ) );
+				auto sampled = m_writer.declLocale( "sampled" + name
+					, m_utils.computeCommonMapContribution( flags.textures[i].flags
+						, flags.passFlags
+						, name
+						, config
+						, maps[i]
+						, gamma
+						, texCoords
+						, normal
+						, tangent
+						, bitangent
+						, emissive
+						, opacity
+						, occlusion
+						, transmittance
+						, tangentSpaceViewPosition
+						, tangentSpaceFragPosition ) );
+
+				if ( checkFlag( flags.textures[i].flags, TextureFlag::eAlbedo ) )
 				{
-					auto name = string::stringCast< char >( string::toString( i, std::locale{ "C" } ) );
-					auto config = writer.declLocale( "config" + name
-						, textureConfigs.getTextureConfiguration( writer.cast< UInt >( textureConfig[i / 4u][i % 4u] ) ) );
-					auto sampled = writer.declLocale< Vec4 >( "sampled" + name
-						, texture( maps[i], config.convertUV( writer, texCoords.xy() ) ) );
+					albedo = config.getAlbedo( m_writer, sampled, albedo, gamma );
+				}
 
-					if ( checkFlag( flags.textures, TextureFlag::eAlbedo ) )
-					{
-						albedo = config.getAlbedo( writer, sampled, albedo, gamma );
-					}
+				if ( checkFlag( flags.textures[i].flags, TextureFlag::eMetalness ) )
+				{
+					metallic = config.getMetalness( m_writer, sampled, metallic );
+				}
 
-					if ( checkFlag( flags.textures, TextureFlag::eMetalness ) )
-					{
-						metallic = config.getMetalness( writer, sampled, metallic );
-					}
-
-					if ( checkFlag( flags.textures, TextureFlag::eRoughness ) )
-					{
-						roughness = config.getRoughness( writer, sampled, roughness );
-					}
-
-					if ( checkFlag( flags.textures, TextureFlag::eOpacity ) )
-					{
-						opacity = config.getOpacity( writer, sampled, opacity );
-					}
-
-					if ( checkFlag( flags.textures, TextureFlag::eEmissive ) )
-					{
-						emissive = config.getEmissive( writer, sampled, emissive, gamma );
-					}
-
-					if ( checkFlag( flags.textures, TextureFlag::eOcclusion ) )
-					{
-						occlusion = config.getOcclusion( writer, sampled, occlusion );
-					}
-
-					if ( checkFlag( flags.textures, TextureFlag::eTransmittance ) )
-					{
-						transmittance = config.getTransmittance( writer, sampled, transmittance );
-					}
-
-					if ( checkFlag( flags.textures, TextureFlag::eNormal ) )
-					{
-						normal = config.getNormal( writer, sampled, normal, tangent, bitangent );
-					}
+				if ( checkFlag( flags.textures[i].flags, TextureFlag::eRoughness ) )
+				{
+					roughness = config.getRoughness( m_writer, sampled, roughness );
 				}
 			}
 		}
@@ -292,6 +274,8 @@ namespace castor3d
 						, normalize( -light.m_direction ) );
 					auto shadowFactor = m_writer.declLocale( "shadowFactor"
 						, 1.0_f );
+					auto cascadeFactors = m_writer.declLocale( "cascadeFactors"
+						, vec3( 0.0_f, 1.0_f, 0.0_f ) );
 					auto cascadeIndex = m_writer.declLocale( "cascadeIndex"
 						, 0_u );
 
@@ -304,24 +288,47 @@ namespace castor3d
 						// Get cascade index for the current fragment's view position
 						FOR( m_writer, UInt, i, 0u, i < maxCount, ++i )
 						{
-							IF( m_writer, -fragmentIn.m_viewVertex.z() < light.m_splitDepths[i] )
+							auto factors = m_writer.declLocale( "factors"
+								, m_getCascadeFactors( Vec3{ fragmentIn.m_viewVertex }
+									, light.m_splitDepths
+									, i ) );
+
+							IF( m_writer, factors.x() != 0.0_f )
 							{
-								cascadeIndex = i + 1_u;
+								cascadeFactors = factors;
 							}
 							FI;
 						}
 						ROF;
 
-						shadowFactor = max( 1.0_f - m_writer.cast< Float >( receivesShadows )
-							, m_shadowModel->computeDirectionalShadow( light.m_lightBase.m_shadowType
-								, light.m_lightBase.m_shadowOffsets
-								, light.m_lightBase.m_shadowVariance
-								, light.m_transforms[cascadeIndex]
-								, fragmentIn.m_worldVertex
-								, -lightDirection
-								, cascadeIndex
-								, light.m_cascadeCount
-								, fragmentIn.m_worldNormal ) );
+						cascadeIndex = m_writer.cast< UInt >( cascadeFactors.x() );
+						shadowFactor = cascadeFactors.y()
+							* max( 1.0_f - m_writer.cast< Float >( receivesShadows )
+								, m_shadowModel->computeDirectionalShadow( light.m_lightBase.m_shadowType
+									, light.m_lightBase.m_shadowOffsets
+									, light.m_lightBase.m_shadowVariance
+									, light.m_transforms[cascadeIndex]
+									, fragmentIn.m_worldVertex
+									, -lightDirection
+									, cascadeIndex
+									, light.m_cascadeCount
+									, fragmentIn.m_worldNormal ) );
+
+						IF( m_writer, cascadeIndex > 0_u )
+						{
+							shadowFactor += cascadeFactors.z()
+								* max( 1.0_f - m_writer.cast< Float >( receivesShadows )
+									, m_shadowModel->computeDirectionalShadow( light.m_lightBase.m_shadowType
+										, light.m_lightBase.m_shadowOffsets
+										, light.m_lightBase.m_shadowVariance
+										, light.m_transforms[cascadeIndex - 1u]
+										, fragmentIn.m_worldVertex
+										, -lightDirection
+										, cascadeIndex - 1u
+										, light.m_cascadeCount
+										, fragmentIn.m_worldNormal ) );
+						}
+						FI;
 					}
 					FI;
 
@@ -569,6 +576,9 @@ namespace castor3d
 						, normalize( -light.m_direction ) );
 					auto shadowFactor = m_writer.declLocale( "shadowFactor"
 						, 1.0_f );
+					auto cascadeFactors = m_writer.declLocale( "cascadeFactors"
+						, vec3( 0.0_f, 1.0_f, 0.0_f )
+						, shadowType != ShadowType::eNone );
 					auto cascadeIndex = m_writer.declLocale( "cascadeIndex"
 						, 0_u
 						, shadowType != ShadowType::eNone );
@@ -582,23 +592,45 @@ namespace castor3d
 						// Get cascade index for the current fragment's view position
 						FOR( m_writer, UInt, i, 0u, i < maxCount, ++i )
 						{
-							IF( m_writer, fragmentIn.m_viewVertex.z() < light.m_splitDepths[i] )
+							auto factors = m_writer.declLocale( "factors"
+								, m_getCascadeFactors( Vec3{ fragmentIn.m_viewVertex }
+									, light.m_splitDepths
+									, i ) );
+
+							IF( m_writer, factors.x() != 0.0_f )
 							{
-								cascadeIndex = i + 1_u;
+								cascadeFactors = factors;
 							}
 							FI;
 						}
 						ROF;
 
-						shadowFactor = max( 1.0_f - m_writer.cast< Float >( receivesShadows )
-							, m_shadowModel->computeDirectionalShadow( light.m_lightBase.m_shadowOffsets
-								, light.m_lightBase.m_shadowVariance
-								, light.m_transforms[cascadeIndex]
-								, fragmentIn.m_worldVertex
-								, -lightDirection
-								, cascadeIndex
-								, light.m_cascadeCount
-								, fragmentIn.m_worldNormal ) );
+						cascadeIndex = m_writer.cast< UInt >( cascadeFactors.x() );
+						shadowFactor = cascadeFactors.y()
+							* max( 1.0_f - m_writer.cast< Float >( receivesShadows )
+								, m_shadowModel->computeDirectionalShadow( light.m_lightBase.m_shadowOffsets
+									, light.m_lightBase.m_shadowVariance
+									, light.m_transforms[cascadeIndex]
+									, fragmentIn.m_worldVertex
+									, -lightDirection
+									, cascadeIndex
+									, light.m_cascadeCount
+									, fragmentIn.m_worldNormal ) );
+
+						IF( m_writer, cascadeIndex > 0_u )
+						{
+							shadowFactor += cascadeFactors.z()
+								* max( 1.0_f - m_writer.cast< Float >( receivesShadows )
+									, m_shadowModel->computeDirectionalShadow( light.m_lightBase.m_shadowOffsets
+										, light.m_lightBase.m_shadowVariance
+										, light.m_transforms[cascadeIndex - 1u]
+										, fragmentIn.m_worldVertex
+										, -lightDirection
+										, cascadeIndex - 1u
+										, light.m_cascadeCount
+										, fragmentIn.m_worldNormal ) );
+						}
+						FI;
 					}
 
 					m_cookTorrance.compute( light.m_lightBase
@@ -634,23 +666,23 @@ namespace castor3d
 					{
 						IF( m_writer, cascadeIndex == 0_u )
 						{
-							output.m_diffuse.rgb() *= vec3( 1.0_f, 0.25f, 0.25f );
-							output.m_specular.rgb() *= vec3( 1.0_f, 0.25f, 0.25f );
+							output.m_diffuse.rgb() *= cascadeFactors.y() * vec3( 1.0_f, 0.25f, 0.25f );
+							output.m_specular.rgb() *= cascadeFactors.y() * vec3( 1.0_f, 0.25f, 0.25f );
 						}
 						ELSEIF( cascadeIndex == 1_u )
 						{
-							output.m_diffuse.rgb() *= vec3( 0.25_f, 1.0f, 0.25f );
-							output.m_specular.rgb() *= vec3( 0.25_f, 1.0f, 0.25f );
+							output.m_diffuse.rgb() *= ( cascadeFactors.y() * vec3( 0.25_f, 1.0f, 0.25f ) + cascadeFactors.z() * vec3( 1.0_f, 0.25f, 0.25f ) );
+							output.m_specular.rgb() *= ( cascadeFactors.y() * vec3( 0.25_f, 1.0f, 0.25f ) + cascadeFactors.z() * vec3( 1.0_f, 0.25f, 0.25f ) );
 						}
 						ELSEIF( cascadeIndex == 2_u )
 						{
-							output.m_diffuse.rgb() *= vec3( 0.25_f, 0.25f, 1.0f );
-							output.m_specular.rgb() *= vec3( 0.25_f, 0.25f, 1.0f );
+							output.m_diffuse.rgb() *= ( cascadeFactors.y() * vec3( 0.25_f, 0.25f, 1.0f ) * cascadeFactors.z() * vec3( 0.25_f, 1.0f, 0.25f ) );
+							output.m_specular.rgb() *= ( cascadeFactors.y() * vec3( 0.25_f, 0.25f, 1.0f ) * cascadeFactors.z() * vec3( 0.25_f, 1.0f, 0.25f ) );
 						}
 						ELSE
 						{
-							output.m_diffuse.rgb() *= vec3( 1.0_f, 1.0f, 0.25f );
-							output.m_specular.rgb() *= vec3( 1.0_f, 1.0f, 0.25f );
+							output.m_diffuse.rgb() *= ( cascadeFactors.y() * vec3( 1.0_f, 1.0f, 0.25f ) * cascadeFactors.z() * vec3( 0.25_f, 0.25f, 1.0f ) );
+							output.m_specular.rgb() *= ( cascadeFactors.y() * vec3( 1.0_f, 1.0f, 0.25f ) * cascadeFactors.z() * vec3( 0.25_f, 0.25f, 1.0f ) );
 						}
 						FI;
 					}

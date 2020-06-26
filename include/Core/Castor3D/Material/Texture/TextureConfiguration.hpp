@@ -99,7 +99,6 @@ namespace castor3d
 		*/
 		/**@{*/
 		float normalGMultiplier{ 1.0f };
-		uint32_t environment{ 0u };
 		uint32_t needsGammaCorrection{ 0u };
 		uint32_t needsYInversion{ 0u };
 		TextureSpace textureSpace{ TextureSpace::eColour };
@@ -121,17 +120,6 @@ namespace castor3d
 		static uint32_t constexpr RgbMask = RgMask | BlueMask;
 		static uint32_t constexpr RgbaMask = RgbMask | AlphaMask;
 		/**@}*/
-		/**
-		*\~english
-		*name
-		*	Environment masks.
-		*\~french
-		*name
-		*	Masques d'environnement.
-		*/
-		/**@{*/
-		static uint32_t constexpr ReflectionMask = 0x00000001u;
-		static uint32_t constexpr RefractionMask = 0x00000002u;
 		/**@}*/
 		/**
 		*\~english
@@ -142,19 +130,19 @@ namespace castor3d
 		*	Configurations de texture prédéfinies.
 		*/
 		/**@{*/
-		C3D_API static castor3d::TextureConfiguration const DiffuseTexture;
-		C3D_API static castor3d::TextureConfiguration const AlbedoTexture;
-		C3D_API static castor3d::TextureConfiguration const SpecularTexture;
-		C3D_API static castor3d::TextureConfiguration const MetalnessTexture;
-		C3D_API static castor3d::TextureConfiguration const GlossinessTexture;
-		C3D_API static castor3d::TextureConfiguration const ShininessTexture;
-		C3D_API static castor3d::TextureConfiguration const RoughnessTexture;
-		C3D_API static castor3d::TextureConfiguration const OpacityTexture;
-		C3D_API static castor3d::TextureConfiguration const EmissiveTexture;
-		C3D_API static castor3d::TextureConfiguration const NormalTexture;
-		C3D_API static castor3d::TextureConfiguration const HeightTexture;
-		C3D_API static castor3d::TextureConfiguration const OcclusionTexture;
-		C3D_API static castor3d::TextureConfiguration const TransmittanceTexture;
+		C3D_API static TextureConfiguration const DiffuseTexture;
+		C3D_API static TextureConfiguration const AlbedoTexture;
+		C3D_API static TextureConfiguration const SpecularTexture;
+		C3D_API static TextureConfiguration const MetalnessTexture;
+		C3D_API static TextureConfiguration const GlossinessTexture;
+		C3D_API static TextureConfiguration const ShininessTexture;
+		C3D_API static TextureConfiguration const RoughnessTexture;
+		C3D_API static TextureConfiguration const OpacityTexture;
+		C3D_API static TextureConfiguration const EmissiveTexture;
+		C3D_API static TextureConfiguration const NormalTexture;
+		C3D_API static TextureConfiguration const HeightTexture;
+		C3D_API static TextureConfiguration const OcclusionTexture;
+		C3D_API static TextureConfiguration const TransmittanceTexture;
 		/**@}*/
 	};
 	/**
@@ -169,6 +157,7 @@ namespace castor3d
 	C3D_API bool operator==( TextureConfiguration const & lhs, TextureConfiguration const & rhs );
 	C3D_API bool operator!=( TextureConfiguration const & lhs, TextureConfiguration const & rhs );
 	/**@}*/
+	C3D_API TextureFlags getFlags( TextureConfiguration const & config );
 }
 
 #endif

@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "Castor3D/Model/ModelModule.hpp"
 
+#include <CastorUtils/Design/Factory.hpp>
+
 namespace castor3d
 {
 	/**@name Model */

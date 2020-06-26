@@ -101,8 +101,8 @@ namespace castor3d
 		 *\param[out]	info		Reçoit les informations de rendu.
 		 *\param[in]	jitter		La valeur de jittering.
 		 */
-		C3D_API virtual void update( RenderInfo & info
-			, castor::Point2f const & jitter ) = 0;
+		C3D_API void update( RenderInfo & info
+			, castor::Point2f const & jitter );
 		/**
 		*\~english
 		*name
@@ -124,18 +124,6 @@ namespace castor3d
 
 	protected:
 		/**
-		 *\~english
-		 *\brief		Render function.
-		 *\param[out]	info		Receives the render informations.
-		 *\param[in]	jitter		The jittering value.
-		 *\~french
-		 *\brief		Fonction de rendu.
-		 *\param[out]	info		Reçoit les informations de rendu.
-		 *\param[in]	jitter		La valeur de jittering.
-		 */
-		C3D_API void doUpdate( RenderInfo & info
-			, castor::Point2f const & jitter = castor::Point2f{} );
-		/**
 		 *\copydoc		castor3d::RenderPass::doCleanup
 		 */
 		C3D_API virtual void doCleanup()override;
@@ -153,9 +141,14 @@ namespace castor3d
 		 *\param			camera		La caméra regardant la scène.
 		 *\param[in,out]	count		Reçouit le nombre de noeuds dessinés.
 		 */
-		C3D_API void doUpdateNodes( SceneCulledRenderNodes & nodes
+		C3D_API virtual void doUpdateNodes( SceneCulledRenderNodes & nodes
 			, castor::Point2f const & jitter
 			, RenderInfo & info )const;
+		/**
+		 *\copydoc		castor3d::RenderPass::doInitialise
+		 */
+		C3D_API void doUpdateUbos( Camera const & camera
+			, castor::Point2f const & jitter )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doInitialise
 		 */

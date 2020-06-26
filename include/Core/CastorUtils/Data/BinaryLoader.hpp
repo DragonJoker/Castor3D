@@ -9,15 +9,6 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		19/10/2011
-	\~english
-	\brief		Partial castor::Loader specialisation for binary files
-	\~french
-	\brief		Spécialisation partielle de castor::Loader, pour les fichiers binaires
-	*/
 	template< class T >
 	class BinaryLoader
 		: public Loader< T, FileType::eBinary >

@@ -47,6 +47,7 @@ namespace castor3d
 	void Light::update()
 	{
 		m_category->update();
+		m_dirty = false;
 	}
 
 	void Light::bind( Point4f * buffer )const
@@ -66,6 +67,7 @@ namespace castor3d
 					onNodeChanged( node );
 				} );
 			onNodeChanged( *parent );
+			m_dirty = true;
 		}
 	}
 
@@ -89,6 +91,7 @@ namespace castor3d
 
 	void Light::onNodeChanged( SceneNode const & node )
 	{
+		m_dirty = true;
 		m_category->updateNode( node );
 	}
 }

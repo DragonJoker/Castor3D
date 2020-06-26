@@ -46,7 +46,6 @@ namespace castor3d
 		 *\brief		Met à jour les données de l'UBO.
 		 */
 		C3D_API void update( std::array< castor::Grid, shader::DirectionalMaxCascadesCount > const & grids
-			, uint32_t lightIndex
 			, float indirectAttenuation = 1.7f );
 		/**
 		 *\~english

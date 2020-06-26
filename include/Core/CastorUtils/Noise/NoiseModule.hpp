@@ -1,8 +1,16 @@
+/*
+See LICENSE file in root folder
+*/
 #ifndef ___CU_NoiseModule_HPP___
 #define ___CU_NoiseModule_HPP___
+#pragma once
+
+#include "CastorUtils/CastorUtils.hpp"
 
 namespace castor
 {
+	/**@name Noise */
+	//@{
 	/**
 	*\~english
 	*\brief
@@ -51,6 +59,7 @@ namespace castor
 	*	Générateur texture de white noise.
 	*/
 	class WhiteNoise;
+	//@}
 }
 
 #endif

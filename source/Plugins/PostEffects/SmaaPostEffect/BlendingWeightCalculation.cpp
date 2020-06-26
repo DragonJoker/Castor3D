@@ -902,7 +902,7 @@ namespace smaa
 			, image
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SmaaAreaTex" ) );
-		m_areaTex->getDefaultView().initialiseSource( areaTexBuffer );
+		m_areaTex->setSource( areaTexBuffer, true );
 		m_areaTex->initialise();
 
 		auto searchTexBuffer = PxBufferBase::create( Size{ SEARCHTEX_WIDTH, SEARCHTEX_HEIGHT }
@@ -914,7 +914,7 @@ namespace smaa
 			, image
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SmaaSearchTex" ) );
-		m_searchTex->getDefaultView().initialiseSource( searchTexBuffer );
+		m_searchTex->setSource( searchTexBuffer, true );
 		m_searchTex->initialise();
 
 		// Create the render pass.

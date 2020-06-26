@@ -216,7 +216,7 @@ namespace castor3d
 					auto emissive = writer.declLocale( "emissive"
 						, data4.xyz() );
 					auto ambient = writer.declLocale( "ambient"
-						, clamp( c3d_ambientLight.xyz() + material.m_ambient * diffuse
+						, clamp( c3d_ambientLight.xyz() * material.m_ambient * diffuse
 							, vec3( 0.0_f )
 							, vec3( 1.0_f ) ) );
 					lightSpecular *= specular;
@@ -244,14 +244,14 @@ namespace castor3d
 							{
 								IF( writer, envMapIndex == Int( i ) )
 								{
-									ambient = reflections.computeReflRefr( incident
+									reflections.computeReflRefr( incident
 										, normal
 										, occlusion
 										, c3d_mapEnvironment[Int( i )]
 										, material.m_refractionRatio
-										, diffuse
-										, shininess );
-									diffuse = vec3( 0.0_f );
+										, shininess
+										, ambient
+										, diffuse );
 								}
 								FI;
 							}
@@ -262,11 +262,13 @@ namespace castor3d
 							{
 								IF( writer, envMapIndex == Int( i ) )
 								{
-									diffuse *= reflections.computeRefl( incident
+									reflections.computeRefl( incident
 										, normal
 										, occlusion
-										, c3d_mapEnvironment[Int( i )] );
-									ambient = vec3( 0.0_f );
+										, c3d_mapEnvironment[Int( i )]
+										, shininess
+										, ambient
+										, diffuse );
 								}
 								FI;
 							}
@@ -277,14 +279,14 @@ namespace castor3d
 							{
 								IF( writer, envMapIndex == Int( i ) )
 								{
-									ambient = reflections.computeRefr( incident
+									reflections.computeRefr( incident
 										, normal
 										, occlusion
 										, c3d_mapEnvironment[Int( i )]
 										, material.m_refractionRatio
-										, diffuse
-										, shininess );
-									diffuse = vec3( 0.0_f );
+										, shininess
+										, ambient
+										, diffuse );
 								}
 								FI;
 							}
@@ -1268,7 +1270,7 @@ namespace castor3d
 		, m_renderPass{ doCreateRenderPass( engine, result.getFormat() ) }
 		, m_frameBuffer{ doCreateFrameBuffer( engine, *m_renderPass, m_size, result ) }
 		, m_finished{ m_device->createSemaphore( "OpaqueResolvePass" ) }
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Opaque" ), cuT( "Reflection pass" ) ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Opaque" ), cuT( "Resolve pass" ) ) }
 		, m_programs
 		{
 			{

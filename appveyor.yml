@@ -33,6 +33,7 @@ install:
   - git submodule update --init -- "external/AGS_SDK"
   - ps: cd $PROJECT_DIR
   - git submodule update --init -- "external/ShaderWriter"
+  - git submodule update --init -- "external/gli"
   - ps: if ($isLinux) {sudo apt-get update}
   - ps: if ($isLinux) {sudo apt-get install libx11-6 libx11-dev libxrandr-dev libassimp-dev libfreetype6-dev zlib1g-dev -y}
   - ps: if (!$isLinux) {cd $PROJECT_DIR\dependencies\vc14\$PLATFORM}

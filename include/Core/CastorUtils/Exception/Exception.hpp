@@ -1,10 +1,10 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___CASTOR_EXCEPTION_H___
-#define ___CASTOR_EXCEPTION_H___
+#ifndef ___CU_Exception_H___
+#define ___CU_Exception_H___
 
-#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/Exception/ExceptionModule.hpp"
 
 #include <string>
 #include <sstream>
@@ -12,17 +12,6 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		03/01/2011
-	\~english
-	\brief		More verbose exception class
-	\remark		Gives File, Function, Line in addition to usual description
-	\~french
-	\brief		Classe d'exceptions plus verbeuse que celles de std
-	\remark		donne aussi le fichier, la fonction et la ligne en plus des informations usuelles
-	*/
 	class Exception
 		: public std::exception
 	{

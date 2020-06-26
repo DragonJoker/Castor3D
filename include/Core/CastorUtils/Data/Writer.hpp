@@ -4,20 +4,13 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_WRITER_H___
 #define ___CASTOR_WRITER_H___
 
+#include "CastorUtils/Data/DataModule.hpp"
+
 #include "CastorUtils/Data/File.hpp"
 #include "CastorUtils/Data/LoaderException.hpp"
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		03/01/2011
-	\~english
-	\brief		Main resource writer class.
-	\~french
-	\brief		Classe de base pour les writers de ressource.
-	*/
 	template< class T, FileType FT >
 	class Writer
 		: public castor::NonCopyable

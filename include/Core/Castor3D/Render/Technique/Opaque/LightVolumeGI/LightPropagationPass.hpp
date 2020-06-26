@@ -37,6 +37,15 @@ namespace castor3d
 	class LightPropagationPass
 		: public castor::Named
 	{
+	private:
+		LightPropagationPass( Engine & engine
+			, uint32_t gridSize
+			, TextureUnit const * geometry
+			, LightVolumePassResult const & injection
+			, LightVolumePassResult const & accumulation
+			, LightVolumePassResult const & propagate
+			, LpvConfigUbo const & lpvConfigUbo );
+
 	public:
 		/**
 		 *\~english
@@ -60,6 +69,27 @@ namespace castor3d
 			, LpvConfigUbo const & lpvConfigUbo );
 		/**
 		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	engine			The engine.
+		 *\param[in]	size			The render area dimensions.
+		 *\param[in]	linearisedDepth	The linearised depth buffer.
+		 *\param[in]	scene			The scene buffer.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	engine			Le moteur.
+		 *\param[in]	size			Les dimensions de la zone de rendu.
+		 *\param[in]	linearisedDepth	Le tampon de profondeur linéarisé.
+		 *\param[in]	scene			Le tampon de scène.
+		 */
+		C3D_API LightPropagationPass( Engine & engine
+			, uint32_t gridSize
+			, TextureUnit const & geometry
+			, LightVolumePassResult const & injection
+			, LightVolumePassResult const & accumulation
+			, LightVolumePassResult const & propagate
+			, LpvConfigUbo const & lpvConfigUbo );
+		/**
+		 *\~english
 		 *\brief		Renders the SSGI pass.
 		 *\param[in]	toWait	The semaphore from the previous render pass.
 		 *\~french
@@ -77,6 +107,8 @@ namespace castor3d
 	private:
 		Engine & m_engine;
 		LpvConfigUbo const & m_lpvConfigUbo;
+		LightVolumePassResult const & m_accumulation;
+		LightVolumePassResult const & m_propagate;
 		RenderPassTimerSPtr m_timer;
 		uint32_t m_count;
 

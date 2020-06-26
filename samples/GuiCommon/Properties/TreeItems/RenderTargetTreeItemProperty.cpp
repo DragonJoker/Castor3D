@@ -1,10 +1,14 @@
 #include "GuiCommon/Properties/TreeItems/RenderTargetTreeItemProperty.hpp"
 
 #include "GuiCommon/Properties/AdditionalProperties.hpp"
+#include "GuiCommon/Properties/TreeItems/PostEffectTreeItemProperty.hpp"
+#include "GuiCommon/Properties/TreeItems/ToneMappingTreeItemProperty.hpp"
 #include "GuiCommon/Shader/ShaderDialog.hpp"
 
 #include <Castor3D/Render/RenderTarget.hpp>
+#include <Castor3D/Render/PostEffect/PostEffect.hpp>
 #include <Castor3D/Render/Technique/RenderTechnique.hpp>
+#include <Castor3D/Render/ToneMapping/ToneMapping.hpp>
 
 #include <wx/propgrid/advprops.h>
 
@@ -33,9 +37,50 @@ namespace GuiCommon
 		static wxString PROPERTY_RENDER_TARGET_DEBUG_VIEW = _( "Debug View" );
 	}
 
+	void AppendRenderTarget( wxTreeCtrlBase * list
+		, bool editable
+		, wxTreeItemId id
+		, RenderTarget & target )
+	{
+		auto targetId = list->AppendItem( id
+			, make_wxString( target.getName() )
+			, eBMP_RENDER_TARGET
+			, eBMP_RENDER_TARGET_SEL
+			, new RenderTargetTreeItemProperty( editable, target ) );
+
+		for ( auto postEffect : target.getHDRPostEffects() )
+		{
+			wxTreeItemId idPostEffect = list->AppendItem( targetId
+				, _( "HDR - " ) + make_wxString( postEffect->getFullName() )
+				, eBMP_POST_EFFECT
+				, eBMP_POST_EFFECT_SEL
+				, new PostEffectTreeItemProperty( editable, *postEffect, list ) );
+		}
+
+		for ( auto postEffect : target.getSRGBPostEffects() )
+		{
+			wxTreeItemId idPostEffect = list->AppendItem( targetId
+				, _( "SRGB - " ) + make_wxString( postEffect->getFullName() )
+				, eBMP_POST_EFFECT
+				, eBMP_POST_EFFECT_SEL
+				, new PostEffectTreeItemProperty( editable, *postEffect, list ) );
+		}
+
+		auto toneMapping = target.getToneMapping();
+
+		if ( toneMapping )
+		{
+			wxTreeItemId idToneMapping = list->AppendItem( targetId
+				, make_wxString( toneMapping->getFullName() )
+				, eBMP_TONE_MAPPING
+				, eBMP_TONE_MAPPING_SEL
+				, new ToneMappingTreeItemProperty( editable, *toneMapping, list ) );
+		}
+	}
+
 	RenderTargetTreeItemProperty::RenderTargetTreeItemProperty( bool editable
-		, RenderTargetSPtr target )
-		: TreeItemProperty( target->getEngine(), editable, ePROPERTY_DATA_TYPE_RENDER_TARGET )
+		, RenderTarget & target )
+		: TreeItemProperty( target.getEngine(), editable, ePROPERTY_DATA_TYPE_RENDER_TARGET )
 		, m_target( target )
 	{
 		PROPERTY_CATEGORY_RENDER_TARGET = _( "Render Target: " );
@@ -65,59 +110,55 @@ namespace GuiCommon
 	void RenderTargetTreeItemProperty::doCreateProperties( wxPGEditor * editor
 		, wxPropertyGrid * grid )
 	{
-		RenderTargetSPtr target = getRenderTarget();
-
-		if ( target )
+		auto & target = getRenderTarget();
+		wxString TARGETS[] =
 		{
-			wxString TARGETS[] =
-			{
-				_( "Window" ),
-				_( "Texture" )
-			};
+			_( "Window" ),
+			_( "Texture" )
+		};
 
-			grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_RENDER_TARGET + TARGETS[size_t( target->getTargetType() )] ) );
+		grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_RENDER_TARGET + TARGETS[size_t( target.getTargetType() )] ) );
 
-			for ( auto & postEffect : target->getHDRPostEffects() )
-			{
-				grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_RENDER_TARGET + TARGETS[size_t( target->getTargetType() )] ) );
-			}
-
-			auto & debugConfig = target->getTechnique()->getDebugConfig();
-			wxPGChoices choices;
-
-			for ( auto & intermediate : target->getIntermediateViews() )
-			{
-				choices.Add( make_wxString( intermediate.name ) );
-			}
-
-			auto selected = choices.GetLabels()[size_t( debugConfig.debugIndex )];
-			grid->Append( new wxEnumProperty( PROPERTY_RENDER_TARGET_DEBUG_VIEW, PROPERTY_RENDER_TARGET_DEBUG_VIEW, choices ) )->SetValue( selected );
-
-			auto & ssaoConfig = target->getTechnique()->getSsaoConfig();
-			grid->Append( new wxPropertyCategory( PROPERTY_RENDER_TARGET_SSAO ) );
-			grid->Append( new wxBoolProperty( PROPERTY_RENDER_TARGET_SSAO_ENABLED, PROPERTY_RENDER_TARGET_SSAO_ENABLED, ssaoConfig.enabled ) );
-			grid->Append( new wxBoolProperty( PROPERTY_RENDER_TARGET_SSAO_HIGH_QUALITY, PROPERTY_RENDER_TARGET_SSAO_HIGH_QUALITY, ssaoConfig.highQuality ) );
-			grid->Append( new wxBoolProperty( PROPERTY_RENDER_TARGET_SSAO_NORMALS_BUFFER, PROPERTY_RENDER_TARGET_SSAO_NORMALS_BUFFER, ssaoConfig.useNormalsBuffer ) );
-			grid->Append( new wxFloatProperty( PROPERTY_RENDER_TARGET_SSAO_RADIUS, PROPERTY_RENDER_TARGET_SSAO_RADIUS, ssaoConfig.radius ) );
-			grid->Append( new wxFloatProperty( PROPERTY_RENDER_TARGET_SSAO_BIAS, PROPERTY_RENDER_TARGET_SSAO_BIAS, ssaoConfig.bias ) );
-			grid->Append( new wxFloatProperty( PROPERTY_RENDER_TARGET_SSAO_INTENSITY, PROPERTY_RENDER_TARGET_SSAO_INTENSITY, ssaoConfig.intensity ) );
-			grid->Append( new wxUIntProperty( PROPERTY_RENDER_TARGET_SSAO_SAMPLES, PROPERTY_RENDER_TARGET_SSAO_SAMPLES, ssaoConfig.numSamples ) );
-			grid->Append( new wxFloatProperty( PROPERTY_RENDER_TARGET_SSAO_EDGE_SHARPNESS, PROPERTY_RENDER_TARGET_SSAO_EDGE_SHARPNESS, ssaoConfig.edgeSharpness ) );
-			grid->Append( new wxBoolProperty( PROPERTY_RENDER_TARGET_SSAO_BLUR_HIGH_QUALITY, PROPERTY_RENDER_TARGET_SSAO_BLUR_HIGH_QUALITY, ssaoConfig.blurHighQuality ) );
-			grid->Append( new wxUIntProperty( PROPERTY_RENDER_TARGET_SSAO_BLUR_STEP_SIZE, PROPERTY_RENDER_TARGET_SSAO_BLUR_STEP_SIZE, ssaoConfig.blurStepSize ) );
-			grid->Append( new wxIntProperty( PROPERTY_RENDER_TARGET_SSAO_BLUR_RADIUS, PROPERTY_RENDER_TARGET_SSAO_BLUR_RADIUS, ssaoConfig.blurRadius->value() ) );
+		for ( auto & postEffect : target.getHDRPostEffects() )
+		{
+			grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_RENDER_TARGET + TARGETS[size_t( target.getTargetType() )] ) );
 		}
+
+		auto & debugConfig = target.getTechnique()->getDebugConfig();
+		wxPGChoices choices;
+
+		for ( auto & intermediate : target.getIntermediateViews() )
+		{
+			choices.Add( make_wxString( intermediate.name ) );
+		}
+
+		auto selected = choices.GetLabels()[size_t( debugConfig.debugIndex )];
+		grid->Append( new wxEnumProperty( PROPERTY_RENDER_TARGET_DEBUG_VIEW, PROPERTY_RENDER_TARGET_DEBUG_VIEW, choices ) )->SetValue( selected );
+
+		auto & ssaoConfig = target.getTechnique()->getSsaoConfig();
+		grid->Append( new wxPropertyCategory( PROPERTY_RENDER_TARGET_SSAO ) );
+		grid->Append( new wxBoolProperty( PROPERTY_RENDER_TARGET_SSAO_ENABLED, PROPERTY_RENDER_TARGET_SSAO_ENABLED, ssaoConfig.enabled ) );
+		grid->Append( new wxBoolProperty( PROPERTY_RENDER_TARGET_SSAO_HIGH_QUALITY, PROPERTY_RENDER_TARGET_SSAO_HIGH_QUALITY, ssaoConfig.highQuality ) );
+		grid->Append( new wxBoolProperty( PROPERTY_RENDER_TARGET_SSAO_NORMALS_BUFFER, PROPERTY_RENDER_TARGET_SSAO_NORMALS_BUFFER, ssaoConfig.useNormalsBuffer ) );
+		grid->Append( new wxFloatProperty( PROPERTY_RENDER_TARGET_SSAO_RADIUS, PROPERTY_RENDER_TARGET_SSAO_RADIUS, ssaoConfig.radius ) );
+		grid->Append( new wxFloatProperty( PROPERTY_RENDER_TARGET_SSAO_BIAS, PROPERTY_RENDER_TARGET_SSAO_BIAS, ssaoConfig.bias ) );
+		grid->Append( new wxFloatProperty( PROPERTY_RENDER_TARGET_SSAO_INTENSITY, PROPERTY_RENDER_TARGET_SSAO_INTENSITY, ssaoConfig.intensity ) );
+		grid->Append( new wxUIntProperty( PROPERTY_RENDER_TARGET_SSAO_SAMPLES, PROPERTY_RENDER_TARGET_SSAO_SAMPLES, ssaoConfig.numSamples ) );
+		grid->Append( new wxFloatProperty( PROPERTY_RENDER_TARGET_SSAO_EDGE_SHARPNESS, PROPERTY_RENDER_TARGET_SSAO_EDGE_SHARPNESS, ssaoConfig.edgeSharpness ) );
+		grid->Append( new wxBoolProperty( PROPERTY_RENDER_TARGET_SSAO_BLUR_HIGH_QUALITY, PROPERTY_RENDER_TARGET_SSAO_BLUR_HIGH_QUALITY, ssaoConfig.blurHighQuality ) );
+		grid->Append( new wxUIntProperty( PROPERTY_RENDER_TARGET_SSAO_BLUR_STEP_SIZE, PROPERTY_RENDER_TARGET_SSAO_BLUR_STEP_SIZE, ssaoConfig.blurStepSize ) );
+		grid->Append( new wxIntProperty( PROPERTY_RENDER_TARGET_SSAO_BLUR_RADIUS, PROPERTY_RENDER_TARGET_SSAO_BLUR_RADIUS, ssaoConfig.blurRadius->value() ) );
 	}
 
 	void RenderTargetTreeItemProperty::doPropertyChange( wxPropertyGridEvent & event )
 	{
-		RenderTargetSPtr target = getRenderTarget();
+		auto & target = getRenderTarget();
 		wxPGProperty * property = event.GetProperty();
 
-		if ( property && target )
+		if ( property )
 		{
-			auto & ssaoConfig = target->getTechnique()->getSsaoConfig();
-			auto & debugConfig = target->getTechnique()->getDebugConfig();
+			auto & ssaoConfig = target.getTechnique()->getSsaoConfig();
+			auto & debugConfig = target.getTechnique()->getDebugConfig();
 
 			if ( property->GetName() == PROPERTY_RENDER_TARGET_SSAO_ENABLED )
 			{

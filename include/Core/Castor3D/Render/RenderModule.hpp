@@ -192,6 +192,9 @@ namespace castor3d
 		CU_ScopedEnumBounds( eOrtho )
 	};
 	C3D_API castor::String getName( ViewportType value );
+
+	C3D_API TextureFlagsArray::const_iterator checkFlags( TextureFlagsArray const & flags, TextureFlag flag );
+	C3D_API TextureFlags merge( TextureFlagsArray const & flags );
 	/**
 	*\~english
 	*\brief
@@ -202,16 +205,38 @@ namespace castor3d
 	*/
 	struct PipelineFlags
 	{
+		PipelineFlags( BlendMode colourBlendMode = BlendMode::eNoBlend
+			, BlendMode alphaBlendMode = BlendMode::eNoBlend
+			, PassFlags passFlags = PassFlag::eNone
+			, uint32_t heightMapIndex = InvalidIndex
+			, ProgramFlags programFlags = ProgramFlag::eNone
+			, SceneFlags sceneFlags = SceneFlag::eNone
+			, VkPrimitiveTopology topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
+			, VkCompareOp alphaFunc = VK_COMPARE_OP_ALWAYS
+			, TextureFlagsArray textures = {} )
+			: colourBlendMode{ colourBlendMode }
+			, alphaBlendMode{ alphaBlendMode }
+			, passFlags{ passFlags }
+			, heightMapIndex{ heightMapIndex }
+			, programFlags{ programFlags }
+			, sceneFlags{ sceneFlags }
+			, topology{ topology }
+			, alphaFunc{ alphaFunc }
+			, textures{ textures }
+			, texturesFlags{ merge( textures ) }
+		{
+		}
+
 		BlendMode colourBlendMode{ BlendMode::eNoBlend };
 		BlendMode alphaBlendMode{ BlendMode::eNoBlend };
 		PassFlags passFlags{ PassFlag::eNone };
-		TextureFlags textures{ TextureFlag::eNone };
-		uint32_t texturesCount{ 0u };
 		uint32_t heightMapIndex{ InvalidIndex };
 		ProgramFlags programFlags{ ProgramFlag::eNone };
 		SceneFlags sceneFlags{ SceneFlag::eNone };
 		VkPrimitiveTopology topology{ VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST };
 		VkCompareOp alphaFunc{ VK_COMPARE_OP_ALWAYS };
+		TextureFlagsArray textures;
+		TextureFlags texturesFlags;
 	};
 	C3D_API bool operator<( PipelineFlags const & lhs, PipelineFlags const & rhs );
 	/**

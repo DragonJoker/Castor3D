@@ -8,7 +8,6 @@
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 
 #include <ashespp/Descriptor/DescriptorSetLayout.hpp>
 #include <ashespp/Pipeline/GraphicsPipeline.hpp>

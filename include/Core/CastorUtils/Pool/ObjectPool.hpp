@@ -12,15 +12,6 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		08/01/2016
-	\~english
-	\brief		Policy used to construct/destruct object if needed.
-	\~french
-	\brief		Poliituqe utilisée pour construire/détruire un objet si nécessaire.
-	*/
 	template< typename Object >
 	struct NewDeletePolicy
 	{
@@ -36,21 +27,7 @@ namespace castor
 			space->~Object();
 		}
 	};
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		08/01/2016
-	\~english
-	\brief		The objects pool.
-	\remarks	Uses a policy to change behaviour easily.
-	\param		Object		The pool objects type.
-	\param		MemDataType	The allocation/deallocation policy type.
-	\~french
-	\brief		Le pool d'objets.
-	\remarks	Utilisation d'une politique pour permettre de changer le comportement assez facilement.
-	\param		Object		Le type des objets du pool.
-	\param		MemDataType	Le type de la politique d'allocation/désallocation.
-	*/
+
 	template< typename Object, MemoryDataType MemDataType >
 	class ObjectPool
 		: private MemoryDataTyper< Object, MemDataType >::Type
@@ -148,21 +125,7 @@ namespace castor
 	private:
 		size_t m_count;
 	};
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		08/01/2016
-	\~english
-	\brief		The aligned objects pool.
-	\remarks	Uses a policy to change behaviour easily.
-	\param		Object		The pool objects type.
-	\param		MemDataType	The allocation/deallocation policy type.
-	\~french
-	\brief		Le pool d'objets alignés.
-	\remarks	Utilisation d'une politique pour permettre de changer le comportement assez facilement.
-	\param		Object		Le type des objets du pool.
-	\param		MemDataType	Le type de la politique d'allocation/désallocation.
-	*/
+
 	template< typename Object, MemoryDataType MemDataType, uint32_t Align >
 	class AlignedObjectPool
 		: private AlignedMemoryDataTyper< Object, Align, MemDataType >::Type

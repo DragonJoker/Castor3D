@@ -15,7 +15,6 @@
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
-#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
@@ -731,7 +730,7 @@ namespace castor3d
 			getCurrentRenderDevice( m_engine ).graphicsCommandPool->createCommandBuffer( "SsaoRawAONormals" ),
 		}
 		, m_finished{ getCurrentRenderDevice( m_engine )->createSemaphore( "SsaoRawAO" ) }
-		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, cuT( "SSAO" ), cuT( "Raw AO" ) ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, cuT( "Scalable Ambient Obscurance" ), cuT( "Raw AO" ) ) }
 	{
 		for ( auto i = 0u; i < m_commandBuffers.size(); ++i )
 		{

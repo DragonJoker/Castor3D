@@ -9,17 +9,6 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		29/08/2011
-	\~english
-	\brief		Pixel definition.
-	\remark		Takes a PixelFormat as a template argument to determine size anf format.
-	\~french
-	\brief		Définition d'un pixel.
-	\remark		L'argument template PixelFormat sert a déterminer la taille et le format du pixel.
-	*/
 	template< PixelFormat FT >
 	class Pixel
 	{
@@ -390,15 +379,6 @@ namespace castor
 	Pixel< FT > operator/( Pixel< FT > const & lhs, Pixel< FU > const & rhs );
 	template < PixelFormat FT, PixelFormat FU >
 	Pixel< FT > operator*( Pixel< FT > const & lhs, Pixel< FU > const & rhs );
-	/**@}*/
-	/**
-	\author 	Sylvain DOREMUS
-	\~english
-	\brief		Typedef over a pixel in A8R8G8B8 format
-	\~french
-	\brief		Typedef sur un pixel au format A8R8G8B8
-	*/
-	typedef Pixel< PixelFormat::eR8G8B8A8_UNORM > UbPixel;
 }
 
 #include "Pixel.inl"

@@ -267,12 +267,6 @@ namespace castor3d
 				, doGetImageCreate( m_2dTexture->getPixelFormat(), { dim, dim }, true )
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, cuT( "ImageBackgroundCube" ) );
-			m_texture->getLayerCubeFaceView( 0u, CubeMapFace::ePositiveX ).initialiseSource();
-			m_texture->getLayerCubeFaceView( 0u, CubeMapFace::eNegativeX ).initialiseSource();
-			m_texture->getLayerCubeFaceView( 0u, CubeMapFace::ePositiveY ).initialiseSource();
-			m_texture->getLayerCubeFaceView( 0u, CubeMapFace::eNegativeY ).initialiseSource();
-			m_texture->getLayerCubeFaceView( 0u, CubeMapFace::ePositiveZ ).initialiseSource();
-			m_texture->getLayerCubeFaceView( 0u, CubeMapFace::eNegativeZ ).initialiseSource();
 			m_texture->initialise();
 
 			VkImageSubresourceLayers srcSubresource

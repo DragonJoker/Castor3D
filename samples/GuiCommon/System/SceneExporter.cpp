@@ -153,7 +153,7 @@ namespace GuiCommon
 				strReturn << cuT( "	Kd " ) << diffuse.red().value() << cuT( " " ) << diffuse.green().value() << cuT( " " ) << diffuse.blue().value() << cuT( "\n" );
 				auto specular = pass->getSpecular();
 				strReturn << cuT( "	Ks " ) << specular.red().value() << cuT( " " ) << specular.green().value() << cuT( " " ) << specular.blue().value() << cuT( "\n" );
-				strReturn << cuT( "	Ns " ) << pass->getShininess() << cuT( "\n" );
+				strReturn << cuT( "	Ns " ) << pass->getShininess().value() << cuT( "\n" );
 				strReturn << cuT( "	d " ) << pass->getOpacity() << cuT( "\n" );
 
 				for ( auto & unit : *pass )
@@ -439,7 +439,7 @@ namespace GuiCommon
 					Path path{ base / it.first + cuT( ".cmsh" ) };
 					{
 						BinaryFile file{ path, File::OpenMode::eWrite };
-						result = BinaryWriter< Mesh >{}.write( *mesh, file );
+						result = castor3d::BinaryWriter< Mesh >{}.write( *mesh, file );
 					}
 
 					auto skeleton = mesh->getSkeleton();
@@ -447,7 +447,7 @@ namespace GuiCommon
 					if ( result && skeleton )
 					{
 						BinaryFile file{ base / ( it.first + cuT( ".cskl" ) ), File::OpenMode::eWrite };
-						result = BinaryWriter< Skeleton >{}.write( *skeleton, file );
+						result = castor3d::BinaryWriter< Skeleton >{}.write( *skeleton, file );
 					}
 				}
 			}

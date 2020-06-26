@@ -6,9 +6,15 @@ See LICENSE file in root folder
 
 #include "TextureModule.hpp"
 
+#include <CastorUtils/Design/ArrayView.hpp>
+#include <CastorUtils/Design/Named.hpp>
+#include <CastorUtils/Graphics/Image.hpp>
+#include <CastorUtils/Graphics/ImageLayout.hpp>
+
 namespace castor3d
 {
 	class TextureSource
+		: public castor::Named
 	{
 	public:
 		/**
@@ -19,129 +25,83 @@ namespace castor3d
 		 *\return		Le tampon de la texture.
 		 *\param[in]	engine	Le moteur.
 		 */
-		C3D_API explicit TextureSource( Engine & engine )
-			: m_engine{ engine }
+		explicit TextureSource( castor::Image & image
+			, castor::String name
+			, castor::ImageLayout layout )
+			: castor::Named{ name }
+			, m_image{ &image }
+			, m_layout{ layout }
 		{
 		}
-		/**
-		 *\~english
-		 *\return		The texture buffer.
-		 *\~french
-		 *\return		Le tampon de la texture.
-		 */
-		C3D_API virtual ~TextureSource()
-		{
-		}
-		/**
-		 *\~english
-		 *\return		The texture buffer.
-		 *\~french
-		 *\return		Le tampon de la texture.
-		 */
-		C3D_API virtual castor::PxBufferBaseSPtr getBuffer( uint32_t level = 0u )const = 0;
-		/**
-		 *\~english
-		 *\return		The texture buffers.
-		 *\~french
-		 *\return		Les tampons de la texture.
-		 */
-		C3D_API virtual castor::PxBufferPtrArray const & getBuffers()const = 0;
-		/**
-		 *\~english
-		 *\return		The texture buffers.
-		 *\~french
-		 *\return		Les tampons de la texture.
-		 */
-		C3D_API virtual castor::PxBufferPtrArray & getBuffers() = 0;
-		/**
-		 *\~english
-		 *\brief		sets the texture buffer.
-		 *\param[in]	buffer	The texture buffer.
-		 *\~french
-		 *\brief		Définit le tampon de la texture.
-		 *\param[in]	buffer	Le tampon de la texture.
-		 */
-		C3D_API virtual void setBuffer( castor::PxBufferBaseSPtr buffer
-			, uint32_t level = 0u ) = 0;
-		/**
-		 *\~english
-		 *\return		The static source status.
-		 *\~french
-		 *\return		Le statut de source statique.
-		 */
-		C3D_API virtual bool isStatic()const = 0;
 
-		/**
-		 *\~english
-		 *\return		The source as string.
-		 *\~french
-		 *\return		La source en chaîne de caractères.
-		 */
-		C3D_API virtual castor::String toString()const = 0;
-		/**
-		 *\~english
-		 *\return		The source's dimensions.
-		 *\~french
-		 *\return		Les dimensions de la source.
-		 */
-		inline VkExtent3D getDimensions()const
+		void update( VkExtent3D const & extent
+			, VkFormat format
+			, uint32_t mipLevels
+			, uint32_t arrayLayers )
 		{
-			return m_size;
+			m_layout.extent->x = extent.width;
+			m_layout.extent->y = extent.height;
+			m_layout.extent->z = extent.depth;
+			m_layout.format = castor::PixelFormat( format );
+			m_layout.layers = arrayLayers;
+			m_layout.levels = mipLevels;
 		}
 		/**
 		 *\~english
-		 *\return		The source's pixel format.
+		 *\name		Accessors.
 		 *\~french
-		 *\return		Le format des pixels de la source.
+		 *\name		Accesseurs.
 		 */
-		inline VkFormat getPixelFormat()const
+		//@{
+		inline castor::String const & toString()const
 		{
-			return m_format;
+			return getName();
 		}
-		/**
-		 *\~english
-		 *\return		The source's mipmap levels count.
-		 *\~french
-		 *\return		Le nombre de niveaux de mipmaps de la source.
-		 */
+
+		inline uint32_t getBaseLayer()const
+		{
+			return m_layout.baseLayer;
+		}
+
+		inline uint32_t getLayerCount()const
+		{
+			return m_layout.layers;
+		}
+
+		inline uint32_t getBaseLevel()const
+		{
+			return m_layout.baseLevel;
+		}
+
 		inline uint32_t getLevelCount()const
 		{
-			return uint32_t( getBuffers().size() );
+			return m_layout.levels;
 		}
 
-		C3D_API static TextureSourceSPtr create( Engine & engine
-			, castor::Path const & folder
-			, castor::Path const & relative );
-		C3D_API static TextureSourceSPtr create( Engine & engine
-			, castor::PxBufferBaseSPtr buffer
-			, uint32_t depth );
-		C3D_API static TextureSourceSPtr create( Engine & engine
-			, VkExtent3D const & extent
-			, VkFormat format );
+		inline uint32_t getDepth()const
+		{
+			return m_layout.extent->z;
+		}
 
-	protected:
-		/**
-		 *\~english
-		 *\brief			Readjusts dimensions if the selected rendering API doesn't support NPOT textures.
-		 *\param[in,out]	size	The size.
-		 *\return			\p true if the dimensions have changed.
-		 *\~french
-		 *\brief			Réajuste les dimensions données si l'API de rendu sélectionnée ne supporte pas les textures NPOT.
-		 *\param[in,out]	size	La taille.
-		 *\return			\p true si les dimensions ont changé.
-		 */
-		bool doAdjustDimensions( VkExtent3D & size );
+		inline bool hasBuffer()const
+		{
+			return m_layout.hasBuffer( m_image->getPxBuffer() );
+		}
 
-	protected:
-		//!\~english	The engine.
-		//!\~french		Le moteur.
-		Engine & m_engine;
-		//!\~english	The source's pixel format.
-		//!\~french		Le format des pixels de la source.
-		VkFormat m_format{};
-		//!\~english	The source's dimensions.
-		//!\~french		Les dimensions de la source.
-		VkExtent3D m_size{};
+		inline castor::ImageLayout::ConstBuffer getBuffer()const
+		{
+			return m_layout.buffer( const_cast< castor::Image const & >( *m_image ).getPxBuffer() );
+		}
+
+		inline castor::ImageLayout::Buffer getBuffer()
+		{
+			return m_layout.buffer( m_image->getPxBuffer() );
+		}
+		//@}
+
+	private:
+		castor::Image * m_image;
+		castor::ImageLayout m_layout;
 	};
 }
 

@@ -197,9 +197,19 @@ namespace castor3d
 			doProcessEvents( EventType::eQueueRender );
 		}
 
+		if ( m_first )
+		{
+			m_first = false;
+			getEngine()->getRenderWindowCache().forEach( []( RenderWindow & window )
+				{
+					window.render( true );
+				} );
+			return;
+		}
+
 		getEngine()->getRenderWindowCache().forEach( []( RenderWindow & window )
 			{
-				window.render( true );
+				window.render( false );
 			} );
 
 		{

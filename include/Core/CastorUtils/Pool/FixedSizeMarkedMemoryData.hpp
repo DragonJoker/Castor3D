@@ -10,19 +10,6 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		08/01/2016
-	\~english
-	\brief		Memory allocation policy.
-	\remarks	Allocates an additional byte, marks it, to be an overview of memory leaks.
-				Holds the memory buffers, free chunks and currently allocated objects count.
-	\~french
-	\brief		Politique d'allocation de mémoire.
-	\remarks	Alloue un octet de plus par objet, et marque cet octet, afin d'avoir un aperçu plus fin des fuites mémoires.
-				Contient le tampon mémoire, les chunks libres, et le nombre d'objets actuellement alloués.
-	*/
 	template< typename Object >
 	class FixedSizeMarkedMemoryData
 	{

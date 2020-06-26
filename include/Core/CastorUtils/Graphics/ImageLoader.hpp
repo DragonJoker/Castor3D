@@ -4,16 +4,14 @@ See LICENSE file in root folder
 #ifndef ___CU_ImageLoader_H___
 #define ___CU_ImageLoader_H___
 
-#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/Graphics/GraphicsModule.hpp"
+
+#include "CastorUtils/Design/ArrayView.hpp"
+#include "CastorUtils/Graphics/Image.hpp"
+#include "CastorUtils/Math/Point.hpp"
 
 namespace castor
 {
-	/**
-	\~english
-	\brief		An image loader.
-	\~french
-	\brief		Un loader d'image.
-	*/
 	class ImageLoaderImpl
 	{
 	public:
@@ -32,18 +30,35 @@ namespace castor
 		 *\param[in]	components	Les composantes de l'image à charger.
 		 *\return		Le tampon de pixels contenant les données de l'image.
 		 */
-		CU_API virtual PxBufferPtrArray load( String const & imageFormat
+		CU_API virtual ImageLayout load( String const & imageFormat
 			, uint8_t const * data
-			, uint32_t size )const = 0;
+			, uint32_t size
+			, PxBufferBaseSPtr & buffer )const = 0;
+		/**
+		 *\~english
+		 *\brief		Loads an image file data.
+		 *\param[in]	data		The image data.
+		 *\param[in]	size		The image data size.
+		 *\param[in]	components	The image components to load.
+		 *\return		The pixel buffer containing the image data.
+		 *\~french
+		 *\brief		Charge les données d'un fichier image.
+		 *\param[in]	data		Les données de l'image.
+		 *\param[in]	size		La taille des données de l'image.
+		 *\param[in]	components	Les composantes de l'image à charger.
+		 *\return		Le tampon de pixels contenant les données de l'image.
+		 */
+		inline Image load( String const & name
+			, String const & imageFormat
+			, uint8_t const * data
+			, uint32_t size )const
+		{
+			PxBufferBaseSPtr buffer;
+			auto layout = load( imageFormat, data, size, buffer );
+			return Image{ name, layout, std::move( buffer ) };
+		}
 	};
 
-	using ImageLoaderPtr = std::unique_ptr< ImageLoaderImpl >;
-	/**
-	\~english
-	\brief		Registers the image loaders, per file extension.
-	\~french
-	\brief		Enregistre les loaders d'image, par extension de fichier.
-	*/
 	class ImageLoader
 	{
 	public:
@@ -97,7 +112,8 @@ namespace castor
 		 *\param[in]	path		Le chemin d'accès au fichier image.
 		 *\return		Le tampon de pixels contenant les données de l'image.
 		 */
-		CU_API PxBufferPtrArray load( Path const & path )const;
+		CU_API Image load( String const & name
+			, Path const & path )const;
 		/**
 		 *\~english
 		 *\brief		Loads an image file data.
@@ -112,7 +128,8 @@ namespace castor
 		 *\param[in]	size		La taille des données de l'image.
 		 *\return		Le tampon de pixels contenant les données de l'image.
 		 */
-		CU_API PxBufferPtrArray load( String const & imageFormat
+		CU_API Image load( String const & name
+			, String const & imageFormat
 			, uint8_t const * data
 			, uint32_t size )const;
 

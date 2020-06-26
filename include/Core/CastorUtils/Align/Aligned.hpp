@@ -4,15 +4,9 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_ALIGNED_H___
 #define ___CASTOR_ALIGNED_H___
 
-#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/Align/AlignModule.hpp"
 
 #include "CastorUtils/Miscellaneous/Utils.hpp"
-
-#if defined( CU_CompilerMSVC )
-#	define CU_Alignas( a ) alignas( a )
-#else
-#	define CU_Alignas( a )
-#endif
 
 namespace castor
 {
@@ -55,15 +49,7 @@ namespace castor
 	{
 		return reinterpret_cast< T * >( alignedAlloc( alignment, size ) );
 	}
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		03/10/2015
-	\~english
-	\brief		Templated class that provide alignment support.
-	\~french
-	\brief		Classe template qui fournit le support de l'alignement.
-	*/
+
 	template< int A >
 	class CU_Alignas( A ) Aligned
 	{
@@ -109,15 +95,7 @@ namespace castor
 			castor::alignedFree( memory );
 		}
 	};
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		03/10/2015
-	\~english
-	\brief		Templated class that provide alignment support.
-	\~french
-	\brief		Classe template qui fournit le support de l'alignement.
-	*/
+
 	template< typename T >
 	class CU_Alignas( alignof( T ) ) AlignedFrom
 	{

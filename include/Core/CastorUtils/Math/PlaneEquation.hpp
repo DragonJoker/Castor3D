@@ -9,14 +9,6 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\date		14/02/2010
-	\~english
-	\brief		Plane equation implementation (ax + by + cz + d = 0).
-	\~french
-	\brief		Implémentation d'une équation de plan (ax + by + cz + d = 0).
-	*/
 	class PlaneEquation
 	{
 	public:

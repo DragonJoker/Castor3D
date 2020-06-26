@@ -11,19 +11,16 @@
 
 namespace castor
 {
-	namespace
+	Image::Image( String const & name
+		, Size const & size
+		, PixelFormat format
+		, uint8_t const * buffer
+		, PixelFormat bufferFormat )
+		: Resource< Image >{ name }
+		, m_buffer{ PxBufferBase::create( size, format, buffer, bufferFormat ) }
+		, m_layout{ *m_buffer }
 	{
-		PxBufferPtrArray cloneBuffers( PxBufferPtrArray const & src )
-		{
-			PxBufferPtrArray result;
-
-			for ( auto & buffer : src )
-			{
-				result.emplace_back( buffer->clone() );
-			}
-
-			return result;
-		}
+		CU_CheckInvariants();
 	}
 
 	Image::Image( String const & name
@@ -31,52 +28,36 @@ namespace castor
 		, PixelFormat format
 		, ByteArray const & buffer
 		, PixelFormat bufferFormat )
-		: Resource< Image >{ name }
-		, m_buffers{ PxBufferBase::create( size, format, &buffer[0], bufferFormat ) }
+		: Image{ name, size, format, buffer.data(), bufferFormat }
 	{
-		CU_CheckInvariants();
-	}
-
-	Image::Image( String const & name
-		, Size const & size
-		, PixelFormat format
-		, uint8_t const * buffer
-		, PixelFormat bufferFormat )
-		: Resource< Image >{ name }
-		, m_buffers{ PxBufferBase::create( size, format, buffer, bufferFormat ) }
-	{
-		CU_CheckInvariants();
 	}
 
 	Image::Image( String const & name
 		, PxBufferBase const & buffer )
-		: Resource< Image >{ name }
-		, m_buffers{ buffer.clone() }
+		: Image{ name, buffer.getDimensions(), buffer.getFormat(), buffer.getConstPtr(), buffer.getFormat() }
 	{
-		CU_CheckInvariants();
 	}
 
-	Image::Image( String const & name
-		, PxBufferPtrArray const & buffers )
-		: Resource< Image >{ name }
-		, m_buffers{ std::move( buffers ) }
+	Image::Image( String name
+		, ImageLayout layout
+		, PxBufferBaseSPtr buffer )
+		: Resource< Image >{ std::move( name ) }
+		, m_buffer{ ( buffer
+			? buffer
+			: PxBufferBase::create( layout.dimensions()
+				, layout.depthLayers()
+				, layout.levels
+				, layout.format ) ) }
+		, m_layout{ layout }
 	{
 		CU_CheckInvariants();
-	}
-
-	Image::Image( String const & name
-		, Path const & pathFile
-		, ImageLoader const & loader )
-		: Resource< Image >{ name }
-		, m_pathFile{ pathFile }
-		, m_buffers{ loader.load( pathFile ) }
-	{
 	}
 
 	Image::Image( Image const & image )
-		: Resource< Image >{ static_cast< Resource< Image > const & >( image ) }
+		: Resource< Image >( image )
 		, m_pathFile{ image.m_pathFile }
-		, m_buffers{ cloneBuffers( image.m_buffers ) }
+		, m_buffer{ image.m_buffer->clone() }
+		, m_layout{ image.m_layout }
 	{
 		CU_CheckInvariants();
 	}
@@ -85,13 +66,32 @@ namespace castor
 	{
 		Resource< Image >::operator=( image );
 		m_pathFile = image.m_pathFile;
-		m_buffers = cloneBuffers( image.m_buffers );
-		CU_CheckInvariants();
+		m_layout = image.m_layout;
+		m_buffer = image.m_buffer ? image.m_buffer->clone() : nullptr;
 		return * this;
 	}
 
-	Image::~Image()
+	PxBufferBaseSPtr Image::updateLayerLayout( Size const & extent
+		, PixelFormat format )
 	{
+		auto result = ( m_layout.extent->x != extent.getWidth()
+			|| m_layout.extent->y != extent.getHeight()
+			|| format != m_layout.format )
+			? m_buffer
+			: nullptr;
+
+		if ( result )
+		{
+			m_layout.extent->x = extent.getWidth();
+			m_layout.extent->y = extent.getHeight();
+			m_layout.format = format;
+			m_buffer = PxBufferBase::create( { m_layout.extent->x, m_layout.extent->y }
+				, m_layout.depthLayers()
+				, m_layout.levels
+				, m_layout.format );
+		}
+
+		return result;
 	}
 
 	Image & Image::resample( Size const & size )
@@ -149,28 +149,43 @@ namespace castor
 			break;
 		}
 
-		auto dstBuffer = PxBufferBase::create( size
-			, srcBuffer->getFormat() );
-		auto result = stbir_resize( srcBuffer->getConstPtr(), int( srcBuffer->getWidth() ), int( srcBuffer->getHeight() ), 0
-			, dstBuffer->getPtr(), int( dstBuffer->getWidth() ), int( dstBuffer->getHeight() ), 0
-			, dataType
-			, channels, alpha, 0
-			, STBIR_EDGE_CLAMP, STBIR_EDGE_CLAMP
-			, STBIR_FILTER_CATMULLROM, STBIR_FILTER_CATMULLROM
-			, colorSpace, nullptr );
+		auto srcW = m_layout.extent->x;
+		auto srcH = m_layout.extent->y;
+		auto srcLayerSize = m_layout.layerSize();
+		auto src = srcBuffer->getPtr();
+		updateLayerLayout( size, srcBuffer->getFormat() );
+		auto dstBuffer = getPixels();
+		auto dstW = m_layout.extent->x;
+		auto dstH = m_layout.extent->y;
+		auto dstLayerSize = m_layout.layerSize();
+		auto dst = dstBuffer->getPtr();
 
-		if ( !result )
+		for ( uint32_t layer = 0u; layer < m_layout.depthLayers(); ++layer )
 		{
-			CU_LoaderError( "Image couldn't be resized" );
+			auto result = stbir_resize( src, int( srcBuffer->getWidth() ), int( srcBuffer->getHeight() ), 0
+				, dst, int( dstBuffer->getWidth() ), int( dstBuffer->getHeight() ), 0
+				, dataType
+				, channels, alpha, 0
+				, STBIR_EDGE_CLAMP, STBIR_EDGE_CLAMP
+				, STBIR_FILTER_CATMULLROM, STBIR_FILTER_CATMULLROM
+				, colorSpace, nullptr );
+
+			if ( !result )
+			{
+				CU_LoaderError( "Image couldn't be resized" );
+			}
+
+			dst += dstLayerSize;
+			src += srcLayerSize;
 		}
 
-		m_buffers.front() = dstBuffer;
+		CU_CheckInvariants();
 		return *this;
 	}
 
 	CU_BeginInvariantBlock( Image )
-	CU_CheckInvariant( !m_buffers.empty() );
-	CU_CheckInvariant( m_buffers.front()->getCount() > 0 );
+	CU_CheckInvariant( m_buffer );
+	CU_CheckInvariant( m_buffer->getCount() > 0 );
 	CU_EndInvariantBlock()
 
 	Image & Image::fill( RgbColour const & colour )
@@ -178,13 +193,14 @@ namespace castor
 		CU_CheckInvariants();
 		setPixel( 0, 0, colour );
 		uint32_t uiBpp = PF::getBytesPerPixel( getPixelFormat() );
+		auto src = m_buffer->getPtr();
+		auto buffer = m_buffer->getPtr() + uiBpp;
+		auto end = m_buffer->getPtr() + m_buffer->getSize();
 
-		for ( auto & buffer : m_buffers )
+		while ( buffer != end )
 		{
-			for ( uint32_t i = uiBpp; i < buffer->getSize(); i += uiBpp )
-			{
-				memcpy( &buffer->getPtr()[i], &buffer->getConstPtr()[0], uiBpp );
-			}
+			memcpy( buffer, src, uiBpp );
+			buffer += uiBpp;
 		}
 
 		CU_CheckInvariants();
@@ -196,13 +212,14 @@ namespace castor
 		CU_CheckInvariants();
 		setPixel( 0, 0, colour );
 		uint32_t uiBpp = PF::getBytesPerPixel( getPixelFormat() );
+		auto src = m_buffer->getPtr();
+		auto buffer = m_buffer->getPtr() + uiBpp;
+		auto end = m_buffer->getPtr() + m_buffer->getSize();
 
-		for ( auto & buffer : m_buffers )
+		while ( buffer != end )
 		{
-			for ( uint32_t i = uiBpp; i < buffer->getSize(); i += uiBpp )
-			{
-				memcpy( &buffer->getPtr()[i], &buffer->getConstPtr()[0], uiBpp );
-			}
+			memcpy( buffer, src, uiBpp );
+			buffer += uiBpp;
 		}
 
 		CU_CheckInvariants();
@@ -218,7 +235,7 @@ namespace castor
 		CU_Require( getLevels() == 1u );
 		CU_Require( x < getWidth() && y < getHeight() && pixel );
 		uint8_t const * src = pixel;
-		uint8_t * dst = &( *m_buffers.front()->getAt( x, y ) );
+		uint8_t * dst = &( *m_buffer->getAt( x, y ) );
 		PF::convertPixel( format, src, getPixelFormat(), dst );
 		CU_CheckInvariants();
 		return * this;
@@ -233,7 +250,7 @@ namespace castor
 		CU_Require( x < getWidth() && y < getHeight() );
 		Point4ub components = toBGRAByte( colour );
 		uint8_t const * src = components.constPtr();
-		uint8_t * dst = &( *m_buffers.front()->getAt( x, y ) );
+		uint8_t * dst = &( *m_buffer->getAt( x, y ) );
 		PF::convertPixel( PixelFormat::eR8G8B8A8_UNORM, src, getPixelFormat(), dst );
 		CU_CheckInvariants();
 		return * this;
@@ -248,133 +265,16 @@ namespace castor
 		CU_Require( x < getWidth() && y < getHeight() );
 		Point3ub components = toBGRByte( colour );
 		uint8_t const * src = components.constPtr();
-		uint8_t * dst = &( *m_buffers.front()->getAt( x, y ) );
+		uint8_t * dst = &( *m_buffer->getAt( x, y ) );
 		PF::convertPixel( PixelFormat::eR8G8B8_UNORM, src, getPixelFormat(), dst );
 		CU_CheckInvariants();
 		return * this;
 	}
 
-	void Image::getPixel( uint32_t x
-		, uint32_t y
-		, uint8_t * pixel
-		, PixelFormat format )const
-	{
-		CU_CheckInvariants();
-		CU_Require( getLevels() == 1u );
-		CU_Require( x < getWidth() && y < getHeight() && pixel );
-		uint8_t const * src = &( *m_buffers.front()->getAt( x, y ) );
-		uint8_t * dst = pixel;
-		PF::convertPixel( getPixelFormat(), src, format, dst );
-		CU_CheckInvariants();
-	}
-
-	RgbaColour Image::getPixel( uint32_t x
-		, uint32_t y )const
-	{
-		CU_CheckInvariants();
-		CU_Require( getLevels() == 1u );
-		CU_Require( x < getWidth() && y < getHeight() );
-		Point4ub components;
-		uint8_t const * src = &( *m_buffers.front()->getAt( x, y ) );
-		uint8_t * dst = components.ptr();
-		PF::convertPixel( getPixelFormat(), src, PixelFormat::eR8G8B8A8_UNORM, dst );
-		CU_CheckInvariants();
-		return RgbaColour::fromBGRA( components );
-	}
-
-	Image & Image::copyImage( Image const & toCopy )
-	{
-		CU_CheckInvariants();
-		CU_Require( getLevels() == 1u );
-		auto srcBuffer = toCopy.m_buffers.front();
-		auto dstBuffer = m_buffers.front();
-
-		if ( getDimensions() == toCopy.getDimensions() )
-		{
-			if ( getPixelFormat() == toCopy.getPixelFormat() )
-			{
-				memcpy( dstBuffer->getPtr(), srcBuffer->getPtr(), dstBuffer->getSize() );
-			}
-			else
-			{
-				for ( uint32_t i = 0; i < getWidth(); ++i )
-				{
-					for ( uint32_t j = 0; j < getHeight(); ++j )
-					{
-						uint8_t const * src = &( *srcBuffer->getAt( i, j ) );
-						uint8_t * dst = &( *dstBuffer->getAt( i, j ) );
-						PF::convertPixel( getPixelFormat(), src, getPixelFormat(), dst );
-					}
-				}
-			}
-		}
-		else
-		{
-			Point2d srcStep( static_cast< double >( toCopy.getWidth() ) / getWidth(), static_cast< double >( toCopy.getHeight() ) / getHeight() );
-			ByteArray srcPix( PF::getBytesPerPixel( toCopy.getPixelFormat() ), 0 );
-
-			for ( uint32_t i = 0; i < getWidth(); ++i )
-			{
-				for ( uint32_t j = 0; j < getHeight(); ++j )
-				{
-					toCopy.getPixel( static_cast< uint32_t >( i * srcStep[0] ), static_cast< uint32_t >( j * srcStep[1] ), srcPix.data(), toCopy.getPixelFormat() );
-					setPixel( i, j, srcPix.data(), toCopy.getPixelFormat() );
-				}
-			}
-		}
-
-		CU_CheckInvariants();
-		return * this;
-	}
-
-	Image Image::subImage( Rectangle const & rect )const
-	{
-		CU_CheckInvariants();
-		CU_Require( getLevels() == 1u );
-		CU_Require( Rectangle( 0, 0 , getWidth(), getHeight() ).intersects( rect ) == Intersection::eIn );
-		Size size( rect.getWidth(), rect.getHeight() );
-		// Création de la sous-image à remplir
-		Image img( m_name + cuT( "_Sub" ) + string::toString( rect[0] ) + cuT( "x" ) + string::toString( rect[1] ) + cuT( ":" ) + string::toString( size.getWidth() ) + cuT( "x" ) + string::toString( size.getHeight() ), size, getPixelFormat() );
-		// Calcul de variables temporaires
-		uint8_t const * src = &( *m_buffers.front()->getAt( rect.left(), rect.top() ) );
-		uint8_t * dst = &( *img.m_buffers.front()->getAt( 0, 0 ) );
-		uint32_t srcPitch = getWidth() * PF::getBytesPerPixel( getPixelFormat() );
-		uint32_t dstPitch = img.getWidth() * PF::getBytesPerPixel( img.getPixelFormat() );
-
-		// Copie des pixels de l'image originale dans la sous-image
-		for ( int i = rect.left(); i < rect.right(); ++i )
-		{
-			std::memcpy( dst, src, dstPitch );
-			src += srcPitch;
-			dst += dstPitch;
-		}
-
-		CU_CheckInvariants();
-		return img;
-	}
-
 	Image & Image::flip()
 	{
 		CU_CheckInvariants();
-
-		for ( auto & buffer : m_buffers )
-		{
-			buffer->flip();
-		}
-
-		CU_CheckInvariants();
-		return * this;
-	}
-
-	Image & Image::mirror()
-	{
-		CU_CheckInvariants();
-
-		for ( auto & buffer : m_buffers )
-		{
-			buffer->mirror();
-		}
-
+		m_buffer->flip();
 		CU_CheckInvariants();
 		return * this;
 	}

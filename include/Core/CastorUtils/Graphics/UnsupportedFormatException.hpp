@@ -1,26 +1,15 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___CASTOR_UNSUPPORTED_FORMAT_EXCEPTION_H___
-#define ___CASTOR_UNSUPPORTED_FORMAT_EXCEPTION_H___
+#ifndef ___CU_UnsupportedFormatException_H___
+#define ___CU_UnsupportedFormatException_H___
+
+#include "CastorUtils/Graphics/GraphicsModule.hpp"
 
 #include "CastorUtils/Exception/Exception.hpp"
 
-#include <vector>
-#include <algorithm>
-#include <numeric>
-
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		03/01/2011
-	\~english
-	\brief		Unsupported format exception
-	\~french
-	\brief		Unsupported format exception
-	*/
 	class UnsupportedFormatException
 		: public castor::Exception
 	{

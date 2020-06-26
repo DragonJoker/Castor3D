@@ -250,6 +250,9 @@ namespace castor3d
 		//!\~english	The pool used to update the render queues.
 		//!\~french		Le pool de mise à jour des files de rendu.
 		castor::ThreadPool m_queueUpdater;
+
+	private:
+		bool m_first = true;
 	};
 }
 

@@ -126,6 +126,15 @@ namespace castor3d
 		C3D_API bool hasAlphaBlending()const;
 		/**
 		 *\~english
+		 *\brief		Tells if the pass needs alpha test.
+		 *\return		\p true if the alpha func is not Always.
+		 *\~french
+		 *\brief		Dit si la passe a besoin de test d'alpha.
+		 *\return		\p true si la fonction alpha ne vaut pas Always.
+		 */
+		C3D_API bool hasAlphaTest()const;
+		/**
+		 *\~english
 		 *\brief		Reduces the textures.
 		 *\~french
 		 *\brief		Réduit les textures.
@@ -162,7 +171,7 @@ namespace castor3d
 		 *\brief		Définit les informations étendues pour le subsurface scattering.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		C3D_API void setSubsurfaceScattering( SubsurfaceScatteringUPtr && value );
+		C3D_API void setSubsurfaceScattering( SubsurfaceScatteringUPtr value );
 		/**
 		 *\~english
 		 *\remarks	Passes are aligned on float[4], so the size of a pass
@@ -193,13 +202,7 @@ namespace castor3d
 		C3D_API bool needsGammaCorrection()const;
 		C3D_API TextureUnitPtrArray getTextureUnits( TextureFlags mask = TextureFlag::eAll )const;
 		C3D_API uint32_t getTextureUnitsCount( TextureFlags mask = TextureFlag::eAll )const;
-
-		inline uint32_t getNonEnvTextureUnitsCount( TextureFlags mask = TextureFlag::eAll )const
-		{
-			castor::remFlag( mask, TextureFlag::eReflection );
-			castor::remFlag( mask, TextureFlag::eRefraction );
-			return getTextureUnitsCount( mask );
-		}
+		C3D_API TextureFlagsArray getTextures( TextureFlags mask )const;
 
 		inline TextureFlags const & getTextures()const
 		{
@@ -218,8 +221,8 @@ namespace castor3d
 
 		inline bool hasEnvironmentMapping()const
 		{
-			return checkFlag( m_textures, TextureFlag::eReflection )
-				|| checkFlag( m_textures, TextureFlag::eRefraction );
+			return checkFlag( m_flags, PassFlag::eReflection )
+				|| checkFlag( m_flags, PassFlag::eRefraction );
 		}
 
 		inline float getOpacity()const
@@ -269,12 +272,13 @@ namespace castor3d
 
 		inline bool hasSubsurfaceScattering()const
 		{
-			return m_subsurfaceScattering != nullptr;
+			return checkFlag( m_flags, PassFlag::eSubsurfaceScattering )
+				&& m_subsurfaceScattering != nullptr;
 		}
 
 		inline bool hasParallaxOcclusion()const
 		{
-			return m_parallaxOcclusion;
+			return checkFlag( m_flags, PassFlag::eParallaxOcclusionMapping );
 		}
 
 		inline SubsurfaceScattering const & getSubsurfaceScattering()const
@@ -286,6 +290,16 @@ namespace castor3d
 		inline bool isImplicit()const
 		{
 			return m_implicit;
+		}
+
+		inline bool hasReflections()const
+		{
+			return checkFlag( m_flags, PassFlag::eReflection );
+		}
+
+		inline bool hasRefraction()const
+		{
+			return checkFlag( m_flags, PassFlag::eRefraction );
 		}
 
 		inline uint32_t getHeightTextureIndex()const
@@ -351,8 +365,7 @@ namespace castor3d
 
 		inline void setParallaxOcclusion( bool value )
 		{
-			m_parallaxOcclusion = value;
-			onChanged( *this );
+			updateFlag( PassFlag::eParallaxOcclusionMapping, value );
 		}
 
 		inline void setAlphaBlendMode( BlendMode value )
@@ -375,7 +388,8 @@ namespace castor3d
 		inline void setAlphaFunc( VkCompareOp value )
 		{
 			m_alphaFunc = value;
-			onChanged( *this );
+			updateFlag( PassFlag::eAlphaTest, hasAlphaTest() );
+			updateFlag( PassFlag::eAlphaBlending, hasAlphaBlending() );
 		}
 
 		inline void setAlphaValue( float value )
@@ -390,6 +404,16 @@ namespace castor3d
 			onChanged( *this );
 		}
 
+		inline void enableReflections( bool value = true )
+		{
+			updateFlag( PassFlag::eReflection, value );
+		}
+
+		inline void enableRefractions( bool value = true )
+		{
+			updateFlag( PassFlag::eRefraction, value );
+		}
+
 		inline void setImplicit( bool value = true )
 		{
 			m_implicit = value;
@@ -401,6 +425,21 @@ namespace castor3d
 		virtual void doInitialise() = 0;
 		virtual void doCleanup() = 0;
 		virtual void doSetOpacity( float value ) = 0;
+
+		inline void updateFlag( PassFlag flag
+			, bool value )
+		{
+			if ( value )
+			{
+				addFlag( m_flags, flag );
+			}
+			else
+			{
+				remFlag( m_flags, flag );
+			}
+
+			onChanged( *this );
+		}
 
 	public:
 		OnPassChanged onChanged;
@@ -421,10 +460,10 @@ namespace castor3d
 		float m_alphaValue{ 0.0f };
 		VkCompareOp m_alphaFunc{ VK_COMPARE_OP_ALWAYS };
 		bool m_texturesReduced{ false };
-		bool m_parallaxOcclusion{ false };
 		SubsurfaceScatteringUPtr m_subsurfaceScattering;
 		SubsurfaceScattering::OnChangedConnection m_sssConnection;
 		uint32_t m_heightTextureIndex{ InvalidIndex };
+		PassFlags m_flags;
 	};
 }
 

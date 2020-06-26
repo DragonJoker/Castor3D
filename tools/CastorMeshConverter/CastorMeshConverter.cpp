@@ -66,7 +66,7 @@ bool doParseArgs( int argc
 		return false;
 	}
 
-	options.input = castor::Path{ castor::string::stringCast< xchar >( args[0] ) };
+	options.input = castor::Path{ castor::string::stringCast< castor::xchar >( args[0] ) };
 	it = std::find( args.begin(), args.end(), "-o" );
 
 	if ( it == args.end() )

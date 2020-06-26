@@ -38,7 +38,11 @@ namespace GuiCommon
 		 *\param[in]	p_name		Le nom de l'animation cible.
 		 *\param[in]	p_state		L'état de l'animation cible.
 		 */
-		AnimationTreeItemProperty( castor3d::Engine * engine, bool p_editable, castor3d::AnimatedObjectGroupSPtr p_group, castor::String const & p_name, castor3d::GroupAnimation const & p_anim );
+		AnimationTreeItemProperty( castor3d::Engine * engine
+			, bool editable
+			, castor3d::AnimatedObjectGroup & group
+			, castor::String const & name
+			, castor3d::GroupAnimation const & anim );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -54,9 +58,9 @@ namespace GuiCommon
 		 *\brief		Récupère l'AnimatedObjectGroup.
 		 *\return		La valeur.
 		 */
-		inline castor3d::AnimatedObjectGroupSPtr getGroup()
+		inline castor3d::AnimatedObjectGroupRPtr getGroup()
 		{
-			return m_group.lock();
+			return &m_group;
 		}
 		/**
 		 *\~english
@@ -123,7 +127,7 @@ namespace GuiCommon
 		bool OnStateChange( wxPGProperty * p_property );
 
 	private:
-		castor3d::AnimatedObjectGroupWPtr m_group;
+		castor3d::AnimatedObjectGroup & m_group;
 		castor::String m_name;
 		castor3d::GroupAnimation m_groupAnim;
 	};

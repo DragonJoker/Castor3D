@@ -555,7 +555,7 @@ namespace castor3d
 		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass
 			, m_result[0].getTexture()->getDefaultView().getTargetView()
 			, m_result[1].getTexture()->getDefaultView().getTargetView() ) }
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Lighting" ), cuT( "RSM GI" ) ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Reflective Shadow Maps" ), cuT( "GI Resolve" ) ) }
 		, m_finished{ getCurrentRenderDevice( engine )->createSemaphore( getName() ) }
 	{
 		if ( auto buffer = m_rsmSamplesSsbo->lock( 0u, RsmConfig::MaxRange, 0u ) )

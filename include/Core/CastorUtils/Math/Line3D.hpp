@@ -4,28 +4,13 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_LINE_3D_H___
 #define ___CASTOR_LINE_3D_H___
 
-#include "CastorUtils/CastorUtils.hpp"
+#include "CastorUtils/Math/Point.hpp"
 
 #include <cmath>
+#include <limits>
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\date		14/08/2010
-	\~english
-	\brief		3D line equation
-	\remark		A slope and an origin
-				<br />x = m_slope[0] * t + m_origin[0]
-				<br />y = m_slope[1] * t + m_origin[1]
-				<br />z = m_slope[2] * t + m_origin[2]
-	\~french
-	\brief		Equation d'une droite 3D
-	\remark		Une pente et une origine
-				<br />x = m_slope[0] * t + m_origin[0]
-				<br />y = m_slope[1] * t + m_origin[1]
-				<br />z = m_slope[2] * t + m_origin[2]
-	*/
 	template< typename T >
 	class Line3D
 	{

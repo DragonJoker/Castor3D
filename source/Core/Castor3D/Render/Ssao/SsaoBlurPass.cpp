@@ -14,7 +14,6 @@
 #include "Castor3D/Render/Ssao/SsaoConfigUbo.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
-#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
@@ -509,7 +508,7 @@ namespace castor3d
 		, m_result{ doCreateTexture( m_engine, getName() + cuT( "Result" ), SsaoBlurPass::ResultFormat, m_size ) }
 		, m_renderPass{ doCreateRenderPass( m_engine, getName() ) }
 		, m_fbo{ doCreateFrameBuffer( m_engine, getName(), *m_renderPass, m_result ) }
-		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, cuT( "SSAO" ), cuT( "Blur" ) ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, cuT( "Scalable Ambient Obscurance" ), prefix + cuT( " Blur" ) ) }
 		, m_finished{ getCurrentRenderDevice( m_engine )->createSemaphore( getName() ) }
 		, m_configurationUbo{ makeUniformBuffer< Configuration >( *m_engine.getRenderSystem()
 			, 1u
