@@ -3,23 +3,23 @@ See LICENSE file in root folder
 */
 namespace castor
 {
-	template< class T >
-	Resource< T >::Resource( Collection & collection
+	template< class ResType >
+	Resource< ResType >::Resource( Collection< ResType, String > & collection
 		, String const & name )
 		: Named{ name }
 		, m_collection{ &collection }
 	{
 	}
 	
-	template< class T >
-	Resource< T >::Resource( String const & name )
+	template< class ResType >
+	Resource< ResType >::Resource( String const & name )
 		: Named{ name }
 		, m_collection{ nullptr }
 	{
 	}
 
-	template< class T >
-	void Resource< T >::changeName( String const & name )
+	template< class ResType >
+	void Resource< ResType >::changeName( String const & name )
 	{
 		if ( m_name == name )
 		{
@@ -38,7 +38,7 @@ namespace castor
 		}
 		else
 		{
-			std::shared_ptr< T > pThis = m_collection->erase( m_name );
+			std::shared_ptr< ResType > pThis = m_collection->erase( m_name );
 			CU_Require( pThis );
 			auto res = m_collection->insert( name, pThis );
 			CU_Require( res );

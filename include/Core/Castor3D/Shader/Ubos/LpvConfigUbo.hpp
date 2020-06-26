@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_LpvConfigUbo_H___
 
 #include "UbosModule.hpp"
+#include "Castor3D/Scene/Light/LightModule.hpp"
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 

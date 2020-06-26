@@ -19,7 +19,7 @@ namespace castor
 		: public PxBufferBase
 	{
 	public:
-		typedef Pixel< PF > Pixel;
+		typedef Pixel< PF > MyPixel;
 
 		using iterator = PixelIterator< PF >;
 		using const_iterator = ConstPixelIterator< PF >;
@@ -73,7 +73,7 @@ namespace castor
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline Pixel at( uint32_t x, uint32_t y )const;
+		inline MyPixel at( uint32_t x, uint32_t y )const;
 
 		inline iterator begin()const
 		{

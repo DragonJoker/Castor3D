@@ -46,7 +46,7 @@ namespace castor
 			, Size const & size
 			, uint8_t const * buffer = nullptr )
 			: Resource< Image > ( name )
-			, m_buffers( std::make_shared< PxBuffer< PFDst > >( size, buffer, PFSrc ) )
+			, m_buffer( std::make_shared< PxBuffer< PFDst > >( size, buffer, PFSrc ) )
 		{
 			CU_CheckInvariants();
 		}
@@ -168,7 +168,7 @@ namespace castor
 		{
 			CU_CheckInvariants();
 			CU_Require( x < getWidth() && y < getHeight() );
-			convertPixel( PF, pixel.constPtr(), getPixelFormat(), m_buffers.front()->getAt( x, y ) );
+			convertPixel( PF, pixel.constPtr(), getPixelFormat(), m_buffer->getAt( x, y ) );
 			CU_CheckInvariants();
 			return * this;
 		}

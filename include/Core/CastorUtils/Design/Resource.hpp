@@ -16,9 +16,9 @@ namespace castor
 		: public Named
 	{
 	protected:
-		using Collection = Collection< ResType, String >;
+		using MyCollection = Collection< ResType, String >;
 
-		Resource( Collection & collection
+		Resource( MyCollection & collection
 			, String const & name );
 		explicit Resource( String const & name );
 		~Resource() = default;
@@ -39,7 +39,7 @@ namespace castor
 		void changeName( String const & name );
 
 	private:
-		Collection * m_collection;
+		MyCollection * m_collection;
 	};
 }
 

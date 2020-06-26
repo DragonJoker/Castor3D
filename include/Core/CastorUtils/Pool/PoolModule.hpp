@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___CU_PoolModule_HPP___
 #pragma once
 
+#include "CastorUtils/Align/AlignModule.hpp"
 #include "CastorUtils/CastorUtils.hpp"
 
 namespace castor

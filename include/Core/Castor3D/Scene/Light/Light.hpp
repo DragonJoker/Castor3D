@@ -140,7 +140,7 @@ namespace castor3d
 		C3D_API PointLightSPtr getPointLight()const;
 		C3D_API SpotLightSPtr getSpotLight()const;
 
-		inline bool Light::hasChanged()const
+		inline bool hasChanged()const
 		{
 			return m_dirty;
 		}

@@ -104,6 +104,12 @@ namespace castor3d
 	CU_ImplementFlags( TextureFlag )
 	C3D_API castor::String getName( TextureFlag value
 		, MaterialType material );
+	struct TextureFlagsId
+	{
+		TextureFlags flags;
+		uint32_t id;
+	};
+	using TextureFlagsArray = std::vector< TextureFlagsId >;
 	/**
 	*\~english
 	*\brief

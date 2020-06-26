@@ -193,12 +193,6 @@ namespace castor3d
 	};
 	C3D_API castor::String getName( ViewportType value );
 
-	struct TextureFlagsId
-	{
-		TextureFlags flags;
-		uint32_t id;
-	};
-	using TextureFlagsArray = std::vector< TextureFlagsId >;
 	C3D_API TextureFlagsArray::const_iterator checkFlags( TextureFlagsArray const & flags, TextureFlag flag );
 	C3D_API TextureFlags merge( TextureFlagsArray const & flags );
 	/**
