@@ -70,8 +70,8 @@ namespace castor3d
 			for ( uint32_t j = 0; j <= uiIntMax; j++ )
 			{
 				submesh.addPoint( InterleavedVertex::createPNT( castor::Point3f{ m_internalRadius * cos( rAngleIn ) + m_externalRadius, m_internalRadius * sin( rAngleIn ), 0.0 }
-					, point::getNormalised( castor::Point3f{ float( cos( rAngleIn ) ), float( sin( rAngleIn ) ), 1.0f } )
-					, Point2f{ 1.0f, float( j ) / m_internalNbFaces } ) );
+					, point::getNormalised( castor::Point3f{ float( cos( rAngleIn ) ), float( sin( rAngleIn ) ), 0.0f } )
+					, Point2f{ 0.0f, float( j ) / m_internalNbFaces } ) );
 				uiCur++;
 				rAngleIn += step;
 			}
