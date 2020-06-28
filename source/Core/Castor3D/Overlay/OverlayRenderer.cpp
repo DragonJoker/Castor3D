@@ -18,6 +18,7 @@
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
+#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp"
 
 #include <CastorUtils/Graphics/Rectangle.hpp>
@@ -134,24 +135,23 @@ namespace castor3d
 		};
 		CU_ImplementFlags( OverlayTexture )
 
-		uint32_t makeKey( TextureFlags const & textures
-			, uint32_t texturesCount
+		uint32_t makeKey( TextureFlagsArray const & textures
 			, bool text )
 		{
 			OverlayTextures tex{ text ? OverlayTexture::eText : OverlayTexture::eNone };
 
-			if ( checkFlag( textures, TextureFlag::eDiffuse ) )
+			if ( checkFlags( textures, TextureFlag::eDiffuse ) != textures.end() )
 			{
 				tex |= OverlayTexture::eColour;
 			}
 
-			if ( checkFlag( textures, TextureFlag::eOpacity ) )
+			if ( checkFlags( textures, TextureFlag::eOpacity ) != textures.end() )
 			{
 				tex |= OverlayTexture::eOpacity;
 			}
 
 			uint32_t result{ tex << 24 };
-			result |= texturesCount;
+			result |= uint32_t( textures.size() );
 			return result;
 		}
 	}
@@ -672,7 +672,7 @@ namespace castor3d
 			, 1u );
 		uint32_t texIndex = 0u;
 
-		for ( auto & unit : pass )
+		for ( auto & unit : pass.getTextureUnits( textures ) )
 		{
 			auto config = unit->getConfiguration();
 
@@ -793,16 +793,16 @@ namespace castor3d
 		ashes::VkPipelineColorBlendAttachmentStateArray attachments
 		{
 			VkPipelineColorBlendAttachmentState
-		{
-			VK_TRUE,
-			VK_BLEND_FACTOR_SRC_ALPHA,
-			VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
-			VK_BLEND_OP_ADD,
-			VK_BLEND_FACTOR_SRC_ALPHA,
-			VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
-			VK_BLEND_OP_ADD,
-			defaultColorWriteMask,
-		},
+			{
+				VK_TRUE,
+				VK_BLEND_FACTOR_SRC_ALPHA,
+				VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+				VK_BLEND_OP_ADD,
+				VK_BLEND_FACTOR_SRC_ALPHA,
+				VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+				VK_BLEND_OP_ADD,
+				defaultColorWriteMask,
+			},
 		};
 		ashes::PipelineColorBlendStateCreateInfo blState
 		{
@@ -896,9 +896,8 @@ namespace castor3d
 			}
 		) );
 		// Remove unwanted flags
-		auto textures = pass.getTextures();
-		remFlag( textures, TextureFlag::eAllButColourAndOpacity );
-		auto key = makeKey( textures, count, text );
+		auto textures = pass.getTextures( TextureFlag::eOpacity | TextureFlag::eDiffuse );
+		auto key = makeKey( textures, text );
 		auto it = pipelines.find( key );
 
 		if ( it == pipelines.end() )
@@ -906,22 +905,20 @@ namespace castor3d
 			// Since it does not exist yet, create it and initialise it
 			it = pipelines.emplace( key
 				, doCreatePipeline( pass
-					, doCreateOverlayProgram( textures
-						, count
-						, text )
+					, doCreateOverlayProgram( textures, text )
 					, text ) ).first;
 		}
 
 		return it->second;
 	}
 
-	ashes::PipelineShaderStageCreateInfoArray OverlayRenderer::doCreateOverlayProgram( TextureFlags const & textures
-		, uint32_t texturesCount
+	ashes::PipelineShaderStageCreateInfoArray OverlayRenderer::doCreateOverlayProgram( TextureFlagsArray const & texturesFlags
 		, bool textOverlay )
 	{
 		using namespace sdw;
 		using namespace shader;
-		bool hasTexture = textures != TextureFlag::eNone;
+		auto texturesCount = uint32_t( texturesFlags.size() );
+		bool hasTexture = !texturesFlags.empty();
 
 		// Vertex shader
 		ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, "Overlay" };
@@ -1012,6 +1009,8 @@ namespace castor3d
 				, std::max( 1u, texturesCount )
 				, hasTexture ) );
 
+			shader::Utils utils{ writer };
+
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
 
@@ -1031,16 +1030,18 @@ namespace castor3d
 
 					if ( hasTexture )
 					{
-						for ( uint32_t i = 0u; i < texturesCount; ++i )
-						{
-							auto name = string::stringCast< char >( string::toString( i, std::locale{ "C" } ) );
-							auto config = writer.declLocale( "config" + name
-								, textureConfigs.getTextureConfiguration( writer.cast< UInt >( c3d_textureConfig[i / 4u][i % 4u] ) ) );
-							auto sampled = writer.declLocale( "sampled" + name
-								, texture( c3d_maps[i], config.convertUV( writer, vtx_texture ), 0.0_f ) );
-							diffuse = config.getDiffuse( writer, sampled, diffuse, 1.0_f );
-							alpha = config.getOpacity( writer, sampled, alpha );
-						}
+						utils.computeColourMapContribution( texturesFlags
+							, textureConfigs
+							, c3d_textureConfig
+							, c3d_maps
+							, vec3( vtx_texture, 0.0 )
+							, diffuse );
+						utils.computeOpacityMapContribution( texturesFlags
+							, textureConfigs
+							, c3d_textureConfig
+							, c3d_maps
+							, vec3( vtx_texture, 0.0 )
+							, alpha );
 					}
 
 					pxl_fragColor = vec4( diffuse.xyz(), alpha );

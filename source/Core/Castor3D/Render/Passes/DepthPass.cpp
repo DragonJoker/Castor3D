@@ -465,7 +465,8 @@ namespace castor3d
 				{
 					auto texCoord = writer.declLocale( "texCoord"
 						, inTexture );
-					utils.computeGeometryMapsContributions( flags
+					utils.computeGeometryMapsContributions( flags.textures
+						, flags.passFlags
 						, textureConfigs
 						, c3d_textureConfig
 						, c3d_maps
