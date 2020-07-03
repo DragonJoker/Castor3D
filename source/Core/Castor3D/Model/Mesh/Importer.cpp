@@ -127,7 +127,6 @@ namespace castor3d
 			try
 			{
 				result = std::make_shared< TextureUnit >( *getEngine() );
-				result->setAutoMipmaps( true );
 				result->setTexture( createTextureLayout( *getEngine(), relative, folder ) );
 				result->setConfiguration( config );
 			}

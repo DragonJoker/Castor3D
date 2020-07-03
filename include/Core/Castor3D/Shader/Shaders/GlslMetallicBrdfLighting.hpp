@@ -19,6 +19,7 @@ namespace castor3d
 		public:
 			C3D_API MetallicBrdfLightingModel( sdw::ShaderWriter & writer
 				, Utils & utils
+				, ShadowOptions shadowOptions
 				, bool isOpaqueProgram );
 			C3D_API void computeCombined( sdw::Vec3 const & worldEye
 				, sdw::Vec3 const & albedo
@@ -59,9 +60,8 @@ namespace castor3d
 			C3D_API static std::shared_ptr< MetallicBrdfLightingModel > createModel( sdw::ShaderWriter & writer
 				, Utils & utils
 				, LightType light
-				, ShadowType shadows
 				, bool lightUbo
-				, bool volumetric
+				, bool shadows
 				, bool rsm
 				, uint32_t & index );
 			C3D_API void computeMapContributions( PipelineFlags const & flags
@@ -88,12 +88,9 @@ namespace castor3d
 			void doDeclareComputeDirectionalLight()override;
 			void doDeclareComputePointLight()override;
 			void doDeclareComputeSpotLight()override;
-			void doDeclareComputeOneDirectionalLight( ShadowType shadowType
-				, bool volumetric )override;
-			void doDeclareComputeOnePointLight( ShadowType shadowType
-				, bool volumetric )override;
-			void doDeclareComputeOneSpotLight( ShadowType shadowType
-				, bool volumetric )override;
+			void doDeclareComputeOneDirectionalLight()override;
+			void doDeclareComputeOnePointLight()override;
+			void doDeclareComputeOneSpotLight()override;
 
 		public:
 			C3D_API static const castor::String Name;

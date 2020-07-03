@@ -278,7 +278,11 @@ namespace castor3d
 				1u,
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_IMAGE_TILING_OPTIMAL,
-				VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
+				( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+					| VK_IMAGE_USAGE_SAMPLED_BIT
+					| ( range.levelCount > 1u
+						? ( VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
+						: 0u ) ),
 			};
 			auto texture = std::make_shared< TextureLayout >( renderSystem
 				, std::move( image )
@@ -389,15 +393,16 @@ namespace castor3d
 			, VkExtent2D const & textureSize )
 		{
 			std::vector< GaussianBlur::RenderQuadPtr > result;
-			CU_Require( input->subresourceRange.levelCount == output->subresourceRange.levelCount );
 			VkImageSubresourceRange srcRange{};
 			srcRange.levelCount = 1u;
 			srcRange.baseMipLevel = input->subresourceRange.baseMipLevel;
 			VkImageSubresourceRange dstRange{};
 			dstRange.levelCount = 1u;
 			dstRange.baseMipLevel = output->subresourceRange.baseMipLevel;
+			auto levelCount = std::min( input->subresourceRange.levelCount
+				, output->subresourceRange.levelCount );
 
-			for ( uint32_t level = 0u; level < input->subresourceRange.levelCount; ++level )
+			for ( uint32_t level = 0u; level < levelCount; ++level )
 			{
 				result.push_back( std::make_unique< GaussianBlur::RenderQuad >( *engine.getRenderSystem()
 					, name + castor::string::toString( level )
@@ -554,44 +559,45 @@ namespace castor3d
 
 	GaussianBlur::GaussianBlur( Engine & engine
 		, castor::String const & prefix
-		, ashes::ImageView const & texture
+		, TextureView const & texture
 		, uint32_t kernelSize )
 		: OwnedBy< Engine >{ engine }
 		, m_prefix{ prefix }
 		, m_source{ texture }
-		, m_size{ texture.image->getDimensions().width, texture.image->getDimensions().height }
-		, m_format{ texture.image->getFormat() }
-		, m_intermediate{ createTexture( engine, m_size, m_format, texture->subresourceRange, m_prefix + cuT( "GaussianBlur" ) ) }
-		, m_renderPass{ createRenderPass( getCurrentRenderDevice( engine ), m_prefix + cuT( "GaussianBlur" ), m_format, m_source->subresourceRange.levelCount ) }
+		, m_size{ m_source.getOwner()->getWidth(), m_source.getOwner()->getHeight() }
+		, m_format{ m_source.getOwner()->getPixelFormat() }
+		, m_intermediate{ createTexture( engine
+			, m_size
+			, m_format
+			, m_source.getSubresourceRange()
+			, m_prefix + cuT( "GaussianBlur" ) ) }
+		, m_renderPass{ createRenderPass( getCurrentRenderDevice( engine )
+			, m_prefix + cuT( "GaussianBlur" )
+			, m_format
+			, m_source.getSubresourceRange().levelCount ) }
 		, m_blurUbo{ makeUniformBuffer< Configuration >( *engine.getRenderSystem()
 			, 1u
 			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT 
 			, m_prefix + cuT( "GaussianBlurConfig" ) ) }
-		, m_blurX
-		{
-			engine,
-			m_prefix + cuT( " - GaussianBlur - X Pass" ),
-			texture,
-			m_intermediate.getTexture()->getDefaultView().getTargetView(),
-			*m_blurUbo,
-			m_format,
-			m_size,
-			*m_renderPass,
-			true,
-		}
-		, m_blurY
-		{
-			engine,
-			m_prefix + cuT( " - GaussianBlur - Y Pass" ),
-			m_intermediate.getTexture()->getDefaultView().getTargetView(),
-			texture,
-			*m_blurUbo,
-			m_format,
-			m_size,
-			*m_renderPass,
-			false,
-		}
+		, m_blurX{ engine
+			, m_prefix + cuT( " - GaussianBlur - X Pass" )
+			, m_source.getSampledView()
+			, m_intermediate.getTexture()->getDefaultView().getTargetView()
+			, *m_blurUbo
+			, m_format
+			, m_size
+			, *m_renderPass
+			, true }
+		, m_blurY{ engine
+			, m_prefix + cuT( " - GaussianBlur - Y Pass" )
+			, m_intermediate.getTexture()->getDefaultView().getSampledView()
+			, m_source.getTargetView()
+			, *m_blurUbo
+			, m_format
+			, m_size
+			, *m_renderPass
+			, false }
 		, m_kernel{ getHalfPascal( kernelSize ) }
 	{
 		auto & device = getCurrentRenderDevice( engine );
@@ -619,8 +625,40 @@ namespace castor3d
 		visitor.visit( m_blurY.pixelShader );
 	}
 
+	CommandsSemaphore GaussianBlur::getCommands( bool generateMipmaps )const
+	{
+		auto & device = getCurrentRenderDevice( *this );
+		castor3d::CommandsSemaphore commands
+		{
+			device.graphicsCommandPool->createCommandBuffer( m_prefix + "GaussianBlur" ),
+			device->createSemaphore( m_prefix + "GaussianBlur" )
+		};
+		auto & cmd = *commands.commandBuffer;
+		cmd.begin();
+		m_blurX.getCommands( cmd, *m_renderPass );
+		m_blurY.getCommands( cmd, *m_renderPass );
+
+		if ( generateMipmaps )
+		{
+			cmd.beginDebugBlock(
+				{
+					m_prefix + " mipmaps generation",
+					makeFloatArray( getEngine()->getNextRainbowColour() ),
+				} );
+			m_source.getSampledView().image->generateMipmaps( cmd
+				, m_source.getSampledView()->subresourceRange.baseArrayLayer
+				, m_source.getSampledView()->subresourceRange.layerCount
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			cmd.endDebugBlock();
+		}
+
+		cmd.end();
+		return commands;
+	}
+
 	CommandsSemaphore GaussianBlur::getCommands( RenderPassTimer const & timer
-		, uint32_t index )const
+		, uint32_t index
+		, bool generateMipmaps )const
 	{
 		auto & device = getCurrentRenderDevice( *this );
 		castor3d::CommandsSemaphore commands
@@ -633,6 +671,21 @@ namespace castor3d
 		timer.beginPass( cmd, index );
 		m_blurX.getCommands( cmd, *m_renderPass );
 		m_blurY.getCommands( cmd, *m_renderPass );
+
+		if ( generateMipmaps )
+		{
+			cmd.beginDebugBlock(
+				{
+					m_prefix + " mipmaps generation",
+					makeFloatArray( getEngine()->getNextRainbowColour() ),
+				} );
+			m_source.getSampledView().image->generateMipmaps( cmd
+				, m_source.getSampledView()->subresourceRange.baseArrayLayer
+				, m_source.getSampledView()->subresourceRange.layerCount
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			cmd.endDebugBlock();
+		}
+
 		timer.endPass( cmd, index );
 		cmd.end();
 		return commands;

@@ -238,8 +238,16 @@ namespace castor3d
 			, lpResult
 			, gpInfoUbo
 			, hasShadows }
-		, m_modelMatrixUbo{ engine }
-		, m_stencilPass{ engine, getName(), lpResult[LpTexture::eDepth].getTexture()->getDefaultView().getTargetView(), m_matrixUbo, m_modelMatrixUbo }
+		, m_modelMatrixUbo{ makeUniformBuffer< ModelMatrixUboConfiguration >( *engine.getRenderSystem()
+			, 1u
+			, VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, "LightPass" + suffix + ( hasShadows ? String{ "Shadow" } : String{} ) ) }
+		, m_stencilPass{ engine
+			, getName()
+			, lpResult[LpTexture::eDepth].getTexture()->getDefaultView().getTargetView()
+			, m_matrixUbo
+			, *m_modelMatrixUbo }
 		, m_type{ type }
 	{
 	}
@@ -293,7 +301,7 @@ namespace castor3d
 			, *m_vertexBuffer
 			, declaration
 			, sceneUbo
-			, &m_modelMatrixUbo
+			, m_modelMatrixUbo.get()
 			, timer );
 	}
 
@@ -302,7 +310,7 @@ namespace castor3d
 		doCleanup();
 		m_stencilPass.cleanup();
 		m_vertexBuffer.reset();
-		m_modelMatrixUbo.cleanup();
+		m_modelMatrixUbo.reset();
 		m_matrixUbo.cleanup();
 	}
 
@@ -327,9 +335,19 @@ namespace castor3d
 		, ShadowMap const * shadowMap
 		, uint32_t shadowMapIndex )
 	{
-		auto model = doComputeModelMatrix( light, camera );
 		m_matrixUbo.update( camera.getView(), camera.getProjection() );
-		m_modelMatrixUbo.update( model );
+
+		auto model = doComputeModelMatrix( light, camera );
+		auto normal = castor::Matrix3x3f{ model };
+		normal.invert();
+		normal.transpose();
+		auto & data = m_modelMatrixUbo->getData();
+		data.prvModel = data.curModel;
+		data.prvNormal = data.curNormal;
+		data.curModel = model;
+		data.curNormal = Matrix4x4f{ normal };
+		m_modelMatrixUbo->upload();
+
 		m_pipeline->program->bind( light );
 	}
 

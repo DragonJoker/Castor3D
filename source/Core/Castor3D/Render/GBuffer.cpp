@@ -37,10 +37,12 @@ namespace castor3d
 		, VkImageCreateFlags createFlags
 		, VkExtent3D const & size
 		, uint32_t layerCount
+		, uint32_t mipLevels
 		, VkFormat format
 		, VkImageUsageFlags usageFlags
 		, VkBorderColor const & borderColor )
 	{
+		mipLevels = std::max( 1u, mipLevels );
 		auto getFormat = []( Engine & engine
 			, VkFormat format )
 		{
@@ -68,21 +70,25 @@ namespace castor3d
 
 		ashes::ImageCreateInfo image
 		{
-			createFlags | ( size.depth > 1u
-				? VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT
-				: 0u ),
+			createFlags
+				| ( size.depth > 1u
+					? VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT
+					: 0u ),
 			( size.depth > 1u
 				? VK_IMAGE_TYPE_3D
 				: VK_IMAGE_TYPE_2D ),
 			getFormat( engine, format ),
 			size,
-			1u,
+			mipLevels,
 			( size.depth > 1u
 				? 1u
 				: layerCount ),
 			VK_SAMPLE_COUNT_1_BIT,
 			VK_IMAGE_TILING_OPTIMAL,
-			usageFlags,
+			usageFlags
+				| ( mipLevels > 1u
+					? ( VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT )
+					: 0u ),
 		};
 		auto layout = std::make_shared< TextureLayout >( *engine.getRenderSystem()
 			, image

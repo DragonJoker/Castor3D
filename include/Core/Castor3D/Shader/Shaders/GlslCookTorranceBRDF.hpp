@@ -21,7 +21,6 @@ namespace castor3d
 				, sdw::Vec3 const & albedo
 				, sdw::Float const & metallic
 				, sdw::Float const & roughness
-				, sdw::Float const & shadowFactor
 				, FragmentInput const & fragmentIn
 				, OutputComponents & output );
 			C3D_API void compute( Light const & light
@@ -29,7 +28,6 @@ namespace castor3d
 				, sdw::Vec3 const & direction
 				, sdw::Vec3 const & specular
 				, sdw::Float const & roughness
-				, sdw::Float const & shadowFactor
 				, FragmentInput const & fragmentIn
 				, OutputComponents & output );
 
@@ -64,7 +62,6 @@ namespace castor3d
 				, sdw::InVec3
 				, sdw::InVec3
 				, sdw::InVec3
-				, sdw::InFloat
 				, sdw::InFloat
 				, sdw::InFloat
 				, FragmentInput

@@ -143,7 +143,7 @@ namespace castor3d
 		, MatrixUbo & matrixUbo
 		, SceneUbo & sceneUbo
 		, GpInfoUbo const & gpInfoUbo
-		, ModelMatrixUbo * modelMatrixUbo )
+		, UniformBuffer< ModelMatrixUboConfiguration > const * modelMatrixUbo )
 	{
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto & device = getCurrentRenderDevice( renderSystem );
@@ -402,7 +402,6 @@ namespace castor3d
 
 	LightPass::Pipeline LightPass::createPipeline( LightType lightType
 		, ShadowType shadowType
-		, bool volumetric
 		, bool rsm
 		, ShadowMap const * shadowMap )
 	{
@@ -411,7 +410,7 @@ namespace castor3d
 		ashes::VertexBufferBase & vbo = *m_vertexBuffer;
 		ashes::PipelineVertexInputStateCreateInfo const & vertexLayout = *m_pUsedVertexLayout;
 		SceneUbo & sceneUbo = *m_sceneUbo;
-		ModelMatrixUbo * modelMatrixUbo = m_mmUbo;
+		UniformBuffer< ModelMatrixUboConfiguration > const * modelMatrixUbo = m_mmUbo;
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto & device = getCurrentRenderDevice( renderSystem );
 		SceneFlags sceneFlags{ scene.getFlags() };
@@ -423,7 +422,6 @@ namespace castor3d
 			m_pixelShader.shader = doGetPbrMRPixelShaderSource( sceneFlags
 				, lightType
 				, shadowType
-				, volumetric
 				, rsm );
 		}
 		else if ( scene.getMaterialsType() == MaterialType::eSpecularGlossiness )
@@ -431,7 +429,6 @@ namespace castor3d
 			m_pixelShader.shader = doGetPbrSGPixelShaderSource( sceneFlags
 				, lightType
 				, shadowType
-				, volumetric
 				, rsm );
 		}
 		else
@@ -439,7 +436,6 @@ namespace castor3d
 			m_pixelShader.shader = doGetPhongPixelShaderSource( sceneFlags
 				, lightType
 				, shadowType
-				, volumetric
 				, rsm );
 		}
 
@@ -466,8 +462,7 @@ namespace castor3d
 		if ( modelMatrixUbo )
 		{
 			pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( ModelMatrixUbo::BindingPoint )
-				, *modelMatrixUbo->getUbo().buffer
-				, modelMatrixUbo->getUbo().offset );
+				, modelMatrixUbo->getBuffer() );
 		}
 
 		pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( shader::LightingModel::UboBindingPoint )
@@ -551,9 +546,6 @@ namespace castor3d
 				, ( shadowMap
 					? light.getShadowType()
 					: ShadowType::eNone )
-				, ( shadowMap
-					? light.getVolumetricSteps() > 0
-					: false )
 				, light.needsRsmShadowMaps()
 				, shadowMap ) );
 		}
@@ -570,7 +562,7 @@ namespace castor3d
 		, ashes::VertexBufferBase & vbo
 		, ashes::PipelineVertexInputStateCreateInfo const & vertexLayout
 		, SceneUbo & sceneUbo
-		, ModelMatrixUbo * modelMatrixUbo
+		, UniformBuffer< ModelMatrixUboConfiguration > const * modelMatrixUbo
 		, RenderPassTimer & timer )
 	{
 		m_scene = &scene;
@@ -633,7 +625,6 @@ namespace castor3d
 	ShaderPtr LightPass::doGetPhongPixelShaderSource( SceneFlags const & sceneFlags
 		, LightType lightType
 		, ShadowType shadowType
-		, bool volumetric
 		, bool rsm )const
 	{
 		using namespace sdw;
@@ -671,9 +662,8 @@ namespace castor3d
 		auto lighting = shader::PhongLightingModel::createModel( writer
 			, utils
 			, lightType
-			, shadowType
 			, true // lightUbo
-			, volumetric
+			, m_shadows
 			, rsm
 			, index );
 		shader::LegacyMaterials materials{ writer };
@@ -811,7 +801,6 @@ namespace castor3d
 	ShaderPtr LightPass::doGetPbrMRPixelShaderSource( SceneFlags const & sceneFlags
 		, LightType lightType
 		, ShadowType shadowType
-		, bool volumetric
 		, bool rsm )const
 	{
 		using namespace sdw;
@@ -850,9 +839,8 @@ namespace castor3d
 		auto lighting = shader::MetallicBrdfLightingModel::createModel( writer
 			, utils
 			, lightType
-			, shadowType
 			, true // lightUbo
-			, volumetric
+			, m_shadows
 			, rsm
 			, index );
 		shader::LegacyMaterials materials{ writer };
@@ -1066,7 +1054,6 @@ namespace castor3d
 	ShaderPtr LightPass::doGetPbrSGPixelShaderSource( SceneFlags const & sceneFlags
 		, LightType lightType
 		, ShadowType shadowType
-		, bool volumetric
 		, bool rsm )const
 	{
 		using namespace sdw;
@@ -1101,9 +1088,8 @@ namespace castor3d
 		auto lighting = shader::SpecularBrdfLightingModel::createModel( writer
 			, utils
 			, lightType
-			, shadowType
 			, true // lightUbo
-			, volumetric
+			, m_shadows
 			, rsm
 			, index );
 		shader::LegacyMaterials materials{ writer };

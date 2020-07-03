@@ -33,19 +33,13 @@ namespace castor3d
 			C3D_API static castor::String const MapFluxPoint;
 
 		public:
-			C3D_API Shadow( sdw::ShaderWriter & writer
+			C3D_API Shadow( ShadowOptions shadowOptions
+				, sdw::ShaderWriter & writer
 				, Utils & utils );
-			C3D_API void declare( bool rsm
-				, uint32_t & index );
-			C3D_API void declareDirectional( ShadowType type
-				, bool rsm
-				, uint32_t & index );
-			C3D_API void declarePoint( ShadowType type
-				, bool rsm
-				, uint32_t & index );
-			C3D_API void declareSpot( ShadowType type
-				, bool rsm
-				, uint32_t & index );
+			C3D_API void declare( uint32_t & index );
+			C3D_API void declareDirectional( uint32_t & index );
+			C3D_API void declarePoint( uint32_t & index );
+			C3D_API void declareSpot( uint32_t & index );
 			C3D_API sdw::Float computeDirectionalShadow( sdw::Int const & shadowType
 				, sdw::Vec2 const & shadowOffsets
 				, sdw::Vec2 const & shadowVariance
@@ -86,7 +80,8 @@ namespace castor3d
 				, sdw::UInt const & lightVolumetricSteps
 				, sdw::Float const & lightVolumetricScattering
 				, OutputComponents & parentOutput )const;
-			C3D_API sdw::Float computeDirectionalShadow( sdw::Vec2 const & shadowOffsets
+			C3D_API sdw::Float computeOneDirectionalShadow( sdw::Int const & shadowType
+				, sdw::Vec2 const & shadowOffsets
 				, sdw::Vec2 const & shadowVariance
 				, sdw::Mat4 const & lightMatrix
 				, sdw::Vec3 const & worldSpacePosition
@@ -94,21 +89,24 @@ namespace castor3d
 				, sdw::UInt const & cascadeIndex
 				, sdw::UInt const & maxCascade
 				, sdw::Vec3 const & normal )const;
-			C3D_API sdw::Float computeSpotShadow( sdw::Vec2 const & shadowOffsets
+			C3D_API sdw::Float computeOneSpotShadow( sdw::Int const & shadowType
+				, sdw::Vec2 const & shadowOffsets
 				, sdw::Vec2 const & shadowVariance
 				, sdw::Mat4 const & lightMatrix
 				, sdw::Vec3 const & worldSpacePosition
 				, sdw::Vec3 const & lightDirection
 				, sdw::Vec3 const & normal
 				, sdw::Int const & index )const;
-			C3D_API sdw::Float computePointShadow( sdw::Vec2 const & shadowOffsets
+			C3D_API sdw::Float computeOnePointShadow( sdw::Int const & shadowType
+				, sdw::Vec2 const & shadowOffsets
 				, sdw::Vec2 const & shadowVariance
 				, sdw::Vec3 const & worldSpacePosition
 				, sdw::Vec3 const & lightDirection
 				, sdw::Vec3 const & normal
 				, sdw::Float const & farPlane
 				, sdw::Int const & index )const;
-			C3D_API void computeVolumetric( sdw::Vec2 const & shadowOffsets
+			C3D_API void computeOneVolumetric( sdw::Int const & shadowType
+				, sdw::Vec2 const & shadowOffsets
 				, sdw::Vec2 const & shadowVariance
 				, sdw::Vec2 const & clipSpacePosition
 				, sdw::Vec3 const & worldSpacePosition
@@ -125,6 +123,11 @@ namespace castor3d
 			C3D_API sdw::Vec4 getLightSpacePosition( sdw::Mat4 const & lightMatrix
 				, sdw::Vec3 const & worldSpacePosition )const;
 
+			bool isEnabled()const
+			{
+				return m_shadowOptions.enabled;
+			}
+
 		private:
 			void doDeclareGetRandom();
 			void doDeclareGetShadowOffset();
@@ -138,14 +141,15 @@ namespace castor3d
 			void doDeclareComputeSpotShadow();
 			void doDeclareComputePointShadow();
 			void doDeclareVolumetric();
-			void doDeclareComputeOneDirectionalShadow( ShadowType type );
-			void doDeclareComputeOneSpotShadow( ShadowType type );
-			void doDeclareComputeOnePointShadow( ShadowType type );
-			void doDeclareOneVolumetric( ShadowType type );
+			void doDeclareComputeOneDirectionalShadow();
+			void doDeclareComputeOneSpotShadow();
+			void doDeclareComputeOnePointShadow();
+			void doDeclareOneVolumetric();
 
 		private:
 			sdw::ShaderWriter & m_writer;
 			Utils & m_utils;
+			ShadowOptions m_shadowOptions;
 			sdw::Function< sdw::Float
 				, sdw::InVec4 > m_getRandom;
 			sdw::Function< sdw::Float
@@ -230,6 +234,7 @@ namespace castor3d
 				, sdw::InFloat
 				, OutputComponents & > m_computeVolumetric;
 			sdw::Function< sdw::Float
+				, sdw::InInt
 				, sdw::InVec2
 				, sdw::InVec2
 				, sdw::InMat4
@@ -239,6 +244,7 @@ namespace castor3d
 				, sdw::InUInt
 				, sdw::InVec3 > m_computeOneDirectional;
 			sdw::Function< sdw::Float
+				, sdw::InInt
 				, sdw::InVec2
 				, sdw::InVec2
 				, sdw::InMat4
@@ -247,6 +253,7 @@ namespace castor3d
 				, sdw::InVec3
 				, sdw::InInt > m_computeOneSpot;
 			sdw::Function< sdw::Float
+				, sdw::InInt
 				, sdw::InVec2
 				, sdw::InVec2
 				, sdw::InVec3
@@ -255,6 +262,7 @@ namespace castor3d
 				, sdw::InFloat
 				, sdw::InInt > m_computeOnePoint;
 			sdw::Function< sdw::Void
+				, sdw::InInt
 				, sdw::InVec2
 				, sdw::InVec2
 				, sdw::InVec2

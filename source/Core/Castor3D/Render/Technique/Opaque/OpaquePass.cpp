@@ -590,7 +590,10 @@ namespace castor3d
 		utils.declareEncodeMaterial();
 		utils.declareParallaxMappingFunc( flags );
 
-		shader::PhongLightingModel lightingModel{ writer, utils, true };
+		shader::PhongLightingModel lightingModel{ writer
+			, utils
+			, {}
+			, true };
 
 		writer.implementFunction< sdw::Void >( "main"
 			, [&]()
@@ -738,7 +741,10 @@ namespace castor3d
 		utils.declareEncodeMaterial();
 		utils.declareParallaxMappingFunc( flags );
 
-		shader::MetallicBrdfLightingModel lightingModel{ writer, utils, true };
+		shader::MetallicBrdfLightingModel lightingModel{ writer
+			, utils
+			, {}
+			, true };
 
 		writer.implementFunction< sdw::Void >( "main"
 			, [&]()
@@ -886,7 +892,10 @@ namespace castor3d
 		utils.declareEncodeMaterial();
 		utils.declareParallaxMappingFunc( flags );
 
-		shader::SpecularBrdfLightingModel lightingModel{ writer, utils, true };
+		shader::SpecularBrdfLightingModel lightingModel{ writer
+			, utils
+			, {}
+			, true };
 
 		writer.implementFunction< sdw::Void >( "main"
 			, [&]()

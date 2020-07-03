@@ -102,7 +102,7 @@ namespace castor3d
 				, MatrixUbo & matrixUbo
 				, SceneUbo & sceneUbo
 				, GpInfoUbo const & gpInfoUbo
-				, ModelMatrixUbo * modelMatrixUbo );
+				, UniformBuffer< ModelMatrixUboConfiguration > const * modelMatrixUbo );
 			/**
 			*\~english
 			*\brief		Cleans up the program and its pipeline.
@@ -362,7 +362,6 @@ namespace castor3d
 
 		Pipeline createPipeline( LightType lightType
 			, ShadowType shadowType
-			, bool volumetric
 			, bool rsm
 			, ShadowMap const * shadowMap );
 
@@ -425,7 +424,7 @@ namespace castor3d
 			, ashes::VertexBufferBase & vbo
 			, ashes::PipelineVertexInputStateCreateInfo const & vertexLayout
 			, SceneUbo & sceneUbo
-			, ModelMatrixUbo * modelMatrixUbo
+			, UniformBuffer< ModelMatrixUboConfiguration > const * modelMatrixUbo
 			, RenderPassTimer & timer );
 		/**
 		 *\~english
@@ -492,7 +491,6 @@ namespace castor3d
 		virtual ShaderPtr doGetPhongPixelShaderSource( SceneFlags const & sceneFlags
 			, LightType lightType
 			, ShadowType shadowType
-			, bool volumetric
 			, bool rsm )const;
 		/**
 		 *\~english
@@ -513,7 +511,6 @@ namespace castor3d
 		virtual ShaderPtr doGetPbrMRPixelShaderSource( SceneFlags const & sceneFlags
 			, LightType lightType
 			, ShadowType shadowType
-			, bool volumetric
 			, bool rsm )const;
 		/**
 		 *\~english
@@ -534,7 +531,6 @@ namespace castor3d
 		virtual ShaderPtr doGetPbrSGPixelShaderSource( SceneFlags const & sceneFlags
 			, LightType lightType
 			, ShadowType shadowType
-			, bool volumetric
 			, bool rsm )const;
 		/**
 		 *\~english
@@ -578,7 +574,7 @@ namespace castor3d
 		castor::String m_name;
 		Scene const * m_scene{ nullptr };
 		SceneUbo * m_sceneUbo{ nullptr };
-		ModelMatrixUbo * m_mmUbo{ nullptr };
+		UniformBuffer< ModelMatrixUboConfiguration > const * m_mmUbo{ nullptr };
 		ashes::PipelineVertexInputStateCreateInfo m_usedVertexLayout{ 0u, {}, {} };
 		ashes::PipelineVertexInputStateCreateInfo const * m_pUsedVertexLayout{ nullptr };
 		RenderPassTimer * m_timer{ nullptr };

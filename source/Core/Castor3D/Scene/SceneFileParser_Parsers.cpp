@@ -3589,7 +3589,6 @@ namespace castor3d
 
 			if ( !relative.empty() )
 			{
-				parsingContext->textureUnit->setAutoMipmaps( true );
 				parsingContext->folder = folder;
 				parsingContext->relative = relative;
 				parsingContext->strName.clear();

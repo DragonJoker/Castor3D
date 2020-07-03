@@ -28,6 +28,12 @@ namespace castor3d
 
 	namespace shader
 	{
+		struct ShadowOptions
+		{
+			bool enabled{ false };
+			bool rsm{ false };
+		};
+
 		enum class TypeName
 		{
 			eLight = int( ast::type::Kind::eCount ),

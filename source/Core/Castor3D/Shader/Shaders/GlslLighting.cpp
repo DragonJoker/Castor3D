@@ -109,18 +109,18 @@ namespace castor3d
 
 		LightingModel::LightingModel( ShaderWriter & writer
 			, Utils & utils
+			, ShadowOptions shadowOptions
 			, bool isOpaqueProgram )
 			: m_writer{ writer }
 			, m_utils{ utils }
 			, m_isOpaqueProgram{ isOpaqueProgram }
-			, m_shadowModel{ std::make_shared< Shadow >( writer, utils ) }
+			, m_shadowModel{ std::make_shared< Shadow >( std::move( shadowOptions ), writer, utils ) }
 		{
 		}
 
-		void LightingModel::declareModel( bool rsm
-			, uint32_t & index )
+		void LightingModel::declareModel( uint32_t & index )
 		{
-			m_shadowModel->declare( rsm, index );
+			m_shadowModel->declare( index );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			m_writer.inlineComment( "// LIGHTS" );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
@@ -142,17 +142,10 @@ namespace castor3d
 			doDeclareComputeSpotLight();
 		}
 
-		void LightingModel::declareDirectionalModel( ShadowType shadows
-			, bool lightUbo
-			, bool volumetric
-			, bool rsm
+		void LightingModel::declareDirectionalModel( bool lightUbo
 			, uint32_t & index )
 		{
-			if ( shadows != ShadowType::eNone )
-			{
-				m_shadowModel->declareDirectional( shadows, rsm, index );
-			}
-
+			m_shadowModel->declareDirectional( index );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			m_writer.inlineComment( "// LIGHTS" );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
@@ -174,20 +167,13 @@ namespace castor3d
 			m_writer.inlineComment( "// LIGHTING" );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			doDeclareModel();
-			doDeclareComputeOneDirectionalLight( shadows, volumetric );
+			doDeclareComputeOneDirectionalLight();
 		}
 
-		void LightingModel::declarePointModel( ShadowType shadows
-			, bool lightUbo
-			, bool volumetric
-			, bool rsm
+		void LightingModel::declarePointModel( bool lightUbo
 			, uint32_t & index )
 		{
-			if ( shadows != ShadowType::eNone )
-			{
-				m_shadowModel->declarePoint( shadows, rsm, index );
-			}
-
+			m_shadowModel->declarePoint( index );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			m_writer.inlineComment( "// LIGHTS" );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
@@ -208,20 +194,13 @@ namespace castor3d
 			m_writer.inlineComment( "// LIGHTING" );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			doDeclareModel();
-			doDeclareComputeOnePointLight( shadows, volumetric );
+			doDeclareComputeOnePointLight();
 		}
 
-		void LightingModel::declareSpotModel( ShadowType shadows
-			, bool lightUbo
-			, bool volumetric
-			, bool rsm
+		void LightingModel::declareSpotModel( bool lightUbo
 			, uint32_t & index )
 		{
-			if ( shadows != ShadowType::eNone )
-			{
-				m_shadowModel->declareSpot( shadows, rsm, index );
-			}
-
+			m_shadowModel->declareSpot( index );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			m_writer.inlineComment( "// LIGHTS" );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
@@ -242,7 +221,7 @@ namespace castor3d
 			m_writer.inlineComment( "// LIGHTING" );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			doDeclareModel();
-			doDeclareComputeOneSpotLight( shadows, volumetric );
+			doDeclareComputeOneSpotLight();
 		}
 
 		DirectionalLight LightingModel::getDirectionalLight( Int const & index )const

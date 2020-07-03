@@ -312,10 +312,13 @@ namespace castor3d
 			auto & flags = node.pipeline.getFlags();
 			ashes::WriteDescriptorSetArray writes;
 
-			node.passNode.fillDescriptor( layout
-				, index
-				, writes
-				, node.pipeline.getFlags().textures );
+			if ( !flags.textures.empty() )
+			{
+				node.passNode.fillDescriptor( layout
+					, index
+					, writes
+					, flags.textures );
+			}
 
 			if ( checkFlag( flags.passFlags, PassFlag::eReflection )
 				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) )

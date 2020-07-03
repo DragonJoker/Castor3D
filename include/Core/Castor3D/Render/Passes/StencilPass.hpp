@@ -39,7 +39,7 @@ namespace castor3d
 			, castor::String const & prefix
 			, ashes::ImageView const & depthView
 			, MatrixUbo & matrixUbo
-			, ModelMatrixUbo & modelMatrixUbo );
+			, UniformBuffer< ModelMatrixUboConfiguration > const & modelMatrixUbo );
 		/**
 		 *\~english
 		 *\brief		Initialises the program and its pipeline.
@@ -89,7 +89,7 @@ namespace castor3d
 		castor::String m_prefix;
 		ashes::ImageView const & m_depthView;
 		MatrixUbo & m_matrixUbo;
-		ModelMatrixUbo & m_modelMatrixUbo;
+		UniformBuffer< ModelMatrixUboConfiguration > const & m_modelMatrixUbo;
 		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
 		ashes::DescriptorSetPoolPtr m_descriptorPool;
 		ashes::DescriptorSetPtr m_descriptorSet;
