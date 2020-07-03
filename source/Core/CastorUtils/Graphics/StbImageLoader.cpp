@@ -218,6 +218,6 @@ namespace castor
 			buffer = doLoad8BitsPerChannel( data, size );
 		}
 
-		return ImageLayout{ *buffer };
+		return ImageLayout{ ImageLayout::e2D, *buffer };
 	}
 }

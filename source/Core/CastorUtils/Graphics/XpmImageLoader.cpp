@@ -114,6 +114,6 @@ namespace castor
 			, PixelFormat::eR8G8B8A8_UNORM
 			, pixels->getConstPtr()
 			, pixels->getFormat() );
-		return ImageLayout{ *outbuffer };
+		return ImageLayout{ ImageLayout::e2D, *outbuffer };
 	}
 }

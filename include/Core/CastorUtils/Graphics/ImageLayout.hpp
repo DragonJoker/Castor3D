@@ -54,16 +54,19 @@ namespace castor
 		}
 
 		inline explicit ImageLayout( PxBufferBase const & buffer )
-			: ImageLayout
-			{
-				getType( buffer ),
-				buffer.getFormat(),
-				Point3ui{ buffer.getWidth(), buffer.getHeight(), 1u },
-				0u,
-				buffer.getLayers(),
-				0u,
-				buffer.getLevels(),
-			}
+			: ImageLayout{ getType( buffer ), buffer }
+		{
+		}
+
+		inline explicit ImageLayout( Type type
+			, PxBufferBase const & buffer )
+			: ImageLayout{ type
+				, buffer.getFormat()
+				, Point3ui{ buffer.getWidth(), buffer.getHeight(), 1u }
+				, 0u
+				, buffer.getLayers()
+				, 0u
+				, buffer.getLevels() }
 		{
 		}
 
