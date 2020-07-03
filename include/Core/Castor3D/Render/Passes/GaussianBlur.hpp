@@ -40,7 +40,7 @@ namespace castor3d
 		 */
 		C3D_API GaussianBlur( Engine & engine
 			, castor::String const & prefix
-			, ashes::ImageView const & texture
+			, TextureView const & texture
 			, uint32_t kernelSize );
 		/**
 		 *\~english
@@ -57,8 +57,18 @@ namespace castor3d
 		 *\param[in]	timer	Le timer de rendu.
 		 *\return		Les commandes utilisées pour rendre la passe.
 		 */
+		C3D_API CommandsSemaphore getCommands( bool generateMipmaps = false )const;
+		/**
+		 *\~english
+		 *\param[in]	timer	The render timer.
+		 *\return		The commands used to render the pass.
+		 *\~french
+		 *\param[in]	timer	Le timer de rendu.
+		 *\return		Les commandes utilisées pour rendre la passe.
+		 */
 		C3D_API CommandsSemaphore getCommands( RenderPassTimer const & timer
-			, uint32_t index )const;
+			, uint32_t index
+			, bool generateMipmaps = false )const;
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -217,7 +227,7 @@ namespace castor3d
 		};
 
 	private:
-		ashes::ImageView const & m_source;
+		TextureView const & m_source;
 		castor::String m_prefix;
 		VkExtent2D m_size;
 		VkFormat m_format;

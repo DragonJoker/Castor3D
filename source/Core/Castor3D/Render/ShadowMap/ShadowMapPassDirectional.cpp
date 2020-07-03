@@ -421,9 +421,8 @@ namespace castor3d
 		auto lighting = shader::PhongLightingModel::createModel( writer
 			, utils
 			, LightType::eDirectional
-			, ShadowType::eNone
 			, false // lightUbo
-			, false // volumetric
+			, false // shadows
 			, false // rsm
 			, index );
 
@@ -505,7 +504,7 @@ namespace castor3d
 				pxl_position.xyz() = vtx_worldPosition;
 
 				pxl_variance.x() = depth;
-				pxl_variance.y() = pxl_variance.x() * pxl_variance.x();
+				pxl_variance.y() = depth * depth;
 
 				auto dx = writer.declLocale( "dx"
 					, dFdx( depth ) );
@@ -571,9 +570,8 @@ namespace castor3d
 		auto lighting = shader::MetallicBrdfLightingModel::createModel( writer
 			, utils
 			, LightType::eDirectional
-			, ShadowType::eNone
 			, false // lightUbo
-			, false // volumetric
+			, false // shadows
 			, false // rsm
 			, index );
 
@@ -655,7 +653,7 @@ namespace castor3d
 				pxl_position.xyz() = vtx_worldPosition;
 
 				pxl_variance.x() = depth;
-				pxl_variance.y() = pxl_variance.x() * pxl_variance.x();
+				pxl_variance.y() = depth * depth;
 
 				auto dx = writer.declLocale( "dx"
 					, dFdx( depth ) );
@@ -721,9 +719,8 @@ namespace castor3d
 		auto lighting = shader::SpecularBrdfLightingModel::createModel( writer
 			, utils
 			, LightType::eDirectional
-			, ShadowType::eNone
 			, false // lightUbo
-			, false // volumetric
+			, false // shadows
 			, false // rsm
 			, index );
 
@@ -807,7 +804,7 @@ namespace castor3d
 				pxl_position.xyz() = vtx_worldPosition;
 
 				pxl_variance.x() = depth;
-				pxl_variance.y() = pxl_variance.x() * pxl_variance.x();
+				pxl_variance.y() = depth * depth;
 
 				auto dx = writer.declLocale( "dx"
 					, dFdx( depth ) );

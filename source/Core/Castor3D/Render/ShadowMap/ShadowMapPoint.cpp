@@ -162,6 +162,13 @@ namespace castor3d
 				frameBuffer.frameBuffer = renderPass.createFrameBuffer( fbDebugName
 					, size
 					, std::move( attaches ) );
+
+				frameBuffer.varianceView = variance.getLayerCubeFaceView( layer, face ).getTargetView();
+				frameBuffer.blur = std::make_unique< GaussianBlur >( *getEngine()
+					, debugName
+					, variance.getLayerCubeFaceView( layer, face )
+					, 5u );
+				frameBuffer.blurCommands = frameBuffer.blur->getCommands( true );
 				++passIndex;
 			}
 
@@ -206,8 +213,9 @@ namespace castor3d
 		auto * result = &toWait;
 		uint32_t offset = index * 6u;
 
-		auto & commandBuffer = *m_passesData[index].commandBuffer;
-		auto & finished = *m_passesData[index].finished;
+		auto & passData = m_passesData[index];
+		auto & commandBuffer = *passData.commandBuffer;
+		auto & finished = *passData.finished;
 		commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 		commandBuffer.beginDebugBlock(
 			{
@@ -220,7 +228,7 @@ namespace castor3d
 			auto & pass = m_passes[offset + face];
 			auto & timer = pass.pass->getTimer();
 			auto & renderPass = pass.pass->getRenderPass();
-			auto & frameBuffer = m_passesData[index].frameBuffers[face];
+			auto & frameBuffer = passData.frameBuffers[face];
 
 			commandBuffer.beginDebugBlock(
 				{
@@ -250,6 +258,20 @@ namespace castor3d
 			, finished
 			, nullptr );
 		result = &finished;
+
+		if ( passData.shadowType == ShadowType::eVariance )
+		{
+			for ( uint32_t face = 0u; face < 6u; ++face )
+			{
+				auto & blurCommands = passData.frameBuffers[face].blurCommands;
+				device.graphicsQueue->submit( *blurCommands.commandBuffer
+					, *result
+					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+					, *blurCommands.semaphore
+					, nullptr );
+				result = blurCommands.semaphore.get();
+			}
+		}
 
 		return *result;
 	}

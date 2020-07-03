@@ -691,12 +691,19 @@ namespace CastorViewer
 		bool result = true;
 
 #if defined( GUICOMMON_RECORDS )
+		auto recordFps = m_recordFps;
 
 		if ( m_renderPanel )
 		{
 			try
 			{
-				result = m_recorder.StartRecord( m_renderPanel->getRenderWindow()->getRenderTarget()->getSize(), m_recordFps );
+
+				auto time = wxGetApp().getCastor()->getRenderLoop().getLastFrameTime();
+				recordFps = std::min( m_recordFps
+					, std::max( 1
+						, int( 1000.0f / std::chrono::duration_cast< std::chrono::milliseconds >( time ).count() ) ) );
+				result = m_recorder.StartRecord( m_renderPanel->getRenderWindow()->getRenderTarget()->getSize()
+					, recordFps );
 			}
 			catch ( std::exception & p_exc )
 			{
@@ -714,7 +721,7 @@ namespace CastorViewer
 			}
 
 			m_timer->Stop();
-			m_timer->Start( 1000 / m_recordFps );
+			m_timer->Start( 1000 / recordFps );
 		}
 
 #endif
@@ -727,7 +734,7 @@ namespace CastorViewer
 #if defined( GUICOMMON_RECORDS )
 
 		auto & castor = *wxGetApp().getCastor();
-		m_renderPanel->getRenderWindow()->saveFrame();
+		m_renderPanel->getRenderWindow()->enableSaveFrame();
 		castor.getRenderLoop().renderSyncFrame();
 		auto buffer = m_renderPanel->getRenderWindow()->getSavedFrame();
 

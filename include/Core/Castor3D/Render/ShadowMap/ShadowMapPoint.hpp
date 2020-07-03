@@ -7,6 +7,8 @@ See LICENSE file in root folder
 #include "ShadowMapModule.hpp"
 
 #include "Castor3D/Render/Viewport.hpp"
+#include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
+#include "Castor3D/Render/Passes/GaussianBlur.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 
 #include <ashespp/Image/ImageView.hpp>
@@ -96,7 +98,10 @@ namespace castor3d
 		struct FrameBuffer
 		{
 			std::array< ashes::ImageView, size_t( SmTexture::eCount ) > views;
+			ashes::ImageView varianceView;
 			ashes::FrameBufferPtr frameBuffer;
+			std::unique_ptr< GaussianBlur > blur;
+			CommandsSemaphore blurCommands{ nullptr, nullptr };
 		};
 		struct PassData
 		{

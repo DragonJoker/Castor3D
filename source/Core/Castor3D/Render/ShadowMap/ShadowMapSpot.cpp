@@ -140,9 +140,11 @@ namespace castor3d
 					device->createSemaphore( debugName ),
 					std::make_unique< GaussianBlur >( *getEngine()
 						, debugName
-						, variance.getLayer2DView( i ).getSampledView()
-						, 5u )
+						, variance.getLayer2DView( i )
+						, 5u ),
+					{ nullptr, nullptr }
 				} );
+			m_passesData.back().blurCommands = m_passesData.back().blur->getCommands( true );
 		}
 	}
 
@@ -158,7 +160,7 @@ namespace castor3d
 		auto & commandBuffer = *m_passesData[index].commandBuffer;
 		auto & frameBuffer = *m_passesData[index].frameBuffer;
 		auto & finished = *m_passesData[index].finished;
-		auto & blur = *m_passesData[index].blur;
+		auto & blurCommands = m_passesData[index].blurCommands;
 
 		auto & timer = pass.pass->getTimer();
 		auto timerBlock = timer.start();
@@ -195,7 +197,12 @@ namespace castor3d
 
 		if ( static_cast< ShadowMapPassSpot const & >( *pass.pass ).getShadowType() == ShadowType::eVariance )
 		{
-			result = &blur.blur( *result );
+			device.graphicsQueue->submit( *blurCommands.commandBuffer
+				, *result
+				, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+				, *blurCommands.semaphore
+				, nullptr );
+			result = blurCommands.semaphore.get();
 		}
 
 		return *result;
