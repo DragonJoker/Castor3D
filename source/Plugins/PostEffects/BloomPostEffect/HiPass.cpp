@@ -215,7 +215,8 @@ namespace Bloom
 		registerFrame( cmd );
 		cmd.endRenderPass();
 #if !Bloom_DebugHiPass
-		m_surface.colourTexture->getTexture().generateMipmaps( cmd );
+		m_surface.colourTexture->getTexture().generateMipmaps( cmd
+			, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL );
 #endif
 
 		timer.endPass( cmd, index );
