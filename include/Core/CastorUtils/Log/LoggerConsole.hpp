@@ -45,6 +45,9 @@ namespace castor
 		 *\param[in]	newLine	Dit si le caractère de fin de ligne doit être ajouté.
 		 */
 		virtual void print( String const & toLog, bool newLine ) = 0;
+
+	protected:
+		castor::String m_header;
 	};
 
 	class ProgramConsole
