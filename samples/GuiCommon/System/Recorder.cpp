@@ -431,9 +431,9 @@ namespace GuiCommon
 				{
 					try
 					{
-						auto buffer = p_buffer->constPtr();
+						auto buffer = p_buffer->getConstPtr();
 						int lineSize[8] = { m_codecContext->width * 4, 0, 0, 0, 0, 0, 0, 0 };
-						auto outputHeight = libffmpeg::sws_scale( m_swsContext, &buffer, lineSize, 0, p_buffer->dimensions().getHeight(), m_frame->data, m_frame->linesize );
+						auto outputHeight = libffmpeg::sws_scale( m_swsContext, &buffer, lineSize, 0, p_buffer->getHeight(), m_frame->data, m_frame->linesize );
 						libffmpeg::AVPacket packet{ 0 };
 						libffmpeg::av_init_packet( &packet );
 						std::vector< uint8_t > outbuf( packet.size );
