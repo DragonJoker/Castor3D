@@ -107,8 +107,7 @@ namespace castor3d
 			cuT( "LPResult" ),
 			{ nullptr, nullptr, nullptr },
 			0u,
-			{ size.getWidth(), size.getHeight() },
-			1u,
+			size,
 		}
 	{
 	}

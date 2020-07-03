@@ -31,16 +31,20 @@ namespace castor3d
 			, VkImageCreateFlags createFlags
 			, VkExtent3D const & size
 			, uint32_t layerCount
+			, uint32_t mipLevels
 			, VkFormat format
 			, VkImageUsageFlags usageFlags
 			, VkBorderColor const & borderColor );
+		/**
+		*	2D or 2D array textures
+		*/
 		template< typename TextureEnumT >
 		static TextureUnitArray doCreateTextures( Engine & engine
 			, std::array< TextureUnit const *, size_t( TextureEnumT::eCount ) > const & inputs
 			, castor::String const & prefix
 			, VkImageCreateFlags createFlags
 			, castor::Size const & size
-			, uint32_t layerCount )
+			, uint32_t layerCount = 1u )
 		{
 			TextureUnitArray result;
 
@@ -54,6 +58,7 @@ namespace castor3d
 						, createFlags
 						, { size.getWidth(), size.getHeight(), 1u }
 						, layerCount
+						, getMipLevels( texture, size )
 						, getFormat( texture )
 						, getUsageFlags( texture )
 						, getBorderColor( texture ) ) );
@@ -62,6 +67,9 @@ namespace castor3d
 
 			return result;
 		}
+		/**
+		*	3D textures
+		*/
 		template< typename TextureEnumT >
 		static TextureUnitArray doCreateTextures( Engine & engine
 			, std::array< TextureUnit const *, size_t( TextureEnumT::eCount ) > const & inputs
@@ -81,6 +89,7 @@ namespace castor3d
 						, createFlags
 						, size
 						, 1u
+						, getMipLevels( texture, size )
 						, getFormat( texture )
 						, getUsageFlags( texture )
 						, getBorderColor( texture ) ) );
