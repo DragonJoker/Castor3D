@@ -274,6 +274,11 @@ namespace castor3d
 
 		m_commandBuffer = m_device.graphicsCommandPool->createCommandBuffer( "RadianceComputer" );
 		m_commandBuffer->begin();
+		m_commandBuffer->beginDebugBlock(
+			{
+				"Generating irradiance map",
+				makeFloatArray( m_device.renderSystem.getEngine()->getNextRainbowColour() ),
+			} );
 
 		for ( auto face = 0u; face < 6u; ++face )
 		{
@@ -286,6 +291,7 @@ namespace castor3d
 			m_commandBuffer->endRenderPass();
 		}
 
+		m_commandBuffer->endDebugBlock();
 		m_commandBuffer->end();
 	}
 

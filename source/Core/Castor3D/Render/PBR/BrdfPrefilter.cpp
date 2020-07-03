@@ -4,6 +4,7 @@
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
 #include <CastorUtils/Math/Angle.hpp>
@@ -160,6 +161,11 @@ namespace castor3d
 		auto & device = getCurrentRenderDevice( m_renderSystem );
 
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
+		m_commandBuffer->beginDebugBlock(
+			{
+				"Prefiltering BRDF",
+				makeFloatArray( m_renderSystem.getEngine()->getNextRainbowColour() ),
+			} );
 		m_commandBuffer->beginRenderPass( *m_renderPass
 			, *m_frameBuffer
 			, { transparentBlackClearColor }
@@ -168,6 +174,7 @@ namespace castor3d
 		m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 		m_commandBuffer->draw( 6u );
 		m_commandBuffer->endRenderPass();
+		m_commandBuffer->endDebugBlock();
 		m_commandBuffer->end();
 
 		device.graphicsQueue->submit( *m_commandBuffer, m_fence.get() );

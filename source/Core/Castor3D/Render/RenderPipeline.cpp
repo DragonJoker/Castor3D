@@ -145,7 +145,7 @@ namespace castor3d
 				} );
 
 			if ( it == bindings.end()
-				&& !layout->getBindings().empty() )
+				&& !bindings.empty() )
 			{
 				m_descriptorPools.emplace_back( layout->createPool( "RenderPipeline", maxSets ) );
 			}
