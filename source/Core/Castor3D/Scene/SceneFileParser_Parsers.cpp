@@ -188,7 +188,7 @@ namespace castor3d
 		{
 			params[0]->get( parsingContext->strName );
 			parsingContext->material = parsingContext->m_pParser->getEngine()->getMaterialCache().add( parsingContext->strName
-				, MaterialType::ePhong );
+				, parsingContext->m_pParser->getEngine()->getMaterialsType() );
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eMaterial )
