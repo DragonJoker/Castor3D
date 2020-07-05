@@ -1040,6 +1040,15 @@ namespace castor3d
 					, normalize( tangentSpaceViewPosition - tangentSpaceFragPosition )
 					, maps[i]
 					, heightMapConfig );
+
+				IF( m_writer, texCoords.x() > 1.0_f
+					|| texCoords.y() > 1.0_f
+					|| texCoords.x() < 0.0_f
+					|| texCoords.y() < 0.0_f )
+				{
+					m_writer.discard();
+				}
+				FI;
 			}
 		}
 
@@ -1063,6 +1072,15 @@ namespace castor3d
 					, normalize( tangentSpaceViewPosition - tangentSpaceFragPosition )
 					, map
 					, config );
+
+				IF( m_writer, texCoords.x() > 1.0_f
+					|| texCoords.y() > 1.0_f
+					|| texCoords.x() < 0.0_f
+					|| texCoords.y() < 0.0_f )
+				{
+					m_writer.discard();
+				}
+				FI;
 			}
 
 			if ( checkFlag( textureFlags, TextureFlag::eOpacity ) )
@@ -1202,6 +1220,7 @@ namespace castor3d
 				, viewDir
 				, heightMap
 				, textureConfig );
+
 		}
 
 		void Utils::encodeMaterial( Int const & receiver
