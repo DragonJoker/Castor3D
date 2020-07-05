@@ -317,6 +317,24 @@ namespace castor3d
 	}
 	CU_EndAttributePush( CSCNSection::eWindow )
 
+	CU_ImplementAttributeParser( parserInclude )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing [path] parameter." ) );
+		}
+		else
+		{
+			Path path;
+			params[0]->get( path );
+			SceneFileParser subparser{ *parsingContext->m_pParser->getEngine() };
+			subparser.parseFile( parsingContext->m_file.getPath() / path, parsingContext );
+		}
+	}
+	CU_EndAttribute()
+
 	CU_ImplementAttributeParser( parserWindowRenderTarget )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
