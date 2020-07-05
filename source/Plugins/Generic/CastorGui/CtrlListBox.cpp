@@ -68,6 +68,11 @@ namespace CastorGui
 	{
 	}
 
+	void ListBoxCtrl::setTextMaterial( MaterialSPtr p_material )
+	{
+		m_textMaterial = p_material;
+	}
+
 	void ListBoxCtrl::setSelectedItemBackgroundMaterial( MaterialSPtr p_value )
 	{
 		m_selectedItemBackgroundMaterial = p_value;
@@ -102,7 +107,8 @@ namespace CastorGui
 
 		if ( getControlsManager() )
 		{
-			StaticCtrlSPtr item = doCreateItemCtrl( p_value );
+			StaticCtrlSPtr item = doCreateItemCtrl( p_value
+				, uint32_t( m_values.size() - 1u ) );
 			getEngine().postEvent( makeFunctorEvent( EventType::ePreRender, [this, item]()
 			{
 				getControlsManager()->create( item );
@@ -247,9 +253,15 @@ namespace CastorGui
 		}
 	}
 
-	StaticCtrlSPtr ListBoxCtrl::doCreateItemCtrl( String const & p_value )
+	StaticCtrlSPtr ListBoxCtrl::doCreateItemCtrl( String const & p_value
+		, uint32_t itemIndex )
 	{
-		StaticCtrlSPtr item = std::make_shared< StaticCtrl >( getName() + cuT( "_Item" ), getEngine(), this, p_value, Position(), Size( getSize().getWidth(), DEFAULT_HEIGHT ), uint32_t( StaticStyle::eVAlignCenter ) );
+		StaticCtrlSPtr item = std::make_shared< StaticCtrl >( getName() + cuT( "_Item" ) + string::toString( itemIndex )
+			, getEngine()
+			, this
+			, p_value
+			, Position()
+			, Size( getSize().getWidth(), DEFAULT_HEIGHT ), uint32_t( StaticStyle::eVAlignCenter ) );
 		item->setCatchesMouseEvents( true );
 
 		item->connectNC( MouseEventType::eEnter, [this]( ControlSPtr p_control, MouseEvent const & p_event )
@@ -282,18 +294,27 @@ namespace CastorGui
 		return item;
 	}
 
-	void ListBoxCtrl::doCreateItem( String const & p_value )
+	void ListBoxCtrl::doCreateItem( String const & p_value
+		, uint32_t itemIndex )
 	{
-		StaticCtrlSPtr item = doCreateItemCtrl( p_value );
+		StaticCtrlSPtr item = doCreateItemCtrl( p_value, itemIndex );
 		getControlsManager()->create( item );
 		item->setBackgroundMaterial( getItemBackgroundMaterial() );
 		item->setForegroundMaterial( getForegroundMaterial() );
+		item->setTextMaterial( getTextMaterial() );
 		item->setVisible( doIsVisible() );
 	}
 
 	void ListBoxCtrl::doCreate()
 	{
-		MaterialSPtr material = getSelectedItemBackgroundMaterial();
+		MaterialSPtr material = getTextMaterial();
+
+		if ( !material )
+		{
+			m_textMaterial = getForegroundMaterial();
+		}
+
+		material = getSelectedItemBackgroundMaterial();
 
 		if ( !material )
 		{
@@ -325,10 +346,12 @@ namespace CastorGui
 		{
 			onKeyDown( p_event );
 		} );
+		uint32_t index = 0u;
 
 		for ( auto value : m_initialValues )
 		{
-			doCreateItem( value );
+			doCreateItem( value, index );
+			++index;
 		}
 
 		m_initialValues.clear();

@@ -459,7 +459,7 @@ namespace CastorGui
 		}
 		else
 		{
-			CU_ParsingError( cuT( "No combo box initialised." ) );
+			CU_ParsingError( cuT( "No combo box control initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -477,7 +477,34 @@ namespace CastorGui
 		}
 		else
 		{
-			CU_ParsingError( cuT( "No combo box initialised." ) );
+			CU_ParsingError( cuT( "No combo box control initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserComboBoxTextMaterial )
+	{
+		ParserContext & guiContext = getParserContext( context );
+		ComboBoxCtrlSPtr combo = guiContext.m_combo;
+
+		if ( combo )
+		{
+			String name;
+			params[0]->get( name );
+			auto material = guiContext.m_engine->getMaterialCache().find( name );
+
+			if ( material )
+			{
+				combo->setTextMaterial( material );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No combo box control initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -504,7 +531,7 @@ namespace CastorGui
 		}
 		else
 		{
-			CU_ParsingError( cuT( "No combo box initialised." ) );
+			CU_ParsingError( cuT( "No combo box control initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -531,7 +558,7 @@ namespace CastorGui
 		}
 		else
 		{
-			CU_ParsingError( cuT( "No combo box initialised." ) );
+			CU_ParsingError( cuT( "No combo box control initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -558,7 +585,7 @@ namespace CastorGui
 		}
 		else
 		{
-			CU_ParsingError( cuT( "No combo box initialised." ) );
+			CU_ParsingError( cuT( "No combo box control initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -593,7 +620,34 @@ namespace CastorGui
 		}
 		else
 		{
-			CU_ParsingError( cuT( "No edit initialised." ) );
+			CU_ParsingError( cuT( "No edit control initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserEditTextMaterial )
+	{
+		ParserContext & guiContext = getParserContext( context );
+		EditCtrlSPtr edit = guiContext.m_edit;
+
+		if ( edit )
+		{
+			String name;
+			params[0]->get( name );
+			auto material = guiContext.m_engine->getMaterialCache().find( name );
+
+			if ( material )
+			{
+				edit->setTextMaterial( material );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No edit control initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -611,7 +665,7 @@ namespace CastorGui
 		}
 		else
 		{
-			CU_ParsingError( cuT( "No edit initialised." ) );
+			CU_ParsingError( cuT( "No edit control initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -625,13 +679,13 @@ namespace CastorGui
 		{
 			bool value;
 			params[0]->get( value );
-			guiContext.m_flags |= value ? ( uint32_t( EditStyle::eMultiline )
-											 | uint32_t( EditStyle::eProcessEnter )
-											 | uint32_t( EditStyle::eProcessTab ) ) : 0;
+			guiContext.m_edit->addStyle( uint32_t( EditStyle::eMultiline )/*
+				| uint32_t( EditStyle::eProcessEnter )
+				| uint32_t( EditStyle::eProcessTab )*/ );
 		}
 		else
 		{
-			CU_ParsingError( cuT( "No edit initialised." ) );
+			CU_ParsingError( cuT( "No edit control initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -666,7 +720,7 @@ namespace CastorGui
 		}
 		else
 		{
-			CU_ParsingError( cuT( "No list box initialised." ) );
+			CU_ParsingError( cuT( "No list box control initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -684,7 +738,34 @@ namespace CastorGui
 		}
 		else
 		{
-			CU_ParsingError( cuT( "No list box initialised." ) );
+			CU_ParsingError( cuT( "No list box control initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserListBoxTextMaterial )
+	{
+		ParserContext & guiContext = getParserContext( context );
+		ListBoxCtrlSPtr listbox = guiContext.m_listbox;
+
+		if ( listbox )
+		{
+			String name;
+			params[0]->get( name );
+			auto material = guiContext.m_engine->getMaterialCache().find( name );
+
+			if ( material )
+			{
+				listbox->setTextMaterial( material );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No list box control initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -711,7 +792,7 @@ namespace CastorGui
 		}
 		else
 		{
-			CU_ParsingError( cuT( "No list box initialised." ) );
+			CU_ParsingError( cuT( "No list box control initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -738,7 +819,7 @@ namespace CastorGui
 		}
 		else
 		{
-			CU_ParsingError( cuT( "No list box initialised." ) );
+			CU_ParsingError( cuT( "No list box control initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -765,7 +846,7 @@ namespace CastorGui
 		}
 		else
 		{
-			CU_ParsingError( cuT( "No list box initialised." ) );
+			CU_ParsingError( cuT( "No list box control initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -817,7 +898,7 @@ namespace CastorGui
 		}
 		else
 		{
-			CU_ParsingError( cuT( "No static initialised." ) );
+			CU_ParsingError( cuT( "No static control initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -835,7 +916,7 @@ namespace CastorGui
 		}
 		else
 		{
-			CU_ParsingError( cuT( "No static initialised." ) );
+			CU_ParsingError( cuT( "No static control initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -853,7 +934,7 @@ namespace CastorGui
 		}
 		else
 		{
-			CU_ParsingError( cuT( "No static initialised." ) );
+			CU_ParsingError( cuT( "No static control initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -871,7 +952,38 @@ namespace CastorGui
 		}
 		else
 		{
-			CU_ParsingError( cuT( "No static initialised." ) );
+			CU_ParsingError( cuT( "No static control initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserStaticTextMaterial )
+	{
+		ParserContext & guiContext = getParserContext( context );
+		StaticCtrlSPtr ctrl = guiContext.m_static;
+
+		if ( !ctrl )
+		{
+			CU_ParsingError( cuT( "No static control initialised." ) );
+		}
+		else if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing [material name] parameter." ) );
+		}
+		else
+		{
+			castor::String name;
+			params[0]->get( name );
+			auto material = guiContext.m_engine->getMaterialCache().find( name );
+
+			if ( material )
+			{
+				ctrl->setTextMaterial( material );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Material [" + name + "] not found." ) );
+			}
 		}
 	}
 	CU_EndAttribute()
@@ -952,6 +1064,33 @@ namespace CastorGui
 			if ( material )
 			{
 				control->setBackgroundMaterial( material );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No control initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserControlForegroundMaterial )
+	{
+		ParserContext & guiContext = getParserContext( context );
+		ControlRPtr control = guiContext.getTop();
+
+		if ( control )
+		{
+			String name;
+			params[0]->get( name );
+			auto material = guiContext.m_engine->getMaterialCache().find( name );
+
+			if ( material )
+			{
+				control->setForegroundMaterial( material );
 			}
 			else
 			{
