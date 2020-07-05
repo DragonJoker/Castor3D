@@ -131,9 +131,8 @@ namespace castor3d
 			auto lightingModel = shader::PhongLightingModel::createModel( writer
 					, utils
 					, LightType::eDirectional
-					, ShadowType::eNone
 					, false // lightUbo
-					, false // volumetric
+					, false // shadows
 					, true // rsm
 					, index );
 			ReflectiveShadowMapping rsm{ writer, c3d_rsmSamples, LightType::eDirectional };
@@ -216,9 +215,8 @@ namespace castor3d
 			auto lightingModel = shader::PhongLightingModel::createModel( writer
 				, utils
 				, LightType::eSpot
-				, ShadowType::eNone
 				, false // lightUbo
-				, false // volumetric
+				, false // shadows
 				, true // rsm
 				, index );
 			ReflectiveShadowMapping rsm{ writer, c3d_rsmSamples, LightType::eSpot };
@@ -305,9 +303,8 @@ namespace castor3d
 			auto lightingModel = shader::PhongLightingModel::createModel( writer
 				, utils
 				, LightType::ePoint
-				, ShadowType::eNone
 				, false // lightUbo
-				, false // volumetric
+				, false // shadows
 				, true // rsm
 				, index );
 			ReflectiveShadowMapping rsm{ writer, c3d_rsmSamples, LightType::ePoint };

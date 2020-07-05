@@ -329,7 +329,8 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
+		ashes::RenderPassPtr doCreateRenderPass( castor::String const & name
+			, RenderDevice const & device
 			, VkFormat format )
 		{
 			ashes::VkAttachmentDescriptionArray attaches
@@ -447,12 +448,13 @@ namespace castor3d
 				std::move( subpasses ),
 				std::move( dependencies ),
 			};
-			auto result = device->createRenderPass( "LightPropagation"
+			auto result = device->createRenderPass( name
 				, std::move( createInfo ) );
 			return result;
 		}
 
-		ashes::VertexBufferPtr< castor::Point3f > doCreateVertexBuffer( Engine & engine
+		ashes::VertexBufferPtr< castor::Point3f > doCreateVertexBuffer( castor::String const & name
+			, Engine & engine
 			, uint32_t width )
 		{
 			auto size = width * width * width;
@@ -462,7 +464,7 @@ namespace castor3d
 				, size
 				, 0u
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, "LightPropagation" );
+				, name );
 			NonTexturedQuad::Vertex vtx;
 
 			if ( auto buffer = result->lock( 0u, size, 0u ) )
@@ -486,7 +488,8 @@ namespace castor3d
 			return result;
 		}
 
-		ashes::DescriptorSetLayoutPtr doCreateDescriptorLayout( Engine & engine
+		ashes::DescriptorSetLayoutPtr doCreateDescriptorLayout( castor::String const & name
+			, Engine & engine
 			, bool occlusion )
 		{
 			ashes::VkDescriptorSetLayoutBindingArray bindings
@@ -512,17 +515,18 @@ namespace castor3d
 					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 			}
 
-			return getCurrentRenderDevice( engine )->createDescriptorSetLayout( "LightPropagation"
+			return getCurrentRenderDevice( engine )->createDescriptorSetLayout( name
 				, std::move( bindings ) );
 		}
 
-		ashes::DescriptorSetPtr doCreateDescriptorSet( ashes::DescriptorSetPool & descriptorSetPool
+		ashes::DescriptorSetPtr doCreateDescriptorSet( castor::String const & name
+			, ashes::DescriptorSetPool & descriptorSetPool
 			, TextureUnit const * geometryInjectionResult
 			, LightVolumePassResult const & lightInjectionResult
 			, UniformBuffer< LpvConfigUboConfiguration > const & ubo )
 		{
 			auto & descriptorSetLayout = descriptorSetPool.getLayout();
-			auto result = descriptorSetPool.createDescriptorSet( "LightPropagation" );
+			auto result = descriptorSetPool.createDescriptorSet( name );
 			result->createSizedBinding( descriptorSetLayout.getBinding( LIUboIdx )
 				, ubo );
 			result->createBinding( descriptorSetLayout.getBinding( RLpvGridIdx )
@@ -546,7 +550,8 @@ namespace castor3d
 			return result;
 		}
 
-		ashes::GraphicsPipelinePtr doCreatePipeline( Engine & engine
+		ashes::GraphicsPipelinePtr doCreatePipeline( castor::String const & name
+			, Engine & engine
 			, ashes::PipelineLayout const & pipelineLayout
 			, ashes::RenderPass const & renderPass
 			, ShaderModule const & vertexShader
@@ -569,108 +574,130 @@ namespace castor3d
 			};
 			VkViewport viewport{ 0.0f, 0.0f, float( lpvSize ), float( lpvSize ) };
 			VkRect2D scissor{ 0, 0, lpvSize, lpvSize };
-			ashes::PipelineViewportStateCreateInfo vpState
-			{
-				0u,
-				1u,
-				ashes::VkViewportArray{ viewport },
-				1u,
-				ashes::VkScissorArray{ scissor },
-			};
+			ashes::PipelineViewportStateCreateInfo vpState{ 0u
+				, 1u
+				, ashes::VkViewportArray{ viewport }
+				, 1u
+				, ashes::VkScissorArray{ scissor } };
 			auto & device = getCurrentRenderDevice( engine );
 			ashes::PipelineShaderStageCreateInfoArray shaderStages;
 			shaderStages.push_back( makeShaderState( device, vertexShader ) );
 			shaderStages.push_back( makeShaderState( device, geometryShader ) );
 			shaderStages.push_back( makeShaderState( device, pixelShader ) );
-			return device->createPipeline( "LightPropagation"
-				, ashes::GraphicsPipelineCreateInfo
-				{
-					0u,
-					shaderStages,
-					std::move( vertexState ),
-					ashes::PipelineInputAssemblyStateCreateInfo{ 0u, VK_PRIMITIVE_TOPOLOGY_POINT_LIST },
-					ashes::nullopt,
-					std::move( vpState ),
-					ashes::PipelineRasterizationStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE },
-					ashes::PipelineMultisampleStateCreateInfo{},
-					ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_FALSE, VK_FALSE },
-					RenderPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 6u ),
-					ashes::nullopt,
-					pipelineLayout,
-					renderPass,
-				} );
+			return device->createPipeline( name
+				, ashes::GraphicsPipelineCreateInfo{ 0u
+					, shaderStages
+					, std::move( vertexState )
+					, ashes::PipelineInputAssemblyStateCreateInfo{ 0u, VK_PRIMITIVE_TOPOLOGY_POINT_LIST }
+					, ashes::nullopt
+					, std::move( vpState )
+					, ashes::PipelineRasterizationStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE }
+					, ashes::PipelineMultisampleStateCreateInfo{}
+					, ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_FALSE, VK_FALSE }
+					, RenderPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 6u )
+					, ashes::nullopt
+					, pipelineLayout
+					, renderPass } );
 		}
 	}
 
 	//*********************************************************************************************
 
 	LightPropagationPass::LightPropagationPass( Engine & engine
+		, castor::String const & suffix
 		, uint32_t gridSize
 		, TextureUnit const * geometry
 		, LightVolumePassResult const & injection
 		, LightVolumePassResult const & accumulation
 		, LightVolumePassResult const & propagate
 		, LpvConfigUbo const & lpvConfigUbo )
-		: Named{ "LightPropagation" }
+		: Named{ "LightPropagation" + suffix }
 		, m_engine{ engine }
 		, m_lpvConfigUbo{ lpvConfigUbo }
 		, m_accumulation{ accumulation }
 		, m_propagate{ propagate }
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Light Propagation Volumes" ), cuT( "Light Propagation" ) ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Light Propagation Volumes" ), "Light Propagation " + suffix ) }
 		, m_count{ gridSize * gridSize * gridSize }
-		, m_vertexBuffer{ doCreateVertexBuffer( engine, gridSize ) }
-		, m_descriptorSetLayout{ doCreateDescriptorLayout( engine, geometry != nullptr ) }
+		, m_vertexBuffer{ doCreateVertexBuffer( getName()
+			, engine
+			, gridSize ) }
+		, m_descriptorSetLayout{ doCreateDescriptorLayout( getName()
+			, engine
+			, geometry != nullptr ) }
 		, m_pipelineLayout{ getCurrentRenderDevice( m_engine )->createPipelineLayout( getName(), *m_descriptorSetLayout ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( getName(), 1u ) }
-		, m_descriptorSet{ doCreateDescriptorSet( *m_descriptorSetPool
+		, m_descriptorSet{ doCreateDescriptorSet( getName()
+			, *m_descriptorSetPool
 			, geometry
 			, injection
 			, m_lpvConfigUbo.getUbo() ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram() }
-		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, getName(), getGeometryProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram( geometry != nullptr ) }
-		, m_renderPass{ doCreateRenderPass( getCurrentRenderDevice( m_engine )
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
+			, getName()
+			, getVertexProgram() }
+		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT
+			, getName()
+			, getGeometryProgram() }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT
+			, getName()
+			, getPixelProgram( geometry != nullptr ) }
+		, m_renderPass{ doCreateRenderPass( getName()
+			, getCurrentRenderDevice( m_engine )
 			, getFormat( LpvTexture::eR ) ) }
-		, m_pipeline{ doCreatePipeline( m_engine
+		, m_pipeline{ doCreatePipeline( getName()
+			, m_engine
 			, *m_pipelineLayout
 			, *m_renderPass
 			, m_vertexShader
 			, m_geometryShader
 			, m_pixelShader
 			, gridSize ) }
-		, m_frameBuffer{ m_renderPass->createFrameBuffer( "LightPropagation"
+		, m_frameBuffer{ m_renderPass->createFrameBuffer( getName()
 			, VkExtent2D{ gridSize, gridSize }
-			, {
-				m_accumulation[LpvTexture::eR].getTexture()->getDefaultView().getTargetView(),
-				m_accumulation[LpvTexture::eG].getTexture()->getDefaultView().getTargetView(),
-				m_accumulation[LpvTexture::eB].getTexture()->getDefaultView().getTargetView(),
-				m_propagate[LpvTexture::eR].getTexture()->getDefaultView().getTargetView(),
-				m_propagate[LpvTexture::eG].getTexture()->getDefaultView().getTargetView(),
-				m_propagate[LpvTexture::eB].getTexture()->getDefaultView().getTargetView(),
-			}
+			, { m_accumulation[LpvTexture::eR].getTexture()->getDefaultView().getTargetView()
+				, m_accumulation[LpvTexture::eG].getTexture()->getDefaultView().getTargetView()
+				, m_accumulation[LpvTexture::eB].getTexture()->getDefaultView().getTargetView()
+				, m_propagate[LpvTexture::eR].getTexture()->getDefaultView().getTargetView()
+				, m_propagate[LpvTexture::eG].getTexture()->getDefaultView().getTargetView()
+				, m_propagate[LpvTexture::eB].getTexture()->getDefaultView().getTargetView() }
 			, gridSize ) }
 		, m_commands{ getCommands( *m_timer, 0u ) }
 	{
 	}
 
 	LightPropagationPass::LightPropagationPass( Engine & engine
+		, castor::String const & name
 		, uint32_t gridSize
 		, LightVolumePassResult const & injection
 		, LightVolumePassResult const & accumulation
 		, LightVolumePassResult const & propagate
 		, LpvConfigUbo const & lpvConfigUbo )
-		: LightPropagationPass{ engine, gridSize, nullptr, injection, accumulation, propagate, lpvConfigUbo }
+		: LightPropagationPass{ engine
+			, name
+			, gridSize
+			, nullptr
+			, injection
+			, accumulation
+			, propagate
+			, lpvConfigUbo }
 	{
 	}
 
 	LightPropagationPass::LightPropagationPass( Engine & engine
+		, castor::String const & name
 		, uint32_t gridSize
 		, TextureUnit const & geometry
 		, LightVolumePassResult const & injection
 		, LightVolumePassResult const & accumulation
 		, LightVolumePassResult const & propagate
 		, LpvConfigUbo const & lpvConfigUbo )
-		: LightPropagationPass{ engine, gridSize, &geometry, injection, accumulation, propagate, lpvConfigUbo }
+		: LightPropagationPass{ engine
+			, name
+			, gridSize
+			, &geometry
+			, injection
+			, accumulation
+			, propagate
+			, lpvConfigUbo }
 	{
 	}
 
@@ -706,19 +733,17 @@ namespace castor3d
 		timer.beginPass( cmd, index );
 		cmd.beginDebugBlock(
 			{
-				"Lighting - Light Propagation",
+				"Lighting - " + getName(),
 				castor3d::makeFloatArray( m_engine.getNextRainbowColour() ),
 			} );
 		cmd.beginRenderPass( *m_renderPass
 			, *m_frameBuffer
-			, {
-				getClearValue( LpvTexture::eR ),
-				getClearValue( LpvTexture::eG ),
-				getClearValue( LpvTexture::eB ),
-				getClearValue( LpvTexture::eR ),
-				getClearValue( LpvTexture::eG ),
-				getClearValue( LpvTexture::eB ),
-			}
+			, { getClearValue( LpvTexture::eR )
+				, getClearValue( LpvTexture::eG )
+				, getClearValue( LpvTexture::eB )
+				, getClearValue( LpvTexture::eR )
+				, getClearValue( LpvTexture::eG )
+				, getClearValue( LpvTexture::eB ) }
 			, VK_SUBPASS_CONTENTS_INLINE );
 		cmd.bindPipeline( *m_pipeline );
 		cmd.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );

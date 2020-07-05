@@ -22,6 +22,8 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Shader/Ubos/LpvConfigUbo.hpp"
 
+#include <CastorUtils/Miscellaneous/StringUtils.hpp>
+
 namespace castor3d
 {
 	template< LightType LtType >
@@ -94,11 +96,24 @@ namespace castor3d
 			, m_aabb{ lightCache.getScene()->getBoundingBox() }
 		{
 			uint32_t propIndex = 0u;
-			m_lightPropagationPasses.emplace_back( engine, GridSize, m_injection, m_accumulation, m_propagate[propIndex], m_lpvConfigUbo );
+			m_lightPropagationPasses.emplace_back( engine
+				, "0"
+				, GridSize
+				, m_injection
+				, m_accumulation
+				, m_propagate[propIndex]
+				, m_lpvConfigUbo );
 
 			for ( uint32_t i = 1u; i < MaxPropagationSteps; ++i )
 			{
-				m_lightPropagationPasses.emplace_back( engine, GridSize, m_geometry, m_propagate[propIndex], m_accumulation, m_propagate[1u - propIndex], m_lpvConfigUbo );
+				m_lightPropagationPasses.emplace_back( engine
+					, castor::string::toString( i )
+					, GridSize
+					, m_geometry
+					, m_propagate[propIndex]
+					, m_accumulation
+					, m_propagate[1u - propIndex]
+					, m_lpvConfigUbo );
 				propIndex = 1u - propIndex;
 			}
 		}

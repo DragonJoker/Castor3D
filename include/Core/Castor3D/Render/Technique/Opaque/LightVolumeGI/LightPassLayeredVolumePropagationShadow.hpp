@@ -24,6 +24,8 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 #include "Castor3D/Shader/Ubos/LayeredLpvConfigUbo.hpp"
 
+#include <CastorUtils/Miscellaneous/StringUtils.hpp>
+
 #include <array>
 
 namespace castor3d
@@ -92,10 +94,10 @@ namespace castor3d
 			}
 			, m_lpvConfigUbos
 			{
-				LpvConfigUbo{ engine },
-				LpvConfigUbo{ engine },
-				LpvConfigUbo{ engine },
-				LpvConfigUbo{ engine },
+				LpvConfigUbo{ engine, 0u },
+				LpvConfigUbo{ engine, 1u },
+				LpvConfigUbo{ engine, 2u },
+				LpvConfigUbo{ engine, 3u },
 			}
 			, m_lightInjectionPasses
 			{
@@ -129,11 +131,24 @@ namespace castor3d
 
 			for ( uint32_t cascade = 0; cascade < shader::DirectionalMaxCascadesCount; ++cascade )
 			{
-				m_lightPropagationPasses.emplace_back( engine, GridSize, m_injection[cascade], m_accumulation[cascade], m_propagate[propIndex], m_lpvConfigUbos[cascade] );
+				m_lightPropagationPasses.emplace_back( engine
+					, castor::string::toString( cascade ) + "x0"
+					, GridSize
+					, m_injection[cascade]
+					, m_accumulation[cascade]
+					, m_propagate[propIndex]
+					, m_lpvConfigUbos[cascade] );
 
 				for ( uint32_t i = 1u; i < MaxPropagationSteps; ++i )
 				{
-					m_lightPropagationPasses.emplace_back( engine, GridSize, m_geometry[cascade], m_propagate[propIndex], m_accumulation[cascade], m_propagate[1u - propIndex], m_lpvConfigUbos[cascade] );
+					m_lightPropagationPasses.emplace_back( engine
+						, castor::string::toString( cascade ) + "x" + castor::string::toString( i )
+						, GridSize
+						, m_geometry[cascade]
+						, m_propagate[propIndex]
+						, m_accumulation[cascade]
+						, m_propagate[1u - propIndex]
+						, m_lpvConfigUbos[cascade] );
 					propIndex = 1u - propIndex;
 				}
 			}
