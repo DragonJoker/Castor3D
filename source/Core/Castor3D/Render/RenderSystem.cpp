@@ -5,6 +5,7 @@
 #include <CastorUtils/Data/BinaryFile.hpp>
 #include <CastorUtils/Math/Angle.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
+#include <CastorUtils/Align/Aligned.hpp>
 
 #include <ashespp/Core/Instance.hpp>
 #include <ashespp/Core/RendererList.hpp>
@@ -19,6 +20,9 @@
 #	include "spirv_glsl.hpp"
 #endif
 
+#include <atomic>
+
+#define C3D_UseAllocationCallbacks 0
 #define C3D_DebugSpirV 0
 
 namespace castor3d
@@ -135,6 +139,119 @@ namespace castor3d
 
 		//*************************************************************************
 
+#if C3D_UseAllocationCallbacks
+
+		struct AlignedBuddyAllocatorTraits
+		{
+			using PointerType = uint8_t *;
+			struct Block
+			{
+				PointerType data;
+			};
+			/**
+			 *\~english
+			 *\brief		Constructor.
+			 *\param[in]	size	The allocator size.
+			 *\param[in]	align	The allocator base alignment.
+			 *\~french
+			 *\brief		Constructeur.
+			 *\param[in]	size	La taille de l'allocateur.
+			 *\param[in]	align	LL'alignement de base de l'allocateur.
+			 */
+			inline AlignedBuddyAllocatorTraits( size_t size
+				, uint32_t align )
+				: m_align{ align }
+				, m_size{ ashes::getAlignedSize( size, m_align ) }
+				, m_memory{ reinterpret_cast< uint8_t * >( castor::alignedAlloc( m_align, m_size ) ) }
+			{
+				CU_Require( m_memory );
+				log::info << cuT( "Vulkan memory allocator, allocating " ) << m_size << std::endl;
+			}
+
+			inline ~AlignedBuddyAllocatorTraits()
+			{
+				log::info << cuT( "Vulkan memory allocator" ) << std::endl;
+				log::info << cuT( "	Total Allocations: " ) << m_totalAllocated << " bytes" << std::endl;
+				log::info << cuT( "	Allocated at most: " ) << m_maxAllocated << " bytes" << std::endl;
+				log::info << cuT( "	Spoiled memory: " ) << m_totalSpoilt << " bytes" << std::endl;
+				log::info << cuT( "	Leaked memory: " ) << m_currentAllocated << " bytes" << std::endl;
+				castor::alignedFree( m_memory );
+			}
+			/**
+			*\~copydoc
+			*	ashes::BuddyAllocatorTraits::getSize
+			*/
+			inline size_t getSize()const
+			{
+				return m_size;
+			}
+			/**
+			*\~copydoc
+			*	ashes::BuddyAllocatorTraits::getPointer
+			*/
+			inline PointerType getPointer( uint32_t offset )
+			{
+				CU_Require( ashes::getAlignedSize( offset, m_align ) == offset );
+				return m_memory + offset;
+			}
+			/**
+			*\~copydoc
+			*	ashes::BuddyAllocatorTraits::getOffset
+			*/
+			inline size_t getOffset( PointerType pointer )const
+			{
+				auto offset = size_t( pointer - m_memory );
+				CU_Ensure( ashes::getAlignedSize( offset, m_align ) == offset );
+				return offset;
+			}
+			/**
+			*\~copydoc
+			*	ashes::BuddyAllocatorTraits::getNull
+			*/
+			inline Block getNull()const
+			{
+				static Block result{ nullptr };
+				return result;
+			}
+			/**
+			*\~copydoc
+			*	ashes::BuddyAllocatorTraits::isNull
+			*/
+			inline bool isNull( PointerType pointer )const
+			{
+				return pointer == getNull().data;
+			}
+
+			inline void registerAllocation( PointerType pointer
+				, VkDeviceSize wantedSize
+				, VkDeviceSize pointerSize )
+			{
+				m_currentAllocated += pointerSize;
+				m_totalAllocated += pointerSize;
+				m_totalSpoilt += ( pointerSize - wantedSize );
+				m_maxAllocated = std::max< uint64_t >( m_maxAllocated, m_currentAllocated );
+			}
+
+			inline void registerDeallocation( PointerType pointer
+				, VkDeviceSize pointerSize )
+			{
+				m_currentAllocated -= pointerSize;
+			}
+
+		private:
+			uint32_t m_align;
+			size_t m_size;
+			uint8_t * m_memory;
+			std::atomic_ullong m_currentAllocated{};
+			std::atomic_ullong m_totalAllocated{};
+			std::atomic_ullong m_maxAllocated{};
+			std::atomic_ullong m_totalSpoilt{};
+		};
+
+#endif
+
+		//*************************************************************************
+
 		bool isValidationLayer( std::string const & name
 			, std::string const & description )
 		{
@@ -174,18 +291,19 @@ namespace castor3d
 			{
 				names.push_back( VK_EXT_DEBUG_UTILS_EXTENSION_NAME );
 			}
-#endif
-#if VK_EXT_debug_report
+#else
+#	if VK_EXT_debug_report
 			if ( isExtensionAvailable( available, VK_EXT_DEBUG_REPORT_EXTENSION_NAME ) )
 			{
 				names.push_back( VK_EXT_DEBUG_REPORT_EXTENSION_NAME );
 			}
-#endif
-#if VK_EXT_debug_marker
+#	endif
+#	if VK_EXT_debug_marker
 			if ( isExtensionAvailable( available, VK_EXT_DEBUG_MARKER_EXTENSION_NAME ) )
 			{
 				names.push_back( VK_EXT_DEBUG_MARKER_EXTENSION_NAME );
 			}
+#	endif
 #endif
 		}
 
@@ -333,6 +451,11 @@ namespace castor3d
 			m_extensionNames,
 		};
 		m_instance = std::make_unique< ashes::Instance >( std::move( plugin )
+#if C3D_UseAllocationCallbacks
+			, ashes::makeAllocator< AlignedBuddyAllocatorTraits >()
+#else
+			, nullptr
+#endif
 			, std::move( createInfo ) );
 
 		if ( getEngine()->isValidationEnabled() )
@@ -356,6 +479,12 @@ namespace castor3d
 
 	RenderSystem::~RenderSystem()
 	{
+		m_features = {};
+		m_properties = {};
+		m_memoryProperties = {};
+		m_gpus.clear();
+		m_debug.reset();
+		m_instance.reset();
 	}
 
 	void RenderSystem::initialise( GpuInformations informations )
