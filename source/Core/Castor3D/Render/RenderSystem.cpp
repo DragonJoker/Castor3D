@@ -165,16 +165,16 @@ namespace castor3d
 				, m_memory{ reinterpret_cast< uint8_t * >( castor::alignedAlloc( m_align, m_size ) ) }
 			{
 				CU_Require( m_memory );
-				log::info << cuT( "Vulkan memory allocator, allocating " ) << m_size << std::endl;
+				log::info << cuT( "Vulkan memory allocator, allocating " ) << m_size << cuT( " bytes" ) << std::endl;
 			}
 
 			inline ~AlignedBuddyAllocatorTraits()
 			{
 				log::info << cuT( "Vulkan memory allocator" ) << std::endl;
-				log::info << cuT( "	Total Allocations: " ) << m_totalAllocated << " bytes" << std::endl;
-				log::info << cuT( "	Allocated at most: " ) << m_maxAllocated << " bytes" << std::endl;
-				log::info << cuT( "	Spoiled memory: " ) << m_totalSpoilt << " bytes" << std::endl;
-				log::info << cuT( "	Leaked memory: " ) << m_currentAllocated << " bytes" << std::endl;
+				log::info << cuT( "	Total Allocations: " ) << m_totalAllocated << cuT( " bytes" ) << std::endl;
+				log::info << cuT( "	Allocated at most: " ) << m_maxAllocated << cuT( " bytes" ) << std::endl;
+				log::info << cuT( "	Spoiled memory: " ) << m_totalSpoilt << cuT( " bytes" ) << std::endl;
+				log::info << cuT( "	Leaked memory: " ) << m_currentAllocated << cuT( " bytes" ) << std::endl;
 				castor::alignedFree( m_memory );
 			}
 			/**

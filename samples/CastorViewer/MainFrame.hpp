@@ -81,7 +81,6 @@ namespace CastorViewer
 		void OnExportScene( wxCommandEvent & event );
 		void OnShowLogs( wxCommandEvent & event );
 		void OnShowLists( wxCommandEvent & event );
-		void OnShowProperties( wxCommandEvent & event );
 		void OnPrintScreen( wxCommandEvent & event );
 		void OnRecord( wxCommandEvent & event );
 		void OnStop( wxCommandEvent & event );

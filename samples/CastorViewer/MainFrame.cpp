@@ -66,7 +66,6 @@ namespace CastorViewer
 			eID_TOOL_EXPORT_SCENE,
 			eID_TOOL_MATERIALS,
 			eID_TOOL_SHOW_LOGS,
-			eID_TOOL_SHOW_PROPERTIES,
 			eID_TOOL_SHOW_LISTS,
 			eID_TOOL_PRINT_SCREEN,
 			eID_TOOL_RECORD,
@@ -519,8 +518,6 @@ namespace CastorViewer
 		splashScreen.Step( 1 );
 		m_toolBar->AddTool( eID_TOOL_SHOW_LISTS, _( "Lists" ), wxImage( *ImagesLoader::getBitmap( eBMP_MATERIALS ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Display lists" ) );
 		splashScreen.Step( 1 );
-		m_toolBar->AddTool( eID_TOOL_SHOW_PROPERTIES, _( "Properties" ), wxImage( *ImagesLoader::getBitmap( eBMP_PROPERTIES ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Display properties" ) );
-		splashScreen.Step( 1 );
 		m_toolBar->AddTool( eID_TOOL_PRINT_SCREEN, _( "Snapshot" ), wxImage( *ImagesLoader::getBitmap( eBMP_PRINTSCREEN ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Take a snapshot" ) );
 		m_toolBar->EnableTool( eID_TOOL_PRINT_SCREEN, false );
 		splashScreen.Step( 1 );
@@ -560,8 +557,6 @@ namespace CastorViewer
 		m_tabsMenu->Append( eID_TOOL_SHOW_LOGS, _( "Display logs" ) );
 		splashScreen.Step( 1 );
 		m_tabsMenu->Append( eID_TOOL_SHOW_LISTS, _( "Display lists" ) );
-		splashScreen.Step( 1 );
-		m_tabsMenu->Append( eID_TOOL_SHOW_PROPERTIES, _( "Display properties" ) );
 		splashScreen.Step( 1 );
 
 		m_captureMenu = new wxMenu;
@@ -802,7 +797,6 @@ namespace CastorViewer
 		EVT_TOOL( eID_TOOL_EXPORT_SCENE, MainFrame::OnExportScene )
 		EVT_TOOL( eID_TOOL_SHOW_LOGS, MainFrame::OnShowLogs )
 		EVT_TOOL( eID_TOOL_SHOW_LISTS, MainFrame::OnShowLists )
-		EVT_TOOL( eID_TOOL_SHOW_PROPERTIES, MainFrame::OnShowProperties )
 		EVT_TOOL( eID_TOOL_PRINT_SCREEN, MainFrame::OnPrintScreen )
 		EVT_TOOL( eID_TOOL_RECORD, MainFrame::OnRecord )
 		EVT_TOOL( eID_TOOL_STOP, MainFrame::OnStop )
@@ -811,7 +805,6 @@ namespace CastorViewer
 		EVT_MENU( eID_TOOL_EXPORT_SCENE, MainFrame::OnExportScene )
 		EVT_MENU( eID_TOOL_SHOW_LOGS, MainFrame::OnShowLogs )
 		EVT_MENU( eID_TOOL_SHOW_LISTS, MainFrame::OnShowLists )
-		EVT_MENU( eID_TOOL_SHOW_PROPERTIES, MainFrame::OnShowProperties )
 		EVT_MENU( eID_TOOL_PRINT_SCREEN, MainFrame::OnPrintScreen )
 		EVT_MENU( eID_TOOL_RECORD, MainFrame::OnRecord )
 		EVT_MENU( eID_TOOL_STOP, MainFrame::OnStop )
@@ -1067,30 +1060,17 @@ namespace CastorViewer
 		event.Skip();
 	}
 
-	void MainFrame::OnShowProperties( wxCommandEvent & event )
-	{
-		if ( !m_propertiesHolder->IsShown() )
-		{
-			m_auiManager.GetPane( m_propertiesHolder ).Show();
-		}
-		else
-		{
-			m_auiManager.GetPane( m_propertiesHolder ).Hide();
-		}
-
-		m_auiManager.Update();
-		event.Skip();
-	}
-
 	void MainFrame::OnShowLists( wxCommandEvent & event )
 	{
 		if ( !m_sceneTabsContainer->IsShown() )
 		{
 			m_auiManager.GetPane( m_sceneTabsContainer ).Show();
+			m_auiManager.GetPane( m_propertiesHolder ).Show();
 		}
 		else
 		{
 			m_auiManager.GetPane( m_sceneTabsContainer ).Hide();
+			m_auiManager.GetPane( m_propertiesHolder ).Hide();
 		}
 
 		m_auiManager.Update();
