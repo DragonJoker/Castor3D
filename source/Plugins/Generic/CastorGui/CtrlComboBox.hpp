@@ -81,6 +81,11 @@ namespace CastorGui
 		*/
 		virtual ~ComboBoxCtrl();
 
+		/** sets the text material.
+		 *\param[in]	p_material	The new value.
+		 */
+		void setTextMaterial( castor3d::MaterialSPtr p_material );
+
 		/** sets the background material for selected item
 		 *\param[in]	material		The new value
 		 */
@@ -165,6 +170,14 @@ namespace CastorGui
 		*\param[in]	font	The new value.
 		*/
 		void setFont( castor::String const & font );
+
+		/**
+		*\return	The text material
+		*/
+		inline castor3d::MaterialSPtr getTextMaterial()const
+		{
+			return m_expand->getTextMaterial();
+		}
 
 		/** Connects a function to a combobox event
 		*\param[in]	event			The event type

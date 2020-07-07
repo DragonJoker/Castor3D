@@ -4,6 +4,7 @@
 #include "Castor3D/Plugin/PluginException.hpp"
 
 #include <CastorUtils/Miscellaneous/DynamicLibrary.hpp>
+#include <CastorUtils/Miscellaneous/Utils.hpp>
 
 using namespace castor;
 

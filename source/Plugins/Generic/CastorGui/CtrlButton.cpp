@@ -187,7 +187,7 @@ namespace CastorGui
 
 		if ( m_highlightedTextMaterial.expired() )
 		{
-			m_highlightedTextMaterial = m_highlightedBackgroundMaterial.lock();
+			m_highlightedTextMaterial = doCreateMaterial( getTextMaterial(), -0.1f );
 		}
 
 		if ( m_pushedBackgroundMaterial.expired() )
@@ -202,7 +202,7 @@ namespace CastorGui
 
 		if ( m_pushedTextMaterial.expired() )
 		{
-			m_pushedTextMaterial = m_pushedBackgroundMaterial.lock();
+			m_pushedTextMaterial = doCreateMaterial( getTextMaterial(), -0.1f );
 		}
 
 		TextOverlaySPtr text = m_text.lock();

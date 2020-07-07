@@ -113,7 +113,7 @@ namespace castor3d
 		{
 			return shininess
 				* clamp( getFloat( writer, sampled, glossinessMask )
-					, 0.0001_f
+					, 0.00390625_f // 1 / 256
 					, 1.0_f );
 		}
 

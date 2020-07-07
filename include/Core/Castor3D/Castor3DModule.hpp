@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/FlagCombination.hpp>
 #include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/Exception/Assertion.hpp>
+#include <CastorUtils/Graphics/GraphicsModule.hpp>
 #include <CastorUtils/Math/Coords.hpp>
 #include <CastorUtils/Math/Point.hpp>
 

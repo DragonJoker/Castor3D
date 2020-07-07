@@ -96,13 +96,18 @@ namespace castor3d
 		{
 			index = getMinTextureIndex();
 			ashes::WriteDescriptorSetArray writes;
-			node.passNode.fillDescriptor( layout
-				, index
-				, writes
-				, node.pipeline.getFlags().textures );
+			auto & flags = node.pipeline.getFlags();
 
-			if ( checkFlag( node.pipeline.getFlags().passFlags, PassFlag::eMetallicRoughness )
-				|| checkFlag( node.pipeline.getFlags().passFlags, PassFlag::eSpecularGlossiness ) )
+			if ( !flags.textures.empty() )
+			{
+				node.passNode.fillDescriptor( layout
+					, index
+					, writes
+					, flags.textures );
+			}
+
+			if ( checkFlag( flags.passFlags, PassFlag::eMetallicRoughness )
+				|| checkFlag( flags.passFlags, PassFlag::eSpecularGlossiness ) )
 			{
 				auto & background = *node.sceneNode.getScene()->getBackground();
 

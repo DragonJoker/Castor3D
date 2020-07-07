@@ -188,7 +188,7 @@ namespace castor3d
 		{
 			params[0]->get( parsingContext->strName );
 			parsingContext->material = parsingContext->m_pParser->getEngine()->getMaterialCache().add( parsingContext->strName
-				, MaterialType::ePhong );
+				, parsingContext->m_pParser->getEngine()->getMaterialsType() );
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eMaterial )
@@ -316,6 +316,24 @@ namespace castor3d
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eWindow )
+
+	CU_ImplementAttributeParser( parserInclude )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing [path] parameter." ) );
+		}
+		else
+		{
+			Path path;
+			params[0]->get( path );
+			SceneFileParser subparser{ *parsingContext->m_pParser->getEngine() };
+			subparser.parseFile( parsingContext->m_file.getPath() / path, parsingContext );
+		}
+	}
+	CU_EndAttribute()
 
 	CU_ImplementAttributeParser( parserWindowRenderTarget )
 	{
@@ -3589,7 +3607,6 @@ namespace castor3d
 
 			if ( !relative.empty() )
 			{
-				parsingContext->textureUnit->setAutoMipmaps( true );
 				parsingContext->folder = folder;
 				parsingContext->relative = relative;
 				parsingContext->strName.clear();

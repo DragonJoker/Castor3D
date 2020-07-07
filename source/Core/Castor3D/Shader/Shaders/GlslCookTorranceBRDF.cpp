@@ -35,7 +35,6 @@ namespace castor3d
 			, sdw::Vec3 const & albedo
 			, sdw::Float const & metallic
 			, sdw::Float const & roughness
-			, sdw::Float const & shadowFactor
 			, FragmentInput const & fragmentIn
 			, OutputComponents & output )
 		{
@@ -45,7 +44,6 @@ namespace castor3d
 				, mix( vec3( 0.04_f ), albedo, vec3( metallic ) )
 				, metallic
 				, roughness
-				, shadowFactor
 				, FragmentInput{ fragmentIn }
 				, output );
 		}
@@ -55,7 +53,6 @@ namespace castor3d
 			, sdw::Vec3 const & direction
 			, sdw::Vec3 const & specular
 			, sdw::Float const & roughness
-			, sdw::Float const & shadowFactor
 			, FragmentInput const & fragmentIn
 			, OutputComponents & output )
 		{
@@ -65,7 +62,6 @@ namespace castor3d
 				, specular
 				, length( specular )
 				, roughness
-				, shadowFactor
 				, FragmentInput{ fragmentIn }
 				, output );
 		}
@@ -168,7 +164,6 @@ namespace castor3d
 					, Vec3 const & f0
 					, Float const & metallic
 					, Float const & roughness
-					, Float const & shadowFactor
 					, FragmentInput const & fragmentIn
 					, OutputComponents & output )
 				{
@@ -217,8 +212,8 @@ namespace castor3d
 
 					kD *= 1.0_f - metallic;
 
-					output.m_diffuse = shadowFactor * ( radiance * light.m_intensity.r() * NdotL * kD / Float{ castor::Pi< float > } );
-					output.m_specular = shadowFactor * ( specReflectance * radiance * light.m_intensity.g() * NdotL );
+					output.m_diffuse = ( radiance * light.m_intensity.r() * NdotL * kD / Float{ castor::Pi< float > } );
+					output.m_specular = ( specReflectance * radiance * light.m_intensity.g() * NdotL );
 				}
 				, InLight( m_writer, "light" )
 				, InVec3( m_writer, "worldEye" )
@@ -226,7 +221,6 @@ namespace castor3d
 				, InVec3( m_writer, "f0" )
 				, InFloat( m_writer, "metallic" )
 				, InFloat( m_writer, "roughness" )
-				, InFloat( m_writer, "shadowFactor" )
 				, FragmentInput{ m_writer }
 				, output );
 		}

@@ -88,9 +88,8 @@ namespace castor3d
 			auto lightingModel = shader::PhongLightingModel::createModel( writer
 				, utils
 				, LightType::eDirectional
-				, ShadowType::eNone
 				, false // lightUbo
-				, false // volumetric
+				, false // shadows
 				, true // rsm
 				, index );
 
@@ -303,7 +302,8 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
+		ashes::RenderPassPtr doCreateRenderPass( castor::String const & name
+			, RenderDevice const & device
 			, VkFormat format )
 		{
 			ashes::VkAttachmentDescriptionArray attaches
@@ -385,12 +385,13 @@ namespace castor3d
 				std::move( subpasses ),
 				std::move( dependencies ),
 			};
-			auto result = device->createRenderPass( "LightInjection"
+			auto result = device->createRenderPass( name
 				, std::move( createInfo ) );
 			return result;
 		}
 
-		ashes::VertexBufferPtr< NonTexturedQuad::Vertex > doCreateVertexBuffer( Engine & engine
+		ashes::VertexBufferPtr< NonTexturedQuad::Vertex > doCreateVertexBuffer( castor::String const & name
+			, Engine & engine
 			, uint32_t rsmSize )
 		{
 			auto & device = getCurrentRenderDevice( engine );
@@ -400,7 +401,7 @@ namespace castor3d
 				, vplCount
 				, 0u
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, "LightInjection" );
+				, name );
 			NonTexturedQuad::Vertex vtx;
 
 			if ( auto buffer = result->lock( 0u, vplCount, 0u ) )
@@ -418,7 +419,8 @@ namespace castor3d
 			return result;
 		}
 
-		ashes::DescriptorSetLayoutPtr doCreateDescriptorLayout( Engine & engine )
+		ashes::DescriptorSetLayoutPtr doCreateDescriptorLayout( castor::String const & name
+			, Engine & engine )
 		{
 			ashes::VkDescriptorSetLayoutBindingArray bindings
 			{
@@ -441,11 +443,12 @@ namespace castor3d
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, VK_SHADER_STAGE_VERTEX_BIT ),
 			};
-			return getCurrentRenderDevice( engine )->createDescriptorSetLayout( "LightInjection"
+			return getCurrentRenderDevice( engine )->createDescriptorSetLayout( name
 				, std::move( bindings ) );
 		}
 
-		ashes::DescriptorSetPtr doCreateDescriptorSet( ashes::DescriptorSetPool & descriptorSetPool
+		ashes::DescriptorSetPtr doCreateDescriptorSet( castor::String const & name
+			, ashes::DescriptorSetPool & descriptorSetPool
 			, LightCache const & lightCache
 			, ShadowMapResult const & smResult
 			, UniformBuffer< LpvConfigUboConfiguration > const & ubo
@@ -453,7 +456,7 @@ namespace castor3d
 			, LightVolumePassResult const & lpvResult )
 		{
 			auto & descriptorSetLayout = descriptorSetPool.getLayout();
-			auto result = descriptorSetPool.createDescriptorSet( "LightInjection" );
+			auto result = descriptorSetPool.createDescriptorSet( name );
 			result->createBinding( descriptorSetLayout.getBinding( LightsIdx )
 				, lightCache.getBuffer()
 				, lightCache.getView() );
@@ -474,7 +477,8 @@ namespace castor3d
 			return result;
 		}
 
-		ashes::GraphicsPipelinePtr doCreatePipeline( Engine & engine
+		ashes::GraphicsPipelinePtr doCreatePipeline( castor::String const & name
+			, Engine & engine
 			, ashes::PipelineLayout const & pipelineLayout
 			, ashes::RenderPass const & renderPass
 			, ShaderModule const & vertexShader
@@ -510,7 +514,7 @@ namespace castor3d
 			shaderStages.push_back( makeShaderState( device, vertexShader ) );
 			shaderStages.push_back( makeShaderState( device, geometryShader ) );
 			shaderStages.push_back( makeShaderState( device, pixelShader ) );
-			return device->createPipeline( "LightInjection"
+			return device->createPipeline( name
 				, ashes::GraphicsPipelineCreateInfo
 				{
 					0u,
@@ -541,7 +545,7 @@ namespace castor3d
 		, LightVolumePassResult const & result
 		, uint32_t gridSize
 		, uint32_t layerIndex )
-		: Named{ "LightInjection" }
+		: Named{ "LightInjection" + std::to_string( layerIndex ) }
 		, m_engine{ engine }
 		, m_lightCache{ lightCache }
 		, m_smResult{ smResult }
@@ -549,12 +553,13 @@ namespace castor3d
 		, m_lpvConfigUbo{ lpvConfigUbo }
 		, m_lightType{ lightType }
 		, m_result{ result }
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Light Propagation Volumes" ), cuT( "Light Injection" ) ) }
-		, m_vertexBuffer{ doCreateVertexBuffer( engine, m_smResult[SmTexture::eDepth].getTexture()->getWidth() ) }
-		, m_descriptorSetLayout{ doCreateDescriptorLayout( engine ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Light Propagation Volumes" ), cuT( "Light Injection " ) + string::toString( layerIndex ) ) }
+		, m_vertexBuffer{ doCreateVertexBuffer( getName(), engine, m_smResult[SmTexture::eDepth].getTexture()->getWidth() ) }
+		, m_descriptorSetLayout{ doCreateDescriptorLayout( getName(), engine ) }
 		, m_pipelineLayout{ getCurrentRenderDevice( m_engine )->createPipelineLayout( getName(), *m_descriptorSetLayout ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( getName(), 1u ) }
-		, m_descriptorSet{ doCreateDescriptorSet( *m_descriptorSetPool
+		, m_descriptorSet{ doCreateDescriptorSet( getName()
+			, *m_descriptorSetPool
 			, m_lightCache
 			, m_smResult
 			, m_lpvConfigUbo.getUbo()
@@ -563,16 +568,18 @@ namespace castor3d
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram( lightType, smResult[SmTexture::eDepth].getTexture()->getWidth(), layerIndex ) }
 		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, getName(), getGeometryProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram() }
-		, m_renderPass{ doCreateRenderPass( getCurrentRenderDevice( m_engine )
+		, m_renderPass{ doCreateRenderPass( getName()
+			, getCurrentRenderDevice( m_engine )
 			, getFormat( LpvTexture::eR ) ) }
-		, m_pipeline{ doCreatePipeline( m_engine
+		, m_pipeline{ doCreatePipeline( getName()
+			, m_engine
 			, *m_pipelineLayout
 			, *m_renderPass
 			, m_vertexShader
 			, m_geometryShader
 			, m_pixelShader
 			, gridSize ) }
-		, m_frameBuffer{ m_renderPass->createFrameBuffer( "LightInjection"
+		, m_frameBuffer{ m_renderPass->createFrameBuffer( getName()
 			, VkExtent2D{ gridSize, gridSize }
 			, {
 				result[LpvTexture::eR].getTexture()->getDefaultView().getTargetView(),
@@ -618,7 +625,7 @@ namespace castor3d
 		timer.beginPass( cmd, index );
 		cmd.beginDebugBlock(
 			{
-				"Lighting - Light Injection",
+				"Lighting - " + getName(),
 				castor3d::makeFloatArray( m_engine.getNextRainbowColour() ),
 			} );
 		cmd.beginRenderPass( *m_renderPass

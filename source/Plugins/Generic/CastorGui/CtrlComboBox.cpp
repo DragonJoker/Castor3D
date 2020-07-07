@@ -99,6 +99,12 @@ namespace CastorGui
 	{
 	}
 
+	void ComboBoxCtrl::setTextMaterial( castor3d::MaterialSPtr p_material )
+	{
+		m_choices->setTextMaterial( p_material );
+		m_expand->setTextMaterial( p_material );
+	}
+
 	void ComboBoxCtrl::setSelectedItemBackgroundMaterial( MaterialSPtr p_material )
 	{
 		m_choices->setSelectedItemBackgroundMaterial( p_material );
@@ -216,7 +222,7 @@ namespace CastorGui
 		} );
 
 		TextOverlaySPtr text = m_text.lock();
-		text->setMaterial( getForegroundMaterial() );
+		text->setMaterial( getTextMaterial() );
 		text->setPixelSize( Size( getSize().getWidth() - getSize().getHeight(), getSize().getHeight() ) );
 
 		if ( !text->getFontTexture() || !text->getFontTexture()->getFont() )

@@ -201,6 +201,7 @@ namespace castor3d
 				createInfo->subresourceRange.layerCount = image.getDimensions().depth;
 			}
 
+			createInfo->subresourceRange.levelCount = 1u;
 			m_targetView = image.createView( debugName
 				, createInfo );
 		}

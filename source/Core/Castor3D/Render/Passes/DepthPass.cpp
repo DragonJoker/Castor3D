@@ -54,8 +54,8 @@ namespace castor3d
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_CLEAR,
 				VK_ATTACHMENT_STORE_OP_STORE,
-				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-				VK_ATTACHMENT_STORE_OP_DONT_CARE,
+				VK_ATTACHMENT_LOAD_OP_CLEAR,
+				VK_ATTACHMENT_STORE_OP_STORE,
 				VK_IMAGE_LAYOUT_UNDEFINED,
 				VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
 			},
@@ -137,10 +137,12 @@ namespace castor3d
 			, *m_frameBuffer
 			, clearValues
 			, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
+
 		if ( hasNodes() )
 		{
 			m_nodesCommands->executeCommands( { getCommandBuffer() } );
 		}
+
 		m_nodesCommands->endRenderPass();
 		timerBlock->endPass( *m_nodesCommands );
 		m_nodesCommands->endDebugBlock();
@@ -465,7 +467,8 @@ namespace castor3d
 				{
 					auto texCoord = writer.declLocale( "texCoord"
 						, inTexture );
-					utils.computeGeometryMapsContributions( flags
+					utils.computeGeometryMapsContributions( flags.textures
+						, flags.passFlags
 						, textureConfigs
 						, c3d_textureConfig
 						, c3d_maps

@@ -887,7 +887,7 @@ namespace castor3d
 		getDevice().graphicsQueue->submit( { *m_commandBuffers[resources->imageIndex] }
 			, { *resources->imageAvailableSemaphore, target->getSemaphore() }
 			, { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT }
-			, { *resources->finishedRenderingSemaphore }
+			, {}
 			, resources->fence.get() );
 		resources->fence->wait( ashes::MaxTimeout );
 	}
@@ -897,8 +897,7 @@ namespace castor3d
 		try
 		{
 			getDevice().graphicsQueue->present( *m_swapChain
-				, resources->imageIndex
-				, *resources->finishedRenderingSemaphore );
+				, resources->imageIndex );
 		}
 		catch ( ashes::Exception & exc )
 		{

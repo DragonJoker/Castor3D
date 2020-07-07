@@ -8,6 +8,8 @@ See LICENSE file in root folder
 
 #include "Castor3D/Scene/Light/LightModule.hpp"
 
+#include <CastorUtils/Graphics/Size.hpp>
+
 namespace castor3d
 {
 	/**@name Render */
@@ -58,6 +60,17 @@ namespace castor3d
 	VkClearValue getClearValue( LpTexture texture );
 	VkImageUsageFlags getUsageFlags( LpTexture texture );
 	VkBorderColor getBorderColor( LpTexture texture );
+	inline uint32_t getMipLevels( LpTexture texture
+		, castor::Size const & size )
+	{
+		return 1u;
+	}
+	inline uint32_t getMipLevels( LpTexture texture
+		, VkExtent3D const & size )
+	{
+		return getMipLevels( texture
+			, castor::Size{ size.width, size.height } );
+	}
 	/**
 	*\~english
 	*\brief

@@ -106,8 +106,7 @@ namespace castor3d
 			cuT( "GPResult" ),
 			{ &depthTexture, nullptr, nullptr, nullptr, nullptr, &velocityTexture },
 			0u,
-			{ depthTexture.getTexture()->getDimensions().width, depthTexture.getTexture()->getDimensions().height },
-			1u,
+			castor::Size{ depthTexture.getTexture()->getDimensions().width, depthTexture.getTexture()->getDimensions().height },
 		}
 	{
 		initialise();

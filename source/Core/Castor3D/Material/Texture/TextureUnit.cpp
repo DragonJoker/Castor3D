@@ -152,7 +152,6 @@ namespace castor3d
 
 	TextureUnit::TextureUnit( Engine & engine )
 		: OwnedBy< Engine >( engine )
-		, m_autoMipmaps{ false }
 		, m_changed{ false }
 		, m_sampler{ engine.getDefaultSampler() }
 		, m_descriptor

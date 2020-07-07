@@ -365,8 +365,8 @@ namespace Bloom
 		{
 			result.emplace_back( device
 				, format
-				, srcImage.getLayer2DView( i ).getSampledView()
-				, dstImage.getLayer2DView( i ).getTargetView()
+				, srcImage.getMipView( i ).getSampledView()
+				, dstImage.getMipView( i ).getTargetView()
 				, renderPass
 				, descriptorPool
 				, pipelineLayout

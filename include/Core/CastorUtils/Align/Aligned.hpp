@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Align/AlignModule.hpp"
 
-#include "CastorUtils/Miscellaneous/Utils.hpp"
+#include <stdexcept>
 
 namespace castor
 {
@@ -58,7 +58,7 @@ namespace castor
 
 		void * operator new( size_t size )
 		{
-			void * storage = castor::alignedAlloc( AlignValue, size );
+			void * storage = alignedAlloc( AlignValue, size );
 
 			if ( !storage )
 			{
@@ -70,7 +70,7 @@ namespace castor
 
 		void * operator new[]( size_t size )
 		{
-			void * storage = castor::alignedAlloc( AlignValue, size );
+			void * storage = alignedAlloc( AlignValue, size );
 
 			if ( !storage )
 			{
@@ -82,17 +82,17 @@ namespace castor
 
 		void * operator new( size_t size, std::nothrow_t )
 		{
-			return castor::alignedAlloc( AlignValue, size );
+			return alignedAlloc( AlignValue, size );
 		}
 
 		void operator delete( void * memory )
 		{
-			castor::alignedFree( memory );
+			alignedFree( memory );
 		}
 
 		void operator delete[]( void * memory )
 		{
-			castor::alignedFree( memory );
+			alignedFree( memory );
 		}
 	};
 
@@ -104,7 +104,7 @@ namespace castor
 
 		void * operator new( size_t size )
 		{
-			void * storage = castor::alignedAlloc( AlignValue, size );
+			void * storage = alignedAlloc( AlignValue, size );
 
 			if ( !storage )
 			{
@@ -116,7 +116,7 @@ namespace castor
 
 		void * operator new[]( size_t size )
 		{
-			void * storage = castor::alignedAlloc( AlignValue, size );
+			void * storage = alignedAlloc( AlignValue, size );
 
 			if ( !storage )
 			{
@@ -128,17 +128,17 @@ namespace castor
 
 		void * operator new( size_t size, std::nothrow_t )
 		{
-			return castor::alignedAlloc( AlignValue, size );
+			return alignedAlloc( AlignValue, size );
 		}
 
 		void operator delete( void * memory )
 		{
-			castor::alignedFree( memory );
+			alignedFree( memory );
 		}
 
 		void operator delete[]( void * memory )
 		{
-			castor::alignedFree( memory );
+			alignedFree( memory );
 		}
 	};
 }

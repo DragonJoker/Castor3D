@@ -37,9 +37,9 @@
 #include <ShaderWriter/Source.hpp>
 
 #if !defined( NDEBUG )
-#	define DISPLAY_DEBUG 1
+#	define C3D_DebugQuads 0
 #else
-#	define DISPLAY_DEBUG 0
+#	define C3D_DebugQuads 0
 #endif
 
 using namespace castor;
@@ -766,6 +766,7 @@ namespace castor3d
 		mainBuilder.resultTexture( m_combinedFrameBuffer.colourTexture.getTexture() );
 		mainBuilder.texcoordConfig( RenderQuadConfig::Texcoord{} );
 
+#if C3D_DebugQuads
 		for ( auto & intermediate : m_intermediates )
 		{
 			m_combineQuads.emplace_back( CombinePassBuilder{ mainBuilder }
@@ -777,8 +778,18 @@ namespace castor3d
 					, m_combinePxl
 					, m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView().getSampledView()
 					, intermediate.view ) );
-
 		}
+#else
+		m_combineQuads.emplace_back( CombinePassBuilder{ mainBuilder }
+			.build( *getEngine()
+				, "Target"
+				, getPixelFormat()
+				, extent
+				, m_combineVtx
+				, m_combinePxl
+				, m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView().getSampledView()
+				, m_intermediates.begin()->view ) );
+#endif
 	}
 
 	void RenderTarget::doRender( RenderInfo & info
@@ -915,8 +926,12 @@ namespace castor3d
 
 	ashes::Semaphore const & RenderTarget::doCombine( ashes::Semaphore const & toWait )
 	{
+#if C3D_DebugQuads
 		auto technique = this->getTechnique();
 		auto & debugConfig = technique->getDebugConfig();
 		return m_combineQuads[debugConfig.debugIndex]->combine( toWait );
+#else
+		return m_combineQuads[0u]->combine( toWait );
+#endif
 	}
 }

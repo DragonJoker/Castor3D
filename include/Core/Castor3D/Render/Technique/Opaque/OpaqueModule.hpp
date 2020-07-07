@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/Technique/TechniqueModule.hpp"
 
+#include <CastorUtils/Graphics/Size.hpp>
+
 namespace castor3d
 {
 	/**@name Render */
@@ -40,6 +42,10 @@ namespace castor3d
 	VkClearValue getClearValue( DsTexture texture );
 	VkImageUsageFlags getUsageFlags( DsTexture texture );
 	VkBorderColor getBorderColor( DsTexture texture );
+	inline uint32_t getMipLevels( DsTexture texture, castor::Size const & size )
+	{
+		return 1u;
+	}
 	/*
 	*\~english
 	*\brief

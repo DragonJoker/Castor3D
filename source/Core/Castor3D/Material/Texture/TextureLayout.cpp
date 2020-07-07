@@ -555,10 +555,12 @@ namespace castor3d
 			, uint32_t mipLevels )
 		{
 			castor::PxBufferBaseSPtr buffer;
+			ImageLayout layout;
 
 			if ( castor::File::fileExists( folder / relative ) )
 			{
 				auto image = engine.getImageLoader().load( name, folder / relative );
+				layout = image.getLayout();
 				buffer = image.getPixels();
 			}
 
@@ -568,7 +570,7 @@ namespace castor3d
 			}
 
 			buffer = adaptBuffer( buffer, mipLevels );
-			return castor::Image{ name, ImageLayout{ *buffer }, buffer };
+			return castor::Image{ name, ImageLayout{ layout.type, *buffer }, buffer };
 		}
 	}
 
@@ -788,7 +790,7 @@ namespace castor3d
 				{
 					0u,
 					*m_texture,
-					( m_info->extent.height > 1u
+					( ( m_info->extent.height > 1u || m_image.getLayout().type == ImageLayout::e2D )
 						? VK_IMAGE_VIEW_TYPE_2D
 						: VK_IMAGE_VIEW_TYPE_1D ),
 					m_info->format,
@@ -876,7 +878,8 @@ namespace castor3d
 			commandBuffer->begin();
 			commandBuffer->beginDebugBlock( { getName() + " Mipmaps Generation"
 				, makeFloatArray( getRenderSystem()->getEngine()->getNextRainbowColour() ) } );
-			m_texture->generateMipmaps( *commandBuffer );
+			m_texture->generateMipmaps( *commandBuffer
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 			commandBuffer->endDebugBlock();
 			commandBuffer->end();
 			device.transferQueue->submit( *commandBuffer, nullptr );

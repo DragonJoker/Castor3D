@@ -13,6 +13,8 @@
 #undef max
 #undef abs
 
+#define CU_UseAnsiCode 0
+
 namespace castor
 {
 	class ConsoleHandle
@@ -101,7 +103,7 @@ namespace castor
 			if ( ::AllocConsole() )
 			{
 				m_allocated = true;
-				doInitialiseConsole( INVALID_HANDLE_VALUE );
+				doInitialiseConsole();
 			}
 			else
 			{
@@ -109,7 +111,7 @@ namespace castor
 
 				if ( lastError == ERROR_ACCESS_DENIED )
 				{
-					doInitialiseConsole( ::GetStdHandle( STD_OUTPUT_HANDLE ) );
+					doInitialiseConsole();
 				}
 				else
 				{
@@ -120,8 +122,6 @@ namespace castor
 
 		virtual ~DebugConsole()
 		{
-			m_handle.cleanup();
-
 			if ( m_allocated )
 			{
 				::FreeConsole();
@@ -130,6 +130,33 @@ namespace castor
 
 		void beginLog( LogType logLevel )
 		{
+#if CU_UseAnsiCode
+			switch ( logLevel )
+			{
+			case LogType::eTrace:
+				m_header = cuT( "[36m" );
+				break;
+
+			case LogType::eDebug:
+				m_header = cuT( "[1;36m" );
+				break;
+
+			case LogType::eInfo:
+				m_header = cuT( "[0m" );
+				break;
+
+			case LogType::eWarning:
+				m_header = cuT( "[33m" );
+				break;
+
+			case LogType::eError:
+				m_header = cuT( "[31m" );
+				break;
+
+			default:
+				break;
+			}
+#else
 			WORD attributes{};
 
 			switch ( logLevel )
@@ -155,28 +182,54 @@ namespace castor
 				break;
 			}
 
-			m_handle.setAttributes( attributes );
+			::SetConsoleTextAttribute( m_handle, attributes );
+#endif
 		}
 
 		void print( String const & toLog, bool newLine )
 		{
-			m_handle.writeText( toLog, newLine );
-		}
-
-	private:
-		void doInitialiseConsole( HANDLE handle )
-		{
-			if ( m_handle.initialise( handle ) )
+			if ( ::IsDebuggerPresent() )
 			{
-				FILE * dump;
-				freopen_s( &dump, "conout$", "w", stdout );
-				freopen_s( &dump, "conout$", "w", stderr );
+				int length = MultiByteToWideChar( CP_UTF8, 0u, toLog.c_str(), -1, nullptr, 0u );
+
+				if ( length > 0 )
+				{
+					std::vector< wchar_t > buffer( size_t( length + 1 ), wchar_t{} );
+					MultiByteToWideChar( CP_UTF8, 0u, toLog.c_str(), -1, buffer.data(), length );
+					std::wstring converted{ buffer.begin(), buffer.end() };
+					::OutputDebugStringW( converted.c_str() );
+				}
+
+				if ( newLine )
+				{
+					::OutputDebugStringW( L"\n" );
+				}
+			}
+
+#if CU_UseAnsiCode
+			printf( "%s%s", m_header.c_str(), toLog.c_str() );
+#else
+			printf( "%s", toLog.c_str() );
+#endif
+
+			if ( newLine )
+			{
+				printf( "\n" );
 			}
 		}
 
 	private:
-		ConsoleHandle m_handle;
+		void doInitialiseConsole()
+		{
+			FILE * dump;
+			( void )freopen_s( &dump, "conout$", "w", stdout );
+			( void )freopen_s( &dump, "conout$", "w", stderr );
+			m_handle = ::GetStdHandle( STD_OUTPUT_HANDLE );
+		}
+
+	private:
 		bool m_allocated{ false };
+		HANDLE m_handle{ INVALID_HANDLE_VALUE };
 	};
 
 	class ReleaseConsole
@@ -239,7 +292,6 @@ namespace castor
 		}
 
 	private:
-		ConsoleHandle m_handle;
 		bool m_allocated{ false };
 	};
 

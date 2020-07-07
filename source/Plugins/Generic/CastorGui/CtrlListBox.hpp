@@ -80,6 +80,11 @@ namespace CastorGui
 		 */
 		virtual ~ListBoxCtrl();
 
+		/** sets the text material.
+		 *\param[in]	p_material	The new value.
+		 */
+		void setTextMaterial( castor3d::MaterialSPtr p_material );
+
 		/** sets the background colour for selected item
 		 *\param[in]	colour		The new value
 		 */
@@ -150,6 +155,14 @@ namespace CastorGui
 			return m_selected;
 		}
 
+		/**
+		*\return	The text material
+		*/
+		inline castor3d::MaterialSPtr getTextMaterial()const
+		{
+			return m_textMaterial.lock();
+		}
+
 		/** Retrieves the background colour for selected item
 		 *\return		The value
 		 */
@@ -213,12 +226,14 @@ namespace CastorGui
 		 *\param[in]	value		The control label
 		 *\return		The static control.
 		 */
-		StaticCtrlSPtr doCreateItemCtrl( castor::String const & value );
+		StaticCtrlSPtr doCreateItemCtrl( castor::String const & value
+			, uint32_t itemIndex );
 
 		/** Creates a sub-control, and it's Castor3D counterpart.
 		 *\param[in]	value		The control label
 		 */
-		void doCreateItem( castor::String const & value );
+		void doCreateItem( castor::String const & value
+			, uint32_t itemIndex );
 
 		/** Recomputes the items positions, according to their position in the items array
 		 */
@@ -295,6 +310,8 @@ namespace CastorGui
 		StaticCtrlWPtr m_selectedItem;
 		//! All the items.
 		std::vector< StaticCtrlSPtr > m_items;
+		//! The text material.
+		castor3d::MaterialWPtr m_textMaterial;
 		//! The background colour, for normal item
 		castor3d::MaterialWPtr m_itemBackgroundMaterial;
 		//! The background colour, for highlighted item

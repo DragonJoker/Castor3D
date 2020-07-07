@@ -17,14 +17,14 @@ using namespace castor3d;
 
 namespace CastorGui
 {
-	EditCtrl::EditCtrl( String const & p_name
+	EditCtrl::EditCtrl( String const & name
 		, Engine & engine
-		, ControlRPtr p_parent
-		, uint32_t p_id )
-		: EditCtrl( p_name
+		, ControlRPtr parent
+		, uint32_t id )
+		: EditCtrl( name
 			, engine
-			, p_parent
-			, p_id
+			, parent
+			, id
 			, String()
 			, Position()
 			, Size()
@@ -33,28 +33,27 @@ namespace CastorGui
 	{
 	}
 
-	EditCtrl::EditCtrl( String const & p_name
+	EditCtrl::EditCtrl( String const & name
 		, Engine & engine
-		, ControlRPtr p_parent
-		, uint32_t p_id
-		, String const & p_caption
-		, Position const & p_position
-		, Size const & p_size
-		, uint32_t p_style
-		, bool p_visible )
+		, ControlRPtr parent
+		, uint32_t id
+		, String const & caption
+		, Position const & position
+		, Size const & size
+		, uint32_t style
+		, bool visible )
 		: Control( ControlType::eEdit
-			, p_name
+			, name
 			, engine
-			, p_parent
-			, p_id
-			, p_position
-			, p_size
-			, p_style
-			, p_visible )
-		, m_caption( p_caption )
-		, m_caretIt( p_caption.end() )
+			, parent
+			, id
+			, position
+			, size
+			, style
+			, visible )
+		, m_caption( caption )
+		, m_caretIt( m_caption.end() )
 		, m_active( false )
-		, m_multiLine( false )
 	{
 		m_caretIt = m_caption.end();
 		m_cursor = MouseCursor::eText;
@@ -94,8 +93,8 @@ namespace CastorGui
 			, nullptr
 			, getBackground()->getOverlay().shared_from_this() )->getTextOverlay();
 		text->setPixelSize( getSize() );
-		text->setVAlign( VAlign::eBottom );
-		text->setVisible( p_visible );
+		text->setVAlign( VAlign::eCenter );
+		text->setVisible( visible );
 		m_text = text;
 
 		doUpdateStyle();
@@ -115,10 +114,32 @@ namespace CastorGui
 		}
 	}
 
-	void EditCtrl::doCreate()
+	void EditCtrl::setTextMaterial( MaterialSPtr p_material )
 	{
 		TextOverlaySPtr text = m_text.lock();
-		text->setMaterial( getForegroundMaterial() );
+		m_textMaterial = p_material;
+
+		if ( text )
+		{
+			text->setMaterial( p_material );
+			text.reset();
+		}
+	}
+
+	void EditCtrl::doCreate()
+	{
+		if ( m_foregroundMaterial.expired() )
+		{
+			m_foregroundMaterial = CreateMaterial( getEngine(), cuT( "CtrlStatic_FG_" ) + string::toString( getId() ), RgbColour::fromComponents( 1.0, 1.0, 1.0 ) );
+		}
+
+		if ( m_textMaterial.expired() )
+		{
+			m_textMaterial = m_foregroundMaterial.lock();
+		}
+
+		TextOverlaySPtr text = m_text.lock();
+		text->setMaterial( getTextMaterial() );
 
 		if ( !text->getFontTexture() || !text->getFontTexture()->getFont() )
 		{
@@ -162,13 +183,6 @@ namespace CastorGui
 
 	void EditCtrl::doSetForegroundMaterial( MaterialSPtr p_material )
 	{
-		TextOverlaySPtr text = m_text.lock();
-
-		if ( text )
-		{
-			text->setMaterial( p_material );
-			text.reset();
-		}
 	}
 
 	void EditCtrl::doSetCaption( String const & p_value )
@@ -198,6 +212,7 @@ namespace CastorGui
 			if ( isMultiLine() )
 			{
 				text->setTextWrappingMode( TextWrappingMode::eBreak );
+				text->setVAlign( VAlign::eTop );
 			}
 		}
 	}

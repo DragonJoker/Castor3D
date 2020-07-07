@@ -165,8 +165,9 @@ namespace castor3d
 
 			frameBuffer.blur = std::make_unique< GaussianBlur >( *getEngine()
 				, debugName
-				, frameBuffer.varianceView
+				, *variance.layers[cascade].view
 				, 5u );
+			frameBuffer.blurCommands = frameBuffer.blur->getCommands( true );
 		}
 	}
 
@@ -206,6 +207,7 @@ namespace castor3d
 	{
 		auto & myTimer = m_passes[0].pass->getTimer();
 		auto timerBlock = myTimer.start();
+		auto & variance = m_result[SmTexture::eVariance].getTexture()->getArray2D();
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 		m_commandBuffer->beginDebugBlock(
 			{
@@ -234,6 +236,7 @@ namespace castor3d
 			m_commandBuffer->executeCommands( { pass.pass->getCommandBuffer() } );
 			m_commandBuffer->endRenderPass();
 			timerBlock->endPass( *m_commandBuffer );
+
 			m_commandBuffer->endDebugBlock();
 			pass.pass->setUpToDate();
 		}
@@ -253,7 +256,13 @@ namespace castor3d
 		{
 			for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
 			{
-				result = &m_frameBuffers[cascade].blur->blur( *result );
+				auto & blurCommands = m_frameBuffers[cascade].blurCommands;
+				device.graphicsQueue->submit( *blurCommands.commandBuffer
+					, *result
+					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+					, *blurCommands.semaphore
+					, nullptr );
+				result = blurCommands.semaphore.get();
 			}
 		}
 		return *result;

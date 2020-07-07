@@ -415,8 +415,6 @@ namespace GuiCommon
 			if ( File::fileExists( path ) )
 			{
 				// Absolute path
-				unit->setAutoMipmaps( true );
-				
 				ashes::ImageCreateInfo image
 				{
 					0u,

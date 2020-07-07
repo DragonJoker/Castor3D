@@ -315,6 +315,23 @@ namespace castor3d
 			return *m_defaultView.view;
 		}
 
+		inline MipView const & getDefault()const
+		{
+			return m_defaultView;
+		}
+
+		inline TextureView const & getMipView( size_t level )const
+		{
+			CU_Require( getDefault().levels.size() > level );
+			return *getDefault().levels[level];
+		}
+
+		inline TextureView & getMipView( size_t level )
+		{
+			CU_Require( getDefault().levels.size() > level );
+			return *getDefault().levels[level];
+		}
+
 		inline ArrayView< MipView > const & getArray2D()const
 		{
 			return m_arrayView;

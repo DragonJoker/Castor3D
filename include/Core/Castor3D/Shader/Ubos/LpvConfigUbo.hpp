@@ -39,7 +39,8 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
 		 */
-		explicit LpvConfigUbo( Engine & engine );
+		explicit LpvConfigUbo( Engine & engine
+			, uint32_t index = 0u );
 		/**
 		 *\~english
 		 *\brief		Updates UBO data.

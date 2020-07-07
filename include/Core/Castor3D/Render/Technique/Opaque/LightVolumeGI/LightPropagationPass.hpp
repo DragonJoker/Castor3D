@@ -39,6 +39,7 @@ namespace castor3d
 	{
 	private:
 		LightPropagationPass( Engine & engine
+			, castor::String const & name
 			, uint32_t gridSize
 			, TextureUnit const * geometry
 			, LightVolumePassResult const & injection
@@ -62,6 +63,7 @@ namespace castor3d
 		 *\param[in]	scene			Le tampon de scène.
 		 */
 		C3D_API LightPropagationPass( Engine & engine
+			, castor::String const & name
 			, uint32_t gridSize
 			, LightVolumePassResult const & injection
 			, LightVolumePassResult const & accumulation
@@ -82,6 +84,7 @@ namespace castor3d
 		 *\param[in]	scene			Le tampon de scène.
 		 */
 		C3D_API LightPropagationPass( Engine & engine
+			, castor::String const & name
 			, uint32_t gridSize
 			, TextureUnit const & geometry
 			, LightVolumePassResult const & injection

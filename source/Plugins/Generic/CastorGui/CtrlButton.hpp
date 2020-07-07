@@ -110,6 +110,14 @@ namespace CastorGui
 			return m_caption;
 		}
 
+		/**
+		*\return	The text material
+		*/
+		inline castor3d::MaterialSPtr getTextMaterial()const
+		{
+			return m_textMaterial.lock();
+		}
+
 		/** Connects a function to a button event
 		 *\param[in]	p_event			The event type
 		 *\param[in]	p_function		The function

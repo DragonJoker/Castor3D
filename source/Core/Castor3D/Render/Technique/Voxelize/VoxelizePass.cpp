@@ -117,7 +117,7 @@ namespace castor3d
 			cmd.begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 			cmd.memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
 				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, m_result->getDefaultView().getTargetView().makeGeneralLayout( VK_IMAGE_LAYOUT_UNDEFINED
+				, m_result->getDefaultView().getSampledView().makeGeneralLayout( VK_IMAGE_LAYOUT_UNDEFINED
 					, VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT ) );
 			cmd.beginDebugBlock(
 				{
@@ -291,7 +291,7 @@ namespace castor3d
 				VK_DESCRIPTOR_TYPE_STORAGE_IMAGE,
 				{ {
 					nullptr,
-					m_result->getDefaultView().getTargetView(),
+					m_result->getDefaultView().getSampledView(),
 					VK_IMAGE_LAYOUT_GENERAL,
 				} }
 			} );
@@ -311,7 +311,7 @@ namespace castor3d
 				VK_DESCRIPTOR_TYPE_STORAGE_IMAGE,
 				{ {
 					nullptr,
-					m_result->getDefaultView().getTargetView(),
+					m_result->getDefaultView().getSampledView(),
 					VK_IMAGE_LAYOUT_GENERAL,
 				} }
 			} );

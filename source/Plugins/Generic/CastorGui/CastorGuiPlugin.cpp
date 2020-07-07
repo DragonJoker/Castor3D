@@ -50,6 +50,7 @@ namespace CastorGui
 			addParser( parsers, section, cuT( "pixel_size" ), &parserControlPixelSize, { makeParameter< ParameterType::eSize >() } );
 			addParser( parsers, section, cuT( "pixel_border_size" ), &parserControlPixelBorderSize, { makeParameter< ParameterType::eRectangle >() } );
 			addParser( parsers, section, cuT( "background_material" ), &parserControlBackgroundMaterial, { makeParameter< ParameterType::eName >() } );
+			addParser( parsers, section, cuT( "foreground_material" ), &parserControlForegroundMaterial, { makeParameter< ParameterType::eName >() } );
 			addParser( parsers, section, cuT( "border_material" ), &parserControlBorderMaterial, { makeParameter< ParameterType::eName >() } );
 			addParser( parsers, section, cuT( "border_inner_uv" ), &parserControlBorderInnerUv, { makeParameter< ParameterType::ePoint4D >() } );
 			addParser( parsers, section, cuT( "border_outer_uv" ), &parserControlBorderOuterUv, { makeParameter< ParameterType::ePoint4D >() } );
@@ -108,6 +109,7 @@ namespace CastorGui
 			CreateDefaultParsers( result, uint32_t( GUISection::eListBox ), &parserListBoxEnd );
 			addParser( result, uint32_t( GUISection::eListBox ), cuT( "font" ), &parserListBoxFont, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( GUISection::eListBox ), cuT( "item" ), &parserListBoxItem, { makeParameter< ParameterType::eText >() } );
+			addParser( result, uint32_t( GUISection::eListBox ), cuT( "text_material" ), &parserListBoxTextMaterial, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( GUISection::eListBox ), cuT( "selected_item_background_material" ), &parserListBoxSelectedItemBackgroundMaterial, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( GUISection::eListBox ), cuT( "selected_item_foreground_material" ), &parserListBoxSelectedItemForegroundMaterial, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( GUISection::eListBox ), cuT( "highlighted_item_background_material" ), &parserListBoxHighlightedItemBackgroundMaterial, { makeParameter< ParameterType::eName >() } );
@@ -115,6 +117,7 @@ namespace CastorGui
 			CreateDefaultParsers( result, uint32_t( GUISection::eComboBox ), &parserComboBoxEnd );
 			addParser( result, uint32_t( GUISection::eComboBox ), cuT( "font" ), &parserComboBoxFont, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( GUISection::eComboBox ), cuT( "item" ), &parserComboBoxItem, { makeParameter< ParameterType::eText >() } );
+			addParser( result, uint32_t( GUISection::eComboBox ), cuT( "text_material" ), &parserComboBoxTextMaterial, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( GUISection::eComboBox ), cuT( "selected_item_background_material" ), &parserComboBoxSelectedItemBackgroundMaterial, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( GUISection::eComboBox ), cuT( "selected_item_foreground_material" ), &parserComboBoxSelectedItemForegroundMaterial, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( GUISection::eComboBox ), cuT( "highlighted_item_background_material" ), &parserComboBoxHighlightedItemBackgroundMaterial, { makeParameter< ParameterType::eName >() } );
@@ -124,9 +127,11 @@ namespace CastorGui
 			addParser( result, uint32_t( GUISection::eStatic ), cuT( "caption" ), &parserStaticCaption, { makeParameter< ParameterType::eText >() } );
 			addParser( result, uint32_t( GUISection::eStatic ), cuT( "horizontal_align" ), &parserStaticHAlign, { makeParameter< ParameterType::eCheckedText >( mapHAligns ) } );
 			addParser( result, uint32_t( GUISection::eStatic ), cuT( "vertical_align" ), &parserStaticVAlign, { makeParameter< ParameterType::eCheckedText >( mapVAligns ) } );
+			addParser( result, uint32_t( GUISection::eStatic ), cuT( "text_material" ), &parserStaticTextMaterial, { makeParameter< ParameterType::eName >() } );
 
 			CreateDefaultParsers( result, uint32_t( GUISection::eEdit ), &parserEditEnd );
 			addParser( result, uint32_t( GUISection::eEdit ), cuT( "font" ), &parserEditFont, { makeParameter< ParameterType::eName >() } );
+			addParser( result, uint32_t( GUISection::eEdit ), cuT( "text_material" ), &parserEditTextMaterial, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( GUISection::eEdit ), cuT( "multiline" ), &parserEditMultiLine, { makeParameter< ParameterType::eBool >() } );
 			addParser( result, uint32_t( GUISection::eEdit ), cuT( "caption" ), &parserEditCaption, { makeParameter< ParameterType::eText >() } );
 

@@ -383,6 +383,11 @@ namespace castor3d
 	void EnvironmentPrefilter::MipRenderCube::registerFrames()
 	{
 		m_commandBuffer->begin();
+		m_commandBuffer->beginDebugBlock(
+			{
+				"Prefiltering Environment map",
+				makeFloatArray( m_device.renderSystem.getEngine()->getNextRainbowColour() ),
+			} );
 
 		for ( uint32_t face = 0u; face < 6u; ++face )
 		{
@@ -395,6 +400,7 @@ namespace castor3d
 			m_commandBuffer->endRenderPass();
 		}
 
+		m_commandBuffer->endDebugBlock();
 		m_commandBuffer->end();
 	}
 

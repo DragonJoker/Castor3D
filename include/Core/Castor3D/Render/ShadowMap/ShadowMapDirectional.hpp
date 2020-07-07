@@ -83,6 +83,7 @@ namespace castor3d
 			ashes::ImageView positionView;
 			ashes::ImageView fluxView;
 			std::unique_ptr< GaussianBlur > blur;
+			CommandsSemaphore blurCommands{ nullptr, nullptr };
 		};
 		ashes::CommandBufferPtr m_commandBuffer;
 		CameraSPtr m_camera;

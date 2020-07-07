@@ -96,13 +96,19 @@ namespace castor3d
 				, sdw::SampledImageCubeRgba32 const & irradiance
 				, sdw::SampledImageCubeRgba32 const & prefiltered
 				, sdw::SampledImage2DRgba32 const & brdf )const;
-			C3D_API void computeOpacityMapContribution( PipelineFlags const & flags
+			C3D_API void computeColourMapContribution( TextureFlagsArray const & flags
+				, TextureConfigurations const & textureConfigs
+				, sdw::Array< sdw::UVec4 > const & textureConfig
+				, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
+				, sdw::Vec3 const & texCoords
+				, sdw::Vec3 & colour );
+			C3D_API void computeOpacityMapContribution( TextureFlagsArray const & flags
 				, TextureConfigurations const & textureConfigs
 				, sdw::Array< sdw::UVec4 > const & textureConfig
 				, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 				, sdw::Vec3 const & texCoords
 				, sdw::Float & opacity );
-			C3D_API void computeNormalMapContribution( PipelineFlags const & flags
+			C3D_API void computeNormalMapContribution( TextureFlagsArray const & flags
 				, TextureConfigurations const & textureConfigs
 				, sdw::Array< sdw::UVec4 > const & textureConfig
 				, sdw::Vec3 & normal
@@ -112,7 +118,8 @@ namespace castor3d
 				, sdw::Vec3 & tangentSpaceFragPosition
 				, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 				, sdw::Vec3 & texCoords );
-			C3D_API void computeHeightMapContribution( PipelineFlags const & flags
+			C3D_API void computeHeightMapContribution( TextureFlagsArray const & flags
+				, PassFlags const & passFlags
 				, TextureConfigurations const & textureConfigs
 				, sdw::Array< sdw::UVec4 > const & textureConfig
 				, sdw::Vec3 const & tangentSpaceViewPosition
@@ -128,7 +135,8 @@ namespace castor3d
 				, sdw::Float & opacity
 				, sdw::Vec3 & tangentSpaceViewPosition
 				, sdw::Vec3 & tangentSpaceFragPosition );
-			C3D_API void computeGeometryMapsContributions( PipelineFlags const & flags
+			C3D_API void computeGeometryMapsContributions( TextureFlagsArray const & flags
+				, PassFlags const & passFlags
 				, TextureConfigurations const & textureConfigs
 				, sdw::Array< sdw::UVec4 > const & textureConfig
 				, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
@@ -152,7 +160,8 @@ namespace castor3d
 				, sdw::Float & transmittance
 				, sdw::Vec3 & tangentSpaceViewPosition
 				, sdw::Vec3 & tangentSpaceFragPosition );
-			C3D_API void computeCommonMapsContributions( PipelineFlags const & flags
+			C3D_API void computeCommonMapsContributions( TextureFlagsArray const & flags
+				, PassFlags const & passFlags
 				, sdw::Float const & gamma
 				, TextureConfigurations const & textureConfigs
 				, sdw::Array< sdw::UVec4 > const & textureConfig

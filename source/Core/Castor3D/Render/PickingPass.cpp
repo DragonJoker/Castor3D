@@ -864,7 +864,7 @@ namespace castor3d
 				auto material = materials->getBaseMaterial( vtx_material );
 				auto alpha = writer.declLocale( "alpha"
 					, material->m_opacity );
-				utils.computeOpacityMapContribution( flags
+				utils.computeOpacityMapContribution( flags.textures
 					, textureConfigs
 					, c3d_textureConfig
 					, c3d_maps

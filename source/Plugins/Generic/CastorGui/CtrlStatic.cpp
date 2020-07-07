@@ -106,8 +106,13 @@ namespace CastorGui
 			m_foregroundMaterial = CreateMaterial( getEngine(), cuT( "CtrlStatic_FG_" ) + string::toString( getId() ), RgbColour::fromComponents( 1.0, 1.0, 1.0 ) );
 		}
 
+		if ( m_textMaterial.expired() )
+		{
+			m_textMaterial = m_foregroundMaterial.lock();
+		}
+
 		TextOverlaySPtr text = m_text.lock();
-		text->setMaterial( getForegroundMaterial() );
+		text->setMaterial( getTextMaterial() );
 
 		if ( !text->getFontTexture() || !text->getFontTexture()->getFont() )
 		{
@@ -139,18 +144,23 @@ namespace CastorGui
 		}
 	}
 
+	void StaticCtrl::setTextMaterial( castor3d::MaterialSPtr value )
+	{
+		m_textMaterial = value;
+		TextOverlaySPtr text = m_text.lock();
+
+		if ( text )
+		{
+			text->setMaterial( value );
+		}
+	}
+
 	void StaticCtrl::doSetBackgroundMaterial( MaterialSPtr p_material )
 	{
 	}
 
 	void StaticCtrl::doSetForegroundMaterial( MaterialSPtr p_material )
 	{
-		TextOverlaySPtr text = m_text.lock();
-
-		if ( text )
-		{
-			text->setMaterial( p_material );
-		}
 	}
 
 	void StaticCtrl::doSetCaption( String const & p_value )

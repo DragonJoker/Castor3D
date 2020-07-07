@@ -285,9 +285,16 @@ target_link_libraries( ${PROJECT_NAME}
 	PRIVATE
 		${FFMPEG_LIBRARIES}
 )
-target_compile_definitions( ${PROJECT_NAME} PUBLIC
-	${wxWidgets_DEFINITIONS}
+target_compile_definitions( ${PROJECT_NAME}
+	PUBLIC
+		${wxWidgets_DEFINITIONS}
 )
+if ( CASTOR_SAMPLE_CASTOR_VIEWER_RECORDS )
+	target_compile_definitions( ${PROJECT_NAME}
+		PUBLIC
+			GUICOMMON_RECORDS
+	)
+endif ()
 install_target( ${PROJECT_NAME}
 	lib
 	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}

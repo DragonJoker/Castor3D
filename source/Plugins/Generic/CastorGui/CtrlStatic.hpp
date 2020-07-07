@@ -49,27 +49,40 @@ namespace CastorGui
 		*/
 		virtual ~StaticCtrl();
 
-		/** sets the caption font.
+		/** Sets the caption font.
 		*\param[in]	p_font	The new value.
 		*/
-		void setFont( castor::String const & p_font );
+		void setFont( castor::String const & value );
 
-		/** sets the horizontal alignment for the text.
-		*\param[in]	p_align	The new value.
+		/** Sets the horizontal alignment for the text.
+		*\param[in]	value	The new value.
 		*/
-		void setHAlign( castor3d::HAlign p_align );
+		void setHAlign( castor3d::HAlign value );
 
-		/** sets the vertical alignment for the text.
-		*\param[in]	p_align	The new value.
+		/** Sets the vertical alignment for the text.
+		*\param[in]	value	The new value.
 		*/
-		void setVAlign( castor3d::VAlign p_align );
+		void setVAlign( castor3d::VAlign value );
 
-		/** Retrieve the static caption
-		 *\return		The value
+		/** Sets the text material.
+		*\param[in]	value	The new value.
+		*/
+		void setTextMaterial( castor3d::MaterialSPtr value );
+
+		/**
+		*\return	The static caption
 		*/
 		inline castor::String const & getCaption()const
 		{
 			return m_caption;
+		}
+
+		/**
+		*\return	The text material
+		*/
+		inline castor3d::MaterialSPtr getTextMaterial()const
+		{
+			return m_textMaterial.lock();
 		}
 
 	private:
@@ -112,6 +125,8 @@ namespace CastorGui
 	private:
 		//! The static caption
 		castor::String m_caption;
+		//! The font material
+		castor3d::MaterialWPtr m_textMaterial;
 
 	protected:
 		//! The text overlay used to display the caption

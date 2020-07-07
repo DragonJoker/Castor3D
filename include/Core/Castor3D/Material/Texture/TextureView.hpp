@@ -125,6 +125,11 @@ namespace castor3d
 			return m_index;
 		}
 
+		inline VkImageSubresourceRange const & getSubresourceRange()const
+		{
+			return m_info->subresourceRange;
+		}
+
 		inline uint32_t getBaseMipLevel()const
 		{
 			return m_info->subresourceRange.baseMipLevel;

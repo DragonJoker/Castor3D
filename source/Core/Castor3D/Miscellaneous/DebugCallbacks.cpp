@@ -333,7 +333,9 @@ namespace castor3d
 
 		if ( m_callback != VK_NULL_HANDLE )
 		{
-			m_instance.vkDestroyDebugReportCallbackEXT( m_instance, m_callback, nullptr );
+			m_instance.vkDestroyDebugReportCallbackEXT( m_instance
+				, m_callback
+				, m_instance.getAllocationCallbacks() );
 		}
 
 #endif
@@ -341,7 +343,9 @@ namespace castor3d
 
 		if ( m_messenger != VK_NULL_HANDLE )
 		{
-			m_instance.vkDestroyDebugUtilsMessengerEXT( m_instance, m_messenger, nullptr );
+			m_instance.vkDestroyDebugUtilsMessengerEXT( m_instance
+				, m_messenger
+				, m_instance.getAllocationCallbacks() );
 		}
 
 #endif

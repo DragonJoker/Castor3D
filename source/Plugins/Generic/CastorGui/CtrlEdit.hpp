@@ -57,6 +57,11 @@ namespace CastorGui
 		*/
 		void setFont( castor::String const & p_font );
 
+		/** Sets the text material.
+		*\param[in]	value	The new value.
+		*/
+		void setTextMaterial( castor3d::MaterialSPtr value );
+
 		/** Retrieves the caption
 		 *\return		The value
 		 */
@@ -89,6 +94,14 @@ namespace CastorGui
 		bool isMultiLine()const
 		{
 			return castor::checkFlag( getStyle(), EditStyle::eMultiline );
+		}
+
+		/**
+		*\return	The text material
+		*/
+		inline castor3d::MaterialSPtr getTextMaterial()const
+		{
+			return m_textMaterial.lock();
 		}
 
 	private:
@@ -187,6 +200,8 @@ namespace CastorGui
 	private:
 		//! The caption
 		castor::String m_caption;
+		//! The font material
+		castor3d::MaterialWPtr m_textMaterial;
 		//! The caret index in the caption
 		castor::string::utf8::const_iterator m_caretIt;
 		//! The activation status
@@ -195,8 +210,6 @@ namespace CastorGui
 		castor3d::TextOverlayWPtr m_text;
 		//! The edit events signals
 		OnEditEvent m_signals[size_t( EditEvent::eCount )];
-		//! Tells if the Edit is a multiline one.
-		bool m_multiLine;
 	};
 }
 
