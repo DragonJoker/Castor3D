@@ -5,8 +5,9 @@ See LICENSE file in root folder
 #define ___C3D_DeferredStencilPass_H___
 
 #include "PassesModule.hpp"
-
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
+
+#include "Castor3D/Buffer/UniformBuffer.hpp"
 
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Descriptor/DescriptorSet.hpp>

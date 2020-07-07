@@ -137,7 +137,7 @@ namespace CastorGui
 		//! read only combo box
 		eReadOnly = 0x00000001,
 	};
-	CU_ImplementFlags( ComboBoxStyle );
+	CU_ImplementFlags( ComboBoxStyle )
 	/**
 	 *\author		Sylvain DOREMUS
 	 *\date		11/02/2015
@@ -156,7 +156,7 @@ namespace CastorGui
 		//! Words are not cut
 		eWordWrap = 0x00000800,
 	};
-	CU_ImplementFlags( EditStyle );
+	CU_ImplementFlags( EditStyle )
 	/**
 	 *\author		Sylvain DOREMUS
 	 *\date		11/02/2015
@@ -171,7 +171,7 @@ namespace CastorGui
 		// The slider is displaye vertically
 		eVertical = 0x000200000,
 	};
-	CU_ImplementFlags( SliderStyle );
+	CU_ImplementFlags( SliderStyle )
 	/**
 	 *\author		Sylvain DOREMUS
 	 *\date		11/02/2015
@@ -194,7 +194,7 @@ namespace CastorGui
 		//! The static's text is aligned on bottom
 		eVAlignBottom = 0x40000000,
 	};
-	CU_ImplementFlags( StaticStyle );
+	CU_ImplementFlags( StaticStyle )
 	/**
 	 *\author		Sylvain DOREMUS
 	 *\date		23/05/2012
