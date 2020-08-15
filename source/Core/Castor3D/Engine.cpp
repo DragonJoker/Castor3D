@@ -228,10 +228,7 @@ namespace castor3d
 
 	void Engine::initialise( uint32_t wanted, bool threaded )
 	{
-#if !defined( NDEBUG )
 		Debug::initialise();
-#endif
-
 		m_threaded = threaded;
 
 		if ( m_renderSystem )
@@ -357,9 +354,7 @@ namespace castor3d
 			m_techniqueCache->clear();
 		}
 
-#if !defined( NDEBUG )
 		Debug::cleanup();
-#endif
 	}
 
 	bool Engine::loadRenderer( String const & type )

@@ -313,6 +313,13 @@ namespace castor3d
 
 	void DebugOverlays::cleanup()
 	{
+		if ( m_totalTime > 0_ns )
+		{
+			log::info << "Counts:\n"
+				<< "  Average Frame Time: " << ( std::chrono::duration_cast< castor::Microseconds >( m_averageTime ).count() / 1000.0f ) << " ms\n"
+				<< "  Average Frames per second: " <<  m_averageFps << std::endl;
+		}
+
 		m_debugPanel.reset();
 	}
 
@@ -377,13 +384,14 @@ namespace castor3d
 	castor::Microseconds DebugOverlays::endFrame()
 	{
 		m_totalTime = m_frameTimer.getElapsed() + m_externalTime;
+		m_framesTimes[m_frameIndex] = m_totalTime;
+		m_averageTime = std::accumulate( m_framesTimes.begin(), m_framesTimes.end(), 0_ns ) / m_framesTimes.size();
+		m_averageFps = 1000000.0f / std::chrono::duration_cast< castor::Microseconds >( m_averageTime ).count();
+		auto total = std::chrono::duration_cast< castor::Microseconds >( m_totalTime );
+		m_fps = 1000000.0f / total.count();
 
 		if ( m_visible )
 		{
-			m_framesTimes[m_frameIndex] = m_totalTime;
-			m_averageTime = std::accumulate( m_framesTimes.begin(), m_framesTimes.end(), 0_ns ) / m_framesTimes.size();
-			m_averageFps = 1000000.0f / std::chrono::duration_cast< std::chrono::microseconds >( m_averageTime ).count();
-			m_fps = 1000000.0f / std::chrono::duration_cast< std::chrono::microseconds >( m_totalTime ).count();
 			m_gpuTotalTime = 0_ns;
 			m_gpuClientTime = 0_ns;
 
@@ -397,27 +405,16 @@ namespace castor3d
 			//m_gpuClientTime = m_gpuTime - m_gpuTotalTime;
 			m_debugPanel->update();
 			getEngine()->getRenderSystem()->resetGpuTime();
-
-			m_frameIndex = ++m_frameIndex % FRAME_SAMPLES_COUNT;
-			m_frameTimer.getElapsed();
 		}
 
-#if defined( NDEBUG )
-
-		auto total = std::chrono::duration_cast< std::chrono::microseconds >( m_totalTime );
 		fprintf( stdout
 			, "\r%0.7f ms, %0.7f fps"
 			, total.count() / 1000.0f
-			, ( 1000000.0 / total.count() ) );
+			, m_fps );
+		m_frameIndex = ++m_frameIndex % FRAME_SAMPLES_COUNT;
+		m_frameTimer.getElapsed();
 
-#else
-
-		std::cout << "\rTime: " << std::setw( 7 ) << m_totalTime;
-		std::cout << " - FPS: " << std::setw( 7 ) << std::setprecision( 4 ) << ( 1000000.0 / std::chrono::duration_cast< std::chrono::microseconds >( m_totalTime ).count() );
-
-#endif
-
-		return std::chrono::duration_cast< castor::Microseconds >( m_totalTime );
+		return total;
 	}
 
 	void DebugOverlays::endGpuTask()

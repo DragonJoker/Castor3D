@@ -39,6 +39,7 @@ namespace castor3d
 
 	RenderLoop::~RenderLoop()
 	{
+		m_debugOverlays->cleanup();
 		m_debugOverlays.reset();
 	}
 
