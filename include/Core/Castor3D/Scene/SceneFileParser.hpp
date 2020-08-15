@@ -256,6 +256,7 @@ namespace castor3d
 		UInt32StrMap m_mapBlendFactors;
 		UInt32StrMap m_mapTypes;
 		UInt32StrMap m_mapComparisonFuncs;
+		UInt32StrMap m_mapParallaxOcclusionModes;
 		UInt32StrMap m_mapTextureArguments;
 		UInt32StrMap m_mapTextureBlendModes;
 		UInt32StrMap m_mapTextureChannels;
