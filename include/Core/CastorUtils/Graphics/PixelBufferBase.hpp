@@ -33,7 +33,8 @@ namespace castor
 			, uint32_t layers = 1u
 			, uint32_t levels = 1u
 			, uint8_t const * buffer = nullptr
-			, PixelFormat bufferFormat = PixelFormat::eR8G8B8A8_UNORM );
+			, PixelFormat bufferFormat = PixelFormat::eR8G8B8A8_UNORM
+			, uint32_t bufferAlign = 0u );
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
@@ -71,15 +72,19 @@ namespace castor
 		 *\~english
 		 *\brief		Initialises the data buffer to the given one
 		 *\remarks		Conversions are made if needed
-		 *\param[in]	buffer		Data buffer
-		 *\param[in]	pixelFormat	Data buffer's pixels format
+		 *\param[in]	buffer			Data buffer.
+		 *\param[in]	bufferFormat	Data buffer's pixels format.
+		 *\param[in]	bufferAlign		Buffer data's alignment.
 		 *\~french
 		 *\brief		Initialise le buffer de données à celui donné
 		 *\remarks		Des conversions sont faites si besoin est
-		 *\param[in]	buffer		Buffer de données
-		 *\param[in]	pixelFormat	Format des pixels du buffer de données
+		 *\param[in]	buffer			Buffer de données.
+		 *\param[in]	bufferFormat	Format des pixels du buffer de données.
+		 *\param[in]	bufferAlign		Alignement des données du buffer.
 		 */
-		CU_API void initialise( uint8_t const * buffer, PixelFormat pixelFormat );
+		CU_API void initialise( uint8_t const * buffer
+			, PixelFormat bufferFormat
+			, uint32_t bufferAlign = 0u );
 		/**
 		 *\~english
 		 *\brief		Initialises the data buffer at the given size
@@ -107,19 +112,6 @@ namespace castor
 		 *\param[in]	pixelBuffer	Le buffer à échanger
 		 */
 		CU_API void swap( PxBufferBase & pixelBuffer );
-		/**
-		 *\~english
-		 *\brief		Converts and assigns a data buffer to this buffer
-		 *\param[in]	buffer		Data buffer
-		 *\param[in]	pixelFormat	Data buffer's pixels format
-		 *\return
-		 *\~french
-		 *\brief		Convertit et assigne les données du buffer donné à ce buffer
-		 *\param[in]	buffer		Buffer de données
-		 *\param[in]	pixelFormat	Format des pixels du buffer de données
-		 *\return
-		 */
-		CU_API void assign( std::vector< uint8_t > const & buffer, PixelFormat pixelFormat );
 		CU_API void update( uint32_t layers, uint32_t levels );
 		/**
 		 *\~english
@@ -246,7 +238,8 @@ namespace castor
 			, uint32_t levels
 			, PixelFormat wantedFormat
 			, uint8_t const * buffer = nullptr
-			, PixelFormat bufferFormat = PixelFormat::eR8G8B8A8_UNORM );
+			, PixelFormat bufferFormat = PixelFormat::eR8G8B8A8_UNORM
+			, uint32_t bufferAlign = 0u );
 		/**
 		 *\~english
 		 *\brief		Creates a buffer with the given data
@@ -266,14 +259,16 @@ namespace castor
 		inline static PxBufferBaseSPtr create( Size const & size
 			, PixelFormat wantedFormat
 			, uint8_t const * buffer = nullptr
-			, PixelFormat bufferFormat = PixelFormat::eR8G8B8A8_UNORM )
+			, PixelFormat bufferFormat = PixelFormat::eR8G8B8A8_UNORM
+			, uint32_t bufferAlign = 0u )
 		{
 			return create( size
 				, 1u
 				, 1u
 				, wantedFormat
 				, buffer
-				, bufferFormat );
+				, bufferFormat
+				, bufferAlign );
 		}
 
 	protected:

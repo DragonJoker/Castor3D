@@ -135,7 +135,12 @@ namespace castor3d
 			return m_info->subresourceRange.baseMipLevel;
 		}
 
-		inline bool needsMipmapsGeneration()const
+		inline void setMipmapsGenerationNeeded( bool value )
+		{
+			m_needsMipmapsGeneration = value;
+		}
+
+		inline bool isMipmapsGenerationNeeded()const
 		{
 			return m_needsMipmapsGeneration;
 		}

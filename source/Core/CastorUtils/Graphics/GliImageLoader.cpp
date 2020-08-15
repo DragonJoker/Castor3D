@@ -16,7 +16,7 @@ namespace castor
 		{
 			return PixelFormat( format );
 		}
-		
+
 		ImageLayout::Type convert( gli::target target )
 		{
 			switch ( target )
@@ -72,16 +72,18 @@ namespace castor
 		, PxBufferBaseSPtr & buffer )const
 	{
 		gli::texture texture;
+		bool flipped = false;
 
-		if ( string::upperCase( imageFormat ).find( cuT( "DDS" ) ) != String::npos )
+		if ( imageFormat.find( cuT( "dds" ) ) != String::npos )
 		{
 			texture = gli::load_dds( reinterpret_cast< char const * >( data ), size );
+			flipped = true;
 		}
-		else if ( string::upperCase( imageFormat ).find( cuT( "KMG" ) ) != String::npos )
+		else if ( imageFormat.find( cuT( "kmg" ) ) != String::npos )
 		{
 			texture = gli::load_kmg( reinterpret_cast< char const * >( data ), size );
 		}
-		else if ( string::upperCase( imageFormat ).find( cuT( "KTX" ) ) != String::npos )
+		else if ( imageFormat.find( cuT( "ktx" ) ) != String::npos )
 		{
 			texture = gli::load_ktx( reinterpret_cast< char const * >( data ), size );
 		}
@@ -97,12 +99,20 @@ namespace castor
 		result.extent = { texture.extent().x, texture.extent().y, texture.extent().z };
 		result.layers = uint32_t( texture.layers() );
 		result.levels = uint32_t( texture.levels() );
+		result.alignment = uint32_t( PF::getBytesPerPixel( result.format ) );
 		buffer = PxBufferBase::create( result.dimensions()
 			, result.layers
 			, result.levels
 			, result.format
 			, static_cast< uint8_t const * >( texture.data() )
-			, result.format );
+			, result.format
+			, result.alignment );
+
+		if ( flipped )
+		{
+			buffer->flip();
+		}
+
 		return result;
 	}
 }

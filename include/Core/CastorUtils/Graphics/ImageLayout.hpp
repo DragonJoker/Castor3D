@@ -42,7 +42,8 @@ namespace castor
 			, uint32_t baseLayer = 0u
 			, uint32_t layers = 1u
 			, uint32_t baseLevel = 0u
-			, uint32_t levels = 1u )
+			, uint32_t levels = 1u
+			, uint32_t alignment = 1u )
 			: type{ type }
 			, format{ format }
 			, extent{ extent }
@@ -50,6 +51,7 @@ namespace castor
 			, layers{ layers }
 			, baseLevel{ baseLevel }
 			, levels{ levels }
+			, alignment{ alignment }
 		{
 		}
 
@@ -198,6 +200,7 @@ namespace castor
 		uint32_t layers;
 		uint32_t baseLevel;
 		uint32_t levels;
+		uint32_t alignment;
 	};
 
 	inline ImageLayout::DeviceSize getSliceSize( ImageLayout const & layout )

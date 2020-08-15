@@ -1,5 +1,7 @@
 #include "Castor3D/Material/Texture/TextureModule.hpp"
 
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
+
 namespace castor3d
 {
 	castor::String getName( TextureSpace value )
@@ -66,5 +68,25 @@ namespace castor3d
 			CU_Failure( "Unsupported CubeMapFace" );
 			return castor::cuEmptyString;
 		}
+	}
+
+	std::ostream & operator<<( std::ostream & stream, TextureLayout const & rhs )
+	{
+		stream << ashes::getName( rhs.getType() )
+			<< ", " << ashes::getName( rhs.getPixelFormat() )
+			<< ", " << rhs.getDimensions().width
+			<< "x" << rhs.getDimensions().height;
+
+		if ( rhs.getDimensions().depth > 1 )
+		{
+			stream << ", " << rhs.getDimensions().depth << " slices";
+		}
+		else
+		{
+			stream << ", " << rhs.getLayersCount() << " layers";
+		}
+
+		stream << ", " << rhs.getMipmapCount() << " miplevels";
+		return stream;
 	}
 }

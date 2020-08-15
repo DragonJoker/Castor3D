@@ -6,7 +6,7 @@
 
 namespace castor
 {
-	namespace details
+	namespace
 	{
 		VkDeviceSize getDataAt( VkFormat format
 			, uint32_t x
@@ -16,9 +16,65 @@ namespace castor
 			, uint32_t levels
 			, PxBufferBase const & buffer )
 		{
-			return VkDeviceSize( ( index * ashes::getLevelsSize( VkExtent2D{ x, y }, format, 0u, levels ) )
-				+ ashes::getLevelsSize( VkExtent2D{ x, y }, format, 0u, level ) )
+			return VkDeviceSize( ( index * ashes::getLevelsSize( VkExtent2D{ x, y }, format, 0u, levels, 1u ) )
+				+ ashes::getLevelsSize( VkExtent2D{ x, y }, format, 0u, level, 1u ) )
 				+ ( size_t( ( y * buffer.getWidth() + x ) * ashes::getMinimalSize( format ) ) );
+		}
+
+
+		void copyBuffer( uint8_t const * srcBuffer
+			, PixelFormat srcFormat
+			, uint32_t srcAlign
+			, uint8_t * dstBuffer
+			, PixelFormat dstFormat
+			, uint32_t dstAlign
+			, VkExtent3D const & extent
+			, uint32_t layers
+			, uint32_t levels )
+		{
+			srcAlign = ( srcAlign
+				? srcAlign
+				: uint32_t( PF::getBytesPerPixel( srcFormat ) ) );
+			dstAlign = ( dstAlign
+				? dstAlign
+				: uint32_t( PF::getBytesPerPixel( dstFormat ) ) );
+			auto srcLayerStart = srcBuffer;
+			auto dstLayerStart = dstBuffer;
+			auto srcBlockSize = ashes::getBlockSize( VkFormat( srcFormat ) );
+			auto dstBlockSize = ashes::getBlockSize( VkFormat( dstFormat ) );
+
+			for ( uint32_t layer = 0u; layer < layers; ++layer )
+			{
+				auto srcLevelStart = srcLayerStart;
+				auto dstLevelStart = dstLayerStart;
+
+				for ( uint32_t level = 0u; level < levels; ++level )
+				{
+					auto srcLevel = srcLevelStart;
+					auto dstLevel = dstLevelStart;
+					auto srcLevelSize = uint32_t( ashes::getSize( VkFormat( srcFormat )
+						, extent
+						, srcBlockSize
+						, level
+						, srcAlign ) );
+					auto dstLevelSize = uint32_t( ashes::getSize( VkFormat( dstFormat )
+						, extent
+						, dstBlockSize
+						, level
+						, dstAlign ) );
+					PF::convertBuffer( srcFormat
+						, srcLevel
+						, srcLevelSize
+						, dstFormat
+						, dstLevel
+						, dstLevelSize );
+					srcLevelStart += srcLevelSize;
+					dstLevelStart += dstLevelSize;
+				}
+
+				srcLayerStart = srcLevelStart;
+				dstLayerStart = dstLevelStart;
+			}
 		}
 	}
 
@@ -27,14 +83,15 @@ namespace castor
 		, uint32_t layers
 		, uint32_t levels
 		, uint8_t const * buffer
-		, PixelFormat bufferFormat )
+		, PixelFormat bufferFormat
+		, uint32_t bufferAlign )
 		: m_format{ format == PixelFormat::eUNDEFINED ? bufferFormat : format }
 		, m_size{ size }
 		, m_layers{ layers }
 		, m_levels{ levels }
 		, m_buffer{ 0 }
 	{
-		initialise( buffer, bufferFormat );
+		initialise( buffer, bufferFormat, bufferAlign );
 	}
 
 	PxBufferBase::PxBufferBase( PxBufferBase const & rhs )
@@ -68,13 +125,15 @@ namespace castor
 	}
 
 	void PxBufferBase::initialise( uint8_t const * buffer
-		, PixelFormat bufferFormat )
+		, PixelFormat bufferFormat
+		, uint32_t bufferAlign )
 	{
 		auto extent = VkExtent3D{ m_size.getWidth(), m_size.getHeight(), m_layers };
 		auto newSize = ashes::getLevelsSize( extent
 			, VkFormat( getFormat() )
 			, 0u
-			, 1u );
+			, m_levels
+			, PF::getBytesPerPixel( getFormat() ) );
 		m_buffer.resize( newSize );
 
 		if ( !buffer )
@@ -83,19 +142,15 @@ namespace castor
 		}
 		else
 		{
-			if ( bufferFormat == m_format )
-			{
-				memcpy( m_buffer.data(), buffer, newSize );
-			}
-			else
-			{
-				PF::convertBuffer( bufferFormat
-					, buffer
-					, getCount() * PF::getBytesPerPixel( bufferFormat )
-					, getFormat()
-					, m_buffer.data()
-					, uint32_t( getSize() ) );
-			}
+			copyBuffer( buffer
+				, bufferFormat
+				, bufferAlign
+				, m_buffer.data()
+				, getFormat()
+				, uint32_t( PF::getBytesPerPixel( getFormat() ) )
+				, extent
+				, m_layers
+				, m_levels );
 		}
 	}
 
@@ -107,27 +162,12 @@ namespace castor
 
 	void PxBufferBase::swap( PxBufferBase & pixelBuffer )
 	{
-		std::swap( m_size, pixelBuffer.m_size );
 		std::swap( m_format, pixelBuffer.m_format );
+		std::swap( m_flipped, pixelBuffer.m_flipped );
+		std::swap( m_size, pixelBuffer.m_size );
+		std::swap( m_layers, pixelBuffer.m_layers );
+		std::swap( m_levels, pixelBuffer.m_levels );
 		std::swap( m_buffer, pixelBuffer.m_buffer );
-	}
-
-	void PxBufferBase::assign( std::vector< uint8_t > const & buffer
-		, PixelFormat pixelFormat )
-	{
-		uint8_t newSize = PF::getBytesPerPixel( m_format );
-		uint32_t dstMax = getCount();
-		uint32_t srcMax = uint32_t( buffer.size() / newSize );
-
-		if ( buffer.size() > 0 && srcMax == dstMax )
-		{
-			PF::convertBuffer( m_format
-				, buffer.data()
-				, uint32_t( buffer.size() )
-				, getFormat()
-				, m_buffer.data()
-				, uint32_t( getSize() ) );
-		}
 	}
 
 	uint32_t getMipLevels( VkExtent3D const & extent )
@@ -160,19 +200,22 @@ namespace castor
 			auto newSize = m_layers * ashes::getLevelsSize( extent
 				, VkFormat( getFormat() )
 				, 0u
-				, m_levels );
+				, m_levels
+				, PF::getBytesPerPixel( getFormat() ) );
 			m_buffer.resize( newSize );
 
 			auto srcBuffer = buffer.data();
 			auto srcLayerSize = ashes::getLevelsSize( extent
 				, VkFormat( getFormat() )
 				, 0u
-				, srcLevels );
+				, srcLevels
+				, PF::getBytesPerPixel( getFormat() ) );
 			auto dstBuffer = m_buffer.data();
 			auto dstLayerSize = ashes::getLevelsSize( extent
 				, VkFormat( getFormat() )
 				, 0u
-				, m_levels );
+				, m_levels
+				, PF::getBytesPerPixel( getFormat() ) );
 
 			for ( uint32_t layer = 0u; layer < std::min( srcLevels, m_layers ); ++layer )
 			{
@@ -195,7 +238,7 @@ namespace castor
 	{
 		CU_Require( x < getWidth() && y < getHeight() );
 		return m_buffer.begin()
-			+ details::getDataAt( VkFormat( m_format ), x, y, index, level, m_levels, *this );
+			+ getDataAt( VkFormat( m_format ), x, y, index, level, m_levels, *this );
 	}
 
 	PxBufferBase::ConstPixelData PxBufferBase::getAt( uint32_t x
@@ -205,22 +248,23 @@ namespace castor
 	{
 		CU_Require( x < getWidth() && y < getHeight() );
 		return m_buffer.begin()
-			+ details::getDataAt( VkFormat( m_format ), x, y, index, level, m_levels, *this );
+			+ getDataAt( VkFormat( m_format ), x, y, index, level, m_levels, *this );
 	}
-
 
 	PxBufferBaseSPtr PxBufferBase::create( Size const & size
 		, uint32_t layers
 		, uint32_t levels
 		, PixelFormat wantedFormat
 		, uint8_t const * buffer
-		, PixelFormat bufferFormat )
+		, PixelFormat bufferFormat
+		, uint32_t bufferAlign )
 	{
 		return std::make_shared< PxBufferBase >( size
 			, wantedFormat
 			, layers
 			, levels
 			, buffer
-			, bufferFormat );
+			, bufferFormat
+			, bufferAlign );
 	}
 }

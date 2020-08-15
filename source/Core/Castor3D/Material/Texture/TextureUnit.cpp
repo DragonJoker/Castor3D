@@ -93,53 +93,52 @@ namespace castor3d
 	bool TextureUnit::TextWriter::operator()( TextureUnit const & unit, TextFile & file )
 	{
 		bool result = true;
+		auto hasTexture = unit.isTextured() && unit.getTexture();
 
-		if ( unit.isTextured() && unit.getTexture() )
+		if ( hasTexture )
 		{
 			auto texture = unit.getTexture();
-			auto image = texture->getDefaultView().toString();
+			auto image = texture->getPath();
+			hasTexture = !image.empty() || !texture->isStatic();
 
-			if ( !image.empty() || !texture->isStatic() )
+			if ( hasTexture )
 			{
-				if ( result )
+				if ( auto block = writeHeader( cuT( "texture_unit" ), file ) )
 				{
-					if ( auto block = writeHeader( cuT( "texture_unit" ), file ) )
+					if ( unit.getSampler() && unit.getSampler()->getName() != cuT( "Default" ) )
 					{
-						if ( result && unit.getSampler() && unit.getSampler()->getName() != cuT( "Default" ) )
-						{
-							result = writeName( cuT( "sampler" ), unit.getSampler()->getName(), file );
-						}
+						result = writeName( cuT( "sampler" ), unit.getSampler()->getName(), file );
+					}
 
-						if ( result && unit.getTexture()->getMipmapCount() > 1 )
-						{
-							result = write( cuT( "levels_count" ), unit.getTexture()->getMipmapCount(), file );
-						}
+					if ( result && unit.getTexture()->getMipmapCount() > 1 )
+					{
+						result = write( cuT( "levels_count" ), unit.getTexture()->getMipmapCount(), file );
+					}
 
-						if ( result )
+					if ( result )
+					{
+						if ( !texture->isStatic() )
 						{
-							if ( !texture->isStatic() )
+							if ( unit.getRenderTarget() )
 							{
-								if ( unit.getRenderTarget() )
-								{
-									result = RenderTarget::TextWriter( m_tabs + cuT( "\t" ) )( *unit.getRenderTarget(), file );
-									checkError( result, "render_target" );
-								}
-								else
-								{
-									// Procedurally generated textures, certainly will go here
-								}
+								result = RenderTarget::TextWriter( m_tabs + cuT( "\t" ) )( *unit.getRenderTarget(), file );
+								checkError( result, "render_target" );
 							}
 							else
 							{
-								result = writeFile( cuT( "image" ), Path{ image }, cuT( "Textures" ), file );
+								// Procedurally generated textures, certainly will go here
 							}
 						}
-
-						if ( result )
+						else
 						{
-							result = TextureConfiguration::TextWriter{ m_tabs, m_type }( unit.getConfiguration(), file );
-							checkError( result, "configuration" );
+							result = writeFile( cuT( "image" ), Path{ image }, cuT( "Textures" ), file );
 						}
+					}
+
+					if ( result )
+					{
+						result = TextureConfiguration::TextWriter{ m_tabs, m_type }( unit.getConfiguration(), file );
+						checkError( result, "configuration" );
 					}
 				}
 			}
@@ -227,6 +226,11 @@ namespace castor3d
 	{
 		m_texture = texture;
 		m_changed = true;
+
+		if ( m_texture )
+		{
+			m_name = m_texture->getImage().getName();
+		}
 	}
 
 	bool TextureUnit::initialise()
@@ -239,6 +243,7 @@ namespace castor3d
 			target->initialise();
 			m_texture = target->getTexture().getTexture();
 			result = true;
+			m_name = cuT( "RT_" ) + castor::string::toString( target->getIndex() );
 		}
 		else if ( m_texture )
 		{
@@ -265,6 +270,12 @@ namespace castor3d
 					}
 				}
 			};
+			m_name = m_texture->getImage().getName();
+		}
+
+		if ( m_texture )
+		{
+			log::info << "Loaded texture [" << toString() << "] image (" << *m_texture << ")" << std::endl;
 		}
 
 		return result;
@@ -308,7 +319,7 @@ namespace castor3d
 		}
 
 		CU_Require( m_texture );
-		return m_texture->getImage().getName();
+		return m_name;
 	}
 
 	TextureFlags TextureUnit::getFlags()const

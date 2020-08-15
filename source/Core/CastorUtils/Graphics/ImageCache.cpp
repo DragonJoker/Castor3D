@@ -97,7 +97,7 @@ namespace castor
 
 			if ( !result->hasBuffer() )
 			{
-				*result = std::move( Image( name, size, format ) );
+				*result = std::move( Image( name, Path{}, size, format ) );
 			}
 			else
 			{
@@ -106,7 +106,7 @@ namespace castor
 		}
 		else
 		{
-			result = std::make_shared< Image >( name, size, format );
+			result = std::make_shared< Image >( name, Path{}, size, format );
 			Collection< Image, String >::insert( name, result );
 			doReportCreation( name );
 		}

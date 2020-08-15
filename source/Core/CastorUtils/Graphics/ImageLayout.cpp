@@ -54,7 +54,8 @@ namespace castor
 		return ashes::getLevelsSize( VkExtent2D{ extent->x, extent->y }
 			, VkFormat( format )
 			, baseLevel
-			, levels );
+			, levels
+			, alignment );
 	}
 
 	ImageLayout::DeviceSize ImageLayout::sliceMipSize( uint32_t level )const
@@ -74,7 +75,8 @@ namespace castor
 		return index * ashes::getLevelsSize( VkExtent2D{ extent->x, extent->y }
 			, VkFormat( format )
 			, 0u
-			, levels );
+			, levels
+			, alignment );
 	}
 	
 	ImageLayout::DeviceSize ImageLayout::sliceMipOffset( uint32_t index
@@ -84,7 +86,8 @@ namespace castor
 			+ ashes::getLevelsSize( VkExtent2D{ extent->x, extent->y }
 				, VkFormat( format )
 				, 0u
-				, level );
+				, level
+				, alignment );
 	}
 
 	ImageLayout::Buffer ImageLayout::buffer( PxBufferBase & buffer )const
