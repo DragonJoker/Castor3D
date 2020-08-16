@@ -190,8 +190,7 @@ namespace castor
 	{
 #if defined( CU_PlatformWindows )
 		String copy{ *this };
-		string::replace( copy, NativeSeparator, GenericSeparator );
-		return copy;
+		return string::replace( copy, String{ NativeSeparator }, String{ GenericSeparator } );
 #else
 		return *this;
 #endif

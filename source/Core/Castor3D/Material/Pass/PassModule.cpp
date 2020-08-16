@@ -2,6 +2,22 @@
 
 namespace castor3d
 {
+	castor::String getName( ParallaxOcclusionMode value )
+	{
+		switch ( value )
+		{
+		case ParallaxOcclusionMode::eNone:
+			return cuT( "none" );
+		case ParallaxOcclusionMode::eOne:
+			return cuT( "one" );
+		case ParallaxOcclusionMode::eRepeat:
+			return cuT( "repeat" );
+		default:
+			CU_Failure( "Unsupported ParallaxOcclusionMode" );
+			return castor::cuEmptyString;
+		}
+	}
+	
 	castor::String getName( BlendMode value )
 	{
 		switch ( value )
@@ -42,8 +58,10 @@ namespace castor3d
 			return cuT( "subsurface_scattering" );
 		case PassFlag::eDistanceBasedTransmittance:
 			return cuT( "distance_based_transmittance" );
-		case PassFlag::eParallaxOcclusionMapping:
-			return cuT( "parallax_occlusion_mapping" );
+		case PassFlag::eParallaxOcclusionMappingOne:
+			return cuT( "parallax_occlusion_mapping_one" );
+		case PassFlag::eParallaxOcclusionMappingRepeat:
+			return cuT( "parallax_occlusion_mapping_repeat" );
 		case PassFlag::eReflection:
 			return cuT( "reflection" );
 		case PassFlag::eRefraction:

@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Data/BinaryLoader.hpp"
 #include "CastorUtils/Data/BinaryWriter.hpp"
+#include "CastorUtils/Data/Path.hpp"
 #include "CastorUtils/Design/Resource.hpp"
 #include "CastorUtils/Graphics/Colour.hpp"
 #include "CastorUtils/Graphics/PixelBuffer.hpp"
@@ -27,29 +28,67 @@ namespace castor
 		 */
 		//@{
 		CU_API Image( String const & name
-			, Size const & size
+			, Path const & path
+			, Size  const & size
 			, PixelFormat format
 			, ByteArray const & buffer
 			, PixelFormat bufferFormat );
 		CU_API Image( String const & name
+			, Path const & path
 			, Size const & size
 			, PixelFormat format = PixelFormat::eR8G8B8A8_UNORM
 			, uint8_t const * buffer = nullptr
 			, PixelFormat bufferFormat = PixelFormat::eR8G8B8A8_UNORM );
 		CU_API Image( String const & name
+			, Path const & path
 			, PxBufferBase const & buffer );
-		CU_API Image( String name
+		CU_API Image( String const & name
+			, Path const & path
 			, ImageLayout layout
 			, PxBufferBaseSPtr buffer = nullptr );
 		template< PixelFormat PFSrc, PixelFormat PFDst >
 		Image( String const & name
+			, Path const & path
 			, Size const & size
 			, uint8_t const * buffer = nullptr )
-			: Resource< Image > ( name )
+			: Resource< Image >( std::move( name ) )
 			, m_buffer( std::make_shared< PxBuffer< PFDst > >( size, buffer, PFSrc ) )
+			, m_pathFile{ std::move( path ) }
 		{
 			CU_CheckInvariants();
 		}
+
+		Image( String const & name
+			, Size const & size
+			, PixelFormat format
+			, uint8_t const * buffer
+			, PixelFormat bufferFormat )
+			: Image{ name, {}, size, format, buffer, bufferFormat }
+		{
+		}
+
+		Image( String const & name
+			, Size const & size
+			, PixelFormat format
+			, ByteArray const & buffer
+			, PixelFormat bufferFormat )
+			: Image{ name, {}, size, format, buffer, bufferFormat }
+		{
+		}
+
+		Image( String const & name
+			, PxBufferBase const & buffer )
+			: Image{ name, {}, buffer }
+		{
+		}
+
+		Image( String const & name
+			, ImageLayout layout
+			, PxBufferBaseSPtr buffer )
+			: Image{ name, {}, layout, std::move( buffer ) }
+		{
+		}
+
 		CU_API ~Image() = default;
 		//@}
 		/**

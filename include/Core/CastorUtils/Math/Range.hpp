@@ -33,7 +33,6 @@ namespace castor
 			: m_min{ std::min( min, max ) }
 			, m_max{ std::max( min, max ) }
 		{
-			assert( m_min != m_max );
 		}
 		/**
 		 *\~english
@@ -91,7 +90,9 @@ namespace castor
 		 */
 		float percent( T const & value )const noexcept
 		{
-			return float( m_min - clamp( value ) ) / float( m_min - m_max );
+			return ( m_min == m_max )
+				? 0.0f
+				: float( m_min - clamp( value ) ) / float( m_min - m_max );
 		}
 		/**
 		 *\~english

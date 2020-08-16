@@ -72,7 +72,7 @@ namespace castor
 		try
 		{
 			return load( name
-				, path.getExtension()
+				, path
 				, data.data()
 				, uint32_t( data.size() ) );
 		}
@@ -83,9 +83,7 @@ namespace castor
 		}
 	}
 
-	Image ImageLoader::load( String const & name
-		, String const & imageFormat
-		, uint8_t const * data
+	void ImageLoader::checkData( uint8_t const * data
 		, uint32_t size )const
 	{
 		if ( !data )
@@ -97,7 +95,15 @@ namespace castor
 		{
 			CU_LoaderError( "Can't load image: Empty data" );
 		}
+	}
 
+	ImageLoaderImpl * ImageLoader::findLoader( Path imagePath )const
+	{
+		return findLoader( string::lowerCase( imagePath.getExtension() ) );
+	}
+
+	ImageLoaderImpl * ImageLoader::findLoader( String imageFormat )const
+	{
 		auto it = m_extLoaders.find( string::lowerCase( imageFormat ) );
 
 		if ( it == m_extLoaders.end() )
@@ -105,6 +111,6 @@ namespace castor
 			CU_LoaderError( "Can't load image: Unsupported image file format (no loader registered for it)" );
 		}
 
-		return it->second->load( name, imageFormat, data, size );
+		return it->second;
 	}
 }

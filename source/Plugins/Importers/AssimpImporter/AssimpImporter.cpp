@@ -13,9 +13,11 @@
 #include <Castor3D/Cache/PluginCache.hpp>
 #include <Castor3D/Cache/SceneCache.hpp>
 #include <Castor3D/Cache/SceneNodeCache.hpp>
-#include <Castor3D/Event/Frame/InitialiseEvent.hpp>
 #include <Castor3D/Cache/CacheView.hpp>
+#include <Castor3D/Event/Frame/InitialiseEvent.hpp>
 #include <Castor3D/Material/Pass/PhongPass.hpp>
+#include <Castor3D/Material/Pass/MetallicRoughnessPbrPass.hpp>
+#include <Castor3D/Material/Pass/SpecularGlossinessPbrPass.hpp>
 #include <Castor3D/Model/Skeleton/Bone.hpp>
 #include <Castor3D/Plugin/ImporterPlugin.hpp>
 #include <Castor3D/Render/RenderLoop.hpp>
@@ -189,7 +191,8 @@ namespace C3dAssimp
 		}
 
 		void doProcessPassBaseComponents( PhongPass & pass
-			, aiMaterial const & aiMaterial )
+			, aiMaterial const & aiMaterial
+			, aiColor3D const & emissive )
 		{
 			aiColor3D ambient( 1, 1, 1 );
 			aiMaterial.Get( AI_MATKEY_COLOR_AMBIENT, ambient );
@@ -197,16 +200,10 @@ namespace C3dAssimp
 			aiMaterial.Get( AI_MATKEY_COLOR_DIFFUSE, diffuse );
 			aiColor3D specular( 1, 1, 1 );
 			aiMaterial.Get( AI_MATKEY_COLOR_SPECULAR, specular );
-			aiColor3D emissive( 1, 1, 1 );
-			aiMaterial.Get( AI_MATKEY_COLOR_EMISSIVE, emissive );
-			float opacity = 1;
-			aiMaterial.Get( AI_MATKEY_OPACITY, opacity );
 			float shininess = 0.5f;
 			aiMaterial.Get( AI_MATKEY_SHININESS, shininess );
 			float shininessStrength = 1.0f;
 			aiMaterial.Get( AI_MATKEY_SHININESS_STRENGTH, shininessStrength );
-			int twoSided = 0;
-			aiMaterial.Get( AI_MATKEY_TWOSIDED, twoSided );
 
 			if ( ambient.IsBlack()
 				&& diffuse.IsBlack()
@@ -218,21 +215,122 @@ namespace C3dAssimp
 				diffuse.b = 1.0;
 			}
 
-			pass.setOpacity( opacity );
-			pass.setTwoSided( twoSided != 0 );
 			pass.setDiffuse( castor::RgbColour::fromComponents( diffuse.r
 				, diffuse.g
 				, diffuse.b ) );
 			pass.setSpecular( castor::RgbColour::fromComponents( specular.r * shininessStrength
 				, specular.g * shininessStrength
 				, specular.b * shininessStrength ) );
-			pass.setEmissive( float( castor::point::length( castor::Point3f{ emissive.r
-				, emissive.g
-				, emissive.b } ) ) );
 
 			if ( shininess > 0 )
 			{
 				pass.setShininess( shininess );
+			}
+		}
+
+		void doProcessPassBaseComponents( SpecularGlossinessPbrPass & pass
+			, aiMaterial const & aiMaterial
+			, aiColor3D const & emissive )
+		{
+			aiColor3D diffuse( 1, 1, 1 );
+			aiMaterial.Get( AI_MATKEY_COLOR_DIFFUSE, diffuse );
+			aiColor3D specular( 1, 1, 1 );
+			aiMaterial.Get( AI_MATKEY_COLOR_SPECULAR, specular );
+			float shininess = 0.5f;
+			aiMaterial.Get( AI_MATKEY_SHININESS, shininess );
+			float shininessStrength = 1.0f;
+			aiMaterial.Get( AI_MATKEY_SHININESS_STRENGTH, shininessStrength );
+
+			if ( diffuse.IsBlack()
+				&& specular.IsBlack()
+				&& emissive.IsBlack() )
+			{
+				diffuse.r = 1.0;
+				diffuse.g = 1.0;
+				diffuse.b = 1.0;
+			}
+
+			pass.setDiffuse( castor::RgbColour::fromComponents( diffuse.r
+				, diffuse.g
+				, diffuse.b ) );
+			pass.setSpecular( castor::RgbColour::fromComponents( specular.r
+				, specular.g
+				, specular.b ) );
+			shininess *= shininessStrength;
+			shininess /= PhongPass::MaxShininess;
+
+			if ( shininess > 0 )
+			{
+				pass.setGlossiness( shininess );
+			}
+		}
+
+		void doProcessPassBaseComponents( MetallicRoughnessPbrPass & pass
+			, aiMaterial const & aiMaterial
+			, aiColor3D const & emissive )
+		{
+			aiColor3D albedo( 1, 1, 1 );
+			aiMaterial.Get( AI_MATKEY_COLOR_DIFFUSE, albedo );
+			float metallic = 0.5f;
+			aiMaterial.Get( AI_MATKEY_COLOR_SPECULAR, metallic );
+			float shininess = 0.5f;
+			aiMaterial.Get( AI_MATKEY_SHININESS, shininess );
+			float shininessStrength = 1.0f;
+			aiMaterial.Get( AI_MATKEY_SHININESS_STRENGTH, shininessStrength );
+
+			if ( albedo.IsBlack()
+				&& emissive.IsBlack() )
+			{
+				albedo.r = 1.0;
+				albedo.g = 1.0;
+				albedo.b = 1.0;
+			}
+
+			pass.setAlbedo( castor::RgbColour::fromComponents( albedo.r
+				, albedo.g
+				, albedo.b ) );
+			pass.setMetallic( metallic );
+			shininess *= shininessStrength;
+			shininess /= PhongPass::MaxShininess;
+
+			if ( shininess > 0 )
+			{
+				pass.setRoughness( 1.0f - shininess );
+			}
+		}
+
+		void doProcessPassBaseComponents( Pass & pass
+			, aiMaterial const & aiMaterial )
+		{
+			aiColor3D emissive( 1, 1, 1 );
+			float opacity = 1;
+			int twoSided = 0;
+			aiMaterial.Get( AI_MATKEY_COLOR_EMISSIVE, emissive );
+			aiMaterial.Get( AI_MATKEY_OPACITY, opacity );
+			aiMaterial.Get( AI_MATKEY_TWOSIDED, twoSided );
+			pass.setOpacity( opacity );
+			pass.setTwoSided( twoSided != 0 );
+			pass.setEmissive( float( castor::point::length( castor::Point3f{ emissive.r
+				, emissive.g
+				, emissive.b } ) ) );
+
+			switch ( pass.getType() )
+			{
+			case MaterialType::ePhong:
+				doProcessPassBaseComponents( static_cast< PhongPass & >( pass )
+					, aiMaterial
+					, emissive );
+				break;
+			case MaterialType::eSpecularGlossiness:
+				doProcessPassBaseComponents( static_cast< SpecularGlossinessPbrPass & >( pass )
+					, aiMaterial
+					, emissive );
+				break;
+			case MaterialType::eMetallicRoughness:
+				doProcessPassBaseComponents( static_cast< MetallicRoughnessPbrPass & >( pass )
+					, aiMaterial
+					, emissive );
+				break;
 			}
 		}
 
@@ -243,22 +341,61 @@ namespace C3dAssimp
 		{
 			if ( name.length > 0 )
 			{
-				importer.loadTexture( castor::Path{ castor::string::stringCast< xchar >( name.C_Str() ) }
+				auto texture = importer.loadTexture( castor::Path{ castor::string::stringCast< xchar >( name.C_Str() ) }
 					, config
 					, pass );
+				log::debug << cuT( "  Texture: [" ) << texture->toString() << cuT( "]" ) << std::endl;
 			}
+		}
+
+		void doProcessPassTextures( MetallicRoughnessPbrPass & pass
+			, aiMaterial const & aiMaterial
+			, MeshImporter const & importer
+			, aiString const & spcTexName )
+		{
+			aiString metTexName;
+			aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_METALNESS, 0 ), metTexName );
+			aiString rghTexName;
+			aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_DIFFUSE_ROUGHNESS, 0 ), rghTexName );
+
+			doLoadTexture( metTexName, pass, TextureConfiguration::MetalnessTexture, importer );
+			doLoadTexture( rghTexName, pass, TextureConfiguration::RoughnessTexture, importer );
+		}
+
+		void doProcessPassTextures( SpecularGlossinessPbrPass & pass
+			, aiMaterial const & aiMaterial
+			, MeshImporter const & importer
+			, aiString const & spcTexName )
+		{
+			aiString glsTexName;
+			aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_SHININESS, 0 ), glsTexName );
+
+			doLoadTexture( spcTexName, pass, TextureConfiguration::SpecularTexture, importer );
+			doLoadTexture( glsTexName, pass, TextureConfiguration::GlossinessTexture, importer );
+		}
+
+		void doProcessPassTextures( PhongPass & pass
+			, aiMaterial const & aiMaterial
+			, MeshImporter const & importer
+			, aiString const & spcTexName )
+		{
+			aiString ambTexName;
+			aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_AMBIENT, 0 ), ambTexName );
+			aiString shnTexName;
+			aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_SHININESS, 0 ), shnTexName );
+
+			doLoadTexture( spcTexName, pass, TextureConfiguration::SpecularTexture, importer );
+			doLoadTexture( shnTexName, pass, TextureConfiguration::ShininessTexture, importer );
 		}
 
 		void doProcessPassTextures( Pass & pass
 			, aiMaterial const & aiMaterial
 			, MeshImporter const & importer )
 		{
-			aiString ambTexName;
-			aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_AMBIENT, 0 ), ambTexName );
-			aiString difTexName;
-			aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_DIFFUSE, 0 ), difTexName );
 			aiString spcTexName;
 			aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_SPECULAR, 0 ), spcTexName );
+			aiString difTexName;
+			aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_DIFFUSE, 0 ), difTexName );
 			aiString emiTexName;
 			aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_EMISSIVE, 0 ), emiTexName );
 			aiString nmlTexName;
@@ -267,8 +404,8 @@ namespace C3dAssimp
 			aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_HEIGHT, 0 ), hgtTexName );
 			aiString opaTexName;
 			aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_OPACITY, 0 ), opaTexName );
-			aiString shnTexName;
-			aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_SHININESS, 0 ), shnTexName );
+			aiString occTexName;
+			aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_AMBIENT_OCCLUSION, 0 ), occTexName );
 
 			if ( difTexName.length > 0
 				&& std::string( difTexName.C_Str() ).find( "_Cine_" ) != castor::String::npos
@@ -281,41 +418,85 @@ namespace C3dAssimp
 				castor::String strNorm = strGlob;
 				castor::String strSpec = strGlob;
 				castor::String strOpac = strGlob;
-				importer.loadTexture( castor::Path{ castor::string::replace( strDiff, cuT( "_Cine_" ), cuT( "_D_" ) ) }
-					, TextureConfiguration::DiffuseTexture
-					, pass );
-				importer.loadTexture( castor::Path{ castor::string::replace( strNorm, cuT( "_Cine_" ), cuT( "_N_" ) ) }
-					, TextureConfiguration::NormalTexture
-					, pass );
-				importer.loadTexture( castor::Path{ castor::string::replace( strSpec, cuT( "_Cine_" ), cuT( "_S_" ) ) }
-					, TextureConfiguration::SpecularTexture
-					, pass );
-				importer.loadTexture( castor::Path{ castor::string::replace( strOpac, cuT( "_Cine_" ), cuT( "_A_" ) ) }
-					, TextureConfiguration::OpacityTexture
-					, pass );
+				difTexName = aiString{ castor::string::replace( strDiff, cuT( "_Cine_" ), cuT( "_D_" ) ) };
+				nmlTexName = aiString{ castor::string::replace( strNorm, cuT( "_Cine_" ), cuT( "_N_" ) ) };
+				spcTexName = aiString{ castor::string::replace( strSpec, cuT( "_Cine_" ), cuT( "_S_" ) ) };
+				opaTexName = aiString{ castor::string::replace( strOpac, cuT( "_Cine_" ), cuT( "_A_" ) ) };
+			}
+
+			doLoadTexture( difTexName, pass, TextureConfiguration::DiffuseTexture, importer );
+			doLoadTexture( emiTexName, pass, TextureConfiguration::EmissiveTexture, importer );
+			doLoadTexture( opaTexName, pass, TextureConfiguration::OpacityTexture, importer );
+			doLoadTexture( occTexName, pass, TextureConfiguration::OcclusionTexture, importer );
+
+			if ( nmlTexName.length > 0 )
+			{
+				doLoadTexture( nmlTexName, pass, TextureConfiguration::NormalTexture, importer );
+				doLoadTexture( hgtTexName, pass, TextureConfiguration::HeightTexture, importer );
 			}
 			else
 			{
-				doLoadTexture( difTexName, pass, TextureConfiguration::DiffuseTexture, importer );
-				doLoadTexture( spcTexName, pass, TextureConfiguration::SpecularTexture, importer );
-				doLoadTexture( emiTexName, pass, TextureConfiguration::EmissiveTexture, importer );
-				doLoadTexture( opaTexName, pass, TextureConfiguration::OpacityTexture, importer );
-				doLoadTexture( shnTexName, pass, TextureConfiguration::GlossinessTexture, importer );
-
-				if ( nmlTexName.length > 0 )
-				{
-					doLoadTexture( nmlTexName, pass, TextureConfiguration::NormalTexture, importer );
-
-					if ( hgtTexName.length > 0 )
-					{
-						doLoadTexture( hgtTexName, pass, TextureConfiguration::HeightTexture, importer );
-					}
-				}
-				else if ( hgtTexName.length > 0 )
-				{
-					doLoadTexture( hgtTexName, pass, TextureConfiguration::NormalTexture, importer );
-				}
+				doLoadTexture( hgtTexName, pass, TextureConfiguration::NormalTexture, importer );
 			}
+
+			switch ( pass.getType() )
+			{
+			case MaterialType::ePhong:
+				doProcessPassTextures( static_cast< PhongPass & >( pass )
+					, aiMaterial
+					, importer
+					, spcTexName );
+				break;
+			case MaterialType::eSpecularGlossiness:
+				doProcessPassTextures( static_cast< SpecularGlossinessPbrPass & >( pass )
+					, aiMaterial
+					, importer
+					, spcTexName );
+				break;
+			case MaterialType::eMetallicRoughness:
+				doProcessPassTextures( static_cast< MetallicRoughnessPbrPass & >( pass )
+					, aiMaterial
+					, importer
+					, spcTexName );
+				break;
+			}
+		}
+
+		MaterialType convert( aiShadingMode shadingMode )
+		{
+			switch ( shadingMode )
+			{
+			case aiShadingMode_Flat:
+			case aiShadingMode_Gouraud:
+			case aiShadingMode_Blinn:
+			case aiShadingMode_Phong:
+			case aiShadingMode_Fresnel:
+				return MaterialType::ePhong;
+
+			case aiShadingMode::aiShadingMode_CookTorrance:
+				return MaterialType::eMetallicRoughness;
+
+			default:
+				return MaterialType::eCount;
+			}
+		}
+
+		void doProcessMaterialPass( Pass & pass
+			, aiMaterial const & aiMaterial
+			, AssimpImporter & importer )
+		{
+			aiShadingMode shadingMode;
+			aiMaterial.Get( AI_MATKEY_SHADING_MODEL, shadingMode );
+			auto srcType = convert( shadingMode );
+			auto dstType = pass.getType();
+
+			if ( dstType != srcType )
+			{
+				log::warn << "Switching from " << getName( srcType ) << " to " << getName( dstType ) << " pass type." << std::endl;
+			}
+
+			doProcessPassBaseComponents( pass, aiMaterial );
+			doProcessPassTextures( pass, aiMaterial, importer );
 		}
 
 		std::map< castor::Milliseconds, castor::Point3f > doProcessVec3Keys( aiVectorKey const * const keys
@@ -566,12 +747,12 @@ namespace C3dAssimp
 	{
 		bool result = false;
 		MaterialSPtr material;
-		std::clog << cuT( "Mesh found: [" ) << aiMesh.mName.C_Str() << cuT( "]" ) << std::endl;
+		log::debug << cuT( "Mesh found: [" ) << aiMesh.mName.C_Str() << cuT( "]" ) << std::endl;
 
 		if ( aiMesh.mMaterialIndex < aiScene.mNumMaterials )
 		{
 			material = doProcessMaterial( scene, *aiScene.mMaterials[aiMesh.mMaterialIndex] );
-			std::clog << cuT( "  Material: [" ) << aiMesh.mMaterialIndex << cuT( " (" ) << material->getName() << cuT( ")]" ) << std::endl;
+			log::debug << cuT( "  Material: [" ) << aiMesh.mMaterialIndex << cuT( " (" ) << material->getName() << cuT( ")]" ) << std::endl;
 		}
 
 		if ( aiMesh.HasFaces() && aiMesh.HasPositions() && material )
@@ -586,6 +767,7 @@ namespace C3dAssimp
 				auto bones = std::make_shared< BonesComponent >( submesh );
 				bones->addBoneDatas( bonesData );
 				submesh.addComponent( bones );
+				log::debug << cuT( "  Skeleton found" ) << std::endl;
 			}
 
 			auto mapping = std::make_shared< TriFaceMapping >( submesh );
@@ -676,12 +858,11 @@ namespace C3dAssimp
 		}
 		else
 		{
-			result = cache.add( name, MaterialType::ePhong );
-			result->createPass();
-			auto pass = result->getTypedPass< MaterialType::ePhong >( 0 );
-
-			doProcessPassBaseComponents( *pass, aiMaterial );
-			doProcessPassTextures( *pass, aiMaterial, *this );
+			result = cache.add( name, scene.getMaterialsType() );
+			auto pass = result->createPass();
+			doProcessMaterialPass( *pass
+				, aiMaterial
+				, *this );
 		}
 
 		return result;
@@ -696,6 +877,7 @@ namespace C3dAssimp
 		index = uint32_t( m_arrayBones.size() );
 		m_arrayBones.push_back( bone );
 		m_mapBoneByID[name] = index;
+		log::trace << cuT( "  Bone: [" ) << name << cuT( "]" ) << std::endl;
 		return bone;
 	}
 

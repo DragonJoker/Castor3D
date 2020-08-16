@@ -69,7 +69,7 @@ namespace castor3d
 			dstPass->setEmissive( srcPass->getEmissive() );
 			dstPass->setOpacity( srcPass->getOpacity() );
 			dstPass->setRefractionRatio( srcPass->getRefractionRatio() );
-			dstPass->setParallaxOcclusion( srcPass->hasParallaxOcclusion() );
+			dstPass->setParallaxOcclusion( srcPass->getParallaxOcclusion() );
 			dstPass->setColourBlendMode( srcPass->getColourBlendMode() );
 			dstPass->enableReflections( srcPass->hasReflections() );
 			dstPass->enableRefractions( srcPass->hasRefraction() );
@@ -3497,9 +3497,9 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			bool value = false;
+			auto value = uint32_t( ParallaxOcclusionMode::eNone );
 			params[0]->get( value );
-			parsingContext->pass->setParallaxOcclusion( value );
+			parsingContext->pass->setParallaxOcclusion( ParallaxOcclusionMode( value ) );
 		}
 	}
 	CU_EndAttribute()

@@ -23,14 +23,9 @@ namespace castor3d
 		std::vector< TextureViewUPtr > levels;
 
 		template< typename FuncT >
-		void forEachView( FuncT function )const
+		void forMipView( FuncT function )const
 		{
 			function( view );
-
-			for ( auto & level : levels )
-			{
-				function( level );
-			}
 		}
 
 		template< typename FuncT >
@@ -45,8 +40,15 @@ namespace castor3d
 			}
 			else
 			{
-				function( view );
+				forMipView( function );
 			}
+		}
+
+		template< typename FuncT >
+		void forEachView( FuncT function )const
+		{
+			forMipView( function );
+			forEachLeafView( function );
 		}
 	};
 
@@ -168,73 +170,6 @@ namespace castor3d
 		C3D_API ~TextureLayout();
 		/**
 		 *\~english
-		 *\brief		Sets the whole layout source.
-		 *\~french
-		 *\brief		Définit la source de tout le layout.
-		 */
-		C3D_API void setSource( castor::PxBufferBaseSPtr buffer
-			, bool isStatic = false );
-		C3D_API void setSource( castor::Path const & folder
-			, castor::Path const & relative );
-		C3D_API void setSource( VkExtent3D const & extent
-			, VkFormat format );
-		inline void setSource( VkExtent2D const & extent
-			, VkFormat format )
-		{
-			return setSource( { extent.width, extent.height, 1u }
-				, format );
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the source for all mip lever of one layer in the layout.
-		 *\~french
-		 *\brief		Définit la source pour tous les mip levels une couche du layout.
-		 */
-		C3D_API void setLayerSource( uint32_t index
-			, castor::PxBufferBaseSPtr buffer );
-		C3D_API void setLayerSource( uint32_t index
-			, castor::Path const & folder
-			, castor::Path const & relative );
-		C3D_API void setLayerSource( uint32_t index
-			, VkExtent3D const & extent
-			, VkFormat format );
-		inline void setLayerSource( uint32_t index
-			, VkExtent2D const & extent
-			, VkFormat format )
-		{
-			return setLayerSource( index
-				, { extent.width, extent.height, 1u }
-				, format );
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the source for one mip level of layer in the layout.
-		 *\~french
-		 *\brief		Définit la source pour un mip level d'une couche du layout.
-		 */
-		C3D_API void setLayerMipSource( uint32_t index
-			, uint32_t level
-			, castor::PxBufferBaseSPtr buffer );
-		C3D_API void setLayerMipSource( uint32_t index
-			, uint32_t level
-			, castor::Path const & folder
-			, castor::Path const & relative );
-		C3D_API void setLayerMipSource( uint32_t index
-			, uint32_t level
-			, VkExtent3D const & extent
-			, VkFormat format );
-		inline void setLayerMipSource( uint32_t index
-			, uint32_t level
-			, VkExtent2D const & extent
-			, VkFormat format )
-		{
-			return setLayerMipSource( index
-				, level
-				, { extent.width, extent.height, 1u }
-				, format );
-		}
-		/**
-		 *\~english
 		 *\brief		Initialises the texture and all its views.
 		 *\return		\p true if OK.
 		 *\~french
@@ -257,52 +192,34 @@ namespace castor3d
 		 */
 		C3D_API void generateMipmaps()const;
 		/**
-		*\~english
-		*name
-		*	Getters.
-		*\~french
-		*name
-		*	Accesseurs.
-		**/
+		 *\name Whole texture access.
+		 **/
 		/**@{*/
-		C3D_API castor::String getName()const;
-
-		inline bool isInitialised()const
+		/**
+		 *\~english
+		 *\brief		Sets the whole layout source.
+		 *\~french
+		 *\brief		Définit la source de tout le layout.
+		 */
+		C3D_API void setSource( castor::PxBufferBaseSPtr buffer
+			, uint32_t bufferOrigLevels
+			, bool isStatic = false );
+		C3D_API void setSource( castor::PxBufferBaseSPtr buffer
+			, bool isStatic = false );
+		C3D_API void setSource( castor::Path const & folder
+			, castor::Path const & relative );
+		C3D_API void setSource( VkExtent3D const & extent
+			, VkFormat format );
+		inline void setSource( VkExtent2D const & extent
+			, VkFormat format )
 		{
-			return m_initialised;
+			return setSource( { extent.width, extent.height, 1u }
+				, format );
 		}
-
-		inline bool isStatic()const
-		{
-			return m_static;
-		}
-
-		inline VkImageType getType()const
-		{
-			return m_info->imageType;
-		}
-
-		inline castor::Image const & getImage()const
-		{
-			return m_image;
-		}
-
-		inline castor::Image & getImage()
-		{
-			return m_image;
-		}
-
-		inline ashes::Image const & getTexture()const
-		{
-			CU_Require( m_texture );
-			return *m_texture;
-		}
-
-		inline bool needsYInversion()const
-		{
-			return getDefaultView().needsYInversion();
-		}
-
+		/**
+		 *\name Getters.
+		 **/
+		/**@{*/
 		inline TextureView const & getDefaultView()const
 		{
 			CU_Require( m_defaultView.view );
@@ -319,7 +236,13 @@ namespace castor3d
 		{
 			return m_defaultView;
 		}
-
+		/**@}*/
+		/**@}*/
+		/**
+		*\name
+		*	2D texture's mip level access.
+		**/
+		/**@{*/
 		inline TextureView const & getMipView( size_t level )const
 		{
 			CU_Require( getDefault().levels.size() > level );
@@ -330,6 +253,44 @@ namespace castor3d
 		{
 			CU_Require( getDefault().levels.size() > level );
 			return *getDefault().levels[level];
+		}
+		/**@}*/
+		/**
+		 *\name Texture array's layer access.
+		 **/
+		/**@{*/
+		/**
+		 *\~english
+		 *\brief		Sets the source for all mip lever of one layer in the layout.
+		 *\~french
+		 *\brief		Définit la source pour tous les mip levels une couche du layout.
+		 */
+		C3D_API void setLayerSource( uint32_t index
+			, castor::PxBufferBaseSPtr buffer
+			, uint32_t bufferOrigLevels );
+		C3D_API void setLayerSource( uint32_t index
+			, castor::PxBufferBaseSPtr buffer );
+		C3D_API void setLayerSource( uint32_t index
+			, castor::Path const & folder
+			, castor::Path const & relative );
+		C3D_API void setLayerSource( uint32_t index
+			, VkExtent3D const & extent
+			, VkFormat format );
+		inline void setLayerSource( uint32_t index
+			, VkExtent2D const & extent
+			, VkFormat format )
+		{
+			return setLayerSource( index
+				, { extent.width, extent.height, 1u }
+			, format );
+		}
+		/**
+		 *\name Getters.
+		 **/
+		/**@{*/
+		inline uint32_t getLayersCount()const
+		{
+			return m_info->arrayLayers;
 		}
 
 		inline ArrayView< MipView > const & getArray2D()const
@@ -366,7 +327,43 @@ namespace castor3d
 			CU_Require( getLayer2D( layer ).view );
 			return *getLayer2D( layer ).view;
 		}
-
+		/**@}*/
+		/**
+		 *\name Texture array layer's mip level access.
+		 **/
+		/**@{*/
+		/**
+		 *\~english
+		 *\brief		Sets the source for one mip level of a layer in the layout.
+		 *\~french
+		 *\brief		Définit la source pour un mip level d'une couche du layout.
+		 */
+		C3D_API void setLayerMipSource( uint32_t index
+			, uint32_t level
+			, castor::PxBufferBaseSPtr buffer );
+		C3D_API void setLayerMipSource( uint32_t index
+			, uint32_t level
+			, castor::Path const & folder
+			, castor::Path const & relative );
+		C3D_API void setLayerMipSource( uint32_t index
+			, uint32_t level
+			, VkExtent3D const & extent
+			, VkFormat format );
+		inline void setLayerMipSource( uint32_t index
+			, uint32_t level
+			, VkExtent2D const & extent
+			, VkFormat format )
+		{
+			return setLayerMipSource( index
+				, level
+				, { extent.width, extent.height, 1u }
+				, format );
+		}
+		/**@}*/
+		/**
+		 *\name 3D texture's slice access.
+		 **/
+		/**@{*/
 		inline SliceView< MipView > const & getSlices3D()const
 		{
 			return m_sliceView;
@@ -400,6 +397,20 @@ namespace castor3d
 		{
 			CU_Require( getSlice( slice ).view );
 			return *getSlice( slice ).view;
+		}
+		/**@}*/
+		/**
+		*\name
+		*	Cube array's texture access.
+		*\remarks
+		*	A simple cube texture is a cube array of size 1.
+		**/
+		/**@{*/
+		inline uint32_t isCube()const
+		{
+			return getLayersCount() >= 6u
+				&& ( getLayersCount() % 6u ) == 0u
+				&& ashes::checkFlag( m_info->flags, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT );
 		}
 
 		inline ArrayView< CubeView > const & getArrayCube()const
@@ -436,7 +447,11 @@ namespace castor3d
 			CU_Require( getLayerCube( layer ).view.view );
 			return *getLayerCube( layer ).view.view;
 		}
-
+		/**@}*/
+		/**
+		 *\name Cube array texture layer's face access.
+		 **/
+		/**@{*/
 		inline MipView const & getLayerCubeFace( size_t layer
 			, CubeMapFace face )const
 		{
@@ -462,7 +477,30 @@ namespace castor3d
 			CU_Require( getLayerCubeFace( layer, face ).view );
 			return *getLayerCubeFace( layer, face ).view;
 		}
-
+		/**@{*/
+		/**
+		 *\~english
+		 *\brief		Sets the source for a layer cube's face in the layout.
+		 *\~french
+		 *\brief		Définit la source pour une face d'un cube d'un tableau dans le layout.
+		 */
+		C3D_API void setLayerCubeFaceSource( uint32_t layer
+			, CubeMapFace face
+			, castor::PxBufferBaseSPtr buffer );
+		C3D_API void setLayerCubeFaceSource( uint32_t layer
+			, CubeMapFace face
+			, castor::Path const & folder
+			, castor::Path const & relative );
+		inline void setLayerCubeFaceSource( uint32_t layer
+			, CubeMapFace face
+			, VkExtent2D const & extent
+			, VkFormat format );
+		/**@}*/
+		/**@}*/
+		/**
+		 *\name Cube array texture layer face's mip level access.
+		 **/
+		/**@{*/
 		inline TextureView const & getLayerCubeFaceMipView( size_t layer
 			, CubeMapFace face
 			, uint32_t level )const
@@ -479,6 +517,68 @@ namespace castor3d
 			CU_Require( getLayerCubeFace( layer, face ).levels.size() > level );
 			CU_Require( getLayerCubeFace( layer, face ).levels[level] );
 			return *getLayerCubeFace( layer, face ).levels[level];
+		}
+		/**@{*/
+		/**
+		 *\~english
+		 *\brief		Sets the source for a face of layer in the layout.
+		 *\~french
+		 *\brief		Définit la source pour un mip level d'une couche du layout.
+		 */
+		C3D_API void setLayerCubeFaceMipSource( uint32_t layer
+			, CubeMapFace face
+			, uint32_t level
+			, castor::PxBufferBaseSPtr buffer );
+		C3D_API void setLayerCubeFaceMipSource( uint32_t layer
+			, CubeMapFace face
+			, uint32_t level
+			, castor::Path const & folder
+			, castor::Path const & relative );
+		inline void setLayerCubeFaceMipSource( uint32_t layer
+			, CubeMapFace face
+			, uint32_t level
+			, VkExtent2D const & extent
+			, VkFormat format );
+		/**@}*/
+		/**@}*/
+		/**
+		*name
+		*	Getters.
+		**/
+		/**@{*/
+		C3D_API castor::String getName()const;
+		C3D_API castor::Path getPath()const;
+		C3D_API bool needsYInversion()const;
+
+		inline bool isInitialised()const
+		{
+			return m_initialised;
+		}
+
+		inline bool isStatic()const
+		{
+			return m_static;
+		}
+
+		inline VkImageType getType()const
+		{
+			return m_info->imageType;
+		}
+
+		inline castor::Image const & getImage()const
+		{
+			return m_image;
+		}
+
+		inline castor::Image & getImage()
+		{
+			return m_image;
+		}
+
+		inline ashes::Image const & getTexture()const
+		{
+			CU_Require( m_texture );
+			return *m_texture;
 		}
 
 		inline uint32_t getWidth()const
@@ -509,18 +609,6 @@ namespace castor3d
 		inline VkFormat getPixelFormat()const
 		{
 			return m_info->format;
-		}
-
-		inline uint32_t getLayersCount()const
-		{
-			return m_info->arrayLayers;
-		}
-
-		inline uint32_t isCube()const
-		{
-			return getLayersCount() >= 6u
-				&& ( getLayersCount() % 6u ) == 0u
-				&& ashes::checkFlag( m_info->flags, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT );
 		}
 		/**@}*/
 		/**
@@ -573,6 +661,9 @@ namespace castor3d
 		uint32_t doUpdateViews();
 		void doUpdateCreateInfo( castor::ImageLayout const & layout );
 		void doUpdateFromFirstImage( castor::ImageLayout const & layout );
+		void doUpdateMips( bool genNeeded, uint32_t mipLevels );
+		void doUpdateLayerMip( bool genNeeded, uint32_t layer, uint32_t level );
+		void doUpdateLayerMips( bool genNeeded, uint32_t layer, uint32_t mipLevels );
 
 	private:
 		bool m_initialised{ false };

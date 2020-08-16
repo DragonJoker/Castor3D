@@ -212,6 +212,9 @@ namespace castor3d
 		 */
 		void doSetOpacity( float value )override;
 
+	public:
+		static constexpr float MaxShininess = 256.0f;
+
 	private:
 		//!\~english	Diffuse material colour.
 		//!\~french		La couleur diffuse
@@ -224,7 +227,7 @@ namespace castor3d
 		float m_ambient{ 1.0f };
 		//!\~english	The shininess value.
 		//!\~french		La valeur d'exposant.
-		castor::RangedValue< float > m_shininess{ 50.0f, castor::makeRange( 0.0001f, 256.0f ) };
+		castor::RangedValue< float > m_shininess{ 50.0f, castor::makeRange( 0.0001f, MaxShininess ) };
 	};
 }
 

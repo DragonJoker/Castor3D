@@ -12,6 +12,8 @@ namespace castor3d
 			return cuT( "metallic_roughness" );
 		case MaterialType::eSpecularGlossiness:
 			return cuT( "specular_glossiness" );
+		case MaterialType::eCount:
+			return cuT( "unsupported" );
 		default:
 			CU_Failure( "Unsupported MaterialType" );
 			return castor::cuEmptyString;

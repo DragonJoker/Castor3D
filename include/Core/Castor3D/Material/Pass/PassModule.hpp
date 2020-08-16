@@ -18,6 +18,22 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Parallax occlusion modes enumeration.
+	*\~french
+	*\brief
+	*	Enumération des modes de parallax occlusion.
+	*/
+	enum class ParallaxOcclusionMode
+	{
+		eNone,
+		eOne,
+		eRepeat,
+		CU_ScopedEnumBounds( eNone )
+	};
+	C3D_API castor::String getName( ParallaxOcclusionMode value );
+	/**
+	*\~english
+	*\brief
 	*	Blending modes enumeration
 	*\~french
 	*\brief
@@ -81,16 +97,19 @@ namespace castor3d
 		eDistanceBasedTransmittance = 0x0020,
 		//!\~english	Shader using parallax occlusion mapping.
 		//\~french		Shader utilisant le parallax occlusion mapping.
-		eParallaxOcclusionMapping = 0x0040,
+		eParallaxOcclusionMappingOne = 0x0040,
+		//!\~english	Shader using parallax occlusion mapping.
+		//\~french		Shader utilisant le parallax occlusion mapping.
+		eParallaxOcclusionMappingRepeat = 0x0080,
 		//!\~english	Reflection map.
 		//!\~french		Map de réflexion.
-		eReflection = 0x0080,
+		eReflection = 0x0100,
 		//!\~english	Refraction map.
 		//!\~french		Map de réfraction.
-		eRefraction = 0x0100,
+		eRefraction = 0x0200,
 		//!\~english	All flags.
 		//\~french		Tous les indicateurs.
-		eAll = 0x01FF,
+		eAll = 0x03FF,
 	};
 	CU_ImplementFlags( PassFlag )
 	C3D_API castor::String getName( PassFlag value );

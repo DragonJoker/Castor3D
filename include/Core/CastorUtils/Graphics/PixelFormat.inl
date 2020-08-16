@@ -3165,7 +3165,10 @@ namespace castor
 		template< PixelFormat PFSrc, PixelFormat PFDst >
 		struct BufferConverter
 		{
-			inline void operator()( uint8_t const * srcBuffer, uint32_t srcSize, uint8_t * dstBuffer, uint32_t dstSize )
+			inline void operator()( uint8_t const * srcBuffer
+				, uint32_t srcSize
+				, uint8_t * dstBuffer
+				, uint32_t dstSize )
 			{
 				uint8_t const * src = &srcBuffer[0];
 				uint8_t * dst = &dstBuffer[0];
@@ -3279,7 +3282,14 @@ namespace castor
 				break;
 
 			default:
-				CU_UnsupportedError( "No conversion defined" );
+				if ( PF == dstFormat )
+				{
+					PixelConverter< PF, PF >()( srcBuffer, dstBuffer );
+				}
+				else
+				{
+					CU_UnsupportedError( "No conversion defined" );
+				}
 				break;
 			}
 		}
@@ -3323,7 +3333,14 @@ namespace castor
 				break;
 
 			default:
-				CU_UnsupportedError( "No conversion defined" );
+				if ( PF == dstFormat )
+				{
+					PixelConverter< PF, PF >()( srcBuffer, dstBuffer );
+				}
+				else
+				{
+					CU_UnsupportedError( "No conversion defined" );
+				}
 				break;
 			}
 		}
@@ -3355,7 +3372,14 @@ namespace castor
 				break;
 
 			default:
-				CU_UnsupportedError( "No conversion defined" );
+				if ( PF == dstFormat )
+				{
+					PixelConverter< PF, PF >()( srcBuffer, dstBuffer );
+				}
+				else
+				{
+					CU_UnsupportedError( "No conversion defined" );
+				}
 				break;
 			}
 		}
@@ -3376,7 +3400,11 @@ namespace castor
 		 *\param[in]	dstSize		La taille du buffer destination
 		 */
 		template< PixelFormat PF >
-		void dynamicColourBufferConversion( uint8_t const * srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t * dstBuffer, uint32_t dstSize )
+		void dynamicColourBufferConversion( uint8_t const * srcBuffer
+			, uint32_t srcSize
+			, PixelFormat dstFormat
+			, uint8_t * dstBuffer
+			, uint32_t dstSize )
 		{
 			switch ( dstFormat )
 			{
@@ -3461,7 +3489,14 @@ namespace castor
 				break;
 
 			default:
-				CU_UnsupportedError( "No conversion defined" );
+				if ( PF == dstFormat )
+				{
+					BufferConverter< PF, PF >()( srcBuffer, srcSize, dstBuffer, dstSize );
+				}
+				else
+				{
+					CU_UnsupportedError( "No conversion defined" );
+				}
 				break;
 			}
 		}
@@ -3482,7 +3517,11 @@ namespace castor
 		 *\param[in]	dstSize		La taille du buffer destination
 		 */
 		template< PixelFormat PF >
-		void dynamicDepthBufferConversion( uint8_t const * srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t * dstBuffer, uint32_t dstSize )
+		void dynamicDepthBufferConversion( uint8_t const * srcBuffer
+			, uint32_t srcSize
+			, PixelFormat dstFormat
+			, uint8_t * dstBuffer
+			, uint32_t dstSize )
 		{
 			switch ( dstFormat )
 			{
@@ -3523,7 +3562,14 @@ namespace castor
 				break;
 
 			default:
-				CU_UnsupportedError( "No conversion defined" );
+				if ( PF == dstFormat )
+				{
+					BufferConverter< PF, PF >()( srcBuffer, srcSize, dstBuffer, dstSize );
+				}
+				else
+				{
+					CU_UnsupportedError( "No conversion defined" );
+				}
 				break;
 			}
 		}
@@ -3544,7 +3590,11 @@ namespace castor
 		 *\param[in]	dstSize		La taille du buffer destination
 		 */
 		template< PixelFormat PF >
-		void dynamicStencilBufferConversion( uint8_t const * srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t * dstBuffer, uint32_t dstSize )
+		void dynamicStencilBufferConversion( uint8_t const * srcBuffer
+			, uint32_t srcSize
+			, PixelFormat dstFormat
+			, uint8_t * dstBuffer
+			, uint32_t dstSize )
 		{
 			switch ( dstFormat )
 			{
@@ -3557,7 +3607,14 @@ namespace castor
 				break;
 
 			default:
-				CU_UnsupportedError( "No conversion defined" );
+				if ( PF == dstFormat )
+				{
+					BufferConverter< PF, PF >()( srcBuffer, srcSize, dstBuffer, dstSize );
+				}
+				else
+				{
+					CU_UnsupportedError( "No conversion defined" );
+				}
 				break;
 			}
 		}
@@ -4686,17 +4743,65 @@ namespace castor
 		{
 			return cuT( "dxtc1" );
 		}
-		static inline void convert( uint8_t const *, uint8_t *, PixelFormat )
+		static inline void convert( uint8_t const * srcBuffer, uint8_t * dstBuffer, PixelFormat dstFormat )
 		{
-			CU_UnsupportedError( "No conversion from " + string::stringCast< char >( toString() ) + " defined" );
+			if ( dstFormat == PixelFormat::eBC1_RGB_UNORM_BLOCK )
+			{
+				detail::PixelConverter< PixelFormat::eBC1_RGB_UNORM_BLOCK, PixelFormat::eBC1_RGB_UNORM_BLOCK >()( srcBuffer, dstBuffer );
+			}
 		}
 		static inline void convert( uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			CU_UnsupportedError( "No conversion from " + string::stringCast< char >( toString() ) + " defined" );
+			if ( dstFormat == PixelFormat::eBC1_RGB_UNORM_BLOCK )
+			{
+				detail::BufferConverter< PixelFormat::eBC1_RGB_UNORM_BLOCK, PixelFormat::eBC1_RGB_UNORM_BLOCK >()( srcBuffer, srcSize, dstBuffer, dstSize );
+			}
 		}
 		template< PixelFormat PF > static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 		{
 			detail::PixelConverter< PixelFormat::eBC1_RGB_UNORM_BLOCK, PF >()( srcBuffer, dstBuffer );
+		}
+	};
+
+	//*************************************************************************************************
+
+	//!\~english	Specialisation for PixelFormat::eBC1_RGBA_UNORM_BLOCK
+	//!\~french		Spécialisation pour PixelFormat::eBC1_RGBA_UNORM_BLOCK
+	template<>
+	struct PixelDefinitions< PixelFormat::eBC1_RGBA_UNORM_BLOCK >
+	{
+		static const uint8_t Size = 8u; // Bit count for a 4x4 pixels block
+		static const uint8_t Count = 4;
+		static const bool Alpha = true;
+		static const bool Colour = true;
+		static const bool Depth = false;
+		static const bool Stencil = false;
+		static const bool Compressed = true;
+		static inline String toString()
+		{
+			return cuT( "BC1 8 bits compressed format" );
+		}
+		static inline String toStr()
+		{
+			return cuT( "bc1" );
+		}
+		static inline void convert( uint8_t const * srcBuffer, uint8_t * dstBuffer, PixelFormat dstFormat )
+		{
+			if ( dstFormat == PixelFormat::eBC1_RGBA_UNORM_BLOCK )
+			{
+				detail::PixelConverter< PixelFormat::eBC1_RGBA_UNORM_BLOCK, PixelFormat::eBC1_RGBA_UNORM_BLOCK >()( srcBuffer, dstBuffer );
+			}
+		}
+		static inline void convert( uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
+		{
+			if ( dstFormat == PixelFormat::eBC1_RGBA_UNORM_BLOCK )
+			{
+				detail::BufferConverter< PixelFormat::eBC1_RGBA_UNORM_BLOCK, PixelFormat::eBC1_RGBA_UNORM_BLOCK >()( srcBuffer, srcSize, dstBuffer, dstSize );
+			}
+		}
+		template< PixelFormat PF > static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
+		{
+			detail::PixelConverter< PixelFormat::eBC1_RGBA_UNORM_BLOCK, PF >()( srcBuffer, dstBuffer );
 		}
 	};
 
@@ -4723,13 +4828,19 @@ namespace castor
 		{
 			return cuT( "dxtc3" );
 		}
-		static inline void convert( uint8_t const *, uint8_t *, PixelFormat )
+		static inline void convert( uint8_t const * srcBuffer, uint8_t * dstBuffer, PixelFormat dstFormat )
 		{
-			CU_UnsupportedError( "No conversion from " + string::stringCast< char >( toString() ) + " defined" );
+			if ( dstFormat == PixelFormat::eBC3_UNORM_BLOCK )
+			{
+				detail::PixelConverter< PixelFormat::eBC3_UNORM_BLOCK, PixelFormat::eBC3_UNORM_BLOCK >()( srcBuffer, dstBuffer );
+			}
 		}
 		static inline void convert( uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			CU_UnsupportedError( "No conversion from " + string::stringCast< char >( toString() ) + " defined" );
+			if ( dstFormat == PixelFormat::eBC3_UNORM_BLOCK )
+			{
+				detail::BufferConverter< PixelFormat::eBC3_UNORM_BLOCK, PixelFormat::eBC3_UNORM_BLOCK >()( srcBuffer, srcSize, dstBuffer, dstSize );
+			}
 		}
 		template< PixelFormat PF > static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 		{
@@ -4760,13 +4871,19 @@ namespace castor
 		{
 			return cuT( "dxtc5" );
 		}
-		static inline void convert( uint8_t const *, uint8_t *, PixelFormat )
+		static inline void convert( uint8_t const * srcBuffer, uint8_t * dstBuffer, PixelFormat dstFormat )
 		{
-			CU_UnsupportedError( "No conversion from " + string::stringCast< char >( toString() ) + " defined" );
+			if ( dstFormat == PixelFormat::eBC5_UNORM_BLOCK )
+			{
+				detail::PixelConverter< PixelFormat::eBC5_UNORM_BLOCK, PixelFormat::eBC5_UNORM_BLOCK >()( srcBuffer, dstBuffer );
+			}
 		}
 		static inline void convert( uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			CU_UnsupportedError( "No conversion from " + string::stringCast< char >( toString() ) + " defined" );
+			if ( dstFormat == PixelFormat::eBC5_UNORM_BLOCK )
+			{
+				detail::BufferConverter< PixelFormat::eBC5_UNORM_BLOCK, PixelFormat::eBC5_UNORM_BLOCK >()( srcBuffer, srcSize, dstBuffer, dstSize );
+			}
 		}
 		template< PixelFormat PF > static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 		{

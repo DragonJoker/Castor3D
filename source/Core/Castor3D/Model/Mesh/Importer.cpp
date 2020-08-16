@@ -122,31 +122,33 @@ namespace castor3d
 			}
 		}
 
-		if ( File::fileExists( folder / relative ) )
+		if ( !File::fileExists( folder / relative ) )
 		{
-			try
-			{
-				result = std::make_shared< TextureUnit >( *getEngine() );
-				result->setTexture( createTextureLayout( *getEngine(), relative, folder ) );
-				result->setConfiguration( config );
-			}
-			catch ( std::exception & exc )
-			{
-				result.reset();
-				log::warn << cuT( "Error encountered while loading texture file " ) << path << cuT( ":\n" ) << exc.what() << std::endl;
-			}
-			catch ( ... )
-			{
-				result.reset();
-				log::warn << cuT( "Unknown error encountered while loading texture file " ) << path << std::endl;
-			}
-		}
-		else
-		{
-			log::warn << cuT( "Couldn't load texture file " ) << path << cuT( ":\nFile does not exist." ) << std::endl;
+			log::error << cuT( "Couldn't load texture file [" ) << path << cuT( "]: File does not exist." ) << std::endl;
+			return nullptr;
 		}
 
-		return result;
+		try
+		{
+			result = std::make_shared< TextureUnit >( *getEngine() );
+			result->setTexture( createTextureLayout( *getEngine(), relative, folder ) );
+			result->setConfiguration( config );
+			return result;
+		}
+		catch ( castor::Exception & exc )
+		{
+			log::error << cuT( "Error encountered while loading texture file [" ) << path << cuT( "]: " ) << exc.what() << std::endl;
+		}
+		catch ( std::exception & exc )
+		{
+			log::error << cuT( "Error encountered while loading texture file [" ) << path << cuT( "]: " ) << exc.what() << std::endl;
+		}
+		catch ( ... )
+		{
+			log::error << cuT( "Error encountered while loading texture file [" ) << path << cuT( "]: Unknown error" ) << std::endl;
+		}
+
+		return nullptr;
 	}
 
 	TextureUnitSPtr MeshImporter::loadTexture( Path const & path

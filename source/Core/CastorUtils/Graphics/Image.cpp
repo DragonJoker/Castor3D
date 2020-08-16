@@ -12,11 +12,13 @@
 namespace castor
 {
 	Image::Image( String const & name
+		, Path const & path
 		, Size const & size
 		, PixelFormat format
 		, uint8_t const * buffer
 		, PixelFormat bufferFormat )
 		: Resource< Image >{ name }
+		, m_pathFile{ path }
 		, m_buffer{ PxBufferBase::create( size, format, buffer, bufferFormat ) }
 		, m_layout{ *m_buffer }
 	{
@@ -24,24 +26,28 @@ namespace castor
 	}
 
 	Image::Image( String const & name
+		, Path const & path
 		, Size const & size
 		, PixelFormat format
 		, ByteArray const & buffer
 		, PixelFormat bufferFormat )
-		: Image{ name, size, format, buffer.data(), bufferFormat }
+		: Image{ name, path, size, format, buffer.data(), bufferFormat }
 	{
 	}
 
 	Image::Image( String const & name
+		, Path const & path
 		, PxBufferBase const & buffer )
-		: Image{ name, buffer.getDimensions(), buffer.getFormat(), buffer.getConstPtr(), buffer.getFormat() }
+		: Image{ name, path, buffer.getDimensions(), buffer.getFormat(), buffer.getConstPtr(), buffer.getFormat() }
 	{
 	}
 
-	Image::Image( String name
+	Image::Image( String const & name
+		, Path const & path
 		, ImageLayout layout
 		, PxBufferBaseSPtr buffer )
 		: Resource< Image >{ std::move( name ) }
+		, m_pathFile{ path }
 		, m_buffer{ ( buffer
 			? buffer
 			: PxBufferBase::create( layout.dimensions()

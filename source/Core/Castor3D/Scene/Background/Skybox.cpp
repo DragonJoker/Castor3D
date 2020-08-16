@@ -177,42 +177,42 @@ namespace castor3d
 	void SkyboxBackground::loadLeftImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().setLayerSource( uint32_t( CubeMapFace::eNegativeX ), folder, relative );
+		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::eNegativeX, folder, relative );
 		notifyChanged();
 	}
 
 	void SkyboxBackground::loadRightImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().setLayerSource( uint32_t( CubeMapFace::ePositiveX ), folder, relative );
+		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::ePositiveX, folder, relative );
 		notifyChanged();
 	}
 
 	void SkyboxBackground::loadTopImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().setLayerSource( uint32_t( CubeMapFace::eNegativeY ), folder, relative );
+		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::eNegativeY, folder, relative );
 		notifyChanged();
 	}
 
 	void SkyboxBackground::loadBottomImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().setLayerSource( uint32_t( CubeMapFace::ePositiveY ), folder, relative );
+		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::ePositiveY, folder, relative );
 		notifyChanged();
 	}
 
 	void SkyboxBackground::loadFrontImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().setLayerSource( uint32_t( CubeMapFace::eNegativeZ ), folder, relative );
+		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::eNegativeZ, folder, relative );
 		notifyChanged();
 	}
 
 	void SkyboxBackground::loadBackImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().setLayerSource( uint32_t( CubeMapFace::ePositiveZ ), folder, relative );
+		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::ePositiveZ, folder, relative );
 		notifyChanged();
 	}
 
@@ -244,7 +244,7 @@ namespace castor3d
 	void SkyboxBackground::setEquiTexture( TextureLayoutSPtr texture
 		, uint32_t size )
 	{
-		m_equiTexturePath = castor::Path( texture->getDefaultView().toString() );
+		m_equiTexturePath = castor::Path( texture->getImage().getPath() );
 		m_equiTexture = texture;
 		m_equiSize.set( size, size );
 		notifyChanged();
@@ -283,7 +283,7 @@ namespace castor3d
 
 	void SkyboxBackground::setCrossTexture( TextureLayoutSPtr texture )
 	{
-		m_crossTexturePath = castor::Path( texture->getDefaultView().toString() );
+		m_crossTexturePath = castor::Path( texture->getImage().getPath() );
 		m_crossTexture = texture;
 		notifyChanged();
 	}

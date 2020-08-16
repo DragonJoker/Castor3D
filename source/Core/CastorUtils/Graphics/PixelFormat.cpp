@@ -1615,6 +1615,10 @@ namespace castor
 				PixelDefinitions< PixelFormat::eBC1_RGB_UNORM_BLOCK >::convert( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 				break;
 
+			case PixelFormat::eBC1_RGBA_UNORM_BLOCK:
+				PixelDefinitions< PixelFormat::eBC1_RGBA_UNORM_BLOCK >::convert( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
+				break;
+
 			case PixelFormat::eBC3_UNORM_BLOCK:
 				PixelDefinitions< PixelFormat::eBC3_UNORM_BLOCK >::convert( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 				break;

@@ -215,6 +215,7 @@ namespace castor3d
 		ashes::WriteDescriptorSet m_descriptor;
 		uint32_t m_id{ 0u };
 		mutable bool m_changed;
+		castor::String m_name;
 	};
 }
 

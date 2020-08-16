@@ -545,8 +545,9 @@ namespace castor3d
 
 		void Utils::declareParallaxMappingFunc( PipelineFlags const & flags )
 		{
-			if ( checkFlag( flags.passFlags, PassFlag::eParallaxOcclusionMapping )
-				&& checkFlags( flags.textures, TextureFlag::eHeight ) != flags.textures.end() )
+			if ( checkFlags( flags.textures, TextureFlag::eHeight ) != flags.textures.end()
+				&& ( checkFlag( flags.passFlags, PassFlag::eParallaxOcclusionMappingOne )
+				|| checkFlag( flags.passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) ) )
 			{
 				using namespace sdw;
 
@@ -564,9 +565,9 @@ namespace castor3d
 
 						// number of depth layers
 						auto minLayers = m_writer.declLocale( "minLayers"
-							, 10.0_f );
+							, 32.0_f );
 						auto maxLayers = m_writer.declLocale( "maxLayers"
-							, 20.0_f );
+							, 64.0_f );
 						auto numLayers = m_writer.declLocale( "numLayers"
 							, mix( maxLayers
 								, minLayers
@@ -579,21 +580,25 @@ namespace castor3d
 							, 0.0_f );
 						// the amount to shift the texture coordinates per layer (from vector P)
 						auto p = m_writer.declLocale( "p"
-							, viewDir.xy() * textureConfig.heightFactor );
+							, viewDir.xy() / viewDir.z() * textureConfig.heightFactor );
 						auto deltaTexCoords = m_writer.declLocale( "deltaTexCoords"
 							, p / numLayers );
 
 						auto currentTexCoords = m_writer.declLocale( "currentTexCoords"
 							, texCoords );
+						auto dx = m_writer.declLocale( "dx"
+							, dFdxCoarse( currentTexCoords ) );
+						auto dy = m_writer.declLocale( "dy"
+							, dFdxCoarse( currentTexCoords ) );
 						auto currentDepthMapValue = m_writer.declLocale( "currentDepthMapValue"
-							, texture( heightMap, currentTexCoords ).r() );
+							, textureGrad( heightMap, currentTexCoords, dx, dy ).r() );
 
 						WHILE( m_writer, currentLayerDepth < currentDepthMapValue )
 						{
 							// shift texture coordinates along direction of P
 							currentTexCoords -= deltaTexCoords;
 							// get depthmap value at current texture coordinates
-							currentDepthMapValue = textureLod( heightMap, currentTexCoords, 0.0_f ).r();
+							currentDepthMapValue = textureGrad( heightMap, currentTexCoords, dx, dy ).r();
 							// get depth of next layer
 							currentLayerDepth += layerDepth;
 						}
@@ -607,7 +612,7 @@ namespace castor3d
 						auto afterDepth = m_writer.declLocale( "afterDepth"
 							, currentDepthMapValue - currentLayerDepth );
 						auto beforeDepth = m_writer.declLocale( "beforeDepth"
-							, texture( heightMap, prevTexCoords ).r() - currentLayerDepth + layerDepth );
+							, textureGrad( heightMap, prevTexCoords, dx, dy ).r() - currentLayerDepth + layerDepth );
 
 						// interpolation of texture coordinates
 						auto weight = m_writer.declLocale( "weight"
@@ -628,9 +633,9 @@ namespace castor3d
 
 		void Utils::declareParallaxShadowFunc( PipelineFlags const & flags )
 		{
-			if ( flags.textures.size() > 1u
-				&& checkFlag( flags.passFlags, PassFlag::eParallaxOcclusionMapping )
-				&& checkFlags( flags.textures, TextureFlag::eHeight ) != flags.textures.end() )
+			if ( checkFlags( flags.textures, TextureFlag::eHeight ) != flags.textures.end()
+				&& ( checkFlag( flags.passFlags, PassFlag::eParallaxOcclusionMappingOne )
+					|| checkFlag( flags.passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) ) )
 			{
 				using namespace sdw;
 
@@ -1031,7 +1036,8 @@ namespace castor3d
 			auto it = checkFlags( flags, TextureFlag::eHeight );
 
 			if ( it != flags.end()
-				&& checkFlag( passFlags, PassFlag::eParallaxOcclusionMapping ) )
+				&& ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne )
+					|| checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) ) )
 			{
 				auto i = size_t( std::distance( flags.begin(), it ) );
 				auto heightMapConfig = m_writer.declLocale( "heightMapConfig"
@@ -1066,21 +1072,25 @@ namespace castor3d
 				, texture( map, config.convertUV( m_writer, texCoords.xy() ) ) );
 
 			if ( checkFlag( textureFlags, TextureFlag::eHeight )
-				&& checkFlag( passFlags, PassFlag::eParallaxOcclusionMapping ) )
+				&& ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne )
+					|| checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) ) )
 			{
 				texCoords.xy() = parallaxMapping( texCoords.xy()
 					, normalize( tangentSpaceViewPosition - tangentSpaceFragPosition )
 					, map
 					, config );
 
-				IF( m_writer, texCoords.x() > 1.0_f
-					|| texCoords.y() > 1.0_f
-					|| texCoords.x() < 0.0_f
-					|| texCoords.y() < 0.0_f )
+				if ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne ) )
 				{
-					m_writer.discard();
+					IF( m_writer, texCoords.x() > 1.0_f
+						|| texCoords.y() > 1.0_f
+						|| texCoords.x() < 0.0_f
+						|| texCoords.y() < 0.0_f )
+					{
+						m_writer.discard();
+					}
+					FI;
 				}
-				FI;
 			}
 
 			if ( checkFlag( textureFlags, TextureFlag::eOpacity ) )

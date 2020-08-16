@@ -276,9 +276,14 @@ namespace castor3d
 				&& m_subsurfaceScattering != nullptr;
 		}
 
+		inline ParallaxOcclusionMode getParallaxOcclusion()const
+		{
+			return m_parallaxOcclusionMode;
+		}
+
 		inline bool hasParallaxOcclusion()const
 		{
-			return checkFlag( m_flags, PassFlag::eParallaxOcclusionMapping );
+			return m_parallaxOcclusionMode != ParallaxOcclusionMode::eNone;
 		}
 
 		inline SubsurfaceScattering const & getSubsurfaceScattering()const
@@ -363,9 +368,13 @@ namespace castor3d
 			onChanged( *this );
 		}
 
-		inline void setParallaxOcclusion( bool value )
+		inline void setParallaxOcclusion( ParallaxOcclusionMode value )
 		{
-			updateFlag( PassFlag::eParallaxOcclusionMapping, value );
+			m_parallaxOcclusionMode = value;
+			updateFlag( PassFlag::eParallaxOcclusionMappingOne
+				, m_parallaxOcclusionMode == ParallaxOcclusionMode::eOne );
+			updateFlag( PassFlag::eParallaxOcclusionMappingRepeat
+				, m_parallaxOcclusionMode == ParallaxOcclusionMode::eRepeat );
 		}
 
 		inline void setAlphaBlendMode( BlendMode value )
@@ -464,6 +473,7 @@ namespace castor3d
 		SubsurfaceScattering::OnChangedConnection m_sssConnection;
 		uint32_t m_heightTextureIndex{ InvalidIndex };
 		PassFlags m_flags;
+		ParallaxOcclusionMode m_parallaxOcclusionMode{ ParallaxOcclusionMode::eNone };
 	};
 }
 

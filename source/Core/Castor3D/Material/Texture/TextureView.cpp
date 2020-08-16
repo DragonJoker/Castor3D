@@ -78,7 +78,6 @@ namespace castor3d
 		m_info->subresourceRange.levelCount = std::min( m_info->subresourceRange.levelCount
 			, image.getMipmapLevels() );
 		m_info->image = image;
-		m_needsMipmapsGeneration = false;
 
 		if ( getOwner()->isStatic() )
 		{
@@ -90,9 +89,6 @@ namespace castor3d
 				m_needsYInversion = m_needsYInversion || getOwner()->getImage().getPxBuffer().isFlipped();
 				baseMipLevel++;
 			}
-
-			m_needsMipmapsGeneration = getLevelCount() <= 1u
-				|| baseMipLevel < getLevelCount();
 		}
 		else
 		{

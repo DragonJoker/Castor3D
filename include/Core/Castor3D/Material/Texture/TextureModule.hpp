@@ -172,6 +172,8 @@ namespace castor3d
 	using OnTextureUnitChanged = castor::Signal< OnTextureUnitChangedFunction >;
 	using OnTextureUnitChangedConnection = OnTextureUnitChanged::connection;
 
+	std::ostream & operator<<( std::ostream & stream, TextureLayout const & layout );
+
 	//@}
 	//@}
 }

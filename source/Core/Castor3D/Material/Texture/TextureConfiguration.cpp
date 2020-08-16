@@ -157,7 +157,7 @@ namespace castor3d
 	TextureConfiguration const TextureConfiguration::MetalnessTexture = []()
 	{
 		TextureConfiguration result;
-		result.specularMask[0] = 0x00FFFFFF;
+		result.specularMask[0] = 0x000000FF;
 		return result;
 	}();
 

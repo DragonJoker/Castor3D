@@ -293,6 +293,9 @@ namespace castor3d
 		m_mapLineSpacingModes[getName( TextLineSpacingMode::eOwnHeight )] = uint32_t( TextLineSpacingMode::eOwnHeight );
 		m_mapLineSpacingModes[getName( TextLineSpacingMode::eMaxLineHeight )] = uint32_t( TextLineSpacingMode::eMaxLineHeight );
 		m_mapLineSpacingModes[getName( TextLineSpacingMode::eMaxFontHeight )] = uint32_t( TextLineSpacingMode::eMaxFontHeight );
+
+		m_mapParallaxOcclusionModes[getName( ParallaxOcclusionMode::eOne )] = uint32_t( ParallaxOcclusionMode::eOne );
+		m_mapParallaxOcclusionModes[getName( ParallaxOcclusionMode::eRepeat )] = uint32_t( ParallaxOcclusionMode::eRepeat );
 	}
 
 	SceneFileParser::~SceneFileParser()
@@ -537,7 +540,7 @@ namespace castor3d
 		addParser( uint32_t( CSCNSection::ePass ), cuT( "alpha_func" ), parserPassAlphaFunc, { makeParameter< ParameterType::eCheckedText >( m_mapComparisonFuncs ), makeParameter< ParameterType::eFloat >() } );
 		addParser( uint32_t( CSCNSection::ePass ), cuT( "refraction_ratio" ), parserPassRefractionRatio, { makeParameter< ParameterType::eFloat >() } );
 		addParser( uint32_t( CSCNSection::ePass ), cuT( "subsurface_scattering" ), parserPassSubsurfaceScattering );
-		addParser( uint32_t( CSCNSection::ePass ), cuT( "parallax_occlusion" ), parserPassParallaxOcclusion, { makeParameter< ParameterType::eBool >() } );
+		addParser( uint32_t( CSCNSection::ePass ), cuT( "parallax_occlusion" ), parserPassParallaxOcclusion, { makeParameter< ParameterType::eCheckedText >( m_mapParallaxOcclusionModes ) } );
 		addParser( uint32_t( CSCNSection::ePass ), cuT( "bw_accumulation" ), parserPassBWAccumulationOperator, { makeParameter< ParameterType::eUInt32 >( makeRange( 0u, 6u ) ) } );
 		addParser( uint32_t( CSCNSection::ePass ), cuT( "reflections" ), parserPassReflections, { makeParameter< ParameterType::eBool >() } );
 		addParser( uint32_t( CSCNSection::ePass ), cuT( "refractions" ), parserPassRefractions, { makeParameter< ParameterType::eBool>() } );
