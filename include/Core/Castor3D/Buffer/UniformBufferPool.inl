@@ -161,9 +161,9 @@ namespace castor3d
 							, ashes::QueueShare
 							{
 								{
-									device.graphicsQueueFamilyIndex,
-									device.computeQueueFamilyIndex,
-									device.transferQueueFamilyIndex,
+									device.queueFamiliesIndex[RenderDevice::GraphicsIdx],
+									device.queueFamiliesIndex[RenderDevice::ComputeIdx],
+									device.queueFamiliesIndex[RenderDevice::TransferIdx],
 								}
 							} );
 					} ) );
@@ -177,9 +177,9 @@ namespace castor3d
 				sharingMode =
 				{
 					{
-						device.graphicsQueueFamilyIndex,
-						device.computeQueueFamilyIndex,
-						device.transferQueueFamilyIndex,
+						device.queueFamiliesIndex[RenderDevice::GraphicsIdx],
+						device.queueFamiliesIndex[RenderDevice::ComputeIdx],
+						device.queueFamiliesIndex[RenderDevice::TransferIdx],
 					}
 				};
 			}
@@ -200,9 +200,9 @@ namespace castor3d
 					m_maxSize = ubuffer.initialise( 
 						{
 							{
-								device.graphicsQueueFamilyIndex,
-								device.computeQueueFamilyIndex,
-								device.transferQueueFamilyIndex,
+								device.queueFamiliesIndex[RenderDevice::GraphicsIdx],
+								device.queueFamiliesIndex[RenderDevice::ComputeIdx],
+								device.queueFamiliesIndex[RenderDevice::TransferIdx],
 							}
 						} );
 				} ) );

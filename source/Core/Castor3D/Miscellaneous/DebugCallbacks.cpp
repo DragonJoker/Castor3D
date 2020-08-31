@@ -131,7 +131,11 @@ namespace castor3d
 			}
 
 			stream << lineEnd;
-			stream << lineBegin << "Message ID: " << pCallbackData->pMessageIdName << lineEnd;
+
+			if ( pCallbackData->pMessageIdName )
+			{
+				stream << lineBegin << "Message ID: " << pCallbackData->pMessageIdName << lineEnd;
+			}
 			stream << lineBegin << "Code: 0x" << std::hex << pCallbackData->messageIdNumber << lineEnd;
 			stream << lineBegin << "Message: " << formatMessage( lineBegin + "  ", pCallbackData->pMessage ) << lineEnd;
 			print( stream, "Objects", pCallbackData->objectCount, pCallbackData->pObjects, lineEnd, lineBegin );

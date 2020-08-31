@@ -34,6 +34,7 @@ woven in by Terry Thorsen 1/2003.
   version without encryption capabilities).
  */
 
+#pragma GCC diagnostic ignored "-Wdangling-else"
 
 #include <stdio.h>
 #include <stdlib.h>

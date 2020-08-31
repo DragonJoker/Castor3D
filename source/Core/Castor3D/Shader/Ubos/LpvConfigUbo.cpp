@@ -78,6 +78,9 @@ namespace castor3d
 				data.config = castor::Point4f{ indirectAttenuation, ( lightFov * 0.5 ).tan(), texelAreaModifier, 0.0f };
 			}
 			break;
+		default:
+			CU_Failure( "Unsupported LightType" );
+			break;
 		}
 
 		m_ubo->upload();

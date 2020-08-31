@@ -8,6 +8,7 @@
 #include "Castor3D/Cache/ParticleSystemCache.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePass.hpp"
 #include "Castor3D/Render/Technique/Transparent/TransparentPass.hpp"
 #include "Castor3D/Scene/Camera.hpp"

@@ -115,12 +115,17 @@ if ( CMAKE_COMPILER_IS_GNUCXX )
 elseif ( ${CMAKE_CXX_COMPILER_ID} MATCHES "Clang" )
 	DumpCompilerVersion( Castor_COMPILER_VERSION )
 	msg_debug( "clang version : ${Castor_COMPILER_VERSION}" )
+	set( PROJECTS_COMPILE_OPTIONS
+		${PROJECTS_COMPILE_OPTIONS}
+		-Wno-inconsistent-missing-override # for wxWidgets
+	)
 elseif ( MSVC )
 	if ( MSVC60 OR MSVC70 OR MSVC71 OR MSVC80 OR MSVC10 OR MSVC11 OR MSVC12 )
 		message( FATAL_ERROR "Your compiler is too old, consider an update." )
 	endif ()
 	set( PROJECTS_COMPILE_DEFINITIONS
 		${PROJECTS_COMPILE_DEFINITIONS}
+		_CRT_SECURE_NO_WARNINGS
 		_ENFORCE_MATCHING_ALLOCATORS=0
 		NOMINMAX
 	)
@@ -168,11 +173,6 @@ if( MSVC )
 	set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zm300" )
 	# Copy Rebracer.xml file so we can use Rebracer extension to uniformise code formatting
 	file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/data/VS/Rebracer.xml DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
-	# add_definitions( -D_CRT_SECURE_NO_WARNINGS )
-	set( PROJECTS_COMPILE_DEFINITIONS
-		${PROJECTS_COMPILE_DEFINITIONS}
-		_CRT_SECURE_NO_WARNINGS
-	)
 endif()
 
 option( CASTOR_BUILDGRP_TEST "Build test projects" OFF )

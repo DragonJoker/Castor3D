@@ -87,27 +87,31 @@ namespace castor3d
 		m_lightPassShadow[size_t( GlobalIlluminationType::eNone )][size_t( LightType::eSpot )] = std::make_unique< SpotLightPassShadow >( engine
 			, m_result
 			, gpInfoUbo );
-		m_lightPassShadow[size_t( GlobalIlluminationType::eLpv )][size_t( LightType::eDirectional )] = std::make_unique< DirectionalLightPassVolumePropagationShadow >( engine
-			, lightCache
-			, gpResult
-			, smDirectionalResult
-			, m_result
-			, gpInfoUbo );
-		m_lightPassShadow[size_t( GlobalIlluminationType::eLpv )][size_t( LightType::ePoint )] = nullptr;
-		m_lightPassShadow[size_t( GlobalIlluminationType::eLpv )][size_t( LightType::eSpot )] = std::make_unique< SpotLightPassVolumePropagationShadow >( engine
-			, lightCache
-			, gpResult
-			, smSpotResult
-			, m_result
-			, gpInfoUbo );
-		m_lightPassShadow[size_t( GlobalIlluminationType::eLayeredLpv )][size_t( LightType::eDirectional )] = std::make_unique< DirectionalLightPassLayeredVolumePropagationShadow >( engine
-			, lightCache
-			, gpResult
-			, smDirectionalResult
-			, m_result
-			, gpInfoUbo );
-		m_lightPassShadow[size_t( GlobalIlluminationType::eLayeredLpv )][size_t( LightType::ePoint )] = nullptr;
-		m_lightPassShadow[size_t( GlobalIlluminationType::eLayeredLpv )][size_t( LightType::eSpot )] = nullptr;
+
+		if ( engine.getRenderSystem()->getGpuInformations().hasShaderType( VK_SHADER_STAGE_GEOMETRY_BIT ) )
+		{
+			m_lightPassShadow[size_t( GlobalIlluminationType::eLpv )][size_t( LightType::eDirectional )] = std::make_unique< DirectionalLightPassVolumePropagationShadow >( engine
+				, lightCache
+				, gpResult
+				, smDirectionalResult
+				, m_result
+				, gpInfoUbo );
+			m_lightPassShadow[size_t( GlobalIlluminationType::eLpv )][size_t( LightType::ePoint )] = nullptr;
+			m_lightPassShadow[size_t( GlobalIlluminationType::eLpv )][size_t( LightType::eSpot )] = std::make_unique< SpotLightPassVolumePropagationShadow >( engine
+				, lightCache
+				, gpResult
+				, smSpotResult
+				, m_result
+				, gpInfoUbo );
+			m_lightPassShadow[size_t( GlobalIlluminationType::eLayeredLpv )][size_t( LightType::eDirectional )] = std::make_unique< DirectionalLightPassLayeredVolumePropagationShadow >( engine
+				, lightCache
+				, gpResult
+				, smDirectionalResult
+				, m_result
+				, gpInfoUbo );
+			m_lightPassShadow[size_t( GlobalIlluminationType::eLayeredLpv )][size_t( LightType::ePoint )] = nullptr;
+			m_lightPassShadow[size_t( GlobalIlluminationType::eLayeredLpv )][size_t( LightType::eSpot )] = nullptr;
+		}
 
 		for ( auto & lightPass : m_lightPass )
 		{
@@ -355,6 +359,11 @@ namespace castor3d
 	LightPass * LightingPass::doGetShadowLightPass( LightType lightType
 		, GlobalIlluminationType giType )const
 	{
+		if ( !m_engine.getRenderSystem()->getGpuInformations().hasShaderType( VK_SHADER_STAGE_GEOMETRY_BIT ) )
+		{
+			return m_lightPassShadow[size_t( GlobalIlluminationType::eNone )][size_t( lightType )].get();
+		}
+
 		return ( ( lightType == LightType::ePoint && giType >= GlobalIlluminationType::eLpv )
 			? m_lightPassShadow[size_t( GlobalIlluminationType::eNone )][size_t( lightType )].get()
 			: ( ( lightType != LightType::eDirectional && giType == GlobalIlluminationType::eLayeredLpv )

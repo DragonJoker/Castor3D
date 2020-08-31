@@ -44,9 +44,10 @@ namespace GuiCommon
 	\brief		Classe d'exporteur de scène, vers fichiers Wavefront OBJ.
 	*/
 	class ObjSceneExporter
+		: public SceneExporter
 	{
 	public:
-		virtual void exportScene( castor3d::Scene const & p_scene, castor::Path const & p_fileName );
+		void exportScene( castor3d::Scene const & p_scene, castor::Path const & p_fileName )override;
 
 	private:
 		void doExportMaterials( castor3d::Scene const & p_scene, castor::Path const & p_path )const;
@@ -65,9 +66,10 @@ namespace GuiCommon
 	\brief		Classe d'exporteur de scène, vers fichiers de scène Castor3D.
 	*/
 	class CscnSceneExporter
+		: public SceneExporter
 	{
 	public:
-		virtual void exportScene( castor3d::Scene const & p_scene, castor::Path const & p_fileName );
+		void exportScene( castor3d::Scene const & p_scene, castor::Path const & p_fileName )override;
 	};
 }
 

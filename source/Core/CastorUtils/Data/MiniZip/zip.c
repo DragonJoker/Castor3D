@@ -8,7 +8,8 @@
 
    Read zip.h for more info
 */
-
+#pragma GCC diagnostic ignored "-Wdangling-else"
+#pragma GCC diagnostic ignored "-Wparentheses-equality"
 
 #include <stdio.h>
 #include <stdlib.h>

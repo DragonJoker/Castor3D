@@ -57,7 +57,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~ShadowMap();
+		C3D_API virtual ~ShadowMap() = default;
 		/**
 		 *\~english
 		 *\brief		Initialises the frame buffer and light type specific data.

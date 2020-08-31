@@ -9,6 +9,8 @@
 #include "GuiCommon/Shader/ShaderProgramPage.hpp"
 #include "GuiCommon/Properties/Math/PropertiesContainer.hpp"
 
+#include <Castor3D/Engine.hpp>
+
 using namespace castor3d;
 using namespace castor;
 

@@ -44,7 +44,7 @@ namespace castor3d
 		, face1( -1 )
 		, face2( -1 )
 		, lightType( LightType::eCount )
-		, primitiveType( VK_PRIMITIVE_TOPOLOGY_END_RANGE )
+		, primitiveType( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST )
 		, viewport( nullptr )
 		, strName()
 		, strName2()
@@ -73,7 +73,7 @@ namespace castor3d
 		face1 = -1;
 		face2 = -1;
 		lightType = LightType::eCount;
-		primitiveType = VK_PRIMITIVE_TOPOLOGY_RANGE_SIZE;
+		primitiveType = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
 		uiUInt16 = 0;
 		uiUInt32 = 0;
 		uiUInt64 = 0;

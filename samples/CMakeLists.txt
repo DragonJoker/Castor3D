@@ -32,10 +32,10 @@ function( SamplesBuild )
 			OR ${CASTOR_BUILD_SAMPLE_CASTOR_TD} )
 			if( APPLE )
 				set( GTK2_FOUND TRUE )
-				set( CastorMinLibraries
-					${CastorMinLibraries}
+				set( GTK2_LIBRARIES
 					"-framework AppKit"
 					"-framework QuartzCore"
+					"-framework Metal"
 				)
 			elseif ( WIN32 )
 				set( GTK2_FOUND TRUE )

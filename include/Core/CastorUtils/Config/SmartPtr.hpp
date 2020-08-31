@@ -31,17 +31,35 @@ namespace castor
 	};
 	CU_API extern DummyDtor g_dummyDtor;
 
-	template< typename T >
+	template< typename TypeT >
 	struct Deleter
 	{
-		inline void operator()( T * pointer )noexcept
+		inline void operator()( TypeT * pointer )noexcept
 		{
 			delete pointer;
 		}
 	};
 
-	template< typename T >
-	using UniquePtr = std::unique_ptr< T, Deleter< T > >;
+	template< typename TypeT >
+	using UniquePtr = std::unique_ptr< TypeT, Deleter< TypeT > >;
+
+	template< typename TypeT, typename ... ParamsT >
+	UniquePtr< TypeT > makeUnique( ParamsT && ... params )
+	{
+		return UniquePtr< TypeT >( new TypeT{ std::forward< ParamsT >( params )... } );
+	}
 }
+
+#define CU_DeclareCUSmartPtr( class_name )\
+	using class_name##SPtr = std::shared_ptr< class_name >;\
+	using class_name##WPtr = std::weak_ptr< class_name >;\
+	using class_name##UPtr = castor::UniquePtr< class_name >;\
+	using class_name##RPtr = class_name *
+
+#define CU_DeclareCUTemplateSmartPtr( class_name )\
+	template< typename T > using class_name##SPtr = std::shared_ptr< class_name< T > >;\
+	template< typename T > using class_name##WPtr = std::weak_ptr< class_name< T > >;\
+	template< typename T > using class_name##UPtr = castor::UniquePtr< class_name< T > >;\
+	template< typename T > using class_name##RPtr = class_name< T > *
 
 #endif

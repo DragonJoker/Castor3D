@@ -4,6 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_ObjectCacheBase_H___
 #define ___C3D_ObjectCacheBase_H___
 
+#pragma GCC diagnostic ignored "-Wundefined-var-template"
+
 #include "CacheModule.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
 

@@ -599,7 +599,6 @@ namespace CastorViewer
 #endif
 		m_fullScreenPerspective = m_auiManager.SavePerspective();
 
-		m_auiManager.GetPane( m_toolBar ).Show();
 		m_auiManager.GetPane( m_sceneTabsContainer ).Show();
 		m_auiManager.GetPane( m_propertiesHolder ).Show();
 		m_auiManager.GetPane( m_renderPanel ).Show();

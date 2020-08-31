@@ -20,16 +20,19 @@ See LICENSE file in root folder
 #	else
 #		define CU_API __declspec(dllimport)
 #	endif
-#	define CU_SharedLibExt cuT( "dll")
+#	define CU_SharedLibExt cuT( "dll" )
+#   define CU_LibPrefix cuT( "" )
 #	define dlerror() ::getLastError()
 #	ifndef NOMINMAX
 #		define NOMINMAX
 #	endif
 #elif defined( CU_PlatformApple )
-#	define CU_SharedLibExt cuT( "dylib")
+#	define CU_SharedLibExt cuT( "dylib" )
+#   define CU_LibPrefix cuT( "lib" )
 #	define CU_API
 #else
-#	define CU_SharedLibExt cuT( "so")
+#	define CU_SharedLibExt cuT( "so" )
+#   define CU_LibPrefix cuT( "lib" )
 #	define CU_API
 #endif
 

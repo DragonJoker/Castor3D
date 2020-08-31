@@ -50,9 +50,9 @@ namespace castor3d
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 				, {
 					{
-						device.graphicsQueueFamilyIndex,
-						device.computeQueueFamilyIndex,
-						device.transferQueueFamilyIndex,
+						device.getGraphicsQueueFamilyIndex(),
+						device.getComputeQueueFamilyIndex(),
+						device.getTransferQueueFamilyIndex(),
 					}
 				} );
 			m_nonSharedBuffers.emplace_back( std::move( buffer ) );

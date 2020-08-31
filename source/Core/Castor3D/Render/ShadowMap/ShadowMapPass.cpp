@@ -18,6 +18,14 @@
 
 using namespace castor;
 
+namespace castor
+{
+	void Deleter< castor3d::ShadowMapPass >::operator()( castor3d::ShadowMapPass * pointer )noexcept
+	{
+		delete pointer;
+	}
+}
+
 namespace castor3d
 {
 	ShadowMapPass::ShadowMapPass( castor::String name

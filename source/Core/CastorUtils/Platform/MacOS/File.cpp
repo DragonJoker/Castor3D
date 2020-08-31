@@ -4,6 +4,7 @@
 
 #include "CastorUtils/Data/File.hpp"
 #include "CastorUtils/Miscellaneous/Utils.hpp"
+#include "CastorUtils/Log/Logger.hpp"
 
 #include <sys/stat.h>
 #include <unistd.h>

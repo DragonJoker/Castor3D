@@ -39,6 +39,7 @@ namespace castor3d
 			, castor::String const & name
 			, VkFormat format
 			, VkExtent3D size
+			, uint32_t arrayLayers
 			, VkImageType imageType
 			, VkImageCreateFlags createFlags
 			, VkImageUsageFlags usageFlags )
@@ -67,7 +68,7 @@ namespace castor3d
 				format,
 				size,
 				1u,
-				1u,
+				arrayLayers,
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_IMAGE_TILING_OPTIMAL,
 				usageFlags,
@@ -185,6 +186,25 @@ namespace castor3d
 			, name
 			, format
 			, { size, 1u, 1u }
+			, 1u
+			, VK_IMAGE_TYPE_1D
+			, createFlags
+			, usageFlags );
+	}
+
+	TextureUnit TextureUnit::create( Engine & engine
+		, castor::String const & name
+		, VkFormat format
+		, uint32_t size
+		, uint32_t arrayLayers
+		, VkImageCreateFlags createFlags
+		, VkImageUsageFlags usageFlags )
+	{
+		return createTextureUnit( engine
+			, name
+			, format
+			, { size, 1u, 1u }
+			, arrayLayers
 			, VK_IMAGE_TYPE_1D
 			, createFlags
 			, usageFlags );
@@ -201,6 +221,25 @@ namespace castor3d
 			, name
 			, format
 			, { size.width, size.height, 1u }
+			, 1u
+			, VK_IMAGE_TYPE_2D
+			, createFlags
+			, usageFlags );
+	}
+
+	TextureUnit TextureUnit::create( Engine & engine
+		, castor::String const & name
+		, VkFormat format
+		, VkExtent2D const & size
+		, uint32_t arrayLayers
+		, VkImageCreateFlags createFlags
+		, VkImageUsageFlags usageFlags )
+	{
+		return createTextureUnit( engine
+			, name
+			, format
+			, { size.width, size.height, 1u }
+			, arrayLayers
 			, VK_IMAGE_TYPE_2D
 			, createFlags
 			, usageFlags );
@@ -217,6 +256,7 @@ namespace castor3d
 			, name
 			, format
 			, size
+			, 1u
 			, VK_IMAGE_TYPE_3D
 			, createFlags
 			, usageFlags );
