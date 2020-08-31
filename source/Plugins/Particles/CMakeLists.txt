@@ -37,7 +37,7 @@ endfunction( ParticlesBuild )
 
 function( ParticlesSummary msg )
 	if ( ${CASTOR_BUILDGRP_PARTICLES} )
-		set( msg_tmp "\n\nParticle plugins :" )
+		set( msg_tmp "\n\n  Particle plugins:" )
 		if( ${CASTOR_BUILD_PARTICLE_FIREWORKS} )
 			set( msg_tmp "${msg_tmp}\n    Fireworks            ${Frwks}" )
 		endif ()

@@ -12,7 +12,7 @@ set( Castor3DIncludeDirs
 	${CASTOR_SOURCE_DIR}/include/Core
 )
 
-set( msgtest "Test projects :" )
+set( msgtest "  Test projects:" )
 
 set( Build ${CT} )
 add_subdirectory( CastorTest )

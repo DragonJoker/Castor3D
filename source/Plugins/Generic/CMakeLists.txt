@@ -37,7 +37,7 @@ endfunction( GenericBuild )
 
 function( GenericSummary msg )
 	if ( ${CASTOR_BUILDGRP_GENERIC} )
-		set( msg_tmp "\n\nGeneric plugins :" )
+		set( msg_tmp "\n\n  Generic plugins:" )
 		if( ${CASTOR_BUILD_GENERIC_CASTORGUI} )
 			set( msg_tmp "${msg_tmp}\n    CastorGui            ${Cgui}" )
 		endif ()

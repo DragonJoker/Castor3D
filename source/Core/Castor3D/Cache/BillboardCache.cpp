@@ -58,7 +58,11 @@ namespace castor3d
 		, SceneNode & parent )
 	{
 		auto result = MyObjectCache::add( name, parent );
-		m_pools.registerElement( *result );
+		getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
+			, [this, result]()
+			{
+				m_pools.registerElement( *result );
+			} ) );
 		return result;
 	}
 
@@ -66,7 +70,11 @@ namespace castor3d
 	{
 		m_initialise( element );
 		MyObjectCache::add( element->getName(), element );
-		m_pools.registerElement( *element );
+		getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
+			, [this, element]()
+			{
+				m_pools.registerElement( *element );
+			} ) );
 	}
 
 	void BillboardListCache::remove( Key const & name )

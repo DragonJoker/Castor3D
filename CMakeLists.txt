@@ -1,5 +1,5 @@
-cmake_minimum_required( VERSION 3.8 )
-cmake_policy( VERSION 3.8 )
+cmake_minimum_required( VERSION 3.15 )
+cmake_policy( VERSION 3.15 )
 
 if ( VCPKG_TARGET_TRIPLET )
 	set( VCPKG_TOOLCHAIN ON )
@@ -47,6 +47,7 @@ include( CompilerVersion )
 include( UnitTest )
 include( CompilationFlags )
 include( AStyleUtils )
+include( Doxygen )
 include( ExternalDependencies )
 
 set_property( GLOBAL PROPERTY USE_FOLDERS ON )
@@ -69,13 +70,13 @@ else ()
 	set( CASTOR_USE_SYSTEM_LIBS OFF )
 endif ()
 
-option( CASTOR_USE_GLSLANG "Use glslang to convert GLSL shaders to SPIR-V" ON )
+option( CASTOR_USE_GLSLANG "Use glslang to convert GLSL shaders to SPIR-V" OFF )
 option( CASTOR_BUILGRP_RENDERER "Build Ashes renderer plugins" ON )
 
 set( DEPENDENCIES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/${COMPILER_FOLDER}/${PROJECTS_PLATFORM} )
 
 if ( CASTOR_USE_SYSTEM_LIBS AND WIN32 AND NOT VCPKG_TOOLCHAIN )
-	message( STATUS "Fetching system libraries from dependencies submodule." )
+	msg_debug( "Fetching system libraries from dependencies submodule." )
 	if ( EXISTS ${DEPENDENCIES_DIR}/glslang/ )
 		set( glslang_DIR ${DEPENDENCIES_DIR}/glslang )
 		set( SPIRV_ROOT_DIR ${DEPENDENCIES_DIR}/glslang )
@@ -91,7 +92,7 @@ if ( CASTOR_USE_SYSTEM_LIBS AND WIN32 AND NOT VCPKG_TOOLCHAIN )
 	endif ()
 	if ( EXISTS ${DEPENDENCIES_DIR}/wxWidgets/ )
 		set( wxWidgets_ROOT_DIR ${DEPENDENCIES_DIR}/wxWidgets CACHE PATH "wxWidgets root directory" )
-		set( wxWidgets_LIB_DIR ${DEPENDENCIES_DIR}/wxWidgets/lib/vc_lib CACHE PATH "wxWidgets libraries directory" )
+		set( wxWidgets_LIB_DIR ${DEPENDENCIES_DIR}/wxWidgets/lib CACHE PATH "wxWidgets libraries directory" )
 	endif ()
 	if ( EXISTS ${DEPENDENCIES_DIR}/freetype/ )
 		set( ENV{FREETYPE_DIR} ${DEPENDENCIES_DIR}/freetype )
@@ -132,8 +133,6 @@ endif ()
 add_compile_options( $<$<CXX_COMPILER_ID:Clang>:-Wno-inconsistent-missing-override> ) # for wxWidgets
 add_compile_options( $<$<CXX_COMPILER_ID:MSVC>:/MP> )
 add_compile_options( $<$<CXX_COMPILER_ID:MSVC>:/wd4068> ) # Unknown pragma
-
-find_package( Doxygen COMPONENTS doxygen dot dia )
 
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------

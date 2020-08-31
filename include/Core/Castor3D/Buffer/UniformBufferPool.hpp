@@ -4,41 +4,13 @@ See LICENSE file in root folder
 #ifndef ___C3D_UniformBufferPool_HPP___
 #define ___C3D_UniformBufferPool_HPP___
 
-#include "Castor3D/Buffer/UniformBuffer.hpp"
+#include "Castor3D/Buffer/PoolUniformBuffer.hpp"
+#include "Castor3D/Buffer/UniformBufferOffset.hpp"
 
 #include <ashespp/Buffer/StagingBuffer.hpp>
 
 namespace castor3d
 {
-	template< typename T >
-	struct UniformBufferOffset
-	{
-		PoolUniformBuffer< T > * buffer{ nullptr };
-		VkMemoryPropertyFlags flags{ 0u };
-		uint32_t offset{ 0u };
-
-		explicit operator bool()const
-		{
-			return buffer
-				&& buffer->hasBuffer();
-		}
-
-		T const & getData()const
-		{
-			return buffer->getData( offset );
-		}
-
-		T & getData()
-		{
-			return buffer->getData( offset );
-		}
-
-		uint32_t getAlignedSize()const
-		{
-			return buffer->getAlignedSize();
-		}
-	};
-
 	template< typename T >
 	class UniformBufferPool
 		: public castor::OwnedBy< RenderSystem >

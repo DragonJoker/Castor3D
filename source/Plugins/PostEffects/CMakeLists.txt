@@ -85,7 +85,7 @@ endfunction( PostEffectsBuild )
 
 function( PostEffectsSummary msg )
 	if ( ${CASTOR_BUILDGRP_POSTFX} )
-		set( msg_tmp "\n\nPostEffect plugins :" )
+		set( msg_tmp "\n\n  PostEffect plugins:" )
 		if( ${CASTOR_BUILD_POSTFX_BLOOM} )
 			set( msg_tmp "${msg_tmp}\n    Bloom                ${Bloom}" )
 		endif ()

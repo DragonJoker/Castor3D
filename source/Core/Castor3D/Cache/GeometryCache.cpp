@@ -1,6 +1,7 @@
 #include "Castor3D/Cache/GeometryCache.hpp"
 
 #include "Castor3D/Event/Frame/FrameListener.hpp"
+#include "Castor3D/Event/Frame/FunctorEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
@@ -180,10 +181,10 @@ namespace castor3d
 	void GeometryCache::uploadPickingUbos( ashes::CommandBuffer const & commandBuffer )const
 	{
 		auto count = m_pickingUboPool.getBufferCount();
-		m_updatePickingTimer->updateCount( std::max( count, 1u ) );
 
 		if ( count )
 		{
+			m_updatePickingTimer->updateCount( count );
 			auto timerBlock = m_updatePickingTimer->start();
 			m_pickingUboPool.upload( commandBuffer, *m_updatePickingTimer, 0u );
 		}
@@ -212,7 +213,6 @@ namespace castor3d
 		{
 			m_modelUboPool.putBuffer( entry.second.modelUbo );
 			m_modelMatrixUboPool.putBuffer( entry.second.modelMatrixUbo );
-			m_modelMatrixUboPool.putBuffer( entry.second.modelMatrixUbo );
 			m_pickingUboPool.putBuffer( entry.second.pickingUbo );
 			m_texturesUboPool.putBuffer( entry.second.texturesUbo );
 		}
@@ -229,7 +229,11 @@ namespace castor3d
 	void GeometryCache::add( ElementPtr element )
 	{
 		MyObjectCache::add( element->getName(), element );
-		doRegister( *element );
+		getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
+			, [this, element]()
+			{
+				doRegister( *element );
+			} ) );
 	}
 
 	GeometrySPtr GeometryCache::add( Key const & name
@@ -238,7 +242,11 @@ namespace castor3d
 	{
 		CU_Require( mesh );
 		auto result = MyObjectCache::add( name, parent, mesh );
-		doRegister( *result );
+		getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
+			, [this, result]()
+			{
+				doRegister( *result );
+			} ) );
 		return result;
 	}
 
