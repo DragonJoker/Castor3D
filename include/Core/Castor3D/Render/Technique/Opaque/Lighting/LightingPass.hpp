@@ -14,6 +14,8 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightPassResult.hpp"
 #include "Castor3D/Render/Technique/Opaque/ReflectiveShadowMapGI/RsmConfig.hpp"
 
+#include <CastorUtils/Design/DelayedInitialiser.hpp>
+
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Sync/Fence.hpp>
 #include <ashespp/Sync/Semaphore.hpp>
@@ -22,9 +24,19 @@ namespace castor3d
 {
 	class LightingPass
 	{
-	private:
-		using LightPasses = std::array< std::unique_ptr< LightPass >, size_t( LightType::eCount ) >;
-		using ShadowLightPasses = std::array< LightPasses, size_t( GlobalIlluminationType::eCount ) >;
+	public:
+		enum class Type
+		{
+			eNoShadow = 0u,
+			eShadowNoGI = 1u,
+			eShadowLpvGI = 2u,
+			eShadowLayeredLpvGI = 3u,
+			CU_ScopedEnumBounds( eNoShadow ),
+		};
+		static_assert( uint32_t( Type::eCount ) == uint32_t( GlobalIlluminationType::eCount ) + 1u );
+		using DelayedLightPass = castor::DelayedInitialiserT< LightPass >;
+		using TypeLightPasses = std::array< DelayedLightPass, size_t( LightType::eCount ) >;
+		using LightPasses = std::array< TypeLightPasses, size_t( Type::eCount ) >;
 
 	public:
 		/**
@@ -104,6 +116,7 @@ namespace castor3d
 			, OpaquePassResult const & gp
 			, ashes::Semaphore const & toWait
 			, uint32_t & index );
+		LightPass * doGetLightPass( LightType lightType )const;
 		LightPass * doGetShadowLightPass( LightType lightType
 			, GlobalIlluminationType giType )const;
 
@@ -111,8 +124,7 @@ namespace castor3d
 		Engine & m_engine;
 		castor::Size const m_size;
 		LightPassResult m_result;
-		LightPasses m_lightPass;
-		ShadowLightPasses m_lightPassShadow;
+		LightPasses m_lightPasses;
 		RenderPassTimerSPtr m_timer;
 		ashes::FencePtr m_fence;
 		ashes::ImageView const & m_srcDepth;

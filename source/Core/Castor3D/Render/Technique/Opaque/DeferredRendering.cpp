@@ -88,7 +88,7 @@ namespace castor3d
 		, OpaquePass & opaquePass
 		, TextureUnit const & depthTexture
 		, TextureUnit const & velocityTexture
-		, TextureLayoutSPtr resultTexture
+		, TextureUnit const & resultTexture
 		, ShadowMapResult const & smDirectionalResult
 		, ShadowMapResult const & smPointResult
 		, ShadowMapResult const & smSpotResult
@@ -107,7 +107,7 @@ namespace castor3d
 			, velocityTexture }
 		, m_linearisePass{ std::make_unique< LineariseDepthPass >( m_engine
 			, cuT( "Deferred" )
-			, makeExtent2D( m_size )
+			, m_size
 			, depthTexture.getTexture()->getDefaultView().getSampledView() ) }
 		, m_lightingPass{ std::make_unique< LightingPass >( m_engine
 			, m_size
@@ -120,7 +120,7 @@ namespace castor3d
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo ) }
 		, m_ssao{ std::make_unique< SsaoPass >( m_engine
-			, makeExtent2D( m_size )
+			, m_size
 			, m_ssaoConfig
 			, m_linearisePass->getResult()
 			, m_opaquePassResult
@@ -137,9 +137,9 @@ namespace castor3d
 		m_resolve.emplace_back( std::make_unique< OpaqueResolvePass >( m_engine
 			, scene
 			, m_opaquePassResult
-			, m_lightingPass->getResult()[LpTexture::eDiffuse].getTexture()->getDefaultView().getSampledView()
-			, m_lightingPass->getResult()[LpTexture::eSpecular].getTexture()->getDefaultView().getSampledView()
-			, resultTexture->getDefaultView().getTargetView()
+			, m_lightingPass->getResult()[LpTexture::eDiffuse]
+			, m_lightingPass->getResult()[LpTexture::eSpecular]
+			, resultTexture
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo
 			, hdrConfigUbo
@@ -148,9 +148,9 @@ namespace castor3d
 		m_resolve.emplace_back( std::make_unique< OpaqueResolvePass >( m_engine
 			, scene
 			, m_opaquePassResult
-			, m_subsurfaceScattering->getResult().getTexture()->getDefaultView().getSampledView()
-			, m_lightingPass->getResult()[LpTexture::eSpecular].getTexture()->getDefaultView().getSampledView()
-			, resultTexture->getDefaultView().getTargetView()
+			, m_subsurfaceScattering->getResult()
+			, m_lightingPass->getResult()[LpTexture::eSpecular]
+			, resultTexture
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo
 			, hdrConfigUbo
@@ -160,33 +160,46 @@ namespace castor3d
 		m_resolve.emplace_back( std::make_unique< OpaqueResolvePass >( m_engine
 			, scene
 			, m_opaquePassResult
-			, m_lightingPass->getResult()[LpTexture::eDiffuse].getTexture()->getDefaultView().getSampledView()
-			, m_lightingPass->getResult()[LpTexture::eSpecular].getTexture()->getDefaultView().getSampledView()
-			, resultTexture->getDefaultView().getTargetView()
+			, m_lightingPass->getResult()[LpTexture::eDiffuse]
+			, m_lightingPass->getResult()[LpTexture::eSpecular]
+			, resultTexture
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo
 			, hdrConfigUbo
-			, &m_ssao->getResult().getTexture()->getDefaultView().getSampledView() ) );
+			, &m_ssao->getResult() ) );
 		//	SSSSS On
 		m_resolve.emplace_back( std::make_unique< OpaqueResolvePass >( m_engine
 			, scene
 			, m_opaquePassResult
-			, m_subsurfaceScattering->getResult().getTexture()->getDefaultView().getSampledView()
-			, m_lightingPass->getResult()[LpTexture::eSpecular].getTexture()->getDefaultView().getSampledView()
-			, resultTexture->getDefaultView().getTargetView()
+			, m_subsurfaceScattering->getResult()
+			, m_lightingPass->getResult()[LpTexture::eSpecular]
+			, resultTexture
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo
 			, hdrConfigUbo
-			, &m_ssao->getResult().getTexture()->getDefaultView().getSampledView() ) );
+			, &m_ssao->getResult() ) );
 		m_opaquePass.initialiseRenderPass( m_opaquePassResult );
+
+		m_linearisePass.initialise();
+		m_ssao.initialise();
+		m_subsurfaceScattering.initialise();
+
+		for ( auto & pass : m_resolve )
+		{
+			pass.initialise();
+		}
 	}
 
 	DeferredRendering::~DeferredRendering()
 	{
-		m_results.clear();
-		m_resolve.clear();
-		m_subsurfaceScattering.reset();
-		m_lightingPass.reset();
+		for ( auto & pass : m_resolve )
+		{
+			pass.cleanup();
+		}
+
+		m_subsurfaceScattering.cleanup();
+		m_ssao.cleanup();
+		m_linearisePass.cleanup();
 	}
 
 	void DeferredRendering::update( RenderInfo & info
@@ -257,22 +270,22 @@ namespace castor3d
 		if ( m_ssaoConfig.enabled
 			|| visitor.forceSubPassesVisit )
 		{
-			m_linearisePass->accept( visitor );
+			m_linearisePass.raw()->accept( visitor );
 		}
 
 		if ( m_ssaoConfig.enabled
 			|| visitor.forceSubPassesVisit )
 		{
-			m_ssao->accept( visitor );
+			m_ssao.raw()->accept( visitor );
 		}
 
 		if ( visitor.getScene().needsSubsurfaceScattering()
 			|| visitor.forceSubPassesVisit )
 		{
-			m_subsurfaceScattering->accept( visitor );
+			m_subsurfaceScattering.raw()->accept( visitor );
 		}
 
 		auto index = getIndex( m_ssaoConfig, visitor.getScene() );
-		m_resolve[index]->accept( visitor );
+		m_resolve[index].raw()->accept( visitor );
 	}
 }

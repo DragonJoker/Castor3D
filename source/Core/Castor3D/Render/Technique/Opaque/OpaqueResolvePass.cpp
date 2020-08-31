@@ -1244,103 +1244,125 @@ namespace castor3d
 	OpaqueResolvePass::OpaqueResolvePass( Engine & engine
 		, Scene & scene
 		, OpaquePassResult const & gp
-		, ashes::ImageView const & lightDiffuse
-		, ashes::ImageView const & lightSpecular
-		, ashes::ImageView const & result
+		, TextureUnit const & lightDiffuse
+		, TextureUnit const & lightSpecular
+		, TextureUnit const & result
 		, SceneUbo & sceneUbo
 		, GpInfoUbo const & gpInfoUbo
 		, HdrConfigUbo & hdrConfigUbo
-		, ashes::ImageView const * ssao )
+		, TextureUnit const * ssao )
 		: OwnedBy< Engine >{ engine }
 		, m_device{ getCurrentRenderDevice( engine ) }
 		, m_scene{ scene }
+		, m_result{ result }
+		, m_sceneUbo{ sceneUbo }
+		, m_gpInfoUbo{ gpInfoUbo }
+		, m_hdrConfigUbo{ hdrConfigUbo }
 		, m_ssaoResult{ ssao }
-		, m_size{ result.image->getDimensions().width, result.image->getDimensions().height }
 		, m_sampler{ engine.getDefaultSampler() }
 		, m_opaquePassResult{ gp }
 		, m_lightDiffuse{ lightDiffuse }
 		, m_lightSpecular{ lightSpecular }
-		, m_vertexBuffer{ doCreateVbo( m_device ) }
-		, m_uboDescriptorLayout{ doCreateUboDescriptorLayout( engine ) }
-		, m_uboDescriptorPool{ m_uboDescriptorLayout->createPool( "OpaqueResolvePassUbo", 1u ) }
-		, m_uboDescriptorSet{ doCreateUboDescriptorSet( engine, *m_uboDescriptorPool, sceneUbo, gpInfoUbo, hdrConfigUbo ) }
-		, m_texDescriptorLayout{ doCreateTexDescriptorLayout( engine, m_ssaoResult != nullptr, engine.getMaterialsType() ) }
-		, m_texDescriptorPool{ m_texDescriptorLayout->createPool( "OpaqueResolvePassTex", 1u ) }
-		, m_texDescriptorSet{ doCreateTexDescriptorSet( engine, *m_texDescriptorPool, m_sampler ) }
-		, m_renderPass{ doCreateRenderPass( engine, result.getFormat() ) }
-		, m_frameBuffer{ doCreateFrameBuffer( engine, *m_renderPass, m_size, result ) }
-		, m_finished{ m_device->createSemaphore( "OpaqueResolvePass" ) }
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Opaque" ), cuT( "Resolve pass" ) ) }
-		, m_programs
-		{
-			{
-				ProgramPipeline
-				{
-					engine,
-					gp,
-					*m_uboDescriptorLayout,
-					*m_texDescriptorLayout,
-					*m_renderPass,
-					m_ssaoResult,
-					m_size,
-					FogType::eDisabled,
-					engine.getMaterialsType(),
-				},
-				ProgramPipeline
-				{
-					engine,
-					gp,
-					*m_uboDescriptorLayout,
-					*m_texDescriptorLayout,
-					*m_renderPass,
-					m_ssaoResult,
-					m_size,
-					FogType::eLinear,
-					engine.getMaterialsType(),
-				},
-				ProgramPipeline
-				{
-					engine,
-					gp,
-					*m_uboDescriptorLayout,
-					*m_texDescriptorLayout,
-					*m_renderPass,
-					m_ssaoResult,
-					m_size,
-					FogType::eExponential,
-					engine.getMaterialsType(),
-				},
-				ProgramPipeline
-				{
-					engine,
-					gp,
-					*m_uboDescriptorLayout,
-					*m_texDescriptorLayout,
-					*m_renderPass,
-					m_ssaoResult,
-					m_size,
-					FogType::eSquaredExponential,
-					engine.getMaterialsType(),
-				},
-			}
-		}
 		, m_ssaoEnabled{ ssao != nullptr }
 		, m_viewport{ engine }
 	{
+	}
+
+	void OpaqueResolvePass::initialise()
+	{
+		auto & engine = *getEngine();
+		auto & result = *m_result.getTexture();
+		VkExtent2D size{ result.getWidth(), result.getHeight() };
+		m_vertexBuffer = doCreateVbo( m_device );
+		m_uboDescriptorLayout = doCreateUboDescriptorLayout( engine );
+		m_uboDescriptorPool = m_uboDescriptorLayout->createPool( "OpaqueResolvePassUbo", 1u );
+		m_uboDescriptorSet = doCreateUboDescriptorSet( engine, *m_uboDescriptorPool, m_sceneUbo, m_gpInfoUbo, m_hdrConfigUbo );
+		m_texDescriptorLayout = doCreateTexDescriptorLayout( engine, m_ssaoResult != nullptr, engine.getMaterialsType() );
+		m_texDescriptorPool = m_texDescriptorLayout->createPool( "OpaqueResolvePassTex", 1u );
+		m_texDescriptorSet = doCreateTexDescriptorSet( engine, *m_texDescriptorPool, m_sampler );
+		m_renderPass = doCreateRenderPass( engine, result.getPixelFormat() );
+		m_frameBuffer = doCreateFrameBuffer( engine, *m_renderPass, size, result.getDefaultView().getSampledView() );
+		m_finished = m_device->createSemaphore( "OpaqueResolvePass" );
+		m_timer = std::make_shared< RenderPassTimer >( engine, cuT( "Opaque" ), cuT( "Resolve pass" ) );
+		m_programs =
+		{
+			std::make_unique< ProgramPipeline >( engine
+			, m_opaquePassResult
+				, *m_uboDescriptorLayout
+				, *m_texDescriptorLayout
+				, *m_renderPass
+				, ( m_ssaoResult
+					? &m_ssaoResult->getTexture()->getDefaultView().getSampledView()
+					: nullptr )
+				, size
+				, FogType::eDisabled
+				, engine.getMaterialsType() ),
+			std::make_unique< ProgramPipeline >( engine
+				, m_opaquePassResult
+				, *m_uboDescriptorLayout
+				, *m_texDescriptorLayout
+				, *m_renderPass
+				, ( m_ssaoResult
+					? &m_ssaoResult->getTexture()->getDefaultView().getSampledView()
+					: nullptr )
+				, size
+				, FogType::eLinear
+				, engine.getMaterialsType() ),
+			std::make_unique< ProgramPipeline >( engine
+				, m_opaquePassResult
+				, *m_uboDescriptorLayout
+				, *m_texDescriptorLayout
+				, *m_renderPass
+				, ( m_ssaoResult
+					? &m_ssaoResult->getTexture()->getDefaultView().getSampledView()
+					: nullptr )
+				, size
+				, FogType::eExponential
+				, engine.getMaterialsType() ),
+			std::make_unique< ProgramPipeline >( engine
+				, m_opaquePassResult
+				, *m_uboDescriptorLayout
+				, *m_texDescriptorLayout
+				, *m_renderPass
+				, ( m_ssaoResult
+					? &m_ssaoResult->getTexture()->getDefaultView().getSampledView()
+					: nullptr )
+				, size
+				, FogType::eSquaredExponential
+				, engine.getMaterialsType() ),
+		};
 		m_viewport.setOrtho( 0, 1, 0, 1, 0, 1 );
 		m_viewport.resize( { m_size.width, m_size.height } );
 		m_viewport.update();
 	}
 
+	void OpaqueResolvePass::cleanup()
+	{
+		m_programs = {};
+		m_timer.reset();
+		m_finished.reset();
+		m_frameBuffer.reset();
+		m_renderPass.reset();
+		m_texDescriptorSet.reset();
+		m_texDescriptorPool.reset();
+		m_texDescriptorLayout.reset();
+		m_uboDescriptorSet.reset();
+		m_uboDescriptorPool.reset();
+		m_uboDescriptorLayout.reset();
+		m_vertexBuffer.reset();
+	}
+
 	void OpaqueResolvePass::update( Camera const & camera )
 	{
 		auto index = size_t( m_scene.getFog().getType() );
-		auto & program = m_programs[index];
+		auto & program = *m_programs[index];
 		auto texDescriptorWrites = doCreateTexDescriptorWrites( *m_texDescriptorLayout
 			, m_opaquePassResult
-			, m_lightDiffuse
-			, m_lightSpecular
-			, m_ssaoResult
+			, m_lightDiffuse.getTexture()->getDefaultView().getSampledView()
+			, m_lightSpecular.getTexture()->getDefaultView().getSampledView()
+			, ( m_ssaoResult
+				? &m_ssaoResult->getTexture()->getDefaultView().getSampledView()
+				: nullptr )
 			, m_sampler
 			, m_scene
 			, getEngine()->getMaterialsType()
@@ -1360,7 +1382,7 @@ namespace castor3d
 		RenderPassTimerBlock timerBlock{ m_timer->start() };
 		timerBlock->notifyPassRender();
 		auto index = size_t( m_scene.getFog().getType() );
-		auto & program = m_programs[index];
+		auto & program = *m_programs[index];
 
 		m_device.graphicsQueue->submit( *program.m_commandBuffer
 			, *result
@@ -1375,7 +1397,7 @@ namespace castor3d
 	void OpaqueResolvePass::accept( PipelineVisitorBase & visitor )
 	{
 		auto index = size_t( m_scene.getFog().getType() );
-		auto & program = m_programs[index];
+		auto & program = *m_programs[index];
 		program.accept( visitor );
 	}
 }

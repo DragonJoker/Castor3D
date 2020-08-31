@@ -14,6 +14,8 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 
+#include <CastorUtils/Design/DelayedInitialiser.hpp>
+
 namespace castor3d
 {
 	class DeferredRendering
@@ -47,7 +49,7 @@ namespace castor3d
 			, OpaquePass & opaquePass
 			, TextureUnit const & depthTexture
 			, TextureUnit const & velocityTexture
-			, TextureLayoutSPtr resultTexture
+			, TextureUnit const & resultTexture
 			, ShadowMapResult const & smDirectionalResult
 			, ShadowMapResult const & smPointResult
 			, ShadowMapResult const & smSpotResult
@@ -108,11 +110,11 @@ namespace castor3d
 		GpInfoUbo const & m_gpInfoUbo;
 		castor::Size m_size;
 		OpaquePassResult m_opaquePassResult;
-		std::unique_ptr< LineariseDepthPass > m_linearisePass;
+		castor::DelayedInitialiserT< LineariseDepthPass > m_linearisePass;
 		std::unique_ptr< LightingPass > m_lightingPass;
-		std::unique_ptr< SsaoPass > m_ssao;
-		std::unique_ptr< SubsurfaceScatteringPass > m_subsurfaceScattering;
-		std::vector< std::unique_ptr< OpaqueResolvePass > > m_resolve;
+		castor::DelayedInitialiserT< SsaoPass > m_ssao;
+		castor::DelayedInitialiserT< SubsurfaceScatteringPass > m_subsurfaceScattering;
+		std::vector< castor::DelayedInitialiserT< OpaqueResolvePass > > m_resolve;
 		std::vector< ashes::ImagePtr > m_results;
 	};
 }

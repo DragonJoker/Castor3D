@@ -660,7 +660,7 @@ namespace castor3d
 	private:
 		uint32_t doUpdateViews();
 		void doUpdateCreateInfo( castor::ImageLayout const & layout );
-		void doUpdateFromFirstImage( castor::ImageLayout const & layout );
+		void doUpdateFromFirstImage( uint32_t mipLevel, castor::ImageLayout layout );
 		void doUpdateMips( bool genNeeded, uint32_t mipLevels );
 		void doUpdateLayerMip( bool genNeeded, uint32_t layer, uint32_t level );
 		void doUpdateLayerMips( bool genNeeded, uint32_t layer, uint32_t mipLevels );

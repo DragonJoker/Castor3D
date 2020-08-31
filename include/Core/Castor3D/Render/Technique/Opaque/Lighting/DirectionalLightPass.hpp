@@ -49,7 +49,7 @@ namespace castor3d
 				, DirectionalLightPass & pass
 				, ShaderModule const & vtx
 				, ShaderModule const & pxl
-				, bool hasShadows );
+				, bool hasShadows = false );
 			/**
 			 *\~english
 			 *\brief		Destructor.
@@ -92,7 +92,7 @@ namespace castor3d
 		DirectionalLightPass( Engine & engine
 			, LightPassResult const & lpResult
 			, GpInfoUbo const & gpInfoUbo
-			, bool hasShadows );
+			, bool hasShadows = false );
 		/**
 		 *\copydoc		castor3d::LightPass::initialise
 		 */

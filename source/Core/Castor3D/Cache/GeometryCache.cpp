@@ -164,17 +164,20 @@ namespace castor3d
 		auto count = m_modelUboPool.getBufferCount()
 			+ m_modelMatrixUboPool.getBufferCount()
 			+ m_texturesUboPool.getBufferCount();
-		m_updateTimer->updateCount( std::max( count, 3u ) );
 
 		if ( count )
 		{
-			auto timerBlock = m_updateTimer->start();
-			uint32_t index = 0u;
-			m_modelUboPool.upload( commandBuffer , *m_updateTimer, index );
-			index += std::max( m_modelUboPool.getBufferCount(), 1u );
-			m_modelMatrixUboPool.upload( commandBuffer, *m_updateTimer, index );
-			index += std::max( m_modelMatrixUboPool.getBufferCount(), 1u );
-			m_texturesUboPool.upload( commandBuffer, *m_updateTimer, index );
+			//m_updateTimer->updateCount( count );
+			//auto timerBlock = m_updateTimer->start();
+			//uint32_t index = 0u;
+			//m_modelUboPool.upload( commandBuffer , *m_updateTimer, index );
+			//index += m_modelUboPool.getBufferCount();
+			//m_modelMatrixUboPool.upload( commandBuffer, *m_updateTimer, index );
+			//index += m_modelMatrixUboPool.getBufferCount();
+			//m_texturesUboPool.upload( commandBuffer, *m_updateTimer, index );
+			m_modelUboPool.upload( commandBuffer );
+			m_modelMatrixUboPool.upload( commandBuffer );
+			m_texturesUboPool.upload( commandBuffer );
 		}
 	}
 

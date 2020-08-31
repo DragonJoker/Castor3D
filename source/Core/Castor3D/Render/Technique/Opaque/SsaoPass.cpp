@@ -19,49 +19,62 @@ using namespace castor3d;
 namespace castor3d
 {
 	SsaoPass::SsaoPass( Engine & engine
-		, VkExtent2D const & size
+		, castor::Size const & size
 		, SsaoConfig & ssaoConfig
 		, TextureUnit const & linearisedDepth
 		, OpaquePassResult const & gpResult
 		, GpInfoUbo const & gpInfoUbo )
 		: m_engine{ engine }
 		, m_ssaoConfig{ ssaoConfig }
+		, m_linearisedDepth{ linearisedDepth }
+		, m_gpResult{ gpResult }
+		, m_gpInfoUbo{ gpInfoUbo }
+		, m_size{ makeExtent2D( size ) }
 		, m_matrixUbo{ engine }
-		, m_ssaoConfigUbo{ std::make_shared< SsaoConfigUbo >( engine ) }
-		, m_rawAoPass{ std::make_shared< SsaoRawAOPass >( engine
-			, size
-			, m_ssaoConfig
-			, *m_ssaoConfigUbo
-			, gpInfoUbo
-			, linearisedDepth
-			, gpResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView() ) }
-#if !C3D_DebugRawPass
-		, m_horizontalBlur{ std::make_shared< SsaoBlurPass >( engine
-			, cuT( "Horizontal" )
-			, size
-			, m_ssaoConfig
-			, *m_ssaoConfigUbo
-			, gpInfoUbo
-			, Point2i{ 1, 0 }
-			, m_rawAoPass->getResult()
-			, gpResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView() ) }
-		, m_verticalBlur{ std::make_shared< SsaoBlurPass >( engine
-			, cuT( "Vertical" )
-			, size
-			, m_ssaoConfig
-			, *m_ssaoConfigUbo
-			, gpInfoUbo
-			, Point2i{ 0, 1 }
-			, m_horizontalBlur->getResult()
-			, gpResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView() ) }
-#endif
 	{
 	}
 
-	SsaoPass::~SsaoPass()
+	void SsaoPass::initialise()
 	{
+		m_matrixUbo.initialise();
+		m_ssaoConfigUbo = std::make_shared< SsaoConfigUbo >( m_engine );
+		m_rawAoPass = std::make_shared< SsaoRawAOPass >( m_engine
+			, m_size
+			, m_ssaoConfig
+			, *m_ssaoConfigUbo
+			, m_gpInfoUbo
+			, m_linearisedDepth
+			, m_gpResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView() );
+#if !C3D_DebugRawPass
+		m_horizontalBlur = std::make_shared< SsaoBlurPass >( m_engine
+			, cuT( "Horizontal" )
+			, m_size
+			, m_ssaoConfig
+			, *m_ssaoConfigUbo
+			, m_gpInfoUbo
+			, Point2i{ 1, 0 }
+			, m_rawAoPass->getResult()
+			, m_gpResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView() );
+		m_verticalBlur = std::make_shared< SsaoBlurPass >( m_engine
+			, cuT( "Vertical" )
+			, m_size
+			, m_ssaoConfig
+			, *m_ssaoConfigUbo
+			, m_gpInfoUbo
+			, Point2i{ 0, 1 }
+			, m_horizontalBlur->getResult()
+			, m_gpResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView() );
+#endif
+	}
+
+	void SsaoPass::cleanup()
+	{
+		m_verticalBlur.reset();
+		m_horizontalBlur.reset();
+		m_rawAoPass.reset();
 		m_ssaoConfigUbo->cleanup();
 		m_ssaoConfigUbo.reset();
+		m_matrixUbo.cleanup();
 	}
 
 	void SsaoPass::update( Camera const & camera )
@@ -87,10 +100,21 @@ namespace castor3d
 
 	void SsaoPass::accept( PipelineVisitorBase & visitor )
 	{
-		m_rawAoPass->accept( m_ssaoConfig, visitor );
+		if ( m_rawAoPass )
+		{
+			m_rawAoPass->accept( m_ssaoConfig, visitor );
+		}
+
 #if !C3D_DebugRawPass
-		m_horizontalBlur->accept( true, m_ssaoConfig, visitor );
-		m_verticalBlur->accept( false, m_ssaoConfig, visitor );
+		if ( m_horizontalBlur )
+		{
+			m_horizontalBlur->accept( true, m_ssaoConfig, visitor );
+		}
+
+		if ( m_verticalBlur )
+		{
+			m_verticalBlur->accept( false, m_ssaoConfig, visitor );
+		}
 #endif
 	}
 

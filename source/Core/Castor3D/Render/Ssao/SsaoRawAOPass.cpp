@@ -788,7 +788,10 @@ namespace castor3d
 	void SsaoRawAOPass::accept( SsaoConfig & config
 		, PipelineVisitorBase & visitor )
 	{
-		visitor.visit( "SSAO Raw AO", getResult().getTexture()->getDefaultView().getSampledView() );
+		if ( getResult().isTextured() )
+		{
+			visitor.visit( "SSAO Raw AO", getResult().getTexture()->getDefaultView().getSampledView() );
+		}
 
 		auto index = m_ssaoConfig.useNormalsBuffer
 			? 1u

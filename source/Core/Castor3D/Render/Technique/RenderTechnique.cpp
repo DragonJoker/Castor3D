@@ -94,25 +94,25 @@ namespace castor3d
 		void doPrepareShadowMap( LightCache const & cache
 			, LightType type
 			, Camera const & camera
-			, ShadowMapUPtr & shadowMap
+			, ShadowMap & shadowMap
 			, ShadowMapLightTypeArray & activeShadowMaps
 			, RenderQueueArray & queues )
 		{
 			auto lights = doSortLights( cache, type, camera );
-			size_t count = std::min( shadowMap->getCount(), uint32_t( lights.size() ) );
+			size_t count = std::min( shadowMap.getCount(), uint32_t( lights.size() ) );
 
 			if ( count > 0 )
 			{
 				uint32_t index = 0u;
 				auto lightIt = lights.begin();
-				activeShadowMaps[size_t( type )].emplace_back( std::ref( *shadowMap ), UInt32Array{} );
+				activeShadowMaps[size_t( type )].emplace_back( std::ref( shadowMap ), UInt32Array{} );
 				auto & active = activeShadowMaps[size_t( type )].back();
 
 				for ( auto i = 0u; i < count; ++i )
 				{
-					lightIt->second->setShadowMap( shadowMap.get(), index );
+					lightIt->second->setShadowMap( &shadowMap, index );
 					active.second.push_back( index );
-					shadowMap->update( camera
+					shadowMap.update( camera
 						, queues
 						, *( lightIt->second )
 						, index );
@@ -190,6 +190,7 @@ namespace castor3d
 #endif
 		, m_initialised{ false }
 		, m_ssaoConfig{ ssaoConfig }
+		, m_colourTexture{ *renderSystem.getEngine() }
 		, m_depthBuffer{ *renderSystem.getEngine() }
 	{
 		doCreateShadowMaps();
@@ -221,30 +222,35 @@ namespace castor3d
 	{
 		if ( !m_initialised )
 		{
+			VkImageSubresourceRange range{ 0u, 0u, 1u, 0u, 1u };
 			auto & device = getCurrentRenderDevice( *this );
 			m_size = m_renderTarget.getSize();
-			m_colourTexture = doCreateTexture( *getEngine()
+			auto colourTexture = doCreateTexture( *getEngine()
 				, m_size
 				, VK_FORMAT_R16G16B16A16_SFLOAT
 				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 					| VK_IMAGE_USAGE_TRANSFER_DST_BIT
 					| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
 				, cuT( "RenderTechnique_Colour" ) );
+			m_colourTexture.setTexture( colourTexture );
+			m_colourTexture.setSampler( createSampler( *getEngine()
+				, cuT( "RenderTechnique_Colour" )
+				, VK_FILTER_LINEAR
+				, &range ) );
 
 			auto depthBuffer = doCreateTexture( *getEngine()
 				, m_size
 				, device.selectSuitableDepthStencilFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
-					| VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
-					| VK_FORMAT_FEATURE_TRANSFER_DST_BIT
 					| VK_FORMAT_FEATURE_TRANSFER_SRC_BIT )
 				, ( VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
 				, cuT( "RenderTechnique_Depth" ) );
 			m_depthBuffer.setTexture( depthBuffer );
-			VkImageSubresourceRange range{ 0u, 0u, 1u, 0u, 1u };
 			m_depthBuffer.setSampler( createSampler( *getEngine()
 				, cuT( "RenderTechnique_Depth" )
 				, VK_FILTER_LINEAR
 				, &range ) );
+
+			m_colourTexture.initialise();
 			m_depthBuffer.initialise();
 			m_signalFinished = device->createSemaphore( "RenderTechnique" );
 			m_gpInfoUbo.initialise();
@@ -303,12 +309,7 @@ namespace castor3d
 		m_stagingBuffer.reset();
 		m_initialised = false;
 		m_depthBuffer.cleanup();
-
-		if ( m_colourTexture )
-		{
-			m_colourTexture->cleanup();
-			m_colourTexture.reset();
-		}
+		m_colourTexture.cleanup();
 
 		auto scene = m_renderTarget.getScene();
 
@@ -415,7 +416,7 @@ namespace castor3d
 
 	void RenderTechnique::accept( RenderTechniqueVisitor & visitor )
 	{
-		visitor.visit( "Technique Colour", m_colourTexture->getDefaultView().getSampledView() );
+		visitor.visit( "Technique Colour", m_colourTexture.getTexture()->getDefaultView().getSampledView() );
 		visitor.visit( "Technique Depth", m_depthBuffer.getTexture()->getDefaultView().getSampledView() );
 
 		if ( checkFlag( visitor.getFlags().passFlags, PassFlag::eAlphaBlending ) )
@@ -446,20 +447,20 @@ namespace castor3d
 		auto & engine = *m_renderTarget.getEngine();
 		m_directionalShadowMap = std::make_unique< ShadowMapDirectional >( engine
 			, scene );
-		m_allShadowMaps[size_t( LightType::eDirectional )].emplace_back( std::ref( *m_directionalShadowMap ), UInt32Array{} );
+		m_allShadowMaps[size_t( LightType::eDirectional )].emplace_back( std::ref( *m_directionalShadowMap.raw() ), UInt32Array{} );
 		m_spotShadowMap = std::make_unique< ShadowMapSpot >( engine
 			, scene );
-		m_allShadowMaps[size_t( LightType::eSpot )].emplace_back( std::ref( *m_spotShadowMap ), UInt32Array{} );
+		m_allShadowMaps[size_t( LightType::eSpot )].emplace_back( std::ref( *m_spotShadowMap.raw() ), UInt32Array{} );
 		m_pointShadowMap = std::make_unique< ShadowMapPoint >( engine
 			, scene );
-		m_allShadowMaps[size_t( LightType::ePoint )].emplace_back( std::ref( *m_pointShadowMap ), UInt32Array{} );
+		m_allShadowMaps[size_t( LightType::ePoint )].emplace_back( std::ref( *m_pointShadowMap.raw() ), UInt32Array{} );
 	}
 
 	void RenderTechnique::doInitialiseShadowMaps()
 	{
-		m_directionalShadowMap->initialise();
-		m_spotShadowMap->initialise();
-		m_pointShadowMap->initialise();
+		m_directionalShadowMap.initialise();
+		m_spotShadowMap.initialise();
+		m_pointShadowMap.initialise();
 	}
 
 	void RenderTechnique::doInitialiseBackgroundPass()
@@ -490,7 +491,7 @@ namespace castor3d
 			},
 			{
 				0u,
-				m_colourTexture->getPixelFormat(),
+				m_colourTexture.getTexture()->getPixelFormat(),
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_CLEAR,
 				VK_ATTACHMENT_STORE_OP_STORE,
@@ -545,7 +546,7 @@ namespace castor3d
 		ashes::ImageViewCRefArray attaches
 		{
 			m_depthBuffer.getTexture()->getDefaultView().getTargetView(),
-			m_colourTexture->getDefaultView().getTargetView(),
+			m_colourTexture.getTexture()->getDefaultView().getTargetView(),
 		};
 		m_bgFrameBuffer = m_bgRenderPass->createFrameBuffer( "Background"
 			, { m_depthBuffer.getTexture()->getWidth(), m_depthBuffer.getTexture()->getHeight() }
@@ -556,7 +557,7 @@ namespace castor3d
 		{
 			background.initialise( *m_bgRenderPass, m_hdrConfigUbo );
 			background.prepareFrame( *m_bgCommandBuffer
-				, Size{ m_colourTexture->getWidth(), m_colourTexture->getHeight() }
+				, Size{ m_colourTexture.getTexture()->getWidth(), m_colourTexture.getTexture()->getHeight() }
 				, *m_bgRenderPass
 				, *m_bgFrameBuffer );
 		};
@@ -570,7 +571,7 @@ namespace castor3d
 		{
 			cbackground.initialise( *m_bgRenderPass, m_hdrConfigUbo );
 			cbackground.prepareFrame( *m_cbgCommandBuffer
-				, Size{ m_colourTexture->getWidth(), m_colourTexture->getHeight() }
+				, Size{ m_colourTexture.getTexture()->getWidth(), m_colourTexture.getTexture()->getHeight() }
 				, *m_bgRenderPass
 				, *m_bgFrameBuffer );
 		};
@@ -633,7 +634,7 @@ namespace castor3d
 		m_weightedBlendRendering = std::make_unique< WeightedBlendRendering >( *getEngine()
 			, static_cast< TransparentPass & >( *m_transparentPass )
 			, m_depthBuffer
-			, m_colourTexture->getDefaultView().getTargetView()
+			, m_colourTexture.getTexture()->getDefaultView().getTargetView()
 			, m_renderTarget.getVelocity()
 			, m_renderTarget.getSize()
 			, *m_renderTarget.getScene()
@@ -653,9 +654,9 @@ namespace castor3d
 
 	void RenderTechnique::doCleanupShadowMaps()
 	{
-		m_directionalShadowMap->cleanup();
-		m_spotShadowMap->cleanup();
-		m_pointShadowMap->cleanup();
+		m_directionalShadowMap.cleanup();
+		m_spotShadowMap.cleanup();
+		m_pointShadowMap.cleanup();
 	}
 
 	void RenderTechnique::doUpdateShadowMaps( RenderQueueArray & queues )
@@ -674,19 +675,19 @@ namespace castor3d
 			doPrepareShadowMap( cache
 				, LightType::eDirectional
 				, camera
-				, m_directionalShadowMap
+				, *m_directionalShadowMap
 				, m_activeShadowMaps
 				, queues );
 			doPrepareShadowMap( cache
 				, LightType::ePoint
 				, camera
-				, m_pointShadowMap
+				, *m_pointShadowMap
 				, m_activeShadowMaps
 				, queues );
 			doPrepareShadowMap( cache
 				, LightType::eSpot
 				, camera
-				, m_spotShadowMap
+				, *m_spotShadowMap
 				, m_activeShadowMaps
 				, queues );
 		}

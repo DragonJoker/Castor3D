@@ -47,7 +47,7 @@ namespace castor3d
 		 */
 		C3D_API LineariseDepthPass( Engine & engine
 			, castor::String const & prefix
-			, VkExtent2D const & size
+			, castor::Size const & size
 			, ashes::ImageView const & depthBuffer );
 		/**
 		 *\~english
@@ -55,7 +55,9 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~LineariseDepthPass();
+		C3D_API ~LineariseDepthPass() = default;
+		C3D_API void initialise();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Updates clipping info.
@@ -145,18 +147,27 @@ namespace castor3d
 		ashes::SemaphorePtr m_finished;
 		/**
 		*name
+		*	Common.
+		*/
+		/**@{*/
+		struct Layout
+		{
+			ashes::DescriptorSetLayoutPtr descriptorLayout;
+			ashes::DescriptorSetPoolPtr descriptorPool;
+			ashes::PipelineLayoutPtr pipelineLayout;
+		};
+		/**@}*/
+		/**
+		*name
 		*	Linearisation.
 		*/
 		/**@{*/
 		ShaderModule m_lineariseVertexShader;
 		ShaderModule m_linearisePixelShader;
-		ashes::PipelineShaderStageCreateInfoArray m_lineariseProgram;
 		ashes::ImageView m_linearisedView;
-		ashes::FrameBufferPtr m_lineariseFrameBuffer;
-		ashes::DescriptorSetLayoutPtr m_lineariseDescriptorLayout;
-		ashes::DescriptorSetPoolPtr m_lineariseDescriptorPool;
+		Layout m_lineariseLayout;
 		ashes::DescriptorSetPtr m_lineariseDescriptor;
-		ashes::PipelineLayoutPtr m_linearisePipelineLayout;
+		ashes::FrameBufferPtr m_lineariseFrameBuffer;
 		ashes::GraphicsPipelinePtr m_linearisePipeline;
 		UniformBufferUPtr< castor::Point3f > m_clipInfo;
 		castor::ChangeTracked< castor::Point3f > m_clipInfoValue;
@@ -183,10 +194,7 @@ namespace castor3d
 		UniformBufferUPtr< MinifyConfiguration > m_previousLevel;
 		ShaderModule m_minifyVertexShader;
 		ShaderModule m_minifyPixelShader;
-		ashes::PipelineShaderStageCreateInfoArray m_minifyProgram;
-		ashes::DescriptorSetLayoutPtr m_minifyDescriptorLayout;
-		ashes::PipelineLayoutPtr m_minifyPipelineLayout;
-		ashes::DescriptorSetPoolPtr m_minifyDescriptorPool;
+		Layout m_minifyLayout;
 		std::array< MinifyPipeline, MaxMipLevel > m_minifyPipelines;
 		/**@}*/
 

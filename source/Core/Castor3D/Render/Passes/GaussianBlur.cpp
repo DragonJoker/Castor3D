@@ -615,8 +615,11 @@ namespace castor3d
 
 	void GaussianBlur::accept( PipelineVisitorBase & visitor )
 	{
-		visitor.visit( m_prefix + " GaussianBlur Intermediate"
-			, m_intermediate.getTexture()->getDefaultView().getSampledView() );
+		if ( m_intermediate.isTextured() )
+		{
+			visitor.visit( m_prefix + " GaussianBlur Intermediate"
+				, m_intermediate.getTexture()->getDefaultView().getSampledView() );
+		}
 
 		visitor.visit( m_blurX.vertexShader );
 		visitor.visit( m_blurX.pixelShader );

@@ -644,13 +644,16 @@ namespace castor3d
 		, SsaoConfig & config
 		, PipelineVisitorBase & visitor )
 	{
-		if ( horizontal )
+		if ( getResult().isTextured() )
 		{
-			visitor.visit( "SSAO HBlurred AO", getResult().getTexture()->getDefaultView().getSampledView() );
-		}
-		else
-		{
-			visitor.visit( "SSAO Blurred AO", getResult().getTexture()->getDefaultView().getSampledView() );
+			if ( horizontal )
+			{
+				visitor.visit( "SSAO HBlurred AO", getResult().getTexture()->getDefaultView().getSampledView() );
+			}
+			else
+			{
+				visitor.visit( "SSAO Blurred AO", getResult().getTexture()->getDefaultView().getSampledView() );
+			}
 		}
 
 		visitor.visit( m_vertexShader );

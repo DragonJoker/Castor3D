@@ -564,7 +564,7 @@ namespace castor3d
 		, UniformBuffer< BlurWeights > const & blurUbo
 		, OpaquePassResult const & gpResult
 		, TextureUnit const & source
-		, std::array< TextureUnit, 3u > const & blurResults
+		, SubsurfaceScatteringPass::BlurResult const & blurResults
 		, TextureUnit const & destination
 		, ashes::PipelineShaderStageCreateInfoArray const & shaderStages )
 		: RenderQuad{ renderSystem, cuT( "SubscatteringCombine" ), VK_FILTER_LINEAR, { ashes::nullopt, RenderQuadConfig::Texcoord{} } }
@@ -674,27 +674,18 @@ namespace castor3d
 		, OpaquePassResult const & gpResult
 		, LightPassResult const & lpResult )
 		: OwnedBy< Engine >{ engine }
+		, m_gpInfoUbo{ gpInfoUbo }
+		, m_sceneUbo{ sceneUbo }
+		, m_gpResult{ gpResult }
+		, m_lpResult{ lpResult }
 		, m_size{ textureSize }
-		, m_blurConfigUbo{ makeUniformBuffer< BlurConfiguration >( *engine.getRenderSystem()
-			, 1u
-			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, "SubsurfaceScatteringBlurConfig" ) }
-		, m_blurWeightsUbo{ makeUniformBuffer< BlurWeights >( *engine.getRenderSystem()
-			, 1u
-			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, "SubsurfaceScatteringBlurWeights" ) }
 		, m_intermediate{ doCreateTexture( engine, textureSize, "SubsurfaceScattering intermediate" ) }
 		, m_blurHorizVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SssBlurX" }
 		, m_blurHorizPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SssBlurX" }
-		, m_blurHorizProgram{ doCreateBlurProgram( engine, false, m_blurHorizVertexShader, m_blurHorizPixelShader ) }
 		, m_blurVerticVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SssBlurY" }
 		, m_blurVerticPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SssBlurY" }
-		, m_blurVerticProgram{ doCreateBlurProgram( engine, true, m_blurVerticVertexShader, m_blurVerticPixelShader ) }
 		, m_combineVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SssCombine" }
 		, m_combinePixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SssCombine" }
-		, m_combineProgram{ doCreateCombineProgram( engine, m_combineVertexShader, m_combinePixelShader ) }
 		, m_blurResults
 		{
 			{
@@ -704,26 +695,39 @@ namespace castor3d
 			}
 		}
 		, m_result{ doCreateTexture( engine, textureSize, "SubsurfaceScattering Result" ) }
-		, m_blurX
-		{
-			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gpResult, lpResult[LpTexture::eDiffuse], m_intermediate, false, m_blurHorizProgram },
-			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gpResult, m_blurResults[0], m_intermediate, false, m_blurHorizProgram },
-			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gpResult, m_blurResults[1], m_intermediate, false, m_blurHorizProgram },
-		}
-		, m_blurY
-		{
-			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gpResult, m_intermediate, m_blurResults[0], true, m_blurVerticProgram },
-			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gpResult, m_intermediate, m_blurResults[1], true, m_blurVerticProgram },
-			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gpResult, m_intermediate, m_blurResults[2], true, m_blurVerticProgram },
-		}
-		, m_combine{ *engine.getRenderSystem(), textureSize, *m_blurWeightsUbo, gpResult, lpResult[LpTexture::eDiffuse], m_blurResults, m_result, m_combineProgram }
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Opaque" ), cuT( "SSSSS pass" ) ) }
 	{
+	}
+
+	void SubsurfaceScatteringPass::initialise()
+	{
+		auto & engine = *getEngine();
+		auto & device = getCurrentRenderDevice( *this );
+
+		m_intermediate.initialise();
+		m_result.initialise();
+
+		for ( auto & result : m_blurResults )
+		{
+			result.initialise();
+		}
+
+		// Blur Configuration UBO
+		m_blurConfigUbo = makeUniformBuffer< BlurConfiguration >( *engine.getRenderSystem()
+			, 1u
+			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, "SubsurfaceScatteringBlurConfig" );
 		auto & configuration = m_blurConfigUbo->getData( 0u );
 		configuration.blurCorrection = 1.0f;
 		configuration.blurPixelSize = Point2f{ 1.0f / m_size.getWidth(), 1.0f / m_size.getHeight() };
 		m_blurConfigUbo->upload();
 
+		// Blur Weights UBO
+		m_blurWeightsUbo = makeUniformBuffer< BlurWeights >( *engine.getRenderSystem()
+			, 1u
+			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, "SubsurfaceScatteringBlurWeights" );
 		auto & weights = m_blurWeightsUbo->getData();
 		weights.originalWeight = Point4f{ 0.2406f, 0.4475f, 0.6159f, 0.25f };
 		weights.blurWeights[0] = Point4f{ 0.1158, 0.3661, 0.3439, 0.25 };
@@ -732,25 +736,93 @@ namespace castor3d
 		weights.blurVariance = Point4f{ 0.0516, 0.2719, 2.0062 };
 		m_blurWeightsUbo->upload();
 
-		auto & device = getCurrentRenderDevice( engine );
+		// Combine pass
+		auto combineProgram = doCreateCombineProgram( engine, m_combineVertexShader, m_combinePixelShader );
+		m_combine = std::make_unique< Combine >( *engine.getRenderSystem()
+			, m_size
+			, *m_blurWeightsUbo
+			, m_gpResult
+			, m_lpResult[LpTexture::eDiffuse]
+			, m_blurResults
+			, m_result
+			, combineProgram );
+
+		// Horizontal blur pass
+		auto blurHorizProgram = doCreateBlurProgram( engine, false, m_blurHorizVertexShader, m_blurHorizPixelShader );
+		m_blurX =
+		{
+			std::make_unique< Blur >( *engine.getRenderSystem()
+				, m_size
+				, m_gpInfoUbo
+				, m_sceneUbo
+				, *m_blurConfigUbo
+				, m_gpResult
+				, m_lpResult[LpTexture::eDiffuse]
+				, m_intermediate
+				, false
+				, blurHorizProgram ),
+			std::make_unique< Blur >( *engine.getRenderSystem()
+				, m_size
+				, m_gpInfoUbo
+				, m_sceneUbo
+				, *m_blurConfigUbo
+				, m_gpResult
+				, m_blurResults[0]
+				, m_intermediate
+				, false
+				, blurHorizProgram ),
+			std::make_unique< Blur >( *engine.getRenderSystem()
+				, m_size
+				, m_gpInfoUbo
+				, m_sceneUbo
+				, *m_blurConfigUbo
+				, m_gpResult
+				, m_blurResults[1]
+				, m_intermediate
+				, false
+				, blurHorizProgram ),
+		};
+
+		// Vertical blur pass
+		auto blurVerticProgram = doCreateBlurProgram( engine, true, m_blurVerticVertexShader, m_blurVerticPixelShader );
+		m_blurY =
+		{
+			std::make_unique< Blur >( *engine.getRenderSystem()
+				, m_size
+				, m_gpInfoUbo
+				, m_sceneUbo
+				, *m_blurConfigUbo
+				, m_gpResult
+				, m_intermediate
+				, m_blurResults[0]
+				, true
+				, blurVerticProgram ),
+			std::make_unique< Blur >( *engine.getRenderSystem()
+				, m_size
+				, m_gpInfoUbo
+				, m_sceneUbo
+				, *m_blurConfigUbo
+				, m_gpResult
+				, m_intermediate
+				, m_blurResults[1]
+				, true
+				, blurVerticProgram ),
+			std::make_unique< Blur >( *engine.getRenderSystem()
+				, m_size
+				, m_gpInfoUbo
+				, m_sceneUbo
+				, *m_blurConfigUbo
+				, m_gpResult
+				, m_intermediate
+				, m_blurResults[2]
+				, true
+				, blurVerticProgram ),
+		};
+
+		// Commands.
+		m_timer = std::make_shared< RenderPassTimer >( engine, cuT( "Opaque" ), cuT( "SSSSS pass" ) );
 		m_finished = device->createSemaphore( "SSSSS pass" );
 		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( "SSSSS pass" );
-		prepare();
-	}
-
-	SubsurfaceScatteringPass::~SubsurfaceScatteringPass()
-	{
-		m_result.cleanup();
-		m_intermediate.cleanup();
-
-		for ( auto & result : m_blurResults )
-		{
-			result.cleanup();
-		}
-	}
-
-	void SubsurfaceScatteringPass::prepare()
-	{
 		m_commandBuffer->begin();
 		m_commandBuffer->beginDebugBlock(
 			{
@@ -761,14 +833,33 @@ namespace castor3d
 
 		for ( size_t i{ 0u }; i < m_blurResults.size(); ++i )
 		{
-			m_blurX[i].prepareFrame( *m_commandBuffer );
-			m_blurY[i].prepareFrame( *m_commandBuffer );
+			m_blurX[i]->prepareFrame( *m_commandBuffer );
+			m_blurY[i]->prepareFrame( *m_commandBuffer );
 		}
 
-		m_combine.prepareFrame( *m_commandBuffer );
+		m_combine->prepareFrame( *m_commandBuffer );
 		m_timer->endPass( *m_commandBuffer );
 		m_commandBuffer->endDebugBlock();
 		m_commandBuffer->end();
+	}
+
+	void SubsurfaceScatteringPass::cleanup()
+	{
+		m_commandBuffer.reset();
+		m_finished.reset();
+		m_timer.reset();
+		m_blurY = { nullptr, nullptr, nullptr };
+		m_blurX = { nullptr, nullptr, nullptr };
+		m_combine.reset();
+		m_blurWeightsUbo.reset();
+		m_blurConfigUbo.reset();
+		m_result.cleanup();
+		m_intermediate.cleanup();
+
+		for ( auto & result : m_blurResults )
+		{
+			result.cleanup();
+		}
 	}
 
 	ashes::Semaphore const & SubsurfaceScatteringPass::render( ashes::Semaphore const & toWait )const

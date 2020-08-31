@@ -54,14 +54,9 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~SubsurfaceScatteringPass();
-		/**
-		*\~english
-		*\brief		Prepares the command buffer.
-		*\~french
-		*\brief		Prépare le tampon de commandes.
-		*/
-		C3D_API void prepare();
+		C3D_API ~SubsurfaceScatteringPass() = default;
+		C3D_API void initialise();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Renders the subsurfaces scattering.
@@ -70,7 +65,7 @@ namespace castor3d
 		 *\brief		Dessine le subsurfaces scattering.
 		 *\param[in]	toWait	Le sémaphore à attendre.
 		 */
-		ashes::Semaphore const & render( ashes::Semaphore const & toWait )const;
+		C3D_API ashes::Semaphore const & render( ashes::Semaphore const & toWait )const;
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -80,14 +75,6 @@ namespace castor3d
 		{
 			return m_result;
 		}
-
-	private:
-		void doBlur( OpaquePassResult const & gpResult
-			, TextureUnit const & source
-			, TextureUnit const & destination
-			, castor::Point2f const & direction )const;
-		void doCombine( OpaquePassResult const & gpResult
-			, TextureUnit const & source )const;
 
 	public:
 		static castor::String const Config;
@@ -141,6 +128,9 @@ namespace castor3d
 			ashes::RenderPassPtr m_renderPass;
 			ashes::FrameBufferPtr m_frameBuffer;
 		};
+		static constexpr uint32_t PassCount = 3u;
+		using BlurResult = std::array< TextureUnit, PassCount >;
+		using BlurArray = std::array< std::unique_ptr< Blur >, PassCount >;
 
 		class Combine
 			: private RenderQuad
@@ -151,7 +141,7 @@ namespace castor3d
 				, UniformBuffer< BlurWeights > const & blurUbo
 				, OpaquePassResult const & gpResult
 				, TextureUnit const & source
-				, std::array< TextureUnit, 3u > const & blurResults
+				, BlurResult const & blurResults
 				, TextureUnit const & destination
 				, ashes::PipelineShaderStageCreateInfoArray const & shaderStages );
 			Combine( Combine && rhs )noexcept;
@@ -166,30 +156,31 @@ namespace castor3d
 			UniformBuffer< BlurWeights > const & m_blurUbo;
 			OpaquePassResult const & m_geometryBufferResult;
 			TextureUnit const & m_source;
-			std::array< TextureUnit, 3u > const & m_blurResults;
+			BlurResult const & m_blurResults;
 			ashes::RenderPassPtr m_renderPass;
 			ashes::FrameBufferPtr m_frameBuffer;
 		};
 
 	private:
+		GpInfoUbo const & m_gpInfoUbo;
+		SceneUbo & m_sceneUbo;
+		OpaquePassResult const & m_gpResult;
+		LightPassResult const & m_lpResult;
 		castor::Size m_size;
 		UniformBufferUPtr< BlurConfiguration > m_blurConfigUbo;
 		UniformBufferUPtr< BlurWeights > m_blurWeightsUbo;
 		TextureUnit m_intermediate;
-		std::array< TextureUnit, 3u > m_blurResults;
+		BlurResult m_blurResults;
 		TextureUnit m_result;
 		ShaderModule m_blurHorizVertexShader;
 		ShaderModule m_blurHorizPixelShader;
-		ashes::PipelineShaderStageCreateInfoArray m_blurHorizProgram;
-		Blur m_blurX[3];
+		BlurArray m_blurX;
 		ShaderModule m_blurVerticVertexShader;
 		ShaderModule m_blurVerticPixelShader;
-		ashes::PipelineShaderStageCreateInfoArray m_blurVerticProgram;
-		Blur m_blurY[3];
+		BlurArray m_blurY;
 		ShaderModule m_combineVertexShader;
 		ShaderModule m_combinePixelShader;
-		ashes::PipelineShaderStageCreateInfoArray m_combineProgram;
-		Combine m_combine;
+		std::unique_ptr< Combine > m_combine;
 		ashes::CommandBufferPtr m_commandBuffer;
 		ashes::SemaphorePtr m_finished;
 		RenderPassTimerSPtr m_timer;

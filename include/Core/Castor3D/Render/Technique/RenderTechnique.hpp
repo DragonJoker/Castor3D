@@ -18,6 +18,8 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 
+#include <CastorUtils/Design/DelayedInitialiser.hpp>
+
 #if C3D_UseDepthPrepass
 #	include "Castor3D/Render/Passes/DepthPass.hpp"
 #endif
@@ -146,8 +148,8 @@ namespace castor3d
 
 		inline TextureLayout const & getResult()const
 		{
-			CU_Require( m_colourTexture );
-			return *m_colourTexture;
+			CU_Require( m_colourTexture.isTextured() );
+			return *m_colourTexture.getTexture();
 		}
 
 		inline TextureLayout const & getDepth()const
@@ -254,7 +256,7 @@ namespace castor3d
 		RenderTarget & m_renderTarget;
 		RenderSystem & m_renderSystem;
 		castor::Size m_size;
-		TextureLayoutSPtr m_colourTexture;
+		TextureUnit m_colourTexture;
 		TextureUnit m_depthBuffer;
 		MatrixUbo m_matrixUbo;
 		HdrConfigUbo m_hdrConfigUbo;
@@ -270,9 +272,9 @@ namespace castor3d
 		std::unique_ptr< DeferredRendering > m_deferredRendering;
 		std::unique_ptr< WeightedBlendRendering > m_weightedBlendRendering;
 		RenderPassTimerSPtr m_particleTimer;
-		ShadowMapUPtr m_directionalShadowMap;
-		ShadowMapUPtr m_pointShadowMap;
-		ShadowMapUPtr m_spotShadowMap;
+		castor::DelayedInitialiserT< ShadowMap > m_directionalShadowMap;
+		castor::DelayedInitialiserT< ShadowMap > m_pointShadowMap;
+		castor::DelayedInitialiserT< ShadowMap > m_spotShadowMap;
 		ShadowMapLightTypeArray m_allShadowMaps;
 		ShadowMapLightTypeArray m_activeShadowMaps;
 		ashes::SemaphorePtr m_signalFinished;
