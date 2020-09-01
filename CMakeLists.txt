@@ -115,10 +115,6 @@ if ( CMAKE_COMPILER_IS_GNUCXX )
 elseif ( ${CMAKE_CXX_COMPILER_ID} MATCHES "Clang" )
 	DumpCompilerVersion( Castor_COMPILER_VERSION )
 	msg_debug( "clang version : ${Castor_COMPILER_VERSION}" )
-	set( PROJECTS_COMPILE_OPTIONS
-		${PROJECTS_COMPILE_OPTIONS}
-		-Wno-inconsistent-missing-override # for wxWidgets
-	)
 elseif ( MSVC )
 	if ( MSVC60 OR MSVC70 OR MSVC71 OR MSVC80 OR MSVC10 OR MSVC11 OR MSVC12 )
 		message( FATAL_ERROR "Your compiler is too old, consider an update." )
@@ -133,7 +129,9 @@ else ()
 	message( FATAL_ERROR "Unsupported compiler." )
 endif ()
 
+add_compile_options( $<$<CXX_COMPILER_ID:Clang>:-Wno-inconsistent-missing-override> ) # for wxWidgets
 add_compile_options( $<$<CXX_COMPILER_ID:MSVC>:/MP> )
+add_compile_options( $<$<CXX_COMPILER_ID:MSVC>:/wd4068> ) # Unknown pragma
 
 find_package( Doxygen COMPONENTS doxygen dot dia )
 
