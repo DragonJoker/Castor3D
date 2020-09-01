@@ -482,6 +482,10 @@ namespace castor3d
 
 		auto main = [&]()
 		{
+			pxl_normalLinear = vec4( 0.0_f );
+			pxl_variance = vec2( 0.0_f );
+			pxl_position = vec4( 0.0_f );
+			pxl_flux = vec4( 0.0_f );
 			auto texCoord = writer.declLocale( "texCoord"
 				, vtx_texture );
 			auto normal = writer.declLocale( "normal"
@@ -646,6 +650,10 @@ namespace castor3d
 
 		auto main = [&]()
 		{
+			pxl_normalLinear = vec4( 0.0_f );
+			pxl_variance = vec2( 0.0_f );
+			pxl_position = vec4( 0.0_f );
+			pxl_flux = vec4( 0.0_f );
 			auto texCoord = writer.declLocale( "texCoord"
 				, vtx_texture );
 			auto normal = writer.declLocale( "normal"
@@ -810,6 +818,10 @@ namespace castor3d
 
 		auto main = [&]()
 		{
+			pxl_normalLinear = vec4( 0.0_f );
+			pxl_variance = vec2( 0.0_f );
+			pxl_position = vec4( 0.0_f );
+			pxl_flux = vec4( 0.0_f );
 			auto texCoord = writer.declLocale( "texCoord"
 				, vtx_texture );
 			auto normal = writer.declLocale( "normal"

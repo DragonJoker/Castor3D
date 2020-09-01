@@ -65,6 +65,7 @@ namespace smaa
 				{
 					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 					vtx_texture = uv;
+					vtx_offset = vec4( 0.0_f );
 					SMAANeighborhoodBlendingVS( vtx_texture, vtx_offset );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

@@ -14,6 +14,19 @@ namespace castor3d
 		std::string formatMessage( std::string_view prefix
 			, std::string_view message )
 		{
+			if ( message.find_first_of( "|\n" ) == message.find( "\n" ) )
+			{
+				auto split = castor::string::split( message.data(), "\n", ~( 0u ), false );
+				std::stringstream stream;
+
+				for ( auto & str : split )
+				{
+					stream << "\n" << prefix << str;
+				}
+
+				return stream.str();
+			}
+
 			auto split = castor::string::split( message.data(), "|", ~( 0u ), false );
 			std::stringstream stream;
 
