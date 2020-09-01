@@ -25,9 +25,9 @@ namespace Testing
 	void CastorUtilsArrayViewTest::BasicTest()
 	{
 		{
-			size_t const size = 8;
+			uint64_t const size = 8;
 			int * tmp = new int[size];
-			ArrayView< int > view1 = makeArrayView( tmp, size );
+			ArrayView< int > view1 = castor::makeArrayView( tmp, size );
 			CT_CHECK( view1.size() == size );
 			CT_CHECK( !view1.empty() );
 			CT_CHECK( view1.begin() == tmp );

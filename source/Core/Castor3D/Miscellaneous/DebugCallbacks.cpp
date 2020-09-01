@@ -14,6 +14,19 @@ namespace castor3d
 		std::string formatMessage( std::string_view prefix
 			, std::string_view message )
 		{
+			if ( message.find_first_of( "|\n" ) == message.find( "\n" ) )
+			{
+				auto split = castor::string::split( message.data(), "\n", ~( 0u ), false );
+				std::stringstream stream;
+
+				for ( auto & str : split )
+				{
+					stream << "\n" << prefix << str;
+				}
+
+				return stream.str();
+			}
+
 			auto split = castor::string::split( message.data(), "|", ~( 0u ), false );
 			std::stringstream stream;
 
@@ -131,7 +144,11 @@ namespace castor3d
 			}
 
 			stream << lineEnd;
-			stream << lineBegin << "Message ID: " << pCallbackData->pMessageIdName << lineEnd;
+
+			if ( pCallbackData->pMessageIdName )
+			{
+				stream << lineBegin << "Message ID: " << pCallbackData->pMessageIdName << lineEnd;
+			}
 			stream << lineBegin << "Code: 0x" << std::hex << pCallbackData->messageIdNumber << lineEnd;
 			stream << lineBegin << "Message: " << formatMessage( lineBegin + "  ", pCallbackData->pMessage ) << lineEnd;
 			print( stream, "Objects", pCallbackData->objectCount, pCallbackData->pObjects, lineEnd, lineBegin );

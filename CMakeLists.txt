@@ -121,6 +121,7 @@ elseif ( MSVC )
 	endif ()
 	set( PROJECTS_COMPILE_DEFINITIONS
 		${PROJECTS_COMPILE_DEFINITIONS}
+		_CRT_SECURE_NO_WARNINGS
 		_ENFORCE_MATCHING_ALLOCATORS=0
 		NOMINMAX
 	)
@@ -128,7 +129,9 @@ else ()
 	message( FATAL_ERROR "Unsupported compiler." )
 endif ()
 
+add_compile_options( $<$<CXX_COMPILER_ID:Clang>:-Wno-inconsistent-missing-override> ) # for wxWidgets
 add_compile_options( $<$<CXX_COMPILER_ID:MSVC>:/MP> )
+add_compile_options( $<$<CXX_COMPILER_ID:MSVC>:/wd4068> ) # Unknown pragma
 
 find_package( Doxygen COMPONENTS doxygen dot dia )
 
@@ -168,11 +171,6 @@ if( MSVC )
 	set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zm300" )
 	# Copy Rebracer.xml file so we can use Rebracer extension to uniformise code formatting
 	file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/data/VS/Rebracer.xml DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
-	# add_definitions( -D_CRT_SECURE_NO_WARNINGS )
-	set( PROJECTS_COMPILE_DEFINITIONS
-		${PROJECTS_COMPILE_DEFINITIONS}
-		_CRT_SECURE_NO_WARNINGS
-	)
 endif()
 
 option( CASTOR_BUILDGRP_TEST "Build test projects" OFF )

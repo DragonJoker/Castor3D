@@ -551,6 +551,10 @@ namespace GuiCommon
 					grid->Append( new wxFloatProperty( PROPERTY_PASS_GLOSSINESS ) )->SetValue( pbr->getGlossiness() );
 				}
 				break;
+
+			default:
+				CU_Failure( "Unsupported MaterialType" );
+				break;
 			}
 
 			grid->Append( new wxBoolProperty( PROPERTY_PASS_TWO_SIDED, wxPG_BOOL_USE_CHECKBOX ) )->SetValue( pass->IsTwoSided() );
@@ -658,6 +662,10 @@ namespace GuiCommon
 				} );
 			}
 			break;
+
+		default:
+			CU_Failure( "Unsupported MaterialType" );
+			break;
 		}
 	}
 
@@ -685,6 +693,10 @@ namespace GuiCommon
 					pbr->setSpecular( value );
 				} );
 			}
+			break;
+
+		default:
+			CU_Failure( "Unsupported MaterialType" );
 			break;
 		}
 	}

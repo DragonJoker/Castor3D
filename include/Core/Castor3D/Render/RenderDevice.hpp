@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include <ashespp/Command/CommandPool.hpp>
 #include <ashespp/Sync/Queue.hpp>
 
+#include <array>
 #include <vector>
 
 namespace castor3d
@@ -46,6 +47,26 @@ namespace castor3d
 			return *device;
 		}
 
+		inline uint32_t getGraphicsQueueFamilyIndex()const
+		{
+			return queueFamiliesIndex[GraphicsIdx];
+		}
+
+		inline uint32_t getPresentQueueFamilyIndex()const
+		{
+			return queueFamiliesIndex[PresentIdx];
+		}
+
+		inline uint32_t getComputeQueueFamilyIndex()const
+		{
+			return queueFamiliesIndex[ComputeIdx];
+		}
+
+		inline uint32_t getTransferQueueFamilyIndex()const
+		{
+			return queueFamiliesIndex[TransferIdx];
+		}
+
 		RenderSystem & renderSystem;
 		ashes::PhysicalDevice const & gpu;
 		AshPluginDescription const & desc;
@@ -53,10 +74,7 @@ namespace castor3d
 		VkPhysicalDeviceMemoryProperties memoryProperties{};
 		VkPhysicalDeviceFeatures features{};
 		VkPhysicalDeviceProperties properties{};
-		uint32_t presentQueueFamilyIndex;
-		uint32_t graphicsQueueFamilyIndex;
-		uint32_t computeQueueFamilyIndex;
-		uint32_t transferQueueFamilyIndex;
+		std::array< uint32_t, 4u > queueFamiliesIndex;
 		ashes::DevicePtr device;
 		std::vector< ashes::CommandPoolPtr > commandPools;
 		ashes::CommandPool * presentCommandPool{ nullptr };
@@ -67,6 +85,11 @@ namespace castor3d
 		ashes::QueuePtr graphicsQueue{ nullptr };
 		ashes::QueuePtr computeQueue{ nullptr };
 		ashes::QueuePtr transferQueue{ nullptr };
+
+		static constexpr size_t GraphicsIdx = 0u;
+		static constexpr size_t PresentIdx = 1u;
+		static constexpr size_t ComputeIdx = 2u;
+		static constexpr size_t TransferIdx = 3u;
 	};
 }
 

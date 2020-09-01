@@ -152,4 +152,19 @@ namespace castor3d
 	//@}
 }
 
+namespace castor
+{
+	template<>
+	struct Deleter< castor3d::ShadowMap >
+	{
+		void operator()( castor3d::ShadowMap * pointer )noexcept;
+	};
+
+	template<>
+	struct Deleter< castor3d::ShadowMapPass >
+	{
+		void operator()( castor3d::ShadowMapPass * pointer )noexcept;
+	};
+}
+
 #endif

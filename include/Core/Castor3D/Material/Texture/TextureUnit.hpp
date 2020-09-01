@@ -78,7 +78,21 @@ namespace castor3d
 		C3D_API static TextureUnit create( Engine & engine
 			, castor::String const & name
 			, VkFormat format
+			, uint32_t size
+			, uint32_t arrayLayers
+			, VkImageCreateFlags createFlags
+			, VkImageUsageFlags usageFlags );
+		C3D_API static TextureUnit create( Engine & engine
+			, castor::String const & name
+			, VkFormat format
 			, VkExtent2D const & size
+			, VkImageCreateFlags createFlags
+			, VkImageUsageFlags usageFlags );
+		C3D_API static TextureUnit create( Engine & engine
+			, castor::String const & name
+			, VkFormat format
+			, VkExtent2D const & size
+			, uint32_t arrayLayers
 			, VkImageCreateFlags createFlags
 			, VkImageUsageFlags usageFlags );
 		C3D_API static TextureUnit create( Engine & engine

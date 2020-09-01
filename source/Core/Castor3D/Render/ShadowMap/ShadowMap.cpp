@@ -14,6 +14,14 @@
 
 using namespace castor;
 
+namespace castor
+{
+	void Deleter< castor3d::ShadowMap >::operator()( castor3d::ShadowMap * pointer )noexcept
+	{
+		delete pointer;
+	}
+}
+
 namespace castor3d
 {
 	ShadowMap::ShadowMap( Engine & engine
@@ -26,10 +34,6 @@ namespace castor3d
 		, m_result{ std::move( result ) }
 		, m_passes{ std::move( passes ) }
 		, m_count{ count }
-	{
-	}
-
-	ShadowMap::~ShadowMap()
 	{
 	}
 

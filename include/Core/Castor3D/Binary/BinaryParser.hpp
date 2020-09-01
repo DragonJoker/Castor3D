@@ -4,6 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_BinaryParser_H___
 #define ___C3D_BinaryParser_H___
 
+#pragma GCC diagnostic ignored "-Wundefined-var-template"
+
 #include "Castor3D/Binary/ChunkParser.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Miscellaneous/Version.hpp"

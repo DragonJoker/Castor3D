@@ -287,18 +287,21 @@ namespace castor3d
 			, ashes::StringArray & names )
 		{
 #if VK_EXT_debug_utils
+			log::debug << "Adding debug_utils layer" << std::endl;
 			if ( isExtensionAvailable( available, VK_EXT_DEBUG_UTILS_EXTENSION_NAME ) )
 			{
 				names.push_back( VK_EXT_DEBUG_UTILS_EXTENSION_NAME );
 			}
 #else
 #	if VK_EXT_debug_report
+			log::debug << "Adding debug_report layer" << std::endl;
 			if ( isExtensionAvailable( available, VK_EXT_DEBUG_REPORT_EXTENSION_NAME ) )
 			{
 				names.push_back( VK_EXT_DEBUG_REPORT_EXTENSION_NAME );
 			}
 #	endif
 #	if VK_EXT_debug_marker
+			log::debug << "Adding debug_marker layer" << std::endl;
 			if ( isExtensionAvailable( available, VK_EXT_DEBUG_MARKER_EXTENSION_NAME ) )
 			{
 				names.push_back( VK_EXT_DEBUG_MARKER_EXTENSION_NAME );
@@ -395,7 +398,7 @@ namespace castor3d
 				engine.getAppVersion().getVkVersion(),
 				"Castor3D",
 				Version{}.getVkVersion(),
-				VK_API_VERSION_1_2,
+				ashes::makeVersion( 1, 2, 0 ),
 			};
 		}
 	}
@@ -450,6 +453,8 @@ namespace castor3d
 			m_layerNames,
 			m_extensionNames,
 		};
+		log::debug << "Enabled layers count: " << uint32_t( m_layerNames.size() ) << std::endl;
+		log::debug << "Enabled extensions count: " << uint32_t( m_extensionNames.size() ) << std::endl;
 		m_instance = std::make_unique< ashes::Instance >( std::move( plugin )
 #if C3D_UseAllocationCallbacks
 			, ashes::makeAllocator< AlignedBuddyAllocatorTraits >()

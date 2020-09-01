@@ -226,12 +226,14 @@ namespace castor3d
 	template<> struct VkTypeTraits< VkConditionalRenderingBeginInfoEXT>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_CONDITIONAL_RENDERING_BEGIN_INFO_EXT; };
 	template<> struct VkTypeTraits< VkPhysicalDeviceFloat16Int8FeaturesKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FLOAT16_INT8_FEATURES_KHR; };
 	template<> struct VkTypeTraits< VkPresentRegionsKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_PRESENT_REGIONS_KHR; };
+#if VK_NVX_device_generated_commands
 	template<> struct VkTypeTraits< VkObjectTableCreateInfoNVX>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_OBJECT_TABLE_CREATE_INFO_NVX; };
 	template<> struct VkTypeTraits< VkIndirectCommandsLayoutCreateInfoNVX>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_INDIRECT_COMMANDS_LAYOUT_CREATE_INFO_NVX; };
 	template<> struct VkTypeTraits< VkCmdProcessCommandsInfoNVX>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_CMD_PROCESS_COMMANDS_INFO_NVX; };
 	template<> struct VkTypeTraits< VkCmdReserveSpaceForCommandsInfoNVX>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_CMD_RESERVE_SPACE_FOR_COMMANDS_INFO_NVX; };
 	template<> struct VkTypeTraits< VkDeviceGeneratedCommandsLimitsNVX>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_DEVICE_GENERATED_COMMANDS_LIMITS_NVX; };
 	template<> struct VkTypeTraits< VkDeviceGeneratedCommandsFeaturesNVX>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_DEVICE_GENERATED_COMMANDS_FEATURES_NVX; };
+#endif
 	template<> struct VkTypeTraits< VkPipelineViewportWScalingStateCreateInfoNV>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_W_SCALING_STATE_CREATE_INFO_NV; };
 	template<> struct VkTypeTraits< VkSurfaceCapabilities2EXT>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_SURFACE_CAPABILITIES_2_EXT; };
 	template<> struct VkTypeTraits< VkDisplayPowerInfoEXT>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_DISPLAY_POWER_INFO_EXT; };

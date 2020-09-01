@@ -156,7 +156,7 @@ namespace castor3d
 		return m_source.getLevelCount();
 	}
 
-	inline ashes::ImageView const & TextureView::getSampledView()const
+	ashes::ImageView const & TextureView::getSampledView()const
 	{
 		if ( !m_sampledView )
 		{
@@ -179,7 +179,7 @@ namespace castor3d
 		return m_sampledView;
 	}
 
-	inline ashes::ImageView const & TextureView::getTargetView()const
+	ashes::ImageView const & TextureView::getTargetView()const
 	{
 		if ( !m_targetView )
 		{

@@ -117,6 +117,7 @@ namespace GuiCommon
 
 		castor::PathArray listPluginsFiles( castor::Path const & folder )
 		{
+			static castor::String castor3DLibPrefix{ CU_LibPrefix + castor::String{ cuT( "castor3d" ) } };
 			castor::PathArray files;
 			castor::File::listDirectoryFiles( folder, files );
 			castor::PathArray result;
@@ -125,7 +126,7 @@ namespace GuiCommon
 			for ( auto file : files )
 			{
 				if ( file.find( CU_SharedLibExt ) != castor::String::npos
-					&& file.getFileName().find( cuT( "castor3d" ) ) == 0u )
+					&& file.getFileName().find( castor3DLibPrefix ) == 0u )
 				{
 					result.push_back( file );
 				}

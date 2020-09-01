@@ -331,6 +331,9 @@ namespace C3dAssimp
 					, aiMaterial
 					, emissive );
 				break;
+			default:
+				CU_Failure( "Unsupported MaterialType" );
+				break;
 			}
 		}
 
@@ -458,6 +461,9 @@ namespace C3dAssimp
 					, aiMaterial
 					, importer
 					, spcTexName );
+				break;
+			default:
+				CU_Failure( "Unsupported MaterialType" );
 				break;
 			}
 		}

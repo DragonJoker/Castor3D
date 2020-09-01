@@ -969,7 +969,7 @@ namespace castor3d
 
 			if ( it != flags.end() )
 			{
-				auto i = size_t( std::distance( flags.begin(), it ) );
+				auto i = uint32_t( std::distance( flags.begin(), it ) );
 				auto colourMapConfig = m_writer.declLocale( "colourMapConfig"
 					, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( it->id ) ) );
 				auto sampledColour = m_writer.declLocale< Vec4 >( "sampledColour"
@@ -989,7 +989,7 @@ namespace castor3d
 
 			if ( it != flags.end() )
 			{
-				auto i = size_t( std::distance( flags.begin(), it ) );
+				auto i = uint32_t( std::distance( flags.begin(), it ) );
 				auto opacityMapConfig = m_writer.declLocale( "opacityMapConfig"
 					, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( it->id ) ) );
 				auto sampledOpacity = m_writer.declLocale< Vec4 >( "sampledOpacity"
@@ -1013,7 +1013,7 @@ namespace castor3d
 
 			if ( it != flags.end() )
 			{
-				auto i = size_t( std::distance( flags.begin(), it ) );
+				auto i = uint32_t( std::distance( flags.begin(), it ) );
 				auto normalMapConfig = m_writer.declLocale( "normalMapConfig"
 					, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( it->id ) ) );
 				auto sampledNormal = m_writer.declLocale< Vec4 >( "sampledNormal"
@@ -1039,7 +1039,7 @@ namespace castor3d
 				&& ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne )
 					|| checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) ) )
 			{
-				auto i = size_t( std::distance( flags.begin(), it ) );
+				auto i = uint32_t( std::distance( flags.begin(), it ) );
 				auto heightMapConfig = m_writer.declLocale( "heightMapConfig"
 					, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( it->id ) ) );
 				texCoords.xy() = parallaxMapping( texCoords.xy()

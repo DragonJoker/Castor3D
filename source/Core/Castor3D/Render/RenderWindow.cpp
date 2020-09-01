@@ -234,7 +234,7 @@ namespace castor3d
 		m_swapChain = getDevice()->createSwapChain( getSwapChainCreateInfo( *m_surface
 			, { m_size.getWidth(), m_size.getHeight() } ) );
 		m_swapChainImages = m_swapChain->getImages();
-		m_commandPool = getDevice()->createCommandPool( getDevice().graphicsQueueFamilyIndex
+		m_commandPool = getDevice()->createCommandPool( getDevice().getGraphicsQueueFamilyIndex()
 			, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT | VK_COMMAND_POOL_CREATE_TRANSIENT_BIT );
 	}
 
@@ -364,31 +364,26 @@ namespace castor3d
 				{
 					waitFrame();
 				}
+				else if ( auto resources = getResources() )
+				{
+					try
+					{
+						submitFrame( resources );
+						presentFrame( resources );
+					}
+					catch ( ashes::Exception & exc )
+					{
+						std::cerr << "Can't render: " << exc.what() << std::endl;
+
+						if ( exc.getResult() == VK_ERROR_DEVICE_LOST )
+						{
+							m_initialised = false;
+						}
+					}
+				}
 				else
 				{
-					auto resources = getResources();
-
-					if ( resources )
-					{
-						try
-						{
-							submitFrame( resources );
-							presentFrame( resources );
-						}
-						catch ( ashes::Exception & exc )
-						{
-							std::cerr << "Can't render: " << exc.what() << std::endl;
-
-							if ( exc.getResult() == VK_ERROR_DEVICE_LOST )
-							{
-								m_initialised = false;
-							}
-						}
-					}
-					else
-					{
-						std::cerr << "Can't render" << std::endl;
-					}
+					std::cerr << "Can't render" << std::endl;
 				}
 			}
 		}
@@ -854,7 +849,6 @@ namespace castor3d
 	RenderWindow::RenderingResources * RenderWindow::getResources()
 	{
 		auto & resources = *m_renderingResources[m_resourceIndex];
-		m_resourceIndex = ( m_resourceIndex + 1 ) % m_renderingResources.size();
 		uint32_t imageIndex{ 0u };
 		auto res = m_swapChain->acquireNextImage( ashes::MaxTimeout
 			, *resources.imageAvailableSemaphore
@@ -864,6 +858,7 @@ namespace castor3d
 			, true
 			, "Swap chain image acquisition" ) )
 		{
+			m_resourceIndex = ( m_resourceIndex + 1 ) % m_renderingResources.size();
 			resources.imageIndex = imageIndex;
 			return &resources;
 		}

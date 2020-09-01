@@ -236,9 +236,11 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 )
 if ( APPLE )
 	set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+		${${PROJECT_NAME}_FOLDER_SRC_FILES}
 		System/MetalLayer.mm
 	)
 	set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+		${${PROJECT_NAME}_FOLDER_HDR_FILES}
 		System/MetalLayer.h
 	)
 endif ()

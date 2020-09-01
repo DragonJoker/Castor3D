@@ -83,6 +83,9 @@ namespace smaa
 				{
 					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 					vtx_texture = uv;
+					vtx_offset[0] = vec4( 0.0_f );
+					vtx_offset[1] = vec4( 0.0_f );
+					vtx_offset[2] = vec4( 0.0_f );
 					SMAABlendingWeightCalculationVS( vtx_texture, vtx_pixcoord, vtx_offset );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

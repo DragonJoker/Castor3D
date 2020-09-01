@@ -107,6 +107,10 @@ namespace GuiCommon
 						pbrsg.setEmissive( 1.0f );
 					}
 					break;
+
+				default:
+					CU_Failure( "Unsupported MaterialType" );
+					break;
 				}
 			}
 			else

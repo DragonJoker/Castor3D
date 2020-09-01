@@ -14,6 +14,16 @@ set( ${PROJECT_NAME}_SRC_FILES
 	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/CastorTestLauncher.cpp
 	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/MainFrame.cpp
 )
+if ( APPLE )
+	set( ${PROJECT_NAME}_SRC_FILES
+		${${PROJECT_NAME}_SRC_FILES}
+		MetalLayer.mm
+	)
+	set( ${PROJECT_NAME}_HDR_FILES
+		${${PROJECT_NAME}_HDR_FILES}
+		MetalLayer.h
+	)
+endif ()
 source_group( "Header Files"
 	FILES
 		${${PROJECT_NAME}_HDR_FILES}
