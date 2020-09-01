@@ -733,8 +733,7 @@ namespace castor3d
 		return TextureUnit::create( engine
 			, cuT( "GeometryInjectionResult" ) + string::toString( index )
 			, VK_FORMAT_R16G16B16A16_SFLOAT
-			, { gridSize, gridSize }
-			, gridSize
+			, { gridSize, gridSize, gridSize }
 			, VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT
 			, VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT );
 	}

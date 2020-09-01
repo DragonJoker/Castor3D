@@ -99,8 +99,7 @@ namespace castor3d
 			prefix + cuT( "LPVResult" ),
 			{ nullptr, nullptr, nullptr },
 			0u,
-			{ size, size },
-			size,
+			{ size, size, size },
 		}
 	{
 		initialise();
