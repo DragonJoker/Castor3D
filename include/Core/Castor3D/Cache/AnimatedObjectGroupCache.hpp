@@ -8,9 +8,8 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationModule.hpp"
 
-#include "Castor3D/Buffer/UniformBufferPool.hpp"
-#include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
-#include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
+#include "Castor3D/Buffer/UniformBufferOffset.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 namespace castor3d
 {
@@ -32,13 +31,13 @@ namespace castor3d
 		{
 			AnimatedObjectGroup const & group;
 			AnimatedSkeleton const & skeleton;
-			UniformBufferOffsetT< SkinningUbo::Configuration > skinningUbo;
+			UniformBufferOffsetT< SkinningUboConfiguration > skinningUbo;
 		};
 		struct MeshPoolsEntry
 		{
 			AnimatedObjectGroup const & group;
 			AnimatedMesh const & mesh;
-			UniformBufferOffsetT< MorphingUbo::Configuration > morphingUbo;
+			UniformBufferOffsetT< MorphingUboConfiguration > morphingUbo;
 		};
 		using MyCache = CacheBase< AnimatedObjectGroup, castor::String >;
 		using MyCacheTraits = typename MyCacheType::MyCacheTraits;
@@ -173,8 +172,6 @@ namespace castor3d
 		std::map< AnimatedObjectGroup *, OnAnimatedSkeletonChangeConnection > m_skeletonRemovedConnections;
 		std::map< AnimatedObjectGroup *, OnAnimatedMeshChangeConnection > m_meshAddedConnections;
 		std::map< AnimatedObjectGroup *, OnAnimatedMeshChangeConnection > m_meshRemovedConnections;
-		UniformBufferPoolT< SkinningUbo::Configuration > m_skinningUboPool;
-		UniformBufferPoolT< MorphingUbo::Configuration > m_morphingUboPool;
 		RenderPassTimerSPtr m_updateTimer;
 	};
 }

@@ -15,6 +15,9 @@ namespace castor3d
 	class HdrConfigUbo
 	{
 	public:
+		using Configuration = HdrConfig;
+
+	public:
 		/**
 		 *\~english
 		 *\name			Copy/Move construction/assignment operation.

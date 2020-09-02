@@ -5,6 +5,7 @@
 #include "Castor3D/Render/RenderQueue.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Event/Frame/FunctorEvent.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Render/Culling/SceneCuller.hpp"

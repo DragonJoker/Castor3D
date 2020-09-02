@@ -13,6 +13,7 @@
 #include "Castor3D/Overlay/OverlayCategory.hpp"
 #include "Castor3D/Overlay/OverlayRenderer.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Culling/FrustumCuller.hpp"
 #include "Castor3D/Render/PostEffect/PostEffect.hpp"
 #include "Castor3D/Render/Technique/RenderTechnique.hpp"
@@ -368,9 +369,11 @@ namespace castor3d
 		m_overlayRenderer->update( *getCamera() );
 	}
 
-	void RenderTarget::render( RenderInfo & info )
+	ashes::Semaphore const & RenderTarget::render( RenderInfo & info
+		, ashes::Semaphore const & toWait )
 	{
 		SceneSPtr scene = getScene();
+		auto result = &toWait;
 
 		if ( scene )
 		{
@@ -382,11 +385,13 @@ namespace castor3d
 				{
 					getEngine()->getRenderSystem()->pushScene( scene.get() );
 					scene->getGeometryCache().fillInfo( info );
-					doRender( info, m_objectsFrameBuffer, getCamera() );
+					result = &doRender( info, m_objectsFrameBuffer, getCamera(), *result );
 					getEngine()->getRenderSystem()->popScene();
 				}
 			}
 		}
+
+		return *result;
 	}
 
 	ViewportType RenderTarget::getViewportType()const
@@ -792,9 +797,10 @@ namespace castor3d
 #endif
 	}
 
-	void RenderTarget::doRender( RenderInfo & info
+	ashes::Semaphore const & RenderTarget::doRender( RenderInfo & info
 		, RenderTarget::TargetFbo & fbo
-		, CameraSPtr camera )
+		, CameraSPtr camera
+		, ashes::Semaphore const & toWait )
 	{
 		auto elapsedTime = m_timer.getElapsed();
 		SceneSPtr scene = getScene();
@@ -804,6 +810,8 @@ namespace castor3d
 		{
 			signalsToWait = scene->getRenderTargetsSemaphores();
 		}
+
+		signalsToWait.push_back( toWait );
 
 		// Render the scene through the RenderTechnique.
 		m_signalFinished = &m_renderTechnique->render( signalsToWait
@@ -831,6 +839,7 @@ namespace castor3d
 
 		// Combine objects and overlays framebuffers, flipping them if necessary.
 		m_signalFinished = &doCombine( *m_signalFinished );
+		return *m_signalFinished;
 	}
 
 	ashes::Semaphore const & RenderTarget::doApplyPostEffects( ashes::Semaphore const & toWait

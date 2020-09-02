@@ -106,8 +106,18 @@ namespace castor3d
 	*/
 	template< typename DataT >
 	class UniformBufferPoolT;
+	/**
+	*\~english
+	*\brief
+	*	Uniform buffer pools implementation.
+	*\~french
+	*\brief
+	*	Implémentation ddu pool de pools de tampon d'uniformes.
+	*/
+	class UniformBufferPools;
 
 	CU_DeclareSmartPtr( UniformBufferBase );
+	CU_DeclareSmartPtr( UniformBufferPools );
 	CU_DeclareTemplateSmartPtr( UniformBuffer );
 	CU_DeclareTemplateSmartPtr( PoolUniformBuffer );
 	CU_DeclareTemplateSmartPtr( UniformBufferPool );

@@ -11,11 +11,11 @@ namespace castor3d
 {
 	BillboardRenderNode::BillboardRenderNode( RenderPipeline & pipeline
 		, PassRenderNode && passNode
-		, UniformBufferOffsetT< ModelMatrixUbo::Configuration > modelMatrixBuffer
-		, UniformBufferOffsetT< ModelUbo::Configuration > modelBuffer
-		, UniformBufferOffsetT< PickingUbo::Configuration > pickingBuffer
-		, UniformBufferOffsetT< BillboardUbo::Configuration > billboardBuffer
-		, UniformBufferOffsetT< TexturesUbo::Configuration > texturesBuffer
+		, UniformBufferOffsetT< ModelMatrixUboConfiguration > modelMatrixBuffer
+		, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
+		, UniformBufferOffsetT< PickingUboConfiguration > pickingBuffer
+		, UniformBufferOffsetT< BillboardUboConfiguration > billboardBuffer
+		, UniformBufferOffsetT< TexturesUboConfiguration > texturesBuffer
 		, GeometryBuffers const & buffers
 		, SceneNode & sceneNode
 		, BillboardBase & data )

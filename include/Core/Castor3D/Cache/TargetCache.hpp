@@ -78,7 +78,8 @@ namespace castor3d
 		 *\brief			Dessine dans les cibles de rendu.
 		 *\param[in,out]	info	Reçoit les informations de rendu.
 		 */
-		C3D_API void render( RenderInfo & info );
+		C3D_API void render( RenderInfo & info
+			, ashes::Semaphore const & toWait );
 		/**
 		 *\~english
 		 *\brief		Flushes the collection.

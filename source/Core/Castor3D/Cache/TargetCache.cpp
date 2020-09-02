@@ -70,18 +70,20 @@ namespace castor3d
 		}
 	}
 
-	void RenderTargetCache::render( RenderInfo & info )
+	void RenderTargetCache::render( RenderInfo & info
+		, ashes::Semaphore const & toWait )
 	{
+		auto result = &toWait;
 		LockType lock{ castor::makeUniqueLock( *this ) };
 
 		for ( auto target : m_renderTargets[size_t( TargetType::eTexture )] )
 		{
-			target->render( info );
+			result = &target->render( info, *result );
 		}
 
 		for ( auto target : m_renderTargets[size_t( TargetType::eWindow )] )
 		{
-			target->render( info );
+			result = &target->render( info, *result );
 		}
 	}
 

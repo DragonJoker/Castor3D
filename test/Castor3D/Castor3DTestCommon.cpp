@@ -1,5 +1,6 @@
 #include "Castor3DTestCommon.hpp"
 
+#include <Castor3D/Engine.hpp>
 #include <Castor3D/Animation/Animable.hpp>
 #include <Castor3D/Animation/Animation.hpp>
 #include <Castor3D/Cache/AnimatedObjectGroupCache.hpp>

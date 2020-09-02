@@ -116,6 +116,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Buffer/GpuBuffer.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Buffer/GpuBufferPool.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Buffer/UniformBufferBase.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Buffer/UniformBufferPools.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/BufferModule.hpp
@@ -130,6 +131,8 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/UniformBufferOffset.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/UniformBufferPool.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/UniformBufferPool.inl
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/UniformBufferPools.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/UniformBufferPools.inl
 )
 set( ${PROJECT_NAME}_SRC_FILES
 	${${PROJECT_NAME}_SRC_FILES}

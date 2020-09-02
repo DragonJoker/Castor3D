@@ -256,7 +256,6 @@ namespace castor3d
 		std::vector< castor::Point4f > m_buffer;
 		ashes::FencePtr m_transferFence;
 		PickNodeType m_pickNodeType{ PickNodeType::eNone };
-		CommandsSemaphore m_uploadCommand;
 	};
 }
 

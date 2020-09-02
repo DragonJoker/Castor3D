@@ -1,7 +1,8 @@
 #include "Castor3D/Render/PickingPass.hpp"
 
-
+#include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/GeometryCache.hpp"
+#include "Castor3D/Event/Frame/FunctorEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
@@ -17,6 +18,14 @@
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
+#include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
+#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelUbo.hpp"
+#include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
+#include "Castor3D/Shader/Ubos/PickingUbo.hpp"
+#include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
+#include "Castor3D/Shader/Ubos/TexturesUbo.hpp"
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
@@ -269,7 +278,6 @@ namespace castor3d
 			, matrixUbo
 			, culler
 			, nullptr }
-		, m_uploadCommand{ nullptr, nullptr }
 	{
 		engine.sendEvent( makeFunctorEvent( EventType::ePreRender
 			, [this]()
@@ -332,18 +340,6 @@ namespace castor3d
 		doUpdate( nodes.instancedSkinnedNodes.backCulled );
 		doUpdate( nodes.morphingNodes.backCulled );
 		doUpdate( nodes.billboardNodes.backCulled );
-		m_uploadCommand.commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
-		myScene.getGeometryCache().uploadPickingUbos( *m_uploadCommand.commandBuffer );
-		m_uploadCommand.commandBuffer->end();
-
-		auto & device = getCurrentRenderDevice( *this );
-		device.graphicsQueue->submit( { *m_uploadCommand.commandBuffer }
-			, {}
-			, { VK_PIPELINE_STAGE_TRANSFER_BIT }
-			, { *m_uploadCommand.semaphore }
-			, m_transferFence.get() );
-		m_transferFence->wait( ashes::MaxTimeout );
-		m_transferFence->reset();
 	}
 
 	Point4f PickingPass::doFboPick( Position const & position
@@ -539,11 +535,6 @@ namespace castor3d
 	{
 		auto & device = getCurrentRenderDevice( *this );
 		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( "PickingPass" );
-		m_uploadCommand =
-		{
-			device.graphicsCommandPool->createCommandBuffer( "PickingPassUboUpload" ),
-			device->createSemaphore( "PickingPassUboUpload" ),
-		};
 
 		m_colourTexture = createTexture( device
 			, size

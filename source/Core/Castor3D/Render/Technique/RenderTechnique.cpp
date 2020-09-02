@@ -310,15 +310,6 @@ namespace castor3d
 		m_initialised = false;
 		m_depthBuffer.cleanup();
 		m_colourTexture.cleanup();
-
-		auto scene = m_renderTarget.getScene();
-
-		if ( scene )
-		{
-			scene->getGeometryCache().cleanupUbos();
-			scene->getBillboardPools().cleanupUbos();
-			scene->getAnimatedObjectGroupCache().cleanupUbos();
-		}
 	}
 
 	void RenderTechnique::cpuUpdate( RenderQueueArray & queues )

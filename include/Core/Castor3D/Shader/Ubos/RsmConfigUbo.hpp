@@ -16,6 +16,9 @@ namespace castor3d
 	class RsmConfigUbo
 	{
 	public:
+		using Configuration = RsmUboConfiguration;
+
+	public:
 		/**
 		 *\~english
 		 *\name			Copy/Move construction/assignment operation.

@@ -1,6 +1,7 @@
 #include "GuiCommon/System/SceneExporter.hpp"
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/MaterialCache.hpp>
 #include <Castor3D/Cache/MeshCache.hpp>
 #include <Castor3D/Binary/BinaryMesh.hpp>
 #include <Castor3D/Binary/BinarySkeleton.hpp>

@@ -196,7 +196,6 @@ namespace castor3d
 					device.graphicsCommandPool->createCommandBuffer( "RenderLoopUboUpload" ),
 					device->createSemaphore( "RenderLoopUboUpload" ),
 				};
-				m_uploadFence = device->createFence( "RenderLoopUboUpload" );
 			}
 
 			// Usually GPU initialisation
@@ -206,44 +205,26 @@ namespace castor3d
 			getEngine()->getMaterialCache().update();
 			getEngine()->getRenderTargetCache().gpuUpdate( info );
 			m_uploadCommand.commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-			getEngine()->getSceneCache().forEach( [this, &device]( Scene & scene )
-				{
-					scene.getGeometryCache().uploadUbos( *m_uploadCommand.commandBuffer );
-					scene.getBillboardPools().uploadUbos( *m_uploadCommand.commandBuffer );
-					scene.getAnimatedObjectGroupCache().uploadUbos( *m_uploadCommand.commandBuffer );
-
-				} );
 			getEngine()->uploadUbos( *m_uploadCommand.commandBuffer );
 			m_uploadCommand.commandBuffer->end();
 			device.graphicsQueue->submit( { *m_uploadCommand.commandBuffer }
 				, {}
 				, {}
-				, {}
-				, m_uploadFence.get() );
-			m_uploadFence->wait( ashes::MaxTimeout );
-			m_uploadFence->reset();
+				, { *m_uploadCommand.semaphore }
+				, nullptr );
 
 			// Render
-			getEngine()->getRenderTargetCache().render( info );
+			getEngine()->getRenderTargetCache().render( info, *m_uploadCommand.semaphore );
 
 			// Usually GPU cleanup
 			doProcessEvents( EventType::eQueueRender );
 		}
 
-		if ( m_first )
-		{
-			m_first = false;
-			getEngine()->getRenderWindowCache().forEach( []( RenderWindow & window )
-				{
-					window.render( true );
-				} );
-			return;
-		}
-
-		getEngine()->getRenderWindowCache().forEach( []( RenderWindow & window )
+		getEngine()->getRenderWindowCache().forEach( [this]( RenderWindow & window )
 			{
-				window.render( false );
+				window.render( m_first );
 			} );
+		m_first = false;
 
 		{
 			auto guard = makeBlockGuard(

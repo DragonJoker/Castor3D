@@ -6,13 +6,9 @@ See LICENSE file in root folder
 
 #include "RenderNodeModule.hpp"
 
-#include "Castor3D/Buffer/UniformBufferPool.hpp"
+#include "Castor3D/Buffer/UniformBufferOffset.hpp"
 #include "Castor3D/Render/Node/PassRenderNode.hpp"
 #include "Castor3D/Render/Node/SceneRenderNode.hpp"
-#include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
-#include "Castor3D/Shader/Ubos/ModelUbo.hpp"
-#include "Castor3D/Shader/Ubos/PickingUbo.hpp"
-#include "Castor3D/Shader/Ubos/TexturesUbo.hpp"
 
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 
@@ -31,10 +27,10 @@ namespace castor3d
 
 		C3D_API ObjectRenderNode( RenderPipeline & pipeline
 			, PassRenderNode && passNode
-			, UniformBufferOffsetT< ModelMatrixUbo::Configuration > modelMatrixBuffer
-			, UniformBufferOffsetT< ModelUbo::Configuration > modelBuffer
-			, UniformBufferOffsetT< PickingUbo::Configuration > pickingBuffer
-			, UniformBufferOffsetT< TexturesUbo::Configuration > texturesBuffer
+			, UniformBufferOffsetT< ModelMatrixUboConfiguration > modelMatrixBuffer
+			, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
+			, UniformBufferOffsetT< PickingUboConfiguration > pickingBuffer
+			, UniformBufferOffsetT< TexturesUboConfiguration > texturesBuffer
 			, GeometryBuffers const & buffers
 			, SceneNode & sceneNode
 			, DataType & data
@@ -48,16 +44,16 @@ namespace castor3d
 		PassRenderNode passNode;
 		//!\~english	The model matrices UBO.
 		//!\~french		L'UBO de matrices modèle.
-		UniformBufferOffsetT< ModelMatrixUbo::Configuration > modelMatrixUbo;
+		UniformBufferOffsetT< ModelMatrixUboConfiguration > modelMatrixUbo;
 		//!\~english	The model UBO.
 		//!\~french		L'UBO de modèle.
-		UniformBufferOffsetT< ModelUbo::Configuration > modelUbo;
+		UniformBufferOffsetT< ModelUboConfiguration > modelUbo;
 		//!\~english	The model UBO.
 		//!\~french		L'UBO de modèle.
-		UniformBufferOffsetT< PickingUbo::Configuration > pickingUbo;
+		UniformBufferOffsetT< PickingUboConfiguration > pickingUbo;
 		//!\~english	The model UBO.
 		//!\~french		L'UBO de modèle.
-		UniformBufferOffsetT< TexturesUbo::Configuration > texturesUbo;
+		UniformBufferOffsetT< TexturesUboConfiguration > texturesUbo;
 		//!\~english	The geometry buffers.
 		//!\~french		Les tampons de la géométrie.
 		GeometryBuffers const & buffers;

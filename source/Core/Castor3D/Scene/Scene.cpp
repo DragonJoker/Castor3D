@@ -823,7 +823,7 @@ namespace castor3d
 			doUpdateAnimations();
 			doUpdateMaterials();
 			getLightCache().update();
-			getGeometryCache().update();
+			getGeometryCache().cpuUpdate();
 			m_billboardPools->update();
 			getAnimatedObjectGroupCache().update();
 			onUpdate( *this );

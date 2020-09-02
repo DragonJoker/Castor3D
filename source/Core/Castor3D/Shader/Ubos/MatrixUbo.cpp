@@ -1,6 +1,7 @@
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
 #include <ashespp/Buffer/StagingBuffer.hpp>
@@ -34,7 +35,7 @@ namespace castor3d
 	{
 		if ( !m_ubo )
 		{
-			m_ubo = m_engine.getMatrixUboPool().getBuffer( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+			m_ubo = m_engine.getUboPools().getBuffer< Configuration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 		}
 	}
 
@@ -42,7 +43,7 @@ namespace castor3d
 	{
 		if ( m_ubo )
 		{
-			m_engine.getMatrixUboPool().putBuffer( m_ubo );
+			m_engine.getUboPools().putBuffer( m_ubo );
 		}
 	}
 

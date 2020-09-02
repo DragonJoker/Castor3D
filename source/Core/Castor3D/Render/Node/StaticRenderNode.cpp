@@ -11,10 +11,10 @@ namespace castor3d
 {
 	StaticRenderNode::StaticRenderNode( RenderPipeline & pipeline
 		, PassRenderNode && passNode
-		, UniformBufferOffsetT< ModelMatrixUbo::Configuration > modelMatrixBuffer
-		, UniformBufferOffsetT< ModelUbo::Configuration > modelBuffer
-		, UniformBufferOffsetT< PickingUbo::Configuration > pickingBuffer
-		, UniformBufferOffsetT< TexturesUbo::Configuration > texturesBuffer
+		, UniformBufferOffsetT< ModelMatrixUboConfiguration > modelMatrixBuffer
+		, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
+		, UniformBufferOffsetT< PickingUboConfiguration > pickingBuffer
+		, UniformBufferOffsetT< TexturesUboConfiguration > texturesBuffer
 		, GeometryBuffers const & buffers
 		, SceneNode & sceneNode
 		, Submesh & data

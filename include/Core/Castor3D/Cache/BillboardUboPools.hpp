@@ -6,12 +6,8 @@ See LICENSE file in root folder
 
 #include "CacheModule.hpp"
 
-#include "Castor3D/Buffer/UniformBufferPool.hpp"
-#include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
-#include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
-#include "Castor3D/Shader/Ubos/ModelUbo.hpp"
-#include "Castor3D/Shader/Ubos/PickingUbo.hpp"
-#include "Castor3D/Shader/Ubos/TexturesUbo.hpp"
+#include "Castor3D/Buffer/UniformBufferOffset.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 namespace castor3d
 {
@@ -22,11 +18,11 @@ namespace castor3d
 		{
 			BillboardBase const & billboard;
 			Pass const & pass;
-			UniformBufferOffsetT< ModelUbo::Configuration > modelUbo;
-			UniformBufferOffsetT< ModelMatrixUbo::Configuration > modelMatrixUbo;
-			UniformBufferOffsetT< BillboardUbo::Configuration > billboardUbo;
-			UniformBufferOffsetT< PickingUbo::Configuration > pickingUbo;
-			UniformBufferOffsetT< TexturesUbo::Configuration > texturesUbo;
+			UniformBufferOffsetT< ModelUboConfiguration > modelUbo;
+			UniformBufferOffsetT< ModelMatrixUboConfiguration > modelMatrixUbo;
+			UniformBufferOffsetT< BillboardUboConfiguration > billboardUbo;
+			UniformBufferOffsetT< PickingUboConfiguration > pickingUbo;
+			UniformBufferOffsetT< TexturesUboConfiguration > texturesUbo;
 		};
 
 	public:
@@ -46,20 +42,6 @@ namespace castor3d
 		 *\brief		Met à jour le contenu des pools d'UBO.
 		 */
 		C3D_API void update();
-		/**
-		 *\~english
-		 *\brief		Updates the UBO pools in VRAM.
-		 *\~french
-		 *\brief		Met à jour les pools d'UBO en VRAM.
-		 */
-		C3D_API void uploadUbos( ashes::CommandBuffer const & commandBuffer );
-		/**
-		 *\~english
-		 *\brief		Cleans up the UBO pools.
-		 *\~french
-		 *\brief		Nettoie les pools d'UBO.
-		 */
-		C3D_API void cleanupUbos();
 		/**
 		 *\~english
 		 *\brief		Register the entries for given billboard.
@@ -98,13 +80,9 @@ namespace castor3d
 			, Pass const & pass );
 
 	private:
+		RenderSystem & m_renderSystem;
 		std::map< size_t, PoolsEntry > m_entries;
 		std::map< BillboardBase *, OnBillboardMaterialChangedConnection > m_connections;
-		UniformBufferPoolT< ModelUbo::Configuration > m_modelUboPool;
-		UniformBufferPoolT< ModelMatrixUbo::Configuration > m_modelMatrixUboPool;
-		UniformBufferPoolT< BillboardUbo::Configuration > m_billboardUboPool;
-		UniformBufferPoolT< PickingUbo::Configuration > m_pickingUboPool;
-		UniformBufferPoolT< TexturesUbo::Configuration > m_texturesUboPool;
 		RenderPassTimerSPtr m_updateTimer;
 	};
 }

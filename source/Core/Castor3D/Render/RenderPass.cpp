@@ -19,10 +19,19 @@
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
-#include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
-#include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp"
 #include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp"
+#include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
+#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelUbo.hpp"
+#include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
+#include "Castor3D/Shader/Ubos/PickingUbo.hpp"
+#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
+#include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
+#include "Castor3D/Shader/Ubos/TexturesUbo.hpp"
 
 #include <ashespp/Buffer/Buffer.hpp>
 #include <ashespp/Buffer/VertexBuffer.hpp>

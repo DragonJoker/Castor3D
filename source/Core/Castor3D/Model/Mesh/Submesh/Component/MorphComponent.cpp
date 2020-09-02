@@ -1,5 +1,6 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
 
+#include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"

@@ -137,7 +137,8 @@ namespace castor3d
 		 *\brief		Dessine une frame.
 		 *\param[out]	info	Reçoit les informations de rendu.
 		 */
-		C3D_API void render( RenderInfo & info );
+		C3D_API ashes::Semaphore const & render( RenderInfo & info
+			, ashes::Semaphore const &  toWait );
 		/**
 		 *\~english
 		 *\brief		Initialisation function.
@@ -392,9 +393,10 @@ namespace castor3d
 			, ashes::ImageView const & source
 			, ashes::ImageView const & target );
 		C3D_API void doInitialiseCombine();
-		C3D_API void doRender( RenderInfo & info
+		C3D_API ashes::Semaphore const & doRender( RenderInfo & info
 			, TargetFbo & fbo
-			, CameraSPtr camera );
+			, CameraSPtr camera
+			, ashes::Semaphore const & toWait );
 		C3D_API ashes::Semaphore const & doApplyPostEffects( ashes::Semaphore const & toWait
 			, PostEffectPtrArray const & effects
 			, ashes::CommandBufferPtr const & copyCommandBuffer
