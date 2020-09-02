@@ -10,8 +10,8 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	template< typename T >
-	class UniformBuffer
+	template< typename DataT >
+	class UniformBufferT
 		: public UniformBufferBase
 	{
 	public:
@@ -31,7 +31,7 @@ namespace castor3d
 		 *\param[in]	flags			Les indicateurs de mémoire du tampon.
 		 *\param[in]	debugName		Le nom debug du tampon.
 		 */
-		inline UniformBuffer( RenderSystem const & renderSystem
+		inline UniformBufferT( RenderSystem const & renderSystem
 			, VkDeviceSize count
 			, VkBufferUsageFlags usage
 			, VkMemoryPropertyFlags flags
@@ -180,7 +180,7 @@ namespace castor3d
 		*\return
 		*	La n-ème instance des données.
 		*/
-		inline T const & getData( VkDeviceSize index = 0 )const
+		inline DataT const & getData( VkDeviceSize index = 0 )const
 		{
 			return m_data[index];
 		}
@@ -192,7 +192,7 @@ namespace castor3d
 		*\return
 		*	La n-ème instance des données.
 		*/
-		inline T & getData( VkDeviceSize index = 0 )
+		inline DataT & getData( VkDeviceSize index = 0 )
 		{
 			return m_data[index];
 		}
@@ -204,7 +204,7 @@ namespace castor3d
 		*\return
 		*	Les données.
 		*/
-		inline std::vector< T > const & getDatas()const
+		inline std::vector< DataT > const & getDatas()const
 		{
 			return m_data;
 		}
@@ -216,24 +216,24 @@ namespace castor3d
 		*\return
 		*	Les données.
 		*/
-		inline std::vector< T > & getDatas()
+		inline std::vector< DataT > & getDatas()
 		{
 			return m_data;
 		}
 
 	private:
-		std::vector< T > m_data;
+		std::vector< DataT > m_data;
 	};
 
-	template< typename T >
-	inline UniformBufferUPtr< T > makeUniformBuffer( RenderSystem const & renderSystem
+	template< typename DataT >
+	inline UniformBufferUPtrT< DataT > makeUniformBuffer( RenderSystem const & renderSystem
 		, VkDeviceSize count
 		, VkBufferUsageFlags usage
 		, VkMemoryPropertyFlags flags
 		, std::string name
 		, ashes::QueueShare sharingMode = {} )
 	{
-		return std::make_unique< UniformBuffer< T > >( renderSystem
+		return std::make_unique< UniformBufferT< DataT > >( renderSystem
 			, uint32_t( count )
 			, usage
 			, flags

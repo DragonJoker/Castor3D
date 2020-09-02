@@ -172,7 +172,7 @@ namespace castor3d
 		m_frontPipelines.clear();
 	}
 
-	void RenderPass::update( RenderQueueArray & queues )
+	void RenderPass::cpuUpdate( RenderQueueArray & queues )
 	{
 		doUpdate( queues );
 	}
@@ -1128,10 +1128,10 @@ namespace castor3d
 		auto jitterProjSpace = jitter * 2.0f;
 		jitterProjSpace[0] /= camera.getWidth();
 		jitterProjSpace[1] /= camera.getHeight();
-		m_matrixUbo.update( camera.getView()
+		m_matrixUbo.cpuUpdate( camera.getView()
 			, camera.getProjection()
 			, jitterProjSpace );
-		m_sceneUbo.update( *camera.getScene(), &camera );
+		m_sceneUbo.gpuUpdate( *camera.getScene(), &camera );
 	}
 
 	std::map< PipelineFlags, RenderPipelineUPtr > & RenderPass::doGetFrontPipelines()

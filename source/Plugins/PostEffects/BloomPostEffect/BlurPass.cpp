@@ -137,7 +137,7 @@ namespace Bloom
 			return result;
 		}
 
-		castor3d::UniformBufferUPtr< castor3d::GaussianBlur::Configuration > doCreateUbo( castor3d::RenderDevice const & device
+		castor3d::UniformBufferUPtrT< castor3d::GaussianBlur::Configuration > doCreateUbo( castor3d::RenderDevice const & device
 			, VkExtent2D dimensions
 			, uint32_t blurKernelSize
 			, uint32_t blurPassesCount
@@ -273,7 +273,7 @@ namespace Bloom
 		, VkExtent2D dimensions
 		, castor3d::ShaderModule const & vertexShader
 		, castor3d::ShaderModule const & pixelShader
-		, castor3d::UniformBuffer< castor3d::GaussianBlur::Configuration > const & blurUbo
+		, castor3d::UniformBufferT< castor3d::GaussianBlur::Configuration > const & blurUbo
 		, uint32_t index )
 	{
 		dimensions.width >>= ( index + 1 );
@@ -356,7 +356,7 @@ namespace Bloom
 		, VkExtent2D dimensions
 		, castor3d::ShaderModule const & vertexShader
 		, castor3d::ShaderModule const & pixelShader
-		, castor3d::UniformBuffer< castor3d::GaussianBlur::Configuration > const & blurUbo
+		, castor3d::UniformBufferT< castor3d::GaussianBlur::Configuration > const & blurUbo
 		, uint32_t blurPassesCount )
 	{
 		std::vector< BlurPass::Subpass > result;

@@ -56,10 +56,10 @@ See LICENSE file in root folder
 	using class_name##RPtr = class_name *
 
 #define CU_DeclareTemplateSmartPtr( class_name )\
-	template< typename T > using class_name##SPtr = std::shared_ptr< class_name< T > >;\
-	template< typename T > using class_name##WPtr = std::weak_ptr< class_name< T > >;\
-	template< typename T > using class_name##UPtr = std::unique_ptr< class_name< T > >;\
-	template< typename T > using class_name##RPtr = class_name< T > *
+	template< typename T > using class_name##SPtrT = std::shared_ptr< class_name##T< T > >;\
+	template< typename T > using class_name##WPtrT = std::weak_ptr< class_name##T< T > >;\
+	template< typename T > using class_name##UPtrT = std::unique_ptr< class_name##T< T > >;\
+	template< typename T > using class_name##RPtrT = class_name##T< T > *
 
 #include <map>
 

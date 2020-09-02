@@ -94,7 +94,7 @@ namespace castor3d
 		 *\param[in]	node	Le noeud de base.
 		 *\param[out]	queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
 		 */
-		C3D_API void update( SceneNode const & node
+		C3D_API void cpuUpdate( SceneNode const & node
 			, RenderQueueArray & queues );
 		/**
 		 *\~english
@@ -102,7 +102,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour les données GPU.
 		 */
-		C3D_API void update();
+		C3D_API void gpuUpdate();
 		/**
 		 *\~english
 		 *\brief		Render function.

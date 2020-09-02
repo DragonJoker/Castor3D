@@ -214,7 +214,7 @@ namespace castor3d
 		};
 
 		ashes::CommandBufferPtr m_commandBuffer;
-		UniformBufferUPtr< castor::Matrix4x4f > m_matrixUbo;
+		UniformBufferUPtrT< castor::Matrix4x4f > m_matrixUbo;
 		ashes::VertexBufferPtr< castor::Point4f > m_vertexBuffer;
 		ashes::PipelineVertexInputStateCreateInfoPtr m_vertexLayout;
 		ashes::DescriptorSetLayoutPtr m_descriptorLayout;

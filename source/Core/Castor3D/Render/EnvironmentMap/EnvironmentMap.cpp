@@ -277,26 +277,26 @@ namespace castor3d
 		m_environmentMap->cleanup();
 	}
 	
-	void EnvironmentMap::update( RenderQueueArray & queues )
+	void EnvironmentMap::cpuUpdate( RenderQueueArray & queues )
 	{
 		// Compute for next frame (or first)
 		if ( m_first || ( m_render % 5u ) == 4u )
 		{
 			for ( auto & pass : m_passes )
 			{
-				pass->update( m_node, queues );
+				pass->cpuUpdate( m_node, queues );
 			}
 		}
 	}
 
-	void EnvironmentMap::update()
+	void EnvironmentMap::gpuUpdate()
 	{
 		// Compute for next frame (or first)
 		if ( m_first || ( m_render % 5u ) == 4u )
 		{
 			for ( auto & pass : m_passes )
 			{
-				pass->update();
+				pass->gpuUpdate();
 			}
 		}
 	}

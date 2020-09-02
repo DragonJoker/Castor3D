@@ -14,18 +14,18 @@ namespace castor3d
 	{
 		C3D_API BillboardRenderNode( RenderPipeline & pipeline
 			, PassRenderNode && passNode
-			, UniformBufferOffset< ModelMatrixUbo::Configuration > modelMatrixBuffer
-			, UniformBufferOffset< ModelUbo::Configuration > modelBuffer
-			, UniformBufferOffset< PickingUbo::Configuration > pickingBuffer
-			, UniformBufferOffset< BillboardUbo::Configuration > billboardBuffer
-			, UniformBufferOffset< TexturesUbo::Configuration > texturesBuffer
+			, UniformBufferOffsetT< ModelMatrixUbo::Configuration > modelMatrixBuffer
+			, UniformBufferOffsetT< ModelUbo::Configuration > modelBuffer
+			, UniformBufferOffsetT< PickingUbo::Configuration > pickingBuffer
+			, UniformBufferOffsetT< BillboardUbo::Configuration > billboardBuffer
+			, UniformBufferOffsetT< TexturesUbo::Configuration > texturesBuffer
 			, GeometryBuffers const & buffers
 			, SceneNode & sceneNode
 			, BillboardBase & data );
 
 		//!\~english	The billboard UBO.
 		//!\~french		L'UBO de billboard.
-		UniformBufferOffset< BillboardUbo::Configuration > billboardUbo;
+		UniformBufferOffsetT< BillboardUbo::Configuration > billboardUbo;
 	};
 }
 

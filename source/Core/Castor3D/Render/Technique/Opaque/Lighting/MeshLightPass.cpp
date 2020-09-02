@@ -335,7 +335,7 @@ namespace castor3d
 		, ShadowMap const * shadowMap
 		, uint32_t shadowMapIndex )
 	{
-		m_matrixUbo.update( camera.getView(), camera.getProjection() );
+		m_matrixUbo.cpuUpdate( camera.getView(), camera.getProjection() );
 
 		auto model = doComputeModelMatrix( light, camera );
 		auto normal = castor::Matrix3x3f{ model };

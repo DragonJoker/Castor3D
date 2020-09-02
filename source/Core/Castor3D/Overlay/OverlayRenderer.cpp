@@ -57,8 +57,8 @@ namespace castor3d
 		}
 
 		template< typename T >
-		void doUpdateUbo( UniformBuffer< T > & overlayUbo
-			, UniformBuffer< TexturesUbo::Configuration > & texturesUbo
+		void doUpdateUbo( UniformBufferT< T > & overlayUbo
+			, UniformBufferT< TexturesUbo::Configuration > & texturesUbo
 			, uint32_t index
 			, OverlayCategory const & overlay
 			, Pass const & pass
@@ -547,7 +547,7 @@ namespace castor3d
 		{
 			m_sizeChanged = true;
 			m_size = size;
-			m_matrixUbo.update( getRenderSystem()->getOrtho( 0.0f
+			m_matrixUbo.cpuUpdate( getRenderSystem()->getOrtho( 0.0f
 				, float( m_size.getWidth() )
 				, 0.0f
 				, float( m_size.getHeight() )
@@ -641,8 +641,8 @@ namespace castor3d
 	ashes::DescriptorSetPtr OverlayRenderer::doCreateDescriptorSet( OverlayRenderer::Pipeline & pipeline
 		, TextureFlags textures
 		, Pass const & pass
-		, UniformBuffer< Configuration > const & overlayUbo
-		, UniformBuffer< TexturesUbo::Configuration > const & texturesUbo
+		, UniformBufferT< Configuration > const & overlayUbo
+		, UniformBufferT< TexturesUbo::Configuration > const & texturesUbo
 		, uint32_t index
 		, bool update )
 	{
@@ -698,8 +698,8 @@ namespace castor3d
 	ashes::DescriptorSetPtr OverlayRenderer::doCreateDescriptorSet( OverlayRenderer::Pipeline & pipeline
 		, TextureFlags textures
 		, Pass const & pass
-		, UniformBuffer< Configuration > const & overlayUbo
-		, UniformBuffer< TexturesUbo::Configuration > const & texturesUbo
+		, UniformBufferT< Configuration > const & overlayUbo
+		, UniformBufferT< TexturesUbo::Configuration > const & texturesUbo
 		, uint32_t index
 		, TextureLayout const & texture
 		, Sampler const & sampler )

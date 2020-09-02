@@ -202,13 +202,13 @@ namespace castor3d
 		m_linearisePass.cleanup();
 	}
 
-	void DeferredRendering::update( RenderInfo & info
+	void DeferredRendering::gpuUpdate( RenderInfo & info
 		, Scene const & scene
 		, Camera const & camera
 		, castor::Point2f const & jitter )
 	{
-		m_opaquePass.getSceneUbo().update( scene, &camera );
-		m_opaquePass.update( info, jitter );
+		m_opaquePass.getSceneUbo().gpuUpdate( scene, &camera );
+		m_opaquePass.gpuUpdate( info, jitter );
 
 		if ( m_ssaoConfig.enabled )
 		{

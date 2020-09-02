@@ -46,7 +46,7 @@ namespace castor3d
 		}
 	}
 
-	void MatrixUbo::update( castor::Matrix4x4f const & view
+	void MatrixUbo::cpuUpdate( castor::Matrix4x4f const & view
 		, castor::Matrix4x4f const & projection
 		, castor::Point2f const & jitter )
 	{
@@ -61,7 +61,7 @@ namespace castor3d
 		configuration.jitter = jitter;
 	}
 
-	void MatrixUbo::update( castor::Matrix4x4f const & projection )
+	void MatrixUbo::cpuUpdate( castor::Matrix4x4f const & projection )
 	{
 		CU_Require( m_ubo );
 		auto & configuration = m_ubo.getData();

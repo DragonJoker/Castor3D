@@ -32,13 +32,13 @@ namespace castor3d
 		{
 			AnimatedObjectGroup const & group;
 			AnimatedSkeleton const & skeleton;
-			UniformBufferOffset< SkinningUbo::Configuration > skinningUbo;
+			UniformBufferOffsetT< SkinningUbo::Configuration > skinningUbo;
 		};
 		struct MeshPoolsEntry
 		{
 			AnimatedObjectGroup const & group;
 			AnimatedMesh const & mesh;
-			UniformBufferOffset< MorphingUbo::Configuration > morphingUbo;
+			UniformBufferOffsetT< MorphingUbo::Configuration > morphingUbo;
 		};
 		using MyCache = CacheBase< AnimatedObjectGroup, castor::String >;
 		using MyCacheTraits = typename MyCacheType::MyCacheTraits;
@@ -173,8 +173,8 @@ namespace castor3d
 		std::map< AnimatedObjectGroup *, OnAnimatedSkeletonChangeConnection > m_skeletonRemovedConnections;
 		std::map< AnimatedObjectGroup *, OnAnimatedMeshChangeConnection > m_meshAddedConnections;
 		std::map< AnimatedObjectGroup *, OnAnimatedMeshChangeConnection > m_meshRemovedConnections;
-		UniformBufferPool< SkinningUbo::Configuration > m_skinningUboPool;
-		UniformBufferPool< MorphingUbo::Configuration > m_morphingUboPool;
+		UniformBufferPoolT< SkinningUbo::Configuration > m_skinningUboPool;
+		UniformBufferPoolT< MorphingUbo::Configuration > m_morphingUboPool;
 		RenderPassTimerSPtr m_updateTimer;
 	};
 }

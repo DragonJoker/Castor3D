@@ -68,7 +68,7 @@ namespace castor3d
 		 *\brief		Met à jour l'UBO avec les valeurs données.
 		 *\param[in]	model	La nouvelle matrice modèle.
 		 */
-		C3D_API void update( castor::Matrix4x4f const & model );
+		C3D_API void cpuUpdate( castor::Matrix4x4f const & model );
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -79,7 +79,7 @@ namespace castor3d
 		 *\param[in]	model	La nouvelle matrice modèle.
 		 *\param[in]	normal	La nouvelle matrice normale.
 		 */
-		C3D_API void update( castor::Matrix4x4f const & model
+		C3D_API void cpuUpdate( castor::Matrix4x4f const & model
 			, castor::Matrix3x3f const & normal );
 		/**
 		 *\~english
@@ -87,12 +87,12 @@ namespace castor3d
 		 *\~french
 		 *\name			getters.
 		 */
-		inline UniformBufferOffset< Configuration > & getUbo()
+		inline UniformBufferOffsetT< Configuration > & getUbo()
 		{
 			return m_ubo;
 		}
 
-		inline UniformBufferOffset< Configuration > const & getUbo()const
+		inline UniformBufferOffsetT< Configuration > const & getUbo()const
 		{
 			return m_ubo;
 		}
@@ -108,7 +108,7 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
-		UniformBufferOffset< Configuration > m_ubo;
+		UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }
 

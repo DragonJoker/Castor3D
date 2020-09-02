@@ -144,7 +144,7 @@ namespace castor3d
 			castor::Point4f splitScales;
 			std::array< castor::Matrix4x4f, shader::DirectionalMaxCascadesCount > transform;
 		};
-		UniformBufferUPtr< Config > m_ubo;
+		UniformBufferUPtrT< Config > m_ubo;
 		Viewport m_viewport;
 	};
 }

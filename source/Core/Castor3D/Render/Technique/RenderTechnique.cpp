@@ -321,60 +321,74 @@ namespace castor3d
 		}
 	}
 
-	void RenderTechnique::update( RenderQueueArray & queues )
+	void RenderTechnique::cpuUpdate( RenderQueueArray & queues )
 	{
+		m_renderTarget.cpuUpdate();
 #if C3D_UseDepthPrepass
-		m_depthPass->update( queues );
+		m_depthPass->cpuUpdate( queues );
 #endif
-		m_renderTarget.update();
-		//m_voxelizer->update( queues );
-		m_opaquePass->update( queues );
-		m_transparentPass->update( queues );
+		//m_voxelizer->cpuUpdate( queues );
+		m_opaquePass->cpuUpdate( queues );
+		m_transparentPass->cpuUpdate( queues );
 		doUpdateShadowMaps( queues );
 		auto & maps = m_renderTarget.getScene()->getEnvironmentMaps();
 
 		for ( auto & map : maps )
 		{
-			map.get().update( queues );
+			map.get().cpuUpdate( queues );
 		}
+
+		auto & camera = *m_renderTarget.getCamera();
+		auto jitter = m_renderTarget.getJitter();
+		auto jitterProjSpace = jitter * 2.0f;
+		jitterProjSpace[0] /= camera.getWidth();
+		jitterProjSpace[1] /= camera.getHeight();
+		m_matrixUbo.cpuUpdate( camera.getView()
+			, camera.getProjection()
+			, jitterProjSpace );
+		m_hdrConfigUbo.cpuUpdate( m_renderTarget.getHdrConfig() );
 	}
 
-	void RenderTechnique::update( castor::Point2f const & jitter
+	void RenderTechnique::gpuUpdate( castor::Point2f const & jitter
 		, RenderInfo & info )
 	{
 		auto & scene = *m_renderTarget.getScene();
 		auto & camera = *m_renderTarget.getCamera();
-		auto jitterProjSpace = jitter * 2.0f;
-		jitterProjSpace[0] /= camera.getWidth();
-		jitterProjSpace[1] /= camera.getHeight();
-		m_matrixUbo.update( camera.getView()
-			, camera.getProjection()
-			, jitterProjSpace );
-		m_gpInfoUbo.update( m_size
+		m_gpInfoUbo.gpuUpdate( m_size
 			, camera );
-		m_hdrConfigUbo.update( m_renderTarget.getHdrConfig() );
 
 #if C3D_UseDepthPrepass
-		m_depthPass->update( info, jitter );
+		m_depthPass->gpuUpdate( info, jitter );
 #endif
 		//m_voxelizer->update( info, jitter );
 #if C3D_UseDeferredRendering
-		m_deferredRendering->update( info, scene, camera, jitter );
+		m_deferredRendering->gpuUpdate( info, scene, camera, jitter );
 #else
-		static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).update( info, jitter );
+		static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).gpuUpdate( info, jitter );
 #endif
 #if C3D_UseWeightedBlendedRendering
-		m_weightedBlendRendering->update( info, scene, camera, jitter );
+		m_weightedBlendRendering->gpuUpdate( info, scene, camera, jitter );
 #else
-		static_cast< ForwardRenderTechniquePass & >( *m_transparentPass ).update( info, jitter );
+		static_cast< ForwardRenderTechniquePass & >( *m_transparentPass ).gpuUpdate( info, jitter );
 #endif
 
 		scene.getLightCache().updateLightsTexture( camera );
 		scene.updateDeviceDependent( camera );
 
+		if ( m_renderTarget.getScene()->getFog().getType() != FogType::eDisabled )
+		{
+			auto & background = m_renderTarget.getScene()->getColourBackground();
+			background.update( camera );
+		}
+		else
+		{
+			auto & background = *m_renderTarget.getScene()->getBackground();
+			background.update( camera );
+		}
+
 		for ( auto & map : m_renderTarget.getScene()->getEnvironmentMaps() )
 		{
-			map.get().update();
+			map.get().gpuUpdate();
 		}
 
 		for ( auto & maps : m_activeShadowMaps )

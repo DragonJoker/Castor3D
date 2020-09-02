@@ -120,7 +120,7 @@ namespace castor3d
 			, 0.1f
 			, 2.0f );
 		m_viewport.update();
-		m_matrixUbo.update( camera.getView()
+		m_matrixUbo.cpuUpdate( camera.getView()
 			, m_viewport.getProjection() );
 	}
 

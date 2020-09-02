@@ -22,11 +22,11 @@ namespace castor3d
 		{
 			BillboardBase const & billboard;
 			Pass const & pass;
-			UniformBufferOffset< ModelUbo::Configuration > modelUbo;
-			UniformBufferOffset< ModelMatrixUbo::Configuration > modelMatrixUbo;
-			UniformBufferOffset< BillboardUbo::Configuration > billboardUbo;
-			UniformBufferOffset< PickingUbo::Configuration > pickingUbo;
-			UniformBufferOffset< TexturesUbo::Configuration > texturesUbo;
+			UniformBufferOffsetT< ModelUbo::Configuration > modelUbo;
+			UniformBufferOffsetT< ModelMatrixUbo::Configuration > modelMatrixUbo;
+			UniformBufferOffsetT< BillboardUbo::Configuration > billboardUbo;
+			UniformBufferOffsetT< PickingUbo::Configuration > pickingUbo;
+			UniformBufferOffsetT< TexturesUbo::Configuration > texturesUbo;
 		};
 
 	public:
@@ -100,11 +100,11 @@ namespace castor3d
 	private:
 		std::map< size_t, PoolsEntry > m_entries;
 		std::map< BillboardBase *, OnBillboardMaterialChangedConnection > m_connections;
-		UniformBufferPool< ModelUbo::Configuration > m_modelUboPool;
-		UniformBufferPool< ModelMatrixUbo::Configuration > m_modelMatrixUboPool;
-		UniformBufferPool< BillboardUbo::Configuration > m_billboardUboPool;
-		UniformBufferPool< PickingUbo::Configuration > m_pickingUboPool;
-		UniformBufferPool< TexturesUbo::Configuration > m_texturesUboPool;
+		UniformBufferPoolT< ModelUbo::Configuration > m_modelUboPool;
+		UniformBufferPoolT< ModelMatrixUbo::Configuration > m_modelMatrixUboPool;
+		UniformBufferPoolT< BillboardUbo::Configuration > m_billboardUboPool;
+		UniformBufferPoolT< PickingUbo::Configuration > m_pickingUboPool;
+		UniformBufferPoolT< TexturesUbo::Configuration > m_texturesUboPool;
 		RenderPassTimerSPtr m_updateTimer;
 	};
 }

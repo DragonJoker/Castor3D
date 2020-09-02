@@ -45,7 +45,7 @@ namespace castor3d
 	{
 	}
 
-	bool ShadowMapPassSpot::update( RenderQueueArray & queues
+	bool ShadowMapPassSpot::cpuUpdate( RenderQueueArray & queues
 		, Light & light
 		, uint32_t index )
 	{
@@ -59,15 +59,14 @@ namespace castor3d
 			, index );
 		doUpdate( queues );
 		m_shadowMapUbo.update( light, index );
+		m_matrixUbo.cpuUpdate( myCamera.getView(), myCamera.getProjection() );
 		return m_outOfDate;
 	}
 
-	void ShadowMapPassSpot::updateDeviceDependent( uint32_t index )
+	void ShadowMapPassSpot::gpuUpdate( uint32_t index )
 	{
 		if ( m_initialised )
 		{
-			auto & myCamera = getCuller().getCamera();
-			m_matrixUbo.update( myCamera.getView(), myCamera.getProjection() );
 			doUpdateNodes( m_renderQueue.getCulledRenderNodes() );
 		}
 	}

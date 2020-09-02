@@ -124,7 +124,7 @@ namespace castor3d
 				lightCamera.setView( directional.getViewMatrix( m_cascades - 1u ) );
 				lightCamera.updateFrustum();
 
-				m_passes[cascade].pass->update( queues
+				m_passes[cascade].pass->cpuUpdate( queues
 					, light
 					, cascade );
 			}
@@ -198,7 +198,7 @@ namespace castor3d
 	{
 		for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
 		{
-			m_passes[cascade].pass->updateDeviceDependent( cascade );
+			m_passes[cascade].pass->gpuUpdate( cascade );
 		}
 	}
 	

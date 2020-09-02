@@ -101,12 +101,12 @@ namespace castor3d
 		, Light & light
 		, uint32_t index )
 	{
-		m_passes[index].pass->update( queues, light, index );
+		m_passes[index].pass->cpuUpdate( queues, light, index );
 	}
 
 	void ShadowMapSpot::updateDeviceDependent( uint32_t index )
 	{
-		m_passes[index].pass->updateDeviceDependent();
+		m_passes[index].pass->gpuUpdate();
 	}
 
 	void ShadowMapSpot::doInitialise()

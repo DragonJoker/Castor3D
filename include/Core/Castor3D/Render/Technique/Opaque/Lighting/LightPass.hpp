@@ -102,7 +102,7 @@ namespace castor3d
 				, MatrixUbo & matrixUbo
 				, SceneUbo & sceneUbo
 				, GpInfoUbo const & gpInfoUbo
-				, UniformBuffer< ModelMatrixUboConfiguration > const * modelMatrixUbo );
+				, UniformBufferT< ModelMatrixUboConfiguration > const * modelMatrixUbo );
 			/**
 			*\~english
 			*\brief		Cleans up the program and its pipeline.
@@ -424,7 +424,7 @@ namespace castor3d
 			, ashes::VertexBufferBase & vbo
 			, ashes::PipelineVertexInputStateCreateInfo const & vertexLayout
 			, SceneUbo & sceneUbo
-			, UniformBuffer< ModelMatrixUboConfiguration > const * modelMatrixUbo
+			, UniformBufferT< ModelMatrixUboConfiguration > const * modelMatrixUbo
 			, RenderPassTimer & timer );
 		/**
 		 *\~english
@@ -574,7 +574,7 @@ namespace castor3d
 		castor::String m_name;
 		Scene const * m_scene{ nullptr };
 		SceneUbo * m_sceneUbo{ nullptr };
-		UniformBuffer< ModelMatrixUboConfiguration > const * m_mmUbo{ nullptr };
+		UniformBufferT< ModelMatrixUboConfiguration > const * m_mmUbo{ nullptr };
 		ashes::PipelineVertexInputStateCreateInfo m_usedVertexLayout{ 0u, {}, {} };
 		ashes::PipelineVertexInputStateCreateInfo const * m_pUsedVertexLayout{ nullptr };
 		RenderPassTimer * m_timer{ nullptr };

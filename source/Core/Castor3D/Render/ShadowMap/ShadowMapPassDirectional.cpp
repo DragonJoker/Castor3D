@@ -52,7 +52,7 @@ namespace castor3d
 	{
 	}
 
-	bool ShadowMapPassDirectional::update( RenderQueueArray & queues
+	bool ShadowMapPassDirectional::cpuUpdate( RenderQueueArray & queues
 		, Light & light
 		, uint32_t index )
 	{
@@ -63,7 +63,7 @@ namespace castor3d
 		return m_outOfDate;
 	}
 
-	void ShadowMapPassDirectional::updateDeviceDependent( uint32_t index )
+	void ShadowMapPassDirectional::gpuUpdate( uint32_t index )
 	{
 		if ( m_initialised )
 		{

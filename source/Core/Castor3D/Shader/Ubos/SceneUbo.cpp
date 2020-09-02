@@ -51,7 +51,7 @@ namespace castor3d
 		m_ubo.reset();
 	}
 
-	void SceneUbo::updateCameraPosition( Camera const & camera )const
+	void SceneUbo::gpuUpdateCameraPosition( Camera const & camera )const
 	{
 		CU_Require( m_ubo );
 		auto & configuration = m_ubo->getData( 0u );
@@ -62,7 +62,7 @@ namespace castor3d
 		m_ubo->upload();
 	}
 
-	void SceneUbo::update( Camera const * camera
+	void SceneUbo::gpuUpdate( Camera const * camera
 		, Fog const & fog )const
 	{
 		CU_Require( m_ubo );
@@ -74,7 +74,7 @@ namespace castor3d
 		{
 			configuration.clipInfo[2] = camera->getNear();
 			configuration.clipInfo[3] = camera->getFar();
-			updateCameraPosition( *camera );
+			gpuUpdateCameraPosition( *camera );
 		}
 		else
 		{
@@ -82,7 +82,7 @@ namespace castor3d
 		}
 	}
 
-	void SceneUbo::update( Scene const & scene
+	void SceneUbo::gpuUpdate( Scene const & scene
 		, Camera const * camera
 		, bool lights )const
 	{
@@ -99,7 +99,7 @@ namespace castor3d
 			configuration.lightsCount[size_t( LightType::eDirectional )] = float( cache.getLightsCount( LightType::eDirectional ) );
 		}
 
-		update( camera, scene.getFog() );
+		gpuUpdate( camera, scene.getFog() );
 	}
 
 	void SceneUbo::setWindowSize( castor::Size const & window )const

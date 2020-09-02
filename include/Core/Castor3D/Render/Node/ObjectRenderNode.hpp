@@ -31,10 +31,10 @@ namespace castor3d
 
 		C3D_API ObjectRenderNode( RenderPipeline & pipeline
 			, PassRenderNode && passNode
-			, UniformBufferOffset< ModelMatrixUbo::Configuration > modelMatrixBuffer
-			, UniformBufferOffset< ModelUbo::Configuration > modelBuffer
-			, UniformBufferOffset< PickingUbo::Configuration > pickingBuffer
-			, UniformBufferOffset< TexturesUbo::Configuration > texturesBuffer
+			, UniformBufferOffsetT< ModelMatrixUbo::Configuration > modelMatrixBuffer
+			, UniformBufferOffsetT< ModelUbo::Configuration > modelBuffer
+			, UniformBufferOffsetT< PickingUbo::Configuration > pickingBuffer
+			, UniformBufferOffsetT< TexturesUbo::Configuration > texturesBuffer
 			, GeometryBuffers const & buffers
 			, SceneNode & sceneNode
 			, DataType & data
@@ -48,16 +48,16 @@ namespace castor3d
 		PassRenderNode passNode;
 		//!\~english	The model matrices UBO.
 		//!\~french		L'UBO de matrices modèle.
-		UniformBufferOffset < ModelMatrixUbo::Configuration > modelMatrixUbo;
+		UniformBufferOffsetT< ModelMatrixUbo::Configuration > modelMatrixUbo;
 		//!\~english	The model UBO.
 		//!\~french		L'UBO de modèle.
-		UniformBufferOffset< ModelUbo::Configuration > modelUbo;
+		UniformBufferOffsetT< ModelUbo::Configuration > modelUbo;
 		//!\~english	The model UBO.
 		//!\~french		L'UBO de modèle.
-		UniformBufferOffset< PickingUbo::Configuration > pickingUbo;
+		UniformBufferOffsetT< PickingUbo::Configuration > pickingUbo;
 		//!\~english	The model UBO.
 		//!\~french		L'UBO de modèle.
-		UniformBufferOffset< TexturesUbo::Configuration > texturesUbo;
+		UniformBufferOffsetT< TexturesUbo::Configuration > texturesUbo;
 		//!\~english	The geometry buffers.
 		//!\~french		Les tampons de la géométrie.
 		GeometryBuffers const & buffers;

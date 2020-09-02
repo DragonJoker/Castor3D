@@ -388,7 +388,7 @@ namespace castor3d
 			, castor::String const & name
 			, ashes::ImageView const & input
 			, ashes::ImageView const & output
-			, UniformBuffer< GaussianBlur::Configuration > const & blurUbo
+			, UniformBufferT< GaussianBlur::Configuration > const & blurUbo
 			, VkFormat format
 			, VkExtent2D const & textureSize )
 		{
@@ -429,7 +429,7 @@ namespace castor3d
 		, VkImageSubresourceRange const & srcRange
 		, ashes::ImageView const & dst
 		, VkImageSubresourceRange const & dstRange
-		, UniformBuffer< Configuration > const & blurUbo
+		, UniformBufferT< Configuration > const & blurUbo
 		, VkFormat format
 		, VkExtent2D const & size )
 		: castor3d::RenderQuad{ renderSystem, name, VK_FILTER_LINEAR, { ashes::nullopt, RenderQuadConfig::Texcoord{} } }
@@ -454,7 +454,7 @@ namespace castor3d
 		, castor::String const & name
 		, ashes::ImageView const & input
 		, ashes::ImageView const & output
-		, UniformBuffer< GaussianBlur::Configuration > const & blurUbo
+		, UniformBufferT< GaussianBlur::Configuration > const & blurUbo
 		, VkFormat format
 		, VkExtent2D const & textureSize
 		, ashes::RenderPass const & renderPass

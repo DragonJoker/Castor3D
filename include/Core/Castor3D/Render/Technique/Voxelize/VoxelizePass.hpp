@@ -43,9 +43,9 @@ namespace castor3d
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor );
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::update
+		 *\copydoc		castor3d::RenderTechniquePass::gpuUpdate
 		 */
-		C3D_API void update( castor::Point2f const & jitter
+		C3D_API void gpuUpdate( castor::Point2f const & jitter
 			, RenderInfo & info );
 		/**
 		 *\~english
@@ -72,7 +72,7 @@ namespace castor3d
 		}
 		/**@}*/
 
-		using RenderPass::update;
+		using RenderPass::cpuUpdate;
 
 	private:
 		/**

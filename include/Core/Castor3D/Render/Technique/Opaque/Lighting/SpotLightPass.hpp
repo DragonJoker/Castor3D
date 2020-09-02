@@ -132,7 +132,7 @@ namespace castor3d
 			//!\~french		La variable contenant la matrice de transformation de la lumière.
 			castor::Matrix4x4f transform;
 		};
-		UniformBufferUPtr< Config > m_ubo;
+		UniformBufferUPtrT< Config > m_ubo;
 	};
 }
 

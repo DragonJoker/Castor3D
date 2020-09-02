@@ -60,7 +60,7 @@ namespace castor3d
 		 *\param[in]	camera		La caméra par laquelle la scène est rendue.
 		 *\param[in]	jitter		La valeur de jittering.
 		 */
-		void update( RenderInfo & info
+		void gpuUpdate( RenderInfo & info
 			, Scene const & scene
 			, Camera const & camera
 			, castor::Point2f const & jitter );

@@ -69,8 +69,8 @@ namespace castor3d
 	*	Un tampon typé d'uniformes, puovant contenir de multiples sous-tampons.
 	*\remark
 	*/
-	template< typename T >
-	class UniformBuffer;
+	template< typename DataT >
+	class UniformBufferT;
 	/**
 	*\~english
 	*\brief
@@ -84,8 +84,8 @@ namespace castor3d
 	*	Alloué depuis un pool.
 	*\remark
 	*/
-	template< typename T >
-	class PoolUniformBuffer;
+	template< typename DataT >
+	class PoolUniformBufferT;
 	/**
 	*\~english
 	*\brief
@@ -94,8 +94,8 @@ namespace castor3d
 	*\brief
 	*	Un UniformBuffer et un offset dans le GpuBuffer.
 	*/
-	template< typename T >
-	struct UniformBufferOffset;
+	template< typename DataT, typename BufferT = PoolUniformBufferT< DataT > >
+	struct UniformBufferOffsetT;
 	/**
 	*\~english
 	*\brief
@@ -104,8 +104,8 @@ namespace castor3d
 	*\brief
 	*	Implémentation d'un pool de tampon d'uniformes.
 	*/
-	template< typename T >
-	class UniformBufferPool;
+	template< typename DataT >
+	class UniformBufferPoolT;
 
 	CU_DeclareSmartPtr( UniformBufferBase );
 	CU_DeclareTemplateSmartPtr( UniformBuffer );

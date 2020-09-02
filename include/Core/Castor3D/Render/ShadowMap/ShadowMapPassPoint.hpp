@@ -46,13 +46,13 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::ShadowMapPass::update
 		 */
-		bool update( RenderQueueArray & queues
+		bool cpuUpdate( RenderQueueArray & queues
 			, Light & light
 			, uint32_t index )override;
 		/**
 		 *\copydoc		castor3d::ShadowMapPass::updateDeviceDependent
 		 */
-		void updateDeviceDependent( uint32_t index )override;
+		void gpuUpdate( uint32_t index )override;
 
 	protected:
 		void doUpdateNodes( SceneCulledRenderNodes & nodes );

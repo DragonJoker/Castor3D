@@ -33,12 +33,12 @@ namespace film_grain
 			, VkExtent2D const & size );
 		void update( castor::Nanoseconds const & time );
 
-		inline castor3d::UniformBuffer< Configuration > const & getUbo()const
+		inline castor3d::UniformBufferT< Configuration > const & getUbo()const
 		{
 			return *m_configUbo;
 		}
 
-		inline castor3d::UniformBuffer< Configuration > & getUbo()
+		inline castor3d::UniformBufferT< Configuration > & getUbo()
 		{
 			return *m_configUbo;
 		}
@@ -50,7 +50,7 @@ namespace film_grain
 	private:
 		uint64_t m_time{ 0ull };
 		VkExtent2D m_size;
-		castor3d::UniformBufferUPtr< Configuration > m_configUbo;
+		castor3d::UniformBufferUPtrT< Configuration > m_configUbo;
 		castor3d::SamplerSPtr m_sampler;
 		ashes::ImagePtr m_noise;
 		ashes::ImageView m_noiseView;

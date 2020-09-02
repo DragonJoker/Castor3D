@@ -45,7 +45,7 @@ namespace castor3d
 		m_ubo.reset();
 	}
 
-	void GpInfoUbo::update( castor::Size const & renderSize
+	void GpInfoUbo::gpuUpdate( castor::Size const & renderSize
 		, Camera const & camera )
 	{
 		CU_Require( m_ubo );

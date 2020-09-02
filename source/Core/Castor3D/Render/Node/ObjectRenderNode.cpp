@@ -8,10 +8,10 @@ namespace castor3d
 	template<>
 	ObjectRenderNode< Submesh, Geometry >::ObjectRenderNode( RenderPipeline & pipeline
 		, PassRenderNode && passNode
-		, UniformBufferOffset< ModelMatrixUbo::Configuration > modelMatrixBuffer
-		, UniformBufferOffset< ModelUbo::Configuration > modelBuffer
-		, UniformBufferOffset< PickingUbo::Configuration > pickingBuffer
-		, UniformBufferOffset< TexturesUbo::Configuration > texturesBuffer
+		, UniformBufferOffsetT< ModelMatrixUbo::Configuration > modelMatrixBuffer
+		, UniformBufferOffsetT< ModelUbo::Configuration > modelBuffer
+		, UniformBufferOffsetT< PickingUbo::Configuration > pickingBuffer
+		, UniformBufferOffsetT< TexturesUbo::Configuration > texturesBuffer
 		, GeometryBuffers const & buffers
 		, SceneNode & sceneNode
 		, Submesh & data
@@ -32,10 +32,10 @@ namespace castor3d
 	template<>
 	ObjectRenderNode< BillboardBase, BillboardBase >::ObjectRenderNode( RenderPipeline & pipeline
 		, PassRenderNode && passNode
-		, UniformBufferOffset< ModelMatrixUbo::Configuration > modelMatrixBuffer
-		, UniformBufferOffset< ModelUbo::Configuration > modelBuffer
-		, UniformBufferOffset< PickingUbo::Configuration > pickingBuffer
-		, UniformBufferOffset< TexturesUbo::Configuration > texturesBuffer
+		, UniformBufferOffsetT< ModelMatrixUbo::Configuration > modelMatrixBuffer
+		, UniformBufferOffsetT< ModelUbo::Configuration > modelBuffer
+		, UniformBufferOffsetT< PickingUbo::Configuration > pickingBuffer
+		, UniformBufferOffsetT< TexturesUbo::Configuration > texturesBuffer
 		, GeometryBuffers const & buffers
 		, SceneNode & sceneNode
 		, BillboardBase & data

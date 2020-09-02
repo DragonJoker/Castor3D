@@ -44,7 +44,7 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
-		UniformBufferUPtr< Configuration > m_ubo;
+		UniformBufferUPtrT< Configuration > m_ubo;
 	};
 }
 

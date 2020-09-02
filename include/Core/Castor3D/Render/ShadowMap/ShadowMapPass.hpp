@@ -66,7 +66,7 @@ namespace castor3d
 		 *\param[out]	index	L'indice de la passe.
 		 *\return		\p true si la passe a changé.
 		 */
-		C3D_API virtual bool update( RenderQueueArray & queues
+		C3D_API virtual bool cpuUpdate( RenderQueueArray & queues
 			, Light & light
 			, uint32_t index ) = 0;
 		/**
@@ -77,7 +77,7 @@ namespace castor3d
 		 *\brief		Met à jour les données dépendantes du device.
 		 *\param[in]	index	L'indice du rendu.
 		 */
-		C3D_API virtual void updateDeviceDependent( uint32_t index = 0 ) = 0;
+		C3D_API virtual void gpuUpdate( uint32_t index = 0 ) = 0;
 
 		inline RenderPassTimer & getTimer()
 		{

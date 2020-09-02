@@ -1427,6 +1427,6 @@ namespace castor3d
 
 	void TransparentPass::doUpdatePipeline( RenderPipeline & pipeline )const
 	{
-		m_sceneUbo.update( *m_camera->getScene(), m_camera, true );
+		m_sceneUbo.gpuUpdate( *m_camera->getScene(), m_camera, true );
 	}
 }

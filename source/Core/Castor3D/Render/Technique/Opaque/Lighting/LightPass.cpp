@@ -143,7 +143,7 @@ namespace castor3d
 		, MatrixUbo & matrixUbo
 		, SceneUbo & sceneUbo
 		, GpInfoUbo const & gpInfoUbo
-		, UniformBuffer< ModelMatrixUboConfiguration > const * modelMatrixUbo )
+		, UniformBufferT< ModelMatrixUboConfiguration > const * modelMatrixUbo )
 	{
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto & device = getCurrentRenderDevice( renderSystem );
@@ -410,7 +410,7 @@ namespace castor3d
 		ashes::VertexBufferBase & vbo = *m_vertexBuffer;
 		ashes::PipelineVertexInputStateCreateInfo const & vertexLayout = *m_pUsedVertexLayout;
 		SceneUbo & sceneUbo = *m_sceneUbo;
-		UniformBuffer< ModelMatrixUboConfiguration > const * modelMatrixUbo = m_mmUbo;
+		UniformBufferT< ModelMatrixUboConfiguration > const * modelMatrixUbo = m_mmUbo;
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto & device = getCurrentRenderDevice( renderSystem );
 		SceneFlags sceneFlags{ scene.getFlags() };
@@ -562,7 +562,7 @@ namespace castor3d
 		, ashes::VertexBufferBase & vbo
 		, ashes::PipelineVertexInputStateCreateInfo const & vertexLayout
 		, SceneUbo & sceneUbo
-		, UniformBuffer< ModelMatrixUboConfiguration > const * modelMatrixUbo
+		, UniformBufferT< ModelMatrixUboConfiguration > const * modelMatrixUbo
 		, RenderPassTimer & timer )
 	{
 		m_scene = &scene;

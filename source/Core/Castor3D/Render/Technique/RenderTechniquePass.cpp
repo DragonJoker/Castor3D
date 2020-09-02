@@ -166,7 +166,7 @@ namespace castor3d
 		node.texDescriptorSet->setBindings( writes );
 	}
 
-	void RenderTechniquePass::update( RenderInfo & info
+	void RenderTechniquePass::gpuUpdate( RenderInfo & info
 		, castor::Point2f const & jitter )
 	{
 		doUpdateNodes( m_renderQueue.getCulledRenderNodes()
@@ -201,7 +201,7 @@ namespace castor3d
 	void RenderTechniquePass::doUpdateUbos( Camera const & camera
 		, castor::Point2f const & jitter )
 	{
-		m_sceneUbo.update( *camera.getScene(), &camera );
+		m_sceneUbo.gpuUpdate( *camera.getScene(), &camera );
 	}
 
 	bool RenderTechniquePass::doInitialise( Size const & CU_UnusedParam( size ) )
@@ -239,7 +239,7 @@ namespace castor3d
 
 	void RenderTechniquePass::doUpdatePipeline( RenderPipeline & pipeline )const
 	{
-		m_sceneUbo.update( m_scene, m_camera );
+		m_sceneUbo.gpuUpdate( m_scene, m_camera );
 	}
 
 	ashes::PipelineDepthStencilStateCreateInfo RenderTechniquePass::doCreateDepthStencilState( PipelineFlags const & flags )const

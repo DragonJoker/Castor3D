@@ -182,9 +182,9 @@ namespace castor3d
 		static castor::Matrix3x3f const Identity{ 1.0f };
 		auto node = camera.getParent();
 		matrix::setTranslate( m_mtxModel, node->getDerivedPosition() );
-		m_matrixUbo.update( camera.getView()
+		m_matrixUbo.cpuUpdate( camera.getView()
 			, camera.getProjection() );
-		m_modelMatrixUbo.update( m_mtxModel, Identity );
+		m_modelMatrixUbo.cpuUpdate( m_mtxModel, Identity );
 
 		if ( m_size != camera.getSize() )
 		{

@@ -37,13 +37,13 @@ namespace castor3d
 		m_transparentPass.initialise( m_size );
 	}
 
-	void WeightedBlendRendering::update( RenderInfo & info
+	void WeightedBlendRendering::gpuUpdate( RenderInfo & info
 		, Scene const & scene
 		, Camera const & camera
 		, castor::Point2f const & jitter )
 	{
-		m_transparentPass.getSceneUbo().update( scene, &camera );
-		m_transparentPass.update( info, jitter );
+		m_transparentPass.getSceneUbo().gpuUpdate( scene, &camera );
+		m_transparentPass.gpuUpdate( info, jitter );
 	}
 
 	ashes::Semaphore const & WeightedBlendRendering::render( Scene const & scene

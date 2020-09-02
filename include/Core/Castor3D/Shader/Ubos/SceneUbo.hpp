@@ -66,7 +66,7 @@ namespace castor3d
 		 *\brief		Met à jour l'UBO avec les valeurs données.
 		 *\param[in]	camera	La camera actuelle.
 		 */
-		C3D_API void updateCameraPosition( Camera const & camera )const;
+		C3D_API void gpuUpdateCameraPosition( Camera const & camera )const;
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -77,7 +77,7 @@ namespace castor3d
 		 *\param[in]	camera	La camera actuelle.
 		 *\param[in]	fog		La configuration du brouillard.
 		 */
-		C3D_API void update( Camera const * camera
+		C3D_API void gpuUpdate( Camera const * camera
 			, Fog const & fog )const;
 		/**
 		 *\~english
@@ -91,7 +91,7 @@ namespace castor3d
 		 *\param[in]	camera	La camera actuelle.
 		 *\param[in]	lights	Les sources lumineuses sont mises à jour elles aussi.
 		 */
-		C3D_API void update( Scene const & scene
+		C3D_API void gpuUpdate( Scene const & scene
 			, Camera const * camera
 			, bool lights = true )const;
 		/**
@@ -109,12 +109,12 @@ namespace castor3d
 		 *\~french
 		 *\name			getters.
 		 */
-		inline UniformBuffer< Configuration > & getUbo()
+		inline UniformBufferT< Configuration > & getUbo()
 		{
 			return *m_ubo;
 		}
 
-		inline UniformBuffer< Configuration > const & getUbo()const
+		inline UniformBufferT< Configuration > const & getUbo()const
 		{
 			return *m_ubo;
 		}
@@ -146,7 +146,7 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
-		UniformBufferUPtr< Configuration > m_ubo;
+		UniformBufferUPtrT< Configuration > m_ubo;
 	};
 }
 

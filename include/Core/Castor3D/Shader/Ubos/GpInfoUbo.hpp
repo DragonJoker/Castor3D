@@ -68,7 +68,7 @@ namespace castor3d
 		 *\brief		Fonction de nettoyage.
 		 */
 		C3D_API void cleanup();
-		void update( castor::Size const & renderSize
+		void gpuUpdate( castor::Size const & renderSize
 			, Camera const & camera );
 		/**
 		 *\~english
@@ -76,12 +76,12 @@ namespace castor3d
 		 *\~french
 		 *\name			getters.
 		 */
-		inline UniformBuffer< Configuration > & getUbo()
+		inline UniformBufferT< Configuration > & getUbo()
 		{
 			return *m_ubo;
 		}
 
-		inline UniformBuffer< Configuration > const & getUbo()const
+		inline UniformBufferT< Configuration > const & getUbo()const
 		{
 			return *m_ubo;
 		}
@@ -99,7 +99,7 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
-		UniformBufferUPtr< Configuration > m_ubo;
+		UniformBufferUPtrT< Configuration > m_ubo;
 	};
 }
 

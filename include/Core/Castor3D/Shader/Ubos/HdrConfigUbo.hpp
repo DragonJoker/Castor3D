@@ -65,7 +65,7 @@ namespace castor3d
 		 *\brief		Met à jour l'UBO avec les valeurs données.
 		 *\param[in]	config	La configuration HDR.
 		 */
-		C3D_API void update( HdrConfig const & config );
+		C3D_API void cpuUpdate( HdrConfig const & config );
 		/**
 		 *\~english
 		 *\name			getters.
@@ -73,12 +73,12 @@ namespace castor3d
 		 *\name			getters.
 		 */
 		/**@{*/
-		inline UniformBufferOffset< HdrConfig > & getUbo()
+		inline UniformBufferOffsetT< HdrConfig > & getUbo()
 		{
 			return m_ubo;
 		}
 
-		inline UniformBufferOffset< HdrConfig > const & getUbo()const
+		inline UniformBufferOffsetT< HdrConfig > const & getUbo()const
 		{
 			return m_ubo;
 		}
@@ -98,7 +98,7 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
-		UniformBufferOffset< HdrConfig > m_ubo;
+		UniformBufferOffsetT< HdrConfig > m_ubo;
 	};
 }
 

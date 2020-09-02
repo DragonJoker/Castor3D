@@ -423,27 +423,27 @@ namespace castor3d
 			return *m_logger;
 		}
 
-		inline UniformBufferPool< MatrixUboConfiguration > & getMatrixUboPool()
+		inline UniformBufferPoolT< MatrixUboConfiguration > & getMatrixUboPool()
 		{
 			return *m_matrixUboPool;
 		}
 
-		inline UniformBufferPool< HdrConfig > & getHdrConfigUboPool()
+		inline UniformBufferPoolT< HdrConfig > & getHdrConfigUboPool()
 		{
 			return *m_hdrConfigUboPool;
 		}
 
-		inline UniformBufferPool< RsmUboConfiguration > & getRsmConfigUboPool()
+		inline UniformBufferPoolT< RsmUboConfiguration > & getRsmConfigUboPool()
 		{
 			return *m_rsmConfigUboPool;
 		}
 
-		inline UniformBufferPool< ModelMatrixUboConfiguration > & getModelMatrixUboPool()
+		inline UniformBufferPoolT< ModelMatrixUboConfiguration > & getModelMatrixUboPool()
 		{
 			return *m_modelMatrixUboPool;
 		}
 
-		inline UniformBufferPool< ShadowMapUboConfiguration > & getShadowMapUboPool()
+		inline UniformBufferPoolT< ShadowMapUboConfiguration > & getShadowMapUboPool()
 		{
 			return *m_shadowMapUboPool;
 		}
@@ -513,11 +513,11 @@ namespace castor3d
 		bool m_enableApiTrace{ false };
 		RenderDepthQuadSPtr m_renderDepth;
 		ashes::CommandBufferPtr m_uploadCommandBuffer;
-		UniformBufferPoolSPtr< MatrixUboConfiguration > m_matrixUboPool;
-		UniformBufferPoolSPtr< HdrConfig > m_hdrConfigUboPool;
-		UniformBufferPoolSPtr< RsmUboConfiguration > m_rsmConfigUboPool;
-		UniformBufferPoolSPtr< ModelMatrixUboConfiguration > m_modelMatrixUboPool;
-		UniformBufferPoolSPtr< ShadowMapUboConfiguration > m_shadowMapUboPool;
+		UniformBufferPoolSPtrT< MatrixUboConfiguration > m_matrixUboPool;
+		UniformBufferPoolSPtrT< HdrConfig > m_hdrConfigUboPool;
+		UniformBufferPoolSPtrT< RsmUboConfiguration > m_rsmConfigUboPool;
+		UniformBufferPoolSPtrT< ModelMatrixUboConfiguration > m_modelMatrixUboPool;
+		UniformBufferPoolSPtrT< ShadowMapUboConfiguration > m_shadowMapUboPool;
 	};
 }
 

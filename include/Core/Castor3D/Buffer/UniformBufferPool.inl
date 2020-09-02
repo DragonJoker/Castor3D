@@ -42,21 +42,21 @@ namespace castor3d
 		}
 	}
 
-	template< typename T >
-	UniformBufferPool< T >::UniformBufferPool( RenderSystem & renderSystem
+	template< typename DataT >
+	UniformBufferPoolT< DataT >::UniformBufferPoolT( RenderSystem & renderSystem
 		, castor::String debugName )
 		: castor::OwnedBy< RenderSystem >{ renderSystem }
 		, m_debugName{ std::move( debugName ) }
 	{
 	}
 
-	template< typename T >
-	UniformBufferPool< T >::~UniformBufferPool()
+	template< typename DataT >
+	UniformBufferPoolT< DataT >::~UniformBufferPoolT()
 	{
 	}
 
-	template< typename T >
-	void UniformBufferPool< T >::cleanup()
+	template< typename DataT >
+	void UniformBufferPoolT< DataT >::cleanup()
 	{
 		m_buffers.clear();
 
@@ -67,8 +67,8 @@ namespace castor3d
 		}
 	}
 
-	template< typename T >
-	void UniformBufferPool< T >::upload( ashes::CommandBuffer const & commandBuffer )const
+	template< typename DataT >
+	void UniformBufferPoolT< DataT >::upload( ashes::CommandBuffer const & commandBuffer )const
 	{
 		if ( m_stagingBuffer )
 		{
@@ -82,41 +82,17 @@ namespace castor3d
 						, m_stagingBuffer->getBuffer()
 						, buffer.buffer->getBuffer().getBuffer()
 						, buffer.index * m_maxUboElemCount
-						, m_maxUboElemCount
+						, m_maxUboSize
 						, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
 				}
 			}
 		}
 	}
 
-	template< typename T >
-	void UniformBufferPool< T >::upload( ashes::CommandBuffer const & commandBuffer
-		, RenderPassTimer & timer
-		, uint32_t index )const
+	template< typename DataT >
+	UniformBufferOffsetT< DataT > UniformBufferPoolT< DataT >::getBuffer( VkMemoryPropertyFlags flags )
 	{
-		if ( m_stagingBuffer )
-		{
-			for ( auto & bufferIt : m_buffers )
-			{
-				for ( auto & buffer : bufferIt.second )
-				{
-					details::copyBuffer( commandBuffer
-						, m_stagingBuffer->getBuffer()
-						, buffer.buffer->getBuffer().getBuffer()
-						, buffer.index * m_maxUboElemCount
-						, m_maxUboElemCount
-						, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
-					timer.notifyPassRender( index );
-					++index;
-				}
-			}
-		}
-	}
-
-	template< typename T >
-	UniformBufferOffset< T > UniformBufferPool< T >::getBuffer( VkMemoryPropertyFlags flags )
-	{
-		UniformBufferOffset< T > result;
+		UniformBufferOffsetT< DataT > result;
 
 		auto key = uint32_t( flags );
 		auto it = m_buffers.emplace( key, BufferArray{} ).first;
@@ -140,7 +116,7 @@ namespace castor3d
 			{
 				auto & properties = renderSystem.getProperties();
 				auto maxSize = std::min( 65536u, properties.limits.maxUniformBufferRange );
-				auto elementSize = ashes::getAlignedSize( sizeof( T )
+				auto elementSize = ashes::getAlignedSize( sizeof( DataT )
 					, properties.limits.minUniformBufferOffsetAlignment );
 				m_maxUboElemCount = uint32_t( std::floor( float( maxSize ) / elementSize ) );
 				m_maxUboSize = uint32_t( m_maxUboElemCount * elementSize );
@@ -148,16 +124,17 @@ namespace castor3d
 					, VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 					, m_maxUboSize * m_maxPoolUboCount
 					, sharingMode );
-				m_stagingData = reinterpret_cast< T * >( m_stagingBuffer->getBuffer().lock( 0u
+				m_stagingData = reinterpret_cast< uint8_t * >( m_stagingBuffer->getBuffer().lock( 0u
 					, m_maxUboSize * m_maxPoolUboCount
 					, 0u ) );
 				assert( m_stagingData );
 			}
 
 			auto index = m_maxUboElemCount * m_currentUboIndex;
-			auto buffer = makePoolUniformBuffer( renderSystem
+			auto buffer = makePoolUniformBuffer< DataT >( renderSystem
 				, castor::makeArrayView( m_stagingData + index
-					, m_stagingData + index + m_maxUboElemCount )
+					, m_stagingData + index + m_maxUboSize )
+				, m_maxUboElemCount
 				, VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, flags
 				, m_debugName );
@@ -173,8 +150,8 @@ namespace castor3d
 		return result;
 	}
 
-	template< typename T >
-	void UniformBufferPool< T >::putBuffer( UniformBufferOffset< T > const & bufferOffset )
+	template< typename DataT >
+	void UniformBufferPoolT< DataT >::putBuffer( UniformBufferOffsetT< DataT > const & bufferOffset )
 	{
 		auto key = uint32_t( bufferOffset.flags );
 		auto it = m_buffers.find( key );
@@ -189,8 +166,8 @@ namespace castor3d
 		itB->buffer->deallocate( bufferOffset.offset );
 	}
 
-	template< typename T >
-	uint32_t UniformBufferPool< T >::getBufferCount()const
+	template< typename DataT >
+	uint32_t UniformBufferPoolT< DataT >::getBufferCount()const
 	{
 		if ( !m_stagingBuffer )
 		{
@@ -207,8 +184,8 @@ namespace castor3d
 		return result;
 	}
 
-	template< typename T >
-	typename UniformBufferPool< T >::BufferArray::iterator UniformBufferPool< T >::doFindBuffer( typename UniformBufferPool< T >::BufferArray & array )
+	template< typename DataT >
+	typename UniformBufferPoolT< DataT >::BufferArray::iterator UniformBufferPoolT< DataT >::doFindBuffer( typename UniformBufferPoolT< DataT >::BufferArray & array )
 	{
 		auto it = array.begin();
 

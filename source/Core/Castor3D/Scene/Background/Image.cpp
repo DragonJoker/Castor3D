@@ -241,7 +241,7 @@ namespace castor3d
 			, node->getDerivedPosition()
 			, node->getDerivedPosition() + Point3f{ 0.0f, 0.0f, 1.0f }
 			, Point3f{ 0.0f, 1.0f, 0.0f } );
-		m_matrixUbo.update( view
+		m_matrixUbo.cpuUpdate( view
 			, m_viewport.getProjection() );
 	}
 

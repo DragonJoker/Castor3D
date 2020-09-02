@@ -103,7 +103,7 @@ namespace castor3d
 			, 1.0f
 			, 0.0f, 2.0f ) );
 		m_matrixUbo.initialise();
-		m_matrixUbo.update( m_mtxView, projection );
+		m_matrixUbo.cpuUpdate( m_mtxView, projection );
 		m_modelMatrixUbo.initialise();
 		m_hdrConfigUbo.initialise();
 		auto const & environmentLayout = getOwner()->getTexture().getTexture();
@@ -170,7 +170,7 @@ namespace castor3d
 		m_matrixUbo.cleanup();
 	}
 
-	void EnvironmentMapPass::update( SceneNode const & node, RenderQueueArray & queues )
+	void EnvironmentMapPass::cpuUpdate( SceneNode const & node, RenderQueueArray & queues )
 	{
 		auto position = node.getDerivedPosition();
 		m_camera->getParent()->setPosition( position );
@@ -179,18 +179,18 @@ namespace castor3d
 		castor::matrix::setTranslate( m_mtxModel, position );
 		castor::matrix::scale( m_mtxModel, castor::Point3f{ 1, -1, 1 } );
 		m_culler->compute();
-		static_cast< RenderTechniquePass & >( *m_opaquePass ).update( queues );
-		static_cast< RenderTechniquePass & >( *m_transparentPass ).update( queues );
+		static_cast< RenderTechniquePass & >( *m_opaquePass ).cpuUpdate( queues );
+		static_cast< RenderTechniquePass & >( *m_transparentPass ).cpuUpdate( queues );
+		m_matrixUbo.cpuUpdate( m_camera->getView()
+			, m_camera->getProjection() );
+		m_modelMatrixUbo.cpuUpdate( m_mtxModel );
 	}
 
-	void EnvironmentMapPass::update()
+	void EnvironmentMapPass::gpuUpdate()
 	{
 		RenderInfo info;
-		m_opaquePass->update( info, {} );
-		m_transparentPass->update( info, {} );
-		m_matrixUbo.update( m_camera->getView()
-			, m_camera->getProjection() );
-		m_modelMatrixUbo.update( m_mtxModel );
+		m_opaquePass->gpuUpdate( info, {} );
+		m_transparentPass->gpuUpdate( info, {} );
 	}
 
 	ashes::Semaphore const & EnvironmentMapPass::render( ashes::Semaphore const & toWait )

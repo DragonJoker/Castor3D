@@ -351,7 +351,7 @@ namespace castor3d
 		}
 	}
 
-	void RenderTarget::update()
+	void RenderTarget::cpuUpdate()
 	{
 		auto & camera = *getCamera();
 		camera.resize( m_size );
@@ -361,10 +361,10 @@ namespace castor3d
 		m_culler->compute();
 	}
 
-	void RenderTarget::update( RenderInfo & info )
+	void RenderTarget::gpuUpdate( RenderInfo & info )
 	{
 		m_toneMapping->update();
-		m_renderTechnique->update( m_jitter, info );
+		m_renderTechnique->gpuUpdate( m_jitter, info );
 		m_overlayRenderer->update( *getCamera() );
 	}
 

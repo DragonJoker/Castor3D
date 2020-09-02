@@ -89,7 +89,7 @@ namespace castor3d
 		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
 		 *\param[out]	queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
 		 */
-		C3D_API void update( RenderQueueArray & queues );
+		C3D_API void cpuUpdate( RenderQueueArray & queues );
 		/**
 		 *\~english
 		 *\brief		Updates GPU data.
@@ -100,7 +100,7 @@ namespace castor3d
 		 *\param[in]	jitter	La valeur de jittering.
 		 *\param[out]	info	Reçoit les informations de rendu.
 		 */
-		C3D_API void update( castor::Point2f const & jitter
+		C3D_API void gpuUpdate( castor::Point2f const & jitter
 			, RenderInfo & info );
 		/**
 		 *\~english

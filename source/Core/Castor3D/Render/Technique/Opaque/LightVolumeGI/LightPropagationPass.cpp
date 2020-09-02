@@ -523,7 +523,7 @@ namespace castor3d
 			, ashes::DescriptorSetPool & descriptorSetPool
 			, TextureUnit const * geometryInjectionResult
 			, LightVolumePassResult const & lightInjectionResult
-			, UniformBuffer< LpvConfigUboConfiguration > const & ubo )
+			, UniformBufferT< LpvConfigUboConfiguration > const & ubo )
 		{
 			auto & descriptorSetLayout = descriptorSetPool.getLayout();
 			auto result = descriptorSetPool.createDescriptorSet( name );

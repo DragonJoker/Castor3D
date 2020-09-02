@@ -31,7 +31,7 @@ namespace castor3d
 				m_updateTimer = std::make_shared< RenderPassTimer >( *getEngine()
 					, cuT( "Update" )
 					, cuT( "Animation UBOs" )
-					, 2u );
+					, 1u );
 			} ) );
 	}
 
@@ -64,15 +64,13 @@ namespace castor3d
 	{
 		auto count = m_skinningUboPool.getBufferCount()
 			+ m_morphingUboPool.getBufferCount();
-		m_updateTimer->updateCount( std::max( count, 2u ) );
 
 		if ( count )
 		{
 			auto timerBlock = m_updateTimer->start();
-			uint32_t index = 0u;
-			m_skinningUboPool.upload( commandBuffer , *m_updateTimer, index );
-			index += std::max( m_skinningUboPool.getBufferCount(), 1u );
-			m_morphingUboPool.upload( commandBuffer, *m_updateTimer, index );
+			m_skinningUboPool.upload( commandBuffer );
+			m_morphingUboPool.upload( commandBuffer );
+			m_updateTimer->notifyPassRender();
 		}
 	}
 

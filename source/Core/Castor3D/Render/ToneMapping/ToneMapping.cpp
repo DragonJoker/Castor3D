@@ -1,6 +1,7 @@
 #include "Castor3D/Render/ToneMapping/ToneMapping.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 
@@ -96,7 +97,7 @@ namespace castor3d
 
 	void ToneMapping::update()
 	{
-		m_hdrConfigUbo.update( m_config );
+		m_hdrConfigUbo.cpuUpdate( m_config );
 		doUpdate();
 	}
 
@@ -113,7 +114,7 @@ namespace castor3d
 		, ashes::DescriptorSet & descriptorSet )
 	{
 		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( 0u )
-			, *m_hdrConfigUbo.getUbo().buffer
+			, m_hdrConfigUbo.getUbo().buffer->getBuffer()
 			, m_hdrConfigUbo.getUbo().offset
 			, 1u );
 	}

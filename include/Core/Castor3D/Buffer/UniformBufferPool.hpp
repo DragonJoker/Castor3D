@@ -11,15 +11,15 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	template< typename T >
-	class UniformBufferPool
+	template< typename DataT >
+	class UniformBufferPoolT
 		: public castor::OwnedBy< RenderSystem >
 	{
 	public:
 		struct Buffer
 		{
 			uint32_t index;
-			PoolUniformBufferUPtr< T > buffer;
+			PoolUniformBufferUPtrT< DataT > buffer;
 		};
 		using BufferArray = std::vector< Buffer >;
 
@@ -34,7 +34,7 @@ namespace castor3d
 		 *\param[in]	renderSystem	Le RenderSystem.
 		 *\param[in]	debugName		Le nom debug du tampon.
 		 */
-		UniformBufferPool( RenderSystem & renderSystem
+		UniformBufferPoolT( RenderSystem & renderSystem
 			, castor::String debugName );
 		/**
 		 *\~english
@@ -42,7 +42,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		~UniformBufferPool();
+		~UniformBufferPoolT();
 		/**
 		 *\~english
 		 *\brief		Cleans up all GPU buffers.
@@ -59,19 +59,6 @@ namespace castor3d
 		void upload( ashes::CommandBuffer const & cb )const;
 		/**
 		 *\~english
-		 *\brief		Uploads all GPU buffers to VRAM.
-		 *\param[in]	timer	The render pass timer.
-		 *\param[in]	index	The render pass index.
-		 *\~french
-		 *\brief		Met à jour tous les tampons GPU en VRAM.
-		 *\param[in]	timer	Le timer de passe de rendu.
-		 *\param[in]	index	L'indice de passe de rendu.
-		 */
-		void upload( ashes::CommandBuffer const & cb
-			, RenderPassTimer & timer
-			, uint32_t index )const;
-		/**
-		 *\~english
 		 *\brief		Retrieves a uniform buffer.
 		 *\param[in]	flags	The buffer memory flags.
 		 *\return		The uniform buffer.
@@ -80,7 +67,7 @@ namespace castor3d
 		 *\param[in]	flags	Les indicateurs de mémoire du tampon.
 		 *\return		Le tampon d'uniformes.
 		 */
-		UniformBufferOffset< T > getBuffer( VkMemoryPropertyFlags flags );
+		UniformBufferOffsetT< DataT > getBuffer( VkMemoryPropertyFlags flags );
 		/**
 		 *\~english
 		 *\brief		Releases a GPU buffer.
@@ -89,7 +76,7 @@ namespace castor3d
 		 *\brief		Libère un tampon GPU.
 		 *\param[in]	bufferOffset	Le tampon à libérer.
 		 */
-		void putBuffer( UniformBufferOffset< T > const & bufferOffset );
+		void putBuffer( UniformBufferOffsetT< DataT > const & bufferOffset );
 		/**
 		 *\~english
 		 *\return		The pool buffers count.
@@ -107,7 +94,7 @@ namespace castor3d
 		uint32_t m_maxPoolUboCount{ 10u };
 		uint32_t m_currentUboIndex{ 0u };
 		ashes::StagingBufferPtr m_stagingBuffer;
-		T * m_stagingData;
+		uint8_t * m_stagingData;
 		std::map< uint32_t, BufferArray > m_buffers;
 		castor::String m_debugName;
 	};

@@ -14,23 +14,23 @@ namespace castor3d
 	{
 		C3D_API SkinningRenderNode( RenderPipeline & pipeline
 			, PassRenderNode && passNode
-			, UniformBufferOffset< ModelMatrixUbo::Configuration > modelMatrixBuffer
-			, UniformBufferOffset< ModelUbo::Configuration > modelBuffer
-			, UniformBufferOffset< PickingUbo::Configuration > pickingBuffer
-			, UniformBufferOffset< TexturesUbo::Configuration > texturesBuffer
+			, UniformBufferOffsetT< ModelMatrixUbo::Configuration > modelMatrixBuffer
+			, UniformBufferOffsetT< ModelUbo::Configuration > modelBuffer
+			, UniformBufferOffsetT< PickingUbo::Configuration > pickingBuffer
+			, UniformBufferOffsetT< TexturesUbo::Configuration > texturesBuffer
 			, GeometryBuffers const & buffers
 			, SceneNode & sceneNode
 			, DataType & data
 			, InstanceType & instance
 			, AnimatedSkeleton & skeleton
-			, UniformBufferOffset < SkinningUbo::Configuration > skinningUbo );
+			, UniformBufferOffsetT < SkinningUbo::Configuration > skinningUbo );
 
 		//!\~english	The animated skeleton.
 		//!\~french		Le squelette animé.
 		AnimatedSkeleton & skeleton;
 		//!\~english	The animation UBO.
 		//!\~french		L'UBO d'animation.
-		UniformBufferOffset< SkinningUbo::Configuration > skinningUbo;
+		UniformBufferOffsetT< SkinningUbo::Configuration > skinningUbo;
 	};
 }
 

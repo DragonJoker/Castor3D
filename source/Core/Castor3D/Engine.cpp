@@ -271,15 +271,15 @@ namespace castor3d
 				auto & device = getCurrentRenderDevice( *this );
 				m_uploadCommandBuffer = device.graphicsCommandPool->createCommandBuffer( "UboPoolsUpload" );
 			} ) );
-		m_matrixUboPool = std::make_shared< UniformBufferPool< MatrixUboConfiguration > >( *m_renderSystem
+		m_matrixUboPool = std::make_shared< UniformBufferPoolT< MatrixUboConfiguration > >( *m_renderSystem
 			, cuT( "MatrixUboPool" ) );
-		m_hdrConfigUboPool = std::make_shared< UniformBufferPool< HdrConfig > >( *m_renderSystem
+		m_hdrConfigUboPool = std::make_shared< UniformBufferPoolT< HdrConfig > >( *m_renderSystem
 			, cuT( "HdrConfigUboPool" ) );
-		m_modelMatrixUboPool = std::make_shared< UniformBufferPool< ModelMatrixUboConfiguration > >( *m_renderSystem
+		m_modelMatrixUboPool = std::make_shared< UniformBufferPoolT< ModelMatrixUboConfiguration > >( *m_renderSystem
 			, cuT( "ModelMatrixUboPool" ) );
-		m_shadowMapUboPool = std::make_shared< UniformBufferPool< ShadowMapUboConfiguration > >( *m_renderSystem
+		m_shadowMapUboPool = std::make_shared< UniformBufferPoolT< ShadowMapUboConfiguration > >( *m_renderSystem
 			, cuT( "ShadowMapUboPool" ) );
-		m_rsmConfigUboPool = std::make_shared< UniformBufferPool< RsmUboConfiguration > >( *m_renderSystem
+		m_rsmConfigUboPool = std::make_shared< UniformBufferPoolT< RsmUboConfiguration > >( *m_renderSystem
 			, cuT( "RsmConfigUboPool" ) );
 
 		if ( threaded )

@@ -78,12 +78,12 @@ namespace castor3d
 		 *\name			getters.
 		 */
 		/**@{*/
-		inline UniformBufferOffset< Configuration > & getUbo()
+		inline UniformBufferOffsetT< Configuration > & getUbo()
 		{
 			return m_ubo;
 		}
 
-		inline UniformBufferOffset< Configuration > const & getUbo()const
+		inline UniformBufferOffsetT< Configuration > const & getUbo()const
 		{
 			return m_ubo;
 		}
@@ -99,7 +99,7 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
-		UniformBufferOffset< Configuration > m_ubo;
+		UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }
 

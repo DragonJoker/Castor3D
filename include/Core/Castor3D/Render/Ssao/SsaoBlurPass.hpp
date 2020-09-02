@@ -129,7 +129,7 @@ namespace castor3d
 		RenderPassTimerSPtr m_timer;
 		ashes::CommandBufferPtr m_commandBuffer;
 		ashes::SemaphorePtr m_finished;
-		UniformBufferUPtr< Configuration > m_configurationUbo;
+		UniformBufferUPtrT< Configuration > m_configurationUbo;
 
 	};
 }

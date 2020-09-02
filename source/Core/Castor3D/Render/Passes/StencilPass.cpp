@@ -103,7 +103,7 @@ namespace castor3d
 		, String const & prefix
 		, ashes::ImageView const & depthView
 		, MatrixUbo & matrixUbo
-		, UniformBuffer< ModelMatrixUboConfiguration > const & modelMatrixUbo )
+		, UniformBufferT< ModelMatrixUboConfiguration > const & modelMatrixUbo )
 		: m_engine{ engine }
 		, m_prefix{ prefix }
 		, m_depthView{ depthView }

@@ -2,8 +2,8 @@
 
 namespace castor3d
 {
-	template< typename T >
-	inline UniformBuffer< T >::UniformBuffer( RenderSystem const & renderSystem
+	template< typename DataT >
+	inline UniformBufferT< DataT >::UniformBufferT( RenderSystem const & renderSystem
 		, VkDeviceSize count
 		, VkBufferUsageFlags usage
 		, VkMemoryPropertyFlags flags
@@ -13,18 +13,18 @@ namespace castor3d
 		{
 			renderSystem,
 			count,
-			sizeof( T ),
+			sizeof( DataT ),
 			usage,
 			flags,
 			std::move( debugName ),
 			std::move( sharingMode ),
 		}
-		, m_data( count, T{} )
+		, m_data( count, DataT{} )
 	{
 	}
 
-	template< typename T >
-	inline void UniformBuffer< T >::upload( ashes::BufferBase const & stagingBuffer
+	template< typename DataT >
+	inline void UniformBufferT< DataT >::upload( ashes::BufferBase const & stagingBuffer
 		, ashes::Queue const & queue
 		, ashes::CommandPool const & commandPool
 		, uint32_t offset
@@ -34,13 +34,13 @@ namespace castor3d
 			, queue
 			, commandPool
 			, getDatas().data()
-			, getDatas().size() * sizeof( T )
+			, getDatas().size() * sizeof( DataT )
 			, offset
 			, flags );
 	}
 
-	template< typename T >
-	inline void UniformBuffer< T >::upload( ashes::BufferBase const & stagingBuffer
+	template< typename DataT >
+	inline void UniformBufferT< DataT >::upload( ashes::BufferBase const & stagingBuffer
 		, ashes::CommandBuffer const & commandBuffer
 		, uint32_t offset
 		, VkPipelineStageFlags flags )const
@@ -48,13 +48,13 @@ namespace castor3d
 		UniformBufferBase::upload( stagingBuffer
 			, commandBuffer
 			, getDatas().data()
-			, getDatas().size() * sizeof( T )
+			, getDatas().size() * sizeof( DataT )
 			, offset
 			, flags );
 	}
 
-	template< typename T >
-	inline void UniformBuffer< T >::upload( ashes::BufferBase const & stagingBuffer
+	template< typename DataT >
+	inline void UniformBufferT< DataT >::upload( ashes::BufferBase const & stagingBuffer
 		, ashes::Queue const & queue
 		, ashes::CommandPool const & commandPool
 		, uint32_t offset
@@ -66,15 +66,15 @@ namespace castor3d
 			, queue
 			, commandPool
 			, getDatas().data()
-			, getDatas().size() * sizeof( T )
+			, getDatas().size() * sizeof( DataT )
 			, offset
 			, flags
 			, timer
 			, index );
 	}
 
-	template< typename T >
-	inline void UniformBuffer< T >::upload( ashes::BufferBase const & stagingBuffer
+	template< typename DataT >
+	inline void UniformBufferT< DataT >::upload( ashes::BufferBase const & stagingBuffer
 		, ashes::CommandBuffer const & commandBuffer
 		, uint32_t offset
 		, VkPipelineStageFlags flags
@@ -84,15 +84,15 @@ namespace castor3d
 		UniformBufferBase::upload( stagingBuffer
 			, commandBuffer
 			, getDatas().data()
-			, getDatas().size() * sizeof( T )
+			, getDatas().size() * sizeof( DataT )
 			, offset
 			, flags
 			, timer
 			, index );
 	}
 
-	template< typename T >
-	inline void UniformBuffer< T >::upload( VkDeviceSize offset
+	template< typename DataT >
+	inline void UniformBufferT< DataT >::upload( VkDeviceSize offset
 		, VkDeviceSize range )const
 	{
 		assert( range + offset <= m_data.size() );
@@ -104,7 +104,7 @@ namespace castor3d
 		{
 			for ( auto i = 0u; i < range; ++i )
 			{
-				std::memcpy( buffer, &m_data[offset + i], sizeof( T ) );
+				std::memcpy( buffer, &m_data[offset + i], sizeof( DataT ) );
 				buffer += size;
 			}
 
@@ -113,8 +113,8 @@ namespace castor3d
 		}
 	}
 
-	template< typename T >
-	inline void UniformBuffer< T >::download( ashes::BufferBase const & stagingBuffer
+	template< typename DataT >
+	inline void UniformBufferT< DataT >::download( ashes::BufferBase const & stagingBuffer
 		, ashes::Queue const & queue
 		, ashes::CommandPool const & commandPool
 		, uint32_t offset
@@ -126,7 +126,7 @@ namespace castor3d
 			, queue
 			, commandPool
 			, getDatas().data()
-			, getDatas().size() * sizeof( T )
+			, getDatas().size() * sizeof( DataT )
 			, offset
 			, flags
 			, timer

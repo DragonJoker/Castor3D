@@ -56,7 +56,7 @@ namespace castor3d
 		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ) );
 	}
 
-	void VoxelizePass::update( castor::Point2f const & jitter
+	void VoxelizePass::gpuUpdate( castor::Point2f const & jitter
 		, RenderInfo & info )
 	{
 		auto & nodes = m_renderQueue.getCulledRenderNodes();
@@ -98,7 +98,7 @@ namespace castor3d
 		auto jitterProjSpace = jitter * 2.0f;
 		jitterProjSpace[0] /= m_camera.getWidth();
 		jitterProjSpace[1] /= m_camera.getHeight();
-		m_matrixUbo.update( identity
+		m_matrixUbo.cpuUpdate( identity
 			, ortho
 			, jitterProjSpace );
 
@@ -240,7 +240,7 @@ namespace castor3d
 
 	void VoxelizePass::doUpdatePipeline( RenderPipeline & pipeline )const
 	{
-		m_sceneUbo.update( m_scene, &m_camera );
+		m_sceneUbo.gpuUpdate( m_scene, &m_camera );
 	}
 
 	ashes::VkDescriptorSetLayoutBindingArray VoxelizePass::doCreateTextureBindings( PipelineFlags const & flags )const

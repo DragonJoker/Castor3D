@@ -8,10 +8,10 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	template< typename T >
-	struct UniformBufferOffset
+	template< typename DataT, typename BufferT >
+	struct UniformBufferOffsetT
 	{
-		UniformBuffer< T > * buffer{ nullptr };
+		BufferT * buffer{ nullptr };
 		VkMemoryPropertyFlags flags{ 0u };
 		uint32_t offset{ 0u };
 
@@ -21,12 +21,12 @@ namespace castor3d
 				&& buffer->hasBuffer();
 		}
 
-		T const & getData()const
+		DataT const & getData()const
 		{
 			return buffer->getData( offset );
 		}
 
-		T & getData()
+		DataT & getData()
 		{
 			return buffer->getData( offset );
 		}

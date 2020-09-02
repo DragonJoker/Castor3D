@@ -101,7 +101,7 @@ namespace castor3d
 		for ( size_t face = index * 6u; face < ( index * 6u ) + 6u; ++face )
 		{
 			auto & pass = m_passes[face];
-			pass.pass->update( queues, light, index );
+			pass.pass->cpuUpdate( queues, light, index );
 		}
 	}
 
@@ -201,7 +201,7 @@ namespace castor3d
 
 		for ( uint32_t face = offset; face < offset + 6u; ++face )
 		{
-			m_passes[face].pass->updateDeviceDependent( face - offset );
+			m_passes[face].pass->gpuUpdate( face - offset );
 		}
 	}
 

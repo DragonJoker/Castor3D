@@ -43,7 +43,7 @@ namespace smaa
 		ashes::RenderPassPtr m_renderPass;
 		castor3d::PostEffectSurface m_surface;
 		ashes::SamplerPtr m_pointSampler;
-		castor3d::UniformBufferUPtr< castor::Point4f > m_ubo;
+		castor3d::UniformBufferUPtrT< castor::Point4f > m_ubo;
 		castor3d::TextureLayoutSPtr m_areaTex;
 		castor3d::TextureLayoutSPtr m_searchTex;
 		castor3d::ShaderModule m_vertexShader;

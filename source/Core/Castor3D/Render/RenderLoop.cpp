@@ -199,8 +199,13 @@ namespace castor3d
 				m_uploadFence = device->createFence( "RenderLoopUboUpload" );
 			}
 
+			// Usually GPU initialisation
 			doProcessEvents( EventType::ePreRender );
-			m_uploadCommand.commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
+
+			// GPU Update
+			getEngine()->getMaterialCache().update();
+			getEngine()->getRenderTargetCache().gpuUpdate( info );
+			m_uploadCommand.commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 			getEngine()->getSceneCache().forEach( [this, &device]( Scene & scene )
 				{
 					scene.getGeometryCache().uploadUbos( *m_uploadCommand.commandBuffer );
@@ -212,14 +217,16 @@ namespace castor3d
 			m_uploadCommand.commandBuffer->end();
 			device.graphicsQueue->submit( { *m_uploadCommand.commandBuffer }
 				, {}
-				, { VK_PIPELINE_STAGE_TRANSFER_BIT }
-				, { *m_uploadCommand.semaphore }
+				, {}
+				, {}
 				, m_uploadFence.get() );
 			m_uploadFence->wait( ashes::MaxTimeout );
 			m_uploadFence->reset();
-			getEngine()->getMaterialCache().update();
-			getEngine()->getRenderTargetCache().update( info );
+
+			// Render
 			getEngine()->getRenderTargetCache().render( info );
+
+			// Usually GPU cleanup
 			doProcessEvents( EventType::eQueueRender );
 		}
 
@@ -263,7 +270,7 @@ namespace castor3d
 		getEngine()->getRenderTechniqueCache().forEach( [&techniquesQueues]( RenderTechnique & technique )
 			{
 				TechniqueQueues techniqueQueues;
-				technique.update( techniqueQueues.queues );
+				technique.cpuUpdate( techniqueQueues.queues );
 				techniqueQueues.shadowMaps = technique.getShadowMaps();
 				techniquesQueues.push_back( techniqueQueues );
 			} );

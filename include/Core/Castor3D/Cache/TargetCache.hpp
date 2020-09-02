@@ -62,7 +62,14 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour les cibles de rendu.
 		 */
-		C3D_API void update( RenderInfo & info );
+		C3D_API void cpuUpdate();
+		/**
+		 *\~english
+		 *\brief		Updates the render targets.
+		 *\~french
+		 *\brief		Met à jour les cibles de rendu.
+		 */
+		C3D_API void gpuUpdate( RenderInfo & info );
 		/**
 		 *\~english
 		 *\brief			Renders into the render targets.

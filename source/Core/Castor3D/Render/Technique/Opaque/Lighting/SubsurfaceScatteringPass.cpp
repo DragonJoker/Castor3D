@@ -453,7 +453,7 @@ namespace castor3d
 		, castor::Size const & size
 		, GpInfoUbo const & gpInfoUbo
 		, SceneUbo & sceneUbo
-		, UniformBuffer< BlurConfiguration > const & blurUbo
+		, UniformBufferT< BlurConfiguration > const & blurUbo
 		, OpaquePassResult const & gpResult
 		, TextureUnit const & source
 		, TextureUnit const & destination
@@ -561,7 +561,7 @@ namespace castor3d
 
 	SubsurfaceScatteringPass::Combine::Combine( RenderSystem & renderSystem
 		, Size const & size
-		, UniformBuffer< BlurWeights > const & blurUbo
+		, UniformBufferT< BlurWeights > const & blurUbo
 		, OpaquePassResult const & gpResult
 		, TextureUnit const & source
 		, SubsurfaceScatteringPass::BlurResult const & blurResults

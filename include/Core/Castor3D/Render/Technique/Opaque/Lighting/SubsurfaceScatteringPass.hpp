@@ -106,7 +106,7 @@ namespace castor3d
 				, castor::Size const & size
 				, GpInfoUbo const & gpInfoUbo
 				, SceneUbo & sceneUbo
-				, UniformBuffer< BlurConfiguration > const & blurUbo
+				, UniformBufferT< BlurConfiguration > const & blurUbo
 				, OpaquePassResult const & gpResult
 				, TextureUnit const & source
 				, TextureUnit const & destination
@@ -124,7 +124,7 @@ namespace castor3d
 			OpaquePassResult const & m_geometryBufferResult;
 			GpInfoUbo const & m_gpInfoUbo;
 			SceneUbo & m_sceneUbo;
-			UniformBuffer< BlurConfiguration > const & m_blurUbo;
+			UniformBufferT< BlurConfiguration > const & m_blurUbo;
 			ashes::RenderPassPtr m_renderPass;
 			ashes::FrameBufferPtr m_frameBuffer;
 		};
@@ -138,7 +138,7 @@ namespace castor3d
 		public:
 			explicit Combine( RenderSystem & renderSystem
 				, castor::Size const & size
-				, UniformBuffer< BlurWeights > const & blurUbo
+				, UniformBufferT< BlurWeights > const & blurUbo
 				, OpaquePassResult const & gpResult
 				, TextureUnit const & source
 				, BlurResult const & blurResults
@@ -153,7 +153,7 @@ namespace castor3d
 
 		private:
 			RenderSystem & m_renderSystem;
-			UniformBuffer< BlurWeights > const & m_blurUbo;
+			UniformBufferT< BlurWeights > const & m_blurUbo;
 			OpaquePassResult const & m_geometryBufferResult;
 			TextureUnit const & m_source;
 			BlurResult const & m_blurResults;
@@ -167,8 +167,8 @@ namespace castor3d
 		OpaquePassResult const & m_gpResult;
 		LightPassResult const & m_lpResult;
 		castor::Size m_size;
-		UniformBufferUPtr< BlurConfiguration > m_blurConfigUbo;
-		UniformBufferUPtr< BlurWeights > m_blurWeightsUbo;
+		UniformBufferUPtrT< BlurConfiguration > m_blurConfigUbo;
+		UniformBufferUPtrT< BlurWeights > m_blurWeightsUbo;
 		TextureUnit m_intermediate;
 		BlurResult m_blurResults;
 		TextureUnit m_result;

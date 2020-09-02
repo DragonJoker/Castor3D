@@ -169,7 +169,7 @@ namespace castor3d
 		ashes::DescriptorSetPtr m_lineariseDescriptor;
 		ashes::FrameBufferPtr m_lineariseFrameBuffer;
 		ashes::GraphicsPipelinePtr m_linearisePipeline;
-		UniformBufferUPtr< castor::Point3f > m_clipInfo;
+		UniformBufferUPtrT< castor::Point3f > m_clipInfo;
 		castor::ChangeTracked< castor::Point3f > m_clipInfoValue;
 		/**@}*/
 		/**
@@ -191,7 +191,7 @@ namespace castor3d
 			ashes::GraphicsPipelinePtr pipeline;
 		};
 
-		UniformBufferUPtr< MinifyConfiguration > m_previousLevel;
+		UniformBufferUPtrT< MinifyConfiguration > m_previousLevel;
 		ShaderModule m_minifyVertexShader;
 		ShaderModule m_minifyPixelShader;
 		Layout m_minifyLayout;

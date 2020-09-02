@@ -318,7 +318,7 @@ namespace castor3d
 		, uint32_t shadowMapIndex )
 	{
 		m_viewport.resize( size );
-		m_matrixUbo.update( camera.getView(), m_viewport.getProjection() );
+		m_matrixUbo.cpuUpdate( camera.getView(), m_viewport.getProjection() );
 		m_pipeline->program->bind( light );
 	}
 

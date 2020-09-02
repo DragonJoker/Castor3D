@@ -72,7 +72,7 @@ namespace castor3d
 		 *\param[in]	projection	La nouvelle matrice de projection.
 		 *\param[in]	jitter		La valeur de jittering.
 		 */
-		C3D_API void update( castor::Matrix4x4f const & view
+		C3D_API void cpuUpdate( castor::Matrix4x4f const & view
 			, castor::Matrix4x4f const & projection
 			, castor::Point2f const & jitter = castor::Point2f{} );
 		/**
@@ -85,19 +85,19 @@ namespace castor3d
 		 *\remarks		La matrice de vue ne sera pas mise à jour.
 		 *\param[in]	projection	La nouvelle matrice de projection.
 		 */
-		C3D_API void update( castor::Matrix4x4f const & projection );
+		C3D_API void cpuUpdate( castor::Matrix4x4f const & projection );
 		/**
 		 *\~english
 		 *\name			Getters.
 		 *\~french
 		 *\name			Accesseurs.
 		 */
-		inline UniformBufferOffset< Configuration > & getUbo()
+		inline UniformBufferOffsetT< Configuration > & getUbo()
 		{
 			return m_ubo;
 		}
 
-		inline UniformBufferOffset< Configuration > const & getUbo()const
+		inline UniformBufferOffsetT< Configuration > const & getUbo()const
 		{
 			return m_ubo;
 		}
@@ -116,7 +116,7 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
-		UniformBufferOffset< Configuration > m_ubo;
+		UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }
 

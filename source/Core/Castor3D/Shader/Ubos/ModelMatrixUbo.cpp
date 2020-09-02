@@ -41,15 +41,15 @@ namespace castor3d
 		}
 	}
 
-	void ModelMatrixUbo::update( castor::Matrix4x4f const & model )
+	void ModelMatrixUbo::cpuUpdate( castor::Matrix4x4f const & model )
 	{
 		auto normal = castor::Matrix3x3f{ model };
 		normal.invert();
 		normal.transpose();
-		update( model, normal );
+		cpuUpdate( model, normal );
 	}
 
-	void ModelMatrixUbo::update( castor::Matrix4x4f const & model
+	void ModelMatrixUbo::cpuUpdate( castor::Matrix4x4f const & model
 		, castor::Matrix3x3f const & normal )
 	{
 		auto & configuration = m_ubo.getData();

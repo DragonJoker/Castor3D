@@ -40,7 +40,7 @@ namespace castor3d
 		}
 	}
 
-	void HdrConfigUbo::update( HdrConfig const & config )
+	void HdrConfigUbo::cpuUpdate( HdrConfig const & config )
 	{
 		CU_Require( m_ubo );
 		m_ubo.getData().setExposure( config.getExposure() );

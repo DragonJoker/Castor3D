@@ -133,7 +133,7 @@ namespace castor3d
 			auto node = camera.getParent();
 			castor::matrix::setTranslate( m_mtxModel, node->getDerivedPosition() );
 			castor::matrix::scale( m_mtxModel, Scale );
-			m_modelMatrixUbo.update( m_mtxModel, Identity );
+			m_modelMatrixUbo.cpuUpdate( m_mtxModel, Identity );
 			doUpdate( camera );
 		}
 	}

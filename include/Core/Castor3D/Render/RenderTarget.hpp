@@ -121,14 +121,14 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour le culling.
 		 */
-		C3D_API void update();
+		C3D_API void cpuUpdate();
 		/**
 		 *\~english
 		 *\brief		Updates GPU data.
 		 *\~french
 		 *\brief		Met à jour les données GPU.
 		 */
-		C3D_API void update( RenderInfo & info );
+		C3D_API void gpuUpdate( RenderInfo & info );
 		/**
 		 *\~english
 		 *\brief		Renders one frame.
@@ -324,6 +324,11 @@ namespace castor3d
 		inline HdrConfig const & getHdrConfig()const
 		{
 			return m_hdrConfig;
+		}
+
+		inline castor::Point2f const & getJitter()const
+		{
+			return m_jitter;
 		}
 
 		inline castor::String const & getName()const

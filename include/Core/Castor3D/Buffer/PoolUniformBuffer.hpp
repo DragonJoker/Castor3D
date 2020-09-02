@@ -10,8 +10,8 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	template< typename T >
-	class PoolUniformBuffer
+	template< typename DataT >
+	class PoolUniformBufferT
 		: public UniformBufferBase
 	{
 	public:
@@ -31,8 +31,9 @@ namespace castor3d
 		 *\param[in]	flags			Les indicateurs de mémoire du tampon.
 		 *\param[in]	debugName		Le nom debug du tampon.
 		 */
-		inline PoolUniformBuffer( RenderSystem const & renderSystem
-			, castor::ArrayView< T > data
+		inline PoolUniformBufferT( RenderSystem const & renderSystem
+			, castor::ArrayView< uint8_t > data
+			, uint32_t count
 			, VkBufferUsageFlags usage
 			, VkMemoryPropertyFlags flags
 			, castor::String debugName
@@ -40,8 +41,8 @@ namespace castor3d
 			: UniformBufferBase
 			{
 				renderSystem,
-				data.size(),
-				sizeof( T ),
+				count,
+				sizeof( DataT ),
 				usage,
 				flags,
 				std::move( debugName ),
@@ -58,9 +59,9 @@ namespace castor3d
 		*\return
 		*	La n-ème instance des données.
 		*/
-		inline T const & getData( VkDeviceSize index = 0 )const
+		inline DataT const & getData( VkDeviceSize index = 0 )const
 		{
-			return m_data[index];
+			return *reinterpret_cast< DataT const * >( m_data.data() + ( index * getAlignedSize() ) );
 		}
 		/**
 		*\~english
@@ -70,9 +71,9 @@ namespace castor3d
 		*\return
 		*	La n-ème instance des données.
 		*/
-		inline T & getData( VkDeviceSize index = 0 )
+		inline DataT & getData( VkDeviceSize index = 0 )
 		{
-			return m_data[index];
+			return *reinterpret_cast< DataT * >( m_data.data() + ( index * getAlignedSize() ) );
 		}
 		/**
 		*\~english
@@ -82,7 +83,7 @@ namespace castor3d
 		*\return
 		*	Les données.
 		*/
-		inline castor::ArrayView< T > const & getDatas()const
+		inline castor::ArrayView< uint8_t > const & getDatas()const
 		{
 			return m_data;
 		}
@@ -94,25 +95,27 @@ namespace castor3d
 		*\return
 		*	Les données.
 		*/
-		inline castor::ArrayView< T > & getDatas()
+		inline castor::ArrayView< uint8_t > & getDatas()
 		{
 			return m_data;
 		}
 
 	private:
-		castor::ArrayView< T > m_data;
+		castor::ArrayView< uint8_t > m_data;
 	};
 
-	template< typename T >
-	inline PoolUniformBufferUPtr< T > makePoolUniformBuffer( RenderSystem const & renderSystem
-		, castor::ArrayView< T > data
+	template< typename DataT >
+	inline PoolUniformBufferUPtrT< DataT > makePoolUniformBuffer( RenderSystem const & renderSystem
+		, castor::ArrayView< uint8_t > data
+		, uint32_t count
 		, VkBufferUsageFlags usage
 		, VkMemoryPropertyFlags flags
 		, std::string name
 		, ashes::QueueShare sharingMode = {} )
 	{
-		return std::make_unique< PoolUniformBuffer< T > >( renderSystem
+		return std::make_unique< PoolUniformBufferT< DataT > >( renderSystem
 			, std::move( data )
+			, count
 			, usage
 			, flags
 			, std::move( name )

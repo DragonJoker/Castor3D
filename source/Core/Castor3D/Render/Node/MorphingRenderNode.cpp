@@ -12,16 +12,16 @@ namespace castor3d
 {
 	MorphingRenderNode::MorphingRenderNode( RenderPipeline & pipeline
 		, PassRenderNode && passNode
-		, UniformBufferOffset< ModelMatrixUbo::Configuration > modelMatrixBuffer
-		, UniformBufferOffset< ModelUbo::Configuration > modelBuffer
-		, UniformBufferOffset< PickingUbo::Configuration > pickingBuffer
-		, UniformBufferOffset< TexturesUbo::Configuration > texturesBuffer
+		, UniformBufferOffsetT< ModelMatrixUbo::Configuration > modelMatrixBuffer
+		, UniformBufferOffsetT< ModelUbo::Configuration > modelBuffer
+		, UniformBufferOffsetT< PickingUbo::Configuration > pickingBuffer
+		, UniformBufferOffsetT< TexturesUbo::Configuration > texturesBuffer
 		, GeometryBuffers const & buffers
 		, SceneNode & sceneNode
 		, DataType & data
 		, InstanceType & instance
 		, AnimatedMesh & mesh
-		, UniformBufferOffset< MorphingUbo::Configuration > morphingUbo )
+		, UniformBufferOffsetT< MorphingUbo::Configuration > morphingUbo )
 		: SubmeshRenderNode{ pipeline
 			, std::move( passNode )
 			, modelMatrixBuffer

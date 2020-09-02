@@ -92,7 +92,7 @@ namespace castor3d
 				m_updateTimer = std::make_shared< RenderPassTimer >( *getEngine()
 					, cuT( "Update" )
 					, cuT( "Model UBOs" )
-					, 3u );
+					, 1u );
 				m_updatePickingTimer = std::make_shared< RenderPassTimer >( *getEngine()
 					, cuT( "Update" )
 					, cuT( "Picking UBOs" )
@@ -167,17 +167,11 @@ namespace castor3d
 
 		if ( count )
 		{
-			//m_updateTimer->updateCount( count );
 			//auto timerBlock = m_updateTimer->start();
-			//uint32_t index = 0u;
-			//m_modelUboPool.upload( commandBuffer , *m_updateTimer, index );
-			//index += m_modelUboPool.getBufferCount();
-			//m_modelMatrixUboPool.upload( commandBuffer, *m_updateTimer, index );
-			//index += m_modelMatrixUboPool.getBufferCount();
-			//m_texturesUboPool.upload( commandBuffer, *m_updateTimer, index );
 			m_modelUboPool.upload( commandBuffer );
 			m_modelMatrixUboPool.upload( commandBuffer );
 			m_texturesUboPool.upload( commandBuffer );
+			//m_updateTimer->notifyPassRender();
 		}
 	}
 
@@ -187,9 +181,9 @@ namespace castor3d
 
 		if ( count )
 		{
-			m_updatePickingTimer->updateCount( count );
 			auto timerBlock = m_updatePickingTimer->start();
-			m_pickingUboPool.upload( commandBuffer, *m_updatePickingTimer, 0u );
+			m_pickingUboPool.upload( commandBuffer );
+			m_updatePickingTimer->notifyPassRender();
 		}
 	}
 

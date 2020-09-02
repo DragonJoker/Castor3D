@@ -37,7 +37,7 @@ namespace castor3d
 				m_updateTimer = std::make_shared< RenderPassTimer >( *renderSystem.getEngine()
 					, cuT( "Update" )
 					, cuT( "Billboard UBOs" )
-					, 4u );
+					, 1u );
 			} ) );
 	}
 
@@ -72,21 +72,16 @@ namespace castor3d
 			+ m_billboardUboPool.getBufferCount()
 			+ m_pickingUboPool.getBufferCount()
 			+ m_texturesUboPool.getBufferCount();
-		m_updateTimer->updateCount( std::max( count, 5u ) );
 
 		if ( count )
 		{
 			auto timerBlock = m_updateTimer->start();
-			uint32_t index = 0u;
-			m_modelUboPool.upload( commandBuffer, *m_updateTimer, index );
-			index += std::max( m_modelUboPool.getBufferCount(), 1u );
-			m_modelMatrixUboPool.upload( commandBuffer, *m_updateTimer, index );
-			index += std::max( m_modelMatrixUboPool.getBufferCount(), 1u );
-			m_billboardUboPool.upload( commandBuffer, *m_updateTimer, index );
-			index += std::max( m_billboardUboPool.getBufferCount(), 1u );
-			m_pickingUboPool.upload( commandBuffer, *m_updateTimer, index );
-			index += std::max( m_pickingUboPool.getBufferCount(), 1u );
-			m_texturesUboPool.upload( commandBuffer, *m_updateTimer, index );
+			m_modelUboPool.upload( commandBuffer );
+			m_modelMatrixUboPool.upload( commandBuffer );
+			m_billboardUboPool.upload( commandBuffer );
+			m_pickingUboPool.upload( commandBuffer );
+			m_texturesUboPool.upload( commandBuffer );
+			m_updateTimer->notifyPassRender();
 		}
 	}
 

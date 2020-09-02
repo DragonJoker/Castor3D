@@ -324,7 +324,7 @@ namespace castor3d
 	{
 		auto & myCamera = getCuller().getCamera();
 		auto & myScene = getCuller().getScene();
-		m_matrixUbo.update( myCamera.getView()
+		m_matrixUbo.cpuUpdate( myCamera.getView()
 			, myCamera.getProjection() );
 		doUpdate( nodes.instancedStaticNodes.backCulled );
 		doUpdate( nodes.staticNodes.backCulled );

@@ -62,7 +62,7 @@ namespace castor3d
 			return sampler;
 		}
 
-		UniformBufferUPtr< castor::Matrix4x4f > doCreateMatrixUbo( RenderDevice const & device
+		UniformBufferUPtrT< castor::Matrix4x4f > doCreateMatrixUbo( RenderDevice const & device
 			, ashes::Queue const & queue
 			, ashes::CommandPool const & pool
 			, bool srcIsCube )
