@@ -101,7 +101,14 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour le tampon de passes.
 		 */
-		C3D_API void update();
+		C3D_API void update( CpuUpdater & updater );
+		/**
+		 *\~english
+		 *\brief		Updates the pass buffer.
+		 *\~french
+		 *\brief		Met à jour le tampon de passes.
+		 */
+		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Removes an element, given a name.

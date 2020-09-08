@@ -62,10 +62,10 @@ namespace castor3d
 			, TextureUnit const & lightDiffuse
 			, TextureUnit const & lightSpecular
 			, TextureUnit const & result
-			, SceneUbo & sceneUbo
+			, SceneUbo const & sceneUbo
 			, GpInfoUbo const & gpInfoUbo
-			, HdrConfigUbo & hdrConfigUbo
-			, TextureUnit const * ssao );
+			, HdrConfigUbo const & hdrConfigUbo
+			, SsaoPass const * ssao );
 		C3D_API ~OpaqueResolvePass() = default;
 		C3D_API void initialise();
 		C3D_API void cleanup();
@@ -131,10 +131,10 @@ namespace castor3d
 		RenderDevice const & m_device;
 		Scene const & m_scene;
 		TextureUnit const & m_result;
-		SceneUbo & m_sceneUbo;
+		SceneUbo const & m_sceneUbo;
 		GpInfoUbo const & m_gpInfoUbo;
-		HdrConfigUbo & m_hdrConfigUbo;
-		TextureUnit const * m_ssaoResult;
+		HdrConfigUbo const & m_hdrConfigUbo;
+		SsaoPass const * m_ssao;
 		VkExtent2D m_size;
 		Viewport m_viewport;
 		SamplerSPtr m_sampler;

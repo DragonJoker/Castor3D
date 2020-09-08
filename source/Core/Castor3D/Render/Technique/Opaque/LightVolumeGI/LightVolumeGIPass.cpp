@@ -1,6 +1,7 @@
 #include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LightVolumeGIPass.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/PoolUniformBufferBase.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
@@ -398,8 +399,8 @@ namespace castor3d
 	void LightVolumeGIPass::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
 		, ashes::DescriptorSet & descriptorSet )
 	{
-		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( GpInfoUboIdx )
-			, m_gpInfo.getUbo() );
+		m_gpInfo.getUbo().createSizedBinding( descriptorSet
+			, descriptorSetLayout.getBinding( GpInfoUboIdx ) );
 		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( LIUboIdx )
 			, m_lpvConfigUbo.getUbo() );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( DepthMapIdx )

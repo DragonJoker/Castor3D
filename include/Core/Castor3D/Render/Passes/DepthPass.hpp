@@ -55,7 +55,7 @@ namespace castor3d
 		C3D_API TextureFlags getTexturesMask()const override;
 
 	public:
-		using RenderTechniquePass::gpuUpdate;
+		using RenderTechniquePass::update;
 
 	protected:
 		/**

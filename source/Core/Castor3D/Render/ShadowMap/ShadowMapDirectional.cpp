@@ -5,6 +5,7 @@
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -102,11 +103,10 @@ namespace castor3d
 	{
 	}
 
-	void ShadowMapDirectional::update( Camera const & camera
-		, RenderQueueArray & queues
-		, Light & light
-		, uint32_t index )
+	void ShadowMapDirectional::update( CpuUpdater & updater )
 	{
+		auto & light = *updater.light;
+		auto & camera = *updater.camera;
 		m_shadowType = light.getShadowType();
 		auto node = light.getParent();
 		node->update();
@@ -124,10 +124,18 @@ namespace castor3d
 				lightCamera.setView( directional.getViewMatrix( m_cascades - 1u ) );
 				lightCamera.updateFrustum();
 
-				m_passes[cascade].pass->cpuUpdate( queues
-					, light
-					, cascade );
+				updater.index = cascade;
+				m_passes[cascade].pass->update( updater );
 			}
+		}
+	}
+
+	void ShadowMapDirectional::update( GpuUpdater & updater )
+	{
+		for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
+		{
+			updater.index = cascade;
+			m_passes[cascade].pass->update( updater );
 		}
 	}
 
@@ -194,14 +202,6 @@ namespace castor3d
 			} );
 	}
 
-	void ShadowMapDirectional::updateDeviceDependent( uint32_t index )
-	{
-		for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
-		{
-			m_passes[cascade].pass->gpuUpdate( cascade );
-		}
-	}
-	
 	ashes::Semaphore const & ShadowMapDirectional::doRender( ashes::Semaphore const & toWait
 		, uint32_t index )
 	{

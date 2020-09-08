@@ -3,6 +3,7 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Material/Texture/TextureView.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Render/Culling/FrustumCuller.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
@@ -170,8 +171,9 @@ namespace castor3d
 		m_matrixUbo.cleanup();
 	}
 
-	void EnvironmentMapPass::cpuUpdate( SceneNode const & node, RenderQueueArray & queues )
+	void EnvironmentMapPass::update( CpuUpdater & updater )
 	{
+		auto & node = *updater.node;
 		auto position = node.getDerivedPosition();
 		m_camera->getParent()->setPosition( position );
 		m_camera->getParent()->update();
@@ -179,18 +181,18 @@ namespace castor3d
 		castor::matrix::setTranslate( m_mtxModel, position );
 		castor::matrix::scale( m_mtxModel, castor::Point3f{ 1, -1, 1 } );
 		m_culler->compute();
-		static_cast< RenderTechniquePass & >( *m_opaquePass ).cpuUpdate( queues );
-		static_cast< RenderTechniquePass & >( *m_transparentPass ).cpuUpdate( queues );
+		static_cast< RenderTechniquePass & >( *m_opaquePass ).update( updater );
+		static_cast< RenderTechniquePass & >( *m_transparentPass ).update( updater );
 		m_matrixUbo.cpuUpdate( m_camera->getView()
 			, m_camera->getProjection() );
 		m_modelMatrixUbo.cpuUpdate( m_mtxModel );
 	}
 
-	void EnvironmentMapPass::gpuUpdate()
+	void EnvironmentMapPass::update( GpuUpdater & updater )
 	{
 		RenderInfo info;
-		m_opaquePass->gpuUpdate( info, {} );
-		m_transparentPass->gpuUpdate( info, {} );
+		m_opaquePass->update( updater );
+		m_transparentPass->update( updater );
 	}
 
 	ashes::Semaphore const & EnvironmentMapPass::render( ashes::Semaphore const & toWait )

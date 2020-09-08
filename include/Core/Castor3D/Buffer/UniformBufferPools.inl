@@ -3,108 +3,65 @@ namespace castor3d
 	template< typename DataT >
 	UniformBufferOffsetT< DataT > UniformBufferPools::getBuffer( VkMemoryPropertyFlags flags )
 	{
-		if constexpr ( std::is_same_v< DataT, MatrixUboConfiguration > )
-		{
-			return m_matrixUboPool.getBuffer( flags );
-		}
-		else if constexpr ( std::is_same_v< DataT, HdrConfig > )
-		{
-			return m_hdrConfigUboPool.getBuffer( flags );
-		}
-		else if constexpr ( std::is_same_v< DataT, RsmUboConfiguration > )
-		{
-			return m_rsmConfigUboPool.getBuffer( flags );
-		}
-		else if constexpr ( std::is_same_v< DataT, ModelMatrixUboConfiguration > )
-		{
-			return m_modelMatrixUboPool.getBuffer( flags );
-		}
-		else if constexpr ( std::is_same_v< DataT, ModelUboConfiguration > )
-		{
-			return m_modelUboPool.getBuffer( flags );
-		}
-		else if constexpr ( std::is_same_v< DataT, BillboardUboConfiguration > )
-		{
-			return m_billboardUboPool.getBuffer( flags );
-		}
-		else if constexpr ( std::is_same_v< DataT, PickingUboConfiguration > )
-		{
-			return m_pickingUboPool.getBuffer( flags );
-		}
-		else if constexpr ( std::is_same_v< DataT, TexturesUboConfiguration > )
-		{
-			return m_texturesUboPool.getBuffer( flags );
-		}
-		else if constexpr ( std::is_same_v< DataT, ShadowMapUboConfiguration > )
-		{
-			return m_shadowMapUboPool.getBuffer( flags );
-		}
-		else if constexpr ( std::is_same_v< DataT, SkinningUboConfiguration > )
-		{
-			return m_skinningUboPool.getBuffer( flags );
-		}
-		else if constexpr ( std::is_same_v< DataT, MorphingUboConfiguration > )
-		{
-			return m_morphingUboPool.getBuffer( flags );
-		}
-		else
-		{
-			static_assert( false, "Unsupported object type" );
-			CU_Exception( "Unsupported object type" );
-		}
+		return m_pools[size_t( UniformBufferPools::getPoolType< DataT >() )].getBuffer< DataT >( flags );
 	}
 
 	template< typename DataT >
 	void UniformBufferPools::putBuffer( UniformBufferOffsetT< DataT > const & bufferOffset )
 	{
+		return m_pools[size_t( UniformBufferPools::getPoolType< DataT >() )].putBuffer( bufferOffset );
+	}
+
+	template< typename DataT >
+	UniformBufferPools::PoolType UniformBufferPools::getPoolType()
+	{
 		if constexpr ( std::is_same_v< DataT, MatrixUboConfiguration > )
 		{
-			return m_matrixUboPool.putBuffer( bufferOffset );
+			return PoolType::eMatrix;
 		}
 		else if constexpr ( std::is_same_v< DataT, HdrConfig > )
 		{
-			return m_hdrConfigUboPool.putBuffer( bufferOffset );
+			return PoolType::eHdrConfig;
 		}
 		else if constexpr ( std::is_same_v< DataT, RsmUboConfiguration > )
 		{
-			return m_rsmConfigUboPool.putBuffer( bufferOffset );
+			return PoolType::eRsmConfig;
 		}
 		else if constexpr ( std::is_same_v< DataT, ModelMatrixUboConfiguration > )
 		{
-			return m_modelMatrixUboPool.putBuffer( bufferOffset );
+			return PoolType::eModelMatrix;
 		}
 		else if constexpr ( std::is_same_v< DataT, ModelUboConfiguration > )
 		{
-			return m_modelUboPool.putBuffer( bufferOffset );
+			return PoolType::eModel;
 		}
 		else if constexpr ( std::is_same_v< DataT, BillboardUboConfiguration > )
 		{
-			return m_billboardUboPool.putBuffer( bufferOffset );
+			return PoolType::eBillboard;
 		}
 		else if constexpr ( std::is_same_v< DataT, PickingUboConfiguration > )
 		{
-			return m_pickingUboPool.putBuffer( bufferOffset );
+			return PoolType::ePicking;
 		}
 		else if constexpr ( std::is_same_v< DataT, TexturesUboConfiguration > )
 		{
-			return m_texturesUboPool.putBuffer( bufferOffset );
+			return PoolType::eTextures;
 		}
 		else if constexpr ( std::is_same_v< DataT, ShadowMapUboConfiguration > )
 		{
-			return m_shadowMapUboPool.putBuffer( bufferOffset );
+			return PoolType::eShadowMap;
 		}
 		else if constexpr ( std::is_same_v< DataT, SkinningUboConfiguration > )
 		{
-			return m_skinningUboPool.putBuffer( bufferOffset );
+			return PoolType::eSkinning;
 		}
 		else if constexpr ( std::is_same_v< DataT, MorphingUboConfiguration > )
 		{
-			return m_morphingUboPool.putBuffer( bufferOffset );
+			return PoolType::eMorphing;
 		}
 		else
 		{
-			static_assert( false, "Unsupported object type" );
-			CU_Exception( "Unsupported object type" );
+			return PoolType::eGeneric;
 		}
 	}
 }

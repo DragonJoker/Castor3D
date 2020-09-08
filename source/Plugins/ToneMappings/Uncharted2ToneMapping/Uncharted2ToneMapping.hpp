@@ -32,7 +32,7 @@ namespace Uncharted2
 		 *\param[in]	parameters	Les paramètres spécifiques à l'implémentation.
 		 */
 		ToneMapping( castor3d::Engine & engine
-			, castor3d::HdrConfig & hdrConfig
+			, castor3d::HdrConfigUbo & hdrConfigUbo
 			, castor3d::Parameters const & parameters );
 		/**
 		 *\~english
@@ -52,7 +52,7 @@ namespace Uncharted2
 		 *\param[in]	parameters	Les paramètres spécifiques à l'implémentation.
 		 */
 		static castor3d::ToneMappingSPtr create( castor3d::Engine & engine
-			, castor3d::HdrConfig & hdrConfig
+			, castor3d::HdrConfigUbo & hdrConfigUbo
 			, castor3d::Parameters const & parameters );
 
 	private:
@@ -65,9 +65,9 @@ namespace Uncharted2
 		 */
 		void doDestroy()override;
 		/**
-		 *\copydoc		castor3d::ToneMapping::doUpdate
+		 *\copydoc		castor3d::ToneMapping::doCpuUpdate
 		 */
-		void doUpdate()override;
+		void doCpuUpdate()override;
 
 	public:
 		static castor::String Type;

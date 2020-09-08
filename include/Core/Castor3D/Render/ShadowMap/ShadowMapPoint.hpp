@@ -41,21 +41,13 @@ namespace castor3d
 		 */
 		C3D_API ~ShadowMapPoint();
 		/**
-		 *\copydoc		castor3d::ShadowMap::update
+		 *\copydoc		castor3d::ShadowMap::cpuUpdate
 		 */
-		C3D_API void update( Camera const & camera
-			, RenderQueueArray & queues
-			, Light & light
-			, uint32_t index )override;
+		C3D_API void update( CpuUpdater & updater )override;
 		/**
-		 *\~english
-		 *\brief		Updates VRAM data.
-		 *\param[out]	index	The map index.
-		 *\~french
-		 *\brief		Met à jour les données VRAM.
-		 *\param[out]	index	L'indice de la texture.
+		 *\copydoc		castor3d::ShadowMap::gpuUpdate
 		 */
-		C3D_API void updateDeviceDependent( uint32_t index )override;
+		C3D_API void update( GpuUpdater & updater )override;
 		/**
 		*\~english
 		*name

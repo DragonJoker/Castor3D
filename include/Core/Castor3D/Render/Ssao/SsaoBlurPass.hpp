@@ -22,7 +22,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	class SsaoBlurPass
+	class /*.hpp*/ SsaoBlurPass
 		: public RenderQuad
 	{
 	public:

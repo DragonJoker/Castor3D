@@ -161,7 +161,7 @@ namespace castor3d
 		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
 		 *\param[out]	queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
 		 */
-		C3D_API void cpuUpdate( RenderQueueArray & queues );
+		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex shader source matching the given flags.

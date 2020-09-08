@@ -3,6 +3,7 @@
 #include "Castor3D/Render/Passes/LineariseDepthPass.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/PoolUniformBufferBase.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
@@ -666,10 +667,8 @@ namespace castor3d
 			, m_ssaoConfigUbo.getUbo()
 			, 0u
 			, 1u );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 1u )
-			, m_gpInfoUbo.getUbo()
-			, 0u
-			, 1u );
+		m_gpInfoUbo.getUbo().createSizedBinding( descriptorSet
+			, descriptorSetLayout.getBinding( 1u ) );
 
 		if ( m_depthView )
 		{

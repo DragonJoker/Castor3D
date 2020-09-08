@@ -1,6 +1,7 @@
 #include "Castor3D/Overlay/OverlayRenderer.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/PoolUniformBufferBase.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
@@ -11,6 +12,7 @@
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Overlay/PanelOverlay.hpp"
 #include "Castor3D/Overlay/TextOverlay.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -539,9 +541,9 @@ namespace castor3d
 		m_finished.reset();
 	}
 
-	void OverlayRenderer::update( Camera const & camera )
+	void OverlayRenderer::update( GpuUpdater & updater )
 	{
-		auto size = camera.getSize();
+		auto size = updater.camera->getSize();
 
 		if ( m_size != size )
 		{
@@ -656,10 +658,8 @@ namespace castor3d
 		getRenderSystem()->getEngine()->getMaterialCache().getTextureBuffer().createBinding( *result
 			, pipeline.descriptorLayout->getBinding( getTexturesBufferIndex() ) );
 		// Matrix UBO
-		result->createBinding( pipeline.descriptorLayout->getBinding( MatrixUboBinding )
-			, *m_matrixUbo.getUbo().buffer
-			, m_matrixUbo.getUbo().offset
-			, 1u );
+		m_matrixUbo.getUbo().createSizedBinding( *result
+			, pipeline.descriptorLayout->getBinding( MatrixUboBinding ) );
 		// Overlay UBO
 		result->createBinding( pipeline.descriptorLayout->getBinding( OverlayUboBinding )
 			, overlayUbo

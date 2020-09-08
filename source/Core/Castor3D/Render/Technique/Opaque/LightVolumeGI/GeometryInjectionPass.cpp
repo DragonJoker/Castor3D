@@ -1,6 +1,7 @@
 #include "Castor3D/Render/Technique/Opaque/LightVolumeGI/GeometryInjectionPass.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/PoolUniformBufferBase.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
@@ -547,8 +548,8 @@ namespace castor3d
 				, smResult[SmTexture::ePosition].getSampler()->getSampler() );
 			result->createSizedBinding( descriptorSetLayout.getBinding( LIUboIdx )
 				, ubo );
-			result->createSizedBinding( descriptorSetLayout.getBinding( GpUboIdx )
-				, gpInfoUbo.getUbo() );
+			gpInfoUbo.getUbo().createSizedBinding( *result
+				, descriptorSetLayout.getBinding( GpUboIdx ) );
 			result->update();
 			return result;
 		}

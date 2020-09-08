@@ -1,10 +1,12 @@
 #include "Castor3D/Render/ShadowMap/ShadowMapPassPoint.hpp"
 
+#include "Castor3D/Buffer/PoolUniformBufferBase.hpp"
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/Node/SceneCulledRenderNodes.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
@@ -77,25 +79,23 @@ namespace castor3d
 	{
 	}
 
-	bool ShadowMapPassPoint::cpuUpdate( RenderQueueArray & queues
-		, Light & light
-		, uint32_t index )
+	bool ShadowMapPassPoint::update( CpuUpdater & updater )
 	{
 		getCuller().compute();
 		m_outOfDate = m_outOfDate
 			|| getCuller().areAllChanged()
 			|| getCuller().areCulledChanged();
-		m_viewport.updateFar( light.getFarPlane() );
-		light.getPointLight()->updateShadow( index );
-		auto position = light.getParent()->getDerivedPosition();
+		m_viewport.updateFar( updater.light->getFarPlane() );
+		updater.light->getPointLight()->updateShadow( updater.index );
+		auto position = updater.light->getParent()->getDerivedPosition();
 		doUpdateShadowMatrices( position, m_matrices );
-		doUpdate( queues );
-		m_shadowMapUbo.update( light, index );
-		m_matrixUbo.cpuUpdate( m_matrices[index], m_projection );
+		doUpdate( *updater.queues );
+		m_shadowMapUbo.update( *updater.light, updater.index );
+		m_matrixUbo.cpuUpdate( m_matrices[updater.index], m_projection );
 		return m_outOfDate;
 	}
 
-	void ShadowMapPassPoint::gpuUpdate( uint32_t index )
+	void ShadowMapPassPoint::update( GpuUpdater & updater )
 	{
 		if ( m_initialised )
 		{
@@ -213,19 +213,15 @@ namespace castor3d
 	void ShadowMapPassPoint::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 		, BillboardListRenderNode & node )
 	{
-		node.uboDescriptorSet->createSizedBinding( layout.getBinding( ShadowMapUbo::BindingPoint )
-			, *m_shadowMapUbo.getUbo().buffer
-			, m_shadowMapUbo.getUbo().offset
-			, 1u );
+		m_shadowMapUbo.getUbo().createSizedBinding( *node.uboDescriptorSet
+			, layout.getBinding( ShadowMapUbo::BindingPoint ) );
 	}
 
 	void ShadowMapPassPoint::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 		, SubmeshRenderNode & node )
 	{
-		node.uboDescriptorSet->createSizedBinding( layout.getBinding( ShadowMapUbo::BindingPoint )
-			, *m_shadowMapUbo.getUbo().buffer
-			, m_shadowMapUbo.getUbo().offset
-			, 1u );
+		m_shadowMapUbo.getUbo().createSizedBinding( *node.uboDescriptorSet
+			, layout.getBinding( ShadowMapUbo::BindingPoint ) );
 	}
 
 	void ShadowMapPassPoint::doUpdate( RenderQueueArray & queues )

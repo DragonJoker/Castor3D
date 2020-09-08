@@ -111,16 +111,29 @@ namespace castor3d
 		/**
 		*\~english
 		*\brief
-		*	Updates the background.
+		*	Updates the background, CPU side.
 		*\param[in] camera
 		*	The scene's camera.
 		*\~french
 		*\brief
-		*	Met à jour le fond.
+		*	Met à jour le fond, niveau CPU.
 		*\param[in] camera
 		*	La caméra de la scène.
 		*/
-		C3D_API void update( Camera const & camera );
+		C3D_API void update( CpuUpdater & updater );
+		/**
+		*\~english
+		*\brief
+		*	Updates the background, GPU side.
+		*\param[in] camera
+		*	The scene's camera.
+		*\~french
+		*\brief
+		*	Met à jour le fond, niveau GPU.
+		*\param[in] camera
+		*	La caméra de la scène.
+		*/
+		C3D_API void update( GpuUpdater & updater );
 		/**
 		*\~english
 		*\brief
@@ -438,16 +451,25 @@ namespace castor3d
 		/**
 		*\~english
 		*\brief
-		*	Updates the background.
+		*	Updates the background, CPU side.
 		*\param[in] camera
 		*	The scene's camera.
 		*\~french
 		*\brief
-		*	Met à jour le fond.
+		*	Met à jour le fond, niveau CPU.
 		*\param[in] camera
 		*	La caméra de la scène.
 		*/
-		C3D_API virtual void doUpdate( Camera const & camera ) = 0;
+		C3D_API virtual void doCpuUpdate( CpuUpdater & updater ) = 0;
+		/**
+		*\~english
+		*\brief
+		*	Updates the background, GPU side.
+		*\~french
+		*\brief
+		*	Met à jour le fond, niveau GPU.
+		*/
+		C3D_API virtual void doGpuUpdate( GpuUpdater & updater ) = 0;
 
 	public:
 		OnBackgroundChanged onChanged;

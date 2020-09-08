@@ -55,7 +55,7 @@ namespace castor3d
 			, ShadowMapResult const & smSpotResult
 			, castor::Size const & size
 			, Scene & scene
-			, HdrConfigUbo & hdrConfigUbo
+			, HdrConfigUbo const & hdrConfigUbo
 			, GpInfoUbo const & gpInfoUbo
 			, SsaoConfig & ssaoConfig );
 		/**
@@ -79,10 +79,7 @@ namespace castor3d
 		 *\param[in]	camera	La caméra par laquelle la scène est rendue.
 		 *\param[in]	jitter	La valeur de jittering.
 		 */
-		void gpuUpdate( RenderInfo & info
-			, Scene const & scene
-			, Camera const & camera
-			, castor::Point2f const & jitter );
+		void update( GpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Renders opaque nodes.

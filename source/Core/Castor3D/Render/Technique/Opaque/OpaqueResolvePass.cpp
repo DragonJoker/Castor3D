@@ -1,6 +1,7 @@
 #include "Castor3D/Render/Technique/Opaque/OpaqueResolvePass.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/PoolUniformBufferBase.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureView.hpp"
@@ -877,11 +878,10 @@ namespace castor3d
 			passBuffer.createBinding( *result, layout.getBinding( getPassBufferIndex() ) );
 			result->createSizedBinding( layout.getBinding( SceneUbo::BindingPoint )
 				, sceneUbo.getUbo() );
-			result->createSizedBinding( layout.getBinding( GpInfoUbo::BindingPoint )
-				, gpInfoUbo.getUbo() );
-			result->createSizedBinding( layout.getBinding( HdrConfigUbo::BindingPoint )
-				, *hdrConfigUbo.getUbo().buffer
-				, hdrConfigUbo.getUbo().offset );
+			gpInfoUbo.getUbo().createSizedBinding( *result
+				, layout.getBinding( GpInfoUbo::BindingPoint ) );
+			hdrConfigUbo.getUbo().createSizedBinding( *result
+				, layout.getBinding( HdrConfigUbo::BindingPoint ) );
 			result->update();
 			return result;
 		}
@@ -1247,10 +1247,10 @@ namespace castor3d
 		, TextureUnit const & lightDiffuse
 		, TextureUnit const & lightSpecular
 		, TextureUnit const & result
-		, SceneUbo & sceneUbo
+		, SceneUbo const & sceneUbo
 		, GpInfoUbo const & gpInfoUbo
-		, HdrConfigUbo & hdrConfigUbo
-		, TextureUnit const * ssao )
+		, HdrConfigUbo const & hdrConfigUbo
+		, SsaoPass const * ssao )
 		: OwnedBy< Engine >{ engine }
 		, m_device{ getCurrentRenderDevice( engine ) }
 		, m_scene{ scene }
@@ -1258,7 +1258,7 @@ namespace castor3d
 		, m_sceneUbo{ sceneUbo }
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_hdrConfigUbo{ hdrConfigUbo }
-		, m_ssaoResult{ ssao }
+		, m_ssao{ ssao }
 		, m_sampler{ engine.getDefaultSampler() }
 		, m_opaquePassResult{ gp }
 		, m_lightDiffuse{ lightDiffuse }
@@ -1277,7 +1277,7 @@ namespace castor3d
 		m_uboDescriptorLayout = doCreateUboDescriptorLayout( engine );
 		m_uboDescriptorPool = m_uboDescriptorLayout->createPool( "OpaqueResolvePassUbo", 1u );
 		m_uboDescriptorSet = doCreateUboDescriptorSet( engine, *m_uboDescriptorPool, m_sceneUbo, m_gpInfoUbo, m_hdrConfigUbo );
-		m_texDescriptorLayout = doCreateTexDescriptorLayout( engine, m_ssaoResult != nullptr, engine.getMaterialsType() );
+		m_texDescriptorLayout = doCreateTexDescriptorLayout( engine, m_ssao != nullptr, engine.getMaterialsType() );
 		m_texDescriptorPool = m_texDescriptorLayout->createPool( "OpaqueResolvePassTex", 1u );
 		m_texDescriptorSet = doCreateTexDescriptorSet( engine, *m_texDescriptorPool, m_sampler );
 		m_renderPass = doCreateRenderPass( engine, result.getPixelFormat() );
@@ -1291,8 +1291,8 @@ namespace castor3d
 				, *m_uboDescriptorLayout
 				, *m_texDescriptorLayout
 				, *m_renderPass
-				, ( m_ssaoResult
-					? &m_ssaoResult->getTexture()->getDefaultView().getSampledView()
+				, ( m_ssao
+					? &m_ssao->getResult().getTexture()->getDefaultView().getSampledView()
 					: nullptr )
 				, size
 				, FogType::eDisabled
@@ -1302,8 +1302,8 @@ namespace castor3d
 				, *m_uboDescriptorLayout
 				, *m_texDescriptorLayout
 				, *m_renderPass
-				, ( m_ssaoResult
-					? &m_ssaoResult->getTexture()->getDefaultView().getSampledView()
+				, ( m_ssao
+					? &m_ssao->getResult().getTexture()->getDefaultView().getSampledView()
 					: nullptr )
 				, size
 				, FogType::eLinear
@@ -1313,8 +1313,8 @@ namespace castor3d
 				, *m_uboDescriptorLayout
 				, *m_texDescriptorLayout
 				, *m_renderPass
-				, ( m_ssaoResult
-					? &m_ssaoResult->getTexture()->getDefaultView().getSampledView()
+				, ( m_ssao
+					? &m_ssao->getResult().getTexture()->getDefaultView().getSampledView()
 					: nullptr )
 				, size
 				, FogType::eExponential
@@ -1324,8 +1324,8 @@ namespace castor3d
 				, *m_uboDescriptorLayout
 				, *m_texDescriptorLayout
 				, *m_renderPass
-				, ( m_ssaoResult
-					? &m_ssaoResult->getTexture()->getDefaultView().getSampledView()
+				, ( m_ssao
+					? &m_ssao->getResult().getTexture()->getDefaultView().getSampledView()
 					: nullptr )
 				, size
 				, FogType::eSquaredExponential
@@ -1360,8 +1360,8 @@ namespace castor3d
 			, m_opaquePassResult
 			, m_lightDiffuse.getTexture()->getDefaultView().getSampledView()
 			, m_lightSpecular.getTexture()->getDefaultView().getSampledView()
-			, ( m_ssaoResult
-				? &m_ssaoResult->getTexture()->getDefaultView().getSampledView()
+			, ( m_ssao
+				? &m_ssao->getResult().getTexture()->getDefaultView().getSampledView()
 				: nullptr )
 			, m_sampler
 			, m_scene

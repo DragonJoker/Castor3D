@@ -145,7 +145,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour les sources lumineuses modifiées.
 		 */
-		C3D_API void update();
+		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Updates the lights texture.
@@ -154,7 +154,7 @@ namespace castor3d
 		 *\brief		Met à jour la texture de sources lumineuses.
 		 *\param[in]	camera	La caméra utilisée pour déterminer si une source lumineuse est applicable ou pas.
 		 */
-		C3D_API void updateLightsTexture( Camera const & camera )const;
+		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english
 		 *\return		The texture buffer.

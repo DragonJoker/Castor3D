@@ -96,7 +96,7 @@ namespace castor3d
 		 *\brief		Met à jour les données GPU.
 		 *\param[in]	camera	La caméra de la fenêtre de rendu.
 		 */
-		C3D_API void update( Camera const & camera );
+		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Begins the overlays preparation.

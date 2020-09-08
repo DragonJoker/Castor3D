@@ -101,8 +101,7 @@ namespace castor3d
 		 *\param[out]	info		Reçoit les informations de rendu.
 		 *\param[in]	jitter		La valeur de jittering.
 		 */
-		C3D_API void gpuUpdate( RenderInfo & info
-			, castor::Point2f const & jitter );
+		C3D_API void update( GpuUpdater & updater );
 		/**
 		*\~english
 		*name
@@ -120,7 +119,7 @@ namespace castor3d
 		/**@}*/
 
 	public:
-		using RenderPass::cpuUpdate;
+		using RenderPass::update;
 
 	protected:
 		/**

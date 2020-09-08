@@ -12,6 +12,7 @@
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Overlay/OverlayCategory.hpp"
 #include "Castor3D/Overlay/OverlayRenderer.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Culling/FrustumCuller.hpp"
@@ -192,17 +193,18 @@ namespace castor3d
 		, m_pixelFormat{ VK_FORMAT_R8G8B8A8_UNORM }
 		, m_initialised{ false }
 		, m_size{ Size{ 100u, 100u } }
+		, m_hdrConfigUbo{ *getEngine() }
 		, m_renderTechnique{}
 		, m_index{ ++sm_uiCount }
 		, m_name{ cuT( "Target" ) + string::toString( m_index ) }
 		, m_objectsFrameBuffer{ *this }
 		, m_overlaysFrameBuffer{ *this }
 		, m_combinedFrameBuffer{ *this }
-		, m_velocityTexture{ engine }
+		, m_velocityTexture{ *getEngine() }
 	{
 		m_toneMapping = getEngine()->getRenderTargetCache().getToneMappingFactory().create( cuT( "linear" )
 			, *getEngine()
-			, m_hdrConfig
+			, m_hdrConfigUbo
 			, Parameters{} );
 		SamplerSPtr sampler = getEngine()->getSamplerCache().add( RenderTarget::DefaultSamplerName + getName() + cuT( "Linear" ) );
 		sampler->setMinFilter( VK_FILTER_LINEAR );
@@ -224,6 +226,7 @@ namespace castor3d
 			m_culler = std::make_unique< FrustumCuller >( *getScene(), *getCamera() );
 			auto & renderSystem = *getEngine()->getRenderSystem();
 			auto & device = getCurrentRenderDevice( renderSystem );
+			m_hdrConfigUbo.initialise();
 			doInitialiseRenderPass();
 			m_initialised = doInitialiseFrameBuffer();
 
@@ -343,6 +346,7 @@ namespace castor3d
 			m_velocityTexture.setTexture( nullptr );
 
 			m_renderTechnique->cleanup();
+			m_hdrConfigUbo.cleanup();
 			m_overlaysFrameBuffer.cleanup();
 			m_objectsFrameBuffer.cleanup();
 			m_combinedFrameBuffer.cleanup();
@@ -352,7 +356,7 @@ namespace castor3d
 		}
 	}
 
-	void RenderTarget::cpuUpdate()
+	void RenderTarget::update( CpuUpdater & updater )
 	{
 		auto & camera = *getCamera();
 		camera.resize( m_size );
@@ -360,20 +364,25 @@ namespace castor3d
 
 		CU_Require( m_culler );
 		m_culler->compute();
+
+		m_hdrConfigUbo.cpuUpdate( m_hdrConfig );
 	}
 
-	void RenderTarget::gpuUpdate( RenderInfo & info )
+	void RenderTarget::update( GpuUpdater & updater )
 	{
-		m_toneMapping->update();
-		m_renderTechnique->gpuUpdate( m_jitter, info );
-		m_overlayRenderer->update( *getCamera() );
+		updater.jitter = m_jitter;
+		updater.scene = getScene();
+		updater.camera = getCamera();
+
+		updater.scene->update( updater );
+		m_toneMapping->update( updater );
+		m_renderTechnique->update( updater );
+		m_overlayRenderer->update( updater );
 	}
 
-	ashes::Semaphore const & RenderTarget::render( RenderInfo & info
-		, ashes::Semaphore const & toWait )
+	void RenderTarget::render( RenderInfo & info )
 	{
 		SceneSPtr scene = getScene();
-		auto result = &toWait;
 
 		if ( scene )
 		{
@@ -385,13 +394,11 @@ namespace castor3d
 				{
 					getEngine()->getRenderSystem()->pushScene( scene.get() );
 					scene->getGeometryCache().fillInfo( info );
-					result = &doRender( info, m_objectsFrameBuffer, getCamera(), *result );
+					doRender( info, m_objectsFrameBuffer, getCamera() );
 					getEngine()->getRenderSystem()->popScene();
 				}
 			}
 		}
-
-		return *result;
 	}
 
 	ViewportType RenderTarget::getViewportType()const
@@ -446,7 +453,7 @@ namespace castor3d
 
 		m_toneMapping = getEngine()->getRenderTargetCache().getToneMappingFactory().create( name
 			, *getEngine()
-			, m_hdrConfig
+			, m_hdrConfigUbo
 			, parameters );
 	}
 
@@ -797,10 +804,9 @@ namespace castor3d
 #endif
 	}
 
-	ashes::Semaphore const & RenderTarget::doRender( RenderInfo & info
+	void RenderTarget::doRender( RenderInfo & info
 		, RenderTarget::TargetFbo & fbo
-		, CameraSPtr camera
-		, ashes::Semaphore const & toWait )
+		, CameraSPtr camera )
 	{
 		auto elapsedTime = m_timer.getElapsed();
 		SceneSPtr scene = getScene();
@@ -811,7 +817,7 @@ namespace castor3d
 			signalsToWait = scene->getRenderTargetsSemaphores();
 		}
 
-		signalsToWait.push_back( toWait );
+		//signalsToWait.push_back( toWait );
 
 		// Render the scene through the RenderTechnique.
 		m_signalFinished = &m_renderTechnique->render( signalsToWait
@@ -839,7 +845,6 @@ namespace castor3d
 
 		// Combine objects and overlays framebuffers, flipping them if necessary.
 		m_signalFinished = &doCombine( *m_signalFinished );
-		return *m_signalFinished;
 	}
 
 	ashes::Semaphore const & RenderTarget::doApplyPostEffects( ashes::Semaphore const & toWait

@@ -1,6 +1,7 @@
 #include "Castor3D/Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/PoolUniformBufferBase.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Buffer/UniformBuffer.hpp"
@@ -538,10 +539,8 @@ namespace castor3d
 			, m_sceneUbo.getUbo().getBuffer()
 			, 0u
 			, 1u );
-		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( BlurGpInfoUboId )
-			, m_gpInfoUbo.getUbo().getBuffer()
-			, 0u
-			, 1u );
+		m_gpInfoUbo.getUbo().createSizedBinding( descriptorSet
+			, descriptorSetLayout.getBinding( BlurGpInfoUboId ) );
 		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( BlurSssUboId )
 			, m_blurUbo.getBuffer()
 			, 0u

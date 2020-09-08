@@ -1,8 +1,10 @@
 #include "Castor3D/Render/ShadowMap/ShadowMapPassSpot.hpp"
 
+#include "Castor3D/Buffer/PoolUniformBufferBase.hpp"
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapSpot.hpp"
 #include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
@@ -50,10 +52,9 @@ namespace castor3d
 	{
 	}
 
-	bool ShadowMapPassSpot::cpuUpdate( RenderQueueArray & queues
-		, Light & light
-		, uint32_t index )
+	bool ShadowMapPassSpot::update( CpuUpdater & updater )
 	{
+		auto & light = *updater.light;
 		getCuller().compute();
 		m_outOfDate = m_outOfDate
 			|| getCuller().areAllChanged()
@@ -61,14 +62,14 @@ namespace castor3d
 		m_shadowType = light.getShadowType();
 		auto & myCamera = getCuller().getCamera();
 		light.getSpotLight()->updateShadow( myCamera
-			, index );
-		doUpdate( queues );
-		m_shadowMapUbo.update( light, index );
+			, updater.index );
+		doUpdate( *updater.queues );
+		m_shadowMapUbo.update( light, updater.index );
 		m_matrixUbo.cpuUpdate( myCamera.getView(), myCamera.getProjection() );
 		return m_outOfDate;
 	}
 
-	void ShadowMapPassSpot::gpuUpdate( uint32_t index )
+	void ShadowMapPassSpot::update( GpuUpdater & updater )
 	{
 		if ( m_initialised )
 		{
@@ -172,19 +173,15 @@ namespace castor3d
 	void ShadowMapPassSpot::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 		, BillboardListRenderNode & node )
 	{
-		node.uboDescriptorSet->createSizedBinding( layout.getBinding( ShadowMapUbo::BindingPoint )
-			, *m_shadowMapUbo.getUbo().buffer
-			, m_shadowMapUbo.getUbo().offset
-			, 1u );
+		m_shadowMapUbo.getUbo().createSizedBinding( *node.uboDescriptorSet
+			, layout.getBinding( ShadowMapUbo::BindingPoint ) );
 	}
 
 	void ShadowMapPassSpot::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 		, SubmeshRenderNode & node )
 	{
-		node.uboDescriptorSet->createSizedBinding( layout.getBinding( ShadowMapUbo::BindingPoint )
-			, *m_shadowMapUbo.getUbo().buffer
-			, m_shadowMapUbo.getUbo().offset
-			, 1u );
+		m_shadowMapUbo.getUbo().createSizedBinding( *node.uboDescriptorSet
+			, layout.getBinding( ShadowMapUbo::BindingPoint ) );
 	}
 
 	void ShadowMapPassSpot::doUpdate( RenderQueueArray & queues )

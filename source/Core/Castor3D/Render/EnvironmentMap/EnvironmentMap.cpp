@@ -6,6 +6,7 @@
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp"
 #include "Castor3D/Render/PBR/IblTextures.hpp"
@@ -277,26 +278,28 @@ namespace castor3d
 		m_environmentMap->cleanup();
 	}
 	
-	void EnvironmentMap::cpuUpdate( RenderQueueArray & queues )
+	void EnvironmentMap::update( CpuUpdater & updater )
 	{
 		// Compute for next frame (or first)
 		if ( m_first || ( m_render % 5u ) == 4u )
 		{
+			updater.node = &m_node;
+
 			for ( auto & pass : m_passes )
 			{
-				pass->cpuUpdate( m_node, queues );
+				pass->update( updater );
 			}
 		}
 	}
 
-	void EnvironmentMap::gpuUpdate()
+	void EnvironmentMap::update( GpuUpdater & updater )
 	{
 		// Compute for next frame (or first)
 		if ( m_first || ( m_render % 5u ) == 4u )
 		{
 			for ( auto & pass : m_passes )
 			{
-				pass->gpuUpdate();
+				pass->update( updater );
 			}
 		}
 	}

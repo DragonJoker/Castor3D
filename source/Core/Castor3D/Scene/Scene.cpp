@@ -814,7 +814,7 @@ namespace castor3d
 			} ) );
 	}
 
-	void Scene::update()
+	void Scene::update( CpuUpdater & updater )
 	{
 		if ( m_initialised )
 		{
@@ -822,7 +822,7 @@ namespace castor3d
 			doUpdateBoundingBox();
 			doUpdateAnimations();
 			doUpdateMaterials();
-			getLightCache().update();
+			getLightCache().update( updater );
 			getGeometryCache().cpuUpdate();
 			m_billboardPools->update();
 			getAnimatedObjectGroupCache().update();
@@ -831,10 +831,9 @@ namespace castor3d
 		}
 	}
 
-	void Scene::updateDeviceDependent( Camera const & camera )
+	void Scene::update( GpuUpdater & updater )
 	{
-		m_background->update( camera );
-		m_colourBackground->update( camera );
+		getLightCache().update( updater );
 		getMeshCache().forEach( []( Mesh & mesh )
 		{
 			for ( auto & submesh : mesh )

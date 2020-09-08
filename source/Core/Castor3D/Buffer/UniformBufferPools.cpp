@@ -13,47 +13,37 @@ namespace castor3d
 {
 	UniformBufferPools::UniformBufferPools( RenderSystem & renderSystem )
 		: castor::OwnedBy< RenderSystem >{ renderSystem }
-		, m_matrixUboPool{ renderSystem, "Matrix" }
-		, m_hdrConfigUboPool{ renderSystem, "HDRConfig" }
-		, m_rsmConfigUboPool{ renderSystem, "RSMConfig" }
-		, m_modelUboPool{ renderSystem, "Model" }
-		, m_modelMatrixUboPool{ renderSystem, "ModelMatrix" }
-		, m_billboardUboPool{ renderSystem, "Billboard" }
-		, m_pickingUboPool{ renderSystem, "Picking" }
-		, m_texturesUboPool{ renderSystem, "Textures" }
-		, m_shadowMapUboPool{ renderSystem, "ShadowMap" }
-		, m_skinningUboPool{ renderSystem, "Skinning" }
-		, m_morphingUboPool{ renderSystem, "Morphing" }
+		, m_pools
+		{
+			UniformBufferPoolBase{ renderSystem, "Matrix" },
+			UniformBufferPoolBase{ renderSystem, "ModelMatrix" },
+			UniformBufferPoolBase{ renderSystem, "Model" },
+			UniformBufferPoolBase{ renderSystem, "Billboard" },
+			UniformBufferPoolBase{ renderSystem, "Skinning" },
+			UniformBufferPoolBase{ renderSystem, "Morphing" },
+			UniformBufferPoolBase{ renderSystem, "Picking" },
+			UniformBufferPoolBase{ renderSystem, "Textures" },
+			UniformBufferPoolBase{ renderSystem, "ShadowMap" },
+			UniformBufferPoolBase{ renderSystem, "HDRConfig" },
+			UniformBufferPoolBase{ renderSystem, "RSMConfig" },
+			UniformBufferPoolBase{ renderSystem, "Generic" },
+		}
 	{
 	}
 
 	UniformBufferPools::~UniformBufferPools()
 	{
-		m_matrixUboPool.cleanup();
-		m_hdrConfigUboPool.cleanup();
-		m_rsmConfigUboPool.cleanup();
-		m_modelUboPool.cleanup();
-		m_modelMatrixUboPool.cleanup();
-		m_billboardUboPool.cleanup();
-		m_pickingUboPool.cleanup();
-		m_texturesUboPool.cleanup();
-		m_shadowMapUboPool.cleanup();
-		m_skinningUboPool.cleanup();
-		m_morphingUboPool.cleanup();
+		for ( auto & pool : m_pools )
+		{
+			pool.cleanup();
+		}
 	}
 
 	void UniformBufferPools::upload( ashes::CommandBuffer const & cb )const
 	{
-		m_matrixUboPool.upload( cb );
-		m_hdrConfigUboPool.upload( cb );
-		m_rsmConfigUboPool.upload( cb );
-		m_modelUboPool.upload( cb );
-		m_modelMatrixUboPool.upload( cb );
-		m_billboardUboPool.upload( cb );
-		m_pickingUboPool.upload( cb );
-		m_texturesUboPool.upload( cb );
-		m_shadowMapUboPool.upload( cb );
-		m_skinningUboPool.upload( cb );
-		m_morphingUboPool.upload( cb );
+		for ( auto & pool : m_pools )
+		{
+			pool.upload( cb );
+		}
 	}
 }

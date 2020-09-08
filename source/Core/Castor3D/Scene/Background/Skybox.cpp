@@ -8,6 +8,7 @@
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Background/Visitor.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Scene/Background/Visitor.hpp"
 #include "Castor3D/Shader/Program.hpp"
@@ -298,15 +299,19 @@ namespace castor3d
 	{
 	}
 
-	void SkyboxBackground::doUpdate( Camera const & camera )
+	void SkyboxBackground::doCpuUpdate( CpuUpdater & updater )
 	{
 		m_viewport.setPerspective( 45.0_degrees
-			, camera.getRatio()
+			, updater.camera->getRatio()
 			, 0.1f
 			, 2.0f );
 		m_viewport.update();
-		m_matrixUbo.cpuUpdate( camera.getView()
+		m_matrixUbo.cpuUpdate( updater.camera->getView()
 			, m_viewport.getProjection() );
+	}
+
+	void SkyboxBackground::doGpuUpdate( GpuUpdater & updater )
+	{
 	}
 
 	bool SkyboxBackground::doInitialiseTexture()

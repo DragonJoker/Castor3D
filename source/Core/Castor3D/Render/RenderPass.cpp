@@ -1,6 +1,7 @@
 #include "Castor3D/Render/RenderPass.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/PoolUniformBufferBase.hpp"
 #include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
 #include "Castor3D/Cache/BillboardUboPools.hpp"
 #include "Castor3D/Cache/GeometryCache.hpp"
@@ -10,6 +11,7 @@
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/Node/RenderNode_Render.hpp"
@@ -181,9 +183,9 @@ namespace castor3d
 		m_frontPipelines.clear();
 	}
 
-	void RenderPass::cpuUpdate( RenderQueueArray & queues )
+	void RenderPass::update( CpuUpdater & updater )
 	{
-		doUpdate( queues );
+		doUpdate( *updater.queues );
 	}
 
 	ShaderPtr RenderPass::getVertexShaderSource( PipelineFlags const & flags )const
@@ -584,32 +586,25 @@ namespace castor3d
 					, node.sceneNode.getScene()->getLightCache().getView() );
 			}
 
-			uboDescriptorSet.createSizedBinding( layout.getBinding( MatrixUbo::BindingPoint )
-				, *matrixUbo.getUbo().buffer
-				, matrixUbo.getUbo().offset );
+			matrixUbo.getUbo().createSizedBinding( uboDescriptorSet
+				, layout.getBinding( MatrixUbo::BindingPoint ) );
 			uboDescriptorSet.createSizedBinding( layout.getBinding( SceneUbo::BindingPoint )
 				, sceneUbo.getUbo() );
 
 			if ( !checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eInstantiation ) )
 			{
-				uboDescriptorSet.createSizedBinding( layout.getBinding( ModelMatrixUbo::BindingPoint )
-					, *node.modelMatrixUbo.buffer
-					, node.modelMatrixUbo.offset
-					, 1u );
+				node.modelMatrixUbo.createSizedBinding( uboDescriptorSet
+					, layout.getBinding( ModelMatrixUbo::BindingPoint ) );
 			}
 
 			if ( !node.pipeline.getFlags().textures.empty() )
 			{
-				uboDescriptorSet.createSizedBinding( layout.getBinding( TexturesUbo::BindingPoint )
-					, *node.texturesUbo.buffer
-					, node.texturesUbo.offset
-					, 1u );
+				node.texturesUbo.createSizedBinding( uboDescriptorSet
+					, layout.getBinding( TexturesUbo::BindingPoint ) );
 			}
 
-			uboDescriptorSet.createSizedBinding( layout.getBinding( ModelUbo::BindingPoint )
-				, *node.modelUbo.buffer
-				, node.modelUbo.offset
-				, 1u );
+			node.modelUbo.createSizedBinding( uboDescriptorSet
+				, layout.getBinding( ModelUbo::BindingPoint ) );
 		}
 	}
 
@@ -624,10 +619,8 @@ namespace castor3d
 			, node
 			, m_matrixUbo
 			, m_sceneUbo );
-		node.uboDescriptorSet->createSizedBinding( layout.getBinding( BillboardUbo::BindingPoint )
-			, *node.billboardUbo.buffer
-			, node.billboardUbo.offset
-			, 1u );
+		node.billboardUbo.createSizedBinding( *node.uboDescriptorSet
+			, layout.getBinding( BillboardUbo::BindingPoint ) );
 		doFillUboDescriptor( layout, node );
 		node.uboDescriptorSet->update();
 	}
@@ -643,10 +636,8 @@ namespace castor3d
 			, node
 			, m_matrixUbo
 			, m_sceneUbo );
-		node.uboDescriptorSet->createSizedBinding( layout.getBinding( MorphingUbo::BindingPoint )
-			, *node.morphingUbo.buffer
-			, node.morphingUbo.offset
-			, 1u );
+		node.morphingUbo.createSizedBinding( *node.uboDescriptorSet
+			, layout.getBinding( MorphingUbo::BindingPoint ) );
 		doFillUboDescriptor( layout, node );
 		node.uboDescriptorSet->update();
 	}
@@ -670,10 +661,8 @@ namespace castor3d
 		}
 		else
 		{
-			node.uboDescriptorSet->createSizedBinding( layout.getBinding( SkinningUbo::BindingPoint )
-				, *node.skinningUbo.buffer
-				, node.skinningUbo.offset
-				, 1u );
+			node.skinningUbo.createSizedBinding( *node.uboDescriptorSet
+				, layout.getBinding( SkinningUbo::BindingPoint ) );
 		}
 
 		doFillUboDescriptor( layout, node );

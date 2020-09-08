@@ -5,6 +5,7 @@
 #include "Castor3D/Event/Frame/FunctorEvent.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
@@ -231,7 +232,7 @@ namespace castor3d
 		}
 	}
 
-	void ObjectCache< Light, castor::String >::update()
+	void ObjectCache< Light, castor::String >::update( CpuUpdater & updater )
 	{
 		if ( !m_dirtyLights.empty() )
 		{
@@ -246,8 +247,9 @@ namespace castor3d
 		}
 	}
 
-	void ObjectCache< Light, castor::String >::updateLightsTexture( Camera const & camera )const
+	void ObjectCache< Light, castor::String >::update( GpuUpdater & updater )
 	{
+		auto & camera = *updater.camera;
 		uint32_t index = 0;
 		uint32_t lightIndex = 0;
 		Point4f * data = m_lightsBuffer.data();

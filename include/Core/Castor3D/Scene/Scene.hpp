@@ -105,14 +105,14 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour la scène avant le rendu.
 		 */
-		C3D_API void update();
+		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Updates the scene device dependant stuff.
 		 *\~french
 		 *\brief		Met à jour les objets de scène dépendant du device.
 		 */
-		C3D_API void updateDeviceDependent( Camera const & camera );
+		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Sets the background for the scene.

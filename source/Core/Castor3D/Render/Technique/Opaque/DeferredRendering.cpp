@@ -6,6 +6,7 @@
 #include "Castor3D/Cache/PluginCache.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/Passes/LineariseDepthPass.hpp"
 #include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
@@ -94,7 +95,7 @@ namespace castor3d
 		, ShadowMapResult const & smSpotResult
 		, Size const & size
 		, Scene & scene
-		, HdrConfigUbo & hdrConfigUbo
+		, HdrConfigUbo const & hdrConfigUbo
 		, GpInfoUbo const & gpInfoUbo
 		, SsaoConfig & ssaoConfig )
 		: m_engine{ engine }
@@ -166,7 +167,7 @@ namespace castor3d
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo
 			, hdrConfigUbo
-			, &m_ssao->getResult() ) );
+			, m_ssao.raw() ) );
 		//	SSSSS On
 		m_resolve.emplace_back( std::make_unique< OpaqueResolvePass >( m_engine
 			, scene
@@ -177,7 +178,7 @@ namespace castor3d
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo
 			, hdrConfigUbo
-			, &m_ssao->getResult() ) );
+			, m_ssao.raw() ) );
 		m_opaquePass.initialiseRenderPass( m_opaquePassResult );
 
 		m_linearisePass.initialise();
@@ -202,13 +203,12 @@ namespace castor3d
 		m_linearisePass.cleanup();
 	}
 
-	void DeferredRendering::gpuUpdate( RenderInfo & info
-		, Scene const & scene
-		, Camera const & camera
-		, castor::Point2f const & jitter )
+	void DeferredRendering::update( GpuUpdater & updater )
 	{
+		auto & scene = *updater.scene;
+		auto & camera = *updater.camera;
 		m_opaquePass.getSceneUbo().gpuUpdate( scene, &camera );
-		m_opaquePass.gpuUpdate( info, jitter );
+		m_opaquePass.update( updater );
 
 		if ( m_ssaoConfig.enabled )
 		{

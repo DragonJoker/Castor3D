@@ -70,15 +70,14 @@ namespace castor3d
 	{
 	}
 
-	void Voxelizer::cpuUpdate( RenderQueueArray & queues )
+	void Voxelizer::update( CpuUpdater & updater )
 	{
-		m_voxelizePass.cpuUpdate( queues );
+		m_voxelizePass.update( updater );
 	}
 
-	void Voxelizer::gpuUpdate( RenderInfo & info
-		, castor::Point2f const & jitter )
+	void Voxelizer::update( GpuUpdater & updater )
 	{
-		m_voxelizePass.gpuUpdate( jitter, info );
+		m_voxelizePass.update( updater );
 	}
 
 	ashes::Semaphore const & Voxelizer::render( ashes::Semaphore const & toWait )

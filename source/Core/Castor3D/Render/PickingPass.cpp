@@ -1,6 +1,7 @@
 #include "Castor3D/Render/PickingPass.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/PoolUniformBufferBase.hpp"
 #include "Castor3D/Cache/GeometryCache.hpp"
 #include "Castor3D/Event/Frame/FunctorEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
@@ -669,19 +670,15 @@ namespace castor3d
 	void PickingPass::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 		, BillboardListRenderNode & node )
 	{
-		node.uboDescriptorSet->createBinding( layout.getBinding( PickingUbo::BindingPoint )
-			, node.pickingUbo.buffer->getBuffer()
-			, node.pickingUbo.offset
-			, 1u );
+		node.pickingUbo.createSizedBinding( *node.uboDescriptorSet
+			, layout.getBinding( PickingUbo::BindingPoint ) );
 	}
 
 	void PickingPass::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 		, SubmeshRenderNode & node )
 	{
-		node.uboDescriptorSet->createBinding( layout.getBinding( PickingUbo::BindingPoint )
-			, node.pickingUbo.buffer->getBuffer()
-			, node.pickingUbo.offset
-			, 1u );
+		node.pickingUbo.createSizedBinding( *node.uboDescriptorSet
+			, layout.getBinding( PickingUbo::BindingPoint ) );
 	}
 
 	void PickingPass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout

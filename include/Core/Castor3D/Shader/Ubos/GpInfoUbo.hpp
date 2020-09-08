@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "UbosModule.hpp"
 
-#include "Castor3D/Buffer/UniformBuffer.hpp"
+#include "Castor3D/Buffer/UniformBufferOffset.hpp"
 
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
@@ -14,16 +14,8 @@ namespace castor3d
 {
 	class GpInfoUbo
 	{
-	private:
-		struct Configuration
-		{
-			castor::Matrix4x4f invViewProj;
-			castor::Matrix4x4f invView;
-			castor::Matrix4x4f invProj;
-			castor::Matrix4x4f gView;
-			castor::Matrix4x4f gProj;
-			castor::Point2f renderSize;
-		};
+	public:
+		using Configuration = GpInfoUboConfiguration;
 
 	public:
 		/**
@@ -68,7 +60,7 @@ namespace castor3d
 		 *\brief		Fonction de nettoyage.
 		 */
 		C3D_API void cleanup();
-		void gpuUpdate( castor::Size const & renderSize
+		C3D_API void cpuUpdate( castor::Size const & renderSize
 			, Camera const & camera );
 		/**
 		 *\~english
@@ -76,14 +68,14 @@ namespace castor3d
 		 *\~french
 		 *\name			getters.
 		 */
-		inline UniformBufferT< Configuration > & getUbo()
+		inline UniformBufferOffsetT< Configuration > & getUbo()
 		{
-			return *m_ubo;
+			return m_ubo;
 		}
 
-		inline UniformBufferT< Configuration > const & getUbo()const
+		inline UniformBufferOffsetT< Configuration > const & getUbo()const
 		{
-			return *m_ubo;
+			return m_ubo;
 		}
 		/**@}*/
 
@@ -99,7 +91,7 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
-		UniformBufferUPtrT< Configuration > m_ubo;
+		UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }
 

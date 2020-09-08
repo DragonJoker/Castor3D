@@ -37,7 +37,7 @@ namespace castor3d
 		 *\brief		Met à jour la passe.
 		 *\param[out]	info	Reçoit les informations de rendu.
 		 */
-		C3D_API void cpuUpdate( RenderQueueArray & queues );
+		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Updates pass.
@@ -46,8 +46,7 @@ namespace castor3d
 		 *\brief		Met à jour la passe.
 		 *\param[out]	info	Reçoit les informations de rendu.
 		 */
-		C3D_API void gpuUpdate( RenderInfo & info
-			, castor::Point2f const & jitter );
+		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Renders nodes.

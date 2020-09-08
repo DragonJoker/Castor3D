@@ -1,7 +1,7 @@
 #include "Castor3D/Render/ToneMapping/ToneMapping.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/UniformBuffer.hpp"
+#include "Castor3D/Buffer/PoolUniformBufferBase.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 
@@ -22,13 +22,12 @@ namespace castor3d
 	ToneMapping::ToneMapping( castor::String const & name
 		, castor::String const & fullName
 		, Engine & engine
-		, HdrConfig & config
+		, HdrConfigUbo & hdrConfigUbo
 		, Parameters const & parameters )
 		: OwnedBy< Engine >{ engine }
 		, RenderQuad{ *engine.getRenderSystem(), name, VK_FILTER_NEAREST, { ashes::nullopt, RenderQuadConfig::Texcoord{} } }
-		, m_config{ config }
+		, m_hdrConfigUbo{ hdrConfigUbo }
 		, m_fullName{ fullName }
-		, m_hdrConfigUbo{ engine }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "ToneMapping" }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "ToneMapping" }
 	{
@@ -42,7 +41,6 @@ namespace castor3d
 		, TextureLayout const & source
 		, ashes::RenderPass const & renderPass )
 	{
-		m_hdrConfigUbo.initialise();
 		auto & device = getCurrentRenderDevice( m_renderSystem );
 		m_signalFinished = device->createSemaphore( m_fullName );
 
@@ -92,30 +90,28 @@ namespace castor3d
 	void ToneMapping::cleanup()
 	{
 		doDestroy();
-		m_hdrConfigUbo.cleanup();
 	}
 
-	void ToneMapping::update()
+	void ToneMapping::update( CpuUpdater & updater )
 	{
-		m_hdrConfigUbo.cpuUpdate( m_config );
-		doUpdate();
+		doCpuUpdate();
+	}
+
+	void ToneMapping::update( GpuUpdater & updater )
+	{
+		doGpuUpdate();
 	}
 
 	void ToneMapping::accept( ToneMappingVisitor & visitor )
 	{
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );
-		visitor.visit( m_vertexShader.name
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, m_config );
 	}
 
 	void ToneMapping::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
 		, ashes::DescriptorSet & descriptorSet )
 	{
-		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( 0u )
-			, m_hdrConfigUbo.getUbo().buffer->getBuffer()
-			, m_hdrConfigUbo.getUbo().offset
-			, 1u );
+		m_hdrConfigUbo.getUbo().createSizedBinding( descriptorSet
+			, descriptorSetLayout.getBinding( 0u ) );
 	}
 }

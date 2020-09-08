@@ -1,6 +1,7 @@
 #include "Castor3D/Render/Technique/Transparent/WeightedBlendRendering.hpp"
 
 #include "Castor3D/Render/RenderInfo.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Fog.hpp"
@@ -25,7 +26,7 @@ namespace castor3d
 		, TextureUnit const & velocityTexture
 		, castor::Size const & size
 		, Scene const & scene
-		, HdrConfigUbo & hdrConfigUbo
+		, HdrConfigUbo const & hdrConfigUbo
 		, GpInfoUbo const & gpInfoUbo )
 		: m_engine{ engine }
 		, m_transparentPass{ transparentPass }
@@ -37,13 +38,12 @@ namespace castor3d
 		m_transparentPass.initialise( m_size );
 	}
 
-	void WeightedBlendRendering::gpuUpdate( RenderInfo & info
-		, Scene const & scene
-		, Camera const & camera
-		, castor::Point2f const & jitter )
+	void WeightedBlendRendering::update( GpuUpdater & updater )
 	{
+		auto & scene = *updater.scene;
+		auto & camera = *updater.camera;
 		m_transparentPass.getSceneUbo().gpuUpdate( scene, &camera );
-		m_transparentPass.gpuUpdate( info, jitter );
+		m_transparentPass.update( updater );
 	}
 
 	ashes::Semaphore const & WeightedBlendRendering::render( Scene const & scene

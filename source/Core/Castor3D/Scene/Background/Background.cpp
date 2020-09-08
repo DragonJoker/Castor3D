@@ -1,9 +1,11 @@
 #include "Castor3D/Scene/Background/Background.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/PoolUniformBufferBase.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -77,6 +79,7 @@ namespace castor3d
 				, hdrConfigUbo );
 		}
 
+
 		if ( m_initialised
 			&& m_scene.getMaterialsType() != MaterialType::ePhong
 			&& m_texture->getLayersCount() == 6u )
@@ -124,17 +127,26 @@ namespace castor3d
 		m_ibl.reset();
 	}
 
-	void SceneBackground::update( Camera const & camera )
+	void SceneBackground::update( CpuUpdater & updater )
 	{
 		if ( m_initialised )
 		{
+			auto & camera = *updater.camera;
 			static castor::Point3f const Scale{ 1, -1, 1 };
 			static castor::Matrix3x3f const Identity{ 1.0f };
 			auto node = camera.getParent();
 			castor::matrix::setTranslate( m_mtxModel, node->getDerivedPosition() );
 			castor::matrix::scale( m_mtxModel, Scale );
 			m_modelMatrixUbo.cpuUpdate( m_mtxModel, Identity );
-			doUpdate( camera );
+			doCpuUpdate( updater );
+		}
+	}
+
+	void SceneBackground::update( GpuUpdater & updater )
+	{
+		if ( m_initialised )
+		{
+			doGpuUpdate( updater );
 		}
 	}
 
@@ -210,15 +222,12 @@ namespace castor3d
 		, ashes::DescriptorSet & uboDescriptorSet
 		, ashes::DescriptorSet & texDescriptorSet )const
 	{
-		uboDescriptorSet.createSizedBinding( m_uboDescriptorLayout->getBinding( MtxUboIdx )
-			, *matrixUbo.getUbo().buffer
-			, matrixUbo.getUbo().offset );
-		uboDescriptorSet.createSizedBinding( m_uboDescriptorLayout->getBinding( MdlMtxUboIdx )
-			, *modelMatrixUbo.getUbo().buffer
-			, modelMatrixUbo.getUbo().offset );
-		uboDescriptorSet.createSizedBinding( m_uboDescriptorLayout->getBinding( HdrCfgUboIdx )
-			, *hdrConfigUbo.getUbo().buffer
-			, hdrConfigUbo.getUbo().offset );
+		matrixUbo.getUbo().createSizedBinding( uboDescriptorSet
+			, m_uboDescriptorLayout->getBinding( MtxUboIdx ) );
+		modelMatrixUbo.getUbo().createSizedBinding( uboDescriptorSet
+			, m_uboDescriptorLayout->getBinding( MdlMtxUboIdx ) );
+		hdrConfigUbo.getUbo().createSizedBinding( uboDescriptorSet
+			, m_uboDescriptorLayout->getBinding( HdrCfgUboIdx ) );
 		texDescriptorSet.createBinding( m_texDescriptorLayout->getBinding( SkyBoxImgIdx )
 			, m_texture->getDefaultView().getSampledView()
 			, m_sampler.lock()->getSampler() );
@@ -352,6 +361,10 @@ namespace castor3d
 		};
 		m_texDescriptorLayout = device->createDescriptorSetLayout( "SceneBackgroundTex"
 			, std::move( texBindings ) );
+	}
+
+	void SceneBackground::doGpuUpdate( GpuUpdater & updater )
+	{
 	}
 
 	bool SceneBackground::doInitialiseVertexBuffer()

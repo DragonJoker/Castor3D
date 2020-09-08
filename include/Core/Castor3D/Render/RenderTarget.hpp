@@ -15,6 +15,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
 #include "Castor3D/Render/ToTexture/RenderQuad.hpp"
+#include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 #include <ashespp/Sync/Semaphore.hpp>
@@ -121,14 +122,14 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour le culling.
 		 */
-		C3D_API void cpuUpdate();
+		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Updates GPU data.
 		 *\~french
 		 *\brief		Met à jour les données GPU.
 		 */
-		C3D_API void gpuUpdate( RenderInfo & info );
+		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Renders one frame.
@@ -137,8 +138,7 @@ namespace castor3d
 		 *\brief		Dessine une frame.
 		 *\param[out]	info	Reçoit les informations de rendu.
 		 */
-		C3D_API ashes::Semaphore const & render( RenderInfo & info
-			, ashes::Semaphore const &  toWait );
+		C3D_API void render( RenderInfo & info );
 		/**
 		 *\~english
 		 *\brief		Initialisation function.
@@ -380,6 +380,11 @@ namespace castor3d
 		{
 			m_hdrConfig.setGamma( value );
 		}
+
+		inline HdrConfigUbo const & getHdrConfigUbo()const
+		{
+			return m_hdrConfigUbo;
+		}
 		/**@}*/
 
 	private:
@@ -393,10 +398,9 @@ namespace castor3d
 			, ashes::ImageView const & source
 			, ashes::ImageView const & target );
 		C3D_API void doInitialiseCombine();
-		C3D_API ashes::Semaphore const & doRender( RenderInfo & info
+		C3D_API void doRender( RenderInfo & info
 			, TargetFbo & fbo
-			, CameraSPtr camera
-			, ashes::Semaphore const & toWait );
+			, CameraSPtr camera );
 		C3D_API ashes::Semaphore const & doApplyPostEffects( ashes::Semaphore const & toWait
 			, PostEffectPtrArray const & effects
 			, ashes::CommandBufferPtr const & copyCommandBuffer
@@ -421,6 +425,7 @@ namespace castor3d
 		TargetType m_type;
 		bool m_initialised;
 		castor::Size m_size;
+		HdrConfigUbo m_hdrConfigUbo;
 		RenderTechniqueSPtr m_renderTechnique;
 		SceneWPtr m_scene;
 		CameraWPtr m_camera;

@@ -1,6 +1,7 @@
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightPass.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/PoolUniformBufferBase.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
@@ -451,13 +452,12 @@ namespace castor3d
 		pipeline.uboDescriptorSet = pipeline.program->getUboDescriptorPool().createDescriptorSet( m_name + "Ubo", 0u );
 		auto & uboLayout = pipeline.program->getUboDescriptorLayout();
 		m_engine.getMaterialCache().getPassBuffer().createBinding( *pipeline.uboDescriptorSet, uboLayout.getBinding( 0u ) );
-		pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( MatrixUbo::BindingPoint )
-			, *m_matrixUbo.getUbo().buffer
-			, m_matrixUbo.getUbo().offset );
+		m_matrixUbo.getUbo().createSizedBinding( *pipeline.uboDescriptorSet
+			, uboLayout.getBinding( MatrixUbo::BindingPoint ) );
 		pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( SceneUbo::BindingPoint )
 			, sceneUbo.getUbo() );
-		pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( GpInfoUbo::BindingPoint )
-			, m_gpInfoUbo.getUbo() );
+		m_gpInfoUbo.getUbo().createSizedBinding( *pipeline.uboDescriptorSet
+			, uboLayout.getBinding( GpInfoUbo::BindingPoint ) );
 
 		if ( modelMatrixUbo )
 		{

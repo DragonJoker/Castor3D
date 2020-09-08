@@ -4,6 +4,7 @@
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Cache/ShaderCache.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/Node/SceneCulledRenderNodes.hpp"
 #include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -63,8 +64,7 @@ namespace castor3d
 		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ) );
 	}
 
-	void VoxelizePass::gpuUpdate( castor::Point2f const & jitter
-		, RenderInfo & info )
+	void VoxelizePass::update( GpuUpdater & updater )
 	{
 		auto & nodes = m_renderQueue.getCulledRenderNodes();
 
@@ -77,12 +77,12 @@ namespace castor3d
 			RenderPass::doUpdate( nodes.morphingNodes.frontCulled );
 			RenderPass::doUpdate( nodes.billboardNodes.frontCulled );
 
-			RenderPass::doUpdate( nodes.instancedStaticNodes.backCulled, info );
-			RenderPass::doUpdate( nodes.staticNodes.backCulled, info );
-			RenderPass::doUpdate( nodes.skinnedNodes.backCulled, info );
-			RenderPass::doUpdate( nodes.instancedSkinnedNodes.backCulled, info );
-			RenderPass::doUpdate( nodes.morphingNodes.backCulled, info );
-			RenderPass::doUpdate( nodes.billboardNodes.backCulled, info );
+			RenderPass::doUpdate( nodes.instancedStaticNodes.backCulled, updater.info );
+			RenderPass::doUpdate( nodes.staticNodes.backCulled, updater.info );
+			RenderPass::doUpdate( nodes.skinnedNodes.backCulled, updater.info );
+			RenderPass::doUpdate( nodes.instancedSkinnedNodes.backCulled, updater.info );
+			RenderPass::doUpdate( nodes.morphingNodes.backCulled, updater.info );
+			RenderPass::doUpdate( nodes.billboardNodes.backCulled, updater.info );
 		}
 
 		static const Matrix4x4f identity
@@ -102,7 +102,7 @@ namespace castor3d
 			, sceneBoundingBox.getMax()->y
 			, -1.0f * sceneBoundingBox.getMin()->z
 			, -1.0f * sceneBoundingBox.getMax()->z );
-		auto jitterProjSpace = jitter * 2.0f;
+		auto jitterProjSpace = updater.jitter * 2.0f;
 		jitterProjSpace[0] /= m_camera.getWidth();
 		jitterProjSpace[1] /= m_camera.getHeight();
 		m_matrixUbo.cpuUpdate( identity

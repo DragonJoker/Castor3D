@@ -16,7 +16,6 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
 #include "Castor3D/Shader/Ubos/DebugConfig.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
-#include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 
 #include <CastorUtils/Design/DelayedInitialiser.hpp>
 
@@ -89,7 +88,7 @@ namespace castor3d
 		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
 		 *\param[out]	queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
 		 */
-		C3D_API void cpuUpdate( RenderQueueArray & queues );
+		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Updates GPU data.
@@ -100,8 +99,7 @@ namespace castor3d
 		 *\param[in]	jitter	La valeur de jittering.
 		 *\param[out]	info	Reçoit les informations de rendu.
 		 */
-		C3D_API void gpuUpdate( castor::Point2f const & jitter
-			, RenderInfo & info );
+		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Render function
@@ -239,8 +237,8 @@ namespace castor3d
 		void doInitialiseOpaquePass();
 		void doInitialiseTransparentPass();
 		void doCleanupShadowMaps();
-		void doUpdateShadowMaps( RenderQueueArray & queues );
-		void doUpdateParticles( RenderInfo & info );
+		void doUpdateShadowMaps( CpuUpdater & updater );
+		void doUpdateParticles( GpuUpdater & updater );
 		ashes::Semaphore const & doRenderShadowMaps( ashes::Semaphore const & semaphore );
 		ashes::Semaphore const & doRenderEnvironmentMaps( ashes::Semaphore const & semaphore );
 #if C3D_UseDepthPrepass
@@ -259,7 +257,6 @@ namespace castor3d
 		TextureUnit m_colourTexture;
 		TextureUnit m_depthBuffer;
 		MatrixUbo m_matrixUbo;
-		HdrConfigUbo m_hdrConfigUbo;
 		GpInfoUbo m_gpInfoUbo;
 		DebugConfig m_debugConfig;
 #if C3D_UseDepthPrepass

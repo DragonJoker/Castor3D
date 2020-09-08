@@ -17,9 +17,9 @@ namespace HejlBurgessDawson
 	String ToneMapping::Name = cuT( "Hejl Burgess Dawson Tone Mapping" );
 
 	ToneMapping::ToneMapping( Engine & engine
-		, HdrConfig & hdrConfig
+		, HdrConfigUbo & hdrConfigUbo
 		, Parameters const & parameters )
-		: castor3d::ToneMapping{ Type, Name, engine, hdrConfig, parameters }
+		: castor3d::ToneMapping{ Type, Name, engine, hdrConfigUbo, parameters }
 	{
 	}
 
@@ -28,11 +28,11 @@ namespace HejlBurgessDawson
 	}
 
 	ToneMappingSPtr ToneMapping::create( Engine & engine
-		, HdrConfig & hdrConfig
+		, HdrConfigUbo & hdrConfigUbo
 		, Parameters const & parameters )
 	{
 		return std::make_shared< ToneMapping >( engine
-			, hdrConfig
+			, hdrConfigUbo
 			, parameters );
 	}
 
@@ -67,7 +67,7 @@ namespace HejlBurgessDawson
 	{
 	}
 
-	void ToneMapping::doUpdate()
+	void ToneMapping::doCpuUpdate()
 	{
 	}
 }

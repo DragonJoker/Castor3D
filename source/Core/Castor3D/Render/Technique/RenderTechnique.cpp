@@ -1,12 +1,14 @@
 #include "Castor3D/Render/Technique/RenderTechnique.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/PoolUniformBufferBase.hpp"
 #include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
 #include "Castor3D/Cache/BillboardUboPools.hpp"
 #include "Castor3D/Cache/GeometryCache.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Cache/ParticleSystemCache.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePass.hpp"
@@ -93,12 +95,11 @@ namespace castor3d
 
 		void doPrepareShadowMap( LightCache const & cache
 			, LightType type
-			, Camera const & camera
 			, ShadowMap & shadowMap
 			, ShadowMapLightTypeArray & activeShadowMaps
-			, RenderQueueArray & queues )
+			, CpuUpdater & updater )
 		{
-			auto lights = doSortLights( cache, type, camera );
+			auto lights = doSortLights( cache, type, *updater.camera );
 			size_t count = std::min( shadowMap.getCount(), uint32_t( lights.size() ) );
 
 			if ( count > 0 )
@@ -112,10 +113,9 @@ namespace castor3d
 				{
 					lightIt->second->setShadowMap( &shadowMap, index );
 					active.second.push_back( index );
-					shadowMap.update( camera
-						, queues
-						, *( lightIt->second )
-						, index );
+					updater.light = lightIt->second;
+					updater.index = index;
+					shadowMap.update( updater );
 					++index;
 					++lightIt;
 				}
@@ -161,7 +161,6 @@ namespace castor3d
 		, m_renderTarget{ renderTarget }
 		, m_renderSystem{ renderSystem }
 		, m_matrixUbo{ *renderSystem.getEngine() }
-		, m_hdrConfigUbo{ *renderSystem.getEngine() }
 		, m_gpInfoUbo{ *renderSystem.getEngine() }
 #if C3D_UseDeferredRendering
 		, m_opaquePass{ std::make_unique< OpaquePass >( m_matrixUbo
@@ -254,7 +253,6 @@ namespace castor3d
 			m_depthBuffer.initialise();
 			m_signalFinished = device->createSemaphore( "RenderTechnique" );
 			m_gpInfoUbo.initialise();
-			m_hdrConfigUbo.initialise();
 			m_matrixUbo.initialise();
 
 			m_stagingBuffer = std::make_unique< ashes::StagingBuffer >( *device
@@ -303,7 +301,6 @@ namespace castor3d
 		m_depthPass.reset();
 #endif
 		m_gpInfoUbo.cleanup();
-		m_hdrConfigUbo.cleanup();
 		m_matrixUbo.cleanup();
 		m_uploadCommandBuffer.reset();
 		m_stagingBuffer.reset();
@@ -312,21 +309,22 @@ namespace castor3d
 		m_colourTexture.cleanup();
 	}
 
-	void RenderTechnique::cpuUpdate( RenderQueueArray & queues )
+	void RenderTechnique::update( CpuUpdater & updater )
 	{
-		m_renderTarget.cpuUpdate();
+		updater.camera = m_renderTarget.getCamera();
+
 #if C3D_UseDepthPrepass
-		m_depthPass->cpuUpdate( queues );
+		m_depthPass->update( updater );
 #endif
-		//m_voxelizer->cpuUpdate( queues );
-		m_opaquePass->cpuUpdate( queues );
-		m_transparentPass->cpuUpdate( queues );
-		doUpdateShadowMaps( queues );
+		//m_voxelizer->cpuUpdate( updater );
+		m_opaquePass->update( updater );
+		m_transparentPass->update( updater );
+		doUpdateShadowMaps( updater );
 		auto & maps = m_renderTarget.getScene()->getEnvironmentMaps();
 
 		for ( auto & map : maps )
 		{
-			map.get().cpuUpdate( queues );
+			map.get().update( updater );
 		}
 
 		auto & camera = *m_renderTarget.getCamera();
@@ -337,49 +335,52 @@ namespace castor3d
 		m_matrixUbo.cpuUpdate( camera.getView()
 			, camera.getProjection()
 			, jitterProjSpace );
-		m_hdrConfigUbo.cpuUpdate( m_renderTarget.getHdrConfig() );
-	}
-
-	void RenderTechnique::gpuUpdate( castor::Point2f const & jitter
-		, RenderInfo & info )
-	{
-		auto & scene = *m_renderTarget.getScene();
-		auto & camera = *m_renderTarget.getCamera();
-		m_gpInfoUbo.gpuUpdate( m_size
+		m_gpInfoUbo.cpuUpdate( m_size
 			, camera );
-
-#if C3D_UseDepthPrepass
-		m_depthPass->gpuUpdate( info, jitter );
-#endif
-		//m_voxelizer->update( info, jitter );
-#if C3D_UseDeferredRendering
-		m_deferredRendering->gpuUpdate( info, scene, camera, jitter );
-#else
-		static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).gpuUpdate( info, jitter );
-#endif
-#if C3D_UseWeightedBlendedRendering
-		m_weightedBlendRendering->gpuUpdate( info, scene, camera, jitter );
-#else
-		static_cast< ForwardRenderTechniquePass & >( *m_transparentPass ).gpuUpdate( info, jitter );
-#endif
-
-		scene.getLightCache().updateLightsTexture( camera );
-		scene.updateDeviceDependent( camera );
 
 		if ( m_renderTarget.getScene()->getFog().getType() != FogType::eDisabled )
 		{
 			auto & background = m_renderTarget.getScene()->getColourBackground();
-			background.update( camera );
+			background.update( updater );
 		}
 		else
 		{
 			auto & background = *m_renderTarget.getScene()->getBackground();
-			background.update( camera );
+			background.update( updater );
+		}
+	}
+
+	void RenderTechnique::update( GpuUpdater & updater )
+	{
+#if C3D_UseDepthPrepass
+		m_depthPass->update( updater );
+#endif
+		//m_voxelizer->update( updater );
+#if C3D_UseDeferredRendering
+		m_deferredRendering->update( updater );
+#else
+		static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).update( updater );
+#endif
+#if C3D_UseWeightedBlendedRendering
+		m_weightedBlendRendering->update( updater );
+#else
+		static_cast< ForwardRenderTechniquePass & >( *m_transparentPass ).update( updater );
+#endif
+
+		if ( m_renderTarget.getScene()->getFog().getType() != FogType::eDisabled )
+		{
+			auto & background = m_renderTarget.getScene()->getColourBackground();
+			background.update( updater );
+		}
+		else
+		{
+			auto & background = *m_renderTarget.getScene()->getBackground();
+			background.update( updater );
 		}
 
 		for ( auto & map : m_renderTarget.getScene()->getEnvironmentMaps() )
 		{
-			map.get().gpuUpdate();
+			map.get().update( updater );
 		}
 
 		for ( auto & maps : m_activeShadowMaps )
@@ -388,16 +389,18 @@ namespace castor3d
 			{
 				for ( auto & id : map.second )
 				{
-					map.first.get().updateDeviceDependent( id );
+					updater.index = id;
+					map.first.get().update( updater );
 				}
 			}
 		}
+
+		doUpdateParticles( updater );
 	}
 
 	ashes::Semaphore const & RenderTechnique::render( ashes::SemaphoreCRefArray const & waitSemaphores
 		, RenderInfo & info )
 	{
-		doUpdateParticles( info );
 #if C3D_UseDepthPrepass
 		auto * semaphore = &doRenderDepth( waitSemaphores );
 		semaphore = &doRenderBackground( *semaphore );
@@ -560,7 +563,7 @@ namespace castor3d
 		auto & background = *m_renderTarget.getScene()->getBackground();
 		auto prepareBackground = [&background, this]()
 		{
-			background.initialise( *m_bgRenderPass, m_hdrConfigUbo );
+			background.initialise( *m_bgRenderPass, m_renderTarget.getHdrConfigUbo() );
 			background.prepareFrame( *m_bgCommandBuffer
 				, Size{ m_colourTexture.getTexture()->getWidth(), m_colourTexture.getTexture()->getHeight() }
 				, *m_bgRenderPass
@@ -574,7 +577,7 @@ namespace castor3d
 		auto & cbackground = m_renderTarget.getScene()->getColourBackground();
 		auto prepareCBackground = [&cbackground, this]()
 		{
-			cbackground.initialise( *m_bgRenderPass, m_hdrConfigUbo );
+			cbackground.initialise( *m_bgRenderPass, m_renderTarget.getHdrConfigUbo() );
 			cbackground.prepareFrame( *m_cbgCommandBuffer
 				, Size{ m_colourTexture.getTexture()->getWidth(), m_colourTexture.getTexture()->getHeight() }
 				, *m_bgRenderPass
@@ -616,7 +619,7 @@ namespace castor3d
 			, m_spotShadowMap->getShadowPassResult()
 			, m_renderTarget.getSize()
 			, *m_renderTarget.getScene()
-			, m_hdrConfigUbo
+			, m_renderTarget.getHdrConfigUbo()
 			, m_gpInfoUbo
 			, m_ssaoConfig );
 
@@ -643,7 +646,7 @@ namespace castor3d
 			, m_renderTarget.getVelocity()
 			, m_renderTarget.getSize()
 			, *m_renderTarget.getScene()
-			, m_hdrConfigUbo
+			, m_renderTarget.getHdrConfigUbo()
 			, m_gpInfoUbo );
 
 #else
@@ -664,7 +667,7 @@ namespace castor3d
 		m_pointShadowMap.cleanup();
 	}
 
-	void RenderTechnique::doUpdateShadowMaps( RenderQueueArray & queues )
+	void RenderTechnique::doUpdateShadowMaps( CpuUpdater & updater )
 	{
 		auto & scene = *m_renderTarget.getScene();
 
@@ -675,33 +678,28 @@ namespace castor3d
 				array.clear();
 			}
 
-			auto & camera = *m_renderTarget.getCamera();
 			auto & cache = scene.getLightCache();
 			doPrepareShadowMap( cache
 				, LightType::eDirectional
-				, camera
 				, *m_directionalShadowMap
 				, m_activeShadowMaps
-				, queues );
+				, updater );
 			doPrepareShadowMap( cache
 				, LightType::ePoint
-				, camera
 				, *m_pointShadowMap
 				, m_activeShadowMaps
-				, queues );
+				, updater );
 			doPrepareShadowMap( cache
 				, LightType::eSpot
-				, camera
 				, *m_spotShadowMap
 				, m_activeShadowMaps
-				, queues );
+				, updater );
 		}
 	}
 	
-	void RenderTechnique::doUpdateParticles( RenderInfo & info )
+	void RenderTechnique::doUpdateParticles( GpuUpdater & updater )
 	{
-		auto & scene = *m_renderTarget.getScene();
-		auto & cache = scene.getParticleSystemCache();
+		auto & cache = updater.scene->getParticleSystemCache();
 		auto lock( castor::makeUniqueLock( cache ) );
 
 		if ( !cache.isEmpty() )
@@ -719,7 +717,7 @@ namespace castor3d
 			for ( auto & particleSystem : cache )
 			{
 				particleSystem.second->update( *m_particleTimer, index );
-				info.m_particlesCount += particleSystem.second->getParticlesCount();
+				updater.info.m_particlesCount += particleSystem.second->getParticlesCount();
 			}
 		}
 	}

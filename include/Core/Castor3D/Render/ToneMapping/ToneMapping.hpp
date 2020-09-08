@@ -39,7 +39,7 @@ namespace castor3d
 		C3D_API ToneMapping( castor::String const & name
 			, castor::String const & fullName
 			, Engine & engine
-			, HdrConfig & config
+			, HdrConfigUbo & hdrConfigUbo
 			, Parameters const & parameters );
 		/**
 		 *\~english
@@ -76,7 +76,14 @@ namespace castor3d
 		 *\~english
 		 *\brief		Met à jour le tone mapping.
 		 */
-		C3D_API void update();
+		C3D_API void update( CpuUpdater & updater );
+		/**
+		 *\~english
+		 *\brief		Updates the tone mapping.
+		 *\~english
+		 *\brief		Met à jour le tone mapping.
+		 */
+		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Visitor acceptance function.
@@ -132,7 +139,18 @@ namespace castor3d
 		 *\~english
 		 *\brief		Met à jour les variables shader du mappage de tons.
 		 */
-		C3D_API virtual void doUpdate() = 0;
+		C3D_API virtual void doCpuUpdate()
+		{
+		}
+		/**
+		 *\~english
+		 *\brief		Updates the tone mapping shader variables.
+		 *\~english
+		 *\brief		Met à jour les variables shader du mappage de tons.
+		 */
+		C3D_API virtual void doGpuUpdate()
+		{
+		}
 
 	private:
 		C3D_API void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
@@ -140,8 +158,7 @@ namespace castor3d
 
 	protected:
 		castor::String m_fullName;
-		HdrConfig & m_config;
-		HdrConfigUbo m_hdrConfigUbo;
+		HdrConfigUbo & m_hdrConfigUbo;
 		ashes::SemaphorePtr m_signalFinished;
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;

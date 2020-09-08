@@ -4,6 +4,7 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
@@ -166,14 +167,13 @@ namespace castor3d
 		node.texDescriptorSet->setBindings( writes );
 	}
 
-	void RenderTechniquePass::gpuUpdate( RenderInfo & info
-		, castor::Point2f const & jitter )
+	void RenderTechniquePass::update( GpuUpdater & updater )
 	{
 		doUpdateNodes( m_renderQueue.getCulledRenderNodes()
-			, jitter
-			, info );
+			, updater.jitter
+			, updater.info );
 		doUpdateUbos( *m_camera
-			, jitter );
+			, updater.jitter );
 	}
 
 	void RenderTechniquePass::doUpdateNodes( SceneCulledRenderNodes & nodes

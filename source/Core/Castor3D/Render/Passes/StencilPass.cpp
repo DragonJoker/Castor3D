@@ -1,6 +1,7 @@
 #include "Castor3D/Render/Passes/StencilPass.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/PoolUniformBufferBase.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -137,9 +138,8 @@ namespace castor3d
 
 		m_descriptorPool = m_descriptorLayout->createPool( name, 1u );
 		m_descriptorSet = m_descriptorPool->createDescriptorSet( name );
-		m_descriptorSet->createSizedBinding( m_descriptorLayout->getBinding( 0u )
-			, *m_matrixUbo.getUbo().buffer
-			, m_matrixUbo.getUbo().offset );
+		m_matrixUbo.getUbo().createSizedBinding( *m_descriptorSet
+			, m_descriptorLayout->getBinding( 0u ) );
 		m_descriptorSet->createSizedBinding( m_descriptorLayout->getBinding( 1u )
 			, m_modelMatrixUbo.getBuffer() );
 		m_descriptorSet->update();

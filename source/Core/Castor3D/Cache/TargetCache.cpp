@@ -40,50 +40,48 @@ namespace castor3d
 		}
 	}
 
-	void RenderTargetCache::cpuUpdate()
+	void RenderTargetCache::update( CpuUpdater & updater )
 	{
 		LockType lock{ castor::makeUniqueLock( *this ) };
 
 		for ( auto target : m_renderTargets[size_t( TargetType::eTexture )] )
 		{
-			target->cpuUpdate();
+			target->update( updater );
 		}
 
 		for ( auto target : m_renderTargets[size_t( TargetType::eWindow )] )
 		{
-			target->cpuUpdate();
+			target->update( updater );
 		}
 	}
 
-	void RenderTargetCache::gpuUpdate( RenderInfo & info )
+	void RenderTargetCache::update( GpuUpdater & updater )
 	{
 		LockType lock{ castor::makeUniqueLock( *this ) };
 
 		for ( auto target : m_renderTargets[size_t( TargetType::eTexture )] )
 		{
-			target->gpuUpdate( info );
+			target->update( updater );
 		}
 
 		for ( auto target : m_renderTargets[size_t( TargetType::eWindow )] )
 		{
-			target->gpuUpdate( info );
+			target->update( updater );
 		}
 	}
 
-	void RenderTargetCache::render( RenderInfo & info
-		, ashes::Semaphore const & toWait )
+	void RenderTargetCache::render( RenderInfo & info )
 	{
-		auto result = &toWait;
 		LockType lock{ castor::makeUniqueLock( *this ) };
 
 		for ( auto target : m_renderTargets[size_t( TargetType::eTexture )] )
 		{
-			result = &target->render( info, *result );
+			target->render( info );
 		}
 
 		for ( auto target : m_renderTargets[size_t( TargetType::eWindow )] )
 		{
-			result = &target->render( info, *result );
+			target->render( info );
 		}
 	}
 

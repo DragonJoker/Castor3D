@@ -18,6 +18,33 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	struct CpuUpdater
+	{
+		CpuUpdater()
+		{
+		}
+
+		RenderQueueArray * queues{ nullptr };
+		CameraSPtr camera;
+		SceneNode const * node{ nullptr };
+		LightSPtr light;
+		uint32_t index{ 0u };
+	};
+
+	struct GpuUpdater
+	{
+		GpuUpdater( RenderInfo & info )
+			: info{ info }
+		{
+		}
+
+		RenderInfo & info;
+		castor::Point2f jitter;
+		SceneSPtr scene;
+		CameraSPtr camera;
+		uint32_t index{ 0u };
+	};
+
 	class RenderLoop
 		: public castor::OwnedBy< Engine >
 	{
@@ -228,6 +255,7 @@ namespace castor3d
 			RenderQueueArray queues;
 			ShadowMapLightTypeArray shadowMaps;
 		};
+
 		void doProcessEvents( EventType eventType );
 		void doGpuStep( RenderInfo & info );
 		void doCpuStep();
@@ -252,12 +280,17 @@ namespace castor3d
 		//!\~english	The pool used to update the render queues.
 		//!\~french		Le pool de mise à jour des files de rendu.
 		castor::ThreadPool m_queueUpdater;
-		//!\~english	The command buffer and semaphore used for UBO uploads.
-		//!\~french		Le command buffer et le semaphore utilisé pour l'upload des UBO.
-		CommandsSemaphore m_uploadCommand;
-		//!\~english	The fence and semaphore used for UBO uploads.
-		//!\~french		La fence et le semaphore utilisé pour l'upload des UBO.
-		ashes::FencePtr m_uploadFence;
+		struct UploadResources
+		{
+			//!\~english	The command buffer and semaphore used for UBO uploads.
+			//!\~french		Le command buffer et le semaphore utilisé pour l'upload des UBO.
+			CommandsSemaphore commands;
+			//!\~english	The fence and semaphore used for UBO uploads.
+			//!\~french		La fence et le semaphore utilisé pour l'upload des UBO.
+			ashes::FencePtr fence;
+		};
+		std::array< UploadResources, 2u > m_uploadResources;
+		uint32_t m_currentUpdate{ 0u };
 
 	private:
 		bool m_first = true;

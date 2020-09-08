@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_UniformBufferPools_HPP___
 
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
+#include "Castor3D/Buffer/UniformBufferPoolBase.hpp"
 
 namespace castor3d
 {
@@ -61,17 +62,28 @@ namespace castor3d
 		void putBuffer( UniformBufferOffsetT< DataT > const & bufferOffset );
 
 	private:
-		UniformBufferPoolT< MatrixUboConfiguration > m_matrixUboPool;
-		UniformBufferPoolT< HdrConfig > m_hdrConfigUboPool;
-		UniformBufferPoolT< RsmUboConfiguration > m_rsmConfigUboPool;
-		UniformBufferPoolT< ModelMatrixUboConfiguration > m_modelMatrixUboPool;
-		UniformBufferPoolT< ModelUboConfiguration > m_modelUboPool;
-		UniformBufferPoolT< BillboardUboConfiguration > m_billboardUboPool;
-		UniformBufferPoolT< PickingUboConfiguration > m_pickingUboPool;
-		UniformBufferPoolT< TexturesUboConfiguration > m_texturesUboPool;
-		UniformBufferPoolT< ShadowMapUboConfiguration > m_shadowMapUboPool;
-		UniformBufferPoolT< SkinningUboConfiguration > m_skinningUboPool;
-		UniformBufferPoolT< MorphingUboConfiguration > m_morphingUboPool;
+		enum class PoolType
+		{
+			eMatrix,
+			eModelMatrix,
+			eModel,
+			eBillboard,
+			eSkinning,
+			eMorphing,
+			ePicking,
+			eTextures,
+			eShadowMap,
+			eHdrConfig,
+			eRsmConfig,
+			eGeneric,
+			eCount,
+		};
+
+		template< typename DataT >
+		static PoolType getPoolType();
+
+	private:
+		std::array< UniformBufferPoolBase, size_t( PoolType::eCount ) > m_pools;
 	};
 }
 

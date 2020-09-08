@@ -6,6 +6,7 @@
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Background/Visitor.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
@@ -105,23 +106,25 @@ namespace castor3d
 		m_cmdCopy.reset();
 	}
 
-	void ColourBackground::doUpdate( Camera const & camera )
+	void ColourBackground::doCpuUpdate( CpuUpdater & updater )
 	{
 		auto & value = m_scene.getBackgroundColour();
 		m_colour = HdrRgbColour::fromComponents( value.red(), value.green(), value.blue() );
+		m_viewport.setPerspective( 45.0_degrees
+			, updater.camera->getRatio()
+			, 0.1f
+			, 2.0f );
+		m_viewport.update();
+		m_matrixUbo.cpuUpdate( updater.camera->getView()
+			, m_viewport.getProjection() );
+	}
 
+	void ColourBackground::doGpuUpdate( GpuUpdater & updater )
+	{
 		if ( m_colour.isDirty() )
 		{
 			doUpdateColour();
 		}
-
-		m_viewport.setPerspective( 45.0_degrees
-			, camera.getRatio()
-			, 0.1f
-			, 2.0f );
-		m_viewport.update();
-		m_matrixUbo.cpuUpdate( camera.getView()
-			, m_viewport.getProjection() );
 	}
 
 	void ColourBackground::doUpdateColour()

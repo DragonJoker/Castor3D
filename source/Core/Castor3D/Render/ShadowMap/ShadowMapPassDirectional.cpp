@@ -1,10 +1,12 @@
 #include "Castor3D/Render/ShadowMap/ShadowMapPassDirectional.hpp"
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
+#include "Castor3D/Buffer/PoolUniformBufferBase.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Material/Texture/TextureView.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/DirectionalLight.hpp"
@@ -56,18 +58,16 @@ namespace castor3d
 	{
 	}
 
-	bool ShadowMapPassDirectional::cpuUpdate( RenderQueueArray & queues
-		, Light & light
-		, uint32_t index )
+	bool ShadowMapPassDirectional::update( CpuUpdater & updater )
 	{
 		getCuller().compute();
-		doUpdate( queues );
-		m_shadowMapUbo.update( light, index );
+		doUpdate( *updater.queues );
+		m_shadowMapUbo.update( *updater.light, updater.index );
 		m_outOfDate = true;
 		return m_outOfDate;
 	}
 
-	void ShadowMapPassDirectional::gpuUpdate( uint32_t index )
+	void ShadowMapPassDirectional::update( GpuUpdater & updater )
 	{
 		if ( m_initialised )
 		{
@@ -169,19 +169,15 @@ namespace castor3d
 	void ShadowMapPassDirectional::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 		, BillboardListRenderNode & node )
 	{
-		node.uboDescriptorSet->createSizedBinding( layout.getBinding( ShadowMapUbo::BindingPoint )
-			, *m_shadowMapUbo.getUbo().buffer
-			, m_shadowMapUbo.getUbo().offset
-			, 1u );
+		m_shadowMapUbo.getUbo().createSizedBinding( *node.uboDescriptorSet
+			, layout.getBinding( ShadowMapUbo::BindingPoint ) );
 	}
 
 	void ShadowMapPassDirectional::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 		, SubmeshRenderNode & node )
 	{
-		node.uboDescriptorSet->createSizedBinding( layout.getBinding( ShadowMapUbo::BindingPoint )
-			, *m_shadowMapUbo.getUbo().buffer
-			, m_shadowMapUbo.getUbo().offset
-			, 1u );
+		m_shadowMapUbo.getUbo().createSizedBinding( *node.uboDescriptorSet
+			, layout.getBinding( ShadowMapUbo::BindingPoint ) );
 	}
 
 	void ShadowMapPassDirectional::doUpdate( RenderQueueArray & queues )

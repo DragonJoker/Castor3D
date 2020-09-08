@@ -2,6 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
+#include "Castor3D/Buffer/PoolUniformBufferBase.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
@@ -359,14 +360,10 @@ namespace castor3d
 
 		m_descriptorPool = m_descriptorLayout->createPool( "TextureProjection", 1u );
 		m_descriptorSet = m_descriptorPool->createDescriptorSet( "TextureProjection", 0u );
-		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 0u )
-			, *m_matrixUbo.getUbo().buffer
-			, m_matrixUbo.getUbo().offset
-			, 1u );
-		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 1u )
-			, *m_modelMatrixUbo.getUbo().buffer
-			, m_modelMatrixUbo.getUbo().offset
-			, 1u );
+		m_matrixUbo.getUbo().createSizedBinding( *m_descriptorSet
+			, m_descriptorLayout->getBinding( 0u ) );
+		m_modelMatrixUbo.getUbo().createSizedBinding( *m_descriptorSet
+			, m_descriptorLayout->getBinding( 1u ) );
 		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 2u )
 			, texture
 			, m_sampler->getSampler() );

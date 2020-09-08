@@ -3,10 +3,11 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
-#include "Castor3D/Render/Culling/DummyCuller.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Render/Culling/DummyCuller.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/PointLight.hpp"
@@ -91,17 +92,25 @@ namespace castor3d
 	{
 	}
 
-	void ShadowMapPoint::update( Camera const & camera
-		, RenderQueueArray & queues
-		, Light & light
-		, uint32_t index )
+	void ShadowMapPoint::update( CpuUpdater & updater )
 	{
-		m_passesData[index].shadowType = light.getShadowType();
+		m_passesData[updater.index].shadowType = updater.light->getShadowType();
 
-		for ( size_t face = index * 6u; face < ( index * 6u ) + 6u; ++face )
+		for ( size_t face = updater.index * 6u; face < ( updater.index * 6u ) + 6u; ++face )
 		{
 			auto & pass = m_passes[face];
-			pass.pass->cpuUpdate( queues, light, index );
+			pass.pass->update( updater );
+		}
+	}
+
+	void ShadowMapPoint::update( GpuUpdater & updater )
+	{
+		uint32_t offset = updater.index * 6u;
+
+		for ( uint32_t face = offset; face < offset + 6u; ++face )
+		{
+			updater.index = face - offset;
+			m_passes[face].pass->update( updater );
 		}
 	}
 
@@ -193,16 +202,6 @@ namespace castor3d
 	void ShadowMapPoint::doCleanup()
 	{
 		m_passesData.clear();
-	}
-
-	void ShadowMapPoint::updateDeviceDependent( uint32_t index )
-	{
-		uint32_t offset = index * 6u;
-
-		for ( uint32_t face = offset; face < offset + 6u; ++face )
-		{
-			m_passes[face].pass->gpuUpdate( face - offset );
-		}
 	}
 
 	ashes::Semaphore const & ShadowMapPoint::doRender( ashes::Semaphore const & toWait

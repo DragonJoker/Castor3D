@@ -2,6 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Culling/FrustumCuller.hpp"
@@ -96,17 +97,14 @@ namespace castor3d
 	{
 	}
 	
-	void ShadowMapSpot::update( Camera const & camera
-		, RenderQueueArray & queues
-		, Light & light
-		, uint32_t index )
+	void ShadowMapSpot::update( CpuUpdater & updater )
 	{
-		m_passes[index].pass->cpuUpdate( queues, light, index );
+		m_passes[updater.index].pass->update( updater );
 	}
 
-	void ShadowMapSpot::updateDeviceDependent( uint32_t index )
+	void ShadowMapSpot::update( GpuUpdater & updater )
 	{
-		m_passes[index].pass->gpuUpdate();
+		m_passes[updater.index].pass->update( updater );
 	}
 
 	void ShadowMapSpot::doInitialise()
