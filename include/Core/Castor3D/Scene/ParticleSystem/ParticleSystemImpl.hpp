@@ -101,10 +101,24 @@ namespace castor3d
 		 *\param[in]	index	L'indice de la passe de rendu.
 		 *\return		Le nombre de particules.
 		 */
-		C3D_API virtual uint32_t update( RenderPassTimer & timer
-			, castor::Milliseconds const & time
-			, castor::Milliseconds const & total
-			, uint32_t index ) = 0;
+		C3D_API virtual void update( CpuUpdater & updater ) = 0;
+		/**
+		 *\~english
+		 *\brief		Updates the particles.
+		 *\param[in]	timer	The render pass timer used for GPU timing.
+		 *\param[in]	time	The time elapsed since last update.
+		 *\param[in]	total	The total elapsed time.
+		 *\param[in]	index	The render pass index.
+		 *\return		The particles count.
+		 *\~french
+		 *\brief		Met à jour les particules.
+		 *\param[in]	timer	Le timer de passe de rendu utilisé pour le timing GPU.
+		 *\param[in]	time	Le temps écoulé depuis la dernière mise à jour.
+		 *\param[in]	total	Le temps total écoulé.
+		 *\param[in]	index	L'indice de la passe de rendu.
+		 *\return		Le nombre de particules.
+		 */
+		C3D_API virtual uint32_t update( GpuUpdater & updater ) = 0;
 		/**
 		 *\~english
 		 *\return		The implementation type.

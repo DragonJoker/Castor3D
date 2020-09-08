@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "UbosModule.hpp"
 
-#include "Castor3D/Buffer/UniformBuffer.hpp"
+#include "Castor3D/Buffer/UniformBufferOffset.hpp"
 
 namespace castor3d
 {
@@ -16,6 +16,7 @@ namespace castor3d
 		using Configuration = PickingUboConfiguration;
 		explicit PickingUbo( Engine & engine );
 		void initialise();
+		void cleanup();
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -29,6 +30,12 @@ namespace castor3d
 		C3D_API static void update( Configuration & configuration
 			, uint32_t drawIndex
 			, uint32_t nodeIndex );
+
+		void createSizedBinding( ashes::DescriptorSet & descriptorSet
+			, VkDescriptorSetLayoutBinding const & layoutBinding )const
+		{
+			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
+		}
 
 	public:
 		C3D_API static const uint32_t BindingPoint;
@@ -44,7 +51,7 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
-		UniformBufferUPtrT< Configuration > m_ubo;
+		UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }
 

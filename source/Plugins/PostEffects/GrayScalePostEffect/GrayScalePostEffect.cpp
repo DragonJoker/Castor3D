@@ -1,7 +1,7 @@
 #include "GrayScalePostEffect/GrayScalePostEffect.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Buffer/UniformBuffer.hpp>
+#include <Castor3D/Buffer/UniformBufferPools.hpp>
 #include <Castor3D/Buffer/GpuBuffer.hpp>
 #include <Castor3D/Cache/SamplerCache.hpp>
 #include <Castor3D/Cache/ShaderCache.hpp>
@@ -90,7 +90,7 @@ namespace grayscale
 	//*********************************************************************************************
 
 	PostEffect::Quad::Quad( castor3d::RenderSystem & renderSystem
-		, castor3d::UniformBufferT< castor::Point3f > const & configUbo )
+		, castor3d::UniformBufferOffsetT< castor::Point3f > const & configUbo )
 		: castor3d::RenderQuad{ renderSystem, cuT( "GrayScale" ), VK_FILTER_NEAREST, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
 		, m_configUbo{ configUbo }
 	{
@@ -99,8 +99,8 @@ namespace grayscale
 	void PostEffect::Quad::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
 		, ashes::DescriptorSet & descriptorSet )
 	{
-		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( 0u )
-			, m_configUbo );
+		m_configUbo.createSizedBinding( descriptorSet
+			, descriptorSetLayout.getBinding( 0u ) );
 	}
 
 	//*********************************************************************************************
@@ -133,12 +133,11 @@ namespace grayscale
 		return std::make_shared< PostEffect >( renderTarget, renderSystem, params );
 	}
 
-	void PostEffect::update( castor::Nanoseconds const & elapsedTime )
+	void PostEffect::update( castor3d::CpuUpdater & updater )
 	{
 		if ( m_factors.isDirty() )
 		{
-			m_configUbo->getData() = m_factors.value();
-			m_configUbo->upload();
+			m_configUbo.getData() = m_factors.value();
 			m_factors.reset();
 		}
 	}
@@ -165,13 +164,8 @@ namespace grayscale
 		stages.push_back( makeShaderState( device, m_vertexShader ) );
 		stages.push_back( makeShaderState( device, m_pixelShader ) );
 
-		m_configUbo = castor3d::makeUniformBuffer< castor::Point3f >( renderSystem
-			, 1u
-			, 0u
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, "GrayScaleUbo" );
-		m_configUbo->getData() = m_factors.value();
-		m_configUbo->upload();
+		m_configUbo = renderSystem.getEngine()->getUboPools().getBuffer< castor::Point3f >( 0u );
+		m_configUbo.getData() = m_factors.value();
 		m_factors.reset();
 
 		// Create the render pass.
@@ -237,7 +231,7 @@ namespace grayscale
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, VK_SHADER_STAGE_FRAGMENT_BIT )
 		};
-		m_quad = std::make_unique< Quad >( renderSystem, *m_configUbo );
+		m_quad = std::make_unique< Quad >( renderSystem, m_configUbo );
 		m_quad->createPipeline( size
 			, castor::Position{}
 			, stages
@@ -287,7 +281,8 @@ namespace grayscale
 		m_quad.reset();
 		m_renderPass.reset();
 		m_surface.cleanup();
-		m_configUbo.reset();
+		auto & renderSystem = *getRenderSystem();
+		renderSystem.getEngine()->getUboPools().putBuffer( m_configUbo );
 	}
 
 	bool PostEffect::doWriteInto( castor::TextFile & file, castor::String const & tabs )

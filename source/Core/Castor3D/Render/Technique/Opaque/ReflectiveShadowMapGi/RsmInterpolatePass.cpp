@@ -7,6 +7,8 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
+#include "Castor3D/Render/RenderPassTimer.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapResult.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightPassResult.hpp"
@@ -624,13 +626,13 @@ namespace castor3d
 	void RsmInterpolatePass::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
 		, ashes::DescriptorSet & descriptorSet )
 	{
-		m_rsmConfigUbo.getUbo().createSizedBinding( descriptorSet
+		m_rsmConfigUbo.createSizedBinding( descriptorSet
 			, descriptorSetLayout.getBinding( RsmCfgUboIdx ) );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( RsmSamplesIdx )
 			, m_rsmSamplesSsbo.getBuffer()
 			, 0u
 			, uint32_t( m_rsmSamplesSsbo.getMemoryRequirements().size ) );
-		m_gpInfo.getUbo().createSizedBinding( descriptorSet
+		m_gpInfo.createSizedBinding( descriptorSet
 			, descriptorSetLayout.getBinding( GpInfoUboIdx ) );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( LightsMapIdx )
 			, m_lightCache.getBuffer()

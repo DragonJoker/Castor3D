@@ -31,7 +31,7 @@ namespace smaa
 		/**
 		*\copydoc		castor3d::PostEffect::update
 		*/
-		void update( castor::Nanoseconds const & elapsedTime )override;
+		void update( castor3d::CpuUpdater & updater )override;
 		/**
 		 *\copydoc		castor3d::PostEffect::accept
 		 */

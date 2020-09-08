@@ -36,7 +36,7 @@ namespace castor3d
 		 *\param[in]	renderSystem	Le RenderSystem.
 		 *\param[in]	debugName		Le nom debug du tampon.
 		 */
-		UniformBufferPoolBase( RenderSystem & renderSystem
+		C3D_API UniformBufferPoolBase( RenderSystem & renderSystem
 			, castor::String debugName );
 		/**
 		 *\~english
@@ -44,21 +44,21 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		~UniformBufferPoolBase();
+		C3D_API ~UniformBufferPoolBase();
 		/**
 		 *\~english
 		 *\brief		Cleans up all GPU buffers.
 		 *\~french
 		 *\brief		Nettoie tous les tampons GPU.
 		 */
-		void cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Uploads all GPU buffers to VRAM.
 		 *\~french
 		 *\brief		Met à jour tous les tampons GPU en VRAM.
 		 */
-		void upload( ashes::CommandBuffer const & cb )const;
+		C3D_API void upload( ashes::CommandBuffer const & cb )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves a uniform buffer.
@@ -87,13 +87,13 @@ namespace castor3d
 		 *\~french
 		 *\return		Le nombre de tampons du pool.
 		 */
-		uint32_t getBufferCount()const;
+		C3D_API uint32_t getBufferCount()const;
 
 	private:
-		BufferArray::iterator doFindBuffer( BufferArray & array
+		C3D_API BufferArray::iterator doFindBuffer( BufferArray & array
 			, VkDeviceSize alignedSize );
-		void doCreateStagingBuffer();
-		BufferArray::iterator doCreatePoolBuffer( VkMemoryPropertyFlags flags
+		C3D_API void doCreateStagingBuffer();
+		C3D_API BufferArray::iterator doCreatePoolBuffer( VkMemoryPropertyFlags flags
 			, UniformBufferPoolBase::BufferArray & buffers );
 
 	private:

@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include <Castor3D/Castor3DModule.hpp>
 
-#include <Castor3D/Buffer/UniformBuffer.hpp>
+#include <Castor3D/Buffer/UniformBufferOffset.hpp>
 
 namespace light_streaks
 {
@@ -30,11 +30,22 @@ namespace light_streaks
 			, VkExtent2D const & size
 			, castor::Point2f const & direction
 			, uint32_t pass );
-		void upload();
 
-		inline castor3d::UniformBufferT< Configuration > & getUbo()
+		castor3d::UniformBufferOffsetT< Configuration > const & getUbo( uint32_t index )const
 		{
-			return *m_ubo;
+			return m_ubo[index];
+		}
+
+		castor3d::UniformBufferOffsetT< Configuration > & getUbo( uint32_t index )
+		{
+			return m_ubo[index];
+		}
+
+		void createSizedBinding( ashes::DescriptorSet & descriptorSet
+			, VkDescriptorSetLayoutBinding const & layoutBinding
+			, uint32_t index )const
+		{
+			return m_ubo[index].createSizedBinding( descriptorSet, layoutBinding );
 		}
 
 	public:
@@ -47,7 +58,7 @@ namespace light_streaks
 
 	private:
 		castor3d::Engine & m_engine;
-		castor3d::UniformBufferUPtrT< Configuration > m_ubo;
+		std::vector< castor3d::UniformBufferOffsetT< Configuration > > m_ubo;
 	};
 }
 

@@ -305,7 +305,7 @@ namespace smaa
 		}
 	}
 
-	void PostEffect::update( castor::Nanoseconds const & elapsedTime )
+	void PostEffect::update( castor3d::CpuUpdater & updater )
 	{
 		if ( m_config.maxSubsampleIndices > 1u )
 		{
@@ -316,7 +316,7 @@ namespace smaa
 
 		if ( m_blendingWeightCalculation )
 		{
-			m_blendingWeightCalculation->update( m_config.subsampleIndices[m_config.subsampleIndex] );
+			m_blendingWeightCalculation->cpuUpdate( m_config.subsampleIndices[m_config.subsampleIndex] );
 			m_config.subsampleIndex = m_frameIndex;
 			m_renderTarget.setJitter( m_config.jitters[m_config.subsampleIndex] );
 		}

@@ -38,11 +38,13 @@ namespace castor3d
 		m_transparentPass.initialise( m_size );
 	}
 
+	void WeightedBlendRendering::update( CpuUpdater & updater )
+	{
+		m_transparentPass.update( updater );
+	}
+
 	void WeightedBlendRendering::update( GpuUpdater & updater )
 	{
-		auto & scene = *updater.scene;
-		auto & camera = *updater.camera;
-		m_transparentPass.getSceneUbo().gpuUpdate( scene, &camera );
 		m_transparentPass.update( updater );
 	}
 

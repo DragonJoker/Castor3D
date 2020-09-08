@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "PassesModule.hpp"
 
-#include "Castor3D/Buffer/UniformBuffer.hpp"
+#include "Castor3D/Buffer/UniformBufferOffset.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
@@ -66,17 +66,21 @@ namespace castor3d
 		 *\brief		Met à jour les informations de clipping.
 		 *\param[in]	viewport	Le viewport contenant les données de clipping.
 		 */
-		C3D_API void update( Viewport const & viewport
-			, ashes::CommandBuffer * cb );
+		C3D_API void cpuUpdate( Viewport const & viewport );
 		/**
 		 *\~english
 		 *\brief		Updates clipping info.
-		 *\param[in]	viewport	The viewport containing the clipping data.
 		 *\~french
 		 *\brief		Met à jour les informations de clipping.
-		 *\param[in]	viewport	Le viewport contenant les données de clipping.
 		 */
-		C3D_API void update( Viewport const & viewport );
+		C3D_API void gpuUpdate( ashes::CommandBuffer * cb );
+		/**
+		 *\~english
+		 *\brief		Updates clipping info.
+		 *\~french
+		 *\brief		Met à jour les informations de clipping.
+		 */
+		C3D_API void gpuUpdate();
 		/**
 		 *\~english
 		 *\brief		Linearises depth buffer.
@@ -169,7 +173,7 @@ namespace castor3d
 		ashes::DescriptorSetPtr m_lineariseDescriptor;
 		ashes::FrameBufferPtr m_lineariseFrameBuffer;
 		ashes::GraphicsPipelinePtr m_linearisePipeline;
-		UniformBufferUPtrT< castor::Point3f > m_clipInfo;
+		UniformBufferOffsetT< castor::Point3f > m_clipInfo;
 		castor::ChangeTracked< castor::Point3f > m_clipInfoValue;
 		/**@}*/
 		/**
@@ -191,7 +195,7 @@ namespace castor3d
 			ashes::GraphicsPipelinePtr pipeline;
 		};
 
-		UniformBufferUPtrT< MinifyConfiguration > m_previousLevel;
+		std::vector< UniformBufferOffsetT< MinifyConfiguration > > m_previousLevel;
 		ShaderModule m_minifyVertexShader;
 		ShaderModule m_minifyPixelShader;
 		Layout m_minifyLayout;

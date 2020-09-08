@@ -1,6 +1,7 @@
 #include "Castor3D/Shader/Ubos/LayeredLpvConfigUbo.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
 namespace castor3d
@@ -13,19 +14,15 @@ namespace castor3d
 
 	LayeredLpvConfigUbo::LayeredLpvConfigUbo( Engine & engine )
 		: m_engine{ engine }
-		, m_ubo{ makeUniformBuffer< Configuration >( *m_engine.getRenderSystem()
-			, 1u
-			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, "LayeredLpvConfigUbo" ) }
+		, m_ubo{ m_engine.getUboPools().getBuffer< Configuration >( 0u ) }
 	{
 	}
 
-	void LayeredLpvConfigUbo::update( std::array< castor::Grid, shader::DirectionalMaxCascadesCount > const & grids
+	void LayeredLpvConfigUbo::cpuUpdate( std::array< castor::Grid, shader::DirectionalMaxCascadesCount > const & grids
 		, float indirectAttenuation )
 	{
 		CU_Require( m_ubo );
-		auto & data = m_ubo->getData();
+		auto & data = m_ubo.getData();
 
 		for ( auto i = 0u; i < grids.size(); ++i )
 		{
@@ -37,6 +34,5 @@ namespace castor3d
 		auto dim = grids[0].getDimensions();
 		data.gridSize = castor::Point4ui{ dim->x, dim->y, dim->z, 0u };
 		data.config = castor::Point4f{ indirectAttenuation, 0.0f, 0.0f, 0.0f };
-		m_ubo->upload();
 	}
 }

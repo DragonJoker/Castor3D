@@ -1,5 +1,9 @@
 #include "Castor3D/Scene/ParticleSystem/CpuParticleSystem.hpp"
 
+#include "Castor3D/Render/RenderDevice.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
+#include "Castor3D/Scene/BillboardList.hpp"
+#include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleEmitter.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleUpdater.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
@@ -19,6 +23,7 @@ namespace castor3d
 
 	bool CpuParticleSystem::initialise()
 	{
+		m_firstUnused = 1u;
 		m_particles.reserve( m_parent.getMaxParticlesCount() );
 		auto & defaultValues = m_parent.getDefaultValues();
 
@@ -36,6 +41,43 @@ namespace castor3d
 		m_particles.clear();
 		m_emitters.clear();
 		m_updaters.clear();
+		m_firstUnused = 1u;
+	}
+
+	void CpuParticleSystem::update( castor3d::CpuUpdater & updater )
+	{
+		auto firstUnused = m_firstUnused;
+
+		for ( auto i = 0u; i < firstUnused; ++i )
+		{
+			m_updaters.front()->update( updater.time
+				, m_particles[i] );
+		}
+
+		doPackParticles();
+	}
+
+	uint32_t CpuParticleSystem::update( castor3d::GpuUpdater & updater )
+	{
+		auto & device = getCurrentRenderDevice( *m_parent.getParent()->getScene() );
+		auto & vbo = m_parent.getBillboards()->getVertexBuffer();
+		VkDeviceSize stride = m_inputs.stride();
+		auto mappedSize = ashes::getAlignedSize( VkDeviceSize( m_firstUnused * stride )
+			, device.properties.limits.nonCoherentAtomSize );
+
+		if ( auto dst = vbo.getBuffer().lock( 0u, mappedSize, 0u ) )
+		{
+			for ( auto i = 0u; i < m_firstUnused; ++i )
+			{
+				std::memcpy( dst, m_particles[i].getData(), stride );
+				dst += stride;
+			}
+
+			vbo.getBuffer().flush( 0u, mappedSize );
+			vbo.getBuffer().unlock();
+		}
+
+		return m_firstUnused;
 	}
 
 	void CpuParticleSystem::addParticleVariable( castor::String const & name, ParticleFormat type, castor::String const & defaultValue )
@@ -45,6 +87,7 @@ namespace castor3d
 
 	void CpuParticleSystem::onEmit( Particle const & particle )
 	{
+		m_particles[m_firstUnused++] = particle;
 		doOnEmit( particle );
 	}
 

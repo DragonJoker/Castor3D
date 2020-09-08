@@ -60,6 +60,21 @@ namespace castor3d
 		 *\param[in]	camera		La caméra par laquelle la scène est rendue.
 		 *\param[in]	jitter		La valeur de jittering.
 		 */
+		void update( CpuUpdater & updater );
+		/**
+		 *\~english
+		 *\brief		Renders opaque nodes.
+		 *\param[out]	info		Receives the render informations.
+		 *\param[in]	scene		The rendered scene.
+		 *\param[in]	camera		The viewer camera.
+		 *\param[in]	jitter		The jittering value.
+		 *\~french
+		 *\brief		Dessine les noeuds opaques.
+		 *\param[out]	info		Reçoit les informations de rendu.
+		 *\param[in]	scene		La scène rendue.
+		 *\param[in]	camera		La caméra par laquelle la scène est rendue.
+		 *\param[in]	jitter		La valeur de jittering.
+		 */
 		void update( GpuUpdater & updater );
 		/**
 		 *\~english

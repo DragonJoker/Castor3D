@@ -1430,8 +1430,7 @@ namespace castor3d
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
-	void TransparentPass::doUpdatePipeline( RenderPipeline & pipeline )const
+	void TransparentPass::doUpdatePipeline( RenderPipeline & pipeline )
 	{
-		m_sceneUbo.gpuUpdate( *m_camera->getScene(), m_camera, true );
 	}
 }

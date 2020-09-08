@@ -129,7 +129,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
 		 */
-		C3D_API void doUpdatePipeline( RenderPipeline & pipeline )const override;
+		C3D_API void doUpdatePipeline( RenderPipeline & pipeline )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
 		 */

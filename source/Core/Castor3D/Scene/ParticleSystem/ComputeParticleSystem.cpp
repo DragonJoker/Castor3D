@@ -1,8 +1,10 @@
 #include "Castor3D/Scene/ParticleSystem/ComputeParticleSystem.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
@@ -59,12 +61,8 @@ namespace castor3d
 		if ( result )
 		{
 			auto & device = getCurrentRenderDevice( getParent() );
-			m_ubo = makeUniformBuffer< Configuration >( *getParent().getScene()->getEngine()->getRenderSystem()
-				, 1u
-				, VK_BUFFER_USAGE_TRANSFER_DST_BIT
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, "ComputeParticleSystemUbo" );
-			m_ubo->getData( 0u ).maxParticleCount = uint32_t( m_parent.getMaxParticlesCount() );
+			m_ubo = device.renderSystem.getEngine()->getUboPools().getBuffer< Configuration >( 0u );
+			m_ubo.getData().maxParticleCount = uint32_t( m_parent.getMaxParticlesCount() );
 		}
 
 		if ( result )
@@ -113,22 +111,22 @@ namespace castor3d
 		}
 
 		m_generatedCountBuffer.reset();
-		m_ubo.reset();
+		getParent().getScene()->getEngine()->getUboPools().putBuffer( m_ubo );
 	}
 
-	uint32_t ComputeParticleSystem::update( RenderPassTimer & timer
-		, Milliseconds const & time
-		, Milliseconds const & totalTime
-		, uint32_t index )
+	void ComputeParticleSystem::update( CpuUpdater & updater )
+	{
+	}
+
+	uint32_t ComputeParticleSystem::update( GpuUpdater & updater )
 	{
 		auto & device = getCurrentRenderDevice( *this );
-		auto & data = m_ubo->getData( 0u );
-		data.deltaTime = float( time.count() );
-		data.time = float( totalTime.count() );
+		auto & data = m_ubo.getData();
+		data.deltaTime = float( updater.time.count() );
+		data.time = float( updater.total.count() );
 		auto particlesCount = std::max( 1u, m_particlesCount );
 		data.currentParticleCount = particlesCount;
 		data.emitterPosition = m_parent.getParent()->getDerivedPosition();
-		m_ubo->upload( 0u );
 
 		uint32_t counts[]{ 0u, 0u };
 
@@ -141,7 +139,7 @@ namespace castor3d
 		}
 
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-		timer.beginPass( *m_commandBuffer, index + 0u );
+		updater.timer->beginPass( *m_commandBuffer, updater.index + 0u );
 		// Put buffers in appropriate state for compute
 		auto flags = m_generatedCountBuffer->getBuffer().getCompatibleStageFlags();
 		m_commandBuffer->memoryBarrier( flags
@@ -175,11 +173,11 @@ namespace castor3d
 		m_commandBuffer->memoryBarrier( flags
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
 			, m_particlesStorages[m_out]->getBuffer().makeTransferSource() );
-		timer.endPass( *m_commandBuffer, index + 0u );
+		updater.timer->endPass( *m_commandBuffer, updater.index + 0u );
 		m_commandBuffer->end();
 
 		device.computeQueue->submit( *m_commandBuffer, m_fence.get() );
-		timer.notifyPassRender( index + 0u );
+		updater.timer->notifyPassRender( updater.index + 0u );
 		m_fence->wait( ashes::MaxTimeout );
 		m_fence->reset();
 		m_commandBuffer->reset();
@@ -195,7 +193,7 @@ namespace castor3d
 		if ( m_particlesCount )
 		{
 			m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-			timer.beginPass( *m_commandBuffer, index + 1u );
+			updater.timer->beginPass( *m_commandBuffer, updater.index + 1u );
 			// Copy output storage to billboard's vertex buffer
 			auto flags = m_parent.getBillboards()->getVertexBuffer().getBuffer().getCompatibleStageFlags();
 			m_commandBuffer->memoryBarrier( flags
@@ -208,12 +206,12 @@ namespace castor3d
 			m_commandBuffer->memoryBarrier( flags
 				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT
 				, m_parent.getBillboards()->getVertexBuffer().getBuffer().makeVertexShaderInputResource() );
-			timer.endPass( *m_commandBuffer, index + 1u );
+			updater.timer->endPass( *m_commandBuffer, updater.index + 1u );
 			m_commandBuffer->end();
 
 			m_fence->reset();
 			device.computeQueue->submit( *m_commandBuffer, m_fence.get() );
-			timer.notifyPassRender( index + 1u );
+			updater.timer->notifyPassRender( updater.index + 1u );
 			m_fence->wait( ashes::MaxTimeout );
 			m_fence->reset();
 
@@ -363,10 +361,8 @@ namespace castor3d
 				, *m_particlesStorages[outIndex]
 				, 0u
 				, uint32_t( m_particlesStorages[outIndex]->getCount() ) );
-			descriptorSet.createSizedBinding( m_descriptorLayout->getBinding( ParticleSystemBufferBinding )
-				, m_ubo->getBuffer()
-				, 0u
-				, 1u );
+			m_ubo.createSizedBinding( descriptorSet
+				, m_descriptorLayout->getBinding( ParticleSystemBufferBinding ) );
 			descriptorSet.update();
 		};
 

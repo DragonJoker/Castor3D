@@ -271,11 +271,11 @@ namespace castor3d
 				{
 					castor::Grid levelGrid{ grid, directional.getSplitScale( i ), i };
 					levelGrid.transform( m_cameraPos, m_cameraDir );
-					m_lpvConfigUbos[i].update( levelGrid, light, i );
+					m_lpvConfigUbos[i].cpuUpdate( levelGrid, light, i );
 					grids[i] = levelGrid;
 				}
 
-				m_lpvConfigUbo.update( grids );
+				m_lpvConfigUbo.cpuUpdate( grids );
 			}
 		}
 

@@ -366,6 +366,16 @@ namespace castor3d
 		m_culler->compute();
 
 		m_hdrConfigUbo.cpuUpdate( m_hdrConfig );
+
+		for ( auto effect : m_hdrPostEffects )
+		{
+			effect->update( updater );
+		}
+
+		for ( auto effect : m_srgbPostEffects )
+		{
+			effect->update( updater );
+		}
 	}
 
 	void RenderTarget::update( GpuUpdater & updater )
@@ -378,6 +388,16 @@ namespace castor3d
 		m_toneMapping->update( updater );
 		m_renderTechnique->update( updater );
 		m_overlayRenderer->update( updater );
+
+		for ( auto effect : m_hdrPostEffects )
+		{
+			effect->update( updater );
+		}
+
+		for ( auto effect : m_srgbPostEffects )
+		{
+			effect->update( updater );
+		}
 	}
 
 	void RenderTarget::render( RenderInfo & info )
@@ -863,7 +883,6 @@ namespace castor3d
 			for ( auto effect : effects )
 			{
 				auto timerBlock = effect->start();
-				effect->update( elapsedTime );
 
 				for ( auto & commands : effect->getCommands() )
 				{

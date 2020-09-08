@@ -29,6 +29,9 @@ namespace castor3d
 		SceneNode const * node{ nullptr };
 		LightSPtr light;
 		uint32_t index{ 0u };
+		castor::Point2f jitter;
+		castor::Milliseconds time;
+		castor::Milliseconds total;
 	};
 
 	struct GpuUpdater
@@ -43,6 +46,9 @@ namespace castor3d
 		SceneSPtr scene;
 		CameraSPtr camera;
 		uint32_t index{ 0u };
+		RenderPassTimer * timer{ nullptr };
+		castor::Milliseconds time;
+		castor::Milliseconds total;
 	};
 
 	class RenderLoop

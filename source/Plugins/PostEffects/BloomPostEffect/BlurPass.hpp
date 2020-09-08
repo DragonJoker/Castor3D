@@ -9,6 +9,9 @@ See LICENSE file in root folder
 
 namespace Bloom
 {
+	using UboOffset = castor3d::UniformBufferOffsetT< castor3d::GaussianBlur::Configuration >;
+	using UboOffsetArray = std::vector< UboOffset >;
+
 	class BlurPass
 	{
 	public:
@@ -49,7 +52,7 @@ namespace Bloom
 				, VkExtent2D dimensions
 				, castor3d::ShaderModule const & vertexShader
 				, castor3d::ShaderModule const & pixelShader
-				, castor3d::UniformBufferT< castor3d::GaussianBlur::Configuration > const & blurUbo
+				, castor3d::UniformBufferOffsetT< castor3d::GaussianBlur::Configuration > const & blurUbo
 				, uint32_t index );
 
 			ashes::FrameBufferPtr frameBuffer;
@@ -62,7 +65,7 @@ namespace Bloom
 		castor3d::RenderDevice const & m_device;
 		uint32_t m_blurKernelSize;
 		uint32_t m_blurPassesCount;
-		castor3d::UniformBufferUPtrT< castor3d::GaussianBlur::Configuration > m_blurUbo;
+		UboOffsetArray m_blurUbo;
 		ashes::RenderPassPtr m_renderPass;
 		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
 		ashes::PipelineLayoutPtr m_pipelineLayout;

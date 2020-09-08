@@ -5,7 +5,7 @@
 #include "SmaaPostEffect/SmaaUbo.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Buffer/UniformBuffer.hpp>
+#include <Castor3D/Buffer/UniformBufferPools.hpp>
 #include <Castor3D/Material/Texture/Sampler.hpp>
 #include <Castor3D/Material/Texture/TextureLayout.hpp>
 #include <Castor3D/Render/RenderPassTimer.hpp>
@@ -877,11 +877,7 @@ namespace smaa
 		VkExtent2D size{ m_edgeDetectionView.image->getDimensions().width
 			, m_edgeDetectionView.image->getDimensions().height };
 
-		m_ubo = castor3d::makeUniformBuffer< castor::Point4f >( m_renderSystem
-			, 1u
-			, 0u
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, getName() );
+		m_ubo = m_renderSystem.getEngine()->getUboPools().getBuffer< castor::Point4f >( 0u );
 		
 		ashes::ImageCreateInfo image
 		{
@@ -1037,8 +1033,7 @@ namespace smaa
 		m_searchTex.reset();
 		m_areaTex->cleanup();
 		m_areaTex.reset();
-		m_ubo->cleanup();
-		m_ubo.reset();
+		m_renderSystem.getEngine()->getUboPools().putBuffer( m_ubo );
 		m_pointSampler.reset();
 		m_surface.cleanup();
 		m_renderPass.reset();;
@@ -1089,18 +1084,17 @@ namespace smaa
 		visitor.visit( m_pixelShader );
 	}
 
-	void BlendingWeightCalculation::update( castor::Point4f const & subsampleIndices )
+	void BlendingWeightCalculation::cpuUpdate( castor::Point4f const & subsampleIndices )
 	{
-		auto & data = m_ubo->getData();
+		auto & data = m_ubo.getData();
 		data = subsampleIndices;
-		m_ubo->upload();
 	}
 
 	void BlendingWeightCalculation::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
 		, ashes::DescriptorSet & descriptorSet )
 	{
-		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( 0u )
-			, *m_ubo );
+		m_ubo.createSizedBinding( descriptorSet
+			, descriptorSetLayout.getBinding( 0u ) );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 1u )
 			, m_areaTex->getDefaultView().getSampledView()
 			, m_sampler->getSampler() );

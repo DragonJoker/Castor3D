@@ -111,7 +111,7 @@ namespace castor3d
 	void ToneMapping::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
 		, ashes::DescriptorSet & descriptorSet )
 	{
-		m_hdrConfigUbo.getUbo().createSizedBinding( descriptorSet
+		m_hdrConfigUbo.createSizedBinding( descriptorSet
 			, descriptorSetLayout.getBinding( 0u ) );
 	}
 }

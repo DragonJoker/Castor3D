@@ -134,7 +134,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::getGeometryShaderSource
 		 */
-		void doUpdatePipeline( RenderPipeline & pipeline )const override;
+		void doUpdatePipeline( RenderPipeline & pipeline )override;
 
 	protected:
 		ShadowMap const & m_shadowMap;

@@ -8,13 +8,14 @@
 #include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapDirectional.hpp"
+#include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/DirectionalLight.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 #include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp"
-#include "Castor3D/Render/ShadowMap/ShadowMapDirectional.hpp"
-#include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslMetallicBrdfLighting.hpp"
@@ -169,14 +170,14 @@ namespace castor3d
 	void ShadowMapPassDirectional::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 		, BillboardListRenderNode & node )
 	{
-		m_shadowMapUbo.getUbo().createSizedBinding( *node.uboDescriptorSet
+		m_shadowMapUbo.createSizedBinding( *node.uboDescriptorSet
 			, layout.getBinding( ShadowMapUbo::BindingPoint ) );
 	}
 
 	void ShadowMapPassDirectional::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 		, SubmeshRenderNode & node )
 	{
-		m_shadowMapUbo.getUbo().createSizedBinding( *node.uboDescriptorSet
+		m_shadowMapUbo.createSizedBinding( *node.uboDescriptorSet
 			, layout.getBinding( ShadowMapUbo::BindingPoint ) );
 	}
 

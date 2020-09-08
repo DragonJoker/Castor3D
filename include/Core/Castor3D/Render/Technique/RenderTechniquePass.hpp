@@ -142,7 +142,7 @@ namespace castor3d
 		 */
 		C3D_API virtual void doUpdateNodes( SceneCulledRenderNodes & nodes
 			, castor::Point2f const & jitter
-			, RenderInfo & info )const;
+			, RenderInfo & info );
 		/**
 		 *\copydoc		castor3d::RenderPass::doInitialise
 		 */
@@ -191,7 +191,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
 		 */
-		C3D_API void doUpdatePipeline( RenderPipeline & pipeline )const override;
+		C3D_API void doUpdatePipeline( RenderPipeline & pipeline )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateDepthStencilState
 		 */

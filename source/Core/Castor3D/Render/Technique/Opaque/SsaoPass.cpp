@@ -5,6 +5,7 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/Ssao/SsaoBlurPass.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfigUbo.hpp"
@@ -77,12 +78,12 @@ namespace castor3d
 		m_matrixUbo.cleanup();
 	}
 
-	void SsaoPass::update( Camera const & camera )
+	void SsaoPass::update( CpuUpdater & updater )
 	{
-		m_ssaoConfigUbo->update( m_ssaoConfig, camera );
+		m_ssaoConfigUbo->cpuUpdate( m_ssaoConfig, *updater.camera );
 #if !C3D_DebugRawPass
-		m_horizontalBlur->update();
-		m_verticalBlur->update();
+		m_horizontalBlur->update( updater );
+		m_verticalBlur->update( updater );
 #endif
 		m_ssaoConfig.blurRadius.reset();
 	}

@@ -452,7 +452,7 @@ namespace castor3d
 			, ashes::DescriptorSetPool & descriptorSetPool
 			, LightCache const & lightCache
 			, ShadowMapResult const & smResult
-			, UniformBufferT< LpvConfigUboConfiguration > const & ubo
+			, UniformBufferOffsetT< LpvConfigUboConfiguration > const & ubo
 			, GpInfoUbo const & gpInfoUbo
 			, LightVolumePassResult const & lpvResult )
 		{
@@ -470,9 +470,9 @@ namespace castor3d
 			result->createBinding( descriptorSetLayout.getBinding( RsmFluxIdx )
 				, smResult[SmTexture::eFlux].getTexture()->getDefaultView().getSampledView()
 				, smResult[SmTexture::eFlux].getSampler()->getSampler() );
-			result->createSizedBinding( descriptorSetLayout.getBinding( LIUboIdx )
-				, ubo );
-			gpInfoUbo.getUbo().createSizedBinding( *result
+			ubo.createSizedBinding( *result
+				, descriptorSetLayout.getBinding( LIUboIdx ) );
+			gpInfoUbo.createSizedBinding( *result
 				, descriptorSetLayout.getBinding( GpUboIdx ) );
 			result->update();
 			return result;

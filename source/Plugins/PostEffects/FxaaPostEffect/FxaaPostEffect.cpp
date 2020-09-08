@@ -157,11 +157,11 @@ namespace fxaa
 	{
 	}
 
-	void RenderQuad::update( float subpixShift
+	void RenderQuad::cpuUpdate( float subpixShift
 		, float spanMax
 		, float reduceMul )
 	{
-		m_fxaaUbo.update( subpixShift
+		m_fxaaUbo.cpuUpdate( subpixShift
 			, spanMax
 			, reduceMul );
 	}
@@ -169,8 +169,8 @@ namespace fxaa
 	void RenderQuad::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
 		, ashes::DescriptorSet & descriptorSet )
 	{
-		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( 0u )
-			, m_fxaaUbo.getUbo() );
+		m_fxaaUbo.createSizedBinding( descriptorSet
+			, descriptorSetLayout.getBinding( 0u ) );
 	}
 
 	//*********************************************************************************************
@@ -257,13 +257,13 @@ namespace fxaa
 			, m_reduceMul );
 	}
 
-	void PostEffect::update( castor::Nanoseconds const & elapsedTime )
+	void PostEffect::update( castor3d::CpuUpdater & updater )
 	{
 		if ( m_subpixShift.isDirty()
 			|| m_spanMax.isDirty()
 			|| m_reduceMul.isDirty() )
 		{
-			m_fxaaQuad->update( m_subpixShift
+			m_fxaaQuad->cpuUpdate( m_subpixShift
 				, m_spanMax
 				, m_reduceMul );
 			m_subpixShift.reset();
@@ -398,7 +398,7 @@ namespace fxaa
 			m_commands.emplace_back( std::move( commands ) );
 		}
 
-		m_fxaaQuad->update( m_subpixShift
+		m_fxaaQuad->cpuUpdate( m_subpixShift
 			, m_spanMax
 			, m_reduceMul );
 		m_subpixShift.reset();

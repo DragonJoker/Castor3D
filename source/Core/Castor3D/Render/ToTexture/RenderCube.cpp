@@ -1,6 +1,7 @@
 #include "Castor3D/Render/ToTexture/RenderCube.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
@@ -62,18 +63,13 @@ namespace castor3d
 			return sampler;
 		}
 
-		UniformBufferUPtrT< castor::Matrix4x4f > doCreateMatrixUbo( RenderDevice const & device
+		std::array< UniformBufferOffsetT< castor::Matrix4x4f >, 6u > doCreateMatrixUbo( RenderDevice const & device
 			, ashes::Queue const & queue
 			, ashes::CommandPool const & pool
 			, bool srcIsCube )
 		{
 			static castor::Matrix4x4f const projection = convert( device->perspective( float( 90.0_degrees ), 1.0f, 0.1f, 10.0f ) );
 
-			auto result = makeUniformBuffer< castor::Matrix4x4f >( device.renderSystem
-				, 6u
-				, VK_BUFFER_USAGE_TRANSFER_DST_BIT
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, "RenderCubeMatrix" );
 			static std::array< castor::Matrix4x4f, 6u > const views = [&device]()
 			{
 				std::array< castor::Matrix4x4f, 6u > result
@@ -88,20 +84,21 @@ namespace castor3d
 				return result;
 			}();
 
-			result->getData( 0u ) = projection * views[0];
-			result->getData( 1u ) = projection * views[1];
-			result->getData( 2u ) = projection * views[2];
-			result->getData( 3u ) = projection * views[3];
-			result->getData( 4u ) = projection * views[4];
-			result->getData( 5u ) = projection * views[5];
-
-			ashes::StagingBuffer stagingBuffer{ *device.device
-				, VK_BUFFER_USAGE_TRANSFER_SRC_BIT
-				, 6ull * result->getAlignedSize() };
-			stagingBuffer.uploadUniformData( queue
-				, pool
-				, result->getDatas()
-				, *result );
+			std::array< UniformBufferOffsetT< castor::Matrix4x4f >, 6u > result
+			{
+				device.renderSystem.getEngine()->getUboPools().getBuffer< castor::Matrix4x4f >( 0u ),
+				device.renderSystem.getEngine()->getUboPools().getBuffer< castor::Matrix4x4f >( 0u ),
+				device.renderSystem.getEngine()->getUboPools().getBuffer< castor::Matrix4x4f >( 0u ),
+				device.renderSystem.getEngine()->getUboPools().getBuffer< castor::Matrix4x4f >( 0u ),
+				device.renderSystem.getEngine()->getUboPools().getBuffer< castor::Matrix4x4f >( 0u ),
+				device.renderSystem.getEngine()->getUboPools().getBuffer< castor::Matrix4x4f >( 0u ),
+			};
+			result[0u].getData() = projection * views[0];
+			result[1u].getData() = projection * views[1];
+			result[2u].getData() = projection * views[2];
+			result[3u].getData() = projection * views[3];
+			result[4u].getData() = projection * views[4];
+			result[5u].getData() = projection * views[5];
 			return result;
 		}
 
@@ -234,10 +231,8 @@ namespace castor3d
 					renderPass,
 				} );
 			facePipeline.descriptorSet = m_descriptorPool->createDescriptorSet( "RenderCubeFace" + castor::string::toString( face ) );
-			facePipeline.descriptorSet->createSizedBinding( m_descriptorLayout->getBinding( 0u )
-				, m_matrixUbo->getBuffer()
-				, face
-				, 1u );
+			m_matrixUbo[face].createSizedBinding( *facePipeline.descriptorSet
+				, m_descriptorLayout->getBinding( 0u ) );
 			facePipeline.descriptorSet->createBinding( m_descriptorLayout->getBinding( 1u )
 				, view
 				, m_sampler->getSampler() );
@@ -260,7 +255,12 @@ namespace castor3d
 		m_descriptorPool.reset();
 		m_pipelineLayout.reset();
 		m_descriptorLayout.reset();
-		m_matrixUbo.reset();
+
+		for ( auto & ubo : m_matrixUbo )
+		{
+			m_device.renderSystem.getEngine()->getUboPools().putBuffer( ubo );
+		}
+
 		m_vertexBuffer.reset();
 	}
 

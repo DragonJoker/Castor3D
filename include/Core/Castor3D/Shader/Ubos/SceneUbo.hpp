@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "UbosModule.hpp"
 
-#include "Castor3D/Buffer/UniformBuffer.hpp"
+#include "Castor3D/Buffer/UniformBufferOffset.hpp"
 
 namespace castor3d
 {
@@ -66,7 +66,7 @@ namespace castor3d
 		 *\brief		Met à jour l'UBO avec les valeurs données.
 		 *\param[in]	camera	La camera actuelle.
 		 */
-		C3D_API void gpuUpdateCameraPosition( Camera const & camera )const;
+		C3D_API void cpuUpdateCameraPosition( Camera const & camera );
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -77,8 +77,8 @@ namespace castor3d
 		 *\param[in]	camera	La camera actuelle.
 		 *\param[in]	fog		La configuration du brouillard.
 		 */
-		C3D_API void gpuUpdate( Camera const * camera
-			, Fog const & fog )const;
+		C3D_API void cpuUpdate( Camera const * camera
+			, Fog const & fog );
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -91,9 +91,9 @@ namespace castor3d
 		 *\param[in]	camera	La camera actuelle.
 		 *\param[in]	lights	Les sources lumineuses sont mises à jour elles aussi.
 		 */
-		C3D_API void gpuUpdate( Scene const & scene
+		C3D_API void cpuUpdate( Scene const & scene
 			, Camera const * camera
-			, bool lights = true )const;
+			, bool lights = true );
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -102,23 +102,13 @@ namespace castor3d
 		 *\brief		Met à jour l'UBO avec les valeurs données.
 		 *\param[in]	window	Les dimensions de la fenêtre.
 		 */
-		C3D_API void setWindowSize( castor::Size const & window )const;
-		/**
-		 *\~english
-		 *\name			getters.
-		 *\~french
-		 *\name			getters.
-		 */
-		inline UniformBufferT< Configuration > & getUbo()
-		{
-			return *m_ubo;
-		}
+		C3D_API void setWindowSize( castor::Size const & window );
 
-		inline UniformBufferT< Configuration > const & getUbo()const
+		void createSizedBinding( ashes::DescriptorSet & descriptorSet
+			, VkDescriptorSetLayoutBinding const & layoutBinding )const
 		{
-			return *m_ubo;
+			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
 		}
-		/**@}*/
 
 	public:
 		C3D_API static uint32_t const BindingPoint;
@@ -146,7 +136,7 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
-		UniformBufferUPtrT< Configuration > m_ubo;
+		UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }
 

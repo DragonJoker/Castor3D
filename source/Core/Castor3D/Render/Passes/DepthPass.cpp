@@ -213,7 +213,7 @@ namespace castor3d
 			, node.pipeline.getFlags().textures );
 	}
 
-	void DepthPass::doUpdatePipeline( RenderPipeline & pipeline )const
+	void DepthPass::doUpdatePipeline( RenderPipeline & pipeline )
 	{
 	}
 

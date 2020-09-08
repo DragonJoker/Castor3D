@@ -222,11 +222,11 @@ namespace castor3d
 		, ashes::DescriptorSet & uboDescriptorSet
 		, ashes::DescriptorSet & texDescriptorSet )const
 	{
-		matrixUbo.getUbo().createSizedBinding( uboDescriptorSet
+		matrixUbo.createSizedBinding( uboDescriptorSet
 			, m_uboDescriptorLayout->getBinding( MtxUboIdx ) );
-		modelMatrixUbo.getUbo().createSizedBinding( uboDescriptorSet
+		modelMatrixUbo.createSizedBinding( uboDescriptorSet
 			, m_uboDescriptorLayout->getBinding( MdlMtxUboIdx ) );
-		hdrConfigUbo.getUbo().createSizedBinding( uboDescriptorSet
+		hdrConfigUbo.createSizedBinding( uboDescriptorSet
 			, m_uboDescriptorLayout->getBinding( HdrCfgUboIdx ) );
 		texDescriptorSet.createBinding( m_texDescriptorLayout->getBinding( SkyBoxImgIdx )
 			, m_texture->getDefaultView().getSampledView()

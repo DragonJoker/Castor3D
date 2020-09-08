@@ -203,7 +203,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
 		 */
-		void doUpdatePipeline( RenderPipeline & pipeline )const override;
+		void doUpdatePipeline( RenderPipeline & pipeline )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateUboBindings
 		 */

@@ -482,10 +482,10 @@ namespace castor3d
 	void LayeredLightVolumeGIPass::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
 		, ashes::DescriptorSet & descriptorSet )
 	{
-		m_gpInfo.getUbo().createSizedBinding( descriptorSet
+		m_gpInfo.createSizedBinding( descriptorSet
 			, descriptorSetLayout.getBinding( GpInfoUboIdx ) );
-		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( LIUboIdx )
-			, m_lpvConfigUbo.getUbo() );
+		m_lpvConfigUbo.createSizedBinding( descriptorSet
+			, descriptorSetLayout.getBinding( LIUboIdx ) );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( DepthMapIdx )
 			, m_gpResult[DsTexture::eDepth].getTexture()->getDefaultView().getSampledView()
 			, m_gpResult[DsTexture::eDepth].getSampler()->getSampler() );

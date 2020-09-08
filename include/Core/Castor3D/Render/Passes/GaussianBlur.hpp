@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "PassesModule.hpp"
 
-#include "Castor3D/Buffer/UniformBuffer.hpp"
+#include "Castor3D/Buffer/UniformBufferOffset.hpp"
 #include "Castor3D/Render/ToTexture/RenderQuad.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 
@@ -180,7 +180,7 @@ namespace castor3d
 				, VkImageSubresourceRange const & srcRange
 				, ashes::ImageView const & dst
 				, VkImageSubresourceRange const & dstRange
-				, UniformBufferT< Configuration > const & blurUbo
+				, UniformBufferOffsetT< Configuration > const & blurUbo
 				, VkFormat format
 				, VkExtent2D const & size );
 
@@ -193,7 +193,7 @@ namespace castor3d
 			ashes::ImageView dstView;
 
 		private:
-			UniformBufferT< Configuration > const & m_blurUbo;
+			UniformBufferOffsetT< Configuration > const & m_blurUbo;
 		};
 		using RenderQuadPtr = std::unique_ptr< RenderQuad >;
 
@@ -210,7 +210,7 @@ namespace castor3d
 				, castor::String const & name
 				, ashes::ImageView const & input
 				, ashes::ImageView const & output
-				, UniformBufferT< GaussianBlur::Configuration > const & blurUbo
+				, UniformBufferOffsetT< GaussianBlur::Configuration > const & blurUbo
 				, VkFormat format
 				, VkExtent2D const & textureSize
 				, ashes::RenderPass const & renderPass
@@ -233,7 +233,7 @@ namespace castor3d
 		VkFormat m_format;
 		TextureUnit m_intermediate;
 		ashes::RenderPassPtr m_renderPass;
-		UniformBufferUPtrT< Configuration > m_blurUbo;
+		UniformBufferOffsetT< Configuration > m_blurUbo;
 		std::vector< float > m_kernel;
 		BlurPass m_blurX;
 		BlurPass m_blurY;

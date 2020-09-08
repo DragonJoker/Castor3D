@@ -1,7 +1,7 @@
 #include "Castor3D/Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/PoolUniformBufferBase.hpp"
+#include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Buffer/UniformBuffer.hpp"
@@ -454,7 +454,6 @@ namespace castor3d
 		, castor::Size const & size
 		, GpInfoUbo const & gpInfoUbo
 		, SceneUbo & sceneUbo
-		, UniformBufferT< BlurConfiguration > const & blurUbo
 		, OpaquePassResult const & gpResult
 		, TextureUnit const & source
 		, TextureUnit const & destination
@@ -465,10 +464,13 @@ namespace castor3d
 		, m_geometryBufferResult{ gpResult }
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_sceneUbo{ sceneUbo }
-		, m_blurUbo{ blurUbo }
+		, m_blurUbo{ renderSystem.getEngine()->getUboPools().getBuffer< BlurConfiguration >( 0u ) }
 		, m_renderPass{ doCreateRenderPass( getCurrentRenderDevice( renderSystem ), destination.getTexture()->getPixelFormat(), "SubscatteringBlur" ) }
 		, m_frameBuffer{ doCreateFrameBuffer( getCurrentRenderDevice( renderSystem ), *m_renderPass, size, destination.getTexture()->getDefaultView().getTargetView(), "SubscatteringBlur" ) }
 	{
+		auto & configuration = m_blurUbo.getData();
+		configuration.blurCorrection = 1.0f;
+		configuration.blurPixelSize = Point2f{ 1.0f / size.getWidth(), 1.0f / size.getHeight() };
 		ashes::VkDescriptorSetLayoutBindingArray bindings
 		{
 			renderSystem.getEngine()->getMaterialCache().getPassBuffer().createLayoutBinding(),
@@ -535,11 +537,9 @@ namespace castor3d
 	{
 		m_renderSystem.getEngine()->getMaterialCache().getPassBuffer().createBinding( descriptorSet
 			, descriptorSetLayout.getBinding( getPassBufferIndex() ) );
-		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( BlurSceneUboId )
-			, m_sceneUbo.getUbo().getBuffer()
-			, 0u
-			, 1u );
-		m_gpInfoUbo.getUbo().createSizedBinding( descriptorSet
+		m_sceneUbo.createSizedBinding( descriptorSet
+			,descriptorSetLayout.getBinding( BlurSceneUboId ) );
+		m_gpInfoUbo.createSizedBinding( descriptorSet
 			, descriptorSetLayout.getBinding( BlurGpInfoUboId ) );
 		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( BlurSssUboId )
 			, m_blurUbo.getBuffer()
@@ -560,7 +560,6 @@ namespace castor3d
 
 	SubsurfaceScatteringPass::Combine::Combine( RenderSystem & renderSystem
 		, Size const & size
-		, UniformBufferT< BlurWeights > const & blurUbo
 		, OpaquePassResult const & gpResult
 		, TextureUnit const & source
 		, SubsurfaceScatteringPass::BlurResult const & blurResults
@@ -568,13 +567,19 @@ namespace castor3d
 		, ashes::PipelineShaderStageCreateInfoArray const & shaderStages )
 		: RenderQuad{ renderSystem, cuT( "SubscatteringCombine" ), VK_FILTER_LINEAR, { ashes::nullopt, RenderQuadConfig::Texcoord{} } }
 		, m_renderSystem{ renderSystem }
-		, m_blurUbo{ blurUbo }
+		, m_blurUbo{ renderSystem.getEngine()->getUboPools().getBuffer< BlurWeights >( 0u ) }
 		, m_geometryBufferResult{ gpResult }
 		, m_source{ source }
 		, m_blurResults{ blurResults }
 		, m_renderPass{ doCreateRenderPass( getCurrentRenderDevice( renderSystem ), destination.getTexture()->getPixelFormat(), getName() ) }
 		, m_frameBuffer{ doCreateFrameBuffer( getCurrentRenderDevice( renderSystem ), *m_renderPass, size, destination.getTexture()->getDefaultView().getTargetView(), getName() ) }
 	{
+		auto & weights = m_blurUbo.getData();
+		weights.originalWeight = Point4f{ 0.2406f, 0.4475f, 0.6159f, 0.25f };
+		weights.blurWeights[0] = Point4f{ 0.1158, 0.3661, 0.3439, 0.25 };
+		weights.blurWeights[1] = Point4f{ 0.1836, 0.1864, 0.0, 0.25 };
+		weights.blurWeights[2] = Point4f{ 0.46, 0.0, 0.0402, 0.25 };
+		weights.blurVariance = Point4f{ 0.0516, 0.2719, 2.0062 };
 		ashes::VkDescriptorSetLayoutBindingArray bindings
 		{
 			renderSystem.getEngine()->getMaterialCache().getPassBuffer().createLayoutBinding(),
@@ -710,36 +715,10 @@ namespace castor3d
 			result.initialise();
 		}
 
-		// Blur Configuration UBO
-		m_blurConfigUbo = makeUniformBuffer< BlurConfiguration >( *engine.getRenderSystem()
-			, 1u
-			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, "SubsurfaceScatteringBlurConfig" );
-		auto & configuration = m_blurConfigUbo->getData( 0u );
-		configuration.blurCorrection = 1.0f;
-		configuration.blurPixelSize = Point2f{ 1.0f / m_size.getWidth(), 1.0f / m_size.getHeight() };
-		m_blurConfigUbo->upload();
-
-		// Blur Weights UBO
-		m_blurWeightsUbo = makeUniformBuffer< BlurWeights >( *engine.getRenderSystem()
-			, 1u
-			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, "SubsurfaceScatteringBlurWeights" );
-		auto & weights = m_blurWeightsUbo->getData();
-		weights.originalWeight = Point4f{ 0.2406f, 0.4475f, 0.6159f, 0.25f };
-		weights.blurWeights[0] = Point4f{ 0.1158, 0.3661, 0.3439, 0.25 };
-		weights.blurWeights[1] = Point4f{ 0.1836, 0.1864, 0.0, 0.25 };
-		weights.blurWeights[2] = Point4f{ 0.46, 0.0, 0.0402, 0.25 };
-		weights.blurVariance = Point4f{ 0.0516, 0.2719, 2.0062 };
-		m_blurWeightsUbo->upload();
-
 		// Combine pass
 		auto combineProgram = doCreateCombineProgram( engine, m_combineVertexShader, m_combinePixelShader );
 		m_combine = std::make_unique< Combine >( *engine.getRenderSystem()
 			, m_size
-			, *m_blurWeightsUbo
 			, m_gpResult
 			, m_lpResult[LpTexture::eDiffuse]
 			, m_blurResults
@@ -754,7 +733,6 @@ namespace castor3d
 				, m_size
 				, m_gpInfoUbo
 				, m_sceneUbo
-				, *m_blurConfigUbo
 				, m_gpResult
 				, m_lpResult[LpTexture::eDiffuse]
 				, m_intermediate
@@ -764,7 +742,6 @@ namespace castor3d
 				, m_size
 				, m_gpInfoUbo
 				, m_sceneUbo
-				, *m_blurConfigUbo
 				, m_gpResult
 				, m_blurResults[0]
 				, m_intermediate
@@ -774,7 +751,6 @@ namespace castor3d
 				, m_size
 				, m_gpInfoUbo
 				, m_sceneUbo
-				, *m_blurConfigUbo
 				, m_gpResult
 				, m_blurResults[1]
 				, m_intermediate
@@ -790,7 +766,6 @@ namespace castor3d
 				, m_size
 				, m_gpInfoUbo
 				, m_sceneUbo
-				, *m_blurConfigUbo
 				, m_gpResult
 				, m_intermediate
 				, m_blurResults[0]
@@ -800,7 +775,6 @@ namespace castor3d
 				, m_size
 				, m_gpInfoUbo
 				, m_sceneUbo
-				, *m_blurConfigUbo
 				, m_gpResult
 				, m_intermediate
 				, m_blurResults[1]
@@ -810,7 +784,6 @@ namespace castor3d
 				, m_size
 				, m_gpInfoUbo
 				, m_sceneUbo
-				, *m_blurConfigUbo
 				, m_gpResult
 				, m_intermediate
 				, m_blurResults[2]
@@ -850,8 +823,6 @@ namespace castor3d
 		m_blurY = { nullptr, nullptr, nullptr };
 		m_blurX = { nullptr, nullptr, nullptr };
 		m_combine.reset();
-		m_blurWeightsUbo.reset();
-		m_blurConfigUbo.reset();
 		m_result.cleanup();
 		m_intermediate.cleanup();
 

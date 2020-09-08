@@ -2,6 +2,7 @@
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Render/RenderDevice.hpp>
+#include <Castor3D/Render/RenderLoop.hpp>
 #include <Castor3D/Scene/BillboardList.hpp>
 #include <Castor3D/Scene/SceneNode.hpp>
 #include <Castor3D/Scene/ParticleSystem/ParticleSystem.hpp>
@@ -160,21 +161,6 @@ namespace fireworks
 			}
 		}
 
-		inline void doPackParticles( castor3d::ParticleArray & particles
-			, uint32_t & firstUnused )
-		{
-			for ( auto i = 1u; i < firstUnused && firstUnused > 1u; ++i )
-			{
-				auto & particle = particles[i];
-
-				if ( particle.getValue< castor3d::ParticleFormat::eFloat >( eType ) == 0.0f )
-				{
-					particle = std::move( particles[firstUnused - 1] );
-					--firstUnused;
-				}
-			}
-		}
-
 		//*****************************************************************************************
 
 		ParticleEmitter::ParticleEmitter( castor3d::ParticleDeclaration const & decl
@@ -308,44 +294,8 @@ namespace fireworks
 		return std::make_unique< ParticleSystem >( parent );
 	}
 
-	uint32_t ParticleSystem::update( castor3d::RenderPassTimer & timer
-		, castor::Milliseconds const & time
-		, castor::Milliseconds const & total
-		, uint32_t index )
-	{
-		auto firstUnused = m_firstUnused;
-
-		for ( auto i = 0u; i < firstUnused; ++i )
-		{
-			m_updaters.front()->update( time
-				, m_particles[i] );
-		}
-
-		doPackParticles( m_particles, m_firstUnused );
-		auto & device = getCurrentRenderDevice( *m_parent.getParent()->getScene() );
-		auto & vbo = m_parent.getBillboards()->getVertexBuffer();
-		VkDeviceSize stride = m_inputs.stride();
-		auto mappedSize = ashes::getAlignedSize( VkDeviceSize( m_firstUnused * stride )
-			, device.properties.limits.nonCoherentAtomSize );
-
-		if ( auto dst = vbo.getBuffer().lock( 0u, mappedSize, 0u ) )
-		{
-			for ( auto i = 0u; i < m_firstUnused; ++i )
-			{
-				std::memcpy( dst, m_particles[i].getData(), stride );
-				dst += stride;
-			}
-
-			vbo.getBuffer().flush( 0u, mappedSize );
-			vbo.getBuffer().unlock();
-		}
-
-		return m_firstUnused;
-	}
-
 	bool ParticleSystem::doInitialise()
 	{
-		m_firstUnused = 1u;
 		addEmitter( nullptr );
 		addEmitter( std::make_unique< PrimaryParticleEmitter >( getParent().getParticleVariables() ) );
 		addEmitter( std::make_unique< SecondaryParticleEmitter >( getParent().getParticleVariables() ) );
@@ -353,14 +303,18 @@ namespace fireworks
 		return true;
 	}
 
-	void ParticleSystem::doCleanup()
+	void ParticleSystem::doPackParticles()
 	{
-		m_firstUnused = 1u;
-	}
+		for ( auto i = 1u; i < m_firstUnused && m_firstUnused > 1u; ++i )
+		{
+			auto & particle = m_particles[i];
 
-	void ParticleSystem::doOnEmit( castor3d::Particle const & particle )
-	{
-		m_particles[m_firstUnused++] = particle;
+			if ( particle.getValue< castor3d::ParticleFormat::eFloat >( eType ) == 0.0f )
+			{
+				particle = std::move( m_particles[m_firstUnused - 1] );
+				--m_firstUnused;
+			}
+		}
 	}
 
 	//*********************************************************************************************

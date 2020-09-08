@@ -8,6 +8,7 @@
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/ShaderCache.hpp"
+#include "Castor3D/Event/Frame/FunctorEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
@@ -186,6 +187,8 @@ namespace castor3d
 	void RenderPass::update( CpuUpdater & updater )
 	{
 		doUpdate( *updater.queues );
+		doUpdateUbos( *updater.camera
+			, updater.jitter );
 	}
 
 	ShaderPtr RenderPass::getVertexShaderSource( PipelineFlags const & flags )const
@@ -458,7 +461,7 @@ namespace castor3d
 		};
 	}
 
-	void RenderPass::updatePipeline( RenderPipeline & pipeline )const
+	void RenderPass::updatePipeline( RenderPipeline & pipeline )
 	{
 		doUpdatePipeline( pipeline );
 	}
@@ -586,10 +589,10 @@ namespace castor3d
 					, node.sceneNode.getScene()->getLightCache().getView() );
 			}
 
-			matrixUbo.getUbo().createSizedBinding( uboDescriptorSet
+			matrixUbo.createSizedBinding( uboDescriptorSet
 				, layout.getBinding( MatrixUbo::BindingPoint ) );
-			uboDescriptorSet.createSizedBinding( layout.getBinding( SceneUbo::BindingPoint )
-				, sceneUbo.getUbo() );
+			sceneUbo.createSizedBinding( uboDescriptorSet
+				, layout.getBinding( SceneUbo::BindingPoint ) );
 
 			if ( !checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eInstantiation ) )
 			{
@@ -933,7 +936,7 @@ namespace castor3d
 		return count;
 	}
 
-	void RenderPass::doUpdate( SubmeshStaticRenderNodesPtrByPipelineMap & nodes )const
+	void RenderPass::doUpdate( SubmeshStaticRenderNodesPtrByPipelineMap & nodes )
 	{
 		doTraverseNodes( nodes
 			, [this]( RenderPipeline & pipeline
@@ -955,7 +958,7 @@ namespace castor3d
 	}
 
 	void RenderPass::doUpdate( SubmeshStaticRenderNodesPtrByPipelineMap & nodes
-		, RenderInfo & info )const
+		, RenderInfo & info )
 	{
 		doTraverseNodes( nodes
 			, [this, &info]( RenderPipeline & pipeline
@@ -983,7 +986,7 @@ namespace castor3d
 	namespace
 	{
 		template< typename MapType >
-		inline void doRenderNonInstanced( RenderPass const & pass
+		inline void doRenderNonInstanced( RenderPass & pass
 			, MapType & nodes )
 		{
 			for ( auto & itPipelines : nodes )
@@ -993,7 +996,7 @@ namespace castor3d
 		}
 
 		template< typename MapType >
-		inline void doRenderNonInstanced( RenderPass const & pass
+		inline void doRenderNonInstanced( RenderPass & pass
 			, MapType & nodes
 			, RenderInfo & info )
 		{
@@ -1012,35 +1015,35 @@ namespace castor3d
 		}
 	}
 
-	void RenderPass::doUpdate( StaticRenderNodesPtrByPipelineMap & nodes )const
+	void RenderPass::doUpdate( StaticRenderNodesPtrByPipelineMap & nodes )
 	{
 		doRenderNonInstanced( *this
 			, nodes );
 	}
 
 	void RenderPass::doUpdate( StaticRenderNodesPtrByPipelineMap & nodes
-		, RenderInfo & info )const
+		, RenderInfo & info )
 	{
 		doRenderNonInstanced( *this
 			, nodes
 			, info );
 	}
 
-	void RenderPass::doUpdate( SkinningRenderNodesPtrByPipelineMap & nodes )const
+	void RenderPass::doUpdate( SkinningRenderNodesPtrByPipelineMap & nodes )
 	{
 		doRenderNonInstanced( *this
 			, nodes );
 	}
 
 	void RenderPass::doUpdate( SkinningRenderNodesPtrByPipelineMap & nodes
-		, RenderInfo & info )const
+		, RenderInfo & info )
 	{
 		doRenderNonInstanced( *this
 			, nodes
 			, info );
 	}
 
-	void RenderPass::doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes )const
+	void RenderPass::doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes )
 	{
 		doTraverseNodes( nodes
 			, [this]( RenderPipeline & pipeline
@@ -1065,7 +1068,7 @@ namespace castor3d
 	}
 
 	void RenderPass::doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes
-		, RenderInfo & info )const
+		, RenderInfo & info )
 	{
 		doTraverseNodes( nodes
 			, [this, &info]( RenderPipeline & pipeline
@@ -1092,28 +1095,28 @@ namespace castor3d
 			} );
 	}
 
-	void RenderPass::doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes )const
+	void RenderPass::doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes )
 	{
 		doRenderNonInstanced( *this
 			, nodes );
 	}
 
 	void RenderPass::doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes
-		, RenderInfo & info )const
+		, RenderInfo & info )
 	{
 		doRenderNonInstanced( *this
 			, nodes
 			, info );
 	}
 
-	void RenderPass::doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes )const
+	void RenderPass::doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes )
 	{
 		doRenderNonInstanced( *this
 			, nodes );
 	}
 
 	void RenderPass::doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes
-		, RenderInfo & info )const
+		, RenderInfo & info )
 	{
 		doRenderNonInstanced( *this
 			, nodes
@@ -1129,7 +1132,7 @@ namespace castor3d
 		m_matrixUbo.cpuUpdate( camera.getView()
 			, camera.getProjection()
 			, jitterProjSpace );
-		m_sceneUbo.gpuUpdate( *camera.getScene(), &camera );
+		m_sceneUbo.cpuUpdate( *camera.getScene(), &camera );
 	}
 
 	std::map< PipelineFlags, RenderPipelineUPtr > & RenderPass::doGetFrontPipelines()

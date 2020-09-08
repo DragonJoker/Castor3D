@@ -15,6 +15,7 @@
 #include "Castor3D/Cache/TargetCache.hpp"
 #include "Castor3D/Cache/WindowCache.hpp"
 #include "Castor3D/Event/Frame/CleanupEvent.hpp"
+#include "Castor3D/Event/Frame/FunctorEvent.hpp"
 #include "Castor3D/Event/Frame/InitialiseEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"

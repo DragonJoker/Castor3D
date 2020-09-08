@@ -39,6 +39,14 @@ namespace castor3d
 		 */
 		C3D_API void cleanup()override;
 		/**
+		 *\copydoc		castor3d::ParticleSystemImpl::override
+		 */
+		C3D_API void update( castor3d::CpuUpdater & updater )override;
+		/**
+		 *\copydoc		castor3d::ParticleSystemImpl::override
+		 */
+		C3D_API uint32_t update( castor3d::GpuUpdater & updater )override;
+		/**
 		 *\copydoc		castor3d::ParticleSystemImpl::addParticleVariable
 		 */
 		C3D_API void addParticleVariable( castor::String const & name
@@ -84,14 +92,25 @@ namespace castor3d
 		 *\~french
 		 *\brief		Nettoie l'implémentation.
 		 */
-		C3D_API virtual void doCleanup() = 0;
+		C3D_API virtual void doCleanup()
+		{
+		}
 		/**
 		 *\~english
 		 *\brief		Called when a particle is emitted.
 		 *\~french
 		 *\brief		Appelé lorsqu'une particule est créée.
 		 */
-		C3D_API virtual void doOnEmit( Particle const & particle ) = 0;
+		C3D_API virtual void doOnEmit( Particle const & particle )
+		{
+		}
+		/**
+		 *\~english
+		 *\brief		Called when a particle is emitted.
+		 *\~french
+		 *\brief		Appelé lorsqu'une particule est créée.
+		 */
+		C3D_API virtual void doPackParticles() = 0;
 
 	protected:
 		//!\~english	The particle's elements description.
@@ -106,6 +125,9 @@ namespace castor3d
 		//!\~english	The particles updaters.
 		//!\~french		Les updaters de particules.
 		ParticleUpdaterArray m_updaters;
+		//!\~english	The first unused particle data.
+		//!\~french		La première particule inutilisée.
+		uint32_t m_firstUnused{ 1u };
 
 	private:
 		std::vector< ParticleEmitter::OnEmitConnection > m_onEmits;

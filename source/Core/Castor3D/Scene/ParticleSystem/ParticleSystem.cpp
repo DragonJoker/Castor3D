@@ -3,6 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/BillboardUboPools.hpp"
 #include "Castor3D/Material/Material.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -283,8 +284,7 @@ namespace castor3d
 		m_impl = nullptr;
 	}
 
-	void ParticleSystem::update( RenderPassTimer & timer
-		, uint32_t index )
+	void ParticleSystem::update( CpuUpdater & updater )
 	{
 		CU_Require( m_impl );
 		auto time = std::chrono::duration_cast< Milliseconds >( m_timer.getElapsed() );
@@ -295,12 +295,20 @@ namespace castor3d
 		}
 
 		m_totalTime += time;
-		m_activeParticlesCount = m_impl->update( timer, time, m_totalTime, index );
+		updater.time = time;
+		updater.total = m_totalTime;
+		m_impl->update( updater );
+	}
+
+	void ParticleSystem::update( GpuUpdater & updater )
+	{
+		CU_Require( m_impl );
+		m_activeParticlesCount = m_impl->update( updater );
 
 		if ( getBillboards()->getCount() != m_activeParticlesCount )
 		{
 			getBillboards()->setCount( m_activeParticlesCount );
-			getBillboards()->update();
+			getBillboards()->update( updater );
 		}
 
 		m_firstUpdate = false;

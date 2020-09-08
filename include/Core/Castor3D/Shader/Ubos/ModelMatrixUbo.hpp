@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "UbosModule.hpp"
 
-#include "Castor3D/Buffer/UniformBufferPool.hpp"
+#include "Castor3D/Buffer/UniformBufferOffset.hpp"
 
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
@@ -81,22 +81,12 @@ namespace castor3d
 		 */
 		C3D_API void cpuUpdate( castor::Matrix4x4f const & model
 			, castor::Matrix3x3f const & normal );
-		/**
-		 *\~english
-		 *\name			getters.
-		 *\~french
-		 *\name			getters.
-		 */
-		inline UniformBufferOffsetT< Configuration > & getUbo()
-		{
-			return m_ubo;
-		}
 
-		inline UniformBufferOffsetT< Configuration > const & getUbo()const
+		void createSizedBinding( ashes::DescriptorSet & descriptorSet
+			, VkDescriptorSetLayoutBinding const & layoutBinding )const
 		{
-			return m_ubo;
+			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
 		}
-		/**@}*/
 
 	public:
 		C3D_API static const uint32_t BindingPoint;

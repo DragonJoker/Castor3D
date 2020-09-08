@@ -238,6 +238,8 @@ namespace castor3d
 		void doInitialiseTransparentPass();
 		void doCleanupShadowMaps();
 		void doUpdateShadowMaps( CpuUpdater & updater );
+		void doUpdateShadowMaps( GpuUpdater & updater );
+		void doUpdateParticles( CpuUpdater & updater );
 		void doUpdateParticles( GpuUpdater & updater );
 		ashes::Semaphore const & doRenderShadowMaps( ashes::Semaphore const & semaphore );
 		ashes::Semaphore const & doRenderEnvironmentMaps( ashes::Semaphore const & semaphore );
@@ -279,8 +281,6 @@ namespace castor3d
 		ashes::FrameBufferPtr m_bgFrameBuffer;
 		ashes::CommandBufferPtr m_bgCommandBuffer;
 		ashes::CommandBufferPtr m_cbgCommandBuffer;
-		ashes::StagingBufferPtr m_stagingBuffer;
-		ashes::CommandBufferPtr m_uploadCommandBuffer;
 		OnBackgroundChangedConnection m_onBgChanged;
 		OnBackgroundChangedConnection m_onCBgChanged;
 	};

@@ -9,6 +9,7 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Node/SceneCulledRenderNodes.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -59,7 +60,7 @@ namespace castor3d
 		}
 
 		template< bool Opaque, typename MapType, typename FuncType >
-		inline void doTraverseNodes( RenderPass const & pass
+		inline void doTraverseNodes( RenderPass & pass
 			, MapType & nodes
 			, PickNodeType type
 			, FuncType function )
@@ -95,7 +96,7 @@ namespace castor3d
 		}
 
 		template< bool Opaque, typename MapType >
-		inline void doUpdateNonInstanced( RenderPass const & pass
+		inline void doUpdateNonInstanced( RenderPass & pass
 			, PickNodeType type
 			, MapType & nodes )
 		{
@@ -831,14 +832,14 @@ namespace castor3d
 		FragmentWriter writer;
 
 		// UBOs
+		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto materials = shader::createMaterials( writer, flags.passFlags );
-		materials->declare( getEngine()->getRenderSystem()->getGpuInformations().hasShaderStorageBuffers() );
+		materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		shader::TextureConfigurations textureConfigs{ writer };
 		bool hasTextures = !flags.textures.empty();
 
 		if ( hasTextures )
 		{
-			auto & renderSystem = *getEngine()->getRenderSystem();
 			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		}
 
@@ -900,7 +901,7 @@ namespace castor3d
 		addFlag( flags.programFlags, ProgramFlag::ePicking );
 	}
 
-	void PickingPass::doUpdatePipeline( RenderPipeline & pipeline )const
+	void PickingPass::doUpdatePipeline( RenderPipeline & pipeline )
 	{
 	}
 

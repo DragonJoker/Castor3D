@@ -8,14 +8,15 @@
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Node/SceneCulledRenderNodes.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapPoint.hpp"
+#include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/PointLight.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
-#include "Castor3D/Render/ShadowMap/ShadowMapPoint.hpp"
-#include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslMetallicBrdfLighting.hpp"
@@ -213,14 +214,14 @@ namespace castor3d
 	void ShadowMapPassPoint::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 		, BillboardListRenderNode & node )
 	{
-		m_shadowMapUbo.getUbo().createSizedBinding( *node.uboDescriptorSet
+		m_shadowMapUbo.createSizedBinding( *node.uboDescriptorSet
 			, layout.getBinding( ShadowMapUbo::BindingPoint ) );
 	}
 
 	void ShadowMapPassPoint::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 		, SubmeshRenderNode & node )
 	{
-		m_shadowMapUbo.getUbo().createSizedBinding( *node.uboDescriptorSet
+		m_shadowMapUbo.createSizedBinding( *node.uboDescriptorSet
 			, layout.getBinding( ShadowMapUbo::BindingPoint ) );
 	}
 

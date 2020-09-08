@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "UbosModule.hpp"
 
-#include "Castor3D/Buffer/UniformBuffer.hpp"
+#include "Castor3D/Buffer/UniformBufferOffset.hpp"
 
 #include <CastorUtils/Graphics/Grid.hpp>
 
@@ -45,24 +45,14 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour les données de l'UBO.
 		 */
-		C3D_API void update( std::array< castor::Grid, shader::DirectionalMaxCascadesCount > const & grids
+		C3D_API void cpuUpdate( std::array< castor::Grid, shader::DirectionalMaxCascadesCount > const & grids
 			, float indirectAttenuation = 1.7f );
-		/**
-		 *\~english
-		 *\name			getters.
-		 *\~french
-		 *\name			getters.
-		 */
-		inline UniformBufferT< Configuration > & getUbo()
-		{
-			return *m_ubo;
-		}
 
-		inline UniformBufferT< Configuration > const & getUbo()const
+		void createSizedBinding( ashes::DescriptorSet & descriptorSet
+			, VkDescriptorSetLayoutBinding const & layoutBinding )const
 		{
-			return *m_ubo;
+			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
 		}
-		/**@}*/
 
 	public:
 		C3D_API static const std::string LayeredLpvConfig;
@@ -73,7 +63,7 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
-		UniformBufferUPtrT< Configuration > m_ubo;
+		UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }
 

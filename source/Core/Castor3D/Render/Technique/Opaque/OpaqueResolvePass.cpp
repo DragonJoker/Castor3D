@@ -876,11 +876,11 @@ namespace castor3d
 			auto & layout = pool.getLayout();
 			auto result = pool.createDescriptorSet( "DeferredResolveUbo", 0u );
 			passBuffer.createBinding( *result, layout.getBinding( getPassBufferIndex() ) );
-			result->createSizedBinding( layout.getBinding( SceneUbo::BindingPoint )
-				, sceneUbo.getUbo() );
-			gpInfoUbo.getUbo().createSizedBinding( *result
+			sceneUbo.createSizedBinding( *result
+				, layout.getBinding( SceneUbo::BindingPoint ) );
+			gpInfoUbo.createSizedBinding( *result
 				, layout.getBinding( GpInfoUbo::BindingPoint ) );
-			hdrConfigUbo.getUbo().createSizedBinding( *result
+			hdrConfigUbo.createSizedBinding( *result
 				, layout.getBinding( HdrConfigUbo::BindingPoint ) );
 			result->update();
 			return result;

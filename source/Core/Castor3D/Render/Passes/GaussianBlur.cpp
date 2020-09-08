@@ -1,6 +1,7 @@
 #include "Castor3D/Render/Passes/GaussianBlur.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
@@ -388,7 +389,7 @@ namespace castor3d
 			, castor::String const & name
 			, ashes::ImageView const & input
 			, ashes::ImageView const & output
-			, UniformBufferT< GaussianBlur::Configuration > const & blurUbo
+			, UniformBufferOffsetT< GaussianBlur::Configuration > const & blurUbo
 			, VkFormat format
 			, VkExtent2D const & textureSize )
 		{
@@ -429,7 +430,7 @@ namespace castor3d
 		, VkImageSubresourceRange const & srcRange
 		, ashes::ImageView const & dst
 		, VkImageSubresourceRange const & dstRange
-		, UniformBufferT< Configuration > const & blurUbo
+		, UniformBufferOffsetT< Configuration > const & blurUbo
 		, VkFormat format
 		, VkExtent2D const & size )
 		: castor3d::RenderQuad{ renderSystem, name, VK_FILTER_LINEAR, { ashes::nullopt, RenderQuadConfig::Texcoord{} } }
@@ -442,10 +443,8 @@ namespace castor3d
 	void GaussianBlur::RenderQuad::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
 		, ashes::DescriptorSet & descriptorSet )
 	{
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( GaussCfgIdx )
-			, m_blurUbo
-			, 0u
-			, 1u );
+		m_blurUbo.createSizedBinding( descriptorSet
+			, descriptorSetLayout.getBinding( GaussCfgIdx ) );
 	}
 
 	//*********************************************************************************************
@@ -454,7 +453,7 @@ namespace castor3d
 		, castor::String const & name
 		, ashes::ImageView const & input
 		, ashes::ImageView const & output
-		, UniformBufferT< GaussianBlur::Configuration > const & blurUbo
+		, UniformBufferOffsetT< GaussianBlur::Configuration > const & blurUbo
 		, VkFormat format
 		, VkExtent2D const & textureSize
 		, ashes::RenderPass const & renderPass
@@ -575,16 +574,12 @@ namespace castor3d
 			, m_prefix + cuT( "GaussianBlur" )
 			, m_format
 			, m_source.getSubresourceRange().levelCount ) }
-		, m_blurUbo{ makeUniformBuffer< Configuration >( *engine.getRenderSystem()
-			, 1u
-			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT 
-			, m_prefix + cuT( "GaussianBlurConfig" ) ) }
+		, m_blurUbo{ engine.getUboPools().getBuffer< Configuration >( 0u ) }
 		, m_blurX{ engine
 			, m_prefix + cuT( " - GaussianBlur - X Pass" )
 			, m_source.getSampledView()
 			, m_intermediate.getTexture()->getDefaultView().getTargetView()
-			, *m_blurUbo
+			, m_blurUbo
 			, m_format
 			, m_size
 			, *m_renderPass
@@ -593,7 +588,7 @@ namespace castor3d
 			, m_prefix + cuT( " - GaussianBlur - Y Pass" )
 			, m_intermediate.getTexture()->getDefaultView().getSampledView()
 			, m_source.getTargetView()
-			, *m_blurUbo
+			, m_blurUbo
 			, m_format
 			, m_size
 			, *m_renderPass
@@ -602,7 +597,7 @@ namespace castor3d
 	{
 		auto & device = getCurrentRenderDevice( engine );
 		CU_Require( kernelSize < MaxCoefficients );
-		auto & data = m_blurUbo->getData( 0u );
+		auto & data = m_blurUbo.getData();
 		data.blurCoeffsCount = uint32_t( m_kernel.size() );
 		data.dump = 0u;
 		std::memcpy( data.blurCoeffs.data()->ptr()
@@ -610,7 +605,6 @@ namespace castor3d
 			, sizeof( float ) * std::min( size_t( MaxCoefficients ), m_kernel.size() ) );
 		data.textureSize[0] = float( m_size.width );
 		data.textureSize[1] = float( m_size.height );
-		m_blurUbo->upload();
 	}
 
 	void GaussianBlur::accept( PipelineVisitorBase & visitor )

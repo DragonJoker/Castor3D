@@ -172,13 +172,11 @@ namespace castor3d
 		doUpdateNodes( m_renderQueue.getCulledRenderNodes()
 			, updater.jitter
 			, updater.info );
-		doUpdateUbos( *m_camera
-			, updater.jitter );
 	}
 
 	void RenderTechniquePass::doUpdateNodes( SceneCulledRenderNodes & nodes
 		, castor::Point2f const & jitter
-		, RenderInfo & info )const
+		, RenderInfo & info )
 	{
 		if ( nodes.hasNodes() )
 		{
@@ -201,7 +199,7 @@ namespace castor3d
 	void RenderTechniquePass::doUpdateUbos( Camera const & camera
 		, castor::Point2f const & jitter )
 	{
-		m_sceneUbo.gpuUpdate( *camera.getScene(), &camera );
+		m_sceneUbo.cpuUpdate( *camera.getScene(), &camera );
 	}
 
 	bool RenderTechniquePass::doInitialise( Size const & CU_UnusedParam( size ) )
@@ -237,9 +235,9 @@ namespace castor3d
 		return nullptr;
 	}
 
-	void RenderTechniquePass::doUpdatePipeline( RenderPipeline & pipeline )const
+	void RenderTechniquePass::doUpdatePipeline( RenderPipeline & pipeline )
 	{
-		m_sceneUbo.gpuUpdate( m_scene, m_camera );
+		m_sceneUbo.cpuUpdate( m_scene, m_camera );
 	}
 
 	ashes::PipelineDepthStencilStateCreateInfo RenderTechniquePass::doCreateDepthStencilState( PipelineFlags const & flags )const

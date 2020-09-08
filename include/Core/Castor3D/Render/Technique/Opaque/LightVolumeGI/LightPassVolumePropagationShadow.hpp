@@ -221,11 +221,11 @@ namespace castor3d
 
 				if constexpr ( LtType == LightType::eDirectional )
 				{
-					m_lpvConfigUbo.update( grid, light, 3u );
+					m_lpvConfigUbo.cpuUpdate( grid, light, 3u );
 				}
 				else
 				{
-					m_lpvConfigUbo.update( grid, light );
+					m_lpvConfigUbo.cpuUpdate( grid, light );
 				}
 			}
 		}

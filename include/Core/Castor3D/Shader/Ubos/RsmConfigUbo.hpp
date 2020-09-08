@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightingModule.hpp"
 
-#include "Castor3D/Buffer/UniformBufferPool.hpp"
+#include "Castor3D/Buffer/UniformBufferOffset.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"
 
 namespace castor3d
@@ -68,23 +68,12 @@ namespace castor3d
 		 *\brief		Met à jour l'UBO avec les valeurs données.
 		 */
 		C3D_API void update( Light const & light );
-		/**
-		 *\~english
-		 *\name			getters.
-		 *\~french
-		 *\name			getters.
-		 */
-		/**@{*/
-		inline UniformBufferOffsetT< RsmUboConfiguration > & getUbo()
-		{
-			return m_ubo;
-		}
 
-		inline UniformBufferOffsetT< RsmUboConfiguration > const & getUbo()const
+		void createSizedBinding( ashes::DescriptorSet & descriptorSet
+			, VkDescriptorSetLayoutBinding const & layoutBinding )const
 		{
-			return m_ubo;
+			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
 		}
-		/**@}*/
 
 	public:
 		C3D_API static std::string const BufferRsmConfig;

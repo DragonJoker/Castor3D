@@ -140,13 +140,11 @@ namespace castor3d
 			auto & layout = pool.getLayout();
 			auto result = pool.createDescriptorSet( "TransparentResolveUbo"
 				, 0u );
-			result->createBinding( layout.getBinding( sceneUboIndex )
-				, sceneUbo.getUbo()
-				, 0u
-				, 1u );
-			gpInfoUbo.getUbo().createSizedBinding( *result
+			sceneUbo.createSizedBinding( *result
+				, layout.getBinding( sceneUboIndex ) );
+			gpInfoUbo.createSizedBinding( *result
 				, layout.getBinding( gpuInfoUboIndex ) );
-			hdrConfigUbo.getUbo().createSizedBinding( *result
+			hdrConfigUbo.createSizedBinding( *result
 				, layout.getBinding( hdrUboIndex ) );
 			result->update();
 			return result;

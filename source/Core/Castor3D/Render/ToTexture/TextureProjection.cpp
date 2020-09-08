@@ -360,9 +360,9 @@ namespace castor3d
 
 		m_descriptorPool = m_descriptorLayout->createPool( "TextureProjection", 1u );
 		m_descriptorSet = m_descriptorPool->createDescriptorSet( "TextureProjection", 0u );
-		m_matrixUbo.getUbo().createSizedBinding( *m_descriptorSet
+		m_matrixUbo.createSizedBinding( *m_descriptorSet
 			, m_descriptorLayout->getBinding( 0u ) );
-		m_modelMatrixUbo.getUbo().createSizedBinding( *m_descriptorSet
+		m_modelMatrixUbo.createSizedBinding( *m_descriptorSet
 			, m_descriptorLayout->getBinding( 1u ) );
 		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 2u )
 			, texture

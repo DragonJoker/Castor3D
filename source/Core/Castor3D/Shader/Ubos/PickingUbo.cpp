@@ -1,6 +1,7 @@
 #include "Castor3D/Shader/Ubos/PickingUbo.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
 namespace castor3d
@@ -23,11 +24,15 @@ namespace castor3d
 	{
 		if ( !m_ubo )
 		{
-			m_ubo = makeUniformBuffer< Configuration >( *m_engine.getRenderSystem()
-				, 1u
-				, VK_BUFFER_USAGE_TRANSFER_DST_BIT
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, "PickingUbo" );
+			m_ubo = m_engine.getUboPools().getBuffer< Configuration >( 0u );
+		}
+	}
+
+	void PickingUbo::cleanup()
+	{
+		if ( m_ubo )
+		{
+			m_engine.getUboPools().putBuffer( m_ubo );
 		}
 	}
 

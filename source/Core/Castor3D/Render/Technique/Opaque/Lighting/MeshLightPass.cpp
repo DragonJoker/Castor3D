@@ -2,6 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
+#include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
@@ -238,16 +239,12 @@ namespace castor3d
 			, lpResult
 			, gpInfoUbo
 			, hasShadows }
-		, m_modelMatrixUbo{ makeUniformBuffer< ModelMatrixUboConfiguration >( *engine.getRenderSystem()
-			, 1u
-			, VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, "LightPass" + suffix + ( hasShadows ? String{ "Shadow" } : String{} ) ) }
+		, m_modelMatrixUbo{ engine.getUboPools().getBuffer< ModelMatrixUboConfiguration >( 0u ) }
 		, m_stencilPass{ engine
 			, getName()
 			, lpResult[LpTexture::eDepth].getTexture()->getDefaultView().getTargetView()
 			, m_matrixUbo
-			, *m_modelMatrixUbo }
+			, m_modelMatrixUbo }
 		, m_type{ type }
 	{
 	}
@@ -301,7 +298,7 @@ namespace castor3d
 			, *m_vertexBuffer
 			, declaration
 			, sceneUbo
-			, m_modelMatrixUbo.get()
+			, &m_modelMatrixUbo
 			, timer );
 	}
 
@@ -310,7 +307,7 @@ namespace castor3d
 		doCleanup();
 		m_stencilPass.cleanup();
 		m_vertexBuffer.reset();
-		m_modelMatrixUbo.reset();
+		m_engine.getUboPools().putBuffer( m_modelMatrixUbo );
 		m_matrixUbo.cleanup();
 	}
 
@@ -341,12 +338,11 @@ namespace castor3d
 		auto normal = castor::Matrix3x3f{ model };
 		normal.invert();
 		normal.transpose();
-		auto & data = m_modelMatrixUbo->getData();
+		auto & data = m_modelMatrixUbo.getData();
 		data.prvModel = data.curModel;
 		data.prvNormal = data.curNormal;
 		data.curModel = model;
 		data.curNormal = Matrix4x4f{ normal };
-		m_modelMatrixUbo->upload();
 
 		m_pipeline->program->bind( light );
 	}

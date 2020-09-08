@@ -62,22 +62,12 @@ namespace castor3d
 		C3D_API void cleanup();
 		C3D_API void cpuUpdate( castor::Size const & renderSize
 			, Camera const & camera );
-		/**
-		 *\~english
-		 *\name			getters.
-		 *\~french
-		 *\name			getters.
-		 */
-		inline UniformBufferOffsetT< Configuration > & getUbo()
-		{
-			return m_ubo;
-		}
 
-		inline UniformBufferOffsetT< Configuration > const & getUbo()const
+		void createSizedBinding( ashes::DescriptorSet & descriptorSet
+			, VkDescriptorSetLayoutBinding const & layoutBinding )const
 		{
-			return m_ubo;
+			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
 		}
-		/**@}*/
 
 	public:
 		C3D_API static const castor::String GPInfo;

@@ -55,7 +55,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour l'UBO de configuration.
 		 */
-		C3D_API void update( Camera const & camera );
+		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Renders the SSAO pass.

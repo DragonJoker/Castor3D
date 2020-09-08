@@ -663,11 +663,9 @@ namespace castor3d
 	void SsaoRawAOPass::RenderQuad::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
 		, ashes::DescriptorSet & descriptorSet )
 	{
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 0u )
-			, m_ssaoConfigUbo.getUbo()
-			, 0u
-			, 1u );
-		m_gpInfoUbo.getUbo().createSizedBinding( descriptorSet
+		m_ssaoConfigUbo.createSizedBinding( descriptorSet
+			, descriptorSetLayout.getBinding( 0u ) );
+		m_gpInfoUbo.createSizedBinding( descriptorSet
 			, descriptorSetLayout.getBinding( 1u ) );
 
 		if ( m_depthView )

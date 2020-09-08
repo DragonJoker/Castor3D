@@ -203,22 +203,28 @@ namespace castor3d
 		m_linearisePass.cleanup();
 	}
 
-	void DeferredRendering::update( GpuUpdater & updater )
+	void DeferredRendering::update( CpuUpdater & updater )
 	{
-		auto & scene = *updater.scene;
 		auto & camera = *updater.camera;
-		m_opaquePass.getSceneUbo().gpuUpdate( scene, &camera );
+		auto & scene = *camera.getScene();
 		m_opaquePass.update( updater );
 
 		if ( m_ssaoConfig.enabled )
 		{
-			m_linearisePass->update( camera.getViewport() );
+			m_linearisePass->cpuUpdate( camera.getViewport() );
 		}
 
 		if ( m_ssaoConfig.enabled )
 		{
-			m_ssao->update( camera );
+			m_ssao->update( updater );
 		}
+	}
+
+	void DeferredRendering::update( GpuUpdater & updater )
+	{
+		auto & scene = *updater.scene;
+		auto & camera = *updater.camera;
+		m_opaquePass.update( updater );
 
 		auto index = getIndex( m_ssaoConfig, scene );
 		m_resolve[index]->update( camera );

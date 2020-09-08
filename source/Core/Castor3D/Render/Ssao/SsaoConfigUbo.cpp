@@ -1,7 +1,7 @@
 #include "Castor3D/Render/Ssao/SsaoConfigUbo.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/UniformBuffer.hpp"
+#include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -56,19 +56,21 @@ namespace castor3d
 
 	void SsaoConfigUbo::initialise()
 	{
-		m_ubo = makeUniformBuffer< Configuration >( *m_engine.getRenderSystem()
-			, 1u
-			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, "SsaoConfig" );
+		if ( !m_ubo )
+		{
+			m_ubo = m_engine.getUboPools().getBuffer< Configuration >( 0u );
+		}
 	}
 
 	void SsaoConfigUbo::cleanup()
 	{
-		m_ubo.reset();
+		if ( m_ubo )
+		{
+			m_engine.getUboPools().putBuffer( m_ubo );
+		}
 	}
 
-	void SsaoConfigUbo::update( SsaoConfig const & config
+	void SsaoConfigUbo::cpuUpdate( SsaoConfig const & config
 		, Camera const & camera )
 	{
 		auto & device = getCurrentRenderDevice( m_engine );
@@ -114,7 +116,7 @@ namespace castor3d
 		farZ = std::min( farZ, -1000.0f );
 		auto const & proj = camera.getProjection();
 
-		auto & configuration = m_ubo->getData( 0u );
+		auto & configuration = m_ubo.getData();
 		configuration.numSamples = config.numSamples;
 		configuration.numSpiralTurns = numSpiralTurns;
 		configuration.projScale = projScale;
@@ -143,7 +145,5 @@ namespace castor3d
 		configuration.maxMipLevel = config.maxMipLevel;
 		configuration.minRadius = config.minRadius;
 		configuration.variation = config.variation;
-
-		m_ubo->upload();
 	}
 }

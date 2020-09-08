@@ -1,6 +1,7 @@
 #include "Castor3D/Render/Passes/LineariseDepthPass.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
@@ -400,11 +401,7 @@ namespace castor3d
 			, VK_FILTER_NEAREST );
 		m_commandBuffer = getCurrentRenderDevice( m_engine ).graphicsCommandPool->createCommandBuffer( m_prefix + "LineariseDepth" );
 		m_finished = getCurrentRenderDevice( m_engine )->createSemaphore( m_prefix + "LineariseDepth" );
-		m_clipInfo = makeUniformBuffer< Point3f >( *m_engine.getRenderSystem()
-			, 1u
-			, 0u
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, "LineariseDepthClipInfo" );
+		m_clipInfo = m_engine.getUboPools().getBuffer< Point3f >( 0u );
 		doInitialiseLinearisePass();
 		doInitialiseMinifyPass();
 	}
@@ -413,7 +410,7 @@ namespace castor3d
 	{
 		doCleanupMinifyPass();
 		doCleanupLinearisePass();
-		m_clipInfo.reset();
+		m_engine.getUboPools().putBuffer( m_clipInfo );
 		m_finished.reset();
 		m_commandBuffer.reset();
 		m_minifySampler.reset();
@@ -424,8 +421,7 @@ namespace castor3d
 		m_result.cleanup();
 	}
 
-	void LineariseDepthPass::update( Viewport const & viewport
-		, ashes::CommandBuffer * cb )
+	void LineariseDepthPass::cpuUpdate( Viewport const & viewport )
 	{
 		auto z_f = viewport.getFar();
 		auto z_n = viewport.getNear();
@@ -439,19 +435,24 @@ namespace castor3d
 
 		if ( m_clipInfoValue.isDirty() )
 		{
-			m_clipInfo->getData() = m_clipInfoValue;
-			m_clipInfo->upload( 0u );
-
-			if ( cb )
-			{
-				doPrepareFrame( *cb, *m_timer, 0u );
-			}
+			m_clipInfo.getData() = m_clipInfoValue;
 		}
 	}
-	
-	void LineariseDepthPass::update( Viewport const & viewport )
+
+	void LineariseDepthPass::gpuUpdate( ashes::CommandBuffer * cb )
 	{
-		update( viewport, m_commandBuffer.get() );
+		if ( cb
+			&& m_clipInfoValue.isDirty() )
+		{
+			doPrepareFrame( *cb, *m_timer, 0u );
+		}
+
+		m_clipInfoValue.reset();
+	}
+	
+	void LineariseDepthPass::gpuUpdate()
+	{
+		gpuUpdate( m_commandBuffer.get() );
 	}
 
 	ashes::Semaphore const & LineariseDepthPass::linearise( ashes::Semaphore const & toWait )const
@@ -538,9 +539,8 @@ namespace castor3d
 		m_lineariseDescriptor->createBinding( m_lineariseLayout.descriptorLayout->getBinding( 0u )
 			, m_srcDepthBuffer
 			, *m_lineariseSampler );
-		m_lineariseDescriptor->createSizedBinding( m_lineariseLayout.descriptorLayout->getBinding( 1u )
-			, *m_clipInfo
-			, 0u );
+		m_clipInfo.createSizedBinding( *m_lineariseDescriptor
+			, m_lineariseLayout.descriptorLayout->getBinding( 1u ) );
 		m_lineariseDescriptor->update();
 
 		m_linearisePipeline = device->createPipeline( "LineariseDepthPass"
@@ -609,15 +609,12 @@ namespace castor3d
 			},
 		};
 
-		m_previousLevel = makeUniformBuffer< MinifyConfiguration >( *m_engine.getRenderSystem()
-			, MaxMipLevel
-			, 0u
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, "LineariseDepthPreviousLevel" );
 
 		for ( auto & pipeline : m_minifyPipelines )
 		{
-			auto & data = m_previousLevel->getData( index );
+			m_previousLevel.push_back( m_engine.getUboPools().getBuffer< MinifyConfiguration >( 0u ) );
+			auto & previousLevel = m_previousLevel.back();
+			auto & data = previousLevel.getData();
 			data.previousLevel = index;
 			data.textureSize = Point2i{ size.width, size.height };
 			size.width >>= 1;
@@ -630,9 +627,8 @@ namespace castor3d
 			pipeline.descriptor->createBinding( m_minifyLayout.descriptorLayout->getBinding( 0u )
 				, *pipeline.sourceView
 				, *m_minifySampler );
-			pipeline.descriptor->createSizedBinding( m_minifyLayout.descriptorLayout->getBinding( 1u )
-				, m_previousLevel->getBuffer()
-				, index );
+			previousLevel.createSizedBinding( *pipeline.descriptor
+				, m_minifyLayout.descriptorLayout->getBinding( 1u ) );
 			pipeline.descriptor->update();
 			ashes::ImageViewCRefArray attaches;
 			attaches.emplace_back( pipeline.targetView );
@@ -665,8 +661,6 @@ namespace castor3d
 			sourceView = &pipeline.targetView;
 			++index;
 		}
-
-		m_previousLevel->upload( 0u, MaxMipLevel );
 	}
 
 	void LineariseDepthPass::doCleanupLinearisePass()
@@ -688,7 +682,12 @@ namespace castor3d
 			pipeline.descriptor.reset();
 		}
 
-		m_previousLevel.reset();
+		for ( auto & ubo : m_previousLevel )
+		{
+			m_engine.getUboPools().putBuffer( ubo );
+		}
+
+		m_previousLevel.clear();
 		m_minifyLayout.descriptorPool.reset();
 		m_minifyLayout.pipelineLayout.reset();
 		m_minifyLayout.descriptorLayout.reset();

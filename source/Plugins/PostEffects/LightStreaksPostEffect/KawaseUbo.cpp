@@ -3,6 +3,7 @@
 #include "LightStreaksPostEffect/LightStreaksPostEffect.hpp"
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Buffer/UniformBufferPools.hpp>
 
 using namespace castor;
 using namespace castor3d;
@@ -23,16 +24,23 @@ namespace light_streaks
 
 	void KawaseUbo::initialise()
 	{
-		m_ubo = castor3d::makeUniformBuffer< Configuration >( *m_engine.getRenderSystem()
-			, PostEffect::Count * 3u
-			, 0u
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, "KawaseCfg" );
+		if ( m_ubo.empty() )
+		{
+			for ( uint32_t i = 0u; i < PostEffect::Count * 3u; ++i )
+			{
+				m_ubo.push_back( m_engine.getUboPools().getBuffer< Configuration >( 0u ) );
+			}
+		}
 	}
 
 	void KawaseUbo::cleanup()
 	{
-		m_ubo.reset();
+		for ( auto & ubo : m_ubo )
+		{
+			m_engine.getUboPools().putBuffer( ubo );
+		}
+
+		m_ubo.clear();
 	}
 
 	void KawaseUbo::update( uint32_t index
@@ -41,17 +49,12 @@ namespace light_streaks
 		, uint32_t pass )
 	{
 		Point2f pixelSize{ 1.0f / size.width, 1.0f / size.height };
-		auto & data = m_ubo->getData( index );
+		auto & data = m_ubo[index].getData();
 		data.samples = 4;
 		data.attenuation = 0.9f;
 		data.pixelSize = pixelSize;
 		data.direction = direction;
 		data.pass = int( pass );
-	}
-
-	void KawaseUbo::upload()
-	{
-		m_ubo->upload( 0u, uint32_t( m_ubo->getDatas().size() ) );
 	}
 
 	//************************************************************************************************

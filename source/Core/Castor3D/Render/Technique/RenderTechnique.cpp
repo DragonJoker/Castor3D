@@ -7,8 +7,10 @@
 #include "Castor3D/Cache/GeometryCache.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Cache/ParticleSystemCache.hpp"
+#include "Castor3D/Event/Frame/FunctorEvent.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Render/RenderLoop.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePass.hpp"
@@ -255,11 +257,6 @@ namespace castor3d
 			m_gpInfoUbo.initialise();
 			m_matrixUbo.initialise();
 
-			m_stagingBuffer = std::make_unique< ashes::StagingBuffer >( *device
-				, VK_BUFFER_USAGE_TRANSFER_SRC_BIT
-				, m_matrixUbo.getUbo().getAlignedSize() );
-			m_uploadCommandBuffer = device.graphicsCommandPool->createCommandBuffer( "RenderTechniqueUpload" );
-
 			//m_voxelizer = std::make_unique< Voxelizer >( *m_renderSystem.getEngine()
 			//	, VkExtent3D{ 64u, 64u, 64u }
 			//	, *m_renderTarget.getScene()
@@ -302,8 +299,6 @@ namespace castor3d
 #endif
 		m_gpInfoUbo.cleanup();
 		m_matrixUbo.cleanup();
-		m_uploadCommandBuffer.reset();
-		m_stagingBuffer.reset();
 		m_initialised = false;
 		m_depthBuffer.cleanup();
 		m_colourTexture.cleanup();
@@ -317,26 +312,16 @@ namespace castor3d
 		m_depthPass->update( updater );
 #endif
 		//m_voxelizer->cpuUpdate( updater );
-		m_opaquePass->update( updater );
-		m_transparentPass->update( updater );
-		doUpdateShadowMaps( updater );
-		auto & maps = m_renderTarget.getScene()->getEnvironmentMaps();
-
-		for ( auto & map : maps )
-		{
-			map.get().update( updater );
-		}
-
-		auto & camera = *m_renderTarget.getCamera();
-		auto jitter = m_renderTarget.getJitter();
-		auto jitterProjSpace = jitter * 2.0f;
-		jitterProjSpace[0] /= camera.getWidth();
-		jitterProjSpace[1] /= camera.getHeight();
-		m_matrixUbo.cpuUpdate( camera.getView()
-			, camera.getProjection()
-			, jitterProjSpace );
-		m_gpInfoUbo.cpuUpdate( m_size
-			, camera );
+#if C3D_UseDeferredRendering
+		m_deferredRendering->update( updater );
+#else
+		static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).update( updater );
+#endif
+#if C3D_UseWeightedBlendedRendering
+		m_weightedBlendRendering->update( updater );
+#else
+		static_cast< ForwardRenderTechniquePass & >( *m_transparentPass ).update( updater );
+#endif
 
 		if ( m_renderTarget.getScene()->getFog().getType() != FogType::eDisabled )
 		{
@@ -348,6 +333,27 @@ namespace castor3d
 			auto & background = *m_renderTarget.getScene()->getBackground();
 			background.update( updater );
 		}
+
+		auto & maps = m_renderTarget.getScene()->getEnvironmentMaps();
+
+		for ( auto & map : maps )
+		{
+			map.get().update( updater );
+		}
+
+		doUpdateShadowMaps( updater );
+		doUpdateParticles( updater );
+
+		auto & camera = *m_renderTarget.getCamera();
+		auto jitter = m_renderTarget.getJitter();
+		auto jitterProjSpace = jitter * 2.0f;
+		jitterProjSpace[0] /= camera.getWidth();
+		jitterProjSpace[1] /= camera.getHeight();
+		m_matrixUbo.cpuUpdate( camera.getView()
+			, camera.getProjection()
+			, jitterProjSpace );
+		m_gpInfoUbo.cpuUpdate( m_size
+			, camera );
 	}
 
 	void RenderTechnique::update( GpuUpdater & updater )
@@ -383,18 +389,7 @@ namespace castor3d
 			map.get().update( updater );
 		}
 
-		for ( auto & maps : m_activeShadowMaps )
-		{
-			for ( auto & map : maps )
-			{
-				for ( auto & id : map.second )
-				{
-					updater.index = id;
-					map.first.get().update( updater );
-				}
-			}
-		}
-
+		doUpdateShadowMaps( updater );
 		doUpdateParticles( updater );
 	}
 
@@ -696,6 +691,37 @@ namespace castor3d
 				, updater );
 		}
 	}
+
+	void RenderTechnique::doUpdateShadowMaps( GpuUpdater & updater )
+	{
+		for ( auto & maps : m_activeShadowMaps )
+		{
+			for ( auto & map : maps )
+			{
+				for ( auto & id : map.second )
+				{
+					updater.index = id;
+					map.first.get().update( updater );
+				}
+			}
+		}
+	}
+	
+	void RenderTechnique::doUpdateParticles( CpuUpdater & updater )
+	{
+		auto & cache = updater.camera->getScene()->getParticleSystemCache();
+		auto lock( castor::makeUniqueLock( cache ) );
+
+		if ( !cache.isEmpty() )
+		{
+			updater.index = 0u;
+
+			for ( auto & particleSystem : cache )
+			{
+				particleSystem.second->update( updater );
+			}
+		}
+	}
 	
 	void RenderTechnique::doUpdateParticles( GpuUpdater & updater )
 	{
@@ -712,11 +738,12 @@ namespace castor3d
 			}
 
 			RenderPassTimerBlock timerBlock{ m_particleTimer->start() };
-			uint32_t index = 0u;
+			updater.index = 0u;
+			updater.timer = m_particleTimer.get();
 
 			for ( auto & particleSystem : cache )
 			{
-				particleSystem.second->update( *m_particleTimer, index );
+				particleSystem.second->update( updater );
 				updater.info.m_particlesCount += particleSystem.second->getParticlesCount();
 			}
 		}

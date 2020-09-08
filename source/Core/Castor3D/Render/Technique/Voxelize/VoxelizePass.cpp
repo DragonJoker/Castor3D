@@ -245,9 +245,9 @@ namespace castor3d
 		addFlag( flags.programFlags, ProgramFlag::eHasGeometry );
 	}
 
-	void VoxelizePass::doUpdatePipeline( RenderPipeline & pipeline )const
+	void VoxelizePass::doUpdatePipeline( RenderPipeline & pipeline )
 	{
-		m_sceneUbo.gpuUpdate( m_scene, &m_camera );
+		m_sceneUbo.cpuUpdate( m_scene, &m_camera );
 	}
 
 	ashes::VkDescriptorSetLayoutBindingArray VoxelizePass::doCreateTextureBindings( PipelineFlags const & flags )const

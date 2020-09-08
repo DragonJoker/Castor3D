@@ -695,13 +695,13 @@ namespace castor3d
 	void RsmGIPass::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
 		, ashes::DescriptorSet & descriptorSet )
 	{
-		m_rsmConfigUbo.getUbo().createSizedBinding( descriptorSet
+		m_rsmConfigUbo.createSizedBinding( descriptorSet
 			, descriptorSetLayout.getBinding( RsmCfgUboIdx ) );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( RsmSamplesIdx )
 			, m_rsmSamplesSsbo->getBuffer()
 			, 0u
 			, uint32_t( m_rsmSamplesSsbo->getMemoryRequirements().size ) );
-		m_gpInfo.getUbo().createSizedBinding( descriptorSet
+		m_gpInfo.createSizedBinding( descriptorSet
 			, descriptorSetLayout.getBinding( GpInfoUboIdx ) );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( LightsMapIdx )
 			, m_lightCache.getBuffer()
