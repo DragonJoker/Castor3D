@@ -1,6 +1,7 @@
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 
@@ -32,20 +33,19 @@ namespace castor3d
 	{
 		if ( !m_ubo )
 		{
-			m_ubo = makeUniformBuffer< Configuration >( *m_engine.getRenderSystem()
-				, 1u
-				, VK_BUFFER_USAGE_TRANSFER_DST_BIT
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, "GpInfoUbo" );
+			m_ubo = m_engine.getUboPools().getBuffer< GpInfoUboConfiguration >( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT );
 		}
 	}
 
 	void GpInfoUbo::cleanup()
 	{
-		m_ubo.reset();
+		if ( m_ubo )
+		{
+			m_engine.getUboPools().putBuffer< GpInfoUboConfiguration >( m_ubo );
+		}
 	}
 
-	void GpInfoUbo::update( castor::Size const & renderSize
+	void GpInfoUbo::cpuUpdate( castor::Size const & renderSize
 		, Camera const & camera )
 	{
 		CU_Require( m_ubo );
@@ -54,14 +54,13 @@ namespace castor3d
 		auto invProj = camera.getProjection().getInverse();
 		auto invViewProj = ( camera.getProjection() * camera.getView() ).getInverse();
 
-		auto & configuration = m_ubo->getData( 0u );
+		auto & configuration = m_ubo.getData();
 		configuration.invViewProj = invViewProj;
 		configuration.invView = invView;
 		configuration.invProj = invProj;
 		configuration.gView = camera.getView();
 		configuration.gProj = camera.getProjection();
 		configuration.renderSize = castor::Point2f( renderSize.getWidth(), renderSize.getHeight() );
-		m_ubo->upload();
 	}
 
 	//************************************************************************************************

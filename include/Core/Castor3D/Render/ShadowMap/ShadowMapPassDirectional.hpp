@@ -45,13 +45,11 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::ShadowMapPass::update
 		 */
-		C3D_API bool update( RenderQueueArray & queues
-			, Light & light
-			, uint32_t index )override;
+		C3D_API bool update( CpuUpdater & updater )override;
 		/**
 		 *\copydoc		castor3d::ShadowMapPass::updateDeviceDependent
 		 */
-		C3D_API void updateDeviceDependent( uint32_t index )override;
+		C3D_API void update( GpuUpdater & updater )override;
 
 	private:
 		/**

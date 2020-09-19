@@ -20,8 +20,7 @@ namespace castor3d
 	\~french
 	\brief		Collection de matériaux, avec des fonctions additionnelles
 	*/
-	template<>
-	class Cache< Material, castor::String >
+	class MaterialCache
 		: public CacheBase< Material, castor::String >
 	{
 	public:
@@ -54,7 +53,7 @@ namespace castor3d
 		 *\param[in]	clean		Le nettoyeur d'objet.
 		 *\param[in]	merge		Le fusionneur de collection d'objets.
 		 */
-		inline Cache( Engine & engine
+		inline MaterialCache( Engine & engine
 			, Producer && produce
 			, Initialiser && initialise
 			, Cleaner && clean
@@ -72,7 +71,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		inline ~Cache()
+		inline ~MaterialCache()
 		{
 		}
 		/**
@@ -102,7 +101,14 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour le tampon de passes.
 		 */
-		C3D_API void update();
+		C3D_API void update( CpuUpdater & updater );
+		/**
+		 *\~english
+		 *\brief		Updates the pass buffer.
+		 *\~french
+		 *\brief		Met à jour le tampon de passes.
+		 */
+		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Removes an element, given a name.

@@ -53,7 +53,7 @@ endfunction( ImportersBuild )
 
 function( ImportersSummary msg )
 	if ( ${CASTOR_BUILDGRP_IMPORTER} )
-		set( msg_tmp "\n\nImporter plugins :" )
+		set( msg_tmp "\n\n  Importer plugins:" )
 		if( ${CASTOR_BUILD_IMPORTER_ASSIMP} )
 			set( msg_tmp "${msg_tmp}\n    Assimp               ${Assimp}" )
 		endif ()

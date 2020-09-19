@@ -45,8 +45,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::update
 		 */
-		C3D_API void update( castor::Point2f const & jitter
-			, RenderInfo & info );
+		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Renders nodes.
@@ -130,7 +129,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
 		 */
-		C3D_API void doUpdatePipeline( RenderPipeline & pipeline )const override;
+		C3D_API void doUpdatePipeline( RenderPipeline & pipeline )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
 		 */

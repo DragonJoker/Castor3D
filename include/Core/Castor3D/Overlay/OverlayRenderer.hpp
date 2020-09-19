@@ -96,7 +96,7 @@ namespace castor3d
 		 *\brief		Met à jour les données GPU.
 		 *\param[in]	camera	La caméra de la fenêtre de rendu.
 		 */
-		C3D_API void update( Camera const & camera );
+		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Begins the overlays preparation.
@@ -201,20 +201,20 @@ namespace castor3d
 			using MyBufferIndex = VertexBufferIndex< VertexT, CountT >;
 			using Quad = std::array< VertexT, CountT >;
 
-			VertexBufferPool( RenderDevice const & device
+			VertexBufferPool( Engine & engine
+				, RenderDevice const & device
 				, ashes::PipelineVertexInputStateCreateInfo const & declaration
 				, uint32_t count );
 			VertexBufferIndex< VertexT, CountT > allocate( OverlayRenderNode & node );
 			void deallocate( VertexBufferIndex< VertexT, CountT > const & index );
 			void upload();
 
+			Engine & engine;
 			uint32_t const maxCount;
 			std::vector< Quad > data;
 			ashes::PipelineVertexInputStateCreateInfo const & declaration;
 			ashes::VertexBufferPtr< Quad > buffer;
 			std::set< uint32_t > free;
-			UniformBufferUPtr< Configuration > overlayUbo;
-			UniformBufferUPtr< TexturesUbo::Configuration > texturesUbo;
 		};
 
 		template< typename VertexT, uint32_t CountT >
@@ -228,6 +228,8 @@ namespace castor3d
 			VertexBufferPool< VertexT, CountT > & pool;
 			OverlayRenderNode & node;
 			uint32_t index;
+			UniformBufferOffsetT< Configuration > overlayUbo;
+			UniformBufferOffsetT< TexturesUbo::Configuration > texturesUbo;
 			OverlayGeometryBuffers geometryBuffers;
 			ashes::DescriptorSetPtr descriptorSet;
 			FontTexture::OnChanged::connection connection;
@@ -255,15 +257,15 @@ namespace castor3d
 		ashes::DescriptorSetPtr doCreateDescriptorSet( OverlayRenderer::Pipeline & pipeline
 			, TextureFlags textures
 			, Pass const & pass
-			, UniformBuffer< Configuration > const & overlayUbo
-			, UniformBuffer< TexturesUbo::Configuration > const & texturesUbo
+			, UniformBufferOffsetT< Configuration > const & overlayUbo
+			, UniformBufferOffsetT< TexturesUbo::Configuration > const & texturesUbo
 			, uint32_t index
 			, bool update = true );
 		ashes::DescriptorSetPtr doCreateDescriptorSet( OverlayRenderer::Pipeline & pipeline
 			, TextureFlags textures
 			, Pass const & pass
-			, UniformBuffer< Configuration > const & overlayUbo
-			, UniformBuffer< TexturesUbo::Configuration > const & texturesUbo
+			, UniformBufferOffsetT< Configuration > const & overlayUbo
+			, UniformBufferOffsetT< TexturesUbo::Configuration > const & texturesUbo
 			, uint32_t index
 			, TextureLayout const & texture
 			, Sampler const & sampler );

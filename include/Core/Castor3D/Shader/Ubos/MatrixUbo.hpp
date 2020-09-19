@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "UbosModule.hpp"
 
-#include "Castor3D/Buffer/UniformBufferPool.hpp"
+#include "Castor3D/Buffer/UniformBufferOffset.hpp"
 
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
@@ -72,7 +72,7 @@ namespace castor3d
 		 *\param[in]	projection	La nouvelle matrice de projection.
 		 *\param[in]	jitter		La valeur de jittering.
 		 */
-		C3D_API void update( castor::Matrix4x4f const & view
+		C3D_API void cpuUpdate( castor::Matrix4x4f const & view
 			, castor::Matrix4x4f const & projection
 			, castor::Point2f const & jitter = castor::Point2f{} );
 		/**
@@ -85,23 +85,13 @@ namespace castor3d
 		 *\remarks		La matrice de vue ne sera pas mise à jour.
 		 *\param[in]	projection	La nouvelle matrice de projection.
 		 */
-		C3D_API void update( castor::Matrix4x4f const & projection );
-		/**
-		 *\~english
-		 *\name			Getters.
-		 *\~french
-		 *\name			Accesseurs.
-		 */
-		inline UniformBufferOffset< Configuration > & getUbo()
-		{
-			return m_ubo;
-		}
+		C3D_API void cpuUpdate( castor::Matrix4x4f const & projection );
 
-		inline UniformBufferOffset< Configuration > const & getUbo()const
+		void createSizedBinding( ashes::DescriptorSet & descriptorSet
+			, VkDescriptorSetLayoutBinding const & layoutBinding )const
 		{
-			return m_ubo;
+			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
 		}
-		/**@}*/
 
 	public:
 		C3D_API static uint32_t const BindingPoint;
@@ -116,7 +106,7 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
-		UniformBufferOffset< Configuration > m_ubo;
+		UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }
 

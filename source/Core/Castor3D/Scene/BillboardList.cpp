@@ -164,7 +164,7 @@ namespace castor3d
 		m_cameraPosition = cameraPosition;
 	}
 
-	void BillboardBase::update()
+	void BillboardBase::update( GpuUpdater & updater )
 	{
 		if ( m_count )
 		{

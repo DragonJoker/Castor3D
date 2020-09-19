@@ -15,6 +15,7 @@
 #include "Castor3D/Cache/TargetCache.hpp"
 #include "Castor3D/Cache/WindowCache.hpp"
 #include "Castor3D/Event/Frame/CleanupEvent.hpp"
+#include "Castor3D/Event/Frame/FunctorEvent.hpp"
 #include "Castor3D/Event/Frame/InitialiseEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
@@ -814,7 +815,7 @@ namespace castor3d
 			} ) );
 	}
 
-	void Scene::update()
+	void Scene::update( CpuUpdater & updater )
 	{
 		if ( m_initialised )
 		{
@@ -822,8 +823,8 @@ namespace castor3d
 			doUpdateBoundingBox();
 			doUpdateAnimations();
 			doUpdateMaterials();
-			getLightCache().update();
-			getGeometryCache().update();
+			getLightCache().update( updater );
+			getGeometryCache().cpuUpdate();
 			m_billboardPools->update();
 			getAnimatedObjectGroupCache().update();
 			onUpdate( *this );
@@ -831,10 +832,9 @@ namespace castor3d
 		}
 	}
 
-	void Scene::updateDeviceDependent( Camera const & camera )
+	void Scene::update( GpuUpdater & updater )
 	{
-		m_background->update( camera );
-		m_colourBackground->update( camera );
+		getLightCache().update( updater );
 		getMeshCache().forEach( []( Mesh & mesh )
 		{
 			for ( auto & submesh : mesh )

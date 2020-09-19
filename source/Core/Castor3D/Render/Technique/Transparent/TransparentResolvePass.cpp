@@ -1,6 +1,7 @@
 #include "Castor3D/Render/Technique/Transparent/TransparentResolvePass.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
@@ -139,18 +140,12 @@ namespace castor3d
 			auto & layout = pool.getLayout();
 			auto result = pool.createDescriptorSet( "TransparentResolveUbo"
 				, 0u );
-			result->createBinding( layout.getBinding( sceneUboIndex )
-				, sceneUbo.getUbo()
-				, 0u
-				, 1u );
-			result->createBinding( layout.getBinding( gpuInfoUboIndex )
-				, gpInfoUbo.getUbo()
-				, 0u
-				, 1u );
-			result->createBinding( layout.getBinding( hdrUboIndex )
-				, *hdrConfigUbo.getUbo().buffer
-				, hdrConfigUbo.getUbo().offset
-				, 1u );
+			sceneUbo.createSizedBinding( *result
+				, layout.getBinding( sceneUboIndex ) );
+			gpInfoUbo.createSizedBinding( *result
+				, layout.getBinding( gpuInfoUboIndex ) );
+			hdrConfigUbo.createSizedBinding( *result
+				, layout.getBinding( hdrUboIndex ) );
 			result->update();
 			return result;
 		}
@@ -525,7 +520,7 @@ namespace castor3d
 	TransparentResolvePass::TransparentResolvePass( Engine & engine
 		, Size const & size
 		, SceneUbo & sceneUbo
-		, HdrConfigUbo & hdrConfigUbo
+		, HdrConfigUbo const & hdrConfigUbo
 		, GpInfoUbo const & gpInfoUbo
 		, TransparentPassResult const & wbResult
 		, ashes::ImageView const & colourView )

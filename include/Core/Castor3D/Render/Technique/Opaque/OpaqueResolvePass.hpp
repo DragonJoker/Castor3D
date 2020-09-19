@@ -56,16 +56,19 @@ namespace castor3d
 		 *\param[in]	hdrConfigUbo	L'UBO HDR.
 		 *\param[in]	ssao			L'image SSAO.
 		 */
-		OpaqueResolvePass( Engine & engine
+		C3D_API OpaqueResolvePass( Engine & engine
 			, Scene & scene
 			, OpaquePassResult const & gp
-			, ashes::ImageView const & lightDiffuse
-			, ashes::ImageView const & lightSpecular
-			, ashes::ImageView const & result
-			, SceneUbo & sceneUbo
+			, TextureUnit const & lightDiffuse
+			, TextureUnit const & lightSpecular
+			, TextureUnit const & result
+			, SceneUbo const & sceneUbo
 			, GpInfoUbo const & gpInfoUbo
-			, HdrConfigUbo & hdrConfigUbo
-			, ashes::ImageView const * ssao );
+			, HdrConfigUbo const & hdrConfigUbo
+			, SsaoPass const * ssao );
+		C3D_API ~OpaqueResolvePass() = default;
+		C3D_API void initialise();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Updates the configuration UBO.
@@ -74,7 +77,7 @@ namespace castor3d
 		 *\brief		Met à jour l'UBO de configuration.
 		 *\param[in]	camera	La caméra de rendu.
 		 */
-		void update( Camera const & camera );
+		C3D_API void update( Camera const & camera );
 		/**
 		 *\~english
 		 *\brief		Renders the reflection mapping.
@@ -83,7 +86,7 @@ namespace castor3d
 		 *\brief		Dessine le mapping de réflexion.
 		 *\param[in]	toWait	Le sémaphore à attendre.
 		 */
-		ashes::Semaphore const & render( ashes::Semaphore const & toWait )const;
+		C3D_API ashes::Semaphore const & render( ashes::Semaphore const & toWait )const;
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -122,18 +125,22 @@ namespace castor3d
 			ashes::GraphicsPipelinePtr m_pipeline;
 			ashes::CommandBufferPtr m_commandBuffer;
 		};
-		using ReflectionPrograms = std::array< ProgramPipeline, size_t( FogType::eCount ) >;
+		using ReflectionPrograms = std::array< std::unique_ptr< ProgramPipeline >, size_t( FogType::eCount ) >;
 
 	private:
 		RenderDevice const & m_device;
 		Scene const & m_scene;
-		ashes::ImageView const * m_ssaoResult;
+		TextureUnit const & m_result;
+		SceneUbo const & m_sceneUbo;
+		GpInfoUbo const & m_gpInfoUbo;
+		HdrConfigUbo const & m_hdrConfigUbo;
+		SsaoPass const * m_ssao;
 		VkExtent2D m_size;
 		Viewport m_viewport;
 		SamplerSPtr m_sampler;
 		OpaquePassResult const & m_opaquePassResult;
-		ashes::ImageView const & m_lightDiffuse;
-		ashes::ImageView const & m_lightSpecular;
+		TextureUnit const & m_lightDiffuse;
+		TextureUnit const & m_lightSpecular;
 		ashes::VertexBufferBasePtr m_vertexBuffer;
 		ashes::DescriptorSetLayoutPtr m_uboDescriptorLayout;
 		ashes::DescriptorSetPoolPtr m_uboDescriptorPool;

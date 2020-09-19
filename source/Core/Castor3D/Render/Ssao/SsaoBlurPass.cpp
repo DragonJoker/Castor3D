@@ -1,6 +1,7 @@
 #include "Castor3D/Render/Ssao/SsaoBlurPass.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
@@ -510,14 +511,10 @@ namespace castor3d
 		, m_fbo{ doCreateFrameBuffer( m_engine, getName(), *m_renderPass, m_result ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, cuT( "Scalable Ambient Obscurance" ), prefix + cuT( " Blur" ) ) }
 		, m_finished{ getCurrentRenderDevice( m_engine )->createSemaphore( getName() ) }
-		, m_configurationUbo{ makeUniformBuffer< Configuration >( *m_engine.getRenderSystem()
-			, 1u
-			, 0u
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, getName() + cuT( "Cfg" ) ) }
+		, m_configurationUbo{ m_engine.getUboPools().getBuffer< Configuration >( 0u ) }
 	{
 		auto & device = getCurrentRenderDevice( m_renderSystem );
-		auto & configuration = m_configurationUbo->getData();
+		auto & configuration = m_configurationUbo.getData();
 		configuration.axis = axis;
 
 		ashes::VkDescriptorSetLayoutBindingArray bindings
@@ -570,11 +567,11 @@ namespace castor3d
 		m_result.cleanup();
 	}
 
-	void SsaoBlurPass::update()const
+	void SsaoBlurPass::update( CpuUpdater & updater )
 	{
 		if ( m_config.blurRadius.isDirty() )
 		{
-			auto & configuration = m_configurationUbo->getData();
+			auto & configuration = m_configurationUbo.getData();
 
 			switch ( m_config.blurRadius.value().value() )
 			{
@@ -618,8 +615,6 @@ namespace castor3d
 				configuration.gaussian[1][2] = 0.036108f;
 				break;
 			}
-
-			m_configurationUbo->upload();
 		}
 	}
 
@@ -644,13 +639,16 @@ namespace castor3d
 		, SsaoConfig & config
 		, PipelineVisitorBase & visitor )
 	{
-		if ( horizontal )
+		if ( getResult().isTextured() )
 		{
-			visitor.visit( "SSAO HBlurred AO", getResult().getTexture()->getDefaultView().getSampledView() );
-		}
-		else
-		{
-			visitor.visit( "SSAO Blurred AO", getResult().getTexture()->getDefaultView().getSampledView() );
+			if ( horizontal )
+			{
+				visitor.visit( "SSAO HBlurred AO", getResult().getTexture()->getDefaultView().getSampledView() );
+			}
+			else
+			{
+				visitor.visit( "SSAO Blurred AO", getResult().getTexture()->getDefaultView().getSampledView() );
+			}
 		}
 
 		visitor.visit( m_vertexShader );
@@ -661,18 +659,12 @@ namespace castor3d
 	void SsaoBlurPass::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
 		, ashes::DescriptorSet & descriptorSet )
 	{
-		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( SsaoCfgUboIdx )
-			, m_ssaoConfigUbo.getUbo().getBuffer()
-			, 0u
-			, 1u );
-		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( GpInfoUboIdx )
-			, m_gpInfoUbo.getUbo().getBuffer()
-			, 0u
-			, 1u );
-		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( BlurCfgUboIdx )
-			, m_configurationUbo->getBuffer()
-			, 0u
-			, 1u );
+		m_ssaoConfigUbo.createSizedBinding( descriptorSet
+			, descriptorSetLayout.getBinding( SsaoCfgUboIdx ) );
+		m_gpInfoUbo.createSizedBinding( descriptorSet
+			, descriptorSetLayout.getBinding( GpInfoUboIdx ) );
+		m_configurationUbo.createSizedBinding( descriptorSet
+			, descriptorSetLayout.getBinding( BlurCfgUboIdx ) );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( NmlImgIdx )
 			, m_normals
 			, m_sampler->getSampler() );

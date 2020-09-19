@@ -1,5 +1,7 @@
 #include "Castor3D/Render/ToTexture/EquirectangularToCube.hpp"
 
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
@@ -204,25 +206,28 @@ namespace castor3d
 
 	void EquirectangularToCube::render()
 	{
+		CU_Require( !m_frameBuffers.empty() );
 		uint32_t face = 0u;
+		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, m_view.makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 
 		for ( auto & frameBuffer : m_frameBuffers )
 		{
 			m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-
-			if ( face == 0u )
-			{
-				m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-					, m_view.makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
-			}
+			m_commandBuffer->beginDebugBlock(
+				{
+					"Equirectangular to cube",
+					makeFloatArray( m_device.renderSystem.getEngine()->getNextRainbowColour() ),
+				} );
 
 			m_commandBuffer->beginRenderPass( *m_renderPass
 				, *frameBuffer.frameBuffer
 				, { transparentBlackClearColor }
-				, VK_SUBPASS_CONTENTS_INLINE );
+			, VK_SUBPASS_CONTENTS_INLINE );
 			registerFrame( *m_commandBuffer, face );
 			m_commandBuffer->endRenderPass();
+			m_commandBuffer->endDebugBlock();
 			m_commandBuffer->end();
 
 			m_device.graphicsQueue->submit( *m_commandBuffer, nullptr );

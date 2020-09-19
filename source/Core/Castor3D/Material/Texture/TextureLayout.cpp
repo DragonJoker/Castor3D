@@ -776,7 +776,7 @@ namespace castor3d
 		, m_static{ isStatic }
 		, m_info{ std::move( info ) }
 		, m_properties{ memoryProperties }
-		, m_image{ debugName, Path{}, convert( info ) }
+		, m_image{ debugName, Path{}, convert( m_info ) }
 		, m_defaultView{ createViews( m_info, *this, m_image.getName() ) }
 		, m_cubeView{ &m_defaultView }
 		, m_arrayView{ &m_defaultView }
@@ -988,7 +988,7 @@ namespace castor3d
 		buffer = adaptBuffer( buffer, buffer->getLevels() );
 		castor::Image srcImage{ getBufferName( *buffer ), ImageLayout{ *buffer }, buffer };
 		auto & srcLayout = srcImage.getLayout();
-		doUpdateFromFirstImage( srcLayout );
+		doUpdateFromFirstImage( 0u, srcLayout );
 		auto & dstLayout = m_image.getLayout();
 		auto src = srcLayout.buffer( *buffer );
 		auto dst = dstLayout.layerBuffer( m_image.getPxBuffer(), index );
@@ -1043,12 +1043,7 @@ namespace castor3d
 		castor::Image srcImage{ getBufferName( *buffer ), ImageLayout{ *buffer }, buffer };
 		auto & srcLayout = srcImage.getLayout();
 		auto & dstLayout = m_image.getLayout();
-
-		if ( level == 0u )
-		{
-			doUpdateFromFirstImage( srcLayout );
-		}
-
+		doUpdateFromFirstImage( level, srcLayout );
 		auto src = srcLayout.buffer( *buffer );
 		auto dst = dstLayout.layerMipBuffer( m_image.getPxBuffer(), index, level );
 		CU_Require( src.size() == dst.size() );
@@ -1229,9 +1224,12 @@ namespace castor3d
 		doUpdateViews();
 	}
 
-	void TextureLayout::doUpdateFromFirstImage( castor::ImageLayout const & layout )
+	void TextureLayout::doUpdateFromFirstImage( uint32_t mipLevel
+		, castor::ImageLayout layout )
 	{
 		using ashes::operator==;
+		layout.extent->x <<= mipLevel;
+		layout.extent->y <<= mipLevel;
 		auto changed = m_image.updateLayerLayout( layout.dimensions(), layout.format )
 			|| m_info->extent == VkExtent3D{}
 			|| m_info->extent.width != layout.extent->x

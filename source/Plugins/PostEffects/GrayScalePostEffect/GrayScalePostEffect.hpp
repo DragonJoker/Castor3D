@@ -25,14 +25,14 @@ namespace grayscale
 		{
 		public:
 			Quad( castor3d::RenderSystem & renderSystem
-				, castor3d::UniformBuffer< castor::Point3f > const & configUbo );
+				, castor3d::UniformBufferOffsetT< castor::Point3f > const & configUbo );
 
 		private:
 			void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
 				, ashes::DescriptorSet & descriptorSet );
 
 		private:
-			castor3d::UniformBuffer< castor::Point3f > const & m_configUbo;
+			castor3d::UniformBufferOffsetT< castor::Point3f > const & m_configUbo;
 		};
 
 	public:
@@ -46,7 +46,7 @@ namespace grayscale
 		/**
 		 *\copydoc		castor3d::PostEffect::update
 		 */
-		void update( castor::Nanoseconds const & elapsedTime )override;
+		void update( castor3d::CpuUpdater & updater )override;
 		/**
 		 *\copydoc		castor3d::PostEffect::accept
 		 */
@@ -73,7 +73,7 @@ namespace grayscale
 	private:
 		castor3d::PostEffectSurface m_surface;
 		ashes::RenderPassPtr m_renderPass;
-		castor3d::UniformBufferUPtr< castor::Point3f > m_configUbo;
+		castor3d::UniformBufferOffsetT< castor::Point3f > m_configUbo;
 		std::unique_ptr< Quad > m_quad;
 		castor::ChangeTracked< castor::Point3f > m_factors{ castor::Point3f{ 0.2126f, 0.7152f, 0.0722f } };
 		castor3d::ShaderModule m_vertexShader;

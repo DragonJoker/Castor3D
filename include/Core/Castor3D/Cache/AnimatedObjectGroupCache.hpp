@@ -8,9 +8,8 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationModule.hpp"
 
-#include "Castor3D/Buffer/UniformBufferPool.hpp"
-#include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
-#include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
+#include "Castor3D/Buffer/UniformBufferOffset.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 namespace castor3d
 {
@@ -32,13 +31,13 @@ namespace castor3d
 		{
 			AnimatedObjectGroup const & group;
 			AnimatedSkeleton const & skeleton;
-			UniformBufferOffset< SkinningUbo::Configuration > skinningUbo;
+			UniformBufferOffsetT< SkinningUboConfiguration > skinningUbo;
 		};
 		struct MeshPoolsEntry
 		{
 			AnimatedObjectGroup const & group;
 			AnimatedMesh const & mesh;
-			UniformBufferOffset< MorphingUbo::Configuration > morphingUbo;
+			UniformBufferOffsetT< MorphingUboConfiguration > morphingUbo;
 		};
 		using MyCache = CacheBase< AnimatedObjectGroup, castor::String >;
 		using MyCacheTraits = typename MyCacheType::MyCacheTraits;
@@ -92,7 +91,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour les pools d'UBO en VRAM.
 		 */
-		C3D_API void uploadUbos();
+		C3D_API void uploadUbos( ashes::CommandBuffer const & commandBuffer );
 		/**
 		 *\~english
 		 *\brief		Cleans up the UBO pools.
@@ -173,8 +172,6 @@ namespace castor3d
 		std::map< AnimatedObjectGroup *, OnAnimatedSkeletonChangeConnection > m_skeletonRemovedConnections;
 		std::map< AnimatedObjectGroup *, OnAnimatedMeshChangeConnection > m_meshAddedConnections;
 		std::map< AnimatedObjectGroup *, OnAnimatedMeshChangeConnection > m_meshRemovedConnections;
-		UniformBufferPool< SkinningUbo::Configuration > m_skinningUboPool;
-		UniformBufferPool< MorphingUbo::Configuration > m_morphingUboPool;
 		RenderPassTimerSPtr m_updateTimer;
 	};
 }

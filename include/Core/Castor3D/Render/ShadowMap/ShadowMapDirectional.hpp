@@ -37,16 +37,13 @@ namespace castor3d
 		 */
 		~ShadowMapDirectional();
 		/**
-		 *\copydoc		castor3d::ShadowMap::update
+		 *\copydoc		castor3d::ShadowMap::cpuUpdate
 		 */
-		void update( Camera const & camera
-			, RenderQueueArray & queues
-			, Light & light
-			, uint32_t index )override;
+		void update( CpuUpdater & updater )override;
 		/**
-		 *\copydoc		castor3d::ShadowMap::updateDeviceDependent
+		 *\copydoc		castor3d::ShadowMap::gpuUpdate
 		 */
-		void updateDeviceDependent( uint32_t index )override;
+		void update( GpuUpdater & updater )override;
 
 	private:
 		void doInitialiseFramebuffers();

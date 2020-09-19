@@ -14,6 +14,8 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 
+#include <CastorUtils/Design/DelayedInitialiser.hpp>
+
 namespace castor3d
 {
 	class DeferredRendering
@@ -47,13 +49,13 @@ namespace castor3d
 			, OpaquePass & opaquePass
 			, TextureUnit const & depthTexture
 			, TextureUnit const & velocityTexture
-			, TextureLayoutSPtr resultTexture
+			, TextureUnit const & resultTexture
 			, ShadowMapResult const & smDirectionalResult
 			, ShadowMapResult const & smPointResult
 			, ShadowMapResult const & smSpotResult
 			, castor::Size const & size
 			, Scene & scene
-			, HdrConfigUbo & hdrConfigUbo
+			, HdrConfigUbo const & hdrConfigUbo
 			, GpInfoUbo const & gpInfoUbo
 			, SsaoConfig & ssaoConfig );
 		/**
@@ -77,10 +79,22 @@ namespace castor3d
 		 *\param[in]	camera	La caméra par laquelle la scène est rendue.
 		 *\param[in]	jitter	La valeur de jittering.
 		 */
-		void update( RenderInfo & info
-			, Scene const & scene
-			, Camera const & camera
-			, castor::Point2f const & jitter );
+		void update( CpuUpdater & updater );
+		/**
+		 *\~english
+		 *\brief		Updates opaque pass.
+		 *\param[out]	info	Receives the render informations.
+		 *\param[in]	scene	The rendered scene.
+		 *\param[in]	camera	The viewer camera.
+		 *\param[in]	jitter	The jittering value.
+		 *\~french
+		 *\brief		Met à jour la passe opaque.
+		 *\param[out]	info	Reçoit les informations de rendu.
+		 *\param[in]	scene	La scène rendue.
+		 *\param[in]	camera	La caméra par laquelle la scène est rendue.
+		 *\param[in]	jitter	La valeur de jittering.
+		 */
+		void update( GpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Renders opaque nodes.
@@ -108,11 +122,11 @@ namespace castor3d
 		GpInfoUbo const & m_gpInfoUbo;
 		castor::Size m_size;
 		OpaquePassResult m_opaquePassResult;
-		std::unique_ptr< LineariseDepthPass > m_linearisePass;
+		castor::DelayedInitialiserT< LineariseDepthPass > m_linearisePass;
 		std::unique_ptr< LightingPass > m_lightingPass;
-		std::unique_ptr< SsaoPass > m_ssao;
-		std::unique_ptr< SubsurfaceScatteringPass > m_subsurfaceScattering;
-		std::vector< std::unique_ptr< OpaqueResolvePass > > m_resolve;
+		castor::DelayedInitialiserT< SsaoPass > m_ssao;
+		castor::DelayedInitialiserT< SubsurfaceScatteringPass > m_subsurfaceScattering;
+		std::vector< castor::DelayedInitialiserT< OpaqueResolvePass > > m_resolve;
 		std::vector< ashes::ImagePtr > m_results;
 	};
 }

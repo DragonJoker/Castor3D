@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_ComputeParticleSystem_H___
 #define ___C3D_ComputeParticleSystem_H___
 
-#include "Castor3D/Buffer/UniformBuffer.hpp"
+#include "Castor3D/Buffer/UniformBufferOffset.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleSystemImpl.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleDeclaration.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
@@ -53,10 +53,11 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::ParticleSystemImpl::update
 		 */
-		C3D_API uint32_t update( RenderPassTimer & timer
-			, castor::Milliseconds const & time
-			, castor::Milliseconds const & total
-			, uint32_t index )override;
+		C3D_API void update( CpuUpdater & updater )override;
+		/**
+		 *\copydoc		castor3d::ParticleSystemImpl::update
+		 */
+		C3D_API uint32_t update( GpuUpdater & updater )override;
 		/**
 		 *\copydoc		castor3d::ParticleSystemImpl::addParticleVariable
 		 */
@@ -124,7 +125,7 @@ namespace castor3d
 	protected:
 		ParticleDeclaration m_inputs;
 		ShaderProgramSPtr m_program;
-		UniformBufferUPtr< Configuration > m_ubo;
+		UniformBufferOffsetT< Configuration > m_ubo;
 		std::array< ashes::BufferPtr< uint8_t >, 2 > m_particlesStorages;
 		ashes::BufferPtr< uint32_t > m_generatedCountBuffer;
 		ashes::BufferPtr< castor::Point4f > m_randomStorage;

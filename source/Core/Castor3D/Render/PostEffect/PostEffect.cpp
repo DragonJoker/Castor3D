@@ -82,7 +82,11 @@ namespace castor3d
 		return m_timer->start();
 	}
 
-	void PostEffect::update( castor::Nanoseconds const & elapsedTime )
+	void PostEffect::update( CpuUpdater & updater )
+	{
+	}
+
+	void PostEffect::update( GpuUpdater & updater )
 	{
 	}
 

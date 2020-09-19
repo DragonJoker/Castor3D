@@ -33,6 +33,11 @@ namespace castor3d
 		, m_renderSystem{ *engine.getRenderSystem() }
 		, m_debugOverlays{ std::make_unique< DebugOverlays >( engine ) }
 		, m_queueUpdater{ std::max( 2u, engine.getCpuInformations().getCoreCount() - ( isAsync ? 2u : 1u ) ) }
+		, m_uploadResources
+		{
+			UploadResources{ { nullptr, nullptr }, nullptr },
+			UploadResources{ { nullptr, nullptr }, nullptr },
+		}
 	{
 		m_debugOverlays->initialise( getEngine()->getOverlayCache() );
 	}
@@ -64,6 +69,11 @@ namespace castor3d
 				{
 					listener.fireEvents( EventType::eQueueRender );
 				} );
+			m_uploadResources =
+			{
+				UploadResources{ { nullptr, nullptr }, nullptr },
+				UploadResources{ { nullptr, nullptr }, nullptr },
+			};
 		}
 		else
 		{
@@ -184,34 +194,53 @@ namespace castor3d
 				{
 					m_renderSystem.setCurrentRenderDevice( nullptr );
 				} );
-			doProcessEvents( EventType::ePreRender );
-			getEngine()->getSceneCache().forEach( []( Scene & scene )
+			auto & device = getCurrentRenderDevice( m_renderSystem );
+
+			if ( !m_uploadResources[0].fence )
+			{
+				for ( auto & resources : m_uploadResources )
 				{
-					scene.getGeometryCache().uploadUbos();
-					scene.getBillboardPools().uploadUbos();
-					scene.getAnimatedObjectGroupCache().uploadUbos();
-				} );
-			getEngine()->getMaterialCache().update();
-			getEngine()->getRenderTargetCache().update( info );
-			getEngine()->uploadUbos();
+					resources.commands =
+					{
+						device.graphicsCommandPool->createCommandBuffer( "RenderLoopUboUpload" ),
+						device->createSemaphore( "RenderLoopUboUpload" ),
+					};
+					resources.fence = device->createFence();
+				}
+			}
+
+			// Usually GPU initialisation
+			doProcessEvents( EventType::ePreRender );
+
+			// GPU Update
+			GpuUpdater updater{ info };
+			getEngine()->getMaterialCache().update( updater );
+			getEngine()->getRenderTargetCache().update( updater );
+
+			auto & uploadResources = m_uploadResources[m_currentUpdate];
+			uploadResources.commands.commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
+			getEngine()->uploadUbos( *uploadResources.commands.commandBuffer );
+			uploadResources.commands.commandBuffer->end();
+			device.graphicsQueue->submit( { *uploadResources.commands.commandBuffer }
+				, {}
+				, {}
+				, {}
+				, uploadResources.fence.get() );
+			uploadResources.fence->wait( ashes::MaxTimeout );
+			uploadResources.fence->reset();
+
+			// Render
 			getEngine()->getRenderTargetCache().render( info );
+
+			// Usually GPU cleanup
 			doProcessEvents( EventType::eQueueRender );
 		}
 
-		if ( m_first )
-		{
-			m_first = false;
-			getEngine()->getRenderWindowCache().forEach( []( RenderWindow & window )
-				{
-					window.render( true );
-				} );
-			return;
-		}
-
-		getEngine()->getRenderWindowCache().forEach( []( RenderWindow & window )
+		getEngine()->getRenderWindowCache().forEach( [this]( RenderWindow & window )
 			{
-				window.render( false );
+				window.render( m_first );
 			} );
+		m_first = false;
 
 		{
 			auto guard = makeBlockGuard(
@@ -230,15 +259,19 @@ namespace castor3d
 	void RenderLoop::doCpuStep()
 	{
 		doProcessEvents( EventType::ePostRender );
-		getEngine()->getSceneCache().forEach( []( Scene & scene )
+		CpuUpdater updater;
+		getEngine()->getMaterialCache().update( updater );
+		getEngine()->getSceneCache().forEach( [&updater]( Scene & scene )
 			{
-				scene.update();
+				scene.update( updater );
 			} );
+		getEngine()->getRenderTargetCache().update( updater );
 		std::vector< TechniqueQueues > techniquesQueues;
-		getEngine()->getRenderTechniqueCache().forEach( [&techniquesQueues]( RenderTechnique & technique )
+		getEngine()->getRenderTechniqueCache().forEach( [&updater, &techniquesQueues]( RenderTechnique & technique )
 			{
 				TechniqueQueues techniqueQueues;
-				technique.update( techniqueQueues.queues );
+				updater.queues = &techniqueQueues.queues;
+				technique.update( updater );
 				techniqueQueues.shadowMaps = technique.getShadowMaps();
 				techniquesQueues.push_back( techniqueQueues );
 			} );

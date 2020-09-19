@@ -10,249 +10,60 @@
 
 namespace castor3d
 {
-	template< typename T >
-	UniformBufferPool< T >::UniformBufferPool( RenderSystem & renderSystem
-		, castor::String debugName )
-		: castor::OwnedBy< RenderSystem >{ renderSystem }
-		, m_debugName{ std::move( debugName ) }
+	template< typename DataT >
+	UniformBufferOffsetT< DataT > UniformBufferPool::getBuffer( VkMemoryPropertyFlags flags )
 	{
-	}
+		UniformBufferOffsetT< DataT > result;
 
-	template< typename T >
-	UniformBufferPool< T >::~UniformBufferPool()
-	{
-	}
-
-	template< typename T >
-	void UniformBufferPool< T >::cleanup()
-	{
-		m_buffers.clear();
-		m_stagingBuffer.reset();
-	}
-
-	template< typename T >
-	void UniformBufferPool< T >::upload()const
-	{
-		if ( m_stagingBuffer )
-		{
-			auto & device = getCurrentRenderDevice( *this );
-
-			for ( auto & bufferIt : m_buffers )
-			{
-				for ( auto & buffer : bufferIt.second )
-				{
-					buffer->upload( m_stagingBuffer->getBuffer()
-						, *device.transferQueue
-						, *device.transferCommandPool
-						, 0u
-						, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
-				}
-			}
-		}
-	}
-
-	template< typename T >
-	void UniformBufferPool< T >::upload( ashes::CommandBuffer const & cb )const
-	{
-		if ( m_stagingBuffer )
-		{
-			auto & device = getCurrentRenderDevice( *this );
-
-			for ( auto & bufferIt : m_buffers )
-			{
-				for ( auto & buffer : bufferIt.second )
-				{
-					buffer->upload( m_stagingBuffer->getBuffer()
-						, cb
-						, 0u
-						, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
-				}
-			}
-		}
-	}
-
-	template< typename T >
-	void UniformBufferPool< T >::upload( RenderPassTimer & timer
-		, uint32_t index )const
-	{
-		if ( m_stagingBuffer )
-		{
-			auto & device = getCurrentRenderDevice( *this );
-
-			for ( auto & bufferIt : m_buffers )
-			{
-				for ( auto & buffer : bufferIt.second )
-				{
-					buffer->upload( m_stagingBuffer->getBuffer()
-						, *device.transferQueue
-						, *device.transferCommandPool
-						, 0u
-						, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT
-						, timer
-						, index );
-					timer.notifyPassRender( index );
-					++index;
-				}
-			}
-		}
-	}
-
-	template< typename T >
-	void UniformBufferPool< T >::upload( ashes::CommandBuffer const & cb
-		, RenderPassTimer & timer
-		, uint32_t index )const
-	{
-		if ( m_stagingBuffer )
-		{
-			auto & device = getCurrentRenderDevice( *this );
-
-			for ( auto & bufferIt : m_buffers )
-			{
-				for ( auto & buffer : bufferIt.second )
-				{
-					buffer->upload( m_stagingBuffer->getBuffer()
-						, cb
-						, 0u
-						, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT
-						, timer
-						, index );
-					timer.notifyPassRender( index );
-					++index;
-				}
-			}
-		}
-	}
-
-	template< typename T >
-	UniformBufferOffset< T > UniformBufferPool< T >::getBuffer( VkMemoryPropertyFlags flags )
-	{
-		UniformBufferOffset< T > result;
-
+		auto & renderSystem = *getRenderSystem();
+		auto & properties = renderSystem.getProperties();
+		auto alignment = properties.limits.minUniformBufferOffsetAlignment;
 		auto key = uint32_t( flags );
-		auto it = m_buffers.find( key );
-
-		if ( it == m_buffers.end() )
-		{
-			it = m_buffers.emplace( key, BufferArray{} ).first;
-		}
-
-		auto itB = doFindBuffer( it->second );
+		auto it = m_buffers.emplace( key, BufferArray{} ).first;
+		auto itB = doFindBuffer( it->second, ashes::getAlignedSize( sizeof( DataT ), alignment ) );
+		auto & device = *renderSystem.getMainRenderDevice();
 
 		if ( itB == it->second.end() )
 		{
-			auto & renderSystem = *getRenderSystem();
-
-			if ( !m_maxCount )
+			assert( m_currentUboIndex < m_maxPoolUboCount - 1u );
+			ashes::QueueShare sharingMode
 			{
-				auto & properties = renderSystem.getProperties();
-				auto maxSize = std::min( 65536u, properties.limits.maxUniformBufferRange );
-				auto elementSize = ashes::getAlignedSize( sizeof( T )
-					, properties.limits.minUniformBufferOffsetAlignment );
-				m_maxCount = uint32_t( std::floor( float( maxSize ) / elementSize ) );
-				m_maxSize = uint32_t( m_maxCount * elementSize );
+				{
+					device.getGraphicsQueueFamilyIndex(),
+					device.getComputeQueueFamilyIndex(),
+					device.getTransferQueueFamilyIndex(),
+				}
+			};
 
-				renderSystem.getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
-					, [this]()
-					{
-						auto & device = getCurrentRenderDevice( *this );
-						m_stagingBuffer = std::make_unique< ashes::StagingBuffer >( *device
-							, VK_BUFFER_USAGE_TRANSFER_SRC_BIT
-							, m_maxSize
-							, ashes::QueueShare
-							{
-								{
-									device.queueFamiliesIndex[RenderDevice::GraphicsIdx],
-									device.queueFamiliesIndex[RenderDevice::ComputeIdx],
-									device.queueFamiliesIndex[RenderDevice::TransferIdx],
-								}
-							} );
-					} ) );
+			if ( !m_maxUboElemCount )
+			{
+				doCreateStagingBuffer();
 			}
 
-			ashes::QueueShare sharingMode;
-
-			if ( renderSystem.hasMainDevice() )
-			{
-				auto & device = *renderSystem.getMainRenderDevice();
-				sharingMode =
-				{
-					{
-						device.queueFamiliesIndex[RenderDevice::GraphicsIdx],
-						device.queueFamiliesIndex[RenderDevice::ComputeIdx],
-						device.queueFamiliesIndex[RenderDevice::TransferIdx],
-					}
-				};
-			}
-
-			auto buffer = makeUniformBuffer< T >( renderSystem
-				, m_maxCount
-				, VK_BUFFER_USAGE_TRANSFER_DST_BIT
-				, flags
-				, m_debugName );
-			it->second.emplace_back( std::move( buffer ) );
-			itB = it->second.begin() + it->second.size() - 1;
-			auto & ubuffer = *it->second.back();
-
-			renderSystem.getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
-				, [&ubuffer, sharingMode, this]()
-				{
-					auto & device = getCurrentRenderDevice( *this );
-					m_maxSize = ubuffer.initialise( 
-						{
-							{
-								device.queueFamiliesIndex[RenderDevice::GraphicsIdx],
-								device.queueFamiliesIndex[RenderDevice::ComputeIdx],
-								device.queueFamiliesIndex[RenderDevice::TransferIdx],
-							}
-						} );
-				} ) );
+			itB = doCreatePoolBuffer( flags, it->second );
 		}
 
-		result.buffer = itB->get();
-		result.offset = ( *itB )->allocate();
+		result.setPool( *itB->buffer );
+		auto chunk = itB->buffer->allocate( sizeof( DataT ) );
+		result.offset = uint32_t( chunk.offset );
+		result.range = uint32_t( chunk.size );
 		result.flags = flags;
 		return result;
 	}
 
-	template< typename T >
-	void UniformBufferPool< T >::putBuffer( UniformBufferOffset< T > const & bufferOffset )
+	template< typename DataT >
+	void UniformBufferPool::putBuffer( UniformBufferOffsetT< DataT > const & bufferOffset )
 	{
 		auto key = uint32_t( bufferOffset.flags );
 		auto it = m_buffers.find( key );
 		CU_Require( it != m_buffers.end() );
 		auto itB = std::find_if( it->second.begin()
 			, it->second.end()
-			, [&bufferOffset]( UniformBufferUPtr< T > const & lookup )
+			, [&bufferOffset]( Buffer const & lookup )
 			{
-				return lookup.get() == bufferOffset.buffer;
+				return &lookup.buffer->getBuffer() == &bufferOffset.getBuffer();
 			} );
 		CU_Require( itB != it->second.end() );
-		( *itB )->deallocate( bufferOffset.offset );
-	}
-
-	template< typename T >
-	uint32_t UniformBufferPool< T >::getBufferCount()const
-	{
-		uint32_t result = 0u;
-
-		for ( auto & bufferIt : m_buffers )
-		{
-			result += uint32_t( bufferIt.second.size() );
-		}
-
-		return result;
-	}
-
-	template< typename T >
-	typename UniformBufferPool< T >::BufferArray::iterator UniformBufferPool< T >::doFindBuffer( typename UniformBufferPool< T >::BufferArray & array )
-	{
-		auto it = array.begin();
-
-		while ( it != array.end() && !( *it )->hasAvailable() )
-		{
-			++it;
-		}
-
-		return it;
+		itB->buffer->deallocate( bufferOffset.offset );
 	}
 }

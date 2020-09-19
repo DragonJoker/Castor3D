@@ -31,16 +31,16 @@ namespace film_grain
 	public:
 		explicit RenderQuad( castor3d::RenderSystem & renderSystem
 			, VkExtent2D const & size );
-		void update( castor::Nanoseconds const & time );
+		void update( castor3d::CpuUpdater & updater );
 
-		inline castor3d::UniformBuffer< Configuration > const & getUbo()const
+		inline castor3d::UniformBufferOffsetT< Configuration > const & getUbo()const
 		{
-			return *m_configUbo;
+			return m_configUbo;
 		}
 
-		inline castor3d::UniformBuffer< Configuration > & getUbo()
+		inline castor3d::UniformBufferOffsetT< Configuration > & getUbo()
 		{
-			return *m_configUbo;
+			return m_configUbo;
 		}
 
 	private:
@@ -50,7 +50,7 @@ namespace film_grain
 	private:
 		uint64_t m_time{ 0ull };
 		VkExtent2D m_size;
-		castor3d::UniformBufferUPtr< Configuration > m_configUbo;
+		castor3d::UniformBufferOffsetT< Configuration > m_configUbo;
 		castor3d::SamplerSPtr m_sampler;
 		ashes::ImagePtr m_noise;
 		ashes::ImageView m_noiseView;
@@ -70,7 +70,7 @@ namespace film_grain
 		/**
 		 *\copydoc		castor3d::PostEffect::update
 		 */
-		void update( castor::Nanoseconds const & elapsedTime )override;
+		void update( castor3d::CpuUpdater & updater )override;
 		/**
 		 *\copydoc		castor3d::PostEffect::accept
 		 */

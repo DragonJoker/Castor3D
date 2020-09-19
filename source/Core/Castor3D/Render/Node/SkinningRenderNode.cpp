@@ -12,16 +12,16 @@ namespace castor3d
 {
 	SkinningRenderNode::SkinningRenderNode( RenderPipeline & pipeline
 		, PassRenderNode && passNode
-		, UniformBufferOffset< ModelMatrixUbo::Configuration > modelMatrixBuffer
-		, UniformBufferOffset< ModelUbo::Configuration > modelBuffer
-		, UniformBufferOffset< PickingUbo::Configuration > pickingBuffer
-		, UniformBufferOffset< TexturesUbo::Configuration > texturesBuffer
+		, UniformBufferOffsetT< ModelMatrixUboConfiguration > modelMatrixBuffer
+		, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
+		, UniformBufferOffsetT< PickingUboConfiguration > pickingBuffer
+		, UniformBufferOffsetT< TexturesUboConfiguration > texturesBuffer
 		, GeometryBuffers const & buffers
 		, SceneNode & sceneNode
 		, Submesh & data
 		, Geometry & instance
 		, AnimatedSkeleton & skeleton
-		, UniformBufferOffset< SkinningUbo::Configuration > skinningUbo )
+		, UniformBufferOffsetT< SkinningUboConfiguration > skinningUbo )
 		: SubmeshRenderNode{ pipeline
 			, std::move( passNode )
 			, modelMatrixBuffer

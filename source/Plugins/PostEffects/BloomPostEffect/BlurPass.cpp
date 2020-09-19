@@ -3,7 +3,7 @@
 #include "BloomPostEffect/BloomPostEffect.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Buffer/UniformBuffer.hpp>
+#include <Castor3D/Buffer/UniformBufferPools.hpp>
 #include <Castor3D/Cache/SamplerCache.hpp>
 #include <Castor3D/Material/Texture/Sampler.hpp>
 #include <Castor3D/Material/Texture/TextureLayout.hpp>
@@ -137,23 +137,20 @@ namespace Bloom
 			return result;
 		}
 
-		castor3d::UniformBufferUPtr< castor3d::GaussianBlur::Configuration > doCreateUbo( castor3d::RenderDevice const & device
+		UboOffsetArray doCreateUbo( castor3d::RenderDevice const & device
 			, VkExtent2D dimensions
 			, uint32_t blurKernelSize
 			, uint32_t blurPassesCount
 			, bool isVertical )
 		{
-			auto result = castor3d::makeUniformBuffer< castor3d::GaussianBlur::Configuration >( device.renderSystem
-				, blurPassesCount
-				, VK_BUFFER_USAGE_TRANSFER_DST_BIT
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, "GaussianBlurCfg" );
+			UboOffsetArray result;
 			auto coefficientsCount = blurKernelSize;
 			auto kernel = doCreateKernel( coefficientsCount );
 
 			for ( auto i = 0u; i < blurPassesCount; ++i )
 			{
-				auto & data = result->getData( i );
+				auto ubo = device.renderSystem.getEngine()->getUboPools().getBuffer< castor3d::GaussianBlur::Configuration >( 0u );
+				auto & data = ubo.getData();
 				data.textureSize = castor::Point2f
 				{
 					isVertical ? 0.0f : 1.0f / float( dimensions.width >> ( i + 1 ) ),
@@ -161,9 +158,9 @@ namespace Bloom
 				};
 				data.blurCoeffsCount = coefficientsCount;
 				data.blurCoeffs = kernel;
+				result.emplace_back( std::move( ubo ) );
 			}
 
-			result->upload( 0u, blurPassesCount );
 			return result;
 		}
 
@@ -273,7 +270,7 @@ namespace Bloom
 		, VkExtent2D dimensions
 		, castor3d::ShaderModule const & vertexShader
 		, castor3d::ShaderModule const & pixelShader
-		, castor3d::UniformBuffer< castor3d::GaussianBlur::Configuration > const & blurUbo
+		, castor3d::UniformBufferOffsetT< castor3d::GaussianBlur::Configuration > const & blurUbo
 		, uint32_t index )
 	{
 		dimensions.width >>= ( index + 1 );
@@ -292,9 +289,8 @@ namespace Bloom
 
 		auto & descriptorLayout = descriptorPool.getLayout();
 		descriptorSet = descriptorPool.createDescriptorSet( name );
-		descriptorSet->createSizedBinding( descriptorLayout.getBinding( 0u )
-			, blurUbo
-			, index );
+		blurUbo.createSizedBinding( *descriptorSet
+			, descriptorLayout.getBinding( 0u ) );
 		descriptorSet->createBinding( descriptorLayout.getBinding( 1u )
 			, srcView
 			, *sampler );
@@ -356,7 +352,7 @@ namespace Bloom
 		, VkExtent2D dimensions
 		, castor3d::ShaderModule const & vertexShader
 		, castor3d::ShaderModule const & pixelShader
-		, castor3d::UniformBuffer< castor3d::GaussianBlur::Configuration > const & blurUbo
+		, UboOffsetArray const & blurUbo
 		, uint32_t blurPassesCount )
 	{
 		std::vector< BlurPass::Subpass > result;
@@ -373,7 +369,7 @@ namespace Bloom
 				, dimensions
 				, vertexShader
 				, pixelShader
-				, blurUbo
+				, blurUbo[i]
 				, i );
 		}
 
@@ -410,7 +406,7 @@ namespace Bloom
 			, dimensions
 			, m_vertexShader
 			, m_pixelShader
-			, *m_blurUbo
+			, m_blurUbo
 			, m_blurPassesCount ) }
 		, m_isVertical{ isVertical }
 	{

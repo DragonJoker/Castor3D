@@ -16,7 +16,8 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
 #include "Castor3D/Shader/Ubos/DebugConfig.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
-#include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
+
+#include <CastorUtils/Design/DelayedInitialiser.hpp>
 
 #if C3D_UseDepthPrepass
 #	include "Castor3D/Render/Passes/DepthPass.hpp"
@@ -87,7 +88,7 @@ namespace castor3d
 		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
 		 *\param[out]	queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
 		 */
-		C3D_API void update( RenderQueueArray & queues );
+		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Updates GPU data.
@@ -98,8 +99,7 @@ namespace castor3d
 		 *\param[in]	jitter	La valeur de jittering.
 		 *\param[out]	info	Reçoit les informations de rendu.
 		 */
-		C3D_API void update( castor::Point2f const & jitter
-			, RenderInfo & info );
+		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Render function
@@ -146,8 +146,8 @@ namespace castor3d
 
 		inline TextureLayout const & getResult()const
 		{
-			CU_Require( m_colourTexture );
-			return *m_colourTexture;
+			CU_Require( m_colourTexture.isTextured() );
+			return *m_colourTexture.getTexture();
 		}
 
 		inline TextureLayout const & getDepth()const
@@ -237,8 +237,10 @@ namespace castor3d
 		void doInitialiseOpaquePass();
 		void doInitialiseTransparentPass();
 		void doCleanupShadowMaps();
-		void doUpdateShadowMaps( RenderQueueArray & queues );
-		void doUpdateParticles( RenderInfo & info );
+		void doUpdateShadowMaps( CpuUpdater & updater );
+		void doUpdateShadowMaps( GpuUpdater & updater );
+		void doUpdateParticles( CpuUpdater & updater );
+		void doUpdateParticles( GpuUpdater & updater );
 		ashes::Semaphore const & doRenderShadowMaps( ashes::Semaphore const & semaphore );
 		ashes::Semaphore const & doRenderEnvironmentMaps( ashes::Semaphore const & semaphore );
 #if C3D_UseDepthPrepass
@@ -254,10 +256,9 @@ namespace castor3d
 		RenderTarget & m_renderTarget;
 		RenderSystem & m_renderSystem;
 		castor::Size m_size;
-		TextureLayoutSPtr m_colourTexture;
+		TextureUnit m_colourTexture;
 		TextureUnit m_depthBuffer;
 		MatrixUbo m_matrixUbo;
-		HdrConfigUbo m_hdrConfigUbo;
 		GpInfoUbo m_gpInfoUbo;
 		DebugConfig m_debugConfig;
 #if C3D_UseDepthPrepass
@@ -270,9 +271,9 @@ namespace castor3d
 		std::unique_ptr< DeferredRendering > m_deferredRendering;
 		std::unique_ptr< WeightedBlendRendering > m_weightedBlendRendering;
 		RenderPassTimerSPtr m_particleTimer;
-		ShadowMapUPtr m_directionalShadowMap;
-		ShadowMapUPtr m_pointShadowMap;
-		ShadowMapUPtr m_spotShadowMap;
+		castor::DelayedInitialiserT< ShadowMap > m_directionalShadowMap;
+		castor::DelayedInitialiserT< ShadowMap > m_pointShadowMap;
+		castor::DelayedInitialiserT< ShadowMap > m_spotShadowMap;
 		ShadowMapLightTypeArray m_allShadowMaps;
 		ShadowMapLightTypeArray m_activeShadowMaps;
 		ashes::SemaphorePtr m_signalFinished;
@@ -280,8 +281,6 @@ namespace castor3d
 		ashes::FrameBufferPtr m_bgFrameBuffer;
 		ashes::CommandBufferPtr m_bgCommandBuffer;
 		ashes::CommandBufferPtr m_cbgCommandBuffer;
-		ashes::StagingBufferPtr m_stagingBuffer;
-		ashes::CommandBufferPtr m_uploadCommandBuffer;
 		OnBackgroundChangedConnection m_onBgChanged;
 		OnBackgroundChangedConnection m_onCBgChanged;
 	};

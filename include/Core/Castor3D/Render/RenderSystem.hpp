@@ -94,42 +94,6 @@ namespace castor3d
 		C3D_API SpirVShader compileShader( ShaderModule const & module )const;
 		/**
 		 *\~english
-		 *\brief		Retrieves a GPU buffer with the given size.
-		 *\param[in]	target	The buffer type.
-		 *\param[in]	size	The wanted buffer size.
-		 *\param[in]	flags	The buffer memory flags.
-		 *\return		The created buffer, depending on current API.
-		 *\~french
-		 *\brief		Récupère un tampon GPU avec la taille donnée.
-		 *\param[in]	target	Le type de tampon.
-		 *\param[in]	size	La taille voulue pour le tampon.
-		 *\param[in]	flags	Les indicateurs de mémoire du tampon.
-		 *\return		Le tampon créé.
-		 */
-		C3D_API GpuBufferOffset getBuffer( VkBufferUsageFlagBits target
-			, uint32_t size
-			, VkMemoryPropertyFlags flags );
-		/**
-		 *\~english
-		 *\brief		Releases a GPU buffer.
-		 *\param[in]	target			The buffer type.
-		 *\param[in]	bufferOffset	The buffer offset to release.
-		 *\~french
-		 *\brief		Libère un tampon GPU.
-		 *\param[in]	target			Le type de tampon.
-		 *\param[in]	bufferOffset	Le tampon à libérer.
-		 */
-		C3D_API void putBuffer( VkBufferUsageFlagBits target
-			, GpuBufferOffset const & bufferOffset );
-		/**
-		 *\~english
-		 *\brief		Cleans up the buffer pool.
-		 *\~french
-		 *\brief		Nettoie le pool de tampons.
-		 */
-		C3D_API void cleanupPool();
-		/**
-		 *\~english
 		 *\brief		Creates a logical device bound to a physical GPU.
 		 *\param[in]	handle	The native window handle.
 		 *\param[in]	gpu		The GPU index.
@@ -351,6 +315,16 @@ namespace castor3d
 		inline AshPluginDescription const & getDescription()const
 		{
 			return m_desc;
+		}
+
+		inline GpuBufferPool const & getBufferPool()const
+		{
+			return m_gpuBufferPool;
+		}
+
+		inline GpuBufferPool & getBufferPool()
+		{
+			return m_gpuBufferPool;
 		}
 		/**@}*/
 		/**

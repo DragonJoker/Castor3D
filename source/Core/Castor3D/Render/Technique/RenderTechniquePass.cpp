@@ -4,6 +4,7 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
@@ -166,19 +167,16 @@ namespace castor3d
 		node.texDescriptorSet->setBindings( writes );
 	}
 
-	void RenderTechniquePass::update( RenderInfo & info
-		, castor::Point2f const & jitter )
+	void RenderTechniquePass::update( GpuUpdater & updater )
 	{
 		doUpdateNodes( m_renderQueue.getCulledRenderNodes()
-			, jitter
-			, info );
-		doUpdateUbos( *m_camera
-			, jitter );
+			, updater.jitter
+			, updater.info );
 	}
 
 	void RenderTechniquePass::doUpdateNodes( SceneCulledRenderNodes & nodes
 		, castor::Point2f const & jitter
-		, RenderInfo & info )const
+		, RenderInfo & info )
 	{
 		if ( nodes.hasNodes() )
 		{
@@ -201,7 +199,7 @@ namespace castor3d
 	void RenderTechniquePass::doUpdateUbos( Camera const & camera
 		, castor::Point2f const & jitter )
 	{
-		m_sceneUbo.update( *camera.getScene(), &camera );
+		m_sceneUbo.cpuUpdate( *camera.getScene(), &camera );
 	}
 
 	bool RenderTechniquePass::doInitialise( Size const & CU_UnusedParam( size ) )
@@ -237,9 +235,9 @@ namespace castor3d
 		return nullptr;
 	}
 
-	void RenderTechniquePass::doUpdatePipeline( RenderPipeline & pipeline )const
+	void RenderTechniquePass::doUpdatePipeline( RenderPipeline & pipeline )
 	{
-		m_sceneUbo.update( m_scene, m_camera );
+		m_sceneUbo.cpuUpdate( m_scene, m_camera );
 	}
 
 	ashes::PipelineDepthStencilStateCreateInfo RenderTechniquePass::doCreateDepthStencilState( PipelineFlags const & flags )const

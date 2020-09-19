@@ -18,9 +18,9 @@ namespace Linear
 	String ToneMapping::Name = cuT( "Linear Tone Mapping" );
 
 	ToneMapping::ToneMapping( Engine & engine
-		, HdrConfig & hdrConfig
+		, HdrConfigUbo & hdrConfigUbo
 		, Parameters const & parameters )
-		: castor3d::ToneMapping{ Type, Name, engine, hdrConfig, parameters }
+		: castor3d::ToneMapping{ Type, Name, engine, hdrConfigUbo, parameters }
 	{
 	}
 
@@ -29,11 +29,11 @@ namespace Linear
 	}
 
 	ToneMappingSPtr ToneMapping::create( Engine & engine
-		, HdrConfig & hdrConfig
+		, HdrConfigUbo & hdrConfigUbo
 		, Parameters const & parameters )
 	{
 		return std::make_shared< ToneMapping >( engine
-			, hdrConfig
+			, hdrConfigUbo
 			, parameters );
 	}
 
@@ -68,7 +68,7 @@ namespace Linear
 	{
 	}
 
-	void ToneMapping::doUpdate()
+	void ToneMapping::doCpuUpdate()
 	{
 	}
 }

@@ -55,8 +55,10 @@ after_build:
   - ps: if ($isLinux) {cd /home/appveyor/projects/castor3d}
   - ps: if (!$isLinux) {cd C:\projects\castor3d}
   - ps: if ($isLinux) {$OS_NAME="linux"} elseif ($isWindows ) {$OS_NAME="win32"} else {$OS_NAME="unknown"}
-  - ps: 7z a Castor3D-$OS_NAME-$PLATFORM.zip ./package/Castor3D/*
+  - ps: cd ./package
+  - ps: 7z a Castor3D-$OS_NAME-$PLATFORM.zip ./Castor3D/*
   - ps: Push-AppveyorArtifact Castor3D-$OS_NAME-$PLATFORM.zip
+  - ps: cd ..
 
 on_success:
   - ps: Invoke-RestMethod https://raw.githubusercontent.com/DiscordHooks/appveyor-discord-webhook/master/send.ps1 -o send.ps1

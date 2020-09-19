@@ -1,5 +1,6 @@
 #include "Castor3D/Engine.hpp"
 
+#include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Cache/ListenerCache.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/PluginCache.hpp"
@@ -12,6 +13,7 @@
 #include "Castor3D/Cache/WindowCache.hpp"
 #include "Castor3D/Event/Frame/CleanupEvent.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
+#include "Castor3D/Event/Frame/FunctorEvent.hpp"
 #include "Castor3D/Event/Frame/InitialiseEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
@@ -22,6 +24,7 @@
 #include "Castor3D/Plugin/Plugin.hpp"
 #include "Castor3D/Render/RenderLoopAsync.hpp"
 #include "Castor3D/Render/RenderLoopSync.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/RenderWindow.hpp"
 #include "Castor3D/Render/ToTexture/RenderDepthQuad.hpp"
@@ -121,7 +124,7 @@ namespace castor3d
 			, eventInit
 			, eventClean
 			, mergeResource );
-		m_materialCache = makeCache< Material, String >( *this
+		m_materialCache = std::make_unique< MaterialCache >( *this
 			, [this]( String const & name, MaterialType type )
 			{
 				return std::make_shared< Material >( name, *this, type );
@@ -271,16 +274,7 @@ namespace castor3d
 				auto & device = getCurrentRenderDevice( *this );
 				m_uploadCommandBuffer = device.graphicsCommandPool->createCommandBuffer( "UboPoolsUpload" );
 			} ) );
-		m_matrixUboPool = std::make_shared< UniformBufferPool< MatrixUboConfiguration > >( *m_renderSystem
-			, cuT( "MatrixUboPool" ) );
-		m_hdrConfigUboPool = std::make_shared< UniformBufferPool< HdrConfig > >( *m_renderSystem
-			, cuT( "HdrConfigUboPool" ) );
-		m_modelMatrixUboPool = std::make_shared< UniformBufferPool< ModelMatrixUboConfiguration > >( *m_renderSystem
-			, cuT( "ModelMatrixUboPool" ) );
-		m_shadowMapUboPool = std::make_shared< UniformBufferPool< ShadowMapUboConfiguration > >( *m_renderSystem
-			, cuT( "ShadowMapUboPool" ) );
-		m_rsmConfigUboPool = std::make_shared< UniformBufferPool< RsmUboConfiguration > >( *m_renderSystem
-			, cuT( "RsmConfigUboPool" ) );
+		m_uboPools = std::make_shared< UniformBufferPools >( *m_renderSystem );
 
 		if ( threaded )
 		{
@@ -336,11 +330,7 @@ namespace castor3d
 			m_techniqueCache->cleanup();
 
 			m_renderLoop.reset();
-			m_rsmConfigUboPool.reset();
-			m_matrixUboPool.reset();
-			m_hdrConfigUboPool.reset();
-			m_modelMatrixUboPool.reset();
-			m_shadowMapUboPool.reset();
+			m_uboPools.reset();
 
 			m_targetCache->clear();
 			m_samplerCache->clear();
@@ -554,13 +544,9 @@ namespace castor3d
 		}
 	}
 
-	void Engine::uploadUbos()
+	void Engine::uploadUbos( ashes::CommandBuffer const & commandBuffer )
 	{
-		m_matrixUboPool->upload();
-		m_hdrConfigUboPool->upload();
-		m_rsmConfigUboPool->upload();
-		m_modelMatrixUboPool->upload();
-		m_shadowMapUboPool->upload();
+		m_uboPools->upload( commandBuffer );
 	}
 
 	void Engine::doLoadCoreData()

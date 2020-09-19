@@ -86,7 +86,7 @@ namespace castor3d
 		TransparentResolvePass( Engine & engine
 			, castor::Size const & size
 			, SceneUbo & sceneUbo
-			, HdrConfigUbo & hdrConfigUbo
+			, HdrConfigUbo const & hdrConfigUbo
 			, GpInfoUbo const & gpInfoUbo
 			, TransparentPassResult const & wbResult
 			, ashes::ImageView const & colourView );

@@ -180,7 +180,7 @@ namespace castor3d
 	private:
 		//!\~english	The uniform buffer containing the model data.
 		//!\~french		Le tampon d'uniformes contenant les données de modèle.
-		UniformBufferUPtr< ModelMatrixUboConfiguration > m_modelMatrixUbo;
+		UniformBufferOffsetT< ModelMatrixUboConfiguration > m_modelMatrixUbo;
 		//!\~english	The light's stencil pass.
 		//!\~french		La passe stencil de la lumière.
 		StencilPass m_stencilPass;

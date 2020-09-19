@@ -1,5 +1,8 @@
 #include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
 
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/UniformBufferPools.hpp"
+#include "Castor3D/Event/Frame/FunctorEvent.hpp"
 #include "Castor3D/Scene/Animation/AnimatedMesh.hpp"
 #include "Castor3D/Scene/Animation/AnimatedObjectGroup.hpp"
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
@@ -22,8 +25,6 @@ namespace castor3d
 			, std::move( initialise )
 			, std::move( clean )
 			, std::move( merge ) )
-		, m_skinningUboPool{ *engine.getRenderSystem(), cuT( "SkinningUboPool" ) }
-		, m_morphingUboPool{ *engine.getRenderSystem(), cuT( "MorphingUboPool" ) }
 	{
 		getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
 			, [this]()
@@ -31,7 +32,7 @@ namespace castor3d
 				m_updateTimer = std::make_shared< RenderPassTimer >( *getEngine()
 					, cuT( "Update" )
 					, cuT( "Animation UBOs" )
-					, 2u );
+					, 1u );
 			} ) );
 	}
 
@@ -60,28 +61,6 @@ namespace castor3d
 		}
 	}
 
-	void AnimatedObjectGroupCache::uploadUbos()
-	{
-		auto count = m_skinningUboPool.getBufferCount()
-			+ m_morphingUboPool.getBufferCount();
-		m_updateTimer->updateCount( std::max( count, 2u ) );
-
-		if ( count )
-		{
-			auto timerBlock = m_updateTimer->start();
-			uint32_t index = 0u;
-			m_skinningUboPool.upload( *m_updateTimer, index );
-			index += std::max( m_skinningUboPool.getBufferCount(), 1u );
-			m_morphingUboPool.upload( *m_updateTimer, index );
-		}
-	}
-
-	void AnimatedObjectGroupCache::cleanupUbos()
-	{
-		m_skinningUboPool.cleanup();
-		m_morphingUboPool.cleanup();
-	}
-
 	AnimatedObjectGroupCache::MeshPoolsEntry AnimatedObjectGroupCache::getUbos( AnimatedMesh const & mesh )const
 	{
 		return m_meshEntries.at( &mesh );
@@ -94,16 +73,17 @@ namespace castor3d
 
 	void AnimatedObjectGroupCache::clear()
 	{
+		auto & pools = getEngine()->getUboPools();
 		MyCache::clear();
 
 		for ( auto & entry : m_meshEntries )
 		{
-			m_morphingUboPool.putBuffer( entry.second.morphingUbo );
+			pools.putBuffer( entry.second.morphingUbo );
 		}
 
 		for ( auto & entry : m_skeletonEntries )
 		{
-			m_skinningUboPool.putBuffer( entry.second.skinningUbo );
+			pools.putBuffer( entry.second.skinningUbo );
 		}
 
 		m_meshEntries.clear();
@@ -138,37 +118,41 @@ namespace castor3d
 	AnimatedObjectGroupCache::MeshPoolsEntry AnimatedObjectGroupCache::doCreateEntry( AnimatedObjectGroup const & group
 		, AnimatedMesh const & mesh )
 	{
+		auto & pools = getEngine()->getUboPools();
 		return
 		{
 			group,
 			mesh,
-			m_morphingUboPool.getBuffer( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ),
+			pools.getBuffer< MorphingUboConfiguration >( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ),
 		};
 	}
 
 	AnimatedObjectGroupCache::SkeletonPoolsEntry AnimatedObjectGroupCache::doCreateEntry( AnimatedObjectGroup const & group
 		, AnimatedSkeleton const & skeleton )
 	{
+		auto & pools = getEngine()->getUboPools();
 		return
 		{
 			group,
 			skeleton,
-			m_skinningUboPool.getBuffer( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ),
+			pools.getBuffer< SkinningUboConfiguration >( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ),
 		};
 	}
 
 	void AnimatedObjectGroupCache::doRemoveEntry( AnimatedMesh const & mesh )
 	{
+		auto & pools = getEngine()->getUboPools();
 		auto entry = getUbos( mesh );
 		m_meshEntries.erase( &mesh );
-		m_morphingUboPool.putBuffer( entry.morphingUbo );
+		pools.putBuffer( entry.morphingUbo );
 	}
 
 	void AnimatedObjectGroupCache::doRemoveEntry( AnimatedSkeleton const & skeleton )
 	{
+		auto & pools = getEngine()->getUboPools();
 		auto entry = getUbos( skeleton );
 		m_skeletonEntries.erase( &skeleton );
-		m_skinningUboPool.putBuffer( entry.skinningUbo );
+		pools.putBuffer( entry.skinningUbo );
 	}
 
 	void AnimatedObjectGroupCache::doRegister( AnimatedObjectGroup & group )

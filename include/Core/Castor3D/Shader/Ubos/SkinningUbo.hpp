@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "UbosModule.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
 
-#include "Castor3D/Buffer/UniformBuffer.hpp"
+#include "Castor3D/Buffer/UniformBufferOffset.hpp"
 
 #include <CastorUtils/Math/SquareMatrix.hpp>
 

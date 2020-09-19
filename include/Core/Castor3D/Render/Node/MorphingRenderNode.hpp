@@ -6,7 +6,6 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/Node/ObjectRenderNode.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
-#include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
 
 namespace castor3d
 {
@@ -15,23 +14,23 @@ namespace castor3d
 	{
 		C3D_API MorphingRenderNode( RenderPipeline & pipeline
 			, PassRenderNode && passNode
-			, UniformBufferOffset< ModelMatrixUbo::Configuration > modelMatrixBuffer
-			, UniformBufferOffset< ModelUbo::Configuration > modelBuffer
-			, UniformBufferOffset< PickingUbo::Configuration > pickingBuffer
-			, UniformBufferOffset< TexturesUbo::Configuration > texturesBuffer
+			, UniformBufferOffsetT< ModelMatrixUboConfiguration > modelMatrixBuffer
+			, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
+			, UniformBufferOffsetT< PickingUboConfiguration > pickingBuffer
+			, UniformBufferOffsetT< TexturesUboConfiguration > texturesBuffer
 			, GeometryBuffers const & buffers
 			, SceneNode & sceneNode
 			, DataType & data
 			, InstanceType & instance
 			, AnimatedMesh & mesh
-			, UniformBufferOffset< MorphingUbo::Configuration > morphingUbo );
+			, UniformBufferOffsetT< MorphingUboConfiguration > morphingUbo );
 
 		//!\~english	The animated mesh.
 		//!\~french		Le maillage animé.
 		AnimatedMesh & mesh;
 		//!\~english	The morphing UBO.
 		//!\~french		L'UBO de morphing.
-		UniformBufferOffset< MorphingUbo::Configuration > morphingUbo;
+		UniformBufferOffsetT< MorphingUboConfiguration > morphingUbo;
 	};
 }
 

@@ -5,7 +5,7 @@ See LICENSE file in root folder
 #define ___C3DFXAA_FxaaUbo_H___
 
 #include <Castor3D/Castor3DModule.hpp>
-#include <Castor3D/Buffer/UniformBuffer.hpp>
+#include <Castor3D/Buffer/UniformBufferOffset.hpp>
 
 namespace fxaa
 {
@@ -23,13 +23,15 @@ namespace fxaa
 	public:
 		explicit FxaaUbo( castor3d::Engine & engine
 			, castor::Size const & size );
-		void update( float shift
+		~FxaaUbo();
+		void cpuUpdate( float shift
 			, float span
 			, float reduce );
 
-		inline castor3d::UniformBuffer< Configuration > & getUbo()
+		void createSizedBinding( ashes::DescriptorSet & descriptorSet
+			, VkDescriptorSetLayoutBinding const & layoutBinding )const
 		{
-			return *m_ubo;
+			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
 		}
 
 	public:
@@ -40,7 +42,8 @@ namespace fxaa
 		static const castor::String PixelSize;
 
 	private:
-		castor3d::UniformBufferUPtr< Configuration > m_ubo;
+		castor3d::Engine & m_engine;
+		castor3d::UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }
 

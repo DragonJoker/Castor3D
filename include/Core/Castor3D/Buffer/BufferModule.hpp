@@ -46,12 +46,14 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	A GpuBuffer and an offset from the GpuBuffer.
+	*	An offset and range of a GpuBuffer.
 	*\~french
 	*\brief
-	*	Un GpuBuffer et un offset dans le GpuBuffer.
+	*	Un intervalle d'un GpuBuffer.
+	*\remark
 	*/
-	struct GpuBufferOffset;
+	template< typename DataT >
+	struct GpuBufferOffsetT;
 	/**
 	*\~english
 	*\brief		A uniform buffer, than can contain multiple sub-buffers.
@@ -69,8 +71,22 @@ namespace castor3d
 	*	Un tampon typé d'uniformes, puovant contenir de multiples sous-tampons.
 	*\remark
 	*/
-	template< typename T >
-	class UniformBuffer;
+	template< typename DataT >
+	class UniformBufferT;
+	/**
+	*\~english
+	*\brief
+	*	A uniform typed buffer, than can contain multiple sub-buffers.
+	*\remarks
+	*	Allocated from a pool.
+	*\~french
+	*\brief
+	*	Un tampon typé d'uniformes, pouvant contenir de multiples sous-tampons.
+	*\remarks
+	*	Alloué depuis un pool.
+	*\remark
+	*/
+	class PoolUniformBuffer;
 	/**
 	*\~english
 	*\brief
@@ -79,25 +95,54 @@ namespace castor3d
 	*\brief
 	*	Un UniformBuffer et un offset dans le GpuBuffer.
 	*/
-	template< typename T >
-	struct UniformBufferOffset;
+	template< typename DataT >
+	struct UniformBufferOffsetT;
 	/**
 	*\~english
 	*\brief
 	*	Uniform buffer pool implementation.
 	*\~french
 	*\brief
-	*	Implémentation d'un pool de tampon d'uniformes.
+	*	Implémentation d'un pool d'uniform buffers.
 	*/
-	template< typename T >
 	class UniformBufferPool;
+	/**
+	*\~english
+	*\brief
+	*	Regroups all uniform buffer pools.
+	*\~french
+	*\brief
+	*	Regroupe les pools d'uniform buffers.
+	*/
+	class UniformBufferPools;
 
 	CU_DeclareSmartPtr( UniformBufferBase );
+	CU_DeclareSmartPtr( UniformBufferPools );
+	CU_DeclareSmartPtr( PoolUniformBuffer );
+	CU_DeclareSmartPtr( UniformBufferPool );
 	CU_DeclareTemplateSmartPtr( UniformBuffer );
-	CU_DeclareTemplateSmartPtr( UniformBufferPool );
 
 	using GpuBufferBuddyAllocator = castor::BuddyAllocatorT< GpuBufferBuddyAllocatorTraits >;
 	using GpuBufferBuddyAllocatorUPtr = std::unique_ptr< GpuBufferBuddyAllocator >;
+	/**
+	*\~english
+	*\brief
+	*	A memory range, in bytes.
+	*\~french
+	*\brief
+	*	Un intervalle mémoire, en octets.
+	*/
+	struct MemChunk
+	{
+		VkDeviceSize offset;
+		VkDeviceSize size;
+	};
+
+	inline bool operator<( MemChunk const & lhs
+		, MemChunk const & rhs )
+	{
+		return lhs.offset < rhs.offset;
+	}
 
 	//@}
 }

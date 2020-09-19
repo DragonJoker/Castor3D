@@ -47,7 +47,7 @@ namespace castor3d
 				, PointLightPass & lightPass
 				, ShaderModule const & vtx
 				, ShaderModule const & pxl
-				, bool hasShadows );
+				, bool hasShadows = false );
 			/**
 			 *\~english
 			 *\brief		Destructor.
@@ -84,7 +84,7 @@ namespace castor3d
 		PointLightPass( Engine & engine
 			, LightPassResult const & lpResult
 			, GpInfoUbo const & gpInfoUbo
-			, bool hasShadows );
+			, bool hasShadows = false );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -123,7 +123,7 @@ namespace castor3d
 			//!\~french		La variable contenant l'atténuation de la lumière (RGB) et son index (A).
 			castor::Point4f attenuation;
 		};
-		UniformBufferUPtr< Config > m_ubo;
+		UniformBufferUPtrT< Config > m_ubo;
 	};
 }
 

@@ -10,7 +10,7 @@ namespace castor3d
 {
 	struct GpuBufferBuddyAllocatorTraits
 	{
-		using PointerType = uint32_t;
+		using PointerType = VkDeviceSize;
 		struct Block
 		{
 			PointerType data;

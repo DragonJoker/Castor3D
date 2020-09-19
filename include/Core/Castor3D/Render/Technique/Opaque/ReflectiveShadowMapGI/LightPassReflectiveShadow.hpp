@@ -15,6 +15,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightPassResult.hpp"
 #include "Castor3D/Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 
 namespace castor3d
 {
@@ -50,47 +51,69 @@ namespace castor3d
 			: LightPassShadow< LtType >{ engine
 				, lpResult
 				, gpInfoUbo }
-			, m_downscalePass{ engine
+			, m_gpResult{ gpResult }
+			, m_smResult{ smResult }
+			, m_lpResult{ lpResult }
+			, m_gpInfoUbo{ gpInfoUbo }
+		{
+		}
+
+
+		void initialise( Scene const & scene
+			, OpaquePassResult const & gp
+			, SceneUbo & sceneUbo
+			, RenderPassTimer & timer )override
+		{
+			auto & lightCache = scene.getLightCache();
+			m_downscalePass = std::make_unique< DownscalePass >( this->m_engine
 				, cuT( "Reflective Shadow Maps" )
 				, ashes::ImageViewArray
 				{
-					lpResult[LpTexture::eDiffuse].getTexture()->getDefaultView().getTargetView(),
-					gpResult[DsTexture::eData1].getTexture()->getDefaultView().getTargetView(),
+					m_lpResult[LpTexture::eDiffuse].getTexture()->getDefaultView().getTargetView(),
+					m_gpResult[DsTexture::eData1].getTexture()->getDefaultView().getTargetView(),
 				}
 				, VkExtent2D
 				{
-					lpResult[LpTexture::eDiffuse].getTexture()->getWidth() >> 2,
-					lpResult[LpTexture::eDiffuse].getTexture()->getHeight() >> 2,
-				} }
-			, m_rsmGiPass{ engine
+					m_lpResult[LpTexture::eDiffuse].getTexture()->getWidth() >> 2,
+					m_lpResult[LpTexture::eDiffuse].getTexture()->getHeight() >> 2,
+				} );
+			m_rsmGiPass = std::make_unique< RsmGIPass >( this->m_engine
 				, lightCache
 				, LtType
 				, VkExtent2D
 				{
-					lpResult[LpTexture::eDiffuse].getTexture()->getWidth() >> 2,
-					lpResult[LpTexture::eDiffuse].getTexture()->getHeight() >> 2,
+					m_lpResult[LpTexture::eDiffuse].getTexture()->getWidth() >> 2,
+					m_lpResult[LpTexture::eDiffuse].getTexture()->getHeight() >> 2,
 				}
-				, gpInfoUbo
-				, gpResult
-				, smResult
-				, m_downscalePass.getResult() }
-			, m_interpolatePass{ engine
+				, m_gpInfoUbo
+				, m_gpResult
+				, m_smResult
+				, m_downscalePass->getResult() );
+			m_interpolatePass = std::make_unique< RsmInterpolatePass >( this->m_engine
 					, lightCache
 					, LtType
 					, VkExtent2D
 					{
-						lpResult[LpTexture::eDiffuse].getTexture()->getWidth(),
-						lpResult[LpTexture::eDiffuse].getTexture()->getHeight(),
+						m_lpResult[LpTexture::eDiffuse].getTexture()->getWidth(),
+						m_lpResult[LpTexture::eDiffuse].getTexture()->getHeight(),
 					}
-					, gpInfoUbo
-					, gpResult
-					, smResult
-					, m_rsmGiPass.getConfigUbo()
-					, m_rsmGiPass.getSamplesSsbo()
-					, m_rsmGiPass.getResult()[0]
-					, m_rsmGiPass.getResult()[1]
-					, lpResult[LpTexture::eDiffuse] }
+					, m_gpInfoUbo
+					, m_gpResult
+					, m_smResult
+					, m_rsmGiPass->getConfigUbo()
+					, m_rsmGiPass->getSamplesSsbo()
+					, m_rsmGiPass->getResult()[0]
+					, m_rsmGiPass->getResult()[1]
+					, m_lpResult[LpTexture::eDiffuse] );
+			LightPassShadow< LtType >::initialise( scene, gp, sceneUbo, timer );
+		}
+
+		void cleanup()override
 		{
+			LightPassShadow< LtType >::cleanup();
+			m_interpolatePass.reset();
+			m_rsmGiPass.reset();
+			m_downscalePass.reset();
 		}
 
 		ashes::Semaphore const & render( uint32_t index
@@ -98,9 +121,9 @@ namespace castor3d
 		{
 			auto result = &toWait;
 			result = &my_pass_type::render( index, *result );
-			result = &m_downscalePass.compute( *result );
-			result = &m_rsmGiPass.compute( *result );
-			result = &m_interpolatePass.compute( *result );
+			result = &m_downscalePass->compute( *result );
+			result = &m_rsmGiPass->compute( *result );
+			result = &m_interpolatePass->compute( *result );
 
 			return *result;
 		}
@@ -108,8 +131,16 @@ namespace castor3d
 		void accept( PipelineVisitorBase & visitor )override
 		{
 			LightPassShadow< LtType >::accept( visitor );
-			m_rsmGiPass.accept( visitor );
-			m_downscalePass.accept( visitor );
+
+			if ( m_rsmGiPass )
+			{
+				m_rsmGiPass->accept( visitor );
+			}
+
+			if ( m_downscalePass )
+			{
+				m_downscalePass->accept( visitor );
+			}
 		}
 
 	protected:
@@ -126,13 +157,17 @@ namespace castor3d
 				, camera
 				, shadowMap
 				, shadowMapIndex );
-			m_rsmGiPass.update( light );
+			m_rsmGiPass->update( light );
 		}
 
 	private:
-		DownscalePass m_downscalePass;
-		RsmGIPass m_rsmGiPass;
-		RsmInterpolatePass m_interpolatePass;
+		OpaquePassResult const & m_gpResult;
+		ShadowMapResult const & m_smResult;
+		LightPassResult const & m_lpResult;
+		GpInfoUbo const & m_gpInfoUbo;
+		std::unique_ptr< DownscalePass > m_downscalePass;
+		std::unique_ptr< RsmGIPass > m_rsmGiPass;
+		std::unique_ptr< RsmInterpolatePass > m_interpolatePass;
 	};
 	//!\~english	The directional lights light pass with shadows.
 	//!\~french		La passe d'éclairage avec ombres pour les lumières directionnelles.

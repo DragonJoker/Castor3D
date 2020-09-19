@@ -69,7 +69,8 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		)
 	endif ()
 
-	option( CASTOR_USE_TRACK "Enable function tracking" FALSE )
+	option( CASTOR_USE_TRACK "Enable function tracking" OFF )
+	option( CASTOR_DISABLE_DELAYED_INITIALISATION "Replaces castor::DelayedInitialiserT implementation by a dummy one." OFF )
 
 	set( CastorBinsDependencies
 		${CastorBinsDependencies}
@@ -215,6 +216,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/ChangeTracked.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/Collection.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/Collection.inl
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/DelayedInitialiser.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/DesignModule.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/DynamicBitset.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/DynamicBitset.inl
@@ -586,6 +588,12 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		ALIAS
 		${PROJECT_NAME}
 	)
+	if ( CASTOR_DISABLE_DELAYED_INITIALISATION )
+		target_compile_definitions( ${PROJECT_NAME}
+			PUBLIC
+				CU_NoDelayedInit=1
+		)
+	endif ()
 	target_compile_definitions( ${PROJECT_NAME}
 		PUBLIC
 			_UNICODE

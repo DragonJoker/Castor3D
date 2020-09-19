@@ -18,9 +18,9 @@ namespace Reinhard
 	String ToneMapping::Name = cuT( "Reinhard Tone Mapping" );
 
 	ToneMapping::ToneMapping( Engine & engine
-		, HdrConfig & hdrConfig
+		, HdrConfigUbo & hdrConfigUbo
 		, Parameters const & parameters )
-		: castor3d::ToneMapping{ Type, Name, engine, hdrConfig, parameters }
+		: castor3d::ToneMapping{ Type, Name, engine, hdrConfigUbo, parameters }
 	{
 	}
 
@@ -29,11 +29,11 @@ namespace Reinhard
 	}
 
 	ToneMappingSPtr ToneMapping::create( Engine & engine
-		, HdrConfig & hdrConfig
+		, HdrConfigUbo & hdrConfigUbo
 		, Parameters const & parameters )
 	{
 		return std::make_shared< ToneMapping >( engine
-			, hdrConfig
+			, hdrConfigUbo
 			, parameters );
 	}
 
@@ -72,7 +72,7 @@ namespace Reinhard
 	{
 	}
 
-	void ToneMapping::doUpdate()
+	void ToneMapping::doCpuUpdate()
 	{
 	}
 }

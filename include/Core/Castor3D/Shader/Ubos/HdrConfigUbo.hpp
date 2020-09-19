@@ -8,12 +8,15 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
 
-#include "Castor3D/Buffer/UniformBufferPool.hpp"
+#include "Castor3D/Buffer/UniformBufferOffset.hpp"
 
 namespace castor3d
 {
 	class HdrConfigUbo
 	{
+	public:
+		using Configuration = HdrConfig;
+
 	public:
 		/**
 		 *\~english
@@ -65,24 +68,13 @@ namespace castor3d
 		 *\brief		Met à jour l'UBO avec les valeurs données.
 		 *\param[in]	config	La configuration HDR.
 		 */
-		C3D_API void update( HdrConfig const & config );
-		/**
-		 *\~english
-		 *\name			getters.
-		 *\~french
-		 *\name			getters.
-		 */
-		/**@{*/
-		inline UniformBufferOffset< HdrConfig > & getUbo()
-		{
-			return m_ubo;
-		}
+		C3D_API void cpuUpdate( HdrConfig const & config );
 
-		inline UniformBufferOffset< HdrConfig > const & getUbo()const
+		void createSizedBinding( ashes::DescriptorSet & descriptorSet
+			, VkDescriptorSetLayoutBinding const & layoutBinding )const
 		{
-			return m_ubo;
+			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
 		}
-		/**@}*/
 
 	public:
 		C3D_API static uint32_t const BindingPoint;
@@ -98,7 +90,7 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
-		UniformBufferOffset< HdrConfig > m_ubo;
+		UniformBufferOffsetT< HdrConfig > m_ubo;
 	};
 }
 

@@ -5,7 +5,8 @@ See LICENSE file in root folder
 #define ___C3D_BillboardRenderNode_H___
 
 #include "Castor3D/Render/Node/ObjectRenderNode.hpp"
-#include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
+
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 namespace castor3d
 {
@@ -14,18 +15,18 @@ namespace castor3d
 	{
 		C3D_API BillboardRenderNode( RenderPipeline & pipeline
 			, PassRenderNode && passNode
-			, UniformBufferOffset< ModelMatrixUbo::Configuration > modelMatrixBuffer
-			, UniformBufferOffset< ModelUbo::Configuration > modelBuffer
-			, UniformBufferOffset< PickingUbo::Configuration > pickingBuffer
-			, UniformBufferOffset< BillboardUbo::Configuration > billboardBuffer
-			, UniformBufferOffset< TexturesUbo::Configuration > texturesBuffer
+			, UniformBufferOffsetT< ModelMatrixUboConfiguration > modelMatrixBuffer
+			, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
+			, UniformBufferOffsetT< PickingUboConfiguration > pickingBuffer
+			, UniformBufferOffsetT< BillboardUboConfiguration > billboardBuffer
+			, UniformBufferOffsetT< TexturesUboConfiguration > texturesBuffer
 			, GeometryBuffers const & buffers
 			, SceneNode & sceneNode
 			, BillboardBase & data );
 
 		//!\~english	The billboard UBO.
 		//!\~french		L'UBO de billboard.
-		UniformBufferOffset< BillboardUbo::Configuration > billboardUbo;
+		UniformBufferOffsetT< BillboardUboConfiguration > billboardUbo;
 	};
 }
 

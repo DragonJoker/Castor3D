@@ -523,12 +523,12 @@ namespace castor3d
 			, ashes::DescriptorSetPool & descriptorSetPool
 			, TextureUnit const * geometryInjectionResult
 			, LightVolumePassResult const & lightInjectionResult
-			, UniformBuffer< LpvConfigUboConfiguration > const & ubo )
+			, UniformBufferOffsetT< LpvConfigUboConfiguration > const & ubo )
 		{
 			auto & descriptorSetLayout = descriptorSetPool.getLayout();
 			auto result = descriptorSetPool.createDescriptorSet( name );
-			result->createSizedBinding( descriptorSetLayout.getBinding( LIUboIdx )
-				, ubo );
+			ubo.createSizedBinding( *result
+				, descriptorSetLayout.getBinding( LIUboIdx ) );
 			result->createBinding( descriptorSetLayout.getBinding( RLpvGridIdx )
 				, lightInjectionResult[LpvTexture::eR].getTexture()->getDefaultView().getSampledView()
 				, lightInjectionResult[LpvTexture::eR].getSampler()->getSampler() );

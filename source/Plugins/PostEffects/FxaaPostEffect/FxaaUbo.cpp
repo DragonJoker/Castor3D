@@ -1,7 +1,7 @@
 #include "FxaaPostEffect/FxaaUbo.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Buffer/UniformBuffer.hpp>
+#include <Castor3D/Buffer/UniformBufferPools.hpp>
 
 #include <CastorUtils/Graphics/Size.hpp>
 
@@ -15,25 +15,26 @@ namespace fxaa
 
 	FxaaUbo::FxaaUbo( castor3d::Engine & engine
 		, castor::Size const & size )
-		: m_ubo{ castor3d::makeUniformBuffer< Configuration >( *engine.getRenderSystem()
-			, 1u
-			, 0u
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
-			, "FxaaCfg" ) }
+		: m_engine{ engine }
+		, m_ubo{ engine.getUboPools().getBuffer< Configuration >( 0u ) }
 	{
-		auto & data = m_ubo->getData();
+		auto & data = m_ubo.getData();
 		data.pixelSize = castor::Point2f{ 1.0f / size.getWidth(), 1.0f / size.getHeight() };
 	}
 
-	void FxaaUbo::update( float shift
+	FxaaUbo::~FxaaUbo()
+	{
+		m_engine.getUboPools().putBuffer( m_ubo );
+	}
+
+	void FxaaUbo::cpuUpdate( float shift
 		, float span
 		, float reduce )
 	{
-		auto & data = m_ubo->getData();
+		auto & data = m_ubo.getData();
 		data.subpixShift = shift;
 		data.spanMax = span;
 		data.reduceMul = reduce;
-		m_ubo->upload();
 	}
 
 	//************************************************************************************************

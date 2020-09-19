@@ -37,7 +37,7 @@ endfunction( GeneratorBuild )
 
 function( GeneratorSummary msg )
 	if ( ${CASTOR_BUILDGRP_GENERATOR} )
-		set( msg_tmp "\n\nGenerator plugins :" )
+		set( msg_tmp "\n\n  Generator plugins:" )
 		if( ${CASTOR_BUILD_GENERATOR_DIAMOND_SQUARE_TERRAIN} )
 			set( msg_tmp "${msg_tmp}\n    DiamondSquareTerrain ${Dst}" )
 		endif ()

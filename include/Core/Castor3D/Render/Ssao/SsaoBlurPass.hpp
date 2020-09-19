@@ -8,7 +8,7 @@ See LICENSE file in root folder
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
-#include "Castor3D/Buffer/UniformBuffer.hpp"
+#include "Castor3D/Buffer/UniformBufferOffset.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/ToTexture/RenderQuad.hpp"
 
@@ -22,7 +22,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	class SsaoBlurPass
+	class /*.hpp*/ SsaoBlurPass
 		: public RenderQuad
 	{
 	public:
@@ -68,7 +68,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour l'UBO de configuration du flou.
 		 */
-		void update()const;
+		void update( CpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Applies the blur.
@@ -129,7 +129,7 @@ namespace castor3d
 		RenderPassTimerSPtr m_timer;
 		ashes::CommandBufferPtr m_commandBuffer;
 		ashes::SemaphorePtr m_finished;
-		UniformBufferUPtr< Configuration > m_configurationUbo;
+		UniformBufferOffsetT< Configuration > m_configurationUbo;
 
 	};
 }

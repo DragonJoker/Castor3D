@@ -97,10 +97,7 @@ namespace castor3d
 		 *\param[out]	light	La source lumineuse.
 		 *\param[out]	index	L'indice de la texture.
 		 */
-		C3D_API virtual void update( Camera const & camera
-			, RenderQueueArray & queues
-			, Light & light
-			, uint32_t index ) = 0;
+		C3D_API virtual void update( CpuUpdater & updater ) = 0;
 		/**
 		 *\~english
 		 *\brief		Updates VRAM data.
@@ -109,7 +106,7 @@ namespace castor3d
 		 *\brief		Met à jour les données VRAM.
 		 *\param[out]	index	L'indice de la texture.
 		 */
-		C3D_API virtual void updateDeviceDependent( uint32_t index ) = 0;
+		C3D_API virtual void update( GpuUpdater & updater ) = 0;
 		/**
 		 *\~english
 		 *\brief		Renders the light's shadow map.

@@ -47,7 +47,7 @@ namespace castor3d
 				, SpotLightPass & lightPass
 				, ShaderModule const & vtx
 				, ShaderModule const & pxl
-				, bool hasShadows );
+				, bool hasShadows = false );
 			/**
 			 *\~english
 			 *\brief		Destructor.
@@ -84,7 +84,7 @@ namespace castor3d
 		SpotLightPass( Engine & engine
 			, LightPassResult const & lpResult
 			, GpInfoUbo const & gpInfoUbo
-			, bool hasShadows );
+			, bool hasShadows = false );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -132,7 +132,7 @@ namespace castor3d
 			//!\~french		La variable contenant la matrice de transformation de la lumière.
 			castor::Matrix4x4f transform;
 		};
-		UniformBufferUPtr< Config > m_ubo;
+		UniformBufferUPtrT< Config > m_ubo;
 	};
 }
 

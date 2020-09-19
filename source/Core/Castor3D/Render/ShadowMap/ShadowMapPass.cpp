@@ -162,7 +162,7 @@ namespace castor3d
 		return ShaderPtr{};
 	}
 
-	void ShadowMapPass::doUpdatePipeline( RenderPipeline & pipeline )const
+	void ShadowMapPass::doUpdatePipeline( RenderPipeline & pipeline )
 	{
 	}
 }

@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include <CastorUtils/Design/Factory.hpp>
 
@@ -65,7 +66,7 @@ namespace castor3d
 	using ToneMappingFactory = castor::Factory< ToneMapping
 		, castor::String
 		, ToneMappingSPtr
-		, std::function< ToneMappingSPtr( Engine &, HdrConfig &, Parameters const & ) > >;
+		, std::function< ToneMappingSPtr( Engine &, HdrConfigUbo &, Parameters const & ) > >;
 
 	//@}
 	//@}

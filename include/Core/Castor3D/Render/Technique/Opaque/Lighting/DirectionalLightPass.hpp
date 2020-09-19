@@ -49,7 +49,7 @@ namespace castor3d
 				, DirectionalLightPass & pass
 				, ShaderModule const & vtx
 				, ShaderModule const & pxl
-				, bool hasShadows );
+				, bool hasShadows = false );
 			/**
 			 *\~english
 			 *\brief		Destructor.
@@ -92,7 +92,7 @@ namespace castor3d
 		DirectionalLightPass( Engine & engine
 			, LightPassResult const & lpResult
 			, GpInfoUbo const & gpInfoUbo
-			, bool hasShadows );
+			, bool hasShadows = false );
 		/**
 		 *\copydoc		castor3d::LightPass::initialise
 		 */
@@ -144,7 +144,7 @@ namespace castor3d
 			castor::Point4f splitScales;
 			std::array< castor::Matrix4x4f, shader::DirectionalMaxCascadesCount > transform;
 		};
-		UniformBufferUPtr< Config > m_ubo;
+		UniformBufferUPtrT< Config > m_ubo;
 		Viewport m_viewport;
 	};
 }

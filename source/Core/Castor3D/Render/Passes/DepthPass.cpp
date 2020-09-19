@@ -15,6 +15,13 @@
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Render/RenderPassTimer.hpp"
+#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelUbo.hpp"
+#include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
+#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
+#include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
@@ -206,7 +213,7 @@ namespace castor3d
 			, node.pipeline.getFlags().textures );
 	}
 
-	void DepthPass::doUpdatePipeline( RenderPipeline & pipeline )const
+	void DepthPass::doUpdatePipeline( RenderPipeline & pipeline )
 	{
 	}
 

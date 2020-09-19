@@ -1,12 +1,15 @@
 #include "Castor3D/Render/PickingPass.hpp"
 
-
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Cache/GeometryCache.hpp"
+#include "Castor3D/Event/Frame/FunctorEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Node/SceneCulledRenderNodes.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -17,6 +20,14 @@
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
+#include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
+#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelUbo.hpp"
+#include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
+#include "Castor3D/Shader/Ubos/PickingUbo.hpp"
+#include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
+#include "Castor3D/Shader/Ubos/TexturesUbo.hpp"
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
@@ -49,7 +60,7 @@ namespace castor3d
 		}
 
 		template< bool Opaque, typename MapType, typename FuncType >
-		inline void doTraverseNodes( RenderPass const & pass
+		inline void doTraverseNodes( RenderPass & pass
 			, MapType & nodes
 			, PickNodeType type
 			, FuncType function )
@@ -85,7 +96,7 @@ namespace castor3d
 		}
 
 		template< bool Opaque, typename MapType >
-		inline void doUpdateNonInstanced( RenderPass const & pass
+		inline void doUpdateNonInstanced( RenderPass & pass
 			, PickNodeType type
 			, MapType & nodes )
 		{
@@ -323,7 +334,7 @@ namespace castor3d
 	{
 		auto & myCamera = getCuller().getCamera();
 		auto & myScene = getCuller().getScene();
-		m_matrixUbo.update( myCamera.getView()
+		m_matrixUbo.cpuUpdate( myCamera.getView()
 			, myCamera.getProjection() );
 		doUpdate( nodes.instancedStaticNodes.backCulled );
 		doUpdate( nodes.staticNodes.backCulled );
@@ -331,7 +342,6 @@ namespace castor3d
 		doUpdate( nodes.instancedSkinnedNodes.backCulled );
 		doUpdate( nodes.morphingNodes.backCulled );
 		doUpdate( nodes.billboardNodes.backCulled );
-		myScene.getGeometryCache().uploadPickingUbos();
 	}
 
 	Point4f PickingPass::doFboPick( Position const & position
@@ -661,19 +671,15 @@ namespace castor3d
 	void PickingPass::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 		, BillboardListRenderNode & node )
 	{
-		node.uboDescriptorSet->createBinding( layout.getBinding( PickingUbo::BindingPoint )
-			, node.pickingUbo.buffer->getBuffer()
-			, node.pickingUbo.offset
-			, 1u );
+		node.pickingUbo.createSizedBinding( *node.uboDescriptorSet
+			, layout.getBinding( PickingUbo::BindingPoint ) );
 	}
 
 	void PickingPass::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 		, SubmeshRenderNode & node )
 	{
-		node.uboDescriptorSet->createBinding( layout.getBinding( PickingUbo::BindingPoint )
-			, node.pickingUbo.buffer->getBuffer()
-			, node.pickingUbo.offset
-			, 1u );
+		node.pickingUbo.createSizedBinding( *node.uboDescriptorSet
+			, layout.getBinding( PickingUbo::BindingPoint ) );
 	}
 
 	void PickingPass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
@@ -826,14 +832,14 @@ namespace castor3d
 		FragmentWriter writer;
 
 		// UBOs
+		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto materials = shader::createMaterials( writer, flags.passFlags );
-		materials->declare( getEngine()->getRenderSystem()->getGpuInformations().hasShaderStorageBuffers() );
+		materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		shader::TextureConfigurations textureConfigs{ writer };
 		bool hasTextures = !flags.textures.empty();
 
 		if ( hasTextures )
 		{
-			auto & renderSystem = *getEngine()->getRenderSystem();
 			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		}
 
@@ -895,7 +901,7 @@ namespace castor3d
 		addFlag( flags.programFlags, ProgramFlag::ePicking );
 	}
 
-	void PickingPass::doUpdatePipeline( RenderPipeline & pipeline )const
+	void PickingPass::doUpdatePipeline( RenderPipeline & pipeline )
 	{
 	}
 

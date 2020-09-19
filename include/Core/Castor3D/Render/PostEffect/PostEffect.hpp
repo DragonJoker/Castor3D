@@ -108,7 +108,16 @@ namespace castor3d
 		 *\brief		Met à jour les données en ayant besoin.
 		 *\param[in]	elapsedTime	Le temps écoulé depuis la dernière frame.
 		 */
-		C3D_API virtual void update( castor::Nanoseconds const & elapsedTime );
+		C3D_API virtual void update( CpuUpdater & updater );
+		/**
+		 *\~english
+		 *\brief		Updated needed data.
+		 *\param[in]	elapsedTime	The time elapsed since last frame.
+		 *\~french
+		 *\brief		Met à jour les données en ayant besoin.
+		 *\param[in]	elapsedTime	Le temps écoulé depuis la dernière frame.
+		 */
+		C3D_API virtual void update( GpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Visitor acceptance function.

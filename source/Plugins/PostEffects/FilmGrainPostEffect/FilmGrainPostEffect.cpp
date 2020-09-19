@@ -8,16 +8,17 @@
 #include "NoiseLayer6.xpm"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Buffer/UniformBuffer.hpp>
+#include <Castor3D/Buffer/UniformBufferPools.hpp>
 #include <Castor3D/Cache/SamplerCache.hpp>
 #include <Castor3D/Cache/ShaderCache.hpp>
 #include <Castor3D/Material/Texture/Sampler.hpp>
 #include <Castor3D/Material/Texture/TextureLayout.hpp>
 #include <Castor3D/Material/Texture/TextureUnit.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
+#include <Castor3D/Render/RenderLoop.hpp>
+#include <Castor3D/Render/RenderPassTimer.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
-#include <Castor3D/Render/RenderPassTimer.hpp>
 #include <Castor3D/Shader/Program.hpp>
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
 
@@ -236,30 +237,23 @@ namespace film_grain
 				, m_noiseView );
 		}
 
-		m_configUbo = castor3d::makeUniformBuffer< Configuration >( device.renderSystem
-			, 1u
-			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, getName() + "Config" );
-		m_configUbo->getData( 0 ).m_pixelSize = Point2f{ m_size.width, m_size.height };
-		m_configUbo->getData( 0 ).m_noiseIntensity = 1.0f;
-		m_configUbo->getData( 0 ).m_exposure = 1.0f;
+		m_configUbo = device.renderSystem.getEngine()->getUboPools().getBuffer< Configuration >( 0u );
+		m_configUbo.getData().m_pixelSize = Point2f{ m_size.width, m_size.height };
+		m_configUbo.getData().m_noiseIntensity = 1.0f;
+		m_configUbo.getData().m_exposure = 1.0f;
 	}
 
-	void RenderQuad::update( castor::Nanoseconds const & time )
+	void RenderQuad::update( castor3d::CpuUpdater & updater )
 	{
-		m_time += time.count();
-		m_configUbo->getData().m_time = ( m_time % NoiseMapCount ) / float( NoiseMapCount );
-		m_configUbo->upload();
+		m_time += updater.time.count();
+		m_configUbo.getData().m_time = ( m_time % NoiseMapCount ) / float( NoiseMapCount );
 	}
 
 	void RenderQuad::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
 		, ashes::DescriptorSet & descriptorSet )
 	{
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 0u )
-			, *m_configUbo
-			, 0u
-			, 1u );
+		m_configUbo.createSizedBinding( descriptorSet
+			, descriptorSetLayout.getBinding( 0u ) );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 1u )
 			, m_noiseView
 			, m_sampler->getSampler() );
@@ -328,9 +322,9 @@ namespace film_grain
 			, m_quad->getUbo().getData().m_noiseIntensity );
 	}
 
-	void PostEffect::update( castor::Nanoseconds const & elapsedTime )
+	void PostEffect::update( castor3d::CpuUpdater & updater )
 	{
-		m_quad->update( elapsedTime );
+		m_quad->update( updater );
 	}
 
 	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )

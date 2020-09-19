@@ -17,13 +17,6 @@ namespace fireworks
 		explicit ParticleSystem( castor3d::ParticleSystem & parent );
 		virtual ~ParticleSystem();
 		static castor3d::CpuParticleSystemUPtr create( castor3d::ParticleSystem & parent );
-		/**
-		 *\copydoc		castor3d::CpuParticleSystem::update
-		 */
-		uint32_t update( castor3d::RenderPassTimer & timer
-			, castor::Milliseconds const & time
-			, castor::Milliseconds const & totalTime
-			, uint32_t index )override;
 
 	private:
 		/**
@@ -31,20 +24,13 @@ namespace fireworks
 		 */
 		bool doInitialise()override;
 		/**
-		 *\copydoc		castor3d::CpuParticleSystem::doCleanup
+		 *\copydoc		castor3d::CpuParticleSystem::doPackParticles
 		 */
-		void doCleanup()override;
-		/**
-		 *\copydoc		castor3d::CpuParticleSystem::doOnEmit
-		 */
-		void doOnEmit( castor3d::Particle const & particle )override;
+		void doPackParticles()override;
 
 	public:
 		static castor::String const Type;
 		static castor::String const Name;
-
-	private:
-		uint32_t m_firstUnused{ 1u };
 	};
 }
 

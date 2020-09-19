@@ -3,6 +3,7 @@
 #include "Castor3D/Render/Passes/LineariseDepthPass.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
@@ -662,14 +663,10 @@ namespace castor3d
 	void SsaoRawAOPass::RenderQuad::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
 		, ashes::DescriptorSet & descriptorSet )
 	{
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 0u )
-			, m_ssaoConfigUbo.getUbo()
-			, 0u
-			, 1u );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 1u )
-			, m_gpInfoUbo.getUbo()
-			, 0u
-			, 1u );
+		m_ssaoConfigUbo.createSizedBinding( descriptorSet
+			, descriptorSetLayout.getBinding( 0u ) );
+		m_gpInfoUbo.createSizedBinding( descriptorSet
+			, descriptorSetLayout.getBinding( 1u ) );
 
 		if ( m_depthView )
 		{
@@ -788,7 +785,10 @@ namespace castor3d
 	void SsaoRawAOPass::accept( SsaoConfig & config
 		, PipelineVisitorBase & visitor )
 	{
-		visitor.visit( "SSAO Raw AO", getResult().getTexture()->getDefaultView().getSampledView() );
+		if ( getResult().isTextured() )
+		{
+			visitor.visit( "SSAO Raw AO", getResult().getTexture()->getDefaultView().getSampledView() );
+		}
 
 		auto index = m_ssaoConfig.useNormalsBuffer
 			? 1u

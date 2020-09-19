@@ -1,6 +1,8 @@
 #include "Castor3D/Overlay/OverlayRenderer.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/UniformBufferPools.hpp"
+#include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
@@ -11,6 +13,7 @@
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Overlay/PanelOverlay.hpp"
 #include "Castor3D/Overlay/TextOverlay.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -57,14 +60,13 @@ namespace castor3d
 		}
 
 		template< typename T >
-		void doUpdateUbo( UniformBuffer< T > & overlayUbo
-			, UniformBuffer< TexturesUbo::Configuration > & texturesUbo
-			, uint32_t index
+		void doUpdateUbo( UniformBufferOffsetT< T > & overlayUbo
+			, UniformBufferOffsetT< TexturesUbo::Configuration > & texturesUbo
 			, OverlayCategory const & overlay
 			, Pass const & pass
 			, Size const & size )
 		{
-			auto & data = overlayUbo.getData( index );
+			auto & data = overlayUbo.getData();
 			auto position = overlay.getAbsolutePosition();
 			auto ratio = overlay.getRenderRatio( size );
 			data.positionRatio = Point4f
@@ -246,6 +248,7 @@ namespace castor3d
 			, Overlay const & overlay
 			, Pass const & pass
 			, OverlayRenderer::OverlayRenderNode & node
+			, Engine & engine
 			, RenderDevice const & device
 			, ashes::PipelineVertexInputStateCreateInfo const & layout
 			, uint32_t maxCount )
@@ -271,7 +274,8 @@ namespace castor3d
 
 				if ( it == overlays.end() )
 				{
-					pools.emplace_back( std::make_unique< VertexBufferPoolT >( device
+					pools.emplace_back( std::make_unique< VertexBufferPoolT >( engine
+						, device
 						, layout
 						, maxCount ) );
 					auto result = pools.back()->allocate( node );
@@ -302,14 +306,14 @@ namespace castor3d
 				, ( fontTexture
 					? m_renderer.doGetTextNode( pass, *fontTexture->getTexture(), *fontTexture->getSampler() )
 					: m_renderer.doGetPanelNode( pass ) )
+				, *pass.getOwner()->getEngine()
 				, getCurrentRenderDevice( m_renderer )
 				, ( fontTexture
 					? m_renderer.m_textDeclaration
 					: m_renderer.m_declaration )
 				, MaxPanelsPerBuffer );
-			doUpdateUbo( *bufferIndex.pool.overlayUbo
-				, *bufferIndex.pool.texturesUbo
-				, bufferIndex.index
+			doUpdateUbo( bufferIndex.overlayUbo
+				, bufferIndex.texturesUbo
 				, overlay
 				, pass
 				, m_renderer.m_size );
@@ -324,8 +328,8 @@ namespace castor3d
 					bufferIndex.descriptorSet = m_renderer.doCreateDescriptorSet( bufferIndex.node.pipeline
 						, pass.getTextures()
 						, pass
-						, *bufferIndex.pool.overlayUbo
-						, *bufferIndex.pool.texturesUbo
+						, bufferIndex.overlayUbo
+						, bufferIndex.texturesUbo
 						, bufferIndex.index
 						, *fontTexture->getTexture()
 						, *fontTexture->getSampler() );
@@ -339,8 +343,8 @@ namespace castor3d
 					bufferIndex.descriptorSet = m_renderer.doCreateDescriptorSet( bufferIndex.node.pipeline
 						, pass.getTextures()
 						, pass
-						, *bufferIndex.pool.overlayUbo
-						, *bufferIndex.pool.texturesUbo
+						, bufferIndex.overlayUbo
+						, bufferIndex.texturesUbo
 						, bufferIndex.index );
 				}
 			}
@@ -369,10 +373,12 @@ namespace castor3d
 	//*********************************************************************************************
 
 	template< typename VertexT, uint32_t CountT >
-	OverlayRenderer::VertexBufferPool< VertexT, CountT >::VertexBufferPool( RenderDevice const & device
+	OverlayRenderer::VertexBufferPool< VertexT, CountT >::VertexBufferPool( Engine & engine
+		, RenderDevice const & device
 		, ashes::PipelineVertexInputStateCreateInfo const & decl
 		, uint32_t count )
-		: maxCount{ count }
+		: engine{ engine }
+		, maxCount{ count }
 		, data{ count, Quad{} }
 		, declaration{ decl }
 		, buffer{ makeVertexBuffer< Quad >( device
@@ -380,16 +386,6 @@ namespace castor3d
 			, 0u
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, "OverlayRenderer" ) }
-		, overlayUbo{ makeUniformBuffer< Configuration >( device.renderSystem
-			, count
-			, 0u
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, "OverlayRendererOv" ) }
-		, texturesUbo{ makeUniformBuffer< TexturesUbo::Configuration >( device.renderSystem
-			, count
-			, 0u
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, "OverlayRendererTx" ) }
 	{
 		for ( auto i = 0u; i < count; ++i )
 		{
@@ -400,10 +396,14 @@ namespace castor3d
 	template< typename VertexT, uint32_t CountT >
 	OverlayRenderer::VertexBufferIndex< VertexT, CountT > OverlayRenderer::VertexBufferPool< VertexT, CountT >::allocate( OverlayRenderNode & node )
 	{
-		OverlayRenderer::VertexBufferIndex< VertexT, CountT > result{ *this, node, InvalidIndex };
+		OverlayRenderer::VertexBufferIndex< VertexT, CountT > result{ *this
+			, node
+			, InvalidIndex };
 
 		if ( !free.empty() )
 		{
+			result.overlayUbo = engine.getUboPools().getBuffer< Configuration >( 0u );
+			result.texturesUbo = engine.getUboPools().getBuffer< TexturesUbo::Configuration >( 0u );
 			result.index = *free.begin();
 			result.geometryBuffers.noTexture.vbo.emplace_back( buffer->getBuffer() );
 			result.geometryBuffers.noTexture.layouts.emplace_back( declaration );
@@ -441,9 +441,6 @@ namespace castor3d
 			buffer->flush( 0u, buffer->getCount() );
 			buffer->unlock();
 		}
-
-		overlayUbo->upload( 0u, uint32_t( data.size() ) );
-		texturesUbo->upload( 0u, uint32_t( data.size() ) );
 	}
 
 	//*********************************************************************************************
@@ -504,17 +501,20 @@ namespace castor3d
 
 
 		// Create one panel overlays buffer pool
-		m_panelVertexBuffers.emplace_back( std::make_unique< PanelVertexBufferPool >( device
+		m_panelVertexBuffers.emplace_back( std::make_unique< PanelVertexBufferPool >( *getRenderSystem()->getEngine()
+			, device
 			, m_declaration
 			, MaxPanelsPerBuffer ) );
 
 		// Create one border overlays buffer pool
-		m_borderVertexBuffers.emplace_back( std::make_unique< BorderPanelVertexBufferPool >( device
+		m_borderVertexBuffers.emplace_back( std::make_unique< BorderPanelVertexBufferPool >( *getRenderSystem()->getEngine()
+			, device
 			, m_declaration
 			, MaxPanelsPerBuffer ) );
 
 		// create one text overlays buffer
-		m_textVertexBuffers.emplace_back( std::make_unique< TextVertexBufferPool >( device
+		m_textVertexBuffers.emplace_back( std::make_unique< TextVertexBufferPool >( *getRenderSystem()->getEngine()
+			, device
 			, m_textDeclaration
 			, MaxPanelsPerBuffer ) );
 	}
@@ -539,15 +539,15 @@ namespace castor3d
 		m_finished.reset();
 	}
 
-	void OverlayRenderer::update( Camera const & camera )
+	void OverlayRenderer::update( GpuUpdater & updater )
 	{
-		auto size = camera.getSize();
+		auto size = updater.camera->getSize();
 
 		if ( m_size != size )
 		{
 			m_sizeChanged = true;
 			m_size = size;
-			m_matrixUbo.update( getRenderSystem()->getOrtho( 0.0f
+			m_matrixUbo.cpuUpdate( getRenderSystem()->getOrtho( 0.0f
 				, float( m_size.getWidth() )
 				, 0.0f
 				, float( m_size.getHeight() )
@@ -641,8 +641,8 @@ namespace castor3d
 	ashes::DescriptorSetPtr OverlayRenderer::doCreateDescriptorSet( OverlayRenderer::Pipeline & pipeline
 		, TextureFlags textures
 		, Pass const & pass
-		, UniformBuffer< Configuration > const & overlayUbo
-		, UniformBuffer< TexturesUbo::Configuration > const & texturesUbo
+		, UniformBufferOffsetT< Configuration > const & overlayUbo
+		, UniformBufferOffsetT< TexturesUbo::Configuration > const & texturesUbo
 		, uint32_t index
 		, bool update )
 	{
@@ -656,20 +656,14 @@ namespace castor3d
 		getRenderSystem()->getEngine()->getMaterialCache().getTextureBuffer().createBinding( *result
 			, pipeline.descriptorLayout->getBinding( getTexturesBufferIndex() ) );
 		// Matrix UBO
-		result->createBinding( pipeline.descriptorLayout->getBinding( MatrixUboBinding )
-			, *m_matrixUbo.getUbo().buffer
-			, m_matrixUbo.getUbo().offset
-			, 1u );
+		m_matrixUbo.createSizedBinding( *result
+			, pipeline.descriptorLayout->getBinding( MatrixUboBinding ) );
 		// Overlay UBO
-		result->createBinding( pipeline.descriptorLayout->getBinding( OverlayUboBinding )
-			, overlayUbo
-			, index
-			, 1u );
+		overlayUbo.createSizedBinding( *result
+			, pipeline.descriptorLayout->getBinding( OverlayUboBinding ) );
 		// Textures UBO
-		result->createBinding( pipeline.descriptorLayout->getBinding( TexturesUboBinding )
-			, texturesUbo
-			, index
-			, 1u );
+		texturesUbo.createSizedBinding( *result
+			, pipeline.descriptorLayout->getBinding( TexturesUboBinding ) );
 		uint32_t texIndex = 0u;
 
 		for ( auto & unit : pass.getTextureUnits( textures ) )
@@ -698,8 +692,8 @@ namespace castor3d
 	ashes::DescriptorSetPtr OverlayRenderer::doCreateDescriptorSet( OverlayRenderer::Pipeline & pipeline
 		, TextureFlags textures
 		, Pass const & pass
-		, UniformBuffer< Configuration > const & overlayUbo
-		, UniformBuffer< TexturesUbo::Configuration > const & texturesUbo
+		, UniformBufferOffsetT< Configuration > const & overlayUbo
+		, UniformBufferOffsetT< TexturesUbo::Configuration > const & texturesUbo
 		, uint32_t index
 		, TextureLayout const & texture
 		, Sampler const & sampler )

@@ -1,9 +1,12 @@
 #include "Castor3D/Cache/BillboardUboPools.hpp"
 
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 
@@ -25,20 +28,8 @@ namespace castor3d
 	}
 
 	BillboardUboPools::BillboardUboPools( RenderSystem & renderSystem )
-		: m_modelUboPool{ renderSystem, cuT( "BillboardUboPools_Model" ) }
-		, m_modelMatrixUboPool{ renderSystem, cuT( "BillboardUboPools_ModelMatrix" ) }
-		, m_billboardUboPool{ renderSystem, cuT( "BillboardUboPools_Billboard" ) }
-		, m_pickingUboPool{ renderSystem, cuT( "BillboardUboPools_Picking" ) }
-		, m_texturesUboPool{ renderSystem, cuT( "BillboardUboPools_Textures" ) }
+		: m_renderSystem{ renderSystem }
 	{
-		renderSystem.getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
-			, [this, &renderSystem]()
-			{
-				m_updateTimer = std::make_shared< RenderPassTimer >( *renderSystem.getEngine()
-					, cuT( "Update" )
-					, cuT( "Billboard UBOs" )
-					, 4u );
-			} ) );
 	}
 
 	void BillboardUboPools::update()
@@ -63,42 +54,6 @@ namespace castor3d
 				++index;
 			}
 		}
-	}
-
-	void BillboardUboPools::uploadUbos()
-	{
-		auto count = m_modelUboPool.getBufferCount()
-			+ m_modelMatrixUboPool.getBufferCount()
-			+ m_billboardUboPool.getBufferCount()
-			+ m_pickingUboPool.getBufferCount()
-			+ m_texturesUboPool.getBufferCount();
-		m_updateTimer->updateCount( std::max( count, 5u ) );
-
-		if ( count )
-		{
-			auto timerBlock = m_updateTimer->start();
-			uint32_t index = 0u;
-			m_modelUboPool.upload( *m_updateTimer, index );
-			index += std::max( m_modelUboPool.getBufferCount(), 1u );
-			m_modelMatrixUboPool.upload( *m_updateTimer, index );
-			index += std::max( m_modelMatrixUboPool.getBufferCount(), 1u );
-			m_billboardUboPool.upload( *m_updateTimer, index );
-			index += std::max( m_billboardUboPool.getBufferCount(), 1u );
-			m_pickingUboPool.upload( *m_updateTimer, index );
-			index += std::max( m_pickingUboPool.getBufferCount(), 1u );
-			m_texturesUboPool.upload( *m_updateTimer, index );
-		}
-	}
-
-	void BillboardUboPools::cleanupUbos()
-	{
-		m_modelUboPool.cleanup();
-		m_modelMatrixUboPool.cleanup();
-		m_billboardUboPool.cleanup();
-		m_pickingUboPool.cleanup();
-		m_texturesUboPool.cleanup();
-		m_entries.clear();
-		m_connections.clear();
 	}
 
 	void BillboardUboPools::registerElement( BillboardBase & billboard )
@@ -154,40 +109,44 @@ namespace castor3d
 
 	void BillboardUboPools::clear()
 	{
+		auto & pools = m_renderSystem.getEngine()->getUboPools();
+
 		for ( auto & entry : m_entries )
 		{
-			m_modelUboPool.putBuffer( entry.second.modelUbo );
-			m_modelMatrixUboPool.putBuffer( entry.second.modelMatrixUbo );
-			m_billboardUboPool.putBuffer( entry.second.billboardUbo );
-			m_pickingUboPool.putBuffer( entry.second.pickingUbo );
-			m_texturesUboPool.putBuffer( entry.second.texturesUbo );
+			pools.putBuffer( entry.second.modelUbo );
+			pools.putBuffer( entry.second.modelMatrixUbo );
+			pools.putBuffer( entry.second.billboardUbo );
+			pools.putBuffer( entry.second.pickingUbo );
+			pools.putBuffer( entry.second.texturesUbo );
 		}
 	}
 	
 	BillboardUboPools::PoolsEntry BillboardUboPools::doCreateEntry( BillboardBase const & billboard
 		, Pass const & pass )
 	{
+		auto & pools = m_renderSystem.getEngine()->getUboPools();
 		return
 		{
 			billboard,
 			pass,
-			m_modelUboPool.getBuffer( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ),
-			m_modelMatrixUboPool.getBuffer( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ),
-			m_billboardUboPool.getBuffer( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ),
-			m_pickingUboPool.getBuffer( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ),
-			m_texturesUboPool.getBuffer( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ),
+			pools.getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ),
+			pools.getBuffer< ModelMatrixUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ),
+			pools.getBuffer< BillboardUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ),
+			pools.getBuffer< PickingUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ),
+			pools.getBuffer< TexturesUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ),
 		};
 	}
 
 	void BillboardUboPools::doRemoveEntry( BillboardBase const & billboard
 		, Pass const & pass )
 	{
+		auto & pools = m_renderSystem.getEngine()->getUboPools();
 		auto entry = getUbos( billboard, pass );
 		m_entries.erase( hash( billboard, pass ) );
-		m_modelUboPool.putBuffer( entry.modelUbo );
-		m_modelMatrixUboPool.putBuffer( entry.modelMatrixUbo );
-		m_billboardUboPool.putBuffer( entry.billboardUbo );
-		m_pickingUboPool.putBuffer( entry.pickingUbo );
-		m_texturesUboPool.putBuffer( entry.texturesUbo );
+		pools.putBuffer( entry.modelUbo );
+		pools.putBuffer( entry.modelMatrixUbo );
+		pools.putBuffer( entry.billboardUbo );
+		pools.putBuffer( entry.pickingUbo );
+		pools.putBuffer( entry.texturesUbo );
 	}
 }

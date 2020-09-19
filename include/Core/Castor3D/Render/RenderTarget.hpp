@@ -15,6 +15,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
 #include "Castor3D/Render/ToTexture/RenderQuad.hpp"
+#include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 #include <ashespp/Sync/Semaphore.hpp>
@@ -121,14 +122,14 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour le culling.
 		 */
-		C3D_API void update();
+		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Updates GPU data.
 		 *\~french
 		 *\brief		Met à jour les données GPU.
 		 */
-		C3D_API void update( RenderInfo & info );
+		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Renders one frame.
@@ -326,6 +327,11 @@ namespace castor3d
 			return m_hdrConfig;
 		}
 
+		inline castor::Point2f const & getJitter()const
+		{
+			return m_jitter;
+		}
+
 		inline castor::String const & getName()const
 		{
 			return m_name;
@@ -374,6 +380,11 @@ namespace castor3d
 		{
 			m_hdrConfig.setGamma( value );
 		}
+
+		inline HdrConfigUbo const & getHdrConfigUbo()const
+		{
+			return m_hdrConfigUbo;
+		}
 		/**@}*/
 
 	private:
@@ -414,6 +425,7 @@ namespace castor3d
 		TargetType m_type;
 		bool m_initialised;
 		castor::Size m_size;
+		HdrConfigUbo m_hdrConfigUbo;
 		RenderTechniqueSPtr m_renderTechnique;
 		SceneWPtr m_scene;
 		CameraWPtr m_camera;

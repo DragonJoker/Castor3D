@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/RenderPass.hpp"
 
+#include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include <ashespp/Image/ImageView.hpp>
@@ -202,7 +203,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
 		 */
-		void doUpdatePipeline( RenderPipeline & pipeline )const override;
+		void doUpdatePipeline( RenderPipeline & pipeline )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateUboBindings
 		 */

@@ -51,6 +51,12 @@ namespace castor3d
 	*\brief		Moteur Castor3D.
 	*/
 	class Engine;
+	/**
+	*/
+	struct CpuUpdater;
+	/**
+	*/
+	struct GpuUpdater;
 
 	CU_DeclareSmartPtr( Engine );
 

@@ -1,6 +1,7 @@
 #include "Castor3D/Render/Technique/Opaque/LightVolumeGI/GeometryInjectionPass.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
@@ -531,7 +532,7 @@ namespace castor3d
 			, ashes::DescriptorSetPool & descriptorSetPool
 			, LightCache const & lightCache
 			, ShadowMapResult const & smResult
-			, UniformBuffer< LpvConfigUboConfiguration > const & ubo
+			, UniformBufferOffsetT< LpvConfigUboConfiguration > const & ubo
 			, GpInfoUbo const & gpInfoUbo )
 		{
 			auto & descriptorSetLayout = descriptorSetPool.getLayout();
@@ -545,10 +546,10 @@ namespace castor3d
 			result->createBinding( descriptorSetLayout.getBinding( RsmPositionIdx )
 				, smResult[SmTexture::ePosition].getTexture()->getDefaultView().getSampledView()
 				, smResult[SmTexture::ePosition].getSampler()->getSampler() );
-			result->createSizedBinding( descriptorSetLayout.getBinding( LIUboIdx )
-				, ubo );
-			result->createSizedBinding( descriptorSetLayout.getBinding( GpUboIdx )
-				, gpInfoUbo.getUbo() );
+			ubo.createSizedBinding( *result
+				, descriptorSetLayout.getBinding( LIUboIdx ) );
+			gpInfoUbo.createSizedBinding( *result
+				, descriptorSetLayout.getBinding( GpUboIdx ) );
 			result->update();
 			return result;
 		}

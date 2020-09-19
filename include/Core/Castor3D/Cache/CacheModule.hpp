@@ -507,13 +507,14 @@ namespace castor3d
 	using OnCacheChangedFunction = std::function< void() >;
 	using OnCacheChanged = castor::Signal < OnCacheChangedFunction >;
 
+
 	using AnimatedObjectGroupCache = Cache< AnimatedObjectGroup, castor::String >;
 	using BillboardListCache = ObjectCache< BillboardList, castor::String >;
 	using CameraCache = ObjectCache< Camera, castor::String >;
 	using GeometryCache = ObjectCache< Geometry, castor::String >;
 	using LightCache = ObjectCache< Light, castor::String >;
 	using FrameListenerCache = Cache< FrameListener, castor::String >;
-	using MaterialCache = Cache< Material, castor::String >;
+	class MaterialCache;
 	using MeshCache = Cache< Mesh, castor::String >;
 	using OverlayCache = Cache< Overlay, castor::String >;
 	using ParticleSystemCache = ObjectCache< ParticleSystem, castor::String >;

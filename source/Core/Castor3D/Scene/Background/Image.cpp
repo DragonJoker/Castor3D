@@ -7,6 +7,7 @@
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
@@ -226,7 +227,7 @@ namespace castor3d
 	{
 	}
 
-	void ImageBackground::doUpdate( Camera const & camera )
+	void ImageBackground::doCpuUpdate( CpuUpdater & updater )
 	{
 		m_viewport.setOrtho( -1.0f
 			, 1.0f
@@ -235,14 +236,18 @@ namespace castor3d
 			, 0.1f
 			, 2.0f );
 		m_viewport.update();
-		auto node = camera.getParent();
+		auto node = updater.camera->getParent();
 		Matrix4x4f view;
 		matrix::lookAt( view
 			, node->getDerivedPosition()
 			, node->getDerivedPosition() + Point3f{ 0.0f, 0.0f, 1.0f }
 			, Point3f{ 0.0f, 1.0f, 0.0f } );
-		m_matrixUbo.update( view
+		m_matrixUbo.cpuUpdate( view
 			, m_viewport.getProjection() );
+	}
+
+	void ImageBackground::doGpuUpdate( GpuUpdater & updater )
+	{
 	}
 
 	void ImageBackground::doInitialise2DTexture()

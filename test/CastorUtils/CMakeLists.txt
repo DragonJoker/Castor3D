@@ -1,7 +1,7 @@
 project( CastorUtilsTest )
 
-find_package( GLM )
-find_package( OpenCL )
+find_package( GLM QUIET )
+find_package( OpenCL QUIET )
 
 set( CUT_C_FLAGS "" )
 set( CUT_CXX_FLAGS "" )
@@ -10,14 +10,12 @@ set( OpenCLLibraries "" )
 
 if( GLM_FOUND )
 	include_directories( ${GLM_INCLUDE_DIR} )
-	message( STATUS "+ Found GLM" )
 	set( CUT_C_FLAGS "${CUT_C_FLAGS} -DCASTOR_USE_GLM" )
 	set( CUT_CXX_FLAGS "${CUT_CXX_FLAGS} -DCASTOR_USE_GLM" )
 endif()
 
 if( OPENCL_FOUND )
 	include_directories( ${OPENCL_INCLUDE_DIRS} )
-	message( STATUS "+ Found OpenCL" )
 	set( CUT_C_FLAGS "${CUT_C_FLAGS} -DCASTOR_USE_OCL" )
 	set( CUT_CXX_FLAGS "${CUT_CXX_FLAGS} -DCASTOR_USE_OCL" )
 	foreach( Lib ${OPENCL_LIBRARIES} )

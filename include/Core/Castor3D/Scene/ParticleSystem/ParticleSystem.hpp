@@ -101,8 +101,14 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour les particules.
 		 */
-		C3D_API void update( RenderPassTimer & timer
-			, uint32_t index );
+		C3D_API void update( CpuUpdater & updater );
+		/**
+		 *\~english
+		 *\brief		Updates the particles.
+		 *\~french
+		 *\brief		Met à jour les particules.
+		 */
+		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Sets the material

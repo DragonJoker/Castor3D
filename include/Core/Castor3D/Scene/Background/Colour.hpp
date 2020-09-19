@@ -98,9 +98,13 @@ namespace castor3d
 		*/
 		void doCleanup()override;
 		/**
-		*\copydoc	castor3d::SceneBackground::doUpdate
+		*\copydoc	castor3d::SceneBackground::doCpuUpdate
 		*/
-		void doUpdate( Camera const & camera )override;
+		void doCpuUpdate( CpuUpdater & updater )override;
+		/**
+		*\copydoc	castor3d::SceneBackground::doGpuUpdate
+		*/
+		void doGpuUpdate( GpuUpdater & updater )override;
 
 	private:
 		void doUpdateColour();

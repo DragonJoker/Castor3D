@@ -1,6 +1,7 @@
 #include "Castor3D/Render/Passes/StencilPass.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -103,7 +104,7 @@ namespace castor3d
 		, String const & prefix
 		, ashes::ImageView const & depthView
 		, MatrixUbo & matrixUbo
-		, UniformBuffer< ModelMatrixUboConfiguration > const & modelMatrixUbo )
+		, UniformBufferOffsetT< ModelMatrixUboConfiguration > const & modelMatrixUbo )
 		: m_engine{ engine }
 		, m_prefix{ prefix }
 		, m_depthView{ depthView }
@@ -137,11 +138,10 @@ namespace castor3d
 
 		m_descriptorPool = m_descriptorLayout->createPool( name, 1u );
 		m_descriptorSet = m_descriptorPool->createDescriptorSet( name );
-		m_descriptorSet->createSizedBinding( m_descriptorLayout->getBinding( 0u )
-			, *m_matrixUbo.getUbo().buffer
-			, m_matrixUbo.getUbo().offset );
-		m_descriptorSet->createSizedBinding( m_descriptorLayout->getBinding( 1u )
-			, m_modelMatrixUbo.getBuffer() );
+		m_matrixUbo.createSizedBinding( *m_descriptorSet
+			, m_descriptorLayout->getBinding( 0u ) );
+		m_modelMatrixUbo.createSizedBinding( *m_descriptorSet
+			, m_descriptorLayout->getBinding( 1u ) );
 		m_descriptorSet->update();
 
 		m_renderPass = doCreateRenderPass( name, m_engine, m_depthView );

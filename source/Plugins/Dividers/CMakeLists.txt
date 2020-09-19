@@ -53,7 +53,7 @@ endfunction( DividersBuild )
 
 function( DividersSummary msg )
 	if ( ${CASTOR_BUILDGRP_DIVIDER} )
-		set( msg_tmp "\n\nSubdivider plugins :" )
+		set( msg_tmp "\n\n  Subdivider plugins:" )
 		if( ${CASTOR_BUILD_DIVIDER_PNTRIANGLES} )
 			set( msg_tmp "${msg_tmp}\n    PN-Triangles         ${PNTri}" )
 		endif()

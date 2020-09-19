@@ -34,8 +34,8 @@ namespace castor3d
 		 *\param[in]	linearisedDepth	Le depth buffer linéarisé.
 		 *\param[in]	gpResult		Le résultat de la geometry pass.
 		 */
-		SsaoPass( Engine & engine
-			, VkExtent2D const & size
+		C3D_API SsaoPass( Engine & engine
+			, castor::Size const & size
 			, SsaoConfig & ssaoConfig
 			, TextureUnit const & linearisedDepth
 			, OpaquePassResult const & gpResult
@@ -46,36 +46,42 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		~SsaoPass();
+		C3D_API ~SsaoPass() = default;
+		C3D_API void initialise();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Updates the configuration UBO.
 		 *\~french
 		 *\brief		Met à jour l'UBO de configuration.
 		 */
-		void update( Camera const & camera );
+		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Renders the SSAO pass.
 		 *\~french
 		 *\brief		Dessine la passe SSAO.
 		 */
-		ashes::Semaphore const & render( ashes::Semaphore const & toWait )const;
+		C3D_API ashes::Semaphore const & render( ashes::Semaphore const & toWait )const;
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
-		void accept( PipelineVisitorBase & visitor );
+		C3D_API void accept( PipelineVisitorBase & visitor );
 		/**
 		 *\~english
 		 *\return		The SSAO pass result.
 		 *\~french
 		 *\return		Le résultat de la passe SSAO.
 		 */
-		TextureUnit const & getResult()const;
+		C3D_API TextureUnit const & getResult()const;
 
 	private:
 		Engine & m_engine;
 		SsaoConfig & m_ssaoConfig;
+		TextureUnit const & m_linearisedDepth;
+		OpaquePassResult const & m_gpResult;
+		GpInfoUbo const & m_gpInfoUbo;
+		VkExtent2D m_size;
 		MatrixUbo m_matrixUbo;
 		std::shared_ptr< SsaoConfigUbo > m_ssaoConfigUbo;
 		std::shared_ptr< SsaoRawAOPass > m_rawAoPass;

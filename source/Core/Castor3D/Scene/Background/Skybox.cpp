@@ -8,6 +8,7 @@
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Background/Visitor.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Scene/Background/Visitor.hpp"
 #include "Castor3D/Shader/Program.hpp"
@@ -298,15 +299,19 @@ namespace castor3d
 	{
 	}
 
-	void SkyboxBackground::doUpdate( Camera const & camera )
+	void SkyboxBackground::doCpuUpdate( CpuUpdater & updater )
 	{
 		m_viewport.setPerspective( 45.0_degrees
-			, camera.getRatio()
+			, updater.camera->getRatio()
 			, 0.1f
 			, 2.0f );
 		m_viewport.update();
-		m_matrixUbo.update( camera.getView()
+		m_matrixUbo.cpuUpdate( updater.camera->getView()
 			, m_viewport.getProjection() );
+	}
+
+	void SkyboxBackground::doGpuUpdate( GpuUpdater & updater )
+	{
 	}
 
 	bool SkyboxBackground::doInitialiseTexture()
@@ -392,85 +397,60 @@ namespace castor3d
 			0,
 			1,
 		};
-		VkImageCopy copyInfos[6];
-		copyInfos[uint32_t( CubeMapFace::ePositiveX )].extent = { width, width, 1u };
-		copyInfos[uint32_t( CubeMapFace::ePositiveX )].srcSubresource = srcSubresource;
-		copyInfos[uint32_t( CubeMapFace::ePositiveX )].srcOffset.x = width * 2;
-		copyInfos[uint32_t( CubeMapFace::ePositiveX )].srcOffset.y = width;
-		copyInfos[uint32_t( CubeMapFace::ePositiveX )].srcOffset.z = 0u;
-		copyInfos[uint32_t( CubeMapFace::ePositiveX )].dstSubresource = dstSubresource;
-		copyInfos[uint32_t( CubeMapFace::ePositiveX )].dstSubresource.baseArrayLayer = uint32_t( CubeMapFace::ePositiveX );
-		copyInfos[uint32_t( CubeMapFace::ePositiveX )].dstOffset = { 0u, 0u, 0u };
+		ashes::VkImageCopyArray copyInfos
+		{
+			6u,
+			VkImageCopy
+			{
+				srcSubresource,
+				{},
+				dstSubresource,
+				{},
+				{ width, height, 0u }
+			}
+		};
+		auto iwidth = int32_t( width );
+		std::array< VkOffset3D, 6u > srcOffsets
+		{
+			{
+				{ iwidth * 2, iwidth, 0 },
+				{ 0, iwidth, 0 },
+				{ 0, 0, 0 },
+				{ iwidth, iwidth * 2, 0 },
+				{ iwidth, iwidth, 0 },
+				{ iwidth * 3, iwidth, 0 },
+			}
+		};
 
-		copyInfos[uint32_t( CubeMapFace::eNegativeX )].extent = { width, width, 1u };
-		copyInfos[uint32_t( CubeMapFace::eNegativeX )].srcSubresource = srcSubresource;
-		copyInfos[uint32_t( CubeMapFace::eNegativeX )].srcOffset.x = 0u;
-		copyInfos[uint32_t( CubeMapFace::eNegativeX )].srcOffset.y = width;
-		copyInfos[uint32_t( CubeMapFace::eNegativeX )].srcOffset.z = 0u;
-		copyInfos[uint32_t( CubeMapFace::eNegativeX )].dstSubresource = dstSubresource;
-		copyInfos[uint32_t( CubeMapFace::eNegativeX )].dstSubresource.baseArrayLayer = uint32_t( CubeMapFace::eNegativeX );
-		copyInfos[uint32_t( CubeMapFace::eNegativeX )].dstOffset = { 0u, 0u, 0u };
-
-		copyInfos[uint32_t( CubeMapFace::ePositiveY )].extent = { width, width, 1u };
-		copyInfos[uint32_t( CubeMapFace::ePositiveY )].srcSubresource = srcSubresource;
-		copyInfos[uint32_t( CubeMapFace::ePositiveY )].srcOffset.x = width;
-		copyInfos[uint32_t( CubeMapFace::ePositiveY )].srcOffset.y = 0u;
-		copyInfos[uint32_t( CubeMapFace::ePositiveY )].srcOffset.z = 0u;
-		copyInfos[uint32_t( CubeMapFace::ePositiveY )].dstSubresource = dstSubresource;
-		copyInfos[uint32_t( CubeMapFace::ePositiveY )].dstSubresource.baseArrayLayer = uint32_t( CubeMapFace::ePositiveY );
-		copyInfos[uint32_t( CubeMapFace::ePositiveY )].dstOffset = { 0u, 0u, 0u };
-
-		copyInfos[uint32_t( CubeMapFace::eNegativeY )].extent = { width, width, 1u };
-		copyInfos[uint32_t( CubeMapFace::eNegativeY )].srcSubresource = srcSubresource;
-		copyInfos[uint32_t( CubeMapFace::eNegativeY )].srcOffset.x = width;
-		copyInfos[uint32_t( CubeMapFace::eNegativeY )].srcOffset.y = width * 2u;
-		copyInfos[uint32_t( CubeMapFace::eNegativeY )].srcOffset.z = 0u;
-		copyInfos[uint32_t( CubeMapFace::eNegativeY )].dstSubresource = dstSubresource;
-		copyInfos[uint32_t( CubeMapFace::eNegativeY )].dstSubresource.baseArrayLayer = uint32_t( CubeMapFace::eNegativeY );
-		copyInfos[uint32_t( CubeMapFace::eNegativeY )].dstOffset = { 0u, 0u, 0u };
-
-		copyInfos[uint32_t( CubeMapFace::ePositiveZ )].extent = { width, width, 1u };
-		copyInfos[uint32_t( CubeMapFace::ePositiveZ )].srcSubresource = srcSubresource;
-		copyInfos[uint32_t( CubeMapFace::ePositiveZ )].srcOffset.x = width;
-		copyInfos[uint32_t( CubeMapFace::ePositiveZ )].srcOffset.y = width;
-		copyInfos[uint32_t( CubeMapFace::ePositiveZ )].srcOffset.z = 0u;
-		copyInfos[uint32_t( CubeMapFace::ePositiveZ )].dstSubresource = dstSubresource;
-		copyInfos[uint32_t( CubeMapFace::ePositiveZ )].dstSubresource.baseArrayLayer = uint32_t( CubeMapFace::ePositiveZ );
-		copyInfos[uint32_t( CubeMapFace::ePositiveZ )].dstOffset = { 0u, 0u, 0u };
-
-		copyInfos[uint32_t( CubeMapFace::eNegativeZ )].extent = { width, width, 1u };
-		copyInfos[uint32_t( CubeMapFace::eNegativeZ )].srcSubresource = srcSubresource;
-		copyInfos[uint32_t( CubeMapFace::eNegativeZ )].srcOffset.x = width * 3u;
-		copyInfos[uint32_t( CubeMapFace::eNegativeZ )].srcOffset.y = width;
-		copyInfos[uint32_t( CubeMapFace::eNegativeZ )].srcOffset.z = 0u;
-		copyInfos[uint32_t( CubeMapFace::eNegativeZ )].dstSubresource = dstSubresource;
-		copyInfos[uint32_t( CubeMapFace::eNegativeZ )].dstSubresource.baseArrayLayer = uint32_t( CubeMapFace::eNegativeZ );
-		copyInfos[uint32_t( CubeMapFace::eNegativeZ )].dstOffset = { 0u, 0u, 0u };
+		for ( uint32_t i = 0u; i < 6u; ++i )
+		{
+			copyInfos[uint32_t( CubeMapFace::ePositiveX )].srcOffset = srcOffsets[i];
+			copyInfos[uint32_t( CubeMapFace::ePositiveX )].dstSubresource.baseArrayLayer = i;
+		}
 
 		auto & device = getCurrentRenderDevice( renderSystem );
 		auto commandBuffer = device.graphicsCommandPool->createCommandBuffer( "SkyboxBackground" );
 		commandBuffer->begin();
+		commandBuffer->beginDebugBlock(
+			{
+				"Cross to Skybox",
+				makeFloatArray( getScene().getEngine()->getNextRainbowColour() ),
+			} );
 		commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
 			, m_crossTexture->getDefaultView().getTargetView().makeTransferSource( VK_IMAGE_LAYOUT_UNDEFINED ) );
-		uint32_t index{ 0u };
-
-		for ( auto & copyInfo : copyInfos )
-		{
-			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
-				, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, m_texture->getLayerCubeFaceView( 0u, CubeMapFace( index ) ).getTargetView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
-			commandBuffer->copyImage( copyInfo
-				, m_crossTexture->getTexture()
-				, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-				, m_texture->getTexture()
-				, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL );
-			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, m_texture->getLayerCubeFaceView( 0u, CubeMapFace( index ) ).getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
-			++index;
-		}
-
+		commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
+			, VK_PIPELINE_STAGE_TRANSFER_BIT
+			, m_texture->getLayerCubeView( 0u ).getTargetView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
+		commandBuffer->copyImage( copyInfos
+			, m_crossTexture->getTexture()
+			, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+			, m_texture->getTexture()
+			, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL );
+		commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, m_texture->getLayerCubeView( 0u ).getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+		commandBuffer->endDebugBlock();
 		commandBuffer->end();
 
 		device.graphicsQueue->submit( *commandBuffer, nullptr );

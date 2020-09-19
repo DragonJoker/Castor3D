@@ -1,6 +1,7 @@
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
 
@@ -28,7 +29,7 @@ namespace castor3d
 	{
 		if ( !m_ubo )
 		{
-			m_ubo = m_engine.getHdrConfigUboPool().getBuffer( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+			m_ubo = m_engine.getUboPools().getBuffer< Configuration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 		}
 	}
 
@@ -36,11 +37,11 @@ namespace castor3d
 	{
 		if ( m_ubo )
 		{
-			m_engine.getHdrConfigUboPool().putBuffer( m_ubo );
+			m_engine.getUboPools().putBuffer( m_ubo );
 		}
 	}
 
-	void HdrConfigUbo::update( HdrConfig const & config )
+	void HdrConfigUbo::cpuUpdate( HdrConfig const & config )
 	{
 		CU_Require( m_ubo );
 		m_ubo.getData().setExposure( config.getExposure() );

@@ -1,4 +1,4 @@
-#include "Castor3D/Buffer/UniformBuffer.hpp"
+#include "Castor3D/Buffer/UniformBufferBase.hpp"
 
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
@@ -112,8 +112,8 @@ namespace castor3d
 	}
 
 	UniformBufferBase::UniformBufferBase( RenderSystem const & renderSystem
-		, uint32_t elemCount
-		, uint32_t elemSize
+		, VkDeviceSize elemCount
+		, VkDeviceSize elemSize
 		, VkBufferUsageFlags usage
 		, VkMemoryPropertyFlags flags
 		, castor::String debugName
@@ -121,8 +121,8 @@ namespace castor3d
 		: m_renderSystem{ renderSystem }
 		, m_usage{ usage }
 		, m_flags{ flags }
-		, m_elemCount{ elemCount }
-		, m_elemSize{ elemSize }
+		, m_elemCount{ uint32_t( elemCount ) }
+		, m_elemSize{ uint32_t( elemSize ) }
 		, m_sharingMode{ std::move( sharingMode ) }
 		, m_debugName{ std::move( debugName ) }
 	{

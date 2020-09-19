@@ -2,6 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
+#include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
@@ -318,7 +319,7 @@ namespace castor3d
 		, uint32_t shadowMapIndex )
 	{
 		m_viewport.resize( size );
-		m_matrixUbo.update( camera.getView(), m_viewport.getProjection() );
+		m_matrixUbo.cpuUpdate( camera.getView(), m_viewport.getProjection() );
 		m_pipeline->program->bind( light );
 	}
 

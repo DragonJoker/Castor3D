@@ -258,12 +258,12 @@ namespace light_streaks
 			, VK_SHADER_STAGE_FRAGMENT_BIT
 			, cuT( "Kawase" )
 			, cuT( "Attenuation" )
-			, m_kawaseUbo.getUbo().getData().attenuation );
+			, m_kawaseUbo.getUbo( 0u ).getData().attenuation );
 		visitor.visit( m_pipelines.kawase.pixelShader.name
 			, VK_SHADER_STAGE_FRAGMENT_BIT
 			, cuT( "Kawase" )
 			, cuT( "Samples" )
-			, m_kawaseUbo.getUbo().getData().samples );
+			, m_kawaseUbo.getUbo( 0u ).getData().samples );
 
 		visitor.visit( m_pipelines.combine.vertexShader );
 		visitor.visit( m_pipelines.combine.pixelShader );
@@ -437,7 +437,6 @@ namespace light_streaks
 			}
 		}
 
-		m_kawaseUbo.upload();
 		bool result = doInitialiseHiPassProgram();
 
 		if ( result )
@@ -641,8 +640,8 @@ namespace light_streaks
 			{
 				surface.descriptorSets.emplace_back( m_pipelines.kawase.layout.descriptorPool->createDescriptorSet( 0u ) );
 				auto & descriptorSet = *surface.descriptorSets.back();
-				descriptorSet.createSizedBinding( m_pipelines.kawase.layout.descriptorLayout->getBinding( 0u )
-					, m_kawaseUbo.getUbo()
+				m_kawaseUbo.createSizedBinding( descriptorSet
+					, m_pipelines.kawase.layout.descriptorLayout->getBinding( 0u )
 					, index );
 				descriptorSet.createBinding( m_pipelines.kawase.layout.descriptorLayout->getBinding( 1u )
 					, source->image->getDefaultView().getSampledView()

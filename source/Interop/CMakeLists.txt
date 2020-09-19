@@ -76,7 +76,7 @@ endfunction( InteropBuild )
 
 function( InteropSummary msg )
 	if ( ${CASTOR_BUILDGRP_INTEROP} )
-		set( msg_tmp "\n\nInteroperability :" )
+		set( msg_tmp "\n\n  Interoperability:" )
 		if ( ${CASTOR_BUILD_INTEROP_PYCASTOR3D} )
 			set( msg_tmp "${msg_tmp}\n    PyCastor3D           ${PyC3D}" )
 		endif ()

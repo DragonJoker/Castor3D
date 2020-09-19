@@ -2,6 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
+#include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
@@ -182,9 +183,9 @@ namespace castor3d
 		static castor::Matrix3x3f const Identity{ 1.0f };
 		auto node = camera.getParent();
 		matrix::setTranslate( m_mtxModel, node->getDerivedPosition() );
-		m_matrixUbo.update( camera.getView()
+		m_matrixUbo.cpuUpdate( camera.getView()
 			, camera.getProjection() );
-		m_modelMatrixUbo.update( m_mtxModel, Identity );
+		m_modelMatrixUbo.cpuUpdate( m_mtxModel, Identity );
 
 		if ( m_size != camera.getSize() )
 		{
@@ -359,14 +360,10 @@ namespace castor3d
 
 		m_descriptorPool = m_descriptorLayout->createPool( "TextureProjection", 1u );
 		m_descriptorSet = m_descriptorPool->createDescriptorSet( "TextureProjection", 0u );
-		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 0u )
-			, *m_matrixUbo.getUbo().buffer
-			, m_matrixUbo.getUbo().offset
-			, 1u );
-		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 1u )
-			, *m_modelMatrixUbo.getUbo().buffer
-			, m_modelMatrixUbo.getUbo().offset
-			, 1u );
+		m_matrixUbo.createSizedBinding( *m_descriptorSet
+			, m_descriptorLayout->getBinding( 0u ) );
+		m_modelMatrixUbo.createSizedBinding( *m_descriptorSet
+			, m_descriptorLayout->getBinding( 1u ) );
 		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 2u )
 			, texture
 			, m_sampler->getSampler() );

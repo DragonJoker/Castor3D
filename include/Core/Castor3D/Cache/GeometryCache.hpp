@@ -7,11 +7,8 @@ See LICENSE file in root folder
 #include "Castor3D/Cache/ObjectCacheBase.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
 
-#include "Castor3D/Buffer/UniformBufferPool.hpp"
-#include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
-#include "Castor3D/Shader/Ubos/ModelUbo.hpp"
-#include "Castor3D/Shader/Ubos/PickingUbo.hpp"
-#include "Castor3D/Shader/Ubos/TexturesUbo.hpp"
+#include "Castor3D/Buffer/UniformBufferOffset.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 namespace castor3d
 {
@@ -34,10 +31,10 @@ namespace castor3d
 			Geometry const & geometry;
 			Submesh const & submesh;
 			Pass const & pass;
-			UniformBufferOffset< ModelUbo::Configuration > modelUbo;
-			UniformBufferOffset< ModelMatrixUbo::Configuration > modelMatrixUbo;
-			UniformBufferOffset< PickingUbo::Configuration > pickingUbo;
-			UniformBufferOffset< TexturesUbo::Configuration > texturesUbo;
+			UniformBufferOffsetT< ModelUboConfiguration > modelUbo;
+			UniformBufferOffsetT< ModelMatrixUboConfiguration > modelMatrixUbo;
+			UniformBufferOffsetT< PickingUboConfiguration > pickingUbo;
+			UniformBufferOffsetT< TexturesUboConfiguration > texturesUbo;
 		};
 		using MyObjectCache = ObjectCacheBase< Geometry, castor::String >;
 		using MyObjectCacheTraits = typename MyObjectCacheType::MyObjectCacheTraits;
@@ -111,28 +108,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour le contenu des pools d'UBO.
 		 */
-		C3D_API void update();
-		/**
-		 *\~english
-		 *\brief		Updates the UBO pools in VRAM.
-		 *\~french
-		 *\brief		Met à jour les pools d'UBO en VRAM.
-		 */
-		C3D_API void uploadUbos()const;
-		/**
-		 *\~english
-		 *\brief		Updates the picking UBO pools in VRAM.
-		 *\~french
-		 *\brief		Met à jour les pools d'UBO de picking en VRAM.
-		 */
-		C3D_API void uploadPickingUbos()const;
-		/**
-		 *\~english
-		 *\brief		Cleans up the UBO pools.
-		 *\~french
-		 *\brief		Nettoie les pools d'UBO.
-		 */
-		C3D_API void cleanupUbos();
+		C3D_API void cpuUpdate();
 		/**
 		 *\~english
 		 *\return		The UBOs for given geometry, submesh and pass.
@@ -200,13 +176,6 @@ namespace castor3d
 		uint32_t m_vertexCount{ 0 };
 		std::map< size_t, PoolsEntry > m_entries;
 		std::map< Geometry *, OnSubmeshMaterialChangedConnection > m_connections;
-		UniformBufferPool< ModelUbo::Configuration > m_modelUboPool;
-		UniformBufferPool< ModelMatrixUbo::Configuration > m_modelMatrixUboPool;
-		UniformBufferPool< PickingUbo::Configuration > m_pickingUboPool;
-		UniformBufferPool< TexturesUbo::Configuration > m_texturesUboPool;
-		RenderPassTimerSPtr m_updateTimer;
-		RenderPassTimerSPtr m_updatePickingTimer;
-		RenderPassTimerSPtr m_updateTexturesTimer;
 	};
 }
 

@@ -81,7 +81,7 @@ namespace castor3d
 		}
 	}
 
-	void MaterialCache::update()
+	void MaterialCache::update( CpuUpdater & updater )
 	{
 		if ( m_passBuffer )
 		{
@@ -91,7 +91,13 @@ namespace castor3d
 			{
 				doAddMaterial( *material.second );
 			}
+		}
+	}
 
+	void MaterialCache::update( GpuUpdater & updater )
+	{
+		if ( m_passBuffer )
+		{
 			m_passBuffer->update();
 			m_textureBuffer->update();
 		}

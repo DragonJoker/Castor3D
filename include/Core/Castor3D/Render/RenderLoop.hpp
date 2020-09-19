@@ -8,14 +8,49 @@ See LICENSE file in root folder
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 
 #include "Castor3D/Overlay/DebugOverlays.hpp"
+#include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
+
+#include <CastorUtils/Multithreading/ThreadPool.hpp>
 
 #include <ashespp/Core/WindowHandle.hpp>
-#include <CastorUtils/Multithreading/ThreadPool.hpp>
 
 #include <chrono>
 
 namespace castor3d
 {
+	struct CpuUpdater
+	{
+		CpuUpdater()
+		{
+		}
+
+		RenderQueueArray * queues{ nullptr };
+		CameraSPtr camera;
+		SceneNode const * node{ nullptr };
+		LightSPtr light;
+		uint32_t index{ 0u };
+		castor::Point2f jitter;
+		castor::Milliseconds time;
+		castor::Milliseconds total;
+	};
+
+	struct GpuUpdater
+	{
+		explicit GpuUpdater( RenderInfo & info )
+			: info{ info }
+		{
+		}
+
+		RenderInfo & info;
+		castor::Point2f jitter;
+		SceneSPtr scene;
+		CameraSPtr camera;
+		uint32_t index{ 0u };
+		RenderPassTimer * timer{ nullptr };
+		castor::Milliseconds time;
+		castor::Milliseconds total;
+	};
+
 	class RenderLoop
 		: public castor::OwnedBy< Engine >
 	{
@@ -226,6 +261,7 @@ namespace castor3d
 			RenderQueueArray queues;
 			ShadowMapLightTypeArray shadowMaps;
 		};
+
 		void doProcessEvents( EventType eventType );
 		void doGpuStep( RenderInfo & info );
 		void doCpuStep();
@@ -250,6 +286,17 @@ namespace castor3d
 		//!\~english	The pool used to update the render queues.
 		//!\~french		Le pool de mise à jour des files de rendu.
 		castor::ThreadPool m_queueUpdater;
+		struct UploadResources
+		{
+			//!\~english	The command buffer and semaphore used for UBO uploads.
+			//!\~french		Le command buffer et le semaphore utilisé pour l'upload des UBO.
+			CommandsSemaphore commands;
+			//!\~english	The fence and semaphore used for UBO uploads.
+			//!\~french		La fence et le semaphore utilisé pour l'upload des UBO.
+			ashes::FencePtr fence;
+		};
+		std::array< UploadResources, 2u > m_uploadResources;
+		uint32_t m_currentUpdate{ 0u };
 
 	private:
 		bool m_first = true;

@@ -25,7 +25,7 @@ namespace fxaa
 	public:
 		explicit RenderQuad( castor3d::RenderSystem & renderSystem
 			, castor::Size const & size );
-		void update( float subpixShift
+		void cpuUpdate( float subpixShift
 			, float spanMax
 			, float reduceMul );
 
@@ -51,7 +51,7 @@ namespace fxaa
 		/**
 		 *\copydoc		castor3d::PostEffect::update
 		 */
-		void update( castor::Nanoseconds const & elapsedTime )override;
+		void update( castor3d::CpuUpdater & updater )override;
 		/**
 		 *\copydoc		castor3d::PostEffect::accept
 		 */

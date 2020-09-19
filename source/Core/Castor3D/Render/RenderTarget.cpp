@@ -12,7 +12,9 @@
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Overlay/OverlayCategory.hpp"
 #include "Castor3D/Overlay/OverlayRenderer.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Culling/FrustumCuller.hpp"
 #include "Castor3D/Render/PostEffect/PostEffect.hpp"
 #include "Castor3D/Render/Technique/RenderTechnique.hpp"
@@ -191,17 +193,18 @@ namespace castor3d
 		, m_pixelFormat{ VK_FORMAT_R8G8B8A8_UNORM }
 		, m_initialised{ false }
 		, m_size{ Size{ 100u, 100u } }
+		, m_hdrConfigUbo{ *getEngine() }
 		, m_renderTechnique{}
 		, m_index{ ++sm_uiCount }
 		, m_name{ cuT( "Target" ) + string::toString( m_index ) }
 		, m_objectsFrameBuffer{ *this }
 		, m_overlaysFrameBuffer{ *this }
 		, m_combinedFrameBuffer{ *this }
-		, m_velocityTexture{ engine }
+		, m_velocityTexture{ *getEngine() }
 	{
 		m_toneMapping = getEngine()->getRenderTargetCache().getToneMappingFactory().create( cuT( "linear" )
 			, *getEngine()
-			, m_hdrConfig
+			, m_hdrConfigUbo
 			, Parameters{} );
 		SamplerSPtr sampler = getEngine()->getSamplerCache().add( RenderTarget::DefaultSamplerName + getName() + cuT( "Linear" ) );
 		sampler->setMinFilter( VK_FILTER_LINEAR );
@@ -223,6 +226,7 @@ namespace castor3d
 			m_culler = std::make_unique< FrustumCuller >( *getScene(), *getCamera() );
 			auto & renderSystem = *getEngine()->getRenderSystem();
 			auto & device = getCurrentRenderDevice( renderSystem );
+			m_hdrConfigUbo.initialise();
 			doInitialiseRenderPass();
 			m_initialised = doInitialiseFrameBuffer();
 
@@ -342,6 +346,7 @@ namespace castor3d
 			m_velocityTexture.setTexture( nullptr );
 
 			m_renderTechnique->cleanup();
+			m_hdrConfigUbo.cleanup();
 			m_overlaysFrameBuffer.cleanup();
 			m_objectsFrameBuffer.cleanup();
 			m_combinedFrameBuffer.cleanup();
@@ -351,7 +356,7 @@ namespace castor3d
 		}
 	}
 
-	void RenderTarget::update()
+	void RenderTarget::update( CpuUpdater & updater )
 	{
 		auto & camera = *getCamera();
 		camera.resize( m_size );
@@ -359,13 +364,40 @@ namespace castor3d
 
 		CU_Require( m_culler );
 		m_culler->compute();
+
+		m_hdrConfigUbo.cpuUpdate( m_hdrConfig );
+
+		for ( auto effect : m_hdrPostEffects )
+		{
+			effect->update( updater );
+		}
+
+		for ( auto effect : m_srgbPostEffects )
+		{
+			effect->update( updater );
+		}
 	}
 
-	void RenderTarget::update( RenderInfo & info )
+	void RenderTarget::update( GpuUpdater & updater )
 	{
-		m_toneMapping->update();
-		m_renderTechnique->update( m_jitter, info );
-		m_overlayRenderer->update( *getCamera() );
+		updater.jitter = m_jitter;
+		updater.scene = getScene();
+		updater.camera = getCamera();
+
+		updater.scene->update( updater );
+		m_toneMapping->update( updater );
+		m_renderTechnique->update( updater );
+		m_overlayRenderer->update( updater );
+
+		for ( auto effect : m_hdrPostEffects )
+		{
+			effect->update( updater );
+		}
+
+		for ( auto effect : m_srgbPostEffects )
+		{
+			effect->update( updater );
+		}
 	}
 
 	void RenderTarget::render( RenderInfo & info )
@@ -441,7 +473,7 @@ namespace castor3d
 
 		m_toneMapping = getEngine()->getRenderTargetCache().getToneMappingFactory().create( name
 			, *getEngine()
-			, m_hdrConfig
+			, m_hdrConfigUbo
 			, parameters );
 	}
 
@@ -805,6 +837,8 @@ namespace castor3d
 			signalsToWait = scene->getRenderTargetsSemaphores();
 		}
 
+		//signalsToWait.push_back( toWait );
+
 		// Render the scene through the RenderTechnique.
 		m_signalFinished = &m_renderTechnique->render( signalsToWait
 			, info );
@@ -849,7 +883,6 @@ namespace castor3d
 			for ( auto effect : effects )
 			{
 				auto timerBlock = effect->start();
-				effect->update( elapsedTime );
 
 				for ( auto & commands : effect->getCommands() )
 				{

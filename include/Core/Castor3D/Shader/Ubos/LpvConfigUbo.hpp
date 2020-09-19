@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "UbosModule.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"
 
-#include "Castor3D/Buffer/UniformBuffer.hpp"
+#include "Castor3D/Buffer/UniformBufferOffset.hpp"
 
 #include <CastorUtils/Graphics/GraphicsModule.hpp>
 
@@ -47,7 +47,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour les données de l'UBO.
 		 */
-		C3D_API void update( castor::Grid const & grid
+		C3D_API void cpuUpdate( castor::Grid const & grid
 			, Light const & light
 			, uint32_t cascadeIndex
 			, float texelAreaModifier = 1.0f
@@ -58,26 +58,26 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour les données de l'UBO.
 		 */
-		C3D_API void update( castor::Grid const & grid
+		C3D_API void cpuUpdate( castor::Grid const & grid
 			, Light const & light
 			, float texelAreaModifier = 1.0f
 			, float indirectAttenuation = 1.7f );
-		/**
-		 *\~english
-		 *\name			getters.
-		 *\~french
-		 *\name			getters.
-		 */
-		inline UniformBuffer< Configuration > & getUbo()
+
+		UniformBufferOffsetT< Configuration > & getUbo()
 		{
-			return *m_ubo;
+			return m_ubo;
 		}
 
-		inline UniformBuffer< Configuration > const & getUbo()const
+		UniformBufferOffsetT< Configuration > const & getUbo()const
 		{
-			return *m_ubo;
+			return m_ubo;
 		}
-		/**@}*/
+
+		void createSizedBinding( ashes::DescriptorSet & descriptorSet
+			, VkDescriptorSetLayoutBinding const & layoutBinding )const
+		{
+			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
+		}
 
 	public:
 		C3D_API static const std::string LpvConfig;
@@ -88,7 +88,7 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
-		UniformBufferUPtr< Configuration > m_ubo;
+		UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }
 

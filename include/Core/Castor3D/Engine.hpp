@@ -215,7 +215,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Transfère en VRAM les données des pools d'UBO.
 		 */
-		C3D_API void uploadUbos();
+		C3D_API void uploadUbos( ashes::CommandBuffer const & commandBuffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves plug-ins path
@@ -423,29 +423,9 @@ namespace castor3d
 			return *m_logger;
 		}
 
-		inline UniformBufferPool< MatrixUboConfiguration > & getMatrixUboPool()
+		inline UniformBufferPools & getUboPools()
 		{
-			return *m_matrixUboPool;
-		}
-
-		inline UniformBufferPool< HdrConfig > & getHdrConfigUboPool()
-		{
-			return *m_hdrConfigUboPool;
-		}
-
-		inline UniformBufferPool< RsmUboConfiguration > & getRsmConfigUboPool()
-		{
-			return *m_rsmConfigUboPool;
-		}
-
-		inline UniformBufferPool< ModelMatrixUboConfiguration > & getModelMatrixUboPool()
-		{
-			return *m_modelMatrixUboPool;
-		}
-
-		inline UniformBufferPool< ShadowMapUboConfiguration > & getShadowMapUboPool()
-		{
-			return *m_shadowMapUboPool;
+			return *m_uboPools;
 		}
 		/**@}*/
 		/**
@@ -513,11 +493,7 @@ namespace castor3d
 		bool m_enableApiTrace{ false };
 		RenderDepthQuadSPtr m_renderDepth;
 		ashes::CommandBufferPtr m_uploadCommandBuffer;
-		UniformBufferPoolSPtr< MatrixUboConfiguration > m_matrixUboPool;
-		UniformBufferPoolSPtr< HdrConfig > m_hdrConfigUboPool;
-		UniformBufferPoolSPtr< RsmUboConfiguration > m_rsmConfigUboPool;
-		UniformBufferPoolSPtr< ModelMatrixUboConfiguration > m_modelMatrixUboPool;
-		UniformBufferPoolSPtr< ShadowMapUboConfiguration > m_shadowMapUboPool;
+		UniformBufferPoolsSPtr m_uboPools;
 	};
 }
 

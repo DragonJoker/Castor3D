@@ -292,29 +292,34 @@ namespace castor3d
 		{
 			for ( auto submesh : *mesh )
 			{
-				sphere.load( center, submesh->getBoundingSphere().getRadius() );
-
-				if ( intersects( sphere, distance ) != Intersection::eOut )
+				if ( auto indices = submesh->getIndexBuffer().lock( 0u, submesh->getIndexBuffer().getCount(), 0u ) )
 				{
-					for ( uint32_t k = 0u; k < submesh->getFaceCount(); k++ )
-					{
-						Face face
-						{
-							0,//submesh->getIndexBuffer().getData()[k * 3 + 0],
-							0,//submesh->getIndexBuffer().getData()[k * 3 + 1],
-							0,//submesh->getIndexBuffer().getData()[k * 3 + 2],
-						};
-						float curfaceDist = 0.0f;
+					sphere.load( center, submesh->getBoundingSphere().getRadius() );
 
-						if ( intersects( face, transform, *submesh, curfaceDist ) != Intersection::eOut && curfaceDist < faceDist )
+					if ( intersects( sphere, distance ) != Intersection::eOut )
+					{
+						for ( uint32_t k = 0u; k < submesh->getFaceCount(); k++ )
 						{
-							result = Intersection::eIn;
-							nearestFace = face;
-							nearestSubmesh = submesh;
-							distance = curfaceDist;
-							faceDist = curfaceDist;
+							Face face
+							{
+								indices[k * 3 + 0],
+								indices[k * 3 + 1],
+								indices[k * 3 + 2],
+							};
+							float curfaceDist = 0.0f;
+
+							if ( intersects( face, transform, *submesh, curfaceDist ) != Intersection::eOut && curfaceDist < faceDist )
+							{
+								result = Intersection::eIn;
+								nearestFace = face;
+								nearestSubmesh = submesh;
+								distance = curfaceDist;
+								faceDist = curfaceDist;
+							}
 						}
 					}
+
+					submesh->getIndexBuffer().unlock();
 				}
 			}
 		}

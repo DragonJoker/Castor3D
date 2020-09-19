@@ -1,6 +1,9 @@
 #include "Castor3D/Cache/GeometryCache.hpp"
 
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
+#include "Castor3D/Event/Frame/FunctorEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
@@ -80,27 +83,7 @@ namespace castor3d
 			, std::move( merge )
 			, std::move( attach )
 			, std::move( detach ) )
-		, m_modelUboPool{ *engine.getRenderSystem(), cuT( "GeometryUboPools_Model" ) }
-		, m_modelMatrixUboPool{ *engine.getRenderSystem(), cuT( "GeometryUboPools_ModelMatrix" ) }
-		, m_pickingUboPool{ *engine.getRenderSystem(), cuT( "GeometryUboPools_Picking" ) }
-		, m_texturesUboPool{ *engine.getRenderSystem(), cuT( "GeometryUboPoolsTextures_" ) }
 	{
-		getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
-			, [this]()
-			{
-				m_updateTimer = std::make_shared< RenderPassTimer >( *getEngine()
-					, cuT( "Update" )
-					, cuT( "Model UBOs" )
-					, 3u );
-				m_updatePickingTimer = std::make_shared< RenderPassTimer >( *getEngine()
-					, cuT( "Update" )
-					, cuT( "Picking UBOs" )
-					, 1u );
-				m_updateTexturesTimer = std::make_shared< RenderPassTimer >( *getEngine()
-					, cuT( "Update" )
-					, cuT( "Textures UBOs" )
-					, 1u );
-			} ) );
 	}
 
 	GeometryCache::~ObjectCache()
@@ -123,7 +106,7 @@ namespace castor3d
 		}
 	}
 
-	void GeometryCache::update()
+	void GeometryCache::cpuUpdate()
 	{
 		for ( auto & pair : m_entries )
 		{
@@ -158,45 +141,6 @@ namespace castor3d
 		}
 	}
 
-	void GeometryCache::uploadUbos()const
-	{
-		auto count = m_modelUboPool.getBufferCount()
-			+ m_modelMatrixUboPool.getBufferCount()
-			+ m_texturesUboPool.getBufferCount();
-		m_updateTimer->updateCount( std::max( count, 3u ) );
-
-		if ( count )
-		{
-			auto timerBlock = m_updateTimer->start();
-			uint32_t index = 0u;
-			m_modelUboPool.upload( *m_updateTimer, index );
-			index += std::max( m_modelUboPool.getBufferCount(), 1u );
-			m_modelMatrixUboPool.upload( *m_updateTimer, index );
-			index += std::max( m_modelMatrixUboPool.getBufferCount(), 1u );
-			m_texturesUboPool.upload( *m_updateTimer, index );
-		}
-	}
-
-	void GeometryCache::uploadPickingUbos()const
-	{
-		auto count = m_pickingUboPool.getBufferCount();
-		m_updatePickingTimer->updateCount( std::max( count, 1u ) );
-
-		if ( count )
-		{
-			auto timerBlock = m_updatePickingTimer->start();
-			m_pickingUboPool.upload( *m_updatePickingTimer, 0u );
-		}
-	}
-
-	void GeometryCache::cleanupUbos()
-	{
-		m_modelUboPool.cleanup();
-		m_modelMatrixUboPool.cleanup();
-		m_pickingUboPool.cleanup();
-		m_texturesUboPool.cleanup();
-	}
-
 	GeometryCache::PoolsEntry GeometryCache::getUbos( Geometry const & geometry
 		, Submesh const & submesh
 		, Pass const & pass )const
@@ -206,30 +150,28 @@ namespace castor3d
 
 	void GeometryCache::clear()
 	{
+		auto & pools = getEngine()->getUboPools();
 		MyObjectCache::clear();
 
 		for ( auto & entry : m_entries )
 		{
-			m_modelUboPool.putBuffer( entry.second.modelUbo );
-			m_modelMatrixUboPool.putBuffer( entry.second.modelMatrixUbo );
-			m_modelMatrixUboPool.putBuffer( entry.second.modelMatrixUbo );
-			m_pickingUboPool.putBuffer( entry.second.pickingUbo );
-			m_texturesUboPool.putBuffer( entry.second.texturesUbo );
+			pools.putBuffer( entry.second.modelUbo );
+			pools.putBuffer( entry.second.modelMatrixUbo );
+			pools.putBuffer( entry.second.pickingUbo );
+			pools.putBuffer( entry.second.texturesUbo );
 		}
 
 		m_entries.clear();
-
-		getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
-			, [this]()
-			{
-				m_updateTimer.reset();
-			} ) );
 	}
 
 	void GeometryCache::add( ElementPtr element )
 	{
 		MyObjectCache::add( element->getName(), element );
-		doRegister( *element );
+		getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
+			, [this, element]()
+			{
+				doRegister( *element );
+			} ) );
 	}
 
 	GeometrySPtr GeometryCache::add( Key const & name
@@ -238,7 +180,11 @@ namespace castor3d
 	{
 		CU_Require( mesh );
 		auto result = MyObjectCache::add( name, parent, mesh );
-		doRegister( *result );
+		getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
+			, [this, result]()
+			{
+				doRegister( *result );
+			} ) );
 		return result;
 	}
 
@@ -260,15 +206,16 @@ namespace castor3d
 		, Submesh const & submesh
 		, Pass const & pass )
 	{
+		auto & pools = getEngine()->getUboPools();
 		return
 		{
 			geometry,
 			submesh,
 			pass,
-			m_modelUboPool.getBuffer( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ),
-			m_modelMatrixUboPool.getBuffer( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ),
-			m_pickingUboPool.getBuffer( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ),
-			m_texturesUboPool.getBuffer( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ),
+			pools.getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ),
+			pools.getBuffer< ModelMatrixUboConfiguration>( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ),
+			pools.getBuffer< PickingUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ),
+			pools.getBuffer< TexturesUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ),
 		};
 	}
 
@@ -276,12 +223,13 @@ namespace castor3d
 		, Submesh const & submesh
 		, Pass const & pass )
 	{
+		auto & pools = getEngine()->getUboPools();
 		auto entry = getUbos( geometry, submesh, pass );
 		m_entries.erase( hash( geometry, submesh, pass ) );
-		m_modelUboPool.putBuffer( entry.modelUbo );
-		m_modelMatrixUboPool.putBuffer( entry.modelMatrixUbo );
-		m_pickingUboPool.putBuffer( entry.pickingUbo );
-		m_texturesUboPool.putBuffer( entry.texturesUbo );
+		pools.putBuffer( entry.modelUbo );
+		pools.putBuffer( entry.modelMatrixUbo );
+		pools.putBuffer( entry.pickingUbo );
+		pools.putBuffer( entry.texturesUbo );
 	}
 
 	void GeometryCache::doRegister( Geometry & geometry )

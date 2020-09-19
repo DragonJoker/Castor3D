@@ -1,7 +1,7 @@
 #include "LinearMotionBlurPostEffect/LinearMotionBlurPostEffect.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Buffer/UniformBuffer.hpp>
+#include <Castor3D/Buffer/UniformBufferPools.hpp>
 #include <Castor3D/Buffer/GpuBuffer.hpp>
 #include <Castor3D/Cache/SamplerCache.hpp>
 #include <Castor3D/Cache/ShaderCache.hpp>
@@ -105,7 +105,7 @@ namespace motion_blur
 
 	PostEffect::Quad::Quad( castor3d::RenderSystem & renderSystem
 		, castor3d::TextureUnit const & velocity
-		, castor3d::UniformBuffer< Configuration > const & ubo )
+		, castor3d::UniformBufferOffsetT< Configuration > const & ubo )
 		: castor3d::RenderQuad{ renderSystem, cuT( "LinearMotionBlur" ), VK_FILTER_NEAREST, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
 		, m_velocityView{ velocity.getTexture()->getDefaultView().getSampledView() }
 		, m_velocitySampler{ velocity.getSampler()->getSampler() }
@@ -116,9 +116,8 @@ namespace motion_blur
 	void PostEffect::Quad::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
 		, ashes::DescriptorSet & descriptorSet )
 	{
-		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( 0u )
-			, m_ubo
-			, 0u );
+		m_ubo.createSizedBinding( descriptorSet
+			, descriptorSetLayout.getBinding( 0u ) );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 1u )
 			, m_velocityView
 			, m_velocitySampler );
@@ -158,20 +157,19 @@ namespace motion_blur
 		return std::make_shared< PostEffect >( renderTarget, renderSystem, params );
 	}
 
-	void PostEffect::update( castor::Nanoseconds const & elapsedTime )
+	void PostEffect::update( castor3d::CpuUpdater & updater )
 	{
 		if ( m_fpsScale )
 		{
 			auto current = Clock::now();
 			auto duration = std::chrono::duration_cast< std::chrono::milliseconds >( current - m_saved );
 			auto fps = 1000.0f / duration.count();
-			auto & configuration = m_ubo->getData( 0u );
+			auto & configuration = m_ubo.getData();
 			configuration.samplesCount = m_configuration.samplesCount;
 			configuration.vectorDivider = m_configuration.vectorDivider;
 			configuration.blurScale = m_fpsScale
 				? fps / getRenderSystem()->getEngine()->getRenderLoop().getWantedFps()
 				: 1.0f;
-			m_ubo->upload( 0u );
 			m_saved = current;
 		}
 	}
@@ -250,15 +248,10 @@ namespace motion_blur
 		m_renderPass = device->createRenderPass( "LinearMotionBlur"
 			, std::move( createInfo ) );
 
-		m_ubo = castor3d::makeUniformBuffer< Configuration >( renderSystem
-			, 1u
-			, 0u
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, "LinearMotionBlurCfg" );
-		auto & configuration = m_ubo->getData( 0u );
+		m_ubo = renderSystem.getEngine()->getUboPools().getBuffer< Configuration >( 0u );
+		auto & configuration = m_ubo.getData();
 		configuration.samplesCount = m_configuration.samplesCount;
 		configuration.vectorDivider = m_configuration.vectorDivider;
-		m_ubo->upload( 0u );
 
 		ashes::VkDescriptorSetLayoutBindingArray bindings
 		{
@@ -271,7 +264,7 @@ namespace motion_blur
 		};
 		m_quad = std::make_unique< Quad >( renderSystem
 			, m_renderTarget.getVelocity()
-			, *m_ubo );
+			, m_ubo );
 		m_quad->createPipeline( size
 			, castor::Position{}
 			, stages
@@ -320,7 +313,8 @@ namespace motion_blur
 	void PostEffect::doCleanup()
 	{
 		m_quad.reset();
-		m_ubo.reset();
+		auto & renderSystem = *getRenderSystem();
+		renderSystem.getEngine()->getUboPools().putBuffer( m_ubo );
 		m_renderPass.reset();
 		m_surface.cleanup();
 	}

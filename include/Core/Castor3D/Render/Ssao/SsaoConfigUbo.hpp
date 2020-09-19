@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "SsaoModule.hpp"
 
-#include "Castor3D/Buffer/UniformBuffer.hpp"
+#include "Castor3D/Buffer/UniformBufferOffset.hpp"
 
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
@@ -132,24 +132,14 @@ namespace castor3d
 		 *\param[in]	config	La configuratio du SSAO.
 		 *\param[in]	camera	La caméra de rendu.
 		 */
-		C3D_API void update( SsaoConfig const & config
+		C3D_API void cpuUpdate( SsaoConfig const & config
 			, Camera const & camera );
-		/**
-		 *\~english
-		 *\name			Getters.
-		 *\~french
-		 *\name			Accesseurs.
-		 */
-		inline UniformBuffer< Configuration > & getUbo()
-		{
-			return *m_ubo;
-		}
 
-		inline UniformBuffer< Configuration > const & getUbo()const
+		void createSizedBinding( ashes::DescriptorSet & descriptorSet
+			, VkDescriptorSetLayoutBinding const & layoutBinding )const
 		{
-			return *m_ubo;
+			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
 		}
-		/**@}*/
 
 	public:
 		static uint32_t constexpr BindingPoint = 8u;
@@ -179,7 +169,7 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
-		UniformBufferUPtr< Configuration > m_ubo;
+		UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }
 

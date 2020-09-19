@@ -1,19 +1,22 @@
 #include "Castor3D/Render/ShadowMap/ShadowMapPassPoint.hpp"
 
+#include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Node/SceneCulledRenderNodes.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapPoint.hpp"
+#include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/PointLight.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
-#include "Castor3D/Render/ShadowMap/ShadowMapPoint.hpp"
-#include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslMetallicBrdfLighting.hpp"
@@ -22,6 +25,11 @@
 #include "Castor3D/Shader/Shaders/GlslSpecularBrdfLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelUbo.hpp"
+#include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
+#include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
 #include "Castor3D/Shader/Ubos/ShadowMapUbo.hpp"
 #include "Castor3D/Shader/Ubos/TexturesUbo.hpp"
 
@@ -72,28 +80,26 @@ namespace castor3d
 	{
 	}
 
-	bool ShadowMapPassPoint::update( RenderQueueArray & queues
-		, Light & light
-		, uint32_t index )
+	bool ShadowMapPassPoint::update( CpuUpdater & updater )
 	{
 		getCuller().compute();
 		m_outOfDate = m_outOfDate
 			|| getCuller().areAllChanged()
 			|| getCuller().areCulledChanged();
-		m_viewport.updateFar( light.getFarPlane() );
-		light.getPointLight()->updateShadow( index );
-		auto position = light.getParent()->getDerivedPosition();
+		m_viewport.updateFar( updater.light->getFarPlane() );
+		updater.light->getPointLight()->updateShadow( updater.index );
+		auto position = updater.light->getParent()->getDerivedPosition();
 		doUpdateShadowMatrices( position, m_matrices );
-		doUpdate( queues );
-		m_shadowMapUbo.update( light, index );
+		doUpdate( *updater.queues );
+		m_shadowMapUbo.update( *updater.light, updater.index );
+		m_matrixUbo.cpuUpdate( m_matrices[updater.index], m_projection );
 		return m_outOfDate;
 	}
 
-	void ShadowMapPassPoint::updateDeviceDependent( uint32_t index )
+	void ShadowMapPassPoint::update( GpuUpdater & updater )
 	{
 		if ( m_initialised )
 		{
-			m_matrixUbo.update( m_matrices[index], m_projection );
 			doUpdateNodes( m_renderQueue.getCulledRenderNodes() );
 		}
 	}
@@ -208,19 +214,15 @@ namespace castor3d
 	void ShadowMapPassPoint::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 		, BillboardListRenderNode & node )
 	{
-		node.uboDescriptorSet->createSizedBinding( layout.getBinding( ShadowMapUbo::BindingPoint )
-			, *m_shadowMapUbo.getUbo().buffer
-			, m_shadowMapUbo.getUbo().offset
-			, 1u );
+		m_shadowMapUbo.createSizedBinding( *node.uboDescriptorSet
+			, layout.getBinding( ShadowMapUbo::BindingPoint ) );
 	}
 
 	void ShadowMapPassPoint::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 		, SubmeshRenderNode & node )
 	{
-		node.uboDescriptorSet->createSizedBinding( layout.getBinding( ShadowMapUbo::BindingPoint )
-			, *m_shadowMapUbo.getUbo().buffer
-			, m_shadowMapUbo.getUbo().offset
-			, 1u );
+		m_shadowMapUbo.createSizedBinding( *node.uboDescriptorSet
+			, layout.getBinding( ShadowMapUbo::BindingPoint ) );
 	}
 
 	void ShadowMapPassPoint::doUpdate( RenderQueueArray & queues )
