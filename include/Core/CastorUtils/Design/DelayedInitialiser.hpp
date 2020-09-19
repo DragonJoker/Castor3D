@@ -19,9 +19,16 @@ namespace castor
 		template< typename RhsT >
 		friend class DelayedInitialiserT;
 
-		DelayedInitialiserT( std::unique_ptr< TypeT > ptr = nullptr )
+		explicit DelayedInitialiserT( std::unique_ptr< TypeT > ptr = nullptr )
 			: m_ptr{ std::move( ptr ) }
 		{
+		}
+
+		template< typename RhsT, typename ... ParamsT >
+		static DelayedInitialiserT make( ParamsT && ... params )
+		{
+			static_assert( std::is_same_v< TypeT, RhsT > || std::is_base_of_v< TypeT, RhsT > );
+			return DelayedInitialiserT{ std::make_unique< RhsT >( std::forward< ParamsT && >( params )... ) };
 		}
 
 		DelayedInitialiserT( DelayedInitialiserT const & rhs ) = delete;
@@ -110,9 +117,16 @@ namespace castor
 		template< typename RhsT >
 		friend class DelayedInitialiserT;
 
-		DelayedInitialiserT( std::unique_ptr< TypeT > ptr = nullptr )
+		explicit DelayedInitialiserT( std::unique_ptr< TypeT > ptr = nullptr )
 			: m_ptr{ std::move( ptr ) }
 		{
+		}
+
+		template< typename RhsT, typename ... ParamsT >
+		static DelayedInitialiserT make( ParamsT && ... params )
+		{
+			static_assert( std::is_same_v< TypeT, RhsT > || std::is_base_of_v< TypeT, RhsT > );
+			return DelayedInitialiserT{ std::make_unique< RhsT >( std::forward< ParamsT && >( params )... ) };
 		}
 
 		DelayedInitialiserT( DelayedInitialiserT const & rhs ) = delete;
@@ -241,12 +255,6 @@ namespace castor
 		std::function< void() > m_initialise{ [](){} };
 	};
 #endif
-
-	template< typename TypeT >
-	DelayedInitialiserT< TypeT > makeDelayedInitialiser( std::unique_ptr< TypeT > ptr = nullptr )
-	{
-		return DelayedInitialiserT< TypeT >( std::move( ptr ) );
-	}
 }
 
 #endif

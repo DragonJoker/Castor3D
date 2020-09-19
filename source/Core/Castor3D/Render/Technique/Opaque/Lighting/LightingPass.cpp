@@ -176,12 +176,12 @@ namespace castor3d
 		{
 			if constexpr ( PassT > getLightType( PassT, LightT ) )
 			{
-				return nullptr;
+				return LightingPass::DelayedLightPass{};
 			}
 			else if constexpr ( PassT == LightingPass::Type::eShadowLpvGI
 				|| PassT == LightingPass::Type::eShadowLayeredLpvGI )
 			{
-				return std::make_unique< PassTypeT< PassT, LightT > >( engine
+				return castor::DelayedInitialiserT< castor3d::LightPass >::template make< PassTypeT< PassT, LightT > >( engine
 					, lightCache
 					, gpResult
 					, smResult
@@ -190,7 +190,7 @@ namespace castor3d
 			}
 			else
 			{
-				return std::make_unique< PassTypeT< PassT, LightT > >( engine
+				return castor::DelayedInitialiserT< castor3d::LightPass >::template make< PassTypeT< PassT, LightT > >( engine
 					, lpResult
 					, gpInfoUbo );
 			}
@@ -232,7 +232,7 @@ namespace castor3d
 					, gpInfoUbo );
 			default:
 				CU_Failure( "Unsupported LightType" );
-				return nullptr;
+				return LightingPass::DelayedLightPass{};
 			}
 		}
 
@@ -282,10 +282,7 @@ namespace castor3d
 						, lpResult
 						, gpInfoUbo );
 				}
-				else
-				{
-					return nullptr;
-				}
+				return LightingPass::DelayedLightPass{};
 			case LightingPass::Type::eShadowLayeredLpvGI:
 				if ( engine.getRenderSystem()->getGpuInformations().hasShaderType( VK_SHADER_STAGE_GEOMETRY_BIT ) )
 				{
@@ -299,13 +296,10 @@ namespace castor3d
 						, lpResult
 						, gpInfoUbo );
 				}
-				else
-				{
-					return nullptr;
-				}
+				return LightingPass::DelayedLightPass{};
 			default:
 				CU_Failure( "Unsupported LightingPass::Type" );
-				return nullptr;
+				return LightingPass::DelayedLightPass{};
 			}
 		}
 

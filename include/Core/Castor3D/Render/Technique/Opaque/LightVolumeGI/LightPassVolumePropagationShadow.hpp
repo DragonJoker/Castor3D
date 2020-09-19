@@ -71,8 +71,8 @@ namespace castor3d
 			, m_accumulation{ engine, "LightAccumulation", GridSize }
 			, m_propagate
 			{
-				LightVolumePassResult{ m_engine, "LightPropagate0", GridSize },
-				LightVolumePassResult{ m_engine, "LightPropagate1", GridSize },
+				LightVolumePassResult{ engine, "LightPropagate0", GridSize },
+				LightVolumePassResult{ engine, "LightPropagate1", GridSize },
 			}
 			, m_aabb{ lightCache.getScene()->getBoundingBox() }
 		{
@@ -84,7 +84,7 @@ namespace castor3d
 			, RenderPassTimer & timer )override
 		{
 			auto & lightCache = scene.getLightCache();
-			m_geometryInjectionPass = std::make_unique< GeometryInjectionPass >( m_engine
+			m_geometryInjectionPass = std::make_unique< GeometryInjectionPass >( this->m_engine
 				, lightCache
 				, LtType
 				, m_smResult
@@ -92,7 +92,7 @@ namespace castor3d
 				, m_lpvConfigUbo
 				, m_geometry
 				, GridSize );
-			m_lightInjectionPass = std::make_unique< LightInjectionPass >( m_engine
+			m_lightInjectionPass = std::make_unique< LightInjectionPass >( this->m_engine
 				, lightCache
 				, LtType
 				, m_smResult
@@ -100,7 +100,7 @@ namespace castor3d
 				, m_lpvConfigUbo
 				, m_injection
 				, GridSize );
-			m_lightVolumeGIPass = std::make_unique< LightVolumeGIPass >( m_engine
+			m_lightVolumeGIPass = std::make_unique< LightVolumeGIPass >( this->m_engine
 				, LtType
 				, m_gpInfoUbo
 				, m_lpvConfigUbo
@@ -108,7 +108,7 @@ namespace castor3d
 				, m_accumulation
 				, m_lpResult[LpTexture::eDiffuse] );
 			uint32_t propIndex = 0u;
-			m_lightPropagationPasses.emplace_back( m_engine
+			m_lightPropagationPasses.emplace_back( this->m_engine
 				, "0"
 				, GridSize
 				, m_injection
@@ -118,7 +118,7 @@ namespace castor3d
 
 			for ( uint32_t i = 1u; i < MaxPropagationSteps; ++i )
 			{
-				m_lightPropagationPasses.emplace_back( m_engine
+				m_lightPropagationPasses.emplace_back( this->m_engine
 					, castor::string::toString( i )
 					, GridSize
 					, m_geometry

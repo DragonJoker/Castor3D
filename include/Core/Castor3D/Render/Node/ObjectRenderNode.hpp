@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
 #include "Castor3D/Render/Node/PassRenderNode.hpp"
 #include "Castor3D/Render/Node/SceneRenderNode.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 

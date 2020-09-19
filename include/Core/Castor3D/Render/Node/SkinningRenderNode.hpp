@@ -4,6 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_SkinningRenderNode_H___
 #define ___C3D_SkinningRenderNode_H___
 
+#include "Castor3D/Scene/Animation/AnimationModule.hpp"
+
 #include "Castor3D/Render/Node/ObjectRenderNode.hpp"
 
 namespace castor3d

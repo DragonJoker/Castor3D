@@ -118,7 +118,7 @@ namespace castor3d
 
 			for ( uint32_t cascade = 0u; cascade < shader::DirectionalMaxCascadesCount; ++cascade )
 			{
-				m_lightInjectionPasses.emplace_back( m_engine
+				m_lightInjectionPasses.emplace_back( this->m_engine
 					, lightCache
 					, LtType
 					, m_smResult
@@ -127,7 +127,7 @@ namespace castor3d
 					, m_injection[cascade]
 					, GridSize
 					, cascade );
-				m_geometryInjectionPasses.emplace_back( m_engine
+				m_geometryInjectionPasses.emplace_back( this->m_engine
 					, lightCache
 					, LtType
 					, m_smResult
@@ -136,7 +136,7 @@ namespace castor3d
 					, m_geometry[cascade]
 					, GridSize
 					, cascade );
-				m_lightPropagationPasses.emplace_back( m_engine
+				m_lightPropagationPasses.emplace_back( this->m_engine
 					, castor::string::toString( cascade ) + "x0"
 					, GridSize
 					, m_injection[cascade]
@@ -146,7 +146,7 @@ namespace castor3d
 
 				for ( uint32_t i = 1u; i < MaxPropagationSteps; ++i )
 				{
-					m_lightPropagationPasses.emplace_back( m_engine
+					m_lightPropagationPasses.emplace_back( this->m_engine
 						, castor::string::toString( cascade ) + "x" + castor::string::toString( i )
 						, GridSize
 						, m_geometry[cascade]
@@ -158,7 +158,7 @@ namespace castor3d
 				}
 			}
 
-			m_lightVolumeGIPass = std::make_unique< LayeredLightVolumeGIPass >( m_engine
+			m_lightVolumeGIPass = std::make_unique< LayeredLightVolumeGIPass >( this->m_engine
 				, m_gpInfoUbo
 				, m_lpvConfigUbo
 				, m_gpResult

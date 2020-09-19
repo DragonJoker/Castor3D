@@ -129,11 +129,11 @@ namespace castor3d
 		{
 			billboard,
 			pass,
-			pools.getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ),
-			pools.getBuffer< ModelMatrixUboConfiguration >( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ),
-			pools.getBuffer< BillboardUboConfiguration >( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ),
-			pools.getBuffer< PickingUboConfiguration >( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ),
-			pools.getBuffer< TexturesUboConfiguration >( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ),
+			pools.getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ),
+			pools.getBuffer< ModelMatrixUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ),
+			pools.getBuffer< BillboardUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ),
+			pools.getBuffer< PickingUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ),
+			pools.getBuffer< TexturesUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ),
 		};
 	}
 

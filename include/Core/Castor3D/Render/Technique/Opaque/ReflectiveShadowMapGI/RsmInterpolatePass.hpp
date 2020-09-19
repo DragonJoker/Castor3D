@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_RsmInterpolatePass_HPP___
 
 #include "ReflectiveShadowMapGIModule.hpp"
+#include "Castor3D/Cache/CacheModule.hpp"
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"

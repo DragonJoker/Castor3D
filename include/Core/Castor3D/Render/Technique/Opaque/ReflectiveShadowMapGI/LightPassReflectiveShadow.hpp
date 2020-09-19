@@ -15,6 +15,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightPassResult.hpp"
 #include "Castor3D/Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 
 namespace castor3d
 {
@@ -60,7 +61,7 @@ namespace castor3d
 			, RenderPassTimer & timer )override
 		{
 			auto & lightCache = scene.getLightCache();
-			m_downscalePass = std::make_unique< DownscalePass >( m_engine
+			m_downscalePass = std::make_unique< DownscalePass >( this->m_engine
 				, cuT( "Reflective Shadow Maps" )
 				, ashes::ImageViewArray
 				{
@@ -72,7 +73,7 @@ namespace castor3d
 					m_lpResult[LpTexture::eDiffuse].getTexture()->getWidth() >> 2,
 					m_lpResult[LpTexture::eDiffuse].getTexture()->getHeight() >> 2,
 				} );
-			m_rsmGiPass = std::make_unique< RsmGIPass >( m_engine
+			m_rsmGiPass = std::make_unique< RsmGIPass >( this->m_engine
 				, lightCache
 				, LtType
 				, VkExtent2D
@@ -83,8 +84,8 @@ namespace castor3d
 				, m_gpInfoUbo
 				, m_gpResult
 				, m_smResult
-				, m_downscalePass.getResult() );
-			m_interpolatePass = std::make_unique< RsmInterpolatePass >( m_engine
+				, m_downscalePass->getResult() );
+			m_interpolatePass = std::make_unique< RsmInterpolatePass >( this->m_engine
 					, lightCache
 					, LtType
 					, VkExtent2D
@@ -95,10 +96,10 @@ namespace castor3d
 					, m_gpInfoUbo
 					, m_gpResult
 					, m_smResult
-					, m_rsmGiPass.getConfigUbo()
-					, m_rsmGiPass.getSamplesSsbo()
-					, m_rsmGiPass.getResult()[0]
-					, m_rsmGiPass.getResult()[1]
+					, m_rsmGiPass->getConfigUbo()
+					, m_rsmGiPass->getSamplesSsbo()
+					, m_rsmGiPass->getResult()[0]
+					, m_rsmGiPass->getResult()[1]
 					, m_lpResult[LpTexture::eDiffuse] );
 			LightPassShadow< LtType >::initialise( scene, gp, sceneUbo, timer );
 		}

@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/Node/ObjectRenderNode.hpp"
 
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
+
 namespace castor3d
 {
 	struct BillboardRenderNode
