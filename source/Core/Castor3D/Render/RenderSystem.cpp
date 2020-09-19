@@ -411,7 +411,7 @@ namespace castor3d
 		, m_desc{ std::move( desc ) }
 		, m_initialised{ false }
 		, m_gpuInformations{}
-		, m_gpuBufferPool{ *this }
+		, m_gpuBufferPool{ *this, cuT( "GlobalPool" ) }
 	{
 		auto & rendererList = engine.getRenderersList();
 		auto plugin = rendererList.selectPlugin( desc.name );
@@ -650,27 +650,6 @@ namespace castor3d
 		}
 
 		return result;
-	}
-
-	GpuBufferOffset RenderSystem::getBuffer( VkBufferUsageFlagBits type
-		, uint32_t size
-		, VkMemoryPropertyFlags flags )
-	{
-		return m_gpuBufferPool.getGpuBuffer( type
-			, size
-			, flags );
-	}
-
-	void RenderSystem::putBuffer( VkBufferUsageFlagBits type
-		, GpuBufferOffset const & bufferOffset )
-	{
-		m_gpuBufferPool.putGpuBuffer( type
-			, bufferOffset );
-	}
-
-	void RenderSystem::cleanupPool()
-	{
-		m_gpuBufferPool.cleanup();
 	}
 	
 	RenderDeviceSPtr RenderSystem::createDevice( ashes::WindowHandle handle

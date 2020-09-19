@@ -10,6 +10,8 @@ See LICENSE file in root folder
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 
+#include <CastorUtils/Design/ArrayView.hpp>
+
 #include <ashespp/Buffer/Buffer.hpp>
 #include <ashespp/Buffer/VertexBuffer.hpp>
 
@@ -23,32 +25,40 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\~french
-		 *\brief		Constructeur.
-		 */
-		C3D_API GpuBuffer();
-		/**
-		 *\~english
-		 *\brief		Initialises the GPU buffer storage.
 		 *\param[in]	device			The device on which the storage is allocated.
 		 *\param[in]	numLevels		The allocator maximum tree size.
 		 *\param[in]	minBlockSize	The minimum size for a block.
 		 *\param[in]	usage			The buffer targets.
 		 *\param[in]	memoryFlags		The buffer memory properties.
 		 *\~french
-		 *\brief		Initialise le stockage GPU du tampon.
+		 *\brief		Constructeur.
 		 *\param[in]	device			Le device sur lequel le stockage est alloué.
 		 *\param[in]	numLevels		La taille maximale de l'arbre de l'allocateur.
 		 *\param[in]	minBlockSize	La taille minimale d'un bloc.
 		 *\param[in]	usage			Les cibles du tampon.
 		 *\param[in]	memoryFlags		Les propriétés mémoire du tampon.
 		 */
-		C3D_API void initialiseStorage( RenderDevice const & device
-			, uint32_t numLevels
-			, uint32_t minBlockSize
+		C3D_API GpuBuffer( RenderSystem const & renderSystem
 			, VkBufferUsageFlags usage
 			, VkMemoryPropertyFlags memoryFlags
-			, ashes::QueueShare sharingMode = {} );
+			, castor::String debugName
+			, ashes::QueueShare sharingMode
+			, uint32_t numLevels
+			, uint32_t minBlockSize );
+		/**
+		 *\~english
+		 *\brief		Initialises the GPU buffer storage.
+		 *\~french
+		 *\brief		Initialise le stockage GPU du tampon.
+		 */
+		C3D_API uint32_t initialise();
+		/**
+		 *\~english
+		 *\brief		Cleans up the GPU buffer.
+		 *\~french
+		 *\brief		Nettoie le tampon GPU.
+		 */
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\param[in]	size	The requested memory size.
@@ -57,7 +67,7 @@ namespace castor3d
 		 *\param[in]	size	La taille requise pour la mémoire.
 		 *\return		\p true s'il y a assez de mémoire restante pour la taille donnée.
 		 */
-		C3D_API bool hasAvailable( size_t size )const;
+		C3D_API bool hasAvailable( VkDeviceSize size )const;
 		/**
 		 *\~english
 		 *\brief		Allocates a memory chunk for a CPU buffer.
@@ -68,7 +78,7 @@ namespace castor3d
 		 *\param[in]	size	La taille requise pour la mémoire.
 		 *\return		L'offset de la zone mémoire.
 		 */
-		C3D_API uint32_t allocate( size_t size );
+		C3D_API MemChunk allocate( VkDeviceSize size );
 		/**
 		 *\~english
 		 *\brief		Deallocates memory.
@@ -77,42 +87,32 @@ namespace castor3d
 		 *\brief		Désalloue de la mémoire.
 		 *\param[in]	offset	L'offset de la zone mémoire.
 		 */
-		C3D_API void deallocate( uint32_t offset );
+		C3D_API void deallocate( MemChunk const & mem );
 		/**
 		 *\~english
 		 *\brief		Locks the buffer, id est maps it into memory so we can modify it.
 		 *\remarks		Maps from m_buffer[offset] to m_buffer[offset + count - 1].
-		 *\param[in]	offset	The start offset in the buffer.
-		 *\param[in]	size	The mapped memory size.
-		 *\param[in]	flags	The lock flags.
+		 *\param[in]	chunk	The mapped memory range.
 		 *\return		The mapped buffer address.
 		 *\~french
 		 *\brief		Locke le tampon, càd le mappe en mémoire ram afin d'y autoriser des modifications.
 		 *\remarks		Mappe de m_buffer[offset] à m_buffer[offset + count - 1].
-		 *\param[in]	offset	L'offset de départ.
-		 *\param[in]	size	La taille de la mémoire à mapper.
-		 *\param[in]	flags	Les flags de lock.
+		 *\param[in]	chunk	L'intervalle de mémoire à mapper.
 		 *\return		L'adresse du tampon mappé.
 		 */
-		C3D_API uint8_t * lock( uint32_t offset
-			, uint32_t size
-			, VkMemoryMapFlags const & flags )const;
+		C3D_API uint8_t * lock( MemChunk const & chunk )const;
 		/**
 		 *\~english
-		 *\brief		Locks the buffer, id est maps it into memory so we can modify it.
-		 *\remarks		Maps from m_buffer[offset] to m_buffer[offset + count - 1].
+		 *\brief		Validates a memory range in VRAM.
 		 *\param[in]	offset	The start offset in the buffer.
 		 *\param[in]	size	The mapped memory size.
 		 *\return		The mapped buffer address.
 		 *\~french
 		 *\brief		Locke le tampon, càd le mappe en mémoire ram afin d'y autoriser des modifications.
-		 *\remarks		Mappe de m_buffer[offset] à m_buffer[offset + count - 1].
-		 *\param[in]	offset	L'offset de départ.
-		 *\param[in]	size	La taille de la mémoire à mapper.
+		 *\param[in]	chunk	L'intervalle de mémoire à valider.
 		 *\return		L'adresse du tampon mappé.
 		 */
-		C3D_API void flush( uint32_t offset
-			, uint32_t size )const;
+		C3D_API void flush( MemChunk const & chunk )const;
 		/**
 		 *\~english
 		 *\brief		Locks the buffer, id est maps it into memory so we can modify it.
@@ -127,8 +127,7 @@ namespace castor3d
 		 *\param[in]	size	La taille de la mémoire à mapper.
 		 *\return		L'adresse du tampon mappé.
 		 */
-		C3D_API void invalidate( uint32_t offset
-			, uint32_t size )const;
+		C3D_API void invalidate( MemChunk const & chunk )const;
 		/**
 		 *\~english
 		 *\brief		Unlocks the buffer, id est unmaps it from memory so no modification can be made after that.
@@ -141,6 +140,7 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Copies data from given buffer to this one.
+		 *\remarks		The command buffer must be in recording state.
 		 *\param[in]	commandBuffer	The command buffer on which the copy commands are recorded.
 		 *\param[in]	src				The source buffer.
 		 *\param[in]	srcOffset		The start offset in the source buffer.
@@ -148,6 +148,7 @@ namespace castor3d
 		 *\param[in]	size			The number of elements to copy.
 		 *\~french
 		 *\brief		Copie les données du tampon donné dans celui-ci.
+		 *\remarks		Le command buffer doit être en état d'enregistrement.
 		 *\param[in]	commandBuffer	Le command buffer sur lequel les commandes de copie sont enregistrées.
 		 *\param[in]	src				Le tampon source.
 		 *\param[in]	srcOffset		L'offset de départ dans le tampon source.
@@ -156,9 +157,8 @@ namespace castor3d
 		 */
 		C3D_API void copy( ashes::CommandBuffer const & commandBuffer
 			, GpuBuffer const & src
-			, uint32_t srcOffset
-			, uint32_t dstOffset
-			, uint32_t size )const;
+			, MemChunk const & srcChunk
+			, VkDeviceSize dstOffset )const;
 		/**
 		 *\~english
 		 *\brief		Transfers data to the GPU buffer from RAM.
@@ -180,8 +180,7 @@ namespace castor3d
 		C3D_API void upload( ashes::StagingBuffer & stagingBuffer
 			, ashes::Queue const & queue
 			, ashes::CommandPool const & commandPool
-			, uint32_t offset
-			, uint32_t count
+			, MemChunk const & chunk
 			, uint8_t const * buffer )const;
 		/**
 		 *\~english
@@ -203,8 +202,7 @@ namespace castor3d
 		 */
 		C3D_API void upload( ashes::StagingBuffer & stagingBuffer
 			, ashes::CommandBuffer const & commandBuffer
-			, uint32_t offset
-			, uint32_t count
+			, MemChunk const & chunk
 			, uint8_t const * buffer )const;
 		/**
 		 *\~english
@@ -227,9 +225,20 @@ namespace castor3d
 		C3D_API void download( ashes::StagingBuffer & stagingBuffer
 			, ashes::Queue const & queue
 			, ashes::CommandPool const & commandPool
-			, uint32_t offset
-			, uint32_t count
+			, MemChunk const & chunk
 			, uint8_t * buffer )const;
+		/**
+		*\~english
+		*\return
+		*	The internal buffer.
+		*\~french
+		*\return
+		*	Le tampon interne.
+		*/
+		inline bool hasBuffer()const
+		{
+			return m_buffer != nullptr;
+		}
 		/**
 		*\~english
 		*\return
@@ -242,18 +251,37 @@ namespace castor3d
 		{
 			return *m_buffer;
 		}
+		inline operator ashes::Buffer< uint8_t > const & ()const
+		{
+			return *m_buffer;
+		}
+		/**
+		*\~english
+		*\return
+		*	The internal buffer.
+		*\~french
+		*\return
+		*	Le tampon interne.
+		*/
+		inline ashes::Buffer< uint8_t > & getBuffer()
+		{
+			return *m_buffer;
+		}
+		inline operator ashes::Buffer< uint8_t > & ()
+		{
+			return *m_buffer;
+		}
 
 	private:
-		void doInitialiseStorage( RenderDevice const & device
-			, uint32_t size
-			, VkBufferUsageFlags usage
-			, VkMemoryPropertyFlags memoryFlags
-			, ashes::QueueShare sharingMode );
-
-	private:
-		RenderDevice const * m_device{ nullptr };
-		GpuBufferBuddyAllocatorUPtr m_allocator;
+		RenderSystem const & m_renderSystem;
+		VkBufferUsageFlags m_usage;
+		VkMemoryPropertyFlags m_memoryFlags;
+		ashes::QueueShare m_sharingMode;
+		std::set< MemChunk > m_allocated;
+		GpuBufferBuddyAllocator m_allocator;
 		ashes::BufferPtr< uint8_t > m_buffer;
+		castor::String m_debugName;
+		VkDeviceSize m_align{ 0u };
 	};
 
 	template< typename T >

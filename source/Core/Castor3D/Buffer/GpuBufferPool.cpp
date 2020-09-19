@@ -3,7 +3,9 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 
 #include <ashespp/Buffer/Buffer.hpp>
+#include <ashespp/Buffer/StagingBuffer.hpp>
 #include <ashespp/Core/Device.hpp>
+#include <ashespp/Sync/Fence.hpp>
 
 using namespace castor;
 
@@ -11,16 +13,34 @@ namespace castor3d
 {
 	namespace
 	{
-		uint32_t doMakeKey( VkBufferUsageFlagBits target
-			, VkMemoryPropertyFlags flags )
+		static uint32_t constexpr minBlockSize = 96u;
+
+		inline void copyBuffer( ashes::CommandBuffer const & commandBuffer
+			, ashes::BufferBase const & src
+			, ashes::BufferBase const & dst
+			, VkDeviceSize offset
+			, VkDeviceSize size
+			, VkPipelineStageFlags flags )
 		{
-			return ( uint32_t( target ) << 0u )
-				| ( uint32_t( flags ) << 16u );
+			auto dstSrcStage = dst.getCompatibleStageFlags();
+			commandBuffer.memoryBarrier( dstSrcStage
+				, VK_PIPELINE_STAGE_TRANSFER_BIT
+				, dst.makeTransferDestination() );
+			commandBuffer.copyBuffer( src
+				, dst
+				, uint32_t( size )
+				, uint32_t( offset ) );
+			dstSrcStage = dst.getCompatibleStageFlags();
+			commandBuffer.memoryBarrier( dstSrcStage
+				, flags
+				, dst.makeUniformBufferInput() );
 		}
 	}
 
-	GpuBufferPool::GpuBufferPool( RenderSystem & renderSystem )
+	GpuBufferPool::GpuBufferPool( RenderSystem & renderSystem
+		, castor::String debugName )
 		: OwnedBy< RenderSystem >{ renderSystem }
+		, m_debugName{ std::move( debugName ) }
 	{
 	}
 
@@ -33,112 +53,70 @@ namespace castor3d
 		m_buffers.clear();
 	}
 
-	GpuBufferOffset GpuBufferPool::getGpuBuffer( VkBufferUsageFlagBits target
-		, uint32_t size
-		, VkMemoryPropertyFlags flags )
+	GpuBuffer & GpuBufferPool::doGetBuffer( VkDeviceSize size
+		, VkBufferUsageFlagBits target
+		, VkMemoryPropertyFlags memory
+		, MemChunk & chunk )
 	{
-		GpuBufferOffset result;
+		auto key = doMakeKey( target, memory );
+		auto it = m_buffers.find( key );
 
-		if ( target != VK_BUFFER_USAGE_INDEX_BUFFER_BIT
-			&& target != VK_BUFFER_USAGE_VERTEX_BUFFER_BIT )
+		if ( it == m_buffers.end() )
 		{
-			auto & device = getCurrentRenderDevice( *this );
-			std::unique_ptr< GpuBuffer > buffer = std::make_unique< GpuBuffer >();
-			buffer->doInitialiseStorage( device
-				, size
-				, target | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, {
-					{
-						device.getGraphicsQueueFamilyIndex(),
-						device.getComputeQueueFamilyIndex(),
-						device.getTransferQueueFamilyIndex(),
-					}
-				} );
-			m_nonSharedBuffers.emplace_back( std::move( buffer ) );
-			result.buffer = &m_nonSharedBuffers.back()->getBuffer().getBuffer();
-			result.offset = 0u;
-		}
-		else
-		{
-			auto key = doMakeKey( target, flags );
-			auto it = m_buffers.find( key );
-
-			if ( it == m_buffers.end() )
-			{
-				it = m_buffers.emplace( key, BufferArray{} ).first;
-			}
-
-			auto itB = doFindBuffer( size, it->second );
-
-			if ( itB == it->second.end() )
-			{
-				uint64_t level = 20u;
-				uint64_t maxSize = ( 1u << level ) * 96;
-
-				while ( size > maxSize && level <= 24 )
-				{
-					++level;
-					maxSize = ( 1u << level ) * 96;
-				}
-
-				CU_Require( maxSize < std::numeric_limits< uint32_t >::max() );
-				CU_Require( maxSize >= size );
-
-				std::unique_ptr< GpuBuffer > buffer = std::make_unique< GpuBuffer >();
-				buffer->initialiseStorage( getCurrentRenderDevice( *getRenderSystem() )
-					, uint32_t( level )
-					, 96u
-					, target
-					, flags );
-				it->second.emplace_back( std::move( buffer ) );
-				result.buffer = &buffer->getBuffer().getBuffer();
-				result.offset = buffer->allocate( size );
-			}
-			else
-			{
-				result.buffer = &( *itB )->getBuffer().getBuffer();
-				result.offset = ( *itB )->allocate( size );
-			}
-
-			result.flags = flags;
+			it = m_buffers.emplace( key, BufferArray{} ).first;
 		}
 
-		return result;
+		auto itB = doFindBuffer( size, it->second );
+
+		if ( itB == it->second.end() )
+		{
+			VkDeviceSize level = 20u;
+			VkDeviceSize maxSize = ( 1u << level ) * minBlockSize;
+
+			while ( size > maxSize && level <= 24 )
+			{
+				++level;
+				maxSize = ( 1u << level ) * minBlockSize;
+			}
+
+			CU_Require( maxSize < std::numeric_limits< uint32_t >::max() );
+			CU_Require( maxSize >= size );
+
+			std::unique_ptr< GpuBuffer > buffer = std::make_unique< GpuBuffer >( *getRenderSystem() 
+				, target
+				, memory
+				, m_debugName
+				, ashes::QueueShare{}
+				, uint32_t( level )
+				, minBlockSize );
+			buffer->initialise();
+			it->second.emplace_back( std::move( buffer ) );
+			itB = std::next( it->second.begin(), it->second.size() - 1u );
+		}
+
+		chunk = ( *itB )->allocate( size );
+		return *( *itB ).get();
 	}
 
-	void GpuBufferPool::putGpuBuffer( VkBufferUsageFlagBits target
-		, GpuBufferOffset const & bufferOffset )
+	void GpuBufferPool::doPutBuffer( GpuBuffer const & buffer
+		, VkBufferUsageFlagBits target
+		, VkMemoryPropertyFlags memory
+		, MemChunk const & chunk )
 	{
-		if ( target != VK_BUFFER_USAGE_INDEX_BUFFER_BIT
-			&& target != VK_BUFFER_USAGE_VERTEX_BUFFER_BIT )
-		{
-			auto it = std::find_if( m_nonSharedBuffers.begin()
-				, m_nonSharedBuffers.end()
-				, [&bufferOffset]( std::unique_ptr< GpuBuffer > const & lookup )
-				{
-					return &lookup->getBuffer().getBuffer() == bufferOffset.buffer;
-				} );
-			CU_Require( it != m_nonSharedBuffers.end() );
-			it->reset();
-		}
-		else
-		{
-			auto key = doMakeKey( target, bufferOffset.flags );
-			auto it = m_buffers.find( key );
-			CU_Require( it != m_buffers.end() );
-			auto itB = std::find_if( it->second.begin()
-				, it->second.end()
-				, [&bufferOffset]( std::unique_ptr< GpuBuffer > const & lookup )
-				{
-					return &lookup->getBuffer().getBuffer() == bufferOffset.buffer;
-				} );
-			CU_Require( itB != it->second.end() );
-			( *itB )->deallocate( bufferOffset.offset );
-		}
+		auto key = doMakeKey( target, memory );
+		auto it = m_buffers.find( key );
+		CU_Require( it != m_buffers.end() );
+		auto itB = std::find_if( it->second.begin()
+			, it->second.end()
+			, [&buffer]( std::unique_ptr< GpuBuffer > const & lookup )
+			{
+				return &lookup->getBuffer().getBuffer() == &buffer.getBuffer().getBuffer();
+			} );
+		CU_Require( itB != it->second.end() );
+		( *itB )->deallocate( chunk );
 	}
 
-	GpuBufferPool::BufferArray::iterator GpuBufferPool::doFindBuffer( uint32_t size
+	GpuBufferPool::BufferArray::iterator GpuBufferPool::doFindBuffer( VkDeviceSize size
 		, GpuBufferPool::BufferArray & array )
 	{
 		auto it = array.begin();
@@ -149,5 +127,12 @@ namespace castor3d
 		}
 
 		return it;
+	}
+
+	uint32_t GpuBufferPool::doMakeKey( VkBufferUsageFlagBits target
+		, VkMemoryPropertyFlags flags )
+	{
+		return ( uint32_t( target ) << 0u )
+			| ( uint32_t( flags ) << 16u );
 	}
 }

@@ -4,16 +4,14 @@ See LICENSE file in root folder
 #ifndef ___C3D_GpuBufferPool_HPP___
 #define ___C3D_GpuBufferPool_HPP___
 
-#include "Castor3D/Buffer/GpuBuffer.hpp"
+#include "Castor3D/Buffer/GpuBufferOffset.hpp"
+
+#include <CastorUtils/Design/OwnedBy.hpp>
+
+#include <ashespp/Buffer/StagingBuffer.hpp>
 
 namespace castor3d
 {
-	struct GpuBufferOffset
-	{
-		ashes::BufferBase const * buffer;
-		VkMemoryPropertyFlags flags;
-		uint32_t offset;
-	};
 	/**
 	\author		Sylvain DOREMUS
 	\version	0.10.0
@@ -38,21 +36,22 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	renderSystem	Le RenderSystem.
 		 */
-		explicit GpuBufferPool( RenderSystem & renderSystem );
+		C3D_API explicit GpuBufferPool( RenderSystem & renderSystem
+			, castor::String debugName );
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		~GpuBufferPool();
+		C3D_API ~GpuBufferPool();
 		/**
 		 *\~english
 		 *\brief		Cleans up all GPU buffers.
 		 *\~french
 		 *\brief		Nettoie tous les tampons GPU.
 		 */
-		void cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Retrieves a GPU buffer with the given size.
@@ -67,8 +66,9 @@ namespace castor3d
 		 *\param[in]	flags	Les indicateurs de mémoire du tampon.
 		 *\return		Le tampon GPU.
 		 */
-		GpuBufferOffset getGpuBuffer( VkBufferUsageFlagBits target
-			, uint32_t size
+		template< typename DataT >
+		GpuBufferOffsetT< DataT > getBuffer( VkBufferUsageFlagBits target
+			, VkDeviceSize count
 			, VkMemoryPropertyFlags flags );
 		/**
 		 *\~english
@@ -80,17 +80,30 @@ namespace castor3d
 		 *\param[in]	target			Le type de tampon.
 		 *\param[in]	bufferOffset	Le tampon à libérer.
 		 */
-		void putGpuBuffer( VkBufferUsageFlagBits target
-			, GpuBufferOffset const & bufferOffset );
+		template< typename DataT >
+		void putBuffer( GpuBufferOffsetT< DataT > const & bufferOffset );
 
 	private:
-		BufferArray::iterator doFindBuffer( uint32_t size
+		C3D_API BufferArray::iterator doFindBuffer( VkDeviceSize size
 			, BufferArray & array );
+		C3D_API uint32_t doMakeKey( VkBufferUsageFlagBits target
+			, VkMemoryPropertyFlags flags );
+		C3D_API GpuBuffer & doGetBuffer( VkDeviceSize size
+			, VkBufferUsageFlagBits target
+			, VkMemoryPropertyFlags memory
+			, MemChunk & chunk );
+		C3D_API void doPutBuffer( GpuBuffer const & buffer
+			, VkBufferUsageFlagBits target
+			, VkMemoryPropertyFlags memory
+			, MemChunk const & chunk );
 
 	private:
+		castor::String m_debugName;
 		std::map< uint32_t, BufferArray > m_buffers;
 		BufferArray m_nonSharedBuffers;
 	};
 }
+
+#include "Castor3D/Buffer/GpuBufferPool.inl"
 
 #endif

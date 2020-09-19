@@ -46,12 +46,14 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	A GpuBuffer and an offset from the GpuBuffer.
+	*	An offset and range of a GpuBuffer.
 	*\~french
 	*\brief
-	*	Un GpuBuffer et un offset dans le GpuBuffer.
+	*	Un intervalle d'un GpuBuffer.
+	*\remark
 	*/
-	struct GpuBufferOffset;
+	template< typename DataT >
+	struct GpuBufferOffsetT;
 	/**
 	*\~english
 	*\brief		A uniform buffer, than can contain multiple sub-buffers.
