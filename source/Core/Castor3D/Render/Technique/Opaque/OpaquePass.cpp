@@ -578,7 +578,6 @@ namespace castor3d
 			, 1u
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
-		index += uint32_t( flags.textures.size() );
 
 		auto out = writer.getOut();
 

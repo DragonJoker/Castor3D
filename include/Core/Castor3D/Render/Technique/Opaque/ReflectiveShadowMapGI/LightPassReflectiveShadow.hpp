@@ -51,6 +51,10 @@ namespace castor3d
 			: LightPassShadow< LtType >{ engine
 				, lpResult
 				, gpInfoUbo }
+			, m_gpResult{ gpResult }
+			, m_smResult{ smResult }
+			, m_lpResult{ lpResult }
+			, m_gpInfoUbo{ gpInfoUbo }
 		{
 		}
 

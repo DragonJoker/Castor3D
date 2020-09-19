@@ -81,13 +81,11 @@ namespace castor3d
 
 		if ( getOwner()->isStatic() )
 		{
-			auto baseMipLevel = 0u;
 			m_needsYInversion = false;
 
 			if ( m_source.hasBuffer() )
 			{
 				m_needsYInversion = m_needsYInversion || getOwner()->getImage().getPxBuffer().isFlipped();
-				baseMipLevel++;
 			}
 		}
 		else

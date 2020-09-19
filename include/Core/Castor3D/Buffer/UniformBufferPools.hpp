@@ -23,7 +23,7 @@ namespace castor3d
 		 *\param[in]	renderSystem	Le RenderSystem.
 		 *\param[in]	debugName		Le nom debug du tampon.
 		 */
-		C3D_API UniformBufferPools( RenderSystem & renderSystem );
+		C3D_API explicit UniformBufferPools( RenderSystem & renderSystem );
 		/**
 		 *\~english
 		 *\brief		Cleans up all GPU buffers.

@@ -155,14 +155,10 @@ namespace castor
 			break;
 		}
 
-		auto srcW = m_layout.extent->x;
-		auto srcH = m_layout.extent->y;
 		auto srcLayerSize = m_layout.layerSize();
 		auto src = srcBuffer->getPtr();
 		updateLayerLayout( size, srcBuffer->getFormat() );
 		auto dstBuffer = getPixels();
-		auto dstW = m_layout.extent->x;
-		auto dstH = m_layout.extent->y;
 		auto dstLayerSize = m_layout.layerSize();
 		auto dst = dstBuffer->getPtr();
 

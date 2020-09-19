@@ -164,7 +164,6 @@ namespace castor3d
 		auto timerBlock = timer.start();
 
 		commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-		auto col = index / ( ( shader::getSpotShadowMapCount() - 1u ) * 2.0f );
 		commandBuffer.beginDebugBlock(
 			{
 				m_name + " generation " + std::to_string( index ),

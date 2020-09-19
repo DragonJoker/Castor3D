@@ -36,7 +36,7 @@ namespace castor3d
 
 	struct GpuUpdater
 	{
-		GpuUpdater( RenderInfo & info )
+		explicit GpuUpdater( RenderInfo & info )
 			: info{ info }
 		{
 		}

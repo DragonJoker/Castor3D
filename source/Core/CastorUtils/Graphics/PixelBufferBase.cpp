@@ -192,7 +192,6 @@ namespace castor
 			|| levels != m_levels )
 		{
 			auto buffer = m_buffer;
-			auto srcLayers = m_layers;
 			auto srcLevels = m_levels;
 			m_layers = layers;
 			m_levels = levels;
