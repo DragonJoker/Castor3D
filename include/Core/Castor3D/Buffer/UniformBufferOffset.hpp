@@ -71,7 +71,7 @@ namespace castor3d
 		void createSizedBinding( ashes::DescriptorSet & descriptorSet
 			, VkDescriptorSetLayoutBinding const & layoutBinding )const
 		{
-			auto & uniformBuffer = pool->getBuffer();
+			auto & uniformBuffer = buffer->getBuffer();
 			auto size = uniformBuffer.getAlignedSize();
 			descriptorSet.createBinding( layoutBinding
 				, uniformBuffer.getBuffer()
