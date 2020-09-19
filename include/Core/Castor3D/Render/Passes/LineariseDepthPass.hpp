@@ -66,21 +66,14 @@ namespace castor3d
 		 *\brief		Met à jour les informations de clipping.
 		 *\param[in]	viewport	Le viewport contenant les données de clipping.
 		 */
-		C3D_API void cpuUpdate( Viewport const & viewport );
+		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Updates clipping info.
 		 *\~french
 		 *\brief		Met à jour les informations de clipping.
 		 */
-		C3D_API void gpuUpdate( ashes::CommandBuffer * cb );
-		/**
-		 *\~english
-		 *\brief		Updates clipping info.
-		 *\~french
-		 *\brief		Met à jour les informations de clipping.
-		 */
-		C3D_API void gpuUpdate();
+		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Linearises depth buffer.

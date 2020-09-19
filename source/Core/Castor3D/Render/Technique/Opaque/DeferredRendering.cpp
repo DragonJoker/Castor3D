@@ -211,7 +211,7 @@ namespace castor3d
 
 		if ( m_ssaoConfig.enabled )
 		{
-			m_linearisePass->cpuUpdate( camera.getViewport() );
+			m_linearisePass->update( updater );
 		}
 
 		if ( m_ssaoConfig.enabled )
@@ -228,6 +228,11 @@ namespace castor3d
 
 		auto index = getIndex( m_ssaoConfig, scene );
 		m_resolve[index]->update( camera );
+
+		if ( m_ssaoConfig.enabled )
+		{
+			m_linearisePass->update( updater );
+		}
 	}
 
 	ashes::Semaphore const & DeferredRendering::render( Scene const & scene

@@ -122,6 +122,25 @@ namespace castor3d
 
 	using GpuBufferBuddyAllocator = castor::BuddyAllocatorT< GpuBufferBuddyAllocatorTraits >;
 	using GpuBufferBuddyAllocatorUPtr = std::unique_ptr< GpuBufferBuddyAllocator >;
+	/**
+	*\~english
+	*\brief
+	*	A memory range, in bytes.
+	*\~french
+	*\brief
+	*	Un intervalle mémoire, en octets.
+	*/
+	struct MemChunk
+	{
+		VkDeviceSize offset;
+		VkDeviceSize size;
+	};
+
+	inline bool operator<( MemChunk const & lhs
+		, MemChunk const & rhs )
+	{
+		return lhs.offset < rhs.offset;
+	}
 
 	//@}
 }

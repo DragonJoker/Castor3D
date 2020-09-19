@@ -73,7 +73,6 @@ namespace castor3d
 	void SsaoConfigUbo::cpuUpdate( SsaoConfig const & config
 		, Camera const & camera )
 	{
-		auto & device = getCurrentRenderDevice( m_engine );
 		auto & viewport = camera.getViewport();
 		int numSpiralTurns = 0;
 

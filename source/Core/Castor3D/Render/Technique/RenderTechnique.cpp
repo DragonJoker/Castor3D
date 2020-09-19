@@ -311,7 +311,7 @@ namespace castor3d
 #if C3D_UseDepthPrepass
 		m_depthPass->update( updater );
 #endif
-		//m_voxelizer->cpuUpdate( updater );
+		//m_voxelizer->update( updater );
 #if C3D_UseDeferredRendering
 		m_deferredRendering->update( updater );
 #else
@@ -358,6 +358,9 @@ namespace castor3d
 
 	void RenderTechnique::update( GpuUpdater & updater )
 	{
+		updater.scene = m_renderTarget.getScene();
+		updater.camera = m_renderTarget.getCamera();
+
 #if C3D_UseDepthPrepass
 		m_depthPass->update( updater );
 #endif

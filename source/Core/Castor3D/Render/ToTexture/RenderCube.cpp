@@ -63,7 +63,7 @@ namespace castor3d
 			return sampler;
 		}
 
-		std::array< UniformBufferOffsetT< castor::Matrix4x4f >, 6u > doCreateMatrixUbo( RenderDevice const & device
+		UniformBufferUPtrT< castor::Matrix4x4f > doCreateMatrixUbo( RenderDevice const & device
 			, ashes::Queue const & queue
 			, ashes::CommandPool const & pool
 			, bool srcIsCube )
@@ -83,22 +83,20 @@ namespace castor3d
 				};
 				return result;
 			}();
+			auto result = makeUniformBuffer< castor::Matrix4x4f >( device.renderSystem
+				, 6u
+				, ( VK_BUFFER_USAGE_TRANSFER_DST_BIT
+					| VK_BUFFER_USAGE_TRANSFER_SRC_BIT )
+				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+				, "RenderCubeMatrix" );
 
-			std::array< UniformBufferOffsetT< castor::Matrix4x4f >, 6u > result
+			for ( uint32_t i = 0u; i < 6u; ++i )
 			{
-				device.renderSystem.getEngine()->getUboPools().getBuffer< castor::Matrix4x4f >( 0u ),
-				device.renderSystem.getEngine()->getUboPools().getBuffer< castor::Matrix4x4f >( 0u ),
-				device.renderSystem.getEngine()->getUboPools().getBuffer< castor::Matrix4x4f >( 0u ),
-				device.renderSystem.getEngine()->getUboPools().getBuffer< castor::Matrix4x4f >( 0u ),
-				device.renderSystem.getEngine()->getUboPools().getBuffer< castor::Matrix4x4f >( 0u ),
-				device.renderSystem.getEngine()->getUboPools().getBuffer< castor::Matrix4x4f >( 0u ),
-			};
-			result[0u].getData() = projection * views[0];
-			result[1u].getData() = projection * views[1];
-			result[2u].getData() = projection * views[2];
-			result[3u].getData() = projection * views[3];
-			result[4u].getData() = projection * views[4];
-			result[5u].getData() = projection * views[5];
+				result->getData( i ) = projection * views[i];
+			}
+
+			result->initialise();
+			result->upload( 0u, 6u );
 			return result;
 		}
 
@@ -231,8 +229,11 @@ namespace castor3d
 					renderPass,
 				} );
 			facePipeline.descriptorSet = m_descriptorPool->createDescriptorSet( "RenderCubeFace" + castor::string::toString( face ) );
-			m_matrixUbo[face].createSizedBinding( *facePipeline.descriptorSet
-				, m_descriptorLayout->getBinding( 0u ) );
+			auto size = uint32_t( m_matrixUbo->getBuffer().getAlignedSize() );
+			facePipeline.descriptorSet->createSizedBinding( m_descriptorLayout->getBinding( 0u )
+				, m_matrixUbo->getBuffer()
+				, face
+				, 1u );
 			facePipeline.descriptorSet->createBinding( m_descriptorLayout->getBinding( 1u )
 				, view
 				, m_sampler->getSampler() );
@@ -255,12 +256,8 @@ namespace castor3d
 		m_descriptorPool.reset();
 		m_pipelineLayout.reset();
 		m_descriptorLayout.reset();
-
-		for ( auto & ubo : m_matrixUbo )
-		{
-			m_device.renderSystem.getEngine()->getUboPools().putBuffer( ubo );
-		}
-
+		m_matrixUbo->cleanup();
+		m_matrixUbo.reset();
 		m_vertexBuffer.reset();
 	}
 

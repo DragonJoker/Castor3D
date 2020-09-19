@@ -7,7 +7,7 @@ See LICENSE file in root folder
 
 #include "RenderToTextureModule.hpp"
 
-#include "Castor3D/Buffer/UniformBufferOffset.hpp"
+#include "Castor3D/Buffer/UniformBuffer.hpp"
 
 #include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/Command/CommandBuffer.hpp>
@@ -214,7 +214,7 @@ namespace castor3d
 		};
 
 		ashes::CommandBufferPtr m_commandBuffer;
-		std::array< UniformBufferOffsetT< castor::Matrix4x4f >, 6u > m_matrixUbo;
+		UniformBufferUPtrT< castor::Matrix4x4f > m_matrixUbo;
 		ashes::VertexBufferPtr< castor::Point4f > m_vertexBuffer;
 		ashes::PipelineVertexInputStateCreateInfoPtr m_vertexLayout;
 		ashes::DescriptorSetLayoutPtr m_descriptorLayout;

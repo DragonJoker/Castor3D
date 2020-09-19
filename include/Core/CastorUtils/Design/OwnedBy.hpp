@@ -71,6 +71,7 @@ namespace castor
 			OwnedBy( OwnedBy< Owner > && rhs ) = default;\
 			~OwnedBy() = default;\
 			Owner * get##Name()const;\
+			Owner * getOwner()const;\
 		private:\
 			Owner & m_owner;\
 		};\
@@ -92,6 +93,10 @@ namespace castor
 		{\
 		}\
 		Owner * OwnedBy< Owner >::get##Name()const\
+		{\
+			return &m_owner;\
+		}\
+		Owner * OwnedBy< Owner >::getOwner()const\
 		{\
 			return &m_owner;\
 		}\

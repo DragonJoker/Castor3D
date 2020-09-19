@@ -11,6 +11,98 @@ See LICENSE file in root folder
 
 namespace castor
 {
+#if defined( CU_NoDelayedInit )
+	template< typename TypeT >
+	class DelayedInitialiserT
+	{
+	public:
+		template< typename RhsT >
+		friend class DelayedInitialiserT;
+
+		DelayedInitialiserT( std::unique_ptr< TypeT > ptr = nullptr )
+			: m_ptr{ std::move( ptr ) }
+		{
+		}
+
+		DelayedInitialiserT( DelayedInitialiserT const & rhs ) = delete;
+		DelayedInitialiserT & operator=( DelayedInitialiserT const & rhs ) = delete;
+
+		DelayedInitialiserT( DelayedInitialiserT && rhs )
+			: m_ptr{ std::move( rhs.m_ptr ) }
+		{
+		}
+
+		template< typename RhsT >
+		DelayedInitialiserT & operator=( DelayedInitialiserT< RhsT > && rhs )
+		{
+			static_assert( std::is_same_v< TypeT, RhsT > || std::is_base_of_v< TypeT, RhsT > );
+			m_ptr = std::move( rhs.m_ptr );
+			return *this;
+		}
+
+		DelayedInitialiserT & operator=( std::unique_ptr< TypeT > ptr )
+		{
+			m_ptr = std::move( ptr );
+			return *this;
+		}
+
+		TypeT & operator*()
+		{
+			return *m_ptr;
+		}
+
+		TypeT const & operator*()const
+		{
+			return *m_ptr;
+		}
+
+		TypeT * operator->()
+		{
+			return m_ptr.get();
+		}
+
+		TypeT const * operator->()const
+		{
+			return m_ptr.get();
+		}
+
+		TypeT * get()const
+		{
+			return m_ptr.get();
+		}
+
+		TypeT * raw()const
+		{
+			return m_ptr.get();
+		}
+
+		void reset()
+		{
+			m_ptr.reset();
+		}
+
+		operator bool()const
+		{
+			return bool( m_ptr );
+		}
+
+		void cleanup()
+		{
+			CU_Require( m_ptr );
+			m_ptr->cleanup();
+		}
+
+		template< typename ... ParamsT >
+		void initialise( ParamsT && ... params )
+		{
+			CU_Require( m_ptr );
+			m_ptr->initialise( std::forward< ParamsT >( params )... );
+		}
+
+	private:
+		std::unique_ptr< TypeT > m_ptr;
+	};
+#else
 	template< typename TypeT >
 	class DelayedInitialiserT
 	{
@@ -148,6 +240,8 @@ namespace castor
 		std::atomic_bool m_initialiseExecuted{ false };
 		std::function< void() > m_initialise{ [](){} };
 	};
+#endif
+
 	template< typename TypeT >
 	DelayedInitialiserT< TypeT > makeDelayedInitialiser( std::unique_ptr< TypeT > ptr = nullptr )
 	{

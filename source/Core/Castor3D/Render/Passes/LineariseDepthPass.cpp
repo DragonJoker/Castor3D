@@ -7,10 +7,11 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
-#include "Castor3D/Render/Viewport.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfigUbo.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -421,8 +422,9 @@ namespace castor3d
 		m_result.cleanup();
 	}
 
-	void LineariseDepthPass::cpuUpdate( Viewport const & viewport )
+	void LineariseDepthPass::update( CpuUpdater & updater )
 	{
+		auto & viewport = updater.camera->getViewport();
 		auto z_f = viewport.getFar();
 		auto z_n = viewport.getNear();
 		auto clipInfo = std::isinf( z_f )
@@ -438,21 +440,16 @@ namespace castor3d
 			m_clipInfo.getData() = m_clipInfoValue;
 		}
 	}
-
-	void LineariseDepthPass::gpuUpdate( ashes::CommandBuffer * cb )
+	
+	void LineariseDepthPass::update( GpuUpdater & updater )
 	{
-		if ( cb
+		if ( m_commandBuffer
 			&& m_clipInfoValue.isDirty() )
 		{
-			doPrepareFrame( *cb, *m_timer, 0u );
+			auto & commands = *m_commandBuffer;
+			doPrepareFrame( commands, *m_timer, 0u );
+			m_clipInfoValue.reset();
 		}
-
-		m_clipInfoValue.reset();
-	}
-	
-	void LineariseDepthPass::gpuUpdate()
-	{
-		gpuUpdate( m_commandBuffer.get() );
 	}
 
 	ashes::Semaphore const & LineariseDepthPass::linearise( ashes::Semaphore const & toWait )const
