@@ -1,7 +1,7 @@
 #include "Castor3D/Render/Passes/StencilPass.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/PoolUniformBufferBase.hpp"
+#include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Camera.hpp"

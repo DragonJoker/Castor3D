@@ -2,7 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
-#include "Castor3D/Buffer/PoolUniformBufferBase.hpp"
+#include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"

@@ -3,7 +3,7 @@
 #include "Castor3D/Render/Passes/LineariseDepthPass.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/PoolUniformBufferBase.hpp"
+#include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"

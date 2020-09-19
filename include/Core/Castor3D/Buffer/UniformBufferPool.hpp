@@ -4,22 +4,24 @@ See LICENSE file in root folder
 #ifndef ___C3D_UniformBufferPool_HPP___
 #define ___C3D_UniformBufferPool_HPP___
 
+#include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
+
+#include <CastorUtils/Design/OwnedBy.hpp>
 
 #include <ashespp/Buffer/StagingBuffer.hpp>
 
 namespace castor3d
 {
-	template< typename DataT >
-	class UniformBufferPoolT
+	class UniformBufferPool
 		: public castor::OwnedBy< RenderSystem >
 	{
 	public:
 		struct Buffer
 		{
 			uint32_t index;
-			PoolUniformBufferUPtrT< DataT > buffer;
+			PoolUniformBufferUPtr buffer;
 		};
 		using BufferArray = std::vector< Buffer >;
 
@@ -34,7 +36,7 @@ namespace castor3d
 		 *\param[in]	renderSystem	Le RenderSystem.
 		 *\param[in]	debugName		Le nom debug du tampon.
 		 */
-		UniformBufferPoolT( RenderSystem & renderSystem
+		C3D_API UniformBufferPool( RenderSystem & renderSystem
 			, castor::String debugName );
 		/**
 		 *\~english
@@ -42,21 +44,21 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		~UniformBufferPoolT();
+		C3D_API ~UniformBufferPool();
 		/**
 		 *\~english
 		 *\brief		Cleans up all GPU buffers.
 		 *\~french
 		 *\brief		Nettoie tous les tampons GPU.
 		 */
-		void cleanup();
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Uploads all GPU buffers to VRAM.
 		 *\~french
 		 *\brief		Met à jour tous les tampons GPU en VRAM.
 		 */
-		void upload( ashes::CommandBuffer const & cb )const;
+		C3D_API void upload( ashes::CommandBuffer const & cb )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves a uniform buffer.
@@ -67,6 +69,7 @@ namespace castor3d
 		 *\param[in]	flags	Les indicateurs de mémoire du tampon.
 		 *\return		Le tampon d'uniformes.
 		 */
+		template< typename DataT >
 		UniformBufferOffsetT< DataT > getBuffer( VkMemoryPropertyFlags flags );
 		/**
 		 *\~english
@@ -76,6 +79,7 @@ namespace castor3d
 		 *\brief		Libère un tampon GPU.
 		 *\param[in]	bufferOffset	Le tampon à libérer.
 		 */
+		template< typename DataT >
 		void putBuffer( UniformBufferOffsetT< DataT > const & bufferOffset );
 		/**
 		 *\~english
@@ -83,10 +87,14 @@ namespace castor3d
 		 *\~french
 		 *\return		Le nombre de tampons du pool.
 		 */
-		uint32_t getBufferCount()const;
+		C3D_API uint32_t getBufferCount()const;
 
 	private:
-		typename BufferArray::iterator doFindBuffer( BufferArray & array );
+		C3D_API BufferArray::iterator doFindBuffer( BufferArray & array
+			, VkDeviceSize alignedSize );
+		C3D_API void doCreateStagingBuffer();
+		C3D_API BufferArray::iterator doCreatePoolBuffer( VkMemoryPropertyFlags flags
+			, UniformBufferPool::BufferArray & buffers );
 
 	private:
 		uint32_t m_maxUboElemCount{ 0u };

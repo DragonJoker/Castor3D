@@ -1,7 +1,7 @@
 #include "Castor3D/Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/PoolUniformBufferBase.hpp"
+#include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"

@@ -1,7 +1,7 @@
 #include "Castor3D/Render/ShadowMap/ShadowMapPassDirectional.hpp"
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
-#include "Castor3D/Buffer/PoolUniformBufferBase.hpp"
+#include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"

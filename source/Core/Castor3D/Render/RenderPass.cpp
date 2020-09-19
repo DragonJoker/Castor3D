@@ -1,7 +1,7 @@
 #include "Castor3D/Render/RenderPass.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/PoolUniformBufferBase.hpp"
+#include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
 #include "Castor3D/Cache/BillboardUboPools.hpp"
 #include "Castor3D/Cache/GeometryCache.hpp"

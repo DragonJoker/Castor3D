@@ -5,7 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_UniformBufferPools_HPP___
 
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
-#include "Castor3D/Buffer/UniformBufferPoolBase.hpp"
+#include "Castor3D/Buffer/UniformBufferPool.hpp"
 
 namespace castor3d
 {
@@ -83,7 +83,7 @@ namespace castor3d
 		static PoolType getPoolType();
 
 	private:
-		std::array< UniformBufferPoolBase, size_t( PoolType::eCount ) > m_pools;
+		std::array< UniformBufferPool, size_t( PoolType::eCount ) > m_pools;
 	};
 }
 

@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_UniformBufferOffset_HPP___
 #define ___C3D_UniformBufferOffset_HPP___
 
-#include "PoolUniformBufferBase.hpp"
+#include "PoolUniformBuffer.hpp"
 
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 #include <ashespp/Buffer/UniformBuffer.hpp>
@@ -15,14 +15,14 @@ namespace castor3d
 	struct UniformBufferOffsetT
 	{
 	private:
-		PoolUniformBufferBase * buffer{ nullptr };
+		PoolUniformBuffer * buffer{ nullptr };
 
 	public:
 		VkMemoryPropertyFlags flags{ 0u };
 		uint32_t offset{ 0u };
 		uint32_t range{ 0u };
 
-		void setPool( PoolUniformBufferBase & pool )
+		void setPool( PoolUniformBuffer & pool )
 		{
 			buffer = &pool;
 		}
@@ -43,12 +43,12 @@ namespace castor3d
 			return buffer->getData< DataT >( offset * buffer->getAlignedSize() );
 		}
 
-		PoolUniformBufferBase const & getPool()const
+		PoolUniformBuffer const & getPool()const
 		{
 			return *buffer;
 		}
 
-		PoolUniformBufferBase & getPool()
+		PoolUniformBuffer & getPool()
 		{
 			return *buffer;
 		}
@@ -71,7 +71,7 @@ namespace castor3d
 		void createSizedBinding( ashes::DescriptorSet & descriptorSet
 			, VkDescriptorSetLayoutBinding const & layoutBinding )const
 		{
-			auto & uniformBuffer = buffer->getBuffer();
+			auto & uniformBuffer = pool->getBuffer();
 			auto size = uniformBuffer.getAlignedSize();
 			descriptorSet.createBinding( layoutBinding
 				, uniformBuffer.getBuffer()

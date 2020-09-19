@@ -1,7 +1,7 @@
 #include "Castor3D/Render/ToneMapping/ToneMapping.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/PoolUniformBufferBase.hpp"
+#include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 

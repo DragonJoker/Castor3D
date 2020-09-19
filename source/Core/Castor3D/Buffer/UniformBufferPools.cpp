@@ -15,18 +15,18 @@ namespace castor3d
 		: castor::OwnedBy< RenderSystem >{ renderSystem }
 		, m_pools
 		{
-			UniformBufferPoolBase{ renderSystem, "Matrix" },
-			UniformBufferPoolBase{ renderSystem, "ModelMatrix" },
-			UniformBufferPoolBase{ renderSystem, "Model" },
-			UniformBufferPoolBase{ renderSystem, "Billboard" },
-			UniformBufferPoolBase{ renderSystem, "Skinning" },
-			UniformBufferPoolBase{ renderSystem, "Morphing" },
-			UniformBufferPoolBase{ renderSystem, "Picking" },
-			UniformBufferPoolBase{ renderSystem, "Textures" },
-			UniformBufferPoolBase{ renderSystem, "ShadowMap" },
-			UniformBufferPoolBase{ renderSystem, "HDRConfig" },
-			UniformBufferPoolBase{ renderSystem, "RSMConfig" },
-			UniformBufferPoolBase{ renderSystem, "Generic" },
+			UniformBufferPool{ renderSystem, "Matrix" },
+			UniformBufferPool{ renderSystem, "ModelMatrix" },
+			UniformBufferPool{ renderSystem, "Model" },
+			UniformBufferPool{ renderSystem, "Billboard" },
+			UniformBufferPool{ renderSystem, "Skinning" },
+			UniformBufferPool{ renderSystem, "Morphing" },
+			UniformBufferPool{ renderSystem, "Picking" },
+			UniformBufferPool{ renderSystem, "Textures" },
+			UniformBufferPool{ renderSystem, "ShadowMap" },
+			UniformBufferPool{ renderSystem, "HDRConfig" },
+			UniformBufferPool{ renderSystem, "RSMConfig" },
+			UniformBufferPool{ renderSystem, "Generic" },
 		}
 	{
 	}

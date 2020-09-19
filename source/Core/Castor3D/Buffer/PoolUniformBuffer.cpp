@@ -1,4 +1,4 @@
-#include "Castor3D/Buffer/PoolUniformBufferBase.hpp"
+#include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -7,7 +7,7 @@
 
 namespace castor3d
 {
-	PoolUniformBufferBase::PoolUniformBufferBase( RenderSystem const & renderSystem
+	PoolUniformBuffer::PoolUniformBuffer( RenderSystem const & renderSystem
 		, castor::ArrayView< uint8_t > data
 		, VkBufferUsageFlags usage
 		, VkMemoryPropertyFlags flags
@@ -20,13 +20,13 @@ namespace castor3d
 		, m_debugName{ std::move( debugName ) }
 		, m_data{ std::move( data ) }
 	{
-		if ( renderSystem.hasCurrentRenderDevice() )
+		if ( m_renderSystem.hasCurrentRenderDevice() )
 		{
 			initialise();
 		}
 	}
 
-	uint32_t PoolUniformBufferBase::initialise()
+	uint32_t PoolUniformBuffer::initialise()
 	{
 		CU_Require( m_renderSystem.hasCurrentRenderDevice() );
 		auto & device = getCurrentRenderDevice( m_renderSystem );
@@ -45,19 +45,19 @@ namespace castor3d
 		return uint32_t( m_buffer->getBuffer().getSize() );
 	}
 
-	void PoolUniformBufferBase::cleanup()
+	void PoolUniformBuffer::cleanup()
 	{
 		CU_Require( m_renderSystem.hasCurrentRenderDevice() );
 		m_buffer.reset();
 	}
 
-	bool PoolUniformBufferBase::hasAvailable( VkDeviceSize size )const
+	bool PoolUniformBuffer::hasAvailable( VkDeviceSize size )const
 	{
 		return m_allocated.empty()
 			|| m_buffer->getBuffer().getSize() >+ ( m_allocated.rbegin()->offset + m_allocated.rbegin()->size + getAlignedSize( uint32_t( size ) ) );
 	}
 
-	MemChunk PoolUniformBufferBase::allocate( VkDeviceSize size )
+	MemChunk PoolUniformBuffer::allocate( VkDeviceSize size )
 	{
 		CU_Require( hasAvailable( size ) );
 		auto & properties = m_renderSystem.getProperties();
@@ -70,7 +70,7 @@ namespace castor3d
 		return { offset / elemSize, size / elemSize };
 	}
 
-	void PoolUniformBufferBase::deallocate( VkDeviceSize offset )
+	void PoolUniformBuffer::deallocate( VkDeviceSize offset )
 	{
 		auto & properties = m_renderSystem.getProperties();
 		auto elemSize = properties.limits.minUniformBufferOffsetAlignment;

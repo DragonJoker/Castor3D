@@ -84,22 +84,7 @@ namespace castor3d
 	*	Alloué depuis un pool.
 	*\remark
 	*/
-	class PoolUniformBufferBase;
-	/**
-	*\~english
-	*\brief
-	*	A uniform typed buffer, than can contain multiple sub-buffers.
-	*\remarks
-	*	Allocated from a pool.
-	*\~french
-	*\brief
-	*	Un tampon typé d'uniformes, pouvant contenir de multiples sous-tampons.
-	*\remarks
-	*	Alloué depuis un pool.
-	*\remark
-	*/
-	template< typename DataT >
-	class PoolUniformBufferT;
+	class PoolUniformBuffer;
 	/**
 	*\~english
 	*\brief
@@ -116,35 +101,24 @@ namespace castor3d
 	*	Uniform buffer pool implementation.
 	*\~french
 	*\brief
-	*	Implémentation d'un pool de tampon d'uniformes.
+	*	Implémentation d'un pool d'uniform buffers.
 	*/
-	class UniformBufferPoolBase;
+	class UniformBufferPool;
 	/**
 	*\~english
 	*\brief
-	*	Uniform buffer pool implementation.
+	*	Regroups all uniform buffer pools.
 	*\~french
 	*\brief
-	*	Implémentation d'un pool de tampon d'uniformes.
-	*/
-	template< typename DataT >
-	class UniformBufferPoolT;
-	/**
-	*\~english
-	*\brief
-	*	Uniform buffer pools implementation.
-	*\~french
-	*\brief
-	*	Implémentation ddu pool de pools de tampon d'uniformes.
+	*	Regroupe les pools d'uniform buffers.
 	*/
 	class UniformBufferPools;
 
-	CU_DeclareSmartPtr( PoolUniformBufferBase );
 	CU_DeclareSmartPtr( UniformBufferBase );
 	CU_DeclareSmartPtr( UniformBufferPools );
+	CU_DeclareSmartPtr( PoolUniformBuffer );
+	CU_DeclareSmartPtr( UniformBufferPool );
 	CU_DeclareTemplateSmartPtr( UniformBuffer );
-	CU_DeclareTemplateSmartPtr( PoolUniformBuffer );
-	CU_DeclareTemplateSmartPtr( UniformBufferPool );
 
 	using GpuBufferBuddyAllocator = castor::BuddyAllocatorT< GpuBufferBuddyAllocatorTraits >;
 	using GpuBufferBuddyAllocatorUPtr = std::unique_ptr< GpuBufferBuddyAllocator >;

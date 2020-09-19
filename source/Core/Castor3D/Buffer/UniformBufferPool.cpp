@@ -1,4 +1,4 @@
-#include "Castor3D/Buffer/UniformBufferPoolBase.hpp"
+#include "Castor3D/Buffer/UniformBufferPool.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Event/Frame/FunctorEvent.hpp"
@@ -35,18 +35,18 @@ namespace castor3d
 		}
 	}
 
-	UniformBufferPoolBase::UniformBufferPoolBase( RenderSystem & renderSystem
+	UniformBufferPool::UniformBufferPool( RenderSystem & renderSystem
 		, castor::String debugName )
 		: castor::OwnedBy< RenderSystem >{ renderSystem }
 		, m_debugName{ std::move( debugName ) }
 	{
 	}
 
-	UniformBufferPoolBase::~UniformBufferPoolBase()
+	UniformBufferPool::~UniformBufferPool()
 	{
 	}
 
-	void UniformBufferPoolBase::cleanup()
+	void UniformBufferPool::cleanup()
 	{
 		m_buffers.clear();
 
@@ -57,7 +57,7 @@ namespace castor3d
 		}
 	}
 
-	void UniformBufferPoolBase::upload( ashes::CommandBuffer const & commandBuffer )const
+	void UniformBufferPool::upload( ashes::CommandBuffer const & commandBuffer )const
 	{
 		if ( m_stagingBuffer )
 		{
@@ -87,7 +87,7 @@ namespace castor3d
 		}
 	}
 
-	uint32_t UniformBufferPoolBase::getBufferCount()const
+	uint32_t UniformBufferPool::getBufferCount()const
 	{
 		if ( !m_stagingBuffer )
 		{
@@ -104,7 +104,7 @@ namespace castor3d
 		return result;
 	}
 
-	UniformBufferPoolBase::BufferArray::iterator UniformBufferPoolBase::doFindBuffer( UniformBufferPoolBase::BufferArray & array
+	UniformBufferPool::BufferArray::iterator UniformBufferPool::doFindBuffer( UniformBufferPool::BufferArray & array
 		, VkDeviceSize alignedSize )
 	{
 		auto it = array.begin();
@@ -117,7 +117,7 @@ namespace castor3d
 		return it;
 	}
 
-	void UniformBufferPoolBase::doCreateStagingBuffer()
+	void UniformBufferPool::doCreateStagingBuffer()
 	{
 		auto & renderSystem = *getRenderSystem();
 		auto & device = *renderSystem.getMainRenderDevice();
@@ -144,8 +144,8 @@ namespace castor3d
 		assert( m_stagingData );
 	}
 
-	UniformBufferPoolBase::BufferArray::iterator UniformBufferPoolBase::doCreatePoolBuffer( VkMemoryPropertyFlags flags
-		, UniformBufferPoolBase::BufferArray & buffers )
+	UniformBufferPool::BufferArray::iterator UniformBufferPool::doCreatePoolBuffer( VkMemoryPropertyFlags flags
+		, UniformBufferPool::BufferArray & buffers )
 	{
 		auto & renderSystem = *getRenderSystem();
 		auto & device = *renderSystem.getMainRenderDevice();
@@ -158,7 +158,7 @@ namespace castor3d
 			}
 		};
 		auto index = m_maxUboSize * m_currentUboIndex;
-		auto buffer = makePoolUniformBufferBase( renderSystem
+		auto buffer = makePoolUniformBuffer( renderSystem
 			, castor::makeArrayView( m_stagingData + index
 				, m_stagingData + index + m_maxUboSize )
 			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
