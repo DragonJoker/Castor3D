@@ -48,7 +48,7 @@ install:
 
 build_script:
   - ps: cd $PROJECT_DIR/build
-  - ps: if ($isLinux) {cmake --build . --target install --parallel 4}
+  - ps: if ($isLinux) {ninja install -j4}
   - ps: if (!$isLinux) {cmake --build . --target install --parallel 4 --config $CONFIGURATION}
 
 after_build:
