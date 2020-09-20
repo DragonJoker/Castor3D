@@ -85,6 +85,8 @@ namespace castor3d
 		ashes::QueuePtr graphicsQueue{ nullptr };
 		ashes::QueuePtr computeQueue{ nullptr };
 		ashes::QueuePtr transferQueue{ nullptr };
+		GpuBufferPoolSPtr bufferPool;
+		UniformBufferPoolsSPtr uboPools;
 
 		static constexpr size_t GraphicsIdx = 0u;
 		static constexpr size_t PresentIdx = 1u;

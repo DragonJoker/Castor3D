@@ -877,7 +877,7 @@ namespace smaa
 		VkExtent2D size{ m_edgeDetectionView.image->getDimensions().width
 			, m_edgeDetectionView.image->getDimensions().height };
 
-		m_ubo = m_renderSystem.getEngine()->getUboPools().getBuffer< castor::Point4f >( 0u );
+		m_ubo = getCurrentRenderDevice( m_renderSystem ).uboPools->getBuffer< castor::Point4f >( 0u );
 		
 		ashes::ImageCreateInfo image
 		{
@@ -1033,7 +1033,7 @@ namespace smaa
 		m_searchTex.reset();
 		m_areaTex->cleanup();
 		m_areaTex.reset();
-		m_renderSystem.getEngine()->getUboPools().putBuffer( m_ubo );
+		getCurrentRenderDevice( m_renderSystem ).uboPools->putBuffer( m_ubo );
 		m_pointSampler.reset();
 		m_surface.cleanup();
 		m_renderPass.reset();;

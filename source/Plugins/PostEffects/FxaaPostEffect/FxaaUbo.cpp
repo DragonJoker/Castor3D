@@ -16,7 +16,7 @@ namespace fxaa
 	FxaaUbo::FxaaUbo( castor3d::Engine & engine
 		, castor::Size const & size )
 		: m_engine{ engine }
-		, m_ubo{ engine.getUboPools().getBuffer< Configuration >( 0u ) }
+		, m_ubo{ getCurrentRenderDevice( m_engine ).uboPools->getBuffer< Configuration >( 0u ) }
 	{
 		auto & data = m_ubo.getData();
 		data.pixelSize = castor::Point2f{ 1.0f / size.getWidth(), 1.0f / size.getHeight() };
@@ -24,7 +24,7 @@ namespace fxaa
 
 	FxaaUbo::~FxaaUbo()
 	{
-		m_engine.getUboPools().putBuffer( m_ubo );
+		getCurrentRenderDevice( m_engine ).uboPools->putBuffer( m_ubo );
 	}
 
 	void FxaaUbo::cpuUpdate( float shift

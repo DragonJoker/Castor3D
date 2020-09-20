@@ -1,6 +1,7 @@
 #include "Castor3D/Render/Passes/LineariseDepthPass.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
@@ -388,21 +389,22 @@ namespace castor3d
 			, cuT( "Linearise depth" ) );
 		m_renderPass = doCreateRenderPass( m_engine );
 		m_vertexBuffer = doCreateVertexBuffer( m_engine );
-		m_lineariseSampler = getCurrentRenderDevice( m_engine )->createSampler( m_prefix + "LineariseDepthLinearise"
+		auto & device = getCurrentRenderDevice( m_engine );
+		m_lineariseSampler = device->createSampler( m_prefix + "LineariseDepthLinearise"
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_FILTER_NEAREST
 			, VK_FILTER_NEAREST );
-		m_minifySampler = getCurrentRenderDevice( m_engine )->createSampler( m_prefix + "MinifyDepth"
+		m_minifySampler = device->createSampler( m_prefix + "MinifyDepth"
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_FILTER_NEAREST
 			, VK_FILTER_NEAREST );
-		m_commandBuffer = getCurrentRenderDevice( m_engine ).graphicsCommandPool->createCommandBuffer( m_prefix + "LineariseDepth" );
-		m_finished = getCurrentRenderDevice( m_engine )->createSemaphore( m_prefix + "LineariseDepth" );
-		m_clipInfo = m_engine.getUboPools().getBuffer< Point3f >( 0u );
+		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( m_prefix + "LineariseDepth" );
+		m_finished = device->createSemaphore( m_prefix + "LineariseDepth" );
+		m_clipInfo = device.uboPools->getBuffer< Point3f >( 0u );
 		doInitialiseLinearisePass();
 		doInitialiseMinifyPass();
 	}
@@ -411,7 +413,8 @@ namespace castor3d
 	{
 		doCleanupMinifyPass();
 		doCleanupLinearisePass();
-		m_engine.getUboPools().putBuffer( m_clipInfo );
+		auto & device = getCurrentRenderDevice( m_engine );
+		device.uboPools->putBuffer( m_clipInfo );
 		m_finished.reset();
 		m_commandBuffer.reset();
 		m_minifySampler.reset();
@@ -609,7 +612,7 @@ namespace castor3d
 
 		for ( auto & pipeline : m_minifyPipelines )
 		{
-			m_previousLevel.push_back( m_engine.getUboPools().getBuffer< MinifyConfiguration >( 0u ) );
+			m_previousLevel.push_back( device.uboPools->getBuffer< MinifyConfiguration >( 0u ) );
 			auto & previousLevel = m_previousLevel.back();
 			auto & data = previousLevel.getData();
 			data.previousLevel = index;
@@ -679,9 +682,11 @@ namespace castor3d
 			pipeline.descriptor.reset();
 		}
 
+		auto & device = getCurrentRenderDevice( m_engine );
+
 		for ( auto & ubo : m_previousLevel )
 		{
-			m_engine.getUboPools().putBuffer( ubo );
+			device.uboPools->putBuffer( ubo );
 		}
 
 		m_previousLevel.clear();

@@ -1,6 +1,7 @@
 #include "Castor3D/Render/ToTexture/RenderCube.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"

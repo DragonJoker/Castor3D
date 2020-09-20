@@ -7,7 +7,6 @@ See LICENSE file in root folder
 #include "RenderModule.hpp"
 #include "Castor3D/Overlay/OverlayModule.hpp"
 
-#include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Miscellaneous/DebugCallbacks.hpp"
 #include "Castor3D/Miscellaneous/GpuInformations.hpp"
 #include "Castor3D/Miscellaneous/GpuObjectTracker.hpp"
@@ -20,8 +19,6 @@ namespace castor3d
 	class RenderSystem
 		: public castor::OwnedBy< Engine >
 	{
-		friend class GpuBufferPool;
-
 	public:
 		/**
 		 *\~english
@@ -316,16 +313,6 @@ namespace castor3d
 		{
 			return m_desc;
 		}
-
-		inline GpuBufferPool const & getBufferPool()const
-		{
-			return m_gpuBufferPool;
-		}
-
-		inline GpuBufferPool & getBufferPool()
-		{
-			return m_gpuBufferPool;
-		}
 		/**@}*/
 		/**
 		*\~english
@@ -384,7 +371,6 @@ namespace castor3d
 		RenderDevice const * m_currentDevice{ nullptr };
 		std::stack< SceneRPtr > m_stackScenes;
 		castor::Nanoseconds m_gpuTime;
-		GpuBufferPool m_gpuBufferPool;
 	};
 }
 

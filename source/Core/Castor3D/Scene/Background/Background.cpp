@@ -1,6 +1,7 @@
 #include "Castor3D/Scene/Background/Background.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"

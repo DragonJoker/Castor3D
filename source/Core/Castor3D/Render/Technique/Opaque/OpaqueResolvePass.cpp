@@ -1,6 +1,7 @@
 #include "Castor3D/Render/Technique/Opaque/OpaqueResolvePass.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"

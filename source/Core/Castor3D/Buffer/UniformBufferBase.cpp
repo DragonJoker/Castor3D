@@ -1,5 +1,6 @@
 #include "Castor3D/Buffer/UniformBufferBase.hpp"
 
+#include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 

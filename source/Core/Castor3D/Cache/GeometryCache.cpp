@@ -150,15 +150,15 @@ namespace castor3d
 
 	void GeometryCache::clear()
 	{
-		auto & pools = getEngine()->getUboPools();
 		MyObjectCache::clear();
+		auto & uboPools = *getCurrentRenderDevice( *getEngine() ).uboPools;
 
 		for ( auto & entry : m_entries )
 		{
-			pools.putBuffer( entry.second.modelUbo );
-			pools.putBuffer( entry.second.modelMatrixUbo );
-			pools.putBuffer( entry.second.pickingUbo );
-			pools.putBuffer( entry.second.texturesUbo );
+			uboPools.putBuffer( entry.second.modelUbo );
+			uboPools.putBuffer( entry.second.modelMatrixUbo );
+			uboPools.putBuffer( entry.second.pickingUbo );
+			uboPools.putBuffer( entry.second.texturesUbo );
 		}
 
 		m_entries.clear();
@@ -206,16 +206,16 @@ namespace castor3d
 		, Submesh const & submesh
 		, Pass const & pass )
 	{
-		auto & pools = getEngine()->getUboPools();
+		auto & uboPools = *getCurrentRenderDevice( *getEngine() ).uboPools;
 		return
 		{
 			geometry,
 			submesh,
 			pass,
-			pools.getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ),
-			pools.getBuffer< ModelMatrixUboConfiguration>( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ),
-			pools.getBuffer< PickingUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ),
-			pools.getBuffer< TexturesUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ),
+			uboPools.getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ),
+			uboPools.getBuffer< ModelMatrixUboConfiguration>( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ),
+			uboPools.getBuffer< PickingUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ),
+			uboPools.getBuffer< TexturesUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ),
 		};
 	}
 
@@ -223,13 +223,13 @@ namespace castor3d
 		, Submesh const & submesh
 		, Pass const & pass )
 	{
-		auto & pools = getEngine()->getUboPools();
 		auto entry = getUbos( geometry, submesh, pass );
+		auto & uboPools = *getCurrentRenderDevice( *getEngine() ).uboPools;
 		m_entries.erase( hash( geometry, submesh, pass ) );
-		pools.putBuffer( entry.modelUbo );
-		pools.putBuffer( entry.modelMatrixUbo );
-		pools.putBuffer( entry.pickingUbo );
-		pools.putBuffer( entry.texturesUbo );
+		uboPools.putBuffer( entry.modelUbo );
+		uboPools.putBuffer( entry.modelMatrixUbo );
+		uboPools.putBuffer( entry.pickingUbo );
+		uboPools.putBuffer( entry.texturesUbo );
 	}
 
 	void GeometryCache::doRegister( Geometry & geometry )

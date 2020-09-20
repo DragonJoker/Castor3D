@@ -66,6 +66,7 @@ namespace castor3d
 		 *\param[in]	target			La vue de texture cible.
 		 */
 		C3D_API OverlayRenderer( RenderSystem & renderSystem
+			, UniformBufferPools & uboPools
 			, ashes::ImageView const & target );
 		/**
 		 *\~english
@@ -202,6 +203,7 @@ namespace castor3d
 			using Quad = std::array< VertexT, CountT >;
 
 			VertexBufferPool( Engine & engine
+				, UniformBufferPools & uboPools
 				, RenderDevice const & device
 				, ashes::PipelineVertexInputStateCreateInfo const & declaration
 				, uint32_t count );
@@ -210,6 +212,7 @@ namespace castor3d
 			void upload();
 
 			Engine & engine;
+			UniformBufferPools & uboPools;
 			uint32_t const maxCount;
 			std::vector< Quad > data;
 			ashes::PipelineVertexInputStateCreateInfo const & declaration;
@@ -272,6 +275,7 @@ namespace castor3d
 		void doCreateRenderPass();
 
 	private:
+		UniformBufferPools & m_uboPools;
 		ashes::ImageView const & m_target;
 		ashes::CommandBufferPtr m_commandBuffer;
 		std::vector< std::unique_ptr< PanelVertexBufferPool > > m_panelVertexBuffers;

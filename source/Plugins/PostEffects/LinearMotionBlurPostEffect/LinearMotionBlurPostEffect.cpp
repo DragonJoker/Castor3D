@@ -248,7 +248,7 @@ namespace motion_blur
 		m_renderPass = device->createRenderPass( "LinearMotionBlur"
 			, std::move( createInfo ) );
 
-		m_ubo = renderSystem.getEngine()->getUboPools().getBuffer< Configuration >( 0u );
+		m_ubo = device.uboPools->getBuffer< Configuration >( 0u );
 		auto & configuration = m_ubo.getData();
 		configuration.samplesCount = m_configuration.samplesCount;
 		configuration.vectorDivider = m_configuration.vectorDivider;
@@ -314,7 +314,7 @@ namespace motion_blur
 	{
 		m_quad.reset();
 		auto & renderSystem = *getRenderSystem();
-		renderSystem.getEngine()->getUboPools().putBuffer( m_ubo );
+		getCurrentRenderDevice( renderSystem ).uboPools->putBuffer( m_ubo );
 		m_renderPass.reset();
 		m_surface.cleanup();
 	}

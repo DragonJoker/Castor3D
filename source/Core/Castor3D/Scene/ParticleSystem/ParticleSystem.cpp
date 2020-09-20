@@ -1,6 +1,7 @@
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Cache/BillboardUboPools.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Render/RenderLoop.hpp"

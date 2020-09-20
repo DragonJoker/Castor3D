@@ -239,7 +239,6 @@ namespace castor3d
 			, lpResult
 			, gpInfoUbo
 			, hasShadows }
-		, m_modelMatrixUbo{ engine.getUboPools().getBuffer< ModelMatrixUboConfiguration >( 0u ) }
 		, m_stencilPass{ engine
 			, getName()
 			, lpResult[LpTexture::eDepth].getTexture()->getDefaultView().getTargetView()
@@ -291,7 +290,8 @@ namespace castor3d
 		}
 
 		m_stencilPass.initialise( declaration, *m_vertexBuffer );
-
+		m_matrixUbo.initialise();
+		m_modelMatrixUbo = device.uboPools->getBuffer< ModelMatrixUboConfiguration >( 0u );
 		doInitialise( scene
 			, gp
 			, m_type
@@ -307,7 +307,7 @@ namespace castor3d
 		doCleanup();
 		m_stencilPass.cleanup();
 		m_vertexBuffer.reset();
-		m_engine.getUboPools().putBuffer( m_modelMatrixUbo );
+		getCurrentRenderDevice( m_engine ).uboPools->putBuffer( m_modelMatrixUbo );
 		m_matrixUbo.cleanup();
 	}
 

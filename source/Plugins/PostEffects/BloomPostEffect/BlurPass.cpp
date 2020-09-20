@@ -149,7 +149,7 @@ namespace Bloom
 
 			for ( auto i = 0u; i < blurPassesCount; ++i )
 			{
-				auto ubo = device.renderSystem.getEngine()->getUboPools().getBuffer< castor3d::GaussianBlur::Configuration >( 0u );
+				auto ubo = device.uboPools->getBuffer< castor3d::GaussianBlur::Configuration >( 0u );
 				auto & data = ubo.getData();
 				data.textureSize = castor::Point2f
 				{

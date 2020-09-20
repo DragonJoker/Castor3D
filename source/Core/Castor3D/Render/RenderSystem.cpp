@@ -1,4 +1,5 @@
 #include "Castor3D/Render/RenderSystem.hpp"
+
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Shader/GlslToSpv.hpp"
 
@@ -411,7 +412,6 @@ namespace castor3d
 		, m_desc{ std::move( desc ) }
 		, m_initialised{ false }
 		, m_gpuInformations{}
-		, m_gpuBufferPool{ *this, cuT( "GlobalPool" ) }
 	{
 		auto & rendererList = engine.getRenderersList();
 		auto plugin = rendererList.selectPlugin( desc.name );

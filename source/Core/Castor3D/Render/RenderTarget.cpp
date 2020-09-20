@@ -289,6 +289,7 @@ namespace castor3d
 			}
 
 			m_overlayRenderer = std::make_shared< OverlayRenderer >( *getEngine()->getRenderSystem()
+				, *device.uboPools
 				, m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView().getTargetView() );
 			m_overlayRenderer->initialise();
 

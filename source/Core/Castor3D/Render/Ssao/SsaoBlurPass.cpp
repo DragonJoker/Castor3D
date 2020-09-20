@@ -511,7 +511,7 @@ namespace castor3d
 		, m_fbo{ doCreateFrameBuffer( m_engine, getName(), *m_renderPass, m_result ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, cuT( "Scalable Ambient Obscurance" ), prefix + cuT( " Blur" ) ) }
 		, m_finished{ getCurrentRenderDevice( m_engine )->createSemaphore( getName() ) }
-		, m_configurationUbo{ m_engine.getUboPools().getBuffer< Configuration >( 0u ) }
+		, m_configurationUbo{ getCurrentRenderDevice( m_engine ).uboPools->getBuffer< Configuration >( 0u ) }
 	{
 		auto & device = getCurrentRenderDevice( m_renderSystem );
 		auto & configuration = m_configurationUbo.getData();

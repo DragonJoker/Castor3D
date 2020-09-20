@@ -1,6 +1,7 @@
 #include "Castor3D/Overlay/OverlayRenderer.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
@@ -275,6 +276,7 @@ namespace castor3d
 				if ( it == overlays.end() )
 				{
 					pools.emplace_back( std::make_unique< VertexBufferPoolT >( engine
+						, *device.uboPools
 						, device
 						, layout
 						, maxCount ) );
@@ -374,10 +376,12 @@ namespace castor3d
 
 	template< typename VertexT, uint32_t CountT >
 	OverlayRenderer::VertexBufferPool< VertexT, CountT >::VertexBufferPool( Engine & engine
+		, UniformBufferPools & uboPools
 		, RenderDevice const & device
 		, ashes::PipelineVertexInputStateCreateInfo const & decl
 		, uint32_t count )
 		: engine{ engine }
+		, uboPools{ uboPools }
 		, maxCount{ count }
 		, data{ count, Quad{} }
 		, declaration{ decl }
@@ -402,8 +406,8 @@ namespace castor3d
 
 		if ( !free.empty() )
 		{
-			result.overlayUbo = engine.getUboPools().getBuffer< Configuration >( 0u );
-			result.texturesUbo = engine.getUboPools().getBuffer< TexturesUbo::Configuration >( 0u );
+			result.overlayUbo = uboPools.getBuffer< Configuration >( 0u );
+			result.texturesUbo = uboPools.getBuffer< TexturesUbo::Configuration >( 0u );
 			result.index = *free.begin();
 			result.geometryBuffers.noTexture.vbo.emplace_back( buffer->getBuffer() );
 			result.geometryBuffers.noTexture.layouts.emplace_back( declaration );
@@ -428,6 +432,8 @@ namespace castor3d
 		index.geometryBuffers.textured.layouts.clear();
 		index.geometryBuffers.textured.vboOffsets.clear();
 		free.insert( index.index );
+		uboPools.putBuffer( index.overlayUbo );
+		uboPools.putBuffer( index.texturesUbo );
 	}
 
 	template< typename VertexT, uint32_t CountT >
@@ -446,8 +452,10 @@ namespace castor3d
 	//*********************************************************************************************
 
 	OverlayRenderer::OverlayRenderer( RenderSystem & renderSystem
+		, UniformBufferPools & uboPools
 		, ashes::ImageView const & target )
 		: OwnedBy< RenderSystem >( renderSystem )
+		, m_uboPools{ uboPools }
 		, m_target{ target }
 		, m_matrixUbo{ *renderSystem.getEngine() }
 		, m_declaration
@@ -502,18 +510,21 @@ namespace castor3d
 
 		// Create one panel overlays buffer pool
 		m_panelVertexBuffers.emplace_back( std::make_unique< PanelVertexBufferPool >( *getRenderSystem()->getEngine()
+			, m_uboPools
 			, device
 			, m_declaration
 			, MaxPanelsPerBuffer ) );
 
 		// Create one border overlays buffer pool
 		m_borderVertexBuffers.emplace_back( std::make_unique< BorderPanelVertexBufferPool >( *getRenderSystem()->getEngine()
+			, m_uboPools
 			, device
 			, m_declaration
 			, MaxPanelsPerBuffer ) );
 
 		// create one text overlays buffer
 		m_textVertexBuffers.emplace_back( std::make_unique< TextVertexBufferPool >( *getRenderSystem()->getEngine()
+			, m_uboPools
 			, device
 			, m_textDeclaration
 			, MaxPanelsPerBuffer ) );

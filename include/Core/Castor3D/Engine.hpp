@@ -211,13 +211,6 @@ namespace castor3d
 			, TextureLayout const & texture );
 		/**
 		 *\~english
-		 *\brief		Transfers UBO pools data to VRAM.
-		 *\~french
-		 *\brief		Transfère en VRAM les données des pools d'UBO.
-		 */
-		C3D_API void uploadUbos( ashes::CommandBuffer const & commandBuffer );
-		/**
-		 *\~english
 		 *\brief		Retrieves plug-ins path
 		 *\return		The plug-ins path
 		 *\~french
@@ -422,11 +415,6 @@ namespace castor3d
 		{
 			return *m_logger;
 		}
-
-		inline UniformBufferPools & getUboPools()
-		{
-			return *m_uboPools;
-		}
 		/**@}*/
 		/**
 		*\~english
@@ -492,8 +480,6 @@ namespace castor3d
 		bool m_enableValidation{ false };
 		bool m_enableApiTrace{ false };
 		RenderDepthQuadSPtr m_renderDepth;
-		ashes::CommandBufferPtr m_uploadCommandBuffer;
-		UniformBufferPoolsSPtr m_uboPools;
 	};
 }
 

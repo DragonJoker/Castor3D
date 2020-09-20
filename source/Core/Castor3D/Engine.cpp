@@ -1,6 +1,5 @@
 #include "Castor3D/Engine.hpp"
 
-#include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Cache/ListenerCache.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/PluginCache.hpp"
@@ -268,14 +267,6 @@ namespace castor3d
 			postEvent( makeInitialiseEvent( *m_defaultSampler ) );
 		}
 
-		postEvent( makeFunctorEvent( EventType::ePreRender
-			, [this]()
-			{
-				auto & device = getCurrentRenderDevice( *this );
-				m_uploadCommandBuffer = device.graphicsCommandPool->createCommandBuffer( "UboPoolsUpload" );
-			} ) );
-		m_uboPools = std::make_shared< UniformBufferPools >( *m_renderSystem );
-
 		if ( threaded )
 		{
 			m_renderLoop = std::make_unique< RenderLoopAsync >( *this, wanted );
@@ -308,15 +299,6 @@ namespace castor3d
 			m_materialCache->cleanup();
 			m_shaderCache->cleanup();
 
-			if ( m_uploadCommandBuffer )
-			{
-				postEvent( makeFunctorEvent( EventType::ePreRender
-					, [this]()
-					{
-						m_uploadCommandBuffer.reset();
-					} ) );
-			}
-
 			if ( m_lightsSampler )
 			{
 				postEvent( makeCleanupEvent( *m_lightsSampler ) );
@@ -330,7 +312,6 @@ namespace castor3d
 			m_techniqueCache->cleanup();
 
 			m_renderLoop.reset();
-			m_uboPools.reset();
 
 			m_targetCache->clear();
 			m_samplerCache->clear();
@@ -542,11 +523,6 @@ namespace castor3d
 				, size
 				, texture );
 		}
-	}
-
-	void Engine::uploadUbos( ashes::CommandBuffer const & commandBuffer )
-	{
-		m_uboPools->upload( commandBuffer );
 	}
 
 	void Engine::doLoadCoreData()

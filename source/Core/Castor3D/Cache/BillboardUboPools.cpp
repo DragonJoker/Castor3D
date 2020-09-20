@@ -109,44 +109,43 @@ namespace castor3d
 
 	void BillboardUboPools::clear()
 	{
-		auto & pools = m_renderSystem.getEngine()->getUboPools();
-
+		auto & uboPools = *getCurrentRenderDevice( m_renderSystem ).uboPools;
 		for ( auto & entry : m_entries )
 		{
-			pools.putBuffer( entry.second.modelUbo );
-			pools.putBuffer( entry.second.modelMatrixUbo );
-			pools.putBuffer( entry.second.billboardUbo );
-			pools.putBuffer( entry.second.pickingUbo );
-			pools.putBuffer( entry.second.texturesUbo );
+			uboPools.putBuffer( entry.second.modelUbo );
+			uboPools.putBuffer( entry.second.modelMatrixUbo );
+			uboPools.putBuffer( entry.second.billboardUbo );
+			uboPools.putBuffer( entry.second.pickingUbo );
+			uboPools.putBuffer( entry.second.texturesUbo );
 		}
 	}
 	
 	BillboardUboPools::PoolsEntry BillboardUboPools::doCreateEntry( BillboardBase const & billboard
 		, Pass const & pass )
 	{
-		auto & pools = m_renderSystem.getEngine()->getUboPools();
+		auto & uboPools = *getCurrentRenderDevice( m_renderSystem ).uboPools;
 		return
 		{
 			billboard,
 			pass,
-			pools.getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ),
-			pools.getBuffer< ModelMatrixUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ),
-			pools.getBuffer< BillboardUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ),
-			pools.getBuffer< PickingUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ),
-			pools.getBuffer< TexturesUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ),
+			uboPools.getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ),
+			uboPools.getBuffer< ModelMatrixUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ),
+			uboPools.getBuffer< BillboardUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ),
+			uboPools.getBuffer< PickingUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ),
+			uboPools.getBuffer< TexturesUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ),
 		};
 	}
 
 	void BillboardUboPools::doRemoveEntry( BillboardBase const & billboard
 		, Pass const & pass )
 	{
-		auto & pools = m_renderSystem.getEngine()->getUboPools();
+		auto & uboPools = *getCurrentRenderDevice( m_renderSystem ).uboPools;
 		auto entry = getUbos( billboard, pass );
 		m_entries.erase( hash( billboard, pass ) );
-		pools.putBuffer( entry.modelUbo );
-		pools.putBuffer( entry.modelMatrixUbo );
-		pools.putBuffer( entry.billboardUbo );
-		pools.putBuffer( entry.pickingUbo );
-		pools.putBuffer( entry.texturesUbo );
+		uboPools.putBuffer( entry.modelUbo );
+		uboPools.putBuffer( entry.modelMatrixUbo );
+		uboPools.putBuffer( entry.billboardUbo );
+		uboPools.putBuffer( entry.pickingUbo );
+		uboPools.putBuffer( entry.texturesUbo );
 	}
 }

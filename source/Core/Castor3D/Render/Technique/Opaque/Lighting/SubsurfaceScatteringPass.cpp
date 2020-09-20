@@ -464,7 +464,7 @@ namespace castor3d
 		, m_geometryBufferResult{ gpResult }
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_sceneUbo{ sceneUbo }
-		, m_blurUbo{ renderSystem.getEngine()->getUboPools().getBuffer< BlurConfiguration >( 0u ) }
+		, m_blurUbo{ getCurrentRenderDevice( renderSystem ).uboPools->getBuffer< BlurConfiguration >( 0u ) }
 		, m_renderPass{ doCreateRenderPass( getCurrentRenderDevice( renderSystem ), destination.getTexture()->getPixelFormat(), "SubscatteringBlur" ) }
 		, m_frameBuffer{ doCreateFrameBuffer( getCurrentRenderDevice( renderSystem ), *m_renderPass, size, destination.getTexture()->getDefaultView().getTargetView(), "SubscatteringBlur" ) }
 	{
@@ -567,7 +567,7 @@ namespace castor3d
 		, ashes::PipelineShaderStageCreateInfoArray const & shaderStages )
 		: RenderQuad{ renderSystem, cuT( "SubscatteringCombine" ), VK_FILTER_LINEAR, { ashes::nullopt, RenderQuadConfig::Texcoord{} } }
 		, m_renderSystem{ renderSystem }
-		, m_blurUbo{ renderSystem.getEngine()->getUboPools().getBuffer< BlurWeights >( 0u ) }
+		, m_blurUbo{ getCurrentRenderDevice( renderSystem ).uboPools->getBuffer< BlurWeights >( 0u ) }
 		, m_geometryBufferResult{ gpResult }
 		, m_source{ source }
 		, m_blurResults{ blurResults }
