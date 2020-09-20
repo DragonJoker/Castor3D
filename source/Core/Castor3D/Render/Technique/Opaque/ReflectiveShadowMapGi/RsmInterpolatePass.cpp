@@ -567,14 +567,12 @@ namespace castor3d
 		RenderPassTimerBlock timerBlock{ m_timer->start() };
 		timerBlock->notifyPassRender();
 		auto * result = &toWait;
-		auto fence = device->createFence( getName() );
 
 		device.graphicsQueue->submit( *m_commandBuffer
 			, toWait
 			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, *m_finished
-			, fence.get() );
-		fence->wait( ashes::MaxTimeout );
+			, nullptr );
 		result = m_finished.get();
 
 		return *result;

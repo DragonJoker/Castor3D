@@ -33,6 +33,7 @@ namespace castor3d
 		: uint8_t
 	{
 		eNone,
+		eRsm,
 		eLpv,
 		eLayeredLpv,
 		CU_ScopedEnumBounds( eNone ),

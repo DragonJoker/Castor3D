@@ -111,6 +111,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserShadowsMaxSlopeOffset )
 	CU_DeclareAttributeParser( parserShadowsVarianceMax )
 	CU_DeclareAttributeParser( parserShadowsVarianceBias )
+	CU_DeclareAttributeParser( parserShadowsRsm )
 	CU_DeclareAttributeParser( parserShadowsLpv )
 	CU_DeclareAttributeParser( parserShadowsLayeredLpv )
 

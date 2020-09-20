@@ -29,8 +29,9 @@ namespace castor3d
 		{
 			eNoShadow = 0u,
 			eShadowNoGI = 1u,
-			eShadowLpvGI = 2u,
-			eShadowLayeredLpvGI = 3u,
+			eShadowRsmGI = 2u,
+			eShadowLpvGI = 3u,
+			eShadowLayeredLpvGI = 4u,
 			CU_ScopedEnumBounds( eNoShadow ),
 		};
 		static_assert( uint32_t( Type::eCount ) == uint32_t( GlobalIlluminationType::eCount ) + 1u );

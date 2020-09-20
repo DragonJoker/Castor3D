@@ -90,21 +90,21 @@ namespace castor3d
 				, m_smResult
 				, m_downscalePass->getResult() );
 			m_interpolatePass = std::make_unique< RsmInterpolatePass >( this->m_engine
-					, lightCache
-					, LtType
-					, VkExtent2D
-					{
-						m_lpResult[LpTexture::eDiffuse].getTexture()->getWidth(),
-						m_lpResult[LpTexture::eDiffuse].getTexture()->getHeight(),
-					}
-					, m_gpInfoUbo
-					, m_gpResult
-					, m_smResult
-					, m_rsmGiPass->getConfigUbo()
-					, m_rsmGiPass->getSamplesSsbo()
-					, m_rsmGiPass->getResult()[0]
-					, m_rsmGiPass->getResult()[1]
-					, m_lpResult[LpTexture::eDiffuse] );
+				, lightCache
+				, LtType
+				, VkExtent2D
+				{
+					m_lpResult[LpTexture::eDiffuse].getTexture()->getWidth(),
+					m_lpResult[LpTexture::eDiffuse].getTexture()->getHeight(),
+				}
+				, m_gpInfoUbo
+				, m_gpResult
+				, m_smResult
+				, m_rsmGiPass->getConfigUbo()
+				, m_rsmGiPass->getSamplesSsbo()
+				, m_rsmGiPass->getResult()[0]
+				, m_rsmGiPass->getResult()[1]
+				, m_lpResult[LpTexture::eDiffuse] );
 			LightPassShadow< LtType >::initialise( scene, gp, sceneUbo, timer );
 		}
 
@@ -169,15 +169,6 @@ namespace castor3d
 		std::unique_ptr< RsmGIPass > m_rsmGiPass;
 		std::unique_ptr< RsmInterpolatePass > m_interpolatePass;
 	};
-	//!\~english	The directional lights light pass with shadows.
-	//!\~french		La passe d'éclairage avec ombres pour les lumières directionnelles.
-	using DirectionalLightPassReflectiveShadow = LightPassReflectiveShadow< LightType::eDirectional >;
-	//!\~english	The point lights light pass with shadows.
-	//!\~french		La passe d'éclairage avec ombres pour les lumières omnidirectionnelles.
-	using PointLightPassReflectiveShadow = LightPassReflectiveShadow< LightType::ePoint >;
-	//!\~english	The spot lights light pass with shadows.
-	//!\~french		La passe d'éclairage avec ombres pour les lumières projecteurs.
-	using SpotLightPassReflectiveShadow = LightPassReflectiveShadow< LightType::eSpot >;
 }
 
 #endif

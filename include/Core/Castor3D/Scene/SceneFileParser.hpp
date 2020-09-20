@@ -72,6 +72,7 @@ namespace castor3d
 		eShadows = CU_MakeSectionName( 'S', 'H', 'D', 'W' ),
 		eMeshDefaultMaterials = CU_MakeSectionName( 'M', 'M', 'T', 'L' ),
 		eRsm = CU_MakeSectionName( 'R', 'F', 'S', 'M' ),
+		eLpv = CU_MakeSectionName( 'L', 'P', 'V', 'I' ),
 	};
 
 	class SceneFileContext

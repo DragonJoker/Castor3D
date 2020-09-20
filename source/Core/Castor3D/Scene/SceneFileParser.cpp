@@ -470,12 +470,17 @@ namespace castor3d
 		addParser( uint32_t( CSCNSection::eShadows ), cuT( "variance_bias" ), parserShadowsVarianceBias, { makeParameter< ParameterType::eFloat >() } );
 		addParser( uint32_t( CSCNSection::eShadows ), cuT( "volumetric_steps" ), parserShadowsVolumetricSteps, { makeParameter< ParameterType::eUInt32 >() } );
 		addParser( uint32_t( CSCNSection::eShadows ), cuT( "volumetric_scattering" ), parserShadowsVolumetricScatteringFactor, { makeParameter< ParameterType::eFloat >() } );
+		addParser( uint32_t( CSCNSection::eShadows ), cuT( "rsm" ), parserShadowsRsm );
 		addParser( uint32_t( CSCNSection::eShadows ), cuT( "lpv" ), parserShadowsLpv );
 		addParser( uint32_t( CSCNSection::eShadows ), cuT( "layered_lpv" ), parserShadowsLayeredLpv );
 
 		addParser( uint32_t( CSCNSection::eRsm ), cuT( "intensity" ), parserRsmIntensity, { makeParameter< ParameterType::eFloat >() } );
 		addParser( uint32_t( CSCNSection::eRsm ), cuT( "max_radius" ), parserRsmMaxRadius, { makeParameter< ParameterType::eFloat >() } );
 		addParser( uint32_t( CSCNSection::eRsm ), cuT( "sample_count" ), parserRsmSampleCount, { makeParameter< ParameterType::eUInt32 >() } );
+
+		addParser( uint32_t( CSCNSection::eLpv ), cuT( "intensity" ), parserRsmIntensity, { makeParameter< ParameterType::eFloat >() } );
+		addParser( uint32_t( CSCNSection::eLpv ), cuT( "max_radius" ), parserRsmMaxRadius, { makeParameter< ParameterType::eFloat >() } );
+		addParser( uint32_t( CSCNSection::eLpv ), cuT( "sample_count" ), parserRsmSampleCount, { makeParameter< ParameterType::eUInt32 >() } );
 
 		addParser( uint32_t( CSCNSection::eNode ), cuT( "parent" ), parserNodeParent, { makeParameter< ParameterType::eName >() } );
 		addParser( uint32_t( CSCNSection::eNode ), cuT( "position" ), parserNodePosition, { makeParameter< ParameterType::ePoint3F >() } );
