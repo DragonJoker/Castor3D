@@ -61,6 +61,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Downscales multiple views to a given dimension.
+	*\~french
+	*\brief
+	*	Downscale plusieurs vues vers une dimension donnée.
+	*/
+	class DownscalePass;
+	/**
+	*\~english
+	*\brief
 	*	Gaussian blur pass.
 	*\~french
 	*\brief
@@ -88,6 +97,7 @@ namespace castor3d
 
 	CU_DeclareSmartPtr( CombinePass );
 	CU_DeclareSmartPtr( DepthPass );
+	CU_DeclareSmartPtr( DownscalePass );
 	CU_DeclareSmartPtr( GaussianBlur );
 	CU_DeclareSmartPtr( LineariseDepthPass );
 	CU_DeclareSmartPtr( StencilPass );

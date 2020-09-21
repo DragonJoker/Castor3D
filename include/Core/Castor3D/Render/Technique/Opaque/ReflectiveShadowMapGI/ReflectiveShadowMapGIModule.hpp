@@ -76,6 +76,9 @@ namespace castor3d
 	//!\~french		La passe d'éclairage avec ombres pour les lumières projecteurs.
 	using SpotLightPassReflectiveShadow = LightPassReflectiveShadow< LightType::eSpot >;
 
+	CU_DeclareSmartPtr( RsmGIPass );
+	CU_DeclareSmartPtr( RsmInterpolatePass );
+
 	//@}
 	//@}
 	//@}

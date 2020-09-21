@@ -165,9 +165,9 @@ namespace castor3d
 		ShadowMapResult const & m_smResult;
 		LightPassResult const & m_lpResult;
 		GpInfoUbo const & m_gpInfoUbo;
-		std::unique_ptr< DownscalePass > m_downscalePass;
-		std::unique_ptr< RsmGIPass > m_rsmGiPass;
-		std::unique_ptr< RsmInterpolatePass > m_interpolatePass;
+		DownscalePassUPtr m_downscalePass;
+		RsmGIPassUPtr m_rsmGiPass;
+		RsmInterpolatePassUPtr m_interpolatePass;
 	};
 }
 

@@ -67,24 +67,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Lighting injection pass.
-	*\~french
-	*\brief
-	*	Passe d'injection de l'éclairage.
-	*/
-	class LayeredLightInjectionPass;
-	/**
-	*\~english
-	*\brief
-	*	Lighting propagation pass.
-	*\~french
-	*\brief
-	*	Passe de propagation de l'éclairage.
-	*/
-	class LayeredLightPropagationPass;
-	/**
-	*\~english
-	*\brief
 	*	Lighting propagation volumes resolution pass.
 	*\~french
 	*\brief
@@ -147,6 +129,27 @@ namespace castor3d
 	*/
 	template< LightType LtType >
 	class LightPassLayeredVolumePropagationShadow;
+
+	//!\~english	The directional lights light pass with shadows and LPV.
+	//!\~french		La passe d'éclairage avec ombres et LPV pour les lumières directionnelles.
+	using DirectionalLightPassVolumePropagationShadow = LightPassVolumePropagationShadow< LightType::eDirectional >;
+	//!\~english	The spot lights light pass with shadows and LPV.
+	//!\~french		La passe d'éclairage avec ombres et LPV pour les lumières projecteurs.
+	using SpotLightPassVolumePropagationShadow = LightPassVolumePropagationShadow< LightType::eSpot >;
+	//!\~english	The directional lights light pass with shadows and LayeredLPV.
+	//!\~french		La passe d'éclairage avec ombres et Layered LPV pour les lumières directionnelles.
+	using DirectionalLightPassLayeredVolumePropagationShadow = LightPassLayeredVolumePropagationShadow< LightType::eDirectional >;
+
+	CU_DeclareSmartPtr( GeometryInjectionPass );
+	CU_DeclareSmartPtr( LayeredLightVolumeGIPass );
+	CU_DeclareSmartPtr( LightInjectionPass );
+	CU_DeclareSmartPtr( LightPropagationPass );
+	CU_DeclareSmartPtr( LightVolumeGIPass );
+
+	CU_DeclareVector( GeometryInjectionPass, GeometryInjectionPass );
+	CU_DeclareVector( LightInjectionPass, LightInjectionPass );
+	CU_DeclareVector( LightVolumeGIPass, LightVolumeGIPass );
+	CU_DeclareVector( LightPropagationPass, LightPropagationPass );
 
 	//@}
 	//@}

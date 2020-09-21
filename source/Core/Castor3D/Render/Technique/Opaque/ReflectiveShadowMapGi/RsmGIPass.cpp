@@ -381,6 +381,7 @@ namespace castor3d
 				sampler->setMagFilter( VK_FILTER_LINEAR );
 				sampler->setWrapS( mode );
 				sampler->setWrapT( mode );
+				sampler->setBorderColour( VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK );
 			}
 
 			return sampler;
@@ -392,7 +393,7 @@ namespace castor3d
 			, VkExtent2D const & size )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			auto sampler = doCreateSampler( engine, name, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+			auto sampler = doCreateSampler( engine, name, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER );
 
 			ashes::ImageCreateInfo image
 			{
