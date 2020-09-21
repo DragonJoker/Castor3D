@@ -966,26 +966,7 @@ namespace castor3d
 			auto & renderSystem = *getRenderSystem();
 			FragmentWriter writer;
 
-			std::unique_ptr< Materials > materials;
-
-			switch ( renderSystem.getEngine()->getMaterialsType() )
-			{
-			case MaterialType::ePhong:
-				materials = std::make_unique< shader::LegacyMaterials >( writer );
-				break;
-
-			case MaterialType::eMetallicRoughness:
-				materials = std::make_unique< PbrMRMaterials >( writer );
-				break;
-
-			case MaterialType::eSpecularGlossiness:
-				materials = std::make_unique< PbrSGMaterials >( writer );
-				break;
-
-			default:
-				break;
-			}
-
+			auto materials = std::make_unique< shader::LegacyMaterials >( writer );
 			materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 			shader::TextureConfigurations textureConfigs{ writer };
 

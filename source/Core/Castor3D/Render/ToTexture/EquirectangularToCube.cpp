@@ -208,18 +208,18 @@ namespace castor3d
 	{
 		CU_Require( !m_frameBuffers.empty() );
 		uint32_t face = 0u;
+		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
+		m_commandBuffer->beginDebugBlock(
+			{
+				"Equirectangular to cube",
+				makeFloatArray( m_device.renderSystem.getEngine()->getNextRainbowColour() ),
+			} );
 		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 			, m_view.makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 
 		for ( auto & frameBuffer : m_frameBuffers )
 		{
-			m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-			m_commandBuffer->beginDebugBlock(
-				{
-					"Equirectangular to cube",
-					makeFloatArray( m_device.renderSystem.getEngine()->getNextRainbowColour() ),
-				} );
 
 			m_commandBuffer->beginRenderPass( *m_renderPass
 				, *frameBuffer.frameBuffer
@@ -227,14 +227,15 @@ namespace castor3d
 			, VK_SUBPASS_CONTENTS_INLINE );
 			registerFrame( *m_commandBuffer, face );
 			m_commandBuffer->endRenderPass();
-			m_commandBuffer->endDebugBlock();
-			m_commandBuffer->end();
-
-			m_device.graphicsQueue->submit( *m_commandBuffer, nullptr );
-			m_device.graphicsQueue->waitIdle();
 
 			++face;
 		}
+
+		m_commandBuffer->endDebugBlock();
+		m_commandBuffer->end();
+
+		m_device.graphicsQueue->submit( *m_commandBuffer, nullptr );
+		m_device.graphicsQueue->waitIdle();
 	}
 
 	//*********************************************************************************************

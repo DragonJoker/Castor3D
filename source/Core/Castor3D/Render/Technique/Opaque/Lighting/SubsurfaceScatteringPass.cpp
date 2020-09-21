@@ -80,12 +80,7 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader inputs
-			auto materials = shader::createMaterials( writer
-				, ( engine.getMaterialsType() == MaterialType::eMetallicRoughness
-					? PassFlag::eMetallicRoughness
-					: ( engine.getMaterialsType() == MaterialType::eSpecularGlossiness
-						? PassFlag::eSpecularGlossiness
-						: PassFlag( 0u ) ) ) );
+			auto materials = shader::createMaterials( writer, PassFlag( 0u ) );
 			materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 			UBO_SCENE( writer, BlurSceneUboId, 0u );
 			UBO_GPINFO( writer, BlurGpInfoUboId, 0u );
@@ -212,12 +207,7 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader inputs
-			auto materials = shader::createMaterials( writer
-				, ( engine.getMaterialsType() == MaterialType::eMetallicRoughness
-					? PassFlag::eMetallicRoughness
-					: ( engine.getMaterialsType() == MaterialType::eSpecularGlossiness
-						? PassFlag::eSpecularGlossiness
-						: PassFlag( 0u ) ) ) );
+			auto materials = shader::createMaterials( writer, PassFlag( 0u ) );
 			materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 
 			auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), CombData4ImgId, 0u );

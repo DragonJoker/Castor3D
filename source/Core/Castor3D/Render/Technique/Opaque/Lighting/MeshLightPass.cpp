@@ -289,9 +289,9 @@ namespace castor3d
 			m_vertexBuffer->unlock();
 		}
 
-		m_stencilPass.initialise( declaration, *m_vertexBuffer );
 		m_matrixUbo.initialise();
 		m_modelMatrixUbo = device.uboPools->getBuffer< ModelMatrixUboConfiguration >( 0u );
+		m_stencilPass.initialise( declaration, *m_vertexBuffer );
 		doInitialise( scene
 			, gp
 			, m_type
@@ -306,9 +306,9 @@ namespace castor3d
 	{
 		doCleanup();
 		m_stencilPass.cleanup();
-		m_vertexBuffer.reset();
 		getCurrentRenderDevice( m_engine ).uboPools->putBuffer( m_modelMatrixUbo );
 		m_matrixUbo.cleanup();
+		m_vertexBuffer.reset();
 	}
 
 	ashes::Semaphore const & MeshLightPass::render( uint32_t index
