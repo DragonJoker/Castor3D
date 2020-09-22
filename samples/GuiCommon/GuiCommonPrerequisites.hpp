@@ -75,9 +75,13 @@ namespace GuiCommon
 
 	enum class ShaderLanguage
 	{
-		GLSL,
-		HLSL,
 		SPIRV,
+#if C3D_HasGLSL
+		GLSL,
+#endif
+#if GC_HasGLSL
+		HLSL,
+#endif
 	};
 
 	static const int GC_IMG_SIZE = 16;

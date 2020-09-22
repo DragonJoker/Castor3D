@@ -15,8 +15,10 @@
 #include <ashespp/Core/Surface.hpp>
 
 #include <ShaderWriter/Source.hpp>
-#include <CompilerGlsl/compileGlsl.hpp>
 #include <CompilerSpirV/compileSpirV.hpp>
+#if C3D_HasGLSL
+#	include <CompilerGlsl/compileGlsl.hpp>
+#endif
 
 #if C3D_HasSPIRVCross
 #	include "spirv_cpp.hpp"

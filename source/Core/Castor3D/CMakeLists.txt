@@ -1557,9 +1557,18 @@ target_link_libraries( ${PROJECT_NAME}
 		sdw::ShaderWriter
 	PRIVATE
 		sdw::CompilerSpirV
-		sdw::CompilerGlsl
 		${glslang_LIBRARIES}
 )
+if ( CASTOR_C3D_NEEDS_GLSL )
+	target_compile_definitions( ${PROJECT_NAME}
+		PUBLIC
+			C3D_HasGLSL
+	)
+target_link_libraries( ${PROJECT_NAME}
+	PRIVATE
+		sdw::CompilerGlsl
+)
+endif ()
 
 install_target( ${PROJECT_NAME} api_dll ${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME} )
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Core" )

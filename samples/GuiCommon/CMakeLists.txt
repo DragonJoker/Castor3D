@@ -281,8 +281,6 @@ target_link_libraries( ${PROJECT_NAME}
 		${wxWidgets_LIBRARIES}
 		${GTK2_LIBRARIES}
 		${X11_LIBRARIES}
-		sdw::CompilerGlsl
-		sdw::CompilerHlsl
 		sdw::CompilerSpirV
 	PRIVATE
 		${FFMPEG_LIBRARIES}
@@ -295,6 +293,22 @@ if ( CASTOR_SAMPLE_CASTOR_VIEWER_RECORDS )
 	target_compile_definitions( ${PROJECT_NAME}
 		PUBLIC
 			GUICOMMON_RECORDS
+	)
+endif ()
+if ( CASTOR_GUICOMMON_NEEDS_HLSL )
+	target_compile_definitions( ${PROJECT_NAME}
+		PUBLIC
+			GC_HasHLSL
+	)
+	target_link_libraries( ${PROJECT_NAME}
+		PRIVATE
+			sdw::CompilerHlsl
+	)
+endif ()
+if ( CASTOR_C3D_NEEDS_GLSL )
+	target_link_libraries( ${PROJECT_NAME}
+		PRIVATE
+			sdw::CompilerGlsl
 	)
 endif ()
 install_target( ${PROJECT_NAME}

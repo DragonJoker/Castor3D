@@ -17,8 +17,12 @@
 #include <Castor3D/Render/Technique/RenderTechnique.hpp>
 #include <Castor3D/Render/Technique/RenderTechniquePass.hpp>
 
-#include <CompilerGlsl/compileGlsl.hpp>
-#include <CompilerHlsl/compileHlsl.hpp>
+#if C3D_HasGLSL
+#	include <CompilerGlsl/compileGlsl.hpp>
+#endif
+#if GC_HasHLSL
+#	include <CompilerHlsl/compileHlsl.hpp>
+#endif
 #include <CompilerSpirV/compileSpirV.hpp>
 
 using namespace castor3d;
@@ -136,6 +140,12 @@ namespace GuiCommon
 
 		switch ( language )
 		{
+		case GuiCommon::ShaderLanguage::SPIRV:
+			extension = wxT( ".spirv" );
+			source = make_wxString( spirv::writeSpirv( *m_module.shader
+				, true ) );
+			break;
+#if C3D_HasGLSL
 		case GuiCommon::ShaderLanguage::GLSL:
 			extension = wxT( ".glsl" );
 			source = make_wxString( glsl::compileGlsl( *m_module.shader
@@ -152,6 +162,8 @@ namespace GuiCommon
 					true,
 				} ) );
 			break;
+#endif
+#if GC_HasHLSL
 		case GuiCommon::ShaderLanguage::HLSL:
 			extension = wxT( ".hlsl" );
 			source = make_wxString( hlsl::compileHlsl( *m_module.shader
@@ -161,11 +173,7 @@ namespace GuiCommon
 					false,
 				} ) );
 			break;
-		case GuiCommon::ShaderLanguage::SPIRV:
-			extension = wxT( ".spirv" );
-			source = make_wxString( spirv::writeSpirv( *m_module.shader
-				, true ) );
-			break;
+#endif
 		}
 
 		m_editor->setText( source );

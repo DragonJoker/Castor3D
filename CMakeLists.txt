@@ -176,6 +176,8 @@ option( CASTOR_BUILDGRP_TEST "Build test projects" OFF )
 option( CASTOR_BUILDGRP_SETUP "Build setup projects" OFF )
 option( CASTOR_BUILDGRP_SAMPLE "Build Castor3D samples." OFF )
 option( CASTOR_BUILD_CASTOR3D "Build Castor3D" ON )
+option( CASTOR_C3D_NEEDS_GLSL "Tells if Castor3D needs CompilerGlsl from ShaderWriter" OFF )
+option( CASTOR_GUICOMMON_NEEDS_HLSL "Tells if GuiCommon needs CompilerHlsl from ShaderWriter" OFF )
 
 # Small macro to add subdirectory files to current target source and header files
 macro( parse_subdir_files_ex _BASE_DIR _PROJGROUP _FOLDER _GROUP )
