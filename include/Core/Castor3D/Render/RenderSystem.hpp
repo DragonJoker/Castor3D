@@ -12,6 +12,8 @@ See LICENSE file in root folder
 #include "Castor3D/Miscellaneous/GpuObjectTracker.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 
+#include <ashespp/Core/WindowHandle.hpp>
+
 #include <stack>
 
 namespace castor3d

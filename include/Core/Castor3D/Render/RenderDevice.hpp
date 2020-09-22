@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_RenderDevice_H___
 
 #include "RenderModule.hpp"
+#include "Castor3D/Buffer/BufferModule.hpp"
 
 #include <ashespp/Command/CommandPool.hpp>
 #include <ashespp/Sync/Queue.hpp>
