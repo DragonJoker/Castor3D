@@ -4,7 +4,7 @@
 
 #include "ComCastor3D/CastorUtils/ComRgbColour.hpp"
 
-#include <Castor3D/Material/SpecularGlossinessPbrPass.hpp>
+#include <Castor3D/Material/Pass/SpecularGlossinessPbrPass.hpp>
 
 namespace CastorCom
 {
@@ -88,12 +88,12 @@ namespace CastorCom
 
 		COM_PROPERTY_GET( TextureUnitCount
 			, unsigned int
-			, makeGetter( m_internal.get(), &castor3d::SpecularGlossinessPbrPass::getTextureUnitsCount ) );
+			, makeGetter( m_internal.get(), &castor3d::SpecularGlossinessPbrPass::getTextureUnitsCount, castor3d::TextureFlag::eAll ) );
 
 		STDMETHOD( CreateTextureUnit )( /* [out, retval] */ ITextureUnit ** pVal );
-		STDMETHOD( GetTextureUnitByIndex )( /* [in] */ unsigned int index, /* [out, retval] */ ITextureUnit ** pVal );
 		STDMETHOD( DestroyTextureUnit )( /* [in] */ ITextureUnit * val );
-		STDMETHOD( GetTextureUnitByChannel )( /* [in] */ eTEXTURE_CHANNEL channel, /* [out, retval] */ ITextureUnit ** pVal );
+		STDMETHOD( GetTextureUnitByIndex )( /* [in] */ unsigned int index, /* [out, retval] */ ITextureUnit ** pVal );
+		STDMETHOD( GetTextureUnitByFlag )( /* [in] */ eTEXTURE_FLAG flag, /* [out, retval] */ ITextureUnit ** pVal );
 
 	private:
 		castor3d::SpecularGlossinessPbrPassSPtr m_internal;

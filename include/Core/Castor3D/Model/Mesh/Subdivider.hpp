@@ -105,7 +105,7 @@ namespace castor3d
 		C3D_API virtual Face addFace( uint32_t a, uint32_t b, uint32_t c );
 		/**
 		 *\~english
-		 *\brief		Tests if the given Point3r is in mine
+		 *\brief		Tests if the given Point3f is in mine
 		 *\param[in]	vertex	The vertex to test
 		 *\param[in]	precision	The comparison precision
 		 *\return		The index of the vertex equal to parameter, -1 if not found

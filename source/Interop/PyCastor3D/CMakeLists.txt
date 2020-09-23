@@ -25,8 +25,9 @@ add_library( castor::${PROJECT_NAME}
 )
 target_include_directories( PyCastor3D
 	PUBLIC
-		${CASTOR_SOURCE_DIR}/include/Interop
-		${CASTOR_BINARY_DIR}/include/Interop
+		$<BUILD_INTERFACE:${CASTOR_SOURCE_DIR}/include/Interop>
+		$<BUILD_INTERFACE:${CASTOR_BINARY_DIR}/include/Interop>
+		$<INSTALL_INTERFACE:include>
 		${Boost_INCLUDE_DIR}
 		${PYTHON_INCLUDE_DIR}
 	PRIVATE

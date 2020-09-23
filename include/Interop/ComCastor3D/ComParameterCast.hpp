@@ -5,6 +5,7 @@
 #include "ComCastor3D/ComCastor3DPrerequisites.hpp"
 #include "ComCastor3D/ComUtils.hpp"
 
+#include <CastorUtils/Math/RangedValue.hpp>
 #include <CastorUtils/Graphics/ColourComponent.hpp>
 
 namespace CastorCom
@@ -13,6 +14,11 @@ namespace CastorCom
 	inline Value parameterCast( _Value const & value )
 	{
 		return Value( value );
+	}
+	template< typename Value, typename _Value >
+	inline bool parameterCast( castor::RangedValue< _Value > const & value )
+	{
+		return parameterCast< Value >( value.value() );
 	}
 	template<>
 	inline bool parameterCast< bool, boolean >( boolean const & value )

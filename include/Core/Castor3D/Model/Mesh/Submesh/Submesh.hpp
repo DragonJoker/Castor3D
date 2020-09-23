@@ -107,7 +107,7 @@ namespace castor3d
 		C3D_API uint32_t getPointsCount()const;
 		/**
 		 *\~english
-		 *\brief		Tests if the given Point3r is in mine
+		 *\brief		Tests if the given Point3f is in mine
 		 *\param[in]	position	The vertex to test
 		 *\param[in]	precision	The comparison precision
 		 *\return		The index of the vertex equal to parameter, -1 if not found

@@ -79,7 +79,7 @@ namespace GuiCommon
 #if C3D_HasGLSL
 		GLSL,
 #endif
-#if GC_HasGLSL
+#if GC_HasHLSL
 		HLSL,
 #endif
 	};

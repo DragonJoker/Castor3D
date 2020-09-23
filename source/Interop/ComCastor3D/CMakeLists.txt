@@ -15,6 +15,163 @@ if ( MSVC )
 			NEWLINE_STYLE LF
 		)
 
+		set( ${PROJECT_NAME}_SRC_FILES
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/ComCastor3DModule.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/ComCastor3DPch.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/ComError.cpp
+		)
+		set( ${PROJECT_NAME}_HDR_FILES
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/ComAtlObject.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/ComCastor3DModule.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/ComCastor3DPch.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/ComCastor3DPrerequisites.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/ComError.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/ComParameterCast.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/ComUtils.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/ComVariableGetter.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/ComVariableIndexedGetter.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/ComVariableIndexedPutter.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/ComVariablePutter.hpp
+		)
+		file( GLOB ${PROJECT_NAME}_IDL_FILES
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/*.idl
+		)
+		file( GLOB ${PROJECT_NAME}_DEF_FILES_RELEASE
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/${PROJECT_NAME}.def
+		)
+		file( GLOB ${PROJECT_NAME}_DEF_FILES_DEBUG
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/${PROJECT_NAME}d.def
+		)
+		source_group( "Header Files" FILES ${${PROJECT_NAME}_HDR_FILES} )
+		source_group( "Source Files" FILES ${${PROJECT_NAME}_SRC_FILES} )
+		source_group( "IDL Files" FILES ${${PROJECT_NAME}_IDL_FILES} )
+
+		set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComCamera.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComColourBackground.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComDirectionalLight.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComEngine.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComGeometry.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComImageBackground.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComIndexMapping.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComLight.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComLightCategory.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComLineMapping.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComMaterial.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComMesh.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComMetallicRoughnessPbrPass.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComMovableObject.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComPass.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComPhongPass.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComPointLight.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComRenderTarget.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComRenderWindow.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComSampler.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComScene.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComSceneBackground.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComSceneNode.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComSkyboxBackground.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComSpecularGlossinessPbrPass.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComSpotLight.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComSubmesh.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComTextureLayout.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComTextureUnit.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComTriFaceMapping.cpp
+		)
+		set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComCamera.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComColourBackground.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComDirectionalLight.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComEngine.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComGeometry.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComImageBackground.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComIndexMapping.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComLight.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComLightCategory.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComLineMapping.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComMaterial.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComMesh.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComMetallicRoughnessPbrPass.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComMovableObject.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComPass.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComPhongPass.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComPointLight.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComRenderTarget.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComRenderWindow.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComSampler.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComScene.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComSceneBackground.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComSceneNode.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComSkyboxBackground.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComSpecularGlossinessPbrPass.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComSpotLight.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComSubmesh.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComTextureLayout.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComTextureUnit.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComTriFaceMapping.hpp
+		)
+		set( ${PROJECT_NAME}_SRC_FILES
+			${${PROJECT_NAME}_SRC_FILES}
+			${${PROJECT_NAME}_FOLDER_SRC_FILES}
+		)
+		set( ${PROJECT_NAME}_HDR_FILES
+			${${PROJECT_NAME}_HDR_FILES}
+			${${PROJECT_NAME}_FOLDER_HDR_FILES}
+		)
+		source_group( "Header Files\\Castor3D" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
+		source_group( "Source Files\\Castor3D" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
+
+		set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/CastorUtils/ComAngle.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/CastorUtils/ComFont.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/CastorUtils/ComGlyph.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/CastorUtils/ComHdrRgbaColour.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/CastorUtils/ComHdrRgbColour.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/CastorUtils/ComImage.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/CastorUtils/ComLogger.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/CastorUtils/ComMatrix4x4.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/CastorUtils/ComPixelBuffer.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/CastorUtils/ComPosition.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/CastorUtils/ComQuaternion.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/CastorUtils/ComRect.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/CastorUtils/ComRgbaColour.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/CastorUtils/ComRgbColour.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/CastorUtils/ComSize.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/CastorUtils/ComVector2D.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/CastorUtils/ComVector3D.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/CastorUtils/ComVector4D.cpp
+		)
+		set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/CastorUtils/ComAngle.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/CastorUtils/ComFont.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/CastorUtils/ComGlyph.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/CastorUtils/ComHdrRgbaColour.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/CastorUtils/ComHdrRgbColour.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/CastorUtils/ComImage.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/CastorUtils/ComLogger.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/CastorUtils/ComMatrix4x4.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/CastorUtils/ComPixelBuffer.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/CastorUtils/ComPosition.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/CastorUtils/ComQuaternion.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/CastorUtils/ComRect.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/CastorUtils/ComRgbaColour.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/CastorUtils/ComRgbColour.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/CastorUtils/ComSize.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/CastorUtils/ComVector2D.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/CastorUtils/ComVector3D.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/CastorUtils/ComVector4D.hpp
+		)
+		set( ${PROJECT_NAME}_SRC_FILES
+			${${PROJECT_NAME}_SRC_FILES}
+			${${PROJECT_NAME}_FOLDER_SRC_FILES}
+		)
+		set( ${PROJECT_NAME}_HDR_FILES
+			${${PROJECT_NAME}_HDR_FILES}
+			${${PROJECT_NAME}_FOLDER_HDR_FILES}
+		)
+		source_group( "Header Files\\CastorUtils" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
+		source_group( "Source Files\\CastorUtils" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
+
 		# Define Interfaces and their RGS files
 		set( RESOURCE_ID 102 )
 		set( RESRC_LIST "" )
@@ -73,7 +230,6 @@ if ( MSVC )
 		add_interface( "AD82930D-4682-4CF1-B9E8-EDFD869E7AF7" RESRC_LIST RESH_LIST RESOURCE_ID "RenderTarget" )
 		add_interface( "68E4373D-24BB-45FE-9717-CB512111A984" RESRC_LIST RESH_LIST RESOURCE_ID "RenderWindow" )
 		add_interface( "98978C6B-C6FB-447C-A874-15068F900011" RESRC_LIST RESH_LIST RESOURCE_ID "Sampler" )
-		add_interface( "3CA68187-BD17-4E78-8D5C-B994DDA134BA" RESRC_LIST RESH_LIST RESOURCE_ID "TextureView" )
 		add_interface( "0FF08968-9937-4771-8949-0E86E3615F98" RESRC_LIST RESH_LIST RESOURCE_ID "TextureLayout" )
 		add_interface( "E8DD6F29-F296-4687-AADD-F6FD1D0AC670" RESRC_LIST RESH_LIST RESOURCE_ID "TextureUnit" )
 		add_interface( "B62FE384-D806-4DA7-B091-A7E260D95D7F" RESRC_LIST RESH_LIST RESOURCE_ID "ShaderProgram" )
@@ -84,11 +240,11 @@ if ( MSVC )
 		add_interface( "A9F3E2A5-A54C-4E4A-8448-0A663BE88E40" RESRC_LIST RESH_LIST RESOURCE_ID "Material" )
 
 		# Add RGS files to the sources
-		file( GLOB COMCASTOR3D_RGS_FILES
+		file( GLOB ${PROJECT_NAME}_RGS_FILES
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Win32/*.rgs
 			${CMAKE_CURRENT_BINARY_DIR}/Win32/*.rgs
 		)
-		source_group( "Registry Files" FILES ${COMCASTOR3D_RGS_FILES} )
+		source_group( "Registry Files" FILES ${${PROJECT_NAME}_RGS_FILES} )
 
 		# Update resources IDs
 		configure_file( 
@@ -97,47 +253,34 @@ if ( MSVC )
 			NEWLINE_STYLE LF
 		)
 
-		# Define IDL files
-		file( GLOB COMCASTOR3D_IDL_FILES
-			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/*.idl
-		)
-		file( GLOB COMCASTOR3D_DEF_FILES_RELEASE
-			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/${PROJECT_NAME}.def
-		)
-		file( GLOB COMCASTOR3D_DEF_FILES_DEBUG
-			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/${PROJECT_NAME}d.def
-		)
-
 		if ( MSVC )
-		  set( CMAKE_SHARED_LINKER_FLAGS_DEBUG "${CMAKE_SHARED_LINKER_FLAGS_DEBUG} /DEF:${COMCASTOR3D_DEF_FILES_DEBUG}")
-		  set( CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /DEF:${COMCASTOR3D_DEF_FILES_RELEASE}")
-		  set( CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO "${CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO} /DEF:${COMCASTOR3D_DEF_FILES_RELEASE}")
+			set( CMAKE_SHARED_LINKER_FLAGS_DEBUG "${CMAKE_SHARED_LINKER_FLAGS_DEBUG} /DEF:${${PROJECT_NAME}_DEF_FILES_DEBUG}")
+			set( CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /DEF:${${PROJECT_NAME}_DEF_FILES_RELEASE}")
+			set( CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO "${CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO} /DEF:${${PROJECT_NAME}_DEF_FILES_RELEASE}")
 		endif()
 
 		# MIDL compiler
-		add_com_interfaces( COMCASTOR3D_SOURCES_IDL_FILES ${COMCASTOR3D_IDL_FILES} )
-		set( COMCASTOR3D_ADDITIONAL_FILES
-			${COMCASTOR3D_IDL_FILES}
-			${COMCASTOR3D_RGS_FILES}
-			${COMCASTOR3D_SOURCES_IDL_FILES}
+		add_com_interfaces( ${PROJECT_NAME}_SOURCES_IDL_FILES ${${PROJECT_NAME}_IDL_FILES} )
+		set( ${PROJECT_NAME}_ADDITIONAL_FILES
+			${${PROJECT_NAME}_IDL_FILES}
+			${${PROJECT_NAME}_RGS_FILES}
+			${${PROJECT_NAME}_SOURCES_IDL_FILES}
 		)
-		source_group( "IDL Files" FILES ${COMCASTOR3D_IDL_FILES} )
-		source_group( "IDL Files" FILES ${COMCASTOR3D_SOURCES_IDL_FILES} )
-		source_group( "IDL Files" FILES ${COMCASTOR3D_DEF_FILES} )
+		source_group( "IDL Files" FILES ${${PROJECT_NAME}_SOURCES_IDL_FILES} )
+		source_group( "IDL Files" FILES ${${PROJECT_NAME}_DEF_FILES} )
+		set( ${PROJECT_NAME}_SRC_FILES
+			${${PROJECT_NAME}_SRC_FILES}
+			${${PROJECT_NAME}_IDL_FILES}
+			${${PROJECT_NAME}_SOURCES_IDL_FILES}
+			${${PROJECT_NAME}_DEF_FILES}
+			${${PROJECT_NAME}_RGS_FILES}
+		)
 
-		add_target( 
+		add_target_min(
 			${PROJECT_NAME}
 			dll
-			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}
-			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}
-			""
-			""
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/${PROJECT_NAME}Pch.hpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/${PROJECT_NAME}Pch.cpp
-			""
-			""
-			""
-			"${CASTOR_BINARY_DIR}/source/Interop/${PROJECT_NAME}/ComCastorUtils.hpp;${COMCASTOR3D_ADDITIONAL_FILES}"
 		)
 		add_library( castor::${PROJECT_NAME}
 			ALIAS
@@ -162,9 +305,6 @@ if ( MSVC )
 			${PROJECT_NAME}
 			PARENT_SCOPE
 		)
-
-		c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Interop CastorUtils "CastorUtils" )
-		c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Interop Castor3D "Castor3D" )
 
 		# Copy tlb files into binaries directory.
 		add_custom_command( TARGET ${PROJECT_NAME}

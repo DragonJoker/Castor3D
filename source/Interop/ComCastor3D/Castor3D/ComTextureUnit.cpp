@@ -59,47 +59,4 @@ namespace CastorCom
 
 		return hr;
 	}
-
-	STDMETHODIMP CTextureUnit::LoadTexture( /* [in] */ BSTR path )
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( m_internal )
-		{
-			ashes::ImageCreateInfo imageInfo
-			{
-				0u,
-				VK_IMAGE_TYPE_2D,
-				VK_FORMAT_UNDEFINED,
-				{ 1u, 1u, 1u },
-				0u,
-				1u,
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_IMAGE_TILING_OPTIMAL,
-				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT
-			};
-			auto texture = std::make_shared< castor3d::TextureLayout >( *m_internal->getEngine()->getRenderSystem()
-				, imageInfo
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, "ComStaticImageView" );
-			castor::Path filePath{ fromBstr( path ) };
-			texture->setSource( filePath.getPath()
-				, filePath.getFileName( true ) );
-			m_internal->setTexture( texture );
-
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::dispatchError(
-				E_FAIL,							// This represents the error
-				IID_ITextureUnit,				// This is the GUID of PixelComponents throwing error
-				_T( "LoadTexture" ),			// This is generally displayed as the title
-				ERROR_UNINITIALISED.c_str(),	// This is the description
-				0,								// This is the context in the help file
-				nullptr );
-		}
-
-		return hr;
-	}
 }

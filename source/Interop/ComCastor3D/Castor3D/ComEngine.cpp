@@ -58,7 +58,7 @@ namespace CastorCom
 					}
 					catch ( std::exception & exc )
 					{
-						castor::Logger::logError( cuT( "Failed to parse the scene file, with following error:" ) + castor::string::stringCast< xchar >( exc.what() ) );
+						castor::Logger::logError( cuT( "Failed to parse the scene file, with following error:" ) + castor::string::stringCast< castor::xchar >( exc.what() ) );
 					}
 				}
 			}

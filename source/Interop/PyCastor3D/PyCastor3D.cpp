@@ -55,64 +55,64 @@ void ExportCastor3D()
 		.value( "FRUSTUM", ViewportType::eFrustum )
 		;
 	//@}
-	/**@group_name TextureChannel */
+	/**@group_name TextureFlag */
 	//@{
-	py::enum_< TextureChannel >( "TextureChannel" )
-		.value( "DIFFUSE", TextureChannel::eDiffuse )
-		.value( "NORMAL", TextureChannel::eNormal )
-		.value( "OPACITY", TextureChannel::eOpacity )
-		.value( "SPECULAR", TextureChannel::eSpecular )
-		.value( "HEIGHT", TextureChannel::eHeight )
-		.value( "EMISSIVE", TextureChannel::eEmissive )
-		.value( "GLOSS", TextureChannel::eGloss )
-		.value( "ALL", TextureChannel::eAll )
+	py::enum_< TextureFlag >( "TextureFlag" )
+		.value( "DIFFUSE", TextureFlag::eDiffuse )
+		.value( "NORMAL", TextureFlag::eNormal )
+		.value( "OPACITY", TextureFlag::eOpacity )
+		.value( "SPECULAR", TextureFlag::eSpecular )
+		.value( "HEIGHT", TextureFlag::eHeight )
+		.value( "EMISSIVE", TextureFlag::eEmissive )
+		.value( "GLOSS", TextureFlag::eGlossiness )
+		.value( "ALL", TextureFlag::eAll )
 		;
 	//@}
 	/**@group_name TextureType */
 	//@{
-	py::enum_< ashes::TextureType >( "TextureType" )
-		.value( "1D", ashes::TextureType::e1D )
-		.value( "2D", ashes::TextureType::e2D )
-		.value( "3D", ashes::TextureType::e3D )
+	py::enum_< VkImageType >( "ImageType" )
+		.value( "1D", VkImageType::VK_IMAGE_TYPE_1D )
+		.value( "2D", VkImageType::VK_IMAGE_TYPE_2D )
+		.value( "3D", VkImageType::VK_IMAGE_TYPE_3D )
 		;
 	//@}
 	/**@group_name WrapMode */
 	//@{
-	py::enum_< ashes::WrapMode >( "WrapMode" )
-		.value( "REPEAT", ashes::WrapMode::eRepeat )
-		.value( "MIRRORED_REPEAT", ashes::WrapMode::eMirroredRepeat )
-		.value( "CLAMP_TO_BORDER", ashes::WrapMode::eClampToBorder )
-		.value( "CLAMP_TO_EDGE", ashes::WrapMode::eClampToEdge )
+	py::enum_< VkSamplerAddressMode >( "WrapMode" )
+		.value( "REPEAT", VkSamplerAddressMode::VK_SAMPLER_ADDRESS_MODE_REPEAT )
+		.value( "MIRRORED_REPEAT", VkSamplerAddressMode::VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT )
+		.value( "CLAMP_TO_BORDER", VkSamplerAddressMode::VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER )
+		.value( "CLAMP_TO_EDGE", VkSamplerAddressMode::VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE )
 		;
 	//@}
 	/**@group_name Filter */
 	//@{
-	py::enum_< ashes::Filter >( "Filter" )
-		.value( "NEAREST", ashes::Filter::eNearest )
-		.value( "LINEAR", ashes::Filter::eLinear )
+	py::enum_< VkFilter >( "Filter" )
+		.value( "NEAREST", VkFilter::VK_FILTER_NEAREST )
+		.value( "LINEAR", VkFilter::VK_FILTER_LINEAR )
 		;
 	//@}
 	/**@group_name MipmapMode */
 	//@{
-	py::enum_< ashes::MipmapMode >( "MipmapMode" )
-		.value( "NEAREST", ashes::MipmapMode::eNearest )
-		.value( "LINEAR", ashes::MipmapMode::eLinear )
+	py::enum_< VkSamplerMipmapMode >( "MipmapMode" )
+		.value( "NEAREST", VkSamplerMipmapMode::VK_SAMPLER_MIPMAP_MODE_NEAREST )
+		.value( "LINEAR", VkSamplerMipmapMode::VK_SAMPLER_MIPMAP_MODE_LINEAR )
 		;
 	//@}
 	/**@group_name PrimitiveTopology */
 	//@{
-	py::enum_< ashes::PrimitiveTopology >( "PrimitiveTopology" )
-		.value( "POINT_LIST", ashes::PrimitiveTopology::ePointList )
-		.value( "LINE_LIST", ashes::PrimitiveTopology::eLineList )
-		.value( "LINE_STRIP", ashes::PrimitiveTopology::eLineStrip )
-		.value( "TRIANGLE_LIST", ashes::PrimitiveTopology::eTriangleList )
-		.value( "TRIANGLE_STRIP", ashes::PrimitiveTopology::eTriangleStrip )
-		.value( "TRIANGLE_FAN", ashes::PrimitiveTopology::eTriangleFan )
-		.value( "LINE_LIST_ADJACENCY", ashes::PrimitiveTopology::eLineListWithAdjacency )
-		.value( "LINE_STRIP_ADJACENCY", ashes::PrimitiveTopology::eLineStripWithAdjacency )
-		.value( "TRIANGLE_LIST_ADJACENCY", ashes::PrimitiveTopology::eTriangleListWithAdjacency )
-		.value( "TRIANGLE_STRIP_ADJACENCY", ashes::PrimitiveTopology::eTriangleStripWithAdjacency )
-		.value( "PATCH_LIST", ashes::PrimitiveTopology::ePatchList )
+	py::enum_< VkPrimitiveTopology >( "PrimitiveTopology" )
+		.value( "POINT_LIST", VkPrimitiveTopology::VK_PRIMITIVE_TOPOLOGY_POINT_LIST )
+		.value( "LINE_LIST", VkPrimitiveTopology::VK_PRIMITIVE_TOPOLOGY_LINE_LIST )
+		.value( "LINE_STRIP", VkPrimitiveTopology::VK_PRIMITIVE_TOPOLOGY_LINE_STRIP )
+		.value( "TRIANGLE_LIST", VkPrimitiveTopology::VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST )
+		.value( "TRIANGLE_STRIP", VkPrimitiveTopology::VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP )
+		.value( "TRIANGLE_FAN", VkPrimitiveTopology::VK_PRIMITIVE_TOPOLOGY_TRIANGLE_FAN )
+		.value( "LINE_LIST_ADJACENCY", VkPrimitiveTopology::VK_PRIMITIVE_TOPOLOGY_LINE_LIST_WITH_ADJACENCY)
+		.value( "LINE_STRIP_ADJACENCY", VkPrimitiveTopology::VK_PRIMITIVE_TOPOLOGY_LINE_STRIP_WITH_ADJACENCY )
+		.value( "TRIANGLE_LIST_ADJACENCY", VkPrimitiveTopology::VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST_WITH_ADJACENCY )
+		.value( "TRIANGLE_STRIP_ADJACENCY", VkPrimitiveTopology::VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP )
+		.value( "PATCH_LIST", VkPrimitiveTopology::VK_PRIMITIVE_TOPOLOGY_PATCH_LIST )
 		;
 	//@}
 	/**@group_name Sampler */
@@ -136,47 +136,47 @@ void ExportCastor3D()
 	//@}
 	/**@group_name TextureView */
 	//@{
-	void ( TextureView::*dynamicTextureImagesetter )( PxBufferBaseSPtr ) = &TextureView::initialiseSource;
-	void ( TextureView::*staticTextureImagesetter )( Path const &, Path const &, ImageComponents ) = &TextureView::initialiseSource;
 	py::class_< TextureView, boost::noncopyable >( "TextureImage", py::no_init )
-		.add_property( "buffer", &TextureView::getBuffer, "The texture image buffer" )
-		.def( "set_source", staticTextureImagesetter, "Sets the texture image" )
-		.def( "set_source", dynamicTextureImagesetter, "Sets the texture image" )
+		//.add_property( "buffer", &TextureView::getBuffer, "The texture image buffer" )
 		;
 	//@}
 	/**@group_name TextureLayout */
 	//@{
-	TextureView &( TextureLayout::*textureLayoutImagegetter )( size_t ) = &TextureLayout::getImage;
+	TextureView &( TextureLayout::*textureLayoutImagegetter )() = &TextureLayout::getDefaultView;
+	void ( TextureLayout::*dynamicTextureImagesetter )( PxBufferBaseSPtr, bool ) = &TextureLayout::setSource;
+	void ( TextureLayout::*staticTextureImagesetter )( Path const &, Path const & ) = &TextureLayout::setSource;
 	py::class_< TextureLayout, boost::noncopyable >( "TextureLayout", py::no_init )
 		.add_property( "type", &TextureLayout::getType, "The texture type" )
 		.def( "image", py::make_function( textureLayoutImagegetter, py::return_value_policy< py::copy_non_const_reference >() ) )
 		.def( "initialise", &TextureLayout::initialise )
 		.def( "cleanup", &TextureLayout::cleanup )
+		.def( "set_source", staticTextureImagesetter, "Sets the texture image" )
+		.def( "set_source", dynamicTextureImagesetter, "Sets the texture image" )
 		;
 	//@}
 	/**@group_name TextureUnit */
 	//@{
 	py::class_< TextureUnit, boost::noncopyable >( "TextureUnit", py::no_init )
 		.add_property( "texture", &TextureUnit::getTexture, &TextureUnit::setTexture, "The unit texture" )
-		.add_property( "channel", &TextureUnit::getChannel, &TextureUnit::setChannel, "The texture channel" )
+		.add_property( "channel", &TextureUnit::getFlags, "The texture channel" )
 		.def( "set_texture", &TextureUnit::setTexture )
 		;
 	//@}
-	/**@group_name LegacyPass */
+	/**@group_name PhongPass */
 	//@{
-	TextureUnitSPtr( Pass::*passChannelTextureUnitgetter )( TextureChannel )const = &Pass::getTextureUnit;
+	TextureUnitSPtr( Pass::*passChannelTextureUnitgetter )( uint32_t )const = &Pass::getTextureUnit;
 	typedef TextureUnitPtrArrayIt( Pass::*TextureUnitPtrArrayItFunc )( );
 	py::class_< Pass, boost::noncopyable >( "Pass", py::no_init )
-		.add_property( "diffuse", cpy::make_getter( &LegacyPass::getDiffuse, py::return_value_policy< py::copy_const_reference >() ), cpy::make_setter( &LegacyPass::setDiffuse ), "The pass diffuse colour" )
-		.add_property( "specular", cpy::make_getter( &LegacyPass::getSpecular, py::return_value_policy< py::copy_const_reference >() ), cpy::make_setter( &LegacyPass::setSpecular ), "The pass specular colour" )
-		.add_property( "emissive", cpy::make_getter( &LegacyPass::getEmissive ), cpy::make_setter( &LegacyPass::setEmissive ), "The pass emissive colour" )
-		.add_property( "shininess", &LegacyPass::getShininess, &LegacyPass::setShininess, "The pass shininess value" )
-		.add_property( "two_sided", &LegacyPass::IsTwoSided, &LegacyPass::setTwoSided, "The pass two sided status" )
-		.add_property( "alpha", &LegacyPass::getOpacity, &LegacyPass::setOpacity, "The pass global alpha value" )
-		.def( "create_texture_unit", &LegacyPass::addTextureUnit )
-		.def( "destroy_pass", &LegacyPass::destroyTextureUnit )
+		.add_property( "diffuse", cpy::make_getter( &PhongPass::getDiffuse, py::return_value_policy< py::copy_const_reference >() ), cpy::make_setter( &PhongPass::setDiffuse ), "The pass diffuse colour" )
+		.add_property( "specular", cpy::make_getter( &PhongPass::getSpecular, py::return_value_policy< py::copy_const_reference >() ), cpy::make_setter( &PhongPass::setSpecular ), "The pass specular colour" )
+		.add_property( "emissive", cpy::make_getter( &PhongPass::getEmissive ), cpy::make_setter( &PhongPass::setEmissive ), "The pass emissive colour" )
+		.add_property( "shininess", &PhongPass::getShininess, &PhongPass::setShininess, "The pass shininess value" )
+		.add_property( "two_sided", &PhongPass::IsTwoSided, &PhongPass::setTwoSided, "The pass two sided status" )
+		.add_property( "alpha", &PhongPass::getOpacity, &PhongPass::setOpacity, "The pass global alpha value" )
+		.def( "create_texture_unit", &PhongPass::addTextureUnit )
+		.def( "destroy_texture_unit", &PhongPass::removeTextureUnit )
 		.def( "get_texture_unit_at_channel", passChannelTextureUnitgetter )
-		.def( "units", py::range< TextureUnitPtrArrayItFunc, TextureUnitPtrArrayItFunc >( &LegacyPass::begin, &LegacyPass::end ) )
+		.def( "units", py::range< TextureUnitPtrArrayItFunc, TextureUnitPtrArrayItFunc >( &PhongPass::begin, &PhongPass::end ) )
 		;
 	//@}
 	/**@group_name Material */
@@ -256,7 +256,7 @@ void ExportCastor3D()
 	//@}
 	/**@group_name GeometryCache */
 	//@{
-	GeometrySPtr( GeometryCache::*geometryCreator )( castor::String const &, SceneNodeSPtr, MeshSPtr ) = &GeometryCache::add;
+	GeometrySPtr( GeometryCache::*geometryCreator )( castor::String const &, SceneNode &, MeshSPtr ) = &GeometryCache::add;
 	py::class_< GeometryCache, boost::noncopyable >( "GeometryCache", py::no_init )
 		.def( "add", geometryCreator, "Adds a Geometry to the cache" )
 		.def( "remove", &GeometryCache::remove, "Finds a Geometry" )
@@ -266,7 +266,7 @@ void ExportCastor3D()
 	//@}
 	/**@group_name LightCache */
 	//@{
-	LightSPtr( LightCache::*lightCreator )( castor::String const &, SceneNodeSPtr, LightType ) = &LightCache::add;
+	LightSPtr( LightCache::*lightCreator )( castor::String const &, SceneNode &, LightType ) = &LightCache::add;
 	py::class_< LightCache, boost::noncopyable >( "LightCache", py::no_init )
 		.def( "add", lightCreator, "Adds a Light to the cache" )
 		.def( "remove", &LightCache::remove, "Removes a Light from the cache" )

@@ -19,7 +19,7 @@ namespace CastorCom
 
 	STDMETHODIMP CLogger::SetFileName( /* [in] */ BSTR name, eLOG_TYPE target )
 	{
-		castor::Logger::setFileName( fromBstr( name ), castor::LogType( target ) );
+		castor::Logger::setFileName( castor::Path{ fromBstr( name ) }, castor::LogType( target ) );
 		return S_OK;
 	}
 

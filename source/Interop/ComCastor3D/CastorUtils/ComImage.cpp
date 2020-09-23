@@ -119,45 +119,6 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CImage::CopyImage( /* [in] */ IImage * val )
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( m_image )
-		{
-			hr = S_OK;
-			m_image->copyImage( *static_cast< CImage * >( val )->m_image );
-		}
-		else
-		{
-			hr = CComError::dispatchError( E_FAIL, IID_IImage, _T( "CcopyImage" ), ERROR_UNINITIALISED_IMAGE, 0, nullptr );
-		}
-
-		return hr;
-	}
-
-	STDMETHODIMP CImage::SubImage( /* [in] */ IRect * val, /* [out, retval] */ IImage ** pVal )
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( m_image )
-		{
-			hr = CImage::CreateInstance( pVal );
-
-			if ( hr == S_OK )
-			{
-				castor::Image l_img = m_image->subImage( *static_cast< CRect * >( val ) );
-				static_cast< CImage * >( *pVal )->m_image = std::make_shared< castor::Image >( l_img );
-			}
-		}
-		else
-		{
-			hr = CComError::dispatchError( E_FAIL, IID_IImage, _T( "SubImage" ), ERROR_UNINITIALISED_IMAGE, 0, nullptr );
-		}
-
-		return hr;
-	}
-
 	STDMETHODIMP CImage::Flip( /* [out, retval] */ IImage ** pVal )
 	{
 		HRESULT hr = E_POINTER;
@@ -175,28 +136,6 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError( E_FAIL, IID_IImage, _T( "Flip" ), ERROR_UNINITIALISED_IMAGE, 0, nullptr );
-		}
-
-		return hr;
-	}
-
-	STDMETHODIMP CImage::Mirror( /* [out, retval] */ IImage ** pVal )
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( m_image )
-		{
-			hr = CImage::CreateInstance( pVal );
-
-			if ( hr == S_OK )
-			{
-				castor::Image l_img = m_image->mirror();
-				static_cast< CImage * >( *pVal )->m_image = std::make_shared< castor::Image >( l_img );
-			}
-		}
-		else
-		{
-			hr = CComError::dispatchError( E_FAIL, IID_IImage, _T( "Mirror" ), ERROR_UNINITIALISED_IMAGE, 0, nullptr );
 		}
 
 		return hr;

@@ -3,9 +3,10 @@
 #define __COMC3D_COM_TEXTURE_UNIT_H__
 
 #include "ComCastor3D/Castor3D/ComTextureLayout.hpp"
+#include "ComCastor3D/Castor3D/ComSampler.hpp"
 #include "ComCastor3D/CastorUtils/ComRgbaColour.hpp"
 
-#include <Castor3D/Texture/TextureUnit.hpp>
+#include <Castor3D/Material/Texture/TextureUnit.hpp>
 
 namespace CastorCom
 {
@@ -52,7 +53,6 @@ namespace CastorCom
 
 		STDMETHOD( Initialise )();
 		STDMETHOD( Cleanup )();
-		STDMETHOD( LoadTexture )( /* [in] */ BSTR path );
 
 	private:
 		castor3d::TextureUnitSPtr m_internal;

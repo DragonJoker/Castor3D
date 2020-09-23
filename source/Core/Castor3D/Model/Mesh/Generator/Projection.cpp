@@ -42,8 +42,8 @@ namespace castor3d
 	//	real totalDistance = 0.0;
 	//	SubmeshSPtr submesh;
 	//	real distanceToOrigin = 0.0;
-	//	Point3r currentUV;
-	//	Point3r previousUV;
+	//	Point3f currentUV;
+	//	Point3f previousUV;
 	//	auto previousPattern = m_pattern;
 
 	//	if ( nbElem > 0 )

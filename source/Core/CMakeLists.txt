@@ -1,6 +1,5 @@
 option( CASTOR_BUILD_TEST_CASTORUTILS "Build CastorUtils test application" TRUE )
 option( CASTOR_BUILD_TEST_CASTOR3D "Build Castor3D test application" TRUE )
-option( CASTOR_BUILD_TEST_RENDERER "Build Renderer test applications" FALSE )
 
 function( CoreInit )
 	set( Cutils "no (Not wanted)" PARENT_SCOPE )

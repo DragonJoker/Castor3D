@@ -251,7 +251,7 @@ namespace castor3d
 		C3D_API void setOrientation( castor::Quaternion const & orientation );
 		/**
 		 *\~english
-		 *\brief		Sets the relative position from a Point3r
+		 *\brief		Sets the relative position from a Point3f
 		 *\param[in]	position	The new position
 		 *\~french
 		 *\brief		Définit la position relative du noeud
@@ -260,7 +260,7 @@ namespace castor3d
 		C3D_API void setPosition( castor::Point3f const & position );
 		/**
 		 *\~english
-		 *\brief		Sets the relative scale from a Point3r
+		 *\brief		Sets the relative scale from a Point3f
 		 *\param[in]	scale	The new scale
 		 *\~french
 		 *\brief		Définit l'échelle relative du noeud

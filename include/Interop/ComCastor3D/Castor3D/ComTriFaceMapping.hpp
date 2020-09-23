@@ -4,7 +4,7 @@
 
 #include "ComCastor3D/Castor3D/ComTextureLayout.hpp"
 
-#include <Castor3D/Mesh/SubmeshComponent/TriFaceMapping.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp>
 
 namespace CastorCom
 {

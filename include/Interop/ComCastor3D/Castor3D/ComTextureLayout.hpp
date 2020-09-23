@@ -2,9 +2,9 @@
 #ifndef __COMC3D_COM_TEXTURE_LAYOUT_H__
 #define __COMC3D_COM_TEXTURE_LAYOUT_H__
 
-#include "ComCastor3D/Castor3D/ComTextureImage.hpp"
+#include "ComCastor3D/CastorUtils/ComPixelBuffer.hpp"
 
-#include <Castor3D/Texture/TextureLayout.hpp>
+#include <Castor3D/Material/Texture/TextureLayout.hpp>
 
 namespace CastorCom
 {
@@ -46,12 +46,15 @@ namespace CastorCom
 			m_internal = state;
 		}
 
-		COM_PROPERTY_INDEXED_GET( Image, unsigned int, ITextureView *, makeIndexedGetter( m_internal.get(), &castor3d::TextureLayout::getView ) );
-
-		COM_PROPERTY_GET( Type, eTEXTURE_TYPE, makeGetter( m_internal.get(), &castor3d::TextureLayout::getType ) );
+		COM_PROPERTY_GET( Type, eIMAGE_TYPE, makeGetter( m_internal.get(), &castor3d::TextureLayout::getType ) );
 
 		STDMETHOD( Initialise )();
 		STDMETHOD( Cleanup )();
+
+		STDMETHOD( InitFromFile )( /* [in] */ BSTR path );
+		STDMETHOD( InitFromBuffer )( /* [in] */ IPixelBuffer * val );
+		STDMETHOD( Init2D )( /* [in] */ unsigned int w, /* [in] */ unsigned int h, /* [in] */ ePIXEL_FORMAT format );
+		STDMETHOD( Init3D )( /* [in] */ unsigned int w, /* [in] */ unsigned int h, /* [in] */ unsigned int d, /* [in] */ ePIXEL_FORMAT format );
 
 	private:
 		castor3d::TextureLayoutSPtr m_internal;
