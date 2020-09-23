@@ -1052,8 +1052,8 @@ set( ${PROJECT_NAME}_HDR_FILES
 	${${PROJECT_NAME}_HDR_FILES}
 	${${PROJECT_NAME}_FOLDER_HDR_FILES}
 )
-source_group( "Header Files\\Render\\Technique\\Opaque\\ReflectiveShadowMapGi" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
-source_group( "Source Files\\Render\\Technique\\Opaque\\ReflectiveShadowMapGi" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
+source_group( "Header Files\\Render\\Technique\\Opaque\\ReflectiveShadowMapGI" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
+source_group( "Source Files\\Render\\Technique\\Opaque\\ReflectiveShadowMapGI" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Technique/Transparent/TransparentPass.cpp
@@ -1557,9 +1557,18 @@ target_link_libraries( ${PROJECT_NAME}
 		sdw::ShaderWriter
 	PRIVATE
 		sdw::CompilerSpirV
-		sdw::CompilerGlsl
 		${glslang_LIBRARIES}
 )
+if ( CASTOR_C3D_NEEDS_GLSL )
+	target_compile_definitions( ${PROJECT_NAME}
+		PUBLIC
+			C3D_HasGLSL
+	)
+target_link_libraries( ${PROJECT_NAME}
+	PRIVATE
+		sdw::CompilerGlsl
+)
+endif ()
 
 install_target( ${PROJECT_NAME} api_dll ${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME} )
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Core" )

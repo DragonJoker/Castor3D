@@ -1,6 +1,7 @@
 #include "Castor3D/Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
@@ -380,6 +381,7 @@ namespace castor3d
 				sampler->setMagFilter( VK_FILTER_LINEAR );
 				sampler->setWrapS( mode );
 				sampler->setWrapT( mode );
+				sampler->setBorderColour( VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK );
 			}
 
 			return sampler;
@@ -391,7 +393,7 @@ namespace castor3d
 			, VkExtent2D const & size )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			auto sampler = doCreateSampler( engine, name, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+			auto sampler = doCreateSampler( engine, name, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER );
 
 			ashes::ImageCreateInfo image
 			{
@@ -626,14 +628,12 @@ namespace castor3d
 		RenderPassTimerBlock timerBlock{ m_timer->start() };
 		timerBlock->notifyPassRender();
 		auto * result = &toWait;
-		auto fence = device->createFence( getName() );
 
 		device.graphicsQueue->submit( *m_commandBuffer
 			, toWait
 			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, *m_finished
-			, fence.get() );
-		fence->wait( ashes::MaxTimeout );
+			, nullptr );
 		result = m_finished.get();
 
 		return *result;

@@ -1847,6 +1847,21 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
+	CU_ImplementAttributeParser( parserShadowsRsm )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->light )
+		{
+			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+		}
+		else
+		{
+			parsingContext->light->setGlobalIlluminationType( GlobalIlluminationType::eRsm );
+		}
+	}
+	CU_EndAttributePush( CSCNSection::eRsm )
+
 	CU_ImplementAttributeParser( parserShadowsLpv )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
@@ -1860,7 +1875,7 @@ namespace castor3d
 			parsingContext->light->setGlobalIlluminationType( GlobalIlluminationType::eLpv );
 		}
 	}
-	CU_EndAttributePush( CSCNSection::eRsm )
+	CU_EndAttributePush( CSCNSection::eLpv )
 
 	CU_ImplementAttributeParser( parserShadowsLayeredLpv )
 	{
@@ -1875,7 +1890,7 @@ namespace castor3d
 			parsingContext->light->setGlobalIlluminationType( GlobalIlluminationType::eLayeredLpv );
 		}
 	}
-	CU_EndAttributePush( CSCNSection::eRsm )
+	CU_EndAttributePush( CSCNSection::eLpv )
 
 	CU_ImplementAttributeParser( parserRsmIntensity )
 	{

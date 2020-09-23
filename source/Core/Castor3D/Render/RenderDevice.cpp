@@ -1,5 +1,7 @@
 #include "Castor3D/Render/RenderDevice.hpp"
 
+#include "Castor3D/Buffer/GpuBufferPool.hpp"
+#include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
 
@@ -200,6 +202,9 @@ namespace castor3d
 
 		transferCommandPool = graphicsCommandPool;
 		transferQueue = device->getQueue( queueFamiliesIndex[RenderDevice::GraphicsIdx], 0u );
+
+		bufferPool = std::make_shared< GpuBufferPool >( renderSystem, cuT( "GlobalBufferPool" ) );
+		uboPools = std::make_shared< UniformBufferPools >( renderSystem );
 	}
 
 	VkFormat RenderDevice::selectSuitableDepthFormat( VkFormatFeatureFlags requiredFeatures )const

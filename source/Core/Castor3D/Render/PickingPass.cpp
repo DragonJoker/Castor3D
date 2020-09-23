@@ -1,6 +1,7 @@
 #include "Castor3D/Render/PickingPass.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Cache/GeometryCache.hpp"
 #include "Castor3D/Event/Frame/FunctorEvent.hpp"

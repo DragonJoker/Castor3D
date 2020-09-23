@@ -20,11 +20,11 @@ namespace castor3d
 		, Initialiser && initialise
 		, Cleaner && clean
 		, Merger && merge )
-		: MyCache( engine
+		: MyCache{ engine
 			, std::move( produce )
 			, std::move( initialise )
 			, std::move( clean )
-			, std::move( merge ) )
+			, std::move( merge ) }
 	{
 		getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
 			, [this]()
@@ -73,17 +73,17 @@ namespace castor3d
 
 	void AnimatedObjectGroupCache::clear()
 	{
-		auto & pools = getEngine()->getUboPools();
 		MyCache::clear();
+		auto & uboPools = *getCurrentRenderDevice( *getEngine() ).uboPools;
 
 		for ( auto & entry : m_meshEntries )
 		{
-			pools.putBuffer( entry.second.morphingUbo );
+			uboPools.putBuffer( entry.second.morphingUbo );
 		}
 
 		for ( auto & entry : m_skeletonEntries )
 		{
-			pools.putBuffer( entry.second.skinningUbo );
+			uboPools.putBuffer( entry.second.skinningUbo );
 		}
 
 		m_meshEntries.clear();
@@ -118,41 +118,41 @@ namespace castor3d
 	AnimatedObjectGroupCache::MeshPoolsEntry AnimatedObjectGroupCache::doCreateEntry( AnimatedObjectGroup const & group
 		, AnimatedMesh const & mesh )
 	{
-		auto & pools = getEngine()->getUboPools();
+		auto & uboPools = *getCurrentRenderDevice( *getEngine() ).uboPools;
 		return
 		{
 			group,
 			mesh,
-			pools.getBuffer< MorphingUboConfiguration >( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ),
+			uboPools.getBuffer< MorphingUboConfiguration >( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ),
 		};
 	}
 
 	AnimatedObjectGroupCache::SkeletonPoolsEntry AnimatedObjectGroupCache::doCreateEntry( AnimatedObjectGroup const & group
 		, AnimatedSkeleton const & skeleton )
 	{
-		auto & pools = getEngine()->getUboPools();
+		auto & uboPools = *getCurrentRenderDevice( *getEngine() ).uboPools;
 		return
 		{
 			group,
 			skeleton,
-			pools.getBuffer< SkinningUboConfiguration >( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ),
+			uboPools.getBuffer< SkinningUboConfiguration >( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ),
 		};
 	}
 
 	void AnimatedObjectGroupCache::doRemoveEntry( AnimatedMesh const & mesh )
 	{
-		auto & pools = getEngine()->getUboPools();
+		auto & uboPools = *getCurrentRenderDevice( *getEngine() ).uboPools;
 		auto entry = getUbos( mesh );
 		m_meshEntries.erase( &mesh );
-		pools.putBuffer( entry.morphingUbo );
+		uboPools.putBuffer( entry.morphingUbo );
 	}
 
 	void AnimatedObjectGroupCache::doRemoveEntry( AnimatedSkeleton const & skeleton )
 	{
-		auto & pools = getEngine()->getUboPools();
+		auto & uboPools = *getCurrentRenderDevice( *getEngine() ).uboPools;
 		auto entry = getUbos( skeleton );
 		m_skeletonEntries.erase( &skeleton );
-		pools.putBuffer( entry.skinningUbo );
+		uboPools.putBuffer( entry.skinningUbo );
 	}
 
 	void AnimatedObjectGroupCache::doRegister( AnimatedObjectGroup & group )

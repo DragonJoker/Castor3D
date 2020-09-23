@@ -211,13 +211,6 @@ namespace castor3d
 			, TextureLayout const & texture );
 		/**
 		 *\~english
-		 *\brief		Transfers UBO pools data to VRAM.
-		 *\~french
-		 *\brief		Transfère en VRAM les données des pools d'UBO.
-		 */
-		C3D_API void uploadUbos( ashes::CommandBuffer const & commandBuffer );
-		/**
-		 *\~english
 		 *\brief		Retrieves plug-ins path
 		 *\return		The plug-ins path
 		 *\~french
@@ -422,11 +415,6 @@ namespace castor3d
 		{
 			return *m_logger;
 		}
-
-		inline UniformBufferPools & getUboPools()
-		{
-			return *m_uboPools;
-		}
 		/**@}*/
 		/**
 		*\~english
@@ -455,7 +443,6 @@ namespace castor3d
 		castor::LoggerInstance * m_logger{ nullptr };
 		castor::String const m_appName;
 		Version const m_appVersion;
-		std::recursive_mutex m_mutexResources;
 		RenderLoopUPtr m_renderLoop;
 		Version m_version;
 		ashes::RendererList m_rendererList;
@@ -474,13 +461,13 @@ namespace castor3d
 		DECLARE_CACHE_MEMBER( scene, Scene );
 		DECLARE_CACHE_MEMBER( listener, FrameListener );
 		FrameListenerWPtr m_defaultListener;
+		std::map< RenderWindow const *, UserInputListenerSPtr > m_windowInputListeners;
+		UserInputListenerSPtr m_userInputListener;
 		DECLARE_CACHE_MEMBER( target, RenderTarget );
 		DECLARE_CACHE_MEMBER( technique, RenderTechnique );
 		DECLARE_CACHE_MEMBER( window, RenderWindow );
 		castor::FontCache m_fontCache;
 		castor::ImageCache m_imageCache;
-		UserInputListenerSPtr m_userInputListener;
-		std::map< RenderWindow const *, UserInputListenerSPtr > m_windowInputListeners;
 		std::map< castor::String, castor::AttributeParsersBySection > m_additionalParsers;
 		std::map< castor::String, castor::StrUInt32Map > m_additionalSections;
 		MeshFactorySPtr m_meshFactory;
@@ -492,8 +479,6 @@ namespace castor3d
 		bool m_enableValidation{ false };
 		bool m_enableApiTrace{ false };
 		RenderDepthQuadSPtr m_renderDepth;
-		ashes::CommandBufferPtr m_uploadCommandBuffer;
-		UniformBufferPoolsSPtr m_uboPools;
 	};
 }
 

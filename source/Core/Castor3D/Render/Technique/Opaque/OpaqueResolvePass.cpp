@@ -1,6 +1,7 @@
 #include "Castor3D/Render/Technique/Opaque/OpaqueResolvePass.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
@@ -44,9 +45,9 @@ namespace castor3d
 {
 	namespace
 	{
-		static uint32_t constexpr c_phongEnvironmentCount = 5u;
-		static uint32_t constexpr c_brdfTexturesCount = 3u;
-		static uint32_t constexpr c_pbrEnvironmentCount = c_phongEnvironmentCount - c_brdfTexturesCount;
+		static uint32_t constexpr c_noIblEnvironmentCount = 5u;
+		static uint32_t constexpr c_iblTexturesCount = 3u;
+		static uint32_t constexpr c_iblEnvironmentCount = c_noIblEnvironmentCount - c_iblTexturesCount;
 
 		ashes::PipelineVertexInputStateCreateInfoPtr doCreateVertexLayout()
 		{
@@ -136,7 +137,7 @@ namespace castor3d
 			auto c3d_mapSsao = writer.declSampledImage< FImg2DRg32 >( "c3d_mapSsao", hasSsao ? index++ : 0u, 1u, hasSsao );
 			auto c3d_mapLightDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightDiffuse", index++, 1u );
 			auto c3d_mapLightSpecular = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightSpecular", index++, 1u );
-			auto c3d_mapEnvironment = writer.declSampledImageArray< FImgCubeRgba32 >( "c3d_mapEnvironment", index++, 1u, c_phongEnvironmentCount );
+			auto c3d_mapEnvironment = writer.declSampledImageArray< FImgCubeRgba32 >( "c3d_mapEnvironment", index++, 1u, c_noIblEnvironmentCount );
 			CU_Require( index < device.properties.limits.maxDescriptorSetSampledImages );
 
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
@@ -233,7 +234,7 @@ namespace castor3d
 							, reflections.computeIncident( position, c3d_cameraPosition.xyz() ) );
 						envMapIndex = envMapIndex - 1_i;
 
-						IF( writer, envMapIndex >= Int( c_phongEnvironmentCount ) )
+						IF( writer, envMapIndex >= Int( c_noIblEnvironmentCount ) )
 						{
 							envMapIndex = 0_i;
 						}
@@ -241,7 +242,7 @@ namespace castor3d
 
 						IF( writer, reflection != 0_i && refraction != 0_i )
 						{
-							for ( auto i = 0; i < c_phongEnvironmentCount; ++i )
+							for ( auto i = 0; i < c_noIblEnvironmentCount; ++i )
 							{
 								IF( writer, envMapIndex == Int( i ) )
 								{
@@ -259,7 +260,7 @@ namespace castor3d
 						}
 						ELSEIF( reflection != 0_i )
 						{
-							for ( auto i = 0; i < c_phongEnvironmentCount; ++i )
+							for ( auto i = 0; i < c_noIblEnvironmentCount; ++i )
 							{
 								IF( writer, envMapIndex == Int( i ) )
 								{
@@ -276,7 +277,7 @@ namespace castor3d
 						}
 						ELSE
 						{
-							for ( auto i = 0; i < c_phongEnvironmentCount; ++i )
+							for ( auto i = 0; i < c_noIblEnvironmentCount; ++i )
 							{
 								IF( writer, envMapIndex == Int( i ) )
 								{
@@ -344,7 +345,7 @@ namespace castor3d
 			auto c3d_mapBrdf = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBrdf", index++, 1u );
 			auto c3d_mapIrradiance = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapIrradiance", index++, 1u );
 			auto c3d_mapPrefiltered = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapPrefiltered", index++, 1u );
-			auto c3d_mapEnvironment = writer.declSampledImageArray< FImgCubeRgba32 >( "c3d_mapEnvironment", index++, 1u, c_pbrEnvironmentCount );
+			auto c3d_mapEnvironment = writer.declSampledImageArray< FImgCubeRgba32 >( "c3d_mapEnvironment", index++, 1u, c_iblEnvironmentCount );
 			CU_Require( index < device.properties.limits.maxDescriptorSetSampledImages );
 
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
@@ -440,7 +441,7 @@ namespace castor3d
 					{
 						envMapIndex = envMapIndex - 1_i;
 
-						IF( writer, envMapIndex >= Int( c_pbrEnvironmentCount ) )
+						IF( writer, envMapIndex >= Int( c_iblEnvironmentCount ) )
 						{
 							envMapIndex = 0_i;
 						}
@@ -453,7 +454,7 @@ namespace castor3d
 
 						IF( writer, reflection != 0_i )
 						{
-							for ( auto i = 0; i < c_pbrEnvironmentCount; ++i )
+							for ( auto i = 0; i < c_iblEnvironmentCount; ++i )
 							{
 								IF( writer, envMapIndex == Int( i ) )
 								{
@@ -487,7 +488,7 @@ namespace castor3d
 
 						IF( writer, refraction != 0_i )
 						{
-							for ( auto i = 0; i < c_pbrEnvironmentCount; ++i )
+							for ( auto i = 0; i < c_iblEnvironmentCount; ++i )
 							{
 								IF( writer, envMapIndex == Int( i ) )
 								{
@@ -596,7 +597,7 @@ namespace castor3d
 			auto c3d_mapBrdf = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBrdf", index++, 1u );
 			auto c3d_mapIrradiance = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapIrradiance", index++, 1u );
 			auto c3d_mapPrefiltered = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapPrefiltered", index++, 1u );
-			auto c3d_mapEnvironment = writer.declSampledImageArray< FImgCubeRgba32 >( "c3d_mapEnvironment", index++, 1u, c_pbrEnvironmentCount );
+			auto c3d_mapEnvironment = writer.declSampledImageArray< FImgCubeRgba32 >( "c3d_mapEnvironment", index++, 1u, c_iblEnvironmentCount );
 			CU_Require( index < device.properties.limits.maxDescriptorSetSampledImages );
 
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
@@ -692,7 +693,7 @@ namespace castor3d
 					{
 						envMapIndex = envMapIndex - 1_i;
 
-						IF( writer, envMapIndex >= Int( c_pbrEnvironmentCount ) )
+						IF( writer, envMapIndex >= Int( c_iblEnvironmentCount ) )
 						{
 							envMapIndex = 0_i;
 						}
@@ -705,7 +706,7 @@ namespace castor3d
 
 						IF( writer, reflection != 0_i )
 						{
-							for ( auto i = 0; i < c_pbrEnvironmentCount; ++i )
+							for ( auto i = 0; i < c_iblEnvironmentCount; ++i )
 							{
 								IF( writer, envMapIndex == Int( i ) )
 								{
@@ -739,7 +740,7 @@ namespace castor3d
 
 						IF( writer, refraction != 0_i )
 						{
-							for ( auto i = 0; i < c_pbrEnvironmentCount; ++i )
+							for ( auto i = 0; i < c_iblEnvironmentCount; ++i )
 							{
 								IF( writer, envMapIndex == Int( i ) )
 								{
@@ -1004,7 +1005,7 @@ namespace castor3d
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapLightSpecular
-			auto envMapCount = c_phongEnvironmentCount;
+			auto envMapCount = c_noIblEnvironmentCount;
 
 			if ( matType != MaterialType::ePhong )
 			{
@@ -1017,7 +1018,7 @@ namespace castor3d
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapPrefiltered
-				envMapCount = c_pbrEnvironmentCount;
+				envMapCount -= c_iblTexturesCount;
 			}
 
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
@@ -1077,7 +1078,7 @@ namespace castor3d
 			result.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { sampler->getSampler(), lightDiffuse, imgLayout } } } );
 			result.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { sampler->getSampler(), lightSpecular, imgLayout } } } );
 			auto & background = *scene.getBackground();
-			auto envMapCount = c_phongEnvironmentCount;
+			auto envMapCount = c_noIblEnvironmentCount;
 
 			if ( matType != MaterialType::ePhong
 				&& background.hasIbl() )
@@ -1086,7 +1087,7 @@ namespace castor3d
 				result.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { ibl.getPrefilteredBrdfSampler(), ibl.getPrefilteredBrdfTexture(), imgLayout } } } );
 				result.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { ibl.getIrradianceSampler(), ibl.getIrradianceTexture(), imgLayout } } } );
 				result.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { ibl.getPrefilteredEnvironmentSampler(), ibl.getPrefilteredEnvironmentTexture(), imgLayout } } } );
-				envMapCount = c_pbrEnvironmentCount;
+				envMapCount -= c_iblTexturesCount;
 			}
 
 			auto & device = getCurrentRenderDevice( scene );

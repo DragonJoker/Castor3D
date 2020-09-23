@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_RenderDevice_H___
 
 #include "RenderModule.hpp"
+#include "Castor3D/Buffer/BufferModule.hpp"
 
 #include <ashespp/Command/CommandPool.hpp>
 #include <ashespp/Sync/Queue.hpp>
@@ -85,6 +86,8 @@ namespace castor3d
 		ashes::QueuePtr graphicsQueue{ nullptr };
 		ashes::QueuePtr computeQueue{ nullptr };
 		ashes::QueuePtr transferQueue{ nullptr };
+		GpuBufferPoolSPtr bufferPool;
+		UniformBufferPoolsSPtr uboPools;
 
 		static constexpr size_t GraphicsIdx = 0u;
 		static constexpr size_t PresentIdx = 1u;

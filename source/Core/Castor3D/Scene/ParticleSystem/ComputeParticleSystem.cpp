@@ -1,6 +1,7 @@
 #include "Castor3D/Scene/ParticleSystem/ComputeParticleSystem.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
@@ -61,7 +62,7 @@ namespace castor3d
 		if ( result )
 		{
 			auto & device = getCurrentRenderDevice( getParent() );
-			m_ubo = device.renderSystem.getEngine()->getUboPools().getBuffer< Configuration >( 0u );
+			m_ubo = device.uboPools->getBuffer< Configuration >( 0u );
 			m_ubo.getData().maxParticleCount = uint32_t( m_parent.getMaxParticlesCount() );
 		}
 
@@ -111,7 +112,8 @@ namespace castor3d
 		}
 
 		m_generatedCountBuffer.reset();
-		getParent().getScene()->getEngine()->getUboPools().putBuffer( m_ubo );
+		auto & device = getCurrentRenderDevice( getParent() );
+		device.uboPools->putBuffer( m_ubo );
 	}
 
 	void ComputeParticleSystem::update( CpuUpdater & updater )

@@ -66,6 +66,19 @@ namespace castor3d
 	template< LightType LtType >
 	class LightPassReflectiveShadow;
 
+	//!\~english	The directional lights light pass with shadows.
+	//!\~french		La passe d'éclairage avec ombres pour les lumières directionnelles.
+	using DirectionalLightPassReflectiveShadow = LightPassReflectiveShadow< LightType::eDirectional >;
+	//!\~english	The point lights light pass with shadows.
+	//!\~french		La passe d'éclairage avec ombres pour les lumières omnidirectionnelles.
+	using PointLightPassReflectiveShadow = LightPassReflectiveShadow< LightType::ePoint >;
+	//!\~english	The spot lights light pass with shadows.
+	//!\~french		La passe d'éclairage avec ombres pour les lumières projecteurs.
+	using SpotLightPassReflectiveShadow = LightPassReflectiveShadow< LightType::eSpot >;
+
+	CU_DeclareSmartPtr( RsmGIPass );
+	CU_DeclareSmartPtr( RsmInterpolatePass );
+
 	//@}
 	//@}
 	//@}

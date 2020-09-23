@@ -34,8 +34,12 @@ namespace GuiCommon
 		DECLARE_EVENT_TABLE()
 		void onClose( wxCloseEvent & event );
 		void onMenuClose( wxCommandEvent & event );
+#if C3D_HasGLSL
 		void onMenuLanguageGLSL( wxCommandEvent & event );
+#endif
+#if GC_HasHLSL
 		void onMenuLanguageHLSL( wxCommandEvent & event );
+#endif
 		void onMenuLanguageSPIRV( wxCommandEvent & event );
 		void onMenuPreferences( wxCommandEvent & event );
 

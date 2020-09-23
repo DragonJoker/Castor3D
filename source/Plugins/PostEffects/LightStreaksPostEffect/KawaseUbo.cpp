@@ -28,7 +28,7 @@ namespace light_streaks
 		{
 			for ( uint32_t i = 0u; i < PostEffect::Count * 3u; ++i )
 			{
-				m_ubo.push_back( m_engine.getUboPools().getBuffer< Configuration >( 0u ) );
+				m_ubo.push_back( getCurrentRenderDevice( m_engine ).uboPools->getBuffer< Configuration >( 0u ) );
 			}
 		}
 	}
@@ -37,7 +37,7 @@ namespace light_streaks
 	{
 		for ( auto & ubo : m_ubo )
 		{
-			m_engine.getUboPools().putBuffer( ubo );
+			getCurrentRenderDevice( m_engine ).uboPools->putBuffer( ubo );
 		}
 
 		m_ubo.clear();

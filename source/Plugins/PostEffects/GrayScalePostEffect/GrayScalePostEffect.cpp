@@ -164,7 +164,7 @@ namespace grayscale
 		stages.push_back( makeShaderState( device, m_vertexShader ) );
 		stages.push_back( makeShaderState( device, m_pixelShader ) );
 
-		m_configUbo = renderSystem.getEngine()->getUboPools().getBuffer< castor::Point3f >( 0u );
+		m_configUbo = device.uboPools->getBuffer< castor::Point3f >( 0u );
 		m_configUbo.getData() = m_factors.value();
 		m_factors.reset();
 
@@ -282,7 +282,7 @@ namespace grayscale
 		m_renderPass.reset();
 		m_surface.cleanup();
 		auto & renderSystem = *getRenderSystem();
-		renderSystem.getEngine()->getUboPools().putBuffer( m_configUbo );
+		getCurrentRenderDevice( renderSystem ).uboPools->putBuffer( m_configUbo );
 	}
 
 	bool PostEffect::doWriteInto( castor::TextFile & file, castor::String const & tabs )

@@ -574,7 +574,7 @@ namespace castor3d
 			, m_prefix + cuT( "GaussianBlur" )
 			, m_format
 			, m_source.getSubresourceRange().levelCount ) }
-		, m_blurUbo{ engine.getUboPools().getBuffer< Configuration >( 0u ) }
+		, m_blurUbo{ getCurrentRenderDevice( engine ).uboPools->getBuffer< Configuration >( 0u ) }
 		, m_blurX{ engine
 			, m_prefix + cuT( " - GaussianBlur - X Pass" )
 			, m_source.getSampledView()

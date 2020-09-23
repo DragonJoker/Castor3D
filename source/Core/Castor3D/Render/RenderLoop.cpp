@@ -1,6 +1,7 @@
 #include "Castor3D/Render/RenderLoop.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
 #include "Castor3D/Cache/BillboardUboPools.hpp"
 #include "Castor3D/Cache/GeometryCache.hpp"
@@ -219,7 +220,7 @@ namespace castor3d
 
 			auto & uploadResources = m_uploadResources[m_currentUpdate];
 			uploadResources.commands.commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-			getEngine()->uploadUbos( *uploadResources.commands.commandBuffer );
+			device.uboPools->upload( *uploadResources.commands.commandBuffer );
 			uploadResources.commands.commandBuffer->end();
 			device.graphicsQueue->submit( { *uploadResources.commands.commandBuffer }
 				, {}

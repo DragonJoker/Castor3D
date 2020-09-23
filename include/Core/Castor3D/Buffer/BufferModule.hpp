@@ -56,6 +56,16 @@ namespace castor3d
 	struct GpuBufferOffsetT;
 	/**
 	*\~english
+	*\brief
+	*	A GpuBuffer pool.
+	*\~french
+	*\brief
+	*	Un pool de GpuBuffer.
+	*\remark
+	*/
+	class GpuBufferPool;
+	/**
+	*\~english
 	*\brief		A uniform buffer, than can contain multiple sub-buffers.
 	*\~french
 	*\brief		Un tampon d'uniformes, puovant contenir de multiples sous-tampons.
@@ -116,6 +126,7 @@ namespace castor3d
 	*/
 	class UniformBufferPools;
 
+	CU_DeclareSmartPtr( GpuBufferPool );
 	CU_DeclareSmartPtr( UniformBufferBase );
 	CU_DeclareSmartPtr( UniformBufferPools );
 	CU_DeclareSmartPtr( PoolUniformBuffer );

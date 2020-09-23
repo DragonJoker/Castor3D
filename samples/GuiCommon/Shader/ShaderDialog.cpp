@@ -21,8 +21,12 @@ namespace GuiCommon
 		eID_MENU_QUIT,
 		eID_MENU_PREFS,
 		eID_MENU_LANG,
+#if C3D_HasGLSL
 		eID_MENU_LANG_GLSL,
+#endif
+#if GC_HasHLSL
 		eID_MENU_LANG_HLSL,
+#endif
 		eID_MENU_LANG_SPIRV,
 		eID_PAGES,
 	}	eID;
@@ -105,7 +109,13 @@ namespace GuiCommon
 				, true
 				, *m_stcContext
 				, sources
+#if C3D_HasGLSL
 				, ShaderLanguage::GLSL
+#elif GC_HasHLSL
+				, ShaderLanguage::HLSL
+#else
+				, ShaderLanguage::SPIRV
+#endif
 				, m_programs ) );
 			auto & page = *m_pages.back();
 			page.SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
@@ -125,8 +135,12 @@ namespace GuiCommon
 		menu->Append( eID_MENU_QUIT, _( "&Quit\tCTRL+Q" ) );
 		menuBar->Append( menu, _T( "&File" ) );
 		menu = new wxMenu;
+#if C3D_HasGLSL
 		m_glslRadio = menu->AppendRadioItem( eID_MENU_LANG_GLSL, wxT( "GLSL" ), _( "Use GLSL to display shaders" ) );
+#endif
+#if GC_HasHLSL
 		m_hlslRadio = menu->AppendRadioItem( eID_MENU_LANG_HLSL, wxT( "HLSL" ), _( "Use HLSL to display shaders" ) );
+#endif
 		m_spirvRadio = menu->AppendRadioItem( eID_MENU_LANG_SPIRV, wxT( "SPIR-V" ), _( "Use SPIR-V to display shaders" ) );
 		menu->AppendSeparator();
 		menu->Append( eID_MENU_PREFS, _( "&Edit preferences ...\tCTRL+E" ) );
@@ -143,8 +157,12 @@ namespace GuiCommon
 	BEGIN_EVENT_TABLE( ShaderDialog, wxFrame )
 		EVT_CLOSE( ShaderDialog::onClose )
 		EVT_MENU( eID_MENU_QUIT, ShaderDialog::onMenuClose )
+#if C3D_HasGLSL
 		EVT_MENU( eID_MENU_LANG_GLSL, ShaderDialog::onMenuLanguageGLSL )
+#endif
+#if GC_HasHLSL
 		EVT_MENU( eID_MENU_LANG_HLSL, ShaderDialog::onMenuLanguageHLSL )
+#endif
 		EVT_MENU( eID_MENU_LANG_SPIRV, ShaderDialog::onMenuLanguageSPIRV )
 		EVT_MENU( eID_MENU_PREFS, ShaderDialog::onMenuPreferences )
 	END_EVENT_TABLE()
@@ -161,6 +179,7 @@ namespace GuiCommon
 		event.Skip();
 	}
 
+#if C3D_HasGLSL
 	void ShaderDialog::onMenuLanguageGLSL( wxCommandEvent & event )
 	{
 		if ( !m_glslRadio->IsCheck() )
@@ -172,7 +191,8 @@ namespace GuiCommon
 
 		event.Skip();
 	}
-
+#endif
+#if GC_HasHLSL
 	void ShaderDialog::onMenuLanguageHLSL( wxCommandEvent & event )
 	{
 		if ( !m_hlslRadio->IsCheck() )
@@ -184,7 +204,7 @@ namespace GuiCommon
 
 		event.Skip();
 	}
-
+#endif
 	void ShaderDialog::onMenuLanguageSPIRV( wxCommandEvent & event )
 	{
 		if ( !m_spirvRadio->IsCheck() )

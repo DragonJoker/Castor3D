@@ -80,12 +80,7 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader inputs
-			auto materials = shader::createMaterials( writer
-				, ( engine.getMaterialsType() == MaterialType::eMetallicRoughness
-					? PassFlag::eMetallicRoughness
-					: ( engine.getMaterialsType() == MaterialType::eSpecularGlossiness
-						? PassFlag::eSpecularGlossiness
-						: PassFlag( 0u ) ) ) );
+			auto materials = shader::createMaterials( writer, PassFlag( 0u ) );
 			materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 			UBO_SCENE( writer, BlurSceneUboId, 0u );
 			UBO_GPINFO( writer, BlurGpInfoUboId, 0u );
@@ -212,12 +207,7 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader inputs
-			auto materials = shader::createMaterials( writer
-				, ( engine.getMaterialsType() == MaterialType::eMetallicRoughness
-					? PassFlag::eMetallicRoughness
-					: ( engine.getMaterialsType() == MaterialType::eSpecularGlossiness
-						? PassFlag::eSpecularGlossiness
-						: PassFlag( 0u ) ) ) );
+			auto materials = shader::createMaterials( writer, PassFlag( 0u ) );
 			materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 
 			auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), CombData4ImgId, 0u );
@@ -464,7 +454,7 @@ namespace castor3d
 		, m_geometryBufferResult{ gpResult }
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_sceneUbo{ sceneUbo }
-		, m_blurUbo{ renderSystem.getEngine()->getUboPools().getBuffer< BlurConfiguration >( 0u ) }
+		, m_blurUbo{ getCurrentRenderDevice( renderSystem ).uboPools->getBuffer< BlurConfiguration >( 0u ) }
 		, m_renderPass{ doCreateRenderPass( getCurrentRenderDevice( renderSystem ), destination.getTexture()->getPixelFormat(), "SubscatteringBlur" ) }
 		, m_frameBuffer{ doCreateFrameBuffer( getCurrentRenderDevice( renderSystem ), *m_renderPass, size, destination.getTexture()->getDefaultView().getTargetView(), "SubscatteringBlur" ) }
 	{
@@ -567,7 +557,7 @@ namespace castor3d
 		, ashes::PipelineShaderStageCreateInfoArray const & shaderStages )
 		: RenderQuad{ renderSystem, cuT( "SubscatteringCombine" ), VK_FILTER_LINEAR, { ashes::nullopt, RenderQuadConfig::Texcoord{} } }
 		, m_renderSystem{ renderSystem }
-		, m_blurUbo{ renderSystem.getEngine()->getUboPools().getBuffer< BlurWeights >( 0u ) }
+		, m_blurUbo{ getCurrentRenderDevice( renderSystem ).uboPools->getBuffer< BlurWeights >( 0u ) }
 		, m_geometryBufferResult{ gpResult }
 		, m_source{ source }
 		, m_blurResults{ blurResults }

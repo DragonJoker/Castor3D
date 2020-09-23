@@ -1,5 +1,6 @@
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 
+#include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 

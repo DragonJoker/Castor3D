@@ -21,7 +21,7 @@ namespace castor3d
 	LpvConfigUbo::LpvConfigUbo( Engine & engine
 		, uint32_t index )
 		: m_engine{ engine }
-		, m_ubo{ m_engine.getUboPools().getBuffer< Configuration >( 0u ) }
+		, m_ubo{ getCurrentRenderDevice( m_engine ).uboPools->getBuffer< Configuration >( 0u ) }
 	{
 	}
 

@@ -34,7 +34,8 @@ namespace castor3d
 	{
 		if ( !m_ubo )
 		{
-			m_ubo = m_engine.getUboPools().getBuffer< Configuration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+			auto & device = getCurrentRenderDevice( m_engine );
+			m_ubo = device.uboPools->getBuffer< Configuration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 		}
 	}
 
@@ -42,7 +43,8 @@ namespace castor3d
 	{
 		if ( m_ubo )
 		{
-			m_engine.getUboPools().putBuffer( m_ubo );
+			auto & device = getCurrentRenderDevice( m_engine );
+			device.uboPools->putBuffer( m_ubo );
 		}
 	}
 

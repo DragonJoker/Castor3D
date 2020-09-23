@@ -6,6 +6,8 @@
 
 using namespace castor;
 
+#define C3D_RSMGIUseCascasdes 0
+
 namespace castor3d
 {
 	ReflectiveShadowMapping::ReflectiveShadowMapping( sdw::ShaderWriter & writer
@@ -97,10 +99,12 @@ namespace castor3d
 				auto c3d_rsmNormalMap = m_writer.getVariable< SampledImage2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eNormalLinear ) );
 				auto c3d_rsmPositionMap = m_writer.getVariable< SampledImage2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::ePosition ) );
 				auto c3d_rsmFluxMap = m_writer.getVariable< SampledImage2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eFlux ) );
-				auto cascadeIndex = m_writer.declLocale( "cascadeIndex"
-					, 0_u );
 				auto maxCount = m_writer.declLocale( "maxCount"
 					, max( light.m_cascadeCount, 1_u ) - 1_u );
+				auto cascadeIndex = m_writer.declLocale( "cascadeIndex"
+					, 0_u );
+
+#if C3D_RSMGIUseCascasdes
 
 				// Get cascade index for the current fragment's view position
 				FOR( m_writer, UInt, i, 0u, i < maxCount, ++i )
@@ -113,15 +117,19 @@ namespace castor3d
 				}
 				ROF;
 
-				auto indirectIllumination = m_writer.declLocale( "indirectIllumination"
-					, vec3( 0.0_f ) );
 				auto rMax = m_writer.declLocale< Float >( "rMax"
 					, rsmRMax / light.m_splitScales[cascadeIndex] );
+#else
+				auto rMax = m_writer.declLocale< Float >( "rMax"
+					, rsmRMax / light.m_splitScales[cascadeIndex] );
+#endif
 				auto lightSpacePosition = m_writer.declLocale< Vec4 >( "lightSpacePosition"
 					, light.m_transforms[cascadeIndex] * vec4( worldPosition, 1.0 ) );
 				lightSpacePosition.xy() = sdw::fma( lightSpacePosition.xy()
 					, vec2( 0.5_f )
 					, vec2( 0.5_f ) );
+				auto indirectIllumination = m_writer.declLocale( "indirectIllumination"
+					, vec3( 0.0_f ) );
 
 				FOR( m_writer, UInt, i, 0_u, i < rsmSampleCount, ++i )
 				{

@@ -43,7 +43,7 @@ namespace castor3d
 
 		constexpr uint32_t getPointGIidx( LightingPass::Type type )
 		{
-			return std::min( uint32_t( type ), uint32_t( LightingPass::Type::eShadowNoGI ) );
+			return std::min( uint32_t( type ), uint32_t( LightingPass::Type::eShadowRsmGI ) );
 		}
 
 		constexpr uint32_t getSpotGIidx( LightingPass::Type type )
@@ -128,6 +128,24 @@ namespace castor3d
 		};
 
 		template<>
+		struct PassInfoT< LightingPass::Type::eShadowRsmGI, LightType::eDirectional >
+		{
+			using Type = DirectionalLightPassReflectiveShadow;
+		};
+
+		template<>
+		struct PassInfoT< LightingPass::Type::eShadowRsmGI, LightType::ePoint >
+		{
+			using Type = PointLightPassReflectiveShadow;
+		};
+
+		template<>
+		struct PassInfoT< LightingPass::Type::eShadowRsmGI, LightType::eSpot >
+		{
+			using Type = SpotLightPassReflectiveShadow;
+		};
+
+		template<>
 		struct PassInfoT< LightingPass::Type::eShadowLpvGI, LightType::eDirectional >
 		{
 			using Type = DirectionalLightPassVolumePropagationShadow;
@@ -178,8 +196,7 @@ namespace castor3d
 			{
 				return LightingPass::DelayedLightPass{};
 			}
-			else if constexpr ( PassT == LightingPass::Type::eShadowLpvGI
-				|| PassT == LightingPass::Type::eShadowLayeredLpvGI )
+			else if constexpr ( PassT > LightingPass::Type::eShadowNoGI )
 			{
 				return castor::DelayedInitialiserT< castor3d::LightPass >::template make< PassTypeT< PassT, LightT > >( engine
 					, lightCache
@@ -261,6 +278,16 @@ namespace castor3d
 					, gpInfoUbo );
 			case LightingPass::Type::eShadowNoGI:
 				return makeLightPassT< LightingPass::Type::eShadowNoGI >( lightType
+					, engine
+					, lightCache
+					, gpResult
+					, smDirectionalResult
+					, smPointResult
+					, smSpotResult
+					, lpResult
+					, gpInfoUbo );
+			case LightingPass::Type::eShadowRsmGI:
+				return makeLightPassT< LightingPass::Type::eShadowRsmGI >( lightType
 					, engine
 					, lightCache
 					, gpResult
@@ -622,7 +649,7 @@ namespace castor3d
 	{
 		if ( !m_engine.getRenderSystem()->getGpuInformations().hasShaderType( VK_SHADER_STAGE_GEOMETRY_BIT ) )
 		{
-			giType = GlobalIlluminationType::eNone;
+			giType = std::min( GlobalIlluminationType::eRsm, giType );
 		}
 
 		return getLightPass( Type( uint32_t( giType ) + 1u )

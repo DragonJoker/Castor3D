@@ -1,5 +1,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
+
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Shader/GlslToSpv.hpp"
 
 #include <CastorUtils/Data/BinaryFile.hpp>
@@ -8,11 +10,15 @@
 #include <CastorUtils/Align/Aligned.hpp>
 
 #include <ashespp/Core/Instance.hpp>
+#include <ashespp/Core/Device.hpp>
 #include <ashespp/Core/RendererList.hpp>
+#include <ashespp/Core/Surface.hpp>
 
 #include <ShaderWriter/Source.hpp>
-#include <CompilerGlsl/compileGlsl.hpp>
 #include <CompilerSpirV/compileSpirV.hpp>
+#if C3D_HasGLSL
+#	include <CompilerGlsl/compileGlsl.hpp>
+#endif
 
 #if C3D_HasSPIRVCross
 #	include "spirv_cpp.hpp"
@@ -411,7 +417,6 @@ namespace castor3d
 		, m_desc{ std::move( desc ) }
 		, m_initialised{ false }
 		, m_gpuInformations{}
-		, m_gpuBufferPool{ *this, cuT( "GlobalPool" ) }
 	{
 		auto & rendererList = engine.getRenderersList();
 		auto plugin = rendererList.selectPlugin( desc.name );

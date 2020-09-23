@@ -290,19 +290,16 @@ namespace castor3d
 		std::array< TextureUnit, shader::DirectionalMaxCascadesCount > m_geometry;
 		std::array< LightVolumePassResult, shader::DirectionalMaxCascadesCount > m_accumulation;
 		std::array< LightVolumePassResult, 2u > m_propagate;
-		std::vector< LightInjectionPass > m_lightInjectionPasses;
-		std::vector< GeometryInjectionPass > m_geometryInjectionPasses;
-		std::vector< LightPropagationPass > m_lightPropagationPasses;
-		std::unique_ptr< LayeredLightVolumeGIPass > m_lightVolumeGIPass;
+		LightInjectionPassArray m_lightInjectionPasses;
+		GeometryInjectionPassArray m_geometryInjectionPasses;
+		LightPropagationPassArray m_lightPropagationPasses;
+		LayeredLightVolumeGIPassUPtr m_lightVolumeGIPass;
 
 		castor::BoundingBox m_aabb;
 		castor::Point3f m_cameraPos;
 		castor::Point3f m_cameraDir;
 		uint32_t m_lightIndex{};
 	};
-	//!\~english	The directional lights light pass with shadows.
-	//!\~french		La passe d'éclairage avec ombres pour les lumières directionnelles.
-	using DirectionalLightPassLayeredVolumePropagationShadow = LightPassLayeredVolumePropagationShadow< LightType::eDirectional >;
 }
 
 #endif

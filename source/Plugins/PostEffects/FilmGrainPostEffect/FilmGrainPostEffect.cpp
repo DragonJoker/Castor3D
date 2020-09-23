@@ -237,7 +237,7 @@ namespace film_grain
 				, m_noiseView );
 		}
 
-		m_configUbo = device.renderSystem.getEngine()->getUboPools().getBuffer< Configuration >( 0u );
+		m_configUbo = device.uboPools->getBuffer< Configuration >( 0u );
 		m_configUbo.getData().m_pixelSize = Point2f{ m_size.width, m_size.height };
 		m_configUbo.getData().m_noiseIntensity = 1.0f;
 		m_configUbo.getData().m_exposure = 1.0f;

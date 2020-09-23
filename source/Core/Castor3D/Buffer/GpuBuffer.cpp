@@ -3,6 +3,9 @@
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
+#include <ashespp/Command/CommandBuffer.hpp>
+#include <ashespp/Buffer/StagingBuffer.hpp>
+
 using namespace castor;
 
 namespace castor3d

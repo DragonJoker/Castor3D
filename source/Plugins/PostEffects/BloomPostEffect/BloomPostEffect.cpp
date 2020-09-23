@@ -1,6 +1,7 @@
 #include "BloomPostEffect/BloomPostEffect.hpp"
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Buffer/GpuBuffer.hpp>
 #include <Castor3D/Cache/SamplerCache.hpp>
 #include <Castor3D/Model/Vertex.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
