@@ -38,12 +38,6 @@
 
 #include <ShaderWriter/Source.hpp>
 
-#if !defined( NDEBUG )
-#	define C3D_DebugQuads 0
-#else
-#	define C3D_DebugQuads 0
-#endif
-
 using namespace castor;
 
 namespace castor3d
@@ -307,7 +301,7 @@ namespace castor3d
 			m_culler.reset();
 
 			m_signalReady.reset();
-			m_combineQuads.clear();
+			m_combinePass.reset();
 
 			m_toneMappingCommandBuffer.reset();
 
@@ -377,6 +371,13 @@ namespace castor3d
 		{
 			effect->update( updater );
 		}
+
+#if C3D_DebugQuads
+		auto technique = this->getTechnique();
+		auto & debugConfig = technique->getDebugConfig();
+		updater.combineIndex = debugConfig.debugIndex;
+		m_combinePass->update( updater );
+#endif
 	}
 
 	void RenderTarget::update( GpuUpdater & updater )
@@ -576,7 +577,9 @@ namespace castor3d
 
 		if ( result )
 		{
-			addIntermediateView( "Target Colour", m_objectsFrameBuffer.colourTexture.getTexture()->getDefaultView().getSampledView() );
+			addIntermediateView( "Target Colour"
+				, m_objectsFrameBuffer.colourTexture.getTexture()->getDefaultView().getSampledView()
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 			result = m_overlaysFrameBuffer.initialise( *m_renderPass
 				, VK_FORMAT_R8G8B8A8_UNORM
 				, m_size );
@@ -584,7 +587,9 @@ namespace castor3d
 
 		if ( result )
 		{
-			addIntermediateView( "Target Overlays", m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView().getSampledView() );
+			addIntermediateView( "Target Overlays"
+				, m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView().getSampledView()
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 			result = m_combinedFrameBuffer.initialise( *m_renderPass
 				, getPixelFormat()
 				, m_size );
@@ -617,7 +622,9 @@ namespace castor3d
 
 		if ( result )
 		{
-			addIntermediateView( "Target Velocity", m_velocityTexture.getTexture()->getDefaultView().getSampledView() );
+			addIntermediateView( "Target Velocity"
+				, m_velocityTexture.getTexture()->getDefaultView().getSampledView()
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		}
 
 		return  result;
@@ -768,8 +775,12 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader inputs
-			auto c3d_mapLhs = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLhs", LhsIdx, 0u );
-			auto c3d_mapRhs = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapRhs", RhsIdx, 0u );
+			sdw::Ubo combineUbo{ writer, "CombineUbo", 0u, 0u };
+			auto c3d_combineIndex = combineUbo.declMember< UInt >( "c3d_combineIndex" );
+			combineUbo.end();
+			auto c3d_mapsLhs = writer.declSampledImageArray< FImg2DRgba32 >( "c3d_mapsLhs", 1u, 0u, uint32_t( m_intermediates.size() ) );
+			auto c3d_mapRhs = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapRhs", 2u, 0u );
+
 			auto vtx_textureLhs = writer.declInput< Vec2 >( "vtx_textureLhs", LhsIdx );
 			auto vtx_textureRhs = writer.declInput< Vec2 >( "vtx_textureRhs", RhsIdx );
 
@@ -780,11 +791,20 @@ namespace castor3d
 				, [&]()
 				{
 					auto lhsColor = writer.declLocale( "lhsColor"
-						, texture( c3d_mapRhs, vtx_textureLhs ) );
-					auto rhsColor = writer.declLocale( "rhsColor"
-						, texture( c3d_mapLhs, vtx_textureRhs ) );
-					lhsColor.rgb() *= 1.0_f - rhsColor.a();
-					pxl_fragColor = vec4( lhsColor.rgb() + rhsColor.rgb(), 1.0_f );
+						, texture( c3d_mapsLhs[c3d_combineIndex], vtx_textureLhs ) );
+
+					IF( writer, c3d_combineIndex == 0_u )
+					{
+						auto rhsColor = writer.declLocale( "rhsColor"
+							, texture( c3d_mapRhs, vtx_textureRhs ) );
+						lhsColor.rgb() *= 1.0_f - rhsColor.a();
+						pxl_fragColor = vec4( lhsColor.rgb() + rhsColor.rgb(), 1.0_f );
+					}
+					ELSE
+					{
+						pxl_fragColor = vec4( lhsColor.rgb(), 1.0_f );
+					}
+					FI;
 				} );
 			m_combinePxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
@@ -800,28 +820,25 @@ namespace castor3d
 		mainBuilder.texcoordConfig( RenderQuadConfig::Texcoord{} );
 
 #if C3D_DebugQuads
-		for ( auto & intermediate : m_intermediates )
-		{
-			m_combineQuads.emplace_back( CombinePassBuilder{ mainBuilder }
-				.build( *getEngine()
-					, "Target"
-					, getPixelFormat()
-					, extent
-					, m_combineVtx
-					, m_combinePxl
-					, m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView().getSampledView()
-					, intermediate.view ) );
-		}
-#else
-		m_combineQuads.emplace_back( CombinePassBuilder{ mainBuilder }
+		m_combinePass = CombinePassBuilder{ mainBuilder }
 			.build( *getEngine()
 				, "Target"
 				, getPixelFormat()
 				, extent
 				, m_combineVtx
 				, m_combinePxl
-				, m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView().getSampledView()
-				, m_intermediates.begin()->view ) );
+				, m_intermediates
+				, { "", m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView().getSampledView(), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
+#else
+		m_combinePass = CombinePassBuilder{ mainBuilder }
+			.build( *getEngine()
+				, "Target"
+				, getPixelFormat()
+				, extent
+				, m_combineVtx
+				, m_combinePxl
+				, { *m_intermediates.begin() }
+				, { "", m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView().getSampledView(), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
 #endif
 	}
 
@@ -960,12 +977,6 @@ namespace castor3d
 
 	ashes::Semaphore const & RenderTarget::doCombine( ashes::Semaphore const & toWait )
 	{
-#if C3D_DebugQuads
-		auto technique = this->getTechnique();
-		auto & debugConfig = technique->getDebugConfig();
-		return m_combineQuads[debugConfig.debugIndex]->combine( toWait );
-#else
-		return m_combineQuads[0u]->combine( toWait );
-#endif
+		return m_combinePass->combine( toWait );
 	}
 }

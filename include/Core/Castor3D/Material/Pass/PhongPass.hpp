@@ -143,7 +143,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La valeur d'exposant.
 		 */
-		inline castor::RangedValue< float > getShininess()const
+		inline castor::RangedValue< float > const & getShininess()const
 		{
 			return m_shininess;
 		}

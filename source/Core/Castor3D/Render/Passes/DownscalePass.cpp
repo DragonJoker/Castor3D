@@ -189,7 +189,8 @@ namespace castor3d
 		for ( auto & unit : m_result )
 		{
 			visitor.visit( "Downscale" + string::toString( index++ )
-				, unit.getTexture()->getDefaultView().getSampledView() );
+				, unit.getTexture()->getDefaultView().getSampledView()
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		}
 	}
 

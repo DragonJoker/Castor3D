@@ -612,7 +612,8 @@ namespace castor3d
 		if ( m_intermediate.isTextured() )
 		{
 			visitor.visit( m_prefix + " GaussianBlur Intermediate"
-				, m_intermediate.getTexture()->getDefaultView().getSampledView() );
+				, m_intermediate.getTexture()->getDefaultView().getSampledView()
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		}
 
 		visitor.visit( m_blurX.vertexShader );

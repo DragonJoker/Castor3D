@@ -787,7 +787,9 @@ namespace castor3d
 	{
 		if ( getResult().isTextured() )
 		{
-			visitor.visit( "SSAO Raw AO", getResult().getTexture()->getDefaultView().getSampledView() );
+			visitor.visit( "SSAO Raw AO"
+				, getResult().getTexture()->getDefaultView().getSampledView()
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		}
 
 		auto index = m_ssaoConfig.useNormalsBuffer

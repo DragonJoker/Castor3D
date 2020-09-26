@@ -131,7 +131,7 @@ namespace castor3d
 		return result;
 	}
 
-	void ImageBackground::accept( BackgroundVisitor & visitor )const
+	void ImageBackground::accept( BackgroundVisitor & visitor )
 	{
 		visitor.visit( *this );
 	}

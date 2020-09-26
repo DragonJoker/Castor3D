@@ -48,7 +48,7 @@ namespace castor3d
 		/**
 		*\copydoc	castor3d::SceneBackground::accept
 		*/
-		C3D_API void accept( BackgroundVisitor & visitor )const override;
+		C3D_API void accept( BackgroundVisitor & visitor )override;
 		/**
 		*\~english
 		*name

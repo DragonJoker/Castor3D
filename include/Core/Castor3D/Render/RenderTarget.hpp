@@ -411,9 +411,10 @@ namespace castor3d
 		C3D_API ashes::Semaphore const & doCombine( ashes::Semaphore const & toWait );
 
 		inline void addIntermediateView( castor::String name
-			, ashes::ImageView view )
+			, ashes::ImageView view
+			, VkImageLayout layout )
 		{
-			m_intermediates.push_back( { std::move( name ), std::move( view ) } );
+			m_intermediates.push_back( { std::move( name ), std::move( view ), layout } );
 		}
 
 	public:
@@ -450,7 +451,7 @@ namespace castor3d
 		RenderPassTimerSPtr m_overlaysTimer;
 		ShaderModule m_combineVtx{ VK_SHADER_STAGE_VERTEX_BIT, "Target - Combine" };
 		ShaderModule m_combinePxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "Target - Combine" };
-		std::vector< std::unique_ptr< CombinePass > > m_combineQuads;
+		std::unique_ptr< CombinePass > m_combinePass;
 		SsaoConfig m_ssaoConfig;
 		castor::Point2f m_jitter;
 		TextureUnit m_velocityTexture;
@@ -459,7 +460,7 @@ namespace castor3d
 		ashes::Semaphore const * m_signalFinished{ nullptr };
 		castor::PreciseTimer m_timer;
 		SceneCullerUPtr m_culler;
-		std::vector< IntermediateView > m_intermediates;
+		IntermediateViewArray m_intermediates;
 	};
 }
 

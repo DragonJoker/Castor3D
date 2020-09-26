@@ -51,9 +51,10 @@ namespace castor3d
 
 			void visit( castor::String const & name
 				, ashes::ImageView const & view
+				, VkImageLayout layout
 				, TextureFactors const & factors )override
 			{
-				m_result.push_back( { name, view, factors } );
+				m_result.push_back( { name, view, layout, factors } );
 			}
 
 		private:
@@ -422,8 +423,12 @@ namespace castor3d
 
 	void RenderTechnique::accept( RenderTechniqueVisitor & visitor )
 	{
-		visitor.visit( "Technique Colour", m_colourTexture.getTexture()->getDefaultView().getSampledView() );
-		visitor.visit( "Technique Depth", m_depthBuffer.getTexture()->getDefaultView().getSampledView() );
+		visitor.visit( "Technique Colour"
+			, m_colourTexture.getTexture()->getDefaultView().getSampledView()
+			, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL );
+		visitor.visit( "Technique Depth"
+			, m_depthBuffer.getTexture()->getDefaultView().getSampledView()
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 
 		if ( checkFlag( visitor.getFlags().passFlags, PassFlag::eAlphaBlending ) )
 		{

@@ -643,11 +643,15 @@ namespace castor3d
 		{
 			if ( horizontal )
 			{
-				visitor.visit( "SSAO HBlurred AO", getResult().getTexture()->getDefaultView().getSampledView() );
+				visitor.visit( "SSAO HBlurred AO"
+					, getResult().getTexture()->getDefaultView().getSampledView()
+					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 			}
 			else
 			{
-				visitor.visit( "SSAO Blurred AO", getResult().getTexture()->getDefaultView().getSampledView() );
+				visitor.visit( "SSAO Blurred AO"
+					, getResult().getTexture()->getDefaultView().getSampledView()
+					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 			}
 		}
 

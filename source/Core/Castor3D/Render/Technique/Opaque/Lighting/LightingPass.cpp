@@ -585,9 +585,11 @@ namespace castor3d
 	void LightingPass::accept( PipelineVisitorBase & visitor )
 	{
 		visitor.visit( "Light Diffuse"
-			, m_result[LpTexture::eDiffuse].getTexture()->getDefaultView().getSampledView() );
+			, m_result[LpTexture::eDiffuse].getTexture()->getDefaultView().getSampledView()
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		visitor.visit( "Light Specular"
-			, m_result[LpTexture::eSpecular].getTexture()->getDefaultView().getSampledView() );
+			, m_result[LpTexture::eSpecular].getTexture()->getDefaultView().getSampledView()
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 
 		for ( auto & lightPasses : m_lightPasses )
 		{

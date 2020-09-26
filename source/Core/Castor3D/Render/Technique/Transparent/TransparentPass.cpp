@@ -248,8 +248,12 @@ namespace castor3d
 
 	bool TransparentPass::doInitialise( Size const & size )
 	{
-		auto & device = getCurrentRenderDevice( *this );
-		m_finished = device->createSemaphore( "TransparentPass" );
+		if ( !m_finished )
+		{
+			auto & device = getCurrentRenderDevice( *this );
+			m_finished = device->createSemaphore( "TransparentPass" );
+		}
+
 		return true;
 	}
 

@@ -44,7 +44,11 @@ namespace castor3d
 			uint32_t index = 0u;
 			m_result[SmTexture( i )].getTexture()->forEachLeafView( [&index, &visitor, this, i]( TextureViewUPtr const & view )
 				{
-					visitor.visit( m_name + getName( SmTexture( i ) ) + cuT( "L" ) + string::toString( index++ ), view->getSampledView() );
+					visitor.visit( m_name + getName( SmTexture( i ) ) + cuT( "L" ) + string::toString( index++ )
+						, view->getSampledView()
+						, ( ashes::isDepthOrStencilFormat( view->getTargetView()->format )
+							? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
+							: VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 				} );
 		}
 	}

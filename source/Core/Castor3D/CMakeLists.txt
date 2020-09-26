@@ -1,5 +1,7 @@
 project( Castor3D )
 
+option( CASTOR_DEBUG_TARGETS "Allows displaying intermediate render targets results" OFF )
+
 set( ${PROJECT_NAME}_DESCRIPTION "Castor3D Core engine" )
 set( ${PROJECT_NAME}_BRIEF "Multiplatform 3D engine" )
 set( ${PROJECT_NAME}_ICON "${CMAKE_SOURCE_DIR}/data/Images/castor-small.png" )
@@ -1264,7 +1266,6 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Background/BackgroundModule.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Background/BackgroundTextWriter.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Background/Colour.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Background/FramePreparator.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Background/Image.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Background/PipelineCreator.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Background/Skybox.cpp
@@ -1275,7 +1276,6 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Background/BackgroundModule.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Background/BackgroundTextWriter.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Background/Colour.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Background/FramePreparator.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Background/Image.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Background/Skybox.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Background/Visitor.hpp
@@ -1559,15 +1559,21 @@ target_link_libraries( ${PROJECT_NAME}
 		sdw::CompilerSpirV
 		${glslang_LIBRARIES}
 )
+if ( CASTOR_DEBUG_TARGETS )
+	target_compile_definitions( ${PROJECT_NAME}
+		PUBLIC
+			C3D_DebugQuads
+	)
+endif ()
 if ( CASTOR_C3D_NEEDS_GLSL )
 	target_compile_definitions( ${PROJECT_NAME}
 		PUBLIC
 			C3D_HasGLSL
 	)
-target_link_libraries( ${PROJECT_NAME}
-	PRIVATE
-		sdw::CompilerGlsl
-)
+	target_link_libraries( ${PROJECT_NAME}
+		PRIVATE
+			sdw::CompilerGlsl
+	)
 endif ()
 
 install_target( ${PROJECT_NAME} api_dll ${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME} )

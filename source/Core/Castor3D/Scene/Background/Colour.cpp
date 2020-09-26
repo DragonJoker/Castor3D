@@ -64,7 +64,7 @@ namespace castor3d
 	{
 	}
 
-	void ColourBackground::accept( BackgroundVisitor & visitor )const
+	void ColourBackground::accept( BackgroundVisitor & visitor )
 	{
 		visitor.visit( *this );
 	}

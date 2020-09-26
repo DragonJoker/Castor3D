@@ -33,7 +33,7 @@ namespace castor3d
 		*\brief
 		*	Visite un fond de type couleur.
 		*/
-		C3D_API virtual void visit( ColourBackground const & background ) = 0;
+		C3D_API virtual void visit( ColourBackground & background ) = 0;
 		/**
 		*\~english
 		*\brief
@@ -42,7 +42,7 @@ namespace castor3d
 		*\brief
 		*	Visite un fond de type skybox.
 		*/
-		C3D_API virtual void visit( SkyboxBackground const & background ) = 0;
+		C3D_API virtual void visit( SkyboxBackground & background ) = 0;
 		/**
 		*\~english
 		*\brief
@@ -51,7 +51,7 @@ namespace castor3d
 		*\brief
 		*	Visite un fond de type image.
 		*/
-		C3D_API virtual void visit( ImageBackground const & background ) = 0;
+		C3D_API virtual void visit( ImageBackground & background ) = 0;
 	};
 }
 

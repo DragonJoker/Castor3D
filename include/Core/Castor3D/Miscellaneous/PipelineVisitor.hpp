@@ -48,6 +48,7 @@ namespace castor3d
 		/**@{*/
 		virtual void visit( castor::String const & name
 			, ashes::ImageView const & view
+			, VkImageLayout layout
 			, TextureFactors const & factors = {} ) = 0;
 		/**@}*/
 		/**
@@ -308,6 +309,7 @@ namespace castor3d
 		/**@{*/
 		void visit( castor::String const & name
 			, ashes::ImageView const & view
+			, VkImageLayout layout
 			, TextureFactors const & factors = TextureFactors{} )override
 		{
 		}

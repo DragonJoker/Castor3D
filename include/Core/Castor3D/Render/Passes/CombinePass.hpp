@@ -11,6 +11,8 @@ See LICENSE file in root folder
 #include "Castor3D/Render/ToTexture/RenderQuad.hpp"
 #include "Castor3D/Shader/ShaderModule.hpp"
 
+#include "Castor3D/Buffer/UniformBufferOffset.hpp"
+
 #include <ashes/common/Optional.hpp>
 #include <ashespp/Image/ImageView.hpp>
 #include <ashespp/Image/Sampler.hpp>
@@ -46,11 +48,13 @@ namespace castor3d
 			, VkExtent2D const & outputSize
 			, ShaderModule const & vertexShader
 			, ShaderModule const & pixelShader
-			, ashes::ImageView const & lhsView
-			, ashes::ImageView const & rhsView
+			, IntermediateViewArray const & lhsViews
+			, IntermediateView const & rhsView
 			, CombinePassConfig config );
 
 	public:
+		C3D_API ~CombinePass();
+		C3D_API void update( CpuUpdater & updater );
 		C3D_API void accept( PipelineVisitorBase & visitor );
 		C3D_API ashes::Semaphore const & combine( ashes::Semaphore const & toWait )const;
 		C3D_API CommandsSemaphore getCommands( RenderPassTimer const & timer
@@ -62,7 +66,7 @@ namespace castor3d
 		}
 
 	public:
-		static castor::String const LhsMap;
+		static castor::String const LhsMaps;
 		static castor::String const RhsMap;
 
 	private:
@@ -72,7 +76,8 @@ namespace castor3d
 		public:
 			explicit CombineQuad( Engine & engine
 				, castor::String const & prefix
-				, ashes::ImageView const & lhsView
+				, IntermediateViewArray const & lhsViews
+				, UniformBufferOffsetT< uint32_t > const & indexUbo
 				, RenderQuadConfig const & config );
 
 		private:
@@ -80,7 +85,8 @@ namespace castor3d
 				, ashes::DescriptorSet & descriptorSet )override;
 
 		private:
-			ashes::ImageView m_lhsView;
+			IntermediateViewArray m_lhsViews;
+			UniformBufferOffsetT< uint32_t > const & m_indexUbo;
 			SamplerSPtr m_lhsSampler;
 		};
 
@@ -88,8 +94,10 @@ namespace castor3d
 		Engine & m_engine;
 		ShaderModule const & m_vertexShader;
 		ShaderModule const & m_pixelShader;
-		ashes::ImageView m_lhsView;
-		ashes::ImageView m_rhsView;
+		ashes::ImageViewArray m_lhsBarrierViews;
+		IntermediateViewArray m_lhsViews;
+		ashes::ImageView m_rhsBarrierView;
+		IntermediateView m_rhsView;
 		CombinePassConfig m_config;
 		castor::String m_prefix;
 		TextureLayoutSPtr m_image;
@@ -99,6 +107,7 @@ namespace castor3d
 		ashes::SemaphorePtr m_finished;
 		ashes::RenderPassPtr m_renderPass;
 		ashes::FrameBufferPtr m_frameBuffer;
+		UniformBufferOffsetT< uint32_t > m_indexUbo;
 		CombineQuad m_quad;
 	};
 
@@ -145,8 +154,8 @@ namespace castor3d
 			, VkExtent2D const & outputSize
 			, ShaderModule const & vertexShader
 			, ShaderModule const & pixelShader
-			, ashes::ImageView const & lhsView
-			, ashes::ImageView const & rhsView )
+			, IntermediateViewArray const & lhsViews
+			, IntermediateView const & rhsView )
 		{
 			return std::unique_ptr< CombinePass >( new CombinePass
 				{
@@ -156,7 +165,7 @@ namespace castor3d
 					outputSize,
 					vertexShader,
 					pixelShader,
-					lhsView,
+					lhsViews,
 					rhsView,
 					std::move( m_config ),
 				} );

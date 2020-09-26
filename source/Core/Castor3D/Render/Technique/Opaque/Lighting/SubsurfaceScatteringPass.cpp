@@ -843,11 +843,13 @@ namespace castor3d
 		for ( size_t i{ 0u }; i < m_blurResults.size(); ++i )
 		{
 			visitor.visit( "SSSSS Blur " + string::toString( i )
-				, m_blurResults[i].getTexture()->getDefaultView().getSampledView() );
+				, m_blurResults[i].getTexture()->getDefaultView().getSampledView()
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		}
 
 		visitor.visit( "SSSSS Result"
-			, m_result.getTexture()->getDefaultView().getSampledView() );
+			, m_result.getTexture()->getDefaultView().getSampledView()
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 
 		visitor.visit( m_blurHorizVertexShader );
 		visitor.visit( m_blurHorizPixelShader );

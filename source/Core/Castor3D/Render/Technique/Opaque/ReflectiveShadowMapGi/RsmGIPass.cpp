@@ -679,9 +679,11 @@ namespace castor3d
 	void RsmGIPass::accept( PipelineVisitorBase & visitor )
 	{
 		visitor.visit( getName() + " GI"
-			, m_result[0].getTexture()->getDefaultView().getSampledView() );
+			, m_result[0].getTexture()->getDefaultView().getSampledView()
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		visitor.visit( getName() + " Normal"
-			, m_result[1].getTexture()->getDefaultView().getSampledView() );
+			, m_result[1].getTexture()->getDefaultView().getSampledView()
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );

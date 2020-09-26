@@ -271,7 +271,7 @@ namespace castor3d
 		*\param visitor
 		*	Le visiteur.
 		*/
-		C3D_API virtual void accept( BackgroundVisitor & visitor )const = 0;
+		C3D_API virtual void accept( BackgroundVisitor & visitor ) = 0;
 		/**
 		*\~english
 		*name

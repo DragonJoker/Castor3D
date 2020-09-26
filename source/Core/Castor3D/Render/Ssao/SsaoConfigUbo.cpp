@@ -130,7 +130,7 @@ namespace castor3d
 		configuration.intensityDivR6 = intersityDivR6;
 		configuration.farPlaneZ = farZ;
 		configuration.edgeSharpness = config.edgeSharpness;
-		configuration.blurStepSize = config.blurStepSize;
+		configuration.blurStepSize = config.blurStepSize.value().value();
 		configuration.blurRadius = config.blurRadius.value().value();
 		configuration.projInfo = castor::Point4f
 		{

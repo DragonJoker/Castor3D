@@ -170,7 +170,7 @@ namespace castor3d
 	{
 	}
 
-	void SkyboxBackground::accept( BackgroundVisitor & visitor )const
+	void SkyboxBackground::accept( BackgroundVisitor & visitor )
 	{
 		visitor.visit( *this );
 	}
@@ -214,6 +214,14 @@ namespace castor3d
 		, castor::Path const & relative )
 	{
 		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::ePositiveZ, folder, relative );
+		notifyChanged();
+	}
+
+	void SkyboxBackground::loadFaceImage( castor::Path const & folder
+		, castor::Path const & relative
+		, CubeMapFace face )
+	{
+		getTexture().setLayerCubeFaceSource( 0u, face, folder, relative );
 		notifyChanged();
 	}
 
