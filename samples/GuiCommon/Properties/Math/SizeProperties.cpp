@@ -15,8 +15,8 @@ namespace GuiCommon
 		: wxPGProperty( label, name )
 	{
 		setValueI( value );
-		AddPrivateChild( new wxIntProperty( _( "Width" ), wxPG_LABEL, value.getWidth() ) );
-		AddPrivateChild( new wxIntProperty( _( "Height" ), wxPG_LABEL, value.getHeight() ) );
+		AddPrivateChild( addAttributes( new wxIntProperty( _( "Width" ), wxPG_LABEL, value.getWidth() ) ) );
+		AddPrivateChild( addAttributes( new wxIntProperty( _( "Height" ), wxPG_LABEL, value.getHeight() ) ) );
 	}
 
 	SizeProperty::~SizeProperty()

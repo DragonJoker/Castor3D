@@ -16,10 +16,10 @@ namespace GuiCommon
 	{
 		setValueI( value );
 		value.toAxisAngle( m_axis, m_angle );
-		AddPrivateChild( new wxFloatProperty( wxT( "Axis X" ), wxPG_LABEL, m_axis[0] ) );
-		AddPrivateChild( new wxFloatProperty( wxT( "Axis Y" ), wxPG_LABEL, m_axis[1] ) );
-		AddPrivateChild( new wxFloatProperty( wxT( "Axis Z" ), wxPG_LABEL, m_axis[2] ) );
-		AddPrivateChild( new wxFloatProperty( wxT( "Angle" ), wxPG_LABEL, m_angle.degrees() ) );
+		AddPrivateChild( addAttributes( new wxFloatProperty( wxT( "Axis X" ), wxPG_LABEL, m_axis[0] ) ) );
+		AddPrivateChild( addAttributes( new wxFloatProperty( wxT( "Axis Y" ), wxPG_LABEL, m_axis[1] ) ) );
+		AddPrivateChild( addAttributes( new wxFloatProperty( wxT( "Axis Z" ), wxPG_LABEL, m_axis[2] ) ) );
+		AddPrivateChild( addAttributes( new wxFloatProperty( wxT( "Angle" ), wxPG_LABEL, m_angle.degrees() ) ) );
 	}
 
 	QuaternionProperty::~QuaternionProperty()

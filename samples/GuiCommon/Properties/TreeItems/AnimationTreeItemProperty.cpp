@@ -14,14 +14,6 @@ using namespace castor;
 
 namespace GuiCommon
 {
-	namespace
-	{
-		static wxString PROPERTY_CATEGORY_ANIMATION = _( "Animation: " );
-		static wxString PROPERTY_ANIMATION_SPEED = _( "Speed" );
-		static wxString PROPERTY_ANIMATION_LOOPED = _( "Looped" );
-		static wxString PROPERTY_ANIMATION_STATE[] = { _( "Play" ), _( "Stop" ), _( "Pause" ) };
-	}
-
 	AnimationTreeItemProperty::AnimationTreeItemProperty( Engine * engine
 		, bool editable
 		, AnimatedObjectGroup & group
@@ -32,13 +24,6 @@ namespace GuiCommon
 		, m_group( group )
 		, m_groupAnim( anim )
 	{
-		PROPERTY_CATEGORY_ANIMATION = _( "Animation: " );
-		PROPERTY_ANIMATION_SPEED = _( "Speed" );
-		PROPERTY_ANIMATION_LOOPED = _( "Looped" );
-		PROPERTY_ANIMATION_STATE[uint32_t( AnimationState::ePlaying )] = _( "Pause" );
-		PROPERTY_ANIMATION_STATE[uint32_t( AnimationState::eStopped )] = _( "Play" );
-		PROPERTY_ANIMATION_STATE[uint32_t( AnimationState::ePaused )] = _( "Stop" );
-
 		CreateTreeItemMenu();
 	}
 
@@ -46,90 +31,59 @@ namespace GuiCommon
 	{
 	}
 
-	void AnimationTreeItemProperty::doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void AnimationTreeItemProperty::doCreateProperties( wxPGEditor * editor
+		, wxPropertyGrid * grid )
 	{
+		static wxString PROPERTY_CATEGORY_ANIMATION = _( "Animation: " );
+		static wxString PROPERTY_ANIMATION_SPEED = _( "Speed" );
+		static wxString PROPERTY_ANIMATION_LOOPED = _( "Looped" );
+		static wxString PROPERTY_ANIMATION_STATE[] = { _( "Play" ), _( "Stop" ), _( "Pause" ) };
+
 		auto group = getGroup();
 
 		if ( group )
 		{
-			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_ANIMATION + make_wxString( m_name ) ) );
-			p_grid->Append( CreateProperty< wxFloatProperty >( PROPERTY_ANIMATION_SPEED, wxVariant( m_groupAnim.m_scale ), _( "The animation time scale." ) ) );
-			p_grid->Append( CreateProperty< wxBoolProperty >( PROPERTY_ANIMATION_LOOPED, wxVariant( m_groupAnim.m_looped ), _( "sets the animation looped or not" ) ) );
-			p_grid->Append( CreateProperty( PROPERTY_ANIMATION_STATE[uint32_t( m_groupAnim.m_state )], PROPERTY_ANIMATION_STATE[uint32_t( m_groupAnim.m_state )], static_cast< ButtonEventMethod >( &AnimationTreeItemProperty::OnStateChange ), this, p_editor ) );
+			addProperty( grid, PROPERTY_CATEGORY_ANIMATION + make_wxString( m_name ) );
+			addProperty( grid, PROPERTY_ANIMATION_SPEED, m_groupAnim.m_scale
+				, [this]( wxVariant const & var )
+				{
+					m_groupAnim.m_scale = variantCast< float >( var );
+					getGroup()->setAnimationScale( m_name, m_groupAnim.m_scale );
+				} );
+			addProperty( grid, PROPERTY_ANIMATION_LOOPED, m_groupAnim.m_looped
+				, [this]( wxVariant const & var )
+				{
+					m_groupAnim.m_looped = variantCast< bool >( var );
+					getGroup()->setAnimationLooped( m_name, m_groupAnim.m_looped );
+				} );
+			m_stateProperty = addProperty( grid, PROPERTY_ANIMATION_STATE[uint32_t( m_groupAnim.m_state )], editor
+				, static_cast< ButtonEventMethod >( [this]( wxVariant const & var )
+					{
+						auto group = getGroup();
+
+						switch ( m_groupAnim.m_state )
+						{
+						case AnimationState::ePlaying:
+							group->pauseAnimation( m_name );
+							m_groupAnim.m_state = AnimationState::ePaused;
+							break;
+
+						case AnimationState::eStopped:
+							group->startAnimation( m_name );
+							m_groupAnim.m_state = AnimationState::ePlaying;
+							break;
+
+						case AnimationState::ePaused:
+							group->stopAnimation( m_name );
+							m_groupAnim.m_state = AnimationState::eStopped;
+							break;
+
+						default:
+							break;
+						}
+
+						m_stateProperty->SetLabel( PROPERTY_ANIMATION_STATE[uint32_t( m_groupAnim.m_state )] );
+					} ) );
 		}
-	}
-
-	void AnimationTreeItemProperty::doPropertyChange( wxPropertyGridEvent & p_event )
-	{
-		auto group = getGroup();
-		wxPGProperty * property = p_event.GetProperty();
-
-		if ( property && group )
-		{
-			wxColour colour;
-
-			if ( property->GetName() == PROPERTY_ANIMATION_SPEED )
-			{
-				OnSpeedChange( property->GetValue().GetReal() );
-			}
-			else if ( property->GetName() == PROPERTY_ANIMATION_LOOPED )
-			{
-				OnLoopedChange( property->GetValue().GetBool() );
-			}
-		}
-	}
-
-	void AnimationTreeItemProperty::OnSpeedChange( double p_value )
-	{
-		m_groupAnim.m_scale = p_value;
-
-		doApplyChange( [this]()
-		{
-			getGroup()->setAnimationscale( m_name, m_groupAnim.m_scale );
-		} );
-	}
-
-	void AnimationTreeItemProperty::OnLoopedChange( bool p_value )
-	{
-		m_groupAnim.m_looped = p_value;
-
-		doApplyChange( [this]()
-		{
-			getGroup()->setAnimationLooped( m_name, m_groupAnim.m_looped );
-		} );
-	}
-
-	bool AnimationTreeItemProperty::OnStateChange( wxPGProperty * p_property )
-	{
-		doApplyChange( [p_property, this]()
-		{
-			auto group = getGroup();
-			ButtonData * data = reinterpret_cast< ButtonData * >( p_property->GetClientObject() );
-
-			switch ( m_groupAnim.m_state )
-			{
-			case AnimationState::ePlaying:
-				group->pauseAnimation( m_name );
-				m_groupAnim.m_state = AnimationState::ePaused;
-				break;
-
-			case AnimationState::eStopped:
-				group->startAnimation( m_name );
-				m_groupAnim.m_state = AnimationState::ePlaying;
-				break;
-
-			case AnimationState::ePaused:
-				group->stopAnimation( m_name );
-				m_groupAnim.m_state = AnimationState::eStopped;
-				break;
-
-			default:
-				break;
-			}
-
-			p_property->SetLabel( PROPERTY_ANIMATION_STATE[uint32_t( m_groupAnim.m_state )] );
-		} );
-
-		return false;
 	}
 }

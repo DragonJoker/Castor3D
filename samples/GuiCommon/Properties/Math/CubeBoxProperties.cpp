@@ -19,9 +19,9 @@ namespace GuiCommon
 		: wxPGProperty{ label, name }
 	{
 		setValueI( value );
-		AddPrivateChild( new Point3fProperty( wxT( "Center" ), wxPG_LABEL, value.getCenter() ) );
-		AddPrivateChild( new Point3fProperty( wxT( "Min" ), wxPG_LABEL, value.getMin() ) );
-		AddPrivateChild( new Point3fProperty( wxT( "Max" ), wxPG_LABEL, value.getMax() ) );
+		AddPrivateChild( addAttributes( new Point3fProperty( wxT( "Center" ), wxPG_LABEL, value.getCenter() ) ) );
+		AddPrivateChild( addAttributes( new Point3fProperty( wxT( "Min" ), wxPG_LABEL, value.getMin() ) ) );
+		AddPrivateChild( addAttributes( new Point3fProperty( wxT( "Max" ), wxPG_LABEL, value.getMax() ) ) );
 	}
 
 	BoundingBoxProperty::~BoundingBoxProperty()

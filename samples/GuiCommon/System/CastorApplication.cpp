@@ -79,6 +79,8 @@
 #	include <X11/Xlib.h>
 #endif
 
+#include <wx/propgrid/propgrid.h>
+
 namespace GuiCommon
 {
 #if defined( NDEBUG )
@@ -125,6 +127,7 @@ namespace GuiCommon
 	bool CastorApplication::OnInit()
 	{
 		wxSetAssertHandler( &CastorApplication::assertHandler );
+		wxPropertyGrid::RegisterAdditionalEditors();
 		bool result = doParseCommandLine();
 		wxDisplay display;
 		wxRect rect = display.GetClientArea();

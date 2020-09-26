@@ -51,12 +51,6 @@ namespace GuiCommon
 		 */
 		virtual void doCreateProperties( wxPGEditor * editor
 			, wxPropertyGrid * grid );
-		/**
-		 *\copydoc GuiCommon::TreeItemProperty::doPropertyChange
-		 */
-		virtual void doPropertyChange( wxPropertyGridEvent & event );
-
-		bool onEditShader( wxPGProperty * p_property );
 
 	private:
 		castor3d::PostEffect & m_effect;

@@ -12,19 +12,10 @@ using namespace castor;
 
 namespace GuiCommon
 {
-	namespace
-	{
-		static wxString PROPERTY_CATEGORY_CAMERA = _( "Camera: " );
-		static wxString PROPERTY_CATEGORY_VIEWPORT = _( "Viewport" );
-	}
-
 	CameraTreeItemProperty::CameraTreeItemProperty( bool p_editable, castor3d::Camera & p_camera )
 		: TreeItemProperty( p_camera.getScene()->getEngine(), p_editable, ePROPERTY_DATA_TYPE_CAMERA )
 		, m_camera( p_camera )
 	{
-		PROPERTY_CATEGORY_CAMERA = _( "Camera: " );
-		PROPERTY_CATEGORY_VIEWPORT = _( "Viewport" );
-
 		CreateTreeItemMenu();
 	}
 
@@ -32,12 +23,11 @@ namespace GuiCommon
 	{
 	}
 
-	void CameraTreeItemProperty::doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void CameraTreeItemProperty::doCreateProperties( wxPGEditor * editor
+		, wxPropertyGrid * grid )
 	{
-		p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_CAMERA + wxString( m_camera.getName() ) ) );
-	}
+		static wxString PROPERTY_CATEGORY_CAMERA = _( "Camera: " );
 
-	void CameraTreeItemProperty::doPropertyChange( wxPropertyGridEvent & p_event )
-	{
+		addProperty( grid, PROPERTY_CATEGORY_CAMERA + wxString( m_camera.getName() ) );
 	}
 }

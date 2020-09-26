@@ -30,17 +30,9 @@ namespace GuiCommon
 	{
 	}
 
-	void GeometryTreeItemProperty::doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void GeometryTreeItemProperty::doCreateProperties( wxPGEditor * editor
+		, wxPropertyGrid * grid )
 	{
-		p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_GEOMETRY + wxString( m_geometry.getName() ) ) );
-	}
-
-	void GeometryTreeItemProperty::doPropertyChange( wxPropertyGridEvent & p_event )
-	{
-		wxPGProperty * property = p_event.GetProperty();
-
-		if ( property )
-		{
-		}
+		addProperty( grid, PROPERTY_CATEGORY_GEOMETRY + wxString( m_geometry.getName() ) );
 	}
 }

@@ -60,14 +60,10 @@ namespace GuiCommon
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
 		virtual void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid );
-		/**
-		 *\copydoc GuiCommon::TreeItemProperty::doPropertyChange
-		 */
-		virtual void doPropertyChange( wxPropertyGridEvent & event );
 
 	private:
-		void onDebugOverlaysChange( bool const & value );
-		void onAmbientLightChange( castor::RgbColour const & value );
+		void onDebugOverlaysChange( wxVariant const & var );
+		void onAmbientLightChange( wxVariant const & var );
 
 	private:
 		castor3d::Scene & m_scene;

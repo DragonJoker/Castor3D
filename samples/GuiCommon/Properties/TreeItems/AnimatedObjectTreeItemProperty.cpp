@@ -28,22 +28,14 @@ namespace GuiCommon
 	{
 	}
 
-	void AnimatedObjectTreeItemProperty::doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void AnimatedObjectTreeItemProperty::doCreateProperties( wxPGEditor * editor
+		, wxPropertyGrid * grid )
 	{
 		auto object = getObject();
 
 		if ( object )
 		{
-		}
-	}
-
-	void AnimatedObjectTreeItemProperty::doPropertyChange( wxPropertyGridEvent & p_event )
-	{
-		auto object = getObject();
-		wxPGProperty * property = p_event.GetProperty();
-
-		if ( property && object )
-		{
+			addProperty( grid, PROPERTY_CATEGORY_ANIMATED_OBJECT + wxString( object->getName() ) );
 		}
 	}
 }

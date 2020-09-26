@@ -116,20 +116,12 @@ namespace GuiCommon
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
 		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
-		/**
-		 *\copydoc GuiCommon::TreeItemProperty::doPropertyChange
-		 */
-		virtual void doPropertyChange( wxPropertyGridEvent & p_event );
-
-	private:
-		void OnSpeedChange( double p_value );
-		void OnLoopedChange( bool p_value );
-		bool OnStateChange( wxPGProperty * p_property );
 
 	private:
 		castor3d::AnimatedObjectGroup & m_group;
 		castor::String m_name;
 		castor3d::GroupAnimation m_groupAnim;
+		wxPGProperty * m_stateProperty;
 	};
 }
 

@@ -17,10 +17,6 @@ namespace GuiCommon
 {
 	namespace
 	{
-		static wxString PROPERTY_CATEGORY_POST_EFFECT = _( "Post Effect: " );
-		static wxString PROPERTY_POST_EFFECT_SHADER = _( "Shader" );
-		static wxString PROPERTY_POST_EFFECT_EDIT_SHADER = _( "View Shaders..." );
-
 		class PostEffectShaderGatherer
 			: public castor3d::PipelineVisitor
 		{
@@ -435,10 +431,6 @@ namespace GuiCommon
 		, m_effect{ effect }
 		, m_parent{ parent }
 	{
-		PROPERTY_CATEGORY_POST_EFFECT = _( "Post Effect: " );
-		PROPERTY_POST_EFFECT_SHADER = _( "Shader" );
-		PROPERTY_POST_EFFECT_EDIT_SHADER = _( "View Shaders..." );
-
 		CreateTreeItemMenu();
 	}
 
@@ -449,29 +441,20 @@ namespace GuiCommon
 	void PostEffectTreeItemProperty::doCreateProperties( wxPGEditor * editor
 		, wxPropertyGrid * grid )
 	{
-		grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_POST_EFFECT + m_effect.getName() ) );
-		grid->Append( CreateProperty( PROPERTY_POST_EFFECT_SHADER
-			, PROPERTY_POST_EFFECT_EDIT_SHADER
-			, static_cast< ButtonEventMethod >( &PostEffectTreeItemProperty::onEditShader ), this, editor ) );
-	}
+		static wxString PROPERTY_CATEGORY_POST_EFFECT = _( "Post Effect: " );
+		static wxString PROPERTY_POST_EFFECT_SHADER = _( "Shader" );
+		static wxString PROPERTY_POST_EFFECT_EDIT_SHADER = _( "View Shaders..." );
 
-	void PostEffectTreeItemProperty::doPropertyChange( wxPropertyGridEvent & event )
-	{
-		wxPGProperty * property = event.GetProperty();
-
-		if ( property )
-		{
-		}
-	}
-
-	bool PostEffectTreeItemProperty::onEditShader( wxPGProperty * property )
-	{
-		ShaderSources sources = PostEffectShaderGatherer::submit( m_effect );
-		ShaderDialog * editor = new ShaderDialog{ m_effect.getRenderSystem()->getEngine()
-			, std::move( sources )
-			, m_effect.getFullName()
-			, m_parent };
-		editor->Show();
-		return false;
+		addProperty( grid, PROPERTY_CATEGORY_POST_EFFECT + m_effect.getName() );
+		addProperty( grid, PROPERTY_POST_EFFECT_SHADER, editor
+			, [this]( wxVariant const & var )
+			{
+				ShaderSources sources = PostEffectShaderGatherer::submit( m_effect );
+				ShaderDialog * editor = new ShaderDialog{ m_effect.getRenderSystem()->getEngine()
+					, std::move( sources )
+					, m_effect.getFullName()
+					, m_parent };
+				editor->Show();
+			} );
 	}
 }

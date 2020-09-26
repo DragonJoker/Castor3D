@@ -15,8 +15,8 @@ namespace GuiCommon
 		: wxPGProperty( label, name )
 	{
 		setValueI( value );
-		AddPrivateChild( new wxIntProperty( wxT( "X" ), wxPG_LABEL, value.x() ) );
-		AddPrivateChild( new wxIntProperty( wxT( "Y" ), wxPG_LABEL, value.y() ) );
+		AddPrivateChild( addAttributes( new wxIntProperty( wxT( "X" ), wxPG_LABEL, value.x() ) ) );
+		AddPrivateChild( addAttributes( new wxIntProperty( wxT( "Y" ), wxPG_LABEL, value.y() ) ) );
 	}
 
 	PositionProperty::~PositionProperty()
