@@ -69,15 +69,15 @@ namespace castor3d
 		visitor.visit( *this );
 	}
 
-	bool ColourBackground::doInitialise( ashes::RenderPass const & renderPass )
+	bool ColourBackground::doInitialise( RenderDevice const & device
+		, ashes::RenderPass const & renderPass )
 	{
 		auto & value = m_scene.getBackgroundColour();
 		m_colour = HdrRgbColour::fromComponents( value.red(), value.green(), value.blue() );
-		auto & device = getCurrentRenderDevice( *this );
 		m_stagingTexture = device->createStagingTexture( "ColourBackgroundStaging"
 			, VK_FORMAT_R32G32B32A32_SFLOAT
 			, { Dim, Dim } );
-		auto result = m_texture->initialise();
+		auto result = m_texture->initialise( device );
 		m_colour.reset();
 
 		if ( result )
@@ -96,7 +96,7 @@ namespace castor3d
 			m_cmdCopy->end();
 		}
 
-		doUpdateColour();
+		doUpdateColour( device );
 		return result;
 	}
 
@@ -123,13 +123,12 @@ namespace castor3d
 	{
 		if ( m_colour.isDirty() )
 		{
-			doUpdateColour();
+			doUpdateColour( updater.device );
 		}
 	}
 
-	void ColourBackground::doUpdateColour()
+	void ColourBackground::doUpdateColour( RenderDevice const & device )
 	{
-		auto & device = getCurrentRenderDevice( *this );
 		VkDeviceSize lockSize = Dim * Dim * sizeof( Point4f );
 
 		if ( auto * buffer = reinterpret_cast< Point4f * >( m_stagingTexture->lock( 0u, lockSize, 0u ) ) )

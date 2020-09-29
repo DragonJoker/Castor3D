@@ -24,13 +24,6 @@ namespace castor3d
 		C3D_API explicit LinesMapping( Submesh & submesh );
 		/**
 		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~LinesMapping();
-		/**
-		 *\~english
 		 *\brief		Clears the lines array.
 		 *\~french
 		 *\brief		Vide le tableau de lignes.
@@ -153,7 +146,7 @@ namespace castor3d
 
 	private:
 		void doCleanup()override;
-		void doFill()override;
+		void doFill( RenderDevice const & device )override;
 		void doUpload()override;
 
 	public:

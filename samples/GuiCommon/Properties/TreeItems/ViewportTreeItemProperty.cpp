@@ -3,7 +3,6 @@
 #include "GuiCommon/Properties/Math/SizeProperties.hpp"
 
 #include <Castor3D/Render/Viewport.hpp>
-#include <Castor3D/Event/Frame/FunctorEvent.hpp>
 
 #include <wx/propgrid/advprops.h>
 

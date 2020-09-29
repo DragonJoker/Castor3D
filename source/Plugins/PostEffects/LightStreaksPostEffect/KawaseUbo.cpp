@@ -22,22 +22,22 @@ namespace light_streaks
 	{
 	}
 
-	void KawaseUbo::initialise()
+	void KawaseUbo::initialise( castor3d::RenderDevice const & device )
 	{
 		if ( m_ubo.empty() )
 		{
 			for ( uint32_t i = 0u; i < PostEffect::Count * 3u; ++i )
 			{
-				m_ubo.push_back( getCurrentRenderDevice( m_engine ).uboPools->getBuffer< Configuration >( 0u ) );
+				m_ubo.push_back( device.uboPools->getBuffer< Configuration >( 0u ) );
 			}
 		}
 	}
 
-	void KawaseUbo::cleanup()
+	void KawaseUbo::cleanup( castor3d::RenderDevice const & device )
 	{
 		for ( auto & ubo : m_ubo )
 		{
-			getCurrentRenderDevice( m_engine ).uboPools->putBuffer( ubo );
+			device.uboPools->putBuffer( ubo );
 		}
 
 		m_ubo.clear();

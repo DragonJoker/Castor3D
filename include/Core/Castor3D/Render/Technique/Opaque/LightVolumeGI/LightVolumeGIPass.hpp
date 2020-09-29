@@ -38,6 +38,7 @@ namespace castor3d
 		 *\param[in]	scene			Le tampon de scène.
 		 */
 		C3D_API LightVolumeGIPass( Engine & engine
+			, RenderDevice const & device
 			, LightType lightType
 			, GpInfoUbo const & gpInfo
 			, LpvConfigUbo const & lpvConfigUbo

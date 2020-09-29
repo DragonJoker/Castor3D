@@ -48,6 +48,7 @@ namespace castor3d
 		}
 
 		SamplerSPtr doCreateSampler( Engine & engine
+			, RenderDevice const & device
 			, uint32_t maxLod )
 		{
 			SamplerSPtr result;
@@ -73,7 +74,7 @@ namespace castor3d
 				engine.getSamplerCache().add( name, result );
 			}
 
-			result->initialise();
+			result->initialise( device );
 			return result;
 		}
 
@@ -416,14 +417,15 @@ namespace castor3d
 	//*********************************************************************************************
 
 	EnvironmentPrefilter::EnvironmentPrefilter( Engine & engine
+		, RenderDevice const & device
 		, castor::Size const & size
 		, ashes::Image const & srcTexture
 		, SamplerSPtr sampler )
-		: m_device{ getCurrentRenderDevice( engine ) }
+		: m_device{ device }
 		, m_srcView{ srcTexture.createView( "EnvironmentPrefilterSrc", VK_IMAGE_VIEW_TYPE_CUBE, srcTexture.getFormat(), 0u, srcTexture.getMipmapLevels(), 0u, 6u ) }
 		, m_result{ doCreatePrefilteredTexture( m_device, size ) }
 		, m_resultView{ m_result->createView( "EnvironmentPrefilterDst", VK_IMAGE_VIEW_TYPE_CUBE, m_result->getFormat(), 0u, m_result->getMipmapLevels(), 0u, 6u ) }
-		, m_sampler{ doCreateSampler( engine, m_result->getMipmapLevels() - 1u ) }
+		, m_sampler{ doCreateSampler( engine, m_device, m_result->getMipmapLevels() - 1u ) }
 		, m_renderPass{ doCreateRenderPass( m_device, m_result->getFormat() ) }
 	{
 		VkExtent2D originalSize{ size.getWidth(), size.getHeight() };

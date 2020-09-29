@@ -105,7 +105,7 @@ namespace castor3d
 
 		for ( auto it : m_fontTextures )
 		{
-			getEngine()->postEvent( makeCleanupEvent( *it.second ) );
+			getEngine()->postEvent( makeGpuCleanupEvent( *it.second ) );
 		}
 	}
 
@@ -131,7 +131,7 @@ namespace castor3d
 		{
 			result = std::make_shared< FontTexture >( *getEngine(), font );
 			m_fontTextures.emplace( font->getName(), result );
-			getEngine()->postEvent( makeInitialiseEvent( *result ) );
+			getEngine()->postEvent( makeGpuInitialiseEvent( *result ) );
 		}
 
 		return result;

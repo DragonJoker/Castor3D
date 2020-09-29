@@ -56,7 +56,8 @@ namespace castor3d
 	{
 	}
 
-	void TextureProjection::initialise( ashes::ImageView const & source
+	void TextureProjection::initialise( RenderDevice const & device
+		, ashes::ImageView const & source
 		, VkFormat targetColour
 		, VkFormat targetDepth )
 	{
@@ -124,23 +125,21 @@ namespace castor3d
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		auto & renderSystem = *getEngine()->getRenderSystem();
-		auto & device = getCurrentRenderDevice( renderSystem );
 		m_renderPass = device->createRenderPass( "TextureProjection"
 			, std::move( createInfo ) );
 
-		m_sampler->initialise();
-		auto program = doInitialiseShader();
-		doInitialiseVertexBuffer();
-		doInitialisePipeline( program, source, *m_renderPass );
+		m_sampler->initialise( device );
+		auto program = doInitialiseShader( device );
+		doInitialiseVertexBuffer( device );
+		doInitialisePipeline( device, program, source, *m_renderPass );
 	}
 
-	void TextureProjection::cleanup()
+	void TextureProjection::cleanup( RenderDevice const & device )
 	{
 		m_pipeline.reset();
 		m_pipelineLayout.reset();
-		m_matrixUbo.cleanup();
-		m_modelMatrixUbo.cleanup();
+		m_matrixUbo.cleanup( device );
+		m_modelMatrixUbo.cleanup( device );
 		m_sampler.reset();
 		m_vertexBuffer.reset();
 		m_descriptorSet.reset();
@@ -148,10 +147,9 @@ namespace castor3d
 		m_descriptorLayout.reset();
 	}
 
-	void TextureProjection::doPrepareFrame()
+	void TextureProjection::doPrepareFrame( RenderDevice const & device )
 	{
 		auto & renderSystem = *getEngine()->getRenderSystem();
-		auto & device = getCurrentRenderDevice( renderSystem );
 
 		if ( !m_commandBuffer )
 		{
@@ -178,7 +176,8 @@ namespace castor3d
 		m_commandBuffer->end();
 	}
 
-	void TextureProjection::update( Camera const & camera )
+	void TextureProjection::update( RenderDevice const & device
+		, Camera const & camera )
 	{
 		static castor::Matrix3x3f const Identity{ 1.0f };
 		auto node = camera.getParent();
@@ -190,13 +189,12 @@ namespace castor3d
 		if ( m_size != camera.getSize() )
 		{
 			m_size = camera.getSize();
-			doPrepareFrame();
+			doPrepareFrame( device );
 		}
 	}
 
-	ashes::PipelineShaderStageCreateInfoArray TextureProjection::doInitialiseShader()
+	ashes::PipelineShaderStageCreateInfoArray TextureProjection::doInitialiseShader( RenderDevice const & device )
 	{
-		auto & renderSystem = *getEngine()->getRenderSystem();
 		ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, "TextureProj" };
 		{
 			using namespace sdw;
@@ -247,7 +245,6 @@ namespace castor3d
 			pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		auto & device = getCurrentRenderDevice( *this );
 		return ashes::PipelineShaderStageCreateInfoArray
 		{
 			makeShaderState( device, vtx ),
@@ -255,10 +252,8 @@ namespace castor3d
 		};
 	}
 
-	bool TextureProjection::doInitialiseVertexBuffer()
+	bool TextureProjection::doInitialiseVertexBuffer( RenderDevice const & device )
 	{
-		auto & renderSystem = *getEngine()->getRenderSystem();
-		auto & device = getCurrentRenderDevice( renderSystem );
 		m_vertexBuffer = makeVertexBuffer< NonTexturedCube >( device
 			, 1u
 			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
@@ -287,7 +282,8 @@ namespace castor3d
 		return true;
 	}
 
-	bool TextureProjection::doInitialisePipeline( ashes::PipelineShaderStageCreateInfoArray & program
+	bool TextureProjection::doInitialisePipeline( RenderDevice const & device
+		, ashes::PipelineShaderStageCreateInfoArray & program
 		, ashes::ImageView const & texture
 		, ashes::RenderPass const & renderPass )
 	{
@@ -320,7 +316,6 @@ namespace castor3d
 
 		auto blState = ashes::PipelineColorBlendStateCreateInfo{};
 		auto & renderSystem = *getEngine()->getRenderSystem();
-		auto & device = getCurrentRenderDevice( renderSystem );
 
 		ashes::VkDescriptorSetLayoutBindingArray bindings
 		{

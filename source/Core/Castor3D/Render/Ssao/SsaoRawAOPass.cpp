@@ -442,11 +442,11 @@ namespace castor3d
 		}
 
 		ashes::PipelineShaderStageCreateInfoArray doGetProgram( Engine & engine
+			, RenderDevice const & device
 			, bool useNormalsBuffer
 			, ShaderModule & vertexShader
 			, ShaderModule & pixelShader )
 		{
-			auto & device = getCurrentRenderDevice( engine );
 			vertexShader.shader = doGetVertexProgram( engine );
 			pixelShader.shader = doGetPixelProgram( engine, useNormalsBuffer );
 			return
@@ -479,6 +479,7 @@ namespace castor3d
 		}
 
 		TextureUnit doCreateTexture( Engine & engine
+			, RenderDevice const & device
 			, castor::String const & name
 			, VkFormat format
 			, VkExtent2D const & size )
@@ -506,11 +507,11 @@ namespace castor3d
 			TextureUnit result{ engine };
 			result.setTexture( ssaoResult );
 			result.setSampler( sampler );
-			result.initialise();
+			result.initialise( device );
 			return result;
 		}
 		
-		ashes::RenderPassPtr doCreateRenderPass( Engine & engine
+		ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
 			, std::vector< std::reference_wrapper< TextureUnit const > > const & textures )
 		{
 			ashes::VkAttachmentDescriptionArray attaches;
@@ -577,14 +578,12 @@ namespace castor3d
 				std::move( subpasses ),
 				std::move( dependencies ),
 			};
-			auto & device = getCurrentRenderDevice( engine );
 			auto result = device->createRenderPass( "SsaoRawAO"
 				, std::move( createInfo ) );
 			return result;
 		}
 
-		ashes::FrameBufferPtr doCreateFrameBuffer( Engine & engine
-			, ashes::RenderPass const & renderPass
+		ashes::FrameBufferPtr doCreateFrameBuffer( ashes::RenderPass const & renderPass
 			, std::vector< std::reference_wrapper< TextureUnit const > > const & textures )
 		{
 			ashes::ImageViewCRefArray attaches;
@@ -595,7 +594,6 @@ namespace castor3d
 			}
 
 			auto size = textures.front().get().getTexture()->getDimensions();
-			auto & device = getCurrentRenderDevice( engine );
 			auto result = renderPass.createFrameBuffer( "SsaoRawAO"
 				, VkExtent2D{ size.width, size.height }
 				, std::move( attaches ) );
@@ -606,24 +604,21 @@ namespace castor3d
 	//*********************************************************************************************
 
 	SsaoRawAOPass::RenderQuad::RenderQuad( Engine & engine
+		, RenderDevice const & device
 		, ashes::RenderPass const & renderPass
 		, VkExtent2D const & size
 		, SsaoConfigUbo & ssaoConfigUbo
 		, GpInfoUbo const & gpInfoUbo
 		, TextureUnit const & depth
 		, ashes::ImageView const * normals )
-		: castor3d::RenderQuad
-		{
-			*engine.getRenderSystem(),
-			cuT( "SsaoRawAO" ),
-			VK_FILTER_NEAREST,
-			{
-				( normals
+		: castor3d::RenderQuad{ *engine.getRenderSystem()
+			, device
+			, cuT( "SsaoRawAO" )
+			, VK_FILTER_NEAREST
+			, { ( normals
 					? ( *normals )->subresourceRange
-					: depth.getTexture()->getDefaultView().getSampledView()->subresourceRange ),
-				ashes::nullopt,
-			},
-		}
+					: depth.getTexture()->getDefaultView().getSampledView()->subresourceRange )
+				, ashes::nullopt } }
 		, vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName() }
 		, pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName() }
 		, m_depthView{ normals ? &depth.getTexture()->getDefaultView().getSampledView() : nullptr }
@@ -652,7 +647,7 @@ namespace castor3d
 
 		this->createPipeline( size
 			, {}
-			, doGetProgram( engine, normals != nullptr, vertexShader, pixelShader )
+			, doGetProgram( engine, device, normals != nullptr, vertexShader, pixelShader )
 			, *view
 			, renderPass
 			, std::move( bindings )
@@ -679,6 +674,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	SsaoRawAOPass::SsaoRawAOPass( Engine & engine
+		, RenderDevice const & device
 		, VkExtent2D const & size
 		, SsaoConfig const & config
 		, SsaoConfigUbo & ssaoConfigUbo
@@ -686,6 +682,7 @@ namespace castor3d
 		, TextureUnit const & linearisedDepthBuffer
 		, ashes::ImageView const & normals )
 		: m_engine{ engine }
+		, m_device{ device }
 		, m_ssaoConfig{ config }
 		, m_ssaoConfigUbo{ ssaoConfigUbo }
 		, m_gpInfoUbo{ gpInfoUbo }
@@ -693,41 +690,32 @@ namespace castor3d
 		, m_normals{ normals }
 		, m_size{ size }
 		, m_result{ doCreateTexture( m_engine
+			, m_device
 			, "SsaoRawAOResult"
 			, SsaoRawAOPass::ResultFormat
 			, m_size ) }
-		, m_renderPass{ doCreateRenderPass( m_engine, { m_result } ) }
-		, m_frameBuffer{ doCreateFrameBuffer( m_engine, *m_renderPass, { m_result } ) }
-		, m_quads
-		{
-			RenderQuad
-			{
-				m_engine,
-				*m_renderPass,
-				m_size,
-				m_ssaoConfigUbo,
-				m_gpInfoUbo,
-				m_linearisedDepthBuffer,
-				nullptr,
-			},
-			RenderQuad
-			{
-				m_engine,
-				*m_renderPass,
-				m_size,
-				m_ssaoConfigUbo,
-				m_gpInfoUbo,
-				m_linearisedDepthBuffer,
-				&m_normals,
-			},
-		}
-		, m_commandBuffers
-		{
-			getCurrentRenderDevice( m_engine ).graphicsCommandPool->createCommandBuffer( "SsaoRawAO" ),
-			getCurrentRenderDevice( m_engine ).graphicsCommandPool->createCommandBuffer( "SsaoRawAONormals" ),
-		}
-		, m_finished{ getCurrentRenderDevice( m_engine )->createSemaphore( "SsaoRawAO" ) }
-		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, cuT( "Scalable Ambient Obscurance" ), cuT( "Raw AO" ) ) }
+		, m_renderPass{ doCreateRenderPass( m_device, { m_result } ) }
+		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, { m_result } ) }
+		, m_quads{ RenderQuad{ m_engine
+				, m_device
+				, *m_renderPass
+				, m_size
+				, m_ssaoConfigUbo
+				, m_gpInfoUbo
+				, m_linearisedDepthBuffer
+				, nullptr }
+			, RenderQuad{ m_engine
+				, m_device
+				, *m_renderPass
+				, m_size
+				, m_ssaoConfigUbo
+				, m_gpInfoUbo
+				, m_linearisedDepthBuffer
+				, &m_normals } }
+		, m_commandBuffers{ m_device.graphicsCommandPool->createCommandBuffer( "SsaoRawAO" )
+			, m_device.graphicsCommandPool->createCommandBuffer( "SsaoRawAONormals" ) }
+		, m_finished{ m_device->createSemaphore( "SsaoRawAO" ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, m_device, cuT( "Scalable Ambient Obscurance" ), cuT( "Raw AO" ) ) }
 	{
 		for ( auto i = 0u; i < m_commandBuffers.size(); ++i )
 		{
@@ -765,15 +753,13 @@ namespace castor3d
 
 	ashes::Semaphore const & SsaoRawAOPass::compute( ashes::Semaphore const & toWait )const
 	{
-		auto & renderSystem = *m_engine.getRenderSystem();
-		auto & device = getCurrentRenderDevice( renderSystem );
 		RenderPassTimerBlock timerBlock{ m_timer->start() };
 		timerBlock->notifyPassRender();
 		auto * result = &toWait;
 		auto index = m_ssaoConfig.useNormalsBuffer
 			? 1u
 			: 0u;
-		device.graphicsQueue->submit( *m_commandBuffers[index]
+		m_device.graphicsQueue->submit( *m_commandBuffers[index]
 			, toWait
 			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, *m_finished

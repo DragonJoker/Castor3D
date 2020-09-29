@@ -33,6 +33,7 @@ namespace castor3d
 		 *\param[in]	srcTexture	La texture cube source.
 		 */
 		C3D_API explicit RadianceComputer( Engine & engine
+			, RenderDevice const & device
 			, castor::Size const & size
 			, ashes::Image const & srcTexture );
 		/**

@@ -29,6 +29,7 @@ namespace castor3d
 		 *\param[in]	tboFormat	Le format voulu pour le TBO.
 		 */
 		C3D_API ShaderBuffer( Engine & engine
+			, RenderDevice const & device
 			, uint32_t size
 			, castor::String name
 			, VkFormat tboFormat = VK_FORMAT_R32G32B32A32_SFLOAT );
@@ -105,7 +106,7 @@ namespace castor3d
 			, VkDeviceSize size );
 
 	private:
-		Engine & m_engine;
+		RenderDevice const & m_device;
 		VkDeviceSize m_size;
 		ashes::BufferBasePtr m_buffer;
 		ashes::BufferViewPtr m_bufferView;

@@ -114,7 +114,7 @@ namespace Testing
 
 		for ( auto & submesh : *src )
 		{
-			submesh->initialise();
+			submesh->initialise( *device );
 		}
 
 		{
@@ -152,7 +152,7 @@ namespace Testing
 
 		for ( auto submesh : *dst )
 		{
-			submesh->initialise();
+			submesh->initialise( *device );
 		}
 
 		auto & lhs = *src;

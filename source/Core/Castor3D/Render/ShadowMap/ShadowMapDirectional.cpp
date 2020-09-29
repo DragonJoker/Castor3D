@@ -139,7 +139,7 @@ namespace castor3d
 		}
 	}
 
-	void ShadowMapDirectional::doInitialiseFramebuffers()
+	void ShadowMapDirectional::doInitialiseFramebuffers( RenderDevice const & device )
 	{
 		VkExtent2D const size
 		{
@@ -179,14 +179,13 @@ namespace castor3d
 		}
 	}
 
-	void ShadowMapDirectional::doInitialise()
+	void ShadowMapDirectional::doInitialise( RenderDevice const & device )
 	{
-		doInitialiseFramebuffers();
-		auto & device = getCurrentRenderDevice( *getEngine() );
+		doInitialiseFramebuffers( device );
 		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( m_name );
 	}
 
-	void ShadowMapDirectional::doCleanup()
+	void ShadowMapDirectional::doCleanup( RenderDevice const & device )
 	{
 		m_commandBuffer.reset();
 		m_frameBuffers.clear();
@@ -202,7 +201,8 @@ namespace castor3d
 			} );
 	}
 
-	ashes::Semaphore const & ShadowMapDirectional::doRender( ashes::Semaphore const & toWait
+	ashes::Semaphore const & ShadowMapDirectional::doRender( RenderDevice const & device
+		, ashes::Semaphore const & toWait
 		, uint32_t index )
 	{
 		auto & myTimer = m_passes[0].pass->getTimer();
@@ -243,7 +243,6 @@ namespace castor3d
 
 		m_commandBuffer->endDebugBlock();
 		m_commandBuffer->end();
-		auto & device = getCurrentRenderDevice( *getEngine() );
 		auto * result = &toWait;
 		device.graphicsQueue->submit( *m_commandBuffer
 			, *result

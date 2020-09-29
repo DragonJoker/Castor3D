@@ -67,12 +67,14 @@ namespace castor3d
 	{
 	}
 
-	bool PostEffectSurface::initialise( ashes::RenderPass const & renderPass
+	bool PostEffectSurface::initialise( RenderDevice const & device
+		, ashes::RenderPass const & renderPass
 		, Size const & size
 		, VkFormat format
 		, uint32_t mipLevels )
 	{
-		return initialise( renderPass
+		return initialise( device
+			, renderPass
 			, size
 			, doCreateTexture( *getEngine()->getRenderSystem()
 				, size
@@ -83,12 +85,14 @@ namespace castor3d
 			, nullptr );
 	}
 
-	bool PostEffectSurface::initialise( ashes::RenderPass const & renderPass
+	bool PostEffectSurface::initialise( RenderDevice const & device
+		, ashes::RenderPass const & renderPass
 		, Size const & size
 		, VkFormat colourFormat
 		, VkFormat depthFormat )
 	{
-		return initialise( renderPass
+		return initialise( device
+			, renderPass
 			, size
 			, doCreateTexture( *getEngine()->getRenderSystem()
 				, size
@@ -104,22 +108,26 @@ namespace castor3d
 				, m_debugName + cuT( "_Depth" ) ) );
 	}
 
-	bool PostEffectSurface::initialise( ashes::RenderPass const & renderPass
+	bool PostEffectSurface::initialise( RenderDevice const & device
+		, ashes::RenderPass const & renderPass
 		, castor::Size const & size
 		, TextureLayoutSPtr colourTexture )
 	{
-		return initialise( renderPass
+		return initialise( device
+			, renderPass
 			, size
 			, colourTexture
 			, nullptr );
 	}
 
-	bool PostEffectSurface::initialise( ashes::RenderPass const & renderPass
+	bool PostEffectSurface::initialise( RenderDevice const & device
+		, ashes::RenderPass const & renderPass
 		, castor::Size const & size
 		, TextureLayoutSPtr colourTexture
 		, VkFormat depthFormat )
 	{
-		return initialise( renderPass
+		return initialise( device
+			, renderPass
 			, size
 			, colourTexture
 			, doCreateTexture( *getEngine()->getRenderSystem()
@@ -130,12 +138,14 @@ namespace castor3d
 				, m_debugName + cuT( "_Depth" ) ) );
 	}
 
-	bool PostEffectSurface::initialise( ashes::RenderPass const & renderPass
+	bool PostEffectSurface::initialise( RenderDevice const & device
+		, ashes::RenderPass const & renderPass
 		, castor::Size const & size
 		, VkFormat colourFormat
 		, TextureLayoutSPtr depthTexture )
 	{
-		return initialise( renderPass
+		return initialise( device
+			, renderPass
 			, size
 			, doCreateTexture( *getEngine()->getRenderSystem()
 				, size
@@ -146,7 +156,8 @@ namespace castor3d
 			, depthTexture );
 	}
 
-	bool PostEffectSurface::initialise( ashes::RenderPass const & renderPass
+	bool PostEffectSurface::initialise( RenderDevice const & device
+		, ashes::RenderPass const & renderPass
 		, Size const & size
 		, TextureLayoutSPtr colourTexture
 		, TextureLayoutSPtr depthTexture )
@@ -157,14 +168,14 @@ namespace castor3d
 		if ( colourTexture )
 		{
 			this->colourTexture = colourTexture;
-			this->colourTexture->initialise();
+			this->colourTexture->initialise( device );
 			attaches.emplace_back( colourTexture->getDefaultView().getTargetView() );
 		}
 
 		if ( depthTexture )
 		{
 			this->depthTexture = depthTexture;
-			this->depthTexture->initialise();
+			this->depthTexture->initialise( device );
 			auto & texture = this->depthTexture->getTexture();
 			auto format = texture.getFormat();
 			auto aspectMask = ashes::getAspectMask( format );
@@ -211,7 +222,7 @@ namespace castor3d
 		return true;
 	}
 
-	void PostEffectSurface::cleanup()
+	void PostEffectSurface::cleanup( RenderDevice const & device )
 	{
 		frameBuffer.reset();
 

@@ -21,7 +21,7 @@ namespace castor3d
 	{
 		if ( engine.getRenderSystem()->hasCurrentRenderDevice() )
 		{
-			initialise();
+			initialise( engine.getRenderSystem()->getCurrentRenderDevice() );
 		}
 	}
 
@@ -29,20 +29,18 @@ namespace castor3d
 	{
 	}
 
-	void GpInfoUbo::initialise()
+	void GpInfoUbo::initialise( castor3d::RenderDevice const & device )
 	{
 		if ( !m_ubo )
 		{
-			auto & device = getCurrentRenderDevice( m_engine );
 			m_ubo = device.uboPools->getBuffer< GpInfoUboConfiguration >( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT );
 		}
 	}
 
-	void GpInfoUbo::cleanup()
+	void GpInfoUbo::cleanup( castor3d::RenderDevice const & device )
 	{
 		if ( m_ubo )
 		{
-			auto & device = getCurrentRenderDevice( m_engine );
 			device.uboPools->putBuffer< GpInfoUboConfiguration >( m_ubo );
 		}
 	}

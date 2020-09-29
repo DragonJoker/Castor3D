@@ -216,11 +216,12 @@ namespace smaa
 	//*********************************************************************************************
 
 	NeighbourhoodBlending::NeighbourhoodBlending( castor3d::RenderTarget & renderTarget
+		, castor3d::RenderDevice const & device
 		, ashes::ImageView const & sourceView
 		, ashes::ImageView const & blendView
 		, ashes::ImageView const * velocityView
 		, SmaaConfig const & config )
-		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), "SmaaNeighbourhoodBlending", VK_FILTER_LINEAR, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
+		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), device, "SmaaNeighbourhoodBlending", VK_FILTER_LINEAR, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
 		, m_sourceView{ sourceView }
 		, m_blendView{ blendView }
 		, m_velocityView{ velocityView }
@@ -231,7 +232,6 @@ namespace smaa
 
 		VkExtent2D size{ sourceView.image->getDimensions().width, sourceView.image->getDimensions().height };
 		auto & renderSystem = m_renderSystem;
-		auto & device = getCurrentRenderDevice( renderSystem );
 
 		// Create the render pass.
 		ashes::VkAttachmentDescriptionArray attachments
@@ -287,7 +287,7 @@ namespace smaa
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		m_renderPass = device->createRenderPass( getName()
+		m_renderPass = m_device->createRenderPass( getName()
 			, std::move( createInfo ) );
 
 		auto pixelSize = Point4f{ 1.0f / size.width, 1.0f / size.height, float( size.width ), float( size.height ) };
@@ -300,8 +300,8 @@ namespace smaa
 			, velocityView != nullptr );
 
 		ashes::PipelineShaderStageCreateInfoArray stages;
-		stages.push_back( makeShaderState( device, m_vertexShader ) );
-		stages.push_back( makeShaderState( device, m_pixelShader ) );
+		stages.push_back( makeShaderState( m_device, m_vertexShader ) );
+		stages.push_back( makeShaderState( m_device, m_pixelShader ) );
 
 		ashes::VkDescriptorSetLayoutBindingArray setLayoutBindings;
 		setLayoutBindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( 0u
@@ -329,7 +329,8 @@ namespace smaa
 		{
 			m_surfaces.emplace_back( *renderTarget.getEngine()
 				, getName() );
-			m_surfaces.back().initialise( *m_renderPass
+			m_surfaces.back().initialise( m_device
+				, *m_renderPass
 				, castor::Size{ size.width, size.height }
 				, colourFormat );
 		}
@@ -339,11 +340,10 @@ namespace smaa
 		, uint32_t passIndex
 		, uint32_t index )
 	{
-		auto & device = getCurrentRenderDevice( m_renderSystem );
 		castor3d::CommandsSemaphore neighbourhoodBlendingCommands
 		{
-			device.graphicsCommandPool->createCommandBuffer( getName() ),
-			device->createSemaphore( getName() )
+			m_device.graphicsCommandPool->createCommandBuffer( getName() ),
+			m_device->createSemaphore( getName() )
 		};
 		auto & neighbourhoodBlendingCmd = *neighbourhoodBlendingCommands.commandBuffer;
 

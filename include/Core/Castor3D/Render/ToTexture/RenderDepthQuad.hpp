@@ -25,14 +25,8 @@ namespace castor3d
 		 *\param[in] renderSystem
 		 *	Le RenderSystem.
 		 */
-		C3D_API explicit RenderDepthQuad( RenderSystem & renderSystem );
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~RenderDepthQuad();
+		C3D_API explicit RenderDepthQuad( RenderSystem & renderSystem
+			, RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Initialises the program.

@@ -16,24 +16,22 @@ namespace castor3d
 	{
 		if ( engine.getRenderSystem()->hasCurrentRenderDevice() )
 		{
-			initialise();
+			initialise( engine.getRenderSystem()->getCurrentRenderDevice() );
 		}
 	}
 
-	void PickingUbo::initialise()
+	void PickingUbo::initialise( RenderDevice const & device )
 	{
 		if ( !m_ubo )
 		{
-			auto & device = getCurrentRenderDevice( m_engine );
 			m_ubo = device.uboPools->getBuffer< Configuration >( 0u );
 		}
 	}
 
-	void PickingUbo::cleanup()
+	void PickingUbo::cleanup( RenderDevice const & device )
 	{
 		if ( m_ubo )
 		{
-			auto & device = getCurrentRenderDevice( m_engine );
 			device.uboPools->putBuffer( m_ubo );
 		}
 	}

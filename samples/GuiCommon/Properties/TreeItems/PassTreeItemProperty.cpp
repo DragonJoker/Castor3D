@@ -6,7 +6,6 @@
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Cache/WindowCache.hpp>
-#include <Castor3D/Event/Frame/FunctorEvent.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Material/Pass/PhongPass.hpp>
 #include <Castor3D/Material/Pass/MetallicRoughnessPbrPass.hpp>
@@ -33,8 +32,7 @@ namespace GuiCommon
 			PassShaderGatherer( PipelineFlags flags
 				, Scene const & scene
 				, ShaderSources & sources )
-				: castor3d::RenderTechniqueVisitor{ std::move( flags )
-					, scene }
+				: castor3d::RenderTechniqueVisitor{ std::move( flags ), scene }
 				, m_sources{ sources }
 			{
 			}

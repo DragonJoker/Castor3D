@@ -3,7 +3,7 @@
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
-#include "Castor3D/Render/RenderModule.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
 using namespace castor;
@@ -87,7 +87,8 @@ namespace castor3d
 	{
 	}
 
-	bool BillboardBase::initialise( uint32_t count )
+	bool BillboardBase::initialise( RenderDevice const & device
+		, uint32_t count )
 	{
 		if ( !m_initialised )
 		{
@@ -99,7 +100,6 @@ namespace castor3d
 				Vertex{ castor::Point3f{ +0.5f, -0.5f, 1.0f }, castor::Point2f{ 1.0f, 0.0f } },
 				Vertex{ castor::Point3f{ +0.5f, +0.5f, 1.0f }, castor::Point2f{ 1.0f, 1.0f } },
 			};
-			auto & device = getCurrentRenderDevice( m_scene );
 			m_quadBuffer = makeVertexBuffer< Quad >( device
 				, 1u
 				, VK_BUFFER_USAGE_TRANSFER_DST_BIT
@@ -139,7 +139,7 @@ namespace castor3d
 		return m_initialised;
 	}
 
-	void BillboardBase::cleanup()
+	void BillboardBase::cleanup( RenderDevice const & device )
 	{
 		if ( m_initialised )
 		{
@@ -168,7 +168,7 @@ namespace castor3d
 	{
 		if ( m_count )
 		{
-			auto & device = getCurrentRenderDevice( getParentScene() );
+			auto & device = updater.device;
 			auto mappedSize = ashes::getAlignedSize( VkDeviceSize( m_count ) * m_vertexStride
 				, device.properties.limits.nonCoherentAtomSize );
 
@@ -361,17 +361,12 @@ namespace castor3d
 	{
 	}
 
-	BillboardList::~BillboardList()
-	{
-	}
-
-	bool BillboardList::initialise()
+	bool BillboardList::initialise( RenderDevice const & device )
 	{
 		if ( !m_vertexLayout
 			|| !m_vertexBuffer
 			|| m_arrayPositions.size() != m_vertexBuffer->getSize() )
 		{
-			auto & device = getCurrentRenderDevice( m_scene );
 			m_vertexBuffer = makeVertexBuffer< castor::Point3f >( device
 				, uint32_t( m_arrayPositions.size() )
 				, VK_BUFFER_USAGE_TRANSFER_DST_BIT
@@ -393,7 +388,7 @@ namespace castor3d
 			}
 		}
 
-		return BillboardBase::initialise( uint32_t( m_arrayPositions.size() ) );
+		return BillboardBase::initialise( device, uint32_t( m_arrayPositions.size() ) );
 	}
 
 	void BillboardList::removePoint( uint32_t index )

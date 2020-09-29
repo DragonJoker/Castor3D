@@ -11,22 +11,23 @@
 
 namespace castor3d
 {
-	UniformBufferPools::UniformBufferPools( RenderSystem & renderSystem )
+	UniformBufferPools::UniformBufferPools( RenderSystem & renderSystem
+		, RenderDevice const & device )
 		: castor::OwnedBy< RenderSystem >{ renderSystem }
 		, m_pools
 		{
-			UniformBufferPool{ renderSystem, "Matrix" },
-			UniformBufferPool{ renderSystem, "ModelMatrix" },
-			UniformBufferPool{ renderSystem, "Model" },
-			UniformBufferPool{ renderSystem, "Billboard" },
-			UniformBufferPool{ renderSystem, "Skinning" },
-			UniformBufferPool{ renderSystem, "Morphing" },
-			UniformBufferPool{ renderSystem, "Picking" },
-			UniformBufferPool{ renderSystem, "Textures" },
-			UniformBufferPool{ renderSystem, "ShadowMap" },
-			UniformBufferPool{ renderSystem, "HDRConfig" },
-			UniformBufferPool{ renderSystem, "RSMConfig" },
-			UniformBufferPool{ renderSystem, "Generic" },
+			UniformBufferPool{ renderSystem, device, "Matrix" },
+			UniformBufferPool{ renderSystem, device, "ModelMatrix" },
+			UniformBufferPool{ renderSystem, device, "Model" },
+			UniformBufferPool{ renderSystem, device, "Billboard" },
+			UniformBufferPool{ renderSystem, device, "Skinning" },
+			UniformBufferPool{ renderSystem, device, "Morphing" },
+			UniformBufferPool{ renderSystem, device, "Picking" },
+			UniformBufferPool{ renderSystem, device, "Textures" },
+			UniformBufferPool{ renderSystem, device, "ShadowMap" },
+			UniformBufferPool{ renderSystem, device, "HDRConfig" },
+			UniformBufferPool{ renderSystem, device, "RSMConfig" },
+			UniformBufferPool{ renderSystem, device, "Generic" },
 		}
 	{
 	}

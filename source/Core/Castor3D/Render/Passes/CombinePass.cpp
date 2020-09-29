@@ -33,6 +33,7 @@ namespace castor3d
 	namespace
 	{
 		TextureLayoutSPtr doCreateTexture( RenderSystem & renderSystem
+			, RenderDevice const & device
 			, castor::String const & prefix
 			, VkExtent2D const & size
 			, VkFormat format )
@@ -55,7 +56,7 @@ namespace castor3d
 				, image
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, prefix + cuT( "CombineResult" ) );
-			texture->initialise();
+			texture->initialise( device );
 			return texture;
 		}
 
@@ -153,7 +154,7 @@ namespace castor3d
 			return result;
 		}
 
-		ashes::RenderPassPtr doCreateRenderPass( RenderSystem const & renderSystem
+		ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
 			, castor::String const & prefix
 			, VkFormat format )
 		{
@@ -210,7 +211,6 @@ namespace castor3d
 				std::move( subpasses ),
 				std::move( dependencies ),
 			};
-			auto & device = getCurrentRenderDevice( renderSystem );
 			auto result = device->createRenderPass( prefix + "Combine"
 				, std::move( createInfo ) );
 			return result;
@@ -231,16 +231,17 @@ namespace castor3d
 	//*********************************************************************************************
 
 	CombinePass::CombineQuad::CombineQuad( Engine & engine
+		, RenderDevice const & device
 		, castor::String const & prefix
 		, IntermediateViewArray const & lhsViews
 		, UniformBufferOffsetT< uint32_t > const & indexUbo
 		, RenderQuadConfig const & config )
-		: RenderQuad{ *engine.getRenderSystem(), cuT( "Combine" ), VK_FILTER_LINEAR, config }
+		: RenderQuad{ *engine.getRenderSystem(), device, cuT( "Combine" ), VK_FILTER_LINEAR, config }
 		, m_lhsViews{ lhsViews }
 		, m_indexUbo{ indexUbo }
 		, m_lhsSampler{ createSampler( engine, prefix + cuT( "Combine" ), VK_FILTER_LINEAR, &m_lhsViews[0].view->subresourceRange ) }
 	{
-		m_lhsSampler->initialise();
+		m_lhsSampler->initialise( m_device );
 	}
 
 	void CombinePass::CombineQuad::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
@@ -266,6 +267,7 @@ namespace castor3d
 	String const CombinePass::RhsMap = cuT( "c3d_mapRhs" );
 
 	CombinePass::CombinePass( Engine & engine
+		, RenderDevice const & device
 		, castor::String const & prefix
 		, VkFormat outputFormat
 		, VkExtent2D const & outputSize
@@ -287,13 +289,12 @@ namespace castor3d
 			? std::move( *config.resultTexture )
 			: doCreateTexture( *engine.getRenderSystem(), prefix, outputSize, outputFormat ) ) }
 		, m_view{ doCreateView( m_image->getTexture() ) }
-		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, m_prefix, cuT( "Combine" ) ) }
-		, m_renderPass{ doCreateRenderPass( *m_engine.getRenderSystem(), m_prefix, outputFormat ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, device, m_prefix, cuT( "Combine" ) ) }
+		, m_renderPass{ doCreateRenderPass( device, m_prefix, outputFormat ) }
 		, m_frameBuffer{ doCreateFrameBuffer( m_prefix, *m_renderPass, m_view, outputSize ) }
 		, m_indexUbo{ getCurrentRenderDevice( engine ).uboPools->getBuffer< uint32_t >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
 		, m_quad{ engine, m_prefix, m_lhsViews, m_indexUbo, std::move( config ) }
 	{
-		auto & device = getCurrentRenderDevice( engine );
 		ashes::PipelineShaderStageCreateInfoArray program
 		{
 			makeShaderState( device, m_vertexShader ),
@@ -341,7 +342,7 @@ namespace castor3d
 	{
 		//RenderPassTimerBlock timerBlock{ m_timer->start() };
 		//timerBlock->notifyPassRender();
-		auto & device = getCurrentRenderDevice( m_engine );
+		auto & device = m_quad.getDevice();
 		auto * result = &toWait;
 
 		device.graphicsQueue->submit( *m_commandBuffer
@@ -357,7 +358,7 @@ namespace castor3d
 	CommandsSemaphore CombinePass::getCommands( RenderPassTimer const & timer
 		, uint32_t index )const
 	{
-		auto & device = getCurrentRenderDevice( m_engine );
+		auto & device = m_quad.getDevice();
 		CommandsSemaphore result
 		{
 			device.graphicsCommandPool->createCommandBuffer( m_prefix + "CombinePass" ),

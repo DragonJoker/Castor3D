@@ -131,11 +131,12 @@ namespace smaa
 	//*********************************************************************************************
 
 	Reproject::Reproject( castor3d::RenderTarget & renderTarget
+		, castor3d::RenderDevice const & device
 		, ashes::ImageView const & currentColourView
 		, ashes::ImageView const & previousColourView
 		, ashes::ImageView const * velocityView
 		, SmaaConfig const & config )
-		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), cuT( "SmaaReproject" ), VK_FILTER_NEAREST, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
+		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), device, cuT( "SmaaReproject" ), VK_FILTER_NEAREST, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
 		, m_currentColourView{ currentColourView }
 		, m_previousColourView{ previousColourView }
 		, m_velocityView{ velocityView }
@@ -199,8 +200,7 @@ namespace smaa
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		auto & device = getCurrentRenderDevice( m_renderSystem );
-		m_renderPass = device->createRenderPass( getName()
+		m_renderPass = m_device->createRenderPass( getName()
 			, std::move( createInfo ) );
 
 		auto pixelSize = Point4f{ 1.0f / size.width, 1.0f / size.height, float( size.width ), float( size.height ) };
@@ -213,8 +213,8 @@ namespace smaa
 			, velocityView != nullptr );
 
 		ashes::PipelineShaderStageCreateInfoArray stages;
-		stages.push_back( makeShaderState( device, m_vertexShader ) );
-		stages.push_back( makeShaderState( device, m_pixelShader ) );
+		stages.push_back( makeShaderState( m_device, m_vertexShader ) );
+		stages.push_back( makeShaderState( m_device, m_pixelShader ) );
 
 		ashes::VkDescriptorSetLayoutBindingArray setLayoutBindings;
 		setLayoutBindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( 0u
@@ -237,7 +237,8 @@ namespace smaa
 			, *m_renderPass
 			, std::move( setLayoutBindings )
 			, {} );
-		m_surface.initialise( *m_renderPass
+		m_surface.initialise( m_device
+			, *m_renderPass
 			, castor::Size{ size.width, size.height }
 			, renderTarget.getPixelFormat() );
 	}
@@ -245,11 +246,10 @@ namespace smaa
 	castor3d::CommandsSemaphore Reproject::prepareCommands( castor3d::RenderPassTimer const & timer
 		, uint32_t passIndex )
 	{
-		auto & device = getCurrentRenderDevice( m_renderSystem );
 		castor3d::CommandsSemaphore reprojectCommands
 		{
-			device.graphicsCommandPool->createCommandBuffer( getName() ),
-			device->createSemaphore( getName() )
+			m_device.graphicsCommandPool->createCommandBuffer( getName() ),
+			m_device->createSemaphore( getName() )
 		};
 		auto & reprojectCmd = *reprojectCommands.commandBuffer;
 

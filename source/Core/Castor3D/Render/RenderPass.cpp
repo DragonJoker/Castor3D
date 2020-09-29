@@ -3,12 +3,13 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
+#include "Castor3D/Cache/BillboardCache.hpp"
 #include "Castor3D/Cache/BillboardUboPools.hpp"
 #include "Castor3D/Cache/GeometryCache.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/ShaderCache.hpp"
-#include "Castor3D/Event/Frame/FunctorEvent.hpp"
+#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
@@ -165,20 +166,21 @@ namespace castor3d
 	{
 	}
 
-	bool RenderPass::initialise( Size const & size )
+	bool RenderPass::initialise( RenderDevice const & device
+		, Size const & size )
 	{
-		m_timer = std::make_shared< RenderPassTimer >( *getEngine(), m_category, getName() );
-		m_sceneUbo.initialise();
+		m_timer = std::make_shared< RenderPassTimer >( *getEngine(), device, m_category, getName() );
+		m_sceneUbo.initialise( device );
 		m_sceneUbo.setWindowSize( size );
 		m_size = size;
-		return doInitialise( size );
+		return doInitialise( device, size );
 	}
 
-	void RenderPass::cleanup()
+	void RenderPass::cleanup( RenderDevice const & device )
 	{
-		m_sceneUbo.cleanup();
+		m_sceneUbo.cleanup( device );
 		m_renderPass.reset();
-		doCleanup();
+		doCleanup( device );
 		m_timer.reset();
 		m_backPipelines.clear();
 		m_frontPipelines.clear();
@@ -444,7 +446,7 @@ namespace castor3d
 	{
 		auto & buffers = billboard.getGeometryBuffers();
 		auto & scene = billboard.getParentScene();
-		auto entry = scene.getBillboardPools().getUbos( billboard, pass );
+		auto entry = scene.getBillboardListCache().getUboPools().getUbos( billboard, pass );
 
 		return BillboardRenderNode
 		{
@@ -1181,10 +1183,9 @@ namespace castor3d
 				pipeline.setScissor( makeScissor( m_size ) );
 			}
 
-			getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
-				, [this, &pipeline, flags]()
+			getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
+				, [this, &pipeline, flags]( RenderDevice const & device )
 				{
-					auto & device = getCurrentRenderDevice( *this );
 					auto uboBindings = doCreateUboBindings( flags );
 					auto texBindings = doCreateTextureBindings( flags );
 					auto uboLayout = device->createDescriptorSetLayout( getName()
@@ -1195,7 +1196,7 @@ namespace castor3d
 					layouts.emplace_back( std::move( uboLayout ) );
 					layouts.emplace_back( std::move( texLayout ) );
 					pipeline.setDescriptorSetLayouts( std::move( layouts ) );
-					pipeline.initialise( getRenderPass() );
+					pipeline.initialise( device, getRenderPass() );
 				} ) );
 		}
 	}
@@ -1226,10 +1227,9 @@ namespace castor3d
 				pipeline.setScissor( makeScissor( m_size ) );
 			}
 
-			getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
-				, [this, &pipeline, flags]()
+			getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
+				, [this, &pipeline, flags]( RenderDevice const & device )
 				{
-					auto & device = getCurrentRenderDevice( *this );
 					auto uboBindings = doCreateUboBindings( flags );
 					auto texBindings = doCreateTextureBindings( flags );
 					auto uboLayout = device->createDescriptorSetLayout( std::move( uboBindings ) );
@@ -1238,7 +1238,7 @@ namespace castor3d
 					layouts.emplace_back( std::move( uboLayout ) );
 					layouts.emplace_back( std::move( texLayout ) );
 					pipeline.setDescriptorSetLayouts( std::move( layouts ) );
-					pipeline.initialise( getRenderPass() );
+					pipeline.initialise( device, getRenderPass() );
 				} ) );
 		}
 	}

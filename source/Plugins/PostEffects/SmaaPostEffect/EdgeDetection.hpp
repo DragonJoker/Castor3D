@@ -19,6 +19,7 @@ namespace smaa
 	{
 	public:
 		EdgeDetection( castor3d::RenderTarget & renderTarget
+			, castor3d::RenderDevice const & device
 			, SmaaConfig const & config );
 		virtual castor3d::CommandsSemaphore prepareCommands( castor3d::RenderPassTimer const & timer
 			, uint32_t passIndex ) = 0;

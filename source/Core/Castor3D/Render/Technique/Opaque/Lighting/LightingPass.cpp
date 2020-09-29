@@ -186,6 +186,7 @@ namespace castor3d
 
 		template< LightingPass::Type PassT, LightType LightT >
 		LightingPass::DelayedLightPass makeLightPassTT( Engine & engine
+			, RenderDevice const & device
 			, LightCache const & lightCache
 			, OpaquePassResult const & gpResult
 			, ShadowMapResult const & smResult
@@ -199,6 +200,7 @@ namespace castor3d
 			else if constexpr ( PassT > LightingPass::Type::eShadowNoGI )
 			{
 				return castor::DelayedInitialiserT< castor3d::LightPass >::template make< PassTypeT< PassT, LightT > >( engine
+					, device
 					, lightCache
 					, gpResult
 					, smResult
@@ -208,6 +210,7 @@ namespace castor3d
 			else
 			{
 				return castor::DelayedInitialiserT< castor3d::LightPass >::template make< PassTypeT< PassT, LightT > >( engine
+					, device
 					, lpResult
 					, gpInfoUbo );
 			}
@@ -216,6 +219,7 @@ namespace castor3d
 		template< LightingPass::Type PassT >
 		LightingPass::DelayedLightPass makeLightPassT( LightType lightType
 			, Engine & engine
+			, RenderDevice const & device
 			, LightCache const & lightCache
 			, OpaquePassResult const & gpResult
 			, ShadowMapResult const & smDirectionalResult
@@ -228,6 +232,7 @@ namespace castor3d
 			{
 			case LightType::eDirectional:
 				return makeLightPassTT< PassT, LightType::eDirectional >( engine
+					, device
 					, lightCache
 					, gpResult
 					, smDirectionalResult
@@ -235,6 +240,7 @@ namespace castor3d
 					, gpInfoUbo );
 			case LightType::ePoint:
 				return makeLightPassTT< PassT, LightType::ePoint >( engine
+					, device
 					, lightCache
 					, gpResult
 					, smPointResult
@@ -242,6 +248,7 @@ namespace castor3d
 					, gpInfoUbo );
 			case LightType::eSpot:
 				return makeLightPassTT< PassT, LightType::eSpot >( engine
+					, device
 					, lightCache
 					, gpResult
 					, smSpotResult
@@ -256,6 +263,7 @@ namespace castor3d
 		LightingPass::DelayedLightPass makeLightPass( LightingPass::Type passType
 			, LightType lightType
 			, Engine & engine
+			, RenderDevice const & device
 			, LightCache const & lightCache
 			, OpaquePassResult const & gpResult
 			, ShadowMapResult const & smDirectionalResult
@@ -269,6 +277,7 @@ namespace castor3d
 			case LightingPass::Type::eNoShadow:
 				return makeLightPassT< LightingPass::Type::eNoShadow >( lightType
 					, engine
+					, device
 					, lightCache
 					, gpResult
 					, smDirectionalResult
@@ -279,6 +288,7 @@ namespace castor3d
 			case LightingPass::Type::eShadowNoGI:
 				return makeLightPassT< LightingPass::Type::eShadowNoGI >( lightType
 					, engine
+					, device
 					, lightCache
 					, gpResult
 					, smDirectionalResult
@@ -289,6 +299,7 @@ namespace castor3d
 			case LightingPass::Type::eShadowRsmGI:
 				return makeLightPassT< LightingPass::Type::eShadowRsmGI >( lightType
 					, engine
+					, device
 					, lightCache
 					, gpResult
 					, smDirectionalResult
@@ -301,6 +312,7 @@ namespace castor3d
 				{
 					return makeLightPassT< LightingPass::Type::eShadowLpvGI >( lightType
 						, engine
+						, device
 						, lightCache
 						, gpResult
 						, smDirectionalResult
@@ -315,6 +327,7 @@ namespace castor3d
 				{
 					return makeLightPassT< LightingPass::Type::eShadowLayeredLpvGI >( lightType
 						, engine
+						, device
 						, lightCache
 						, gpResult
 						, smDirectionalResult
@@ -332,6 +345,7 @@ namespace castor3d
 
 		LightingPass::TypeLightPasses makeTypeLightPasses( LightingPass::Type passType
 			, Engine & engine
+			, RenderDevice const & device
 			, LightCache const & lightCache
 			, OpaquePassResult const & gpResult
 			, ShadowMapResult const & smDirectionalResult
@@ -346,6 +360,7 @@ namespace castor3d
 			{
 				result[i] = makeLightPass( passType, LightType( i )
 					, engine
+					, device
 					, lightCache
 					, gpResult
 					, smDirectionalResult
@@ -359,6 +374,7 @@ namespace castor3d
 		}
 
 		LightingPass::LightPasses makeLightPasses( Engine & engine
+			, RenderDevice const & device
 			, LightCache const & lightCache
 			, OpaquePassResult const & gpResult
 			, ShadowMapResult const & smDirectionalResult
@@ -373,6 +389,7 @@ namespace castor3d
 			{
 				result[i] = makeTypeLightPasses( LightingPass::Type( i )
 					, engine
+					, device
 					, lightCache
 					, gpResult
 					, smDirectionalResult
@@ -387,6 +404,7 @@ namespace castor3d
 	}
 
 	LightingPass::LightingPass( Engine & engine
+		, RenderDevice const & device
 		, castor::Size const & size
 		, Scene & scene
 		, OpaquePassResult const & gpResult
@@ -397,25 +415,27 @@ namespace castor3d
 		, SceneUbo & sceneUbo
 		, GpInfoUbo const & gpInfoUbo )
 		: m_engine{ engine }
+		, m_device{ device }
 		, m_size{ size }
 		, m_result{ engine, size }
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Opaque" ), cuT( "Lighting pass" ) ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( engine, device, cuT( "Opaque" ), cuT( "Lighting pass" ) ) }
 		, m_srcDepth{ depthView }
 		, m_blitDepth
 		{
-			getCurrentRenderDevice( engine ).graphicsCommandPool->createCommandBuffer( "LPBlitDepth", VK_COMMAND_BUFFER_LEVEL_PRIMARY ),
-			getCurrentRenderDevice( engine )->createSemaphore( "LPBlitDepth" ),
+			m_device.graphicsCommandPool->createCommandBuffer( "LPBlitDepth", VK_COMMAND_BUFFER_LEVEL_PRIMARY ),
+			m_device->createSemaphore( "LPBlitDepth" ),
 		}
 		, m_lpResultBarrier
 		{
-			getCurrentRenderDevice( engine ).graphicsCommandPool->createCommandBuffer( "LPResultBarrier", VK_COMMAND_BUFFER_LEVEL_PRIMARY ),
-			getCurrentRenderDevice( engine )->createSemaphore( "LPResultBarrier" ),
+			m_device.graphicsCommandPool->createCommandBuffer( "LPResultBarrier", VK_COMMAND_BUFFER_LEVEL_PRIMARY ),
+			m_device->createSemaphore( "LPResultBarrier" ),
 		}
 	{
 		auto & lightCache = scene.getLightCache();
 		lightCache.initialise();
-		m_result.initialise();
+		m_result.initialise( m_device );
 		m_lightPasses = makeLightPasses( engine
+			, m_device
 			, lightCache
 			, gpResult
 			, smDirectionalResult
@@ -438,7 +458,6 @@ namespace castor3d
 			}
 		}
 
-		auto & device = getCurrentRenderDevice( engine );
 		VkImageCopy copy
 		{
 			{ m_srcDepth->subresourceRange.aspectMask, 0u, 0u, 1u },
@@ -540,8 +559,7 @@ namespace castor3d
 				timerBlock->updateCount( count );
 			}
 
-			auto & device = getCurrentRenderDevice( m_engine );
-			device.graphicsQueue->submit( *m_blitDepth.commandBuffer
+			m_device.graphicsQueue->submit( *m_blitDepth.commandBuffer
 				, *result
 				, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 				, *m_blitDepth.semaphore
@@ -570,8 +588,7 @@ namespace castor3d
 		}
 		else
 		{
-			auto & device = getCurrentRenderDevice( m_engine );
-			device.graphicsQueue->submit( *m_lpResultBarrier.commandBuffer
+			m_device.graphicsQueue->submit( *m_lpResultBarrier.commandBuffer
 				, *result
 				, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 				, *m_lpResultBarrier.semaphore

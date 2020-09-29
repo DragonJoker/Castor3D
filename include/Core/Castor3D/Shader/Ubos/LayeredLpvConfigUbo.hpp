@@ -38,7 +38,15 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
 		 */
-		explicit LayeredLpvConfigUbo( Engine & engine );
+		explicit LayeredLpvConfigUbo( RenderDevice const & device );
+		/**@}*/
+		/**
+		 *\~english
+		 *\brief		Destructor.
+		 *\~french
+		 *\brief		Destructeur.
+		 */
+		~LayeredLpvConfigUbo();
 		/**
 		 *\~english
 		 *\brief		Updates UBO data.
@@ -62,7 +70,7 @@ namespace castor3d
 		C3D_API static const std::string Config;
 
 	private:
-		Engine & m_engine;
+		RenderDevice const & m_device;
 		UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }

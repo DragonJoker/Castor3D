@@ -7,7 +7,7 @@
 #include "Castor3D/Cache/GeometryCache.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Cache/ParticleSystemCache.hpp"
-#include "Castor3D/Event/Frame/FunctorEvent.hpp"
+#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -126,6 +126,7 @@ namespace castor3d
 		}
 
 		TextureLayoutSPtr doCreateTexture( Engine & engine
+			, RenderDevice const & device
 			, Size const & size
 			, VkFormat format
 			, VkImageUsageFlags usage
@@ -147,7 +148,7 @@ namespace castor3d
 				, image
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, std::move( debugName ) );
-			result->initialise();
+			result->initialise( device );
 			return result;
 		}
 	}
@@ -220,14 +221,15 @@ namespace castor3d
 		m_opaquePass.reset();
 	}
 
-	bool RenderTechnique::initialise( std::vector< IntermediateView > & intermediates )
+	bool RenderTechnique::initialise( RenderDevice const & device
+		, std::vector< IntermediateView > & intermediates )
 	{
 		if ( !m_initialised )
 		{
 			VkImageSubresourceRange range{ 0u, 0u, 1u, 0u, 1u };
-			auto & device = getCurrentRenderDevice( *this );
 			m_size = m_renderTarget.getSize();
 			auto colourTexture = doCreateTexture( *getEngine()
+				, device
 				, m_size
 				, VK_FORMAT_R16G16B16A16_SFLOAT
 				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
@@ -241,6 +243,7 @@ namespace castor3d
 				, &range ) );
 
 			auto depthBuffer = doCreateTexture( *getEngine()
+				, device
 				, m_size
 				, device.selectSuitableDepthStencilFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
 					| VK_FORMAT_FEATURE_TRANSFER_SRC_BIT )
@@ -252,11 +255,11 @@ namespace castor3d
 				, VK_FILTER_LINEAR
 				, &range ) );
 
-			m_colourTexture.initialise();
-			m_depthBuffer.initialise();
+			m_colourTexture.initialise( device );
+			m_depthBuffer.initialise( device );
 			m_signalFinished = device->createSemaphore( "RenderTechnique" );
-			m_gpInfoUbo.initialise();
-			m_matrixUbo.initialise();
+			m_gpInfoUbo.initialise( device );
+			m_matrixUbo.initialise( device );
 
 			//m_voxelizer = std::make_unique< Voxelizer >( *m_renderSystem.getEngine()
 			//	, VkExtent3D{ 64u, 64u, 64u }
@@ -264,23 +267,23 @@ namespace castor3d
 			//	, m_renderTarget.getCuller()
 			//	, m_renderTarget.getTexture().getTexture()->getDefaultView().getTargetView() );
 
-			doInitialiseShadowMaps();
+			doInitialiseShadowMaps( device );
 #if C3D_UseDepthPrepass
-			doInitialiseDepthPass();
+			doInitialiseDepthPass( device );
 #endif
-			doInitialiseBackgroundPass();
-			doInitialiseOpaquePass();
-			doInitialiseTransparentPass();
+			doInitialiseBackgroundPass( device );
+			doInitialiseOpaquePass( device );
+			doInitialiseTransparentPass( device );
 			IntermediatesLister::submit( *this, intermediates );
 
-			m_particleTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Particles" ), cuT( "Particles" ) );
+			m_particleTimer = std::make_shared< RenderPassTimer >( *getEngine(), device, cuT( "Particles" ), cuT( "Particles" ) );
 			m_initialised = true;
 		}
 
 		return m_initialised;
 	}
 
-	void RenderTechnique::cleanup()
+	void RenderTechnique::cleanup( RenderDevice const & device )
 	{
 		m_onBgChanged.disconnect();
 		m_bgCommandBuffer.reset();
@@ -290,16 +293,16 @@ namespace castor3d
 		m_particleTimer.reset();
 		m_weightedBlendRendering.reset();
 		m_deferredRendering.reset();
-		doCleanupShadowMaps();
-		m_transparentPass->cleanup();
-		m_opaquePass->cleanup();
+		doCleanupShadowMaps( device );
+		m_transparentPass->cleanup( device );
+		m_opaquePass->cleanup( device );
 		m_voxelizer.reset();
 #if C3D_UseDepthPrepass
-		m_depthPass->cleanup();
+		m_depthPass->cleanup( device );
 		m_depthPass.reset();
 #endif
-		m_gpInfoUbo.cleanup();
-		m_matrixUbo.cleanup();
+		m_gpInfoUbo.cleanup( device );
+		m_matrixUbo.cleanup( device );
 		m_initialised = false;
 		m_depthBuffer.cleanup();
 		m_colourTexture.cleanup();
@@ -397,22 +400,23 @@ namespace castor3d
 		doUpdateParticles( updater );
 	}
 
-	ashes::Semaphore const & RenderTechnique::render( ashes::SemaphoreCRefArray const & waitSemaphores
+	ashes::Semaphore const & RenderTechnique::render( RenderDevice const & device
+		, ashes::SemaphoreCRefArray const & waitSemaphores
 		, RenderInfo & info )
 	{
 #if C3D_UseDepthPrepass
-		auto * semaphore = &doRenderDepth( waitSemaphores );
-		semaphore = &doRenderBackground( *semaphore );
+		auto * semaphore = &doRenderDepth( device, waitSemaphores );
+		semaphore = &doRenderBackground( device, *semaphore );
 #else
 		auto * semaphore = &doRenderBackground( waitSemaphores );
 #endif
-		semaphore = &doRenderEnvironmentMaps( *semaphore );
-		semaphore = &doRenderShadowMaps( *semaphore );
+		semaphore = &doRenderEnvironmentMaps( device, *semaphore );
+		semaphore = &doRenderShadowMaps( device, *semaphore );
 
 		// Render part
 		//semaphore = &m_voxelizer->render( *semaphore );
-		semaphore = &doRenderOpaque( *semaphore );
-		semaphore = &doRenderTransparent( *semaphore );
+		semaphore = &doRenderOpaque( device, *semaphore );
+		semaphore = &doRenderTransparent( device, *semaphore );
 		return *semaphore;
 	}
 
@@ -467,17 +471,16 @@ namespace castor3d
 		m_allShadowMaps[size_t( LightType::ePoint )].emplace_back( std::ref( *m_pointShadowMap.raw() ), UInt32Array{} );
 	}
 
-	void RenderTechnique::doInitialiseShadowMaps()
+	void RenderTechnique::doInitialiseShadowMaps( RenderDevice const & device )
 	{
-		m_directionalShadowMap.initialise();
-		m_spotShadowMap.initialise();
-		m_pointShadowMap.initialise();
+		m_directionalShadowMap.initialise( device );
+		m_spotShadowMap.initialise( device );
+		m_pointShadowMap.initialise( device );
 	}
 
-	void RenderTechnique::doInitialiseBackgroundPass()
+	void RenderTechnique::doInitialiseBackgroundPass( RenderDevice const & device )
 	{
 		auto & renderSystem = *getEngine()->getRenderSystem();
-		auto & device = getCurrentRenderDevice( renderSystem );
 		m_bgCommandBuffer = device.graphicsCommandPool->createCommandBuffer( "Background" );
 		m_cbgCommandBuffer = device.graphicsCommandPool->createCommandBuffer( "ColourBackground" );
 		auto depthLoadOp = C3D_UseDepthPrepass
@@ -564,55 +567,58 @@ namespace castor3d
 			, std::move( attaches ) );
 
 		auto & background = *m_renderTarget.getScene()->getBackground();
-		auto prepareBackground = [&background, this]()
+		auto prepareBackground = [&background, this]( RenderDevice const & device )
 		{
-			background.initialise( *m_bgRenderPass, m_renderTarget.getHdrConfigUbo() );
+			background.initialise( device, *m_bgRenderPass, m_renderTarget.getHdrConfigUbo() );
 			background.prepareFrame( *m_bgCommandBuffer
 				, Size{ m_colourTexture.getTexture()->getWidth(), m_colourTexture.getTexture()->getHeight() }
 				, *m_bgRenderPass
 				, *m_bgFrameBuffer );
 		};
-		prepareBackground();
+		prepareBackground( device );
 		m_onBgChanged = background.onChanged.connect( [prepareBackground, this]( SceneBackground const & )
 			{
-				getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender, prepareBackground ) );
+				getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender, prepareBackground ) );
 			} );
 		auto & cbackground = m_renderTarget.getScene()->getColourBackground();
-		auto prepareCBackground = [&cbackground, this]()
+		auto prepareCBackground = [&cbackground, this]( RenderDevice const & device )
 		{
-			cbackground.initialise( *m_bgRenderPass, m_renderTarget.getHdrConfigUbo() );
+			cbackground.initialise( device, *m_bgRenderPass, m_renderTarget.getHdrConfigUbo() );
 			cbackground.prepareFrame( *m_cbgCommandBuffer
 				, Size{ m_colourTexture.getTexture()->getWidth(), m_colourTexture.getTexture()->getHeight() }
 				, *m_bgRenderPass
 				, *m_bgFrameBuffer );
 		};
-		prepareCBackground();
+		prepareCBackground( device );
 		m_onCBgChanged = cbackground.onChanged.connect( [prepareCBackground, this]( SceneBackground const & )
 			{
-				getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender, prepareCBackground ) );
+				getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender, prepareCBackground ) );
 			} );
 	}
 
 #if C3D_UseDepthPrepass
 
-	void RenderTechnique::doInitialiseDepthPass()
+	void RenderTechnique::doInitialiseDepthPass( RenderDevice const & device )
 	{
 		m_depthPass = std::make_unique< DepthPass >( cuT( "Depth Prepass" )
+			, device
 			, m_matrixUbo
 			, m_renderTarget.getCuller()
 			, m_ssaoConfig
 			, m_depthBuffer.getTexture() );
-		m_depthPass->initialise( m_size );
+		m_depthPass->initialise( device, m_size );
 	}
 
 #endif
 
-	void RenderTechnique::doInitialiseOpaquePass()
+	void RenderTechnique::doInitialiseOpaquePass( RenderDevice const & device )
 	{
+		m_opaquePass->initialise( device, m_size );
+
 #if C3D_UseDeferredRendering
 
-		m_opaquePass->initialise( m_size );
 		m_deferredRendering = std::make_unique< DeferredRendering >( *getEngine()
+			, device
 			, static_cast< OpaquePass & >( *m_opaquePass )
 			, m_depthBuffer
 			, m_renderTarget.getVelocity()
@@ -628,7 +634,6 @@ namespace castor3d
 
 #else
 
-		m_opaquePass->initialise( m_size );
 		static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).initialiseRenderPass( m_colourTexture->getDefaultView().getView()
 			, m_depthBuffer.getTexture()->getDefaultView().getView()
 			, m_size
@@ -637,12 +642,13 @@ namespace castor3d
 #endif
 	}
 
-	void RenderTechnique::doInitialiseTransparentPass()
+	void RenderTechnique::doInitialiseTransparentPass( RenderDevice const & device )
 	{
+
 #if C3D_UseWeightedBlendedRendering
 
-		m_transparentPass->initialise( m_size );
 		m_weightedBlendRendering = std::make_unique< WeightedBlendRendering >( *getEngine()
+			, device
 			, static_cast< TransparentPass & >( *m_transparentPass )
 			, m_depthBuffer
 			, m_colourTexture.getTexture()->getDefaultView().getTargetView()
@@ -654,20 +660,20 @@ namespace castor3d
 
 #else
 
-		m_transparentPass->initialise( m_size );
 		static_cast< ForwardRenderTechniquePass & >( *m_transparentPass ).initialiseRenderPass( m_colourTexture->getDefaultView().getView()
 			, m_depthBuffer.getTexture()->getDefaultView().getView()
 			, m_size
 			, false );
+		m_transparentPass->initialise( device, m_size ); 
 
 #endif
 	}
 
-	void RenderTechnique::doCleanupShadowMaps()
+	void RenderTechnique::doCleanupShadowMaps( RenderDevice const & device )
 	{
-		m_directionalShadowMap.cleanup();
-		m_spotShadowMap.cleanup();
-		m_pointShadowMap.cleanup();
+		m_directionalShadowMap.cleanup( device );
+		m_spotShadowMap.cleanup( device );
+		m_pointShadowMap.cleanup( device );
 	}
 
 	void RenderTechnique::doUpdateShadowMaps( CpuUpdater & updater )
@@ -757,7 +763,8 @@ namespace castor3d
 		}
 	}
 
-	ashes::Semaphore const & RenderTechnique::doRenderShadowMaps( ashes::Semaphore const & semaphore )
+	ashes::Semaphore const & RenderTechnique::doRenderShadowMaps( RenderDevice const & device
+		, ashes::Semaphore const & semaphore )
 	{
 		ashes::Semaphore const * result = &semaphore;
 		auto & scene = *m_renderTarget.getScene();
@@ -770,7 +777,7 @@ namespace castor3d
 				{
 					for ( auto & index : shadowMap.second )
 					{
-						result = &shadowMap.first.get().render( *result, index );
+						result = &shadowMap.first.get().render( device, *result, index );
 					}
 				}
 			}
@@ -779,13 +786,14 @@ namespace castor3d
 		return *result;
 	}
 
-	ashes::Semaphore const & RenderTechnique::doRenderEnvironmentMaps( ashes::Semaphore const & semaphore )
+	ashes::Semaphore const & RenderTechnique::doRenderEnvironmentMaps( RenderDevice const & device
+		, ashes::Semaphore const & semaphore )
 	{
 		ashes::Semaphore const * result = &semaphore;
 
 		for ( auto & map : m_renderTarget.getScene()->getEnvironmentMaps() )
 		{
-			result = &map.get().render( *result );
+			result = &map.get().render( device, *result );
 		}
 
 		return *result;
@@ -793,21 +801,24 @@ namespace castor3d
 
 #if C3D_UseDepthPrepass
 
-	ashes::Semaphore const & RenderTechnique::doRenderDepth( ashes::SemaphoreCRefArray const & semaphores )
+	ashes::Semaphore const & RenderTechnique::doRenderDepth( RenderDevice const & device
+		, ashes::SemaphoreCRefArray const & semaphores )
 	{
-		return m_depthPass->render( semaphores );
+		return m_depthPass->render( device, semaphores );
 	}
 
-	ashes::Semaphore const & RenderTechnique::doRenderBackground( ashes::Semaphore const & semaphore )
+	ashes::Semaphore const & RenderTechnique::doRenderBackground( RenderDevice const & device
+		, ashes::Semaphore const & semaphore )
 	{
-		return doRenderBackground( { 1u, std::ref( semaphore ) } );
+		return doRenderBackground( device, { 1u, std::ref( semaphore ) } );
 	}
 
 #endif
 
-	ashes::Semaphore const & RenderTechnique::doRenderBackground( ashes::SemaphoreCRefArray const & semaphores )
+	ashes::Semaphore const & RenderTechnique::doRenderBackground( RenderDevice const & device
+		, ashes::SemaphoreCRefArray const & semaphores )
 	{
-		auto const & queue = *getCurrentRenderDevice( *this ).graphicsQueue;
+		auto const & queue = *device.graphicsQueue;
 		ashes::VkPipelineStageFlagsArray const stages( semaphores.size(), VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT );
 
 		if ( m_renderTarget.getScene()->getFog().getType() != FogType::eDisabled )
@@ -836,7 +847,8 @@ namespace castor3d
 		return bgSemaphore;
 	}
 
-	ashes::Semaphore const & RenderTechnique::doRenderOpaque( ashes::Semaphore const & semaphore )
+	ashes::Semaphore const & RenderTechnique::doRenderOpaque( RenderDevice const & device
+		, ashes::Semaphore const & semaphore )
 	{
 		ashes::Semaphore const * result = &semaphore;
 
@@ -846,16 +858,17 @@ namespace castor3d
 			auto & camera = *m_renderTarget.getCamera();
 
 #if C3D_UseDeferredRendering
-			result = &m_deferredRendering->render( scene, camera, *result );
+			result = &m_deferredRendering->render( device, scene, camera, *result );
 #else
-			result = &static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).render( *result );
+			result = &static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).render( device, *result );
 #endif
 		}
 
 		return *result;
 	}
 
-	ashes::Semaphore const & RenderTechnique::doRenderTransparent( ashes::Semaphore const & semaphore )
+	ashes::Semaphore const & RenderTechnique::doRenderTransparent( RenderDevice const & device
+		, ashes::Semaphore const & semaphore )
 	{
 		ashes::Semaphore const * result = &semaphore;
 
@@ -864,9 +877,9 @@ namespace castor3d
 			auto & scene = *m_renderTarget.getScene();
 
 #if C3D_UseWeightedBlendedRendering
-			result = &m_weightedBlendRendering->render( scene, *result );
+			result = &m_weightedBlendRendering->render( device, scene, *result );
 #else
-			result = &static_cast< ForwardRenderTechniquePass & >( *m_transparentPass ).render( *result );
+			result = &static_cast< ForwardRenderTechniquePass & >( *m_transparentPass ).render( device, *result );
 #endif
 		}
 

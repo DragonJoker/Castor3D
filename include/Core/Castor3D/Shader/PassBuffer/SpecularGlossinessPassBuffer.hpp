@@ -26,6 +26,7 @@ namespace castor3d
 		 *\param[in]	size	Le nombre maximal de passes.
 		 */
 		C3D_API SpecularGlossinessPassBuffer( Engine & engine
+			, RenderDevice const & device
 			, uint32_t size );
 		/**
 		 *\~english

@@ -39,6 +39,7 @@ namespace castor3d
 		 *\param[in]	scene			Le tampon de scène.
 		 */
 		C3D_API RsmGIPass( Engine & engine
+			, RenderDevice const & device
 			, LightCache const & lightCache
 			, LightType lightType
 			, VkExtent2D const & size

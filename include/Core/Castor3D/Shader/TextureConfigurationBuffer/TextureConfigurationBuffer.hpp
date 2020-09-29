@@ -27,6 +27,7 @@ namespace castor3d
 		 *\param[in]	count	Le nombre maximal de configurations.
 		 */
 		C3D_API TextureConfigurationBuffer( Engine & engine
+			, RenderDevice const & device
 			, uint32_t count );
 		/**
 		 *\~english

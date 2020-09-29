@@ -46,14 +46,14 @@ namespace castor3d
 		 *\~french
 		 *\brief		Initialise le tampon GPU.
 		 */
-		C3D_API uint32_t initialise();
+		C3D_API uint32_t initialise( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Cleans up the GPU buffer.
 		 *\~french
 		 *\brief		Nettoie le tampon GPU.
 		 */
-		C3D_API void cleanup();
+		C3D_API void cleanup( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\return		\p true if there is enough remaining memory for a new element.

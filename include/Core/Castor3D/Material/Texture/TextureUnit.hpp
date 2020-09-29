@@ -70,12 +70,14 @@ namespace castor3d
 		*/
 		/**@{*/
 		C3D_API static TextureUnit create( Engine & engine
+			, RenderDevice const & device
 			, castor::String const & name
 			, VkFormat format
 			, uint32_t size
 			, VkImageCreateFlags createFlags
 			, VkImageUsageFlags usageFlags );
 		C3D_API static TextureUnit create( Engine & engine
+			, RenderDevice const & device
 			, castor::String const & name
 			, VkFormat format
 			, uint32_t size
@@ -83,12 +85,14 @@ namespace castor3d
 			, VkImageCreateFlags createFlags
 			, VkImageUsageFlags usageFlags );
 		C3D_API static TextureUnit create( Engine & engine
+			, RenderDevice const & device
 			, castor::String const & name
 			, VkFormat format
 			, VkExtent2D const & size
 			, VkImageCreateFlags createFlags
 			, VkImageUsageFlags usageFlags );
 		C3D_API static TextureUnit create( Engine & engine
+			, RenderDevice const & device
 			, castor::String const & name
 			, VkFormat format
 			, VkExtent2D const & size
@@ -96,6 +100,7 @@ namespace castor3d
 			, VkImageCreateFlags createFlags
 			, VkImageUsageFlags usageFlags );
 		C3D_API static TextureUnit create( Engine & engine
+			, RenderDevice const & device
 			, castor::String const & name
 			, VkFormat format
 			, VkExtent3D const & size
@@ -124,7 +129,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Initialise la texture, id est : remplit le buffer d'image, cree la texture au niveau du renderer.
 		 */
-		C3D_API bool initialise();
+		C3D_API bool initialise( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Cleans up the texture.
@@ -188,6 +193,17 @@ namespace castor3d
 		{
 			return m_id;
 		}
+
+		inline bool hasDevice()const
+		{
+			return m_device != nullptr;
+		}
+
+		inline RenderDevice const & getDevice()const
+		{
+			CU_Require( hasDevice() );
+			return *m_device;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -221,6 +237,7 @@ namespace castor3d
 
 	private:
 		friend class TextureRenderer;
+		RenderDevice const * m_device{ nullptr };
 		TextureConfiguration m_configuration;
 		castor::Matrix4x4f m_transformations;
 		TextureLayoutSPtr m_texture;

@@ -123,9 +123,10 @@ namespace smaa
 	//*********************************************************************************************
 
 	DepthEdgeDetection::DepthEdgeDetection( castor3d::RenderTarget & renderTarget
+		, castor3d::RenderDevice const & device
 		, ashes::ImageView const & depthView
 		, SmaaConfig const & config )
-		: EdgeDetection{ renderTarget, config }
+		: EdgeDetection{ renderTarget, device, config }
 		, m_depthView{ doCreateDepthView( depthView ) }
 		, m_sourceView{ depthView }
 	{
@@ -141,11 +142,10 @@ namespace smaa
 	castor3d::CommandsSemaphore DepthEdgeDetection::prepareCommands( castor3d::RenderPassTimer const & timer
 		, uint32_t passIndex )
 	{
-		auto & device = getCurrentRenderDevice( m_renderSystem );
 		castor3d::CommandsSemaphore edgeDetectionCommands
 		{
-			device.graphicsCommandPool->createCommandBuffer( "DepthEdgeDetection" ),
-			device->createSemaphore( "DepthEdgeDetection" )
+			m_device.graphicsCommandPool->createCommandBuffer( "DepthEdgeDetection" ),
+			m_device->createSemaphore( "DepthEdgeDetection" )
 		};
 		auto & edgeDetectionCmd = *edgeDetectionCommands.commandBuffer;
 
@@ -181,10 +181,9 @@ namespace smaa
 	{
 		VkExtent2D size{ m_depthView.image->getDimensions().width
 			, m_depthView.image->getDimensions().height };
-		auto & device = getCurrentRenderDevice( m_renderSystem );
 		ashes::PipelineShaderStageCreateInfoArray stages;
-		stages.push_back( makeShaderState( device, m_vertexShader ) );
-		stages.push_back( makeShaderState( device, m_pixelShader ) );
+		stages.push_back( makeShaderState( m_device, m_vertexShader ) );
+		stages.push_back( makeShaderState( m_device, m_pixelShader ) );
 
 		ashes::PipelineDepthStencilStateCreateInfo dsstate{ 0u, VK_FALSE, VK_FALSE };
 		dsstate->stencilTestEnable = true;

@@ -97,7 +97,8 @@ namespace castor3d
 		*\return
 		*	\p true if ok.
 		*/
-		C3D_API bool initialise( ashes::RenderPass const & renderPass
+		C3D_API bool initialise( RenderDevice const & device
+			, ashes::RenderPass const & renderPass
 			, HdrConfigUbo const & hdrConfigUbo );
 		/**
 		*\~english
@@ -107,7 +108,7 @@ namespace castor3d
 		*\brief
 		*	Fonction de nettoyage.
 		*/
-		C3D_API void cleanup();
+		C3D_API void cleanup( RenderDevice const & device );
 		/**
 		*\~english
 		*\brief
@@ -412,7 +413,7 @@ namespace castor3d
 		*\brief
 		*	Le programme shader utilisé pour dessiner le fond.
 		*/
-		virtual ashes::PipelineShaderStageCreateInfoArray doInitialiseShader();
+		virtual ashes::PipelineShaderStageCreateInfoArray doInitialiseShader( RenderDevice const & device );
 		/**
 		*\~english
 		*\return
@@ -421,7 +422,7 @@ namespace castor3d
 		*\brief
 		*	Initialise le layout de descripteurs.
 		*/
-		virtual void doInitialiseDescriptorLayouts();
+		virtual void doInitialiseDescriptorLayouts( RenderDevice const & device );
 		/**
 		*\~english
 		*\brief
@@ -438,7 +439,8 @@ namespace castor3d
 		*\return
 		*	\p true if ok.
 		*/
-		C3D_API virtual bool doInitialise( ashes::RenderPass const & renderPass ) = 0;
+		C3D_API virtual bool doInitialise( RenderDevice const & device
+			, ashes::RenderPass const & renderPass ) = 0;
 		/**
 		*\~english
 		*\brief
@@ -475,8 +477,9 @@ namespace castor3d
 		OnBackgroundChanged onChanged;
 
 	private:
-		bool doInitialiseVertexBuffer();
-		bool doInitialisePipeline( ashes::PipelineShaderStageCreateInfoArray program
+		bool doInitialiseVertexBuffer( RenderDevice const & device );
+		bool doInitialisePipeline( RenderDevice const & device
+			, ashes::PipelineShaderStageCreateInfoArray program
 			, ashes::RenderPass const & renderPass
 			, HdrConfigUbo const & hdrConfigUbo );
 

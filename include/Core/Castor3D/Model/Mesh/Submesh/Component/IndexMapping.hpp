@@ -26,13 +26,6 @@ namespace castor3d
 			, castor::String const & type );
 		/**
 		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~IndexMapping();
-		/**
-		 *\~english
 		 *\return		The elements count.
 		 *\~french
 		 *\return		Le nombre d'éléments.
@@ -81,7 +74,7 @@ namespace castor3d
 		}
 
 	private:
-		inline bool doInitialise()override
+		inline bool doInitialise( RenderDevice const & device )override
 		{
 			return true;
 		}

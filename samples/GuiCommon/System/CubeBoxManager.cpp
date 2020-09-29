@@ -5,7 +5,7 @@
 #include <Castor3D/Cache/MeshCache.hpp>
 #include <Castor3D/Cache/SceneNodeCache.hpp>
 #include <Castor3D/Event/Frame/FrameListener.hpp>
-#include <Castor3D/Event/Frame/FunctorEvent.hpp>
+#include <Castor3D/Event/Frame/CpuFunctorEvent.hpp>
 #include <Castor3D/Event/Frame/InitialiseEvent.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Material/Pass/MetallicRoughnessPbrPass.hpp>
@@ -120,7 +120,7 @@ namespace GuiCommon
 
 			submesh->setDefaultMaterial( material );
 			result->computeContainers();
-			scene.getListener().postEvent( makeInitialiseEvent( *submesh ) );
+			scene.getListener().postEvent( makeGpuInitialiseEvent( *submesh ) );
 			return result;
 		}
 	}
@@ -156,7 +156,7 @@ namespace GuiCommon
 		, castor3d::Submesh const & submesh )
 	{
 		Engine * engine = m_scene.getEngine();
-		engine->postEvent( makeFunctorEvent( EventType::ePostRender
+		engine->postEvent( makeCpuFunctorEvent( EventType::ePostRender
 			, [this, &object, &submesh]()
 			{
 				m_object = &object;
@@ -196,7 +196,7 @@ namespace GuiCommon
 	{
 		CU_Require( object.getName() == m_object->getName() );
 		Engine * engine = m_scene.getEngine();
-		engine->postEvent( makeFunctorEvent( EventType::ePostRender
+		engine->postEvent( makeCpuFunctorEvent( EventType::ePostRender
 			, [this, &object]()
 			{
 				m_sceneConnection.disconnect();
@@ -314,8 +314,8 @@ namespace GuiCommon
 		aabbSubmesh->needsUpdate();
 
 		Engine * engine = m_scene.getEngine();
-		engine->postEvent( makeFunctorEvent( EventType::ePreRender
-			, [this, aabbSubmesh]()
+		engine->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+			, [this, aabbSubmesh]( RenderDevice const & device )
 			{
 				aabbSubmesh->update();
 			} ) );

@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "MaterialModule.hpp"
 #include "Castor3D/Material/Pass/PassModule.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Design/Resource.hpp>
@@ -82,7 +83,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Initialise le matériau et toutes ses passes.
 		 */
-		C3D_API void initialise();
+		C3D_API void initialise( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Flushes passes.

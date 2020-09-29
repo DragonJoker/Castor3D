@@ -67,7 +67,8 @@ namespace castor3d
 	{
 	}
 
-	void TransparentPass::initialiseRenderPass( TransparentPassResult const & wbpResult )
+	void TransparentPass::initialiseRenderPass( RenderDevice const & device
+		, TransparentPassResult const & wbpResult )
 	{
 		ashes::VkAttachmentDescriptionArray attaches
 		{
@@ -159,7 +160,6 @@ namespace castor3d
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		auto & device = getCurrentRenderDevice( *this );
 		m_renderPass = device->createRenderPass( "TransparentPass"
 			, std::move( createInfo ) );
 		ashes::ImageViewCRefArray fbAttaches;
@@ -178,7 +178,8 @@ namespace castor3d
 		m_nodesCommands = device.graphicsCommandPool->createCommandBuffer( "TransparentPass" );
 	}
 
-	ashes::Semaphore const & TransparentPass::render( ashes::Semaphore const & toWait )
+	ashes::Semaphore const & TransparentPass::render( RenderDevice const & device
+		, ashes::Semaphore const & toWait )
 	{
 		static ashes::VkClearValueArray const clearValues
 		{
@@ -222,7 +223,6 @@ namespace castor3d
 		m_nodesCommands->endDebugBlock();
 		m_nodesCommands->end();
 
-		auto & device = getCurrentRenderDevice( *this );
 		device.graphicsQueue->submit( *m_nodesCommands
 			, *result
 			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
@@ -246,11 +246,11 @@ namespace castor3d
 		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ) );
 	}
 
-	bool TransparentPass::doInitialise( Size const & size )
+	bool TransparentPass::doInitialise( RenderDevice const & device
+		, Size const & size )
 	{
 		if ( !m_finished )
 		{
-			auto & device = getCurrentRenderDevice( *this );
 			m_finished = device->createSemaphore( "TransparentPass" );
 		}
 

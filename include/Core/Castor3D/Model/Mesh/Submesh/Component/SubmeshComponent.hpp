@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "ComponentModule.hpp"
 #include "Castor3D/Material/MaterialModule.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Shader/ShaderModule.hpp"
 
 namespace castor3d
@@ -39,7 +40,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Initialise le sous-maillage
 		 */
-		C3D_API bool initialise();
+		C3D_API bool initialise( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Cleans the submesh
@@ -53,7 +54,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Initialise le sous-maillage
 		 */
-		C3D_API void fill();
+		C3D_API void fill( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Uploads data on VRAM.
@@ -115,9 +116,9 @@ namespace castor3d
 		}
 
 	private:
-		C3D_API virtual bool doInitialise() = 0;
+		C3D_API virtual bool doInitialise( RenderDevice const & device ) = 0;
 		C3D_API virtual void doCleanup() = 0;
-		C3D_API virtual void doFill() = 0;
+		C3D_API virtual void doFill( RenderDevice const & device ) = 0;
 		C3D_API virtual void doUpload() = 0;
 
 	private:

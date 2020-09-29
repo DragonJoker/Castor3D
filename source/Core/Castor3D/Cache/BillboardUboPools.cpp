@@ -27,8 +27,8 @@ namespace castor3d
 		}
 	}
 
-	BillboardUboPools::BillboardUboPools( RenderSystem & renderSystem )
-		: m_renderSystem{ renderSystem }
+	BillboardUboPools::BillboardUboPools( RenderDevice const & device )
+		: m_device{ device }
 	{
 	}
 
@@ -107,9 +107,9 @@ namespace castor3d
 		return m_entries.at( hash( billboard, pass ) );
 	}
 
-	void BillboardUboPools::clear()
+	void BillboardUboPools::clear( RenderDevice const & device )
 	{
-		auto & uboPools = *getCurrentRenderDevice( m_renderSystem ).uboPools;
+		auto & uboPools = *device.uboPools;
 		for ( auto & entry : m_entries )
 		{
 			uboPools.putBuffer( entry.second.modelUbo );
@@ -123,7 +123,7 @@ namespace castor3d
 	BillboardUboPools::PoolsEntry BillboardUboPools::doCreateEntry( BillboardBase const & billboard
 		, Pass const & pass )
 	{
-		auto & uboPools = *getCurrentRenderDevice( m_renderSystem ).uboPools;
+		auto & uboPools = *m_device.uboPools;
 		return
 		{
 			billboard,
@@ -139,7 +139,7 @@ namespace castor3d
 	void BillboardUboPools::doRemoveEntry( BillboardBase const & billboard
 		, Pass const & pass )
 	{
-		auto & uboPools = *getCurrentRenderDevice( m_renderSystem ).uboPools;
+		auto & uboPools = *m_device.uboPools;
 		auto entry = getUbos( billboard, pass );
 		m_entries.erase( hash( billboard, pass ) );
 		uboPools.putBuffer( entry.modelUbo );

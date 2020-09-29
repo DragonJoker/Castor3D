@@ -815,11 +815,10 @@ namespace castor3d
 		m_defaultView.view.reset();
 	}
 
-	bool TextureLayout::initialise()
+	bool TextureLayout::initialise( RenderDevice const & device )
 	{
 		if ( !m_initialised )
 		{
-			auto & device = getCurrentRenderDevice( *this );
 			auto props = device->getPhysicalDevice().getFormatProperties( m_info->format );
 
 			if ( checkFlag( props.optimalTilingFeatures, VK_FORMAT_FEATURE_TRANSFER_DST_BIT ) )
@@ -917,13 +916,12 @@ namespace castor3d
 		m_initialised = false;
 	}
 
-	void TextureLayout::generateMipmaps()const
+	void TextureLayout::generateMipmaps( RenderDevice const & device )const
 	{
 		if ( m_info->mipLevels > 1u
 			&& getDefaultView().isMipmapsGenerationNeeded() )
 		{
 			CU_Require( m_texture );
-			auto & device = getCurrentRenderDevice( *this );
 			auto commandBuffer = device.transferCommandPool->createCommandBuffer( "TextureGenMipmaps" );
 			commandBuffer->begin();
 			commandBuffer->beginDebugBlock( { getName() + " Mipmaps Generation"

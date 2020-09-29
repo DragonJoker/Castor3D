@@ -31,6 +31,7 @@ namespace castor3d
 		 *\param[in]	depthBuffer	Le tampon de profondeur cible.
 		 */
 		C3D_API DepthPass( castor::String const & prefix
+			, RenderDevice const & device
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, SsaoConfig const & ssaoConfig
@@ -50,7 +51,8 @@ namespace castor3d
 		 *\brief		Dessine les noeuds.
 		 *\param[out]	toWait	Le sémaphore à attendre.
 		 */
-		C3D_API ashes::Semaphore const & render( ashes::SemaphoreCRefArray const & semaphores );
+		C3D_API ashes::Semaphore const & render( RenderDevice const & device
+			, ashes::SemaphoreCRefArray const & semaphores );
 
 		C3D_API TextureFlags getTexturesMask()const override;
 
@@ -61,7 +63,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::doCleanup
 		 */
-		C3D_API void doCleanup()override;
+		C3D_API void doCleanup( RenderDevice const & device )override;
 
 	private:
 		/**

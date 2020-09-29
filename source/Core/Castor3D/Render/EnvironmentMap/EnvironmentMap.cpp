@@ -154,10 +154,9 @@ namespace castor3d
 	{
 	}
 
-	bool EnvironmentMap::initialise()
+	bool EnvironmentMap::initialise( RenderDevice const & device )
 	{
-		auto & device = getCurrentRenderDevice( *this );
-		m_environmentMap->initialise();
+		m_environmentMap->initialise( device );
 		ashes::ImageCreateInfo depthStencil
 		{
 			0u,
@@ -251,7 +250,8 @@ namespace castor3d
 
 		for ( auto & pass : m_passes )
 		{
-			pass->initialise( MapSize
+			pass->initialise( device
+				, MapSize
 				, face++
 				, *m_renderPass
 				, background
@@ -262,13 +262,13 @@ namespace castor3d
 		return true;
 	}
 
-	void EnvironmentMap::cleanup()
+	void EnvironmentMap::cleanup( RenderDevice const & device )
 	{
 		m_ibl.reset();
 
 		for ( auto & pass : m_passes )
 		{
-			pass->cleanup();
+			pass->cleanup( device );
 		}
 
 		m_backgroundUboDescriptorPool.reset();
@@ -304,7 +304,8 @@ namespace castor3d
 		}
 	}
 
-	ashes::Semaphore const & EnvironmentMap::render( ashes::Semaphore const & toWait )
+	ashes::Semaphore const & EnvironmentMap::render( RenderDevice const & device
+		, ashes::Semaphore const & toWait )
 	{
 		ashes::Semaphore const * result = &toWait;
 
@@ -313,10 +314,10 @@ namespace castor3d
 		{
 			for ( auto & pass : m_passes )
 			{
-				result = &pass->render( *result );
+				result = &pass->render( device, *result );
 			}
 
-			m_environmentMap->getTexture()->generateMipmaps();
+			m_environmentMap->getTexture()->generateMipmaps( device );
 			m_render = 0u;
 		}
 

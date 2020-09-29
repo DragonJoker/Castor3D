@@ -54,6 +54,7 @@ namespace castor3d
 		 *\param[in]	scene			Le tampon de scène.
 		 */
 		C3D_API LightInjectionPass( Engine & engine
+			, RenderDevice const & device
 			, LightCache const & lightCache
 			, LightType lightType
 			, ShadowMapResult const & smResult
@@ -80,6 +81,7 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
+		RenderDevice const & m_device;
 		LightCache const & m_lightCache;
 		ShadowMapResult const & m_smResult;
 		GpInfoUbo const & m_gpInfoUbo;

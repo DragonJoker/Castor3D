@@ -54,14 +54,15 @@ namespace castor3d
 		 *\~french
 		 *\brief		Initialise le tampon GPU.
 		 */
-		C3D_API uint32_t initialise();
+		C3D_API uint32_t initialise( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Initialises the GPU buffer.
 		 *\~french
 		 *\brief		Initialise le tampon GPU.
 		 */
-		C3D_API uint32_t initialise( ashes::QueueShare sharingMode );
+		C3D_API uint32_t initialise( RenderDevice const & device
+			, ashes::QueueShare sharingMode );
 		/**
 		 *\~english
 		 *\brief		Cleans up the GPU buffer.

@@ -92,7 +92,8 @@ namespace castor3d
 		/**
 		*\copydoc	castor3d::SceneBackground::doInitialise
 		*/
-		bool doInitialise( ashes::RenderPass const & renderPass )override;
+		bool doInitialise( RenderDevice const & device
+			, ashes::RenderPass const & renderPass )override;
 		/**
 		*\copydoc	castor3d::SceneBackground::doCleanup
 		*/
@@ -107,7 +108,7 @@ namespace castor3d
 		void doGpuUpdate( GpuUpdater & updater )override;
 
 	private:
-		void doUpdateColour();
+		void doUpdateColour( RenderDevice const & device );
 
 	private:
 		castor::ChangeTracked< castor::HdrRgbColour > m_colour;

@@ -31,6 +31,7 @@ namespace castor3d
 		 *\param[in]	size	La taille d'une passe.
 		 */
 		C3D_API PassBuffer( Engine & engine
+			, RenderDevice const & device
 			, uint32_t count
 			, uint32_t size );
 		/**

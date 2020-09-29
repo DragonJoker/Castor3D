@@ -110,8 +110,9 @@ namespace castor3d
 	//*********************************************************************************************
 
 	TextureConfigurationBuffer::TextureConfigurationBuffer( Engine & engine
+		, RenderDevice const & device
 		, uint32_t count )
-		: m_buffer{ engine, count * DataSize, cuT( "TextureConfigurationBuffer" ) }
+		: m_buffer{ engine, device, count * DataSize, cuT( "TextureConfigurationBuffer" ) }
 		, m_configMaxCount{ count }
 		, m_data{ doBindData( m_buffer.getPtr(), m_buffer.getSize(), count ) }
 	{

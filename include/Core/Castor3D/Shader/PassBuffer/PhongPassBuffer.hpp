@@ -26,6 +26,7 @@ namespace castor3d
 		 *\param[in]	count	Le nombre maximal de passes.
 		 */
 		C3D_API PhongPassBuffer( Engine & engine
+			, RenderDevice const & device
 			, uint32_t count );
 		/**
 		 *\~english

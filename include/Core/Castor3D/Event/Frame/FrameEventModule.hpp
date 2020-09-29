@@ -39,20 +39,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Cleaner event
-	*\remarks
-	*	Cleans up the member given when constructed.
-	*\~french
-	*\brief
-	*	Evènement de nettoyage
-	*\remarks
-	*	Nettoie le membre donné lors de la construction.
-	*/
-	template< class T >
-	class CleanupEvent;
-	/**
-	*\~english
-	*\brief
 	*	The interface which represents a frame event.
 	*\remarks
 	*	Basically a frame event has a EventType to know when it must be applied.
@@ -64,7 +50,20 @@ namespace castor3d
 	*	Un évènement a un EventType pour savoir quand il doit être traité.
 	*	<br />La fonction de traitement doit être implémentée par les classes filles.
 	*/
-	class FrameEvent;
+	class CpuFrameEvent;
+	/**
+	*\~english
+	*\brief
+	*	Functor event
+	*\remarks
+	*	Executes a function when processed
+	*\~french
+	*\brief
+	*	Evènement foncteur
+	*\remarks
+	*	Excécute une fonction lorsqu'il est traité
+	*/
+	class CpuFunctorEvent;
 	/**
 	*\~english
 	*\brief
@@ -81,6 +80,21 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	The interface which represents a frame event.
+	*\remarks
+	*	Basically a frame event has a EventType to know when it must be applied.
+	*	<br />It can be applied, so the function must be implemented by children classes
+	*\~french
+	*\brief
+	*	Interface représentant un évènement de frame
+	*\remarks
+	*	Un évènement a un EventType pour savoir quand il doit être traité.
+	*	<br />La fonction de traitement doit être implémentée par les classes filles.
+	*/
+	class GpuFrameEvent;
+	/**
+	*\~english
+	*\brief
 	*	Functor event
 	*\remarks
 	*	Executes a function when processed
@@ -90,29 +104,17 @@ namespace castor3d
 	*\remarks
 	*	Excécute une fonction lorsqu'il est traité
 	*/
-	template< class Functor >
-	class FunctorEvent;
-	/**
-	*\~english
-	*\brief
-	*	Initialiser event
-	*\remarks
-	*	Initialises the member given when constructed.
-	*\~french
-	*\brief
-	*	Evènement d'initialisation
-	*\remarks
-	*	Initialise le membre donné lors de la construction.
-	*/
-	template< class T >
-	class InitialiseEvent;
+	class GpuFunctorEvent;
 
-	CU_DeclareSmartPtr( FrameEvent );
+	CU_DeclareSmartPtr( CpuFrameEvent );
 	CU_DeclareSmartPtr( FrameListener );
+	CU_DeclareSmartPtr( GpuFrameEvent );
+	CU_DeclareSmartPtr( CpuFunctorEvent );
+	CU_DeclareSmartPtr( GpuFunctorEvent );
 
-	//! FrameEvent pointer array
-	CU_DeclareVector( FrameEventUPtr, FrameEventPtr );
-	//! FrameListener pointer map, sorted by name
+	CU_DeclareVector( CpuFrameEventUPtr, CpuFrameEventPtr );
+	CU_DeclareVector( GpuFrameEventUPtr, GpuFrameEventPtr );
+
 	CU_DeclareMap( castor::String, FrameListenerSPtr, FrameListenerPtrStr );
 
 	//@}

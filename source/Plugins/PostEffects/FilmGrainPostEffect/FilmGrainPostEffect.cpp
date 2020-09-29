@@ -149,11 +149,11 @@ namespace film_grain
 	//*********************************************************************************************
 
 	RenderQuad::RenderQuad( castor3d::RenderSystem & renderSystem
+		, castor3d::RenderDevice const & device
 		, VkExtent2D const & size )
-		: castor3d::RenderQuad{ renderSystem, cuT( "FilmGrain" ), VK_FILTER_LINEAR, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
+		: castor3d::RenderQuad{ renderSystem, device, cuT( "FilmGrain" ), VK_FILTER_LINEAR, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
 		, m_size{ size }
 	{
-		auto & device = getCurrentRenderDevice( renderSystem );
 		auto & engine = *renderSystem.getEngine();
 		auto name = getName() + cuT( "Noise" );
 		castor3d::SamplerSPtr sampler;
@@ -167,7 +167,7 @@ namespace film_grain
 			m_sampler->setWrapS( VK_SAMPLER_ADDRESS_MODE_REPEAT );
 			m_sampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_REPEAT );
 			m_sampler->setWrapR( VK_SAMPLER_ADDRESS_MODE_REPEAT );
-			m_sampler->initialise();
+			m_sampler->initialise( device );
 		}
 		else
 		{
@@ -187,7 +187,7 @@ namespace film_grain
 			( VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ),
 		};
-		m_noise = castor3d::makeImage( device
+		m_noise = castor3d::makeImage( m_device
 			, std::move( image )
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, name );
@@ -217,13 +217,13 @@ namespace film_grain
 
 		auto dim = images[0].getDimensions();
 		auto format = castor3d::convert( images[0].getPixelFormat() );
-		auto staging = device->createStagingTexture( format
+		auto staging = m_device->createStagingTexture( format
 			, VkExtent2D{ dim.getWidth(), dim.getHeight() } );
 
 		for ( uint32_t i = 0u; i < NoiseMapCount; ++i )
 		{
-			staging->uploadTextureData( *device.graphicsQueue
-				, *device.graphicsCommandPool
+			staging->uploadTextureData( *m_device.graphicsQueue
+				, *m_device.graphicsCommandPool
 				, {
 					m_noiseView->subresourceRange.aspectMask,
 					m_noiseView->subresourceRange.baseMipLevel,
@@ -237,7 +237,7 @@ namespace film_grain
 				, m_noiseView );
 		}
 
-		m_configUbo = device.uboPools->getBuffer< Configuration >( 0u );
+		m_configUbo = m_device.uboPools->getBuffer< Configuration >( 0u );
 		m_configUbo.getData().m_pixelSize = Point2f{ m_size.width, m_size.height };
 		m_configUbo.getData().m_noiseIntensity = 1.0f;
 		m_configUbo.getData().m_exposure = 1.0f;
@@ -327,12 +327,12 @@ namespace film_grain
 		m_quad->update( updater );
 	}
 
-	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
+	bool PostEffect::doInitialise( castor3d::RenderDevice const & device
+		, castor3d::RenderPassTimer const & timer )
 	{
 		auto & renderSystem = *getRenderSystem();
-		auto & device = getCurrentRenderDevice( *this );
 		VkExtent2D size{ m_target->getWidth(), m_target->getHeight() };
-		m_sampler->initialise();
+		m_sampler->initialise( device );
 		m_vertexShader.shader = getVertexProgram( getRenderSystem() );
 		m_pixelShader.shader = getFragmentProgram( getRenderSystem() );
 
@@ -407,7 +407,9 @@ namespace film_grain
 				, VK_SHADER_STAGE_FRAGMENT_BIT ),
 		};
 
-		m_quad = std::make_unique< RenderQuad >( renderSystem, size );
+		m_quad = std::make_unique< RenderQuad >( renderSystem
+			, device
+			, size );
 		m_quad->createPipeline( size
 			, Position{}
 			, stages
@@ -416,7 +418,8 @@ namespace film_grain
 			, std::move( bindings )
 			, {} );
 
-		auto result = m_surface.initialise( *m_renderPass
+		auto result = m_surface.initialise( device
+			, *m_renderPass
 			, castor::Size{ m_target->getWidth(), m_target->getHeight() }
 			, m_target->getPixelFormat() );
 
@@ -456,11 +459,11 @@ namespace film_grain
 		return result;
 	}
 
-	void PostEffect::doCleanup()
+	void PostEffect::doCleanup( castor3d::RenderDevice const & device )
 	{
 		m_quad.reset();
 		m_renderPass.reset();
-		m_surface.cleanup();
+		m_surface.cleanup( device );
 	}
 
 	bool PostEffect::doWriteInto( TextFile & file, String const & tabs )

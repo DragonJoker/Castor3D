@@ -6,13 +6,13 @@ See LICENSE file in root folder
 
 #include "RenderPanel.hpp"
 
-#include <Castor3D/Event/Frame/FrameEvent.hpp>
+#include <Castor3D/Event/Frame/CpuFrameEvent.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
 
 namespace CastorViewer
 {
 	class MouseNodeEvent
-		: public castor3d::FrameEvent
+		: public castor3d::CpuFrameEvent
 	{
 	public:
 		MouseNodeEvent( castor3d::SceneNodeSPtr p_node, float p_dx, float p_dy, float p_dz );

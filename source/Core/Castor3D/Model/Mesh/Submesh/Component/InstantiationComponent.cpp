@@ -2,7 +2,7 @@
 
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
-#include "Castor3D/Event/Frame/FunctorEvent.hpp"
+#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
@@ -23,11 +23,6 @@ namespace castor3d
 	{
 	}
 
-	InstantiationComponent::~InstantiationComponent()
-	{
-		cleanup();
-	}
-
 	uint32_t InstantiationComponent::ref( MaterialSPtr material )
 	{
 		auto it = find( material );
@@ -43,10 +38,10 @@ namespace castor3d
 		if ( doCheckInstanced( data.count ) )
 		{
 			data.data.resize( data.count );
-			getOwner()->getOwner()->getScene()->getListener().postEvent( makeFunctorEvent( EventType::eQueueRender
-				, [this]()
+			getOwner()->getOwner()->getScene()->getListener().postEvent( makeGpuFunctorEvent( EventType::eQueueRender
+				, [this]( RenderDevice const & device )
 				{
-					doFill();
+					doFill( device );
 				} ) );
 		}
 
@@ -70,8 +65,8 @@ namespace castor3d
 
 			if ( !doCheckInstanced( data.count ) )
 			{
-				getOwner()->getOwner()->getScene()->getListener().postEvent( makeFunctorEvent( EventType::ePreRender
-					, [&data]()
+				getOwner()->getOwner()->getScene()->getListener().postEvent( makeGpuFunctorEvent( EventType::ePreRender
+					, [&data]( RenderDevice const & device )
 					{
 						data.buffer.reset();
 					} ) );
@@ -134,7 +129,7 @@ namespace castor3d
 		ref( newMaterial );
 	}
 
-	bool InstantiationComponent::doInitialise()
+	bool InstantiationComponent::doInitialise( RenderDevice const & device )
 	{
 		bool result = true;
 
@@ -156,8 +151,6 @@ namespace castor3d
 						{ RenderPass::VertexInputs::MaterialLocation, BindingPoint, VK_FORMAT_R32_SINT, offsetof( InstantiationData, m_material ) },
 					} );
 			}
-
-			auto & device = getCurrentRenderDevice( *getOwner()->getOwner() );
 
 			for ( auto & data : m_instances )
 			{
@@ -189,7 +182,7 @@ namespace castor3d
 		}
 	}
 
-	void InstantiationComponent::doFill()
+	void InstantiationComponent::doFill( RenderDevice const & device )
 	{
 	}
 

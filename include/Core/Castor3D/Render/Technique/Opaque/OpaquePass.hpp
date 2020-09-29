@@ -44,7 +44,8 @@ namespace castor3d
 		 *\brief		Initialise la passe de rendu.
 		 *\param[in]	gpResult	Les tampons de la geometry pass.
 		 */
-		void initialiseRenderPass( OpaquePassResult const & gpResult );
+		void initialiseRenderPass( RenderDevice const & device
+			, OpaquePassResult const & gpResult );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -57,7 +58,8 @@ namespace castor3d
 		 *\brief		Dessine les noeuds transparents.
 		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
 		 */
-		ashes::Semaphore const & render( ashes::Semaphore const & toWait );
+		ashes::Semaphore const & render( RenderDevice const & device
+			, ashes::Semaphore const & toWait );
 
 		C3D_API TextureFlags getTexturesMask()const override;
 

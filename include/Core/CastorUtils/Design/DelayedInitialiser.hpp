@@ -93,10 +93,11 @@ namespace castor
 			return bool( m_ptr );
 		}
 
-		void cleanup()
+		template< typename ... ParamsT >
+		void cleanup( ParamsT && ... params )
 		{
 			CU_Require( m_ptr );
-			m_ptr->cleanup();
+			m_ptr->cleanup( std::forward< ParamsT >( params )... );
 		}
 
 		template< typename ... ParamsT >

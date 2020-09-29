@@ -21,7 +21,7 @@ namespace fxaa
 		};
 
 	public:
-		explicit FxaaUbo( castor3d::Engine & engine
+		explicit FxaaUbo( castor3d::RenderDevice const & device
 			, castor::Size const & size );
 		~FxaaUbo();
 		void cpuUpdate( float shift
@@ -42,7 +42,7 @@ namespace fxaa
 		static const castor::String PixelSize;
 
 	private:
-		castor3d::Engine & m_engine;
+		castor3d::RenderDevice const & m_device;
 		castor3d::UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }

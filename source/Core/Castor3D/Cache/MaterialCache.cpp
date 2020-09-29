@@ -1,7 +1,7 @@
 #include "Castor3D/Cache/MaterialCache.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Event/Frame/FunctorEvent.hpp"
+#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Event/Frame/InitialiseEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
@@ -25,7 +25,8 @@ namespace castor3d
 
 	template<> const String CacheTraits< Material, String >::Name = cuT( "Material" );
 
-	void MaterialCache::initialise( MaterialType type )
+	void MaterialCache::initialise( RenderDevice const & device
+		, MaterialType type )
 	{
 		if ( !m_passBuffer )
 		{
@@ -40,35 +41,43 @@ namespace castor3d
 			else
 			{
 				m_defaultMaterial = m_elements.find( Material::DefaultMaterialName );
-				getEngine()->postEvent( makeInitialiseEvent( *m_defaultMaterial ) );
+				m_defaultMaterial->initialise( device );
 			}
 
 			switch ( type )
 			{
 			case MaterialType::ePhong:
-				m_passBuffer = std::make_shared< PhongPassBuffer >( *getEngine(), shader::MaxMaterialsCount );
+				m_passBuffer = std::make_shared< PhongPassBuffer >( *getEngine()
+					, device
+					, shader::MaxMaterialsCount );
 				break;
 
 			case MaterialType::eMetallicRoughness:
-				m_passBuffer = std::make_shared< MetallicRoughnessPassBuffer >( *getEngine(), shader::MaxMaterialsCount );
+				m_passBuffer = std::make_shared< MetallicRoughnessPassBuffer >( *getEngine()
+					, device
+					, shader::MaxMaterialsCount );
 				break;
 
 			case MaterialType::eSpecularGlossiness:
-				m_passBuffer = std::make_shared< SpecularGlossinessPassBuffer >( *getEngine(), shader::MaxMaterialsCount );
+				m_passBuffer = std::make_shared< SpecularGlossinessPassBuffer >( *getEngine()
+					, device
+					, shader::MaxMaterialsCount );
 				break;
 
 			default:
 				break;
 			}
 
-			m_textureBuffer = std::make_shared< TextureConfigurationBuffer >( *getEngine(), shader::MaxTextureConfigurationCount );
+			m_textureBuffer = std::make_shared< TextureConfigurationBuffer >( *getEngine()
+				, device
+				, shader::MaxTextureConfigurationCount );
 		}
 	}
 
 	void MaterialCache::cleanup()
 	{
-		getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
-			, [this]()
+		getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+			, [this]( RenderDevice const & device )
 			{
 				m_passBuffer.reset();
 				m_textureBuffer.reset();

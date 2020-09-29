@@ -11,7 +11,7 @@
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
 #include <Castor3D/Event/Frame/InitialiseEvent.hpp>
-#include <Castor3D/Event/Frame/FunctorEvent.hpp>
+#include <Castor3D/Event/Frame/GpuFunctorEvent.hpp>
 #include <Castor3D/Overlay/BorderPanelOverlay.hpp>
 
 using namespace castor;
@@ -67,8 +67,8 @@ namespace CastorGui
 			if ( material )
 			{
 				auto control = *it;
-				m_frameListener->postEvent( makeFunctorEvent( EventType::ePreRender
-					, [control, material]()
+				m_frameListener->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+					, [control, material]( RenderDevice const & device )
 					{
 						control->setBackgroundMaterial( material );
 					} ) );
@@ -93,8 +93,8 @@ namespace CastorGui
 		if ( it != std::end( controls ) )
 		{
 			auto control = *it;
-			m_frameListener->postEvent( makeFunctorEvent( EventType::ePreRender
-				, [control, p_caption]()
+			m_frameListener->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+				, [control, p_caption]( RenderDevice const & device )
 				{
 					control->setCaption( p_caption );
 				} ) );

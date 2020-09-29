@@ -82,14 +82,14 @@ namespace castor3d
 	{
 	}
 
-	bool EnvironmentMapPass::initialise( Size const & size
+	bool EnvironmentMapPass::initialise( RenderDevice const & device
+		, Size const & size
 		, uint32_t face
 		, ashes::RenderPass const & renderPass
 		, SceneBackground const & background
 		, ashes::DescriptorSetPool const & uboPool
 		, ashes::DescriptorSetPool const & texPool )
 	{
-		auto & device = getCurrentRenderDevice( *getOwner() );
 		float const aspect = float( size.getWidth() ) / size.getHeight();
 		float const nearZ = 0.1f;
 		float const farZ = 1000.0f;
@@ -103,20 +103,21 @@ namespace castor3d
 		static castor::Matrix4x4f const projection = convert( device->perspective( ( 45.0_degrees ).radians()
 			, 1.0f
 			, 0.0f, 2.0f ) );
-		m_matrixUbo.initialise();
+		m_matrixUbo.initialise( device );
 		m_matrixUbo.cpuUpdate( m_mtxView, projection );
-		m_modelMatrixUbo.initialise();
-		m_hdrConfigUbo.initialise();
+		m_modelMatrixUbo.initialise( device );
+		m_hdrConfigUbo.initialise( device );
 		auto const & environmentLayout = getOwner()->getTexture().getTexture();
 		m_envView = environmentLayout->getLayerCubeFaceMipView( 0u, CubeMapFace( face ), 0u ).getTargetView();
 		auto const & depthView = getOwner()->getDepthView();
 
 		// Initialise opaque pass.
-		m_opaquePass->initialiseRenderPass( m_envView
+		m_opaquePass->initialiseRenderPass( device
+			, m_envView
 			, getOwner()->getDepthView()
 			, size
 			, true );
-		m_opaquePass->initialise( size );
+		m_opaquePass->initialise( device, size );
 
 		// Create custom background pass.
 		ashes::ImageViewCRefArray attaches;
@@ -145,18 +146,19 @@ namespace castor3d
 			, *m_backgroundTexDescriptorSet );
 
 		// Initialise transparent pass.
-		m_transparentPass->initialiseRenderPass( m_envView
+		m_transparentPass->initialiseRenderPass( device
+			, m_envView
 			, getOwner()->getDepthView()
 			, size
 			, false );
-		m_transparentPass->initialise( size );
+		m_transparentPass->initialise( device, size );
 
 		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( name );
 		m_finished = device->createSemaphore( name );
 		return true;
 	}
 
-	void EnvironmentMapPass::cleanup()
+	void EnvironmentMapPass::cleanup( RenderDevice const & device )
 	{
 		m_finished.reset();
 		m_commandBuffer.reset();
@@ -164,11 +166,11 @@ namespace castor3d
 		m_backgroundUboDescriptorSet.reset();
 		m_backgroundTexDescriptorSet.reset();
 		m_frameBuffer.reset();
-		m_opaquePass->cleanup();
-		m_transparentPass->cleanup();
-		m_hdrConfigUbo.cleanup();
-		m_modelMatrixUbo.cleanup();
-		m_matrixUbo.cleanup();
+		m_opaquePass->cleanup( device );
+		m_transparentPass->cleanup( device );
+		m_hdrConfigUbo.cleanup( device );
+		m_modelMatrixUbo.cleanup( device );
+		m_matrixUbo.cleanup( device );
 	}
 
 	void EnvironmentMapPass::update( CpuUpdater & updater )
@@ -195,9 +197,9 @@ namespace castor3d
 		m_transparentPass->update( updater );
 	}
 
-	ashes::Semaphore const & EnvironmentMapPass::render( ashes::Semaphore const & toWait )
+	ashes::Semaphore const & EnvironmentMapPass::render( RenderDevice const & device
+		, ashes::Semaphore const & toWait )
 	{
-		auto & device = getCurrentRenderDevice( *getOwner() );
 		ashes::Semaphore const * result = &toWait;
 
 		m_commandBuffer->begin();

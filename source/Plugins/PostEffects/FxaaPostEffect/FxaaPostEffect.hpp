@@ -24,6 +24,7 @@ namespace fxaa
 	{
 	public:
 		explicit RenderQuad( castor3d::RenderSystem & renderSystem
+			, castor3d::RenderDevice const & device
 			, castor::Size const & size );
 		void cpuUpdate( float subpixShift
 			, float spanMax
@@ -61,11 +62,12 @@ namespace fxaa
 		/**
 		*\copydoc		castor3d::PostEffect::doInitialise
 		*/
-		bool doInitialise( castor3d::RenderPassTimer const & timer ) override;
+		bool doInitialise( castor3d::RenderDevice const & device
+			, castor3d::RenderPassTimer const & timer ) override;
 		/**
 		*\copydoc		castor3d::PostEffect::doCleanup
 		*/
-		void doCleanup() override;
+		void doCleanup( castor3d::RenderDevice const & device ) override;
 		/**
 		 *\copydoc		castor3d::PostEffect::doWriteInto
 		 */

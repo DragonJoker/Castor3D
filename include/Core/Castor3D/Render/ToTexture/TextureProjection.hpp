@@ -40,17 +40,19 @@ namespace castor3d
 		*	Initialisation / Cleanup.
 		*/
 		/**@{*/
-		C3D_API void initialise( ashes::ImageView const & source
+		C3D_API void initialise( RenderDevice const & device
+			, ashes::ImageView const & source
 			, VkFormat targetColour
 			, VkFormat targetDepth );
-		C3D_API void cleanup();
+		C3D_API void cleanup( RenderDevice const & device );
 		/**@}*/
 		/**
 		*name
 		*	Update.
 		*/
 		/**@{*/
-		C3D_API void update( Camera const & camera );
+		C3D_API void update( RenderDevice const & device
+			, Camera const & camera );
 		/**@}*/
 		/**
 		*name
@@ -71,12 +73,13 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		ashes::PipelineShaderStageCreateInfoArray doInitialiseShader();
-		bool doInitialiseVertexBuffer();
-		bool doInitialisePipeline( ashes::PipelineShaderStageCreateInfoArray & program
+		ashes::PipelineShaderStageCreateInfoArray doInitialiseShader( RenderDevice const & device );
+		bool doInitialiseVertexBuffer( RenderDevice const & device );
+		bool doInitialisePipeline( RenderDevice const & device
+			, ashes::PipelineShaderStageCreateInfoArray & program
 			, ashes::ImageView const & texture
 			, ashes::RenderPass const & renderPass );
-		void doPrepareFrame();
+		void doPrepareFrame( RenderDevice const & device );
 
 	private:
 		MatrixUbo m_matrixUbo;

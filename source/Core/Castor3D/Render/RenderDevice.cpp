@@ -203,8 +203,8 @@ namespace castor3d
 		transferCommandPool = graphicsCommandPool;
 		transferQueue = device->getQueue( queueFamiliesIndex[RenderDevice::GraphicsIdx], 0u );
 
-		bufferPool = std::make_shared< GpuBufferPool >( renderSystem, cuT( "GlobalBufferPool" ) );
-		uboPools = std::make_shared< UniformBufferPools >( renderSystem );
+		bufferPool = std::make_shared< GpuBufferPool >( renderSystem, *this, cuT( "GlobalBufferPool" ) );
+		uboPools = std::make_shared< UniformBufferPools >( renderSystem, *this );
 	}
 
 	VkFormat RenderDevice::selectSuitableDepthFormat( VkFormatFeatureFlags requiredFeatures )const

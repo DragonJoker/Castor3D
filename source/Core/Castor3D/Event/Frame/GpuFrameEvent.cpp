@@ -1,4 +1,4 @@
-#include "Castor3D/Event/Frame/FrameEvent.hpp"
+#include "Castor3D/Event/Frame/GpuFrameEvent.hpp"
 
 #include <CastorUtils/Miscellaneous/Debug.hpp>
 
@@ -6,7 +6,7 @@ using namespace castor;
 
 namespace castor3d
 {
-	FrameEvent::FrameEvent( EventType type )
+	GpuFrameEvent::GpuFrameEvent( EventType type )
 		: m_type( type )
 	{
 #if !defined( NDEBUG )
@@ -16,9 +16,5 @@ namespace castor3d
 		m_stackTrace = stream.str();
 
 #endif
-	}
-
-	FrameEvent::~FrameEvent()
-	{
 	}
 }

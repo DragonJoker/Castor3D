@@ -47,8 +47,8 @@ namespace castor3d
 		 *\brief		Destructeur.
 		 */
 		C3D_API ~SsaoPass() = default;
-		C3D_API void initialise();
-		C3D_API void cleanup();
+		C3D_API void initialise( RenderDevice const & device );
+		C3D_API void cleanup( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Updates the configuration UBO.

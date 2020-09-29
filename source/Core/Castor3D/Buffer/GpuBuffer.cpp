@@ -27,14 +27,12 @@ namespace castor3d
 	{
 		if ( m_renderSystem.hasCurrentRenderDevice() )
 		{
-			initialise();
+			initialise( m_renderSystem.getCurrentRenderDevice() );
 		}
 	}
 
-	uint32_t GpuBuffer::initialise()
+	uint32_t GpuBuffer::initialise( RenderDevice const & device )
 	{
-		CU_Require( m_renderSystem.hasCurrentRenderDevice() );
-		auto & device = getCurrentRenderDevice( m_renderSystem );
 		CU_Require( ( m_align % device.properties.limits.nonCoherentAtomSize ) == 0u );
 		m_buffer = makeBuffer< uint8_t >( device
 			, uint32_t( m_allocator.getSize() )
@@ -45,9 +43,8 @@ namespace castor3d
 		return uint32_t( m_buffer->getBuffer().getSize() );
 	}
 
-	void GpuBuffer::cleanup()
+	void GpuBuffer::cleanup( RenderDevice const & device )
 	{
-		CU_Require( m_renderSystem.hasCurrentRenderDevice() );
 		m_buffer.reset();
 	}
 

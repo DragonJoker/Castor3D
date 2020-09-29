@@ -6,8 +6,7 @@
 #include "Castor3D/Cache/OverlayCache.hpp"
 
 #include "Castor3D/Event/Frame/FrameListener.hpp"
-#include "Castor3D/Event/Frame/FunctorEvent.hpp"
-#include "Castor3D/Event/Frame/InitialiseEvent.hpp"
+#include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Overlay/TextOverlay.hpp"
 
@@ -26,7 +25,11 @@ namespace castor3d
 		m_keyboard.ctrl = false;
 		m_keyboard.alt = false;
 		m_keyboard.shift = false;
-		m_frameListener->postEvent( makeInitialiseEvent( *this ) );
+		m_frameListener->postEvent( makeCpuFunctorEvent( EventType::ePreRender
+			, [this]()
+			{
+				initialise();
+			} ) );
 	}
 
 	UserInputListener::~UserInputListener()
@@ -35,7 +38,7 @@ namespace castor3d
 
 	bool UserInputListener::initialise()
 	{
-		m_frameListener->postEvent( makeFunctorEvent( EventType::ePostRender
+		m_frameListener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
 			, [this]()
 			{
 				processEvents();
@@ -74,7 +77,7 @@ namespace castor3d
 		if ( m_enabled )
 		{
 			// Push this method again, for next frame.
-			m_frameListener->postEvent( makeFunctorEvent( EventType::ePostRender
+			m_frameListener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
 				, [this]()
 				{
 					processEvents();
@@ -426,7 +429,8 @@ namespace castor3d
 
 				if ( material )
 				{
-					this->m_frameListener->postEvent( makeFunctorEvent( EventType::ePreRender
+					this->m_frameListener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+					//??? this->m_frameListener->postEvent( makeCpuFunctorEvent( EventType::ePreRender
 						, [overlay, material]()
 						{
 							overlay->setMaterial( material );

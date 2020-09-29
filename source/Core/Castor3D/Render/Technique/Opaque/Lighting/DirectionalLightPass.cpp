@@ -36,11 +36,10 @@ namespace castor3d
 	{
 		static constexpr uint32_t VertexCount = 6u;
 
-		ashes::RenderPassPtr doCreateRenderPass( Engine & engine
+		ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
 			, LightPassResult const & lpResult
 			, bool first )
 		{
-			auto & device = getCurrentRenderDevice( engine );
 			VkImageLayout layout = first
 				? VK_IMAGE_LAYOUT_UNDEFINED
 				: VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
@@ -134,11 +133,12 @@ namespace castor3d
 	//*********************************************************************************************
 
 	DirectionalLightPass::Program::Program( Engine & engine
+		, RenderDevice const & device
 		, DirectionalLightPass & pass
 		, ShaderModule const & vtx
 		, ShaderModule const & pxl
 		, bool hasShadows )
-		: LightPass::Program{ engine, pass.getName(), vtx, pxl, hasShadows }
+		: LightPass::Program{ engine, device, pass.getName(), vtx, pxl, hasShadows }
 		, m_lightPass{ pass }
 	{
 	}
@@ -183,8 +183,7 @@ namespace castor3d
 		}
 
 		blstate.attachments.push_back( blstate.attachments.back() );
-		auto & device = getCurrentRenderDevice( m_engine );
-		return device->createPipeline( m_name + ( blend ? std::string{ "Blend" } : std::string{ "First" } )
+		return m_device->createPipeline( m_name + ( blend ? std::string{ "Blend" } : std::string{ "First" } )
 			, ashes::GraphicsPipelineCreateInfo
 			{
 				0u,
@@ -213,13 +212,15 @@ namespace castor3d
 	//*********************************************************************************************
 
 	DirectionalLightPass::DirectionalLightPass( Engine & engine
+		, RenderDevice const & device
 		, LightPassResult const & lpResult
 		, GpInfoUbo const & gpInfoUbo
 		, bool hasShadows )
 		: LightPass{ engine
+			, device
 			, "Directional"
-			, doCreateRenderPass( engine, lpResult, true )
-			, doCreateRenderPass( engine, lpResult, false )
+			, doCreateRenderPass( device, lpResult, true )
+			, doCreateRenderPass( device, lpResult, false )
 			, lpResult
 			, gpInfoUbo
 			, hasShadows }
@@ -241,8 +242,7 @@ namespace castor3d
 		, RenderPassTimer & timer )
 	{
 		auto & renderSystem = *m_engine.getRenderSystem();
-		auto & device = getCurrentRenderDevice( renderSystem );
-		m_vertexBuffer = makeVertexBuffer< float >( device
+		m_vertexBuffer = makeVertexBuffer< float >( m_device
 			, 12u
 			, 0u
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
@@ -348,6 +348,7 @@ namespace castor3d
 	LightPass::ProgramPtr DirectionalLightPass::doCreateProgram()
 	{
 		return std::make_unique< Program >( m_engine
+			, m_device
 			, *this
 			, m_vertexShader
 			, m_pixelShader

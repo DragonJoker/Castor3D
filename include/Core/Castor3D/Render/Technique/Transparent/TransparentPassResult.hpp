@@ -35,6 +35,7 @@ namespace castor3d
 		*	La texture de vélocité.
 		*/
 		C3D_API TransparentPassResult( Engine & engine
+			, RenderDevice const & device
 			, TextureUnit const & depthTexture
 			, TextureUnit const & velocityTexture );
 	};

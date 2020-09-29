@@ -455,11 +455,10 @@ namespace castor3d
 		}
 
 		ashes::VertexBufferPtr< castor::Point3f > doCreateVertexBuffer( castor::String const & name
-			, Engine & engine
+			, RenderDevice const & device
 			, uint32_t width )
 		{
 			auto size = width * width * width;
-			auto & device = getCurrentRenderDevice( engine );
 
 			auto result = makeVertexBuffer< castor::Point3f >( device
 				, size
@@ -490,7 +489,7 @@ namespace castor3d
 		}
 
 		ashes::DescriptorSetLayoutPtr doCreateDescriptorLayout( castor::String const & name
-			, Engine & engine
+			, RenderDevice const & device
 			, bool occlusion )
 		{
 			ashes::VkDescriptorSetLayoutBindingArray bindings
@@ -516,7 +515,7 @@ namespace castor3d
 					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 			}
 
-			return getCurrentRenderDevice( engine )->createDescriptorSetLayout( name
+			return device->createDescriptorSetLayout( name
 				, std::move( bindings ) );
 		}
 
@@ -552,7 +551,7 @@ namespace castor3d
 		}
 
 		ashes::GraphicsPipelinePtr doCreatePipeline( castor::String const & name
-			, Engine & engine
+			, RenderDevice const & device
 			, ashes::PipelineLayout const & pipelineLayout
 			, ashes::RenderPass const & renderPass
 			, ShaderModule const & vertexShader
@@ -580,7 +579,6 @@ namespace castor3d
 				, ashes::VkViewportArray{ viewport }
 				, 1u
 				, ashes::VkScissorArray{ scissor } };
-			auto & device = getCurrentRenderDevice( engine );
 			ashes::PipelineShaderStageCreateInfoArray shaderStages;
 			shaderStages.push_back( makeShaderState( device, vertexShader ) );
 			shaderStages.push_back( makeShaderState( device, geometryShader ) );
@@ -605,6 +603,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	LightPropagationPass::LightPropagationPass( Engine & engine
+		, RenderDevice const & device
 		, castor::String const & suffix
 		, uint32_t gridSize
 		, TextureUnit const * geometry
@@ -614,18 +613,19 @@ namespace castor3d
 		, LpvConfigUbo const & lpvConfigUbo )
 		: Named{ "LightPropagation" + suffix }
 		, m_engine{ engine }
+		, m_device{ device }
 		, m_lpvConfigUbo{ lpvConfigUbo }
 		, m_accumulation{ accumulation }
 		, m_propagate{ propagate }
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Light Propagation Volumes" ), "Light Propagation " + suffix ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( engine, m_device, cuT( "Light Propagation Volumes" ), "Light Propagation " + suffix ) }
 		, m_count{ gridSize * gridSize * gridSize }
 		, m_vertexBuffer{ doCreateVertexBuffer( getName()
-			, engine
+			, m_device
 			, gridSize ) }
 		, m_descriptorSetLayout{ doCreateDescriptorLayout( getName()
-			, engine
+			, m_device
 			, geometry != nullptr ) }
-		, m_pipelineLayout{ getCurrentRenderDevice( m_engine )->createPipelineLayout( getName(), *m_descriptorSetLayout ) }
+		, m_pipelineLayout{ m_device->createPipelineLayout( getName(), *m_descriptorSetLayout ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( getName(), 1u ) }
 		, m_descriptorSet{ doCreateDescriptorSet( getName()
 			, *m_descriptorSetPool
@@ -642,10 +642,10 @@ namespace castor3d
 			, getName()
 			, getPixelProgram( geometry != nullptr ) }
 		, m_renderPass{ doCreateRenderPass( getName()
-			, getCurrentRenderDevice( m_engine )
+			, m_device
 			, getFormat( LpvTexture::eR ) ) }
 		, m_pipeline{ doCreatePipeline( getName()
-			, m_engine
+			, m_device
 			, *m_pipelineLayout
 			, *m_renderPass
 			, m_vertexShader
@@ -666,6 +666,7 @@ namespace castor3d
 	}
 
 	LightPropagationPass::LightPropagationPass( Engine & engine
+		, RenderDevice const & device
 		, castor::String const & name
 		, uint32_t gridSize
 		, LightVolumePassResult const & injection
@@ -673,6 +674,7 @@ namespace castor3d
 		, LightVolumePassResult const & propagate
 		, LpvConfigUbo const & lpvConfigUbo )
 		: LightPropagationPass{ engine
+			, device
 			, name
 			, gridSize
 			, nullptr
@@ -684,6 +686,7 @@ namespace castor3d
 	}
 
 	LightPropagationPass::LightPropagationPass( Engine & engine
+		, RenderDevice const & device
 		, castor::String const & name
 		, uint32_t gridSize
 		, TextureUnit const & geometry
@@ -692,6 +695,7 @@ namespace castor3d
 		, LightVolumePassResult const & propagate
 		, LpvConfigUbo const & lpvConfigUbo )
 		: LightPropagationPass{ engine
+			, device
 			, name
 			, gridSize
 			, &geometry
@@ -704,12 +708,11 @@ namespace castor3d
 
 	ashes::Semaphore const & LightPropagationPass::compute( ashes::Semaphore const & toWait )const
 	{
-		auto & device = getCurrentRenderDevice( m_engine );
 		RenderPassTimerBlock timerBlock{ m_timer->start() };
 		timerBlock->notifyPassRender();
 		auto * result = &toWait;
 
-		device.graphicsQueue->submit( *m_commands.commandBuffer
+		m_device.graphicsQueue->submit( *m_commands.commandBuffer
 			, toWait
 			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, *m_commands.semaphore
@@ -722,11 +725,10 @@ namespace castor3d
 	CommandsSemaphore LightPropagationPass::getCommands( RenderPassTimer const & timer
 		, uint32_t index )const
 	{
-		auto & device = getCurrentRenderDevice( m_engine );
 		castor3d::CommandsSemaphore commands
 		{
-			device.graphicsCommandPool->createCommandBuffer( getName() ),
-			device->createSemaphore( getName() )
+			m_device.graphicsCommandPool->createCommandBuffer( getName() ),
+			m_device->createSemaphore( getName() )
 		};
 		auto & cmd = *commands.commandBuffer;
 

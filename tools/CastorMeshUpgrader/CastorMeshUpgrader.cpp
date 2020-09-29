@@ -5,8 +5,218 @@
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Model/Skeleton/Skeleton.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 
+#include <ashespp/Core/PlatformWindowHandle.hpp>
+
+class DummyWindowHandle
+	: public ashes::IWindowHandle
+{
+public:
+	DummyWindowHandle()
+		: ashes::IWindowHandle{ ashes::KHR_PLATFORM_SURFACE_EXTENSION_NAME }
+#if defined( VK_USE_PLATFORM_WIN32_KHR )
+		, m_mswHandle{ nullptr, nullptr }
+#elif defined( VK_USE_PLATFORM_ANDROID_KHR )
+		, m_androidHandle{ nullptr }
+#elif defined( VK_USE_PLATFORM_XCB_KHR )
+		, m_xcbHandle{ nullptr, nullptr }
+#elif defined( VK_USE_PLATFORM_MIR_KHR )
+		, m_mirHandle{ nullptr, nullptr }
+#elif defined( VK_USE_PLATFORM_WAYLAND_KHR )
+		, m_waylandHandle{ nullptr, nullptr }
+#elif defined( VK_USE_PLATFORM_XLIB_KHR )
+		, m_waylandHandle{ nullptr, nullptr }
+#elif defined( VK_USE_PLATFORM_MACOS_MVK )
+		, m_macosHandle{ nullptr }
+#endif
+	{
+	}
+
+	~DummyWindowHandle()
+	{
+	}
+
+	operator bool()override
+	{
+		return true;
+	}
+
+#if defined( VK_USE_PLATFORM_WIN32_KHR )
+
+	ashes::IMswWindowHandle m_mswHandle;
+
+	operator ashes::IMswWindowHandle const & ( )const
+	{
+		return m_mswHandle;
+	}
+
+	operator ashes::IMswWindowHandle & ( )
+	{
+		return m_mswHandle;
+	}
+
+	ashes::IMswWindowHandle const * operator *()const
+	{
+		return &m_mswHandle;
+	}
+
+	ashes::IMswWindowHandle * operator *()
+	{
+		return &m_mswHandle;
+	}
+
+#elif defined( VK_USE_PLATFORM_ANDROID_KHR )
+
+	ashes::IAndroidWindowHandle m_androidHandle;
+
+	operator ashes::IAndroidWindowHandle const & ( )const
+	{
+		return m_androidHandle;
+	}
+
+	operator ashes::IAndroidWindowHandle & ( )
+	{
+		return m_androidHandle;
+	}
+
+	ashes::IAndroidWindowHandle const * operator *()const
+	{
+		return &m_androidHandle;
+	}
+
+	ashes::IAndroidWindowHandle * operator *()
+	{
+		return &m_androidHandle;
+	}
+
+#elif defined( VK_USE_PLATFORM_XCB_KHR )
+
+	ashes::IXcbWindowHandle m_xcbHandle;
+
+	operator ashes::IXcbWindowHandle const & ( )const
+	{
+		return m_xcbHandle;
+	}
+
+	operator ashes::IXcbWindowHandle & ( )
+	{
+		return m_xcbHandle;
+	}
+
+	ashes::IXcbWindowHandle const * operator *()const
+	{
+		return &m_xcbHandle;
+	}
+
+	ashes::IXcbWindowHandle * operator *()
+	{
+		return &m_xcbHandle;
+	}
+
+#elif defined( VK_USE_PLATFORM_MIR_KHR )
+
+	ashes::IMirWindowHandle m_mirHandle;
+
+	operator ashes::IMirWindowHandle const & ( )const
+	{
+		return m_mirHandle;
+	}
+
+	operator ashes::IMirWindowHandle & ( )
+	{
+		return m_mirHandle;
+	}
+
+	ashes::IMirWindowHandle const * operator *()const
+	{
+		return &m_mirHandle;
+	}
+
+	ashes::IMirWindowHandle * operator *()
+	{
+		return &m_mirHandle;
+	}
+
+#elif defined( VK_USE_PLATFORM_WAYLAND_KHR )
+
+	ashes::IWaylandWindowHandle m_waylandHandle;
+
+	operator ashes::IWaylandWindowHandle const & ( )const
+	{
+		return m_waylandHandle;
+	}
+
+	operator ashes::IWaylandWindowHandle & ( )
+	{
+		return m_waylandHandle;
+	}
+
+	ashes::IWaylandWindowHandle const * operator *()const
+	{
+		return &m_waylandHandle;
+	}
+
+	ashes::IWaylandWindowHandle * operator *()
+	{
+		return &m_waylandHandle;
+	}
+
+#elif defined( VK_USE_PLATFORM_XLIB_KHR )
+
+	ashes::IXWindowHandle m_xlibHandle;
+
+	operator ashes::IXWindowHandle const & ( )const
+	{
+		return m_xlibHandle;
+	}
+
+	operator ashes::IXWindowHandle & ( )
+	{
+		return m_xlibHandle;
+	}
+
+	ashes::IXWindowHandle const * operator *()const
+	{
+		return &m_xlibHandle;
+	}
+
+	ashes::IXWindowHandle * operator *()
+	{
+		return &m_xlibHandle;
+	}
+
+#elif defined( VK_USE_PLATFORM_MACOS_MVK )
+
+	ashes::IMacOsWindowHandle m_macosHandle;
+
+	operator ashes::IMacOsWindowHandle const & ( )const
+	{
+		return m_macosHandle;
+	}
+
+	operator ashes::IMacOsWindowHandle & ( )
+	{
+		return m_macosHandle;
+	}
+
+	ashes::IMacOsWindowHandle const * operator *()const
+	{
+		return &m_macosHandle;
+	}
+
+	ashes::IMacOsWindowHandle * operator *()
+	{
+		return &m_macosHandle;
+	}
+
+#else
+
+#	error "Unsupported window system."
+
+#endif
+};
 using StringArray = std::vector< std::string >;
 
 struct Options
@@ -120,20 +330,23 @@ bool doInitialiseEngine( castor3d::Engine & engine )
 	return result;
 }
 
-void doInitialise( castor3d::Mesh & mesh )
+void doInitialise( castor3d::RenderDevice const & device
+	, castor3d::Mesh & mesh )
 {
 	for ( auto & submesh : mesh )
 	{
-		submesh->initialise();
+		submesh->initialise( device );
 	}
 }
 
-void doInitialise( castor3d::Skeleton & skeleton )
+void doInitialise( castor3d::RenderDevice const & device
+	, castor3d::Skeleton & skeleton )
 {
 }
 
 template< typename T >
-bool doParseObject( castor::Path const & path
+bool doParseObject( castor3d::RenderDevice const & device
+	, castor::Path const & path
 	, T & object )
 {
 	bool result = false;
@@ -159,7 +372,7 @@ bool doParseObject( castor::Path const & path
 
 	if ( result )
 	{
-		doInitialise( object );
+		doInitialise( device, object );
 	}
 
 	return result;
@@ -167,10 +380,10 @@ bool doParseObject( castor::Path const & path
 
 template< typename T >
 bool doWriteObject( castor::Path const & path
-	, T const & object );
+	, T & object );
 
 bool doPostWrite( castor::Path const & path
-	, castor3d::Mesh const & mesh )
+	, castor3d::Mesh & mesh )
 {
 	auto skeleton = mesh.getSkeleton();
 	bool result = true;
@@ -181,18 +394,19 @@ bool doPostWrite( castor::Path const & path
 		result = doWriteObject( newPath, *skeleton );
 	}
 
+	mesh.cleanup();
 	return result;
 }
 
 bool doPostWrite( castor::Path const & path
-	, castor3d::Skeleton const & skeleton )
+	, castor3d::Skeleton & skeleton )
 {
 	return true;
 }
 
 template< typename T >
 bool doWriteObject( castor::Path const & path
-	, T const & object )
+	, T & object )
 {
 	bool result = false;
 
@@ -230,21 +444,28 @@ int main( int argc, char * argv[] )
 
 	if ( doParseArgs( argc, argv, options ) )
 	{
-		auto path = options.input;
+		auto inputPath = options.input;
 
-		if ( !castor::File::fileExists( path ) )
+		if ( !castor::File::fileExists( inputPath ) )
 		{
-			path = castor::File::getExecutableDirectory() / path;
+			inputPath = castor::File::getExecutableDirectory() / inputPath;
 		}
 
-		if ( !castor::File::fileExists( path ) )
+		auto outputPath = options.output;
+
+		if ( !castor::File::fileExists( outputPath ) )
 		{
-			std::cerr << "File [" << path << "] does not exist." << std::endl << std::endl;
+			outputPath = castor::File::getExecutableDirectory() / outputPath;
+		}
+
+		if ( !castor::File::fileExists( inputPath ) )
+		{
+			std::cerr << "File [" << inputPath << "] does not exist." << std::endl << std::endl;
 			printUsage();
 			return EXIT_SUCCESS;
 		}
 
-		auto extension = castor::string::lowerCase( path.getExtension() );
+		auto extension = castor::string::lowerCase( inputPath.getExtension() );
 
 		if ( extension != cuT( "cmsh" ) && extension != cuT( "cskl" ) )
 		{
@@ -270,24 +491,25 @@ int main( int argc, char * argv[] )
 		if ( doInitialiseEngine( engine ) )
 		{
 			castor3d::Scene scene{ cuT( "DummyScene" ), engine };
-			auto name = path.getFileName();
+			auto name = inputPath.getFileName();
+			auto device = engine.getRenderSystem()->createDevice( ashes::WindowHandle{ std::make_unique< DummyWindowHandle >() }, 0u );
 
 			if ( extension == cuT( "cmsh" ) )
 			{
 				castor3d::Mesh mesh{ name, scene };
 
-				if ( doParseObject( path, mesh ) )
+				if ( doParseObject( *device, inputPath, mesh ) )
 				{
-					doWriteObject( path, mesh );
+					doWriteObject( outputPath, mesh );
 				}
 			}
 			else if ( extension == cuT( "cskl" ) )
 			{
 				castor3d::Skeleton skeleton{ scene };
 
-				if ( doParseObject( path, skeleton ) )
+				if ( doParseObject( *device, inputPath, skeleton ) )
 				{
-					doWriteObject( path, skeleton );
+					doWriteObject( outputPath, skeleton );
 				}
 			}
 

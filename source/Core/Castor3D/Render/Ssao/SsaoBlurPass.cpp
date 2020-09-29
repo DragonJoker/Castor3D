@@ -335,13 +335,13 @@ namespace castor3d
 		}
 
 		ashes::PipelineShaderStageCreateInfoArray doGetProgram( Engine & engine
+			, RenderDevice const & device
 			, SsaoConfig const & config
 			, ShaderModule & vertexShader
 			, ShaderModule & pixelShader )
 		{
 			vertexShader.shader = doGetVertexProgram( engine );
 			pixelShader.shader = doGetPixelProgram( engine, config.useNormalsBuffer );
-			auto & device = getCurrentRenderDevice( engine );
 			ashes::PipelineShaderStageCreateInfoArray result
 			{
 				makeShaderState( device, vertexShader ),
@@ -373,6 +373,7 @@ namespace castor3d
 		}
 
 		TextureUnit doCreateTexture( Engine & engine
+			, RenderDevice const & device
 			, String const & name
 			, VkFormat format
 			, VkExtent2D const & size )
@@ -400,11 +401,11 @@ namespace castor3d
 			TextureUnit result{ engine };
 			result.setTexture( ssaoResult );
 			result.setSampler( sampler );
-			result.initialise();
+			result.initialise( device );
 			return result;
 		}
 
-		ashes::RenderPassPtr doCreateRenderPass( Engine & engine
+		ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
 			, String const & name )
 		{
 			ashes::VkAttachmentDescriptionArray attaches
@@ -462,8 +463,6 @@ namespace castor3d
 				std::move( subpasses ),
 				std::move( dependencies ),
 			};
-			auto & renderSystem = *engine.getRenderSystem();
-			auto & device = getCurrentRenderDevice( renderSystem );
 			auto result = device->createRenderPass( name
 				, std::move( createInfo ) );
 			return result;
@@ -487,6 +486,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	SsaoBlurPass::SsaoBlurPass( Engine & engine
+		, RenderDevice const & device
 		, String const & prefix
 		, VkExtent2D const & size
 		, SsaoConfig const & config
@@ -495,7 +495,7 @@ namespace castor3d
 		, Point2i const & axis
 		, TextureUnit const & input
 		, ashes::ImageView const & normals )
-		: RenderQuad{ *engine.getRenderSystem(), prefix + cuT( "SsaoBlur" ), VK_FILTER_NEAREST, {} }
+		: RenderQuad{ *engine.getRenderSystem(), device, prefix + cuT( "SsaoBlur" ), VK_FILTER_NEAREST, {} }
 		, m_engine{ engine }
 		, m_ssaoConfigUbo{ ssaoConfigUbo }
 		, m_gpInfoUbo{ gpInfoUbo }
@@ -504,16 +504,15 @@ namespace castor3d
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName() }
 		, m_config{ config }
-		, m_program{ doGetProgram( m_engine, m_config, m_vertexShader, m_pixelShader ) }
+		, m_program{ doGetProgram( m_engine, m_device, m_config, m_vertexShader, m_pixelShader ) }
 		, m_size{ size }
-		, m_result{ doCreateTexture( m_engine, getName() + cuT( "Result" ), SsaoBlurPass::ResultFormat, m_size ) }
-		, m_renderPass{ doCreateRenderPass( m_engine, getName() ) }
+		, m_result{ doCreateTexture( m_engine, m_device, getName() + cuT( "Result" ), SsaoBlurPass::ResultFormat, m_size ) }
+		, m_renderPass{ doCreateRenderPass( m_device, getName() ) }
 		, m_fbo{ doCreateFrameBuffer( m_engine, getName(), *m_renderPass, m_result ) }
-		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, cuT( "Scalable Ambient Obscurance" ), prefix + cuT( " Blur" ) ) }
-		, m_finished{ getCurrentRenderDevice( m_engine )->createSemaphore( getName() ) }
-		, m_configurationUbo{ getCurrentRenderDevice( m_engine ).uboPools->getBuffer< Configuration >( 0u ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, m_device, cuT( "Scalable Ambient Obscurance" ), prefix + cuT( " Blur" ) ) }
+		, m_finished{ m_device->createSemaphore( getName() ) }
+		, m_configurationUbo{ m_device.uboPools->getBuffer< Configuration >( 0u ) }
 	{
-		auto & device = getCurrentRenderDevice( m_renderSystem );
 		auto & configuration = m_configurationUbo.getData();
 		configuration.axis = axis;
 
@@ -539,7 +538,7 @@ namespace castor3d
 			, *m_renderPass
 			, std::move( bindings )
 			, {} );
-		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( getName() );
+		m_commandBuffer = m_device.graphicsCommandPool->createCommandBuffer( getName() );
 
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
 		m_commandBuffer->beginDebugBlock(
@@ -624,8 +623,7 @@ namespace castor3d
 		timerBlock->notifyPassRender();
 		auto * result = &toWait;
 
-		auto & device = getCurrentRenderDevice( m_renderSystem );
-		device.graphicsQueue->submit( *m_commandBuffer
+		m_device.graphicsQueue->submit( *m_commandBuffer
 			, *result
 			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, *m_finished

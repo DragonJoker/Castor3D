@@ -24,8 +24,8 @@ namespace light_streaks
 
 	public:
 		explicit KawaseUbo( castor3d::Engine & engine );
-		void initialise();
-		void cleanup();
+		void initialise( castor3d::RenderDevice const & device );
+		void cleanup( castor3d::RenderDevice const & device );
 		void update( uint32_t index
 			, VkExtent2D const & size
 			, castor::Point2f const & direction

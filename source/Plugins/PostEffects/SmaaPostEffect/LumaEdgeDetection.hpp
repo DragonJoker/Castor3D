@@ -13,6 +13,7 @@ namespace smaa
 	{
 	public:
 		LumaEdgeDetection( castor3d::RenderTarget & renderTarget
+			, castor3d::RenderDevice const & device
 			, ashes::ImageView const & colourView
 			, ashes::Image const * predication
 			, SmaaConfig const & config );

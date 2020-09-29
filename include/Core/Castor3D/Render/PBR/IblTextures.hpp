@@ -30,6 +30,7 @@ namespace castor3d
 		 *\param[in]	sampler	Le sampler utilisé pour la texture d'environnement.
 		 */
 		C3D_API explicit IblTextures( Scene & scene
+			, RenderDevice const & device
 			, ashes::Image const & source
 			, SamplerSPtr sampler );
 		/**

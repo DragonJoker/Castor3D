@@ -281,6 +281,72 @@ namespace castor3d
 	static VkClearValue const transparentBlackClearColor{ makeClearValue( 0.0f, 0.0f, 0.0f, 0.0f ) };
 	static VkClearValue const opaqueWhiteClearColor{ makeClearValue( 1.0f, 1.0f, 1.0f, 1.0f ) };
 	static VkClearValue const transparentWhiteClearColor{ makeClearValue( 1.0f, 1.0f, 1.0f, 0.0f ) };
+
+	inline bool operator>( VkImageSubresourceRange const & lhs
+		, VkImageSubresourceRange const & rhs )
+	{
+		return lhs.aspectMask > rhs.aspectMask
+			|| ( lhs.aspectMask == rhs.aspectMask
+				&& ( lhs.baseArrayLayer > rhs.baseArrayLayer
+					|| ( lhs.baseArrayLayer == rhs.baseArrayLayer
+						&& ( lhs.layerCount > rhs.layerCount
+							|| ( lhs.layerCount == rhs.layerCount
+								&& ( lhs.baseMipLevel > rhs.baseMipLevel
+									|| ( lhs.baseMipLevel == rhs.baseMipLevel
+										&& lhs.levelCount > rhs.levelCount
+										)
+									)
+								)
+							)
+						)
+					)
+				);
+	}
+
+	inline bool operator<( VkImageSubresourceRange const & lhs
+		, VkImageSubresourceRange const & rhs )
+	{
+		return lhs.aspectMask < rhs.aspectMask
+			|| ( lhs.aspectMask == rhs.aspectMask
+				&& ( lhs.baseArrayLayer < rhs.baseArrayLayer
+					|| ( lhs.baseArrayLayer == rhs.baseArrayLayer
+						&& ( lhs.layerCount < rhs.layerCount
+							|| ( lhs.layerCount == rhs.layerCount
+								&& ( lhs.baseMipLevel < rhs.baseMipLevel
+									|| ( lhs.baseMipLevel == rhs.baseMipLevel
+										&& lhs.levelCount < rhs.levelCount
+										)
+									)
+								)
+							)
+						)
+					)
+				);
+	}
+
+	inline bool operator<=( VkImageSubresourceRange const & lhs
+		, VkImageSubresourceRange const & rhs )
+	{
+		return !( lhs > rhs );
+	}
+
+	inline bool operator>=( VkImageSubresourceRange const & lhs
+		, VkImageSubresourceRange const & rhs )
+	{
+		return !( lhs < rhs );
+	}
+
+	inline bool operator!=( VkImageSubresourceRange const & lhs
+		, VkImageSubresourceRange const & rhs )
+	{
+		return lhs < rhs || lhs > rhs;
+	}
+
+	inline bool operator==( VkImageSubresourceRange const & lhs
+		, VkImageSubresourceRange const & rhs )
+	{
+		return lhs >= rhs && lhs <= rhs;
+	}
 }
 
 CU_DeclareExportedOwnedBy( C3D_API, castor3d::Engine, Engine )

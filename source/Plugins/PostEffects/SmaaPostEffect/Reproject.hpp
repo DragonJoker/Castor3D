@@ -19,6 +19,7 @@ namespace smaa
 	{
 	public:
 		Reproject( castor3d::RenderTarget & renderTarget
+			, castor3d::RenderDevice const & device
 			, ashes::ImageView const & currentColourView
 			, ashes::ImageView const & previousColourView
 			, ashes::ImageView const * velocityView

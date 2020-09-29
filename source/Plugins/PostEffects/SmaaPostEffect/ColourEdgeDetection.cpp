@@ -310,10 +310,11 @@ namespace smaa
 	//*********************************************************************************************
 
 	ColourEdgeDetection::ColourEdgeDetection( castor3d::RenderTarget & renderTarget
+		, castor3d::RenderDevice const & device
 		, ashes::ImageView const & colourView
 		, ashes::Image const * predication
 		, SmaaConfig const & config )
-		: EdgeDetection{ renderTarget, config }
+		: EdgeDetection{ renderTarget, device, config }
 		, m_colourView{ colourView }
 		, m_predicationView{ ( predication
 			? std::make_unique< ashes::ImageView >( doCreatePredicationView( *predication ) )
@@ -342,11 +343,10 @@ namespace smaa
 	castor3d::CommandsSemaphore ColourEdgeDetection::prepareCommands( castor3d::RenderPassTimer const & timer
 		, uint32_t passIndex )
 	{
-		auto & device = getCurrentRenderDevice( m_renderSystem );
 		castor3d::CommandsSemaphore edgeDetectionCommands
 		{
-			device.graphicsCommandPool->createCommandBuffer( "ColourEdgeDetection" ),
-			device->createSemaphore( "ColourEdgeDetection" )
+			m_device.graphicsCommandPool->createCommandBuffer( "ColourEdgeDetection" ),
+			m_device->createSemaphore( "ColourEdgeDetection" )
 		};
 		auto & edgeDetectionCmd = *edgeDetectionCommands.commandBuffer;
 
@@ -400,10 +400,9 @@ namespace smaa
 	{
 		VkExtent2D size{ m_colourView.image->getDimensions().width
 			, m_colourView.image->getDimensions().height };
-		auto & device = getCurrentRenderDevice( m_renderSystem );
 		ashes::PipelineShaderStageCreateInfoArray stages;
-		stages.push_back( makeShaderState( device, m_vertexShader ) );
-		stages.push_back( makeShaderState( device, m_pixelShader ) );
+		stages.push_back( makeShaderState( m_device, m_vertexShader ) );
+		stages.push_back( makeShaderState( m_device, m_pixelShader ) );
 
 		ashes::PipelineDepthStencilStateCreateInfo dsstate{ 0u, VK_FALSE, VK_FALSE };
 		dsstate->stencilTestEnable = true;

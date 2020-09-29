@@ -14,8 +14,14 @@ using namespace castor;
 
 namespace castor3d
 {
-	RenderDepthQuad::RenderDepthQuad( RenderSystem & renderSystem )
-		: RenderQuad{ renderSystem, "RenderDepthQuad", VK_FILTER_LINEAR, { ashes::nullopt, RenderQuadConfig::Texcoord{} } }
+	RenderDepthQuad::RenderDepthQuad( RenderSystem & renderSystem
+		, RenderDevice const & device )
+		: RenderQuad{ renderSystem
+			, device
+			, "RenderDepthQuad"
+			, VK_FILTER_LINEAR
+			, { ashes::nullopt
+				, RenderQuadConfig::Texcoord{} } }
 		, m_program{ "RenderDepthQuad", renderSystem }
 	{
 		ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, "RenderDepthQuad" };
@@ -66,13 +72,9 @@ namespace castor3d
 		m_program.setSource( VK_SHADER_STAGE_FRAGMENT_BIT, std::move( pxl.shader ) );
 	}
 
-	RenderDepthQuad::~RenderDepthQuad()
-	{
-	}
-
 	void RenderDepthQuad::initialise()
 	{
-		m_program.initialise();
+		m_program.initialise( m_device );
 	}
 
 	void RenderDepthQuad::render( ashes::RenderPass const & renderPass
@@ -82,8 +84,7 @@ namespace castor3d
 		, TextureLayout const & texture )
 	{
 		cleanup();
-		auto & device = getCurrentRenderDevice( m_renderSystem );
-		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( "RenderDepthQuad" );
+		m_commandBuffer = m_device.graphicsCommandPool->createCommandBuffer( "RenderDepthQuad" );
 		createPipeline( { size.getWidth(), size.getHeight() }
 			, position
 			, m_program.getStates()
@@ -101,7 +102,7 @@ namespace castor3d
 		m_commandBuffer->endRenderPass();
 		m_commandBuffer->end();
 
-		device.graphicsQueue->submit( *m_commandBuffer, nullptr );
-		device.graphicsQueue->waitIdle();
+		m_device.graphicsQueue->submit( *m_commandBuffer, nullptr );
+		m_device.graphicsQueue->waitIdle();
 	}
 }

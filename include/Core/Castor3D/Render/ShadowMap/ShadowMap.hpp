@@ -64,14 +64,14 @@ namespace castor3d
 		 *\~french
 		 *\brief		Initialise le frame buffer et les données spécifiques au type de source lumineuse.
 		 */
-		C3D_API bool initialise();
+		C3D_API bool initialise( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Cleans up the frame buffer and light type specific data.
 		 *\~french
 		 *\brief		Nettoie le frame buffer et les données spécifiques au type de source lumineuse.
 		 */
-		C3D_API void cleanup();
+		C3D_API void cleanup( RenderDevice const & device );
 		/**
 		*\~english
 		*\brief
@@ -117,7 +117,8 @@ namespace castor3d
 		 *\param[out]	toWait	Le sémaphore de la précédente passe de rendu.
 		 *\param[out]	index	L'indice de la texture.
 		 */
-		C3D_API ashes::Semaphore const & render( ashes::Semaphore const & toWait
+		C3D_API ashes::Semaphore const & render( RenderDevice const & device
+			, ashes::Semaphore const & toWait
 			, uint32_t index );
 		/**
 		*\~english
@@ -162,15 +163,16 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::ShadowMap::initialise
 		 */
-		C3D_API virtual void doInitialise() = 0;
+		C3D_API virtual void doInitialise( RenderDevice const & device ) = 0;
 		/**
 		 *\copydoc		castor3d::ShadowMap::cleanup
 		 */
-		C3D_API virtual void doCleanup() = 0;
+		C3D_API virtual void doCleanup( RenderDevice const & device ) = 0;
 		/**
 		 *\copydoc		castor3d::ShadowMap::render
 		 */
-		C3D_API virtual ashes::Semaphore const & doRender( ashes::Semaphore const & toWait
+		C3D_API virtual ashes::Semaphore const & doRender( RenderDevice const & device
+			, ashes::Semaphore const & toWait
 			, uint32_t index ) = 0;
 		/**
 		 *\~english

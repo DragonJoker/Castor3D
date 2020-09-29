@@ -3,7 +3,6 @@
 #include "GuiCommon/Properties/AdditionalProperties.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Event/Frame/FunctorEvent.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Material/Texture/TextureLayout.hpp>
 #include <Castor3D/Material/Texture/TextureUnit.hpp>
@@ -266,9 +265,9 @@ namespace GuiCommon
 		TextureUnitSPtr unit = getTexture();
 		Path path{ make_String( var.GetString() ) };
 
+		// Absolute path
 		if ( File::fileExists( path ) )
 		{
-			// Absolute path
 			ashes::ImageCreateInfo image
 			{
 				0u,
@@ -282,13 +281,15 @@ namespace GuiCommon
 				( VK_IMAGE_USAGE_SAMPLED_BIT
 					| VK_IMAGE_USAGE_TRANSFER_DST_BIT ),
 			};
+			auto & device = unit->getDevice();
 			auto texture = std::make_shared< TextureLayout >( *unit->getEngine()->getRenderSystem()
 				, image
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 				, path );
 			texture->setSource( Path{}, path );
 			unit->setTexture( texture );
-			unit->initialise();
+
+			unit->initialise( device );
 		}
 	}
 }

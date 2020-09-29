@@ -4,7 +4,6 @@
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Animation/Animation.hpp>
-#include <Castor3D/Event/Frame/FunctorEvent.hpp>
 #include <Castor3D/Scene/Animation/AnimatedObjectGroup.hpp>
 
 #include <wx/propgrid/advprops.h>

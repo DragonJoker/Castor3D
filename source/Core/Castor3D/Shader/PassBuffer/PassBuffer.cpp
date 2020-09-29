@@ -9,9 +9,10 @@ namespace castor3d
 	//*********************************************************************************************
 
 	PassBuffer::PassBuffer( Engine & engine
+		, RenderDevice const & device
 		, uint32_t count
 		, uint32_t size )
-		: m_buffer{ engine, count * size, cuT( "PassBuffer" ) }
+		: m_buffer{ engine, device, count * size, cuT( "PassBuffer" ) }
 		, m_passCount{ count }
 	{
 	}

@@ -6,7 +6,7 @@
 #include "Castor3D/Cache/OverlayCache.hpp"
 #include "Castor3D/Cache/TargetCache.hpp"
 #include "Castor3D/Cache/TechniqueCache.hpp"
-#include "Castor3D/Event/Frame/FunctorEvent.hpp"
+#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
@@ -127,7 +127,8 @@ namespace castor3d
 	{
 	}
 
-	bool RenderTarget::TargetFbo::initialise( ashes::RenderPass & renderPass
+	bool RenderTarget::TargetFbo::initialise( RenderDevice const & device
+		, ashes::RenderPass & renderPass
 		, VkFormat format
 		, Size const & size )
 	{
@@ -159,7 +160,7 @@ namespace castor3d
 			, renderTarget.getName() + cuT( "Colour" ) );
 		colourTexture.setTexture( texture );
 		colourTexture.setSampler( sampler );
-		colourTexture.getTexture()->initialise();
+		colourTexture.getTexture()->initialise( device );
 
 		ashes::ImageViewCRefArray attaches;
 		attaches.emplace_back( colourTexture.getTexture()->getDefaultView().getTargetView() );
@@ -170,7 +171,7 @@ namespace castor3d
 		return true;
 	}
 
-	void RenderTarget::TargetFbo::cleanup()
+	void RenderTarget::TargetFbo::cleanup( RenderDevice const & device )
 	{
 		colourTexture.cleanup();
 		frameBuffer.reset();
@@ -196,10 +197,6 @@ namespace castor3d
 		, m_combinedFrameBuffer{ *this }
 		, m_velocityTexture{ *getEngine() }
 	{
-		m_toneMapping = getEngine()->getRenderTargetCache().getToneMappingFactory().create( cuT( "linear" )
-			, *getEngine()
-			, m_hdrConfigUbo
-			, Parameters{} );
 		SamplerSPtr sampler = getEngine()->getSamplerCache().add( RenderTarget::DefaultSamplerName + getName() + cuT( "Linear" ) );
 		sampler->setMinFilter( VK_FILTER_LINEAR );
 		sampler->setMagFilter( VK_FILTER_LINEAR );
@@ -213,29 +210,37 @@ namespace castor3d
 	{
 	}
 
-	void RenderTarget::initialise()
+	void RenderTarget::initialise( RenderDevice const & device )
 	{
 		if ( !m_initialised )
 		{
+			if ( !m_toneMapping )
+			{
+				m_toneMapping = getEngine()->getRenderTargetCache().getToneMappingFactory().create( cuT( "linear" )
+					, *getEngine()
+					, device
+					, m_hdrConfigUbo
+					, Parameters{} );
+			}
+
 			m_culler = std::make_unique< FrustumCuller >( *getScene(), *getCamera() );
 			auto & renderSystem = *getEngine()->getRenderSystem();
-			auto & device = getCurrentRenderDevice( renderSystem );
-			m_hdrConfigUbo.initialise();
-			doInitialiseRenderPass();
-			m_initialised = doInitialiseFrameBuffer();
+			m_hdrConfigUbo.initialise( device );
+			doInitialiseRenderPass( device );
+			m_initialised = doInitialiseFrameBuffer( device );
 
 			if ( m_initialised )
 			{
-				m_initialised = doInitialiseVelocityTexture();
+				m_initialised = doInitialiseVelocityTexture( device );
 			}
 
 			if ( m_initialised )
 			{
-				m_initialised = doInitialiseTechnique();
+				m_initialised = doInitialiseTechnique( device );
 			}
 
-			m_overlaysTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Overlays" ), cuT( "Overlays" ) );
-			m_toneMappingTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Tone Mapping" ), cuT( "Tone Mapping" ) );
+			m_overlaysTimer = std::make_shared< RenderPassTimer >( *getEngine(), device, cuT( "Overlays" ), cuT( "Overlays" ) );
+			m_toneMappingTimer = std::make_shared< RenderPassTimer >( *getEngine(), device, cuT( "Tone Mapping" ), cuT( "Tone Mapping" ) );
 
 			if ( !m_hdrPostEffects.empty() )
 			{
@@ -245,12 +250,13 @@ namespace castor3d
 				{
 					if ( m_initialised )
 					{
-						m_initialised = effect->initialise( *sourceView );
+						m_initialised = effect->initialise( device, *sourceView );
 						sourceView = &effect->getResult();
 					}
 				}
 
-				doInitialiseCopyCommands( "HDR"
+				doInitialiseCopyCommands( device
+					, "HDR"
 					, m_hdrCopyCommands
 					, sourceView->getDefaultView().getSampledView()
 					, m_renderTechnique->getResult().getDefaultView().getTargetView() );
@@ -259,7 +265,7 @@ namespace castor3d
 
 			if ( m_initialised )
 			{
-				m_initialised = doInitialiseToneMapping();
+				m_initialised = doInitialiseToneMapping( device );
 			}
 
 			if ( !m_srgbPostEffects.empty() )
@@ -270,12 +276,13 @@ namespace castor3d
 				{
 					if ( m_initialised )
 					{
-						m_initialised = effect->initialise( *sourceView );
+						m_initialised = effect->initialise( device, *sourceView );
 						sourceView = &effect->getResult();
 					}
 				}
 
-				doInitialiseCopyCommands( "SRGB"
+				doInitialiseCopyCommands( device
+					, "SRGB"
 					, m_srgbCopyCommands
 					, sourceView->getDefaultView().getSampledView()
 					, m_objectsFrameBuffer.colourTexture.getTexture()->getDefaultView().getTargetView() );
@@ -285,15 +292,15 @@ namespace castor3d
 			m_overlayRenderer = std::make_shared< OverlayRenderer >( *getEngine()->getRenderSystem()
 				, *device.uboPools
 				, m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView().getTargetView() );
-			m_overlayRenderer->initialise();
+			m_overlayRenderer->initialise( device );
 
-			doInitialiseCombine();
+			doInitialiseCombine( device );
 
 			m_signalReady = device->createSemaphore( getName() + "Ready" );
 		}
 	}
 
-	void RenderTarget::cleanup()
+	void RenderTarget::cleanup( RenderDevice const & device )
 	{
 		if ( m_initialised )
 		{
@@ -307,13 +314,13 @@ namespace castor3d
 
 			if ( m_overlayRenderer )
 			{
-				m_overlayRenderer->cleanup();
+				m_overlayRenderer->cleanup( device );
 				m_overlayRenderer.reset();
 			}
 
 			for ( auto effect : m_srgbPostEffects )
 			{
-				effect->cleanup();
+				effect->cleanup( device );
 			}
 
 			if ( m_toneMapping )
@@ -324,7 +331,7 @@ namespace castor3d
 
 			for ( auto effect : m_hdrPostEffects )
 			{
-				effect->cleanup();
+				effect->cleanup( device );
 			}
 
 			m_hdrCopyCommands.reset();
@@ -340,11 +347,11 @@ namespace castor3d
 			m_velocityTexture.cleanup();
 			m_velocityTexture.setTexture( nullptr );
 
-			m_renderTechnique->cleanup();
-			m_hdrConfigUbo.cleanup();
-			m_overlaysFrameBuffer.cleanup();
-			m_objectsFrameBuffer.cleanup();
-			m_combinedFrameBuffer.cleanup();
+			m_renderTechnique->cleanup( device );
+			m_hdrConfigUbo.cleanup( device );
+			m_overlaysFrameBuffer.cleanup( device );
+			m_objectsFrameBuffer.cleanup( device );
+			m_combinedFrameBuffer.cleanup( device );
 			m_renderTechnique.reset();
 			m_renderPass.reset();
 			getEngine()->getRenderTechniqueCache().remove( getName() + cuT( "Technique" ) );
@@ -402,7 +409,8 @@ namespace castor3d
 		}
 	}
 
-	void RenderTarget::render( RenderInfo & info )
+	void RenderTarget::render( RenderDevice const & device
+		, RenderInfo & info )
 	{
 		SceneSPtr scene = getScene();
 
@@ -416,7 +424,7 @@ namespace castor3d
 				{
 					getEngine()->getRenderSystem()->pushScene( scene.get() );
 					scene->getGeometryCache().fillInfo( info );
-					doRender( info, m_objectsFrameBuffer, getCamera() );
+					doRender( device, info, m_objectsFrameBuffer, getCamera() );
 					getEngine()->getRenderSystem()->popScene();
 				}
 			}
@@ -467,16 +475,25 @@ namespace castor3d
 			ToneMappingSPtr toneMapping;
 			std::swap( m_toneMapping, toneMapping );
 			// Give ownership of the tone mapping to the event (capture by value in the lambda).
-			getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender, [toneMapping]()
-			{
-				toneMapping->cleanup();
-			} ) );
+			getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+				, [toneMapping]( RenderDevice const & device )
+				{
+					toneMapping->cleanup();
+				} ) );
 		}
 
-		m_toneMapping = getEngine()->getRenderTargetCache().getToneMappingFactory().create( name
-			, *getEngine()
-			, m_hdrConfigUbo
-			, parameters );
+		getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+			, [this, name, parameters]( RenderDevice const & device )
+			{
+				if ( !m_toneMapping )
+				{
+					m_toneMapping = getEngine()->getRenderTargetCache().getToneMappingFactory().create( name
+						, *getEngine()
+						, device
+						, m_hdrConfigUbo
+						, parameters );
+				}
+			} ) );
 	}
 
 	void RenderTarget::addPostEffect( PostEffectSPtr effect )
@@ -507,7 +524,7 @@ namespace castor3d
 		m_techniqueParameters.add( parameters );
 	}
 
-	void RenderTarget::doInitialiseRenderPass()
+	void RenderTarget::doInitialiseRenderPass( RenderDevice const & device )
 	{
 		ashes::VkAttachmentDescriptionArray attaches
 		{
@@ -562,14 +579,14 @@ namespace castor3d
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		auto & device = getCurrentRenderDevice( *this );
 		m_renderPass = device->createRenderPass( getName()
 			, std::move( createInfo ) );
 	}
 
-	bool RenderTarget::doInitialiseFrameBuffer()
+	bool RenderTarget::doInitialiseFrameBuffer( RenderDevice const & device )
 	{
-		auto result = m_objectsFrameBuffer.initialise( *m_renderPass
+		auto result = m_objectsFrameBuffer.initialise( device
+			, *m_renderPass
 			, VK_FORMAT_R8G8B8A8_UNORM
 			, m_size );
 		auto & dimensions = m_objectsFrameBuffer.colourTexture.getTexture()->getDimensions();
@@ -580,7 +597,8 @@ namespace castor3d
 			addIntermediateView( "Target Colour"
 				, m_objectsFrameBuffer.colourTexture.getTexture()->getDefaultView().getSampledView()
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-			result = m_overlaysFrameBuffer.initialise( *m_renderPass
+			result = m_overlaysFrameBuffer.initialise( device
+				, *m_renderPass
 				, VK_FORMAT_R8G8B8A8_UNORM
 				, m_size );
 		}
@@ -590,7 +608,8 @@ namespace castor3d
 			addIntermediateView( "Target Overlays"
 				, m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView().getSampledView()
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-			result = m_combinedFrameBuffer.initialise( *m_renderPass
+			result = m_combinedFrameBuffer.initialise( device
+				, *m_renderPass
 				, getPixelFormat()
 				, m_size );
 		}
@@ -598,7 +617,7 @@ namespace castor3d
 		return result;
 	}
 
-	bool RenderTarget::doInitialiseVelocityTexture()
+	bool RenderTarget::doInitialiseVelocityTexture( RenderDevice const & device )
 	{
 		ashes::ImageCreateInfo image
 		{
@@ -618,7 +637,7 @@ namespace castor3d
 			, getName() + cuT( "Velocity" ) );
 		m_velocityTexture.setTexture( std::move( velocityTexture ) );
 		m_velocityTexture.setSampler( getEngine()->getSamplerCache().find( RenderTarget::DefaultSamplerName + getName() + cuT( "Nearest" ) ) );
-		bool result = m_velocityTexture.initialise();
+		bool result = m_velocityTexture.initialise( device );
 
 		if ( result )
 		{
@@ -630,7 +649,7 @@ namespace castor3d
 		return  result;
 	}
 
-	bool RenderTarget::doInitialiseTechnique()
+	bool RenderTarget::doInitialiseTechnique( RenderDevice const & device )
 	{
 		if ( !m_renderTechnique )
 		{
@@ -651,12 +670,11 @@ namespace castor3d
 			}
 		}
 
-		return m_renderTechnique->initialise( m_intermediates );
+		return m_renderTechnique->initialise( device, m_intermediates );
 	}
 
-	bool RenderTarget::doInitialiseToneMapping()
+	bool RenderTarget::doInitialiseToneMapping( RenderDevice const & device )
 	{
-		auto & device = getCurrentRenderDevice( *this );
 		auto result = m_toneMapping->initialise( getSize()
 			, m_renderTechnique->getResult()
 			, *m_renderPass );
@@ -695,12 +713,12 @@ namespace castor3d
 		return result;
 	}
 
-	void RenderTarget::doInitialiseCopyCommands( castor::String const & name
+	void RenderTarget::doInitialiseCopyCommands( RenderDevice const & device
+		, castor::String const & name
 		, ashes::CommandBufferPtr & commandBuffer
 		, ashes::ImageView const & source
 		, ashes::ImageView const & target )
 	{
-		auto & device = getCurrentRenderDevice( *this );
 		commandBuffer = device.graphicsCommandPool->createCommandBuffer( getName() + name + "Copy" );
 
 		commandBuffer->begin();
@@ -732,7 +750,7 @@ namespace castor3d
 		commandBuffer->end();
 	}
 
-	void RenderTarget::doInitialiseCombine()
+	void RenderTarget::doInitialiseCombine( RenderDevice const & device )
 	{
 		static uint32_t constexpr LhsIdx = 0u;
 		static uint32_t constexpr RhsIdx = 1u;
@@ -842,7 +860,8 @@ namespace castor3d
 #endif
 	}
 
-	void RenderTarget::doRender( RenderInfo & info
+	void RenderTarget::doRender( RenderDevice const & device
+		, RenderInfo & info
 		, RenderTarget::TargetFbo & fbo
 		, CameraSPtr camera )
 	{
@@ -858,34 +877,40 @@ namespace castor3d
 		//signalsToWait.push_back( toWait );
 
 		// Render the scene through the RenderTechnique.
-		m_signalFinished = &m_renderTechnique->render( signalsToWait
+		m_signalFinished = &m_renderTechnique->render( device
+			, signalsToWait
 			, info );
 
 		// Draw HDR post effects.
-		m_signalFinished = &doApplyPostEffects( *m_signalFinished
+		m_signalFinished = &doApplyPostEffects( device
+			, *m_signalFinished
 			, m_hdrPostEffects
 			, m_hdrCopyCommands
 			, m_hdrCopyFinished
 			, elapsedTime );
 
 		// Then draw the render's result to the RenderTarget's frame buffer, applying the tone mapping operator.
-		m_signalFinished = &doApplyToneMapping( *m_signalFinished );
+		m_signalFinished = &doApplyToneMapping( device
+			, *m_signalFinished );
 
 		// Apply the sRGB post effects.
-		m_signalFinished = &doApplyPostEffects( *m_signalFinished
+		m_signalFinished = &doApplyPostEffects( device
+			, *m_signalFinished
 			, m_srgbPostEffects
 			, m_srgbCopyCommands
 			, m_srgbCopyFinished
 			, elapsedTime );
 
 		// And now render overlays.
-		m_signalFinished = &doRenderOverlays( *m_signalFinished );
+		m_signalFinished = &doRenderOverlays( device
+			, *m_signalFinished );
 
 		// Combine objects and overlays framebuffers, flipping them if necessary.
 		m_signalFinished = &doCombine( *m_signalFinished );
 	}
 
-	ashes::Semaphore const & RenderTarget::doApplyPostEffects( ashes::Semaphore const & toWait
+	ashes::Semaphore const & RenderTarget::doApplyPostEffects( RenderDevice const & device
+		, ashes::Semaphore const & toWait
 		, PostEffectPtrArray const & effects
 		, ashes::CommandBufferPtr const & copyCommandBuffer
 		, ashes::SemaphorePtr const & copyFinished
@@ -895,7 +920,6 @@ namespace castor3d
 
 		if ( !effects.empty() )
 		{
-			auto & device = getCurrentRenderDevice( *this );
 			auto & queue = *device.graphicsQueue;
 
 			for ( auto effect : effects )
@@ -926,9 +950,9 @@ namespace castor3d
 		return *result;
 	}
 
-	ashes::Semaphore const & RenderTarget::doApplyToneMapping( ashes::Semaphore const & toWait )
+	ashes::Semaphore const & RenderTarget::doApplyToneMapping( RenderDevice const & device
+		, ashes::Semaphore const & toWait )
 	{
-		auto & device = getCurrentRenderDevice( *this );
 		auto & queue = *device.graphicsQueue;
 		auto timerBlock = m_toneMappingTimer->start();
 		timerBlock->notifyPassRender();
@@ -944,7 +968,8 @@ namespace castor3d
 		return *result;
 	}
 
-	ashes::Semaphore const & RenderTarget::doRenderOverlays( ashes::Semaphore const & toWait )
+	ashes::Semaphore const & RenderTarget::doRenderOverlays( RenderDevice const & device
+		, ashes::Semaphore const & toWait )
 	{
 		auto * result = &toWait;
 		auto timerBlock = m_overlaysTimer->start();
@@ -953,7 +978,7 @@ namespace castor3d
 			LockType lock{ castor::makeUniqueLock( getEngine()->getOverlayCache() ) };
 			m_overlayRenderer->beginPrepare( *m_overlaysTimer
 				, *result );
-			auto preparer = m_overlayRenderer->getPreparer();
+			auto preparer = m_overlayRenderer->getPreparer( device );
 
 			for ( auto category : getEngine()->getOverlayCache() )
 			{
@@ -969,7 +994,7 @@ namespace castor3d
 			}
 
 			m_overlayRenderer->endPrepare( *m_overlaysTimer );
-			m_overlayRenderer->render( *m_overlaysTimer );
+			m_overlayRenderer->render( device, *m_overlaysTimer );
 			result = &m_overlayRenderer->getSemaphore();
 		}
 		return *result;

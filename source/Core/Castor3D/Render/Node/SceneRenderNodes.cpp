@@ -6,7 +6,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
-#include "Castor3D/Event/Frame/FunctorEvent.hpp"
+#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
@@ -518,8 +518,8 @@ namespace castor3d
 			, shadowMaps );
 
 		auto & renderPass = *queue.getOwner();
-		renderPass.getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
-			, [&renderPass, this, shadowMaps]()
+		renderPass.getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
+			, [&renderPass, this, shadowMaps]( RenderDevice const & device )
 			{
 				doInitialiseNodes( renderPass, staticNodes.frontCulled, shadowMaps );
 				doInitialiseNodes( renderPass, staticNodes.backCulled, shadowMaps );
@@ -533,8 +533,8 @@ namespace castor3d
 				doInitialiseInstancedNodes( renderPass, instancedSkinnedNodes.frontCulled, shadowMaps );
 				doInitialiseInstancedNodes( renderPass, instancedSkinnedNodes.backCulled, shadowMaps );
 			} ) );
-		renderPass.getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
-			, [&renderPass, this, shadowMaps]()
+		renderPass.getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
+			, [&renderPass, this, shadowMaps]( RenderDevice const & device )
 			{
 				doInitialiseNodes( renderPass, billboardNodes.frontCulled, shadowMaps );
 				doInitialiseNodes( renderPass, billboardNodes.backCulled, shadowMaps );

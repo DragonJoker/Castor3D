@@ -1,4 +1,4 @@
-﻿namespace GuiCommon
+namespace GuiCommon
 {
 	template< typename MyValueT >
 	wxPGProperty * TreeItemProperty::createProperty( wxPropertyGrid * grid

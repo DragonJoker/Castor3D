@@ -97,14 +97,14 @@ namespace castor3d
 		 *\~french
 		 *\brief		Initialise le programme.
 		 */
-		C3D_API bool initialise();
+		C3D_API bool initialise( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Cleans the program up.
 		 *\~french
 		 *\brief		Nettoie le programme.
 		 */
-		C3D_API void cleanup();
+		C3D_API void cleanup( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Sets the shader file.

@@ -120,7 +120,7 @@ namespace castor3d
 		return m_passesData[index].views[size_t( texture )];
 	}
 
-	void ShadowMapPoint::doInitialiseFramebuffers()
+	void ShadowMapPoint::doInitialiseFramebuffers( RenderDevice const & device )
 	{
 		VkExtent2D size
 		{
@@ -185,26 +185,26 @@ namespace castor3d
 		}
 	}
 
-	void ShadowMapPoint::doInitialise()
+	void ShadowMapPoint::doInitialise( RenderDevice const & device )
 	{
-		doInitialiseFramebuffers();
+		doInitialiseFramebuffers( device );
 		uint32_t index = 0u;
 
 		for ( auto & data : m_passesData )
 		{
 			std::string debugName = "ShadowMapPoint" + std::to_string( index++ );
-			auto & device = getCurrentRenderDevice( *this );
 			data.commandBuffer = device.graphicsCommandPool->createCommandBuffer( debugName );
 			data.finished = device->createSemaphore( debugName );
 		}
 	}
 
-	void ShadowMapPoint::doCleanup()
+	void ShadowMapPoint::doCleanup( RenderDevice const & device )
 	{
 		m_passesData.clear();
 	}
 
-	ashes::Semaphore const & ShadowMapPoint::doRender( ashes::Semaphore const & toWait
+	ashes::Semaphore const & ShadowMapPoint::doRender( RenderDevice const & device
+		, ashes::Semaphore const & toWait
 		, uint32_t index )
 	{
 		auto & myTimer = m_passes[0].pass->getTimer();
@@ -249,7 +249,6 @@ namespace castor3d
 
 		commandBuffer.endDebugBlock();
 		commandBuffer.end();
-		auto & device = getCurrentRenderDevice( *this );
 
 		device.graphicsQueue->submit( commandBuffer
 			, *result

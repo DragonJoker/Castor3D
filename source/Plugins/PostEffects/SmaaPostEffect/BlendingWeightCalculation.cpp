@@ -832,10 +832,9 @@ namespace smaa
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ashes::SamplerPtr doCreateSampler( castor3d::Engine & engine
+		ashes::SamplerPtr doCreateSampler( castor3d::RenderDevice const & device
 			, castor::String const & name )
 		{
-			auto & device = getCurrentRenderDevice( engine );
 			ashes::SamplerCreateInfo sampler
 			{
 				0u,
@@ -862,13 +861,14 @@ namespace smaa
 	//*********************************************************************************************
 
 	BlendingWeightCalculation::BlendingWeightCalculation( castor3d::RenderTarget & renderTarget
+		, castor3d::RenderDevice const & device
 		, ashes::ImageView const & edgeDetectionView
 		, castor3d::TextureLayoutSPtr depthView
 		, SmaaConfig const & config )
-		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), cuT( "SmaaBlendingWeightCalculation" ), VK_FILTER_LINEAR, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
+		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), device, cuT( "SmaaBlendingWeightCalculation" ), VK_FILTER_LINEAR, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
 		, m_edgeDetectionView{ edgeDetectionView }
 		, m_surface{ *renderTarget.getEngine(), getName() }
-		, m_pointSampler{ doCreateSampler( *renderTarget.getEngine(), cuT( "SMAA_Point" ) ) }
+		, m_pointSampler{ doCreateSampler( device, cuT( "SMAA_Point" ) ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName() }
 	{
@@ -877,7 +877,7 @@ namespace smaa
 		VkExtent2D size{ m_edgeDetectionView.image->getDimensions().width
 			, m_edgeDetectionView.image->getDimensions().height };
 
-		m_ubo = getCurrentRenderDevice( m_renderSystem ).uboPools->getBuffer< castor::Point4f >( 0u );
+		m_ubo = m_device.uboPools->getBuffer< castor::Point4f >( 0u );
 		
 		ashes::ImageCreateInfo image
 		{
@@ -902,7 +902,7 @@ namespace smaa
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SmaaAreaTex" ) );
 		m_areaTex->setSource( areaTexBuffer, true );
-		m_areaTex->initialise();
+		m_areaTex->initialise( m_device );
 
 		auto searchTexBuffer = PxBufferBase::create( Size{ SEARCHTEX_WIDTH, SEARCHTEX_HEIGHT }
 			, PixelFormat::eR8_UNORM
@@ -914,7 +914,7 @@ namespace smaa
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SmaaSearchTex" ) );
 		m_searchTex->setSource( searchTexBuffer, true );
-		m_searchTex->initialise();
+		m_searchTex->initialise( m_device );
 
 		// Create the render pass.
 		ashes::VkAttachmentDescriptionArray attachments
@@ -981,8 +981,7 @@ namespace smaa
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		auto & device = getCurrentRenderDevice( m_renderSystem );
-		m_renderPass = device->createRenderPass( getName()
+		m_renderPass = m_device->createRenderPass( getName()
 			, std::move( createInfo ) );
 
 		auto pixelSize = Point4f{ 1.0f / size.width, 1.0f / size.height, float( size.width ), float( size.height ) };
@@ -994,8 +993,8 @@ namespace smaa
 			, config );
 
 		ashes::PipelineShaderStageCreateInfoArray stages;
-		stages.push_back( makeShaderState( device, m_vertexShader ) );
-		stages.push_back( makeShaderState( device, m_pixelShader ) );
+		stages.push_back( makeShaderState( m_device, m_vertexShader ) );
+		stages.push_back( makeShaderState( m_device, m_pixelShader ) );
 
 		ashes::PipelineDepthStencilStateCreateInfo dsstate{ 0u, VK_FALSE, VK_FALSE };
 		dsstate->stencilTestEnable = VK_TRUE;
@@ -1021,7 +1020,8 @@ namespace smaa
 			, std::move( setLayoutBindings )
 			, {}
 			, std::move( dsstate ) );
-		m_surface.initialise( *m_renderPass
+		m_surface.initialise( m_device 
+			, *m_renderPass
 			, castor::Size{ size.width, size.height }
 			, colourFormat
 			, depthView );
@@ -1033,20 +1033,19 @@ namespace smaa
 		m_searchTex.reset();
 		m_areaTex->cleanup();
 		m_areaTex.reset();
-		getCurrentRenderDevice( m_renderSystem ).uboPools->putBuffer( m_ubo );
+		m_device.uboPools->putBuffer( m_ubo );
 		m_pointSampler.reset();
-		m_surface.cleanup();
-		m_renderPass.reset();;
+		m_surface.cleanup( m_device );
+		m_renderPass.reset();
 	}
 
 	castor3d::CommandsSemaphore BlendingWeightCalculation::prepareCommands( castor3d::RenderPassTimer const & timer
 		, uint32_t passIndex )
 	{
-		auto & device = getCurrentRenderDevice( m_renderSystem );
 		castor3d::CommandsSemaphore blendingWeightCommands
 		{
-			device.graphicsCommandPool->createCommandBuffer( getName() ),
-			device->createSemaphore( getName() )
+			m_device.graphicsCommandPool->createCommandBuffer( getName() ),
+			m_device->createSemaphore( getName() )
 		};
 		auto & blendingWeightCmd = *blendingWeightCommands.commandBuffer;
 

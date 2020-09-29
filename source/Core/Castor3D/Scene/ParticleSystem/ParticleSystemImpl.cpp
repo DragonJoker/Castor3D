@@ -15,9 +15,4 @@ namespace castor3d
 	ParticleSystemImpl::~ParticleSystemImpl()
 	{
 	}
-
-	RenderDevice const & getCurrentRenderDevice( ParticleSystem const & object )
-	{
-		return getCurrentRenderDevice( static_cast< MovableObject const & >( object ) );
-	}
 }

@@ -29,13 +29,6 @@ namespace castor3d
 		C3D_API explicit BonesComponent( Submesh & submesh );
 		/**
 		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API ~BonesComponent();
-		/**
-		 *\~english
 		 *\brief		adds bone datas.
 		 *\param[in]	begin	The bones data begin.
 		 *\param[in]	end		The bones data end.
@@ -133,9 +126,9 @@ namespace castor3d
 		}
 
 	private:
-		bool doInitialise()override;
+		bool doInitialise( RenderDevice const & device )override;
 		void doCleanup()override;
-		void doFill()override;
+		void doFill( RenderDevice const & device )override;
 		void doUpload()override;
 
 	public:

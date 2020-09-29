@@ -39,6 +39,7 @@ namespace castor3d
 		 *\param[in]	normals					Le tampon de normales.
 		 */
 		SsaoRawAOPass( Engine & engine
+			, RenderDevice const & device
 			, VkExtent2D const & size
 			, SsaoConfig const & config
 			, SsaoConfigUbo & ssaoConfigUbo
@@ -89,6 +90,7 @@ namespace castor3d
 			: castor3d::RenderQuad
 		{
 			RenderQuad( Engine & engine
+				, RenderDevice const & device
 				, ashes::RenderPass const & renderPass
 				, VkExtent2D const & size
 				, SsaoConfigUbo & ssaoConfigUbo
@@ -111,6 +113,7 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
+		RenderDevice const & m_device;
 		SsaoConfig const & m_ssaoConfig;
 		SsaoConfigUbo & m_ssaoConfigUbo;
 		GpInfoUbo const & m_gpInfoUbo;

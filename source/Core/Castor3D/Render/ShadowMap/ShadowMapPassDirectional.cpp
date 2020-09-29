@@ -76,9 +76,9 @@ namespace castor3d
 		}
 	}
 
-	bool ShadowMapPassDirectional::doInitialise( Size const & size )
+	bool ShadowMapPassDirectional::doInitialise( RenderDevice const & device
+		, Size const & size )
 	{
-		auto & device = getCurrentRenderDevice( *this );
 		std::array< VkImageLayout, size_t( SmTexture::eCount ) > FinalLayouts
 		{
 			VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
@@ -161,7 +161,7 @@ namespace castor3d
 		return m_initialised;
 	}
 
-	void ShadowMapPassDirectional::doCleanup()
+	void ShadowMapPassDirectional::doCleanup( RenderDevice const & device )
 	{
 		m_renderQueue.cleanup();
 		getCuller().getCamera().detach();

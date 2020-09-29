@@ -90,8 +90,9 @@ namespace grayscale
 	//*********************************************************************************************
 
 	PostEffect::Quad::Quad( castor3d::RenderSystem & renderSystem
+		, castor3d::RenderDevice const & device
 		, castor3d::UniformBufferOffsetT< castor::Point3f > const & configUbo )
-		: castor3d::RenderQuad{ renderSystem, cuT( "GrayScale" ), VK_FILTER_NEAREST, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
+		: castor3d::RenderQuad{ renderSystem, device, cuT( "GrayScale" ), VK_FILTER_NEAREST, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
 		, m_configUbo{ configUbo }
 	{
 	}
@@ -153,10 +154,10 @@ namespace grayscale
 			, m_factors );
 	}
 
-	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
+	bool PostEffect::doInitialise( castor3d::RenderDevice const & device
+		, castor3d::RenderPassTimer const & timer )
 	{
 		auto & renderSystem = *getRenderSystem();
-		auto & device = getCurrentRenderDevice( *this );
 		VkExtent2D size{ m_target->getWidth(), m_target->getHeight() };
 		m_vertexShader.shader = getVertexProgram( renderSystem );
 		m_pixelShader.shader = getFragmentProgram();
@@ -231,7 +232,9 @@ namespace grayscale
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, VK_SHADER_STAGE_FRAGMENT_BIT )
 		};
-		m_quad = std::make_unique< Quad >( renderSystem, m_configUbo );
+		m_quad = std::make_unique< Quad >( renderSystem
+			, device
+			, m_configUbo );
 		m_quad->createPipeline( size
 			, castor::Position{}
 			, stages
@@ -240,7 +243,8 @@ namespace grayscale
 			, std::move( bindings )
 			, {} );
 
-		auto result = m_surface.initialise( *m_renderPass
+		auto result = m_surface.initialise( device
+			, *m_renderPass
 			, castor::Size{ m_target->getWidth(), m_target->getHeight() }
 			, m_target->getPixelFormat() );
 
@@ -276,13 +280,12 @@ namespace grayscale
 		return result;
 	}
 
-	void PostEffect::doCleanup()
+	void PostEffect::doCleanup( castor3d::RenderDevice const & device )
 	{
 		m_quad.reset();
 		m_renderPass.reset();
-		m_surface.cleanup();
-		auto & renderSystem = *getRenderSystem();
-		getCurrentRenderDevice( renderSystem ).uboPools->putBuffer( m_configUbo );
+		m_surface.cleanup( device );
+		device.uboPools->putBuffer( m_configUbo );
 	}
 
 	bool PostEffect::doWriteInto( castor::TextFile & file, castor::String const & tabs )

@@ -57,6 +57,7 @@ namespace castor3d
 		 *\param[in]	ssao			L'image SSAO.
 		 */
 		C3D_API OpaqueResolvePass( Engine & engine
+			, RenderDevice const & device
 			, Scene & scene
 			, OpaquePassResult const & gp
 			, TextureUnit const & lightDiffuse
@@ -100,6 +101,7 @@ namespace castor3d
 			ProgramPipeline & operator=( ProgramPipeline const & ) = delete;
 			ProgramPipeline & operator=( ProgramPipeline && ) = delete;
 			ProgramPipeline( Engine & engine
+				, RenderDevice const & device
 				, OpaquePassResult const & gp
 				, ashes::DescriptorSetLayout const & uboLayout
 				, ashes::DescriptorSetLayout const & texLayout

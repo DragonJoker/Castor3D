@@ -22,6 +22,7 @@ namespace castor3d
 	ToneMapping::ToneMapping( castor::String const & name
 		, castor::String const & fullName
 		, Engine & engine
+		, RenderDevice const & device
 		, HdrConfigUbo & hdrConfigUbo
 		, Parameters const & parameters )
 		: OwnedBy< Engine >{ engine }
@@ -41,8 +42,7 @@ namespace castor3d
 		, TextureLayout const & source
 		, ashes::RenderPass const & renderPass )
 	{
-		auto & device = getCurrentRenderDevice( m_renderSystem );
-		m_signalFinished = device->createSemaphore( m_fullName );
+		m_signalFinished = m_device->createSemaphore( m_fullName );
 
 		{
 			VertexWriter writer;
@@ -68,8 +68,8 @@ namespace castor3d
 		m_pixelShader.shader = doCreate();
 		ashes::PipelineShaderStageCreateInfoArray program
 		{
-			makeShaderState( device, m_vertexShader ),
-			makeShaderState( device, m_pixelShader ),
+			makeShaderState( m_device, m_vertexShader ),
+			makeShaderState( m_device, m_pixelShader ),
 		};
 		ashes::VkDescriptorSetLayoutBindingArray bindings
 		{

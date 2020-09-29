@@ -62,7 +62,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Initialise le sous-maillage
 		 */
-		C3D_API void initialise();
+		C3D_API void initialise( RenderDevice const & device );
 		/**
 		*\~english
 		*\brief		Cleans the submesh
@@ -350,7 +350,7 @@ namespace castor3d
 		inline VkPrimitiveTopology getTopology()const;
 
 	private:
-		void doGenerateVertexBuffer();
+		void doGenerateVertexBuffer( RenderDevice const & device );
 
 	public:
 		static uint32_t constexpr Position = 0u;

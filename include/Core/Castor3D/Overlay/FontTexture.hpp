@@ -46,14 +46,14 @@ namespace castor3d
 		 *\~french
 		 *\brief		Initialise la texture.
 		 */
-		C3D_API void initialise();
+		C3D_API void initialise( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Flushes the teture.
 		 *\~french
 		 *\brief		Nettoie la texture.
 		 */
-		C3D_API void cleanup();
+		C3D_API void cleanup( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Updates the glyphs.

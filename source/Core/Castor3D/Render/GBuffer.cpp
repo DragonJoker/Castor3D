@@ -18,7 +18,7 @@ namespace castor3d
 		VkFormat getDepthFormat( Engine & engine
 			, VkFormat format )
 		{
-			auto & device = getCurrentRenderDevice( engine );
+			auto & device = *engine.getRenderSystem()->getMainRenderDevice();
 			std::vector< VkFormat > depthFormats
 			{
 				format,
@@ -32,7 +32,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	TextureUnit GBufferBase::doInitialiseTexture( Engine & engine
+	TextureUnit GBufferBase::doCreateTexture( Engine & engine
 		, castor::String const & name
 		, VkImageCreateFlags createFlags
 		, VkExtent3D const & size

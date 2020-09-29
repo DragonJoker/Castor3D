@@ -163,6 +163,7 @@ namespace light_streaks
 	//*********************************************************************************************
 
 	PostEffect::Surface::Surface( castor3d::RenderSystem & renderSystem
+		, castor3d::RenderDevice const & device
 		, VkFormat format
 		, VkExtent2D const & size
 		, ashes::RenderPass const & renderPass
@@ -187,7 +188,7 @@ namespace light_streaks
 			, imageCreateInfo
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, debugName );
-		image->initialise();
+		image->initialise( device );
 
 		ashes::ImageViewCRefArray attachments{ image->getDefaultView().getTargetView() };
 		frameBuffer = renderPass.createFrameBuffer( debugName
@@ -270,12 +271,12 @@ namespace light_streaks
 		visitor.visit( m_pipelines.combine.pixelShader );
 	}
 
-	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
+	bool PostEffect::doInitialise( castor3d::RenderDevice const & device
+		, castor3d::RenderPassTimer const & timer )
 	{
-		m_kawaseUbo.initialise();
-		m_linearSampler->initialise();
-		m_nearestSampler->initialise();
-		auto & device = getCurrentRenderDevice( *this );
+		m_kawaseUbo.initialise( device );
+		m_linearSampler->initialise( device );
+		m_nearestSampler->initialise( device );
 		VkExtent2D size{ m_target->getWidth(), m_target->getHeight() };
 
 		// Create vertex buffer
@@ -418,11 +419,13 @@ namespace light_streaks
 		for ( auto i = 0u; i < Count; ++i )
 		{
 			m_pipelines.hiPass.surfaces.emplace_back( *getRenderSystem()
+				, device
 				, m_target->getPixelFormat()
 				, size
 				, *m_renderPass
 				, cuT( "LightStreaksHiPassSurface" ) );
 			m_pipelines.kawase.surfaces.emplace_back( *getRenderSystem()
+				, device
 				, m_target->getPixelFormat()
 				, size
 				, *m_renderPass
@@ -438,30 +441,30 @@ namespace light_streaks
 			}
 		}
 
-		bool result = doInitialiseHiPassProgram();
+		bool result = doInitialiseHiPassProgram( device );
 
 		if ( result )
 		{
-			result = doInitialiseKawaseProgram();
+			result = doInitialiseKawaseProgram( device );
 		}
 
 		if ( result )
 		{
-			result = doInitialiseCombineProgram();
+			result = doInitialiseCombineProgram( device );
 		}
 
 		if ( result )
 		{
-			result = doBuildCommandBuffer( timer );
+			result = doBuildCommandBuffer( device, timer );
 		}
 
 		m_result = m_pipelines.combine.surfaces[0].image.get();
 		return result;
 	}
 
-	void PostEffect::doCleanup()
+	void PostEffect::doCleanup( castor3d::RenderDevice const & device )
 	{
-		m_kawaseUbo.cleanup();
+		m_kawaseUbo.cleanup( device );
 		m_vertexBuffer.reset();
 
 		Pipeline dummy1
@@ -529,11 +532,9 @@ namespace light_streaks
 		return sampler;
 	}
 
-	bool PostEffect::doInitialiseHiPassProgram()
+	bool PostEffect::doInitialiseHiPassProgram( castor3d::RenderDevice const & device )
 	{
 		VkExtent2D size{ m_target->getWidth(), m_target->getHeight() };
-		auto & renderSystem = *getRenderSystem();
-		auto & device = getCurrentRenderDevice( *this );
 		m_pipelines.hiPass.vertexShader.shader = getVertexProgram( getRenderSystem() );
 		m_pipelines.hiPass.pixelShader.shader = getHiPassProgram( getRenderSystem() );
 
@@ -587,11 +588,9 @@ namespace light_streaks
 		return true;
 	}
 
-	bool PostEffect::doInitialiseKawaseProgram()
+	bool PostEffect::doInitialiseKawaseProgram( castor3d::RenderDevice const & device )
 	{
 		VkExtent2D size{ m_target->getWidth(), m_target->getHeight() };
-		auto & renderSystem = *getRenderSystem();
-		auto & device = getCurrentRenderDevice( *this );
 		m_pipelines.kawase.vertexShader.shader = getVertexProgram( getRenderSystem() );
 		m_pipelines.kawase.pixelShader.shader = getKawaseProgram( getRenderSystem() );
 
@@ -657,13 +656,12 @@ namespace light_streaks
 		return true;
 	}
 
-	bool PostEffect::doInitialiseCombineProgram()
+	bool PostEffect::doInitialiseCombineProgram( castor3d::RenderDevice const & device )
 	{
 		VkExtent2D size{ m_target->getWidth(), m_target->getHeight() };
 		auto & renderSystem = *getRenderSystem();
-		auto & device = getCurrentRenderDevice( *this );
-		m_pipelines.combine.vertexShader.shader = getVertexProgram( getRenderSystem() );
-		m_pipelines.combine.pixelShader.shader = getCombineProgram( getRenderSystem() );
+		m_pipelines.combine.vertexShader.shader = getVertexProgram( &renderSystem );
+		m_pipelines.combine.pixelShader.shader = getCombineProgram( &renderSystem );
 
 		// Create pipeline
 		ashes::PipelineVertexInputStateCreateInfo inputState
@@ -702,6 +700,7 @@ namespace light_streaks
 
 		// Create view and associated frame buffer.
 		m_pipelines.combine.surfaces.emplace_back( *getRenderSystem()
+			, device
 			, m_target->getPixelFormat()
 			, size
 			, *m_renderPass
@@ -729,9 +728,9 @@ namespace light_streaks
 		return true;
 	}
 
-	bool PostEffect::doBuildCommandBuffer( castor3d::RenderPassTimer const & timer )
+	bool PostEffect::doBuildCommandBuffer( castor3d::RenderDevice const & device
+		, castor3d::RenderPassTimer const & timer )
 	{
-		auto & device = getCurrentRenderDevice( *this );
 		VkExtent2D size{ m_target->getWidth(), m_target->getHeight() };
 
 		// Fill command buffer.

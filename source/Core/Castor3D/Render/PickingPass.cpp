@@ -4,7 +4,7 @@
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Cache/GeometryCache.hpp"
-#include "Castor3D/Event/Frame/FunctorEvent.hpp"
+#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
@@ -282,24 +282,24 @@ namespace castor3d
 			, culler
 			, nullptr }
 	{
-		engine.sendEvent( makeFunctorEvent( EventType::ePreRender
-			, [this]()
+		engine.sendEvent( makeGpuFunctorEvent( EventType::ePreRender
+			, [this]( RenderDevice const & device )
 			{
-				auto & device = getCurrentRenderDevice( *this );
 				m_transferFence = device->createFence( "PickingPass" );
 			} ) );
 	}
 
 	PickingPass::~PickingPass()
 	{
-		cleanup();
+		CU_Assert( m_commandBuffer == nullptr, "Did you forget to call PickingPass::cleanup ?" );
 	}
 
 	void PickingPass::addScene( Scene & scene, Camera & camera )
 	{
 	}
 
-	PickNodeType PickingPass::pick( castor::Position position
+	PickNodeType PickingPass::pick( RenderDevice const & device
+		, castor::Position position
 		, Camera const & camera )
 	{
 		m_pickNodeType = PickNodeType::eNone;
@@ -325,7 +325,7 @@ namespace castor3d
 		if ( m_renderQueue.getCulledRenderNodes().hasNodes() )
 		{
 			doUpdateNodes( m_renderQueue.getCulledRenderNodes() );
-			auto pixel = doFboPick( position, myCamera, m_renderQueue.getCommandBuffer() );
+			auto pixel = doFboPick( device, position, myCamera, m_renderQueue.getCommandBuffer() );
 			m_pickNodeType = doPick( pixel, m_renderQueue.getCulledRenderNodes() );
 		}
 		return m_pickNodeType;
@@ -345,7 +345,8 @@ namespace castor3d
 		doUpdate( nodes.billboardNodes.backCulled );
 	}
 
-	Point4f PickingPass::doFboPick( Position const & position
+	Point4f PickingPass::doFboPick( RenderDevice const & device
+		, Position const & position
 		, Camera const & camera
 		, ashes::CommandBuffer const & commandBuffer )
 	{
@@ -395,7 +396,6 @@ namespace castor3d
 
 		m_commandBuffer->end();
 
-		auto & device = getCurrentRenderDevice( *this );
 		device.graphicsQueue->submit( *m_commandBuffer, m_transferFence.get() );
 		m_transferFence->wait( ashes::MaxTimeout );
 		m_transferFence->reset();
@@ -534,9 +534,9 @@ namespace castor3d
 			, nodes );
 	}
 
-	bool PickingPass::doInitialise( Size const & size )
+	bool PickingPass::doInitialise( RenderDevice const & device
+		, Size const & size )
 	{
-		auto & device = getCurrentRenderDevice( *this );
 		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( "PickingPass" );
 
 		m_colourTexture = createTexture( device
@@ -659,7 +659,7 @@ namespace castor3d
 		return true;
 	}
 
-	void PickingPass::doCleanup()
+	void PickingPass::doCleanup( RenderDevice const & device )
 	{
 		m_commandBuffer.reset();
 		m_scenes.clear();

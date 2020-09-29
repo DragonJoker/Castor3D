@@ -67,19 +67,20 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		void doInitialiseFramebuffers();
+		void doInitialiseFramebuffers( RenderDevice const & device );
 		/**
 		 *\copydoc		castor3d::ShadowMap::doInitialise
 		 */
-		void doInitialise()override;
+		void doInitialise( RenderDevice const & device )override;
 		/**
 		 *\copydoc		castor3d::ShadowMap::doCleanup
 		 */
-		void doCleanup()override;
+		void doCleanup( RenderDevice const & device )override;
 		/**
 		 *\copydoc		castor3d::ShadowMap::doRender
 		 */
-		ashes::Semaphore const & doRender( ashes::Semaphore const & toWait
+		ashes::Semaphore const & doRender( RenderDevice const & device
+			, ashes::Semaphore const & toWait
 			, uint32_t index )override;
 		/**
 		 *\copydoc		castor3d::ShadowMap::isUpToDate

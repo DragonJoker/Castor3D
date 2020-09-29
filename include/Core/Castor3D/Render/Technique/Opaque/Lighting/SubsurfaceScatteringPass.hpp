@@ -43,6 +43,7 @@ namespace castor3d
 		 *\param[in]	lpResult		Le résultat de la light pass.
 		 */
 		C3D_API SubsurfaceScatteringPass( Engine & engine
+			, RenderDevice const & device
 			, GpInfoUbo const & gpInfoUbo
 			, SceneUbo & sceneUbo
 			, castor::Size const & textureSize
@@ -55,8 +56,8 @@ namespace castor3d
 		 *\brief		Destructeur.
 		 */
 		C3D_API ~SubsurfaceScatteringPass() = default;
-		C3D_API void initialise();
-		C3D_API void cleanup();
+		C3D_API void initialise( RenderDevice const & device );
+		C3D_API void cleanup( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Renders the subsurfaces scattering.
@@ -65,7 +66,8 @@ namespace castor3d
 		 *\brief		Dessine le subsurfaces scattering.
 		 *\param[in]	toWait	Le sémaphore à attendre.
 		 */
-		C3D_API ashes::Semaphore const & render( ashes::Semaphore const & toWait )const;
+		C3D_API ashes::Semaphore const & render( RenderDevice const & device
+			, ashes::Semaphore const & toWait )const;
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -103,6 +105,7 @@ namespace castor3d
 		{
 		public:
 			Blur( RenderSystem & renderSystem
+				, RenderDevice const & device
 				, castor::Size const & size
 				, GpInfoUbo const & gpInfoUbo
 				, SceneUbo & sceneUbo
@@ -136,6 +139,7 @@ namespace castor3d
 		{
 		public:
 			explicit Combine( RenderSystem & renderSystem
+				, RenderDevice const & device
 				, castor::Size const & size
 				, OpaquePassResult const & gpResult
 				, TextureUnit const & source

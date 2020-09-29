@@ -274,6 +274,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	LightVolumeGIPass::LightVolumeGIPass( Engine & engine
+		, RenderDevice const & device
 		, LightType lightType
 		, GpInfoUbo const & gpInfo
 		, LpvConfigUbo const & lpvConfigUbo
@@ -281,9 +282,10 @@ namespace castor3d
 		, LightVolumePassResult const & lpResult
 		, TextureUnit const & dst )
 		: RenderQuad{ *engine.getRenderSystem()
+			, device
 			, castor3d::getName( lightType ) + "VplGI"
 			, VK_FILTER_LINEAR
-			, { ashes::nullopt, RenderQuadConfig::Texcoord{}, BlendMode::eAdditive } }
+			, { ashes::nullopt, RenderQuadConfig::Texcoord{}, BlendMode::eAdditive, ashes::nullopt, true } }
 		, m_gpInfo{ gpInfo }
 		, m_lpvConfigUbo{ lpvConfigUbo }
 		, m_gpResult{ gpResult }
@@ -291,16 +293,15 @@ namespace castor3d
 		, m_result{ dst }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram() }
-		, m_renderPass{ doCreateRenderPass( getCurrentRenderDevice( m_renderSystem )
+		, m_renderPass{ doCreateRenderPass( device
 			, m_result.getTexture()->getPixelFormat() ) }
 		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass
 			, m_result.getTexture()->getDefaultView().getTargetView() ) }
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Light Propagation Volumes" ), cuT( "GI Resolve" ) ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( engine, m_device, cuT( "Light Propagation Volumes" ), cuT( "GI Resolve" ) ) }
 	{
-		auto & device = getCurrentRenderDevice( m_renderSystem );
 		ashes::PipelineShaderStageCreateInfoArray shaderStages;
-		shaderStages.push_back( makeShaderState( device, m_vertexShader ) );
-		shaderStages.push_back( makeShaderState( device, m_pixelShader ) );
+		shaderStages.push_back( makeShaderState( m_device, m_vertexShader ) );
+		shaderStages.push_back( makeShaderState( m_device, m_pixelShader ) );
 
 		ashes::VkDescriptorSetLayoutBindingArray bindings
 		{
@@ -338,12 +339,11 @@ namespace castor3d
 	ashes::Semaphore const & LightVolumeGIPass::compute( ashes::Semaphore const & toWait )const
 	{
 		auto & renderSystem = m_renderSystem;
-		auto & device = getCurrentRenderDevice( renderSystem );
 		RenderPassTimerBlock timerBlock{ m_timer->start() };
 		timerBlock->notifyPassRender();
 		auto * result = &toWait;
 
-		device.graphicsQueue->submit( *m_commandBuffer
+		m_device.graphicsQueue->submit( *m_commandBuffer
 			, toWait
 			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, *m_finished
@@ -356,11 +356,10 @@ namespace castor3d
 	CommandsSemaphore LightVolumeGIPass::getCommands( RenderPassTimer const & timer
 		, uint32_t index )const
 	{
-		auto & device = getCurrentRenderDevice( m_renderSystem );
 		castor3d::CommandsSemaphore commands
 		{
-			device.graphicsCommandPool->createCommandBuffer( getName() ),
-			device->createSemaphore( getName() )
+			m_device.graphicsCommandPool->createCommandBuffer( getName() ),
+			m_device->createSemaphore( getName() )
 		};
 		auto & cmd = *commands.commandBuffer;
 

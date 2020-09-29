@@ -47,6 +47,7 @@ namespace castor3d
 		 *\param[in]	normals			Le tampon de normales.
 		 */
 		SsaoBlurPass( Engine & engine
+			, RenderDevice const & device
 			, castor::String const & prefix
 			, VkExtent2D const & size
 			, SsaoConfig const & config

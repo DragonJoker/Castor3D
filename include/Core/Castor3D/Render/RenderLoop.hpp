@@ -37,11 +37,14 @@ namespace castor3d
 
 	struct GpuUpdater
 	{
-		explicit GpuUpdater( RenderInfo & info )
-			: info{ info }
+		explicit GpuUpdater( RenderDevice const & device
+			, RenderInfo & info )
+			: device{ device }
+			, info{ info }
 		{
 		}
 
+		RenderDevice const & device;
 		RenderInfo & info;
 		castor::Point2f jitter;
 		SceneSPtr scene;
@@ -264,6 +267,8 @@ namespace castor3d
 		};
 
 		void doProcessEvents( EventType eventType );
+		void doProcessEvents( EventType eventType
+			, RenderDevice const & device );
 		void doGpuStep( RenderInfo & info );
 		void doCpuStep();
 		void doUpdateQueues( std::vector< TechniqueQueues > & queues );

@@ -3,7 +3,6 @@
 #include "GuiCommon/Properties/Math/PointProperties.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Event/Frame/FunctorEvent.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Scene/Light/DirectionalLight.hpp>
 #include <Castor3D/Scene/Light/SpotLight.hpp>
@@ -17,75 +16,10 @@ using namespace castor;
 
 namespace GuiCommon
 {
-	namespace
-	{
-		static wxString PROPERTY_CATEGORY_LIGHT = _( "Light:" );
-		static wxString PROPERTY_CATEGORY_POINT_LIGHT = _( "Point Light" );
-		static wxString PROPERTY_CATEGORY_SPOT_LIGHT = _( "Spot Light" );
-		static wxString PROPERTY_LIGHT_COLOUR = _( "Colour" );
-		static wxString PROPERTY_LIGHT_INTENSITY = _( "Intensities" );
-		static wxString PROPERTY_LIGHT_ATTENUATION = _( "Attenuation" );
-		static wxString PROPERTY_LIGHT_CUT_OFF = _( "Cut off" );
-		static wxString PROPERTY_LIGHT_EXPONENT = _( "Exponent" );
-		static wxString PROPERTY_CATEGORY_SHADOW = _( "Shadow:" );
-		static wxString PROPERTY_SHADOW_ENABLED = _( "Enable Shadows" );
-		static wxString PROPERTY_SHADOW_TYPE = _( "Type" );
-		static wxString PROPERTY_SHADOW_TYPE_NONE = _( "None" );
-		static wxString PROPERTY_SHADOW_TYPE_RAW = _( "Raw" );
-		static wxString PROPERTY_SHADOW_TYPE_PCF = _( "PCF" );
-		static wxString PROPERTY_SHADOW_TYPE_VSM = _( "VSM" );
-		static wxString PROPERTY_SHADOW_MIN_OFFSET = _( "Min. Offset" );
-		static wxString PROPERTY_SHADOW_MAX_SLOPE_OFFSET = _( "Max. Slope Offset" );
-		static wxString PROPERTY_SHADOW_MAX_VARIANCE = _( "Max. Variance" );
-		static wxString PROPERTY_SHADOW_VARIANCE_BIAS = _( "Variance Bias" );
-		static wxString PROPERTY_SHADOW_VOLUMETRIC_STEPS = _( "Volumetric Steps" );
-		static wxString PROPERTY_SHADOW_VOLUMETRIC_SCATTERING_FACTOR = _( "Volumetric Scattering Factor" );
-		static wxString PROPERTY_CATEGORY_GLOBAL_ILLUM = _( "Global Illumination" );
-		static wxString PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE = _( "GI Type" );
-		static wxString PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_NONE = _( "None" );
-		static wxString PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_RSM = _( "RSM" );
-		static wxString PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LPV = _( "LPV" );
-		static wxString PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LAYERED_LPV = _( "Layered LPV" );
-		static wxString PROPERTY_SHADOW_RSM_INTENSITY = _( "Intensity" );
-		static wxString PROPERTY_SHADOW_RSM_MAX_RADIUS = _( "Max. Radius" );
-		static wxString PROPERTY_SHADOW_RSM_SAMPLE_COUNT = _( "Sample Count" );
-	}
-
 	LightTreeItemProperty::LightTreeItemProperty( bool editable, Light & light )
 		: TreeItemProperty( light.getScene()->getEngine(), editable, ePROPERTY_DATA_TYPE_LIGHT )
 		, m_light( light )
 	{
-		PROPERTY_CATEGORY_LIGHT = _( "Light: " );
-		PROPERTY_CATEGORY_POINT_LIGHT = _( "Point Light" );
-		PROPERTY_CATEGORY_SPOT_LIGHT = _( "Spot Light" );
-		PROPERTY_LIGHT_COLOUR = _( "Colour" );
-		PROPERTY_LIGHT_INTENSITY = _( "Intensities" );
-		PROPERTY_LIGHT_ATTENUATION = _( "Attenuation" );
-		PROPERTY_LIGHT_CUT_OFF = _( "Cut off" );
-		PROPERTY_LIGHT_EXPONENT = _( "Exponent" );
-		PROPERTY_CATEGORY_SHADOW = _( "Shadow:" );
-		PROPERTY_SHADOW_ENABLED = _( "Enabled" );
-		PROPERTY_SHADOW_TYPE = _( "Type" );
-		PROPERTY_SHADOW_TYPE_NONE = _( "None" );
-		PROPERTY_SHADOW_TYPE_RAW = _( "Raw" );
-		PROPERTY_SHADOW_TYPE_PCF = _( "PCF" );
-		PROPERTY_SHADOW_TYPE_VSM = _( "VSM" );
-		PROPERTY_SHADOW_MIN_OFFSET = _( "Min. Offset" );
-		PROPERTY_SHADOW_MAX_SLOPE_OFFSET = _( "Max. Slope Offset" );
-		PROPERTY_SHADOW_MAX_VARIANCE = _( "Max. Variance" );
-		PROPERTY_SHADOW_VARIANCE_BIAS = _( "Variance Bias" );
-		PROPERTY_SHADOW_VOLUMETRIC_STEPS = _( "Volumetric Steps" );
-		PROPERTY_SHADOW_VOLUMETRIC_SCATTERING_FACTOR = _( "Volumetric Scattering Factor" );
-		PROPERTY_CATEGORY_GLOBAL_ILLUM = _( "Global Illumination" );
-		PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_NONE = _( "None" );
-		PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_RSM = _( "RSM" );
-		PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LPV = _( "LPV" );
-		PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LAYERED_LPV = _( "Layered LPV" );
-		PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE = _( "GI Type" );
-		PROPERTY_SHADOW_RSM_INTENSITY = _( "Intensity" );
-		PROPERTY_SHADOW_RSM_MAX_RADIUS = _( "Max. Radius" );
-		PROPERTY_SHADOW_RSM_SAMPLE_COUNT = _( "Sample Count" );
-
 		CreateTreeItemMenu();
 	}
 
@@ -95,6 +29,10 @@ namespace GuiCommon
 
 	void LightTreeItemProperty::doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )
 	{
+		static wxString PROPERTY_CATEGORY_LIGHT = _( "Light:" );
+		static wxString PROPERTY_LIGHT_COLOUR = _( "Colour" );
+		static wxString PROPERTY_LIGHT_INTENSITY = _( "Intensities" );
+
 		addProperty( grid, PROPERTY_CATEGORY_LIGHT + wxString( m_light.getName() ) );
 		addPropertyT( grid, PROPERTY_LIGHT_COLOUR, m_light.getColour(), &m_light, ( void ( Light:: * )( castor::Point3f const & ) ) & Light::setColour );
 		addPropertyT( grid, PROPERTY_LIGHT_INTENSITY, m_light.getIntensity(), &m_light, &Light::setIntensity );
@@ -123,12 +61,20 @@ namespace GuiCommon
 
 	void LightTreeItemProperty::doCreatePointLightProperties( wxPropertyGrid * grid, PointLight & light )
 	{
+		static wxString PROPERTY_CATEGORY_POINT_LIGHT = _( "Point Light" );
+		static wxString PROPERTY_LIGHT_ATTENUATION = _( "Attenuation" );
+
 		addProperty( grid, PROPERTY_CATEGORY_POINT_LIGHT );
 		addPropertyT( grid, PROPERTY_LIGHT_ATTENUATION, light.getAttenuation(), &light, &PointLight::setAttenuation );
 	}
 
 	void LightTreeItemProperty::doCreateSpotLightProperties( wxPropertyGrid * grid, SpotLight & light )
 	{
+		static wxString PROPERTY_CATEGORY_SPOT_LIGHT = _( "Spot Light" );
+		static wxString PROPERTY_LIGHT_ATTENUATION = _( "Attenuation" );
+		static wxString PROPERTY_LIGHT_CUT_OFF = _( "Cut off" );
+		static wxString PROPERTY_LIGHT_EXPONENT = _( "Exponent" );
+
 		addProperty( grid, PROPERTY_CATEGORY_SPOT_LIGHT );
 		addPropertyT( grid, PROPERTY_LIGHT_ATTENUATION, light.getAttenuation(), &light, &SpotLight::setAttenuation );
 		addPropertyT( grid, PROPERTY_LIGHT_CUT_OFF, light.getCutOff(), &light, &SpotLight::setCutOff );
@@ -137,6 +83,29 @@ namespace GuiCommon
 
 	void LightTreeItemProperty::doCreateShadowProperties( wxPropertyGrid * grid )
 	{
+		static wxString PROPERTY_CATEGORY_SHADOW = _( "Shadow:" );
+		static wxString PROPERTY_SHADOW_ENABLED = _( "Enable Shadows" );
+		static wxString PROPERTY_SHADOW_TYPE = _( "Type" );
+		static wxString PROPERTY_SHADOW_TYPE_NONE = _( "None" );
+		static wxString PROPERTY_SHADOW_TYPE_RAW = _( "Raw" );
+		static wxString PROPERTY_SHADOW_TYPE_PCF = _( "PCF" );
+		static wxString PROPERTY_SHADOW_TYPE_VSM = _( "VSM" );
+		static wxString PROPERTY_SHADOW_MIN_OFFSET = _( "Min. Offset" );
+		static wxString PROPERTY_SHADOW_MAX_SLOPE_OFFSET = _( "Max. Slope Offset" );
+		static wxString PROPERTY_SHADOW_MAX_VARIANCE = _( "Max. Variance" );
+		static wxString PROPERTY_SHADOW_VARIANCE_BIAS = _( "Variance Bias" );
+		static wxString PROPERTY_SHADOW_VOLUMETRIC_STEPS = _( "Volumetric Steps" );
+		static wxString PROPERTY_SHADOW_VOLUMETRIC_SCATTERING_FACTOR = _( "Volumetric Scattering Factor" );
+		static wxString PROPERTY_CATEGORY_GLOBAL_ILLUM = _( "Global Illumination" );
+		static wxString PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE = _( "GI Type" );
+		static wxString PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_NONE = _( "None" );
+		static wxString PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_RSM = _( "RSM" );
+		static wxString PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LPV = _( "LPV" );
+		static wxString PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LAYERED_LPV = _( "Layered LPV" );
+		static wxString PROPERTY_SHADOW_RSM_INTENSITY = _( "Intensity" );
+		static wxString PROPERTY_SHADOW_RSM_MAX_RADIUS = _( "Max. Radius" );
+		static wxString PROPERTY_SHADOW_RSM_SAMPLE_COUNT = _( "Sample Count" );
+
 		wxArrayString shadowChoices;
 		shadowChoices.Add( PROPERTY_SHADOW_TYPE_NONE );
 		shadowChoices.Add( PROPERTY_SHADOW_TYPE_RAW );

@@ -69,7 +69,8 @@ namespace castor3d
 		 *\param		pool		Le pool de descripteurs utilisé pour binder le fond de la scène.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		bool initialise( castor::Size const & size
+		bool initialise( RenderDevice const & device
+			, castor::Size const & size
 			, uint32_t face
 			, ashes::RenderPass const & renderPass
 			, SceneBackground const & background
@@ -81,7 +82,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Nettoie la passe.
 		 */
-		void cleanup();
+		void cleanup( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Updates the render pass.
@@ -110,7 +111,8 @@ namespace castor3d
 		 *\brief		Fonction de rendu.
 		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
 		 */
-		C3D_API ashes::Semaphore const & render( ashes::Semaphore const & toWait );
+		C3D_API ashes::Semaphore const & render( RenderDevice const & device
+			, ashes::Semaphore const & toWait );
 
 	private:
 		SceneNodeSPtr m_node;

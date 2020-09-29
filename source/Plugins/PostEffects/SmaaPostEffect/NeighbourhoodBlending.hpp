@@ -19,6 +19,7 @@ namespace smaa
 	{
 	public:
 		NeighbourhoodBlending( castor3d::RenderTarget & renderTarget
+			, castor3d::RenderDevice const & device
 			, ashes::ImageView const & sourceView
 			, ashes::ImageView const & blendView
 			, ashes::ImageView const * velocityView

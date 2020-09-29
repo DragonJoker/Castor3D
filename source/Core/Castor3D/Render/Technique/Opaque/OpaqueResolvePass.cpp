@@ -845,7 +845,8 @@ namespace castor3d
 			};
 		}
 
-		inline ashes::DescriptorSetLayoutPtr doCreateUboDescriptorLayout( Engine & engine )
+		inline ashes::DescriptorSetLayoutPtr doCreateUboDescriptorLayout( Engine & engine
+			, RenderDevice const & device )
 		{
 			auto & passBuffer = engine.getMaterialCache().getPassBuffer();
 			ashes::VkDescriptorSetLayoutBindingArray bindings
@@ -861,7 +862,6 @@ namespace castor3d
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ),
 			};
-			auto & device = getCurrentRenderDevice( engine );
 			auto result = device->createDescriptorSetLayout( "DeferredResolveUbo"
 				, std::move( bindings ) );
 			return result;
@@ -887,7 +887,7 @@ namespace castor3d
 			return result;
 		}
 
-		inline ashes::RenderPassPtr doCreateRenderPass( Engine & engine
+		inline ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
 			, VkFormat format )
 		{
 			ashes::VkAttachmentDescriptionArray attaches
@@ -943,15 +943,12 @@ namespace castor3d
 				std::move( subpasses ),
 				std::move( dependencies ),
 			};
-			auto & renderSystem = *engine.getRenderSystem();
-			auto & device = getCurrentRenderDevice( renderSystem );
 			auto result = device->createRenderPass( "DeferredResolve"
 				, std::move( createInfo ) );
 			return result;
 		}
 
-		inline ashes::FrameBufferPtr doCreateFrameBuffer( Engine & engine
-			, ashes::RenderPass const & renderPass
+		inline ashes::FrameBufferPtr doCreateFrameBuffer( ashes::RenderPass const & renderPass
 			, VkExtent2D const size
 			, ashes::ImageView const & view )
 		{
@@ -965,7 +962,7 @@ namespace castor3d
 			return result;
 		}
 
-		inline ashes::DescriptorSetLayoutPtr doCreateTexDescriptorLayout( Engine & engine
+		inline ashes::DescriptorSetLayoutPtr doCreateTexDescriptorLayout( RenderDevice const & device
 			, bool hasSsao
 			, MaterialType matType )
 		{
@@ -1026,22 +1023,22 @@ namespace castor3d
 				, VK_SHADER_STAGE_FRAGMENT_BIT
 				, envMapCount ) );	// c3d_mapEnvironment
 
-			auto & device = getCurrentRenderDevice( engine );
 			auto result = device->createDescriptorSetLayout( "DeferredResolveTex"
 				, std::move( bindings ) );
 			return result;
 		}
 
-		inline ashes::DescriptorSetPtr doCreateTexDescriptorSet( Engine & engine
+		inline ashes::DescriptorSetPtr doCreateTexDescriptorSet( RenderDevice const & device
 			, ashes::DescriptorSetPool & pool
 			, SamplerSPtr sampler )
 		{
-			sampler->initialise();
+			sampler->initialise( device );
 			auto result = pool.createDescriptorSet( "DeferredResolveTex", 1u );
 			return result;
 		}
 
-		inline ashes::WriteDescriptorSetArray doCreateTexDescriptorWrites( ashes::DescriptorSetLayout const & layout
+		inline ashes::WriteDescriptorSetArray doCreateTexDescriptorWrites( RenderDevice const & device
+			, ashes::DescriptorSetLayout const & layout
 			, OpaquePassResult const & gp
 			, ashes::ImageView const & lightDiffuse
 			, ashes::ImageView const & lightSpecular
@@ -1090,7 +1087,6 @@ namespace castor3d
 				envMapCount -= c_iblTexturesCount;
 			}
 
-			auto & device = getCurrentRenderDevice( scene );
 			result.push_back( { index++, 0u, envMapCount, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER } );
 			CU_Require( index < device.properties.limits.maxDescriptorSetSampledImages );
 
@@ -1184,6 +1180,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	OpaqueResolvePass::ProgramPipeline::ProgramPipeline( Engine & engine
+		, RenderDevice const & device
 		, OpaquePassResult const & gp
 		, ashes::DescriptorSetLayout const & uboLayout
 		, ashes::DescriptorSetLayout const & texLayout
@@ -1197,10 +1194,10 @@ namespace castor3d
 		, m_renderPass{ &renderPass }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "DeferredResolve" }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "DeferredResolve" }
-		, m_program{ doCreateProgram( getCurrentRenderDevice( engine ), fogType, ssao != nullptr, matType, m_vertexShader, m_pixelShader ) }
-		, m_pipelineLayout{ getCurrentRenderDevice( engine )->createPipelineLayout( "DeferredResolve", { uboLayout, texLayout } ) }
-		, m_pipeline{ doCreateRenderPipeline( getCurrentRenderDevice( engine ), *m_pipelineLayout, m_program, renderPass, size ) }
-		, m_commandBuffer{ getCurrentRenderDevice( engine ).graphicsCommandPool->createCommandBuffer( "DeferredResolve", VK_COMMAND_BUFFER_LEVEL_PRIMARY ) }
+		, m_program{ doCreateProgram( device, fogType, ssao != nullptr, matType, m_vertexShader, m_pixelShader ) }
+		, m_pipelineLayout{ device->createPipelineLayout( "DeferredResolve", { uboLayout, texLayout } ) }
+		, m_pipeline{ doCreateRenderPipeline( device, *m_pipelineLayout, m_program, renderPass, size ) }
+		, m_commandBuffer{ device.graphicsCommandPool->createCommandBuffer( "DeferredResolve", VK_COMMAND_BUFFER_LEVEL_PRIMARY ) }
 	{
 	}
 
@@ -1243,6 +1240,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	OpaqueResolvePass::OpaqueResolvePass( Engine & engine
+		, RenderDevice const & device
 		, Scene & scene
 		, OpaquePassResult const & gp
 		, TextureUnit const & lightDiffuse
@@ -1253,7 +1251,7 @@ namespace castor3d
 		, HdrConfigUbo const & hdrConfigUbo
 		, SsaoPass const * ssao )
 		: OwnedBy< Engine >{ engine }
-		, m_device{ getCurrentRenderDevice( engine ) }
+		, m_device{ device }
 		, m_scene{ scene }
 		, m_result{ result }
 		, m_sceneUbo{ sceneUbo }
@@ -1275,20 +1273,21 @@ namespace castor3d
 		auto & result = *m_result.getTexture();
 		VkExtent2D size{ result.getWidth(), result.getHeight() };
 		m_vertexBuffer = doCreateVbo( m_device );
-		m_uboDescriptorLayout = doCreateUboDescriptorLayout( engine );
+		m_uboDescriptorLayout = doCreateUboDescriptorLayout( engine, m_device );
 		m_uboDescriptorPool = m_uboDescriptorLayout->createPool( "OpaqueResolvePassUbo", 1u );
 		m_uboDescriptorSet = doCreateUboDescriptorSet( engine, *m_uboDescriptorPool, m_sceneUbo, m_gpInfoUbo, m_hdrConfigUbo );
-		m_texDescriptorLayout = doCreateTexDescriptorLayout( engine, m_ssao != nullptr, engine.getMaterialsType() );
+		m_texDescriptorLayout = doCreateTexDescriptorLayout( m_device, m_ssao != nullptr, engine.getMaterialsType() );
 		m_texDescriptorPool = m_texDescriptorLayout->createPool( "OpaqueResolvePassTex", 1u );
-		m_texDescriptorSet = doCreateTexDescriptorSet( engine, *m_texDescriptorPool, m_sampler );
-		m_renderPass = doCreateRenderPass( engine, result.getPixelFormat() );
-		m_frameBuffer = doCreateFrameBuffer( engine, *m_renderPass, size, result.getDefaultView().getSampledView() );
+		m_texDescriptorSet = doCreateTexDescriptorSet( m_device, *m_texDescriptorPool, m_sampler );
+		m_renderPass = doCreateRenderPass( m_device, result.getPixelFormat() );
+		m_frameBuffer = doCreateFrameBuffer( *m_renderPass, size, result.getDefaultView().getSampledView() );
 		m_finished = m_device->createSemaphore( "OpaqueResolvePass" );
-		m_timer = std::make_shared< RenderPassTimer >( engine, cuT( "Opaque" ), cuT( "Resolve pass" ) );
+		m_timer = std::make_shared< RenderPassTimer >( engine, m_device, cuT( "Opaque" ), cuT( "Resolve pass" ) );
 		m_programs =
 		{
 			std::make_unique< ProgramPipeline >( engine
-			, m_opaquePassResult
+				, m_device
+				, m_opaquePassResult
 				, *m_uboDescriptorLayout
 				, *m_texDescriptorLayout
 				, *m_renderPass
@@ -1299,6 +1298,7 @@ namespace castor3d
 				, FogType::eDisabled
 				, engine.getMaterialsType() ),
 			std::make_unique< ProgramPipeline >( engine
+				, m_device
 				, m_opaquePassResult
 				, *m_uboDescriptorLayout
 				, *m_texDescriptorLayout
@@ -1310,6 +1310,7 @@ namespace castor3d
 				, FogType::eLinear
 				, engine.getMaterialsType() ),
 			std::make_unique< ProgramPipeline >( engine
+				, m_device
 				, m_opaquePassResult
 				, *m_uboDescriptorLayout
 				, *m_texDescriptorLayout
@@ -1321,6 +1322,7 @@ namespace castor3d
 				, FogType::eExponential
 				, engine.getMaterialsType() ),
 			std::make_unique< ProgramPipeline >( engine
+				, m_device
 				, m_opaquePassResult
 				, *m_uboDescriptorLayout
 				, *m_texDescriptorLayout
@@ -1357,7 +1359,8 @@ namespace castor3d
 	{
 		auto index = size_t( m_scene.getFog().getType() );
 		auto & program = *m_programs[index];
-		auto texDescriptorWrites = doCreateTexDescriptorWrites( *m_texDescriptorLayout
+		auto texDescriptorWrites = doCreateTexDescriptorWrites( m_device 
+			, *m_texDescriptorLayout
 			, m_opaquePassResult
 			, m_lightDiffuse.getTexture()->getDefaultView().getSampledView()
 			, m_lightSpecular.getTexture()->getDefaultView().getSampledView()

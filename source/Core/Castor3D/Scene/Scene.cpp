@@ -15,7 +15,6 @@
 #include "Castor3D/Cache/TargetCache.hpp"
 #include "Castor3D/Cache/WindowCache.hpp"
 #include "Castor3D/Event/Frame/CleanupEvent.hpp"
-#include "Castor3D/Event/Frame/FunctorEvent.hpp"
 #include "Castor3D/Event/Frame/InitialiseEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
@@ -445,7 +444,6 @@ namespace castor3d
 		, m_animationUpdater{ std::max( 2u, engine.getCpuInformations().getCoreCount() - ( engine.isThreaded() ? 2u : 1u ) ) }
 		, m_background{ std::make_shared< ColourBackground >( engine, *this ) }
 		, m_colourBackground{ std::make_shared< ColourBackground >( engine, *this ) }
-		, m_billboardPools{ std::make_shared< BillboardUboPools >( *engine.getRenderSystem() ) }
 		, m_lightFactory{ std::make_shared< LightFactory >() }
 	{
 		auto mergeObject = [this]( auto const & source
@@ -489,13 +487,21 @@ namespace castor3d
 			element->setName( name );
 			destination.insert( name, element );
 		};
-		auto eventInitialise = [this]( auto element )
+		auto gpuEvtInitialise = [this]( auto element )
 		{
-			this->getListener().postEvent( makeInitialiseEvent( *element ) );
+			this->getListener().postEvent( makeGpuInitialiseEvent( *element ) );
 		};
-		auto eventClean = [this]( auto element )
+		auto gpuEvtClean = [this]( auto element )
 		{
-			this->getListener().postEvent( makeCleanupEvent( *element ) );
+			this->getListener().postEvent( makeGpuCleanupEvent( *element ) );
+		};
+		auto cpuEvtInitialise = [this]( auto element )
+		{
+			this->getListener().postEvent( makeCpuInitialiseEvent( *element ) );
+		};
+		auto cpuEvtClean = [this]( auto element )
+		{
+			this->getListener().postEvent( makeCpuCleanupEvent( *element ) );
 		};
 		auto attachObject = []( auto element
 			, SceneNode & parent
@@ -542,8 +548,8 @@ namespace castor3d
 						, *this
 						, parent );
 				}
-			, eventInitialise
-			, eventClean
+			, gpuEvtInitialise
+			, gpuEvtClean
 			, mergeObject
 			, attachObject
 			, [this]( BillboardListSPtr element )
@@ -631,8 +637,8 @@ namespace castor3d
 						, parent
 						, count );
 				}
-			, eventInitialise
-			, eventClean
+			, gpuEvtInitialise
+			, gpuEvtClean
 			, mergeObject
 			, attachObject
 			, [this]( ParticleSystemSPtr element )
@@ -672,13 +678,13 @@ namespace castor3d
 						, *this );
 				}
 			, dummy
-			, eventClean
+			, cpuEvtClean
 			, mergeResource );
 
 		m_materialCacheView = makeCacheView< Material, EventType::ePreRender >( getName()
 			, [this]( MaterialSPtr element )
 				{
-					this->getListener().postEvent( makeInitialiseEvent( *element ) );
+					this->getListener().postEvent( makeGpuInitialiseEvent( *element ) );
 					this->m_materialsListeners.emplace( element
 						, element->onChanged.connect( [this]( Material const & material )
 							{
@@ -690,12 +696,12 @@ namespace castor3d
 				{
 					m_dirtyMaterials = true;
 					this->m_materialsListeners.erase( element );
-					this->getListener().postEvent( makeCleanupEvent( *element ) );
+					this->getListener().postEvent( makeCpuCleanupEvent( *element ) );
 				}
 			, getEngine()->getMaterialCache() );
 		m_samplerCacheView = makeCacheView< Sampler, EventType::ePreRender >( getName()
-			, eventInitialise
-			, eventClean
+			, gpuEvtInitialise
+			, cpuEvtClean
 			, getEngine()->getSamplerCache() );
 		m_overlayCacheView = makeCacheView< Overlay, EventType::ePreRender >( getName()
 			, std::bind( OverlayCache::OverlayInitialiser{ getEngine()->getOverlayCache() }, std::placeholders::_1 )
@@ -784,18 +790,24 @@ namespace castor3d
 		m_initialised = false;
 		m_animatedObjectGroupCache->cleanup();
 		m_cameraCache->cleanup();
-		m_billboardCache->cleanup();
 		m_particleSystemCache->cleanup();
+
+		getListener().postEvent( makeGpuFunctorEvent( EventType::ePreRender
+			, [this]( RenderDevice const & device )
+			{
+				m_billboardCache->cleanup( device );
+			} ) );
+
 		m_geometryCache->cleanup();
 		m_lightCache->cleanup();
 		m_sceneNodeCache->cleanup();
 
 		for ( auto & pass : m_reflectionMapsArray )
 		{
-			getListener().postEvent( makeFunctorEvent( EventType::ePreRender
-				, [&pass]()
+			getListener().postEvent( makeGpuFunctorEvent( EventType::ePreRender
+				, [&pass]( RenderDevice const & device )
 				{
-					pass.get().cleanup();
+					pass.get().cleanup( device );
 				} ) );
 		}
 
@@ -807,12 +819,11 @@ namespace castor3d
 		// These ones, being ResourceCache, need to be cleared in destructor only
 		m_meshCache->cleanup();
 
-		getListener().postEvent( makeFunctorEvent( EventType::ePreRender
-			, [this]()
+		getListener().postEvent( makeGpuFunctorEvent( EventType::ePreRender
+			, [this]( RenderDevice const & device )
 			{
-				m_background->cleanup();
-				m_colourBackground->cleanup();
-				m_billboardPools->clear();
+				m_background->cleanup( device );
+				m_colourBackground->cleanup( device );
 			} ) );
 	}
 
@@ -826,7 +837,7 @@ namespace castor3d
 			doUpdateMaterials();
 			getLightCache().update( updater );
 			getGeometryCache().cpuUpdate();
-			m_billboardPools->update();
+			getBillboardListCache().update( updater );
 			getAnimatedObjectGroupCache().update();
 			onUpdate( *this );
 			m_changed = false;
@@ -954,10 +965,10 @@ namespace castor3d
 			auto & pass = *it->second;
 			m_reflectionMapsArray.emplace_back( pass );
 
-			getListener().postEvent( makeFunctorEvent( EventType::ePreRender
-				, [&pass]()
+			getListener().postEvent( makeGpuFunctorEvent( EventType::ePreRender
+				, [&pass]( RenderDevice const & device )
 				{
-					pass.initialise();
+					pass.initialise( device );
 				} ) );
 		}
 	}

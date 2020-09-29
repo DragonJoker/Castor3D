@@ -85,7 +85,8 @@ namespace castor3d
 		*\param[in] renderPass
 		*	La passe de rendu à laquelle ce pipeline est lié.
 		*/
-		C3D_API void initialise( ashes::RenderPass const & renderPass );
+		C3D_API void initialise( RenderDevice const & device
+			, ashes::RenderPass const & renderPass );
 		/**
 		*\~english
 		*\brief
@@ -94,7 +95,7 @@ namespace castor3d
 		*\brief
 		*	Nettoie le pipeline.
 		*/
-		C3D_API void cleanup();
+		C3D_API void cleanup( RenderDevice const & device );
 		/**
 		*\~english
 		*\brief

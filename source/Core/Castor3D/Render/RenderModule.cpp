@@ -173,24 +173,4 @@ namespace castor3d
 					)
 				);
 	}
-
-	RenderDevice const & getCurrentRenderDevice( RenderDevice const & obj )
-	{
-		return getCurrentRenderDevice( obj.renderSystem );
-	}
-
-	RenderDevice const & getCurrentRenderDevice( RenderSystem const & obj )
-	{
-		return obj.getCurrentRenderDevice();
-	}
-
-	RenderDevice const & getCurrentRenderDevice( Engine const & obj )
-	{
-		return getCurrentRenderDevice( *obj.getRenderSystem() );
-	}
-
-	RenderDevice const & getCurrentRenderDevice( Scene const & obj )
-	{
-		return getCurrentRenderDevice( *obj.getEngine() );
-	}
 }

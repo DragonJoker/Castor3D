@@ -16,7 +16,7 @@ namespace CastorViewer
 	{
 	}
 
-	bool TranslateNodeEvent::apply()
+	void TranslateNodeEvent::apply()
 	{
 		SceneNodeSPtr node = m_node.lock();
 
@@ -35,6 +35,5 @@ namespace CastorViewer
 		m_dx = 0;
 		m_dy = 0;
 		m_dz = 0;
-		return true;
 	}
 }

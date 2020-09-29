@@ -42,7 +42,7 @@ namespace castor3d
 	{
 		if ( m_engine.getRenderSystem()->hasCurrentRenderDevice() )
 		{
-			initialise();
+			initialise( m_engine.getRenderSystem()->getCurrentRenderDevice() );
 		}
 	}
 
@@ -50,24 +50,22 @@ namespace castor3d
 	{
 		if ( m_engine.getRenderSystem()->hasCurrentRenderDevice() )
 		{
-			cleanup();
+			cleanup( m_engine.getRenderSystem()->getCurrentRenderDevice() );
 		}
 	}
 
-	void SsaoConfigUbo::initialise()
+	void SsaoConfigUbo::initialise( RenderDevice const & device )
 	{
 		if ( !m_ubo )
 		{
-			auto & device = getCurrentRenderDevice( m_engine );
 			m_ubo = device.uboPools->getBuffer< Configuration >( 0u );
 		}
 	}
 
-	void SsaoConfigUbo::cleanup()
+	void SsaoConfigUbo::cleanup( RenderDevice const & device )
 	{
 		if ( m_ubo )
 		{
-			auto & device = getCurrentRenderDevice( m_engine );
 			device.uboPools->putBuffer( m_ubo );
 		}
 	}

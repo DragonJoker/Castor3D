@@ -176,7 +176,7 @@ namespace castor3d
 		 *\brief		Initialise la texture et toutes ses vues.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool initialise();
+		C3D_API bool initialise( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Cleans up the texture and all its views.
@@ -190,7 +190,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Génère les mipmaps de la texture
 		 */
-		C3D_API void generateMipmaps()const;
+		C3D_API void generateMipmaps( RenderDevice const & device )const;
 		/**
 		 *\name Whole texture access.
 		 **/

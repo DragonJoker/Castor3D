@@ -33,11 +33,9 @@ namespace castor3d
 
 	namespace
 	{
-		ashes::PipelineShaderStageCreateInfoArray doCreateProgram( RenderSystem & renderSystem
+		ashes::PipelineShaderStageCreateInfoArray doCreateProgram( RenderDevice const & device
 			, VkFormat format )
 		{
-			auto & device = getCurrentRenderDevice( renderSystem );
-
 			ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, "EquirectangularToCube" };
 			{
 				VertexWriter writer;
@@ -176,7 +174,7 @@ namespace castor3d
 		, m_renderPass{ doCreateRenderPass( m_device, target.getPixelFormat() ) }
 	{
 		auto size = VkExtent2D{ target.getWidth(), target.getHeight() };
-		auto program = doCreateProgram( device.renderSystem, equiRectangular.getPixelFormat() );
+		auto program = doCreateProgram( device, equiRectangular.getPixelFormat() );
 		uint32_t face = 0u;
 
 		for ( auto & facePipeline : m_frameBuffers )

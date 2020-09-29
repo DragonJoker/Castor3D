@@ -2,7 +2,7 @@
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
-#include <Castor3D/Event/Frame/FunctorEvent.hpp>
+#include <Castor3D/Event/Frame/CpuFunctorEvent.hpp>
 
 using namespace castor;
 using namespace castor3d;
@@ -54,7 +54,7 @@ namespace GuiCommon
 		{
 			auto handler = it->second;
 			auto value = event.GetValue();
-			m_engine->postEvent( makeFunctorEvent( EventType::ePreRender
+			m_engine->postEvent( makeCpuFunctorEvent( EventType::ePreRender
 				, [value, handler]()
 				{
 					handler( value );
@@ -115,7 +115,7 @@ namespace GuiCommon
 	{
 		auto prop = grid->Append( new wxStringProperty{ _( "View shaders..." ), wxPG_LABEL, name } );
 		prop->SetEditor( editor );
-		prop->SetClientObject( new ButtonData( handler ) );
+		prop->SetClientObject( new ButtonData{ handler } );
 		return prop;
 	}
 }

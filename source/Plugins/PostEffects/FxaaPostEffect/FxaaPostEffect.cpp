@@ -151,9 +151,10 @@ namespace fxaa
 	//*********************************************************************************************
 
 	RenderQuad::RenderQuad( castor3d::RenderSystem & renderSystem
+		, castor3d::RenderDevice const & device
 		, Size const & size )
-		: castor3d::RenderQuad{ renderSystem, cuT( "Fxaa" ), VK_FILTER_LINEAR, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
-		, m_fxaaUbo{ *renderSystem.getEngine(), size }
+		: castor3d::RenderQuad{ renderSystem, device, cuT( "Fxaa" ), VK_FILTER_LINEAR, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
+		, m_fxaaUbo{ device, size }
 	{
 	}
 
@@ -272,12 +273,12 @@ namespace fxaa
 		}
 	}
 
-	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
+	bool PostEffect::doInitialise( castor3d::RenderDevice const & device
+		, castor3d::RenderPassTimer const & timer )
 	{
-		m_sampler->initialise();
+		m_sampler->initialise( device );
 
 		auto & renderSystem = *getRenderSystem();
-		auto & device = getCurrentRenderDevice( *this );
 		VkExtent2D size{ m_target->getWidth(), m_target->getHeight() };
 
 		// Create the render pass.
@@ -352,6 +353,7 @@ namespace fxaa
 		stages.push_back( makeShaderState( device, m_pixelShader ) );
 
 		m_fxaaQuad = std::make_unique< RenderQuad >( renderSystem
+			, device
 			, castor::Size{ size.width, size.height } );
 		m_fxaaQuad->createPipeline( size
 			, Position{}
@@ -362,7 +364,8 @@ namespace fxaa
 			, {} );
 
 		// Initialise the surface.
-		auto result = m_surface.initialise( *m_renderPass
+		auto result = m_surface.initialise( device
+			, *m_renderPass
 			, castor::Size{ size.width, size.height }
 			, m_target->getPixelFormat() );
 
@@ -408,10 +411,10 @@ namespace fxaa
 		return result;
 	}
 
-	void PostEffect::doCleanup()
+	void PostEffect::doCleanup( castor3d::RenderDevice const & device )
 	{
 		m_fxaaQuad.reset();
-		m_surface.cleanup();
+		m_surface.cleanup( device );
 		m_renderPass.reset();
 	}
 

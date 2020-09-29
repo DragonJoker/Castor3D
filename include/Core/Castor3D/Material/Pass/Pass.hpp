@@ -78,7 +78,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Initialise la passe et toutes ses dépendances.
 		 */
-		C3D_API void initialise();
+		C3D_API void initialise( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Cleans up the pass and all it's dependencies.

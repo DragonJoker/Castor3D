@@ -104,9 +104,10 @@ namespace motion_blur
 	//*********************************************************************************************
 
 	PostEffect::Quad::Quad( castor3d::RenderSystem & renderSystem
+		, castor3d::RenderDevice const & device
 		, castor3d::TextureUnit const & velocity
 		, castor3d::UniformBufferOffsetT< Configuration > const & ubo )
-		: castor3d::RenderQuad{ renderSystem, cuT( "LinearMotionBlur" ), VK_FILTER_NEAREST, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
+		: castor3d::RenderQuad{ renderSystem, device, cuT( "LinearMotionBlur" ), VK_FILTER_NEAREST, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
 		, m_velocityView{ velocity.getTexture()->getDefaultView().getSampledView() }
 		, m_velocitySampler{ velocity.getSampler()->getSampler() }
 		, m_ubo{ ubo }
@@ -180,10 +181,10 @@ namespace motion_blur
 		visitor.visit( m_pixelShader );
 	}
 
-	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
+	bool PostEffect::doInitialise( castor3d::RenderDevice const & device
+		, castor3d::RenderPassTimer const & timer )
 	{
 		auto & renderSystem = *getRenderSystem();
-		auto & device = getCurrentRenderDevice( *this );
 		VkExtent2D size{ m_target->getWidth(), m_target->getHeight() };
 		m_vertexShader.shader = getVertexProgram( getRenderSystem() );
 		m_pixelShader.shader = getFragmentProgram( getRenderSystem() );
@@ -263,6 +264,7 @@ namespace motion_blur
 				, VK_SHADER_STAGE_FRAGMENT_BIT ),
 		};
 		m_quad = std::make_unique< Quad >( renderSystem
+			, device
 			, m_renderTarget.getVelocity()
 			, m_ubo );
 		m_quad->createPipeline( size
@@ -273,7 +275,8 @@ namespace motion_blur
 			, bindings
 			, {} );
 
-		auto result = m_surface.initialise( *m_renderPass
+		auto result = m_surface.initialise( device
+			, *m_renderPass
 			, castor::Size{ m_target->getWidth(), m_target->getHeight() }
 			, m_target->getPixelFormat() );
 
@@ -310,13 +313,12 @@ namespace motion_blur
 		return result;
 	}
 
-	void PostEffect::doCleanup()
+	void PostEffect::doCleanup( castor3d::RenderDevice const & device )
 	{
 		m_quad.reset();
-		auto & renderSystem = *getRenderSystem();
-		getCurrentRenderDevice( renderSystem ).uboPools->putBuffer( m_ubo );
+		device.uboPools->putBuffer( m_ubo );
 		m_renderPass.reset();
-		m_surface.cleanup();
+		m_surface.cleanup( device );
 	}
 
 	bool PostEffect::doWriteInto( castor::TextFile & file, castor::String const & tabs )

@@ -279,11 +279,11 @@ namespace castor3d
 		}
 
 		ashes::PipelineShaderStageCreateInfoArray doCreateBlurProgram( Engine & engine
+			, RenderDevice const & device
 			, bool isVertic
 			, ShaderModule & vertexShader
 			, ShaderModule & pixelShader )
 		{
-			auto & device = getCurrentRenderDevice( engine );
 			vertexShader.shader = doGetVertexProgram( engine );
 			pixelShader.shader = doGetBlurProgram( engine, isVertic );
 
@@ -295,10 +295,10 @@ namespace castor3d
 		}
 
 		ashes::PipelineShaderStageCreateInfoArray doCreateCombineProgram( Engine & engine
+			, RenderDevice const & device
 			, ShaderModule & vertexShader
 			, ShaderModule & pixelShader )
 		{
-			auto & device = getCurrentRenderDevice( engine );
 			vertexShader.shader = doGetVertexProgram( engine );
 			pixelShader.shader = doGetCombineProgram( engine );
 
@@ -331,6 +331,7 @@ namespace castor3d
 		}
 
 		TextureUnit doCreateTexture( Engine & engine
+			, RenderDevice const & device
 			, Size const & size
 			, std::string name )
 		{
@@ -357,7 +358,7 @@ namespace castor3d
 			TextureUnit unit{ engine };
 			unit.setTexture( texture );
 			unit.setSampler( sampler );
-			unit.initialise();
+			unit.initialise( device );
 			return unit;
 		}
 
@@ -423,8 +424,7 @@ namespace castor3d
 			return result;
 		}
 
-		ashes::FrameBufferPtr doCreateFrameBuffer( RenderDevice const & device
-			, ashes::RenderPass const & renderPass
+		ashes::FrameBufferPtr doCreateFrameBuffer( ashes::RenderPass const & renderPass
 			, castor::Size const & size
 			, ashes::ImageView const & view
 			, std::string name )
@@ -441,6 +441,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	SubsurfaceScatteringPass::Blur::Blur( RenderSystem & renderSystem
+		, RenderDevice const & device
 		, castor::Size const & size
 		, GpInfoUbo const & gpInfoUbo
 		, SceneUbo & sceneUbo
@@ -449,14 +450,14 @@ namespace castor3d
 		, TextureUnit const & destination
 		, bool isVertic
 		, ashes::PipelineShaderStageCreateInfoArray const & shaderStages )
-		: RenderQuad{ renderSystem, "SubscatteringBlur", VK_FILTER_LINEAR, { ashes::nullopt, RenderQuadConfig::Texcoord{} } }
+		: RenderQuad{ renderSystem, device, "SubscatteringBlur", VK_FILTER_LINEAR, { ashes::nullopt, RenderQuadConfig::Texcoord{} } }
 		, m_renderSystem{ renderSystem }
 		, m_geometryBufferResult{ gpResult }
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_sceneUbo{ sceneUbo }
-		, m_blurUbo{ getCurrentRenderDevice( renderSystem ).uboPools->getBuffer< BlurConfiguration >( 0u ) }
-		, m_renderPass{ doCreateRenderPass( getCurrentRenderDevice( renderSystem ), destination.getTexture()->getPixelFormat(), "SubscatteringBlur" ) }
-		, m_frameBuffer{ doCreateFrameBuffer( getCurrentRenderDevice( renderSystem ), *m_renderPass, size, destination.getTexture()->getDefaultView().getTargetView(), "SubscatteringBlur" ) }
+		, m_blurUbo{ m_device.uboPools->getBuffer< BlurConfiguration >( 0u ) }
+		, m_renderPass{ doCreateRenderPass( m_device, destination.getTexture()->getPixelFormat(), "SubscatteringBlur" ) }
+		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, size, destination.getTexture()->getDefaultView().getTargetView(), "SubscatteringBlur" ) }
 	{
 		auto & configuration = m_blurUbo.getData();
 		configuration.blurCorrection = 1.0f;
@@ -549,20 +550,21 @@ namespace castor3d
 	//*********************************************************************************************
 
 	SubsurfaceScatteringPass::Combine::Combine( RenderSystem & renderSystem
+		, RenderDevice const & device
 		, Size const & size
 		, OpaquePassResult const & gpResult
 		, TextureUnit const & source
 		, SubsurfaceScatteringPass::BlurResult const & blurResults
 		, TextureUnit const & destination
 		, ashes::PipelineShaderStageCreateInfoArray const & shaderStages )
-		: RenderQuad{ renderSystem, cuT( "SubscatteringCombine" ), VK_FILTER_LINEAR, { ashes::nullopt, RenderQuadConfig::Texcoord{} } }
+		: RenderQuad{ renderSystem, device, cuT( "SubscatteringCombine" ), VK_FILTER_LINEAR, { ashes::nullopt, RenderQuadConfig::Texcoord{} } }
 		, m_renderSystem{ renderSystem }
-		, m_blurUbo{ getCurrentRenderDevice( renderSystem ).uboPools->getBuffer< BlurWeights >( 0u ) }
+		, m_blurUbo{ m_device.uboPools->getBuffer< BlurWeights >( 0u ) }
 		, m_geometryBufferResult{ gpResult }
 		, m_source{ source }
 		, m_blurResults{ blurResults }
-		, m_renderPass{ doCreateRenderPass( getCurrentRenderDevice( renderSystem ), destination.getTexture()->getPixelFormat(), getName() ) }
-		, m_frameBuffer{ doCreateFrameBuffer( getCurrentRenderDevice( renderSystem ), *m_renderPass, size, destination.getTexture()->getDefaultView().getTargetView(), getName() ) }
+		, m_renderPass{ doCreateRenderPass( m_device, destination.getTexture()->getPixelFormat(), getName() ) }
+		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, size, destination.getTexture()->getDefaultView().getTargetView(), getName() ) }
 	{
 		auto & weights = m_blurUbo.getData();
 		weights.originalWeight = Point4f{ 0.2406f, 0.4475f, 0.6159f, 0.25f };
@@ -662,6 +664,7 @@ namespace castor3d
 	String const SubsurfaceScatteringPass::Offsets = "c3d_offsets";
 
 	SubsurfaceScatteringPass::SubsurfaceScatteringPass( Engine & engine
+		, RenderDevice const & device
 		, GpInfoUbo const & gpInfoUbo
 		, SceneUbo & sceneUbo
 		, Size const & textureSize
@@ -673,7 +676,7 @@ namespace castor3d
 		, m_gpResult{ gpResult }
 		, m_lpResult{ lpResult }
 		, m_size{ textureSize }
-		, m_intermediate{ doCreateTexture( engine, textureSize, "SubsurfaceScattering intermediate" ) }
+		, m_intermediate{ doCreateTexture( engine, device, textureSize, "SubsurfaceScattering intermediate" ) }
 		, m_blurHorizVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SssBlurX" }
 		, m_blurHorizPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SssBlurX" }
 		, m_blurVerticVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SssBlurY" }
@@ -683,31 +686,31 @@ namespace castor3d
 		, m_blurResults
 		{
 			{
-				doCreateTexture( engine, textureSize, "SubsurfaceScattering Blur 0" ),
-				doCreateTexture( engine, textureSize, "SubsurfaceScattering Blur 1" ),
-				doCreateTexture( engine, textureSize, "SubsurfaceScattering Blur 2" ),
+				doCreateTexture( engine, device, textureSize, "SubsurfaceScattering Blur 0" ),
+				doCreateTexture( engine, device, textureSize, "SubsurfaceScattering Blur 1" ),
+				doCreateTexture( engine, device, textureSize, "SubsurfaceScattering Blur 2" ),
 			}
 		}
-		, m_result{ doCreateTexture( engine, textureSize, "SubsurfaceScattering Result" ) }
+		, m_result{ doCreateTexture( engine, device, textureSize, "SubsurfaceScattering Result" ) }
 	{
 	}
 
-	void SubsurfaceScatteringPass::initialise()
+	void SubsurfaceScatteringPass::initialise( RenderDevice const & device )
 	{
 		auto & engine = *getEngine();
-		auto & device = getCurrentRenderDevice( *this );
 
-		m_intermediate.initialise();
-		m_result.initialise();
+		m_intermediate.initialise( device );
+		m_result.initialise( device );
 
 		for ( auto & result : m_blurResults )
 		{
-			result.initialise();
+			result.initialise( device );
 		}
 
 		// Combine pass
-		auto combineProgram = doCreateCombineProgram( engine, m_combineVertexShader, m_combinePixelShader );
+		auto combineProgram = doCreateCombineProgram( engine, device, m_combineVertexShader, m_combinePixelShader );
 		m_combine = std::make_unique< Combine >( *engine.getRenderSystem()
+			, device
 			, m_size
 			, m_gpResult
 			, m_lpResult[LpTexture::eDiffuse]
@@ -716,10 +719,11 @@ namespace castor3d
 			, combineProgram );
 
 		// Horizontal blur pass
-		auto blurHorizProgram = doCreateBlurProgram( engine, false, m_blurHorizVertexShader, m_blurHorizPixelShader );
+		auto blurHorizProgram = doCreateBlurProgram( engine, device, false, m_blurHorizVertexShader, m_blurHorizPixelShader );
 		m_blurX =
 		{
 			std::make_unique< Blur >( *engine.getRenderSystem()
+				, device
 				, m_size
 				, m_gpInfoUbo
 				, m_sceneUbo
@@ -729,6 +733,7 @@ namespace castor3d
 				, false
 				, blurHorizProgram ),
 			std::make_unique< Blur >( *engine.getRenderSystem()
+				, device
 				, m_size
 				, m_gpInfoUbo
 				, m_sceneUbo
@@ -738,6 +743,7 @@ namespace castor3d
 				, false
 				, blurHorizProgram ),
 			std::make_unique< Blur >( *engine.getRenderSystem()
+				, device
 				, m_size
 				, m_gpInfoUbo
 				, m_sceneUbo
@@ -749,10 +755,11 @@ namespace castor3d
 		};
 
 		// Vertical blur pass
-		auto blurVerticProgram = doCreateBlurProgram( engine, true, m_blurVerticVertexShader, m_blurVerticPixelShader );
+		auto blurVerticProgram = doCreateBlurProgram( engine, device, true, m_blurVerticVertexShader, m_blurVerticPixelShader );
 		m_blurY =
 		{
 			std::make_unique< Blur >( *engine.getRenderSystem()
+				, device
 				, m_size
 				, m_gpInfoUbo
 				, m_sceneUbo
@@ -762,6 +769,7 @@ namespace castor3d
 				, true
 				, blurVerticProgram ),
 			std::make_unique< Blur >( *engine.getRenderSystem()
+				, device
 				, m_size
 				, m_gpInfoUbo
 				, m_sceneUbo
@@ -771,6 +779,7 @@ namespace castor3d
 				, true
 				, blurVerticProgram ),
 			std::make_unique< Blur >( *engine.getRenderSystem()
+				, device
 				, m_size
 				, m_gpInfoUbo
 				, m_sceneUbo
@@ -782,7 +791,7 @@ namespace castor3d
 		};
 
 		// Commands.
-		m_timer = std::make_shared< RenderPassTimer >( engine, cuT( "Opaque" ), cuT( "SSSSS pass" ) );
+		m_timer = std::make_shared< RenderPassTimer >( engine, device, cuT( "Opaque" ), cuT( "SSSSS pass" ) );
 		m_finished = device->createSemaphore( "SSSSS pass" );
 		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( "SSSSS pass" );
 		m_commandBuffer->begin();
@@ -805,7 +814,7 @@ namespace castor3d
 		m_commandBuffer->end();
 	}
 
-	void SubsurfaceScatteringPass::cleanup()
+	void SubsurfaceScatteringPass::cleanup( RenderDevice const & device )
 	{
 		m_commandBuffer.reset();
 		m_finished.reset();
@@ -822,9 +831,9 @@ namespace castor3d
 		}
 	}
 
-	ashes::Semaphore const & SubsurfaceScatteringPass::render( ashes::Semaphore const & toWait )const
+	ashes::Semaphore const & SubsurfaceScatteringPass::render( RenderDevice const & device
+		, ashes::Semaphore const & toWait )const
 	{
-		auto & device = getCurrentRenderDevice( *this );
 		RenderPassTimerBlock timerBlock{ m_timer->start() };
 		timerBlock->notifyPassRender();
 		auto * result = &toWait;

@@ -37,6 +37,7 @@ namespace castor3d
 		 *\param[in]	renderSystem	Le RenderSystem.
 		 */
 		C3D_API explicit GpuBufferPool( RenderSystem & renderSystem
+			, RenderDevice const & device
 			, castor::String debugName );
 		/**
 		 *\~english
@@ -98,6 +99,7 @@ namespace castor3d
 			, MemChunk const & chunk );
 
 	private:
+		RenderDevice const & m_device;
 		castor::String m_debugName;
 		std::map< uint32_t, BufferArray > m_buffers;
 		BufferArray m_nonSharedBuffers;

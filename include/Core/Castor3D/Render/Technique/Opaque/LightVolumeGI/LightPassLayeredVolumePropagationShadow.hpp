@@ -58,51 +58,53 @@ namespace castor3d
 		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
 		 */
 		LightPassLayeredVolumePropagationShadow( Engine & engine
+			, RenderDevice const & device
 			, LightCache const & lightCache
 			, OpaquePassResult const & gpResult
 			, ShadowMapResult const & smResult
 			, LightPassResult const & lpResult
 			, GpInfoUbo const & gpInfoUbo )
 			: LightPassShadow< LtType >{ engine
+				, device
 				, lpResult
 				, gpInfoUbo }
 			, m_gpResult{ gpResult }
 			, m_smResult{ smResult }
 			, m_lpResult{ lpResult }
 			, m_gpInfoUbo{ gpInfoUbo }
-			, m_lpvConfigUbo{ engine }
+			, m_lpvConfigUbo{ device }
 			, m_injection
 			{
-				LightVolumePassResult{ engine, "LightInjection0", GridSize },
-				LightVolumePassResult{ engine, "LightInjection1", GridSize },
-				LightVolumePassResult{ engine, "LightInjection2", GridSize },
-				LightVolumePassResult{ engine, "LightInjection3", GridSize },
+				LightVolumePassResult{ engine, device, "LightInjection0", GridSize },
+				LightVolumePassResult{ engine, device, "LightInjection1", GridSize },
+				LightVolumePassResult{ engine, device, "LightInjection2", GridSize },
+				LightVolumePassResult{ engine, device, "LightInjection3", GridSize },
 			}
 			, m_geometry
 			{
-				GeometryInjectionPass::createResult( engine, 0u, GridSize ),
-				GeometryInjectionPass::createResult( engine, 1u, GridSize ),
-				GeometryInjectionPass::createResult( engine, 2u, GridSize ),
-				GeometryInjectionPass::createResult( engine, 3u, GridSize ),
+				GeometryInjectionPass::createResult( engine, device, 0u, GridSize ),
+				GeometryInjectionPass::createResult( engine, device, 1u, GridSize ),
+				GeometryInjectionPass::createResult( engine, device, 2u, GridSize ),
+				GeometryInjectionPass::createResult( engine, device, 3u, GridSize ),
 			}
 			, m_accumulation
 			{
-				LightVolumePassResult{ engine, "LightAccumulation0", GridSize },
-				LightVolumePassResult{ engine, "LightAccumulation1", GridSize },
-				LightVolumePassResult{ engine, "LightAccumulation2", GridSize },
-				LightVolumePassResult{ engine, "LightAccumulation3", GridSize },
+				LightVolumePassResult{ engine, device, "LightAccumulation0", GridSize },
+				LightVolumePassResult{ engine, device, "LightAccumulation1", GridSize },
+				LightVolumePassResult{ engine, device, "LightAccumulation2", GridSize },
+				LightVolumePassResult{ engine, device, "LightAccumulation3", GridSize },
 			}
 			, m_propagate
 			{
-				LightVolumePassResult{ engine, "LightPropagate00", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate01", GridSize },
+				LightVolumePassResult{ engine, device, "LightPropagate00", GridSize },
+				LightVolumePassResult{ engine, device, "LightPropagate01", GridSize },
 			}
 			, m_lpvConfigUbos
 			{
-				LpvConfigUbo{ engine, 0u },
-				LpvConfigUbo{ engine, 1u },
-				LpvConfigUbo{ engine, 2u },
-				LpvConfigUbo{ engine, 3u },
+				LpvConfigUbo{ device, 0u },
+				LpvConfigUbo{ device, 1u },
+				LpvConfigUbo{ device, 2u },
+				LpvConfigUbo{ device, 3u },
 			}
 			, m_aabb{ lightCache.getScene()->getBoundingBox() }
 		{
@@ -119,6 +121,7 @@ namespace castor3d
 			for ( uint32_t cascade = 0u; cascade < shader::DirectionalMaxCascadesCount; ++cascade )
 			{
 				m_lightInjectionPasses.emplace_back( this->m_engine
+					, this->m_device
 					, lightCache
 					, LtType
 					, m_smResult
@@ -128,6 +131,7 @@ namespace castor3d
 					, GridSize
 					, cascade );
 				m_geometryInjectionPasses.emplace_back( this->m_engine
+					, this->m_device
 					, lightCache
 					, LtType
 					, m_smResult
@@ -137,6 +141,7 @@ namespace castor3d
 					, GridSize
 					, cascade );
 				m_lightPropagationPasses.emplace_back( this->m_engine
+					, this->m_device
 					, castor::string::toString( cascade ) + "x0"
 					, GridSize
 					, m_injection[cascade]
@@ -147,6 +152,7 @@ namespace castor3d
 				for ( uint32_t i = 1u; i < MaxPropagationSteps; ++i )
 				{
 					m_lightPropagationPasses.emplace_back( this->m_engine
+						, this->m_device
 						, castor::string::toString( cascade ) + "x" + castor::string::toString( i )
 						, GridSize
 						, m_geometry[cascade]
@@ -159,6 +165,7 @@ namespace castor3d
 			}
 
 			m_lightVolumeGIPass = std::make_unique< LayeredLightVolumeGIPass >( this->m_engine
+				, this->m_device
 				, m_gpInfoUbo
 				, m_lpvConfigUbo
 				, m_gpResult

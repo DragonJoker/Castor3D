@@ -39,6 +39,7 @@ namespace castor3d
 		 *\param[in]	dst		La vue destination.
 		 */
 		C3D_API RsmInterpolatePass( Engine & engine
+			, RenderDevice const & device
 			, LightCache const & lightCache
 			, LightType lightType
 			, VkExtent2D const & size

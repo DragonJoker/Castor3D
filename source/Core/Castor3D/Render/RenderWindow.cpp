@@ -4,7 +4,7 @@
 #include "Castor3D/Cache/ListenerCache.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/TargetCache.hpp"
-#include "Castor3D/Event/Frame/FunctorEvent.hpp"
+#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Event/UserInput/UserInputListener.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Miscellaneous/DebugName.hpp"
@@ -263,7 +263,7 @@ namespace castor3d
 					{
 						engine.getRenderSystem()->setCurrentRenderDevice( nullptr );
 					} );
-				engine.getMaterialCache().initialise( engine.getMaterialsType() );
+				engine.getMaterialCache().initialise( *m_device, engine.getMaterialsType() );
 				doCreateSwapchain();
 				doCreateRenderPass();
 				RenderTargetSPtr target = getRenderTarget();
@@ -273,11 +273,11 @@ namespace castor3d
 					CU_Exception( "No render target for render window." );
 				}
 
-				target->initialise();
+				target->initialise( *m_device );
 				m_pickingPass = std::make_shared< PickingPass >( *getEngine()
 					, target->getTechnique()->getMatrixUbo()
 					, target->getCuller() );
-				m_pickingPass->initialise( target->getSize() );
+				m_pickingPass->initialise( *m_device, target->getSize() );
 
 				doCreateSwapChainDependent();
 				doPrepareFrames();
@@ -305,9 +305,9 @@ namespace castor3d
 			bool hasCurrent = engine.getRenderSystem()->hasCurrentRenderDevice();
 
 			if ( hasCurrent
-				&& &getCurrentRenderDevice( *this ) != m_device.get() )
+				&& &engine.getRenderSystem()->getCurrentRenderDevice() != m_device.get() )
 			{
-				auto & device = getCurrentRenderDevice( *this );
+				auto & device = engine.getRenderSystem()->getCurrentRenderDevice();
 				auto guard = castor::makeBlockGuard(
 					[this, &engine]()
 					{
@@ -359,7 +359,9 @@ namespace castor3d
 				}
 
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
-				m_pickingPass->pick( convertToTopDown( m_mousePosition, m_size ), *target->getCamera() );
+				m_pickingPass->pick( *m_device
+					, convertToTopDown( m_mousePosition, m_size )
+					, *target->getCamera() );
 #endif
 
 				if ( waitOnly )
@@ -403,11 +405,12 @@ namespace castor3d
 		if ( m_initialised && !m_dirty )
 		{
 			m_dirty = true;
-			getListener()->postEvent( makeFunctorEvent( EventType::ePreRender, [this]()
-			{
-				doResetSwapChain();
-				m_dirty = false;
-			} ) );
+			getListener()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+				, [this]( RenderDevice const & device )
+				{
+					doResetSwapChain();
+					m_dirty = false;
+				} ) );
 		}
 	}
 
@@ -582,7 +585,9 @@ namespace castor3d
 
 		if ( camera )
 		{
-			result = m_pickingPass->pick( convertToTopDown( position, m_size ), *camera );
+			result = m_pickingPass->pick( *m_device
+				, convertToTopDown( position, m_size )
+				, *camera );
 		}
 
 		return result;
@@ -789,6 +794,7 @@ namespace castor3d
 		m_renderQuad = RenderQuadBuilder{}
 			.texcoordConfig( RenderQuadConfig::Texcoord{} )
 			.build( *getEngine()->getRenderSystem()
+				, *m_device
 				, "RenderWindow" + getName()
 				, VK_FILTER_LINEAR );
 		doCreateProgram();
@@ -954,7 +960,7 @@ namespace castor3d
 
 		if ( m_pickingPass )
 		{
-			m_pickingPass->cleanup();
+			m_pickingPass->cleanup( *m_device );
 			m_pickingPass.reset();
 		}
 
@@ -963,7 +969,7 @@ namespace castor3d
 
 		if ( target )
 		{
-			target->cleanup();
+			target->cleanup( *m_device );
 		}
 
 		m_renderQuad.reset();

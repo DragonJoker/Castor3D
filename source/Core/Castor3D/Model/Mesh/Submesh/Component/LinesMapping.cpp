@@ -32,11 +32,6 @@ namespace castor3d
 	{
 	}
 
-	LinesMapping::~LinesMapping()
-	{
-		cleanup();
-	}
-
 	Line LinesMapping::addLine( uint32_t a, uint32_t b )
 	{
 		Line result{ a, b };
@@ -150,7 +145,7 @@ namespace castor3d
 		m_lines.clear();
 	}
 
-	void LinesMapping::doFill()
+	void LinesMapping::doFill( RenderDevice const & device )
 	{
 	}
 

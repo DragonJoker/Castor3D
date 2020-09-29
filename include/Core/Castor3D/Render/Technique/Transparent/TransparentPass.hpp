@@ -47,7 +47,8 @@ namespace castor3d
 		 *\brief		Initialise la passe de rendu.
 		 *\param[in]	wbpResult	Les tampons de la passe d'accumulation.
 		 */
-		C3D_API void initialiseRenderPass( TransparentPassResult const & wbpResult );
+		C3D_API void initialiseRenderPass( RenderDevice const & device
+			, TransparentPassResult const & wbpResult );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -60,7 +61,8 @@ namespace castor3d
 		 *\brief		Dessine les noeuds transparents.
 		 *\param[in]	toWait	Le sémaphore à attendre.
 		 */
-		C3D_API ashes::Semaphore const & render( ashes::Semaphore const & toWait );
+		C3D_API ashes::Semaphore const & render( RenderDevice const & device
+			, ashes::Semaphore const & toWait );
 
 		C3D_API TextureFlags getTexturesMask()const override;
 		/**
@@ -82,7 +84,8 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doInitialise
 		 */
-		bool doInitialise( castor::Size const & size )override;
+		bool doInitialise( RenderDevice const & device
+			, castor::Size const & size )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateDepthStencilState
 		 */

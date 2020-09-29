@@ -20,6 +20,7 @@ namespace smaa
 	{
 	public:
 		BlendingWeightCalculation( castor3d::RenderTarget & renderTarget
+			, castor3d::RenderDevice const & device
 			, ashes::ImageView const & edgeDetectionView
 			, castor3d::TextureLayoutSPtr depthView
 			, SmaaConfig const & config );

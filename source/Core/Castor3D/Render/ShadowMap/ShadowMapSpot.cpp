@@ -107,9 +107,8 @@ namespace castor3d
 		m_passes[updater.index].pass->update( updater );
 	}
 
-	void ShadowMapSpot::doInitialise()
+	void ShadowMapSpot::doInitialise( RenderDevice const & device )
 	{
-		auto & device = getCurrentRenderDevice( *this );
 		VkExtent2D size
 		{
 			ShadowMapPassSpot::TextureSize,
@@ -146,12 +145,13 @@ namespace castor3d
 		}
 	}
 
-	void ShadowMapSpot::doCleanup()
+	void ShadowMapSpot::doCleanup( RenderDevice const & device )
 	{
 		m_passesData.clear();
 	}
 
-	ashes::Semaphore const & ShadowMapSpot::doRender( ashes::Semaphore const & toWait
+	ashes::Semaphore const & ShadowMapSpot::doRender( RenderDevice const & device
+		, ashes::Semaphore const & toWait
 		, uint32_t index )
 	{
 		auto & pass = m_passes[index];
@@ -183,7 +183,6 @@ namespace castor3d
 
 		pass.pass->setUpToDate();
 
-		auto & device = getCurrentRenderDevice( *getEngine() );
 		auto * result = &toWait;
 		device.graphicsQueue->submit( commandBuffer
 			, *result

@@ -87,13 +87,22 @@ namespace castor3d
 		C3D_API bool loadRenderer( castor::String const & type );
 		/**
 		 *\~english
+		 *\brief		Posts a frame event to the default frame listener
+		 *\param[in]	event	The event to add
+		 *\~french
+		 *\brief		Ajoute un évènement de frame au frame listener par défaut
+		 *\param[in]	event	L'évènement
+		 */
+		C3D_API void postEvent( CpuFrameEventUPtr event );
+		/**
+		 *\~english
 		 *\brief		If a device is enabled, executes the given event, if not posts it to the default frame listener.
 		 *\param[in]	event	The event.
 		 *\~french
 		 *\brief		Si un device est actif, exécute l'évènement donné, sinon il est ajouté au frame listener par défaut.
 		 *\param[in]	event	L'évènement.
 		 */
-		C3D_API void sendEvent( FrameEventUPtr && event );
+		C3D_API void sendEvent( GpuFrameEventUPtr event );
 		/**
 		 *\~english
 		 *\brief		Posts a frame event to the default frame listener
@@ -102,7 +111,7 @@ namespace castor3d
 		 *\brief		Ajoute un évènement de frame au frame listener par défaut
 		 *\param[in]	event	L'évènement
 		 */
-		C3D_API void postEvent( FrameEventUPtr && event );
+		C3D_API void postEvent( GpuFrameEventUPtr event );
 		/**
 		 *\~english
 		 *\~brief		Fires a mouse move event.

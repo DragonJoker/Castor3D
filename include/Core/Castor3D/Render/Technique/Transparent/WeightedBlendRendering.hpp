@@ -38,6 +38,7 @@ namespace castor3d
 		 *\param[in]	hdrConfigUbo	L'UBO de configuration HDR.
 		 */
 		WeightedBlendRendering( Engine & engine
+			, RenderDevice const & device
 			, TransparentPass & transparentPass
 			, TextureUnit const & depthView
 			, ashes::ImageView const & colourView
@@ -86,7 +87,8 @@ namespace castor3d
 		 *\param[in]	scene	La scène rendue.
 		 *\param[in]	toWait	Le sémaphore à attendre.
 		 */
-		ashes::Semaphore const & render( Scene const & scene
+		ashes::Semaphore const & render( RenderDevice const & device
+			, Scene const & scene
 			, ashes::Semaphore const & toWait );
 		/**
 		 *\~english

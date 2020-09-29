@@ -79,7 +79,7 @@ namespace castor3d
 
 	Mesh::~Mesh()
 	{
-		cleanup();
+		CU_Assert( m_submeshes.empty(), "Did you forget to call Mesh::cleanup ?" );
 	}
 
 	void Mesh::cleanup()

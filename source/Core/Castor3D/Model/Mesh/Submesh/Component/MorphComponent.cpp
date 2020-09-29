@@ -20,11 +20,6 @@ namespace castor3d
 	{
 	}
 
-	MorphComponent::~MorphComponent()
-	{
-		cleanup();
-	}
-
 	void MorphComponent::gather( MaterialSPtr material
 		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
@@ -35,14 +30,13 @@ namespace castor3d
 		layouts.emplace_back( *m_animLayout );
 	}
 
-	bool MorphComponent::doInitialise()
+	bool MorphComponent::doInitialise( RenderDevice const & device )
 	{
 		auto & vertexBuffer = getOwner()->getVertexBuffer();
 		auto count = vertexBuffer.getCount();
 
 		if ( !m_animBuffer || m_animBuffer->getCount() != count )
 		{
-			auto & device = getCurrentRenderDevice( *getOwner()->getOwner() );
 			m_animBuffer = makeVertexBuffer< InterleavedVertex >( device
 				, count
 				, 0u
@@ -71,7 +65,7 @@ namespace castor3d
 		m_animBuffer.reset();
 	}
 
-	void MorphComponent::doFill()
+	void MorphComponent::doFill( RenderDevice const & device )
 	{
 	}
 

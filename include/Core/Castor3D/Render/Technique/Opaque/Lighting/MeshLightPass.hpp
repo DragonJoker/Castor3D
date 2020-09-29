@@ -45,6 +45,7 @@ namespace castor3d
 			 *\param[in]	hasShadows	Dit si ce programme utilise une shadow map.
 			 */
 			Program( Engine & engine
+				, RenderDevice const & device
 				, castor::String const & name
 				, ShaderModule const & vtx
 				, ShaderModule const & pxl
@@ -84,6 +85,7 @@ namespace castor3d
 		 *\param[in]	hasShadows	Dit si les ombres sont activées pour cette passe d'éclairage.
 		 */
 		MeshLightPass( Engine & engine
+			, RenderDevice const & device
 			, castor::String const & suffix
 			, LightPassResult const & lpResult
 			, GpInfoUbo const & gpInfoUbo

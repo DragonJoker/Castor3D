@@ -19,6 +19,7 @@ namespace Bloom
 	{
 	public:
 		HiPass( castor3d::RenderSystem & renderSystem
+			, castor3d::RenderDevice const & device
 			, VkFormat format
 			, ashes::ImageView const & sceneView
 			, VkExtent2D size

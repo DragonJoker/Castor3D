@@ -61,6 +61,7 @@ namespace castor3d
 		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
 		 */
 		LightingPass( Engine & engine
+			, RenderDevice const & device
 			, castor::Size const & size
 			, Scene & scene
 			, OpaquePassResult const & gpResult
@@ -123,6 +124,7 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
+		RenderDevice const & m_device;
 		castor::Size const m_size;
 		LightPassResult m_result;
 		LightPasses m_lightPasses;

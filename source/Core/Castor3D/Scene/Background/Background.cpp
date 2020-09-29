@@ -39,13 +39,13 @@ namespace castor3d
 	{
 	}
 
-	bool SceneBackground::initialise( ashes::RenderPass const & renderPass
+	bool SceneBackground::initialise( RenderDevice const & device
+		, ashes::RenderPass const & renderPass
 		, HdrConfigUbo const & hdrConfigUbo )
 	{
-		auto & device = getCurrentRenderDevice( *this );
 		m_semaphore = device->createSemaphore( "SceneBackground" );
-		m_initialised = doInitialiseVertexBuffer()
-			&& doInitialise( renderPass );
+		m_initialised = doInitialiseVertexBuffer( device )
+			&& doInitialise( device, renderPass );
 		castor::String const name = cuT( "Skybox" );
 		SamplerSPtr sampler;
 
@@ -70,12 +70,13 @@ namespace castor3d
 			}
 		}
 
-		sampler->initialise();
+		sampler->initialise( device );
 		m_sampler = sampler;
 
 		if ( m_initialised )
 		{
-			doInitialisePipeline( doInitialiseShader()
+			doInitialisePipeline( device
+				, doInitialiseShader( device )
 				, renderPass
 				, hdrConfigUbo );
 		}
@@ -86,6 +87,7 @@ namespace castor3d
 			&& m_texture->getLayersCount() == 6u )
 		{
 			m_ibl = std::make_unique< IblTextures >( m_scene
+				, device
 				, m_texture->getTexture()
 				, sampler );
 			m_ibl->update();
@@ -93,20 +95,20 @@ namespace castor3d
 
 		if ( m_initialised )
 		{
-			m_timer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Background" ), cuT( "Background" ) );
+			m_timer = std::make_shared< RenderPassTimer >( *getEngine(), device, cuT( "Background" ), cuT( "Background" ) );
 		}
 
 		return m_initialised;
 	}
 
-	void SceneBackground::cleanup()
+	void SceneBackground::cleanup( RenderDevice const & device )
 	{
 		m_timer.reset();
 
 		doCleanup();
 
-		m_matrixUbo.cleanup();
-		m_modelMatrixUbo.cleanup();
+		m_matrixUbo.cleanup( device );
+		m_modelMatrixUbo.cleanup( device );
 		m_pipeline.reset();
 		m_indexBuffer.reset();
 		m_vertexBuffer.reset();
@@ -264,7 +266,7 @@ namespace castor3d
 		commandBuffer.drawIndexed( uint32_t( m_indexBuffer->getCount() ) );
 	}
 
-	ashes::PipelineShaderStageCreateInfoArray SceneBackground::doInitialiseShader()
+	ashes::PipelineShaderStageCreateInfoArray SceneBackground::doInitialiseShader( RenderDevice const & device )
 	{
 		using namespace sdw;
 		auto & renderSystem = *getEngine()->getRenderSystem();
@@ -329,7 +331,6 @@ namespace castor3d
 			pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		auto & device = getCurrentRenderDevice( renderSystem );
 		return ashes::PipelineShaderStageCreateInfoArray
 		{
 			makeShaderState( device, vtx ),
@@ -337,9 +338,8 @@ namespace castor3d
 		};
 	}
 
-	void SceneBackground::doInitialiseDescriptorLayouts()
+	void SceneBackground::doInitialiseDescriptorLayouts( RenderDevice const & device )
 	{
-		auto & device = getCurrentRenderDevice( *this );
 		ashes::VkDescriptorSetLayoutBindingArray uboBindings
 		{
 			makeDescriptorSetLayoutBinding( MtxUboIdx
@@ -368,11 +368,9 @@ namespace castor3d
 	{
 	}
 
-	bool SceneBackground::doInitialiseVertexBuffer()
+	bool SceneBackground::doInitialiseVertexBuffer( RenderDevice const & device )
 	{
 		using castor::Point3f;
-		auto & renderSystem = *getEngine()->getRenderSystem();
-		auto & device = getCurrentRenderDevice( renderSystem );
 		ashes::StagingBuffer stagingBuffer{ *device.device, 0u, sizeof( Cube ) };
 
 		// Vertex Buffer
@@ -435,18 +433,18 @@ namespace castor3d
 		return true;
 	}
 
-	bool SceneBackground::doInitialisePipeline( ashes::PipelineShaderStageCreateInfoArray program
+	bool SceneBackground::doInitialisePipeline( RenderDevice const & device
+		, ashes::PipelineShaderStageCreateInfoArray program
 		, ashes::RenderPass const & renderPass
 		, HdrConfigUbo const & hdrConfigUbo )
 	{
-		auto & device = getCurrentRenderDevice( *this );
 		m_pipelineLayout.reset();
-		doInitialiseDescriptorLayouts();
+		doInitialiseDescriptorLayouts( device );
 		m_pipelineLayout = device->createPipelineLayout( "SceneBackground"
 		, { *m_uboDescriptorLayout, *m_texDescriptorLayout } );
 
-		m_matrixUbo.initialise();
-		m_modelMatrixUbo.initialise();
+		m_matrixUbo.initialise( device );
+		m_modelMatrixUbo.initialise( device );
 
 		m_uboDescriptorSet.reset();
 		m_uboDescriptorPool = m_uboDescriptorLayout->createPool( "SceneBackgroundUbo"

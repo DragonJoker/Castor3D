@@ -13,6 +13,7 @@ namespace smaa
 	{
 	public:
 		DepthEdgeDetection( castor3d::RenderTarget & renderTarget
+			, castor3d::RenderDevice const & device
 			, ashes::ImageView const & depthView
 			, SmaaConfig const & config );
 		castor3d::CommandsSemaphore prepareCommands( castor3d::RenderPassTimer const & timer

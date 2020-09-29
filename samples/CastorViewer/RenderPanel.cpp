@@ -8,8 +8,9 @@
 #include <wx/display.h>
 
 #include <Castor3D/Cache/SceneNodeCache.hpp>
+#include <Castor3D/Event/Frame/CpuFunctorEvent.hpp>
 #include <Castor3D/Event/Frame/FrameListener.hpp>
-#include <Castor3D/Event/Frame/FunctorEvent.hpp>
+#include <Castor3D/Event/Frame/GpuFunctorEvent.hpp>
 #include <Castor3D/Event/UserInput/UserInputListener.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Material/Pass/PhongPass.hpp>
@@ -256,7 +257,7 @@ namespace CastorViewer
 		if ( camera )
 		{
 			auto cameraNode = camera->getParent();
-			camera->getScene()->getListener().postEvent( makeFunctorEvent( EventType::ePostRender
+			camera->getScene()->getListener().postEvent( makeCpuFunctorEvent( EventType::ePostRender
 				, [this, cameraNode]()
 				{
 					Quaternion orientation{ cameraNode->getOrientation() };
@@ -382,7 +383,7 @@ namespace CastorViewer
 
 		if ( changed )
 		{
-			scene->getListener().postEvent( makeFunctorEvent( EventType::ePostRender
+			scene->getListener().postEvent( makeCpuFunctorEvent( EventType::ePostRender
 				, [scene]()
 				{
 					scene->setChanged();
@@ -791,22 +792,23 @@ namespace CastorViewer
 				{
 					auto x = m_oldX;
 					auto y = m_oldY;
-					m_listener->postEvent( makeFunctorEvent( EventType::ePreRender, [this, window, x, y]()
-					{
-						Camera & camera = *window->getCamera();
-						camera.update();
-						auto type = window->pick( Position{ int( x ), int( y ) } );
+					m_listener->postEvent( makeCpuFunctorEvent( EventType::ePreRender
+						, [this, window, x, y]()
+						{
+							Camera & camera = *window->getCamera();
+							camera.update();
+							auto type = window->pick( Position{ int( x ), int( y ) } );
 
-						if ( type != PickNodeType::eNone
-							&& type != PickNodeType::eBillboard )
-						{
-							doUpdateSelectedGeometry( window->getPickedGeometry(), window->getPickedSubmesh() );
-						}
-						else
-						{
-							doUpdateSelectedGeometry( nullptr, nullptr );
-						}
-					} ) );
+							if ( type != PickNodeType::eNone
+								&& type != PickNodeType::eBillboard )
+							{
+								doUpdateSelectedGeometry( window->getPickedGeometry(), window->getPickedSubmesh() );
+							}
+							else
+							{
+								doUpdateSelectedGeometry( nullptr, nullptr );
+							}
+						} ) );
 				}
 				else if ( m_currentState )
 				{
@@ -854,20 +856,21 @@ namespace CastorViewer
 			{
 				auto x = m_oldX;
 				auto y = m_oldY;
-				m_listener->postEvent( makeFunctorEvent( EventType::ePreRender, [this, window, x, y]()
-				{
-					auto type = window->pick( Position{ int( x ), int( y ) } );
+				m_listener->postEvent( makeCpuFunctorEvent( EventType::ePreRender
+					, [this, window, x, y]()
+					{
+						auto type = window->pick( Position{ int( x ), int( y ) } );
 
-					if ( type != PickNodeType::eNone
-						&& type != PickNodeType::eBillboard )
-					{
-						doUpdateSelectedGeometry( window->getPickedGeometry(), window->getPickedSubmesh() );
-					}
-					else
-					{
-						doUpdateSelectedGeometry( nullptr, nullptr );
-					}
-				} ) );
+						if ( type != PickNodeType::eNone
+							&& type != PickNodeType::eBillboard )
+						{
+							doUpdateSelectedGeometry( window->getPickedGeometry(), window->getPickedSubmesh() );
+						}
+						else
+						{
+							doUpdateSelectedGeometry( nullptr, nullptr );
+						}
+					} ) );
 			}
 		}
 

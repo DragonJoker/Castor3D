@@ -9,8 +9,4 @@ namespace castor3d
 		: SubmeshComponent{ submesh, type }
 	{
 	}
-
-	IndexMapping::~IndexMapping()
-	{
-	}
 }

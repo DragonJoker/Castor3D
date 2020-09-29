@@ -53,15 +53,13 @@ namespace castor3d
 		}
 	}
 
-	bool ShadowMap::initialise()
+	bool ShadowMap::initialise( RenderDevice const & device )
 	{
 		bool result = true;
 
 		if ( !m_initialised )
 		{
-			m_result.initialise();
-			auto & device = getCurrentRenderDevice( *this );
-
+			m_result.initialise( device );
 			{
 				auto cmdBuffer = device.graphicsCommandPool->createCommandBuffer( m_name + "Clear" );
 				cmdBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
@@ -111,14 +109,14 @@ namespace castor3d
 
 			for ( auto & pass : m_passes )
 			{
-				pass.matrixUbo->initialise();
-				result = result && pass.pass->initialise( { size.width, size.height } );
+				pass.matrixUbo->initialise( device );
+				result = result && pass.pass->initialise( device, { size.width, size.height } );
 			}
 
 			if ( result )
 			{
 				m_finished = device->createSemaphore( m_name );
-				doInitialise();
+				doInitialise( device );
 				m_initialised = true;
 			}
 		}
@@ -126,22 +124,23 @@ namespace castor3d
 		return result;
 	}
 
-	void ShadowMap::cleanup()
+	void ShadowMap::cleanup( RenderDevice const & device )
 	{
 		m_finished.reset();
 
 		for ( auto & pass : m_passes )
 		{
-			pass.pass->cleanup();
-			pass.matrixUbo->cleanup();
+			pass.pass->cleanup( device );
+			pass.matrixUbo->cleanup( device );
 		}
 
 		m_initialised = false;
-		doCleanup();
+		doCleanup( device );
 		m_result.cleanup();
 	}
 
-	ashes::Semaphore const & ShadowMap::render( ashes::Semaphore const & toWait
+	ashes::Semaphore const & ShadowMap::render( RenderDevice const & device
+		, ashes::Semaphore const & toWait
 		, uint32_t index )
 	{
 		if ( isUpToDate( index ) )
@@ -149,7 +148,7 @@ namespace castor3d
 			return toWait;
 		}
 
-		return doRender( toWait, index );
+		return doRender( device, toWait, index );
 	}
 
 	ashes::VkClearValueArray const & ShadowMap::getClearValues()const

@@ -39,6 +39,7 @@ namespace castor3d
 		C3D_API ToneMapping( castor::String const & name
 			, castor::String const & fullName
 			, Engine & engine
+			, RenderDevice const & device
 			, HdrConfigUbo & hdrConfigUbo
 			, Parameters const & parameters );
 		/**

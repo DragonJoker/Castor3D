@@ -85,14 +85,15 @@ namespace castor3d
 		 *\param[in]	texture	La texture cible.
 		 *\return		\p true if ok.
 		 */
-		C3D_API bool initialise( TextureLayout const & texture );
+		C3D_API bool initialise( castor3d::RenderDevice const & device
+			, TextureLayout const & texture );
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
 		 *\~french
 		 *\brief		Fonction de nettoyage.
 		 */
-		C3D_API void cleanup();
+		C3D_API void cleanup( castor3d::RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Starts rendering the effect.
@@ -171,14 +172,15 @@ namespace castor3d
 		 *\param[in]	timer	Le timer de la passe de rendu.
 		 *\return		\p true if ok.
 		 */
-		C3D_API virtual bool doInitialise( RenderPassTimer const & timer ) = 0;
+		C3D_API virtual bool doInitialise( castor3d::RenderDevice const & device
+			, RenderPassTimer const & timer ) = 0;
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
 		 *\~french
 		 *\brief		Fonction de nettoyage.
 		 */
-		C3D_API virtual void doCleanup() = 0;
+		C3D_API virtual void doCleanup( castor3d::RenderDevice const & device ) = 0;
 		/**
 		 *\~english
 		 *\brief		Writes the effect into a text file.

@@ -90,7 +90,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~Sampler();
+		C3D_API ~Sampler();
 		/**
 		 *\~english
 		 *\brief		Initialises the GPU sampler.
@@ -99,7 +99,7 @@ namespace castor3d
 		 *\brief		Initialise le sampler GPU.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool initialise();
+		C3D_API bool initialise( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Cleanups the sampler

@@ -43,6 +43,7 @@ namespace castor3d
 
 	protected:
 		C3D_API CombinePass( Engine & engine
+			, RenderDevice const & device
 			, castor::String const & prefix
 			, VkFormat outputFormat
 			, VkExtent2D const & outputSize
@@ -75,6 +76,7 @@ namespace castor3d
 		{
 		public:
 			explicit CombineQuad( Engine & engine
+				, RenderDevice const & device
 				, castor::String const & prefix
 				, IntermediateViewArray const & lhsViews
 				, UniformBufferOffsetT< uint32_t > const & indexUbo
@@ -149,6 +151,7 @@ namespace castor3d
 		}
 
 		inline CombinePassUPtr build( Engine & engine
+			, RenderDevice const & device
 			, castor::String const & prefix
 			, VkFormat outputFormat
 			, VkExtent2D const & outputSize
@@ -160,6 +163,7 @@ namespace castor3d
 			return std::unique_ptr< CombinePass >( new CombinePass
 				{
 					engine,
+					device,
 					prefix,
 					outputFormat,
 					outputSize,

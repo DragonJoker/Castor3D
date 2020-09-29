@@ -13,6 +13,8 @@ See LICENSE file in root folder
 #include "GuiCommon/Properties/Math/RectangleProperties.hpp"
 #include "GuiCommon/Properties/Math/SizeProperties.hpp"
 
+#include <Castor3D/Render/RenderModule.hpp>
+
 #include <CastorUtils/Graphics/Font.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
 
@@ -132,7 +134,7 @@ namespace GuiCommon
 		virtual void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid ) = 0;
 
 	public:
-		using PropertyChangeHandler = std::function< void ( wxVariant const & value ) >;
+		using PropertyChangeHandler = std::function< void ( wxVariant const & ) >;
 		static PropertyChangeHandler const EmptyHandler;
 
 		template< typename ObjectT, typename ValueT >

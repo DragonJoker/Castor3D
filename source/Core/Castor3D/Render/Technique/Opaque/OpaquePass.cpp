@@ -63,7 +63,8 @@ namespace castor3d
 	{
 	}
 
-	void OpaquePass::initialiseRenderPass( OpaquePassResult const & gpResult )
+	void OpaquePass::initialiseRenderPass( RenderDevice const & device
+		, OpaquePassResult const & gpResult )
 	{
 		ashes::VkAttachmentDescriptionArray attachments
 		{
@@ -138,7 +139,6 @@ namespace castor3d
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		auto & device = getCurrentRenderDevice( *this );
 		m_renderPass = device->createRenderPass( "OpaquePass"
 			, std::move( createInfo ) );
 
@@ -167,7 +167,8 @@ namespace castor3d
 		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ) );
 	}
 
-	ashes::Semaphore const & OpaquePass::render( ashes::Semaphore const & toWait )
+	ashes::Semaphore const & OpaquePass::render( RenderDevice const & device
+		, ashes::Semaphore const & toWait )
 	{
 		static ashes::VkClearValueArray const clearValues
 		{
@@ -180,7 +181,6 @@ namespace castor3d
 		};
 
 		auto * result = &toWait;
-		auto & device = getCurrentRenderDevice( *this );
 		auto timerBlock = getTimer().start();
 
 		m_nodesCommands->begin();

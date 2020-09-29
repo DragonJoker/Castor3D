@@ -3006,7 +3006,7 @@ namespace castor3d
 			parsingContext->vertexTan.clear();
 			parsingContext->vertexTex.clear();
 			parsingContext->faces.clear();
-			parsingContext->submesh->getParent().getScene()->getListener().postEvent( makeInitialiseEvent( *parsingContext->submesh ) );
+			parsingContext->submesh->getParent().getScene()->getListener().postEvent( makeGpuInitialiseEvent( *parsingContext->submesh ) );
 		}
 	}
 	CU_EndAttributePop()

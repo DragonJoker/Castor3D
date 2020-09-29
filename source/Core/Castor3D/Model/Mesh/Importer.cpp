@@ -64,7 +64,7 @@ namespace castor3d
 
 				for ( auto submesh : mesh )
 				{
-					mesh.getScene()->getListener().postEvent( makeInitialiseEvent( *submesh ) );
+					mesh.getScene()->getListener().postEvent( makeGpuInitialiseEvent( *submesh ) );
 				}
 			}
 		}

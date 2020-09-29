@@ -393,10 +393,9 @@ namespace castor3d
 		}
 
 		ashes::VertexBufferPtr< NonTexturedQuad::Vertex > doCreateVertexBuffer( castor::String const & name
-			, Engine & engine
+			, RenderDevice const & device
 			, uint32_t rsmSize )
 		{
-			auto & device = getCurrentRenderDevice( engine );
 			auto vplCount = rsmSize * rsmSize;
 
 			auto result = makeVertexBuffer< NonTexturedQuad::Vertex >( device
@@ -422,7 +421,7 @@ namespace castor3d
 		}
 
 		ashes::DescriptorSetLayoutPtr doCreateDescriptorLayout( castor::String const & name
-			, Engine & engine )
+			, RenderDevice const & device )
 		{
 			ashes::VkDescriptorSetLayoutBindingArray bindings
 			{
@@ -445,7 +444,7 @@ namespace castor3d
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, VK_SHADER_STAGE_VERTEX_BIT ),
 			};
-			return getCurrentRenderDevice( engine )->createDescriptorSetLayout( name
+			return device->createDescriptorSetLayout( name
 				, std::move( bindings ) );
 		}
 
@@ -480,7 +479,7 @@ namespace castor3d
 		}
 
 		ashes::GraphicsPipelinePtr doCreatePipeline( castor::String const & name
-			, Engine & engine
+			, RenderDevice const & device
 			, ashes::PipelineLayout const & pipelineLayout
 			, ashes::RenderPass const & renderPass
 			, ShaderModule const & vertexShader
@@ -511,7 +510,6 @@ namespace castor3d
 				1u,
 				ashes::VkScissorArray{ scissor },
 			};
-			auto & device = getCurrentRenderDevice( engine );
 			ashes::PipelineShaderStageCreateInfoArray shaderStages;
 			shaderStages.push_back( makeShaderState( device, vertexShader ) );
 			shaderStages.push_back( makeShaderState( device, geometryShader ) );
@@ -539,6 +537,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	LightInjectionPass::LightInjectionPass( Engine & engine
+		, RenderDevice const & device
 		, LightCache const & lightCache
 		, LightType lightType
 		, ShadowMapResult const & smResult
@@ -549,16 +548,17 @@ namespace castor3d
 		, uint32_t layerIndex )
 		: Named{ "LightInjection" + std::to_string( layerIndex ) }
 		, m_engine{ engine }
+		, m_device{ device }
 		, m_lightCache{ lightCache }
 		, m_smResult{ smResult }
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_lpvConfigUbo{ lpvConfigUbo }
 		, m_lightType{ lightType }
 		, m_result{ result }
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Light Propagation Volumes" ), cuT( "Light Injection " ) + string::toString( layerIndex ) ) }
-		, m_vertexBuffer{ doCreateVertexBuffer( getName(), engine, m_smResult[SmTexture::eDepth].getTexture()->getWidth() ) }
-		, m_descriptorSetLayout{ doCreateDescriptorLayout( getName(), engine ) }
-		, m_pipelineLayout{ getCurrentRenderDevice( m_engine )->createPipelineLayout( getName(), *m_descriptorSetLayout ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( engine, m_device, cuT( "Light Propagation Volumes" ), cuT( "Light Injection " ) + string::toString( layerIndex ) ) }
+		, m_vertexBuffer{ doCreateVertexBuffer( getName(), m_device, m_smResult[SmTexture::eDepth].getTexture()->getWidth() ) }
+		, m_descriptorSetLayout{ doCreateDescriptorLayout( getName(), m_device ) }
+		, m_pipelineLayout{ m_device->createPipelineLayout( getName(), *m_descriptorSetLayout ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( getName(), 1u ) }
 		, m_descriptorSet{ doCreateDescriptorSet( getName()
 			, *m_descriptorSetPool
@@ -571,10 +571,10 @@ namespace castor3d
 		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, getName(), getGeometryProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram() }
 		, m_renderPass{ doCreateRenderPass( getName()
-			, getCurrentRenderDevice( m_engine )
+			, m_device
 			, getFormat( LpvTexture::eR ) ) }
 		, m_pipeline{ doCreatePipeline( getName()
-			, m_engine
+			, m_device
 			, *m_pipelineLayout
 			, *m_renderPass
 			, m_vertexShader
@@ -595,12 +595,11 @@ namespace castor3d
 
 	ashes::Semaphore const & LightInjectionPass::compute( ashes::Semaphore const & toWait )const
 	{
-		auto & device = getCurrentRenderDevice( m_engine );
 		RenderPassTimerBlock timerBlock{ m_timer->start() };
 		timerBlock->notifyPassRender();
 		auto * result = &toWait;
 
-		device.graphicsQueue->submit( *m_commands.commandBuffer
+		m_device.graphicsQueue->submit( *m_commands.commandBuffer
 			, toWait
 			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, *m_commands.semaphore
@@ -613,11 +612,10 @@ namespace castor3d
 	CommandsSemaphore LightInjectionPass::getCommands( RenderPassTimer const & timer
 		, uint32_t index )const
 	{
-		auto & device = getCurrentRenderDevice( m_engine );
 		castor3d::CommandsSemaphore commands
 		{
-			device.graphicsCommandPool->createCommandBuffer( getName() ),
-			device->createSemaphore( getName() )
+			m_device.graphicsCommandPool->createCommandBuffer( getName() ),
+			m_device->createSemaphore( getName() )
 		};
 		auto & cmd = *commands.commandBuffer;
 		auto rsmSize = m_smResult[SmTexture::eDepth].getTexture()->getWidth();

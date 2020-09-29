@@ -82,6 +82,7 @@ namespace castor3d
 		*	La configuration des coordonnées de texture.
 		*/
 		C3D_API RenderQuad( RenderSystem & renderSystem
+			, RenderDevice const & device
 			, castor::String const & name
 			, VkFilter samplerFilter
 			, RenderQuadConfig config );
@@ -239,6 +240,12 @@ namespace castor3d
 			return &m_renderSystem;
 		}
 
+		inline RenderDevice const & getDevice()const
+		{
+			return m_device;
+		}
+		/**@}*/
+
 	private:
 		C3D_API virtual void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
 			, ashes::DescriptorSet & descriptorSet );
@@ -246,6 +253,7 @@ namespace castor3d
 
 	protected:
 		RenderSystem & m_renderSystem;
+		RenderDevice const & m_device;
 		SamplerSPtr m_sampler;
 		ashes::GraphicsPipelinePtr m_pipeline;
 		ashes::PipelineLayoutPtr m_pipelineLayout;
@@ -326,16 +334,15 @@ namespace castor3d
 		*	Le filtre d'échantillonnage pour la texture source.
 		*/
 		inline RenderQuadUPtr build( RenderSystem & renderSystem
+			, RenderDevice const & device
 			, castor::String const & name
 			, VkFilter samplerFilter )
 		{
-			return std::unique_ptr< RenderQuad >( new RenderQuad
-				{
-					renderSystem,
-					name,
-					samplerFilter,
-					m_config,
-				} );
+			return std::unique_ptr< RenderQuad >( new RenderQuad{ renderSystem
+				, device
+				, name
+				, samplerFilter
+				, m_config } );
 		}
 
 	private:

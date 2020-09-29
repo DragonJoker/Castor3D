@@ -50,7 +50,8 @@ namespace castor3d
 			return result;
 		}
 
-		SamplerSPtr doCreateSampler( Engine & engine )
+		SamplerSPtr doCreateSampler( Engine & engine
+			, RenderDevice const & device )
 		{
 			SamplerSPtr result;
 			auto name = cuT( "IblTexturesRadiance" );
@@ -70,7 +71,7 @@ namespace castor3d
 				engine.getSamplerCache().add( name, result );
 			}
 
-			result->initialise();
+			result->initialise( device );
 			return result;
 		}
 
@@ -232,17 +233,17 @@ namespace castor3d
 	//*********************************************************************************************
 
 	RadianceComputer::RadianceComputer( Engine & engine
+		, RenderDevice const & device
 		, Size const & size
 		, ashes::Image const & srcTexture )
-		: RenderCube{ getCurrentRenderDevice( engine ), false }
+		: RenderCube{ device, false }
 		, m_result{ doCreateRadianceTexture( m_device, size ) }
 		, m_resultView{ m_result->createView( "RadianceComputerResult", VK_IMAGE_VIEW_TYPE_CUBE, m_result->getFormat(), 0u, m_result->getMipmapLevels(), 0u, 6u ) }
-		, m_sampler{ doCreateSampler( engine ) }
+		, m_sampler{ doCreateSampler( engine, m_device ) }
 		, m_srcView{ doCreateSrcView( srcTexture ) }
 		, m_renderPass{ doCreateRenderPass( m_device, m_result->getFormat() ) }
 	{
 		auto & dstTexture = *m_result;
-		auto & device = getCurrentRenderDevice( m_device );
 		
 		for ( auto face = 0u; face < 6u; ++face )
 		{

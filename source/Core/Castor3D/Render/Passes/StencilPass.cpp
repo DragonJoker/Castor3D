@@ -32,7 +32,7 @@ namespace castor3d
 	namespace
 	{
 		ashes::RenderPassPtr doCreateRenderPass( castor::String const & name
-			, Engine const & engine
+			, RenderDevice const & device
 			, ashes::ImageView const & depthView )
 		{
 			ashes::VkAttachmentDescriptionArray attaches
@@ -68,8 +68,6 @@ namespace castor3d
 				std::move( subpasses ),
 				std::move( dependencies ),
 			};
-			auto & renderSystem = *engine.getRenderSystem();
-			auto & device = getCurrentRenderDevice( renderSystem );
 			auto result = device->createRenderPass( name
 				, std::move( createInfo ) );
 			return result;
@@ -113,12 +111,12 @@ namespace castor3d
 	{
 	}
 
-	void StencilPass::initialise( ashes::PipelineVertexInputStateCreateInfo const & vertexLayout
+	void StencilPass::initialise( RenderDevice const & device
+		, ashes::PipelineVertexInputStateCreateInfo const & vertexLayout
 		, ashes::VertexBufferBase & vbo )
 	{
 		m_vbo = &vbo;
 		auto & renderSystem = *m_engine.getRenderSystem();
-		auto & device = getCurrentRenderDevice( renderSystem );
 		VkExtent2D size{ m_depthView.image->getDimensions().width, m_depthView.image->getDimensions().height };
 		auto name = m_prefix + "StencilPass";
 
@@ -144,7 +142,7 @@ namespace castor3d
 			, m_descriptorLayout->getBinding( 1u ) );
 		m_descriptorSet->update();
 
-		m_renderPass = doCreateRenderPass( name, m_engine, m_depthView );
+		m_renderPass = doCreateRenderPass( name, device, m_depthView );
 		ashes::ImageViewCRefArray attaches
 		{
 			m_depthView
@@ -236,9 +234,9 @@ namespace castor3d
 		m_descriptorLayout.reset();
 	}
 
-	ashes::Semaphore const & StencilPass::render( ashes::Semaphore const & toWait )
+	ashes::Semaphore const & StencilPass::render( RenderDevice const & device
+		, ashes::Semaphore const & toWait )
 	{
-		auto & device = getCurrentRenderDevice( m_engine );
 		auto * result = &toWait;
 
 		device.graphicsQueue->submit( *m_commandBuffer

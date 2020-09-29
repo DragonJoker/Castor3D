@@ -23,14 +23,12 @@ namespace castor3d
 	{
 		if ( m_renderSystem.hasCurrentRenderDevice() )
 		{
-			initialise();
+			initialise( m_renderSystem.getCurrentRenderDevice() );
 		}
 	}
 
-	uint32_t PoolUniformBuffer::initialise()
+	uint32_t PoolUniformBuffer::initialise( RenderDevice const & device )
 	{
-		CU_Require( m_renderSystem.hasCurrentRenderDevice() );
-		auto & device = getCurrentRenderDevice( m_renderSystem );
 		m_buffer.reset();
 		auto & properties = m_renderSystem.getProperties();
 		auto elemSize = properties.limits.minUniformBufferOffsetAlignment;
@@ -46,9 +44,8 @@ namespace castor3d
 		return uint32_t( m_buffer->getBuffer().getSize() );
 	}
 
-	void PoolUniformBuffer::cleanup()
+	void PoolUniformBuffer::cleanup( RenderDevice const & device )
 	{
-		CU_Require( m_renderSystem.hasCurrentRenderDevice() );
 		m_buffer.reset();
 	}
 

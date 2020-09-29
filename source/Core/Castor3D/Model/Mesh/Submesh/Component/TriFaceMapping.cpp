@@ -34,11 +34,6 @@ namespace castor3d
 	{
 	}
 
-	TriFaceMapping::~TriFaceMapping()
-	{
-		cleanup();
-	}
-
 	Face TriFaceMapping::addFace( uint32_t a, uint32_t b, uint32_t c )
 	{
 		Face result{ a, b, c };
@@ -200,7 +195,7 @@ namespace castor3d
 		m_faces.clear();
 	}
 
-	void TriFaceMapping::doFill()
+	void TriFaceMapping::doFill( RenderDevice const & device )
 	{
 	}
 

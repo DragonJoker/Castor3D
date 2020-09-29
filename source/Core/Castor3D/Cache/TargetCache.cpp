@@ -70,18 +70,19 @@ namespace castor3d
 		}
 	}
 
-	void RenderTargetCache::render( RenderInfo & info )
+	void RenderTargetCache::render( RenderDevice const & device
+		, RenderInfo & info )
 	{
 		LockType lock{ castor::makeUniqueLock( *this ) };
 
 		for ( auto target : m_renderTargets[size_t( TargetType::eTexture )] )
 		{
-			target->render( info );
+			target->render( device, info );
 		}
 
 		for ( auto target : m_renderTargets[size_t( TargetType::eWindow )] )
 		{
-			target->render( info );
+			target->render( device, info );
 		}
 	}
 

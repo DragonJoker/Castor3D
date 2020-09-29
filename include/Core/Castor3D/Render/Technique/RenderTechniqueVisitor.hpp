@@ -26,8 +26,8 @@ namespace castor3d
 	protected:
 		inline RenderTechniqueVisitor( PipelineFlags flags
 			, Scene const & scene
-			, bool forceSubPassesVisit = false )
-			: PipelineVisitor{ forceSubPassesVisit }
+			, Config config = { false, true } )
+			: PipelineVisitor{ std::move( config ) }
 			, m_flags{ std::move( flags ) }
 			, m_scene{ scene }
 		{

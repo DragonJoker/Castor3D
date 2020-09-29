@@ -57,14 +57,15 @@ namespace castor3d
 		 *\param[in]	count	Le nombre d'éléments.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool initialise( uint32_t count );
+		C3D_API bool initialise( RenderDevice const & device
+			, uint32_t count );
 		/**
 		 *\~english
 		 *\brief		Cleans GPU side elements up
 		 *\~french
 		 *\brief		Nettoie les elements GPU
 		 */
-		C3D_API void cleanup();
+		C3D_API void cleanup( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Sorts the points from farthest to nearest from the camera.
@@ -296,20 +297,13 @@ namespace castor3d
 			, Scene & scene );
 		/**
 		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API ~BillboardList();
-		/**
-		 *\~english
 		 *\brief		Initialises GPU side elements
 		 *\return		\p true if all is OK
 		 *\~french
 		 *\brief		Initialise les elements GPU
 		 *\return		\p true si tout s'est bien passe
 		 */
-		C3D_API bool initialise();
+		C3D_API bool initialise( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Removes a point from the list

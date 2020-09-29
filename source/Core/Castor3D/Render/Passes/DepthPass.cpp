@@ -37,6 +37,7 @@ using namespace castor3d;
 namespace castor3d
 {
 	DepthPass::DepthPass( String const & prefix
+		, RenderDevice const & device
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, SsaoConfig const & ssaoConfig
@@ -49,7 +50,6 @@ namespace castor3d
 			, nullptr
 			, ssaoConfig }
 	{
-		auto & device = getCurrentRenderDevice( *this );
 		VkExtent2D size{ depthBuffer->getDimensions().width, depthBuffer->getDimensions().height };
 
 		// Create the render pass.
@@ -122,7 +122,8 @@ namespace castor3d
 	{
 	}
 
-	ashes::Semaphore const & DepthPass::render( ashes::SemaphoreCRefArray const & semaphores )
+	ashes::Semaphore const & DepthPass::render( RenderDevice const & device
+		, ashes::SemaphoreCRefArray const & semaphores )
 	{
 		static ashes::VkClearValueArray const clearValues
 		{
@@ -130,7 +131,6 @@ namespace castor3d
 		};
 
 		RenderPassTimerBlock timerBlock{ getTimer().start() };
-		auto & device = getCurrentRenderDevice( *this );
 
 		m_nodesCommands->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 		m_nodesCommands->beginDebugBlock(
@@ -165,12 +165,12 @@ namespace castor3d
 		return getSemaphore();
 	}
 
-	void DepthPass::doCleanup()
+	void DepthPass::doCleanup( RenderDevice const & device )
 	{
 		m_nodesCommands.reset();
 		m_frameBuffer.reset();
 		m_renderPass.reset();
-		RenderTechniquePass::doCleanup();
+		RenderTechniquePass::doCleanup( device );
 	}
 
 	void DepthPass::doUpdate( RenderQueueArray & queues )

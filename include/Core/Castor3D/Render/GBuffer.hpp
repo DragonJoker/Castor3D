@@ -26,7 +26,7 @@ namespace castor3d
 		}
 
 	protected:
-		static C3D_API TextureUnit doInitialiseTexture( Engine & engine
+		static C3D_API TextureUnit doCreateTexture( Engine & engine
 			, castor::String const & name
 			, VkImageCreateFlags createFlags
 			, VkExtent3D const & size
@@ -53,7 +53,7 @@ namespace castor3d
 				if ( !inputs[i] )
 				{
 					auto texture = TextureEnumT( i );
-					result.emplace_back( doInitialiseTexture( engine
+					result.emplace_back( doCreateTexture( engine
 						, prefix + castor3d::getName( texture )
 						, createFlags
 						, { size.getWidth(), size.getHeight(), 1u }
@@ -84,7 +84,7 @@ namespace castor3d
 				if ( !inputs[i] )
 				{
 					auto texture = TextureEnumT( i );
-					result.emplace_back( doInitialiseTexture( engine
+					result.emplace_back( doCreateTexture( engine
 						, prefix + castor3d::getName( texture )
 						, createFlags
 						, size
@@ -129,14 +129,13 @@ namespace castor3d
 			, uint32_t layerCount = 1u )
 			: GBufferBase{ std::move( name ) }
 			, m_engine{ engine }
-			, m_owned{ GBufferBase::doCreateTextures< TextureEnumT >( engine
+			, m_owned{ GBufferBase::doCreateTextures< TextureEnumT >( m_engine
 				, inputs
 				, getName()
 				, createFlags
 				, size
 				, layerCount ) }
 		{
-			auto & device = getCurrentRenderDevice( m_engine );
 			auto itOwned = m_owned.begin();
 
 			for ( uint32_t i = 0; i < inputs.size(); ++i )
@@ -175,13 +174,12 @@ namespace castor3d
 			, VkExtent3D const & size )
 			: GBufferBase{ std::move( name ) }
 			, m_engine{ engine }
-			, m_owned{ GBufferBase::doCreateTextures< TextureEnumT >( engine
+			, m_owned{ GBufferBase::doCreateTextures< TextureEnumT >( m_engine
 				, inputs
 				, getName()
 				, createFlags
 				, size ) }
 		{
-			auto & device = getCurrentRenderDevice( m_engine );
 			auto itOwned = m_owned.begin();
 
 			for ( uint32_t i = 0; i < inputs.size(); ++i )
@@ -198,11 +196,11 @@ namespace castor3d
 			}
 		}
 
-		void initialise()
+		void initialise( RenderDevice const & device )
 		{
 			for ( auto & unit : m_owned )
 			{
-				unit.initialise();
+				unit.initialise( device );
 			}
 		}
 

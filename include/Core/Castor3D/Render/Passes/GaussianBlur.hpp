@@ -39,6 +39,7 @@ namespace castor3d
 		 *\param[in]	kernelSize	Le nombre de coefficients du kernel.
 		 */
 		C3D_API GaussianBlur( Engine & engine
+			, RenderDevice const & device
 			, castor::String const & prefix
 			, TextureView const & texture
 			, uint32_t kernelSize );
@@ -175,6 +176,7 @@ namespace castor3d
 		{
 		public:
 			RenderQuad( RenderSystem & renderSystem
+				, RenderDevice const & device
 				, castor::String const & name
 				, ashes::ImageView const & src
 				, VkImageSubresourceRange const & srcRange
@@ -207,6 +209,7 @@ namespace castor3d
 			ashes::CommandBufferPtr commandBuffer;
 
 			BlurPass( Engine & engine
+				, RenderDevice const & device
 				, castor::String const & name
 				, ashes::ImageView const & input
 				, ashes::ImageView const & output
@@ -228,6 +231,7 @@ namespace castor3d
 
 	private:
 		TextureView const & m_source;
+		RenderDevice const & m_device;
 		castor::String m_prefix;
 		VkExtent2D m_size;
 		VkFormat m_format;

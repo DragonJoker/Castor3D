@@ -40,6 +40,7 @@ namespace castor3d
 	}
 
 	TextureUnit doCreateTexture( Engine & engine
+		, RenderDevice const & device
 		, castor::String const & name
 		, VkFormat format
 		, VkExtent2D const & size )
@@ -67,11 +68,12 @@ namespace castor3d
 		TextureUnit result{ engine };
 		result.setTexture( layout );
 		result.setSampler( sampler );
-		result.initialise();
+		result.initialise( device );
 		return result;
 	}
 
 	TextureUnitArray doCreateTextures( Engine & engine
+		, RenderDevice const & device
 		, castor::String const & name
 		, ashes::ImageViewArray const & views
 		, VkExtent2D const & size )
@@ -81,6 +83,7 @@ namespace castor3d
 		for ( auto & view : views )
 		{
 			result.emplace_back( doCreateTexture( engine
+				, device
 				, name + string::toString( result.size() )
 				, view->format
 				, size ) );
@@ -92,14 +95,16 @@ namespace castor3d
 	//*********************************************************************************************
 
 	DownscalePass::DownscalePass( Engine & engine
+		, RenderDevice const & device
 		, castor::String const & category
 		, ashes::ImageViewArray const & srcViews
 		, VkExtent2D const & dstSize )
 		: m_engine{ engine }
-		, m_result{ doCreateTextures( engine, "Downscaled", srcViews, dstSize ) }
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, category, cuT( "Downscale" ) ) }
-		, m_commandBuffer{ getCurrentRenderDevice( engine ).graphicsCommandPool->createCommandBuffer( "Downscale", VK_COMMAND_BUFFER_LEVEL_PRIMARY ) }
-		, m_finished{ getCurrentRenderDevice( engine )->createSemaphore( "Downscale" ) }
+		, m_device{ device }
+		, m_result{ doCreateTextures( engine, m_device, "Downscaled", srcViews, dstSize ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( engine, device, category, cuT( "Downscale" ) ) }
+		, m_commandBuffer{ m_device.graphicsCommandPool->createCommandBuffer( "Downscale", VK_COMMAND_BUFFER_LEVEL_PRIMARY ) }
+		, m_finished{ m_device->createSemaphore( "Downscale" ) }
 	{
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
 		m_timer->beginPass( *m_commandBuffer, 0u );
@@ -167,12 +172,11 @@ namespace castor3d
 
 	ashes::Semaphore const & DownscalePass::compute( ashes::Semaphore const & toWait )
 	{
-		auto & device = getCurrentRenderDevice( m_engine );
 		RenderPassTimerBlock timerBlock{ m_timer->start() };
 		timerBlock->notifyPassRender();
 		auto * result = &toWait;
 
-		device.graphicsQueue->submit( *m_commandBuffer
+		m_device.graphicsQueue->submit( *m_commandBuffer
 			, *result
 			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, *m_finished

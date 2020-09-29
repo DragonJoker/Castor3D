@@ -2,6 +2,8 @@
 
 #include "GuiCommon/System/GradientButton.hpp"
 
+#include <Castor3D/Event/Frame/GpuFunctorEvent.hpp>
+
 #include <wx/propgrid/advprops.h>
 
 using namespace castor;

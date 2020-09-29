@@ -12,10 +12,15 @@ namespace castor3d
 	std::string const LayeredLpvConfigUbo::GridSize = "c3d_gridSize";
 	std::string const LayeredLpvConfigUbo::Config = "c3d_config";
 
-	LayeredLpvConfigUbo::LayeredLpvConfigUbo( Engine & engine )
-		: m_engine{ engine }
-		, m_ubo{ getCurrentRenderDevice( m_engine ).uboPools->getBuffer< Configuration >( 0u ) }
+	LayeredLpvConfigUbo::LayeredLpvConfigUbo( RenderDevice const & device )
+		: m_device{ device }
+		, m_ubo{ device.uboPools->getBuffer< Configuration >( 0u ) }
 	{
+	}
+	
+	LayeredLpvConfigUbo::~LayeredLpvConfigUbo()
+	{
+		m_device.uboPools->putBuffer( m_ubo );
 	}
 
 	void LayeredLpvConfigUbo::cpuUpdate( std::array< castor::Grid, shader::DirectionalMaxCascadesCount > const & grids

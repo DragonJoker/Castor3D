@@ -42,13 +42,6 @@ namespace castor3d
 			, uint32_t threshold = 1u );
 		/**
 		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API ~InstantiationComponent();
-		/**
-		 *\~english
 		 *\brief		Increments instance count.
 		 *\param[in]	material	The material for which the instance count is incremented.
 		 *\return		The previous instance count.
@@ -157,9 +150,9 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		bool doInitialise()override;
+		bool doInitialise( RenderDevice const & device )override;
 		void doCleanup()override;
-		void doFill()override;
+		void doFill( RenderDevice const & device )override;
 		void doUpload()override;
 		inline bool doCheckInstanced( uint32_t count )const
 		{

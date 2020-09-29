@@ -483,6 +483,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	RsmInterpolatePass::RsmInterpolatePass( Engine & engine
+		, RenderDevice const & device
 		, LightCache const & lightCache
 		, LightType lightType
 		, VkExtent2D const & size
@@ -494,7 +495,15 @@ namespace castor3d
 		, TextureUnit const & gi
 		, TextureUnit const & nml
 		, TextureUnit const & dst )
-		: RenderQuad{ *engine.getRenderSystem(), "RsmInterpolate", VK_FILTER_LINEAR, { ashes::nullopt, RenderQuadConfig::Texcoord{}, BlendMode::eAdditive } }
+		: RenderQuad{ *engine.getRenderSystem()
+			, device
+			, "RsmInterpolate"
+			, VK_FILTER_LINEAR
+			, { ashes::nullopt
+				, RenderQuadConfig::Texcoord{}
+				, BlendMode::eAdditive
+				, ashes::nullopt
+				, true } }
 		, m_lightCache{ lightCache }
 		, m_gpInfo{ gpInfo }
 		, m_gpResult{ gpResult }
@@ -505,15 +514,14 @@ namespace castor3d
 		, m_rsmSamplesSsbo{ rsmSamplesSsbo }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram( engine, lightType, gi.getTexture()->getWidth(), gi.getTexture()->getHeight() ) }
-		, m_renderPass{ doCreateRenderPass( getCurrentRenderDevice( m_renderSystem ), dst.getTexture()->getPixelFormat() ) }
+		, m_renderPass{ doCreateRenderPass( m_device, dst.getTexture()->getPixelFormat() ) }
 		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, dst.getTexture()->getDefaultView().getTargetView() ) }
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Reflective Shadow Maps" ), cuT( "Interpolate" ) ) }
-		, m_finished{ getCurrentRenderDevice( engine )->createSemaphore( getName() ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( engine, m_device, cuT( "Reflective Shadow Maps" ), cuT( "Interpolate" ) ) }
+		, m_finished{ m_device->createSemaphore( getName() ) }
 	{
-		auto & device = getCurrentRenderDevice( m_renderSystem );
 		ashes::PipelineShaderStageCreateInfoArray shaderStages;
-		shaderStages.push_back( makeShaderState( device, m_vertexShader ) );
-		shaderStages.push_back( makeShaderState( device, m_pixelShader ) );
+		shaderStages.push_back( makeShaderState( m_device, m_vertexShader ) );
+		shaderStages.push_back( makeShaderState( m_device, m_pixelShader ) );
 
 		ashes::VkDescriptorSetLayoutBindingArray bindings
 		{
@@ -563,12 +571,11 @@ namespace castor3d
 	ashes::Semaphore const & RsmInterpolatePass::compute( ashes::Semaphore const & toWait )const
 	{
 		auto & renderSystem = m_renderSystem;
-		auto & device = getCurrentRenderDevice( renderSystem );
 		RenderPassTimerBlock timerBlock{ m_timer->start() };
 		timerBlock->notifyPassRender();
 		auto * result = &toWait;
 
-		device.graphicsQueue->submit( *m_commandBuffer
+		m_device.graphicsQueue->submit( *m_commandBuffer
 			, toWait
 			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, *m_finished
@@ -581,11 +588,10 @@ namespace castor3d
 	CommandsSemaphore RsmInterpolatePass::getCommands( RenderPassTimer const & timer
 		, uint32_t index )const
 	{
-		auto & device = getCurrentRenderDevice( m_renderSystem );
 		castor3d::CommandsSemaphore commands
 		{
-			device.graphicsCommandPool->createCommandBuffer( getName() ),
-			device->createSemaphore( getName() )
+			m_device.graphicsCommandPool->createCommandBuffer( getName() ),
+			m_device->createSemaphore( getName() )
 		};
 		auto & cmd = *commands.commandBuffer;
 
