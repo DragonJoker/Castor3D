@@ -19,6 +19,8 @@ See LICENSE file in root folder
 #include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
 #include <ashespp/Pipeline/PipelineViewportStateCreateInfo.hpp>
 
+#include <type_traits>
+
 namespace castor3d
 {
 	struct RenderQuadConfig
@@ -53,12 +55,15 @@ namespace castor3d
 		ashes::Optional< VkImageSubresourceRange > range;
 		ashes::Optional< Texcoord > texcoordConfig;
 		ashes::Optional< BlendMode > blendMode;
+		ashes::Optional< uint32_t > descriptorSetsCount;
+		ashes::Optional< bool > arraySource;
 	};
 
 	class RenderQuad
 		: public castor::Named
 	{
-		friend class RenderQuadBuilder;
+		template< typename ConfigT, typename BuilderT >
+		friend class RenderQuadBuilderT;
 
 	protected:
 		/**
@@ -129,7 +134,7 @@ namespace castor3d
 		C3D_API void createPipeline( VkExtent2D const & size
 			, castor::Position const & position
 			, ashes::PipelineShaderStageCreateInfoArray const & program
-			, ashes::ImageView const & view
+			, ashes::ImageView const & inputView
 			, ashes::RenderPass const & renderPass
 			, ashes::VkDescriptorSetLayoutBindingArray bindings
 			, ashes::VkPushConstantRangeArray const & pushRanges );
@@ -176,7 +181,7 @@ namespace castor3d
 		C3D_API void createPipeline( VkExtent2D const & size
 			, castor::Position const & position
 			, ashes::PipelineShaderStageCreateInfoArray const & program
-			, ashes::ImageView const & view
+			, ashes::ImageView const & inputView
 			, ashes::RenderPass const & renderPass
 			, ashes::VkDescriptorSetLayoutBindingArray bindings
 			, ashes::VkPushConstantRangeArray const & pushRanges
@@ -198,6 +203,29 @@ namespace castor3d
 		*	The render pass to use.
 		*\param[in] subpassIndex
 		*	The render subpass index.
+		*\param[in] descriptorSetIndex
+		*	The render descriptor set index.
+		*\~french
+		*\brief
+		*	Prépare les commandes de dessin du quad.
+		*\param[in] renderPass
+		*	La passe de rendu à utiliser.
+		*\param[in] subpassIndex
+		*	L'indice de la sous passe de rendu.
+		*\param[in] descriptorSetIndex
+		*	L'indice du descriptor set.
+		*/
+		C3D_API void prepareFrame( ashes::RenderPass const & renderPass
+			, uint32_t subpassIndex
+			, uint32_t descriptorSetIndex );
+		/**
+		*\~english
+		*\brief
+		*	Prepares the commands to render the quad.
+		*\param[in] renderPass
+		*	The render pass to use.
+		*\param[in] subpassIndex
+		*	The render subpass index.
 		*\~french
 		*\brief
 		*	Prépare les commandes de dessin du quad.
@@ -206,29 +234,61 @@ namespace castor3d
 		*\param[in] subpassIndex
 		*	L'indice de la sous passe de rendu.
 		*/
-		C3D_API void prepareFrame( ashes::RenderPass const & renderPass
-			, uint32_t subpassIndex );
+		inline void prepareFrame( ashes::RenderPass const & renderPass
+			, uint32_t subpassIndex )
+		{
+			prepareFrame( renderPass, subpassIndex, 0u );
+		}
 		/**
 		*\~english
 		*\brief
 		*	Prpares the commands to render the quad, inside given command buffer.
 		*\param[in,out] commandBuffer
 		*	The command buffer.
+		*\param[in] descriptorSetIndex
+		*	The render descriptor set index.
 		*\~french
 		*\brief
 		*	Prépare les commandes de dessin du quad, dans le tampon de commandes donné.
 		*\param[in,out] commandBuffer
 		*	Le tampon de commandes.
+		*\param[in] descriptorSetIndex
+		*	L'indice du descriptor set.
 		*/
-		C3D_API void registerFrame( ashes::CommandBuffer & commandBuffer )const;
+		C3D_API void registerFrame( ashes::CommandBuffer & commandBuffer
+			, uint32_t descriptorSetIndex )const;
 		/**
 		*\~english
-		*\return
-		*	The command buffer to render the quad.
+		*\brief
+		*	Prpares the commands to render the quad, inside given command buffer.
+		*\param[in,out] commandBuffer
+		*	The command buffer.
+		*\param[in] descriptorSetIndex
+		*	The render descriptor set index.
 		*\~french
-		*\return
-		*	Le tampon de commandes de dessin du quad.
+		*\brief
+		*	Prépare les commandes de dessin du quad, dans le tampon de commandes donné.
+		*\param[in,out] commandBuffer
+		*	Le tampon de commandes.
+		*\param[in] descriptorSetIndex
+		*	L'indice du descriptor set.
 		*/
+		inline void registerFrame( ashes::CommandBuffer & commandBuffer )const
+		{
+			registerFrame( commandBuffer, 0u );
+		}
+		/**
+		*\~english
+		*\name
+		*	Getters.
+		*\~french
+		*\name
+		*	Accesseurs.
+		**/
+		/**@{*/
+		C3D_API uint32_t getDescriptorSetIndex( uint32_t descriptorBaseIndex
+			, uint32_t level )const;
+
 		inline ashes::CommandBuffer const & getCommandBuffer()const
 		{
 			CU_Require( m_commandBuffer );
@@ -249,6 +309,19 @@ namespace castor3d
 	private:
 		C3D_API virtual void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
 			, ashes::DescriptorSet & descriptorSet );
+		C3D_API virtual void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
+			, ashes::DescriptorSet & descriptorSet
+			, uint32_t descriptorSetIndex );
+		inline void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
+			, ashes::DescriptorSet & descriptorSet
+			, uint32_t descriptorBaseIndex
+			, uint32_t level )
+		{
+			doFillDescriptorSet( descriptorSetLayout
+				, descriptorSet
+				, getDescriptorSetIndex( descriptorBaseIndex, level ) );
+		}
+
 		C3D_API virtual void doRegisterFrame( ashes::CommandBuffer & commandBuffer )const;
 
 	protected:
@@ -264,16 +337,24 @@ namespace castor3d
 		ashes::VertexBufferPtr< TexturedQuad::Vertex > m_vertexBuffer;
 		ashes::DescriptorSetLayoutPtr m_descriptorSetLayout;
 		ashes::DescriptorSetPoolPtr m_descriptorSetPool;
-		ashes::DescriptorSetPtr m_descriptorSet;
+		std::vector< ashes::DescriptorSetPtr > m_descriptorSets;
+		uint32_t m_descriptorSetCount{ 1u };
 		ashes::ImageView const * m_sourceView{ nullptr };
+		ashes::ImageViewArray m_sourceMipViews;
 		bool m_useTexCoords;
+		bool m_arraySource;
 		BlendMode m_blendMode;
 	};
 
-	class RenderQuadBuilder
+	template< typename ConfigT, typename BuilderT >
+	class RenderQuadBuilderT
 	{
+		static_assert( std::is_same_v< ConfigT, RenderQuadConfig >
+			|| std::is_base_of_v< RenderQuadConfig, ConfigT >
+			, "RenderQuadBuilderT::ConfigT must derive from castor3d::RenderQuadConfig" );
+
 	public:
-		inline RenderQuadBuilder()
+		inline RenderQuadBuilderT()
 		{
 		}
 		/**
@@ -284,10 +365,10 @@ namespace castor3d
 		*\param[in] config
 		*	La configuration des coordonnées de texture.
 		*/
-		inline RenderQuadBuilder & texcoordConfig( RenderQuadConfig::Texcoord const & config )
+		inline BuilderT & texcoordConfig( RenderQuadConfig::Texcoord const & config )
 		{
 			m_config.texcoordConfig = config;
-			return *this;
+			return static_cast< BuilderT & >( *this );
 		}
 		/**
 		*\~english
@@ -298,10 +379,24 @@ namespace castor3d
 		*\param[in] range
 		*	Contient les mip levels, pour l'échantillonneur.
 		*/
-		inline RenderQuadBuilder & range( VkImageSubresourceRange const & range )
+		inline BuilderT & range( VkImageSubresourceRange const & range )
 		{
 			m_config.range = range;
-			return *this;
+			return static_cast< BuilderT & >( *this );
+		}
+		/**
+		*\~english
+		*\param[in] range
+		*	Contains mip levels for the sampler.
+		*\~french
+		*\brief
+		*\param[in] range
+		*	Contient les mip levels, pour l'échantillonneur.
+		*/
+		inline BuilderT & arraySource( bool arraySource = true )
+		{
+			m_config.arraySource = arraySource;
+			return static_cast< BuilderT & >( *this );
 		}
 		/**
 		*\~english
@@ -312,10 +407,24 @@ namespace castor3d
 		*\param[in] blend
 		*	Contient le statut de mélange à la destination.
 		*/
-		inline RenderQuadBuilder & blendMode( BlendMode blendMode )
+		inline BuilderT & blendMode( BlendMode blendMode )
 		{
 			m_config.blendMode = blendMode;
-			return *this;
+			return static_cast< BuilderT & >( *this );
+		}
+		/**
+		*\~english
+		*\param[in] count
+		*	Contains the number of descriptor sets to reserve.
+		*\~french
+		*\brief
+		*\param[in] blend
+		*	Contient le nombre de descriptor sets à réserver.
+		*/
+		inline BuilderT & descriptorSetsCount( uint32_t descriptorSetsCount )
+		{
+			m_config.descriptorSetsCount = descriptorSetsCount;
+			return static_cast< BuilderT & >( *this );
 		}
 		/**
 		*\~english
@@ -345,8 +454,13 @@ namespace castor3d
 				, m_config } );
 		}
 
-	private:
-		RenderQuadConfig m_config;
+	protected:
+		ConfigT m_config;
+	};
+
+	class RenderQuadBuilder
+		: public RenderQuadBuilderT< RenderQuadConfig, RenderQuadBuilder >
+	{
 	};
 }
 

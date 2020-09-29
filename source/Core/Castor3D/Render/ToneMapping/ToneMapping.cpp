@@ -26,7 +26,12 @@ namespace castor3d
 		, HdrConfigUbo & hdrConfigUbo
 		, Parameters const & parameters )
 		: OwnedBy< Engine >{ engine }
-		, RenderQuad{ *engine.getRenderSystem(), name, VK_FILTER_NEAREST, { ashes::nullopt, RenderQuadConfig::Texcoord{} } }
+		, RenderQuad{ *engine.getRenderSystem()
+			, device
+			, name
+			, VK_FILTER_NEAREST
+			, { ashes::nullopt
+				, RenderQuadConfig::Texcoord{} } }
 		, m_hdrConfigUbo{ hdrConfigUbo }
 		, m_fullName{ fullName }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "ToneMapping" }

@@ -74,7 +74,7 @@ namespace castor3d
 			return texture.createView( std::move( createInfo ) );
 		}
 
-		ashes::ImageView doCreateBarrierView( IntermediateView const & view )
+		IntermediateView doCreateBarrierView( IntermediateView const & view )
 		{
 			ashes::ImageViewCreateInfo createInfo
 			{
@@ -97,16 +97,39 @@ namespace castor3d
 					view.view->subresourceRange.layerCount,
 				},
 			};
-			return view.view.image->createView( std::move( createInfo ) );
+			return
+			{
+				view.name,
+				view.view.image->createView( std::move( createInfo ) ),
+				view.layout,
+				view.factors,
+			};
 		}
 
-		ashes::ImageViewArray doCreateBarrierViews( IntermediateViewArray const & views )
+		IntermediateViewArray doCreateBarrierViews( CombinePassConfig config
+			, IntermediateViewArray const & views
+			, ashes::ImageView const & outputView )
 		{
-			ashes::ImageViewArray result;
+			using castor3d::operator!=;
+			IntermediateViewArray result;
+
+			if ( !config.descriptorSetsCount
+				|| config.descriptorSetsCount.value() == 1u )
+			{
+				auto & view = views[0u];
+				CU_Require( view.view->image != outputView->image
+					|| view.view->subresourceRange != outputView->subresourceRange );
+				result.push_back( doCreateBarrierView( view ) );
+				return result;
+			}
 
 			for ( auto & view : views )
 			{
-				result.push_back( doCreateBarrierView( view ) );
+				if ( view.view->image != outputView->image
+					|| view.view->subresourceRange != outputView->subresourceRange )
+				{
+					result.push_back( doCreateBarrierView( view ) );
+				}
 			}
 
 			return result;
@@ -142,13 +165,30 @@ namespace castor3d
 			};
 		}
 
-		IntermediateViewArray doCreateSampledViews( IntermediateViewArray const & views )
+		IntermediateViewArray doCreateSampledViews( CombinePassConfig config
+			, IntermediateViewArray const & views
+			, ashes::ImageView const & outputView )
 		{
+			using castor3d::operator!=;
 			IntermediateViewArray result;
+
+			if ( !config.descriptorSetsCount
+				|| config.descriptorSetsCount.value() == 1u )
+			{
+				auto & view = views[0u];
+				CU_Require( view.view->image != outputView->image
+					|| view.view->subresourceRange != outputView->subresourceRange );
+				result.push_back( doCreateSampledView( view ) );
+				return result;
+			}
 
 			for ( auto & view : views )
 			{
-				result.push_back( doCreateSampledView( view ) );
+				if ( view.view->image != outputView->image
+					|| view.view->subresourceRange != outputView->subresourceRange )
+				{
+					result.push_back( doCreateSampledView( view ) );
+				}
 			}
 
 			return result;
@@ -234,31 +274,22 @@ namespace castor3d
 		, RenderDevice const & device
 		, castor::String const & prefix
 		, IntermediateViewArray const & lhsViews
-		, UniformBufferOffsetT< uint32_t > const & indexUbo
 		, RenderQuadConfig const & config )
 		: RenderQuad{ *engine.getRenderSystem(), device, cuT( "Combine" ), VK_FILTER_LINEAR, config }
 		, m_lhsViews{ lhsViews }
-		, m_indexUbo{ indexUbo }
 		, m_lhsSampler{ createSampler( engine, prefix + cuT( "Combine" ), VK_FILTER_LINEAR, &m_lhsViews[0].view->subresourceRange ) }
 	{
 		m_lhsSampler->initialise( m_device );
 	}
 
 	void CombinePass::CombineQuad::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-		, ashes::DescriptorSet & descriptorSet )
+		, ashes::DescriptorSet & descriptorSet
+		, uint32_t descriptorSetIndex )
 	{
-		uint32_t index = 0u;
-		m_indexUbo.createSizedBinding( descriptorSet
-			, descriptorSetLayout.getBinding( 0u ) );
-
-		for ( auto & lhsView : m_lhsViews )
-		{
-			descriptorSet.createBinding( descriptorSetLayout.getBinding( 1u )
-				, lhsView.view
-				, m_lhsSampler->getSampler()
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-				, index++ );
-		}
+		descriptorSet.createBinding( descriptorSetLayout.getBinding( 0u )
+			, m_lhsViews[descriptorSetIndex].view
+			, m_lhsSampler->getSampler()
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 	}
 
 	//*********************************************************************************************
@@ -279,21 +310,20 @@ namespace castor3d
 		: m_engine{ engine }
 		, m_vertexShader{ vertexShader }
 		, m_pixelShader{ pixelShader }
-		, m_lhsBarrierViews{ doCreateBarrierViews( lhsViews ) }
-		, m_lhsViews{ doCreateSampledViews( lhsViews ) }
+		, m_image{ ( config.resultTexture
+			? std::move( *config.resultTexture )
+			: doCreateTexture( *engine.getRenderSystem(), device, prefix, outputSize, outputFormat ) ) }
+		, m_view{ doCreateView( m_image->getTexture() ) }
+		, m_lhsBarrierViews{ doCreateBarrierViews( config, lhsViews, m_view ) }
+		, m_lhsViews{ doCreateSampledViews( config, lhsViews, m_view ) }
 		, m_rhsBarrierView{ doCreateBarrierView( rhsView ) }
 		, m_rhsView{ doCreateSampledView( rhsView ) }
 		, m_config{ config }
 		, m_prefix{ prefix }
-		, m_image{ ( config.resultTexture
-			? std::move( *config.resultTexture )
-			: doCreateTexture( *engine.getRenderSystem(), prefix, outputSize, outputFormat ) ) }
-		, m_view{ doCreateView( m_image->getTexture() ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, device, m_prefix, cuT( "Combine" ) ) }
 		, m_renderPass{ doCreateRenderPass( device, m_prefix, outputFormat ) }
 		, m_frameBuffer{ doCreateFrameBuffer( m_prefix, *m_renderPass, m_view, outputSize ) }
-		, m_indexUbo{ getCurrentRenderDevice( engine ).uboPools->getBuffer< uint32_t >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
-		, m_quad{ engine, m_prefix, m_lhsViews, m_indexUbo, std::move( config ) }
+		, m_quad{ engine, device, m_prefix, m_lhsViews, std::move( config ) }
 	{
 		ashes::PipelineShaderStageCreateInfoArray program
 		{
@@ -303,12 +333,8 @@ namespace castor3d
 		ashes::VkDescriptorSetLayoutBindingArray bindings
 		{
 			makeDescriptorSetLayoutBinding( 0u
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-			makeDescriptorSetLayoutBinding( 1u
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT
-				, uint32_t( m_lhsViews.size() ) ),
+				, VK_SHADER_STAGE_FRAGMENT_BIT ),
 		};
 		m_quad.createPipeline( outputSize
 			, Position{}
@@ -317,14 +343,15 @@ namespace castor3d
 			, *m_renderPass
 			, bindings
 			, {} );
-		auto commands = getCommands( *m_timer, 0u );
-		m_commandBuffer = std::move( commands.commandBuffer );
-		m_finished = std::move( commands.semaphore );
+
+		for ( uint32_t i = 0u; i < uint32_t( m_lhsViews.size() ); ++i )
+		{
+			m_commands.push_back( getCommands( *m_timer, i ) );
+		}
 	}
 
 	CombinePass::~CombinePass()
 	{
-		getCurrentRenderDevice( m_engine ).uboPools->putBuffer( m_indexUbo );
 	}
 
 	void CombinePass::accept( PipelineVisitorBase & visitor )
@@ -335,22 +362,23 @@ namespace castor3d
 
 	void CombinePass::update( CpuUpdater & updater )
 	{
-		m_indexUbo.getData() = updater.combineIndex;
+		m_index = std::min( updater.combineIndex, uint32_t( m_lhsViews.size() ) );
 	}
 
 	ashes::Semaphore const & CombinePass::combine( ashes::Semaphore const & toWait )const
 	{
 		//RenderPassTimerBlock timerBlock{ m_timer->start() };
 		//timerBlock->notifyPassRender();
+		auto & commands = m_commands[m_index];
 		auto & device = m_quad.getDevice();
 		auto * result = &toWait;
 
-		device.graphicsQueue->submit( *m_commandBuffer
+		device.graphicsQueue->submit( *commands.commandBuffer
 			, *result
 			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, *m_finished
+			, *commands.semaphore
 			, nullptr );
-		result = m_finished.get();
+		result = commands.semaphore.get();
 
 		return *result;
 	}
@@ -374,21 +402,16 @@ namespace castor3d
 				makeFloatArray( device.renderSystem.getEngine()->getNextRainbowColour() ),
 			} );
 
-		auto it = m_lhsViews.begin();
-		for ( auto & lhsView : m_lhsBarrierViews )
-		{
-			cmd.memoryBarrier( ashes::getStageMask( it->layout )
-				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, lhsView.makeLayoutTransition( it->layout
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-					, VK_QUEUE_FAMILY_IGNORED
-					, VK_QUEUE_FAMILY_IGNORED ) );
-			++it;
-		}
-
-		cmd.memoryBarrier( ashes::getStageMask( m_rhsView.layout )
+		auto & lhsBarrierView = m_lhsBarrierViews[index];
+		cmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_rhsBarrierView.makeLayoutTransition( m_rhsView.layout
+			, lhsBarrierView.view.makeLayoutTransition( VK_IMAGE_LAYOUT_UNDEFINED
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, VK_QUEUE_FAMILY_IGNORED
+				, VK_QUEUE_FAMILY_IGNORED ) );
+		cmd.memoryBarrier( ashes::getStageMask( m_rhsBarrierView.layout )
+			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, m_rhsBarrierView.view.makeLayoutTransition( m_rhsBarrierView.layout
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				, VK_QUEUE_FAMILY_IGNORED
 				, VK_QUEUE_FAMILY_IGNORED ) );
@@ -397,25 +420,19 @@ namespace castor3d
 			, *m_frameBuffer
 			, { transparentBlackClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE );
-		m_quad.registerFrame( cmd );
+		m_quad.registerFrame( cmd, index );
 		cmd.endRenderPass();
 
-		it = m_lhsViews.begin();
-		for ( auto & lhsView : m_lhsBarrierViews )
-		{
-			cmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, ashes::getStageMask( it->layout )
-				, lhsView.makeLayoutTransition( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-					, it->layout
-					, VK_QUEUE_FAMILY_IGNORED
-					, VK_QUEUE_FAMILY_IGNORED ) );
-			++it;
-		}
-
 		cmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, ashes::getStageMask( m_rhsView.layout )
-			, m_rhsBarrierView.makeLayoutTransition( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-				, m_rhsView.layout
+			, ashes::getStageMask( lhsBarrierView.layout )
+			, lhsBarrierView.view.makeLayoutTransition( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, lhsBarrierView.layout
+				, VK_QUEUE_FAMILY_IGNORED
+				, VK_QUEUE_FAMILY_IGNORED ) );
+		cmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, ashes::getStageMask( m_rhsBarrierView.layout )
+			, m_rhsBarrierView.view.makeLayoutTransition( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, m_rhsBarrierView.layout
 				, VK_QUEUE_FAMILY_IGNORED
 				, VK_QUEUE_FAMILY_IGNORED ) );
 		

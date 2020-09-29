@@ -79,16 +79,22 @@ namespace castor3d
 				, RenderDevice const & device
 				, castor::String const & prefix
 				, IntermediateViewArray const & lhsViews
-				, UniformBufferOffsetT< uint32_t > const & indexUbo
 				, RenderQuadConfig const & config );
 
 		private:
 			void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-				, ashes::DescriptorSet & descriptorSet )override;
+				, ashes::DescriptorSet & descriptorSet
+				, uint32_t descriptorSetIndex )override;
+			inline void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
+				, ashes::DescriptorSet & descriptorSet )override
+			{
+				doFillDescriptorSet( descriptorSetLayout
+					, descriptorSet
+					, 0u );
+			}
 
 		private:
 			IntermediateViewArray m_lhsViews;
-			UniformBufferOffsetT< uint32_t > const & m_indexUbo;
 			SamplerSPtr m_lhsSampler;
 		};
 
@@ -96,40 +102,28 @@ namespace castor3d
 		Engine & m_engine;
 		ShaderModule const & m_vertexShader;
 		ShaderModule const & m_pixelShader;
-		ashes::ImageViewArray m_lhsBarrierViews;
+		TextureLayoutSPtr m_image;
+		ashes::ImageView m_view;
+		IntermediateViewArray m_lhsBarrierViews;
 		IntermediateViewArray m_lhsViews;
-		ashes::ImageView m_rhsBarrierView;
+		IntermediateView m_rhsBarrierView;
 		IntermediateView m_rhsView;
 		CombinePassConfig m_config;
 		castor::String m_prefix;
-		TextureLayoutSPtr m_image;
-		ashes::ImageView m_view;
 		RenderPassTimerSPtr m_timer;
-		ashes::CommandBufferPtr m_commandBuffer;
-		ashes::SemaphorePtr m_finished;
+		CommandsSemaphoreArray m_commands;
 		ashes::RenderPassPtr m_renderPass;
 		ashes::FrameBufferPtr m_frameBuffer;
-		UniformBufferOffsetT< uint32_t > m_indexUbo;
 		CombineQuad m_quad;
+		uint32_t m_index{ 0u };
 	};
 
 	class CombinePassBuilder
+		: public RenderQuadBuilderT< CombinePassConfig, CombinePassBuilder >
 	{
 	public:
 		inline CombinePassBuilder()
 		{
-		}
-
-		inline CombinePassBuilder & texcoordConfig( RenderQuadConfig::Texcoord const & config )
-		{
-			m_config.texcoordConfig = config;
-			return *this;
-		}
-
-		inline CombinePassBuilder & range( VkImageSubresourceRange const & range )
-		{
-			m_config.range = range;
-			return *this;
 		}
 
 		inline CombinePassBuilder & resultTexture( TextureLayoutSPtr resultTexture )
@@ -176,7 +170,7 @@ namespace castor3d
 		}
 
 	private:
-		CombinePassConfig m_config;
+		using RenderQuadBuilderT< CombinePassConfig, CombinePassBuilder >::build;
 	};
 }
 

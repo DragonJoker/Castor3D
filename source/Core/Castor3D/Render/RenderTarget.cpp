@@ -793,11 +793,8 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader inputs
-			sdw::Ubo combineUbo{ writer, "CombineUbo", 0u, 0u };
-			auto c3d_combineIndex = combineUbo.declMember< UInt >( "c3d_combineIndex" );
-			combineUbo.end();
-			auto c3d_mapsLhs = writer.declSampledImageArray< FImg2DRgba32 >( "c3d_mapsLhs", 1u, 0u, uint32_t( m_intermediates.size() ) );
-			auto c3d_mapRhs = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapRhs", 2u, 0u );
+			auto c3d_mapLhs = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLhs", 0u, 0u );
+			auto c3d_mapRhs = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapRhs", 1u, 0u );
 
 			auto vtx_textureLhs = writer.declInput< Vec2 >( "vtx_textureLhs", LhsIdx );
 			auto vtx_textureRhs = writer.declInput< Vec2 >( "vtx_textureRhs", RhsIdx );
@@ -809,20 +806,11 @@ namespace castor3d
 				, [&]()
 				{
 					auto lhsColor = writer.declLocale( "lhsColor"
-						, texture( c3d_mapsLhs[c3d_combineIndex], vtx_textureLhs ) );
-
-					IF( writer, c3d_combineIndex == 0_u )
-					{
-						auto rhsColor = writer.declLocale( "rhsColor"
-							, texture( c3d_mapRhs, vtx_textureRhs ) );
-						lhsColor.rgb() *= 1.0_f - rhsColor.a();
-						pxl_fragColor = vec4( lhsColor.rgb() + rhsColor.rgb(), 1.0_f );
-					}
-					ELSE
-					{
-						pxl_fragColor = vec4( lhsColor.rgb(), 1.0_f );
-					}
-					FI;
+						, texture( c3d_mapLhs, vtx_textureLhs ) );
+					auto rhsColor = writer.declLocale( "rhsColor"
+						, texture( c3d_mapRhs, vtx_textureRhs ) );
+					lhsColor.rgb() *= 1.0_f - rhsColor.a();
+					pxl_fragColor = vec4( lhsColor.rgb() + rhsColor.rgb(), 1.0_f );
 				} );
 			m_combinePxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
@@ -837,9 +825,12 @@ namespace castor3d
 		mainBuilder.resultTexture( m_combinedFrameBuffer.colourTexture.getTexture() );
 		mainBuilder.texcoordConfig( RenderQuadConfig::Texcoord{} );
 
-#if C3D_DebugQuads
 		m_combinePass = CombinePassBuilder{ mainBuilder }
+#if C3D_DebugQuads
+			.descriptorSetsCount( uint32_t( m_intermediates.size() ) )
+#endif
 			.build( *getEngine()
+				, device
 				, "Target"
 				, getPixelFormat()
 				, extent
@@ -847,17 +838,6 @@ namespace castor3d
 				, m_combinePxl
 				, m_intermediates
 				, { "", m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView().getSampledView(), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
-#else
-		m_combinePass = CombinePassBuilder{ mainBuilder }
-			.build( *getEngine()
-				, "Target"
-				, getPixelFormat()
-				, extent
-				, m_combineVtx
-				, m_combinePxl
-				, { *m_intermediates.begin() }
-				, { "", m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView().getSampledView(), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
-#endif
 	}
 
 	void RenderTarget::doRender( RenderDevice const & device

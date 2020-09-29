@@ -22,7 +22,7 @@ namespace GuiCommon
 		{
 		private:
 			explicit PostEffectShaderGatherer( ShaderSources & sources )
-				: castor3d::PipelineVisitor{ false }
+				: castor3d::PipelineVisitor{ { false, true } }
 				, m_sources{ sources }
 			{
 			}

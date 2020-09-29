@@ -57,6 +57,8 @@ namespace castor3d
 	*\brief
 	*	Utilisée pour créer une variable RenderQuad.
 	*/
+	template< typename ConfigT, typename BuilderT >
+	class RenderQuadBuilderT;
 	class RenderQuadBuilder;
 	/**
 	*\~english

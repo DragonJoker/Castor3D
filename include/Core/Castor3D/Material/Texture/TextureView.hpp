@@ -149,6 +149,10 @@ namespace castor3d
 		{
 			return m_needsYInversion;
 		}
+
+		static VkImageViewCreateInfo convertToSampledView( VkImageViewCreateInfo createInfo );
+		static VkImageViewCreateInfo convertToTargetView( VkImageViewCreateInfo createInfo
+			, uint32_t depth );
 		/**@}*/
 
 	private:

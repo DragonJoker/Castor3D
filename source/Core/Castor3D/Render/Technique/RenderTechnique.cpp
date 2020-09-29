@@ -49,25 +49,57 @@ namespace castor3d
 				technique.accept( visTransparent );
 			}
 
-			void visit( castor::String const & name
-				, ashes::ImageView const & view
-				, VkImageLayout layout
-				, TextureFactors const & factors )override
-			{
-				m_result.push_back( { name, view, layout, factors } );
-			}
-
 		private:
 			IntermediatesLister( PipelineFlags const & flags
 				, Scene const & scene
 				, std::vector< IntermediateView > & result )
-				: RenderTechniqueVisitor{ flags, scene, true }
+				: RenderTechniqueVisitor{ flags, scene, { true, false } }
 				, m_result{ result }
 			{
 			}
 
+			void doVisit( castor::String const & name
+				, ashes::ImageView const & view
+				, VkImageLayout layout
+				, TextureFactors const & factors )override
+			{
+				m_cache.insert( view.createInfo );
+				m_result.push_back( { name, view, layout, factors } );
+			}
+
+			bool doFilter( VkImageViewCreateInfo const & info )const override
+			{
+				return info.viewType == VK_IMAGE_VIEW_TYPE_2D
+					&& info.subresourceRange.baseMipLevel == 0u
+					&& info.subresourceRange.levelCount == 1u
+					&& info.subresourceRange.layerCount == 1u
+					&& m_cache.end() == m_cache.find( info );
+			}
+
 		private:
 			std::vector< IntermediateView > & m_result;
+			struct VkImageViewCreateInfoComp
+			{
+				bool operator()( VkImageViewCreateInfo const & lhs
+					, VkImageViewCreateInfo const & rhs )const
+				{
+					return ( lhs.image < rhs.image
+						|| ( lhs.image == rhs.image
+							&& ( lhs.subresourceRange.baseArrayLayer < rhs.subresourceRange.baseArrayLayer
+								|| ( lhs.subresourceRange.baseArrayLayer == rhs.subresourceRange.baseArrayLayer
+									&& ( lhs.subresourceRange.baseMipLevel < rhs.subresourceRange.baseMipLevel
+										|| ( lhs.subresourceRange.baseMipLevel == rhs.subresourceRange.baseMipLevel
+											&& ( lhs.subresourceRange.layerCount < rhs.subresourceRange.layerCount
+												|| ( lhs.subresourceRange.layerCount == rhs.subresourceRange.layerCount
+													&& ( lhs.subresourceRange.levelCount < rhs.subresourceRange.levelCount
+														|| ( lhs.subresourceRange.levelCount == rhs.subresourceRange.levelCount
+															&& ( lhs.viewType < rhs.viewType
+																|| ( lhs.viewType == rhs.viewType
+																	&& ( lhs.format < rhs.format ) ) ) ) ) ) ) ) ) ) ) ) );
+
+				}
+			};
+			std::set< VkImageViewCreateInfo, VkImageViewCreateInfoComp > m_cache;
 		};
 
 		std::map< double, LightSPtr > doSortLights( LightCache const & cache
