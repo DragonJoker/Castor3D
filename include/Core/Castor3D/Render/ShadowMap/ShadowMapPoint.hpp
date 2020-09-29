@@ -93,7 +93,6 @@ namespace castor3d
 			std::array< ashes::ImageView, size_t( SmTexture::eCount ) > views;
 			ashes::ImageView varianceView;
 			ashes::FrameBufferPtr frameBuffer;
-			std::unique_ptr< GaussianBlur > blur;
 			CommandsSemaphore blurCommands{ nullptr, nullptr };
 		};
 		struct PassData
@@ -105,6 +104,7 @@ namespace castor3d
 			std::array< ashes::ImageView, size_t( SmTexture::eCount ) > views;
 		};
 		std::vector< PassData > m_passesData;
+		std::unique_ptr< GaussianBlur > m_blur;
 	};
 }
 

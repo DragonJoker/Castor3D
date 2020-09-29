@@ -18,6 +18,9 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	using TextureViewCRef = std::reference_wrapper< TextureView const >;
+	using TextureViewCRefArray = std::vector< TextureViewCRef >;
+
 	class GaussianBlur
 		: public castor::OwnedBy< Engine >
 	{
@@ -41,7 +44,7 @@ namespace castor3d
 		C3D_API GaussianBlur( Engine & engine
 			, RenderDevice const & device
 			, castor::String const & prefix
-			, TextureView const & texture
+			, TextureView const & view
 			, uint32_t kernelSize );
 		/**
 		 *\~english
@@ -58,7 +61,8 @@ namespace castor3d
 		 *\param[in]	timer	Le timer de rendu.
 		 *\return		Les commandes utilisées pour rendre la passe.
 		 */
-		C3D_API CommandsSemaphore getCommands( bool generateMipmaps = false )const;
+		C3D_API CommandsSemaphore getCommands( bool generateMipmaps = false
+			, uint32_t layer = 0u )const;
 		/**
 		 *\~english
 		 *\param[in]	timer	The render timer.
@@ -68,7 +72,7 @@ namespace castor3d
 		 *\return		Les commandes utilisées pour rendre la passe.
 		 */
 		C3D_API CommandsSemaphore getCommands( RenderPassTimer const & timer
-			, uint32_t index
+			, uint32_t layer
 			, bool generateMipmaps = false )const;
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
@@ -89,16 +93,20 @@ namespace castor3d
 			return *m_renderPass;
 		}
 
-		inline ashes::FrameBuffer const & getBlurXFrameBuffer()const
+		inline ashes::FrameBuffer const & getBlurXFrameBuffer( uint32_t level )const
 		{
-			CU_Require( m_blurX.fbo );
-			return *m_blurX.fbo;
+			CU_Require( ( !m_blurX.fbos.empty() )
+				&& m_blurX.fbos[0u].size() > level
+				&& m_blurX.fbos[0u][level] );
+			return *m_blurX.fbos[0u][level];
 		}
 
-		inline ashes::FrameBuffer const & getBlurYFrameBuffer()const
+		inline ashes::FrameBuffer const & getBlurYFrameBuffer( uint32_t layer, uint32_t level )const
 		{
-			CU_Require( m_blurY.fbo );
-			return *m_blurY.fbo;
+			CU_Require( m_blurY.fbos.size() > layer
+				&& m_blurY.fbos[layer].size() > level
+				&& m_blurY.fbos[layer][level] );
+			return *m_blurY.fbos[layer][level];
 		}
 
 		inline ashes::CommandBuffer const & getBlurXCommandBuffer()const
@@ -180,11 +188,7 @@ namespace castor3d
 				, castor::String const & name
 				, ashes::ImageView const & src
 				, VkImageSubresourceRange const & srcRange
-				, ashes::ImageView const & dst
-				, VkImageSubresourceRange const & dstRange
-				, UniformBufferOffsetT< Configuration > const & blurUbo
-				, VkFormat format
-				, VkExtent2D const & size );
+				, UniformBufferOffsetT< Configuration > const & blurUbo );
 
 		private:
 			virtual void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
@@ -192,7 +196,6 @@ namespace castor3d
 
 		public:
 			ashes::ImageView srcView;
-			ashes::ImageView dstView;
 
 		private:
 			UniformBufferOffsetT< Configuration > const & m_blurUbo;
@@ -201,12 +204,14 @@ namespace castor3d
 
 		struct BlurPass
 		{
-			std::vector< RenderQuadPtr > quads;
+			RenderQuadPtr quad;
 			ShaderModule vertexShader;
 			ShaderModule pixelShader;
 			ashes::SemaphorePtr semaphore;
-			ashes::FrameBufferPtr fbo;
+			ashes::ImageViewArray views;
+			std::vector< ashes::FrameBufferPtrArray > fbos;
 			ashes::CommandBufferPtr commandBuffer;
+			bool isHorizontal;
 
 			BlurPass( Engine & engine
 				, RenderDevice const & device
@@ -218,8 +223,10 @@ namespace castor3d
 				, VkExtent2D const & textureSize
 				, ashes::RenderPass const & renderPass
 				, bool isHorizontal );
-			void getCommands( ashes::CommandBuffer const & cmd
-				, ashes::RenderPass const & renderPass )const;
+			void getCommands( ashes::CommandBuffer & cmd
+				, ashes::RenderPass const & renderPass
+				, uint32_t layer
+				, bool generateMipmaps )const;
 
 		private:
 			ashes::CommandBufferPtr doGenerateCommandBuffer( RenderDevice const & device

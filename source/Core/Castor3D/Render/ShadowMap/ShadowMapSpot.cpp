@@ -119,6 +119,11 @@ namespace castor3d
 		auto & variance = *m_result[SmTexture::eVariance].getTexture();
 		auto & position = *m_result[SmTexture::ePosition].getTexture();
 		auto & flux = *m_result[SmTexture::eFlux].getTexture();
+		m_blur = std::make_unique< GaussianBlur >( *getEngine()
+			, device
+			, "ShadowMapSpot"
+			, variance.getDefaultView()
+			, 5u );
 
 		for ( auto i = 0u; i < m_passes.size(); ++i )
 		{
@@ -135,19 +140,16 @@ namespace castor3d
 					device.graphicsCommandPool->createCommandBuffer( debugName ),
 					renderPass.createFrameBuffer( debugName, size, std::move( attaches ) ),
 					device->createSemaphore( debugName ),
-					std::make_unique< GaussianBlur >( *getEngine()
-						, debugName
-						, variance.getLayer2DView( i )
-						, 5u ),
 					{ nullptr, nullptr }
 				} );
-			m_passesData.back().blurCommands = m_passesData.back().blur->getCommands( true );
+			m_passesData.back().blurCommands = m_blur->getCommands( true, i );
 		}
 	}
 
 	void ShadowMapSpot::doCleanup( RenderDevice const & device )
 	{
 		m_passesData.clear();
+		m_blur.reset();
 	}
 
 	ashes::Semaphore const & ShadowMapSpot::doRender( RenderDevice const & device

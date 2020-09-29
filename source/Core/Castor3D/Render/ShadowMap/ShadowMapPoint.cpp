@@ -132,6 +132,11 @@ namespace castor3d
 		auto & variance = *m_result[SmTexture::eVariance].getTexture();
 		auto & position = *m_result[SmTexture::ePosition].getTexture();
 		auto & flux = *m_result[SmTexture::eFlux].getTexture();
+		m_blur = std::make_unique< GaussianBlur >( *getEngine()
+			, device
+			, "ShadowMapPoint"
+			, variance.getDefaultView()
+			, 5u );
 
 		for ( uint32_t layer = 0u; layer < shader::getPointShadowMapCount(); ++layer )
 		{
@@ -173,11 +178,7 @@ namespace castor3d
 					, std::move( attaches ) );
 
 				frameBuffer.varianceView = variance.getLayerCubeFaceView( layer, face ).getTargetView();
-				frameBuffer.blur = std::make_unique< GaussianBlur >( *getEngine()
-					, debugName
-					, variance.getLayerCubeFaceView( layer, face )
-					, 5u );
-				frameBuffer.blurCommands = frameBuffer.blur->getCommands( true );
+				frameBuffer.blurCommands = m_blur->getCommands( true, passIndex );
 				++passIndex;
 			}
 
@@ -201,6 +202,7 @@ namespace castor3d
 	void ShadowMapPoint::doCleanup( RenderDevice const & device )
 	{
 		m_passesData.clear();
+		m_blur.reset();
 	}
 
 	ashes::Semaphore const & ShadowMapPoint::doRender( RenderDevice const & device

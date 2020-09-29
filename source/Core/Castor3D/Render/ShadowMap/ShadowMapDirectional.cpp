@@ -152,6 +152,12 @@ namespace castor3d
 		auto & position = m_result[SmTexture::ePosition].getTexture()->getArray2D();
 		auto & flux = m_result[SmTexture::eFlux].getTexture()->getArray2D();
 
+		m_blur = std::make_unique< GaussianBlur >( *getEngine()
+			, device
+			, "ShadowMapDirectional"
+			, *variance.view->view
+			, 5u );
+
 		for ( uint32_t cascade = 0u; cascade < m_passes.size(); ++cascade )
 		{
 			std::string debugName = "ShadowMapDirectionalCascade" + std::to_string( cascade );
@@ -171,11 +177,7 @@ namespace castor3d
 			attaches.emplace_back( frameBuffer.fluxView );
 			frameBuffer.frameBuffer = renderPass.createFrameBuffer( debugName, size, std::move( attaches ) );
 
-			frameBuffer.blur = std::make_unique< GaussianBlur >( *getEngine()
-				, debugName
-				, *variance.layers[cascade].view
-				, 5u );
-			frameBuffer.blurCommands = frameBuffer.blur->getCommands( true );
+			frameBuffer.blurCommands = m_blur->getCommands( true, cascade );
 		}
 	}
 
@@ -189,6 +191,7 @@ namespace castor3d
 	{
 		m_commandBuffer.reset();
 		m_frameBuffers.clear();
+		m_blur.reset();
 	}
 
 	bool ShadowMapDirectional::isUpToDate( uint32_t index )const
