@@ -24,10 +24,6 @@ namespace smaa
 		virtual void doInitialisePipeline()override;
 
 	private:
-		void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-			, ashes::DescriptorSet & descriptorSet )override;
-
-	private:
 		ashes::ImageView const & m_colourView;
 		std::unique_ptr< ashes::ImageView > m_predicationView;
 	};

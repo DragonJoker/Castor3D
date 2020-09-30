@@ -70,6 +70,15 @@ namespace castor3d
 		C3D_API VkDescriptorSetLayoutBinding createLayoutBinding( uint32_t index = 0u )const;
 		/**
 		 *\~english
+		 *\brief		Creates the descriptor write for this buffer.
+		 *\param[in]	binding	The descriptor set layout binding.
+		 *\~french
+		 *\brief		Crée le descriptor write pour ce tampon.
+		 *\param[in]	binding	L'attache de layout de set de descripteurs.
+		 */
+		C3D_API ashes::WriteDescriptorSet getBinding( uint32_t binding )const;
+		/**
+		 *\~english
 		 *\brief			Creates the descriptor set binding at given point.
 		 *\param[in,out]	descriptorSet	Receives the created binding.
 		 *\param[in]		binding			The descriptor set layout binding.
@@ -100,6 +109,16 @@ namespace castor3d
 		{
 			return m_size;
 		}
+		/**
+		 *\~english
+		 *\return		The buffer descriptor type.
+		 *\~french
+		 *\brief		Le type de descripteur du tampon.
+		 */
+		inline VkDescriptorType getType()const
+		{
+			return m_type;
+		}
 
 	private:
 		void doUpdate( VkDeviceSize offset
@@ -110,6 +129,7 @@ namespace castor3d
 		VkDeviceSize m_size;
 		ashes::BufferBasePtr m_buffer;
 		ashes::BufferViewPtr m_bufferView;
+		VkDescriptorType m_type;
 		ashes::ByteArray m_data;
 	};
 }

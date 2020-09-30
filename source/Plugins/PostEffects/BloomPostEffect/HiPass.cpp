@@ -157,7 +157,12 @@ namespace Bloom
 		, ashes::ImageView const & sceneView
 		, VkExtent2D size
 		, uint32_t blurPassesCount )
-		: castor3d::RenderQuad{ renderSystem, device, cuT( "BloomHiPass" ), VK_FILTER_NEAREST, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
+		: castor3d::RenderQuad{ device
+			, cuT( "BloomHiPass" )
+			, VK_FILTER_NEAREST
+			, { ashes::nullopt
+				, ashes::nullopt
+				, castor3d::rq::Texcoord{} } }
 		, m_sceneView{ sceneView }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram( renderSystem ) }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram( renderSystem ) }
@@ -176,12 +181,13 @@ namespace Bloom
 #endif
 
 		ashes::VkDescriptorSetLayoutBindingArray bindings;
-		this->createPipeline( size
+		createPipelineAndPass( size
 			, {}
 			, shaderStages
-			, sceneView
 			, *m_renderPass
-			, bindings
+			, {
+				makeDescriptorWrite( sceneView, m_sampler->getSampler(), 0u )
+			}
 			, {} );
 		m_surface.initialise( device
 			, *m_renderPass
@@ -212,7 +218,7 @@ namespace Bloom
 			, *m_surface.frameBuffer
 			, { castor3d::transparentBlackClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE );
-		registerFrame( cmd );
+		registerPass( cmd );
 		cmd.endRenderPass();
 #if !Bloom_DebugHiPass
 		m_surface.colourTexture->getTexture().generateMipmaps( cmd

@@ -45,7 +45,7 @@ namespace castor3d
 {
 	namespace
 	{
-		static uint32_t constexpr c_noIblEnvironmentCount = 5u;
+		static uint32_t constexpr c_noIblEnvironmentCount = 6u;
 		static uint32_t constexpr c_iblTexturesCount = 3u;
 		static uint32_t constexpr c_iblEnvironmentCount = c_noIblEnvironmentCount - c_iblTexturesCount;
 
@@ -117,7 +117,8 @@ namespace castor3d
 
 		ShaderPtr doCreateLegacyPixelProgram( RenderDevice const & device
 			, FogType fogType
-			, bool hasSsao )
+			, bool hasSsao
+			, bool hasGi )
 		{
 			auto & renderSystem = device.renderSystem;
 			using namespace sdw;
@@ -137,6 +138,7 @@ namespace castor3d
 			auto c3d_mapSsao = writer.declSampledImage< FImg2DRg32 >( "c3d_mapSsao", hasSsao ? index++ : 0u, 1u, hasSsao );
 			auto c3d_mapLightDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightDiffuse", index++, 1u );
 			auto c3d_mapLightSpecular = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightSpecular", index++, 1u );
+			auto c3d_mapLightIndirect = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightIndirect", hasGi ? index++ : 0u, 1u, hasGi );
 			auto c3d_mapEnvironment = writer.declSampledImageArray< FImgCubeRgba32 >( "c3d_mapEnvironment", index++, 1u, c_noIblEnvironmentCount );
 			CU_Require( index < device.properties.limits.maxDescriptorSetSampledImages );
 
@@ -197,10 +199,6 @@ namespace castor3d
 						, envMapIndex );
 					auto material = writer.declLocale( "material"
 						, materials.getMaterial( materialId ) );
-					auto lightDiffuse = writer.declLocale( "lightDiffuse"
-						, textureLod( c3d_mapLightDiffuse, vtx_texture, 0.0_f ).xyz() );
-					auto lightSpecular = writer.declLocale( "lightSpecular"
-						, textureLod( c3d_mapLightSpecular, vtx_texture, 0.0_f ).xyz() );
 					auto depth = writer.declLocale( "depth"
 						, textureLod( c3d_mapDepth, vtx_texture, 0.0_f ).x() );
 					auto position = writer.declLocale( "position"
@@ -221,6 +219,14 @@ namespace castor3d
 						, clamp( c3d_ambientLight.xyz() * material.m_ambient * diffuse
 							, vec3( 0.0_f )
 							, vec3( 1.0_f ) ) );
+					auto lightDiffuse = writer.declLocale( "lightDiffuse"
+						, textureLod( c3d_mapLightDiffuse, vtx_texture, 0.0_f ).xyz() );
+					auto lightSpecular = writer.declLocale( "lightSpecular"
+						, textureLod( c3d_mapLightSpecular, vtx_texture, 0.0_f ).xyz() );
+					auto lightIndirect = writer.declLocale( "lightIndirect"
+						, textureLod( c3d_mapLightIndirect, vtx_texture, 0.0_f ).rgb()
+						, hasGi );
+					lightDiffuse += lightIndirect;
 					lightSpecular *= specular;
 
 					if ( hasSsao )
@@ -302,6 +308,7 @@ namespace castor3d
 					}
 					FI;
 
+					ambient *= lightIndirect;
 					pxl_fragColor = vec4( diffuse + lightSpecular + emissive + ambient, 1.0_f );
 
 					if ( fogType != FogType::eDisabled )
@@ -322,7 +329,8 @@ namespace castor3d
 
 		ShaderPtr doCreatePbrMRPixelProgram( RenderDevice const & device
 			, FogType fogType
-			, bool hasSsao )
+			, bool hasSsao
+			, bool hasGi )
 		{
 			auto & renderSystem = device.renderSystem;
 			using namespace sdw;
@@ -342,6 +350,7 @@ namespace castor3d
 			auto c3d_mapSsao = writer.declSampledImage< FImg2DRg32 >( "c3d_mapSsao", hasSsao ? index++ : 0u, 1u, hasSsao );
 			auto c3d_mapLightDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightDiffuse", index++, 1u );
 			auto c3d_mapLightSpecular = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightSpecular", index++, 1u );
+			auto c3d_mapLightIndirect = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightIndirect", hasGi ? index++ : 0u, 1u, hasGi );
 			auto c3d_mapBrdf = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBrdf", index++, 1u );
 			auto c3d_mapIrradiance = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapIrradiance", index++, 1u );
 			auto c3d_mapPrefiltered = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapPrefiltered", index++, 1u );
@@ -431,6 +440,10 @@ namespace castor3d
 						, textureLod( c3d_mapLightDiffuse, fixedTexCoord, 0.0_f ).rgb() );
 					auto lightSpecular = writer.declLocale( "lightSpecular"
 						, textureLod( c3d_mapLightSpecular, fixedTexCoord, 0.0_f ).rgb() );
+					auto lightIndirect = writer.declLocale( "lightIndirect"
+						, textureLod( c3d_mapLightIndirect, vtx_texture, 0.0_f ).rgb()
+						, hasGi );
+					lightDiffuse += lightIndirect;
 
 					if ( hasSsao )
 					{
@@ -554,6 +567,7 @@ namespace castor3d
 					}
 					FI;
 
+					ambient *= lightIndirect;
 					pxl_fragColor = vec4( lightDiffuse * albedo + lightSpecular + emissive + ambient, 1.0_f );
 
 					if ( fogType != FogType::eDisabled )
@@ -574,7 +588,8 @@ namespace castor3d
 
 		ShaderPtr doCreatePbrSGPixelProgram( RenderDevice const & device
 			, FogType fogType
-			, bool hasSsao )
+			, bool hasSsao
+			, bool hasGi )
 		{
 			auto & renderSystem = device.renderSystem;
 			using namespace sdw;
@@ -594,6 +609,7 @@ namespace castor3d
 			auto c3d_mapSsao = writer.declSampledImage< FImg2DRg32 >( "c3d_mapSsao", hasSsao ? index++ : 0u, 1u, hasSsao );
 			auto c3d_mapLightDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightDiffuse", index++, 1u );
 			auto c3d_mapLightSpecular = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightSpecular", index++, 1u );
+			auto c3d_mapLightIndirect = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightIndirect", hasGi ? index++ : 0u, 1u, hasGi );
 			auto c3d_mapBrdf = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBrdf", index++, 1u );
 			auto c3d_mapIrradiance = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapIrradiance", index++, 1u );
 			auto c3d_mapPrefiltered = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapPrefiltered", index++, 1u );
@@ -683,6 +699,10 @@ namespace castor3d
 						, textureLod( c3d_mapLightDiffuse, fixedTexCoord, 0.0_f ).xyz() );
 					auto lightSpecular = writer.declLocale( "lightSpecular"
 						, textureLod( c3d_mapLightSpecular, fixedTexCoord, 0.0_f ).xyz() );
+					auto lightIndirect = writer.declLocale( "lightIndirect"
+						, textureLod( c3d_mapLightIndirect, fixedTexCoord, 0.0_f ).rgb()
+						, hasGi );
+					lightDiffuse += lightIndirect;
 
 					if ( hasSsao )
 					{
@@ -806,6 +826,7 @@ namespace castor3d
 					}
 					FI;
 
+					ambient *= lightIndirect;
 					pxl_fragColor = vec4( lightDiffuse * diffuse + lightSpecular + emissive + ambient, 1.0_f );
 
 					if ( fogType != FogType::eDisabled )
@@ -827,16 +848,17 @@ namespace castor3d
 		ashes::PipelineShaderStageCreateInfoArray doCreateProgram( RenderDevice const & device
 			, FogType fogType
 			, bool hasSsao
+			, bool hasGi
 			, MaterialType matType
 			, ShaderModule & vertexShader
 			, ShaderModule & pixelShader )
 		{
 			vertexShader.shader = doCreateVertexProgram( device );
 			pixelShader.shader = ( matType == MaterialType::ePhong
-				? doCreateLegacyPixelProgram( device, fogType, hasSsao )
+				? doCreateLegacyPixelProgram( device, fogType, hasSsao, hasGi )
 				: ( matType == MaterialType::eMetallicRoughness
-					? doCreatePbrMRPixelProgram( device, fogType, hasSsao )
-					: doCreatePbrSGPixelProgram( device, fogType, hasSsao ) ) );
+					? doCreatePbrMRPixelProgram( device, fogType, hasSsao, hasGi )
+					: doCreatePbrSGPixelProgram( device, fogType, hasSsao, hasGi ) ) );
 
 			return ashes::PipelineShaderStageCreateInfoArray
 			{
@@ -964,6 +986,7 @@ namespace castor3d
 
 		inline ashes::DescriptorSetLayoutPtr doCreateTexDescriptorLayout( RenderDevice const & device
 			, bool hasSsao
+			, bool hasGi
 			, MaterialType matType )
 		{
 			uint32_t index = 1u;
@@ -1002,6 +1025,14 @@ namespace castor3d
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapLightSpecular
+
+			if ( hasGi )
+			{
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+					, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapLightIndirect
+			}
+
 			auto envMapCount = c_noIblEnvironmentCount;
 
 			if ( matType != MaterialType::ePhong )
@@ -1030,31 +1061,27 @@ namespace castor3d
 
 		inline ashes::DescriptorSetPtr doCreateTexDescriptorSet( RenderDevice const & device
 			, ashes::DescriptorSetPool & pool
-			, SamplerSPtr sampler )
-		{
-			sampler->initialise( device );
-			auto result = pool.createDescriptorSet( "DeferredResolveTex", 1u );
-			return result;
-		}
-
-		inline ashes::WriteDescriptorSetArray doCreateTexDescriptorWrites( RenderDevice const & device
 			, ashes::DescriptorSetLayout const & layout
 			, OpaquePassResult const & gp
+			, ashes::ImageView const * ssao
+			, ashes::ImageView const * sssss
 			, ashes::ImageView const & lightDiffuse
 			, ashes::ImageView const & lightSpecular
-			, ashes::ImageView const * ssao
+			, ashes::ImageView const * lightIndirect
 			, SamplerSPtr sampler
 			, Scene const & scene
 			, MaterialType matType
-			, std::vector< std::reference_wrapper< EnvironmentMap > > const & envMaps )
+			, OpaqueResolvePass::EnvMapArray const & envMaps )
 		{
+			sampler->initialise( device );
+			auto descriptorSet = pool.createDescriptorSet( "DeferredResolveTex", 1u );
 			uint32_t index = 1u;
 			auto imgLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-			ashes::WriteDescriptorSetArray result;
+			ashes::WriteDescriptorSetArray writes;
 
 			for ( auto unit : gp )
 			{
-				result.push_back( {
+				writes.push_back( {
 					index++,
 					0u,
 					VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
@@ -1069,11 +1096,25 @@ namespace castor3d
 
 			if ( ssao )
 			{
-				result.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { sampler->getSampler(), *ssao, imgLayout } } } );
+				writes.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { sampler->getSampler(), *ssao, imgLayout } } } );
 			}
 
-			result.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { sampler->getSampler(), lightDiffuse, imgLayout } } } );
-			result.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { sampler->getSampler(), lightSpecular, imgLayout } } } );
+			if ( sssss )
+			{
+				writes.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { sampler->getSampler(), *sssss, imgLayout } } } );
+			}
+			else
+			{
+				writes.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { sampler->getSampler(), lightDiffuse, imgLayout } } } );
+			}
+
+			writes.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { sampler->getSampler(), lightSpecular, imgLayout } } } );
+
+			if ( lightIndirect )
+			{
+				writes.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { sampler->getSampler(), *lightIndirect, imgLayout } } } );
+			}
+
 			auto & background = *scene.getBackground();
 			auto envMapCount = c_noIblEnvironmentCount;
 
@@ -1081,18 +1122,18 @@ namespace castor3d
 				&& background.hasIbl() )
 			{
 				auto & ibl = background.getIbl();
-				result.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { ibl.getPrefilteredBrdfSampler(), ibl.getPrefilteredBrdfTexture(), imgLayout } } } );
-				result.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { ibl.getIrradianceSampler(), ibl.getIrradianceTexture(), imgLayout } } } );
-				result.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { ibl.getPrefilteredEnvironmentSampler(), ibl.getPrefilteredEnvironmentTexture(), imgLayout } } } );
+				writes.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { ibl.getPrefilteredBrdfSampler(), ibl.getPrefilteredBrdfTexture(), imgLayout } } } );
+				writes.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { ibl.getIrradianceSampler(), ibl.getIrradianceTexture(), imgLayout } } } );
+				writes.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { ibl.getPrefilteredEnvironmentSampler(), ibl.getPrefilteredEnvironmentTexture(), imgLayout } } } );
 				envMapCount -= c_iblTexturesCount;
 			}
 
-			result.push_back( { index++, 0u, envMapCount, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER } );
+			writes.push_back( { index++, 0u, envMapCount, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER } );
 			CU_Require( index < device.properties.limits.maxDescriptorSetSampledImages );
 
-			result.back().imageInfo.reserve( envMapCount );
+			writes.back().imageInfo.reserve( envMapCount );
 
-			auto & envWrites = result.back();
+			auto & envWrites = writes.back();
 			auto it = envMaps.begin();
 			uint32_t i = 0u;
 
@@ -1113,7 +1154,9 @@ namespace castor3d
 				++i;
 			}
 
-			return result;
+			descriptorSet->setBindings( writes );
+			descriptorSet->update();
+			return descriptorSet;
 		}
 
 		ashes::GraphicsPipelinePtr doCreateRenderPipeline( RenderDevice const & device
@@ -1183,58 +1226,77 @@ namespace castor3d
 		, RenderDevice const & device
 		, OpaquePassResult const & gp
 		, ashes::DescriptorSetLayout const & uboLayout
-		, ashes::DescriptorSetLayout const & texLayout
 		, ashes::RenderPass const & renderPass
 		, ashes::ImageView const * ssao
+		, ashes::ImageView const * subsurfaceScattering
+		, ashes::ImageView const & lightDiffuse
+		, ashes::ImageView const & lightSpecular
+		, ashes::ImageView const * lightIndirect
+		, SamplerSPtr const & sampler
 		, VkExtent2D const & size
 		, FogType fogType
-		, MaterialType matType )
-		: m_engine{ engine }
-		, m_opaquePassResult{ gp }
-		, m_renderPass{ &renderPass }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "DeferredResolve" }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "DeferredResolve" }
-		, m_program{ doCreateProgram( device, fogType, ssao != nullptr, matType, m_vertexShader, m_pixelShader ) }
-		, m_pipelineLayout{ device->createPipelineLayout( "DeferredResolve", { uboLayout, texLayout } ) }
-		, m_pipeline{ doCreateRenderPipeline( device, *m_pipelineLayout, m_program, renderPass, size ) }
-		, m_commandBuffer{ device.graphicsCommandPool->createCommandBuffer( "DeferredResolve", VK_COMMAND_BUFFER_LEVEL_PRIMARY ) }
+		, MaterialType matType
+		, Scene const & scene )
+		: engine{ engine }
+		, opaquePassResult{ gp }
+		, renderPass{ &renderPass }
+		, vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "DeferredResolve" }
+		, pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "DeferredResolve" }
+		, program{ doCreateProgram( device, fogType, ssao != nullptr, lightIndirect != nullptr, matType, vertexShader, pixelShader ) }
+		, texDescriptorLayout{ doCreateTexDescriptorLayout( device, ssao != nullptr, lightIndirect != nullptr, engine.getMaterialsType() ) }
+		, texDescriptorPool{ texDescriptorLayout->createPool( "OpaqueResolvePassTex", 1u ) }
+		, texDescriptorSet{ doCreateTexDescriptorSet( device
+			, *texDescriptorPool
+			, *texDescriptorLayout
+			, gp
+			, ssao
+			, subsurfaceScattering
+			, lightDiffuse
+			, lightSpecular
+			, lightIndirect
+			, sampler
+			, scene
+			, matType
+			, scene.getEnvironmentMaps() ) }
+		, pipelineLayout{ device->createPipelineLayout( "DeferredResolve", { uboLayout, *texDescriptorLayout } ) }
+		, pipeline{ doCreateRenderPipeline( device, *pipelineLayout, program, renderPass, size ) }
+		, commandBuffer{ device.graphicsCommandPool->createCommandBuffer( "DeferredResolve", VK_COMMAND_BUFFER_LEVEL_PRIMARY ) }
 	{
 	}
 
 	void OpaqueResolvePass::ProgramPipeline::updateCommandBuffer( ashes::VertexBufferBase & vbo
 		, ashes::DescriptorSet const & uboSet
-		, ashes::DescriptorSet const & texSet
 		, ashes::FrameBuffer const & frameBuffer
 		, RenderPassTimer & timer )
 	{
-		m_commandBuffer->begin();
-		m_commandBuffer->beginDebugBlock(
+		commandBuffer->begin();
+		commandBuffer->beginDebugBlock(
 			{
 				"Deferred - Resolve",
-				makeFloatArray( m_engine.getNextRainbowColour() ),
+				makeFloatArray( engine.getNextRainbowColour() ),
 			} );
-		timer.beginPass( *m_commandBuffer );
-		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+		timer.beginPass( *commandBuffer );
+		commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_opaquePassResult[DsTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
-		m_commandBuffer->beginRenderPass( *m_renderPass
+			, opaquePassResult[DsTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+		commandBuffer->beginRenderPass( *renderPass
 			, frameBuffer
 			, { transparentBlackClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE );
-		m_commandBuffer->bindPipeline( *m_pipeline );
-		m_commandBuffer->bindDescriptorSets( { uboSet, texSet }, *m_pipelineLayout );
-		m_commandBuffer->bindVertexBuffer( 0u, vbo.getBuffer(), 0u );
-		m_commandBuffer->draw( 6u );
-		m_commandBuffer->endRenderPass();
-		timer.endPass( *m_commandBuffer );
-		m_commandBuffer->endDebugBlock();
-		m_commandBuffer->end();
+		commandBuffer->bindPipeline( *pipeline );
+		commandBuffer->bindDescriptorSets( { uboSet, *texDescriptorSet }, *pipelineLayout );
+		commandBuffer->bindVertexBuffer( 0u, vbo.getBuffer(), 0u );
+		commandBuffer->draw( 6u );
+		commandBuffer->endRenderPass();
+		timer.endPass( *commandBuffer );
+		commandBuffer->endDebugBlock();
+		commandBuffer->end();
 	}
 
 	void OpaqueResolvePass::ProgramPipeline::accept( PipelineVisitorBase & visitor )
 	{
-		visitor.visit( m_vertexShader );
-		visitor.visit( m_pixelShader );
+		visitor.visit( vertexShader );
+		visitor.visit( pixelShader );
 	}
 
 	//*********************************************************************************************
@@ -1243,13 +1305,15 @@ namespace castor3d
 		, RenderDevice const & device
 		, Scene & scene
 		, OpaquePassResult const & gp
+		, SsaoPass const & ssao
+		, TextureUnit const & subsurfaceScattering
 		, TextureUnit const & lightDiffuse
 		, TextureUnit const & lightSpecular
+		, TextureUnit const & lightIndirect
 		, TextureUnit const & result
 		, SceneUbo const & sceneUbo
 		, GpInfoUbo const & gpInfoUbo
-		, HdrConfigUbo const & hdrConfigUbo
-		, SsaoPass const * ssao )
+		, HdrConfigUbo const & hdrConfigUbo )
 		: OwnedBy< Engine >{ engine }
 		, m_device{ device }
 		, m_scene{ scene }
@@ -1260,10 +1324,12 @@ namespace castor3d
 		, m_ssao{ ssao }
 		, m_sampler{ engine.getDefaultSampler() }
 		, m_opaquePassResult{ gp }
+		, m_subsurfaceScattering{ subsurfaceScattering }
 		, m_lightDiffuse{ lightDiffuse }
 		, m_lightSpecular{ lightSpecular }
-		, m_ssaoEnabled{ ssao != nullptr }
+		, m_lightIndirect{ lightIndirect }
 		, m_viewport{ engine }
+		, m_programs{ nullptr }
 	{
 	}
 
@@ -1276,64 +1342,10 @@ namespace castor3d
 		m_uboDescriptorLayout = doCreateUboDescriptorLayout( engine, m_device );
 		m_uboDescriptorPool = m_uboDescriptorLayout->createPool( "OpaqueResolvePassUbo", 1u );
 		m_uboDescriptorSet = doCreateUboDescriptorSet( engine, *m_uboDescriptorPool, m_sceneUbo, m_gpInfoUbo, m_hdrConfigUbo );
-		m_texDescriptorLayout = doCreateTexDescriptorLayout( m_device, m_ssao != nullptr, engine.getMaterialsType() );
-		m_texDescriptorPool = m_texDescriptorLayout->createPool( "OpaqueResolvePassTex", 1u );
-		m_texDescriptorSet = doCreateTexDescriptorSet( m_device, *m_texDescriptorPool, m_sampler );
 		m_renderPass = doCreateRenderPass( m_device, result.getPixelFormat() );
 		m_frameBuffer = doCreateFrameBuffer( *m_renderPass, size, result.getDefaultView().getSampledView() );
 		m_finished = m_device->createSemaphore( "OpaqueResolvePass" );
 		m_timer = std::make_shared< RenderPassTimer >( engine, m_device, cuT( "Opaque" ), cuT( "Resolve pass" ) );
-		m_programs =
-		{
-			std::make_unique< ProgramPipeline >( engine
-				, m_device
-				, m_opaquePassResult
-				, *m_uboDescriptorLayout
-				, *m_texDescriptorLayout
-				, *m_renderPass
-				, ( m_ssao
-					? &m_ssao->getResult().getTexture()->getDefaultView().getSampledView()
-					: nullptr )
-				, size
-				, FogType::eDisabled
-				, engine.getMaterialsType() ),
-			std::make_unique< ProgramPipeline >( engine
-				, m_device
-				, m_opaquePassResult
-				, *m_uboDescriptorLayout
-				, *m_texDescriptorLayout
-				, *m_renderPass
-				, ( m_ssao
-					? &m_ssao->getResult().getTexture()->getDefaultView().getSampledView()
-					: nullptr )
-				, size
-				, FogType::eLinear
-				, engine.getMaterialsType() ),
-			std::make_unique< ProgramPipeline >( engine
-				, m_device
-				, m_opaquePassResult
-				, *m_uboDescriptorLayout
-				, *m_texDescriptorLayout
-				, *m_renderPass
-				, ( m_ssao
-					? &m_ssao->getResult().getTexture()->getDefaultView().getSampledView()
-					: nullptr )
-				, size
-				, FogType::eExponential
-				, engine.getMaterialsType() ),
-			std::make_unique< ProgramPipeline >( engine
-				, m_device
-				, m_opaquePassResult
-				, *m_uboDescriptorLayout
-				, *m_texDescriptorLayout
-				, *m_renderPass
-				, ( m_ssao
-					? &m_ssao->getResult().getTexture()->getDefaultView().getSampledView()
-					: nullptr )
-				, size
-				, FogType::eSquaredExponential
-				, engine.getMaterialsType() ),
-		};
 		m_viewport.setOrtho( 0, 1, 0, 1, 0, 1 );
 		m_viewport.resize( { m_size.width, m_size.height } );
 		m_viewport.update();
@@ -1346,38 +1358,20 @@ namespace castor3d
 		m_finished.reset();
 		m_frameBuffer.reset();
 		m_renderPass.reset();
-		m_texDescriptorSet.reset();
-		m_texDescriptorPool.reset();
-		m_texDescriptorLayout.reset();
 		m_uboDescriptorSet.reset();
 		m_uboDescriptorPool.reset();
 		m_uboDescriptorLayout.reset();
 		m_vertexBuffer.reset();
 	}
 
-	void OpaqueResolvePass::update( Camera const & camera )
+	void OpaqueResolvePass::update( GpuUpdater & updater )
 	{
-		auto index = size_t( m_scene.getFog().getType() );
-		auto & program = *m_programs[index];
-		auto texDescriptorWrites = doCreateTexDescriptorWrites( m_device 
-			, *m_texDescriptorLayout
-			, m_opaquePassResult
-			, m_lightDiffuse.getTexture()->getDefaultView().getSampledView()
-			, m_lightSpecular.getTexture()->getDefaultView().getSampledView()
-			, ( m_ssao
-				? &m_ssao->getResult().getTexture()->getDefaultView().getSampledView()
-				: nullptr )
-			, m_sampler
-			, m_scene
-			, getEngine()->getMaterialsType()
-			, m_scene.getEnvironmentMaps() );
-		m_texDescriptorSet->setBindings( texDescriptorWrites );
-		m_texDescriptorSet->update();
+		auto & program = getProgram();
 		program.updateCommandBuffer( *m_vertexBuffer
 			, *m_uboDescriptorSet
-			, *m_texDescriptorSet
 			, *m_frameBuffer
 			, *m_timer );
+		m_currentProgram = &program;
 	}
 
 	ashes::Semaphore const & OpaqueResolvePass::render( ashes::Semaphore const & toWait )const
@@ -1386,9 +1380,8 @@ namespace castor3d
 		RenderPassTimerBlock timerBlock{ m_timer->start() };
 		timerBlock->notifyPassRender();
 		auto index = size_t( m_scene.getFog().getType() );
-		auto & program = *m_programs[index];
 
-		m_device.graphicsQueue->submit( *program.m_commandBuffer
+		m_device.graphicsQueue->submit( *m_currentProgram->commandBuffer
 			, *result
 			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, *m_finished
@@ -1400,8 +1393,50 @@ namespace castor3d
 
 	void OpaqueResolvePass::accept( PipelineVisitorBase & visitor )
 	{
-		auto index = size_t( m_scene.getFog().getType() );
-		auto & program = *m_programs[index];
+		auto & program = getProgram();
 		program.accept( visitor );
+	}
+
+	OpaqueResolvePass::ProgramPipeline & OpaqueResolvePass::getProgram()
+	{
+		auto fog = m_scene.getFog().getType();
+		bool hasSsao = m_ssao.getConfig().enabled;
+		bool hasSssss = m_scene.needsSubsurfaceScattering();
+		bool hasGi = m_scene.needsGlobalIllumination();
+		auto index = size_t( fog )
+			* ( hasSsao ? 2u : 1u )
+			* ( hasSssss ? 2u : 1u )
+			* ( hasGi ? 2u : 1u );
+		auto & result = m_programs[index];
+
+		if ( !result )
+		{
+			auto & engine = *getEngine();
+			auto & tex = *m_result.getTexture();
+			VkExtent2D size{ tex.getWidth(), tex.getHeight() };
+			result = std::make_unique< ProgramPipeline >( engine
+				, m_device
+				, m_opaquePassResult
+				, *m_uboDescriptorLayout
+				, *m_renderPass
+				, ( hasSsao
+					? &m_ssao.getResult().getTexture()->getDefaultView().getSampledView()
+					: nullptr )
+				, ( hasSssss
+					? &m_subsurfaceScattering.getTexture()->getDefaultView().getSampledView()
+					: nullptr )
+				, m_lightDiffuse.getTexture()->getDefaultView().getSampledView()
+				, m_lightSpecular.getTexture()->getDefaultView().getSampledView()
+				, ( hasGi
+					? &m_lightIndirect.getTexture()->getDefaultView().getSampledView()
+					: nullptr )
+				, m_sampler
+				, size
+				, fog
+				, engine.getMaterialsType()
+				, m_scene );
+		}
+
+		return *result;
 	}
 }

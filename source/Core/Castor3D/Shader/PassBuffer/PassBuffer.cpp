@@ -76,6 +76,11 @@ namespace castor3d
 		m_buffer.createBinding( descriptorSet, binding );
 	}
 
+	ashes::WriteDescriptorSet PassBuffer::getBinding()const
+	{
+		return m_buffer.getBinding( getPassBufferIndex() );
+	}
+
 	void PassBuffer::visit( PhongPass const & pass )
 	{
 		CU_Exception( "This pass buffer can't hold phong pass data" );

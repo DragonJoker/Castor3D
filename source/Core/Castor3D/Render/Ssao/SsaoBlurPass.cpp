@@ -33,11 +33,14 @@ namespace castor3d
 {
 	namespace
 	{
-		static uint32_t constexpr SsaoCfgUboIdx = 0u;
-		static uint32_t constexpr GpInfoUboIdx = 1u;
-		static uint32_t constexpr BlurCfgUboIdx = 2u;
-		static uint32_t constexpr NmlImgIdx = 3u;
-		static uint32_t constexpr InpImgIdx = 4u;
+		enum Idx : uint32_t
+		{
+			SsaoCfgUboIdx = 0u,
+			GpInfoUboIdx,
+			BlurCfgUboIdx,
+			NmlImgIdx,
+			InpImgIdx,
+		};
 
 		ShaderPtr doGetVertexProgram( Engine & engine )
 		{
@@ -481,6 +484,19 @@ namespace castor3d
 				, std::move( attaches ) );
 			return result;
 		}
+
+		rq::BindingDescriptionArray createBlurBindings()
+		{
+			return rq::BindingDescriptionArray
+			{
+				{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, ashes::nullopt },	// SsaoCfg UBO
+				{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, ashes::nullopt },	// GpInfo UBO
+				{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, ashes::nullopt },	// BlurCfg UBO
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },	// Normal Map
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },	// Input Map
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },	// BentInput Map
+			};
+		}
 	}
 
 	//*********************************************************************************************
@@ -495,7 +511,10 @@ namespace castor3d
 		, Point2i const & axis
 		, TextureUnit const & input
 		, ashes::ImageView const & normals )
-		: RenderQuad{ *engine.getRenderSystem(), device, prefix + cuT( "SsaoBlur" ), VK_FILTER_NEAREST, {} }
+		: RenderQuad{ device
+			, prefix + cuT( "SsaoBlur" )
+			, VK_FILTER_NEAREST
+			, { createBlurBindings() } }
 		, m_engine{ engine }
 		, m_ssaoConfigUbo{ ssaoConfigUbo }
 		, m_gpInfoUbo{ gpInfoUbo }
@@ -515,29 +534,21 @@ namespace castor3d
 	{
 		auto & configuration = m_configurationUbo.getData();
 		configuration.axis = axis;
-
-		ashes::VkDescriptorSetLayoutBindingArray bindings
-		{
-			makeDescriptorSetLayoutBinding( SsaoCfgUboIdx
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-			makeDescriptorSetLayoutBinding( GpInfoUboIdx
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-			makeDescriptorSetLayoutBinding( BlurCfgUboIdx
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-			makeDescriptorSetLayoutBinding( NmlImgIdx
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-		};
-		createPipeline( m_size
+		createPipelineAndPass( m_size
 			, Position{}
 			, m_program
-			, m_input.getTexture()->getDefaultView().getSampledView()
 			, *m_renderPass
-			, std::move( bindings )
-			, {} );
+			, {
+				makeDescriptorWrite( m_ssaoConfigUbo.getUbo(), SsaoCfgUboIdx ),
+				makeDescriptorWrite( m_gpInfoUbo.getUbo(), GpInfoUboIdx ),
+				makeDescriptorWrite( m_configurationUbo, BlurCfgUboIdx ),
+				makeDescriptorWrite( m_normals
+					, m_sampler->getSampler()
+					, NmlImgIdx ),
+				makeDescriptorWrite( m_input.getTexture()->getDefaultView().getSampledView()
+					, m_input.getSampler()->getSampler()
+					, InpImgIdx ),
+			} );
 		m_commandBuffer = m_device.graphicsCommandPool->createCommandBuffer( getName() );
 
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
@@ -551,7 +562,7 @@ namespace castor3d
 			, *m_fbo
 			, { opaqueWhiteClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE );
-		registerFrame( *m_commandBuffer );
+		registerPass( *m_commandBuffer );
 		m_timer->endPass( *m_commandBuffer );
 		m_commandBuffer->endRenderPass();
 		m_commandBuffer->endDebugBlock();
@@ -656,23 +667,5 @@ namespace castor3d
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );
 		config.accept( m_vertexShader.name, visitor );
-	}
-
-	void SsaoBlurPass::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-		, ashes::DescriptorSet & descriptorSet )
-	{
-		m_ssaoConfigUbo.createSizedBinding( descriptorSet
-			, descriptorSetLayout.getBinding( SsaoCfgUboIdx ) );
-		m_gpInfoUbo.createSizedBinding( descriptorSet
-			, descriptorSetLayout.getBinding( GpInfoUboIdx ) );
-		m_configurationUbo.createSizedBinding( descriptorSet
-			, descriptorSetLayout.getBinding( BlurCfgUboIdx ) );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( NmlImgIdx )
-			, m_normals
-			, m_sampler->getSampler() );
-	}
-
-	void SsaoBlurPass::doRegisterFrame( ashes::CommandBuffer & commandBuffer )const
-	{
 	}
 }

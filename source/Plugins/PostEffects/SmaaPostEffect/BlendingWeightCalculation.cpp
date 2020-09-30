@@ -91,6 +91,14 @@ namespace smaa
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
+		enum Idx : uint32_t
+		{
+			SubsampleCfgIdx,
+			AreaTexIdx,
+			SearchTexIdx,
+			EdgesTexIdx,
+		};
+
 		std::unique_ptr< ast::Shader > doBlendingWeightCalculationFP( castor3d::RenderSystem & renderSystem
 			, Point4f const & renderTargetMetrics
 			, SmaaConfig const & config )
@@ -121,12 +129,12 @@ namespace smaa
 				, writer.cast< Float >( c3d_cornerRounding ) / 100.0_f );
 
 			// Shader inputs
-			Ubo ubo{ writer, cuT( "Subsample" ), 0u, 0u };
+			Ubo ubo{ writer, cuT( "Subsample" ), SubsampleCfgIdx, 0u };
 			auto c3d_subsampleIndices = ubo.declMember< Vec4 >( constants::SubsampleIndices );
 			ubo.end();
-			auto c3d_areaTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_areaTex", 1u, 0u );
-			auto c3d_searchTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_searchTex", 2u, 0u );
-			auto c3d_edgesTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_edgesTex", 3u, 0u );
+			auto c3d_areaTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_areaTex", AreaTexIdx, 0u );
+			auto c3d_searchTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_searchTex", SearchTexIdx, 0u );
+			auto c3d_edgesTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_edgesTex", EdgesTexIdx, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 			auto vtx_pixcoord = writer.declInput< Vec2 >( "vtx_pixcoord", 1u );
 			auto vtx_offset = writer.declInputArray< Vec4 >( "vtx_offset", 2u, 3u );
@@ -856,6 +864,17 @@ namespace smaa
 			};
 			return device->createSampler( sampler );
 		}
+
+		castor3d::rq::BindingDescriptionArray createBindings()
+		{
+			return
+			{
+				{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, std::nullopt },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
+			};
+		}
 	}
 
 	//*********************************************************************************************
@@ -865,7 +884,12 @@ namespace smaa
 		, ashes::ImageView const & edgeDetectionView
 		, castor3d::TextureLayoutSPtr depthView
 		, SmaaConfig const & config )
-		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), device, cuT( "SmaaBlendingWeightCalculation" ), VK_FILTER_LINEAR, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
+		: castor3d::RenderQuad{ device
+			, cuT( "SmaaBlendingWeightCalculation" )
+			, VK_FILTER_LINEAR
+			, { createBindings()
+				, ashes::nullopt
+				, castor3d::rq::Texcoord{} } }
 		, m_edgeDetectionView{ edgeDetectionView }
 		, m_surface{ *renderTarget.getEngine(), getName() }
 		, m_pointSampler{ doCreateSampler( device, cuT( "SMAA_Point" ) ) }
@@ -1001,23 +1025,24 @@ namespace smaa
 		dsstate->front.compareOp = VK_COMPARE_OP_EQUAL;
 		dsstate->front.reference = 1u;
 		dsstate->back = dsstate->front;
-		ashes::VkDescriptorSetLayoutBindingArray setLayoutBindings;
-		setLayoutBindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( 0u
-			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		setLayoutBindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( 1u
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		setLayoutBindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( 2u
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 
-		createPipeline( size
+		createPipelineAndPass( size
 			, castor::Position{}
 			, stages
-			, m_edgeDetectionView
 			, *m_renderPass
-			, std::move( setLayoutBindings )
+			, {
+				makeDescriptorWrite( m_ubo
+					, SubsampleCfgIdx ),
+				makeDescriptorWrite( m_areaTex->getDefaultView().getSampledView()
+					, m_sampler->getSampler()
+					, AreaTexIdx),
+				makeDescriptorWrite( m_searchTex->getDefaultView().getSampledView()
+					, *m_pointSampler
+					, SearchTexIdx ),
+				makeDescriptorWrite( m_edgeDetectionView
+					, getSampler().getSampler()
+					, EdgesTexIdx ),
+			}
 			, {}
 			, std::move( dsstate ) );
 		m_surface.initialise( m_device 
@@ -1068,7 +1093,7 @@ namespace smaa
 				castor3d::defaultClearDepthStencil,
 			}
 			, VK_SUBPASS_CONTENTS_INLINE );
-		registerFrame( blendingWeightCmd );
+		registerPass( blendingWeightCmd );
 		blendingWeightCmd.endRenderPass();
 		timer.endPass( blendingWeightCmd, passIndex );
 		blendingWeightCmd.endDebugBlock();
@@ -1087,19 +1112,6 @@ namespace smaa
 	{
 		auto & data = m_ubo.getData();
 		data = subsampleIndices;
-	}
-
-	void BlendingWeightCalculation::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-		, ashes::DescriptorSet & descriptorSet )
-	{
-		m_ubo.createSizedBinding( descriptorSet
-			, descriptorSetLayout.getBinding( 0u ) );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 1u )
-			, m_areaTex->getDefaultView().getSampledView()
-			, m_sampler->getSampler() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 2u )
-			, m_searchTex->getDefaultView().getSampledView()
-			, *m_pointSampler );
 	}
 
 	//*********************************************************************************************

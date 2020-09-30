@@ -75,6 +75,11 @@ namespace castor3d
 		 */
 		C3D_API TextureUnit const & getResult()const;
 
+		inline SsaoConfig const & getConfig()const
+		{
+			return m_ssaoConfig;
+		}
+
 	private:
 		Engine & m_engine;
 		SsaoConfig & m_ssaoConfig;

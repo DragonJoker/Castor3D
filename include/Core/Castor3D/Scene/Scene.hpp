@@ -227,6 +227,7 @@ namespace castor3d
 		*/
 		/**@{*/
 		C3D_API MaterialType getMaterialsType()const;
+		C3D_API bool needsGlobalIllumination()const;
 
 		inline castor::BoundingBox const & getBoundingBox()const
 		{

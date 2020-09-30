@@ -59,16 +59,15 @@ namespace castor3d
 	*/
 	template< typename ConfigT, typename BuilderT >
 	class RenderQuadBuilderT;
-	class RenderQuadBuilder;
 	/**
 	*\~english
 	*\brief
-	*	The configuration to create a RenderQuad.
+	*	Used to create a RenderQuad variable.
 	*\~french
 	*\brief
-	*	La configuration pour créer un RenderQuad.
+	*	Utilisée pour créer une variable RenderQuad.
 	*/
-	struct RenderQuadConfig;
+	class RenderQuadBuilder;
 	/**
 	*\~english
 	*\brief

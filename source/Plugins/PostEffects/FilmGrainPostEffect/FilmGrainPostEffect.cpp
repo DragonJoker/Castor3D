@@ -74,21 +74,28 @@ namespace film_grain
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
+		enum Idx : uint32_t
+		{
+			FilmCfgUboIdx,
+			NoiseTexIdx,
+			SourceTexIdx,
+		};
+
 		std::unique_ptr< ast::Shader > getFragmentProgram( castor3d::RenderSystem * renderSystem )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
 
 			// Shader inputs
-			sdw::Ubo filmGrain{ writer, FilmGrainUbo, 0u, 0u };
+			sdw::Ubo filmGrain{ writer, FilmGrainUbo, FilmCfgUboIdx, 0u };
 			auto c3d_pixelSize = filmGrain.declMember< Vec2 >( PixelSize );
 			auto c3d_noiseIntensity = filmGrain.declMember< Float >( NoiseIntensity );
 			auto c3d_exposure = filmGrain.declMember< Float >( Exposure );
 			auto c3d_time = filmGrain.declMember< Float >( Time );
 			filmGrain.end();
 
-			auto c3d_noiseTex = writer.declSampledImage< FImg3DR32 >( NoiseTex, 1u, 0u );
-			auto c3d_srcTex = writer.declSampledImage< FImg2DRgba32 >( SrcTex, 2u, 0u );
+			auto c3d_noiseTex = writer.declSampledImage< FImg3DR32 >( NoiseTex, NoiseTexIdx, 0u );
+			auto c3d_srcTex = writer.declSampledImage< FImg2DRgba32 >( SrcTex, SourceTexIdx, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs
@@ -144,6 +151,16 @@ namespace film_grain
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
+
+		castor3d::rq::BindingDescriptionArray createBindings()
+		{
+			return
+			{
+				{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, std::nullopt },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
+			};
+		}
 	}
 
 	//*********************************************************************************************
@@ -151,11 +168,22 @@ namespace film_grain
 	RenderQuad::RenderQuad( castor3d::RenderSystem & renderSystem
 		, castor3d::RenderDevice const & device
 		, VkExtent2D const & size )
-		: castor3d::RenderQuad{ renderSystem, device, cuT( "FilmGrain" ), VK_FILTER_LINEAR, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
+		: castor3d::RenderQuad{ device
+			, cuT( "FilmGrain" )
+			, VK_FILTER_LINEAR
+			, { createBindings()
+				, ashes::nullopt
+				, castor3d::rq::Texcoord{} } }
 		, m_size{ size }
 	{
 		auto & engine = *renderSystem.getEngine();
 		auto name = getName() + cuT( "Noise" );
+
+		m_configUbo = m_device.uboPools->getBuffer< Configuration >( 0u );
+		m_configUbo.getData().m_pixelSize = Point2f{ m_size.width, m_size.height };
+		m_configUbo.getData().m_noiseIntensity = 1.0f;
+		m_configUbo.getData().m_exposure = 1.0f;
+
 		castor3d::SamplerSPtr sampler;
 
 		if ( !engine.getSamplerCache().has( name ) )
@@ -236,27 +264,12 @@ namespace film_grain
 				, images[i].getBuffer().data()
 				, m_noiseView );
 		}
-
-		m_configUbo = m_device.uboPools->getBuffer< Configuration >( 0u );
-		m_configUbo.getData().m_pixelSize = Point2f{ m_size.width, m_size.height };
-		m_configUbo.getData().m_noiseIntensity = 1.0f;
-		m_configUbo.getData().m_exposure = 1.0f;
 	}
 
 	void RenderQuad::update( castor3d::CpuUpdater & updater )
 	{
 		m_time += updater.time.count();
 		m_configUbo.getData().m_time = ( m_time % NoiseMapCount ) / float( NoiseMapCount );
-	}
-
-	void RenderQuad::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-		, ashes::DescriptorSet & descriptorSet )
-	{
-		m_configUbo.createSizedBinding( descriptorSet
-			, descriptorSetLayout.getBinding( 0u ) );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 1u )
-			, m_noiseView
-			, m_sampler->getSampler() );
 	}
 
 	//*********************************************************************************************
@@ -397,26 +410,23 @@ namespace film_grain
 		m_renderPass = device->createRenderPass( "FilmGrain"
 			, std::move( createInfo ) );
 
-		ashes::VkDescriptorSetLayoutBindingArray bindings
-		{
-			castor3d::makeDescriptorSetLayoutBinding( 0u
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-			castor3d::makeDescriptorSetLayoutBinding( 1u
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-		};
-
 		m_quad = std::make_unique< RenderQuad >( renderSystem
 			, device
 			, size );
-		m_quad->createPipeline( size
+		m_quad->createPipelineAndPass( size
 			, Position{}
 			, stages
-			, m_target->getDefaultView().getSampledView()
 			, *m_renderPass
-			, std::move( bindings )
-			, {} );
+			, {
+				m_quad->makeDescriptorWrite( m_quad->getUbo()
+					, FilmCfgUboIdx ),
+				m_quad->makeDescriptorWrite( m_quad->getNoiseView()
+					, m_sampler->getSampler()
+					, NoiseTexIdx ),
+				m_quad->makeDescriptorWrite( m_target->getDefaultView().getSampledView()
+					, m_sampler->getSampler()
+					, SourceTexIdx ),
+			} );
 
 		auto result = m_surface.initialise( device
 			, *m_renderPass
@@ -447,7 +457,7 @@ namespace film_grain
 				, *m_surface.frameBuffer
 				, { castor3d::transparentBlackClearColor }
 				, VK_SUBPASS_CONTENTS_INLINE );
-			m_quad->registerFrame( cmd );
+			m_quad->registerPass( cmd );
 			cmd.endRenderPass();
 			timer.endPass( cmd );
 			cmd.endDebugBlock();

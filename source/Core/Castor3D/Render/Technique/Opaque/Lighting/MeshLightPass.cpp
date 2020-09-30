@@ -77,6 +77,17 @@ namespace castor3d
 					layout,
 					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 				},
+				{
+					0u,
+					lpResult[LpTexture::eIndirect].getTexture()->getPixelFormat(),
+					VK_SAMPLE_COUNT_1_BIT,
+					loadOp,
+					VK_ATTACHMENT_STORE_OP_STORE,
+					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+					VK_ATTACHMENT_STORE_OP_DONT_CARE,
+					layout,
+					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+				},
 			};
 			ashes::SubpassDescriptionArray subpasses;
 			subpasses.emplace_back( ashes::SubpassDescription
@@ -87,6 +98,7 @@ namespace castor3d
 					{
 						{ 1u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
 						{ 2u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
+						{ 3u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
 					},
 					{},
 					VkAttachmentReference{ 0u, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL },
@@ -196,6 +208,7 @@ namespace castor3d
 				} );
 		}
 
+		blattaches.push_back( blattaches.back() );
 		blattaches.push_back( blattaches.back() );
 		auto result = m_device->createPipeline( m_name + ( blend ? std::string{ "Blend" } : std::string{ "First" } )
 			, ashes::GraphicsPipelineCreateInfo

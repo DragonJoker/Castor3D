@@ -20,7 +20,8 @@ namespace smaa
 	public:
 		EdgeDetection( castor3d::RenderTarget & renderTarget
 			, castor3d::RenderDevice const & device
-			, SmaaConfig const & config );
+			, SmaaConfig const & config
+			, castor3d::rq::BindingDescriptionArray const & bindings );
 		virtual castor3d::CommandsSemaphore prepareCommands( castor3d::RenderPassTimer const & timer
 			, uint32_t passIndex ) = 0;
 		void accept( castor3d::PipelineVisitorBase & visitor );

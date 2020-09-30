@@ -141,6 +141,11 @@ namespace castor3d
 			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
 		}
 
+		UniformBufferOffsetT< Configuration > const & getUbo()const
+		{
+			return m_ubo;
+		}
+
 	public:
 		static uint32_t constexpr BindingPoint = 8u;
 		C3D_API static castor::String const BufferSsaoConfig;

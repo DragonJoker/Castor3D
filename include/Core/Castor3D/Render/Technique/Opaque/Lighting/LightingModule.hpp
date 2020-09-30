@@ -53,6 +53,7 @@ namespace castor3d
 		eDepth,
 		eDiffuse,
 		eSpecular,
+		eIndirect,
 		CU_ScopedEnumBounds( eDepth ),
 	};
 	castor::String getTextureName( LpTexture texture );

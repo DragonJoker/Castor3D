@@ -360,6 +360,11 @@ namespace castor3d
 
 	void RenderTarget::update( CpuUpdater & updater )
 	{
+		if ( !m_initialised )
+		{
+			return;
+		}
+
 		auto & camera = *getCamera();
 		camera.resize( m_size );
 		camera.update();
@@ -389,11 +394,17 @@ namespace castor3d
 
 	void RenderTarget::update( GpuUpdater & updater )
 	{
+		if ( !m_initialised )
+		{
+			return;
+		}
+
 		updater.jitter = m_jitter;
 		updater.scene = getScene();
 		updater.camera = getCamera();
 
 		updater.scene->update( updater );
+
 		m_toneMapping->update( updater );
 		m_renderTechnique->update( updater );
 		m_overlayRenderer->update( updater );
@@ -412,6 +423,11 @@ namespace castor3d
 	void RenderTarget::render( RenderDevice const & device
 		, RenderInfo & info )
 	{
+		if ( !m_initialised )
+		{
+			return;
+		}
+
 		SceneSPtr scene = getScene();
 
 		if ( scene )
@@ -699,7 +715,7 @@ namespace castor3d
 				, *m_objectsFrameBuffer.frameBuffer
 				, { clear }
 				, VK_SUBPASS_CONTENTS_INLINE );
-			m_toneMapping->registerFrame( *m_toneMappingCommandBuffer );
+			m_toneMapping->registerPass( *m_toneMappingCommandBuffer );
 			m_toneMappingCommandBuffer->endRenderPass();
 			// Put render technique image back in colour attachment layout.
 			m_toneMappingCommandBuffer->memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
@@ -823,12 +839,17 @@ namespace castor3d
 
 		CombinePassBuilder mainBuilder{};
 		mainBuilder.resultTexture( m_combinedFrameBuffer.colourTexture.getTexture() );
-		mainBuilder.texcoordConfig( RenderQuadConfig::Texcoord{} );
+		mainBuilder.texcoordConfig( rq::Texcoord{} );
+
+#if C3D_DebugQuads
+		auto intermediates = m_intermediates;
+#else
+		IntermediateViewArray intermediates{ m_intermediates[0] };
+#endif
 
 		m_combinePass = CombinePassBuilder{ mainBuilder }
-#if C3D_DebugQuads
-			.descriptorSetsCount( uint32_t( m_intermediates.size() ) )
-#endif
+			.binding( VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D )
+			.binding( VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D )
 			.build( *getEngine()
 				, device
 				, "Target"
@@ -836,8 +857,10 @@ namespace castor3d
 				, extent
 				, m_combineVtx
 				, m_combinePxl
-				, m_intermediates
-				, { "", m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView().getSampledView(), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
+				, intermediates
+				, { ""
+					, m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView().getSampledView()
+					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
 	}
 
 	void RenderTarget::doRender( RenderDevice const & device

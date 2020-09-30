@@ -995,6 +995,19 @@ namespace castor3d
 		return getEngine()->getMaterialsType();
 	}
 
+	bool Scene::needsGlobalIllumination()const
+	{
+		auto result = false;
+		m_lightCache->forEach( [&result]( Light const & light )
+			{
+				if ( !result )
+				{
+					result = light.getGlobalIlluminationType() != GlobalIlluminationType::eNone;
+				}
+			} );
+		return result;
+	}
+
 	void Scene::setMaterialsType( MaterialType value )
 	{
 		getEngine()->setMaterialsType( value );

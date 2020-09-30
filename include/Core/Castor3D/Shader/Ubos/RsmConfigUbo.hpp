@@ -75,6 +75,11 @@ namespace castor3d
 			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
 		}
 
+		UniformBufferOffsetT< Configuration > const & getUbo()const
+		{
+			return m_ubo;
+		}
+
 	public:
 		C3D_API static std::string const BufferRsmConfig;
 		C3D_API static std::string const Intensity;
@@ -84,7 +89,7 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
-		UniformBufferOffsetT< RsmUboConfiguration > m_ubo;
+		UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }
 

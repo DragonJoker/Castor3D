@@ -178,7 +178,7 @@ namespace castor3d
 		setLayoutBindings = ashes::VkDescriptorSetLayoutBindingArray
 		{
 			makeDescriptorSetLayoutBinding( index++
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ),
 			makeDescriptorSetLayoutBinding( index++
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
@@ -273,13 +273,14 @@ namespace castor3d
 			lpResult[LpTexture::eDepth].getTexture()->getDefaultView().getTargetView(),
 			lpResult[LpTexture::eDiffuse].getTexture()->getDefaultView().getTargetView(),
 			lpResult[LpTexture::eSpecular].getTexture()->getDefaultView().getTargetView(),
+			lpResult[LpTexture::eIndirect].getTexture()->getDefaultView().getTargetView(),
 		};
 		frameBuffer = this->renderPass->createFrameBuffer( name
 			, {
 				lpResult[LpTexture::eDepth].getTexture()->getWidth(),
 				lpResult[LpTexture::eDepth].getTexture()->getHeight(),
 			}
-			, std::move( attaches ) );
+		, std::move( attaches ) );
 	}
 
 	//************************************************************************************************
@@ -348,7 +349,7 @@ namespace castor3d
 		{
 			commandBuffer.beginRenderPass( *m_firstRenderPass.renderPass
 				, *m_firstRenderPass.frameBuffer
-				, { defaultClearDepthStencil, opaqueBlackClearColor, opaqueBlackClearColor }
+				, { defaultClearDepthStencil, opaqueBlackClearColor, opaqueBlackClearColor, doGetIndirectClearColor() }
 				, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 			commandBuffer.executeCommands( { *m_pipeline->firstCommandBuffer } );
 		}
@@ -356,7 +357,7 @@ namespace castor3d
 		{
 			commandBuffer.beginRenderPass( *m_blendRenderPass.renderPass
 				, *m_blendRenderPass.frameBuffer
-				, { defaultClearDepthStencil, opaqueBlackClearColor, opaqueBlackClearColor }
+				, { defaultClearDepthStencil, opaqueBlackClearColor, opaqueBlackClearColor, doGetIndirectClearColor() }
 				, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 			commandBuffer.executeCommands( { *m_pipeline->blendCommandBuffer } );
 		}
@@ -552,6 +553,11 @@ namespace castor3d
 			, shadowMap
 			, first );
 		return it.first->second.get();
+	}
+
+	VkClearValue LightPass::doGetIndirectClearColor()const
+	{
+		return opaqueWhiteClearColor;
 	}
 
 	void LightPass::doInitialise( Scene const & scene

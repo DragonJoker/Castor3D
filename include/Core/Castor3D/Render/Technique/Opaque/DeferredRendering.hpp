@@ -129,7 +129,7 @@ namespace castor3d
 		std::unique_ptr< LightingPass > m_lightingPass;
 		castor::DelayedInitialiserT< SsaoPass > m_ssao;
 		castor::DelayedInitialiserT< SubsurfaceScatteringPass > m_subsurfaceScattering;
-		std::vector< castor::DelayedInitialiserT< OpaqueResolvePass > > m_resolve;
+		castor::DelayedInitialiserT< OpaqueResolvePass > m_resolve;
 		std::vector< ashes::ImagePtr > m_results;
 	};
 }

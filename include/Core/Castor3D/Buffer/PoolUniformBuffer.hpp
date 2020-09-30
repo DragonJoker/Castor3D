@@ -11,7 +11,6 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/ArrayView.hpp>
 
 #include <ashespp/Buffer/UniformBuffer.hpp>
-#include <ashespp/Sync/Fence.hpp>
 
 #include <set>
 

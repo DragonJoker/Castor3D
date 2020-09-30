@@ -139,76 +139,31 @@ namespace castor3d
 			, m_size
 			, m_opaquePassResult
 			, m_lightingPass->getResult() ) }
+		, m_resolve{ makeDelayedInitialiser< OpaqueResolvePass >( m_engine
+				, m_device
+				, scene
+				, m_opaquePassResult
+				, *m_ssao.raw()
+				, m_subsurfaceScattering->getResult()
+				, m_lightingPass->getResult()[LpTexture::eDiffuse]
+				, m_lightingPass->getResult()[LpTexture::eSpecular]
+				, m_lightingPass->getResult()[LpTexture::eIndirect]
+				, resultTexture
+				, m_opaquePass.getSceneUbo()
+				, m_gpInfoUbo
+				, hdrConfigUbo ) }
 	{
-		//SSAO Off
-		//	SSSSS Off
-		m_resolve.emplace_back( std::make_unique< OpaqueResolvePass >( m_engine
-			, m_device
-			, scene
-			, m_opaquePassResult
-			, m_lightingPass->getResult()[LpTexture::eDiffuse]
-			, m_lightingPass->getResult()[LpTexture::eSpecular]
-			, resultTexture
-			, m_opaquePass.getSceneUbo()
-			, m_gpInfoUbo
-			, hdrConfigUbo
-			, nullptr ) );
-		//	SSSSS On
-		m_resolve.emplace_back( std::make_unique< OpaqueResolvePass >( m_engine
-			, m_device
-			, scene
-			, m_opaquePassResult
-			, m_subsurfaceScattering->getResult()
-			, m_lightingPass->getResult()[LpTexture::eSpecular]
-			, resultTexture
-			, m_opaquePass.getSceneUbo()
-			, m_gpInfoUbo
-			, hdrConfigUbo
-			, nullptr ) );
-		//SSAO On
-		//	SSSSS Off
-		m_resolve.emplace_back( std::make_unique< OpaqueResolvePass >( m_engine
-			, m_device
-			, scene
-			, m_opaquePassResult
-			, m_lightingPass->getResult()[LpTexture::eDiffuse]
-			, m_lightingPass->getResult()[LpTexture::eSpecular]
-			, resultTexture
-			, m_opaquePass.getSceneUbo()
-			, m_gpInfoUbo
-			, hdrConfigUbo
-			, m_ssao.raw() ) );
-		//	SSSSS On
-		m_resolve.emplace_back( std::make_unique< OpaqueResolvePass >( m_engine
-			, m_device
-			, scene
-			, m_opaquePassResult
-			, m_subsurfaceScattering->getResult()
-			, m_lightingPass->getResult()[LpTexture::eSpecular]
-			, resultTexture
-			, m_opaquePass.getSceneUbo()
-			, m_gpInfoUbo
-			, hdrConfigUbo
-			, m_ssao.raw() ) );
 		m_opaquePass.initialiseRenderPass( device, m_opaquePassResult );
 
 		m_linearisePass.initialise( m_device );
 		m_ssao.initialise( m_device );
 		m_subsurfaceScattering.initialise( m_device );
-
-		for ( auto & pass : m_resolve )
-		{
-			pass.initialise();
-		}
+		m_resolve.initialise();
 	}
 
 	DeferredRendering::~DeferredRendering()
 	{
-		for ( auto & pass : m_resolve )
-		{
-			pass.cleanup();
-		}
-
+		m_resolve.cleanup();
 		m_subsurfaceScattering.cleanup( m_device );
 		m_ssao.cleanup( m_device );
 		m_linearisePass.cleanup( m_device );
@@ -238,7 +193,7 @@ namespace castor3d
 		m_opaquePass.update( updater );
 
 		auto index = getIndex( m_ssaoConfig, scene );
-		m_resolve[index]->update( camera );
+		m_resolve->update( updater );
 
 		if ( m_ssaoConfig.enabled )
 		{
@@ -273,9 +228,7 @@ namespace castor3d
 			result = &m_subsurfaceScattering->render( device, *result );
 		}
 
-		auto index = getIndex( m_ssaoConfig, scene );
-		result = &m_resolve[index]->render( *result );
-
+		result = &m_resolve->render( *result );
 		return *result;
 	}
 
@@ -319,6 +272,6 @@ namespace castor3d
 		}
 
 		auto index = getIndex( m_ssaoConfig, visitor.getScene() );
-		m_resolve[index].raw()->accept( visitor );
+		m_resolve.raw()->accept( visitor );
 	}
 }

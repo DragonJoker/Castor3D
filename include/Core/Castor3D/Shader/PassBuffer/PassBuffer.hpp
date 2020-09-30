@@ -11,6 +11,8 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/ArrayView.hpp>
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
+#include <ashespp/Descriptor/DescriptorSet.hpp>
+
 #define C3D_MaterialsStructOfArrays 0
 
 namespace castor3d
@@ -68,6 +70,13 @@ namespace castor3d
 		C3D_API VkDescriptorSetLayoutBinding createLayoutBinding()const;
 		/**
 		 *\~english
+		 *\brief		Creates the descriptor write for this buffer.
+		 *\~french
+		 *\brief		Crée le descriptor write pour ce tampon.
+		 */
+		C3D_API ashes::WriteDescriptorSet getBinding()const;
+		/**
+		 *\~english
 		 *\brief		Creates the descriptor set binding at given point.
 		 *\param[in]	descriptorSet	The descriptor set that receives the binding.
 		 *\param[in]	binding			The descriptor set layout binding.
@@ -114,6 +123,16 @@ namespace castor3d
 		inline uint8_t * getPtr()
 		{
 			return m_buffer.getPtr();
+		}
+		/**
+		 *\~english
+		 *\return		The buffer descriptor type.
+		 *\~french
+		 *\brief		Le type de descripteur du tampon.
+		 */
+		inline VkDescriptorType getType()const
+		{
+			return m_buffer.getType();
 		}
 
 	public:

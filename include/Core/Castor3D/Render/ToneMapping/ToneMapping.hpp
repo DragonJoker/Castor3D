@@ -114,7 +114,7 @@ namespace castor3d
 		/**@}*/
 
 	public:
-		using RenderQuad::registerFrame;
+		using RenderQuad::registerPass;
 		using RenderQuad::getName;
 
 	private:
@@ -152,10 +152,6 @@ namespace castor3d
 		C3D_API virtual void doGpuUpdate()
 		{
 		}
-
-	private:
-		C3D_API void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-			, ashes::DescriptorSet & descriptorSet )override;
 
 	protected:
 		castor::String m_fullName;

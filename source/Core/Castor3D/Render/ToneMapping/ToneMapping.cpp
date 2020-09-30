@@ -2,8 +2,9 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
-#include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Shader/Program.hpp"
 
 #include <CastorUtils/Graphics/Size.hpp>
 
@@ -17,6 +18,16 @@ namespace castor3d
 	namespace
 	{
 		static uint32_t constexpr HdrCfgUboIdx = 0u;
+		static uint32_t constexpr HdrMapIdx = 1u;
+
+		rq::BindingDescriptionArray createBindings()
+		{
+			return rq::BindingDescriptionArray
+			{
+				{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, ashes::nullopt },	// HdrConfig UBO
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },	// HDR Map
+			};
+		}
 	}
 
 	ToneMapping::ToneMapping( castor::String const & name
@@ -26,12 +37,12 @@ namespace castor3d
 		, HdrConfigUbo & hdrConfigUbo
 		, Parameters const & parameters )
 		: OwnedBy< Engine >{ engine }
-		, RenderQuad{ *engine.getRenderSystem()
-			, device
+		, RenderQuad{ device
 			, name
 			, VK_FILTER_NEAREST
-			, { ashes::nullopt
-				, RenderQuadConfig::Texcoord{} } }
+			, { createBindings()
+				, ashes::nullopt
+				, rq::Texcoord{} } }
 		, m_hdrConfigUbo{ hdrConfigUbo }
 		, m_fullName{ fullName }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "ToneMapping" }
@@ -76,18 +87,17 @@ namespace castor3d
 			makeShaderState( m_device, m_vertexShader ),
 			makeShaderState( m_device, m_pixelShader ),
 		};
-		ashes::VkDescriptorSetLayoutBindingArray bindings
-		{
-			makeDescriptorSetLayoutBinding( HdrCfgUboIdx
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-		};
-		createPipeline( { size[0], size[1] }
+		createPipelineAndPass( { size[0], size[1] }
 			, Position{}
 			, program
-			, source.getDefaultView().getSampledView()
 			, renderPass
-			, std::move( bindings )
+			, {
+				makeDescriptorWrite( m_hdrConfigUbo.getUbo()
+					, HdrCfgUboIdx ),
+				makeDescriptorWrite( source.getDefaultView().getSampledView()
+					, m_sampler->getSampler()
+					, HdrMapIdx ),
+			}
 			, {} );
 		return true;
 	}
@@ -111,12 +121,5 @@ namespace castor3d
 	{
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );
-	}
-
-	void ToneMapping::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-		, ashes::DescriptorSet & descriptorSet )
-	{
-		m_hdrConfigUbo.createSizedBinding( descriptorSet
-			, descriptorSetLayout.getBinding( 0u ) );
 	}
 }

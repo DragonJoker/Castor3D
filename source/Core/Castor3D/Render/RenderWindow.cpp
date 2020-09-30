@@ -6,6 +6,7 @@
 #include "Castor3D/Cache/TargetCache.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Event/UserInput/UserInputListener.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
@@ -792,23 +793,24 @@ namespace castor3d
 	{
 		doCreateRenderingResources();
 		m_renderQuad = RenderQuadBuilder{}
-			.texcoordConfig( RenderQuadConfig::Texcoord{} )
-			.build( *getEngine()->getRenderSystem()
-				, *m_device
+			.texcoordConfig( rq::Texcoord{} )
+			.build( *m_device
 				, "RenderWindow" + getName()
 				, VK_FILTER_LINEAR );
 		doCreateProgram();
-		m_renderQuad->createPipeline( VkExtent2D{ m_size[0], m_size[1] }
+		m_renderQuad->createPipelineAndPass( VkExtent2D{ m_size[0], m_size[1] }
 			, castor::Position{}
 			, m_program
-#if C3D_DebugPicking
-			, m_pickingPass->getResult()
-#else
-			, getRenderTarget()->getTexture().getTexture()->getDefaultView().getSampledView()
-#endif
 			, *m_renderPass
-			, {}
-			, {} );
+			, {
+#if C3D_DebugPicking
+				RenderQuad::makeDescriptorWrite( m_pickingPass->getResult()
+#else
+				RenderQuad::makeDescriptorWrite( getRenderTarget()->getTexture().getTexture()->getDefaultView().getSampledView()
+#endif
+					, m_renderQuad->getSampler().getSampler()
+					, 0u ),
+			} );
 	}
 
 	bool RenderWindow::doPrepareFrames()
@@ -832,7 +834,7 @@ namespace castor3d
 				, frameBuffer
 				, { opaqueWhiteClearColor }
 				, VK_SUBPASS_CONTENTS_INLINE );
-			m_renderQuad->registerFrame( commandBuffer );
+			m_renderQuad->registerPass( commandBuffer );
 			commandBuffer.endRenderPass();
 			commandBuffer.endDebugBlock();
 			commandBuffer.end();
@@ -844,6 +846,7 @@ namespace castor3d
 	void RenderWindow::doResetSwapChain()
 	{
 		getDevice()->waitIdle();
+		m_renderQuad.reset();
 		m_frameBuffers.clear();
 		m_commandBuffers.clear();
 		m_renderingResources.clear();

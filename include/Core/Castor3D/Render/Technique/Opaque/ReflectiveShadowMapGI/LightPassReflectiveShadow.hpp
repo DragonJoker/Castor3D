@@ -109,7 +109,7 @@ namespace castor3d
 				, m_rsmGiPass->getSamplesSsbo()
 				, m_rsmGiPass->getResult()[0]
 				, m_rsmGiPass->getResult()[1]
-				, m_lpResult[LpTexture::eDiffuse] );
+				, m_lpResult[LpTexture::eIndirect] );
 			LightPassShadow< LtType >::initialise( scene, gp, sceneUbo, timer );
 		}
 
@@ -163,6 +163,12 @@ namespace castor3d
 				, shadowMap
 				, shadowMapIndex );
 			m_rsmGiPass->update( light );
+		}
+
+	private:
+		VkClearValue doGetIndirectClearColor()const override
+		{
+			return opaqueBlackClearColor;
 		}
 
 	private:

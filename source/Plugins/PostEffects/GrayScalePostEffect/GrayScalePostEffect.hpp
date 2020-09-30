@@ -25,15 +25,7 @@ namespace grayscale
 		{
 		public:
 			Quad( castor3d::RenderSystem & renderSystem
-				, castor3d::RenderDevice const & device
-				, castor3d::UniformBufferOffsetT< castor::Point3f > const & configUbo );
-
-		private:
-			void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-				, ashes::DescriptorSet & descriptorSet );
-
-		private:
-			castor3d::UniformBufferOffsetT< castor::Point3f > const & m_configUbo;
+				, castor3d::RenderDevice const & device );
 		};
 
 	public:

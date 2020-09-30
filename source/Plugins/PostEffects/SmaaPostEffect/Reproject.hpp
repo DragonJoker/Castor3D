@@ -34,10 +34,6 @@ namespace smaa
 		}
 
 	private:
-		void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-			, ashes::DescriptorSet & descriptorSet )override;
-
-	private:
 		ashes::RenderPassPtr m_renderPass;
 		castor3d::PostEffectSurface m_surface;
 		ashes::ImageView const & m_currentColourView;

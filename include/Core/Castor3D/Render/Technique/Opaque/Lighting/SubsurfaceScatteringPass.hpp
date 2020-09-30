@@ -118,11 +118,6 @@ namespace castor3d
 			void prepareFrame( ashes::CommandBuffer & commandBuffer )const;
 
 		private:
-			void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-				, ashes::DescriptorSet & descriptorSet )override;
-
-		private:
-			RenderSystem & m_renderSystem;
 			OpaquePassResult const & m_geometryBufferResult;
 			GpInfoUbo const & m_gpInfoUbo;
 			SceneUbo & m_sceneUbo;
@@ -150,11 +145,6 @@ namespace castor3d
 			void prepareFrame( ashes::CommandBuffer & commandBuffer )const;
 
 		private:
-			void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-				, ashes::DescriptorSet & descriptorSet )override;
-
-		private:
-			RenderSystem & m_renderSystem;
 			UniformBufferOffsetT< BlurWeights > m_blurUbo;
 			OpaquePassResult const & m_geometryBufferResult;
 			TextureUnit const & m_source;

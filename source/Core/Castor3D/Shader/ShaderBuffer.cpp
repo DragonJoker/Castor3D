@@ -62,6 +62,7 @@ namespace castor3d
 		, m_size{ size }
 		, m_buffer{ doCreateBuffer( engine, device, m_size, name ) }
 		, m_bufferView{ doCreateView( engine, device, tboFormat, *m_buffer ) }
+		, m_type{ m_bufferView ? VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER : VK_DESCRIPTOR_TYPE_STORAGE_BUFFER }
 		, m_data( size_t( m_size ), uint8_t( 0 ) )
 	{
 	}
@@ -88,14 +89,32 @@ namespace castor3d
 
 	VkDescriptorSetLayoutBinding ShaderBuffer::createLayoutBinding( uint32_t index )const
 	{
+		return makeDescriptorSetLayoutBinding( index, m_type, VK_SHADER_STAGE_FRAGMENT_BIT );
+	}
+
+	ashes::WriteDescriptorSet ShaderBuffer::getBinding( uint32_t binding )const
+	{
+		auto result = ashes::WriteDescriptorSet
+		{
+			binding,
+			0u,
+			1u,
+			( checkFlag( m_buffer->getUsage(), VkBufferUsageFlagBits::VK_BUFFER_USAGE_STORAGE_BUFFER_BIT )
+				? VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				: VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER ),
+		};
+
 		if ( m_bufferView )
 		{
-			return makeDescriptorSetLayoutBinding( index, VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT );
+			result.bufferInfo.push_back( VkDescriptorBufferInfo{ *m_buffer, m_bufferView->getOffset(), m_bufferView->getRange() } );
+			result.texelBufferView.push_back( *m_bufferView );
 		}
 		else
 		{
-			return makeDescriptorSetLayoutBinding( index, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT );
+			result.bufferInfo.push_back( VkDescriptorBufferInfo{ *m_buffer, 0u, uint32_t( m_size ) } );
 		}
+
+		return result;
 	}
 
 	void ShaderBuffer::createBinding( ashes::DescriptorSet & descriptorSet

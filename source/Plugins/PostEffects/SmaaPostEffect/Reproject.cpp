@@ -57,6 +57,13 @@ namespace smaa
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
+		enum Idx : uint32_t
+		{
+			CurColTexIdx,
+			PrvColTexIdx,
+			VelocityTexIdx,
+		};
+
 		std::unique_ptr< ast::Shader > doGetReprojectFP( castor3d::RenderSystem const & renderSystem
 			, Point4f const & renderTargetMetrics
 			, SmaaConfig const & config
@@ -69,9 +76,9 @@ namespace smaa
 
 			// Shader inputs
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
-			auto c3d_currentColourTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_currentColourTex", 0u, 0u );
-			auto c3d_previousColourTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_previousColourTex", 1u, 0u );
-			auto c3d_velocityTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_velocityTex", 2u, 0u, reprojection );
+			auto c3d_currentColourTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_currentColourTex", CurColTexIdx, 0u );
+			auto c3d_previousColourTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_previousColourTex", PrvColTexIdx, 0u );
+			auto c3d_velocityTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_velocityTex", VelocityTexIdx, 0u, reprojection );
 
 			// Shader outputs
 			auto pxl_fragColour = writer.declOutput< Vec4 >( "pxl_fragColour", 0u );
@@ -126,6 +133,16 @@ namespace smaa
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
+
+		castor3d::rq::BindingDescriptionArray createBindings()
+		{
+			return
+			{
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
+			};
+		}
 	}
 	
 	//*********************************************************************************************
@@ -136,7 +153,12 @@ namespace smaa
 		, ashes::ImageView const & previousColourView
 		, ashes::ImageView const * velocityView
 		, SmaaConfig const & config )
-		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), device, cuT( "SmaaReproject" ), VK_FILTER_NEAREST, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
+		: castor3d::RenderQuad{ device
+			, cuT( "SmaaReproject" )
+			, VK_FILTER_NEAREST
+			, { createBindings()
+				, ashes::nullopt
+				, castor3d::rq::Texcoord{} } }
 		, m_currentColourView{ currentColourView }
 		, m_previousColourView{ previousColourView }
 		, m_velocityView{ velocityView }
@@ -216,27 +238,28 @@ namespace smaa
 		stages.push_back( makeShaderState( m_device, m_vertexShader ) );
 		stages.push_back( makeShaderState( m_device, m_pixelShader ) );
 
-		ashes::VkDescriptorSetLayoutBindingArray setLayoutBindings;
-		setLayoutBindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( 0u
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		auto * view = &m_previousColourView;
+		ashes::WriteDescriptorSetArray writes
+		{
+			makeDescriptorWrite( m_currentColourView
+				, getSampler().getSampler()
+				, CurColTexIdx ),
+			makeDescriptorWrite( m_previousColourView
+				, getSampler().getSampler()
+				, PrvColTexIdx ),
+		};
 
 		if ( m_velocityView )
 		{
-			setLayoutBindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( 1u
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-			view = m_velocityView;
+			writes.push_back( makeDescriptorWrite( *m_velocityView
+				, m_sampler->getSampler()
+				, VelocityTexIdx ) );
 		}
 
-		createPipeline( size
+		createPipelineAndPass( size
 			, castor::Position{}
 			, stages
-			, *view
 			, *m_renderPass
-			, std::move( setLayoutBindings )
-			, {} );
+			, writes );
 		m_surface.initialise( m_device
 			, *m_renderPass
 			, castor::Size{ size.width, size.height }
@@ -272,7 +295,7 @@ namespace smaa
 			, *m_surface.frameBuffer
 			, { castor3d::transparentBlackClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE );
-		registerFrame( reprojectCmd );
+		registerPass( reprojectCmd );
 		reprojectCmd.endRenderPass();
 		timer.endPass( reprojectCmd, passIndex );
 		reprojectCmd.endDebugBlock();
@@ -285,21 +308,6 @@ namespace smaa
 	{
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );
-	}
-
-	void Reproject::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-		, ashes::DescriptorSet & descriptorSet )
-	{
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 0u )
-			, m_currentColourView
-			, m_sampler->getSampler() );
-
-		if ( m_velocityView )
-		{
-			descriptorSet.createBinding( descriptorSetLayout.getBinding( 1u )
-				, m_previousColourView
-				, m_sampler->getSampler() );
-		}
 	}
 
 	//*********************************************************************************************

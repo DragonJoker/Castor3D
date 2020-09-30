@@ -34,6 +34,11 @@ namespace film_grain
 			, VkExtent2D const & size );
 		void update( castor3d::CpuUpdater & updater );
 
+		inline ashes::ImageView const & getNoiseView()const
+		{
+			return m_noiseView;
+		}
+
 		inline castor3d::UniformBufferOffsetT< Configuration > const & getUbo()const
 		{
 			return m_configUbo;
@@ -43,10 +48,6 @@ namespace film_grain
 		{
 			return m_configUbo;
 		}
-
-	private:
-		void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-			, ashes::DescriptorSet & descriptorSet )override;
 
 	private:
 		uint64_t m_time{ 0ull };

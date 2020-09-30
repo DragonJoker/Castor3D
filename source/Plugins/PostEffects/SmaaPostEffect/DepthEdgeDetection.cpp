@@ -29,6 +29,11 @@ namespace smaa
 {
 	namespace
 	{
+		enum Idx : uint32_t
+		{
+			DepthTexIdx,
+		};
+
 		std::unique_ptr< ast::Shader > doGetEdgeDetectionFP( castor3d::RenderSystem & renderSystem
 			, Point4f const & renderTargetMetrics
 			, SmaaConfig const & config )
@@ -50,7 +55,7 @@ namespace smaa
 			// Shader inputs
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 			auto vtx_offset = writer.declInputArray< Vec4 >( "vtx_offset", 1u, 3u );
-			auto c3d_depthTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_depthTex", 0u, 0u );
+			auto c3d_depthTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_depthTex", DepthTexIdx, 0u );
 
 			// Shader outputs
 			auto pxl_fragColour = writer.declOutput< Vec4 >( "pxl_fragColour", 0u );
@@ -118,6 +123,14 @@ namespace smaa
 			};
 			return depthView.image->createView( view );
 		}
+
+		castor3d::rq::BindingDescriptionArray createBindings()
+		{
+			return
+			{
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
+			};
+		}
 	}
 
 	//*********************************************************************************************
@@ -126,7 +139,7 @@ namespace smaa
 		, castor3d::RenderDevice const & device
 		, ashes::ImageView const & depthView
 		, SmaaConfig const & config )
-		: EdgeDetection{ renderTarget, device, config }
+		: EdgeDetection{ renderTarget, device, config, createBindings() }
 		, m_depthView{ doCreateDepthView( depthView ) }
 		, m_sourceView{ depthView }
 	{
@@ -168,7 +181,7 @@ namespace smaa
 				castor3d::defaultClearDepthStencil,
 			}
 			, VK_SUBPASS_CONTENTS_INLINE );
-		registerFrame( edgeDetectionCmd );
+		registerPass( edgeDetectionCmd );
 		edgeDetectionCmd.endRenderPass();
 		timer.endPass( edgeDetectionCmd, passIndex );
 		edgeDetectionCmd.endDebugBlock();
@@ -191,12 +204,15 @@ namespace smaa
 		dsstate->front.reference = 1u;
 		dsstate->back = dsstate->front;
 		ashes::VkDescriptorSetLayoutBindingArray setLayoutBindings;
-		createPipeline( size
+		createPipelineAndPass( size
 			, castor::Position{}
 			, stages
-			, m_depthView
 			, *m_renderPass
-			, std::move( setLayoutBindings )
+			, {
+				makeDescriptorWrite( m_depthView
+					, getSampler().getSampler()
+					, DepthTexIdx ),
+			}
 			, {}
 			, std::move( dsstate ) );
 	}

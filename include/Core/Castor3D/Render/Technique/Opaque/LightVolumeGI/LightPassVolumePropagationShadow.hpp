@@ -111,7 +111,7 @@ namespace castor3d
 				, m_lpvConfigUbo
 				, m_gpResult
 				, m_accumulation
-				, m_lpResult[LpTexture::eDiffuse] );
+				, m_lpResult[LpTexture::eIndirect] );
 			uint32_t propIndex = 0u;
 			m_lightPropagationPasses.emplace_back( this->m_engine
 				, this->m_device
@@ -235,6 +235,12 @@ namespace castor3d
 					m_lpvConfigUbo.cpuUpdate( grid, light );
 				}
 			}
+		}
+
+	private:
+		VkClearValue doGetIndirectClearColor()const override
+		{
+			return opaqueBlackClearColor;
 		}
 
 	private:

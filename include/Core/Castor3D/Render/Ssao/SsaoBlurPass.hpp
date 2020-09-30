@@ -98,11 +98,6 @@ namespace castor3d
 		}
 		/**@}*/
 
-	private:
-		void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-			, ashes::DescriptorSet & descriptorSet )override;
-		void doRegisterFrame( ashes::CommandBuffer & commandBuffer )const override;
-
 	public:
 		static VkFormat constexpr ResultFormat = VK_FORMAT_R8G8B8A8_UNORM;
 

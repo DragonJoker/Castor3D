@@ -77,13 +77,14 @@ namespace smaa
 
 	EdgeDetection::EdgeDetection( castor3d::RenderTarget & renderTarget
 		, castor3d::RenderDevice const & device
-		, SmaaConfig const & config )
-		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem()
-			, device
+		, SmaaConfig const & config
+		, castor3d::rq::BindingDescriptionArray const & bindings )
+		: castor3d::RenderQuad{ device
 			, cuT( "SmaaEdgeDetection" )
 			, VK_FILTER_LINEAR
-			, { ashes::nullopt
-				, castor3d::RenderQuadConfig::Texcoord{} } }
+			, { bindings
+				, ashes::nullopt
+				, castor3d::rq::Texcoord{} } }
 		, m_config{ config }
 		, m_surface{ *renderTarget.getEngine(), getName() }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName() }

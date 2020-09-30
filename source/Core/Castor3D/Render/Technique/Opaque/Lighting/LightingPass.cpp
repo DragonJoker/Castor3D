@@ -511,6 +511,10 @@ namespace castor3d
 		m_lpResultBarrier.commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
 			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 			, m_result[LpTexture::eSpecular].getTexture()->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+		// Indirect view to shader read only
+		m_lpResultBarrier.commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
+			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, m_result[LpTexture::eIndirect].getTexture()->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 		m_lpResultBarrier.commandBuffer->endDebugBlock();
 		m_lpResultBarrier.commandBuffer->end();
 	}
@@ -606,6 +610,9 @@ namespace castor3d
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		visitor.visit( "Light Specular"
 			, m_result[LpTexture::eSpecular].getTexture()->getDefaultView().getSampledView()
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+		visitor.visit( "Light Indirect"
+			, m_result[LpTexture::eIndirect].getTexture()->getDefaultView().getSampledView()
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 
 		for ( auto & lightPasses : m_lightPasses )

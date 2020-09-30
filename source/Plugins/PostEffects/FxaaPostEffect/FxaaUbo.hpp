@@ -9,16 +9,18 @@ See LICENSE file in root folder
 
 namespace fxaa
 {
+	struct FxaaUboConfiguration
+	{
+		castor::Point2f pixelSize;
+		float subpixShift;
+		float spanMax;
+		float reduceMul;
+	};
+
 	class FxaaUbo
 	{
 	private:
-		struct Configuration
-		{
-			castor::Point2f pixelSize;
-			float subpixShift;
-			float spanMax;
-			float reduceMul;
-		};
+		using Configuration = FxaaUboConfiguration;
 
 	public:
 		explicit FxaaUbo( castor3d::RenderDevice const & device
@@ -32,6 +34,11 @@ namespace fxaa
 			, VkDescriptorSetLayoutBinding const & layoutBinding )const
 		{
 			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
+		}
+
+		castor3d::UniformBufferOffsetT< Configuration > const & getUbo()const
+		{
+			return m_ubo;
 		}
 
 	public:

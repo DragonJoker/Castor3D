@@ -39,6 +39,7 @@ namespace castor3d
 				cuT( "Depth" ),
 				cuT( "Diffuse" ),
 				cuT( "Specular" ),
+				cuT( "Indirect" ),
 			}
 		};
 		return Values[size_t( texture )];
@@ -50,6 +51,7 @@ namespace castor3d
 		{
 			{
 				VK_FORMAT_D32_SFLOAT_S8_UINT,
+				VK_FORMAT_R16G16B16A16_SFLOAT,
 				VK_FORMAT_R16G16B16A16_SFLOAT,
 				VK_FORMAT_R16G16B16A16_SFLOAT,
 			}
@@ -66,7 +68,8 @@ namespace castor3d
 			{
 				defaultClearDepthStencil,
 				opaqueBlackClearColor,
-				opaqueBlackClearColor
+				opaqueBlackClearColor,
+				opaqueWhiteClearColor,
 			}
 		};
 		return Values[size_t( texture )];
@@ -79,6 +82,7 @@ namespace castor3d
 			{
 				VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT,
 				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT,
+				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
 				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
 			}
 		};
@@ -93,6 +97,7 @@ namespace castor3d
 				VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE,
 				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
 				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
+				VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE,
 			}
 		};
 		return Values[size_t( texture )];
@@ -106,7 +111,7 @@ namespace castor3d
 		{
 			engine,
 			cuT( "LPResult" ),
-			{ nullptr, nullptr, nullptr },
+			{ nullptr, nullptr, nullptr, nullptr },
 			0u,
 			size,
 		}

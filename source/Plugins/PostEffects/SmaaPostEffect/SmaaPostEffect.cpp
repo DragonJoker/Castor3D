@@ -474,17 +474,19 @@ namespace smaa
 
 		ashes::VkDescriptorSetLayoutBindingArray bindings;
 		auto copyQuad = castor3d::RenderQuadBuilder{}
-			.texcoordConfig( castor3d::RenderQuadConfig::Texcoord{} )
-			.build( *getRenderSystem()
-				, device
+			.texcoordConfig( castor3d::rq::Texcoord{} )
+			.build( device
 				, cuT( "SmaaCopy" )
 				, VK_FILTER_NEAREST );
-		copyQuad->createPipeline( { m_renderTarget.getSize().getWidth(), m_renderTarget.getSize().getHeight() }
+		copyQuad->createPipelineAndPass( { m_renderTarget.getSize().getWidth(), m_renderTarget.getSize().getHeight() }
 			, {}
 			, m_copyProgram
-			, m_smaaResult->getDefaultView().getSampledView()
 			, *m_copyRenderPass
-			, std::move( bindings )
+			, {
+				copyQuad->makeDescriptorWrite( m_smaaResult->getDefaultView().getSampledView()
+					, copyQuad->getSampler().getSampler()
+					, 0u )
+			}
 			, {} );
 
 		castor3d::CommandsSemaphore copyCommands
@@ -508,7 +510,7 @@ namespace smaa
 			, *m_copyFrameBuffer
 			, { castor3d::transparentBlackClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE );
-		copyQuad->registerFrame( copyCmd );
+		copyQuad->registerPass( copyCmd );
 		copyCmd.endRenderPass();
 		timer.endPass( copyCmd, passIndex );
 		copyCmd.endDebugBlock();

@@ -62,6 +62,11 @@ namespace castor3d
 			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
 		}
 
+		UniformBufferOffsetT< Configuration > const & getUbo()const
+		{
+			return m_ubo;
+		}
+
 	public:
 		C3D_API static const std::string LayeredLpvConfig;
 		C3D_API static const std::string AllMinVolumeCorners;

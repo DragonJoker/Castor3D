@@ -68,11 +68,6 @@ namespace castor3d
 		C3D_API void accept( PipelineVisitorBase & visitor );
 
 	private:
-		void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-			, ashes::DescriptorSet & descriptorSet )override;
-		void doRegisterFrame( ashes::CommandBuffer & commandBuffer )const override;
-
-	private:
 		LightCache const & m_lightCache;
 		GpInfoUbo const & m_gpInfo;
 		OpaquePassResult const & m_gpResult;

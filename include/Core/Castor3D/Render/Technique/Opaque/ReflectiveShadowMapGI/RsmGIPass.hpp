@@ -80,11 +80,6 @@ namespace castor3d
 		}
 
 	private:
-		void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-			, ashes::DescriptorSet & descriptorSet )override;
-		void doRegisterFrame( ashes::CommandBuffer & commandBuffer )const override;
-
-	private:
 		LightCache const & m_lightCache;
 		OpaquePassResult const & m_gpResult;
 		ShadowMapResult const & m_smResult;

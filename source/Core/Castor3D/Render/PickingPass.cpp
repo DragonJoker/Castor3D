@@ -35,6 +35,7 @@
 #include <ashespp/Descriptor/DescriptorSetLayout.hpp>
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/RenderPass/FrameBuffer.hpp>
+#include <ashespp/Sync/Fence.hpp>
 
 #include <ShaderWriter/Source.hpp>
 

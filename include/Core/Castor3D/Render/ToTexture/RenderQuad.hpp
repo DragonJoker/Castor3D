@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_RenderQuad_H___
 
 #include "RenderToTextureModule.hpp"
+#include "Castor3D/Buffer/UniformBufferOffset.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
@@ -23,16 +24,16 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	struct RenderQuadConfig
+	namespace rq
 	{
-		/**
-		*\~english
-		*\brief
-		*	Tells how the texture coordinates from the vertex buffer are built.
-		*\~french
-		*\brief
-		*	Définit comment sont construites les coordonnées de texture du vertex buffer.
-		*/
+	/**
+	*\~english
+	*\brief
+	*	Tells how the texture coordinates from the vertex buffer are built.
+	*\~french
+	*\brief
+	*	Définit comment sont construites les coordonnées de texture du vertex buffer.
+	*/
 		struct Texcoord
 		{
 			/*
@@ -52,12 +53,45 @@ namespace castor3d
 			*/
 			bool invertV{ false };
 		};
-		ashes::Optional< VkImageSubresourceRange > range;
-		ashes::Optional< Texcoord > texcoordConfig;
-		ashes::Optional< BlendMode > blendMode;
-		ashes::Optional< uint32_t > descriptorSetsCount;
-		ashes::Optional< bool > arraySource;
-	};
+
+		struct BindingDescription
+		{
+			BindingDescription( VkDescriptorType descriptorType
+				, ashes::Optional< VkImageViewType > viewType
+				, VkShaderStageFlags stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT )
+				: descriptorType{ descriptorType }
+				, viewType{ viewType }
+				, stageFlags{ stageFlags }
+			{
+			}
+
+			VkDescriptorType descriptorType;
+			ashes::Optional< VkImageViewType > viewType;
+			VkShaderStageFlags stageFlags;
+		};
+		using BindingDescriptionArray = std::vector< BindingDescription >;
+
+		template< template< typename ValueT > typename WrapperT >
+		struct ConfigT
+		{
+			WrapperT< BindingDescriptionArray > bindings;
+			WrapperT< VkImageSubresourceRange > range;
+			WrapperT< Texcoord > texcoordConfig;
+			WrapperT< BlendMode > blendMode;
+		};
+
+		template< typename TypeT >
+		struct RawTyperT
+		{
+			using Type = TypeT;
+		};
+
+		template< typename TypeT >
+		using RawTypeT = typename RawTyperT< TypeT >::Type;
+
+		using Config = ConfigT< ashes::Optional >;
+		using ConfigData = ConfigT< RawTypeT >;
+	}
 
 	class RenderQuad
 		: public castor::Named
@@ -70,31 +104,43 @@ namespace castor3d
 		*\~english
 		*\brief
 		*	Constructor.
-		*\param[in] renderSystem
-		*	The RenderSystem.
+		*\param[in] device
+		*	The RenderDevice.
+		*\param[in] name
+		*	The pass name.
 		*\param[in] samplerFilter
 		*	The sampler filter for the source texture.
 		*\param[in] config
-		*	The texture coordinates configuration.
+		*	The configuration.
 		*\~french
 		*\brief
 		*	Constructeur.
-		*\param[in] renderSystem
-		*	Le RenderSystem.
+		*\param[in] device
+		*	Le RenderDevice.
+		*\param[in] name
+		*	Le nom de la passe.
 		*\param[in] samplerFilter
 		*	Le filtre d'échantillonnage pour la texture source.
 		*\param[in] config
-		*	La configuration des coordonnées de texture.
+		*	La configuration.
 		*/
-		C3D_API RenderQuad( RenderSystem & renderSystem
-			, RenderDevice const & device
+		C3D_API RenderQuad( RenderDevice const & device
 			, castor::String const & name
 			, VkFilter samplerFilter
-			, RenderQuadConfig config );
+			, rq::Config config );
 
 	public:
 		C3D_API virtual ~RenderQuad();
 		C3D_API explicit RenderQuad( RenderQuad && rhs )noexcept;
+		/**
+		*\~english
+		*\brief
+		*	Cleans up GPU objects.
+		*\~french
+		*\brief
+		*	Nettoie les objets GPU.
+		*/
+		C3D_API void cleanup();
 		/**
 		*\~english
 		*\brief
@@ -105,8 +151,6 @@ namespace castor3d
 		*	The render position.
 		*\param[in] program
 		*	The shader program.
-		*\param[in] view
-		*	The source view.
 		*\param[in] renderPass
 		*	The render pass to use.
 		*\param[in] bindings
@@ -122,8 +166,6 @@ namespace castor3d
 		*	La position du rendu.
 		*\param[in] program
 		*	Le programme shader.
-		*\param[in] view
-		*	La vue cible.
 		*\param[in] renderPass
 		*	La passe de rendu à utiliser.
 		*\param[in] bindings
@@ -134,22 +176,43 @@ namespace castor3d
 		C3D_API void createPipeline( VkExtent2D const & size
 			, castor::Position const & position
 			, ashes::PipelineShaderStageCreateInfoArray const & program
-			, ashes::ImageView const & inputView
 			, ashes::RenderPass const & renderPass
-			, ashes::VkDescriptorSetLayoutBindingArray bindings
-			, ashes::VkPushConstantRangeArray const & pushRanges );
+			, ashes::VkPushConstantRangeArray const & pushRanges = ashes::VkPushConstantRangeArray{}
+			, ashes::PipelineDepthStencilStateCreateInfo dsState = ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_FALSE, VK_FALSE } );
 		/**
 		*\~english
 		*\brief
-		*	Creates the rendering pipeline.
+		*	Creates the entries for one pass.
+		*\param[in] writes
+		*	The pass descriptor writes.
+		*\~french
+		*\brief
+		*	Crée les entrées pour une passe.
+		*\param[in] writes
+		*	Les descriptor writes de la passe.
+		*/
+		C3D_API void registerPassInputs( ashes::WriteDescriptorSetArray const & writes );
+		/**
+		*\~english
+		*\brief
+		*	Initialises the descriptor sets for all registered passes.
+		*\~french
+		*\brief
+		*	Crée les descriptor sets pour toute les passes enregistrées.
+		*/
+		C3D_API void initialisePasses();
+		/**
+		*\~english
+		*\brief
+		*	Creates the rendering pipeline and initialises the quad for one pass.
 		*\param[in] size
 		*	The render size.
 		*\param[in] position
 		*	The render position.
 		*\param[in] program
 		*	The shader program.
-		*\param[in] view
-		*	The source view.
+		*\param[in] writes
+		*	The pass descriptor writes.
 		*\param[in] renderPass
 		*	The render pass to use.
 		*\param[in] bindings
@@ -160,15 +223,15 @@ namespace castor3d
 		*	The depth stencil state to use.
 		*\~french
 		*\brief
-		*	Crée le pipeline de rendu.
+		*	Crée le pipeline de rendu et initialise le quad pour une passe.
 		*\param[in] size
 		*	Les dimensions de rendu.
 		*\param[in] position
 		*	La position du rendu.
 		*\param[in] program
 		*	Le programme shader.
-		*\param[in] view
-		*	La vue cible.
+		*\param[in] writes
+		*	Les descriptor writes de la passe.
 		*\param[in] renderPass
 		*	La passe de rendu à utiliser.
 		*\param[in] bindings
@@ -178,23 +241,13 @@ namespace castor3d
 		*\param[in] dsState
 		*	L'état de profondeur et stencil à utiliser.
 		*/
-		C3D_API void createPipeline( VkExtent2D const & size
+		C3D_API void createPipelineAndPass( VkExtent2D const & size
 			, castor::Position const & position
 			, ashes::PipelineShaderStageCreateInfoArray const & program
-			, ashes::ImageView const & inputView
 			, ashes::RenderPass const & renderPass
-			, ashes::VkDescriptorSetLayoutBindingArray bindings
-			, ashes::VkPushConstantRangeArray const & pushRanges
-			, ashes::PipelineDepthStencilStateCreateInfo dsState );
-		/**
-		*\~english
-		*\brief
-		*	Cleans up GPU objects.
-		*\~french
-		*\brief
-		*	Nettoie les objets GPU.
-		*/
-		C3D_API void cleanup();
+			, ashes::WriteDescriptorSetArray const & writes
+			, ashes::VkPushConstantRangeArray const & pushRanges = ashes::VkPushConstantRangeArray{}
+			, ashes::PipelineDepthStencilStateCreateInfo dsState = ashes::PipelineDepthStencilStateCreateInfo{ 0u, false, false } );
 		/**
 		*\~english
 		*\brief
@@ -215,7 +268,7 @@ namespace castor3d
 		*\param[in] descriptorSetIndex
 		*	L'indice du descriptor set.
 		*/
-		C3D_API void prepareFrame( ashes::RenderPass const & renderPass
+		C3D_API void preparePass( ashes::RenderPass const & renderPass
 			, uint32_t subpassIndex
 			, uint32_t descriptorSetIndex );
 		/**
@@ -234,10 +287,10 @@ namespace castor3d
 		*\param[in] subpassIndex
 		*	L'indice de la sous passe de rendu.
 		*/
-		inline void prepareFrame( ashes::RenderPass const & renderPass
+		inline void preparePass( ashes::RenderPass const & renderPass
 			, uint32_t subpassIndex )
 		{
-			prepareFrame( renderPass, subpassIndex, 0u );
+			preparePass( renderPass, subpassIndex, 0u );
 		}
 		/**
 		*\~english
@@ -255,7 +308,7 @@ namespace castor3d
 		*\param[in] descriptorSetIndex
 		*	L'indice du descriptor set.
 		*/
-		C3D_API void registerFrame( ashes::CommandBuffer & commandBuffer
+		C3D_API void registerPass( ashes::CommandBuffer & commandBuffer
 			, uint32_t descriptorSetIndex )const;
 		/**
 		*\~english
@@ -273,21 +326,236 @@ namespace castor3d
 		*\param[in] descriptorSetIndex
 		*	L'indice du descriptor set.
 		*/
-		inline void registerFrame( ashes::CommandBuffer & commandBuffer )const
+		inline void registerPass( ashes::CommandBuffer & commandBuffer )const
 		{
-			registerFrame( commandBuffer, 0u );
+			registerPass( commandBuffer, 0u );
 		}
 		/**
 		*\~english
-		*\name
-		*	Getters.
+		*\brief
+		*	Creates a descriptor write for combined image sampler.
+		*\param[in] view
+		*	The image view.
+		*\param[in] sampler
+		*	The sampler.
+		*\param[in] dstBinding
+		*	The binding inside the descriptor set.
+		*\param[in] dstArrayElement
+		*	The array element index.
 		*\~french
-		*\name
-		*	Accesseurs.
-		**/
-		/**@{*/
-		C3D_API uint32_t getDescriptorSetIndex( uint32_t descriptorBaseIndex
-			, uint32_t level )const;
+		*\brief
+		*	Crée un descriptor write pour un sampler et une image combinés.
+		*\param[in] view
+		*	La vue sur l'image.
+		*\param[in] sampler
+		*	Le sampler.
+		*\param[in] dstBinding
+		*	Le binding dans le descriptor set.
+		*\param[in] dstArrayElement
+		*	L'indice dans le tableau d'éléments.
+		*/
+		C3D_API static ashes::WriteDescriptorSet makeDescriptorWrite( ashes::ImageView const & view
+			, ashes::Sampler const & sampler
+			, uint32_t dstBinding
+			, uint32_t dstArrayElement = 0u );
+		/**
+		*\~english
+		*\brief
+		*	Creates a descriptor write for uniform buffer.
+		*\param[in] buffer
+		*	The uniform buffer.
+		*\param[in] elemOffset
+		*	The offset, expressed in element count.
+		*\param[in] elemRange
+		*	The range, expressed in element count.
+		*\param[in] dstBinding
+		*	The binding inside the descriptor set.
+		*\param[in] dstArrayElement
+		*	The array element index.
+		*\~french
+		*\brief
+		*	Crée un descriptor write pour un uniform buffer.
+		*\param[in] buffer
+		*	L'uniform buffer.
+		*\param[in] elemOffset
+		*	L'offset, exprimé en nombre d'éléments.
+		*\param[in] elemRange
+		*	L'intervalle, exprimé en nombre d'éléments.
+		*\param[in] dstBinding
+		*	Le binding dans le descriptor set.
+		*\param[in] dstArrayElement
+		*	L'indice dans le tableau d'éléments.
+		*/
+		C3D_API static ashes::WriteDescriptorSet makeDescriptorWrite( ashes::UniformBuffer const & buffer
+			, uint32_t dstBinding
+			, uint32_t elemOffset
+			, uint32_t elemRange
+			, uint32_t dstArrayElement = 0u );
+		/**
+		*\~english
+		*\brief
+		*	Creates a descriptor write for uniform buffer range.
+		*\param[in] buffer
+		*	The uniform buffer range.
+		*\param[in] dstBinding
+		*	The binding inside the descriptor set.
+		*\param[in] dstArrayElement
+		*	The array element index.
+		*\~french
+		*\brief
+		*	Crée un descriptor write pour un intervalle d'uniform buffer.
+		*\param[in] buffer
+		*	L'intervalle d'uniform buffer.
+		*\param[in] dstBinding
+		*	Le binding dans le descriptor set.
+		*\param[in] dstArrayElement
+		*	L'indice dans le tableau d'éléments.
+		*/
+		template< typename DataT >
+		static ashes::WriteDescriptorSet makeDescriptorWrite( UniformBufferOffsetT< DataT > const & buffer
+			, uint32_t dstBinding
+			, uint32_t dstArrayElement = 0u )
+		{
+			return buffer.getDescriptorWrite( dstBinding
+				, dstArrayElement );
+		}
+		/**
+		*\~english
+		*\brief
+		*	Creates a descriptor write for storage buffer.
+		*\param[in] storageBuffer
+		*	The storage buffer.
+		*\param[in] elemOffset
+		*	The offset, expressed in element count.
+		*\param[in] elemRange
+		*	The range, expressed in element count.
+		*\param[in] dstBinding
+		*	The binding inside the descriptor set.
+		*\param[in] dstArrayElement
+		*	The array element index.
+		*\~french
+		*\brief
+		*	Crée un descriptor write pour un storage buffer.
+		*\param[in] storageBuffer
+		*	Le storage buffer.
+		*\param[in] elemOffset
+		*	L'offset, exprimé en nombre d'éléments.
+		*\param[in] elemRange
+		*	L'intervalle, exprimé en nombre d'éléments.
+		*\param[in] dstBinding
+		*	Le binding dans le descriptor set.
+		*\param[in] dstArrayElement
+		*	L'indice dans le tableau d'éléments.
+		*/
+		C3D_API static ashes::WriteDescriptorSet makeDescriptorWrite( ashes::BufferBase const & storageBuffer
+			, uint32_t dstBinding
+			, uint32_t byteOffset
+			, uint32_t byteRange
+			, uint32_t dstArrayElement = 0u );
+		/**
+		*\~english
+		*\brief
+		*	Creates a descriptor write for storage buffer.
+		*\param[in] storageBuffer
+		*	The storage buffer.
+		*\param[in] elemOffset
+		*	The offset, expressed in element count.
+		*\param[in] elemRange
+		*	The range, expressed in element count.
+		*\param[in] dstBinding
+		*	The binding inside the descriptor set.
+		*\param[in] dstArrayElement
+		*	The array element index.
+		*\~french
+		*\brief
+		*	Crée un descriptor write pour un storage buffer.
+		*\param[in] storageBuffer
+		*	Le storage buffer.
+		*\param[in] elemOffset
+		*	L'offset, exprimé en nombre d'éléments.
+		*\param[in] elemRange
+		*	L'intervalle, exprimé en nombre d'éléments.
+		*\param[in] dstBinding
+		*	Le binding dans le descriptor set.
+		*\param[in] dstArrayElement
+		*	L'indice dans le tableau d'éléments.
+		*/
+		template< typename DataT >
+		static ashes::WriteDescriptorSet makeDescriptorWrite( ashes::Buffer< DataT > const & storageBuffer
+			, uint32_t dstBinding
+			, uint32_t elemOffset
+			, uint32_t elemRange
+			, uint32_t dstArrayElement = 0u )
+		{
+			return makeDescriptorWrite( storageBuffer.getBuffer()
+				, dstBinding
+				, uint32_t( elemOffset * sizeof( T ) )
+				, uint32_t( elemRange * sizeof( T ) )
+				, dstArrayElement );
+		}
+		/**
+		*\~english
+		*\brief
+		*	Creates a descriptor write for buffer texel view.
+		*\param[in] buffer
+		*	The buffer.
+		*\param[in] view
+		*	The texel view.
+		*\param[in] dstBinding
+		*	The binding inside the descriptor set.
+		*\param[in] dstArrayElement
+		*	The array element index.
+		*\~french
+		*\brief
+		*	Crée un descriptor write pour une texel view sur un buffer.
+		*\param[in] buffer
+		*	Le buffer.
+		*\param[in] view
+		*	La texel view.
+		*\param[in] dstBinding
+		*	Le binding dans le descriptor set.
+		*\param[in] dstArrayElement
+		*	L'indice dans le tableau d'éléments.
+		*/
+		C3D_API static ashes::WriteDescriptorSet makeDescriptorWrite( ashes::BufferBase const & buffer
+			, ashes::BufferView const & view
+			, uint32_t dstBinding
+			, uint32_t dstArrayElement = 0u );
+		/**
+		*\~english
+		*\brief
+		*	Creates a descriptor write for buffer texel view.
+		*\param[in] buffer
+		*	The buffer.
+		*\param[in] view
+		*	The texel view.
+		*\param[in] dstBinding
+		*	The binding inside the descriptor set.
+		*\param[in] dstArrayElement
+		*	The array element index.
+		*\~french
+		*\brief
+		*	Crée un descriptor write pour une texel view sur un buffer.
+		*\param[in] buffer
+		*	Le buffer.
+		*\param[in] view
+		*	La texel view.
+		*\param[in] dstBinding
+		*	Le binding dans le descriptor set.
+		*\param[in] dstArrayElement
+		*	L'indice dans le tableau d'éléments.
+		*/
+		template< typename DataT >
+		static ashes::WriteDescriptorSet makeDescriptorWrite( ashes::Buffer< DataT > const & buffer
+			, ashes::BufferView const & view
+			, uint32_t dstBinding
+			, uint32_t dstArrayElement = 0u )
+		{
+			return makeDescriptorWrite( buffer.getBuffer()
+				, view
+				, dstBinding
+				, dstArrayElement );
+		}
 
 		inline ashes::CommandBuffer const & getCommandBuffer()const
 		{
@@ -304,54 +572,41 @@ namespace castor3d
 		{
 			return m_device;
 		}
+
+		inline Sampler const & getSampler()const
+		{
+			return *m_sampler;
+		}
 		/**@}*/
 
 	private:
-		C3D_API virtual void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-			, ashes::DescriptorSet & descriptorSet );
-		C3D_API virtual void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-			, ashes::DescriptorSet & descriptorSet
-			, uint32_t descriptorSetIndex );
-		inline void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-			, ashes::DescriptorSet & descriptorSet
-			, uint32_t descriptorBaseIndex
-			, uint32_t level )
-		{
-			doFillDescriptorSet( descriptorSetLayout
-				, descriptorSet
-				, getDescriptorSetIndex( descriptorBaseIndex, level ) );
-		}
-
-		C3D_API virtual void doRegisterFrame( ashes::CommandBuffer & commandBuffer )const;
+		C3D_API virtual void doRegisterPass( ashes::CommandBuffer & commandBuffer )const;
 
 	protected:
 		RenderSystem & m_renderSystem;
 		RenderDevice const & m_device;
-		SamplerSPtr m_sampler;
 		ashes::GraphicsPipelinePtr m_pipeline;
 		ashes::PipelineLayoutPtr m_pipelineLayout;
 		ashes::CommandBufferPtr m_commandBuffer;
+		SamplerSPtr m_sampler;
 
 	private:
-		std::array< TexturedQuad::Vertex, 4u > m_vertexData;
 		ashes::VertexBufferPtr< TexturedQuad::Vertex > m_vertexBuffer;
 		ashes::DescriptorSetLayoutPtr m_descriptorSetLayout;
+		rq::ConfigData m_config;
+		bool m_useTexCoord{ true };
+		std::vector< ashes::WriteDescriptorSetArray > m_passes;
+
 		ashes::DescriptorSetPoolPtr m_descriptorSetPool;
 		std::vector< ashes::DescriptorSetPtr > m_descriptorSets;
-		uint32_t m_descriptorSetCount{ 1u };
-		ashes::ImageView const * m_sourceView{ nullptr };
-		ashes::ImageViewArray m_sourceMipViews;
-		bool m_useTexCoords;
-		bool m_arraySource;
-		BlendMode m_blendMode;
 	};
 
 	template< typename ConfigT, typename BuilderT >
 	class RenderQuadBuilderT
 	{
-		static_assert( std::is_same_v< ConfigT, RenderQuadConfig >
-			|| std::is_base_of_v< RenderQuadConfig, ConfigT >
-			, "RenderQuadBuilderT::ConfigT must derive from castor3d::RenderQuadConfig" );
+		static_assert( std::is_same_v< ConfigT, rq::Config >
+			|| std::is_base_of_v< rq::Config, ConfigT >
+			, "RenderQuadBuilderT::ConfigT must derive from castor3d::rq::Config" );
 
 	public:
 		inline RenderQuadBuilderT()
@@ -365,7 +620,7 @@ namespace castor3d
 		*\param[in] config
 		*	La configuration des coordonnées de texture.
 		*/
-		inline BuilderT & texcoordConfig( RenderQuadConfig::Texcoord const & config )
+		inline BuilderT & texcoordConfig( rq::Texcoord const & config )
 		{
 			m_config.texcoordConfig = config;
 			return static_cast< BuilderT & >( *this );
@@ -375,7 +630,6 @@ namespace castor3d
 		*\param[in] range
 		*	Contains mip levels for the sampler.
 		*\~french
-		*\brief
 		*\param[in] range
 		*	Contient les mip levels, pour l'échantillonneur.
 		*/
@@ -386,24 +640,9 @@ namespace castor3d
 		}
 		/**
 		*\~english
-		*\param[in] range
-		*	Contains mip levels for the sampler.
-		*\~french
-		*\brief
-		*\param[in] range
-		*	Contient les mip levels, pour l'échantillonneur.
-		*/
-		inline BuilderT & arraySource( bool arraySource = true )
-		{
-			m_config.arraySource = arraySource;
-			return static_cast< BuilderT & >( *this );
-		}
-		/**
-		*\~english
 		*\param[in] blend
 		*	Contains blend to destination status.
 		*\~french
-		*\brief
 		*\param[in] blend
 		*	Contient le statut de mélange à la destination.
 		*/
@@ -415,40 +654,90 @@ namespace castor3d
 		/**
 		*\~english
 		*\param[in] count
-		*	Contains the number of descriptor sets to reserve.
+		*	Contains the inputs bindings.
 		*\~french
-		*\brief
 		*\param[in] blend
-		*	Contient le nombre de descriptor sets à réserver.
+		*	Contient les bindings en entrée.
 		*/
-		inline BuilderT & descriptorSetsCount( uint32_t descriptorSetsCount )
+		inline BuilderT & bindings( rq::BindingDescriptionArray const & bindings )
 		{
-			m_config.descriptorSetsCount = descriptorSetsCount;
+			m_config.bindings = bindings;
 			return static_cast< BuilderT & >( *this );
 		}
 		/**
 		*\~english
-		*\brief
+		*	Adds an image.
+		*\param[in] binding
+		*	Contains the binding to add.
+		*\~french
+		*	Ajoute un binding.
+		*\param[in] binding
+		*	Contient le binding à ajouter.
+		*/
+		inline BuilderT & binding( rq::BindingDescription const & binding )
+		{
+			if ( !m_config.bindings )
+			{
+				m_config.bindings = rq::BindingDescriptionArray{};
+			}
+
+			m_config.bindings.value().push_back( binding );
+			return static_cast< BuilderT & >( *this );
+		}
+		/**
+		*\~english
+		*	Adds an image.
+		*\param[in] binding
+		*	Contains the binding to add.
+		*\~french
+		*	Ajoute un binding.
+		*\param[in] binding
+		*	Contient le binding à ajouter.
+		*/
+		inline BuilderT & binding( VkDescriptorType descriptor
+			, VkShaderStageFlags stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT )
+		{
+			return binding( rq::BindingDescription{ descriptor, ashes::nullopt, stageFlags } );
+		}
+		/**
+		*\~english
+		*	Adds an image binding.
+		*\param[in] binding
+		*	Contains the binding to add.
+		*\~french
+		*	Ajoute un binding d'image.
+		*\param[in] binding
+		*	Contient le binding à ajouter.
+		*/
+		inline BuilderT & binding( VkDescriptorType descriptor
+			, VkImageViewType view
+			, VkShaderStageFlags stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT )
+		{
+			return binding( rq::BindingDescription{ descriptor, view, stageFlags } );
+		}
+		/**
+		*\~english
 		*	Creates the RenderQuad.
-		*\param[in] renderSystem
-		*	The RenderSystem.
+		*\param[in] device
+		*	The RenderDevice.
+		*\param[in] name
+		*	The pass name.
 		*\param[in] samplerFilter
 		*	The sampler filter for the source texture.
 		*\~french
-		*\brief
 		*	Crée le RenderQuad.
-		*\param[in] renderSystem
-		*	Le RenderSystem.
+		*\param[in] device
+		*	Le RenderDevice.
+		*\param[in] name
+		*	Le nom de la passe.
 		*\param[in] samplerFilter
 		*	Le filtre d'échantillonnage pour la texture source.
 		*/
-		inline RenderQuadUPtr build( RenderSystem & renderSystem
-			, RenderDevice const & device
+		inline RenderQuadUPtr build( RenderDevice const & device
 			, castor::String const & name
 			, VkFilter samplerFilter )
 		{
-			return std::unique_ptr< RenderQuad >( new RenderQuad{ renderSystem
-				, device
+			return std::unique_ptr< RenderQuad >( new RenderQuad{ device
 				, name
 				, samplerFilter
 				, m_config } );
@@ -459,7 +748,7 @@ namespace castor3d
 	};
 
 	class RenderQuadBuilder
-		: public RenderQuadBuilderT< RenderQuadConfig, RenderQuadBuilder >
+		: public RenderQuadBuilderT< rq::Config, RenderQuadBuilder >
 	{
 	};
 }

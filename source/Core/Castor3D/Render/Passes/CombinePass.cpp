@@ -113,8 +113,7 @@ namespace castor3d
 			using castor3d::operator!=;
 			IntermediateViewArray result;
 
-			if ( !config.descriptorSetsCount
-				|| config.descriptorSetsCount.value() == 1u )
+			if ( views.size() == 1u )
 			{
 				auto & view = views[0u];
 				CU_Require( view.view->image != outputView->image
@@ -172,8 +171,7 @@ namespace castor3d
 			using castor3d::operator!=;
 			IntermediateViewArray result;
 
-			if ( !config.descriptorSetsCount
-				|| config.descriptorSetsCount.value() == 1u )
+			if ( views.size() == 1u )
 			{
 				auto & view = views[0u];
 				CU_Require( view.view->image != outputView->image
@@ -274,22 +272,36 @@ namespace castor3d
 		, RenderDevice const & device
 		, castor::String const & prefix
 		, IntermediateViewArray const & lhsViews
-		, RenderQuadConfig const & config )
-		: RenderQuad{ *engine.getRenderSystem(), device, cuT( "Combine" ), VK_FILTER_LINEAR, config }
+		, IntermediateView const & rhsView
+		, ShaderModule const & vertexShader
+		, ShaderModule const & pixelShader
+		, ashes::RenderPass const & renderPass
+		, VkExtent2D const & outputSize
+		, rq::Config config )
+		: RenderQuad{ device
+			, cuT( "Combine" )
+			, VK_FILTER_LINEAR
+			, config }
 		, m_lhsViews{ lhsViews }
 		, m_lhsSampler{ createSampler( engine, prefix + cuT( "Combine" ), VK_FILTER_LINEAR, &m_lhsViews[0].view->subresourceRange ) }
 	{
 		m_lhsSampler->initialise( m_device );
-	}
 
-	void CombinePass::CombineQuad::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-		, ashes::DescriptorSet & descriptorSet
-		, uint32_t descriptorSetIndex )
-	{
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 0u )
-			, m_lhsViews[descriptorSetIndex].view
-			, m_lhsSampler->getSampler()
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+		for ( auto & view : m_lhsViews )
+		{
+			registerPassInputs({ makeDescriptorWrite( view.view, m_lhsSampler->getSampler(), 0u, 0u )
+					, makeDescriptorWrite( rhsView.view, m_sampler->getSampler(), 1u, 0u ) } );
+		}
+		ashes::PipelineShaderStageCreateInfoArray program
+		{
+			makeShaderState( device, vertexShader ),
+			makeShaderState( device, pixelShader ),
+		};
+		createPipeline( outputSize
+			, Position{}
+			, program
+			, renderPass );
+		initialisePasses();
 	}
 
 	//*********************************************************************************************
@@ -323,26 +335,8 @@ namespace castor3d
 		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, device, m_prefix, cuT( "Combine" ) ) }
 		, m_renderPass{ doCreateRenderPass( device, m_prefix, outputFormat ) }
 		, m_frameBuffer{ doCreateFrameBuffer( m_prefix, *m_renderPass, m_view, outputSize ) }
-		, m_quad{ engine, device, m_prefix, m_lhsViews, std::move( config ) }
+		, m_quad{ engine, device, m_prefix, m_lhsViews, m_rhsView, m_vertexShader, m_pixelShader, *m_renderPass, outputSize, std::move( config ) }
 	{
-		ashes::PipelineShaderStageCreateInfoArray program
-		{
-			makeShaderState( device, m_vertexShader ),
-			makeShaderState( device, m_pixelShader ),
-		};
-		ashes::VkDescriptorSetLayoutBindingArray bindings
-		{
-			makeDescriptorSetLayoutBinding( 0u
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-		};
-		m_quad.createPipeline( outputSize
-			, Position{}
-			, program
-			, m_rhsView.view
-			, *m_renderPass
-			, bindings
-			, {} );
 
 		for ( uint32_t i = 0u; i < uint32_t( m_lhsViews.size() ); ++i )
 		{
@@ -420,7 +414,7 @@ namespace castor3d
 			, *m_frameBuffer
 			, { transparentBlackClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE );
-		m_quad.registerFrame( cmd, index );
+		m_quad.registerPass( cmd, index );
 		cmd.endRenderPass();
 
 		cmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT

@@ -372,6 +372,9 @@ namespace castor3d
 			, Light const & light
 			, ShadowMap const * shadowMap );
 
+	private:
+		virtual VkClearValue doGetIndirectClearColor()const;
+
 	protected:
 		/**
 		 *\~english

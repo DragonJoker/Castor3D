@@ -342,6 +342,11 @@ namespace castor3d
 
 	void RenderTechnique::update( CpuUpdater & updater )
 	{
+		if ( !m_initialised )
+		{
+			return;
+		}
+
 		updater.camera = m_renderTarget.getCamera();
 
 #if C3D_UseDepthPrepass
@@ -394,6 +399,11 @@ namespace castor3d
 
 	void RenderTechnique::update( GpuUpdater & updater )
 	{
+		if ( !m_initialised )
+		{
+			return;
+		}
+
 		updater.scene = m_renderTarget.getScene();
 		updater.camera = m_renderTarget.getCamera();
 
@@ -436,6 +446,11 @@ namespace castor3d
 		, ashes::SemaphoreCRefArray const & waitSemaphores
 		, RenderInfo & info )
 	{
+		if ( !m_initialised )
+		{
+			return waitSemaphores.front();
+		}
+
 #if C3D_UseDepthPrepass
 		auto * semaphore = &doRenderDepth( device, waitSemaphores );
 		semaphore = &doRenderBackground( device, *semaphore );

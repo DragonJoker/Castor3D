@@ -10,17 +10,19 @@ See LICENSE file in root folder
 
 namespace light_streaks
 {
+	struct KawaseUboConfiguration
+	{
+		castor::Point2f pixelSize;
+		castor::Point2f direction;
+		int samples;
+		float attenuation;
+		int pass;
+	};
+		
 	class KawaseUbo
 	{
 	public:
-		struct Configuration
-		{
-			castor::Point2f pixelSize;
-			castor::Point2f direction;
-			int samples;
-			float attenuation;
-			int pass;
-		};
+		using Configuration = KawaseUboConfiguration;
 
 	public:
 		explicit KawaseUbo( castor3d::Engine & engine );

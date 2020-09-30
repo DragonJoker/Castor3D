@@ -53,19 +53,25 @@ namespace Bloom
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
+		enum Idx
+		{
+			GaussCfgUboIdx,
+			DifImgIdx,
+		};
+
 		std::unique_ptr< ast::Shader > getPixelProgram( castor3d::RenderSystem & renderSystem )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
 
 			// Shader inputs
-			Ubo config{ writer, castor3d::GaussianBlur::Config, 0u, 0u };
+			Ubo config{ writer, castor3d::GaussianBlur::Config, GaussCfgUboIdx, 0u };
 			auto c3d_pixelSize = config.declMember< Vec2 >( castor3d::GaussianBlur::TextureSize );
 			auto c3d_coefficientsCount = config.declMember< UInt >( castor3d::GaussianBlur::CoefficientsCount );
 			auto c3d_dump = config.declMember< UInt >( "c3d_dump" ); // to keep a 16 byte alignment.
 			auto c3d_coefficients = config.declMember< Vec4 >( castor3d::GaussianBlur::Coefficients, castor3d::GaussianBlur::MaxCoefficients / 4u );
 			config.end();
-			auto c3d_mapSource = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapSource", 1u, 0u );
+			auto c3d_mapSource = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapSource", DifImgIdx, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs

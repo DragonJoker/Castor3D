@@ -70,7 +70,15 @@ namespace castor3d
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
-		
+
+		enum Idx
+		{
+			SsaoCfgUboIdx,
+			GpInfoUboIdx,
+			DepthMapIdx,
+			NormalMapIdx,
+		};
+
 		ShaderPtr doGetPixelProgram( Engine & engine
 			, bool useNormalsBuffer )
 		{
@@ -79,14 +87,13 @@ namespace castor3d
 
 			//////////////////////////////////////////////////
 
-			uint32_t index = 0u;
-			UBO_SSAO_CONFIG( writer, index++, 0u );
-			UBO_GPINFO( writer, index++, 0u );
+			UBO_SSAO_CONFIG( writer, SsaoCfgUboIdx, 0u );
+			UBO_GPINFO( writer, GpInfoUboIdx, 0u );
 			// Negative, "linear" values in world-space units
-			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapDepth", index++, 0u );
+			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapDepth", DepthMapIdx, 0u );
 
 			/** Same size as result buffer, do not offset by guard band when reading from it */
-			auto c3d_mapNormal = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapNormal", index++, 0u, useNormalsBuffer );
+			auto c3d_mapNormal = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapNormal", NormalMapIdx, 0u, useNormalsBuffer );
 			auto c3d_readMultiplyFirst = writer.declConstant( "c3d_readMultiplyFirst", vec3( 2.0_f ) );
 			auto c3d_readAddSecond = writer.declConstant( "c3d_readAddSecond", vec3( 1.0_f ) );
 
@@ -114,7 +121,7 @@ namespace castor3d
 					writer.returnStmt( vec3( sdw::fma( S.xy(), projInfo.xy(), projInfo.zw() ) * z, z ) );
 				}
 				, InVec2{ writer, "S" }
-				, InFloat{ writer, "z" }
+					, InFloat{ writer, "z" }
 				, InVec4{ writer, "projInfo" } );
 
 			// Reconstructs camera-space normal from camera-space position
@@ -123,10 +130,10 @@ namespace castor3d
 				{
 					writer.returnStmt( cross( dFdy( vsPosition ), dFdx( vsPosition ) ) );
 				}
-				, InVec3{ writer, "vsPosition" } );
+			, InVec3{ writer, "vsPosition" } );
 
-			// Returns a unit vector and a screen-space radius for the tap on a unit disk
-			//	(the caller should scale by the actual disk radius)
+		// Returns a unit vector and a screen-space radius for the tap on a unit disk
+		//	(the caller should scale by the actual disk radius)
 			auto tapLocation = writer.implementFunction< Vec2 >( "tapLocation"
 				, [&]( Int const & sampleNumber
 					, Float const & spinAngle
@@ -142,7 +149,7 @@ namespace castor3d
 					writer.returnStmt( vec2( cos( angle ), sin( angle ) ) );
 				}
 				, InInt{ writer, "sampleNumber" }
-				, InFloat{ writer, "spinAngle" }
+					, InFloat{ writer, "spinAngle" }
 				, OutFloat{ writer, "ssRadius" } );
 
 
@@ -152,9 +159,9 @@ namespace castor3d
 				{
 					writer.returnStmt( clamp( z * ( 1.0_f / c3d_farPlaneZ ), 0.0_f, 1.0_f ) );
 				}
-				, InFloat{ writer, "z" } );
+			, InFloat{ writer, "z" } );
 
-			// Read the camera-space position of the point at screen-space pixel ssPosition
+		// Read the camera-space position of the point at screen-space pixel ssPosition
 			auto getPosition = writer.implementFunction< Vec3 >( "getPosition"
 				, [&]( IVec2 const & ssPosition )
 				{
@@ -167,7 +174,7 @@ namespace castor3d
 						, c3d_projInfo );
 					writer.returnStmt( position );
 				}
-				, InIVec2{ writer, "ssPosition" } );
+			, InIVec2{ writer, "ssPosition" } );
 
 			auto getMipLevel = writer.implementFunction< Int >( "getMipLevel"
 				, [&]( Float const & ssRadius )
@@ -178,10 +185,10 @@ namespace castor3d
 						, 0_i
 						, c3d_maxMipLevel ) );
 				}
-				, InFloat{ writer, "ssRadius" } );
+			, InFloat{ writer, "ssRadius" } );
 
-			// Read the camera-space position of the point at screen-space pixel ssP + unitOffset * ssR.
-			// Assumes length(unitOffset) == 1.
+		// Read the camera-space position of the point at screen-space pixel ssP + unitOffset * ssR.
+		// Assumes length(unitOffset) == 1.
 			auto getOffsetPosition = writer.implementFunction< Vec3 >( "getOffsetPosition"
 				, [&]( IVec2 const & ssCenter
 					, Vec2 const & unitOffset
@@ -210,8 +217,8 @@ namespace castor3d
 					writer.returnStmt( position );
 				}
 				, InIVec2{ writer, "ssCenter" }
-				, InVec2{ writer, "unitOffset" }
-				, InFloat{ writer, "ssRadius" }
+					, InVec2{ writer, "unitOffset" }
+					, InFloat{ writer, "ssRadius" }
 				, InFloat{ writer, "invCszBufferScale" } );
 
 			// Smaller return value = less occlusion
@@ -226,7 +233,7 @@ namespace castor3d
 					// return float(vv < radius2) * max((vn - bias) / (epsilon + vv), 0.0) * radius2 * 0.6;
 
 					// B: Smoother transition to zero (lowers contrast, smoothing out corners). [Recommended]
-					IF ( writer, c3d_highQuality )
+					IF( writer, c3d_highQuality )
 					{
 						// Epsilon inside the sqrt for rsqrt operation
 						auto f = writer.declLocale( "f"
@@ -238,8 +245,8 @@ namespace castor3d
 						// Avoid the square root from above.
 						//  Assumes the desired result is intensity/radius^6 in main()
 						auto f = writer.declLocale( "f"
-							, max( c3d_radius2 - vv, 0.0_f ) );
-						writer.returnStmt( f * f * f * max( ( vn - c3d_bias ) / ( epsilon + vv ), 0.0_f ) );
+						, max( c3d_radius2 - vv, 0.0_f ) );
+					writer.returnStmt( f * f * f * max( ( vn - c3d_bias ) / ( epsilon + vv ), 0.0_f ) );
 					}
 					FI;
 
@@ -253,7 +260,7 @@ namespace castor3d
 					//return 2.0 * float(vv < radius * radius) * max(vn - bias, 0.0);
 				}
 				, InFloat{ writer, "vv" }
-				, InFloat{ writer, "vn" }
+					, InFloat{ writer, "vn" }
 				, InFloat{ writer, "epsilon" } );
 
 			// Compute the occlusion due to sample point \a occluder about camera-space point \a csCenter with unit normal \a normal
@@ -275,7 +282,7 @@ namespace castor3d
 					writer.returnStmt( fallOffFunction( vv, vn, epsilon ) * mix( 1.0_f, max( 0.0_f, 1.5_f * normal.z() ), 0.35_f ) );
 				}
 				, InVec3{ writer, "csCenter" }
-				, InVec3{ writer, "normal" }
+					, InVec3{ writer, "normal" }
 				, InVec3{ writer, "occluder" } );
 
 			// Compute the occlusion due to sample with index \a tapIndex about the pixel at \a ssCenter that corresponds
@@ -438,7 +445,7 @@ namespace castor3d
 							, 0.0_f
 							, 1.0_f ) );
 				} );
-				return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		ashes::PipelineShaderStageCreateInfoArray doGetProgram( Engine & engine
@@ -486,7 +493,7 @@ namespace castor3d
 		{
 			auto & renderSystem = *engine.getRenderSystem();
 			auto sampler = doCreateSampler( engine, name, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-			
+
 			ashes::ImageCreateInfo image
 			{
 				0u,
@@ -510,7 +517,7 @@ namespace castor3d
 			result.initialise( device );
 			return result;
 		}
-		
+
 		ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
 			, std::vector< std::reference_wrapper< TextureUnit const > > const & textures )
 		{
@@ -599,6 +606,23 @@ namespace castor3d
 				, std::move( attaches ) );
 			return result;
 		}
+
+		rq::BindingDescriptionArray createBindings( bool normals )
+		{
+			rq::BindingDescriptionArray result
+			{
+				{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, ashes::nullopt },	// SsaoCfg UBO
+				{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, ashes::nullopt },	// GpInfo UBO
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },	// Depth Map
+			};
+
+			if ( normals )
+			{
+				result.push_back( { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D } );	// Normal Map
+			}
+
+			return result;
+		}
 	}
 
 	//*********************************************************************************************
@@ -611,11 +635,11 @@ namespace castor3d
 		, GpInfoUbo const & gpInfoUbo
 		, TextureUnit const & depth
 		, ashes::ImageView const * normals )
-		: castor3d::RenderQuad{ *engine.getRenderSystem()
-			, device
+		: castor3d::RenderQuad{ device
 			, cuT( "SsaoRawAO" )
 			, VK_FILTER_NEAREST
-			, { ( normals
+			, { createBindings( normals )
+				, ( normals
 					? ( *normals )->subresourceRange
 					: depth.getTexture()->getDefaultView().getSampledView()->subresourceRange )
 				, ashes::nullopt } }
@@ -626,49 +650,24 @@ namespace castor3d
 		, m_ssaoConfigUbo{ ssaoConfigUbo }
 		, m_gpInfoUbo{ gpInfoUbo }
 	{
-		ashes::VkDescriptorSetLayoutBindingArray bindings
+		m_sampler->initialise( m_device );
+		ashes::WriteDescriptorSetArray bindings
 		{
-			makeDescriptorSetLayoutBinding( 0u
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-			makeDescriptorSetLayoutBinding( 1u
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
+			makeDescriptorWrite( m_ssaoConfigUbo.getUbo(), SsaoCfgUboIdx ),
+			makeDescriptorWrite( m_gpInfoUbo.getUbo(), GpInfoUboIdx ),
+			makeDescriptorWrite( depth.getTexture()->getDefaultView().getTargetView(), m_sampler->getSampler(), DepthMapIdx ),
 		};
-		ashes::ImageView const * view = &depth.getTexture()->getDefaultView().getTargetView();
 
 		if ( normals )
 		{
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( 2u
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-			view = normals;
+			bindings.emplace_back( makeDescriptorWrite( *normals, m_sampler->getSampler(), NormalMapIdx ) );
 		}
 
-		this->createPipeline( size
+		createPipelineAndPass( size
 			, {}
 			, doGetProgram( engine, device, normals != nullptr, vertexShader, pixelShader )
-			, *view
 			, renderPass
-			, std::move( bindings )
-			, {}
-			, ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_FALSE, VK_FALSE } );
-	}
-
-	void SsaoRawAOPass::RenderQuad::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-		, ashes::DescriptorSet & descriptorSet )
-	{
-		m_ssaoConfigUbo.createSizedBinding( descriptorSet
-			, descriptorSetLayout.getBinding( 0u ) );
-		m_gpInfoUbo.createSizedBinding( descriptorSet
-			, descriptorSetLayout.getBinding( 1u ) );
-
-		if ( m_depthView )
-		{
-			descriptorSet.createBinding( descriptorSetLayout.getBinding( 2u )
-				, *m_depthView
-				, m_depthSampler->getSampler() );
-		}
+			, bindings );
 	}
 	
 	//*********************************************************************************************
@@ -733,7 +732,7 @@ namespace castor3d
 				, *m_frameBuffer
 				, { opaqueWhiteClearColor }
 				, VK_SUBPASS_CONTENTS_INLINE );
-			quad.registerFrame( cmd );
+			quad.registerPass( cmd );
 			cmd.endRenderPass();
 			m_timer->endPass( cmd );
 			cmd.endDebugBlock();

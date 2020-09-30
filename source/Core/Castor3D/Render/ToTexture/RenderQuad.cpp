@@ -12,6 +12,7 @@
 #include "Castor3D/Material/Texture/Sampler.hpp"
 
 #include <ashespp/Buffer/VertexBuffer.hpp>
+#include <ashespp/Buffer/BufferView.hpp>
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Command/CommandBufferInheritanceInfo.hpp>
 #include <ashespp/Core/Device.hpp>
@@ -57,97 +58,149 @@ namespace castor3d
 				, doGetColourAttachmentCount( pass ) );
 		}
 
-		ashes::ImageViewArray createMipViews( ashes::ImageView const & source
-			, uint32_t descriptorCount
-			, bool arraySource )
+		bool checkWrites( ashes::WriteDescriptorSetArray const & writes
+			, rq::BindingDescriptionArray const & bindings )
 		{
-			ashes::ImageViewArray result;
-			auto createInfo = source.createInfo;
-
-			if ( !arraySource )
+			if ( writes.size() != bindings.size() )
 			{
-				createInfo.subresourceRange.layerCount = 1u;
-
-				if ( createInfo.viewType == VK_IMAGE_VIEW_TYPE_1D_ARRAY )
-				{
-					createInfo.viewType = VK_IMAGE_VIEW_TYPE_1D;
-				}
-				else if ( createInfo.viewType == VK_IMAGE_VIEW_TYPE_2D_ARRAY
-					|| createInfo.viewType == VK_IMAGE_VIEW_TYPE_CUBE_ARRAY
-					|| createInfo.viewType == VK_IMAGE_VIEW_TYPE_3D )
-				{
-					createInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-				}
-			}
-			else
-			{
-				descriptorCount = 1u;
+				return false;
 			}
 
-			createInfo.subresourceRange.levelCount = 1u;
-
-			for ( uint32_t layer = 0; layer < descriptorCount; ++layer )
+			for ( auto & write : writes )
 			{
-				createInfo.subresourceRange.baseMipLevel = source->subresourceRange.baseMipLevel;
-
-				for ( uint32_t level = 0; level < source->subresourceRange.levelCount; ++level )
+				if ( write->descriptorType != bindings[write->dstBinding].descriptorType )
 				{
-					auto info = TextureView::convertToSampledView( createInfo );
-					result.push_back( source.image->createView( std::move( info ) ) );
-					++createInfo.subresourceRange.baseMipLevel;
+					return false;
 				}
+			}
 
-				++createInfo.subresourceRange.baseArrayLayer;
+			return true;
+		}
+
+		ashes::VkDescriptorSetLayoutBindingArray createBindings( rq::BindingDescriptionArray const & bindings )
+		{
+			ashes::VkDescriptorSetLayoutBindingArray result;
+			uint32_t index = 0u;
+
+			for ( auto & binding : bindings )
+			{
+				result.push_back( { index++
+					, binding.descriptorType
+					, 1u
+					, binding.stageFlags
+					, nullptr } );
 			}
 
 			return result;
 		}
+
+		ashes::VkDescriptorSetLayoutBindingArray createBindings( rq::BindingDescriptionArray const & bindings
+			, ashes::WriteDescriptorSetArray const & writes )
+		{
+			ashes::VkDescriptorSetLayoutBindingArray result;
+			uint32_t index = 0u;
+
+			for ( auto & write : writes )
+			{
+				auto & binding = bindings[index++];
+				result.push_back( { write->dstBinding
+					, binding.descriptorType
+					, write->descriptorCount
+					, binding.stageFlags
+					, nullptr } );
+			}
+
+			return result;
+		}
+
+		template< typename TypeT >
+		struct DefaultValueGetterT;
+
+		template<>
+		struct DefaultValueGetterT< VkImageSubresourceRange >
+		{
+			static VkImageSubresourceRange const & get()
+			{
+				static VkImageSubresourceRange const result = VkImageSubresourceRange{ 0u, 0u, 1u, 0u, 1u };
+				return result;
+			}
+		};
+
+		template<>
+		struct DefaultValueGetterT< BlendMode >
+		{
+			static BlendMode const & get()
+			{
+				static BlendMode const result = BlendMode::eNoBlend;
+				return result;
+			}
+		};
+
+		template<>
+		struct DefaultValueGetterT< rq::Texcoord >
+		{
+			static rq::Texcoord const & get()
+			{
+				static rq::Texcoord const result{ false, false };
+				return result;
+			}
+		};
+
+		template<>
+		struct DefaultValueGetterT< rq::BindingDescriptionArray >
+		{
+			static rq::BindingDescriptionArray const & get()
+			{
+				static rq::BindingDescriptionArray const result = rq::BindingDescriptionArray{ []()
+					{
+						rq::BindingDescriptionArray result
+						{
+							{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
+						};
+						return result;
+				}( ) };
+				return result;
+			}
+		};
+
+		template< typename TypeT >
+		static inline TypeT const & defaultV = DefaultValueGetterT< TypeT >::get();
 	}
 
-	RenderQuad::RenderQuad( RenderSystem & renderSystem
-		, RenderDevice const & device
+	RenderQuad::RenderQuad( RenderDevice const & device
 		, castor::String const & name
 		, VkFilter samplerFilter
-		, RenderQuadConfig config )
+		, rq::Config config )
 		: castor::Named{ name }
-		, m_renderSystem{ renderSystem }
+		, m_renderSystem{ device.renderSystem }
 		, m_device{ device }
 		, m_sampler{ createSampler( *m_renderSystem.getEngine()
 			, getName()
 			, samplerFilter
 			, ( config.range ? &config.range.value() : nullptr ) ) }
-		, m_vertexData
-		{
-			TexturedQuad::Vertex{ Point2f{ -1.0, -1.0 }, config.texcoordConfig ? Point2f{ ( config.texcoordConfig->invertU ? 1.0 : 0.0 ), ( config.texcoordConfig->invertV ? 1.0 : 0.0 ) } : Point2f{} },
-			TexturedQuad::Vertex{ Point2f{ -1.0, +1.0 }, config.texcoordConfig ? Point2f{ ( config.texcoordConfig->invertU ? 1.0 : 0.0 ), ( config.texcoordConfig->invertV ? 0.0 : 1.0 ) } : Point2f{} },
-			TexturedQuad::Vertex{ Point2f{ +1.0, -1.0 }, config.texcoordConfig ? Point2f{ ( config.texcoordConfig->invertU ? 0.0 : 1.0 ), ( config.texcoordConfig->invertV ? 1.0 : 0.0 ) } : Point2f{} },
-			TexturedQuad::Vertex{ Point2f{ +1.0, +1.0 }, config.texcoordConfig ? Point2f{ ( config.texcoordConfig->invertU ? 0.0 : 1.0 ), ( config.texcoordConfig->invertV ? 0.0 : 1.0 ) } : Point2f{} },
-		}
-		, m_descriptorSetCount{ config.descriptorSetsCount ? *config.descriptorSetsCount : 1u }
-		, m_useTexCoords{ bool( config.texcoordConfig ) }
-		, m_arraySource{ config.arraySource ? *config.arraySource : false }
-		, m_blendMode{ config.blendMode ? *config.blendMode : BlendMode::eNoBlend }
+		, m_config{ ( config.bindings ? *config.bindings : defaultV< rq::BindingDescriptionArray > )
+			, ( config.range ? *config.range : defaultV< VkImageSubresourceRange > )
+			, ( config.texcoordConfig ? *config.texcoordConfig : defaultV< rq::Texcoord > )
+			, ( config.blendMode ? *config.blendMode : defaultV< BlendMode > ) }
+		, m_useTexCoord{ config.texcoordConfig }
 	{
+		m_sampler->initialise( m_device );
 	}
 
 	RenderQuad::RenderQuad( RenderQuad && rhs )noexcept
 		: castor::Named{ std::forward< castor::Named && >( rhs ) }
 		, m_renderSystem{ rhs.m_renderSystem }
 		, m_device{ rhs.m_device }
-		, m_sampler{ std::move( rhs.m_sampler ) }
 		, m_pipeline{ std::move( rhs.m_pipeline ) }
 		, m_pipelineLayout{ std::move( rhs.m_pipelineLayout ) }
 		, m_commandBuffer{ std::move( rhs.m_commandBuffer ) }
-		, m_vertexData{ std::move( rhs.m_vertexData ) }
+		, m_sampler{ std::move( rhs.m_sampler ) }
 		, m_vertexBuffer{ std::move( rhs.m_vertexBuffer ) }
 		, m_descriptorSetLayout{ std::move( rhs.m_descriptorSetLayout ) }
+		, m_config{ std::move( rhs.m_config ) }
+		, m_useTexCoord{ std::move( rhs.m_useTexCoord ) }
 		, m_descriptorSetPool{ std::move( rhs.m_descriptorSetPool ) }
 		, m_descriptorSets{ std::move( rhs.m_descriptorSets ) }
-		, m_sourceView{ std::move( rhs.m_sourceView ) }
-		, m_useTexCoords{ std::move( rhs.m_useTexCoords ) }
-		, m_blendMode{ std::move( rhs.m_blendMode ) }
-		, m_descriptorSetCount{ std::move( rhs.m_descriptorSetCount ) }
-		, m_arraySource{ std::move( rhs.m_arraySource ) }
 	{
 	}
 
@@ -158,8 +211,9 @@ namespace castor3d
 
 	void RenderQuad::cleanup()
 	{
-		m_pipeline.reset();
+		m_sampler->cleanup();
 		m_descriptorSets.clear();
+		m_pipeline.reset();
 		m_pipelineLayout.reset();
 		m_descriptorSetPool.reset();
 		m_descriptorSetLayout.reset();
@@ -170,33 +224,10 @@ namespace castor3d
 	void RenderQuad::createPipeline( VkExtent2D const & size
 		, castor::Position const & position
 		, ashes::PipelineShaderStageCreateInfoArray const & program
-		, ashes::ImageView const & inputView
 		, ashes::RenderPass const & renderPass
-		, ashes::VkDescriptorSetLayoutBindingArray bindings
-		, ashes::VkPushConstantRangeArray const & pushRanges )
-	{
-		createPipeline( size
-			, position
-			, program
-			, inputView
-			, renderPass
-			, bindings
-			, pushRanges
-			, ashes::PipelineDepthStencilStateCreateInfo{ 0u, false, false } );
-	}
-
-	void RenderQuad::createPipeline( VkExtent2D const & size
-		, castor::Position const & position
-		, ashes::PipelineShaderStageCreateInfoArray const & program
-		, ashes::ImageView const & inputView
-		, ashes::RenderPass const & renderPass
-		, ashes::VkDescriptorSetLayoutBindingArray bindings
 		, ashes::VkPushConstantRangeArray const & pushRanges
 		, ashes::PipelineDepthStencilStateCreateInfo dsState )
 	{
-		m_sourceView = &inputView;
-		m_sourceMipViews = createMipViews( *m_sourceView, m_descriptorSetCount, m_arraySource );
-		m_sampler->initialise( m_device );
 		// Initialise the vertex buffer.
 		m_vertexBuffer = makeVertexBuffer< TexturedQuad::Vertex >( m_device
 			, 4u
@@ -206,7 +237,25 @@ namespace castor3d
 
 		if ( auto buffer = m_vertexBuffer->lock( 0u, 4u, 0u ) )
 		{
-			std::copy( m_vertexData.begin(), m_vertexData.end(), buffer );
+			std::array< TexturedQuad::Vertex, 4u > vertexData
+			{
+				TexturedQuad::Vertex{ Point2f{ -1.0, -1.0 }
+				, ( m_useTexCoord
+					? Point2f{ ( m_config.texcoordConfig.invertU ? 1.0 : 0.0 ), ( m_config.texcoordConfig.invertV ? 1.0 : 0.0 ) }
+					: Point2f{} ) },
+				TexturedQuad::Vertex{ Point2f{ -1.0, +1.0 }
+				, ( m_useTexCoord ? Point2f{ ( m_config.texcoordConfig.invertU ? 1.0 : 0.0 ), ( m_config.texcoordConfig.invertV ? 0.0 : 1.0 ) }
+					: Point2f{} ) },
+				TexturedQuad::Vertex{ Point2f{ +1.0, -1.0 }
+				, ( m_useTexCoord
+					? Point2f{ ( m_config.texcoordConfig.invertU ? 0.0 : 1.0 ), ( m_config.texcoordConfig.invertV ? 1.0 : 0.0 ) }
+					: Point2f{} ) },
+				TexturedQuad::Vertex{ Point2f{ +1.0, +1.0 }
+				, ( m_useTexCoord
+					? Point2f{ ( m_config.texcoordConfig.invertU ? 0.0 : 1.0 ), ( m_config.texcoordConfig.invertV ? 0.0 : 1.0 ) }
+					: Point2f{} ) },
+			};
+			std::copy( vertexData.begin(), vertexData.end(), buffer );
 			m_vertexBuffer->flush( 0u, 4u );
 			m_vertexBuffer->unlock();
 		}
@@ -217,7 +266,7 @@ namespace castor3d
 			{ 0u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TexturedQuad::Vertex, position ) },
 		};
 
-		if ( m_useTexCoords )
+		if ( m_useTexCoord )
 		{
 			attributes.push_back( { 1u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TexturedQuad::Vertex, texture ) } );
 		}
@@ -232,51 +281,11 @@ namespace castor3d
 			std::move( attributes ),
 		};
 
-		// Initialise the descriptor set.
-		auto textureBindingPoint = uint32_t( bindings.size() );
-
-		if ( !bindings.empty() )
-		{
-			--textureBindingPoint;
-
-			for ( auto & binding : bindings )
-			{
-				textureBindingPoint = std::max( textureBindingPoint, binding.binding );
-			}
-
-			++textureBindingPoint;
-		}
-
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( textureBindingPoint
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		auto bindings = createBindings( m_config.bindings );
 		m_descriptorSetLayout = m_device->createDescriptorSetLayout( getName()
 			, std::move( bindings ) );
 		m_pipelineLayout = m_device->createPipelineLayout( getName()
 			, { *m_descriptorSetLayout }, pushRanges );
-		auto descriptorSetCount = uint32_t( m_descriptorSetCount * m_sourceView->createInfo.subresourceRange.levelCount );
-		m_descriptorSetPool = m_descriptorSetLayout->createPool( getName()
-			, descriptorSetCount );
-		m_descriptorSets.reserve( descriptorSetCount );
-
-		for ( uint32_t index = 0u; index < m_descriptorSetCount; ++index )
-		{
-			auto prefix = getName() + "_" + string::toString( index ) + "x";
-
-			for ( auto levelOff = 0u; levelOff < m_sourceView->createInfo.subresourceRange.levelCount; ++levelOff )
-			{
-				auto descriptorSet = m_descriptorSetPool->createDescriptorSet( prefix + string::toString( index ) );
-				doFillDescriptorSet( *m_descriptorSetLayout
-					, *descriptorSet
-					, index
-					, levelOff + m_sourceView->createInfo.subresourceRange.baseMipLevel );
-				descriptorSet->createBinding( m_descriptorSetLayout->getBinding( textureBindingPoint )
-					, m_sourceMipViews[getDescriptorSetIndex( index, levelOff )]
-					, m_sampler->getSampler() );
-				descriptorSet->update();
-				m_descriptorSets.emplace_back( std::move( descriptorSet ) );
-			}
-		}
 
 		// Initialise the pipeline.
 		VkViewport viewport{ float( position.x() ), float( position.y() ), float( size.width ), float( size.height ) };
@@ -301,14 +310,60 @@ namespace castor3d
 				ashes::PipelineRasterizationStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE },
 				ashes::PipelineMultisampleStateCreateInfo{},
 				ashes::Optional< ashes::PipelineDepthStencilStateCreateInfo >( std::move( dsState ) ),
-				doCreateBlendState( renderPass, m_blendMode ),
+				doCreateBlendState( renderPass, m_config.blendMode ),
 				ashes::nullopt,
 				*m_pipelineLayout,
 				static_cast< VkRenderPass const & >( renderPass )
 			) );
 	}
 
-	void RenderQuad::prepareFrame( ashes::RenderPass const & renderPass
+	void RenderQuad::registerPassInputs( ashes::WriteDescriptorSetArray const & writes )
+	{
+		CU_Require( checkWrites( writes, m_config.bindings ) );
+
+		m_passes.emplace_back( writes );
+	}
+
+	void RenderQuad::initialisePasses()
+	{
+		CU_Require( m_descriptorSetLayout );
+		auto descriptorSetCount = uint32_t( uint32_t( m_passes.size() ) );
+		m_descriptorSetPool = m_descriptorSetLayout->createPool( getName()
+			, descriptorSetCount );
+		m_descriptorSets.reserve( descriptorSetCount );
+		uint32_t index = 0u;
+		auto prefix = getName() + ", Pass ";
+
+		for ( auto & pass : m_passes )
+		{
+			auto descriptorSet = m_descriptorSetPool->createDescriptorSet( prefix + string::toString( index ) );
+			descriptorSet->setBindings( pass );
+			descriptorSet->update();
+			m_descriptorSets.emplace_back( std::move( descriptorSet ) );
+			++index;
+		}
+	}
+
+	void RenderQuad::createPipelineAndPass( VkExtent2D const & size
+		, castor::Position const & position
+		, ashes::PipelineShaderStageCreateInfoArray const & program
+		, ashes::RenderPass const & renderPass
+		, ashes::WriteDescriptorSetArray const & writes
+		, ashes::VkPushConstantRangeArray const & pushRanges
+		, ashes::PipelineDepthStencilStateCreateInfo dsState )
+	{
+		CU_Require( checkWrites( writes, m_config.bindings ) );
+		createPipeline( size
+			, position
+			, program
+			, renderPass
+			, pushRanges
+			, std::move( dsState ) );
+		m_passes.emplace_back( writes );
+		initialisePasses();
+	}
+
+	void RenderQuad::preparePass( ashes::RenderPass const & renderPass
 		, uint32_t subpassIndex
 		, uint32_t descriptorSetIndex )
 	{
@@ -321,41 +376,84 @@ namespace castor3d
 				, VkBool32( VK_FALSE )
 				, 0u
 				, 0u ) );
-		registerFrame( *m_commandBuffer, descriptorSetIndex );
+		registerPass( *m_commandBuffer, descriptorSetIndex );
 		m_commandBuffer->end();
 	}
 
-	void RenderQuad::registerFrame( ashes::CommandBuffer & commandBuffer
+	void RenderQuad::registerPass( ashes::CommandBuffer & commandBuffer
 		, uint32_t descriptorSetIndex )const
 	{
 		commandBuffer.bindPipeline( *m_pipeline );
 		commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 		commandBuffer.bindDescriptorSet( *m_descriptorSets[descriptorSetIndex], *m_pipelineLayout );
-		doRegisterFrame( commandBuffer );
+		doRegisterPass( commandBuffer );
 		commandBuffer.draw( 4u );
 	}
 
-	uint32_t RenderQuad::getDescriptorSetIndex( uint32_t descriptorBaseIndex
-		, uint32_t level )const
+	ashes::WriteDescriptorSet RenderQuad::makeDescriptorWrite( ashes::ImageView const & view
+		, ashes::Sampler const & sampler
+		, uint32_t dstBinding
+		, uint32_t dstArrayElement )
 	{
-		CU_Require( m_sourceView );
-		return ( descriptorBaseIndex * m_sourceView->createInfo.subresourceRange.levelCount ) + level;
+		auto result = ashes::WriteDescriptorSet{ dstBinding
+			, dstArrayElement
+			, 1u
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER };
+		result.imageInfo.push_back( { sampler, view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
+		return result;
 	}
 
-	void RenderQuad::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-		, ashes::DescriptorSet & descriptorSet )
+	ashes::WriteDescriptorSet RenderQuad::makeDescriptorWrite( ashes::UniformBuffer const & buffer
+		, uint32_t dstBinding
+		, uint32_t elemOffset
+		, uint32_t elemRange
+		, uint32_t dstArrayElement )
 	{
-	}
-	
-	void RenderQuad::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-		, ashes::DescriptorSet & descriptorSet
-		, uint32_t descriptorSetIndex )
-	{
-		doFillDescriptorSet( descriptorSetLayout
-			, descriptorSet );
+		auto result = ashes::WriteDescriptorSet{ dstBinding
+			, dstArrayElement
+			, 1u
+			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER };
+		result.bufferInfo.push_back( { buffer.getBuffer()
+			, buffer.getAlignedSize() * elemOffset
+			, buffer.getAlignedSize() * elemRange } );
+		return result;
 	}
 
-	void RenderQuad::doRegisterFrame( ashes::CommandBuffer & commandBuffer )const
+	ashes::WriteDescriptorSet RenderQuad::makeDescriptorWrite( ashes::BufferBase const & storageBuffer
+		, uint32_t dstBinding
+		, uint32_t byteOffset
+		, uint32_t byteRange
+		, uint32_t dstArrayElement )
+	{
+		auto result = ashes::WriteDescriptorSet{ dstBinding
+			, dstArrayElement
+			, 1u
+			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
+		result.bufferInfo.push_back( { storageBuffer
+			, byteOffset
+			, byteRange } );
+		return result;
+	}
+
+	ashes::WriteDescriptorSet RenderQuad::makeDescriptorWrite( ashes::BufferBase const & buffer
+		, ashes::BufferView const & view
+		, uint32_t dstBinding
+		, uint32_t dstArrayElement )
+	{
+		auto result = ashes::WriteDescriptorSet{ dstBinding
+			, dstArrayElement
+			, 1u
+			, ( ( buffer.getUsage() & VkBufferUsageFlagBits::VK_BUFFER_USAGE_STORAGE_BUFFER_BIT )
+				? VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER
+				: VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER ), };
+		result.bufferInfo.push_back( { buffer
+			, view.getOffset()
+			, view.getRange() } );
+		result.texelBufferView.push_back( view );
+		return result;
+	}
+
+	void RenderQuad::doRegisterPass( ashes::CommandBuffer & commandBuffer )const
 	{
 	}
 }

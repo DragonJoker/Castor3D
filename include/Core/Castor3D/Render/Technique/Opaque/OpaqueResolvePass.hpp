@@ -30,55 +30,58 @@ namespace castor3d
 		: castor::OwnedBy< Engine >
 	{
 	public:
+		using EnvMapArray = std::vector< std::reference_wrapper< EnvironmentMap > >;
 		/**
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine			The engine.
 		 *\param[in]	scene			The rendered scene.
 		 *\param[in]	gp				The geometry pass result.
+		 *\param[in]	ssao			The SSAO image.
 		 *\param[in]	lightDiffuse	The diffuse result of the lighting pass.
 		 *\param[in]	lightSpecular	The specular result of the lighting pass.
+		 *\param[in]	lightIndirect	The indirect result of the lighting pass.
 		 *\param[in]	result			The texture receiving the result.
 		 *\param[in]	sceneUbo		The scene UBO.
 		 *\param[in]	gpInfoUbo		The geometry pass UBO.
 		 *\param[in]	hdrConfigUbo	The HDR UBO.
-		 *\param[in]	ssao			The SSAO image.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine			Le moteur.
 		 *\param[in]	scene			La scène rendue.
 		 *\param[in]	gp				Le résultat de la passe géométrique.
+		 *\param[in]	ssao			L'image SSAO.
 		 *\param[in]	lightDiffuse	Le résultat diffus de la passe d'éclairage.
 		 *\param[in]	lightSpecular	Le résultat spéculaire de la passe d'éclairage.
+		 *\param[in]	lightIndirect	Le résultat indirect de la passe d'éclairage.
 		 *\param[in]	result			La texture recevant le résultat.
 		 *\param[in]	sceneUbo		L'UBO de la scène.
 		 *\param[in]	gpInfoUbo		L'UBO de la passe géométrique.
 		 *\param[in]	hdrConfigUbo	L'UBO HDR.
-		 *\param[in]	ssao			L'image SSAO.
 		 */
 		C3D_API OpaqueResolvePass( Engine & engine
 			, RenderDevice const & device
 			, Scene & scene
 			, OpaquePassResult const & gp
+			, SsaoPass const & ssao
+			, TextureUnit const & subsurfaceScattering
 			, TextureUnit const & lightDiffuse
 			, TextureUnit const & lightSpecular
+			, TextureUnit const & lightIndirect
 			, TextureUnit const & result
 			, SceneUbo const & sceneUbo
 			, GpInfoUbo const & gpInfoUbo
-			, HdrConfigUbo const & hdrConfigUbo
-			, SsaoPass const * ssao );
+			, HdrConfigUbo const & hdrConfigUbo );
 		C3D_API ~OpaqueResolvePass() = default;
 		C3D_API void initialise();
 		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Updates the configuration UBO.
-		 *\param[in]	camera	The viewing camera.
 		 *\~french
 		 *\brief		Met à jour l'UBO de configuration.
-		 *\param[in]	camera	La caméra de rendu.
 		 */
-		C3D_API void update( Camera const & camera );
+		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Renders the reflection mapping.
@@ -104,30 +107,44 @@ namespace castor3d
 				, RenderDevice const & device
 				, OpaquePassResult const & gp
 				, ashes::DescriptorSetLayout const & uboLayout
-				, ashes::DescriptorSetLayout const & texLayout
 				, ashes::RenderPass const & renderPass
 				, ashes::ImageView const * ssao
+				, ashes::ImageView const * subsurfaceScattering
+				, ashes::ImageView const & lightDiffuse
+				, ashes::ImageView const & lightSpecular
+				, ashes::ImageView const * lightIndirect
+				, SamplerSPtr const & sampler
 				, VkExtent2D const & size
 				, FogType fogType
-				, MaterialType matType );
+				, MaterialType matType
+				, Scene const & scene );
 			void updateCommandBuffer( ashes::VertexBufferBase & vbo
 				, ashes::DescriptorSet const & uboSet
-				, ashes::DescriptorSet const & texSet
 				, ashes::FrameBuffer const & frameBuffer
 				, RenderPassTimer & timer );
 			void accept( PipelineVisitorBase & visitor );
 
-			Engine & m_engine;
-			OpaquePassResult const & m_opaquePassResult;
-			ashes::RenderPass const * m_renderPass;
-			castor3d::ShaderModule m_vertexShader;
-			castor3d::ShaderModule m_pixelShader;
-			ashes::PipelineShaderStageCreateInfoArray m_program;
-			ashes::PipelineLayoutPtr m_pipelineLayout;
-			ashes::GraphicsPipelinePtr m_pipeline;
-			ashes::CommandBufferPtr m_commandBuffer;
+			Engine & engine;
+			OpaquePassResult const & opaquePassResult;
+			ashes::RenderPass const * renderPass;
+			castor3d::ShaderModule vertexShader;
+			castor3d::ShaderModule pixelShader;
+			ashes::PipelineShaderStageCreateInfoArray program;
+			ashes::DescriptorSetLayoutPtr texDescriptorLayout;
+			ashes::DescriptorSetPoolPtr texDescriptorPool;
+			ashes::DescriptorSetPtr texDescriptorSet;
+			ashes::PipelineLayoutPtr pipelineLayout;
+			ashes::GraphicsPipelinePtr pipeline;
+			ashes::CommandBufferPtr commandBuffer;
 		};
-		using ReflectionPrograms = std::array< std::unique_ptr< ProgramPipeline >, size_t( FogType::eCount ) >;
+		using ProgramPipelinePtr = std::unique_ptr< ProgramPipeline >;
+		static size_t constexpr SsaoCount = 2u;
+		static size_t constexpr SsssCount = 2u;
+		static size_t constexpr GiCount = 2u;
+		static size_t constexpr MaxProgramsCount = size_t( FogType::eCount ) * SsaoCount * SsssCount * GiCount;
+		using ReflectionPrograms = std::array< ProgramPipelinePtr, MaxProgramsCount >;
+
+		ProgramPipeline & getProgram();
 
 	private:
 		RenderDevice const & m_device;
@@ -136,27 +153,26 @@ namespace castor3d
 		SceneUbo const & m_sceneUbo;
 		GpInfoUbo const & m_gpInfoUbo;
 		HdrConfigUbo const & m_hdrConfigUbo;
-		SsaoPass const * m_ssao;
+		SsaoPass const & m_ssao;
 		VkExtent2D m_size;
 		Viewport m_viewport;
 		SamplerSPtr m_sampler;
 		OpaquePassResult const & m_opaquePassResult;
+		TextureUnit const & m_subsurfaceScattering;
 		TextureUnit const & m_lightDiffuse;
 		TextureUnit const & m_lightSpecular;
+		TextureUnit const & m_lightIndirect;
 		ashes::VertexBufferBasePtr m_vertexBuffer;
 		ashes::DescriptorSetLayoutPtr m_uboDescriptorLayout;
 		ashes::DescriptorSetPoolPtr m_uboDescriptorPool;
 		ashes::DescriptorSetPtr m_uboDescriptorSet;
-		ashes::DescriptorSetLayoutPtr m_texDescriptorLayout;
-		ashes::DescriptorSetPoolPtr m_texDescriptorPool;
-		ashes::DescriptorSetPtr m_texDescriptorSet;
 		ashes::WriteDescriptorSetArray m_texDescriptorWrites;
 		ashes::RenderPassPtr m_renderPass;
 		ashes::FrameBufferPtr m_frameBuffer;
 		ashes::SemaphorePtr m_finished;
 		RenderPassTimerSPtr m_timer;
 		ReflectionPrograms m_programs;
-		bool m_ssaoEnabled{ false };
+		ProgramPipeline * m_currentProgram;
 	};
 }
 

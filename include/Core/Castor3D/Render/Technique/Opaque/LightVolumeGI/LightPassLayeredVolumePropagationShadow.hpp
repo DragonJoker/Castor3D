@@ -173,7 +173,7 @@ namespace castor3d
 				, m_accumulation[1u]
 				, m_accumulation[2u]
 				, m_accumulation[3u]
-				, m_lpResult[LpTexture::eDiffuse] );
+				, m_lpResult[LpTexture::eIndirect] );
 			LightPassShadow< LtType >::initialise( scene, gp, sceneUbo, timer );
 		}
 
@@ -284,6 +284,12 @@ namespace castor3d
 
 				m_lpvConfigUbo.cpuUpdate( grids );
 			}
+		}
+
+	private:
+		VkClearValue doGetIndirectClearColor()const override
+		{
+			return opaqueBlackClearColor;
 		}
 
 	private:

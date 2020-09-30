@@ -29,13 +29,17 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	struct CombinePassConfig
-		: RenderQuadConfig
+	template< template< typename ValueT > typename WrapperT >
+	struct CombinePassConfigT
+		: rq::ConfigT< WrapperT >
 	{
-		ashes::Optional< TextureLayoutSPtr > resultTexture{ ashes::nullopt };
-		ashes::Optional< VkImageLayout > lhsLayout{ ashes::nullopt };
-		ashes::Optional< VkImageLayout > rhsLayout{ ashes::nullopt };
+		WrapperT< TextureLayoutSPtr > resultTexture;
+		WrapperT< VkImageLayout > lhsLayout;
+		WrapperT< VkImageLayout > rhsLayout;
 	};
+
+	using CombinePassConfig = CombinePassConfigT< ashes::Optional >;
+	using CombinePassConfigData = CombinePassConfigT< rq::RawTypeT >;
 
 	class CombinePass
 	{
@@ -79,19 +83,12 @@ namespace castor3d
 				, RenderDevice const & device
 				, castor::String const & prefix
 				, IntermediateViewArray const & lhsViews
-				, RenderQuadConfig const & config );
-
-		private:
-			void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-				, ashes::DescriptorSet & descriptorSet
-				, uint32_t descriptorSetIndex )override;
-			inline void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-				, ashes::DescriptorSet & descriptorSet )override
-			{
-				doFillDescriptorSet( descriptorSetLayout
-					, descriptorSet
-					, 0u );
-			}
+				, IntermediateView const & rhsView
+				, ShaderModule const & vertexShader
+				, ShaderModule const & pixelShader
+				, ashes::RenderPass const & renderPass
+				, VkExtent2D const & outputSize
+				, rq::Config config );
 
 		private:
 			IntermediateViewArray m_lhsViews;

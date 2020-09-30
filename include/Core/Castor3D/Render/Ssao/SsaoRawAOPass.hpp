@@ -101,10 +101,6 @@ namespace castor3d
 			castor3d::ShaderModule vertexShader;
 			castor3d::ShaderModule pixelShader;
 
-		private:
-			void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-				, ashes::DescriptorSet & descriptorSet )override;
-
 			SsaoConfigUbo & m_ssaoConfigUbo;
 			GpInfoUbo const & m_gpInfoUbo;
 			ashes::ImageView const * m_depthView;

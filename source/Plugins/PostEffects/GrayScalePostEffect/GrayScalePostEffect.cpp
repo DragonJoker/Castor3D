@@ -61,16 +61,22 @@ namespace grayscale
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
+		enum Idx : uint32_t
+		{
+			GrayCfgUboIdx,
+			ColorTexIdx,
+		};
+
 		std::unique_ptr< ast::Shader > getFragmentProgram()
 		{
 			using namespace sdw;
 			FragmentWriter writer;
 
 			// Shader inputs
-			auto configUbo = Ubo{ writer, "Configuration", 0u, 0u };
+			auto configUbo = Ubo{ writer, "Configuration", GrayCfgUboIdx, 0u };
 			auto c3d_factors = configUbo.declMember< Vec3 >( "c3d_factors" );
 			configUbo.end();
-			auto c3d_mapColor = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapColor", 1u, 0u );
+			auto c3d_mapColor = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapColor", ColorTexIdx, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs
@@ -85,23 +91,28 @@ namespace grayscale
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
+
+		castor3d::rq::BindingDescriptionArray createBindings()
+		{
+			return
+			{
+				{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, std::nullopt },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
+			};
+		}
 	}
 
 	//*********************************************************************************************
 
 	PostEffect::Quad::Quad( castor3d::RenderSystem & renderSystem
-		, castor3d::RenderDevice const & device
-		, castor3d::UniformBufferOffsetT< castor::Point3f > const & configUbo )
-		: castor3d::RenderQuad{ renderSystem, device, cuT( "GrayScale" ), VK_FILTER_NEAREST, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
-		, m_configUbo{ configUbo }
+		, castor3d::RenderDevice const & device )
+		: castor3d::RenderQuad{ device
+			, cuT( "GrayScale" )
+			, VK_FILTER_NEAREST
+			, { createBindings()
+				, ashes::nullopt
+				, castor3d::rq::Texcoord{} } }
 	{
-	}
-
-	void PostEffect::Quad::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-		, ashes::DescriptorSet & descriptorSet )
-	{
-		m_configUbo.createSizedBinding( descriptorSet
-			, descriptorSetLayout.getBinding( 0u ) );
 	}
 
 	//*********************************************************************************************
@@ -233,15 +244,18 @@ namespace grayscale
 				, VK_SHADER_STAGE_FRAGMENT_BIT )
 		};
 		m_quad = std::make_unique< Quad >( renderSystem
-			, device
-			, m_configUbo );
-		m_quad->createPipeline( size
+			, device );
+		m_quad->createPipelineAndPass( size
 			, castor::Position{}
 			, stages
-			, m_target->getDefaultView().getSampledView()
 			, *m_renderPass
-			, std::move( bindings )
-			, {} );
+			, {
+				m_quad->makeDescriptorWrite( m_configUbo
+					, GrayCfgUboIdx ),
+				m_quad->makeDescriptorWrite( m_target->getDefaultView().getSampledView()
+					, m_quad->getSampler().getSampler()
+					, GrayCfgUboIdx ),
+			} );
 
 		auto result = m_surface.initialise( device
 			, *m_renderPass
@@ -268,7 +282,7 @@ namespace grayscale
 				, *m_surface.frameBuffer
 				, { castor3d::transparentBlackClearColor }
 				, VK_SUBPASS_CONTENTS_INLINE );
-			m_quad->registerFrame( cmd );
+			m_quad->registerPass( cmd );
 			cmd.endRenderPass();
 
 			timer.endPass( cmd );

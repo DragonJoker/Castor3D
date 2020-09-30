@@ -30,9 +30,10 @@ namespace fxaa
 			, float spanMax
 			, float reduceMul );
 
-	private:
-		void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-			, ashes::DescriptorSet & descriptorSet )override;
+		castor3d::UniformBufferOffsetT< FxaaUboConfiguration > const & getUbo()const
+		{
+			return m_fxaaUbo.getUbo();
+		}
 
 	private:
 		FxaaUbo m_fxaaUbo;

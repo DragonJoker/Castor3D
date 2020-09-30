@@ -48,7 +48,8 @@ namespace castor3d
 	*\brief
 	*	La configuration pour créer une CombinePass.
 	*/
-	struct CombinePassConfig;
+	template< template< typename ValueT > typename WrapperT >
+	struct CombinePassConfigT;
 	/**
 	*\~english
 	*\brief

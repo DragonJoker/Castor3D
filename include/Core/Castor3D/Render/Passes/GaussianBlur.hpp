@@ -188,11 +188,11 @@ namespace castor3d
 				, castor::String const & name
 				, ashes::ImageView const & src
 				, VkImageSubresourceRange const & srcRange
-				, UniformBufferOffsetT< Configuration > const & blurUbo );
-
-		private:
-			virtual void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-				, ashes::DescriptorSet & descriptorSet );
+				, UniformBufferOffsetT< Configuration > const & blurUbo
+				, ShaderModule const & vertexShader
+				, ShaderModule const & pixelShader
+				, ashes::RenderPass const & renderPass
+				, VkExtent2D const & textureSize );
 
 		public:
 			ashes::ImageView srcView;
@@ -204,9 +204,9 @@ namespace castor3d
 
 		struct BlurPass
 		{
-			RenderQuadPtr quad;
 			ShaderModule vertexShader;
 			ShaderModule pixelShader;
+			RenderQuad quad;
 			ashes::SemaphorePtr semaphore;
 			ashes::ImageViewArray views;
 			std::vector< ashes::FrameBufferPtrArray > fbos;
@@ -227,10 +227,6 @@ namespace castor3d
 				, ashes::RenderPass const & renderPass
 				, uint32_t layer
 				, bool generateMipmaps )const;
-
-		private:
-			ashes::CommandBufferPtr doGenerateCommandBuffer( RenderDevice const & device
-				, ashes::RenderPass const & renderPass );
 
 		private:
 			Engine & m_engine;

@@ -71,6 +71,13 @@ namespace smaa
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
+		enum Idx : uint32_t
+		{
+			ColorTexIdx,
+			BlendTexIdx,
+			VelocityTexIdx,
+		};
+
 		std::unique_ptr< ast::Shader > doGetNeighbourhoodBlendingFP( castor3d::RenderSystem & renderSystem
 			, Point4f const & renderTargetMetrics
 			, SmaaConfig const & config
@@ -86,9 +93,9 @@ namespace smaa
 			// Shader inputs
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 			auto vtx_offset = writer.declInput< Vec4 >( "vtx_offset", 1u );
-			auto c3d_colourTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_colourTex", 0u, 0u );
-			auto c3d_blendTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_blendTex", 1u, 0u );
-			auto c3d_velocityTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_velocityTex", 2u, 0u, reprojection );
+			auto c3d_colourTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_colourTex", ColorTexIdx, 0u );
+			auto c3d_blendTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_blendTex", BlendTexIdx, 0u );
+			auto c3d_velocityTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_velocityTex", VelocityTexIdx, 0u, reprojection );
 
 			/**
 			 * Conditional move:
@@ -211,6 +218,16 @@ namespace smaa
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
+
+		castor3d::rq::BindingDescriptionArray createBindings()
+		{
+			return
+			{
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
+			};
+		}
 	}
 
 	//*********************************************************************************************
@@ -221,7 +238,12 @@ namespace smaa
 		, ashes::ImageView const & blendView
 		, ashes::ImageView const * velocityView
 		, SmaaConfig const & config )
-		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), device, "SmaaNeighbourhoodBlending", VK_FILTER_LINEAR, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
+		: castor3d::RenderQuad{ device
+			, "SmaaNeighbourhoodBlending"
+			, VK_FILTER_LINEAR
+			, { createBindings()
+				, ashes::nullopt
+				, castor3d::rq::Texcoord{} } }
 		, m_sourceView{ sourceView }
 		, m_blendView{ blendView }
 		, m_velocityView{ velocityView }
@@ -303,26 +325,28 @@ namespace smaa
 		stages.push_back( makeShaderState( m_device, m_vertexShader ) );
 		stages.push_back( makeShaderState( m_device, m_pixelShader ) );
 
-		ashes::VkDescriptorSetLayoutBindingArray setLayoutBindings;
-		setLayoutBindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( 0u
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		auto * view = &m_blendView;
+		ashes::WriteDescriptorSetArray writes
+		{
+			makeDescriptorWrite( m_sourceView
+				, getSampler().getSampler()
+				, ColorTexIdx ),
+			makeDescriptorWrite( m_blendView
+				, getSampler().getSampler()
+				, BlendTexIdx ),
+		};
 
 		if ( m_velocityView )
 		{
-			setLayoutBindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( 1u
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-			view = m_velocityView;
+			writes.emplace_back( makeDescriptorWrite( *m_velocityView
+				, getSampler().getSampler()
+				, VelocityTexIdx ) );
 		}
 
-		createPipeline( size
+		createPipelineAndPass( size
 			, castor::Position{}
 			, stages
-			, *view
 			, *m_renderPass
-			, std::move( setLayoutBindings )
+			, writes
 			, {} );
 
 		for ( uint32_t i = 0; i < config.maxSubsampleIndices; ++i )
@@ -371,7 +395,7 @@ namespace smaa
 			, *m_surfaces[index].frameBuffer
 			, { castor3d::transparentBlackClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE );
-		registerFrame( neighbourhoodBlendingCmd );
+		registerPass( neighbourhoodBlendingCmd );
 		neighbourhoodBlendingCmd.endRenderPass();
 		timer.endPass( neighbourhoodBlendingCmd, passIndex );
 		neighbourhoodBlendingCmd.endDebugBlock();
@@ -384,21 +408,6 @@ namespace smaa
 	{
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );
-	}
-
-	void NeighbourhoodBlending::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-		, ashes::DescriptorSet & descriptorSet )
-	{
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 0u )
-			, m_sourceView
-			, m_sampler->getSampler() );
-
-		if ( m_velocityView )
-		{
-			descriptorSet.createBinding( descriptorSetLayout.getBinding( 1u )
-				, m_blendView
-				, m_sampler->getSampler() );
-		}
 	}
 
 	//*********************************************************************************************
