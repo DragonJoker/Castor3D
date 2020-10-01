@@ -433,9 +433,7 @@ namespace castor3d
 					, m_lpResult3[LpvTexture::eB].getSampler()->getSampler()
 					, BLpvAccumIdx3 ),
 			} );
-		auto commands = getCommands( *m_timer, 0u );
-		m_commandBuffer = std::move( commands.commandBuffer );
-		m_finished = std::move( commands.semaphore );
+		m_commands = getCommands( *m_timer, 0u );
 	}
 
 	ashes::Semaphore const & LayeredLightVolumeGIPass::compute( ashes::Semaphore const & toWait )const
@@ -445,12 +443,12 @@ namespace castor3d
 		timerBlock->notifyPassRender();
 		auto * result = &toWait;
 
-		m_device.graphicsQueue->submit( *m_commandBuffer
+		m_device.graphicsQueue->submit( *m_commands.commandBuffer
 			, toWait
 			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, *m_finished
+			, *m_commands.semaphore
 			, nullptr );
-		result = m_finished.get();
+		result = m_commands.semaphore.get();
 
 		return *result;
 	}

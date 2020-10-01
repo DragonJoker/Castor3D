@@ -13,8 +13,8 @@ namespace castor3d
 {
 	struct CommandsSemaphore
 	{
-		CommandsSemaphore( ashes::CommandBufferPtr commandBuffer
-			, ashes::SemaphorePtr semaphore )
+		CommandsSemaphore( ashes::CommandBufferPtr commandBuffer = nullptr
+			, ashes::SemaphorePtr semaphore = nullptr )
 			: commandBuffer{ std::move( commandBuffer ) }
 			, semaphore{ std::move( semaphore ) }
 		{

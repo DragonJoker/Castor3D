@@ -585,7 +585,6 @@ namespace castor3d
 			, m_result[0].getTexture()->getDefaultView().getTargetView()
 			, m_result[1].getTexture()->getDefaultView().getTargetView() ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, m_device, cuT( "Reflective Shadow Maps" ), cuT( "GI Resolve" ) ) }
-		, m_finished{ m_device->createSemaphore( getName() ) }
 	{
 		if ( auto buffer = m_rsmSamplesSsbo->lock( 0u, RsmConfig::MaxRange, 0u ) )
 		{
@@ -642,9 +641,7 @@ namespace castor3d
 					, RsmFluxIdx ),
 			}
 			, {} );
-		auto commands = getCommands( *m_timer, 0u );
-		m_commandBuffer = std::move( commands.commandBuffer );
-		m_finished = std::move( commands.semaphore );
+		m_commands = getCommands( *m_timer, 0u );
 	}
 
 	ashes::Semaphore const & RsmGIPass::compute( ashes::Semaphore const & toWait )const
@@ -654,12 +651,12 @@ namespace castor3d
 		timerBlock->notifyPassRender();
 		auto * result = &toWait;
 
-		m_device.graphicsQueue->submit( *m_commandBuffer
+		m_device.graphicsQueue->submit( *m_commands.commandBuffer
 			, toWait
 			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, *m_finished
+			, *m_commands.semaphore
 			, nullptr );
-		result = m_finished.get();
+		result = m_commands.semaphore.get();
 
 		return *result;
 	}

@@ -533,7 +533,6 @@ namespace castor3d
 		, m_renderPass{ doCreateRenderPass( m_device, dst.getTexture()->getPixelFormat() ) }
 		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, dst.getTexture()->getDefaultView().getTargetView() ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, m_device, cuT( "Reflective Shadow Maps" ), cuT( "Interpolate" ) ) }
-		, m_finished{ m_device->createSemaphore( getName() ) }
 	{
 		ashes::PipelineShaderStageCreateInfoArray shaderStages;
 		shaderStages.push_back( makeShaderState( m_device, m_vertexShader ) );
@@ -576,9 +575,7 @@ namespace castor3d
 					, m_smResult[SmTexture::eFlux].getSampler()->getSampler()
 					, RsmFluxIdx ),
 			} );
-		auto commands = getCommands( *m_timer, 0u );
-		m_commandBuffer = std::move( commands.commandBuffer );
-		m_finished = std::move( commands.semaphore );
+		m_commands = getCommands( *m_timer, 0u );
 	}
 
 	ashes::Semaphore const & RsmInterpolatePass::compute( ashes::Semaphore const & toWait )const
@@ -588,12 +585,12 @@ namespace castor3d
 		timerBlock->notifyPassRender();
 		auto * result = &toWait;
 
-		m_device.graphicsQueue->submit( *m_commandBuffer
+		m_device.graphicsQueue->submit( *m_commands.commandBuffer
 			, toWait
 			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, *m_finished
+			, *m_commands.semaphore
 			, nullptr );
-		result = m_finished.get();
+		result = m_commands.semaphore.get();
 
 		return *result;
 	}

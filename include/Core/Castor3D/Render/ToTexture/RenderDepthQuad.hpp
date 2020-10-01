@@ -58,6 +58,7 @@ namespace castor3d
 
 	private:
 		ShaderProgram m_program;
+		ashes::CommandBufferPtr m_commandBuffer;
 	};
 }
 

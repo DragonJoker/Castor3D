@@ -251,50 +251,6 @@ namespace castor3d
 		/**
 		*\~english
 		*\brief
-		*	Prepares the commands to render the quad.
-		*\param[in] renderPass
-		*	The render pass to use.
-		*\param[in] subpassIndex
-		*	The render subpass index.
-		*\param[in] descriptorSetIndex
-		*	The render descriptor set index.
-		*\~french
-		*\brief
-		*	Prépare les commandes de dessin du quad.
-		*\param[in] renderPass
-		*	La passe de rendu à utiliser.
-		*\param[in] subpassIndex
-		*	L'indice de la sous passe de rendu.
-		*\param[in] descriptorSetIndex
-		*	L'indice du descriptor set.
-		*/
-		C3D_API void preparePass( ashes::RenderPass const & renderPass
-			, uint32_t subpassIndex
-			, uint32_t descriptorSetIndex );
-		/**
-		*\~english
-		*\brief
-		*	Prepares the commands to render the quad.
-		*\param[in] renderPass
-		*	The render pass to use.
-		*\param[in] subpassIndex
-		*	The render subpass index.
-		*\~french
-		*\brief
-		*	Prépare les commandes de dessin du quad.
-		*\param[in] renderPass
-		*	La passe de rendu à utiliser.
-		*\param[in] subpassIndex
-		*	L'indice de la sous passe de rendu.
-		*/
-		inline void preparePass( ashes::RenderPass const & renderPass
-			, uint32_t subpassIndex )
-		{
-			preparePass( renderPass, subpassIndex, 0u );
-		}
-		/**
-		*\~english
-		*\brief
 		*	Prpares the commands to render the quad, inside given command buffer.
 		*\param[in,out] commandBuffer
 		*	The command buffer.
@@ -557,12 +513,6 @@ namespace castor3d
 				, dstArrayElement );
 		}
 
-		inline ashes::CommandBuffer const & getCommandBuffer()const
-		{
-			CU_Require( m_commandBuffer );
-			return *m_commandBuffer;
-		}
-
 		inline RenderSystem * getRenderSystem()const
 		{
 			return &m_renderSystem;
@@ -585,20 +535,18 @@ namespace castor3d
 	protected:
 		RenderSystem & m_renderSystem;
 		RenderDevice const & m_device;
-		ashes::GraphicsPipelinePtr m_pipeline;
-		ashes::PipelineLayoutPtr m_pipelineLayout;
-		ashes::CommandBufferPtr m_commandBuffer;
 		SamplerSPtr m_sampler;
+		rq::ConfigData m_config;
 
 	private:
-		ashes::VertexBufferPtr< TexturedQuad::Vertex > m_vertexBuffer;
-		ashes::DescriptorSetLayoutPtr m_descriptorSetLayout;
-		rq::ConfigData m_config;
 		bool m_useTexCoord{ true };
-		std::vector< ashes::WriteDescriptorSetArray > m_passes;
-
+		ashes::DescriptorSetLayoutPtr m_descriptorSetLayout;
+		ashes::PipelineLayoutPtr m_pipelineLayout;
+		ashes::GraphicsPipelinePtr m_pipeline;
 		ashes::DescriptorSetPoolPtr m_descriptorSetPool;
+		std::vector< ashes::WriteDescriptorSetArray > m_passes;
 		std::vector< ashes::DescriptorSetPtr > m_descriptorSets;
+		ashes::VertexBufferPtr< TexturedQuad::Vertex > m_vertexBuffer;
 	};
 
 	template< typename ConfigT, typename BuilderT >

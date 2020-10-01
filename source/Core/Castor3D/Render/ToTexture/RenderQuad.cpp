@@ -8,6 +8,7 @@
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
+#include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 
@@ -165,6 +166,18 @@ namespace castor3d
 
 		template< typename TypeT >
 		static inline TypeT const & defaultV = DefaultValueGetterT< TypeT >::get();
+
+		ashes::WriteDescriptorSet clone( ashes::WriteDescriptorSet const & src )
+		{
+			ashes::WriteDescriptorSet result{ src->dstBinding
+				, src->dstArrayElement
+				, src->descriptorCount
+				, src->descriptorType };
+			result.bufferInfo = src.bufferInfo;
+			result.imageInfo = src.imageInfo;
+			result.texelBufferView = src.texelBufferView;
+			return result;
+		}
 	}
 
 	RenderQuad::RenderQuad( RenderDevice const & device
@@ -191,34 +204,41 @@ namespace castor3d
 		: castor::Named{ std::forward< castor::Named && >( rhs ) }
 		, m_renderSystem{ rhs.m_renderSystem }
 		, m_device{ rhs.m_device }
-		, m_pipeline{ std::move( rhs.m_pipeline ) }
-		, m_pipelineLayout{ std::move( rhs.m_pipelineLayout ) }
-		, m_commandBuffer{ std::move( rhs.m_commandBuffer ) }
 		, m_sampler{ std::move( rhs.m_sampler ) }
-		, m_vertexBuffer{ std::move( rhs.m_vertexBuffer ) }
-		, m_descriptorSetLayout{ std::move( rhs.m_descriptorSetLayout ) }
 		, m_config{ std::move( rhs.m_config ) }
 		, m_useTexCoord{ std::move( rhs.m_useTexCoord ) }
+		, m_descriptorSetLayout{ std::move( rhs.m_descriptorSetLayout ) }
+		, m_pipelineLayout{ std::move( rhs.m_pipelineLayout ) }
+		, m_pipeline{ std::move( rhs.m_pipeline ) }
 		, m_descriptorSetPool{ std::move( rhs.m_descriptorSetPool ) }
+		, m_passes{ std::move( rhs.m_passes ) }
 		, m_descriptorSets{ std::move( rhs.m_descriptorSets ) }
+		, m_vertexBuffer{ std::move( rhs.m_vertexBuffer ) }
 	{
 	}
 
 	RenderQuad::~RenderQuad()
 	{
+		m_sampler->cleanup();
 		cleanup();
 	}
 
 	void RenderQuad::cleanup()
 	{
-		m_sampler->cleanup();
+		for ( auto & pass : m_passes )
+		{
+			for ( auto & write : pass )
+			{
+				write = clone( write );
+			}
+		}
+
+		m_vertexBuffer.reset();
 		m_descriptorSets.clear();
+		m_descriptorSetPool.reset();
 		m_pipeline.reset();
 		m_pipelineLayout.reset();
-		m_descriptorSetPool.reset();
 		m_descriptorSetLayout.reset();
-		m_commandBuffer.reset();
-		m_vertexBuffer.reset();
 	}
 
 	void RenderQuad::createPipeline( VkExtent2D const & size
@@ -282,6 +302,7 @@ namespace castor3d
 		};
 
 		auto bindings = createBindings( m_config.bindings );
+		CU_Require( bindings.capacity() < 1000u );
 		m_descriptorSetLayout = m_device->createDescriptorSetLayout( getName()
 			, std::move( bindings ) );
 		m_pipelineLayout = m_device->createPipelineLayout( getName()
@@ -361,23 +382,6 @@ namespace castor3d
 			, std::move( dsState ) );
 		m_passes.emplace_back( writes );
 		initialisePasses();
-	}
-
-	void RenderQuad::preparePass( ashes::RenderPass const & renderPass
-		, uint32_t subpassIndex
-		, uint32_t descriptorSetIndex )
-	{
-		m_commandBuffer = m_device.graphicsCommandPool->createCommandBuffer( getName()
-			, VK_COMMAND_BUFFER_LEVEL_SECONDARY );
-		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
-			, makeVkType< VkCommandBufferInheritanceInfo >( renderPass
-				, subpassIndex
-				, VkFramebuffer( VK_NULL_HANDLE )
-				, VkBool32( VK_FALSE )
-				, 0u
-				, 0u ) );
-		registerPass( *m_commandBuffer, descriptorSetIndex );
-		m_commandBuffer->end();
 	}
 
 	void RenderQuad::registerPass( ashes::CommandBuffer & commandBuffer

@@ -93,7 +93,7 @@ namespace castor3d
 		ashes::RenderPassPtr m_renderPass;
 		ashes::FrameBufferPtr m_frameBuffer;
 		RenderPassTimerSPtr m_timer;
-		ashes::SemaphorePtr m_finished;
+		CommandsSemaphore m_commands;
 	};
 }
 
