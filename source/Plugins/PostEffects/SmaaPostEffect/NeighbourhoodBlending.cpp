@@ -219,14 +219,20 @@ namespace smaa
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		castor3d::rq::BindingDescriptionArray createBindings()
+		castor3d::rq::BindingDescriptionArray createBindings( bool reprojection )
 		{
-			return
+			castor3d::rq::BindingDescriptionArray result
 			{
 				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
 				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
-				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
 			};
+
+			if ( reprojection )
+			{
+				result.push_back( { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D } );
+			}
+
+			return result;
 		}
 	}
 
@@ -241,7 +247,7 @@ namespace smaa
 		: castor3d::RenderQuad{ device
 			, "SmaaNeighbourhoodBlending"
 			, VK_FILTER_LINEAR
-			, { createBindings()
+			, { createBindings( velocityView )
 				, ashes::nullopt
 				, castor3d::rq::Texcoord{} } }
 		, m_sourceView{ sourceView }
