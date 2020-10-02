@@ -146,10 +146,11 @@ namespace castor3d
 	CU_DeclareSmartPtr( LightPropagationPass );
 	CU_DeclareSmartPtr( LightVolumeGIPass );
 
+	CU_DeclareArray( LightPropagationPassUPtr, 2u, LightPropagationPass );
+
 	CU_DeclareVector( GeometryInjectionPass, GeometryInjectionPass );
 	CU_DeclareVector( LightInjectionPass, LightInjectionPass );
 	CU_DeclareVector( LightVolumeGIPass, LightVolumeGIPass );
-	CU_DeclareVector( LightPropagationPass, LightPropagationPass );
 
 	//@}
 	//@}

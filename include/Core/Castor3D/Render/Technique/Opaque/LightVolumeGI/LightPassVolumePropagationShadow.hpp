@@ -116,32 +116,38 @@ namespace castor3d
 				, m_gpResult
 				, m_accumulation
 				, m_lpResult[LpTexture::eIndirect] );
+			m_lightPropagationPasses = { std::make_unique< LightPropagationPass >( this->m_device
+					, this->getName()
+					, "NoOcc"
+					, false
+					, GridSize )
+				, std::make_unique< LightPropagationPass >( this->m_device
+					, this->getName()
+					, "Occ"
+					, true
+					, GridSize ) };
+			auto & passNoOcc = *m_lightPropagationPasses[0u];
 			uint32_t propIndex = 0u;
-			m_lightPropagationPasses.emplace_back( this->m_engine
-				, this->m_device
-				, this->getName()
-				, "0"
-				, GridSize
+			passNoOcc.registerPassIO( nullptr
 				, m_injection
+				, m_lpvConfigUbo
 				, m_accumulation
-				, m_propagate[propIndex]
-				, m_lpvConfigUbo );
+				, m_propagate[propIndex] );
+			passNoOcc.initialisePasses();
+
+			auto & passOcc = *m_lightPropagationPasses[1u];
 
 			for ( uint32_t i = 1u; i < MaxPropagationSteps; ++i )
 			{
-				m_lightPropagationPasses.emplace_back( this->m_engine
-					, this->m_device
-					, this->getName()
-					, castor::string::toString( i )
-					, GridSize
-					, m_geometry
+				passOcc.registerPassIO( &m_geometry
 					, m_propagate[propIndex]
+					, m_lpvConfigUbo
 					, m_accumulation
-					, m_propagate[1u - propIndex]
-					, m_lpvConfigUbo );
+					, m_propagate[1u - propIndex] );
 				propIndex = 1u - propIndex;
 			}
 
+			passOcc.initialisePasses();
 			LightPassShadow< LtType >::initialise( scene, gp, sceneUbo, timer );
 		}
 
@@ -151,7 +157,7 @@ namespace castor3d
 			m_lightVolumeGIPass.reset();
 			m_lightInjectionPass.reset();
 			m_geometryInjectionPass.reset();
-			m_lightPropagationPasses.clear();
+			m_lightPropagationPasses = {};
 		}
 
 		ashes::Semaphore const & render( uint32_t index
@@ -161,10 +167,11 @@ namespace castor3d
 			result = &my_pass_type::render( index, *result );
 			result = &m_lightInjectionPass->compute( *result );
 			result = &m_geometryInjectionPass->compute( *result );
+			result = &m_lightPropagationPasses[0]->compute( *result, 0u );
 
-			for ( auto & pass : m_lightPropagationPasses )
+			for ( uint32_t i = 1u; i < MaxPropagationSteps; ++i )
 			{
-				result = &pass.compute( *result );
+				result = &m_lightPropagationPasses[1]->compute( *result, i - 1u );
 			}
 
 			result = &m_lightVolumeGIPass->compute( *result );
@@ -188,7 +195,7 @@ namespace castor3d
 
 			for ( auto & pass : m_lightPropagationPasses )
 			{
-				pass.accept( visitor );
+				pass->accept( visitor );
 			}
 
 			if ( m_lightVolumeGIPass )

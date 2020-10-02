@@ -250,7 +250,6 @@ namespace castor3d
 
 	void RenderGrid::createPipeline( ashes::PipelineShaderStageCreateInfoArray const & program
 		, ashes::RenderPass const & renderPass
-		, VkPrimitiveTopology topology
 		, ashes::VkPushConstantRangeArray const & pushRanges
 		, ashes::PipelineDepthStencilStateCreateInfo dsState )
 	{
@@ -309,7 +308,7 @@ namespace castor3d
 			, ashes::GraphicsPipelineCreateInfo( 0u
 				, program
 				, std::move( vertexState )
-				, ashes::PipelineInputAssemblyStateCreateInfo{ 0u, topology }
+				, ashes::PipelineInputAssemblyStateCreateInfo{ 0u, VK_PRIMITIVE_TOPOLOGY_POINT_LIST }
 				, ashes::nullopt
 				, std::move( vpState )
 				, ashes::PipelineRasterizationStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE }
@@ -351,14 +350,12 @@ namespace castor3d
 	void RenderGrid::createPipelineAndPass( ashes::PipelineShaderStageCreateInfoArray const & program
 		, ashes::RenderPass const & renderPass
 		, ashes::WriteDescriptorSetArray const & writes
-		, VkPrimitiveTopology topology
 		, ashes::VkPushConstantRangeArray const & pushRanges
 		, ashes::PipelineDepthStencilStateCreateInfo dsState )
 	{
 		CU_Require( checkWrites( writes, m_config.bindings ) );
 		createPipeline( program
 			, renderPass
-			, topology
 			, pushRanges
 			, std::move( dsState ) );
 		m_passes.emplace_back( writes );

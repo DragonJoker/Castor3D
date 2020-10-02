@@ -99,7 +99,6 @@ namespace castor3d
 		*/
 		C3D_API void createPipeline( ashes::PipelineShaderStageCreateInfoArray const & program
 			, ashes::RenderPass const & renderPass
-			, VkPrimitiveTopology topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP
 			, ashes::VkPushConstantRangeArray const & pushRanges = ashes::VkPushConstantRangeArray{}
 			, ashes::PipelineDepthStencilStateCreateInfo dsState = ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_FALSE, VK_FALSE } );
 		/**
@@ -159,7 +158,6 @@ namespace castor3d
 		C3D_API void createPipelineAndPass( ashes::PipelineShaderStageCreateInfoArray const & program
 			, ashes::RenderPass const & renderPass
 			, ashes::WriteDescriptorSetArray const & writes
-			, VkPrimitiveTopology topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP
 			, ashes::VkPushConstantRangeArray const & pushRanges = ashes::VkPushConstantRangeArray{}
 			, ashes::PipelineDepthStencilStateCreateInfo dsState = ashes::PipelineDepthStencilStateCreateInfo{ 0u, false, false } );
 		/**
