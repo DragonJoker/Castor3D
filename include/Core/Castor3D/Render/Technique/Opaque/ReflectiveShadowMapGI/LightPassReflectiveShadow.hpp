@@ -51,6 +51,7 @@ namespace castor3d
 			, GpInfoUbo const & gpInfoUbo )
 			: LightPassShadow< LtType >{ engine
 				, device
+				, "ReflectiveShadow"
 				, lpResult
 				, gpInfoUbo }
 			, m_gpResult{ gpResult }

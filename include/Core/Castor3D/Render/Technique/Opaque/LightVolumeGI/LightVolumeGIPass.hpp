@@ -39,6 +39,7 @@ namespace castor3d
 		 */
 		C3D_API LightVolumeGIPass( Engine & engine
 			, RenderDevice const & device
+			, castor::String const & prefix
 			, LightType lightType
 			, GpInfoUbo const & gpInfo
 			, LpvConfigUbo const & lpvConfigUbo

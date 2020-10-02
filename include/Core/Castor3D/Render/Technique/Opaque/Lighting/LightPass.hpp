@@ -9,6 +9,8 @@ See LICENSE file in root folder
 
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
+#include <CastorUtils/Design/Named.hpp>
+
 #include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Descriptor/DescriptorSet.hpp>
@@ -25,6 +27,7 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	class LightPass
+		: public castor::Named
 	{
 	protected:
 		struct RenderPass
@@ -45,6 +48,7 @@ namespace castor3d
 		\brief		Classe de base pour tous les programmes des passes d'éclairage.
 		*/
 		struct Program
+			: public castor::Named
 		{
 		public:
 			/**
@@ -229,7 +233,6 @@ namespace castor3d
 		public:
 			Engine & m_engine;
 			RenderDevice const & m_device;
-			castor::String m_name;
 			ashes::PipelineShaderStageCreateInfoArray m_program;
 			ashes::DescriptorSetLayoutPtr m_uboDescriptorLayout;
 			ashes::DescriptorSetPoolPtr m_uboDescriptorPool;
@@ -578,7 +581,6 @@ namespace castor3d
 
 		Engine & m_engine;
 		RenderDevice const & m_device;
-		castor::String m_name;
 		Scene const * m_scene{ nullptr };
 		SceneUbo * m_sceneUbo{ nullptr };
 		UniformBufferOffsetT< ModelMatrixUboConfiguration > const * m_mmUbo{ nullptr };

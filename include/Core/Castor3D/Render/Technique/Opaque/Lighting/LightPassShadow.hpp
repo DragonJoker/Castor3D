@@ -159,13 +159,26 @@ namespace castor3d
 		 */
 		LightPassShadow( Engine & engine
 			, RenderDevice const & device
+			, castor::String const & suffix
 			, LightPassResult const & lpResult
 			, GpInfoUbo const & gpInfoUbo )
 			: my_pass_type{ engine
 				, device
+				, suffix
 				, lpResult
 				, gpInfoUbo
 				, true }
+		{
+		}
+		LightPassShadow( Engine & engine
+			, RenderDevice const & device
+			, LightPassResult const & lpResult
+			, GpInfoUbo const & gpInfoUbo )
+			: LightPassShadow{ engine
+				, device
+				, cuT( "Shadow" )
+				, lpResult
+				, gpInfoUbo }
 		{
 		}
 

@@ -13,7 +13,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaqueModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LightVolumePassResult.hpp"
-#include "Castor3D/Render/ToTexture/RenderQuad.hpp"
+#include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
@@ -65,7 +65,8 @@ namespace castor3d
 		 */
 		C3D_API LightPropagationPass( Engine & engine
 			, RenderDevice const & device
-			, castor::String const & name
+			, castor::String const & prefix
+			, castor::String const & suffix
 			, uint32_t gridSize
 			, LightVolumePassResult const & injection
 			, LightVolumePassResult const & accumulation
@@ -87,7 +88,8 @@ namespace castor3d
 		 */
 		C3D_API LightPropagationPass( Engine & engine
 			, RenderDevice const & device
-			, castor::String const & name
+			, castor::String const & prefix
+			, castor::String const & suffix
 			, uint32_t gridSize
 			, TextureUnit const & geometry
 			, LightVolumePassResult const & injection

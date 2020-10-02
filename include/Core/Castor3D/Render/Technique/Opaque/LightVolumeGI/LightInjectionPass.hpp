@@ -55,6 +55,7 @@ namespace castor3d
 		 */
 		C3D_API LightInjectionPass( Engine & engine
 			, RenderDevice const & device
+			, castor::String const & prefix
 			, LightCache const & lightCache
 			, LightType lightType
 			, ShadowMapResult const & smResult

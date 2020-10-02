@@ -65,12 +65,13 @@ namespace castor3d
 
 	SpotLightPass::SpotLightPass( Engine & engine
 		, RenderDevice const & device
+		, castor::String const & suffix
 		, LightPassResult const & lpResult
 		, GpInfoUbo const & gpInfoUbo
 		, bool hasShadows )
 		: MeshLightPass{ engine
-		, device
-			, cuT( "Spot" )
+			, device
+			, cuT( "Spot" ) + suffix
 			, lpResult
 			, gpInfoUbo
 			, LightType::eSpot

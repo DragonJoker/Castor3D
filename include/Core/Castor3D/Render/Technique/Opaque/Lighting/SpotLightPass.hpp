@@ -84,9 +84,18 @@ namespace castor3d
 		 */
 		SpotLightPass( Engine & engine
 			, RenderDevice const & device
+			, castor::String const & suffix
 			, LightPassResult const & lpResult
 			, GpInfoUbo const & gpInfoUbo
 			, bool hasShadows = false );
+		SpotLightPass( Engine & engine
+			, RenderDevice const & device
+			, LightPassResult const & lpResult
+			, GpInfoUbo const & gpInfoUbo
+			, bool hasShadows = false )
+			: SpotLightPass{ engine, device, castor::String{}, lpResult, gpInfoUbo, hasShadows }
+		{
+		}
 		/**
 		 *\~english
 		 *\brief		Destructor.

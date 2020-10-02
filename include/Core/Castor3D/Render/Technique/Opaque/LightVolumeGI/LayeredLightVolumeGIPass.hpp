@@ -39,6 +39,7 @@ namespace castor3d
 		 */
 		C3D_API LayeredLightVolumeGIPass( Engine & engine
 			, RenderDevice const & device
+			, castor::String const & prefix
 			, GpInfoUbo const & gpInfo
 			, LayeredLpvConfigUbo const & lpvConfigUbo
 			, OpaquePassResult const & gpResult

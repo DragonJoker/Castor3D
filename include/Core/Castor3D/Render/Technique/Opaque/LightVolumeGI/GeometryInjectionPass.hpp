@@ -55,6 +55,7 @@ namespace castor3d
 		 */
 		C3D_API GeometryInjectionPass( Engine & engine
 			, RenderDevice const & device
+			, castor::String const & prefix
 			, LightCache const & lightCache
 			, LightType lightType
 			, ShadowMapResult const & smResult
@@ -81,6 +82,7 @@ namespace castor3d
 
 		static TextureUnit createResult( Engine & engine
 			, RenderDevice const & device
+			, castor::String const & prefix
 			, uint32_t index
 			, uint32_t gridSize );
 

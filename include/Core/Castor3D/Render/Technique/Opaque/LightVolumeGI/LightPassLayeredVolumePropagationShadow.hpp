@@ -8,10 +8,13 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightPassShadow.hpp"
 
+#include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/Passes/DownscalePass.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/LightPassResult.hpp"
+#include "Castor3D/Render/Technique/Opaque/LightVolumeGI/GeometryInjectionPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LightInjectionPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LightPropagationPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LayeredLightVolumeGIPass.hpp"
@@ -22,6 +25,7 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/Light/DirectionalLight.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
+#include "Castor3D/Shader/Ubos/LpvConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/LayeredLpvConfigUbo.hpp"
 
 #include <CastorUtils/Miscellaneous/StringUtils.hpp>
@@ -66,6 +70,7 @@ namespace castor3d
 			, GpInfoUbo const & gpInfoUbo )
 			: LightPassShadow< LtType >{ engine
 				, device
+				, "LayeredLPVShadow"
 				, lpResult
 				, gpInfoUbo }
 			, m_gpResult{ gpResult }
@@ -75,29 +80,29 @@ namespace castor3d
 			, m_lpvConfigUbo{ device }
 			, m_injection
 			{
-				LightVolumePassResult{ engine, device, "LightInjection0", GridSize },
-				LightVolumePassResult{ engine, device, "LightInjection1", GridSize },
-				LightVolumePassResult{ engine, device, "LightInjection2", GridSize },
-				LightVolumePassResult{ engine, device, "LightInjection3", GridSize },
+				LightVolumePassResult{ engine, device, this->getName() + "Injection0", GridSize },
+				LightVolumePassResult{ engine, device, this->getName() + "Injection1", GridSize },
+				LightVolumePassResult{ engine, device, this->getName() + "Injection2", GridSize },
+				LightVolumePassResult{ engine, device, this->getName() + "Injection3", GridSize },
 			}
 			, m_geometry
 			{
-				GeometryInjectionPass::createResult( engine, device, 0u, GridSize ),
-				GeometryInjectionPass::createResult( engine, device, 1u, GridSize ),
-				GeometryInjectionPass::createResult( engine, device, 2u, GridSize ),
-				GeometryInjectionPass::createResult( engine, device, 3u, GridSize ),
+				GeometryInjectionPass::createResult( engine, device, this->getName(), 0u, GridSize ),
+				GeometryInjectionPass::createResult( engine, device, this->getName(), 1u, GridSize ),
+				GeometryInjectionPass::createResult( engine, device, this->getName(), 2u, GridSize ),
+				GeometryInjectionPass::createResult( engine, device, this->getName(), 3u, GridSize ),
 			}
 			, m_accumulation
 			{
-				LightVolumePassResult{ engine, device, "LightAccumulation0", GridSize },
-				LightVolumePassResult{ engine, device, "LightAccumulation1", GridSize },
-				LightVolumePassResult{ engine, device, "LightAccumulation2", GridSize },
-				LightVolumePassResult{ engine, device, "LightAccumulation3", GridSize },
+				LightVolumePassResult{ engine, device, this->getName() + "Accumulation0", GridSize },
+				LightVolumePassResult{ engine, device, this->getName() + "Accumulation1", GridSize },
+				LightVolumePassResult{ engine, device, this->getName() + "Accumulation2", GridSize },
+				LightVolumePassResult{ engine, device, this->getName() + "Accumulation3", GridSize },
 			}
 			, m_propagate
 			{
-				LightVolumePassResult{ engine, device, "LightPropagate00", GridSize },
-				LightVolumePassResult{ engine, device, "LightPropagate01", GridSize },
+				LightVolumePassResult{ engine, device, this->getName() + "Propagate0", GridSize },
+				LightVolumePassResult{ engine, device, this->getName() + "Propagate1", GridSize },
 			}
 			, m_lpvConfigUbos
 			{
@@ -122,6 +127,7 @@ namespace castor3d
 			{
 				m_lightInjectionPasses.emplace_back( this->m_engine
 					, this->m_device
+					, this->getName()
 					, lightCache
 					, LtType
 					, m_smResult
@@ -132,6 +138,7 @@ namespace castor3d
 					, cascade );
 				m_geometryInjectionPasses.emplace_back( this->m_engine
 					, this->m_device
+					, this->getName()
 					, lightCache
 					, LtType
 					, m_smResult
@@ -142,6 +149,7 @@ namespace castor3d
 					, cascade );
 				m_lightPropagationPasses.emplace_back( this->m_engine
 					, this->m_device
+					, this->getName()
 					, castor::string::toString( cascade ) + "x0"
 					, GridSize
 					, m_injection[cascade]
@@ -153,6 +161,7 @@ namespace castor3d
 				{
 					m_lightPropagationPasses.emplace_back( this->m_engine
 						, this->m_device
+						, this->getName()
 						, castor::string::toString( cascade ) + "x" + castor::string::toString( i )
 						, GridSize
 						, m_geometry[cascade]
@@ -166,6 +175,7 @@ namespace castor3d
 
 			m_lightVolumeGIPass = std::make_unique< LayeredLightVolumeGIPass >( this->m_engine
 				, this->m_device
+				, this->getName()
 				, m_gpInfoUbo
 				, m_lpvConfigUbo
 				, m_gpResult

@@ -56,7 +56,8 @@ namespace castor3d
 		, m_device{ device }
 		, m_passesCount{ passesCount }
 		, m_category{ category }
-		, m_timerQuery{ device->createQueryPool( VK_QUERY_TYPE_TIMESTAMP
+		, m_timerQuery{ device->createQueryPool( name
+			, VK_QUERY_TYPE_TIMESTAMP
 			, 2u * passesCount
 			, 0u ) }
 		, m_cpuTime{ 0_ns }

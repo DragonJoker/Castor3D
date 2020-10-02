@@ -604,20 +604,20 @@ namespace castor3d
 
 	LightPropagationPass::LightPropagationPass( Engine & engine
 		, RenderDevice const & device
-		, castor::String const & suffix
+		, castor::String const & name
 		, uint32_t gridSize
 		, TextureUnit const * geometry
 		, LightVolumePassResult const & injection
 		, LightVolumePassResult const & accumulation
 		, LightVolumePassResult const & propagate
 		, LpvConfigUbo const & lpvConfigUbo )
-		: Named{ "LightPropagation" + suffix }
+		: Named{ name }
 		, m_engine{ engine }
 		, m_device{ device }
 		, m_lpvConfigUbo{ lpvConfigUbo }
 		, m_accumulation{ accumulation }
 		, m_propagate{ propagate }
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, m_device, cuT( "Light Propagation Volumes" ), "Light Propagation " + suffix ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( engine, m_device, cuT( "Light Propagation Volumes" ), "Light Propagation" ) }
 		, m_count{ gridSize * gridSize * gridSize }
 		, m_vertexBuffer{ doCreateVertexBuffer( getName()
 			, m_device
@@ -667,7 +667,8 @@ namespace castor3d
 
 	LightPropagationPass::LightPropagationPass( Engine & engine
 		, RenderDevice const & device
-		, castor::String const & name
+		, castor::String const & prefix
+		, castor::String const & suffix
 		, uint32_t gridSize
 		, LightVolumePassResult const & injection
 		, LightVolumePassResult const & accumulation
@@ -675,7 +676,7 @@ namespace castor3d
 		, LpvConfigUbo const & lpvConfigUbo )
 		: LightPropagationPass{ engine
 			, device
-			, name
+			, prefix + cuT( "Propagation" ) + suffix
 			, gridSize
 			, nullptr
 			, injection
@@ -687,7 +688,8 @@ namespace castor3d
 
 	LightPropagationPass::LightPropagationPass( Engine & engine
 		, RenderDevice const & device
-		, castor::String const & name
+		, castor::String const & prefix
+		, castor::String const & suffix
 		, uint32_t gridSize
 		, TextureUnit const & geometry
 		, LightVolumePassResult const & injection
@@ -696,7 +698,7 @@ namespace castor3d
 		, LpvConfigUbo const & lpvConfigUbo )
 		: LightPropagationPass{ engine
 			, device
-			, name
+			, prefix + cuT( "Propagation" ) + suffix
 			, gridSize
 			, &geometry
 			, injection

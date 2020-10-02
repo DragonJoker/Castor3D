@@ -349,6 +349,7 @@ namespace castor3d
 
 	LayeredLightVolumeGIPass::LayeredLightVolumeGIPass( Engine & engine
 		, RenderDevice const & device
+		, castor::String const & prefix
 		, GpInfoUbo const & gpInfo
 		, LayeredLpvConfigUbo const & lpvConfigUbo
 		, OpaquePassResult const & gpResult
@@ -358,7 +359,7 @@ namespace castor3d
 		, LightVolumePassResult const & lpResult3
 		, TextureUnit const & dst )
 		: RenderQuad{ device
-			, "DirectionalLayeredVplGI"
+			, prefix + "GIResolve"
 			, VK_FILTER_LINEAR
 			, { createBindings()
 				, ashes::nullopt

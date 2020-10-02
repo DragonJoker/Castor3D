@@ -92,9 +92,18 @@ namespace castor3d
 		 */
 		DirectionalLightPass( Engine & engine
 			, RenderDevice const & device
+			, castor::String const & suffix
 			, LightPassResult const & lpResult
 			, GpInfoUbo const & gpInfoUbo
 			, bool hasShadows = false );
+		DirectionalLightPass( Engine & engine
+			, RenderDevice const & device
+			, LightPassResult const & lpResult
+			, GpInfoUbo const & gpInfoUbo
+			, bool hasShadows = false )
+			: DirectionalLightPass{ engine, device, castor::String{}, lpResult, gpInfoUbo, hasShadows }
+		{
+		}
 		/**
 		 *\copydoc		castor3d::LightPass::initialise
 		 */

@@ -60,7 +60,8 @@ namespace castor3d
 			, LightPassResult const & lpResult
 			, GpInfoUbo const & gpInfoUbo )
 			: LightPassShadow< LtType >{ engine
-			, device
+				, device
+				, "LPVShadow"
 				, lpResult
 				, gpInfoUbo }
 			, m_gpResult{ gpResult }
@@ -68,13 +69,13 @@ namespace castor3d
 			, m_lpResult{ lpResult }
 			, m_gpInfoUbo{ gpInfoUbo }
 			, m_lpvConfigUbo{ device }
-			, m_injection{ engine, device, "LightInjection", GridSize }
-			, m_geometry{ GeometryInjectionPass::createResult( engine, device, 0u , GridSize ) }
-			, m_accumulation{ engine, device, "LightAccumulation", GridSize }
+			, m_injection{ engine, device, this->getName() + "Injection", GridSize }
+			, m_geometry{ GeometryInjectionPass::createResult( engine, device, this->getName(), 0u , GridSize ) }
+			, m_accumulation{ engine, device, this->getName() + "Accumulation", GridSize }
 			, m_propagate
 			{
-				LightVolumePassResult{ engine, device, "LightPropagate0", GridSize },
-				LightVolumePassResult{ engine, device, "LightPropagate1", GridSize },
+				LightVolumePassResult{ engine, device, this->getName() + "Propagate0", GridSize },
+				LightVolumePassResult{ engine, device, this->getName() + "Propagate1", GridSize },
 			}
 			, m_aabb{ lightCache.getScene()->getBoundingBox() }
 		{
@@ -88,6 +89,7 @@ namespace castor3d
 			auto & lightCache = scene.getLightCache();
 			m_geometryInjectionPass = std::make_unique< GeometryInjectionPass >( this->m_engine
 				, this->m_device
+				, this->getName()
 				, lightCache
 				, LtType
 				, m_smResult
@@ -97,6 +99,7 @@ namespace castor3d
 				, GridSize );
 			m_lightInjectionPass = std::make_unique< LightInjectionPass >( this->m_engine
 				, this->m_device
+				, this->getName()
 				, lightCache
 				, LtType
 				, m_smResult
@@ -106,6 +109,7 @@ namespace castor3d
 				, GridSize );
 			m_lightVolumeGIPass = std::make_unique< LightVolumeGIPass >( this->m_engine
 				, this->m_device
+				, this->getName()
 				, LtType
 				, m_gpInfoUbo
 				, m_lpvConfigUbo
@@ -115,6 +119,7 @@ namespace castor3d
 			uint32_t propIndex = 0u;
 			m_lightPropagationPasses.emplace_back( this->m_engine
 				, this->m_device
+				, this->getName()
 				, "0"
 				, GridSize
 				, m_injection
@@ -126,6 +131,7 @@ namespace castor3d
 			{
 				m_lightPropagationPasses.emplace_back( this->m_engine
 					, this->m_device
+					, this->getName()
 					, castor::string::toString( i )
 					, GridSize
 					, m_geometry

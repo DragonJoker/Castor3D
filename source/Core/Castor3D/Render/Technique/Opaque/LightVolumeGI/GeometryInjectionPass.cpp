@@ -614,6 +614,7 @@ namespace castor3d
 
 	GeometryInjectionPass::GeometryInjectionPass( Engine & engine
 		, RenderDevice const & device
+		, castor::String const & prefix
 		, LightCache const & lightCache
 		, LightType lightType
 		, ShadowMapResult const & smResult
@@ -622,7 +623,7 @@ namespace castor3d
 		, TextureUnit const & result
 		, uint32_t gridSize
 		, uint32_t layerIndex )
-		: Named{ "GeometryInjection" + string::toString( layerIndex ) }
+		: Named{ prefix + "GeometryInjection" + string::toString( layerIndex ) }
 		, m_engine{ engine }
 		, m_device{ device }
 		, m_lightCache{ lightCache }
@@ -631,7 +632,7 @@ namespace castor3d
 		, m_lpvConfigUbo{ lpvConfigUbo }
 		, m_lightType{ lightType }
 		, m_result{ result }
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, device, cuT( "Light Propagation Volumes" ), cuT( "Geometry Injection " ) + string::toString( layerIndex ) ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( engine, device, cuT( "Light Propagation Volumes" ), cuT( "Geometry Injection" ) ) }
 		, m_vertexBuffer{ doCreateVertexBuffer( getName(), m_device, m_smResult[SmTexture::eDepth].getTexture()->getWidth() ) }
 		, m_descriptorSetLayout{ doCreateDescriptorLayout( getName(), m_device ) }
 		, m_pipelineLayout{ m_device->createPipelineLayout( getName(), *m_descriptorSetLayout ) }
@@ -728,12 +729,13 @@ namespace castor3d
 
 	TextureUnit GeometryInjectionPass::createResult( Engine & engine
 		, RenderDevice const & device
+		, castor::String const & prefix
 		, uint32_t index
 		, uint32_t gridSize )
 	{
 		return TextureUnit::create( engine
 			, device
-			, cuT( "GeometryInjectionResult" ) + string::toString( index )
+			, prefix + cuT( "GeometryInjectionResult" ) + string::toString( index )
 			, VK_FORMAT_R16G16B16A16_SFLOAT
 			, { gridSize, gridSize, gridSize }
 			, VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT

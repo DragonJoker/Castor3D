@@ -43,34 +43,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Class used to render a texture into a quad.
-	*\~french
-	*\brief
-	*	Classe utilisée pour rendre une texture dans un quad.
-	*/
-	class RenderQuad;
-	/**
-	*\~english
-	*\brief
-	*	Used to create a RenderQuad variable.
-	*\~french
-	*\brief
-	*	Utilisée pour créer une variable RenderQuad.
-	*/
-	template< typename ConfigT, typename BuilderT >
-	class RenderQuadBuilderT;
-	/**
-	*\~english
-	*\brief
-	*	Used to create a RenderQuad variable.
-	*\~french
-	*\brief
-	*	Utilisée pour créer une variable RenderQuad.
-	*/
-	class RenderQuadBuilder;
-	/**
-	*\~english
-	*\brief
 	*	Projects a texture in a quad.
 	*\~french
 	*\brief
@@ -90,7 +62,6 @@ namespace castor3d
 	CU_DeclareSmartPtr( EquirectangularToCube );
 	CU_DeclareSmartPtr( RenderCube );
 	CU_DeclareSmartPtr( RenderDepthQuad );
-	CU_DeclareSmartPtr( RenderQuad );
 	CU_DeclareSmartPtr( TextureProjection );
 	CU_DeclareSmartPtr( TextureProjectionToCube );
 

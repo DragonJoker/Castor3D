@@ -538,6 +538,7 @@ namespace castor3d
 
 	LightInjectionPass::LightInjectionPass( Engine & engine
 		, RenderDevice const & device
+		, castor::String const & prefix
 		, LightCache const & lightCache
 		, LightType lightType
 		, ShadowMapResult const & smResult
@@ -546,7 +547,7 @@ namespace castor3d
 		, LightVolumePassResult const & result
 		, uint32_t gridSize
 		, uint32_t layerIndex )
-		: Named{ "LightInjection" + std::to_string( layerIndex ) }
+		: Named{ prefix + "LightInjection" + std::to_string( layerIndex ) }
 		, m_engine{ engine }
 		, m_device{ device }
 		, m_lightCache{ lightCache }
@@ -555,7 +556,7 @@ namespace castor3d
 		, m_lpvConfigUbo{ lpvConfigUbo }
 		, m_lightType{ lightType }
 		, m_result{ result }
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, m_device, cuT( "Light Propagation Volumes" ), cuT( "Light Injection " ) + string::toString( layerIndex ) ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( engine, m_device, cuT( "Light Propagation Volumes" ), cuT( " Light Injection" ) ) }
 		, m_vertexBuffer{ doCreateVertexBuffer( getName(), m_device, m_smResult[SmTexture::eDepth].getTexture()->getWidth() ) }
 		, m_descriptorSetLayout{ doCreateDescriptorLayout( getName(), m_device ) }
 		, m_pipelineLayout{ m_device->createPipelineLayout( getName(), *m_descriptorSetLayout ) }

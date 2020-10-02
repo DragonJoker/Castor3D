@@ -196,7 +196,8 @@ namespace castor3d
 			return sampler;
 		}
 
-		ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
+		ashes::RenderPassPtr doCreateRenderPass( castor::String const & name
+			, RenderDevice const & device
 			, VkFormat format )
 		{
 			ashes::VkAttachmentDescriptionArray attaches
@@ -254,18 +255,19 @@ namespace castor3d
 				std::move( subpasses ),
 				std::move( dependencies ),
 			};
-			auto result = device->createRenderPass( "VplGI"
+			auto result = device->createRenderPass( name
 				, std::move( createInfo ) );
 			return result;
 		}
 
-		ashes::FrameBufferPtr doCreateFrameBuffer( ashes::RenderPass const & renderPass
+		ashes::FrameBufferPtr doCreateFrameBuffer( castor::String const & name
+			, ashes::RenderPass const & renderPass
 			, ashes::ImageView const & view )
 		{
 			ashes::ImageViewCRefArray attaches;
 			attaches.emplace_back( view );
 			auto size = view.image->getDimensions();
-			return renderPass.createFrameBuffer( "VplGI"
+			return renderPass.createFrameBuffer( name
 				, VkExtent2D{ size.width, size.height }
 				, std::move( attaches ) );
 		}
@@ -289,6 +291,7 @@ namespace castor3d
 
 	LightVolumeGIPass::LightVolumeGIPass( Engine & engine
 		, RenderDevice const & device
+		, castor::String const & prefix
 		, LightType lightType
 		, GpInfoUbo const & gpInfo
 		, LpvConfigUbo const & lpvConfigUbo
@@ -296,7 +299,7 @@ namespace castor3d
 		, LightVolumePassResult const & lpResult
 		, TextureUnit const & dst )
 		: RenderQuad{ device
-			, castor3d::getName( lightType ) + "VplGI"
+			, prefix + "GIResolve"
 			, VK_FILTER_LINEAR
 			, { createBindings()
 				, ashes::nullopt
@@ -309,9 +312,11 @@ namespace castor3d
 		, m_result{ dst }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram() }
-		, m_renderPass{ doCreateRenderPass( device
+		, m_renderPass{ doCreateRenderPass( getName()
+			, device
 			, m_result.getTexture()->getPixelFormat() ) }
-		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass
+		, m_frameBuffer{ doCreateFrameBuffer( getName()
+			, *m_renderPass
 			, m_result.getTexture()->getDefaultView().getTargetView() ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, m_device, cuT( "Light Propagation Volumes" ), cuT( "GI Resolve" ) ) }
 	{
@@ -379,7 +384,7 @@ namespace castor3d
 		timer.beginPass( cmd, index );
 		cmd.beginDebugBlock(
 			{
-				"Lighting - LPV GI",
+				"Lighting - " + getName(),
 				castor3d::makeFloatArray( m_renderSystem.getEngine()->getNextRainbowColour() ),
 			} );
 		cmd.beginRenderPass( *m_renderPass

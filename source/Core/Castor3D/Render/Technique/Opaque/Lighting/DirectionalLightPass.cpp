@@ -226,12 +226,13 @@ namespace castor3d
 
 	DirectionalLightPass::DirectionalLightPass( Engine & engine
 		, RenderDevice const & device
+		, castor::String const & suffix
 		, LightPassResult const & lpResult
 		, GpInfoUbo const & gpInfoUbo
 		, bool hasShadows )
 		: LightPass{ engine
 			, device
-			, "Directional"
+			, "Directional" + suffix
 			, doCreateRenderPass( device, lpResult, true )
 			, doCreateRenderPass( device, lpResult, false )
 			, lpResult
