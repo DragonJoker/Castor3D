@@ -10,7 +10,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
-#include "Castor3D/Render/ToTexture/RenderQuad.hpp"
+#include "Castor3D/Render/Passes/RenderQuad.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
 

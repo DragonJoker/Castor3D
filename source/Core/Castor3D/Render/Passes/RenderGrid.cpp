@@ -1,4 +1,4 @@
-#include "Castor3D/Render/ToTexture/RenderQuad.hpp"
+#include "Castor3D/Render/Passes/RenderGrid.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
@@ -180,9 +180,10 @@ namespace castor3d
 		}
 	}
 
-	RenderQuad::RenderQuad( RenderDevice const & device
+	RenderGrid::RenderGrid( RenderDevice const & device
 		, castor::String const & name
 		, VkFilter samplerFilter
+		, uint32_t gridSize
 		, rq::Config config )
 		: castor::Named{ name }
 		, m_renderSystem{ device.renderSystem }
@@ -196,11 +197,13 @@ namespace castor3d
 			, ( config.texcoordConfig ? *config.texcoordConfig : defaultV< rq::Texcoord > )
 			, ( config.blendMode ? *config.blendMode : defaultV< BlendMode > ) }
 		, m_useTexCoord{ config.texcoordConfig }
+		, m_gridSize{ gridSize }
+		, m_count{ gridSize * gridSize * gridSize }
 	{
 		m_sampler->initialise( m_device );
 	}
 
-	RenderQuad::RenderQuad( RenderQuad && rhs )noexcept
+	RenderGrid::RenderGrid( RenderGrid && rhs )noexcept
 		: castor::Named{ std::forward< castor::Named && >( rhs ) }
 		, m_renderSystem{ rhs.m_renderSystem }
 		, m_device{ rhs.m_device }
@@ -217,13 +220,17 @@ namespace castor3d
 	{
 	}
 
-	RenderQuad::~RenderQuad()
+	RenderGrid::~RenderGrid()
 	{
-		m_sampler->cleanup();
+		if ( m_sampler )
+		{
+			m_sampler->cleanup();
+		}
+
 		cleanup();
 	}
 
-	void RenderQuad::cleanup()
+	void RenderGrid::cleanup()
 	{
 		for ( auto & pass : m_passes )
 		{
@@ -241,41 +248,34 @@ namespace castor3d
 		m_descriptorSetLayout.reset();
 	}
 
-	void RenderQuad::createPipeline( VkExtent2D const & size
-		, castor::Position const & position
-		, ashes::PipelineShaderStageCreateInfoArray const & program
+	void RenderGrid::createPipeline( ashes::PipelineShaderStageCreateInfoArray const & program
 		, ashes::RenderPass const & renderPass
+		, VkPrimitiveTopology topology
 		, ashes::VkPushConstantRangeArray const & pushRanges
 		, ashes::PipelineDepthStencilStateCreateInfo dsState )
 	{
 		// Initialise the vertex buffer.
-		m_vertexBuffer = makeVertexBuffer< TexturedQuad::Vertex >( m_device
-			, 4u
+		auto bufferSize = m_gridSize * m_gridSize * m_gridSize;
+		m_vertexBuffer = makeVertexBuffer< castor::Point3f >( m_device
+			, bufferSize
 			, 0u
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, getName() );
 
-		if ( auto buffer = m_vertexBuffer->lock( 0u, 4u, 0u ) )
+		if ( auto buffer = m_vertexBuffer->lock( 0u, bufferSize, 0u ) )
 		{
-			std::array< TexturedQuad::Vertex, 4u > vertexData
+			for ( uint32_t d = 0; d < m_gridSize; d++ )
 			{
-				TexturedQuad::Vertex{ Point2f{ -1.0, -1.0 }
-				, ( m_useTexCoord
-					? Point2f{ ( m_config.texcoordConfig.invertU ? 1.0 : 0.0 ), ( m_config.texcoordConfig.invertV ? 1.0 : 0.0 ) }
-					: Point2f{} ) },
-				TexturedQuad::Vertex{ Point2f{ -1.0, +1.0 }
-				, ( m_useTexCoord ? Point2f{ ( m_config.texcoordConfig.invertU ? 1.0 : 0.0 ), ( m_config.texcoordConfig.invertV ? 0.0 : 1.0 ) }
-					: Point2f{} ) },
-				TexturedQuad::Vertex{ Point2f{ +1.0, -1.0 }
-				, ( m_useTexCoord
-					? Point2f{ ( m_config.texcoordConfig.invertU ? 0.0 : 1.0 ), ( m_config.texcoordConfig.invertV ? 1.0 : 0.0 ) }
-					: Point2f{} ) },
-				TexturedQuad::Vertex{ Point2f{ +1.0, +1.0 }
-				, ( m_useTexCoord
-					? Point2f{ ( m_config.texcoordConfig.invertU ? 0.0 : 1.0 ), ( m_config.texcoordConfig.invertV ? 0.0 : 1.0 ) }
-					: Point2f{} ) },
-			};
-			std::copy( vertexData.begin(), vertexData.end(), buffer );
+				for ( uint32_t c = 0; c < m_gridSize; c++ )
+				{
+					for ( uint32_t r = 0; r < m_gridSize; r++ )
+					{
+						*buffer = castor::Point3f{ float( r ), float( c ), float( d ) };
+						++buffer;
+					}
+				}
+			}
+
 			m_vertexBuffer->flush( 0u, 4u );
 			m_vertexBuffer->unlock();
 		}
@@ -283,23 +283,12 @@ namespace castor3d
 		// Initialise the vertex layout.
 		ashes::VkVertexInputAttributeDescriptionArray attributes
 		{
-			{ 0u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TexturedQuad::Vertex, position ) },
+			{ 0u, 0u, VK_FORMAT_R32G32B32_SFLOAT, 0u },
 		};
 
-		if ( m_useTexCoord )
-		{
-			attributes.push_back( { 1u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TexturedQuad::Vertex, texture ) } );
-		}
-
-		ashes::PipelineVertexInputStateCreateInfo vertexState
-		{
-			0u,
-			ashes::VkVertexInputBindingDescriptionArray
-			{
-				{ 0u, sizeof( TexturedQuad::Vertex ), VK_VERTEX_INPUT_RATE_VERTEX },
-			},
-			std::move( attributes ),
-		};
+		ashes::PipelineVertexInputStateCreateInfo vertexState{ 0u
+			, { { 0u, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_VERTEX } }
+			, std::move( attributes ) };
 
 		auto bindings = createBindings( m_config.bindings );
 		CU_Require( bindings.capacity() < 1000u );
@@ -309,43 +298,37 @@ namespace castor3d
 			, { *m_descriptorSetLayout }, pushRanges );
 
 		// Initialise the pipeline.
-		VkViewport viewport{ float( position.x() ), float( position.y() ), float( size.width ), float( size.height ) };
-		VkRect2D scissor{ position.x(), position.y(), size.width, size.height };
-		ashes::PipelineViewportStateCreateInfo vpState
-		{
-			0u,
-			1u,
-			ashes::VkViewportArray{ viewport },
-			1u,
-			ashes::VkScissorArray{ scissor },
-		};
+		VkViewport viewport{ 0.0f, 0.0f, float( m_gridSize ), float( m_gridSize ) };
+		VkRect2D scissor{ 0, 0, m_gridSize, m_gridSize };
+		ashes::PipelineViewportStateCreateInfo vpState{ 0u
+			, 1u
+			, ashes::VkViewportArray{ viewport }
+			, 1u
+			, ashes::VkScissorArray{ scissor } };
 		m_pipeline = m_device->createPipeline( getName()
-			, ashes::GraphicsPipelineCreateInfo
-			(
-				0u,
-				program,
-				std::move( vertexState ),
-				ashes::PipelineInputAssemblyStateCreateInfo{ 0u, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP },
-				ashes::nullopt,
-				std::move( vpState ),
-				ashes::PipelineRasterizationStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE },
-				ashes::PipelineMultisampleStateCreateInfo{},
-				ashes::Optional< ashes::PipelineDepthStencilStateCreateInfo >( std::move( dsState ) ),
-				doCreateBlendState( renderPass, m_config.blendMode ),
-				ashes::nullopt,
-				*m_pipelineLayout,
-				static_cast< VkRenderPass const & >( renderPass )
-			) );
+			, ashes::GraphicsPipelineCreateInfo( 0u
+				, program
+				, std::move( vertexState )
+				, ashes::PipelineInputAssemblyStateCreateInfo{ 0u, topology }
+				, ashes::nullopt
+				, std::move( vpState )
+				, ashes::PipelineRasterizationStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE }
+				, ashes::PipelineMultisampleStateCreateInfo{}
+				, ashes::Optional< ashes::PipelineDepthStencilStateCreateInfo >( std::move( dsState ) )
+				, doCreateBlendState( renderPass, m_config.blendMode )
+				, ashes::nullopt
+				, *m_pipelineLayout
+				, static_cast< VkRenderPass const & >( renderPass ) ) );
 	}
 
-	void RenderQuad::registerPassInputs( ashes::WriteDescriptorSetArray const & writes )
+	void RenderGrid::registerPassInputs( ashes::WriteDescriptorSetArray const & writes )
 	{
 		CU_Require( checkWrites( writes, m_config.bindings ) );
 
 		m_passes.emplace_back( writes );
 	}
 
-	void RenderQuad::initialisePasses()
+	void RenderGrid::initialisePasses()
 	{
 		CU_Require( m_descriptorSetLayout );
 		auto descriptorSetCount = uint32_t( uint32_t( m_passes.size() ) );
@@ -365,99 +348,34 @@ namespace castor3d
 		}
 	}
 
-	void RenderQuad::createPipelineAndPass( VkExtent2D const & size
-		, castor::Position const & position
-		, ashes::PipelineShaderStageCreateInfoArray const & program
+	void RenderGrid::createPipelineAndPass( ashes::PipelineShaderStageCreateInfoArray const & program
 		, ashes::RenderPass const & renderPass
 		, ashes::WriteDescriptorSetArray const & writes
+		, VkPrimitiveTopology topology
 		, ashes::VkPushConstantRangeArray const & pushRanges
 		, ashes::PipelineDepthStencilStateCreateInfo dsState )
 	{
 		CU_Require( checkWrites( writes, m_config.bindings ) );
-		createPipeline( size
-			, position
-			, program
+		createPipeline( program
 			, renderPass
+			, topology
 			, pushRanges
 			, std::move( dsState ) );
 		m_passes.emplace_back( writes );
 		initialisePasses();
 	}
 
-	void RenderQuad::registerPass( ashes::CommandBuffer & commandBuffer
+	void RenderGrid::registerPass( ashes::CommandBuffer & commandBuffer
 		, uint32_t descriptorSetIndex )const
 	{
 		commandBuffer.bindPipeline( *m_pipeline );
 		commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 		commandBuffer.bindDescriptorSet( *m_descriptorSets[descriptorSetIndex], *m_pipelineLayout );
 		doRegisterPass( commandBuffer );
-		commandBuffer.draw( 4u );
+		commandBuffer.draw( m_count );
 	}
 
-	ashes::WriteDescriptorSet RenderQuad::makeDescriptorWrite( ashes::ImageView const & view
-		, ashes::Sampler const & sampler
-		, uint32_t dstBinding
-		, uint32_t dstArrayElement )
-	{
-		auto result = ashes::WriteDescriptorSet{ dstBinding
-			, dstArrayElement
-			, 1u
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER };
-		result.imageInfo.push_back( { sampler, view, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
-		return result;
-	}
-
-	ashes::WriteDescriptorSet RenderQuad::makeDescriptorWrite( ashes::UniformBuffer const & buffer
-		, uint32_t dstBinding
-		, uint32_t elemOffset
-		, uint32_t elemRange
-		, uint32_t dstArrayElement )
-	{
-		auto result = ashes::WriteDescriptorSet{ dstBinding
-			, dstArrayElement
-			, 1u
-			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER };
-		result.bufferInfo.push_back( { buffer.getBuffer()
-			, buffer.getAlignedSize() * elemOffset
-			, buffer.getAlignedSize() * elemRange } );
-		return result;
-	}
-
-	ashes::WriteDescriptorSet RenderQuad::makeDescriptorWrite( ashes::BufferBase const & storageBuffer
-		, uint32_t dstBinding
-		, uint32_t byteOffset
-		, uint32_t byteRange
-		, uint32_t dstArrayElement )
-	{
-		auto result = ashes::WriteDescriptorSet{ dstBinding
-			, dstArrayElement
-			, 1u
-			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
-		result.bufferInfo.push_back( { storageBuffer
-			, byteOffset
-			, byteRange } );
-		return result;
-	}
-
-	ashes::WriteDescriptorSet RenderQuad::makeDescriptorWrite( ashes::BufferBase const & buffer
-		, ashes::BufferView const & view
-		, uint32_t dstBinding
-		, uint32_t dstArrayElement )
-	{
-		auto result = ashes::WriteDescriptorSet{ dstBinding
-			, dstArrayElement
-			, 1u
-			, ( ( buffer.getUsage() & VkBufferUsageFlagBits::VK_BUFFER_USAGE_STORAGE_BUFFER_BIT )
-				? VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER
-				: VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER ), };
-		result.bufferInfo.push_back( { buffer
-			, view.getOffset()
-			, view.getRange() } );
-		result.texelBufferView.push_back( view );
-		return result;
-	}
-
-	void RenderQuad::doRegisterPass( ashes::CommandBuffer & commandBuffer )const
+	void RenderGrid::doRegisterPass( ashes::CommandBuffer & commandBuffer )const
 	{
 	}
 }

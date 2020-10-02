@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/ToneMapping/ToneMappingVisitor.hpp"
 
-#include "Castor3D/Render/ToTexture/RenderQuad.hpp"
+#include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 
 #include <CastorUtils/Design/Named.hpp>

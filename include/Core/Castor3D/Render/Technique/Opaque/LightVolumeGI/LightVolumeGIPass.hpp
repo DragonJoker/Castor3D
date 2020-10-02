@@ -11,7 +11,7 @@ See LICENSE file in root folder
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaqueModule.hpp"
-#include "Castor3D/Render/ToTexture/RenderQuad.hpp"
+#include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 

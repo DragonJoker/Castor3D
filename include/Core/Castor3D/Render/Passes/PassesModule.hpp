@@ -89,6 +89,62 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Class used to render a texture into a 3D grid.
+	*\~french
+	*\brief
+	*	Classe utilisée pour rendre une texture dans une grille 3D.
+	*/
+	class RenderGrid;
+	/**
+	*\~english
+	*\brief
+	*	Used to create a RenderGrid variable.
+	*\~french
+	*\brief
+	*	Utilisée pour créer une variable RenderGrid.
+	*/
+	template< typename ConfigT, typename BuilderT >
+	class RenderGridBuilderT;
+	/**
+	*\~english
+	*\brief
+	*	Used to create a RenderGrid variable.
+	*\~french
+	*\brief
+	*	Utilisée pour créer une variable RenderGrid.
+	*/
+	class RenderGridBuilder;
+	/**
+	*\~english
+	*\brief
+	*	Class used to render a texture into a quad.
+	*\~french
+	*\brief
+	*	Classe utilisée pour rendre une texture dans un quad.
+	*/
+	class RenderQuad;
+	/**
+	*\~english
+	*\brief
+	*	Used to create a RenderQuad variable.
+	*\~french
+	*\brief
+	*	Utilisée pour créer une variable RenderQuad.
+	*/
+	template< typename ConfigT, typename BuilderT >
+	class RenderQuadBuilderT;
+	/**
+	*\~english
+	*\brief
+	*	Used to create a RenderQuad variable.
+	*\~french
+	*\brief
+	*	Utilisée pour créer une variable RenderQuad.
+	*/
+	class RenderQuadBuilder;
+	/**
+	*\~english
+	*\brief
 	*	Stencil pre-pass for light passes needing a mesh.
 	*\~french
 	*\brief
@@ -101,6 +157,8 @@ namespace castor3d
 	CU_DeclareSmartPtr( DownscalePass );
 	CU_DeclareSmartPtr( GaussianBlur );
 	CU_DeclareSmartPtr( LineariseDepthPass );
+	CU_DeclareSmartPtr( RenderQuad );
+	CU_DeclareSmartPtr( RenderGrid );
 	CU_DeclareSmartPtr( StencilPass );
 
 	CU_DeclareVector( CommandsSemaphore, CommandsSemaphore );

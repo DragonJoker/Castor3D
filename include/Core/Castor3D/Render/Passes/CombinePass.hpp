@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
-#include "Castor3D/Render/ToTexture/RenderQuad.hpp"
+#include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Shader/ShaderModule.hpp"
 
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"

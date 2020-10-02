@@ -1,10 +1,10 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_RenderQuad_H___
-#define ___C3D_RenderQuad_H___
+#ifndef ___C3D_RenderGrid_H___
+#define ___C3D_RenderGrid_H___
 
-#include "RenderToTextureModule.hpp"
+#include "RenderQuad.hpp"
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 
@@ -24,80 +24,11 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	namespace rq
-	{
-	/**
-	*\~english
-	*\brief
-	*	Tells how the texture coordinates from the vertex buffer are built.
-	*\~french
-	*\brief
-	*	Définit comment sont construites les coordonnées de texture du vertex buffer.
-	*/
-		struct Texcoord
-		{
-			/*
-			*\~english
-			*\brief
-			*	Tells if the U coordinate of UV must be inverted, thus mirroring vertically the resulting image.
-			*\~french
-			*	Dit si la coordonnée U de l'UV doit être inversée, rendant ainsi un miroir vertical de l'image.
-			*/
-			bool invertU{ false };
-			/*
-			*\~english
-			*\brief
-			*	Tells if the U coordinate of UV must be inverted, thus mirroring horizontally the resulting image.
-			*\~french
-			*	Dit si la coordonnée V de l'UV doit être inversée, rendant ainsi un miroir horizontal de l'image.
-			*/
-			bool invertV{ false };
-		};
-
-		struct BindingDescription
-		{
-			BindingDescription( VkDescriptorType descriptorType
-				, ashes::Optional< VkImageViewType > viewType
-				, VkShaderStageFlags stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT )
-				: descriptorType{ descriptorType }
-				, viewType{ viewType }
-				, stageFlags{ stageFlags }
-			{
-			}
-
-			VkDescriptorType descriptorType;
-			ashes::Optional< VkImageViewType > viewType;
-			VkShaderStageFlags stageFlags;
-		};
-		using BindingDescriptionArray = std::vector< BindingDescription >;
-
-		template< template< typename ValueT > typename WrapperT >
-		struct ConfigT
-		{
-			WrapperT< BindingDescriptionArray > bindings;
-			WrapperT< VkImageSubresourceRange > range;
-			WrapperT< Texcoord > texcoordConfig;
-			WrapperT< BlendMode > blendMode;
-		};
-
-		template< typename TypeT >
-		struct RawTyperT
-		{
-			using Type = TypeT;
-		};
-
-		template< typename TypeT >
-		using RawTypeT = typename RawTyperT< TypeT >::Type;
-
-		using Config = ConfigT< ashes::Optional >;
-		using ConfigData = ConfigT< RawTypeT >;
-	}
-
-	class RenderQuad
+	class RenderGrid
 		: public castor::Named
 	{
 		template< typename ConfigT, typename BuilderT >
-		friend class RenderQuadBuilderT;
+		friend class RenderGridBuilderT;
 
 	protected:
 		/**
@@ -124,14 +55,15 @@ namespace castor3d
 		*\param[in] config
 		*	La configuration.
 		*/
-		C3D_API RenderQuad( RenderDevice const & device
+		C3D_API RenderGrid( RenderDevice const & device
 			, castor::String const & name
 			, VkFilter samplerFilter
+			, uint32_t gridSize
 			, rq::Config config );
 
 	public:
-		C3D_API virtual ~RenderQuad();
-		C3D_API explicit RenderQuad( RenderQuad && rhs )noexcept;
+		C3D_API virtual ~RenderGrid();
+		C3D_API explicit RenderGrid( RenderGrid && rhs )noexcept;
 		/**
 		*\~english
 		*\brief
@@ -145,38 +77,29 @@ namespace castor3d
 		*\~english
 		*\brief
 		*	Creates the rendering pipeline.
-		*\param[in] size
-		*	The render size.
-		*\param[in] position
-		*	The render position.
 		*\param[in] program
 		*	The shader program.
 		*\param[in] renderPass
 		*	The render pass to use.
-		*\param[in] bindings
-		*	The already existing bindings.
 		*\param[in] pushRanges
 		*	The push constant ranges.
+		*\param[in] dsState
+		*	The depth stencil state to use.
 		*\~french
 		*\brief
 		*	Crée le pipeline de rendu.
-		*\param[in] size
-		*	Les dimensions de rendu.
-		*\param[in] position
-		*	La position du rendu.
 		*\param[in] program
 		*	Le programme shader.
 		*\param[in] renderPass
 		*	La passe de rendu à utiliser.
-		*\param[in] bindings
-		*	Les attaches déjà existantes.
 		*\param[in] pushRanges
 		*	Les intervalles de push constants.
+		*\param[in] dsState
+		*	L'état de profondeur et stencil à utiliser.
 		*/
-		C3D_API void createPipeline( VkExtent2D const & size
-			, castor::Position const & position
-			, ashes::PipelineShaderStageCreateInfoArray const & program
+		C3D_API void createPipeline( ashes::PipelineShaderStageCreateInfoArray const & program
 			, ashes::RenderPass const & renderPass
+			, VkPrimitiveTopology topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP
 			, ashes::VkPushConstantRangeArray const & pushRanges = ashes::VkPushConstantRangeArray{}
 			, ashes::PipelineDepthStencilStateCreateInfo dsState = ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_FALSE, VK_FALSE } );
 		/**
@@ -205,18 +128,14 @@ namespace castor3d
 		*\~english
 		*\brief
 		*	Creates the rendering pipeline and initialises the quad for one pass.
-		*\param[in] size
-		*	The render size.
-		*\param[in] position
-		*	The render position.
 		*\param[in] program
 		*	The shader program.
 		*\param[in] writes
 		*	The pass descriptor writes.
 		*\param[in] renderPass
 		*	The render pass to use.
-		*\param[in] bindings
-		*	The already existing bindings.
+		*\param[in] writes
+		*	The pass' descriptor writes.
 		*\param[in] pushRanges
 		*	The push constant ranges.
 		*\param[in] dsState
@@ -224,28 +143,23 @@ namespace castor3d
 		*\~french
 		*\brief
 		*	Crée le pipeline de rendu et initialise le quad pour une passe.
-		*\param[in] size
-		*	Les dimensions de rendu.
-		*\param[in] position
-		*	La position du rendu.
 		*\param[in] program
 		*	Le programme shader.
 		*\param[in] writes
 		*	Les descriptor writes de la passe.
 		*\param[in] renderPass
 		*	La passe de rendu à utiliser.
-		*\param[in] bindings
-		*	Les attaches déjà existantes.
+		*\param[in] writes
+		*	Les descriptor writes de la passe.
 		*\param[in] pushRanges
 		*	Les intervalles de push constants.
 		*\param[in] dsState
 		*	L'état de profondeur et stencil à utiliser.
 		*/
-		C3D_API void createPipelineAndPass( VkExtent2D const & size
-			, castor::Position const & position
-			, ashes::PipelineShaderStageCreateInfoArray const & program
+		C3D_API void createPipelineAndPass( ashes::PipelineShaderStageCreateInfoArray const & program
 			, ashes::RenderPass const & renderPass
 			, ashes::WriteDescriptorSetArray const & writes
+			, VkPrimitiveTopology topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP
 			, ashes::VkPushConstantRangeArray const & pushRanges = ashes::VkPushConstantRangeArray{}
 			, ashes::PipelineDepthStencilStateCreateInfo dsState = ashes::PipelineDepthStencilStateCreateInfo{ 0u, false, false } );
 		/**
@@ -310,10 +224,13 @@ namespace castor3d
 		*\param[in] dstArrayElement
 		*	L'indice dans le tableau d'éléments.
 		*/
-		C3D_API static ashes::WriteDescriptorSet makeDescriptorWrite( ashes::ImageView const & view
+		static ashes::WriteDescriptorSet makeDescriptorWrite( ashes::ImageView const & view
 			, ashes::Sampler const & sampler
 			, uint32_t dstBinding
-			, uint32_t dstArrayElement = 0u );
+			, uint32_t dstArrayElement = 0u )
+		{
+			return RenderQuad::makeDescriptorWrite( view, sampler, dstBinding, dstArrayElement );
+		}
 		/**
 		*\~english
 		*\brief
@@ -342,11 +259,14 @@ namespace castor3d
 		*\param[in] dstArrayElement
 		*	L'indice dans le tableau d'éléments.
 		*/
-		C3D_API static ashes::WriteDescriptorSet makeDescriptorWrite( ashes::UniformBuffer const & buffer
+		static ashes::WriteDescriptorSet makeDescriptorWrite( ashes::UniformBuffer const & buffer
 			, uint32_t dstBinding
 			, uint32_t elemOffset
 			, uint32_t elemRange
-			, uint32_t dstArrayElement = 0u );
+			, uint32_t dstArrayElement = 0u )
+		{
+			return RenderQuad::makeDescriptorWrite( buffer, dstBinding, elemOffset, elemRange, dstArrayElement );
+		}
 		/**
 		*\~english
 		*\brief
@@ -407,7 +327,10 @@ namespace castor3d
 			, uint32_t dstBinding
 			, uint32_t byteOffset
 			, uint32_t byteRange
-			, uint32_t dstArrayElement = 0u );
+			, uint32_t dstArrayElement = 0u )
+		{
+			return RenderQuad::makeDescriptorWrite( storageBuffer, dstBinding, byteOffset, byteRange, dstArrayElement );
+		}
 		/**
 		*\~english
 		*\brief
@@ -476,7 +399,10 @@ namespace castor3d
 		C3D_API static ashes::WriteDescriptorSet makeDescriptorWrite( ashes::BufferBase const & buffer
 			, ashes::BufferView const & view
 			, uint32_t dstBinding
-			, uint32_t dstArrayElement = 0u );
+			, uint32_t dstArrayElement = 0u )
+		{
+			return RenderQuad::makeDescriptorWrite( buffer, view, dstBinding, dstArrayElement );
+		}
 		/**
 		*\~english
 		*\brief
@@ -527,6 +453,11 @@ namespace castor3d
 		{
 			return *m_sampler;
 		}
+
+		inline uint32_t getGridSize()const
+		{
+			return m_gridSize;
+		}
 		/**@}*/
 
 	private:
@@ -540,132 +471,28 @@ namespace castor3d
 
 	private:
 		bool m_useTexCoord{ true };
+		uint32_t m_gridSize{ 0u };
+		uint32_t m_count{ 0u };
 		ashes::DescriptorSetLayoutPtr m_descriptorSetLayout;
 		ashes::PipelineLayoutPtr m_pipelineLayout;
 		ashes::GraphicsPipelinePtr m_pipeline;
 		ashes::DescriptorSetPoolPtr m_descriptorSetPool;
 		std::vector< ashes::WriteDescriptorSetArray > m_passes;
 		std::vector< ashes::DescriptorSetPtr > m_descriptorSets;
-		ashes::VertexBufferPtr< TexturedQuad::Vertex > m_vertexBuffer;
+		ashes::VertexBufferPtr< castor::Point3f > m_vertexBuffer;
 	};
 
 	template< typename ConfigT, typename BuilderT >
-	class RenderQuadBuilderT
+	class RenderGridBuilderT
+		: public RenderQuadBuilderT< ConfigT, BuilderT >
 	{
-		static_assert( std::is_same_v< ConfigT, rq::Config >
-			|| std::is_base_of_v< rq::Config, ConfigT >
-			, "RenderQuadBuilderT::ConfigT must derive from castor3d::rq::Config" );
-
 	public:
-		inline RenderQuadBuilderT()
+		inline RenderGridBuilderT()
 		{
 		}
 		/**
 		*\~english
-		*\param[in] config
-		*	The texture coordinates configuration.
-		*\~french
-		*\param[in] config
-		*	La configuration des coordonnées de texture.
-		*/
-		inline BuilderT & texcoordConfig( rq::Texcoord const & config )
-		{
-			m_config.texcoordConfig = config;
-			return static_cast< BuilderT & >( *this );
-		}
-		/**
-		*\~english
-		*\param[in] range
-		*	Contains mip levels for the sampler.
-		*\~french
-		*\param[in] range
-		*	Contient les mip levels, pour l'échantillonneur.
-		*/
-		inline BuilderT & range( VkImageSubresourceRange const & range )
-		{
-			m_config.range = range;
-			return static_cast< BuilderT & >( *this );
-		}
-		/**
-		*\~english
-		*\param[in] blend
-		*	Contains blend to destination status.
-		*\~french
-		*\param[in] blend
-		*	Contient le statut de mélange à la destination.
-		*/
-		inline BuilderT & blendMode( BlendMode blendMode )
-		{
-			m_config.blendMode = blendMode;
-			return static_cast< BuilderT & >( *this );
-		}
-		/**
-		*\~english
-		*\param[in] count
-		*	Contains the inputs bindings.
-		*\~french
-		*\param[in] blend
-		*	Contient les bindings en entrée.
-		*/
-		inline BuilderT & bindings( rq::BindingDescriptionArray const & bindings )
-		{
-			m_config.bindings = bindings;
-			return static_cast< BuilderT & >( *this );
-		}
-		/**
-		*\~english
-		*	Adds an image.
-		*\param[in] binding
-		*	Contains the binding to add.
-		*\~french
-		*	Ajoute un binding.
-		*\param[in] binding
-		*	Contient le binding à ajouter.
-		*/
-		inline BuilderT & binding( rq::BindingDescription const & binding )
-		{
-			if ( !m_config.bindings )
-			{
-				m_config.bindings = rq::BindingDescriptionArray{};
-			}
-
-			m_config.bindings.value().push_back( binding );
-			return static_cast< BuilderT & >( *this );
-		}
-		/**
-		*\~english
-		*	Adds an image.
-		*\param[in] binding
-		*	Contains the binding to add.
-		*\~french
-		*	Ajoute un binding.
-		*\param[in] binding
-		*	Contient le binding à ajouter.
-		*/
-		inline BuilderT & binding( VkDescriptorType descriptor
-			, VkShaderStageFlags stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT )
-		{
-			return binding( rq::BindingDescription{ descriptor, ashes::nullopt, stageFlags } );
-		}
-		/**
-		*\~english
-		*	Adds an image binding.
-		*\param[in] binding
-		*	Contains the binding to add.
-		*\~french
-		*	Ajoute un binding d'image.
-		*\param[in] binding
-		*	Contient le binding à ajouter.
-		*/
-		inline BuilderT & binding( VkDescriptorType descriptor
-			, VkImageViewType view
-			, VkShaderStageFlags stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT )
-		{
-			return binding( rq::BindingDescription{ descriptor, view, stageFlags } );
-		}
-		/**
-		*\~english
-		*	Creates the RenderQuad.
+		*	Creates the RenderGrid.
 		*\param[in] device
 		*	The RenderDevice.
 		*\param[in] name
@@ -673,7 +500,7 @@ namespace castor3d
 		*\param[in] samplerFilter
 		*	The sampler filter for the source texture.
 		*\~french
-		*	Crée le RenderQuad.
+		*	Crée le RenderGrid.
 		*\param[in] device
 		*	Le RenderDevice.
 		*\param[in] name
@@ -681,22 +508,21 @@ namespace castor3d
 		*\param[in] samplerFilter
 		*	Le filtre d'échantillonnage pour la texture source.
 		*/
-		inline RenderQuadUPtr build( RenderDevice const & device
+		inline RenderGridUPtr build( RenderDevice const & device
 			, castor::String const & name
-			, VkFilter samplerFilter )
+			, VkFilter samplerFilter
+			, uint32_t gridSize )
 		{
-			return std::unique_ptr< RenderQuad >( new RenderQuad{ device
+			return std::unique_ptr< RenderGrid >( new RenderGrid{ device
 				, name
 				, samplerFilter
+				, gridSize
 				, m_config } );
 		}
-
-	protected:
-		ConfigT m_config;
 	};
 
-	class RenderQuadBuilder
-		: public RenderQuadBuilderT< rq::Config, RenderQuadBuilder >
+	class RenderGridBuilder
+		: public RenderGridBuilderT< rq::Config, RenderGridBuilder >
 	{
 	};
 }

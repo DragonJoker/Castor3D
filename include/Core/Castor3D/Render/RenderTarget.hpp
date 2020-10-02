@@ -14,7 +14,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/PostEffect/PostEffectModule.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
-#include "Castor3D/Render/ToTexture/RenderQuad.hpp"
+#include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 
 #include <ashespp/RenderPass/FrameBuffer.hpp>

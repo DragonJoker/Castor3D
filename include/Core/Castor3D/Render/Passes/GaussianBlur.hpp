@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "PassesModule.hpp"
 
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
-#include "Castor3D/Render/ToTexture/RenderQuad.hpp"
+#include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 
 #include <ashespp/Image/ImageView.hpp>

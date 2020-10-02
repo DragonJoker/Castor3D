@@ -15,7 +15,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/Technique/RenderTechnique.hpp"
-#include "Castor3D/Render/ToTexture/RenderQuad.hpp"
+#include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
 #include <CastorUtils/Graphics/PixelBufferBase.hpp>

@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/Viewport.hpp"
-#include "Castor3D/Render/ToTexture/RenderQuad.hpp"
+#include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightPass.hpp"
 
 #include <ashespp/Command/CommandBuffer.hpp>
