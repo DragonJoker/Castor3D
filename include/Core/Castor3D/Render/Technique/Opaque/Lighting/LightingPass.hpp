@@ -28,10 +28,12 @@ namespace castor3d
 		enum class Type
 		{
 			eNoShadow = 0u,
-			eShadowNoGI = 1u,
-			eShadowRsmGI = 2u,
-			eShadowLpvGI = 3u,
-			eShadowLayeredLpvGI = 4u,
+			eShadowNoGI,
+			eShadowRsmGI,
+			eShadowLpvGI,
+			eShadowLpvGGI,
+			eShadowLayeredLpvGI,
+			eShadowLayeredLpvGGI,
 			CU_ScopedEnumBounds( eNoShadow ),
 		};
 		static_assert( uint32_t( Type::eCount ) == uint32_t( GlobalIlluminationType::eCount ) + 1u );

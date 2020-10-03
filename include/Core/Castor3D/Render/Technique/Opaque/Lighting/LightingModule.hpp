@@ -33,9 +33,16 @@ namespace castor3d
 		: uint8_t
 	{
 		eNone,
+		// Reflective shadow maps.
 		eRsm,
+		// Light Propagation Volumes without geometry injection.
 		eLpv,
+		// Light Propagation Volumes with geometry injection.
+		eLpvG,
+		// Layered Light Propagation Volumes without geometry injection.
 		eLayeredLpv,
+		// Layered Light Propagation Volumes with geometry injection.
+		eLayeredLpvG,
 		CU_ScopedEnumBounds( eNone ),
 	};
 	castor::String getName( GlobalIlluminationType giType );

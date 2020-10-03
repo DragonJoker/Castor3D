@@ -26,7 +26,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	template< LightType LtType >
+	template< LightType LtType, bool GeometryVolumesT >
 	class LightPassVolumePropagationShadow
 		: public LightPassShadow< LtType >
 	{
@@ -70,7 +70,9 @@ namespace castor3d
 			, m_gpInfoUbo{ gpInfoUbo }
 			, m_lpvConfigUbo{ device }
 			, m_injection{ engine, device, this->getName() + "Injection", GridSize }
-			, m_geometry{ GeometryInjectionPass::createResult( engine, device, this->getName(), 0u , GridSize ) }
+			, m_geometry{ ( GeometryVolumesT
+				? GeometryInjectionPass::createResult( engine, device, this->getName(), 0u , GridSize )
+				: TextureUnit{ engine } ) }
 			, m_accumulation{ engine, device, this->getName() + "Accumulation", GridSize }
 			, m_propagate
 			{
@@ -87,16 +89,6 @@ namespace castor3d
 			, RenderPassTimer & timer )override
 		{
 			auto & lightCache = scene.getLightCache();
-			m_geometryInjectionPass = std::make_unique< GeometryInjectionPass >( this->m_engine
-				, this->m_device
-				, this->getName()
-				, lightCache
-				, LtType
-				, m_smResult
-				, m_gpInfoUbo
-				, m_lpvConfigUbo
-				, m_geometry
-				, GridSize );
 			m_lightInjectionPass = std::make_unique< LightInjectionPass >( this->m_engine
 				, this->m_device
 				, this->getName()
@@ -116,38 +108,64 @@ namespace castor3d
 				, m_gpResult
 				, m_accumulation
 				, m_lpResult[LpTexture::eIndirect] );
-			m_lightPropagationPasses = { std::make_unique< LightPropagationPass >( this->m_device
-					, this->getName()
-					, "NoOcc"
-					, false
-					, GridSize )
-				, std::make_unique< LightPropagationPass >( this->m_device
-					, this->getName()
-					, "Occ"
-					, true
-					, GridSize ) };
-			auto & passNoOcc = *m_lightPropagationPasses[0u];
+			m_lightPropagationPasses[0] = std::make_unique< LightPropagationPass >( this->m_device
+				, this->getName()
+				, cuT( "NoOcc" )
+				, false
+				, GridSize );
+			LightPropagationPass & passNoOcc = *m_lightPropagationPasses[0u];
 			uint32_t propIndex = 0u;
 			passNoOcc.registerPassIO( nullptr
 				, m_injection
 				, m_lpvConfigUbo
 				, m_accumulation
 				, m_propagate[propIndex] );
-			passNoOcc.initialisePasses();
 
-			auto & passOcc = *m_lightPropagationPasses[1u];
-
-			for ( uint32_t i = 1u; i < MaxPropagationSteps; ++i )
+			if constexpr ( GeometryVolumesT )
 			{
-				passOcc.registerPassIO( &m_geometry
-					, m_propagate[propIndex]
+				m_geometryInjectionPass = std::make_unique< GeometryInjectionPass >( this->m_engine
+					, this->m_device
+					, this->getName()
+					, lightCache
+					, LtType
+					, m_smResult
+					, m_gpInfoUbo
 					, m_lpvConfigUbo
-					, m_accumulation
-					, m_propagate[1u - propIndex] );
-				propIndex = 1u - propIndex;
+					, m_geometry
+					, GridSize );
+				m_lightPropagationPasses[1] = std::make_unique< LightPropagationPass >( this->m_device
+					, this->getName()
+					, cuT( "Occ" )
+					, true
+					, GridSize );
+				auto & passOcc = *m_lightPropagationPasses[1u];
+
+				for ( uint32_t i = 1u; i < MaxPropagationSteps; ++i )
+				{
+					passOcc.registerPassIO( &m_geometry
+						, m_propagate[propIndex]
+						, m_lpvConfigUbo
+						, m_accumulation
+						, m_propagate[1u - propIndex] );
+					propIndex = 1u - propIndex;
+				}
+
+				passOcc.initialisePasses();
+			}
+			else
+			{
+				for ( uint32_t i = 1u; i < MaxPropagationSteps; ++i )
+				{
+					passNoOcc.registerPassIO( nullptr
+						, m_propagate[propIndex]
+						, m_lpvConfigUbo
+						, m_accumulation
+						, m_propagate[1u - propIndex] );
+					propIndex = 1u - propIndex;
+				}
 			}
 
-			passOcc.initialisePasses();
+			passNoOcc.initialisePasses();
 			LightPassShadow< LtType >::initialise( scene, gp, sceneUbo, timer );
 		}
 
@@ -166,12 +184,23 @@ namespace castor3d
 			auto result = &toWait;
 			result = &my_pass_type::render( index, *result );
 			result = &m_lightInjectionPass->compute( *result );
-			result = &m_geometryInjectionPass->compute( *result );
-			result = &m_lightPropagationPasses[0]->compute( *result, 0u );
 
-			for ( uint32_t i = 1u; i < MaxPropagationSteps; ++i )
+			if constexpr ( GeometryVolumesT )
 			{
-				result = &m_lightPropagationPasses[1]->compute( *result, i - 1u );
+				result = &m_geometryInjectionPass->compute( *result );
+				result = &m_lightPropagationPasses[0]->compute( *result, 0u );
+
+				for ( uint32_t i = 1u; i < MaxPropagationSteps; ++i )
+				{
+					result = &m_lightPropagationPasses[1]->compute( *result, i - 1u );
+				}
+			}
+			else
+			{
+				for ( uint32_t i = 0u; i < MaxPropagationSteps; ++i )
+				{
+					result = &m_lightPropagationPasses[0]->compute( *result, i );
+				}
 			}
 
 			result = &m_lightVolumeGIPass->compute( *result );

@@ -117,7 +117,7 @@ namespace castor3d
 	*\brief
 	*	Classe de base pour toutes les passes d'éclairage avec du light propagation volumes.
 	*/
-	template< LightType LtType >
+	template< LightType LtType, bool GeometryVolumesT >
 	class LightPassVolumePropagationShadow;
 	/**
 	*\~english
@@ -127,18 +127,28 @@ namespace castor3d
 	*\brief
 	*	Classe de base pour toutes les passes d'éclairage avec du light propagation volumes.
 	*/
-	template< LightType LtType >
+	template< LightType LtType, bool GeometryVolumesT >
 	class LightPassLayeredVolumePropagationShadow;
 
 	//!\~english	The directional lights light pass with shadows and LPV.
 	//!\~french		La passe d'éclairage avec ombres et LPV pour les lumières directionnelles.
-	using DirectionalLightPassVolumePropagationShadow = LightPassVolumePropagationShadow< LightType::eDirectional >;
+	using DirectionalLightPassLPVShadow = LightPassVolumePropagationShadow< LightType::eDirectional, false >;
 	//!\~english	The spot lights light pass with shadows and LPV.
 	//!\~french		La passe d'éclairage avec ombres et LPV pour les lumières projecteurs.
-	using SpotLightPassVolumePropagationShadow = LightPassVolumePropagationShadow< LightType::eSpot >;
+	using SpotLightPassLPVShadow = LightPassVolumePropagationShadow< LightType::eSpot, false >;
 	//!\~english	The directional lights light pass with shadows and LayeredLPV.
 	//!\~french		La passe d'éclairage avec ombres et Layered LPV pour les lumières directionnelles.
-	using DirectionalLightPassLayeredVolumePropagationShadow = LightPassLayeredVolumePropagationShadow< LightType::eDirectional >;
+	using DirectionalLightPassLayeredLPVShadow = LightPassLayeredVolumePropagationShadow< LightType::eDirectional, false >;
+
+	//!\~english	The directional lights light pass with shadows and LPV.
+	//!\~french		La passe d'éclairage avec ombres et LPV pour les lumières directionnelles.
+	using DirectionalLightPassLPVGShadow = LightPassVolumePropagationShadow< LightType::eDirectional, true >;
+	//!\~english	The spot lights light pass with shadows and LPV.
+	//!\~french		La passe d'éclairage avec ombres et LPV pour les lumières projecteurs.
+	using SpotLightPassLPVGShadow = LightPassVolumePropagationShadow< LightType::eSpot, true >;
+	//!\~english	The directional lights light pass with shadows and LayeredLPV.
+	//!\~french		La passe d'éclairage avec ombres et Layered LPV pour les lumières directionnelles.
+	using DirectionalLightPassLayeredLPVGShadow = LightPassLayeredVolumePropagationShadow< LightType::eDirectional, true >;
 
 	CU_DeclareSmartPtr( GeometryInjectionPass );
 	CU_DeclareSmartPtr( LayeredLightVolumeGIPass );

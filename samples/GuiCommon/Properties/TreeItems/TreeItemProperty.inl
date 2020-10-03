@@ -19,8 +19,8 @@ namespace GuiCommon
 		{
 			wxPGProperty * prop = grid->Append( new wxUIntProperty( name, name, value ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
-			prop->SetAttribute( wxPG_ATTR_MIN, std::numeric_limits< uint8_t >::lowest() );
-			prop->SetAttribute( wxPG_ATTR_MAX, std::numeric_limits< uint8_t >::max() );
+			prop->SetAttribute( wxPG_ATTR_MIN, getVariant< uint8_t >( std::numeric_limits< uint8_t >::lowest() ) );
+			prop->SetAttribute( wxPG_ATTR_MAX, getVariant< uint8_t >( std::numeric_limits< uint8_t >::max() ) );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_MOTION, WXVARIANT( true ) );
 			return prop;
@@ -29,8 +29,8 @@ namespace GuiCommon
 		{
 			wxPGProperty * prop = grid->Append( new wxIntProperty( name, name, value ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
-			prop->SetAttribute( wxPG_ATTR_MIN, std::numeric_limits< int16_t >::lowest() );
-			prop->SetAttribute( wxPG_ATTR_MAX, std::numeric_limits< int16_t >::max() );
+			prop->SetAttribute( wxPG_ATTR_MIN, getVariant< int16_t >( std::numeric_limits< int16_t >::lowest() ) );
+			prop->SetAttribute( wxPG_ATTR_MAX, getVariant< int16_t >( std::numeric_limits< int16_t >::max() ) );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_MOTION, WXVARIANT( true ) );
 			return prop;
@@ -39,8 +39,8 @@ namespace GuiCommon
 		{
 			wxPGProperty * prop = grid->Append( new wxUIntProperty( name, name, value ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
-			prop->SetAttribute( wxPG_ATTR_MIN, std::numeric_limits< uint16_t >::lowest() );
-			prop->SetAttribute( wxPG_ATTR_MAX, std::numeric_limits< uint16_t >::max() );
+			prop->SetAttribute( wxPG_ATTR_MIN, getVariant< uint16_t >( std::numeric_limits< uint16_t >::lowest() ) );
+			prop->SetAttribute( wxPG_ATTR_MAX, getVariant< uint16_t >( std::numeric_limits< uint16_t >::max() ) );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_MOTION, WXVARIANT( true ) );
 			return prop;
@@ -49,8 +49,8 @@ namespace GuiCommon
 		{
 			wxPGProperty * prop = grid->Append( new wxIntProperty( name, name, value ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
-			prop->SetAttribute( wxPG_ATTR_MIN, std::numeric_limits< int32_t >::lowest() );
-			prop->SetAttribute( wxPG_ATTR_MAX, std::numeric_limits< int32_t >::max() );
+			prop->SetAttribute( wxPG_ATTR_MIN, getVariant< int32_t >( std::numeric_limits< int32_t >::lowest() ) );
+			prop->SetAttribute( wxPG_ATTR_MAX, getVariant< int32_t >( std::numeric_limits< int32_t >::max() ) );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_MOTION, WXVARIANT( true ) );
 			return prop;
@@ -192,9 +192,9 @@ namespace GuiCommon
 		{
 			wxPGProperty * prop = createProperty( grid, name, value.degrees(), handler );
 			prop->SetAttribute( wxPG_ATTR_UNITS, wxT( "°" ) );
-			prop->SetAttribute( wxPG_ATTR_SPINCTRL_STEP, WXVARIANT( 1.0f ) );
-			prop->SetAttribute( wxPG_ATTR_MIN, WXVARIANT( 0.0f ) );
-			prop->SetAttribute( wxPG_ATTR_MAX, WXVARIANT( 359.0f ) );
+			prop->SetAttribute( wxPG_ATTR_SPINCTRL_STEP, WXVARIANT( 1.0 ) );
+			prop->SetAttribute( wxPG_ATTR_MIN, WXVARIANT( 0.0 ) );
+			prop->SetAttribute( wxPG_ATTR_MAX, WXVARIANT( 359.0 ) );
 			return prop;
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Font > )
@@ -210,8 +210,8 @@ namespace GuiCommon
 		else if constexpr ( castor::isRangedValueT< ValueT > )
 		{
 			wxPGProperty * prop = createProperty( grid, name, value.value(), handler );
-			prop->SetAttribute( wxPG_ATTR_MIN, WXVARIANT( value.range().getMin() ) );
-			prop->SetAttribute( wxPG_ATTR_MAX, WXVARIANT( value.range().getMax() ) );
+			prop->SetAttribute( wxPG_ATTR_MIN, getVariant< castor::UnRangedValueT< ValueT > >( value.range().getMin() ) );
+			prop->SetAttribute( wxPG_ATTR_MAX, getVariant< castor::UnRangedValueT< ValueT > >( value.range().getMax() ) );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_MOTION, WXVARIANT( true ) );
 			return prop;

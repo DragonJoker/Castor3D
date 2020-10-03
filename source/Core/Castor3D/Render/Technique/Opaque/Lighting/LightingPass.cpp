@@ -148,7 +148,7 @@ namespace castor3d
 		template<>
 		struct PassInfoT< LightingPass::Type::eShadowLpvGI, LightType::eDirectional >
 		{
-			using Type = DirectionalLightPassVolumePropagationShadow;
+			using Type = DirectionalLightPassLPVShadow;
 		};
 
 		template<>
@@ -160,13 +160,13 @@ namespace castor3d
 		template<>
 		struct PassInfoT< LightingPass::Type::eShadowLpvGI, LightType::eSpot >
 		{
-			using Type = SpotLightPassVolumePropagationShadow;
+			using Type = SpotLightPassLPVShadow;
 		};
 
 		template<>
 		struct PassInfoT< LightingPass::Type::eShadowLayeredLpvGI, LightType::eDirectional >
 		{
-			using Type = DirectionalLightPassLayeredVolumePropagationShadow;
+			using Type = DirectionalLightPassLayeredLPVShadow;
 		};
 
 		template<>
@@ -178,7 +178,43 @@ namespace castor3d
 		template<>
 		struct PassInfoT< LightingPass::Type::eShadowLayeredLpvGI, LightType::eSpot >
 		{
-			using Type = SpotLightPassVolumePropagationShadow;
+			using Type = SpotLightPassLPVShadow;
+		};
+
+		template<>
+		struct PassInfoT< LightingPass::Type::eShadowLpvGGI, LightType::eDirectional >
+		{
+			using Type = DirectionalLightPassLPVGShadow;
+		};
+
+		template<>
+		struct PassInfoT< LightingPass::Type::eShadowLpvGGI, LightType::ePoint >
+		{
+			using Type = PointLightPassShadow;
+		};
+
+		template<>
+		struct PassInfoT< LightingPass::Type::eShadowLpvGGI, LightType::eSpot >
+		{
+			using Type = SpotLightPassLPVGShadow;
+		};
+
+		template<>
+		struct PassInfoT< LightingPass::Type::eShadowLayeredLpvGGI, LightType::eDirectional >
+		{
+			using Type = DirectionalLightPassLayeredLPVGShadow;
+		};
+
+		template<>
+		struct PassInfoT< LightingPass::Type::eShadowLayeredLpvGGI, LightType::ePoint >
+		{
+			using Type = PointLightPassShadow;
+		};
+
+		template<>
+		struct PassInfoT< LightingPass::Type::eShadowLayeredLpvGGI, LightType::eSpot >
+		{
+			using Type = SpotLightPassLPVGShadow;
 		};
 
 		template< LightingPass::Type PassT, LightType LightT >
@@ -322,10 +358,40 @@ namespace castor3d
 						, gpInfoUbo );
 				}
 				return LightingPass::DelayedLightPass{};
+			case LightingPass::Type::eShadowLpvGGI:
+				if ( engine.getRenderSystem()->getGpuInformations().hasShaderType( VK_SHADER_STAGE_GEOMETRY_BIT ) )
+				{
+					return makeLightPassT< LightingPass::Type::eShadowLpvGGI >( lightType
+						, engine
+						, device
+						, lightCache
+						, gpResult
+						, smDirectionalResult
+						, smPointResult
+						, smSpotResult
+						, lpResult
+						, gpInfoUbo );
+				}
+				return LightingPass::DelayedLightPass{};
 			case LightingPass::Type::eShadowLayeredLpvGI:
 				if ( engine.getRenderSystem()->getGpuInformations().hasShaderType( VK_SHADER_STAGE_GEOMETRY_BIT ) )
 				{
 					return makeLightPassT< LightingPass::Type::eShadowLayeredLpvGI >( lightType
+						, engine
+						, device
+						, lightCache
+						, gpResult
+						, smDirectionalResult
+						, smPointResult
+						, smSpotResult
+						, lpResult
+						, gpInfoUbo );
+				}
+				return LightingPass::DelayedLightPass{};
+			case LightingPass::Type::eShadowLayeredLpvGGI:
+				if ( engine.getRenderSystem()->getGpuInformations().hasShaderType( VK_SHADER_STAGE_GEOMETRY_BIT ) )
+				{
+					return makeLightPassT< LightingPass::Type::eShadowLayeredLpvGGI >( lightType
 						, engine
 						, device
 						, lightCache
