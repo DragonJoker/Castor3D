@@ -347,15 +347,13 @@ namespace castor3d
 
 	void SkyboxBackground::doInitialiseEquiTexture( RenderDevice const & device )
 	{
-		auto & engine = *getEngine();
-		auto & renderSystem = *engine.getRenderSystem();
 		m_equiTexture->initialise( device );
 
 		// create the cube texture if needed.
 		if ( m_texture->getDimensions().width != m_equiSize.getWidth()
 			|| m_texture->getDimensions().height != m_equiSize.getHeight() )
 		{
-			m_texture = std::make_shared< TextureLayout >( renderSystem
+			m_texture = std::make_shared< TextureLayout >( device.renderSystem
 				, doGetImageCreate( m_equiTexture->getPixelFormat(), m_equiSize, true )
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, cuT( "SkyboxBackgroundEquiCube" ) );

@@ -1379,7 +1379,6 @@ namespace castor3d
 		auto * result = &toWait;
 		RenderPassTimerBlock timerBlock{ m_timer->start() };
 		timerBlock->notifyPassRender();
-		auto index = size_t( m_scene.getFog().getType() );
 
 		m_device.graphicsQueue->submit( *m_currentProgram->commandBuffer
 			, *result

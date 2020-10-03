@@ -251,8 +251,6 @@ namespace castor3d
 
 	void ImageBackground::doInitialise2DTexture( RenderDevice const & device )
 	{
-		auto & engine = *getEngine();
-		auto & renderSystem = *engine.getRenderSystem();
 		m_2dTexture->initialise( device );
 		VkExtent3D extent{ m_2dTexture->getWidth(), m_2dTexture->getHeight(), 1u };
 		auto dim = std::max( m_2dTexture->getWidth(), m_2dTexture->getHeight() );
@@ -266,7 +264,7 @@ namespace castor3d
 			auto yOffset = ( dim - extent.height ) / 2u;
 			VkOffset3D const srcOffset{ 0, 0, 0 };
 			VkOffset3D const dstOffset{ int32_t( xOffset ), int32_t( yOffset ), 0 };
-			m_texture = std::make_shared< TextureLayout >( renderSystem
+			m_texture = std::make_shared< TextureLayout >( device.renderSystem
 				, doGetImageCreate( m_2dTexture->getPixelFormat(), { dim, dim }, true )
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, cuT( "ImageBackgroundCube" ) );

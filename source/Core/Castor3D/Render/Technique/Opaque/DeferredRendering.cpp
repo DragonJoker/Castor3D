@@ -76,13 +76,6 @@ namespace castor3d
 			texture->initialise( device );
 			return texture;
 		}
-
-		size_t getIndex( SsaoConfig const & ssaoConfig
-			, Scene const & scene )
-		{
-			return 2u * ( ssaoConfig.enabled ? 1u : 0u )
-				+ ( scene.needsSubsurfaceScattering() ? 1u : 0u );
-		}
 	}
 
 	//*********************************************************************************************
@@ -191,8 +184,6 @@ namespace castor3d
 		auto & scene = *updater.scene;
 		auto & camera = *updater.camera;
 		m_opaquePass.update( updater );
-
-		auto index = getIndex( m_ssaoConfig, scene );
 		m_resolve->update( updater );
 
 		if ( m_ssaoConfig.enabled )
@@ -271,7 +262,6 @@ namespace castor3d
 			m_subsurfaceScattering.raw()->accept( visitor );
 		}
 
-		auto index = getIndex( m_ssaoConfig, visitor.getScene() );
 		m_resolve.raw()->accept( visitor );
 	}
 }
