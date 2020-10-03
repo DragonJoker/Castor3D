@@ -23,11 +23,6 @@ namespace castor3d
 	{
 	}
 
-	BonesInstantiationComponent::~BonesInstantiationComponent()
-	{
-		cleanup();
-	}
-
 	void BonesInstantiationComponent::gather( MaterialSPtr material
 		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
@@ -35,7 +30,7 @@ namespace castor3d
 	{
 	}
 
-	bool BonesInstantiationComponent::doInitialise()
+	bool BonesInstantiationComponent::doInitialise( RenderDevice const & device )
 	{
 		bool result = true;
 		auto count = m_instantiation.getMaxRefCount();
@@ -47,6 +42,7 @@ namespace castor3d
 			{
 				auto stride = uint32_t( sizeof( float ) * 16u * 400u );
 				m_instancedBonesBuffer = std::make_unique< ShaderBuffer >( *getOwner()->getOwner()->getScene()->getEngine()
+					, device
 					, count * stride
 					, cuT( "InstancedBonesBuffer" ) );
 			}
@@ -64,7 +60,7 @@ namespace castor3d
 		m_instancedBonesBuffer.reset();
 	}
 
-	void BonesInstantiationComponent::doFill()
+	void BonesInstantiationComponent::doFill( RenderDevice const & device )
 	{
 		if ( m_instancedBonesBuffer )
 		{
@@ -75,6 +71,7 @@ namespace castor3d
 				&& ( !m_instancedBonesBuffer || m_instancedBonesBuffer->getSize() < count * stride ) )
 			{
 				m_instancedBonesBuffer = std::make_unique< ShaderBuffer >( *getOwner()->getOwner()->getScene()->getEngine()
+					, device
 					, uint32_t( count * stride )
 					, cuT( "InstancedBonesBuffer" ) );
 			}

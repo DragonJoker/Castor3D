@@ -55,7 +55,6 @@ namespace CastorCom
 		COM_PROPERTY_GET( Dimensions, ISize *, makeGetter( m_buffer.get(), &castor::PxBufferBase::getDimensions ) );
 
 		STDMETHOD( Flip )();
-		STDMETHOD( Mirror )();
 		STDMETHOD( Initialise )( /* [in] */ ISize * size, /* [in] */ ePIXEL_FORMAT format );
 
 	private:

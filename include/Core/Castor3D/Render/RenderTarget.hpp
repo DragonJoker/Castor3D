@@ -14,7 +14,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/PostEffect/PostEffectModule.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
-#include "Castor3D/Render/ToTexture/RenderQuad.hpp"
+#include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 
 #include <ashespp/RenderPass/FrameBuffer.hpp>
@@ -80,10 +80,11 @@ namespace castor3d
 		{
 		public:
 			explicit TargetFbo( RenderTarget & renderTarget );
-			bool initialise( ashes::RenderPass & renderPass
+			bool initialise( RenderDevice const & device
+				, ashes::RenderPass & renderPass
 				, VkFormat format
 				, castor::Size const & size );
-			void cleanup();
+			void cleanup( RenderDevice const & device );
 
 			//!\~english	The texture receiving the color render.
 			//!\~french		La texture recevant le rendu couleur.
@@ -138,21 +139,22 @@ namespace castor3d
 		 *\brief		Dessine une frame.
 		 *\param[out]	info	Reçoit les informations de rendu.
 		 */
-		C3D_API void render( RenderInfo & info );
+		C3D_API void render( RenderDevice const & device
+			, RenderInfo & info );
 		/**
 		 *\~english
 		 *\brief		Initialisation function.
 		 *\~french
 		 *\brief		Fonction d'initialisation.
 		 */
-		C3D_API void initialise();
+		C3D_API void initialise( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
 		 *\~french
 		 *\brief		Fonction de nettoyage.
 		 */
-		C3D_API void cleanup();
+		C3D_API void cleanup( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Sets the target dimensions.
@@ -301,6 +303,7 @@ namespace castor3d
 
 		inline ToneMappingSPtr getToneMapping()const
 		{
+			CU_Require( m_toneMapping );
 			return m_toneMapping;
 		}
 
@@ -388,32 +391,38 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		C3D_API void doInitialiseRenderPass();
-		C3D_API bool doInitialiseFrameBuffer();
-		C3D_API bool doInitialiseVelocityTexture();
-		C3D_API bool doInitialiseTechnique();
-		C3D_API bool doInitialiseToneMapping();
-		C3D_API void doInitialiseCopyCommands( castor::String const & name
+		C3D_API void doInitialiseRenderPass( RenderDevice const & device );
+		C3D_API bool doInitialiseFrameBuffer( RenderDevice const & device );
+		C3D_API bool doInitialiseVelocityTexture( RenderDevice const & device );
+		C3D_API bool doInitialiseTechnique( RenderDevice const & device );
+		C3D_API bool doInitialiseToneMapping( RenderDevice const & device );
+		C3D_API void doInitialiseCopyCommands( RenderDevice const & device
+			, castor::String const & name
 			, ashes::CommandBufferPtr & commandBuffer
 			, ashes::ImageView const & source
 			, ashes::ImageView const & target );
-		C3D_API void doInitialiseCombine();
-		C3D_API void doRender( RenderInfo & info
+		C3D_API void doInitialiseCombine( RenderDevice const & device );
+		C3D_API void doRender( RenderDevice const & device
+			, RenderInfo & info
 			, TargetFbo & fbo
 			, CameraSPtr camera );
-		C3D_API ashes::Semaphore const & doApplyPostEffects( ashes::Semaphore const & toWait
+		C3D_API ashes::Semaphore const & doApplyPostEffects( RenderDevice const & device
+			, ashes::Semaphore const & toWait
 			, PostEffectPtrArray const & effects
 			, ashes::CommandBufferPtr const & copyCommandBuffer
 			, ashes::SemaphorePtr const & copyFinished
 			, castor::Nanoseconds const & elapsedTime );
-		C3D_API ashes::Semaphore const & doApplyToneMapping( ashes::Semaphore const & toWait );
-		C3D_API ashes::Semaphore const & doRenderOverlays( ashes::Semaphore const & toWait );
+		C3D_API ashes::Semaphore const & doApplyToneMapping( RenderDevice const & device
+			, ashes::Semaphore const & toWait );
+		C3D_API ashes::Semaphore const & doRenderOverlays( RenderDevice const & device
+			, ashes::Semaphore const & toWait );
 		C3D_API ashes::Semaphore const & doCombine( ashes::Semaphore const & toWait );
 
 		inline void addIntermediateView( castor::String name
-			, ashes::ImageView view )
+			, ashes::ImageView view
+			, VkImageLayout layout )
 		{
-			m_intermediates.push_back( { std::move( name ), std::move( view ) } );
+			m_intermediates.push_back( { std::move( name ), std::move( view ), layout } );
 		}
 
 	public:
@@ -450,7 +459,7 @@ namespace castor3d
 		RenderPassTimerSPtr m_overlaysTimer;
 		ShaderModule m_combineVtx{ VK_SHADER_STAGE_VERTEX_BIT, "Target - Combine" };
 		ShaderModule m_combinePxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "Target - Combine" };
-		std::vector< std::unique_ptr< CombinePass > > m_combineQuads;
+		std::unique_ptr< CombinePass > m_combinePass;
 		SsaoConfig m_ssaoConfig;
 		castor::Point2f m_jitter;
 		TextureUnit m_velocityTexture;
@@ -459,7 +468,7 @@ namespace castor3d
 		ashes::Semaphore const * m_signalFinished{ nullptr };
 		castor::PreciseTimer m_timer;
 		SceneCullerUPtr m_culler;
-		std::vector< IntermediateView > m_intermediates;
+		IntermediateViewArray m_intermediates;
 	};
 }
 

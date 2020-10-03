@@ -62,14 +62,14 @@ namespace castor3d
 		 *\brief		Initialise l'implémentation.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool initialise() = 0;
+		C3D_API virtual bool initialise( RenderDevice const & device ) = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans the implementation.
 		 *\~french
 		 *\brief		Nettoie l'implémentation.
 		 */
-		C3D_API virtual void cleanup() = 0;
+		C3D_API virtual void cleanup( RenderDevice const & device ) = 0;
 		/**
 		 *\~english
 		 *\brief		adds a particle variable.
@@ -148,12 +148,6 @@ namespace castor3d
 		//!\~french		Le type d'implémentation.
 		Type m_type;
 	};
-	C3D_API RenderDevice const & getCurrentRenderDevice( ParticleSystem const & object );
-
-	inline RenderDevice const & getCurrentRenderDevice( ParticleSystemImpl const & object )
-	{
-		return getCurrentRenderDevice( object.getParent() );
-	}
 }
 
 #endif

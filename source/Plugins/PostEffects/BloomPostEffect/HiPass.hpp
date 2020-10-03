@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include <Castor3D/Render/PostEffect/PostEffect.hpp>
 #include <Castor3D/Render/PostEffect/PostEffectSurface.hpp>
-#include <Castor3D/Render/ToTexture/RenderQuad.hpp>
+#include <Castor3D/Render/Passes/RenderQuad.hpp>
 
 #include <ShaderAST/Shader.hpp>
 
@@ -19,6 +19,7 @@ namespace Bloom
 	{
 	public:
 		HiPass( castor3d::RenderSystem & renderSystem
+			, castor3d::RenderDevice const & device
 			, VkFormat format
 			, ashes::ImageView const & sceneView
 			, VkExtent2D size

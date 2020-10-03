@@ -18,6 +18,7 @@ namespace castor3d
 	namespace
 	{
 		TextureUnit createTexture( Engine & engine
+			, RenderDevice const & device
 			, String const & name
 			, VkExtent3D const & size )
 		{
@@ -38,7 +39,7 @@ namespace castor3d
 				, std::move( image )
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, name );
-			layout->initialise();
+			layout->initialise( device );
 			TextureUnit result{ engine };
 			result.setSampler( createSampler( engine, name, VK_FILTER_NEAREST, nullptr ) );
 			result.setTexture( layout );
@@ -49,6 +50,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	Voxelizer::Voxelizer( Engine & engine
+		, RenderDevice const & device
 		, VkExtent3D const & resultDimensions
 		, Scene & scene
 		, SceneCuller & culler
@@ -56,14 +58,14 @@ namespace castor3d
 		: m_engine{ engine }
 		, m_matrixUbo{ engine }
 		, m_size{ resultDimensions }
-		, m_result{ createTexture( engine, "VoxelizerResult", resultDimensions ) }
+		, m_result{ createTexture( engine, device, "VoxelizerResult", resultDimensions ) }
 		, m_voxelizePass{ engine
 			, m_matrixUbo
 			, culler
 			, m_result.getTexture()
 			, colourView }
 	{
-		m_voxelizePass.initialise( { resultDimensions.width, resultDimensions.height } );
+		m_voxelizePass.initialise( device, { resultDimensions.width, resultDimensions.height } );
 	}
 
 	Voxelizer::~Voxelizer()
@@ -80,10 +82,11 @@ namespace castor3d
 		m_voxelizePass.update( updater );
 	}
 
-	ashes::Semaphore const & Voxelizer::render( ashes::Semaphore const & toWait )
+	ashes::Semaphore const & Voxelizer::render( RenderDevice const & device
+		, ashes::Semaphore const & toWait )
 	{
 		ashes::Semaphore const * result = &toWait;
-		result = &m_voxelizePass.render( *result );
+		result = &m_voxelizePass.render( device, *result );
 		return *result;
 	}
 

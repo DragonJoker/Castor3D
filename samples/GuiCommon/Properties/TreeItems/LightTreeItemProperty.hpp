@@ -59,32 +59,12 @@ namespace GuiCommon
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
 		virtual void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid );
-		/**
-		 *\copydoc GuiCommon::TreeItemProperty::doPropertyChange
-		 */
-		virtual void doPropertyChange( wxPropertyGridEvent & event );
 
 	private:
-		void doCreateDirectionalLightProperties( wxPropertyGrid * grid, castor3d::DirectionalLightSPtr light );
-		void doCreatePointLightProperties( wxPropertyGrid * grid, castor3d::PointLightSPtr light );
-		void doCreateSpotLightProperties( wxPropertyGrid * grid, castor3d::SpotLightSPtr light );
+		void doCreateDirectionalLightProperties( wxPropertyGrid * grid, castor3d::DirectionalLight & light );
+		void doCreatePointLightProperties( wxPropertyGrid * grid, castor3d::PointLight & light );
+		void doCreateSpotLightProperties( wxPropertyGrid * grid, castor3d::SpotLight & light );
 		void doCreateShadowProperties( wxPropertyGrid * grid );
-		void onColourChange( castor::RgbColour const & value );
-		void onIntensityChange( castor::Point2f const & value );
-		void onAttenuationChange( castor::Point3f const & value );
-		void onCutOffChange( double value );
-		void onExponentChange( double value );
-		void onShadowTypeChange( castor3d::ShadowType value );
-		void onShadowMinOffsetChange( double value );
-		void onShadowMaxSlopeOffsetChange( double value );
-		void onShadowMaxVarianceChange( double value );
-		void onShadowVarianceBiasChange( double value );
-		void onShadowVolumetricStepsChange( long value );
-		void onShadowVolumetricScatteringFactorChange( double value );
-		void onGiTypeChange( castor3d::GlobalIlluminationType value );
-		void onRsmIntensityChange( double value );
-		void onRsmMaxRadiusChange( double value );
-		void onRsmSampleCountChange( long value );
 
 	private:
 		castor3d::Light & m_light;

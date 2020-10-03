@@ -13,7 +13,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaqueModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LightVolumePassResult.hpp"
-#include "Castor3D/Render/ToTexture/RenderQuad.hpp"
+#include "Castor3D/Render/Passes/RenderGrid.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
@@ -35,62 +35,54 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	class LightPropagationPass
-		: public castor::Named
+		: public RenderGrid
 	{
-	private:
-		LightPropagationPass( Engine & engine
-			, castor::String const & name
-			, uint32_t gridSize
-			, TextureUnit const * geometry
-			, LightVolumePassResult const & injection
-			, LightVolumePassResult const & accumulation
-			, LightVolumePassResult const & propagate
-			, LpvConfigUbo const & lpvConfigUbo );
-
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine			The engine.
-		 *\param[in]	size			The render area dimensions.
-		 *\param[in]	linearisedDepth	The linearised depth buffer.
-		 *\param[in]	scene			The scene buffer.
+		 *\param[in]	device		The render device.
+		 *\param[in]	name		The pass name.
+		 *\param[in]	occlusion	Tells if the pass uses occlusion map.
+		 *\param[in]	gridSize	The grid size.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine			Le moteur.
-		 *\param[in]	size			Les dimensions de la zone de rendu.
-		 *\param[in]	linearisedDepth	Le tampon de profondeur linéarisé.
-		 *\param[in]	scene			Le tampon de scène.
+		 *\param[in]	device		Le render device.
+		 *\param[in]	name		Le nom de la passe.
+		 *\param[in]	occlusion	Dit si la passe utilise une map d'occlusion.
+		 *\param[in]	gridSize	Les dimensions de la grille.
 		 */
-		C3D_API LightPropagationPass( Engine & engine
-			, castor::String const & name
-			, uint32_t gridSize
-			, LightVolumePassResult const & injection
-			, LightVolumePassResult const & accumulation
-			, LightVolumePassResult const & propagate
-			, LpvConfigUbo const & lpvConfigUbo );
+		C3D_API LightPropagationPass( RenderDevice const & device
+			, castor::String const & prefix
+			, castor::String const & suffix
+			, bool occlusion
+			, uint32_t gridSize );
 		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	engine			The engine.
-		 *\param[in]	size			The render area dimensions.
-		 *\param[in]	linearisedDepth	The linearised depth buffer.
-		 *\param[in]	scene			The scene buffer.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	engine			Le moteur.
-		 *\param[in]	size			Les dimensions de la zone de rendu.
-		 *\param[in]	linearisedDepth	Le tampon de profondeur linéarisé.
-		 *\param[in]	scene			Le tampon de scène.
-		 */
-		C3D_API LightPropagationPass( Engine & engine
-			, castor::String const & name
-			, uint32_t gridSize
-			, TextureUnit const & geometry
+		*\~english
+		*\brief
+		*	Creates the entries for one pass.
+		*\param[in] writes
+		*	The pass descriptor writes.
+		*\~french
+		*\brief
+		*	Crée les entrées pour une passe.
+		*\param[in] writes
+		*	Les descriptor writes de la passe.
+		*/
+		C3D_API void registerPassIO( TextureUnit const * occlusion
 			, LightVolumePassResult const & injection
+			, LpvConfigUbo const & lpvConfigUbo
 			, LightVolumePassResult const & accumulation
-			, LightVolumePassResult const & propagate
-			, LpvConfigUbo const & lpvConfigUbo );
+			, LightVolumePassResult const & propagate );
+		/**
+		*\~english
+		*\brief
+		*	Initialises the descriptor sets for all registered passes.
+		*\~french
+		*\brief
+		*	Crée les descriptor sets pour toute les passes enregistrées.
+		*/
+		C3D_API void initialisePasses();
 		/**
 		 *\~english
 		 *\brief		Renders the SSGI pass.
@@ -99,7 +91,8 @@ namespace castor3d
 		 *\brief		Dessine la passe SSGI.
 		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
 		 */
-		C3D_API ashes::Semaphore const & compute( ashes::Semaphore const & toWait )const;
+		C3D_API ashes::Semaphore const & compute( ashes::Semaphore const & toWait
+			, uint32_t index )const;
 		C3D_API CommandsSemaphore getCommands( RenderPassTimer const & timer
 			, uint32_t index )const;
 		/**
@@ -108,25 +101,21 @@ namespace castor3d
 		C3D_API void accept( PipelineVisitorBase & visitor );
 
 	private:
-		Engine & m_engine;
-		LpvConfigUbo const & m_lpvConfigUbo;
-		LightVolumePassResult const & m_accumulation;
-		LightVolumePassResult const & m_propagate;
-		RenderPassTimerSPtr m_timer;
-		uint32_t m_count;
+		using RenderGrid::registerPassInputs;
 
-		ashes::VertexBufferPtr< castor::Point3f > m_vertexBuffer;
-		ashes::DescriptorSetLayoutPtr m_descriptorSetLayout;
-		ashes::PipelineLayoutPtr m_pipelineLayout;
-		ashes::DescriptorSetPoolPtr m_descriptorSetPool;
-		ashes::DescriptorSetPtr m_descriptorSet;
+		void registerPassOutputs( ashes::ImageViewCRefArray const & outputs );
+
+	private:
+		Engine & m_engine;
+		RenderPassTimerSPtr m_timer;
+
 		ShaderModule m_vertexShader;
 		ShaderModule m_geometryShader;
 		ShaderModule m_pixelShader;
 		ashes::RenderPassPtr m_renderPass;
-		ashes::GraphicsPipelinePtr m_pipeline;
-		ashes::FrameBufferPtr m_frameBuffer;
-		CommandsSemaphore m_commands;
+		std::vector< ashes::ImageViewCRefArray > m_passesOutputs;
+		ashes::FrameBufferPtrArray m_frameBuffers;
+		std::vector< CommandsSemaphore > m_commands;
 	};
 }
 

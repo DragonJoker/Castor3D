@@ -4,7 +4,7 @@
 
 #include "ComCastor3D/ComAtlObject.hpp"
 
-#include <Castor3D/Mesh/Mesh.hpp>
+#include <Castor3D/Model/Mesh/Mesh.hpp>
 
 namespace CastorCom
 {

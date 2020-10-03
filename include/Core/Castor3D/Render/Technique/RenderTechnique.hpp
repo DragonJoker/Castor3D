@@ -70,14 +70,15 @@ namespace castor3d
 		 *\brief		Fonction d'initialisation.
 		 *\return		\p true if ok.
 		 */
-		C3D_API bool initialise( std::vector< IntermediateView > & intermediates );
+		C3D_API bool initialise( RenderDevice const & device
+			, std::vector< IntermediateView > & intermediates );
 		/**
 		 *\~english
 		 *\brief		Cleanup function
 		 *\~french
 		 *\brief		Fonction de nettoyage
 		 */
-		C3D_API void cleanup();
+		C3D_API void cleanup( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Update function.
@@ -110,7 +111,8 @@ namespace castor3d
 		 *\param[in]	waitSemaphores	Les sémaphores à attendre.
 		 *\param[out]	info			Reçoit les informations de rendu.
 		 */
-		C3D_API ashes::Semaphore const & render( ashes::SemaphoreCRefArray const & waitSemaphores
+		C3D_API ashes::Semaphore const & render( RenderDevice const & device
+			, ashes::SemaphoreCRefArray const & waitSemaphores
 			, RenderInfo & info );
 		/**
 		 *\~english
@@ -229,27 +231,34 @@ namespace castor3d
 
 	private:
 		void doCreateShadowMaps();
-		void doInitialiseShadowMaps();
-		void doInitialiseBackgroundPass();
+		void doInitialiseShadowMaps( RenderDevice const & device );
+		void doInitialiseBackgroundPass( RenderDevice const & device );
 #if C3D_UseDepthPrepass
-		void doInitialiseDepthPass();
+		void doInitialiseDepthPass( RenderDevice const & device );
 #endif
-		void doInitialiseOpaquePass();
-		void doInitialiseTransparentPass();
-		void doCleanupShadowMaps();
+		void doInitialiseOpaquePass( RenderDevice const & device );
+		void doInitialiseTransparentPass( RenderDevice const & device );
+		void doCleanupShadowMaps( RenderDevice const & device );
 		void doUpdateShadowMaps( CpuUpdater & updater );
 		void doUpdateShadowMaps( GpuUpdater & updater );
 		void doUpdateParticles( CpuUpdater & updater );
 		void doUpdateParticles( GpuUpdater & updater );
-		ashes::Semaphore const & doRenderShadowMaps( ashes::Semaphore const & semaphore );
-		ashes::Semaphore const & doRenderEnvironmentMaps( ashes::Semaphore const & semaphore );
+		ashes::Semaphore const & doRenderShadowMaps( RenderDevice const & device
+			, ashes::Semaphore const & semaphore );
+		ashes::Semaphore const & doRenderEnvironmentMaps( RenderDevice const & device
+			, ashes::Semaphore const & semaphore );
 #if C3D_UseDepthPrepass
-		ashes::Semaphore const & doRenderDepth( ashes::SemaphoreCRefArray const & semaphores );
-		ashes::Semaphore const & doRenderBackground( ashes::Semaphore const & semaphore );
+		ashes::Semaphore const & doRenderDepth( RenderDevice const & device
+			, ashes::SemaphoreCRefArray const & semaphores );
+		ashes::Semaphore const & doRenderBackground( RenderDevice const & device
+			, ashes::Semaphore const & semaphore );
 #endif
-		ashes::Semaphore const & doRenderBackground( ashes::SemaphoreCRefArray const & semaphores );
-		ashes::Semaphore const & doRenderOpaque( ashes::Semaphore const & semaphore );
-		ashes::Semaphore const & doRenderTransparent( ashes::Semaphore const & semaphore );
+		ashes::Semaphore const & doRenderBackground( RenderDevice const & device
+			, ashes::SemaphoreCRefArray const & semaphores );
+		ashes::Semaphore const & doRenderOpaque( RenderDevice const & device
+			, ashes::Semaphore const & semaphore );
+		ashes::Semaphore const & doRenderTransparent( RenderDevice const & device
+			, ashes::Semaphore const & semaphore );
 
 	private:
 		bool m_initialised;

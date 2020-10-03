@@ -92,7 +92,7 @@ namespace castor3d
 		bool blurHighQuality{ false };
 		//!\~english	Step in 2-pixel intervals since we already blurred against neighbors in the first AO pass.
 		//!\~french		Etape en intervalles de 2 pixels, un flou a déjà été appliqué, vis à vis des voisins, dans la première passe d'AO.
-		uint32_t blurStepSize{ 2u };
+		castor::ChangeTracked< castor::RangedValue< uint32_t > > blurStepSize{ { 2u, castor::makeRange( 1u, 60u ) } };
 		//!\~english	VkFilter radius in pixels. This will be multiplied by m_blurStepSize.
 		//!\~english	Rayon du filtre en pixels. Sera multiplié par m_blurStepSize.
 		castor::ChangeTracked< castor::RangedValue< int32_t > > blurRadius{ { 4, castor::makeRange( 1, 6 ) } };

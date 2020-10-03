@@ -48,13 +48,26 @@ namespace GuiCommon
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
 		virtual void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid );
-		/**
-		 *\copydoc GuiCommon::TreeItemProperty::doPropertyChange
-		 */
-		virtual void doPropertyChange( wxPropertyGridEvent & event );
 
 	private:
-		void onValueChange( wxVariant const & value );
+		wxPGProperty * doBuildTrackedRangedValueProperty( wxPropertyGrid * grid
+			, wxString const & name
+			, UniformValueBase & uniform );
+		wxPGProperty * doBuildTrackedUnrangedValueProperty( wxPropertyGrid * grid
+			, wxString const & name
+			, UniformValueBase & uniform );
+		wxPGProperty * doBuildTrackedValueProperty( wxPropertyGrid * grid
+			, wxString const & name
+			, UniformValueBase & uniform );
+		wxPGProperty * doBuildUntrackedRangedValueProperty( wxPropertyGrid * grid
+			, wxString const & name
+			, UniformValueBase & uniform );
+		wxPGProperty * doBuildUntrackedUnrangedValueProperty( wxPropertyGrid * grid
+			, wxString const & name
+			, UniformValueBase & uniform );
+		wxPGProperty * doBuildUntrackedValueProperty( wxPropertyGrid * grid
+			, wxString const & name
+			, UniformValueBase & uniform );
 
 	private:
 		UniformValueBase & m_uniform;

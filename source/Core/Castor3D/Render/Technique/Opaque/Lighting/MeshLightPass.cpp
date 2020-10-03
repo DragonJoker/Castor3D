@@ -30,12 +30,11 @@ namespace castor3d
 
 	namespace
 	{
-		ashes::RenderPassPtr doCreateRenderPass( Engine & engine
+		ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
 			, castor::String const & name
 			, LightPassResult const & lpResult
 			, bool first )
 		{
-			auto & device = getCurrentRenderDevice( engine );
 			VkImageLayout layout = first
 				? VK_IMAGE_LAYOUT_UNDEFINED
 				: VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
@@ -78,6 +77,17 @@ namespace castor3d
 					layout,
 					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 				},
+				{
+					0u,
+					lpResult[LpTexture::eIndirect].getTexture()->getPixelFormat(),
+					VK_SAMPLE_COUNT_1_BIT,
+					loadOp,
+					VK_ATTACHMENT_STORE_OP_STORE,
+					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+					VK_ATTACHMENT_STORE_OP_DONT_CARE,
+					layout,
+					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+				},
 			};
 			ashes::SubpassDescriptionArray subpasses;
 			subpasses.emplace_back( ashes::SubpassDescription
@@ -88,6 +98,7 @@ namespace castor3d
 					{
 						{ 1u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
 						{ 2u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
+						{ 3u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
 					},
 					{},
 					VkAttachmentReference{ 0u, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL },
@@ -130,11 +141,12 @@ namespace castor3d
 	//*********************************************************************************************
 
 	MeshLightPass::Program::Program( Engine & engine
+		, RenderDevice const & device
 		, String const & name
 		, ShaderModule const & vtx
 		, ShaderModule const & pxl
 		, bool hasShadows )
-		: LightPass::Program{ engine, name, vtx, pxl, hasShadows }
+		: LightPass::Program{ engine, device, name, vtx, pxl, hasShadows }
 	{
 	}
 
@@ -197,8 +209,8 @@ namespace castor3d
 		}
 
 		blattaches.push_back( blattaches.back() );
-		auto & device = getCurrentRenderDevice( m_engine );
-		auto result = device->createPipeline( m_name + ( blend ? std::string{ "Blend" } : std::string{ "First" } )
+		blattaches.push_back( blattaches.back() );
+		auto result = m_device->createPipeline( m_name + ( blend ? std::string{ "Blend" } : std::string{ "First" } )
 			, ashes::GraphicsPipelineCreateInfo
 			{
 				0u,
@@ -221,18 +233,20 @@ namespace castor3d
 	//*********************************************************************************************
 
 	MeshLightPass::MeshLightPass( Engine & engine
+		, RenderDevice const & device
 		, castor::String const & suffix
 		, LightPassResult const & lpResult
 		, GpInfoUbo const & gpInfoUbo
 		, LightType type
 		, bool hasShadows )
 		: LightPass{ engine
+			, device
 			, suffix
-			, doCreateRenderPass( engine
+			, doCreateRenderPass( device
 				, "LightPass" + suffix + ( hasShadows ? String{ "Shadow" } : String{} )
 				, lpResult
 				, true )
-			, doCreateRenderPass( engine
+			, doCreateRenderPass( device
 				, "LightPass" + suffix + ( hasShadows ? String{ "Shadow" } : String{} )
 				, lpResult
 				, false )
@@ -259,7 +273,6 @@ namespace castor3d
 		, RenderPassTimer & timer )
 	{
 		auto & renderSystem = *m_engine.getRenderSystem();
-		auto & device = getCurrentRenderDevice( renderSystem );
 
 		ashes::PipelineVertexInputStateCreateInfo declaration
 		{
@@ -276,7 +289,7 @@ namespace castor3d
 
 		auto data = doGenerateVertices();
 		m_count = uint32_t( data.size() );
-		m_vertexBuffer = makeVertexBuffer< float >( device
+		m_vertexBuffer = makeVertexBuffer< float >( m_device
 			, uint32_t( data.size() * 3u )
 			, 0u
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
@@ -289,9 +302,9 @@ namespace castor3d
 			m_vertexBuffer->unlock();
 		}
 
-		m_matrixUbo.initialise();
-		m_modelMatrixUbo = device.uboPools->getBuffer< ModelMatrixUboConfiguration >( 0u );
-		m_stencilPass.initialise( declaration, *m_vertexBuffer );
+		m_matrixUbo.initialise( m_device );
+		m_modelMatrixUbo = m_device.uboPools->getBuffer< ModelMatrixUboConfiguration >( 0u );
+		m_stencilPass.initialise( m_device, declaration, *m_vertexBuffer );
 		doInitialise( scene
 			, gp
 			, m_type
@@ -306,8 +319,8 @@ namespace castor3d
 	{
 		doCleanup();
 		m_stencilPass.cleanup();
-		getCurrentRenderDevice( m_engine ).uboPools->putBuffer( m_modelMatrixUbo );
-		m_matrixUbo.cleanup();
+		m_device.uboPools->putBuffer( m_modelMatrixUbo );
+		m_matrixUbo.cleanup( m_device );
 		m_vertexBuffer.reset();
 	}
 
@@ -315,7 +328,7 @@ namespace castor3d
 		, ashes::Semaphore const & toWait )
 	{
 		auto * result = &toWait;
-		result = &m_stencilPass.render( *result );
+		result = &m_stencilPass.render( m_device , *result );
 		result = &LightPass::render( index, *result );
 		return *result;
 	}

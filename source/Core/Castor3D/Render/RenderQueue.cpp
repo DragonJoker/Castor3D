@@ -5,7 +5,7 @@
 #include "Castor3D/Render/RenderQueue.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Event/Frame/FunctorEvent.hpp"
+#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
@@ -34,10 +34,9 @@ namespace castor3d
 		, m_viewport{ castor::makeChangeTracked< ashes::Optional< VkViewport > >( ashes::nullopt ) }
 		, m_scissor{ castor::makeChangeTracked< ashes::Optional< VkRect2D > >( ashes::nullopt ) }
 	{
-		getOwner()->getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
-			, [this]()
+		getOwner()->getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
+			, [this]( RenderDevice const & device )
 			{
-				auto & device = getCurrentRenderDevice( *getOwner()->getEngine() );
 				m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( "RenderQueue", VK_COMMAND_BUFFER_LEVEL_SECONDARY );
 			} ) );
 	}
@@ -79,8 +78,8 @@ namespace castor3d
 			&& m_preparation == Preparation::eDone )
 		{
 			m_preparation = Preparation::eWaiting;
-			getOwner()->getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
-				, [this]()
+			getOwner()->getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
+				, [this]( RenderDevice const & device )
 				{
 					m_preparation = Preparation::eRunning;
 					m_commandBuffer->reset();

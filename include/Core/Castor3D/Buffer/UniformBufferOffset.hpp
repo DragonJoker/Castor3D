@@ -7,7 +7,6 @@ See LICENSE file in root folder
 #include "PoolUniformBuffer.hpp"
 
 #include <ashespp/Descriptor/DescriptorSet.hpp>
-#include <ashespp/Buffer/UniformBuffer.hpp>
 
 namespace castor3d
 {
@@ -77,6 +76,21 @@ namespace castor3d
 				, uniformBuffer.getBuffer()
 				, uint32_t( offset * size )
 				, uint32_t( range * size ) );
+		}
+
+		ashes::WriteDescriptorSet getDescriptorWrite( uint32_t dstBinding
+			, uint32_t dstArrayElement = 0u )const
+		{
+			auto & uniformBuffer = buffer->getBuffer();
+			auto size = uniformBuffer.getAlignedSize();
+			auto result = ashes::WriteDescriptorSet{ dstBinding
+				, dstArrayElement
+				, 1u
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER };
+			result.bufferInfo.push_back( { uniformBuffer.getBuffer()
+				, size * offset
+				, size * range } );
+			return result;
 		}
 	};
 }

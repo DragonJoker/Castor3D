@@ -13,17 +13,10 @@ using namespace castor;
 
 namespace GuiCommon
 {
-	namespace
-	{
-		static wxString PROPERTY_CATEGORY_SKELETON_ANIMATION = _( "Skeleton Animation: " );
-	}
-
 	SkeletonAnimationTreeItemProperty::SkeletonAnimationTreeItemProperty( bool editable, SkeletonAnimation & animation )
 		: TreeItemProperty( animation.getOwner()->getScene()->getEngine(), editable, ePROPERTY_DATA_TYPE_SKELETON_ANIMATION )
 		, m_animation( animation )
 	{
-		PROPERTY_CATEGORY_SKELETON_ANIMATION = _( "Skeleton Animation: " );
-
 		CreateTreeItemMenu();
 	}
 
@@ -31,17 +24,11 @@ namespace GuiCommon
 	{
 	}
 
-	void SkeletonAnimationTreeItemProperty::doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )
+	void SkeletonAnimationTreeItemProperty::doCreateProperties( wxPGEditor * editor
+		, wxPropertyGrid * grid )
 	{
-		grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_SKELETON_ANIMATION + wxString( m_animation.getName() ) ) );
-	}
+		static wxString PROPERTY_CATEGORY_SKELETON_ANIMATION = _( "Skeleton Animation: " );
 
-	void SkeletonAnimationTreeItemProperty::doPropertyChange( wxPropertyGridEvent & p_event )
-	{
-		wxPGProperty * property = p_event.GetProperty();
-
-		if ( property )
-		{
-		}
+		addProperty( grid, PROPERTY_CATEGORY_SKELETON_ANIMATION + wxString( m_animation.getName() ) );
 	}
 }

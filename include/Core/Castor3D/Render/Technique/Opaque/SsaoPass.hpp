@@ -47,8 +47,8 @@ namespace castor3d
 		 *\brief		Destructeur.
 		 */
 		C3D_API ~SsaoPass() = default;
-		C3D_API void initialise();
-		C3D_API void cleanup();
+		C3D_API void initialise( RenderDevice const & device );
+		C3D_API void cleanup( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Updates the configuration UBO.
@@ -74,6 +74,11 @@ namespace castor3d
 		 *\return		Le résultat de la passe SSAO.
 		 */
 		C3D_API TextureUnit const & getResult()const;
+
+		inline SsaoConfig const & getConfig()const
+		{
+			return m_ssaoConfig;
+		}
 
 	private:
 		Engine & m_engine;

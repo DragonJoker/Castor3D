@@ -13,11 +13,14 @@
 #include <Castor3D/Cache/MeshCache.hpp>
 #include <Castor3D/Cache/WindowCache.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
+#include <Castor3D/Model/Mesh/MeshFactory.hpp>
+#include <Castor3D/Model/Mesh/MeshGenerator.hpp>
 #include <Castor3D/Render/Viewport.hpp>
 
 namespace CastorCom
 {
 	static const tstring ERROR_UNINITIALISED = _T( "The scene must be initialised" );
+	static const tstring ERROR_NULL_PARENT_NODE = _T( "The parent node must not be null." );
 
 	CScene::CScene()
 	{
@@ -80,19 +83,33 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CScene::CreateGeometry( /* [in] */ BSTR name, /* [out, retval] */ IGeometry ** pVal )
+	STDMETHODIMP CScene::CreateGeometry( /* [in] */ BSTR name, /*[in] */ ISceneNode * node, /* [out, retval] */ IGeometry ** pVal )
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
+			if ( !node )
+			{
+				hr = CComError::dispatchError(
+					E_POINTER,						// This represents the error
+					IID_IScene,						// This is the GUID of PixelComponents throwing error
+					_T( "CreateLight" ),			// This is generally displayed as the title
+					ERROR_NULL_PARENT_NODE.c_str(),	// This is the description
+					0,								// This is the context in the help file
+					nullptr );
+				return hr;
+			}
+
 			if ( pVal )
 			{
 				hr = CGeometry::CreateInstance( pVal );
 
 				if ( hr == S_OK )
 				{
-					static_cast< CGeometry * >( *pVal )->setInternal( m_internal->getGeometryCache().add( fromBstr( name ), nullptr, nullptr ) );
+					static_cast< CGeometry * >( *pVal )->setInternal( m_internal->getGeometryCache().add( fromBstr( name )
+						, *static_cast< CSceneNode * >( node )->getInternal()
+						, nullptr ) );
 				}
 			}
 		}
@@ -116,6 +133,18 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
+			if ( !node )
+			{
+				hr = CComError::dispatchError(
+					E_POINTER,						// This represents the error
+					IID_IScene,						// This is the GUID of PixelComponents throwing error
+					_T( "CreateLight" ),			// This is generally displayed as the title
+					ERROR_NULL_PARENT_NODE.c_str(),	// This is the description
+					0,								// This is the context in the help file
+					nullptr );
+				return hr;
+			}
+
 			if ( pVal )
 			{
 				hr = CCamera::CreateInstance( pVal );
@@ -126,7 +155,7 @@ namespace CastorCom
 					l_viewport.setPerspective( castor::Angle::fromDegrees( 120 ), 4.0f / 3.0f, 0.1f, 1000.0f );
 					l_viewport.resize( castor::Size( ww, wh ) );
 					auto l_camera = m_internal->getCameraCache().add( fromBstr( name )
-						, node ? static_cast< CSceneNode * >( node )->getInternal() : nullptr
+						, *static_cast< CSceneNode * >( node )->getInternal()
 						, std::move( l_viewport ) );
 					static_cast< CCamera * >( *pVal )->setInternal( l_camera );
 				}
@@ -152,13 +181,27 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
+			if ( !node )
+			{
+				hr = CComError::dispatchError(
+					E_POINTER,						// This represents the error
+					IID_IScene,						// This is the GUID of PixelComponents throwing error
+					_T( "CreateLight" ),			// This is generally displayed as the title
+					ERROR_NULL_PARENT_NODE.c_str(),	// This is the description
+					0,								// This is the context in the help file
+					nullptr );
+				return hr;
+			}
+
 			if ( pVal )
 			{
 				hr = CLight::CreateInstance( pVal );
 
 				if ( hr == S_OK )
 				{
-					static_cast< CLight * >( *pVal )->setInternal( m_internal->getLightCache().add( fromBstr( name ), node ? static_cast< CSceneNode * >( node )->getInternal() : nullptr, castor3d::LightType( type ) ) );
+					static_cast< CLight * >( *pVal )->setInternal( m_internal->getLightCache().add( fromBstr( name )
+						, *static_cast< CSceneNode * >( node )->getInternal()
+						, castor3d::LightType( type ) ) );
 				}
 			}
 		}

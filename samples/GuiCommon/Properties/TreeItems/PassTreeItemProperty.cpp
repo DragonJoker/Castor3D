@@ -6,7 +6,6 @@
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Cache/WindowCache.hpp>
-#include <Castor3D/Event/Frame/FunctorEvent.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Material/Pass/PhongPass.hpp>
 #include <Castor3D/Material/Pass/MetallicRoughnessPbrPass.hpp>
@@ -26,23 +25,6 @@ namespace GuiCommon
 {
 	namespace
 	{
-		static wxString PROPERTY_CATEGORY_PASS = _( "Pass: " );
-		static wxString PROPERTY_PASS_DIFFUSE = _( "Diffuse" );
-		static wxString PROPERTY_PASS_SPECULAR = _( "Specular" );
-		static wxString PROPERTY_PASS_AMBIENT = _( "Ambient" );
-		static wxString PROPERTY_PASS_EMISSIVE = _( "Emissive" );
-		static wxString PROPERTY_PASS_EXPONENT = _( "Exponent" );
-		static wxString PROPERTY_PASS_TWO_SIDED = _( "Two sided" );
-		static wxString PROPERTY_PASS_OPACITY = _( "Opacity" );
-		static wxString PROPERTY_PASS_ALBEDO = _( "Albedo" );
-		static wxString PROPERTY_PASS_ROUGHNESS = _( "Roughness" );
-		static wxString PROPERTY_PASS_METALLIC = _( "Metallic" );
-		static wxString PROPERTY_PASS_SHADER = _( "Shader" );
-		static wxString PROPERTY_PASS_REFRACTION = _( "Refraction" );
-		static wxString PROPERTY_PASS_GLOSSINESS = _( "Glossiness" );
-		static wxString PROPERTY_PASS_BWACCUM = _( "BW Accumulator" );
-		static wxString PROPERTY_PASS_EDIT_SHADER = _( "View Shaders..." );
-
 		class PassShaderGatherer
 			: public castor3d::RenderTechniqueVisitor
 		{
@@ -50,8 +32,7 @@ namespace GuiCommon
 			PassShaderGatherer( PipelineFlags flags
 				, Scene const & scene
 				, ShaderSources & sources )
-				: castor3d::RenderTechniqueVisitor{ std::move( flags )
-					, scene }
+				: castor3d::RenderTechniqueVisitor{ std::move( flags ), scene }
 				, m_sources{ sources }
 			{
 			}
@@ -491,22 +472,6 @@ namespace GuiCommon
 		, m_scene{ scene }
 		, m_parent{ parent }
 	{
-		PROPERTY_CATEGORY_PASS = _( "Pass: " );
-		PROPERTY_PASS_DIFFUSE = _( "Diffuse" );
-		PROPERTY_PASS_SPECULAR = _( "Specular" );
-		PROPERTY_PASS_AMBIENT = _( "Ambient" );
-		PROPERTY_PASS_EMISSIVE = _( "Emissive" );
-		PROPERTY_PASS_EXPONENT = _( "Exponent" );
-		PROPERTY_PASS_TWO_SIDED = _( "Two sided" );
-		PROPERTY_PASS_OPACITY = _( "Opacity" );
-		PROPERTY_PASS_ALBEDO = _( "Albedo" );
-		PROPERTY_PASS_ROUGHNESS = _( "Roughness" );
-		PROPERTY_PASS_METALLIC = _( "Metallic" );
-		PROPERTY_PASS_SHADER = _( "Shader" );
-		PROPERTY_PASS_GLOSSINESS = _( "Glossiness" );
-		PROPERTY_PASS_EDIT_SHADER = _( "View Shaders..." );
-		PROPERTY_PASS_BWACCUM = _( "BW Accumulator" );
-
 		CreateTreeItemMenu();
 	}
 
@@ -516,39 +481,56 @@ namespace GuiCommon
 
 	void PassTreeItemProperty::doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )
 	{
+		static wxString PROPERTY_CATEGORY_PASS = _( "Pass: " );
+		static wxString PROPERTY_PASS_DIFFUSE = _( "Diffuse" );
+		static wxString PROPERTY_PASS_SPECULAR = _( "Specular" );
+		static wxString PROPERTY_PASS_AMBIENT = _( "Ambient" );
+		static wxString PROPERTY_PASS_EMISSIVE = _( "Emissive" );
+		static wxString PROPERTY_PASS_EXPONENT = _( "Exponent" );
+		static wxString PROPERTY_PASS_TWO_SIDED = _( "Two sided" );
+		static wxString PROPERTY_PASS_OPACITY = _( "Opacity" );
+		static wxString PROPERTY_PASS_ALBEDO = _( "Albedo" );
+		static wxString PROPERTY_PASS_ROUGHNESS = _( "Roughness" );
+		static wxString PROPERTY_PASS_METALLIC = _( "Metallic" );
+		static wxString PROPERTY_PASS_SHADER = _( "Shader" );
+		static wxString PROPERTY_PASS_REFRACTION = _( "Refraction" );
+		static wxString PROPERTY_PASS_GLOSSINESS = _( "Glossiness" );
+		static wxString PROPERTY_PASS_BWACCUM = _( "BW Accumulator" );
+		static wxString PROPERTY_PASS_EDIT_SHADER = _( "View Shaders..." );
+
 		PassSPtr pass = getPass();
 
 		if ( pass )
 		{
-			grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_PASS + wxString( pass->getOwner()->getName() ) ) );
+			addProperty( grid, PROPERTY_CATEGORY_PASS + wxString( pass->getOwner()->getName() ) );
 
 			switch ( pass->getType() )
 			{
 			case MaterialType::ePhong:
 				{
-					auto phong = std::static_pointer_cast< PhongPass >( pass );
-					grid->Append( new wxColourProperty( PROPERTY_PASS_DIFFUSE ) )->SetValue( WXVARIANT( wxColour( toBGRPacked( phong->getDiffuse() ) ) ) );
-					grid->Append( new wxColourProperty( PROPERTY_PASS_SPECULAR ) )->SetValue( WXVARIANT( wxColour( toBGRPacked( phong->getSpecular() ) ) ) );
-					grid->Append( new wxFloatProperty( PROPERTY_PASS_AMBIENT ) )->SetValue( phong->getAmbient() );
-					grid->Append( new wxFloatProperty( PROPERTY_PASS_EXPONENT ) )->SetValue( phong->getShininess().value() );
+					auto & spec = static_cast< PhongPass & >( *pass );
+					addPropertyT( grid, PROPERTY_PASS_DIFFUSE, spec.getDiffuse(), &spec, &PhongPass::setDiffuse );
+					addPropertyT( grid, PROPERTY_PASS_SPECULAR, spec.getSpecular(), &spec, &PhongPass::setSpecular );
+					addPropertyT( grid, PROPERTY_PASS_AMBIENT, spec.getAmbient(), &spec, &PhongPass::setAmbient );
+					addPropertyT( grid, PROPERTY_PASS_EXPONENT, spec.getShininess(), &spec, &PhongPass::setShininess );
 				}
 				break;
 
 			case MaterialType::eMetallicRoughness:
 				{
-					auto pbr = std::static_pointer_cast< MetallicRoughnessPbrPass >( pass );
-					grid->Append( new wxColourProperty( PROPERTY_PASS_ALBEDO ) )->SetValue( WXVARIANT( wxColour( toBGRPacked( pbr->getAlbedo() ) ) ) );
-					grid->Append( new wxFloatProperty( PROPERTY_PASS_ROUGHNESS ) )->SetValue( pbr->getRoughness() );
-					grid->Append( new wxFloatProperty( PROPERTY_PASS_METALLIC ) )->SetValue( pbr->getMetallic() );
+					auto & spec = static_cast< MetallicRoughnessPbrPass & >( *pass );
+					addPropertyT( grid, PROPERTY_PASS_ALBEDO, spec.getAlbedo(), &spec, &MetallicRoughnessPbrPass::setAlbedo );
+					addPropertyT( grid, PROPERTY_PASS_ROUGHNESS, spec.getRoughness(), &spec, &MetallicRoughnessPbrPass::setRoughness );
+					addPropertyT( grid, PROPERTY_PASS_METALLIC, spec.getMetallic(), &spec, &MetallicRoughnessPbrPass::setMetallic );
 				}
 				break;
 
 			case MaterialType::eSpecularGlossiness:
 				{
-					auto pbr = std::static_pointer_cast< SpecularGlossinessPbrPass >( pass );
-					grid->Append( new wxColourProperty( PROPERTY_PASS_DIFFUSE ) )->SetValue( WXVARIANT( wxColour( toBGRPacked( pbr->getDiffuse() ) ) ) );
-					grid->Append( new wxColourProperty( PROPERTY_PASS_SPECULAR ) )->SetValue( WXVARIANT( wxColour( toBGRPacked( pbr->getSpecular() ) ) ) );
-					grid->Append( new wxFloatProperty( PROPERTY_PASS_GLOSSINESS ) )->SetValue( pbr->getGlossiness() );
+				auto & spec = static_cast< SpecularGlossinessPbrPass & >( *pass );
+					addPropertyT( grid, PROPERTY_PASS_DIFFUSE, spec.getDiffuse(), &spec, &SpecularGlossinessPbrPass::setDiffuse );
+					addPropertyT( grid, PROPERTY_PASS_SPECULAR, spec.getSpecular(), &spec, &SpecularGlossinessPbrPass::setSpecular );
+					addPropertyT( grid, PROPERTY_PASS_GLOSSINESS, spec.getGlossiness(), &spec, &SpecularGlossinessPbrPass::setGlossiness );
 				}
 				break;
 
@@ -557,269 +539,27 @@ namespace GuiCommon
 				break;
 			}
 
-			grid->Append( new wxBoolProperty( PROPERTY_PASS_TWO_SIDED, wxPG_BOOL_USE_CHECKBOX ) )->SetValue( pass->IsTwoSided() );
-			grid->Append( new wxFloatProperty( PROPERTY_PASS_EMISSIVE ) )->SetValue( pass->getEmissive() );
-			grid->Append( new wxFloatProperty( PROPERTY_PASS_OPACITY ) )->SetValue( pass->getOpacity() );
-			grid->Append( new wxUIntProperty( PROPERTY_PASS_BWACCUM ) )->SetValue( int( pass->getBWAccumulationOperator() ) );
+			addPropertyT( grid, PROPERTY_PASS_TWO_SIDED, pass->IsTwoSided(), pass.get(), &Pass::setTwoSided );
+			addPropertyT( grid, PROPERTY_PASS_EMISSIVE, pass->getEmissive(), pass.get(), &Pass::setEmissive );
+			addPropertyT( grid, PROPERTY_PASS_OPACITY, pass->getOpacity(), pass.get(), &Pass::setOpacity );
+			addPropertyT( grid, PROPERTY_PASS_BWACCUM, pass->getBWAccumulationOperator(), pass.get(), &Pass::setBWAccumulationOperator );
 
 			if ( pass->hasRefraction() )
 			{
-				grid->Append( new wxFloatProperty( PROPERTY_PASS_REFRACTION ) )->SetValue( pass->getRefractionRatio() );
+				addPropertyT( grid, PROPERTY_PASS_REFRACTION, pass->getRefractionRatio(), pass.get(), &Pass::setRefractionRatio );
 			}
 
-			grid->Append( CreateProperty( PROPERTY_PASS_SHADER, PROPERTY_PASS_EDIT_SHADER, static_cast< ButtonEventMethod >( &PassTreeItemProperty::OnEditShader ), this, editor ) );
-		}
-	}
-
-	void PassTreeItemProperty::doPropertyChange( wxPropertyGridEvent & event )
-	{
-		PassSPtr pass = getPass();
-		wxPGProperty * property = event.GetProperty();
-
-		if ( property && pass )
-		{
-			wxColour colour;
-
-			if ( property->GetName() == PROPERTY_PASS_DIFFUSE )
-			{
-				colour << property->GetValue();
-				OnDiffuseColourChange( RgbColour::fromBGR( colour.GetRGB() ) );
-			}
-			else if ( property->GetName() == PROPERTY_PASS_SPECULAR )
-			{
-				colour << property->GetValue();
-				OnSpecularColourChange( RgbColour::fromBGR( colour.GetRGB() ) );
-			}
-			else if ( property->GetName() == PROPERTY_PASS_AMBIENT )
-			{
-				OnAmbientChange( property->GetValue() );
-			}
-			else if ( property->GetName() == PROPERTY_PASS_EMISSIVE )
-			{
-				OnEmissiveChange( property->GetValue() );
-			}
-			else if ( property->GetName() == PROPERTY_PASS_EXPONENT )
-			{
-				OnExponentChange( property->GetValue() );
-			}
-			else if ( property->GetName() == PROPERTY_PASS_TWO_SIDED )
-			{
-				OnTwoSidedChange( property->GetValue() );
-			}
-			else if ( property->GetName() == PROPERTY_PASS_OPACITY )
-			{
-				OnOpacityChange( property->GetValue() );
-			}
-			else if ( property->GetName() == PROPERTY_PASS_BWACCUM )
-			{
-				OnBWAccumulatorChange( property->GetValue() );
-			}
-			else if ( property->GetName() == PROPERTY_PASS_REFRACTION )
-			{
-				OnRefractionRatioChange( property->GetValue() );
-			}
-			else if ( property->GetName() == PROPERTY_PASS_ALBEDO )
-			{
-				OnAlbedoChange( RgbColour::fromBGR( colour.GetRGB() ) );
-			}
-			else if ( property->GetName() == PROPERTY_PASS_ROUGHNESS )
-			{
-				OnRoughnessChange( property->GetValue() );
-			}
-			else if ( property->GetName() == PROPERTY_PASS_GLOSSINESS )
-			{
-				OnGlossinessChange( property->GetValue() );
-			}
-			else if ( property->GetName() == PROPERTY_PASS_METALLIC )
-			{
-				OnMetallicChange( property->GetValue() );
-			}
-		}
-	}
-
-	void PassTreeItemProperty::OnDiffuseColourChange( RgbColour const & value )
-	{
-		auto pass = m_pass.lock();
-
-		switch ( pass->getType() )
-		{
-		case MaterialType::ePhong:
-			{
-				auto phong = getTypedPass< MaterialType::ePhong >();
-				doApplyChange( [value, phong]()
+			addProperty( grid, PROPERTY_PASS_SHADER, editor
+				, [this]( wxVariant const & var )
 				{
-						phong->setDiffuse( value );
+					PassSPtr pass = getPass();
+					ShaderSources sources = PassShaderGatherer::submit( *pass, m_scene );
+					ShaderDialog * editor = new ShaderDialog{ pass->getOwner()->getEngine()
+						, std::move( sources )
+						, pass->getOwner()->getName() + string::toString( pass->getId(), 10, std::locale{ "C" } )
+						, m_parent };
+					editor->Show();
 				} );
-			}
-			break;
-
-		case MaterialType::eSpecularGlossiness:
-			{
-				auto pbr = getTypedPass< MaterialType::eSpecularGlossiness >();
-				doApplyChange( [value, pbr]()
-				{
-					pbr->setDiffuse( value );
-				} );
-			}
-			break;
-
-		default:
-			CU_Failure( "Unsupported MaterialType" );
-			break;
 		}
-	}
-
-	void PassTreeItemProperty::OnSpecularColourChange( RgbColour const & value )
-	{
-		auto pass = m_pass.lock();
-
-		switch ( pass->getType() )
-		{
-		case MaterialType::ePhong:
-			{
-				auto phong = getTypedPass< MaterialType::ePhong >();
-				doApplyChange( [value, phong]()
-				{
-						phong->setSpecular( value );
-				} );
-			}
-			break;
-
-		case MaterialType::eSpecularGlossiness:
-			{
-				auto pbr = getTypedPass< MaterialType::eSpecularGlossiness >();
-				doApplyChange( [value, pbr]()
-				{
-					pbr->setSpecular( value );
-				} );
-			}
-			break;
-
-		default:
-			CU_Failure( "Unsupported MaterialType" );
-			break;
-		}
-	}
-
-	void PassTreeItemProperty::OnAmbientChange (double value)
-	{
-		auto pass = getTypedPass< MaterialType::ePhong >();
-
-		doApplyChange( [value, pass]()
-		{
-			pass->setAmbient( float( value ) );
-		} );
-	}
-
-	void PassTreeItemProperty::OnEmissiveChange( double value )
-	{
-		auto pass = getPass();
-
-		doApplyChange( [value, pass]()
-		{
-			pass->setEmissive( float( value ) );
-		} );
-	}
-
-	void PassTreeItemProperty::OnExponentChange( double value )
-	{
-		auto pass = getTypedPass< MaterialType::ePhong >();
-
-		doApplyChange( [value, pass]()
-		{
-			pass->setShininess( float( value ) );
-		} );
-	}
-
-	void PassTreeItemProperty::OnTwoSidedChange( bool value )
-	{
-		PassSPtr pass = getPass();
-
-		doApplyChange( [value, pass]()
-		{
-			pass->setTwoSided( value );
-		} );
-	}
-
-	void PassTreeItemProperty::OnOpacityChange( double value )
-	{
-		PassSPtr pass = getPass();
-
-		doApplyChange( [value, pass]()
-		{
-			pass->setOpacity( float( value ) );
-		} );
-	}
-
-	void PassTreeItemProperty::OnBWAccumulatorChange( long value )
-	{
-		PassSPtr pass = getPass();
-
-		doApplyChange( [value, pass]()
-		{
-			pass->setBWAccumulationOperator( uint32_t( value ) );
-		} );
-	}
-
-	void PassTreeItemProperty::OnRefractionRatioChange( double value )
-	{
-		PassSPtr pass = getPass();
-
-		doApplyChange( [value, pass]()
-		{
-			pass->setRefractionRatio( float( value ) );
-		} );
-	}
-
-	void PassTreeItemProperty::OnAlbedoChange( castor::RgbColour const & value )
-	{
-		auto pass = getTypedPass< MaterialType::eMetallicRoughness >();
-
-		doApplyChange( [value, pass]()
-		{
-			pass->setAlbedo( value );
-		} );
-	}
-
-	void PassTreeItemProperty::OnRoughnessChange( double value )
-	{
-		auto pass = getTypedPass< MaterialType::eMetallicRoughness >();
-
-		doApplyChange( [value, pass]()
-		{
-			pass->setRoughness( float( value ) );
-		} );
-	}
-
-	void PassTreeItemProperty::OnMetallicChange( double value )
-	{
-		auto pass = getTypedPass< MaterialType::eMetallicRoughness >();
-
-		doApplyChange( [value, pass]()
-		{
-			pass->setMetallic( float( value ) );
-		} );
-	}
-
-	void PassTreeItemProperty::OnGlossinessChange( double value )
-	{
-		auto pass = getTypedPass< MaterialType::eSpecularGlossiness >();
-
-		doApplyChange( [value, pass]()
-		{
-			pass->setGlossiness( float( value ) );
-		} );
-	}
-
-	bool PassTreeItemProperty::OnEditShader( wxPGProperty * p_property )
-	{
-		PassSPtr pass = getPass();
-		ShaderSources sources = PassShaderGatherer::submit( *pass, m_scene );
-		ShaderDialog * editor = new ShaderDialog{ pass->getOwner()->getEngine()
-			, std::move( sources )
-			, pass->getOwner()->getName() + string::toString( pass->getId(), 10, std::locale{ "C" } )
-			, m_parent };
-		editor->Show();
-		return false;
 	}
 }

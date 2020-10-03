@@ -57,29 +57,24 @@ namespace GuiCommon
 		}
 
 	private:
-		void addProperty( wxPropertyGrid * grid
+		void doAddProperty( wxPropertyGrid * grid
 			, wxString const & flagName
 			, wxString const & isName
 			, wxString const & compName
 			, castor3d::TextureFlag flag
 			, castor::Point2ui & mask
-			, uint32_t componentsCount );
+			, uint32_t componentsCount
+			, PropertyChangeHandler handler );
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
 		virtual void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid );
-		/**
-		 *\copydoc GuiCommon::TreeItemProperty::doPropertyChange
-		 */
-		virtual void doPropertyChange( wxPropertyGridEvent & event );
 
 	private:
-		void onChange( castor3d::TextureFlag flag
+		void onChange( wxVariant const & var
+			, castor3d::TextureFlag flag
 			, uint32_t componentsCount );
-		void onNormalFactorChange( double value );
-		void onHeightFactorChange( double value );
-		void onNormalDirectXChange( bool value );
-		void onImageChange( castor::Path const & value );
+		void onImageChange( wxVariant const & var );
 
 	private:
 		struct PropertyPair

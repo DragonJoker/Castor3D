@@ -48,9 +48,9 @@ namespace castor3d
 	{
 	}
 
-	void FontTexture::initialise()
+	void FontTexture::initialise( RenderDevice const & device )
 	{
-		m_texture->initialise();
+		m_texture->initialise( device );
 		onChanged( *this );
 	}
 
@@ -107,7 +107,7 @@ namespace castor3d
 
 	}
 
-	void FontTexture::cleanup()
+	void FontTexture::cleanup( RenderDevice const & device )
 	{
 		if ( m_texture )
 		{

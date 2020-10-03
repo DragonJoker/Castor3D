@@ -97,10 +97,10 @@ void ExportCastorUtils()
 		.def( py::self -= py::other< RgbColour >() )
 		.def( py::self == py::other< RgbColour >() )
 		.def( py::self != py::other< RgbColour >() )
-		.def( py::self += py::other< real >() )
-		.def( py::self -= py::other< real >() )
-		.def( py::self *= py::other< real >() )
-		.def( py::self /= py::other< real >() )
+		.def( py::self += py::other< float >() )
+		.def( py::self -= py::other< float >() )
+		.def( py::self *= py::other< float >() )
+		.def( py::self /= py::other< float >() )
 		;
 	//@}
 	/**@group_name RgbaColour	*/
@@ -115,28 +115,28 @@ void ExportCastorUtils()
 		.def( py::self -= py::other< RgbaColour >() )
 		.def( py::self == py::other< RgbaColour >() )
 		.def( py::self != py::other< RgbaColour >() )
-		.def( py::self += py::other< real >() )
-		.def( py::self -= py::other< real >() )
-		.def( py::self *= py::other< real >() )
-		.def( py::self /= py::other< real >() )
+		.def( py::self += py::other< float >() )
+		.def( py::self -= py::other< float >() )
+		.def( py::self *= py::other< float >() )
+		.def( py::self /= py::other< float >() )
 		;
 	//@}
 	/**@group_name Vector2D	*/
 	//@{
 	py::def( "dot", cpy::VectorCrosser() );
-	py::class_< Point2r, std::shared_ptr< Point2r >, boost::noncopyable >( "Vector2D", py::init< real, real >() )
-		.add_property( "x", cpy::make_getter( &Point2r::operator[], 0u ), cpy::make_setter( &Point2r::operator[], 0u ), "The X coordinate" )
-		.add_property( "y", cpy::make_getter( &Point2r::operator[], 1u ), cpy::make_setter( &Point2r::operator[], 1u ), "The Y coordinate" )
+	py::class_< Point2f, std::shared_ptr< Point2f >, boost::noncopyable >( "Vector2D", py::init< float, float >() )
+		.add_property( "x", cpy::make_getter( &Point2f::operator[], 0u ), cpy::make_setter( &Point2f::operator[], 0u ), "The X coordinate" )
+		.add_property( "y", cpy::make_getter( &Point2f::operator[], 1u ), cpy::make_setter( &Point2f::operator[], 1u ), "The Y coordinate" )
 		.def( "normalise", cpy::VectorNormaliser() )
 		.def( "negate", cpy::VectorNegater() )
-		.def( py::self += py::other< Point2r >() )
-		.def( py::self -= py::other< Point2r >() )
-		.def( py::self *= py::other< Point2r >() )
-		.def( py::self /= py::other< Point2r >() )
-		.def( py::self == py::other< Point2r >() )
-		.def( py::self != py::other< Point2r >() )
-		.def( py::self *= py::other< real >() )
-		.def( py::self /= py::other< real >() )
+		.def( py::self += py::other< Point2f >() )
+		.def( py::self -= py::other< Point2f >() )
+		.def( py::self *= py::other< Point2f >() )
+		.def( py::self /= py::other< Point2f >() )
+		.def( py::self == py::other< Point2f >() )
+		.def( py::self != py::other< Point2f >() )
+		.def( py::self *= py::other< float >() )
+		.def( py::self /= py::other< float >() )
 		.def( "length", cpy::VectorLengther() )
 		;
 	//@}
@@ -144,20 +144,20 @@ void ExportCastorUtils()
 	//@{
 	py::def( "cross", cpy::Vectordotter() );
 	py::def( "dot", cpy::VectorCrosser() );
-	py::class_< Point3r, std::shared_ptr< Point3r >, boost::noncopyable >( "Vector3D", py::init< real, real, real >() )
-		.add_property( "x", cpy::make_getter( &Point3r::operator[], 0u ), cpy::make_setter( &Point3r::operator[], 0u ), "The X coordinate" )
-		.add_property( "y", cpy::make_getter( &Point3r::operator[], 1u ), cpy::make_setter( &Point3r::operator[], 1u ), "The Y coordinate" )
-		.add_property( "z", cpy::make_getter( &Point3r::operator[], 2u ), cpy::make_setter( &Point3r::operator[], 2u ), "The Z coordinate" )
+	py::class_< Point3f, std::shared_ptr< Point3f >, boost::noncopyable >( "Vector3D", py::init< float, float, float >() )
+		.add_property( "x", cpy::make_getter( &Point3f::operator[], 0u ), cpy::make_setter( &Point3f::operator[], 0u ), "The X coordinate" )
+		.add_property( "y", cpy::make_getter( &Point3f::operator[], 1u ), cpy::make_setter( &Point3f::operator[], 1u ), "The Y coordinate" )
+		.add_property( "z", cpy::make_getter( &Point3f::operator[], 2u ), cpy::make_setter( &Point3f::operator[], 2u ), "The Z coordinate" )
 		.def( "normalise", cpy::VectorNormaliser() )
 		.def( "negate", cpy::VectorNegater() )
-		.def( py::self += py::other< Point3r >() )
-		.def( py::self -= py::other< Point3r >() )
-		.def( py::self *= py::other< Point3r >() )
-		.def( py::self /= py::other< Point3r >() )
-		.def( py::self == py::other< Point3r >() )
-		.def( py::self != py::other< Point3r >() )
-		.def( py::self *= py::other< real >() )
-		.def( py::self /= py::other< real >() )
+		.def( py::self += py::other< Point3f >() )
+		.def( py::self -= py::other< Point3f >() )
+		.def( py::self *= py::other< Point3f >() )
+		.def( py::self /= py::other< Point3f >() )
+		.def( py::self == py::other< Point3f >() )
+		.def( py::self != py::other< Point3f >() )
+		.def( py::self *= py::other< float >() )
+		.def( py::self /= py::other< float >() )
 		.def( "length", cpy::VectorLengther() )
 		;
 	//@}
@@ -182,8 +182,8 @@ void ExportCastorUtils()
 		.def( py::self /= py::other< Angle >() )
 		.def( py::self == py::other< Angle >() )
 		.def( py::self != py::other< Angle >() )
-		.def( py::self *= py::other< real >() )
-		.def( py::self /= py::other< real >() )
+		.def( py::self *= py::other< float >() )
+		.def( py::self /= py::other< float >() )
 		;
 	//@}
 	/**@group_name Quaternion	*/
@@ -191,7 +191,7 @@ void ExportCastorUtils()
 	void ( Quaternion::*quaternionToAxisAngle )( Point3f &, Angle & )const = &Quaternion::toAxisAngle;
 	void ( Quaternion::*quaternionToAxes )( Point3f &, Point3f &, Point3f & )const = &Quaternion::toAxes;
 	Point3f & ( Quaternion::*quaternionTransform )( Point3f const &, Point3f & )const = &Quaternion::transform;
-	void ( Quaternion::*quaternionToMatrix )( Matrix4x4r & )const = &Quaternion::toMatrix;
+	void ( Quaternion::*quaternionToMatrix )( Matrix4x4f & )const = &Quaternion::toMatrix;
 	Quaternion( Quaternion::*quaternionLerp )( Quaternion const & p_target, float p_factor )const = &Quaternion::lerp;
 	Quaternion( Quaternion::*quaternionMix )( Quaternion const & p_target, float p_factor )const = &Quaternion::mix;
 	Quaternion( Quaternion::*quaternionSlerp )( Quaternion const & p_target, float p_factor )const = &Quaternion::slerp;
@@ -219,9 +219,9 @@ void ExportCastorUtils()
 	//@}
 	/**@group_name Matrix	*/
 	//@{
-	py::class_< Matrix4x4r >( "Matrix", py::init<>() )
-		.def( "transpose", py::make_function( &Matrix4x4r::transpose, py::return_value_policy< py::reference_existing_object >() ) )
-		.def( "invert", py::make_function( &Matrix4x4r::invert, py::return_value_policy< py::reference_existing_object >() ) )
+	py::class_< Matrix4x4f >( "Matrix", py::init<>() )
+		.def( "transpose", py::make_function( &Matrix4x4f::transpose, py::return_value_policy< py::reference_existing_object >() ) )
+		.def( "invert", py::make_function( &Matrix4x4f::invert, py::return_value_policy< py::reference_existing_object >() ) )
 		;
 	//@}
 	/**@group_name Position	*/
@@ -249,8 +249,8 @@ void ExportCastorUtils()
 	/**@group_name Rectangle	*/
 	//@{
 	Intersection( Rectangle::*IntPoint )( Position const & )const = &Rectangle::intersects;
-	Intersection( Rectangle::*IntRect )( Rectangle const & )const = &Rectangle::intersects;
-	py::class_< Rectangle >( "Rectangle", py::init< int32_t, int32_t, uint32_t, uint32_t >() )
+	Intersection( Rectangle::*IntRect )( castor::Rectangle const & )const = &Rectangle::intersects;
+	py::class_< castor::Rectangle >( "Rectangle", py::init< int32_t, int32_t, uint32_t, uint32_t >() )
 		.add_property( "left", cpy::make_getter( &Rectangle::left ), cpy::make_setter( &Rectangle::left ), "The left value for the rectangle" )
 		.add_property( "right", cpy::make_getter( &Rectangle::right ), cpy::make_setter( &Rectangle::right ), "The right value for the rectangle" )
 		.add_property( "top", cpy::make_getter( &Rectangle::top ), cpy::make_setter( &Rectangle::top ), "The top value for the rectangle" )
@@ -283,12 +283,11 @@ void ExportCastorUtils()
 	/**@group_name PixelBuffer	*/
 	//@{
 	py::class_< PxBufferBase, boost::noncopyable >( "PixelBuffer", py::no_init )
-		.add_property( "dimensions", py::make_function( &PxBufferBase::dimensions, py::return_value_policy< py::copy_const_reference >() ), "The buffer dimensions" )
+		.add_property( "dimensions", py::make_function( &PxBufferBase::getDimensions, py::return_value_policy< py::copy_const_reference >() ), "The buffer dimensions" )
 		.add_property( "width", &PxBufferBase::getWidth, "The buffer width" )
 		.add_property( "height", &PxBufferBase::getHeight, "The buffer height" )
-		.add_property( "pixel_format", &PxBufferBase::format, "The buffer pixel format" )
+		.add_property( "pixel_format", &PxBufferBase::getFormat, "The buffer pixel format" )
 		.def( "flip", &PxBufferBase::flip, py::return_value_policy< py::reference_existing_object >() )
-		.def( "mirror", &PxBufferBase::mirror, py::return_value_policy< py::reference_existing_object >() )
 		.def( "create", cpy::PxBufferCreator() )
 		.staticmethod( "create" )
 		;
@@ -301,15 +300,13 @@ void ExportCastorUtils()
 		.def( "resample", &Image::resample, py::return_value_policy< py::reference_existing_object >() )
 		.def( "fillRgb", cpy::FillRgb(), py::return_value_policy< py::reference_existing_object >() )
 		.def( "fillRgba", cpy::FillRgba(), py::return_value_policy< py::reference_existing_object >() )
-		.def( "copy_image", &Image::copyImage, py::return_value_policy< py::reference_existing_object >() )
-		.def( "sub_image", &Image::subImage )
 		;
 	//@}
 	/**@group_name Logger	*/
 	//@{
-	void( *LoggerInitialiser )( LogType ) = &Logger::initialise;
+	LoggerInstance * ( *LoggerInitialiser )( LogType ) = &Logger::initialise;
 	void( *LoggerCleaner )( ) = &Logger::cleanup;
-	void( *LoggerFileNamesetter )( String const &, LogType ) = &Logger::setFileName;
+	void( *LoggerFileNamesetter )( Path const &, LogType ) = &Logger::setFileName;
 	void( *DebugLogger )( String const & ) = &Logger::logDebug;
 	void( *InfoLogger )( String const & ) = &Logger::logInfo;
 	void( *WarningLogger )( String const & ) = &Logger::logWarning;

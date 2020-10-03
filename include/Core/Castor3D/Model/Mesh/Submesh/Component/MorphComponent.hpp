@@ -22,13 +22,6 @@ namespace castor3d
 		 */
 		C3D_API explicit MorphComponent( Submesh & submesh );
 		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API ~MorphComponent();
-		/**
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
 		C3D_API void gather( MaterialSPtr material
@@ -74,9 +67,9 @@ namespace castor3d
 		}
 
 	private:
-		bool doInitialise()override;
+		bool doInitialise( RenderDevice const & device )override;
 		void doCleanup()override;
-		void doFill()override;
+		void doFill( RenderDevice const & device )override;
 		void doUpload()override;
 
 	public:

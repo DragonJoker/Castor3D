@@ -52,7 +52,7 @@ namespace castortd
 	void Tower::accept( Game & p_game )
 	{
 		doUpdateTimes( p_game.getElapsed() );
-		m_anim.setAnimationscale( m_category->getAttackAnimationName(), m_animScale );
+		m_anim.setAnimationScale( m_category->getAttackAnimationName(), m_animScale );
 		EnemyArray sorted;
 
 		switch ( m_state )

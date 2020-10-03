@@ -3006,7 +3006,7 @@ namespace castor3d
 			parsingContext->vertexTan.clear();
 			parsingContext->vertexTex.clear();
 			parsingContext->faces.clear();
-			parsingContext->submesh->getParent().getScene()->getListener().postEvent( makeInitialiseEvent( *parsingContext->submesh ) );
+			parsingContext->submesh->getParent().getScene()->getListener().postEvent( makeGpuInitialiseEvent( *parsingContext->submesh ) );
 		}
 	}
 	CU_EndAttributePop()
@@ -5295,7 +5295,7 @@ namespace castor3d
 
 		if ( parsingContext->pAnimGroup )
 		{
-			parsingContext->pAnimGroup->setAnimationscale( parsingContext->strName2, value );
+			parsingContext->pAnimGroup->setAnimationScale( parsingContext->strName2, value );
 		}
 		else
 		{
@@ -5712,7 +5712,7 @@ namespace castor3d
 			{
 				uint32_t value;
 				params[0]->get( value );
-				parsingContext->ssaoConfig.blurStepSize = value;
+				parsingContext->ssaoConfig.blurStepSize = { value, parsingContext->ssaoConfig.blurStepSize.value().range() };
 			}
 		}
 		else
@@ -5760,7 +5760,7 @@ namespace castor3d
 			{
 				uint32_t value;
 				params[0]->get( value );
-				parsingContext->ssaoConfig.blurRadius = makeRangedValue( int32_t( value ), 1, 6 );
+				parsingContext->ssaoConfig.blurRadius = { int32_t( value ), parsingContext->ssaoConfig.blurRadius.value().range() };
 			}
 		}
 		else

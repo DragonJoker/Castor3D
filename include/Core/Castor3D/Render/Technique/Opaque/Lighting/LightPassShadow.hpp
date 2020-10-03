@@ -135,10 +135,11 @@ namespace castor3d
 			 *\param[in]	pxl			Le source du fagment shader.
 			 */
 			Program( Engine & engine
+				, RenderDevice const & device
 				, LightPassShadow & lightPass
 				, ShaderModule const & vtx
 				, ShaderModule const & pxl )
-				: my_program_type( engine, lightPass, vtx, pxl, true )
+				: my_program_type( engine, device, lightPass, vtx, pxl, true )
 			{
 			}
 		};
@@ -157,12 +158,27 @@ namespace castor3d
 		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
 		 */
 		LightPassShadow( Engine & engine
+			, RenderDevice const & device
+			, castor::String const & suffix
 			, LightPassResult const & lpResult
 			, GpInfoUbo const & gpInfoUbo )
 			: my_pass_type{ engine
+				, device
+				, suffix
 				, lpResult
 				, gpInfoUbo
 				, true }
+		{
+		}
+		LightPassShadow( Engine & engine
+			, RenderDevice const & device
+			, LightPassResult const & lpResult
+			, GpInfoUbo const & gpInfoUbo )
+			: LightPassShadow{ engine
+				, device
+				, cuT( "Shadow" )
+				, lpResult
+				, gpInfoUbo }
 		{
 		}
 
@@ -173,6 +189,7 @@ namespace castor3d
 		typename LightPass::ProgramPtr doCreateProgram()override
 		{
 			auto result = std::make_unique< LightPassShadow::Program >( this->m_engine
+				, this->m_device
 				, *this
 				, this->m_vertexShader
 				, this->m_pixelShader );

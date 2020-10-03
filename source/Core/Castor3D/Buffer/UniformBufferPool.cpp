@@ -1,13 +1,11 @@
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Event/Frame/FunctorEvent.hpp"
-#include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
 #include <ashespp/Buffer/StagingBuffer.hpp>
+#include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Core/Device.hpp>
-#include <ashespp/Sync/Fence.hpp>
 
 namespace castor3d
 {
@@ -36,8 +34,10 @@ namespace castor3d
 	}
 
 	UniformBufferPool::UniformBufferPool( RenderSystem & renderSystem
+		, RenderDevice const & device
 		, castor::String debugName )
 		: castor::OwnedBy< RenderSystem >{ renderSystem }
+		, m_device{ device }
 		, m_debugName{ std::move( debugName ) }
 	{
 	}
@@ -168,7 +168,7 @@ namespace castor3d
 		buffers.push_back( { m_currentUboIndex, std::move( buffer ) } );
 		++m_currentUboIndex;
 		auto itB = std::next( buffers.begin(), buffers.size() - 1 );
-		m_maxUboSize = itB->buffer->initialise();
+		m_maxUboSize = itB->buffer->initialise( m_device );
 		return itB;
 	}
 }

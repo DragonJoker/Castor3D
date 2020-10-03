@@ -227,6 +227,7 @@ namespace castor3d
 		*/
 		/**@{*/
 		C3D_API MaterialType getMaterialsType()const;
+		C3D_API bool needsGlobalIllumination()const;
 
 		inline castor::BoundingBox const & getBoundingBox()const
 		{
@@ -330,16 +331,6 @@ namespace castor3d
 			return m_hasTransparentObjects;
 		}
 
-		inline BillboardUboPools const & getBillboardPools()const
-		{
-			return *m_billboardPools;
-		}
-
-		inline BillboardUboPools & getBillboardPools()
-		{
-			return *m_billboardPools;
-		}
-
 		inline uint32_t getDirectionalShadowCascades()const
 		{
 			return m_directionalShadowCascades;
@@ -407,7 +398,6 @@ namespace castor3d
 		DECLARE_CACHE_VIEW_MEMBER( material, Material, EventType::ePreRender );
 		DECLARE_CACHE_VIEW_MEMBER( sampler, Sampler, EventType::ePreRender );
 		DECLARE_CU_CACHE_VIEW_MEMBER( font, Font, EventType::ePreRender );
-		std::shared_ptr< BillboardUboPools > m_billboardPools;
 		bool m_changed{ false };
 		castor::RgbColour m_ambientLight;
 		castor::RgbColour m_backgroundColour;

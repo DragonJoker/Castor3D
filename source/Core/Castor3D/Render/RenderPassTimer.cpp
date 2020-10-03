@@ -47,14 +47,17 @@ namespace castor3d
 	//*********************************************************************************************
 
 	RenderPassTimer::RenderPassTimer( Engine & engine
+		, RenderDevice const & device
 		, String const & category
 		, String const & name
 		, uint32_t passesCount )
 		: Named{ name }
 		, m_engine{ engine }
+		, m_device{ device }
 		, m_passesCount{ passesCount }
 		, m_category{ category }
-		, m_timerQuery{ getCurrentRenderDevice( engine )->createQueryPool( VK_QUERY_TYPE_TIMESTAMP
+		, m_timerQuery{ device->createQueryPool( name
+			, VK_QUERY_TYPE_TIMESTAMP
 			, 2u * passesCount
 			, 0u ) }
 		, m_cpuTime{ 0_ns }
@@ -119,7 +122,7 @@ namespace castor3d
 
 	void RenderPassTimer::retrieveGpuTime()
 	{
-		static float const period = float( getCurrentRenderDevice( m_engine )->getTimestampPeriod() );
+		static float const period = float( m_device->getTimestampPeriod() );
 		m_gpuTime = 0_ns;
 
 		for ( uint32_t i = 0; i < m_passesCount; ++i )
@@ -151,7 +154,7 @@ namespace castor3d
 		if ( m_passesCount != count )
 		{
 			m_passesCount = count;
-			m_timerQuery = getCurrentRenderDevice( m_engine )->createQueryPool( VK_QUERY_TYPE_TIMESTAMP
+			m_timerQuery = m_device->createQueryPool( VK_QUERY_TYPE_TIMESTAMP
 				, 2u * m_passesCount
 				, 0u );
 			m_startedPasses.resize( m_passesCount );

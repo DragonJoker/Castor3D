@@ -18,12 +18,6 @@ namespace castor3d
 	{
 	}
 
-	BonesComponent::~BonesComponent()
-	{
-		cleanup();
-		m_bones.clear();
-	}
-
 	void BonesComponent::addBoneDatas( VertexBoneData const * const begin
 		, VertexBoneData const * const end )
 	{
@@ -50,10 +44,8 @@ namespace castor3d
 		addBoneDatas( boneData.data(), boneData.data() + boneData.size() );
 	}
 
-	bool BonesComponent::doInitialise()
+	bool BonesComponent::doInitialise( RenderDevice const & device )
 	{
-		auto & device = getCurrentRenderDevice( *getOwner()->getOwner() );
-
 		if ( !m_bonesBuffer || m_bonesBuffer->getCount() != m_bones.size() )
 		{
 			m_bonesBuffer = makeVertexBuffer< VertexBoneData >( device
@@ -85,7 +77,7 @@ namespace castor3d
 		m_bonesBuffer.reset();
 	}
 
-	void BonesComponent::doFill()
+	void BonesComponent::doFill( RenderDevice const & device )
 	{
 	}
 

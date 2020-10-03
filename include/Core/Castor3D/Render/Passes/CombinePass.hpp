@@ -8,8 +8,10 @@ See LICENSE file in root folder
 
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
-#include "Castor3D/Render/ToTexture/RenderQuad.hpp"
+#include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Shader/ShaderModule.hpp"
+
+#include "Castor3D/Buffer/UniformBufferOffset.hpp"
 
 #include <ashes/common/Optional.hpp>
 #include <ashespp/Image/ImageView.hpp>
@@ -27,13 +29,17 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	struct CombinePassConfig
-		: RenderQuadConfig
+	template< template< typename ValueT > typename WrapperT >
+	struct CombinePassConfigT
+		: rq::ConfigT< WrapperT >
 	{
-		ashes::Optional< TextureLayoutSPtr > resultTexture{ ashes::nullopt };
-		ashes::Optional< VkImageLayout > lhsLayout{ ashes::nullopt };
-		ashes::Optional< VkImageLayout > rhsLayout{ ashes::nullopt };
+		WrapperT< TextureLayoutSPtr > resultTexture;
+		WrapperT< VkImageLayout > lhsLayout;
+		WrapperT< VkImageLayout > rhsLayout;
 	};
+
+	using CombinePassConfig = CombinePassConfigT< ashes::Optional >;
+	using CombinePassConfigData = CombinePassConfigT< rq::RawTypeT >;
 
 	class CombinePass
 	{
@@ -41,16 +47,19 @@ namespace castor3d
 
 	protected:
 		C3D_API CombinePass( Engine & engine
+			, RenderDevice const & device
 			, castor::String const & prefix
 			, VkFormat outputFormat
 			, VkExtent2D const & outputSize
 			, ShaderModule const & vertexShader
 			, ShaderModule const & pixelShader
-			, ashes::ImageView const & lhsView
-			, ashes::ImageView const & rhsView
+			, IntermediateViewArray const & lhsViews
+			, IntermediateView const & rhsView
 			, CombinePassConfig config );
 
 	public:
+		C3D_API ~CombinePass();
+		C3D_API void update( CpuUpdater & updater );
 		C3D_API void accept( PipelineVisitorBase & visitor );
 		C3D_API ashes::Semaphore const & combine( ashes::Semaphore const & toWait )const;
 		C3D_API CommandsSemaphore getCommands( RenderPassTimer const & timer
@@ -62,7 +71,7 @@ namespace castor3d
 		}
 
 	public:
-		static castor::String const LhsMap;
+		static castor::String const LhsMaps;
 		static castor::String const RhsMap;
 
 	private:
@@ -71,16 +80,18 @@ namespace castor3d
 		{
 		public:
 			explicit CombineQuad( Engine & engine
+				, RenderDevice const & device
 				, castor::String const & prefix
-				, ashes::ImageView const & lhsView
-				, RenderQuadConfig const & config );
+				, IntermediateViewArray const & lhsViews
+				, IntermediateView const & rhsView
+				, ShaderModule const & vertexShader
+				, ShaderModule const & pixelShader
+				, ashes::RenderPass const & renderPass
+				, VkExtent2D const & outputSize
+				, rq::Config config );
 
 		private:
-			void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-				, ashes::DescriptorSet & descriptorSet )override;
-
-		private:
-			ashes::ImageView m_lhsView;
+			IntermediateViewArray m_lhsViews;
 			SamplerSPtr m_lhsSampler;
 		};
 
@@ -88,37 +99,28 @@ namespace castor3d
 		Engine & m_engine;
 		ShaderModule const & m_vertexShader;
 		ShaderModule const & m_pixelShader;
-		ashes::ImageView m_lhsView;
-		ashes::ImageView m_rhsView;
-		CombinePassConfig m_config;
-		castor::String m_prefix;
 		TextureLayoutSPtr m_image;
 		ashes::ImageView m_view;
+		IntermediateViewArray m_lhsBarrierViews;
+		IntermediateViewArray m_lhsViews;
+		IntermediateView m_rhsBarrierView;
+		IntermediateView m_rhsView;
+		CombinePassConfig m_config;
+		castor::String m_prefix;
 		RenderPassTimerSPtr m_timer;
-		ashes::CommandBufferPtr m_commandBuffer;
-		ashes::SemaphorePtr m_finished;
+		CommandsSemaphoreArray m_commands;
 		ashes::RenderPassPtr m_renderPass;
 		ashes::FrameBufferPtr m_frameBuffer;
 		CombineQuad m_quad;
+		uint32_t m_index{ 0u };
 	};
 
 	class CombinePassBuilder
+		: public RenderQuadBuilderT< CombinePassConfig, CombinePassBuilder >
 	{
 	public:
 		inline CombinePassBuilder()
 		{
-		}
-
-		inline CombinePassBuilder & texcoordConfig( RenderQuadConfig::Texcoord const & config )
-		{
-			m_config.texcoordConfig = config;
-			return *this;
-		}
-
-		inline CombinePassBuilder & range( VkImageSubresourceRange const & range )
-		{
-			m_config.range = range;
-			return *this;
 		}
 
 		inline CombinePassBuilder & resultTexture( TextureLayoutSPtr resultTexture )
@@ -140,30 +142,32 @@ namespace castor3d
 		}
 
 		inline CombinePassUPtr build( Engine & engine
+			, RenderDevice const & device
 			, castor::String const & prefix
 			, VkFormat outputFormat
 			, VkExtent2D const & outputSize
 			, ShaderModule const & vertexShader
 			, ShaderModule const & pixelShader
-			, ashes::ImageView const & lhsView
-			, ashes::ImageView const & rhsView )
+			, IntermediateViewArray const & lhsViews
+			, IntermediateView const & rhsView )
 		{
 			return std::unique_ptr< CombinePass >( new CombinePass
 				{
 					engine,
+					device,
 					prefix,
 					outputFormat,
 					outputSize,
 					vertexShader,
 					pixelShader,
-					lhsView,
+					lhsViews,
 					rhsView,
 					std::move( m_config ),
 				} );
 		}
 
 	private:
-		CombinePassConfig m_config;
+		using RenderQuadBuilderT< CombinePassConfig, CombinePassBuilder >::build;
 	};
 }
 

@@ -3,7 +3,6 @@
 #include "Castor3D/Engine.hpp"
 
 #include "Castor3D/Event/Frame/FrameListener.hpp"
-#include "Castor3D/Event/Frame/FunctorEvent.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
@@ -131,12 +130,12 @@ namespace castor3d
 		return result;
 	}
 
-	void ImageBackground::accept( BackgroundVisitor & visitor )const
+	void ImageBackground::accept( BackgroundVisitor & visitor )
 	{
 		visitor.visit( *this );
 	}
 
-	ashes::PipelineShaderStageCreateInfoArray ImageBackground::doInitialiseShader()
+	ashes::PipelineShaderStageCreateInfoArray ImageBackground::doInitialiseShader( RenderDevice const & device )
 	{
 		using namespace sdw;
 		auto & renderSystem = *getEngine()->getRenderSystem();
@@ -201,7 +200,6 @@ namespace castor3d
 			pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		auto & device = getCurrentRenderDevice( renderSystem );
 		return ashes::PipelineShaderStageCreateInfoArray
 		{
 			makeShaderState( device, vtx ),
@@ -209,9 +207,10 @@ namespace castor3d
 		};
 	}
 
-	bool ImageBackground::doInitialise( ashes::RenderPass const & renderPass )
+	bool ImageBackground::doInitialise( RenderDevice const & device
+		, ashes::RenderPass const & renderPass )
 	{
-		doInitialise2DTexture();
+		doInitialise2DTexture( device );
 		m_hdr = m_texture->getPixelFormat() == VK_FORMAT_R32_SFLOAT
 			|| m_texture->getPixelFormat() == VK_FORMAT_R32G32_SFLOAT
 			|| m_texture->getPixelFormat() == VK_FORMAT_R32G32B32_SFLOAT
@@ -220,7 +219,7 @@ namespace castor3d
 			|| m_texture->getPixelFormat() == VK_FORMAT_R16G16_SFLOAT
 			|| m_texture->getPixelFormat() == VK_FORMAT_R16G16B16_SFLOAT
 			|| m_texture->getPixelFormat() == VK_FORMAT_R16G16B16A16_SFLOAT;
-		return m_texture->initialise();
+		return m_texture->initialise( device );
 	}
 
 	void ImageBackground::doCleanup()
@@ -250,12 +249,11 @@ namespace castor3d
 	{
 	}
 
-	void ImageBackground::doInitialise2DTexture()
+	void ImageBackground::doInitialise2DTexture( RenderDevice const & device )
 	{
 		auto & engine = *getEngine();
 		auto & renderSystem = *engine.getRenderSystem();
-		auto & device = getCurrentRenderDevice( renderSystem );
-		m_2dTexture->initialise();
+		m_2dTexture->initialise( device );
 		VkExtent3D extent{ m_2dTexture->getWidth(), m_2dTexture->getHeight(), 1u };
 		auto dim = std::max( m_2dTexture->getWidth(), m_2dTexture->getHeight() );
 
@@ -272,7 +270,7 @@ namespace castor3d
 				, doGetImageCreate( m_2dTexture->getPixelFormat(), { dim, dim }, true )
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, cuT( "ImageBackgroundCube" ) );
-			m_texture->initialise();
+			m_texture->initialise( device );
 
 			VkImageSubresourceLayers srcSubresource
 			{

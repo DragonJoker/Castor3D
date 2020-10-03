@@ -12,7 +12,7 @@
 #include "Castor3D/Cache/WindowCache.hpp"
 #include "Castor3D/Event/Frame/CleanupEvent.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
-#include "Castor3D/Event/Frame/FunctorEvent.hpp"
+#include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
 #include "Castor3D/Event/Frame/InitialiseEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
@@ -73,11 +73,11 @@ namespace castor3d
 		};
 		auto eventInit = [this]( auto element )
 		{
-			this->postEvent( makeInitialiseEvent( *element ) );
+			this->postEvent( makeGpuInitialiseEvent( *element ) );
 		};
-		auto eventClean = [this]( auto element )
+		auto cpuEvtClean = [this]( auto element )
 		{
-			this->postEvent( makeCleanupEvent( *element ) );
+			this->postEvent( makeCpuCleanupEvent( *element ) );
 		};
 		auto instantInit = [this]( auto element )
 		{
@@ -121,7 +121,7 @@ namespace castor3d
 				return std::make_shared< Sampler >( *this, name );
 			}
 			, eventInit
-			, eventClean
+			, cpuEvtClean
 			, mergeResource );
 		m_materialCache = std::make_unique< MaterialCache >( *this
 			, [this]( String const & name, MaterialType type )
@@ -129,7 +129,7 @@ namespace castor3d
 				return std::make_shared< Material >( name, *this, type );
 			}
 			, eventInit
-			, eventClean
+			, cpuEvtClean
 			, mergeResource );
 		m_pluginCache = std::make_unique< PluginCache >( *this
 			, []( String const & name, PluginType type, castor::DynamicLibrarySPtr library )
@@ -184,7 +184,11 @@ namespace castor3d
 			, dummy
 			, [this]( RenderWindowSPtr element )
 			{
-				postEvent( makeCleanupEvent( *element ) );
+				postEvent( makeCpuFunctorEvent( EventType::ePreRender
+					, [element]()
+					{
+						element->cleanup();
+					} ) );
 			}
 			, mergeResource );
 
@@ -259,12 +263,12 @@ namespace castor3d
 
 		if ( m_lightsSampler )
 		{
-			postEvent( makeInitialiseEvent( *m_lightsSampler ) );
+			postEvent( makeGpuInitialiseEvent( *m_lightsSampler ) );
 		}
 
 		if ( m_defaultSampler )
 		{
-			postEvent( makeInitialiseEvent( *m_defaultSampler ) );
+			postEvent( makeGpuInitialiseEvent( *m_defaultSampler ) );
 		}
 
 		if ( threaded )
@@ -301,12 +305,12 @@ namespace castor3d
 
 			if ( m_lightsSampler )
 			{
-				postEvent( makeCleanupEvent( *m_lightsSampler ) );
+				postEvent( makeCpuCleanupEvent( *m_lightsSampler ) );
 			}
 
 			if ( m_defaultSampler )
 			{
-				postEvent( makeCleanupEvent( *m_defaultSampler ) );
+				postEvent( makeCpuCleanupEvent( *m_defaultSampler ) );
 			}
 
 			m_techniqueCache->cleanup();
@@ -341,11 +345,22 @@ namespace castor3d
 		return m_renderSystem != nullptr;
 	}
 
-	void Engine::sendEvent( FrameEventUPtr && event )
+	void Engine::postEvent( CpuFrameEventUPtr event )
+	{
+		auto lock( castor::makeUniqueLock( *m_listenerCache ) );
+		FrameListenerSPtr listener = m_defaultListener.lock();
+
+		if ( listener )
+		{
+			listener->postEvent( std::move( event ) );
+		}
+	}
+
+	void Engine::sendEvent( GpuFrameEventUPtr event )
 	{
 		if ( m_renderSystem && m_renderSystem->hasCurrentRenderDevice() )
 		{
-			event->apply();
+			event->apply( m_renderSystem->getCurrentRenderDevice() );
 		}
 		else
 		{
@@ -353,10 +368,9 @@ namespace castor3d
 		}
 	}
 
-	void Engine::postEvent( FrameEventUPtr && event )
+	void Engine::postEvent( GpuFrameEventUPtr event )
 	{
-		using LockType = std::unique_lock< FrameListenerCache >;
-		LockType lock{ castor::makeUniqueLock( *m_listenerCache ) };
+		auto lock( castor::makeUniqueLock( *m_listenerCache ) );
 		FrameListenerSPtr listener = m_defaultListener.lock();
 
 		if ( listener )
@@ -453,7 +467,7 @@ namespace castor3d
 		auto plistener = listener.get();
 		auto pwindow = &window;
 		log::debug << "Removing UIListener 0x" << std::hex << plistener << std::endl;
-		listener->getFrameListener().postEvent( makeFunctorEvent( EventType::ePostRender
+		listener->getFrameListener().postEvent( makeCpuFunctorEvent( EventType::ePostRender
 			, [this, plistener, pwindow]()
 			{
 				m_windowInputListeners.erase( pwindow );

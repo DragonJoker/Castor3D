@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_Submesh_H___
 
 #include "Component/ComponentModule.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 
 #include "Castor3D/Binary/BinaryModule.hpp"
 #include "Castor3D/Buffer/BufferModule.hpp"
@@ -62,7 +63,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Initialise le sous-maillage
 		 */
-		C3D_API void initialise();
+		C3D_API void initialise( RenderDevice const & device );
 		/**
 		*\~english
 		*\brief		Cleans the submesh
@@ -107,7 +108,7 @@ namespace castor3d
 		C3D_API uint32_t getPointsCount()const;
 		/**
 		 *\~english
-		 *\brief		Tests if the given Point3r is in mine
+		 *\brief		Tests if the given Point3f is in mine
 		 *\param[in]	position	The vertex to test
 		 *\param[in]	precision	The comparison precision
 		 *\return		The index of the vertex equal to parameter, -1 if not found
@@ -350,7 +351,7 @@ namespace castor3d
 		inline VkPrimitiveTopology getTopology()const;
 
 	private:
-		void doGenerateVertexBuffer();
+		void doGenerateVertexBuffer( RenderDevice const & device );
 
 	public:
 		static uint32_t constexpr Position = 0u;

@@ -170,7 +170,7 @@ namespace castor3d
 	{
 	}
 
-	void SkyboxBackground::accept( BackgroundVisitor & visitor )const
+	void SkyboxBackground::accept( BackgroundVisitor & visitor )
 	{
 		visitor.visit( *this );
 	}
@@ -214,6 +214,14 @@ namespace castor3d
 		, castor::Path const & relative )
 	{
 		getTexture().setLayerCubeFaceSource( 0u, CubeMapFace::ePositiveZ, folder, relative );
+		notifyChanged();
+	}
+
+	void SkyboxBackground::loadFaceImage( castor::Path const & folder
+		, castor::Path const & relative
+		, CubeMapFace face )
+	{
+		getTexture().setLayerCubeFaceSource( 0u, face, folder, relative );
 		notifyChanged();
 	}
 
@@ -289,10 +297,11 @@ namespace castor3d
 		notifyChanged();
 	}
 
-	bool SkyboxBackground::doInitialise( ashes::RenderPass const & renderPass )
+	bool SkyboxBackground::doInitialise( RenderDevice const & device
+		, ashes::RenderPass const & renderPass )
 	{
 		CU_Require( m_texture );
-		return doInitialiseTexture();
+		return doInitialiseTexture( device );
 	}
 
 	void SkyboxBackground::doCleanup()
@@ -314,15 +323,15 @@ namespace castor3d
 	{
 	}
 
-	bool SkyboxBackground::doInitialiseTexture()
+	bool SkyboxBackground::doInitialiseTexture( RenderDevice const & device )
 	{
 		if ( m_equiTexture )
 		{
-			doInitialiseEquiTexture();
+			doInitialiseEquiTexture( device );
 		}
 		else if ( m_crossTexture )
 		{
-			doInitialiseCrossTexture();
+			doInitialiseCrossTexture( device );
 		}
 
 		m_hdr = m_texture->getPixelFormat() == VK_FORMAT_R32_SFLOAT
@@ -333,15 +342,14 @@ namespace castor3d
 			|| m_texture->getPixelFormat() == VK_FORMAT_R16G16_SFLOAT
 			|| m_texture->getPixelFormat() == VK_FORMAT_R16G16B16_SFLOAT
 			|| m_texture->getPixelFormat() == VK_FORMAT_R16G16B16A16_SFLOAT;
-		return m_texture->initialise();
+		return m_texture->initialise( device );
 	}
 
-	void SkyboxBackground::doInitialiseEquiTexture()
+	void SkyboxBackground::doInitialiseEquiTexture( RenderDevice const & device )
 	{
 		auto & engine = *getEngine();
 		auto & renderSystem = *engine.getRenderSystem();
-		auto & device = getCurrentRenderDevice( renderSystem );
-		m_equiTexture->initialise();
+		m_equiTexture->initialise( device );
 
 		// create the cube texture if needed.
 		if ( m_texture->getDimensions().width != m_equiSize.getWidth()
@@ -351,7 +359,7 @@ namespace castor3d
 				, doGetImageCreate( m_equiTexture->getPixelFormat(), m_equiSize, true )
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, cuT( "SkyboxBackgroundEquiCube" ) );
-			m_texture->initialise();
+			m_texture->initialise( device );
 
 			EquirectangularToCube equiToCube{ *m_equiTexture
 				, device
@@ -360,18 +368,18 @@ namespace castor3d
 
 			if ( m_scene.getMaterialsType() != MaterialType::ePhong )
 			{
-				m_texture->generateMipmaps();
+				m_texture->generateMipmaps( device );
 			}
 		}
 
 		m_equiTexture->cleanup();
 	}
 
-	void SkyboxBackground::doInitialiseCrossTexture()
+	void SkyboxBackground::doInitialiseCrossTexture( RenderDevice const & device )
 	{
 		auto & engine = *getEngine();
 		auto & renderSystem = *engine.getRenderSystem();
-		m_crossTexture->initialise();
+		m_crossTexture->initialise( device );
 		auto width = m_crossTexture->getWidth() / 4u;
 		auto height = m_crossTexture->getHeight() / 3u;
 		CU_Require( width == height );
@@ -381,7 +389,7 @@ namespace castor3d
 			, doGetImageCreate( m_crossTexture->getPixelFormat(), Size{ width, width }, true )
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SkyboxBackgroundCrossCube" ) );
-		m_texture->initialise();
+		m_texture->initialise( device );
 
 		VkImageSubresourceLayers srcSubresource
 		{
@@ -428,7 +436,6 @@ namespace castor3d
 			copyInfos[uint32_t( CubeMapFace::ePositiveX )].dstSubresource.baseArrayLayer = i;
 		}
 
-		auto & device = getCurrentRenderDevice( renderSystem );
 		auto commandBuffer = device.graphicsCommandPool->createCommandBuffer( "SkyboxBackground" );
 		commandBuffer->begin();
 		commandBuffer->beginDebugBlock(

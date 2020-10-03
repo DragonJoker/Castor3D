@@ -50,7 +50,7 @@ namespace CastorCom
 
 			if ( ::WideCharToMultiByte( CP_UTF8, 0, val, l_length, l_out.data(), int( l_out.size() ), nullptr, nullptr ) )
 			{
-				l_return = castor::string::stringCast< xchar >( std::string( l_out.begin(), l_out.end() ) );
+				l_return = castor::string::stringCast< castor::xchar >( std::string( l_out.begin(), l_out.end() ) );
 			}
 		}
 

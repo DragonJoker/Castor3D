@@ -4,9 +4,9 @@
 
 #include "ComCastor3D/ComAtlObject.hpp"
 
-#include <Castor3D/Mesh/SubmeshComponent/IndexMapping.hpp>
-#include <Castor3D/Mesh/SubmeshComponent/LinesMapping.hpp>
-#include <Castor3D/Mesh/SubmeshComponent/TriFaceMapping.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/IndexMapping.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp>
 
 namespace CastorCom
 {

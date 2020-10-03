@@ -45,11 +45,11 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::ParticleSystemImpl::initialise
 		 */
-		C3D_API bool initialise()override;
+		C3D_API bool initialise( RenderDevice const & device )override;
 		/**
 		 *\copydoc		castor3d::ParticleSystemImpl::cleanup
 		 */
-		C3D_API void cleanup()override;
+		C3D_API void cleanup( RenderDevice const & device )override;
 		/**
 		 *\copydoc		castor3d::ParticleSystemImpl::update
 		 */
@@ -107,10 +107,10 @@ namespace castor3d
 		}
 
 	private:
-		bool doInitialiseParticleStorage();
-		bool doCreateRandomStorage();
-		bool doInitialisePipeline();
-		void doPrepareCommandBuffers();
+		bool doInitialiseParticleStorage( RenderDevice const & device );
+		bool doCreateRandomStorage( RenderDevice const & device );
+		bool doInitialisePipeline( RenderDevice const & device );
+		void doPrepareCommandBuffers( RenderDevice const & device );
 
 	protected:
 		struct Configuration

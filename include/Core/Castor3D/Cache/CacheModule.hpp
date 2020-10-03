@@ -529,6 +529,7 @@ namespace castor3d
 
 	CU_DeclareSmartPtr( AnimatedObjectGroupCache );
 	CU_DeclareSmartPtr( BillboardListCache );
+	CU_DeclareSmartPtr( BillboardUboPools );
 	CU_DeclareSmartPtr( CameraCache );
 	CU_DeclareSmartPtr( GeometryCache );
 	CU_DeclareSmartPtr( LightCache );

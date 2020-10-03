@@ -11,13 +11,22 @@ See LICENSE file in root folder
 #include <CastorUtils/Math/RangedValue.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
+#include <ashespp/Image/ImageView.hpp>
+
 namespace castor3d
 {
 	class PipelineVisitorBase
 	{
+	public:
+		struct Config
+		{
+			bool forceSubPassesVisit;
+			bool forceMiplevelsVisit;
+		};
+
 	protected:
-		inline explicit PipelineVisitorBase( bool forceSubPassesVisit )
-			: forceSubPassesVisit{ forceSubPassesVisit }
+		inline explicit PipelineVisitorBase( Config config )
+			: config{ std::move( config ) }
 		{
 		}
 
@@ -46,9 +55,16 @@ namespace castor3d
 		*	Images intermédiaires.
 		**/
 		/**@{*/
-		virtual void visit( castor::String const & name
+		inline void visit( castor::String const & name
 			, ashes::ImageView const & view
-			, TextureFactors const & factors = {} ) = 0;
+			, VkImageLayout layout
+			, TextureFactors const & factors = {} )
+		{
+			if ( doFilter( view.createInfo ) )
+			{
+				doVisit( name, view, layout, factors );
+			}
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -263,16 +279,24 @@ namespace castor3d
 			, castor::ChangeTracked< castor::RangedValue< uint32_t > > & value ) = 0;
 		/**@}*/
 
+	private:
+		virtual bool doFilter( VkImageViewCreateInfo const & info )const = 0;
+
+		virtual void doVisit( castor::String const & name
+			, ashes::ImageView const & view
+			, VkImageLayout layout
+			, TextureFactors const & factors = {} ) = 0;
+
 	public:
-		bool const forceSubPassesVisit;
+		Config const config;
 	};
 
 	class PipelineVisitor
 		: public PipelineVisitorBase
 	{
 	protected:
-		inline explicit PipelineVisitor( bool forceSubPassesVisit )
-			: PipelineVisitorBase{ forceSubPassesVisit }
+		inline explicit PipelineVisitor( Config config )
+			: PipelineVisitorBase{ std::move( config ) }
 		{
 		}
 
@@ -294,21 +318,6 @@ namespace castor3d
 		}
 
 		void visit( DebugConfig const & ubo )override
-		{
-		}
-		/**@}*/
-		/**
-		*\~english
-		*name
-		*	Intermediate images.
-		*\~french
-		*name
-		*	Images intermédiaires.
-		**/
-		/**@{*/
-		void visit( castor::String const & name
-			, ashes::ImageView const & view
-			, TextureFactors const & factors = TextureFactors{} )override
 		{
 		}
 		/**@}*/
@@ -666,6 +675,22 @@ namespace castor3d
 		{
 		}
 		/**@}*/
+
+	public:
+		using PipelineVisitorBase::visit;
+
+	private:
+		bool doFilter( VkImageViewCreateInfo const & info )const override
+		{
+			return true;
+		}
+
+		void doVisit( castor::String const & name
+			, ashes::ImageView const & view
+			, VkImageLayout layout
+			, TextureFactors const & factors = TextureFactors{} )override
+		{
+		}
 	};
 }
 

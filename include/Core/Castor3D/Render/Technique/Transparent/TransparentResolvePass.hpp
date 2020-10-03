@@ -21,6 +21,7 @@ namespace castor3d
 		TransparentResolveProgram( TransparentResolveProgram && rhs ) = default;
 		TransparentResolveProgram & operator=( TransparentResolveProgram && rhs ) = delete;
 		TransparentResolveProgram( Engine & engine
+			, RenderDevice const & device
 			, ashes::RenderPass const & renderPass
 			, RenderPassTimer & timer
 			, ashes::DescriptorSetLayout const & uboLayout
@@ -84,6 +85,7 @@ namespace castor3d
 		 *\param[in]	colourView		La vue couleur cible.
 		 */
 		TransparentResolvePass( Engine & engine
+			, RenderDevice const & device
 			, castor::Size const & size
 			, SceneUbo & sceneUbo
 			, HdrConfigUbo const & hdrConfigUbo
@@ -107,7 +109,8 @@ namespace castor3d
 		 *\param[in]	fogType	Le type de brouillard.
 		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
 		 */
-		ashes::Semaphore const & render( FogType fogType
+		ashes::Semaphore const & render( RenderDevice const & device
+			, FogType fogType
 			, ashes::Semaphore const & toWait );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
@@ -115,7 +118,8 @@ namespace castor3d
 		void accept( RenderTechniqueVisitor & visitor );
 
 	private:
-		TransparentResolveProgram * doGetProgram( FogType type );
+		TransparentResolveProgram * doGetProgram( RenderDevice const & device
+			, FogType type );
 
 	private:
 		castor::Size m_size;

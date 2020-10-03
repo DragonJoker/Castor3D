@@ -2,7 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
-#include "Castor3D/Event/Frame/FunctorEvent.hpp"
+#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Scene/Animation/AnimatedMesh.hpp"
 #include "Castor3D/Scene/Animation/AnimatedObjectGroup.hpp"
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
@@ -26,10 +26,11 @@ namespace castor3d
 			, std::move( clean )
 			, std::move( merge ) }
 	{
-		getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
-			, [this]()
+		getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
+			, [this]( RenderDevice const & device )
 			{
 				m_updateTimer = std::make_shared< RenderPassTimer >( *getEngine()
+					, device
 					, cuT( "Update" )
 					, cuT( "Animation UBOs" )
 					, 1u );
@@ -71,10 +72,10 @@ namespace castor3d
 		return m_skeletonEntries.at( &skeleton );
 	}
 
-	void AnimatedObjectGroupCache::clear()
+	void AnimatedObjectGroupCache::clear( RenderDevice const & device )
 	{
 		MyCache::clear();
-		auto & uboPools = *getCurrentRenderDevice( *getEngine() ).uboPools;
+		auto & uboPools = *device.uboPools;
 
 		for ( auto & entry : m_meshEntries )
 		{
@@ -115,10 +116,11 @@ namespace castor3d
 		}
 	}
 
-	AnimatedObjectGroupCache::MeshPoolsEntry AnimatedObjectGroupCache::doCreateEntry( AnimatedObjectGroup const & group
+	AnimatedObjectGroupCache::MeshPoolsEntry AnimatedObjectGroupCache::doCreateEntry( RenderDevice const & device
+		, AnimatedObjectGroup const & group
 		, AnimatedMesh const & mesh )
 	{
-		auto & uboPools = *getCurrentRenderDevice( *getEngine() ).uboPools;
+		auto & uboPools = *device.uboPools;
 		return
 		{
 			group,
@@ -127,10 +129,11 @@ namespace castor3d
 		};
 	}
 
-	AnimatedObjectGroupCache::SkeletonPoolsEntry AnimatedObjectGroupCache::doCreateEntry( AnimatedObjectGroup const & group
+	AnimatedObjectGroupCache::SkeletonPoolsEntry AnimatedObjectGroupCache::doCreateEntry( RenderDevice const & device
+		, AnimatedObjectGroup const & group
 		, AnimatedSkeleton const & skeleton )
 	{
-		auto & uboPools = *getCurrentRenderDevice( *getEngine() ).uboPools;
+		auto & uboPools = *device.uboPools;
 		return
 		{
 			group,
@@ -139,17 +142,19 @@ namespace castor3d
 		};
 	}
 
-	void AnimatedObjectGroupCache::doRemoveEntry( AnimatedMesh const & mesh )
+	void AnimatedObjectGroupCache::doRemoveEntry( RenderDevice const & device
+		, AnimatedMesh const & mesh )
 	{
-		auto & uboPools = *getCurrentRenderDevice( *getEngine() ).uboPools;
+		auto & uboPools = *device.uboPools;
 		auto entry = getUbos( mesh );
 		m_meshEntries.erase( &mesh );
 		uboPools.putBuffer( entry.morphingUbo );
 	}
 
-	void AnimatedObjectGroupCache::doRemoveEntry( AnimatedSkeleton const & skeleton )
+	void AnimatedObjectGroupCache::doRemoveEntry( RenderDevice const & device
+		, AnimatedSkeleton const & skeleton )
 	{
-		auto & uboPools = *getCurrentRenderDevice( *getEngine() ).uboPools;
+		auto & uboPools = *device.uboPools;
 		auto entry = getUbos( skeleton );
 		m_skeletonEntries.erase( &skeleton );
 		uboPools.putBuffer( entry.skinningUbo );
@@ -157,52 +162,76 @@ namespace castor3d
 
 	void AnimatedObjectGroupCache::doRegister( AnimatedObjectGroup & group )
 	{
-		m_meshAddedConnections.emplace( &group, group.onMeshAdded.connect( [this]( AnimatedObjectGroup const & group
-			, AnimatedMesh const & mesh )
-		{
-			m_meshEntries.emplace( &mesh
-				, doCreateEntry( group, mesh ) );
-		} ) );
-		m_meshRemovedConnections.emplace( &group, group.onMeshRemoved.connect( [this]( AnimatedObjectGroup const & group
-			, AnimatedMesh const & mesh )
-		{
-			doRemoveEntry( mesh );
-		} ) );
-		m_skeletonAddedConnections.emplace( &group, group.onSkeletonAdded.connect( [this]( AnimatedObjectGroup const & group
-			, AnimatedSkeleton const & skeleton )
-		{
-			m_skeletonEntries.emplace( &skeleton
-				, doCreateEntry( group, skeleton ) );
-		} ) );
-		m_skeletonRemovedConnections.emplace( &group, group.onSkeletonRemoved.connect( [this]( AnimatedObjectGroup const & group
-			, AnimatedSkeleton const & skeleton )
-		{
-			doRemoveEntry( skeleton );
-		} ) );
+		m_meshAddedConnections.emplace( &group
+			, group.onMeshAdded.connect( [this]( AnimatedObjectGroup const & group
+				, AnimatedMesh const & mesh )
+				{
+					getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
+						, [this, &group, &mesh]( RenderDevice const & device )
+						{
+							m_meshEntries.emplace( &mesh
+								, doCreateEntry( device, group, mesh ) );
+						} ) );
+				} ) );
+		m_meshRemovedConnections.emplace( &group
+			, group.onMeshRemoved.connect( [this]( AnimatedObjectGroup const & group
+				, AnimatedMesh const & mesh )
+				{
+					getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
+						, [this, &group, &mesh]( RenderDevice const & device )
+						{
+							doRemoveEntry( device, mesh );
+						} ) );
+				} ) );
+		m_skeletonAddedConnections.emplace( &group
+			, group.onSkeletonAdded.connect( [this]( AnimatedObjectGroup const & group
+				, AnimatedSkeleton const & skeleton )
+				{
+					getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
+						, [this, &group, &skeleton]( RenderDevice const & device )
+						{
+							m_skeletonEntries.emplace( &skeleton
+								, doCreateEntry( device, group, skeleton ) );
+						} ) );
+				} ) );
+		m_skeletonRemovedConnections.emplace( &group
+			, group.onSkeletonRemoved.connect( [this]( AnimatedObjectGroup const & group
+				, AnimatedSkeleton const & skeleton )
+				{
+					getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
+						, [this, &group, &skeleton]( RenderDevice const & device )
+						{
+							doRemoveEntry( device, skeleton );
+						} ) );
+				} ) );
 	}
 
 	void AnimatedObjectGroupCache::doUnregister( AnimatedObjectGroup & group )
 	{
-		m_meshAddedConnections.erase( &group );
-		m_meshRemovedConnections.erase( &group );
-		m_skeletonAddedConnections.erase( &group );
-		m_skeletonRemovedConnections.erase( &group );
-
-		for ( auto & pair : group.getObjects() )
-		{
-			switch ( pair.second->getKind() )
+		getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
+			, [this, &group]( RenderDevice const & device )
 			{
-			case AnimationType::eMesh:
-				doRemoveEntry( static_cast< AnimatedMesh const & >( *pair.second ) );
-				break;
+				m_meshAddedConnections.erase( &group );
+				m_meshRemovedConnections.erase( &group );
+				m_skeletonAddedConnections.erase( &group );
+				m_skeletonRemovedConnections.erase( &group );
 
-			case AnimationType::eSkeleton:
-				doRemoveEntry( static_cast< AnimatedSkeleton const & >( *pair.second ) );
-				break;
+				for ( auto & pair : group.getObjects() )
+				{
+					switch ( pair.second->getKind() )
+					{
+					case AnimationType::eMesh:
+						doRemoveEntry( device, static_cast< AnimatedMesh const & >( *pair.second ) );
+						break;
 
-			default:
-				break;
-			}
-		}
+					case AnimationType::eSkeleton:
+						doRemoveEntry( device, static_cast< AnimatedSkeleton const & >( *pair.second ) );
+						break;
+
+					default:
+						break;
+					}
+				}
+			} ) );
 	}
 }

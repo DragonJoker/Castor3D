@@ -4,7 +4,7 @@
 
 #include "ComCastor3D/CastorUtils/ComRgbColour.hpp"
 
-#include <Castor3D/Material/Pass.hpp>
+#include <Castor3D/Material/Pass/Pass.hpp>
 
 namespace CastorCom
 {
@@ -74,12 +74,14 @@ namespace CastorCom
 			, makeGetter( m_internal.get(), &castor3d::Pass::getOpacity )
 			, makePutter( m_internal.get(), &castor3d::Pass::setOpacity ) );
 
-		COM_PROPERTY_GET( TextureUnitCount, unsigned int, makeGetter( m_internal.get(), &castor3d::Pass::getTextureUnitsCount ) );
+		COM_PROPERTY_GET( TextureUnitCount
+			, unsigned int
+			, makeGetter( m_internal.get(), &castor3d::Pass::getTextureUnitsCount, castor3d::TextureFlag::eAll ) );
 
 		STDMETHOD( CreateTextureUnit )( /* [out, retval] */ ITextureUnit ** pVal );
-		STDMETHOD( GetTextureUnitByIndex )( /* [in] */ unsigned int index, /* [out, retval] */ ITextureUnit ** pVal );
 		STDMETHOD( DestroyTextureUnit )( /* [in] */ ITextureUnit * val );
-		STDMETHOD( GetTextureUnitByChannel )( /* [in] */ eTEXTURE_CHANNEL channel, /* [out, retval] */ ITextureUnit ** pVal );
+		STDMETHOD( GetTextureUnitByIndex )( /* [in] */ unsigned int index, /* [out, retval] */ ITextureUnit ** pVal );
+		STDMETHOD( GetTextureUnitByFlag )( /* [in] */ eTEXTURE_FLAG flag, /* [out, retval] */ ITextureUnit ** pVal );
 
 	private:
 		castor3d::PassSPtr m_internal;

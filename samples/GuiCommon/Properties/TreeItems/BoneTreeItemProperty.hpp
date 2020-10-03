@@ -45,10 +45,6 @@ namespace GuiCommon
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
 		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
-		/**
-		 *\copydoc GuiCommon::TreeItemProperty::doPropertyChange
-		 */
-		virtual void doPropertyChange( wxPropertyGridEvent & p_event );
 
 	private:
 		castor3d::Bone & m_bone;

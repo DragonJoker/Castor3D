@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/ToneMapping/ToneMappingVisitor.hpp"
 
-#include "Castor3D/Render/ToTexture/RenderQuad.hpp"
+#include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
@@ -39,6 +39,7 @@ namespace castor3d
 		C3D_API ToneMapping( castor::String const & name
 			, castor::String const & fullName
 			, Engine & engine
+			, RenderDevice const & device
 			, HdrConfigUbo & hdrConfigUbo
 			, Parameters const & parameters );
 		/**
@@ -113,7 +114,7 @@ namespace castor3d
 		/**@}*/
 
 	public:
-		using RenderQuad::registerFrame;
+		using RenderQuad::registerPass;
 		using RenderQuad::getName;
 
 	private:
@@ -151,10 +152,6 @@ namespace castor3d
 		C3D_API virtual void doGpuUpdate()
 		{
 		}
-
-	private:
-		C3D_API void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-			, ashes::DescriptorSet & descriptorSet )override;
 
 	protected:
 		castor::String m_fullName;

@@ -124,7 +124,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Vide la collection.
 		 */
-		C3D_API void clear();
+		C3D_API void clear( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Adds an object.
@@ -162,10 +162,12 @@ namespace castor3d
 		C3D_API void remove( Key const & name );
 
 	private:
-		PoolsEntry doCreateEntry( Geometry const & geometry
+		PoolsEntry doCreateEntry( RenderDevice const & device
+			, Geometry const & geometry
 			, Submesh const & submesh
 			, Pass const & pass );
-		void doRemoveEntry( Geometry const & geometry
+		void doRemoveEntry( RenderDevice const & device
+			, Geometry const & geometry
 			, Submesh const & submesh
 			, Pass const & pass );
 		void doRegister( Geometry & geometry );

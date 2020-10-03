@@ -13,10 +13,10 @@ namespace fxaa
 	const castor::String FxaaUbo::ReduceMul = cuT( "c3d_reduceMul" );
 	const castor::String FxaaUbo::PixelSize = cuT( "c3d_pixelSize" );
 
-	FxaaUbo::FxaaUbo( castor3d::Engine & engine
+	FxaaUbo::FxaaUbo( castor3d::RenderDevice const & device
 		, castor::Size const & size )
-		: m_engine{ engine }
-		, m_ubo{ getCurrentRenderDevice( m_engine ).uboPools->getBuffer< Configuration >( 0u ) }
+		: m_device{ device }
+		, m_ubo{ device.uboPools->getBuffer< Configuration >( 0u ) }
 	{
 		auto & data = m_ubo.getData();
 		data.pixelSize = castor::Point2f{ 1.0f / size.getWidth(), 1.0f / size.getHeight() };
@@ -24,7 +24,7 @@ namespace fxaa
 
 	FxaaUbo::~FxaaUbo()
 	{
-		getCurrentRenderDevice( m_engine ).uboPools->putBuffer( m_ubo );
+		m_device.uboPools->putBuffer( m_ubo );
 	}
 
 	void FxaaUbo::cpuUpdate( float shift

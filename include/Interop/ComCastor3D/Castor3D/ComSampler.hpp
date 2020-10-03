@@ -4,7 +4,7 @@
 
 #include "ComCastor3D/CastorUtils/ComRgbaColour.hpp"
 
-#include <Castor3D/Texture/Sampler.hpp>
+#include <Castor3D/Material/Texture/Sampler.hpp>
 
 namespace CastorCom
 {

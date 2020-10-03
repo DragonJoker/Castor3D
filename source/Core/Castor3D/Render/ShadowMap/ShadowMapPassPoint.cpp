@@ -114,9 +114,9 @@ namespace castor3d
 		RenderPass::doUpdate( nodes.billboardNodes.backCulled );
 	}
 
-	bool ShadowMapPassPoint::doInitialise( Size const & size )
+	bool ShadowMapPassPoint::doInitialise( RenderDevice const & device
+		, Size const & size )
 	{
-		auto & device = getCurrentRenderDevice( *this );
 		float const aspect = float( size.getWidth() ) / size.getHeight();
 		float const nearZ = 1.0f;
 		float const farZ = 2000.0f;
@@ -205,7 +205,7 @@ namespace castor3d
 		return m_initialised;
 	}
 
-	void ShadowMapPassPoint::doCleanup()
+	void ShadowMapPassPoint::doCleanup( RenderDevice const & device )
 	{
 		m_renderQueue.cleanup();
 		m_onNodeChanged.disconnect();

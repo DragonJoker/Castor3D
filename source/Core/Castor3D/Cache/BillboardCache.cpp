@@ -2,7 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
-#include "Castor3D/Event/Frame/FunctorEvent.hpp"
+#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
@@ -36,32 +36,46 @@ namespace castor3d
 			, std::move( merge )
 			, std::move( attach )
 			, std::move( detach ) )
-		, m_pools{ scene.getBillboardPools() }
 	{
+		scene.getListener().postEvent( makeGpuFunctorEvent( EventType::ePreRender
+			, [this]( RenderDevice const & device )
+			{
+				m_pools = std::make_shared< BillboardUboPools >( device );
+			} ) );
 	}
 
 	BillboardListCache::~ObjectCache()
 	{
 	}
 
+	void BillboardListCache::cleanup( RenderDevice const & device )
+	{
+		m_pools->clear( device );
+	}
+
 	void BillboardListCache::clear()
 	{
 		for ( auto & element : m_elements )
 		{
-			m_pools.unregisterElement( *element.second );
+			m_pools->unregisterElement( *element.second );
 		}
 
 		MyObjectCache::clear();
+	}
+
+	void BillboardListCache::update( CpuUpdater & updater )
+	{
+		m_pools->update();
 	}
 
 	BillboardListSPtr BillboardListCache::add( Key const & name
 		, SceneNode & parent )
 	{
 		auto result = MyObjectCache::add( name, parent );
-		getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
-			, [this, result]()
+		getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
+			, [this, result]( RenderDevice const & device )
 			{
-				m_pools.registerElement( *result );
+				m_pools->registerElement( *result );
 			} ) );
 		return result;
 	}
@@ -70,10 +84,10 @@ namespace castor3d
 	{
 		m_initialise( element );
 		MyObjectCache::add( element->getName(), element );
-		getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
-			, [this, element]()
+		getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
+			, [this, element]( RenderDevice const & device )
 			{
-				m_pools.registerElement( *element );
+				m_pools->registerElement( *element );
 			} ) );
 	}
 
@@ -87,7 +101,7 @@ namespace castor3d
 			m_detach( element );
 			m_elements.erase( name );
 			onChanged();
-			m_pools.unregisterElement( *element );
+			m_pools->unregisterElement( *element );
 		}
 	}
 }

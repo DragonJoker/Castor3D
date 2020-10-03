@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "PbrModule.hpp"
 
-#include "Castor3D/Render/ToTexture/RenderQuad.hpp"
+#include "Castor3D/Render/Passes/RenderQuad.hpp"
 
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 
@@ -28,6 +28,7 @@ namespace castor3d
 		 *\param[in]	dstTexture	La texture cube destination.
 		 */
 		C3D_API explicit BrdfPrefilter( Engine & engine
+			, RenderDevice const & device
 			, castor::Size const & size
 			, ashes::ImageView const & dstTexture );
 		/**
@@ -49,6 +50,7 @@ namespace castor3d
 
 	private:
 		RenderSystem & m_renderSystem;
+		RenderDevice const & m_device;
 		ashes::VertexBufferPtr< TexturedQuad > m_vertexBuffer;
 		ashes::PipelineVertexInputStateCreateInfoPtr m_vertexLayout;
 		ashes::RenderPassPtr m_renderPass;

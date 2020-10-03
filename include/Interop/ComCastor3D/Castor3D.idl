@@ -58,49 +58,220 @@ typedef enum
 ]
 typedef enum
 {
-	ePIXEL_FORMAT_L8,
-	ePIXEL_FORMAT_L16F,
-	ePIXEL_FORMAT_L32F,
-	ePIXEL_FORMAT_A8L8,
-	ePIXEL_FORMAT_AL16F,
-	ePIXEL_FORMAT_AL32F,
-	ePIXEL_FORMAT_A1R5G5B5,
-	ePIXEL_FORMAT_R5G6B5,
-	ePIXEL_FORMAT_R8G8B8,
-	ePIXEL_FORMAT_B8G8R8,
-	ePIXEL_FORMAT_R8G8B8_SRGB,
-	ePIXEL_FORMAT_B8G8R8_SRGB,
-	ePIXEL_FORMAT_A8R8G8B8,
-	ePIXEL_FORMAT_A8B8G8R8,
-	ePIXEL_FORMAT_A8R8G8B8_SRGB,
-	ePIXEL_FORMAT_A8B8G8R8_SRGB,
-	ePIXEL_FORMAT_RGB16F,
-	ePIXEL_FORMAT_RGBA16F,
-	ePIXEL_FORMAT_RGB32F,
-	ePIXEL_FORMAT_RGBA32F,
-	ePIXEL_FORMAT_DXTC1,
-	ePIXEL_FORMAT_DXTC3,
-	ePIXEL_FORMAT_DXTC5,
-	ePIXEL_FORMAT_D16,
-	ePIXEL_FORMAT_D24S8,
-	ePIXEL_FORMAT_D32,
-	ePIXEL_FORMAT_D32F,
-	ePIXEL_FORMAT_D32FS8,
-	ePIXEL_FORMAT_S8,
+	ePIXEL_FORMAT_UNDEFINED = 0,
+
+	ePIXEL_FORMAT_R4G4_UNORM = 1,
+	ePIXEL_FORMAT_R4G4B4A4_UNORM = 2,
+	ePIXEL_FORMAT_B4G4R4A4_UNORM = 3,
+	ePIXEL_FORMAT_R5G6B5_UNORM = 4,
+	ePIXEL_FORMAT_B5G6R5_UNORM = 5,
+	ePIXEL_FORMAT_R5G5B5A1_UNORM = 6,
+	ePIXEL_FORMAT_B5G5R5A1_UNORM = 7,
+	ePIXEL_FORMAT_A1R5G5B5_UNORM = 8,
+
+	ePIXEL_FORMAT_R8_UNORM = 9,
+	ePIXEL_FORMAT_R8_SNORM = 10,
+	ePIXEL_FORMAT_R8_USCALED = 11,
+	ePIXEL_FORMAT_R8_SSCALED = 12,
+	ePIXEL_FORMAT_R8_UINT = 13,
+	ePIXEL_FORMAT_R8_SINT = 14,
+	ePIXEL_FORMAT_R8_SRGB = 15,
+
+	ePIXEL_FORMAT_R8G8_UNORM = 16,
+	ePIXEL_FORMAT_R8G8_SNORM = 17,
+	ePIXEL_FORMAT_R8G8_USCALED = 18,
+	ePIXEL_FORMAT_R8G8_SSCALED = 19,
+	ePIXEL_FORMAT_R8G8_UINT = 20,
+	ePIXEL_FORMAT_R8G8_SINT = 21,
+	ePIXEL_FORMAT_R8G8_SRGB = 22,
+
+	ePIXEL_FORMAT_R8G8B8_UNORM = 23,
+	ePIXEL_FORMAT_R8G8B8_SNORM = 24,
+	ePIXEL_FORMAT_R8G8B8_USCALED = 25,
+	ePIXEL_FORMAT_R8G8B8_SSCALED = 26,
+	ePIXEL_FORMAT_R8G8B8_UINT = 27,
+	ePIXEL_FORMAT_R8G8B8_SINT = 28,
+	ePIXEL_FORMAT_R8G8B8_SRGB = 29,
+
+	ePIXEL_FORMAT_B8G8R8_UNORM = 30,
+	ePIXEL_FORMAT_B8G8R8_SNORM = 31,
+	ePIXEL_FORMAT_B8G8R8_USCALED = 32,
+	ePIXEL_FORMAT_B8G8R8_SSCALED = 33,
+	ePIXEL_FORMAT_B8G8R8_UINT = 34,
+	ePIXEL_FORMAT_B8G8R8_SINT = 35,
+	ePIXEL_FORMAT_B8G8R8_SRGB = 36,
+
+	ePIXEL_FORMAT_R8G8B8A8_UNORM = 37,
+	ePIXEL_FORMAT_R8G8B8A8_SNORM = 38,
+	ePIXEL_FORMAT_R8G8B8A8_USCALED = 39,
+	ePIXEL_FORMAT_R8G8B8A8_SSCALED = 40,
+	ePIXEL_FORMAT_R8G8B8A8_UINT = 41,
+	ePIXEL_FORMAT_R8G8B8A8_SINT = 42,
+	ePIXEL_FORMAT_R8G8B8A8_SRGB = 43,
+
+	ePIXEL_FORMAT_B8G8R8A8_UNORM = 44,
+	ePIXEL_FORMAT_B8G8R8A8_SNORM = 45,
+	ePIXEL_FORMAT_B8G8R8A8_USCALED = 46,
+	ePIXEL_FORMAT_B8G8R8A8_SSCALED = 47,
+	ePIXEL_FORMAT_B8G8R8A8_UINT = 48,
+	ePIXEL_FORMAT_B8G8R8A8_SINT = 49,
+	ePIXEL_FORMAT_B8G8R8A8_SRGB = 50,
+
+	ePIXEL_FORMAT_A8B8G8R8_UNORM = 51,
+	ePIXEL_FORMAT_A8B8G8R8_SNORM = 52,
+	ePIXEL_FORMAT_A8B8G8R8_USCALED = 53,
+	ePIXEL_FORMAT_A8B8G8R8_SSCALED = 54,
+	ePIXEL_FORMAT_A8B8G8R8_UINT = 55,
+	ePIXEL_FORMAT_A8B8G8R8_SINT = 56,
+	ePIXEL_FORMAT_A8B8G8R8_SRGB = 57,
+
+	ePIXEL_FORMAT_A2R10G10B10_UNORM = 58,
+	ePIXEL_FORMAT_A2R10G10B10_SNORM = 59,
+	ePIXEL_FORMAT_A2R10G10B10_USCALED = 60,
+	ePIXEL_FORMAT_A2R10G10B10_SSCALED = 61,
+	ePIXEL_FORMAT_A2R10G10B10_UINT = 62,
+	ePIXEL_FORMAT_A2R10G10B10_SINT = 63,
+
+	ePIXEL_FORMAT_A2B10G10R10_UNORM = 64,
+	ePIXEL_FORMAT_A2B10G10R10_SNORM = 65,
+	ePIXEL_FORMAT_A2B10G10R10_USCALED = 66,
+	ePIXEL_FORMAT_A2B10G10R10_SSCALED = 67,
+	ePIXEL_FORMAT_A2B10G10R10_UINT = 68,
+	ePIXEL_FORMAT_A2B10G10R10_SINT = 69,
+
+	ePIXEL_FORMAT_R16_UNORM = 70,
+	ePIXEL_FORMAT_R16_SNORM = 71,
+	ePIXEL_FORMAT_R16_USCALED = 72,
+	ePIXEL_FORMAT_R16_SSCALED = 73,
+	ePIXEL_FORMAT_R16_UINT = 74,
+	ePIXEL_FORMAT_R16_SINT = 75,
+	ePIXEL_FORMAT_R16_SFLOAT = 76,
+
+	ePIXEL_FORMAT_R16G16_UNORM = 77,
+	ePIXEL_FORMAT_R16G16_SNORM = 78,
+	ePIXEL_FORMAT_R16G16_USCALED = 79,
+	ePIXEL_FORMAT_R16G16_SSCALED = 80,
+	ePIXEL_FORMAT_R16G16_UINT = 81,
+	ePIXEL_FORMAT_R16G16_SINT = 82,
+	ePIXEL_FORMAT_R16G16_SFLOAT = 83,
+
+	ePIXEL_FORMAT_R16G16B16_UNORM = 84,
+	ePIXEL_FORMAT_R16G16B16_SNORM = 85,
+	ePIXEL_FORMAT_R16G16B16_USCALED = 86,
+	ePIXEL_FORMAT_R16G16B16_SSCALED = 87,
+	ePIXEL_FORMAT_R16G16B16_UINT = 88,
+	ePIXEL_FORMAT_R16G16B16_SINT = 89,
+	ePIXEL_FORMAT_R16G16B16_SFLOAT = 90,
+
+	ePIXEL_FORMAT_R16G16B16A16_UNORM = 91,
+	ePIXEL_FORMAT_R16G16B16A16_SNORM = 92,
+	ePIXEL_FORMAT_R16G16B16A16_USCALED = 93,
+	ePIXEL_FORMAT_R16G16B16A16_SSCALED = 94,
+	ePIXEL_FORMAT_R16G16B16A16_UINT = 95,
+	ePIXEL_FORMAT_R16G16B16A16_SINT = 96,
+	ePIXEL_FORMAT_R16G16B16A16_SFLOAT = 97,
+
+	ePIXEL_FORMAT_R32_UINT = 98,
+	ePIXEL_FORMAT_R32_SINT = 99,
+	ePIXEL_FORMAT_R32_SFLOAT = 100,
+
+	ePIXEL_FORMAT_R32G32_UINT = 101,
+	ePIXEL_FORMAT_R32G32_SINT = 102,
+	ePIXEL_FORMAT_R32G32_SFLOAT = 103,
+
+	ePIXEL_FORMAT_R32G32B32_UINT = 104,
+	ePIXEL_FORMAT_R32G32B32_SINT = 105,
+	ePIXEL_FORMAT_R32G32B32_SFLOAT = 106,
+
+	ePIXEL_FORMAT_R32G32B32A32_UINT = 107,
+	ePIXEL_FORMAT_R32G32B32A32_SINT = 108,
+	ePIXEL_FORMAT_R32G32B32A32_SFLOAT = 109,
+
+	ePIXEL_FORMAT_R64_UINT = 110,
+	ePIXEL_FORMAT_R64_SINT = 111,
+	ePIXEL_FORMAT_R64_SFLOAT = 112,
+
+	ePIXEL_FORMAT_R64G64_UINT = 113,
+	ePIXEL_FORMAT_R64G64_SINT = 114,
+	ePIXEL_FORMAT_R64G64_SFLOAT = 115,
+
+	ePIXEL_FORMAT_R64G64B64_UINT = 116,
+	ePIXEL_FORMAT_R64G64B64_SINT = 117,
+	ePIXEL_FORMAT_R64G64B64_SFLOAT = 118,
+
+	ePIXEL_FORMAT_R64G64B64A64_UINT = 119,
+	ePIXEL_FORMAT_R64G64B64A64_SINT = 120,
+	ePIXEL_FORMAT_R64G64B64A64_SFLOAT = 121,
+
+	ePIXEL_FORMAT_B10G11R11_UFLOAT = 122,
+	ePIXEL_FORMAT_E5B9G9R9_UFLOAT = 123,
+
+	ePIXEL_FORMAT_D16_UNORM = 124,
+	ePIXEL_FORMAT_X8_D24_UNORM = 125,
+	ePIXEL_FORMAT_D32_SFLOAT = 126,
+	ePIXEL_FORMAT_S8_UINT = 127,
+	ePIXEL_FORMAT_D16_UNORM_S8_UINT = 128,
+	ePIXEL_FORMAT_D24_UNORM_S8_UINT = 129,
+	ePIXEL_FORMAT_D32_SFLOAT_S8_UINT = 130,
+
+	ePIXEL_FORMAT_BC1_RGB_UNORM_BLOCK = 131, // RGB_DXT1
+	ePIXEL_FORMAT_BC1_RGB_SRGB_BLOCK = 132, // RGB_DXT1
+	ePIXEL_FORMAT_BC1_RGBA_UNORM_BLOCK = 133, // RGBA_DXT1
+	ePIXEL_FORMAT_BC1_RGBA_SRGB_BLOCK = 134, // RGBA_DXT1
+	ePIXEL_FORMAT_BC2_UNORM_BLOCK = 135, // RGBA_DXT3
+	ePIXEL_FORMAT_BC2_SRGB_BLOCK = 136, // RGBA_DXT3
+	ePIXEL_FORMAT_BC3_UNORM_BLOCK = 137, // RGBA_DXT5
+	ePIXEL_FORMAT_BC3_SRGB_BLOCK = 138, // RGBA_DXT5
+	ePIXEL_FORMAT_BC4_UNORM_BLOCK = 139, // R_ATI1N
+	ePIXEL_FORMAT_BC4_SNORM_BLOCK = 140, // R_ATI1N
+	ePIXEL_FORMAT_BC5_UNORM_BLOCK = 141, // RG_ATI2N
+	ePIXEL_FORMAT_BC5_SNORM_BLOCK = 142, // RG_ATI2N
+	ePIXEL_FORMAT_BC6H_UFLOAT_BLOCK = 143, // RGB_BP
+	ePIXEL_FORMAT_BC6H_SFLOAT_BLOCK = 144, // RGB_BP
+	ePIXEL_FORMAT_BC7_UNORM_BLOCK = 145, // RGBA_BP
+	ePIXEL_FORMAT_BC7_SRGB_BLOCK = 146, // RGBA_BP
+
+	ePIXEL_FORMAT_ETC2_R8G8B8_UNORM_BLOCK = 147,
+	ePIXEL_FORMAT_ETC2_R8G8B8_SRGB_BLOCK = 148,
+	ePIXEL_FORMAT_ETC2_R8G8B8A1_UNORM_BLOCK = 149,
+	ePIXEL_FORMAT_ETC2_R8G8B8A1_SRGB_BLOCK = 150,
+	ePIXEL_FORMAT_ETC2_R8G8B8A8_UNORM_BLOCK = 151,
+	ePIXEL_FORMAT_ETC2_R8G8B8A8_SRGB_BLOCK = 152,
+	ePIXEL_FORMAT_EAC_R11_UNORM_BLOCK = 153,
+	ePIXEL_FORMAT_EAC_R11_SNORM_BLOCK = 154,
+	ePIXEL_FORMAT_EAC_R11G11_UNORM_BLOCK = 155,
+	ePIXEL_FORMAT_EAC_R11G11_SNORM_BLOCK = 156,
+
+	ePIXEL_FORMAT_ASTC_4x4_UNORM_BLOCK = 157,
+	ePIXEL_FORMAT_ASTC_4x4_SRGB_BLOCK = 158,
+	ePIXEL_FORMAT_ASTC_5x4_UNORM_BLOCK = 159,
+	ePIXEL_FORMAT_ASTC_5x4_SRGB_BLOCK = 160,
+	ePIXEL_FORMAT_ASTC_5x5_UNORM_BLOCK = 161,
+	ePIXEL_FORMAT_ASTC_5x5_SRGB_BLOCK = 162,
+	ePIXEL_FORMAT_ASTC_6x5_UNORM_BLOCK = 163,
+	ePIXEL_FORMAT_ASTC_6x5_SRGB_BLOCK = 164,
+	ePIXEL_FORMAT_ASTC_6x6_UNORM_BLOCK = 165,
+	ePIXEL_FORMAT_ASTC_6x6_SRGB_BLOCK = 166,
+	ePIXEL_FORMAT_ASTC_8x5_UNORM_BLOCK = 167,
+	ePIXEL_FORMAT_ASTC_8x5_SRGB_BLOCK = 168,
+	ePIXEL_FORMAT_ASTC_8x6_UNORM_BLOCK = 169,
+	ePIXEL_FORMAT_ASTC_8x6_SRGB_BLOCK = 170,
+	ePIXEL_FORMAT_ASTC_8x8_UNORM_BLOCK = 171,
+	ePIXEL_FORMAT_ASTC_8x8_SRGB_BLOCK = 172,
+	ePIXEL_FORMAT_ASTC_10x5_UNORM_BLOCK = 173,
+	ePIXEL_FORMAT_ASTC_10x5_SRGB_BLOCK = 174,
+	ePIXEL_FORMAT_ASTC_10x6_UNORM_BLOCK = 175,
+	ePIXEL_FORMAT_ASTC_10x6_SRGB_BLOCK = 176,
+	ePIXEL_FORMAT_ASTC_10x8_UNORM_BLOCK = 177,
+	ePIXEL_FORMAT_ASTC_10x8_SRGB_BLOCK = 178,
+	ePIXEL_FORMAT_ASTC_10x10_UNORM_BLOCK = 179,
+	ePIXEL_FORMAT_ASTC_10x10_SRGB_BLOCK = 180,
+	ePIXEL_FORMAT_ASTC_12x10_UNORM_BLOCK = 181,
+	ePIXEL_FORMAT_ASTC_12x10_SRGB_BLOCK = 182,
+	ePIXEL_FORMAT_ASTC_12x12_UNORM_BLOCK = 183,
+	ePIXEL_FORMAT_ASTC_12x12_SRGB_BLOCK = 184,
 	ePIXEL_FORMAT_COUNT,
 }	ePIXEL_FORMAT;
-
-// eRENDERER_TYPE
-[
-	uuid( 30F8D353-04EA-4041-A67C-C421945DF1D2 ),
-	helpstring( "Castor3D supported renderer types enumeration." )
-]
-typedef enum
-{
-	eRENDERER_TYPE_OPENGL3,
-	eRENDERER_TYPE_OPENGL4,
-	eRENDERER_TYPE_VULKAN,
-}	eRENDERER_TYPE;
 
 // eLIGHT_TYPE
 [
@@ -265,29 +436,32 @@ typedef enum
 	eSKELETON_ANIMATION_OBJECT_TYPE_COUNT
 }	eSKELETON_ANIMATION_OBJECT_TYPE;
 
-// eTEXTURE_CHANNEL
+// eTEXTURE_FLAG
 [
 	uuid( C0F75923-E03E-49B7-B7C9-EFAC55630B7F ),
-	helpstring( "Castor3D Texture channels enumeration." )
+	helpstring( "Castor3D Texture flags enumeration." )
 ]
 typedef enum
 {
-	eTEXTURE_CHANNEL_DIFFUSE = 0x00000001,
-	eTEXTURE_CHANNEL_ALBEDO = eTEXTURE_CHANNEL_DIFFUSE,
-	eTEXTURE_CHANNEL_NORMAL = 0x00000002,
-	eTEXTURE_CHANNEL_OPACITY = 0x00000004,
-	eTEXTURE_CHANNEL_SPECULAR = 0x00000008,
-	eTEXTURE_CHANNEL_ROUGHNESS = eTEXTURE_CHANNEL_SPECULAR,
-	eTEXTURE_CHANNEL_HEIGHT = 0x00000010,
-	eTEXTURE_CHANNEL_GLOSS = 0x00000020,
-	eTEXTURE_CHANNEL_METALLIC = eTEXTURE_CHANNEL_GLOSS,
-	eTEXTURE_CHANNEL_EMISSIVE = 0x00000040,
-	eTEXTURE_CHANNEL_REFLECTION = 0x00000080,
-	eTEXTURE_CHANNEL_REFRACTION = 0x00000100,
-	eTEXTURE_CHANNEL_AMBIENT_OCCLUSION = 0x00000200,
-	eTEXTURE_CHANNEL_TRANSMITTANCE = 0x00000400,
-	eTEXTURE_CHANNEL_ALL = 0x00000FFF,
-}	eTEXTURE_CHANNEL;
+	eTEXTURE_FLAG_NONE = 0x0000,
+	eTEXTURE_FLAG_HEIGHT = 0x0001,
+	eTEXTURE_FLAG_OPACITY = 0x0002,
+	eTEXTURE_FLAG_NORMAL = 0x0004,
+	eTEXTURE_FLAG_EMISSIVE = 0x0008,
+	eTEXTURE_FLAG_OCCLUSION = 0x0010,
+	eTEXTURE_FLAG_TRANSMITTANCE = 0x0020,
+	eTEXTURE_FLAG_DIFFUSE = 0x0040,
+	eTEXTURE_FLAG_ALBEDO = eTEXTURE_FLAG_DIFFUSE,
+	eTEXTURE_FLAG_SPECULAR = 0x0080,
+	eTEXTURE_FLAG_METALNESS = eTEXTURE_FLAG_SPECULAR,
+	eTEXTURE_FLAG_GLOSSINESS = 0x0100,
+	eTEXTURE_FLAG_SHININESS = eTEXTURE_FLAG_GLOSSINESS,
+	eTEXTURE_FLAG_ROUGHNESS = eTEXTURE_FLAG_GLOSSINESS,
+	eTEXTURE_FLAG_ALL = 0x1FF,
+	eTEXTURE_FLAG_ALL_BUT_OPACITY = eTEXTURE_FLAG_ALL & ~( eTEXTURE_FLAG_OPACITY ),
+	eTEXTURE_FLAG_ALL_BUT_COLOUR_AND_OPACITY = eTEXTURE_FLAG_ALL_BUT_OPACITY & ~( eTEXTURE_FLAG_DIFFUSE ),
+	eTEXTURE_FLAG_ALL_BUT_NORMAL_AND_OPACITY = eTEXTURE_FLAG_ALL_BUT_OPACITY & ~( eTEXTURE_FLAG_NORMAL ),
+}	eTEXTURE_FLAG;
 
 // eCOMPARISON_FUNC
 [
@@ -306,25 +480,18 @@ typedef enum
 	eCOMPARISON_FUNC_NEVER,
 }	eCOMPARISON_FUNC;
 
-// eTEXTURE_TYPE
+// eIMAGE_TYPE
 [
 	uuid( 7B89A147-BC55-40AC-B720-435B74348074 ),
-	helpstring( "Castor3D Texture types enumeration." )
+	helpstring( "Castor3D Image types enumeration." )
 ]
 typedef enum
 {
-	eTEXTURE_TYPE_BUFFER,
-	eTEXTURE_TYPE_1D,
-	eTEXTURE_TYPE_1DARRAY,
-	eTEXTURE_TYPE_2D,
-	eTEXTURE_TYPE_2DARRAY,
-	eTEXTURE_TYPE_2DMS,
-	eTEXTURE_TYPE_2DMSARRAY,
-	eTEXTURE_TYPE_3D,
-	eTEXTURE_TYPE_CUBE,
-	eTEXTURE_TYPE_CUBEARRAY,
-	eTEXTURE_TYPE_COUNT,
-}	eTEXTURE_TYPE;
+	eIMAGE_TYPE_1D,
+	eIMAGE_TYPE_2D,
+	eIMAGE_TYPE_3D,
+	eIMAGE_TYPE_COUNT,
+}	eIMAGE_TYPE;
 
 // eBORDER_COLOUR
 [
@@ -811,8 +978,7 @@ interface IPixelBuffer
 	[propget, id( 3 ), helpstring( "property Height" )] HRESULT Height( [out, retval] unsigned int * pVal );
 	[propget, id( 4 ), helpstring( "property PixelFormat" )] HRESULT PixelFormat( [out, retval] ePIXEL_FORMAT * pVal );
 	[id( 5 ), helpstring( "method Flip" )] HRESULT Flip();
-	[id( 6 ), helpstring( "method Mirror" )] HRESULT Mirror();
-	[id( 7 ), helpstring( "Initialises the buffer" )] HRESULT Initialise( ISize * size, ePIXEL_FORMAT pf );
+	[id( 6 ), helpstring( "Initialises the buffer" )] HRESULT Initialise( ISize * size, ePIXEL_FORMAT pf );
 };
 
 // IImage
@@ -833,8 +999,6 @@ interface IImage
 	[id( 3 ), helpstring( "method LoadFromFormat" )] HRESULT LoadFromFormat( [in] IEngine * engine, [in] BSTR name, [in] ePIXEL_FORMAT fmt, [in] ISize * size );
 	[id( 4 ), helpstring( "method Resample" )] HRESULT Resample( [in] ISize * val );
 	[id( 5 ), helpstring( "method Fill" )] HRESULT Fill( [in] IRgbaColour * val );
-	[id( 6 ), helpstring( "method CopyImage" )] HRESULT CopyImage( [in] IImage * pVal );
-	[id( 7 ), helpstring( "method SubImage" )] HRESULT SubImage( [in] IRect * val, [out, retval] IImage ** pVal );
 };
 
 // ILogger
@@ -917,22 +1081,6 @@ interface ISampler
 	[id( 13 ), helpstring( "Cleans the sampler up" )] HRESULT Cleanup();
 };
 
-// ITextureView
-[
-	uuid( AD4C78E2-277A-4F6E-A1BB-F94FEA78F4A5 ),
-	helpstring( "Castor3D TextureImage interface" ),
-	dual,
-	oleautomation
-]
-interface ITextureView
-	: IDispatch
-{
-	[propget, id( 1 ), helpstring( "The texture image buffer" )] HRESULT Buffer( [out, retval] IPixelBuffer ** pVal );
-	[id( 4 ), helpstring( "Sets the image source" )] HRESULT StaticSource( [in] IPixelBuffer * val );
-	[id( 5 ), helpstring( "Sets the image source" )] HRESULT Dynamic2DSource( [in] unsigned int w, [in] unsigned int h, [in] ePIXEL_FORMAT format );
-	[id( 6 ), helpstring( "Sets the image source" )] HRESULT Dynamic3DSource( [in] unsigned int w, [in] unsigned int h, [in] unsigned int d, [in] ePIXEL_FORMAT format );
-};
-
 // ITextureLayout
 [
 	uuid( 8985F532-34C0-4996-882C-8850D45C53F1 ),
@@ -943,10 +1091,13 @@ interface ITextureView
 interface ITextureLayout
 	: IDispatch
 {
-	[propget, id( 1 ), helpstring( "The texture type" )] HRESULT Type( [out, retval] eTEXTURE_TYPE * pVal );
-	[propget, id( 2 ), helpstring( "The texture image at given index" )] HRESULT Image( [in] unsigned int index, [out, retval] ITextureView ** pVal );
+	[propget, id( 1 ), helpstring( "The texture type" )] HRESULT Type( [out, retval] eIMAGE_TYPE * pVal );
 	[id( 3 ), helpstring( "Initialises the texture" )] HRESULT Initialise();
 	[id( 4 ), helpstring( "Cleans the texture up" )] HRESULT Cleanup();
+	[id( 5 ), helpstring( "Sets the static image source from a file" )] HRESULT InitFromFile( [in] BSTR path );
+	[id( 6 ), helpstring( "Sets the static image source from a buffer" )] HRESULT InitFromBuffer( [in] IPixelBuffer * val );
+	[id( 7 ), helpstring( "Sets the dynamic image source" )] HRESULT Init2D( [in] unsigned int w, [in] unsigned int h, [in] ePIXEL_FORMAT format );
+	[id( 8 ), helpstring( "Sets the dynamic image source" )] HRESULT Init3D( [in] unsigned int w, [in] unsigned int h, [in] unsigned int d, [in] ePIXEL_FORMAT format );
 };
 
 // ITextureUnit
@@ -963,7 +1114,6 @@ interface ITextureUnit
 	[propput, id( 1 ), helpstring( "The unit texture" )] HRESULT Texture( [in] ITextureLayout * val );
 	[propget, id( 2 ), helpstring( "The unit sampler" )] HRESULT Sampler( [out, retval] ISampler ** pVal );
 	[propput, id( 2 ), helpstring( "The unit sampler" )] HRESULT Sampler( [in] ISampler * val );
-	[id( 4 ), helpstring( "Loads the texture image from a file" )] HRESULT LoadTexture( [in] BSTR path );
 	[id( 5 ), helpstring( "Initialises the texture" )] HRESULT Initialise();
 	[id( 6 ), helpstring( "Cleans the texture up" )] HRESULT Cleanup();
 };
@@ -993,9 +1143,9 @@ interface IPass
 	[propget, id( 7 ), helpstring( "Retrieves the units count" )] HRESULT TextureUnitCount( [out, retval] unsigned int * pVal );
 	[propget, id( 8 ), helpstring( "The pass type" )] HRESULT Type( [out, retval] ePASS_TYPE * pVal );
 	[id( 9 ), helpstring( "Creates a texture unit" )] HRESULT CreateTextureUnit( [out, retval] ITextureUnit ** pVal );
-	[id( 10 ), helpstring( "Retrieves the texture unit at given index" )] HRESULT GetTextureUnitByIndex( [in] unsigned int index, [out, retval] ITextureUnit ** pVal );
 	[id( 11 ), helpstring( "Destroys the texture unit" )] HRESULT DestroyTextureUnit( [in] ITextureUnit * val );
-	[id( 12 ), helpstring( "Retrieves the texture unit at given channel" )] HRESULT GetTextureUnitByChannel( [in] eTEXTURE_CHANNEL channel, [out, retval] ITextureUnit ** pVal );
+	[id( 10 ), helpstring( "Retrieves the texture unit at given index" )] HRESULT GetTextureUnitByIndex( [in] unsigned int index, [out, retval] ITextureUnit ** pVal );
+	[id( 12 ), helpstring( "Retrieves the texture unit at given flag" )] HRESULT GetTextureUnitByFlag( [in] eTEXTURE_FLAG flag, [out, retval] ITextureUnit ** pVal );
 };
 
 // IPhongPass
@@ -1251,7 +1401,7 @@ interface IScene
 	[propget, id( 7 ), helpstring( "The cameras root scene node" )] HRESULT CameraRootNode( [out, retval] ISceneNode ** pVal );
 	[id( 8 ), helpstring( "Clears the created objects maps" )] HRESULT ClearScene();
 	[id( 9 ), helpstring( "Creates a new scene node" )] HRESULT CreateSceneNode( [in] BSTR name, [in] ISceneNode * parent, [out, retval] ISceneNode ** pVal );
-	[id( 10 ), helpstring( "Creates a new geometry" )] HRESULT CreateGeometry( [in] BSTR name, [out, retval] IGeometry ** pVal );
+	[id( 10 ), helpstring( "Creates a new geometry" )] HRESULT CreateGeometry( [in] BSTR name, [in] ISceneNode * parent, [out, retval] IGeometry ** pVal );
 	[id( 11 ), helpstring( "Creates a new camera" )] HRESULT CreateCamera( [in] BSTR name, [in] int ww, [in] int wh, [in] ISceneNode * node, [out, retval] ICamera ** pVal );
 	[id( 12 ), helpstring( "Creates a new light" )] HRESULT CreateLight( [in] BSTR name, [in] ISceneNode * node, [in] eLIGHT_TYPE type, [out, retval] ILight ** pVal );
 	[id( 13 ), helpstring( "Retrieves the scene node with the given name" )] HRESULT GetNode( [in] BSTR name, [out, retval] ISceneNode ** pVal );
@@ -1812,15 +1962,6 @@ library Castor3D
 	coclass Sampler
 	{
 		[default] interface ISampler;
-	}
-
-	// TextureView
-	[
-		uuid( 3CA68187-BD17-4E78-8D5C-B994DDA134BA )
-	]
-	coclass TextureView
-	{
-		[default] interface ITextureView;
 	}
 
 	// TextureLayout

@@ -160,7 +160,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom de l'animation.
 		 *\param[in]	scale	Le multiplicateur.
 		 */
-		C3D_API void setAnimationscale( castor::String const & name
+		C3D_API void setAnimationScale( castor::String const & name
 			, float scale );
 		/**
 		 *\~english

@@ -18,7 +18,7 @@ else ()
 endif()
 
 if ( wxWidgets_FOUND AND GTK2_FOUND )
-	add_target( 
+	add_target_min( 
 		${PROJECT_NAME}
 		dll
 		${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}
@@ -32,8 +32,8 @@ if ( wxWidgets_FOUND AND GTK2_FOUND )
 		PRIVATE
 			${Castor3DIncludeDirs}
 			${CASTOR_SOURCE_DIR}/samples
-			${GTK2_INCLUDE_DIRS} )
-			${wxWidgets_INCLUDE_DIR} )
+			${GTK2_INCLUDE_DIRS}
+			${wxWidgets_INCLUDE_DIR}
 	)
 	target_link_libraries( ${PROJECT_NAME}
 		PRIVATE

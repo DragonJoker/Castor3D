@@ -87,10 +87,10 @@ namespace Bloom
 #endif
 	}
 
-	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
+	bool PostEffect::doInitialise( castor3d::RenderDevice const & device
+		, castor3d::RenderPassTimer const & timer )
 	{
 		VkExtent2D size{ m_target->getWidth(), m_target->getHeight() };
-		auto & device = getCurrentRenderDevice( *this );
 
 #if !Bloom_DebugHiPass
 		// Create vertex buffer
@@ -136,10 +136,11 @@ namespace Bloom
 			, image
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "BloomBlur" ) );
-		m_blurTexture->initialise();
+		m_blurTexture->initialise( device );
 #endif
 
 		m_hiPass = std::make_unique< HiPass >( *getRenderSystem()
+			, device
 			, m_target->getPixelFormat()
 			, m_target->getDefaultView().getSampledView()
 			, size
@@ -192,7 +193,7 @@ namespace Bloom
 		return true;
 	}
 
-	void PostEffect::doCleanup()
+	void PostEffect::doCleanup( castor3d::RenderDevice const & device )
 	{
 		m_combinePass.reset();
 		m_blurXPass.reset();

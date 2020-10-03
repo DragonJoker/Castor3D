@@ -180,13 +180,13 @@ namespace castor3d
 		m_textureUnits.clear();
 	}
 
-	void Pass::initialise()
+	void Pass::initialise( RenderDevice const & device )
 	{
 		prepareTextures();
 
 		for ( auto unit : m_textureUnits )
 		{
-			unit->initialise();
+			unit->initialise( device );
 		}
 
 		doInitialise();

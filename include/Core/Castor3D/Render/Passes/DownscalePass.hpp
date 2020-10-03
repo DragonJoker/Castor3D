@@ -31,6 +31,7 @@ namespace castor3d
 		 *\param[in]	dstSize		La taille voulue.
 		 */
 		C3D_API DownscalePass( Engine & engine
+			, RenderDevice const & device
 			, castor::String const & category
 			, ashes::ImageViewArray const & srcViews
 			, VkExtent2D const & dstSize );
@@ -64,6 +65,7 @@ namespace castor3d
 
 	private:
 		Engine const & m_engine;
+		RenderDevice const & m_device;
 		TextureUnitArray m_result;
 		RenderPassTimerSPtr m_timer;
 		ashes::CommandBufferPtr m_commandBuffer;

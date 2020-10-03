@@ -42,7 +42,7 @@ namespace castor3d
 	{
 		if ( m_engine.getRenderSystem()->hasCurrentRenderDevice() )
 		{
-			initialise();
+			initialise( m_engine.getRenderSystem()->getCurrentRenderDevice() );
 		}
 	}
 
@@ -50,24 +50,22 @@ namespace castor3d
 	{
 		if ( m_engine.getRenderSystem()->hasCurrentRenderDevice() )
 		{
-			cleanup();
+			cleanup( m_engine.getRenderSystem()->getCurrentRenderDevice() );
 		}
 	}
 
-	void SsaoConfigUbo::initialise()
+	void SsaoConfigUbo::initialise( RenderDevice const & device )
 	{
 		if ( !m_ubo )
 		{
-			auto & device = getCurrentRenderDevice( m_engine );
 			m_ubo = device.uboPools->getBuffer< Configuration >( 0u );
 		}
 	}
 
-	void SsaoConfigUbo::cleanup()
+	void SsaoConfigUbo::cleanup( RenderDevice const & device )
 	{
 		if ( m_ubo )
 		{
-			auto & device = getCurrentRenderDevice( m_engine );
 			device.uboPools->putBuffer( m_ubo );
 		}
 	}
@@ -130,7 +128,7 @@ namespace castor3d
 		configuration.intensityDivR6 = intersityDivR6;
 		configuration.farPlaneZ = farZ;
 		configuration.edgeSharpness = config.edgeSharpness;
-		configuration.blurStepSize = config.blurStepSize;
+		configuration.blurStepSize = config.blurStepSize.value().value();
 		configuration.blurRadius = config.blurRadius.value().value();
 		configuration.projInfo = castor::Point4f
 		{

@@ -46,19 +46,20 @@ namespace castor3d
 		void update( GpuUpdater & updater )override;
 
 	private:
-		void doInitialiseFramebuffers();
+		void doInitialiseFramebuffers( RenderDevice const & device );
 		/**
 		 *\copydoc		castor3d::ShadowMap::doInitialise
 		 */
-		void doInitialise()override;
+		void doInitialise( RenderDevice const & device )override;
 		/**
 		 *\copydoc		castor3d::ShadowMap::doCleanup
 		 */
-		void doCleanup()override;
+		void doCleanup( RenderDevice const & device )override;
 		/**
 		 *\copydoc		castor3d::ShadowMap::doRender
 		 */
-		ashes::Semaphore const & doRender( ashes::Semaphore const & toWait
+		ashes::Semaphore const & doRender( RenderDevice const & device
+			, ashes::Semaphore const & toWait
 			, uint32_t index )override;
 		/**
 		 *\copydoc		castor3d::ShadowMap::isUpToDate
@@ -79,11 +80,11 @@ namespace castor3d
 			ashes::ImageView varianceView;
 			ashes::ImageView positionView;
 			ashes::ImageView fluxView;
-			std::unique_ptr< GaussianBlur > blur;
 			CommandsSemaphore blurCommands{ nullptr, nullptr };
 		};
 		ashes::CommandBufferPtr m_commandBuffer;
 		CameraSPtr m_camera;
+		std::unique_ptr< GaussianBlur > m_blur;
 		std::vector< FrameBuffer > m_frameBuffers;
 		ShadowType m_shadowType{ ShadowType::eRaw };
 		uint32_t m_cascades;

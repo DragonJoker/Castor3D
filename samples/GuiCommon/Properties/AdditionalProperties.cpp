@@ -2,6 +2,8 @@
 
 #include "GuiCommon/System/GradientButton.hpp"
 
+#include <Castor3D/Event/Frame/GpuFunctorEvent.hpp>
+
 #include <wx/propgrid/advprops.h>
 
 using namespace castor;
@@ -10,15 +12,14 @@ namespace GuiCommon
 {
 	//************************************************************************************************
 
-	ButtonData::ButtonData( ButtonEventMethod p_method, wxEvtHandler * p_handler )
-		: m_method( p_method )
-		, m_handler( p_handler )
+	ButtonData::ButtonData( ButtonEventMethod method )
+		: m_method( method )
 	{
 	}
 
-	bool ButtonData::Call( wxPGProperty * property )
+	void ButtonData::Call( wxVariant const & var )
 	{
-		return ( *m_handler.*m_method )( property );
+		m_method( var );
 	}
 
 	//************************************************************************************************
@@ -45,7 +46,8 @@ namespace GuiCommon
 			if ( ButtonData * btn = dynamic_cast< ButtonData * >( p_property->GetClientObject() ) )
 			{
 				// call the method
-				return btn->Call( p_property );
+				btn->Call( p_property->GetValue() );
+				return false;
 			}
 		}
 
@@ -85,12 +87,12 @@ namespace GuiCommon
 		return new wxStringProperty( p_name, wxPG_LABEL, p_value );
 	}
 
-	wxStringProperty * CreateProperty( wxString const & p_name, wxString const & p_value, ButtonEventMethod p_method, wxEvtHandler * p_handler, wxPGEditor * p_editor )
+	wxPGProperty * addAttributes( wxPGProperty * prop )
 	{
-		wxStringProperty * result = new wxStringProperty( p_name, wxPG_LABEL, p_value );
-		result->SetEditor( p_editor );
-		result->SetClientObject( new ButtonData( p_method, p_handler ) );
-		return result;
+		prop->SetEditor( wxPGEditor_SpinCtrl );
+		prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
+		prop->SetAttribute( wxPG_ATTR_SPINCTRL_MOTION, WXVARIANT( true ) );
+		return prop;
 	}
 
 	//************************************************************************************************

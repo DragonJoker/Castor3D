@@ -79,7 +79,7 @@ namespace GuiCommon
 #if C3D_HasGLSL
 		GLSL,
 #endif
-#if GC_HasGLSL
+#if GC_HasHLSL
 		HLSL,
 #endif
 	};
@@ -223,17 +223,15 @@ namespace GuiCommon
 	 *\~english
 	 *\brief		Loads a font glyphs using wxWidgets
 	 *\remarks		Uses a custom SFontImpl
-	 *\param[in]	engine	The Castor3D engine, to check for font existence
-	 *\param[in]	p_font		The wxWidgets font
+	 *\param[in]	p_font	The wxWidgets font
 	 *\return		The loaded font
 	 *\~french
 	 *\brief		Charge les glyphes de la police en utilisant wxWidgets
 	 *\remarks		Utilise une version personnalisée de SFontImpl
-	 *\param[in]	engine	Le moteur, pour vérifier l'existance de la police
-	 *\param[in]	p_font		La police wxWidgets
+	 *\param[in]	p_font	La police wxWidgets
 	 *\return		La police chargée
 	 */
-	castor::FontSPtr make_Font( castor3d::Engine * engine, wxFont const & p_font );
+	castor::FontSPtr make_Font( wxFont const & p_font );
 	/**
 	 *\~english
 	 *\brief		Creates a castor::String from a wxString
@@ -289,6 +287,28 @@ namespace GuiCommon
 	 *\return		Le wxSize
 	 */
 	wxSize make_wxSize( castor::Size const & p_value );
+	/**
+	 *\brief		Builds a wxArrayString from a an array of wxString.
+	 *\param[in]	values	The array.
+	 *\return		The wxArrayString.
+	 */
+	template< size_t Count >
+	wxArrayString make_wxArrayString( std::array< wxString, Count > values )
+	{
+		return wxArrayString{ Count, values.data() };
+	}
+	/**
+	 *\brief		Builds a make_wxArrayInt from a an array of int.
+	 *\param[in]	values	The array.
+	 *\return		The make_wxArrayInt.
+	 */
+	template< size_t Count >
+	wxArrayInt make_wxArrayInt( std::array< int, Count > values )
+	{
+		wxArrayInt result{ Count };
+		std::memcpy( &result[0], values.data(), Count * sizeof( int ) );
+		return result;
+	}
 
 	ast::ShaderStage convert( VkShaderStageFlagBits stage );
 

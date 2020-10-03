@@ -85,11 +85,32 @@ namespace castor3d
 		C3D_API ~ObjectCache();
 		/**
 		 *\~english
+		 *\brief		Initialises the UBO pools.
+		 *\~french
+		 *\brief		Initialise les pools d'UBO.
+		 */
+		C3D_API void initialise( RenderDevice const & device );
+		/**
+		 *\~english
+		 *\brief		Cleans up the UBO pools.
+		 *\~french
+		 *\brief		Nettoie les pools d'UBO.
+		 */
+		C3D_API void cleanup( RenderDevice const & device );
+		/**
+		 *\~english
 		 *\brief		Flushes the collection.
 		 *\~french
 		 *\brief		Vide la collection.
 		 */
 		C3D_API void clear();
+		/**
+		 *\~english
+		 *\brief		Updates the collection.
+		 *\~french
+		 *\brief		Met ç jour la collection.
+		 */
+		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Creates a new object and adds it to the collection.
@@ -123,8 +144,13 @@ namespace castor3d
 		 */
 		C3D_API void remove( Key const & name );
 
+		inline BillboardUboPools & getUboPools()const
+		{
+			return *m_pools;
+		}
+
 	private:
-		BillboardUboPools & m_pools;
+		BillboardUboPoolsSPtr m_pools;
 	};
 	using BillboardListCache = ObjectCache< BillboardList, castor::String >;
 	CU_DeclareSmartPtr( BillboardListCache );

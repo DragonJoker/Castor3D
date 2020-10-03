@@ -478,11 +478,30 @@ namespace castor3d
 				, VkExtent2D{ size.width, size.height }
 				, std::move( attaches ) );
 		}
+
+		rq::BindingDescriptionArray createBindings()
+		{
+			return
+			{
+				{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, std::nullopt },
+				{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, std::nullopt },
+				{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, std::nullopt },
+				{ VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, std::nullopt },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
+			};
+		}
 	}
 
 	//*********************************************************************************************
 
 	RsmInterpolatePass::RsmInterpolatePass( Engine & engine
+		, RenderDevice const & device
 		, LightCache const & lightCache
 		, LightType lightType
 		, VkExtent2D const & size
@@ -494,7 +513,13 @@ namespace castor3d
 		, TextureUnit const & gi
 		, TextureUnit const & nml
 		, TextureUnit const & dst )
-		: RenderQuad{ *engine.getRenderSystem(), "RsmInterpolate", VK_FILTER_LINEAR, { ashes::nullopt, RenderQuadConfig::Texcoord{}, BlendMode::eAdditive } }
+		: RenderQuad{ device
+			, "RsmInterpolate"
+			, VK_FILTER_LINEAR
+			, { createBindings()
+				, ashes::nullopt
+				, rq::Texcoord{}
+				, BlendMode::eAdditive } }
 		, m_lightCache{ lightCache }
 		, m_gpInfo{ gpInfo }
 		, m_gpResult{ gpResult }
@@ -505,75 +530,67 @@ namespace castor3d
 		, m_rsmSamplesSsbo{ rsmSamplesSsbo }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram( engine, lightType, gi.getTexture()->getWidth(), gi.getTexture()->getHeight() ) }
-		, m_renderPass{ doCreateRenderPass( getCurrentRenderDevice( m_renderSystem ), dst.getTexture()->getPixelFormat() ) }
+		, m_renderPass{ doCreateRenderPass( m_device, dst.getTexture()->getPixelFormat() ) }
 		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, dst.getTexture()->getDefaultView().getTargetView() ) }
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Reflective Shadow Maps" ), cuT( "Interpolate" ) ) }
-		, m_finished{ getCurrentRenderDevice( engine )->createSemaphore( getName() ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( engine, m_device, cuT( "Reflective Shadow Maps" ), cuT( "Interpolate" ) ) }
 	{
-		auto & device = getCurrentRenderDevice( m_renderSystem );
 		ashes::PipelineShaderStageCreateInfoArray shaderStages;
-		shaderStages.push_back( makeShaderState( device, m_vertexShader ) );
-		shaderStages.push_back( makeShaderState( device, m_pixelShader ) );
-
-		ashes::VkDescriptorSetLayoutBindingArray bindings
-		{
-			makeDescriptorSetLayoutBinding( RsmCfgUboIdx
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-			makeDescriptorSetLayoutBinding( RsmSamplesIdx
-				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-			makeDescriptorSetLayoutBinding( GpInfoUboIdx
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-			makeDescriptorSetLayoutBinding( LightsMapIdx
-				, VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-			makeDescriptorSetLayoutBinding( GiMapIdx
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-			makeDescriptorSetLayoutBinding( NmlMapIdx
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-			makeDescriptorSetLayoutBinding( DepthMapIdx
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-			makeDescriptorSetLayoutBinding( Data1MapIdx
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-			makeDescriptorSetLayoutBinding( RsmNormalsIdx
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-			makeDescriptorSetLayoutBinding( RsmPositionIdx
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-		};
-		this->createPipeline( size
+		shaderStages.push_back( makeShaderState( m_device, m_vertexShader ) );
+		shaderStages.push_back( makeShaderState( m_device, m_pixelShader ) );
+		createPipelineAndPass( size
 			, {}
 			, shaderStages
-			, m_smResult[SmTexture::eFlux].getTexture()->getDefaultView().getSampledView()
 			, *m_renderPass
-			, std::move( bindings )
-			, {} );
-		auto commands = getCommands( *m_timer, 0u );
-		m_commandBuffer = std::move( commands.commandBuffer );
-		m_finished = std::move( commands.semaphore );
+			, {
+				makeDescriptorWrite( m_rsmConfigUbo.getUbo()
+					, RsmCfgUboIdx ),
+				makeDescriptorWrite( m_rsmSamplesSsbo.getBuffer()
+					, RsmSamplesIdx
+					, 0u
+					, uint32_t( m_rsmSamplesSsbo.getMemoryRequirements().size ) ),
+				makeDescriptorWrite( m_gpInfo.getUbo()
+					, GpInfoUboIdx ),
+				makeDescriptorWrite( m_lightCache.getBuffer()
+					, m_lightCache.getView()
+					, LightsMapIdx ),
+				makeDescriptorWrite( m_gi.getTexture()->getDefaultView().getSampledView()
+					, m_gi.getSampler()->getSampler()
+					, GiMapIdx ),
+				makeDescriptorWrite( m_nml.getTexture()->getDefaultView().getSampledView()
+					, m_nml.getSampler()->getSampler()
+					, NmlMapIdx ),
+				makeDescriptorWrite( m_gpResult[DsTexture::eDepth].getTexture()->getDefaultView().getSampledView()
+					, m_gpResult[DsTexture::eDepth].getSampler()->getSampler()
+					, DepthMapIdx ),
+				makeDescriptorWrite( m_gpResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView()
+					, m_gpResult[DsTexture::eData1].getSampler()->getSampler()
+					, Data1MapIdx ),
+				makeDescriptorWrite( m_smResult[SmTexture::eNormalLinear].getTexture()->getDefaultView().getSampledView()
+					, m_smResult[SmTexture::eNormalLinear].getSampler()->getSampler()
+					, RsmNormalsIdx ),
+				makeDescriptorWrite( m_smResult[SmTexture::ePosition].getTexture()->getDefaultView().getSampledView()
+					, m_smResult[SmTexture::ePosition].getSampler()->getSampler()
+					, RsmPositionIdx ),
+				makeDescriptorWrite( m_smResult[SmTexture::eFlux].getTexture()->getDefaultView().getSampledView()
+					, m_smResult[SmTexture::eFlux].getSampler()->getSampler()
+					, RsmFluxIdx ),
+			} );
+		m_commands = getCommands( *m_timer, 0u );
 	}
 
 	ashes::Semaphore const & RsmInterpolatePass::compute( ashes::Semaphore const & toWait )const
 	{
 		auto & renderSystem = m_renderSystem;
-		auto & device = getCurrentRenderDevice( renderSystem );
 		RenderPassTimerBlock timerBlock{ m_timer->start() };
 		timerBlock->notifyPassRender();
 		auto * result = &toWait;
 
-		device.graphicsQueue->submit( *m_commandBuffer
+		m_device.graphicsQueue->submit( *m_commands.commandBuffer
 			, toWait
 			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, *m_finished
+			, *m_commands.semaphore
 			, nullptr );
-		result = m_finished.get();
+		result = m_commands.semaphore.get();
 
 		return *result;
 	}
@@ -581,11 +598,10 @@ namespace castor3d
 	CommandsSemaphore RsmInterpolatePass::getCommands( RenderPassTimer const & timer
 		, uint32_t index )const
 	{
-		auto & device = getCurrentRenderDevice( m_renderSystem );
 		castor3d::CommandsSemaphore commands
 		{
-			device.graphicsCommandPool->createCommandBuffer( getName() ),
-			device->createSemaphore( getName() )
+			m_device.graphicsCommandPool->createCommandBuffer( getName() ),
+			m_device->createSemaphore( getName() )
 		};
 		auto & cmd = *commands.commandBuffer;
 
@@ -603,7 +619,7 @@ namespace castor3d
 			, *m_frameBuffer
 			, { castor3d::transparentBlackClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE );
-		registerFrame( cmd );
+		registerPass( cmd );
 		cmd.endRenderPass();
 		cmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 			, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
@@ -619,43 +635,5 @@ namespace castor3d
 	{
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );
-	}
-
-	void RsmInterpolatePass::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-		, ashes::DescriptorSet & descriptorSet )
-	{
-		m_rsmConfigUbo.createSizedBinding( descriptorSet
-			, descriptorSetLayout.getBinding( RsmCfgUboIdx ) );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( RsmSamplesIdx )
-			, m_rsmSamplesSsbo.getBuffer()
-			, 0u
-			, uint32_t( m_rsmSamplesSsbo.getMemoryRequirements().size ) );
-		m_gpInfo.createSizedBinding( descriptorSet
-			, descriptorSetLayout.getBinding( GpInfoUboIdx ) );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( LightsMapIdx )
-			, m_lightCache.getBuffer()
-			, m_lightCache.getView() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( GiMapIdx )
-			, m_gi.getTexture()->getDefaultView().getSampledView()
-			, m_gi.getSampler()->getSampler() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( NmlMapIdx )
-			, m_nml.getTexture()->getDefaultView().getSampledView()
-			, m_nml.getSampler()->getSampler() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( DepthMapIdx )
-			, m_gpResult[DsTexture::eDepth].getTexture()->getDefaultView().getSampledView()
-			, m_gpResult[DsTexture::eDepth].getSampler()->getSampler() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( Data1MapIdx )
-			, m_gpResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView()
-			, m_gpResult[DsTexture::eData1].getSampler()->getSampler() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( RsmNormalsIdx )
-			, m_smResult[SmTexture::eNormalLinear].getTexture()->getDefaultView().getSampledView()
-			, m_smResult[SmTexture::eNormalLinear].getSampler()->getSampler() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( RsmPositionIdx )
-			, m_smResult[SmTexture::ePosition].getTexture()->getDefaultView().getSampledView()
-			, m_smResult[SmTexture::ePosition].getSampler()->getSampler() );
-	}
-
-	void RsmInterpolatePass::doRegisterFrame( ashes::CommandBuffer & commandBuffer )const
-	{
 	}
 }

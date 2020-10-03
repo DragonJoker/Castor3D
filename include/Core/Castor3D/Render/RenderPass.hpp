@@ -143,14 +143,15 @@ namespace castor3d
 		 *\param		size	Les dimensions voulues pour la passe.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool initialise( castor::Size const & size );
+		C3D_API bool initialise( RenderDevice const & device
+			, castor::Size const & size );
 		/**
 		 *\~english
 		 *\brief		Cleans up the pass.
 		 *\~french
 		 *\brief		Nettoie la passe.
 		 */
-		C3D_API void cleanup();
+		C3D_API void cleanup( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Updates the render pass.
@@ -1031,7 +1032,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Nettoie la passe.
 		 */
-		C3D_API virtual void doCleanup() = 0;
+		C3D_API virtual void doCleanup( RenderDevice const & device ) = 0;
 
 	private:
 		/**
@@ -1044,7 +1045,8 @@ namespace castor3d
 		 *\param		size	Les dimensions voulues pour la passe.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool doInitialise( castor::Size const & size ) = 0;
+		C3D_API virtual bool doInitialise( RenderDevice const & device
+			, castor::Size const & size ) = 0;
 		/**
 		 *\~english
 		 *\brief		Initialises the descriptor set of a billboard node.

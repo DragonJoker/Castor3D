@@ -12,17 +12,10 @@ using namespace castor;
 
 namespace GuiCommon
 {
-	namespace
-	{
-		static wxString PROPERTY_CATEGORY_SKELETON = _( "Skeleton: " );
-	}
-
 	SkeletonTreeItemProperty::SkeletonTreeItemProperty( bool editable, Skeleton & skeleton )
 		: TreeItemProperty( skeleton.getScene()->getEngine(), editable, ePROPERTY_DATA_TYPE_MATERIAL )
 		, m_skeleton( skeleton )
 	{
-		PROPERTY_CATEGORY_SKELETON = _( "Skeleton: " );
-
 		CreateTreeItemMenu();
 	}
 
@@ -30,17 +23,11 @@ namespace GuiCommon
 	{
 	}
 
-	void SkeletonTreeItemProperty::doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )
+	void SkeletonTreeItemProperty::doCreateProperties( wxPGEditor * editor
+		, wxPropertyGrid * grid )
 	{
-		grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_SKELETON ) );
-	}
+		static wxString PROPERTY_CATEGORY_SKELETON = _( "Skeleton: " );
 
-	void SkeletonTreeItemProperty::doPropertyChange( wxPropertyGridEvent & event )
-	{
-		wxPGProperty * property = event.GetProperty();
-
-		if ( property )
-		{
-		}
+		addProperty( grid, PROPERTY_CATEGORY_SKELETON );
 	}
 }

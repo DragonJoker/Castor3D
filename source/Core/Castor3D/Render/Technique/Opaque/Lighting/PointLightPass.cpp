@@ -36,11 +36,12 @@ namespace castor3d
 	//*********************************************************************************************
 
 	PointLightPass::Program::Program( Engine & engine
+		, RenderDevice const & device
 		, PointLightPass & lightPass
 		, ShaderModule const & vtx
 		, ShaderModule const & pxl
 		, bool hasShadows )
-		: MeshLightPass::Program{ engine, lightPass.getName(), vtx, pxl, hasShadows }
+		: MeshLightPass::Program{ engine, device, lightPass.getName(), vtx, pxl, hasShadows }
 		, m_lightPass{ lightPass }
 	{
 	}
@@ -59,11 +60,14 @@ namespace castor3d
 	//*********************************************************************************************
 
 	PointLightPass::PointLightPass( Engine & engine
+		, RenderDevice const & device
+		, castor::String const & suffix
 		, LightPassResult const & lpResult
 		, GpInfoUbo const & gpInfoUbo
 		, bool hasShadows )
 		: MeshLightPass{ engine
-			, cuT( "Point" )
+			, device
+			, cuT( "Point" ) + suffix
 			, lpResult
 			, gpInfoUbo
 			, LightType::ePoint
@@ -119,6 +123,7 @@ namespace castor3d
 	LightPass::ProgramPtr PointLightPass::doCreateProgram()
 	{
 		return std::make_unique< Program >( m_engine
+			, m_device
 			, *this
 			, m_vertexShader
 			, m_pixelShader

@@ -119,7 +119,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Vide la collection.
 		 */
-		C3D_API void clear();
+		C3D_API void clear( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Adds an object.
@@ -154,12 +154,16 @@ namespace castor3d
 		using MyCache::add;
 
 	private:
-		SkeletonPoolsEntry doCreateEntry( AnimatedObjectGroup const & group
+		SkeletonPoolsEntry doCreateEntry( RenderDevice const & device
+			, AnimatedObjectGroup const & group
 			, AnimatedSkeleton const & skeleton );
-		MeshPoolsEntry doCreateEntry( AnimatedObjectGroup const & group
+		MeshPoolsEntry doCreateEntry( RenderDevice const & device
+			, AnimatedObjectGroup const & group
 			, AnimatedMesh const & mesh );
-		void doRemoveEntry( AnimatedSkeleton const & skeleton );
-		void doRemoveEntry( AnimatedMesh const & mesh );
+		void doRemoveEntry( RenderDevice const & device
+			, AnimatedSkeleton const & skeleton );
+		void doRemoveEntry( RenderDevice const & device
+			, AnimatedMesh const & mesh );
 		void doRegister( AnimatedObjectGroup & group );
 		void doUnregister( AnimatedObjectGroup & group );
 

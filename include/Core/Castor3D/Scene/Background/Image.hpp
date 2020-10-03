@@ -108,17 +108,18 @@ namespace castor3d
 		/**
 		*\copydoc	castor3d::SceneBackground::accept
 		*/
-		C3D_API void accept( BackgroundVisitor & visitor )const override;
+		C3D_API void accept( BackgroundVisitor & visitor )override;
 
 	private:
 		/**
 		*\copydoc	castor3d::SceneBackground::doInitialiseShader
 		*/
-		ashes::PipelineShaderStageCreateInfoArray doInitialiseShader()override;
+		ashes::PipelineShaderStageCreateInfoArray doInitialiseShader( RenderDevice const & device )override;
 		/**
 		*\copydoc	castor3d::SceneBackground::doInitialise
 		*/
-		bool doInitialise( ashes::RenderPass const & renderPass )override;
+		bool doInitialise( RenderDevice const & device
+			, ashes::RenderPass const & renderPass )override;
 		/**
 		*\copydoc	castor3d::SceneBackground::doCleanup
 		*/
@@ -133,7 +134,7 @@ namespace castor3d
 		void doGpuUpdate( GpuUpdater & updater )override;
 
 	private:
-		void doInitialise2DTexture();
+		void doInitialise2DTexture( RenderDevice const & device );
 
 	private:
 		TextureLayoutSPtr m_2dTexture;

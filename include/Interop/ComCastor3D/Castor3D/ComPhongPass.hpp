@@ -4,7 +4,7 @@
 
 #include "ComCastor3D/CastorUtils/ComRgbColour.hpp"
 
-#include <Castor3D/Material/PhongPass.hpp>
+#include <Castor3D/Material/Pass/PhongPass.hpp>
 
 namespace CastorCom
 {
@@ -90,12 +90,14 @@ namespace CastorCom
 			, makeGetter( m_internal.get(), &castor3d::PhongPass::getAmbient )
 			, makePutter( m_internal.get(), &castor3d::PhongPass::setAmbient ) );
 
-		COM_PROPERTY_GET( TextureUnitCount, unsigned int, makeGetter( m_internal.get(), &castor3d::PhongPass::getTextureUnitsCount ) );
+		COM_PROPERTY_GET( TextureUnitCount
+			, unsigned int
+			, makeGetter( m_internal.get(), &castor3d::PhongPass::getTextureUnitsCount, castor3d::TextureFlag::eAll ) );
 
 		STDMETHOD( CreateTextureUnit )( /* [out, retval] */ ITextureUnit ** pVal );
-		STDMETHOD( GetTextureUnitByIndex )( /* [in] */ unsigned int index, /* [out, retval] */ ITextureUnit ** pVal );
 		STDMETHOD( DestroyTextureUnit )( /* [in] */ ITextureUnit * val );
-		STDMETHOD( GetTextureUnitByChannel )( /* [in] */ eTEXTURE_CHANNEL channel, /* [out, retval] */ ITextureUnit ** pVal );
+		STDMETHOD( GetTextureUnitByIndex )( /* [in] */ unsigned int index, /* [out, retval] */ ITextureUnit ** pVal );
+		STDMETHOD( GetTextureUnitByFlag )( /* [in] */ eTEXTURE_FLAG flag, /* [out, retval] */ ITextureUnit ** pVal );
 
 	private:
 		castor3d::PhongPassSPtr m_internal;

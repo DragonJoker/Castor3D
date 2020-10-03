@@ -30,14 +30,18 @@
 #include <Castor3D/Cache/SceneNodeCache.hpp>
 #include <Castor3D/Cache/WindowCache.hpp>
 #include <Castor3D/Animation/Animable.hpp>
-#include <Castor3D/Animation/Skeleton/SkeletonAnimation.hpp>
-#include <Castor3D/Animation/Mesh/MeshAnimation.hpp>
 #include <Castor3D/Material/Material.hpp>
-#include <Castor3D/Material/LegacyPass.hpp>
-#include <Castor3D/Mesh/Mesh.hpp>
-#include <Castor3D/Mesh/Submesh.hpp>
-#include <Castor3D/Mesh/SubmeshComponent/LinesMapping.hpp>
-#include <Castor3D/Mesh/SubmeshComponent/TriFaceMapping.hpp>
+#include <Castor3D/Material/Pass/PhongPass.hpp>
+#include <Castor3D/Material/Texture/Sampler.hpp>
+#include <Castor3D/Material/Texture/TextureView.hpp>
+#include <Castor3D/Material/Texture/TextureLayout.hpp>
+#include <Castor3D/Material/Texture/TextureUnit.hpp>
+#include <Castor3D/Model/Mesh/Mesh.hpp>
+#include <Castor3D/Model/Mesh/Animation/MeshAnimation.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp>
+#include <Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp>
 #include <Castor3D/Overlay/BorderPanelOverlay.hpp>
 #include <Castor3D/Overlay/Overlay.hpp>
 #include <Castor3D/Overlay/PanelOverlay.hpp>
@@ -61,10 +65,6 @@
 #include <Castor3D/Scene/Light/PointLight.hpp>
 #include <Castor3D/Scene/Light/SpotLight.hpp>
 #include <Castor3D/Shader/Program.hpp>
-#include <Castor3D/Texture/Sampler.hpp>
-#include <Castor3D/Texture/TextureView.hpp>
-#include <Castor3D/Texture/TextureLayout.hpp>
-#include <Castor3D/Texture/TextureUnit.hpp>
 
 namespace cpy
 {
@@ -230,7 +230,7 @@ namespace cpy
 
 	struct VectorNormaliser
 	{
-		void operator()( castor::Point3r * p_arg )
+		void operator()( castor::Point3f * p_arg )
 		{
 			castor::point::normalise( *p_arg );
 		}
@@ -238,7 +238,7 @@ namespace cpy
 
 	struct VectorNegater
 	{
-		void operator()( castor::Point3r * p_arg )
+		void operator()( castor::Point3f * p_arg )
 		{
 			castor::point::negate( *p_arg );
 		}
@@ -246,7 +246,7 @@ namespace cpy
 
 	struct VectorLengther
 	{
-		void operator()( castor::Point3r * p_arg )
+		void operator()( castor::Point3f * p_arg )
 		{
 			castor::point::length( *p_arg );
 		}
@@ -254,7 +254,7 @@ namespace cpy
 
 	struct Vectordotter
 	{
-		castor::real operator()( castor::Point3r const & p_1, castor::Point3r const & p_2 )
+		float operator()( castor::Point3f const & p_1, castor::Point3f const & p_2 )
 		{
 			return castor::point::dot( p_1, p_2 );
 		}
@@ -262,7 +262,7 @@ namespace cpy
 
 	struct VectorCrosser
 	{
-		castor::Point3r operator()( castor::Point3r const & p_1, castor::Point3r const & p_2 )
+		castor::Point3f operator()( castor::Point3f const & p_1, castor::Point3f const & p_2 )
 		{
 			return castor::point::cross( p_1, p_2 );
 		}
@@ -277,7 +277,7 @@ namespace cpy
 	};
 	struct PointAdder
 	{
-		void operator()( castor3d::Submesh * p_submesh, castor::Point3r const & p_point )
+		void operator()( castor3d::Submesh * p_submesh, castor::Point3f const & p_point )
 		{
 			p_submesh->addPoint( p_point );
 		}
@@ -312,7 +312,7 @@ namespace cpy
 	{
 		castor3d::GeometrySPtr operator()( castor3d::GeometryCache * p_cache, castor::String const & p_key, castor3d::SceneNodeSPtr p_node, castor3d::MeshSPtr p_mesh )
 		{
-			return p_cache->add( p_key, p_node, p_mesh );
+			return p_cache->add( p_key, *p_node, p_mesh );
 		}
 	};
 
@@ -320,7 +320,7 @@ namespace cpy
 	{
 		castor3d::LightSPtr operator()( castor3d::LightCache * p_cache, castor::String const & p_key, castor3d::SceneNodeSPtr p_node, castor3d::LightType p_type )
 		{
-			return p_cache->add( p_key, p_node, p_type );
+			return p_cache->add( p_key, *p_node, p_type );
 		}
 	};
 
@@ -344,7 +344,7 @@ namespace cpy
 	{
 		castor3d::CameraSPtr operator()( castor3d::CameraCache * p_cache, castor::String const & p_key, castor3d::SceneNodeSPtr p_node, castor3d::Viewport && p_viewport )
 		{
-			return p_cache->add( p_key, p_node, std::move( p_viewport ) );
+			return p_cache->add( p_key, *p_node, std::move( p_viewport ) );
 		}
 	};
 
@@ -369,7 +369,7 @@ namespace cpy
 
 	struct QuaternionFromMatrix
 	{
-		castor::Quaternion operator()( castor::Matrix4x4r const & matrix )
+		castor::Quaternion operator()( castor::Matrix4x4f const & matrix )
 		{
 			return castor::Quaternion::fromMatrix( matrix );
 		}
@@ -467,30 +467,30 @@ namespace boost
 			{
 				return boost::mpl::vector< void, Class *, Value >();
 			}
-			inline boost::mpl::vector< void, castor::Point3r * >
+			inline boost::mpl::vector< void, castor::Point3f * >
 			get_signature( cpy::VectorNormaliser, void * = 0 )
 			{
-				return boost::mpl::vector< void, castor::Point3r * >();
+				return boost::mpl::vector< void, castor::Point3f * >();
 			}
-			inline boost::mpl::vector< void, castor::Point3r * >
+			inline boost::mpl::vector< void, castor::Point3f * >
 			get_signature( cpy::VectorNegater, void * = 0 )
 			{
-				return boost::mpl::vector< void, castor::Point3r * >();
+				return boost::mpl::vector< void, castor::Point3f * >();
 			}
-			inline boost::mpl::vector< void, castor::Point3r * >
+			inline boost::mpl::vector< void, castor::Point3f * >
 			get_signature( cpy::VectorLengther, void * = 0 )
 			{
-				return boost::mpl::vector< void, castor::Point3r * >();
+				return boost::mpl::vector< void, castor::Point3f * >();
 			}
-			inline boost::mpl::vector< castor::real, castor::Point3r const &, castor::Point3r const & >
+			inline boost::mpl::vector< float, castor::Point3f const &, castor::Point3f const & >
 			get_signature( cpy::Vectordotter, void * = 0 )
 			{
-				return boost::mpl::vector< castor::real, castor::Point3r const &, castor::Point3r const & >();
+				return boost::mpl::vector< float, castor::Point3f const &, castor::Point3f const & >();
 			}
-			inline boost::mpl::vector< castor::Point3r, castor::Point3r const &, castor::Point3r const & >
+			inline boost::mpl::vector< castor::Point3f, castor::Point3f const &, castor::Point3f const & >
 			get_signature( cpy::VectorCrosser, void * = 0 )
 			{
-				return boost::mpl::vector< castor::Point3r, castor::Point3r const &, castor::Point3r const & >();
+				return boost::mpl::vector< castor::Point3f, castor::Point3f const &, castor::Point3f const & >();
 			}
 			inline boost::mpl::vector< castor::PxBufferBaseSPtr, castor::Size const &, castor::PixelFormat >
 			get_signature( cpy::PxBufferCreator, void * = 0 )
@@ -532,10 +532,10 @@ namespace boost
 			{
 				return boost::mpl::vector< castor3d::SceneSPtr, castor3d::Engine *, castor::String const & >();
 			}
-			inline boost::mpl::vector< void, castor3d::Submesh *, castor::Point3r const & >
+			inline boost::mpl::vector< void, castor3d::Submesh *, castor::Point3f const & >
 			get_signature( cpy::PointAdder, void * = 0 )
 			{
-				return boost::mpl::vector< void, castor3d::Submesh *, castor::Point3r const & >();
+				return boost::mpl::vector< void, castor3d::Submesh *, castor::Point3f const & >();
 			}
 			inline boost::mpl::vector< void, castor3d::TriFaceMapping *, uint32_t, uint32_t, uint32_t >
 			get_signature( cpy::FaceAdder, void * = 0 )
@@ -593,10 +593,10 @@ namespace boost
 			{
 				return boost::mpl::vector< castor::Quaternion, castor::Point3f const &, castor::Point3f const &, castor::Point3f const & >();
 			}
-			inline boost::mpl::vector< castor::Quaternion, castor::Matrix4x4r const & >
+			inline boost::mpl::vector< castor::Quaternion, castor::Matrix4x4f const & >
 			get_signature( cpy::QuaternionFromMatrix, void * = 0 )
 			{
-				return boost::mpl::vector< castor::Quaternion, castor::Matrix4x4r const & >();
+				return boost::mpl::vector< castor::Quaternion, castor::Matrix4x4f const & >();
 			}
 			inline boost::mpl::vector< castor::Image &, castor::Image &, castor::RgbColour const & >
 			get_signature( cpy::FillRgb, void * = 0 )

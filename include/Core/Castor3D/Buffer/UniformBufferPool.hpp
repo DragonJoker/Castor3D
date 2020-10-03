@@ -37,6 +37,7 @@ namespace castor3d
 		 *\param[in]	debugName		Le nom debug du tampon.
 		 */
 		C3D_API UniformBufferPool( RenderSystem & renderSystem
+			, RenderDevice const & device
 			, castor::String debugName );
 		/**
 		 *\~english
@@ -97,6 +98,7 @@ namespace castor3d
 			, UniformBufferPool::BufferArray & buffers );
 
 	private:
+		RenderDevice const & m_device;
 		uint32_t m_maxUboElemCount{ 0u };
 		uint32_t m_maxUboSize{ 0u };
 		uint32_t m_maxPoolUboCount{ 10u };

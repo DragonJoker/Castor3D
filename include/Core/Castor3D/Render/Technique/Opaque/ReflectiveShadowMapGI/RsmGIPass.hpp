@@ -12,7 +12,7 @@ See LICENSE file in root folder
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaqueModule.hpp"
-#include "Castor3D/Render/ToTexture/RenderQuad.hpp"
+#include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"
 #include "Castor3D/Shader/Ubos/RsmConfigUbo.hpp"
 
@@ -39,6 +39,7 @@ namespace castor3d
 		 *\param[in]	scene			Le tampon de scène.
 		 */
 		C3D_API RsmGIPass( Engine & engine
+			, RenderDevice const & device
 			, LightCache const & lightCache
 			, LightType lightType
 			, VkExtent2D const & size
@@ -79,11 +80,6 @@ namespace castor3d
 		}
 
 	private:
-		void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-			, ashes::DescriptorSet & descriptorSet )override;
-		void doRegisterFrame( ashes::CommandBuffer & commandBuffer )const override;
-
-	private:
 		LightCache const & m_lightCache;
 		OpaquePassResult const & m_gpResult;
 		ShadowMapResult const & m_smResult;
@@ -97,7 +93,7 @@ namespace castor3d
 		ashes::RenderPassPtr m_renderPass;
 		ashes::FrameBufferPtr m_frameBuffer;
 		RenderPassTimerSPtr m_timer;
-		ashes::SemaphorePtr m_finished;
+		CommandsSemaphore m_commands;
 	};
 }
 

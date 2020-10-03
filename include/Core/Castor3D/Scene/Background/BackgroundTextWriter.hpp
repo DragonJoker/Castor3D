@@ -27,15 +27,15 @@ namespace castor3d
 		/**
 		*\copydoc	castor3d::BackgroundVisitor::visit
 		*/
-		C3D_API void visit( ColourBackground const & background )override;
+		C3D_API void visit( ColourBackground & background )override;
 		/**
 		*\copydoc	castor3d::BackgroundVisitor::visit
 		*/
-		C3D_API void visit( SkyboxBackground const & background )override;
+		C3D_API void visit( SkyboxBackground & background )override;
 		/**
 		*\copydoc	castor3d::BackgroundVisitor::visit
 		*/
-		C3D_API void visit( ImageBackground const & background )override;
+		C3D_API void visit( ImageBackground & background )override;
 
 	private:
 		castor::TextFile & m_file;

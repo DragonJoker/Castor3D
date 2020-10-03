@@ -214,7 +214,7 @@ namespace castor3d
 		}
 	}
 
-	void AnimatedObjectGroup::setAnimationscale( castor::String const & name
+	void AnimatedObjectGroup::setAnimationScale( castor::String const & name
 		, float scale )
 	{
 		auto itAnim = m_animations.find( name );

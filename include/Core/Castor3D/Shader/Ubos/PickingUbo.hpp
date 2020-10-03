@@ -15,8 +15,8 @@ namespace castor3d
 	public:
 		using Configuration = PickingUboConfiguration;
 		explicit PickingUbo( Engine & engine );
-		void initialise();
-		void cleanup();
+		void initialise( RenderDevice const & device );
+		void cleanup( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -35,6 +35,11 @@ namespace castor3d
 			, VkDescriptorSetLayoutBinding const & layoutBinding )const
 		{
 			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
+		}
+
+		UniformBufferOffsetT< Configuration > const & getUbo()const
+		{
+			return m_ubo;
 		}
 
 	public:

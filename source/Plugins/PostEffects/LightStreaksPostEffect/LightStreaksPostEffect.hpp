@@ -36,11 +36,12 @@ namespace light_streaks
 		/**
 		*\copydoc		castor3d::PostEffect::doInitialise
 		*/
-		virtual bool doInitialise( castor3d::RenderPassTimer const & timer )override;
+		virtual bool doInitialise( castor3d::RenderDevice const & device
+			, castor3d::RenderPassTimer const & timer )override;
 		/**
 		*\copydoc		castor3d::PostEffect::doCleanup
 		*/
-		virtual void doCleanup()override;
+		virtual void doCleanup( castor3d::RenderDevice const & device )override;
 		/**
 		 *\copydoc		castor3d::PostEffect::doWriteInto
 		 */
@@ -59,10 +60,11 @@ namespace light_streaks
 
 	private:
 		castor3d::SamplerSPtr doCreateSampler( bool linear );
-		bool doInitialiseHiPassProgram();
-		bool doInitialiseKawaseProgram();
-		bool doInitialiseCombineProgram();
-		bool doBuildCommandBuffer( castor3d::RenderPassTimer const & timer );
+		bool doInitialiseHiPassProgram( castor3d::RenderDevice const & device );
+		bool doInitialiseKawaseProgram( castor3d::RenderDevice const & device );
+		bool doInitialiseCombineProgram( castor3d::RenderDevice const & device );
+		bool doBuildCommandBuffer( castor3d::RenderDevice const & device
+			, castor3d::RenderPassTimer const & timer );
 
 	private:
 		struct Layout
@@ -75,6 +77,7 @@ namespace light_streaks
 		struct Surface
 		{
 			Surface( castor3d::RenderSystem & renderSystem
+				, castor3d::RenderDevice const & device
 				, VkFormat format
 				, VkExtent2D const & size
 				, ashes::RenderPass const & renderPass

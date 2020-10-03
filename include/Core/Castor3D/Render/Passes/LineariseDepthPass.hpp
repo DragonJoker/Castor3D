@@ -56,8 +56,8 @@ namespace castor3d
 		 *\brief		Destructeur.
 		 */
 		C3D_API ~LineariseDepthPass() = default;
-		C3D_API void initialise();
-		C3D_API void cleanup();
+		C3D_API void initialise( RenderDevice const & device );
+		C3D_API void cleanup( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Updates clipping info.
@@ -80,7 +80,8 @@ namespace castor3d
 		 *\~french
 		 *\brief		Linéarise le tampon de profondeur.
 		 */
-		C3D_API ashes::Semaphore const & linearise( ashes::Semaphore const & toWait )const;
+		C3D_API ashes::Semaphore const & linearise( RenderDevice const & device
+			, ashes::Semaphore const & toWait )const;
 		/**
 		 *\~english
 		 *\param[in]	timer	The render timer.
@@ -89,7 +90,8 @@ namespace castor3d
 		 *\param[in]	timer	Le timer de rendu.
 		 *\return		Les commandes utilisées pour rendre la passe.
 		 */
-		C3D_API CommandsSemaphore getCommands( RenderPassTimer const & timer
+		C3D_API CommandsSemaphore getCommands( RenderDevice const & device
+			, RenderPassTimer const & timer
 			, uint32_t index )const;
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
@@ -116,10 +118,10 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		void doInitialiseLinearisePass();
-		void doInitialiseMinifyPass();
-		void doCleanupLinearisePass();
-		void doCleanupMinifyPass();
+		void doInitialiseLinearisePass( RenderDevice const & device );
+		void doInitialiseMinifyPass( RenderDevice const & device );
+		void doCleanupLinearisePass( RenderDevice const & device );
+		void doCleanupMinifyPass( RenderDevice const & device );
 		void doPrepareFrame( ashes::CommandBuffer & cb
 			, RenderPassTimer const & timer
 			, uint32_t index )const;

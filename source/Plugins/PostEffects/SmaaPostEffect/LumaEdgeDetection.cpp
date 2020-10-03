@@ -29,6 +29,12 @@ namespace smaa
 {
 	namespace
 	{
+		enum Idx : uint32_t
+		{
+			ColorTexIdx,
+			PredicationTexIdx,
+		};
+
 		std::unique_ptr< ast::Shader > doGetEdgeDetectionFPPredication( castor3d::RenderSystem & renderSystem
 			, Point4f const & renderTargetMetrics
 			, SmaaConfig const & config )
@@ -52,8 +58,8 @@ namespace smaa
 
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 			auto vtx_offset = writer.declInputArray< Vec4 >( "vtx_offset", 1u, 3u );
-			auto c3d_colourTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_colourTex", 0u, 0u );
-			auto c3d_predicationTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_predicationTex", 1u, 0u );
+			auto c3d_colourTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_colourTex", ColorTexIdx, 0u );
+			auto c3d_predicationTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_predicationTex", PredicationTexIdx, 0u );
 
 			// Shader outputs
 			auto pxl_fragColour = writer.declOutput< Vec4 >( "pxl_fragColour", 0u );
@@ -297,17 +303,29 @@ namespace smaa
 			};
 			return texture.createView( view );
 		}
+
+		castor3d::rq::BindingDescriptionArray createBindings()
+		{
+			return
+			{
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
+			};
+		}
 	}
 
 	//*********************************************************************************************
 
 	LumaEdgeDetection::LumaEdgeDetection( castor3d::RenderTarget & renderTarget
+		, castor3d::RenderDevice const & device
 		, ashes::ImageView const & colourView
 		, ashes::Image const * predication
 		, SmaaConfig const & config )
-		: EdgeDetection{ renderTarget, config }
+		: EdgeDetection{ renderTarget, device, config, createBindings() }
 		, m_colourView{ colourView }
-		, m_predicationView{ predication ? std::make_unique< ashes::ImageView >( doCreatePredicationView( *predication ) ) : nullptr }
+		, m_predicationView{ ( predication
+			? std::make_unique< ashes::ImageView >( doCreatePredicationView( *predication ) )
+			: nullptr ) }
 	{
 		VkExtent2D size{ renderTarget.getSize().getWidth()
 			, renderTarget.getSize().getHeight() };
@@ -325,11 +343,10 @@ namespace smaa
 	castor3d::CommandsSemaphore LumaEdgeDetection::prepareCommands( castor3d::RenderPassTimer const & timer
 		, uint32_t passIndex )
 	{
-		auto & device = getCurrentRenderDevice( m_renderSystem );
 		castor3d::CommandsSemaphore edgeDetectionCommands
 		{
-			device.graphicsCommandPool->createCommandBuffer( "LumaEdgeDetection" ),
-			device->createSemaphore( "LumaEdgeDetection" )
+			m_device.graphicsCommandPool->createCommandBuffer( "LumaEdgeDetection" ),
+			m_device->createSemaphore( "LumaEdgeDetection" )
 		};
 		auto & edgeDetectionCmd = *edgeDetectionCommands.commandBuffer;
 
@@ -370,7 +387,7 @@ namespace smaa
 				castor3d::defaultClearDepthStencil,
 			}
 			, VK_SUBPASS_CONTENTS_INLINE );
-		registerFrame( edgeDetectionCmd );
+		registerPass( edgeDetectionCmd );
 		edgeDetectionCmd.endRenderPass();
 		timer.endPass( edgeDetectionCmd, passIndex );
 		edgeDetectionCmd.endDebugBlock();
@@ -383,10 +400,9 @@ namespace smaa
 	{
 		VkExtent2D size{ m_colourView.image->getDimensions().width
 			, m_colourView.image->getDimensions().height };
-		auto & device = getCurrentRenderDevice( m_renderSystem );
 		ashes::PipelineShaderStageCreateInfoArray stages;
-		stages.push_back( makeShaderState( device, m_vertexShader ) );
-		stages.push_back( makeShaderState( device, m_pixelShader ) );
+		stages.push_back( makeShaderState( m_device, m_vertexShader ) );
+		stages.push_back( makeShaderState( m_device, m_pixelShader ) );
 
 		ashes::PipelineDepthStencilStateCreateInfo dsstate
 		{
@@ -415,35 +431,27 @@ namespace smaa
 				1u,
 			},
 		};
-		ashes::VkDescriptorSetLayoutBindingArray setLayoutBindings;
-		auto * view = &m_colourView;
+
+		ashes::WriteDescriptorSetArray writes
+		{
+			makeDescriptorWrite( m_colourView
+				, getSampler().getSampler()
+				, ColorTexIdx ),
+		};
 
 		if ( m_predicationView )
 		{
-			setLayoutBindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( 0u
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-			view = m_predicationView.get();
+			writes.emplace_back( makeDescriptorWrite( *m_predicationView
+				, getSampler().getSampler()
+				, PredicationTexIdx ) );
 		}
 
-		createPipeline( size
+		createPipelineAndPass( size
 			, castor::Position{}
 			, stages
-			, *view
 			, *m_renderPass
-			, std::move( setLayoutBindings )
+			, std::move( writes )
 			, {}
 			, std::move( dsstate ) );
-	}
-
-	void LumaEdgeDetection::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-		, ashes::DescriptorSet & descriptorSet )
-	{
-		if ( m_predicationView )
-		{
-			descriptorSet.createBinding( descriptorSetLayout.getBinding( 0u )
-				, m_colourView
-				, m_sampler->getSampler() );
-		}
 	}
 }

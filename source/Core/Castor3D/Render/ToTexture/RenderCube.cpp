@@ -96,7 +96,7 @@ namespace castor3d
 				result->getData( i ) = projection * views[i];
 			}
 
-			result->initialise();
+			result->initialise( device );
 			result->upload( 0u, 6u );
 			return result;
 		}
@@ -182,7 +182,7 @@ namespace castor3d
 		, ashes::VkPushConstantRangeArray const & pushRanges
 		, ashes::PipelineDepthStencilStateCreateInfo const & dsState )
 	{
-		m_sampler->initialise();
+		m_sampler->initialise( m_device );
 		m_matrixUbo = doCreateMatrixUbo( m_device
 			, *m_device.graphicsQueue
 			, *m_device.graphicsCommandPool

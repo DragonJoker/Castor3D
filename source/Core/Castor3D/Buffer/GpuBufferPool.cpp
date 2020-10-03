@@ -38,8 +38,10 @@ namespace castor3d
 	}
 
 	GpuBufferPool::GpuBufferPool( RenderSystem & renderSystem
+		, RenderDevice const & device
 		, castor::String debugName )
 		: OwnedBy< RenderSystem >{ renderSystem }
+		, m_device{ device }
 		, m_debugName{ std::move( debugName ) }
 	{
 	}
@@ -89,7 +91,7 @@ namespace castor3d
 				, ashes::QueueShare{}
 				, uint32_t( level )
 				, minBlockSize );
-			buffer->initialise();
+			buffer->initialise( m_device );
 			it->second.emplace_back( std::move( buffer ) );
 			itB = std::next( it->second.begin(), it->second.size() - 1u );
 		}

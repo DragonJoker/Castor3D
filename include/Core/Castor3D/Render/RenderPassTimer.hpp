@@ -51,6 +51,7 @@ namespace castor3d
 		 *\param[in]	passesCount	Le nombre de passes de rendu.
 		 */
 		C3D_API RenderPassTimer( Engine & engine
+			, RenderDevice const & device
 			, castor::String const & category
 			, castor::String const & name
 			, uint32_t passesCount = 1u );
@@ -153,6 +154,7 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
+		RenderDevice const & m_device;
 		uint32_t m_passesCount;
 		castor::String m_category;
 		castor::PreciseTimer m_cpuTimer;

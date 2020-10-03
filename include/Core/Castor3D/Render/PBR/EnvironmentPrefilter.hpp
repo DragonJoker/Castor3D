@@ -65,6 +65,7 @@ namespace castor3d
 		 *\param[in]	sampler		Le sampler utilisé pour la texture source.
 		 */
 		C3D_API explicit EnvironmentPrefilter( Engine & engine
+			, RenderDevice const & device
 			, castor::Size const & size
 			, ashes::Image const & srcTexture
 			, SamplerSPtr sampler );

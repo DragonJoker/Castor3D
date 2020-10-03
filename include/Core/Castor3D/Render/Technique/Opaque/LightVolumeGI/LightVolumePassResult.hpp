@@ -15,6 +15,7 @@ namespace castor3d
 	{
 	public:
 		C3D_API LightVolumePassResult( Engine & engine
+			, RenderDevice const & device
 			, castor::String const & prefix
 			, uint32_t size );
 	};

@@ -15,6 +15,7 @@ namespace castor3d
 	namespace
 	{
 		ashes::BufferBasePtr doCreateBuffer( Engine & engine
+			, RenderDevice const & device
 			, VkDeviceSize size
 			, castor::String name )
 		{
@@ -23,7 +24,6 @@ namespace castor3d
 			VkBufferUsageFlagBits target = renderSystem.getGpuInformations().hasFeature( GpuFeature::eShaderStorageBuffers )
 					? VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 					: VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT;
-			auto & device = getCurrentRenderDevice( engine );
 			result = makeBufferBase( device
 				, size
 				, target | VK_BUFFER_USAGE_TRANSFER_DST_BIT
@@ -33,6 +33,7 @@ namespace castor3d
 		}
 
 		ashes::BufferViewPtr doCreateView( Engine & engine
+			, RenderDevice const & device
 			, VkFormat tboFormat
 			, ashes::BufferBase const & buffer )
 		{
@@ -40,7 +41,7 @@ namespace castor3d
 
 			if ( !engine.getRenderSystem()->getGpuInformations().hasFeature( GpuFeature::eShaderStorageBuffers ) )
 			{
-				result = getCurrentRenderDevice( engine )->createBufferView( buffer
+				result = device->createBufferView( buffer
 					, tboFormat
 					, 0u
 					, uint32_t( buffer.getSize() ) );
@@ -53,13 +54,15 @@ namespace castor3d
 	//*********************************************************************************************
 
 	ShaderBuffer::ShaderBuffer( Engine & engine
+		, RenderDevice const & device
 		, uint32_t size
 		, castor::String name
 		, VkFormat tboFormat )
-		: m_engine{ engine }
+		: m_device{ device }
 		, m_size{ size }
-		, m_buffer{ doCreateBuffer( engine, m_size, name ) }
-		, m_bufferView{ doCreateView( engine, tboFormat, *m_buffer ) }
+		, m_buffer{ doCreateBuffer( engine, device, m_size, name ) }
+		, m_bufferView{ doCreateView( engine, device, tboFormat, *m_buffer ) }
+		, m_type{ m_bufferView ? VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER : VK_DESCRIPTOR_TYPE_STORAGE_BUFFER }
 		, m_data( size_t( m_size ), uint8_t( 0 ) )
 	{
 	}
@@ -78,23 +81,40 @@ namespace castor3d
 	void ShaderBuffer::update( VkDeviceSize offset
 		, VkDeviceSize size )
 	{
-		auto & device = getCurrentRenderDevice( m_engine );
 		doUpdate( 0u
 			, std::min( m_size
 				, ashes::getAlignedSize( size
-					, uint32_t( device.properties.limits.nonCoherentAtomSize ) ) ) );
+					, uint32_t( m_device.properties.limits.nonCoherentAtomSize ) ) ) );
 	}
 
 	VkDescriptorSetLayoutBinding ShaderBuffer::createLayoutBinding( uint32_t index )const
 	{
+		return makeDescriptorSetLayoutBinding( index, m_type, VK_SHADER_STAGE_FRAGMENT_BIT );
+	}
+
+	ashes::WriteDescriptorSet ShaderBuffer::getBinding( uint32_t binding )const
+	{
+		auto result = ashes::WriteDescriptorSet
+		{
+			binding,
+			0u,
+			1u,
+			( checkFlag( m_buffer->getUsage(), VkBufferUsageFlagBits::VK_BUFFER_USAGE_STORAGE_BUFFER_BIT )
+				? VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				: VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER ),
+		};
+
 		if ( m_bufferView )
 		{
-			return makeDescriptorSetLayoutBinding( index, VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT );
+			result.bufferInfo.push_back( VkDescriptorBufferInfo{ *m_buffer, m_bufferView->getOffset(), m_bufferView->getRange() } );
+			result.texelBufferView.push_back( *m_bufferView );
 		}
 		else
 		{
-			return makeDescriptorSetLayoutBinding( index, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT );
+			result.bufferInfo.push_back( VkDescriptorBufferInfo{ *m_buffer, 0u, uint32_t( m_size ) } );
 		}
+
+		return result;
 	}
 
 	void ShaderBuffer::createBinding( ashes::DescriptorSet & descriptorSet

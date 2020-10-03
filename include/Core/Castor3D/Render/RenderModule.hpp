@@ -251,6 +251,7 @@ namespace castor3d
 	{
 		castor::String name;
 		ashes::ImageView view;
+		VkImageLayout layout;
 		TextureFactors factors;
 	};
 	/**
@@ -466,11 +467,9 @@ namespace castor3d
 	CU_DeclareSmartPtr( RenderWindow );
 	CU_DeclareSmartPtr( Viewport );
 
-	//! RenderWindow pointer array.
 	CU_DeclareVector( RenderWindowSPtr, RenderWindowPtr );
-	//! RenderWindow pointer map, sorted by index.
+	CU_DeclareVector( IntermediateView, IntermediateView );
 	CU_DeclareMap( uint32_t, RenderWindowSPtr, RenderWindow );
-	//! RenderWindow pointer map, sorted by name.
 	CU_DeclareMap( castor::String, RenderWindowSPtr, RenderWindowPtrStr );
 
 	using RenderQueueArray = std::vector< std::reference_wrapper< RenderQueue > >;
@@ -479,33 +478,5 @@ namespace castor3d
 
 CU_DeclareExportedOwnedBy( C3D_API, castor3d::RenderSystem, RenderSystem )
 CU_DeclareExportedOwnedBy( C3D_API, castor3d::RenderDevice, RenderDevice )
-
-namespace castor3d
-{
-	/**@name Render */
-	//@{
-
-	C3D_API RenderDevice const & getCurrentRenderDevice( RenderDevice const & obj );
-	C3D_API RenderDevice const & getCurrentRenderDevice( RenderSystem const & obj );
-	C3D_API RenderDevice const & getCurrentRenderDevice( Engine const & obj );
-	C3D_API RenderDevice const & getCurrentRenderDevice( Scene const & obj );
-
-	inline RenderDevice const & getCurrentRenderDevice( castor::OwnedBy< RenderSystem > const & obj )
-	{
-		return getCurrentRenderDevice( *obj.getRenderSystem() );
-	}
-
-	inline RenderDevice const & getCurrentRenderDevice( castor::OwnedBy< Engine > const & obj )
-	{
-		return getCurrentRenderDevice( *obj.getEngine() );
-	}
-
-	inline RenderDevice const & getCurrentRenderDevice( castor::OwnedBy< Scene > const & obj )
-	{
-		return getCurrentRenderDevice( *obj.getScene() );
-	}
-
-	//@}
-}
 
 #endif

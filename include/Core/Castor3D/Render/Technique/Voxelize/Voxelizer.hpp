@@ -24,6 +24,7 @@ namespace castor3d
 		 *\param[in]	scene			La scène rendue.
 		 */
 		C3D_API Voxelizer( Engine & engine
+			, RenderDevice const & device
 			, VkExtent3D const & size
 			, Scene & scene
 			, SceneCuller & culler
@@ -55,7 +56,8 @@ namespace castor3d
 		 *\brief		Dessine les noeuds.
 		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
 		 */
-		C3D_API ashes::Semaphore const & render( ashes::Semaphore const & toWait );
+		C3D_API ashes::Semaphore const & render( RenderDevice const & device
+			, ashes::Semaphore const & toWait );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */

@@ -11,7 +11,7 @@ See LICENSE file in root folder
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaqueModule.hpp"
-#include "Castor3D/Render/ToTexture/RenderQuad.hpp"
+#include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
@@ -38,6 +38,8 @@ namespace castor3d
 		 *\param[in]	scene			Le tampon de scène.
 		 */
 		C3D_API LayeredLightVolumeGIPass( Engine & engine
+			, RenderDevice const & device
+			, castor::String const & prefix
 			, GpInfoUbo const & gpInfo
 			, LayeredLpvConfigUbo const & lpvConfigUbo
 			, OpaquePassResult const & gpResult
@@ -63,11 +65,6 @@ namespace castor3d
 		C3D_API void accept( PipelineVisitorBase & visitor );
 
 	private:
-		void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-			, ashes::DescriptorSet & descriptorSet )override;
-		void doRegisterFrame( ashes::CommandBuffer & commandBuffer )const override;
-
-	private:
 		GpInfoUbo const & m_gpInfo;
 		LayeredLpvConfigUbo const & m_lpvConfigUbo;
 		OpaquePassResult const & m_gpResult;
@@ -81,7 +78,7 @@ namespace castor3d
 		ashes::RenderPassPtr m_renderPass;
 		ashes::FrameBufferPtr m_frameBuffer;
 		RenderPassTimerSPtr m_timer;
-		ashes::SemaphorePtr m_finished;
+		CommandsSemaphore m_commands;
 	};
 }
 

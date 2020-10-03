@@ -27,14 +27,14 @@ using namespace castor;
 namespace castor3d
 {
 	BrdfPrefilter::BrdfPrefilter( Engine & engine
+		, RenderDevice const & device
 		, castor::Size const & size
 		, ashes::ImageView const & dstTexture )
 		: m_renderSystem{ *engine.getRenderSystem() }
+		, m_device{ device }
 	{
-		auto & device = getCurrentRenderDevice( m_renderSystem );
-
 		// Initialise the vertex buffer.
-		m_vertexBuffer = makeVertexBuffer< TexturedQuad >( device
+		m_vertexBuffer = makeVertexBuffer< TexturedQuad >( m_device
 			, 1u
 			, 0u
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
@@ -123,7 +123,7 @@ namespace castor3d
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		m_renderPass = device->createRenderPass( "BrdfPrefilter"
+		m_renderPass = m_device->createRenderPass( "BrdfPrefilter"
 			, std::move( createInfo ) );
 
 		// Initialise the frame buffer.
@@ -134,8 +134,8 @@ namespace castor3d
 			, std::move( views ) );
 
 		// Initialise the pipeline.
-		m_pipelineLayout = device->createPipelineLayout( "BrdfPrefilter" );
-		m_pipeline = device->createPipeline( "BrdfPrefilter"
+		m_pipelineLayout = m_device->createPipelineLayout( "BrdfPrefilter" );
+		m_pipeline = m_device->createPipeline( "BrdfPrefilter"
 			, ashes::GraphicsPipelineCreateInfo
 			{
 				0u,
@@ -152,14 +152,12 @@ namespace castor3d
 				*m_pipelineLayout,
 				*m_renderPass
 			} );
-		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( "BrdfPrefilter" );
-		m_fence = device->createFence( "BrdfPrefilter" );
+		m_commandBuffer = m_device.graphicsCommandPool->createCommandBuffer( "BrdfPrefilter" );
+		m_fence = m_device->createFence( "BrdfPrefilter" );
 	}
 
 	void BrdfPrefilter::render()
 	{
-		auto & device = getCurrentRenderDevice( m_renderSystem );
-
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 		m_commandBuffer->beginDebugBlock(
 			{
@@ -177,7 +175,7 @@ namespace castor3d
 		m_commandBuffer->endDebugBlock();
 		m_commandBuffer->end();
 
-		device.graphicsQueue->submit( *m_commandBuffer, m_fence.get() );
+		m_device.graphicsQueue->submit( *m_commandBuffer, m_fence.get() );
 		m_fence->wait( ashes::MaxTimeout );
 		m_fence->reset();
 	}
@@ -385,11 +383,10 @@ namespace castor3d
 			pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		auto & device = getCurrentRenderDevice( m_renderSystem );
 		return ashes::PipelineShaderStageCreateInfoArray
 		{
-			makeShaderState( device, vtx ),
-			makeShaderState( device, pxl ),
+			makeShaderState( m_device, vtx ),
+			makeShaderState( m_device, pxl ),
 		};
 	}
 }

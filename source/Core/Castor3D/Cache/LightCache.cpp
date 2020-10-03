@@ -2,7 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
-#include "Castor3D/Event/Frame/FunctorEvent.hpp"
+#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderLoop.hpp"
@@ -112,11 +112,9 @@ namespace castor3d
 	void ObjectCache< Light, castor::String >::initialise()
 	{
 		m_lightsBuffer.resize( 300ull * shader::getMaxLightComponentsCount() );
-		getScene()->getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
-			, [this]()
+		getScene()->getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
+			, [this]( RenderDevice const & device )
 			{
-				auto & device = getCurrentRenderDevice( *getScene() );
-
 				if ( !m_textureBuffer )
 				{
 					m_textureBuffer = makeBuffer< castor::Point4f >( device
@@ -139,8 +137,8 @@ namespace castor3d
 
 	void ObjectCache< Light, castor::String >::cleanup()
 	{
-		m_scene.getListener().postEvent( makeFunctorEvent( EventType::ePreRender
-			, [this]()
+		m_scene.getListener().postEvent( makeGpuFunctorEvent( EventType::ePreRender
+			, [this]( RenderDevice const & device )
 			{
 				m_textureView.reset();
 				m_textureBuffer.reset();

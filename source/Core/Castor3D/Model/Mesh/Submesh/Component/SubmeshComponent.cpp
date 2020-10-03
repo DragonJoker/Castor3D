@@ -9,11 +9,11 @@ namespace castor3d
 	{
 	}
 
-	bool SubmeshComponent::initialise()
+	bool SubmeshComponent::initialise( RenderDevice const & device )
 	{
 		if ( !m_initialised || m_dirty )
 		{
-			m_initialised = doInitialise();
+			m_initialised = doInitialise( device );
 		}
 
 		return m_initialised;
@@ -27,11 +27,11 @@ namespace castor3d
 		}
 	}
 
-	void SubmeshComponent::fill()
+	void SubmeshComponent::fill( RenderDevice const & device )
 	{
 		if ( m_initialised )
 		{
-			doFill();
+			doFill( device );
 		}
 	}
 

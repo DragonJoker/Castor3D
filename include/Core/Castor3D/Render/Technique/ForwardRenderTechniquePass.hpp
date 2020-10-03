@@ -86,7 +86,8 @@ namespace castor3d
 		 *\param[in]	size		Les dimensions de la passe.
 		 *\param[in]	clear		Dit si les attaches doivent être vidées au début de la passe.
 		 */
-		void initialiseRenderPass( ashes::ImageView const & colourView
+		void initialiseRenderPass( RenderDevice const & device
+			, ashes::ImageView const & colourView
 			, ashes::ImageView const & depthView
 			, castor::Size const & size
 			, bool clear );
@@ -102,7 +103,8 @@ namespace castor3d
 		 *\brief		Dessine les noeuds.
 		 *\param[out]	toWait	Le sémaphore à attendre.
 		 */
-		ashes::Semaphore const & render( ashes::Semaphore const & toWait );
+		ashes::Semaphore const & render( RenderDevice const & device
+			, ashes::Semaphore const & toWait );
 
 	protected:
 		/**
@@ -113,7 +115,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::doCleanup
 		 */
-		C3D_API void doCleanup()override;
+		C3D_API void doCleanup( RenderDevice const & device )override;
 
 	private:
 		/**

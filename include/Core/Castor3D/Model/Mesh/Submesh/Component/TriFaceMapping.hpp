@@ -26,13 +26,6 @@ namespace castor3d
 		C3D_API explicit TriFaceMapping( Submesh & submesh );
 		/**
 		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~TriFaceMapping();
-		/**
-		 *\~english
 		 *\brief		Clears this submesh's face array.
 		 *\~french
 		 *\brief		Vide le tableau de faces.
@@ -216,7 +209,7 @@ namespace castor3d
 
 	private:
 		void doCleanup()override;
-		void doFill()override;
+		void doFill( RenderDevice const & device )override;
 		void doUpload()override;
 
 	public:

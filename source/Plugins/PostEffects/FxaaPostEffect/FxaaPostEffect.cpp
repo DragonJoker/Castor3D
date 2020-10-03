@@ -59,14 +59,20 @@ namespace fxaa
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
+		enum Idx : uint32_t
+		{
+			FxaaCfgUboIdx,
+			ColorTexIdx,
+		};
+
 		std::unique_ptr< ast::Shader > getFxaaFragmentProgram( castor3d::RenderSystem * renderSystem )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
 
 			// Shader inputs
-			UBO_FXAA( writer, 0u, 0u );
-			auto c3d_mapColor = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapColor", 1u, 0u );
+			UBO_FXAA( writer, FxaaCfgUboIdx, 0u );
+			auto c3d_mapColor = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapColor", ColorTexIdx, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 			auto vtx_posPos = writer.declInput< Vec4 >( PosPos, 1u );
 
@@ -146,14 +152,29 @@ namespace fxaa
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
+
+		castor3d::rq::BindingDescriptionArray createBindings()
+		{
+			return
+			{
+				{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, std::nullopt },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
+			};
+		}
 	}
 
 	//*********************************************************************************************
 
 	RenderQuad::RenderQuad( castor3d::RenderSystem & renderSystem
+		, castor3d::RenderDevice const & device
 		, Size const & size )
-		: castor3d::RenderQuad{ renderSystem, cuT( "Fxaa" ), VK_FILTER_LINEAR, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
-		, m_fxaaUbo{ *renderSystem.getEngine(), size }
+		: castor3d::RenderQuad{ device
+			, cuT( "Fxaa" )
+			, VK_FILTER_LINEAR
+			, { createBindings()
+				, ashes::nullopt
+				, castor3d::rq::Texcoord{} } }
+		, m_fxaaUbo{ device, size }
 	{
 	}
 
@@ -164,13 +185,6 @@ namespace fxaa
 		m_fxaaUbo.cpuUpdate( subpixShift
 			, spanMax
 			, reduceMul );
-	}
-
-	void RenderQuad::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-		, ashes::DescriptorSet & descriptorSet )
-	{
-		m_fxaaUbo.createSizedBinding( descriptorSet
-			, descriptorSetLayout.getBinding( 0u ) );
 	}
 
 	//*********************************************************************************************
@@ -272,12 +286,12 @@ namespace fxaa
 		}
 	}
 
-	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
+	bool PostEffect::doInitialise( castor3d::RenderDevice const & device
+		, castor3d::RenderPassTimer const & timer )
 	{
-		m_sampler->initialise();
+		m_sampler->initialise( device );
 
 		auto & renderSystem = *getRenderSystem();
-		auto & device = getCurrentRenderDevice( *this );
 		VkExtent2D size{ m_target->getWidth(), m_target->getHeight() };
 
 		// Create the render pass.
@@ -352,17 +366,23 @@ namespace fxaa
 		stages.push_back( makeShaderState( device, m_pixelShader ) );
 
 		m_fxaaQuad = std::make_unique< RenderQuad >( renderSystem
+			, device
 			, castor::Size{ size.width, size.height } );
-		m_fxaaQuad->createPipeline( size
+		m_fxaaQuad->createPipelineAndPass( size
 			, Position{}
 			, stages
-			, m_target->getDefaultView().getSampledView()
 			, *m_renderPass
-			, std::move( bindings )
-			, {} );
+			, {
+				m_fxaaQuad->makeDescriptorWrite( m_fxaaQuad->getUbo()
+					, FxaaCfgUboIdx ),
+				m_fxaaQuad->makeDescriptorWrite( m_target->getDefaultView().getSampledView()
+					, m_fxaaQuad->getSampler().getSampler()
+					, ColorTexIdx ),
+			} );
 
 		// Initialise the surface.
-		auto result = m_surface.initialise( *m_renderPass
+		auto result = m_surface.initialise( device
+			, *m_renderPass
 			, castor::Size{ size.width, size.height }
 			, m_target->getPixelFormat() );
 
@@ -390,7 +410,7 @@ namespace fxaa
 				, *m_surface.frameBuffer
 				, { castor3d::transparentBlackClearColor }
 				, VK_SUBPASS_CONTENTS_INLINE );
-			m_fxaaQuad->registerFrame( cmd );
+			m_fxaaQuad->registerPass( cmd );
 			cmd.endRenderPass();
 
 			timer.endPass( cmd );
@@ -408,10 +428,10 @@ namespace fxaa
 		return result;
 	}
 
-	void PostEffect::doCleanup()
+	void PostEffect::doCleanup( castor3d::RenderDevice const & device )
 	{
 		m_fxaaQuad.reset();
-		m_surface.cleanup();
+		m_surface.cleanup( device );
 		m_renderPass.reset();
 	}
 

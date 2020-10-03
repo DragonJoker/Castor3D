@@ -161,8 +161,10 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	OverlayRenderer::Preparer::Preparer( OverlayRenderer & renderer )
+	OverlayRenderer::Preparer::Preparer( OverlayRenderer & renderer
+		, RenderDevice const & device )
 		: m_renderer{ renderer }
+		, m_device{ device }
 	{
 	}
 
@@ -174,7 +176,8 @@ namespace castor3d
 			{
 				if ( !pass->isImplicit() )
 				{
-					doPrepareOverlay< PanelVertexBufferPool::Quad >( overlay
+					doPrepareOverlay< PanelVertexBufferPool::Quad >( m_device
+						, overlay
 						, *pass
 						, m_renderer.m_panelOverlays
 						, m_renderer.m_panelVertexBuffers
@@ -193,7 +196,8 @@ namespace castor3d
 			{
 				if ( !pass->isImplicit() )
 				{
-					doPrepareOverlay< PanelVertexBufferPool::Quad >( overlay
+					doPrepareOverlay< PanelVertexBufferPool::Quad >( m_device
+						, overlay
 						, *pass
 						, m_renderer.m_panelOverlays
 						, m_renderer.m_panelVertexBuffers
@@ -209,7 +213,8 @@ namespace castor3d
 			{
 				if ( !pass->isImplicit() )
 				{
-					doPrepareOverlay< BorderPanelVertexBufferPool::Quad >( overlay
+					doPrepareOverlay< BorderPanelVertexBufferPool::Quad >( m_device
+						, overlay
 						, *pass
 						, m_renderer.m_borderPanelOverlays
 						, m_renderer.m_borderVertexBuffers
@@ -228,7 +233,8 @@ namespace castor3d
 			{
 				if ( !pass->isImplicit() )
 				{
-					doPrepareOverlay< TextVertexBufferPool::Quad >( overlay
+					doPrepareOverlay< TextVertexBufferPool::Quad >( m_device
+						, overlay
 						, *pass
 						, m_renderer.m_textOverlays
 						, m_renderer.m_textVertexBuffers
@@ -292,7 +298,8 @@ namespace castor3d
 	//*********************************************************************************************
 
 	template< typename QuadT, typename OverlayT, typename BufferIndexT, typename BufferPoolT, typename VertexT >
-	void OverlayRenderer::Preparer::doPrepareOverlay( OverlayT const & overlay
+	void OverlayRenderer::Preparer::doPrepareOverlay( RenderDevice const & device
+		, OverlayT const & overlay
 		, Pass const & pass
 		, std::map< size_t, BufferIndexT > & overlays
 		, std::vector< BufferPoolT > & vertexBuffers
@@ -306,10 +313,10 @@ namespace castor3d
 				, overlay.getOverlay()
 				, pass
 				, ( fontTexture
-					? m_renderer.doGetTextNode( pass, *fontTexture->getTexture(), *fontTexture->getSampler() )
-					: m_renderer.doGetPanelNode( pass ) )
+					? m_renderer.doGetTextNode( device, pass, *fontTexture->getTexture(), *fontTexture->getSampler() )
+					: m_renderer.doGetPanelNode( device, pass ) )
 				, *pass.getOwner()->getEngine()
-				, getCurrentRenderDevice( m_renderer )
+				, device
 				, ( fontTexture
 					? m_renderer.m_textDeclaration
 					: m_renderer.m_declaration )
@@ -492,13 +499,11 @@ namespace castor3d
 	{
 	}
 
-	void OverlayRenderer::initialise()
+	void OverlayRenderer::initialise( RenderDevice const & device )
 	{
-		auto & device = getCurrentRenderDevice( *this );
-
 		if ( !m_renderPass )
 		{
-			doCreateRenderPass();
+			doCreateRenderPass( device );
 		}
 
 		if ( !m_commandBuffer )
@@ -530,9 +535,9 @@ namespace castor3d
 			, MaxPanelsPerBuffer ) );
 	}
 
-	void OverlayRenderer::cleanup()
+	void OverlayRenderer::cleanup( RenderDevice const & device )
 	{
-		m_matrixUbo.cleanup();
+		m_matrixUbo.cleanup( device );
 		m_panelOverlays.clear();
 		m_borderPanelOverlays.clear();
 		m_textOverlays.clear();
@@ -609,9 +614,9 @@ namespace castor3d
 		m_sizeChanged = false;
 	}
 
-	void OverlayRenderer::render( RenderPassTimer & timer )
+	void OverlayRenderer::render( RenderDevice const & device
+		, RenderPassTimer & timer )
 	{
-		auto & device = getCurrentRenderDevice( *this );
 		auto & queue = *device.graphicsQueue;
 		timer.notifyPassRender();
 		queue.submit( *m_commandBuffer
@@ -621,20 +626,22 @@ namespace castor3d
 			, nullptr );
 	}
 
-	OverlayRenderer::OverlayRenderNode & OverlayRenderer::doGetPanelNode( Pass const & pass )
+	OverlayRenderer::OverlayRenderNode & OverlayRenderer::doGetPanelNode( RenderDevice const & device
+		, Pass const & pass )
 	{
 		auto it = m_mapPanelNodes.find( &pass );
 
 		if ( it == m_mapPanelNodes.end() )
 		{
-			auto & pipeline = doGetPipeline( pass, m_panelPipelines, false );
+			auto & pipeline = doGetPipeline( device, pass, m_panelPipelines, false );
 			it = m_mapPanelNodes.insert( { &pass, OverlayRenderNode{ pipeline, pass } } ).first;
 		}
 
 		return it->second;
 	}
 
-	OverlayRenderer::OverlayRenderNode & OverlayRenderer::doGetTextNode( Pass const & pass
+	OverlayRenderer::OverlayRenderNode & OverlayRenderer::doGetTextNode( RenderDevice const & device
+		, Pass const & pass
 		, TextureLayout const & texture
 		, Sampler const & sampler )
 	{
@@ -642,7 +649,7 @@ namespace castor3d
 
 		if ( it == m_mapTextNodes.end() )
 		{
-			auto & pipeline = doGetPipeline( pass, m_textPipelines, true );
+			auto & pipeline = doGetPipeline( device, pass, m_textPipelines, true );
 			it = m_mapTextNodes.insert( { &pass, OverlayRenderNode{ pipeline, pass } } ).first;
 		}
 
@@ -723,7 +730,7 @@ namespace castor3d
 		return result;
 	}
 
-	void OverlayRenderer::doCreateRenderPass()
+	void OverlayRenderer::doCreateRenderPass( RenderDevice const & device )
 	{
 		ashes::VkAttachmentDescriptionArray attaches
 		{
@@ -778,7 +785,6 @@ namespace castor3d
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		auto & device = getCurrentRenderDevice( *this );
 		m_renderPass = device->createRenderPass( "OverlayRenderer"
 			, std::move( createInfo ) );
 
@@ -789,12 +795,11 @@ namespace castor3d
 			, std::move( fbAttaches ) );
 	}
 
-	OverlayRenderer::Pipeline OverlayRenderer::doCreatePipeline( Pass const & pass
+	OverlayRenderer::Pipeline OverlayRenderer::doCreatePipeline( RenderDevice const & device
+		, Pass const & pass
 		, ashes::PipelineShaderStageCreateInfoArray program
 		, bool text )
 	{
-		auto & device = getCurrentRenderDevice( *this );
-
 		ashes::VkPipelineColorBlendAttachmentStateArray attachments
 		{
 			VkPipelineColorBlendAttachmentState
@@ -887,7 +892,8 @@ namespace castor3d
 		};
 	}
 
-	OverlayRenderer::Pipeline & OverlayRenderer::doGetPipeline( Pass const & pass
+	OverlayRenderer::Pipeline & OverlayRenderer::doGetPipeline( RenderDevice const & device
+		, Pass const & pass
 		, std::map< uint32_t, Pipeline > & pipelines
 		, bool text )
 	{
@@ -909,15 +915,17 @@ namespace castor3d
 		{
 			// Since it does not exist yet, create it and initialise it
 			it = pipelines.emplace( key
-				, doCreatePipeline( pass
-					, doCreateOverlayProgram( textures, text )
+				, doCreatePipeline( device
+					, pass
+					, doCreateOverlayProgram( device, textures, text )
 					, text ) ).first;
 		}
 
 		return it->second;
 	}
 
-	ashes::PipelineShaderStageCreateInfoArray OverlayRenderer::doCreateOverlayProgram( TextureFlagsArray const & texturesFlags
+	ashes::PipelineShaderStageCreateInfoArray OverlayRenderer::doCreateOverlayProgram( RenderDevice const & device
+		, TextureFlagsArray const & texturesFlags
 		, bool textOverlay )
 	{
 		using namespace sdw;
@@ -1036,7 +1044,6 @@ namespace castor3d
 			pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		auto & device = getCurrentRenderDevice( *this );
 		return ashes::PipelineShaderStageCreateInfoArray
 		{
 			makeShaderState( device, vtx ),

@@ -50,15 +50,16 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::ShadowMap::doInitialise
 		 */
-		void doInitialise()override;
+		void doInitialise( RenderDevice const & device )override;
 		/**
 		 *\copydoc		castor3d::ShadowMap::doCleanup
 		 */
-		void doCleanup()override;
+		void doCleanup( RenderDevice const & device )override;
 		/**
 		 *\copydoc		castor3d::ShadowMap::doRender
 		 */
-		ashes::Semaphore const & doRender( ashes::Semaphore const & toWait
+		ashes::Semaphore const & doRender( RenderDevice const & device
+			, ashes::Semaphore const & toWait
 			, uint32_t index )override;
 		/**
 		 *\copydoc		castor3d::ShadowMap::isUpToDate
@@ -76,10 +77,10 @@ namespace castor3d
 			ashes::CommandBufferPtr commandBuffer;
 			ashes::FrameBufferPtr frameBuffer;
 			ashes::SemaphorePtr finished;
-			std::unique_ptr< GaussianBlur > blur;
 			CommandsSemaphore blurCommands;
 		};
 		std::vector< PassData > m_passesData;
+		std::unique_ptr< GaussianBlur > m_blur;
 	};
 }
 

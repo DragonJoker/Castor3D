@@ -20,7 +20,7 @@ namespace GuiCommon
 	{
 		setValueI( value );
 		AddPrivateChild( new Point3fProperty( wxT( "Center" ), wxPG_LABEL, value.getCenter() ) );
-		AddPrivateChild( new wxFloatProperty( wxT( "Radius" ), wxPG_LABEL, value.getRadius() ) );
+		AddPrivateChild( addAttributes( new wxFloatProperty( wxT( "Radius" ), wxPG_LABEL, value.getRadius() ) ) );
 	}
 
 	BoundingSphereProperty::~BoundingSphereProperty()

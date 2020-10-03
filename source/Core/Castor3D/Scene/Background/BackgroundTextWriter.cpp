@@ -16,17 +16,17 @@ namespace castor3d
 	{
 	}
 
-	void BackgroundTextWriter::visit( ColourBackground const & background )
+	void BackgroundTextWriter::visit( ColourBackground & background )
 	{
 	}
 
-	void BackgroundTextWriter::visit( SkyboxBackground const & background )
+	void BackgroundTextWriter::visit( SkyboxBackground & background )
 	{
 		SkyboxBackground::TextWriter writer{ m_tabs };
 		writer( background, m_file );
 	}
 
-	void BackgroundTextWriter::visit( ImageBackground const & background )
+	void BackgroundTextWriter::visit( ImageBackground & background )
 	{
 		ImageBackground::TextWriter writer{ m_tabs };
 		writer( background, m_file );

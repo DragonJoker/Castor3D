@@ -28,7 +28,7 @@ namespace castor
 		static DelayedInitialiserT make( ParamsT && ... params )
 		{
 			static_assert( std::is_same_v< TypeT, RhsT > || std::is_base_of_v< TypeT, RhsT > );
-			return DelayedInitialiserT{ std::make_unique< RhsT >( std::forward< ParamsT && >( params )... ) };
+			return DelayedInitialiserT{ std::make_unique< RhsT >( std::forward< ParamsT >( params )... ) };
 		}
 
 		DelayedInitialiserT( DelayedInitialiserT const & rhs ) = delete;
@@ -93,10 +93,11 @@ namespace castor
 			return bool( m_ptr );
 		}
 
-		void cleanup()
+		template< typename ... ParamsT >
+		void cleanup( ParamsT && ... params )
 		{
 			CU_Require( m_ptr );
-			m_ptr->cleanup();
+			m_ptr->cleanup( std::forward< ParamsT >( params )... );
 		}
 
 		template< typename ... ParamsT >
@@ -209,14 +210,15 @@ namespace castor
 			return bool( m_ptr );
 		}
 
-		void cleanup()
+		template< typename ... ParamsT >
+		void cleanup( ParamsT && ... params )
 		{
 			CU_Require( m_ptr );
 			if ( m_initialised.exchange( false ) )
 			{
 				if ( m_initialiseExecuted.exchange( false ) )
 				{
-					m_ptr->cleanup();
+					m_ptr->cleanup( std::forward< ParamsT >( params )... );
 				}
 
 				m_initialise = [](){};
@@ -255,6 +257,18 @@ namespace castor
 		std::function< void() > m_initialise{ [](){} };
 	};
 #endif
+
+	template< typename LhsT, typename RhsT, typename ... ParamsT >
+	inline DelayedInitialiserT< LhsT > makeDerivedDelayedInitialiser( ParamsT && ... params )
+	{
+		return DelayedInitialiserT< LhsT >::template make< RhsT >( std::forward< ParamsT >( params )... );
+	}
+
+	template< typename LhsT, typename ... ParamsT >
+	inline DelayedInitialiserT< LhsT > makeDelayedInitialiser( ParamsT && ... params )
+	{
+		return DelayedInitialiserT< LhsT >::template make< LhsT >( std::forward< ParamsT >( params )... );
+	}
 }
 
 #endif

@@ -120,7 +120,7 @@ namespace castor3d
 		return m_passesData[index].views[size_t( texture )];
 	}
 
-	void ShadowMapPoint::doInitialiseFramebuffers()
+	void ShadowMapPoint::doInitialiseFramebuffers( RenderDevice const & device )
 	{
 		VkExtent2D size
 		{
@@ -132,6 +132,11 @@ namespace castor3d
 		auto & variance = *m_result[SmTexture::eVariance].getTexture();
 		auto & position = *m_result[SmTexture::ePosition].getTexture();
 		auto & flux = *m_result[SmTexture::eFlux].getTexture();
+		m_blur = std::make_unique< GaussianBlur >( *getEngine()
+			, device
+			, "ShadowMapPoint"
+			, variance.getDefaultView()
+			, 5u );
 
 		for ( uint32_t layer = 0u; layer < shader::getPointShadowMapCount(); ++layer )
 		{
@@ -173,11 +178,7 @@ namespace castor3d
 					, std::move( attaches ) );
 
 				frameBuffer.varianceView = variance.getLayerCubeFaceView( layer, face ).getTargetView();
-				frameBuffer.blur = std::make_unique< GaussianBlur >( *getEngine()
-					, debugName
-					, variance.getLayerCubeFaceView( layer, face )
-					, 5u );
-				frameBuffer.blurCommands = frameBuffer.blur->getCommands( true );
+				frameBuffer.blurCommands = m_blur->getCommands( true, passIndex );
 				++passIndex;
 			}
 
@@ -185,26 +186,27 @@ namespace castor3d
 		}
 	}
 
-	void ShadowMapPoint::doInitialise()
+	void ShadowMapPoint::doInitialise( RenderDevice const & device )
 	{
-		doInitialiseFramebuffers();
+		doInitialiseFramebuffers( device );
 		uint32_t index = 0u;
 
 		for ( auto & data : m_passesData )
 		{
 			std::string debugName = "ShadowMapPoint" + std::to_string( index++ );
-			auto & device = getCurrentRenderDevice( *this );
 			data.commandBuffer = device.graphicsCommandPool->createCommandBuffer( debugName );
 			data.finished = device->createSemaphore( debugName );
 		}
 	}
 
-	void ShadowMapPoint::doCleanup()
+	void ShadowMapPoint::doCleanup( RenderDevice const & device )
 	{
 		m_passesData.clear();
+		m_blur.reset();
 	}
 
-	ashes::Semaphore const & ShadowMapPoint::doRender( ashes::Semaphore const & toWait
+	ashes::Semaphore const & ShadowMapPoint::doRender( RenderDevice const & device
+		, ashes::Semaphore const & toWait
 		, uint32_t index )
 	{
 		auto & myTimer = m_passes[0].pass->getTimer();
@@ -249,7 +251,6 @@ namespace castor3d
 
 		commandBuffer.endDebugBlock();
 		commandBuffer.end();
-		auto & device = getCurrentRenderDevice( *this );
 
 		device.graphicsQueue->submit( commandBuffer
 			, *result

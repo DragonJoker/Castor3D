@@ -5,7 +5,7 @@
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
-#include <Castor3D/Event/Frame/FunctorEvent.hpp>
+#include <Castor3D/Event/Frame/GpuFunctorEvent.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Material/Pass/Pass.hpp>
 #include <Castor3D/Material/Pass/PhongPass.hpp>
@@ -109,10 +109,11 @@ namespace CastorGui
 		{
 			StaticCtrlSPtr item = doCreateItemCtrl( p_value
 				, uint32_t( m_values.size() - 1u ) );
-			getEngine().postEvent( makeFunctorEvent( EventType::ePreRender, [this, item]()
-			{
-				getControlsManager()->create( item );
-			} ) );
+			getEngine().postEvent( makeGpuFunctorEvent( EventType::ePreRender
+				, [this, item]( RenderDevice const & device )
+				{
+					getControlsManager()->create( item );
+				} ) );
 
 			doUpdateItems();
 		}
@@ -145,10 +146,11 @@ namespace CastorGui
 				if ( getControlsManager() )
 				{
 					ControlSPtr control = *it;
-					getEngine().postEvent( makeFunctorEvent( EventType::ePreRender, [this, control]()
-					{
-						getControlsManager()->destroy( control );
-					} ) );
+					getEngine().postEvent( makeGpuFunctorEvent( EventType::ePreRender
+						, [this, control]( RenderDevice const & device )
+						{
+							getControlsManager()->destroy( control );
+						} ) );
 				}
 
 				m_items.erase( it );

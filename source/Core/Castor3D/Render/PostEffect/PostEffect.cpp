@@ -54,25 +54,27 @@ namespace castor3d
 		return doWriteInto( file, tabs );
 	}
 
-	bool PostEffect::initialise( TextureLayout const & texture )
+	bool PostEffect::initialise( castor3d::RenderDevice const & device
+		, TextureLayout const & texture )
 	{
 		m_target = &texture;
 		auto name = m_fullName;
 		name = castor::string::replace( name, cuT( "PostEffect" ), castor::String{} );
 		name = castor::string::replace( name, cuT( "Post Effect" ), castor::String{} );
 		m_timer = std::make_unique< RenderPassTimer >( *getRenderSystem()->getEngine()
+			, device
 			, getKindName( m_kind ) + cuT( " PostEffect" )
 			, name
 			, m_passesCount );
-		auto result = doInitialise( *m_timer );
+		auto result = doInitialise( device, *m_timer );
 		CU_Ensure( m_result != nullptr );
 		return result;
 	}
 
-	void PostEffect::cleanup()
+	void PostEffect::cleanup( castor3d::RenderDevice const & device )
 	{
 		m_commands.clear();
-		doCleanup();
+		doCleanup( device );
 		m_timer.reset();
 	}
 

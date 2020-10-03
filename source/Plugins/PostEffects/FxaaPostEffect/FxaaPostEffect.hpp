@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <Castor3D/Render/PostEffect/PostEffect.hpp>
 #include <Castor3D/Render/PostEffect/PostEffectSurface.hpp>
-#include <Castor3D/Render/ToTexture/RenderQuad.hpp>
+#include <Castor3D/Render/Passes/RenderQuad.hpp>
 #include <Castor3D/Material/Texture/TextureUnit.hpp>
 #include <Castor3D/Render/Viewport.hpp>
 #include <Castor3D/Shader/Ubos/MatrixUbo.hpp>
@@ -24,14 +24,16 @@ namespace fxaa
 	{
 	public:
 		explicit RenderQuad( castor3d::RenderSystem & renderSystem
+			, castor3d::RenderDevice const & device
 			, castor::Size const & size );
 		void cpuUpdate( float subpixShift
 			, float spanMax
 			, float reduceMul );
 
-	private:
-		void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-			, ashes::DescriptorSet & descriptorSet )override;
+		castor3d::UniformBufferOffsetT< FxaaUboConfiguration > const & getUbo()const
+		{
+			return m_fxaaUbo.getUbo();
+		}
 
 	private:
 		FxaaUbo m_fxaaUbo;
@@ -61,11 +63,12 @@ namespace fxaa
 		/**
 		*\copydoc		castor3d::PostEffect::doInitialise
 		*/
-		bool doInitialise( castor3d::RenderPassTimer const & timer ) override;
+		bool doInitialise( castor3d::RenderDevice const & device
+			, castor3d::RenderPassTimer const & timer ) override;
 		/**
 		*\copydoc		castor3d::PostEffect::doCleanup
 		*/
-		void doCleanup() override;
+		void doCleanup( castor3d::RenderDevice const & device ) override;
 		/**
 		 *\copydoc		castor3d::PostEffect::doWriteInto
 		 */

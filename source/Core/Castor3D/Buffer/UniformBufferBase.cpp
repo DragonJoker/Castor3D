@@ -134,21 +134,20 @@ namespace castor3d
 
 		if ( renderSystem.hasCurrentRenderDevice() )
 		{
-			initialise();
+			initialise( renderSystem.getCurrentRenderDevice() );
 		}
 	}
 
-	uint32_t UniformBufferBase::initialise( ashes::QueueShare sharingMode )
+	uint32_t UniformBufferBase::initialise( RenderDevice const & device
+		, ashes::QueueShare sharingMode )
 	{
 		m_sharingMode = sharingMode;
-		return initialise();
+		return initialise( device );
 	}
 
-	uint32_t UniformBufferBase::initialise()
+	uint32_t UniformBufferBase::initialise( RenderDevice const & device )
 	{
-		CU_Require( m_renderSystem.hasCurrentRenderDevice() );
 		m_buffer.reset();
-		auto & device = getCurrentRenderDevice( m_renderSystem );
 		m_buffer = ashes::makeUniformBuffer( *device.device
 			, m_debugName + "Ubo"
 			, m_elemCount
@@ -192,7 +191,6 @@ namespace castor3d
 		, uint32_t offset
 		, VkPipelineStageFlags flags )const
 	{
-		auto & device = getCurrentRenderDevice( m_renderSystem );
 		auto commandBuffer = commandPool.createCommandBuffer( "UniformBufferUpload"
 			, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
 		upload( stagingBuffer
@@ -257,7 +255,6 @@ namespace castor3d
 		, RenderPassTimer const & timer
 		, uint32_t index )const
 	{
-		auto & device = getCurrentRenderDevice( m_renderSystem );
 		auto commandBuffer = commandPool.createCommandBuffer( "UniformBufferUpload"
 			, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
 		upload( stagingBuffer
@@ -343,7 +340,6 @@ namespace castor3d
 			, flags
 			, timer
 			, index );
-		auto & device = getCurrentRenderDevice( m_renderSystem );
 		queue.submit( *commandBuffer
 			, m_transferFence.get() );
 		m_transferFence->wait( ashes::MaxTimeout );

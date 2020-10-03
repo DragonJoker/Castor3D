@@ -53,14 +53,14 @@ namespace castor3d
 		 *\~french
 		 *\brief		Initialise l'UBO.
 		 */
-		C3D_API void initialise();
+		C3D_API void initialise( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
 		 *\~french
 		 *\brief		Fonction de nettoyage.
 		 */
-		C3D_API void cleanup();
+		C3D_API void cleanup( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -75,6 +75,11 @@ namespace castor3d
 			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
 		}
 
+		UniformBufferOffsetT< Configuration > const & getUbo()const
+		{
+			return m_ubo;
+		}
+
 	public:
 		C3D_API static std::string const BufferRsmConfig;
 		C3D_API static std::string const Intensity;
@@ -84,7 +89,7 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
-		UniformBufferOffsetT< RsmUboConfiguration > m_ubo;
+		UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }
 

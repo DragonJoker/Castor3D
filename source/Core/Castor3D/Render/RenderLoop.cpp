@@ -62,12 +62,15 @@ namespace castor3d
 				{
 					m_renderSystem.setCurrentRenderDevice( nullptr );
 				} );
-			getEngine()->getFrameListenerCache().forEach( []( FrameListener & listener )
+			auto & device = m_renderSystem.getCurrentRenderDevice();
+			getEngine()->getFrameListenerCache().forEach( [&device]( FrameListener & listener )
 				{
+					listener.fireEvents( EventType::ePreRender, device );
 					listener.fireEvents( EventType::ePreRender );
 				} );
-			getEngine()->getFrameListenerCache().forEach( []( FrameListener & listener )
+			getEngine()->getFrameListenerCache().forEach( [&device]( FrameListener & listener )
 				{
+					listener.fireEvents( EventType::eQueueRender, device );
 					listener.fireEvents( EventType::eQueueRender );
 				} );
 			m_uploadResources =
@@ -183,6 +186,15 @@ namespace castor3d
 			} );
 	}
 
+	void RenderLoop::doProcessEvents( EventType eventType
+		, RenderDevice const & device )
+	{
+		getEngine()->getFrameListenerCache().forEach( [eventType, &device]( FrameListener & listener )
+			{
+				listener.fireEvents( eventType, device );
+			} );
+	}
+
 	void RenderLoop::doGpuStep( RenderInfo & info )
 	{
 		{
@@ -195,7 +207,7 @@ namespace castor3d
 				{
 					m_renderSystem.setCurrentRenderDevice( nullptr );
 				} );
-			auto & device = getCurrentRenderDevice( m_renderSystem );
+			auto & device = m_renderSystem.getCurrentRenderDevice();
 
 			if ( !m_uploadResources[0].fence )
 			{
@@ -211,10 +223,11 @@ namespace castor3d
 			}
 
 			// Usually GPU initialisation
+			doProcessEvents( EventType::ePreRender, device );
 			doProcessEvents( EventType::ePreRender );
 
 			// GPU Update
-			GpuUpdater updater{ info };
+			GpuUpdater updater{ device, info };
 			getEngine()->getMaterialCache().update( updater );
 			getEngine()->getRenderTargetCache().update( updater );
 
@@ -231,9 +244,10 @@ namespace castor3d
 			uploadResources.fence->reset();
 
 			// Render
-			getEngine()->getRenderTargetCache().render( info );
+			getEngine()->getRenderTargetCache().render( device, info );
 
 			// Usually GPU cleanup
+			doProcessEvents( EventType::eQueueRender, device );
 			doProcessEvents( EventType::eQueueRender );
 		}
 

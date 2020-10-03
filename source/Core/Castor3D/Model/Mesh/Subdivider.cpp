@@ -2,7 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
-#include "Castor3D/Event/Frame/FunctorEvent.hpp"
+#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/Face.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Vertex.hpp"
@@ -149,7 +149,11 @@ namespace castor3d
 
 		if ( m_generateBuffers && !m_threaded )
 		{
-			m_submesh->initialise();
+			m_submesh->getOwner()->getScene()->getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
+				, [this]( RenderDevice const & device )
+				{
+					m_submesh->initialise( device );
+				} ) );
 		}
 
 		cleanup();
@@ -163,11 +167,12 @@ namespace castor3d
 
 		if ( m_generateBuffers )
 		{
-			m_submesh->getOwner()->getScene()->getListener().postEvent( makeFunctorEvent( EventType::ePreRender, [this]()
-			{
-				m_submesh->computeNormals();
-				m_submesh->initialise();
-			} ) );
+			m_submesh->getOwner()->getScene()->getListener().postEvent( makeGpuFunctorEvent( EventType::ePreRender
+				, [this]( RenderDevice const & device )
+				{
+					m_submesh->computeNormals();
+					m_submesh->initialise( device );
+				} ) );
 		}
 
 		if ( m_onSubdivisionEnd )

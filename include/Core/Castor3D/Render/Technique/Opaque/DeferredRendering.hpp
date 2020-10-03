@@ -46,6 +46,7 @@ namespace castor3d
 		 *\param[in]	config			La configuration du SSAO.
 		 */
 		DeferredRendering( Engine & engine
+			, RenderDevice const & device
 			, OpaquePass & opaquePass
 			, TextureUnit const & depthTexture
 			, TextureUnit const & velocityTexture
@@ -107,7 +108,8 @@ namespace castor3d
 		 *\param[out]	camera		La caméra par laquelle la scène est rendue.
 		 *\param[in]	toWait		Le sémaphore de la passe de rendu précédente.
 		 */
-		ashes::Semaphore const & render( Scene const & scene
+		ashes::Semaphore const & render( RenderDevice const & device
+			, Scene const & scene
 			, Camera const & camera
 			, ashes::Semaphore const & toWait );
 		/**
@@ -117,6 +119,7 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
+		RenderDevice const & m_device;
 		SsaoConfig & m_ssaoConfig;
 		OpaquePass & m_opaquePass;
 		GpInfoUbo const & m_gpInfoUbo;
@@ -126,7 +129,7 @@ namespace castor3d
 		std::unique_ptr< LightingPass > m_lightingPass;
 		castor::DelayedInitialiserT< SsaoPass > m_ssao;
 		castor::DelayedInitialiserT< SubsurfaceScatteringPass > m_subsurfaceScattering;
-		std::vector< castor::DelayedInitialiserT< OpaqueResolvePass > > m_resolve;
+		castor::DelayedInitialiserT< OpaqueResolvePass > m_resolve;
 		std::vector< ashes::ImagePtr > m_results;
 	};
 }

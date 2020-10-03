@@ -90,6 +90,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	TransparentPassResult::TransparentPassResult( Engine & engine
+		, RenderDevice const & device
 		, TextureUnit const & depthTexture
 		, TextureUnit const & velocityTexture )
 		: GBufferT< WbTexture >
@@ -101,7 +102,7 @@ namespace castor3d
 			castor::Size{ depthTexture.getTexture()->getDimensions().width, depthTexture.getTexture()->getDimensions().height },
 		}
 	{
-		initialise();
+		initialise( device );
 	}
 
 	//*********************************************************************************************

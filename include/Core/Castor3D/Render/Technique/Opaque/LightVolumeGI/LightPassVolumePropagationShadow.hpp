@@ -53,26 +53,29 @@ namespace castor3d
 		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
 		 */
 		LightPassVolumePropagationShadow( Engine & engine
+			, RenderDevice const & device
 			, LightCache const & lightCache
 			, OpaquePassResult const & gpResult
 			, ShadowMapResult const & smResult
 			, LightPassResult const & lpResult
 			, GpInfoUbo const & gpInfoUbo )
 			: LightPassShadow< LtType >{ engine
+				, device
+				, "LPVShadow"
 				, lpResult
 				, gpInfoUbo }
 			, m_gpResult{ gpResult }
 			, m_smResult{ smResult }
 			, m_lpResult{ lpResult }
 			, m_gpInfoUbo{ gpInfoUbo }
-			, m_lpvConfigUbo{ engine }
-			, m_injection{ engine, "LightInjection", GridSize }
-			, m_geometry{ GeometryInjectionPass::createResult( engine, 0u , GridSize ) }
-			, m_accumulation{ engine, "LightAccumulation", GridSize }
+			, m_lpvConfigUbo{ device }
+			, m_injection{ engine, device, this->getName() + "Injection", GridSize }
+			, m_geometry{ GeometryInjectionPass::createResult( engine, device, this->getName(), 0u , GridSize ) }
+			, m_accumulation{ engine, device, this->getName() + "Accumulation", GridSize }
 			, m_propagate
 			{
-				LightVolumePassResult{ engine, "LightPropagate0", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate1", GridSize },
+				LightVolumePassResult{ engine, device, this->getName() + "Propagate0", GridSize },
+				LightVolumePassResult{ engine, device, this->getName() + "Propagate1", GridSize },
 			}
 			, m_aabb{ lightCache.getScene()->getBoundingBox() }
 		{
@@ -85,6 +88,8 @@ namespace castor3d
 		{
 			auto & lightCache = scene.getLightCache();
 			m_geometryInjectionPass = std::make_unique< GeometryInjectionPass >( this->m_engine
+				, this->m_device
+				, this->getName()
 				, lightCache
 				, LtType
 				, m_smResult
@@ -93,6 +98,8 @@ namespace castor3d
 				, m_geometry
 				, GridSize );
 			m_lightInjectionPass = std::make_unique< LightInjectionPass >( this->m_engine
+				, this->m_device
+				, this->getName()
 				, lightCache
 				, LtType
 				, m_smResult
@@ -101,34 +108,46 @@ namespace castor3d
 				, m_injection
 				, GridSize );
 			m_lightVolumeGIPass = std::make_unique< LightVolumeGIPass >( this->m_engine
+				, this->m_device
+				, this->getName()
 				, LtType
 				, m_gpInfoUbo
 				, m_lpvConfigUbo
 				, m_gpResult
 				, m_accumulation
-				, m_lpResult[LpTexture::eDiffuse] );
+				, m_lpResult[LpTexture::eIndirect] );
+			m_lightPropagationPasses = { std::make_unique< LightPropagationPass >( this->m_device
+					, this->getName()
+					, "NoOcc"
+					, false
+					, GridSize )
+				, std::make_unique< LightPropagationPass >( this->m_device
+					, this->getName()
+					, "Occ"
+					, true
+					, GridSize ) };
+			auto & passNoOcc = *m_lightPropagationPasses[0u];
 			uint32_t propIndex = 0u;
-			m_lightPropagationPasses.emplace_back( this->m_engine
-				, "0"
-				, GridSize
+			passNoOcc.registerPassIO( nullptr
 				, m_injection
+				, m_lpvConfigUbo
 				, m_accumulation
-				, m_propagate[propIndex]
-				, m_lpvConfigUbo );
+				, m_propagate[propIndex] );
+			passNoOcc.initialisePasses();
+
+			auto & passOcc = *m_lightPropagationPasses[1u];
 
 			for ( uint32_t i = 1u; i < MaxPropagationSteps; ++i )
 			{
-				m_lightPropagationPasses.emplace_back( this->m_engine
-					, castor::string::toString( i )
-					, GridSize
-					, m_geometry
+				passOcc.registerPassIO( &m_geometry
 					, m_propagate[propIndex]
+					, m_lpvConfigUbo
 					, m_accumulation
-					, m_propagate[1u - propIndex]
-					, m_lpvConfigUbo );
+					, m_propagate[1u - propIndex] );
 				propIndex = 1u - propIndex;
 			}
 
+			passOcc.initialisePasses();
 			LightPassShadow< LtType >::initialise( scene, gp, sceneUbo, timer );
 		}
 
@@ -138,7 +157,7 @@ namespace castor3d
 			m_lightVolumeGIPass.reset();
 			m_lightInjectionPass.reset();
 			m_geometryInjectionPass.reset();
-			m_lightPropagationPasses.clear();
+			m_lightPropagationPasses = {};
 		}
 
 		ashes::Semaphore const & render( uint32_t index
@@ -148,10 +167,11 @@ namespace castor3d
 			result = &my_pass_type::render( index, *result );
 			result = &m_lightInjectionPass->compute( *result );
 			result = &m_geometryInjectionPass->compute( *result );
+			result = &m_lightPropagationPasses[0]->compute( *result, 0u );
 
-			for ( auto & pass : m_lightPropagationPasses )
+			for ( uint32_t i = 1u; i < MaxPropagationSteps; ++i )
 			{
-				result = &pass.compute( *result );
+				result = &m_lightPropagationPasses[1]->compute( *result, i - 1u );
 			}
 
 			result = &m_lightVolumeGIPass->compute( *result );
@@ -175,7 +195,7 @@ namespace castor3d
 
 			for ( auto & pass : m_lightPropagationPasses )
 			{
-				pass.accept( visitor );
+				pass->accept( visitor );
 			}
 
 			if ( m_lightVolumeGIPass )
@@ -228,6 +248,12 @@ namespace castor3d
 					m_lpvConfigUbo.cpuUpdate( grid, light );
 				}
 			}
+		}
+
+	private:
+		VkClearValue doGetIndirectClearColor()const override
+		{
+			return opaqueBlackClearColor;
 		}
 
 	private:

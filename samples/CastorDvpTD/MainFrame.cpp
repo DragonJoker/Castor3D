@@ -4,7 +4,7 @@
 #include "CastorDvpTD/CastorDvpTD.hpp"
 #include "CastorDvpTD/Game.hpp"
 
-#include <Castor3D/Event/Frame/FunctorEvent.hpp>
+#include <Castor3D/Event/Frame/CpuFunctorEvent.hpp>
 #include <Castor3D/Render/RenderLoop.hpp>
 #include <Castor3D/Render/RenderWindow.hpp>
 
@@ -30,7 +30,7 @@ namespace castortd
 			if ( !wxGetApp().getCastor()->isCleaned() )
 			{
 				p_game.update();
-				wxGetApp().getCastor()->postEvent( makeFunctorEvent( EventType::ePostRender, [&p_game]()
+				wxGetApp().getCastor()->postEvent( makeCpuFunctorEvent( EventType::ePostRender, [&p_game]()
 				{
 					doUpdate( p_game );
 				} ) );
@@ -110,10 +110,11 @@ namespace castortd
 			if ( CASTOR3D_THREADED )
 			{
 				wxGetApp().getCastor()->getRenderLoop().beginRendering();
-				wxGetApp().getCastor()->postEvent( makeFunctorEvent( EventType::ePostRender, [this]()
-				{
-					doUpdate( *m_game );
-				} ) );
+				wxGetApp().getCastor()->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+					, [this]()
+					{
+						doUpdate( *m_game );
+					} ) );
 			}
 			else
 			{

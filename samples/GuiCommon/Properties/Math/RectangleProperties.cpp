@@ -7,6 +7,8 @@
 
 using namespace castor;
 
+GC_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( castor, Rectangle )
+
 namespace GuiCommon
 {
 	WX_PG_IMPLEMENT_PROPERTY_CLASS( RectangleProperty, wxPGProperty, castor::Rectangle, castor::Rectangle const &, TextCtrl )
@@ -15,10 +17,11 @@ namespace GuiCommon
 		: wxPGProperty( label, name )
 	{
 		setValueI( value );
-		AddPrivateChild( new wxIntProperty( _( "Left" ), wxPG_LABEL, value.left() ) );
-		AddPrivateChild( new wxIntProperty( _( "Top" ), wxPG_LABEL, value.top() ) );
-		AddPrivateChild( new wxIntProperty( _( "Right" ), wxPG_LABEL, value.right() ) );
-		AddPrivateChild( new wxIntProperty( _( "Bottom" ), wxPG_LABEL, value.bottom() ) );
+
+		AddPrivateChild( addAttributes( new wxIntProperty( _( "Left" ), wxPG_LABEL, value.left() ) ) );
+		AddPrivateChild( addAttributes( new wxIntProperty( _( "Top" ), wxPG_LABEL, value.top() ) ) );
+		AddPrivateChild( addAttributes( new wxIntProperty( _( "Right" ), wxPG_LABEL, value.right() ) ) );
+		AddPrivateChild( addAttributes( new wxIntProperty( _( "Bottom" ), wxPG_LABEL, value.bottom() ) ) );
 	}
 
 	RectangleProperty::~RectangleProperty()

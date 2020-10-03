@@ -71,22 +71,6 @@ namespace GuiCommon
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
 		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
-		/**
-		 *\copydoc GuiCommon::TreeItemProperty::doPropertyChange
-		 */
-		virtual void doPropertyChange( wxPropertyGridEvent & p_event );
-
-	private:
-		void OnTypeChange( castor3d::ViewportType p_value );
-		void OnSizeChange( castor::Size const & p_value );
-		void OnTopChange( double p_value );
-		void OnBottomChange( double p_value );
-		void OnLeftChange( double p_value );
-		void OnRightChange( double p_value );
-		void OnNearChange( double p_value );
-		void OnFarChange( double p_value );
-		void OnFovYChange( double p_value );
-		void OnRatioChange( double p_value );
 
 	private:
 		castor3d::Viewport & m_viewport;

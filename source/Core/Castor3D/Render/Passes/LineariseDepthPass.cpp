@@ -144,10 +144,10 @@ namespace castor3d
 		}
 
 		ashes::PipelineShaderStageCreateInfoArray doGetLineariseProgram( Engine & engine
+			, RenderDevice const & device
 			, ShaderModule & vertexShader
 			, ShaderModule & pixelShader )
 		{
-			auto & device = getCurrentRenderDevice( engine );
 			vertexShader.shader = doGetVertexProgram( engine );
 			pixelShader.shader = doGetLinearisePixelProgram( engine );
 			return ashes::PipelineShaderStageCreateInfoArray
@@ -158,10 +158,10 @@ namespace castor3d
 		}
 
 		ashes::PipelineShaderStageCreateInfoArray doGetMinifyProgram( Engine & engine
+			, RenderDevice const & device
 			, ShaderModule & vertexShader
 			, ShaderModule & pixelShader )
 		{
-			auto & device = getCurrentRenderDevice( engine );
 			vertexShader.shader = doGetVertexProgram( engine );
 			pixelShader.shader = doGetMinifyPixelProgram( engine );
 			return ashes::PipelineShaderStageCreateInfoArray
@@ -196,7 +196,7 @@ namespace castor3d
 			return sampler;
 		}
 
-		ashes::ImageView doCreateImageView( Engine & engine, ashes::ImageView const & srcView )
+		ashes::ImageView doCreateImageView( ashes::ImageView const & srcView )
 		{
 			auto createInfos = srcView.createInfo;
 			createInfos.subresourceRange.aspectMask = ashes::getAspectMask( srcView->format );
@@ -205,7 +205,8 @@ namespace castor3d
 			return result;
 		}
 
-		TextureUnit doCreateTexture( Engine & engine, VkExtent2D const & size )
+		TextureUnit doCreateTexture( Engine & engine
+			, VkExtent2D const & size )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
 			auto sampler = doCreateSampler( engine
@@ -234,11 +235,10 @@ namespace castor3d
 			TextureUnit result{ engine };
 			result.setTexture( ssaoResult );
 			result.setSampler( sampler );
-			result.initialise();
 			return result;
 		}
 
-		ashes::RenderPassPtr doCreateRenderPass( Engine & engine )
+		ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device )
 		{
 			ashes::VkAttachmentDescriptionArray attachments
 			{
@@ -293,8 +293,6 @@ namespace castor3d
 				std::move( subpasses ),
 				std::move( dependencies ),
 			};
-			auto & renderSystem = *engine.getRenderSystem();
-			auto & device = getCurrentRenderDevice( renderSystem );
 			auto result = device->createRenderPass( "LineariseDepthPass"
 				, std::move( createInfo ) );
 			return result;
@@ -311,10 +309,8 @@ namespace castor3d
 				, std::move( attaches ) );
 		}
 
-		ashes::VertexBufferPtr< NonTexturedQuad > doCreateVertexBuffer( Engine & engine )
+		ashes::VertexBufferPtr< NonTexturedQuad > doCreateVertexBuffer( RenderDevice const & device )
 		{
-			auto & renderSystem = *engine.getRenderSystem();
-			auto & device = getCurrentRenderDevice( renderSystem );
 			auto result = makeVertexBuffer< NonTexturedQuad >( device
 				, 1u
 				, 0u
@@ -369,7 +365,7 @@ namespace castor3d
 		, ashes::ImageView const & depthBuffer )
 		: m_engine{ engine }
 		, m_srcDepthBuffer{ depthBuffer }
-		, m_depthBuffer{ doCreateImageView( engine, m_srcDepthBuffer ) }
+		, m_depthBuffer{ doCreateImageView( m_srcDepthBuffer ) }
 		, m_prefix{ prefix }
 		, m_size{ makeExtent2D( size ) }
 		, m_result{ doCreateTexture( m_engine, m_size ) }
@@ -381,15 +377,15 @@ namespace castor3d
 	{
 	}
 
-	void LineariseDepthPass::initialise()
+	void LineariseDepthPass::initialise( RenderDevice const & device )
 	{
-		m_result.initialise();
+		m_result.initialise( device );
 		m_timer = std::make_shared< RenderPassTimer >( m_engine
+			, device
 			, m_prefix
 			, cuT( "Linearise depth" ) );
-		m_renderPass = doCreateRenderPass( m_engine );
-		m_vertexBuffer = doCreateVertexBuffer( m_engine );
-		auto & device = getCurrentRenderDevice( m_engine );
+		m_renderPass = doCreateRenderPass( device );
+		m_vertexBuffer = doCreateVertexBuffer( device );
 		m_lineariseSampler = device->createSampler( m_prefix + "LineariseDepthLinearise"
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
@@ -405,15 +401,14 @@ namespace castor3d
 		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( m_prefix + "LineariseDepth" );
 		m_finished = device->createSemaphore( m_prefix + "LineariseDepth" );
 		m_clipInfo = device.uboPools->getBuffer< Point3f >( 0u );
-		doInitialiseLinearisePass();
-		doInitialiseMinifyPass();
+		doInitialiseLinearisePass( device );
+		doInitialiseMinifyPass( device );
 	}
 
-	void LineariseDepthPass::cleanup()
+	void LineariseDepthPass::cleanup( RenderDevice const & device )
 	{
-		doCleanupMinifyPass();
-		doCleanupLinearisePass();
-		auto & device = getCurrentRenderDevice( m_engine );
+		doCleanupMinifyPass( device );
+		doCleanupLinearisePass( device );
 		device.uboPools->putBuffer( m_clipInfo );
 		m_finished.reset();
 		m_commandBuffer.reset();
@@ -455,11 +450,11 @@ namespace castor3d
 		}
 	}
 
-	ashes::Semaphore const & LineariseDepthPass::linearise( ashes::Semaphore const & toWait )const
+	ashes::Semaphore const & LineariseDepthPass::linearise( RenderDevice const & device
+		, ashes::Semaphore const & toWait )const
 	{
 		RenderPassTimerBlock timerBlock{ m_timer->start() };
 		timerBlock->notifyPassRender();
-		auto & device = getCurrentRenderDevice( m_engine );
 		auto * result = &toWait;
 
 		device.graphicsQueue->submit( *m_commandBuffer
@@ -472,10 +467,10 @@ namespace castor3d
 		return *result;
 	}
 
-	CommandsSemaphore LineariseDepthPass::getCommands( RenderPassTimer const & timer
+	CommandsSemaphore LineariseDepthPass::getCommands( RenderDevice const & device
+		, RenderPassTimer const & timer
 		, uint32_t index )const
 	{
-		auto & device = getCurrentRenderDevice( *m_engine.getRenderSystem() );
 		castor3d::CommandsSemaphore commands
 		{
 			device.graphicsCommandPool->createCommandBuffer( m_prefix + "LineariseDepthPass" ),
@@ -493,7 +488,8 @@ namespace castor3d
 		for ( auto & layer : getResult().getTexture()->getArray2D().layers )
 		{
 			visitor.visit( "Linearised Depth " + string::toString( index++ )
-				, layer.view->getSampledView() );
+				, layer.view->getSampledView()
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		}
 
 		visitor.visit( m_lineariseVertexShader );
@@ -503,10 +499,11 @@ namespace castor3d
 		visitor.visit( m_minifyPixelShader );
 	}
 
-	void LineariseDepthPass::doInitialiseLinearisePass()
+	void LineariseDepthPass::doInitialiseLinearisePass( RenderDevice const & device )
 	{
 		auto size = m_result.getTexture()->getDimensions();
 		auto lineariseProgram = doGetLineariseProgram( m_engine
+			, device
 			, m_lineariseVertexShader
 			, m_linearisePixelShader );
 		ashes::ImageViewCRefArray attaches;
@@ -518,7 +515,6 @@ namespace castor3d
 			, VkExtent2D{ size.width, size.height }
 			, std::move( attaches ) );
 		auto & renderSystem = *m_engine.getRenderSystem();
-		auto & device = getCurrentRenderDevice( renderSystem );
 		ashes::VkDescriptorSetLayoutBindingArray bindings
 		{
 			makeDescriptorSetLayoutBinding( DepthImgIdx
@@ -567,12 +563,12 @@ namespace castor3d
 			} );
 	}
 
-	void LineariseDepthPass::doInitialiseMinifyPass()
+	void LineariseDepthPass::doInitialiseMinifyPass( RenderDevice const & device )
 	{
 		auto & renderSystem = *m_engine.getRenderSystem();
-		auto & device = getCurrentRenderDevice( renderSystem );
 		auto size = m_result.getTexture()->getDimensions();
 		auto minifyProgram = doGetMinifyProgram( m_engine
+			, device
 			, m_minifyVertexShader
 			, m_minifyPixelShader );
 		ashes::VkDescriptorSetLayoutBindingArray bindings
@@ -663,7 +659,7 @@ namespace castor3d
 		}
 	}
 
-	void LineariseDepthPass::doCleanupLinearisePass()
+	void LineariseDepthPass::doCleanupLinearisePass( RenderDevice const & device )
 	{
 		m_linearisePipeline.reset();
 		m_lineariseLayout.pipelineLayout.reset();
@@ -673,7 +669,7 @@ namespace castor3d
 		m_lineariseFrameBuffer.reset();
 	}
 
-	void LineariseDepthPass::doCleanupMinifyPass()
+	void LineariseDepthPass::doCleanupMinifyPass( RenderDevice const & device )
 	{
 		for ( auto & pipeline : m_minifyPipelines )
 		{
@@ -681,8 +677,6 @@ namespace castor3d
 			pipeline.frameBuffer.reset();
 			pipeline.descriptor.reset();
 		}
-
-		auto & device = getCurrentRenderDevice( m_engine );
 
 		for ( auto & ubo : m_previousLevel )
 		{

@@ -13,6 +13,7 @@ namespace smaa
 	{
 	public:
 		LumaEdgeDetection( castor3d::RenderTarget & renderTarget
+			, castor3d::RenderDevice const & device
 			, ashes::ImageView const & colourView
 			, ashes::Image const * predication
 			, SmaaConfig const & config );
@@ -21,10 +22,6 @@ namespace smaa
 
 	private:
 		virtual void doInitialisePipeline()override;
-
-	private:
-		void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-			, ashes::DescriptorSet & descriptorSet )override;
 
 	private:
 		ashes::ImageView const & m_colourView;

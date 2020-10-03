@@ -4,8 +4,9 @@
 #include "CastorDvpTD/Game.hpp"
 
 #include <Castor3D/Cache/SceneNodeCache.hpp>
+#include <Castor3D/Event/Frame/CpuFunctorEvent.hpp>
 #include <Castor3D/Event/Frame/FrameListener.hpp>
-#include <Castor3D/Event/Frame/FunctorEvent.hpp>
+#include <Castor3D/Event/Frame/GpuFunctorEvent.hpp>
 #include <Castor3D/Event/UserInput/UserInputListener.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Material/Pass/Pass.hpp>
@@ -181,12 +182,13 @@ namespace castortd
 					{
 					case Cell::State::Empty:
 						freeCell = true;
-						m_listener->postEvent( makeFunctorEvent( EventType::ePostRender, [this, p_geometry]()
-						{
-							castor::Point3f position = p_geometry->getParent()->getPosition();
-							auto height = p_geometry->getMesh()->getBoundingBox().getMax()[1] - p_geometry->getMesh()->getBoundingBox().getMin()[1];
-							m_marker->setPosition( castor::Point3f{ position[0], height + 1, position[2] } );
-						} ) );
+						m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+							, [this, p_geometry]()
+							{
+								castor::Point3f position = p_geometry->getParent()->getPosition();
+								auto height = p_geometry->getMesh()->getBoundingBox().getMax()[1] - p_geometry->getMesh()->getBoundingBox().getMin()[1];
+								m_marker->setPosition( castor::Point3f{ position[0], height + 1, position[2] } );
+							} ) );
 						m_selectedTower = nullptr;
 						break;
 
@@ -205,10 +207,11 @@ namespace castortd
 				}
 			}
 
-			m_listener->postEvent( makeFunctorEvent( EventType::ePreRender, [this, freeCell]()
-			{
-				m_marker->setVisible( freeCell );
-			} ) );
+			m_listener->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+				, [this, freeCell]( RenderDevice const & device )
+				{
+					m_marker->setVisible( freeCell );
+				} ) );
 		}
 	}
 
@@ -216,10 +219,11 @@ namespace castortd
 	{
 		if ( m_game.IsRunning() && m_selectedTower && m_selectedTower->CanUpgradeDamage() && m_game.CanAfford( m_selectedTower->getDamageUpgradeCost() ) )
 		{
-			m_listener->postEvent( makeFunctorEvent( EventType::ePostRender, [this]()
-			{
-				m_game.UpgradeTowerDamage( *m_selectedTower );
-			} ) );
+			m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+				, [this]()
+				{
+					m_game.UpgradeTowerDamage( *m_selectedTower );
+				} ) );
 		}
 	}
 
@@ -227,10 +231,11 @@ namespace castortd
 	{
 		if ( m_game.IsRunning() && m_selectedTower && m_selectedTower->CanUpgradeSpeed() && m_game.CanAfford( m_selectedTower->getSpeedUpgradeCost() ) )
 		{
-			m_listener->postEvent( makeFunctorEvent( EventType::ePostRender, [this]()
-			{
-				m_game.UpgradeTowerSpeed( *m_selectedTower );
-			} ) );
+			m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+				, [this]()
+				{
+					m_game.UpgradeTowerSpeed( *m_selectedTower );
+				} ) );
 		}
 	}
 
@@ -238,10 +243,11 @@ namespace castortd
 	{
 		if ( m_game.IsRunning() && m_selectedTower && m_selectedTower->CanUpgradeRange() && m_game.CanAfford( m_selectedTower->getRangeUpgradeCost() ) )
 		{
-			m_listener->postEvent( makeFunctorEvent( EventType::ePostRender, [this]()
-			{
-				m_game.UpgradeTowerRange( *m_selectedTower );
-			} ) );
+			m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+				, [this]()
+				{
+					m_game.UpgradeTowerRange( *m_selectedTower );
+				} ) );
 		}
 	}
 
@@ -396,46 +402,49 @@ namespace castortd
 			break;
 
 		case WXK_F1:
-			m_listener->postEvent( makeFunctorEvent( EventType::ePostRender, [this]()
-			{
-				if ( m_game.IsRunning() )
+			m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+				, [this]()
 				{
-					m_game.Help();
-				}
-			} ) );
+					if ( m_game.IsRunning() )
+					{
+						m_game.Help();
+					}
+				} ) );
 			break;
 
 		case WXK_RETURN:
 		case WXK_NUMPAD_ENTER:
-			m_listener->postEvent( makeFunctorEvent( EventType::ePostRender, [this]()
-			{
-				if ( m_game.isEnded() )
+			m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+				, [this]()
 				{
-					m_game.Reset();
-					m_game.start();
-				}
-				else if ( !m_game.IsStarted() )
-				{
-					m_game.start();
-				}
-			} ) );
+					if ( m_game.isEnded() )
+					{
+						m_game.Reset();
+						m_game.start();
+					}
+					else if ( !m_game.IsStarted() )
+					{
+						m_game.start();
+					}
+				} ) );
 			break;
 
 		case WXK_SPACE:
-			m_listener->postEvent( makeFunctorEvent( EventType::ePostRender, [this]()
-			{
-				if ( m_game.IsStarted() )
+			m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+				, [this]()
 				{
-					if ( m_game.isPaused() )
+					if ( m_game.IsStarted() )
 					{
-						m_game.resume();
+						if ( m_game.isPaused() )
+						{
+							m_game.resume();
+						}
+						else
+						{
+							m_game.pause();
+						}
 					}
-					else
-					{
-						m_game.pause();
-					}
-				}
-			} ) );
+				} ) );
 			break;
 
 		case WXK_LEFT:
@@ -492,22 +501,23 @@ namespace castortd
 				m_y = doTransformY( p_event.GetY() );
 				m_oldX = m_x;
 				m_oldY = m_y;
-				m_listener->postEvent( makeFunctorEvent( EventType::ePreRender, [this, window]()
-				{
-					Camera & camera = *window->getCamera();
-					camera.update();
-					auto type = window->pick( Position{ int( m_x ), int( m_y ) } );
+				m_listener->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+					, [this, window]( RenderDevice const & device )
+					{
+						Camera & camera = *window->getCamera();
+						camera.update();
+						auto type = window->pick( Position{ int( m_x ), int( m_y ) } );
 
-					if ( type != PickNodeType::eNone
-						&& type != PickNodeType::eBillboard )
-					{
-						doUpdateSelectedGeometry( window->getPickedGeometry() );
-					}
-					else
-					{
-						doUpdateSelectedGeometry( nullptr );
-					}
-				} ) );
+						if ( type != PickNodeType::eNone
+							&& type != PickNodeType::eBillboard )
+						{
+							doUpdateSelectedGeometry( window->getPickedGeometry() );
+						}
+						else
+						{
+							doUpdateSelectedGeometry( nullptr );
+						}
+					} ) );
 			}
 		}
 
@@ -658,13 +668,14 @@ namespace castortd
 	{
 		if ( m_game.IsRunning() )
 		{
-			m_listener->postEvent( makeFunctorEvent( EventType::ePostRender, [this]()
-			{
-				if ( m_game.BuildTower( m_marker->getPosition(), std::make_unique< LongRangeTower >( m_longRange ) ) )
+			m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+				, [this]()
 				{
-					doUpdateSelectedGeometry( nullptr );
-				}
-			} ) );
+					if ( m_game.BuildTower( m_marker->getPosition(), std::make_unique< LongRangeTower >( m_longRange ) ) )
+					{
+						doUpdateSelectedGeometry( nullptr );
+					}
+				} ) );
 		}
 	}
 
@@ -672,13 +683,14 @@ namespace castortd
 	{
 		if ( m_game.IsRunning() )
 		{
-			m_listener->postEvent( makeFunctorEvent( EventType::ePostRender, [this]()
-			{
-				if ( m_game.BuildTower( m_marker->getPosition(), std::make_unique< ShortRangeTower >( m_shortRange ) ) )
+			m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+				, [this]()
 				{
-					doUpdateSelectedGeometry( nullptr );
-				}
-			} ) );
+					if ( m_game.BuildTower( m_marker->getPosition(), std::make_unique< ShortRangeTower >( m_shortRange ) ) )
+					{
+						doUpdateSelectedGeometry( nullptr );
+					}
+				} ) );
 		}
 	}
 

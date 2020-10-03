@@ -3,7 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
-#include "Castor3D/Event/Frame/FunctorEvent.hpp"
+#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
@@ -38,8 +38,8 @@ namespace castor3d
 
 			inline void operator()( GeometrySPtr element )
 			{
-				m_listener.postEvent( makeFunctorEvent( EventType::ePreRender
-					, [element, this]()
+				m_listener.postEvent( makeGpuFunctorEvent( EventType::ePreRender
+					, [element, this]( RenderDevice const & device )
 					{
 						element->prepare( m_faceCount, m_vertexCount );
 					} ) );
@@ -148,10 +148,10 @@ namespace castor3d
 		return m_entries.at( hash( geometry, submesh, pass ) );
 	}
 
-	void GeometryCache::clear()
+	void GeometryCache::clear( RenderDevice const & device )
 	{
 		MyObjectCache::clear();
-		auto & uboPools = *getCurrentRenderDevice( *getEngine() ).uboPools;
+		auto & uboPools = *device.uboPools;
 
 		for ( auto & entry : m_entries )
 		{
@@ -167,11 +167,7 @@ namespace castor3d
 	void GeometryCache::add( ElementPtr element )
 	{
 		MyObjectCache::add( element->getName(), element );
-		getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
-			, [this, element]()
-			{
-				doRegister( *element );
-			} ) );
+		doRegister( *element );
 	}
 
 	GeometrySPtr GeometryCache::add( Key const & name
@@ -180,11 +176,7 @@ namespace castor3d
 	{
 		CU_Require( mesh );
 		auto result = MyObjectCache::add( name, parent, mesh );
-		getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
-			, [this, result]()
-			{
-				doRegister( *result );
-			} ) );
+		doRegister( *result );
 		return result;
 	}
 
@@ -202,11 +194,12 @@ namespace castor3d
 		}
 	}
 
-	GeometryCache::PoolsEntry GeometryCache::doCreateEntry( Geometry const & geometry
+	GeometryCache::PoolsEntry GeometryCache::doCreateEntry( RenderDevice const & device
+		, Geometry const & geometry
 		, Submesh const & submesh
 		, Pass const & pass )
 	{
-		auto & uboPools = *getCurrentRenderDevice( *getEngine() ).uboPools;
+		auto & uboPools = *device.uboPools;
 		return
 		{
 			geometry,
@@ -219,12 +212,13 @@ namespace castor3d
 		};
 	}
 
-	void GeometryCache::doRemoveEntry( Geometry const & geometry
+	void GeometryCache::doRemoveEntry( RenderDevice const & device
+		, Geometry const & geometry
 		, Submesh const & submesh
 		, Pass const & pass )
 	{
 		auto entry = getUbos( geometry, submesh, pass );
-		auto & uboPools = *getCurrentRenderDevice( *getEngine() ).uboPools;
+		auto & uboPools = *device.uboPools;
 		m_entries.erase( hash( geometry, submesh, pass ) );
 		uboPools.putBuffer( entry.modelUbo );
 		uboPools.putBuffer( entry.modelMatrixUbo );
@@ -234,60 +228,68 @@ namespace castor3d
 
 	void GeometryCache::doRegister( Geometry & geometry )
 	{
-		m_connections.emplace( &geometry, geometry.onMaterialChanged.connect( [this]( Geometry const & geometry
-			, Submesh const & submesh
-			, MaterialSPtr oldMaterial
-			, MaterialSPtr newMaterial )
-		{
-			if ( oldMaterial )
+		getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
+			, [this, &geometry]( RenderDevice const & device )
 			{
-				for ( auto & pass : *oldMaterial )
-				{
-					doRemoveEntry( geometry, submesh, *pass );
-				}
-			}
-
-			if ( newMaterial )
-			{
-				for ( auto & pass : *newMaterial )
-				{
-					m_entries.emplace( hash( geometry, submesh, *pass )
-						, doCreateEntry( geometry, submesh, *pass ) );
-				}
-			}
-		} ) );
-
-		if ( geometry.getMesh() )
-		{
-			for ( auto & submesh : *geometry.getMesh() )
-			{
-				auto material = geometry.getMaterial( *submesh );
-
-				if ( material )
-				{
-					for ( auto & pass : *material )
+				m_connections.emplace( &geometry, geometry.onMaterialChanged.connect( [this, &device]( Geometry const & geometry
+					, Submesh const & submesh
+					, MaterialSPtr oldMaterial
+					, MaterialSPtr newMaterial )
 					{
-						m_entries.emplace( hash( geometry, *submesh, *pass )
-							, doCreateEntry( geometry, *submesh, *pass ) );
+						if ( oldMaterial )
+						{
+							for ( auto & pass : *oldMaterial )
+							{
+								doRemoveEntry( device, geometry, submesh, *pass );
+							}
+						}
+
+						if ( newMaterial )
+						{
+							for ( auto & pass : *newMaterial )
+							{
+								m_entries.emplace( hash( geometry, submesh, *pass )
+									, doCreateEntry( device, geometry, submesh, *pass ) );
+							}
+						}
+					} ) );
+
+				if ( geometry.getMesh() )
+				{
+					for ( auto & submesh : *geometry.getMesh() )
+					{
+						auto material = geometry.getMaterial( *submesh );
+
+						if ( material )
+						{
+							for ( auto & pass : *material )
+							{
+								m_entries.emplace( hash( geometry, *submesh, *pass )
+									, doCreateEntry( device, geometry, *submesh, *pass ) );
+							}
+						}
 					}
 				}
-			}
-		}
+			} ) );
 	}
 
 	void GeometryCache::doUnregister( Geometry & geometry )
 	{
-		m_connections.erase( &geometry );
-
-		if ( geometry.getMesh() )
-		{
-			for ( auto & submesh : *geometry.getMesh() )
+		getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
+			, [this, &geometry]( RenderDevice const & device )
 			{
-				for ( auto & pass : *geometry.getMaterial( *submesh ) )
+				m_connections.erase( &geometry );
+
+				if ( geometry.getMesh() )
 				{
-					doRemoveEntry( geometry, *submesh, *pass );
+					for ( auto & submesh : *geometry.getMesh() )
+					{
+						for ( auto & pass : *geometry.getMaterial( *submesh ) )
+						{
+							doRemoveEntry( device, geometry, *submesh, *pass );
+						}
+					}
 				}
-			}
-		}
+			} ) );
 	}
 }

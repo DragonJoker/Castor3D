@@ -18,11 +18,16 @@ namespace castor3d
 	std::string const LpvConfigUbo::GridSizes = "c3d_gridSizes";
 	std::string const LpvConfigUbo::Config = "c3d_lpvConfig";
 
-	LpvConfigUbo::LpvConfigUbo( Engine & engine
+	LpvConfigUbo::LpvConfigUbo( RenderDevice const & device
 		, uint32_t index )
-		: m_engine{ engine }
-		, m_ubo{ getCurrentRenderDevice( m_engine ).uboPools->getBuffer< Configuration >( 0u ) }
+		: m_device{ device }
+		, m_ubo{ m_device.uboPools->getBuffer< Configuration >( 0u ) }
 	{
+	}
+	
+	LpvConfigUbo::~LpvConfigUbo()
+	{
+		m_device.uboPools->putBuffer( m_ubo );
 	}
 
 	void LpvConfigUbo::cpuUpdate( castor::Grid const & grid

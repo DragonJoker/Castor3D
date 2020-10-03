@@ -61,19 +61,26 @@ namespace motion_blur
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
+		enum Idx : uint32_t
+		{
+			BlurCfgUboIdx,
+			VelocityTexIdx,
+			ColorTexIdx,
+		};
+
 		std::unique_ptr< ast::Shader > getFragmentProgram( castor3d::RenderSystem * renderSystem )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
 
 			// Shader inputs
-			Ubo configuration{ writer, "Configuration", 0u, 0u };
+			Ubo configuration{ writer, "Configuration", BlurCfgUboIdx, 0u };
 			auto c3d_samplesCount = configuration.declMember< UInt >( "c3d_samplesCount" );
 			auto c3d_vectorDivider = configuration.declMember< Float >( "c3d_vectorDivider" );
 			auto c3d_blurScale = configuration.declMember< Float >( "c3d_blurScale" );
 			configuration.end();
-			auto c3d_mapVelocity = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapVelocity", 1u, 0u );
-			auto c3d_mapColor = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapColor", 2u, 0u );
+			auto c3d_mapVelocity = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapVelocity", VelocityTexIdx, 0u );
+			auto c3d_mapColor = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapColor", ColorTexIdx, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs
@@ -99,28 +106,29 @@ namespace motion_blur
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
+
+		castor3d::rq::BindingDescriptionArray createBindings()
+		{
+			return
+			{
+				{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, std::nullopt },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
+			};
+		}
 	}
 
 	//*********************************************************************************************
 
 	PostEffect::Quad::Quad( castor3d::RenderSystem & renderSystem
-		, castor3d::TextureUnit const & velocity
-		, castor3d::UniformBufferOffsetT< Configuration > const & ubo )
-		: castor3d::RenderQuad{ renderSystem, cuT( "LinearMotionBlur" ), VK_FILTER_NEAREST, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
-		, m_velocityView{ velocity.getTexture()->getDefaultView().getSampledView() }
-		, m_velocitySampler{ velocity.getSampler()->getSampler() }
-		, m_ubo{ ubo }
+		, castor3d::RenderDevice const & device )
+		: castor3d::RenderQuad{ device
+			, cuT( "LinearMotionBlur" )
+			, VK_FILTER_NEAREST
+			, { createBindings()
+				, ashes::nullopt
+				, castor3d::rq::Texcoord{} } }
 	{
-	}
-
-	void PostEffect::Quad::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-		, ashes::DescriptorSet & descriptorSet )
-	{
-		m_ubo.createSizedBinding( descriptorSet
-			, descriptorSetLayout.getBinding( 0u ) );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 1u )
-			, m_velocityView
-			, m_velocitySampler );
 	}
 
 	//*********************************************************************************************
@@ -180,10 +188,10 @@ namespace motion_blur
 		visitor.visit( m_pixelShader );
 	}
 
-	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
+	bool PostEffect::doInitialise( castor3d::RenderDevice const & device
+		, castor3d::RenderPassTimer const & timer )
 	{
 		auto & renderSystem = *getRenderSystem();
-		auto & device = getCurrentRenderDevice( *this );
 		VkExtent2D size{ m_target->getWidth(), m_target->getHeight() };
 		m_vertexShader.shader = getVertexProgram( getRenderSystem() );
 		m_pixelShader.shader = getFragmentProgram( getRenderSystem() );
@@ -263,17 +271,24 @@ namespace motion_blur
 				, VK_SHADER_STAGE_FRAGMENT_BIT ),
 		};
 		m_quad = std::make_unique< Quad >( renderSystem
-			, m_renderTarget.getVelocity()
-			, m_ubo );
-		m_quad->createPipeline( size
+			, device );
+		m_quad->createPipelineAndPass( size
 			, castor::Position{}
 			, stages
-			, m_target->getDefaultView().getSampledView()
 			, *m_renderPass
-			, bindings
-			, {} );
+			, {
+				m_quad->makeDescriptorWrite( m_ubo
+					, BlurCfgUboIdx ),
+				m_quad->makeDescriptorWrite( m_renderTarget.getVelocity().getTexture()->getDefaultView().getSampledView()
+					, m_renderTarget.getVelocity().getSampler()->getSampler()
+					, VelocityTexIdx ),
+				m_quad->makeDescriptorWrite( m_target->getDefaultView().getSampledView()
+					, m_quad->getSampler().getSampler()
+					, VelocityTexIdx ),
+			} );
 
-		auto result = m_surface.initialise( *m_renderPass
+		auto result = m_surface.initialise( device
+			, *m_renderPass
 			, castor::Size{ m_target->getWidth(), m_target->getHeight() }
 			, m_target->getPixelFormat() );
 
@@ -297,7 +312,7 @@ namespace motion_blur
 				, *m_surface.frameBuffer
 				, { castor3d::transparentBlackClearColor }
 				, VK_SUBPASS_CONTENTS_INLINE );
-			m_quad->registerFrame( cmd );
+			m_quad->registerPass( cmd );
 			cmd.endRenderPass();
 
 			timer.endPass( cmd );
@@ -310,13 +325,12 @@ namespace motion_blur
 		return result;
 	}
 
-	void PostEffect::doCleanup()
+	void PostEffect::doCleanup( castor3d::RenderDevice const & device )
 	{
 		m_quad.reset();
-		auto & renderSystem = *getRenderSystem();
-		getCurrentRenderDevice( renderSystem ).uboPools->putBuffer( m_ubo );
+		device.uboPools->putBuffer( m_ubo );
 		m_renderPass.reset();
-		m_surface.cleanup();
+		m_surface.cleanup( device );
 	}
 
 	bool PostEffect::doWriteInto( castor::TextFile & file, castor::String const & tabs )

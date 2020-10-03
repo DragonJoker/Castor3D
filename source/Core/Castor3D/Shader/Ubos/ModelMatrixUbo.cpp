@@ -18,7 +18,7 @@ namespace castor3d
 	{
 		if ( engine.getRenderSystem()->hasCurrentRenderDevice() )
 		{
-			initialise();
+			initialise( engine.getRenderSystem()->getCurrentRenderDevice() );
 		}
 	}
 
@@ -26,20 +26,18 @@ namespace castor3d
 	{
 	}
 
-	void ModelMatrixUbo::initialise()
+	void ModelMatrixUbo::initialise( RenderDevice const & device )
 	{
 		if ( !m_ubo )
 		{
-			auto & device = getCurrentRenderDevice( m_engine );
 			m_ubo = device.uboPools->getBuffer< Configuration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 		}
 	}
 
-	void ModelMatrixUbo::cleanup()
+	void ModelMatrixUbo::cleanup( RenderDevice const & device )
 	{
 		if ( m_ubo )
 		{
-			auto & device = getCurrentRenderDevice( m_engine );
 			device.uboPools->putBuffer( m_ubo );
 		}
 	}

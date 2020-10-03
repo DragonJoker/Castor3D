@@ -4,8 +4,8 @@
 
 #include "ComCastor3D/Castor3D/ComTextureLayout.hpp"
 
-#include <Castor3D/Mesh/Submesh.hpp>
-#include <Castor3D/Mesh/SubmeshComponent/LinesMapping.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp>
 
 namespace CastorCom
 {

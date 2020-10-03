@@ -320,11 +320,36 @@ namespace castor3d
 				, VkExtent2D{ size.width, size.height }
 				, std::move( attaches ) );
 		}
+
+		rq::BindingDescriptionArray createBindings()
+		{
+			return
+			{
+				{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, std::nullopt },
+				{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, std::nullopt },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
+			};
+		}
 	}
 
 	//*********************************************************************************************
 
 	LayeredLightVolumeGIPass::LayeredLightVolumeGIPass( Engine & engine
+		, RenderDevice const & device
+		, castor::String const & prefix
 		, GpInfoUbo const & gpInfo
 		, LayeredLpvConfigUbo const & lpvConfigUbo
 		, OpaquePassResult const & gpResult
@@ -333,10 +358,13 @@ namespace castor3d
 		, LightVolumePassResult const & lpResult2
 		, LightVolumePassResult const & lpResult3
 		, TextureUnit const & dst )
-		: RenderQuad{ *engine.getRenderSystem()
-			, "DirectionalLayeredVplGI"
+		: RenderQuad{ device
+			, prefix + "GIResolve"
 			, VK_FILTER_LINEAR
-			, { ashes::nullopt, RenderQuadConfig::Texcoord{}, BlendMode::eAdditive } }
+			, { createBindings()
+				, ashes::nullopt
+				, rq::Texcoord{}
+				, BlendMode::eAdditive } }
 		, m_gpInfo{ gpInfo }
 		, m_lpvConfigUbo{ lpvConfigUbo }
 		, m_gpResult{ gpResult }
@@ -347,91 +375,81 @@ namespace castor3d
 		, m_result{ dst }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram() }
-		, m_renderPass{ doCreateRenderPass( getCurrentRenderDevice( m_renderSystem )
+		, m_renderPass{ doCreateRenderPass( device
 			, m_result.getTexture()->getPixelFormat() ) }
 		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass
 			, m_result.getTexture()->getDefaultView().getTargetView() ) }
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Light Propagation Volumes" ), cuT( "Layered GI Resolve" ) ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( engine, m_device, cuT( "Light Propagation Volumes" ), cuT( "Layered GI Resolve" ) ) }
 	{
-		auto & device = getCurrentRenderDevice( m_renderSystem );
 		ashes::PipelineShaderStageCreateInfoArray shaderStages;
-		shaderStages.push_back( makeShaderState( device, m_vertexShader ) );
-		shaderStages.push_back( makeShaderState( device, m_pixelShader ) );
-
-		ashes::VkDescriptorSetLayoutBindingArray bindings
-		{
-			makeDescriptorSetLayoutBinding( GpInfoUboIdx
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-			makeDescriptorSetLayoutBinding( LIUboIdx
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-			makeDescriptorSetLayoutBinding( DepthMapIdx
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-			makeDescriptorSetLayoutBinding( Data1MapIdx
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-			makeDescriptorSetLayoutBinding( RLpvAccumIdx0
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-			makeDescriptorSetLayoutBinding( GLpvAccumIdx0
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-			makeDescriptorSetLayoutBinding( BLpvAccumIdx0
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-			makeDescriptorSetLayoutBinding( RLpvAccumIdx1
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-			makeDescriptorSetLayoutBinding( GLpvAccumIdx1
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-			makeDescriptorSetLayoutBinding( BLpvAccumIdx1
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-			makeDescriptorSetLayoutBinding( RLpvAccumIdx2
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-			makeDescriptorSetLayoutBinding( GLpvAccumIdx2
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-			makeDescriptorSetLayoutBinding( BLpvAccumIdx2
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-			makeDescriptorSetLayoutBinding( RLpvAccumIdx3
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-			makeDescriptorSetLayoutBinding( GLpvAccumIdx3
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-		};
-		this->createPipeline( { m_result.getTexture()->getDimensions().width, m_result.getTexture()->getDimensions().height }
+		shaderStages.push_back( makeShaderState( m_device, m_vertexShader ) );
+		shaderStages.push_back( makeShaderState( m_device, m_pixelShader ) );
+		createPipelineAndPass( { m_result.getTexture()->getDimensions().width, m_result.getTexture()->getDimensions().height }
 			, {}
 			, shaderStages
-			, m_lpResult3[LpvTexture::eB].getTexture()->getDefaultView().getSampledView()
-			, *m_renderPass
-			, std::move( bindings )
-			, {} );
-		auto commands = getCommands( *m_timer, 0u );
-		m_commandBuffer = std::move( commands.commandBuffer );
-		m_finished = std::move( commands.semaphore );
+			, * m_renderPass
+			, {
+				makeDescriptorWrite( m_gpInfo.getUbo(), GpInfoUboIdx ),
+				makeDescriptorWrite( m_lpvConfigUbo.getUbo(), LIUboIdx ),
+				makeDescriptorWrite( m_gpResult[DsTexture::eDepth].getTexture()->getDefaultView().getSampledView()
+					, m_gpResult[DsTexture::eDepth].getSampler()->getSampler()
+					, DepthMapIdx ),
+				makeDescriptorWrite( m_gpResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView()
+					, m_gpResult[DsTexture::eData1].getSampler()->getSampler()
+					, Data1MapIdx ),
+				makeDescriptorWrite( m_lpResult0[LpvTexture::eR].getTexture()->getDefaultView().getSampledView()
+					, m_lpResult0[LpvTexture::eR].getSampler()->getSampler()
+					, RLpvAccumIdx0 ),
+				makeDescriptorWrite( m_lpResult0[LpvTexture::eG].getTexture()->getDefaultView().getSampledView()
+					, m_lpResult0[LpvTexture::eG].getSampler()->getSampler()
+					, GLpvAccumIdx0 ),
+				makeDescriptorWrite( m_lpResult0[LpvTexture::eB].getTexture()->getDefaultView().getSampledView()
+					, m_lpResult0[LpvTexture::eB].getSampler()->getSampler()
+					, BLpvAccumIdx0 ),
+				makeDescriptorWrite( m_lpResult1[LpvTexture::eR].getTexture()->getDefaultView().getSampledView()
+					, m_lpResult1[LpvTexture::eR].getSampler()->getSampler()
+					, RLpvAccumIdx1 ),
+				makeDescriptorWrite( m_lpResult1[LpvTexture::eG].getTexture()->getDefaultView().getSampledView()
+					, m_lpResult1[LpvTexture::eG].getSampler()->getSampler()
+					, GLpvAccumIdx1 ),
+				makeDescriptorWrite( m_lpResult1[LpvTexture::eB].getTexture()->getDefaultView().getSampledView()
+					, m_lpResult1[LpvTexture::eB].getSampler()->getSampler()
+					, BLpvAccumIdx1 ),
+				makeDescriptorWrite( m_lpResult2[LpvTexture::eR].getTexture()->getDefaultView().getSampledView()
+					, m_lpResult2[LpvTexture::eR].getSampler()->getSampler()
+					, RLpvAccumIdx2 ),
+				makeDescriptorWrite( m_lpResult2[LpvTexture::eG].getTexture()->getDefaultView().getSampledView()
+					, m_lpResult2[LpvTexture::eG].getSampler()->getSampler()
+					, GLpvAccumIdx2 ),
+				makeDescriptorWrite( m_lpResult2[LpvTexture::eB].getTexture()->getDefaultView().getSampledView()
+					, m_lpResult2[LpvTexture::eB].getSampler()->getSampler()
+					, BLpvAccumIdx2 ),
+				makeDescriptorWrite( m_lpResult3[LpvTexture::eR].getTexture()->getDefaultView().getSampledView()
+					, m_lpResult3[LpvTexture::eR].getSampler()->getSampler()
+					, RLpvAccumIdx3 ),
+				makeDescriptorWrite( m_lpResult3[LpvTexture::eG].getTexture()->getDefaultView().getSampledView()
+					, m_lpResult3[LpvTexture::eG].getSampler()->getSampler()
+					, GLpvAccumIdx3 ),
+				makeDescriptorWrite( m_lpResult3[LpvTexture::eB].getTexture()->getDefaultView().getSampledView()
+					, m_lpResult3[LpvTexture::eB].getSampler()->getSampler()
+					, BLpvAccumIdx3 ),
+			} );
+		m_commands = getCommands( *m_timer, 0u );
 	}
 
 	ashes::Semaphore const & LayeredLightVolumeGIPass::compute( ashes::Semaphore const & toWait )const
 	{
 		auto & renderSystem = m_renderSystem;
-		auto & device = getCurrentRenderDevice( renderSystem );
 		RenderPassTimerBlock timerBlock{ m_timer->start() };
 		timerBlock->notifyPassRender();
 		auto * result = &toWait;
 
-		device.graphicsQueue->submit( *m_commandBuffer
+		m_device.graphicsQueue->submit( *m_commands.commandBuffer
 			, toWait
 			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, *m_finished
+			, *m_commands.semaphore
 			, nullptr );
-		result = m_finished.get();
+		result = m_commands.semaphore.get();
 
 		return *result;
 	}
@@ -439,11 +457,10 @@ namespace castor3d
 	CommandsSemaphore LayeredLightVolumeGIPass::getCommands( RenderPassTimer const & timer
 		, uint32_t index )const
 	{
-		auto & device = getCurrentRenderDevice( m_renderSystem );
 		castor3d::CommandsSemaphore commands
 		{
-			device.graphicsCommandPool->createCommandBuffer( getName() ),
-			device->createSemaphore( getName() )
+			m_device.graphicsCommandPool->createCommandBuffer( getName() ),
+			m_device->createSemaphore( getName() )
 		};
 		auto & cmd = *commands.commandBuffer;
 
@@ -461,7 +478,7 @@ namespace castor3d
 			, *m_frameBuffer
 			, { castor3d::transparentBlackClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE );
-		registerFrame( cmd );
+		registerPass( cmd );
 		cmd.endRenderPass();
 		cmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 			, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
@@ -477,57 +494,5 @@ namespace castor3d
 	{
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );
-	}
-
-	void LayeredLightVolumeGIPass::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-		, ashes::DescriptorSet & descriptorSet )
-	{
-		m_gpInfo.createSizedBinding( descriptorSet
-			, descriptorSetLayout.getBinding( GpInfoUboIdx ) );
-		m_lpvConfigUbo.createSizedBinding( descriptorSet
-			, descriptorSetLayout.getBinding( LIUboIdx ) );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( DepthMapIdx )
-			, m_gpResult[DsTexture::eDepth].getTexture()->getDefaultView().getSampledView()
-			, m_gpResult[DsTexture::eDepth].getSampler()->getSampler() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( Data1MapIdx )
-			, m_gpResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView()
-			, m_gpResult[DsTexture::eData1].getSampler()->getSampler() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( RLpvAccumIdx0 )
-			, m_lpResult0[LpvTexture::eR].getTexture()->getDefaultView().getSampledView()
-			, m_lpResult0[LpvTexture::eR].getSampler()->getSampler() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( GLpvAccumIdx0 )
-			, m_lpResult0[LpvTexture::eG].getTexture()->getDefaultView().getSampledView()
-			, m_lpResult0[LpvTexture::eG].getSampler()->getSampler() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( BLpvAccumIdx0 )
-			, m_lpResult0[LpvTexture::eB].getTexture()->getDefaultView().getSampledView()
-			, m_lpResult0[LpvTexture::eB].getSampler()->getSampler() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( RLpvAccumIdx1 )
-			, m_lpResult1[LpvTexture::eR].getTexture()->getDefaultView().getSampledView()
-			, m_lpResult1[LpvTexture::eR].getSampler()->getSampler() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( GLpvAccumIdx1 )
-			, m_lpResult1[LpvTexture::eG].getTexture()->getDefaultView().getSampledView()
-			, m_lpResult1[LpvTexture::eG].getSampler()->getSampler() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( BLpvAccumIdx1 )
-			, m_lpResult1[LpvTexture::eB].getTexture()->getDefaultView().getSampledView()
-			, m_lpResult1[LpvTexture::eB].getSampler()->getSampler() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( RLpvAccumIdx2 )
-			, m_lpResult2[LpvTexture::eR].getTexture()->getDefaultView().getSampledView()
-			, m_lpResult2[LpvTexture::eR].getSampler()->getSampler() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( GLpvAccumIdx2 )
-			, m_lpResult2[LpvTexture::eG].getTexture()->getDefaultView().getSampledView()
-			, m_lpResult2[LpvTexture::eG].getSampler()->getSampler() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( BLpvAccumIdx2 )
-			, m_lpResult2[LpvTexture::eB].getTexture()->getDefaultView().getSampledView()
-			, m_lpResult2[LpvTexture::eB].getSampler()->getSampler() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( RLpvAccumIdx3 )
-			, m_lpResult3[LpvTexture::eR].getTexture()->getDefaultView().getSampledView()
-			, m_lpResult3[LpvTexture::eR].getSampler()->getSampler() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( GLpvAccumIdx3 )
-			, m_lpResult3[LpvTexture::eG].getTexture()->getDefaultView().getSampledView()
-			, m_lpResult3[LpvTexture::eG].getSampler()->getSampler() );
-	}
-
-	void LayeredLightVolumeGIPass::doRegisterFrame( ashes::CommandBuffer & commandBuffer )const
-	{
 	}
 }

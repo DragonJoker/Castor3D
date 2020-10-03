@@ -17,9 +17,10 @@ namespace Uncharted2
 	String ToneMapping::Name = cuT( "Uncharted 2 Tone Mapping" );
 
 	ToneMapping::ToneMapping( Engine & engine
+		, castor3d::RenderDevice const & device
 		, HdrConfigUbo & hdrConfigUbo
 		, Parameters const & parameters )
-		: castor3d::ToneMapping{ Type, Name, engine, hdrConfigUbo, parameters }
+		: castor3d::ToneMapping{ Type, Name, engine, device, hdrConfigUbo, parameters }
 	{
 	}
 
@@ -28,10 +29,12 @@ namespace Uncharted2
 	}
 
 	ToneMappingSPtr ToneMapping::create( Engine & engine
+		, castor3d::RenderDevice const & device
 		, HdrConfigUbo & hdrConfigUbo
 		, Parameters const & parameters )
 	{
 		return std::make_shared< ToneMapping >( engine
+			, device
 			, hdrConfigUbo
 			, parameters );
 	}

@@ -4,8 +4,12 @@ See LICENSE file in root folder
 #ifndef ___GUICOMMON_ADDITIONAL_PROPERTIES_H___
 #define ___GUICOMMON_ADDITIONAL_PROPERTIES_H___
 
+#include "GuiCommon/GuiCommonPrerequisites.hpp"
+
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/editors.h>
+
+#include <functional>
 
 #define GC_PG_NS_DECLARE_VARIANT_DATA_EXPORTED( namspace, classname, expdecl )\
 	namspace::classname & operator<<( namspace::classname & object, const wxVariant & variant );\
@@ -18,7 +22,25 @@ See LICENSE file in root folder
 		variant << value;\
 		return variant;\
 	}\
-	extern const char* classname##_VariantType
+	extern const char* classname##_VariantType;\
+	namespace GuiCommon\
+	{\
+		template<>\
+		struct ValueTraitsT< namspace::classname >\
+		{\
+			using ValueT = namspace::classname;\
+			using ParamType = ValueT const &;\
+			using RetType = ValueT;\
+			static inline RetType convert( wxVariant const & var )\
+			{\
+				return classname##RefFromVariant( var );\
+			}\
+			static inline wxVariant convert( ParamType value )\
+			{\
+				return WXVARIANT( value );\
+			}\
+		};\
+	}
 
 #define GC_PG_NS_DECLARE_VARIANT_DATA( namspace, classname )\
 	GC_PG_NS_DECLARE_VARIANT_DATA_EXPORTED( namspace, classname, wxEMPTY_PARAMETER_VALUE )
@@ -66,22 +88,21 @@ See LICENSE file in root folder
 
 // Add getter (ie. classname << variant) separately to allow
 // custom implementations.
-#define GC_PG_IMPLEMENT_ALIGNED_VARIANT_DATA_EXPORTED_NO_EQ_NO_GETTER( classname, alignment, expdecl ) \
+#define GC_PG_IMPLEMENT_VARIANT_DATA_EXPORTED_NO_EQ_NO_GETTER( namspace, classname, expdecl ) \
 	const char* classname##_VariantType = #classname; \
 	class classname##VariantData\
 		: public wxVariantData\
-		, public castor::Aligned< alignment >\
 	{ \
 	public:\
 		classname##VariantData() {} \
-		classname##VariantData( const classname & value ) { m_value = value; } \
-		classname &GetValue() { return m_value; } \
-		const classname &GetValue() const { return m_value; } \
+		classname##VariantData( const namspace::classname & value ) { m_value = value; } \
+		namspace::classname &GetValue() { return m_value; } \
+		const namspace::classname &GetValue() const { return m_value; } \
 		virtual bool Eq( wxVariantData & data ) const; \
 		virtual wxString GetType() const; \
 		virtual wxVariantData* Clone() const { return new classname##VariantData( m_value ); } \
 	protected:\
-		classname m_value; \
+		namspace::classname m_value; \
 	};\
 	\
 	wxString classname##VariantData::GetType() const\
@@ -89,13 +110,13 @@ See LICENSE file in root folder
 		return wxS( #classname );\
 	}\
 	\
-	expdecl wxVariant & operator<<( wxVariant & variant, const classname & value )\
+	expdecl wxVariant & operator<<( wxVariant & variant, const namspace::classname & value )\
 	{\
 		classname##VariantData * data = new classname##VariantData( value );\
 		variant.SetData( data );\
 		return variant;\
 	} \
-	expdecl classname & classname##RefFromVariant( wxVariant & variant ) \
+	expdecl namspace::classname & classname##RefFromVariant( wxVariant & variant ) \
 	{ \
 		wxASSERT_MSG( variant.GetType() == wxS( #classname ), \
 					  wxString::Format( "Variant type should have been '%s'" \
@@ -106,7 +127,7 @@ See LICENSE file in root folder
 			( classname##VariantData * ) variant.GetData(); \
 		return data->GetValue();\
 	} \
-	expdecl const classname& classname##RefFromVariant( const wxVariant& variant ) \
+	expdecl const namspace::classname& classname##RefFromVariant( const wxVariant& variant ) \
 	{ \
 		wxASSERT_MSG( variant.GetType() == wxS( #classname ), \
 					  wxString::Format( "Variant type should have been '%s'" \
@@ -118,8 +139,8 @@ See LICENSE file in root folder
 		return data->GetValue();\
 	}
 
-#define GC_PG_IMPLEMENT_ALIGNED_VARIANT_DATA_GETTER( classname, expdecl ) \
-	expdecl classname & operator<<( classname &value, const wxVariant & variant )\
+#define GC_PG_IMPLEMENT_VARIANT_DATA_GETTER( namspace, classname, expdecl ) \
+	expdecl namspace::classname & operator<<( namspace::classname &value, const wxVariant & variant )\
 	{\
 		wxASSERT( variant.GetType() == #classname );\
 		\
@@ -129,32 +150,52 @@ See LICENSE file in root folder
 	}
 
 // with Eq() implementation that always returns false
-#define GC_PG_IMPLEMENT_ALIGNED_VARIANT_DATA_EXPORTED_DUMMY_EQ( classname, alignment, expdecl ) \
-	GC_PG_IMPLEMENT_ALIGNED_VARIANT_DATA_EXPORTED_NO_EQ_NO_GETTER( classname, alignment, wxEMPTY_PARAMETER_VALUE expdecl ) \
-	GC_PG_IMPLEMENT_ALIGNED_VARIANT_DATA_GETTER( classname, wxEMPTY_PARAMETER_VALUE expdecl ) \
+#define GC_PG_IMPLEMENT_VARIANT_DATA_EXPORTED_DUMMY_EQ( namspace, classname, expdecl )\
+	GC_PG_IMPLEMENT_VARIANT_DATA_EXPORTED_NO_EQ_NO_GETTER( namspace, classname, wxEMPTY_PARAMETER_VALUE expdecl )\
+	GC_PG_IMPLEMENT_VARIANT_DATA_GETTER( namspace, classname, wxEMPTY_PARAMETER_VALUE expdecl )\
 	\
-	bool classname##VariantData::Eq( wxVariantData & WXUNUSED( data ) ) const \
+	bool classname##VariantData::Eq( wxVariantData& WXUNUSED( data ) ) const\
 	{\
-		return false; \
+		return false;\
 	}
+
+#define GC_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( namspace, classname )\
+	GC_PG_IMPLEMENT_VARIANT_DATA_EXPORTED_DUMMY_EQ( namspace, classname, wxEMPTY_PARAMETER_VALUE )
 
 namespace GuiCommon
 {
-	template< typename T > T getValue( wxVariant const & p_variant );
-	template< typename T > wxVariant setValue( T const & p_value );
+	template< typename ValueT >
+	struct ValueTraitsT;
 
-	typedef bool ( wxEvtHandler::*ButtonEventMethod )( wxPGProperty * );
+	template< typename ValueT >
+	using RetTypeT = typename ValueTraitsT< ValueT >::RetType;
+	
+	template< typename ValueT >
+	using ParamTypeT = typename ValueTraitsT< ValueT >::ParamType;
+
+	template< typename ValueT >
+	RetTypeT< ValueT > variantCast( wxVariant const & var )
+	{
+		return ValueTraitsT< ValueT >::convert( var );
+	}
+
+	template< typename ValueT >
+	wxVariant getVariant( ParamTypeT< ValueT > value )
+	{
+		return ValueTraitsT< ValueT >::convert( value );
+	}
+
+	using ButtonEventMethod = std::function< void ( wxVariant const & ) >;
 
 	class ButtonData
 		: public wxClientData
 	{
 	public:
-		ButtonData( ButtonEventMethod p_method, wxEvtHandler * p_handler );
-		bool Call( wxPGProperty * property );
+		ButtonData( ButtonEventMethod method );
+		void Call( wxVariant const & var );
 
 	private:
 		ButtonEventMethod m_method;
-		wxEvtHandler * m_handler;
 	};
 
 	class ButtonEventEditor
@@ -172,7 +213,8 @@ namespace GuiCommon
 	wxUIntProperty * CreateProperty( wxString const & p_name, uint32_t const & p_value );
 	wxBoolProperty * CreateProperty( wxString const & p_name, bool const & p_value, bool p_checkbox );
 	wxStringProperty * CreateProperty( wxString const & p_name, wxString const & p_value );
-	wxStringProperty * CreateProperty( wxString const & p_name, wxString const & p_value, ButtonEventMethod p_method, wxEvtHandler * p_handler, wxPGEditor * p_editor );
+
+	wxPGProperty * addAttributes( wxPGProperty * prop );
 
 	template< typename PropertyType >
 	PropertyType * CreateProperty( wxString const & p_name, wxVariant && p_value, wxString const & p_help )

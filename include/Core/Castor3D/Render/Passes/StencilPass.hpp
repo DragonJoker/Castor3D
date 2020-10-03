@@ -51,7 +51,8 @@ namespace castor3d
 		 *\param[in]	vertexLayout	Le layout du tampon de sommets.
 		 *\param[in]	vbo				Le tampon de sommets contenant l'objet à dessiner.
 		 */
-		void initialise( ashes::PipelineVertexInputStateCreateInfo const & vertexLayout
+		void initialise( RenderDevice const & device
+			, ashes::PipelineVertexInputStateCreateInfo const & vertexLayout
 			, ashes::VertexBufferBase & vbo );
 		/**
 		*\~english
@@ -68,7 +69,8 @@ namespace castor3d
 		 *\brief		Dessine la passe de stencil.
 		 *\param[in]	toWait	Le sémaphore à attendre.
 		 */
-		ashes::Semaphore const & render( ashes::Semaphore const & toWait );
+		ashes::Semaphore const & render( RenderDevice const & device
+			, ashes::Semaphore const & toWait );
 		/**
 		*\~english
 		*name

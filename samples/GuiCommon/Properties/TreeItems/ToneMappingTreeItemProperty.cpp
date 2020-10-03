@@ -16,10 +16,6 @@ namespace GuiCommon
 {
 	namespace
 	{
-		static wxString PROPERTY_CATEGORY_TONE_MAPPING = _( "Tone Mapping: " );
-		static wxString PROPERTY_TONE_MAPPING_SHADER = _( "Shader" );
-		static wxString PROPERTY_TONE_MAPPING_EDIT_SHADER = _( "View Shaders..." );
-
 		class ToneMappingShaderGatherer
 			: public castor3d::ToneMappingVisitor
 		{
@@ -87,10 +83,6 @@ namespace GuiCommon
 		, m_toneMapping{ toneMapping }
 		, m_parent{ parent }
 	{
-		PROPERTY_CATEGORY_TONE_MAPPING = _( "Tone Mapping: " );
-		PROPERTY_TONE_MAPPING_SHADER = _( "Shader" );
-		PROPERTY_TONE_MAPPING_EDIT_SHADER = _( "View Shaders..." );
-
 		CreateTreeItemMenu();
 	}
 
@@ -101,22 +93,15 @@ namespace GuiCommon
 	void ToneMappingTreeItemProperty::doCreateProperties( wxPGEditor * editor
 		, wxPropertyGrid * grid )
 	{
-		grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_TONE_MAPPING + m_toneMapping.getName() ) );
-		grid->Append( CreateProperty( PROPERTY_TONE_MAPPING_SHADER
-			, PROPERTY_TONE_MAPPING_EDIT_SHADER
-			, static_cast< ButtonEventMethod >( &ToneMappingTreeItemProperty::onEditShader ), this, editor ) );
+		static wxString PROPERTY_CATEGORY_TONE_MAPPING = _( "Tone Mapping: " );
+		static wxString PROPERTY_TONE_MAPPING_SHADER = _( "Shader" );
+
+		addProperty( grid, PROPERTY_CATEGORY_TONE_MAPPING + m_toneMapping.getName() );
+		addProperty( grid, PROPERTY_TONE_MAPPING_SHADER, editor
+			, [this]( wxVariant const & var ){ onEditShader( var ); } );
 	}
 
-	void ToneMappingTreeItemProperty::doPropertyChange( wxPropertyGridEvent & event )
-	{
-		wxPGProperty * property = event.GetProperty();
-
-		if ( property )
-		{
-		}
-	}
-
-	bool ToneMappingTreeItemProperty::onEditShader( wxPGProperty * property )
+	void ToneMappingTreeItemProperty::onEditShader( wxVariant const & var )
 	{
 		ShaderSources sources = ToneMappingShaderGatherer::submit( m_toneMapping );
 		ShaderDialog * editor = new ShaderDialog{ m_toneMapping.getEngine()
@@ -124,6 +109,5 @@ namespace GuiCommon
 			, m_toneMapping.getFullName()
 			, m_parent };
 		editor->Show();
-		return false;
 	}
 }

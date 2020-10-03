@@ -15,7 +15,7 @@ namespace castor3d
 	{
 	protected:
 		inline ToneMappingVisitor()
-			: PipelineVisitor{ false }
+			: PipelineVisitor{ { false, true } }
 		{
 		}
 

@@ -77,7 +77,7 @@ namespace castor3d
 
 			if ( result )
 			{
-				result = file.writeText( m_tabs + cuT( "\tblur_step_size " ) + string::toString( object.blurStepSize, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+				result = file.writeText( m_tabs + cuT( "\tblur_step_size " ) + string::toString( object.blurStepSize.value().value(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig blur step size" );
 			}
 

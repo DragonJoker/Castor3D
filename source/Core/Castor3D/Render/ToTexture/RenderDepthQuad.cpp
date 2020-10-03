@@ -1,6 +1,7 @@
 #include "Castor3D/Render/ToTexture/RenderDepthQuad.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 
 #include <CastorUtils/Graphics/Size.hpp>
@@ -14,8 +15,14 @@ using namespace castor;
 
 namespace castor3d
 {
-	RenderDepthQuad::RenderDepthQuad( RenderSystem & renderSystem )
-		: RenderQuad{ renderSystem, "RenderDepthQuad", VK_FILTER_LINEAR, { ashes::nullopt, RenderQuadConfig::Texcoord{} } }
+	RenderDepthQuad::RenderDepthQuad( RenderSystem & renderSystem
+		, RenderDevice const & device )
+		: RenderQuad{ device
+			, "RenderDepthQuad"
+			, VK_FILTER_LINEAR
+			, { ashes::nullopt
+				, ashes::nullopt
+				, rq::Texcoord{} } }
 		, m_program{ "RenderDepthQuad", renderSystem }
 	{
 		ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, "RenderDepthQuad" };
@@ -66,13 +73,9 @@ namespace castor3d
 		m_program.setSource( VK_SHADER_STAGE_FRAGMENT_BIT, std::move( pxl.shader ) );
 	}
 
-	RenderDepthQuad::~RenderDepthQuad()
-	{
-	}
-
 	void RenderDepthQuad::initialise()
 	{
-		m_program.initialise();
+		m_program.initialise( m_device );
 	}
 
 	void RenderDepthQuad::render( ashes::RenderPass const & renderPass
@@ -82,26 +85,26 @@ namespace castor3d
 		, TextureLayout const & texture )
 	{
 		cleanup();
-		auto & device = getCurrentRenderDevice( m_renderSystem );
-		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( "RenderDepthQuad" );
-		createPipeline( { size.getWidth(), size.getHeight() }
+		m_commandBuffer = m_device.graphicsCommandPool->createCommandBuffer( "RenderDepthQuad" );
+		createPipelineAndPass( { size.getWidth(), size.getHeight() }
 			, position
 			, m_program.getStates()
-			, texture.getDefaultView().getSampledView()
 			, renderPass
-			, {}
-			, {}
-			, ashes::PipelineDepthStencilStateCreateInfo{ 0u, false, false } );
+			, {
+				makeDescriptorWrite( texture.getDefaultView().getSampledView()
+					, m_sampler->getSampler()
+					, 0u ),
+			} );
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 		m_commandBuffer->beginRenderPass( renderPass
 			, frameBuffer
 			, { transparentBlackClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE );
-		registerFrame( *m_commandBuffer );
+		registerPass( *m_commandBuffer );
 		m_commandBuffer->endRenderPass();
 		m_commandBuffer->end();
 
-		device.graphicsQueue->submit( *m_commandBuffer, nullptr );
-		device.graphicsQueue->waitIdle();
+		m_device.graphicsQueue->submit( *m_commandBuffer, nullptr );
+		m_device.graphicsQueue->waitIdle();
 	}
 }

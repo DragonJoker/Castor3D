@@ -21,7 +21,7 @@ namespace castor3d
 	{
 	}
 
-	bool CpuParticleSystem::initialise()
+	bool CpuParticleSystem::initialise( RenderDevice const & device )
 	{
 		m_firstUnused = 1u;
 		m_particles.reserve( m_parent.getMaxParticlesCount() );
@@ -35,7 +35,7 @@ namespace castor3d
 		return doInitialise();
 	}
 
-	void CpuParticleSystem::cleanup()
+	void CpuParticleSystem::cleanup( RenderDevice const & device )
 	{
 		doCleanup();
 		m_particles.clear();
@@ -59,7 +59,7 @@ namespace castor3d
 
 	uint32_t CpuParticleSystem::update( castor3d::GpuUpdater & updater )
 	{
-		auto & device = getCurrentRenderDevice( *m_parent.getParent()->getScene() );
+		auto & device = updater.device;
 		auto & vbo = m_parent.getBillboards()->getVertexBuffer();
 		VkDeviceSize stride = m_inputs.stride();
 		auto mappedSize = ashes::getAlignedSize( VkDeviceSize( m_firstUnused * stride )

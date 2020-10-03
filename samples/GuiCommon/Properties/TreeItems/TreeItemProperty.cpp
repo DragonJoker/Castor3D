@@ -2,7 +2,7 @@
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
-#include <Castor3D/Event/Frame/FunctorEvent.hpp>
+#include <Castor3D/Event/Frame/CpuFunctorEvent.hpp>
 
 using namespace castor;
 using namespace castor3d;
@@ -13,11 +13,15 @@ namespace GuiCommon
 	{
 		eID_DELETE = 1
 	}	eID;
+	
+	TreeItemProperty::PropertyChangeHandler const TreeItemProperty::EmptyHandler = []( wxVariant const & ){};
 
-	TreeItemProperty::TreeItemProperty( castor3d::Engine * engine, bool p_editable, ePROPERTY_DATA_TYPE p_type )
+	TreeItemProperty::TreeItemProperty( castor3d::Engine * engine
+		, bool editable
+		, ePROPERTY_DATA_TYPE type )
 		: wxTreeItemData()
-		, m_type( p_type )
-		, m_editable( p_editable )
+		, m_type( type )
+		, m_editable( editable )
 		, m_engine( engine )
 		, m_menu( nullptr )
 	{
@@ -28,44 +32,49 @@ namespace GuiCommon
 		delete m_menu;
 	}
 
-	void TreeItemProperty::DisplayTreeItemMenu( wxWindow * p_window, wxCoord x, wxCoord y )
+	void TreeItemProperty::DisplayTreeItemMenu( wxWindow * window, wxCoord x, wxCoord y )
 	{
 		if ( m_editable && m_menu )
 		{
-			p_window->PopupMenu( m_menu );
+			window->PopupMenu( m_menu );
 		}
 	}
 
-	void TreeItemProperty::CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void TreeItemProperty::CreateProperties( wxPGEditor * editor
+		, wxPropertyGrid * grid )
 	{
-		doCreateProperties( p_editor, p_grid );
+		doCreateProperties( editor, grid );
 	}
 
-	void TreeItemProperty::onPropertyChange( wxPropertyGridEvent & p_event )
+	void TreeItemProperty::onPropertyChange( wxPropertyGridEvent & event )
 	{
-		doPropertyChange( p_event );
+		auto it = m_handlers.find( event.GetPropertyName() );
+
+		if ( it != m_handlers.end() )
+		{
+			auto handler = it->second;
+			auto value = event.GetValue();
+			m_engine->postEvent( makeCpuFunctorEvent( EventType::ePreRender
+				, [value, handler]()
+				{
+					handler( value );
+				} ) );
+		}
 	}
 
-	wxEnumProperty * TreeItemProperty::doCreateMaterialProperty( wxString const & p_name )
+	wxArrayString TreeItemProperty::getMaterialsList()
 	{
-		wxEnumProperty * material = new wxEnumProperty( p_name );
 		auto & cache = m_engine->getMaterialCache();
-		wxPGChoices choices;
+		wxArrayString choices;
 		using LockType = std::unique_lock< MaterialCache >;
 		LockType lock{ castor::makeUniqueLock( cache ) };
 
 		for ( auto pair : cache )
 		{
-			choices.Add( pair.first );
+			choices.push_back( pair.first );
 		}
 
-		material->SetChoices( choices );
-		return material;
-	}
-
-	void TreeItemProperty::doApplyChange( std::function< void() > p_functor )
-	{
-		m_engine->postEvent( makeFunctorEvent( EventType::ePreRender, p_functor ) );
+		return choices;
 	}
 
 	void TreeItemProperty::CreateTreeItemMenu()
@@ -80,5 +89,33 @@ namespace GuiCommon
 
 	void TreeItemProperty::doCreateTreeItemMenu()
 	{
+	}
+
+	wxPGProperty * TreeItemProperty::addProperty( wxPropertyGrid * grid
+		, wxString const & name )
+	{
+		return grid->Append( new wxPropertyCategory{ name } );
+	}
+
+	wxPGProperty * TreeItemProperty::addProperty( wxPropertyGrid * grid
+		, wxString const & name
+		, wxArrayString const & choices
+		, wxString const & selected
+		, PropertyChangeHandler handler )
+	{
+		wxPGProperty * prop = createProperty( grid, name, choices, handler );
+		prop->SetValue( selected );
+		return prop;
+	}
+
+	wxPGProperty * TreeItemProperty::addProperty( wxPropertyGrid * grid
+		, wxString const & name
+		, wxPGEditor * editor
+		, PropertyChangeHandler handler )
+	{
+		auto prop = grid->Append( new wxStringProperty{ _( "View shaders..." ), wxPG_LABEL, name } );
+		prop->SetEditor( editor );
+		prop->SetClientObject( new ButtonData{ handler } );
+		return prop;
 	}
 }

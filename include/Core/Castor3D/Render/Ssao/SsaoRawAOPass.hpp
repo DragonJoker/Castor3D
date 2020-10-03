@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/RenderInfo.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightPass.hpp"
-#include "Castor3D/Render/ToTexture/RenderQuad.hpp"
+#include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 
 #include <ShaderAST/Shader.hpp>
@@ -39,6 +39,7 @@ namespace castor3d
 		 *\param[in]	normals					Le tampon de normales.
 		 */
 		SsaoRawAOPass( Engine & engine
+			, RenderDevice const & device
 			, VkExtent2D const & size
 			, SsaoConfig const & config
 			, SsaoConfigUbo & ssaoConfigUbo
@@ -89,6 +90,7 @@ namespace castor3d
 			: castor3d::RenderQuad
 		{
 			RenderQuad( Engine & engine
+				, RenderDevice const & device
 				, ashes::RenderPass const & renderPass
 				, VkExtent2D const & size
 				, SsaoConfigUbo & ssaoConfigUbo
@@ -99,10 +101,6 @@ namespace castor3d
 			castor3d::ShaderModule vertexShader;
 			castor3d::ShaderModule pixelShader;
 
-		private:
-			void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-				, ashes::DescriptorSet & descriptorSet )override;
-
 			SsaoConfigUbo & m_ssaoConfigUbo;
 			GpInfoUbo const & m_gpInfoUbo;
 			ashes::ImageView const * m_depthView;
@@ -111,6 +109,7 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
+		RenderDevice const & m_device;
 		SsaoConfig const & m_ssaoConfig;
 		SsaoConfigUbo & m_ssaoConfigUbo;
 		GpInfoUbo const & m_gpInfoUbo;

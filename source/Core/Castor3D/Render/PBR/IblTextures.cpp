@@ -35,7 +35,7 @@ namespace castor3d
 {
 	namespace
 	{
-		ashes::ImagePtr doCreatePrefilteredBrdf( RenderSystem const & renderSystem
+		ashes::ImagePtr doCreatePrefilteredBrdf( RenderDevice const & device
 			, Size const & size )
 		{
 			ashes::ImageCreateInfo image
@@ -58,7 +58,6 @@ namespace castor3d
 #endif
 					| VK_IMAGE_USAGE_SAMPLED_BIT),
 			};
-			auto & device = getCurrentRenderDevice( renderSystem );
 			return makeImage( device
 				, std::move( image )
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
@@ -67,6 +66,7 @@ namespace castor3d
 
 #if !C3D_GenerateBRDFIntegration
 		ashes::ImageView doCreatePrefilteredBrdfView( Engine & engine
+			, RenderDevice const & device
 			, ashes::Image const & texture )
 		{
 			PxBufferBaseSPtr buffer;
@@ -90,7 +90,6 @@ namespace castor3d
 				, buffer->getFormat() );
 			auto result = texture.createView( VK_IMAGE_VIEW_TYPE_2D, texture.getFormat() );
 			auto & renderSystem = *engine.getRenderSystem();
-			auto & device = getCurrentRenderDevice( renderSystem );
 			auto staging = device->createStagingTexture( VK_FORMAT_R8G8B8A8_UNORM
 				, makeExtent2D( buffer->getDimensions() ) );
 			staging->uploadTextureData( *device.graphicsQueue
@@ -102,7 +101,8 @@ namespace castor3d
 		}
 #endif
 
-		SamplerSPtr doCreateSampler( Engine & engine )
+		SamplerSPtr doCreateSampler( Engine & engine
+			, RenderDevice const & device )
 		{
 			SamplerSPtr result;
 			auto name = cuT( "IblTexturesBRDF" );
@@ -122,7 +122,7 @@ namespace castor3d
 				engine.getSamplerCache().add( name, result );
 			}
 
-			result->initialise();
+			result->initialise( device );
 			return result;
 		}
 	}
@@ -130,18 +130,19 @@ namespace castor3d
 	//************************************************************************************************
 
 	IblTextures::IblTextures( Scene & scene
+		, RenderDevice const & device
 		, ashes::Image const & source
 		, SamplerSPtr sampler )
 		: OwnedBy< Scene >{ scene }
-		, m_prefilteredBrdf{ doCreatePrefilteredBrdf( *scene.getEngine()->getRenderSystem(), Size{ 512u, 512u } ) }
+		, m_prefilteredBrdf{ doCreatePrefilteredBrdf( device, Size{ 512u, 512u } ) }
 #if !C3D_GenerateBRDFIntegration
-		, m_prefilteredBrdfView{ doCreatePrefilteredBrdfView( *scene.getEngine(), *m_prefilteredBrdf ) }
+		, m_prefilteredBrdfView{ doCreatePrefilteredBrdfView( *scene.getEngine(), device, *m_prefilteredBrdf ) }
 #else
 		, m_prefilteredBrdfView{ m_prefilteredBrdf->createView( VK_IMAGE_VIEW_TYPE_2D, m_prefilteredBrdf->getFormat() ) }
 #endif
-		, m_sampler{ doCreateSampler( *scene.getEngine() ) }
-		, m_radianceComputer{ *scene.getEngine(), Size{ 32u, 32u }, source }
-		, m_environmentPrefilter{ *scene.getEngine(), Size{ 128u, 128u }, source, std::move( sampler ) }
+		, m_sampler{ doCreateSampler( *scene.getEngine(), device ) }
+		, m_radianceComputer{ *scene.getEngine(), device, Size{ 32u, 32u }, source }
+		, m_environmentPrefilter{ *scene.getEngine(), device, Size{ 128u, 128u }, source, std::move( sampler ) }
 	{
 #if C3D_GenerateBRDFIntegration
 		BrdfPrefilter filter{ *scene.getEngine()

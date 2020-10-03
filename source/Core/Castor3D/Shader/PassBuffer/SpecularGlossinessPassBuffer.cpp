@@ -57,8 +57,9 @@ namespace castor3d
 	}
 
 	SpecularGlossinessPassBuffer::SpecularGlossinessPassBuffer( Engine & engine
+		, RenderDevice const & device
 		, uint32_t count )
-		: PassBuffer{ engine, count, DataSize }
+		: PassBuffer{ engine, device, count, DataSize }
 		, m_data{ doBindData( m_buffer.getPtr(), count ) }
 	{
 	}

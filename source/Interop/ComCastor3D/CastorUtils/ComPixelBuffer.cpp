@@ -38,29 +38,6 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CPixelBuffer::Mirror()
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( m_buffer )
-		{
-			m_buffer->mirror();
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::dispatchError(
-					 E_FAIL,								// This represents the error
-					 IID_IPixelBuffer,						// This is the GUID of PixelComponents throwing error
-					 _T( "Mirror" ),						// This is generally displayed as the title
-					 ERROR_UNINITIALISED_BUFFER.c_str(),	// This is the description
-					 0,										// This is the context in the help file
-					 nullptr );
-		}
-
-		return hr;
-	}
-
 	STDMETHODIMP CPixelBuffer::Initialise( /* [in] */ ISize * size, /* [in] */ ePIXEL_FORMAT format )
 	{
 		HRESULT hr = E_FAIL;

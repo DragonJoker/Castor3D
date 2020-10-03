@@ -139,7 +139,7 @@ namespace castor3d
 		}
 	}
 
-	void ShadowMapDirectional::doInitialiseFramebuffers()
+	void ShadowMapDirectional::doInitialiseFramebuffers( RenderDevice const & device )
 	{
 		VkExtent2D const size
 		{
@@ -151,6 +151,12 @@ namespace castor3d
 		auto & variance = m_result[SmTexture::eVariance].getTexture()->getArray2D();
 		auto & position = m_result[SmTexture::ePosition].getTexture()->getArray2D();
 		auto & flux = m_result[SmTexture::eFlux].getTexture()->getArray2D();
+
+		m_blur = std::make_unique< GaussianBlur >( *getEngine()
+			, device
+			, "ShadowMapDirectional"
+			, *variance.view->view
+			, 5u );
 
 		for ( uint32_t cascade = 0u; cascade < m_passes.size(); ++cascade )
 		{
@@ -171,25 +177,21 @@ namespace castor3d
 			attaches.emplace_back( frameBuffer.fluxView );
 			frameBuffer.frameBuffer = renderPass.createFrameBuffer( debugName, size, std::move( attaches ) );
 
-			frameBuffer.blur = std::make_unique< GaussianBlur >( *getEngine()
-				, debugName
-				, *variance.layers[cascade].view
-				, 5u );
-			frameBuffer.blurCommands = frameBuffer.blur->getCommands( true );
+			frameBuffer.blurCommands = m_blur->getCommands( true, cascade );
 		}
 	}
 
-	void ShadowMapDirectional::doInitialise()
+	void ShadowMapDirectional::doInitialise( RenderDevice const & device )
 	{
-		doInitialiseFramebuffers();
-		auto & device = getCurrentRenderDevice( *getEngine() );
+		doInitialiseFramebuffers( device );
 		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( m_name );
 	}
 
-	void ShadowMapDirectional::doCleanup()
+	void ShadowMapDirectional::doCleanup( RenderDevice const & device )
 	{
 		m_commandBuffer.reset();
 		m_frameBuffers.clear();
+		m_blur.reset();
 	}
 
 	bool ShadowMapDirectional::isUpToDate( uint32_t index )const
@@ -202,7 +204,8 @@ namespace castor3d
 			} );
 	}
 
-	ashes::Semaphore const & ShadowMapDirectional::doRender( ashes::Semaphore const & toWait
+	ashes::Semaphore const & ShadowMapDirectional::doRender( RenderDevice const & device
+		, ashes::Semaphore const & toWait
 		, uint32_t index )
 	{
 		auto & myTimer = m_passes[0].pass->getTimer();
@@ -243,7 +246,6 @@ namespace castor3d
 
 		m_commandBuffer->endDebugBlock();
 		m_commandBuffer->end();
-		auto & device = getCurrentRenderDevice( *getEngine() );
 		auto * result = &toWait;
 		device.graphicsQueue->submit( *m_commandBuffer
 			, *result

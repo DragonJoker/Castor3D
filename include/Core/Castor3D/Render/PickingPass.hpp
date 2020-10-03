@@ -65,7 +65,8 @@ namespace castor3d
 		 *\param[in]	camera		La caméra regardant la scène.
 		 *\return		PickingPass::PickNodeType si rien n'a été pické.
 		 */
-		C3D_API PickNodeType pick( castor::Position position
+		C3D_API PickNodeType pick( RenderDevice const & device
+			, castor::Position position
 			, Camera const & camera );
 		/**
 		*\~english
@@ -111,7 +112,8 @@ namespace castor3d
 
 	private:
 		void doUpdateNodes( SceneCulledRenderNodes & nodes );
-		castor::Point4f doFboPick( castor::Position const & position
+		castor::Point4f doFboPick( RenderDevice const & device
+			, castor::Position const & position
 			, Camera const & camera
 			, ashes::CommandBuffer const & commandBuffer );
 		PickNodeType doPick( castor::Point4f const & pixel
@@ -143,11 +145,12 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doInitialise
 		 */
-		bool doInitialise( castor::Size const & size )override;
+		bool doInitialise( RenderDevice const & device
+			, castor::Size const & size )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doCleanup
 		 */
-		void doCleanup()override;
+		void doCleanup( RenderDevice const & device )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doFillUboDescriptor
 		 */

@@ -202,14 +202,14 @@ namespace castor3d
 		m_sceneUbo.cpuUpdate( *camera.getScene(), &camera );
 	}
 
-	bool RenderTechniquePass::doInitialise( Size const & CU_UnusedParam( size ) )
+	bool RenderTechniquePass::doInitialise( RenderDevice const & device
+		, Size const & CU_UnusedParam( size ) )
 	{
-		auto & device = getCurrentRenderDevice( *this );
 		m_finished = device->createSemaphore( getName() );
 		return true;
 	}
 
-	void RenderTechniquePass::doCleanup()
+	void RenderTechniquePass::doCleanup( RenderDevice const & device )
 	{
 		m_renderQueue.cleanup();
 		m_finished.reset();

@@ -106,7 +106,7 @@ namespace Bloom
 				, image
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, cuT( "BloomCombineResult" ) );
-			texture->initialise();
+			texture->initialise( device );
 			return texture;
 		}
 

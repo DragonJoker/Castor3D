@@ -223,7 +223,11 @@ namespace GuiCommon
 		{
 			for ( size_t i = 0; i < Count; ++i )
 			{
-				p_prop->AddPrivateChild( CreateProperty( p_names[i], p_value[i] ) );
+				wxPGProperty * prop = CreateProperty( p_names[i], p_value[i] );
+				prop->SetEditor( wxPGEditor_SpinCtrl );
+				prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
+				prop->SetAttribute( wxPG_ATTR_SPINCTRL_MOTION, WXVARIANT( true ) );
+				p_prop->AddPrivateChild( prop );
 			}
 		}
 		static void refreshChildren( PointProperty< T, Count > * p_prop )
@@ -232,13 +236,13 @@ namespace GuiCommon
 
 			for ( size_t i = 0; i < Count; ++i )
 			{
-				p_prop->Item( i )->SetValue( setValue( point[i] ) );
+				p_prop->Item( i )->SetValue( getVariant< T >( point[i] ) );
 			}
 		}
 		static wxVariant childChanged( wxVariant & p_thisValue, int p_index, wxVariant & p_newValue )
 		{
 			castor::Point< T, Count > & point = PointRefFromVariant< T, Count >( p_thisValue );
-			T val = getValue< T >( p_newValue );
+			T val = variantCast< T >( p_newValue );
 
 			switch ( p_index )
 			{

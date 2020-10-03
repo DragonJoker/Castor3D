@@ -34,7 +34,7 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	renderSystem	Le RenderSystem.
 		 */
-		C3D_API explicit BillboardUboPools( RenderSystem & renderSystem );
+		C3D_API explicit BillboardUboPools( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Updates the UBO pools data.
@@ -71,7 +71,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Vide les pools.
 		 */
-		C3D_API void clear();
+		C3D_API void clear( RenderDevice const & device );
 
 	private:
 		PoolsEntry doCreateEntry( BillboardBase const & billboard
@@ -80,10 +80,11 @@ namespace castor3d
 			, Pass const & pass );
 
 	private:
-		RenderSystem & m_renderSystem;
+		RenderDevice const & m_device;
 		std::map< size_t, PoolsEntry > m_entries;
 		std::map< BillboardBase *, OnBillboardMaterialChangedConnection > m_connections;
 		RenderPassTimerSPtr m_updateTimer;
+		std::shared_ptr< BillboardUboPools > m_billboardPools;
 	};
 }
 

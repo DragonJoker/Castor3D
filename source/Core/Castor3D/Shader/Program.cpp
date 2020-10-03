@@ -133,12 +133,10 @@ namespace castor3d
 	{
 	}
 
-	bool ShaderProgram::initialise()
+	bool ShaderProgram::initialise( RenderDevice const & device )
 	{
 		if ( m_states.empty() )
 		{
-			auto & device = getCurrentRenderDevice( *this );
-
 			auto loadShader = [this, &device]( VkShaderStageFlagBits stage )
 			{
 				static std::map< VkShaderStageFlagBits, std::string > type
@@ -191,7 +189,7 @@ namespace castor3d
 		return m_states.size() == m_modules.size();
 	}
 
-	void ShaderProgram::cleanup()
+	void ShaderProgram::cleanup( RenderDevice const & device )
 	{
 		m_states.clear();
 	}

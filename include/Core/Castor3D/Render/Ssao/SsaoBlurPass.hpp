@@ -10,7 +10,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
-#include "Castor3D/Render/ToTexture/RenderQuad.hpp"
+#include "Castor3D/Render/Passes/RenderQuad.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
 
@@ -47,6 +47,7 @@ namespace castor3d
 		 *\param[in]	normals			Le tampon de normales.
 		 */
 		SsaoBlurPass( Engine & engine
+			, RenderDevice const & device
 			, castor::String const & prefix
 			, VkExtent2D const & size
 			, SsaoConfig const & config
@@ -96,11 +97,6 @@ namespace castor3d
 			return m_result;
 		}
 		/**@}*/
-
-	private:
-		void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-			, ashes::DescriptorSet & descriptorSet )override;
-		void doRegisterFrame( ashes::CommandBuffer & commandBuffer )const override;
 
 	public:
 		static VkFormat constexpr ResultFormat = VK_FORMAT_R8G8B8A8_UNORM;

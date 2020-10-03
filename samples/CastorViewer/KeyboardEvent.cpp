@@ -13,7 +13,7 @@ using namespace castor;
 namespace CastorViewer
 {
 	KeyboardEvent::KeyboardEvent( RenderWindowSPtr p_window )
-		: FrameEvent( EventType::ePreRender )
+		: CpuFrameEvent( EventType::ePreRender )
 		, m_window( p_window )
 	{
 	}
@@ -22,7 +22,7 @@ namespace CastorViewer
 	{
 	}
 
-	bool KeyboardEvent::apply()
+	void KeyboardEvent::apply()
 	{
 		RenderWindowSPtr pWindow = m_window.lock();
 
@@ -30,7 +30,5 @@ namespace CastorViewer
 		{
 			pWindow->enableFullScreen( !pWindow->isFullscreen() );
 		}
-
-		return true;
 	}
 }

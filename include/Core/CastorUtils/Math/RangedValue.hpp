@@ -417,6 +417,19 @@ namespace castor
 		return lhs.value() / rhs.value();
 	}
 	/**@}*/
+	
+	template< typename T >
+	struct IsRangedValue : std::false_type
+	{
+	};
+
+	template< typename T >
+	struct IsRangedValue< RangedValue< T > > : std::true_type
+	{
+	};
+
+	template< typename T >
+	static inline bool constexpr isRangedValueT = IsRangedValue< T >::value;
 }
 
 #endif

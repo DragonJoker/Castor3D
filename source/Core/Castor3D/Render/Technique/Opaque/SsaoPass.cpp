@@ -35,11 +35,12 @@ namespace castor3d
 	{
 	}
 
-	void SsaoPass::initialise()
+	void SsaoPass::initialise( RenderDevice const & device )
 	{
-		m_matrixUbo.initialise();
+		m_matrixUbo.initialise( device );
 		m_ssaoConfigUbo = std::make_shared< SsaoConfigUbo >( m_engine );
 		m_rawAoPass = std::make_shared< SsaoRawAOPass >( m_engine
+			, device
 			, m_size
 			, m_ssaoConfig
 			, *m_ssaoConfigUbo
@@ -48,6 +49,7 @@ namespace castor3d
 			, m_gpResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView() );
 #if !C3D_DebugRawPass
 		m_horizontalBlur = std::make_shared< SsaoBlurPass >( m_engine
+			, device
 			, cuT( "Horizontal" )
 			, m_size
 			, m_ssaoConfig
@@ -57,6 +59,7 @@ namespace castor3d
 			, m_rawAoPass->getResult()
 			, m_gpResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView() );
 		m_verticalBlur = std::make_shared< SsaoBlurPass >( m_engine
+			, device
 			, cuT( "Vertical" )
 			, m_size
 			, m_ssaoConfig
@@ -68,14 +71,14 @@ namespace castor3d
 #endif
 	}
 
-	void SsaoPass::cleanup()
+	void SsaoPass::cleanup( RenderDevice const & device )
 	{
 		m_verticalBlur.reset();
 		m_horizontalBlur.reset();
 		m_rawAoPass.reset();
-		m_ssaoConfigUbo->cleanup();
+		m_ssaoConfigUbo->cleanup( device );
 		m_ssaoConfigUbo.reset();
-		m_matrixUbo.cleanup();
+		m_matrixUbo.cleanup( device );
 	}
 
 	void SsaoPass::update( CpuUpdater & updater )

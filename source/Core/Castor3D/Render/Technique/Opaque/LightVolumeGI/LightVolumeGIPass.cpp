@@ -196,7 +196,8 @@ namespace castor3d
 			return sampler;
 		}
 
-		ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
+		ashes::RenderPassPtr doCreateRenderPass( castor::String const & name
+			, RenderDevice const & device
 			, VkFormat format )
 		{
 			ashes::VkAttachmentDescriptionArray attaches
@@ -254,36 +255,56 @@ namespace castor3d
 				std::move( subpasses ),
 				std::move( dependencies ),
 			};
-			auto result = device->createRenderPass( "VplGI"
+			auto result = device->createRenderPass( name
 				, std::move( createInfo ) );
 			return result;
 		}
 
-		ashes::FrameBufferPtr doCreateFrameBuffer( ashes::RenderPass const & renderPass
+		ashes::FrameBufferPtr doCreateFrameBuffer( castor::String const & name
+			, ashes::RenderPass const & renderPass
 			, ashes::ImageView const & view )
 		{
 			ashes::ImageViewCRefArray attaches;
 			attaches.emplace_back( view );
 			auto size = view.image->getDimensions();
-			return renderPass.createFrameBuffer( "VplGI"
+			return renderPass.createFrameBuffer( name
 				, VkExtent2D{ size.width, size.height }
 				, std::move( attaches ) );
+		}
+
+		rq::BindingDescriptionArray createBindings()
+		{
+			return
+			{
+				{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, std::nullopt },
+				{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, std::nullopt },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
+			};
 		}
 	}
 
 	//*********************************************************************************************
 
 	LightVolumeGIPass::LightVolumeGIPass( Engine & engine
+		, RenderDevice const & device
+		, castor::String const & prefix
 		, LightType lightType
 		, GpInfoUbo const & gpInfo
 		, LpvConfigUbo const & lpvConfigUbo
 		, OpaquePassResult const & gpResult
 		, LightVolumePassResult const & lpResult
 		, TextureUnit const & dst )
-		: RenderQuad{ *engine.getRenderSystem()
-			, castor3d::getName( lightType ) + "VplGI"
+		: RenderQuad{ device
+			, prefix + "GIResolve"
 			, VK_FILTER_LINEAR
-			, { ashes::nullopt, RenderQuadConfig::Texcoord{}, BlendMode::eAdditive } }
+			, { createBindings()
+				, ashes::nullopt
+				, rq::Texcoord{}
+				, BlendMode::eAdditive } }
 		, m_gpInfo{ gpInfo }
 		, m_lpvConfigUbo{ lpvConfigUbo }
 		, m_gpResult{ gpResult }
@@ -291,64 +312,57 @@ namespace castor3d
 		, m_result{ dst }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram() }
-		, m_renderPass{ doCreateRenderPass( getCurrentRenderDevice( m_renderSystem )
+		, m_renderPass{ doCreateRenderPass( getName()
+			, device
 			, m_result.getTexture()->getPixelFormat() ) }
-		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass
+		, m_frameBuffer{ doCreateFrameBuffer( getName()
+			, *m_renderPass
 			, m_result.getTexture()->getDefaultView().getTargetView() ) }
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Light Propagation Volumes" ), cuT( "GI Resolve" ) ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( engine, m_device, cuT( "Light Propagation Volumes" ), cuT( "GI Resolve" ) ) }
 	{
-		auto & device = getCurrentRenderDevice( m_renderSystem );
 		ashes::PipelineShaderStageCreateInfoArray shaderStages;
-		shaderStages.push_back( makeShaderState( device, m_vertexShader ) );
-		shaderStages.push_back( makeShaderState( device, m_pixelShader ) );
-
-		ashes::VkDescriptorSetLayoutBindingArray bindings
-		{
-			makeDescriptorSetLayoutBinding( GpInfoUboIdx
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-			makeDescriptorSetLayoutBinding( LIUboIdx
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-			makeDescriptorSetLayoutBinding( DepthMapIdx
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-			makeDescriptorSetLayoutBinding( Data1MapIdx
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-			makeDescriptorSetLayoutBinding( RLpvAccumIdx
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-			makeDescriptorSetLayoutBinding( GLpvAccumIdx
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-		};
-		this->createPipeline( { m_result.getTexture()->getDimensions().width, m_result.getTexture()->getDimensions().height }
+		shaderStages.push_back( makeShaderState( m_device, m_vertexShader ) );
+		shaderStages.push_back( makeShaderState( m_device, m_pixelShader ) );
+		createPipelineAndPass( { m_result.getTexture()->getDimensions().width, m_result.getTexture()->getDimensions().height }
 			, {}
 			, shaderStages
-			, m_lpResult[LpvTexture::eB].getTexture()->getDefaultView().getSampledView()
 			, *m_renderPass
-			, std::move( bindings )
+			, {
+				makeDescriptorWrite( m_gpInfo.getUbo(), GpInfoUboIdx ),
+				makeDescriptorWrite( m_lpvConfigUbo.getUbo(), LIUboIdx ),
+				makeDescriptorWrite( m_gpResult[DsTexture::eDepth].getTexture()->getDefaultView().getSampledView()
+					, m_gpResult[DsTexture::eDepth].getSampler()->getSampler()
+					, DepthMapIdx ),
+				makeDescriptorWrite( m_gpResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView()
+					, m_gpResult[DsTexture::eData1].getSampler()->getSampler()
+					, Data1MapIdx ),
+				makeDescriptorWrite( m_lpResult[LpvTexture::eR].getTexture()->getDefaultView().getSampledView()
+					, m_lpResult[LpvTexture::eR].getSampler()->getSampler()
+					, RLpvAccumIdx ),
+				makeDescriptorWrite( m_lpResult[LpvTexture::eG].getTexture()->getDefaultView().getSampledView()
+					, m_lpResult[LpvTexture::eG].getSampler()->getSampler()
+					, GLpvAccumIdx ),
+				makeDescriptorWrite( m_lpResult[LpvTexture::eB].getTexture()->getDefaultView().getSampledView()
+					, m_lpResult[LpvTexture::eB].getSampler()->getSampler()
+					, BLpvAccumIdx ),
+			}
 			, {} );
-		auto commands = getCommands( *m_timer, 0u );
-		m_commandBuffer = std::move( commands.commandBuffer );
-		m_finished = std::move( commands.semaphore );
+		m_commands = getCommands( *m_timer, 0u );
 	}
 
 	ashes::Semaphore const & LightVolumeGIPass::compute( ashes::Semaphore const & toWait )const
 	{
 		auto & renderSystem = m_renderSystem;
-		auto & device = getCurrentRenderDevice( renderSystem );
 		RenderPassTimerBlock timerBlock{ m_timer->start() };
 		timerBlock->notifyPassRender();
 		auto * result = &toWait;
 
-		device.graphicsQueue->submit( *m_commandBuffer
+		m_device.graphicsQueue->submit( *m_commands.commandBuffer
 			, toWait
 			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, *m_finished
+			, *m_commands.semaphore
 			, nullptr );
-		result = m_finished.get();
+		result = m_commands.semaphore.get();
 
 		return *result;
 	}
@@ -356,11 +370,10 @@ namespace castor3d
 	CommandsSemaphore LightVolumeGIPass::getCommands( RenderPassTimer const & timer
 		, uint32_t index )const
 	{
-		auto & device = getCurrentRenderDevice( m_renderSystem );
 		castor3d::CommandsSemaphore commands
 		{
-			device.graphicsCommandPool->createCommandBuffer( getName() ),
-			device->createSemaphore( getName() )
+			m_device.graphicsCommandPool->createCommandBuffer( getName() ),
+			m_device->createSemaphore( getName() )
 		};
 		auto & cmd = *commands.commandBuffer;
 
@@ -371,14 +384,14 @@ namespace castor3d
 		timer.beginPass( cmd, index );
 		cmd.beginDebugBlock(
 			{
-				"Lighting - LPV GI",
+				"Lighting - " + getName(),
 				castor3d::makeFloatArray( m_renderSystem.getEngine()->getNextRainbowColour() ),
 			} );
 		cmd.beginRenderPass( *m_renderPass
 			, *m_frameBuffer
 			, { castor3d::transparentBlackClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE );
-		registerFrame( cmd );
+		registerPass( cmd );
 		cmd.endRenderPass();
 		cmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 			, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
@@ -394,30 +407,5 @@ namespace castor3d
 	{
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );
-	}
-
-	void LightVolumeGIPass::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-		, ashes::DescriptorSet & descriptorSet )
-	{
-		m_gpInfo.createSizedBinding( descriptorSet
-			, descriptorSetLayout.getBinding( GpInfoUboIdx ) );
-		m_lpvConfigUbo.createSizedBinding( descriptorSet
-			, descriptorSetLayout.getBinding( LIUboIdx ) );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( DepthMapIdx )
-			, m_gpResult[DsTexture::eDepth].getTexture()->getDefaultView().getSampledView()
-			, m_gpResult[DsTexture::eDepth].getSampler()->getSampler() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( Data1MapIdx )
-			, m_gpResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView()
-			, m_gpResult[DsTexture::eData1].getSampler()->getSampler() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( RLpvAccumIdx )
-			, m_lpResult[LpvTexture::eR].getTexture()->getDefaultView().getSampledView()
-			, m_lpResult[LpvTexture::eR].getSampler()->getSampler() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( GLpvAccumIdx )
-			, m_lpResult[LpvTexture::eG].getTexture()->getDefaultView().getSampledView()
-			, m_lpResult[LpvTexture::eG].getSampler()->getSampler() );
-	}
-
-	void LightVolumeGIPass::doRegisterFrame( ashes::CommandBuffer & commandBuffer )const
-	{
 	}
 }

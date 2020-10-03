@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include <Castor3D/Buffer/UniformBuffer.hpp>
 #include <Castor3D/Render/PostEffect/PostEffect.hpp>
 #include <Castor3D/Render/PostEffect/PostEffectSurface.hpp>
-#include <Castor3D/Render/ToTexture/RenderQuad.hpp>
+#include <Castor3D/Render/Passes/RenderQuad.hpp>
 #include <Castor3D/Material/Texture/TextureUnit.hpp>
 
 #include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
@@ -30,8 +30,14 @@ namespace film_grain
 
 	public:
 		explicit RenderQuad( castor3d::RenderSystem & renderSystem
+			, castor3d::RenderDevice const & device
 			, VkExtent2D const & size );
 		void update( castor3d::CpuUpdater & updater );
+
+		inline ashes::ImageView const & getNoiseView()const
+		{
+			return m_noiseView;
+		}
 
 		inline castor3d::UniformBufferOffsetT< Configuration > const & getUbo()const
 		{
@@ -42,10 +48,6 @@ namespace film_grain
 		{
 			return m_configUbo;
 		}
-
-	private:
-		void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-			, ashes::DescriptorSet & descriptorSet )override;
 
 	private:
 		uint64_t m_time{ 0ull };
@@ -80,11 +82,12 @@ namespace film_grain
 		/**
 		 *\copydoc		castor3d::PostEffect::doInitialise
 		 */
-		bool doInitialise( castor3d::RenderPassTimer const & timer )override;
+		bool doInitialise( castor3d::RenderDevice const & device
+			, castor3d::RenderPassTimer const & timer )override;
 		/**
 		 *\copydoc		castor3d::PostEffect::doCleanup
 		 */
-		void doCleanup()override;
+		void doCleanup( castor3d::RenderDevice const & device )override;
 		/**
 		 *\copydoc		castor3d::PostEffect::doWriteInto
 		 */

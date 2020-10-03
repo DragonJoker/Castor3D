@@ -50,6 +50,19 @@ namespace castor3d
 			forMipView( function );
 			forEachLeafView( function );
 		}
+
+		template< typename FuncT >
+		void forEachFirstMipView( FuncT function )const
+		{
+			if ( !levels.empty() )
+			{
+				function( *levels.begin() );
+			}
+			else
+			{
+				forMipView( function );
+			}
+		}
 	};
 
 	struct CubeView
@@ -66,6 +79,12 @@ namespace castor3d
 			{
 				face.forEachView( function );
 			}
+		}
+		
+		template< typename FuncT >
+		void forEachFirstMipView( FuncT function )const
+		{
+			view.forEachFirstMipView( function );
 		}
 
 		template< typename FuncT >
@@ -94,6 +113,15 @@ namespace castor3d
 		}
 
 		template< typename FuncT >
+		void forEachFirstMipView( FuncT function )const
+		{
+			for ( auto & layer : layers )
+			{
+				layer.forEachFirstMipView( function );
+			}
+		}
+
+		template< typename FuncT >
 		void forEachLeafView( FuncT function )const
 		{
 			for ( auto & layer : layers )
@@ -115,6 +143,15 @@ namespace castor3d
 			for ( auto & slice : slices )
 			{
 				slice.forEachView( function );
+			}
+		}
+
+		template< typename FuncT >
+		void forEachFirstMipView( FuncT function )const
+		{
+			for ( auto & slice : slices )
+			{
+				slice.forEachFirstMipView( function );
 			}
 		}
 
@@ -176,7 +213,7 @@ namespace castor3d
 		 *\brief		Initialise la texture et toutes ses vues.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool initialise();
+		C3D_API bool initialise( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Cleans up the texture and all its views.
@@ -190,7 +227,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Génère les mipmaps de la texture
 		 */
-		C3D_API void generateMipmaps()const;
+		C3D_API void generateMipmaps( RenderDevice const & device )const;
 		/**
 		 *\name Whole texture access.
 		 **/
@@ -636,6 +673,27 @@ namespace castor3d
 			else if ( !m_sliceView.slices.empty() )
 			{
 				m_sliceView.forEachView( function );
+			}
+		}
+		
+		template< typename FuncT >
+		void forEachFirstMipView( FuncT function )const
+		{
+			if ( !m_cubeView.layers.empty() )
+			{
+				m_cubeView.forEachFirstMipView( function );
+			}
+			else if ( !m_arrayView.layers.empty() )
+			{
+				m_arrayView.forEachFirstMipView( function );
+			}
+			else if ( !m_sliceView.slices.empty() )
+			{
+				m_sliceView.forEachFirstMipView( function );
+			}
+			else
+			{
+				m_defaultView.forEachFirstMipView( function );
 			}
 		}
 

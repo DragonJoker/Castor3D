@@ -1,7 +1,7 @@
 #include "Castor3D/Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Event/Frame/FunctorEvent.hpp"
+#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Animation/MeshAnimation.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
@@ -58,8 +58,8 @@ namespace castor3d
 	{
 		if ( &cur != m_cur )
 		{
-			getOwner()->getAnimatedMesh().getMesh().getScene()->getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
-				, [this, cur, prv]()
+			getOwner()->getAnimatedMesh().getMesh().getScene()->getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+				, [this, cur, prv]( RenderDevice const & device )
 				{
 					auto & vertexBuffer = m_animationObject.getSubmesh().getVertexBuffer();
 					auto & animBuffer = m_animationObject.getComponent().getAnimationBuffer();

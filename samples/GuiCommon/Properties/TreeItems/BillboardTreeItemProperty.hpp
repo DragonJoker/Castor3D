@@ -57,14 +57,6 @@ namespace GuiCommon
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
 		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
-		/**
-		 *\copydoc GuiCommon::TreeItemProperty::doPropertyChange
-		 */
-		virtual void doPropertyChange( wxPropertyGridEvent & p_event );
-
-	private:
-		void OnMaterialChange( castor::String const & p_name );
-		void OnSizeChange( castor::Point2f const & p_size );
 
 	private:
 		castor3d::BillboardList & m_billboard;

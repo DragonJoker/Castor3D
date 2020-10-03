@@ -2,6 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
+#include "Castor3D/Cache/BillboardCache.hpp"
 #include "Castor3D/Cache/BillboardUboPools.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Render/RenderLoop.hpp"
@@ -207,9 +208,8 @@ namespace castor3d
 	{
 	}
 
-	bool ParticleSystem::initialise()
+	bool ParticleSystem::initialise( RenderDevice const & device )
 	{
-		auto & device = getCurrentRenderDevice( *this );
 		ashes::VkVertexInputBindingDescriptionArray bindings
 		{
 			{ 1u, m_inputs.stride(), VK_VERTEX_INPUT_RATE_INSTANCE }
@@ -247,12 +247,12 @@ namespace castor3d
 		m_particlesBillboard->setBillboardType( BillboardType::eSpherical );
 		m_particlesBillboard->setDimensions( m_dimensions );
 		m_particlesBillboard->setMaterial( m_material.lock() );
-		bool result = m_particlesBillboard->initialise( m_particlesCount );
-		getScene()->getBillboardPools().registerElement( *m_particlesBillboard );
+		bool result = m_particlesBillboard->initialise( device, m_particlesCount );
+		getScene()->getBillboardListCache().getUboPools().registerElement( *m_particlesBillboard );
 
 		if ( result )
 		{
-			result = m_csImpl->initialise();
+			result = m_csImpl->initialise( device );
 		}
 
 		if ( result )
@@ -262,7 +262,7 @@ namespace castor3d
 		}
 		else
 		{
-			result = m_cpuImpl->initialise();
+			result = m_cpuImpl->initialise( device );
 
 			if ( result )
 			{
@@ -275,13 +275,13 @@ namespace castor3d
 		return result;
 	}
 
-	void ParticleSystem::cleanup()
+	void ParticleSystem::cleanup( RenderDevice const & device )
 	{
-		getScene()->getBillboardPools().unregisterElement( *m_particlesBillboard );
-		m_particlesBillboard->cleanup();
+		getScene()->getBillboardListCache().getUboPools().unregisterElement( *m_particlesBillboard );
+		m_particlesBillboard->cleanup( device );
 		m_particlesBillboard.reset();
-		m_csImpl->cleanup();
-		m_cpuImpl->cleanup();
+		m_csImpl->cleanup( device );
+		m_cpuImpl->cleanup( device );
 		m_impl = nullptr;
 	}
 

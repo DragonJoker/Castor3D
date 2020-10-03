@@ -91,6 +91,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	LightVolumePassResult::LightVolumePassResult( Engine & engine
+		, RenderDevice const & device
 		, castor::String const & prefix
 		, uint32_t size )
 		: GBufferT< LpvTexture >
@@ -102,7 +103,7 @@ namespace castor3d
 			{ size, size, size },
 		}
 	{
-		initialise();
+		initialise( device );
 	}
 
 	//*********************************************************************************************

@@ -76,15 +76,22 @@ namespace smaa
 	//*********************************************************************************************
 
 	EdgeDetection::EdgeDetection( castor3d::RenderTarget & renderTarget
-		, SmaaConfig const & config )
-		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), cuT( "SmaaEdgeDetection" ), VK_FILTER_LINEAR, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
+		, castor3d::RenderDevice const & device
+		, SmaaConfig const & config
+		, castor3d::rq::BindingDescriptionArray const & bindings )
+		: castor3d::RenderQuad{ device
+			, cuT( "SmaaEdgeDetection" )
+			, VK_FILTER_LINEAR
+			, { bindings
+				, ashes::nullopt
+				, castor3d::rq::Texcoord{} } }
 		, m_config{ config }
 		, m_surface{ *renderTarget.getEngine(), getName() }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName() }
 	{
 		static constexpr VkFormat colourFormat = VK_FORMAT_R8G8B8A8_UNORM;
-		static const VkFormat depthFormat = renderTarget.getEngine()->getRenderSystem()->getMainRenderDevice()->selectSuitableStencilFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT );
+		const VkFormat depthFormat = m_device.selectSuitableStencilFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT );
 
 		VkExtent2D size{ renderTarget.getSize().getWidth()
 			, renderTarget.getSize().getHeight() };
@@ -154,11 +161,11 @@ namespace smaa
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		auto & device = getCurrentRenderDevice( m_renderSystem );
-		m_renderPass = device->createRenderPass( getName()
+		m_renderPass = m_device->createRenderPass( getName()
 			, std::move( createInfo ) );
 
-		m_surface.initialise( *m_renderPass
+		m_surface.initialise( m_device
+			, *m_renderPass
 			, renderTarget.getSize()
 			, colourFormat
 			, depthFormat );

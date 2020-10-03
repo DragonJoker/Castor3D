@@ -33,11 +33,11 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::ParticleSystemImpl::initialise
 		 */
-		C3D_API bool initialise()override;
+		C3D_API bool initialise( RenderDevice const & device )override;
 		/**
 		 *\copydoc		castor3d::ParticleSystemImpl::cleanup
 		 */
-		C3D_API void cleanup()override;
+		C3D_API void cleanup( RenderDevice const & device )override;
 		/**
 		 *\copydoc		castor3d::ParticleSystemImpl::override
 		 */

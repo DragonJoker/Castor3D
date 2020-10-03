@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Cache/CacheBase.hpp"
 #include "Castor3D/Material/MaterialModule.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBufferModule.hpp"
 #include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBufferModule.hpp"
 
@@ -80,7 +81,8 @@ namespace castor3d
 		 *\~french
 		 *\brief		Initialise le matériau par défaut.
 		 */
-		C3D_API void initialise( MaterialType type );
+		C3D_API void initialise( RenderDevice const & device
+			, MaterialType type );
 		/**
 		 *\~english
 		 *\brief		Sets all the elements to be cleaned up.

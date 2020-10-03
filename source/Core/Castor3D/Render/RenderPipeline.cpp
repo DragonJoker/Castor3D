@@ -1,7 +1,6 @@
 #include "Castor3D/Render/RenderPipeline.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Event/Frame/FunctorEvent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -44,7 +43,8 @@ namespace castor3d
 	{
 	}
 
-	void RenderPipeline::initialise( ashes::RenderPass const & renderPass )
+	void RenderPipeline::initialise( RenderDevice const & device
+		, ashes::RenderPass const & renderPass )
 	{
 		ashes::VkVertexInputBindingDescriptionArray bindings;
 		ashes::VkVertexInputAttributeDescriptionArray attributes;
@@ -69,7 +69,7 @@ namespace castor3d
 			}
 		}
 
-		m_program->initialise();
+		m_program->initialise( device );
 		ashes::VkDynamicStateArray dynamicStates;
 		ashes::VkViewportArray viewports;
 		ashes::VkScissorArray scissors;
@@ -99,7 +99,6 @@ namespace castor3d
 			dynamicState = ashes::PipelineDynamicStateCreateInfo{ 0u, std::move( dynamicStates ) };
 		}
 
-		auto & device = getCurrentRenderDevice( *this );
 		m_pipelineLayout = device->createPipelineLayout( "RenderPipeline"
 			, descriptorLayouts
 			, m_pushConstantRanges );
@@ -123,7 +122,7 @@ namespace castor3d
 			, std::move( createInfo ) );
 	}
 
-	void RenderPipeline::cleanup()
+	void RenderPipeline::cleanup( RenderDevice const & device )
 	{
 		m_pipeline.reset();
 		m_pipelineLayout.reset();
@@ -132,7 +131,6 @@ namespace castor3d
 	void RenderPipeline::createDescriptorPools( uint32_t maxSets )
 	{
 		m_descriptorPools.clear();
-		auto & device = getCurrentRenderDevice( *this );
 
 		for ( auto & layout : m_descriptorLayouts )
 		{

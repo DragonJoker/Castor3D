@@ -43,12 +43,15 @@ namespace castor3d
 		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
 		 */
 		LightPassReflectiveShadow( Engine & engine
+			, RenderDevice const & device
 			, LightCache const & lightCache
 			, OpaquePassResult const & gpResult
 			, ShadowMapResult const & smResult
 			, LightPassResult const & lpResult
 			, GpInfoUbo const & gpInfoUbo )
 			: LightPassShadow< LtType >{ engine
+				, device
+				, "ReflectiveShadow"
 				, lpResult
 				, gpInfoUbo }
 			, m_gpResult{ gpResult }
@@ -66,6 +69,7 @@ namespace castor3d
 		{
 			auto & lightCache = scene.getLightCache();
 			m_downscalePass = std::make_unique< DownscalePass >( this->m_engine
+				, this->m_device
 				, cuT( "Reflective Shadow Maps" )
 				, ashes::ImageViewArray
 				{
@@ -78,6 +82,7 @@ namespace castor3d
 					m_lpResult[LpTexture::eDiffuse].getTexture()->getHeight() >> 2,
 				} );
 			m_rsmGiPass = std::make_unique< RsmGIPass >( this->m_engine
+				, this->m_device
 				, lightCache
 				, LtType
 				, VkExtent2D
@@ -90,6 +95,7 @@ namespace castor3d
 				, m_smResult
 				, m_downscalePass->getResult() );
 			m_interpolatePass = std::make_unique< RsmInterpolatePass >( this->m_engine
+				, this->m_device
 				, lightCache
 				, LtType
 				, VkExtent2D
@@ -104,7 +110,7 @@ namespace castor3d
 				, m_rsmGiPass->getSamplesSsbo()
 				, m_rsmGiPass->getResult()[0]
 				, m_rsmGiPass->getResult()[1]
-				, m_lpResult[LpTexture::eDiffuse] );
+				, m_lpResult[LpTexture::eIndirect] );
 			LightPassShadow< LtType >::initialise( scene, gp, sceneUbo, timer );
 		}
 
@@ -158,6 +164,12 @@ namespace castor3d
 				, shadowMap
 				, shadowMapIndex );
 			m_rsmGiPass->update( light );
+		}
+
+	private:
+		VkClearValue doGetIndirectClearColor()const override
+		{
+			return opaqueBlackClearColor;
 		}
 
 	private:

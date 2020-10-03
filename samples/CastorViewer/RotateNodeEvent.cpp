@@ -18,7 +18,7 @@ namespace CastorViewer
 	{
 	}
 
-	bool RotateNodeEvent::apply()
+	void RotateNodeEvent::apply()
 	{
 		SceneNodeSPtr node = m_node.lock();
 
@@ -35,6 +35,5 @@ namespace CastorViewer
 		m_dx = 0;
 		m_dy = 0;
 		m_dz = 0;
-		return true;
 	}
 }

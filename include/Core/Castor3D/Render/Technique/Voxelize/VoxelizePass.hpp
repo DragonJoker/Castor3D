@@ -54,7 +54,8 @@ namespace castor3d
 		 *\brief		Dessine les noeuds.
 		 *\param[out]	toWait	Le sémaphore à attendre.
 		 */
-		ashes::Semaphore const & render( ashes::Semaphore const & toWait );
+		ashes::Semaphore const & render( RenderDevice const & device
+			, ashes::Semaphore const & toWait );
 		/**
 		*\~english
 		*name
@@ -89,11 +90,12 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::doCleanup
 		 */
-		C3D_API void doCleanup()override;
+		C3D_API void doCleanup( RenderDevice const & device )override;
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::doInitialise
 		 */
-		C3D_API bool doInitialise( castor::Size const & size )override;
+		C3D_API bool doInitialise( RenderDevice const & device
+			, castor::Size const & size )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doFillUboDescriptor
 		 */

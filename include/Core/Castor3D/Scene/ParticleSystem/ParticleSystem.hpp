@@ -87,14 +87,14 @@ namespace castor3d
 		 *\brief		Initialise les elements GPU
 		 *\return		\p true si tout s'est bien passe
 		 */
-		C3D_API bool initialise();
+		C3D_API bool initialise( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Cleans GPU side elements up
 		 *\~french
 		 *\brief		Nettoie les elements GPU
 		 */
-		C3D_API void cleanup();
+		C3D_API void cleanup( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Updates the particles.

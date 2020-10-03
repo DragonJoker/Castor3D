@@ -2,7 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/OverlayCache.hpp"
-#include "Castor3D/Event/Frame/FunctorEvent.hpp"
+#include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Overlay/OverlayRenderer.hpp"
@@ -175,12 +175,12 @@ namespace castor3d
 
 			fontTexture->update();
 
-			getOverlay().getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
-				, [this, fontTexture]()
+			getOverlay().getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+				, [this, fontTexture]( RenderDevice const & device )
 				{
 					m_fontChanged = true;
-					fontTexture->cleanup();
-					fontTexture->initialise();
+					fontTexture->cleanup( device );
+					fontTexture->initialise( device );
 				} ) );
 		}
 	}

@@ -158,6 +158,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	Properties/TreeItems/ToneMappingTreeItemProperty.hpp
 	Properties/TreeItems/TreeHolder.hpp
 	Properties/TreeItems/TreeItemProperty.hpp
+	Properties/TreeItems/TreeItemProperty.inl
 	Properties/TreeItems/ViewportTreeItemProperty.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES

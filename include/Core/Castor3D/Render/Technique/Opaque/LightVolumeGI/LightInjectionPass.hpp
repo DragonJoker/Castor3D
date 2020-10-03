@@ -13,7 +13,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaqueModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LightVolumePassResult.hpp"
-#include "Castor3D/Render/ToTexture/RenderQuad.hpp"
+#include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"
 #include "Castor3D/Shader/ShaderModule.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
@@ -54,6 +54,8 @@ namespace castor3d
 		 *\param[in]	scene			Le tampon de scène.
 		 */
 		C3D_API LightInjectionPass( Engine & engine
+			, RenderDevice const & device
+			, castor::String const & prefix
 			, LightCache const & lightCache
 			, LightType lightType
 			, ShadowMapResult const & smResult
@@ -80,6 +82,7 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
+		RenderDevice const & m_device;
 		LightCache const & m_lightCache;
 		ShadowMapResult const & m_smResult;
 		GpInfoUbo const & m_gpInfoUbo;

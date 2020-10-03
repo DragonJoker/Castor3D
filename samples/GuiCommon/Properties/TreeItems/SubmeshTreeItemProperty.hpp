@@ -71,14 +71,10 @@ namespace GuiCommon
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
 		virtual void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid );
-		/**
-		 *\copydoc GuiCommon::TreeItemProperty::doPropertyChange
-		 */
-		virtual void doPropertyChange( wxPropertyGridEvent & event );
 
 	private:
-		void OnMaterialChange( castor::String const & name );
-		void OnTopologyChange( VkPrimitiveTopology value );
+		void onMaterialChange( wxVariant const & var );
+		void onTopologyChange( wxVariant const & var );
 
 	private:
 		castor3d::Geometry & m_geometry;

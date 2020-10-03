@@ -35,7 +35,8 @@ namespace castor3d
 			: public OverlayVisitor
 		{
 		public:
-			explicit Preparer( OverlayRenderer & renderer );
+			explicit Preparer( OverlayRenderer & renderer
+				, RenderDevice const & device );
 
 			void visit( PanelOverlay const & overlay )override;
 			void visit( BorderPanelOverlay const & overlay )override;
@@ -43,7 +44,8 @@ namespace castor3d
 
 		private:
 			template< typename QuadT, typename OverlayT, typename BufferIndexT, typename BufferPoolT, typename VertexT >
-			void doPrepareOverlay( OverlayT const & overlay
+			void doPrepareOverlay( RenderDevice const & device
+				, OverlayT const & overlay
 				, Pass const & pass
 				, std::map< size_t, BufferIndexT > & overlays
 				, std::vector< BufferPoolT > & vertexBuffers
@@ -52,6 +54,7 @@ namespace castor3d
 
 		private:
 			OverlayRenderer & m_renderer;
+			RenderDevice const & m_device;
 		};
 
 	public:
@@ -81,14 +84,14 @@ namespace castor3d
 		 *\~french
 		 *\brief		Initialise les tampons.
 		 */
-		C3D_API void initialise();
+		C3D_API void initialise( RenderDevice const & device );
 		/**
 		*\~english
 		*\brief		Flushes the renderer.
 		*\~french
 		*\brief		Nettoie le renderer.
 		*/
-		C3D_API void cleanup();
+		C3D_API void cleanup( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Updates the GPU data.
@@ -127,7 +130,8 @@ namespace castor3d
 		 *\brief		Termine la préparation des incrustations.
 		 *\param[in]	timer	Le timer de la passe de rendu.
 		 */
-		C3D_API void render( RenderPassTimer & timer );
+		C3D_API void render( RenderDevice const & device
+			, RenderPassTimer & timer );
 		/**
 		*\~english
 		*name
@@ -153,9 +157,9 @@ namespace castor3d
 			return m_sizeChanged;
 		}
 
-		Preparer getPreparer()
+		Preparer getPreparer( RenderDevice const & device )
 		{
-			return Preparer{ *this };
+			return Preparer{ *this, device };
 		}
 
 		ashes::Semaphore const & getSemaphore()
@@ -245,17 +249,22 @@ namespace castor3d
 		using TextVertexBufferPool = VertexBufferPool< TextOverlay::Vertex, 600u >;
 		using TextVertexBufferIndex = TextVertexBufferPool::MyBufferIndex;
 
-		OverlayRenderNode & doGetPanelNode( Pass const & pass );
-		OverlayRenderNode & doGetTextNode( Pass const & pass
+		OverlayRenderNode & doGetPanelNode( RenderDevice const & device
+			, Pass const & pass );
+		OverlayRenderNode & doGetTextNode( RenderDevice const & device
+			, Pass const & pass
 			, TextureLayout const & texture
 			, Sampler const & sampler );
-		Pipeline doCreatePipeline( Pass const & pass
+		Pipeline doCreatePipeline( RenderDevice const & device
+			, Pass const & pass
 			, ashes::PipelineShaderStageCreateInfoArray program
 			, bool text );
-		Pipeline & doGetPipeline( Pass const & pass
+		Pipeline & doGetPipeline( RenderDevice const & device
+			, Pass const & pass
 			, std::map< uint32_t, Pipeline > & pipelines
 			, bool text );
-		ashes::PipelineShaderStageCreateInfoArray doCreateOverlayProgram( TextureFlagsArray const & textures
+		ashes::PipelineShaderStageCreateInfoArray doCreateOverlayProgram( RenderDevice const & device
+			, TextureFlagsArray const & textures
 			, bool text );
 		ashes::DescriptorSetPtr doCreateDescriptorSet( OverlayRenderer::Pipeline & pipeline
 			, TextureFlags textures
@@ -272,7 +281,7 @@ namespace castor3d
 			, uint32_t index
 			, TextureLayout const & texture
 			, Sampler const & sampler );
-		void doCreateRenderPass();
+		void doCreateRenderPass( RenderDevice const & device );
 
 	private:
 		UniformBufferPools & m_uboPools;

@@ -20,15 +20,14 @@ namespace castor3d
 
 	Submesh::~Submesh()
 	{
-		cleanup();
+		CU_Assert( !m_initialised, "Did you forget to call Submesh::cleanup ?" );
 	}
 
-	void Submesh::initialise()
+	void Submesh::initialise( RenderDevice const & device )
 	{
 		if ( !m_generated )
 		{
-			doGenerateVertexBuffer();
-			auto & device = getCurrentRenderDevice( *getOwner() );
+			doGenerateVertexBuffer( device );
 			m_indexBuffer = makeBuffer< uint32_t >( device
 				, VkDeviceSize( m_indexMapping->getCount() ) * m_indexMapping->getComponentsCount()
 				, VK_BUFFER_USAGE_INDEX_BUFFER_BIT
@@ -37,8 +36,8 @@ namespace castor3d
 
 			for ( auto & component : m_components )
 			{
-				component.second->initialise();
-				component.second->fill();
+				component.second->initialise( device );
+				component.second->fill( device );
 				component.second->upload();
 			}
 
@@ -67,7 +66,7 @@ namespace castor3d
 
 			for ( auto & component : m_components )
 			{
-				m_initialised = m_initialised && component.second->initialise();
+				m_initialised = m_initialised && component.second->initialise( device );
 			}
 
 			m_dirty = !m_initialised;
@@ -314,9 +313,8 @@ namespace castor3d
 		return it->second;
 	}
 
-	void Submesh::doGenerateVertexBuffer()
+	void Submesh::doGenerateVertexBuffer( RenderDevice const & device )
 	{
-		auto & device = getCurrentRenderDevice( *getOwner() );
 		uint32_t size = uint32_t( m_points.size() );
 
 		if ( size )

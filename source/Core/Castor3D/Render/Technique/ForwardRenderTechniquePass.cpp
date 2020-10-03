@@ -87,7 +87,8 @@ namespace castor3d
 	{
 	}
 
-	void ForwardRenderTechniquePass::initialiseRenderPass( ashes::ImageView const & colourView
+	void ForwardRenderTechniquePass::initialiseRenderPass( RenderDevice const & device
+		, ashes::ImageView const & colourView
 		, ashes::ImageView const & depthView
 		, castor::Size const & size
 		, bool clear )
@@ -174,7 +175,6 @@ namespace castor3d
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		auto & device = getCurrentRenderDevice( *this );
 		m_renderPass = device->createRenderPass( getName()
 			, std::move( createInfo ) );
 		ashes::ImageViewCRefArray fbAttaches;
@@ -196,7 +196,8 @@ namespace castor3d
 		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ) );
 	}
 
-	ashes::Semaphore const & ForwardRenderTechniquePass::render( ashes::Semaphore const & toWait )
+	ashes::Semaphore const & ForwardRenderTechniquePass::render( RenderDevice const & device
+		, ashes::Semaphore const & toWait )
 	{
 		ashes::Semaphore const * result = &toWait;
 
@@ -209,7 +210,6 @@ namespace castor3d
 			};
 
 			RenderPassTimerBlock timerBlock{ getTimer().start() };
-			auto & device = getCurrentRenderDevice( *this );
 
 			m_nodesCommands->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 			m_nodesCommands->beginDebugBlock(
@@ -246,11 +246,11 @@ namespace castor3d
 		RenderPass::doUpdateUbos( camera, jitter );
 	}
 
-	void ForwardRenderTechniquePass::doCleanup()
+	void ForwardRenderTechniquePass::doCleanup( RenderDevice const & device )
 	{
 		m_nodesCommands.reset();
 		m_frameBuffer.reset();
-		RenderTechniquePass::doCleanup();
+		RenderTechniquePass::doCleanup( device );
 	}
 
 	ashes::VkDescriptorSetLayoutBindingArray ForwardRenderTechniquePass::doCreateTextureBindings( PipelineFlags const & flags )const

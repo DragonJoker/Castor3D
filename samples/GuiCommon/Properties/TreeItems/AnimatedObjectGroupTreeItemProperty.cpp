@@ -30,17 +30,14 @@ namespace GuiCommon
 	{
 	}
 
-	void AnimatedObjectGroupTreeItemProperty::doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void AnimatedObjectGroupTreeItemProperty::doCreateProperties( wxPGEditor * editor
+		, wxPropertyGrid * grid )
 	{
 		auto group = getGroup();
 
 		if ( group )
 		{
-			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_ANIMATED_OBJECT_GROUP + wxString( group->getName() ) ) );
+			addProperty( grid, PROPERTY_CATEGORY_ANIMATED_OBJECT_GROUP + wxString( group->getName() ) );
 		}
-	}
-
-	void AnimatedObjectGroupTreeItemProperty::doPropertyChange( wxPropertyGridEvent & p_event )
-	{
 	}
 }

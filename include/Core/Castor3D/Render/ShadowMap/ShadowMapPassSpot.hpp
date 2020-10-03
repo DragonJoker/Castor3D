@@ -67,11 +67,12 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doInitialise
 		 */
-		bool doInitialise( castor::Size const & size )override;
+		bool doInitialise( RenderDevice const & device
+			, castor::Size const & size )override;
 		/**
 		 *\copydoc		castor3d::ShadowMapPass::doCleanup
 		 */
-		void doCleanup()override;
+		void doCleanup( RenderDevice const & device )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doFillUboDescriptor
 		 */

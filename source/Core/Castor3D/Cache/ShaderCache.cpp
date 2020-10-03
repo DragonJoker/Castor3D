@@ -1,7 +1,8 @@
 #include "Castor3D/Cache/ShaderCache.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Event/Frame/FunctorEvent.hpp"
+#include "Castor3D/Event/Frame/CleanupEvent.hpp"
+#include "Castor3D/Event/Frame/InitialiseEvent.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Shader/Program.hpp"
@@ -12,19 +13,6 @@
 
 namespace castor3d
 {
-	namespace
-	{
-		void initialiseProgram( Engine & engine
-			, ShaderProgramSPtr program )
-		{
-			engine.sendEvent( makeFunctorEvent( EventType::ePreRender
-				, [program]()
-				{
-					program->initialise();
-				} ) );
-		}
-	}
-
 	ShaderProgramCache::ShaderProgramCache( Engine & engine )
 		: OwnedBy< Engine >( engine )
 	{
@@ -40,11 +28,7 @@ namespace castor3d
 
 		for ( auto & program : m_programs )
 		{
-			getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender
-				, [&program]()
-				{
-					program->cleanup();
-				} ) );
+			getEngine()->postEvent( makeGpuCleanupEvent( *program ) );
 		}
 	}
 
@@ -64,7 +48,7 @@ namespace castor3d
 
 		if ( initialise )
 		{
-			initialiseProgram( *getEngine(), result );
+			getEngine()->sendEvent( makeGpuInitialiseEvent( *result ) );
 		}
 
 		return result;
@@ -96,7 +80,7 @@ namespace castor3d
 		result = doCreateAutomaticProgram( renderPass, flags );
 		CU_Require( result );
 		doAddAutomaticProgram( result, flags );
-		initialiseProgram( *getEngine(), result );
+		getEngine()->sendEvent( makeGpuInitialiseEvent( *result ) );
 		return result;
 	}
 

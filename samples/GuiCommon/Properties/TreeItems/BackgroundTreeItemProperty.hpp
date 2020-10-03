@@ -48,30 +48,14 @@ namespace GuiCommon
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
 		virtual void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid );
-		/**
-		 *\copydoc GuiCommon::TreeItemProperty::doPropertyChange
-		 */
-		virtual void doPropertyChange( wxPropertyGridEvent & event );
 
 	private:
 		wxPGProperty * doCreateTextureImageProperty( wxString const & name
 			, castor3d::TextureLayout const & texture );
-		void onBackgroundColourChange( castor::RgbColour const & value );
-		void onBackgroundImageChange( castor::String const & value );
-		void onBackgroundLeftImageChange( castor::String const & value );
-		void onBackgroundRightImageChange( castor::String const & value );
-		void onBackgroundTopImageChange( castor::String const & value );
-		void onBackgroundBottomImageChange( castor::String const & value );
-		void onBackgroundFrontImageChange( castor::String const & value );
-		void onBackgroundBackImageChange( castor::String const & value );
-		void onBackgroundCrossImageChange( castor::String const & value );
-		void onBackgroundEquirectangularImageChange( castor::String const & value );
-		void onBackgroundEquirectangularDimensionsChange( uint32_t value );
 
 	private:
 		castor3d::SceneBackground & m_background;
 		wxWindow * m_parent;
-		wxPGProperty * m_backgroundProperty{ nullptr };
 	};
 }
 

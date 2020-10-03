@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderDepthQuad_H___
 #define ___C3D_RenderDepthQuad_H___
 
-#include "Castor3D/Render/ToTexture/RenderQuad.hpp"
+#include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
 namespace castor3d
@@ -25,14 +25,8 @@ namespace castor3d
 		 *\param[in] renderSystem
 		 *	Le RenderSystem.
 		 */
-		C3D_API explicit RenderDepthQuad( RenderSystem & renderSystem );
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~RenderDepthQuad();
+		C3D_API explicit RenderDepthQuad( RenderSystem & renderSystem
+			, RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Initialises the program.
@@ -64,6 +58,7 @@ namespace castor3d
 
 	private:
 		ShaderProgram m_program;
+		ashes::CommandBufferPtr m_commandBuffer;
 	};
 }
 

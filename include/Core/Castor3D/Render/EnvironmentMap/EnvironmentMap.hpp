@@ -53,14 +53,14 @@ namespace castor3d
 		 *\~french
 		 *\brief		Initialise le frame buffer.
 		 */
-		C3D_API bool initialise();
+		C3D_API bool initialise( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Cleans up the frame buffer.
 		 *\~french
 		 *\brief		Nettoie le frame buffer.
 		 */
-		C3D_API void cleanup();
+		C3D_API void cleanup( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Updates the passes.
@@ -85,7 +85,8 @@ namespace castor3d
 		 *\~french
 		 *\brief		Dessine la texture d'environnement.
 		 */
-		C3D_API ashes::Semaphore const & render( ashes::Semaphore const & toWait );
+		C3D_API ashes::Semaphore const & render( RenderDevice const & device
+			, ashes::Semaphore const & toWait );
 		/**
 		 *\~english
 		 *\brief		Dumps the environment map on screen.

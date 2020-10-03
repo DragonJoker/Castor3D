@@ -81,26 +81,6 @@ namespace GuiCommon
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
 		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
-		/**
-		 *\copydoc GuiCommon::TreeItemProperty::doPropertyChange
-		 */
-		virtual void doPropertyChange( wxPropertyGridEvent & p_event );
-
-	private:
-		void OnDiffuseColourChange( castor::RgbColour const & p_value );
-		void OnSpecularColourChange( castor::RgbColour const & p_value );
-		void OnAmbientChange( double p_value );
-		void OnEmissiveChange( double p_value );
-		void OnExponentChange( double p_value );
-		void OnTwoSidedChange( bool p_value );
-		void OnOpacityChange( double p_value );
-		void OnBWAccumulatorChange( long p_value );
-		void OnRefractionRatioChange( double p_value );
-		void OnAlbedoChange( castor::RgbColour const & p_value );
-		void OnRoughnessChange( double p_value );
-		void OnMetallicChange( double p_value );
-		void OnGlossinessChange( double p_value );
-		bool OnEditShader( wxPGProperty * p_property );
 
 	private:
 		castor3d::PassWPtr m_pass;

@@ -50,46 +50,45 @@ namespace castor3d
 	{
 	}
 
-	bool ComputeParticleSystem::initialise()
+	bool ComputeParticleSystem::initialise( RenderDevice const & device )
 	{
 		bool result = m_program != nullptr;
 
 		if ( result )
 		{
-			result = m_program->initialise();
+			result = m_program->initialise( device );
 		}
 
 		if ( result )
 		{
-			auto & device = getCurrentRenderDevice( getParent() );
 			m_ubo = device.uboPools->getBuffer< Configuration >( 0u );
 			m_ubo.getData().maxParticleCount = uint32_t( m_parent.getMaxParticlesCount() );
 		}
 
 		if ( result )
 		{
-			result = doCreateRandomStorage();
+			result = doCreateRandomStorage( device );
 		}
 
 		if ( result )
 		{
-			result = doInitialiseParticleStorage();
+			result = doInitialiseParticleStorage( device );
 		}
 
 		if ( result )
 		{
-			result = doInitialisePipeline();
+			result = doInitialisePipeline( device );
 		}
 
 		if ( result )
 		{
-			doPrepareCommandBuffers();
+			doPrepareCommandBuffers( device );
 		}
 
 		return result;
 	}
 
-	void ComputeParticleSystem::cleanup()
+	void ComputeParticleSystem::cleanup( RenderDevice const & device )
 	{
 		m_fence.reset();
 		m_commandBuffer.reset();
@@ -112,7 +111,6 @@ namespace castor3d
 		}
 
 		m_generatedCountBuffer.reset();
-		auto & device = getCurrentRenderDevice( getParent() );
 		device.uboPools->putBuffer( m_ubo );
 	}
 
@@ -122,7 +120,7 @@ namespace castor3d
 
 	uint32_t ComputeParticleSystem::update( GpuUpdater & updater )
 	{
-		auto & device = getCurrentRenderDevice( *this );
+		auto & device = updater.device;
 		auto & data = m_ubo.getData();
 		data.deltaTime = float( updater.time.count() );
 		data.time = float( updater.total.count() );
@@ -236,10 +234,9 @@ namespace castor3d
 		m_program = program;
 	}
 
-	bool ComputeParticleSystem::doInitialiseParticleStorage()
+	bool ComputeParticleSystem::doInitialiseParticleStorage( RenderDevice const & device )
 	{
 		auto size = uint32_t( m_parent.getMaxParticlesCount() * m_inputs.stride() );
-		auto & device = getCurrentRenderDevice( getParent() );
 		m_generatedCountBuffer = makeBuffer< uint32_t >( device
 			, ashes::getAlignedSize( 2u * sizeof( uint32_t )
 				, device.device->getProperties().limits.nonCoherentAtomSize ) / sizeof( uint32_t )
@@ -277,9 +274,8 @@ namespace castor3d
 		return true;
 	}
 
-	bool ComputeParticleSystem::doCreateRandomStorage()
+	bool ComputeParticleSystem::doCreateRandomStorage( RenderDevice const & device )
 	{
-		auto & device = getCurrentRenderDevice( getParent() );
 		uint32_t size = 1024u;
 		m_randomStorage = makeBuffer< castor::Point4f >( device
 			, 1024
@@ -309,9 +305,8 @@ namespace castor3d
 		return true;
 	}
 
-	bool ComputeParticleSystem::doInitialisePipeline()
+	bool ComputeParticleSystem::doInitialisePipeline( RenderDevice const & device )
 	{
-		auto & device = getCurrentRenderDevice( getParent() );
 		ashes::VkDescriptorSetLayoutBindingArray bindings
 		{
 			makeDescriptorSetLayoutBinding( IndexBufferBinding
@@ -376,9 +371,8 @@ namespace castor3d
 		return true;
 	}
 
-	void ComputeParticleSystem::doPrepareCommandBuffers()
+	void ComputeParticleSystem::doPrepareCommandBuffers( RenderDevice const & device )
 	{
-		auto & device = getCurrentRenderDevice( *this );
 		m_commandBuffer = device.computeCommandPool->createCommandBuffer( m_parent.getName() );
 		m_fence = device->createFence( m_parent.getName() );
 	}

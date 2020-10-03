@@ -6,18 +6,18 @@ See LICENSE file in root folder
 
 #include "RenderPanel.hpp"
 
-#include <Castor3D/Event/Frame/FrameEvent.hpp>
+#include <Castor3D/Event/Frame/CpuFrameEvent.hpp>
 
 namespace CastorViewer
 {
 	class KeyboardEvent
-		: public castor3d::FrameEvent
+		: public castor3d::CpuFrameEvent
 	{
 	public:
 		explicit KeyboardEvent( castor3d::RenderWindowSPtr p_window );
 		virtual ~KeyboardEvent();
 
-		virtual bool apply();
+		void apply()override;
 
 	private:
 		castor3d::RenderWindowWPtr m_window;

@@ -9,9 +9,10 @@ namespace castor3d
 	//*********************************************************************************************
 
 	PassBuffer::PassBuffer( Engine & engine
+		, RenderDevice const & device
 		, uint32_t count
 		, uint32_t size )
-		: m_buffer{ engine, count * size, cuT( "PassBuffer" ) }
+		: m_buffer{ engine, device, count * size, cuT( "PassBuffer" ) }
 		, m_passCount{ count }
 	{
 	}
@@ -73,6 +74,11 @@ namespace castor3d
 		, VkDescriptorSetLayoutBinding const & binding )const
 	{
 		m_buffer.createBinding( descriptorSet, binding );
+	}
+
+	ashes::WriteDescriptorSet PassBuffer::getBinding()const
+	{
+		return m_buffer.getBinding( getPassBufferIndex() );
 	}
 
 	void PassBuffer::visit( PhongPass const & pass )

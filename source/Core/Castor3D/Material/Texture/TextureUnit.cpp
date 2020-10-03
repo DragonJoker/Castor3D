@@ -36,6 +36,7 @@ namespace castor3d
 		}
 
 		TextureUnit createTextureUnit( Engine & engine
+			, RenderDevice const & device
 			, castor::String const & name
 			, VkFormat format
 			, VkExtent3D size
@@ -80,7 +81,7 @@ namespace castor3d
 			TextureUnit unit{ engine };
 			unit.setTexture( layout );
 			unit.setSampler( sampler );
-			unit.initialise();
+			unit.initialise( device );
 			return unit;
 		}
 	}
@@ -176,6 +177,7 @@ namespace castor3d
 	}
 
 	TextureUnit TextureUnit::create( Engine & engine
+		, RenderDevice const & device
 		, castor::String const & name
 		, VkFormat format
 		, uint32_t size
@@ -183,6 +185,7 @@ namespace castor3d
 		, VkImageUsageFlags usageFlags )
 	{
 		return createTextureUnit( engine
+			, device
 			, name
 			, format
 			, { size, 1u, 1u }
@@ -193,6 +196,7 @@ namespace castor3d
 	}
 
 	TextureUnit TextureUnit::create( Engine & engine
+		, RenderDevice const & device
 		, castor::String const & name
 		, VkFormat format
 		, uint32_t size
@@ -201,6 +205,7 @@ namespace castor3d
 		, VkImageUsageFlags usageFlags )
 	{
 		return createTextureUnit( engine
+			, device
 			, name
 			, format
 			, { size, 1u, 1u }
@@ -211,6 +216,7 @@ namespace castor3d
 	}
 
 	TextureUnit TextureUnit::create( Engine & engine
+		, RenderDevice const & device
 		, castor::String const & name
 		, VkFormat format
 		, VkExtent2D const & size
@@ -218,6 +224,7 @@ namespace castor3d
 		, VkImageUsageFlags usageFlags )
 	{
 		return createTextureUnit( engine
+			, device
 			, name
 			, format
 			, { size.width, size.height, 1u }
@@ -228,6 +235,7 @@ namespace castor3d
 	}
 
 	TextureUnit TextureUnit::create( Engine & engine
+		, RenderDevice const & device
 		, castor::String const & name
 		, VkFormat format
 		, VkExtent2D const & size
@@ -236,6 +244,7 @@ namespace castor3d
 		, VkImageUsageFlags usageFlags )
 	{
 		return createTextureUnit( engine
+			, device
 			, name
 			, format
 			, { size.width, size.height, 1u }
@@ -246,6 +255,7 @@ namespace castor3d
 	}
 
 	TextureUnit TextureUnit::create( Engine & engine
+		, RenderDevice const & device
 		, castor::String const & name
 		, VkFormat format
 		, VkExtent3D const & size
@@ -253,6 +263,7 @@ namespace castor3d
 		, VkImageUsageFlags usageFlags )
 	{
 		return createTextureUnit( engine
+			, device
 			, name
 			, format
 			, size
@@ -273,28 +284,28 @@ namespace castor3d
 		}
 	}
 
-	bool TextureUnit::initialise()
+	bool TextureUnit::initialise( RenderDevice const & device )
 	{
 		RenderTargetSPtr target = m_renderTarget.lock();
 		bool result = false;
 
 		if ( target )
 		{
-			target->initialise();
+			target->initialise( device );
 			m_texture = target->getTexture().getTexture();
 			result = true;
 			m_name = cuT( "RT_" ) + castor::string::toString( target->getIndex() );
 		}
 		else if ( m_texture )
 		{
-			result = m_texture->initialise();
+			result = m_texture->initialise( device );
 			auto sampler = getSampler();
 			CU_Require( sampler );
-			sampler->initialise();
+			sampler->initialise( device );
 
 			if ( result && m_texture->getMipmapCount() > 1u )
 			{
-				m_texture->generateMipmaps();
+				m_texture->generateMipmaps( device );
 			}
 
 			m_descriptor = ashes::WriteDescriptorSet
@@ -318,28 +329,34 @@ namespace castor3d
 			log::info << "Loaded texture [" << toString() << "] image (" << *m_texture << ")" << std::endl;
 		}
 
+		m_device = &device;
 		return result;
 	}
 
 	void TextureUnit::cleanup()
 	{
-		auto sampler = getSampler();
-
-		if ( sampler )
+		if ( m_device )
 		{
-			sampler->cleanup();
-		}
-		
-		if ( m_texture )
-		{
-			m_texture->cleanup();
-		}
+			auto & device = *m_device;
+			m_device = nullptr;
+			auto sampler = getSampler();
 
-		RenderTargetSPtr target = m_renderTarget.lock();
+			if ( sampler )
+			{
+				sampler->cleanup();
+			}
 
-		if ( target )
-		{
-			target->cleanup();
+			if ( m_texture )
+			{
+				m_texture->cleanup();
+			}
+
+			RenderTargetSPtr target = m_renderTarget.lock();
+
+			if ( target )
+			{
+				target->cleanup( device );
+			}
 		}
 	}
 

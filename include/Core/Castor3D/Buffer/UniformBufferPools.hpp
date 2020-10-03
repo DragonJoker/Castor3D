@@ -5,7 +5,6 @@ See LICENSE file in root folder
 #define ___C3D_UniformBufferPools_HPP___
 
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
-#include "Castor3D/Buffer/UniformBufferPool.hpp"
 
 namespace castor3d
 {
@@ -23,7 +22,8 @@ namespace castor3d
 		 *\param[in]	renderSystem	Le RenderSystem.
 		 *\param[in]	debugName		Le nom debug du tampon.
 		 */
-		C3D_API explicit UniformBufferPools( RenderSystem & renderSystem );
+		C3D_API explicit UniformBufferPools( RenderSystem & renderSystem
+			, RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Cleans up all GPU buffers.

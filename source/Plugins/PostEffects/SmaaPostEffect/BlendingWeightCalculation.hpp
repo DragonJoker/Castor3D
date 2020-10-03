@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include <Castor3D/Buffer/UniformBuffer.hpp>
 #include <Castor3D/Render/PostEffect/PostEffect.hpp>
 #include <Castor3D/Render/PostEffect/PostEffectSurface.hpp>
-#include <Castor3D/Render/ToTexture/RenderQuad.hpp>
+#include <Castor3D/Render/Passes/RenderQuad.hpp>
 
 #include <ShaderAST/Shader.hpp>
 
@@ -20,6 +20,7 @@ namespace smaa
 	{
 	public:
 		BlendingWeightCalculation( castor3d::RenderTarget & renderTarget
+			, castor3d::RenderDevice const & device
 			, ashes::ImageView const & edgeDetectionView
 			, castor3d::TextureLayoutSPtr depthView
 			, SmaaConfig const & config );
@@ -33,10 +34,6 @@ namespace smaa
 		{
 			return m_surface.colourTexture;
 		}
-
-	private:
-		void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-			, ashes::DescriptorSet & descriptorSet )override;
 
 	private:
 		ashes::ImageView const & m_edgeDetectionView;

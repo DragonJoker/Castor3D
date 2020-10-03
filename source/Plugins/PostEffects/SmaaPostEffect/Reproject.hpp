@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <Castor3D/Render/PostEffect/PostEffect.hpp>
 #include <Castor3D/Render/PostEffect/PostEffectSurface.hpp>
-#include <Castor3D/Render/ToTexture/RenderQuad.hpp>
+#include <Castor3D/Render/Passes/RenderQuad.hpp>
 
 #include <ShaderAST/Shader.hpp>
 
@@ -19,6 +19,7 @@ namespace smaa
 	{
 	public:
 		Reproject( castor3d::RenderTarget & renderTarget
+			, castor3d::RenderDevice const & device
 			, ashes::ImageView const & currentColourView
 			, ashes::ImageView const & previousColourView
 			, ashes::ImageView const * velocityView
@@ -31,10 +32,6 @@ namespace smaa
 		{
 			return m_surface.colourTexture;
 		}
-
-	private:
-		void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-			, ashes::DescriptorSet & descriptorSet )override;
 
 	private:
 		ashes::RenderPassPtr m_renderPass;

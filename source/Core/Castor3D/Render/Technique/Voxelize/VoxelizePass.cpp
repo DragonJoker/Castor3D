@@ -111,14 +111,14 @@ namespace castor3d
 
 	}
 
-	ashes::Semaphore const & VoxelizePass::render( ashes::Semaphore const & toWait )
+	ashes::Semaphore const & VoxelizePass::render( RenderDevice const & device
+		, ashes::Semaphore const & toWait )
 	{
 		ashes::Semaphore const * result = &toWait;
 
 		if ( hasNodes() )
 		{
 			RenderPassTimerBlock timerBlock{ getTimer().start() };
-			auto & device = getCurrentRenderDevice( *this );
 
 			auto & cmd = *m_commands.commandBuffer;
 			cmd.begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
@@ -154,7 +154,8 @@ namespace castor3d
 		return *result;
 	}
 
-	bool VoxelizePass::doInitialise( Size const & CU_UnusedParam( size ) )
+	bool VoxelizePass::doInitialise( RenderDevice const & device
+		, Size const & CU_UnusedParam( size ) )
 	{
 		ashes::VkAttachmentDescriptionArray attaches
 		{
@@ -209,7 +210,6 @@ namespace castor3d
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		auto & device = getCurrentRenderDevice( *this );
 		m_renderPass = device->createRenderPass( getName()
 			, std::move( createInfo ) );
 		ashes::ImageViewCRefArray fbAttaches;
@@ -227,7 +227,7 @@ namespace castor3d
 		return true;
 	}
 
-	void VoxelizePass::doCleanup()
+	void VoxelizePass::doCleanup( RenderDevice const & device )
 	{
 		m_renderQueue.cleanup();
 		m_commands = { nullptr, nullptr };

@@ -15,7 +15,7 @@ namespace CastorViewer
 		RotateNodeEvent( castor3d::SceneNodeSPtr p_node, float p_dx, float p_dy, float p_dz );
 		virtual ~RotateNodeEvent();
 
-		bool apply()override;
+		void apply()override;
 	};
 }
 

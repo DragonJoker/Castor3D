@@ -64,13 +64,16 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		uint32_t constexpr BlurSceneUboId = 2u;
-		uint32_t constexpr BlurGpInfoUboId = 3u;
-		uint32_t constexpr BlurSssUboId = 4u;
-		uint32_t constexpr BlurDepthImgId = 5u;
-		uint32_t constexpr BlurData4ImgId = 6u;
-		uint32_t constexpr BlurData5ImgId = 7u;
-		uint32_t constexpr BlurLgtDiffImgId = 8u;
+		enum BlurId : size_t
+		{
+			BlurSceneUboId = 1u,
+			BlurGpInfoUboId,
+			BlurSssUboId,
+			BlurDepthImgId,
+			BlurData4ImgId,
+			BlurData5ImgId,
+			BlurLgtDiffImgId,
+		};
 
 		ShaderPtr doGetBlurProgram( Engine & engine
 			, bool isVertic )
@@ -193,12 +196,15 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		uint32_t constexpr CombData4ImgId = 2u;
-		uint32_t constexpr CombData5ImgId = 3u;
-		uint32_t constexpr CombBlur1ImgId = 4u;
-		uint32_t constexpr CombBlur2ImgId = 5u;
-		uint32_t constexpr CombBlur3ImgId = 6u;
-		uint32_t constexpr CombLgtDiffImgId = 7u;
+		enum CombId : size_t
+		{
+			CombData4ImgId = 1u,
+			CombData5ImgId,
+			CombBlur1ImgId,
+			CombBlur2ImgId,
+			CombBlur3ImgId,
+			CombLgtDiffImgId,
+		};
 
 		ShaderPtr doGetCombineProgram( Engine & engine )
 		{
@@ -279,11 +285,11 @@ namespace castor3d
 		}
 
 		ashes::PipelineShaderStageCreateInfoArray doCreateBlurProgram( Engine & engine
+			, RenderDevice const & device
 			, bool isVertic
 			, ShaderModule & vertexShader
 			, ShaderModule & pixelShader )
 		{
-			auto & device = getCurrentRenderDevice( engine );
 			vertexShader.shader = doGetVertexProgram( engine );
 			pixelShader.shader = doGetBlurProgram( engine, isVertic );
 
@@ -295,10 +301,10 @@ namespace castor3d
 		}
 
 		ashes::PipelineShaderStageCreateInfoArray doCreateCombineProgram( Engine & engine
+			, RenderDevice const & device
 			, ShaderModule & vertexShader
 			, ShaderModule & pixelShader )
 		{
-			auto & device = getCurrentRenderDevice( engine );
 			vertexShader.shader = doGetVertexProgram( engine );
 			pixelShader.shader = doGetCombineProgram( engine );
 
@@ -331,6 +337,7 @@ namespace castor3d
 		}
 
 		TextureUnit doCreateTexture( Engine & engine
+			, RenderDevice const & device
 			, Size const & size
 			, std::string name )
 		{
@@ -357,7 +364,7 @@ namespace castor3d
 			TextureUnit unit{ engine };
 			unit.setTexture( texture );
 			unit.setSampler( sampler );
-			unit.initialise();
+			unit.initialise( device );
 			return unit;
 		}
 
@@ -423,8 +430,7 @@ namespace castor3d
 			return result;
 		}
 
-		ashes::FrameBufferPtr doCreateFrameBuffer( RenderDevice const & device
-			, ashes::RenderPass const & renderPass
+		ashes::FrameBufferPtr doCreateFrameBuffer( ashes::RenderPass const & renderPass
 			, castor::Size const & size
 			, ashes::ImageView const & view
 			, std::string name )
@@ -436,11 +442,41 @@ namespace castor3d
 				, std::move( attaches ) );
 			return result;
 		}
+
+		rq::BindingDescriptionArray createBlurBindings( PassBuffer const & buffer )
+		{
+			return rq::BindingDescriptionArray
+			{
+				{ buffer.getType(), ashes::nullopt },	// Pass Buffer
+				{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, ashes::nullopt },	// Scene UBO
+				{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, ashes::nullopt },	// GpInfo UBO
+				{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, ashes::nullopt },	// Blur UBO
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },	// Depth
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },	// Translucency
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },	// MaterialIndex
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },	// LightDiffuse
+			};
+		}
+
+		rq::BindingDescriptionArray createCombineBindings( PassBuffer const & buffer )
+		{
+			return rq::BindingDescriptionArray
+			{
+				{ buffer.getType(), ashes::nullopt },	// Pass Buffer
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },	// Translucency
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },	// MaterialIndex
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },	// BlurResult 0
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },	// BlurResult 1
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },	// BlurResult 2
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },	// LightDiffuse
+			};
+		}
 	}
 
 	//*********************************************************************************************
 
 	SubsurfaceScatteringPass::Blur::Blur( RenderSystem & renderSystem
+		, RenderDevice const & device
 		, castor::Size const & size
 		, GpInfoUbo const & gpInfoUbo
 		, SceneUbo & sceneUbo
@@ -449,54 +485,50 @@ namespace castor3d
 		, TextureUnit const & destination
 		, bool isVertic
 		, ashes::PipelineShaderStageCreateInfoArray const & shaderStages )
-		: RenderQuad{ renderSystem, "SubscatteringBlur", VK_FILTER_LINEAR, { ashes::nullopt, RenderQuadConfig::Texcoord{} } }
-		, m_renderSystem{ renderSystem }
+		: RenderQuad{ device
+			, "SubscatteringBlur"
+			, VK_FILTER_LINEAR
+			, { createBlurBindings( renderSystem.getEngine()->getMaterialCache().getPassBuffer() )
+				, ashes::nullopt
+				, rq::Texcoord{} } }
 		, m_geometryBufferResult{ gpResult }
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_sceneUbo{ sceneUbo }
-		, m_blurUbo{ getCurrentRenderDevice( renderSystem ).uboPools->getBuffer< BlurConfiguration >( 0u ) }
-		, m_renderPass{ doCreateRenderPass( getCurrentRenderDevice( renderSystem ), destination.getTexture()->getPixelFormat(), "SubscatteringBlur" ) }
-		, m_frameBuffer{ doCreateFrameBuffer( getCurrentRenderDevice( renderSystem ), *m_renderPass, size, destination.getTexture()->getDefaultView().getTargetView(), "SubscatteringBlur" ) }
+		, m_blurUbo{ m_device.uboPools->getBuffer< BlurConfiguration >( 0u ) }
+		, m_renderPass{ doCreateRenderPass( m_device, destination.getTexture()->getPixelFormat(), "SubscatteringBlur" ) }
+		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, size, destination.getTexture()->getDefaultView().getTargetView(), "SubscatteringBlur" ) }
 	{
 		auto & configuration = m_blurUbo.getData();
 		configuration.blurCorrection = 1.0f;
 		configuration.blurPixelSize = Point2f{ 1.0f / size.getWidth(), 1.0f / size.getHeight() };
-		ashes::VkDescriptorSetLayoutBindingArray bindings
-		{
-			renderSystem.getEngine()->getMaterialCache().getPassBuffer().createLayoutBinding(),
-			makeDescriptorSetLayoutBinding( BlurSceneUboId
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ), // Scene UBO
-			makeDescriptorSetLayoutBinding( BlurGpInfoUboId
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ), // GpInfo UBO
-			makeDescriptorSetLayoutBinding( BlurSssUboId
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ), // Blur UBO
-			makeDescriptorSetLayoutBinding( BlurDepthImgId
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ), // Depth map
-			makeDescriptorSetLayoutBinding( BlurData4ImgId
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ), // Translucency map
-			makeDescriptorSetLayoutBinding( BlurData5ImgId
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ), // MaterialIndex map
-		};
-
 		VkExtent2D extent{ size.getWidth(), size.getHeight() };
-		createPipeline( extent
+		createPipelineAndPass( extent
 			, Position{}
 			, shaderStages
-			, source.getTexture()->getDefaultView().getSampledView()
 			, *m_renderPass
-			, std::move( bindings )
+			, {
+				m_renderSystem.getEngine()->getMaterialCache().getPassBuffer().getBinding(),
+				makeDescriptorWrite( m_sceneUbo.getUbo(), BlurSceneUboId ),
+				makeDescriptorWrite( m_gpInfoUbo.getUbo(), BlurGpInfoUboId ),
+				makeDescriptorWrite( m_blurUbo, BlurSssUboId ),
+				makeDescriptorWrite( m_geometryBufferResult[DsTexture::eDepth].getTexture()->getDefaultView().getSampledView()
+					, m_sampler->getSampler()
+						, BlurDepthImgId ),
+				makeDescriptorWrite( m_geometryBufferResult[DsTexture::eData4].getTexture()->getDefaultView().getSampledView()
+					, m_sampler->getSampler()
+					, BlurData4ImgId ),
+				makeDescriptorWrite( m_geometryBufferResult[DsTexture::eData5].getTexture()->getDefaultView().getSampledView()
+					, m_sampler->getSampler()
+					, BlurData5ImgId ),
+				makeDescriptorWrite( source.getTexture()->getDefaultView().getSampledView()
+					, m_sampler->getSampler()
+					, BlurLgtDiffImgId ),
+			}
 			, {} );
 	}
 
 	SubsurfaceScatteringPass::Blur::Blur( Blur && rhs )noexcept
 		: RenderQuad{ std::forward< RenderQuad >( rhs ) }
-		, m_renderSystem{ rhs.m_renderSystem }
 		, m_geometryBufferResult{ rhs.m_geometryBufferResult }
 		, m_gpInfoUbo{ rhs.m_gpInfoUbo }
 		, m_sceneUbo{ rhs.m_sceneUbo }
@@ -517,52 +549,33 @@ namespace castor3d
 			, *m_frameBuffer
 			, { opaqueBlackClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE );
-		registerFrame( commandBuffer );
+		registerPass( commandBuffer );
 		commandBuffer.endRenderPass();
 		commandBuffer.endDebugBlock();
-	}
-
-	void SubsurfaceScatteringPass::Blur::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-		, ashes::DescriptorSet & descriptorSet )
-	{
-		m_renderSystem.getEngine()->getMaterialCache().getPassBuffer().createBinding( descriptorSet
-			, descriptorSetLayout.getBinding( getPassBufferIndex() ) );
-		m_sceneUbo.createSizedBinding( descriptorSet
-			,descriptorSetLayout.getBinding( BlurSceneUboId ) );
-		m_gpInfoUbo.createSizedBinding( descriptorSet
-			, descriptorSetLayout.getBinding( BlurGpInfoUboId ) );
-		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( BlurSssUboId )
-			, m_blurUbo.getBuffer()
-			, 0u
-			, 1u );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( BlurDepthImgId )
-			, m_geometryBufferResult[DsTexture::eDepth].getTexture()->getDefaultView().getSampledView()
-			, m_sampler->getSampler() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( BlurData4ImgId )
-			, m_geometryBufferResult[DsTexture::eData4].getTexture()->getDefaultView().getSampledView()
-			, m_sampler->getSampler() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( BlurData5ImgId )
-			, m_geometryBufferResult[DsTexture::eData5].getTexture()->getDefaultView().getSampledView()
-			, m_sampler->getSampler() );
 	}
 
 	//*********************************************************************************************
 
 	SubsurfaceScatteringPass::Combine::Combine( RenderSystem & renderSystem
+		, RenderDevice const & device
 		, Size const & size
 		, OpaquePassResult const & gpResult
 		, TextureUnit const & source
 		, SubsurfaceScatteringPass::BlurResult const & blurResults
 		, TextureUnit const & destination
 		, ashes::PipelineShaderStageCreateInfoArray const & shaderStages )
-		: RenderQuad{ renderSystem, cuT( "SubscatteringCombine" ), VK_FILTER_LINEAR, { ashes::nullopt, RenderQuadConfig::Texcoord{} } }
-		, m_renderSystem{ renderSystem }
-		, m_blurUbo{ getCurrentRenderDevice( renderSystem ).uboPools->getBuffer< BlurWeights >( 0u ) }
+		: RenderQuad{ device
+			, cuT( "SubscatteringCombine" )
+			, VK_FILTER_LINEAR
+			, { createCombineBindings( renderSystem.getEngine()->getMaterialCache().getPassBuffer() )
+				, ashes::nullopt
+				, rq::Texcoord{} } }
+		, m_blurUbo{ m_device.uboPools->getBuffer< BlurWeights >( 0u ) }
 		, m_geometryBufferResult{ gpResult }
 		, m_source{ source }
 		, m_blurResults{ blurResults }
-		, m_renderPass{ doCreateRenderPass( getCurrentRenderDevice( renderSystem ), destination.getTexture()->getPixelFormat(), getName() ) }
-		, m_frameBuffer{ doCreateFrameBuffer( getCurrentRenderDevice( renderSystem ), *m_renderPass, size, destination.getTexture()->getDefaultView().getTargetView(), getName() ) }
+		, m_renderPass{ doCreateRenderPass( m_device, destination.getTexture()->getPixelFormat(), getName() ) }
+		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, size, destination.getTexture()->getDefaultView().getTargetView(), getName() ) }
 	{
 		auto & weights = m_blurUbo.getData();
 		weights.originalWeight = Point4f{ 0.2406f, 0.4475f, 0.6159f, 0.25f };
@@ -570,41 +583,37 @@ namespace castor3d
 		weights.blurWeights[1] = Point4f{ 0.1836, 0.1864, 0.0, 0.25 };
 		weights.blurWeights[2] = Point4f{ 0.46, 0.0, 0.0402, 0.25 };
 		weights.blurVariance = Point4f{ 0.0516, 0.2719, 2.0062 };
-		ashes::VkDescriptorSetLayoutBindingArray bindings
-		{
-			renderSystem.getEngine()->getMaterialCache().getPassBuffer().createLayoutBinding(),
-			makeDescriptorSetLayoutBinding( 1u
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),	// Debug
-			makeDescriptorSetLayoutBinding( CombData4ImgId
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),	// Translucency map
-			makeDescriptorSetLayoutBinding( CombData5ImgId
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),	// MaterialIndex map
-			makeDescriptorSetLayoutBinding( CombBlur1ImgId
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),	// Blur result 0
-			makeDescriptorSetLayoutBinding( CombBlur2ImgId
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),	// Blur result 1
-			makeDescriptorSetLayoutBinding( CombBlur3ImgId
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),	// Blur result 2
-		};
 		VkExtent2D extent{ size.getWidth(), size.getHeight() };
-		createPipeline( extent
+		createPipelineAndPass( extent
 			, Position{}
 			, shaderStages
-			, source.getTexture()->getDefaultView().getSampledView()
 			, *m_renderPass
-			, std::move( bindings )
+			, {
+				m_renderSystem.getEngine()->getMaterialCache().getPassBuffer().getBinding(),
+				makeDescriptorWrite( m_geometryBufferResult[DsTexture::eData4].getTexture()->getDefaultView().getSampledView()
+					, m_sampler->getSampler()
+					, CombData4ImgId ),
+				makeDescriptorWrite( m_geometryBufferResult[DsTexture::eData5].getTexture()->getDefaultView().getSampledView()
+					, m_sampler->getSampler()
+					, CombData5ImgId ),
+				makeDescriptorWrite( m_blurResults[0].getTexture()->getDefaultView().getSampledView()
+					, m_blurResults[0].getSampler()->getSampler()
+					, CombBlur1ImgId ),
+				makeDescriptorWrite( m_blurResults[1].getTexture()->getDefaultView().getSampledView()
+					, m_blurResults[1].getSampler()->getSampler()
+					, CombBlur2ImgId ),
+				makeDescriptorWrite( m_blurResults[2].getTexture()->getDefaultView().getSampledView()
+					, m_blurResults[2].getSampler()->getSampler()
+					, CombBlur3ImgId ),
+				makeDescriptorWrite( source.getTexture()->getDefaultView().getSampledView()
+					, m_sampler->getSampler()
+					, CombLgtDiffImgId ),
+			}
 			, {} );
 	}
 
 	SubsurfaceScatteringPass::Combine::Combine( Combine && rhs )noexcept
 		: RenderQuad{ std::forward< RenderQuad >( rhs ) }
-		, m_renderSystem{ rhs.m_renderSystem }
 		, m_blurUbo{ rhs.m_blurUbo }
 		, m_geometryBufferResult{ rhs.m_geometryBufferResult }
 		, m_source{ rhs.m_source }
@@ -625,31 +634,9 @@ namespace castor3d
 		commandBuffer.beginRenderPass( *m_renderPass
 			, *m_frameBuffer
 			, { red }
-		, VK_SUBPASS_CONTENTS_INLINE );
-		registerFrame( commandBuffer );
+			, VK_SUBPASS_CONTENTS_INLINE );
+		registerPass( commandBuffer );
 		commandBuffer.endRenderPass();
-	}
-
-	void SubsurfaceScatteringPass::Combine::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-		, ashes::DescriptorSet & descriptorSet )
-	{
-		m_renderSystem.getEngine()->getMaterialCache().getPassBuffer().createBinding( descriptorSet
-			, descriptorSetLayout.getBinding( getPassBufferIndex() ) );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( CombData4ImgId )
-			, m_geometryBufferResult[DsTexture::eData4].getTexture()->getDefaultView().getSampledView()
-			, m_sampler->getSampler() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( CombData5ImgId )
-			, m_geometryBufferResult[DsTexture::eData5].getTexture()->getDefaultView().getSampledView()
-			, m_sampler->getSampler() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( CombBlur1ImgId )
-			, m_blurResults[0].getTexture()->getDefaultView().getSampledView()
-			, m_blurResults[0].getSampler()->getSampler() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( CombBlur2ImgId )
-			, m_blurResults[1].getTexture()->getDefaultView().getSampledView()
-			, m_blurResults[1].getSampler()->getSampler() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( CombBlur3ImgId )
-			, m_blurResults[2].getTexture()->getDefaultView().getSampledView()
-			, m_blurResults[2].getSampler()->getSampler() );
 	}
 
 	//*********************************************************************************************
@@ -662,6 +649,7 @@ namespace castor3d
 	String const SubsurfaceScatteringPass::Offsets = "c3d_offsets";
 
 	SubsurfaceScatteringPass::SubsurfaceScatteringPass( Engine & engine
+		, RenderDevice const & device
 		, GpInfoUbo const & gpInfoUbo
 		, SceneUbo & sceneUbo
 		, Size const & textureSize
@@ -673,7 +661,7 @@ namespace castor3d
 		, m_gpResult{ gpResult }
 		, m_lpResult{ lpResult }
 		, m_size{ textureSize }
-		, m_intermediate{ doCreateTexture( engine, textureSize, "SubsurfaceScattering intermediate" ) }
+		, m_intermediate{ doCreateTexture( engine, device, textureSize, "SubsurfaceScattering intermediate" ) }
 		, m_blurHorizVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SssBlurX" }
 		, m_blurHorizPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SssBlurX" }
 		, m_blurVerticVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SssBlurY" }
@@ -683,31 +671,31 @@ namespace castor3d
 		, m_blurResults
 		{
 			{
-				doCreateTexture( engine, textureSize, "SubsurfaceScattering Blur 0" ),
-				doCreateTexture( engine, textureSize, "SubsurfaceScattering Blur 1" ),
-				doCreateTexture( engine, textureSize, "SubsurfaceScattering Blur 2" ),
+				doCreateTexture( engine, device, textureSize, "SubsurfaceScattering Blur 0" ),
+				doCreateTexture( engine, device, textureSize, "SubsurfaceScattering Blur 1" ),
+				doCreateTexture( engine, device, textureSize, "SubsurfaceScattering Blur 2" ),
 			}
 		}
-		, m_result{ doCreateTexture( engine, textureSize, "SubsurfaceScattering Result" ) }
+		, m_result{ doCreateTexture( engine, device, textureSize, "SubsurfaceScattering Result" ) }
 	{
 	}
 
-	void SubsurfaceScatteringPass::initialise()
+	void SubsurfaceScatteringPass::initialise( RenderDevice const & device )
 	{
 		auto & engine = *getEngine();
-		auto & device = getCurrentRenderDevice( *this );
 
-		m_intermediate.initialise();
-		m_result.initialise();
+		m_intermediate.initialise( device );
+		m_result.initialise( device );
 
 		for ( auto & result : m_blurResults )
 		{
-			result.initialise();
+			result.initialise( device );
 		}
 
 		// Combine pass
-		auto combineProgram = doCreateCombineProgram( engine, m_combineVertexShader, m_combinePixelShader );
+		auto combineProgram = doCreateCombineProgram( engine, device, m_combineVertexShader, m_combinePixelShader );
 		m_combine = std::make_unique< Combine >( *engine.getRenderSystem()
+			, device
 			, m_size
 			, m_gpResult
 			, m_lpResult[LpTexture::eDiffuse]
@@ -716,10 +704,11 @@ namespace castor3d
 			, combineProgram );
 
 		// Horizontal blur pass
-		auto blurHorizProgram = doCreateBlurProgram( engine, false, m_blurHorizVertexShader, m_blurHorizPixelShader );
+		auto blurHorizProgram = doCreateBlurProgram( engine, device, false, m_blurHorizVertexShader, m_blurHorizPixelShader );
 		m_blurX =
 		{
 			std::make_unique< Blur >( *engine.getRenderSystem()
+				, device
 				, m_size
 				, m_gpInfoUbo
 				, m_sceneUbo
@@ -729,6 +718,7 @@ namespace castor3d
 				, false
 				, blurHorizProgram ),
 			std::make_unique< Blur >( *engine.getRenderSystem()
+				, device
 				, m_size
 				, m_gpInfoUbo
 				, m_sceneUbo
@@ -738,6 +728,7 @@ namespace castor3d
 				, false
 				, blurHorizProgram ),
 			std::make_unique< Blur >( *engine.getRenderSystem()
+				, device
 				, m_size
 				, m_gpInfoUbo
 				, m_sceneUbo
@@ -749,10 +740,11 @@ namespace castor3d
 		};
 
 		// Vertical blur pass
-		auto blurVerticProgram = doCreateBlurProgram( engine, true, m_blurVerticVertexShader, m_blurVerticPixelShader );
+		auto blurVerticProgram = doCreateBlurProgram( engine, device, true, m_blurVerticVertexShader, m_blurVerticPixelShader );
 		m_blurY =
 		{
 			std::make_unique< Blur >( *engine.getRenderSystem()
+				, device
 				, m_size
 				, m_gpInfoUbo
 				, m_sceneUbo
@@ -762,6 +754,7 @@ namespace castor3d
 				, true
 				, blurVerticProgram ),
 			std::make_unique< Blur >( *engine.getRenderSystem()
+				, device
 				, m_size
 				, m_gpInfoUbo
 				, m_sceneUbo
@@ -771,6 +764,7 @@ namespace castor3d
 				, true
 				, blurVerticProgram ),
 			std::make_unique< Blur >( *engine.getRenderSystem()
+				, device
 				, m_size
 				, m_gpInfoUbo
 				, m_sceneUbo
@@ -782,7 +776,7 @@ namespace castor3d
 		};
 
 		// Commands.
-		m_timer = std::make_shared< RenderPassTimer >( engine, cuT( "Opaque" ), cuT( "SSSSS pass" ) );
+		m_timer = std::make_shared< RenderPassTimer >( engine, device, cuT( "Opaque" ), cuT( "SSSSS pass" ) );
 		m_finished = device->createSemaphore( "SSSSS pass" );
 		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( "SSSSS pass" );
 		m_commandBuffer->begin();
@@ -805,7 +799,7 @@ namespace castor3d
 		m_commandBuffer->end();
 	}
 
-	void SubsurfaceScatteringPass::cleanup()
+	void SubsurfaceScatteringPass::cleanup( RenderDevice const & device )
 	{
 		m_commandBuffer.reset();
 		m_finished.reset();
@@ -822,9 +816,9 @@ namespace castor3d
 		}
 	}
 
-	ashes::Semaphore const & SubsurfaceScatteringPass::render( ashes::Semaphore const & toWait )const
+	ashes::Semaphore const & SubsurfaceScatteringPass::render( RenderDevice const & device
+		, ashes::Semaphore const & toWait )const
 	{
-		auto & device = getCurrentRenderDevice( *this );
 		RenderPassTimerBlock timerBlock{ m_timer->start() };
 		timerBlock->notifyPassRender();
 		auto * result = &toWait;
@@ -843,11 +837,13 @@ namespace castor3d
 		for ( size_t i{ 0u }; i < m_blurResults.size(); ++i )
 		{
 			visitor.visit( "SSSSS Blur " + string::toString( i )
-				, m_blurResults[i].getTexture()->getDefaultView().getSampledView() );
+				, m_blurResults[i].getTexture()->getDefaultView().getSampledView()
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		}
 
 		visitor.visit( "SSSSS Result"
-			, m_result.getTexture()->getDefaultView().getSampledView() );
+			, m_result.getTexture()->getDefaultView().getSampledView()
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 
 		visitor.visit( m_blurHorizVertexShader );
 		visitor.visit( m_blurHorizPixelShader );

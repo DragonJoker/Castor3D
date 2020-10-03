@@ -1,7 +1,7 @@
 #include "GuiCommon/System/NodeState.hpp"
 
 #include <Castor3D/Event/Frame/FrameListener.hpp>
-#include <Castor3D/Event/Frame/FunctorEvent.hpp>
+#include <Castor3D/Event/Frame/CpuFunctorEvent.hpp>
 #include <Castor3D/Scene/SceneNode.hpp>
 
 using namespace castor;
@@ -63,7 +63,7 @@ namespace GuiCommon
 		m_scalarVelocityY = 0.0f;
 		m_scalarVelocityZ = 0.0f;
 
-		m_listener.postEvent( makeFunctorEvent( EventType::ePostRender
+		m_listener.postEvent( makeCpuFunctorEvent( EventType::ePostRender
 			, [this]()
 			{
 				m_node->setOrientation( m_originalOrientation );
@@ -111,7 +111,7 @@ namespace GuiCommon
 		if ( result )
 		{
 			angles = m_angles;
-			m_listener.postEvent( makeFunctorEvent( EventType::ePostRender
+			m_listener.postEvent( makeCpuFunctorEvent( EventType::ePostRender
 			, [this, translate, angles]()
 			{
 				m_node->translate( translate );

@@ -8,7 +8,7 @@ See LICENSE file in root folder
 #include "Castor3D/Overlay/OverlayRenderer.hpp"
 
 #include "Castor3D/Event/UserInput/UserInputListener.hpp"
-#include "Castor3D/Render/ToTexture/RenderQuad.hpp"
+#include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>

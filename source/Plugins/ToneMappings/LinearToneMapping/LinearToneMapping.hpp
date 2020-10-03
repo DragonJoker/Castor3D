@@ -32,6 +32,7 @@ namespace Linear
 		 *\param[in]	parameters	Les paramètres spécifiques à l'implémentation.
 		 */
 		ToneMapping( castor3d::Engine & engine
+			, castor3d::RenderDevice const & device
 			, castor3d::HdrConfigUbo & hdrConfigUbo
 			, castor3d::Parameters const & parameters );
 		/**
@@ -52,6 +53,7 @@ namespace Linear
 		 *\param[in]	parameters	Les paramètres spécifiques à l'implémentation.
 		 */
 		static castor3d::ToneMappingSPtr create( castor3d::Engine & engine
+			, castor3d::RenderDevice const & device
 			, castor3d::HdrConfigUbo & hdrConfigUbo
 			, castor3d::Parameters const & parameters );
 

@@ -125,7 +125,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doCleanup
 		 */
-		C3D_API virtual void doCleanup()override;
+		C3D_API virtual void doCleanup( RenderDevice const & device )override;
 
 	private:
 		/**
@@ -151,7 +151,8 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doInitialise
 		 */
-		C3D_API bool doInitialise( castor::Size const & size )override;
+		C3D_API bool doInitialise( RenderDevice const & device
+			, castor::Size const & size )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdate
 		 */

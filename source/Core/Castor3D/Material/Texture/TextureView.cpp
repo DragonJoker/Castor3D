@@ -164,12 +164,7 @@ namespace castor3d
 			auto debugName = m_debugName
 				+ "L(" + string::toString( m_info->subresourceRange.baseArrayLayer ) + "x" + string::toString( m_info->subresourceRange.layerCount ) + ")"
 				+ "M(" + string::toString( m_info->subresourceRange.baseMipLevel ) + "x" + string::toString( m_info->subresourceRange.levelCount ) + ")";
-			auto createInfo = m_info;
-			createInfo->subresourceRange.aspectMask = ( ( ashes::isDepthStencilFormat( m_info->format ) || ashes::isDepthFormat( m_info->format ) )
-				? VK_IMAGE_ASPECT_DEPTH_BIT
-				: ( ashes::isStencilFormat( m_info->format )
-					? VK_IMAGE_ASPECT_STENCIL_BIT
-					: createInfo->subresourceRange.aspectMask ) );
+			auto createInfo = convertToSampledView( m_info );
 			m_sampledView = image.createView( debugName
 				, createInfo );
 		}
@@ -187,20 +182,34 @@ namespace castor3d
 			auto debugName = m_debugName
 				+ "L(" + string::toString( m_info->subresourceRange.baseArrayLayer ) + "x" + string::toString( m_info->subresourceRange.layerCount ) + ")"
 				+ "M(" + string::toString( m_info->subresourceRange.baseMipLevel ) + "x" + string::toString( m_info->subresourceRange.levelCount ) + ")";
-			auto createInfo = m_info;
-
-			if ( createInfo->viewType == VK_IMAGE_VIEW_TYPE_3D )
-			{
-				createInfo->viewType = VK_IMAGE_VIEW_TYPE_2D_ARRAY;
-				createInfo->subresourceRange.layerCount = image.getDimensions().depth;
-			}
-
-			createInfo->subresourceRange.levelCount = 1u;
+			auto createInfo = convertToTargetView( m_info, image.getDimensions().depth );
 			m_targetView = image.createView( debugName
 				, createInfo );
 		}
 
 		return m_targetView;
+	}
+
+	VkImageViewCreateInfo TextureView::convertToSampledView( VkImageViewCreateInfo createInfo )
+	{
+		createInfo.subresourceRange.aspectMask = ( ( ashes::isDepthStencilFormat( createInfo.format ) || ashes::isDepthFormat( createInfo.format ) )
+			? VK_IMAGE_ASPECT_DEPTH_BIT
+			: ( ashes::isStencilFormat( createInfo.format )
+				? VK_IMAGE_ASPECT_STENCIL_BIT
+				: createInfo.subresourceRange.aspectMask ) );
+		return createInfo;
+	}
+
+	VkImageViewCreateInfo TextureView::convertToTargetView( VkImageViewCreateInfo createInfo, uint32_t depth )
+	{
+		if ( createInfo.viewType == VK_IMAGE_VIEW_TYPE_3D )
+		{
+			createInfo.viewType = VK_IMAGE_VIEW_TYPE_2D_ARRAY;
+			createInfo.subresourceRange.layerCount = depth;
+		}
+
+		createInfo.subresourceRange.levelCount = 1u;
+		return createInfo;
 	}
 
 	void TextureView::doUpdate( ashes::ImageViewCreateInfo info )

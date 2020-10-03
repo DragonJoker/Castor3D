@@ -38,7 +38,15 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
 		 */
-		explicit LayeredLpvConfigUbo( Engine & engine );
+		explicit LayeredLpvConfigUbo( RenderDevice const & device );
+		/**@}*/
+		/**
+		 *\~english
+		 *\brief		Destructor.
+		 *\~french
+		 *\brief		Destructeur.
+		 */
+		~LayeredLpvConfigUbo();
 		/**
 		 *\~english
 		 *\brief		Updates UBO data.
@@ -54,6 +62,11 @@ namespace castor3d
 			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
 		}
 
+		UniformBufferOffsetT< Configuration > const & getUbo()const
+		{
+			return m_ubo;
+		}
+
 	public:
 		C3D_API static const std::string LayeredLpvConfig;
 		C3D_API static const std::string AllMinVolumeCorners;
@@ -62,7 +75,7 @@ namespace castor3d
 		C3D_API static const std::string Config;
 
 	private:
-		Engine & m_engine;
+		RenderDevice const & m_device;
 		UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }

@@ -77,13 +77,13 @@ namespace castor3d
 	{
 	}
 
-	void Material::initialise()
+	void Material::initialise( RenderDevice const & device )
 	{
 		log::debug << cuT( "Initialising material [" ) << getName() << cuT( "]" ) << std::endl;
 
 		for ( auto pass : m_passes )
 		{
-			pass->initialise();
+			pass->initialise( device );
 		}
 	}
 

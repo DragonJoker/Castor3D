@@ -20,6 +20,7 @@ using namespace castor;
 namespace castor3d
 {
 	WeightedBlendRendering::WeightedBlendRendering( Engine & engine
+		, RenderDevice const & device
 		, TransparentPass & transparentPass
 		, TextureUnit const & depthView
 		, ashes::ImageView const & colourView
@@ -31,11 +32,11 @@ namespace castor3d
 		: m_engine{ engine }
 		, m_transparentPass{ transparentPass }
 		, m_size{ size }
-		, m_transparentPassResult{ engine, depthView, velocityTexture }
-		, m_finalCombinePass{ engine, m_size, m_transparentPass.getSceneUbo(), hdrConfigUbo, gpInfoUbo, m_transparentPassResult, colourView }
+		, m_transparentPassResult{ engine, device, depthView, velocityTexture }
+		, m_finalCombinePass{ engine, device, m_size, m_transparentPass.getSceneUbo(), hdrConfigUbo, gpInfoUbo, m_transparentPassResult, colourView }
 	{
-		m_transparentPass.initialiseRenderPass( m_transparentPassResult );
-		m_transparentPass.initialise( m_size );
+		m_transparentPass.initialiseRenderPass( device, m_transparentPassResult );
+		m_transparentPass.initialise( device, m_size );
 	}
 
 	void WeightedBlendRendering::update( CpuUpdater & updater )
@@ -48,20 +49,26 @@ namespace castor3d
 		m_transparentPass.update( updater );
 	}
 
-	ashes::Semaphore const & WeightedBlendRendering::render( Scene const & scene
+	ashes::Semaphore const & WeightedBlendRendering::render( RenderDevice const & device
+		, Scene const & scene
 		, ashes::Semaphore const & toWait )
 	{
 		auto * result = &toWait;
-		result = &m_transparentPass.render( *result );
-		result = &m_finalCombinePass.render( scene.getFog().getType()
+		result = &m_transparentPass.render( device, *result );
+		result = &m_finalCombinePass.render( device
+			, scene.getFog().getType()
 			, *result );
 		return *result;
 	}
 
 	void WeightedBlendRendering::accept( RenderTechniqueVisitor & visitor )
 	{
-		visitor.visit( "Transparent Accumulation", m_transparentPassResult[WbTexture::eAccumulation].getTexture()->getDefaultView().getSampledView() );
-		visitor.visit( "Transparent Revealage", m_transparentPassResult[WbTexture::eRevealage].getTexture()->getDefaultView().getSampledView() );
+		visitor.visit( "Transparent Accumulation"
+			, m_transparentPassResult[WbTexture::eAccumulation].getTexture()->getDefaultView().getSampledView()
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+		visitor.visit( "Transparent Revealage"
+			, m_transparentPassResult[WbTexture::eRevealage].getTexture()->getDefaultView().getSampledView()
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		m_transparentPass.accept( visitor );
 		m_finalCombinePass.accept( visitor );
 	}

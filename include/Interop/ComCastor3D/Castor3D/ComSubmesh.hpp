@@ -4,7 +4,7 @@
 
 #include "ComCastor3D/Castor3D/ComIndexMapping.hpp"
 
-#include <Castor3D/Mesh/Submesh.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 
 namespace CastorCom
 {
