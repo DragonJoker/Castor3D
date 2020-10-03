@@ -227,7 +227,10 @@ namespace castor3d
 			, uint32_t dstBinding
 			, uint32_t dstArrayElement = 0u )
 		{
-			return RenderQuad::makeDescriptorWrite( view, sampler, dstBinding, dstArrayElement );
+			return RenderQuad::makeDescriptorWrite( view
+				, sampler
+				, dstBinding
+				, dstArrayElement );
 		}
 		/**
 		*\~english
@@ -263,7 +266,11 @@ namespace castor3d
 			, uint32_t elemRange
 			, uint32_t dstArrayElement = 0u )
 		{
-			return RenderQuad::makeDescriptorWrite( buffer, dstBinding, elemOffset, elemRange, dstArrayElement );
+			return RenderQuad::makeDescriptorWrite( buffer
+				, dstBinding
+				, elemOffset
+				, elemRange
+				, dstArrayElement );
 		}
 		/**
 		*\~english
@@ -290,7 +297,8 @@ namespace castor3d
 			, uint32_t dstBinding
 			, uint32_t dstArrayElement = 0u )
 		{
-			return buffer.getDescriptorWrite( dstBinding
+			return RenderQuad::makeDescriptorWrite( buffer
+				, dstBinding
 				, dstArrayElement );
 		}
 		/**
@@ -327,7 +335,11 @@ namespace castor3d
 			, uint32_t byteRange
 			, uint32_t dstArrayElement = 0u )
 		{
-			return RenderQuad::makeDescriptorWrite( storageBuffer, dstBinding, byteOffset, byteRange, dstArrayElement );
+			return RenderQuad::makeDescriptorWrite( storageBuffer
+				, dstBinding
+				, byteOffset
+				, byteRange
+				, dstArrayElement );
 		}
 		/**
 		*\~english
@@ -364,10 +376,10 @@ namespace castor3d
 			, uint32_t elemRange
 			, uint32_t dstArrayElement = 0u )
 		{
-			return makeDescriptorWrite( storageBuffer.getBuffer()
+			return RenderQuad::makeDescriptorWrite( storageBuffer
 				, dstBinding
-				, uint32_t( elemOffset * sizeof( T ) )
-				, uint32_t( elemRange * sizeof( T ) )
+				, elemOffset
+				, elemRange
 				, dstArrayElement );
 		}
 		/**
@@ -399,7 +411,10 @@ namespace castor3d
 			, uint32_t dstBinding
 			, uint32_t dstArrayElement = 0u )
 		{
-			return RenderQuad::makeDescriptorWrite( buffer, view, dstBinding, dstArrayElement );
+			return RenderQuad::makeDescriptorWrite( buffer
+				, view
+				, dstBinding
+				, dstArrayElement );
 		}
 		/**
 		*\~english
@@ -431,7 +446,7 @@ namespace castor3d
 			, uint32_t dstBinding
 			, uint32_t dstArrayElement = 0u )
 		{
-			return makeDescriptorWrite( buffer.getBuffer()
+			return RenderQuad::makeDescriptorWrite( buffer
 				, view
 				, dstBinding
 				, dstArrayElement );
@@ -515,7 +530,7 @@ namespace castor3d
 				, name
 				, samplerFilter
 				, gridSize
-				, m_config } );
+				, this->m_config } );
 		}
 	};
 

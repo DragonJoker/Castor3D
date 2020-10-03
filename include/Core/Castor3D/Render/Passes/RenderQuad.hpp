@@ -445,8 +445,8 @@ namespace castor3d
 		{
 			return makeDescriptorWrite( storageBuffer.getBuffer()
 				, dstBinding
-				, uint32_t( elemOffset * sizeof( T ) )
-				, uint32_t( elemRange * sizeof( T ) )
+				, uint32_t( elemOffset * sizeof( DataT ) )
+				, uint32_t( elemRange * sizeof( DataT ) )
 				, dstArrayElement );
 		}
 		/**

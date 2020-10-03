@@ -4,6 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_PASS_H___
 #define ___C3D_PASS_H___
 
+#include "PassModule.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
+
 #include "Castor3D/Material/Pass/SubsurfaceScattering.hpp"
 #include "Castor3D/Material/Texture/TextureModule.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBufferModule.hpp"

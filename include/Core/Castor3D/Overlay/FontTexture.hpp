@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "OverlayModule.hpp"
 #include "Castor3D/Material/Texture/TextureModule.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 
 #include <CastorUtils/Design/Signal.hpp>
 #include <CastorUtils/Graphics/Position.hpp>

@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_ShaderBuffer_H___
 
 #include "ShaderModule.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 
 #include <ashespp/Buffer/Buffer.hpp>
 #include <ashespp/Buffer/BufferView.hpp>

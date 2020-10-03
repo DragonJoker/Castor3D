@@ -210,14 +210,15 @@ namespace castor
 			return bool( m_ptr );
 		}
 
-		void cleanup()
+		template< typename ... ParamsT >
+		void cleanup( ParamsT && ... params )
 		{
 			CU_Require( m_ptr );
 			if ( m_initialised.exchange( false ) )
 			{
 				if ( m_initialiseExecuted.exchange( false ) )
 				{
-					m_ptr->cleanup();
+					m_ptr->cleanup( std::forward< ParamsT >( params )... );
 				}
 
 				m_initialise = [](){};
@@ -260,13 +261,13 @@ namespace castor
 	template< typename LhsT, typename RhsT, typename ... ParamsT >
 	inline DelayedInitialiserT< LhsT > makeDerivedDelayedInitialiser( ParamsT && ... params )
 	{
-		return DelayedInitialiserT< LhsT >::make< RhsT >( std::forward< ParamsT >( params )... );
+		return DelayedInitialiserT< LhsT >::template make< RhsT >( std::forward< ParamsT >( params )... );
 	}
 
 	template< typename LhsT, typename ... ParamsT >
 	inline DelayedInitialiserT< LhsT > makeDelayedInitialiser( ParamsT && ... params )
 	{
-		return DelayedInitialiserT< LhsT >::make< LhsT >( std::forward< ParamsT >( params )... );
+		return DelayedInitialiserT< LhsT >::template make< LhsT >( std::forward< ParamsT >( params )... );
 	}
 }
 

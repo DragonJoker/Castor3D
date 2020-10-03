@@ -11,6 +11,8 @@ See LICENSE file in root folder
 #include <CastorUtils/Math/RangedValue.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
+#include <ashespp/Image/ImageView.hpp>
+
 namespace castor3d
 {
 	class PipelineVisitorBase

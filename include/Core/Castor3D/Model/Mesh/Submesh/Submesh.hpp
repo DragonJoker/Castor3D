@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_Submesh_H___
 
 #include "Component/ComponentModule.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 
 #include "Castor3D/Binary/BinaryModule.hpp"
 #include "Castor3D/Buffer/BufferModule.hpp"

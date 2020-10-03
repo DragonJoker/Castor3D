@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_BillboardList_H___
 
 #include "Castor3D/Material/MaterialModule.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
 #include "Castor3D/Shader/ShaderModule.hpp"
 

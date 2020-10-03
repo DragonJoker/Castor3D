@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_Sampler___
 
 #include "TextureModule.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 
 #include <ashespp/Image/SamplerCreateInfo.hpp>
 #include <ashespp/Image/Sampler.hpp>
