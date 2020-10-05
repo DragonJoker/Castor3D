@@ -66,24 +66,25 @@ namespace CastorViewer
 
 	private:
 		DECLARE_EVENT_TABLE()
-		void OnRenderTimer( wxTimerEvent & event );
-		void OnTimer( wxTimerEvent & event );
-		void OnFpsTimer( wxTimerEvent & event );
-		void OnPaint( wxPaintEvent & event );
-		void OnSize( wxSizeEvent & event );
-		void OnInit( wxInitDialogEvent & event );
-		void OnClose( wxCloseEvent  & event );
-		void OnEnterWindow( wxMouseEvent & event );
-		void OnLeaveWindow( wxMouseEvent & event );
-		void OnEraseBackground( wxEraseEvent & event );
-		void OnKeyUp( wxKeyEvent & event );
-		void OnLoadScene( wxCommandEvent & event );
-		void OnExportScene( wxCommandEvent & event );
-		void OnShowLogs( wxCommandEvent & event );
-		void OnShowLists( wxCommandEvent & event );
-		void OnPrintScreen( wxCommandEvent & event );
-		void OnRecord( wxCommandEvent & event );
-		void OnStop( wxCommandEvent & event );
+		void onRenderTimer( wxTimerEvent & event );
+		void onTimer( wxTimerEvent & event );
+		void onFpsTimer( wxTimerEvent & event );
+		void onPaint( wxPaintEvent & event );
+		void onSize( wxSizeEvent & event );
+		void onInit( wxInitDialogEvent & event );
+		void onClose( wxCloseEvent  & event );
+		void onEnterWindow( wxMouseEvent & event );
+		void onLeaveWindow( wxMouseEvent & event );
+		void onEraseBackground( wxEraseEvent & event );
+		void onKeyUp( wxKeyEvent & event );
+		void onSceneTabChanging( wxAuiNotebookEvent & event );
+		void onLoadScene( wxCommandEvent & event );
+		void onExportScene( wxCommandEvent & event );
+		void onShowLogs( wxCommandEvent & event );
+		void onShowLists( wxCommandEvent & event );
+		void onPrintScreen( wxCommandEvent & event );
+		void onRecord( wxCommandEvent & event );
+		void onStop( wxCommandEvent & event );
 
 	private:
 		int m_logsHeight{ 100 };
@@ -103,7 +104,8 @@ namespace CastorViewer
 		wxAuiNotebook * m_logTabsContainer{ nullptr };
 		wxAuiNotebook * m_sceneTabsContainer{ nullptr };
 		GuiCommon::PropertiesHolder * m_propertiesHolder{ nullptr };
-		GuiCommon::PropertiesContainer * m_propertiesContainer{ nullptr };
+		GuiCommon::PropertiesContainer * m_scenePropertiesContainer{ nullptr };
+		GuiCommon::PropertiesContainer * m_materialPropertiesContainer{ nullptr };
 		wxListBox * m_messageLog{ nullptr };
 		wxListBox * m_errorLog{ nullptr };
 		GuiCommon::SceneObjectsList * m_sceneObjectsList{ nullptr };

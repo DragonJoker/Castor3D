@@ -43,6 +43,17 @@ namespace GuiCommon
 		, m_bCanEdit( p_bCanEdit )
 		, m_data( nullptr )
 	{
+		SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
+		SetForegroundColour( PANEL_FOREGROUND_COLOUR );
+		SetCaptionBackgroundColour( PANEL_BACKGROUND_COLOUR );
+		SetCaptionTextColour( PANEL_FOREGROUND_COLOUR );
+		SetSelectionBackgroundColour( ACTIVE_TAB_COLOUR );
+		SetSelectionTextColour( ACTIVE_TEXT_COLOUR );
+		SetCellBackgroundColour( INACTIVE_TAB_COLOUR );
+		SetCellTextColour( INACTIVE_TEXT_COLOUR );
+		SetLineColour( BORDER_COLOUR );
+		SetMarginColour( BORDER_COLOUR );
+
 		if ( !m_buttonEditor )
 		{
 			m_buttonEditor = RegisterEditorClass( new ButtonEventEditor() );
