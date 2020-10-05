@@ -103,7 +103,7 @@ namespace castor3d
 					&& ( file.writeText( m_tabs + cuT( "\t\tlooped " ) + String{ it.second.looped ? cuT( "true" ) : cuT( "false" ) } +cuT( "\n" ) ) > 0 )
 					&& ( file.writeText( m_tabs + cuT( "\t\tscale " ) + string::toString( it.second.scale, std::locale{ "C" } ) + cuT( "\n" ) ) > 0 )
 					&& ( it.second.startingPoint == 0_ms ? true : file.writeText( m_tabs + cuT( "\t\tstart_at " ) + string::toString( it.second.startingPoint.count() / 1000.0, std::locale{ "C" } ) + cuT( "\n" ) ) > 0 )
-					&& ( it.second.stoppingPoint == 0_ms ? true : file.writeText( m_tabs + cuT( "\t\tstart_at " ) + string::toString( it.second.stoppingPoint.count() / 1000.0, std::locale{ "C" } ) + cuT( "\n" ) ) > 0 )
+					&& ( it.second.stoppingPoint == 0_ms ? true : file.writeText( m_tabs + cuT( "\t\tstop_at " ) + string::toString( it.second.stoppingPoint.count() / 1000.0, std::locale{ "C" } ) + cuT( "\n" ) ) > 0 )
 					&& ( file.writeText( m_tabs + cuT( "\t}\n" ) ) > 0 );
 				castor::TextWriter< AnimatedObjectGroup >::checkError( result, "AnimatedObjectGroup animation" );
 			}

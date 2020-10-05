@@ -116,13 +116,22 @@ namespace castor3d
 	protected:
 		/**
 		 *\~english
-		 *\brief		adds an animation.
+		 *\brief		Adds an animation.
 		 *\param[in]	animation	The animation.
 		 *\~french
 		 *\brief		Ajoute une animation.
 		 *\param[in]	animation	L'animation.
 		 */
 		inline void doAddAnimation( AnimationPtr animation );
+		/**
+		 *\~english
+		 *\brief		Removes an animation.
+		 *\param[in]	animation	The animation.
+		 *\~french
+		 *\brief		Enlève une animation.
+		 *\param[in]	animation	L'animation.
+		 */
+		inline void doRemoveAnimation( castor::String const & name );
 		/**
 		 *\~english
 		 *\brief		Retrieves an animation

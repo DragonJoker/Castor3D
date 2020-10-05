@@ -49,11 +49,6 @@ namespace castor3d
 			result = result && BinaryWriter< Bone >{}.write( *bone, m_chunk );
 		}
 
-		for ( auto const & it : obj.m_animations )
-		{
-			result = result && BinaryWriter< Animation >{}.write( *it.second, m_chunk );
-		}
-
 		return result;
 	}
 

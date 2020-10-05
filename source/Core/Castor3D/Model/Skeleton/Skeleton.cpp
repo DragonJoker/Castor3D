@@ -69,6 +69,14 @@ namespace castor3d
 		return doGetAnimation< SkeletonAnimation >( name );
 	}
 
+	void Skeleton::removeAnimation( castor::String const & name )
+	{
+		if ( hasAnimation( name ) )
+		{
+			doRemoveAnimation( name );
+		}
+	}
+
 	void Skeleton::computeContainers( Mesh & mesh )
 	{
 		auto it = m_boxes.find( &mesh );
