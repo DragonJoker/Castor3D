@@ -163,7 +163,7 @@ namespace castor
 		 *\param[in]	received	Les paramètres remplis.
 		 *\return		\p false si \p params ne contient pas tous les types de paramètres attendus par la fonction.
 		 */
-		CU_API bool checkParams( String const & params
+		CU_API bool checkParams( String params
 			, ParserParameterArray const & expected
 			, ParserParameterArray & received );
 		/**
@@ -224,7 +224,7 @@ namespace castor
 		 *\brief		Initialisation spécifique.
 		 *\param[in]	path	Le chemin d'accès au fichier.
 		 */
-		CU_API virtual void doInitialiseParser( castor::Path const & path ) = 0;
+		CU_API virtual void doInitialiseParser( Path const & path ) = 0;
 		/**
 		 *\~english
 		 *\brief		Specific cleanup.
@@ -271,16 +271,18 @@ namespace castor
 		 *\param[in]	section	L'ID de section
 		 *\return		Le nom.
 		 */
-		CU_API virtual castor::String doGetSectionName( uint32_t section ) = 0;
+		CU_API virtual String doGetSectionName( uint32_t section ) = 0;
 
 	private:
 		bool doParseScriptLine( String & line );
 		bool doParseScriptBlockEnd();
-		bool doInvokeParser( castor::String & line, AttributeParserMap const & parsers );
+		bool doInvokeParser( String & line, AttributeParserMap const & parsers );
 		void doEnterBlock();
 		void doLeaveBlock();
 		bool doIsInIgnoredBlock();
 		String doGetSectionsStack();
+		void doAddDefine( String const & param );
+		void doCheckDefines( String & text );
 
 	private:
 		uint32_t m_rootSectionId;
@@ -297,6 +299,9 @@ namespace castor
 		//!\~english	Tells the lines parsed are to be ignored.
 		//!\~french		Dit que les ligne slues sont ignorées.
 		bool m_ignored;
+		//!\~english	The defines map.
+		//!\~french		La map de defines.
+		StrStrMap m_defines;
 	};
 }
 

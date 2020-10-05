@@ -252,28 +252,29 @@ namespace castor
 		return result;
 	}
 
-	void FileParser::parseError( String const & p_error )
+	void FileParser::parseError( String const & text )
 	{
-		StringStream error{ makeStringStream() };
-		error << cuT( "Error, line #" ) << m_context->m_line << cuT( ": Directive <" ) << doGetSectionsStack() << cuT( ">: " ) << p_error;
-		m_logger.logError( error.str() );
+		StringStream stream{ makeStringStream() };
+		stream << cuT( "Error, line #" ) << m_context->m_line << cuT( ": Directive <" ) << doGetSectionsStack() << cuT( ">: " ) << text;
+		m_logger.logError( stream.str() );
 	}
 
-	void FileParser::parseWarning( String const & p_warning )
+	void FileParser::parseWarning( String const & text )
 	{
-		StringStream error{ makeStringStream() };
-		error << cuT( "Warning, line #" ) << m_context->m_line << cuT( ": Directive <" ) << doGetSectionsStack() << cuT( ">: " ) << p_warning;
-		m_logger.logWarning( error.str() );
+		StringStream stream{ makeStringStream() };
+		stream << cuT( "Warning, line #" ) << m_context->m_line << cuT( ": Directive <" ) << doGetSectionsStack() << cuT( ">: " ) << text;
+		m_logger.logWarning( stream.str() );
 	}
 
-	bool FileParser::checkParams( String const & p_params, ParserParameterArray const & p_expected, ParserParameterArray & p_received )
+	bool FileParser::checkParams( String params
+		, ParserParameterArray const & expected
+		, ParserParameterArray & received )
 	{
 		bool result = true;
-		String params( p_params );
 		string::trim( params );
 		String missingParam;
 
-		for ( auto param : p_expected )
+		for ( auto param : expected )
 		{
 			if ( result )
 			{
@@ -286,7 +287,7 @@ namespace castor
 				}
 				else
 				{
-					p_received.push_back( filled );
+					received.push_back( filled );
 				}
 			}
 		}
@@ -295,7 +296,7 @@ namespace castor
 		{
 			auto param = std::make_shared< ParserParameter< ParameterType::eText > >();
 			param->m_value = params;
-			p_received.push_back( param );
+			received.push_back( param );
 		}
 
 		if ( !result )
@@ -409,6 +410,10 @@ namespace castor
 				result = iter->second.m_function( this, iter->second.m_params );
 			}
 		}
+		else
+		{
+			parseError( "Unexpected '}'" );
+		}
 
 		return result;
 	}
@@ -424,7 +429,11 @@ namespace castor
 		{
 			if ( iter == p_parsers.end() )
 			{
-				if ( !doDiscardParser( p_line ) )
+				if ( splitCmd[0] == cuT( "define" ) && splitCmd.size() > 1 )
+				{
+					doAddDefine( splitCmd[1] );
+				}
+				else if ( !doDiscardParser( p_line ) )
 				{
 					ignore();
 				}
@@ -436,6 +445,7 @@ namespace castor
 				if ( splitCmd.size() >= 2 )
 				{
 					strParameters = string::trim( splitCmd[1] );
+					doCheckDefines( strParameters );
 				}
 
 				ParserParameterArray filled;
@@ -520,5 +530,77 @@ namespace castor
 		}
 
 		return sections.str();
+	}
+
+	void FileParser::doAddDefine( String const & param )
+	{
+		m_context->m_functionName = "define";
+		auto values = string::split( param, cuT( " \t" ), 1 );
+
+		if ( values.size() == 2 )
+		{
+			auto iresult = m_defines.emplace( values[0], values[1] );
+
+			if ( !iresult.second )
+			{
+				parseError( cuT( "Replacing an already existing value." ) );
+			}
+		}
+		else
+		{
+			parseWarning( cuT( "Missing parameters." ) );
+		}
+	}
+
+	void FileParser::doCheckDefines( String & text )
+	{
+		static String const separators = cuT( " \t,;:?./-*+=(){}[]|" );
+		auto textLength = text.size();
+
+		for ( auto & define : m_defines )
+		{
+			auto index = String::npos;
+			auto wordLength = define.first.size();
+
+			do
+			{
+				index = text.find( define.first, index + 1 );
+
+				if ( index != String::npos )
+				{
+					bool replace = true;
+
+					if ( index > 0 )
+					{
+						// Word doesn't start the line.
+						if ( separators.find( text[index - 1] ) == String::npos )
+						{
+							// Previous char isn't separator => ignore.
+							replace = false;
+						}
+					}
+
+					if ( replace )
+					{
+						if ( index + textLength > wordLength )
+						{
+							// Word doesn't end the line.
+							if ( separators.find( text[index + wordLength] ) == String::npos )
+							{
+								// Next char isn't separator => ignore.
+								replace = false;
+							}
+						}
+					}
+
+					if ( replace )
+					{
+						text = text.replace( index, define.first.size(), define.second );
+						textLength = text.size();
+					}
+				}
+			}
+			while ( index != String::npos );
+		}
 	}
 }
