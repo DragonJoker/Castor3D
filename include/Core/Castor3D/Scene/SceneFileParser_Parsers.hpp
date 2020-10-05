@@ -221,6 +221,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserUnitReflection )
 	CU_DeclareAttributeParser( parserUnitRefraction )
 	CU_DeclareAttributeParser( parserUnitSampler )
+	CU_DeclareAttributeParser( parserUnitInvertY )
 	CU_DeclareAttributeParser( parserUnitEnd )
 
 	// Shader Parsers
@@ -321,6 +322,8 @@ namespace castor3d
 	// Animated object group animation parsers
 	CU_DeclareAttributeParser( parserAnimationLooped )
 	CU_DeclareAttributeParser( parserAnimationScale )
+	CU_DeclareAttributeParser( parserAnimationStartAt )
+	CU_DeclareAttributeParser( parserAnimationStopAt )
 	CU_DeclareAttributeParser( parserAnimationEnd )
 
 	// Skybox parsers
@@ -347,6 +350,8 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserSsaoBlurHighQuality )
 	CU_DeclareAttributeParser( parserSsaoBlurStepSize )
 	CU_DeclareAttributeParser( parserSsaoBlurRadius )
+	CU_DeclareAttributeParser( parserSsaoBendStepCount )
+	CU_DeclareAttributeParser( parserSsaoBendStepSize )
 	CU_DeclareAttributeParser( parserSsaoEnd )
 
 	// Subsurface Scattering parsers

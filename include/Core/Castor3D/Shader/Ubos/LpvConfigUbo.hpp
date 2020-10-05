@@ -16,7 +16,7 @@ namespace castor3d
 	class LpvConfigUbo
 	{
 	public:
-		using Configuration = LpvConfigUboConfiguration;
+		using Configuration = LpvConfiguration;
 
 	public:
 		/**
@@ -55,21 +55,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour les données de l'UBO.
 		 */
-		C3D_API void cpuUpdate( castor::Grid const & grid
-			, Light const & light
-			, uint32_t cascadeIndex
-			, float texelAreaModifier = 1.0f
-			, float indirectAttenuation = 1.7f );
-		/**
-		 *\~english
-		 *\brief		Updates UBO data.
-		 *\~french
-		 *\brief		Met à jour les données de l'UBO.
-		 */
-		C3D_API void cpuUpdate( castor::Grid const & grid
-			, Light const & light
-			, float texelAreaModifier = 1.0f
-			, float indirectAttenuation = 1.7f );
+		C3D_API void cpuUpdate( Configuration const & config );
 
 		UniformBufferOffsetT< Configuration > & getUbo()
 		{
@@ -110,6 +96,10 @@ namespace castor3d
 	auto c3d_minVolumeCorner = lpvConfig.declMember< Vec4 >( castor3d::LpvConfigUbo::MinVolumeCorner );\
 	auto c3d_gridSizes = lpvConfig.declMember< Vec4 >( castor3d::LpvConfigUbo::GridSizes );\
 	auto c3d_lpvConfig = lpvConfig.declMember< Vec4 >( castor3d::LpvConfigUbo::Config );\
+	auto c3d_lpvIndirectAttenuation = c3d_lpvConfig.x();\
+	auto c3d_lpvTexelAreaModifier = c3d_lpvConfig.y();\
+	auto c3d_lpvTanFovXHalf = c3d_lpvConfig.z();\
+	auto c3d_lpvTanFovYHalf = c3d_lpvConfig.w();\
 	lpvConfig.end()
 
 #endif

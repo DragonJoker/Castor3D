@@ -603,9 +603,11 @@ namespace Testing
 			while ( result && itA != endItA && itB != endItB )
 			{
 				result = CT_EQUAL( itA->first, itB->first );
-				result = result && CT_EQUAL( itA->second.m_state, itB->second.m_state );
-				result = result && CT_EQUAL( itA->second.m_scale, itB->second.m_scale );
-				result = result && CT_EQUAL( itA->second.m_looped, itB->second.m_looped );
+				result = result && CT_EQUAL( itA->second.state, itB->second.state );
+				result = result && CT_EQUAL( itA->second.scale, itB->second.scale );
+				result = result && CT_EQUAL( itA->second.looped, itB->second.looped );
+				result = result && CT_EQUAL( itA->second.startingPoint, itB->second.startingPoint );
+				result = result && CT_EQUAL( itA->second.stoppingPoint, itB->second.stoppingPoint );
 				++itA;
 				++itB;
 			}

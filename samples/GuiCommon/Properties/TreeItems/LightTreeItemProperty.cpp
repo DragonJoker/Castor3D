@@ -101,7 +101,9 @@ namespace GuiCommon
 		static wxString PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_NONE = _( "None" );
 		static wxString PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_RSM = _( "RSM" );
 		static wxString PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LPV = _( "LPV" );
+		static wxString PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LPVG = _( "LPV (Geometry)" );
 		static wxString PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LAYERED_LPV = _( "Layered LPV" );
+		static wxString PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LAYERED_LPVG = _( "Layered LPV (Geometry)" );
 		static wxString PROPERTY_SHADOW_RSM_INTENSITY = _( "Intensity" );
 		static wxString PROPERTY_SHADOW_RSM_MAX_RADIUS = _( "Max. Radius" );
 		static wxString PROPERTY_SHADOW_RSM_SAMPLE_COUNT = _( "Sample Count" );
@@ -118,10 +120,12 @@ namespace GuiCommon
 		if ( m_light.getLightType() != LightType::ePoint )
 		{
 			giChoices.Add( PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LPV );
+			giChoices.Add( PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LPVG );
 
 			if ( m_light.getLightType() == LightType::eDirectional )
 			{
 				giChoices.Add( PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LAYERED_LPV );
+				giChoices.Add( PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LAYERED_LPVG );
 			}
 		}
 

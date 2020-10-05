@@ -20,15 +20,18 @@
 #include "GuiCommon/Properties/TreeItems/SubmeshTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/ViewportTreeItemProperty.hpp"
 #include "GuiCommon/System/ImagesLoader.hpp"
+#include "GuiCommon/System/MaterialsList.hpp"
 
 #include <wx/imaglist.h>
 #include <wx/aui/framemanager.h>
 #include <wx/artprov.h>
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/CacheView.hpp>
 #include <Castor3D/Cache/CameraCache.hpp>
 #include <Castor3D/Cache/GeometryCache.hpp>
 #include <Castor3D/Cache/LightCache.hpp>
+#include <Castor3D/Cache/MaterialCache.hpp>
 #include <Castor3D/Cache/OverlayCache.hpp>
 #include <Castor3D/Cache/TargetCache.hpp>
 #include <Castor3D/Animation/Animation.hpp>
@@ -52,6 +55,12 @@
 #include <Castor3D/Scene/Animation/AnimatedObjectGroup.hpp>
 #include <Castor3D/Scene/Light/Light.hpp>
 
+#include "GuiCommon/xpms/material.xpm"
+#include "GuiCommon/xpms/material_sel.xpm"
+#include "GuiCommon/xpms/pass.xpm"
+#include "GuiCommon/xpms/pass_sel.xpm"
+#include "GuiCommon/xpms/texture.xpm"
+#include "GuiCommon/xpms/texture_sel.xpm"
 
 using namespace castor3d;
 using namespace castor;
@@ -222,6 +231,20 @@ namespace GuiCommon
 			if ( rootNode )
 			{
 				doAddNode( catId, rootNode );
+			}
+
+			catId = AppendItem( sceneId
+				, _( "Materials" )
+				, eBMP_MATERIAL
+				, eBMP_MATERIAL_SEL );
+			for ( auto materialName : scene->getMaterialView() )
+			{
+				auto material = engine->getMaterialCache().find( materialName );
+				MaterialsList::addMaterial( this
+					, *scene
+					, m_propertiesHolder->IsEditable()
+					, catId
+					, material );
 			}
 
 			catId = AppendItem( sceneId

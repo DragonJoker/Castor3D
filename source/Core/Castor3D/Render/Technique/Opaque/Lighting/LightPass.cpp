@@ -130,12 +130,14 @@ namespace castor3d
 		, String const & name
 		, ShaderModule const & vtx
 		, ShaderModule const & pxl
-		, bool hasShadows )
+		, bool hasShadows
+		, bool generatesIndirect )
 		: castor::Named{ name }
 		, m_engine{ engine }
 		, m_device{ device }
 		, m_program{ ::doCreateProgram( device, vtx, pxl ) }
 		, m_shadows{ hasShadows }
+		, m_generatesIndirect{ generatesIndirect }
 	{
 	}
 
@@ -265,7 +267,8 @@ namespace castor3d
 
 	LightPass::RenderPass::RenderPass( std::string const & name
 		, ashes::RenderPassPtr renderPass
-		, LightPassResult const & lpResult )
+		, LightPassResult const & lpResult
+		, bool generatesIndirect )
 		: renderPass{ std::move( renderPass ) }
 	{
 		ashes::ImageViewCRefArray attaches
@@ -273,14 +276,17 @@ namespace castor3d
 			lpResult[LpTexture::eDepth].getTexture()->getDefaultView().getTargetView(),
 			lpResult[LpTexture::eDiffuse].getTexture()->getDefaultView().getTargetView(),
 			lpResult[LpTexture::eSpecular].getTexture()->getDefaultView().getTargetView(),
-			lpResult[LpTexture::eIndirect].getTexture()->getDefaultView().getTargetView(),
 		};
+
+		if ( !generatesIndirect )
+		{
+			attaches.emplace_back( lpResult[LpTexture::eIndirectDiffuse].getTexture()->getDefaultView().getTargetView() );
+		}
+
 		frameBuffer = this->renderPass->createFrameBuffer( name
-			, {
-				lpResult[LpTexture::eDepth].getTexture()->getWidth(),
-				lpResult[LpTexture::eDepth].getTexture()->getHeight(),
-			}
-		, std::move( attaches ) );
+			, { lpResult[LpTexture::eDepth].getTexture()->getWidth()
+				, lpResult[LpTexture::eDepth].getTexture()->getHeight() }
+			, std::move( attaches ) );
 	}
 
 	//************************************************************************************************
@@ -288,17 +294,19 @@ namespace castor3d
 	LightPass::LightPass( Engine & engine
 		, RenderDevice const & device
 		, String const & suffix
-		, ashes::RenderPassPtr && firstRenderPass
-		, ashes::RenderPassPtr && blendRenderPass
+		, ashes::RenderPassPtr firstRenderPass
+		, ashes::RenderPassPtr blendRenderPass
 		, LightPassResult const & lpResult
 		, GpInfoUbo const & gpInfoUbo
-		, bool hasShadows )
+		, bool hasShadows
+		, bool generatesIndirect )
 		: castor::Named{ "LightPass" + suffix }
 		, m_engine{ engine }
 		, m_device{ device }
-		, m_firstRenderPass{ getName() + "First", std::move( firstRenderPass ), lpResult }
-		, m_blendRenderPass{ getName() + "Blend", std::move( blendRenderPass ), lpResult }
+		, m_firstRenderPass{ getName() + "First", std::move( firstRenderPass ), lpResult, generatesIndirect }
+		, m_blendRenderPass{ getName() + "Blend", std::move( blendRenderPass ), lpResult, generatesIndirect }
 		, m_shadows{ hasShadows }
+		, m_generatesIndirect{ generatesIndirect }
 		, m_matrixUbo{ engine }
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_sampler{ engine.getDefaultSampler() }
@@ -495,7 +503,7 @@ namespace castor3d
 		pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 		pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 
-		if ( shadowMap )
+		if ( shadowMap && m_shadows )
 		{
 			auto & smResult = shadowMap->getShadowPassResult();
 			pipeline.textureWrites.push_back( ashes::WriteDescriptorSet
@@ -557,7 +565,7 @@ namespace castor3d
 
 	VkClearValue LightPass::doGetIndirectClearColor()const
 	{
-		return opaqueWhiteClearColor;
+		return opaqueBlackClearColor;
 	}
 
 	void LightPass::doInitialise( Scene const & scene
@@ -652,6 +660,7 @@ namespace castor3d
 		// Shader outputs
 		auto pxl_diffuse = writer.declOutput< Vec3 >( "pxl_diffuse", 0 );
 		auto pxl_specular = writer.declOutput< Vec3 >( "pxl_specular", 1 );
+		auto pxl_indirect = writer.declOutput< Vec3 >( "pxl_indirect", 2, !m_generatesIndirect );
 
 		// Utility functions
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
@@ -795,6 +804,7 @@ namespace castor3d
 
 				pxl_diffuse = lightDiffuse;
 				pxl_specular = lightSpecular;
+				pxl_indirect = vec3( 1.0_f, 1.0_f, 1.0_f );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -829,6 +839,7 @@ namespace castor3d
 		// Shader outputs
 		auto pxl_diffuse = writer.declOutput< Vec3 >( "pxl_diffuse", 0 );
 		auto pxl_specular = writer.declOutput< Vec3 >( "pxl_specular", 1 );
+		auto pxl_indirect = writer.declOutput< Vec3 >( "pxl_indirect", 2, !m_generatesIndirect );
 
 		// Utility functions
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
@@ -1048,6 +1059,7 @@ namespace castor3d
 
 				pxl_diffuse = lightDiffuse;
 				pxl_specular = lightSpecular;
+				pxl_indirect = vec3( 1.0_f, 1.0_f, 1.0_f );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -1105,6 +1117,7 @@ namespace castor3d
 		// Shader outputs
 		auto pxl_diffuse = writer.declOutput< Vec3 >( "pxl_diffuse", 0 );
 		auto pxl_specular = writer.declOutput< Vec3 >( "pxl_specular", 1 );
+		auto pxl_indirect = writer.declOutput< Vec3 >( "pxl_indirect", 2, !m_generatesIndirect );
 
 		writer.implementFunction< sdw::Void >( "main"
 			, [&]()
@@ -1232,6 +1245,7 @@ namespace castor3d
 
 				pxl_diffuse = lightDiffuse;
 				pxl_specular = lightSpecular;
+				pxl_indirect = vec3( 1.0_f, 1.0_f, 1.0_f );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

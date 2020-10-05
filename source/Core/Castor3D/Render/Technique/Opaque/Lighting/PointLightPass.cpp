@@ -40,8 +40,15 @@ namespace castor3d
 		, PointLightPass & lightPass
 		, ShaderModule const & vtx
 		, ShaderModule const & pxl
-		, bool hasShadows )
-		: MeshLightPass::Program{ engine, device, lightPass.getName(), vtx, pxl, hasShadows }
+		, bool hasShadows
+		, bool generatesIndirect )
+		: MeshLightPass::Program{ engine
+			, device
+			, lightPass.getName()
+			, vtx
+			, pxl
+			, hasShadows
+			, generatesIndirect }
 		, m_lightPass{ lightPass }
 	{
 	}
@@ -64,14 +71,16 @@ namespace castor3d
 		, castor::String const & suffix
 		, LightPassResult const & lpResult
 		, GpInfoUbo const & gpInfoUbo
-		, bool hasShadows )
+		, bool hasShadows
+		, bool generatesIndirect )
 		: MeshLightPass{ engine
 			, device
 			, cuT( "Point" ) + suffix
 			, lpResult
 			, gpInfoUbo
 			, LightType::ePoint
-			, hasShadows }
+			, hasShadows
+			, generatesIndirect }
 		, m_ubo{ makeUniformBuffer< Config >( *engine.getRenderSystem()
 			, 1u
 			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
@@ -127,7 +136,8 @@ namespace castor3d
 			, *this
 			, m_vertexShader
 			, m_pixelShader
-			, m_shadows );
+			, m_shadows
+			, m_generatesIndirect );
 	}
 
 	//*********************************************************************************************

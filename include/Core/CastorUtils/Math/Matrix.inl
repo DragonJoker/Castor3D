@@ -263,9 +263,9 @@ namespace castor
 	}
 
 	template< typename T, uint32_t Columns, uint32_t Rows >
-	inline Matrix< T, Columns, Rows > Matrix< T, Columns, Rows >::getIdentity()const
+	inline Matrix< T, Columns, Rows > Matrix< T, Columns, Rows >::getIdentity()
 	{
-		Matrix< T, Columns, Rows > result( * this );
+		Matrix< T, Columns, Rows > result;
 		result.setIdentity();
 		return result;
 	}

@@ -103,6 +103,26 @@ namespace GuiCommon
 	//************************************************************************************************
 
 	template<>
+	struct ValueTraitsT< castor::Milliseconds >
+	{
+		using ValueT = castor::Milliseconds;
+		using ParamType = ValueT const &;
+		using RetType = ValueT;
+
+		static inline RetType convert( wxVariant const & var )
+		{
+			return ValueT( int64_t( var.GetDouble() * 1000.0 ) );
+		}
+
+		static inline wxVariant convert( ParamType value )
+		{
+			return WXVARIANT( value.count() / 1000.0 );
+		}
+	};
+
+	//************************************************************************************************
+
+	template<>
 	struct ValueTraitsT< castor::Path >
 	{
 		using ValueT = castor::Path;

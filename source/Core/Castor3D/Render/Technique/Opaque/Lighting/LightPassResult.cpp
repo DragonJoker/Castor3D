@@ -39,7 +39,7 @@ namespace castor3d
 				cuT( "Depth" ),
 				cuT( "Diffuse" ),
 				cuT( "Specular" ),
-				cuT( "Indirect" ),
+				cuT( "IndirectDiffuse" ),
 			}
 		};
 		return Values[size_t( texture )];

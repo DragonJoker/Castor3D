@@ -198,5 +198,13 @@ namespace castor3d
 		return doGetAnimation< MeshAnimation >( name );
 	}
 
+	void Mesh::removeAnimation( castor::String const & name )
+	{
+		if ( hasAnimation( name ) )
+		{
+			doRemoveAnimation( name );
+		}
+	}
+
 	//*************************************************************************************************
 }

@@ -419,17 +419,32 @@ namespace castor
 	/**@}*/
 	
 	template< typename T >
-	struct IsRangedValue : std::false_type
+	struct IsRangedValueT : std::false_type
 	{
 	};
 
 	template< typename T >
-	struct IsRangedValue< RangedValue< T > > : std::true_type
+	struct IsRangedValueT< RangedValue< T > > : std::true_type
 	{
 	};
 
 	template< typename T >
-	static inline bool constexpr isRangedValueT = IsRangedValue< T >::value;
+	static inline bool constexpr isRangedValueT = IsRangedValueT< T >::value;
+	
+	template< typename T >
+	struct RangedValueGetterT
+	{
+		using Type = T;
+	};
+
+	template< typename T >
+	struct RangedValueGetterT< RangedValue< T > >
+	{
+		using Type = T;
+	};
+
+	template< typename T >
+	using UnRangedValueT = typename RangedValueGetterT< T >::Type;
 }
 
 #endif

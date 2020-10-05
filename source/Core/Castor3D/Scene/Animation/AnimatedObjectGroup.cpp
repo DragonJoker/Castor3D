@@ -16,6 +16,38 @@ using namespace castor;
 
 namespace castor3d
 {
+	namespace
+	{
+		template< typename FuncT, typename ParamT >
+		bool applyAnimationFunc( GroupAnimationMap & animations
+			, AnimatedObjectPtrStrMap & objects
+			, castor::String const & name
+			, FuncT func
+			, ParamT const & value
+			, size_t outputOffset )
+		{
+			auto itAnim = animations.find( name );
+			auto result = itAnim != animations.end();
+
+			if ( result )
+			{
+				for ( auto it : objects )
+				{
+					if ( it.second->hasAnimation( name ) )
+					{
+						auto & animation = it.second->getAnimation( name );
+						( animation.*func )( value );
+					}
+				}
+
+				auto buffer = reinterpret_cast< uint8_t * >( &itAnim->second );
+				*reinterpret_cast< ParamT * >( buffer + outputOffset ) = value;
+			}
+
+			return result;
+		}
+	}
+
 	AnimatedObjectGroup::TextWriter::TextWriter( String const & tabs )
 		: castor::TextWriter< AnimatedObjectGroup >{ tabs }
 	{
@@ -68,8 +100,10 @@ namespace castor3d
 				result = result
 					&& ( file.writeText( m_tabs + cuT( "\tanimation \"" ) + it.first + cuT( "\"\n" ) ) > 0 )
 					&& ( file.writeText( m_tabs + cuT( "\t{\n" ) ) > 0 )
-					&& ( file.writeText( m_tabs + cuT( "\t\tlooped " ) + String{ it.second.m_looped ? cuT( "true" ) : cuT( "false" ) } +cuT( "\n" ) ) > 0 )
-					&& ( file.writeText( m_tabs + cuT( "\t\tscale " ) + string::toString( it.second.m_scale, std::locale{ "C" } ) + cuT( "\n" ) ) > 0 )
+					&& ( file.writeText( m_tabs + cuT( "\t\tlooped " ) + String{ it.second.looped ? cuT( "true" ) : cuT( "false" ) } +cuT( "\n" ) ) > 0 )
+					&& ( file.writeText( m_tabs + cuT( "\t\tscale " ) + string::toString( it.second.scale, std::locale{ "C" } ) + cuT( "\n" ) ) > 0 )
+					&& ( it.second.startingPoint == 0_ms ? true : file.writeText( m_tabs + cuT( "\t\tstart_at " ) + string::toString( it.second.startingPoint.count() / 1000.0, std::locale{ "C" } ) + cuT( "\n" ) ) > 0 )
+					&& ( it.second.stoppingPoint == 0_ms ? true : file.writeText( m_tabs + cuT( "\t\tstop_at " ) + string::toString( it.second.stoppingPoint.count() / 1000.0, std::locale{ "C" } ) + cuT( "\n" ) ) > 0 )
 					&& ( file.writeText( m_tabs + cuT( "\t}\n" ) ) > 0 );
 				castor::TextWriter< AnimatedObjectGroup >::checkError( result, "AnimatedObjectGroup animation" );
 			}
@@ -81,7 +115,7 @@ namespace castor3d
 
 			for ( auto it : group.getAnimations() )
 			{
-				if ( it.second.m_state == AnimationState::ePlaying )
+				if ( it.second.state == AnimationState::ePlaying )
 				{
 					result = result && ( file.writeText( m_tabs + cuT( "\tstart_animation \"" ) + it.first + cuT( "\"\n" ) ) > 0 );
 					castor::TextWriter< AnimatedObjectGroup >::checkError( result, "AnimatedObjectGroup started animation" );
@@ -174,8 +208,10 @@ namespace castor3d
 		{
 			object->addAnimation( it.first );
 			auto & animation = object->getAnimation( it.first );
-			animation.setLooped( it.second.m_looped );
-			animation.setScale( it.second.m_scale );
+			animation.setLooped( it.second.looped );
+			animation.setScale( it.second.scale );
+			animation.setStartingPoint( it.second.startingPoint );
+			animation.setStoppingPoint( it.second.stoppingPoint );
 		}
 
 		return result;
@@ -197,41 +233,45 @@ namespace castor3d
 	void AnimatedObjectGroup::setAnimationLooped( castor::String const & name
 		, bool looped )
 	{
-		auto itAnim = m_animations.find( name );
-
-		if ( itAnim != m_animations.end() )
-		{
-			for ( auto it : m_objects )
-			{
-				if ( it.second->hasAnimation( name ) )
-				{
-					auto & animation = it.second->getAnimation( name );
-					animation.setLooped( looped );
-				}
-			}
-
-			itAnim->second.m_looped = looped;
-		}
+		applyAnimationFunc( m_animations
+			, m_objects
+			, name
+			, &AnimationInstance::setLooped
+			, looped
+			, offsetof( GroupAnimation, looped ) );
 	}
 
 	void AnimatedObjectGroup::setAnimationScale( castor::String const & name
 		, float scale )
 	{
-		auto itAnim = m_animations.find( name );
+		applyAnimationFunc( m_animations
+			, m_objects
+			, name
+			, &AnimationInstance::setScale
+			, scale
+			, offsetof( GroupAnimation, scale ) );
+	}
 
-		if ( itAnim != m_animations.end() )
-		{
-			for ( auto it : m_objects )
-			{
-				if ( it.second->hasAnimation( name ) )
-				{
-					auto & animation = it.second->getAnimation( name );
-					animation.setScale( scale );
-				}
-			}
+	void AnimatedObjectGroup::setAnimationStartingPoint( castor::String const & name
+		, castor::Milliseconds value )
+	{
+		applyAnimationFunc( m_animations
+			, m_objects
+			, name
+			, &AnimationInstance::setStartingPoint
+			, value
+			, offsetof( GroupAnimation, startingPoint ) );
+	}
 
-			itAnim->second.m_scale = scale;
-		}
+	void AnimatedObjectGroup::setAnimationStoppingPoint( castor::String const & name
+		, castor::Milliseconds value )
+	{
+		applyAnimationFunc( m_animations
+			, m_objects
+			, name
+			, &AnimationInstance::setStoppingPoint
+			, value
+			, offsetof( GroupAnimation, stoppingPoint ) );
 	}
 
 	void AnimatedObjectGroup::update()
@@ -263,7 +303,7 @@ namespace castor3d
 				it.second->startAnimation( name );
 			}
 
-			itAnim->second.m_state = AnimationState::ePlaying;
+			itAnim->second.state = AnimationState::ePlaying;
 		}
 	}
 
@@ -278,7 +318,7 @@ namespace castor3d
 				it.second->stopAnimation( name );
 			}
 
-			itAnim->second.m_state = AnimationState::eStopped;
+			itAnim->second.state = AnimationState::eStopped;
 		}
 	}
 
@@ -293,7 +333,7 @@ namespace castor3d
 				it.second->pauseAnimation( name );
 			}
 
-			itAnim->second.m_state = AnimationState::ePaused;
+			itAnim->second.state = AnimationState::ePaused;
 		}
 	}
 
@@ -306,7 +346,7 @@ namespace castor3d
 
 		for ( auto it : m_animations )
 		{
-			it.second.m_state = AnimationState::ePlaying;
+			it.second.state = AnimationState::ePlaying;
 		}
 	}
 
@@ -319,7 +359,7 @@ namespace castor3d
 
 		for ( auto it : m_animations )
 		{
-			it.second.m_state = AnimationState::eStopped;
+			it.second.state = AnimationState::eStopped;
 		}
 	}
 
@@ -332,7 +372,7 @@ namespace castor3d
 
 		for ( auto it : m_animations )
 		{
-			it.second.m_state = AnimationState::ePaused;
+			it.second.state = AnimationState::ePaused;
 		}
 	}
 }

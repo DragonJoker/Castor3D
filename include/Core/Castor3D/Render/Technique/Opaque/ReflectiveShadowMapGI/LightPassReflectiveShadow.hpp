@@ -53,7 +53,8 @@ namespace castor3d
 				, device
 				, "ReflectiveShadow"
 				, lpResult
-				, gpInfoUbo }
+				, gpInfoUbo
+				, true }
 			, m_gpResult{ gpResult }
 			, m_smResult{ smResult }
 			, m_lpResult{ lpResult }
@@ -68,6 +69,11 @@ namespace castor3d
 			, RenderPassTimer & timer )override
 		{
 			auto & lightCache = scene.getLightCache();
+			auto size = VkExtent2D
+			{
+				m_lpResult[LpTexture::eDiffuse].getTexture()->getWidth() >> 2,
+				m_lpResult[LpTexture::eDiffuse].getTexture()->getHeight() >> 2,
+			};
 			m_downscalePass = std::make_unique< DownscalePass >( this->m_engine
 				, this->m_device
 				, cuT( "Reflective Shadow Maps" )
@@ -76,20 +82,12 @@ namespace castor3d
 					m_lpResult[LpTexture::eDiffuse].getTexture()->getDefaultView().getTargetView(),
 					m_gpResult[DsTexture::eData1].getTexture()->getDefaultView().getTargetView(),
 				}
-				, VkExtent2D
-				{
-					m_lpResult[LpTexture::eDiffuse].getTexture()->getWidth() >> 2,
-					m_lpResult[LpTexture::eDiffuse].getTexture()->getHeight() >> 2,
-				} );
+				, size );
 			m_rsmGiPass = std::make_unique< RsmGIPass >( this->m_engine
 				, this->m_device
 				, lightCache
 				, LtType
-				, VkExtent2D
-				{
-					m_lpResult[LpTexture::eDiffuse].getTexture()->getWidth() >> 2,
-					m_lpResult[LpTexture::eDiffuse].getTexture()->getHeight() >> 2,
-				}
+				, size
 				, m_gpInfoUbo
 				, m_gpResult
 				, m_smResult
@@ -110,7 +108,7 @@ namespace castor3d
 				, m_rsmGiPass->getSamplesSsbo()
 				, m_rsmGiPass->getResult()[0]
 				, m_rsmGiPass->getResult()[1]
-				, m_lpResult[LpTexture::eIndirect] );
+				, m_lpResult[LpTexture::eIndirectDiffuse] );
 			LightPassShadow< LtType >::initialise( scene, gp, sceneUbo, timer );
 		}
 

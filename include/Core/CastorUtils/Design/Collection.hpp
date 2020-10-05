@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "CastorUtils/Design/Templates.hpp"
 #include "CastorUtils/Design/NonCopyable.hpp"
 #include "CastorUtils/Exception/Assertion.hpp"
+#include "CastorUtils/Log/LoggerInstance.hpp"
 
 namespace castor
 {
@@ -38,7 +39,7 @@ namespace castor
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		Collection();
+		explicit Collection( LoggerInstance & logger );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -46,6 +47,13 @@ namespace castor
 		 *\brief		Destructeur
 		 */
 		~Collection();
+		/**
+		 *\~english
+		 *\return		The logger instance.
+		 *\~french
+		 *\return		L'instance de logger.
+		 */
+		inline LoggerInstance & getLogger()const;
 		/**
 		 *\~english
 		 *\brief		Locks the collection mutex
@@ -196,6 +204,7 @@ namespace castor
 		inline void doUpdateLast( KeyParamType key )const;
 
 	private:
+		LoggerInstance & m_logger;
 		ObjectPtrTMap m_objects;
 		mutable std::recursive_mutex m_mutex;
 		mutable bool m_locked;

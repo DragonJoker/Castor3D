@@ -94,6 +94,60 @@ namespace castor3d
 		}
 		/**
 		 *\~english
+		 *\return		The animation stopping point.
+		 *\~french
+		 *\return		Le point de départ de l'animation.
+		 */
+		inline castor::Milliseconds getStartingPoint()const
+		{
+			return m_startingPoint;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the animation stopping point.
+		 *\param[in]	value	The new value.
+		 *\~french
+		 *\brief		Définit le point de départ de l'animation.
+		 *\param[in]	value	La nouvelle valeur.
+		 */
+		inline void setStartingPoint( castor::Milliseconds value )
+		{
+			m_startingPoint = value;
+
+			if ( m_currentTime < m_startingPoint )
+			{
+				m_currentTime = m_startingPoint;
+			}
+		}
+		/**
+		 *\~english
+		 *\return		The animation stopping point.
+		 *\~french
+		 *\return		Le point d'arrêt de l'animation.
+		 */
+		inline castor::Milliseconds getStoppingPoint()const
+		{
+			return m_stoppingPoint;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the animation stopping point.
+		 *\param[in]	value	The new value.
+		 *\~french
+		 *\brief		Définit le point d'arrêt de l'animation.
+		 *\param[in]	value	La nouvelle valeur.
+		 */
+		inline void setStoppingPoint( castor::Milliseconds value )
+		{
+			m_stoppingPoint = value;
+
+			if ( m_currentTime > m_stoppingPoint )
+			{
+				m_currentTime = m_stoppingPoint;
+			}
+		}
+		/**
+		 *\~english
 		 *\return		The animation loop status.
 		 *\~french
 		 *\return		L'état de boucle de l'animation.
@@ -144,6 +198,12 @@ namespace castor3d
 		//!\~english	Tells whether or not the animation is looped.
 		//!\~french		Dit si oui ou non l'animation est bouclée.
 		bool m_looped{ false };
+		//!\~english	The starting point.
+		//!\~french		Le point de départ.
+		castor::Milliseconds m_startingPoint{ 0 };
+		//!\~english	The stopping point.
+		//!\~french		Le point d'arrêt.
+		castor::Milliseconds m_stoppingPoint{ 0 };
 		//!\~english	The current playing time.
 		//!\~french		L'index de temps courant.
 		castor::Milliseconds m_currentTime{ 0 };

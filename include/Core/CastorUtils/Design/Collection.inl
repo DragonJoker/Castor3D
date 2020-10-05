@@ -9,14 +9,21 @@ namespace castor
 	}
 
 	template< typename ObjectT, typename KeyT >
-	Collection< ObjectT, KeyT >::Collection()
-		: m_locked( false )
+	Collection< ObjectT, KeyT >::Collection( LoggerInstance & logger )
+		: m_logger( logger )
+		, m_locked( false )
 	{
 	}
 
 	template< typename ObjectT, typename KeyT >
 	Collection< ObjectT, KeyT >::~Collection()
 	{
+	}
+
+	template< typename ObjectT, typename KeyT >
+	inline LoggerInstance & Collection< ObjectT, KeyT >::getLogger()const
+	{
+		return m_logger;
 	}
 
 	template< typename ObjectT, typename KeyT >
@@ -86,7 +93,7 @@ namespace castor
 		}
 		else
 		{
-			Logger::logWarning( details::WARNING_COLLECTION_UNKNOWN_OBJECT + string::toString( key ) );
+			m_logger.logWarning( details::WARNING_COLLECTION_UNKNOWN_OBJECT + string::toString( key ) );
 		}
 
 		return result;
@@ -113,7 +120,7 @@ namespace castor
 		}
 		else
 		{
-			Logger::logWarning( details::WARNING_COLLECTION_DUPLICATE_OBJECT + string::toString( key ) );
+			m_logger.logWarning( details::WARNING_COLLECTION_DUPLICATE_OBJECT + string::toString( key ) );
 		}
 
 		return result;

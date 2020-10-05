@@ -103,7 +103,7 @@ namespace castor3d
 			auto calculateSurfelAreaLightViewM = writer.implementFunction< Float >( "calculateSurfelAreaLightViewM"
 				, [&]( Vec3 viewPos )
 				{
-					writer.returnStmt( ( 4.0_f * viewPos.z() * viewPos.z() * c3d_lpvConfig.y() * c3d_lpvConfig.y() ) / Float{ float( rsmTexSize * rsmTexSize ) } );
+					writer.returnStmt( ( 4.0_f * viewPos.z() * viewPos.z() * c3d_lpvTanFovXHalf * c3d_lpvTanFovYHalf ) / Float{ float( rsmTexSize * rsmTexSize ) } );
 				}
 				, InVec3{ writer, "viewPos" } );
 
@@ -124,7 +124,7 @@ namespace castor3d
 					outRsmNormal = texelFetch( c3d_rsmNormalMap, rsmCoords, 0_i ).rgb();
 					auto viewPos = writer.declLocale( "viewPos"
 						, c3d_lightView * vec4( outRsmPos, 1.0 ) );
-					outSurfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvConfig.z();
+					outSurfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvTexelAreaModifier;
 
 					outVolumeCellIndex = convertPointToGridIndex( outRsmPos );
 
@@ -185,7 +185,7 @@ namespace castor3d
 			auto calculateSurfelAreaLightViewM = writer.implementFunction< Float >( "calculateSurfelAreaLightViewM"
 				, [&]( Vec3 viewPos )
 				{
-					writer.returnStmt( ( 4.0 * viewPos.z() * viewPos.z() * c3d_lpvConfig.y() * c3d_lpvConfig.y() ) / Float{ float( rsmTexSize * rsmTexSize ) } );
+					writer.returnStmt( ( 4.0 * viewPos.z() * viewPos.z() * c3d_lpvTanFovXHalf * c3d_lpvTanFovYHalf ) / Float{ float( rsmTexSize * rsmTexSize ) } );
 				}
 				, InVec3{ writer, "viewPos" } );
 
@@ -204,7 +204,7 @@ namespace castor3d
 					outRsmNormal = texelFetch( c3d_rsmNormalMap, rsmCoords, 0_i ).rgb();
 					auto viewPos = writer.declLocale( "viewPos"
 						, c3d_lightView * vec4( outRsmPos, 1.0 ) );
-					outSurfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvConfig.w();
+					outSurfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvTexelAreaModifier;
 
 					outVolumeCellIndex = convertPointToGridIndex( outRsmPos );
 
@@ -532,7 +532,7 @@ namespace castor3d
 			, ashes::DescriptorSetPool & descriptorSetPool
 			, LightCache const & lightCache
 			, ShadowMapResult const & smResult
-			, UniformBufferOffsetT< LpvConfigUboConfiguration > const & ubo
+			, UniformBufferOffsetT< LpvConfiguration > const & ubo
 			, GpInfoUbo const & gpInfoUbo )
 		{
 			auto & descriptorSetLayout = descriptorSetPool.getLayout();

@@ -204,6 +204,15 @@ namespace castor3d
 		C3D_API MeshAnimation & createAnimation( castor::String const & name );
 		/**
 		 *\~english
+		 *\brief		Removes an animation
+		 *\param[in]	name	The animation name
+		 *\~french
+		 *\brief		Retire une animation
+		 *\param[in]	name	Le nom de l'animation
+		 */
+		C3D_API void removeAnimation( castor::String const & name );
+		/**
+		 *\~english
 		 *\brief		Retrieves an iterator to the begin of the submeshes
 		 *\~french
 		 *\brief		Récupère un itérateur sur le début des sous maillages

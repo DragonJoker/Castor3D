@@ -147,7 +147,7 @@ namespace castor
 		 *\~french
 		 *\return		La matrice identité.
 		 */
-		my_type getIdentity()const;
+		static my_type getIdentity();
 		/**
 		 *\~english
 		 *\return		The trace or this matrix.

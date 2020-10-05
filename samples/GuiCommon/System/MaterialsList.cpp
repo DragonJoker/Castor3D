@@ -94,7 +94,12 @@ namespace GuiCommon
 
 		for ( auto pair : m_engine->getMaterialCache() )
 		{
-			doAddMaterial( root, pair.second );
+			addMaterial( this
+				, *m_scene
+				, m_propertiesHolder->IsEditable()
+				, root
+				, pair.second
+				, eBMP_MATERIAL );
 		}
 	}
 
@@ -104,61 +109,84 @@ namespace GuiCommon
 		m_scene = nullptr;
 	}
 
-	void MaterialsList::doAddMaterial( wxTreeItemId id
-		, castor3d::MaterialSPtr material )
+	void MaterialsList::addMaterial( wxTreeCtrl * treeCtrl
+		, castor3d::Scene & scene
+		, bool editable
+		, wxTreeItemId id
+		, castor3d::MaterialSPtr material
+		, uint32_t iconOffset )
 	{
-		wxTreeItemId materialId = AppendItem( id
+		wxTreeItemId materialId = treeCtrl->AppendItem( id
 			, material->getName()
-			, eBMP_MATERIAL - eBMP_MATERIAL
-			, eBMP_MATERIAL_SEL - eBMP_MATERIAL
-			, new MaterialTreeItemProperty( m_propertiesHolder->IsEditable()
+			, eBMP_MATERIAL - iconOffset
+			, eBMP_MATERIAL_SEL - iconOffset
+			, new MaterialTreeItemProperty( editable
 				, material ) );
 		uint32_t passIndex = 0;
 
 		for ( auto pass : *material )
 		{
-			doAddPass( materialId, ++passIndex, pass );
+			doAddPass( treeCtrl
+				, scene
+				, editable
+				, materialId
+				, ++passIndex
+				, pass
+				, iconOffset );
 		}
 	}
 
-	void MaterialsList::doAddPass( wxTreeItemId id
+	void MaterialsList::doAddPass( wxTreeCtrl * treeCtrl
+		, castor3d::Scene & scene
+		, bool editable
+		, wxTreeItemId id
 		, uint32_t index
-		, castor3d::PassSPtr pass )
+		, castor3d::PassSPtr pass
+		, uint32_t iconOffset )
 	{
-		wxTreeItemId passId = AppendItem( id
+		wxTreeItemId passId = treeCtrl->AppendItem( id
 			, wxString( _( "Pass " ) ) << index
-			, eBMP_PASS - eBMP_MATERIAL
-			, eBMP_PASS_SEL - eBMP_MATERIAL
-			, new PassTreeItemProperty( m_propertiesHolder->IsEditable()
+			, eBMP_PASS - iconOffset
+			, eBMP_PASS_SEL - iconOffset
+			, new PassTreeItemProperty( editable
 				, pass
-				, *m_scene
-				, this ) );
+				, scene
+				, treeCtrl ) );
 		uint32_t unitIndex = 0;
 
 		for ( auto unit : *pass )
 		{
-			doAddTexture( passId, ++unitIndex, unit, pass->getType() );
+			doAddTexture( treeCtrl
+				, editable
+				, passId
+				, ++unitIndex
+				, unit
+				, pass->getType()
+				, iconOffset );
 		}
 	}
 
-	void MaterialsList::doAddTexture( wxTreeItemId id
+	void MaterialsList::doAddTexture( wxTreeCtrl * treeCtrl
+		, bool editable
+		, wxTreeItemId id
 		, uint32_t index
 		, castor3d::TextureUnitSPtr texture
-		, castor3d::MaterialType type )
+		, castor3d::MaterialType type
+		, uint32_t iconOffset )
 	{
-		wxTreeItemId unitId = AppendItem( id
+		wxTreeItemId unitId = treeCtrl->AppendItem( id
 			, wxString( _( "Texture Unit " ) ) << index
-			, eBMP_TEXTURE - eBMP_MATERIAL
-			, eBMP_TEXTURE_SEL - eBMP_MATERIAL
-			, new TextureTreeItemProperty( m_propertiesHolder->IsEditable()
+			, eBMP_TEXTURE - iconOffset
+			, eBMP_TEXTURE_SEL - iconOffset
+			, new TextureTreeItemProperty( editable
 				, texture
 				, type ) );
 		RenderTargetSPtr target = texture->getRenderTarget();
 
 		if ( target )
 		{
-			AppendRenderTarget( this
-				, m_propertiesHolder->IsEditable()
+			AppendRenderTarget( treeCtrl
+				, editable
 				, unitId
 				, *target );
 		}

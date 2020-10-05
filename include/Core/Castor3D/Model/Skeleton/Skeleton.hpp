@@ -90,6 +90,15 @@ namespace castor3d
 		C3D_API SkeletonAnimation & createAnimation( castor::String const & name );
 		/**
 		 *\~english
+		 *\brief		Removes an animation
+		 *\param[in]	name	The animation name
+		 *\~french
+		 *\brief		Retire une animation
+		 *\param[in]	name	Le nom de l'animation
+		 */
+		C3D_API void removeAnimation( castor::String const & name );
+		/**
+		 *\~english
 		 *\brief		Computes the bounding box and sphere for each bone, for given mesh.
 		 *\~french
 		 *\brief		Calcule les bounding box et sphere, pour chaque os, pour le maillage donné.

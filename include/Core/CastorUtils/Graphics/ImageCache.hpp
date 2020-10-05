@@ -20,7 +20,8 @@ namespace castor
 		 *\~french
 		 *\brief		Constructeur.
 		 */
-		CU_API explicit ImageCache( ImageLoader const & loader );
+		CU_API explicit ImageCache( LoggerInstance & logger
+			, ImageLoader const & loader );
 		/**
 		 *\~english
 		 *\brief		Destructor.

@@ -47,7 +47,8 @@ namespace castor3d
 			, LightVolumePassResult const & lpResult1
 			, LightVolumePassResult const & lpResult2
 			, LightVolumePassResult const & lpResult3
-			, TextureUnit const & dst );
+			, TextureUnit const & dst
+			, BlendMode blendMode );
 		/**
 		 *\~english
 		 *\brief		Renders the SSGI pass.

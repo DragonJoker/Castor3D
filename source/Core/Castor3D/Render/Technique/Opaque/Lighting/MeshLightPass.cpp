@@ -33,6 +33,7 @@ namespace castor3d
 		ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
 			, castor::String const & name
 			, LightPassResult const & lpResult
+			, bool generatesIndirect
 			, bool first )
 		{
 			VkImageLayout layout = first
@@ -77,29 +78,36 @@ namespace castor3d
 					layout,
 					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 				},
-				{
+			};
+			ashes::VkAttachmentReferenceArray references
+			{
+				{ 1u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
+				{ 2u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
+			};
+
+			if ( !generatesIndirect )
+			{
+				attaches.push_back( {
 					0u,
-					lpResult[LpTexture::eIndirect].getTexture()->getPixelFormat(),
+					lpResult[LpTexture::eIndirectDiffuse].getTexture()->getPixelFormat(),
 					VK_SAMPLE_COUNT_1_BIT,
-					loadOp,
+					VK_ATTACHMENT_LOAD_OP_CLEAR,
 					VK_ATTACHMENT_STORE_OP_STORE,
 					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					layout,
+					VK_IMAGE_LAYOUT_UNDEFINED,
 					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-				},
-			};
+					} );
+				references.push_back( { 3u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } );
+			}
+			
 			ashes::SubpassDescriptionArray subpasses;
 			subpasses.emplace_back( ashes::SubpassDescription
 				{
 					0u,
 					VK_PIPELINE_BIND_POINT_GRAPHICS,
 					{},
-					{
-						{ 1u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
-						{ 2u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
-						{ 3u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
-					},
+					references,
 					{},
 					VkAttachmentReference{ 0u, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL },
 					{},
@@ -145,8 +153,15 @@ namespace castor3d
 		, String const & name
 		, ShaderModule const & vtx
 		, ShaderModule const & pxl
-		, bool hasShadows )
-		: LightPass::Program{ engine, device, name, vtx, pxl, hasShadows }
+		, bool hasShadows
+		, bool generatesIndirect )
+		: LightPass::Program{ engine
+			, device
+			, name
+			, vtx
+			, pxl
+			, hasShadows
+			, generatesIndirect }
 	{
 	}
 
@@ -209,7 +224,12 @@ namespace castor3d
 		}
 
 		blattaches.push_back( blattaches.back() );
-		blattaches.push_back( blattaches.back() );
+
+		if ( !m_generatesIndirect )
+		{
+			blattaches.push_back( blattaches.back() );
+		}
+
 		auto result = m_device->createPipeline( m_name + ( blend ? std::string{ "Blend" } : std::string{ "First" } )
 			, ashes::GraphicsPipelineCreateInfo
 			{
@@ -238,21 +258,25 @@ namespace castor3d
 		, LightPassResult const & lpResult
 		, GpInfoUbo const & gpInfoUbo
 		, LightType type
-		, bool hasShadows )
+		, bool hasShadows
+		, bool generatesIndirect )
 		: LightPass{ engine
 			, device
 			, suffix
 			, doCreateRenderPass( device
-				, "LightPass" + suffix + ( hasShadows ? String{ "Shadow" } : String{} )
+				, suffix
 				, lpResult
+				, generatesIndirect
 				, true )
 			, doCreateRenderPass( device
-				, "LightPass" + suffix + ( hasShadows ? String{ "Shadow" } : String{} )
+				, suffix
 				, lpResult
+				, generatesIndirect
 				, false )
 			, lpResult
 			, gpInfoUbo
-			, hasShadows }
+			, hasShadows
+			, generatesIndirect }
 		, m_stencilPass{ engine
 			, getName()
 			, lpResult[LpTexture::eDepth].getTexture()->getDefaultView().getTargetView()

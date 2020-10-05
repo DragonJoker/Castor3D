@@ -53,6 +53,7 @@ namespace castor3d
 			, Cleaner && clean
 			, Merger && merge )
 			: m_engine{ engine }
+			, m_elements{ castor3d::getLogger( engine ) }
 			, m_produce{ std::move( produce ) }
 			, m_initialise{ std::move( initialise ) }
 			, m_clean{ std::move( clean ) }

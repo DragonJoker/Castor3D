@@ -27,7 +27,7 @@ namespace castor
 		 *\~french
 		 *\brief		Constructeur.
 		 */
-		CU_API FontCache();
+		CU_API explicit FontCache( LoggerInstance & logger );
 		/**
 		 *\~english
 		 *\brief		Destructor.

@@ -26,9 +26,17 @@ namespace GuiCommon
 
 	void PropertiesHolder::setGrid( wxPropertyGrid * grid )
 	{
+		if ( m_grid )
+		{
+			m_auiManager.DetachPane( m_grid );
+		}
+
 		m_grid = grid;
-		m_auiManager.AddPane( m_grid
-			, wxAuiPaneInfo().Name( wxT( "Grid" ) )
+
+		if ( m_grid )
+		{
+			m_auiManager.AddPane( m_grid
+				, wxAuiPaneInfo().Name( wxT( "Grid" ) )
 				.CaptionVisible( false )
 				.Center()
 				.CloseButton( false )
@@ -37,6 +45,8 @@ namespace GuiCommon
 				.Movable( false )
 				.PaneBorder( false )
 				.Dockable( false ) );
+		}
+
 		m_auiManager.Update();
 	}
 }

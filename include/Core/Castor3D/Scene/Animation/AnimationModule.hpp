@@ -71,9 +71,11 @@ namespace castor3d
 
 	struct GroupAnimation
 	{
-		AnimationState m_state;
-		bool m_looped;
-		float m_scale;
+		AnimationState state{};
+		bool looped{};
+		float scale{};
+		castor::Milliseconds startingPoint{};
+		castor::Milliseconds stoppingPoint{};
 	};
 	using GroupAnimationMap = std::map< castor::String, GroupAnimation >;
 

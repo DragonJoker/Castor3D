@@ -70,6 +70,7 @@ namespace CastorViewer
 			eID_TOOL_PRINT_SCREEN,
 			eID_TOOL_RECORD,
 			eID_TOOL_STOP,
+			eID_TAB_SCENE,
 			eID_RENDER_TIMER,
 			eID_MSGLOG_TIMER,
 			eID_ERRLOG_TIMER,
@@ -321,25 +322,16 @@ namespace CastorViewer
 		m_renderPanel = new RenderPanel( this, wxID_ANY, wxDefaultPosition, wxSize( size.x - m_propertiesWidth, size.y - m_logsHeight ) );
 		m_logTabsContainer = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TOP | wxAUI_NB_TAB_MOVE | wxAUI_NB_TAB_FIXED_WIDTH );
 		m_logTabsContainer->SetArtProvider( new AuiTabArt );
-		m_sceneTabsContainer = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TOP | wxAUI_NB_TAB_MOVE | wxAUI_NB_TAB_FIXED_WIDTH );
+		m_sceneTabsContainer = new wxAuiNotebook( this, eID_TAB_SCENE, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TOP | wxAUI_NB_TAB_MOVE | wxAUI_NB_TAB_FIXED_WIDTH );
 		m_sceneTabsContainer->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		m_sceneTabsContainer->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		m_sceneTabsContainer->SetArtProvider( new AuiTabArt );
 		m_propertiesHolder = new PropertiesHolder{ this };
 		m_propertiesHolder->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		m_propertiesHolder->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
-		m_propertiesContainer = new PropertiesContainer( true, m_propertiesHolder, wxDefaultPosition, wxDefaultSize );
-		m_propertiesContainer->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
-		m_propertiesContainer->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
-		m_propertiesContainer->SetCaptionBackgroundColour( PANEL_BACKGROUND_COLOUR );
-		m_propertiesContainer->SetCaptionTextColour( PANEL_FOREGROUND_COLOUR );
-		m_propertiesContainer->SetSelectionBackgroundColour( ACTIVE_TAB_COLOUR );
-		m_propertiesContainer->SetSelectionTextColour( ACTIVE_TEXT_COLOUR );
-		m_propertiesContainer->SetCellBackgroundColour( INACTIVE_TAB_COLOUR );
-		m_propertiesContainer->SetCellTextColour( INACTIVE_TEXT_COLOUR );
-		m_propertiesContainer->SetLineColour( BORDER_COLOUR );
-		m_propertiesContainer->SetMarginColour( BORDER_COLOUR );
-		m_propertiesHolder->setGrid( m_propertiesContainer );
+		m_scenePropertiesContainer = new PropertiesContainer( true, m_propertiesHolder, wxDefaultPosition, wxDefaultSize );
+		m_materialPropertiesContainer = new PropertiesContainer( true, m_propertiesHolder, wxDefaultPosition, wxDefaultSize );
+		m_propertiesHolder->setGrid( m_scenePropertiesContainer );
 
 		m_auiManager.AddPane( m_renderPanel
 			, wxAuiPaneInfo()
@@ -413,14 +405,14 @@ namespace CastorViewer
 		createLog( _( "Errors" ), m_errorLog );
 
 		auto holder = new TreeHolder{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
-		m_sceneObjectsList = new SceneObjectsList( m_propertiesContainer, holder, wxDefaultPosition, wxDefaultSize );
+		m_sceneObjectsList = new SceneObjectsList( m_scenePropertiesContainer, holder, wxDefaultPosition, wxDefaultSize );
 		m_sceneObjectsList->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		m_sceneObjectsList->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		holder->setTree( m_sceneObjectsList );
 		m_sceneTabsContainer->AddPage( holder, _( "Scene" ), true );
 
 		holder = new TreeHolder{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
-		m_materialsList = new MaterialsList( m_propertiesContainer, holder, wxDefaultPosition, wxDefaultSize );
+		m_materialsList = new MaterialsList( m_materialPropertiesContainer, holder, wxDefaultPosition, wxDefaultSize );
 		m_materialsList->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		m_materialsList->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		holder->setTree( m_materialsList );
@@ -780,43 +772,44 @@ namespace CastorViewer
 	}
 
 	BEGIN_EVENT_TABLE( MainFrame, wxFrame )
-		EVT_TIMER( eID_RENDER_TIMER, MainFrame::OnRenderTimer )
-		EVT_TIMER( eID_MSGLOG_TIMER, MainFrame::OnTimer )
-		EVT_TIMER( eID_ERRLOG_TIMER, MainFrame::OnTimer )
-		EVT_TIMER( eID_FPS_TIMER, MainFrame::OnFpsTimer )
-		EVT_PAINT( MainFrame::OnPaint )
-		EVT_INIT_DIALOG( MainFrame::OnInit )
-		EVT_CLOSE( MainFrame::OnClose )
-		EVT_ENTER_WINDOW( MainFrame::OnEnterWindow )
-		EVT_LEAVE_WINDOW( MainFrame::OnLeaveWindow )
-		EVT_ERASE_BACKGROUND( MainFrame::OnEraseBackground )
-		EVT_KEY_UP( MainFrame::OnKeyUp )
+		EVT_TIMER( eID_RENDER_TIMER, MainFrame::onRenderTimer )
+		EVT_TIMER( eID_MSGLOG_TIMER, MainFrame::onTimer )
+		EVT_TIMER( eID_ERRLOG_TIMER, MainFrame::onTimer )
+		EVT_TIMER( eID_FPS_TIMER, MainFrame::onFpsTimer )
+		EVT_PAINT( MainFrame::onPaint )
+		EVT_INIT_DIALOG( MainFrame::onInit )
+		EVT_CLOSE( MainFrame::onClose )
+		EVT_ENTER_WINDOW( MainFrame::onEnterWindow )
+		EVT_LEAVE_WINDOW( MainFrame::onLeaveWindow )
+		EVT_ERASE_BACKGROUND( MainFrame::onEraseBackground )
+		EVT_KEY_UP( MainFrame::onKeyUp )
+		EVT_AUINOTEBOOK_PAGE_CHANGING( eID_TAB_SCENE, MainFrame::onSceneTabChanging )
 #if CV_MainFrameToolbar
-		EVT_TOOL( eID_TOOL_LOAD_SCENE, MainFrame::OnLoadScene )
-		EVT_TOOL( eID_TOOL_EXPORT_SCENE, MainFrame::OnExportScene )
-		EVT_TOOL( eID_TOOL_SHOW_LOGS, MainFrame::OnShowLogs )
-		EVT_TOOL( eID_TOOL_SHOW_LISTS, MainFrame::OnShowLists )
-		EVT_TOOL( eID_TOOL_PRINT_SCREEN, MainFrame::OnPrintScreen )
-		EVT_TOOL( eID_TOOL_RECORD, MainFrame::OnRecord )
-		EVT_TOOL( eID_TOOL_STOP, MainFrame::OnStop )
+		EVT_TOOL( eID_TOOL_LOAD_SCENE, MainFrame::onLoadScene )
+		EVT_TOOL( eID_TOOL_EXPORT_SCENE, MainFrame::onExportScene )
+		EVT_TOOL( eID_TOOL_SHOW_LOGS, MainFrame::onShowLogs )
+		EVT_TOOL( eID_TOOL_SHOW_LISTS, MainFrame::onShowLists )
+		EVT_TOOL( eID_TOOL_PRINT_SCREEN, MainFrame::onPrintScreen )
+		EVT_TOOL( eID_TOOL_RECORD, MainFrame::onRecord )
+		EVT_TOOL( eID_TOOL_STOP, MainFrame::onStop )
 #else
-		EVT_MENU( eID_TOOL_LOAD_SCENE, MainFrame::OnLoadScene )
-		EVT_MENU( eID_TOOL_EXPORT_SCENE, MainFrame::OnExportScene )
-		EVT_MENU( eID_TOOL_SHOW_LOGS, MainFrame::OnShowLogs )
-		EVT_MENU( eID_TOOL_SHOW_LISTS, MainFrame::OnShowLists )
-		EVT_MENU( eID_TOOL_PRINT_SCREEN, MainFrame::OnPrintScreen )
-		EVT_MENU( eID_TOOL_RECORD, MainFrame::OnRecord )
-		EVT_MENU( eID_TOOL_STOP, MainFrame::OnStop )
+		EVT_MENU( eID_TOOL_LOAD_SCENE, MainFrame::onLoadScene )
+		EVT_MENU( eID_TOOL_EXPORT_SCENE, MainFrame::onExportScene )
+		EVT_MENU( eID_TOOL_SHOW_LOGS, MainFrame::onShowLogs )
+		EVT_MENU( eID_TOOL_SHOW_LISTS, MainFrame::onShowLists )
+		EVT_MENU( eID_TOOL_PRINT_SCREEN, MainFrame::onPrintScreen )
+		EVT_MENU( eID_TOOL_RECORD, MainFrame::onRecord )
+		EVT_MENU( eID_TOOL_STOP, MainFrame::onStop )
 #endif
 	END_EVENT_TABLE()
 
-	void MainFrame::OnPaint( wxPaintEvent & event )
+	void MainFrame::onPaint( wxPaintEvent & event )
 	{
 		wxPaintDC paintDC( this );
 		event.Skip();
 	}
 
-	void MainFrame::OnRenderTimer( wxTimerEvent & event )
+	void MainFrame::onRenderTimer( wxTimerEvent & event )
 	{
 		auto castor = wxGetApp().getCastor();
 
@@ -836,7 +829,7 @@ namespace CastorViewer
 		}
 	}
 
-	void MainFrame::OnTimer( wxTimerEvent & event )
+	void MainFrame::onTimer( wxTimerEvent & event )
 	{
 		if ( event.GetId() == eID_MSGLOG_TIMER && m_messageLog )
 		{
@@ -850,7 +843,7 @@ namespace CastorViewer
 		event.Skip();
 	}
 
-	void MainFrame::OnFpsTimer( wxTimerEvent & event )
+	void MainFrame::onFpsTimer( wxTimerEvent & event )
 	{
 		if ( wxGetApp().getCastor()
 			&& wxGetApp().getCastor()->hasRenderLoop() )
@@ -867,11 +860,11 @@ namespace CastorViewer
 		}
 	}
 
-	void MainFrame::OnInit( wxInitDialogEvent & event )
+	void MainFrame::onInit( wxInitDialogEvent & event )
 	{
 	}
 
-	void MainFrame::OnClose( wxCloseEvent & event )
+	void MainFrame::onClose( wxCloseEvent & event )
 	{
 		Logger::unregisterCallback( this );
 		m_auiManager.DetachPane( m_sceneTabsContainer );
@@ -949,35 +942,51 @@ namespace CastorViewer
 		event.Skip();
 	}
 
-	void MainFrame::OnEnterWindow( wxMouseEvent & event )
+	void MainFrame::onEnterWindow( wxMouseEvent & event )
 	{
 		SetFocus();
 		event.Skip();
 	}
 
-	void MainFrame::OnLeaveWindow( wxMouseEvent & event )
+	void MainFrame::onLeaveWindow( wxMouseEvent & event )
 	{
 		event.Skip();
 	}
 
-	void MainFrame::OnEraseBackground( wxEraseEvent & event )
+	void MainFrame::onEraseBackground( wxEraseEvent & event )
 	{
 		event.Skip();
 	}
 
-	void MainFrame::OnKeyUp( wxKeyEvent & p_event )
+	void MainFrame::onKeyUp( wxKeyEvent & event )
 	{
 		if ( m_renderPanel )
 		{
-			m_renderPanel->onKeyUp( p_event );
+			m_renderPanel->onKeyUp( event );
 		}
 		else
 		{
-			p_event.Skip();
+			event.Skip();
 		}
 	}
 
-	void MainFrame::OnLoadScene( wxCommandEvent & event )
+	void MainFrame::onSceneTabChanging( wxAuiNotebookEvent & event )
+	{
+		auto index = event.GetSelection();
+
+		if ( index == 0 )
+		{
+			m_propertiesHolder->setGrid( m_scenePropertiesContainer );
+		}
+		else
+		{
+			m_propertiesHolder->setGrid( m_materialPropertiesContainer );
+		}
+
+		event.Skip();
+	}
+
+	void MainFrame::onLoadScene( wxCommandEvent & event )
 	{
 		wxString wildcard = _( "Castor3D scene files" );
 		wildcard << wxT( " (*.cscn;*.zip)|*.cscn;*.zip|" );
@@ -996,7 +1005,7 @@ namespace CastorViewer
 		event.Skip();
 	}
 
-	void MainFrame::OnExportScene( wxCommandEvent & event )
+	void MainFrame::onExportScene( wxCommandEvent & event )
 	{
 		SceneSPtr scene = m_mainScene.lock();
 
@@ -1044,7 +1053,7 @@ namespace CastorViewer
 		event.Skip();
 	}
 
-	void MainFrame::OnShowLogs( wxCommandEvent & event )
+	void MainFrame::onShowLogs( wxCommandEvent & event )
 	{
 		if ( !m_logTabsContainer->IsShown() )
 		{
@@ -1059,7 +1068,7 @@ namespace CastorViewer
 		event.Skip();
 	}
 
-	void MainFrame::OnShowLists( wxCommandEvent & event )
+	void MainFrame::onShowLists( wxCommandEvent & event )
 	{
 		if ( !m_sceneTabsContainer->IsShown() )
 		{
@@ -1076,13 +1085,13 @@ namespace CastorViewer
 		event.Skip();
 	}
 
-	void MainFrame::OnPrintScreen( wxCommandEvent & event )
+	void MainFrame::onPrintScreen( wxCommandEvent & event )
 	{
 		doSaveFrame();
 		event.Skip();
 	}
 
-	void MainFrame::OnRecord( wxCommandEvent & event )
+	void MainFrame::onRecord( wxCommandEvent & event )
 	{
 #if defined( GUICOMMON_RECORDS )
 
@@ -1101,7 +1110,7 @@ namespace CastorViewer
 		event.Skip();
 	}
 
-	void MainFrame::OnStop( wxCommandEvent & event )
+	void MainFrame::onStop( wxCommandEvent & event )
 	{
 		doStopRecord();
 		event.Skip();

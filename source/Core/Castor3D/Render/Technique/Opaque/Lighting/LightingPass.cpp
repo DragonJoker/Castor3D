@@ -148,7 +148,7 @@ namespace castor3d
 		template<>
 		struct PassInfoT< LightingPass::Type::eShadowLpvGI, LightType::eDirectional >
 		{
-			using Type = DirectionalLightPassVolumePropagationShadow;
+			using Type = DirectionalLightPassLPVShadow;
 		};
 
 		template<>
@@ -160,13 +160,13 @@ namespace castor3d
 		template<>
 		struct PassInfoT< LightingPass::Type::eShadowLpvGI, LightType::eSpot >
 		{
-			using Type = SpotLightPassVolumePropagationShadow;
+			using Type = SpotLightPassLPVShadow;
 		};
 
 		template<>
 		struct PassInfoT< LightingPass::Type::eShadowLayeredLpvGI, LightType::eDirectional >
 		{
-			using Type = DirectionalLightPassLayeredVolumePropagationShadow;
+			using Type = DirectionalLightPassLayeredLPVShadow;
 		};
 
 		template<>
@@ -178,7 +178,43 @@ namespace castor3d
 		template<>
 		struct PassInfoT< LightingPass::Type::eShadowLayeredLpvGI, LightType::eSpot >
 		{
-			using Type = SpotLightPassVolumePropagationShadow;
+			using Type = SpotLightPassLPVShadow;
+		};
+
+		template<>
+		struct PassInfoT< LightingPass::Type::eShadowLpvGGI, LightType::eDirectional >
+		{
+			using Type = DirectionalLightPassLPVGShadow;
+		};
+
+		template<>
+		struct PassInfoT< LightingPass::Type::eShadowLpvGGI, LightType::ePoint >
+		{
+			using Type = PointLightPassShadow;
+		};
+
+		template<>
+		struct PassInfoT< LightingPass::Type::eShadowLpvGGI, LightType::eSpot >
+		{
+			using Type = SpotLightPassLPVGShadow;
+		};
+
+		template<>
+		struct PassInfoT< LightingPass::Type::eShadowLayeredLpvGGI, LightType::eDirectional >
+		{
+			using Type = DirectionalLightPassLayeredLPVGShadow;
+		};
+
+		template<>
+		struct PassInfoT< LightingPass::Type::eShadowLayeredLpvGGI, LightType::ePoint >
+		{
+			using Type = PointLightPassShadow;
+		};
+
+		template<>
+		struct PassInfoT< LightingPass::Type::eShadowLayeredLpvGGI, LightType::eSpot >
+		{
+			using Type = SpotLightPassLPVGShadow;
 		};
 
 		template< LightingPass::Type PassT, LightType LightT >
@@ -322,10 +358,40 @@ namespace castor3d
 						, gpInfoUbo );
 				}
 				return LightingPass::DelayedLightPass{};
+			case LightingPass::Type::eShadowLpvGGI:
+				if ( engine.getRenderSystem()->getGpuInformations().hasShaderType( VK_SHADER_STAGE_GEOMETRY_BIT ) )
+				{
+					return makeLightPassT< LightingPass::Type::eShadowLpvGGI >( lightType
+						, engine
+						, device
+						, lightCache
+						, gpResult
+						, smDirectionalResult
+						, smPointResult
+						, smSpotResult
+						, lpResult
+						, gpInfoUbo );
+				}
+				return LightingPass::DelayedLightPass{};
 			case LightingPass::Type::eShadowLayeredLpvGI:
 				if ( engine.getRenderSystem()->getGpuInformations().hasShaderType( VK_SHADER_STAGE_GEOMETRY_BIT ) )
 				{
 					return makeLightPassT< LightingPass::Type::eShadowLayeredLpvGI >( lightType
+						, engine
+						, device
+						, lightCache
+						, gpResult
+						, smDirectionalResult
+						, smPointResult
+						, smSpotResult
+						, lpResult
+						, gpInfoUbo );
+				}
+				return LightingPass::DelayedLightPass{};
+			case LightingPass::Type::eShadowLayeredLpvGGI:
+				if ( engine.getRenderSystem()->getGpuInformations().hasShaderType( VK_SHADER_STAGE_GEOMETRY_BIT ) )
+				{
+					return makeLightPassT< LightingPass::Type::eShadowLayeredLpvGGI >( lightType
 						, engine
 						, device
 						, lightCache
@@ -503,18 +569,14 @@ namespace castor3d
 				"Deferred - Ligth Pass Result Barrier",
 				makeFloatArray( m_engine.getNextRainbowColour() ),
 			} );
-		// Diffuse view to shader read only
-		m_lpResultBarrier.commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
-			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_result[LpTexture::eDiffuse].getTexture()->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
-		// Specular view to shader read only
-		m_lpResultBarrier.commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
-			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_result[LpTexture::eSpecular].getTexture()->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
-		// Indirect view to shader read only
-		m_lpResultBarrier.commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
-			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_result[LpTexture::eIndirect].getTexture()->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+
+		for ( auto i = size_t( LpTexture::eMin ) + 1u; i < size_t( LpTexture::eCount ); ++i )
+		{
+			m_lpResultBarrier.commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
+				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+				, m_result[LpTexture( i )].getTexture()->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+		}
+
 		m_lpResultBarrier.commandBuffer->endDebugBlock();
 		m_lpResultBarrier.commandBuffer->end();
 	}
@@ -548,6 +610,7 @@ namespace castor3d
 	{
 		auto & cache = scene.getLightCache();
 		ashes::Semaphore const * result = &toWait;
+		m_active.clear();
 
 		if ( !cache.isEmpty() )
 		{
@@ -611,19 +674,13 @@ namespace castor3d
 		visitor.visit( "Light Specular"
 			, m_result[LpTexture::eSpecular].getTexture()->getDefaultView().getSampledView()
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-		visitor.visit( "Light Indirect"
-			, m_result[LpTexture::eIndirect].getTexture()->getDefaultView().getSampledView()
+		visitor.visit( "Light Indirect Diffuse"
+			, m_result[LpTexture::eIndirectDiffuse].getTexture()->getDefaultView().getSampledView()
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 
-		for ( auto & lightPasses : m_lightPasses )
+		for ( auto & lightPass : m_active )
 		{
-			for ( auto & lightPass : lightPasses )
-			{
-				if ( lightPass )
-				{
-					lightPass.raw()->accept( visitor );
-				}
-			}
+			lightPass->accept( visitor );
 		}
 	}
 
@@ -647,6 +704,7 @@ namespace castor3d
 					LightPass * pass = ( light->isShadowProducer() && light->getShadowMap() )
 						? doGetShadowLightPass( type, light->getGlobalIlluminationType() )
 						: doGetLightPass( type );
+					m_active.insert( pass );
 					pass->update( index == 0u
 						, camera.getSize()
 						, *light

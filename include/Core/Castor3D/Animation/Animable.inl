@@ -63,6 +63,19 @@ namespace castor3d
 	}
 
 	template< typename AnimableHanlerT >
+	inline void AnimableT< AnimableHanlerT >::doRemoveAnimation( castor::String const & name )
+	{
+		auto it = m_animations.find( name );
+
+		if ( it == m_animations.end() )
+		{
+			CU_Exception( cuT( "No animation named [" ) + name + "]" );
+		}
+
+		m_animations.erase( it );
+	}
+
+	template< typename AnimableHanlerT >
 	template< typename AnimationType >
 	inline AnimationType & AnimableT< AnimableHanlerT >::doGetAnimation( castor::String const & name )
 	{

@@ -572,6 +572,7 @@ namespace castor3d
 		addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "height_factor" ), parserUnitHeightFactor, { makeParameter< ParameterType::eFloat >() } );
 		addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "normal_directx" ), parserUnitNormalDirectX, { makeParameter< ParameterType::eBool >() } );
 		addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "sampler" ), parserUnitSampler, { makeParameter< ParameterType::eName >() } );
+		addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "invert_y" ), parserUnitInvertY, { makeParameter< ParameterType::eBool >() } );
 		addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "}" ), parserUnitEnd );
 
 		addParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "vertex_program" ), parserVertexShader );
@@ -676,6 +677,8 @@ namespace castor3d
 
 		addParser( uint32_t( CSCNSection::eAnimation ), cuT( "looped" ), parserAnimationLooped, { makeParameter< ParameterType::eBool >() } );
 		addParser( uint32_t( CSCNSection::eAnimation ), cuT( "scale" ), parserAnimationScale, { makeParameter< ParameterType::eFloat >() } );
+		addParser( uint32_t( CSCNSection::eAnimation ), cuT( "start_at" ), parserAnimationStartAt, { makeParameter< ParameterType::eFloat >() } );
+		addParser( uint32_t( CSCNSection::eAnimation ), cuT( "stop_at" ), parserAnimationStopAt, { makeParameter< ParameterType::eFloat >() } );
 		addParser( uint32_t( CSCNSection::eAnimation ), cuT( "}" ), parserAnimationEnd );
 
 		addParser( uint32_t( CSCNSection::eSkybox ), cuT( "equirectangular" ), parserSkyboxEqui, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eUInt32 >() } );

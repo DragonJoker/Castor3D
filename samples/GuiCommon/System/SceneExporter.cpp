@@ -4,14 +4,18 @@
 #include <Castor3D/Cache/MaterialCache.hpp>
 #include <Castor3D/Cache/MeshCache.hpp>
 #include <Castor3D/Binary/BinaryMesh.hpp>
+#include <Castor3D/Binary/BinaryMeshAnimation.hpp>
 #include <Castor3D/Binary/BinarySkeleton.hpp>
+#include <Castor3D/Binary/BinarySkeletonAnimation.hpp>
 #include <Castor3D/Cache/CacheView.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Material/Pass/PhongPass.hpp>
 #include <Castor3D/Material/Pass/MetallicRoughnessPbrPass.hpp>
 #include <Castor3D/Material/Pass/SpecularGlossinessPbrPass.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
+#include <Castor3D/Model/Mesh/Animation/MeshAnimation.hpp>
 #include <Castor3D/Model/Skeleton/Skeleton.hpp>
+#include <Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Model/Vertex.hpp>
 #include <Castor3D/Render/RenderWindow.hpp>
@@ -447,8 +451,26 @@ namespace GuiCommon
 
 					if ( result && skeleton )
 					{
-						BinaryFile file{ base / ( it.first + cuT( ".cskl" ) ), File::OpenMode::eWrite };
-						result = castor3d::BinaryWriter< Skeleton >{}.write( *skeleton, file );
+						BinaryFile skelFile{ base / ( it.first + cuT( ".cskl" ) ), File::OpenMode::eWrite };
+						result = castor3d::BinaryWriter< Skeleton >{}.write( *skeleton, skelFile );
+
+						for ( auto & animation : skeleton->getAnimations() )
+						{
+							if ( result )
+							{
+								BinaryFile animFile{ base / ( it.first + cuT( ".cska" ) ), File::OpenMode::eWrite };
+								result = castor3d::BinaryWriter< SkeletonAnimation >{}.write( static_cast< SkeletonAnimation const & >( *animation.second ), animFile );
+							}
+						}
+					}
+
+					for ( auto & animation : mesh->getAnimations() )
+					{
+						if ( result )
+						{
+							BinaryFile animFile{ base / ( it.first + cuT( ".cmsa" ) ), File::OpenMode::eWrite };
+							result = castor3d::BinaryWriter< MeshAnimation >{}.write( static_cast< MeshAnimation const & >( *animation.second ), animFile );
+						}
 					}
 				}
 			}

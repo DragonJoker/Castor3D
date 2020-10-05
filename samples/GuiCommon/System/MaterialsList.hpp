@@ -23,17 +23,28 @@ namespace GuiCommon
 		void loadMaterials( castor3d::Engine * engine
 			, castor3d::Scene & scene );
 		void unloadMaterials();
+		static void addMaterial( wxTreeCtrl * treeCtrl
+			, castor3d::Scene & scene
+			, bool editable
+			, wxTreeItemId id
+			, castor3d::MaterialSPtr material
+			, uint32_t iconOffset = 0u );
 
 	private:
-		void doAddMaterial( wxTreeItemId id
-			, castor3d::MaterialSPtr material );
-		void doAddPass( wxTreeItemId id
+		static void doAddPass( wxTreeCtrl * treeCtrl
+			, castor3d::Scene & scene
+			, bool editable
+			, wxTreeItemId id
 			, uint32_t index
-			, castor3d::PassSPtr pass );
-		void doAddTexture( wxTreeItemId id
+			, castor3d::PassSPtr pass
+			, uint32_t iconOffset );
+		static void doAddTexture( wxTreeCtrl * treeCtrl
+			, bool editable
+			, wxTreeItemId id
 			, uint32_t index
 			, castor3d::TextureUnitSPtr texture
-			, castor3d::MaterialType type );
+			, castor3d::MaterialType type
+			, uint32_t iconOffset );
 
 		DECLARE_EVENT_TABLE()
 		void onClose( wxCloseEvent & event );

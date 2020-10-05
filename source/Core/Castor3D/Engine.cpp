@@ -61,7 +61,8 @@ namespace castor3d
 		, m_appName{ appName }
 		, m_appVersion{ appVersion }
 		, m_enableValidation{ enableValidation }
-		, m_imageCache{ m_imageLoader }
+		, m_fontCache{ *m_logger }
+		, m_imageCache{ *m_logger, m_imageLoader }
 		, m_meshFactory{ std::make_shared< MeshFactory >() }
 		, m_subdividerFactory{ std::make_shared< MeshSubdividerFactory >() }
 		, m_importerFactory{ std::make_shared< MeshImporterFactory >() }

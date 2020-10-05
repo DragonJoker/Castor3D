@@ -287,10 +287,14 @@ namespace castor3d
 			auto submeshFlags = programFlags;
 			remFlag( programFlags, ProgramFlag::eSkinning );
 			remFlag( programFlags, ProgramFlag::eMorphing );
-			auto mesh = std::static_pointer_cast< AnimatedMesh >( doFindAnimatedObject( scene, name + cuT( "_Mesh" ) ) );
-			auto skeleton = std::static_pointer_cast< AnimatedSkeleton >( doFindAnimatedObject( scene, name + cuT( "_Skeleton" ) ) );
+			auto mesh = checkFlag( submeshFlags, ProgramFlag::eMorphing )
+				? std::static_pointer_cast< AnimatedMesh >( doFindAnimatedObject( scene, name + cuT( "_Mesh" ) ) )
+				: nullptr;
+			auto skeleton = checkFlag( submeshFlags, ProgramFlag::eSkinning )
+				? std::static_pointer_cast< AnimatedSkeleton >( doFindAnimatedObject( scene, name + cuT( "_Skeleton" ) ) )
+				: nullptr;
 
-			if ( skeleton )
+			if ( skeleton  )
 			{
 				addFlag( programFlags, ProgramFlag::eSkinning );
 			}
