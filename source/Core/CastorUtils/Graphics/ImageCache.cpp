@@ -11,25 +11,27 @@ namespace castor
 		static const xchar * WarningCacheDuplicateObject = cuT( "Cache::create - Duplicate " );
 		static const xchar * WarningCacheNullObject = cuT( "Cache::Insert - nullptr " );
 
-		inline void doReportCreation( castor::String const & name )
+		inline void doReportCreation( LoggerInstance & logger
+			, castor::String const & name )
 		{
-			castor::Logger::logTrace( castor::makeStringStream()
+			logger.logTrace( castor::makeStringStream()
 				<< InfoCacheCreatedObject
 				<< cuT( "Image: " )
 				<< name );
 		}
 
-		inline void doReportDuplicate( castor::String const & name )
+		inline void doReportDuplicate( LoggerInstance & logger
+			, castor::String const & name )
 		{
-			castor::Logger::logWarning( castor::makeStringStream()
+			logger.logWarning( castor::makeStringStream()
 				<< WarningCacheDuplicateObject
 				<< cuT( "Image: " )
 				<< name );
 		}
 
-		inline void doReportNull()
+		inline void doReportNull( LoggerInstance & logger )
 		{
-			castor::Logger::logWarning( castor::makeStringStream()
+			logger.logWarning( castor::makeStringStream()
 				<< WarningCacheNullObject
 				<< cuT( "Image" ) );
 		}
@@ -37,8 +39,10 @@ namespace castor
 
 	//*********************************************************************************************
 
-	ImageCache::ImageCache( ImageLoader const & loader )
-		: m_loader{ loader }
+	ImageCache::ImageCache( LoggerInstance & logger
+		, ImageLoader const & loader )
+		: Collection< Image, String >{ logger }
+		, m_loader{ loader }
 	{
 	}
 
@@ -63,7 +67,7 @@ namespace castor
 			}
 			else
 			{
-				doReportDuplicate( name );
+				doReportDuplicate( getLogger(), name );
 			}
 		}
 		else
@@ -72,7 +76,7 @@ namespace castor
 			{
 				result = std::make_shared< Image >( m_loader.load( name, path ) );
 				Collection< Image, String >::insert( name, result );
-				doReportCreation( name );
+				doReportCreation( getLogger(), name );
 			}
 			else
 			{
@@ -101,14 +105,14 @@ namespace castor
 			}
 			else
 			{
-				doReportDuplicate( name );
+				doReportDuplicate( getLogger(), name );
 			}
 		}
 		else
 		{
 			result = std::make_shared< Image >( name, Path{}, size, format );
 			Collection< Image, String >::insert( name, result );
-			doReportCreation( name );
+			doReportCreation( getLogger(), name );
 		}
 
 		return result;

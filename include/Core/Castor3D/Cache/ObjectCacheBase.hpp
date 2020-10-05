@@ -75,17 +75,18 @@ namespace castor3d
 			, Merger && merge = Merger{}
 			, Attacher && attach = Attacher{}
 			, Detacher && detach = Detacher{} )
-			: m_engine( engine )
-			, m_scene( scene )
-			, m_rootNode( rootNode )
-			, m_rootCameraNode( rootCameraNode )
-			, m_rootObjectNode( rootObjectNode )
-			, m_produce( std::move( produce ) )
-			, m_initialise( std::move( initialise ) )
-			, m_clean( std::move( clean ) )
-			, m_merge( std::move( merge ) )
-			, m_attach( std::move( attach ) )
-			, m_detach( std::move(  detach ) )
+			: m_engine{ engine }
+			, m_scene{ scene }
+			, m_rootNode{ rootNode }
+			, m_rootCameraNode{ rootCameraNode }
+			, m_rootObjectNode{ rootObjectNode }
+			, m_elements{ engine.getLogger() }
+			, m_produce{ std::move( produce ) }
+			, m_initialise{ std::move( initialise ) }
+			, m_clean{ std::move( clean ) }
+			, m_merge{ std::move( merge ) }
+			, m_attach{ std::move( attach ) }
+			, m_detach{ std::move( detach ) }
 		{
 		}
 		/**

@@ -11,25 +11,27 @@ namespace castor
 		static const xchar * WarningCacheDuplicateObject = cuT( "Cache::create - Duplicate " );
 		static const xchar * WarningCacheNullObject = cuT( "Cache::Insert - nullptr " );
 
-		inline void doReportCreation( castor::String const & name )
+		inline void doReportCreation( LoggerInstance & logger
+			, castor::String const & name )
 		{
-			castor::Logger::logTrace( castor::makeStringStream()
+			logger.logTrace( castor::makeStringStream()
 				<< InfoCacheCreatedObject
 				<< cuT( "Font: " )
 				<< name );
 		}
 
-		inline void doReportDuplicate( castor::String const & name )
+		inline void doReportDuplicate( LoggerInstance & logger
+			, castor::String const & name )
 		{
-			castor::Logger::logWarning( castor::makeStringStream()
+			logger.logWarning( castor::makeStringStream()
 				<< WarningCacheDuplicateObject
 				<< cuT( "Font: " )
 				<< name );
 		}
 
-		inline void doReportNull()
+		inline void doReportNull( LoggerInstance & logger )
 		{
-			castor::Logger::logWarning( castor::makeStringStream()
+			logger.logWarning( castor::makeStringStream()
 				<< WarningCacheNullObject
 				<< cuT( "Font" ) );
 		}
@@ -37,7 +39,8 @@ namespace castor
 
 	//*********************************************************************************************
 
-	FontCache::FontCache()
+	FontCache::FontCache( LoggerInstance & logger )
+		: Collection< Font, String >{ logger }
 	{
 	}
 
@@ -80,7 +83,7 @@ namespace castor
 		if ( Collection< Font, String >::has( p_name ) )
 		{
 			result = Collection< Font, String >::find( p_name );
-			doReportDuplicate( p_name );
+			doReportDuplicate( getLogger(), p_name );
 		}
 		else
 		{
@@ -89,7 +92,7 @@ namespace castor
 			if ( File::fileExists( p_path ) )
 			{
 				result = std::make_shared< Font >( p_name, p_height, p_path );
-				doReportCreation( p_name );
+				doReportCreation( getLogger(), p_name );
 				Collection< Font, String >::insert( p_name, result );
 
 				if ( m_paths.find( name ) == m_paths.end() )
@@ -125,7 +128,7 @@ namespace castor
 		if ( Collection< Font, String >::has( p_name ) )
 		{
 			result = Collection< Font, String >::find( p_name );
-			doReportDuplicate( p_name );
+			doReportDuplicate( getLogger(), p_name );
 		}
 		else
 		{
