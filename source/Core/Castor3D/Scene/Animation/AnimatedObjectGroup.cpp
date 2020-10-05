@@ -102,6 +102,8 @@ namespace castor3d
 					&& ( file.writeText( m_tabs + cuT( "\t{\n" ) ) > 0 )
 					&& ( file.writeText( m_tabs + cuT( "\t\tlooped " ) + String{ it.second.looped ? cuT( "true" ) : cuT( "false" ) } +cuT( "\n" ) ) > 0 )
 					&& ( file.writeText( m_tabs + cuT( "\t\tscale " ) + string::toString( it.second.scale, std::locale{ "C" } ) + cuT( "\n" ) ) > 0 )
+					&& ( it.second.startingPoint == 0_ms ? true : file.writeText( m_tabs + cuT( "\t\tstart_at " ) + string::toString( it.second.startingPoint.count() / 1000.0, std::locale{ "C" } ) + cuT( "\n" ) ) > 0 )
+					&& ( it.second.stoppingPoint == 0_ms ? true : file.writeText( m_tabs + cuT( "\t\tstart_at " ) + string::toString( it.second.stoppingPoint.count() / 1000.0, std::locale{ "C" } ) + cuT( "\n" ) ) > 0 )
 					&& ( file.writeText( m_tabs + cuT( "\t}\n" ) ) > 0 );
 				castor::TextWriter< AnimatedObjectGroup >::checkError( result, "AnimatedObjectGroup animation" );
 			}
@@ -208,6 +210,8 @@ namespace castor3d
 			auto & animation = object->getAnimation( it.first );
 			animation.setLooped( it.second.looped );
 			animation.setScale( it.second.scale );
+			animation.setStartingPoint( it.second.startingPoint );
+			animation.setStoppingPoint( it.second.stoppingPoint );
 		}
 
 		return result;
@@ -246,8 +250,28 @@ namespace castor3d
 			, &AnimationInstance::setScale
 			, scale
 			, offsetof( GroupAnimation, scale ) );
+	}
 
+	void AnimatedObjectGroup::setAnimationStartingPoint( castor::String const & name
+		, castor::Milliseconds value )
+	{
+		applyAnimationFunc( m_animations
+			, m_objects
+			, name
+			, &AnimationInstance::setStartingPoint
+			, value
+			, offsetof( GroupAnimation, startingPoint ) );
+	}
 
+	void AnimatedObjectGroup::setAnimationStoppingPoint( castor::String const & name
+		, castor::Milliseconds value )
+	{
+		applyAnimationFunc( m_animations
+			, m_objects
+			, name
+			, &AnimationInstance::setStoppingPoint
+			, value
+			, offsetof( GroupAnimation, stoppingPoint ) );
 	}
 
 	void AnimatedObjectGroup::update()

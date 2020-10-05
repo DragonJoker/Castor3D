@@ -164,6 +164,30 @@ namespace castor3d
 			, float scale );
 		/**
 		 *\~english
+		 *\brief		Sets the starting point of wanted animation.
+		 *\param[in]	name	The name of the animation.
+		 *\param[in]	value	The starting point.
+		 *\~french
+		 *\brief		Définit le point de départ de l'animation voulue.
+		 *\param[in]	name	Le nom de l'animation.
+		 *\param[in]	value	Le point de départ.
+		 */
+		C3D_API void setAnimationStartingPoint( castor::String const & name
+			, castor::Milliseconds value );
+		/**
+		 *\~english
+		 *\brief		Sets the stopping point of wanted animation.
+		 *\param[in]	name	The name of the animation.
+		 *\param[in]	value	The stopping point.
+		 *\~french
+		 *\brief		Définit le point d'arrêt de l'animation voulue.
+		 *\param[in]	name	Le nom de l'animation.
+		 *\param[in]	value	Le point d'arrêt.
+		 */
+		C3D_API void setAnimationStoppingPoint( castor::String const & name
+			, castor::Milliseconds value );
+		/**
+		 *\~english
 		 *\brief		Updates all animated objects
 		 *\~french
 		 *\brief		Met à jour toutes les animations

@@ -84,7 +84,7 @@ namespace GuiCommon
 		 */
 		inline castor3d::AnimationState getState()
 		{
-			return m_groupAnim.m_state;
+			return m_groupAnim.state;
 		}
 		/**
 		 *\~english
@@ -96,7 +96,7 @@ namespace GuiCommon
 		 */
 		inline float getScale()
 		{
-			return m_groupAnim.m_scale;
+			return m_groupAnim.scale;
 		}
 		/**
 		 *\~english
@@ -108,7 +108,7 @@ namespace GuiCommon
 		 */
 		inline bool isLooped()
 		{
-			return m_groupAnim.m_looped;
+			return m_groupAnim.looped;
 		}
 
 	private:

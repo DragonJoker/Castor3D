@@ -606,6 +606,8 @@ namespace Testing
 				result = result && CT_EQUAL( itA->second.state, itB->second.state );
 				result = result && CT_EQUAL( itA->second.scale, itB->second.scale );
 				result = result && CT_EQUAL( itA->second.looped, itB->second.looped );
+				result = result && CT_EQUAL( itA->second.startingPoint, itB->second.startingPoint );
+				result = result && CT_EQUAL( itA->second.stoppingPoint, itB->second.stoppingPoint );
 				++itA;
 				++itB;
 			}

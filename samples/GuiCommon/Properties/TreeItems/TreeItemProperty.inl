@@ -176,6 +176,16 @@ namespace GuiCommon
 		{
 			return grid->Append( new wxImageFileProperty( name, name, make_wxString( value ) ) );
 		}
+		else if constexpr ( std::is_same_v< ValueT, castor::Milliseconds > )
+		{
+			wxPGProperty * prop = grid->Append( new wxFloatProperty( name, name, value.count() / 1000.0 ) );
+			prop->SetEditor( wxPGEditor_SpinCtrl );
+			prop->SetAttribute( wxPG_ATTR_UNITS, wxT( "s" ) );
+			prop->SetAttribute( wxPG_ATTR_SPINCTRL_STEP, WXVARIANT( 0.1 ) );
+			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
+			prop->SetAttribute( wxPG_ATTR_SPINCTRL_MOTION, WXVARIANT( true ) );
+			return prop;
+		}
 		else if constexpr ( std::is_same_v< ValueT, castor::BoundingSphere > )
 		{
 			wxPGProperty * prop = grid->Append( new BoundingSphereProperty( name, name, value ) );
@@ -279,7 +289,7 @@ namespace GuiCommon
 		, PropertyChangeHandler handler )
 	{
 		wxPGProperty * prop = addProperty( grid, name, value, handler );
-		prop->SetAttribute( wxPG_ATTR_SPINCTRL_STEP, WXVARIANT( step ) );
+		prop->SetAttribute( wxPG_ATTR_SPINCTRL_STEP, getVariant< ValueT >( step ) );
 		return prop;
 	}
 

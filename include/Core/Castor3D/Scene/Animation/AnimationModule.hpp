@@ -74,6 +74,8 @@ namespace castor3d
 		AnimationState state{};
 		bool looped{};
 		float scale{};
+		castor::Milliseconds startingPoint{};
+		castor::Milliseconds stoppingPoint{};
 	};
 	using GroupAnimationMap = std::map< castor::String, GroupAnimation >;
 

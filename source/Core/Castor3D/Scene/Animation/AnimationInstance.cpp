@@ -18,7 +18,9 @@ namespace castor3d
 
 	void AnimationInstance::update( Milliseconds const & elapsed )
 	{
-		auto length = m_animation.getLength();
+		auto length = m_stoppingPoint == 0_ms
+			? m_animation.getLength()
+			: std::min( m_stoppingPoint, m_animation.getLength() );
 		double scale = m_scale;
 		auto looped = m_looped;
 
@@ -42,22 +44,24 @@ namespace castor3d
 							m_currentTime -= length;
 						}
 						while ( m_currentTime >= length );
+
+						m_currentTime += m_startingPoint;
 					}
 				}
-				else if ( m_currentTime < 0_ms )
+				else if ( m_currentTime < m_startingPoint )
 				{
 					if ( !looped )
 					{
 						m_state = AnimationState::ePaused;
-						m_currentTime = 0_ms;
+						m_currentTime = m_startingPoint;
 					}
 					else
 					{
 						do
 						{
-							m_currentTime += m_animation.getLength();
+							m_currentTime += length;
 						}
-						while ( m_currentTime < 0_ms );
+						while ( m_currentTime < m_startingPoint );
 					}
 				}
 			}
@@ -84,7 +88,7 @@ namespace castor3d
 		if ( m_state != AnimationState::eStopped )
 		{
 			m_state = AnimationState::eStopped;
-			m_currentTime = 0_ms;
+			m_currentTime = m_startingPoint;
 		}
 	}
 

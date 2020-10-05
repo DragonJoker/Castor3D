@@ -4098,6 +4098,29 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
+	CU_ImplementAttributeParser( parserUnitInvertY )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->textureUnit )
+		{
+			CU_ParsingError( cuT( "No TextureUnit initialised." ) );
+		}
+		else if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			bool value;
+			params[0]->get( value );
+			parsingContext->textureConfiguration.needsYInversion = value
+				? 1u
+				: 0u;
+		}
+	}
+	CU_EndAttribute()
+
 	CU_ImplementAttributeParser( parserUnitEnd )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
@@ -5296,6 +5319,42 @@ namespace castor3d
 		if ( parsingContext->pAnimGroup )
 		{
 			parsingContext->pAnimGroup->setAnimationScale( parsingContext->strName2, value );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No animated object group initialised" ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserAnimationStartAt )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+		float value;
+		params[0]->get( value );
+
+		if ( parsingContext->pAnimGroup )
+		{
+			parsingContext->pAnimGroup->setAnimationStartingPoint( parsingContext->strName2
+				, castor::Milliseconds{ uint64_t( value * 1000.0f ) } );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No animated object group initialised" ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserAnimationStopAt )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+		float value;
+		params[0]->get( value );
+
+		if ( parsingContext->pAnimGroup )
+		{
+			parsingContext->pAnimGroup->setAnimationStoppingPoint( parsingContext->strName2
+				, castor::Milliseconds{ uint64_t( value * 1000.0f ) } );
 		}
 		else
 		{
