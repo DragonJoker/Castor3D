@@ -34,7 +34,8 @@ namespace castor3d
 		{
 			RenderPass( std::string const & name
 				, ashes::RenderPassPtr renderPass
-				, LightPassResult const & lpResult );
+				, LightPassResult const & lpResult
+				, bool generatesIndirect );
 			ashes::RenderPassPtr renderPass;
 			ashes::FrameBufferPtr frameBuffer;
 		};
@@ -70,7 +71,8 @@ namespace castor3d
 				, castor::String const & name
 				, ShaderModule const & vtx
 				, ShaderModule const & pxl
-				, bool hasShadows );
+				, bool hasShadows
+				, bool generatesIndirect );
 			/**
 			 *\~english
 			 *\brief		Destructor.
@@ -242,6 +244,7 @@ namespace castor3d
 			ashes::GraphicsPipelinePtr m_blendPipeline;
 			ashes::GraphicsPipelinePtr m_firstPipeline;
 			bool m_shadows;
+			bool m_generatesIndirect;
 		};
 		using ProgramPtr = std::unique_ptr< Program >;
 
@@ -400,11 +403,12 @@ namespace castor3d
 		LightPass( Engine & engine
 			, RenderDevice const & device
 			, castor::String const & suffix
-			, ashes::RenderPassPtr && firstRenderPass
-			, ashes::RenderPassPtr && blendRenderPass
+			, ashes::RenderPassPtr firstRenderPass
+			, ashes::RenderPassPtr blendRenderPass
 			, LightPassResult const & lpResult
 			, GpInfoUbo const & gpInfoUbo
-			, bool hasShadows );
+			, bool hasShadows
+			, bool generatesIndirect );
 		/**
 		 *\~english
 		 *\brief		Initialises the light pass.
@@ -588,7 +592,8 @@ namespace castor3d
 		ashes::PipelineVertexInputStateCreateInfo const * m_pUsedVertexLayout{ nullptr };
 		RenderPassTimer * m_timer{ nullptr };
 		UniformBufferBase const * m_baseUbo{ nullptr };
-		bool m_shadows{};
+		bool m_shadows;
+		bool m_generatesIndirect;
 		MatrixUbo m_matrixUbo;
 		RenderPass m_firstRenderPass;
 		RenderPass m_blendRenderPass;

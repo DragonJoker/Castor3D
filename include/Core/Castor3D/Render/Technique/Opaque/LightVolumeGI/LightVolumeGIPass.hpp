@@ -45,7 +45,8 @@ namespace castor3d
 			, LpvConfigUbo const & lpvConfigUbo
 			, OpaquePassResult const & gpResult
 			, LightVolumePassResult const & lpResult
-			, TextureUnit const & dst );
+			, TextureUnit const & dst
+			, BlendMode blendMode );
 		/**
 		 *\~english
 		 *\brief		Renders the SSGI pass.

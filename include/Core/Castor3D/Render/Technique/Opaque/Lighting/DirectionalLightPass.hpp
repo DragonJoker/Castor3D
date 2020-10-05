@@ -50,7 +50,8 @@ namespace castor3d
 				, DirectionalLightPass & pass
 				, ShaderModule const & vtx
 				, ShaderModule const & pxl
-				, bool hasShadows = false );
+				, bool hasShadows = false
+				, bool generatesIndirect = false );
 			/**
 			 *\~english
 			 *\brief		Destructor.
@@ -95,12 +96,14 @@ namespace castor3d
 			, castor::String const & suffix
 			, LightPassResult const & lpResult
 			, GpInfoUbo const & gpInfoUbo
-			, bool hasShadows = false );
+			, bool hasShadows = false
+			, bool generatesIndirect = false );
 		DirectionalLightPass( Engine & engine
 			, RenderDevice const & device
 			, LightPassResult const & lpResult
 			, GpInfoUbo const & gpInfoUbo
-			, bool hasShadows = false )
+			, bool hasShadows = false
+			, bool generatesIndirect = false )
 			: DirectionalLightPass{ engine, device, castor::String{}, lpResult, gpInfoUbo, hasShadows }
 		{
 		}

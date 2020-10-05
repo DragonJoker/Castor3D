@@ -48,7 +48,8 @@ namespace castor3d
 				, PointLightPass & lightPass
 				, ShaderModule const & vtx
 				, ShaderModule const & pxl
-				, bool hasShadows = false );
+				, bool hasShadows = false
+				, bool generatesIndirect = false );
 			/**
 			 *\~english
 			 *\brief		Destructor.
@@ -87,13 +88,21 @@ namespace castor3d
 			, castor::String const & suffix
 			, LightPassResult const & lpResult
 			, GpInfoUbo const & gpInfoUbo
-			, bool hasShadows = false );
+			, bool hasShadows = false
+			, bool generatesIndirect = false );
 		PointLightPass( Engine & engine
 			, RenderDevice const & device
 			, LightPassResult const & lpResult
 			, GpInfoUbo const & gpInfoUbo
-			, bool hasShadows = false )
-			: PointLightPass{ engine, device, castor::String{}, lpResult, gpInfoUbo, hasShadows }
+			, bool hasShadows = false
+			, bool generatesIndirect = false )
+			: PointLightPass{ engine
+				, device
+				, castor::String{}
+				, lpResult
+				, gpInfoUbo
+				, hasShadows
+				, generatesIndirect }
 		{
 		}
 		/**

@@ -140,7 +140,7 @@ namespace castor3d
 				, m_subsurfaceScattering->getResult()
 				, m_lightingPass->getResult()[LpTexture::eDiffuse]
 				, m_lightingPass->getResult()[LpTexture::eSpecular]
-				, m_lightingPass->getResult()[LpTexture::eIndirect]
+				, m_lightingPass->getResult()[LpTexture::eIndirectDiffuse]
 				, resultTexture
 				, m_opaquePass.getSceneUbo()
 				, m_gpInfoUbo

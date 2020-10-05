@@ -156,11 +156,20 @@ namespace castor3d
 	CU_DeclareSmartPtr( LightPropagationPass );
 	CU_DeclareSmartPtr( LightVolumeGIPass );
 
-	CU_DeclareArray( LightPropagationPassUPtr, 2u, LightPropagationPass );
+	namespace lpv
+	{
+		// 2 passes: First and Blend.
+		static uint32_t constexpr ResolvePassCount = 2u;
+		// 2 passes: with or without geometry occlusion.
+		static uint32_t constexpr PropagationPassCount = 2u;
+	}
+
+	CU_DeclareArray( LayeredLightVolumeGIPassUPtr, lpv::ResolvePassCount, LayeredLightVolumeGIPass );
+	CU_DeclareArray( LightPropagationPassUPtr, lpv::PropagationPassCount, LightPropagationPass );
+	CU_DeclareArray( LightVolumeGIPassUPtr, lpv::ResolvePassCount, LightVolumeGIPass );
 
 	CU_DeclareVector( GeometryInjectionPass, GeometryInjectionPass );
 	CU_DeclareVector( LightInjectionPass, LightInjectionPass );
-	CU_DeclareVector( LightVolumeGIPass, LightVolumeGIPass );
 
 	//@}
 	//@}

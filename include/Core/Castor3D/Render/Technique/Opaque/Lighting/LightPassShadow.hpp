@@ -138,8 +138,15 @@ namespace castor3d
 				, RenderDevice const & device
 				, LightPassShadow & lightPass
 				, ShaderModule const & vtx
-				, ShaderModule const & pxl )
-				: my_program_type( engine, device, lightPass, vtx, pxl, true )
+				, ShaderModule const & pxl
+				, bool generatesIndirect )
+				: my_program_type( engine
+					, device
+					, lightPass
+					, vtx
+					, pxl
+					, true
+					, generatesIndirect )
 			{
 			}
 		};
@@ -161,24 +168,28 @@ namespace castor3d
 			, RenderDevice const & device
 			, castor::String const & suffix
 			, LightPassResult const & lpResult
-			, GpInfoUbo const & gpInfoUbo )
+			, GpInfoUbo const & gpInfoUbo
+			, bool generatesIndirect = false )
 			: my_pass_type{ engine
 				, device
 				, suffix
 				, lpResult
 				, gpInfoUbo
-				, true }
+				, true
+				, generatesIndirect }
 		{
 		}
 		LightPassShadow( Engine & engine
 			, RenderDevice const & device
 			, LightPassResult const & lpResult
-			, GpInfoUbo const & gpInfoUbo )
+			, GpInfoUbo const & gpInfoUbo
+			, bool generatesIndirect = false )
 			: LightPassShadow{ engine
 				, device
 				, cuT( "Shadow" )
 				, lpResult
-				, gpInfoUbo }
+				, gpInfoUbo
+				, generatesIndirect }
 		{
 		}
 
@@ -192,7 +203,8 @@ namespace castor3d
 				, this->m_device
 				, *this
 				, this->m_vertexShader
-				, this->m_pixelShader );
+				, this->m_pixelShader
+				, this->m_generatesIndirect );
 			return result;
 		}
 	};

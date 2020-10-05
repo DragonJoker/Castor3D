@@ -519,7 +519,7 @@ namespace castor3d
 			, { createBindings()
 				, ashes::nullopt
 				, rq::Texcoord{}
-				, BlendMode::eAdditive } }
+				, BlendMode::eNoBlend } }
 		, m_lightCache{ lightCache }
 		, m_gpInfo{ gpInfo }
 		, m_gpResult{ gpResult }

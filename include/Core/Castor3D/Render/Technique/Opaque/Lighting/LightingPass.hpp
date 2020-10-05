@@ -20,6 +20,8 @@ See LICENSE file in root folder
 #include <ashespp/Sync/Fence.hpp>
 #include <ashespp/Sync/Semaphore.hpp>
 
+#include <unordered_set>
+
 namespace castor3d
 {
 	class LightingPass
@@ -135,6 +137,7 @@ namespace castor3d
 		ashes::ImageView const & m_srcDepth;
 		CommandsSemaphore m_blitDepth;
 		CommandsSemaphore m_lpResultBarrier;
+		std::unordered_set< LightPass * > m_active;
 	};
 }
 

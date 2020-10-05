@@ -452,7 +452,7 @@ namespace castor3d
 			, ashes::DescriptorSetPool & descriptorSetPool
 			, LightCache const & lightCache
 			, ShadowMapResult const & smResult
-			, UniformBufferOffsetT< LpvConfigUboConfiguration > const & ubo
+			, UniformBufferOffsetT< LpvConfiguration > const & ubo
 			, GpInfoUbo const & gpInfoUbo
 			, LightVolumePassResult const & lpvResult )
 		{

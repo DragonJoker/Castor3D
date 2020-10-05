@@ -49,7 +49,8 @@ namespace castor3d
 				, castor::String const & name
 				, ShaderModule const & vtx
 				, ShaderModule const & pxl
-				, bool hasShadows );
+				, bool hasShadows
+				, bool generatesIndirect );
 			/**
 			 *\~english
 			 *\brief		Destructor.
@@ -90,7 +91,8 @@ namespace castor3d
 			, LightPassResult const & lpResult
 			, GpInfoUbo const & gpInfoUbo
 			, LightType type
-			, bool hasShadows );
+			, bool hasShadows
+			, bool generatesIndirect );
 		/**
 		 *\~english
 		 *\brief		Destructor.

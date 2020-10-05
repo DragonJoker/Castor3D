@@ -248,7 +248,8 @@ namespace castor3d
 		}
 
 		ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
-			, VkFormat format )
+			, VkFormat format
+			, BlendMode blendMode )
 		{
 			ashes::VkAttachmentDescriptionArray attaches
 			{
@@ -256,11 +257,15 @@ namespace castor3d
 					0u,
 					format,
 					VK_SAMPLE_COUNT_1_BIT,
-					VK_ATTACHMENT_LOAD_OP_LOAD,
+					( blendMode == BlendMode::eNoBlend
+						? VK_ATTACHMENT_LOAD_OP_CLEAR
+						: VK_ATTACHMENT_LOAD_OP_LOAD ),
 					VK_ATTACHMENT_STORE_OP_STORE,
 					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+					( blendMode == BlendMode::eNoBlend
+						? VK_IMAGE_LAYOUT_UNDEFINED
+						: VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ),
 					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 				},
 			};
@@ -357,14 +362,15 @@ namespace castor3d
 		, LightVolumePassResult const & lpResult1
 		, LightVolumePassResult const & lpResult2
 		, LightVolumePassResult const & lpResult3
-		, TextureUnit const & dst )
+		, TextureUnit const & dst
+		, BlendMode blendMode )
 		: RenderQuad{ device
 			, prefix + "GIResolve"
 			, VK_FILTER_LINEAR
 			, { createBindings()
 				, ashes::nullopt
 				, rq::Texcoord{}
-				, BlendMode::eAdditive } }
+				, blendMode } }
 		, m_gpInfo{ gpInfo }
 		, m_lpvConfigUbo{ lpvConfigUbo }
 		, m_gpResult{ gpResult }
@@ -376,7 +382,8 @@ namespace castor3d
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram() }
 		, m_renderPass{ doCreateRenderPass( device
-			, m_result.getTexture()->getPixelFormat() ) }
+			, m_result.getTexture()->getPixelFormat()
+			, blendMode ) }
 		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass
 			, m_result.getTexture()->getDefaultView().getTargetView() ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, m_device, cuT( "Light Propagation Volumes" ), cuT( "Layered GI Resolve" ) ) }
