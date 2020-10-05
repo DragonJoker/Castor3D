@@ -99,7 +99,7 @@ namespace castor3d
 			m_objects.emplace_back( object.get()
 				, ( it != keyFrame.end()
 					? it->second
-					: Matrix4x4f::getIdentity() ) );
+					: Matrix4x4f{ Matrix4x4f::getIdentity() } ) );
 
 			if ( object->getObject().getType() == SkeletonAnimationObjectType::eBone )
 			{

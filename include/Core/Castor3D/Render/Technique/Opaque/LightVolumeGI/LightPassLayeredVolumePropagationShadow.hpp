@@ -318,14 +318,14 @@ namespace castor3d
 				m_lightVolumeGIPasses[0]->accept( visitor );
 			}
 
-			visitor.visit( getName()
+			visitor.visit( this->getName()
 				, ( VK_SHADER_STAGE_GEOMETRY_BIT
 					| VK_SHADER_STAGE_VERTEX_BIT
 					| VK_SHADER_STAGE_FRAGMENT_BIT )
 				, cuT( "LPV Config" )
 				, cuT( "Indirect Attenuation" )
 				, m_configuration.data.indirectAttenuation );
-			visitor.visit( getName()
+			visitor.visit( this->getName()
 				, ( VK_SHADER_STAGE_GEOMETRY_BIT
 					| VK_SHADER_STAGE_VERTEX_BIT
 					| VK_SHADER_STAGE_FRAGMENT_BIT )

@@ -11,6 +11,11 @@ using namespace castor;
 
 namespace castor3d
 {
+	castor::LoggerInstance & getLogger( Engine & engine )
+	{
+		return engine.getLogger();
+	}
+
 	castor::Matrix4x4f convert( std::array< float, 16 > const & value )
 	{
 		castor::Matrix4x4f result;

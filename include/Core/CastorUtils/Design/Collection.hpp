@@ -39,7 +39,7 @@ namespace castor
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		Collection( LoggerInstance & logger );
+		explicit Collection( LoggerInstance & logger );
 		/**
 		 *\~english
 		 *\brief		Destructor

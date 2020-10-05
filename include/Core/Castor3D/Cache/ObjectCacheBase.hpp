@@ -80,7 +80,7 @@ namespace castor3d
 			, m_rootNode{ rootNode }
 			, m_rootCameraNode{ rootCameraNode }
 			, m_rootObjectNode{ rootObjectNode }
-			, m_elements{ engine.getLogger() }
+			, m_elements{ castor3d::getLogger( engine ) }
 			, m_produce{ std::move( produce ) }
 			, m_initialise{ std::move( initialise ) }
 			, m_clean{ std::move( clean ) }
