@@ -482,12 +482,16 @@ namespace castor3d
 		, castor::String const & prefix
 		, castor::String const & suffix
 		, bool occlusion
-		, uint32_t gridSize )
+		, uint32_t gridSize
+		, BlendMode blendMode )
 		: RenderGrid{ device
 			, prefix + "Propagation" + suffix
 			, VK_FILTER_LINEAR
 			, gridSize
-			, { createBindings( occlusion ) } }
+			, { createBindings( occlusion )
+				, std::nullopt
+				, std::nullopt
+				, blendMode } }
 		, m_engine{ *device.renderSystem.getEngine() }
 		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, m_device, cuT( "Light Propagation Volumes" ), cuT( "Light Propagation" ) ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT

@@ -132,13 +132,6 @@ namespace castor3d
 			, RenderPassTimer & timer )override
 		{
 			auto & lightCache = scene.getLightCache();
-			uint32_t propIndex = 0u;
-			m_lightPropagationPasses[0] = std::make_unique< LightPropagationPass >( this->m_device
-				, this->getName()
-				, "NoOcc"
-				, false
-				, GridSize );
-			auto & passNoOcc = *m_lightPropagationPasses[0u];
 			m_lightVolumeGIPasses = { std::make_unique< LayeredLightVolumeGIPass >( this->m_engine
 					, this->m_device
 					, this->getName()
@@ -163,6 +156,24 @@ namespace castor3d
 					, m_accumulation[3u]
 					, m_lpResult[LpTexture::eIndirectDiffuse]
 					, BlendMode::eAdditive ) };
+			m_lightPropagationPasses = { std::make_unique< LightPropagationPass >( this->m_device
+					, this->getName()
+					, "NoOcc"
+					, false
+					, GridSize
+					, BlendMode::eNoBlend )
+				, std::make_unique< LightPropagationPass >( this->m_device
+					, this->getName()
+					, ( GeometryVolumesT
+						? castor::String{ cuT( "OccBlend" ) }
+						: castor::String{ cuT( "NoOccBlend" ) } )
+					, GeometryVolumesT
+					, GridSize
+					, BlendMode::eNoBlend ) };
+
+			uint32_t propIndex = 0u;
+			auto & passNoOcc = *m_lightPropagationPasses[0u];
+			auto & passOcc = *m_lightPropagationPasses[1u];
 
 			for ( uint32_t cascade = 0u; cascade < shader::DirectionalMaxCascadesCount; ++cascade )
 			{
@@ -177,23 +188,9 @@ namespace castor3d
 					, m_injection[cascade]
 					, GridSize
 					, cascade );
-				passNoOcc.registerPassIO( nullptr
-					, m_injection[cascade]
-					, m_lpvConfigUbos[cascade]
-					, m_accumulation[cascade]
-					, m_propagate[propIndex] );
-			}
+				TextureUnit * geometry{ nullptr };
 
-			if constexpr ( GeometryVolumesT )
-			{
-				m_lightPropagationPasses[1] = std::make_unique< LightPropagationPass >( this->m_device
-					, this->getName()
-					, "Occ"
-					, true
-					, GridSize );
-				auto & passOcc = *m_lightPropagationPasses[1u];
-
-				for ( uint32_t cascade = 0u; cascade < shader::DirectionalMaxCascadesCount; ++cascade )
+				if constexpr ( GeometryVolumesT )
 				{
 					m_geometryInjectionPasses.emplace_back( this->m_engine
 						, this->m_device
@@ -206,37 +203,28 @@ namespace castor3d
 						, m_geometry[cascade]
 						, GridSize
 						, cascade );
-
-					for ( uint32_t i = 1u; i < MaxPropagationSteps; ++i )
-					{
-						passOcc.registerPassIO( &m_geometry[cascade]
-							, m_propagate[propIndex]
-							, m_lpvConfigUbos[cascade]
-							, m_accumulation[cascade]
-							, m_propagate[1u - propIndex] );
-						propIndex = 1u - propIndex;
-					}
+					geometry = &m_geometry[cascade];
 				}
 
-				passOcc.initialisePasses();
-			}
-			else
-			{
-				for ( uint32_t cascade = 0u; cascade < shader::DirectionalMaxCascadesCount; ++cascade )
+				passNoOcc.registerPassIO( nullptr
+					, m_injection[cascade]
+					, m_lpvConfigUbos[cascade]
+					, m_accumulation[cascade]
+					, m_propagate[propIndex] );
+
+				for ( uint32_t i = 1u; i < MaxPropagationSteps; ++i )
 				{
-					for ( uint32_t i = 1u; i < MaxPropagationSteps; ++i )
-					{
-						passNoOcc.registerPassIO( nullptr
-							, m_propagate[propIndex]
-							, m_lpvConfigUbos[cascade]
-							, m_accumulation[cascade]
-							, m_propagate[1u - propIndex] );
-						propIndex = 1u - propIndex;
-					}
+					passOcc.registerPassIO( geometry
+						, m_propagate[propIndex]
+						, m_lpvConfigUbos[cascade]
+						, m_accumulation[cascade]
+						, m_propagate[1u - propIndex] );
+					propIndex = 1u - propIndex;
 				}
 			}
 
 			passNoOcc.initialisePasses();
+			passOcc.initialisePasses();
 			LightPassShadow< LtType >::initialise( scene, gp, sceneUbo, timer );
 		}
 
@@ -266,27 +254,16 @@ namespace castor3d
 			}
 
 			auto & passNoOcc = *m_lightPropagationPasses[0u];
+			auto & passOcc = *m_lightPropagationPasses[1u];
 			uint32_t occPassIndex = 0u;
 
 			for ( uint32_t cascade = 0u; cascade < shader::DirectionalMaxCascadesCount; ++cascade )
 			{
 				result = &passNoOcc.compute( *result, cascade );
 
-				if constexpr ( GeometryVolumesT )
+				for ( uint32_t i = 1u; i < MaxPropagationSteps; ++i, ++occPassIndex )
 				{
-					auto & passOcc = *m_lightPropagationPasses[1u];
-
-					for ( uint32_t i = 1u; i < MaxPropagationSteps; ++i, ++occPassIndex )
-					{
-						result = &passOcc.compute( *result, occPassIndex );
-					}
-				}
-				else
-				{
-					for ( uint32_t i = 1u; i < MaxPropagationSteps; ++i, ++occPassIndex )
-					{
-						result = &passNoOcc.compute( *result, occPassIndex );
-					}
+					result = &passOcc.compute( *result, occPassIndex );
 				}
 			}
 
@@ -431,13 +408,13 @@ namespace castor3d
 		GeometryInjectionPassArray m_geometryInjectionPasses;
 		LightPropagationPassArray m_lightPropagationPasses;
 		LayeredLightVolumeGIPassArray m_lightVolumeGIPasses;
-		std::array< LpvConfiguration, shader::DirectionalMaxCascadesCount > m_configurations;
-		LpvConfiguration m_configuration;
 
 		castor::BoundingBox m_aabb;
 		castor::Point3f m_cameraPos;
 		castor::Point3f m_cameraDir;
 		uint32_t m_lightIndex{};
+		std::array< LpvConfiguration, shader::DirectionalMaxCascadesCount > m_configurations;
+		LpvConfiguration m_configuration;
 	};
 }
 
