@@ -96,10 +96,15 @@ namespace castor3d
 	auto c3d_minVolumeCorner = lpvConfig.declMember< Vec4 >( castor3d::LpvConfigUbo::MinVolumeCorner );\
 	auto c3d_gridSizes = lpvConfig.declMember< Vec4 >( castor3d::LpvConfigUbo::GridSizes );\
 	auto c3d_lpvConfig = lpvConfig.declMember< Vec4 >( castor3d::LpvConfigUbo::Config );\
+	lpvConfig.end();\
+	auto c3d_gridWidth = c3d_gridSizes.x();\
+	auto c3d_gridHeight = c3d_gridSizes.y();\
+	auto c3d_gridDepth = c3d_gridSizes.z();\
+	auto c3d_gridSize = c3d_gridSizes.xyz();\
+	auto c3d_lightIndex = writer.cast< sdw::Int >( c3d_gridSizes.w() );\
 	auto c3d_lpvIndirectAttenuation = c3d_lpvConfig.x();\
 	auto c3d_lpvTexelAreaModifier = c3d_lpvConfig.y();\
 	auto c3d_lpvTanFovXHalf = c3d_lpvConfig.z();\
-	auto c3d_lpvTanFovYHalf = c3d_lpvConfig.w();\
-	lpvConfig.end()
+	auto c3d_lpvTanFovYHalf = c3d_lpvConfig.w()
 
 #endif

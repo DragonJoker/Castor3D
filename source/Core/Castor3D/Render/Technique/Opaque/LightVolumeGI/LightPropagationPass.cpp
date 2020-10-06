@@ -252,7 +252,7 @@ namespace castor3d
 						if ( occlusion )
 						{
 							auto occCoord = writer.declLocale( "occCoord"
-								, ( vec3( neighbourGScellIndex.xyz() ) + 0.5_f * vec3( mainDirection ) ) / c3d_gridSizes.xyz() );
+								, ( vec3( neighbourGScellIndex.xyz() ) + 0.5_f * vec3( mainDirection ) ) / c3d_gridSize );
 							auto occCoeffs = writer.declLocale( "occCoeffs"
 								, texture( c3d_geometryVolume, occCoord ) );
 							occlusionValue = 1.0 - clamp( occlusionAmplifier * dot( occCoeffs, evalSH_direct( vec3( -mainDirection ) ) ), 0.0_f, 1.0_f );
@@ -283,7 +283,7 @@ namespace castor3d
 							if ( occlusion )
 							{
 								auto occCoord = writer.declLocale( "occCoord"
-									, ( vec3( neighbourGScellIndex.xyz() ) + 0.5_f * evalDirection ) / c3d_gridSizes.xyz() );
+									, ( vec3( neighbourGScellIndex.xyz() ) + 0.5_f * evalDirection ) / c3d_gridSize );
 								auto occCoeffs = writer.declLocale( "occCoeffs"
 									, texture( c3d_geometryVolume, occCoord ) );
 								occlusionValue = 1.0 - clamp( occlusionAmplifier * dot( occCoeffs, evalSH_direct( -evalDirection ) ), 0.0_f, 1.0_f );

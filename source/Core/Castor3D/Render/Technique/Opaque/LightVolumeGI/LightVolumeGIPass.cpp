@@ -159,7 +159,7 @@ namespace castor3d
 					auto lpvIntensity = writer.declLocale( "lpvIntensity"
 						, vec3( 0.0_f ) );
 					auto lpvCellCoords = writer.declLocale( "lpvCellCoords"
-						, ( wsPosition - c3d_minVolumeCorner.xyz() ) / c3d_minVolumeCorner.w() / c3d_gridSizes.xyz() );
+						, ( wsPosition - c3d_minVolumeCorner.xyz() ) / c3d_minVolumeCorner.w() / c3d_gridSize );
 
 					lpvIntensity = vec3(
 						dot( SHintensity, texture( c3d_lpvAccumulatorR, lpvCellCoords ) ),
