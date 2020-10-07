@@ -248,6 +248,7 @@ namespace castor3d
 		, ashes::VkPushConstantRangeArray const & pushRanges
 		, ashes::PipelineDepthStencilStateCreateInfo dsState )
 	{
+		log::debug << "Creating pipeline for " << getName() << std::endl;
 		// Initialise the vertex buffer.
 		m_vertexBuffer = makeVertexBuffer< TexturedQuad::Vertex >( m_device
 			, 4u
@@ -347,6 +348,7 @@ namespace castor3d
 
 	void RenderQuad::initialisePasses()
 	{
+		log::debug << "Initialising passes for " << getName() << std::endl;
 		CU_Require( m_descriptorSetLayout );
 		auto descriptorSetCount = uint32_t( uint32_t( m_passes.size() ) );
 		m_descriptorSetPool = m_descriptorSetLayout->createPool( getName()
