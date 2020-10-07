@@ -4,7 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_SsaoConfigUbo_H___
 #define ___C3D_SsaoConfigUbo_H___
 
-#include "SsaoModule.hpp"
+#include "UbosModule.hpp"
+#include "Render/Ssao/SsaoModule.hpp"
 
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
 

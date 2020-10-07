@@ -8,9 +8,9 @@
 #include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/Ssao/SsaoBlurPass.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
-#include "Castor3D/Render/Ssao/SsaoConfigUbo.hpp"
 #include "Castor3D/Render/Ssao/SsaoRawAOPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
+#include "Castor3D/Shader/Ubos/SsaoConfigUbo.hpp"
 
 using namespace castor;
 using namespace castor3d;

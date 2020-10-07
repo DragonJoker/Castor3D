@@ -1,4 +1,4 @@
-#include "Castor3D/Render/Ssao/SsaoConfigUbo.hpp"
+#include "Castor3D/Shader/Ubos/SsaoConfigUbo.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
