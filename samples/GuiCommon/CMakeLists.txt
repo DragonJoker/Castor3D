@@ -234,6 +234,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	System/SceneExporter.hpp
 	System/SceneObjectsList.hpp
 	System/SplashScreen.hpp
+	System/TreeListContainer.hpp
 )
 if ( APPLE )
 	set( ${PROJECT_NAME}_FOLDER_SRC_FILES

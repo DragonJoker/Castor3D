@@ -120,6 +120,9 @@ namespace GuiCommon
 	class LanguageInfo;
 	class StcContext;
 
+	template< typename ListT >
+	class TreeListContainerT;
+
 	typedef std::shared_ptr< std::thread > thread_sptr;
 	typedef std::shared_ptr< LanguageInfo > LanguageInfoPtr;
 	typedef std::shared_ptr< LanguageFileContext > LanguageFileContextPtr;

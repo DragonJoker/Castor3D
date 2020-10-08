@@ -28,6 +28,13 @@ namespace CastorViewer
 {
 	class RenderPanel;
 
+	struct LogContainer
+	{
+		std::vector< std::pair< wxString, bool > > queue;
+		std::mutex mutex;
+		wxListBox * listBox{ nullptr };
+	};
+
 	typedef enum eBMP
 	{
 		eBMP_SCENES = GuiCommon::eBMP_COUNT,
@@ -77,7 +84,6 @@ namespace CastorViewer
 		void onLeaveWindow( wxMouseEvent & event );
 		void onEraseBackground( wxEraseEvent & event );
 		void onKeyUp( wxKeyEvent & event );
-		void onSceneTabChanging( wxAuiNotebookEvent & event );
 		void onLoadScene( wxCommandEvent & event );
 		void onExportScene( wxCommandEvent & event );
 		void onShowLogs( wxCommandEvent & event );
@@ -103,13 +109,13 @@ namespace CastorViewer
 #endif
 		wxAuiNotebook * m_logTabsContainer{ nullptr };
 		wxAuiNotebook * m_sceneTabsContainer{ nullptr };
-		GuiCommon::PropertiesHolder * m_propertiesHolder{ nullptr };
-		GuiCommon::PropertiesContainer * m_scenePropertiesContainer{ nullptr };
-		GuiCommon::PropertiesContainer * m_materialPropertiesContainer{ nullptr };
-		wxListBox * m_messageLog{ nullptr };
-		wxListBox * m_errorLog{ nullptr };
-		GuiCommon::SceneObjectsList * m_sceneObjectsList{ nullptr };
-		GuiCommon::MaterialsList * m_materialsList{ nullptr };
+		LogContainer m_messageLog;
+		LogContainer m_errorLog;
+#ifndef NDEBUG
+		LogContainer m_debugLog;
+#endif
+		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList > * m_sceneObjects{ nullptr };
+		GuiCommon::TreeListContainerT< GuiCommon::MaterialsList > * m_materials{ nullptr };
 		castor3d::SceneWPtr m_mainScene;
 		castor3d::CameraWPtr m_mainCamera;
 		castor3d::SceneNodeWPtr m_sceneNode;
@@ -118,11 +124,7 @@ namespace CastorViewer
 		wxString m_fullScreenPerspective;
 		wxString m_debugPerspective;
 		wxTimer * m_timerErr{ nullptr };
-		std::vector< std::pair< wxString, bool > > m_errLogList;
-		std::mutex m_errLogListMtx;
 		wxTimer * m_timerMsg{ nullptr };
-		std::vector< std::pair< wxString, bool > > m_msgLogList;
-		std::mutex m_msgLogListMtx;
 		GuiCommon::Recorder m_recorder;
 		int m_recordFps{ 0 };
 		wxString m_title;
