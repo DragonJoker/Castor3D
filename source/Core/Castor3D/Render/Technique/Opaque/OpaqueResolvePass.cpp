@@ -1402,10 +1402,10 @@ namespace castor3d
 		bool hasSsao = m_ssao.getConfig().enabled;
 		bool hasSssss = m_scene.needsSubsurfaceScattering();
 		bool hasGi = m_scene.needsGlobalIllumination();
-		auto index = size_t( fog )
-			* ( hasSsao ? 2u : 1u )
-			* ( hasSssss ? 2u : 1u )
-			* ( hasGi ? 2u : 1u );
+		auto index = ( size_t( fog ) * SsaoCount * SsssCount * GiCount )
+			+ ( ( hasSsao ? 1u : 0 ) * SsssCount * GiCount )
+			+ ( ( hasSssss ? 1u : 0u ) * GiCount )
+			+ ( hasGi ? 1u : 0u );
 		auto & result = m_programs[index];
 
 		if ( !result )
