@@ -72,10 +72,17 @@ jobs:
     - name: Create Build Environment
       run: cmake -E make_directory ${{runner.workspace}}/build-${{ matrix.buildType }}
 
-    - name: Configure CMake
-      shell: bash
-      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
-      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.buildType }} -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/package/Castor3D -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILD_PLUGINS=OFF -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_BUILDGRP_SAMPLE=OFF -DPROJECTS_USE_PRECOMPILED_HEADERS=OFF -DCASTOR_USE_GLSLANG=OFF -DCASTOR_DISABLE_DELAYED_INITIALISATION=ON
+    if: ${{ matrix.os[0] }} == 'windows-latest'
+      - name: Configure CMake
+        shell: bash
+        working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.buildType }} -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/package/Castor3D -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILD_PLUGINS=OFF -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_BUILDGRP_SAMPLE=OFF -DPROJECTS_USE_PRECOMPILED_HEADERS=ON -DCASTOR_USE_GLSLANG=OFF -DCASTOR_DISABLE_DELAYED_INITIALISATION=ON
+
+    if: ${{ matrix.os[0] }} != 'windows-latest'
+      - name: Configure CMake
+        shell: bash
+        working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.buildType }} -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/package/Castor3D -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILD_PLUGINS=OFF -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_BUILDGRP_SAMPLE=OFF -DPROJECTS_USE_PRECOMPILED_HEADERS=OFF -DCASTOR_USE_GLSLANG=OFF -DCASTOR_DISABLE_DELAYED_INITIALISATION=ON
 
     - name: Build
       working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
