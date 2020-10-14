@@ -22,45 +22,38 @@ jobs:
         vcpkgGitCommitId: '7e3d3beac5ca6fe8aab4599d4e1d8ce270ccdea8'
         setupOnly: true
 
-    - name: Install spirv-cross
+    - name: Install dependencies from vcpkg
       run: $VCPKG_ROOT/vcpkg install spirv-cross:${{ matrix.os[1] }} freetype:${{ matrix.os[1] }} zlib:${{ matrix.os[1] }}
       shell: bash
+
+    - name: Checkout CMake submodule
+      run: git submodule update --init -- "CMake"
+
+    - name: Caching CMake submodule
+      uses: actions/cache@v2
+      env:
+        cache-name: cache-cmake-submodule
+      with:
+          path: $GITHUB_WORKSPACE/CMake
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/*.cmake') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
 
     - name: Checkout external/Ashes submodule
       run: git submodule update --init --recursive -- "external/Ashes"
 
-    - name: Cache Ashes submodule
-      uses: actions/cache@v2
-      env:
-        cache-name: cache-ashes-submodule
-      with:
-          path: $GITHUB_WORKSPACE/external/Ashes
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/*.*') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-
     - name: Checkout external/ShaderWriter submodule
       run: git submodule update --init -- "external/ShaderWriter"
-
-    - name: Cache ShaderWriter submodule
-      uses: actions/cache@v2
-      env:
-        cache-name: cache-shaderwriter-submodule
-      with:
-          path: $GITHUB_WORKSPACE/external/ShaderWriter
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/*.*') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
 
     - name: Checkout external/gli submodule
       run: git submodule update --init -- "external/gli"
 
-    - name: Cache gli submodule
+    - name: Cache external submodules
       uses: actions/cache@v2
       env:
-        cache-name: cache-gli-submodule
+        cache-name: cache-external-submodule
       with:
-          path: $GITHUB_WORKSPACE/external/gli
+          path: $GITHUB_WORKSPACE/external
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/*.*') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
