@@ -23,7 +23,7 @@ jobs:
         setupOnly: true
 
     - name: Install spirv-cross
-      run: $VCPKG_ROOT/vcpkg install spirv-cross:${{ matrix.os[1] } assimp:${{ matrix.os[1] } freetype:${{ matrix.os[1] }} zlib:${{ matrix.os[1] }}
+      run: $VCPKG_ROOT/vcpkg install spirv-cross:${{ matrix.os[1] }} assimp:${{ matrix.os[1] }} freetype:${{ matrix.os[1] }} zlib:${{ matrix.os[1] }}
       shell: bash
 
     - name: Checkout external/Ashes submodule
