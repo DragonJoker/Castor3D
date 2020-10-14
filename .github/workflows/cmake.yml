@@ -7,6 +7,7 @@ jobs:
     strategy:
       matrix:
         os: [[ubuntu-latest,x64-linux]]
+        # os: [[ubuntu-latest,x64-linux], [windows-latest,x64-windows], [macos-latest,x64-osx]]
         buildType: [Release]
 
     runs-on: ${{ matrix.os[0] }}
@@ -85,4 +86,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: generated-binaries
-        path: $GITHUB_WORKSPACE/package/Castor3D/
+        path: ${{ github.workspace }}/package/Castor3D/
