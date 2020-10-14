@@ -27,11 +27,7 @@ jobs:
       shell: bash
 
     - name: Checkout external/Ashes submodule
-      run: git submodule update --init -- "external/Ashes"
-
-    - name: Checkout external/Ashes/Vulkan-Headers submodule
-      working-directory: ${{runner.workspace}}/external/Ashes
-      run: git submodule update --init -- "external/Vulkan-Headers"
+      run: git submodule update --init --recursive -- "external/Ashes"
 
     - name: Cache Ashes submodule
       uses: actions/cache@v2
