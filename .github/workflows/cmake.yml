@@ -1,13 +1,23 @@
-name: CMake
+name: Build
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
+      - development
+  pull_request:
+    branches:
+      - master
+      - development
+  release:
+    types:
+      - created
 
 jobs:
   build:
     strategy:
       matrix:
-        os: [[ubuntu-latest,x64-linux]]
-        # os: [[ubuntu-latest,x64-linux], [windows-latest,x64-windows], [macos-latest,x64-osx]]
+        os: [[ubuntu-latest,x64-linux], [windows-latest,x64-windows], [macos-latest,x64-osx]]
         buildType: [Release]
 
     runs-on: ${{ matrix.os[0] }}
@@ -85,5 +95,5 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: generated-binaries
+        name: generated-binaries-${{ matrix.os[1] }}
         path: ${{ github.workspace }}/package/Castor3D/
