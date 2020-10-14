@@ -2,7 +2,7 @@ set( FOLDER_NAME AssimpImporter )
 project( castor3d${FOLDER_NAME} )
 
 if ( VCPKG_TOOLCHAIN )
-	find_package( assimp CONFIG assimp )
+	find_package( assimp CONFIG )
 	set( assimp_LIBRARIES assimp::assimp )
 	set( assimp_FOUND ON )
 else ()
