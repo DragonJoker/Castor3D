@@ -37,10 +37,8 @@ jobs:
       run: $VCPKG_ROOT/vcpkg install spirv-cross:${{ matrix.os[1] }} freetype:${{ matrix.os[1] }} zlib:${{ matrix.os[1] }}
       shell: bash
 
-    - name: Checkout CMake submodule
-      run: git submodule update --init -- "CMake"
-
     - name: Caching CMake submodule
+      id: cache-cmake
       uses: actions/cache@v2
       env:
         cache-name: cache-cmake-submodule
@@ -50,24 +48,32 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
 
-    - name: Checkout external/Ashes submodule
-      run: git submodule update --init --recursive -- "external/Ashes"
-
-    - name: Checkout external/ShaderWriter submodule
-      run: git submodule update --init -- "external/ShaderWriter"
-
-    - name: Checkout external/gli submodule
-      run: git submodule update --init -- "external/gli"
+    - name: Checkout CMake submodule
+      if: steps.cache-cmake.outputs.cache-hit != 'true'
+      run: git submodule update --init -- "CMake"
 
     - name: Cache external submodules
+      id: cache-external
       uses: actions/cache@v2
       env:
-        cache-name: cache-external-submodule
+        cache-name: cache-external-submodules
       with:
           path: $GITHUB_WORKSPACE/external
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/*.*') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
+
+    - name: Checkout external/Ashes submodule
+      if: steps.cache-external.outputs.cache-hit != 'true'
+      run: git submodule update --init --recursive -- "external/Ashes"
+
+    - name: Checkout external/ShaderWriter submodule
+      if: steps.cache-external.outputs.cache-hit != 'true'
+      run: git submodule update --init -- "external/ShaderWriter"
+
+    - name: Checkout external/gli submodule
+      if: steps.cache-external.outputs.cache-hit != 'true'
+      run: git submodule update --init -- "external/gli"
 
     - name: Create Build Environment
       run: cmake -E make_directory ${{runner.workspace}}/build-${{ matrix.buildType }}
@@ -101,16 +107,19 @@ jobs:
       run: ctest -C ${{ matrix.buildType }}
 
     - name: Prepare package
+      if: github.event_name == 'push'
       working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
       shell: bash
       run: cmake --install . --config ${{ matrix.buildType }}
 
     - name: Zip package
+      if: github.event_name == 'push'
       working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
       shell: bash
       run: 7z a $GITHUB_WORKSPACE/Castor3D-${{ matrix.os[1] }}.zip $GITHUB_WORKSPACE/package/Castor3D/
 
     - name: Upload package
+      if: github.event_name == 'push'
       uses: actions/upload-artifact@v2
       with:
         name: Castor3D-${{ matrix.os[1] }}.zip
