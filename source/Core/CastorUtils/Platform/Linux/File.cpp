@@ -3,6 +3,7 @@
 #if defined( CU_PlatformLinux )
 
 #include "CastorUtils/Data/File.hpp"
+#include "CastorUtils/Log/Logger.hpp"
 #include "CastorUtils/Miscellaneous/Utils.hpp"
 
 #include <sys/stat.h>

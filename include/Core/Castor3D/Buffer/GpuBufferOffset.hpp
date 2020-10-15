@@ -12,7 +12,7 @@ namespace castor3d
 	struct GpuBufferOffsetT
 	{
 	private:
-		GpuBuffer const * buffer;
+		GpuBuffer * buffer;
 
 	public:
 		VkBufferUsageFlagBits target;

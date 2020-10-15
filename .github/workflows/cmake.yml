@@ -1,0 +1,112 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - master
+      - development
+  pull_request:
+    branches:
+      - master
+      - development
+  release:
+    types:
+      - created
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [[ubuntu-latest,x64-linux], [windows-latest,x64-windows], [macos-latest,x64-osx]]
+        buildType: [Release]
+
+    runs-on: ${{ matrix.os[0] }}
+
+    steps:
+    - uses: actions/checkout@v2
+
+    # Restore from cache the previously built ports. If cache-miss, download, build vcpkg.
+    - name: Setup vcpkg
+      # Download and build vcpkg, without installing any port. If content is cached already, it is a no-op.
+      uses: lukka/run-vcpkg@v4
+      with:
+        vcpkgGitCommitId: '7e3d3beac5ca6fe8aab4599d4e1d8ce270ccdea8'
+        setupOnly: true
+
+    - name: Install dependencies from vcpkg
+      run: $VCPKG_ROOT/vcpkg install spirv-cross:${{ matrix.os[1] }} freetype:${{ matrix.os[1] }} zlib:${{ matrix.os[1] }}
+      shell: bash
+
+    - name: Checkout CMake submodule
+      run: git submodule update --init -- "CMake"
+
+    - name: Caching CMake submodule
+      uses: actions/cache@v2
+      env:
+        cache-name: cache-cmake-submodule
+      with:
+          path: $GITHUB_WORKSPACE/CMake
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/*.cmake') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+
+    - name: Checkout external/Ashes submodule
+      run: git submodule update --init --recursive -- "external/Ashes"
+
+    - name: Checkout external/ShaderWriter submodule
+      run: git submodule update --init -- "external/ShaderWriter"
+
+    - name: Checkout external/gli submodule
+      run: git submodule update --init -- "external/gli"
+
+    - name: Cache external submodules
+      uses: actions/cache@v2
+      env:
+        cache-name: cache-external-submodule
+      with:
+          path: $GITHUB_WORKSPACE/external
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/*.*') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+
+    - name: Create Build Environment
+      run: cmake -E make_directory ${{runner.workspace}}/build-${{ matrix.buildType }}
+
+    - name: Configure CMake (Windows)
+      shell: bash
+      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.buildType }} -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/package/Castor3D -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILD_PLUGINS=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_BUILDGRP_SAMPLE=OFF -DPROJECTS_USE_PRECOMPILED_HEADERS=ON -DCASTOR_USE_GLSLANG=OFF -DCASTOR_DISABLE_DELAYED_INITIALISATION=ON -DASHES_BUILD_RENDERER_OGL=OFF -DASHES_BUILD_RENDERER_D3D11=OFF
+      if: runner.os == 'Windows'
+
+    - name: Configure CMake (Linux)
+      shell: bash
+      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.buildType }} -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/package/Castor3D -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILD_PLUGINS=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_BUILDGRP_SAMPLE=OFF -DPROJECTS_USE_PRECOMPILED_HEADERS=OFF -DCASTOR_USE_GLSLANG=OFF -DCASTOR_DISABLE_DELAYED_INITIALISATION=ON -DASHES_BUILD_RENDERER_OGL=OFF
+      if: runner.os == 'Linux'
+
+    - name: Configure CMake (Mac OS)
+      shell: bash
+      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.buildType }} -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/package/Castor3D -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILD_PLUGINS=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_BUILDGRP_SAMPLE=OFF -DPROJECTS_USE_PRECOMPILED_HEADERS=OFF -DCASTOR_USE_GLSLANG=OFF -DCASTOR_DISABLE_DELAYED_INITIALISATION=ON -DASHES_BUILD_RENDERER_OGL=OFF
+      if: runner.os == 'macOS'
+
+    - name: Build
+      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+      shell: bash
+      run: cmake --build . --parallel 2 --config ${{ matrix.buildType }}
+
+    - name: Test
+      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+      shell: bash
+      run: ctest -C ${{ matrix.buildType }}
+
+    - name: Prepare package
+      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+      shell: bash
+      run: cmake --install . --config ${{ matrix.buildType }}
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: generated-binaries-${{ matrix.os[1] }}
+        path: ${{ github.workspace }}/package/Castor3D/

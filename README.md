@@ -1,6 +1,6 @@
-|         Server     | Result |
-|:------------------:|--------|
-| AppVeyor           | [![Build Status](https://ci.appveyor.com/api/projects/status/github/DragonJoker/castor3d?branch=development&svg=true)](https://ci.appveyor.com/project/DragonJoker/castor3d) |
+<p align="center">
+  <a href="https://github.com/DragonJoker/Castor3D/actions?query=workflow%3ABuild"><img alt="Build status" src="https://github.com/DragonJoker/Castor3D/workflows/Build/badge.svg"></a>
+</p>
 
 
 Castor3D
