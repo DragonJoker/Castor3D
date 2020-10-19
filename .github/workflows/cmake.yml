@@ -38,13 +38,13 @@ jobs:
     - name: Install necessary packages (Linux)
       if: runner.os == 'Linux'
       shell: bash
-      run: sudo apt-get install libxi-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev libxrandr-dev libxxf86vm-dev libxaw7-dev libwxgtk3.0-dev libgtk2.0-dev libassimp-dev
+      run: sudo apt-get install libxi-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev libxrandr-dev libxxf86vm-dev libxaw7-dev
 
     - name: Install necessary packages (Windows)
       if: runner.os == 'Windows'
       shell: bash
       run: $VCPKG_ROOT/vcpkg install assimp:${{ matrix.os[1] }}
-    
+
     - name: Checkout submodules
       run: |
         git submodule update --init -- "CMake"
@@ -78,13 +78,13 @@ jobs:
       if: runner.os == 'Linux'
       shell: bash
       working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
-      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.buildType }} -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/package/Castor3D -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILD_PLUGINS=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_BUILDGRP_SAMPLE=ON -DCASTOR_BUILDGRP_TOOL=ON -DPROJECTS_USE_PRECOMPILED_HEADERS=OFF -DCASTOR_USE_GLSLANG=OFF -DCASTOR_DISABLE_DELAYED_INITIALISATION=ON -DASHES_BUILD_RENDERER_OGL=OFF -DCASTOR_BUILD_IMPORTER_ASSIMP=OFF
+      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.buildType }} -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/package/Castor3D -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILD_PLUGINS=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_BUILDGRP_SAMPLE=OFF -DCASTOR_BUILDGRP_TOOL=OFF -DPROJECTS_USE_PRECOMPILED_HEADERS=OFF -DCASTOR_USE_GLSLANG=OFF -DCASTOR_DISABLE_DELAYED_INITIALISATION=ON -DASHES_BUILD_RENDERER_OGL=OFF -DCASTOR_BUILD_IMPORTER_ASSIMP=OFF
 
     - name: Configure CMake (Mac OS)
       id: configure-macos
       shell: bash
       working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
-      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.buildType }} -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/package/Castor3D -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILD_PLUGINS=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_BUILDGRP_SAMPLE=ON -DCASTOR_BUILDGRP_TOOL=ON -DPROJECTS_USE_PRECOMPILED_HEADERS=OFF -DCASTOR_USE_GLSLANG=OFF -DCASTOR_DISABLE_DELAYED_INITIALISATION=ON -DASHES_BUILD_RENDERER_OGL=OFF -DCASTOR_BUILD_IMPORTER_ASSIMP=OFF
+      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.buildType }} -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/package/Castor3D -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILD_PLUGINS=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_BUILDGRP_SAMPLE=OFF -DCASTOR_BUILDGRP_TOOL=OFF -DPROJECTS_USE_PRECOMPILED_HEADERS=OFF -DCASTOR_USE_GLSLANG=OFF -DCASTOR_DISABLE_DELAYED_INITIALISATION=ON -DASHES_BUILD_RENDERER_OGL=OFF -DCASTOR_BUILD_IMPORTER_ASSIMP=OFF
       if: runner.os == 'macOS'
 
     - name: Build
