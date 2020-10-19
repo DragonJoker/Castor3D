@@ -52,11 +52,7 @@ include( ExternalDependencies )
 
 set_property( GLOBAL PROPERTY USE_FOLDERS ON )
 
-set( COMPILER_FOLDER ${COMPILER} )
-
-if ( ${COMPILER_FOLDER} STREQUAL "vc15" OR ${COMPILER_FOLDER} STREQUAL "vc16" )
-	set( COMPILER_FOLDER "vc14" )
-endif ()
+set( COMPILER_FOLDER "vc14" )
 
 if ( NOT ANDROID )
 	if ( VCPKG_TOOLCHAIN )
@@ -108,12 +104,12 @@ if ( CASTOR_USE_SYSTEM_LIBS AND WIN32 AND NOT VCPKG_TOOLCHAIN )
 		set( wxWidgets_LIB_DIR ${DEPENDENCIES_DIR}/wxWidgets/lib CACHE PATH "wxWidgets libraries directory" )
 	endif ()
 endif ()
-if ( CASTOR_USE_DEPS_WXWIDGETS )
+if ( CASTOR_USE_DEPS_WXWIDGETS AND WIN32 )
 	if ( NOT EXISTS ${DEPENDENCIES_DIR}/wxWidgets/ )
 		message( SEND_ERROR "${DEPENDENCIES_DIR}/wxWidgets not found" )
 	endif ()
-	set( wxWidgets_ROOT_DIR ${DEPENDENCIES_DIR}/wxWidgets CACHE PATH "wxWidgets root directory" )
-	set( wxWidgets_LIB_DIR ${DEPENDENCIES_DIR}/wxWidgets/lib CACHE PATH "wxWidgets libraries directory" )
+	set( wxWidgets_ROOT_DIR ${DEPENDENCIES_DIR}/wxWidgets CACHE PATH "wxWidgets root directory" FORCE )
+	set( wxWidgets_LIB_DIR ${DEPENDENCIES_DIR}/wxWidgets/lib CACHE PATH "wxWidgets libraries directory" FORCE )
 endif ()
 
 #--------------------------------------------------------------------------------------------------
