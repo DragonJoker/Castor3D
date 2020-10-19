@@ -87,13 +87,13 @@ jobs:
       if: runner.os == 'macOS'
 
     - name: Build
-      if: (steps.configure-windows.conclusion == success) || (steps.configure-linux.conclusion == success) || (steps.configure-macos.conclusion == success)
+      if: (steps.configure-windows.conclusion == 'success') || (steps.configure-linux.conclusion == 'success') || (steps.configure-macos.conclusion == 'success')
       working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
       shell: bash
       run: cmake --build . --parallel 2 --config ${{ matrix.buildType }}
 
     - name: Prepare success package
-      if: github.event_name == 'push' && ((steps.configure-windows.conclusion == success) || (steps.configure-linux.conclusion == success) || (steps.configure-macos.conclusion == success))
+      if: github.event_name == 'push' && ((steps.configure-windows.conclusion == 'success') || (steps.configure-linux.conclusion == 'success') || (steps.configure-macos.conclusion == 'success'))
       working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
       shell: bash
       run: |
@@ -101,20 +101,20 @@ jobs:
         7z a $GITHUB_WORKSPACE/Castor3D-${{ matrix.os[1] }}.zip $GITHUB_WORKSPACE/package/Castor3D/
 
     - name: Upload success package
-      if: github.event_name == 'push' && ((steps.configure-windows.conclusion == success) || (steps.configure-linux.conclusion == success) || (steps.configure-macos.conclusion == success))
+      if: github.event_name == 'push' && ((steps.configure-windows.conclusion == 'success') || (steps.configure-linux.conclusion == 'success') || (steps.configure-macos.conclusion == 'success'))
       uses: actions/upload-artifact@v2
       with:
         name: Castor3D-${{ matrix.os[1] }}.zip
         path: ${{ github.workspace }}/Castor3D-${{ matrix.os[1] }}.zip
 
     - name: Prepare logs package
-      if: (steps.configure-windows.conclusion != success) && (steps.configure-linux.conclusion != success) && (steps.configure-macos.conclusion != success)
+      if: (steps.configure-windows.conclusion != 'success') && (steps.configure-linux.conclusion != 'success') && (steps.configure-macos.conclusion != 'success')
       working-directory: ${{ github.workspace }}
       shell: bash
       run:  7z a ./Castor3D-${{ matrix.os[1] }}-BuildLogs.zip ./*.log
 
     - name: Upload logs package
-      if: (steps.configure-windows.conclusion != success) && (steps.configure-linux.conclusion != success) && (steps.configure-macos.conclusion != success)
+      if: (steps.configure-windows.conclusion != 'success') && (steps.configure-linux.conclusion != 'success') && (steps.configure-macos.conclusion != 'success')
       uses: actions/upload-artifact@v2
       with:
         name: Castor3D-${{ matrix.os[1] }}-BuildLogs.zip
