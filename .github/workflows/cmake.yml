@@ -82,22 +82,13 @@ jobs:
       shell: bash
       run: cmake --build . --parallel 2 --config ${{ matrix.buildType }}
 
-    - name: Test
-      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
-      shell: bash
-      run: ctest -C ${{ matrix.buildType }}
-
     - name: Prepare package
       if: github.event_name == 'push'
       working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
       shell: bash
-      run: cmake --install . --config ${{ matrix.buildType }}
-
-    - name: Zip package
-      if: github.event_name == 'push'
-      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
-      shell: bash
-      run: 7z a $GITHUB_WORKSPACE/Castor3D-${{ matrix.os[1] }}.zip $GITHUB_WORKSPACE/package/Castor3D/
+      run: |
+        cmake --install . --config ${{ matrix.buildType }}
+        7z a $GITHUB_WORKSPACE/Castor3D-${{ matrix.os[1] }}.zip $GITHUB_WORKSPACE/package/Castor3D/
 
     - name: Upload package
       if: github.event_name == 'push'
