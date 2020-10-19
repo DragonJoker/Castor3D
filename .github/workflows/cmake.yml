@@ -32,9 +32,9 @@ jobs:
         setupOnly: true
 
     - name: Install necessary packages
-      run: $VCPKG_ROOT/vcpkg install spirv-cross:${{ matrix.os[1] }} freetype:${{ matrix.os[1] }} zlib:${{ matrix.os[1] }} gli:${{ matrix.os[1] }}
       shell: bash
-
+      run: $VCPKG_ROOT/vcpkg install spirv-cross:${{ matrix.os[1] }} freetype:${{ matrix.os[1] }} zlib:${{ matrix.os[1] }} gli:${{ matrix.os[1] }}
+  
     - name: Install necessary packages (Linux)
       if: runner.os == 'Linux'
       shell: bash
@@ -42,6 +42,7 @@ jobs:
 
     - name: Install necessary packages (Windows)
       if: runner.os == 'Windows'
+      shell: bash
       run: $VCPKG_ROOT/vcpkg install assimp:${{ matrix.os[1] }}
     
     - name: Checkout submodules
