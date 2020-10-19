@@ -2,7 +2,26 @@ set( FOLDER_NAME AssimpImporter )
 project( castor3d${FOLDER_NAME} )
 
 if ( VCPKG_TOOLCHAIN )
-	find_package( assimp CONFIG )
+	option( CASTOR_USE_SYSTEM_ASSIMP "Use system Assimp instead of vcpkg's" OFF )
+
+	if ( CASTOR_USE_SYSTEM_ASSIMP )
+		set( CMAKE_MODULE_PATH
+			${CMAKE_CURRENT_SOURCE_DIR}/CMake
+			${CMAKE_CURRENT_SOURCE_DIR}/CMake/Modules
+			${CMAKE_CURRENT_SOURCE_DIR}/CMake/Modules/Traditional
+			${CMAKE_CURRENT_SOURCE_DIR}/CMake/Toolchains
+		)
+	endif ()
+endif ()
+
+if ( VCPKG_TOOLCHAIN AND NOT CASTOR_USE_SYSTEM_ASSIMP )
+	find_package( irrlicht CONFIG QUIET )
+	find_package( polyclipping CONFIG QUIET )
+	find_package( minizip CONFIG QUIET )
+	find_package( kubazip CONFIG QUIET )
+	find_package( poly2tri CONFIG QUIET )
+	find_package( utf8cpp CONFIG QUIET )
+	find_package( assimp CONFIG QUIET )
 	set( assimp_LIBRARIES assimp::assimp )
 	if ( TARGET assimp::assimp )
 		set( assimp_FOUND ON )
