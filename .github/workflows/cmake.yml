@@ -14,20 +14,20 @@ on:
       - created
 
 jobs:
-  build:
+  ######################################
+  # Setup (cmake, vcpkg...)
+  ######################################
+  setup-build:
+    name: Setup build.
     strategy:
       matrix:
         os: [[ubuntu-latest,x64-linux], [windows-latest,x64-windows], [macos-latest,x64-osx]]
         buildType: [Release]
-
     runs-on: ${{ matrix.os[0] }}
-
     steps:
     - uses: actions/checkout@v2
 
-    # Restore from cache the previously built ports. If cache-miss, download, build vcpkg.
     - name: Setup vcpkg
-      # Download and build vcpkg, without installing any port. If content is cached already, it is a no-op.
       uses: lukka/run-vcpkg@v4
       with:
         vcpkgGitCommitId: '7e3d3beac5ca6fe8aab4599d4e1d8ce270ccdea8'
@@ -47,6 +47,55 @@ jobs:
     - name: Create Build Environment
       run: cmake -E make_directory ${{runner.workspace}}/build-${{ matrix.buildType }}
 
+
+  ######################################
+  # Base libraries
+  ######################################
+  build-castor3d:
+    name: Build Castor3D base libraries.
+    needs: setup-build
+    strategy:
+      matrix:
+        os: [[ubuntu-latest,x64-linux], [windows-latest,x64-windows], [macos-latest,x64-osx]]
+        buildType: [Release]
+    runs-on: ${{ matrix.os[0] }}
+    steps:
+    - name: Configure CMake (Windows)
+      shell: bash
+      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.buildType }} -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/package/Castor3D -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILD_PLUGINS=OFF -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_BUILDGRP_SAMPLE=OFF -DPROJECTS_USE_PRECOMPILED_HEADERS=ON -DCASTOR_USE_GLSLANG=OFF -DCASTOR_DISABLE_DELAYED_INITIALISATION=ON -DASHES_BUILD_RENDERER_OGL=ON -DASHES_BUILD_RENDERER_D3D11=ON
+      if: runner.os == 'Windows'
+
+    - name: Configure CMake (Linux)
+      shell: bash
+      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.buildType }} -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/package/Castor3D -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILD_PLUGINS=OFF -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_BUILDGRP_SAMPLE=OFF -DPROJECTS_USE_PRECOMPILED_HEADERS=OFF -DCASTOR_USE_GLSLANG=OFF -DCASTOR_DISABLE_DELAYED_INITIALISATION=ON -DASHES_BUILD_RENDERER_OGL=ON
+      if: runner.os == 'Linux'
+
+    - name: Configure CMake (Mac OS)
+      shell: bash
+      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.buildType }} -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/package/Castor3D -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILD_PLUGINS=OFF -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_BUILDGRP_SAMPLE=OFF -DPROJECTS_USE_PRECOMPILED_HEADERS=OFF -DCASTOR_USE_GLSLANG=OFF -DCASTOR_DISABLE_DELAYED_INITIALISATION=ON -DASHES_BUILD_RENDERER_OGL=ON
+      if: runner.os == 'macOS'
+
+    - name: Build
+      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+      shell: bash
+      run: cmake --build . --parallel 2 --config ${{ matrix.buildType }}
+
+
+  ######################################
+  # Plugins
+  ######################################
+  build-plugins:
+    name: Build Castor3D plugins.
+    needs: build-castor3d
+    strategy:
+      matrix:
+        os: [[ubuntu-latest,x64-linux], [windows-latest,x64-windows], [macos-latest,x64-osx]]
+        buildType: [Release]
+    runs-on: ${{ matrix.os[0] }}
+    steps:
     - name: Configure CMake (Windows)
       shell: bash
       working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
@@ -70,11 +119,19 @@ jobs:
       shell: bash
       run: cmake --build . --parallel 2 --config ${{ matrix.buildType }}
 
-    - name: Test
-      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
-      shell: bash
-      run: ctest -C ${{ matrix.buildType }}
 
+  ######################################
+  # Bundle
+  ######################################
+  build-package:
+    name: Build package.
+    needs: build-plugins
+    strategy:
+      matrix:
+        os: [[ubuntu-latest,x64-linux], [windows-latest,x64-windows], [macos-latest,x64-osx]]
+        buildType: [Release]
+    runs-on: ${{ matrix.os[0] }}
+    steps:
     - name: Prepare package
       if: github.event_name == 'push'
       working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
