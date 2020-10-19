@@ -42,6 +42,11 @@ function( ToolsBuild )
 			set( wxWidgets_IGNORE_VCPKG ON )
 			find_package( wxWidgets COMPONENTS core base )
 
+			if ( CASTOR_USE_DEPS_WXWIDGETS AND NOT wxWidgets_FOUND )
+				set( wxWidgets_LIB_DIR ${DEPENDENCIES_DIR}/wxWidgets/lib CACHE PATH "wxWidgets libraries directory" )
+				find_package( wxWidgets QUIET COMPONENTS core base )
+			endif ()
+
 			if( wxWidgets_FOUND AND GTK2_FOUND )
 				if ( APPLE )
 					set( Castor3DDefinitions

@@ -25,23 +25,25 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    # Restore from cache the previously built ports. If cache-miss, download, build vcpkg.
     - name: Setup vcpkg
-      # Download and build vcpkg, without installing any port. If content is cached already, it is a no-op.
       uses: lukka/run-vcpkg@v4
       with:
         vcpkgGitCommitId: '7e3d3beac5ca6fe8aab4599d4e1d8ce270ccdea8'
         setupOnly: true
 
-    - name: Install necessary packages (Linux)
-      if: runner.os == 'Linux'
-      shell: bash
-      run: sudo apt-get install libxi-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev libxrandr-dev libxxf86vm-dev libxaw7-dev libwxgtk3.0-dev libgtk2.0-dev
-
-    - name: Install dependencies from vcpkg
+    - name: Install necessary packages
       run: $VCPKG_ROOT/vcpkg install spirv-cross:${{ matrix.os[1] }} freetype:${{ matrix.os[1] }} zlib:${{ matrix.os[1] }} gli:${{ matrix.os[1] }}
       shell: bash
 
+    - name: Install necessary packages (Linux)
+      if: runner.os == 'Linux'
+      shell: bash
+      run: sudo apt-get install libxi-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev libxrandr-dev libxxf86vm-dev libxaw7-dev libwxgtk3.0-dev libgtk2.0-dev libassimp-dev
+
+    - name: Install necessary packages (Windows)
+      if: runner.os == 'Windows'
+      run: $VCPKG_ROOT/vcpkg install assimp:${{ matrix.os[1] }}
+    
     - name: Checkout submodules
       run: |
         git submodule update --init -- "CMake"
@@ -64,39 +66,57 @@ jobs:
       run: cmake -E make_directory ${{runner.workspace}}/build-${{ matrix.buildType }}
 
     - name: Configure CMake (Windows)
+      id: configure-windows
       if: runner.os == 'Windows'
       shell: bash
       working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
       run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.buildType }} -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/package/Castor3D -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILD_PLUGINS=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_BUILDGRP_SAMPLE=ON -DCASTOR_BUILDGRP_TOOL=ON -DPROJECTS_USE_PRECOMPILED_HEADERS=ON -DCASTOR_USE_GLSLANG=OFF -DCASTOR_DISABLE_DELAYED_INITIALISATION=ON -DASHES_BUILD_RENDERER_OGL=OFF -DASHES_BUILD_RENDERER_D3D11=ON -DCASTOR_USE_DEPS_WXWIDGETS=ON
 
     - name: Configure CMake (Linux)
+      id: configure-linux
       if: runner.os == 'Linux'
       shell: bash
       working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
       run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.buildType }} -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/package/Castor3D -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILD_PLUGINS=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_BUILDGRP_SAMPLE=ON -DCASTOR_BUILDGRP_TOOL=ON -DPROJECTS_USE_PRECOMPILED_HEADERS=OFF -DCASTOR_USE_GLSLANG=OFF -DCASTOR_DISABLE_DELAYED_INITIALISATION=ON -DASHES_BUILD_RENDERER_OGL=OFF
 
     - name: Configure CMake (Mac OS)
+      id: configure-macos
       shell: bash
       working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
       run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.buildType }} -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/package/Castor3D -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILD_PLUGINS=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_BUILDGRP_SAMPLE=ON -DCASTOR_BUILDGRP_TOOL=ON -DPROJECTS_USE_PRECOMPILED_HEADERS=OFF -DCASTOR_USE_GLSLANG=OFF -DCASTOR_DISABLE_DELAYED_INITIALISATION=ON -DASHES_BUILD_RENDERER_OGL=OFF
       if: runner.os == 'macOS'
 
     - name: Build
+      if: (steps.configure-windows.conclusion == success) || (steps.configure-linux.conclusion == success) || (steps.configure-macos.conclusion == success)
       working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
       shell: bash
       run: cmake --build . --parallel 2 --config ${{ matrix.buildType }}
 
-    - name: Prepare package
-      if: github.event_name == 'push'
+    - name: Prepare success package
+      if: github.event_name == 'push' && ((steps.configure-windows.conclusion == success) || (steps.configure-linux.conclusion == success) || (steps.configure-macos.conclusion == success))
       working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
       shell: bash
       run: |
         cmake --install . --config ${{ matrix.buildType }}
         7z a $GITHUB_WORKSPACE/Castor3D-${{ matrix.os[1] }}.zip $GITHUB_WORKSPACE/package/Castor3D/
 
-    - name: Upload package
-      if: github.event_name == 'push'
+    - name: Upload success package
+      if: github.event_name == 'push' && ((steps.configure-windows.conclusion == success) || (steps.configure-linux.conclusion == success) || (steps.configure-macos.conclusion == success))
       uses: actions/upload-artifact@v2
       with:
         name: Castor3D-${{ matrix.os[1] }}.zip
         path: ${{ github.workspace }}/Castor3D-${{ matrix.os[1] }}.zip
+
+    - name: Prepare logs package
+      if: (steps.configure-windows.conclusion != success) && (steps.configure-linux.conclusion != success) && (steps.configure-macos.conclusion != success)
+      working-directory: ${{ github.workspace }}
+      shell: bash
+      run:  7z a ./Castor3D-${{ matrix.os[1] }}-BuildLogs.zip ./*.log
+
+    - name: Upload logs package
+      if: (steps.configure-windows.conclusion != success) && (steps.configure-linux.conclusion != success) && (steps.configure-macos.conclusion != success)
+      uses: actions/upload-artifact@v2
+      with:
+        name: Castor3D-${{ matrix.os[1] }}-BuildLogs.zip
+        path: ${{ github.workspace }}/Castor3D-${{ matrix.os[1] }}-BuildLogs.zip
+
