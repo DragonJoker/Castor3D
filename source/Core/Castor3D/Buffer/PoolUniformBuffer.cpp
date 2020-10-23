@@ -36,8 +36,8 @@ namespace castor3d
 		auto elemCount = uint32_t( std::floor( float( maxSize ) / elemSize ) );
 		m_buffer = ashes::makeUniformBuffer( *device.device
 			, m_debugName + "Ubo"
-			, elemSize
 			, elemCount
+			, elemSize
 			, m_usage | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 			, m_sharingMode );
 		m_buffer->bindMemory( setupMemory( device, *m_buffer, m_flags, m_debugName + "Ubo" ) );
