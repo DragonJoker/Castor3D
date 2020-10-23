@@ -87,6 +87,7 @@ namespace castor3d
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, "PointLightPassUbo" ) }
 	{
+		m_ubo->initialise( device );
 		m_baseUbo = m_ubo.get();
 		log::trace << cuT( "Created PointLightPass" ) << ( hasShadows ? castor::String{ cuT( "Shadow" ) } : cuEmptyString ) << std::endl;
 	}

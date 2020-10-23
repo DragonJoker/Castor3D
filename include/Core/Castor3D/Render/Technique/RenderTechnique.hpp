@@ -280,9 +280,9 @@ namespace castor3d
 		std::unique_ptr< DeferredRendering > m_deferredRendering;
 		std::unique_ptr< WeightedBlendRendering > m_weightedBlendRendering;
 		RenderPassTimerSPtr m_particleTimer;
-		castor::DelayedInitialiserT< ShadowMap > m_directionalShadowMap;
-		castor::DelayedInitialiserT< ShadowMap > m_pointShadowMap;
-		castor::DelayedInitialiserT< ShadowMap > m_spotShadowMap;
+		ShadowMapUPtr m_directionalShadowMap;
+		ShadowMapUPtr m_pointShadowMap;
+		ShadowMapUPtr m_spotShadowMap;
 		ShadowMapLightTypeArray m_allShadowMaps;
 		ShadowMapLightTypeArray m_activeShadowMaps;
 		ashes::SemaphorePtr m_signalFinished;

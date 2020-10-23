@@ -226,6 +226,7 @@ namespace castor3d
 		, castor::Point3f const & attenuation
 		, float max );
 
+	CU_DeclareSmartPtr( LightPass );
 	//@}
 	//@}
 	//@}

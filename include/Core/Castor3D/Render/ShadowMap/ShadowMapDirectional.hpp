@@ -20,15 +20,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine		The engine.
-		 *\param[in]	scene		The scene.
+		 *\param[in]	scene	The scene.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine		Le moteur.
-		 *\param[in]	scene		La scène.
+		 *\param[in]	scene	La scène.
 		 */
-		ShadowMapDirectional( Engine & engine
-			, Scene & scene );
+		ShadowMapDirectional( Scene & scene );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -69,7 +66,6 @@ namespace castor3d
 	public:
 		static VkFormat constexpr VarianceFormat = VK_FORMAT_R32G32_SFLOAT;
 		static VkFormat constexpr LinearDepthFormat = VK_FORMAT_R32_SFLOAT;
-		static VkFormat RawDepthFormat;
 
 	private:
 		struct FrameBuffer

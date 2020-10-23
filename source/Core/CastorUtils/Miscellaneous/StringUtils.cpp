@@ -214,6 +214,38 @@ namespace castor
 			return strReturn;
 		}
 
+		String snakeToCamelCase( String str )
+		{
+			String result;
+			result.reserve( str.size() );
+			bool prvUnderscore = true;
+			std::locale loc;
+
+			for ( auto c : str )
+			{
+				if ( prvUnderscore )
+				{
+					result += std::toupper( c, loc );
+					prvUnderscore = false;
+				}
+				else if ( c == '_' )
+				{
+					prvUnderscore = true;
+				}
+				else
+				{
+					result += c;
+				}
+			}
+
+			if ( prvUnderscore )
+			{
+				result += '_';
+			}
+
+			return result;
+		}
+
 		String & toUpperCase( String & text )
 		{
 			text = upperCase( text );

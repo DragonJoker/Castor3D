@@ -179,6 +179,13 @@ namespace castor3d
 		C3D_API bool hasShadows()const;
 		/**
 		 *\~english
+		 *\return		Tells if the scene has a shadow projecting light of given type.
+		 *\~french
+		 *\return		Dit si la scène a au moins une source lumineuse du type donné projetant des ombres.
+		 */
+		C3D_API bool hasShadows( LightType lightType )const;
+		/**
+		 *\~english
 		 *\return		Creates a reflection map for given node.
 		 *\param[in]	node	The scene node from which the reflection map is generated.
 		 *\~french

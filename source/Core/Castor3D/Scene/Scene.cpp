@@ -948,13 +948,28 @@ namespace castor3d
 
 	bool Scene::hasShadows()const
 	{
-		using LockType = std::unique_lock< LightCache const >;
-		LockType lock{ castor::makeUniqueLock( getLightCache() ) };
+		auto & cache = getLightCache();
+		auto lock( castor::makeUniqueLock( cache ) );
 
-		return getLightCache().end() != std::find_if( getLightCache().begin(), getLightCache().end(), []( std::pair< String, LightSPtr > const & p_it )
-		{
-			return p_it.second->isShadowProducer();
-		} );
+		return cache.end() != std::find_if( cache.begin()
+			, cache.end()
+			, []( std::pair< String, LightSPtr > const & lookup )
+			{
+				return lookup.second->isShadowProducer();
+			} );
+	}
+
+	bool Scene::hasShadows( LightType lightType )const
+	{
+		auto & cache = getLightCache();
+		auto lights = cache.getLights( lightType );
+
+		return lights.end() != std::find_if( lights.begin()
+			, lights.end()
+			, []( LightSPtr const & lookup )
+			{
+				return lookup->isShadowProducer();
+			} );
 	}
 
 	void Scene::createEnvironmentMap( SceneNode & node )

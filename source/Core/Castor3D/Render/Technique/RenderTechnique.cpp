@@ -139,6 +139,15 @@ namespace castor3d
 
 			if ( count > 0 )
 			{
+				if ( !shadowMap.isInitialised() )
+				{
+					cache.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+						, [&shadowMap]( RenderDevice const & device )
+						{
+							shadowMap.initialise( device );
+						} ) );
+				}
+
 				uint32_t index = 0u;
 				auto lightIt = lights.begin();
 				activeShadowMaps[size_t( type )].emplace_back( std::ref( shadowMap ), UInt32Array{} );
@@ -506,23 +515,19 @@ namespace castor3d
 	void RenderTechnique::doCreateShadowMaps()
 	{
 		auto & scene = *m_renderTarget.getScene();
-		auto & engine = *m_renderTarget.getEngine();
-		m_directionalShadowMap = std::make_unique< ShadowMapDirectional >( engine
-			, scene );
-		m_allShadowMaps[size_t( LightType::eDirectional )].emplace_back( std::ref( *m_directionalShadowMap.raw() ), UInt32Array{} );
-		m_spotShadowMap = std::make_unique< ShadowMapSpot >( engine
-			, scene );
-		m_allShadowMaps[size_t( LightType::eSpot )].emplace_back( std::ref( *m_spotShadowMap.raw() ), UInt32Array{} );
-		m_pointShadowMap = std::make_unique< ShadowMapPoint >( engine
-			, scene );
-		m_allShadowMaps[size_t( LightType::ePoint )].emplace_back( std::ref( *m_pointShadowMap.raw() ), UInt32Array{} );
+		m_directionalShadowMap = std::make_unique< ShadowMapDirectional >( scene );
+		m_allShadowMaps[size_t( LightType::eDirectional )].emplace_back( std::ref( *m_directionalShadowMap ), UInt32Array{} );
+		m_spotShadowMap = std::make_unique< ShadowMapSpot >( scene );
+		m_allShadowMaps[size_t( LightType::eSpot )].emplace_back( std::ref( *m_spotShadowMap ), UInt32Array{} );
+		m_pointShadowMap = std::make_unique< ShadowMapPoint >( scene );
+		m_allShadowMaps[size_t( LightType::ePoint )].emplace_back( std::ref( *m_pointShadowMap ), UInt32Array{} );
 	}
 
 	void RenderTechnique::doInitialiseShadowMaps( RenderDevice const & device )
 	{
-		m_directionalShadowMap.initialise( device );
-		m_spotShadowMap.initialise( device );
-		m_pointShadowMap.initialise( device );
+		m_directionalShadowMap->initialise( device );
+		m_spotShadowMap->initialise( device );
+		m_pointShadowMap->initialise( device );
 	}
 
 	void RenderTechnique::doInitialiseBackgroundPass( RenderDevice const & device )
@@ -718,9 +723,9 @@ namespace castor3d
 
 	void RenderTechnique::doCleanupShadowMaps( RenderDevice const & device )
 	{
-		m_directionalShadowMap.cleanup( device );
-		m_spotShadowMap.cleanup( device );
-		m_pointShadowMap.cleanup( device );
+		m_directionalShadowMap->cleanup( device );
+		m_spotShadowMap->cleanup( device );
+		m_pointShadowMap->cleanup( device );
 	}
 
 	void RenderTechnique::doUpdateShadowMaps( CpuUpdater & updater )

@@ -43,6 +43,8 @@
 
 #include "Castor3D/Shader/GlslToSpv.hpp"
 
+#include <string_view>
+
 using namespace castor;
 
 //*************************************************************************************************
@@ -401,7 +403,13 @@ namespace castor3d
 		}
 
 		Path usrDir = binDir.getPath();
-		return usrDir / cuT( "lib" ) / cuT( "Castor3D" );
+
+#if defined( CU_PlatformWindows )
+		static std::basic_string_view< xchar > constexpr pluginsSubdir = cuT( "bin" );
+#else
+		static std::basic_string_view< xchar > constexpr pluginsSubdir = cuT( "lib" );
+#endif
+		return usrDir / pluginsSubdir.data() / cuT( "Castor3D" );
 	}
 
 	castor::Path Engine::getEngineDirectory()

@@ -133,18 +133,18 @@ namespace castor3d
 			, m_opaquePassResult
 			, m_lightingPass->getResult() ) }
 		, m_resolve{ makeDelayedInitialiser< OpaqueResolvePass >( m_engine
-				, m_device
-				, scene
-				, m_opaquePassResult
-				, *m_ssao.raw()
-				, m_subsurfaceScattering->getResult()
-				, m_lightingPass->getResult()[LpTexture::eDiffuse]
-				, m_lightingPass->getResult()[LpTexture::eSpecular]
-				, m_lightingPass->getResult()[LpTexture::eIndirectDiffuse]
-				, resultTexture
-				, m_opaquePass.getSceneUbo()
-				, m_gpInfoUbo
-				, hdrConfigUbo ) }
+			, m_device
+			, scene
+			, m_opaquePassResult
+			, *m_ssao.raw()
+			, m_subsurfaceScattering->getResult()
+			, m_lightingPass->getResult()[LpTexture::eDiffuse]
+			, m_lightingPass->getResult()[LpTexture::eSpecular]
+			, m_lightingPass->getResult()[LpTexture::eIndirectDiffuse]
+			, resultTexture
+			, m_opaquePass.getSceneUbo()
+			, m_gpInfoUbo
+			, hdrConfigUbo ) }
 	{
 		m_opaquePass.initialiseRenderPass( device, m_opaquePassResult );
 
@@ -167,6 +167,7 @@ namespace castor3d
 		auto & camera = *updater.camera;
 		auto & scene = *camera.getScene();
 		m_opaquePass.update( updater );
+		m_lightingPass->update( updater );
 
 		if ( m_ssaoConfig.enabled )
 		{
@@ -262,6 +263,6 @@ namespace castor3d
 			m_subsurfaceScattering.raw()->accept( visitor );
 		}
 
-		m_resolve.raw()->accept( visitor );
+		m_resolve->accept( visitor );
 	}
 }

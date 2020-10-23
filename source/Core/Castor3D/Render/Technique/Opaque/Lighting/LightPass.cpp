@@ -316,6 +316,7 @@ namespace castor3d
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName() }
 	{
+		m_matrixUbo.initialise( m_device );
 	}
 
 	void LightPass::update( bool first
