@@ -28,12 +28,12 @@ jobs:
     - name: Setup vcpkg
       uses: lukka/run-vcpkg@v4
       with:
-        vcpkgGitCommitId: '7e3d3beac5ca6fe8aab4599d4e1d8ce270ccdea8'
+        vcpkgGitCommitId: '9190f58d0fd33c2debabd9f7723299ebd77fc7cf'
         setupOnly: true
 
     - name: Install necessary packages
       shell: bash
-      run: $VCPKG_ROOT/vcpkg install spirv-cross:${{ matrix.os[1] }} freetype:${{ matrix.os[1] }} zlib:${{ matrix.os[1] }} gli:${{ matrix.os[1] }}
+      run: $VCPKG_ROOT/vcpkg install spirv-cross:${{ matrix.os[1] }} freetype:${{ matrix.os[1] }} zlib:${{ matrix.os[1] }} gli:${{ matrix.os[1] }} shaderwriter:${{ matrix.os[1] }} ashes:${{ matrix.os[1] }}
   
     - name: Install necessary packages (Linux)
       if: runner.os == 'Linux'
@@ -46,10 +46,7 @@ jobs:
       run: $VCPKG_ROOT/vcpkg install assimp:${{ matrix.os[1] }}
 
     - name: Checkout submodules
-      run: |
-        git submodule update --init -- "CMake"
-        git submodule update --init --recursive -- "external/Ashes"
-        git submodule update --init -- "external/ShaderWriter"
+      run: git submodule update --init -- "CMake"
 
     - name: Checkout dependencies submodule (Windows)
       if: runner.os == 'Windows'
@@ -120,4 +117,3 @@ jobs:
       with:
         name: Castor3D-${{ matrix.os[1] }}-BuildLogs.zip
         path: ${{ github.workspace }}/Castor3D-${{ matrix.os[1] }}-BuildLogs.zip
-
