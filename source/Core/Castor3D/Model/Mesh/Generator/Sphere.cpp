@@ -72,9 +72,10 @@ namespace castor3d
 						float rCos = cos( rAlphaI );
 						float rSin = sin( rAlphaI );
 						auto pos = castor::Point3f{ ptT[0] * rCos, ptT[1], ptT[0] * rSin };
-						submesh.addPoint( InterleavedVertex::createPNT( pos
-							, castor::Point3f{ castor::point::getNormalised( pos ) }
-							, castor::Point2f{ float( i ) / m_nbFaces, float( 1.0 + ptT[1] / m_radius ) / 2 } ) );
+						submesh.addPoint( InterleavedVertex{}
+							.position( pos )
+							.normal( castor::point::getNormalised( pos ) )
+							.texcoord( castor::Point2f{ float( i ) / m_nbFaces, float( 1.0 + ptT[1] / m_radius ) / 2 } ) );
 						iCur++;
 					}
 				}
@@ -87,9 +88,10 @@ namespace castor3d
 					float rCos = cos( rAlphaI );
 					float rSin = sin( rAlphaI );
 					auto pos = castor::Point3f{ ptB[0] * rCos, ptB[1], ptB[0] * rSin };
-					submesh.addPoint( InterleavedVertex::createPNT( pos
-						, castor::Point3f{ castor::point::getNormalised( pos ) }
-						, castor::Point2f{ float( i ) / m_nbFaces, float( 1.0 + ptB[1] / m_radius ) / 2 } ) );
+					submesh.addPoint( InterleavedVertex{}
+						.position( pos )
+						.normal( castor::point::getNormalised( pos ) )
+						.texcoord( castor::Point2f{ float( i ) / m_nbFaces, float( 1.0 + ptB[1] / m_radius ) / 2 } ) );
 				}
 
 				// Reconstition des faces
