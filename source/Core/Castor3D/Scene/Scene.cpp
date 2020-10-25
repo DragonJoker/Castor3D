@@ -1057,12 +1057,18 @@ namespace castor3d
 		Point3f max{ fmax, fmax, fmax };
 		m_geometryCache->forEach( [&min, &max]( Geometry const & geometry )
 			{
-				auto bbox = geometry.getMesh()->getBoundingBox().getAxisAligned( geometry.getParent()->getDerivedTransformationMatrix() );
+				auto node = geometry.getParent();
+				auto mesh = geometry.getMesh();
 
-				for ( auto i = 0u; i < 3u; ++i )
+				if ( node && mesh )
 				{
-					min[i] = std::min( min[i], bbox.getMin()[i] );
-					max[i] = std::max( max[i], bbox.getMax()[i] );
+					auto bbox = mesh->getBoundingBox().getAxisAligned( node->getDerivedTransformationMatrix() );
+
+					for ( auto i = 0u; i < 3u; ++i )
+					{
+						min[i] = std::min( min[i], bbox.getMin()[i] );
+						max[i] = std::max( max[i], bbox.getMax()[i] );
+					}
 				}
 			} );
 		m_boundingBox.load( min, max );

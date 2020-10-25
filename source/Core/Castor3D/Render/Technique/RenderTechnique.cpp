@@ -1,5 +1,6 @@
 #include "Castor3D/Render/Technique/RenderTechnique.hpp"
 
+#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
@@ -23,9 +24,6 @@
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 
 using namespace castor;
-
-#define C3D_UseWeightedBlendedRendering 1
-#define C3D_UseDeferredRendering 1
 
 namespace castor3d
 {

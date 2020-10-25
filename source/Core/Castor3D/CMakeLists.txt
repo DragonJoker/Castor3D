@@ -28,6 +28,7 @@ set( ${PROJECT_NAME}_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Castor3DPrerequisites.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Engine.hpp
 	${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}/RequiredVersion.hpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/DebugDefines.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Castor3DModule.cpp

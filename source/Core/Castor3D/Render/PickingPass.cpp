@@ -1,5 +1,6 @@
 #include "Castor3D/Render/PickingPass.hpp"
 
+#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
@@ -203,8 +204,8 @@ namespace castor3d
 					{
 						if ( !itMesh->second.empty() )
 						{
-							uint32_t faceIndex{ uint32_t( index[3] ) };
 							uint32_t instanceIndex{ uint32_t( index[2] ) };
+							uint32_t faceIndex{ uint32_t( index[3] ) };
 							auto itNode = itMesh->second.begin() + instanceIndex;
 
 							subnode = ( *itNode )->data.shared_from_this();
@@ -267,6 +268,7 @@ namespace castor3d
 		}
 
 		static int constexpr PickingOffset = int( PickingPass::PickingWidth / 2 );
+		static int constexpr BufferOffset = ( PickingOffset * PickingPass::PickingWidth ) + PickingOffset - 1;
 	}
 
 	//*********************************************************************************************
@@ -303,32 +305,38 @@ namespace castor3d
 		, castor::Position position
 		, Camera const & camera )
 	{
-		m_pickNodeType = PickNodeType::eNone;
-		m_geometry.reset();
-		m_submesh.reset();
-		m_face = 0u;
-		auto & myCamera = getCuller().getCamera();
-		int32_t offsetX = std::clamp( position.x() - PickingOffset
-			, 0
-			, int32_t( m_colourTexture->getDimensions().width - PickingWidth ) );
-		int32_t offsetY = std::clamp( position.y() - PickingOffset
-			, 0
-			, int32_t( m_colourTexture->getDimensions().height - PickingWidth ) );
-		VkRect2D scissor =
+		if ( !m_picking.exchange( true ) )
 		{
-			{ offsetX, offsetY },
-			{ PickingWidth, PickingWidth },
-		};
+			m_pickNodeType = PickNodeType::eNone;
+			m_geometry.reset();
+			m_submesh.reset();
+			m_face = 0u;
+			auto & myCamera = getCuller().getCamera();
+			int32_t offsetX = std::clamp( position.x() - PickingOffset
+				, 0
+				, int32_t( m_colourTexture->getDimensions().width - PickingWidth ) );
+			int32_t offsetY = std::clamp( position.y() - PickingOffset
+				, 0
+				, int32_t( m_colourTexture->getDimensions().height - PickingWidth ) );
+			VkRect2D scissor =
+			{
+				{ offsetX, offsetY },
+				{ PickingWidth, PickingWidth },
+			};
 
-		ShadowMapLightTypeArray shadowMaps;
-		m_renderQueue.update( shadowMaps, scissor );
+			ShadowMapLightTypeArray shadowMaps;
+			m_renderQueue.update( shadowMaps, scissor );
 
-		if ( m_renderQueue.getCulledRenderNodes().hasNodes() )
-		{
-			doUpdateNodes( m_renderQueue.getCulledRenderNodes() );
-			auto pixel = doFboPick( device, position, myCamera, m_renderQueue.getCommandBuffer() );
-			m_pickNodeType = doPick( pixel, m_renderQueue.getCulledRenderNodes() );
+			if ( m_renderQueue.getCulledRenderNodes().hasNodes() )
+			{
+				doUpdateNodes( m_renderQueue.getCulledRenderNodes() );
+				auto pixel = doFboPick( device, position, myCamera, m_renderQueue.getCommandBuffer() );
+				m_pickNodeType = doPick( pixel, m_renderQueue.getCulledRenderNodes() );
+			}
+
+			m_picking = false;
 		}
+
 		return m_pickNodeType;
 	}
 
@@ -372,8 +380,12 @@ namespace castor3d
 		m_commandBuffer->endRenderPass();
 		m_commandBuffer->endDebugBlock();
 
-		m_copyRegion.imageOffset.x = int32_t( position.x() - PickingOffset );
-		m_copyRegion.imageOffset.y = int32_t( camera.getHeight() - position.y() - PickingOffset );
+		m_copyRegion.imageOffset.x = std::clamp( position.x() - PickingOffset
+			, 0
+			, int32_t( m_colourTexture->getDimensions().width - PickingWidth ) );
+		m_copyRegion.imageOffset.y = std::clamp( position.y() - PickingOffset
+			, 0
+			, int32_t( m_colourTexture->getDimensions().height - PickingWidth ) );
 
 #if !C3D_DebugPicking
 		m_commandBuffer->beginDebugBlock(
@@ -381,17 +393,50 @@ namespace castor3d
 				"PickingPass Copy",
 				makeFloatArray( getEngine()->getNextRainbowColour() ),
 			} );
-		auto flags = m_stagingBuffer->getBuffer().getCompatibleStageFlags();
-		m_commandBuffer->memoryBarrier( flags
+		auto pipelineStageFlags = m_stagingBuffer->getBuffer().getCompatibleStageFlags();
+		m_commandBuffer->memoryBarrier( pipelineStageFlags
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
 			, m_stagingBuffer->getBuffer().makeTransferDestination() );
 		m_commandBuffer->copyToBuffer( m_copyRegion
 			, *m_colourTexture
 			, m_stagingBuffer->getBuffer() );
-		flags = m_stagingBuffer->getBuffer().getCompatibleStageFlags();
-		m_commandBuffer->memoryBarrier( flags
+		VkImageLayout layout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+
+#	if C3D_DebugPickingTransfer
+
+		m_commandBuffer->endDebugBlock();
+		m_commandBuffer->beginDebugBlock(
+			{
+				"PickingPass Transfer Display",
+				makeFloatArray( getEngine()->getNextRainbowColour() ),
+			} );
+		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+			, VK_PIPELINE_STAGE_TRANSFER_BIT
+			, m_stagingBuffer->getBuffer().makeTransferSource() );
+		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+			, VK_PIPELINE_STAGE_TRANSFER_BIT
+			, m_colourView.makeTransferDestination( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
+		m_commandBuffer->copyToImage( m_transferDisplayRegion
+			, m_stagingBuffer->getBuffer()
+			, *m_colourTexture );
+
+		for ( auto & region : m_pickDisplayRegions )
+		{
+			m_commandBuffer->copyToImage( region
+				, m_stagingBuffer->getBuffer()
+				, *m_colourTexture );
+		}
+
+		layout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+
+#	endif
+
+		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 			, VK_PIPELINE_STAGE_HOST_BIT
 			, m_stagingBuffer->getBuffer().makeHostRead() );
+		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, m_colourView.makeShaderInputResource( layout ) );
 		m_commandBuffer->endDebugBlock();
 #endif
 
@@ -400,7 +445,6 @@ namespace castor3d
 		device.graphicsQueue->submit( *m_commandBuffer, m_transferFence.get() );
 		m_transferFence->wait( ashes::MaxTimeout );
 		m_transferFence->reset();
-		device->waitIdle();
 
 #if !C3D_DebugPicking
 		if ( auto * data = m_stagingBuffer->lock( 0u, m_stagingBuffer->getCount(), 0u ) )
@@ -410,10 +454,13 @@ namespace castor3d
 		}
 #endif
 
-		auto it = m_buffer.begin();
-		it += ( PickingOffset * PickingWidth ) + PickingOffset - 1;
-		log::trace << cuT( "Picked: " ) << it->at( 0 ) << cuT( ", " ) << it->at( 1 ) << cuT( ", " ) << it->at( 2 ) << ", " << it->at( 3 ) << std::endl;
-		return *it;
+		auto & result = *( m_buffer.begin() + BufferOffset );
+		log::trace << cuT( "Picked" )
+			<< cuT( ": " ) << result->x
+			<< cuT( ", " ) << result->y
+			<< cuT( ", " ) << result->z
+			<< cuT( ", " ) << result->w << std::endl;
+		return result;
 	}
 
 	PickNodeType PickingPass::doPick( Point4f const & pixel
@@ -545,6 +592,7 @@ namespace castor3d
 			, VK_FORMAT_R32G32B32A32_SFLOAT
 			, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
+				| VK_IMAGE_USAGE_TRANSFER_DST_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, "Colour" );
@@ -552,17 +600,39 @@ namespace castor3d
 			, *m_colourTexture
 			, "Colour" );
 
-		m_copyRegion.bufferImageHeight = 0u;
-		m_copyRegion.bufferOffset = 0u;
-		m_copyRegion.bufferRowLength = 0u;
-		m_copyRegion.imageExtent.width = PickingWidth;
-		m_copyRegion.imageExtent.height = PickingWidth;
-		m_copyRegion.imageExtent.depth = 1u;
-		m_copyRegion.imageOffset.z = 0u;
-		m_copyRegion.imageSubresource.aspectMask = m_colourView->subresourceRange.aspectMask;
-		m_copyRegion.imageSubresource.baseArrayLayer = 0u;
-		m_copyRegion.imageSubresource.layerCount = 1u;
-		m_copyRegion.imageSubresource.mipLevel = 0u;
+		m_copyRegion =
+		{
+			0u,
+			0u,
+			0u,
+			{ m_colourView->subresourceRange.aspectMask, 0u, 0u, 1u },
+			{ 0, 0, 0 },
+			{ PickingWidth, PickingWidth, 1u },
+		};
+		m_transferDisplayRegion =
+		{
+			0u,
+			0u,
+			0u,
+			{ m_colourView->subresourceRange.aspectMask, 0u, 0u, 1u },
+			{ 0, 0, 0 },
+			{ PickingWidth, PickingWidth, 1u },
+		};
+		for ( int i = 0; i < PickingWidth; ++i )
+		{
+			for ( int j = 0; j < PickingWidth; ++j )
+			{
+				m_pickDisplayRegions.push_back(
+					{
+						BufferOffset * ashes::getMinimalSize( VK_FORMAT_R32G32B32A32_SFLOAT ),
+						0u,
+						0u,
+						{ m_colourView->subresourceRange.aspectMask, 0u, 0u, 1u },
+						{ int( PickingWidth ) * 2 + i, j, 0 },
+						{ 1u, 1u, 1u },
+					} );
+			}
+		}
 
 		m_depthTexture = createTexture( device
 			, size
@@ -576,7 +646,8 @@ namespace castor3d
 
 		m_stagingBuffer = makeBuffer< Point4f >( device
 			, PickingWidth * PickingWidth
-			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, ( VK_BUFFER_USAGE_TRANSFER_DST_BIT
+				| VK_BUFFER_USAGE_TRANSFER_SRC_BIT )
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, "PickingPassStagingBuffer" );
 
@@ -845,8 +916,8 @@ namespace castor3d
 			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		}
 
-		UBO_PICKING( writer, PickingUbo::BindingPoint, 0u );
 		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
+		UBO_PICKING( writer, PickingUbo::BindingPoint, 0u );
 
 		// Fragment Intputs
 		auto in = writer.getIn();
@@ -882,7 +953,7 @@ namespace castor3d
 				, alpha
 				, material->m_alphaRef );
 
-			pxl_fragColor = vec4( c3d_drawIndex, c3d_nodeIndex, vtx_instance, in.primitiveID );
+			pxl_fragColor = vec4( c3d_drawIndex, c3d_nodeIndex, vtx_instance, 0.0f );
 #if C3D_DebugPicking
 			pxl_fragColor /= 255.0_f;
 #endif
@@ -909,19 +980,7 @@ namespace castor3d
 
 	ashes::VkDescriptorSetLayoutBindingArray PickingPass::doCreateUboBindings( PipelineFlags const & flags )const
 	{
-		ashes::VkDescriptorSetLayoutBindingArray result = RenderPass::doCreateUboBindings( flags );
-		result.push_back( makeDescriptorSetLayoutBinding( UboBindingPoint
-			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-
-		if ( checkFlag( flags.programFlags, ProgramFlag::eBillboards ) )
-		{
-			result.emplace_back( makeDescriptorSetLayoutBinding( BillboardUbo::BindingPoint
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_VERTEX_BIT ) );
-		}
-
-		return result;
+		return RenderPass::doCreateUboBindings( flags );
 	}
 
 	ashes::VkDescriptorSetLayoutBindingArray PickingPass::doCreateTextureBindings( PipelineFlags const & flags )const

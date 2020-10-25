@@ -1,6 +1,7 @@
 #include "GuiCommon/System/CubeBoxManager.hpp"
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/GeometryCache.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
 #include <Castor3D/Cache/MeshCache.hpp>
 #include <Castor3D/Cache/SceneNodeCache.hpp>
@@ -40,14 +41,14 @@ namespace GuiCommon
 			auto submesh = result->createSubmesh();
 			static InterleavedVertexArray const vertex
 			{
-				InterleavedVertex::createP( Point3f{ -1, -1, -1 } ),
-				InterleavedVertex::createP( Point3f{ -1, +1, -1 } ),
-				InterleavedVertex::createP( Point3f{ +1, +1, -1 } ),
-				InterleavedVertex::createP( Point3f{ +1, -1, -1 } ),
-				InterleavedVertex::createP( Point3f{ -1, -1, +1 } ),
-				InterleavedVertex::createP( Point3f{ -1, +1, +1 } ),
-				InterleavedVertex::createP( Point3f{ +1, +1, +1 } ),
-				InterleavedVertex::createP( Point3f{ +1, -1, +1 } ),
+				InterleavedVertex{}.position( Point3f{ -1, -1, -1 } ),
+				InterleavedVertex{}.position( Point3f{ -1, +1, -1 } ),
+				InterleavedVertex{}.position( Point3f{ +1, +1, -1 } ),
+				InterleavedVertex{}.position( Point3f{ +1, -1, -1 } ),
+				InterleavedVertex{}.position( Point3f{ -1, -1, +1 } ),
+				InterleavedVertex{}.position( Point3f{ -1, +1, +1 } ),
+				InterleavedVertex{}.position( Point3f{ +1, +1, +1 } ),
+				InterleavedVertex{}.position( Point3f{ +1, -1, +1 } ),
 			};
 			submesh->setTopology( VK_PRIMITIVE_TOPOLOGY_LINE_LIST );
 			submesh->addPoints( vertex );
@@ -85,6 +86,7 @@ namespace GuiCommon
 						phong.setDiffuse( colour );
 						phong.setSpecular( colour );
 						phong.setAmbient( 1.0f );
+						phong.setEmissive( 1.0f );
 					}
 					break;
 
@@ -156,8 +158,8 @@ namespace GuiCommon
 		, castor3d::Submesh const & submesh )
 	{
 		Engine * engine = m_scene.getEngine();
-		engine->postEvent( makeCpuFunctorEvent( EventType::ePostRender
-			, [this, &object, &submesh]()
+		engine->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+			, [this, &object, &submesh]( RenderDevice const & device )
 			{
 				m_object = &object;
 				m_submesh = &submesh;
@@ -196,8 +198,8 @@ namespace GuiCommon
 	{
 		CU_Require( object.getName() == m_object->getName() );
 		Engine * engine = m_scene.getEngine();
-		engine->postEvent( makeCpuFunctorEvent( EventType::ePostRender
-			, [this, &object]()
+		engine->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+			, [this, &object]( RenderDevice const & device )
 			{
 				m_sceneConnection.disconnect();
 				doRemoveBB( m_obbMesh->getName(), m_obbNode );
@@ -238,17 +240,38 @@ namespace GuiCommon
 		, SceneNode & parent
 		, BoundingBox const & bb )
 	{
+		SceneNodeSPtr result;
 		auto name = m_object->getName() + cuT( "-" ) + nameSpec;
-		auto node = m_scene.getSceneNodeCache().add( name, parent );
-		auto geometry = m_scene.getGeometryCache().add( name, *node, bbMesh );
+
+		if ( !m_scene.getSceneNodeCache().has( name ) )
+		{
+			result = m_scene.getSceneNodeCache().add( name, parent );
+		}
+		else
+		{
+			result = m_scene.getSceneNodeCache().find( name );
+			result->attachTo( parent );
+		}
+
+		GeometrySPtr geometry;
+
+		if ( !m_scene.getGeometryCache().has( name ) )
+		{
+			geometry = m_scene.getGeometryCache().add( name, *result, bbMesh );
+		}
+		else
+		{
+			geometry = m_scene.getGeometryCache().find( name );
+		}
+
 		geometry->setShadowCaster( false );
 
 		if ( &parent != m_scene.getObjectRootNode().get() )
 		{
 			auto scale = ( bb.getMax() - bb.getMin() ) / 2.0f;
-			node->setScale( scale );
-			node->setPosition( bb.getCenter() );
-			node->setVisible( true );
+			result->setScale( scale );
+			result->setPosition( bb.getCenter() );
+			result->setVisible( true );
 		}
 
 		for ( auto & submesh : *bbMesh )
@@ -256,68 +279,62 @@ namespace GuiCommon
 			geometry->setMaterial( *submesh, submesh->getDefaultMaterial() );
 		}
 
-		return node;
+		return result;
 	}
 
 	void CubeBoxManager::doRemoveBB( String const & nameSpec
 		, SceneNodeSPtr bbNode )
 	{
-		auto name = m_object->getName() + cuT( "-" ) + nameSpec;
-
-		if ( m_scene.getGeometryCache().has( name ) )
-		{
-			m_scene.getGeometryCache().remove( name );
-		}
-
-		m_scene.getSceneNodeCache().remove( bbNode->getName() );
-
 		bbNode->setVisible( false );
 	}
 
 	void CubeBoxManager::onSceneUpdate( castor3d::Scene const & scene )
 	{
-		auto & obb = m_object->getBoundingBox();
-		auto scale = obb.getDimensions() / 2.0f;
-		m_obbNode->setScale( scale );
-		m_obbNode->setPosition( obb.getCenter() );
-		m_obbNode->update();
-		uint32_t i = 0u;
-		auto & sobb = m_object->getBoundingBox( *m_submesh );
-		m_obbSelectedSubmeshNode->setScale( sobb.getDimensions() / 2.0f );
-		m_obbSelectedSubmeshNode->setPosition( sobb.getCenter() );
-		m_obbSelectedSubmeshNode->update();
-
-		for ( auto & submesh : *m_object->getMesh() )
+		if ( m_obbNode->isVisible() && m_obbNode->isDisplayable() )
 		{
-			if ( submesh.get() != m_submesh )
+			auto & obb = m_object->getBoundingBox();
+			auto scale = obb.getDimensions() / 2.0f;
+			m_obbNode->setScale( scale );
+			m_obbNode->setPosition( obb.getCenter() );
+			m_obbNode->update();
+			uint32_t i = 0u;
+			auto & sobb = m_object->getBoundingBox( *m_submesh );
+			m_obbSelectedSubmeshNode->setScale( sobb.getDimensions() / 2.0f );
+			m_obbSelectedSubmeshNode->setPosition( sobb.getCenter() );
+			m_obbSelectedSubmeshNode->update();
+
+			for ( auto & submesh : *m_object->getMesh() )
 			{
-				auto & sobb = m_object->getBoundingBox( *submesh );
-				m_obbSubmeshNodes[i]->setScale( sobb.getDimensions() / 2.0f );
-				m_obbSubmeshNodes[i]->setPosition( sobb.getCenter() );
-				m_obbSubmeshNodes[i]->update();
-				++i;
+				if ( submesh.get() != m_submesh )
+				{
+					auto & sobb = m_object->getBoundingBox( *submesh );
+					m_obbSubmeshNodes[i]->setScale( sobb.getDimensions() / 2.0f );
+					m_obbSubmeshNodes[i]->setPosition( sobb.getCenter() );
+					m_obbSubmeshNodes[i]->update();
+					++i;
+				}
 			}
+
+			auto aabb = obb.getAxisAligned( m_obbNode->getParent()->getDerivedTransformationMatrix() );
+			auto aabbMin = aabb.getMin();
+			auto aabbMax = aabb.getMax();
+			auto aabbSubmesh = m_aabbMesh->getSubmesh( 0u );
+			aabbSubmesh->getPoint( 0u ).pos = Point3f( aabbMin[0], aabbMin[1], aabbMin[2] );
+			aabbSubmesh->getPoint( 1u ).pos = Point3f( aabbMin[0], aabbMax[1], aabbMin[2] );
+			aabbSubmesh->getPoint( 2u ).pos = Point3f( aabbMax[0], aabbMax[1], aabbMin[2] );
+			aabbSubmesh->getPoint( 3u ).pos = Point3f( aabbMax[0], aabbMin[1], aabbMin[2] );
+			aabbSubmesh->getPoint( 4u ).pos = Point3f( aabbMin[0], aabbMin[1], aabbMax[2] );
+			aabbSubmesh->getPoint( 5u ).pos = Point3f( aabbMin[0], aabbMax[1], aabbMax[2] );
+			aabbSubmesh->getPoint( 6u ).pos = Point3f( aabbMax[0], aabbMax[1], aabbMax[2] );
+			aabbSubmesh->getPoint( 7u ).pos = Point3f( aabbMax[0], aabbMin[1], aabbMax[2] );
+			aabbSubmesh->needsUpdate();
+
+			Engine * engine = m_scene.getEngine();
+			engine->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+				, [this, aabbSubmesh]( RenderDevice const & device )
+				{
+					aabbSubmesh->update();
+				} ) );
 		}
-
-		auto aabb = obb.getAxisAligned( m_obbNode->getParent()->getDerivedTransformationMatrix() );
-		auto aabbMin = aabb.getMin();
-		auto aabbMax = aabb.getMax();
-		auto aabbSubmesh = m_aabbMesh->getSubmesh( 0u );
-		aabbSubmesh->getPoint( 0u ).pos = Point3f( aabbMin[0], aabbMin[1], aabbMin[2] );
-		aabbSubmesh->getPoint( 1u ).pos = Point3f( aabbMin[0], aabbMax[1], aabbMin[2] );
-		aabbSubmesh->getPoint( 2u ).pos = Point3f( aabbMax[0], aabbMax[1], aabbMin[2] );
-		aabbSubmesh->getPoint( 3u ).pos = Point3f( aabbMax[0], aabbMin[1], aabbMin[2] );
-		aabbSubmesh->getPoint( 4u ).pos = Point3f( aabbMin[0], aabbMin[1], aabbMax[2] );
-		aabbSubmesh->getPoint( 5u ).pos = Point3f( aabbMin[0], aabbMax[1], aabbMax[2] );
-		aabbSubmesh->getPoint( 6u ).pos = Point3f( aabbMax[0], aabbMax[1], aabbMax[2] );
-		aabbSubmesh->getPoint( 7u ).pos = Point3f( aabbMax[0], aabbMin[1], aabbMax[2] );
-		aabbSubmesh->needsUpdate();
-
-		Engine * engine = m_scene.getEngine();
-		engine->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-			, [this, aabbSubmesh]( RenderDevice const & device )
-			{
-				aabbSubmesh->update();
-			} ) );
 	}
 }

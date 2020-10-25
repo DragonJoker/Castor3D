@@ -20,6 +20,8 @@ See LICENSE file in root folder
 #include <ashespp/Sync/Fence.hpp>
 #include <ashespp/Sync/Semaphore.hpp>
 
+#include <array>
+
 namespace castor3d
 {
 	class RenderWindow
@@ -386,6 +388,16 @@ namespace castor3d
 			return m_saveBuffer;
 		}
 
+		inline bool isPickingDebugEnabled()const
+		{
+			return m_enablePickingDebug;
+		}
+
+		inline void enablePickingDebug( bool v )
+		{
+			m_enablePickingDebug = v;
+		}
+
 		C3D_API GeometrySPtr getPickedGeometry()const;
 		C3D_API BillboardBaseSPtr getPickedBillboard()const;
 		C3D_API SubmeshSPtr getPickedSubmesh()const;
@@ -463,7 +475,7 @@ namespace castor3d
 		ashes::CommandBufferPtr m_transferCommandBuffer;
 		ashes::ImageViewArray m_views;
 		std::vector< ashes::FrameBufferPtr > m_frameBuffers;
-		ashes::CommandBufferPtrArray m_commandBuffers;
+		std::array< ashes::CommandBufferPtrArray, 2u > m_commandBuffers;
 		ashes::PipelineShaderStageCreateInfoArray m_program;
 		RenderQuadUPtr m_renderQuad;
 		RenderTargetWPtr m_renderTarget;
@@ -478,6 +490,7 @@ namespace castor3d
 		castor::PxBufferBaseSPtr m_saveBuffer;
 		PickingPassSPtr m_pickingPass;
 		castor::Position m_mousePosition;
+		bool m_enablePickingDebug{ false };
 	};
 }
 
