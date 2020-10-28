@@ -30,7 +30,7 @@ namespace castor3d
 	{
 		struct ShadowOptions
 		{
-			bool enabled{ false };
+			SceneFlags enabled = SceneFlags( 0 );
 			bool rsm{ false };
 		};
 

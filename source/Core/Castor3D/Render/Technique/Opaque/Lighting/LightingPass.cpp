@@ -720,7 +720,7 @@ namespace castor3d
 			{
 				Type type = Type::eNoShadow;
 
-				if ( light->isShadowProducer() && light->getShadowMap() )
+				if ( light->isShadowProducer() )
 				{
 					auto giType = light->getGlobalIlluminationType();
 
@@ -732,7 +732,7 @@ namespace castor3d
 					type = Type( uint32_t( giType ) + 1u );
 				}
 
-				auto & lightPass = getLightPass( Type::eNoShadow
+				auto & lightPass = getLightPass( type
 					, lightType
 					, m_lightPasses );
 

@@ -130,13 +130,14 @@ namespace castor3d
 
 		std::shared_ptr< PhongLightingModel > PhongLightingModel::createModel( sdw::ShaderWriter & writer
 			, Utils & utils
+			, SceneFlags sceneFlags
 			, bool rsm
 			, uint32_t & index
 			, bool isOpaqueProgram )
 		{
 			auto result = std::make_shared< PhongLightingModel >( writer
 				, utils
-				, ShadowOptions{ true, rsm }
+				, ShadowOptions{ ( sceneFlags & SceneFlag::eShadowAny ), rsm }
 				, isOpaqueProgram );
 			result->declareModel( index );
 			return result;
@@ -152,7 +153,13 @@ namespace castor3d
 		{
 			auto result = std::make_shared< PhongLightingModel >( writer
 				, utils
-				, ShadowOptions{ shadows, rsm }
+				, ShadowOptions
+				{
+					( shadows
+						? SceneFlag( uint8_t( SceneFlag::eShadowBegin ) << int( lightType ) )
+						: SceneFlags( 0u ) ),
+					rsm
+				}
 				, true );
 
 			switch ( lightType )

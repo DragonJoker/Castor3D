@@ -414,6 +414,8 @@ namespace castor3d
 		updater.scene = m_renderTarget.getScene();
 		updater.camera = m_renderTarget.getCamera();
 
+		doInitialiseShadowMaps( updater.device );
+
 #if C3D_UseDepthPrepass
 		m_depthPass->update( updater );
 #endif

@@ -854,6 +854,33 @@ namespace castor3d
 				submesh->update();
 			}
 		} );
+
+		bool needsGI = false;
+		bool hasAnyShadows = false;
+		std::array< bool, size_t( LightType::eCount ) > hasShadows{};
+
+		m_lightCache->forEach( [&needsGI, &hasAnyShadows, &hasShadows]( Light const & light )
+			{
+				if ( light.getGlobalIlluminationType() != GlobalIlluminationType::eNone )
+				{
+					needsGI = true;
+				}
+
+				if ( light.isShadowProducer() )
+				{
+					hasAnyShadows = true;
+					hasShadows[size_t( light.getLightType() )] = true;
+				}
+			} );
+
+		size_t i = 0u;
+		for ( auto & shadows : m_hasShadows )
+		{
+			shadows.exchange( hasShadows[i] );
+			++i;
+		}
+		m_hasAnyShadows.exchange( hasAnyShadows );
+		m_needsGlobalIllumination.exchange( needsGI );
 	}
 
 	void Scene::setBackground( SceneBackgroundSPtr value )
@@ -948,28 +975,12 @@ namespace castor3d
 
 	bool Scene::hasShadows()const
 	{
-		auto & cache = getLightCache();
-		auto lock( castor::makeUniqueLock( cache ) );
-
-		return cache.end() != std::find_if( cache.begin()
-			, cache.end()
-			, []( std::pair< String, LightSPtr > const & lookup )
-			{
-				return lookup.second->isShadowProducer();
-			} );
+		return m_hasAnyShadows;
 	}
 
 	bool Scene::hasShadows( LightType lightType )const
 	{
-		auto & cache = getLightCache();
-		auto lights = cache.getLights( lightType );
-
-		return lights.end() != std::find_if( lights.begin()
-			, lights.end()
-			, []( LightSPtr const & lookup )
-			{
-				return lookup->isShadowProducer();
-			} );
+		return m_hasShadows[size_t( lightType )];
 	}
 
 	void Scene::createEnvironmentMap( SceneNode & node )
@@ -1012,15 +1023,7 @@ namespace castor3d
 
 	bool Scene::needsGlobalIllumination()const
 	{
-		auto result = false;
-		m_lightCache->forEach( [&result]( Light const & light )
-			{
-				if ( !result )
-				{
-					result = light.getGlobalIlluminationType() != GlobalIlluminationType::eNone;
-				}
-			} );
-		return result;
+		return m_needsGlobalIllumination;
 	}
 
 	void Scene::setMaterialsType( MaterialType value )

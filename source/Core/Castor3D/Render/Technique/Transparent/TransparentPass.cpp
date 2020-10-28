@@ -364,7 +364,8 @@ namespace castor3d
 
 			for ( auto i = 0u; i < uint32_t( LightType::eCount ); ++i )
 			{
-				bindShadowMaps( shadowMaps[i]
+				bindShadowMaps( node.pipeline.getFlags()
+					, shadowMaps[i]
 					, writes
 					, index );
 			}
@@ -711,6 +712,7 @@ namespace castor3d
 		utils.declareParallaxMappingFunc( flags );
 		auto lighting = shader::PhongLightingModel::createModel( writer
 			, utils
+			, flags.sceneFlags
 			, false // rsm
 			, index
 			, m_opaque );
@@ -948,6 +950,7 @@ namespace castor3d
 		utils.declareParallaxMappingFunc( flags );
 		auto lighting = shader::MetallicBrdfLightingModel::createModel( writer
 			, utils
+			, flags.sceneFlags
 			, false // rsm
 			, index
 			, m_opaque );
@@ -1234,6 +1237,7 @@ namespace castor3d
 		utils.declareParallaxMappingFunc( flags );
 		auto lighting = shader::SpecularBrdfLightingModel::createModel( writer
 			, utils
+			, flags.sceneFlags
 			, false // rsm
 			, index
 			, m_opaque );

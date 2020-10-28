@@ -103,16 +103,24 @@ namespace castor3d
 		eNone = 0x00,
 		//!\~english	Linear fog.
 		//!\~french		Brouillard linéaire.
-		eFogLinear = 0x01,
+		eFogLinear = 0x01 << 0,
 		//!\~english	Exponential fog.
 		//!\~french		Brouillard exponentiel.
-		eFogExponential = 0x02,
+		eFogExponential = 0x01 << 1,
 		//!\~english	Squared exponential fog.
 		//!\~french		Brouillard exponentiel au carré.
-		eFogSquaredExponential = 0x04,
+		eFogSquaredExponential = 0x01 << 2,
+		//!\~english	Shadow enabling, by light source type.
+		//!\~french		Activation des ombres, par type de source lumineuse.
+		eShadowBegin = 0x01 << 3,
+		eShadowDirectional = eShadowBegin << 0,
+		eShadowPoint = eShadowBegin << 1,
+		eShadowSpot = eShadowBegin << 2,
+		eShadowEnd = eShadowSpot,
+		eShadowAny = eShadowSpot | eShadowPoint | eShadowDirectional,
 		//!\~english	All flags.
 		//!\~french		Tous les indicateurs.
-		eAll = 0x07,
+		eAll = 0x3F,
 	};
 	CU_ImplementFlags( SceneFlag )
 	/**
