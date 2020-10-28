@@ -4,7 +4,7 @@
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 
 #include <ShaderWriter/CompositeTypes/Struct.hpp>
-#include <ShaderWriter/CompositeTypes/StructuredSsbo.hpp>
+#include <ShaderWriter/CompositeTypes/ArraySsbo.hpp>
 
 using namespace castor;
 

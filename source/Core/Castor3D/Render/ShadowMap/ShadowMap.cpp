@@ -163,10 +163,10 @@ namespace castor3d
 		, ashes::Semaphore const & toWait
 		, uint32_t index )
 	{
-		if ( isUpToDate( index ) )
-		{
-			return toWait;
-		}
+		//if ( isUpToDate( index ) )
+		//{
+		//	return toWait;
+		//}
 
 		return doRender( device, toWait, index );
 	}

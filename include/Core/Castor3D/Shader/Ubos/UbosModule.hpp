@@ -94,30 +94,10 @@ namespace castor3d
 		castor::Matrix4x4f lightView;
 		castor::Point4f minVolumeCorner;
 		castor::Point4f gridSizes;
-		union
-		{
-			struct
-			{
-				float indirectAttenuation = 1.7f;
-				float texelAreaModifier = 1.0f;
-				float tanFovXHalf = 1.0f;
-				float tanFovYHalf = 1.0f;
-			} data;
-			castor::Point4f config;
-		};
-
-		LpvConfiguration()
-		{
-		}
-
-		LpvConfiguration & operator=( LpvConfiguration const & rhs )
-		{
-			lightView = rhs.lightView;
-			minVolumeCorner = rhs.minVolumeCorner;
-			gridSizes = rhs.gridSizes;
-			config = rhs.config;
-			return *this;
-		}
+		float indirectAttenuation = 1.7f;
+		float texelAreaModifier = 1.0f;
+		float tanFovXHalf = 1.0f;
+		float tanFovYHalf = 1.0f;
 	};
 	/**
 	*\~english

@@ -39,7 +39,7 @@ namespace castor3d
 	{
 		constexpr uint32_t getDirectionalGIidx( LightingPass::Type type )
 		{
-			return std::min( uint32_t( type ), uint32_t( LightingPass::Type::eShadowLayeredLpvGI ) );
+			return std::min( uint32_t( type ), uint32_t( LightingPass::Type::eShadowLayeredLpvGGI ) );
 		}
 
 		constexpr uint32_t getPointGIidx( LightingPass::Type type )
@@ -49,7 +49,7 @@ namespace castor3d
 
 		constexpr uint32_t getSpotGIidx( LightingPass::Type type )
 		{
-			return std::min( uint32_t( type ), uint32_t( LightingPass::Type::eShadowLpvGI ) );
+			return std::min( uint32_t( type ), uint32_t( LightingPass::Type::eShadowLpvGGI ) );
 		}
 
 		constexpr LightingPass::Type getLightType( LightingPass::Type passType

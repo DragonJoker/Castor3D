@@ -500,7 +500,10 @@ namespace castor3d
 				shader::OutputComponents output{ lightDiffuse, lightSpecular };
 				auto light = writer.declLocale( "light"
 					, lighting->getDirectionalLight( writer.cast< Int >( c3d_lightIndex ) ) );
-				pxl_flux.rgb() = diffuse * light.m_lightBase.m_colour * light.m_lightBase.m_intensity.x();
+				pxl_flux.rgb() = diffuse
+					* light.m_lightBase.m_colour
+					* light.m_lightBase.m_intensity.x()
+					/** clamp( dot( normalize( light.m_direction ), normal ), 0.0_f, 1.0_f )*/;
 
 				auto depth = writer.declLocale( "depth"
 					, in.fragCoord.z() );
@@ -653,7 +656,10 @@ namespace castor3d
 				shader::OutputComponents output{ lightDiffuse, lightSpecular };
 				auto light = writer.declLocale( "light"
 					, lighting->getDirectionalLight( writer.cast< Int >( c3d_lightIndex ) ) );
-				pxl_flux.rgb() = albedo * light.m_lightBase.m_colour * light.m_lightBase.m_intensity.x();
+				pxl_flux.rgb() = albedo
+					* light.m_lightBase.m_colour
+					* light.m_lightBase.m_intensity.x()
+					/** clamp( dot( normalize( light.m_direction ), normal ), 0.0_f, 1.0_f )*/;
 
 				auto depth = writer.declLocale( "depth"
 					, in.fragCoord.z() );
@@ -808,7 +814,8 @@ namespace castor3d
 					, lighting->getDirectionalLight( writer.cast< Int >( c3d_lightIndex ) ) );
 				pxl_flux.rgb() = albedo
 					* light.m_lightBase.m_colour
-					* light.m_lightBase.m_intensity.x();
+					* light.m_lightBase.m_intensity.x()
+					/** clamp( dot( normalize( light.m_direction ), normal ), 0.0_f, 1.0_f )*/;
 
 				auto depth = writer.declLocale( "depth"
 					, in.fragCoord.z() );

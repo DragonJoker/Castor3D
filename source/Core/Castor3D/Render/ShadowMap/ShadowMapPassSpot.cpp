@@ -529,7 +529,8 @@ namespace castor3d
 				spotFactor = 1.0_f - step( spotFactor, 0.0_f );
 				pxl_flux.rgb() = ( diffuse
 						* light.m_lightBase.m_colour
-						* light.m_lightBase.m_intensity.x() )
+						* light.m_lightBase.m_intensity.x()
+						* clamp( dot( lightDirection, normal ), 0.0_f, 1.0_f ) )
 					/ attenuation;
 
 				auto depth = writer.declLocale( "depth"
@@ -706,7 +707,8 @@ namespace castor3d
 				spotFactor = 1.0_f - step( spotFactor, 0.0_f );
 				pxl_flux.rgb() = ( albedo
 						* light.m_lightBase.m_colour
-						* light.m_lightBase.m_intensity.x() )
+						* light.m_lightBase.m_intensity.x()
+						* clamp( dot( lightDirection, normal ), 0.0_f, 1.0_f ) )
 					/ attenuation;
 
 				auto depth = writer.declLocale( "depth"
@@ -883,7 +885,8 @@ namespace castor3d
 				spotFactor = 1.0_f - step( spotFactor, 0.0_f );
 				pxl_flux.rgb() = ( albedo
 						* light.m_lightBase.m_colour
-						* light.m_lightBase.m_intensity.x() )
+						* light.m_lightBase.m_intensity.x()
+						* clamp( dot( lightDirection, normal ), 0.0_f, 1.0_f ) )
 					/ attenuation;
 
 				auto depth = writer.declLocale( "depth"

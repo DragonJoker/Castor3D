@@ -1,7 +1,7 @@
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 
 #include <ShaderWriter/Source.hpp>
-#include <ShaderWriter/CompositeTypes/StructuredSsbo.hpp>
+#include <ShaderWriter/CompositeTypes/ArraySsbo.hpp>
 
 using namespace castor;
 using namespace sdw;
@@ -189,15 +189,15 @@ namespace castor3d
 							, *m_type );
 						auto offset = m_writer.declLocale( "offset"
 							, m_writer.cast< Int >( index ) * Int( MaxMaterialComponentsCount ) );
-						result.m_diffAmb = texelFetch( c3d_materials, offset++ );
-						result.m_specShin = texelFetch( c3d_materials, offset++ );
-						result.m_common = texelFetch( c3d_materials, offset++ );
-						result.m_reflRefr = texelFetch( c3d_materials, offset++ );
-						result.m_sssInfo = texelFetch( c3d_materials, offset++ );
+						result.m_diffAmb = texelFetch( c3d_materials, Int{ offset++ } );
+						result.m_specShin = texelFetch( c3d_materials, Int{ offset++ } );
+						result.m_common = texelFetch( c3d_materials, Int{ offset++ } );
+						result.m_reflRefr = texelFetch( c3d_materials, Int{ offset++ } );
+						result.m_sssInfo = texelFetch( c3d_materials, Int{ offset++ } );
 
 						for ( uint32_t i = 0; i < MaxTransmittanceProfileSize; ++i )
 						{
-							result.m_transmittanceProfile[i] = texelFetch( c3d_materials, offset++ );
+							result.m_transmittanceProfile[i] = texelFetch( c3d_materials, Int{ offset++ } );
 						}
 
 						m_writer.returnStmt( result );
@@ -254,15 +254,15 @@ namespace castor3d
 							, *m_type );
 						auto offset = m_writer.declLocale( "offset"
 							, m_writer.cast< Int >( index ) * Int( MaxMaterialComponentsCount ) );
-						result.m_albRough = texelFetch( c3d_materials, offset++ );
-						result.m_metDiv = texelFetch( c3d_materials, offset++ );
-						result.m_common = texelFetch( c3d_materials, offset++ );
-						result.m_reflRefr = texelFetch( c3d_materials, offset++ );
-						result.m_sssInfo = texelFetch( c3d_materials, offset++ );
+						result.m_albRough = texelFetch( c3d_materials, Int{ offset++ } );
+						result.m_metDiv = texelFetch( c3d_materials, Int{ offset++ } );
+						result.m_common = texelFetch( c3d_materials, Int{ offset++ } );
+						result.m_reflRefr = texelFetch( c3d_materials, Int{ offset++ } );
+						result.m_sssInfo = texelFetch( c3d_materials, Int{ offset++ } );
 
 						for ( uint32_t i = 0; i < MaxTransmittanceProfileSize; ++i )
 						{
-							result.m_transmittanceProfile[i] = texelFetch( c3d_materials, offset++ );
+							result.m_transmittanceProfile[i] = texelFetch( c3d_materials, Int{ offset++ } );
 						}
 
 						m_writer.returnStmt( result );
@@ -319,15 +319,15 @@ namespace castor3d
 							, *m_type );
 						auto offset = m_writer.declLocale( "offset"
 							, m_writer.cast< Int >( index ) * Int( MaxMaterialComponentsCount ) );
-						result.m_diffDiv = texelFetch( c3d_materials, offset++ );
-						result.m_specGloss = texelFetch( c3d_materials, offset++ );
-						result.m_common = texelFetch( c3d_materials, offset++ );
-						result.m_reflRefr = texelFetch( c3d_materials, offset++ );
-						result.m_sssInfo = texelFetch( c3d_materials, offset++ );
+						result.m_diffDiv = texelFetch( c3d_materials, Int{ offset++ } );
+						result.m_specGloss = texelFetch( c3d_materials, Int{ offset++ } );
+						result.m_common = texelFetch( c3d_materials, Int{ offset++ } );
+						result.m_reflRefr = texelFetch( c3d_materials, Int{ offset++ } );
+						result.m_sssInfo = texelFetch( c3d_materials, Int{ offset++ } );
 
 						for ( uint32_t i = 0; i < MaxTransmittanceProfileSize; ++i )
 						{
-							result.m_transmittanceProfile[i] = texelFetch( c3d_materials, offset++ );
+							result.m_transmittanceProfile[i] = texelFetch( c3d_materials, Int{ offset++ } );
 						}
 
 						m_writer.returnStmt( result );

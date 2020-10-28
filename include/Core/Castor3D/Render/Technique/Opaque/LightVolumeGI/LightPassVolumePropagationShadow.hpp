@@ -243,14 +243,14 @@ namespace castor3d
 					| VK_SHADER_STAGE_FRAGMENT_BIT )
 				, cuT( "LPV Config" )
 				, cuT( "Indirect Attenuation" )
-				, m_configuration.data.indirectAttenuation );
+				, m_configuration.indirectAttenuation );
 			visitor.visit( this->getName()
 				, ( VK_SHADER_STAGE_GEOMETRY_BIT
 					| VK_SHADER_STAGE_VERTEX_BIT
 					| VK_SHADER_STAGE_FRAGMENT_BIT )
 				, cuT( "LPV Config" )
 				, cuT( "Texel Area Modifier" )
-				, m_configuration.data.texelAreaModifier );
+				, m_configuration.texelAreaModifier );
 		}
 
 	protected:
@@ -307,8 +307,8 @@ namespace castor3d
 					auto & spotLight = *light.getSpotLight();
 					m_configuration.lightView = spotLight.getViewMatrix();
 					auto lightFov = spotLight.getCutOff();
-					m_configuration.data.tanFovXHalf = ( lightFov * 0.5 ).tan();
-					m_configuration.data.tanFovYHalf = ( lightFov * 0.5 ).tan();
+					m_configuration.tanFovXHalf = ( lightFov * 0.5 ).tan();
+					m_configuration.tanFovYHalf = ( lightFov * 0.5 ).tan();
 				}
 
 				m_lpvConfigUbo.cpuUpdate( m_configuration );

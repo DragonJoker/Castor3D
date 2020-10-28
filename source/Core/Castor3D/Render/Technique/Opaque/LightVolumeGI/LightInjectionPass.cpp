@@ -47,12 +47,18 @@ namespace castor3d
 {
 	namespace
 	{
-		static constexpr uint32_t LightsIdx = 0u;
-		static constexpr uint32_t RsmNormalsIdx = 1u;
-		static constexpr uint32_t RsmPositionIdx = 2u;
-		static constexpr uint32_t RsmFluxIdx = 3u;
-		static constexpr uint32_t LIUboIdx = 4u;
-		static constexpr uint32_t GpUboIdx = 5u;
+		enum Idx : uint32_t
+		{
+			LightsIdx,
+			RsmNormalsIdx,
+			RsmPositionIdx,
+			RsmFluxIdx,
+			LIUboIdx,
+			GpUboIdx,
+			LpvGridRIdx,
+			LpvGridGIdx,
+			LpvGridBIdx,
+		};
 
 		std::unique_ptr< ast::Shader > getDirectionalVertexProgram( uint32_t rsmTexSize
 			, uint32_t layerIndex )
@@ -126,6 +132,7 @@ namespace castor3d
 						, ( vec2( outVolumeCellIndex.xy() ) + 0.5_f ) / c3d_gridSizes.xy() * 2.0_f - 1.0_f );
 
 					out.vtx.position = vec4( screenPos, 0.0, 1.0 );
+					out.vtx.pointSize = 1.0f;
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
@@ -184,6 +191,7 @@ namespace castor3d
 					auto screenPos = writer.declLocale( "screenPos"
 						, ( vec2( outVolumeCellIndex.xy() ) + 0.5_f ) / c3d_gridSizes.xy() * 2.0_f - 1.0_f );
 					out.vtx.position = vec4( screenPos, 0.0_f, 1.0_f );
+					out.vtx.pointSize = 1.0f;
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
@@ -229,10 +237,10 @@ namespace castor3d
 				, [&]()
 				{
 					out.vtx.position = in.vtx[0].position;
-					outVolumeCellIndex = inVolumeCellIndex[0];
 					out.layer = inVolumeCellIndex[0].z();
 					out.vtx.pointSize = 1.0f;
 
+					outVolumeCellIndex = inVolumeCellIndex[0];
 					outRsmPos = inRsmPos[0];
 					outRsmNormal = inRsmNormal[0];
 					outRsmFlux = inRsmFlux[0];
@@ -258,9 +266,9 @@ namespace castor3d
 			// SH_C0 * SH_cosLobe_C0 = 0.25000000007f
 			// SH_C1 * SH_cosLobe_C1 = 0.5000000011f
 
-			auto outLpvGridR = writer.declOutput< Vec4 >( "outLpvGridR", 0u );
-			auto outLpvGridG = writer.declOutput< Vec4 >( "outLpvGridG", 1u );
-			auto outLpvGridB = writer.declOutput< Vec4 >( "outLpvGridB", 2u );
+			auto outLpvGridR = writer.declImage< RWFImg3DRgba32 >( "outLpvGridR", LpvGridRIdx, 0u );
+			auto outLpvGridG = writer.declImage< RWFImg3DRgba32 >( "outLpvGridG", LpvGridGIdx, 0u );
+			auto outLpvGridB = writer.declImage< RWFImg3DRgba32 >( "outLpvGridB", LpvGridBIdx, 0u );
 
 			//layout( early_fragment_tests )in;//turn on early depth tests
 
@@ -289,6 +297,17 @@ namespace castor3d
 			writer.implementFunction< Void >( "main"
 				, [&]()
 				{
+					IF( writer, inVolumeCellIndex.r() >= 31_i
+						|| inVolumeCellIndex.r() < 1_i
+						|| inVolumeCellIndex.g() >= 31_i
+						|| inVolumeCellIndex.g() < 1_i
+						|| inVolumeCellIndex.b() >= 31_i
+						|| inVolumeCellIndex.b() < 1_i )
+					{
+						writer.discard();
+					}
+					FI;
+
 					auto SHCoeffsR = writer.declLocale( "SHCoeffsR"
 						, evalCosineLobeToDir( inRsmNormal ) / Float{ Pi< float > } *inRsmFlux.r() );
 					auto SHCoeffsG = writer.declLocale( "SHCoeffsG"
@@ -296,9 +315,18 @@ namespace castor3d
 					auto SHCoeffsB = writer.declLocale( "SHCoeffsB"
 						, evalCosineLobeToDir( inRsmNormal ) / Float{ Pi< float > } *inRsmFlux.b() );
 
-					outLpvGridR = SHCoeffsR;
-					outLpvGridG = SHCoeffsG;
-					outLpvGridB = SHCoeffsB;
+					auto current = writer.declLocale( "current"
+						, imageLoad( outLpvGridR, inVolumeCellIndex ) );
+					current += SHCoeffsR;
+					imageStore( outLpvGridR, inVolumeCellIndex, current );
+
+					current = imageLoad( outLpvGridG, inVolumeCellIndex );
+					current += SHCoeffsG;
+					imageStore( outLpvGridG, inVolumeCellIndex, current );
+
+					current = imageLoad( outLpvGridB, inVolumeCellIndex );
+					current += SHCoeffsB;
+					imageStore( outLpvGridB, inVolumeCellIndex, current );
 				} );
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -308,53 +336,14 @@ namespace castor3d
 			, RenderDevice const & device
 			, VkFormat format )
 		{
-			ashes::VkAttachmentDescriptionArray attaches
-			{
-				{
-					0u,
-					format,
-					VK_SAMPLE_COUNT_1_BIT,
-					VK_ATTACHMENT_LOAD_OP_CLEAR,
-					VK_ATTACHMENT_STORE_OP_STORE,
-					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					VK_IMAGE_LAYOUT_UNDEFINED,
-					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-				},
-				{
-					0u,
-					format,
-					VK_SAMPLE_COUNT_1_BIT,
-					VK_ATTACHMENT_LOAD_OP_CLEAR,
-					VK_ATTACHMENT_STORE_OP_STORE,
-					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					VK_IMAGE_LAYOUT_UNDEFINED,
-					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-				},
-				{
-					0u,
-					format,
-					VK_SAMPLE_COUNT_1_BIT,
-					VK_ATTACHMENT_LOAD_OP_CLEAR,
-					VK_ATTACHMENT_STORE_OP_STORE,
-					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					VK_IMAGE_LAYOUT_UNDEFINED,
-					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-				},
-			};
+			ashes::VkAttachmentDescriptionArray attaches;
 			ashes::SubpassDescriptionArray subpasses;
 			subpasses.emplace_back( ashes::SubpassDescription
 				{
 					0u,
 					VK_PIPELINE_BIND_POINT_GRAPHICS,
 					{},
-					{
-						{ 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
-						{ 1u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
-						{ 2u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
-					},
+					{},
 					{},
 					ashes::nullopt,
 					{},
@@ -443,6 +432,15 @@ namespace castor3d
 				makeDescriptorSetLayoutBinding( GpUboIdx
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, VK_SHADER_STAGE_VERTEX_BIT ),
+				makeDescriptorSetLayoutBinding( LpvGridRIdx
+					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
+					, VK_SHADER_STAGE_FRAGMENT_BIT ),
+				makeDescriptorSetLayoutBinding( LpvGridGIdx
+					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
+					, VK_SHADER_STAGE_FRAGMENT_BIT ),
+				makeDescriptorSetLayoutBinding( LpvGridBIdx
+					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
+					, VK_SHADER_STAGE_FRAGMENT_BIT ),
 			};
 			return device->createDescriptorSetLayout( name
 				, std::move( bindings ) );
@@ -474,6 +472,12 @@ namespace castor3d
 				, descriptorSetLayout.getBinding( LIUboIdx ) );
 			gpInfoUbo.createSizedBinding( *result
 				, descriptorSetLayout.getBinding( GpUboIdx ) );
+			result->createBinding( descriptorSetLayout.getBinding( LpvGridRIdx )
+				, lpvResult[LpvTexture::eR].getTexture()->getDefaultView().getSampledView() );
+			result->createBinding( descriptorSetLayout.getBinding( LpvGridGIdx )
+				, lpvResult[LpvTexture::eG].getTexture()->getDefaultView().getSampledView() );
+			result->createBinding( descriptorSetLayout.getBinding( LpvGridBIdx )
+				, lpvResult[LpvTexture::eB].getTexture()->getDefaultView().getSampledView() );
 			result->update();
 			return result;
 		}
@@ -512,7 +516,7 @@ namespace castor3d
 			};
 			ashes::PipelineShaderStageCreateInfoArray shaderStages;
 			shaderStages.push_back( makeShaderState( device, vertexShader ) );
-			shaderStages.push_back( makeShaderState( device, geometryShader ) );
+			//shaderStages.push_back( makeShaderState( device, geometryShader ) );
 			shaderStages.push_back( makeShaderState( device, pixelShader ) );
 			return device->createPipeline( name
 				, ashes::GraphicsPipelineCreateInfo
@@ -584,11 +588,7 @@ namespace castor3d
 			, gridSize ) }
 		, m_frameBuffer{ m_renderPass->createFrameBuffer( getName()
 			, VkExtent2D{ gridSize, gridSize }
-			, {
-				result[LpvTexture::eR].getTexture()->getDefaultView().getTargetView(),
-				result[LpvTexture::eG].getTexture()->getDefaultView().getTargetView(),
-				result[LpvTexture::eB].getTexture()->getDefaultView().getTargetView(),
-			}
+			, {}
 			, gridSize ) }
 		, m_commands{ getCommands( *m_timer, 0u ) }
 	{
@@ -613,6 +613,9 @@ namespace castor3d
 	CommandsSemaphore LightInjectionPass::getCommands( RenderPassTimer const & timer
 		, uint32_t index )const
 	{
+		auto rview = m_result[LpvTexture::eR].getTexture()->getDefaultView().getSampledView();
+		auto gview = m_result[LpvTexture::eG].getTexture()->getDefaultView().getSampledView();
+		auto bview = m_result[LpvTexture::eB].getTexture()->getDefaultView().getSampledView();
 		castor3d::CommandsSemaphore commands
 		{
 			m_device.graphicsCommandPool->createCommandBuffer( getName() ),
@@ -629,19 +632,48 @@ namespace castor3d
 				"Lighting - " + getName(),
 				castor3d::makeFloatArray( m_engine.getNextRainbowColour() ),
 			} );
+		cmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, VK_PIPELINE_STAGE_TRANSFER_BIT
+			, rview.makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
+		cmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, VK_PIPELINE_STAGE_TRANSFER_BIT
+			, gview.makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
+		cmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, VK_PIPELINE_STAGE_TRANSFER_BIT
+			, bview.makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
+		//cmd.clear( rview, getClearValue( LpvTexture::eR ).color );
+		//cmd.clear( gview, getClearValue( LpvTexture::eG ).color );
+		//cmd.clear( bview, getClearValue( LpvTexture::eB ).color );
+		cmd.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, rview.makeGeneralLayout( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+				, VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT ) );
+		cmd.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, gview.makeGeneralLayout( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+				, VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT ) );
+		cmd.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, bview.makeGeneralLayout( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+				, VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT ) );
 		cmd.beginRenderPass( *m_renderPass
 			, *m_frameBuffer
-			, {
-				getClearValue( LpvTexture::eR ),
-				getClearValue( LpvTexture::eG ),
-				getClearValue( LpvTexture::eB )
-			}
-		, VK_SUBPASS_CONTENTS_INLINE );
+			, {}
+			, VK_SUBPASS_CONTENTS_INLINE );
 		cmd.bindPipeline( *m_pipeline );
 		cmd.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 		cmd.bindDescriptorSet( *m_descriptorSet, *m_pipelineLayout );
 		cmd.draw( vplCount );
 		cmd.endRenderPass();
+		cmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, rview.makeShaderInputResource( VK_IMAGE_LAYOUT_GENERAL ) );
+		cmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, gview.makeShaderInputResource( VK_IMAGE_LAYOUT_GENERAL ) );
+		cmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, bview.makeShaderInputResource( VK_IMAGE_LAYOUT_GENERAL ) );
 		cmd.endDebugBlock();
 		timer.endPass( cmd, index );
 		cmd.end();
