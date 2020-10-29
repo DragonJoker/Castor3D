@@ -169,7 +169,7 @@ namespace castor3d
 				, [&]( IVec2 const & ssPosition )
 				{
 					auto position = writer.declLocale< Vec3 >( "position" );
-					position.z() = texelFetch( c3d_mapDepth, ssPosition, 0_i ).r();
+					position.z() = c3d_mapDepth.fetch( ssPosition, 0_i ).r();
 
 					// Offset to pixel center
 					position = reconstructCSPosition( vec2( ssPosition ) + vec2( 0.5_f )
@@ -210,8 +210,8 @@ namespace castor3d
 					auto mipPosition = writer.declLocale( "mipPosition"
 						, clamp( ivec2( ssPosition.x() >> mipLevel, ssPosition.y() >> mipLevel )
 							, ivec2( 0_i )
-							, textureSize( c3d_mapDepth, mipLevel ) - ivec2( 1_i ) ) );
-					position.z() = texelFetch( c3d_mapDepth, mipPosition, mipLevel ).r();
+							, c3d_mapDepth.getSize( mipLevel ) - ivec2( 1_i ) ) );
+					position.z() = c3d_mapDepth.fetch( mipPosition, mipLevel ).r();
 
 					// Offset to pixel center
 					position = reconstructCSPosition( ( vec2( ssPosition ) + vec2( 0.5_f ) ) * invCszBufferScale
@@ -392,7 +392,7 @@ namespace castor3d
 
 					if ( useNormalsBuffer )
 					{
-						normal = texelFetch( c3d_mapNormal, ivec2( in.fragCoord.xy() ), 0_i ).xyz();
+						normal = c3d_mapNormal.fetch( ivec2( in.fragCoord.xy() ), 0_i ).xyz();
 						normal = normalize( readNormal( normal ) );
 					}
 					else

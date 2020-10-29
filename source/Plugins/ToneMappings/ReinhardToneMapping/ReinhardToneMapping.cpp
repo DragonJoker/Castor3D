@@ -60,7 +60,7 @@ namespace Reinhard
 			, [&]()
 			{
 				auto hdrColor = writer.declLocale( "hdrColor"
-					, texture( c3d_mapHdr, vtx_texture ).rgb() );
+					, c3d_mapHdr.sample( vtx_texture ).rgb() );
 				// Exposure tone mapping
 				auto mapped = writer.declLocale( "mapped"
 					, vec3( Float( 1.0f ) ) - exp( -hdrColor * c3d_exposure ) );

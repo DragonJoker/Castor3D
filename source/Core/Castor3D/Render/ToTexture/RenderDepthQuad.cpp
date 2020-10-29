@@ -62,7 +62,8 @@ namespace castor3d
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					auto depth = writer.declLocale( "depth", texture( c3d_mapDepth, vtx_texture.xy() ).x() );
+					auto depth = writer.declLocale( "depth"
+						, c3d_mapDepth.sample( vtx_texture.xy() ).x() );
 					depth = 1.0_f - ( 1.0_f - depth ) * 25.0f;
 					pxl_fragColor = vec4( depth, depth, depth, 1.0_f );
 				} );

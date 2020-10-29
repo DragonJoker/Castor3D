@@ -82,11 +82,11 @@ namespace smaa
 						&& config.data.enableReprojection
 						&& C3D_DebugVelocity )
 					{
-						pxl_fragColour = vec4( texture( c3d_map, vtx_texture ).xy(), 0.0_f, 1.0_f );
+						pxl_fragColour = vec4( c3d_map.sample( vtx_texture ).xy(), 0.0_f, 1.0_f );
 					}
 					else
 					{
-						pxl_fragColour = texture( c3d_map, vtx_texture );
+						pxl_fragColour = c3d_map.sample( vtx_texture );
 					}
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

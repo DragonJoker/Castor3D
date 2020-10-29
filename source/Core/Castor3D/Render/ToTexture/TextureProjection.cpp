@@ -238,8 +238,7 @@ namespace castor3d
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					pxl_FragColor = texture( c3d_mapColor
-						, in.fragCoord.xy() / c3d_size );
+					pxl_FragColor = c3d_mapColor.sample( in.fragCoord.xy() / c3d_size );
 				} );
 
 			pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

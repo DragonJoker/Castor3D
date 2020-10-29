@@ -68,7 +68,7 @@ namespace light_streaks
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					pxl_fragColor = vec4( texture( c3d_mapColor, vtx_texture, 0.0_f ).xyz(), 1.0_f );
+					pxl_fragColor = vec4( c3d_mapColor.sample( vtx_texture, 0.0_f ).xyz(), 1.0_f );
 					auto maxComponent = writer.declLocale( "maxComponent"
 						, max( pxl_fragColor.r(), pxl_fragColor.g() ) );
 					maxComponent = max( maxComponent, pxl_fragColor.b() );
@@ -118,7 +118,7 @@ namespace light_streaks
 						auto sampleCoord = writer.declLocale( "sampleCoord"
 							, texcoords + ( c3d_direction * b * vec2( s, s ) * c3d_pixelSize ) );
 						// Scale and accumulate
-						colour += texture( c3d_mapHiPass, sampleCoord ).rgb() * clamp( weight, 0.0_f, 1.0_f );
+						colour += c3d_mapHiPass.sample( sampleCoord ).rgb() * clamp( weight, 0.0_f, 1.0_f );
 					}
 					ROF;
 
@@ -150,11 +150,11 @@ namespace light_streaks
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 			{
-				pxl_fragColor = texture( c3d_mapScene, vtx_texture );
-				pxl_fragColor += texture( c3d_mapKawase1, vtx_texture );
-				pxl_fragColor += texture( c3d_mapKawase2, vtx_texture );
-				pxl_fragColor += texture( c3d_mapKawase3, vtx_texture );
-				pxl_fragColor += texture( c3d_mapKawase4, vtx_texture );
+				pxl_fragColor = c3d_mapScene.sample( vtx_texture );
+				pxl_fragColor += c3d_mapKawase1.sample( vtx_texture );
+				pxl_fragColor += c3d_mapKawase2.sample( vtx_texture );
+				pxl_fragColor += c3d_mapKawase3.sample( vtx_texture );
+				pxl_fragColor += c3d_mapKawase4.sample( vtx_texture );
 			} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}

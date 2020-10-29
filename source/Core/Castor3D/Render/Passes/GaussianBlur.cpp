@@ -78,13 +78,13 @@ namespace castor3d
 				{
 					auto base = writer.declLocale( "base", vec2( 1.0_f, 0.0_f ) / c3d_textureSize );
 					auto offset = writer.declLocale( "offset", vec2( 0.0_f, 0.0_f ) );
-					pxl_fragColor = texture( c3d_mapSource, vtx_texture ) * c3d_coefficients[0_u][0_u];
+					pxl_fragColor = c3d_mapSource.sample( vtx_texture ) * c3d_coefficients[0_u][0_u];
 
 					FOR( writer, UInt, i, 1_u, i < c3d_coefficientsCount, ++i )
 					{
 						offset += base;
-						pxl_fragColor += c3d_coefficients[i / 4_u][i % 4_u] * texture( c3d_mapSource, vtx_texture - offset );
-						pxl_fragColor += c3d_coefficients[i / 4_u][i % 4_u] * texture( c3d_mapSource, vtx_texture + offset );
+						pxl_fragColor += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( vtx_texture - offset );
+						pxl_fragColor += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( vtx_texture + offset );
 					}
 					ROF;
 
@@ -122,13 +122,13 @@ namespace castor3d
 				{
 					auto base = writer.declLocale( "base", vec2( 1.0_f, 0.0_f ) / c3d_textureSize );
 					auto offset = writer.declLocale( "offset", vec2( 0.0_f, 0.0_f ) );
-					pxl_fragColor = texture( c3d_mapSource, vec3( vtx_texture, Float( float( layer ) ) ) ) * c3d_coefficients[0_u][0_u];
+					pxl_fragColor = c3d_mapSource.sample( vec3( vtx_texture, Float( float( layer ) ) ) ) * c3d_coefficients[0_u][0_u];
 
 					FOR( writer, UInt, i, 1_u, i < c3d_coefficientsCount, ++i )
 					{
 						offset += base;
-						pxl_fragColor += c3d_coefficients[i / 4_u][i % 4_u] * texture( c3d_mapSource, vec3( vtx_texture - offset, Float( float( layer ) ) ) );
-						pxl_fragColor += c3d_coefficients[i / 4_u][i % 4_u] * texture( c3d_mapSource, vec3( vtx_texture + offset, Float( float( layer ) ) ) );
+						pxl_fragColor += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( vec3( vtx_texture - offset, Float( float( layer ) ) ) );
+						pxl_fragColor += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( vec3( vtx_texture + offset, Float( float( layer ) ) ) );
 					}
 					ROF;
 
@@ -164,13 +164,13 @@ namespace castor3d
 				{
 					auto base = writer.declLocale( "base", vec2( 0.0_f, 1.0_f ) / c3d_textureSize );
 					auto offset = writer.declLocale( "offset", vec2( 0.0_f, 0.0_f ) );
-					pxl_fragColor = texture( c3d_mapSource, vtx_texture ) * c3d_coefficients[0_u][0_u];
+					pxl_fragColor = c3d_mapSource.sample( vtx_texture ) * c3d_coefficients[0_u][0_u];
 
 					FOR( writer, UInt, i, 1_u, i < c3d_coefficientsCount, ++i )
 					{
 						offset += base;
-						pxl_fragColor += c3d_coefficients[i / 4_u][i % 4_u] * texture( c3d_mapSource, vtx_texture - offset );
-						pxl_fragColor += c3d_coefficients[i / 4_u][i % 4_u] * texture( c3d_mapSource, vtx_texture + offset );
+						pxl_fragColor += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( vtx_texture - offset );
+						pxl_fragColor += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( vtx_texture + offset );
 					}
 					ROF;
 

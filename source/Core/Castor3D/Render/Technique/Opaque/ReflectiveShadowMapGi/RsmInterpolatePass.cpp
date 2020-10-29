@@ -123,7 +123,7 @@ namespace castor3d
 					auto texCoord = writer.declLocale( "texCoord"
 						, vtx_texture );
 					auto depth = writer.declLocale( "depth"
-						, textureLod( c3d_mapDepth, texCoord, 0.0_f ).x() );
+						, c3d_mapDepth.lod( texCoord, 0.0_f ).x() );
 
 					IF( writer, depth == 1.0_f )
 					{
@@ -132,7 +132,7 @@ namespace castor3d
 					FI;
 
 					auto data1 = writer.declLocale( "data1"
-						, textureLod( c3d_mapData1, texCoord, 0.0_f ) );
+						, c3d_mapData1.lod( texCoord, 0.0_f ) );
 					auto vsPosition = writer.declLocale( "vsPosition"
 						, utils.calcVSPosition( texCoord, depth, c3d_mtxInvProj ) );
 					auto wsPosition = writer.declLocale( "wsPosition"
@@ -140,7 +140,7 @@ namespace castor3d
 					auto wsNormal = writer.declLocale( "wsNormal"
 						, data1.xyz() );
 					auto giNormal = writer.declLocale( "giNormal"
-						, textureLod( c3d_mapNml, texCoord, 0.0_f ).xyz() );
+						, c3d_mapNml.lod( texCoord, 0.0_f ).xyz() );
 					auto areEqual = writer.declLocale( "areEqual"
 						, giNormal == wsNormal );
 
@@ -148,11 +148,11 @@ namespace castor3d
 					{
 						auto offset = writer.declLocale( "offset"
 							, vec2( Float{ 1.0f / width }, Float{ 1.0f / height } ) );
-						pxl_rsmGI = textureLod( c3d_mapGi, texCoord, 0.0_f ).xyz()
-							+ textureLod( c3d_mapGi, texCoord + vec2( offset.x(), offset.y() ), 0.0_f ).xyz()
-							+ textureLod( c3d_mapGi, texCoord + vec2( offset.x(), -offset.y() ), 0.0_f ).xyz()
-							+ textureLod( c3d_mapGi, texCoord + vec2( -offset.x(), offset.y() ), 0.0_f ).xyz()
-							+ textureLod( c3d_mapGi, texCoord + vec2( -offset.x(), -offset.y() ), 0.0_f ).xyz();
+						pxl_rsmGI = c3d_mapGi.lod( texCoord, 0.0_f ).xyz()
+							+ c3d_mapGi.lod( texCoord + vec2( offset.x(), offset.y() ), 0.0_f ).xyz()
+							+ c3d_mapGi.lod( texCoord + vec2( offset.x(), -offset.y() ), 0.0_f ).xyz()
+							+ c3d_mapGi.lod( texCoord + vec2( -offset.x(), offset.y() ), 0.0_f ).xyz()
+							+ c3d_mapGi.lod( texCoord + vec2( -offset.x(), -offset.y() ), 0.0_f ).xyz();
 						pxl_rsmGI /= 5.0_f;
 					}
 					ELSE
@@ -228,7 +228,7 @@ namespace castor3d
 					auto texCoord = writer.declLocale( "texCoord"
 						, vtx_texture );
 					auto depth = writer.declLocale( "depth"
-						, textureLod( c3d_mapDepth, texCoord, 0.0_f ).x() );
+						, c3d_mapDepth.lod( texCoord, 0.0_f ).x() );
 
 					IF( writer, depth == 1.0_f )
 					{
@@ -237,7 +237,7 @@ namespace castor3d
 					FI;
 
 					auto data1 = writer.declLocale( "data1"
-						, textureLod( c3d_mapData1, texCoord, 0.0_f ) );
+						, c3d_mapData1.lod( texCoord, 0.0_f ) );
 					auto wsPosition = writer.declLocale( "wsPosition"
 						, utils.calcWSPosition( texCoord, depth, c3d_mtxInvViewProj ) );
 					auto wsNormal = writer.declLocale( "wsNormal"
@@ -250,7 +250,7 @@ namespace castor3d
 					FI;
 
 					auto giNormal = writer.declLocale( "giNormal"
-						, textureLod( c3d_mapNml, texCoord, 0.0_f ).xyz() );
+						, c3d_mapNml.lod( texCoord, 0.0_f ).xyz() );
 					auto areEqual = writer.declLocale( "areEqual"
 						, giNormal == wsNormal );
 
@@ -258,11 +258,11 @@ namespace castor3d
 					{
 						auto offset = writer.declLocale( "offset"
 							, vec2( Float{ 1.0f / width }, Float{ 1.0f / height } ) );
-						pxl_rsmGI = textureLod( c3d_mapGi, texCoord, 0.0_f ).xyz()
-							+ textureLod( c3d_mapGi, texCoord + vec2( offset.x(), offset.y() ), 0.0_f ).xyz()
-							+ textureLod( c3d_mapGi, texCoord + vec2( offset.x(), -offset.y() ), 0.0_f ).xyz()
-							+ textureLod( c3d_mapGi, texCoord + vec2( -offset.x(), offset.y() ), 0.0_f ).xyz()
-							+ textureLod( c3d_mapGi, texCoord + vec2( -offset.x(), -offset.y() ), 0.0_f ).xyz();
+						pxl_rsmGI = c3d_mapGi.lod( texCoord, 0.0_f ).xyz()
+							+ c3d_mapGi.lod( texCoord + vec2( offset.x(), offset.y() ), 0.0_f ).xyz()
+							+ c3d_mapGi.lod( texCoord + vec2( offset.x(), -offset.y() ), 0.0_f ).xyz()
+							+ c3d_mapGi.lod( texCoord + vec2( -offset.x(), offset.y() ), 0.0_f ).xyz()
+							+ c3d_mapGi.lod( texCoord + vec2( -offset.x(), -offset.y() ), 0.0_f ).xyz();
 						pxl_rsmGI /= 5.0_f;
 					}
 					ELSE
@@ -337,16 +337,16 @@ namespace castor3d
 					auto texCoord = writer.declLocale( "texCoord"
 						, vtx_texture );
 					auto data1 = writer.declLocale( "data1"
-						, textureLod( c3d_mapData1, texCoord, 0.0_f ) );
+						, c3d_mapData1.lod( texCoord, 0.0_f ) );
 					auto depth = writer.declLocale( "depth"
-						, textureLod( c3d_mapDepth, texCoord, 0.0_f ).x() );
+						, c3d_mapDepth.lod( texCoord, 0.0_f ).x() );
 					auto wsPosition = writer.declLocale( "wsPosition"
 						, utils.calcWSPosition( texCoord, depth, c3d_mtxInvViewProj ) );
 					auto wsNormal = writer.declLocale( "wsNormal"
 						, data1.xyz() );
 
 					auto giNormal = writer.declLocale( "giNormal"
-						, textureLod( c3d_mapNml, texCoord, 0.0_f ).xyz() );
+						, c3d_mapNml.lod( texCoord, 0.0_f ).xyz() );
 					auto areEqual = writer.declLocale( "areEqual"
 						, giNormal == wsNormal );
 
@@ -354,11 +354,11 @@ namespace castor3d
 					{
 						auto offset = writer.declLocale( "offset"
 							, vec2( Float{ 1.0f / width }, Float{ 1.0f / height } ) );
-						pxl_rsmGI = textureLod( c3d_mapGi, texCoord, 0.0_f ).xyz()
-							+ textureLod( c3d_mapGi, texCoord + vec2( offset.x(), offset.y() ), 0.0_f ).xyz()
-							+ textureLod( c3d_mapGi, texCoord + vec2( offset.x(), -offset.y() ), 0.0_f ).xyz()
-							+ textureLod( c3d_mapGi, texCoord + vec2( -offset.x(), offset.y() ), 0.0_f ).xyz()
-							+ textureLod( c3d_mapGi, texCoord + vec2( -offset.x(), -offset.y() ), 0.0_f ).xyz();
+						pxl_rsmGI = c3d_mapGi.lod( texCoord, 0.0_f ).xyz()
+							+ c3d_mapGi.lod( texCoord + vec2( offset.x(), offset.y() ), 0.0_f ).xyz()
+							+ c3d_mapGi.lod( texCoord + vec2( offset.x(), -offset.y() ), 0.0_f ).xyz()
+							+ c3d_mapGi.lod( texCoord + vec2( -offset.x(), offset.y() ), 0.0_f ).xyz()
+							+ c3d_mapGi.lod( texCoord + vec2( -offset.x(), -offset.y() ), 0.0_f ).xyz();
 						pxl_rsmGI /= 5.0_f;
 					}
 					ELSE

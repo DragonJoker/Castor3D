@@ -114,7 +114,7 @@ namespace castor3d
 						, reflect( wsIncident, wsNormal ) );
 					m_writer.returnStmt( ambientLight.xyz()
 						* occlusion
-						* texture( envMap, reflected ).xyz()
+						* envMap.sample( reflected ).xyz()
 						* albedo / length( albedo ) );
 				}
 				, InVec3{ m_writer, "wsIncident" }
@@ -151,7 +151,7 @@ namespace castor3d
 							, reflectance ) );
 					auto refracted = m_writer.declLocale( "refracted"
 						, refract( wsIncident, wsNormal, refractionRatio ) );
-					m_writer.returnStmt( mix( texture( envMap, refracted ).xyz() * albedo / length( albedo )
+					m_writer.returnStmt( mix( envMap.sample( refracted ).xyz() * albedo / length( albedo )
 						, reflection
 						, vec3( fresnel ) ) );
 				}
@@ -191,7 +191,7 @@ namespace castor3d
 							, reflectance ) );
 					auto refracted = m_writer.declLocale( "refracted"
 						, m_utils.negateTopDownToBottomUp( refract( wsIncident, wsNormal, refractionRatio ) ) );
-					m_writer.returnStmt( mix( texture( envMap, refracted ).xyz() * albedo / length( albedo )
+					m_writer.returnStmt( mix( envMap.sample( refracted ).xyz() * albedo / length( albedo )
 						, reflection
 						, vec3( fresnel ) ) );
 				}

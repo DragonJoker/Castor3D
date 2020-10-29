@@ -122,9 +122,9 @@ namespace castor3d
 							, in.vertexIndex / rsmTexSize
 							, cascadeIndex ) );
 
-					outRsmPos = texelFetch( c3d_rsmPositionMap, rsmCoords, 0_i ).rgb();
-					outRsmNormal = texelFetch( c3d_rsmNormalMap, rsmCoords, 0_i ).rgb();
-					outRsmFlux = texelFetch( c3d_rsmFluxMap, rsmCoords, 0_i );
+					outRsmPos = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
+					outRsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
+					outRsmFlux = c3d_rsmFluxMap.fetch( rsmCoords, 0_i );
 					outVolumeCellIndex = convertPointToGridIndex( outRsmPos
 						, outRsmNormal );
 
@@ -183,9 +183,9 @@ namespace castor3d
 							, in.vertexIndex / rsmTexSize
 							, c3d_lightIndex ) );
 
-					outRsmPos = texelFetch( c3d_rsmPositionMap, rsmCoords, 0_i ).rgb();
-					outRsmNormal = texelFetch( c3d_rsmNormalMap, rsmCoords, 0_i ).rgb();
-					outRsmFlux = texelFetch( c3d_rsmFluxMap, rsmCoords, 0_i );
+					outRsmPos = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
+					outRsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
+					outRsmFlux = c3d_rsmFluxMap.fetch( rsmCoords, 0_i );
 					outVolumeCellIndex = convertPointToGridIndex( outRsmPos, outRsmNormal );
 
 					auto screenPos = writer.declLocale( "screenPos"
@@ -316,17 +316,17 @@ namespace castor3d
 						, evalCosineLobeToDir( inRsmNormal ) / Float{ Pi< float > } *inRsmFlux.b() );
 
 					auto current = writer.declLocale( "current"
-						, imageLoad( outLpvGridR, inVolumeCellIndex ) );
+						, outLpvGridR.load( inVolumeCellIndex ) );
 					current += SHCoeffsR;
-					imageStore( outLpvGridR, inVolumeCellIndex, current );
+					outLpvGridR.store( inVolumeCellIndex, current );
 
-					current = imageLoad( outLpvGridG, inVolumeCellIndex );
+					current = outLpvGridG.load( inVolumeCellIndex );
 					current += SHCoeffsG;
-					imageStore( outLpvGridG, inVolumeCellIndex, current );
+					outLpvGridG.store( inVolumeCellIndex, current );
 
-					current = imageLoad( outLpvGridB, inVolumeCellIndex );
+					current = outLpvGridB.load( inVolumeCellIndex );
 					current += SHCoeffsB;
-					imageStore( outLpvGridB, inVolumeCellIndex, current );
+					outLpvGridB.store( inVolumeCellIndex, current );
 				} );
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

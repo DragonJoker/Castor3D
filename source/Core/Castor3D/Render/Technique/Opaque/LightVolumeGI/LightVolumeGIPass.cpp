@@ -139,7 +139,7 @@ namespace castor3d
 					auto texCoord = writer.declLocale( "texCoord"
 						, vtx_texture );
 					auto depth = writer.declLocale( "depth"
-						, textureLod( c3d_mapDepth, texCoord, 0.0_f ).x() );
+						, c3d_mapDepth.lod( texCoord, 0.0_f ).x() );
 
 					IF( writer, depth == 1.0_f )
 					{
@@ -148,7 +148,7 @@ namespace castor3d
 					FI;
 
 					auto data1 = writer.declLocale( "data1"
-						, textureLod( c3d_mapData1, texCoord, 0.0_f ) );
+						, c3d_mapData1.lod( texCoord, 0.0_f ) );
 					auto wsPosition = writer.declLocale( "wsPosition"
 						, utils.calcWSPosition( texCoord, depth, c3d_mtxInvViewProj ) );
 					auto wsNormal = writer.declLocale( "wsNormal"
@@ -162,9 +162,9 @@ namespace castor3d
 						, ( wsPosition - c3d_minVolumeCorner.xyz() ) / c3d_minVolumeCorner.w() / c3d_gridSize );
 
 					lpvIntensity = vec3(
-						dot( SHintensity, texture( c3d_lpvAccumulatorR, lpvCellCoords ) ),
-						dot( SHintensity, texture( c3d_lpvAccumulatorG, lpvCellCoords ) ),
-						dot( SHintensity, texture( c3d_lpvAccumulatorB, lpvCellCoords ) )
+						dot( SHintensity, c3d_lpvAccumulatorR.sample( lpvCellCoords ) ),
+						dot( SHintensity, c3d_lpvAccumulatorG.sample( lpvCellCoords ) ),
+						dot( SHintensity, c3d_lpvAccumulatorB.sample( lpvCellCoords ) )
 					);
 
 					auto finalLPVRadiance = writer.declLocale( "finalLPVRadiance"

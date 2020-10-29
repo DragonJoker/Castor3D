@@ -143,13 +143,13 @@ namespace castor3d
 					, Vec3 bent )
 				{
 					auto temp = writer.declLocale( "temp"
-						, texelFetch( c3d_mapInput, tapLoc, 0_i ).rgb() );
+						, c3d_mapInput.fetch( tapLoc, 0_i ).rgb() );
 					tapKey = unpackKey( temp.g() );
 					value = temp.r();
 
 					if ( useNormalsBuffer )
 					{
-						temp = texelFetch( c3d_mapNormal, tapLoc, 0_i ).xyz();
+						temp = c3d_mapNormal.fetch( tapLoc, 0_i ).xyz();
 						temp = normalize( sdw::fma( temp, c3d_readMultiplyFirst.xyz(), c3d_readAddSecond.xyz() ) );
 					}
 					else
@@ -262,11 +262,11 @@ namespace castor3d
 						, ivec2( in.fragCoord.xy() ) );
 
 					auto temp = writer.declLocale( "temp"
-						, texelFetch( c3d_mapInput, ssCenter, 0_i ) );
+						, c3d_mapInput.fetch( ssCenter, 0_i ) );
 					auto sum = writer.declLocale( "sum"
 						, temp.r() );
 					auto bentNormal = writer.declLocale( "bentNormal"
-						, readNormal( texelFetch( c3d_mapBentInput, ssCenter, 0_i ).xyz() ) );
+						, readNormal( c3d_mapBentInput.fetch( ssCenter, 0_i ).xyz() ) );
 
 					keyPassThrough = temp.g();
 					auto key = writer.declLocale( "key"
@@ -276,7 +276,7 @@ namespace castor3d
 
 					if ( useNormalsBuffer )
 					{
-						normal = normalize( readNormal( texelFetch( c3d_mapNormal, ssCenter, 0_i ) ) );
+						normal = normalize( readNormal( c3d_mapNormal.fetch( ssCenter, 0_i ) ) );
 					}
 
 					IF( writer, key == 1.0_f )

@@ -109,9 +109,9 @@ namespace castor3d
 				, [&]()
 				{
 					auto data4 = writer.declLocale( "data4"
-						, textureLod( c3d_mapData4, vtx_texture, 0.0_f ) );
+						, c3d_mapData4.lod( vtx_texture, 0.0_f ) );
 					auto data5 = writer.declLocale( "data5"
-						, textureLod( c3d_mapData5, vtx_texture, 0.0_f ) );
+						, c3d_mapData5.lod( vtx_texture, 0.0_f ) );
 					auto materialId = writer.declLocale( "materialId"
 						, writer.cast< UInt >( data5.z() ) );
 					auto translucency = writer.declLocale( "translucency"
@@ -126,9 +126,9 @@ namespace castor3d
 
 					// Fetch color and linear depth for current pixel:
 					auto colorM = writer.declLocale( "colorM"
-						, textureLod( c3d_mapLightDiffuse, vtx_texture, 0.0_f ) );
+						, c3d_mapLightDiffuse.lod( vtx_texture, 0.0_f ) );
 					auto depthM = writer.declLocale( "depthM"
-						, textureLod( c3d_mapDepth, vtx_texture, 0.0_f ).r() );
+						, c3d_mapDepth.lod( vtx_texture, 0.0_f ).r() );
 					depthM = utils.calcVSPosition( vtx_texture
 						, depthM
 						, c3d_mtxInvProj ).z();
@@ -177,9 +177,9 @@ namespace castor3d
 					{
 						// Fetch color and depth for current sample:
 						offset = sdw::fma( vec2( o[i] ), finalStep, vtx_texture );
-						color = textureLod( c3d_mapLightDiffuse, offset, 0.0_f ).rgb();
+						color = c3d_mapLightDiffuse.lod( offset, 0.0_f ).rgb();
 						offset = sdw::fma( vec2( o[i] ), finalStep, vtx_texture );
-						depth = textureLod( c3d_mapDepth, offset, 0.0_f ).r();
+						depth = c3d_mapDepth.lod( offset, 0.0_f ).r();
 						depth = utils.calcVSPosition( vtx_texture
 							, depth
 							, c3d_mtxInvProj ).z();
@@ -235,9 +235,9 @@ namespace castor3d
 				, [&]()
 				{
 					auto data5 = writer.declLocale( "data5"
-						, textureLod( c3d_mapData5, vtx_texture, 0.0_f ) );
+						, c3d_mapData5.lod( vtx_texture, 0.0_f ) );
 					auto original = writer.declLocale( "original"
-						, textureLod( c3d_mapLightDiffuse, vtx_texture, 0.0_f ) );
+						, c3d_mapLightDiffuse.lod( vtx_texture, 0.0_f ) );
 					auto materialId = writer.declLocale( "materialId"
 						, writer.cast< UInt >( data5.z() ) );
 					auto material = materials->getBaseMaterial( materialId );
@@ -265,13 +265,13 @@ namespace castor3d
 								2.0062_f
 							} );
 						auto blur1 = writer.declLocale( "blur1"
-							, textureLod( c3d_mapBlur1, vtx_texture, 0.0_f ) );
+							, c3d_mapBlur1.lod( vtx_texture, 0.0_f ) );
 						auto blur2 = writer.declLocale( "blur2"
-							, textureLod( c3d_mapBlur2, vtx_texture, 0.0_f ) );
+							, c3d_mapBlur2.lod( vtx_texture, 0.0_f ) );
 						auto blur3 = writer.declLocale( "blur3"
-							, textureLod( c3d_mapBlur3, vtx_texture, 0.0_f ) );
+							, c3d_mapBlur3.lod( vtx_texture, 0.0_f ) );
 						auto data4 = writer.declLocale( "data4"
-							, textureLod( c3d_mapData4, vtx_texture, 0.0_f ) );
+							, c3d_mapData4.lod( vtx_texture, 0.0_f ) );
 						auto translucency = writer.declLocale( "translucency"
 							, data4.w() );
 						pxl_fragColor = original * originalWeight

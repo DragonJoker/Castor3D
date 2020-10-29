@@ -141,20 +141,20 @@ namespace smaa
 				{
 					// Fetch the blending weights for current pixel:
 					auto a = writer.declLocale< Vec4 >( "a" );
-					a.x() = texture( blendTex, offset.xy() ).a(); // Right
-					a.y() = texture( blendTex, offset.zw() ).g(); // Top
-					a.wz() = texture( blendTex, texcoord ).xz(); // Bottom / Left
+					a.x() = blendTex.sample( offset.xy() ).a(); // Right
+					a.y() = blendTex.sample( offset.zw() ).g(); // Top
+					a.wz() = blendTex.sample( texcoord ).xz(); // Bottom / Left
 
 					// Is there any blending weight with a value greater than 0.0?
 					IF ( writer, dot( a, vec4( 1.0_f, 1.0_f, 1.0_f, 1.0_f ) ) < 1e-5_f )
 					{
 						auto color = writer.declLocale( "color"
-							, textureLod( colorTex, texcoord, 0.0_f ) );
+							, colorTex.lod( texcoord, 0.0_f ) );
 
 						if ( reprojection )
 						{
 							auto velocity = writer.declLocale( "velocity"
-								, textureLod( c3d_velocityTex, texcoord, 0.0_f ).rg() );
+								, c3d_velocityTex.lod( texcoord, 0.0_f ).rg() );
 
 							// Pack velocity into the alpha channel:
 							color.a() = sqrt( 5.0_f * length( velocity ) );
@@ -185,15 +185,15 @@ namespace smaa
 						// We exploit bilinear filtering to mix current pixel with the chosen
 						// neighbor:
 						auto color = writer.declLocale( "color"
-							, blendingWeight.x() * textureLod( colorTex, blendingCoord.xy(), 0.0_f ) );
-						color += blendingWeight.y() * textureLod( colorTex, blendingCoord.zw(), 0.0_f );
+							, blendingWeight.x() * colorTex.lod( blendingCoord.xy(), 0.0_f ) );
+						color += blendingWeight.y() * colorTex.lod( blendingCoord.zw(), 0.0_f );
 
 						if ( reprojection )
 						{
 							// Antialias velocity for proper reprojection in a later stage:
 							auto velocity = writer.declLocale( "velocity"
-								, blendingWeight.x() * textureLod( c3d_velocityTex, blendingCoord.xy(), 0.0_f ).rg() );
-							velocity += blendingWeight.y() * textureLod( c3d_velocityTex, blendingCoord.zw(), 0.0_f ).rg();
+								, blendingWeight.x() * c3d_velocityTex.lod( blendingCoord.xy(), 0.0_f ).rg() );
+							velocity += blendingWeight.y() * c3d_velocityTex.lod( blendingCoord.zw(), 0.0_f ).rg();
 
 							// Pack velocity into the alpha channel:
 							color.a() = sqrt( 5.0_f * length( velocity ) );

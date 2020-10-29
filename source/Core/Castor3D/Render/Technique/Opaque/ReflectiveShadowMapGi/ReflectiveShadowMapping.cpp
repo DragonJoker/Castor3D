@@ -141,11 +141,11 @@ namespace castor3d
 							, m_writer.cast< Float >( cascadeIndex ) ) );
 
 					auto vplPositionWS = m_writer.declLocale( "vplPositionWS"
-						, texture( c3d_rsmPositionMap, coords ).xyz() );
+						, c3d_rsmPositionMap.sample( coords ).xyz() );
 					auto vplNormalWS = m_writer.declLocale( "vplNormalWS"
-						, texture( c3d_rsmNormalMap, coords ).xyz() );
+						, c3d_rsmNormalMap.sample( coords ).xyz() );
 					auto vplFlux = m_writer.declLocale( "vplFlux"
-						, texture( c3d_rsmFluxMap, coords ).xyz() );
+						, c3d_rsmFluxMap.sample( coords ).xyz() );
 					auto dot1 = m_writer.declLocale( "dot1"
 						, max( 0.0_f, dot( vplNormalWS, worldPosition - vplPositionWS ) ) );
 					auto dot2 = m_writer.declLocale( "dot2"
@@ -207,11 +207,11 @@ namespace castor3d
 							, m_writer.cast< Float >( rsmIndex ) ) );
 
 					auto vplPositionWS = m_writer.declLocale( "vplPositionWS"
-						, texture( c3d_rsmPositionMap, coords ).xyz() );
+						, c3d_rsmPositionMap.sample( coords ).xyz() );
 					auto vplNormalWS = m_writer.declLocale( "vplNormalWS"
-						, texture( c3d_rsmNormalMap, coords ).xyz() );
+						, c3d_rsmNormalMap.sample( coords ).xyz() );
 					auto vplFlux = m_writer.declLocale( "vplFlux"
-						, texture( c3d_rsmFluxMap, coords ).xyz() );
+						, c3d_rsmFluxMap.sample( coords ).xyz() );
 					auto diff = m_writer.declLocale( "diff"
 						, worldPosition - vplPositionWS );
 					auto dot1 = m_writer.declLocale( "dot1"
@@ -278,11 +278,11 @@ namespace castor3d
 						, vec3( sdw::fma( rnd, rMax, lightSpacePosition.xy() ), rsmIndex ) );
 
 					auto vplPositionWS = m_writer.declLocale( "vplPositionWS"
-						, texture( c3d_rsmPositionMap, coords ).xyz() );
+						, c3d_rsmPositionMap.sample( coords ).xyz() );
 					auto vplNormalWS = m_writer.declLocale( "vplNormalWS"
-						, texture( c3d_rsmNormalMap, coords ).xyz() );
+						, c3d_rsmNormalMap.sample( coords ).xyz() );
 					auto vplFlux = m_writer.declLocale( "vplFlux"
-						, texture( c3d_rsmFluxMap, coords ).xyz() );
+						, c3d_rsmFluxMap.sample( coords ).xyz() );
 					auto diff = m_writer.declLocale( "diff"
 						, worldPosition - vplPositionWS );
 					auto dot1 = m_writer.declLocale( "dot1"

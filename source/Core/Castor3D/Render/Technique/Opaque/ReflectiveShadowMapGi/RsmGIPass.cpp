@@ -148,7 +148,7 @@ namespace castor3d
 					auto texCoord = writer.declLocale( "texCoord"
 						, vtx_texture );
 					auto depth = writer.declLocale( "depth"
-						, textureLod( c3d_mapDepth, texCoord, 0.0_f ).x() );
+						, c3d_mapDepth.lod( texCoord, 0.0_f ).x() );
 
 					IF( writer, depth == 1.0_f )
 					{
@@ -157,7 +157,7 @@ namespace castor3d
 					FI;
 
 					auto data1 = writer.declLocale( "data1"
-						, textureLod( c3d_mapData1, texCoord, 0.0_f ) );
+						, c3d_mapData1.lod( texCoord, 0.0_f ) );
 					auto vsPosition = writer.declLocale( "vsPosition"
 						, utils.calcVSPosition( texCoord, depth, c3d_mtxInvProj ) );
 					auto wsPosition = writer.declLocale( "wsPosition"
@@ -232,7 +232,7 @@ namespace castor3d
 					auto texCoord = writer.declLocale( "texCoord"
 						, vtx_texture );
 					auto depth = writer.declLocale( "depth"
-						, textureLod( c3d_mapDepth, texCoord, 0.0_f ).x() );
+						, c3d_mapDepth.lod( texCoord, 0.0_f ).x() );
 
 					IF( writer, depth == 1.0_f )
 					{
@@ -241,7 +241,7 @@ namespace castor3d
 					FI;
 
 					auto data1 = writer.declLocale( "data1"
-						, textureLod( c3d_mapData1, texCoord, 0.0_f ) );
+						, c3d_mapData1.lod( texCoord, 0.0_f ) );
 					auto wsPosition = writer.declLocale( "wsPosition"
 						, utils.calcWSPosition( texCoord, depth, c3d_mtxInvViewProj ) );
 					auto wsNormal = writer.declLocale( "wsNormal"
@@ -320,9 +320,9 @@ namespace castor3d
 					auto texCoord = writer.declLocale( "texCoord"
 						, vtx_texture );
 					auto data1 = writer.declLocale( "data1"
-						, textureLod( c3d_mapData1, texCoord, 0.0_f ) );
+						, c3d_mapData1.lod( texCoord, 0.0_f ) );
 					auto depth = writer.declLocale( "depth"
-						, textureLod( c3d_mapDepth, texCoord, 0.0_f ).x() );
+						, c3d_mapDepth.lod( texCoord, 0.0_f ).x() );
 					auto wsPosition = writer.declLocale( "wsPosition"
 						, utils.calcWSPosition( texCoord, depth, c3d_mtxInvViewProj ) );
 					auto wsNormal = writer.declLocale( "wsNormal"
@@ -586,6 +586,8 @@ namespace castor3d
 			, m_result[1].getTexture()->getDefaultView().getTargetView() ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, m_device, cuT( "Reflective Shadow Maps" ), cuT( "GI Resolve" ) ) }
 	{
+		m_rsmConfigUbo.initialise( m_device );
+
 		if ( auto buffer = m_rsmSamplesSsbo->lock( 0u, RsmConfig::MaxRange, 0u ) )
 		{
 			std::random_device rd;

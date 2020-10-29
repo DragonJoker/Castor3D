@@ -822,9 +822,9 @@ namespace castor3d
 				, [&]()
 				{
 					auto lhsColor = writer.declLocale( "lhsColor"
-						, texture( c3d_mapLhs, vtx_textureLhs ) );
+						, c3d_mapLhs.sample( vtx_textureLhs ) );
 					auto rhsColor = writer.declLocale( "rhsColor"
-						, texture( c3d_mapRhs, vtx_textureRhs ) );
+						, c3d_mapRhs.sample( vtx_textureRhs ) );
 					lhsColor.rgb() *= 1.0_f - rhsColor.a();
 					pxl_fragColor = vec4( lhsColor.rgb() + rhsColor.rgb(), 1.0_f );
 				} );

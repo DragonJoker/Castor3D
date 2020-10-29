@@ -441,8 +441,7 @@ namespace castor3d
 						auto uv = m_writer.declLocale( "uv"
 							, shadowCoord.st() + offset );
 						auto dist = m_writer.declLocale( "dist"
-							, texture( shadowMap
-								, vec3( uv, m_writer.cast< Float >( index ) ) ) );
+							, shadowMap.sample( vec3( uv, m_writer.cast< Float >( index ) ) ) );
 
 						IF( m_writer, shadowCoord.w() > 0.0_f )
 						{
@@ -523,8 +522,7 @@ namespace castor3d
 						auto uv = m_writer.declLocale( "uv"
 							, shadowCoord.st() + offset );
 						auto dist = m_writer.declLocale( "dist"
-							, texture( shadowMap
-								, vec3( uv, m_writer.cast< Float >( cascadeIndex ) ) ) );
+							, shadowMap.sample( vec3( uv, m_writer.cast< Float >( cascadeIndex ) ) ) );
 
 						IF( m_writer, shadowCoord.w() > 0 )
 						{
@@ -627,8 +625,8 @@ namespace castor3d
 						IF( m_writer, shadowType == Int( int( ShadowType::eVariance ) ) )
 						{
 							auto moments = m_writer.declLocale( "moments"
-								, textureLod( c3d_mapVarianceDirectional
-									, vec3( lightSpacePosition.xy()
+								, c3d_mapVarianceDirectional
+									.lod( vec3( lightSpacePosition.xy()
 										, m_writer.cast< Float >( cascadeIndex ) )
 									, 0.0_f ) );
 							result = m_chebyshevUpperBound( moments
@@ -707,8 +705,8 @@ namespace castor3d
 						IF( m_writer, shadowType == Int( int( ShadowType::eVariance ) ) )
 						{
 							auto moments = m_writer.declLocale( "moments"
-								, textureLod( c3d_mapVarianceSpot
-									, vec3( lightSpacePosition.xy()
+								, c3d_mapVarianceSpot
+									.lod( vec3( lightSpacePosition.xy()
 										, m_writer.cast< Float >( index ) )
 									, 0.0_f ) );
 							result = m_chebyshevUpperBound( moments
@@ -817,8 +815,8 @@ namespace castor3d
 								{
 									for ( int k = 0; k < samples; ++k )
 									{
-										moments = textureLod( c3d_mapVariancePoint
-											, vec4( vertexToLight + vec3( x, y, z )
+										moments = c3d_mapVariancePoint
+											.lod( vec4( vertexToLight + vec3( x, y, z )
 												, m_writer.cast< Float >( index ) )
 											, 0.0_f );
 										shadowFactor += m_chebyshevUpperBound( moments
@@ -872,8 +870,7 @@ namespace castor3d
 									{
 										for ( int k = 0; k < samples; ++k )
 										{
-											shadowMapDepth = texture( c3d_mapNormalDepthPoint
-												, vec4( vertexToLight + vec3( x, y, z )
+											shadowMapDepth = c3d_mapNormalDepthPoint.sample( vec4( vertexToLight + vec3( x, y, z )
 													, m_writer.cast< Float >( index ) ) ).w();
 											shadowFactor += step( depth - bias, shadowMapDepth );
 											numSamplesUsed += 1.0_f;
@@ -893,9 +890,8 @@ namespace castor3d
 							ELSE
 							{
 								auto shadowMapDepth = m_writer.declLocale( "shadowMapDepth"
-									, texture( c3d_mapNormalDepthPoint
-										, vec4( vertexToLight
-											, m_writer.cast< Float >( index ) ) ).w() );
+									, c3d_mapNormalDepthPoint.sample( vec4( vertexToLight
+										, m_writer.cast< Float >( index ) ) ).w() );
 								result = step( depth - bias, shadowMapDepth );
 							}
 							FI;
@@ -1047,8 +1043,8 @@ namespace castor3d
 						IF( m_writer, shadowType == Int( int( ShadowType::eVariance ) ) )
 						{
 							auto moments = m_writer.declLocale( "moments"
-								, textureLod( c3d_mapVarianceDirectional
-									, vec3( lightSpacePosition.xy()
+								, c3d_mapVarianceDirectional
+									.lod( vec3( lightSpacePosition.xy()
 										, m_writer.cast< Float >( cascadeIndex ) )
 									, 0.0_f ) );
 							result = m_chebyshevUpperBound( moments
@@ -1127,8 +1123,8 @@ namespace castor3d
 						IF( m_writer, shadowType == Int( int( ShadowType::eVariance ) ) )
 						{
 							auto moments = m_writer.declLocale( "moments"
-								, textureLod( c3d_mapVarianceSpot
-									, vec3( lightSpacePosition.xy()
+								, c3d_mapVarianceSpot
+									.lod( vec3( lightSpacePosition.xy()
 										, m_writer.cast< Float >( shadowMapIndex ) )
 									, 0.0_f ) );
 							result = m_chebyshevUpperBound( moments
@@ -1235,8 +1231,8 @@ namespace castor3d
 								{
 									for ( int k = 0; k < samples; ++k )
 									{
-										moments = textureLod( c3d_mapVariancePoint
-											, vec4( vertexToLight + vec3( x, y, z )
+										moments = c3d_mapVariancePoint
+											.lod( vec4( vertexToLight + vec3( x, y, z )
 												, m_writer.cast< Float >( shadowMapIndex ) )
 											, 0.0_f );
 										shadowFactor += m_chebyshevUpperBound( moments
@@ -1290,8 +1286,7 @@ namespace castor3d
 									{
 										for ( int k = 0; k < samples; ++k )
 										{
-											shadowMapDepth = texture( c3d_mapNormalDepthPoint
-												, vec4( vertexToLight + vec3( x, y, z )
+											shadowMapDepth = c3d_mapNormalDepthPoint.sample( vec4( vertexToLight + vec3( x, y, z )
 													, m_writer.cast< Float >( shadowMapIndex ) ) ).w();
 											shadowFactor += step( depth - bias, shadowMapDepth );
 											numSamplesUsed += 1.0_f;
@@ -1311,8 +1306,7 @@ namespace castor3d
 							ELSE
 							{
 								auto shadowMapDepth = m_writer.declLocale( "shadowMapDepth"
-									, texture( c3d_mapNormalDepthPoint
-										, vec4( vertexToLight
+									, c3d_mapNormalDepthPoint.sample( vec4( vertexToLight
 											, m_writer.cast< Float >( shadowMapIndex ) ) ).w() );
 								m_writer.returnStmt( step( depth - bias, shadowMapDepth ) );
 							}

@@ -59,7 +59,7 @@ namespace Linear
 			, [&]()
 			{
 				auto hdrColor = writer.declLocale( "hdrColor"
-					, texture( c3d_mapHdr, vtx_texture ).rgb() );
+					, c3d_mapHdr.sample( vtx_texture ).rgb() );
 				hdrColor *= vec3( c3d_exposure );
 				pxl_rgb = vec4( utils.applyGamma( c3d_gamma, hdrColor ), 1.0_f );
 			} );

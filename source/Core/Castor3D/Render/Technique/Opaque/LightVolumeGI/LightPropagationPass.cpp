@@ -242,9 +242,9 @@ namespace castor3d
 						auto neighbourGScellIndex = writer.declLocale( "neighbourGScellIndex"
 							, inCellIndex - mainDirection );
 						//Load sh coeffs
-						RSHcoeffsNeighbour = texelFetch( c3d_lpvGridR, neighbourGScellIndex, 0_i );
-						GSHcoeffsNeighbour = texelFetch( c3d_lpvGridG, neighbourGScellIndex, 0_i );
-						BSHcoeffsNeighbour = texelFetch( c3d_lpvGridB, neighbourGScellIndex, 0_i );
+						RSHcoeffsNeighbour = c3d_lpvGridR.fetch( neighbourGScellIndex, 0_i );
+						GSHcoeffsNeighbour = c3d_lpvGridG.fetch( neighbourGScellIndex, 0_i );
+						BSHcoeffsNeighbour = c3d_lpvGridB.fetch( neighbourGScellIndex, 0_i );
 
 						auto occlusionValue = writer.declLocale( "occlusionValue"
 							, 1.0_f ); // no occlusion
@@ -254,7 +254,7 @@ namespace castor3d
 							auto occCoord = writer.declLocale( "occCoord"
 								, ( vec3( neighbourGScellIndex.xyz() ) + 0.5_f * vec3( mainDirection ) ) / c3d_gridSize );
 							auto occCoeffs = writer.declLocale( "occCoeffs"
-								, texture( c3d_geometryVolume, occCoord ) );
+								, c3d_geometryVolume.sample( occCoord ) );
 							occlusionValue = 1.0 - clamp( occlusionAmplifier * dot( occCoeffs, evalSH_direct( vec3( -mainDirection ) ) ), 0.0_f, 1.0_f );
 						}
 
@@ -285,7 +285,7 @@ namespace castor3d
 								auto occCoord = writer.declLocale( "occCoord"
 									, ( vec3( neighbourGScellIndex.xyz() ) + 0.5_f * evalDirection ) / c3d_gridSize );
 								auto occCoeffs = writer.declLocale( "occCoeffs"
-									, texture( c3d_geometryVolume, occCoord ) );
+									, c3d_geometryVolume.sample( occCoord ) );
 								occlusionValue = 1.0 - clamp( occlusionAmplifier * dot( occCoeffs, evalSH_direct( -evalDirection ) ), 0.0_f, 1.0_f );
 							}
 

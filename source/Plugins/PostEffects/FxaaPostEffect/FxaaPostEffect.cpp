@@ -85,15 +85,15 @@ namespace fxaa
 				, [&]()
 				{
 					auto rgbNW = writer.declLocale( "rgbNW"
-						, textureLodOffset( c3d_mapColor, vtx_texture, 0.0_f, ivec2( -1_i, -1_i ) ).rgb() );
+						, c3d_mapColor.lod( vtx_texture, 0.0_f, ivec2( -1_i, -1_i ) ).rgb() );
 					auto rgbNE = writer.declLocale( "rgbNE"
-						, textureLodOffset( c3d_mapColor, vtx_texture, 0.0_f, ivec2( 1_i, -1_i ) ).rgb() );
+						, c3d_mapColor.lod( vtx_texture, 0.0_f, ivec2( 1_i, -1_i ) ).rgb() );
 					auto rgbSW = writer.declLocale( "rgbSW"
-						, textureLodOffset( c3d_mapColor, vtx_texture, 0.0_f, ivec2( -1_i, 1_i ) ).rgb() );
+						, c3d_mapColor.lod( vtx_texture, 0.0_f, ivec2( -1_i, 1_i ) ).rgb() );
 					auto rgbSE = writer.declLocale( "rgbSE"
-						, textureLodOffset( c3d_mapColor, vtx_texture, 0.0_f, ivec2( 1_i, 1_i ) ).rgb() );
+						, c3d_mapColor.lod( vtx_texture, 0.0_f, ivec2( 1_i, 1_i ) ).rgb() );
 					auto rgbM = writer.declLocale( "rgbM"
-						, texture( c3d_mapColor, vtx_texture, 0.0_f ).rgb() );
+						, c3d_mapColor.sample( vtx_texture, 0.0_f ).rgb() );
 
 					auto luma = writer.declLocale( "luma"
 						, vec3( 0.299_f, 0.587_f, 0.114_f ) );
@@ -131,8 +131,8 @@ namespace fxaa
 						, vtx_texture + dir * ( 2.0_f / 3.0_f - 0.5_f ) );
 
 					auto rgbA = writer.declLocale( "rgbA"
-						, ( texture( c3d_mapColor, texcoord0, 0.0_f ).rgb()
-								+ texture( c3d_mapColor, texcoord1, 0.0_f ).rgb() )
+						, ( c3d_mapColor.sample( texcoord0, 0.0_f ).rgb()
+								+ c3d_mapColor.sample( texcoord1, 0.0_f ).rgb() )
 							* ( 1.0_f / 2.0_f ) );
 
 					texcoord0 = vtx_texture + dir * ( 0.0_f / 3.0_f - 0.5_f );
@@ -140,8 +140,8 @@ namespace fxaa
 
 					auto rgbB = writer.declLocale( "rgbB"
 						, ( rgbA * 1.0_f / 2.0_f )
-							+ ( texture( c3d_mapColor, texcoord0, 0.0_f ).rgb()
-									+ texture( c3d_mapColor, texcoord1, 0.0_f ).rgb() )
+							+ ( c3d_mapColor.sample( texcoord0, 0.0_f ).rgb()
+									+ c3d_mapColor.sample( texcoord1, 0.0_f ).rgb() )
 								* ( 1.0_f / 4.0_f ) );
 					auto lumaB = writer.declLocale( "lumaB"
 						, dot( rgbB, luma ) );

@@ -93,15 +93,15 @@ namespace smaa
 						// Velocity is assumed to be calculated for motion blur, so we need to
 						// inverse it for reprojection:
 						auto velocity = writer.declLocale( "velocity"
-							, -texture( c3d_velocityTex, texcoord ).rg() );
+							, -c3d_velocityTex.sample( texcoord ).rg() );
 
 						// Fetch current pixel:
 						auto current = writer.declLocale( "current"
-							, texture( currentColorTex, texcoord ) );
+							, currentColorTex.sample( texcoord ) );
 
 						// Reproject current coordinates and fetch previous pixel:
 						auto previous = writer.declLocale( "previous"
-							, texture( previousColorTex, texcoord + velocity ) );
+							, previousColorTex.sample( texcoord + velocity ) );
 
 						// Attenuate the previous pixel if the velocity is different:
 						auto delta = writer.declLocale( "delta"
@@ -116,9 +116,9 @@ namespace smaa
 					{
 						// Just blend the pixels:
 						auto current = writer.declLocale( "current"
-							, texture( currentColorTex, texcoord ) );
+							, currentColorTex.sample( texcoord ) );
 						auto previous = writer.declLocale( "previous"
-							, texture( previousColorTex, texcoord ) );
+							, previousColorTex.sample( texcoord ) );
 						writer.returnStmt( mix( current, previous, vec4( 0.5_f ) ) );
 					}
 				}

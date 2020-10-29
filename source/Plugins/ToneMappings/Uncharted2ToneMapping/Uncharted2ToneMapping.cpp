@@ -84,7 +84,7 @@ namespace Uncharted2
 			, [&]()
 			{
 				auto hdrColor = writer.declLocale( "hdrColor"
-					, texture( c3d_mapHdr, vtx_texture ).rgb() );
+					, c3d_mapHdr.sample( vtx_texture ).rgb() );
 				hdrColor *= vec3( Float( ExposureBias ) ); // Hardcoded Exposure Adjustment.
 
 				auto current = writer.declLocale( "current"

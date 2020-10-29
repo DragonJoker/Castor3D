@@ -104,7 +104,7 @@ namespace castor3d
 			writer.implementFunction< Void >( "main"
 				, [&]()
 				{
-					pxl_fragColor = reconstructCSZ( texelFetch( c3d_mapDepth, ivec2( in.fragCoord.xy() ), 0_i ).r()
+					pxl_fragColor = reconstructCSZ( c3d_mapDepth.fetch( ivec2( in.fragCoord.xy() ), 0_i ).r()
 						, c3d_clipInfo );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -134,8 +134,7 @@ namespace castor3d
 						, ivec2( in.fragCoord.xy() ) );
 
 					// Rotated grid subsampling to avoid XY directional bias or Z precision bias while downsampling.
-					pxl_fragColor = texelFetch( c3d_mapDepth
-						, clamp( ssPosition * 2 + ivec2( ssPosition.y() & 1, ssPosition.x() & 1 )
+					pxl_fragColor = c3d_mapDepth.fetch( clamp( ssPosition * 2 + ivec2( ssPosition.y() & 1, ssPosition.x() & 1 )
 							, ivec2( 0_i, 0_i )
 							, c3d_textureSize - ivec2( 1_i, 1_i ) )
 						, c3d_previousLevel ).r();

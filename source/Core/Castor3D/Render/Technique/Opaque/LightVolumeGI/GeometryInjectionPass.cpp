@@ -120,8 +120,8 @@ namespace castor3d
 							, cascadeIndex ) );
 
 					outLightPos = light.m_direction;
-					outRsmPos = texelFetch( c3d_rsmPositionMap, rsmCoords, 0_i ).rgb();
-					outRsmNormal = texelFetch( c3d_rsmNormalMap, rsmCoords, 0_i ).rgb();
+					outRsmPos = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
+					outRsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
 					auto viewPos = writer.declLocale( "viewPos"
 						, c3d_lightView * vec4( outRsmPos, 1.0 ) );
 					outSurfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvTexelAreaModifier;
@@ -200,8 +200,8 @@ namespace castor3d
 							, c3d_lightIndex ) );
 
 					outLightPos = light.m_position;
-					outRsmPos = texelFetch( c3d_rsmPositionMap, rsmCoords, 0_i ).rgb();
-					outRsmNormal = texelFetch( c3d_rsmNormalMap, rsmCoords, 0_i ).rgb();
+					outRsmPos = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
+					outRsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
 					auto viewPos = writer.declLocale( "viewPos"
 						, c3d_lightView * vec4( outRsmPos, 1.0 ) );
 					outSurfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvTexelAreaModifier;
@@ -280,8 +280,8 @@ namespace castor3d
 							, c3d_lightIndex ) );
 
 					outLightPos = light.m_position;
-					outRsmPos = texelFetch( c3d_rsmPositionMap, rsmCoords, 0_i ).rgb();
-					outRsmNormal = texelFetch( c3d_rsmNormalMap, rsmCoords, 0_i ).rgb();
+					outRsmPos = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
+					outRsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
 					outSurfelArea = calculateSurfelAreaLightViewM( outLightPos ) * c3d_lpvTexelAreaModifier;
 
 					outVolumeCellIndex = convertPointToGridIndex( outRsmPos );

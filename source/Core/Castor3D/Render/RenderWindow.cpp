@@ -779,7 +779,7 @@ namespace castor3d
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					pxl_fragColor = vec4( texture( c3d_mapResult, vtx_texture ).xyz(), 1.0_f );
+					pxl_fragColor = vec4( c3d_mapResult.sample( vtx_texture ).xyz(), 1.0_f );
 				} );
 			pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}

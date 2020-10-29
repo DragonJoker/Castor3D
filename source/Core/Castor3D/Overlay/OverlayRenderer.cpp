@@ -1019,7 +1019,7 @@ namespace castor3d
 
 					if ( textOverlay )
 					{
-						alpha *= texture( c3d_mapText, vtx_text, 0.0_f );
+						alpha *= c3d_mapText.sample( vtx_text, 0.0_f );
 					}
 
 					if ( hasTexture )

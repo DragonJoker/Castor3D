@@ -69,7 +69,7 @@ namespace Bloom
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					pxl_fragColor = vec4( texture( c3d_mapColor, vtx_texture, 0.0_f ).xyz(), 1.0_f );
+					pxl_fragColor = vec4( c3d_mapColor.sample( vtx_texture, 0.0_f ).xyz(), 1.0_f );
 					auto maxComponent = writer.declLocale( "maxComponent"
 						, max( pxl_fragColor.r(), pxl_fragColor.g() ) );
 					maxComponent = max( maxComponent, pxl_fragColor.b() );

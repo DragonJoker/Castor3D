@@ -156,7 +156,7 @@ namespace castor3d
 					auto texCoord = writer.declLocale( "texCoord"
 						, vtx_texture );
 					auto depth = writer.declLocale( "depth"
-						, textureLod( c3d_mapDepth, texCoord, 0.0_f ).x() );
+						, c3d_mapDepth.lod( texCoord, 0.0_f ).x() );
 
 					IF( writer, depth == 1.0_f )
 					{
@@ -165,7 +165,7 @@ namespace castor3d
 					FI;
 
 					auto data1 = writer.declLocale( "data1"
-						, textureLod( c3d_mapData1, texCoord, 0.0_f ) );
+						, c3d_mapData1.lod( texCoord, 0.0_f ) );
 					auto wsPosition = writer.declLocale( "wsPosition"
 						, utils.calcWSPosition( texCoord, depth, c3d_mtxInvViewProj ) );
 					auto wsNormal = writer.declLocale( "wsNormal"
@@ -190,30 +190,30 @@ namespace castor3d
 					lpvCellCoords3 /= gridSize;
 					auto lpvIntensity3 = writer.declLocale( "lpvIntensity3"
 						, vec3(
-							dot( SHintensity, texture( c3d_lpvAccumulatorR3, lpvCellCoords3 ) ),
-							dot( SHintensity, texture( c3d_lpvAccumulatorG3, lpvCellCoords3 ) ),
-							dot( SHintensity, texture( c3d_lpvAccumulatorB3, lpvCellCoords3 ) ) ) );
+							dot( SHintensity, c3d_lpvAccumulatorR3.sample( lpvCellCoords3 ) ),
+							dot( SHintensity, c3d_lpvAccumulatorG3.sample( lpvCellCoords3 ) ),
+							dot( SHintensity, c3d_lpvAccumulatorB3.sample( lpvCellCoords3 ) ) ) );
 
 					lpvCellCoords2 /= gridSize;
 					auto lpvIntensity2 = writer.declLocale( "lpvIntensity2"
 						, vec3(
-							dot( SHintensity, texture( c3d_lpvAccumulatorR2, lpvCellCoords2 ) ),
-							dot( SHintensity, texture( c3d_lpvAccumulatorG2, lpvCellCoords2 ) ),
-							dot( SHintensity, texture( c3d_lpvAccumulatorB2, lpvCellCoords2 ) ) ) );
+							dot( SHintensity, c3d_lpvAccumulatorR2.sample( lpvCellCoords2 ) ),
+							dot( SHintensity, c3d_lpvAccumulatorG2.sample( lpvCellCoords2 ) ),
+							dot( SHintensity, c3d_lpvAccumulatorB2.sample( lpvCellCoords2 ) ) ) );
 
 					lpvCellCoords1 /= gridSize;
 					auto lpvIntensity1 = writer.declLocale( "lpvIntensity1"
 						, vec3(
-							dot( SHintensity, texture( c3d_lpvAccumulatorR1, lpvCellCoords1 ) ),
-							dot( SHintensity, texture( c3d_lpvAccumulatorG1, lpvCellCoords1 ) ),
-							dot( SHintensity, texture( c3d_lpvAccumulatorB1, lpvCellCoords1 ) ) ) );
+							dot( SHintensity, c3d_lpvAccumulatorR1.sample( lpvCellCoords1 ) ),
+							dot( SHintensity, c3d_lpvAccumulatorG1.sample( lpvCellCoords1 ) ),
+							dot( SHintensity, c3d_lpvAccumulatorB1.sample( lpvCellCoords1 ) ) ) );
 
 					lpvCellCoords0 /= gridSize;
 					auto lpvIntensity0 = writer.declLocale( "lpvIntensity0"
 						, vec3(
-							dot( SHintensity, texture( c3d_lpvAccumulatorR0, lpvCellCoords0 ) ),
-							dot( SHintensity, texture( c3d_lpvAccumulatorG0, lpvCellCoords0 ) ),
-							dot( SHintensity, texture( c3d_lpvAccumulatorB0, lpvCellCoords0 ) ) ) );
+							dot( SHintensity, c3d_lpvAccumulatorR0.sample( lpvCellCoords0 ) ),
+							dot( SHintensity, c3d_lpvAccumulatorG0.sample( lpvCellCoords0 ) ),
+							dot( SHintensity, c3d_lpvAccumulatorB0.sample( lpvCellCoords0 ) ) ) );
 
 					auto lpvIntensity = writer.declLocale( "lpvIntensity"
 						, lpvIntensity0 + lpvIntensity1 + lpvIntensity2 + lpvIntensity3 );
