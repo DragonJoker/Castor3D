@@ -240,7 +240,7 @@ namespace castor3d
 
 			for ( auto light : makeArrayView( dirty.begin(), end ) )
 			{
-				light->update();
+				light->update( updater );
 			}
 		}
 	}

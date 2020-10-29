@@ -185,6 +185,7 @@ namespace castor3d
 		auto & scene = *updater.scene;
 		auto & camera = *updater.camera;
 		m_opaquePass.update( updater );
+		m_lightingPass->update( updater );
 		m_resolve->update( updater );
 
 		if ( m_ssaoConfig.enabled )

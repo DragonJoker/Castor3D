@@ -83,19 +83,18 @@ namespace castor3d
 		~LightingPass();
 		/**
 		 *\~english
-		 *\brief		Updates opaque pass.
-		 *\param[out]	info	Receives the render informations.
-		 *\param[in]	scene	The rendered scene.
-		 *\param[in]	camera	The viewer camera.
-		 *\param[in]	jitter	The jittering value.
+		 *\brief		Updates the lighting pass, CPU wise.
 		 *\~french
-		 *\brief		Met à jour la passe opaque.
-		 *\param[out]	info	Reçoit les informations de rendu.
-		 *\param[in]	scene	La scène rendue.
-		 *\param[in]	camera	La caméra par laquelle la scène est rendue.
-		 *\param[in]	jitter	La valeur de jittering.
+		 *\brief		Met à jour la passe d'éclairage, a niveau CPU.
 		 */
 		void update( CpuUpdater & updater );
+		/**
+		 *\~english
+		 *\brief		Updates the lighting pass, GPU wise.
+		 *\~french
+		 *\brief		Met à jour la passe d'éclairage, a niveau GPU.
+		 */
+		void update( GpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Renders the light passes on currently bound framebuffer.
@@ -130,7 +129,7 @@ namespace castor3d
 		}
 
 	private:
-		void doUpdateLightPasses( CpuUpdater & updater
+		void doUpdateLightPasses( GpuUpdater & updater
 			, LightType lightType );
 		ashes::Semaphore const & doRenderLights( Scene const & scene
 			, Camera const & camera

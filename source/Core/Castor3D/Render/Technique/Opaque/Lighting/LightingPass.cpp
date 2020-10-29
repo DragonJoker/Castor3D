@@ -613,9 +613,13 @@ namespace castor3d
 
 	void LightingPass::update( CpuUpdater & updater )
 	{
+		m_active.clear();
+	}
+
+	void LightingPass::update( GpuUpdater & updater )
+	{
 		auto & scene = *updater.camera->getScene();
 		auto & cache = scene.getLightCache();
-		m_active.clear();
 
 		if ( !cache.isEmpty() )
 		{
@@ -706,7 +710,7 @@ namespace castor3d
 		}
 	}
 
-	void LightingPass::doUpdateLightPasses( CpuUpdater & updater
+	void LightingPass::doUpdateLightPasses( GpuUpdater & updater
 		, LightType lightType )
 	{
 		auto & camera = *updater.camera;

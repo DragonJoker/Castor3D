@@ -44,10 +44,12 @@ namespace castor3d
 	{
 	}
 
-	void Light::update()
+	void Light::update( CpuUpdater & updater )
 	{
 		m_category->update();
 		m_dirty = false;
+		m_currentGlobalIllumination = m_globalIllumination;
+		m_currentShadowCaster = m_shadowCaster;
 	}
 
 	void Light::bind( Point4f * buffer )const
