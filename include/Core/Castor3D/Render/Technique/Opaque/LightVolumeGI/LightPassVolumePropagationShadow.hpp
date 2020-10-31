@@ -40,7 +40,6 @@ namespace castor3d
 		using my_pass_type = typename my_traits::light_pass_type;
 		using my_shadow_pass_type = typename my_traits::shadow_pass_type;
 
-		static constexpr uint32_t GridSize = 32u;
 		static constexpr uint32_t MaxPropagationSteps = 8u;
 
 	public:
@@ -74,15 +73,15 @@ namespace castor3d
 			, m_lpResult{ lpResult }
 			, m_gpInfoUbo{ gpInfoUbo }
 			, m_lpvConfigUbo{ device }
-			, m_injection{ engine, device, this->getName() + "Injection", GridSize }
+			, m_injection{ engine, device, this->getName() + "Injection", engine.getLpvGridSize() }
 			, m_geometry{ ( GeometryVolumesT
-				? GeometryInjectionPass::createResult( engine, device, this->getName(), 0u , GridSize )
+				? GeometryInjectionPass::createResult( engine, device, this->getName(), 0u , engine.getLpvGridSize() )
 				: TextureUnit{ engine } ) }
-			, m_accumulation{ engine, device, this->getName() + "Accumulation", GridSize }
+			, m_accumulation{ engine, device, this->getName() + "Accumulation", engine.getLpvGridSize() }
 			, m_propagate
 			{
-				LightVolumePassResult{ engine, device, this->getName() + "Propagate0", GridSize },
-				LightVolumePassResult{ engine, device, this->getName() + "Propagate1", GridSize },
+				LightVolumePassResult{ engine, device, this->getName() + "Propagate0", engine.getLpvGridSize() },
+				LightVolumePassResult{ engine, device, this->getName() + "Propagate1", engine.getLpvGridSize() },
 			}
 			, m_aabb{ lightCache.getScene()->getBoundingBox() }
 		{
@@ -104,7 +103,7 @@ namespace castor3d
 				, m_gpInfoUbo
 				, m_lpvConfigUbo
 				, m_injection
-				, GridSize
+				, this->m_engine.getLpvGridSize()
 				, cascadeIndex );
 			m_lightVolumeGIPasses = { std::make_unique< LightVolumeGIPass >( this->m_engine
 					, this->m_device
@@ -130,7 +129,7 @@ namespace castor3d
 					, this->getName()
 					, cuT( "NoOcc" )
 					, false
-					, GridSize
+					, this->m_engine.getLpvGridSize()
 					, BlendMode::eAdditive )
 				, std::make_unique< LightPropagationPass >( this->m_device
 					, this->getName()
@@ -138,7 +137,7 @@ namespace castor3d
 						? castor::String{ cuT( "OccBlend" ) }
 						: castor::String{ cuT( "NoOccBlend" ) } )
 					, GeometryVolumesT
-					, GridSize
+					, this->m_engine.getLpvGridSize()
 					, BlendMode::eAdditive ) };
 			TextureUnit * geometry{ nullptr };
 
@@ -153,7 +152,7 @@ namespace castor3d
 					, m_gpInfoUbo
 					, m_lpvConfigUbo
 					, m_geometry
-					, GridSize
+					, this->m_engine.getLpvGridSize()
 					, cascadeIndex );
 				geometry = &m_geometry;
 			}
@@ -308,7 +307,7 @@ namespace castor3d
 					, m_aabb
 					, m_cameraPos
 					, m_cameraDir
-					, GridSize );
+					, this->m_engine.getLpvGridSize() );
 			}
 		}
 

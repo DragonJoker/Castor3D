@@ -142,6 +142,12 @@ namespace castor3d
 			result = file.writeText( m_tabs + cuT( "debug_overlays true\n" ) ) > 0;
 			castor::TextWriter< Scene >::checkError( result, "Debug overlays" );
 		}
+		
+		if ( scene.getEngine()->getLpvGridSize() != 32u )
+		{
+			result = file.writeText( m_tabs + cuT( "lpv_grid_size " ) + castor::string::toString( scene.getEngine()->getLpvGridSize() ) + cuT( "\n" ) ) > 0;
+			castor::TextWriter< Scene >::checkError( result, "LPV grid size" );
+		}
 
 		if ( result )
 		{

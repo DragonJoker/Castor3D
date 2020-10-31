@@ -424,6 +424,11 @@ namespace castor3d
 		{
 			return *m_logger;
 		}
+
+		inline uint32_t getLpvGridSize()
+		{
+			return m_lpvGridSize;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -442,6 +447,11 @@ namespace castor3d
 		inline void setMaterialsType( MaterialType type )
 		{
 			m_materialType = type;
+		}
+
+		inline void setLpvGridSize( uint32_t size )
+		{
+			m_lpvGridSize = size;
 		}
 		/**@}*/
 
@@ -488,6 +498,7 @@ namespace castor3d
 		bool m_enableValidation{ false };
 		bool m_enableApiTrace{ false };
 		RenderDepthQuadSPtr m_renderDepth;
+		uint32_t m_lpvGridSize{ 32u };
 	};
 }
 

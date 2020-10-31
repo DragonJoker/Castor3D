@@ -335,6 +335,23 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
+	CU_ImplementAttributeParser( parserRootLpvGridSize )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing [count] parameter." ) );
+		}
+		else
+		{
+			uint32_t count;
+			params[0]->get( count );
+			parsingContext->m_pParser->getEngine()->setLpvGridSize( count );
+		}
+	}
+	CU_EndAttribute()
+
 	CU_ImplementAttributeParser( parserWindowRenderTarget )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );

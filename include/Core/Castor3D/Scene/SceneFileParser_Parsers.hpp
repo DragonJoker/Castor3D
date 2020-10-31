@@ -20,6 +20,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserRootWindow )
 	CU_DeclareAttributeParser( parserRootMaterials )
 	CU_DeclareAttributeParser( parserInclude )
+	CU_DeclareAttributeParser( parserRootLpvGridSize )
 
 	//Window parsers
 	CU_DeclareAttributeParser( parserWindowRenderTarget )
