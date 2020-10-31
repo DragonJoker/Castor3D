@@ -106,9 +106,9 @@ namespace castor3d
 
 			/*Spherical harmonics coefficients - precomputed*/
 			auto SH_C0 = writer.declConstant( "SH_C0"
-				, 0.282094792_f );// 1 / (2 * sqrt(pi))
+				, Float{ 1.0f / ( 2.0f * sqrt( castor::Pi< float > ) ) } );
 			auto SH_C1 = writer.declConstant( "SH_C1"
-				, 0.488602512_f ); // sqrt(3 / pi) / 2
+				, Float{ sqrt( 3.0f / castor::Pi< float > ) / 2.0f } );
 
 			// Shader inputs
 			UBO_GPINFO( writer, GpInfoUboIdx, 0u );

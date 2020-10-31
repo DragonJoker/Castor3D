@@ -482,30 +482,33 @@ namespace castor3d
 		switch ( colourBlendMode )
 		{
 		case BlendMode::eNoBlend:
+			attach.colorBlendOp = VK_BLEND_OP_ADD;
 			attach.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
 			attach.dstColorBlendFactor = VK_BLEND_FACTOR_ZERO;
 			break;
 
 		case BlendMode::eAdditive:
-			attach.blendEnable = true;
+			attach.blendEnable = VK_TRUE;
+			attach.colorBlendOp = VK_BLEND_OP_ADD;
 			attach.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
 			attach.dstColorBlendFactor = VK_BLEND_FACTOR_ONE;
 			break;
 
 		case BlendMode::eMultiplicative:
-			attach.blendEnable = true;
+			attach.blendEnable = VK_TRUE;
+			attach.colorBlendOp = VK_BLEND_OP_ADD;
 			attach.srcColorBlendFactor = VK_BLEND_FACTOR_ZERO;
 			attach.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR;
 			break;
 
 		case BlendMode::eInterpolative:
-			attach.blendEnable = true;
+			attach.blendEnable = VK_TRUE;
 			attach.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_COLOR;
 			attach.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR;
 			break;
 
 		default:
-			attach.blendEnable = true;
+			attach.blendEnable = VK_TRUE;
 			attach.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_COLOR;
 			attach.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR;
 			break;
@@ -514,18 +517,21 @@ namespace castor3d
 		switch ( alphaBlendMode )
 		{
 		case BlendMode::eNoBlend:
+			attach.alphaBlendOp = VK_BLEND_OP_ADD;
 			attach.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
 			attach.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
 			break;
 
 		case BlendMode::eAdditive:
-			attach.blendEnable = true;
+			attach.blendEnable = VK_TRUE;
+			attach.alphaBlendOp = VK_BLEND_OP_ADD;
 			attach.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
 			attach.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
 			break;
 
 		case BlendMode::eMultiplicative:
-			attach.blendEnable = true;
+			attach.blendEnable = VK_TRUE;
+			attach.alphaBlendOp = VK_BLEND_OP_ADD;
 			attach.srcAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
 			attach.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
 			attach.srcColorBlendFactor = VK_BLEND_FACTOR_ZERO;
@@ -533,7 +539,8 @@ namespace castor3d
 			break;
 
 		case BlendMode::eInterpolative:
-			attach.blendEnable = true;
+			attach.blendEnable = VK_TRUE;
+			attach.alphaBlendOp = VK_BLEND_OP_ADD;
 			attach.srcAlphaBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
 			attach.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
 			attach.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
@@ -541,7 +548,8 @@ namespace castor3d
 			break;
 
 		default:
-			attach.blendEnable = true;
+			attach.blendEnable = VK_TRUE;
+			attach.alphaBlendOp = VK_BLEND_OP_ADD;
 			attach.srcAlphaBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
 			attach.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
 			attach.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;

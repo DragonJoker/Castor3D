@@ -129,6 +129,15 @@ namespace castor3d
 	*/
 	template< LightType LtType, bool GeometryVolumesT >
 	class LightPassLayeredVolumePropagationShadow;
+	/**
+	*\~english
+	*\brief
+	*	Light propagation data.
+	*\~french
+	*\brief
+	*	Données de light propagation.
+	*/
+	struct LpvConfig;
 
 	//!\~english	The directional lights light pass with shadows and LPV.
 	//!\~french		La passe d'éclairage avec ombres et LPV pour les lumières directionnelles.

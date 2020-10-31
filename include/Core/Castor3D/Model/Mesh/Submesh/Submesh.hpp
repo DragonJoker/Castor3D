@@ -380,6 +380,7 @@ namespace castor3d
 		ashes::PipelineVertexInputStateCreateInfoPtr m_vertexLayout;
 		ashes::BufferPtr< uint32_t > m_indexBuffer;
 		mutable std::map< MaterialSPtr, GeometryBuffers > m_geometryBuffers;
+		bool m_needsNormalsCompute{ false };
 
 		friend class BinaryWriter< Submesh >;
 		friend class BinaryParser< Submesh >;

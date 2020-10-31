@@ -89,7 +89,7 @@ namespace castor3d
 	*\brief
 	*	Données de light propagation.
 	*/
-	struct LpvConfiguration
+	struct LpvConfigUboConfiguration
 	{
 		castor::Matrix4x4f lightView;
 		castor::Point4f minVolumeCorner;

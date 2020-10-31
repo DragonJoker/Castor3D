@@ -13,12 +13,14 @@ namespace castor3d
 {
 	struct CommandsSemaphore
 	{
-		CommandsSemaphore( ashes::CommandBufferPtr commandBuffer = nullptr
-			, ashes::SemaphorePtr semaphore = nullptr )
-			: commandBuffer{ std::move( commandBuffer ) }
-			, semaphore{ std::move( semaphore ) }
-		{
-		}
+		C3D_API CommandsSemaphore( RenderDevice const & device
+			, castor::String const & name );
+		C3D_API CommandsSemaphore( ashes::CommandBufferPtr commandBuffer = nullptr
+			, ashes::SemaphorePtr semaphore = nullptr );
+
+		C3D_API void submit( ashes::Queue const & queue )const;
+		C3D_API ashes::Semaphore const & submit( ashes::Queue const & queue
+			, ashes::Semaphore const & toWait )const;
 
 		ashes::CommandBufferPtr commandBuffer;
 		ashes::SemaphorePtr semaphore;

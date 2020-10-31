@@ -44,13 +44,23 @@ namespace castor3d
 {
 	namespace
 	{
-		enum Idx
+		enum InIdx
 		{
 			LIUboIdx,
 			RLpvGridIdx,
 			GLpvGridIdx,
 			BLpvGridIdx,
 			GpGridIdx,
+		};
+		
+		enum OutIdx
+		{
+			RLpvAccumulatorIdx,
+			GLpvAccumulatorIdx,
+			BLpvAccumulatorIdx,
+			RLpvNextStepIdx,
+			GLpvNextStepIdx,
+			BLpvNextStepIdx,
 		};
 
 		std::unique_ptr< ast::Shader > getVertexProgram()
@@ -112,15 +122,15 @@ namespace castor3d
 
 			/*Spherical harmonics coefficients - precomputed*/
 			auto SH_C0 = writer.declConstant( "SH_C0"
-				, 0.282094792_f );// 1 / (2 * sqrt(pi))
+				, Float{ 1.0f / ( 2.0f * sqrt( castor::Pi< float > ) ) } );
 			auto SH_C1 = writer.declConstant( "SH_C1"
-				, 0.488602512_f ); // sqrt(3 / pi) / 2
+				, Float{ sqrt( 3.0f / castor::Pi< float > ) / 2.0f } );
 
 			/*Cosine lobe coeff*/
 			auto SH_cosLobe_C0 = writer.declConstant( "SH_cosLobe_C0"
-				, 0.886226925_f );// sqrt(pi) / 2
+				, Float{ sqrt( castor::Pi< float > ) / 2.0f } );
 			auto SH_cosLobe_C1 = writer.declConstant( "SH_cosLobe_C1"
-				, 1.02332671_f ); // sqrt(pi / 3)
+				, Float{ sqrt( castor::Pi< float > ) / 3.0f } );
 
 			auto directFaceSubtendedSolidAngle = writer.declConstant( "directFaceSubtendedSolidAngle"
 				, 0.12753712_f ); // 0.4006696846f / Pi
@@ -130,27 +140,27 @@ namespace castor3d
 				, std::vector< IVec3 >
 				{
 					//+Z
-					ivec3( 0_i, 0, 1 ),
+					ivec3( 0_i, 0_i, 1_i ),
 					//-Z
-					ivec3( 0_i, 0, -1 ),
+					ivec3( 0_i, 0_i, -1_i ),
 					//+X
-					ivec3( 1_i, 0, 0 ),
+					ivec3( 1_i, 0_i, 0_i ),
 					//-X
-					ivec3( -1_i, 0, 0 ),
+					ivec3( -1_i, 0_i, 0_i ),
 					//+Y
-					ivec3( 0_i, 1, 0 ),
+					ivec3( 0_i, 1_i, 0_i ),
 					//-Y
-					ivec3( 0_i, -1, 0 ),
+					ivec3( 0_i, -1_i, 0_i ),
 				} );
 
 			//Sides of the cell - right, top, left, bottom
 			auto cellSides = writer.declConstantArray( "cellSides"
 				, std::vector< IVec2 >
 				{
-					ivec2( 1_i, 0 ),
-					ivec2( 0_i, 1 ),
-					ivec2( -1_i, 0 ),
-					ivec2( 0_i, -1 ),
+					ivec2( 1_i, 0_i ),
+					ivec2( 0_i, 1_i ),
+					ivec2( -1_i, 0_i ),
+					ivec2( 0_i, -1_i ),
 				} );
 
 			UBO_LPVCONFIG( writer, LIUboIdx, 0u );
@@ -159,13 +169,12 @@ namespace castor3d
 			auto c3d_lpvGridB = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Grid" ), BLpvGridIdx, 0u );
 			auto c3d_geometryVolume = writer.declSampledImage< FImg3DRgba16 >( "c3d_geometryVolume", GpGridIdx, 0u, occlusion );
 
-			uint32_t index = 0u;
-			auto outLpvAccumulatorR = writer.declOutput< Vec4 >( "outLpvAccumulatorR", index++ );
-			auto outLpvAccumulatorG = writer.declOutput< Vec4 >( "outLpvAccumulatorG", index++ );
-			auto outLpvAccumulatorB = writer.declOutput< Vec4 >( "outLpvAccumulatorB", index++ );
-			auto outLpvNextStepR = writer.declOutput< Vec4 >( "outLpvNextStepR", index++ );
-			auto outLpvNextStepG = writer.declOutput< Vec4 >( "outLpvNextStepG", index++ );
-			auto outLpvNextStepB = writer.declOutput< Vec4 >( "outLpvNextStepB", index++ );
+			auto outLpvAccumulatorR = writer.declOutput< Vec4 >( "outLpvAccumulatorR", RLpvAccumulatorIdx );
+			auto outLpvAccumulatorG = writer.declOutput< Vec4 >( "outLpvAccumulatorG", GLpvAccumulatorIdx );
+			auto outLpvAccumulatorB = writer.declOutput< Vec4 >( "outLpvAccumulatorB", BLpvAccumulatorIdx );
+			auto outLpvNextStepR = writer.declOutput< Vec4 >( "outLpvNextStepR", RLpvNextStepIdx );
+			auto outLpvNextStepG = writer.declOutput< Vec4 >( "outLpvNextStepG", GLpvNextStepIdx );
+			auto outLpvNextStepB = writer.declOutput< Vec4 >( "outLpvNextStepB", BLpvNextStepIdx );
 
 			auto inCellIndex = writer.declInput< IVec3 >( "inCellIndex", 0u );
 			auto in = writer.getIn();
@@ -197,8 +206,8 @@ namespace castor3d
 				, [&]( Int index
 					, IVec3 orientation )
 				{
-					const float smallComponent = 0.4472135f; // 1 / sqrt(5)
-					const float bigComponent = 0.894427f; // 2 / sqrt(5)
+					const float smallComponent = 1.0f / sqrt( 5.0f );
+					const float bigComponent = 2.0f / sqrt( 5.0f );
 
 					auto tmp = writer.declLocale( "tmp"
 						, vec3( writer.cast< Float >( cellSides[index].x() ) * smallComponent
@@ -335,74 +344,81 @@ namespace castor3d
 
 		ashes::RenderPassPtr doCreateRenderPass( castor::String const & name
 			, RenderDevice const & device
-			, VkFormat format )
+			, VkFormat format
+			, BlendMode blendMode )
 		{
+			auto loadOp = ( blendMode == BlendMode::eNoBlend
+				? VK_ATTACHMENT_LOAD_OP_CLEAR
+				: VK_ATTACHMENT_LOAD_OP_LOAD );
+			auto srcImageLayout = ( blendMode == BlendMode::eNoBlend
+				? VK_IMAGE_LAYOUT_UNDEFINED
+				: VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 			ashes::VkAttachmentDescriptionArray attaches
 			{
 				{
 					0u,
 					format,
 					VK_SAMPLE_COUNT_1_BIT,
-					VK_ATTACHMENT_LOAD_OP_CLEAR,
+					loadOp,
 					VK_ATTACHMENT_STORE_OP_STORE,
 					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					VK_IMAGE_LAYOUT_UNDEFINED,
+					srcImageLayout,
 					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 				},
 				{
 					0u,
 					format,
 					VK_SAMPLE_COUNT_1_BIT,
-					VK_ATTACHMENT_LOAD_OP_CLEAR,
+					loadOp,
 					VK_ATTACHMENT_STORE_OP_STORE,
 					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					VK_IMAGE_LAYOUT_UNDEFINED,
+					srcImageLayout,
 					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 				},
 				{
 					0u,
 					format,
 					VK_SAMPLE_COUNT_1_BIT,
-					VK_ATTACHMENT_LOAD_OP_CLEAR,
+					loadOp,
 					VK_ATTACHMENT_STORE_OP_STORE,
 					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					VK_IMAGE_LAYOUT_UNDEFINED,
+					srcImageLayout,
 					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 				},
 				{
 					0u,
 					format,
 					VK_SAMPLE_COUNT_1_BIT,
-					VK_ATTACHMENT_LOAD_OP_CLEAR,
+					loadOp,
 					VK_ATTACHMENT_STORE_OP_STORE,
 					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					VK_IMAGE_LAYOUT_UNDEFINED,
+					srcImageLayout,
 					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 				},
 				{
 					0u,
 					format,
 					VK_SAMPLE_COUNT_1_BIT,
-					VK_ATTACHMENT_LOAD_OP_CLEAR,
+					loadOp,
 					VK_ATTACHMENT_STORE_OP_STORE,
 					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					VK_IMAGE_LAYOUT_UNDEFINED,
+					srcImageLayout,
 					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 				},
 				{
 					0u,
 					format,
 					VK_SAMPLE_COUNT_1_BIT,
-					VK_ATTACHMENT_LOAD_OP_CLEAR,
+					loadOp,
 					VK_ATTACHMENT_STORE_OP_STORE,
 					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					VK_IMAGE_LAYOUT_UNDEFINED,
+					srcImageLayout,
 					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 				},
 			};
@@ -413,12 +429,12 @@ namespace castor3d
 					VK_PIPELINE_BIND_POINT_GRAPHICS,
 					{},
 					{
-						{ 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
-						{ 1u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
-						{ 2u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
-						{ 3u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
-						{ 4u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
-						{ 5u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
+						{ RLpvAccumulatorIdx, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
+						{ GLpvAccumulatorIdx, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
+						{ BLpvAccumulatorIdx, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
+						{ RLpvNextStepIdx, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
+						{ GLpvNextStepIdx, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
+						{ BLpvNextStepIdx, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
 					},
 					{},
 					ashes::nullopt,
@@ -505,7 +521,8 @@ namespace castor3d
 			, getPixelProgram( occlusion ) }
 		, m_renderPass{ doCreateRenderPass( getName()
 			, m_device
-			, getFormat( LpvTexture::eR ) ) }
+			, getFormat( LpvTexture::eR )
+			, blendMode ) }
 	{
 		ashes::PipelineShaderStageCreateInfoArray shaderStages
 		{

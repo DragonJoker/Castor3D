@@ -9,6 +9,75 @@
 
 namespace castor3d
 {
+	namespace
+	{
+		bool fix( castor::Point3f & value
+			, castor::Point3f const & default )
+		{
+			bool result = false;
+
+			if ( std::isnan( value->x ) )
+			{
+				value->x = default->x;
+				result = true;
+			}
+
+			if ( std::isnan( value->y ) )
+			{
+				value->z = default->y;
+				result = true;
+			}
+
+			if ( std::isnan( value->z ) )
+			{
+				value->z = default->z;
+				result = true;
+			}
+
+			return result;
+		}
+
+		bool fixNml( castor::Point3f & value )
+		{
+			static castor::Point3f const default{ 0.0f, 1.0f, 0.0f };
+			auto result = fix( value, default );
+
+			if ( castor::point::length( value ) < std::numeric_limits< float >::epsilon() )
+			{
+				value = default;
+				result = true;
+			}
+
+			return result;
+		}
+
+		bool fixTan( castor::Point3f & value )
+		{
+			static castor::Point3f const default{ 1.0f, 0.0f, 0.0f };
+			auto result = fix( value, default );
+
+			if ( castor::point::length( value ) < std::numeric_limits< float >::epsilon() )
+			{
+				value = default;
+				result = true;
+			}
+
+			return result;
+		}
+
+		bool fixPos( castor::Point3f & value )
+		{
+			static castor::Point3f const default{ 0.0f, 0.0f, 0.0f };
+			return fix( value, default );
+		}
+
+		bool fixTex( castor::Point3f & value )
+		{
+			static castor::Point3f const default{ 0.0f, 0.0f, 0.0f };
+			return fix( value, default );
+		}
+	}
+
 	Submesh::Submesh( Mesh & mesh, uint32_t id )
 		: OwnedBy< Mesh >{ mesh }
 		, m_parentMesh{ mesh }
@@ -133,6 +202,11 @@ namespace castor3d
 
 			m_box.load( min, max );
 			m_sphere.load( m_box );
+
+			if ( m_needsNormalsCompute )
+			{
+				computeNormals( false );
+			}
 		}
 	}
 
@@ -229,13 +303,23 @@ namespace castor3d
 
 	void Submesh::addPoint( InterleavedVertex const & vertex )
 	{
-		m_points.push_back( vertex );
+		auto point = vertex;
+		m_needsNormalsCompute = fixNml( point.nml );
+		m_needsNormalsCompute = fixPos( point.pos ) || m_needsNormalsCompute;
+		m_needsNormalsCompute = fixTex( point.tex ) || m_needsNormalsCompute;
+		m_needsNormalsCompute = fixTan( point.tan ) || m_needsNormalsCompute;
+		m_points.push_back( point );
 	}
 
 	void Submesh::addPoints( InterleavedVertex const * const begin
 		, InterleavedVertex const * const end )
 	{
-		m_points.insert( m_points.end(), begin, end );
+		m_points.reserve( m_points.size() + end - begin );
+
+		for ( auto & point : castor::makeArrayView( begin, end ) )
+		{
+			addPoint( point );
+		}
 	}
 
 	void Submesh::computeNormals( bool reverted )
@@ -243,6 +327,7 @@ namespace castor3d
 		if ( m_indexMapping )
 		{
 			m_indexMapping->computeNormals( reverted );
+			m_needsNormalsCompute = false;
 		}
 	}
 

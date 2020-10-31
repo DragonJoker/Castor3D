@@ -78,7 +78,7 @@ namespace castor3d
 			auto outRsmPos = writer.declOutput< Vec3 >( "outRsmPos", index++ );
 			auto outRsmNormal = writer.declOutput< Vec3 >( "outRsmNormal", index++ );
 			auto outSurfelArea = writer.declOutput< Float >( "outSurfelArea", index++ );
-			auto outLightPos = writer.declOutput< Vec3 >( "outLightPos", index++, uint32_t( sdw::var::Flag::eFlat ) );
+			auto outLightPos = writer.declOutput< Vec3 >( "outLightPos", index++ );
 			auto out = writer.getOut();
 
 			// Utility functions
@@ -95,7 +95,7 @@ namespace castor3d
 			auto convertPointToGridIndex = writer.implementFunction< IVec3 >( "convertPointToGridIndex"
 				, [&]( Vec3 pos )
 				{
-					writer.returnStmt( ivec3( ( pos - c3d_minVolumeCorner.xyz() ) / vec3( c3d_minVolumeCorner.w() ) - vec3( 0.5_f ) ) );
+					writer.returnStmt( ivec3( ( pos - c3d_minVolumeCorner ) / vec3( c3d_cellSize ) - vec3( 0.5_f ) ) );
 				}
 				, InVec3{ writer, "pos" } );
 
@@ -119,12 +119,12 @@ namespace castor3d
 							, in.vertexIndex / rsmTexSize
 							, cascadeIndex ) );
 
-					outLightPos = light.m_direction;
 					outRsmPos = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
 					outRsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
 					auto viewPos = writer.declLocale( "viewPos"
 						, c3d_lightView * vec4( outRsmPos, 1.0 ) );
 					outSurfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvTexelAreaModifier;
+					outLightPos = light.m_direction + outRsmPos;
 
 					outVolumeCellIndex = convertPointToGridIndex( outRsmPos );
 
@@ -160,7 +160,7 @@ namespace castor3d
 			auto outRsmPos = writer.declOutput< Vec3 >( "outRsmPos", index++ );
 			auto outRsmNormal = writer.declOutput< Vec3 >( "outRsmNormal", index++ );
 			auto outSurfelArea = writer.declOutput< Float >( "outSurfelArea", index++ );
-			auto outLightPos = writer.declOutput< Vec3 >( "outLightPos", index++, uint32_t( sdw::var::Flag::eFlat ) );
+			auto outLightPos = writer.declOutput< Vec3 >( "outLightPos", index++ );
 			auto out = writer.getOut();
 
 			// Utility functions
@@ -177,7 +177,7 @@ namespace castor3d
 			auto convertPointToGridIndex = writer.implementFunction< IVec3 >( "convertPointToGridIndex"
 				, [&]( Vec3 pos )
 				{
-					writer.returnStmt( ivec3( ( pos - c3d_minVolumeCorner.xyz() ) / vec3( c3d_minVolumeCorner.w() ) - vec3( 0.5_f ) ) );
+					writer.returnStmt( ivec3( ( pos - c3d_minVolumeCorner ) / vec3( c3d_cellSize ) - vec3( 0.5_f ) ) );
 				}
 				, InVec3{ writer, "pos" } );
 
@@ -240,7 +240,7 @@ namespace castor3d
 			auto outRsmPos = writer.declOutput< Vec3 >( "outRsmPos", index++ );
 			auto outRsmNormal = writer.declOutput< Vec3 >( "outRsmNormal", index++ );
 			auto outSurfelArea = writer.declOutput< Float >( "outSurfelArea", index++ );
-			auto outLightPos = writer.declOutput< Vec3 >( "outLightPos", index++, uint32_t( sdw::var::Flag::eFlat ) );
+			auto outLightPos = writer.declOutput< Vec3 >( "outLightPos", index++ );
 			auto out = writer.getOut();
 
 			// Utility functions
@@ -257,7 +257,7 @@ namespace castor3d
 			auto convertPointToGridIndex = writer.implementFunction< IVec3 >( "convertPointToGridIndex"
 				, [&]( Vec3 pos )
 				{
-					writer.returnStmt( ivec3( ( pos - c3d_minVolumeCorner.xyz() ) / vec3( c3d_minVolumeCorner.w() ) - vec3( 0.5_f ) ) );
+					writer.returnStmt( ivec3( ( pos - c3d_minVolumeCorner ) / vec3( c3d_cellSize ) - vec3( 0.5_f ) ) );
 				}
 				, InVec3{ writer, "pos" } );
 
@@ -332,16 +332,17 @@ namespace castor3d
 			auto outRsmPos = writer.declOutput< Vec3 >( "outRsmPos", index++ );
 			auto outRsmNormal = writer.declOutput< Vec3 >( "outRsmNormal", index++ );
 			auto outSurfelArea = writer.declOutput< Float >( "outSurfelArea", index++ );
-			auto outLightPos = writer.declOutput< Vec3 >( "outLightPos", index++, uint32_t( sdw::var::Flag::eFlat ) );
+			auto outLightPos = writer.declOutput< Vec3 >( "outLightPos", index++ );
 			auto out = writer.getOut();
 
 			writer.implementFunction< Void >( "main"
 				, [&]()
 				{
 					out.vtx.position = in.vtx[0].position;
+					out.layer = inVolumeCellIndex[0].z();
 					out.vtx.pointSize = 1.0f;
-					outVolumeCellIndex = inVolumeCellIndex[0];
 
+					outVolumeCellIndex = inVolumeCellIndex[0];
 					outRsmPos = inRsmPos[0];
 					outRsmNormal = inRsmNormal[0];
 					outSurfelArea = inSurfelArea[0];
@@ -400,70 +401,32 @@ namespace castor3d
 				, [&]( Vec3 dir
 					, Vec3 normal )
 				{
-					writer.returnStmt( clamp( ( inSurfelArea * clamp( dot( normal, dir ), 0.0_f, 1.0_f ) ) / ( c3d_minVolumeCorner.w() * c3d_minVolumeCorner.w() )
+					writer.returnStmt( clamp( ( inSurfelArea * clamp( dot( normal, dir ), 0.0_f, 1.0_f ) ) / ( c3d_cellSize * c3d_cellSize )
 						, 0.0_f
 						, 1.0_f ) ); //It is probability so 0.0 - 1.0
 				}
 				, InVec3{ writer, "dir" }
 				, InVec3{ writer, "normal" } );
 			
-			auto isInside = writer.implementFunction< Boolean >( "isInside"
-				, [&]( IVec3 i )
-				{
-					IF( writer, i.x() < 0 || i.x() > writer.cast< Int >( c3d_gridWidth ) )
-					{
-						writer.returnStmt( Boolean{ false } );
-					}
-					FI;
-					IF( writer, i.y() < 0 || i.y() > writer.cast< Int >( c3d_gridHeight ) )
-					{
-						writer.returnStmt( Boolean{ false } );
-					}
-					FI;
-					IF( writer, i.z() < 0 || i.z() > writer.cast< Int >( c3d_gridDepth ) )
-					{
-						writer.returnStmt( Boolean{ false } );
-					}
-					FI;
-					writer.returnStmt( Boolean{ true } );
-				}
-				, InIVec3{ writer, "i" } );
-
 			writer.implementFunction< Void >( "main"
 				, [&]()
 				{
 					//Discard pixels with really small normal
-					IF( writer, length( inRsmNormal ) < 0.01_f
-						|| !isInside( inVolumeCellIndex ) )
+					IF( writer, length( inRsmNormal ) < 0.01_f )
 					{
 						writer.discard();
 					}
 					FI;
 
-					if ( lightType == LightType::eDirectional )
-					{
-						auto lightDir = writer.declLocale( "lightDir"
-							, normalize( -inLightPos ) );
-						auto blockingPotential = writer.declLocale( "blockingPotential"
-							, calculateBlockingPotential( lightDir, inRsmNormal ) );
+					auto lightDir = writer.declLocale( "lightDir"
+						, normalize( inLightPos - inRsmPos ) );
+					auto blockingPotential = writer.declLocale( "blockingPotential"
+						, calculateBlockingPotential( lightDir, inRsmNormal ) );
 
-						auto SHCoeffGV = writer.declLocale( "SHCoeffGV"
-							, evalCosineLobeToDir( inRsmNormal ) * blockingPotential );
+					auto SHCoeffGV = writer.declLocale( "SHCoeffGV"
+						, evalCosineLobeToDir( inRsmNormal ) * blockingPotential );
 
-						outGeometryVolume = SHCoeffGV;
-					}
-					else
-					{
-						auto lightDir = writer.declLocale( "lightDir"
-							, normalize( inLightPos - inRsmPos ) );
-						auto blockingPotential = writer.declLocale( "blockingPotential"
-							, calculateBlockingPotential( lightDir, inRsmNormal ) );
-
-						auto SHCoeffGV = writer.declLocale( "SHCoeffGV"
-							, evalCosineLobeToDir( inRsmNormal ) * blockingPotential );
-
-						outGeometryVolume = SHCoeffGV;
-					}
+					outGeometryVolume = SHCoeffGV;
 				} );
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -612,7 +575,7 @@ namespace castor3d
 			, ashes::DescriptorSetPool & descriptorSetPool
 			, LightCache const & lightCache
 			, ShadowMapResult const & smResult
-			, UniformBufferOffsetT< LpvConfiguration > const & ubo
+			, UniformBufferOffsetT< LpvConfigUboConfiguration > const & ubo
 			, GpInfoUbo const & gpInfoUbo )
 		{
 			auto & descriptorSetLayout = descriptorSetPool.getLayout();

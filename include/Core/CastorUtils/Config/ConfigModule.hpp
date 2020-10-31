@@ -14,6 +14,7 @@ See LICENSE file in root folder
 
 #include <chrono>
 #include <string>
+#include <string_view>
 #include <iostream>
 #include <sstream>
 
@@ -33,6 +34,7 @@ namespace castor
 	using xchar = char;
 	using ychar = wchar_t;
 	using String = std::basic_string< xchar >;
+	using StringView = std::basic_string_view< xchar >;
 	using StringStream = std::basic_stringstream< xchar >;
 	using OutputStringStream = std::basic_ostringstream< xchar >;
 	using InputStringStream = std::basic_istringstream< xchar >;

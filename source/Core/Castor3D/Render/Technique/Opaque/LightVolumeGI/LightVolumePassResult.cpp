@@ -54,9 +54,9 @@ namespace castor3d
 		static std::array< VkClearValue, size_t( LpvTexture::eCount ) > Values
 		{
 			{
-				opaqueBlackClearColor,
-				opaqueBlackClearColor,
-				opaqueBlackClearColor
+				transparentBlackClearColor,
+				transparentBlackClearColor,
+				transparentBlackClearColor,
 			}
 		};
 		return Values[size_t( texture )];

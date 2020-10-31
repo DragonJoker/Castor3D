@@ -122,7 +122,6 @@ namespace castor3d
 				LpvConfigUbo{ device, 3u },
 			}
 			, m_aabb{ lightCache.getScene()->getBoundingBox() }
-			, m_configurations{ LpvConfiguration{}, LpvConfiguration{}, LpvConfiguration{}, LpvConfiguration{} }
 		{
 		}
 
@@ -161,7 +160,7 @@ namespace castor3d
 					, "NoOcc"
 					, false
 					, GridSize
-					, BlendMode::eNoBlend )
+					, BlendMode::eAdditive )
 				, std::make_unique< LightPropagationPass >( this->m_device
 					, this->getName()
 					, ( GeometryVolumesT
@@ -169,11 +168,22 @@ namespace castor3d
 						: castor::String{ cuT( "NoOccBlend" ) } )
 					, GeometryVolumesT
 					, GridSize
-					, BlendMode::eNoBlend ) };
+					, BlendMode::eAdditive ) };
 
-			uint32_t propIndex = 0u;
 			auto & passNoOcc = *m_lightPropagationPasses[0u];
 			auto & passOcc = *m_lightPropagationPasses[1u];
+			auto clearTex = []( ashes::CommandBuffer const & cmd
+				, LightVolumePassResult & result
+				, LpvTexture tex )
+			{
+				cmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+					, VK_PIPELINE_STAGE_TRANSFER_BIT
+					, result[tex].getTexture()->getDefaultView().getSampledView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
+				cmd.clear( result[tex].getTexture()->getDefaultView().getSampledView(), getClearValue( tex ).color );
+				cmd.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+					, result[tex].getTexture()->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+			};
 
 			for ( uint32_t cascade = 0u; cascade < shader::DirectionalMaxCascadesCount; ++cascade )
 			{
@@ -206,6 +216,7 @@ namespace castor3d
 					geometry = &m_geometry[cascade];
 				}
 
+				uint32_t propIndex = 0u;
 				passNoOcc.registerPassIO( nullptr
 					, m_injection[cascade]
 					, m_lpvConfigUbos[cascade]
@@ -221,6 +232,32 @@ namespace castor3d
 						, m_propagate[1u - propIndex] );
 					propIndex = 1u - propIndex;
 				}
+
+				m_clearCommands[cascade] = CommandsSemaphore{ this->m_device
+					, this->getName() + cuT( "Clear" ) + castor::string::toString( cascade ) };
+				auto & clearCommands = m_clearCommands[cascade];
+				ashes::CommandBuffer & cmd = *clearCommands.commandBuffer;
+				cmd.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
+				cmd.beginDebugBlock(
+					{
+						"Lighting - " + getName() + " - Clear " + castor::string::toString( cascade ),
+						castor3d::makeFloatArray( m_engine.getNextRainbowColour() ),
+					} );
+
+				auto & tex = m_accumulation[cascade];
+				clearTex( cmd, tex, LpvTexture::eR );
+				clearTex( cmd, tex, LpvTexture::eG );
+				clearTex( cmd, tex, LpvTexture::eB );
+
+				for ( auto & tex : m_propagate )
+				{
+					clearTex( cmd, tex, LpvTexture::eR );
+					clearTex( cmd, tex, LpvTexture::eG );
+					clearTex( cmd, tex, LpvTexture::eB );
+				}
+
+				cmd.endDebugBlock();
+				cmd.end();
 			}
 
 			passNoOcc.initialisePasses();
@@ -230,6 +267,7 @@ namespace castor3d
 
 		void cleanup()override
 		{
+			m_clearCommands = { CommandsSemaphore{}, CommandsSemaphore{}, CommandsSemaphore{}, CommandsSemaphore{}, };
 			LightPassShadow< LtType >::cleanup();
 			m_lightVolumeGIPasses = {};
 			m_lightPropagationPasses = {};
@@ -259,6 +297,7 @@ namespace castor3d
 
 			for ( uint32_t cascade = 0u; cascade < shader::DirectionalMaxCascadesCount; ++cascade )
 			{
+				result = &this->m_clearCommands[cascade].submit( *this->m_device.graphicsQueue, *result );
 				result = &passNoOcc.compute( *result, cascade );
 
 				for ( uint32_t i = 1u; i < MaxPropagationSteps; ++i, ++occPassIndex )
@@ -294,21 +333,6 @@ namespace castor3d
 			{
 				m_lightVolumeGIPasses[0]->accept( visitor );
 			}
-
-			visitor.visit( this->getName()
-				, ( VK_SHADER_STAGE_GEOMETRY_BIT
-					| VK_SHADER_STAGE_VERTEX_BIT
-					| VK_SHADER_STAGE_FRAGMENT_BIT )
-				, cuT( "LPV Config" )
-				, cuT( "Indirect Attenuation" )
-				, m_configuration.indirectAttenuation );
-			visitor.visit( this->getName()
-				, ( VK_SHADER_STAGE_GEOMETRY_BIT
-					| VK_SHADER_STAGE_VERTEX_BIT
-					| VK_SHADER_STAGE_FRAGMENT_BIT )
-				, cuT( "LPV Config" )
-				, cuT( "Texel Area Modifier" )
-				, m_configuration.texelAreaModifier );
 		}
 
 	protected:
@@ -333,9 +357,11 @@ namespace castor3d
 			camera.getParent()->getDerivedOrientation().transform( camDir, camDir );
 
 			if ( m_aabb != aabb
-				|| light.hasChanged()
 				|| m_cameraPos != camPos
-				|| m_cameraDir != camDir )
+				|| m_cameraDir != camDir
+				|| light.hasChanged()
+				|| light.getLpvConfig().indirectAttenuation.isDirty()
+				|| light.getLpvConfig().texelAreaModifier.isDirty() )
 			{
 				auto & directional = *light.getDirectionalLight();
 				m_lightIndex = light.getShadowMapIndex();
@@ -350,37 +376,12 @@ namespace castor3d
 
 				for ( auto i = 0u; i < shader::DirectionalMaxCascadesCount; ++i )
 				{
-					auto & configuration = m_configurations[i];
-					castor::Grid levelGrid{ grid, directional.getSplitScale( i ), i };
-					levelGrid.transform( m_cameraPos, m_cameraDir );
-
-					auto minVolumeCorner = levelGrid.getMin();
-					auto gridSize = levelGrid.getDimensions();
-					auto cellSize = levelGrid.getCellSize();
-
-					configuration.indirectAttenuation = m_configuration.indirectAttenuation;
-					configuration.texelAreaModifier = m_configuration.texelAreaModifier;
-					configuration.minVolumeCorner = castor::Point4f{ minVolumeCorner->x, minVolumeCorner->y, minVolumeCorner->z, cellSize };
-					configuration.gridSizes = castor::Point4f{ gridSize->x, gridSize->y, gridSize->z, light.getBufferIndex() };
-
-					if constexpr ( LtType == LightType::eDirectional )
-					{
-						configuration.lightView = light.getDirectionalLight()->getViewMatrix( i );
-					}
-					else if constexpr ( LtType == LightType::ePoint )
-					{
-					}
-					else if constexpr ( LtType == LightType::eSpot )
-					{
-						auto & spotLight = *light.getSpotLight();
-						configuration.lightView = spotLight.getViewMatrix();
-						auto lightFov = spotLight.getCutOff();
-						configuration.tanFovXHalf = ( lightFov * 0.5 ).tan();
-						configuration.tanFovYHalf = ( lightFov * 0.5 ).tan();
-					}
-
-					m_lpvConfigUbos[i].cpuUpdate( configuration );
-					grids[i] = levelGrid;
+					grids[i] = m_lpvConfigUbos[i].cpuUpdate( directional
+						, i
+						, grid
+						, m_aabb
+						, m_cameraPos
+						, m_cameraDir );
 				}
 
 				m_lpvConfigUbo.cpuUpdate( grids );
@@ -404,6 +405,7 @@ namespace castor3d
 		std::array< TextureUnit, shader::DirectionalMaxCascadesCount > m_geometry;
 		std::array< LightVolumePassResult, shader::DirectionalMaxCascadesCount > m_accumulation;
 		std::array< LightVolumePassResult, 2u > m_propagate;
+		std::array< CommandsSemaphore, shader::DirectionalMaxCascadesCount > m_clearCommands;
 		LightInjectionPassArray m_lightInjectionPasses;
 		GeometryInjectionPassArray m_geometryInjectionPasses;
 		LightPropagationPassArray m_lightPropagationPasses;
@@ -413,8 +415,6 @@ namespace castor3d
 		castor::Point3f m_cameraPos;
 		castor::Point3f m_cameraDir;
 		uint32_t m_lightIndex{};
-		std::array< LpvConfiguration, shader::DirectionalMaxCascadesCount > m_configurations;
-		LpvConfiguration m_configuration;
 	};
 }
 

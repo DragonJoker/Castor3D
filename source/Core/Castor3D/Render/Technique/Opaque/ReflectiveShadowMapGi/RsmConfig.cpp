@@ -16,7 +16,7 @@ namespace castor3d
 	{
 		bool result{ true };
 		log::info << m_tabs << cuT( "Writing RsmConfig" ) << std::endl;
-		result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "rsm\n" ) + m_tabs + cuT( "{\n" ) ) > 0;
+		result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "rsm_config\n" ) + m_tabs + cuT( "{\n" ) ) > 0;
 
 		if ( result )
 		{

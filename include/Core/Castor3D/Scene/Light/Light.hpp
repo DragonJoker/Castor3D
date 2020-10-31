@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "LightModule.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 
+#include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LpvConfig.hpp"
 #include "Castor3D/Render/Technique/Opaque/ReflectiveShadowMapGI/RsmConfig.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightingModule.hpp"
 #include "Castor3D/Scene/MovableObject.hpp"
@@ -246,6 +247,16 @@ namespace castor3d
 		{
 			return m_rsmConfig;
 		}
+
+		inline LpvConfig const & getLpvConfig()const
+		{
+			return m_lpvConfig;
+		}
+
+		inline LpvConfig & getLpvConfig()
+		{
+			return m_lpvConfig;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -389,6 +400,7 @@ namespace castor3d
 		std::atomic< GlobalIlluminationType > m_currentGlobalIllumination{ GlobalIlluminationType::eNone };
 		uint32_t m_bufferIndex{ 0u };
 		RsmConfig m_rsmConfig;
+		LpvConfig m_lpvConfig;
 	};
 }
 

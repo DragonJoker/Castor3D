@@ -98,9 +98,9 @@ namespace castor3d
 
 			/*Spherical harmonics coefficients - precomputed*/
 			auto SH_C0 = writer.declConstant( "SH_C0"
-				, 0.282094792_f );// 1 / (2 * sqrt(pi))
+				, Float{ 1.0f / ( 2.0f * sqrt( castor::Pi< float > ) ) } );
 			auto SH_C1 = writer.declConstant( "SH_C1"
-				, 0.488602512_f ); // sqrt(3 / pi) / 2
+				, Float{ sqrt( 3.0f / castor::Pi< float > ) / 2.0f } );
 
 			// Shader inputs
 			UBO_GPINFO( writer, GpInfoUboIdx, 0u );
@@ -159,7 +159,7 @@ namespace castor3d
 					auto lpvIntensity = writer.declLocale( "lpvIntensity"
 						, vec3( 0.0_f ) );
 					auto lpvCellCoords = writer.declLocale( "lpvCellCoords"
-						, ( wsPosition - c3d_minVolumeCorner.xyz() ) / c3d_minVolumeCorner.w() / c3d_gridSize );
+						, ( wsPosition - c3d_minVolumeCorner ) / c3d_cellSize / c3d_gridSize );
 
 					lpvIntensity = vec3(
 						dot( SHintensity, c3d_lpvAccumulatorR.sample( lpvCellCoords ) ),
