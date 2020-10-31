@@ -124,7 +124,7 @@ namespace castor3d
 					auto viewPos = writer.declLocale( "viewPos"
 						, c3d_lightView * vec4( outRsmPos, 1.0 ) );
 					outSurfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvTexelAreaModifier;
-					outLightPos = light.m_direction + outRsmPos;
+					outLightPos = outRsmPos - light.m_direction;
 
 					outVolumeCellIndex = convertPointToGridIndex( outRsmPos );
 

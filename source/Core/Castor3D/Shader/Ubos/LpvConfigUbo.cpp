@@ -59,6 +59,8 @@ namespace castor3d
 		{
 		case LightType::eDirectional:
 			configuration.lightView = light.getDirectionalLight()->getViewMatrix( 3u );
+			configuration.tanFovXHalf = 1.0f;
+			configuration.tanFovYHalf = 1.0f;
 			break;
 
 		case LightType::ePoint:
@@ -97,6 +99,8 @@ namespace castor3d
 		configuration.minVolumeCorner = castor::Point4f{ minVolumeCorner->x, minVolumeCorner->y, minVolumeCorner->z, cellSize };
 		configuration.gridSizes = castor::Point4f{ gridSize->x, gridSize->y, gridSize->z, light.getLight().getBufferIndex() };
 		configuration.lightView = light.getViewMatrix( cascadeIndex );
+		configuration.tanFovXHalf = 1.0f;
+		configuration.tanFovYHalf = 1.0f;
 
 		return levelGrid;
 	}

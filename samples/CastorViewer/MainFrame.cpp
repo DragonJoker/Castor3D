@@ -198,11 +198,6 @@ namespace CastorViewer
 					{
 						m_mainScene = window->getScene();
 
-						if ( window->isFullscreen() )
-						{
-							ShowFullScreen( true, wxFULLSCREEN_ALL );
-						}
-
 						auto size = make_wxSize( window->getRenderTarget()->getSize() );
 
 						if ( !IsMaximized() )
@@ -224,6 +219,7 @@ namespace CastorViewer
 						SetMinClientSize( size );
 
 #endif
+						toggleFullScreen( window->isFullscreen() );
 					}
 					else
 					{
