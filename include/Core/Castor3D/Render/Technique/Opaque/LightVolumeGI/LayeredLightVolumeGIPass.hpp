@@ -43,10 +43,7 @@ namespace castor3d
 			, GpInfoUbo const & gpInfo
 			, LayeredLpvConfigUbo const & lpvConfigUbo
 			, OpaquePassResult const & gpResult
-			, LightVolumePassResult const & lpResult0
-			, LightVolumePassResult const & lpResult1
-			, LightVolumePassResult const & lpResult2
-			, LightVolumePassResult const & lpResult3
+			, LightVolumePassResult const & lpvResult
 			, TextureUnit const & dst
 			, BlendMode blendMode );
 		/**
@@ -69,10 +66,7 @@ namespace castor3d
 		GpInfoUbo const & m_gpInfo;
 		LayeredLpvConfigUbo const & m_lpvConfigUbo;
 		OpaquePassResult const & m_gpResult;
-		LightVolumePassResult const & m_lpResult0;
-		LightVolumePassResult const & m_lpResult1;
-		LightVolumePassResult const & m_lpResult2;
-		LightVolumePassResult const & m_lpResult3;
+		LightVolumePassResult const & m_lpvResult;
 		TextureUnit const & m_result;
 		ShaderModule m_vertexShader;
 		ShaderModule m_pixelShader;

@@ -25,7 +25,6 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Light/DirectionalLight.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
-#include "Castor3D/Shader/Shaders/SdwModule.hpp"
 #include "Castor3D/Shader/Ubos/LpvConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/LayeredLpvConfigUbo.hpp"
 
@@ -79,49 +78,22 @@ namespace castor3d
 			, m_lpResult{ lpResult }
 			, m_gpInfoUbo{ gpInfoUbo }
 			, m_lpvConfigUbo{ device }
-			, m_injection
-			{
-				LightVolumePassResult{ engine, device, this->getName() + "Injection0", engine.getLpvGridSize() },
-				LightVolumePassResult{ engine, device, this->getName() + "Injection1", engine.getLpvGridSize() },
-				LightVolumePassResult{ engine, device, this->getName() + "Injection2", engine.getLpvGridSize() },
-				LightVolumePassResult{ engine, device, this->getName() + "Injection3", engine.getLpvGridSize() },
-			}
-			, m_geometry
-			{
-				( GeometryVolumesT
-					? GeometryInjectionPass::createResult( engine, device, this->getName(), 0u, engine.getLpvGridSize() )
-					: TextureUnit{ engine } ),
-				( GeometryVolumesT
-					? GeometryInjectionPass::createResult( engine, device, this->getName(), 1u, engine.getLpvGridSize() )
-					: TextureUnit{ engine } ),
-				( GeometryVolumesT
-					? GeometryInjectionPass::createResult( engine, device, this->getName(), 2u, engine.getLpvGridSize() )
-					: TextureUnit{ engine } ),
-				( GeometryVolumesT
-					? GeometryInjectionPass::createResult( engine, device, this->getName(), 3u, engine.getLpvGridSize() )
-					: TextureUnit{ engine } ),
-			}
-			, m_accumulation
-			{
-				LightVolumePassResult{ engine, device, this->getName() + "Accumulation0", engine.getLpvGridSize() },
-				LightVolumePassResult{ engine, device, this->getName() + "Accumulation1", engine.getLpvGridSize() },
-				LightVolumePassResult{ engine, device, this->getName() + "Accumulation2", engine.getLpvGridSize() },
-				LightVolumePassResult{ engine, device, this->getName() + "Accumulation3", engine.getLpvGridSize() },
-			}
+			, m_accumulation{ engine, device, this->getName() + "Accumulation", engine.getLpvGridSize() }
 			, m_propagate
 			{
 				LightVolumePassResult{ engine, device, this->getName() + "Propagate0", engine.getLpvGridSize() },
 				LightVolumePassResult{ engine, device, this->getName() + "Propagate1", engine.getLpvGridSize() },
 			}
-			, m_lpvConfigUbos
-			{
-				LpvConfigUbo{ device, 0u },
-				LpvConfigUbo{ device, 1u },
-				LpvConfigUbo{ device, 2u },
-				LpvConfigUbo{ device, 3u },
-			}
 			, m_aabb{ lightCache.getScene()->getBoundingBox() }
 		{
+			for ( uint32_t cascade = 0u; cascade < shader::DirectionalMaxCascadesCount; ++cascade )
+			{
+				m_injection.emplace_back( engine, device, this->getName() + "Injection" + castor::string::toString( cascade ), engine.getLpvGridSize() );
+				m_geometry.emplace_back( GeometryVolumesT
+					? GeometryInjectionPass::createResult( engine, device, this->getName(), cascade, engine.getLpvGridSize() )
+					: TextureUnit{ engine } );
+				m_lpvConfigUbos.emplace_back( device, cascade );
+			}
 		}
 
 		void initialise( Scene const & scene
@@ -136,10 +108,7 @@ namespace castor3d
 					, m_gpInfoUbo
 					, m_lpvConfigUbo
 					, m_gpResult
-					, m_accumulation[0u]
-					, m_accumulation[1u]
-					, m_accumulation[2u]
-					, m_accumulation[3u]
+					, m_accumulation
 					, m_lpResult[LpTexture::eIndirectDiffuse]
 					, BlendMode::eNoBlend )
 				, std::make_unique< LayeredLightVolumeGIPass >( this->m_engine
@@ -148,10 +117,7 @@ namespace castor3d
 					, m_gpInfoUbo
 					, m_lpvConfigUbo
 					, m_gpResult
-					, m_accumulation[0u]
-					, m_accumulation[1u]
-					, m_accumulation[2u]
-					, m_accumulation[3u]
+					, m_accumulation
 					, m_lpResult[LpTexture::eIndirectDiffuse]
 					, BlendMode::eAdditive ) };
 			m_lightPropagationPasses = { std::make_unique< LightPropagationPass >( this->m_device
@@ -183,6 +149,22 @@ namespace castor3d
 					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 					, result[tex].getTexture()->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
 			};
+
+			m_clearCommand = CommandsSemaphore{ this->m_device
+				, this->getName() + cuT( "ClearAccumulation" ) };
+			ashes::CommandBuffer & cmd = *m_clearCommand.commandBuffer;
+			cmd.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
+			cmd.beginDebugBlock(
+				{
+					"Lighting - " + getName() + " - Clear Accumulation",
+					castor3d::makeFloatArray( m_engine.getNextRainbowColour() ),
+				} );
+			clearTex( cmd, m_accumulation, LpvTexture::eR );
+			clearTex( cmd, m_accumulation, LpvTexture::eG );
+			clearTex( cmd, m_accumulation, LpvTexture::eB );
+
+			cmd.endDebugBlock();
+			cmd.end();
 
 			for ( uint32_t cascade = 0u; cascade < shader::DirectionalMaxCascadesCount; ++cascade )
 			{
@@ -219,7 +201,7 @@ namespace castor3d
 				passNoOcc.registerPassIO( nullptr
 					, m_injection[cascade]
 					, m_lpvConfigUbos[cascade]
-					, m_accumulation[cascade]
+					, m_accumulation
 					, m_propagate[propIndex] );
 
 				for ( uint32_t i = 1u; i < MaxPropagationSteps; ++i )
@@ -227,13 +209,13 @@ namespace castor3d
 					passOcc.registerPassIO( geometry
 						, m_propagate[propIndex]
 						, m_lpvConfigUbos[cascade]
-						, m_accumulation[cascade]
+						, m_accumulation
 						, m_propagate[1u - propIndex] );
 					propIndex = 1u - propIndex;
 				}
 
-				m_clearCommands[cascade] = CommandsSemaphore{ this->m_device
-					, this->getName() + cuT( "Clear" ) + castor::string::toString( cascade ) };
+				m_clearCommands.emplace_back( this->m_device
+					, this->getName() + cuT( "Clear" ) + castor::string::toString( cascade ) );
 				auto & clearCommands = m_clearCommands[cascade];
 				ashes::CommandBuffer & cmd = *clearCommands.commandBuffer;
 				cmd.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
@@ -242,11 +224,6 @@ namespace castor3d
 						"Lighting - " + getName() + " - Clear " + castor::string::toString( cascade ),
 						castor3d::makeFloatArray( m_engine.getNextRainbowColour() ),
 					} );
-
-				auto & tex = m_accumulation[cascade];
-				clearTex( cmd, tex, LpvTexture::eR );
-				clearTex( cmd, tex, LpvTexture::eG );
-				clearTex( cmd, tex, LpvTexture::eB );
 
 				for ( auto & tex : m_propagate )
 				{
@@ -266,7 +243,8 @@ namespace castor3d
 
 		void cleanup()override
 		{
-			m_clearCommands = { CommandsSemaphore{}, CommandsSemaphore{}, CommandsSemaphore{}, CommandsSemaphore{}, };
+			m_clearCommands.clear();
+			m_clearCommand = {};
 			LightPassShadow< LtType >::cleanup();
 			m_lightVolumeGIPasses = {};
 			m_lightPropagationPasses = {};
@@ -290,6 +268,7 @@ namespace castor3d
 				result = &pass.compute( *result );
 			}
 
+			result = &this->m_clearCommand.submit( *this->m_device.graphicsQueue, *result );
 			auto & passNoOcc = *m_lightPropagationPasses[0u];
 			auto & passOcc = *m_lightPropagationPasses[1u];
 			uint32_t occPassIndex = 0u;
@@ -399,12 +378,13 @@ namespace castor3d
 		LightPassResult const & m_lpResult;
 		GpInfoUbo const & m_gpInfoUbo;
 		LayeredLpvConfigUbo m_lpvConfigUbo;
-		std::array< LpvConfigUbo, shader::DirectionalMaxCascadesCount > m_lpvConfigUbos;
-		std::array< LightVolumePassResult, shader::DirectionalMaxCascadesCount > m_injection;
-		std::array< TextureUnit, shader::DirectionalMaxCascadesCount > m_geometry;
-		std::array< LightVolumePassResult, shader::DirectionalMaxCascadesCount > m_accumulation;
+		std::vector< LpvConfigUbo > m_lpvConfigUbos;
+		std::vector< LightVolumePassResult > m_injection;
+		std::vector< TextureUnit > m_geometry;
+		LightVolumePassResult m_accumulation;
 		std::array< LightVolumePassResult, 2u > m_propagate;
-		std::array< CommandsSemaphore, shader::DirectionalMaxCascadesCount > m_clearCommands;
+		CommandsSemaphore m_clearCommand;
+		std::vector< CommandsSemaphore > m_clearCommands;
 		LightInjectionPassArray m_lightInjectionPasses;
 		GeometryInjectionPassArray m_geometryInjectionPasses;
 		LightPropagationPassArray m_lightPropagationPasses;

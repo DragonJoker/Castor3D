@@ -60,22 +60,16 @@ namespace castor3d
 {
 	namespace
 	{
-		static constexpr uint32_t GpInfoUboIdx = 0u;
-		static constexpr uint32_t LIUboIdx = 1u;
-		static constexpr uint32_t DepthMapIdx = 2u;
-		static constexpr uint32_t Data1MapIdx = 3u;
-		static constexpr uint32_t RLpvAccumIdx0 = 4u;
-		static constexpr uint32_t GLpvAccumIdx0 = 5u;
-		static constexpr uint32_t BLpvAccumIdx0 = 6u;
-		static constexpr uint32_t RLpvAccumIdx1 = 7u;
-		static constexpr uint32_t GLpvAccumIdx1 = 8u;
-		static constexpr uint32_t BLpvAccumIdx1 = 9u;
-		static constexpr uint32_t RLpvAccumIdx2 = 10u;
-		static constexpr uint32_t GLpvAccumIdx2 = 11u;
-		static constexpr uint32_t BLpvAccumIdx2 = 12u;
-		static constexpr uint32_t RLpvAccumIdx3 = 13u;
-		static constexpr uint32_t GLpvAccumIdx3 = 14u;
-		static constexpr uint32_t BLpvAccumIdx3 = 15u;
+		enum InIds
+		{
+			GpInfoUboIdx,
+			LIUboIdx,
+			DepthMapIdx,
+			Data1MapIdx,
+			RLpvAccumIdx,
+			GLpvAccumIdx,
+			BLpvAccumIdx,
+		};
 
 		std::unique_ptr< ast::Shader > getVertexProgram()
 		{
@@ -115,18 +109,9 @@ namespace castor3d
 			UBO_LAYERED_LPVCONFIG( writer, LIUboIdx, 0u );
 			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), DepthMapIdx, 0u );
 			auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), Data1MapIdx, 0u );
-			auto c3d_lpvAccumulatorR0 = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator" ) + "0", RLpvAccumIdx0, 0u );
-			auto c3d_lpvAccumulatorG0 = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator" ) + "0", GLpvAccumIdx0, 0u );
-			auto c3d_lpvAccumulatorB0 = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator" ) + "0", BLpvAccumIdx0, 0u );
-			auto c3d_lpvAccumulatorR1 = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator" ) + "1", RLpvAccumIdx1, 0u );
-			auto c3d_lpvAccumulatorG1 = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator" ) + "1", GLpvAccumIdx1, 0u );
-			auto c3d_lpvAccumulatorB1 = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator" ) + "1", BLpvAccumIdx1, 0u );
-			auto c3d_lpvAccumulatorR2 = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator" ) + "2", RLpvAccumIdx2, 0u );
-			auto c3d_lpvAccumulatorG2 = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator" ) + "2", GLpvAccumIdx2, 0u );
-			auto c3d_lpvAccumulatorB2 = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator" ) + "2", BLpvAccumIdx2, 0u );
-			auto c3d_lpvAccumulatorR3 = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator" ) + "3", RLpvAccumIdx3, 0u );
-			auto c3d_lpvAccumulatorG3 = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator" ) + "3", GLpvAccumIdx3, 0u );
-			auto c3d_lpvAccumulatorB3 = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator" ) + "3", BLpvAccumIdx3, 0u );
+			auto c3d_lpvAccumulatorR = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator" ), RLpvAccumIdx, 0u );
+			auto c3d_lpvAccumulatorG = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator" ), GLpvAccumIdx, 0u );
+			auto c3d_lpvAccumulatorB = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator" ), BLpvAccumIdx, 0u );
 			auto in = writer.getIn();
 
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
@@ -175,48 +160,19 @@ namespace castor3d
 						, evalSH_direct( -wsNormal ) );
 
 					// l3 is the finest
-					auto lpvCellCoords3 = writer.declLocale( "lpvCellCoords3"
+					auto lpvCellCoords = writer.declLocale( "lpvCellCoords"
 						, ( wsPosition - c3d_allMinVolumeCorners[3].xyz() ) / c3d_allCellSizes.w() );
-					auto lpvCellCoords2 = writer.declLocale( "lpvCellCoords2"
-						, ( wsPosition - c3d_allMinVolumeCorners[2].xyz() ) / c3d_allCellSizes.z() );
-					auto lpvCellCoords1 = writer.declLocale( "lpvCellCoords1"
-						, ( wsPosition - c3d_allMinVolumeCorners[1].xyz() ) / c3d_allCellSizes.y() );
-					auto lpvCellCoords0 = writer.declLocale( "lpvCellCoords0"
-						, ( wsPosition - c3d_allMinVolumeCorners[0].xyz() ) / c3d_allCellSizes.x() );
 
 					auto gridSize = writer.declLocale( "gridSize"
 						, vec3( c3d_gridSize.xyz() ) );
 
-					lpvCellCoords3 /= gridSize;
-					auto lpvIntensity3 = writer.declLocale( "lpvIntensity3"
-						, vec3(
-							dot( SHintensity, c3d_lpvAccumulatorR3.sample( lpvCellCoords3 ) ),
-							dot( SHintensity, c3d_lpvAccumulatorG3.sample( lpvCellCoords3 ) ),
-							dot( SHintensity, c3d_lpvAccumulatorB3.sample( lpvCellCoords3 ) ) ) );
-
-					lpvCellCoords2 /= gridSize;
-					auto lpvIntensity2 = writer.declLocale( "lpvIntensity2"
-						, vec3(
-							dot( SHintensity, c3d_lpvAccumulatorR2.sample( lpvCellCoords2 ) ),
-							dot( SHintensity, c3d_lpvAccumulatorG2.sample( lpvCellCoords2 ) ),
-							dot( SHintensity, c3d_lpvAccumulatorB2.sample( lpvCellCoords2 ) ) ) );
-
-					lpvCellCoords1 /= gridSize;
-					auto lpvIntensity1 = writer.declLocale( "lpvIntensity1"
-						, vec3(
-							dot( SHintensity, c3d_lpvAccumulatorR1.sample( lpvCellCoords1 ) ),
-							dot( SHintensity, c3d_lpvAccumulatorG1.sample( lpvCellCoords1 ) ),
-							dot( SHintensity, c3d_lpvAccumulatorB1.sample( lpvCellCoords1 ) ) ) );
-
-					lpvCellCoords0 /= gridSize;
-					auto lpvIntensity0 = writer.declLocale( "lpvIntensity0"
-						, vec3(
-							dot( SHintensity, c3d_lpvAccumulatorR0.sample( lpvCellCoords0 ) ),
-							dot( SHintensity, c3d_lpvAccumulatorG0.sample( lpvCellCoords0 ) ),
-							dot( SHintensity, c3d_lpvAccumulatorB0.sample( lpvCellCoords0 ) ) ) );
-
+					lpvCellCoords /= gridSize;
 					auto lpvIntensity = writer.declLocale( "lpvIntensity"
-						, lpvIntensity0 + lpvIntensity1 + lpvIntensity2 + lpvIntensity3 );
+						, vec3(
+							dot( SHintensity, c3d_lpvAccumulatorR.sample( lpvCellCoords ) ),
+							dot( SHintensity, c3d_lpvAccumulatorG.sample( lpvCellCoords ) ),
+							dot( SHintensity, c3d_lpvAccumulatorB.sample( lpvCellCoords ) ) ) );
+
 					auto finalLPVRadiance = writer.declLocale( "finalLPVRadiance"
 						, ( c3d_config.x() / Float{ castor::Pi< float > } ) * max( lpvIntensity, vec3( 0.0_f ) ) );
 					pxl_lpvGI = finalLPVRadiance;
@@ -337,15 +293,6 @@ namespace castor3d
 				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
 				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
 				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
-				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
-				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
-				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
-				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
-				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
-				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
-				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
-				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
-				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
 			};
 		}
 	}
@@ -358,10 +305,7 @@ namespace castor3d
 		, GpInfoUbo const & gpInfo
 		, LayeredLpvConfigUbo const & lpvConfigUbo
 		, OpaquePassResult const & gpResult
-		, LightVolumePassResult const & lpResult0
-		, LightVolumePassResult const & lpResult1
-		, LightVolumePassResult const & lpResult2
-		, LightVolumePassResult const & lpResult3
+		, LightVolumePassResult const & lpvResult
 		, TextureUnit const & dst
 		, BlendMode blendMode )
 		: RenderQuad{ device
@@ -374,10 +318,7 @@ namespace castor3d
 		, m_gpInfo{ gpInfo }
 		, m_lpvConfigUbo{ lpvConfigUbo }
 		, m_gpResult{ gpResult }
-		, m_lpResult0{ lpResult0 }
-		, m_lpResult1{ lpResult1 }
-		, m_lpResult2{ lpResult2 }
-		, m_lpResult3{ lpResult3 }
+		, m_lpvResult{ lpvResult }
 		, m_result{ dst }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram() }
@@ -391,6 +332,7 @@ namespace castor3d
 		ashes::PipelineShaderStageCreateInfoArray shaderStages;
 		shaderStages.push_back( makeShaderState( m_device, m_vertexShader ) );
 		shaderStages.push_back( makeShaderState( m_device, m_pixelShader ) );
+
 		createPipelineAndPass( { m_result.getTexture()->getDimensions().width, m_result.getTexture()->getDimensions().height }
 			, {}
 			, shaderStages
@@ -399,47 +341,20 @@ namespace castor3d
 				makeDescriptorWrite( m_gpInfo.getUbo(), GpInfoUboIdx ),
 				makeDescriptorWrite( m_lpvConfigUbo.getUbo(), LIUboIdx ),
 				makeDescriptorWrite( m_gpResult[DsTexture::eDepth].getTexture()->getDefaultView().getSampledView()
-					, m_gpResult[DsTexture::eDepth].getSampler()->getSampler()
+				, m_gpResult[DsTexture::eDepth].getSampler()->getSampler()
 					, DepthMapIdx ),
 				makeDescriptorWrite( m_gpResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView()
 					, m_gpResult[DsTexture::eData1].getSampler()->getSampler()
 					, Data1MapIdx ),
-				makeDescriptorWrite( m_lpResult0[LpvTexture::eR].getTexture()->getDefaultView().getSampledView()
-					, m_lpResult0[LpvTexture::eR].getSampler()->getSampler()
-					, RLpvAccumIdx0 ),
-				makeDescriptorWrite( m_lpResult0[LpvTexture::eG].getTexture()->getDefaultView().getSampledView()
-					, m_lpResult0[LpvTexture::eG].getSampler()->getSampler()
-					, GLpvAccumIdx0 ),
-				makeDescriptorWrite( m_lpResult0[LpvTexture::eB].getTexture()->getDefaultView().getSampledView()
-					, m_lpResult0[LpvTexture::eB].getSampler()->getSampler()
-					, BLpvAccumIdx0 ),
-				makeDescriptorWrite( m_lpResult1[LpvTexture::eR].getTexture()->getDefaultView().getSampledView()
-					, m_lpResult1[LpvTexture::eR].getSampler()->getSampler()
-					, RLpvAccumIdx1 ),
-				makeDescriptorWrite( m_lpResult1[LpvTexture::eG].getTexture()->getDefaultView().getSampledView()
-					, m_lpResult1[LpvTexture::eG].getSampler()->getSampler()
-					, GLpvAccumIdx1 ),
-				makeDescriptorWrite( m_lpResult1[LpvTexture::eB].getTexture()->getDefaultView().getSampledView()
-					, m_lpResult1[LpvTexture::eB].getSampler()->getSampler()
-					, BLpvAccumIdx1 ),
-				makeDescriptorWrite( m_lpResult2[LpvTexture::eR].getTexture()->getDefaultView().getSampledView()
-					, m_lpResult2[LpvTexture::eR].getSampler()->getSampler()
-					, RLpvAccumIdx2 ),
-				makeDescriptorWrite( m_lpResult2[LpvTexture::eG].getTexture()->getDefaultView().getSampledView()
-					, m_lpResult2[LpvTexture::eG].getSampler()->getSampler()
-					, GLpvAccumIdx2 ),
-				makeDescriptorWrite( m_lpResult2[LpvTexture::eB].getTexture()->getDefaultView().getSampledView()
-					, m_lpResult2[LpvTexture::eB].getSampler()->getSampler()
-					, BLpvAccumIdx2 ),
-				makeDescriptorWrite( m_lpResult3[LpvTexture::eR].getTexture()->getDefaultView().getSampledView()
-					, m_lpResult3[LpvTexture::eR].getSampler()->getSampler()
-					, RLpvAccumIdx3 ),
-				makeDescriptorWrite( m_lpResult3[LpvTexture::eG].getTexture()->getDefaultView().getSampledView()
-					, m_lpResult3[LpvTexture::eG].getSampler()->getSampler()
-					, GLpvAccumIdx3 ),
-				makeDescriptorWrite( m_lpResult3[LpvTexture::eB].getTexture()->getDefaultView().getSampledView()
-					, m_lpResult3[LpvTexture::eB].getSampler()->getSampler()
-					, BLpvAccumIdx3 ),
+				makeDescriptorWrite( m_lpvResult[LpvTexture::eR].getTexture()->getDefaultView().getSampledView()
+					, m_lpvResult[LpvTexture::eR].getSampler()->getSampler()
+					, RLpvAccumIdx ),
+				makeDescriptorWrite( m_lpvResult[LpvTexture::eG].getTexture()->getDefaultView().getSampledView()
+					, m_lpvResult[LpvTexture::eG].getSampler()->getSampler()
+					, GLpvAccumIdx ),
+				makeDescriptorWrite( m_lpvResult[LpvTexture::eB].getTexture()->getDefaultView().getSampledView()
+					, m_lpvResult[LpvTexture::eB].getSampler()->getSampler()
+					, BLpvAccumIdx ),
 			} );
 		m_commands = getCommands( *m_timer, 0u );
 	}

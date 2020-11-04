@@ -232,9 +232,9 @@ namespace castor3d
 			float occlusionAmplifier = 1.0f;
 
 			auto propagate = writer.implementFunction< Void >( "propagate"
-				, [&]( Vec4 R
-					, Vec4 G
-					, Vec4 B )
+				, [&]( Vec4 shR
+					, Vec4 shG
+					, Vec4 shB )
 				{
 					FOR( writer, Int, neighbour, 0, neighbour < 6, neighbour++ )
 					{
@@ -274,9 +274,9 @@ namespace castor3d
 							, evalCosineLobeToDir_direct( vec3( mainDirection ) ) );
 						auto mainDirectionSH = writer.declLocale( "mainDirectionSH"
 							, evalSH_direct( vec3( mainDirection ) ) );
-						R += occludedDirectFaceContribution * max( 0.0_f, dot( RSHcoeffsNeighbour, mainDirectionSH ) ) * mainDirectionCosineLobeSH;
-						G += occludedDirectFaceContribution * max( 0.0_f, dot( GSHcoeffsNeighbour, mainDirectionSH ) ) * mainDirectionCosineLobeSH;
-						B += occludedDirectFaceContribution * max( 0.0_f, dot( BSHcoeffsNeighbour, mainDirectionSH ) ) * mainDirectionCosineLobeSH;
+						shR += occludedDirectFaceContribution * max( 0.0_f, dot( RSHcoeffsNeighbour, mainDirectionSH ) ) * mainDirectionCosineLobeSH;
+						shG += occludedDirectFaceContribution * max( 0.0_f, dot( GSHcoeffsNeighbour, mainDirectionSH ) ) * mainDirectionCosineLobeSH;
+						shB += occludedDirectFaceContribution * max( 0.0_f, dot( BSHcoeffsNeighbour, mainDirectionSH ) ) * mainDirectionCosineLobeSH;
 
 						//Now we have contribution for the neighbour's cell in the main direction -> need to do reprojection 
 						//Reprojection will be made only onto 4 faces (acctually we need to take into account 5 faces but we already have the one in the main direction)
@@ -307,36 +307,36 @@ namespace castor3d
 							auto evalDirectionSH = writer.declLocale( "evalDirectionSH"
 								, evalSH_direct( evalDirection ) );
 
-							R += occludedSideFaceContribution * max( 0.0_f, dot( RSHcoeffsNeighbour, evalDirectionSH ) ) * reprojDirectionCosineLobeSH;
-							G += occludedSideFaceContribution * max( 0.0_f, dot( GSHcoeffsNeighbour, evalDirectionSH ) ) * reprojDirectionCosineLobeSH;
-							B += occludedSideFaceContribution * max( 0.0_f, dot( BSHcoeffsNeighbour, evalDirectionSH ) ) * reprojDirectionCosineLobeSH;
+							shR += occludedSideFaceContribution * max( 0.0_f, dot( RSHcoeffsNeighbour, evalDirectionSH ) ) * reprojDirectionCosineLobeSH;
+							shG += occludedSideFaceContribution * max( 0.0_f, dot( GSHcoeffsNeighbour, evalDirectionSH ) ) * reprojDirectionCosineLobeSH;
+							shB += occludedSideFaceContribution * max( 0.0_f, dot( BSHcoeffsNeighbour, evalDirectionSH ) ) * reprojDirectionCosineLobeSH;
 						}
 						ROF;
 					}
 					ROF;
 				}
-				, OutVec4{ writer, "R" }
-				, OutVec4{ writer, "G" }
-				, OutVec4{ writer, "B" } );
+				, OutVec4{ writer, "shR" }
+				, OutVec4{ writer, "shG" }
+				, OutVec4{ writer, "shB" } );
 
 			writer.implementMain( [&]()
 				{
-					auto R = writer.declLocale( "R"
+					auto shR = writer.declLocale( "shR"
 						, vec4( 0.0_f ) );
-					auto G = writer.declLocale( "G"
+					auto shG = writer.declLocale( "shG"
 						, vec4( 0.0_f ) );
-					auto B = writer.declLocale( "B"
+					auto shB = writer.declLocale( "shB"
 						, vec4( 0.0_f ) );
 
-					propagate( R, G, B );
+					propagate( shR, shG, shB );
 
-					outLpvAccumulatorR = R;
-					outLpvAccumulatorG = G;
-					outLpvAccumulatorB = B;
+					outLpvAccumulatorR = shR;
+					outLpvAccumulatorG = shG;
+					outLpvAccumulatorB = shB;
 
-					outLpvNextStepR = R;
-					outLpvNextStepG = G;
-					outLpvNextStepB = B;
+					outLpvNextStepR = shR;
+					outLpvNextStepG = shG;
+					outLpvNextStepB = shB;
 				} );
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
