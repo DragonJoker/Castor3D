@@ -63,7 +63,6 @@ namespace castor3d
 	{
 		getCuller().compute();
 		doUpdate( *updater.queues );
-		m_shadowMapUbo.update( *updater.light, updater.index );
 		m_outOfDate = true;
 		RenderPass::update( updater );
 		return m_outOfDate;
@@ -71,6 +70,7 @@ namespace castor3d
 
 	void ShadowMapPassDirectional::doUpdateUbos( CpuUpdater & updater )
 	{
+		RenderPass::doUpdateUbos( updater );
 		m_shadowMapUbo.update( *updater.light, updater.index );
 	}
 
@@ -185,9 +185,6 @@ namespace castor3d
 	{
 		m_shadowMapUbo.createSizedBinding( *node.uboDescriptorSet
 			, layout.getBinding( ShadowMapUbo::BindingPoint ) );
-	}
-
-		queues.emplace_back( m_renderQueue );
 	}
 
 	ashes::VkDescriptorSetLayoutBindingArray ShadowMapPassDirectional::doCreateUboBindings( PipelineFlags const & flags )const
