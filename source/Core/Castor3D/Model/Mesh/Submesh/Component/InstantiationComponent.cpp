@@ -27,17 +27,32 @@ namespace castor3d
 	{
 		auto it = find( material );
 
-		if ( it == end() )
+		if ( it == m_instances.end() )
 		{
-			it = m_instances.emplace( material, Data{ 0u, nullptr } ).first;
+			DataArray data;
+
+			for ( uint32_t i = 0u; i < 6u; ++i )
+			{
+				data.emplace_back( 0u, nullptr );
+			}
+
+			it = m_instances.emplace( material, std::move( data ) ).first;
 		}
 
-		auto & data = it->second;
+		auto & datas = it->second;
+		auto & data = datas[0];
 		auto result = data.count++;
 
 		if ( doCheckInstanced( data.count ) )
 		{
 			data.data.resize( data.count );
+			getOwner()->getOwner()->getScene()->getListener().postEvent( makeGpuFunctorEvent( EventType::eQueueRender
+				, [this]( RenderDevice const & device )
+				{
+					doFill( device );
+				} ) );
+			auto & mulData = datas[5];
+			mulData.data.resize( data.count * 6u );
 			getOwner()->getOwner()->getScene()->getListener().postEvent( makeGpuFunctorEvent( EventType::eQueueRender
 				, [this]( RenderDevice const & device )
 				{
@@ -55,7 +70,8 @@ namespace castor3d
 
 		if ( it != end() )
 		{
-			auto & data = it->second;
+			auto & datas = it->second;
+			auto & data = datas[0];
 			result = data.count;
 
 			if ( data.count )
@@ -65,11 +81,14 @@ namespace castor3d
 
 			if ( !doCheckInstanced( data.count ) )
 			{
-				getOwner()->getOwner()->getScene()->getListener().postEvent( makeGpuFunctorEvent( EventType::ePreRender
-					, [&data]( RenderDevice const & device )
-					{
-						data.buffer.reset();
-					} ) );
+				for ( auto & data : datas )
+				{
+					getOwner()->getOwner()->getScene()->getListener().postEvent( makeGpuFunctorEvent( EventType::ePreRender
+						, [&data]( RenderDevice const & device )
+						{
+							data.buffer.reset();
+						} ) );
+				}
 			}
 		}
 
@@ -83,7 +102,7 @@ namespace castor3d
 
 		if ( it != end() )
 		{
-			result = it->second.count;
+			result = it->second[0].count;
 		}
 
 		return result;
@@ -95,7 +114,7 @@ namespace castor3d
 
 		for ( auto & it : m_instances )
 		{
-			count = std::max( count, it.second.count );
+			count = std::max( count, it.second[0].count );
 		}
 
 		return count;
@@ -104,14 +123,18 @@ namespace castor3d
 	void InstantiationComponent::gather( MaterialSPtr material
 		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
-		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts )
+		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
+		, uint32_t instanceMult )
 	{
 		auto it = m_instances.find( material );
+		auto index = ( instanceMult <= 1u
+			? 0u
+			: instanceMult - 1u );
 
 		if ( it != m_instances.end()
-			&& it->second.buffer )
+			&& it->second[index].buffer )
 		{
-			buffers.emplace_back( it->second.buffer->getBuffer() );
+			buffers.emplace_back( it->second[index].buffer->getBuffer() );
 			offsets.emplace_back( 0u );
 			layouts.emplace_back( *m_matrixLayout );
 		}
@@ -127,6 +150,46 @@ namespace castor3d
 		}
 
 		ref( newMaterial );
+	}
+
+	InstantiationComponent::InstanceDataMap::const_iterator InstantiationComponent::find( MaterialSPtr material
+		, uint32_t instanceMult )const
+	{
+		auto result = find( material );
+		auto index = getIndex( instanceMult );
+
+		if ( result != m_instances.end()
+			&& ( result->second.size() <= index
+				|| result->second[index].count == 0u ) )
+		{
+			return m_instances.end();
+		}
+
+		return result;
+	}
+
+	InstantiationComponent::InstanceDataMap::iterator InstantiationComponent::find( MaterialSPtr material
+		, uint32_t instanceMult )
+	{
+		auto result = find( material );
+		auto index = getIndex( instanceMult );
+
+		if ( result != m_instances.end()
+			&& ( result->second.size() <= index
+				|| result->second[index].count == 0u ) )
+		{
+			return m_instances.end();
+		}
+
+		return result;
+	}
+
+	ProgramFlags InstantiationComponent::getProgramFlags( MaterialSPtr material )const
+	{
+		auto it = find( material );
+		return ( it != end() && it->second[0].buffer )
+			? ProgramFlag::eInstantiation
+			: ProgramFlag( 0 );
 	}
 
 	bool InstantiationComponent::doInitialise( RenderDevice const & device )
@@ -145,22 +208,32 @@ namespace castor3d
 					, ashes::VkVertexInputAttributeDescriptionArray
 					{
 						{ RenderPass::VertexInputs::TransformLocation + 0u, BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 0u * sizeof( Point4f ) },
-						{ RenderPass::VertexInputs::TransformLocation + 1u, BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 1u * sizeof( Point4f ) },
-						{ RenderPass::VertexInputs::TransformLocation + 2u, BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 2u * sizeof( Point4f ) },
-						{ RenderPass::VertexInputs::TransformLocation + 3u, BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 3u * sizeof( Point4f ) },
-						{ RenderPass::VertexInputs::MaterialLocation, BindingPoint, VK_FORMAT_R32_SINT, offsetof( InstantiationData, m_material ) },
+					{ RenderPass::VertexInputs::TransformLocation + 1u, BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 1u * sizeof( Point4f ) },
+					{ RenderPass::VertexInputs::TransformLocation + 2u, BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 2u * sizeof( Point4f ) },
+					{ RenderPass::VertexInputs::TransformLocation + 3u, BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 3u * sizeof( Point4f ) },
+					{ RenderPass::VertexInputs::MaterialLocation, BindingPoint, VK_FORMAT_R32_SINT, offsetof( InstantiationData, m_material ) },
 					} );
 			}
 
-			for ( auto & data : m_instances )
+			for ( auto & datas : m_instances )
 			{
-				if ( doCheckInstanced( data.second.count ) )
+				if ( doCheckInstanced( datas.second[0].count ) )
 				{
-					data.second.buffer = makeVertexBuffer< InstantiationData >( device
-						, data.second.count
-						, 0u
-						, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-						, getOwner()->getParent().getName() + "Submesh" + castor::string::toString( getOwner()->getId() ) + "InstantiationComponentBuffer" );
+					uint32_t index = 0u;
+
+					for ( auto & data : datas.second )
+					{
+						if ( data.count )
+						{
+							data.buffer = makeVertexBuffer< InstantiationData >( device
+								, data.count
+								, 0u
+								, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+								, getOwner()->getParent().getName() + "Submesh" + castor::string::toString( getOwner()->getId() ) + "InstantiationComponentBufferMult" + string::toString( index ) );
+						}
+
+						++index;
+					}
 				}
 			}
 		}
@@ -176,9 +249,12 @@ namespace castor3d
 	{
 		m_matrixLayout.reset();
 
-		for ( auto & data : m_instances )
+		for ( auto & datas : m_instances )
 		{
-			data.second.buffer.reset();
+			for ( auto & data : datas.second )
+			{
+				data.buffer.reset();
+			}
 		}
 	}
 
@@ -190,16 +266,22 @@ namespace castor3d
 	{
 		for ( auto & data : m_instances )
 		{
-			if ( data.second.buffer
-				&& data.second.count )
+			for ( auto & datas : m_instances )
 			{
-				if ( auto * buffer = reinterpret_cast< InstantiationData * >( data.second.buffer->getBuffer().lock( 0
-					, ~( 0ull )
-					, 0u ) ) )
+				for ( auto & data : datas.second )
 				{
-					std::copy( data.second.data.begin(), data.second.data.end(), buffer );
-					data.second.buffer->getBuffer().flush( 0u, ~( 0ull ) );
-					data.second.buffer->getBuffer().unlock();
+					if ( data.buffer
+						&& data.count )
+					{
+						if ( auto * buffer = reinterpret_cast< InstantiationData * >( data.buffer->getBuffer().lock( 0
+							, ~( 0ull )
+							, 0u ) ) )
+						{
+							std::copy( data.data.begin(), data.data.end(), buffer );
+							data.buffer->getBuffer().flush( 0u, ~( 0ull ) );
+							data.buffer->getBuffer().unlock();
+						}
+					}
 				}
 			}
 		}

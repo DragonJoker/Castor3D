@@ -8,7 +8,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 #include "Castor3D/Render/Node/RenderNode.hpp"
 
-#include <CastorUtils/Design/ChangeTracked.hpp>
+#include <CastorUtils/Design/GroupChangeTracked.hpp>
 
 #include <atomic>
 
@@ -124,8 +124,8 @@ namespace castor3d
 		ashes::CommandBufferPtr m_commandBuffer;
 		bool m_allChanged{};
 		bool m_culledChanged{};
-		castor::ChangeTracked< ashes::Optional< VkViewport > > m_viewport;
-		castor::ChangeTracked< ashes::Optional< VkRect2D > > m_scissor;
+		castor::GroupChangeTracked< ashes::Optional< VkViewport > > m_viewport;
+		castor::GroupChangeTracked< ashes::Optional< VkRect2D > > m_scissor;
 		enum class Preparation
 		{
 			eWaiting,

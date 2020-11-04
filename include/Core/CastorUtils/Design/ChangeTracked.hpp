@@ -117,15 +117,9 @@ namespace castor
 	{
 		return ChangeTracked< T >{ value };
 	}
-	
-	template< typename T >
-	struct IsChangeTracked : std::false_type {};
 
 	template< typename T >
-	struct IsChangeTracked< ChangeTracked< T > > : std::true_type {};
-
-	template< typename T >
-	static inline bool constexpr isChangeTrackedT = IsChangeTracked< T >::value;
+	struct IsChangeTrackedT< ChangeTracked< T > > : std::true_type {};
 }
 
 #endif

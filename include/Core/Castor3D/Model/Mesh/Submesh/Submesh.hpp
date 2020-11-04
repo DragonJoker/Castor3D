@@ -223,7 +223,8 @@ namespace castor3d
 		*\~french
 		*\return		Les tampons de géométrie associés au materiau donné.
 		*/
-		C3D_API GeometryBuffers const & getGeometryBuffers( MaterialSPtr material )const;
+		C3D_API GeometryBuffers const & getGeometryBuffers( MaterialSPtr material
+			, uint32_t instanceMult )const;
 		/**
 		 *\~english
 		 *\brief		Adds a points list to my list

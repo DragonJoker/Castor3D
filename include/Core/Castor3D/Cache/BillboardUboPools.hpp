@@ -11,11 +11,18 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	C3D_API size_t hash( BillboardBase const & billboard
+		, Pass const & pass );
+	C3D_API size_t hash( BillboardBase const & billboard
+		, Pass const & pass
+		, uint32_t instanceMult );
+
 	class BillboardUboPools
 	{
 	public:
 		struct PoolsEntry
 		{
+			size_t hash;
 			BillboardBase const & billboard;
 			Pass const & pass;
 			UniformBufferOffsetT< ModelUboConfiguration > modelUbo;
@@ -23,6 +30,7 @@ namespace castor3d
 			UniformBufferOffsetT< BillboardUboConfiguration > billboardUbo;
 			UniformBufferOffsetT< PickingUboConfiguration > pickingUbo;
 			UniformBufferOffsetT< TexturesUboConfiguration > texturesUbo;
+			UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesUbo;
 		};
 
 	public:
@@ -35,6 +43,10 @@ namespace castor3d
 		 *\param[in]	renderSystem	Le RenderSystem.
 		 */
 		C3D_API explicit BillboardUboPools( RenderDevice const & device );
+
+		C3D_API void registerPass( RenderPass const & renderPass );
+		C3D_API void unregisterPass( RenderPass const * renderPass
+			, uint32_t instanceMult );
 		/**
 		 *\~english
 		 *\brief		Updates the UBO pools data.
@@ -74,17 +86,20 @@ namespace castor3d
 		C3D_API void clear( RenderDevice const & device );
 
 	private:
-		PoolsEntry doCreateEntry( BillboardBase const & billboard
+		void doCreateEntry( BillboardBase const & billboard
 			, Pass const & pass );
 		void doRemoveEntry( BillboardBase const & billboard
 			, Pass const & pass );
 
 	private:
 		RenderDevice const & m_device;
+		std::map< size_t, PoolsEntry > m_baseEntries;
 		std::map< size_t, PoolsEntry > m_entries;
 		std::map< BillboardBase *, OnBillboardMaterialChangedConnection > m_connections;
 		RenderPassTimerSPtr m_updateTimer;
 		std::shared_ptr< BillboardUboPools > m_billboardPools;
+		using RenderPassSet = std::set< RenderPass const * >;
+		std::map< uint32_t, RenderPassSet > m_instances;
 	};
 }
 

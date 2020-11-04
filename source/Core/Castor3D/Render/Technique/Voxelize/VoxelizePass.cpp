@@ -234,11 +234,6 @@ namespace castor3d
 		m_frameBuffer.reset();
 	}
 
-	void VoxelizePass::doUpdate( RenderQueueArray & queues )
-	{
-		queues.emplace_back( m_renderQueue );
-	}
-
 	void VoxelizePass::doUpdateFlags( PipelineFlags & flags )const
 	{
 		flags.textures.clear();

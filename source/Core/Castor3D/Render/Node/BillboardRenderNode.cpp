@@ -16,6 +16,7 @@ namespace castor3d
 		, UniformBufferOffsetT< PickingUboConfiguration > pickingBuffer
 		, UniformBufferOffsetT< BillboardUboConfiguration > billboardBuffer
 		, UniformBufferOffsetT< TexturesUboConfiguration > texturesBuffer
+		, UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesBuffer
 		, GeometryBuffers const & buffers
 		, SceneNode & sceneNode
 		, BillboardBase & data )
@@ -25,6 +26,7 @@ namespace castor3d
 			, modelBuffer
 			, pickingBuffer
 			, texturesBuffer
+			, modelInstancesBuffer
 			, buffers
 			, sceneNode
 			, data

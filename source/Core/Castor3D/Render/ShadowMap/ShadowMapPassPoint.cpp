@@ -86,13 +86,7 @@ namespace castor3d
 		m_outOfDate = m_outOfDate
 			|| getCuller().areAllChanged()
 			|| getCuller().areCulledChanged();
-		m_viewport.updateFar( updater.light->getFarPlane() );
-		updater.light->getPointLight()->updateShadow( updater.index );
-		auto position = updater.light->getParent()->getDerivedPosition();
-		doUpdateShadowMatrices( position, m_matrices );
-		doUpdate( *updater.queues );
-		m_shadowMapUbo.update( *updater.light, updater.index );
-		m_matrixUbo.cpuUpdate( m_matrices[updater.index], m_projection );
+		RenderPass::update( updater );
 		return m_outOfDate;
 	}
 
@@ -102,6 +96,17 @@ namespace castor3d
 		{
 			doUpdateNodes( m_renderQueue.getCulledRenderNodes() );
 		}
+	}
+
+	void ShadowMapPassPoint::doUpdateUbos( CpuUpdater & updater )
+	{
+		m_viewport.updateFar( updater.light->getFarPlane() );
+		updater.light->getPointLight()->updateShadow( updater.index );
+		auto position = updater.light->getParent()->getDerivedPosition();
+		doUpdateShadowMatrices( position, m_matrices );
+
+		m_shadowMapUbo.update( *updater.light, updater.index );
+		m_matrixUbo.cpuUpdate( m_matrices[updater.index], m_projection );
 	}
 
 	void ShadowMapPassPoint::doUpdateNodes( SceneCulledRenderNodes & nodes )
@@ -223,11 +228,6 @@ namespace castor3d
 	{
 		m_shadowMapUbo.createSizedBinding( *node.uboDescriptorSet
 			, layout.getBinding( ShadowMapUbo::BindingPoint ) );
-	}
-
-	void ShadowMapPassPoint::doUpdate( RenderQueueArray & queues )
-	{
-		queues.emplace_back( m_renderQueue );
 	}
 
 	ashes::VkDescriptorSetLayoutBindingArray ShadowMapPassPoint::doCreateUboBindings( PipelineFlags const & flags )const

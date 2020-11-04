@@ -240,12 +240,6 @@ namespace castor3d
 		return *result;
 	}
 
-	void ForwardRenderTechniquePass::doUpdateUbos( Camera const & camera
-		, castor::Point2f const & jitter )
-	{
-		RenderPass::doUpdateUbos( camera, jitter );
-	}
-
 	void ForwardRenderTechniquePass::doCleanup( RenderDevice const & device )
 	{
 		m_nodesCommands.reset();

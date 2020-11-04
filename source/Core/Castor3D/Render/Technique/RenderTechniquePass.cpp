@@ -203,10 +203,10 @@ namespace castor3d
 		}
 	}
 
-	void RenderTechniquePass::doUpdateUbos( Camera const & camera
-		, castor::Point2f const & jitter )
+	void RenderTechniquePass::doUpdateUbos( CpuUpdater & updater )
 	{
-		m_sceneUbo.cpuUpdate( *camera.getScene(), &camera );
+		m_sceneUbo.cpuUpdate( *updater.camera->getScene()
+			, updater.camera.get() );
 	}
 
 	bool RenderTechniquePass::doInitialise( RenderDevice const & device
@@ -220,11 +220,6 @@ namespace castor3d
 	{
 		m_renderQueue.cleanup();
 		m_finished.reset();
-	}
-
-	void RenderTechniquePass::doUpdate( RenderQueueArray & queues )
-	{
-		queues.emplace_back( m_renderQueue );
 	}
 
 	void RenderTechniquePass::doUpdateFlags( PipelineFlags & flags )const

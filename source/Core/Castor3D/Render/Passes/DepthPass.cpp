@@ -173,11 +173,6 @@ namespace castor3d
 		RenderTechniquePass::doCleanup( device );
 	}
 
-	void DepthPass::doUpdate( RenderQueueArray & queues )
-	{
-		queues.emplace_back( m_renderQueue );
-	}
-
 	TextureFlags DepthPass::getTexturesMask()const
 	{
 		return TextureFlags{ TextureFlag::eOpacity | TextureFlag::eHeight };

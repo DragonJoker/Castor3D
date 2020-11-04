@@ -62,8 +62,8 @@ namespace castor3d
 			};
 		}
 
-		template< bool Opaque, typename MapType, typename FuncType >
-		inline void doTraverseNodes( RenderPass & pass
+		template< typename MapType, typename FuncType >
+		inline void traverseNodes( PickingPass & pass
 			, MapType & nodes
 			, PickNodeType type
 			, FuncType function )
@@ -98,8 +98,8 @@ namespace castor3d
 			}
 		}
 
-		template< bool Opaque, typename MapType >
-		inline void doUpdateNonInstanced( RenderPass & pass
+		template< typename MapType >
+		inline void updateNonInstanced( PickingPass & pass
 			, PickNodeType type
 			, MapType & nodes )
 		{
@@ -123,7 +123,7 @@ namespace castor3d
 		}
 
 		template< typename MapType, typename NodeType, typename SubNodeType >
-		inline void doPickFromList( MapType const & map
+		inline void pickFromList( MapType const & map
 			, Point4f const & index
 			, std::weak_ptr< NodeType > & node
 			, std::weak_ptr< SubNodeType > & subnode
@@ -155,7 +155,7 @@ namespace castor3d
 		}
 
 		template< typename MapType, typename NodeType, typename SubNodeType >
-		inline void doPickFromInstantiatedList( MapType const & map
+		inline void pickFromInstantiatedList( MapType const & map
 			, Point4f const & index
 			, std::weak_ptr< NodeType > & node
 			, std::weak_ptr< SubNodeType > & subnode
@@ -475,27 +475,27 @@ namespace castor3d
 			switch ( result )
 			{
 			case PickNodeType::eStatic:
-				doPickFromList( nodes.staticNodes.backCulled, pixel, m_geometry, m_submesh, m_face );
+				pickFromList( nodes.staticNodes.backCulled, pixel, m_geometry, m_submesh, m_face );
 				break;
 
 			case PickNodeType::eInstantiatedStatic:
-				doPickFromInstantiatedList( nodes.instancedStaticNodes.backCulled, pixel, m_geometry, m_submesh, m_face );
+				pickFromInstantiatedList( nodes.instancedStaticNodes.backCulled, pixel, m_geometry, m_submesh, m_face );
 				break;
 
 			case PickNodeType::eSkinning:
-				doPickFromList( nodes.skinnedNodes.backCulled, pixel, m_geometry, m_submesh, m_face );
+				pickFromList( nodes.skinnedNodes.backCulled, pixel, m_geometry, m_submesh, m_face );
 				break;
 
 			case PickNodeType::eInstantiatedSkinning:
-				doPickFromInstantiatedList( nodes.instancedSkinnedNodes.backCulled, pixel, m_geometry, m_submesh, m_face );
+				pickFromInstantiatedList( nodes.instancedSkinnedNodes.backCulled, pixel, m_geometry, m_submesh, m_face );
 				break;
 
 			case PickNodeType::eMorphing:
-				doPickFromList( nodes.morphingNodes.backCulled, pixel, m_geometry, m_submesh, m_face );
+				pickFromList( nodes.morphingNodes.backCulled, pixel, m_geometry, m_submesh, m_face );
 				break;
 
 			case PickNodeType::eBillboard:
-				doPickFromList( nodes.billboardNodes.backCulled, pixel, m_billboard, m_billboard, m_face );
+				pickFromList( nodes.billboardNodes.backCulled, pixel, m_billboard, m_billboard, m_face );
 				break;
 
 			default:
@@ -510,7 +510,7 @@ namespace castor3d
 
 	void PickingPass::doUpdate( SubmeshStaticRenderNodesPtrByPipelineMap & nodes )
 	{
-		doTraverseNodes< true >( *this
+		traverseNodes( *this
 			, nodes
 			, PickNodeType::eInstantiatedStatic
 			, [this]( RenderPipeline & pipeline
@@ -522,31 +522,31 @@ namespace castor3d
 				auto it = component.find( pass.getOwner()->shared_from_this() );
 
 				if ( it != component.end()
-					&& it->second.buffer )
+					&& it->second[0].buffer )
 				{
 					doCopyNodesMatrices( renderNodes
-						, it->second.data );
+						, it->second[0].data );
 				}
 			} );
 	}
 
 	void PickingPass::doUpdate( StaticRenderNodesPtrByPipelineMap & nodes )
 	{
-		doUpdateNonInstanced< true >( *this
+		updateNonInstanced( *this
 			, PickNodeType::eStatic
 			, nodes );
 	}
 
 	void PickingPass::doUpdate( SkinningRenderNodesPtrByPipelineMap & nodes )
 	{
-		doUpdateNonInstanced< true >( *this
+		updateNonInstanced( *this
 			, PickNodeType::eSkinning
 			, nodes );
 	}
 	
 	void PickingPass::doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes )
 	{
-		doTraverseNodes< true >( *this
+		traverseNodes( *this
 			, nodes
 			, PickNodeType::eInstantiatedSkinning
 			, [this]( RenderPipeline & pipeline
@@ -560,7 +560,7 @@ namespace castor3d
 
 				if ( !renderNodes.empty()
 					&& it != component.end()
-					&& it->second.buffer
+					&& it->second[0].buffer
 					&& instantiatedBones.hasInstancedBonesBuffer() )
 				{
 					doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
@@ -570,14 +570,14 @@ namespace castor3d
 
 	void PickingPass::doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes )
 	{
-		doUpdateNonInstanced< true >( *this
+		updateNonInstanced( *this
 			, PickNodeType::eMorphing
 			, nodes );
 	}
 
 	void PickingPass::doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes )
 	{
-		doUpdateNonInstanced< true >( *this
+		updateNonInstanced( *this
 			, PickNodeType::eBillboard
 			, nodes );
 	}

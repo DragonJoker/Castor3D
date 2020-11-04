@@ -41,11 +41,46 @@ namespace castor3d
 			, [this]( RenderDevice const & device )
 			{
 				m_pools = std::make_shared< BillboardUboPools >( device );
+
+				for ( auto pass : m_pendingPasses )
+				{
+					m_pools->registerPass( *pass );
+				}
 			} ) );
 	}
 
 	BillboardListCache::~ObjectCache()
 	{
+	}
+
+	void BillboardListCache::registerPass( RenderPass const & renderPass )
+	{
+		if ( m_pools )
+		{
+			m_pools->registerPass( renderPass );
+		}
+		else
+		{
+			m_pendingPasses.insert( &renderPass );
+		}
+	}
+
+	void BillboardListCache::unregisterPass( RenderPass const * renderPass
+		, uint32_t instanceMult )
+	{
+		if ( m_pools )
+		{
+			m_pools->unregisterPass( renderPass, instanceMult );
+		}
+		else
+		{
+			auto it = m_pendingPasses.find( renderPass );
+
+			if ( it != m_pendingPasses.end() )
+			{
+				m_pendingPasses.erase( it );
+			}
+		}
 	}
 
 	void BillboardListCache::cleanup( RenderDevice const & device )

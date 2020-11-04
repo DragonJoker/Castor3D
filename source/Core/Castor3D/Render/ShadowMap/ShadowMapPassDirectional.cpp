@@ -65,7 +65,13 @@ namespace castor3d
 		doUpdate( *updater.queues );
 		m_shadowMapUbo.update( *updater.light, updater.index );
 		m_outOfDate = true;
+		RenderPass::update( updater );
 		return m_outOfDate;
+	}
+
+	void ShadowMapPassDirectional::doUpdateUbos( CpuUpdater & updater )
+	{
+		m_shadowMapUbo.update( *updater.light, updater.index );
 	}
 
 	void ShadowMapPassDirectional::update( GpuUpdater & updater )
@@ -181,8 +187,6 @@ namespace castor3d
 			, layout.getBinding( ShadowMapUbo::BindingPoint ) );
 	}
 
-	void ShadowMapPassDirectional::doUpdate( RenderQueueArray & queues )
-	{
 		queues.emplace_back( m_renderQueue );
 	}
 

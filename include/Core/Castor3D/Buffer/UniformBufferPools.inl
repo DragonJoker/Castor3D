@@ -35,6 +35,10 @@ namespace castor3d
 		{
 			return PoolType::eModel;
 		}
+		else if constexpr ( std::is_same_v< DataT, ModelInstancesUboConfiguration > )
+		{
+			return PoolType::eModelInstances;
+		}
 		else if constexpr ( std::is_same_v< DataT, BillboardUboConfiguration > )
 		{
 			return PoolType::eBillboard;

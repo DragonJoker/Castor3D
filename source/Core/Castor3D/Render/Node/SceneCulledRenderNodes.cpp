@@ -12,6 +12,7 @@
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/Culling/CullingModule.hpp"
+#include "Castor3D/Render/Culling/SceneCuller.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
@@ -81,21 +82,20 @@ namespace castor3d
 
 		template< typename MapType
 			, typename CulledMapType
-			, typename CulledArrayType >
-			void doParseRenderNodes( MapType & inputNodes
-				, CulledMapType & outputNodes
-				, CulledArrayType const & culledNodes
-				, ashes::CommandBuffer const & commandBuffer )
+			, typename CulledT >
+		void doParseRenderNodes( MapType & inputNodes
+			, CulledMapType & outputNodes
+			, SceneCuller::CulledInstancesPtrT< CulledT > const & culledNodes )
 		{
 			for ( auto & pipelines : inputNodes )
 			{
 				for ( auto & node : pipelines.second )
 				{
-					auto it = std::find( culledNodes.begin()
-						, culledNodes.end()
+					auto it = std::find( culledNodes.objects.begin()
+						, culledNodes.objects.end()
 						, node.first );
 
-					if ( it != culledNodes.end() )
+					if ( it != culledNodes.objects.end() )
 					{
 						doAddRenderNode( *pipelines.first, &node.second, outputNodes );
 					}
@@ -105,20 +105,19 @@ namespace castor3d
 
 		template< typename CulledMapType
 			, typename AllMapType >
-			void doParseRenderNodes( CulledMapType & outputNodes
-				, ashes::CommandBuffer const & commandBuffer
-				, RenderPipeline & pipeline
-				, Pass & pass
-				, AllMapType & renderNodes
-				, std::vector< CulledSubmesh * > const & culledNodes )
+		void doParseRenderNodes( CulledMapType & outputNodes
+			, RenderPipeline & pipeline
+			, Pass & pass
+			, AllMapType & renderNodes
+			, SceneCuller::CulledInstancesPtrT< CulledSubmesh > const & culledNodes )
 		{
 			for ( auto & node : renderNodes )
 			{
-				auto it = std::find( culledNodes.begin()
-					, culledNodes.end()
+				auto it = std::find( culledNodes.objects.begin()
+					, culledNodes.objects.end()
 					, node.first );
 
-				if ( it != culledNodes.end() )
+				if ( it != culledNodes.objects.end() )
 				{
 					doAddRenderNode( pass, pipeline, &node.second, ( *it )->data, outputNodes );
 				}
@@ -128,13 +127,15 @@ namespace castor3d
 		//*****************************************************************************************
 
 		GeometryBuffers const & getGeometryBuffers( Submesh const & submesh
-			, MaterialSPtr material )
+			, MaterialSPtr material
+			, uint32_t instanceCount )
 		{
-			return submesh.getGeometryBuffers( material );
+			return submesh.getGeometryBuffers( material, instanceCount );
 		}
 
 		GeometryBuffers const & getGeometryBuffers( BillboardBase const & billboard
-			, MaterialSPtr material )
+			, MaterialSPtr material
+			, uint32_t instanceCount )
 		{
 			return billboard.getGeometryBuffers();
 		}
@@ -145,11 +146,13 @@ namespace castor3d
 			, ashes::CommandBuffer const & commandBuffer
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissor
-			, uint32_t instanceCount = 1u )
+			, uint32_t instanceCount )
 		{
 			if ( instanceCount )
 			{
-				GeometryBuffers const & geometryBuffers = getGeometryBuffers( node.data, node.passNode.pass.getOwner()->shared_from_this() );
+				GeometryBuffers const & geometryBuffers = getGeometryBuffers( node.data
+					, node.passNode.pass.getOwner()->shared_from_this()
+					, instanceCount );
 
 				commandBuffer.bindPipeline( pipeline.getPipeline() );
 
@@ -201,11 +204,12 @@ namespace castor3d
 			, ashes::CommandBuffer const & commandBuffer
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissor
-			, uint32_t instanceCount = 1u )
+			, uint32_t instanceCount )
 		{
 			if ( instanceCount )
 			{
-				GeometryBuffers const & geometryBuffers = object.getGeometryBuffers( pass.getOwner()->shared_from_this() );
+				GeometryBuffers const & geometryBuffers = object.getGeometryBuffers( pass.getOwner()->shared_from_this()
+					, instanceCount );
 
 				commandBuffer.bindPipeline( pipeline.getPipeline() );
 
@@ -256,7 +260,8 @@ namespace castor3d
 			, RenderPipeline & pipeline
 			, Pass & pass
 			, Submesh & submesh
-			, CulledMapType & renderNodes )
+			, CulledMapType & renderNodes
+			, uint32_t instanceMult )
 		{
 			doAddRenderNodeCommands( pass
 				, pipeline
@@ -265,20 +270,26 @@ namespace castor3d
 				, commandBuffer
 				, viewport
 				, scissor
-				, uint32_t( renderNodes.size() ) );
+				, uint32_t( renderNodes.size() * instanceMult ) );
 		}
 
 		template< typename MapType >
 		void doParseRenderNodesCommands( MapType & inputNodes
 			, ashes::CommandBuffer const & commandBuffer
 			, ashes::Optional< VkViewport > const & viewport
-			, ashes::Optional< VkRect2D > const & scissor )
+			, ashes::Optional< VkRect2D > const & scissor
+			, uint32_t instanceMult )
 		{
 			for ( auto & pipelines : inputNodes )
 			{
 				for ( auto & node : pipelines.second )
 				{
-					doAddRenderNodeCommands( *pipelines.first, *node, commandBuffer, viewport, scissor );
+					doAddRenderNodeCommands( *pipelines.first
+						, *node
+						, commandBuffer
+						, viewport
+						, scissor
+						, instanceMult );
 				}
 			}
 		}
@@ -287,13 +298,19 @@ namespace castor3d
 		void doParseRenderNodesCommands( BillboardRenderNodesPtrByPipelineMap & inputNodes
 			, ashes::CommandBuffer const & commandBuffer
 			, ashes::Optional< VkViewport > const & viewport
-			, ashes::Optional< VkRect2D > const & scissor )
+			, ashes::Optional< VkRect2D > const & scissor
+			, uint32_t instanceMult )
 		{
 			for ( auto & pipelines : inputNodes )
 			{
 				for ( auto & node : pipelines.second )
 				{
-					doAddRenderNodeCommands( *pipelines.first, *node, commandBuffer, viewport, scissor, node->instance.getCount() );
+					doAddRenderNodeCommands( *pipelines.first
+						, *node
+						, commandBuffer
+						, viewport
+						, scissor
+						, node->instance.getCount() );
 				}
 			}
 		}
@@ -322,6 +339,8 @@ namespace castor3d
 
 	void SceneCulledRenderNodes::parse( RenderQueue const & queue )
 	{
+		auto & culler = queue.getOwner()->getCuller();
+
 		auto & allNodes = queue.getAllRenderNodes();
 		instancedStaticNodes.backCulled.clear();
 		instancedStaticNodes.frontCulled.clear();
@@ -335,7 +354,6 @@ namespace castor3d
 		morphingNodes.frontCulled.clear();
 		billboardNodes.backCulled.clear();
 		billboardNodes.frontCulled.clear();
-		auto & culler = queue.getOwner()->getCuller();
 
 		doTraverseNodes( allNodes.instancedStaticNodes.frontCulled
 			, [this, &queue, &culler]( RenderPipeline & pipeline
@@ -344,7 +362,6 @@ namespace castor3d
 				, auto & nodes )
 			{
 				doParseRenderNodes( instancedStaticNodes.frontCulled
-					, queue.getCommandBuffer()
 					, pipeline
 					, pass
 					, nodes
@@ -357,7 +374,6 @@ namespace castor3d
 				, auto & nodes )
 			{
 				doParseRenderNodes( instancedStaticNodes.backCulled
-					, queue.getCommandBuffer()
 					, pipeline
 					, pass
 					, nodes
@@ -370,7 +386,6 @@ namespace castor3d
 				, auto & nodes )
 			{
 				doParseRenderNodes( instancedSkinnedNodes.frontCulled
-					, queue.getCommandBuffer()
 					, pipeline
 					, pass
 					, nodes
@@ -383,7 +398,6 @@ namespace castor3d
 				, auto & nodes )
 			{
 				doParseRenderNodes( instancedSkinnedNodes.backCulled
-					, queue.getCommandBuffer()
 					, pipeline
 					, pass
 					, nodes
@@ -392,39 +406,31 @@ namespace castor3d
 
 		doParseRenderNodes( allNodes.staticNodes.frontCulled
 			, staticNodes.frontCulled
-			, culler.getCulledSubmeshes( queue.isOpaque() )
-			, queue.getCommandBuffer() );
+			, culler.getCulledSubmeshes( queue.isOpaque() ) );
 		doParseRenderNodes( allNodes.staticNodes.backCulled
 			, staticNodes.backCulled
-			, culler.getCulledSubmeshes( queue.isOpaque() )
-			, queue.getCommandBuffer() );
+			, culler.getCulledSubmeshes( queue.isOpaque() ) );
 
 		doParseRenderNodes( allNodes.skinnedNodes.frontCulled
 			, skinnedNodes.frontCulled
-			, culler.getCulledSubmeshes( queue.isOpaque() )
-			, queue.getCommandBuffer() );
+			, culler.getCulledSubmeshes( queue.isOpaque() ) );
 		doParseRenderNodes( allNodes.skinnedNodes.backCulled
 			, skinnedNodes.backCulled
-			, culler.getCulledSubmeshes( queue.isOpaque() )
-			, queue.getCommandBuffer() );
+			, culler.getCulledSubmeshes( queue.isOpaque() ) );
 
 		doParseRenderNodes( allNodes.morphingNodes.frontCulled
 			, morphingNodes.frontCulled
-			, culler.getCulledSubmeshes( queue.isOpaque() )
-			, queue.getCommandBuffer() );
+			, culler.getCulledSubmeshes( queue.isOpaque() ) );
 		doParseRenderNodes( allNodes.morphingNodes.backCulled
 			, morphingNodes.backCulled
-			, culler.getCulledSubmeshes( queue.isOpaque() )
-			, queue.getCommandBuffer() );
+			, culler.getCulledSubmeshes( queue.isOpaque() ) );
 
 		doParseRenderNodes( allNodes.billboardNodes.frontCulled
 			, billboardNodes.frontCulled
-			, culler.getCulledBillboards( queue.isOpaque() )
-			, queue.getCommandBuffer() );
+			, culler.getCulledBillboards( queue.isOpaque() ) );
 		doParseRenderNodes( allNodes.billboardNodes.backCulled
 			, billboardNodes.backCulled
-			, culler.getCulledBillboards( queue.isOpaque() )
-			, queue.getCommandBuffer() );
+			, culler.getCulledBillboards( queue.isOpaque() ) );
 	}
 
 	void SceneCulledRenderNodes::prepareCommandBuffers( RenderQueue const & queue
@@ -451,7 +457,8 @@ namespace castor3d
 					, pipeline
 					, pass
 					, submesh
-					, nodes );
+					, nodes
+					, queue.getOwner()->getInstanceMult() );
 			} );
 		doTraverseNodes( instancedStaticNodes.backCulled
 			, [&queue, &viewport, &scissors]( RenderPipeline & pipeline
@@ -465,7 +472,8 @@ namespace castor3d
 					, pipeline
 					, pass
 					, submesh
-					, nodes );
+					, nodes
+					, queue.getOwner()->getInstanceMult() );
 			} );
 		doTraverseNodes( instancedSkinnedNodes.frontCulled
 			, [&queue, &viewport, &scissors]( RenderPipeline & pipeline
@@ -479,7 +487,8 @@ namespace castor3d
 					, pipeline
 					, pass
 					, submesh
-					, nodes );
+					, nodes
+					, queue.getOwner()->getInstanceMult() );
 			} );
 		doTraverseNodes( instancedSkinnedNodes.backCulled
 			, [&queue, &viewport, &scissors]( RenderPipeline & pipeline
@@ -493,44 +502,53 @@ namespace castor3d
 					, pipeline
 					, pass
 					, submesh
-					, nodes );
+					, nodes
+					, queue.getOwner()->getInstanceMult() );
 			} );
 
 		doParseRenderNodesCommands( staticNodes.frontCulled
 			, queue.getCommandBuffer()
 			, viewport
-			, scissors );
+			, scissors
+			, queue.getOwner()->getInstanceMult() );
 		doParseRenderNodesCommands( staticNodes.backCulled
 			, queue.getCommandBuffer()
 			, viewport
-			, scissors );
+			, scissors
+			, queue.getOwner()->getInstanceMult() );
 
 		doParseRenderNodesCommands( skinnedNodes.frontCulled
 			, queue.getCommandBuffer()
 			, viewport
-			, scissors );
+			, scissors
+			, queue.getOwner()->getInstanceMult() );
 		doParseRenderNodesCommands( skinnedNodes.backCulled
 			, queue.getCommandBuffer()
 			, viewport
-			, scissors );
+			, scissors
+			, queue.getOwner()->getInstanceMult() );
 
 		doParseRenderNodesCommands( morphingNodes.frontCulled
 			, queue.getCommandBuffer()
 			, viewport
-			, scissors );
+			, scissors
+			, queue.getOwner()->getInstanceMult() );
 		doParseRenderNodesCommands( morphingNodes.backCulled
 			, queue.getCommandBuffer()
 			, viewport
-			, scissors );
+			, scissors
+			, queue.getOwner()->getInstanceMult() );
 
 		doParseRenderNodesCommands( billboardNodes.frontCulled
 			, queue.getCommandBuffer()
 			, viewport
-			, scissors );
+			, scissors
+			, queue.getOwner()->getInstanceMult() );
 		doParseRenderNodesCommands( billboardNodes.backCulled
 			, queue.getCommandBuffer()
 			, viewport
-			, scissors );
+			, scissors
+			, queue.getOwner()->getInstanceMult() );
 
 		queue.getCommandBuffer().end();
 	}

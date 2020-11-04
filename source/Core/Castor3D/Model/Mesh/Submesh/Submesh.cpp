@@ -366,7 +366,8 @@ namespace castor3d
 		}
 	}
 
-	GeometryBuffers const & Submesh::getGeometryBuffers( MaterialSPtr material )const
+	GeometryBuffers const & Submesh::getGeometryBuffers( MaterialSPtr material
+		, uint32_t instanceMult )const
 	{
 		auto it = m_geometryBuffers.find( material );
 
@@ -381,7 +382,7 @@ namespace castor3d
 
 			for ( auto & component : m_components )
 			{
-				component.second->gather( material, buffers, offsets, layouts );
+				component.second->gather( material, buffers, offsets, layouts, instanceMult );
 			}
 
 			GeometryBuffers result;

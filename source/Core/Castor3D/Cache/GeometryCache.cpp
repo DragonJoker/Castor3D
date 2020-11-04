@@ -8,7 +8,9 @@
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderInfo.hpp"
+#include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
@@ -50,15 +52,34 @@ namespace castor3d
 			FrameListener & m_listener;
 		};
 
-		size_t hash( Geometry const & geometry
-			, Submesh const & submesh
-			, Pass const & pass )
+		castor::String printhex( uint64_t v )
 		{
-			size_t result = std::hash< Geometry const * >{}( &geometry );
-			castor::hashCombine( result, submesh );
-			castor::hashCombine( result, pass );
-			return result;
+			auto stream = castor::makeStringStream();
+			stream << "0x" << std::hex << std::setw( 16u ) << std::setfill( '0' ) << v;
+			return stream.str();
 		}
+	}
+
+	size_t hash( Geometry const & geometry
+		, Submesh const & submesh
+		, Pass const & pass )
+	{
+		size_t result = std::hash< Geometry const * >{}( &geometry );
+		castor::hashCombine( result, submesh );
+		castor::hashCombine( result, pass );
+		return result;
+	}
+
+	size_t hash( Geometry const & geometry
+		, Submesh const & submesh
+		, Pass const & pass
+		, uint32_t instanceMult )
+	{
+		size_t result = std::hash< uint32_t >{}( instanceMult );
+		castor::hashCombine( result, geometry );
+		castor::hashCombine( result, submesh );
+		castor::hashCombine( result, pass );
+		return result;
 	}
 
 	GeometryCache::ObjectCache( Engine & engine
@@ -90,6 +111,82 @@ namespace castor3d
 	{
 	}
 
+	void GeometryCache::registerPass( RenderPass const & renderPass )
+	{
+		auto instanceMult = renderPass.getInstanceMult();
+		auto iresult = m_instances.emplace( instanceMult, RenderPassSet{} );
+
+		if ( iresult.second )
+		{
+			m_engine.sendEvent( makeGpuFunctorEvent( EventType::ePreRender
+				, [this, instanceMult]( RenderDevice const & device )
+				{
+					auto & uboPools = *device.uboPools;
+
+					for ( auto entry : m_baseEntries )
+					{
+						entry.second.hash = hash( entry.second.geometry
+							, entry.second.submesh
+							, entry.second.pass
+							, instanceMult );
+						auto it = m_entries.emplace( entry.second.hash, entry.second ).first;
+
+						if ( instanceMult )
+						{
+							it->second.modelInstancesUbo = uboPools.getBuffer< ModelInstancesUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+						}
+					}
+				} ) );
+		}
+
+		iresult.first->second.insert( &renderPass );
+	}
+
+	void GeometryCache::unregisterPass( RenderPass const * renderPass
+		, uint32_t instanceMult )
+	{
+		auto instIt = m_instances.find( instanceMult );
+
+		if ( instIt != m_instances.end() )
+		{
+			auto it = instIt->second.find( renderPass );
+
+			if ( it != instIt->second.end() )
+			{
+				instIt->second.erase( it );
+			}
+
+			if ( instIt->second.empty() )
+			{
+				m_instances.erase( instIt );
+				m_engine.sendEvent( makeGpuFunctorEvent( EventType::ePreRender
+					, [this, instanceMult]( RenderDevice const & device )
+					{
+						auto & uboPools = *device.uboPools;
+
+						for ( auto & entry : m_baseEntries )
+						{
+							auto it = m_entries.find( hash( entry.second.geometry
+								, entry.second.submesh
+								, entry.second.pass
+								, instanceMult ) );
+
+							if ( it != m_entries.end() )
+							{
+								auto entry = it->second;
+								m_entries.erase( it );
+
+								if ( entry.modelInstancesUbo )
+								{
+									uboPools.putBuffer( entry.modelInstancesUbo );
+								}
+							}
+						}
+					} ) );
+			}
+		}
+	}
+
 	void GeometryCache::fillInfo( RenderInfo & info )const
 	{
 		auto lock( castor::makeUniqueLock( m_elements ) );
@@ -106,9 +203,9 @@ namespace castor3d
 		}
 	}
 
-	void GeometryCache::cpuUpdate()
+	void GeometryCache::update( CpuUpdater & updater )
 	{
-		for ( auto & pair : m_entries )
+		for ( auto & pair : m_baseEntries )
 		{
 			auto & entry = pair.second;
 
@@ -143,9 +240,10 @@ namespace castor3d
 
 	GeometryCache::PoolsEntry GeometryCache::getUbos( Geometry const & geometry
 		, Submesh const & submesh
-		, Pass const & pass )const
+		, Pass const & pass
+		, uint32_t instanceMult )const
 	{
-		return m_entries.at( hash( geometry, submesh, pass ) );
+		return m_entries.at( hash( geometry, submesh, pass, instanceMult ) );
 	}
 
 	void GeometryCache::clear( RenderDevice const & device )
@@ -155,6 +253,14 @@ namespace castor3d
 
 		for ( auto & entry : m_entries )
 		{
+			if ( entry.second.modelInstancesUbo )
+			{
+				uboPools.putBuffer( entry.second.modelInstancesUbo );
+			}
+		}
+
+		for ( auto & entry : m_baseEntries )
+		{
 			uboPools.putBuffer( entry.second.modelUbo );
 			uboPools.putBuffer( entry.second.modelMatrixUbo );
 			uboPools.putBuffer( entry.second.pickingUbo );
@@ -162,6 +268,8 @@ namespace castor3d
 		}
 
 		m_entries.clear();
+		m_baseEntries.clear();
+		m_instances.clear();
 	}
 
 	void GeometryCache::add( ElementPtr element )
@@ -194,22 +302,40 @@ namespace castor3d
 		}
 	}
 
-	GeometryCache::PoolsEntry GeometryCache::doCreateEntry( RenderDevice const & device
+	void GeometryCache::doCreateEntry( RenderDevice const & device
 		, Geometry const & geometry
 		, Submesh const & submesh
 		, Pass const & pass )
 	{
 		auto & uboPools = *device.uboPools;
-		return
+		auto baseHash = hash( geometry, submesh, pass );
+		auto iresult= m_baseEntries.emplace( baseHash
+			, GeometryCache::PoolsEntry{ baseHash
+				, geometry
+				, submesh
+				, pass } );
+
+		if ( iresult.second )
 		{
-			geometry,
-			submesh,
-			pass,
-			uboPools.getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ),
-			uboPools.getBuffer< ModelMatrixUboConfiguration>( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ),
-			uboPools.getBuffer< PickingUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ),
-			uboPools.getBuffer< TexturesUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ),
-		};
+			auto & baseEntry = iresult.first->second;
+			baseEntry.modelUbo = uboPools.getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+			baseEntry.modelMatrixUbo = uboPools.getBuffer< ModelMatrixUboConfiguration>( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+			baseEntry.pickingUbo = uboPools.getBuffer< PickingUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+			baseEntry.texturesUbo = uboPools.getBuffer< TexturesUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+
+			for ( auto instanceMult : m_instances )
+			{
+				auto entry = baseEntry;
+
+				if ( instanceMult.first > 1 )
+				{
+					entry.modelInstancesUbo = uboPools.getBuffer< ModelInstancesUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+				}
+
+				entry.hash = hash( geometry, submesh, pass, instanceMult.first );
+				m_entries.emplace( entry.hash, entry );
+			}
+		}
 	}
 
 	void GeometryCache::doRemoveEntry( RenderDevice const & device
@@ -217,13 +343,36 @@ namespace castor3d
 		, Submesh const & submesh
 		, Pass const & pass )
 	{
-		auto entry = getUbos( geometry, submesh, pass );
 		auto & uboPools = *device.uboPools;
-		m_entries.erase( hash( geometry, submesh, pass ) );
-		uboPools.putBuffer( entry.modelUbo );
-		uboPools.putBuffer( entry.modelMatrixUbo );
-		uboPools.putBuffer( entry.pickingUbo );
-		uboPools.putBuffer( entry.texturesUbo );
+		auto baseHash = hash( geometry, submesh, pass );
+
+		for ( auto instanceMult : m_instances )
+		{
+			auto it = m_entries.find( hash( geometry, submesh, pass, instanceMult.first ) );
+
+			if ( it != m_entries.end() )
+			{
+				auto entry = it->second;
+				m_entries.erase( it );
+
+				if ( entry.modelInstancesUbo )
+				{
+					uboPools.putBuffer( entry.modelInstancesUbo );
+				}
+			}
+		}
+
+		auto it = m_baseEntries.find( baseHash );
+
+		if ( it != m_baseEntries.end() )
+		{
+			auto entry = it->second;
+			m_baseEntries.erase( it );
+			uboPools.putBuffer( entry.modelUbo );
+			uboPools.putBuffer( entry.modelMatrixUbo );
+			uboPools.putBuffer( entry.pickingUbo );
+			uboPools.putBuffer( entry.texturesUbo );
+		}
 	}
 
 	void GeometryCache::doRegister( Geometry & geometry )
@@ -248,8 +397,7 @@ namespace castor3d
 						{
 							for ( auto & pass : *newMaterial )
 							{
-								m_entries.emplace( hash( geometry, submesh, *pass )
-									, doCreateEntry( device, geometry, submesh, *pass ) );
+								doCreateEntry( device, geometry, submesh, *pass );
 							}
 						}
 					} ) );
@@ -264,8 +412,7 @@ namespace castor3d
 						{
 							for ( auto & pass : *material )
 							{
-								m_entries.emplace( hash( geometry, *submesh, *pass )
-									, doCreateEntry( device, geometry, *submesh, *pass ) );
+								doCreateEntry( device, geometry, *submesh, *pass );
 							}
 						}
 					}

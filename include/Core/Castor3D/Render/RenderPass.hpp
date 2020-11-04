@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_RENDER_PASS_H___
-#define ___C3D_RENDER_PASS_H___
+#ifndef ___C3D_RenderPass_H___
+#define ___C3D_RenderPass_H___
 
 #include "RenderModule.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp"
@@ -27,95 +27,61 @@ namespace castor3d
 	public:
 		using DistanceSortedNodeMap = std::multimap< double, std::unique_ptr< DistanceRenderNodeBase > >;
 
+	private:
+		C3D_API RenderPass( castor::String const & category
+			, castor::String const & name
+			, Engine & engine
+			, MatrixUbo & matrixUbo
+			, SceneCuller & culler
+			, bool opaque
+			, bool oit
+			, SceneNode const * ignored
+			, uint32_t instanceMult = 1u );
+
 	protected:
 		/**
 		 *\~english
 		 *\brief		Constructor for opaque nodes.
-		 *\param[in]	category	The pass category.
-		 *\param[in]	name		The pass name.
-		 *\param[in]	engine		The engine.
-		 *\param[in]	matrixUbo	The scene matrices UBO.
-		 *\param[in]	culler		The scene culler for this pass.
+		 *\param[in]	category		The pass category.
+		 *\param[in]	name			The pass name.
+		 *\param[in]	engine			The engine.
+		 *\param[in]	matrixUbo		The scene matrices UBO.
+		 *\param[in]	culler			The scene culler for this pass.
+		 *\param[in]	instanceMult	The object instance multiplier.
 		 *\~french
 		 *\brief		Constructeur pour les noeuds opaques.
-		 *\param[in]	category	La catégorie de la passe.
-		 *\param[in]	name		Le nom de la passe.
-		 *\param[in]	engine		Le moteur.
-		 *\param[in]	matrixUbo	L'UBO des matrices de la scène.
-		 *\param[in]	culler		Le culler pour cette passe.
-		 */
-		C3D_API RenderPass( castor::String const & category
-			, castor::String const & name
-			, Engine & engine
-			, MatrixUbo & matrixUbo
-			, SceneCuller & culler );
-		/**
-		 *\~english
-		 *\brief		Constructor for transparent nodes.
-		 *\param[in]	category	The pass category.
-		 *\param[in]	name		The pass name.
-		 *\param[in]	engine		The engine.
-		 *\param[in]	matrixUbo	The scene matrices UBO.
-		 *\param[in]	culler		The scene culler for this pass.
-		 *\param[in]	oit			The order independant status.
-		 *\~french
-		 *\brief		Constructeur pour les noeuds transparents.
-		 *\param[in]	category	La catégorie de la passe.
-		 *\param[in]	name		Le nom de la passe.
-		 *\param[in]	engine		Le moteur.
-		 *\param[in]	matrixUbo	L'UBO des matrices de la scène.
-		 *\param[in]	culler		Le culler pour cette passe.
-		 *\param[in]	oit			Le statut de rendu indépendant de l'ordre des objets.
+		 *\param[in]	category		La catégorie de la passe.
+		 *\param[in]	name			Le nom de la passe.
+		 *\param[in]	engine			Le moteur.
+		 *\param[in]	matrixUbo		L'UBO des matrices de la scène.
+		 *\param[in]	culler			Le culler pour cette passe.
+		 *\param[in]	instanceMult	Le multiplicateur d'instances d'objets.
 		 */
 		C3D_API RenderPass( castor::String const & category
 			, castor::String const & name
 			, Engine & engine
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
-			, bool oit );
-		/**
-		 *\~english
-		 *\brief		Constructor for opaque nodes.
-		 *\param[in]	category	The pass category.
-		 *\param[in]	name		The pass name.
-		 *\param[in]	engine		The engine.
-		 *\param[in]	matrixUbo	The scene matrices UBO.
-		 *\param[in]	culler		The scene culler for this pass.
-		 *\param[in]	ignored		The geometries attached to this node will be ignored in the render.
-		 *\~french
-		 *\brief		Constructeur pour les noeuds opaques.
-		 *\param[in]	category	La catégorie de la passe.
-		 *\param[in]	name		Le nom de la passe.
-		 *\param[in]	engine		Le moteur.
-		 *\param[in]	matrixUbo	L'UBO des matrices de la scène.
-		 *\param[in]	culler		Le culler pour cette passe.
-		 *\param[in]	ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
-		 */
-		C3D_API RenderPass( castor::String const & category
-			, castor::String const & name
-			, Engine & engine
-			, MatrixUbo & matrixUbo
-			, SceneCuller & culler
-			, SceneNode const * ignored );
+			, uint32_t instanceMult = 1u );
 		/**
 		 *\~english
 		 *\brief		Constructor for transparent nodes.
-		 *\param[in]	category	The pass category.
-		 *\param[in]	name		The pass name.
-		 *\param[in]	engine		The engine.
-		 *\param[in]	matrixUbo	The scene matrices UBO.
-		 *\param[in]	culler		The scene culler for this pass.
-		 *\param[in]	oit			The order independant status.
-		 *\param[in]	ignored		The geometries attached to this node will be ignored in the render.
+		 *\param[in]	category		The pass category.
+		 *\param[in]	name			The pass name.
+		 *\param[in]	engine			The engine.
+		 *\param[in]	matrixUbo		The scene matrices UBO.
+		 *\param[in]	culler			The scene culler for this pass.
+		 *\param[in]	oit				The order independant status.
+		 *\param[in]	instanceMult	The object instance multiplier.
 		 *\~french
 		 *\brief		Constructeur pour les noeuds transparents.
-		 *\param[in]	category	La catégorie de la passe.
-		 *\param[in]	name		Le nom de la passe.
-		 *\param[in]	engine		Le moteur.
-		 *\param[in]	matrixUbo	L'UBO des matrices de la scène.
-		 *\param[in]	culler		Le culler pour cette passe.
-		 *\param[in]	oit			Le statut de rendu indépendant de l'ordre des objets.
-		 *\param[in]	ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
+		 *\param[in]	category		La catégorie de la passe.
+		 *\param[in]	name			Le nom de la passe.
+		 *\param[in]	engine			Le moteur.
+		 *\param[in]	matrixUbo		L'UBO des matrices de la scène.
+		 *\param[in]	culler			Le culler pour cette passe.
+		 *\param[in]	oit				Le statut de rendu indépendant de l'ordre des objets.
+		 *\param[in]	instanceMult	Le multiplicateur d'instances d'objets.
 		 */
 		C3D_API RenderPass( castor::String const & category
 			, castor::String const & name
@@ -123,7 +89,64 @@ namespace castor3d
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, bool oit
-			, SceneNode const * ignored );
+			, uint32_t instanceMult = 1u );
+		/**
+		 *\~english
+		 *\brief		Constructor for opaque nodes.
+		 *\param[in]	category		The pass category.
+		 *\param[in]	name			The pass name.
+		 *\param[in]	engine			The engine.
+		 *\param[in]	matrixUbo		The scene matrices UBO.
+		 *\param[in]	culler			The scene culler for this pass.
+		 *\param[in]	ignored			The geometries attached to this node will be ignored in the render.
+		 *\param[in]	instanceMult	The object instance multiplier.
+		 *\~french
+		 *\brief		Constructeur pour les noeuds opaques.
+		 *\param[in]	category		La catégorie de la passe.
+		 *\param[in]	name			Le nom de la passe.
+		 *\param[in]	engine			Le moteur.
+		 *\param[in]	matrixUbo		L'UBO des matrices de la scène.
+		 *\param[in]	culler			Le culler pour cette passe.
+		 *\param[in]	ignored			Les géométries attachées à ce noeud seront ignorées lors du rendu.
+		 *\param[in]	instanceMult	Le multiplicateur d'instances d'objets.
+		 */
+		C3D_API RenderPass( castor::String const & category
+			, castor::String const & name
+			, Engine & engine
+			, MatrixUbo & matrixUbo
+			, SceneCuller & culler
+			, SceneNode const * ignored
+			, uint32_t instanceMult = 1u );
+		/**
+		 *\~english
+		 *\brief		Constructor for transparent nodes.
+		 *\param[in]	category		The pass category.
+		 *\param[in]	name			The pass name.
+		 *\param[in]	engine			The engine.
+		 *\param[in]	matrixUbo		The scene matrices UBO.
+		 *\param[in]	culler			The scene culler for this pass.
+		 *\param[in]	oit				The order independant status.
+		 *\param[in]	ignored			The geometries attached to this node will be ignored in the render.
+		 *\param[in]	instanceMult	The object instance multiplier.
+		 *\~french
+		 *\brief		Constructeur pour les noeuds transparents.
+		 *\param[in]	category		La catégorie de la passe.
+		 *\param[in]	name			Le nom de la passe.
+		 *\param[in]	engine			Le moteur.
+		 *\param[in]	matrixUbo		L'UBO des matrices de la scène.
+		 *\param[in]	culler			Le culler pour cette passe.
+		 *\param[in]	oit				Le statut de rendu indépendant de l'ordre des objets.
+		 *\param[in]	ignored			Les géométries attachées à ce noeud seront ignorées lors du rendu.
+		 *\param[in]	instanceMult	Le multiplicateur d'instances d'objets.
+		 */
+		C3D_API RenderPass( castor::String const & category
+			, castor::String const & name
+			, Engine & engine
+			, MatrixUbo & matrixUbo
+			, SceneCuller & culler
+			, bool oit
+			, SceneNode const * ignored
+			, uint32_t instanceMult = 1u );
 
 	public:
 		/**
@@ -659,6 +682,16 @@ namespace castor3d
 			return uint32_t( m_backPipelines.size()
 				+ m_frontPipelines.size() );
 		}
+
+		inline uint32_t getInstanceMult()const
+		{
+			return m_instanceMult;
+		}
+
+		inline bool isDirty()const
+		{
+			return m_isDirty;
+		}
 		/**@}*/
 
 	protected:
@@ -914,6 +947,17 @@ namespace castor3d
 			, RenderInfo & info );
 		/**
 		 *\~english
+		 *\brief		Updates the specific data.
+		 *\remarks		Gather the render queues, for further update.
+		 *\param[out]	queues	Receives the render queues needed for the rendering of the frame.
+		 *\~french
+		 *\brief		Met les données spécifiques.
+		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
+		 *\param[out]	queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
+		 */
+		C3D_API virtual void doUpdate( RenderQueueArray & queues );
+		/**
+		 *\~english
 		 *\brief		Uploads UBO pools to VRAM.
 		 *\param[in]	camera	The camera.
 		 *\param[in]	jitter	The jitteering data.
@@ -922,8 +966,7 @@ namespace castor3d
 		 *\param[in]	camera	La caméra.
 		 *\param[in]	jitter	Les données de jittering.
 		 */
-		C3D_API virtual void doUpdateUbos( Camera const & camera
-			, castor::Point2f const & jitter );
+		C3D_API virtual void doUpdateUbos( CpuUpdater & updater );
 		/**
 		*\~english
 		*\return
@@ -1109,17 +1152,6 @@ namespace castor3d
 			, ShadowMapLightTypeArray const & shadowMaps ) = 0;
 		/**
 		 *\~english
-		 *\brief		Updates the specific data.
-		 *\remarks		Gather the render queues, for further update.
-		 *\param[out]	queues	Receives the render queues needed for the rendering of the frame.
-		 *\~french
-		 *\brief		Met les données spécifiques.
-		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
-		 *\param[out]	queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
-		 */
-		C3D_API virtual void doUpdate( RenderQueueArray & queues ) = 0;
-		/**
-		 *\~english
 		 *\brief			Modifies the given flags to make them match the render pass requirements.
 		 *\param[in,out]	flags	The pipeline flags.
 		 *\~french
@@ -1233,14 +1265,17 @@ namespace castor3d
 		RenderSystem & m_renderSystem;
 		MatrixUbo & m_matrixUbo;
 		SceneCuller & m_culler;
-		castor::String m_category;
 		RenderQueue m_renderQueue;
+		castor::String m_category;
 		bool m_opaque{ false };
 		bool m_oit{ false };
+		bool m_isDirty{ true };
 		SceneUbo m_sceneUbo;
 		ashes::RenderPassPtr m_renderPass;
 		RenderPassTimerSPtr m_timer;
 		castor::Size m_size;
+		uint32_t const m_instanceMult{ 1u };
+		std::map< size_t, UniformBufferOffsetT< ModelInstancesUboConfiguration > > m_modelsInstances;
 
 	private:
 		std::map< PipelineFlags, RenderPipelineUPtr > m_frontPipelines;

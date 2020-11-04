@@ -2,33 +2,20 @@
 
 namespace castor3d
 {
-	namespace
-	{
-		template< typename NodeType >
-		void doCopy( std::vector< NodeType > & src
-			, std::vector< NodeType * > & dst )
-		{
-			for ( auto & node : src )
-			{
-				dst.push_back( &node );
-			}
-		}
-	}
-
-	DummyCuller::DummyCuller( Scene const & scene )
-		: SceneCuller{ scene, nullptr }
+	DummyCuller::DummyCuller( Scene & scene )
+		: SceneCuller{ scene, nullptr, 1u }
 	{
 	}
 
 	void DummyCuller::doCullGeometries()
 	{
-		doCopy( m_allOpaqueSubmeshes, m_culledOpaqueSubmeshes );
-		doCopy( m_allTransparentSubmeshes, m_culledTransparentSubmeshes );
+		m_allOpaqueSubmeshes.copy( m_culledOpaqueSubmeshes );
+		m_allTransparentSubmeshes.copy( m_culledTransparentSubmeshes );
 	}
 
 	void DummyCuller::doCullBillboards()
 	{
-		doCopy( m_allOpaqueBillboards, m_culledOpaqueBillboards );
-		doCopy( m_allTransparentBillboards, m_culledTransparentBillboards );
+		m_allOpaqueBillboards.copy( m_culledOpaqueBillboards );
+		m_allTransparentBillboards.copy( m_culledTransparentBillboards );
 	}
 }

@@ -66,6 +66,10 @@ namespace castor3d
 		 */
 		void doCleanup( RenderDevice const & device )override;
 		/**
+		 *\copydoc		castor3d::ShadowMapPass::doUpdateUbos
+		 */
+		void doUpdateUbos( CpuUpdater & updater )override;
+		/**
 		 *\copydoc		castor3d::RenderPass::doFillUboDescriptor
 		 */
 		void doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
@@ -75,10 +79,6 @@ namespace castor3d
 		 */
 		void doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 			, SubmeshRenderNode & node )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doUpdate
-		 */
-		void doUpdate( RenderQueueArray & queues )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateUboBindings
 		 */

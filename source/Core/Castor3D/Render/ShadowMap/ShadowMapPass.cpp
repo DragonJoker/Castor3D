@@ -39,10 +39,6 @@ namespace castor3d
 	{
 	}
 
-	ShadowMapPass::~ShadowMapPass()
-	{
-	}
-
 	void ShadowMapPass::doUpdateNodes( SceneCulledRenderNodes & nodes )
 	{
 		if ( nodes.hasNodes() )

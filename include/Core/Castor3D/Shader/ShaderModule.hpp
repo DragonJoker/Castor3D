@@ -99,30 +99,33 @@ namespace castor3d
 		//!\~english	Shader for fixed size billboards.
 		//\~french		Shader pour les billboards à dimensions fixes.
 		eFixedSize = 0x0080,
+		//!\~english	Program using and instances multiplier.
+		//!\~french		Programme utilisant un multiplicateur d'instances.
+		eInstanceMult = 0x0100,
 		//!\~english	Shader used to render a shadow map for directional light.
 		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière directionnalle.
-		eShadowMapDirectional = 0x0100,
+		eShadowMapDirectional = 0x0200,
 		//!\~english	Shader used to render a shadow map for spot light.
 		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière projecteur.
-		eShadowMapSpot = 0x0200,
+		eShadowMapSpot = 0x0400,
 		//!\~english	Shader used to render a shadow map for point light.
 		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière omnidirectionnelle.
-		eShadowMapPoint = 0x0400,
+		eShadowMapPoint = 0x0800,
 		//!\~english	Shader used to render an environment map.
 		//\~french		Shader utilisé pour dessiner une texture d'environnement.
-		eEnvironmentMapping = 0x0800,
+		eEnvironmentMapping = 0x1000,
 		//!\~english	Shader for the depth pre-pass.
 		//\~french		Shader pour la pré-passe de profondeur.
-		eDepthPass = 0x1000,
+		eDepthPass = 0x2000,
 		//!\~english	Vertex shader inverts normals (for front culling).
 		//\~french		Le vertex shader inverse les normales (pour le front culling).
-		eInvertNormals = 0x2000,
+		eInvertNormals = 0x4000,
 		//!\~english	Vertex shader inverts normals (for front culling).
 		//\~french		Le vertex shader inverse les normales (pour le front culling).
-		eHasGeometry = 0x4000,
+		eHasGeometry = 0x8000,
 		//!\~english	All flags.
 		//\~french		Tous les indicateurs.
-		eAll = 0x7FFF,
+		eAll = 0xFFFF,
 	};
 	CU_ImplementFlags( ProgramFlag )
 	/**

@@ -274,6 +274,14 @@ namespace castor
 
 	using Named = NamedBase< String >;
 	using DynamicBitset = DynamicBitsetT< uint32_t >;
+
+	template< typename T >
+	struct IsChangeTrackedT : std::false_type
+	{
+	};
+
+	template< typename T >
+	static inline bool constexpr isChangeTrackedT = IsChangeTrackedT< T >::value;
 	//@}
 }
 
