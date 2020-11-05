@@ -62,16 +62,9 @@ namespace castor3d
 	bool ShadowMapPassDirectional::update( CpuUpdater & updater )
 	{
 		getCuller().compute();
-		doUpdate( *updater.queues );
 		m_outOfDate = true;
 		RenderPass::update( updater );
 		return m_outOfDate;
-	}
-
-	void ShadowMapPassDirectional::doUpdateUbos( CpuUpdater & updater )
-	{
-		RenderPass::doUpdateUbos( updater );
-		m_shadowMapUbo.update( *updater.light, updater.index );
 	}
 
 	void ShadowMapPassDirectional::update( GpuUpdater & updater )
@@ -80,6 +73,12 @@ namespace castor3d
 		{
 			doUpdateNodes( m_renderQueue.getCulledRenderNodes() );
 		}
+	}
+
+	void ShadowMapPassDirectional::doUpdateUbos( CpuUpdater & updater )
+	{
+		RenderPass::doUpdateUbos( updater );
+		m_shadowMapUbo.update( *updater.light, updater.index );
 	}
 
 	bool ShadowMapPassDirectional::doInitialise( RenderDevice const & device
