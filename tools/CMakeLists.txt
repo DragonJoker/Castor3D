@@ -7,6 +7,7 @@ option( CASTOR_BUILD_TOOL_DIFF_IMAGE "Build DiffImage" ON )
 option( CASTOR_BUILD_TOOL_MESH_UPGRADER "Build CastorMeshUpgrader" ON )
 option( CASTOR_BUILD_TOOL_MESH_CONVERTER "Build CastorMeshConverter" ON )
 option( CASTOR_BUILD_TOOL_CASTOR_TEST_LAUNCHER "Build CastorTestLauncher" ON )
+option( CASTOR_BUILD_TOOL_CASTOR_TEST_PARSER "Build CastorTestParser" ON )
 
 function( ToolsInit )
 	set( ImgConv "no (Not wanted)" PARENT_SCOPE )
@@ -14,6 +15,7 @@ function( ToolsInit )
 	set( MshUpgd "no (Not wanted)" PARENT_SCOPE )
 	set( MshConv "no (Not wanted)" PARENT_SCOPE )
 	set( TestLcr "no (Not wanted)" PARENT_SCOPE )
+	set( TestPsr "no (Not wanted)" PARENT_SCOPE )
 endfunction( ToolsInit )
 
 function( ToolsBuild )
@@ -40,11 +42,11 @@ function( ToolsBuild )
 
 			#we look for wxWidgets
 			set( wxWidgets_IGNORE_VCPKG ON )
-			find_package( wxWidgets COMPONENTS core base )
+			find_package( wxWidgets COMPONENTS core base adv aui )
 
 			if ( CASTOR_USE_DEPS_WXWIDGETS AND NOT wxWidgets_FOUND )
 				set( wxWidgets_LIB_DIR ${DEPENDENCIES_DIR}/wxWidgets/lib CACHE PATH "wxWidgets libraries directory" )
-				find_package( wxWidgets QUIET COMPONENTS core base )
+				find_package( wxWidgets QUIET COMPONENTS core base adv aui )
 			endif ()
 
 			if( wxWidgets_FOUND AND GTK2_FOUND )
@@ -79,6 +81,16 @@ function( ToolsBuild )
 						ImgConverter "ImgConverter"
 						PARENT_SCOPE )
 					set( ImgConv ${Build} PARENT_SCOPE )
+				endif ()
+
+				if( CASTOR_BUILD_TOOL_CASTOR_TEST_PARSER )
+					set( Build ${TestPsr} )
+					add_subdirectory( CastorTestParser )
+					set( CPACK_PACKAGE_EXECUTABLES
+						${CPACK_PACKAGE_EXECUTABLES}
+						CastorTestParser "CastorTestParser"
+						PARENT_SCOPE )
+					set( TestPsr ${Build} PARENT_SCOPE )
 				endif ()
 
 				if( CASTOR_BUILD_CASTOR3D AND CASTOR_BUILD_TOOL_CASTOR_TEST_LAUNCHER )
@@ -163,6 +175,8 @@ function( ToolsSummary )
 				set( msg_tmp "${msg_tmp}\n    CastorTestLauncher   ${TestLcr}" )
 			endif ()
 		endif ()
+		if( CASTOR_BUILD_TOOL_CASTOR_TEST_PARSER )
+			set( msg_tmp "${msg_tmp}\n    CastorTestParser     ${TestPsr}" )
 		endif ()
 		set( msg "${msg}${msg_tmp}" )
 		message( STATUS "${msg}\n" )
