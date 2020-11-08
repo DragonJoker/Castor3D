@@ -224,6 +224,30 @@ namespace castor
 		return uiReturn;
 	}
 
+	bool File::directoryDelete( Path const & folder )
+	{
+		HitFileFunction fileFunction = []( Path const & folder
+			, String const & name )
+		{
+			File::deleteFile( folder / name );
+		};
+		TraverseDirFunction directoryFunction;
+		directoryFunction = [&fileFunction, &directoryFunction]( Path const & folder )
+		{
+			bool result = traverseDirectory( folder
+				, directoryFunction
+				, fileFunction );
+
+			if ( result )
+			{
+				result = deleteEmptyDirectory( folder );
+			}
+
+			return result;
+		};
+		return directoryFunction( folder );
+	}
+
 	bool File::fileExists( Path const & p_pathFile )
 	{
 		std::ifstream ifile( string::stringCast< char >( p_pathFile ).c_str() );
@@ -272,5 +296,57 @@ namespace castor
 		}
 
 		return result;
+	}
+
+	bool File::listDirectoryFiles( Path const & folderPath, PathArray & files, bool recursive )
+	{
+		files = filterDirectoryFiles( folderPath
+			, []( Path const & folder
+				, String const & name )
+			{
+				return true;
+			}
+			, recursive );
+		return true;
+	}
+
+	PathArray File::filterDirectoryFiles( Path const & folderPath
+		, FilterFunction onFile
+		, bool recursive )
+	{
+		PathArray files;
+		HitFileFunction fileFunction = [&files, onFile]( Path const & folder
+			, String const & name )
+		{
+			if ( onFile( folder, name ) )
+			{
+				files.push_back( folder / name );
+			}
+
+			return true;
+		};
+		TraverseDirFunction directoryFunction;
+
+		if ( recursive )
+		{
+			directoryFunction = [&fileFunction, &directoryFunction]( Path const & path )
+			{
+				return traverseDirectory( path
+					, directoryFunction
+					, fileFunction );
+			};
+		}
+		else
+		{
+			directoryFunction = []( Path const & path )
+			{
+				return true;
+			};
+		}
+
+		traverseDirectory( folderPath
+			, directoryFunction
+			, fileFunction );
+		return files;
 	}
 }

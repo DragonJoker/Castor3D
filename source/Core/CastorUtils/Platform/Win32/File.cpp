@@ -22,98 +22,56 @@
 
 namespace castor
 {
-	namespace
+	bool File::traverseDirectory( Path const & folderPath
+		, TraverseDirFunction directoryFunction
+		, HitFileFunction fileFunction )
 	{
-		template< typename DirectoryFuncType, typename FileFuncType >
-		bool TraverseDirectory( Path const & folderPath, DirectoryFuncType directoryFunction, FileFuncType fileFunction )
+		CU_Require( !folderPath.empty() );
+		bool result = false;
+		WIN32_FIND_DATAA findData;
+		HANDLE handle = ::FindFirstFileA( ( folderPath / cuT( "*.*" ) ).c_str(), &findData );
+
+		if ( handle != INVALID_HANDLE_VALUE )
 		{
-			CU_Require( !folderPath.empty() );
-			bool result = false;
-			WIN32_FIND_DATAA findData;
-			HANDLE handle = ::FindFirstFileA( ( folderPath / cuT( "*.*" ) ).c_str(), &findData );
+			result = true;
+			String name = findData.cFileName;
 
-			if ( handle != INVALID_HANDLE_VALUE )
+			if ( name != cuT( "." ) && name != cuT( ".." ) )
 			{
-				result = true;
-				String name = findData.cFileName;
-
-				if ( name != cuT( "." ) && name != cuT( ".." ) )
+				if ( ( findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) == FILE_ATTRIBUTE_DIRECTORY )
 				{
-					if ( ( findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) == FILE_ATTRIBUTE_DIRECTORY )
-					{
-						result = directoryFunction( folderPath / name );
-					}
-					else
-					{
-						fileFunction( folderPath / name );
-					}
+					result = directoryFunction( folderPath / name );
 				}
-
-				while ( result && ::FindNextFileA( handle, &findData ) == TRUE )
+				else
 				{
-					if ( findData.cFileName != name )
-					{
-						name = findData.cFileName;
+					fileFunction( folderPath, name );
+				}
+			}
 
-						if ( name != cuT( "." ) && name != cuT( ".." ) )
+			while ( result && ::FindNextFileA( handle, &findData ) == TRUE )
+			{
+				if ( findData.cFileName != name )
+				{
+					name = findData.cFileName;
+
+					if ( name != cuT( "." ) && name != cuT( ".." ) )
+					{
+						if ( ( findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) == FILE_ATTRIBUTE_DIRECTORY )
 						{
-							if ( ( findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) == FILE_ATTRIBUTE_DIRECTORY )
-							{
-								result = directoryFunction( folderPath / name );
-							}
-							else
-							{
-								fileFunction( folderPath / name );
-							}
+							result = directoryFunction( folderPath / name );
+						}
+						else
+						{
+							fileFunction( folderPath, name );
 						}
 					}
 				}
-
-				::FindClose( handle );
 			}
 
-			return result;
+			::FindClose( handle );
 		}
 
-		bool DeleteEmptyDirectory( Path const & p_path )
-		{
-#if defined( CU_CompilerMSVC )
-
-			bool result = _rmdir( p_path.c_str() ) == 0;
-
-#else
-
-			bool result = rmdir( string::stringCast< char >( p_path ).c_str() ) == 0;
-
-#endif
-
-			if ( !result )
-			{
-				auto error = errno;
-
-				switch ( error )
-				{
-				case ENOTEMPTY:
-					Logger::logError( makeStringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], it is not empty." ) );
-					break;
-
-				case ENOENT:
-					Logger::logError( makeStringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], the path is invalid." ) );
-					break;
-
-				case EACCES:
-					Logger::logError( makeStringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], a program has an open handle to this directory." ) );
-					break;
-
-				default:
-					Logger::logError( makeStringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], unknown error (" ) << error << cuT( ")." ) );
-					break;
-				}
-			}
-
-			return result;
-		}
-
+		return result;
 	}
 
 #if defined( CU_CompilerMSVC )
@@ -234,85 +192,40 @@ namespace castor
 #endif
 	}
 
-	bool File::listDirectoryFiles( Path const & folderPath, PathArray & p_files, bool p_recursive )
+	bool File::deleteEmptyDirectory( Path const & p_path )
 	{
-		struct FileFunction
+#if defined( CU_CompilerMSVC )
+
+		bool result = _rmdir( p_path.c_str() ) == 0;
+
+#else
+
+		bool result = rmdir( string::stringCast< char >( p_path ).c_str() ) == 0;
+
+#endif
+
+		if ( !result )
 		{
-			explicit FileFunction( PathArray & p_files )
-				: m_files( p_files )
+			auto error = errno;
+
+			switch ( error )
 			{
+			case ENOTEMPTY:
+				Logger::logError( makeStringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], it is not empty." ) );
+				break;
+
+			case ENOENT:
+				Logger::logError( makeStringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], the path is invalid." ) );
+				break;
+
+			case EACCES:
+				Logger::logError( makeStringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], a program has an open handle to this directory." ) );
+				break;
+
+			default:
+				Logger::logError( makeStringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], unknown error (" ) << error << cuT( ")." ) );
+				break;
 			}
-			void operator()( Path const & p_path )
-			{
-				m_files.push_back( p_path );
-			}
-			PathArray & m_files;
-		};
-
-		if ( p_recursive )
-		{
-			struct DirectoryFunction
-			{
-				explicit DirectoryFunction( PathArray & p_files )
-					: m_files( p_files )
-				{
-				}
-				bool operator()( Path const & p_path )
-				{
-					return TraverseDirectory( p_path, DirectoryFunction( m_files ), FileFunction( m_files ) );
-				}
-				PathArray & m_files;
-			};
-
-			return TraverseDirectory( folderPath, DirectoryFunction( p_files ), FileFunction( p_files ) );
-		}
-		else
-		{
-			struct DirectoryFunction
-			{
-				DirectoryFunction()
-				{
-				}
-				bool operator()( Path const & p_path )
-				{
-					return true;
-				}
-			};
-
-			return TraverseDirectory( folderPath, DirectoryFunction(), FileFunction( p_files ) );
-		}
-	}
-
-	bool File::directoryDelete( Path const & p_path )
-	{
-		struct FileFunction
-		{
-			void operator()( Path const & p_path )
-			{
-				File::deleteFile( p_path );
-			}
-		};
-
-		struct DirectoryFunction
-		{
-			bool operator()( Path const & p_path )
-			{
-				bool result = TraverseDirectory( p_path, DirectoryFunction(), FileFunction() );
-
-				if ( result )
-				{
-					result = DeleteEmptyDirectory( p_path );
-				}
-
-				return result;
-			}
-		};
-
-		bool result = TraverseDirectory( p_path, DirectoryFunction(), FileFunction() );
-
-		if ( result )
-		{
-			result = DeleteEmptyDirectory( p_path );
 		}
 
 		return result;
