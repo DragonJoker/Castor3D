@@ -13,7 +13,6 @@ set( ExternalIncludes )
 
 if ( CASTOR_USE_GLSLANG )
 	set( Castor3DDefinitions
-		${Castor3DDefinitions}
 		C3D_HasGlslang
 	)
 endif ()

@@ -307,7 +307,6 @@ namespace castor3d
 		m_needsNormalsCompute = fixNml( point.nml );
 		m_needsNormalsCompute = fixPos( point.pos ) || m_needsNormalsCompute;
 		m_needsNormalsCompute = fixTex( point.tex ) || m_needsNormalsCompute;
-		m_needsNormalsCompute = fixTan( point.tan ) || m_needsNormalsCompute;
 		m_points.push_back( point );
 	}
 
