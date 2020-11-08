@@ -42,6 +42,6 @@ namespace castor
 	};
 }
 
-#	define CU_Time() castor::BlockTimer timer##__LINE__( __FUNCTION__, __FILE__, __LINE__ )
+#define CU_Time() castor::BlockTimer timer##__LINE__{ __FUNCTION__, __FILE__, uint32_t( __LINE__ ) }
 
 #endif

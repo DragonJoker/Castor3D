@@ -43,7 +43,7 @@ namespace castor
 	};
 
 	class UnicityException
-		: public castor::Exception
+		: public Exception
 	{
 	public:
 		UnicityException( UnicityError error
@@ -58,9 +58,9 @@ namespace castor
 		{
 		}
 	};
-	//!\~english	Helper macro to use UnicityException.
-	//\~french		Macro pour faciliter l'utilisation de UnicityException.
-#	define CU_UnicityError( error, text ) throw UnicityException( error, text, __FILE__, __FUNCTION__, __LINE__)
 }
+//!\~english	Helper macro to use UnicityException.
+//\~french		Macro pour faciliter l'utilisation de UnicityException.
+#define CU_UnicityError( error, text ) throw castor::UnicityException{ error, text, __FILE__, __FUNCTION__, uint32_t( __LINE__ ) }
 
 #endif

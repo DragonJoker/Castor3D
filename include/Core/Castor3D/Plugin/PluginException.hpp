@@ -54,9 +54,10 @@ namespace castor3d
 	private:
 		bool m_critical;
 	};
-	//! helper macro to ease the use of PluginException
-#	define CASTOR_PLUGIN_EXCEPTION( description, critical ) throw PluginException( critical, description, __FILE__, __FUNCTION__, __LINE__)
 }
+
+//! helper macro to ease the use of PluginException
+#define CASTOR_PLUGIN_EXCEPTION( description, critical ) throw castor3d::PluginException{ critical, description, __FILE__, __FUNCTION__, uint32_t( __LINE__ ) }
 
 #endif
 

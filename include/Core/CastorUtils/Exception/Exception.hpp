@@ -183,13 +183,11 @@ namespace castor
 	};
 }
 /**
-\author 	Sylvain DOREMUS
-\date 		03/01/2011
-\~english
-\brief		Macro to ease the use of castor::Exception
-\~french
-\brief		Macro définie pour faciliter l'utilisation de castor::Exception
+*\~english
+*\brief		Macro to ease the use of castor::Exception
+*\~french
+*\brief		Macro définie pour faciliter l'utilisation de castor::Exception
 */
-#define CU_Exception( text ) throw castor::Exception{ text, __FILE__, __FUNCTION__, __LINE__ }
+#define CU_Exception( text ) throw castor::Exception{ text, __FILE__, __FUNCTION__, uint32_t( __LINE__ ) }
 
 #endif

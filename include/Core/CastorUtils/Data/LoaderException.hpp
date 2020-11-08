@@ -39,6 +39,6 @@ namespace castor
 }
 //!\~english	Helper macro to use LoaderException.
 //\~french		Macro pour faciliter l'utilisation de LoaderException.
-#define CU_LoaderError( text ) throw castor::LoaderException{ text, __FILE__, __FUNCTION__, __LINE__ }
+#define CU_LoaderError( text ) throw castor::LoaderException{ text, __FILE__, __FUNCTION__, uint32_t( __LINE__ ) }
 
 #endif

@@ -645,22 +645,22 @@ namespace Testing
 	Fail( __FILE__, __FUNCTION__, __LINE__, x )
 
 #	define CT_CHECK( x )\
-	Check( LAZY( ( x ) ), __FILE__, __FUNCTION__, __LINE__, #x )
+	Check( LAZY( ( x ) ), __FILE__, __FUNCTION__, uint32_t( __LINE__ ), #x )
 
 #	define CT_EQUAL( x, y )\
-	CheckEqual( [&]( auto const & lhs, auto const & rhs ){ return this->compare( lhs, rhs ); }, LAZY( ( x ) ), LAZY( ( y ) ), __FILE__, __FUNCTION__, __LINE__, #x, #y )
+	CheckEqual( [&]( auto const & lhs, auto const & rhs ){ return this->compare( lhs, rhs ); }, LAZY( ( x ) ), LAZY( ( y ) ), __FILE__, __FUNCTION__, uint32_t( __LINE__ ), #x, #y )
 
 #	define CT_NEQUAL( x, y )\
-	CheckNotEqual( [&]( auto const & lhs, auto const & rhs ){ return this->compare( lhs, rhs ); }, LAZY( ( x ) ), LAZY( ( y ) ), __FILE__, __FUNCTION__, __LINE__, #x, #y )
+	CheckNotEqual( [&]( auto const & lhs, auto const & rhs ){ return this->compare( lhs, rhs ); }, LAZY( ( x ) ), LAZY( ( y ) ), __FILE__, __FUNCTION__, uint32_t( __LINE__ ), #x, #y )
 
 #	define CT_CHECK_THROW( x )\
-	CheckThrow( LAZY( ( x ) ), __FILE__, __FUNCTION__, __LINE__, #x )
+	CheckThrow( LAZY( ( x ) ), __FILE__, __FUNCTION__, uint32_t( __LINE__ ), #x )
 
 #	define CT_CHECK_NOTHROW( x )\
-	CheckNoThrow( LAZY( ( x ) ), __FILE__, __FUNCTION__, __LINE__, #x )
+	CheckNoThrow( LAZY( ( x ) ), __FILE__, __FUNCTION__, uint32_t( __LINE__ ), #x )
 
 #	define CT_REQUIRE( x )\
-	Require( LAZY( ( x ) ), __FILE__, __FUNCTION__, __LINE__, #x )
+	Require( LAZY( ( x ) ), __FILE__, __FUNCTION__, uint32_t( __LINE__ ), #x )
 }
 
 #endif
