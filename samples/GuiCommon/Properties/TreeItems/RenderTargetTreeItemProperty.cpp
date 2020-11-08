@@ -5,10 +5,11 @@
 #include "GuiCommon/Properties/TreeItems/ToneMappingTreeItemProperty.hpp"
 #include "GuiCommon/Shader/ShaderDialog.hpp"
 
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Plugin/ToneMappingPlugin.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/PostEffect/PostEffect.hpp>
 #include <Castor3D/Render/Technique/RenderTechnique.hpp>
-#include <Castor3D/Render/ToneMapping/ToneMapping.hpp>
 
 #include <wx/propgrid/advprops.h>
 
@@ -46,16 +47,11 @@ namespace GuiCommon
 				, new PostEffectTreeItemProperty( editable, *postEffect, list ) );
 		}
 
-		auto toneMapping = target.getToneMapping();
-
-		if ( toneMapping )
-		{
-			wxTreeItemId idToneMapping = list->AppendItem( targetId
-				, make_wxString( toneMapping->getFullName() )
-				, eBMP_TONE_MAPPING
-				, eBMP_TONE_MAPPING_SEL
-				, new ToneMappingTreeItemProperty( editable, *toneMapping, list ) );
-		}
+		wxTreeItemId idToneMapping = list->AppendItem( targetId
+			, _( "Tone Mapping" )
+			, eBMP_TONE_MAPPING
+			, eBMP_TONE_MAPPING_SEL
+			, new ToneMappingTreeItemProperty( editable, target, list ) );
 	}
 
 	RenderTargetTreeItemProperty::RenderTargetTreeItemProperty( bool editable
@@ -105,15 +101,14 @@ namespace GuiCommon
 
 #if C3D_DebugQuads
 		auto & debugConfig = target.getTechnique()->getDebugConfig();
-		wxArrayString choices;
+		wxArrayString debugChoices;
 
 		for ( auto & intermediate : target.getIntermediateViews() )
 		{
-			choices.Add( make_wxString( intermediate.name ) );
+			debugChoices.Add( make_wxString( intermediate.name ) );
 		}
 
-		auto selected = choices[size_t( debugConfig.debugIndex )];
-		addPropertyET( grid, PROPERTY_RENDER_TARGET_DEBUG_VIEW, choices, &debugConfig.debugIndex );
+		addPropertyET( grid, PROPERTY_RENDER_TARGET_DEBUG_VIEW, debugChoices, &debugConfig.debugIndex );
 #endif
 
 		auto & ssaoConfig = target.getTechnique()->getSsaoConfig();

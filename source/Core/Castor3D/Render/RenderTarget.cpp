@@ -488,12 +488,12 @@ namespace castor3d
 	{
 		if ( m_toneMapping )
 		{
-			ToneMappingSPtr toneMapping;
-			std::swap( m_toneMapping, toneMapping );
-			// Give ownership of the tone mapping to the event (capture by value in the lambda).
 			getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [toneMapping]( RenderDevice const & device )
+				, [this]( RenderDevice const & device )
 				{
+					ToneMappingSPtr toneMapping;
+					m_toneMappingCommandBuffer.reset();
+					std::swap( m_toneMapping, toneMapping );
 					toneMapping->cleanup();
 				} ) );
 		}
@@ -508,6 +508,7 @@ namespace castor3d
 						, device
 						, m_hdrConfigUbo
 						, parameters );
+					doInitialiseToneMapping( device );
 				}
 			} ) );
 	}
