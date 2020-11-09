@@ -1,6 +1,10 @@
 #include "CastorTestParser/MainFrame.hpp"
 
+#include "CastorTestParser/CategoryPanel.hpp"
+#include "CastorTestParser/LayeredPanel.hpp"
+#include "CastorTestParser/TestPanel.hpp"
 #include "CastorTestParser/Aui/AuiDockArt.hpp"
+#include "CastorTestParser/Aui/AuiTabArt.hpp"
 #include "CastorTestParser/Database/DbDateTimeHelpers.hpp"
 #include "CastorTestParser/Database/DbResult.hpp"
 #include "CastorTestParser/Database/DbStatement.hpp"
@@ -24,6 +28,7 @@ namespace test_parser
 		enum ID
 		{
 			eID_GRID,
+			eID_DETAIL,
 		};
 
 		castor::PathArray listTestCategories( castor::Path const & folder )
@@ -170,6 +175,26 @@ namespace test_parser
 
 	//*********************************************************************************************
 
+	std::string getFolderName( TestStatus value )
+	{
+		switch ( value )
+		{
+		case TestStatus::eNotRun:
+			return "NotRun";
+		case TestStatus::eNegligible:
+			return "Negligible";
+		case TestStatus::eAcceptable:
+			return "Acceptable";
+		case TestStatus::eUnacceptable:
+			return "Unacceptable";
+		case TestStatus::eUnprocessed:
+			return "Unprocessed";
+		default:
+			assert( false );
+			return std::string{};
+		}
+	}
+
 	wxString makeWxString( std::string const & in )
 	{
 		return wxString{ in.c_str(), wxMBConvUTF8{} };
@@ -239,21 +264,19 @@ namespace test_parser
 		m_auiManager.UnInit();
 	}
 
-	void MainFrame::doInitGui()
+	wxWindow * MainFrame::doInitTestsList()
 	{
-		SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
-		SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		wxPanel * listPanel = new wxPanel{ this
 			, wxID_ANY
 			, wxDefaultPosition
-			, wxSize{ 800, 200 } };
+			, wxDefaultSize };
 		listPanel->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		listPanel->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		wxBoxSizer * sizerList = new wxBoxSizer{ wxVERTICAL };
 		m_view = new wxDataViewCtrl{ listPanel
 			, eID_GRID
 			, wxDefaultPosition
-			, wxSize{ 800, 200 }
+			, wxDefaultSize
 			, 0 };
 		// Intently inverted back and fore.
 		m_view->SetBackgroundColour( PANEL_FOREGROUND_COLOUR );
@@ -261,18 +284,69 @@ namespace test_parser
 		sizerList->Add( m_view, wxSizerFlags( 1 ).Expand() );
 		listPanel->SetSizer( sizerList );
 		sizerList->SetSizeHints( listPanel );
+		m_model = new TreeModel;
+		m_view->AssociateModel( m_model.get() );
+		m_view->Connect( wxEVT_DATAVIEW_ITEM_ACTIVATED
+			, wxDataViewEventHandler( MainFrame::onItemActivated )
+			, nullptr
+			, this );
+		uint32_t flags = wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_RESIZABLE;
+		auto renCategory = new wxDataViewTextRenderer{ wxDataViewTextRenderer::GetDefaultType() };
+		wxDataViewColumn * colCategory = new wxDataViewColumn( _( "Category" ), renCategory, int( TreeModel::Column::eCategory ), 150, wxALIGN_LEFT, flags );
+		colCategory->SetMinWidth( 150 );
+		m_view->AppendColumn( colCategory );
+		auto renScene = new wxDataViewTextRenderer{ wxDataViewTextRenderer::GetDefaultType() };
+		wxDataViewColumn * colScene = new wxDataViewColumn( _( "Name" ), renScene, int( TreeModel::Column::eName ), 400, wxALIGN_LEFT, flags );
+		colScene->SetMinWidth( 400 );
+		m_view->AppendColumn( colScene );
+		auto renRenderer = new wxDataViewTextRenderer{ wxDataViewTextRenderer::GetDefaultType() };
+		wxDataViewColumn * colRenderer = new wxDataViewColumn( _( "Renderer" ), renRenderer, int( TreeModel::Column::eRenderer ), 40, wxALIGN_LEFT, flags );
+		colRenderer->SetMinWidth( 40 );
+		m_view->AppendColumn( colRenderer );
+		auto renRunDate = new wxDataViewDateRenderer{ wxDataViewDateRenderer::GetDefaultType() };
+		wxDataViewColumn * colRunDate = new wxDataViewColumn( _( "Run Date" ), renRunDate, int( TreeModel::Column::eRunDate ), 100, wxALIGN_LEFT, flags );
+		colRunDate->SetMinWidth( 100 );
+		m_view->AppendColumn( colRunDate );
+		auto renStatus = new wxDataViewBitmapRenderer{ wxDataViewBitmapRenderer::GetDefaultType() };
+		wxDataViewColumn * colStatus = new wxDataViewColumn( _( "Status" ), renStatus, int( TreeModel::Column::eStatus ), 100, wxALIGN_LEFT, flags );
+		colStatus->SetMinWidth( 100 );
+		m_view->AppendColumn( colStatus );
 
-		wxPanel * detailPanel = new wxPanel{ this
-			, wxID_ANY
+		return listPanel;
+	}
+
+	wxWindow * MainFrame::doInitDetailsView()
+	{
+		m_detailViews = new LayeredPanel{ this
 			, wxDefaultPosition
-			, wxSize{ 800, 600 } };
-		detailPanel->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
-		detailPanel->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
+			, wxDefaultSize };
+		m_detailViews->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
+		m_detailViews->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
+		auto layer = new wxPanel{ m_detailViews, wxID_ANY, wxDefaultPosition, wxSize{ 800, 600 } };
+		layer->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
+		layer->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
+		m_detailViews->addLayer( layer );
+		m_testView = new TestPanel{ m_detailViews, m_config };
+		m_detailViews->addLayer( m_testView );
+		m_categoryView = new CategoryPanel{ m_detailViews, wxDefaultPosition, wxSize{ 800, 600 } };
+		m_detailViews->addLayer( m_categoryView );
+		m_detailViews->showLayer( 0 );
+
+		return m_detailViews;
+	}
+
+	void MainFrame::doInitGui()
+	{
+		SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
+		SetForegroundColour( PANEL_FOREGROUND_COLOUR );
+		auto testsList = doInitTestsList();
+		auto detailsView = doInitDetailsView();
 
 		m_auiManager.SetArtProvider( new AuiDockArt );
-		m_auiManager.AddPane( listPanel
+		m_auiManager.AddPane( testsList
 			, wxAuiPaneInfo()
 			.Layer( 0 )
+			.MinSize( 0, 200 )
 			.Caption( _( "Tests List" ) )
 			.CaptionVisible( true )
 			.CloseButton( false )
@@ -282,10 +356,10 @@ namespace test_parser
 			.Dockable( true )
 			.BottomDockable( true )
 			.TopDockable( true ) );
-		m_auiManager.AddPane( detailPanel
+		m_auiManager.AddPane( detailsView
 			, wxAuiPaneInfo()
 			.Layer( 0 )
-			.Caption( _( "Test Detail" ) )
+			.Caption( _( "Details View" ) )
 			.CaptionVisible( true )
 			.CloseButton( false )
 			.PaneBorder( false )
@@ -420,36 +494,6 @@ namespace test_parser
 
 	void MainFrame::doFillList()
 	{
-		m_model = new TreeModel;
-		m_view->AssociateModel( m_model.get() );
-
-		uint32_t flags = wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_RESIZABLE;
-
-		auto renCategory = new wxDataViewTextRenderer{ wxDataViewTextRenderer::GetDefaultType() };
-		wxDataViewColumn * colCategory = new wxDataViewColumn( _( "Category" ), renCategory, 0, 150, wxALIGN_LEFT, flags );
-		colCategory->SetMinWidth( 150 );
-		m_view->AppendColumn( colCategory );
-
-		auto renScene = new wxDataViewTextRenderer{ wxDataViewTextRenderer::GetDefaultType() };
-		wxDataViewColumn * colScene = new wxDataViewColumn( _( "Name" ), renScene, 1, 400, wxALIGN_LEFT, flags );
-		colScene->SetMinWidth( 400 );
-		m_view->AppendColumn( colScene );
-
-		auto renRenderer = new wxDataViewTextRenderer{ wxDataViewTextRenderer::GetDefaultType() };
-		wxDataViewColumn * colRenderer = new wxDataViewColumn( _( "Renderer" ), renRenderer, 2, 40, wxALIGN_LEFT, flags );
-		colRenderer->SetMinWidth( 40 );
-		m_view->AppendColumn( colRenderer );
-
-		auto renRunDate = new wxDataViewDateRenderer{ wxDataViewDateRenderer::GetDefaultType() };
-		wxDataViewColumn * colRunDate = new wxDataViewColumn( _( "Run Date" ), renRunDate, 3, 100, wxALIGN_LEFT, flags );
-		colRunDate->SetMinWidth( 100 );
-		m_view->AppendColumn( colRunDate );
-
-		auto renStatus = new wxDataViewBitmapRenderer{ wxDataViewBitmapRenderer::GetDefaultType() };
-		wxDataViewColumn * colStatus = new wxDataViewColumn( _( "Status" ), renStatus, 4, 100, wxALIGN_LEFT, flags );
-		colStatus->SetMinWidth( 100 );
-		m_view->AppendColumn( colStatus );
-
 		for ( auto & tests : m_tests )
 		{
 			auto node = addCategory( *m_model, tests.first );
@@ -460,13 +504,34 @@ namespace test_parser
 			}
 		}
 
-		m_view->Connect( wxEVT_DATAVIEW_ITEM_ACTIVATED
-			, wxDataViewEventHandler( MainFrame::onItemActivated ) );
+		m_view->Expand( wxDataViewItem{ m_model->GetRootNode() } );
 	}
 
 	void MainFrame::onItemActivated( wxDataViewEvent & evt )
 	{
-		castor::Logger::logDebug( "Coin" );
+		auto node = static_cast< TreeModelNode * >( evt.GetItem().GetID() );
+
+		if ( node )
+		{
+			if ( node->test )
+			{
+				m_testView->setTest( *node->test );
+				m_detailViews->showLayer( 1 );
+			}
+			else
+			{
+				auto it = m_tests.find( makeStdString( node->category ) );
+				assert( it != m_tests.end() );
+				m_categoryView->setCategory( node->category, it->second );
+				m_detailViews->showLayer( 2 );
+			}
+		}
+		else
+		{
+			m_detailViews->hideLayers();
+		}
+
+		m_auiManager.Update();
 	}
 
 	//*********************************************************************************************

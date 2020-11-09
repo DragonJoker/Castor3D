@@ -10,6 +10,7 @@ See LICENSE file in root folder
 #include <wx/frame.h>
 #include <wx/dataview.h>
 #include <wx/aui/framemanager.h>
+#include <wx/aui/auibook.h>
 
 #include <map>
 
@@ -23,6 +24,8 @@ namespace test_parser
 		~MainFrame();
 
 	private:
+		wxWindow * doInitTestsList();
+		wxWindow * doInitDetailsView();
 		void doInitGui();
 		void doInitDatabase();
 		void doFillDatabase();
@@ -36,8 +39,12 @@ namespace test_parser
 		Config m_config;
 		db::Connection m_database;
 		TestMap m_tests;
-		wxDataViewCtrl * m_view;
+		wxDataViewCtrl * m_view{};
 		wxObjectDataPtr< TreeModel > m_model;
+		LayeredPanel * m_detailViews{};
+		TestPanel * m_testView{};
+		CategoryPanel * m_categoryView{};
+		bool m_hasPage{ false };
 	};
 }
 

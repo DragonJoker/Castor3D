@@ -13,6 +13,7 @@ if ( SQLite3_FOUND AND Boost_FOUND )
 	set( ${PROJECT_NAME}_HDR_FILES
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/CategoryPanel.hpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/CastorTestParser.hpp
+		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/LayeredPanel.hpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/MainFrame.hpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Prerequisites.hpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/TestPanel.hpp
@@ -20,6 +21,7 @@ if ( SQLite3_FOUND AND Boost_FOUND )
 	set( ${PROJECT_NAME}_SRC_FILES
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/CategoryPanel.cpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/CastorTestParser.cpp
+		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/LayeredPanel.cpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/MainFrame.cpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/TestPanel.cpp
 	)
@@ -160,8 +162,6 @@ if ( SQLite3_FOUND AND Boost_FOUND )
 		${X11_LIBRARIES}
 		SQLite::SQLite3
 		${Boost_LIBRARIES}
-		chartdir
-		wxchartdir
 	)
 	target_compile_definitions( ${PROJECT_NAME} PRIVATE
 		${CastorToolsDefinitions}

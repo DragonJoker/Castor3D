@@ -12,6 +12,10 @@ See LICENSE file in root folder
 
 namespace test_parser
 {
+	class CategoryPanel;
+	class LayeredPanel;
+	class MainFrame;
+	class TestPanel;
 	class TreeModelNode;
 	class TreeModel;
 
@@ -41,6 +45,7 @@ namespace test_parser
 		eUnprocessed,
 		eCount,
 	};
+	std::string getFolderName( TestStatus value );
 
 	struct Test
 	{
