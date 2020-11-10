@@ -73,26 +73,29 @@ namespace castor3d
 	}
 
 	void bindShadowMaps( PipelineFlags const & pipelineFlags
-		, ShadowMapRefArray const & shadowMaps
+		, ShadowMapLightTypeArray const & shadowMaps
 		, ashes::WriteDescriptorSetArray & writes
 		, uint32_t & index )
 	{
-		for ( uint8_t i = uint8_t( LightType::eMin ); i < uint8_t( LightType::eCount ); ++i )
+		for ( auto i = 0u; i < uint32_t( LightType::eCount ); ++i )
 		{
 			if ( checkFlag( pipelineFlags.sceneFlags, SceneFlag( uint8_t( SceneFlag::eShadowBegin ) << i ) ) )
 			{
-				auto & shadowMap = shadowMaps[i];
-				auto & result = shadowMap.first.get().getShadowPassResult();
-				CU_Require( result[SmTexture::eNormalLinear].getTexture()->isInitialised() );
-				bindTexture( result[SmTexture::eNormalLinear].getTexture()->getDefaultView().getSampledView()
-					, result[SmTexture::eNormalLinear].getSampler()->getSampler()
-					, writes
-					, index );
-				CU_Require( result[SmTexture::eVariance].getTexture()->isInitialised() );
-				bindTexture( result[SmTexture::eVariance].getTexture()->getDefaultView().getSampledView()
-					, result[SmTexture::eVariance].getSampler()->getSampler()
-					, writes
-					, index );
+				for ( auto & shadowMapRef : shadowMaps[i] )
+				{
+					auto & shadowMap = shadowMapRef.first.get();
+					auto & result = shadowMap.getShadowPassResult();
+					CU_Require( result[SmTexture::eNormalLinear].getTexture()->isInitialised() );
+					bindTexture( result[SmTexture::eNormalLinear].getTexture()->getDefaultView().getSampledView()
+						, result[SmTexture::eNormalLinear].getSampler()->getSampler()
+						, writes
+						, index );
+					CU_Require( result[SmTexture::eVariance].getTexture()->isInitialised() );
+					bindTexture( result[SmTexture::eVariance].getTexture()->getDefaultView().getSampledView()
+						, result[SmTexture::eVariance].getSampler()->getSampler()
+						, writes
+						, index );
+				}
 			}
 		}
 	}
