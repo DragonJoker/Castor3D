@@ -72,7 +72,6 @@ function( SamplesBuild )
 			endif ()
 			if( wxWidgets_FOUND AND GTK2_FOUND )
 				set( Castor3DIncludeDirs
-					${Castor3DIncludeDirs}
 					${CASTOR_BINARY_DIR}/include/Core
 					${CASTOR_SOURCE_DIR}/include/Core
 				)

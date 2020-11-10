@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "EnvironmentMapModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
+#include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Render/PBR/PbrModule.hpp"
 #include "Castor3D/Material/Texture/TextureModule.hpp"
 
@@ -152,6 +153,7 @@ namespace castor3d
 		bool m_first{ true };
 		uint32_t m_render{ 0u };
 		std::shared_ptr< IblTextures > m_ibl;
+		CommandsSemaphore m_generateMipmaps;
 	};
 }
 

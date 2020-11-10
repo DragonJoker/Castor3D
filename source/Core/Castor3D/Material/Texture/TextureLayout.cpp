@@ -926,13 +926,19 @@ namespace castor3d
 			commandBuffer->begin();
 			commandBuffer->beginDebugBlock( { getName() + " Mipmaps Generation"
 				, makeFloatArray( getRenderSystem()->getEngine()->getNextRainbowColour() ) } );
-			m_texture->generateMipmaps( *commandBuffer
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			generateMipmaps( *commandBuffer );
 			commandBuffer->endDebugBlock();
 			commandBuffer->end();
 			device.transferQueue->submit( *commandBuffer, nullptr );
 			device.transferQueue->waitIdle();
 		}
+	}
+
+	void TextureLayout::generateMipmaps( ashes::CommandBuffer & cmd )const
+	{
+		CU_Require( m_texture );
+		m_texture->generateMipmaps( cmd
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 	}
 
 	void TextureLayout::setSource( Path const & folder

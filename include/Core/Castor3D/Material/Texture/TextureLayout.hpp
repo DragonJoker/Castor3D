@@ -229,6 +229,13 @@ namespace castor3d
 		 */
 		C3D_API void generateMipmaps( RenderDevice const & device )const;
 		/**
+		 *\~english
+		 *\brief		Generate texture mipmaps
+		 *\~french
+		 *\brief		Génère les mipmaps de la texture
+		 */
+		C3D_API void generateMipmaps( ashes::CommandBuffer & cmd )const;
+		/**
 		 *\name Whole texture access.
 		 **/
 		/**@{*/

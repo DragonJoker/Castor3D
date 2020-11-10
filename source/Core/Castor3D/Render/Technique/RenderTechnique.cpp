@@ -306,6 +306,8 @@ namespace castor3d
 			//	, m_renderTarget.getCuller()
 			//	, m_renderTarget.getTexture().getTexture()->getDefaultView().getTargetView() );
 
+			auto & maps = m_renderTarget.getScene()->getEnvironmentMaps();
+
 			doInitialiseShadowMaps( device );
 #if C3D_UseDepthPrepass
 			doInitialiseDepthPass( device );
@@ -313,9 +315,14 @@ namespace castor3d
 			doInitialiseBackgroundPass( device );
 			doInitialiseOpaquePass( device );
 			doInitialiseTransparentPass( device );
-			IntermediatesLister::submit( *this, intermediates );
+
+			for ( auto & map : maps )
+			{
+				map.get().initialise( device );
+			}
 
 			m_particleTimer = std::make_shared< RenderPassTimer >( *getEngine(), device, cuT( "Particles" ), cuT( "Particles" ) );
+			IntermediatesLister::submit( *this, intermediates );
 			m_initialised = true;
 		}
 
@@ -416,6 +423,11 @@ namespace castor3d
 
 		doInitialiseShadowMaps( updater.device );
 
+		for ( auto & map : m_renderTarget.getScene()->getEnvironmentMaps() )
+		{
+			map.get().update( updater );
+		}
+
 #if C3D_UseDepthPrepass
 		m_depthPass->update( updater );
 #endif
@@ -440,11 +452,6 @@ namespace castor3d
 		{
 			auto & background = *m_renderTarget.getScene()->getBackground();
 			background.update( updater );
-		}
-
-		for ( auto & map : m_renderTarget.getScene()->getEnvironmentMaps() )
-		{
-			map.get().update( updater );
 		}
 
 		doUpdateShadowMaps( updater );
@@ -692,6 +699,28 @@ namespace castor3d
 			, false );
 
 #endif
+
+		m_colorTexTransition = { device, "TechniqueColourTexTransition" };
+		auto & cmd = *m_colorTexTransition.commandBuffer;
+		cmd.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
+		cmd.beginDebugBlock(
+			{
+				"Technique Colour Texture Transition",
+				makeFloatArray( getEngine()->getNextRainbowColour() ),
+			} );
+		cmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, m_colourTexture.getTexture()->getDefaultView().getTargetView().makeShaderInputResource( VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL ) );
+		cmd.memoryBarrier( VK_PIPELINE_STAGE_HOST_BIT
+			, VK_PIPELINE_STAGE_TRANSFER_BIT
+			, m_renderTarget.getVelocity().getTexture()->getDefaultView().getTargetView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
+		cmd.clear( m_renderTarget.getVelocity().getTexture()->getDefaultView().getTargetView()
+			, transparentBlackClearColor.color );
+		cmd.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, m_renderTarget.getVelocity().getTexture()->getDefaultView().getTargetView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+		cmd.endDebugBlock();
+		cmd.end();
 	}
 
 	void RenderTechnique::doInitialiseTransparentPass( RenderDevice const & device )
@@ -914,6 +943,10 @@ namespace castor3d
 #else
 			result = &static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).render( device, *result );
 #endif
+		}
+		else
+		{
+			result = &m_colorTexTransition.submit( *device.graphicsQueue, *result );
 		}
 
 		return *result;

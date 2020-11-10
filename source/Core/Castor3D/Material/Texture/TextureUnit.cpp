@@ -384,6 +384,12 @@ namespace castor3d
 		return castor3d::getFlags( m_configuration );
 	}
 
+	bool TextureUnit::isInitialised()const
+	{
+		return m_texture
+			&& m_texture->isInitialised();
+	}
+
 	void TextureUnit::setConfiguration( TextureConfiguration value )
 	{
 		m_configuration = std::move( value );
