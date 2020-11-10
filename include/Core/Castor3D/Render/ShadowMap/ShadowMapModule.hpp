@@ -145,7 +145,7 @@ namespace castor3d
 	*	Ecrit les descripteurs des shadow maps dans les writes donnés.
 	*/
 	void bindShadowMaps( PipelineFlags const & pipelineFlags
-		, ShadowMapRefArray const & shadowMaps
+		, ShadowMapLightTypeArray const & shadowMaps
 		, ashes::WriteDescriptorSetArray & writes
 		, uint32_t & index );
 

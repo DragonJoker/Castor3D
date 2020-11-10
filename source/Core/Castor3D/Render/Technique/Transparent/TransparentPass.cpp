@@ -362,14 +362,10 @@ namespace castor3d
 				}
 			}
 
-			for ( auto i = 0u; i < uint32_t( LightType::eCount ); ++i )
-			{
-				bindShadowMaps( node.pipeline.getFlags()
-					, shadowMaps[i]
-					, writes
-					, index );
-			}
-
+			bindShadowMaps( node.pipeline.getFlags()
+				, shadowMaps
+				, writes
+				, index );
 			node.texDescriptorSet->setBindings( writes );
 		}
 	}
