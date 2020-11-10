@@ -137,8 +137,8 @@ namespace castor3d
 
 			if ( checkFlag( m_shadowOptions.enabled, SceneFlag::eShadowPoint ) )
 			{
-				auto c3d_mapNormalDepthPoint = m_writer.declSampledImage< FImgCubeArrayRgba32 >( MapNormalDepthPoint, index++, 1u );
-				auto c3d_mapVariancePoint = m_writer.declSampledImage< FImgCubeArrayRg32 >( MapVariancePoint, index++, 1u );
+				auto c3d_mapNormalDepthPoint = m_writer.declSampledImage< FImgCubeRgba32 >( MapNormalDepthPoint, index++, 1u );
+				auto c3d_mapVariancePoint = m_writer.declSampledImage< FImgCubeRg32 >( MapVariancePoint, index++, 1u );
 				doDeclareGetRandom();
 				doDeclareGetShadowOffset();
 				doDeclareTextureProj();
@@ -1199,8 +1199,8 @@ namespace castor3d
 				{
 					if ( checkFlag( m_shadowOptions.enabled, SceneFlag::eShadowPoint ) )
 					{
-						auto c3d_mapNormalDepthPoint = m_writer.getVariable< SampledImageCubeArrayRgba32 >( MapNormalDepthPoint );
-						auto c3d_mapVariancePoint = m_writer.getVariable< SampledImageCubeArrayRg32 >( MapVariancePoint );
+						auto c3d_mapNormalDepthPoint = m_writer.getVariable< SampledImageCubeRgba32 >( MapNormalDepthPoint );
+						auto c3d_mapVariancePoint = m_writer.getVariable< SampledImageCubeRg32 >( MapVariancePoint );
 						auto vertexToLight = m_writer.declLocale( "vertexToLight"
 							, worldSpacePosition - lightPosition );
 						auto depth = m_writer.declLocale( "depth"
@@ -1232,9 +1232,8 @@ namespace castor3d
 									for ( int k = 0; k < samples; ++k )
 									{
 										moments = c3d_mapVariancePoint
-											.lod( vec4( vertexToLight + vec3( x, y, z )
-												, m_writer.cast< Float >( shadowMapIndex ) )
-											, 0.0_f );
+											.lod( vertexToLight + vec3( x, y, z )
+												, 0.0_f );
 										shadowFactor += m_chebyshevUpperBound( moments
 											, depth
 											, shadowVariance.x()
@@ -1286,8 +1285,7 @@ namespace castor3d
 									{
 										for ( int k = 0; k < samples; ++k )
 										{
-											shadowMapDepth = c3d_mapNormalDepthPoint.sample( vec4( vertexToLight + vec3( x, y, z )
-													, m_writer.cast< Float >( shadowMapIndex ) ) ).w();
+											shadowMapDepth = c3d_mapNormalDepthPoint.sample( vertexToLight + vec3( x, y, z ) ).w();
 											shadowFactor += step( depth - bias, shadowMapDepth );
 											numSamplesUsed += 1.0_f;
 											z += inc;
@@ -1306,8 +1304,7 @@ namespace castor3d
 							ELSE
 							{
 								auto shadowMapDepth = m_writer.declLocale( "shadowMapDepth"
-									, c3d_mapNormalDepthPoint.sample( vec4( vertexToLight
-											, m_writer.cast< Float >( shadowMapIndex ) ) ).w() );
+									, c3d_mapNormalDepthPoint.sample( vertexToLight ).w() );
 								m_writer.returnStmt( step( depth - bias, shadowMapDepth ) );
 							}
 							FI;

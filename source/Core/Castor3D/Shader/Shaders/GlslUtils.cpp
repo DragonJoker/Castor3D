@@ -971,7 +971,7 @@ namespace castor3d
 			{
 				auto i = uint32_t( std::distance( flags.begin(), it ) );
 				auto colourMapConfig = m_writer.declLocale( "colourMapConfig"
-					, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( it->id ) ) );
+					, textureConfigs.getTextureConfiguration( UInt( it->id + 1u ) ) );
 				auto sampledColour = m_writer.declLocale< Vec4 >( "sampledColour"
 					, maps[i].sample( colourMapConfig.convertUV( m_writer, texCoords.xy() ) ) );
 				colour = colourMapConfig.getDiffuse( m_writer, sampledColour, colour, 1.0_f );
@@ -991,7 +991,7 @@ namespace castor3d
 			{
 				auto i = uint32_t( std::distance( flags.begin(), it ) );
 				auto opacityMapConfig = m_writer.declLocale( "opacityMapConfig"
-					, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( it->id ) ) );
+					, textureConfigs.getTextureConfiguration( UInt( it->id + 1u ) ) );
 				auto sampledOpacity = m_writer.declLocale< Vec4 >( "sampledOpacity"
 					, maps[i].sample( opacityMapConfig.convertUV( m_writer, texCoords.xy() ) ) );
 				opacity = opacityMapConfig.getOpacity( m_writer, sampledOpacity, opacity );
@@ -1015,7 +1015,7 @@ namespace castor3d
 			{
 				auto i = uint32_t( std::distance( flags.begin(), it ) );
 				auto normalMapConfig = m_writer.declLocale( "normalMapConfig"
-					, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( it->id ) ) );
+					, textureConfigs.getTextureConfiguration( UInt( it->id ) ) );
 				auto sampledNormal = m_writer.declLocale< Vec4 >( "sampledNormal"
 					, maps[i].sample( normalMapConfig.convertUV( m_writer, texCoords.xy() ) ) );
 				auto tbn = m_writer.declLocale( "tbn"
@@ -1041,7 +1041,7 @@ namespace castor3d
 			{
 				auto i = uint32_t( std::distance( flags.begin(), it ) );
 				auto heightMapConfig = m_writer.declLocale( "heightMapConfig"
-					, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( it->id ) ) );
+					, textureConfigs.getTextureConfiguration( UInt( it->id ) ) );
 				texCoords.xy() = parallaxMapping( texCoords.xy()
 					, normalize( tangentSpaceViewPosition - tangentSpaceFragPosition )
 					, maps[i]
