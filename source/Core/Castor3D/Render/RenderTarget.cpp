@@ -486,30 +486,23 @@ namespace castor3d
 	void RenderTarget::setToneMappingType( String const & name
 		, Parameters const & parameters )
 	{
-		if ( m_toneMapping )
-		{
-			getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [this]( RenderDevice const & device )
-				{
-					ToneMappingSPtr toneMapping;
-					m_toneMappingCommandBuffer.reset();
-					std::swap( m_toneMapping, toneMapping );
-					toneMapping->cleanup();
-				} ) );
-		}
-
 		getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
 			, [this, name, parameters]( RenderDevice const & device )
 			{
-				if ( !m_toneMapping )
+				if ( m_toneMapping )
 				{
-					m_toneMapping = getEngine()->getRenderTargetCache().getToneMappingFactory().create( name
-						, *getEngine()
-						, device
-						, m_hdrConfigUbo
-						, parameters );
-					doInitialiseToneMapping( device );
+					m_toneMappingCommandBuffer.reset();
+					ToneMappingSPtr toneMapping;
+					std::swap( m_toneMapping, toneMapping );
+					toneMapping->cleanup();
 				}
+
+				m_toneMapping = getEngine()->getRenderTargetCache().getToneMappingFactory().create( name
+					, *getEngine()
+					, device
+					, m_hdrConfigUbo
+					, parameters );
+				doInitialiseToneMapping( device );
 			} ) );
 	}
 
