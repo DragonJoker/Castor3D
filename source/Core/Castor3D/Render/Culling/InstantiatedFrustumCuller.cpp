@@ -31,10 +31,10 @@ namespace castor3d
 				while ( objectIt != all.objects.end() )
 				{
 					CulledT & node = *objectIt;
-					UInt32Array & instances = *instanceIt;
 
 					if ( isVisible( frustum, node ) )
 					{
+						UInt32Array & instances = *instanceIt;
 						instances[*indexIt] = frustumIndex;
 						++( *indexIt );
 					}

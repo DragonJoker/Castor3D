@@ -75,7 +75,7 @@ namespace test_parser
 		struct InsertTest
 		{
 			InsertTest() = default;
-			InsertTest( db::Connection & connection )
+			explicit InsertTest( db::Connection & connection )
 				: stmt{ connection.createStatement( "INSERT INTO Test(Name, RunDate, Status, Renderer, Category) VALUES (?, ?, ?, ?, ?);" ) }
 				, name{ stmt->createParameter( "Name", db::FieldType::eVarchar, 1024 ) }
 				, runDate{ stmt->createParameter( "RunDate", db::FieldType::eDatetime ) }
@@ -97,7 +97,7 @@ namespace test_parser
 		struct UpdateTestStatus
 		{
 			UpdateTestStatus() = default;
-			UpdateTestStatus( db::Connection & connection )
+			explicit UpdateTestStatus( db::Connection & connection )
 				: stmt{ connection.createStatement( "UPDATE Test SET Status=? WHERE Id=?;" ) }
 				, status{ stmt->createParameter( "Status", db::FieldType::eSint32 ) }
 				, id{ stmt->createParameter( "Id", db::FieldType::eSint32 ) }

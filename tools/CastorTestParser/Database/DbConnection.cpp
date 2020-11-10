@@ -641,7 +641,6 @@ namespace test_parser::db
 		{
 			auto result = std::make_unique< Result >( columns );
 			int ret;
-			int iNbColumns = int( columns.size() );
 
 			while ( ( ret = sqlite3_step( statement ) ) != SQLITE_DONE )
 			{

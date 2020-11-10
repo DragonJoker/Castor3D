@@ -26,22 +26,22 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	scene	La scène.
 		 */
-		ShadowMapSpot( Scene & scene );
+		C3D_API explicit ShadowMapSpot( Scene & scene );
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		~ShadowMapSpot();
+		C3D_API ~ShadowMapSpot();
 		/**
 		 *\copydoc		castor3d::ShadowMap::cpuUpdate
 		 */
-		void update( CpuUpdater & updater )override;
+		C3D_API void update( CpuUpdater & updater )override;
 		/**
 		 *\copydoc		castor3d::ShadowMap::gpuUpdate
 		 */
-		void update( GpuUpdater & updater )override;
+		C3D_API void update( GpuUpdater & updater )override;
 
 	private:
 		/**

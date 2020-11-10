@@ -25,22 +25,22 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	scene	La scène.
 		 */
-		ShadowMapDirectional( Scene & scene );
+		C3D_API explicit ShadowMapDirectional( Scene & scene );
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		~ShadowMapDirectional();
+		C3D_API ~ShadowMapDirectional();
 		/**
 		 *\copydoc		castor3d::ShadowMap::cpuUpdate
 		 */
-		void update( CpuUpdater & updater )override;
+		C3D_API void update( CpuUpdater & updater )override;
 		/**
 		 *\copydoc		castor3d::ShadowMap::gpuUpdate
 		 */
-		void update( GpuUpdater & updater )override;
+		C3D_API void update( GpuUpdater & updater )override;
 
 	private:
 		void doInitialiseFramebuffers( RenderDevice const & device );

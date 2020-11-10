@@ -33,7 +33,7 @@ namespace castor3d
 		auto * result = &toWait;
 
 		queue.submit( *commandBuffer
-			, toWait
+			, *result
 			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, *semaphore
 			, nullptr );

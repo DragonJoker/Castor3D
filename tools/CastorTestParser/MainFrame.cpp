@@ -862,13 +862,6 @@ namespace test_parser
 		auto findNameCategory = finderName->createParameter( "Category", db::FieldType::eVarchar, 50 );
 		finderName->initialise();
 
-		auto updater = m_database.createStatement( "UPDATE Test SET Status=?, Renderer=? WHERE Id=?;" );
-		auto updateStatus = updater->createParameter( "Status", db::FieldType::eSint32 );
-		auto updateRenderer = updater->createParameter( "Renderer", db::FieldType::eVarchar, 10 );
-		auto updateId = updater->createParameter( "Id", db::FieldType::eSint32 );
-		updater->initialise();
-
-
 		for ( auto & tests : tests )
 		{
 			for ( auto test : tests.second )
@@ -1030,7 +1023,14 @@ namespace test_parser
 			auto result = wxExecute( command
 				, ExecMode
 				, m_runningTest.genProcess.get() );
-#if !CTP_UseAsync
+#if CTP_UseAsync
+
+			if ( result == 0 )
+			{
+				castor::Logger::logError( "doProcessTest: " + castor::System::getLastErrorText() );
+			}
+
+#else
 			onTestRunEnd( wxProcessEvent{} );
 #endif
 		}
@@ -1075,7 +1075,7 @@ namespace test_parser
 
 			if ( result != 0 )
 			{
-				castor::Logger::logError( castor::System::getLastErrorText() );
+				castor::Logger::logError( "doViewTest: " + castor::System::getLastErrorText() );
 			}
 		}
 	}
@@ -1251,8 +1251,6 @@ namespace test_parser
 	{
 		auto wasDisplayingTest = m_detailViews->isLayerShown( 1 );
 		auto wasDisplayingCategory = m_detailViews->isLayerShown( 2 );
-		bool wasAllTests = m_selected.allTests;
-		bool wasAllCategories = m_selected.allCategories;
 		m_selected.allTests = true;
 		m_selected.allCategories = true;
 		m_view->GetSelections( m_selected.items );
@@ -1262,11 +1260,12 @@ namespace test_parser
 		if ( m_selected.items.size() == 1 )
 		{
 			auto node = static_cast< TreeModelNode * >( m_selected.items[0].GetID() );
-			Test * test{};
-			wxString category;
 
 			if ( node )
 			{
+				wxString category;
+				Test * test{};
+
 				if ( node->test )
 				{
 					test = node->test;
@@ -1396,7 +1395,14 @@ namespace test_parser
 			auto result = wxExecute( command
 				, ExecMode
 				, m_runningTest.difProcess.get() );
-#if !CTP_UseAsync
+#if CTP_UseAsync
+
+			if ( result == 0 )
+			{
+				castor::Logger::logError( "doProcessTest: " + castor::System::getLastErrorText() );
+			}
+
+#else
 			onTestDiffEnd( wxProcessEvent{} );
 #endif
 		}

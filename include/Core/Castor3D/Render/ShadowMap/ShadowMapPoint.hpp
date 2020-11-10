@@ -29,7 +29,7 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	scene	La scène.
 		 */
-		C3D_API ShadowMapPoint( Scene & scene );
+		C3D_API explicit ShadowMapPoint( Scene & scene );
 		/**
 		 *\~english
 		 *\brief		Destructor.

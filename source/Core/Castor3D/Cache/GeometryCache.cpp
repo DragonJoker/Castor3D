@@ -307,7 +307,6 @@ namespace castor3d
 		, Submesh const & submesh
 		, Pass const & pass )
 	{
-		auto & uboPools = *device.uboPools;
 		auto baseHash = hash( geometry, submesh, pass );
 		auto iresult= m_baseEntries.emplace( baseHash
 			, GeometryCache::PoolsEntry{ baseHash
@@ -317,6 +316,7 @@ namespace castor3d
 
 		if ( iresult.second )
 		{
+			auto & uboPools = *device.uboPools;
 			auto & baseEntry = iresult.first->second;
 			baseEntry.modelUbo = uboPools.getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 			baseEntry.modelMatrixUbo = uboPools.getBuffer< ModelMatrixUboConfiguration>( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );

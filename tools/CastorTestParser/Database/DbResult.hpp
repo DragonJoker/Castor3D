@@ -11,7 +11,7 @@ namespace test_parser::db
 	class Result
 	{
 	public:
-		Result( const ValuedObjectInfosArray & fieldInfos );
+		explicit Result( const ValuedObjectInfosArray & fieldInfos );
 
 		uint32_t getFieldCount() const;
 		ValuedObjectInfos const & getFieldInfos( uint32_t index ) const;

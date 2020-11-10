@@ -202,7 +202,6 @@ namespace castor3d
 	void BillboardUboPools::doCreateEntry( BillboardBase const & billboard
 		, Pass const & pass )
 	{
-		auto & uboPools = *m_device.uboPools;
 		auto baseHash = hash( billboard, pass );
 		auto iresult = m_baseEntries.emplace( baseHash
 			, BillboardUboPools::PoolsEntry{ baseHash
@@ -211,6 +210,7 @@ namespace castor3d
 
 		if ( iresult.second )
 		{
+			auto & uboPools = *m_device.uboPools;
 			auto & baseEntry = iresult.first->second;
 			baseEntry.modelUbo = uboPools.getBuffer< ModelUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 			baseEntry.modelMatrixUbo = uboPools.getBuffer< ModelMatrixUboConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
