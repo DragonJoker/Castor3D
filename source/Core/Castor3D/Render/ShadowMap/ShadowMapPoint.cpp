@@ -92,11 +92,12 @@ namespace castor3d
 	void ShadowMapPoint::update( CpuUpdater & updater )
 	{
 		m_passesData[updater.index].shadowType = updater.light->getShadowType();
+		uint32_t offset = updater.index * 6u;
 
-		for ( size_t face = updater.index * 6u; face < ( updater.index * 6u ) + 6u; ++face )
+		for ( uint32_t face = offset; face < offset + 6u; ++face )
 		{
-			auto & pass = m_passes[face];
-			pass.pass->update( updater );
+			updater.index = face - offset;
+			m_passes[face].pass->update( updater );
 		}
 	}
 

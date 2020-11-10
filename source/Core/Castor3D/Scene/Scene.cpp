@@ -880,13 +880,22 @@ namespace castor3d
 			} );
 
 		size_t i = 0u;
+		bool changed = false;
 		for ( auto & shadows : m_hasShadows )
 		{
-			shadows.exchange( hasShadows[i] );
+			changed = shadows.exchange( hasShadows[i] ) != hasShadows[i]
+				|| changed;
 			++i;
 		}
-		m_hasAnyShadows.exchange( hasAnyShadows );
-		m_needsGlobalIllumination.exchange( needsGI );
+		changed = m_hasAnyShadows.exchange( hasAnyShadows ) != hasAnyShadows
+			|| changed;
+		changed = m_needsGlobalIllumination.exchange( needsGI ) != needsGI
+			|| changed;
+
+		if ( changed )
+		{
+			onChanged( *this );
+		}
 	}
 
 	void Scene::setBackground( SceneBackgroundSPtr value )
@@ -974,6 +983,21 @@ namespace castor3d
 
 		default:
 			break;
+		}
+
+		if ( m_hasShadows[size_t( LightType::eDirectional )] )
+		{
+			result |= SceneFlag::eShadowDirectional;
+		}
+
+		if ( m_hasShadows[size_t( LightType::ePoint )] )
+		{
+			result |= SceneFlag::eShadowPoint;
+		}
+
+		if ( m_hasShadows[size_t( LightType::eSpot )] )
+		{
+			result |= SceneFlag::eShadowSpot;
 		}
 
 		return result;
