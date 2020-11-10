@@ -4,6 +4,7 @@
 #include "CastorTestParser/xpms/acceptable.xpm"
 #include "CastorTestParser/xpms/negligible.xpm"
 #include "CastorTestParser/xpms/notrun.xpm"
+#include "CastorTestParser/xpms/running.xpm"
 #include "CastorTestParser/xpms/unacceptable.xpm"
 #include "CastorTestParser/xpms/unprocessed.xpm"
 
@@ -23,13 +24,14 @@ namespace test_parser
 	TreeModel::TreeModel()
 		: m_root( new TreeModelNode{ nullptr, _( "Tests database" ) } )
 		, m_statusImages
-	{
-		createImage( notrun_xpm ),
-		createImage( negligible_xpm ),
-		createImage( acceptable_xpm ),
-		createImage( unacceptable_xpm ),
-		createImage( unprocessed_xpm ),
-	}
+		{
+			createImage( notrun_xpm ),
+			createImage( negligible_xpm ),
+			createImage( acceptable_xpm ),
+			createImage( unacceptable_xpm ),
+			createImage( unprocessed_xpm ),
+			createImage( running_xpm ),
+		}
 	{
 	}
 
@@ -183,6 +185,19 @@ namespace test_parser
 				result = litem1 - litem2;
 			}
 		}
+		else if ( column == int( Column::eStatus ) )
+		{
+			auto node1 = static_cast< TreeModelNode const * >( item1.GetID() );
+			auto node2 = static_cast< TreeModelNode const * >( item2.GetID() );
+			result = ( node1->test->status < node2->test->status
+				? -1
+				: ( node1->test->status == node2->test->status
+					? 0
+					: 1 ) );
+			result = ascending
+				? result
+				: -result;
+		}
 		else
 		{
 			result = wxDataViewModel::Compare( item1, item2, column, ascending );
@@ -242,7 +257,7 @@ namespace test_parser
 				break;
 
 			case Column::eStatus:
-				variant << m_statusImages[long( node->test->status )];
+				variant << m_statusImages[std::min( long( TestStatus::eCount ) - 1, long( node->test->status ) )];
 				break;
 
 			default:

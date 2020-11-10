@@ -21,6 +21,11 @@ namespace test_parser
 
 		void setTest( Test & test );
 
+		Test * getTest()const
+		{
+			return m_test;
+		}
+
 	private:
 		Config const & m_config;
 		Test * m_test{};

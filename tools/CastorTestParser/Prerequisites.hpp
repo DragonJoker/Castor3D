@@ -33,7 +33,10 @@ namespace test_parser
 	{
 		castor::Path test;
 		castor::Path work;
-		bool init{};
+		castor::Path launcher;
+		castor::Path viewer;
+		castor::Path differ;
+		bool skip{};
 	};
 
 	enum class TestStatus
@@ -43,9 +46,10 @@ namespace test_parser
 		eAcceptable,
 		eUnacceptable,
 		eUnprocessed,
+		eRunning,
 		eCount,
 	};
-	std::string getFolderName( TestStatus value );
+	castor::Path getFolderName( TestStatus value );
 
 	struct Test
 	{
@@ -56,6 +60,12 @@ namespace test_parser
 		std::string renderer;
 		std::string category;
 	};
+	castor::Path getResultFolder( Test const & test, bool useStatus = true );
+	castor::Path getResultName( Test const & test );
+	castor::Path getCompareFolder( Test const & test, bool useStatus = true );
+	castor::Path getCompareName( Test const & test );
+	castor::Path getReferenceFolder( Test const & test );
+	castor::Path getReferenceName( Test const & test );
 
 	using TestArray = std::vector< Test >;
 	using TestMap = std::map< std::string, TestArray >;

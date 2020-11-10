@@ -270,15 +270,22 @@ namespace castor
 		return result;
 	}
 
-	bool File::copyFile( Path const & p_file, Path const & p_folder )
+	bool File::copyFile( Path const & srcFileName
+		, Path const & dstFolder )
+	{
+		return copyFileName( srcFileName
+			, dstFolder / srcFileName.getFileName( true ) );
+	}
+
+	bool File::copyFileName( Path const & srcFileName
+		, Path const & dstFileName )
 	{
 		bool result = false;
-		Path file{ p_folder / p_file.getFileName() + cuT( "." ) + p_file.getExtension() };
-		std::ifstream src( string::stringCast< char >( p_file ), std::ios::binary );
+		std::ifstream src( string::stringCast< char >( srcFileName ), std::ios::binary );
 
 		if ( src.is_open() )
 		{
-			std::ofstream dst( string::stringCast< char >( file ), std::ios::binary );
+			std::ofstream dst( string::stringCast< char >( dstFileName ), std::ios::binary );
 
 			if ( src.is_open() )
 			{
@@ -287,12 +294,12 @@ namespace castor
 			}
 			else
 			{
-				Logger::logWarning( cuT( "copyFile - Can't open destination file : " ) + p_file );
+				Logger::logWarning( cuT( "copyFile - Can't open destination file : " ) + dstFileName );
 			}
 		}
 		else
 		{
-			Logger::logWarning( cuT( "copyFile - Can't open source file : " ) + p_file );
+			Logger::logWarning( cuT( "copyFile - Can't open source file : " ) + srcFileName );
 		}
 
 		return result;

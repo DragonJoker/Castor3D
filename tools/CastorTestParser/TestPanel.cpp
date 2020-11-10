@@ -30,13 +30,13 @@ namespace test_parser
 		wxImage loadRefImage( castor::Path const & folder
 			, Test const & test )
 		{
-			return loadImage( folder / test.category / ( test.name + "_ref.png" ) );
+			return loadImage( folder / getReferenceFolder( test )/ getReferenceName( test ) );
 		}
 
 		wxImage loadResultImage( castor::Path const & folder
 			, Test const & test )
 		{
-			return loadImage( folder / test.category / "Compare" / getFolderName( test.status ) / ( test.name + "_" + test.renderer + ".png" ) );
+			return loadImage( folder / getResultFolder( test ) / getResultName( test ) );
 		}
 	}
 
@@ -47,6 +47,8 @@ namespace test_parser
 		wxImagePanel( wxWindow * parent )
 			: wxPanel{ parent }
 		{
+			SetBackgroundColour( BORDER_COLOUR );
+			SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 			Connect( wxEVT_PAINT
 				, wxPaintEventHandler( wxImagePanel::paintEvent )
 				, nullptr
@@ -73,6 +75,8 @@ namespace test_parser
 	private:
 		void render( wxDC & dc )
 		{
+			dc.Clear();
+
 			if ( m_source.IsOk() )
 			{
 				auto size = GetClientSize();
@@ -81,14 +85,26 @@ namespace test_parser
 					|| size.GetWidth() != m_current.GetWidth()
 					|| size.GetHeight() != m_current.GetHeight() )
 				{
-					m_current = m_source.ResampleBicubic( size.GetWidth(), size.GetHeight() );
+					auto ratio = m_source.GetHeight() / float( m_source.GetWidth() );
+					auto w = size.GetWidth();
+					auto h = w * ratio;
+
+					if ( h > size.GetHeight() )
+					{
+						h = size.GetHeight();
+						w = h / ratio;
+					}
+
+					m_current = m_source.ResampleBicubic( std::max( int( w ), 1 ), std::max( int( h ), 1 ) );
 				}
 
-				dc.DrawBitmap( m_current, 0, 0, false );
-			}
-			else
-			{
-				dc.FloodFill( 0, 0, GetBackgroundColour() );
+				if ( m_current.IsOk() )
+				{
+					dc.DrawBitmap( m_current
+						, ( size.GetWidth() - m_current.GetWidth() ) / 2
+						, ( size.GetHeight() - m_current.GetHeight() ) / 2
+						, false );
+				}
 			}
 		}
 
@@ -130,6 +146,6 @@ namespace test_parser
 	{
 		m_test = &test;
 		m_ref->setImage( loadRefImage( m_config.test, test ) );
-		m_result->setImage( loadResultImage( m_config.test, test ) );
+		m_result->setImage( loadResultImage( m_config.work, test ) );
 	}
 }

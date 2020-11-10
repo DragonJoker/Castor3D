@@ -22,10 +22,12 @@ namespace test_parser
 		void addLayer( wxPanel * panel );
 		void showLayer( size_t index );
 		void hideLayers();
+		bool isLayerShown( size_t index )const;
 
 	private:
 		std::vector< wxPanel * > m_panels;
 		wxPanel * m_current{};
+		size_t m_layer{ ~( 0u ) };
 	};
 }
 

@@ -33,7 +33,7 @@ namespace test_parser
 
 		wxCmdLineParser parser( wxApp::argc, wxApp::argv );
 		parser.AddSwitch( wxT( "h" ), wxT( "help" ), _( "Displays this help." ) );
-		parser.AddSwitch( wxT( "i" ), wxT( "init" ), _( "Force database initialisation." ) );
+		parser.AddSwitch( wxT( "s" ), wxT( "skip" ), _( "Skip database initialisation." ) );
 		parser.AddOption( wxT( "f" ), wxT( "folder" ), _( "Specifies the tests directory." ), wxCMD_LINE_VAL_STRING, 0 );
 		parser.AddOption( wxT( "c" ), wxT( "config" ), _( "Specifies the tests config file." ), wxCMD_LINE_VAL_STRING, 0 );
 		parser.AddOption( wxT( "w" ), wxT( "work" ), _( "Specifies the working directory." ), wxCMD_LINE_VAL_STRING, 0 );
@@ -83,14 +83,20 @@ namespace test_parser
 			config.work = config.test;
 		}
 
-		if ( parser.Found( wxT( 'i' ) ) )
+		if ( parser.Found( wxT( 's' ) ) )
 		{
-			config.init = true;
+			config.skip = true;
 		}
-		else
-		{
-			config.init = !castor::File::fileExists( config.work / "db.sqlite" );
-		}
+
+#if defined( _WIN32 )
+		static castor::String const BinExt = cuT( ".exe" );
+#else
+		static castor::String const BinExt;
+#endif
+
+		config.launcher = castor::File::getExecutableDirectory() / ( cuT( "CastorTestLauncher" ) + BinExt );
+		config.viewer = castor::File::getExecutableDirectory() / ( cuT( "CastorViewer" ) + BinExt );
+		config.differ = castor::File::getExecutableDirectory() / ( cuT( "DiffImage" ) + BinExt );
 
 		configFile.Write( Entry_Folder, makeWxString( config.test ) );
 		configFile.Write( Entry_Work, makeWxString( config.work ) );
@@ -126,6 +132,7 @@ namespace test_parser
 			{
 				MainFrame * mainFrame{ new MainFrame{ std::move( config ) } };
 				SetTopWindow( mainFrame );
+				mainFrame->initialise();
 				result = true;
 			}
 			catch ( castor::Exception & exc )

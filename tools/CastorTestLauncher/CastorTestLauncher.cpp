@@ -109,7 +109,8 @@ namespace test_launcher
 
 		castor3d::EngineSPtr castor = std::make_shared< Engine >( cuT( "CastorTestLauncher" )
 			, castor3d::Version{ CastorTestLauncher_VERSION_MAJOR, CastorTestLauncher_VERSION_MINOR, CastorTestLauncher_VERSION_BUILD }
-			, false );
+			, false
+			, *Logger::getSingleton().getInstance() );
 		PathArray arrayFiles;
 		File::listDirectoryFiles( Engine::getPluginsDirectory(), arrayFiles );
 
@@ -194,6 +195,11 @@ namespace test_launcher
 		}
 
 		wxImage::CleanUpHandlers();
-		return false;
+		return true;
+	}
+
+	int CastorTestLauncher::OnRun()
+	{
+		return 0;
 	}
 }
