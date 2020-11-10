@@ -170,9 +170,11 @@ namespace castor3d
 		}
 	}
 
-	BillboardUboPools::PoolsEntry BillboardUboPools::getUbos( BillboardBase const & billboard, Pass const & pass )const
+	BillboardUboPools::PoolsEntry BillboardUboPools::getUbos( BillboardBase const & billboard
+		, Pass const & pass
+		, uint32_t instanceMult )const
 	{
-		return m_entries.at( hash( billboard, pass ) );
+		return m_entries.at( hash( billboard, pass, instanceMult ) );
 	}
 
 	void BillboardUboPools::clear( RenderDevice const & device )

@@ -76,7 +76,9 @@ namespace castor3d
 		 *\brief		Nettoie les pools d'UBO.
 		 *\remarks		Considère que l'entrée a été préalablement créée.
 		 */
-		C3D_API PoolsEntry getUbos( BillboardBase const & billboard, Pass const & pass )const;
+		C3D_API PoolsEntry getUbos( BillboardBase const & billboard
+			, Pass const & pass
+			, uint32_t instanceMult )const;
 		/**
 		 *\~english
 		 *\brief		Flushes the pools.

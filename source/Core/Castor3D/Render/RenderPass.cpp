@@ -483,7 +483,9 @@ namespace castor3d
 	{
 		auto & buffers = billboard.getGeometryBuffers();
 		auto & scene = billboard.getParentScene();
-		auto billboardEntry = scene.getBillboardListCache().getUboPools().getUbos( billboard, pass );
+		auto billboardEntry = scene.getBillboardListCache().getUboPools().getUbos( billboard
+			, pass
+			, getInstanceMult() );
 		auto it = m_modelsInstances.emplace( billboardEntry.hash
 			, billboardEntry.modelInstancesUbo ).first;
 		it->second = billboardEntry.modelInstancesUbo;
