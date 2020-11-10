@@ -5,13 +5,12 @@ See LICENSE file in root folder
 #define ___C3D_PickingPass_H___
 
 #include "Castor3D/Render/RenderPass.hpp"
-
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include <ashespp/Image/ImageView.hpp>
 
-#define C3D_DebugPicking 0
+#include <atomic>
 
 namespace castor3d
 {
@@ -107,6 +106,11 @@ namespace castor3d
 		inline PickNodeType getPickedNodeType()const
 		{
 			return m_pickNodeType;
+		}
+
+		inline bool isPicking()const
+		{
+			return m_picking;
 		}
 		/**@}*/
 
@@ -249,6 +253,8 @@ namespace castor3d
 		ashes::ImageView m_depthView;
 		ashes::FrameBufferPtr m_frameBuffer;
 		VkBufferImageCopy m_copyRegion{};
+		VkBufferImageCopy m_transferDisplayRegion{};
+		std::vector< VkBufferImageCopy > m_pickDisplayRegions;
 		ashes::CommandBufferPtr m_commandBuffer;
 		ashes::BufferPtr< castor::Point4f > m_stagingBuffer;
 		std::map< Scene const *, CameraQueueMap > m_scenes;
@@ -259,6 +265,7 @@ namespace castor3d
 		std::vector< castor::Point4f > m_buffer;
 		ashes::FencePtr m_transferFence;
 		PickNodeType m_pickNodeType{ PickNodeType::eNone };
+		std::atomic_bool m_picking{ false };
 	};
 }
 

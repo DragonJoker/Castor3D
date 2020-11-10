@@ -69,20 +69,24 @@ namespace castor3d
 			{
 				if ( i < m_nbFaces )
 				{
-					baseVertex.push_back( InterleavedVertex::createPNT( Point3f{ m_radius * rCos, -m_height / 2, m_radius * rSin }
-						, Point3f{ 0.0, -1.0, 0.0 }
-						, Point2f{ ( 1 + rCos ) / 2, ( 1 + rSin ) / 2 } ) );
-					topVertex.push_back( InterleavedVertex::createPNT( Point3f{ m_radius * rCos, m_height / 2, m_radius * rSinT }
-						, Point3f{ 0.0, 1.0, 0.0 }
-						, Point2f{ ( 1 + rCos ) / 2, ( 1 + rSinT ) / 2 } ) );
+					baseVertex.push_back( InterleavedVertex{}
+						.position( Point3f{ m_radius * rCos, -m_height / 2, m_radius * rSin } )
+						.normal( Point3f{ 0.0, -1.0, 0.0 } )
+						.texcoord( Point2f{ ( 1 + rCos ) / 2, ( 1 + rSin ) / 2 } ) );
+					topVertex.push_back( InterleavedVertex{}
+						.position( Point3f{ m_radius * rCos, m_height / 2, m_radius * rSinT } )
+						.normal( Point3f{ 0.0, 1.0, 0.0 } )
+						.texcoord( Point2f{ ( 1 + rCos ) / 2, ( 1 + rSinT ) / 2 } ) );
 				}
 
-				sideVertex.push_back( InterleavedVertex::createPNT( Point3f{ m_radius * rCos, -m_height / 2, m_radius * rSin }
-					, Point3f{ -rCos, -rSin, 0.0 }
-					, Point2f{ float( 1.0 ) - float( i ) / m_nbFaces, float( 0.0 ) } ) );
-				sideVertex.push_back( InterleavedVertex::createPNT( Point3f{ m_radius * rCos, m_height / 2, m_radius * rSin }
-					, Point3f{ -rCos, -rSin, 0.0 }
-					, Point2f{ float( 1.0 ) - float( i ) / m_nbFaces, float( 1.0 ) } ) );
+				sideVertex.push_back( InterleavedVertex{}
+					.position( Point3f{ m_radius * rCos, -m_height / 2, m_radius * rSin } )
+					.normal( Point3f{ -rCos, -rSin, 0.0 } )
+					.texcoord( Point2f{ float( 1.0 ) - float( i ) / m_nbFaces, float( 0.0 ) } ) );
+				sideVertex.push_back( InterleavedVertex{}
+					.position( Point3f{ m_radius * rCos, m_height / 2, m_radius * rSin } )
+					.normal( Point3f{ -rCos, -rSin, 0.0 } )
+					.texcoord( Point2f{ float( 1.0 ) - float( i ) / m_nbFaces, float( 1.0 ) } ) );
 
 				const float newCos = rCosRot * rCos - rSinRot * rSin;
 				const float newSin = rSinRot * rCos + rCosRot * rSin;
@@ -94,12 +98,14 @@ namespace castor3d
 			auto topCenterIndex = uint32_t( topVertex.size() );
 			auto bottomCenterIndex = uint32_t( baseVertex.size() );
 			FaceSPtr pFace;
-			topVertex.push_back( InterleavedVertex::createPNT( Point3f{ 0.0, m_height / 2, 0.0 }
-				, Point3f{ 0.0, 1.0, 0.0 }
-				, Point2f{ 0.5, 0.5 } ) );
-			baseVertex.push_back( InterleavedVertex::createPNT( Point3f{ 0.0, -m_height / 2, 0.0 }
-				, Point3f{ 0.0, -1.0, 0.0 }
-				, Point2f{ 0.5, 0.5 } ) );
+			topVertex.push_back( InterleavedVertex{}
+				.position( Point3f{ 0.0, m_height / 2, 0.0 } )
+				.normal( Point3f{ 0.0, 1.0, 0.0 } )
+				.texcoord( Point2f{ 0.5, 0.5 } ) );
+			baseVertex.push_back( InterleavedVertex{}
+				.position( Point3f{ 0.0, -m_height / 2, 0.0 } )
+				.normal( Point3f{ 0.0, -1.0, 0.0 } )
+				.texcoord( Point2f{ 0.5, 0.5 } ) );
 
 			submeshTop.addPoints( topVertex );
 			submeshBase.addPoints( baseVertex );

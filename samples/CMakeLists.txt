@@ -61,18 +61,17 @@ function( SamplesBuild )
 			#we look for wxWidgets
 			if ( WIN32 )
 				set( wxWidgets_IGNORE_VCPKG ON )
-				find_package( wxWidgets QUIET COMPONENTS core base scintilla stc aui adv propgrid )
+				find_package( wxWidgets QUIET COMPONENTS core base scintilla stc aui adv propgrid regex )
 
 				if ( CASTOR_USE_DEPS_WXWIDGETS AND NOT wxWidgets_FOUND )
 					set( wxWidgets_LIB_DIR ${DEPENDENCIES_DIR}/wxWidgets/lib CACHE PATH "wxWidgets libraries directory" )
-					find_package( wxWidgets QUIET COMPONENTS core base scintilla stc aui adv propgrid )
+					find_package( wxWidgets QUIET COMPONENTS core base scintilla stc aui adv propgrid regex )
 				endif ()
 			else ()
 				find_package( wxWidgets COMPONENTS core base stc aui adv propgrid )
 			endif ()
 			if( wxWidgets_FOUND AND GTK2_FOUND )
 				set( Castor3DIncludeDirs
-					${Castor3DIncludeDirs}
 					${CASTOR_BINARY_DIR}/include/Core
 					${CASTOR_SOURCE_DIR}/include/Core
 				)

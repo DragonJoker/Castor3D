@@ -14,17 +14,76 @@
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 
+#include <CastorUtils/Miscellaneous/Hash.hpp>
+
 namespace castor3d
 {
-	namespace
+	//*********************************************************************************************
+
+	size_t hash( CulledSubmesh const & culled )
 	{
-		using LockType = std::unique_lock< BillboardListCache const >;
+		return hash( culled.instance, culled.data, *culled.pass );
+	}
+	
+	size_t hash( CulledSubmesh const & culled
+		, uint32_t instanceMult )
+	{
+		return hash( culled.instance, culled.data, *culled.pass, instanceMult );
 	}
 
-	SceneCuller::SceneCuller( Scene const & scene
-		, Camera * camera )
+	bool isVisible( Camera const & camera
+		, CulledSubmesh const & node )
+	{
+		return isVisible( camera.getFrustum(), node );
+	}
+
+	bool isVisible( Frustum const & frustum
+		, CulledSubmesh const & node )
+	{
+		return node.sceneNode.isDisplayable()
+			&& node.sceneNode.isVisible()
+			&& ( node.data.getInstantiation().isInstanced( node.pass->getOwner()->shared_from_this() )
+				|| ( frustum.isVisible( node.instance.getBoundingSphere( node.data )
+					, node.sceneNode.getDerivedTransformationMatrix()
+					, node.sceneNode.getDerivedScale() )
+					&& frustum.isVisible( node.instance.getBoundingBox( node.data )
+						, node.sceneNode.getDerivedTransformationMatrix() ) ) );
+	}
+
+	//*********************************************************************************************
+
+	size_t hash( CulledBillboard const & culled )
+	{
+		return hash( culled.data, *culled.pass );
+	}
+	
+	size_t hash( CulledBillboard const & culled
+		, uint32_t instanceMult )
+	{
+		return hash( culled.data, *culled.pass, instanceMult );
+	}
+
+	bool isVisible( Camera const & camera
+		, CulledBillboard const & node )
+	{
+		return isVisible( camera.getFrustum(), node );
+	}
+
+	bool isVisible( Frustum const & frustum
+		, CulledBillboard const & node )
+	{
+		return node.sceneNode.isDisplayable()
+			&& node.sceneNode.isVisible();
+	}
+
+	//*********************************************************************************************
+
+	SceneCuller::SceneCuller( Scene & scene
+		, Camera * camera
+		, uint32_t instancesCount )
 		: m_scene{ scene }
 		, m_camera{ camera }
+		, m_instancesCount{ instancesCount }
 	{
 		m_sceneChanged = m_scene.onChanged.connect( [this]( Scene const & scene )
 			{
@@ -47,10 +106,7 @@ namespace castor3d
 		if ( m_allChanged )
 		{
 			m_minCullersZ = std::numeric_limits< float >::max();
-			m_allOpaqueSubmeshes.clear();
-			m_allTransparentSubmeshes.clear();
-			m_allOpaqueBillboards.clear();
-			m_allTransparentBillboards.clear();
+			doClearAll();
 			doListGeometries();
 			doListBillboards();
 			doListParticles();
@@ -61,10 +117,7 @@ namespace castor3d
 
 		if ( m_culledChanged )
 		{
-			m_culledOpaqueSubmeshes.clear();
-			m_culledTransparentSubmeshes.clear();
-			m_culledOpaqueBillboards.clear();
-			m_culledTransparentBillboards.clear();
+			doClearCulled();
 			doCullGeometries();
 			doCullBillboards();
 		}
@@ -78,6 +131,14 @@ namespace castor3d
 		}
 	}
 
+	UInt32Array SceneCuller::getInitialInstances()const
+	{
+		UInt32Array instances;
+		instances.resize( m_instancesCount );
+		std::iota( instances.begin(), instances.end(), 0u );;
+		return instances;
+	}
+
 	void SceneCuller::onSceneChanged( Scene const & scene )
 	{
 		m_sceneDirty = true;
@@ -88,10 +149,27 @@ namespace castor3d
 		m_cameraDirty = true;
 	}
 
+	void SceneCuller::doClearAll()
+	{
+		m_allOpaqueSubmeshes.clear();
+		m_allTransparentSubmeshes.clear();
+		m_allOpaqueBillboards.clear();
+		m_allTransparentBillboards.clear();
+	}
+
+	void SceneCuller::doClearCulled()
+	{
+		m_culledOpaqueSubmeshes.clear();
+		m_culledTransparentSubmeshes.clear();
+		m_culledOpaqueBillboards.clear();
+		m_culledTransparentBillboards.clear();
+	}
+
 	void SceneCuller::doListGeometries()
 	{
 		auto & scene = getScene();
 		auto lock( castor::makeUniqueLock( scene.getGeometryCache() ) );
+		auto instances = getInitialInstances();
 
 		for ( auto primitive : scene.getGeometryCache() )
 		{
@@ -117,17 +195,19 @@ namespace castor3d
 
 								if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) )
 								{
-									m_allTransparentSubmeshes.emplace_back( CulledSubmesh{ geometry
-										, *submesh
-										, pass
-										, node } );
+									m_allTransparentSubmeshes.push_back( CulledSubmesh{ geometry
+											, *submesh
+											, pass
+											, node }
+										, instances );
 								}
 								else
 								{
-									m_allOpaqueSubmeshes.emplace_back( CulledSubmesh{ geometry
-										, *submesh
-										, pass
-										, node } );
+									m_allOpaqueSubmeshes.push_back( CulledSubmesh{ geometry
+											, *submesh
+											, pass
+											, node }
+										, instances );
 								}
 							}
 						}
@@ -168,7 +248,8 @@ namespace castor3d
 	void SceneCuller::doListBillboards()
 	{
 		auto & scene = getScene();
-		LockType lock{ castor::makeUniqueLock( scene.getBillboardListCache() ) };
+		auto lock( castor::makeUniqueLock( scene.getBillboardListCache() ) );
+		auto instances = getInitialInstances();
 
 		for ( auto billboard : scene.getBillboardListCache() )
 		{
@@ -188,17 +269,19 @@ namespace castor3d
 
 						if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) )
 						{
-							m_allTransparentBillboards.emplace_back( CulledBillboard{ billboards
-								, billboards
-								, pass
-								, node } );
+							m_allTransparentBillboards.push_back( CulledBillboard{ billboards
+									, billboards
+									, pass
+									, node }
+								, instances );
 						}
 						else
 						{
-							m_allOpaqueBillboards.emplace_back( CulledBillboard{ billboards
-								, billboards
-								, pass
-								, node } );
+							m_allOpaqueBillboards.push_back( CulledBillboard{ billboards
+									, billboards
+									, pass
+									, node }
+								, instances );
 						}
 					}
 				}
@@ -210,6 +293,7 @@ namespace castor3d
 	{
 		auto & scene = getScene();
 		auto lock( castor::makeUniqueLock( scene.getParticleSystemCache() ) );
+		auto instances = getInitialInstances();
 
 		for ( auto particleSystem : scene.getParticleSystemCache() )
 		{
@@ -228,21 +312,25 @@ namespace castor3d
 					{
 						if ( material->hasAlphaBlending() )
 						{
-							m_allTransparentBillboards.emplace_back( CulledBillboard{ billboards
-								, billboards
-								, pass
-								, node } );
+							m_allTransparentBillboards.push_back( CulledBillboard{ billboards
+									, billboards
+									, pass
+									, node }
+								, instances );
 						}
 						else
 						{
-							m_allOpaqueBillboards.emplace_back( CulledBillboard{ billboards
-								, billboards
-								, pass
-								, node } );
+							m_allOpaqueBillboards.push_back( CulledBillboard{ billboards
+									, billboards
+									, pass
+									, node }
+								, instances );
 						}
 					}
 				}
 			}
 		}
 	}
+
+	//*********************************************************************************************
 }

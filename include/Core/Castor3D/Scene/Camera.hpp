@@ -244,6 +244,11 @@ namespace castor3d
 		{
 			return m_frustum.isVisible( point );
 		}
+
+		inline Frustum const & getFrustum()const
+		{
+			return m_frustum;
+		}
 		/**@}*/
 		/**
 		*\~english

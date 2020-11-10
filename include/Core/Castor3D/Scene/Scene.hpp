@@ -22,6 +22,8 @@ See LICENSE file in root folder
 #include <CastorUtils/Log/Logger.hpp>
 #include <CastorUtils/Multithreading/ThreadPool.hpp>
 
+#include <atomic>
+
 namespace castor3d
 {
 	class Scene
@@ -177,6 +179,13 @@ namespace castor3d
 		 *\return		Dit si la scène a au moins une source lumineuse projetant des ombres.
 		 */
 		C3D_API bool hasShadows()const;
+		/**
+		 *\~english
+		 *\return		Tells if the scene has a shadow projecting light of given type.
+		 *\~french
+		 *\return		Dit si la scène a au moins une source lumineuse du type donné projetant des ombres.
+		 */
+		C3D_API bool hasShadows( LightType lightType )const;
 		/**
 		 *\~english
 		 *\return		Creates a reflection map for given node.
@@ -416,6 +425,9 @@ namespace castor3d
 		bool m_dirtyMaterials{ true };
 		uint32_t m_directionalShadowCascades{ 4u };
 		castor::BoundingBox m_boundingBox;
+		std::atomic_bool m_needsGlobalIllumination;
+		std::array< std::atomic_bool, size_t( LightType::eCount ) > m_hasShadows;
+		std::atomic_bool m_hasAnyShadows;
 
 	public:
 		//!\~english	The cameras root node name.

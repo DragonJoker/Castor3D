@@ -1,5 +1,6 @@
 #include "Castor3D/Render/RenderWindow.hpp"
 
+#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/ListenerCache.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
@@ -32,8 +33,6 @@
 #include <ShaderWriter/Source.hpp>
 
 #include <CastorUtils/Design/BlockGuard.hpp>
-
-#define C3D_DebugBackgroundPicking 0
 
 namespace castor3d
 {
@@ -584,7 +583,7 @@ namespace castor3d
 		PickNodeType result = PickNodeType::eNone;
 		auto camera = getCamera();
 
-		if ( camera )
+		if ( camera && !m_pickingPass->isPicking() )
 		{
 			result = m_pickingPass->pick( *m_device
 				, convertToTopDown( position, m_size )
@@ -622,7 +621,7 @@ namespace castor3d
 		{
 			m_renderingResources.emplace_back( std::make_unique< RenderingResources >( getDevice()->createSemaphore( getName() + castor::string::toString( i ) + "ImageAvailable" )
 				, getDevice()->createSemaphore( getName() + castor::string::toString( i ) + "FinishedRendering" )
-				, getDevice()->createFence( getName() + castor::string::toString( i ), VK_FENCE_CREATE_SIGNALED_BIT )
+				, getDevice()->createFence( getName() + castor::string::toString( i ), VkFenceCreateFlags{ 0u } )
 				, getDevice().graphicsCommandPool->createCommandBuffer( getName() + castor::string::toString( i ) )
 				, 0u ) );
 		}
@@ -702,12 +701,15 @@ namespace castor3d
 
 	void RenderWindow::doCreateCommandBuffers()
 	{
-		m_commandBuffers.resize( m_swapChainImages.size() );
-		uint32_t index = 0u;
-
-		for ( auto & commandBuffer : m_commandBuffers )
+		for ( auto & commandBuffers : m_commandBuffers )
 		{
-			commandBuffer = m_commandPool->createCommandBuffer( getName() + castor::string::toString( index++ ) );
+			commandBuffers.resize( m_swapChainImages.size() );
+			uint32_t index = 0u;
+
+			for ( auto & commandBuffer : commandBuffers )
+			{
+				commandBuffer = m_commandPool->createCommandBuffer( getName() + castor::string::toString( index++ ) );
+			}
 		}
 	}
 
@@ -777,7 +779,7 @@ namespace castor3d
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					pxl_fragColor = vec4( texture( c3d_mapResult, vtx_texture ).xyz(), 1.0_f );
+					pxl_fragColor = vec4( c3d_mapResult.sample( vtx_texture ).xyz(), 1.0_f );
 				} );
 			pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
@@ -798,19 +800,27 @@ namespace castor3d
 				, "RenderWindow" + getName()
 				, VK_FILTER_LINEAR );
 		doCreateProgram();
-		m_renderQuad->createPipelineAndPass( VkExtent2D{ m_size[0], m_size[1] }
+		m_renderQuad->createPipeline( VkExtent2D{ m_size[0], m_size[1] }
 			, castor::Position{}
 			, m_program
-			, *m_renderPass
-			, {
+			, *m_renderPass );
+		m_renderQuad->registerPassInputs(
+			{
 #if C3D_DebugPicking
 				RenderQuad::makeDescriptorWrite( m_pickingPass->getResult()
 #else
 				RenderQuad::makeDescriptorWrite( getRenderTarget()->getTexture().getTexture()->getDefaultView().getSampledView()
 #endif
-					, m_renderQuad->getSampler().getSampler()
+				, m_renderQuad->getSampler().getSampler()
 					, 0u ),
 			} );
+		m_renderQuad->registerPassInputs(
+			{
+				RenderQuad::makeDescriptorWrite( m_pickingPass->getResult()
+				, m_renderQuad->getSampler().getSampler()
+					, 0u ),
+			} );
+		m_renderQuad->initialisePasses();
 	}
 
 	bool RenderWindow::doPrepareFrames()
@@ -818,26 +828,32 @@ namespace castor3d
 		bool result{ true };
 		doCreateCommandBuffers();
 		doCreateFrameBuffers();
+		auto pass = 0u;
 
-		for ( uint32_t i = 0u; i < m_commandBuffers.size() && result; ++i )
+		for ( auto & commandBuffers : m_commandBuffers )
 		{
-			auto & frameBuffer = *m_frameBuffers[i];
-			auto & commandBuffer = *m_commandBuffers[i];
+			for ( uint32_t i = 0u; i < commandBuffers.size() && result; ++i )
+			{
+				auto & frameBuffer = *m_frameBuffers[i];
+				auto & commandBuffer = *commandBuffers[i];
 
-			commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
-			commandBuffer.beginDebugBlock(
-				{
-					"RenderWindow Render",
-					makeFloatArray( getEngine()->getNextRainbowColour() ),
-				} );
-			commandBuffer.beginRenderPass( *m_renderPass
-				, frameBuffer
-				, { opaqueWhiteClearColor }
-				, VK_SUBPASS_CONTENTS_INLINE );
-			m_renderQuad->registerPass( commandBuffer );
-			commandBuffer.endRenderPass();
-			commandBuffer.endDebugBlock();
-			commandBuffer.end();
+				commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
+				commandBuffer.beginDebugBlock(
+					{
+						"RenderWindow Render",
+						makeFloatArray( getEngine()->getNextRainbowColour() ),
+					} );
+				commandBuffer.beginRenderPass( *m_renderPass
+					, frameBuffer
+					, { opaqueWhiteClearColor }
+					, VK_SUBPASS_CONTENTS_INLINE );
+				m_renderQuad->registerPass( commandBuffer, pass );
+				commandBuffer.endRenderPass();
+				commandBuffer.endDebugBlock();
+				commandBuffer.end();
+			}
+
+			++pass;
 		}
 
 		return result;
@@ -848,7 +864,12 @@ namespace castor3d
 		getDevice()->waitIdle();
 		m_renderQuad.reset();
 		m_frameBuffers.clear();
-		m_commandBuffers.clear();
+
+		for ( auto & commandBuffers : m_commandBuffers )
+		{
+			commandBuffers.clear();
+		}
+
 		m_renderingResources.clear();
 		m_swapChainImages.clear();
 		m_swapChain.reset();
@@ -889,19 +910,21 @@ namespace castor3d
 	void RenderWindow::submitFrame( RenderingResources * resources )
 	{
 		RenderTargetSPtr target = getRenderTarget();
-		resources->fence->reset();
-		getDevice().graphicsQueue->submit( { *m_commandBuffers[resources->imageIndex] }
+		getDevice().graphicsQueue->submit( { ( m_enablePickingDebug
+			? *m_commandBuffers[1][resources->imageIndex]
+			: *m_commandBuffers[0][resources->imageIndex] ) }
 			, { *resources->imageAvailableSemaphore, target->getSemaphore() }
 			, { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT }
 			, {}
 			, resources->fence.get() );
-		resources->fence->wait( ashes::MaxTimeout );
 	}
 
 	void RenderWindow::presentFrame( RenderingResources * resources )
 	{
 		try
 		{
+			resources->fence->wait( ashes::MaxTimeout );
+			resources->fence->reset();
 			getDevice().graphicsQueue->present( *m_swapChain
 				, resources->imageIndex );
 		}
@@ -977,7 +1000,12 @@ namespace castor3d
 
 		m_renderQuad.reset();
 		m_program.clear();
-		m_commandBuffers.clear();
+
+		for ( auto & commandBuffers : m_commandBuffers )
+		{
+			commandBuffers.clear();
+		}
+
 		m_renderingResources.clear();
 		m_commandPool.reset();
 		m_frameBuffers.clear();

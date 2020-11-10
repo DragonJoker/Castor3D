@@ -121,10 +121,6 @@ namespace castor3d
 			, SubmeshRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		/**
-		 *\copydoc		castor3d::RenderPass::doUpdate
-		 */
-		C3D_API void doUpdate( RenderQueueArray & queues )override;
-		/**
 		 *\copydoc		castor3d::RenderPass::doUpdateFlags
 		 */
 		C3D_API void doUpdateFlags( PipelineFlags & flags )const override;

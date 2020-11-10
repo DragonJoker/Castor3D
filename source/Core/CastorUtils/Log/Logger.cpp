@@ -59,10 +59,10 @@ namespace castor
 		}
 	}
 
-	LoggerInstance * Logger::createInstance( LogType logLevel )
+	LoggerInstancePtr Logger::createInstance( LogType logLevel )
 	{
 		CU_Require( getSingleton().m_console );
-		return new LoggerInstance{ *getSingleton().m_console, logLevel };
+		return std::make_unique< LoggerInstance >( *getSingleton().m_console, logLevel );
 	}
 
 	void Logger::registerCallback( LogCallback p_pfnCallback, void * p_pCaller )

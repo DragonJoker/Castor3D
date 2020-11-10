@@ -31,8 +31,8 @@ namespace castor3d
 			} ) )
 		, m_renderNodes{ new SceneRenderNodes( m_culler.getScene() ) }
 		, m_culledRenderNodes{ new SceneCulledRenderNodes( m_culler.getScene() ) }
-		, m_viewport{ castor::makeChangeTracked< ashes::Optional< VkViewport > >( ashes::nullopt ) }
-		, m_scissor{ castor::makeChangeTracked< ashes::Optional< VkRect2D > >( ashes::nullopt ) }
+		, m_viewport{ castor::makeChangeTracked< ashes::Optional< VkViewport > >( m_culledChanged, ashes::nullopt ) }
+		, m_scissor{ castor::makeChangeTracked< ashes::Optional< VkRect2D > >( m_culledChanged, ashes::nullopt ) }
 	{
 		getOwner()->getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
 			, [this]( RenderDevice const & device )
@@ -56,9 +56,7 @@ namespace castor3d
 			m_allChanged = false;
 		}
 
-		bool commandBuffersChanged = m_culledChanged
-			|| m_viewport.isDirty()
-			|| m_scissor.isDirty();
+		bool commandBuffersChanged = m_culledChanged;
 
 		if ( m_culledChanged )
 		{
@@ -120,8 +118,6 @@ namespace castor3d
 		culledNodes.prepareCommandBuffers( *this
 			, m_viewport.value()
 			, m_scissor.value() );
-		m_viewport.reset();
-		m_scissor.reset();
 	}
 
 	void RenderQueue::doParseAllRenderNodes( ShadowMapLightTypeArray & shadowMaps )
@@ -138,7 +134,7 @@ namespace castor3d
 
 	void RenderQueue::doOnCullerCompute( SceneCuller const & culler )
 	{
-		m_allChanged = culler.areAllChanged();
+		m_allChanged = m_allChanged || culler.areAllChanged();
 		m_culledChanged = m_allChanged || culler.areCulledChanged();
 	}
 }

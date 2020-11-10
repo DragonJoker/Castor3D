@@ -240,12 +240,6 @@ namespace castor3d
 		return *result;
 	}
 
-	void ForwardRenderTechniquePass::doUpdateUbos( Camera const & camera
-		, castor::Point2f const & jitter )
-	{
-		RenderPass::doUpdateUbos( camera, jitter );
-	}
-
 	void ForwardRenderTechniquePass::doCleanup( RenderDevice const & device )
 	{
 		m_nodesCommands.reset();
@@ -357,13 +351,10 @@ namespace castor3d
 				}
 			}
 
-			for ( auto i = 0u; i < uint32_t( LightType::eCount ); ++i )
-			{
-				bindShadowMaps( shadowMaps[i]
-					, writes
-					, index );
-			}
-
+			bindShadowMaps( node.pipeline.getFlags()
+				, shadowMaps
+				, writes
+				, index );
 			node.texDescriptorSet->setBindings( writes );
 		}
 	}
@@ -646,6 +637,7 @@ namespace castor3d
 		utils.declareParallaxMappingFunc( flags );
 		auto lighting = shader::PhongLightingModel::createModel( writer
 			, utils
+			, flags.sceneFlags
 			, false // rsm
 			, index
 			, m_opaque );
@@ -873,6 +865,7 @@ namespace castor3d
 		utils.declareParallaxMappingFunc( flags );
 		auto lighting = shader::MetallicBrdfLightingModel::createModel( writer
 			, utils
+			, flags.sceneFlags
 			, false // rsm
 			, index
 			, m_opaque );
@@ -1161,6 +1154,7 @@ namespace castor3d
 		utils.declareParallaxMappingFunc( flags );
 		auto lighting = shader::SpecularBrdfLightingModel::createModel( writer
 			, utils
+			, flags.sceneFlags
 			, false // rsm
 			, index
 			, m_opaque );

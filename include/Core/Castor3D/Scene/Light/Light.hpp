@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "LightModule.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 
+#include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LpvConfig.hpp"
 #include "Castor3D/Render/Technique/Opaque/ReflectiveShadowMapGI/RsmConfig.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightingModule.hpp"
 #include "Castor3D/Scene/MovableObject.hpp"
@@ -14,6 +15,8 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Graphics/RgbColour.hpp>
+
+#include <atomic>
 
 namespace castor3d
 {
@@ -93,7 +96,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met la source à jour.
 		 */
-		C3D_API void update();
+		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Records the light data into given buffer.
@@ -202,7 +205,7 @@ namespace castor3d
 
 		inline bool isShadowProducer()const
 		{
-			return m_shadowCaster;
+			return m_currentShadowCaster;
 		}
 
 		inline ShadowType getShadowType()const
@@ -232,7 +235,7 @@ namespace castor3d
 
 		inline GlobalIlluminationType getGlobalIlluminationType()const
 		{
-			return m_globalIllumination;
+			return m_currentGlobalIllumination;
 		}
 
 		inline RsmConfig const & getRsmConfig()const
@@ -243,6 +246,16 @@ namespace castor3d
 		inline RsmConfig & getRsmConfig()
 		{
 			return m_rsmConfig;
+		}
+
+		inline LpvConfig const & getLpvConfig()const
+		{
+			return m_lpvConfig;
+		}
+
+		inline LpvConfig & getLpvConfig()
+		{
+			return m_lpvConfig;
 		}
 		/**@}*/
 		/**
@@ -347,6 +360,7 @@ namespace castor3d
 		inline void setShadowProducer( bool value )
 		{
 			m_shadowCaster = value;
+			onChanged( *this );
 		}
 
 		inline void setShadowType( ShadowType value )
@@ -363,6 +377,7 @@ namespace castor3d
 		inline void setGlobalIlluminationType( GlobalIlluminationType value )
 		{
 			m_globalIllumination = value;
+			onChanged( *this );
 		}
 		/**@}*/
 
@@ -375,14 +390,17 @@ namespace castor3d
 	protected:
 		bool m_enabled{ false };
 		bool m_shadowCaster{ false };
+		std::atomic_bool m_currentShadowCaster{ false };
 		bool m_dirty{ true };
 		ShadowType m_shadowType{ ShadowType::eNone };
 		LightCategorySPtr m_category;
 		ShadowMapRPtr m_shadowMap{ nullptr };
 		uint32_t m_shadowMapIndex{ 0u };
 		GlobalIlluminationType m_globalIllumination{ GlobalIlluminationType::eNone };
+		std::atomic< GlobalIlluminationType > m_currentGlobalIllumination{ GlobalIlluminationType::eNone };
 		uint32_t m_bufferIndex{ 0u };
 		RsmConfig m_rsmConfig;
+		LpvConfig m_lpvConfig;
 	};
 }
 

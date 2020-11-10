@@ -71,6 +71,7 @@ namespace castor3d
 		eMat2f,
 		eMat3f,
 		eMat4f,
+		CU_ScopedEnumBounds( eInt )
 	};
 	C3D_API castor::String getName( ParticleFormat value );
 	/**

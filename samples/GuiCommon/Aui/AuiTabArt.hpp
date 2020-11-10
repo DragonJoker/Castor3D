@@ -18,6 +18,10 @@ namespace GuiCommon
 
 		virtual wxAuiTabArt * Clone()override;
 
+		void DrawBorder( wxDC & dc
+			, wxWindow * wnd
+			, const wxRect & rect )override;
+
 		void DrawBackground( wxDC & dc
 			, wxWindow * window
 			, wxRect const & rect )override;

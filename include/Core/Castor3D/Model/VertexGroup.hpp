@@ -11,60 +11,28 @@ namespace castor3d
 	template< typename T >
 	struct InterleavedVertexT
 	{
-		static InterleavedVertexT createP( castor::Point3< T > const & pos )
+		InterleavedVertexT & position( castor::Point3< T > const & pos )
 		{
-			InterleavedVertexT result;
-			result.pos = pos;
-			return result;
+			this->pos = pos;
+			return *this;
 		}
 
-		static InterleavedVertexT createPN( castor::Point3< T > const & pos
-			, castor::Point3< T > const & nml )
+		InterleavedVertexT & normal( castor::Point3< T > const & nml )
 		{
-			InterleavedVertexT result;
-			result.pos = pos;
-			result.nml = nml;
-			return result;
+			this->nml = nml;
+			return *this;
 		}
 
-		static InterleavedVertexT createPT( castor::Point3< T > const & pos
-			, castor::Point3< T > const & tex )
+		InterleavedVertexT & texcoord( castor::Point2< T > const & tex )
 		{
-			InterleavedVertexT result;
-			result.pos = pos;
-			result.tex = tex;
-			return result;
+			this->tex = castor::Point3< T >{ tex };
+			return *this;
 		}
 
-		static InterleavedVertexT createPT( castor::Point3< T > const & pos
-			, castor::Point2< T > const & tex )
+		InterleavedVertexT & texcoord( castor::Point3< T > const & tex )
 		{
-			InterleavedVertexT result;
-			result.pos = pos;
-			result.tex = castor::Point3< T >{ tex };
-			return result;
-		}
-
-		static InterleavedVertexT createPNT( castor::Point3< T > const & pos
-			, castor::Point3< T > const & nml
-			, castor::Point3< T > const & tex )
-		{
-			InterleavedVertexT result;
-			result.pos = pos;
-			result.nml = nml;
-			result.tex = tex;
-			return result;
-		}
-
-		static InterleavedVertexT createPNT( castor::Point3< T > const & pos
-			, castor::Point3< T > const & nml
-			, castor::Point2< T > const & tex )
-		{
-			InterleavedVertexT result;
-			result.pos = pos;
-			result.nml = nml;
-			result.tex = castor::Point3< T >{ tex };
-			return result;
+			this->tex = tex;
+			return *this;
 		}
 
 		//!\~english	The vertex coordinates.

@@ -94,6 +94,15 @@ namespace GuiCommon
 		return new AuiTabArt( *this );
 	}
 
+	void AuiTabArt::DrawBorder( wxDC & dc
+		, wxWindow * wnd
+		, const wxRect & rect )
+	{
+		dc.SetPen( m_baseColourPen );
+		dc.SetBrush( m_baseColourBrush );
+		dc.DrawRectangle( rect );
+	}
+
 	void AuiTabArt::DrawBackground( wxDC & dc
 		, wxWindow * window
 		, wxRect const & rect )
@@ -187,7 +196,7 @@ namespace GuiCommon
 			borderPoints[4] = wxPoint( tabX + tabWidth, tabY + tabHeight - 6 );
 			borderPoints[5] = wxPoint( tabX + tabWidth, tabY );
 		}
-		else //if (m_flags & wxAUI_NB_TOP) {}
+		else
 		{
 			borderPoints[0] = wxPoint( tabX, tabY + tabHeight - 4 );
 			borderPoints[1] = wxPoint( tabX, tabY + 2 );
@@ -197,16 +206,11 @@ namespace GuiCommon
 			borderPoints[5] = wxPoint( tabX + tabWidth, tabY + tabHeight - 4 );
 		}
 
-		// TODO: else if (m_flags &wxAUI_NB_LEFT) {}
-		// TODO: else if (m_flags &wxAUI_NB_RIGHT) {}
-
 		int drawnTabYOffset = borderPoints[1].y;
 		int drawnTabHeight = borderPoints[0].y - borderPoints[1].y;
 
 		if ( pane.active )
 		{
-			// draw active tab
-
 			// draw base background color
 			wxRect r( tabX, tabY, tabWidth, tabHeight );
 			dc.SetPen( wxPen( m_activeColour ) );
@@ -220,19 +224,12 @@ namespace GuiCommon
 		}
 		else
 		{
-			// draw inactive tab
-
 			// draw base background color
 			wxRect r( tabX, tabY, tabWidth, tabHeight );
 			dc.SetPen( wxPen( m_baseColour ) );
 			dc.SetBrush( wxBrush( m_baseColour ) );
 			dc.DrawRectangle( r.x + 1, r.y + 1, r.width - 1, r.height - 4 );
 		}
-
-		//// draw tab outline
-		//dc.SetPen( m_borderPen );
-		//dc.SetBrush( *wxTRANSPARENT_BRUSH );
-		//dc.DrawPolygon( WXSIZEOF( borderPoints ), borderPoints );
 
 		// there are two horizontal grey lines at the bottom of the tab control,
 		// this gets rid of the top one of those lines in the tab control
@@ -242,9 +239,7 @@ namespace GuiCommon
 			{
 				dc.SetPen( wxPen( m_activeColour.ChangeLightness( 170 ) ) );
 			}
-			// TODO: else if (m_flags &wxAUI_NB_LEFT) {}
-			// TODO: else if (m_flags &wxAUI_NB_RIGHT) {}
-			else //for wxAUI_NB_TOP
+			else
 			{
 				dc.SetPen( m_activeColour );
 			}

@@ -234,11 +234,6 @@ namespace castor3d
 		m_frameBuffer.reset();
 	}
 
-	void VoxelizePass::doUpdate( RenderQueueArray & queues )
-	{
-		queues.emplace_back( m_renderQueue );
-	}
-
 	void VoxelizePass::doUpdateFlags( PipelineFlags & flags )const
 	{
 		flags.textures.clear();
@@ -491,7 +486,7 @@ namespace castor3d
 					, abs( faceNormal ) );
 
 				auto imgSize = writer.declLocale( "imgSize"
-					, vec3( imageSize( pxl_voxelVisibility ) ) );
+					, vec3( pxl_voxelVisibility.getSize() ) );
 				auto pixelSize = writer.declLocale( "pixelSize"
 					, vec3( 1.0_f ) / imgSize );
 				auto pixelDiagonal = writer.declLocale< Float >( "pixelDiagonal"
@@ -598,8 +593,8 @@ namespace castor3d
 
 				auto texcoord = writer.declLocale( "texcoord"
 					, geo_position * 0.5 + vec3( 0.5_f ) );
-				imageStore( pxl_voxelVisibility
-					, imageSize( pxl_voxelVisibility ) * ivec3( texcoord )
+				pxl_voxelVisibility
+					.store( pxl_voxelVisibility.getSize() * ivec3( texcoord )
 					, 1.0_f );
 				pxl_fragColor = vec4( 1.0_f );
 			} );

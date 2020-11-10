@@ -65,9 +65,10 @@ namespace castor3d
 		{
 			for ( uint32_t j = 0; j < nbVertexH; j++ )
 			{
-				submesh->addPoint( InterleavedVertex::createPNT( castor::Point3f{ offsetW + ( i * gapW ), offsetH + ( j * gapH ), 0.0 }
-					, castor::Point3f{ 0.0, 0.0, 1.0 }
-				, castor::Point2f{ i * gapW / m_width, j * gapH / m_depth } ) );
+				submesh->addPoint( InterleavedVertex{}
+					.position( castor::Point3f{ offsetW + ( i * gapW ), offsetH + ( j * gapH ), 0.0 } )
+					.normal( castor::Point3f{ 0.0, 0.0, 1.0 } )
+					.texcoord( castor::Point2f{ i * gapW / m_width, j * gapH / m_depth } ) );
 			}
 		}
 

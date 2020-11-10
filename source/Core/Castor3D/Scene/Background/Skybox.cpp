@@ -412,7 +412,7 @@ namespace castor3d
 				{},
 				dstSubresource,
 				{},
-				{ width, height, 0u }
+				{ width, height, 1u }
 			}
 		};
 		auto iwidth = int32_t( width );
@@ -430,8 +430,8 @@ namespace castor3d
 
 		for ( uint32_t i = 0u; i < 6u; ++i )
 		{
-			copyInfos[uint32_t( CubeMapFace::ePositiveX )].srcOffset = srcOffsets[i];
-			copyInfos[uint32_t( CubeMapFace::ePositiveX )].dstSubresource.baseArrayLayer = i;
+			copyInfos[i].srcOffset = srcOffsets[i];
+			copyInfos[i].dstSubresource.baseArrayLayer = i;
 		}
 
 		auto commandBuffer = device.graphicsCommandPool->createCommandBuffer( "SkyboxBackground" );

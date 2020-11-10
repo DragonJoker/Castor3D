@@ -18,6 +18,7 @@
 #include <GuiCommon/System/RendererSelector.hpp>
 #include <GuiCommon/System/SplashScreen.hpp>
 #include <GuiCommon/System/SceneExporter.hpp>
+#include <GuiCommon/System/TreeListContainer.hpp>
 
 #include <Castor3D/Cache/SceneCache.hpp>
 #include <Castor3D/Cache/WindowCache.hpp>
@@ -70,19 +71,24 @@ namespace CastorViewer
 			eID_TOOL_PRINT_SCREEN,
 			eID_TOOL_RECORD,
 			eID_TOOL_STOP,
-			eID_TAB_SCENE,
+			eID_PANE_RENDER,
+			eID_PANE_LISTS,
+			eID_PANE_LOGS,
 			eID_RENDER_TIMER,
 			eID_MSGLOG_TIMER,
 			eID_ERRLOG_TIMER,
+#ifndef NDEBUG
+			eID_DBGLOG_TIMER,
+#endif
 			eID_FPS_TIMER,
 		};
 
-		void updateLog( std::vector< std::pair< wxString, bool > > & queue, std::mutex & mutex, wxListBox & log )
+		void updateLog( LogContainer & log )
 		{
 			std::vector< std::pair< wxString, bool > > flush;
 			{
-				std::lock_guard< std::mutex > lock( mutex );
-				std::swap( flush, queue );
+				std::lock_guard< std::mutex > lock( log.mutex );
+				std::swap( flush, log.queue );
 			}
 
 			if ( !flush.empty() )
@@ -91,11 +97,11 @@ namespace CastorViewer
 				{
 					if ( message.second )
 					{
-						log.Insert( message.first, 0 );
+						log.listBox->Insert( message.first, 0 );
 					}
 					else
 					{
-						log.SetString( 0, message.first );
+						log.listBox->SetString( 0, message.first );
 					}
 				}
 			}
@@ -144,8 +150,8 @@ namespace CastorViewer
 
 		if ( scene )
 		{
-			m_materialsList->unloadMaterials();
-			m_sceneObjectsList->unloadScene();
+			m_materials->getList()->unloadMaterials();
+			m_sceneObjects->getList()->unloadScene();
 			m_mainCamera.reset();
 			m_sceneNode.reset();
 			auto engine = wxGetApp().getCastor();
@@ -192,11 +198,6 @@ namespace CastorViewer
 					{
 						m_mainScene = window->getScene();
 
-						if ( window->isFullscreen() )
-						{
-							ShowFullScreen( true, wxFULLSCREEN_ALL );
-						}
-
 						auto size = make_wxSize( window->getRenderTarget()->getSize() );
 
 						if ( !IsMaximized() )
@@ -218,6 +219,7 @@ namespace CastorViewer
 						SetMinClientSize( size );
 
 #endif
+						toggleFullScreen( window->isFullscreen() );
 					}
 					else
 					{
@@ -233,8 +235,8 @@ namespace CastorViewer
 
 					if ( scene )
 					{
-						m_sceneObjectsList->loadScene( engine, scene );
-						m_materialsList->loadMaterials( engine, *scene );
+						m_sceneObjects->getList()->loadScene( engine, scene );
+						m_materials->getList()->loadMaterials( engine, *scene );
 					}
 
 #if CV_MainFrameToolbar
@@ -299,9 +301,9 @@ namespace CastorViewer
 
 	void MainFrame::select( castor3d::GeometrySPtr geometry, castor3d::SubmeshSPtr submesh )
 	{
-		if ( m_sceneObjectsList )
+		if ( m_sceneObjects && m_sceneObjects->getList() )
 		{
-			m_sceneObjectsList->select( geometry, submesh );
+			m_sceneObjects->getList()->select( geometry, submesh );
 		}
 	}
 
@@ -319,19 +321,13 @@ namespace CastorViewer
 #endif
 
 		m_auiManager.SetArtProvider( new AuiDockArt );
-		m_renderPanel = new RenderPanel( this, wxID_ANY, wxDefaultPosition, wxSize( size.x - m_propertiesWidth, size.y - m_logsHeight ) );
-		m_logTabsContainer = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TOP | wxAUI_NB_TAB_MOVE | wxAUI_NB_TAB_FIXED_WIDTH );
+		m_renderPanel = new RenderPanel( this, eID_PANE_RENDER, wxDefaultPosition, wxSize( size.x - m_propertiesWidth, size.y - m_logsHeight ) );
+		m_logTabsContainer = new wxAuiNotebook( this, eID_PANE_LOGS, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TOP | wxAUI_NB_TAB_MOVE | wxAUI_NB_TAB_FIXED_WIDTH );
 		m_logTabsContainer->SetArtProvider( new AuiTabArt );
-		m_sceneTabsContainer = new wxAuiNotebook( this, eID_TAB_SCENE, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TOP | wxAUI_NB_TAB_MOVE | wxAUI_NB_TAB_FIXED_WIDTH );
+		m_sceneTabsContainer = new wxAuiNotebook( this, eID_PANE_LISTS, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TOP | wxAUI_NB_TAB_MOVE | wxAUI_NB_TAB_FIXED_WIDTH );
 		m_sceneTabsContainer->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		m_sceneTabsContainer->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		m_sceneTabsContainer->SetArtProvider( new AuiTabArt );
-		m_propertiesHolder = new PropertiesHolder{ this };
-		m_propertiesHolder->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
-		m_propertiesHolder->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
-		m_scenePropertiesContainer = new PropertiesContainer( true, m_propertiesHolder, wxDefaultPosition, wxDefaultSize );
-		m_materialPropertiesContainer = new PropertiesContainer( true, m_propertiesHolder, wxDefaultPosition, wxDefaultSize );
-		m_propertiesHolder->setGrid( m_scenePropertiesContainer );
 
 		m_auiManager.AddPane( m_renderPanel
 			, wxAuiPaneInfo()
@@ -376,47 +372,28 @@ namespace CastorViewer
 				.MinSize( m_propertiesWidth, size.y / 3 )
 				.Layer( 2 )
 				.PaneBorder( false ) );
-		m_auiManager.AddPane( m_propertiesHolder
-			, wxAuiPaneInfo()
-				.CaptionVisible( false )
-				.Hide()
-				.CloseButton()
-				.Name( wxT( "Properties" ) )
-				.Caption( _( "Properties" ) )
-				.Left()
-				.Dock()
-				.LeftDockable()
-				.RightDockable()
-				.Movable()
-				.PinButton()
-				.MinSize( m_propertiesWidth, size.y / 3 )
-				.Layer( 2 )
-				.PaneBorder( false ) );
 
-		auto createLog = [this, &size]( wxString const & p_name, wxListBox *& p_log )
+		auto createLog = [this, &size]( wxString const & name
+			, LogContainer & log )
 		{
-			p_log = new wxListBox( m_logTabsContainer, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxBORDER_NONE );
-			p_log->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
-			p_log->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
-			m_logTabsContainer->AddPage( p_log, p_name, true );
+			log.listBox = new wxListBox( m_logTabsContainer, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxBORDER_NONE );
+			log.listBox->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
+			log.listBox->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
+			m_logTabsContainer->AddPage( log.listBox, name, true );
 		};
 
 		createLog( _( "Messages" ), m_messageLog );
 		createLog( _( "Errors" ), m_errorLog );
+#ifndef NDEBUG
+		createLog( _( "Debug" ), m_debugLog );
+#endif
+		m_logTabsContainer->ChangeSelection( 0u );
 
-		auto holder = new TreeHolder{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
-		m_sceneObjectsList = new SceneObjectsList( m_scenePropertiesContainer, holder, wxDefaultPosition, wxDefaultSize );
-		m_sceneObjectsList->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
-		m_sceneObjectsList->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
-		holder->setTree( m_sceneObjectsList );
-		m_sceneTabsContainer->AddPage( holder, _( "Scene" ), true );
+		m_sceneObjects = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
+		m_sceneTabsContainer->AddPage( m_sceneObjects, _( "Scene" ), true );
 
-		holder = new TreeHolder{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
-		m_materialsList = new MaterialsList( m_materialPropertiesContainer, holder, wxDefaultPosition, wxDefaultSize );
-		m_materialsList->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
-		m_materialsList->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
-		holder->setTree( m_materialsList );
-		m_sceneTabsContainer->AddPage( holder, _( "Materials" ), true );
+		m_materials = new GuiCommon::TreeListContainerT< GuiCommon::MaterialsList >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
+		m_sceneTabsContainer->AddPage( m_materials, _( "Materials" ), true );
 		m_sceneTabsContainer->ChangeSelection( 0u );
 
 		m_auiManager.Update();
@@ -592,7 +569,6 @@ namespace CastorViewer
 		m_fullScreenPerspective = m_auiManager.SavePerspective();
 
 		m_auiManager.GetPane( m_sceneTabsContainer ).Show();
-		m_auiManager.GetPane( m_propertiesHolder ).Show();
 		m_auiManager.GetPane( m_renderPanel ).Show();
 		m_debugPerspective = m_auiManager.SavePerspective();
 
@@ -607,21 +583,29 @@ namespace CastorViewer
 	{
 		switch ( logType )
 		{
+#ifndef NDEBUG
+		case castor::LogType::eTrace:
 		case castor::LogType::eDebug:
+			{
+				std::lock_guard< std::mutex > lock( m_debugLog.mutex );
+				m_debugLog.queue.emplace_back( make_wxString( log ), newLine );
+			}
+			break;
+#endif
 		case castor::LogType::eInfo:
-		{
-			std::lock_guard< std::mutex > lock( m_msgLogListMtx );
-			m_msgLogList.emplace_back( log, newLine );
-		}
-		break;
+			{
+				std::lock_guard< std::mutex > lock( m_messageLog.mutex );
+				m_messageLog.queue.emplace_back( make_wxString( log ), newLine );
+			}
+			break;
 
 		case castor::LogType::eWarning:
 		case castor::LogType::eError:
-		{
-			std::lock_guard< std::mutex > lock( m_errLogListMtx );
-			m_errLogList.emplace_back( log, newLine );
-		}
-		break;
+			{
+				std::lock_guard< std::mutex > lock( m_errorLog.mutex );
+				m_errorLog.queue.emplace_back( make_wxString( log ), newLine );
+			}
+			break;
 
 		default:
 			break;
@@ -783,7 +767,6 @@ namespace CastorViewer
 		EVT_LEAVE_WINDOW( MainFrame::onLeaveWindow )
 		EVT_ERASE_BACKGROUND( MainFrame::onEraseBackground )
 		EVT_KEY_UP( MainFrame::onKeyUp )
-		EVT_AUINOTEBOOK_PAGE_CHANGING( eID_TAB_SCENE, MainFrame::onSceneTabChanging )
 #if CV_MainFrameToolbar
 		EVT_TOOL( eID_TOOL_LOAD_SCENE, MainFrame::onLoadScene )
 		EVT_TOOL( eID_TOOL_EXPORT_SCENE, MainFrame::onExportScene )
@@ -831,14 +814,20 @@ namespace CastorViewer
 
 	void MainFrame::onTimer( wxTimerEvent & event )
 	{
-		if ( event.GetId() == eID_MSGLOG_TIMER && m_messageLog )
+		if ( event.GetId() == eID_MSGLOG_TIMER && m_messageLog.listBox )
 		{
-			updateLog( m_msgLogList, m_msgLogListMtx, *m_messageLog );
+			updateLog( m_messageLog );
 		}
-		else if ( event.GetId() == eID_ERRLOG_TIMER && m_errorLog )
+		else if ( event.GetId() == eID_ERRLOG_TIMER && m_errorLog.listBox )
 		{
-			updateLog( m_errLogList, m_errLogListMtx, *m_errorLog );
+			updateLog( m_errorLog );
 		}
+#ifndef NDEBUG
+		else if ( event.GetId() == eID_DBGLOG_TIMER && m_debugLog.listBox )
+		{
+			updateLog( m_debugLog );
+		}
+#endif
 
 		event.Skip();
 	}
@@ -868,14 +857,16 @@ namespace CastorViewer
 	{
 		Logger::unregisterCallback( this );
 		m_auiManager.DetachPane( m_sceneTabsContainer );
-		m_auiManager.DetachPane( m_propertiesHolder );
 		m_auiManager.DetachPane( m_logTabsContainer );
 		m_auiManager.DetachPane( m_renderPanel );
 #if CV_MainFrameToolbar
 		m_auiManager.DetachPane( m_toolBar );
 #endif
-		m_messageLog = nullptr;
-		m_errorLog = nullptr;
+		m_messageLog.listBox = nullptr;
+		m_errorLog.listBox = nullptr;
+#ifndef NDEBUG
+		m_debugLog.listBox = nullptr;
+#endif
 
 		if ( m_renderPanel )
 		{
@@ -970,22 +961,6 @@ namespace CastorViewer
 		}
 	}
 
-	void MainFrame::onSceneTabChanging( wxAuiNotebookEvent & event )
-	{
-		auto index = event.GetSelection();
-
-		if ( index == 0 )
-		{
-			m_propertiesHolder->setGrid( m_scenePropertiesContainer );
-		}
-		else
-		{
-			m_propertiesHolder->setGrid( m_materialPropertiesContainer );
-		}
-
-		event.Skip();
-	}
-
 	void MainFrame::onLoadScene( wxCommandEvent & event )
 	{
 		wxString wildcard = _( "Castor3D scene files" );
@@ -1073,12 +1048,10 @@ namespace CastorViewer
 		if ( !m_sceneTabsContainer->IsShown() )
 		{
 			m_auiManager.GetPane( m_sceneTabsContainer ).Show();
-			m_auiManager.GetPane( m_propertiesHolder ).Show();
 		}
 		else
 		{
 			m_auiManager.GetPane( m_sceneTabsContainer ).Hide();
-			m_auiManager.GetPane( m_propertiesHolder ).Hide();
 		}
 
 		m_auiManager.Update();

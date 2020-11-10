@@ -47,12 +47,15 @@ namespace castor3d
 {
 	namespace
 	{
-		static constexpr uint32_t LightsIdx = 0u;
-		static constexpr uint32_t RsmNormalsIdx = 1u;
-		static constexpr uint32_t RsmPositionIdx = 2u;
-		static constexpr uint32_t RsmFluxIdx = 3u;
-		static constexpr uint32_t LIUboIdx = 4u;
-		static constexpr uint32_t GpUboIdx = 5u;
+		enum Idx : uint32_t
+		{
+			LightsIdx,
+			RsmNormalsIdx,
+			RsmPositionIdx,
+			RsmFluxIdx,
+			LIUboIdx,
+			GpUboIdx,
+		};
 
 		std::unique_ptr< ast::Shader > getDirectionalVertexProgram( uint32_t rsmTexSize
 			, uint32_t layerIndex )
@@ -99,7 +102,7 @@ namespace castor3d
 				, [&]( Vec3 pos
 					, Vec3 normal )
 				{
-					writer.returnStmt( ivec3( ( pos - c3d_minVolumeCorner.xyz() ) / vec3( c3d_minVolumeCorner.w() ) + 0.5_f * normal ) );
+					writer.returnStmt( ivec3( ( pos - c3d_minVolumeCorner ) / vec3( c3d_cellSize ) + 0.5_f * normal ) );
 				}
 				, InVec3{ writer, "pos" }
 				, InVec3{ writer, "normal" } );
@@ -116,9 +119,9 @@ namespace castor3d
 							, in.vertexIndex / rsmTexSize
 							, cascadeIndex ) );
 
-					outRsmPos = texelFetch( c3d_rsmPositionMap, rsmCoords, 0_i ).rgb();
-					outRsmNormal = texelFetch( c3d_rsmNormalMap, rsmCoords, 0_i ).rgb();
-					outRsmFlux = texelFetch( c3d_rsmFluxMap, rsmCoords, 0_i );
+					outRsmPos = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
+					outRsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
+					outRsmFlux = c3d_rsmFluxMap.fetch( rsmCoords, 0_i );
 					outVolumeCellIndex = convertPointToGridIndex( outRsmPos
 						, outRsmNormal );
 
@@ -126,6 +129,7 @@ namespace castor3d
 						, ( vec2( outVolumeCellIndex.xy() ) + 0.5_f ) / c3d_gridSizes.xy() * 2.0_f - 1.0_f );
 
 					out.vtx.position = vec4( screenPos, 0.0, 1.0 );
+					out.vtx.pointSize = 1.0f;
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
@@ -163,7 +167,7 @@ namespace castor3d
 				, [&]( Vec3 pos
 					, Vec3 normal )
 				{
-					writer.returnStmt( ivec3( ( pos - c3d_minVolumeCorner.xyz() ) / vec3( c3d_minVolumeCorner.w() ) + 0.5_f * normal ) );
+					writer.returnStmt( ivec3( ( pos - c3d_minVolumeCorner ) / vec3( c3d_cellSize ) + 0.5_f * normal ) );
 				}
 				, InVec3{ writer, "pos" }
 				, InVec3{ writer, "normal" } );
@@ -174,16 +178,17 @@ namespace castor3d
 					auto rsmCoords = writer.declLocale( "rsmCoords"
 						, ivec3( in.vertexIndex % rsmTexSize
 							, in.vertexIndex / rsmTexSize
-							, writer.cast< Int >( c3d_gridSizes.w() ) ) );
+							, c3d_lightIndex ) );
 
-					outRsmPos = texelFetch( c3d_rsmPositionMap, rsmCoords, 0_i ).rgb();
-					outRsmNormal = texelFetch( c3d_rsmNormalMap, rsmCoords, 0_i ).rgb();
-					outRsmFlux = texelFetch( c3d_rsmFluxMap, rsmCoords, 0_i );
+					outRsmPos = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
+					outRsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
+					outRsmFlux = c3d_rsmFluxMap.fetch( rsmCoords, 0_i );
 					outVolumeCellIndex = convertPointToGridIndex( outRsmPos, outRsmNormal );
 
 					auto screenPos = writer.declLocale( "screenPos"
 						, ( vec2( outVolumeCellIndex.xy() ) + 0.5_f ) / c3d_gridSizes.xy() * 2.0_f - 1.0_f );
 					out.vtx.position = vec4( screenPos, 0.0_f, 1.0_f );
+					out.vtx.pointSize = 1.0f;
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
@@ -229,10 +234,10 @@ namespace castor3d
 				, [&]()
 				{
 					out.vtx.position = in.vtx[0].position;
-					outVolumeCellIndex = inVolumeCellIndex[0];
 					out.layer = inVolumeCellIndex[0].z();
 					out.vtx.pointSize = 1.0f;
 
+					outVolumeCellIndex = inVolumeCellIndex[0];
 					outRsmPos = inRsmPos[0];
 					outRsmNormal = inRsmNormal[0];
 					outRsmFlux = inRsmFlux[0];
@@ -251,9 +256,9 @@ namespace castor3d
 
 			/*Cosine lobe coeff*/
 			auto SH_cosLobe_C0 = writer.declConstant( "SH_cosLobe_C0"
-				, 0.886226925_f );// sqrt(pi) / 2 
+				, Float{ sqrt( castor::Pi< float > ) / 2.0f } );
 			auto SH_cosLobe_C1 = writer.declConstant( "SH_cosLobe_C1"
-				, 1.02332671_f ); // sqrt(pi / 3)
+				, Float{ sqrt( castor::Pi< float > ) / 3.0f } );
 
 			// SH_C0 * SH_cosLobe_C0 = 0.25000000007f
 			// SH_C1 * SH_cosLobe_C1 = 0.5000000011f
@@ -452,7 +457,7 @@ namespace castor3d
 			, ashes::DescriptorSetPool & descriptorSetPool
 			, LightCache const & lightCache
 			, ShadowMapResult const & smResult
-			, UniformBufferOffsetT< LpvConfiguration > const & ubo
+			, UniformBufferOffsetT< LpvConfigUboConfiguration > const & ubo
 			, GpInfoUbo const & gpInfoUbo
 			, LightVolumePassResult const & lpvResult )
 		{
@@ -598,26 +603,13 @@ namespace castor3d
 	{
 		RenderPassTimerBlock timerBlock{ m_timer->start() };
 		timerBlock->notifyPassRender();
-		auto * result = &toWait;
-
-		m_device.graphicsQueue->submit( *m_commands.commandBuffer
-			, toWait
-			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, *m_commands.semaphore
-			, nullptr );
-		result = m_commands.semaphore.get();
-
-		return *result;
+		return m_commands.submit( *m_device.graphicsQueue, toWait );
 	}
 
 	CommandsSemaphore LightInjectionPass::getCommands( RenderPassTimer const & timer
 		, uint32_t index )const
 	{
-		castor3d::CommandsSemaphore commands
-		{
-			m_device.graphicsCommandPool->createCommandBuffer( getName() ),
-			m_device->createSemaphore( getName() )
-		};
+		castor3d::CommandsSemaphore commands{ m_device, getName() };
 		auto & cmd = *commands.commandBuffer;
 		auto rsmSize = m_smResult[SmTexture::eDepth].getTexture()->getWidth();
 		auto vplCount = rsmSize * rsmSize;
@@ -636,7 +628,7 @@ namespace castor3d
 				getClearValue( LpvTexture::eG ),
 				getClearValue( LpvTexture::eB )
 			}
-		, VK_SUBPASS_CONTENTS_INLINE );
+			, VK_SUBPASS_CONTENTS_INLINE );
 		cmd.bindPipeline( *m_pipeline );
 		cmd.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 		cmd.bindDescriptorSet( *m_descriptorSet, *m_pipelineLayout );

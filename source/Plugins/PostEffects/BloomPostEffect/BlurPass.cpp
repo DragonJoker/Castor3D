@@ -82,13 +82,13 @@ namespace Bloom
 				{
 					auto offset = writer.declLocale( "offset"
 						, vec2( 0.0_f, 0.0_f ) );
-					pxl_fragColor = texture( c3d_mapSource, vtx_texture ) * c3d_coefficients[0_u][0_u];
+					pxl_fragColor = c3d_mapSource.sample( vtx_texture ) * c3d_coefficients[0_u][0_u];
 
 					FOR( writer, UInt, i, 1u, i < c3d_coefficientsCount, ++i )
 					{
 						offset += c3d_pixelSize;
-						pxl_fragColor += c3d_coefficients[i / 4_u][i % 4_u] * texture( c3d_mapSource, vtx_texture - offset );
-						pxl_fragColor += c3d_coefficients[i / 4_u][i % 4_u] * texture( c3d_mapSource, vtx_texture + offset );
+						pxl_fragColor += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( vtx_texture - offset );
+						pxl_fragColor += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( vtx_texture + offset );
 					}
 					ROF;
 				} );

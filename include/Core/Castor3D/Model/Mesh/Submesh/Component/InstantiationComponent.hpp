@@ -8,6 +8,8 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
+#include <ashespp/Buffer/VertexBuffer.hpp>
+
 namespace castor3d
 {
 	struct InstantiationData
@@ -22,10 +24,20 @@ namespace castor3d
 	public:
 		struct Data
 		{
+			Data( uint32_t count
+				, ashes::VertexBufferPtr< InstantiationData > buffer
+				, std::vector< InstantiationData > data = {} )
+				: count{ count }
+				, buffer{ std::move( buffer ) }
+				, data{ std::move( data ) }
+			{
+			}
 			uint32_t count;
 			ashes::VertexBufferPtr< InstantiationData > buffer;
 			std::vector< InstantiationData > data;
 		};
+		using DataArray = std::vector< Data >;
+		using InstanceDataMap = std::map< MaterialSPtr, DataArray >;
 
 	public:
 		/**
@@ -98,7 +110,8 @@ namespace castor3d
 		C3D_API void gather( MaterialSPtr material
 			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
-			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts )override;
+			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
+			, uint32_t instanceMult )override;
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::setMaterial
 		 */
@@ -114,38 +127,43 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
+		C3D_API InstanceDataMap::const_iterator find( MaterialSPtr material
+			, uint32_t instanceMult )const;
+		C3D_API InstanceDataMap::iterator find( MaterialSPtr material
+			, uint32_t instanceMult );
+		C3D_API ProgramFlags getProgramFlags( MaterialSPtr material )const override;
+
 		inline uint32_t getThreshold()const
 		{
 			return m_threshold;
 		}
 
-		inline std::map< MaterialSPtr, Data >::const_iterator end()const
+		inline InstanceDataMap::const_iterator end()const
 		{
 			return m_instances.end();
 		}
 
-		inline std::map< MaterialSPtr, Data >::iterator end()
+		inline InstanceDataMap::iterator end()
 		{
 			return m_instances.end();
 		}
 
-		inline std::map< MaterialSPtr, Data >::const_iterator find( MaterialSPtr material )const
+		inline InstanceDataMap::const_iterator find( MaterialSPtr material )const
 		{
 			return m_instances.find( material );
 		}
 
-		inline std::map< MaterialSPtr, Data >::iterator find( MaterialSPtr material )
+		inline InstanceDataMap::iterator find( MaterialSPtr material )
 		{
 			needsUpdate();
 			return m_instances.find( material );
 		}
 
-		inline ProgramFlags getProgramFlags( MaterialSPtr material )const override
+		uint32_t getIndex( uint32_t instanceMult )const
 		{
-			auto it = find( material );
-			return ( it != end() && it->second.buffer )
-				? ProgramFlag::eInstantiation
-				: ProgramFlag( 0 );
+			return ( instanceMult <= 1u
+				? 0u
+				: instanceMult - 1u );
 		}
 		/**@}*/
 
@@ -164,7 +182,7 @@ namespace castor3d
 		C3D_API static uint32_t constexpr BindingPoint = 2u;
 
 	private:
-		std::map< MaterialSPtr, Data > m_instances;
+		InstanceDataMap m_instances;
 		ashes::PipelineVertexInputStateCreateInfoPtr m_matrixLayout;
 		uint32_t m_threshold;
 	};

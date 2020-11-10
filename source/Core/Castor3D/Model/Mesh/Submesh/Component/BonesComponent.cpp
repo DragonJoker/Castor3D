@@ -32,7 +32,8 @@ namespace castor3d
 	void BonesComponent::gather( MaterialSPtr material
 		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
-		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts )
+		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
+		, uint32_t instanceMult )
 	{
 		buffers.emplace_back( m_bonesBuffer->getBuffer() );
 		offsets.emplace_back( 0u );

@@ -2,15 +2,21 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
+#include "Castor3D/Material/Texture/TextureView.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Culling/DummyCuller.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapPassPoint.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/PointLight.hpp"
+#include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslMetallicBrdfLighting.hpp"
@@ -21,11 +27,6 @@
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/ShadowMapUbo.hpp"
 #include "Castor3D/Shader/Ubos/TexturesUbo.hpp"
-#include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Render/ShadowMap/ShadowMapPassPoint.hpp"
-#include "Castor3D/Material/Texture/Sampler.hpp"
-#include "Castor3D/Material/Texture/TextureView.hpp"
-#include "Castor3D/Material/Texture/TextureLayout.hpp"
 
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>
@@ -43,10 +44,10 @@ namespace castor3d
 {
 	namespace
 	{
-		std::vector< ShadowMap::PassData > createPasses( Engine & engine
-			, Scene & scene
+		std::vector< ShadowMap::PassData > createPasses( Scene & scene
 			, ShadowMap & shadowMap )
 		{
+			auto & engine = *scene.getEngine();
 			std::vector< ShadowMap::PassData > result;
 
 			for ( auto i = 0u; i < 6u * shader::getPointShadowMapCount(); ++i )
@@ -70,19 +71,15 @@ namespace castor3d
 		}
 	}
 
-	ShadowMapPoint::ShadowMapPoint( Engine & engine
-		, Scene & scene )
-		: ShadowMap{ engine
-			, cuT( "ShadowMapPoint" )
-			, ShadowMapResult
-			{
-				engine,
-				cuT( "Point" ),
-				VkImageCreateFlags( VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT ),
-				Size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize },
-				6u * shader::getPointShadowMapCount(),
-			}
-			, createPasses( engine, scene, *this )
+	ShadowMapPoint::ShadowMapPoint( Scene & scene )
+		: ShadowMap{ scene
+			, LightType::ePoint
+			, ShadowMapResult{ *scene.getEngine()
+				, cuT( "Point" )
+				, VkImageCreateFlags( VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT )
+				, Size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize }
+				, 6u * shader::getPointShadowMapCount() }
+			, createPasses( scene, *this )
 			, shader::getPointShadowMapCount() }
 	{
 		log::trace << "Created ShadowMapPoint" << std::endl;
@@ -95,11 +92,12 @@ namespace castor3d
 	void ShadowMapPoint::update( CpuUpdater & updater )
 	{
 		m_passesData[updater.index].shadowType = updater.light->getShadowType();
+		uint32_t offset = updater.index * 6u;
 
-		for ( size_t face = updater.index * 6u; face < ( updater.index * 6u ) + 6u; ++face )
+		for ( uint32_t face = offset; face < offset + 6u; ++face )
 		{
-			auto & pass = m_passes[face];
-			pass.pass->update( updater );
+			updater.index = face - offset;
+			m_passes[face].pass->update( updater );
 		}
 	}
 

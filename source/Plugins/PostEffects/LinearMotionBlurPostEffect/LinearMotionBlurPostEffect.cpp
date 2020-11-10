@@ -90,15 +90,15 @@ namespace motion_blur
 				, [&]()
 				{
 					auto blurVector = writer.declLocale( "vector"
-						, ( texture( c3d_mapVelocity, vtx_texture ).xy() / c3d_vectorDivider ) * c3d_blurScale );
+						, ( c3d_mapVelocity.sample( vtx_texture ).xy() / c3d_vectorDivider ) * c3d_blurScale );
 					blurVector.y() = -blurVector.y();
-					pxl_fragColor = texture( c3d_mapColor, vtx_texture );
+					pxl_fragColor = c3d_mapColor.sample( vtx_texture );
 
 					FOR( writer, UInt, i, 0u, i < c3d_samplesCount, ++i )
 					{
 						auto offset = writer.declLocale( "offset"
 							, blurVector * ( writer.cast< Float >( i ) / writer.cast< Float >( c3d_samplesCount - 1_u ) - 0.5f ) );
-						pxl_fragColor += texture( c3d_mapColor, vtx_texture + offset );
+						pxl_fragColor += c3d_mapColor.sample( vtx_texture + offset );
 					}
 					ROF;
 

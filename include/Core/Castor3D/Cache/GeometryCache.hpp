@@ -10,8 +10,17 @@ See LICENSE file in root folder
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
+#include <set>
+
 namespace castor3d
 {
+	C3D_API size_t hash( Geometry const & geometry
+		, Submesh const & submesh
+		, Pass const & pass );
+	C3D_API size_t hash( Geometry const & geometry
+		, Submesh const & submesh
+		, Pass const & pass
+		, uint32_t instanceMult );
 	/**
 	\author 	Sylvain DOREMUS
 	\date 		29/01/2016
@@ -28,6 +37,7 @@ namespace castor3d
 	public:
 		struct PoolsEntry
 		{
+			size_t hash;
 			Geometry const & geometry;
 			Submesh const & submesh;
 			Pass const & pass;
@@ -35,6 +45,7 @@ namespace castor3d
 			UniformBufferOffsetT< ModelMatrixUboConfiguration > modelMatrixUbo;
 			UniformBufferOffsetT< PickingUboConfiguration > pickingUbo;
 			UniformBufferOffsetT< TexturesUboConfiguration > texturesUbo;
+			UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesUbo;
 		};
 		using MyObjectCache = ObjectCacheBase< Geometry, castor::String >;
 		using MyObjectCacheTraits = typename MyObjectCacheType::MyObjectCacheTraits;
@@ -95,6 +106,10 @@ namespace castor3d
 		 *\brief		Destructeur.
 		 */
 		C3D_API ~ObjectCache();
+
+		C3D_API void registerPass( RenderPass const & renderPass );
+		C3D_API void unregisterPass( RenderPass const * renderPass
+			, uint32_t instanceMult );
 		/**
 		 *\~english
 		 *\return		The objects count.
@@ -108,7 +123,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour le contenu des pools d'UBO.
 		 */
-		C3D_API void cpuUpdate();
+		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
 		 *\return		The UBOs for given geometry, submesh and pass.
@@ -117,7 +132,8 @@ namespace castor3d
 		 */
 		C3D_API PoolsEntry getUbos( Geometry const & geometry
 			, Submesh const & submesh
-			, Pass const & pass )const;
+			, Pass const & pass
+			, uint32_t instanceMult )const;
 		/**
 		 *\~english
 		 *\brief		Flushes the collection.
@@ -162,7 +178,7 @@ namespace castor3d
 		C3D_API void remove( Key const & name );
 
 	private:
-		PoolsEntry doCreateEntry( RenderDevice const & device
+		void doCreateEntry( RenderDevice const & device
 			, Geometry const & geometry
 			, Submesh const & submesh
 			, Pass const & pass );
@@ -176,8 +192,11 @@ namespace castor3d
 	private:
 		uint32_t m_faceCount{ 0 };
 		uint32_t m_vertexCount{ 0 };
+		std::map< size_t, PoolsEntry > m_baseEntries;
 		std::map< size_t, PoolsEntry > m_entries;
 		std::map< Geometry *, OnSubmeshMaterialChangedConnection > m_connections;
+		using RenderPassSet = std::set< RenderPass const * >;
+		std::map< uint32_t, RenderPassSet > m_instances;
 	};
 }
 

@@ -12,13 +12,13 @@
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Render/Ssao/SsaoConfigUbo.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/SsaoConfigUbo.hpp"
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 #include <CastorUtils/Math/Angle.hpp>
@@ -100,11 +100,12 @@ namespace castor3d
 			auto in = writer.getIn();
 
 			auto pxl_fragColor = writer.declOutput< Vec3 >( "pxl_fragColor", 0u );
+			auto pxl_bentNormal = writer.declOutput< Vec4 >( "pxl_bentNormal", 1u );
 
 #define visibility pxl_fragColor.r()
 #define bilateralKey pxl_fragColor.g()
 #define readNormal( normal ) -( transpose( inverse( c3d_mtxGView ) ) * vec4( normal.xyz(), 1.0 ) ).xyz()
-#define writeNormal( normal ) ( inverse( transpose( c3d_mtxGView ) ) * vec4( -normal.xyz(), 1.0 ) ).xyz()
+#define writeNormal( normal ) ( transpose( inverse( c3d_mtxInvView ) ) * vec4( -normal.xyz(), 1.0 ) ).xyz()
 
 			//////////////////////////////////////////////////
 
@@ -114,34 +115,35 @@ namespace castor3d
 			// was placed!]
 			// Costs 3 MADD.  Error is on the order of 10^3 at the far plane, partly due to z precision.
 			auto reconstructCSPosition = writer.implementFunction< Vec3 >( "reconstructCSPosition"
-				, [&]( Vec2 const & S
-					, Float const & z
+				, [&]( Vec2 const & ssPosition
+					, Float const & csZ
 					, Vec4 const & projInfo )
 				{
-					writer.returnStmt( vec3( sdw::fma( S.xy(), projInfo.xy(), projInfo.zw() ) * z, z ) );
+					writer.returnStmt( vec3( sdw::fma( ssPosition.xy(), projInfo.xy(), projInfo.zw() ) * csZ, csZ ) );
 				}
-				, InVec2{ writer, "S" }
-					, InFloat{ writer, "z" }
+				, InVec2{ writer, "ssPosition" }
+				, InFloat{ writer, "csZ" }
 				, InVec4{ writer, "projInfo" } );
 
 			// Reconstructs camera-space normal from camera-space position
 			auto reconstructNonUnitCSFaceNormal = writer.implementFunction< Vec3 >( "reconstructNonUnitCSFaceNormal"
-				, [&]( Vec3 const & vsPosition )
+				, [&]( Vec3 const & csPosition )
 				{
-					writer.returnStmt( cross( dFdy( vsPosition ), dFdx( vsPosition ) ) );
+					writer.returnStmt( cross( dFdy( csPosition ), dFdx( csPosition ) ) );
 				}
-			, InVec3{ writer, "vsPosition" } );
+				, InVec3{ writer, "csPosition" } );
 
-		// Returns a unit vector and a screen-space radius for the tap on a unit disk
-		//	(the caller should scale by the actual disk radius)
+			// Returns a unit vector and a screen-space radius for the tap on a unit disk
+			//	(the caller should scale by the actual disk radius)
 			auto tapLocation = writer.implementFunction< Vec2 >( "tapLocation"
 				, [&]( Int const & sampleNumber
+					, Int const & sampleCount
 					, Float const & spinAngle
 					, Float ssRadius )
 				{
 					// Radius relative to ssR
 					auto alpha = writer.declLocale( "alpha"
-						, ( writer.cast< Float >( sampleNumber ) + 0.5_f ) * ( 1.0_f / writer.cast< Float >( c3d_numSamples ) ) );
+						, ( writer.cast< Float >( sampleNumber ) + 0.5_f ) * ( 1.0_f / writer.cast< Float >( sampleCount ) ) );
 					auto angle = writer.declLocale( "angle"
 						, alpha * ( 6.28_f * writer.cast< Float >( c3d_numSpiralTurns ) ) + spinAngle );
 
@@ -149,24 +151,25 @@ namespace castor3d
 					writer.returnStmt( vec2( cos( angle ), sin( angle ) ) );
 				}
 				, InInt{ writer, "sampleNumber" }
-					, InFloat{ writer, "spinAngle" }
+				, InInt{ writer, "sampleCount" }
+				, InFloat{ writer, "spinAngle" }
 				, OutFloat{ writer, "ssRadius" } );
 
 
 			// Used for packing Z into the GB channels
 			auto csZToKey = writer.implementFunction< Float >( "csZToKey"
-				, [&]( Float const & z )
+				, [&]( Float const & csZ )
 				{
-					writer.returnStmt( clamp( z * ( 1.0_f / c3d_farPlaneZ ), 0.0_f, 1.0_f ) );
+					writer.returnStmt( clamp( csZ * ( 1.0_f / c3d_farPlaneZ ), 0.0_f, 1.0_f ) );
 				}
-			, InFloat{ writer, "z" } );
+				, InFloat{ writer, "csZ" } );
 
-		// Read the camera-space position of the point at screen-space pixel ssPosition
+			// Read the camera-space position of the point at screen-space pixel ssPosition
 			auto getPosition = writer.implementFunction< Vec3 >( "getPosition"
 				, [&]( IVec2 const & ssPosition )
 				{
 					auto position = writer.declLocale< Vec3 >( "position" );
-					position.z() = texelFetch( c3d_mapDepth, ssPosition, 0_i ).r();
+					position.z() = c3d_mapDepth.fetch( ssPosition, 0_i ).r();
 
 					// Offset to pixel center
 					position = reconstructCSPosition( vec2( ssPosition ) + vec2( 0.5_f )
@@ -174,7 +177,7 @@ namespace castor3d
 						, c3d_projInfo );
 					writer.returnStmt( position );
 				}
-			, InIVec2{ writer, "ssPosition" } );
+				, InIVec2{ writer, "ssPosition" } );
 
 			auto getMipLevel = writer.implementFunction< Int >( "getMipLevel"
 				, [&]( Float const & ssRadius )
@@ -185,10 +188,10 @@ namespace castor3d
 						, 0_i
 						, c3d_maxMipLevel ) );
 				}
-			, InFloat{ writer, "ssRadius" } );
+				, InFloat{ writer, "ssRadius" } );
 
-		// Read the camera-space position of the point at screen-space pixel ssP + unitOffset * ssR.
-		// Assumes length(unitOffset) == 1.
+			// Read the camera-space position of the point at screen-space pixel ssP + unitOffset * ssR.
+			// Assumes length(unitOffset) == 1.
 			auto getOffsetPosition = writer.implementFunction< Vec3 >( "getOffsetPosition"
 				, [&]( IVec2 const & ssCenter
 					, Vec2 const & unitOffset
@@ -207,8 +210,8 @@ namespace castor3d
 					auto mipPosition = writer.declLocale( "mipPosition"
 						, clamp( ivec2( ssPosition.x() >> mipLevel, ssPosition.y() >> mipLevel )
 							, ivec2( 0_i )
-							, textureSize( c3d_mapDepth, mipLevel ) - ivec2( 1_i ) ) );
-					position.z() = texelFetch( c3d_mapDepth, mipPosition, mipLevel ).r();
+							, c3d_mapDepth.getSize( mipLevel ) - ivec2( 1_i ) ) );
+					position.z() = c3d_mapDepth.fetch( mipPosition, mipLevel ).r();
 
 					// Offset to pixel center
 					position = reconstructCSPosition( ( vec2( ssPosition ) + vec2( 0.5_f ) ) * invCszBufferScale
@@ -217,8 +220,8 @@ namespace castor3d
 					writer.returnStmt( position );
 				}
 				, InIVec2{ writer, "ssCenter" }
-					, InVec2{ writer, "unitOffset" }
-					, InFloat{ writer, "ssRadius" }
+				, InVec2{ writer, "unitOffset" }
+				, InFloat{ writer, "ssRadius" }
 				, InFloat{ writer, "invCszBufferScale" } );
 
 			// Smaller return value = less occlusion
@@ -245,8 +248,8 @@ namespace castor3d
 						// Avoid the square root from above.
 						//  Assumes the desired result is intensity/radius^6 in main()
 						auto f = writer.declLocale( "f"
-						, max( c3d_radius2 - vv, 0.0_f ) );
-					writer.returnStmt( f * f * f * max( ( vn - c3d_bias ) / ( epsilon + vv ), 0.0_f ) );
+							, max( c3d_radius2 - vv, 0.0_f ) );
+						writer.returnStmt( f * f * f * max( ( vn - c3d_bias ) / ( epsilon + vv ), 0.0_f ) );
 					}
 					FI;
 
@@ -260,7 +263,7 @@ namespace castor3d
 					//return 2.0 * float(vv < radius * radius) * max(vn - bias, 0.0);
 				}
 				, InFloat{ writer, "vv" }
-					, InFloat{ writer, "vn" }
+				, InFloat{ writer, "vn" }
 				, InFloat{ writer, "epsilon" } );
 
 			// Compute the occlusion due to sample point \a occluder about camera-space point \a csCenter with unit normal \a normal
@@ -275,14 +278,12 @@ namespace castor3d
 						, dot( v, v ) );
 					auto vn = writer.declLocale( "vn"
 						, dot( v, normal ) );
-					auto const epsilon = writer.declLocale( "epsilon"
-						, 0.001_f );
 
 					// Without the angular adjustment term, surfaces seen head on have less AO
-					writer.returnStmt( fallOffFunction( vv, vn, epsilon ) * mix( 1.0_f, max( 0.0_f, 1.5_f * normal.z() ), 0.35_f ) );
+					writer.returnStmt( fallOffFunction( vv, vn, 0.001_f ) * mix( 1.0_f, max( 0.0_f, 1.5_f * normal.z() ), 0.35_f ) );
 				}
 				, InVec3{ writer, "csCenter" }
-					, InVec3{ writer, "normal" }
+				, InVec3{ writer, "normal" }
 				, InVec3{ writer, "occluder" } );
 
 			// Compute the occlusion due to sample with index \a tapIndex about the pixel at \a ssCenter that corresponds
@@ -293,20 +294,22 @@ namespace castor3d
 			// In this implementation, we factor out (9 / radius).
 
 			// Four versions of the falloff function are implemented below."
-			auto sampleAO = writer.implementFunction< Void >( "sampleAO"
+			auto sampleAO = writer.implementFunction< Vec3 >( "sampleAO"
 				, [&]( IVec2 const & ssCenter
 					, Vec3 const & csCenter
 					, Vec3 const & normal
 					, Float const & ssDiskRadius
 					, Int const & tapIndex
+					, Int const & tapCount
 					, Float const & randomPatternRotationAngle
 					, Float const & invCszBufferScale
 					, Float occlusion )
 				{
 					// Offset on the unit disk, spun for this pixel
-					auto ssRadius = writer.declLocale< Float >( "ssRadius" );
+					auto ssRadius = writer.declLocale( "ssRadius"
+						, 0.0_f );
 					auto unitOffset = writer.declLocale( "unitOffset"
-						, tapLocation( tapIndex, randomPatternRotationAngle, ssRadius ) );
+						, tapLocation( tapIndex, tapCount, randomPatternRotationAngle, ssRadius ) );
 
 					// Ensure that the taps are at least 1 pixel away
 					ssRadius = max( 0.75_f, ssRadius * ssDiskRadius );
@@ -318,15 +321,53 @@ namespace castor3d
 							, ssRadius
 							, invCszBufferScale ) );
 					occlusion = aoValueFromPositionsAndNormal( csCenter, normal, occluder );
+					writer.returnStmt( occluder - csCenter );
 				}
 				, InIVec2{ writer, "ssCenter" }
 				, InVec3{ writer, "csCenter" }
 				, InVec3{ writer, "normal" }
 				, InFloat{ writer, "ssDiskRadius" }
 				, InInt{ writer, "tapIndex" }
+				, InInt{ writer, "tapCount" }
 				, InFloat{ writer, "randomPatternRotationAngle" }
 				, InFloat{ writer, "invCszBufferScale" }
 				, OutFloat{ writer, "occlusion" } );
+
+			auto isOccluded = writer.implementFunction< Float >( "isOccluded"
+				, [&]( Vec3 const & csPosition
+					, Vec3 const & csCenter )
+				{
+					writer.returnStmt( 0.0_f );
+				}
+				, InVec3{ writer, "csPosition" }
+				, InVec3{ writer, "csCenter" } );
+
+			auto sampleRay = writer.implementFunction< Vec3 >( "sampleRay"
+				, [&]( Vec3 const & csCenter
+					, Vec3 const & csRay )
+				{
+					// Offset on the unit disk, spun for this pixel
+					auto step = writer.declLocale( "step"
+						, csRay * c3d_bendStepSize );
+					auto current = writer.declLocale( "currentRadius"
+						, csCenter + step );
+					auto currentOcclusion = writer.declLocale( "currentOcclusion"
+						, 0.0_f );
+					auto stepIdx = writer.declLocale( "stepIdx"
+						, 0_i );
+
+					WHILE( writer, stepIdx < c3d_bendStepCount && currentOcclusion == 0.0_f )
+					{
+						currentOcclusion = isOccluded( csCenter, current );
+						stepIdx += 1u;
+						current += step;
+					}
+					ELIHW;
+
+					writer.returnStmt( current * ( 1.0_f - ( currentOcclusion / writer.cast< Float >( stepIdx ) ) ) );
+				}
+				, InVec3{ writer, "csCenter" }
+				, InVec3{ writer, "csRay" } );
 
 			auto square = writer.implementFunction< Float >( "square"
 				, [&]( Float const & x )
@@ -335,42 +376,42 @@ namespace castor3d
 				}
 				, InFloat{ writer, "x" } );
 
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
+			writer.implementMain( [&]()
 				{
 					// Pixel being shaded
 					auto ssCenter = writer.declLocale( "ssCenter"
 						, ivec2( in.fragCoord.xy() ) );
 
 					// World space point being shaded
-					// SDO: World, or Camera space ? (getPosition returns Camera space)
-					auto wsCenter = writer.declLocale( "wsCenter"
+					auto csCenter = writer.declLocale( "csCenter"
 						, getPosition( ssCenter ) );
 
-					bilateralKey = csZToKey( wsCenter.z() );
+					bilateralKey = csZToKey( csCenter.z() );
 
 					auto normal = writer.declLocale< Vec3 >( "normal" );
 
 					if ( useNormalsBuffer )
 					{
-						normal = texelFetch( c3d_mapNormal, ivec2( in.fragCoord.xy() ), 0_i ).xyz();
+						normal = c3d_mapNormal.fetch( ivec2( in.fragCoord.xy() ), 0_i ).xyz();
 						normal = normalize( readNormal( normal ) );
 					}
 					else
 					{
 						// Reconstruct normals from positions.
-						normal = reconstructNonUnitCSFaceNormal( wsCenter );
+						normal = reconstructNonUnitCSFaceNormal( csCenter );
 
 						// Since normal is computed from the cross product of camera-space edge vectors from points
 						// at adjacent pixels, its magnitude will be proportional to the square of distance from the camera
 						//
 						// if the threshold # is too big you will see black dots where we used a bad normal at edges, too small -> white
-						IF( writer, dot( normal, normal ) > ( square( wsCenter.z() * wsCenter.z() * 0.00006_f ) ) )
+						IF( writer, dot( normal, normal ) > ( square( csCenter.z() * csCenter.z() * 0.00006_f ) ) )
 						{
 							// The normals from depth should be very small values before normalization,
 							// except at depth discontinuities, where they will be large and lead
 							// to 1-pixel false occlusions because they are not reliable
 							visibility = 1.0_f;
+							pxl_bentNormal.rgb() = normalize( writeNormal( normal ) );
+							pxl_bentNormal.a() = 0.0f;
 							writer.returnStmt();
 						}
 						ELSE
@@ -384,12 +425,14 @@ namespace castor3d
 					// Choose the screen-space sample radius
 					// proportional to the projected area of the sphere
 					auto ssDiskRadius = writer.declLocale( "ssDiskRadius"
-						, c3d_projScale * c3d_radius / wsCenter.z() );
+						, c3d_projScale * c3d_radius / csCenter.z() );
 
 					IF( writer, ssDiskRadius <= c3d_minRadius )
 					{
 						// There is no way to compute AO at this radius
 						visibility = 1.0_f;
+						pxl_bentNormal.rgb() = writeNormal( normal );
+						pxl_bentNormal.a() = 0.0f;
 						writer.returnStmt();
 					}
 					FI;
@@ -400,22 +443,34 @@ namespace castor3d
 
 					auto sum = writer.declLocale( "sum"
 						, 0.0_f );
+					auto bentNormal = writer.declLocale( "bentNormal"
+						, vec3( 0.0_f ) );
 
 					FOR( writer, Int, i, 0, i < c3d_numSamples, ++i )
 					{
+						auto occluder = writer.declLocale( "occluder"
+							, vec3( 0.0_f ) );
 						auto occlusion = writer.declLocale( "occlusion"
 							, 0.0_f );
-						sampleAO( ssCenter
-							, wsCenter
-							, normal
-							, ssDiskRadius
-							, i
-							, randomPatternRotationAngle
-							, 1.0_f
-							, occlusion );
+						auto ssRadius = writer.declLocale( "ssRadius"
+							, 0.0_f );
+						auto csRay = writer.declLocale( "ray"
+							, sampleAO( ssCenter
+								, csCenter
+								, normal
+								, ssDiskRadius
+								, i
+								, c3d_numSamples
+								, randomPatternRotationAngle
+								, 1.0_f
+								, occlusion ) );
 						sum += occlusion;
+						bentNormal += sampleRay( csCenter, csRay );
 					}
 					ROF;
+
+					bentNormal = normalize( bentNormal )/* * 0.5_f + 0.5_f*/;
+					pxl_bentNormal.xyz() = writeNormal( bentNormal );
 
 					auto A = writer.declLocale< Float >( "A" );
 
@@ -693,8 +748,13 @@ namespace castor3d
 			, "SsaoRawAOResult"
 			, SsaoRawAOPass::ResultFormat
 			, m_size ) }
-		, m_renderPass{ doCreateRenderPass( m_device, { m_result } ) }
-		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, { m_result } ) }
+		, m_bentNormals{ doCreateTexture( m_engine
+			, m_device
+			, "BentNormals"
+			, VK_FORMAT_R32G32B32A32_SFLOAT
+			, m_size ) }
+		, m_renderPass{ doCreateRenderPass( m_device, { m_result, m_bentNormals } ) }
+		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, { m_result, m_bentNormals } ) }
 		, m_quads{ RenderQuad{ m_engine
 				, m_device
 				, *m_renderPass
@@ -730,7 +790,7 @@ namespace castor3d
 			m_timer->beginPass( cmd );
 			cmd.beginRenderPass( *m_renderPass
 				, *m_frameBuffer
-				, { opaqueWhiteClearColor }
+				, { opaqueWhiteClearColor, opaqueWhiteClearColor }
 				, VK_SUBPASS_CONTENTS_INLINE );
 			quad.registerPass( cmd );
 			cmd.endRenderPass();
@@ -747,6 +807,7 @@ namespace castor3d
 			quad.cleanup();
 		}
 
+		m_bentNormals.cleanup();
 		m_result.cleanup();
 	}
 
@@ -777,11 +838,18 @@ namespace castor3d
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		}
 
+		if ( getBentResult().isTextured() )
+		{
+			visitor.visit( "SSAO Bent Normals"
+				, getBentResult().getTexture()->getDefaultView().getSampledView()
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+		}
+
 		auto index = m_ssaoConfig.useNormalsBuffer
 			? 1u
 			: 0u;
 		visitor.visit( m_quads[index].vertexShader );
-		visitor.visit( m_quads[index].pixelShader  );
+		visitor.visit( m_quads[index].pixelShader );
 		config.accept( m_quads[index].pixelShader.name, visitor );
 	}
 }

@@ -486,29 +486,23 @@ namespace castor3d
 	void RenderTarget::setToneMappingType( String const & name
 		, Parameters const & parameters )
 	{
-		if ( m_toneMapping )
-		{
-			ToneMappingSPtr toneMapping;
-			std::swap( m_toneMapping, toneMapping );
-			// Give ownership of the tone mapping to the event (capture by value in the lambda).
-			getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [toneMapping]( RenderDevice const & device )
-				{
-					toneMapping->cleanup();
-				} ) );
-		}
-
 		getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
 			, [this, name, parameters]( RenderDevice const & device )
 			{
-				if ( !m_toneMapping )
+				if ( m_toneMapping )
 				{
-					m_toneMapping = getEngine()->getRenderTargetCache().getToneMappingFactory().create( name
-						, *getEngine()
-						, device
-						, m_hdrConfigUbo
-						, parameters );
+					m_toneMappingCommandBuffer.reset();
+					ToneMappingSPtr toneMapping;
+					std::swap( m_toneMapping, toneMapping );
+					toneMapping->cleanup();
 				}
+
+				m_toneMapping = getEngine()->getRenderTargetCache().getToneMappingFactory().create( name
+					, *getEngine()
+					, device
+					, m_hdrConfigUbo
+					, parameters );
+				doInitialiseToneMapping( device );
 			} ) );
 	}
 
@@ -822,9 +816,9 @@ namespace castor3d
 				, [&]()
 				{
 					auto lhsColor = writer.declLocale( "lhsColor"
-						, texture( c3d_mapLhs, vtx_textureLhs ) );
+						, c3d_mapLhs.sample( vtx_textureLhs ) );
 					auto rhsColor = writer.declLocale( "rhsColor"
-						, texture( c3d_mapRhs, vtx_textureRhs ) );
+						, c3d_mapRhs.sample( vtx_textureRhs ) );
 					lhsColor.rgb() *= 1.0_f - rhsColor.a();
 					pxl_fragColor = vec4( lhsColor.rgb() + rhsColor.rgb(), 1.0_f );
 				} );

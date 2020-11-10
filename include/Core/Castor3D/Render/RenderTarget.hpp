@@ -330,6 +330,11 @@ namespace castor3d
 			return m_hdrConfig;
 		}
 
+		inline HdrConfig & getHdrConfig()
+		{
+			return m_hdrConfig;
+		}
+
 		inline castor::Point2f const & getJitter()const
 		{
 			return m_jitter;
@@ -376,12 +381,12 @@ namespace castor3d
 
 		inline void setExposure( float value )
 		{
-			m_hdrConfig.setExposure( value );
+			m_hdrConfig.exposure = value;
 		}
 
 		inline void setGamma( float value )
 		{
-			m_hdrConfig.setGamma( value );
+			m_hdrConfig.gamma = value;
 		}
 
 		inline HdrConfigUbo const & getHdrConfigUbo()const

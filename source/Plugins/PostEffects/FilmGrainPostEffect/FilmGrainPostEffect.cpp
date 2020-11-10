@@ -127,7 +127,7 @@ namespace film_grain
 						, texcoord * 2.0_f );
 					coord.x() *= c3d_pixelSize.y() / c3d_pixelSize.x();
 					auto noise = writer.declLocale( "noise"
-						, texture( c3d_noiseTex, vec3( coord, c3d_time ) ) );
+						, c3d_noiseTex.sample( vec3( coord, c3d_time ) ) );
 					auto exposureFactor = writer.declLocale( "exposureFactor"
 						, c3d_exposure / 2.0_f );
 					exposureFactor = sqrt( exposureFactor );
@@ -145,7 +145,7 @@ namespace film_grain
 				, [&]()
 				{
 					auto colour = writer.declLocale( "colour"
-						, texture( c3d_srcTex, vtx_texture ).xyz() );
+						, c3d_srcTex.sample( vtx_texture ).xyz() );
 					colour = addNoise( colour, vtx_texture );
 					pxl_fragColor = vec4( colour, 1.0 );
 				} );

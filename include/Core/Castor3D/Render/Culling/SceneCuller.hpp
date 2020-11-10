@@ -17,6 +17,13 @@ namespace castor3d
 		PassSPtr pass;
 		SceneNode & sceneNode;
 	};
+	size_t hash( CulledSubmesh const & culled );
+	size_t hash( CulledSubmesh const & culled
+		, uint32_t instanceMult );
+	bool isVisible( Camera const & camera
+		, CulledSubmesh const & node );
+	bool isVisible( Frustum const & frustum
+		, CulledSubmesh const & node );
 
 	struct CulledBillboard
 	{
@@ -25,13 +32,60 @@ namespace castor3d
 		PassSPtr pass;
 		SceneNode & sceneNode;
 	};
+	size_t hash( CulledBillboard const & culled );
+	size_t hash( CulledBillboard const & culled
+		, uint32_t instanceMult );
+	bool isVisible( Camera const & camera
+		, CulledBillboard const & node );
+	bool isVisible( Frustum const & frustum
+		, CulledBillboard const & node );
 
 	class SceneCuller
 	{
 	public:
+		template< typename CulledT, typename ArrayT >
+		struct CulledInstancesArrayT
+		{
+			std::vector< CulledT > objects;
+			std::vector< ArrayT > instances;
+			uint32_t count;
+
+			void clear()noexcept
+			{
+				objects.clear();
+				instances.clear();
+			}
+
+			void push_back( CulledT object
+				, ArrayT instance )
+			{
+				objects.push_back( std::move( object ) );
+				instances.push_back( std::move( instance ) );
+			}
+
+			void copy( CulledInstancesArrayT< CulledT *, ArrayT * > & dst )
+			{
+				for ( auto & node : objects )
+				{
+					dst.objects.push_back( &node );
+				}
+
+				for ( auto & node : instances )
+				{
+					dst.instances.push_back( &node );
+				}
+			}
+		};
+
+		template< typename CulledT >
+		using CulledInstancesT = CulledInstancesArrayT< CulledT, UInt32Array >;
+		template< typename CulledT >
+		using CulledInstancesPtrT = CulledInstancesArrayT< CulledT *, UInt32Array * >;
+
 	public:
-		C3D_API SceneCuller( Scene const & scene
-			, Camera * camera );
+		C3D_API SceneCuller( Scene & scene
+			, Camera * camera
+			, uint32_t instancesCount );
 		C3D_API virtual ~SceneCuller() = default;
 		C3D_API void compute();
 
@@ -40,7 +94,7 @@ namespace castor3d
 			return m_minCullersZ;
 		}
 
-		inline Scene const & getScene()const
+		inline Scene & getScene()const
 		{
 			return m_scene;
 		}
@@ -72,28 +126,28 @@ namespace castor3d
 			return m_culledChanged;
 		}
 
-		inline std::vector< CulledSubmesh > const & getAllSubmeshes( bool opaque )const
+		inline CulledInstancesT< CulledSubmesh > const & getAllSubmeshes( bool opaque )const
 		{
 			return opaque
 				? m_allOpaqueSubmeshes
 				: m_allTransparentSubmeshes;
 		}
 
-		inline std::vector< CulledBillboard > const & getAllBillboards( bool opaque )const
+		inline CulledInstancesT< CulledBillboard > const & getAllBillboards( bool opaque )const
 		{
 			return opaque
 				? m_allOpaqueBillboards
 				: m_allTransparentBillboards;
 		}
 
-		inline std::vector< CulledSubmesh * > const & getCulledSubmeshes( bool opaque )const
+		inline CulledInstancesPtrT< CulledSubmesh > const & getCulledSubmeshes( bool opaque )const
 		{
 			return opaque
 				? m_culledOpaqueSubmeshes
 				: m_culledTransparentSubmeshes;
 		}
 
-		inline std::vector< CulledBillboard * > const & getCulledBillboards( bool opaque )const
+		inline CulledInstancesPtrT< CulledBillboard > const & getCulledBillboards( bool opaque )const
 		{
 			return opaque
 				? m_culledOpaqueBillboards
@@ -103,9 +157,14 @@ namespace castor3d
 	public:
 		mutable SceneCullerSignal onCompute;
 
+	protected:
+		UInt32Array getInitialInstances()const;
+
 	private:
 		void onSceneChanged( Scene const & scene );
 		void onCameraChanged( Camera const & camera );
+		void doClearAll();
+		void doClearCulled();
 		void doListGeometries();
 		void doListBillboards();
 		void doListParticles();
@@ -113,23 +172,24 @@ namespace castor3d
 		virtual void doCullBillboards() = 0;
 
 	private:
-		Scene const & m_scene;
+		Scene & m_scene;
 		Camera * m_camera;
 
 	protected:
+		uint32_t m_instancesCount;
 		bool m_allChanged{ true };
 		bool m_culledChanged{ true };
 		bool m_sceneDirty{ true };
 		bool m_cameraDirty{ true };
 		float m_minCullersZ{ 0.0f };
-		std::vector< CulledSubmesh > m_allOpaqueSubmeshes;
-		std::vector< CulledSubmesh > m_allTransparentSubmeshes;
-		std::vector< CulledBillboard > m_allOpaqueBillboards;
-		std::vector< CulledBillboard > m_allTransparentBillboards;
-		std::vector< CulledSubmesh * > m_culledOpaqueSubmeshes;
-		std::vector< CulledSubmesh * > m_culledTransparentSubmeshes;
-		std::vector< CulledBillboard * > m_culledOpaqueBillboards;
-		std::vector< CulledBillboard * > m_culledTransparentBillboards;
+		CulledInstancesT< CulledSubmesh > m_allOpaqueSubmeshes;
+		CulledInstancesT< CulledSubmesh > m_allTransparentSubmeshes;
+		CulledInstancesT< CulledBillboard > m_allOpaqueBillboards;
+		CulledInstancesT< CulledBillboard > m_allTransparentBillboards;
+		CulledInstancesPtrT< CulledSubmesh > m_culledOpaqueSubmeshes;
+		CulledInstancesPtrT< CulledSubmesh > m_culledTransparentSubmeshes;
+		CulledInstancesPtrT< CulledBillboard > m_culledOpaqueBillboards;
+		CulledInstancesPtrT< CulledBillboard > m_culledTransparentBillboards;
 		OnSceneChangedConnection m_sceneChanged;
 		OnCameraChangedConnection m_cameraChanged;
 	};

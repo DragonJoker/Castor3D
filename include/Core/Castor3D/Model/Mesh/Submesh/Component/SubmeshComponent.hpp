@@ -86,7 +86,8 @@ namespace castor3d
 		C3D_API virtual void gather( MaterialSPtr material
 			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
-			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts ) = 0;
+			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
+			, uint32_t instanceMult ) = 0;
 		/**
 		 *\~english
 		 *\return		The shader program flags.

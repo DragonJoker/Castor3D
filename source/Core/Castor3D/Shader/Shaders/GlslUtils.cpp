@@ -163,7 +163,7 @@ namespace castor3d
 					auto c3d_mapNormal( m_writer.getVariable< SampledImage2DRgba32 >( "c3d_mapNormal" ) );
 
 					auto mapNormal = m_writer.declLocale( "mapNormal"
-						, texture( c3d_mapNormal, uv.xy() ).xyz() );
+						, c3d_mapNormal.sample( uv.xy() ).xyz() );
 					mapNormal = sdw::fma( mapNormal
 						, vec3( 2.0_f )
 						, vec3( -1.0_f ) );
@@ -345,7 +345,7 @@ namespace castor3d
 					kD *= 1.0_f - metallic;
 
 					auto irradiance = m_writer.declLocale( "irradiance"
-						, texture( irradianceMap, vec3( normal.x(), -normal.y(), normal.z() ) ).rgb() );
+						, irradianceMap.sample( vec3( normal.x(), -normal.y(), normal.z() ) ).rgb() );
 					auto diffuseReflection = m_writer.declLocale( "diffuseReflection"
 						, irradiance * baseColour );
 					auto R = m_writer.declLocale( "R"
@@ -353,11 +353,11 @@ namespace castor3d
 					R.y() = -R.y();
 
 					auto prefilteredColor = m_writer.declLocale( "prefilteredColor"
-						, textureLod( prefilteredEnvMap, R, roughness * Float( float( MaxIblReflectionLod ) ) ).rgb() );
+						, prefilteredEnvMap.lod( R, roughness * Float( float( MaxIblReflectionLod ) ) ).rgb() );
 					auto envBRDFCoord = m_writer.declLocale( "envBRDFCoord"
 						, vec2( NdotV, roughness ) );
 					auto envBRDF = m_writer.declLocale( "envBRDF"
-						, texture( brdfMap, envBRDFCoord ).rg() );
+						, brdfMap.sample( envBRDFCoord ).rg() );
 					auto specularReflection = m_writer.declLocale( "specularReflection"
 						, prefilteredColor * sdw::fma( kS
 							, vec3( envBRDF.x() )
@@ -591,14 +591,14 @@ namespace castor3d
 						auto dy = m_writer.declLocale( "dy"
 							, dFdxCoarse( currentTexCoords ) );
 						auto currentDepthMapValue = m_writer.declLocale( "currentDepthMapValue"
-							, textureGrad( heightMap, currentTexCoords, dx, dy ).r() );
+							, heightMap.grad( currentTexCoords, dx, dy ).r() );
 
 						WHILE( m_writer, currentLayerDepth < currentDepthMapValue )
 						{
 							// shift texture coordinates along direction of P
 							currentTexCoords -= deltaTexCoords;
 							// get depthmap value at current texture coordinates
-							currentDepthMapValue = textureGrad( heightMap, currentTexCoords, dx, dy ).r();
+							currentDepthMapValue = heightMap.grad( currentTexCoords, dx, dy ).r();
 							// get depth of next layer
 							currentLayerDepth += layerDepth;
 						}
@@ -612,7 +612,7 @@ namespace castor3d
 						auto afterDepth = m_writer.declLocale( "afterDepth"
 							, currentDepthMapValue - currentLayerDepth );
 						auto beforeDepth = m_writer.declLocale( "beforeDepth"
-							, textureGrad( heightMap, prevTexCoords, dx, dy ).r() - currentLayerDepth + layerDepth );
+							, heightMap.grad( prevTexCoords, dx, dy ).r() - currentLayerDepth + layerDepth );
 
 						// interpolation of texture coordinates
 						auto weight = m_writer.declLocale( "weight"
@@ -681,7 +681,7 @@ namespace castor3d
 							auto currentTextureCoords = m_writer.declLocale( "currentTextureCoords"
 								, initialTexCoord + texStep );
 							auto heightFromTexture = m_writer.declLocale( "heightFromTexture"
-								, texture( heightMap, currentTextureCoords ).r() );
+								, heightMap.sample( currentTextureCoords ).r() );
 							auto stepIndex = m_writer.declLocale( "stepIndex"
 								, 1_i );
 
@@ -704,7 +704,7 @@ namespace castor3d
 								stepIndex += 1_i;
 								currentLayerHeight -= layerHeight;
 								currentTextureCoords += texStep;
-								heightFromTexture = texture( heightMap, currentTextureCoords ).r();
+								heightFromTexture = heightMap.sample( currentTextureCoords ).r();
 							}
 							ELIHW;
 
@@ -971,9 +971,9 @@ namespace castor3d
 			{
 				auto i = uint32_t( std::distance( flags.begin(), it ) );
 				auto colourMapConfig = m_writer.declLocale( "colourMapConfig"
-					, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( it->id ) ) );
+					, textureConfigs.getTextureConfiguration( UInt( it->id + 1u ) ) );
 				auto sampledColour = m_writer.declLocale< Vec4 >( "sampledColour"
-					, texture( maps[i], colourMapConfig.convertUV( m_writer, texCoords.xy() ) ) );
+					, maps[i].sample( colourMapConfig.convertUV( m_writer, texCoords.xy() ) ) );
 				colour = colourMapConfig.getDiffuse( m_writer, sampledColour, colour, 1.0_f );
 			}
 		}
@@ -991,9 +991,9 @@ namespace castor3d
 			{
 				auto i = uint32_t( std::distance( flags.begin(), it ) );
 				auto opacityMapConfig = m_writer.declLocale( "opacityMapConfig"
-					, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( it->id ) ) );
+					, textureConfigs.getTextureConfiguration( UInt( it->id + 1u ) ) );
 				auto sampledOpacity = m_writer.declLocale< Vec4 >( "sampledOpacity"
-					, texture( maps[i], opacityMapConfig.convertUV( m_writer, texCoords.xy() ) ) );
+					, maps[i].sample( opacityMapConfig.convertUV( m_writer, texCoords.xy() ) ) );
 				opacity = opacityMapConfig.getOpacity( m_writer, sampledOpacity, opacity );
 			}
 		}
@@ -1015,9 +1015,9 @@ namespace castor3d
 			{
 				auto i = uint32_t( std::distance( flags.begin(), it ) );
 				auto normalMapConfig = m_writer.declLocale( "normalMapConfig"
-					, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( it->id ) ) );
+					, textureConfigs.getTextureConfiguration( UInt( it->id ) ) );
 				auto sampledNormal = m_writer.declLocale< Vec4 >( "sampledNormal"
-					, texture( maps[i], normalMapConfig.convertUV( m_writer, texCoords.xy() ) ) );
+					, maps[i].sample( normalMapConfig.convertUV( m_writer, texCoords.xy() ) ) );
 				auto tbn = m_writer.declLocale( "tbn"
 					, shader::Utils::getTBN( normal, tangent, bitangent ) );
 				normal = normalMapConfig.getNormal( m_writer, sampledNormal, tbn );
@@ -1041,7 +1041,7 @@ namespace castor3d
 			{
 				auto i = uint32_t( std::distance( flags.begin(), it ) );
 				auto heightMapConfig = m_writer.declLocale( "heightMapConfig"
-					, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( it->id ) ) );
+					, textureConfigs.getTextureConfiguration( UInt( it->id ) ) );
 				texCoords.xy() = parallaxMapping( texCoords.xy()
 					, normalize( tangentSpaceViewPosition - tangentSpaceFragPosition )
 					, maps[i]
@@ -1069,7 +1069,7 @@ namespace castor3d
 			, sdw::Vec3 & tangentSpaceFragPosition )
 		{
 			auto result = m_writer.declLocale< Vec4 >( "result" + name
-				, texture( map, config.convertUV( m_writer, texCoords.xy() ) ) );
+				, map.sample( config.convertUV( m_writer, texCoords.xy() ) ) );
 
 			if ( checkFlag( textureFlags, TextureFlag::eHeight )
 				&& ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne )

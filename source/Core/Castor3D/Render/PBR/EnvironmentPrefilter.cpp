@@ -265,7 +265,7 @@ namespace castor3d
 										, 0.0_f
 										, 0.5_f * log2( saSample / saTexel ) ) );
 
-								prefilteredColor += texture( c3d_mapEnvironment, L, mipLevel ).rgb() * NdotL;
+								prefilteredColor += c3d_mapEnvironment.sample( L, mipLevel ).rgb() * NdotL;
 								totalWeight += NdotL;
 							}
 							FI;

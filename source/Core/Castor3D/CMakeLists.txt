@@ -13,7 +13,6 @@ set( ExternalIncludes )
 
 if ( CASTOR_USE_GLSLANG )
 	set( Castor3DDefinitions
-		${Castor3DDefinitions}
 		C3D_HasGlslang
 	)
 endif ()
@@ -28,6 +27,7 @@ set( ${PROJECT_NAME}_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Castor3DPrerequisites.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Engine.hpp
 	${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}/RequiredVersion.hpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/DebugDefines.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Castor3DModule.cpp
@@ -712,12 +712,16 @@ source_group( "Source Files\\Render" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Culling/DummyCuller.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Culling/FrustumCuller.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Culling/InstantiatedDummyCuller.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Culling/InstantiatedFrustumCuller.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Culling/SceneCuller.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Culling/CullingModule.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Culling/DummyCuller.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Culling/FrustumCuller.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Culling/InstantiatedDummyCuller.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Culling/InstantiatedFrustumCuller.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Culling/SceneCuller.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
@@ -792,6 +796,7 @@ source_group( "Source Files\\Render\\Node" FILES ${${PROJECT_NAME}_FOLDER_SRC_FI
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Passes/CombinePass.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Passes/CommandsSemaphore.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Passes/DepthPass.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Passes/DownscalePass.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Passes/GaussianBlur.cpp
@@ -906,13 +911,11 @@ source_group( "Source Files\\Render\\ShadowMap" FILES ${${PROJECT_NAME}_FOLDER_S
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Ssao/SsaoBlurPass.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Ssao/SsaoConfig.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Ssao/SsaoConfigUbo.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Ssao/SsaoRawAOPass.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Ssao/SsaoBlurPass.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Ssao/SsaoConfig.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Ssao/SsaoConfigUbo.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Ssao/SsaoModule.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Ssao/SsaoRawAOPass.hpp
 )
@@ -1016,6 +1019,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Technique/Opaque/LightVolumeGI/LightPropagationPass.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Technique/Opaque/LightVolumeGI/LightVolumePassResult.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Technique/Opaque/LightVolumeGI/LightVolumeGIPass.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Technique/Opaque/LightVolumeGI/LpvConfig.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Technique/Opaque/LightVolumeGI/GeometryInjectionPass.hpp
@@ -1027,6 +1031,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Technique/Opaque/LightVolumeGI/LightVolumeGIModule.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Technique/Opaque/LightVolumeGI/LightVolumePassResult.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Technique/Opaque/LightVolumeGI/LightVolumeGIPass.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Technique/Opaque/LightVolumeGI/LpvConfig.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
 	${${PROJECT_NAME}_SRC_FILES}
@@ -1482,6 +1487,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/LayeredLpvConfigUbo.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/LpvConfigUbo.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/MatrixUbo.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/ModelInstancesUbo.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/ModelMatrixUbo.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/ModelUbo.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/MorphingUbo.cpp
@@ -1491,6 +1497,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/SceneUbo.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/ShadowMapUbo.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/SkinningUbo.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/SsaoConfigUbo.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/TexturesUbo.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
@@ -1501,6 +1508,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/LayeredLpvConfigUbo.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/LpvConfigUbo.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/MatrixUbo.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/ModelInstancesUbo.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/ModelMatrixUbo.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/ModelUbo.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/MorphingUbo.hpp
@@ -1510,6 +1518,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/SceneUbo.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/ShadowMapUbo.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/SkinningUbo.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/SsaoConfigUbo.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/TexturesUbo.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/UbosModule.hpp
 )

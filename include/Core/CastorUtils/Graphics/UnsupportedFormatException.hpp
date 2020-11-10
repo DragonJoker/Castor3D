@@ -36,14 +36,13 @@ namespace castor
 		{
 		}
 	};
-	/**
-	\author 	Sylvain DOREMUS
-	\~english
-	\brief		english Helper macro to use UnsupportedFormatException
-	\~french
-	\brief		Macro écrite pour faciliter l'utilisation de UnsupportedFormatException
-	*/
-#	define CU_UnsupportedError( text) throw UnsupportedFormatException( text, __FILE__, __FUNCTION__, __LINE__)
 }
+/**
+*\~english
+*\brief		english Helper macro to use UnsupportedFormatException
+*\~french
+*\brief		Macro écrite pour faciliter l'utilisation de UnsupportedFormatException
+*/
+#define CU_UnsupportedError( text ) throw castor::UnsupportedFormatException{ text, __FILE__, __FUNCTION__, uint32_t( __LINE__ ) }
 
 #endif

@@ -142,6 +142,12 @@ namespace castor3d
 			result = file.writeText( m_tabs + cuT( "debug_overlays true\n" ) ) > 0;
 			castor::TextWriter< Scene >::checkError( result, "Debug overlays" );
 		}
+		
+		if ( scene.getEngine()->getLpvGridSize() != 32u )
+		{
+			result = file.writeText( m_tabs + cuT( "lpv_grid_size " ) + castor::string::toString( scene.getEngine()->getLpvGridSize() ) + cuT( "\n" ) ) > 0;
+			castor::TextWriter< Scene >::checkError( result, "LPV grid size" );
+		}
 
 		if ( result )
 		{
@@ -836,9 +842,9 @@ namespace castor3d
 			doUpdateAnimations();
 			doUpdateMaterials();
 			getLightCache().update( updater );
-			getGeometryCache().cpuUpdate();
+			getGeometryCache().update( updater );
 			getBillboardListCache().update( updater );
-			getAnimatedObjectGroupCache().update();
+			getAnimatedObjectGroupCache().update( updater );
 			onUpdate( *this );
 			m_changed = false;
 		}
@@ -854,6 +860,42 @@ namespace castor3d
 				submesh->update();
 			}
 		} );
+
+		bool needsGI = false;
+		bool hasAnyShadows = false;
+		std::array< bool, size_t( LightType::eCount ) > hasShadows{};
+
+		m_lightCache->forEach( [&needsGI, &hasAnyShadows, &hasShadows]( Light const & light )
+			{
+				if ( light.getGlobalIlluminationType() != GlobalIlluminationType::eNone )
+				{
+					needsGI = true;
+				}
+
+				if ( light.isShadowProducer() )
+				{
+					hasAnyShadows = true;
+					hasShadows[size_t( light.getLightType() )] = true;
+				}
+			} );
+
+		size_t i = 0u;
+		bool changed = false;
+		for ( auto & shadows : m_hasShadows )
+		{
+			changed = shadows.exchange( hasShadows[i] ) != hasShadows[i]
+				|| changed;
+			++i;
+		}
+		changed = m_hasAnyShadows.exchange( hasAnyShadows ) != hasAnyShadows
+			|| changed;
+		changed = m_needsGlobalIllumination.exchange( needsGI ) != needsGI
+			|| changed;
+
+		if ( changed )
+		{
+			onChanged( *this );
+		}
 	}
 
 	void Scene::setBackground( SceneBackgroundSPtr value )
@@ -943,18 +985,32 @@ namespace castor3d
 			break;
 		}
 
+		if ( m_hasShadows[size_t( LightType::eDirectional )] )
+		{
+			result |= SceneFlag::eShadowDirectional;
+		}
+
+		if ( m_hasShadows[size_t( LightType::ePoint )] )
+		{
+			result |= SceneFlag::eShadowPoint;
+		}
+
+		if ( m_hasShadows[size_t( LightType::eSpot )] )
+		{
+			result |= SceneFlag::eShadowSpot;
+		}
+
 		return result;
 	}
 
 	bool Scene::hasShadows()const
 	{
-		using LockType = std::unique_lock< LightCache const >;
-		LockType lock{ castor::makeUniqueLock( getLightCache() ) };
+		return m_hasAnyShadows;
+	}
 
-		return getLightCache().end() != std::find_if( getLightCache().begin(), getLightCache().end(), []( std::pair< String, LightSPtr > const & p_it )
-		{
-			return p_it.second->isShadowProducer();
-		} );
+	bool Scene::hasShadows( LightType lightType )const
+	{
+		return m_hasShadows[size_t( lightType )];
 	}
 
 	void Scene::createEnvironmentMap( SceneNode & node )
@@ -997,15 +1053,7 @@ namespace castor3d
 
 	bool Scene::needsGlobalIllumination()const
 	{
-		auto result = false;
-		m_lightCache->forEach( [&result]( Light const & light )
-			{
-				if ( !result )
-				{
-					result = light.getGlobalIlluminationType() != GlobalIlluminationType::eNone;
-				}
-			} );
-		return result;
+		return m_needsGlobalIllumination;
 	}
 
 	void Scene::setMaterialsType( MaterialType value )
@@ -1042,12 +1090,18 @@ namespace castor3d
 		Point3f max{ fmax, fmax, fmax };
 		m_geometryCache->forEach( [&min, &max]( Geometry const & geometry )
 			{
-				auto bbox = geometry.getMesh()->getBoundingBox().getAxisAligned( geometry.getParent()->getDerivedTransformationMatrix() );
+				auto node = geometry.getParent();
+				auto mesh = geometry.getMesh();
 
-				for ( auto i = 0u; i < 3u; ++i )
+				if ( node && mesh )
 				{
-					min[i] = std::min( min[i], bbox.getMin()[i] );
-					max[i] = std::max( max[i], bbox.getMax()[i] );
+					auto bbox = mesh->getBoundingBox().getAxisAligned( node->getDerivedTransformationMatrix() );
+
+					for ( auto i = 0u; i < 3u; ++i )
+					{
+						min[i] = std::min( min[i], bbox.getMin()[i] );
+						max[i] = std::max( max[i], bbox.getMax()[i] );
+					}
 				}
 			} );
 		m_boundingBox.load( min, max );

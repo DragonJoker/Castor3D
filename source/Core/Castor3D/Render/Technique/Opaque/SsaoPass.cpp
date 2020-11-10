@@ -8,9 +8,9 @@
 #include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/Ssao/SsaoBlurPass.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
-#include "Castor3D/Render/Ssao/SsaoConfigUbo.hpp"
 #include "Castor3D/Render/Ssao/SsaoRawAOPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
+#include "Castor3D/Shader/Ubos/SsaoConfigUbo.hpp"
 
 using namespace castor;
 using namespace castor3d;
@@ -57,6 +57,7 @@ namespace castor3d
 			, m_gpInfoUbo
 			, Point2i{ 1, 0 }
 			, m_rawAoPass->getResult()
+			, m_rawAoPass->getBentResult()
 			, m_gpResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView() );
 		m_verticalBlur = std::make_shared< SsaoBlurPass >( m_engine
 			, device
@@ -67,6 +68,7 @@ namespace castor3d
 			, m_gpInfoUbo
 			, Point2i{ 0, 1 }
 			, m_horizontalBlur->getResult()
+			, m_horizontalBlur->getBentResult()
 			, m_gpResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView() );
 #endif
 	}
@@ -128,6 +130,15 @@ namespace castor3d
 		return m_rawAoPass->getResult();
 #else
 		return m_verticalBlur->getResult();
+#endif
+	}
+
+	TextureUnit const & SsaoPass::getBentNormals()const
+	{
+#if C3D_DebugRawPass
+		return m_rawAoPass->getBentResult();
+#else
+		return m_rawAoPass->getBentResult();
 #endif
 	}
 }

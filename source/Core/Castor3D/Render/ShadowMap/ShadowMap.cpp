@@ -5,6 +5,7 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapPass.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
@@ -24,13 +25,15 @@ namespace castor
 
 namespace castor3d
 {
-	ShadowMap::ShadowMap( Engine & engine
-		, castor::String name
+	ShadowMap::ShadowMap( Scene & scene
+		, LightType lightType
 		, ShadowMapResult result
 		, std::vector< PassData > passes
 		, uint32_t count )
-		: OwnedBy< Engine >{ engine }
-		, m_name{ std::move( name ) }
+		: OwnedBy< Engine >{ *scene.getEngine() }
+		, m_scene{ scene }
+		, m_lightType{ lightType }
+		, m_name{ cuT( "ShadowMap" ) + castor::string::snakeToCamelCase( getName( lightType ) ) }
 		, m_result{ std::move( result ) }
 		, m_passes{ std::move( passes ) }
 		, m_count{ count }
@@ -39,40 +42,42 @@ namespace castor3d
 
 	void ShadowMap::accept( PipelineVisitorBase & visitor )
 	{
-		for ( uint32_t i = 1u; i < uint32_t( SmTexture::eCount ); ++i )
+		if ( m_initialised )
 		{
-			uint32_t index = 0u;
+			for ( uint32_t i = 1u; i < uint32_t( SmTexture::eCount ); ++i )
+			{
+				uint32_t index = 0u;
 
-			if ( visitor.config.forceMiplevelsVisit )
-			{
-				m_result[SmTexture( i )].getTexture()->forEachLeafView( [&index, &visitor, this, i]( TextureViewUPtr const & view )
-					{
-						visitor.visit( m_name + getName( SmTexture( i ) ) + cuT( "L" ) + string::toString( index++ )
-							, view->getSampledView()
-							, ( ashes::isDepthOrStencilFormat( view->getTargetView()->format )
-								? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
-								: VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-					} );
-			}
-			else
-			{
-				m_result[SmTexture( i )].getTexture()->forEachView( [&index, &visitor, this, i]( TextureViewUPtr const & view )
-					{
-						visitor.visit( m_name + getName( SmTexture( i ) ) + cuT( "L" ) + string::toString( index++ )
-							, view->getSampledView()
-							, ( ashes::isDepthOrStencilFormat( view->getTargetView()->format )
-								? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
-								: VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-					} );
+				if ( visitor.config.forceMiplevelsVisit )
+				{
+					m_result[SmTexture( i )].getTexture()->forEachLeafView( [&index, &visitor, this, i]( TextureViewUPtr const & view )
+						{
+							visitor.visit( m_name + getName( SmTexture( i ) ) + cuT( "L" ) + string::toString( index++ )
+								, view->getSampledView()
+								, ( ashes::isDepthOrStencilFormat( view->getTargetView()->format )
+									? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
+									: VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+						} );
+				}
+				else
+				{
+					m_result[SmTexture( i )].getTexture()->forEachView( [&index, &visitor, this, i]( TextureViewUPtr const & view )
+						{
+							visitor.visit( m_name + getName( SmTexture( i ) ) + cuT( "L" ) + string::toString( index++ )
+								, view->getSampledView()
+								, ( ashes::isDepthOrStencilFormat( view->getTargetView()->format )
+									? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
+									: VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+						} );
+				}
 			}
 		}
 	}
 
 	bool ShadowMap::initialise( RenderDevice const & device )
 	{
-		bool result = true;
-
-		if ( !m_initialised )
+		if ( !m_initialised
+			&& m_scene.hasShadows( m_lightType ) )
 		{
 			m_result.initialise( device );
 			{
@@ -119,8 +124,8 @@ namespace castor3d
 				device.graphicsQueue->submit( *cmdBuffer, fence.get() );
 				fence->wait( ashes::MaxTimeout );
 			}
-
 			auto size = m_result[SmTexture::eVariance].getTexture()->getDimensions();
+			bool result = true;
 
 			for ( auto & pass : m_passes )
 			{
@@ -136,7 +141,7 @@ namespace castor3d
 			}
 		}
 
-		return result;
+		return m_initialised;
 	}
 
 	void ShadowMap::cleanup( RenderDevice const & device )
@@ -158,10 +163,10 @@ namespace castor3d
 		, ashes::Semaphore const & toWait
 		, uint32_t index )
 	{
-		if ( isUpToDate( index ) )
-		{
-			return toWait;
-		}
+		//if ( isUpToDate( index ) )
+		//{
+		//	return toWait;
+		//}
 
 		return doRender( device, toWait, index );
 	}

@@ -15,8 +15,7 @@ namespace castor3d
 		friend class Engine;
 
 	private:
-		static castor::LoggerInstance * initialise( castor::LogType type
-			, castor::Path const & filePath );
+		static castor::LoggerInstance * initialise( castor::LoggerInstance & logger );
 		static void cleanup();
 
 	private:

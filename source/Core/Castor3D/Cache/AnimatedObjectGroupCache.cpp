@@ -41,7 +41,7 @@ namespace castor3d
 	{
 	}
 
-	void AnimatedObjectGroupCache::update()
+	void AnimatedObjectGroupCache::update( CpuUpdater & updater )
 	{
 		for ( auto & pair : m_skeletonEntries )
 		{

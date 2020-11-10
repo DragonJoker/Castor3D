@@ -16,6 +16,7 @@ namespace castor3d
 		, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
 		, UniformBufferOffsetT< PickingUboConfiguration > pickingBuffer
 		, UniformBufferOffsetT< TexturesUboConfiguration > texturesBuffer
+		, UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesBuffer
 		, GeometryBuffers const & buffers
 		, SceneNode & sceneNode
 		, DataType & data
@@ -28,6 +29,7 @@ namespace castor3d
 			, modelBuffer
 			, pickingBuffer
 			, texturesBuffer
+			, modelInstancesBuffer
 			, buffers
 			, sceneNode
 			, data

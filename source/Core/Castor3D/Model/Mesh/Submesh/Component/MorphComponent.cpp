@@ -23,7 +23,8 @@ namespace castor3d
 	void MorphComponent::gather( MaterialSPtr material
 		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
-		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts )
+		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
+		, uint32_t instanceMult )
 	{
 		buffers.emplace_back( m_animBuffer->getBuffer() );
 		offsets.emplace_back( 0u );

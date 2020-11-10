@@ -44,13 +44,23 @@ namespace castor3d
 {
 	namespace
 	{
-		enum Idx
+		enum InIdx
 		{
 			LIUboIdx,
 			RLpvGridIdx,
 			GLpvGridIdx,
 			BLpvGridIdx,
 			GpGridIdx,
+		};
+		
+		enum OutIdx
+		{
+			RLpvAccumulatorIdx,
+			GLpvAccumulatorIdx,
+			BLpvAccumulatorIdx,
+			RLpvNextStepIdx,
+			GLpvNextStepIdx,
+			BLpvNextStepIdx,
 		};
 
 		std::unique_ptr< ast::Shader > getVertexProgram()
@@ -112,15 +122,15 @@ namespace castor3d
 
 			/*Spherical harmonics coefficients - precomputed*/
 			auto SH_C0 = writer.declConstant( "SH_C0"
-				, 0.282094792_f );// 1 / (2 * sqrt(pi))
+				, Float{ 1.0f / ( 2.0f * sqrt( castor::Pi< float > ) ) } );
 			auto SH_C1 = writer.declConstant( "SH_C1"
-				, 0.488602512_f ); // sqrt(3 / pi) / 2
+				, Float{ sqrt( 3.0f / castor::Pi< float > ) / 2.0f } );
 
 			/*Cosine lobe coeff*/
 			auto SH_cosLobe_C0 = writer.declConstant( "SH_cosLobe_C0"
-				, 0.886226925_f );// sqrt(pi) / 2
+				, Float{ sqrt( castor::Pi< float > ) / 2.0f } );
 			auto SH_cosLobe_C1 = writer.declConstant( "SH_cosLobe_C1"
-				, 1.02332671_f ); // sqrt(pi / 3)
+				, Float{ sqrt( castor::Pi< float > ) / 3.0f } );
 
 			auto directFaceSubtendedSolidAngle = writer.declConstant( "directFaceSubtendedSolidAngle"
 				, 0.12753712_f ); // 0.4006696846f / Pi
@@ -130,27 +140,27 @@ namespace castor3d
 				, std::vector< IVec3 >
 				{
 					//+Z
-					ivec3( 0_i, 0, 1 ),
+					ivec3( 0_i, 0_i, 1_i ),
 					//-Z
-					ivec3( 0_i, 0, -1 ),
+					ivec3( 0_i, 0_i, -1_i ),
 					//+X
-					ivec3( 1_i, 0, 0 ),
+					ivec3( 1_i, 0_i, 0_i ),
 					//-X
-					ivec3( -1_i, 0, 0 ),
+					ivec3( -1_i, 0_i, 0_i ),
 					//+Y
-					ivec3( 0_i, 1, 0 ),
+					ivec3( 0_i, 1_i, 0_i ),
 					//-Y
-					ivec3( 0_i, -1, 0 ),
+					ivec3( 0_i, -1_i, 0_i ),
 				} );
 
 			//Sides of the cell - right, top, left, bottom
 			auto cellSides = writer.declConstantArray( "cellSides"
 				, std::vector< IVec2 >
 				{
-					ivec2( 1_i, 0 ),
-					ivec2( 0_i, 1 ),
-					ivec2( -1_i, 0 ),
-					ivec2( 0_i, -1 ),
+					ivec2( 1_i, 0_i ),
+					ivec2( 0_i, 1_i ),
+					ivec2( -1_i, 0_i ),
+					ivec2( 0_i, -1_i ),
 				} );
 
 			UBO_LPVCONFIG( writer, LIUboIdx, 0u );
@@ -159,13 +169,12 @@ namespace castor3d
 			auto c3d_lpvGridB = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Grid" ), BLpvGridIdx, 0u );
 			auto c3d_geometryVolume = writer.declSampledImage< FImg3DRgba16 >( "c3d_geometryVolume", GpGridIdx, 0u, occlusion );
 
-			uint32_t index = 0u;
-			auto outLpvAccumulatorR = writer.declOutput< Vec4 >( "outLpvAccumulatorR", index++ );
-			auto outLpvAccumulatorG = writer.declOutput< Vec4 >( "outLpvAccumulatorG", index++ );
-			auto outLpvAccumulatorB = writer.declOutput< Vec4 >( "outLpvAccumulatorB", index++ );
-			auto outLpvNextStepR = writer.declOutput< Vec4 >( "outLpvNextStepR", index++ );
-			auto outLpvNextStepG = writer.declOutput< Vec4 >( "outLpvNextStepG", index++ );
-			auto outLpvNextStepB = writer.declOutput< Vec4 >( "outLpvNextStepB", index++ );
+			auto outLpvAccumulatorR = writer.declOutput< Vec4 >( "outLpvAccumulatorR", RLpvAccumulatorIdx );
+			auto outLpvAccumulatorG = writer.declOutput< Vec4 >( "outLpvAccumulatorG", GLpvAccumulatorIdx );
+			auto outLpvAccumulatorB = writer.declOutput< Vec4 >( "outLpvAccumulatorB", BLpvAccumulatorIdx );
+			auto outLpvNextStepR = writer.declOutput< Vec4 >( "outLpvNextStepR", RLpvNextStepIdx );
+			auto outLpvNextStepG = writer.declOutput< Vec4 >( "outLpvNextStepG", GLpvNextStepIdx );
+			auto outLpvNextStepB = writer.declOutput< Vec4 >( "outLpvNextStepB", BLpvNextStepIdx );
 
 			auto inCellIndex = writer.declInput< IVec3 >( "inCellIndex", 0u );
 			auto in = writer.getIn();
@@ -197,8 +206,8 @@ namespace castor3d
 				, [&]( Int index
 					, IVec3 orientation )
 				{
-					const float smallComponent = 0.4472135f; // 1 / sqrt(5)
-					const float bigComponent = 0.894427f; // 2 / sqrt(5)
+					const float smallComponent = 1.0f / sqrt( 5.0f );
+					const float bigComponent = 2.0f / sqrt( 5.0f );
 
 					auto tmp = writer.declLocale( "tmp"
 						, vec3( writer.cast< Float >( cellSides[index].x() ) * smallComponent
@@ -223,9 +232,9 @@ namespace castor3d
 			float occlusionAmplifier = 1.0f;
 
 			auto propagate = writer.implementFunction< Void >( "propagate"
-				, [&]( Vec4 R
-					, Vec4 G
-					, Vec4 B )
+				, [&]( Vec4 shR
+					, Vec4 shG
+					, Vec4 shB )
 				{
 					FOR( writer, Int, neighbour, 0, neighbour < 6, neighbour++ )
 					{
@@ -242,9 +251,9 @@ namespace castor3d
 						auto neighbourGScellIndex = writer.declLocale( "neighbourGScellIndex"
 							, inCellIndex - mainDirection );
 						//Load sh coeffs
-						RSHcoeffsNeighbour = texelFetch( c3d_lpvGridR, neighbourGScellIndex, 0_i );
-						GSHcoeffsNeighbour = texelFetch( c3d_lpvGridG, neighbourGScellIndex, 0_i );
-						BSHcoeffsNeighbour = texelFetch( c3d_lpvGridB, neighbourGScellIndex, 0_i );
+						RSHcoeffsNeighbour = c3d_lpvGridR.fetch( neighbourGScellIndex, 0_i );
+						GSHcoeffsNeighbour = c3d_lpvGridG.fetch( neighbourGScellIndex, 0_i );
+						BSHcoeffsNeighbour = c3d_lpvGridB.fetch( neighbourGScellIndex, 0_i );
 
 						auto occlusionValue = writer.declLocale( "occlusionValue"
 							, 1.0_f ); // no occlusion
@@ -252,9 +261,9 @@ namespace castor3d
 						if ( occlusion )
 						{
 							auto occCoord = writer.declLocale( "occCoord"
-								, ( vec3( neighbourGScellIndex.xyz() ) + 0.5_f * vec3( mainDirection ) ) / c3d_gridSizes.xyz() );
+								, ( vec3( neighbourGScellIndex.xyz() ) + 0.5_f * vec3( mainDirection ) ) / c3d_gridSize );
 							auto occCoeffs = writer.declLocale( "occCoeffs"
-								, texture( c3d_geometryVolume, occCoord ) );
+								, c3d_geometryVolume.sample( occCoord ) );
 							occlusionValue = 1.0 - clamp( occlusionAmplifier * dot( occCoeffs, evalSH_direct( vec3( -mainDirection ) ) ), 0.0_f, 1.0_f );
 						}
 
@@ -265,9 +274,9 @@ namespace castor3d
 							, evalCosineLobeToDir_direct( vec3( mainDirection ) ) );
 						auto mainDirectionSH = writer.declLocale( "mainDirectionSH"
 							, evalSH_direct( vec3( mainDirection ) ) );
-						R += occludedDirectFaceContribution * max( 0.0_f, dot( RSHcoeffsNeighbour, mainDirectionSH ) ) * mainDirectionCosineLobeSH;
-						G += occludedDirectFaceContribution * max( 0.0_f, dot( GSHcoeffsNeighbour, mainDirectionSH ) ) * mainDirectionCosineLobeSH;
-						B += occludedDirectFaceContribution * max( 0.0_f, dot( BSHcoeffsNeighbour, mainDirectionSH ) ) * mainDirectionCosineLobeSH;
+						shR += occludedDirectFaceContribution * max( 0.0_f, dot( RSHcoeffsNeighbour, mainDirectionSH ) ) * mainDirectionCosineLobeSH;
+						shG += occludedDirectFaceContribution * max( 0.0_f, dot( GSHcoeffsNeighbour, mainDirectionSH ) ) * mainDirectionCosineLobeSH;
+						shB += occludedDirectFaceContribution * max( 0.0_f, dot( BSHcoeffsNeighbour, mainDirectionSH ) ) * mainDirectionCosineLobeSH;
 
 						//Now we have contribution for the neighbour's cell in the main direction -> need to do reprojection 
 						//Reprojection will be made only onto 4 faces (acctually we need to take into account 5 faces but we already have the one in the main direction)
@@ -283,9 +292,9 @@ namespace castor3d
 							if ( occlusion )
 							{
 								auto occCoord = writer.declLocale( "occCoord"
-									, ( vec3( neighbourGScellIndex.xyz() ) + 0.5_f * evalDirection ) / c3d_gridSizes.xyz() );
+									, ( vec3( neighbourGScellIndex.xyz() ) + 0.5_f * evalDirection ) / c3d_gridSize );
 								auto occCoeffs = writer.declLocale( "occCoeffs"
-									, texture( c3d_geometryVolume, occCoord ) );
+									, c3d_geometryVolume.sample( occCoord ) );
 								occlusionValue = 1.0 - clamp( occlusionAmplifier * dot( occCoeffs, evalSH_direct( -evalDirection ) ), 0.0_f, 1.0_f );
 							}
 
@@ -298,36 +307,36 @@ namespace castor3d
 							auto evalDirectionSH = writer.declLocale( "evalDirectionSH"
 								, evalSH_direct( evalDirection ) );
 
-							R += occludedSideFaceContribution * max( 0.0_f, dot( RSHcoeffsNeighbour, evalDirectionSH ) ) * reprojDirectionCosineLobeSH;
-							G += occludedSideFaceContribution * max( 0.0_f, dot( GSHcoeffsNeighbour, evalDirectionSH ) ) * reprojDirectionCosineLobeSH;
-							B += occludedSideFaceContribution * max( 0.0_f, dot( BSHcoeffsNeighbour, evalDirectionSH ) ) * reprojDirectionCosineLobeSH;
+							shR += occludedSideFaceContribution * max( 0.0_f, dot( RSHcoeffsNeighbour, evalDirectionSH ) ) * reprojDirectionCosineLobeSH;
+							shG += occludedSideFaceContribution * max( 0.0_f, dot( GSHcoeffsNeighbour, evalDirectionSH ) ) * reprojDirectionCosineLobeSH;
+							shB += occludedSideFaceContribution * max( 0.0_f, dot( BSHcoeffsNeighbour, evalDirectionSH ) ) * reprojDirectionCosineLobeSH;
 						}
 						ROF;
 					}
 					ROF;
 				}
-				, OutVec4{ writer, "R" }
-				, OutVec4{ writer, "G" }
-				, OutVec4{ writer, "B" } );
+				, OutVec4{ writer, "shR" }
+				, OutVec4{ writer, "shG" }
+				, OutVec4{ writer, "shB" } );
 
 			writer.implementMain( [&]()
 				{
-					auto R = writer.declLocale( "R"
+					auto shR = writer.declLocale( "shR"
 						, vec4( 0.0_f ) );
-					auto G = writer.declLocale( "G"
+					auto shG = writer.declLocale( "shG"
 						, vec4( 0.0_f ) );
-					auto B = writer.declLocale( "B"
+					auto shB = writer.declLocale( "shB"
 						, vec4( 0.0_f ) );
 
-					propagate( R, G, B );
+					propagate( shR, shG, shB );
 
-					outLpvAccumulatorR = R;
-					outLpvAccumulatorG = G;
-					outLpvAccumulatorB = B;
+					outLpvAccumulatorR = shR;
+					outLpvAccumulatorG = shG;
+					outLpvAccumulatorB = shB;
 
-					outLpvNextStepR = R;
-					outLpvNextStepG = G;
-					outLpvNextStepB = B;
+					outLpvNextStepR = shR;
+					outLpvNextStepG = shG;
+					outLpvNextStepB = shB;
 				} );
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -335,74 +344,81 @@ namespace castor3d
 
 		ashes::RenderPassPtr doCreateRenderPass( castor::String const & name
 			, RenderDevice const & device
-			, VkFormat format )
+			, VkFormat format
+			, BlendMode blendMode )
 		{
+			auto loadOp = ( blendMode == BlendMode::eNoBlend
+				? VK_ATTACHMENT_LOAD_OP_CLEAR
+				: VK_ATTACHMENT_LOAD_OP_LOAD );
+			auto srcImageLayout = ( blendMode == BlendMode::eNoBlend
+				? VK_IMAGE_LAYOUT_UNDEFINED
+				: VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 			ashes::VkAttachmentDescriptionArray attaches
 			{
 				{
 					0u,
 					format,
 					VK_SAMPLE_COUNT_1_BIT,
-					VK_ATTACHMENT_LOAD_OP_CLEAR,
+					loadOp,
 					VK_ATTACHMENT_STORE_OP_STORE,
 					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					VK_IMAGE_LAYOUT_UNDEFINED,
+					srcImageLayout,
 					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 				},
 				{
 					0u,
 					format,
 					VK_SAMPLE_COUNT_1_BIT,
-					VK_ATTACHMENT_LOAD_OP_CLEAR,
+					loadOp,
 					VK_ATTACHMENT_STORE_OP_STORE,
 					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					VK_IMAGE_LAYOUT_UNDEFINED,
+					srcImageLayout,
 					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 				},
 				{
 					0u,
 					format,
 					VK_SAMPLE_COUNT_1_BIT,
-					VK_ATTACHMENT_LOAD_OP_CLEAR,
+					loadOp,
 					VK_ATTACHMENT_STORE_OP_STORE,
 					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					VK_IMAGE_LAYOUT_UNDEFINED,
+					srcImageLayout,
 					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 				},
 				{
 					0u,
 					format,
 					VK_SAMPLE_COUNT_1_BIT,
-					VK_ATTACHMENT_LOAD_OP_CLEAR,
+					loadOp,
 					VK_ATTACHMENT_STORE_OP_STORE,
 					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					VK_IMAGE_LAYOUT_UNDEFINED,
+					srcImageLayout,
 					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 				},
 				{
 					0u,
 					format,
 					VK_SAMPLE_COUNT_1_BIT,
-					VK_ATTACHMENT_LOAD_OP_CLEAR,
+					loadOp,
 					VK_ATTACHMENT_STORE_OP_STORE,
 					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					VK_IMAGE_LAYOUT_UNDEFINED,
+					srcImageLayout,
 					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 				},
 				{
 					0u,
 					format,
 					VK_SAMPLE_COUNT_1_BIT,
-					VK_ATTACHMENT_LOAD_OP_CLEAR,
+					loadOp,
 					VK_ATTACHMENT_STORE_OP_STORE,
 					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					VK_IMAGE_LAYOUT_UNDEFINED,
+					srcImageLayout,
 					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 				},
 			};
@@ -413,12 +429,12 @@ namespace castor3d
 					VK_PIPELINE_BIND_POINT_GRAPHICS,
 					{},
 					{
-						{ 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
-						{ 1u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
-						{ 2u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
-						{ 3u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
-						{ 4u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
-						{ 5u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
+						{ RLpvAccumulatorIdx, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
+						{ GLpvAccumulatorIdx, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
+						{ BLpvAccumulatorIdx, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
+						{ RLpvNextStepIdx, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
+						{ GLpvNextStepIdx, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
+						{ BLpvNextStepIdx, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
 					},
 					{},
 					ashes::nullopt,
@@ -482,12 +498,16 @@ namespace castor3d
 		, castor::String const & prefix
 		, castor::String const & suffix
 		, bool occlusion
-		, uint32_t gridSize )
+		, uint32_t gridSize
+		, BlendMode blendMode )
 		: RenderGrid{ device
 			, prefix + "Propagation" + suffix
 			, VK_FILTER_LINEAR
 			, gridSize
-			, { createBindings( occlusion ) } }
+			, { createBindings( occlusion )
+				, std::nullopt
+				, std::nullopt
+				, blendMode } }
 		, m_engine{ *device.renderSystem.getEngine() }
 		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, m_device, cuT( "Light Propagation Volumes" ), cuT( "Light Propagation" ) ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
@@ -501,7 +521,8 @@ namespace castor3d
 			, getPixelProgram( occlusion ) }
 		, m_renderPass{ doCreateRenderPass( getName()
 			, m_device
-			, getFormat( LpvTexture::eR ) ) }
+			, getFormat( LpvTexture::eR )
+			, blendMode ) }
 	{
 		ashes::PipelineShaderStageCreateInfoArray shaderStages
 		{

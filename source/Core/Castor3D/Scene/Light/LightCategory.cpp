@@ -11,63 +11,66 @@ using namespace castor;
 
 namespace castor3d
 {
-	LightCategory::TextWriter::TextWriter( String const & p_tabs )
-		: castor::TextWriter< LightCategory >{ p_tabs }
+	LightCategory::TextWriter::TextWriter( String const & tabs )
+		: castor::TextWriter< LightCategory >{ tabs }
 	{
 	}
 
-	bool LightCategory::TextWriter::operator()( LightCategory const & p_light, TextFile & p_file )
+	bool LightCategory::TextWriter::operator()( LightCategory const & light, TextFile & file )
 	{
-		log::info << m_tabs << cuT( "Writing Light " ) << p_light.getLight().getName() << std::endl;
-		bool result = p_file.writeText( cuT( "\n" ) + m_tabs + cuT( "light \"" ) + p_light.getLight().getName() + cuT( "\"\n" ) ) > 0
-			&& p_file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
+		log::info << m_tabs << cuT( "Writing Light " ) << light.getLight().getName() << std::endl;
+		bool result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "light \"" ) + light.getLight().getName() + cuT( "\"\n" ) ) > 0
+			&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
 		castor::TextWriter< LightCategory >::checkError( result, "LightCategory name" );
 
 		if ( result )
 		{
-			result = MovableObject::TextWriter{ m_tabs + cuT( "\t" ) }( p_light.getLight(), p_file );
+			result = MovableObject::TextWriter{ m_tabs + cuT( "\t" ) }( light.getLight(), file );
 		}
 
 		if ( result )
 		{
-			result = p_file.writeText( m_tabs + cuT( "\ttype " ) + castor3d::getName( p_light.getLightType() ) + cuT( "\n" ) ) > 0;
+			result = file.writeText( m_tabs + cuT( "\ttype " ) + castor3d::getName( light.getLightType() ) + cuT( "\n" ) ) > 0;
 			castor::TextWriter< LightCategory >::checkError( result, "LightCategory type" );
 		}
 
 		if ( result )
 		{
-			result = p_file.writeText( m_tabs + cuT( "\tcolour " ) ) > 0
-				&& Point3f::TextWriter( String{} )( p_light.getColour(), p_file )
-				&& p_file.writeText( cuT( "\n" ) ) > 0;
+			result = file.writeText( m_tabs + cuT( "\tcolour " ) ) > 0
+				&& Point3f::TextWriter( String{} )( light.getColour(), file )
+				&& file.writeText( cuT( "\n" ) ) > 0;
 			castor::TextWriter< LightCategory >::checkError( result, "LightCategory colour" );
 		}
 
 		if ( result )
 		{
-			result = p_file.writeText( m_tabs + cuT( "\tintensity " ) ) > 0
-				&& Point2f::TextWriter( String{} )( p_light.getIntensity(), p_file )
-				&& p_file.writeText( cuT( "\n" ) ) > 0;
+			result = file.writeText( m_tabs + cuT( "\tintensity " ) ) > 0
+				&& Point2f::TextWriter( String{} )( light.getIntensity(), file )
+				&& file.writeText( cuT( "\n" ) ) > 0;
 			castor::TextWriter< LightCategory >::checkError( result, "LightCategory intensity" );
 		}
 
-		if ( result && p_light.getLight().isShadowProducer() )
+		result = file.writeText( m_tabs + cuT( "\tshadows\n" ) ) > 0
+			&& file.writeText( m_tabs + cuT( "\t{\n" ) ) > 0
+			&& file.writeText( m_tabs + cuT( "\t\tproducer " ) + ( light.getLight().isShadowProducer() ? String{ "true" } : String{ "false" } ) + cuT( "\n" ) ) > 0
+			&& file.writeText( m_tabs + cuT( "\t\tfilter " ) + castor3d::getName( light.getLight().getShadowType() ) + cuT( "\n" ) ) > 0
+			&& file.writeText( m_tabs + cuT( "\t\tglobal_illumination " ) + castor3d::getName( light.getLight().getGlobalIlluminationType() ) + cuT( "\n" ) ) > 0;
+		castor::TextWriter< LightCategory >::checkError( result, "LightCategory shadow" );
+
+		if ( result && light.getVolumetricSteps() )
 		{
-			result = p_file.writeText( m_tabs + cuT( "\tshadows\n" ) ) > 0
-				&& p_file.writeText( m_tabs + cuT( "\t{\n" ) ) > 0
-				&& p_file.writeText( m_tabs + cuT( "\t\tproducer true\n" ) ) > 0
-				&& p_file.writeText( m_tabs + cuT( "\t\tfilter " ) + castor3d::getName( p_light.getLight().getShadowType() ) + cuT( "\n" ) ) > 0;
-
-			if ( result && p_light.getVolumetricSteps() )
-			{
-				result = p_file.writeText( m_tabs + cuT( "\t\tvolumetric_steps " )
-						+ string::toString( p_light.getVolumetricSteps(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0
-					&& p_file.writeText( m_tabs + cuT( "\t\tvolumetric_scattering " )
-						+ string::toString( p_light.getVolumetricScatteringFactor(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
-			}
-
-			result = result && p_file.writeText( m_tabs + cuT( "\t}\n" ) ) > 0;
-			castor::TextWriter< LightCategory >::checkError( result, "LightCategory shadow producer" );
+			result = file.writeText( m_tabs + cuT( "\t\tvolumetric_steps " )
+					+ string::toString( light.getVolumetricSteps(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0
+				&& file.writeText( m_tabs + cuT( "\t\tvolumetric_scattering " )
+					+ string::toString( light.getVolumetricScatteringFactor(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+			castor::TextWriter< LightCategory >::checkError( result, "LightCategory shadow volumetric steps" );
 		}
+
+		result = result && RsmConfig::TextWriter( m_tabs + cuT( "\t\t" ) )( light.getLight().getRsmConfig(), file );
+		castor::TextWriter< LightCategory >::checkError( result, "LightCategory shadow RSM config" );
+		result = result && LpvConfig::TextWriter( m_tabs + cuT( "\t\t" ) )( light.getLight().getLpvConfig(), file );
+		castor::TextWriter< LightCategory >::checkError( result, "LightCategory shadow LPV config" );
+		result = result && file.writeText( m_tabs + cuT( "\t}\n" ) ) > 0;
 
 		return result;
 	}

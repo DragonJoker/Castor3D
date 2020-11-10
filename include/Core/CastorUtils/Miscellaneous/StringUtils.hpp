@@ -228,6 +228,13 @@ namespace castor
 		CU_API String lowerCase( String const & str );
 		/**
 		 *\~english
+		 *\brief			Converts given string from snake_case to CamelCase.
+		 *\~french
+		 *\brief			Convertit la chaine donnée de snake_case vers CamelCase.
+		 */
+		CU_API String snakeToCamelCase( String str );
+		/**
+		 *\~english
 		 *\brief			sets all characters in a String to upper case
 		 *\param[in,out]	str	The String to modify, receives the modified String
 		 *\return			The modified String

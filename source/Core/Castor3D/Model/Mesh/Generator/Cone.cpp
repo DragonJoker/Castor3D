@@ -43,36 +43,42 @@ namespace castor3d
 			m_height = castor::string::toFloat( param );
 		}
 
-		if ( m_nbFaces >= 2 && m_height > std::numeric_limits< float >::epsilon() && m_radius > std::numeric_limits< float >::epsilon() )
+		if ( m_nbFaces >= 2
+			&& m_height > std::numeric_limits< float >::epsilon()
+			&& m_radius > std::numeric_limits< float >::epsilon() )
 		{
 			Submesh & submeshBase = *mesh.createSubmesh();
 			Submesh & submeshSide = *mesh.createSubmesh();
 			//CALCUL DE LA POSITION DES POINTS
-			float angleRotation = castor::PiMult2< float > / m_nbFaces;
+			float const dalpha = castor::PiMult2< float > / m_nbFaces;
 			uint32_t i = 0;
 			InterleavedVertexArray baseVertex;
 			InterleavedVertexArray sideVertex;
 
-			for ( float dAlphaI = 0; i <= m_nbFaces; dAlphaI += angleRotation )
+			for ( float alpha = 0; i <= m_nbFaces; alpha += dalpha )
 			{
-				auto rCos = cos( dAlphaI );
-				auto rSin = sin( dAlphaI );
+				auto rCos = cos( alpha );
+				auto rSin = sin( alpha );
 
 				if ( i < m_nbFaces )
 				{
-					baseVertex.push_back( InterleavedVertex::createPT( castor::Point3f{ m_radius * rCos, 0.0, m_radius * rSin }
-						, castor::Point2f{ ( 1 + rCos ) / 2, ( 1 + rSin ) / 2 } ) );
+					baseVertex.push_back( InterleavedVertex{}
+						.position( castor::Point3f{ m_radius * rCos, 0.0, m_radius * rSin } )
+						.texcoord( castor::Point2f{ ( 1 + rCos ) / 2, ( 1 + rSin ) / 2 } ) );
 				}
 
-				sideVertex.push_back( InterleavedVertex::createPT( castor::Point3f{ m_radius * rCos, 0.0, m_radius * rSin }
-					, castor::Point2f{ float( i ) / m_nbFaces, float( 1.0 ) } ) );
-				sideVertex.push_back( InterleavedVertex::createPT( castor::Point3f{ float( 0 ), m_height, float( 0 ) }
-					, castor::Point2f{ float( i ) / m_nbFaces, float( 0.0 ) } ) );
+				sideVertex.push_back( InterleavedVertex{}
+					.position( castor::Point3f{ m_radius * rCos, 0.0, m_radius * rSin } )
+					.texcoord( castor::Point2f{ float( i ) / m_nbFaces, float( 1.0 ) } ) );
+				sideVertex.push_back( InterleavedVertex{}
+					.position( castor::Point3f{ float( 0 ), m_height, float( 0 ) } )
+					.texcoord( castor::Point2f{ float( i ) / m_nbFaces, float( 0.0 ) } ) );
 				i++;
 			}
 			
-			baseVertex.push_back( InterleavedVertex::createPT( castor::Point3f{ 0.0, 0.0, 0.0 }
-				, castor::Point2f{ 0.5, 0.5 } ) );
+			baseVertex.push_back( InterleavedVertex{}
+				.position( castor::Point3f{ 0.0, 0.0, 0.0 } )
+				.texcoord( castor::Point2f{ 0.5, 0.5 } ) );
 			auto bottomCenterIndex = uint32_t( baseVertex.size() - 1u );
 			submeshBase.addPoints( baseVertex );
 			submeshSide.addPoints( sideVertex );

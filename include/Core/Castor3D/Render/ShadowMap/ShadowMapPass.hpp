@@ -45,13 +45,6 @@ namespace castor3d
 			, ShadowMap const & shadowMap );
 		/**
 		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~ShadowMapPass();
-		/**
-		 *\~english
 		 *\brief		Updates the render pass.
 		 *\remarks		Gather the render queues, for further update.
 		 *\param[out]	queues	Receives the render queues needed for the rendering of the frame.

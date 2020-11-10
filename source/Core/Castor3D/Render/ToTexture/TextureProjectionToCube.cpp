@@ -89,7 +89,7 @@ namespace castor3d
 				{
 					auto uv = writer.declLocale( "uv"
 						, sampleSphericalMap( normalize( vtx_position ) ) );
-					pxl_colour = vec4( texture( mapColour, uv ).rgb(), 1.0_f );
+					pxl_colour = vec4( mapColour.sample( uv ).rgb(), 1.0_f );
 				};
 
 				writer.implementFunction< sdw::Void >( "main", main );

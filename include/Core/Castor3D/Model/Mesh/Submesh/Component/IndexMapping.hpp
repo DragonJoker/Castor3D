@@ -62,7 +62,8 @@ namespace castor3d
 		inline void gather( MaterialSPtr material
 			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
-			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts )override
+			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
+			, uint32_t instanceMult )override
 		{
 		}
 		/**

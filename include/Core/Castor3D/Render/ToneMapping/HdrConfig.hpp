@@ -47,78 +47,12 @@ namespace castor3d
 		};
 
 	public:
-		/**
-		 *\~english
-		 *\brief		Sets the exposure value.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit la valeur de l'exposition.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		inline void setExposure( float value )
-		{
-			m_exposure = value;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the gamma correction value.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit la valeur de la correction gamma.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		inline void setGamma( float value )
-		{
-			m_gamma = value;
-		}
-		/**
-		 *\~english
-		 *\return		The exposure value.
-		 *\~french
-		 *\return		La valeur de l'exposition.
-		 */
-		inline float getExposure()const
-		{
-			return m_exposure;
-		}
-		/**
-		 *\~english
-		 *\return		The gamma correction value.
-		 *\~french
-		 *\return		La valeur de la correction gamma.
-		 */
-		inline float getGamma()const
-		{
-			return m_gamma;
-		}
-		/**
-		 *\~english
-		 *\return		The exposure value.
-		 *\~french
-		 *\return		La valeur de l'exposition.
-		 */
-		inline float & getExposure()
-		{
-			return m_exposure;
-		}
-		/**
-		 *\~english
-		 *\return		The gamma correction value.
-		 *\~french
-		 *\return		La valeur de la correction gamma.
-		 */
-		inline float & getGamma()
-		{
-			return m_gamma;
-		}
-
-	private:
 		//!\~english	The exposure value.
 		//!\~french		La valeur d'exposition.
-		float m_exposure{ 1.0f };
+		float exposure{ 1.0f };
 		//!\~english	The gamma correction value.
 		//!\~french		La valeur de correction gamma.
-		float m_gamma{ 2.2f };
+		float gamma{ 2.2f };
 	};
 }
 

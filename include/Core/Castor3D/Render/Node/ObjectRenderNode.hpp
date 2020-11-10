@@ -32,46 +32,24 @@ namespace castor3d
 			, UniformBufferOffsetT< ModelUboConfiguration > modelBuffer
 			, UniformBufferOffsetT< PickingUboConfiguration > pickingBuffer
 			, UniformBufferOffsetT< TexturesUboConfiguration > texturesBuffer
+			, UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesBuffer
 			, GeometryBuffers const & buffers
 			, SceneNode & sceneNode
 			, DataType & data
 			, InstanceType & instance );
 
-		//!\~english	The pipeline.
-		//!\~french		Le pipeline.
 		RenderPipeline & pipeline;
-		//!\~english	The pipeline.
-		//!\~french		Le pipeline.
 		PassRenderNode passNode;
-		//!\~english	The model matrices UBO.
-		//!\~french		L'UBO de matrices modèle.
 		UniformBufferOffsetT< ModelMatrixUboConfiguration > modelMatrixUbo;
-		//!\~english	The model UBO.
-		//!\~french		L'UBO de modèle.
 		UniformBufferOffsetT< ModelUboConfiguration > modelUbo;
-		//!\~english	The model UBO.
-		//!\~french		L'UBO de modèle.
 		UniformBufferOffsetT< PickingUboConfiguration > pickingUbo;
-		//!\~english	The model UBO.
-		//!\~french		L'UBO de modèle.
 		UniformBufferOffsetT< TexturesUboConfiguration > texturesUbo;
-		//!\~english	The geometry buffers.
-		//!\~french		Les tampons de la géométrie.
+		UniformBufferOffsetT< ModelInstancesUboConfiguration > modelInstancesUbo;
 		GeometryBuffers const & buffers;
-		//!\~english	The parent scene node.
-		//!\~french		Le scene node parent.
 		SceneNode & sceneNode;
-		//!\~english	The object's data.
-		//!\~french		Les données de l'objet.
 		DataType & data;
-		//!\~english	The object instantiating the data.
-		//!\~french		L'objet instanciant les données.
 		InstanceType & instance;
-		//!\~english	The UBO descriptor set for the object.
-		//!\~french		L'ensemble de descripteurs d'UBO pour l'objet.
 		ashes::DescriptorSetPtr uboDescriptorSet;
-		//!\~english	The textures descriptor set for the object.
-		//!\~french		L'ensemble de descripteurs de textures pour l'objet.
 		ashes::DescriptorSetPtr texDescriptorSet;
 	};
 }

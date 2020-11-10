@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Technique/Opaque/OpaqueModule.hpp"
 
 #include "Castor3D/Scene/Light/LightModule.hpp"
+#include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
 #include <CastorUtils/Graphics/Size.hpp>
 
@@ -129,6 +130,15 @@ namespace castor3d
 	*/
 	template< LightType LtType, bool GeometryVolumesT >
 	class LightPassLayeredVolumePropagationShadow;
+	/**
+	*\~english
+	*\brief
+	*	Light propagation data.
+	*\~french
+	*\brief
+	*	Données de light propagation.
+	*/
+	struct LpvConfig;
 
 	//!\~english	The directional lights light pass with shadows and LPV.
 	//!\~french		La passe d'éclairage avec ombres et LPV pour les lumières directionnelles.
@@ -168,8 +178,11 @@ namespace castor3d
 	CU_DeclareArray( LightPropagationPassUPtr, lpv::PropagationPassCount, LightPropagationPass );
 	CU_DeclareArray( LightVolumeGIPassUPtr, lpv::ResolvePassCount, LightVolumeGIPass );
 
+	using LayeredLightVolumePassResult = std::array< LightVolumePassResult, shader::DirectionalMaxCascadesCount >;
+
 	CU_DeclareVector( GeometryInjectionPass, GeometryInjectionPass );
 	CU_DeclareVector( LightInjectionPass, LightInjectionPass );
+
 
 	//@}
 	//@}

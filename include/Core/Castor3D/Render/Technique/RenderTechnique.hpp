@@ -8,6 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
+#include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Render/Technique/Opaque/DeferredRendering.hpp"
@@ -280,9 +281,9 @@ namespace castor3d
 		std::unique_ptr< DeferredRendering > m_deferredRendering;
 		std::unique_ptr< WeightedBlendRendering > m_weightedBlendRendering;
 		RenderPassTimerSPtr m_particleTimer;
-		castor::DelayedInitialiserT< ShadowMap > m_directionalShadowMap;
-		castor::DelayedInitialiserT< ShadowMap > m_pointShadowMap;
-		castor::DelayedInitialiserT< ShadowMap > m_spotShadowMap;
+		ShadowMapUPtr m_directionalShadowMap;
+		ShadowMapUPtr m_pointShadowMap;
+		ShadowMapUPtr m_spotShadowMap;
 		ShadowMapLightTypeArray m_allShadowMaps;
 		ShadowMapLightTypeArray m_activeShadowMaps;
 		ashes::SemaphorePtr m_signalFinished;
@@ -292,6 +293,7 @@ namespace castor3d
 		ashes::CommandBufferPtr m_cbgCommandBuffer;
 		OnBackgroundChangedConnection m_onBgChanged;
 		OnBackgroundChangedConnection m_onCBgChanged;
+		CommandsSemaphore m_colorTexTransition;
 	};
 }
 

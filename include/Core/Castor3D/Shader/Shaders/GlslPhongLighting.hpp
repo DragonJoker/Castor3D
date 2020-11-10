@@ -45,6 +45,7 @@ namespace castor3d
 				, OutputComponents & output )const;
 			C3D_API static std::shared_ptr< PhongLightingModel > createModel( sdw::ShaderWriter & writer
 				, Utils & utils
+				, SceneFlags sceneFlags
 				, bool rsm
 				, uint32_t & index
 				, bool isOpaqueProgram );

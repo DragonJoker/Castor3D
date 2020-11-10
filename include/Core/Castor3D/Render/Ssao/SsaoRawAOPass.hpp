@@ -80,6 +80,11 @@ namespace castor3d
 		{
 			return m_result;
 		}
+
+		inline TextureUnit const & getBentResult()const
+		{
+			return m_bentNormals;
+		}
 		/**@}*/
 
 	public:
@@ -117,6 +122,7 @@ namespace castor3d
 		ashes::ImageView const & m_normals;
 		VkExtent2D m_size;
 		TextureUnit m_result;
+		TextureUnit m_bentNormals;
 		ashes::RenderPassPtr m_renderPass;
 		ashes::FrameBufferPtr m_frameBuffer;
 		std::array< RenderQuad, 2u > m_quads;

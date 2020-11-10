@@ -253,6 +253,7 @@ namespace castor3d
 		, ashes::VkPushConstantRangeArray const & pushRanges
 		, ashes::PipelineDepthStencilStateCreateInfo dsState )
 	{
+		log::debug << "Creating pipeline for " << getName() << std::endl;
 		// Initialise the vertex buffer.
 		auto bufferSize = m_gridSize * m_gridSize * m_gridSize;
 		m_vertexBuffer = makeVertexBuffer< castor::Point3f >( m_device
@@ -329,6 +330,7 @@ namespace castor3d
 
 	void RenderGrid::initialisePasses()
 	{
+		log::debug << "Initialising passes for " << getName() << std::endl;
 		CU_Require( m_descriptorSetLayout );
 		auto descriptorSetCount = uint32_t( uint32_t( m_passes.size() ) );
 		m_descriptorSetPool = m_descriptorSetLayout->createPool( getName()

@@ -297,10 +297,10 @@ namespace castor3d
 #else
 					auto c3d_sLights = m_writer.getVariable< SampledImageBufferRgba32 >( "c3d_sLights" );
 					auto offset = m_writer.declLocale( "offset", index * Int( getMaxLightComponentsCount() ) );
-					result.m_colourIndex = texelFetch( c3d_sLights, offset++ );
-					result.m_intensityFarPlane = texelFetch( c3d_sLights, offset++ );
-					result.m_volumetric = texelFetch( c3d_sLights, offset++ );
-					result.m_shadow = texelFetch( c3d_sLights, offset++ );
+					result.m_colourIndex = c3d_sLights.fetch( Int{ offset++ } );
+					result.m_intensityFarPlane = c3d_sLights.fetch( Int{ offset++ } );
+					result.m_volumetric = c3d_sLights.fetch( Int{ offset++ } );
+					result.m_shadow = c3d_sLights.fetch( Int{ offset++ } );
 #endif
 					m_writer.returnStmt( result );
 				}
@@ -325,10 +325,10 @@ namespace castor3d
 
 					auto c3d_sLights = m_writer.getVariable< SampledImageBufferRgba32 >( "c3d_sLights" );
 					auto offset = m_writer.declLocale( "offset", index * Int( int( getMaxLightComponentsCount() ) ) + Int( int( getBaseLightComponentsCount() ) ) );
-					result.m_directionCount = texelFetch( c3d_sLights, offset++ );
+					result.m_directionCount = c3d_sLights.fetch( Int{ offset++ } );
 					result.m_direction = normalize( result.m_direction );
-					result.m_splitDepths = texelFetch( c3d_sLights, offset++ );
-					result.m_splitScales = texelFetch( c3d_sLights, offset++ );
+					result.m_splitDepths = c3d_sLights.fetch( Int{ offset++ } );
+					result.m_splitScales = c3d_sLights.fetch( Int{ offset++ } );
 					auto col0 = m_writer.declLocale< Vec4 >( "col0" );
 					auto col1 = m_writer.declLocale< Vec4 >( "col1" );
 					auto col2 = m_writer.declLocale< Vec4 >( "col2" );
@@ -336,10 +336,10 @@ namespace castor3d
 
 					for ( uint32_t i = 0u; i < DirectionalMaxCascadesCount; ++i )
 					{
-						col0 = texelFetch( c3d_sLights, offset++ );
-						col1 = texelFetch( c3d_sLights, offset++ );
-						col2 = texelFetch( c3d_sLights, offset++ );
-						col3 = texelFetch( c3d_sLights, offset++ );
+						col0 = c3d_sLights.fetch( Int{ offset++ } );
+						col1 = c3d_sLights.fetch( Int{ offset++ } );
+						col2 = c3d_sLights.fetch( Int{ offset++ } );
+						col3 = c3d_sLights.fetch( Int{ offset++ } );
 						result.m_transforms[i] = mat4( col0, col1, col2, col3 );
 					}
 #endif
@@ -357,8 +357,8 @@ namespace castor3d
 					result.m_lightBase = getBaseLight( index );
 					auto c3d_sLights = m_writer.getVariable< SampledImageBufferRgba32 >( "c3d_sLights" );
 					auto offset = m_writer.declLocale( "offset", index * Int( getMaxLightComponentsCount() ) + Int( getBaseLightComponentsCount() ) );
-					result.m_position4 = texelFetch( c3d_sLights, offset++ );
-					result.m_attenuation4 = texelFetch( c3d_sLights, offset++ );
+					result.m_position4 = c3d_sLights.fetch( Int{ offset++ } );
+					result.m_attenuation4 = c3d_sLights.fetch( Int{ offset++ } );
 					m_writer.returnStmt( result );
 				}
 				, InInt{ m_writer, "index" } );
@@ -373,14 +373,14 @@ namespace castor3d
 					result.m_lightBase = getBaseLight( index );
 					auto c3d_sLights = m_writer.getVariable< SampledImageBufferRgba32 >( "c3d_sLights" );
 					auto offset = m_writer.declLocale( "offset", index * Int( getMaxLightComponentsCount() ) + Int( getBaseLightComponentsCount() ) );
-					result.m_position4 = texelFetch( c3d_sLights, offset++ );
-					result.m_attenuation4 = texelFetch( c3d_sLights, offset++ );
-					result.m_direction4 = normalize( texelFetch( c3d_sLights, offset++ ) );
-					result.m_exponentCutOff = texelFetch( c3d_sLights, offset++ );
-					result.m_transform = mat4( texelFetch( c3d_sLights, offset + 0_i )
-						, texelFetch( c3d_sLights, offset + 1_i )
-						, texelFetch( c3d_sLights, offset + 2_i )
-						, texelFetch( c3d_sLights, offset + 3_i ) );
+					result.m_position4 = c3d_sLights.fetch( Int{ offset++ } );
+					result.m_attenuation4 = c3d_sLights.fetch( Int{ offset++ } );
+					result.m_direction4 = normalize( c3d_sLights.fetch( Int{ offset++ } ) );
+					result.m_exponentCutOff = c3d_sLights.fetch( Int{ offset++ } );
+					result.m_transform = mat4( c3d_sLights.fetch( offset + 0_i )
+						, c3d_sLights.fetch( offset + 1_i )
+						, c3d_sLights.fetch( offset + 2_i )
+						, c3d_sLights.fetch( offset + 3_i ) );
 					m_writer.returnStmt( result );
 				}
 				, InInt{ m_writer, "index" } );

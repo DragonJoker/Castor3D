@@ -248,7 +248,7 @@ namespace castor3d
 					auto coord = writer.declLocale( "coord"
 						, ivec2( in.fragCoord.xy() ) );
 					auto revealage = writer.declLocale( "revealage"
-						, texelFetch( c3d_mapRevealage, coord, 0_i ).r() );
+						, c3d_mapRevealage.fetch( coord, 0_i ).r() );
 
 					IF( writer, revealage == 1.0_f )
 					{
@@ -258,7 +258,7 @@ namespace castor3d
 					FI;
 
 					auto accum = writer.declLocale( "accum"
-						, texelFetch( c3d_mapAccumulation, coord, 0_i ) );
+						, c3d_mapAccumulation.fetch( coord, 0_i ) );
 
 					// Suppress overflow
 					IF( writer, sdw::isinf( maxComponent( sdw::abs( accum.rgb() ) ) ) )
@@ -278,7 +278,7 @@ namespace castor3d
 							, in.fragCoord.xy() );
 						auto position = writer.declLocale( "position"
 							, utils.calcVSPosition( texCoord
-								, texture( c3d_mapDepth, texCoord ).r()
+								, c3d_mapDepth.sample( texCoord ).r()
 								, c3d_mtxInvProj ) );
 						pxl_fragColor = fog.apply( vec4( utils.removeGamma( c3d_gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
 							, pxl_fragColor

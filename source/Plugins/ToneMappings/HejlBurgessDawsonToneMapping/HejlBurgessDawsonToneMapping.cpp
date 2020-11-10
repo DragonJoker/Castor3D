@@ -55,7 +55,7 @@ namespace HejlBurgessDawson
 			, [&]()
 			{
 				auto hdrColor = writer.declLocale( "hdrColor"
-					, texture( c3d_mapHdr, vtx_texture ).rgb() );
+					, c3d_mapHdr.sample( vtx_texture ).rgb() );
 				hdrColor *= vec3( c3d_exposure );
 				auto x = writer.declLocale( "x"
 					, max( hdrColor - 0.004_f, vec3( 0.0_f ) ) );

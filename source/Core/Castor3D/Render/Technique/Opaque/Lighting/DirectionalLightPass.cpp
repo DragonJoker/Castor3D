@@ -274,6 +274,7 @@ namespace castor3d
 			, "SsaoConfigUbo" ) }
 		, m_viewport{ engine }
 	{
+		m_ubo->initialise( device );
 		m_baseUbo = m_ubo.get();
 		m_viewport.setOrtho( -1, 1, -1, 1, -1, 1 );
 		log::trace << cuT( "Created " ) << getName() << std::endl;

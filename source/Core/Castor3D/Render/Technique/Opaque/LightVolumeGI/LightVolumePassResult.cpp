@@ -54,9 +54,9 @@ namespace castor3d
 		static std::array< VkClearValue, size_t( LpvTexture::eCount ) > Values
 		{
 			{
-				opaqueBlackClearColor,
-				opaqueBlackClearColor,
-				opaqueBlackClearColor
+				transparentBlackClearColor,
+				transparentBlackClearColor,
+				transparentBlackClearColor,
 			}
 		};
 		return Values[size_t( texture )];
@@ -67,9 +67,9 @@ namespace castor3d
 		static std::array< VkImageUsageFlags, size_t( LpvTexture::eCount ) > Values
 		{
 			{
-				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
-				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
-				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+				VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+				VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+				VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
 			}
 		};
 		return Values[size_t( texture )];

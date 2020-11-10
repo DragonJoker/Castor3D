@@ -26,7 +26,8 @@ namespace test_launcher
 		bool doParseCommandLine();
 		castor3d::EngineSPtr doInitialiseCastor();
 
-		bool OnInit()override;
+		bool OnInit() override;
+		int OnRun() override;
 
 	private:
 		MainFrame * m_mainFrame{ nullptr };

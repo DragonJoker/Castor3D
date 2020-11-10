@@ -67,10 +67,6 @@ namespace castor3d
 
 	private:
 		/**
-		 *\copydoc		castor3d::RenderPass::doUpdate
-		 */
-		void doUpdate( RenderQueueArray & queues )override;
-		/**
 		 *\copydoc		castor3d::RenderPass::doUpdateFlags
 		 */
 		void doUpdateFlags( PipelineFlags & flags )const override;

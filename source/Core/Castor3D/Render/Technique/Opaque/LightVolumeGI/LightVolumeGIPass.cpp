@@ -98,9 +98,9 @@ namespace castor3d
 
 			/*Spherical harmonics coefficients - precomputed*/
 			auto SH_C0 = writer.declConstant( "SH_C0"
-				, 0.282094792_f );// 1 / (2 * sqrt(pi))
+				, Float{ 1.0f / ( 2.0f * sqrt( castor::Pi< float > ) ) } );
 			auto SH_C1 = writer.declConstant( "SH_C1"
-				, 0.488602512_f ); // sqrt(3 / pi) / 2
+				, Float{ sqrt( 3.0f / castor::Pi< float > ) / 2.0f } );
 
 			// Shader inputs
 			UBO_GPINFO( writer, GpInfoUboIdx, 0u );
@@ -139,7 +139,7 @@ namespace castor3d
 					auto texCoord = writer.declLocale( "texCoord"
 						, vtx_texture );
 					auto depth = writer.declLocale( "depth"
-						, textureLod( c3d_mapDepth, texCoord, 0.0_f ).x() );
+						, c3d_mapDepth.lod( texCoord, 0.0_f ).x() );
 
 					IF( writer, depth == 1.0_f )
 					{
@@ -148,7 +148,7 @@ namespace castor3d
 					FI;
 
 					auto data1 = writer.declLocale( "data1"
-						, textureLod( c3d_mapData1, texCoord, 0.0_f ) );
+						, c3d_mapData1.lod( texCoord, 0.0_f ) );
 					auto wsPosition = writer.declLocale( "wsPosition"
 						, utils.calcWSPosition( texCoord, depth, c3d_mtxInvViewProj ) );
 					auto wsNormal = writer.declLocale( "wsNormal"
@@ -159,12 +159,12 @@ namespace castor3d
 					auto lpvIntensity = writer.declLocale( "lpvIntensity"
 						, vec3( 0.0_f ) );
 					auto lpvCellCoords = writer.declLocale( "lpvCellCoords"
-						, ( wsPosition - c3d_minVolumeCorner.xyz() ) / c3d_minVolumeCorner.w() / c3d_gridSizes.xyz() );
+						, ( wsPosition - c3d_minVolumeCorner ) / c3d_cellSize / c3d_gridSize );
 
 					lpvIntensity = vec3(
-						dot( SHintensity, texture( c3d_lpvAccumulatorR, lpvCellCoords ) ),
-						dot( SHintensity, texture( c3d_lpvAccumulatorG, lpvCellCoords ) ),
-						dot( SHintensity, texture( c3d_lpvAccumulatorB, lpvCellCoords ) )
+						dot( SHintensity, c3d_lpvAccumulatorR.sample( lpvCellCoords ) ),
+						dot( SHintensity, c3d_lpvAccumulatorG.sample( lpvCellCoords ) ),
+						dot( SHintensity, c3d_lpvAccumulatorB.sample( lpvCellCoords ) )
 					);
 
 					auto finalLPVRadiance = writer.declLocale( "finalLPVRadiance"

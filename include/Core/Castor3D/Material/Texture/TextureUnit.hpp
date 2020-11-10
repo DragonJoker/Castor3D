@@ -158,7 +158,8 @@ namespace castor3d
 		C3D_API VkImageType getType()const;
 		C3D_API castor::String toString()const;
 		C3D_API TextureFlags getFlags()const;
-
+		C3D_API bool isInitialised()const;
+		
 		inline TextureLayoutSPtr getTexture()const
 		{
 			return m_texture;

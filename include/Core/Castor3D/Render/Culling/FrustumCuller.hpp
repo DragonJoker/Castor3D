@@ -12,7 +12,7 @@ namespace castor3d
 		: public SceneCuller
 	{
 	public:
-		C3D_API FrustumCuller( Scene const & scene
+		C3D_API FrustumCuller( Scene & scene
 			, Camera & camera );
 
 	private:

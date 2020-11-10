@@ -34,7 +34,7 @@ target_link_libraries( ${PROJECT_NAME} PRIVATE
 	castor::Castor3D
 )
 target_compile_definitions( ${PROJECT_NAME} PRIVATE
-	${Castor3DDefinitions}
+	${CastorToolsDefinitions}
 )
 set_property( TARGET ${PROJECT_NAME}
 	PROPERTY

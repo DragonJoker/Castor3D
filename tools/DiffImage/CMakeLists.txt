@@ -31,10 +31,10 @@ target_include_directories( ${PROJECT_NAME} PRIVATE
 	${CASTOR_BINARY_DIR}/tools
 )
 target_link_libraries( ${PROJECT_NAME} PRIVATE
-	castor::Castor3D
+	castor::CastorUtils
 )
 target_compile_definitions( ${PROJECT_NAME} PRIVATE
-	${Castor3DDefinitions}
+	${CastorToolsDefinitions}
 )
 set_property( TARGET ${PROJECT_NAME}
 	PROPERTY

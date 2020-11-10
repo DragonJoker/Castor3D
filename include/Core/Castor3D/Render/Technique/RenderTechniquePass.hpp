@@ -144,19 +144,14 @@ namespace castor3d
 			, castor::Point2f const & jitter
 			, RenderInfo & info );
 		/**
-		 *\copydoc		castor3d::RenderPass::doInitialise
+		 *\copydoc		castor3d::RenderPass::doUpdateUbos
 		 */
-		C3D_API void doUpdateUbos( Camera const & camera
-			, castor::Point2f const & jitter )override;
+		C3D_API void doUpdateUbos( CpuUpdater & updater )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doInitialise
 		 */
 		C3D_API bool doInitialise( RenderDevice const & device
 			, castor::Size const & size )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doUpdate
-		 */
-		C3D_API void doUpdate( RenderQueueArray & queues )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdateFlags
 		 */

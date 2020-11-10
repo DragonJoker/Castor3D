@@ -184,7 +184,7 @@ namespace castor3d
 			std::function< void() > main = [&]()
 			{
 				auto colour = writer.declLocale( "colour"
-					, texture( c3d_mapSkybox, vtx_texture ) );
+					, c3d_mapSkybox.sample( vtx_texture ) );
 
 				if ( !m_hdr )
 				{

@@ -33,21 +33,21 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine	The engine.
+		 *\param[in]	scene	The scene.
 		 *\param[in]	name	The shadow map name.
 		 *\param[in]	result	The shadow map pass result.
 		 *\param[in]	passes	The passes used to render map.
 		 *\param[in]	count	The passes count.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
+		 *\param[in]	scene	La scène.
 		 *\param[in]	name	Le nom de la shadow map.
 		 *\param[in]	result	Le résultat de la passe de shadow map.
 		 *\param[in]	passes	Les passes utilisées pour rendre cette texture.
 		 *\param[in]	count	Le nombre de passes.
 		 */
-		C3D_API ShadowMap( Engine & engine
-			, castor::String name
+		C3D_API ShadowMap( Scene & scene
+			, LightType lightType
 			, ShadowMapResult result
 			, std::vector< PassData > passes
 			, uint32_t count );
@@ -149,6 +149,11 @@ namespace castor3d
 		{
 			return m_count;
 		}
+
+		inline bool isInitialised()const
+		{
+			return m_initialised;
+		}
 		/**@}*/
 	public:
 		static constexpr TextureFlags textureFlags{ TextureFlag::eOpacity
@@ -183,6 +188,8 @@ namespace castor3d
 		C3D_API virtual bool isUpToDate( uint32_t index )const = 0;
 
 	protected:
+		Scene & m_scene;
+		LightType m_lightType;
 		castor::String m_name;
 		ashes::FencePtr m_fence;
 		std::set< std::reference_wrapper< GeometryBuffers > > m_geometryBuffers;

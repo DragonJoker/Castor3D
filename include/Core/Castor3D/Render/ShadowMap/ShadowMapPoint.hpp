@@ -24,15 +24,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine	The engine.
 		 *\param[in]	scene	The scene.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
 		 *\param[in]	scene	La scène.
 		 */
-		C3D_API ShadowMapPoint( Engine & engine
-			, Scene & scene );
+		C3D_API explicit ShadowMapPoint( Scene & scene );
 		/**
 		 *\~english
 		 *\brief		Destructor.

@@ -231,6 +231,39 @@ namespace castor
 		 */
 		CU_API int seek( long long offset
 			, OffsetMode origin = OffsetMode::eBeginning );
+		using TraverseDirFunction = std::function< bool( Path const & path ) >;
+		using HitFileFunction = std::function< void( Path const & folder, String const & name ) >;
+		using FilterFunction = std::function< bool( Path const & folder, String const & name ) >;
+		/**
+		*\brief
+		*	Traverses the files and directories of a directory.
+		*\param[in] folderPath
+		*	The directory path.
+		*\param[in] directoryFunction
+		*	returns \p true to traverse it, \p false to ignore.
+		*\param[in] fileFunction
+		*	Placeholder to handle a file name.
+		*\return
+		*	\p false if any error occured.
+		*/
+		CU_API static bool traverseDirectory( Path const & folderPath
+			, TraverseDirFunction directoryFunction
+			, HitFileFunction fileFunction );
+		/**
+		*\brief
+		*	Filters the files in a directory, recursively or not.
+		*\param[in] folderPath
+		*	The directory path.
+		*\param[in] onFile
+		*	The filter function, returns \p true to add to the list, \p false to ignore.
+		*\param[in] recursive
+		*	Tells if search must be recursive.
+		*\return
+		*	The files list.
+		*/
+		CU_API static PathArray filterDirectoryFiles( Path const & folderPath
+			, FilterFunction onFile
+			, bool recursive = false );
 		/**
 		 *\~english
 		 *\brief		List all files in a directory, recursively or not
@@ -340,6 +373,16 @@ namespace castor
 			, Path const & folderPath );
 		/**
 		 *\~english
+		 *\brief		Copies a file
+		 *\return		\p true if file has been correctly copied
+		 *\~french
+		 *\brief		Copie un fichier
+		 *\return		\p true si le fichier a été copié correctement
+		 */
+		CU_API static bool copyFileName( Path const & srcFileName
+			, Path const & dstFileName );
+		/**
+		 *\~english
 		 *\brief		Retrieves the file size
 		 *\return		The value
 		 *\~french
@@ -406,6 +449,9 @@ namespace castor
 		CU_DeclareInvariantBlock();
 		CU_API uint64_t doWrite( uint8_t const * buffer, uint64_t size );
 		CU_API uint64_t doRead( uint8_t * buffer, uint64_t size );
+
+	private:
+		CU_API static bool deleteEmptyDirectory( Path const & folderPath );
 
 	protected:
 		//!\~english	The opening mode.

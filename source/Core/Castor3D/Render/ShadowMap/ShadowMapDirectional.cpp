@@ -36,11 +36,11 @@ namespace castor3d
 {
 	namespace
 	{
-		std::vector< ShadowMap::PassData > createPasses( Engine & engine
-			, Scene & scene
+		std::vector< ShadowMap::PassData > createPasses( Scene & scene
 			, ShadowMap & shadowMap
 			, uint32_t cascadeCount )
 		{
+			auto & engine = *scene.getEngine();
 			std::vector< ShadowMap::PassData > result;
 			auto const width = ShadowMapPassDirectional::TextureSize;
 			auto const height = ShadowMapPassDirectional::TextureSize;
@@ -77,21 +77,15 @@ namespace castor3d
 		}
 	}
 
-	VkFormat ShadowMapDirectional::RawDepthFormat = VK_FORMAT_UNDEFINED;
-
-	ShadowMapDirectional::ShadowMapDirectional( Engine & engine
-		, Scene & scene )
-		: ShadowMap{ engine
-			, cuT( "ShadowMapDirectional" )
-			, ShadowMapResult
-			{
-				engine,
-				cuT( "Directional" ),
-				0u,
-				Size{ ShadowMapPassDirectional::TextureSize, ShadowMapPassDirectional::TextureSize },
-				scene.getDirectionalShadowCascades(),
-			}
-			, createPasses( engine, scene, *this, scene.getDirectionalShadowCascades() )
+	ShadowMapDirectional::ShadowMapDirectional( Scene & scene )
+		: ShadowMap{ scene
+			, LightType::eDirectional
+			, ShadowMapResult{ *scene.getEngine()
+				, cuT( "Directional" )
+				, 0u
+				, Size{ ShadowMapPassDirectional::TextureSize, ShadowMapPassDirectional::TextureSize }
+				, scene.getDirectionalShadowCascades() }
+			, createPasses( scene, *this, scene.getDirectionalShadowCascades() )
 			, 1u }
 		, m_frameBuffers( m_passes.size() )
 		, m_cascades{ scene.getDirectionalShadowCascades() }

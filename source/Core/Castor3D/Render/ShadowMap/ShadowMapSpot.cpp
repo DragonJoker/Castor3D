@@ -2,10 +2,14 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
+#include "Castor3D/Material/Texture/TextureView.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Culling/FrustumCuller.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapPassSpot.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/SpotLight.hpp"
@@ -20,10 +24,6 @@
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/ShadowMapUbo.hpp"
 #include "Castor3D/Shader/Ubos/TexturesUbo.hpp"
-#include "Castor3D/Render/ShadowMap/ShadowMapPassSpot.hpp"
-#include "Castor3D/Material/Texture/Sampler.hpp"
-#include "Castor3D/Material/Texture/TextureView.hpp"
-#include "Castor3D/Material/Texture/TextureLayout.hpp"
 
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/Image/ImageView.hpp>
@@ -40,10 +40,10 @@ namespace castor3d
 {
 	namespace
 	{
-		std::vector< ShadowMap::PassData > createPasses( Engine & engine
-			, Scene & scene
+		std::vector< ShadowMap::PassData > createPasses( Scene & scene
 			, ShadowMap & shadowMap )
 		{
+			auto & engine = *scene.getEngine();
 			std::vector< ShadowMap::PassData > result;
 			Viewport viewport{ engine };
 			viewport.resize( Size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize } );
@@ -73,21 +73,15 @@ namespace castor3d
 		}
 	}
 
-	VkFormat ShadowMapSpot::RawDepthFormat = VK_FORMAT_UNDEFINED;
-
-	ShadowMapSpot::ShadowMapSpot( Engine & engine
-		, Scene & scene )
-		: ShadowMap{ engine
-			, cuT( "ShadowMapSpot" )
-			, ShadowMapResult
-			{
-				engine,
-				cuT( "Spot" ),
-				0u,
-				Size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize },
-				shader::getSpotShadowMapCount(),
-			}
-			, createPasses( engine, scene, *this )
+	ShadowMapSpot::ShadowMapSpot( Scene & scene )
+		: ShadowMap{ scene
+			, LightType::eSpot
+			, ShadowMapResult{ *scene.getEngine()
+				, cuT( "Spot" )
+				, 0u
+				, Size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize }
+				, shader::getSpotShadowMapCount() }
+			, createPasses( scene, *this )
 			, shader::getSpotShadowMapCount() }
 	{
 		log::trace << "Created ShadowMapSpot" << std::endl;

@@ -151,7 +151,7 @@ namespace castor3d
 						, m_shadow.getLightSpacePosition( light.m_transforms[0_u]
 							, shrinkedPos ) );
 					auto shadowDepth = m_writer.declLocale( "d1"
-						, texture( c3d_mapDepthDirectional, lightSpacePosition.xy() ).w() );
+						, c3d_mapDepthDirectional.sample( lightSpacePosition.xy() ).w() );
 					ssstResult = m_compute( shadowDepth
 						, material.m_transmittanceProfileSize
 						, material.m_transmittanceProfile
@@ -197,7 +197,7 @@ namespace castor3d
 					auto direction = m_writer.declLocale( "direction"
 						, vertexToLight );
 					auto shadowDepth = m_writer.declLocale( "shadowDepth"
-						, texture( c3d_mapDepthPoint, direction ).w() );
+						, c3d_mapDepthPoint.sample( direction ).w() );
 					auto lightSpacePosition = m_writer.declLocale( "lightSpacePosition"
 						, m_utils.calcWSPosition( uv
 							, shadowDepth
@@ -241,7 +241,7 @@ namespace castor3d
 						, m_shadow.getLightSpacePosition( light.m_transform
 							, shrinkedPos ) );
 					auto shadowDepth = m_writer.declLocale( "shadowDepth"
-						, texture( c3d_mapDepthSpot, lightSpacePosition.xy() ).w() );
+						, c3d_mapDepthSpot.sample( lightSpacePosition.xy() ).w() );
 					ssstResult = m_compute( shadowDepth
 						, material.m_transmittanceProfileSize
 						, material.m_transmittanceProfile

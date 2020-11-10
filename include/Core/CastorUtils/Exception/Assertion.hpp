@@ -49,18 +49,12 @@ namespace castor
 		 *\param[in]	function	Le nom de la fonction
 		 *\param[in]	line		Le numéro de ligne
 		 */
-		AssertException( std::string const & description, char const * file, char const * function, uint32_t line )
-			: Debug::Backtraced()
-			, Exception( "Assertion failed: " + description + "\n" + m_callStack, file, function, line )
-		{
-		}
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		virtual ~AssertException() throw()
+		AssertException( std::string const & description
+			, char const * file
+			, char const * function
+			, uint32_t line )
+			: Debug::Backtraced{}
+			, Exception{ "Assertion failed: " + description + "\n" + m_callStack, file, function, line }
 		{
 		}
 	};
@@ -92,7 +86,7 @@ namespace castor
 #		define CU_Assert( pred, text )
 	if ( !( pred ) )\
 	{\
-		throw castor::AssertException( ( text ), __FILE__, __FUNCTION__, __LINE__ );\
+		throw castor::AssertException( ( text ), __FILE__, __FUNCTION__, uint32_t( __LINE__ ) );\
 	}
 
 #	else

@@ -21,30 +21,27 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine	The engine.
 		 *\param[in]	scene	The scene.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
 		 *\param[in]	scene	La scène.
 		 */
-		ShadowMapSpot( Engine & engine
-			, Scene & scene );
+		C3D_API explicit ShadowMapSpot( Scene & scene );
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		~ShadowMapSpot();
+		C3D_API ~ShadowMapSpot();
 		/**
 		 *\copydoc		castor3d::ShadowMap::cpuUpdate
 		 */
-		void update( CpuUpdater & updater )override;
+		C3D_API void update( CpuUpdater & updater )override;
 		/**
 		 *\copydoc		castor3d::ShadowMap::gpuUpdate
 		 */
-		void update( GpuUpdater & updater )override;
+		C3D_API void update( GpuUpdater & updater )override;
 
 	private:
 		/**
@@ -69,7 +66,6 @@ namespace castor3d
 	public:
 		static VkFormat constexpr VarianceFormat = VK_FORMAT_R32G32_SFLOAT;
 		static VkFormat constexpr LinearDepthFormat = VK_FORMAT_R32_SFLOAT;
-		static VkFormat RawDepthFormat;
 
 	private:
 		struct PassData

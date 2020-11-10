@@ -27,6 +27,7 @@ namespace castor3d
 			sdw::Vec4 m_colourIndex;
 			sdw::Vec4 m_intensityFarPlane;
 			sdw::Vec4 m_volumetric;
+			sdw::Vec4 m_shadow;
 			// Specific values
 			sdw::Vec3 m_colour;
 			sdw::Vec2 m_intensity;
@@ -35,7 +36,6 @@ namespace castor3d
 			sdw::Int m_index;
 			sdw::UInt m_volumetricSteps;
 			sdw::Float m_volumetricScattering;
-			sdw::Vec4 m_shadow;
 			sdw::Vec2 m_shadowOffsets;
 			sdw::Vec2 m_shadowVariance;
 

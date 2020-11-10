@@ -1,4 +1,4 @@
-#include "Castor3D/Render/Ssao/SsaoConfigUbo.hpp"
+#include "Castor3D/Shader/Ubos/SsaoConfigUbo.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
@@ -36,6 +36,8 @@ namespace castor3d
 	String const SsaoConfigUbo::MaxMipLevel = cuT( "c3d_maxMipLevel" );
 	String const SsaoConfigUbo::MinRadius = cuT( "c3d_minRadius" );
 	String const SsaoConfigUbo::Variation = cuT( "c3d_variation" );
+	String const SsaoConfigUbo::BendStepCount = cuT( "c3d_bendStepCount" );
+	String const SsaoConfigUbo::BendStepSize = cuT( "c3d_bendStepSize" );
 
 	SsaoConfigUbo::SsaoConfigUbo( Engine & engine )
 		: m_engine{ engine }
@@ -144,5 +146,7 @@ namespace castor3d
 		configuration.maxMipLevel = config.maxMipLevel;
 		configuration.minRadius = config.minRadius;
 		configuration.variation = config.variation;
+		configuration.bendStepCount = config.bendStepCount.value();
+		configuration.bendStepSize = config.bendStepSize;
 	}
 }

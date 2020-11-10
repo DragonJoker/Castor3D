@@ -72,7 +72,7 @@ namespace smaa
 					, Array< Vec4 > const & offset
 					, SampledImage2DRgba32 const & predicationTex )
 				{
-					writer.returnStmt( textureGather( predicationTex, texcoord + c3d_rtMetrics.xy() * vec2( -0.5_f, -0.5_f ) ).grb() );
+					writer.returnStmt( predicationTex.gather( texcoord + c3d_rtMetrics.xy() * vec2( -0.5_f, -0.5_f ) ).grb() );
 				}
 				, InVec2{ writer, "texcoord" }
 				, InVec4Array{ writer, "offset", 3u }
@@ -115,16 +115,16 @@ namespace smaa
 					// Calculate color deltas:
 					auto delta = writer.declLocale< Vec4 >( "delta" );
 					auto C = writer.declLocale( "C"
-						, texture( c3d_colourTex, texcoord ).rgb() );
+						, c3d_colourTex.sample( texcoord ).rgb() );
 
 					auto Cleft = writer.declLocale( "Cleft"
-						, texture( c3d_colourTex, offset[0].xy() ).rgb() );
+						, c3d_colourTex.sample( offset[0].xy() ).rgb() );
 					auto t = writer.declLocale( "t"
 						, abs( C - Cleft ) );
 					delta.x() = max( max( t.r(), t.g() ), t.b() );
 
 					auto Ctop = writer.declLocale( "Ctop"
-						, texture( c3d_colourTex, offset[0].zw() ).rgb() );
+						, c3d_colourTex.sample( offset[0].zw() ).rgb() );
 					t = abs( C - Ctop );
 					delta.y() = max( max( t.r(), t.g() ), t.b() );
 
@@ -141,12 +141,12 @@ namespace smaa
 
 					// Calculate right and bottom deltas:
 					auto Cright = writer.declLocale( "Cright"
-						, texture( c3d_colourTex, offset[1].xy() ).rgb() );
+						, c3d_colourTex.sample( offset[1].xy() ).rgb() );
 					t = abs( C - Cright );
 					delta.z() = max( max( t.r(), t.g() ), t.b() );
 
 					auto Cbottom = writer.declLocale( "Cbottom"
-						, texture( c3d_colourTex, offset[1].zw() ).rgb() );
+						, c3d_colourTex.sample( offset[1].zw() ).rgb() );
 					t = abs( C - Cbottom );
 					delta.w() = max( max( t.r(), t.g() ), t.b() );
 
@@ -156,12 +156,12 @@ namespace smaa
 
 					// Calculate left-left and top-top deltas:
 					auto Cleftleft = writer.declLocale( "Cleftleft"
-						, texture( c3d_colourTex, offset[2].xy() ).rgb() );
+						, c3d_colourTex.sample( offset[2].xy() ).rgb() );
 					t = abs( C - Cleftleft );
 					delta.z() = max( max( t.r(), t.g() ), t.b() );
 
 					auto Ctoptop = writer.declLocale( "Ctoptop"
-						, texture( c3d_colourTex, offset[2].zw() ).rgb() );
+						, c3d_colourTex.sample( offset[2].zw() ).rgb() );
 					t = abs( C - Ctoptop );
 					delta.w() = max( max( t.r(), t.g() ), t.b() );
 
@@ -226,16 +226,16 @@ namespace smaa
 					// Calculate color deltas:
 					auto delta = writer.declLocale< Vec4 >( "delta" );
 					auto C = writer.declLocale( "C"
-						, texture( c3d_colourTex, texcoord ).rgb() );
+						, c3d_colourTex.sample( texcoord ).rgb() );
 
 					auto Cleft = writer.declLocale( "Cleft"
-						, texture( c3d_colourTex, offset[0].xy() ).rgb() );
+						, c3d_colourTex.sample( offset[0].xy() ).rgb() );
 					auto t = writer.declLocale( "t"
 						, abs( C - Cleft ) );
 					delta.x() = max( max( t.r(), t.g() ), t.b() );
 
 					auto Ctop = writer.declLocale( "Ctop"
-						, texture( c3d_colourTex, offset[0].zw() ).rgb() );
+						, c3d_colourTex.sample( offset[0].zw() ).rgb() );
 					t = abs( C - Ctop );
 					delta.y() = max( max( t.r(), t.g() ), t.b() );
 
@@ -252,12 +252,12 @@ namespace smaa
 
 					// Calculate right and bottom deltas:
 					auto Cright = writer.declLocale( "Cright"
-						, texture( c3d_colourTex, offset[1].xy() ).rgb() );
+						, c3d_colourTex.sample( offset[1].xy() ).rgb() );
 					t = abs( C - Cright );
 					delta.z() = max( max( t.r(), t.g() ), t.b() );
 
 					auto Cbottom = writer.declLocale( "Cbottom"
-						, texture( c3d_colourTex, offset[1].zw() ).rgb() );
+						, c3d_colourTex.sample( offset[1].zw() ).rgb() );
 					t = abs( C - Cbottom );
 					delta.w() = max( max( t.r(), t.g() ), t.b() );
 
@@ -267,12 +267,12 @@ namespace smaa
 
 					// Calculate left-left and top-top deltas:
 					auto Cleftleft = writer.declLocale( "Cleftleft"
-						, texture( c3d_colourTex, offset[2].xy() ).rgb() );
+						, c3d_colourTex.sample( offset[2].xy() ).rgb() );
 					t = abs( C - Cleftleft );
 					delta.z() = max( max( t.r(), t.g() ), t.b() );
 
 					auto Ctoptop = writer.declLocale( "Ctoptop"
-						, texture( c3d_colourTex, offset[2].zw() ).rgb() );
+						, c3d_colourTex.sample( offset[2].zw() ).rgb() );
 					t = abs( C - Ctoptop );
 					delta.w() = max( max( t.r(), t.g() ), t.b() );
 

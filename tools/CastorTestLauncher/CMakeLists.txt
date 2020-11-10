@@ -55,7 +55,7 @@ target_link_libraries( ${PROJECT_NAME} PRIVATE
 	${X11_LIBRARIES}
 )
 target_compile_definitions( ${PROJECT_NAME} PRIVATE
-	${Castor3DDefinitions}
+	${CastorToolsDefinitions}
 	${wxWidgets_DEFINITIONS}
 )
 set_property( TARGET ${PROJECT_NAME}

@@ -74,11 +74,11 @@ namespace Bloom
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					pxl_fragColor = texture( c3d_mapScene, vtx_texture );
+					pxl_fragColor = c3d_mapScene.sample( vtx_texture );
 
 					for ( uint32_t i = 0; i < blurPassesCount; ++i )
 					{
-						pxl_fragColor += texture( c3d_mapPasses, vtx_texture, Float( float( i ) ) );
+						pxl_fragColor += c3d_mapPasses.sample( vtx_texture, Float( float( i ) ) );
 					}
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

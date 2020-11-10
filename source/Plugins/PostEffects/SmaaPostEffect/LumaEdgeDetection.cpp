@@ -72,7 +72,7 @@ namespace smaa
 					, Array< Vec4 > const & offset
 					, SampledImage2DRgba32 const & tex )
 				{
-					writer.returnStmt( textureGather( tex, texcoord + c3d_rtMetrics.xy() * vec2( -0.5_f, -0.5_f ) ).grb() );
+					writer.returnStmt( tex.gather( texcoord + c3d_rtMetrics.xy() * vec2( -0.5_f, -0.5_f ) ).grb() );
 				}
 				, InVec2{ writer, "texcoord" }
 				, InVec4Array{ writer, "offset", 3u }
@@ -116,12 +116,12 @@ namespace smaa
 					auto weights = writer.declLocale( "weights"
 						, vec3( 0.2126_f, 0.7152_f, 0.0722_f ) );
 					auto L = writer.declLocale( "L"
-						, dot( texture( c3d_colourTex, texcoord ).rgb(), weights ) );
+						, dot( c3d_colourTex.sample( texcoord ).rgb(), weights ) );
 
 					auto Lleft = writer.declLocale( "Lleft"
-						, dot( texture( c3d_colourTex, offset[0].xy() ).rgb(), weights ) );
+						, dot( c3d_colourTex.sample( offset[0].xy() ).rgb(), weights ) );
 					auto Ltop = writer.declLocale( "Ltop"
-						, dot( texture( c3d_colourTex, offset[0].zw() ).rgb(), weights ) );
+						, dot( c3d_colourTex.sample( offset[0].zw() ).rgb(), weights ) );
 
 					// We do the usual threshold:
 					auto delta = writer.declLocale< Vec4 >( "delta" );
@@ -138,9 +138,9 @@ namespace smaa
 
 					// Calculate right and bottom deltas:
 					auto Lright = writer.declLocale( "Lright"
-						, dot( texture( c3d_colourTex, offset[1].xy() ).rgb(), weights ) );
+						, dot( c3d_colourTex.sample( offset[1].xy() ).rgb(), weights ) );
 					auto Lbottom = writer.declLocale( "Lbottom"
-						, dot( texture( c3d_colourTex, offset[1].zw() ).rgb(), weights ) );
+						, dot( c3d_colourTex.sample( offset[1].zw() ).rgb(), weights ) );
 					delta.zw() = abs( L - vec2( Lright, Lbottom ) );
 
 					// Calculate the maximum delta in the direct neighborhood:
@@ -149,9 +149,9 @@ namespace smaa
 
 					// Calculate left-left and top-top deltas:
 					auto Lleftleft = writer.declLocale( "Lleftleft"
-						, dot( texture( c3d_colourTex, offset[2].xy() ).rgb(), weights ) );
+						, dot( c3d_colourTex.sample( offset[2].xy() ).rgb(), weights ) );
 					auto Ltoptop = writer.declLocale( "Ltoptop"
-						, dot( texture( c3d_colourTex, offset[2].zw() ).rgb(), weights ) );
+						, dot( c3d_colourTex.sample( offset[2].zw() ).rgb(), weights ) );
 					delta.zw() = abs( vec2( Lleft, Ltop ) - vec2( Lleftleft, Ltoptop ) );
 
 					// Calculate the final maximum delta:
@@ -206,7 +206,7 @@ namespace smaa
 					, Array< Vec4 > const & offset
 					, SampledImage2DRgba32 const & tex )
 				{
-					writer.returnStmt( textureGather( tex, texcoord + c3d_rtMetrics.xy() * vec2( -0.5_f, -0.5_f ) ).grb() );
+					writer.returnStmt( tex.gather( texcoord + c3d_rtMetrics.xy() * vec2( -0.5_f, -0.5_f ) ).grb() );
 				}
 				, InVec2{ writer, "texcoord" }
 				, InVec4Array{ writer, "offset", 3u }
@@ -230,12 +230,12 @@ namespace smaa
 					auto weights = writer.declLocale( "weights"
 						, vec3( 0.2126_f, 0.7152_f, 0.0722_f ) );
 					auto L = writer.declLocale( "L"
-						, dot( texture( c3d_colourTex, texcoord ).rgb(), weights ) );
+						, dot( c3d_colourTex.sample( texcoord ).rgb(), weights ) );
 
 					auto Lleft = writer.declLocale( "Lleft"
-						, dot( texture( c3d_colourTex, offset[0].xy() ).rgb(), weights ) );
+						, dot( c3d_colourTex.sample( offset[0].xy() ).rgb(), weights ) );
 					auto Ltop = writer.declLocale( "Ltop"
-						, dot( texture( c3d_colourTex, offset[0].zw() ).rgb(), weights ) );
+						, dot( c3d_colourTex.sample( offset[0].zw() ).rgb(), weights ) );
 
 					// We do the usual threshold:
 					auto delta = writer.declLocale< Vec4 >( "delta" );
@@ -252,9 +252,9 @@ namespace smaa
 
 					// Calculate right and bottom deltas:
 					auto Lright = writer.declLocale( "Lright"
-						, dot( texture( c3d_colourTex, offset[1].xy() ).rgb(), weights ) );
+						, dot( c3d_colourTex.sample( offset[1].xy() ).rgb(), weights ) );
 					auto Lbottom = writer.declLocale( "Lbottom"
-						, dot( texture( c3d_colourTex, offset[1].zw() ).rgb(), weights ) );
+						, dot( c3d_colourTex.sample( offset[1].zw() ).rgb(), weights ) );
 					delta.zw() = abs( L - vec2( Lright, Lbottom ) );
 
 					// Calculate the maximum delta in the direct neighborhood:
@@ -263,9 +263,9 @@ namespace smaa
 
 					// Calculate left-left and top-top deltas:
 					auto Lleftleft = writer.declLocale( "Lleftleft"
-						, dot( texture( c3d_colourTex, offset[2].xy() ).rgb(), weights ) );
+						, dot( c3d_colourTex.sample( offset[2].xy() ).rgb(), weights ) );
 					auto Ltoptop = writer.declLocale( "Ltoptop"
-						, dot( texture( c3d_colourTex, offset[2].zw() ).rgb(), weights ) );
+						, dot( c3d_colourTex.sample( offset[2].zw() ).rgb(), weights ) );
 					delta.zw() = abs( vec2( Lleft, Ltop ) - vec2( Lleftleft, Ltoptop ) );
 
 					// Calculate the final maximum delta:

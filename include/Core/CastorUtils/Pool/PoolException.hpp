@@ -258,13 +258,11 @@ namespace castor
 	};
 }
 /**
-\author 	Sylvain DOREMUS
-\date 		03/01/2011
-\~english
-\brief		Macro to ease the use of castor::PoolException
-\~french
-\brief		Macro définie pour faciliter l'utilisation de castor::PoolException
+*\~english
+*\brief		Macro to ease the use of castor::PoolException
+*\~french
+*\brief		Macro définie pour faciliter l'utilisation de castor::PoolException
 */
-#define CU_PoolException( error ) throw castor::PoolMemoryException< error >( __FILE__, __FUNCTION__, __LINE__ )
+#define CU_PoolException( error ) throw castor::PoolMemoryException< error >{ __FILE__, __FUNCTION__, uint32_t( __LINE__ ) }
 
 #endif

@@ -107,6 +107,8 @@ namespace GuiCommon
 		static wxString PROPERTY_SHADOW_RSM_INTENSITY = _( "Intensity" );
 		static wxString PROPERTY_SHADOW_RSM_MAX_RADIUS = _( "Max. Radius" );
 		static wxString PROPERTY_SHADOW_RSM_SAMPLE_COUNT = _( "Sample Count" );
+		static wxString PROPERTY_SHADOW_LPV_INDIRECT_ATT = _( "Indirect Attenuation" );
+		static wxString PROPERTY_SHADOW_LPV_SURFEL_AREA = _( "Texel Area Mod." );
 
 		wxArrayString shadowChoices;
 		shadowChoices.Add( PROPERTY_SHADOW_TYPE_NONE );
@@ -143,11 +145,67 @@ namespace GuiCommon
 			addPropertyT( grid, PROPERTY_SHADOW_VOLUMETRIC_SCATTERING_FACTOR, m_light.getCategory()->getVolumetricScatteringFactor(), m_light.getCategory().get(), &LightCategory::setVolumetricScatteringFactor );
 		}
 
-		auto & rsmConfig = m_light.getRsmConfig();
 		addProperty( grid, PROPERTY_CATEGORY_GLOBAL_ILLUM );
-		addPropertyET( grid, PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE, giChoices, m_light.getGlobalIlluminationType(), &m_light, &Light::setGlobalIlluminationType );
+		addPropertyE( grid, PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE, giChoices, m_light.getGlobalIlluminationType()
+			, [this]( GlobalIlluminationType type )
+			{
+				m_light.setGlobalIlluminationType( type );
+				doUpdateGIProperties( type );
+			} );
+		auto & rsmConfig = m_light.getRsmConfig();
+		m_rsmProperties = addProperty( grid, PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_RSM );
 		addPropertyT( grid, PROPERTY_SHADOW_RSM_INTENSITY, &rsmConfig.intensity );
 		addPropertyT( grid, PROPERTY_SHADOW_RSM_MAX_RADIUS, &rsmConfig.maxRadius );
 		addPropertyT( grid, PROPERTY_SHADOW_RSM_SAMPLE_COUNT, &rsmConfig.sampleCount );
+
+		if ( m_light.getLightType() != LightType::ePoint )
+		{
+			auto & lpvConfig = m_light.getLpvConfig();
+			m_lpvProperties = addProperty( grid, PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LPV );
+			addPropertyT( grid, PROPERTY_SHADOW_LPV_INDIRECT_ATT, &lpvConfig.indirectAttenuation );
+			addPropertyT( grid, PROPERTY_SHADOW_LPV_SURFEL_AREA, &lpvConfig.texelAreaModifier );
+		}
+
+		doUpdateGIProperties( m_light.getGlobalIlluminationType() );
+	}
+
+	void LightTreeItemProperty::doUpdateGIProperties( castor3d::GlobalIlluminationType type )
+	{
+		switch ( type )
+		{
+		case GlobalIlluminationType::eNone:
+			if ( m_rsmProperties )
+			{
+				m_rsmProperties->Enable( false );
+			}
+			if ( m_lpvProperties )
+			{
+				m_lpvProperties->Enable( false );
+			}
+			break;
+		case GlobalIlluminationType::eRsm:
+			if ( m_rsmProperties )
+			{
+				m_rsmProperties->Enable( true );
+			}
+			if ( m_lpvProperties )
+			{
+				m_lpvProperties->Enable( false );
+			}
+			break;
+		case GlobalIlluminationType::eLpv:
+		case GlobalIlluminationType::eLpvG:
+		case GlobalIlluminationType::eLayeredLpv:
+		case GlobalIlluminationType::eLayeredLpvG:
+			if ( m_rsmProperties )
+			{
+				m_rsmProperties->Enable( false );
+			}
+			if ( m_lpvProperties )
+			{
+				m_lpvProperties->Enable( true );
+			}
+			break;
+		}
 	}
 }

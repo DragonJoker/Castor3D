@@ -86,7 +86,7 @@ namespace grayscale
 				, [&]()
 				{
 					auto colour = writer.declLocale( "colour"
-						, texture( c3d_mapColor, vtx_texture ).xyz() );
+						, c3d_mapColor.sample( vtx_texture ).xyz() );
 					pxl_fragColor = vec4( vec3( dot( c3d_factors, colour ) ), 1.0_f );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

@@ -156,40 +156,42 @@ namespace castor3d
 
 	bool EnvironmentMap::initialise( RenderDevice const & device )
 	{
-		m_environmentMap->initialise( device );
-		ashes::ImageCreateInfo depthStencil
+		if ( !m_environmentMap->isInitialised() )
 		{
-			0u,
-			VK_IMAGE_TYPE_2D,
-			device.selectSuitableDepthStencilFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT ),
-			{ MapSize[0], MapSize[1], 1u },
-			1u,
-			1u,
-			VK_SAMPLE_COUNT_1_BIT,
-			VK_IMAGE_TILING_OPTIMAL,
-			VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
-		};
-		m_depthBuffer = makeImage( device
-			, std::move( depthStencil )
-			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-			, "EnvironmentMapImage" );
-		m_depthBufferView = m_depthBuffer->createView( "EnvironmentMap"
-			, VK_IMAGE_VIEW_TYPE_2D
-			, m_depthBuffer->getFormat() );
-
-		ashes::VkAttachmentDescriptionArray attaches
-		{
+			m_environmentMap->initialise( device );
+			ashes::ImageCreateInfo depthStencil
 			{
 				0u,
-				m_depthBuffer->getFormat(),
+				VK_IMAGE_TYPE_2D,
+				device.selectSuitableDepthStencilFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT ),
+				{ MapSize[0], MapSize[1], 1u },
+				1u,
+				1u,
 				VK_SAMPLE_COUNT_1_BIT,
-				VK_ATTACHMENT_LOAD_OP_CLEAR,
-				VK_ATTACHMENT_STORE_OP_STORE,
-				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-				VK_ATTACHMENT_STORE_OP_DONT_CARE,
-				VK_IMAGE_LAYOUT_UNDEFINED,
-				VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
-			},
+				VK_IMAGE_TILING_OPTIMAL,
+				VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
+			};
+			m_depthBuffer = makeImage( device
+				, std::move( depthStencil )
+				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+				, "EnvironmentMapImage" );
+			m_depthBufferView = m_depthBuffer->createView( "EnvironmentMap"
+				, VK_IMAGE_VIEW_TYPE_2D
+				, m_depthBuffer->getFormat() );
+
+			ashes::VkAttachmentDescriptionArray attaches
+			{
+				{
+					0u,
+					m_depthBuffer->getFormat(),
+					VK_SAMPLE_COUNT_1_BIT,
+					VK_ATTACHMENT_LOAD_OP_CLEAR,
+					VK_ATTACHMENT_STORE_OP_STORE,
+					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+					VK_ATTACHMENT_STORE_OP_DONT_CARE,
+					VK_IMAGE_LAYOUT_UNDEFINED,
+					VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+				},
 			{
 				0u,
 				m_environmentMap->getTexture()->getPixelFormat(),
@@ -201,29 +203,29 @@ namespace castor3d
 				VK_IMAGE_LAYOUT_UNDEFINED,
 				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 			}
-		};
-		ashes::SubpassDescriptionArray subpasses;
-		subpasses.emplace_back( ashes::SubpassDescription
-			{
-				0u,
-				VK_PIPELINE_BIND_POINT_GRAPHICS,
+			};
+			ashes::SubpassDescriptionArray subpasses;
+			subpasses.emplace_back( ashes::SubpassDescription
+				{
+					0u,
+					VK_PIPELINE_BIND_POINT_GRAPHICS,
 				{},
 				{ { 1u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
 				{},
 				VkAttachmentReference{ 0u, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL },
 				{},
-			} );
-		ashes::VkSubpassDependencyArray dependencies
-		{
+				} );
+			ashes::VkSubpassDependencyArray dependencies
 			{
-				VK_SUBPASS_EXTERNAL,
-				0u,
-				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-				VK_DEPENDENCY_BY_REGION_BIT,
-			},
+				{
+					VK_SUBPASS_EXTERNAL,
+					0u,
+					VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+					VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+					VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+					VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+					VK_DEPENDENCY_BY_REGION_BIT,
+				},
 			{
 				0u,
 				VK_SUBPASS_EXTERNAL,
@@ -233,30 +235,40 @@ namespace castor3d
 				VK_ACCESS_SHADER_READ_BIT,
 				VK_DEPENDENCY_BY_REGION_BIT,
 			}
-		};
-		ashes::RenderPassCreateInfo createInfo
-		{
-			0u,
-			std::move( attaches ),
-			std::move( subpasses ),
-			std::move( dependencies ),
-		};
-		m_renderPass = device->createRenderPass( "EnvironmentMap"
-			, std::move( createInfo ) );
-		auto & background = *m_node.getScene()->getBackground();
-		m_backgroundUboDescriptorPool = background.getUboDescriptorLayout().createPool( "EnvironmentMapUbo", 6u );
-		m_backgroundTexDescriptorPool = background.getTexDescriptorLayout().createPool( "EnvironmentMapTex", 6u );
-		uint32_t face = 0u;
+			};
+			ashes::RenderPassCreateInfo createInfo
+			{
+				0u,
+				std::move( attaches ),
+				std::move( subpasses ),
+				std::move( dependencies ),
+			};
+			m_renderPass = device->createRenderPass( "EnvironmentMap"
+				, std::move( createInfo ) );
+			auto & background = *m_node.getScene()->getBackground();
+			m_backgroundUboDescriptorPool = background.getUboDescriptorLayout().createPool( "EnvironmentMapUbo", 6u );
+			m_backgroundTexDescriptorPool = background.getTexDescriptorLayout().createPool( "EnvironmentMapTex", 6u );
+			uint32_t face = 0u;
 
-		for ( auto & pass : m_passes )
-		{
-			pass->initialise( device
-				, MapSize
-				, face++
-				, *m_renderPass
-				, background
-				, *m_backgroundUboDescriptorPool
-				, *m_backgroundTexDescriptorPool );
+			for ( auto & pass : m_passes )
+			{
+				pass->initialise( device
+					, MapSize
+					, face++
+					, *m_renderPass
+					, background
+					, *m_backgroundUboDescriptorPool
+					, *m_backgroundTexDescriptorPool );
+			}
+
+			m_generateMipmaps = CommandsSemaphore{ device, cuT( "EnvironmentMapMipmaps" ) };
+			auto & cmd = *m_generateMipmaps.commandBuffer;
+			cmd.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
+			cmd.beginDebugBlock( { m_environmentMap->getTexture()->getName() + " Mipmaps Generation"
+				, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
+			m_environmentMap->getTexture()->generateMipmaps( cmd );
+			cmd.endDebugBlock();
+			cmd.end();
 		}
 
 		return true;
@@ -317,7 +329,7 @@ namespace castor3d
 				result = &pass->render( device, *result );
 			}
 
-			m_environmentMap->getTexture()->generateMipmaps( device );
+			result = &m_generateMipmaps.submit( *device.graphicsQueue, *result );
 			m_render = 0u;
 		}
 

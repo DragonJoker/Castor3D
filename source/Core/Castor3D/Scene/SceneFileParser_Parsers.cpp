@@ -335,6 +335,23 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
+	CU_ImplementAttributeParser( parserRootLpvGridSize )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing [count] parameter." ) );
+		}
+		else
+		{
+			uint32_t count;
+			params[0]->get( count );
+			parsingContext->m_pParser->getEngine()->setLpvGridSize( count );
+		}
+	}
+	CU_EndAttribute()
+
 	CU_ImplementAttributeParser( parserWindowRenderTarget )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
@@ -1729,6 +1746,23 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
+	CU_ImplementAttributeParser( parserShadowsGlobalIllumination )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->light )
+		{
+			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+		}
+		else if ( !params.empty() )
+		{
+			uint32_t value;
+			params[0]->get( value );
+			parsingContext->light->setGlobalIlluminationType( GlobalIlluminationType( value ) );
+		}
+	}
+	CU_EndAttribute()
+
 	CU_ImplementAttributeParser( parserShadowsVolumetricSteps )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
@@ -1847,47 +1881,24 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserShadowsRsm )
+	CU_ImplementAttributeParser( parserShadowsRsmConfig )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
 
 		if ( !parsingContext->light )
 		{
 			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
-		}
-		else
-		{
-			parsingContext->light->setGlobalIlluminationType( GlobalIlluminationType::eRsm );
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eRsm )
 
-	CU_ImplementAttributeParser( parserShadowsLpv )
+	CU_ImplementAttributeParser( parserShadowsLpvConfig )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
 
 		if ( !parsingContext->light )
 		{
 			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
-		}
-		else
-		{
-			parsingContext->light->setGlobalIlluminationType( GlobalIlluminationType::eLpv );
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eLpv )
-
-	CU_ImplementAttributeParser( parserShadowsLayeredLpv )
-	{
-		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
-
-		if ( !parsingContext->light )
-		{
-			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
-		}
-		else
-		{
-			parsingContext->light->setGlobalIlluminationType( GlobalIlluminationType::eLayeredLpv );
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eLpv )
@@ -1941,6 +1952,40 @@ namespace castor3d
 			auto range = parsingContext->light->getRsmConfig().sampleCount.value();
 			range = value;
 			parsingContext->light->getRsmConfig().sampleCount = range;
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserLpvIndirectAttenuation )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->light )
+		{
+			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+		}
+		else
+		{
+			float value{ 0u };
+			params[0]->get( value );
+			parsingContext->light->getLpvConfig().indirectAttenuation = value;
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserLpvTexelAreaModifier )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->light )
+		{
+			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+		}
+		else
+		{
+			float value{ 0u };
+			params[0]->get( value );
+			parsingContext->light->getLpvConfig().texelAreaModifier = value;
 		}
 	}
 	CU_EndAttribute()
@@ -5820,6 +5865,54 @@ namespace castor3d
 				uint32_t value;
 				params[0]->get( value );
 				parsingContext->ssaoConfig.blurRadius = { int32_t( value ), parsingContext->ssaoConfig.blurRadius.value().range() };
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No render target initialised" ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserSsaoBendStepCount )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( parsingContext->renderTarget )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				uint32_t value;
+				params[0]->get( value );
+				parsingContext->ssaoConfig.bendStepCount = value;
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No render target initialised" ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserSsaoBendStepSize )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( parsingContext->renderTarget )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				float value;
+				params[0]->get( value );
+				parsingContext->ssaoConfig.bendStepSize = value;
 			}
 		}
 		else

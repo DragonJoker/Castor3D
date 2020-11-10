@@ -334,9 +334,10 @@ namespace castor3d
 			, SceneRenderNodes & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )
 		{
+			uint32_t instanceMult = renderPass.getInstanceMult();
 			auto & scene = nodes.scene;
 
-			for ( auto & culledNode : renderPass.getCuller().getAllSubmeshes( opaque ) )
+			for ( auto & culledNode : renderPass.getCuller().getAllSubmeshes( opaque ).objects )
 			{
 				auto & submesh = culledNode.data;
 				auto pass = culledNode.pass;
@@ -371,7 +372,7 @@ namespace castor3d
 							, programFlags
 							, sceneFlags
 							, submesh.getTopology()
-							, submesh.getGeometryBuffers( material ).layouts );
+							, submesh.getGeometryBuffers( material, instanceMult ).layouts );
 						nodes.addRenderNode( flags
 							, animated
 							, culledNode
@@ -395,7 +396,7 @@ namespace castor3d
 								, programFlags
 								, sceneFlags
 								, submesh.getTopology()
-								, submesh.getGeometryBuffers( material ).layouts );
+								, submesh.getGeometryBuffers( material, instanceMult ).layouts );
 							nodes.addRenderNode( flags
 								, animated
 								, culledNode
@@ -408,7 +409,7 @@ namespace castor3d
 				}
 			}
 
-			for ( auto & culledNode : renderPass.getCuller().getAllBillboards( opaque ) )
+			for ( auto & culledNode : renderPass.getCuller().getAllBillboards( opaque ).objects )
 			{
 				auto & billboard = culledNode.data;
 				auto & pass = culledNode.pass;

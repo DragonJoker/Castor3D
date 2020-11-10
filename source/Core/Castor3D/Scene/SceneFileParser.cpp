@@ -11,6 +11,32 @@ using namespace castor;
 
 namespace castor3d
 {
+	//****************************************************************************************************
+
+	namespace
+	{
+		using ashes::getName;
+
+		template< typename EnumT >
+		castor::UInt32StrMap getEnumMapT( EnumT min, EnumT max )
+		{
+			castor::UInt32StrMap result;
+
+			for ( uint32_t i = uint32_t( min ); i <= uint32_t( max ); ++i )
+			{
+				result[getName( EnumT( i ) )] = i;
+			}
+
+			return result;
+		}
+
+		template< typename EnumT >
+		castor::UInt32StrMap getEnumMapT()
+		{
+			return getEnumMapT( EnumT::eMin, EnumT::eMax );
+		}
+	}
+
 	//*********************************************************************************************
 
 	SceneFileContext::SceneFileContext( Path const & path, SceneFileParser * parser )
@@ -122,74 +148,9 @@ namespace castor3d
 		: OwnedBy< Engine >( engine )
 		, FileParser{ engine.getLogger(), uint32_t( CSCNSection::eRoot ) }
 	{
-		m_mapBlendFactors[ashes::getName( VK_BLEND_FACTOR_ZERO )] = uint32_t( VK_BLEND_FACTOR_ZERO );
-		m_mapBlendFactors[ashes::getName( VK_BLEND_FACTOR_ONE )] = uint32_t( VK_BLEND_FACTOR_ONE );
-		m_mapBlendFactors[ashes::getName( VK_BLEND_FACTOR_SRC_COLOR )] = uint32_t( VK_BLEND_FACTOR_SRC_COLOR );
-		m_mapBlendFactors[ashes::getName( VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR )] = uint32_t( VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR );
-		m_mapBlendFactors[ashes::getName( VK_BLEND_FACTOR_DST_COLOR )] = uint32_t( VK_BLEND_FACTOR_DST_COLOR );
-		m_mapBlendFactors[ashes::getName( VK_BLEND_FACTOR_ONE_MINUS_DST_COLOR )] = uint32_t( VK_BLEND_FACTOR_ONE_MINUS_DST_COLOR );
-		m_mapBlendFactors[ashes::getName( VK_BLEND_FACTOR_SRC_ALPHA )] = uint32_t( VK_BLEND_FACTOR_SRC_ALPHA );
-		m_mapBlendFactors[ashes::getName( VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA )] = uint32_t( VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA );
-		m_mapBlendFactors[ashes::getName( VK_BLEND_FACTOR_DST_ALPHA )] = uint32_t( VK_BLEND_FACTOR_DST_ALPHA );
-		m_mapBlendFactors[ashes::getName( VK_BLEND_FACTOR_ONE_MINUS_DST_ALPHA )] = uint32_t( VK_BLEND_FACTOR_ONE_MINUS_DST_ALPHA );
-		m_mapBlendFactors[ashes::getName( VK_BLEND_FACTOR_SRC_ALPHA_SATURATE )] = uint32_t( VK_BLEND_FACTOR_SRC_ALPHA_SATURATE );
-		m_mapBlendFactors[ashes::getName( VK_BLEND_FACTOR_SRC1_COLOR )] = uint32_t( VK_BLEND_FACTOR_SRC1_COLOR );
-		m_mapBlendFactors[ashes::getName( VK_BLEND_FACTOR_ONE_MINUS_SRC1_COLOR )] = uint32_t( VK_BLEND_FACTOR_ONE_MINUS_SRC1_COLOR );
-		m_mapBlendFactors[ashes::getName( VK_BLEND_FACTOR_SRC1_ALPHA )] = uint32_t( VK_BLEND_FACTOR_SRC1_ALPHA );
-		m_mapBlendFactors[ashes::getName( VK_BLEND_FACTOR_ONE_MINUS_SRC1_ALPHA )] = uint32_t( VK_BLEND_FACTOR_ONE_MINUS_SRC1_ALPHA );
-
-		m_mapTypes[ashes::getName( VK_IMAGE_TYPE_1D )] = uint32_t( VK_IMAGE_TYPE_1D );
-		m_mapTypes[ashes::getName( VK_IMAGE_TYPE_2D )] = uint32_t( VK_IMAGE_TYPE_2D );
-		m_mapTypes[ashes::getName( VK_IMAGE_TYPE_3D )] = uint32_t( VK_IMAGE_TYPE_3D );
-
-		m_mapComparisonFuncs[ashes::getName( VK_COMPARE_OP_ALWAYS )] = uint32_t( VK_COMPARE_OP_ALWAYS );
-		m_mapComparisonFuncs[ashes::getName( VK_COMPARE_OP_LESS )] = uint32_t( VK_COMPARE_OP_LESS );
-		m_mapComparisonFuncs[ashes::getName( VK_COMPARE_OP_LESS_OR_EQUAL )] = uint32_t( VK_COMPARE_OP_LESS_OR_EQUAL );
-		m_mapComparisonFuncs[ashes::getName( VK_COMPARE_OP_EQUAL )] = uint32_t( VK_COMPARE_OP_EQUAL );
-		m_mapComparisonFuncs[ashes::getName( VK_COMPARE_OP_NOT_EQUAL )] = uint32_t( VK_COMPARE_OP_NOT_EQUAL );
-		m_mapComparisonFuncs[ashes::getName( VK_COMPARE_OP_GREATER_OR_EQUAL )] = uint32_t( VK_COMPARE_OP_GREATER_OR_EQUAL );
-		m_mapComparisonFuncs[ashes::getName( VK_COMPARE_OP_GREATER )] = uint32_t( VK_COMPARE_OP_GREATER );
-		m_mapComparisonFuncs[ashes::getName( VK_COMPARE_OP_NEVER )] = uint32_t( VK_COMPARE_OP_NEVER );
-
-		m_mapTextureBlendModes[ashes::getName( VK_BLEND_OP_ADD )] = uint32_t( VK_BLEND_OP_ADD );
-		m_mapTextureBlendModes[ashes::getName( VK_BLEND_OP_MIN )] = uint32_t( VK_BLEND_OP_MIN );
-		m_mapTextureBlendModes[ashes::getName( VK_BLEND_OP_MAX )] = uint32_t( VK_BLEND_OP_MAX );
-		m_mapTextureBlendModes[ashes::getName( VK_BLEND_OP_SUBTRACT )] = uint32_t( VK_BLEND_OP_SUBTRACT );
-		m_mapTextureBlendModes[ashes::getName( VK_BLEND_OP_REVERSE_SUBTRACT )] = uint32_t( VK_BLEND_OP_REVERSE_SUBTRACT );
-
-		m_mapPrimitiveTypes[ashes::getName( VK_PRIMITIVE_TOPOLOGY_POINT_LIST )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_POINT_LIST );
-		m_mapPrimitiveTypes[ashes::getName( VK_PRIMITIVE_TOPOLOGY_LINE_LIST )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_LINE_LIST );
-		m_mapPrimitiveTypes[ashes::getName( VK_PRIMITIVE_TOPOLOGY_LINE_LIST_WITH_ADJACENCY )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_LINE_LIST_WITH_ADJACENCY );
-		m_mapPrimitiveTypes[ashes::getName( VK_PRIMITIVE_TOPOLOGY_LINE_STRIP )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_LINE_STRIP );
-		m_mapPrimitiveTypes[ashes::getName( VK_PRIMITIVE_TOPOLOGY_LINE_STRIP_WITH_ADJACENCY )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_LINE_STRIP_WITH_ADJACENCY );
-		m_mapPrimitiveTypes[ashes::getName( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST );
-		m_mapPrimitiveTypes[ashes::getName( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST_WITH_ADJACENCY )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST_WITH_ADJACENCY );
-		m_mapPrimitiveTypes[ashes::getName( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP );
-		m_mapPrimitiveTypes[ashes::getName( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY );
-		m_mapPrimitiveTypes[ashes::getName( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_FAN )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_FAN );
-
 		m_mapPrimitiveOutputTypes[ashes::getName( VK_PRIMITIVE_TOPOLOGY_POINT_LIST )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_POINT_LIST );
 		m_mapPrimitiveOutputTypes[ashes::getName( VK_PRIMITIVE_TOPOLOGY_LINE_STRIP )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_LINE_STRIP );
 		m_mapPrimitiveOutputTypes[ashes::getName( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP );
-
-		m_mapFilters[ashes::getName( VK_FILTER_NEAREST )] = uint32_t( VK_FILTER_NEAREST );
-		m_mapFilters[ashes::getName( VK_FILTER_LINEAR )] = uint32_t( VK_FILTER_LINEAR );
-
-		m_mapMipmapModes[cuT( "none" )] = uint32_t( VK_SAMPLER_MIPMAP_MODE_NEAREST );
-		m_mapMipmapModes[ashes::getName( VK_SAMPLER_MIPMAP_MODE_NEAREST )] = uint32_t( VK_SAMPLER_MIPMAP_MODE_NEAREST );
-		m_mapMipmapModes[ashes::getName( VK_SAMPLER_MIPMAP_MODE_LINEAR )] = uint32_t( VK_SAMPLER_MIPMAP_MODE_LINEAR );
-
-		m_mapWrappingModes[ashes::getName( VK_SAMPLER_ADDRESS_MODE_REPEAT )] = uint32_t( VK_SAMPLER_ADDRESS_MODE_REPEAT );
-		m_mapWrappingModes[ashes::getName( VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT )] = uint32_t( VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT );
-		m_mapWrappingModes[ashes::getName( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER )] = uint32_t( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER );
-		m_mapWrappingModes[ashes::getName( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE )] = uint32_t( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-
-		m_mapBorderColours[ashes::getName( VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK )] = uint32_t( VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK );
-		m_mapBorderColours[ashes::getName( VK_BORDER_COLOR_INT_TRANSPARENT_BLACK )] = uint32_t( VK_BORDER_COLOR_INT_TRANSPARENT_BLACK );
-		m_mapBorderColours[ashes::getName( VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK )] = uint32_t( VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK );
-		m_mapBorderColours[ashes::getName( VK_BORDER_COLOR_INT_OPAQUE_BLACK )] = uint32_t( VK_BORDER_COLOR_INT_OPAQUE_BLACK );
-		m_mapBorderColours[ashes::getName( VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE )] = uint32_t( VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE );
-		m_mapBorderColours[ashes::getName( VK_BORDER_COLOR_INT_OPAQUE_WHITE )] = uint32_t( VK_BORDER_COLOR_INT_OPAQUE_WHITE );
 
 		m_mapShaderTypes[ashes::getName( VK_SHADER_STAGE_VERTEX_BIT )] = uint32_t( VK_SHADER_STAGE_VERTEX_BIT );
 		m_mapShaderTypes[ashes::getName( VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT )] = uint32_t( VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT );
@@ -213,89 +174,39 @@ namespace castor3d
 		m_mapTextureChannels[getName( TextureFlag::eMetalness, MaterialType::eMetallicRoughness )] = uint32_t( TextureFlag::eMetalness );
 		m_mapTextureChannels[getName( TextureFlag::eRoughness, MaterialType::eMetallicRoughness )] = uint32_t( TextureFlag::eRoughness );
 
-		m_mapLightTypes[getName( LightType::ePoint )] = uint32_t( LightType::ePoint );
-		m_mapLightTypes[getName( LightType::eSpot )] = uint32_t( LightType::eSpot );
-		m_mapLightTypes[getName( LightType::eDirectional )] = uint32_t( LightType::eDirectional );
-
-		m_mapViewportModes[getName( ViewportType::eOrtho )] = uint32_t( ViewportType::eOrtho );
-		m_mapViewportModes[getName( ViewportType::ePerspective )] = uint32_t( ViewportType::ePerspective );
-		m_mapViewportModes[getName( ViewportType::eFrustum )] = uint32_t( ViewportType::eFrustum );
-
-		m_mapVariableTypes[getName( ParticleFormat::eInt )] = uint32_t( ParticleFormat::eInt );
-		m_mapVariableTypes[getName( ParticleFormat::eUInt )] = uint32_t( ParticleFormat::eUInt );
-		m_mapVariableTypes[getName( ParticleFormat::eFloat )] = uint32_t( ParticleFormat::eFloat );
-		m_mapVariableTypes[getName( ParticleFormat::eVec2i )] = uint32_t( ParticleFormat::eVec2i );
-		m_mapVariableTypes[getName( ParticleFormat::eVec3i )] = uint32_t( ParticleFormat::eVec3i );
-		m_mapVariableTypes[getName( ParticleFormat::eVec4i )] = uint32_t( ParticleFormat::eVec4i );
-		m_mapVariableTypes[getName( ParticleFormat::eVec2ui )] = uint32_t( ParticleFormat::eVec2ui );
-		m_mapVariableTypes[getName( ParticleFormat::eVec3ui )] = uint32_t( ParticleFormat::eVec3ui );
-		m_mapVariableTypes[getName( ParticleFormat::eVec4ui )] = uint32_t( ParticleFormat::eVec4ui );
-		m_mapVariableTypes[getName( ParticleFormat::eVec2f )] = uint32_t( ParticleFormat::eVec2f );
-		m_mapVariableTypes[getName( ParticleFormat::eVec3f )] = uint32_t( ParticleFormat::eVec3f );
-		m_mapVariableTypes[getName( ParticleFormat::eVec4f )] = uint32_t( ParticleFormat::eVec4f );
-		m_mapVariableTypes[getName( ParticleFormat::eMat2f )] = uint32_t( ParticleFormat::eMat2f );
-		m_mapVariableTypes[getName( ParticleFormat::eMat3f )] = uint32_t( ParticleFormat::eMat3f );
-		m_mapVariableTypes[getName( ParticleFormat::eMat4f )] = uint32_t( ParticleFormat::eMat4f );
-
-		m_mapMovables[getName( MovableType::eCamera )] = uint32_t( MovableType::eCamera );
-		m_mapMovables[getName( MovableType::eLight )] = uint32_t( MovableType::eLight );
-		m_mapMovables[getName( MovableType::eGeometry )] = uint32_t( MovableType::eGeometry );
-		m_mapMovables[getName( MovableType::eBillboard )] = uint32_t( MovableType::eBillboard );
-		m_mapMovables[getName( MovableType::eParticleEmitter )] = uint32_t( MovableType::eParticleEmitter );
-
-		m_mapBlendModes[getName( BlendMode::eNoBlend )] = uint32_t( BlendMode::eNoBlend );
-		m_mapBlendModes[getName( BlendMode::eAdditive )] = uint32_t( BlendMode::eAdditive );
-		m_mapBlendModes[getName( BlendMode::eMultiplicative )] = uint32_t( BlendMode::eMultiplicative );
-		m_mapBlendModes[getName( BlendMode::eInterpolative )] = uint32_t( BlendMode::eInterpolative );
-		m_mapBlendModes[getName( BlendMode::eABuffer )] = uint32_t( BlendMode::eABuffer );
-		m_mapBlendModes[getName( BlendMode::eDepthPeeling )] = uint32_t( BlendMode::eDepthPeeling );
-
-		m_fogTypes[getName( FogType::eLinear )] = uint32_t( FogType::eLinear );
-		m_fogTypes[getName( FogType::eExponential )] = uint32_t( FogType::eExponential );
-		m_fogTypes[getName( FogType::eSquaredExponential )] = uint32_t( FogType::eSquaredExponential );
-
 		m_mapComparisonModes[cuT( "none" )] = uint32_t( false );
 		m_mapComparisonModes[cuT( "ref_to_texture" )] = uint32_t( true );
 
-		m_mapBillboardTypes[getName( BillboardType::eCylindrical )] = uint32_t( BillboardType::eCylindrical );
-		m_mapBillboardTypes[getName( BillboardType::eSpherical )] = uint32_t( BillboardType::eSpherical );
+		m_mapMipmapModes[cuT( "none" )] = uint32_t( VK_SAMPLER_MIPMAP_MODE_NEAREST );
 
-		m_mapBillboardSizes[getName( BillboardSize::eDynamic )] = uint32_t( BillboardSize::eDynamic );
-		m_mapBillboardSizes[getName( BillboardSize::eFixed )] = uint32_t( BillboardSize::eFixed );
+		m_mapBlendFactors = getEnumMapT( VK_BLEND_FACTOR_ZERO, VK_BLEND_FACTOR_ONE_MINUS_SRC1_ALPHA );
+		m_mapTypes = getEnumMapT( VK_IMAGE_TYPE_1D, VK_IMAGE_TYPE_3D );
+		m_mapComparisonFuncs = getEnumMapT( VK_COMPARE_OP_NEVER, VK_COMPARE_OP_ALWAYS );
+		m_mapTextureBlendModes = getEnumMapT( VK_BLEND_OP_ADD, VK_BLEND_OP_MAX );
+		m_mapPrimitiveTypes = getEnumMapT( VK_PRIMITIVE_TOPOLOGY_POINT_LIST, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY );
+		m_mapFilters = getEnumMapT( VK_FILTER_NEAREST, VK_FILTER_LINEAR );
+		m_mapMipmapModes = getEnumMapT( VK_SAMPLER_MIPMAP_MODE_NEAREST, VK_SAMPLER_MIPMAP_MODE_LINEAR );
+		m_mapWrappingModes = getEnumMapT( VK_SAMPLER_ADDRESS_MODE_REPEAT, VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE );
+		m_mapBorderColours = getEnumMapT( VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK, VK_BORDER_COLOR_INT_OPAQUE_WHITE );
 
-		m_mapMaterialTypes[getName( MaterialType::ePhong )] = uint32_t( MaterialType::ePhong );
-		m_mapMaterialTypes[getName( MaterialType::eMetallicRoughness )] = uint32_t( MaterialType::eMetallicRoughness );
-		m_mapMaterialTypes[getName( MaterialType::eSpecularGlossiness )] = uint32_t( MaterialType::eSpecularGlossiness );
-
-		m_mapShadowFilters[getName( ShadowType::eRaw )] = uint32_t( ShadowType::eRaw );
-		m_mapShadowFilters[getName( ShadowType::ePCF )] = uint32_t( ShadowType::ePCF );
-		m_mapShadowFilters[getName( ShadowType::eVariance )] = uint32_t( ShadowType::eVariance );
-
-		m_mapTextWrappingModes[getName( TextWrappingMode::eNone )] = uint32_t( TextWrappingMode::eNone );
-		m_mapTextWrappingModes[getName( TextWrappingMode::eBreak )] = uint32_t( TextWrappingMode::eBreak );
-		m_mapTextWrappingModes[getName( TextWrappingMode::eBreakWords )] = uint32_t( TextWrappingMode::eBreakWords );
-
-		m_mapBorderPositions[getName( BorderPosition::eInternal )] = uint32_t( BorderPosition::eInternal );
-		m_mapBorderPositions[getName( BorderPosition::eMiddle )] = uint32_t( BorderPosition::eMiddle );
-		m_mapBorderPositions[getName( BorderPosition::eExternal )] = uint32_t( BorderPosition::eExternal );
-
-		m_mapVerticalAligns[getName( VAlign::eTop )] = uint32_t( VAlign::eTop );
-		m_mapVerticalAligns[getName( VAlign::eCenter )] = uint32_t( VAlign::eCenter );
-		m_mapVerticalAligns[getName( VAlign::eBottom )] = uint32_t( VAlign::eBottom );
-
-		m_mapHorizontalAligns[getName( HAlign::eLeft )] = uint32_t( HAlign::eLeft );
-		m_mapHorizontalAligns[getName( HAlign::eCenter )] = uint32_t( HAlign::eCenter );
-		m_mapHorizontalAligns[getName( HAlign::eRight )] = uint32_t( HAlign::eRight );
-
-		m_mapTextTexturingModes[getName( TextTexturingMode::eLetter )] = uint32_t( TextTexturingMode::eLetter );
-		m_mapTextTexturingModes[getName( TextTexturingMode::eText )] = uint32_t( TextTexturingMode::eText );
-
-		m_mapLineSpacingModes[getName( TextLineSpacingMode::eOwnHeight )] = uint32_t( TextLineSpacingMode::eOwnHeight );
-		m_mapLineSpacingModes[getName( TextLineSpacingMode::eMaxLineHeight )] = uint32_t( TextLineSpacingMode::eMaxLineHeight );
-		m_mapLineSpacingModes[getName( TextLineSpacingMode::eMaxFontHeight )] = uint32_t( TextLineSpacingMode::eMaxFontHeight );
-
-		m_mapParallaxOcclusionModes[getName( ParallaxOcclusionMode::eOne )] = uint32_t( ParallaxOcclusionMode::eOne );
-		m_mapParallaxOcclusionModes[getName( ParallaxOcclusionMode::eRepeat )] = uint32_t( ParallaxOcclusionMode::eRepeat );
+		m_mapLightTypes = getEnumMapT< LightType >();
+		m_mapViewportModes = getEnumMapT< ViewportType >();
+		m_mapVariableTypes = getEnumMapT< ParticleFormat >();
+		m_mapMovables = getEnumMapT< MovableType >();
+		m_mapBlendModes = getEnumMapT< BlendMode >();
+		m_fogTypes = getEnumMapT< FogType >();
+		m_mapBillboardTypes = getEnumMapT< BillboardType >();
+		m_mapBillboardSizes = getEnumMapT< BillboardSize >();
+		m_mapMaterialTypes = getEnumMapT< MaterialType >();
+		m_mapTextWrappingModes = getEnumMapT< TextWrappingMode >();
+		m_mapBorderPositions = getEnumMapT< BorderPosition >();
+		m_mapVerticalAligns = getEnumMapT< VAlign >();
+		m_mapHorizontalAligns = getEnumMapT< HAlign >();
+		m_mapTextTexturingModes = getEnumMapT< TextTexturingMode >();
+		m_mapLineSpacingModes = getEnumMapT< TextLineSpacingMode >();
+		m_mapParallaxOcclusionModes = getEnumMapT< ParallaxOcclusionMode >();
+		m_mapShadowFilters = getEnumMapT< ShadowType >();
+		m_mapGlobalIlluminations = getEnumMapT< GlobalIlluminationType >();
 	}
 
 	SceneFileParser::~SceneFileParser()
@@ -387,6 +298,7 @@ namespace castor3d
 		addParser( uint32_t( CSCNSection::eRoot ), cuT( "window" ), parserRootWindow, { makeParameter< ParameterType::eName >() } );
 		addParser( uint32_t( CSCNSection::eRoot ), cuT( "materials" ), parserRootMaterials, { makeParameter< ParameterType::eCheckedText >( m_mapMaterialTypes ) } );
 		addParser( uint32_t( CSCNSection::eRoot ), cuT( "include" ), parserInclude, { makeParameter< ParameterType::ePath >() } );
+		addParser( uint32_t( CSCNSection::eRoot ), cuT( "lpv_grid_size" ), parserRootLpvGridSize, { makeParameter< ParameterType::eUInt32 >() } );
 
 		addParser( uint32_t( CSCNSection::eWindow ), cuT( "render_target" ), parserWindowRenderTarget );
 		addParser( uint32_t( CSCNSection::eWindow ), cuT( "vsync" ), parserWindowVSync, { makeParameter< ParameterType::eBool >() } );
@@ -464,23 +376,22 @@ namespace castor3d
 
 		addParser( uint32_t( CSCNSection::eShadows ), cuT( "producer" ), parserShadowsProducer, { makeParameter< ParameterType::eBool >() } );
 		addParser( uint32_t( CSCNSection::eShadows ), cuT( "filter" ), parserShadowsFilter, { makeParameter< ParameterType::eCheckedText >( m_mapShadowFilters ) } );
+		addParser( uint32_t( CSCNSection::eShadows ), cuT( "global_illumination" ), parserShadowsGlobalIllumination, { makeParameter< ParameterType::eCheckedText >( m_mapGlobalIlluminations ) } );
 		addParser( uint32_t( CSCNSection::eShadows ), cuT( "min_offset" ), parserShadowsMinOffset, { makeParameter< ParameterType::eFloat >() } );
 		addParser( uint32_t( CSCNSection::eShadows ), cuT( "max_slope_offset" ), parserShadowsMaxSlopeOffset, { makeParameter< ParameterType::eFloat >() } );
 		addParser( uint32_t( CSCNSection::eShadows ), cuT( "variance_max" ), parserShadowsVarianceMax, { makeParameter< ParameterType::eFloat >() } );
 		addParser( uint32_t( CSCNSection::eShadows ), cuT( "variance_bias" ), parserShadowsVarianceBias, { makeParameter< ParameterType::eFloat >() } );
 		addParser( uint32_t( CSCNSection::eShadows ), cuT( "volumetric_steps" ), parserShadowsVolumetricSteps, { makeParameter< ParameterType::eUInt32 >() } );
 		addParser( uint32_t( CSCNSection::eShadows ), cuT( "volumetric_scattering" ), parserShadowsVolumetricScatteringFactor, { makeParameter< ParameterType::eFloat >() } );
-		addParser( uint32_t( CSCNSection::eShadows ), cuT( "rsm" ), parserShadowsRsm );
-		addParser( uint32_t( CSCNSection::eShadows ), cuT( "lpv" ), parserShadowsLpv );
-		addParser( uint32_t( CSCNSection::eShadows ), cuT( "layered_lpv" ), parserShadowsLayeredLpv );
+		addParser( uint32_t( CSCNSection::eShadows ), cuT( "rsm_config" ), parserShadowsRsmConfig );
+		addParser( uint32_t( CSCNSection::eShadows ), cuT( "lpv_config" ), parserShadowsLpvConfig );
 
 		addParser( uint32_t( CSCNSection::eRsm ), cuT( "intensity" ), parserRsmIntensity, { makeParameter< ParameterType::eFloat >() } );
 		addParser( uint32_t( CSCNSection::eRsm ), cuT( "max_radius" ), parserRsmMaxRadius, { makeParameter< ParameterType::eFloat >() } );
 		addParser( uint32_t( CSCNSection::eRsm ), cuT( "sample_count" ), parserRsmSampleCount, { makeParameter< ParameterType::eUInt32 >() } );
 
-		addParser( uint32_t( CSCNSection::eLpv ), cuT( "intensity" ), parserRsmIntensity, { makeParameter< ParameterType::eFloat >() } );
-		addParser( uint32_t( CSCNSection::eLpv ), cuT( "max_radius" ), parserRsmMaxRadius, { makeParameter< ParameterType::eFloat >() } );
-		addParser( uint32_t( CSCNSection::eLpv ), cuT( "sample_count" ), parserRsmSampleCount, { makeParameter< ParameterType::eUInt32 >() } );
+		addParser( uint32_t( CSCNSection::eLpv ), cuT( "indirect_attenuation" ), parserLpvIndirectAttenuation, { makeParameter< ParameterType::eFloat >() } );
+		addParser( uint32_t( CSCNSection::eLpv ), cuT( "texel_area_modifier" ), parserLpvTexelAreaModifier, { makeParameter< ParameterType::eFloat >() } );
 
 		addParser( uint32_t( CSCNSection::eNode ), cuT( "parent" ), parserNodeParent, { makeParameter< ParameterType::eName >() } );
 		addParser( uint32_t( CSCNSection::eNode ), cuT( "position" ), parserNodePosition, { makeParameter< ParameterType::ePoint3F >() } );
@@ -703,6 +614,8 @@ namespace castor3d
 		addParser( uint32_t( CSCNSection::eSsao ), cuT( "blur_high_quality" ), parserSsaoBlurHighQuality, { makeParameter< ParameterType::eBool >() } );
 		addParser( uint32_t( CSCNSection::eSsao ), cuT( "blur_step_size" ), parserSsaoBlurStepSize, { makeParameter< ParameterType::eUInt32 >() } );
 		addParser( uint32_t( CSCNSection::eSsao ), cuT( "blur_radius" ), parserSsaoBlurRadius, { makeParameter< ParameterType::eUInt32 >() } );
+		addParser( uint32_t( CSCNSection::eSsao ), cuT( "bend_step_count" ), parserSsaoBendStepCount, { makeParameter< ParameterType::eUInt32 >( makeRange( 1u, 60u ) ) } );
+		addParser( uint32_t( CSCNSection::eSsao ), cuT( "bend_step_size" ), parserSsaoBendStepSize, { makeParameter< ParameterType::eFloat >() } );
 		addParser( uint32_t( CSCNSection::eSsao ), cuT( "}" ), parserSsaoEnd );
 
 		addParser( uint32_t( CSCNSection::eSubsurfaceScattering ), cuT( "strength" ), parserSubsurfaceScatteringStrength, { makeParameter< ParameterType::eFloat >() } );

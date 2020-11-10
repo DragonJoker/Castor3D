@@ -39,8 +39,7 @@ namespace castor3d
 			CU_ScopedEnumBounds( eNoShadow ),
 		};
 		static_assert( uint32_t( Type::eCount ) == uint32_t( GlobalIlluminationType::eCount ) + 1u );
-		using DelayedLightPass = castor::DelayedInitialiserT< LightPass >;
-		using TypeLightPasses = std::array< DelayedLightPass, size_t( LightType::eCount ) >;
+		using TypeLightPasses = std::array< LightPassUPtr, size_t( LightType::eCount ) >;
 		using LightPasses = std::array< TypeLightPasses, size_t( Type::eCount ) >;
 
 	public:
@@ -84,6 +83,20 @@ namespace castor3d
 		~LightingPass();
 		/**
 		 *\~english
+		 *\brief		Updates the lighting pass, CPU wise.
+		 *\~french
+		 *\brief		Met à jour la passe d'éclairage, a niveau CPU.
+		 */
+		void update( CpuUpdater & updater );
+		/**
+		 *\~english
+		 *\brief		Updates the lighting pass, GPU wise.
+		 *\~french
+		 *\brief		Met à jour la passe d'éclairage, a niveau GPU.
+		 */
+		void update( GpuUpdater & updater );
+		/**
+		 *\~english
 		 *\brief		Renders the light passes on currently bound framebuffer.
 		 *\param[in]	scene	The scene.
 		 *\param[in]	camera	The viewing camera.
@@ -116,6 +129,8 @@ namespace castor3d
 		}
 
 	private:
+		void doUpdateLightPasses( GpuUpdater & updater
+			, LightType lightType );
 		ashes::Semaphore const & doRenderLights( Scene const & scene
 			, Camera const & camera
 			, LightType type
@@ -129,6 +144,13 @@ namespace castor3d
 	private:
 		Engine & m_engine;
 		RenderDevice const & m_device;
+		OpaquePassResult const & m_gpResult;
+		ShadowMapResult const & m_smDirectionalResult;
+		ShadowMapResult const & m_smPointResult;
+		ShadowMapResult const & m_smSpotResult;
+		ashes::ImageView const & m_depthView;
+		SceneUbo & m_sceneUbo;
+		GpInfoUbo const & m_gpInfoUbo;
 		castor::Size const m_size;
 		LightPassResult m_result;
 		LightPasses m_lightPasses;

@@ -288,6 +288,7 @@ namespace castor3d
 		UInt32StrMap m_mapBillboardSizes;
 		UInt32StrMap m_mapMaterialTypes;
 		UInt32StrMap m_mapShadowFilters;
+		UInt32StrMap m_mapGlobalIlluminations;
 	};
 }
 

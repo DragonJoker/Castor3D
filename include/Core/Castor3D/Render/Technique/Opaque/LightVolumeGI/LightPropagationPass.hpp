@@ -56,7 +56,8 @@ namespace castor3d
 			, castor::String const & prefix
 			, castor::String const & suffix
 			, bool occlusion
-			, uint32_t gridSize );
+			, uint32_t gridSize
+			, BlendMode blendMode );
 		/**
 		*\~english
 		*\brief

@@ -104,6 +104,17 @@ namespace castor
 	{
 		return !operator==( lhs, rhs );
 	}
+
+	template< typename T >
+	GroupChangeTracked< T > makeChangeTracked( bool & dirty, T const & value )
+	{
+		return GroupChangeTracked< T >{ dirty, value };
+	}
+
+	template< typename T >
+	struct IsChangeTrackedT< GroupChangeTracked< T > > : std::true_type
+	{
+	};
 }
 
 #endif

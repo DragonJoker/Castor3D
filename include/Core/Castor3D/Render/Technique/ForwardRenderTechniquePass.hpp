@@ -108,11 +108,6 @@ namespace castor3d
 
 	protected:
 		/**
-		 *\copydoc		castor3d::RenderPass::doUpdateUbos
-		 */
-		C3D_API void doUpdateUbos( Camera const & camera
-			, castor::Point2f const & jitter )override;
-		/**
 		 *\copydoc		castor3d::RenderTechniquePass::doCleanup
 		 */
 		C3D_API void doCleanup( RenderDevice const & device )override;

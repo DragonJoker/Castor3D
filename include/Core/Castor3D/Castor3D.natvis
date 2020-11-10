@@ -21,4 +21,12 @@
     </Expand>
   </Type>
 
+  <Type Name="castor3d::Frustum">
+	<DisplayString>{m_planes}</DisplayString>
+	  <Expand>
+	  <Item Name="viewport">m_viewport</Item>
+	  <Item Name="planes">m_planes</Item>
+	  </Expand>
+  </Type>
+
 </AutoVisualizer>

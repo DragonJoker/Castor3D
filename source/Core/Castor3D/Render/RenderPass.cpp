@@ -29,6 +29,7 @@
 #include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp"
 #include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelInstancesUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelUbo.hpp"
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
@@ -51,7 +52,7 @@ namespace castor3d
 	namespace
 	{
 		template< typename MapType, typename SubFuncType >
-		inline void doSubTraverseNodes( MapType & nodes
+		inline void subTraverseNodes( MapType & nodes
 			, SubFuncType subFunction )
 		{
 			for ( auto & itPipelines : nodes )
@@ -64,10 +65,10 @@ namespace castor3d
 		}
 
 		template< typename MapType, typename FuncType >
-		inline void doTraverseNodes( MapType & nodes
+		inline void traverseNodes( MapType & nodes
 			, FuncType function )
 		{
-			doSubTraverseNodes( nodes
+			subTraverseNodes( nodes
 				, [&function]( auto & first
 					, auto & itPass )
 				{
@@ -82,6 +83,22 @@ namespace castor3d
 				} );
 		}
 
+		template< typename CulledT >
+		void updateInstancesUbos( std::map< size_t, UniformBufferOffsetT< ModelInstancesUboConfiguration > > & buffers
+			, SceneCuller::CulledInstancesPtrT< CulledT > const & nodes
+			, uint32_t instanceMult )
+		{
+			auto instancesIt = nodes.instances.begin();
+
+			for ( auto & node : nodes.objects )
+			{
+				auto instances = *instancesIt;
+				auto it = buffers.find( hash( *node, instanceMult ) );
+				CU_Require( it != buffers.end() );
+				cpuUpdate( it->second, *instances );
+				++instancesIt;
+			}
+		}
 	}
 
 	//*********************************************************************************************
@@ -90,37 +107,25 @@ namespace castor3d
 		, String const & name
 		, Engine & engine
 		, MatrixUbo & matrixUbo
-		, SceneCuller & culler )
-		: OwnedBy< Engine >{ engine }
-		, Named{ name }
-		, m_renderSystem{ *engine.getRenderSystem() }
-		, m_matrixUbo{ matrixUbo }
-		, m_culler{ culler }
-		, m_category{ category }
-		, m_oit{ true }
-		, m_renderQueue{ *this, true, nullptr }
-		, m_opaque{ true }
-		, m_sceneUbo{ engine }
-	{
-	}
-
-	RenderPass::RenderPass( String const & category
-		, String const & name
-		, Engine & engine
-		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
-		, bool oit )
+		, bool opaque
+		, bool oit
+		, SceneNode const * ignored
+		, uint32_t instanceMult )
 		: OwnedBy< Engine >{ engine }
 		, Named{ name }
 		, m_renderSystem{ *engine.getRenderSystem() }
 		, m_matrixUbo{ matrixUbo }
 		, m_culler{ culler }
+		, m_renderQueue{ *this, opaque, ignored }
 		, m_category{ category }
 		, m_oit{ oit }
-		, m_renderQueue{ *this, false, nullptr }
-		, m_opaque{ false }
+		, m_opaque{ opaque }
 		, m_sceneUbo{ engine }
+		, m_instanceMult{ instanceMult }
 	{
+		m_culler.getScene().getGeometryCache().registerPass( *this );
+		m_culler.getScene().getBillboardListCache().registerPass( *this );
 	}
 
 	RenderPass::RenderPass( String const & category
@@ -128,17 +133,8 @@ namespace castor3d
 		, Engine & engine
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
-		, SceneNode const * ignored )
-		: OwnedBy< Engine >{ engine }
-		, Named{ name }
-		, m_renderSystem{ *engine.getRenderSystem() }
-		, m_matrixUbo{ matrixUbo }
-		, m_culler{ culler }
-		, m_category{ category }
-		, m_oit{ true }
-		, m_renderQueue{ *this, true, ignored }
-		, m_opaque{ true }
-		, m_sceneUbo{ engine }
+		, uint32_t instanceMult )
+		: RenderPass{ category, name, engine, matrixUbo, culler, true, true, nullptr, instanceMult }
 	{
 	}
 
@@ -148,17 +144,31 @@ namespace castor3d
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, bool oit
-		, SceneNode const * ignored )
-		: OwnedBy< Engine >{ engine }
-		, Named{ name }
-		, m_renderSystem{ *engine.getRenderSystem() }
-		, m_matrixUbo{ matrixUbo }
-		, m_culler{ culler }
-		, m_category{ category }
-		, m_oit{ oit }
-		, m_renderQueue{ *this, false, ignored }
-		, m_opaque{ false }
-		, m_sceneUbo{ engine }
+		, uint32_t instanceMult )
+		: RenderPass{ category, name, engine, matrixUbo, culler, false, oit, nullptr, instanceMult }
+	{
+	}
+
+	RenderPass::RenderPass( String const & category
+		, String const & name
+		, Engine & engine
+		, MatrixUbo & matrixUbo
+		, SceneCuller & culler
+		, SceneNode const * ignored
+		, uint32_t instanceMult )
+		: RenderPass{ category, name, engine, matrixUbo, culler, true, true, ignored, instanceMult }
+	{
+	}
+
+	RenderPass::RenderPass( String const & category
+		, String const & name
+		, Engine & engine
+		, MatrixUbo & matrixUbo
+		, SceneCuller & culler
+		, bool oit
+		, SceneNode const * ignored
+		, uint32_t instanceMult )
+		: RenderPass{ category, name, engine, matrixUbo, culler, false, oit, ignored, instanceMult }
 	{
 	}
 
@@ -189,8 +199,8 @@ namespace castor3d
 	void RenderPass::update( CpuUpdater & updater )
 	{
 		doUpdate( *updater.queues );
-		doUpdateUbos( *updater.camera
-			, updater.jitter );
+		doUpdateUbos( updater );
+		m_isDirty = false;
 	}
 
 	ShaderPtr RenderPass::getVertexShaderSource( PipelineFlags const & flags )const
@@ -366,10 +376,18 @@ namespace castor3d
 		, Geometry & primitive
 		, AnimatedSkeleton & skeleton )
 	{
-		auto & buffers = submesh.getGeometryBuffers( pass.getOwner()->shared_from_this() );
+		auto & buffers = submesh.getGeometryBuffers( pass.getOwner()->shared_from_this()
+			, getInstanceMult() );
 		auto & scene = *primitive.getScene();
-		auto geometryEntry = scene.getGeometryCache().getUbos( primitive, submesh, pass );
+		auto geometryEntry = scene.getGeometryCache().getUbos( primitive
+			, submesh
+			, pass
+			, getInstanceMult() );
 		auto animationEntry = scene.getAnimatedObjectGroupCache().getUbos( skeleton );
+		auto it = m_modelsInstances.emplace( geometryEntry.hash
+			, geometryEntry.modelInstancesUbo ).first;
+		it->second = geometryEntry.modelInstancesUbo;
+		m_isDirty = true;
 
 		return SkinningRenderNode
 		{
@@ -379,6 +397,7 @@ namespace castor3d
 			geometryEntry.modelUbo,
 			geometryEntry.pickingUbo,
 			geometryEntry.texturesUbo,
+			geometryEntry.modelInstancesUbo,
 			buffers,
 			*primitive.getParent(),
 			submesh,
@@ -394,10 +413,18 @@ namespace castor3d
 		, Geometry & primitive
 		, AnimatedMesh & mesh )
 	{
-		auto & buffers = submesh.getGeometryBuffers( pass.getOwner()->shared_from_this() );
+		auto & buffers = submesh.getGeometryBuffers( pass.getOwner()->shared_from_this()
+			, getInstanceMult() );
 		auto & scene = *primitive.getScene();
-		auto geometryEntry = scene.getGeometryCache().getUbos( primitive, submesh, pass );
+		auto geometryEntry = scene.getGeometryCache().getUbos( primitive
+			, submesh
+			, pass
+			, getInstanceMult() );
 		auto animationEntry = scene.getAnimatedObjectGroupCache().getUbos( mesh );
+		auto it = m_modelsInstances.emplace( geometryEntry.hash
+			, geometryEntry.modelInstancesUbo ).first;
+		it->second = geometryEntry.modelInstancesUbo;
+		m_isDirty = true;
 
 		return MorphingRenderNode
 		{
@@ -407,6 +434,7 @@ namespace castor3d
 			geometryEntry.modelUbo,
 			geometryEntry.pickingUbo,
 			geometryEntry.texturesUbo,
+			geometryEntry.modelInstancesUbo,
 			buffers,
 			*primitive.getParent(),
 			submesh,
@@ -421,18 +449,27 @@ namespace castor3d
 		, Submesh & submesh
 		, Geometry & primitive )
 	{
-		auto & buffers = submesh.getGeometryBuffers( pass.getOwner()->shared_from_this() );
+		auto & buffers = submesh.getGeometryBuffers( pass.getOwner()->shared_from_this()
+			, getInstanceMult() );
 		auto & scene = *primitive.getScene();
-		auto entry = scene.getGeometryCache().getUbos( primitive, submesh, pass );
+		auto geometryEntry = scene.getGeometryCache().getUbos( primitive
+			, submesh
+			, pass
+			, getInstanceMult() );
+		auto it = m_modelsInstances.emplace( geometryEntry.hash
+			, geometryEntry.modelInstancesUbo ).first;
+		it->second = geometryEntry.modelInstancesUbo;
+		m_isDirty = true;
 
 		return StaticRenderNode
 		{
 			pipeline,
 			doCreatePassRenderNode( pass, pipeline ),
-			entry.modelMatrixUbo,
-			entry.modelUbo,
-			entry.pickingUbo,
-			entry.texturesUbo,
+			geometryEntry.modelMatrixUbo,
+			geometryEntry.modelUbo,
+			geometryEntry.pickingUbo,
+			geometryEntry.texturesUbo,
+			geometryEntry.modelInstancesUbo,
 			buffers,
 			*primitive.getParent(),
 			submesh,
@@ -446,17 +483,24 @@ namespace castor3d
 	{
 		auto & buffers = billboard.getGeometryBuffers();
 		auto & scene = billboard.getParentScene();
-		auto entry = scene.getBillboardListCache().getUboPools().getUbos( billboard, pass );
+		auto billboardEntry = scene.getBillboardListCache().getUboPools().getUbos( billboard
+			, pass
+			, getInstanceMult() );
+		auto it = m_modelsInstances.emplace( billboardEntry.hash
+			, billboardEntry.modelInstancesUbo ).first;
+		it->second = billboardEntry.modelInstancesUbo;
+		m_isDirty = true;
 
 		return BillboardRenderNode
 		{
 			pipeline,
 			doCreatePassRenderNode( pass, pipeline ),
-			entry.modelMatrixUbo,
-			entry.modelUbo,
-			entry.pickingUbo,
-			entry.billboardUbo,
-			entry.texturesUbo,
+			billboardEntry.modelMatrixUbo,
+			billboardEntry.modelUbo,
+			billboardEntry.pickingUbo,
+			billboardEntry.billboardUbo,
+			billboardEntry.texturesUbo,
+			billboardEntry.modelInstancesUbo,
 			buffers,
 			*billboard.getNode(),
 			billboard
@@ -482,30 +526,33 @@ namespace castor3d
 		switch ( colourBlendMode )
 		{
 		case BlendMode::eNoBlend:
+			attach.colorBlendOp = VK_BLEND_OP_ADD;
 			attach.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
 			attach.dstColorBlendFactor = VK_BLEND_FACTOR_ZERO;
 			break;
 
 		case BlendMode::eAdditive:
-			attach.blendEnable = true;
+			attach.blendEnable = VK_TRUE;
+			attach.colorBlendOp = VK_BLEND_OP_ADD;
 			attach.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
 			attach.dstColorBlendFactor = VK_BLEND_FACTOR_ONE;
 			break;
 
 		case BlendMode::eMultiplicative:
-			attach.blendEnable = true;
+			attach.blendEnable = VK_TRUE;
+			attach.colorBlendOp = VK_BLEND_OP_ADD;
 			attach.srcColorBlendFactor = VK_BLEND_FACTOR_ZERO;
 			attach.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR;
 			break;
 
 		case BlendMode::eInterpolative:
-			attach.blendEnable = true;
+			attach.blendEnable = VK_TRUE;
 			attach.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_COLOR;
 			attach.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR;
 			break;
 
 		default:
-			attach.blendEnable = true;
+			attach.blendEnable = VK_TRUE;
 			attach.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_COLOR;
 			attach.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR;
 			break;
@@ -514,18 +561,21 @@ namespace castor3d
 		switch ( alphaBlendMode )
 		{
 		case BlendMode::eNoBlend:
+			attach.alphaBlendOp = VK_BLEND_OP_ADD;
 			attach.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
 			attach.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
 			break;
 
 		case BlendMode::eAdditive:
-			attach.blendEnable = true;
+			attach.blendEnable = VK_TRUE;
+			attach.alphaBlendOp = VK_BLEND_OP_ADD;
 			attach.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
 			attach.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
 			break;
 
 		case BlendMode::eMultiplicative:
-			attach.blendEnable = true;
+			attach.blendEnable = VK_TRUE;
+			attach.alphaBlendOp = VK_BLEND_OP_ADD;
 			attach.srcAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
 			attach.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
 			attach.srcColorBlendFactor = VK_BLEND_FACTOR_ZERO;
@@ -533,7 +583,8 @@ namespace castor3d
 			break;
 
 		case BlendMode::eInterpolative:
-			attach.blendEnable = true;
+			attach.blendEnable = VK_TRUE;
+			attach.alphaBlendOp = VK_BLEND_OP_ADD;
 			attach.srcAlphaBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
 			attach.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
 			attach.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
@@ -541,7 +592,8 @@ namespace castor3d
 			break;
 
 		default:
-			attach.blendEnable = true;
+			attach.blendEnable = VK_TRUE;
+			attach.alphaBlendOp = VK_BLEND_OP_ADD;
 			attach.srcAlphaBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
 			attach.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
 			attach.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
@@ -600,6 +652,13 @@ namespace castor3d
 			{
 				node.modelMatrixUbo.createSizedBinding( uboDescriptorSet
 					, layout.getBinding( ModelMatrixUbo::BindingPoint ) );
+			}
+
+			if ( checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eInstanceMult ) )
+			{
+				CU_Require( node.modelInstancesUbo );
+				node.modelInstancesUbo.createSizedBinding( uboDescriptorSet
+					, layout.getBinding( ModelInstancesUbo::BindingPoint ) );
 			}
 
 			if ( !node.pipeline.getFlags().textures.empty() )
@@ -769,7 +828,7 @@ namespace castor3d
 			, MapType & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )
 		{
-			doSubTraverseNodes( nodes
+			subTraverseNodes( nodes
 				, [&renderPass, &descriptorPool, &shadowMaps]( Pass & pass1
 					, auto & itPass )
 				{
@@ -829,33 +888,11 @@ namespace castor3d
 	namespace
 	{
 		template< typename NodeT >
-		uint32_t copyNodesMatrices( std::vector< NodeT > const & renderNodes
-			, std::vector< InstantiationData > & matrixBuffer )
-		{
-			auto const count = std::min( uint32_t( matrixBuffer.size() )
-				, uint32_t( renderNodes.size() ) );
-			auto buffer = matrixBuffer.data();
-			auto it = renderNodes.begin();
-			auto i = 0u;
-
-			while ( i < count )
-			{
-				auto & node = *it;
-				buffer->m_matrix = node.sceneNode.getDerivedTransformationMatrix();
-				buffer->m_material = node.passNode.pass.getId();
-				++buffer;
-				++i;
-				++it;
-			}
-
-			return count;
-		}
-
-		template< typename NodeT >
 		uint32_t copyNodesMatrices( std::vector< NodeT * > const & renderNodes
-			, std::vector< InstantiationData > & matrixBuffer )
+			, std::vector< InstantiationData > & matrixBuffer
+			, uint32_t instanceMult )
 		{
-			auto const count = std::min( uint32_t( matrixBuffer.size() )
+			auto const count = std::min( uint32_t( matrixBuffer.size() / instanceMult )
 				, uint32_t( renderNodes.size() ) );
 			auto buffer = matrixBuffer.data();
 			auto it = renderNodes.begin();
@@ -864,9 +901,14 @@ namespace castor3d
 			while ( i < count )
 			{
 				auto & node = *it;
-				buffer->m_matrix = node->sceneNode.getDerivedTransformationMatrix();
-				buffer->m_material = node->passNode.pass.getId();
-				++buffer;
+
+				for ( auto inst = 0u; inst < instanceMult; ++inst )
+				{
+					buffer->m_matrix = node->sceneNode.getDerivedTransformationMatrix();
+					buffer->m_material = node->passNode.pass.getId();
+					++buffer;
+				}
+
 				++i;
 				++it;
 			}
@@ -878,7 +920,7 @@ namespace castor3d
 	uint32_t RenderPass::doCopyNodesMatrices( StaticRenderNodePtrArray const & renderNodes
 		, std::vector< InstantiationData > & matrixBuffer )const
 	{
-		return copyNodesMatrices( renderNodes, matrixBuffer );
+		return copyNodesMatrices( renderNodes, matrixBuffer, m_instanceMult );
 	}
 
 	uint32_t RenderPass::doCopyNodesMatrices( StaticRenderNodePtrArray const & renderNodes
@@ -893,14 +935,14 @@ namespace castor3d
 	uint32_t RenderPass::doCopyNodesMatrices( SkinningRenderNodePtrArray const & renderNodes
 		, std::vector< InstantiationData > & matrixBuffer )const
 	{
-		return copyNodesMatrices( renderNodes, matrixBuffer );
+		return copyNodesMatrices( renderNodes, matrixBuffer, m_instanceMult );
 	}
 
 	uint32_t RenderPass::doCopyNodesMatrices( SkinningRenderNodePtrArray const & renderNodes
 		, std::vector< InstantiationData > & matrixBuffer
 		, RenderInfo & info )const
 	{
-		auto count = this->doCopyNodesMatrices( renderNodes, matrixBuffer );
+		auto count = doCopyNodesMatrices( renderNodes, matrixBuffer );
 		info.m_visibleObjectsCount += count;
 		return count;
 	}
@@ -919,8 +961,13 @@ namespace castor3d
 		while ( i < count )
 		{
 			auto & node = *it;
-			node->skeleton.fillBuffer( buffer );
-			buffer += stride;
+
+			for ( auto inst = 0u; inst < m_instanceMult; ++inst )
+			{
+				node->skeleton.fillBuffer( buffer );
+				buffer += stride;
+			}
+
 			++i;
 			++it;
 		}
@@ -940,21 +987,22 @@ namespace castor3d
 
 	void RenderPass::doUpdate( SubmeshStaticRenderNodesPtrByPipelineMap & nodes )
 	{
-		doTraverseNodes( nodes
+		traverseNodes( nodes
 			, [this]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, InstantiationComponent & instantiation
 				, StaticRenderNodePtrArray & renderNodes )
 			{
-				auto it = instantiation.find( pass.getOwner()->shared_from_this() );
+				auto it = instantiation.find( pass.getOwner()->shared_from_this(), m_instanceMult );
+				auto index = instantiation.getIndex( m_instanceMult );
 
 				if ( !renderNodes.empty()
 					&& it != instantiation.end()
-					&& it->second.buffer )
+					&& it->second[index].buffer )
 				{
 					doCopyNodesMatrices( renderNodes
-						, it->second.data );
+						, it->second[index].data );
 				}
 			} );
 	}
@@ -962,21 +1010,22 @@ namespace castor3d
 	void RenderPass::doUpdate( SubmeshStaticRenderNodesPtrByPipelineMap & nodes
 		, RenderInfo & info )
 	{
-		doTraverseNodes( nodes
+		traverseNodes( nodes
 			, [this, &info]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, InstantiationComponent & instantiation
 				, StaticRenderNodePtrArray & renderNodes )
 			{
-				auto it = instantiation.find( pass.getOwner()->shared_from_this() );
+				auto it = instantiation.find( pass.getOwner()->shared_from_this(), m_instanceMult );
+				auto index = instantiation.getIndex( m_instanceMult );
 
 				if ( !renderNodes.empty()
 					&& it != instantiation.end()
-					&& it->second.buffer )
+					&& it->second[index].buffer )
 				{
 					uint32_t count = doCopyNodesMatrices( renderNodes
-						, it->second.data
+						, it->second[index].data
 						, info );
 					info.m_visibleFaceCount += submesh.getFaceCount() * count;
 					info.m_visibleVertexCount += submesh.getPointsCount() * count;
@@ -988,7 +1037,7 @@ namespace castor3d
 	namespace
 	{
 		template< typename MapType >
-		inline void doRenderNonInstanced( RenderPass & pass
+		inline void renderNonInstanced( RenderPass & pass
 			, MapType & nodes )
 		{
 			for ( auto & itPipelines : nodes )
@@ -998,7 +1047,7 @@ namespace castor3d
 		}
 
 		template< typename MapType >
-		inline void doRenderNonInstanced( RenderPass & pass
+		inline void renderNonInstanced( RenderPass & pass
 			, MapType & nodes
 			, RenderInfo & info )
 		{
@@ -1019,35 +1068,35 @@ namespace castor3d
 
 	void RenderPass::doUpdate( StaticRenderNodesPtrByPipelineMap & nodes )
 	{
-		doRenderNonInstanced( *this
+		renderNonInstanced( *this
 			, nodes );
 	}
 
 	void RenderPass::doUpdate( StaticRenderNodesPtrByPipelineMap & nodes
 		, RenderInfo & info )
 	{
-		doRenderNonInstanced( *this
+		renderNonInstanced( *this
 			, nodes
 			, info );
 	}
 
 	void RenderPass::doUpdate( SkinningRenderNodesPtrByPipelineMap & nodes )
 	{
-		doRenderNonInstanced( *this
+		renderNonInstanced( *this
 			, nodes );
 	}
 
 	void RenderPass::doUpdate( SkinningRenderNodesPtrByPipelineMap & nodes
 		, RenderInfo & info )
 	{
-		doRenderNonInstanced( *this
+		renderNonInstanced( *this
 			, nodes
 			, info );
 	}
 
 	void RenderPass::doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes )
 	{
-		doTraverseNodes( nodes
+		traverseNodes( nodes
 			, [this]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
@@ -1055,14 +1104,15 @@ namespace castor3d
 				, SkinningRenderNodePtrArray & renderNodes )
 			{
 				auto & instantiatedBones = submesh.getInstantiatedBones();
-				auto it = instantiation.find( pass.getOwner()->shared_from_this() );
+				auto it = instantiation.find( pass.getOwner()->shared_from_this(), m_instanceMult );
+				auto index = instantiation.getIndex( m_instanceMult );
 
 				if ( !renderNodes.empty()
 					&& it != instantiation.end()
-					&& it->second.buffer
+					&& it->second[index].buffer
 					&& instantiatedBones.hasInstancedBonesBuffer() )
 				{
-					uint32_t count1 = doCopyNodesMatrices( renderNodes, it->second.data );
+					uint32_t count1 = doCopyNodesMatrices( renderNodes, it->second[index].data );
 					uint32_t count2 = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
 					CU_Require( count1 == count2 );
 				}
@@ -1072,7 +1122,7 @@ namespace castor3d
 	void RenderPass::doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes
 		, RenderInfo & info )
 	{
-		doTraverseNodes( nodes
+		traverseNodes( nodes
 			, [this, &info]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
@@ -1080,14 +1130,15 @@ namespace castor3d
 				, SkinningRenderNodePtrArray & renderNodes )
 			{
 				auto & instantiatedBones = submesh.getInstantiatedBones();
-				auto it = instantiation.find( pass.getOwner()->shared_from_this() );
+				auto it = instantiation.find( pass.getOwner()->shared_from_this(), m_instanceMult );
+				auto index = instantiation.getIndex( m_instanceMult );
 
 				if ( !renderNodes.empty()
 					&& it != instantiation.end()
-					&& it->second.buffer
+					&& it->second[index].buffer
 					&& instantiatedBones.hasInstancedBonesBuffer() )
 				{
-					uint32_t count1 = doCopyNodesMatrices( renderNodes, it->second.data, info );
+					uint32_t count1 = doCopyNodesMatrices( renderNodes, it->second[index].data, info );
 					uint32_t count2 = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer(), info );
 					CU_Require( count1 == count2 );
 					info.m_visibleFaceCount += submesh.getFaceCount() * count1;
@@ -1099,42 +1150,51 @@ namespace castor3d
 
 	void RenderPass::doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes )
 	{
-		doRenderNonInstanced( *this
+		renderNonInstanced( *this
 			, nodes );
 	}
 
 	void RenderPass::doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes
 		, RenderInfo & info )
 	{
-		doRenderNonInstanced( *this
+		renderNonInstanced( *this
 			, nodes
 			, info );
 	}
 
 	void RenderPass::doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes )
 	{
-		doRenderNonInstanced( *this
+		renderNonInstanced( *this
 			, nodes );
 	}
 
 	void RenderPass::doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes
 		, RenderInfo & info )
 	{
-		doRenderNonInstanced( *this
+		renderNonInstanced( *this
 			, nodes
 			, info );
 	}
 
-	void RenderPass::doUpdateUbos( Camera const & camera
-		, castor::Point2f const & jitter )
+	void RenderPass::doUpdateUbos( CpuUpdater & updater )
 	{
-		auto jitterProjSpace = jitter * 2.0f;
+		auto & camera = *updater.camera;
+		auto jitterProjSpace = updater.jitter * 2.0f;
 		jitterProjSpace[0] /= camera.getWidth();
 		jitterProjSpace[1] /= camera.getHeight();
 		m_matrixUbo.cpuUpdate( camera.getView()
 			, camera.getProjection()
 			, jitterProjSpace );
 		m_sceneUbo.cpuUpdate( *camera.getScene(), &camera );
+
+		if ( getInstanceMult() > 1
+			&& !m_modelsInstances.empty() )
+		{
+			updateInstancesUbos( m_modelsInstances, getCuller().getCulledSubmeshes( true ), getInstanceMult() );
+			updateInstancesUbos( m_modelsInstances, getCuller().getCulledSubmeshes( false ), getInstanceMult() );
+			updateInstancesUbos( m_modelsInstances, getCuller().getCulledBillboards( true ), getInstanceMult() );
+			updateInstancesUbos( m_modelsInstances, getCuller().getCulledBillboards( true ), getInstanceMult() );
+		}
 	}
 
 	std::map< PipelineFlags, RenderPipelineUPtr > & RenderPass::doGetFrontPipelines()
@@ -1260,12 +1320,12 @@ namespace castor3d
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		}
 
-		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( MatrixUbo::BindingPoint
+		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( MatrixUbo::BindingPoint//3
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
 				? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
 				: VK_SHADER_STAGE_VERTEX_BIT ) ) );
-		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( SceneUbo::BindingPoint
+		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( SceneUbo::BindingPoint//4
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, ( VK_SHADER_STAGE_FRAGMENT_BIT
 				| ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
@@ -1274,32 +1334,48 @@ namespace castor3d
 
 		if ( !checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
 		{
-			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( ModelMatrixUbo::BindingPoint
+			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( ModelMatrixUbo::BindingPoint//5
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
 					? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
 					: VK_SHADER_STAGE_VERTEX_BIT ) ) );
 		}
 
-		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( ModelUbo::BindingPoint
+		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( TexturesUbo::BindingPoint//6
+			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( ModelUbo::BindingPoint//7
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, ( VK_SHADER_STAGE_FRAGMENT_BIT
 				| ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
 					? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
 					: VK_SHADER_STAGE_VERTEX_BIT ) ) ) );
-		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( TexturesUbo::BindingPoint
-			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_FRAGMENT_BIT )  );
 
 		if ( checkFlag( flags.programFlags, ProgramFlag::eSkinning ) )
 		{
-			uboBindings.push_back( SkinningUbo::createLayoutBinding( SkinningUbo::BindingPoint
+			uboBindings.push_back( SkinningUbo::createLayoutBinding( SkinningUbo::BindingPoint//8
 				, flags.programFlags ) );
 		}
 
 		if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
 		{
-			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( MorphingUbo::BindingPoint
+			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( MorphingUbo::BindingPoint//9
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
+					? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
+					: VK_SHADER_STAGE_VERTEX_BIT ) ) );
+		}
+		
+		if ( checkFlag( flags.programFlags, ProgramFlag::eInstanceMult ) )
+		{
+			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( ModelInstancesUbo::BindingPoint//10
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, VK_SHADER_STAGE_VERTEX_BIT ) );
+		}
+
+		if ( checkFlag( flags.programFlags, ProgramFlag::eBillboards ) )
+		{
+			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( BillboardUbo::BindingPoint//11
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
 					? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
@@ -1308,21 +1384,17 @@ namespace castor3d
 
 		if ( checkFlag( flags.programFlags, ProgramFlag::ePicking ) )
 		{
-			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( PickingUbo::BindingPoint
+			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( PickingUbo::BindingPoint//12
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		}
 
-		if ( checkFlag( flags.programFlags, ProgramFlag::eBillboards ) )
-		{
-			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( BillboardUbo::BindingPoint
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
-					? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
-					: VK_SHADER_STAGE_VERTEX_BIT ) ) );
-		}
-
 		return uboBindings;
+	}
+
+	void RenderPass::doUpdate( RenderQueueArray & queues )
+	{
+		queues.emplace_back( m_renderQueue );
 	}
 
 	ShaderPtr RenderPass::doGetVertexShaderSource( PipelineFlags const & flags )const

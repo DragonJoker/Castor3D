@@ -316,6 +316,7 @@ namespace castor3d
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName() }
 	{
+		m_matrixUbo.initialise( m_device );
 	}
 
 	void LightPass::update( bool first
@@ -692,15 +693,15 @@ namespace castor3d
 					, utils.calcTexCoord( in.fragCoord.xy()
 						, c3d_renderSize ) );
 				auto data1 = writer.declLocale( "data1"
-					, textureLod( c3d_mapData1, texCoord, 0.0_f ) );
+					, c3d_mapData1.lod( texCoord, 0.0_f ) );
 				auto data2 = writer.declLocale( "data2"
-					, textureLod( c3d_mapData2, texCoord, 0.0_f ) );
+					, c3d_mapData2.lod( texCoord, 0.0_f ) );
 				auto data3 = writer.declLocale( "data3"
-					, textureLod( c3d_mapData3, texCoord, 0.0_f ) );
+					, c3d_mapData3.lod( texCoord, 0.0_f ) );
 				auto data4 = writer.declLocale( "data4"
-					, textureLod( c3d_mapData4, texCoord, 0.0_f ) );
+					, c3d_mapData4.lod( texCoord, 0.0_f ) );
 				auto data5 = writer.declLocale( "data5"
-					, textureLod( c3d_mapData5, texCoord, 0.0_f ) );
+					, c3d_mapData5.lod( texCoord, 0.0_f ) );
 				auto flags = writer.declLocale( "flags"
 					, writer.cast< Int >( data1.w() ) );
 				auto shadowReceiver = writer.declLocale( "shadowReceiver"
@@ -718,7 +719,7 @@ namespace castor3d
 				auto eye = writer.declLocale( "eye"
 					, c3d_cameraPosition.xyz() );
 				auto depth = writer.declLocale( "depth"
-					, textureLod( c3d_mapDepth, texCoord, 0.0_f ).x() );
+					, c3d_mapDepth.lod( texCoord, 0.0_f ).x() );
 				auto vsPosition = writer.declLocale( "vsPosition"
 					, utils.calcVSPosition( texCoord, depth, c3d_mtxInvProj ) );
 				auto wsPosition = writer.declLocale( "wsPosition"
@@ -871,15 +872,15 @@ namespace castor3d
 					, utils.calcTexCoord( in.fragCoord.xy()
 						, c3d_renderSize ) );
 				auto data1 = writer.declLocale( "data1"
-					, textureLod( c3d_mapData1, texCoord, 0.0_f ) );
+					, c3d_mapData1.lod( texCoord, 0.0_f ) );
 				auto data2 = writer.declLocale( "data2"
-					, textureLod( c3d_mapData2, texCoord, 0.0_f ) );
+					, c3d_mapData2.lod( texCoord, 0.0_f ) );
 				auto data3 = writer.declLocale( "data3"
-					, textureLod( c3d_mapData3, texCoord, 0.0_f ) );
+					, c3d_mapData3.lod( texCoord, 0.0_f ) );
 				auto data4 = writer.declLocale( "data4"
-					, textureLod( c3d_mapData4, texCoord, 0.0_f ) );
+					, c3d_mapData4.lod( texCoord, 0.0_f ) );
 				auto data5 = writer.declLocale( "data5"
-					, textureLod( c3d_mapData5, texCoord, 0.0_f ) );
+					, c3d_mapData5.lod( texCoord, 0.0_f ) );
 				auto metallic = writer.declLocale( "metallic"
 					, data3.r() );
 				auto roughness = writer.declLocale( "roughness"
@@ -901,7 +902,7 @@ namespace castor3d
 				auto eye = writer.declLocale( "eye"
 					, c3d_cameraPosition.xyz() );
 				auto depth = writer.declLocale( "depth"
-					, textureLod( c3d_mapDepth, texCoord, 0.0_f ).x() );
+					, c3d_mapDepth.lod( texCoord, 0.0_f ).x() );
 				auto vsPosition = writer.declLocale( "vsPosition"
 					, utils.calcVSPosition( texCoord, depth, c3d_mtxInvProj ) );
 				auto wsPosition = writer.declLocale( "wsPosition"
@@ -1126,15 +1127,15 @@ namespace castor3d
 					, utils.calcTexCoord( in.fragCoord.xy()
 						, c3d_renderSize ) );
 				auto data1 = writer.declLocale( "data1"
-					, textureLod( c3d_mapData1, texCoord, 0.0_f ) );
+					, c3d_mapData1.lod( texCoord, 0.0_f ) );
 				auto data2 = writer.declLocale( "data2"
-					, textureLod( c3d_mapData2, texCoord, 0.0_f ) );
+					, c3d_mapData2.lod( texCoord, 0.0_f ) );
 				auto data3 = writer.declLocale( "data3"
-					, textureLod( c3d_mapData3, texCoord, 0.0_f ) );
+					, c3d_mapData3.lod( texCoord, 0.0_f ) );
 				auto data4 = writer.declLocale( "data4"
-					, textureLod( c3d_mapData4, texCoord, 0.0_f ) );
+					, c3d_mapData4.lod( texCoord, 0.0_f ) );
 				auto data5 = writer.declLocale( "data5"
-					, textureLod( c3d_mapData5, texCoord, 0.0_f ) );
+					, c3d_mapData5.lod( texCoord, 0.0_f ) );
 				auto specular = writer.declLocale( "specular"
 					, data3.rgb() );
 				auto glossiness = writer.declLocale( "glossiness"
@@ -1156,7 +1157,7 @@ namespace castor3d
 				auto eye = writer.declLocale( "eye"
 					, c3d_cameraPosition.xyz() );
 				auto depth = writer.declLocale( "depth"
-					, textureLod( c3d_mapDepth, texCoord, 0.0_f ).x() );
+					, c3d_mapDepth.lod( texCoord, 0.0_f ).x() );
 				auto vsPosition = writer.declLocale( "vsPosition"
 					, utils.calcVSPosition( texCoord, depth, c3d_mtxInvProj ) );
 				auto wsPosition = writer.declLocale( "wsPosition"

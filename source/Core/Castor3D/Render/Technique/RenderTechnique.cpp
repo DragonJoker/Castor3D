@@ -1,5 +1,6 @@
 #include "Castor3D/Render/Technique/RenderTechnique.hpp"
 
+#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
@@ -23,9 +24,6 @@
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 
 using namespace castor;
-
-#define C3D_UseWeightedBlendedRendering 1
-#define C3D_UseDeferredRendering 1
 
 namespace castor3d
 {
@@ -139,6 +137,15 @@ namespace castor3d
 
 			if ( count > 0 )
 			{
+				if ( !shadowMap.isInitialised() )
+				{
+					cache.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+						, [&shadowMap]( RenderDevice const & device )
+						{
+							shadowMap.initialise( device );
+						} ) );
+				}
+
 				uint32_t index = 0u;
 				auto lightIt = lights.begin();
 				activeShadowMaps[size_t( type )].emplace_back( std::ref( shadowMap ), UInt32Array{} );
@@ -299,6 +306,8 @@ namespace castor3d
 			//	, m_renderTarget.getCuller()
 			//	, m_renderTarget.getTexture().getTexture()->getDefaultView().getTargetView() );
 
+			auto & maps = m_renderTarget.getScene()->getEnvironmentMaps();
+
 			doInitialiseShadowMaps( device );
 #if C3D_UseDepthPrepass
 			doInitialiseDepthPass( device );
@@ -306,9 +315,14 @@ namespace castor3d
 			doInitialiseBackgroundPass( device );
 			doInitialiseOpaquePass( device );
 			doInitialiseTransparentPass( device );
-			IntermediatesLister::submit( *this, intermediates );
+
+			for ( auto & map : maps )
+			{
+				map.get().initialise( device );
+			}
 
 			m_particleTimer = std::make_shared< RenderPassTimer >( *getEngine(), device, cuT( "Particles" ), cuT( "Particles" ) );
+			IntermediatesLister::submit( *this, intermediates );
 			m_initialised = true;
 		}
 
@@ -407,6 +421,13 @@ namespace castor3d
 		updater.scene = m_renderTarget.getScene();
 		updater.camera = m_renderTarget.getCamera();
 
+		doInitialiseShadowMaps( updater.device );
+
+		for ( auto & map : m_renderTarget.getScene()->getEnvironmentMaps() )
+		{
+			map.get().update( updater );
+		}
+
 #if C3D_UseDepthPrepass
 		m_depthPass->update( updater );
 #endif
@@ -431,11 +452,6 @@ namespace castor3d
 		{
 			auto & background = *m_renderTarget.getScene()->getBackground();
 			background.update( updater );
-		}
-
-		for ( auto & map : m_renderTarget.getScene()->getEnvironmentMaps() )
-		{
-			map.get().update( updater );
 		}
 
 		doUpdateShadowMaps( updater );
@@ -506,23 +522,19 @@ namespace castor3d
 	void RenderTechnique::doCreateShadowMaps()
 	{
 		auto & scene = *m_renderTarget.getScene();
-		auto & engine = *m_renderTarget.getEngine();
-		m_directionalShadowMap = std::make_unique< ShadowMapDirectional >( engine
-			, scene );
-		m_allShadowMaps[size_t( LightType::eDirectional )].emplace_back( std::ref( *m_directionalShadowMap.raw() ), UInt32Array{} );
-		m_spotShadowMap = std::make_unique< ShadowMapSpot >( engine
-			, scene );
-		m_allShadowMaps[size_t( LightType::eSpot )].emplace_back( std::ref( *m_spotShadowMap.raw() ), UInt32Array{} );
-		m_pointShadowMap = std::make_unique< ShadowMapPoint >( engine
-			, scene );
-		m_allShadowMaps[size_t( LightType::ePoint )].emplace_back( std::ref( *m_pointShadowMap.raw() ), UInt32Array{} );
+		m_directionalShadowMap = std::make_unique< ShadowMapDirectional >( scene );
+		m_allShadowMaps[size_t( LightType::eDirectional )].emplace_back( std::ref( *m_directionalShadowMap ), UInt32Array{} );
+		m_spotShadowMap = std::make_unique< ShadowMapSpot >( scene );
+		m_allShadowMaps[size_t( LightType::eSpot )].emplace_back( std::ref( *m_spotShadowMap ), UInt32Array{} );
+		m_pointShadowMap = std::make_unique< ShadowMapPoint >( scene );
+		m_allShadowMaps[size_t( LightType::ePoint )].emplace_back( std::ref( *m_pointShadowMap ), UInt32Array{} );
 	}
 
 	void RenderTechnique::doInitialiseShadowMaps( RenderDevice const & device )
 	{
-		m_directionalShadowMap.initialise( device );
-		m_spotShadowMap.initialise( device );
-		m_pointShadowMap.initialise( device );
+		m_directionalShadowMap->initialise( device );
+		m_spotShadowMap->initialise( device );
+		m_pointShadowMap->initialise( device );
 	}
 
 	void RenderTechnique::doInitialiseBackgroundPass( RenderDevice const & device )
@@ -687,6 +699,28 @@ namespace castor3d
 			, false );
 
 #endif
+
+		m_colorTexTransition = { device, "TechniqueColourTexTransition" };
+		auto & cmd = *m_colorTexTransition.commandBuffer;
+		cmd.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
+		cmd.beginDebugBlock(
+			{
+				"Technique Colour Texture Transition",
+				makeFloatArray( getEngine()->getNextRainbowColour() ),
+			} );
+		cmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, m_colourTexture.getTexture()->getDefaultView().getTargetView().makeShaderInputResource( VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL ) );
+		cmd.memoryBarrier( VK_PIPELINE_STAGE_HOST_BIT
+			, VK_PIPELINE_STAGE_TRANSFER_BIT
+			, m_renderTarget.getVelocity().getTexture()->getDefaultView().getTargetView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
+		cmd.clear( m_renderTarget.getVelocity().getTexture()->getDefaultView().getTargetView()
+			, transparentBlackClearColor.color );
+		cmd.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, m_renderTarget.getVelocity().getTexture()->getDefaultView().getTargetView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+		cmd.endDebugBlock();
+		cmd.end();
 	}
 
 	void RenderTechnique::doInitialiseTransparentPass( RenderDevice const & device )
@@ -718,9 +752,9 @@ namespace castor3d
 
 	void RenderTechnique::doCleanupShadowMaps( RenderDevice const & device )
 	{
-		m_directionalShadowMap.cleanup( device );
-		m_spotShadowMap.cleanup( device );
-		m_pointShadowMap.cleanup( device );
+		m_directionalShadowMap->cleanup( device );
+		m_spotShadowMap->cleanup( device );
+		m_pointShadowMap->cleanup( device );
 	}
 
 	void RenderTechnique::doUpdateShadowMaps( CpuUpdater & updater )
@@ -909,6 +943,10 @@ namespace castor3d
 #else
 			result = &static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).render( device, *result );
 #endif
+		}
+		else
+		{
+			result = &m_colorTexTransition.submit( *device.graphicsQueue, *result );
 		}
 
 		return *result;

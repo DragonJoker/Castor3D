@@ -115,7 +115,7 @@ namespace castor3d
 				{
 					auto reflected = m_writer.declLocale( "reflected"
 						, reflect( wsIncident, wsNormal ) );
-					ambient = occlusion * textureLod( envMap, reflected, ( 256.0f - shininess ) / 32.0f ).xyz() * diffuse;
+					ambient = occlusion * envMap.lod( reflected, ( 256.0f - shininess ) / 32.0f ).xyz() * diffuse;
 					diffuse = vec3( 0.0_f );
 				}
 				, InVec3{ m_writer, "wsIncident" }
@@ -142,7 +142,7 @@ namespace castor3d
 					auto refracted = m_writer.declLocale( "refracted"
 						, refract( wsIncident, wsNormal, refractionRatio ) );
 					ambient = vec3( 0.0_f );
-					diffuse = textureLod( envMap, refracted, ( 256.0f - shininess ) / 32.0f ).xyz() * ( diffuse / length( diffuse ) );
+					diffuse = envMap.lod( refracted, ( 256.0f - shininess ) / 32.0f ).xyz() * ( diffuse / length( diffuse ) );
 				}
 				, InVec3{ m_writer, "wsIncident" }
 				, InVec3{ m_writer, "wsNormal" }

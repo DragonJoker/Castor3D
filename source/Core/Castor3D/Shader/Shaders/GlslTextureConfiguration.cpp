@@ -3,7 +3,7 @@
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
 #include <ShaderWriter/Source.hpp>
-#include <ShaderWriter/CompositeTypes/StructuredSsbo.hpp>
+#include <ShaderWriter/CompositeTypes/ArraySsbo.hpp>
 
 using namespace castor;
 
@@ -250,13 +250,13 @@ namespace castor3d
 							, *m_type );
 						auto offset = m_writer.declLocale( cuT( "offset" )
 							, m_writer.cast< sdw::Int >( index ) * sdw::Int( shader::MaxTextureConfigurationComponentsCount ) );
-						result.colrSpec = texelFetch( c3d_textureConfigurations, offset++ );
-						result.glossOpa = texelFetch( c3d_textureConfigurations, offset++ );
-						result.emisOccl = texelFetch( c3d_textureConfigurations, offset++ );
-						result.trnsDumm = texelFetch( c3d_textureConfigurations, offset++ );
-						result.normalFc = texelFetch( c3d_textureConfigurations, offset++ );
-						result.heightFc = texelFetch( c3d_textureConfigurations, offset++ );
-						result.miscVals = texelFetch( c3d_textureConfigurations, offset++ );
+						result.colrSpec = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
+						result.glossOpa = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
+						result.emisOccl = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
+						result.trnsDumm = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
+						result.normalFc = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
+						result.heightFc = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
+						result.miscVals = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
 						m_writer.returnStmt( result );
 					}
 					, sdw::InUInt{ m_writer, cuT( "index" ) } );

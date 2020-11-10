@@ -43,8 +43,8 @@ namespace castor3d
 		 */
 		C3D_API virtual ~VersionException() throw() {}
 	};
-
-#	define CASTOR_VERSION_EXCEPTION( given, expected ) throw castor3d::VersionException( given, expected, __FILE__, __FUNCTION__, __LINE__ )
 }
+
+#define CASTOR_VERSION_EXCEPTION( given, expected ) throw castor3d::VersionException{ given, expected, __FILE__, __FUNCTION__, uint32_t( __LINE__ ) }
 
 #endif

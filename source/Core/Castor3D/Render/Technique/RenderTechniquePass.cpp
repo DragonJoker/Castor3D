@@ -72,21 +72,31 @@ namespace castor3d
 			} );
 	}
 
-	void bindShadowMaps( ShadowMapRefArray const & shadowMaps
+	void bindShadowMaps( PipelineFlags const & pipelineFlags
+		, ShadowMapLightTypeArray const & shadowMaps
 		, ashes::WriteDescriptorSetArray & writes
 		, uint32_t & index )
 	{
-		for ( auto & shadowMap : shadowMaps )
+		for ( auto i = 0u; i < uint32_t( LightType::eCount ); ++i )
 		{
-			auto & result = shadowMap.first.get().getShadowPassResult();
-			bindTexture( result[SmTexture::eNormalLinear].getTexture()->getDefaultView().getSampledView()
-				, result[SmTexture::eNormalLinear].getSampler()->getSampler()
-				, writes
-				, index );
-			bindTexture( result[SmTexture::eVariance].getTexture()->getDefaultView().getSampledView()
-				, result[SmTexture::eVariance].getSampler()->getSampler()
-				, writes
-				, index );
+			if ( checkFlag( pipelineFlags.sceneFlags, SceneFlag( uint8_t( SceneFlag::eShadowBegin ) << i ) ) )
+			{
+				for ( auto & shadowMapRef : shadowMaps[i] )
+				{
+					auto & shadowMap = shadowMapRef.first.get();
+					auto & result = shadowMap.getShadowPassResult();
+					CU_Require( result[SmTexture::eNormalLinear].getTexture()->isInitialised() );
+					bindTexture( result[SmTexture::eNormalLinear].getTexture()->getDefaultView().getSampledView()
+						, result[SmTexture::eNormalLinear].getSampler()->getSampler()
+						, writes
+						, index );
+					CU_Require( result[SmTexture::eVariance].getTexture()->isInitialised() );
+					bindTexture( result[SmTexture::eVariance].getTexture()->getDefaultView().getSampledView()
+						, result[SmTexture::eVariance].getSampler()->getSampler()
+						, writes
+						, index );
+				}
+			}
 		}
 	}
 
@@ -196,10 +206,10 @@ namespace castor3d
 		}
 	}
 
-	void RenderTechniquePass::doUpdateUbos( Camera const & camera
-		, castor::Point2f const & jitter )
+	void RenderTechniquePass::doUpdateUbos( CpuUpdater & updater )
 	{
-		m_sceneUbo.cpuUpdate( *camera.getScene(), &camera );
+		m_sceneUbo.cpuUpdate( *updater.camera->getScene()
+			, updater.camera.get() );
 	}
 
 	bool RenderTechniquePass::doInitialise( RenderDevice const & device
@@ -213,11 +223,6 @@ namespace castor3d
 	{
 		m_renderQueue.cleanup();
 		m_finished.reset();
-	}
-
-	void RenderTechniquePass::doUpdate( RenderQueueArray & queues )
-	{
-		queues.emplace_back( m_renderQueue );
 	}
 
 	void RenderTechniquePass::doUpdateFlags( PipelineFlags & flags )const

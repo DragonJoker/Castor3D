@@ -5,6 +5,7 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -38,7 +39,7 @@ namespace castor3d
 	{
 		constexpr uint32_t getDirectionalGIidx( LightingPass::Type type )
 		{
-			return std::min( uint32_t( type ), uint32_t( LightingPass::Type::eShadowLayeredLpvGI ) );
+			return std::min( uint32_t( type ), uint32_t( LightingPass::Type::eShadowLayeredLpvGGI ) );
 		}
 
 		constexpr uint32_t getPointGIidx( LightingPass::Type type )
@@ -48,7 +49,7 @@ namespace castor3d
 
 		constexpr uint32_t getSpotGIidx( LightingPass::Type type )
 		{
-			return std::min( uint32_t( type ), uint32_t( LightingPass::Type::eShadowLpvGI ) );
+			return std::min( uint32_t( type ), uint32_t( LightingPass::Type::eShadowLpvGGI ) );
 		}
 
 		constexpr LightingPass::Type getLightType( LightingPass::Type passType
@@ -85,6 +86,29 @@ namespace castor3d
 			default:
 				CU_Failure( "Unsupported LightType" );
 				return nullptr;
+			}
+		}
+
+		LightPassUPtr & getLightPass( LightingPass::Type passType
+			, LightType lightType
+			, LightingPass::LightPasses & passes )
+		{
+			auto lt = uint32_t( lightType );
+
+			switch ( lightType )
+			{
+			case LightType::eDirectional:
+				return passes[getDirectionalGIidx( passType )][lt];
+			case LightType::ePoint:
+				return passes[getPointGIidx( passType )][lt];
+			case LightType::eSpot:
+				return passes[getSpotGIidx( passType )][lt];
+			default:
+				{
+					static LightPassUPtr dummy;
+					CU_Failure( "Unsupported LightType" );
+					return dummy;
+				}
 			}
 		}
 
@@ -221,7 +245,7 @@ namespace castor3d
 		using PassTypeT = typename PassInfoT< PassT, LightT >::Type;
 
 		template< LightingPass::Type PassT, LightType LightT >
-		LightingPass::DelayedLightPass makeLightPassTT( Engine & engine
+		LightPassUPtr makeLightPassTT( Engine & engine
 			, RenderDevice const & device
 			, LightCache const & lightCache
 			, OpaquePassResult const & gpResult
@@ -231,11 +255,11 @@ namespace castor3d
 		{
 			if constexpr ( PassT > getLightType( PassT, LightT ) )
 			{
-				return LightingPass::DelayedLightPass{};
+				return LightPassUPtr{};
 			}
 			else if constexpr ( PassT > LightingPass::Type::eShadowNoGI )
 			{
-				return castor::DelayedInitialiserT< castor3d::LightPass >::template make< PassTypeT< PassT, LightT > >( engine
+				return std::make_unique< PassTypeT< PassT, LightT > >( engine
 					, device
 					, lightCache
 					, gpResult
@@ -245,7 +269,7 @@ namespace castor3d
 			}
 			else
 			{
-				return castor::DelayedInitialiserT< castor3d::LightPass >::template make< PassTypeT< PassT, LightT > >( engine
+				return std::make_unique< PassTypeT< PassT, LightT > >( engine
 					, device
 					, lpResult
 					, gpInfoUbo );
@@ -253,7 +277,7 @@ namespace castor3d
 		}
 
 		template< LightingPass::Type PassT >
-		LightingPass::DelayedLightPass makeLightPassT( LightType lightType
+		LightPassUPtr makeLightPassT( LightType lightType
 			, Engine & engine
 			, RenderDevice const & device
 			, LightCache const & lightCache
@@ -292,11 +316,11 @@ namespace castor3d
 					, gpInfoUbo );
 			default:
 				CU_Failure( "Unsupported LightType" );
-				return LightingPass::DelayedLightPass{};
+				return LightPassUPtr{};
 			}
 		}
 
-		LightingPass::DelayedLightPass makeLightPass( LightingPass::Type passType
+		LightPassUPtr makeLightPass( LightingPass::Type passType
 			, LightType lightType
 			, Engine & engine
 			, RenderDevice const & device
@@ -357,7 +381,7 @@ namespace castor3d
 						, lpResult
 						, gpInfoUbo );
 				}
-				return LightingPass::DelayedLightPass{};
+				return LightPassUPtr{};
 			case LightingPass::Type::eShadowLpvGGI:
 				if ( engine.getRenderSystem()->getGpuInformations().hasShaderType( VK_SHADER_STAGE_GEOMETRY_BIT ) )
 				{
@@ -372,7 +396,7 @@ namespace castor3d
 						, lpResult
 						, gpInfoUbo );
 				}
-				return LightingPass::DelayedLightPass{};
+				return LightPassUPtr{};
 			case LightingPass::Type::eShadowLayeredLpvGI:
 				if ( engine.getRenderSystem()->getGpuInformations().hasShaderType( VK_SHADER_STAGE_GEOMETRY_BIT ) )
 				{
@@ -387,7 +411,7 @@ namespace castor3d
 						, lpResult
 						, gpInfoUbo );
 				}
-				return LightingPass::DelayedLightPass{};
+				return LightPassUPtr{};
 			case LightingPass::Type::eShadowLayeredLpvGGI:
 				if ( engine.getRenderSystem()->getGpuInformations().hasShaderType( VK_SHADER_STAGE_GEOMETRY_BIT ) )
 				{
@@ -402,10 +426,10 @@ namespace castor3d
 						, lpResult
 						, gpInfoUbo );
 				}
-				return LightingPass::DelayedLightPass{};
+				return LightPassUPtr{};
 			default:
 				CU_Failure( "Unsupported LightingPass::Type" );
-				return LightingPass::DelayedLightPass{};
+				return LightPassUPtr{};
 			}
 		}
 
@@ -482,6 +506,13 @@ namespace castor3d
 		, GpInfoUbo const & gpInfoUbo )
 		: m_engine{ engine }
 		, m_device{ device }
+		, m_gpResult{ gpResult }
+		, m_smDirectionalResult{ smDirectionalResult }
+		, m_smPointResult{ smPointResult }
+		, m_smSpotResult{ smSpotResult }
+		, m_depthView{ depthView }
+		, m_sceneUbo{ sceneUbo }
+		, m_gpInfoUbo{ gpInfoUbo }
 		, m_size{ size }
 		, m_result{ engine, size }
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, device, cuT( "Opaque" ), cuT( "Lighting pass" ) ) }
@@ -500,29 +531,6 @@ namespace castor3d
 		auto & lightCache = scene.getLightCache();
 		lightCache.initialise();
 		m_result.initialise( m_device );
-		m_lightPasses = makeLightPasses( engine
-			, m_device
-			, lightCache
-			, gpResult
-			, smDirectionalResult
-			, smPointResult
-			, smSpotResult
-			, m_result
-			, gpInfoUbo );
-
-		for ( auto & lightPasses : m_lightPasses )
-		{
-			for ( auto & lightPass : lightPasses )
-			{
-				if ( lightPass )
-				{
-					lightPass.initialise( scene
-						, gpResult
-						, sceneUbo
-						, *m_timer );
-				}
-			}
-		}
 
 		VkImageCopy copy
 		{
@@ -594,13 +602,31 @@ namespace castor3d
 			{
 				if ( lightPass )
 				{
-					lightPass.cleanup();
+					lightPass->cleanup();
 					lightPass.reset();
 				}
 			}
 		}
 
 		m_result.cleanup();
+	}
+
+	void LightingPass::update( CpuUpdater & updater )
+	{
+		m_active.clear();
+	}
+
+	void LightingPass::update( GpuUpdater & updater )
+	{
+		auto & scene = *updater.camera->getScene();
+		auto & cache = scene.getLightCache();
+
+		if ( !cache.isEmpty() )
+		{
+			doUpdateLightPasses( updater, LightType::eDirectional );
+			doUpdateLightPasses( updater, LightType::ePoint );
+			doUpdateLightPasses( updater, LightType::eSpot );
+		}
 	}
 
 	ashes::Semaphore const & LightingPass::render( Scene const & scene
@@ -684,6 +710,58 @@ namespace castor3d
 		}
 	}
 
+	void LightingPass::doUpdateLightPasses( GpuUpdater & updater
+		, LightType lightType )
+	{
+		auto & camera = *updater.camera;
+		auto & scene = *updater.camera->getScene();
+		auto & cache = scene.getLightCache();
+
+		for ( auto & light : cache.getLights( lightType ) )
+		{
+			if ( light->getLightType() == LightType::eDirectional
+				|| camera.isVisible( light->getBoundingBox(), light->getParent()->getDerivedTransformationMatrix() ) )
+			{
+				Type type = Type::eNoShadow;
+
+				if ( light->isShadowProducer() )
+				{
+					auto giType = light->getGlobalIlluminationType();
+
+					if ( !m_engine.getRenderSystem()->getGpuInformations().hasShaderType( VK_SHADER_STAGE_GEOMETRY_BIT ) )
+					{
+						giType = std::min( GlobalIlluminationType::eRsm, giType );
+					}
+
+					type = Type( uint32_t( giType ) + 1u );
+				}
+
+				auto & lightPass = getLightPass( type
+					, lightType
+					, m_lightPasses );
+
+				if ( !lightPass )
+				{
+					lightPass = makeLightPass( type
+						, lightType
+						, m_engine
+						, m_device
+						, cache
+						, m_gpResult
+						, m_smDirectionalResult
+						, m_smPointResult
+						, m_smSpotResult
+						, m_result
+						, m_gpInfoUbo );
+					lightPass->initialise( scene
+						, m_gpResult
+						, m_sceneUbo
+						, *m_timer );
+				}
+			}
+		}
+	}
+
 	ashes::Semaphore const & LightingPass::doRenderLights( Scene const & scene
 		, Camera const & camera
 		, LightType type
@@ -704,6 +782,7 @@ namespace castor3d
 					LightPass * pass = ( light->isShadowProducer() && light->getShadowMap() )
 						? doGetShadowLightPass( type, light->getGlobalIlluminationType() )
 						: doGetLightPass( type );
+					CU_Require( pass != nullptr );
 					m_active.insert( pass );
 					pass->update( index == 0u
 						, camera.getSize()

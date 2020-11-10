@@ -141,7 +141,8 @@ namespace castor3d
 		static size_t constexpr SsaoCount = 2u;
 		static size_t constexpr SsssCount = 2u;
 		static size_t constexpr GiCount = 2u;
-		static size_t constexpr MaxProgramsCount = size_t( FogType::eCount ) * SsaoCount * SsssCount * GiCount;
+		static size_t constexpr AllButFogCount = SsaoCount * SsssCount * GiCount;
+		static size_t constexpr MaxProgramsCount = size_t( FogType::eCount ) * AllButFogCount;
 		using ReflectionPrograms = std::array< ProgramPipelinePtr, MaxProgramsCount >;
 
 		ProgramPipeline & getProgram();

@@ -55,18 +55,11 @@ namespace castor3d
 
 	bool ShadowMapPassSpot::update( CpuUpdater & updater )
 	{
-		auto & light = *updater.light;
 		getCuller().compute();
 		m_outOfDate = m_outOfDate
 			|| getCuller().areAllChanged()
 			|| getCuller().areCulledChanged();
-		m_shadowType = light.getShadowType();
-		auto & myCamera = getCuller().getCamera();
-		light.getSpotLight()->updateShadow( myCamera
-			, updater.index );
-		doUpdate( *updater.queues );
-		m_shadowMapUbo.update( light, updater.index );
-		m_matrixUbo.cpuUpdate( myCamera.getView(), myCamera.getProjection() );
+		RenderPass::update( updater );
 		return m_outOfDate;
 	}
 
@@ -76,6 +69,17 @@ namespace castor3d
 		{
 			doUpdateNodes( m_renderQueue.getCulledRenderNodes() );
 		}
+	}
+
+	void ShadowMapPassSpot::doUpdateUbos( CpuUpdater & updater )
+	{
+		auto & light = *updater.light;
+		auto & myCamera = getCuller().getCamera();
+		m_shadowType = light.getShadowType();
+		light.getSpotLight()->updateShadow( myCamera
+			, updater.index );
+		m_shadowMapUbo.update( light, updater.index );
+		m_matrixUbo.cpuUpdate( myCamera.getView(), myCamera.getProjection() );
 	}
 
 	bool ShadowMapPassSpot::doInitialise( RenderDevice const & device
@@ -182,11 +186,6 @@ namespace castor3d
 	{
 		m_shadowMapUbo.createSizedBinding( *node.uboDescriptorSet
 			, layout.getBinding( ShadowMapUbo::BindingPoint ) );
-	}
-
-	void ShadowMapPassSpot::doUpdate( RenderQueueArray & queues )
-	{
-		queues.emplace_back( m_renderQueue );
 	}
 
 	ashes::VkDescriptorSetLayoutBindingArray ShadowMapPassSpot::doCreateUboBindings( PipelineFlags const & flags )const
@@ -529,7 +528,8 @@ namespace castor3d
 				spotFactor = 1.0_f - step( spotFactor, 0.0_f );
 				pxl_flux.rgb() = ( diffuse
 						* light.m_lightBase.m_colour
-						* light.m_lightBase.m_intensity.x() )
+						* light.m_lightBase.m_intensity.x()
+						* clamp( dot( lightDirection, normal ), 0.0_f, 1.0_f ) )
 					/ attenuation;
 
 				auto depth = writer.declLocale( "depth"
@@ -706,7 +706,8 @@ namespace castor3d
 				spotFactor = 1.0_f - step( spotFactor, 0.0_f );
 				pxl_flux.rgb() = ( albedo
 						* light.m_lightBase.m_colour
-						* light.m_lightBase.m_intensity.x() )
+						* light.m_lightBase.m_intensity.x()
+						* clamp( dot( lightDirection, normal ), 0.0_f, 1.0_f ) )
 					/ attenuation;
 
 				auto depth = writer.declLocale( "depth"
@@ -883,7 +884,8 @@ namespace castor3d
 				spotFactor = 1.0_f - step( spotFactor, 0.0_f );
 				pxl_flux.rgb() = ( albedo
 						* light.m_lightBase.m_colour
-						* light.m_lightBase.m_intensity.x() )
+						* light.m_lightBase.m_intensity.x()
+						* clamp( dot( lightDirection, normal ), 0.0_f, 1.0_f ) )
 					/ attenuation;
 
 				auto depth = writer.declLocale( "depth"

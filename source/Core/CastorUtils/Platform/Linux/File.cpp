@@ -84,78 +84,47 @@ namespace castor
 
 			return S_ISLNK( buf.st_mode );
 		}
+	}
 
-		template< typename DirectoryFuncType, typename FileFuncType >
-		bool TraverseDirectory( Path const & folderPath, DirectoryFuncType directoryFunction, FileFuncType fileFunction )
+	bool File::traverseDirectory( Path const & folderPath
+		, TraverseDirFunction directoryFunction
+		, HitFileFunction fileFunction )
+	{
+		CU_Require( !folderPath.empty() );
+		bool result = false;
+		DIR * dir;
+
+		if ( ( dir = opendir( string::stringCast< char >( folderPath ).c_str() ) ) == nullptr )
 		{
-			CU_Require( !folderPath.empty() );
-			bool result = false;
-			DIR * dir;
+			printErrnoName( cuT( "folder" ), folderPath );
+			result = false;
+		}
+		else
+		{
+			result = true;
+			dirent * dirent;
 
-			if ( ( dir = opendir( string::stringCast< char >( folderPath ).c_str() ) ) == nullptr )
+			while ( result && ( dirent = readdir( dir ) ) != nullptr )
 			{
-				printErrnoName( cuT( "folder" ), folderPath );
-				result = false;
-			}
-			else
-			{
-				result = true;
-				dirent * dirent;
+				String name = string::stringCast< xchar >( dirent->d_name );
 
-				while ( result && ( dirent = readdir( dir ) ) != nullptr )
+				if ( name != cuT( "." ) && name != cuT( ".." ) )
 				{
-					String name = string::stringCast< xchar >( dirent->d_name );
-
-					if ( name != cuT( "." ) && name != cuT( ".." ) )
+					if ( dirent->d_type == DT_DIR )
 					{
-						if ( dirent->d_type == DT_DIR )
-						{
-							result = directoryFunction( folderPath / name );
-						}
-						else if ( !isLink( folderPath / name ) )
-						{
-							fileFunction( folderPath / name );
-						}
+						result = directoryFunction( folderPath / name );
+					}
+					else if ( !isLink( folderPath / name ) )
+					{
+						fileFunction( folderPath, name );
 					}
 				}
-
-				closedir( dir );
 			}
 
-			return result;
+			closedir( dir );
 		}
 
-		bool DeleteEmptyDirectory( Path const & p_path )
-		{
-			bool result = rmdir( string::stringCast< char >( p_path ).c_str() ) == 0;
-
-			if ( !result )
-			{
-				auto error = errno;
-
-				switch ( error )
-				{
-				case ENOTEMPTY:
-					Logger::logError( makeStringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], it is not empty." ) );
-					break;
-
-				case ENOENT:
-					Logger::logError( makeStringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], the path is invalid." ) );
-					break;
-
-				case EACCES:
-					Logger::logError( makeStringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], a program has an open handle to this directory." ) );
-					break;
-
-				default:
-					Logger::logError( makeStringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], unknown error (" ) << error << cuT( ")." ) );
-					break;
-				}
-			}
-
-			return result;
-		}
-
+		return result;
 	}
 
 	bool fileOpen( FILE *& p_file, char const * p_path, char const * p_mode )
@@ -273,85 +242,32 @@ namespace castor
 		return mkdir( string::stringCast< char >( p_path ).c_str(), mode ) == 0;
 	}
 
-	bool File::listDirectoryFiles( Path const & folderPath, PathArray & p_files, bool p_recursive )
+	bool File::deleteEmptyDirectory( Path const & p_path )
 	{
-		struct FileFunction
+		bool result = rmdir( string::stringCast< char >( p_path ).c_str() ) == 0;
+
+		if ( !result )
 		{
-			explicit FileFunction( PathArray & p_files )
-				: m_files( p_files )
+			auto error = errno;
+
+			switch ( error )
 			{
+			case ENOTEMPTY:
+				Logger::logError( makeStringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], it is not empty." ) );
+				break;
+
+			case ENOENT:
+				Logger::logError( makeStringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], the path is invalid." ) );
+				break;
+
+			case EACCES:
+				Logger::logError( makeStringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], a program has an open handle to this directory." ) );
+				break;
+
+			default:
+				Logger::logError( makeStringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], unknown error (" ) << error << cuT( ")." ) );
+				break;
 			}
-			void operator()( Path const & p_path )
-			{
-				m_files.push_back( p_path );
-			}
-			PathArray & m_files;
-		};
-
-		if ( p_recursive )
-		{
-			struct DirectoryFunction
-			{
-				explicit DirectoryFunction( PathArray & p_files )
-					: m_files( p_files )
-				{
-				}
-				bool operator()( Path const & p_path )
-				{
-					return TraverseDirectory( p_path, DirectoryFunction( m_files ), FileFunction( m_files ) );
-				}
-				PathArray & m_files;
-			};
-
-			return TraverseDirectory( folderPath, DirectoryFunction( p_files ), FileFunction( p_files ) );
-		}
-		else
-		{
-			struct DirectoryFunction
-			{
-				DirectoryFunction()
-				{
-				}
-				bool operator()( Path const & p_path )
-				{
-					return true;
-				}
-			};
-
-			return TraverseDirectory( folderPath, DirectoryFunction(), FileFunction( p_files ) );
-		}
-	}
-
-	bool File::directoryDelete( Path const & p_path )
-	{
-		struct FileFunction
-		{
-			void operator()( Path const & p_path )
-			{
-				File::deleteFile( p_path );
-			}
-		};
-
-		struct DirectoryFunction
-		{
-			bool operator()( Path const & p_path )
-			{
-				bool result = TraverseDirectory( p_path, DirectoryFunction(), FileFunction() );
-
-				if ( result )
-				{
-					result = DeleteEmptyDirectory( p_path );
-				}
-
-				return result;
-			}
-		};
-
-		bool result = TraverseDirectory( p_path, DirectoryFunction(), FileFunction() );
-
-		if ( result )
-		{
-			result = DeleteEmptyDirectory( p_path );
 		}
 
 		return result;

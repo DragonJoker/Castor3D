@@ -16,13 +16,13 @@ namespace castor3d
 
 		if ( result )
 		{
-			result = file.writeText( m_tabs + cuT( "\texposure " ) + string::toString( obj.getExposure(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+			result = file.writeText( m_tabs + cuT( "\texposure " ) + string::toString( obj.exposure, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 			castor::TextWriter< HdrConfig >::checkError( result, "HdrConfig exposure." );
 		}
 
 		if ( result )
 		{
-			result = file.writeText( m_tabs + cuT( "\tgamma " ) + string::toString( obj.getGamma(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+			result = file.writeText( m_tabs + cuT( "\tgamma " ) + string::toString( obj.gamma, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 			castor::TextWriter< HdrConfig >::checkError( result, "HdrConfig gamma." );
 		}
 

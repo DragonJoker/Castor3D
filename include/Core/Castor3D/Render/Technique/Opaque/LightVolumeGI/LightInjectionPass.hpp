@@ -63,7 +63,7 @@ namespace castor3d
 			, LpvConfigUbo const & lpvConfigUbo
 			, LightVolumePassResult const & result
 			, uint32_t size
-			, uint32_t layerIndex = shader::DirectionalMaxCascadesCount - 1u );
+			, uint32_t layerIndex );
 		/**
 		 *\~english
 		 *\brief		Renders the SSGI pass.
