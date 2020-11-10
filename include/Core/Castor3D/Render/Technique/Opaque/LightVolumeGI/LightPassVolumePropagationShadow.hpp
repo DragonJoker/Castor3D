@@ -196,8 +196,8 @@ namespace castor3d
 			cmd.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
 			cmd.beginDebugBlock(
 				{
-					"Lighting - " + getName() + " - Clear",
-					castor3d::makeFloatArray( m_engine.getNextRainbowColour() ),
+					"Lighting - " + this->getName() + " - Clear",
+					castor3d::makeFloatArray( this->m_engine.getNextRainbowColour() ),
 				} );
 			clearTex( m_propagate[0u], LpvTexture::eR );
 			clearTex( m_propagate[0u], LpvTexture::eG );

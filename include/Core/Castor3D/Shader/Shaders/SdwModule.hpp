@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/ShaderModule.hpp"
 
 #include "Castor3D/Material/Pass/PassModule.hpp"
+#include "Castor3D/Scene/SceneModule.hpp"
 
 #include <ShaderWriter/BaseTypes/Array.hpp>
 #include <ShaderWriter/BaseTypes/Bool.hpp>

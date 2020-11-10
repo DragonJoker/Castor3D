@@ -86,7 +86,7 @@ namespace castor
 					}
 					else
 					{
-						fileFunction( folderPath / name );
+						fileFunction( folderPath, name );
 					}
 				}
 			}

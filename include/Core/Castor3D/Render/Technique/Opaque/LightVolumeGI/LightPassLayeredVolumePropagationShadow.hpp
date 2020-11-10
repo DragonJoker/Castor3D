@@ -156,8 +156,8 @@ namespace castor3d
 			cmd.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
 			cmd.beginDebugBlock(
 				{
-					"Lighting - " + getName() + " - Clear Accumulation",
-					castor3d::makeFloatArray( m_engine.getNextRainbowColour() ),
+					"Lighting - " + this->getName() + " - Clear Accumulation",
+					castor3d::makeFloatArray( this->m_engine.getNextRainbowColour() ),
 				} );
 			clearTex( cmd, m_accumulation, LpvTexture::eR );
 			clearTex( cmd, m_accumulation, LpvTexture::eG );
@@ -221,8 +221,8 @@ namespace castor3d
 				cmd.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
 				cmd.beginDebugBlock(
 					{
-						"Lighting - " + getName() + " - Clear " + castor::string::toString( cascade ),
-						castor3d::makeFloatArray( m_engine.getNextRainbowColour() ),
+						"Lighting - " + this->getName() + " - Clear " + castor::string::toString( cascade ),
+						castor3d::makeFloatArray( this->m_engine.getNextRainbowColour() ),
 					} );
 
 				for ( auto & tex : m_propagate )

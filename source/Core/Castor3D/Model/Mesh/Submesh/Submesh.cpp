@@ -12,25 +12,25 @@ namespace castor3d
 	namespace
 	{
 		bool fix( castor::Point3f & value
-			, castor::Point3f const & default )
+			, castor::Point3f const & defaultValue )
 		{
 			bool result = false;
 
 			if ( std::isnan( value->x ) )
 			{
-				value->x = default->x;
+				value->x = defaultValue->x;
 				result = true;
 			}
 
 			if ( std::isnan( value->y ) )
 			{
-				value->z = default->y;
+				value->z = defaultValue->y;
 				result = true;
 			}
 
 			if ( std::isnan( value->z ) )
 			{
-				value->z = default->z;
+				value->z = defaultValue->z;
 				result = true;
 			}
 
@@ -39,12 +39,12 @@ namespace castor3d
 
 		bool fixNml( castor::Point3f & value )
 		{
-			static castor::Point3f const default{ 0.0f, 1.0f, 0.0f };
-			auto result = fix( value, default );
+			static castor::Point3f const defaultValue{ 0.0f, 1.0f, 0.0f };
+			auto result = fix( value, defaultValue );
 
 			if ( castor::point::length( value ) < std::numeric_limits< float >::epsilon() )
 			{
-				value = default;
+				value = defaultValue;
 				result = true;
 			}
 
@@ -53,12 +53,12 @@ namespace castor3d
 
 		bool fixTan( castor::Point3f & value )
 		{
-			static castor::Point3f const default{ 1.0f, 0.0f, 0.0f };
-			auto result = fix( value, default );
+			static castor::Point3f const defaultValue{ 1.0f, 0.0f, 0.0f };
+			auto result = fix( value, defaultValue );
 
 			if ( castor::point::length( value ) < std::numeric_limits< float >::epsilon() )
 			{
-				value = default;
+				value = defaultValue;
 				result = true;
 			}
 
@@ -67,14 +67,14 @@ namespace castor3d
 
 		bool fixPos( castor::Point3f & value )
 		{
-			static castor::Point3f const default{ 0.0f, 0.0f, 0.0f };
-			return fix( value, default );
+			static castor::Point3f const defaultValue{ 0.0f, 0.0f, 0.0f };
+			return fix( value, defaultValue );
 		}
 
 		bool fixTex( castor::Point3f & value )
 		{
-			static castor::Point3f const default{ 0.0f, 0.0f, 0.0f };
-			return fix( value, default );
+			static castor::Point3f const defaultValue{ 0.0f, 0.0f, 0.0f };
+			return fix( value, defaultValue );
 		}
 	}
 

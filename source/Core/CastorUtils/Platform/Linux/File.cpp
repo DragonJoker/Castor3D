@@ -116,7 +116,7 @@ namespace castor
 					}
 					else if ( !isLink( folderPath / name ) )
 					{
-						fileFunction( folderPath / name );
+						fileFunction( folderPath, name );
 					}
 				}
 			}
