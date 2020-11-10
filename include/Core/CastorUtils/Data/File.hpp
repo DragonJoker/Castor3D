@@ -373,6 +373,16 @@ namespace castor
 			, Path const & folderPath );
 		/**
 		 *\~english
+		 *\brief		Copies a file
+		 *\return		\p true if file has been correctly copied
+		 *\~french
+		 *\brief		Copie un fichier
+		 *\return		\p true si le fichier a été copié correctement
+		 */
+		CU_API static bool copyFileName( Path const & srcFileName
+			, Path const & dstFileName );
+		/**
+		 *\~english
 		 *\brief		Retrieves the file size
 		 *\return		The value
 		 *\~french

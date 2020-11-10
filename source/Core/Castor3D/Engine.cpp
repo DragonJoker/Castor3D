@@ -51,15 +51,29 @@ using namespace castor;
 
 namespace castor3d
 {
-	static constexpr bool C3D_EnableAPITrace = false;
-	static const char * C3D_NO_RENDERSYSTEM = "No RenderSystem loaded, call castor3d::Engine::loadRenderer before castor3d::Engine::Initialise";
-	static const char * C3D_MAIN_LOOP_EXISTS = "Render loop is already started";
+	namespace
+	{
+		static constexpr bool C3D_EnableAPITrace = false;
+		static const char * C3D_NO_RENDERSYSTEM = "No RenderSystem loaded, call castor3d::Engine::loadRenderer before castor3d::Engine::Initialise";
+		static const char * C3D_MAIN_LOOP_EXISTS = "Render loop is already started";
+
+		castor::LoggerInstancePtr createLogger( castor::LogType type
+			, castor::Path const & filePath )
+		{
+			auto result = castor::Logger::createInstance( type );
+			result->setFileName( filePath );
+			return result;
+		}
+	}
 
 	Engine::Engine( castor::String const & appName
 		, Version const & appVersion
-		, bool enableValidation )
+		, bool enableValidation
+		, castor::LoggerInstancePtr ownedLogger
+		, castor::LoggerInstance * logger )
 		: Unique< Engine >( this )
-		, m_logger{ log::initialise( castor::Logger::getLevel(), getEngineDirectory() / cuT( "Castor3D.log" ) ) }
+		, m_ownedLogger{ std::move( ownedLogger ) }
+		, m_logger{ log::initialise( *( logger ? logger : m_ownedLogger.get() ) ) }
 		, m_appName{ appName }
 		, m_appVersion{ appVersion }
 		, m_enableValidation{ enableValidation }
@@ -95,8 +109,8 @@ namespace castor3d
 			element->flush();
 		};
 		auto mergeResource = []( auto const & source
-		   , auto & destination
-		   , auto element )
+			, auto & destination
+			, auto element )
 		{
 		};
 		initialiseGlslang();
@@ -118,7 +132,7 @@ namespace castor3d
 		m_defaultListener = m_listenerCache->add( cuT( "Default" ) );
 
 		m_shaderCache = makeCache( *this );
-		m_samplerCache = makeCache< Sampler, String >(	*this
+		m_samplerCache = makeCache< Sampler, String >( *this
 			, [this]( String const & name )
 			{
 				return std::make_shared< Sampler >( *this, name );
@@ -142,7 +156,7 @@ namespace castor3d
 			, dummy
 			, dummy
 			, mergeResource );
-		m_overlayCache = makeCache< Overlay, String >(	*this
+		m_overlayCache = makeCache< Overlay, String >( *this
 			, [this]( String const & name, OverlayType type, SceneSPtr scene, OverlaySPtr parent )
 			{
 				auto result = std::make_shared< Overlay >( *this, type, scene, parent );
@@ -152,7 +166,7 @@ namespace castor3d
 			, dummy
 			, dummy
 			, mergeResource );
-		m_sceneCache = makeCache< Scene, String >(	*this
+		m_sceneCache = makeCache< Scene, String >( *this
 			, [this]( castor::String const & name )
 			{
 				return std::make_shared< Scene >( name, *this );
@@ -177,7 +191,7 @@ namespace castor3d
 			, dummy
 			, dummy
 			, mergeResource );
-		m_windowCache = makeCache< RenderWindow, String >(	*this
+		m_windowCache = makeCache< RenderWindow, String >( *this
 			, [this]( castor::String const & name )
 			{
 				auto result = std::make_shared< RenderWindow >( name
@@ -202,6 +216,29 @@ namespace castor3d
 
 		log::info << cuT( "Castor3D - Core engine version : " ) << Version{} << std::endl;
 		log::info << m_cpuInformations << std::endl;
+	}
+
+	Engine::Engine( castor::String const & appName
+		, Version const & appVersion
+		, bool enableValidation )
+		: Engine{ appName
+			, appVersion
+			, enableValidation
+			, createLogger( castor::Logger::getLevel(), getEngineDirectory() / cuT( "Castor3D.log" ) )
+			, nullptr }
+	{
+	}
+	
+	Engine::Engine( castor::String const & appName
+		, Version const & appVersion
+		, bool enableValidation
+		, castor::LoggerInstance & logger )
+		: Engine{ appName
+			, appVersion
+			, enableValidation
+			, nullptr
+			, &logger }
+	{
 	}
 
 	Engine::~Engine()

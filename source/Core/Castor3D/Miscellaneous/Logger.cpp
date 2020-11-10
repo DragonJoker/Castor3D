@@ -14,11 +14,9 @@ namespace castor3d
 	castor::LoggerStreamT< char, castor::WarningLoggerStreambufT > log::warn;
 	castor::LoggerStreamT< char, castor::ErrorLoggerStreambufT > log::error;
 
-	castor::LoggerInstance * log::initialise( castor::LogType type
-		, castor::Path const & filePath )
+	castor::LoggerInstance * log::initialise( castor::LoggerInstance & logger )
 	{
-		m_logger = castor::Logger::createInstance( type );
-		m_logger->setFileName( filePath );
+		m_logger = &logger;
 		trace.set( *m_logger );
 		debug.set( *m_logger );
 		info.set( *m_logger );
@@ -73,7 +71,6 @@ namespace castor3d
 		info.reset();
 		warn.reset();
 		error.reset();
-		delete m_logger;
 		m_logger = nullptr;
 	}
 }

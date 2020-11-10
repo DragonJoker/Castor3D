@@ -89,6 +89,8 @@ namespace castor
 	 *\param[in]	newLine	Dit si on ajoute le caractère de fin de ligne.
 	 */
 	using LogCallback = std::function< void( String const & text, LogType type, bool newLine ) >;
+
+	using LoggerInstancePtr = std::unique_ptr< LoggerInstance >;
 	//@}
 }
 

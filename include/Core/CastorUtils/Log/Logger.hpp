@@ -51,7 +51,7 @@ namespace castor
 		 *\brief		Crée une instance de logger avec le niveau donné.
 		 *\param[in]	logLevel	Le niveau de log.
 		 */
-		CU_API static LoggerInstance * createInstance( LogType logLevel );
+		CU_API static LoggerInstancePtr createInstance( LogType logLevel );
 		/**
 		 *\~english
 		 *\brief		Registers the logging callback

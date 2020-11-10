@@ -28,6 +28,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Graphics/ImageLoader.hpp>
 #include <CastorUtils/Graphics/ImageWriter.hpp>
 #include <CastorUtils/Graphics/RgbaColour.hpp>
+#include <CastorUtils/Log/LoggerInstance.hpp>
 #include <CastorUtils/Miscellaneous/CpuInformations.hpp>
 
 #include <ashespp/Core/RendererList.hpp>
@@ -37,6 +38,19 @@ namespace castor3d
 	class Engine
 		: public castor::Unique< Engine >
 	{
+	private:
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\~french
+		 *\brief		Constructeur
+		 */
+		Engine( castor::String const & appName
+			, Version const & appVersion
+			, bool enableValidation
+			, castor::LoggerInstancePtr ownedLogger
+			, castor::LoggerInstance * logger );
+
 	public:
 		/**
 		 *\~english
@@ -47,6 +61,16 @@ namespace castor3d
 		C3D_API Engine( castor::String const & appName
 			, Version const & appVersion
 			, bool enableValidation );
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\~french
+		 *\brief		Constructeur
+		 */
+		C3D_API Engine( castor::String const & appName
+			, Version const & appVersion
+			, bool enableValidation
+			, castor::LoggerInstance & logger );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -459,7 +483,8 @@ namespace castor3d
 		void doLoadCoreData();
 
 	private:
-		castor::LoggerInstance * m_logger{ nullptr };
+		castor::LoggerInstancePtr m_ownedLogger;
+		castor::LoggerInstance * m_logger;
 		castor::String const m_appName;
 		Version const m_appVersion;
 		RenderLoopUPtr m_renderLoop;
