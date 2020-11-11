@@ -934,7 +934,7 @@ namespace castor3d
 			, RenderPass::VertexOutputs::MaterialLocation );
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
 			, getMinTextureIndex()
-			, 0u
+			, 1u
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
 

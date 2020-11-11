@@ -274,7 +274,7 @@ namespace GuiCommon
 			result->setVisible( true );
 		}
 
-		for ( auto & submesh : *bbMesh )
+		for ( auto & submesh : *geometry->getMesh() )
 		{
 			geometry->setMaterial( *submesh, submesh->getDefaultMaterial() );
 		}
