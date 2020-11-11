@@ -52,7 +52,7 @@ namespace castor3d
 		static std::string const DrawIndex = "c3d_iDrawIndex";
 		static std::string const NodeIndex = "c3d_iNodeIndex";
 
-		castor::Position convertToBottomUp( Position const & position
+		castor::Position convertToTopDown( castor::Position const & position
 			, castor::Size const & size )
 		{
 			return
@@ -307,6 +307,7 @@ namespace castor3d
 	{
 		if ( !m_picking.exchange( true ) )
 		{
+			position = convertToTopDown( position, m_size );
 			m_pickNodeType = PickNodeType::eNone;
 			m_geometry.reset();
 			m_submesh.reset();
@@ -459,7 +460,9 @@ namespace castor3d
 			<< cuT( ": " ) << result->x
 			<< cuT( ", " ) << result->y
 			<< cuT( ", " ) << result->z
-			<< cuT( ", " ) << result->w << std::endl;
+			<< cuT( ", " ) << result->w
+			<< cuT( ", at " ) << position[0]
+			<< cuT( "x" ) << position[1] << std::endl;
 		return result;
 	}
 

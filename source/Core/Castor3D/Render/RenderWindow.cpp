@@ -38,16 +38,6 @@ namespace castor3d
 {
 	namespace
 	{
-		castor::Position convertToTopDown( castor::Position const & position
-			, castor::Size const & size )
-		{
-			return
-			{
-				position.x(),
-				int32_t( size.getHeight() - position.y() )
-			};
-		}
-
 		uint32_t getImageCount( ashes::Surface const & surface )
 		{
 			auto surfaceCaps = surface.getCapabilities();
@@ -360,7 +350,7 @@ namespace castor3d
 
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
 				m_pickingPass->pick( *m_device
-					, convertToTopDown( m_mousePosition, m_size )
+					, m_mousePosition
 					, *target->getCamera() );
 #endif
 
@@ -586,7 +576,7 @@ namespace castor3d
 		if ( camera && !m_pickingPass->isPicking() )
 		{
 			result = m_pickingPass->pick( *m_device
-				, convertToTopDown( position, m_size )
+				, position
 				, *camera );
 		}
 
