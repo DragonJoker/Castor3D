@@ -34,7 +34,19 @@ namespace castor3d
 				++instanceIt;
 			}
 		}
+
+		template< typename CulledT >
+		void cullNodes( Camera const & camera
+			, SceneCuller::CulledInstanceArrayT< CulledT > & all
+			, SceneCuller::CulledInstancePtrArrayT< CulledT > & culled )
+		{
+			for ( size_t i = 0; i < size_t( RenderMode::eCount ); ++i )
+			{
+				cullNodes( camera, all[i], culled[i] );
+			}
+		}
 	}
+
 	FrustumCuller::FrustumCuller( Scene & scene
 		, Camera & camera )
 		: SceneCuller{ scene, &camera, 1u }
@@ -43,13 +55,11 @@ namespace castor3d
 
 	void FrustumCuller::doCullGeometries()
 	{
-		cullNodes( getCamera(), m_allOpaqueSubmeshes, m_culledOpaqueSubmeshes );
-		cullNodes( getCamera(), m_allTransparentSubmeshes, m_culledTransparentSubmeshes );
+		cullNodes( getCamera(), m_allSubmeshes, m_culledSubmeshes );
 	}
 
 	void FrustumCuller::doCullBillboards()
 	{
-		cullNodes( getCamera(), m_allOpaqueBillboards, m_culledOpaqueBillboards );
-		cullNodes( getCamera(), m_allTransparentBillboards, m_culledTransparentBillboards );
+		cullNodes( getCamera(), m_allBillboards, m_culledBillboards );
 	}
 }

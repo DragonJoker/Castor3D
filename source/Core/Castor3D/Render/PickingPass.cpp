@@ -52,7 +52,7 @@ namespace castor3d
 		static std::string const DrawIndex = "c3d_iDrawIndex";
 		static std::string const NodeIndex = "c3d_iNodeIndex";
 
-		castor::Position convertToBottomUp( Position const & position
+		castor::Position convertToTopDown( castor::Position const & position
 			, castor::Size const & size )
 		{
 			return
@@ -283,6 +283,8 @@ namespace castor3d
 			, engine
 			, matrixUbo
 			, culler
+			, RenderMode::eBoth
+			, true
 			, nullptr }
 	{
 		engine.sendEvent( makeGpuFunctorEvent( EventType::ePreRender
@@ -307,6 +309,7 @@ namespace castor3d
 	{
 		if ( !m_picking.exchange( true ) )
 		{
+			position = convertToTopDown( position, m_size );
 			m_pickNodeType = PickNodeType::eNone;
 			m_geometry.reset();
 			m_submesh.reset();
@@ -459,7 +462,9 @@ namespace castor3d
 			<< cuT( ": " ) << result->x
 			<< cuT( ", " ) << result->y
 			<< cuT( ", " ) << result->z
-			<< cuT( ", " ) << result->w << std::endl;
+			<< cuT( ", " ) << result->w
+			<< cuT( ", at " ) << position[0]
+			<< cuT( "x" ) << position[1] << std::endl;
 		return result;
 	}
 
@@ -929,7 +934,7 @@ namespace castor3d
 			, RenderPass::VertexOutputs::MaterialLocation );
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
 			, getMinTextureIndex()
-			, 0u
+			, 1u
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
 
@@ -1008,12 +1013,6 @@ namespace castor3d
 	ashes::PipelineColorBlendStateCreateInfo PickingPass::doCreateBlendState( PipelineFlags const & flags )const
 	{
 		return RenderPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u );
-	}
-
-	void PickingPass::doPrepareFrontPipeline( ShaderProgramSPtr program
-		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts
-		, PipelineFlags const & flags )
-	{
 	}
 
 	//*********************************************************************************************

@@ -249,7 +249,7 @@ namespace castor3d
 	{
 		return ashes::PipelineDepthStencilStateCreateInfo{ 0u
 			, VK_TRUE
-			, m_opaque };
+			, m_mode != RenderMode::eTransparentOnly };
 	}
 
 	ashes::PipelineColorBlendStateCreateInfo RenderTechniquePass::doCreateBlendState( PipelineFlags const & flags )const

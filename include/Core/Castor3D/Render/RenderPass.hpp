@@ -27,13 +27,13 @@ namespace castor3d
 	public:
 		using DistanceSortedNodeMap = std::multimap< double, std::unique_ptr< DistanceRenderNodeBase > >;
 
-	private:
+	protected:
 		C3D_API RenderPass( castor::String const & category
 			, castor::String const & name
 			, Engine & engine
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
-			, bool opaque
+			, RenderMode mode
 			, bool oit
 			, SceneNode const * ignored
 			, uint32_t instanceMult = 1u );
@@ -1267,7 +1267,7 @@ namespace castor3d
 		SceneCuller & m_culler;
 		RenderQueue m_renderQueue;
 		castor::String m_category;
-		bool m_opaque{ false };
+		RenderMode m_mode{ RenderMode::eBoth };
 		bool m_oit{ false };
 		bool m_isDirty{ true };
 		SceneUbo m_sceneUbo;

@@ -192,6 +192,24 @@ namespace castor3d
 		CU_ScopedEnumBounds( eOrtho )
 	};
 	C3D_API castor::String getName( ViewportType value );
+	/**
+	*\~english
+	*\brief
+	*	The render pass modes, regarding transparency.
+	*\~french
+	*\brief
+	*	Les modes de rendu des passes, par rapport à la transparence.
+	*/
+	enum class RenderMode
+		: uint8_t
+	{
+		eOpaqueOnly,
+		eTransparentOnly,
+		eBoth,
+		CU_ScopedEnumBounds( eOpaqueOnly )
+	};
+	C3D_API castor::String getName( RenderMode value );
+	C3D_API bool isValidNodeForPass( PassFlags const & passFlags, RenderMode value );
 
 	C3D_API TextureFlagsArray::const_iterator checkFlags( TextureFlagsArray const & flags, TextureFlag flag );
 	C3D_API TextureFlags merge( TextureFlagsArray const & flags );

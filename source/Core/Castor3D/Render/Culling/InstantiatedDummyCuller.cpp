@@ -10,13 +10,17 @@ namespace castor3d
 
 	void InstantiatedDummyCuller::doCullGeometries()
 	{
-		m_allOpaqueSubmeshes.copy( m_culledOpaqueSubmeshes );
-		m_allTransparentSubmeshes.copy( m_culledTransparentSubmeshes );
+		for ( size_t i = 0; i < size_t( RenderMode::eCount ); ++i )
+		{
+			m_allSubmeshes[i].copy( m_culledSubmeshes[i] );
+		}
 	}
 
 	void InstantiatedDummyCuller::doCullBillboards()
 	{
-		m_allOpaqueBillboards.copy( m_culledOpaqueBillboards );
-		m_allTransparentBillboards.copy( m_culledTransparentBillboards );
+		for ( size_t i = 0; i < size_t( RenderMode::eCount ); ++i )
+		{
+			m_allBillboards[i].copy( m_culledBillboards[i] );
+		}
 	}
 }

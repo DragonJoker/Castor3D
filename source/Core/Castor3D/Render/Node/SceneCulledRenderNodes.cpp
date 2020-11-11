@@ -365,7 +365,7 @@ namespace castor3d
 					, pipeline
 					, pass
 					, nodes
-					, culler.getCulledSubmeshes( queue.isOpaque() ) );
+					, culler.getCulledSubmeshes( queue.getMode() ) );
 			} );
 		doTraverseNodes( allNodes.instancedStaticNodes.backCulled
 			, [this, &queue, &culler]( RenderPipeline & pipeline
@@ -377,7 +377,7 @@ namespace castor3d
 					, pipeline
 					, pass
 					, nodes
-					, culler.getCulledSubmeshes( queue.isOpaque() ) );
+					, culler.getCulledSubmeshes( queue.getMode() ) );
 			} );
 		doTraverseNodes( allNodes.instancedSkinnedNodes.frontCulled
 			, [this, &queue, &culler]( RenderPipeline & pipeline
@@ -389,7 +389,7 @@ namespace castor3d
 					, pipeline
 					, pass
 					, nodes
-					, culler.getCulledSubmeshes( queue.isOpaque() ) );
+					, culler.getCulledSubmeshes( queue.getMode() ) );
 			} );
 		doTraverseNodes( allNodes.instancedSkinnedNodes.backCulled
 			, [this, &queue, &culler]( RenderPipeline & pipeline
@@ -401,36 +401,36 @@ namespace castor3d
 					, pipeline
 					, pass
 					, nodes
-					, culler.getCulledSubmeshes( queue.isOpaque() ) );
+					, culler.getCulledSubmeshes( queue.getMode() ) );
 			} );
 
 		doParseRenderNodes( allNodes.staticNodes.frontCulled
 			, staticNodes.frontCulled
-			, culler.getCulledSubmeshes( queue.isOpaque() ) );
+			, culler.getCulledSubmeshes( queue.getMode() ) );
 		doParseRenderNodes( allNodes.staticNodes.backCulled
 			, staticNodes.backCulled
-			, culler.getCulledSubmeshes( queue.isOpaque() ) );
+			, culler.getCulledSubmeshes( queue.getMode() ) );
 
 		doParseRenderNodes( allNodes.skinnedNodes.frontCulled
 			, skinnedNodes.frontCulled
-			, culler.getCulledSubmeshes( queue.isOpaque() ) );
+			, culler.getCulledSubmeshes( queue.getMode() ) );
 		doParseRenderNodes( allNodes.skinnedNodes.backCulled
 			, skinnedNodes.backCulled
-			, culler.getCulledSubmeshes( queue.isOpaque() ) );
+			, culler.getCulledSubmeshes( queue.getMode() ) );
 
 		doParseRenderNodes( allNodes.morphingNodes.frontCulled
 			, morphingNodes.frontCulled
-			, culler.getCulledSubmeshes( queue.isOpaque() ) );
+			, culler.getCulledSubmeshes( queue.getMode() ) );
 		doParseRenderNodes( allNodes.morphingNodes.backCulled
 			, morphingNodes.backCulled
-			, culler.getCulledSubmeshes( queue.isOpaque() ) );
+			, culler.getCulledSubmeshes( queue.getMode() ) );
 
 		doParseRenderNodes( allNodes.billboardNodes.frontCulled
 			, billboardNodes.frontCulled
-			, culler.getCulledBillboards( queue.isOpaque() ) );
+			, culler.getCulledBillboards( queue.getMode() ) );
 		doParseRenderNodes( allNodes.billboardNodes.backCulled
 			, billboardNodes.backCulled
-			, culler.getCulledBillboards( queue.isOpaque() ) );
+			, culler.getCulledBillboards( queue.getMode() ) );
 	}
 
 	void SceneCulledRenderNodes::prepareCommandBuffers( RenderQueue const & queue

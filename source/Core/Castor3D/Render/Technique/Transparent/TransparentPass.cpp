@@ -711,7 +711,7 @@ namespace castor3d
 			, flags.sceneFlags
 			, false // rsm
 			, index
-			, m_opaque );
+			, false );
 		shader::PhongReflectionModel reflections{ writer, utils };
 
 		// Fragment Outputs
@@ -949,7 +949,7 @@ namespace castor3d
 			, flags.sceneFlags
 			, false // rsm
 			, index
-			, m_opaque );
+			, false );
 		shader::MetallicPbrReflectionModel reflections{ writer, utils };
 
 		// Fragment Outputs
@@ -1236,7 +1236,7 @@ namespace castor3d
 			, flags.sceneFlags
 			, false // rsm
 			, index
-			, m_opaque );
+			, false );
 		shader::SpecularPbrReflectionModel reflections{ writer, utils };
 
 		// Fragment Outputs

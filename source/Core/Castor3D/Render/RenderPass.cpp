@@ -108,7 +108,7 @@ namespace castor3d
 		, Engine & engine
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
-		, bool opaque
+		, RenderMode mode
 		, bool oit
 		, SceneNode const * ignored
 		, uint32_t instanceMult )
@@ -117,10 +117,10 @@ namespace castor3d
 		, m_renderSystem{ *engine.getRenderSystem() }
 		, m_matrixUbo{ matrixUbo }
 		, m_culler{ culler }
-		, m_renderQueue{ *this, opaque, ignored }
+		, m_renderQueue{ *this, mode, ignored }
 		, m_category{ category }
 		, m_oit{ oit }
-		, m_opaque{ opaque }
+		, m_mode{ mode }
 		, m_sceneUbo{ engine }
 		, m_instanceMult{ instanceMult }
 	{
@@ -134,7 +134,7 @@ namespace castor3d
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, uint32_t instanceMult )
-		: RenderPass{ category, name, engine, matrixUbo, culler, true, true, nullptr, instanceMult }
+		: RenderPass{ category, name, engine, matrixUbo, culler, RenderMode::eOpaqueOnly, true, nullptr, instanceMult }
 	{
 	}
 
@@ -145,7 +145,7 @@ namespace castor3d
 		, SceneCuller & culler
 		, bool oit
 		, uint32_t instanceMult )
-		: RenderPass{ category, name, engine, matrixUbo, culler, false, oit, nullptr, instanceMult }
+		: RenderPass{ category, name, engine, matrixUbo, culler, RenderMode::eTransparentOnly, oit, nullptr, instanceMult }
 	{
 	}
 
@@ -156,7 +156,7 @@ namespace castor3d
 		, SceneCuller & culler
 		, SceneNode const * ignored
 		, uint32_t instanceMult )
-		: RenderPass{ category, name, engine, matrixUbo, culler, true, true, ignored, instanceMult }
+		: RenderPass{ category, name, engine, matrixUbo, culler, RenderMode::eOpaqueOnly, true, ignored, instanceMult }
 	{
 	}
 
@@ -168,7 +168,7 @@ namespace castor3d
 		, bool oit
 		, SceneNode const * ignored
 		, uint32_t instanceMult )
-		: RenderPass{ category, name, engine, matrixUbo, culler, false, oit, ignored, instanceMult }
+		: RenderPass{ category, name, engine, matrixUbo, culler, RenderMode::eTransparentOnly, oit, ignored, instanceMult }
 	{
 	}
 
@@ -250,11 +250,11 @@ namespace castor3d
 		doUpdateFlags( flags );
 		remFlag( flags.programFlags, ProgramFlag::eInvertNormals );
 
-		if ( checkFlag( flags.passFlags, PassFlag::eAlphaBlending ) != m_opaque
+		if ( isValidNodeForPass( flags.passFlags, m_mode )
 			&& ( !checkFlag( flags.programFlags, ProgramFlag::eBillboards )
 				|| !isShadowMapProgram( flags.programFlags ) ) )
 		{
-			if ( m_opaque )
+			if ( m_mode != RenderMode::eTransparentOnly )
 			{
 				flags.alphaBlendMode = BlendMode::eNoBlend;
 			}
@@ -294,11 +294,11 @@ namespace castor3d
 		doUpdateFlags( flags );
 		addFlag( flags.programFlags, ProgramFlag::eInvertNormals );
 
-		if ( checkFlag( flags.passFlags, PassFlag::eAlphaBlending ) != m_opaque
+		if ( isValidNodeForPass( flags.passFlags, m_mode )
 			&& ( !checkFlag( flags.programFlags, ProgramFlag::eBillboards )
 				|| !isShadowMapProgram( flags.programFlags ) ) )
 		{
-			if ( m_opaque )
+			if ( m_mode != RenderMode::eTransparentOnly )
 			{
 				flags.alphaBlendMode = BlendMode::eNoBlend;
 			}
@@ -334,7 +334,7 @@ namespace castor3d
 
 	RenderPipeline * RenderPass::getPipelineFront( PipelineFlags flags )const
 	{
-		if ( m_opaque )
+		if ( m_mode != RenderMode::eTransparentOnly )
 		{
 			flags.alphaBlendMode = BlendMode::eNoBlend;
 		}
@@ -353,7 +353,7 @@ namespace castor3d
 
 	RenderPipeline * RenderPass::getPipelineBack( PipelineFlags flags )const
 	{
-		if ( m_opaque )
+		if ( m_mode != RenderMode::eTransparentOnly )
 		{
 			flags.alphaBlendMode = BlendMode::eNoBlend;
 		}
@@ -1190,10 +1190,11 @@ namespace castor3d
 		if ( getInstanceMult() > 1
 			&& !m_modelsInstances.empty() )
 		{
-			updateInstancesUbos( m_modelsInstances, getCuller().getCulledSubmeshes( true ), getInstanceMult() );
-			updateInstancesUbos( m_modelsInstances, getCuller().getCulledSubmeshes( false ), getInstanceMult() );
-			updateInstancesUbos( m_modelsInstances, getCuller().getCulledBillboards( true ), getInstanceMult() );
-			updateInstancesUbos( m_modelsInstances, getCuller().getCulledBillboards( true ), getInstanceMult() );
+			for ( size_t i = 0; i < size_t( RenderMode::eCount ); ++i )
+			{
+				updateInstancesUbos( m_modelsInstances, getCuller().getCulledSubmeshes( RenderMode( i ) ), getInstanceMult() );
+				updateInstancesUbos( m_modelsInstances, getCuller().getCulledBillboards( RenderMode( i ) ), getInstanceMult() );
+			}
 		}
 	}
 

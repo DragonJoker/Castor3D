@@ -66,6 +66,17 @@ namespace castor3d
 				++instanceIt;
 			}
 		}
+
+		template< typename CulledT >
+		void cullNodes( std::vector< Frustum > const & frustums
+			, SceneCuller::CulledInstanceArrayT< CulledT > & all
+			, SceneCuller::CulledInstancePtrArrayT< CulledT > & culled )
+		{
+			for ( size_t i = 0; i < size_t( RenderMode::eCount ); ++i )
+			{
+				cullNodes( frustums, all[i], culled[i] );
+			}
+		}
 	}
 
 	InstantiatedFrustumCuller::InstantiatedFrustumCuller( Scene & scene
@@ -77,13 +88,11 @@ namespace castor3d
 
 	void InstantiatedFrustumCuller::doCullGeometries()
 	{
-		cullNodes( m_frustums, m_allOpaqueSubmeshes, m_culledOpaqueSubmeshes );
-		cullNodes( m_frustums, m_allTransparentSubmeshes, m_culledTransparentSubmeshes );
+		cullNodes( m_frustums, m_allSubmeshes, m_culledSubmeshes );
 	}
 
 	void InstantiatedFrustumCuller::doCullBillboards()
 	{
-		cullNodes( m_frustums, m_allOpaqueBillboards, m_culledOpaqueBillboards );
-		cullNodes( m_frustums, m_allTransparentBillboards, m_culledTransparentBillboards );
+		cullNodes( m_frustums, m_allBillboards, m_culledBillboards );
 	}
 }
