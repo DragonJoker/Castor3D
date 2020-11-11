@@ -228,12 +228,6 @@ namespace castor3d
 		 */
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
 		/**
-		 *\copydoc		castor3d::RenderPass::doPrepareFrontPipeline
-		 */
-		void doPrepareFrontPipeline( ShaderProgramSPtr program
-			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts
-			, PipelineFlags const & flags )override;
-		/**
 		 *\copydoc		castor3d::RenderPass::doUpdateFlags
 		 */
 		void doUpdateFlags( PipelineFlags & flags )const override;

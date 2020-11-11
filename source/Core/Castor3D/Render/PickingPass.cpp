@@ -283,6 +283,8 @@ namespace castor3d
 			, engine
 			, matrixUbo
 			, culler
+			, RenderMode::eBoth
+			, true
 			, nullptr }
 	{
 		engine.sendEvent( makeGpuFunctorEvent( EventType::ePreRender
@@ -1011,12 +1013,6 @@ namespace castor3d
 	ashes::PipelineColorBlendStateCreateInfo PickingPass::doCreateBlendState( PipelineFlags const & flags )const
 	{
 		return RenderPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u );
-	}
-
-	void PickingPass::doPrepareFrontPipeline( ShaderProgramSPtr program
-		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts
-		, PipelineFlags const & flags )
-	{
 	}
 
 	//*********************************************************************************************
