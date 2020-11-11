@@ -19,10 +19,10 @@ using ashes::operator!=;
 namespace castor3d
 {
 	RenderQueue::RenderQueue( RenderPass & renderPass
-		, bool opaque
+		, RenderMode mode
 		, SceneNode const * ignored )
 		: OwnedBy< RenderPass >{ renderPass }
-		, m_opaque{ opaque }
+		, m_mode{ mode }
 		, m_ignoredNode{ ignored }
 		, m_culler{ getOwner()->getCuller() }
 		, m_onCullerCompute( m_culler.onCompute.connect( [this]( SceneCuller const & culler )

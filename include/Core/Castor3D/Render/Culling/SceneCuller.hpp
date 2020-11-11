@@ -82,6 +82,11 @@ namespace castor3d
 		template< typename CulledT >
 		using CulledInstancesPtrT = CulledInstancesArrayT< CulledT *, UInt32Array * >;
 
+		template< typename CulledT >
+		using CulledInstanceArrayT = std::array< CulledInstancesT< CulledT >, size_t( RenderMode::eCount ) >;
+		template< typename CulledT >
+		using CulledInstancePtrArrayT = std::array< CulledInstancesPtrT< CulledT >, size_t( RenderMode::eCount ) >;
+
 	public:
 		C3D_API SceneCuller( Scene & scene
 			, Camera * camera
@@ -126,32 +131,24 @@ namespace castor3d
 			return m_culledChanged;
 		}
 
-		inline CulledInstancesT< CulledSubmesh > const & getAllSubmeshes( bool opaque )const
+		inline CulledInstancesT< CulledSubmesh > const & getAllSubmeshes( RenderMode mode )const
 		{
-			return opaque
-				? m_allOpaqueSubmeshes
-				: m_allTransparentSubmeshes;
+			return m_allSubmeshes[size_t( mode )];
 		}
 
-		inline CulledInstancesT< CulledBillboard > const & getAllBillboards( bool opaque )const
+		inline CulledInstancesT< CulledBillboard > const & getAllBillboards( RenderMode mode )const
 		{
-			return opaque
-				? m_allOpaqueBillboards
-				: m_allTransparentBillboards;
+			return m_allBillboards[size_t( mode )];
 		}
 
-		inline CulledInstancesPtrT< CulledSubmesh > const & getCulledSubmeshes( bool opaque )const
+		inline CulledInstancesPtrT< CulledSubmesh > const & getCulledSubmeshes( RenderMode mode )const
 		{
-			return opaque
-				? m_culledOpaqueSubmeshes
-				: m_culledTransparentSubmeshes;
+			return m_culledSubmeshes[size_t( mode )];
 		}
 
-		inline CulledInstancesPtrT< CulledBillboard > const & getCulledBillboards( bool opaque )const
+		inline CulledInstancesPtrT< CulledBillboard > const & getCulledBillboards( RenderMode mode )const
 		{
-			return opaque
-				? m_culledOpaqueBillboards
-				: m_culledTransparentBillboards;
+			return m_culledBillboards[size_t( mode )];
 		}
 
 	public:
@@ -182,14 +179,10 @@ namespace castor3d
 		bool m_sceneDirty{ true };
 		bool m_cameraDirty{ true };
 		float m_minCullersZ{ 0.0f };
-		CulledInstancesT< CulledSubmesh > m_allOpaqueSubmeshes;
-		CulledInstancesT< CulledSubmesh > m_allTransparentSubmeshes;
-		CulledInstancesT< CulledBillboard > m_allOpaqueBillboards;
-		CulledInstancesT< CulledBillboard > m_allTransparentBillboards;
-		CulledInstancesPtrT< CulledSubmesh > m_culledOpaqueSubmeshes;
-		CulledInstancesPtrT< CulledSubmesh > m_culledTransparentSubmeshes;
-		CulledInstancesPtrT< CulledBillboard > m_culledOpaqueBillboards;
-		CulledInstancesPtrT< CulledBillboard > m_culledTransparentBillboards;
+		CulledInstanceArrayT< CulledSubmesh > m_allSubmeshes;
+		CulledInstanceArrayT< CulledBillboard > m_allBillboards;
+		CulledInstancePtrArrayT< CulledSubmesh > m_culledSubmeshes;
+		CulledInstancePtrArrayT< CulledBillboard > m_culledBillboards;
 		OnSceneChangedConnection m_sceneChanged;
 		OnCameraChangedConnection m_cameraChanged;
 	};

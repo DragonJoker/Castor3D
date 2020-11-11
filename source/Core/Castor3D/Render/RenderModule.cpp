@@ -112,6 +112,31 @@ namespace castor3d
 		}
 	}
 
+	castor::String getName( RenderMode value )
+	{
+		switch ( value )
+		{
+		case RenderMode::eOpaqueOnly:
+			return cuT( "opaque_only" );
+		case RenderMode::eTransparentOnly:
+			return cuT( "transparent_only" );
+		case RenderMode::eBoth:
+			return cuT( "both" );
+		default:
+			CU_Failure( "Unsupported RenderMode" );
+			return castor::cuEmptyString;
+		}
+	}
+
+	bool isValidNodeForPass( PassFlags const & passFlags, RenderMode value )
+	{
+		auto transparent = checkFlag( passFlags, PassFlag::eAlphaBlending );
+		return value == RenderMode::eBoth
+			|| ( transparent
+				? ( value == RenderMode::eTransparentOnly )
+				: ( value == RenderMode::eOpaqueOnly ) );
+	}
+
 	TextureFlagsArray::const_iterator checkFlags( TextureFlagsArray const & flags, TextureFlag flag )
 	{
 		auto it = std::find_if( flags.begin()

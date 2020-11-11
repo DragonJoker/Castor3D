@@ -36,7 +36,7 @@ namespace castor3d
 		 *\param[in]	ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 */
 		C3D_API RenderQueue( RenderPass & renderPass
-			, bool opaque
+			, RenderMode mode
 			, SceneNode const * ignored );
 		/**
 		 *\~english
@@ -97,9 +97,9 @@ namespace castor3d
 			return *m_commandBuffer;
 		}
 
-		inline bool isOpaque()const
+		inline RenderMode getMode()const
 		{
-			return m_opaque;
+			return m_mode;
 		}
 
 		inline SceneNode const * getIgnoredNode()const
@@ -117,7 +117,7 @@ namespace castor3d
 	private:
 		SceneCuller const & m_culler;
 		SceneCullerSignalConnection m_onCullerCompute;
-		bool m_opaque;
+		RenderMode m_mode;
 		SceneNode const * m_ignoredNode{ nullptr };
 		SceneRenderNodesPtr m_renderNodes;
 		SceneCulledRenderNodesPtr m_culledRenderNodes;

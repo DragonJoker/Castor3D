@@ -640,7 +640,7 @@ namespace castor3d
 			, flags.sceneFlags
 			, false // rsm
 			, index
-			, m_opaque );
+			, m_mode != RenderMode::eTransparentOnly );
 		shader::PhongReflectionModel reflections{ writer, utils };
 
 		// Fragment Outputs
@@ -868,7 +868,7 @@ namespace castor3d
 			, flags.sceneFlags
 			, false // rsm
 			, index
-			, m_opaque );
+			, m_mode != RenderMode::eTransparentOnly );
 		shader::MetallicPbrReflectionModel reflections{ writer, utils };
 		shader::Fog fog{ getFogType( flags.sceneFlags ), writer };
 
@@ -934,14 +934,9 @@ namespace castor3d
 					, roughness
 					, tangentSpaceViewPosition
 					, tangentSpaceFragPosition );
-
-				if ( m_opaque )
-				{
-					utils.applyAlphaFunc( flags.alphaFunc
-						, alpha
-						, material.m_alphaRef );
-				}
-
+				utils.applyAlphaFunc( flags.alphaFunc
+					, alpha
+					, material.m_alphaRef );
 				emissive *= albedo;
 				auto lightDiffuse = writer.declLocale( "lightDiffuse"
 					, vec3( 0.0_f ) );
@@ -1157,7 +1152,7 @@ namespace castor3d
 			, flags.sceneFlags
 			, false // rsm
 			, index
-			, m_opaque );
+			, m_mode != RenderMode::eTransparentOnly );
 		shader::SpecularPbrReflectionModel reflections{ writer, utils };
 
 		// Fragment Outputs
@@ -1222,14 +1217,9 @@ namespace castor3d
 					, glossiness
 					, tangentSpaceViewPosition
 					, tangentSpaceFragPosition );
-
-				if ( m_opaque )
-				{
-					utils.applyAlphaFunc( flags.alphaFunc
-						, alpha
-						, material.m_alphaRef );
-				}
-
+				utils.applyAlphaFunc( flags.alphaFunc
+					, alpha
+					, material.m_alphaRef );
 				emissive *= albedo;
 				auto lightDiffuse = writer.declLocale( "lightDiffuse"
 					, vec3( 0.0_f ) );

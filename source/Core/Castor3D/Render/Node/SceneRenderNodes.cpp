@@ -329,7 +329,7 @@ namespace castor3d
 		//*****************************************************************************************
 
 		void doSortRenderNodes( RenderPass & renderPass
-			, bool opaque
+			, RenderMode mode
 			, SceneNode const * ignored
 			, SceneRenderNodes & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )
@@ -337,7 +337,7 @@ namespace castor3d
 			uint32_t instanceMult = renderPass.getInstanceMult();
 			auto & scene = nodes.scene;
 
-			for ( auto & culledNode : renderPass.getCuller().getAllSubmeshes( opaque ).objects )
+			for ( auto & culledNode : renderPass.getCuller().getAllSubmeshes( mode ).objects )
 			{
 				auto & submesh = culledNode.data;
 				auto pass = culledNode.pass;
@@ -349,7 +349,7 @@ namespace castor3d
 					pass->prepareTextures();
 					auto passFlags = pass->getPassFlags();
 
-					if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) != opaque )
+					if ( isValidNodeForPass( passFlags, mode ) )
 					{
 						auto programFlags = submesh.getProgramFlags( material );
 						auto sceneFlags = scene.getFlags();
@@ -381,7 +381,7 @@ namespace castor3d
 							, submesh
 							, renderPass );
 
-						auto needsFront = !opaque
+						auto needsFront = ( mode == RenderMode::eTransparentOnly )
 							|| pass->IsTwoSided()
 							|| checkFlags( textures, TextureFlag::eOpacity ) != textures.end();
 
@@ -409,7 +409,7 @@ namespace castor3d
 				}
 			}
 
-			for ( auto & culledNode : renderPass.getCuller().getAllBillboards( opaque ).objects )
+			for ( auto & culledNode : renderPass.getCuller().getAllBillboards( mode ).objects )
 			{
 				auto & billboard = culledNode.data;
 				auto & pass = culledNode.pass;
@@ -431,7 +431,7 @@ namespace castor3d
 					, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP
 					, billboard.getGeometryBuffers().layouts );
 
-				if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) != opaque
+				if ( isValidNodeForPass( passFlags, mode )
 					&& !isShadowMapProgram( programFlags ) )
 				{
 					nodes.addRenderNode( flags
@@ -517,7 +517,7 @@ namespace castor3d
 		billboardNodes.frontCulled.clear();
 
 		castor3d::doSortRenderNodes( *queue.getOwner()
-			, queue.isOpaque()
+			, queue.getMode()
 			, queue.getIgnoredNode()
 			, *this
 			, shadowMaps );

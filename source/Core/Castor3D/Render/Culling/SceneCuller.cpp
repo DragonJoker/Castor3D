@@ -20,6 +20,29 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
+	namespace
+	{
+		template< typename CulledT >
+		void doAddNode( PassFlags const & passFlags
+			, CulledT const & node
+			, UInt32Array const & instances
+			, SceneCuller::CulledInstanceArrayT< CulledT > & nodes )
+		{
+			if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) )
+			{
+				nodes[size_t( RenderMode::eTransparentOnly )].push_back( node, instances );
+			}
+			else
+			{
+				nodes[size_t( RenderMode::eOpaqueOnly )].push_back( node, instances );
+			}
+
+			nodes[size_t( RenderMode::eBoth )].push_back( node, instances );
+		}
+	}
+
+	//*********************************************************************************************
+
 	size_t hash( CulledSubmesh const & culled )
 	{
 		return hash( culled.instance, culled.data, *culled.pass );
@@ -151,18 +174,20 @@ namespace castor3d
 
 	void SceneCuller::doClearAll()
 	{
-		m_allOpaqueSubmeshes.clear();
-		m_allTransparentSubmeshes.clear();
-		m_allOpaqueBillboards.clear();
-		m_allTransparentBillboards.clear();
+		for ( size_t i = 0; i < size_t( RenderMode::eCount ); ++i )
+		{
+			m_allSubmeshes[i].clear();
+			m_allBillboards[i].clear();
+		}
 	}
 
 	void SceneCuller::doClearCulled()
 	{
-		m_culledOpaqueSubmeshes.clear();
-		m_culledTransparentSubmeshes.clear();
-		m_culledOpaqueBillboards.clear();
-		m_culledTransparentBillboards.clear();
+		for ( size_t i = 0; i < size_t( RenderMode::eCount ); ++i )
+		{
+			m_culledSubmeshes[i].clear();
+			m_culledBillboards[i].clear();
+		}
 	}
 
 	void SceneCuller::doListGeometries()
@@ -191,24 +216,13 @@ namespace castor3d
 						{
 							for ( auto & pass : *material )
 							{
-								auto passFlags = pass->getPassFlags();
-
-								if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) )
-								{
-									m_allTransparentSubmeshes.push_back( CulledSubmesh{ geometry
-											, *submesh
-											, pass
-											, node }
-										, instances );
-								}
-								else
-								{
-									m_allOpaqueSubmeshes.push_back( CulledSubmesh{ geometry
-											, *submesh
-											, pass
-											, node }
-										, instances );
-								}
+								doAddNode( pass->getPassFlags()
+									, CulledSubmesh{ geometry
+										, *submesh
+										, pass
+										, node }
+									, instances
+									, m_allSubmeshes );
 							}
 						}
 					}
@@ -265,24 +279,13 @@ namespace castor3d
 
 					for ( auto & pass : *material )
 					{
-						auto passFlags = pass->getPassFlags();
-
-						if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) )
-						{
-							m_allTransparentBillboards.push_back( CulledBillboard{ billboards
-									, billboards
-									, pass
-									, node }
-								, instances );
-						}
-						else
-						{
-							m_allOpaqueBillboards.push_back( CulledBillboard{ billboards
-									, billboards
-									, pass
-									, node }
-								, instances );
-						}
+						doAddNode( pass->getPassFlags()
+							, CulledBillboard{ billboards
+								, billboards
+								, pass
+								, node }
+							, instances
+							, m_allBillboards );
 					}
 				}
 			}
@@ -310,22 +313,13 @@ namespace castor3d
 
 					for ( auto & pass : *material )
 					{
-						if ( material->hasAlphaBlending() )
-						{
-							m_allTransparentBillboards.push_back( CulledBillboard{ billboards
-									, billboards
-									, pass
-									, node }
-								, instances );
-						}
-						else
-						{
-							m_allOpaqueBillboards.push_back( CulledBillboard{ billboards
-									, billboards
-									, pass
-									, node }
-								, instances );
-						}
+						doAddNode( pass->getPassFlags()
+							, CulledBillboard{ billboards
+								, billboards
+								, pass
+								, node }
+							, instances
+							, m_allBillboards );
 					}
 				}
 			}
