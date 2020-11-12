@@ -25,25 +25,28 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	name		The pass name.
-		 *\param[in]	engine		The engine.
-		 *\param[in]	matrixUbo	The scene matrices UBO.
-		 *\param[in]	culler		The culler for this pass.
-		 *\param[in]	shadowMap	The parent shadow map.
+		 *\param[in]	name			The pass name.
+		 *\param[in]	engine			The engine.
+		 *\param[in]	matrixUbo		The scene matrices UBO.
+		 *\param[in]	culler			The culler for this pass.
+		 *\param[in]	shadowMap		The parent shadow map.
+		 *\param[in]	instanceMult	The object instance multiplier.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	name		Le nom de la passe.
-		 *\param[in]	engine		Le moteur.
-		 *\param[in]	matrixUbo	L'UBO de matrices de la scène.
-		 *\param[in]	culler		Le culler pour cette passe.
-		 *\param[in]	shadowMap	La shadow map parente.
+		 *\param[in]	name			Le nom de la passe.
+		 *\param[in]	engine			Le moteur.
+		 *\param[in]	matrixUbo		L'UBO de matrices de la scène.
+		 *\param[in]	culler			Le culler pour cette passe.
+		 *\param[in]	shadowMap		La shadow map parente.
+		 *\param[in]	instanceMult	Le multiplicateur d'instances d'objets.
 		 */
 		C3D_API ShadowMapPass( RenderDevice const & device
 			, castor::String name
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, ShadowMap const & shadowMap
-			, ashes::RenderPassPtr renderPass );
+			, ashes::RenderPassPtr renderPass
+			, uint32_t instanceMult = 1u );
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.

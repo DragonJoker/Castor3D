@@ -123,7 +123,7 @@ namespace castor3d
 
 				// Snap cascade to texel grid:
 				auto extent = maxExtents - minExtents;
-				auto texelSize = extent / float( ShadowMapPassDirectional::TextureSize );
+				auto texelSize = extent / float( ShadowMapPassDirectional::TileSize );
 				minExtents = castor::point::getFloored( minExtents / texelSize ) * texelSize;
 				maxExtents = castor::point::getFloored( maxExtents / texelSize ) * texelSize;
 
@@ -206,22 +206,41 @@ namespace castor3d
 
 	void DirectionalLight::doBind( Point4f * buffer )const
 	{
+		auto shadowTilesX = float( ShadowMapPassDirectional::TileCountX );
+		auto shadowTilesY = float( ShadowMapPassDirectional::TileCountY );
 		doCopyComponent( m_direction, float( m_cascades.size() ), buffer );
-		Point4f splitDepths;
-		Point4f splitScales;
+		doCopyComponent( shadowTilesX
+			, shadowTilesY
+			, 1.0f / shadowTilesX
+			, 1.0f / shadowTilesY
+			, buffer );
+		std::array< Point4f, 2u > splitDepths;
+		std::array< Point4f, 2u > splitScales;
 
 		for ( uint32_t i = 0u; i < m_cascades.size(); ++i )
 		{
-			splitDepths[i] = m_cascades[i].splitDepthScale->x;
-			splitScales[i] = m_cascades[i].splitDepthScale->y;
+			splitDepths[i / 4][i % 4] = m_cascades[i].splitDepthScale->x;
+			splitScales[i / 4][i % 4] = m_cascades[i].splitDepthScale->y;
 		}
 
-		doCopyComponent( splitDepths, buffer );
-		doCopyComponent( splitScales, buffer );
+		doCopyComponent( splitDepths[0], buffer );
+		doCopyComponent( splitDepths[1], buffer );
+		doCopyComponent( splitScales[0], buffer );
+		doCopyComponent( splitScales[1], buffer );
 
 		for ( uint32_t i = 0u; i < m_cascades.size(); ++i )
 		{
-			doCopyComponent( m_cascades[i].viewProjMatrix, buffer );
+			const float sizeX = 1.0f / shadowTilesX;
+			const float sizeY = 1.0f / shadowTilesY;
+			const float offsetX = ( float( i % uint32_t( shadowTilesX ) ) / shadowTilesX + sizeX * 0.5f ) * 2.0f - 1.0f;
+			const float offsetY = ( 1.0f - ( float( i / uint32_t( shadowTilesX ) ) / shadowTilesY ) - sizeY * 0.5f ) * 2.0f - 1.0f;
+			castor::Matrix4x4f tileBias;
+			tileBias[0] = { sizeX, 0.0f, 0.0f, 0.0f };
+			tileBias[1] = { 0.0f, sizeY, 0.0f, 0.0f };
+			tileBias[2] = { 0.0f, 0.0f, 1.0f, 0.0f };
+			tileBias[3] = { offsetX, offsetY, 0.0f, 1.0f };
+
+			doCopyComponent( tileBias * m_cascades[i].viewProjMatrix, buffer );
 		}
 
 		for ( auto i = uint32_t( m_cascades.size() ); i < shader::DirectionalMaxCascadesCount; ++i )
