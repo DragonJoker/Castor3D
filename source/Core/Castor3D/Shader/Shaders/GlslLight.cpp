@@ -70,9 +70,10 @@ namespace castor3d
 			: StructInstance{ writer, std::move( expr ), enabled }
 			, m_lightBase{ getMember< Light >( "m_lightBase" ) }
 			, m_directionCount{ getMember< Vec4 >( "m_directionCount" ) }
+			, m_tiles{ getMember< Vec4 >( "m_tiles" ) }
+			, m_splitDepths{ getMemberArray< Vec4 >( "m_splitDepths" ) }
+			, m_splitScales{ getMemberArray< Vec4 >( "m_splitScales" ) }
 			, m_transforms{ getMemberArray< Mat4 >( "m_transforms" ) }
-			, m_splitDepths{ getMember< Vec4 >( "m_splitDepths" ) }
-			, m_splitScales{ getMember< Vec4 >( "m_splitScales" ) }
 			, m_direction{ m_directionCount.xyz() }
 			, m_cascadeCount{ writer.cast< UInt >( m_directionCount.w() ) }
 		{
@@ -87,8 +88,9 @@ namespace castor3d
 			{
 				result->declMember( "m_lightBase", Light::makeType( cache ) );
 				result->declMember( "m_directionCount", ast::type::Kind::eVec4F );
-				result->declMember( "m_splitDepths", ast::type::Kind::eVec4F );
-				result->declMember( "m_splitScales", ast::type::Kind::eVec4F );
+				result->declMember( "m_tiles", ast::type::Kind::eVec4F );
+				result->declMember( "m_splitDepths", ast::type::Kind::eVec4F, 2u );
+				result->declMember( "m_splitScales", ast::type::Kind::eVec4F, 2u );
 				result->declMember( "m_transforms", ast::type::Kind::eMat4x4F, DirectionalMaxCascadesCount );
 			}
 

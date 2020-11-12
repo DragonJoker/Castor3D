@@ -71,10 +71,10 @@ namespace castor3d
 				auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
 					, LightsIdx
 					, 0u );
-				auto c3d_rsmNormalMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eNormalLinear )
+				auto c3d_rsmNormalMap = writer.declSampledImage< FImg2DRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eNormalLinear )
 					, RsmNormalsIdx
 					, 0u );
-				auto c3d_rsmPositionMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::ePosition )
+				auto c3d_rsmPositionMap = writer.declSampledImage< FImg2DRgba32 >( getTextureName( LightType::eDirectional, SmTexture::ePosition )
 					, RsmPositionIdx
 					, 0u );
 				UBO_LPVGRIDCONFIG( writer, LpvGridUboIdx, 0u, true );
@@ -122,9 +122,8 @@ namespace castor3d
 						auto cascadeIndex = writer.declLocale( "cascadeIndex"
 							, writer.cast< Int >( max( 1_u, light.m_cascadeCount ) - 1_u ) );
 						auto rsmCoords = writer.declLocale( "rsmCoords"
-							, ivec3( in.vertexIndex % rsmTexSize
-								, in.vertexIndex / rsmTexSize
-								, cascadeIndex ) );
+							, ivec2( in.vertexIndex % rsmTexSize
+								, in.vertexIndex / rsmTexSize ) );
 
 						outRsmPos = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
 						outRsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
