@@ -1006,19 +1006,19 @@ namespace test_parser
 
 	void MainFrame::TestUpdater::addTest( TreeModelNode & test )
 	{
-		auto lock = castor::makeUniqueLock( mutex );
+		auto lock( castor::makeUniqueLock( mutex ) );
 		running.push_back( &test );
 	}
 
 	std::vector< TreeModelNode * > MainFrame::TestUpdater::get()
 	{
-		auto lock = castor::makeUniqueLock( mutex );
+		auto lock( castor::makeUniqueLock( mutex ) );
 		return running;
 	}
 
 	void MainFrame::TestUpdater::set( std::vector< TreeModelNode * > current )
 	{
-		auto lock = castor::makeUniqueLock( mutex );
+		auto lock( castor::makeUniqueLock( mutex ) );
 		running = current;
 	}
 

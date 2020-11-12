@@ -107,7 +107,7 @@ namespace test_parser
 
 		struct TestUpdater
 		{
-			TestUpdater( wxObjectDataPtr< TreeModel > & model );
+			explicit TestUpdater( wxObjectDataPtr< TreeModel > & model );
 			void addTest( TreeModelNode & test );
 			void stop();
 
