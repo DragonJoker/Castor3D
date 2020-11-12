@@ -198,7 +198,7 @@ namespace castor3d
 		*/
 		DataT const & getData( VkDeviceSize index = 0 )const
 		{
-			return m_data[index];
+			return m_data[size_t( index )];
 		}
 		/**
 		*\~english
@@ -214,7 +214,7 @@ namespace castor3d
 		*/
 		DataT & getData( VkDeviceSize index = 0 )
 		{
-			return m_data[index];
+			return m_data[size_t( index )];
 		}
 		/**
 		*\~english
@@ -254,7 +254,7 @@ namespace castor3d
 		, ashes::QueueShare sharingMode = {} )
 	{
 		return castor::makeUnique< UniformBufferT< DataT > >( renderSystem
-			, uint32_t( count )
+			, count
 			, usage
 			, flags
 			, castor::move( name )
