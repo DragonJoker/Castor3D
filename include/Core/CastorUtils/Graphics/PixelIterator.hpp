@@ -27,6 +27,8 @@ namespace castor
 		using internal_type = array_type::iterator;
 		using const_internal_type = array_type::const_iterator;
 
+		using iterator_category = internal_type::iterator_category;
+
 		inline PixelIterator( array_type const & array, internal_type const & iter )
 			: m_current{ iter }
 			, m_end{ array.end() }

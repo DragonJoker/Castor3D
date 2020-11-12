@@ -25,6 +25,8 @@ namespace castor
 		using pixel_type = Pixel< PF >;
 		using array_type = PxBufferBase::PxArray;
 		using internal_type = array_type::const_iterator;
+
+		using iterator_category = internal_type::iterator_category;
 		
 		inline ConstPixelIterator( array_type const & array, internal_type const & iter )
 			: m_current{ iter }
