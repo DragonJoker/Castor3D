@@ -17,6 +17,24 @@
 
 #include <castor.xpm>
 
+#include "CastorTestParser/xpms/acceptable.xpm"
+#include "CastorTestParser/xpms/negligible.xpm"
+#include "CastorTestParser/xpms/notrun.xpm"
+#include "CastorTestParser/xpms/unacceptable.xpm"
+#include "CastorTestParser/xpms/unprocessed.xpm"
+#include "CastorTestParser/xpms/progress_1.xpm"
+#include "CastorTestParser/xpms/progress_2.xpm"
+#include "CastorTestParser/xpms/progress_3.xpm"
+#include "CastorTestParser/xpms/progress_4.xpm"
+#include "CastorTestParser/xpms/progress_5.xpm"
+#include "CastorTestParser/xpms/progress_6.xpm"
+#include "CastorTestParser/xpms/progress_7.xpm"
+#include "CastorTestParser/xpms/progress_8.xpm"
+#include "CastorTestParser/xpms/progress_9.xpm"
+#include "CastorTestParser/xpms/progress_10.xpm"
+#include "CastorTestParser/xpms/progress_11.xpm"
+#include "CastorTestParser/xpms/progress_12.xpm"
+
 #include <wx/dc.h>
 #include <wx/menu.h>
 #include <wx/progdlg.h>
@@ -72,50 +90,80 @@ namespace test_parser
 			return node;
 		}
 
-		class DataViewAnimatedBitmapRenderer : public wxDataViewRenderer
+		class DataViewTestStatusRenderer
+			: public wxDataViewRenderer
 		{
+		private:
+			using Clock = std::chrono::high_resolution_clock;
+
 		public:
 			static wxString GetDefaultType()
 			{
-				return wxS( "wxBitmap" );
+				return wxS( "long" );
 			}
 
-			DataViewAnimatedBitmapRenderer( const wxString & varianttype = GetDefaultType(),
+			DataViewTestStatusRenderer( const wxString & varianttype = GetDefaultType(),
 				wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
 				int align = wxDVR_DEFAULT_ALIGNMENT )
 				: wxDataViewRenderer{ varianttype, mode, align }
+				, m_size{ 20, 20 }
+				, m_bitmaps{ createImage( notrun_xpm )
+					, createImage( negligible_xpm )
+					, createImage( acceptable_xpm )
+					, createImage( unacceptable_xpm )
+					, createImage( unprocessed_xpm )
+					, createImage( progress_1_xpm )
+					, createImage( progress_2_xpm )
+					, createImage( progress_3_xpm )
+					, createImage( progress_4_xpm )
+					, createImage( progress_5_xpm )
+					, createImage( progress_6_xpm )
+					, createImage( progress_7_xpm )
+					, createImage( progress_8_xpm )
+					, createImage( progress_9_xpm )
+					, createImage( progress_10_xpm )
+					, createImage( progress_11_xpm )
+					, createImage( progress_12_xpm ) }
 			{
 			}
 
 			bool SetValue( const wxVariant & value ) override
 			{
-				m_bitmap << value;
+				m_status = TestStatus( value.GetLong() );
 				return true;
 			}
 
 			bool GetValue( wxVariant & value ) const override
 			{
-				value << m_bitmap;
+				value = wxVariant{ long( m_status ) };
 				return true;
 			}
 
 			bool Render( wxRect cell, wxDC * dc, int state ) override
 			{
-				dc->DrawBitmap( m_bitmap
+				dc->DrawBitmap( m_bitmaps[size_t( m_status )]
 					, cell.x
 					, cell.y
 					, true );
-				return true;
+				return false;
 			}
 
 			wxSize GetSize() const override
 			{
-				return m_bitmap.GetSize();
+				return m_size;
 			}
 
 		private:
-			wxIcon m_icon;
-			wxBitmap m_bitmap;
+			wxImage createImage( char const * const * xpmData )
+			{
+				wxImage result{ xpmData };
+				return result.Scale( m_size.x, m_size.y );
+			}
+
+		private:
+			wxSize m_size;
+			std::array< wxBitmap, size_t( TestStatus::eCount ) > m_bitmaps;
+			TestStatus m_status{ TestStatus::eNegligible };
 		};
 	}
 
@@ -126,6 +174,7 @@ namespace test_parser
 		, m_auiManager{ this, wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE }
 		, m_config{ std::move( config ) }
 		, m_database{ m_config }
+		, m_updater{ m_model }
 	{
 		SetClientSize( 800, 600 );
 		doInitGui();
@@ -164,6 +213,7 @@ namespace test_parser
 
 	MainFrame::~MainFrame()
 	{
+		m_updater.stop();
 		m_auiManager.UnInit();
 	}
 
@@ -263,7 +313,7 @@ namespace test_parser
 		wxDataViewColumn * colRunDate = new wxDataViewColumn( _( "Run Date" ), renRunDate, int( TreeModel::Column::eRunDate ), 100, wxALIGN_LEFT, flags );
 		colRunDate->SetMinWidth( 100 );
 		m_view->AppendColumn( colRunDate );
-		auto renStatus = new DataViewAnimatedBitmapRenderer{ wxDataViewBitmapRenderer::GetDefaultType() };
+		auto renStatus = new DataViewTestStatusRenderer;
 		wxDataViewColumn * colStatus = new wxDataViewColumn( _( "Status" ), renStatus, int( TreeModel::Column::eStatus ), 100, wxALIGN_LEFT, flags );
 		colStatus->SetMinWidth( 100 );
 		m_view->AppendColumn( colStatus );
@@ -428,7 +478,8 @@ namespace test_parser
 			wxString command = m_config.launcher;
 			command << " " << ( m_config.test / test.category / ( test.name + ".cscn" ) );
 			command << " -" << test.renderer;
-			test.status = TestStatus::eRunning;
+			test.status = TestStatus::eRunning_Begin;
+			m_updater.addTest( *testNode.node );
 			m_model->ItemChanged( wxDataViewItem{ testNode.node } );
 			m_statusBar->SetLabel( _( "Running test: " ) + test.name );
 			auto result = wxExecute( command
@@ -909,6 +960,66 @@ namespace test_parser
 		{
 			doCancelTest( *testNode.test, testNode.status );
 		}
+	}
+
+	//*********************************************************************************************
+
+	MainFrame::TestUpdater::TestUpdater( wxObjectDataPtr< TreeModel > & model )
+		: thread{ [this, &model]()
+			{
+				while ( !isStopped )
+				{
+					auto current = get();
+					auto it = current.begin();
+
+					while ( it != current.end() )
+					{
+						auto node = *it;
+
+						if ( !isRunning( node->test->status ) )
+						{
+							it = current.erase( it );
+						}
+						else
+						{
+							node->test->status = ( node->test->status == TestStatus::eRunning_End )
+								? TestStatus::eRunning_Begin
+								: TestStatus( uint32_t( node->test->status ) + 1 );
+							++it;
+						}
+
+						model->ItemChanged( wxDataViewItem{ node } );
+					}
+
+					set( current );
+					std::this_thread::sleep_for( 100_ms );
+				}
+			} }
+	{
+	}
+
+	void MainFrame::TestUpdater::stop()
+	{
+		isStopped = true;
+		thread.join();
+	}
+
+	void MainFrame::TestUpdater::addTest( TreeModelNode & test )
+	{
+		auto lock = castor::makeUniqueLock( mutex );
+		running.push_back( &test );
+	}
+
+	std::vector< TreeModelNode * > MainFrame::TestUpdater::get()
+	{
+		auto lock = castor::makeUniqueLock( mutex );
+		return running;
+	}
+
+	void MainFrame::TestUpdater::set( std::vector< TreeModelNode * > current )
+	{
+		auto lock = castor::makeUniqueLock( mutex );
+		running = current;
 	}
 
 	//*********************************************************************************************

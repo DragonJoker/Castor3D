@@ -44,7 +44,7 @@ namespace test_parser
 		: public wxPanel
 	{
 	public:
-		wxImagePanel( wxWindow * parent )
+		explicit wxImagePanel( wxWindow * parent )
 			: wxPanel{ parent }
 		{
 			SetBackgroundColour( BORDER_COLOUR );

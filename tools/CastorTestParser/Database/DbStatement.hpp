@@ -59,7 +59,7 @@ namespace test_parser::db
 		struct ValueUpdater
 			: public Parameter::ValueUpdater
 		{
-			ValueUpdater( Statement * stmt );
+			explicit ValueUpdater( Statement * stmt );
 
 			void update( const Parameter & value ) override;
 

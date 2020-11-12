@@ -232,6 +232,7 @@ namespace test_parser
 	void TestDatabase::initialise( wxProgressDialog & progress
 		, int & index )
 	{
+#ifdef NDEBUG
 		if ( !m_config.skip )
 		{
 			doInitDatabase( progress, index );
@@ -240,6 +241,7 @@ namespace test_parser
 			doFillDatabase( progress, index );
 		}
 		else
+#endif
 		{
 			m_insertTest = InsertTest{ m_database };
 			m_updateTestStatus = UpdateTestStatus{ m_database };

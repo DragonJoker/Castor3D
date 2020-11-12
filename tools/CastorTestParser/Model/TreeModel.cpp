@@ -1,37 +1,12 @@
 #include "CastorTestParser/Model/TreeModel.hpp"
 #include "CastorTestParser/Model/TreeModelNode.hpp"
 
-#include "CastorTestParser/xpms/acceptable.xpm"
-#include "CastorTestParser/xpms/negligible.xpm"
-#include "CastorTestParser/xpms/notrun.xpm"
-#include "CastorTestParser/xpms/running.xpm"
-#include "CastorTestParser/xpms/unacceptable.xpm"
-#include "CastorTestParser/xpms/unprocessed.xpm"
-
 #include <CastorUtils/Log/Logger.hpp>
 
 namespace test_parser
 {
-	namespace
-	{
-		wxImage createImage( char const * const * xpmData )
-		{
-			wxImage result{ xpmData };
-			return result;
-		}
-	}
-
 	TreeModel::TreeModel()
 		: m_root( new TreeModelNode{ nullptr, _( "Tests database" ) } )
-		, m_statusImages
-		{
-			createImage( notrun_xpm ),
-			createImage( negligible_xpm ),
-			createImage( acceptable_xpm ),
-			createImage( unacceptable_xpm ),
-			createImage( unprocessed_xpm ),
-			createImage( running_xpm ),
-		}
 	{
 	}
 
@@ -257,7 +232,7 @@ namespace test_parser
 				break;
 
 			case Column::eStatus:
-				variant << m_statusImages[std::min( long( TestStatus::eCount ) - 1, long( node->test->status ) )];
+				variant = wxVariant{ long( node->test->status ) };
 				break;
 
 			default:
@@ -324,7 +299,7 @@ namespace test_parser
 				break;
 
 			case Column::eStatus:
-				//node->test->status = int( variant.GetLong() );
+				node->test->status = TestStatus( variant.GetLong() );
 				result = true;
 				break;
 

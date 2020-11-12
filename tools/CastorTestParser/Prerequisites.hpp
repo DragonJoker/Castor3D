@@ -47,9 +47,27 @@ namespace test_parser
 		eAcceptable,
 		eUnacceptable,
 		eUnprocessed,
-		eRunning,
+		eRunning_0,
+		eRunning_1,
+		eRunning_2,
+		eRunning_3,
+		eRunning_4,
+		eRunning_5,
+		eRunning_6,
+		eRunning_7,
+		eRunning_8,
+		eRunning_9,
+		eRunning_10,
+		eRunning_11,
 		eCount,
+		eRunning_Begin = eRunning_0,
+		eRunning_End = eRunning_11,
 	};
+	static bool isRunning( TestStatus value )
+	{
+		return value >= TestStatus::eRunning_Begin
+			&& value <= TestStatus::eRunning_End;
+	}
 	castor::Path getFolderName( TestStatus value );
 	TestStatus getStatus( std::string const & name );
 

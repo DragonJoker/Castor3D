@@ -104,6 +104,23 @@ namespace test_parser
 		};
 		RunningTest m_runningTest;
 		std::atomic_bool m_cancelled;
+
+		struct TestUpdater
+		{
+			TestUpdater( wxObjectDataPtr< TreeModel > & model );
+			void addTest( TreeModelNode & test );
+			void stop();
+
+		private:
+			std::vector< TreeModelNode * > get();
+			void set( std::vector< TreeModelNode * > current );
+
+			std::mutex mutex;
+			std::vector< TreeModelNode * > running;
+			std::atomic_bool isStopped{ false };
+			std::thread thread;
+		};
+		TestUpdater m_updater;
 	};
 }
 
