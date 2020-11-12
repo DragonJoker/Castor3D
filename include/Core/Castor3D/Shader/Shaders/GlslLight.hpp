@@ -60,9 +60,10 @@ namespace castor3d
 			// Raw values
 			Light m_lightBase;
 			sdw::Vec4 m_directionCount;
+			sdw::Vec4 m_tiles;
+			sdw::Array< sdw::Vec4 > m_splitDepths;
+			sdw::Array< sdw::Vec4 > m_splitScales;
 			sdw::Array< sdw::Mat4 > m_transforms;
-			sdw::Vec4 m_splitDepths;
-			sdw::Vec4 m_splitScales;
 			// Specific values
 			sdw::Vec3 m_direction;
 			sdw::UInt m_cascadeCount;

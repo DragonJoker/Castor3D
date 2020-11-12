@@ -104,7 +104,7 @@ namespace castor3d
 					, rsmData.rsmRMax / light.m_splitScales[cascadeIndex] );
 #else
 				auto rMax = m_writer.declLocale< Float >( "rMax"
-					, rsmData.rsmRMax / light.m_splitScales[cascadeIndex] );
+					, rsmData.rsmRMax / light.m_splitScales[cascadeIndex / 4][cascadeIndex % 4] );
 #endif
 				auto lightSpacePosition = m_writer.declLocale< Vec4 >( "lightSpacePosition"
 					, light.m_transforms[cascadeIndex] * vec4( worldPosition, 1.0 ) );

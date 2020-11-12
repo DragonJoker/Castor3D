@@ -26,6 +26,7 @@ namespace castor3d
 			UniformBufferPool{ renderSystem, device, "Picking" },
 			UniformBufferPool{ renderSystem, device, "Textures" },
 			UniformBufferPool{ renderSystem, device, "ShadowMap" },
+			UniformBufferPool{ renderSystem, device, "ShadowMapDirectional" },
 			UniformBufferPool{ renderSystem, device, "HDRConfig" },
 			UniformBufferPool{ renderSystem, device, "RSMConfig" },
 			UniformBufferPool{ renderSystem, device, "Generic" },

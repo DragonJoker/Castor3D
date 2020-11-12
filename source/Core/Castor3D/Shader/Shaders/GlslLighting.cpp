@@ -271,8 +271,11 @@ namespace castor3d
 					auto offset = m_writer.declLocale( "offset", index * Int( int( getMaxLightComponentsCount() ) ) + Int( int( getBaseLightComponentsCount() ) ) );
 					result.m_directionCount = c3d_sLights.fetch( Int{ offset++ } );
 					result.m_direction = normalize( result.m_direction );
-					result.m_splitDepths = c3d_sLights.fetch( Int{ offset++ } );
-					result.m_splitScales = c3d_sLights.fetch( Int{ offset++ } );
+					result.m_tiles = c3d_sLights.fetch( Int{ offset++ } );
+					result.m_splitDepths[0] = c3d_sLights.fetch( Int{ offset++ } );
+					result.m_splitDepths[1] = c3d_sLights.fetch( Int{ offset++ } );
+					result.m_splitScales[0] = c3d_sLights.fetch( Int{ offset++ } );
+					result.m_splitScales[1] = c3d_sLights.fetch( Int{ offset++ } );
 					auto col0 = m_writer.declLocale< Vec4 >( "col0" );
 					auto col1 = m_writer.declLocale< Vec4 >( "col1" );
 					auto col2 = m_writer.declLocale< Vec4 >( "col2" );
@@ -334,14 +337,16 @@ namespace castor3d
 		{
 			m_getCascadeFactors = m_writer.implementFunction< sdw::Vec3 >( "getCascadeFactors"
 				, [this]( Vec3 viewVertex
-					, Vec4 splitDepths
+					, Array< Vec4 > splitDepths
 					, UInt index )
 				{
+					auto incIndex = m_writer.declLocale( "incIndex"
+						, index + 1u );
 					auto splitDiff = m_writer.declLocale( "splitDiff"
-						, ( splitDepths[index + 1u] - splitDepths[index] ) / 16.0f );
+						, ( splitDepths[incIndex / 4][incIndex % 4] - splitDepths[index / 4][index % 4] ) / 16.0f );
 					auto splitMax = m_writer.declLocale( "splitMax"
-						, splitDepths[index] - splitDiff );
-					splitDiff *= 2.0f;
+						, splitDepths[index / 4][index % 4] - splitDiff );
+					splitDiff *= 2.0_f;
 					auto splitMin = m_writer.declLocale( "splitMin"
 						, splitMax + splitDiff );
 
@@ -365,8 +370,8 @@ namespace castor3d
 					m_writer.returnStmt( vec3( 0.0_f, 1.0_f, 0.0_f ) );
 				}
 				, InVec3( m_writer, "viewVertex" )
-					, InVec4( m_writer, "splitDepths" )
-					, InUInt( m_writer, "index" ) );
+				, InParam< Array< Vec4 > >( m_writer, "splitDepths", 2u )
+				, InUInt( m_writer, "index" ) );
 		}
 	}
 }

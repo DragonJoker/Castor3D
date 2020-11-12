@@ -8,6 +8,7 @@ See LICENSE file in root folder
 #include "Castor3D/Overlay/OverlayModule.hpp"
 #include "Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMapModule.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 #include "Castor3D/Render/Technique/Voxelize/VoxelSceneData.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
@@ -411,7 +412,7 @@ namespace castor3d
 		bool m_hasTransparentObjects{ false };
 		std::map< MaterialSPtr, OnMaterialChangedConnection > m_materialsListeners;
 		bool m_dirtyMaterials{ true };
-		uint32_t m_directionalShadowCascades{ 4u };
+		uint32_t m_directionalShadowCascades{ ShadowMapDirectionalTileCountX * ShadowMapDirectionalTileCountY };
 		castor::BoundingBox m_boundingBox;
 		std::atomic_bool m_needsGlobalIllumination;
 		std::array< std::atomic_bool, size_t( LightType::eCount ) > m_hasShadows;

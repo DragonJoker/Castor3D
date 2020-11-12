@@ -16,6 +16,8 @@ namespace castor3d
 	/**@name ShadowMap */
 	//@{
 
+	static constexpr uint32_t ShadowMapDirectionalTileCountX = 2u;
+	static constexpr uint32_t ShadowMapDirectionalTileCountY = 2u;
 	/**
 	*\~english
 	*\brief

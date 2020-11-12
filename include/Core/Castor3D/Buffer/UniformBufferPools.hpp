@@ -76,6 +76,7 @@ namespace castor3d
 			ePicking,
 			eTextures,
 			eShadowMap,
+			eShadowMapDirectional,
 			eHdrConfig,
 			eRsmConfig,
 			eGeneric,

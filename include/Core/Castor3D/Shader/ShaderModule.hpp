@@ -104,7 +104,7 @@ namespace castor3d
 		eInstanceMult = 0x0100,
 		//!\~english	Shader used to render a shadow map for directional light.
 		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière directionnalle.
-		eShadowMapDirectional = 0x0200,
+		eShadowMapDirectional = 0x0200 | eInstanceMult,
 		//!\~english	Shader used to render a shadow map for spot light.
 		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière projecteur.
 		eShadowMapSpot = 0x0400,

@@ -43,11 +43,13 @@ namespace castor3d
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, ShadowMap const & shadowMap
-		, ashes::RenderPassPtr renderPass )
+		, ashes::RenderPassPtr renderPass
+		, uint32_t instanceMult )
 		: SceneRenderPass{ device
 			, cuT( "ShadowMap" )
 			, std::move( name )
 			, SceneRenderPassDesc{ shadowMap.getShadowPassResult()[SmTexture::eDepth].getTexture()->getDimensions(), matrixUbo, culler, RenderMode::eBoth, true, false }
+				.instanceMult( instanceMult )
 			, std::move( renderPass ) }
 		, m_shadowMap{ shadowMap }
 		, m_shadowMapUbo{ device }

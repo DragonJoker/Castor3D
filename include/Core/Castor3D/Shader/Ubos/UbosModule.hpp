@@ -384,6 +384,30 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Shadow map data UBO for directional sources.
+	*\~french
+	*\brief
+	*	UBO des données de shadow map pour les sources directionnelles.
+	*/
+	class ShadowMapDirectionalUbo;
+	/**
+	*\~english
+	*\brief
+	*	Shadow map data for directional sources.
+	*\~french
+	*\brief
+	*	Données de shadow map pour les sources directionnelles.
+	*/
+	struct ShadowMapDirectionalUboConfiguration
+	{
+		std::array< castor::Matrix4x4f, 6u > lightProjections;
+		std::array< castor::Matrix4x4f, 6u > lightViews;
+		castor::Point4f lightTiles;
+		uint32_t lightIndex;
+	};
+	/**
+	*\~english
+	*\brief
 	*	Shadow map data UBO.
 	*\~french
 	*\brief
