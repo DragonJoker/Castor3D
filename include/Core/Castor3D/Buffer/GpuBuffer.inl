@@ -23,7 +23,7 @@ namespace castor3d
 	bool GpuBufferT< AllocatorT >::hasAvailable( VkDeviceSize size )const noexcept
 	{
 		size = ashes::getAlignedSize( size, m_allocator.getAlignSize() );
-		return m_allocator.hasAvailable( size );
+		return m_allocator.hasAvailable( size_t( size ) );
 	}
 
 	template< typename AllocatorT >
@@ -32,7 +32,7 @@ namespace castor3d
 		auto realSize = ashes::getAlignedSize( size, m_allocator.getAlignSize() );
 		return
 		{
-			m_allocator.allocate( realSize ),
+			m_allocator.allocate( size_t( realSize ) ),
 			realSize,
 			size,
 		};

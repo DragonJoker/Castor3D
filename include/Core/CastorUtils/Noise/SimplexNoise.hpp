@@ -33,8 +33,7 @@ namespace castor
 		// Generate random lookup for permutations containing all numbers from 0..255
 		Vector< uint8_t > plookup;
 		plookup.resize( 256 );
-		std::iota( plookup.begin(), plookup.end(), 0 );
-		std::default_random_engine rndEngine( std::random_device{}( ) );
+		std::iota( plookup.begin(), plookup.end(), uint8_t{} );
 		std::shuffle( plookup.begin(), plookup.end(), rndEngine );
 
 		for ( uint32_t i = 0; i < 256; i++ )
@@ -186,7 +185,7 @@ namespace castor
 	template< typename TypeT >
 	uint8_t SimplexNoiseT< TypeT >::hash( int32_t i )
 	{
-		return m_permutations[static_cast< uint8_t >( i )];
+		return uint8_t( m_permutations[uint8_t( i )] );
 	}
 
 	template< typename TypeT >

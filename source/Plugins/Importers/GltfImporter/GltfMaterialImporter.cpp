@@ -310,8 +310,8 @@ namespace c3d_gltf
 			{
 				result = importer.loadImage( source.name()
 					, castor::ImageCreateParams{ source.type()
-					, source.buffer()
-					, { false, false, false } } );
+						, source.buffer()
+						, { false, false, false } } );
 			}
 			else if ( source.isFileImage() )
 			{

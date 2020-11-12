@@ -41,7 +41,7 @@ namespace castor
 
 	public:
 		explicit RangeSequenceT( Vector< T > const & sequence )
-			: Range{ sequence.front(), sequence.back() }
+			: Range< T >{ sequence.front(), sequence.back() }
 			, m_sequence{ convert( sequence ) }
 		{
 		}

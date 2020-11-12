@@ -26,7 +26,7 @@ namespace castor
 		, T const & rhs )
 	{
 		constexpr uint32_t kMul = 0x9e3779b9u;
-		std::hash< T > hasher;
+		std::hash< T const * > hasher;
 		hash ^= hasher( &rhs ) + kMul + ( hash << 6 ) + ( hash >> 2 );
 		return hash;
 	}
