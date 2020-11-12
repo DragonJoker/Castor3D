@@ -16,6 +16,7 @@ if ( SQLite3_FOUND AND Boost_FOUND )
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/LayeredPanel.hpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/MainFrame.hpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Prerequisites.hpp
+		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/TestDatabase.hpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/TestPanel.hpp
 	)
 	set( ${PROJECT_NAME}_SRC_FILES
@@ -23,6 +24,8 @@ if ( SQLite3_FOUND AND Boost_FOUND )
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/CastorTestParser.cpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/LayeredPanel.cpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/MainFrame.cpp
+		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Prerequisites.cpp
+		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/TestDatabase.cpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/TestPanel.cpp
 	)
 	source_group( "Header Files"

@@ -579,8 +579,6 @@ namespace castor3d
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
 
-		auto out = writer.getOut();
-
 		// Fragment Outputs
 		index = 0u;
 		auto outData1 = writer.declOutput< Vec4 >( OpaquePass::Output1, index++ );
@@ -588,6 +586,7 @@ namespace castor3d
 		auto outData3 = writer.declOutput< Vec4 >( OpaquePass::Output3, index++ );
 		auto outData4 = writer.declOutput< Vec4 >( OpaquePass::Output4, index++ );
 		auto outData5 = writer.declOutput< Vec4 >( OpaquePass::Output5, index++ );
+		auto out = writer.getOut();
 
 		shader::Utils utils{ writer };
 		utils.declareRemoveGamma();
@@ -728,9 +727,6 @@ namespace castor3d
 			, 1u
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
-		index += uint32_t( flags.textures.size() );
-
-		auto out = writer.getOut();
 
 		// Fragment Outputs
 		index = 0u;
@@ -739,6 +735,7 @@ namespace castor3d
 		auto outData3 = writer.declOutput< Vec4 >( OpaquePass::Output3, index++ );
 		auto outData4 = writer.declOutput< Vec4 >( OpaquePass::Output4, index++ );
 		auto outData5 = writer.declOutput< Vec4 >( OpaquePass::Output5, index++ );
+		auto out = writer.getOut();
 
 		shader::Utils utils{ writer };
 		utils.declareRemoveGamma();
@@ -879,9 +876,6 @@ namespace castor3d
 			, 1u
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
-		index += uint32_t( flags.textures.size() );
-
-		auto out = writer.getOut();
 
 		// Fragment Outputs
 		index = 0u;
@@ -890,6 +884,7 @@ namespace castor3d
 		auto outData3 = writer.declOutput< Vec4 >( OpaquePass::Output3, index++ );
 		auto outData4 = writer.declOutput< Vec4 >( OpaquePass::Output4, index++ );
 		auto outData5 = writer.declOutput< Vec4 >( OpaquePass::Output5, index++ );
+		auto out = writer.getOut();
 
 		shader::Utils utils{ writer };
 		utils.declareRemoveGamma();

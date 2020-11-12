@@ -132,6 +132,7 @@ namespace test_parser
 			{
 				MainFrame * mainFrame{ new MainFrame{ std::move( config ) } };
 				SetTopWindow( mainFrame );
+				mainFrame->Show();
 				mainFrame->initialise();
 				result = true;
 			}

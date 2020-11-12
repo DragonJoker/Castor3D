@@ -73,7 +73,6 @@ namespace test_parser
 
 	private:
 		TreeModelNode * m_root;
-		std::vector< wxBitmap > m_statusImages;
 	};
 }
 
