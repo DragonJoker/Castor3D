@@ -77,7 +77,7 @@ namespace castor3d
 			std::shared_ptr< Shadow > m_shadowModel;
 			sdw::Function< sdw::Vec3
 				, sdw::InVec3
-				, sdw::InVec4
+				, sdw::InParam< sdw::Array< sdw::Vec4 > >
 				, sdw::InUInt > m_getCascadeFactors;
 			sdw::Function< shader::Light
 				, sdw::InInt > m_getBaseLight;

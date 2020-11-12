@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/ShaderModule.hpp"
 
 #include "Castor3D/Material/Pass/PassModule.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"
 
@@ -69,7 +70,7 @@ namespace castor3d
 		// Light Propagation Volumes Cascades.
 		constexpr uint32_t LpvMaxCascadesCount = 3u;
 		// Directional Shadow Cascades.
-		constexpr uint32_t DirectionalMaxCascadesCount = 4u;
+		static uint32_t constexpr DirectionalMaxCascadesCount = ShadowMapDirectionalTileCountX * ShadowMapDirectionalTileCountY;
 		// Pass Buffer.
 		static uint32_t constexpr MaxMaterialsCount = 2000u;
 		static int constexpr MaxMaterialComponentsCount = 15;
