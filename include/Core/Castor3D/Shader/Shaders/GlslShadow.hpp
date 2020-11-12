@@ -130,12 +130,12 @@ namespace castor3d
 			sdw::Function< sdw::Float
 				, sdw::InVec4
 				, sdw::InVec2
-				, sdw::InSampledImage2DArrayRgba32
+				, sdw::InSampledImage2DRgba32
 				, sdw::InUInt
 				, sdw::InFloat > m_textureProjCascade;
 			sdw::Function< sdw::Float
 				, sdw::InVec4
-				, sdw::InSampledImage2DArrayRgba32
+				, sdw::InSampledImage2DRgba32
 				, sdw::InVec2
 				, sdw::InUInt
 				, sdw::InFloat > m_filterPCFCascade;

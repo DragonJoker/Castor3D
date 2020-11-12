@@ -3,6 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
+#include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
@@ -10,8 +11,10 @@
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Render/Culling/InstantiatedFrustumCuller.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapDirectional.hpp"
 #include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/DirectionalLight.hpp"
 #include "Castor3D/Shader/Program.hpp"
@@ -26,10 +29,10 @@
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Ubos/ModelInstancesUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelUbo.hpp"
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
-#include "Castor3D/Shader/Ubos/ShadowMapUbo.hpp"
 
 #include <CastorUtils/Graphics/Image.hpp>
 
@@ -45,6 +48,17 @@ namespace castor3d
 {
 	namespace
 	{
+		void fillAdditionalDescriptor( RenderPipeline const & pipeline
+			, ashes::WriteDescriptorSetArray & descriptorWrites
+			, Scene const & scene
+			, ShadowMapDirectionalUbo const & shadowMapUbo )
+		{
+			auto index = uint32_t( PassUboIdx::eCount );
+			auto & flags = pipeline.getFlags();
+			descriptorWrites.push_back( scene.getLightCache().getDescriptorWrite( index++ ) );
+			descriptorWrites.push_back( shadowMapUbo.getDescriptorWrite( index++ ) );
+		}
+
 		ashes::RenderPassPtr createRenderPass( RenderDevice const & device
 			, ShadowMap const & shadowMap
 			, castor::String const & name )
@@ -118,19 +132,22 @@ namespace castor3d
 		}
 	}
 
-	uint32_t const ShadowMapPassDirectional::TextureSize = 2048u;
+	uint32_t const ShadowMapPassDirectional::TileSize = 2048u;
+	uint32_t const ShadowMapPassDirectional::TileCountX = ShadowMapDirectionalTileCountX;
+	uint32_t const ShadowMapPassDirectional::TileCountY = ShadowMapDirectionalTileCountY;
 
 	ShadowMapPassDirectional::ShadowMapPassDirectional( RenderDevice const & device
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, ShadowMap const & shadowMap
-		, uint32_t cascadeIndex )
+		, uint32_t cascadeCount )
 		: ShadowMapPass{ device
-			, getPassName( cascadeIndex )
+			, cuT( "ShadowMapPassDirectional" )
 			, matrixUbo
 			, culler
 			, shadowMap
-			, createRenderPass( device, shadowMap, getPassName( cascadeIndex ) ) }
+			, createRenderPass( device, shadowMap, cuT( "ShadowMapPassDirectional" ) ) }
+		, m_shadowMapDirectionalUbo{ device }
 	{
 		log::trace << "Created " << m_name << std::endl;
 	}
@@ -142,7 +159,25 @@ namespace castor3d
 
 	bool ShadowMapPassDirectional::update( CpuUpdater & updater )
 	{
-		getCuller().compute();
+		auto & light = *updater.light;
+		auto & camera = *updater.camera;
+		auto node = light.getParent();
+		auto & directional = *light.getDirectionalLight();
+		auto & culler = static_cast< InstantiatedFrustumCuller & >( getCuller() );
+		std::vector< Frustum > frustums;
+
+		for ( uint32_t cascade = 0u; cascade < getInstanceMult(); ++cascade )
+		{
+			frustums.emplace_back( camera.getViewport() );
+			frustums.back().update( directional.getProjMatrix( cascade )
+				, directional.getViewMatrix( cascade ) );
+		}
+
+		culler.setFrustums( std::move( frustums ) );
+		culler.compute();
+		m_outOfDate = m_outOfDate
+			|| culler.areAllChanged()
+			|| culler.areCulledChanged();
 		m_outOfDate = true;
 		SceneRenderPass::update( updater );
 		return m_outOfDate;
@@ -159,7 +194,42 @@ namespace castor3d
 	void ShadowMapPassDirectional::doUpdateUbos( CpuUpdater & updater )
 	{
 		SceneRenderPass::doUpdateUbos( updater );
-		m_shadowMapUbo.update( *updater.light, updater.index );
+		m_shadowMapDirectionalUbo.update( *updater.light->getDirectionalLight() );
+	}
+
+	void ShadowMapPassDirectional::doFillAdditionalBindings( PipelineFlags const & flags
+		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
+	{
+		auto index = uint32_t( PassUboIdx::eCount );
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			, VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		m_initialised = true;
+	}
+
+	void ShadowMapPassDirectional::doFillAdditionalDescriptor( RenderPipeline const & pipeline
+		, ashes::WriteDescriptorSetArray & descriptorWrites
+		, BillboardListRenderNode & node
+		, ShadowMapLightTypeArray const & shadowMaps )
+	{
+		fillAdditionalDescriptor( pipeline
+			, descriptorWrites
+			, getCuller().getScene()
+			, m_shadowMapDirectionalUbo );
+	}
+
+	void ShadowMapPassDirectional::doFillAdditionalDescriptor( RenderPipeline const & pipeline
+		, ashes::WriteDescriptorSetArray & descriptorWrites
+		, SubmeshRenderNode & node
+		, ShadowMapLightTypeArray const & shadowMaps )
+	{
+		fillAdditionalDescriptor( pipeline
+			, descriptorWrites
+			, getCuller().getScene()
+			, m_shadowMapDirectionalUbo );
 	}
 
 	ashes::PipelineDepthStencilStateCreateInfo ShadowMapPassDirectional::doCreateDepthStencilState( PipelineFlags const & flags )const
@@ -209,9 +279,12 @@ namespace castor3d
 			, uint32_t( NodeUboIdx::eMorphing )
 			, RenderPipeline::eBuffers
 			, flags.programFlags );
+		UBO_MODEL_INSTANCES( writer
+			, uint32_t( NodeUboIdx::eModelInstances )
+			, RenderPipeline::eBuffers );
 
 		auto index = uint32_t( PassUboIdx::eCount ) + 1u;
-		UBO_SHADOWMAP( writer
+		UBO_SHADOWMAP_DIRECTIONAL( writer
 			, index++
 			, RenderPipeline::eAdditional );
 
@@ -243,8 +316,22 @@ namespace castor3d
 				, c3d_modelData.getCurModelMtx( flags.programFlags, skinningData, inSurface ) );
 			curPosition = mtxModel * curPosition;
 			outSurface.worldPosition = curPosition.xyz();
-			curPosition = c3d_shadowMapData.worldToView( curPosition );
-			out.vtx.position = c3d_shadowMapData.viewToProj( curPosition );
+
+			auto ti = writer.declLocale( "tileIndex"
+				, c3d_modelInstancesData.getTileIndex( in ) );
+			auto tileMin = writer.declLocale( "tileMin"
+				, c3d_shadowMapDirectionalData.getTileMin( ti ) );
+			auto tileMax = writer.declLocale( "tileMax"
+				, c3d_shadowMapDirectionalData.getTileMax( tileMin ) );
+
+			curPosition = c3d_shadowMapDirectionalData.worldToView( ti, curPosition );
+			curPosition = c3d_shadowMapDirectionalData.viewToProj( ti, curPosition );
+			out.vtx.position = curPosition;
+
+			out.vtx.clipDistance[0] = dot( vec4( 1.0_f, 0.0_f, 0.0_f, -tileMin.x() ), curPosition );
+			out.vtx.clipDistance[1] = dot( vec4( -1.0_f, 0.0_f, 0.0_f, tileMax.x() ), curPosition );
+			out.vtx.clipDistance[2] = dot( vec4( 0.0_f, -1.0_f, 0.0_f, -tileMin.y() ), curPosition );
+			out.vtx.clipDistance[3] = dot( vec4( 0.0_f, 1.0_f, 0.0_f, tileMax.y() ), curPosition );
 
 			auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
 				, c3d_modelData.getNormalMtx( flags.programFlags, mtxModel ) );
@@ -299,7 +386,7 @@ namespace castor3d
 		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
 			, index++
 			, RenderPipeline::eAdditional );
-		UBO_SHADOWMAP( writer
+		UBO_SHADOWMAP_DIRECTIONAL( writer
 			, index++
 			, RenderPipeline::eAdditional );
 		auto lighting = shader::PhongLightingModel::createModel( writer
@@ -386,7 +473,7 @@ namespace castor3d
 					, vec3( 0.0_f ) );
 				shader::OutputComponents output{ lightDiffuse, lightSpecular };
 				auto light = writer.declLocale( "light"
-					, c3d_shadowMapData.getDirectionalLight( *lighting ) );
+					, c3d_shadowMapDirectionalData.getDirectionalLight( *lighting ) );
 				pxl_flux.rgb() = diffuse
 					* light.m_lightBase.m_colour
 					* light.m_lightBase.m_intensity.x()
@@ -451,7 +538,7 @@ namespace castor3d
 		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
 			, index++
 			, RenderPipeline::eAdditional );
-		UBO_SHADOWMAP( writer
+		UBO_SHADOWMAP_DIRECTIONAL( writer
 			, index++
 			, RenderPipeline::eAdditional );
 		auto lighting = shader::MetallicBrdfLightingModel::createModel( writer
@@ -538,7 +625,7 @@ namespace castor3d
 					, vec3( 0.0_f ) );
 				shader::OutputComponents output{ lightDiffuse, lightSpecular };
 				auto light = writer.declLocale( "light"
-					, c3d_shadowMapData.getDirectionalLight( *lighting ) );
+					, c3d_shadowMapDirectionalData.getDirectionalLight( *lighting ) );
 				pxl_flux.rgb() = albedo
 					* light.m_lightBase.m_colour
 					* light.m_lightBase.m_intensity.x()
@@ -603,7 +690,7 @@ namespace castor3d
 		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights"
 			, index++
 			, RenderPipeline::eAdditional );
-		UBO_SHADOWMAP( writer
+		UBO_SHADOWMAP_DIRECTIONAL( writer
 			, index++
 			, RenderPipeline::eAdditional );
 		auto lighting = shader::SpecularBrdfLightingModel::createModel( writer
@@ -690,7 +777,7 @@ namespace castor3d
 					, vec3( 0.0_f ) );
 				shader::OutputComponents output{ lightDiffuse, lightSpecular };
 				auto light = writer.declLocale( "light"
-					, c3d_shadowMapData.getDirectionalLight( *lighting ) );
+					, c3d_shadowMapDirectionalData.getDirectionalLight( *lighting ) );
 				pxl_flux.rgb() = albedo
 					* light.m_lightBase.m_colour
 					* light.m_lightBase.m_intensity.x()

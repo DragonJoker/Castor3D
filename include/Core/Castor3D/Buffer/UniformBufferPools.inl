@@ -55,6 +55,10 @@ namespace castor3d
 		{
 			return PoolType::eMorphing;
 		}
+		else if constexpr ( std::is_same_v< DataT, ShadowMapDirectionalUboConfiguration > )
+		{
+			return PoolType::eShadowMapDirectional;
+		}
 		else
 		{
 			return PoolType::eGeneric;

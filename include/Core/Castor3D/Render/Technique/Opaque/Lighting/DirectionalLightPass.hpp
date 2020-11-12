@@ -159,8 +159,9 @@ namespace castor3d
 		{
 			LightPass::Config base;
 			castor::Point4f direction;
-			castor::Point4f splitDepths;
-			castor::Point4f splitScales;
+			castor::Point4f tiles;
+			std::array < castor::Point4f, 2u > splitDepths;
+			std::array < castor::Point4f, 2u > splitScales;
 			std::array< castor::Matrix4x4f, shader::DirectionalMaxCascadesCount > transform;
 		};
 		UniformBufferUPtrT< Config > m_ubo;
