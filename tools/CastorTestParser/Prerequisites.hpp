@@ -15,6 +15,7 @@ namespace test_parser
 	class CategoryPanel;
 	class LayeredPanel;
 	class MainFrame;
+	class TestDatabase;
 	class TestPanel;
 	class TreeModelNode;
 	class TreeModel;
@@ -50,6 +51,7 @@ namespace test_parser
 		eCount,
 	};
 	castor::Path getFolderName( TestStatus value );
+	TestStatus getStatus( std::string const & name );
 
 	struct Test
 	{
@@ -59,6 +61,7 @@ namespace test_parser
 		TestStatus status;
 		std::string renderer;
 		std::string category;
+		bool ignoreResult;
 	};
 	castor::Path getResultFolder( Test const & test, bool useStatus = true );
 	castor::Path getResultName( Test const & test );
@@ -75,6 +78,13 @@ namespace test_parser
 	wxDateTime makeWxDateTime( db::DateTime const & in );
 	db::DateTime makeDbDateTime( wxDateTime const & in );
 
+	db::DateTime getFileDate( castor::Path const & imgPath );
+	castor::Path getFolderName( db::DateTime const & value );
+	bool isDateTime( castor::String const & value
+		, db::DateTime & result );
+	castor::PathArray findTestResults( Test const & test
+		, castor::Path const & work );
+	std::string getDetails( Test const & test );
 }
 
 #endif

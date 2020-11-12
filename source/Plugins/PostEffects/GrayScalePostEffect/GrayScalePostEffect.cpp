@@ -254,7 +254,7 @@ namespace grayscale
 					, GrayCfgUboIdx ),
 				m_quad->makeDescriptorWrite( m_target->getDefaultView().getSampledView()
 					, m_quad->getSampler().getSampler()
-					, GrayCfgUboIdx ),
+					, ColorTexIdx ),
 			} );
 
 		auto result = m_surface.initialise( device

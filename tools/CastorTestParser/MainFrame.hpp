@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___CTP_MainFrame_HPP___
 
 #include "Prerequisites.hpp"
+#include "TestDatabase.hpp"
 #include "Database/DbConnection.hpp"
 #include "Database/DbStatement.hpp"
 
@@ -17,7 +18,6 @@ See LICENSE file in root folder
 #include <list>
 #include <map>
 
-class wxProgressDialog;
 class wxStaticText;
 
 namespace test_parser
@@ -31,8 +31,6 @@ namespace test_parser
 
 		void initialise();
 
-		void insertTest( Test const & test
-			, bool moveFiles = true );
 		void updateTestStatus( Test & test
 			, TestStatus newStatus
 			, bool reference );
@@ -43,17 +41,13 @@ namespace test_parser
 		wxWindow * doInitDetailsView();
 		void doInitGui();
 		void doInitMenus();
-		void doInitDatabase( wxProgressDialog & progress, int & index );
-		TestMap doListCategories( wxProgressDialog & progress, int & index, uint32_t & testCount );
-		void doPopulateDatabase( wxProgressDialog & progress, int & index, TestMap const & tests, uint32_t testCount );
-		void doFillDatabase( wxProgressDialog & progress, int & index );
-		uint32_t doListTests( wxProgressDialog & progress, int & index );
 		void doFillList( wxProgressDialog & progress, int & index, uint32_t testCount );
 
 		void doProcessTest();
 		void doRunTest();
 		void doViewTest();
 		void doSetRef();
+		void doIgnoreTestResult();
 		void doRunAllCategoryTests();
 		void doRunCategoryTests( TestStatus filter );
 		void doRunAllCategoryTestsBut( TestStatus filter );
@@ -72,50 +66,9 @@ namespace test_parser
 		void onTestDiffEnd( wxProcessEvent & evt );
 
 	private:
-		struct InsertTest
-		{
-			InsertTest() = default;
-			explicit InsertTest( db::Connection & connection )
-				: stmt{ connection.createStatement( "INSERT INTO Test(Name, RunDate, Status, Renderer, Category) VALUES (?, ?, ?, ?, ?);" ) }
-				, name{ stmt->createParameter( "Name", db::FieldType::eVarchar, 1024 ) }
-				, runDate{ stmt->createParameter( "RunDate", db::FieldType::eDatetime ) }
-				, status{ stmt->createParameter( "Status", db::FieldType::eSint32 ) }
-				, renderer{ stmt->createParameter( "Renderer", db::FieldType::eVarchar, 10 ) }
-				, category{ stmt->createParameter( "Category", db::FieldType::eVarchar, 50 ) }
-			{
-				stmt->initialise();
-			}
-
-			db::StatementPtr stmt;
-			db::Parameter * name{};
-			db::Parameter * runDate{};
-			db::Parameter * status{};
-			db::Parameter * renderer{};
-			db::Parameter * category{};
-		};
-		
-		struct UpdateTestStatus
-		{
-			UpdateTestStatus() = default;
-			explicit UpdateTestStatus( db::Connection & connection )
-				: stmt{ connection.createStatement( "UPDATE Test SET Status=? WHERE Id=?;" ) }
-				, status{ stmt->createParameter( "Status", db::FieldType::eSint32 ) }
-				, id{ stmt->createParameter( "Id", db::FieldType::eSint32 ) }
-			{
-				stmt->initialise();
-			}
-
-			db::StatementPtr stmt;
-			db::Parameter * status{};
-			db::Parameter * id{};
-		};
-
-	private:
 		wxAuiManager m_auiManager;
 		Config m_config;
-		db::Connection m_database;
-		InsertTest m_insertTest;
-		UpdateTestStatus m_updateTestStatus;
+		TestDatabase m_database;
 		TestMap m_tests;
 		wxDataViewCtrl * m_view{};
 		wxObjectDataPtr< TreeModel > m_model;

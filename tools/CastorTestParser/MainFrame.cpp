@@ -19,7 +19,6 @@
 
 #include <wx/dc.h>
 #include <wx/menu.h>
-#include <wx/process.h>
 #include <wx/progdlg.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
@@ -44,6 +43,7 @@ namespace test_parser
 			eID_RUN_TEST,
 			eID_VIEW_TEST,
 			eID_SET_REF,
+			eID_IGNORE_RESULT,
 			eID_RUN_CATEGORY_TESTS_ALL,
 			eID_RUN_CATEGORY_TESTS_NOTRUN,
 			eID_RUN_CATEGORY_TESTS_ACCEPTABLE,
@@ -54,226 +54,6 @@ namespace test_parser
 			eID_RUN_TESTS_ALL_BUT_NEGLIGIBLE,
 			eID_CANCEL,
 		};
-
-		castor::PathArray listTestCategories( castor::Path const & folder )
-		{
-			castor::PathArray result;
-			castor::File::traverseDirectory( folder
-				, [&result]( castor::Path const & folder )
-				{
-					result.push_back( folder );
-					return true;
-				}
-				, []( castor::Path const & folder
-					, castor::String const & name )
-				{
-				} );
-			return result;
-		}
-
-		castor::PathArray listScenes( castor::Path const & categoryPath )
-		{
-			return castor::File::filterDirectoryFiles( categoryPath
-				, []( castor::Path const & folder, castor::String const & name )
-				{
-					return castor::Path{ name }.getExtension() == cuT( "cscn" );
-				} );
-		}
-
-		db::DateTime getFileDate( castor::Path const & imgPath )
-		{
-			wxStructStat strucStat;
-			wxStat( makeWxString( imgPath ), &strucStat );
-			return makeDbDateTime( wxDateTime{ strucStat.st_mtime } );
-		}
-
-		void makeTest( TestStatus status
-			, std::string const & category
-			, castor::Path const & imgPath
-			, std::map< castor::String, Test > & tests )
-		{
-			auto name = castor::string::stringCast< char >( imgPath.getFileName() );
-			auto prevDotIdx = name.find_last_of( "." );
-
-			if ( prevDotIdx == std::string::npos
-				|| name.substr( prevDotIdx + 1 ) != "diff" )
-			{
-				auto rendererIdx = name.find_last_of( "_" );
-
-				if ( rendererIdx != std::string::npos )
-				{
-					auto renderer = name.substr( rendererIdx  + 1 );
-					name = name.substr( 0, rendererIdx );
-					tests.emplace( name
-						, Test{ 0u
-							, name
-							, getFileDate( imgPath )
-							, status
-							, renderer
-							, category } );
-				}
-			}
-		}
-
-		TestStatus getStatus( std::string const & name )
-		{
-			static std::map< std::string, TestStatus > const folders
-			{
-				{ "Negligible", TestStatus::eNegligible },
-				{ "Acceptable", TestStatus::eAcceptable },
-				{ "Unacceptable", TestStatus::eUnacceptable },
-				{ "Unprocessed", TestStatus::eUnprocessed },
-			};
-			auto it = folders.find( name );
-			assert( it != folders.end() );
-			return it->second;
-		}
-
-		std::map< castor::String, Test > listAllResults( castor::Path const & categoryPath
-			, castor::PathArray const & folders )
-		{
-			std::map< castor::String, Test > results;
-			auto category = castor::string::stringCast< char >( categoryPath.getFileName() );
-
-			for ( auto & status : folders )
-			{
-				auto testStatus = getStatus( status.getFileName() );
-				castor::File::filterDirectoryFiles( status
-					, [&results, &status, &category, testStatus]( castor::Path const & folder, castor::String const & name )
-					{
-						auto result = castor::Path{ name }.getExtension() == cuT( "png" );
-
-						if ( result )
-						{
-							makeTest( testStatus, category, folder / name, results );
-						}
-
-						return result;
-					} );
-			}
-
-			return results;
-		}
-
-		uint32_t listTests( castor::Path const & categoryPath
-			, TestMap & tests )
-		{
-			auto category = castor::string::stringCast< char >( categoryPath.getFileName() );
-			auto compareFolder = categoryPath / cuT( "Compare" );
-			castor::PathArray folders
-			{
-				compareFolder / "Negligible",
-				compareFolder / "Acceptable",
-				compareFolder / "Unacceptable",
-				compareFolder / "Unprocessed",
-			};
-			auto allResults = listAllResults( categoryPath, folders );
-			auto scenes = listScenes( categoryPath );
-			auto & categoryIt = tests.emplace( category, TestArray{} ).first;
-
-			for ( auto & testScene : scenes )
-			{
-				auto sceneName = testScene.getFileName();
-				auto it = allResults.find( sceneName );
-
-				if ( it == allResults.end() )
-				{
-					categoryIt->second.push_back( Test{ 0
-						, sceneName
-						, getFileDate( testScene )
-						, TestStatus::eNotRun
-						, "vk"
-						, category } );
-				}
-				else
-				{
-					categoryIt->second.push_back( it->second );
-				}
-			}
-
-			return uint32_t( categoryIt->second.size() );
-		}
-
-		void moveFile( castor::Path const & srcFolder
-			, castor::Path const & dstFolder
-			, castor::Path const & srcName
-			, castor::Path const & dstName
-			, bool force )
-		{
-			auto src = srcFolder / srcName;
-			auto dst = dstFolder / dstName;
-
-			if ( castor::File::fileExists( src ) )
-			{
-				if ( !castor::File::directoryExists( dstFolder ) )
-				{
-					if ( !castor::File::directoryCreate( dstFolder ) )
-					{
-						castor::Logger::logError( "Couldn't create folder [" + dstFolder + "]: " + castor::System::getLastErrorText() );
-						return;
-					}
-				}
-
-				if ( force || !castor::File::fileExists( dst ) )
-				{
-					if ( !castor::File::copyFileName( src, dst ) )
-					{
-						castor::Logger::logError( "Couldn't copy image [" + src + "]: " + castor::System::getLastErrorText() );
-						return;
-					}
-				}
-
-				castor::File::deleteFile( src );
-			}
-		}
-
-		void moveFile( castor::Path const & srcFolder
-			, castor::Path const & dstFolder
-			, castor::Path const & name
-			, bool force )
-		{
-			moveFile( srcFolder
-				, dstFolder
-				, name
-				, name
-				, force );
-		}
-
-		void moveTestFile( Test const & test
-			, castor::Path srcFolder
-			, castor::Path dstFolder )
-		{
-			if ( test.status == TestStatus::eNotRun )
-			{
-				return;
-			}
-
-			srcFolder /= getCompareFolder( test, true );
-			dstFolder /= getResultFolder( test );
-			moveFile( srcFolder
-				, dstFolder
-				, getCompareName( test )
-				, getResultName( test )
-				, false );
-		}
-
-		void moveResultFile( Test const & test
-			, TestStatus oldStatus
-			, TestStatus newStatus
-			, castor::Path work )
-		{
-			if ( oldStatus == TestStatus::eNotRun
-				|| oldStatus == newStatus )
-			{
-				return;
-			}
-
-			auto resultFolder = work / getResultFolder( test, false );
-			moveFile( resultFolder / getFolderName( oldStatus )
-				, resultFolder / getFolderName( newStatus )
-				, getResultName( test )
-				, false );
-		}
 
 		TreeModelNode * addCategory( TreeModel & model
 			, std::string const & category )
@@ -290,57 +70,6 @@ namespace test_parser
 			TreeModelNode * node = new TreeModelNode{ category, test };
 			category->Append( node );
 			return node;
-		}
-
-		static const std::string FOLDER_DATETIME = "%Y-%m-%d_%H-%M-%S";
-		static constexpr size_t FOLDER_DATETIME_SIZE = 4u + 3u + 3u + 3u + 3u + 3u;
-
-		castor::Path getFolderName( db::DateTime const & value )
-		{
-			return castor::Path{ db::date_time::format( value, FOLDER_DATETIME ) };
-		}
-
-		bool isDateTime( castor::String const & value
-			, db::DateTime & result )
-		{
-			return db::date_time::isDateTime( value, FOLDER_DATETIME, result );
-		}
-
-		std::string getDetails( Test const & test )
-		{
-			return test.category
-				+ " - " + test.renderer
-				+ " - " + test.name
-				+ " - " + db::date_time::format( test.runDate, FOLDER_DATETIME );
-		}
-
-		castor::PathArray findTestResults( Test const & test
-			, castor::Path const & work )
-		{
-			std::vector< TestStatus > statuses
-			{
-				TestStatus::eNegligible,
-				TestStatus::eAcceptable,
-				TestStatus::eUnacceptable,
-				TestStatus::eUnprocessed,
-			};
-			castor::File::FilterFunction filterFile = [&test]( castor::Path const & folder
-				, castor::String const & name )
-			{
-				return name.find( test.name ) == ( FOLDER_DATETIME_SIZE + 1u );
-			};
-			castor::PathArray result;
-			auto baseFolder = work / getResultFolder( test, false );
-
-			for ( auto & status : statuses )
-			{
-				auto matches = castor::File::filterDirectoryFiles( baseFolder / getFolderName( status )
-					, filterFile
-					, true );
-				result.insert( result.end(), matches.begin(), matches.end() );
-			}
-
-			return result;
 		}
 
 		class DataViewAnimatedBitmapRenderer : public wxDataViewRenderer
@@ -392,108 +121,11 @@ namespace test_parser
 
 	//*********************************************************************************************
 
-	castor::Path getFolderName( TestStatus value )
-	{
-		switch ( value )
-		{
-		case TestStatus::eNotRun:
-			return castor::Path{ "NotRun" };
-		case TestStatus::eNegligible:
-			return castor::Path{ "Negligible" };
-		case TestStatus::eAcceptable:
-			return castor::Path{ "Acceptable" };
-		case TestStatus::eUnacceptable:
-			return castor::Path{ "Unacceptable" };
-		case TestStatus::eUnprocessed:
-			return castor::Path{ "Unprocessed" };
-		default:
-			assert( false );
-			return castor::Path{};
-		}
-	}
-
-	castor::Path getResultFolder( Test const & test, bool useStatus )
-	{
-		auto result = castor::Path{ "Result" } / test.category;
-		return useStatus
-			? result / getFolderName( test.status )
-			: result;
-	}
-
-	castor::Path getResultName( Test const & test )
-	{
-		return castor::Path{ getFolderName( test.runDate ) + "_" + test.name + "_" + test.renderer + ".png" };
-	}
-
-	castor::Path getCompareFolder( Test const & test, bool useStatus )
-	{
-		auto result = castor::Path{ test.category } / cuT( "Compare" );
-		return useStatus
-			? result / getFolderName( test.status )
-			: result;
-	}
-
-	castor::Path getCompareName( Test const & test )
-	{
-		return castor::Path{ test.name + "_" + test.renderer + ".png" };
-	}
-
-	castor::Path getReferenceFolder( Test const & test )
-	{
-		return castor::Path{ test.category };
-	}
-
-	castor::Path getReferenceName( Test const & test )
-	{
-		return castor::Path{ test.name + "_ref.png" };
-	}
-
-	wxString makeWxString( std::string const & in )
-	{
-		return wxString{ in.c_str(), wxMBConvUTF8{} };
-	}
-
-	std::string makeStdString( wxString const & in )
-	{
-		return in.char_str( wxMBConvUTF8{} ).data();
-	}
-
-	wxDateTime makeWxDateTime( db::DateTime const & in )
-	{
-		int year = int( in.date().year() );
-		int month = int( in.date().month() ) - 1;
-		int day = int( in.date().day() );
-		int hour = int( in.time_of_day().hours() );
-		int minute = int( in.time_of_day().minutes() );
-		int second = int( in.time_of_day().seconds() );
-		return wxDateTime{ wxDateTime::wxDateTime_t( day )
-			, wxDateTime::Month( month )
-			, wxDateTime::wxDateTime_t( year )
-			, wxDateTime::wxDateTime_t( hour )
-			, wxDateTime::wxDateTime_t( minute )
-			, wxDateTime::wxDateTime_t( second ) };
-	}
-
-	db::DateTime makeDbDateTime( wxDateTime const & in )
-	{
-		int monthDay = in.GetDay();
-		int month = in.GetMonth() + 1;
-		int year = in.GetYear();
-		int hour = in.GetHour();
-		int min = in.GetMinute();
-		int sec = in.GetSecond();
-		return db::DateTime{ db::Date( year, month, monthDay )
-			, db::Time( hour, min, sec ) };
-
-	}
-
-	//*********************************************************************************************
-
 	MainFrame::MainFrame( Config config )
 		: wxFrame{ nullptr, wxID_ANY, wxT( "Castor3D Tests Parser" ), wxDefaultPosition, wxSize( 800, 700 ) }
 		, m_auiManager{ this, wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE }
 		, m_config{ std::move( config ) }
-		, m_database{ m_config.work }
+		, m_database{ m_config }
 	{
 		SetClientSize( 800, 600 );
 		doInitGui();
@@ -528,7 +160,6 @@ namespace test_parser
 
 				evt.Skip();
 			} );
-		Show( true );
 	}
 
 	MainFrame::~MainFrame()
@@ -545,21 +176,9 @@ namespace test_parser
 				, int( 1 )
 				, this };
 			int index = 0;
-
-			if ( !m_config.skip )
-			{
-				doInitDatabase( progress, index );
-				m_insertTest = { m_database };
-				m_updateTestStatus = { m_database };
-				doFillDatabase( progress, index );
-			}
-			else
-			{
-				m_insertTest = { m_database };
-				m_updateTestStatus = { m_database };
-			}
-
-			auto testCount = doListTests( progress, index );
+			m_database.initialise( progress, index );
+			uint32_t testCount;
+			m_tests = m_database.listLatestTests( testCount, progress, index );
 			doFillList( progress, index, testCount );
 		}
 
@@ -581,43 +200,12 @@ namespace test_parser
 		m_statusBar->SetLabel( _( "Idle" ) );
 	}
 
-	void MainFrame::insertTest( Test const & test
-		, bool moveFiles )
-	{
-		m_insertTest.name->setValue( test.name );
-		m_insertTest.runDate->setValue( test.runDate );
-		m_insertTest.status->setValue( int32_t( test.status ) );
-		m_insertTest.renderer->setValue( test.renderer );
-		m_insertTest.category->setValue( test.category );
-		m_insertTest.stmt->executeUpdate();
-
-		if ( moveFiles )
-		{
-			moveTestFile( test, m_config.test, m_config.work );
-		}
-
-		castor::Logger::logInfo( "Inserted: " + getDetails( test ) );
-	}
-
 	void MainFrame::updateTestStatus( Test & test
 		, TestStatus newStatus
 		, bool reference )
 	{
 		auto node = getTestNode( test );
-		auto oldStatus = test.status;
-		test.status = TestStatus::eRunning;
-		m_model->ItemChanged( wxDataViewItem{ node } );
-		m_updateTestStatus.status->setValue( int32_t( newStatus ) );
-		m_updateTestStatus.id->setValue( int32_t( test.id ) );
-		m_updateTestStatus.stmt->executeUpdate();
-		moveResultFile( test, oldStatus, newStatus, m_config.work );
-
-		if ( reference )
-		{
-			castor::File::copyFileName( m_config.work / getResultFolder( test, false ) / getFolderName( newStatus ) / getResultName( test )
-				, m_config.test / getReferenceFolder( test ) / getReferenceName( test ) );
-		}
-
+		m_database.updateTestStatus( test, newStatus, reference );
 		test.status = newStatus;
 		m_model->ItemChanged( wxDataViewItem{ node } );
 
@@ -626,8 +214,6 @@ namespace test_parser
 		{
 			m_testView->setTest( test );
 		}
-
-		castor::Logger::logInfo( "Updated status for: " + getDetails( test ) );
 	}
 
 	wxWindow * MainFrame::doInitTestsList()
@@ -753,23 +339,24 @@ namespace test_parser
 	{
 		auto addTestMenus = []( wxMenu & menu )
 		{
-			menu.Append( eID_VIEW_TEST, "View Test\tF5" );
-			menu.Append( eID_SET_REF, "Set Reference\tF6" );
-			menu.Append( eID_RUN_TEST, "Run Test\tF7" );
+			menu.Append( eID_VIEW_TEST, _( "View Test" ) + wxT( "\tF5" ) );
+			menu.Append( eID_SET_REF, _( "Set Reference" ) + wxT( "\tF6" ) );
+			menu.Append( eID_RUN_TEST, _( "Run Test" ) + wxT( "\tF7" ) );
+			menu.Append( eID_IGNORE_RESULT, _( "Ignore test results" ) + wxT( "\tF8" ), wxEmptyString, wxITEM_CHECK );
 		};
 		auto addCategoryMenus = []( wxMenu & menu )
 		{
-			menu.Append( eID_RUN_CATEGORY_TESTS_ALL, "Run all category's tests\tCtrl+F7" );
-			menu.Append( eID_RUN_CATEGORY_TESTS_NOTRUN, "Run all <not run> category's tests\tCtrl+F8" );
-			menu.Append( eID_RUN_CATEGORY_TESTS_ACCEPTABLE, "Run all <acceptable> category's tests\tCtrl+F9" );
-			menu.Append( eID_RUN_CATEGORY_TESTS_ALL_BUT_NEGLIGIBLE, "Run all but <negligible> category's tests\tCtrl+F10" );
+			menu.Append( eID_RUN_CATEGORY_TESTS_ALL, _( "Run all category's tests" ) + wxT( "\tCtrl+F7" ) );
+			menu.Append( eID_RUN_CATEGORY_TESTS_NOTRUN, _( "Run all <not run> category's tests" ) + wxT( "\tCtrl+F8" ) );
+			menu.Append( eID_RUN_CATEGORY_TESTS_ACCEPTABLE, _( "Run all <acceptable> category's tests" ) + wxT( "\tCtrl+F9" ) );
+			menu.Append( eID_RUN_CATEGORY_TESTS_ALL_BUT_NEGLIGIBLE, _( "Run all but <negligible> category's tests" ) + wxT( "\tCtrl+F10" ) );
 		};
 		auto addAllMenus = []( wxMenu & menu )
 		{
-			menu.Append( eID_RUN_TESTS_ALL, "Run all tests\tCtrl+Alt+F7" );
-			menu.Append( eID_RUN_TESTS_NOTRUN, "Run all <not run> tests\tCtrl+Alt+F8" );
-			menu.Append( eID_RUN_TESTS_ACCEPTABLE, "Run all <acceptable> tests\tCtrl+Alt+F9" );
-			menu.Append( eID_RUN_TESTS_ALL_BUT_NEGLIGIBLE, "Run all but <negligible> tests\tCtrl+F10" );
+			menu.Append( eID_RUN_TESTS_ALL, _( "Run all tests" ) + wxT( "\tCtrl+Alt+F7" ) );
+			menu.Append( eID_RUN_TESTS_NOTRUN, _( "Run all <not run> tests" ) + wxT( "\tCtrl+Alt+F8" ) );
+			menu.Append( eID_RUN_TESTS_ACCEPTABLE, _( "Run all <acceptable> tests" ) + wxT( "\tCtrl+Alt+F9" ) );
+			menu.Append( eID_RUN_TESTS_ALL_BUT_NEGLIGIBLE, _( "Run all but <negligible> tests" ) + wxT( "\tCtrl+F10" ) );
 		};
 		m_testMenu = std::make_unique< wxMenu >();
 		addTestMenus( *m_testMenu );
@@ -805,182 +392,6 @@ namespace test_parser
 			, wxCommandEventHandler( MainFrame::onMenuOption )
 			, nullptr
 			, this );
-	}
-
-	void MainFrame::doInitDatabase( wxProgressDialog & progress
-		, int & index )
-	{
-		std::string createTableTest = "CREATE TABLE IF NOT EXISTS Test";
-		createTableTest += "( Id INTEGER PRIMARY KEY\n";
-		createTableTest += "\t, Name VARCHAR(1024)\n";
-		createTableTest += "\t, RunDate DATETIME\n";
-		createTableTest += "\t, Status INTEGER\n";
-		createTableTest += "\t, Renderer VARCHAR(10)\n";
-		createTableTest += "\t, Category VARCHAR(50)\n";
-		createTableTest += ");";
-		m_database.executeUpdate( createTableTest );
-	}
-
-	TestMap MainFrame::doListCategories( wxProgressDialog & progress
-		, int & index
-		, uint32_t & testCount )
-	{
-		TestMap result;
-		auto categories = listTestCategories( m_config.test );
-		castor::Logger::logInfo( "Listing Test files" );
-		progress.SetTitle( _( "Listing Test files" ) );
-		progress.SetRange( progress.GetRange() + int( categories.size() ) );
-		progress.Update( index, _( "isting Test files..." ) );
-
-		for ( auto & categoryPath : categories )
-		{
-			progress.Update( index++, wxT( "Category " ) + makeWxString( categoryPath.getFileName() ) + wxT( "..." ) );
-			testCount += listTests( categoryPath, result );
-		}
-
-		return result;
-	}
-
-	void MainFrame::doPopulateDatabase( wxProgressDialog & progress
-		, int & index
-		, TestMap const & tests
-		, uint32_t testCount )
-	{
-		castor::Logger::logInfo( "Populating database" );
-		progress.SetTitle( _( "Populating database" ) );
-		progress.SetRange( progress.GetRange() + int( testCount ) );
-		progress.Update( index, _( "Populating database..." ) );
-
-		auto finderDate = m_database.createStatement( "SELECT Id, Status FROM Test WHERE Name=? AND Category=? AND RunDate=?;" );
-		auto findDateName = finderDate->createParameter( "Name", db::FieldType::eVarchar, 1024 );
-		auto findDateCategory = finderDate->createParameter( "Category", db::FieldType::eVarchar, 50 );
-		auto findDateRunDate = finderDate->createParameter( "RunDate", db::FieldType::eDatetime );
-		finderDate->initialise();
-
-		auto finderName = m_database.createStatement( "SELECT Id FROM Test WHERE Name=? AND Category=?;" );
-		auto findNameName = finderName->createParameter( "Name", db::FieldType::eVarchar, 1024 );
-		auto findNameCategory = finderName->createParameter( "Category", db::FieldType::eVarchar, 50 );
-		finderName->initialise();
-
-		for ( auto & tests : tests )
-		{
-			for ( auto test : tests.second )
-			{
-				progress.Update( index++, makeWxString( test.category ) + wxT( " - " ) + makeWxString( test.name ) + wxT( "..." ) );
-				db::ResultPtr result;
-
-				if ( test.status != TestStatus::eNotRun )
-				{
-					findDateName->setValue( test.name );
-					findDateCategory->setValue( test.category );
-					findDateRunDate->setValue( test.runDate );
-					result = finderDate->executeSelect();
-
-					if ( result->empty() )
-					{
-						insertTest( test );
-					}
-					else
-					{
-						auto & row = *result->begin();
-						auto status = row.getField( 1u ).getValue< int32_t >();
-
-						if ( test.status != TestStatus( status ) )
-						{
-							m_updateTestStatus.id->setValue( row.getField( 0u ).getValue< int32_t >() );
-							m_updateTestStatus.status->setValue( int32_t( test.status ) );
-							m_updateTestStatus.stmt->executeUpdate();
-							moveTestFile( test, m_config.test, m_config.work );
-						}
-					}
-				}
-				else
-				{
-					findNameName->setValue( test.name );
-					findNameCategory->setValue( test.category );
-					result = finderName->executeSelect();
-
-					if ( result->empty() )
-					{
-						castor::PathArray files = findTestResults( test, m_config.work );
-
-						for ( auto & file : files )
-						{
-							// file = .../Status/YY-MM-DD_HH-MM-SS_Name_Renderer.png
-							auto fullName = file.getFileName();
-							size_t index = 0;
-
-							//Status
-							test.status = getStatus( file.getPath().getFileName() );
-
-							// Date
-							// YY-MM-DD
-							index = fullName.find( '_', index );
-							assert( index != castor::String::npos );
-							// YY-MM-DD_HH-MM-SS
-							index = fullName.find( '_', index );
-							assert( index != castor::String::npos );
-							auto isDate = isDateTime( fullName.substr( 0, index ), test.runDate );
-							assert( isDate );
-
-							// Renderer
-							auto lastIndex = fullName.find_last_of( '_' );
-							assert( index != lastIndex );
-							test.renderer = fullName.substr( lastIndex );
-
-							insertTest( test, false );
-						}
-					}
-				}
-			}
-		}
-	}
-
-	void MainFrame::doFillDatabase( wxProgressDialog & progress
-		, int & index )
-	{
-		uint32_t testCount = 0u;
-		auto tests = doListCategories( progress, index, testCount );
-		doPopulateDatabase( progress, index, tests, testCount );
-	}
-
-	uint32_t MainFrame::doListTests( wxProgressDialog & progress
-		, int & index )
-	{
-		uint32_t testCount{};
-		std::string listTests = "SELECT Id, Name, MAX( RunDate ) AS RunDate, Status, Renderer, Category\n";
-		listTests += "FROM Test\n";
-		listTests += "GROUP BY Category, Name\n";
-		listTests += "ORDER BY Category, Name;";
-		auto result = m_database.executeSelect( listTests );
-		std::string prevCategory;
-		auto categoryIt = m_tests.end();
-		castor::Logger::logInfo( "Listing tests" );
-		progress.SetTitle( _( "Listing tests" ) );
-		progress.SetRange( progress.GetRange() + int( result->size() ) );
-		progress.Update( index, _( "Listing tests..." ) );
-
-		for ( auto & row : *result )
-		{
-			Test test{ uint32_t( row.getField( 0u ).getValue< int32_t >() )
-				, row.getField( 1u ).getValue< std::string >()
-				, row.getField( 2u ).getValue< db::DateTime >()
-				, TestStatus( row.getField( 3u ).getValue< int32_t >() )
-				, row.getField( 4u ).getValue< std::string >()
-				, row.getField( 5u ).getValue< std::string >() };
-
-			if ( prevCategory != test.category )
-			{
-				categoryIt = m_tests.emplace( test.category, TestArray{} ).first;
-				prevCategory = test.category;
-			}
-
-			categoryIt->second.push_back( test );
-			++testCount;
-			progress.Update( index++, makeWxString( test.category ) + wxT( " - " ) + makeWxString( test.name ) + wxT( "..." ) );
-		}
-
-		return testCount;
 	}
 
 	void MainFrame::doFillList( wxProgressDialog & progress
@@ -1097,6 +508,24 @@ namespace test_parser
 		}
 
 		m_statusBar->SetLabel( _( "Idle" ) );
+	}
+
+	void MainFrame::doIgnoreTestResult()
+	{
+		m_cancelled.exchange( false );
+
+		if ( !m_selected.items.empty() )
+		{
+			for ( auto & item : m_selected.items )
+			{
+				auto node = static_cast< TreeModelNode * >( item.GetID() );
+				assert( node->test );
+				m_statusBar->SetLabel( _( "Setting reference: " ) + node->test->name );
+				node->test->ignoreResult = m_testMenu->IsChecked( eID_IGNORE_RESULT );
+				m_database.updateTestIgnoreResult( *node->test, node->test->ignoreResult, true );
+				m_model->ItemChanged( item );
+			}
+		}
 	}
 
 	TreeModelNode * MainFrame::getTestNode( Test const & test )
@@ -1321,6 +750,17 @@ namespace test_parser
 		{
 			if ( m_selected.allTests )
 			{
+				if ( m_selected.items.size() <= 1 )
+				{
+					m_testMenu->Enable( eID_IGNORE_RESULT, true );
+					m_testMenu->Check( eID_IGNORE_RESULT, static_cast< TreeModelNode * >( m_selected.items.front().GetID() )->test->ignoreResult );
+				}
+				else
+				{
+					m_testMenu->Enable( eID_IGNORE_RESULT, false );
+					m_testMenu->Check( eID_IGNORE_RESULT, false );
+				}
+
 				PopupMenu( m_testMenu.get() );
 			}
 			else if ( m_selected.allCategories )
@@ -1350,6 +790,9 @@ namespace test_parser
 			break;
 		case eID_SET_REF:
 			doSetRef();
+			break;
+		case eID_IGNORE_RESULT:
+			doIgnoreTestResult();
 			break;
 		case eID_RUN_CATEGORY_TESTS_ALL:
 			doRunAllCategoryTests();
@@ -1418,7 +861,7 @@ namespace test_parser
 
 	void MainFrame::onTestDiffEnd( wxProcessEvent & evt )
 	{
-		auto & testNode = *m_runningTest.tests.begin();
+		auto testNode = *m_runningTest.tests.begin();
 		m_runningTest.tests.erase( m_runningTest.tests.begin() );
 		auto & test = *testNode.test;
 
@@ -1443,13 +886,21 @@ namespace test_parser
 			auto path = match.getPath();
 			test.runDate = getFileDate( match );
 			test.status = getStatus( path.getFileName() );
-			insertTest( test );
-			m_model->ItemChanged( wxDataViewItem{ testNode.node } );
+			m_database.insertTest( test );
 
-			if ( m_detailViews->isLayerShown( 1 )
-				&& m_testView->getTest() == &test )
+			if ( test.ignoreResult )
 			{
-				m_testView->setTest( test );
+				updateTestStatus( test, TestStatus::eNegligible, true );
+			}
+			else
+			{
+				m_model->ItemChanged( wxDataViewItem{ testNode.node } );
+
+				if ( m_detailViews->isLayerShown( 1 )
+					&& m_testView->getTest() == &test )
+				{
+					m_testView->setTest( test );
+				}
 			}
 
 			doProcessTest();
