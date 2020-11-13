@@ -50,11 +50,31 @@ namespace castor
 	}
 }
 
-#define CU_DeclareCUSmartPtr( class_name )\
+#define CU_DeclareCUSmartPtr( nmspc, class_name, expdecl )\
+}\
+namespace castor\
+{\
+	template<>\
+	struct Deleter< nmspc::class_name >\
+	{\
+		expdecl void operator()( nmspc::class_name * pointer )noexcept;\
+	};\
+}\
+namespace nmspc\
+{\
 	using class_name##SPtr = std::shared_ptr< class_name >;\
 	using class_name##WPtr = std::weak_ptr< class_name >;\
 	using class_name##UPtr = castor::UniquePtr< class_name >;\
 	using class_name##RPtr = class_name *
+
+#define CU_ImplementCUSmartPtr( nmspc, class_name )\
+namespace castor\
+{\
+	void Deleter< nmspc::class_name >::operator()( nmspc::class_name * pointer )noexcept\
+	{\
+		delete pointer;\
+	}\
+}
 
 #define CU_DeclareCUTemplateSmartPtr( class_name )\
 	template< typename T > using class_name##SPtr = std::shared_ptr< class_name< T > >;\

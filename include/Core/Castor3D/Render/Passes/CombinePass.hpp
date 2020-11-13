@@ -151,7 +151,7 @@ namespace castor3d
 			, IntermediateViewArray const & lhsViews
 			, IntermediateView const & rhsView )
 		{
-			return std::unique_ptr< CombinePass >( new CombinePass
+			return castor::UniquePtr< CombinePass >( new CombinePass
 				{
 					engine,
 					device,

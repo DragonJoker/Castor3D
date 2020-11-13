@@ -9,6 +9,8 @@
 
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, Voxelizer );
+
 using namespace castor;
 
 namespace castor3d

@@ -35,6 +35,8 @@ namespace castor3d
 	*/
 	class Voxelizer;
 
+	CU_DeclareCUSmartPtr( castor3d, Voxelizer, C3D_API );
+
 	//@}
 	//@}
 	//@}

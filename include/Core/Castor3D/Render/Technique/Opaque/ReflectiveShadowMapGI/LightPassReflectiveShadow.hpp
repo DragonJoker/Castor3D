@@ -74,7 +74,7 @@ namespace castor3d
 				m_lpResult[LpTexture::eDiffuse].getTexture()->getWidth() >> 2,
 				m_lpResult[LpTexture::eDiffuse].getTexture()->getHeight() >> 2,
 			};
-			m_downscalePass = std::make_unique< DownscalePass >( this->m_engine
+			m_downscalePass = castor::makeUnique< DownscalePass >( this->m_engine
 				, this->m_device
 				, cuT( "Reflective Shadow Maps" )
 				, ashes::ImageViewArray

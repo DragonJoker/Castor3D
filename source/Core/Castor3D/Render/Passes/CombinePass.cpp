@@ -26,6 +26,8 @@
 
 #include <numeric>
 
+CU_ImplementCUSmartPtr( castor3d, CombinePass )
+
 using namespace castor;
 
 namespace castor3d

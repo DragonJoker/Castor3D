@@ -464,7 +464,7 @@ namespace castor3d
 		RenderPassTimerSPtr m_overlaysTimer;
 		ShaderModule m_combineVtx{ VK_SHADER_STAGE_VERTEX_BIT, "Target - Combine" };
 		ShaderModule m_combinePxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "Target - Combine" };
-		std::unique_ptr< CombinePass > m_combinePass;
+		CombinePassUPtr m_combinePass;
 		SsaoConfig m_ssaoConfig;
 		castor::Point2f m_jitter;
 		TextureUnit m_velocityTexture;

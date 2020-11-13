@@ -46,6 +46,8 @@
 
 #include <random>
 
+CU_ImplementCUSmartPtr( castor3d, LineariseDepthPass )
+
 using namespace castor;
 
 namespace castor3d
