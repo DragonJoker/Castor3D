@@ -24,6 +24,8 @@
 
 #include <ShaderWriter/Source.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, RenderTechniquePass )
+
 using namespace castor;
 
 namespace castor3d

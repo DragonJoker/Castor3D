@@ -86,6 +86,7 @@ namespace castor3d
 		, uint32_t & index );
 
 	CU_DeclareSmartPtr( RenderTechnique );
+	CU_DeclareCUSmartPtr( castor3d, RenderTechniquePass, C3D_API );
 
 	//@}
 	//@}

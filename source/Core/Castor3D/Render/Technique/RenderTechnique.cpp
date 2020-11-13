@@ -17,7 +17,9 @@
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 #include "Castor3D/Render/Technique/ForwardRenderTechniquePass.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePass.hpp"
+#include "Castor3D/Render/Technique/Opaque/DeferredRendering.hpp"
 #include "Castor3D/Render/Technique/Transparent/TransparentPass.hpp"
+#include "Castor3D/Render/Technique/Transparent/WeightedBlendRendering.hpp"
 #include "Castor3D/Render/Technique/Voxelize/Voxelizer.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -209,11 +211,11 @@ namespace castor3d
 		, m_matrixUbo{ *renderSystem.getEngine() }
 		, m_gpInfoUbo{ *renderSystem.getEngine() }
 #if C3D_UseDeferredRendering
-		, m_opaquePass{ std::make_unique< OpaquePass >( m_matrixUbo
+		, m_opaquePass{ castor::makeUniqueDerived< RenderTechniquePass, OpaquePass >( m_matrixUbo
 			, renderTarget.getCuller()
 			, ssaoConfig ) }
 #else
-		, m_opaquePass{ std::make_unique< ForwardRenderTechniquePass >( cuT( "opaque_pass" )
+		, m_opaquePass{ castor::makeUniqueDerived< RenderTechniquePass, ForwardRenderTechniquePass >( cuT( "opaque_pass" )
 			, m_matrixUbo
 			, renderTarget.getCuller()
 			, false
@@ -221,7 +223,7 @@ namespace castor3d
 			, ssaoConfig ) }
 #endif
 #if C3D_UseWeightedBlendedRendering
-		, m_transparentPass{ std::make_unique< TransparentPass >( m_matrixUbo
+		, m_transparentPass{ castor::makeUniqueDerived< RenderTechniquePass, TransparentPass >( m_matrixUbo
 			, renderTarget.getCuller()
 			, ssaoConfig ) }
 #else
@@ -662,7 +664,7 @@ namespace castor3d
 
 	void RenderTechnique::doInitialiseDepthPass( RenderDevice const & device )
 	{
-		m_depthPass = std::make_unique< DepthPass >( cuT( "Depth Prepass" )
+		m_depthPass = castor::makeUnique< DepthPass >( cuT( "Depth Prepass" )
 			, device
 			, m_matrixUbo
 			, m_renderTarget.getCuller()
@@ -679,7 +681,7 @@ namespace castor3d
 
 #if C3D_UseDeferredRendering
 
-		m_deferredRendering = std::make_unique< DeferredRendering >( *getEngine()
+		m_deferredRendering = castor::makeUnique< DeferredRendering >( *getEngine()
 			, device
 			, static_cast< OpaquePass & >( *m_opaquePass )
 			, m_depthBuffer
@@ -732,7 +734,7 @@ namespace castor3d
 
 #if C3D_UseWeightedBlendedRendering
 
-		m_weightedBlendRendering = std::make_unique< WeightedBlendRendering >( *getEngine()
+		m_weightedBlendRendering = castor::makeUnique< WeightedBlendRendering >( *getEngine()
 			, device
 			, static_cast< TransparentPass & >( *m_transparentPass )
 			, m_depthBuffer

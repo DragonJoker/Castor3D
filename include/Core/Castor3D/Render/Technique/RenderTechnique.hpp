@@ -9,14 +9,14 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
-#include "Castor3D/Render/Passes/DepthPass.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
-#include "Castor3D/Render/Technique/Opaque/DeferredRendering.hpp"
-#include "Castor3D/Render/Technique/Transparent/WeightedBlendRendering.hpp"
+#include "Castor3D/Render/Technique/Opaque/OpaqueModule.hpp"
+#include "Castor3D/Render/Technique/Transparent/TransparentModule.hpp"
 #include "Castor3D/Render/Technique/Voxelize/VoxelizeModule.hpp"
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
 #include "Castor3D/Shader/Ubos/DebugConfig.hpp"
+#include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
 #include <CastorUtils/Design/DelayedInitialiser.hpp>
@@ -266,11 +266,11 @@ namespace castor3d
 		DebugConfig m_debugConfig;
 		DepthPassUPtr m_depthPass;
 		VoxelizerUPtr m_voxelizer;
-		std::unique_ptr< RenderTechniquePass > m_opaquePass;
-		std::unique_ptr< RenderTechniquePass > m_transparentPass;
+		RenderTechniquePassUPtr m_opaquePass;
+		RenderTechniquePassUPtr m_transparentPass;
 		SsaoConfig m_ssaoConfig;
-		std::unique_ptr< DeferredRendering > m_deferredRendering;
-		std::unique_ptr< WeightedBlendRendering > m_weightedBlendRendering;
+		DeferredRenderingUPtr m_deferredRendering;
+		WeightedBlendRenderingUPtr m_weightedBlendRendering;
 		RenderPassTimerSPtr m_particleTimer;
 		ShadowMapUPtr m_directionalShadowMap;
 		ShadowMapUPtr m_pointShadowMap;

@@ -13,6 +13,7 @@
 #include "Castor3D/Cache/TechniqueCache.hpp"
 #include "Castor3D/Cache/WindowCache.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
+#include "Castor3D/Render/RenderQueue.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/RenderWindow.hpp"
