@@ -221,7 +221,7 @@ namespace test_parser
 
 	TestDatabase::TestDatabase( Config config )
 		: m_config{ std::move( config ) }
-		, m_database{ m_config.work }
+		, m_database{ m_config.database }
 	{
 	}
 

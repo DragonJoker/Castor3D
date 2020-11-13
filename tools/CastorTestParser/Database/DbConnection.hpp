@@ -11,7 +11,7 @@ namespace test_parser::db
 	class Connection
 	{
 	public:
-		explicit Connection( castor::Path testsFolder );
+		explicit Connection( castor::Path databaseFile );
 		~Connection();
 
 		bool executeUpdate( sqlite3_stmt * statement );

@@ -11,7 +11,6 @@ namespace test_parser::db
 {
 	namespace
 	{
-		static const castor::String DbFileName = "db.sqlite";
 		static const std::string SQLITE_SQL_SNULL = "NULL";
 
 		static const std::string ERROR_DB_MISSING_LIMITS = "Missing limits for field ";
@@ -697,21 +696,19 @@ namespace test_parser::db
 
 	//*********************************************************************************************
 
-	Connection::Connection( castor::Path testsFolder )
+	Connection::Connection( castor::Path databaseFile )
 	{
-		auto filePath = testsFolder / DbFileName;
-
-		if ( !castor::File::fileExists( filePath ) )
+		if ( !castor::File::fileExists( databaseFile ) )
 		{
 			FILE * file{};
 
-			if ( castor::fileOpen( file, filePath.c_str(), "w" ) )
+			if ( castor::fileOpen( file, databaseFile.c_str(), "w" ) )
 			{
 				fclose( file );
 			}
 		}
 
-		sqliteCheck( sqlite3_open( filePath.c_str(), &m_database )
+		sqliteCheck( sqlite3_open( databaseFile.c_str(), &m_database )
 			, castor::makeStringStream() << INFO_SQLITE_SELECTION
 			, m_database );
 	}

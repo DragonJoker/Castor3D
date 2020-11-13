@@ -34,6 +34,7 @@ namespace test_parser
 	{
 		castor::Path test;
 		castor::Path work;
+		castor::Path database;
 		castor::Path launcher;
 		castor::Path viewer;
 		castor::Path differ;
