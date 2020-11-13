@@ -449,7 +449,8 @@ namespace castor3d
 	{
 		// Since their vertex attribute locations overlap, we must not have both set at the same time.
 		CU_Require( ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) ? 1 : 0 )
-			+ ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) ? 1 : 0 ) < 2 );
+			+ ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) ? 1 : 0 ) < 2
+			&& "Can't have both instantiation and morphing yet." );
 		using namespace sdw;
 		VertexWriter writer;
 		// Vertex inputs
@@ -492,8 +493,6 @@ namespace castor3d
 			, RenderPass::VertexInputs::Texture2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
 		auto in = writer.getIn();
-		CU_Require( ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) ? 1 : 0 )
-			+ ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) ? 1 : 0 ) < 2 );
 
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0 );
@@ -589,8 +588,8 @@ namespace castor3d
 				, prvMtxModel * curPosition );
 			curPosition = curMtxModel * curPosition;
 			outWorldPosition = curPosition.xyz();
-			prvPosition = c3d_prvViewProj * prvPosition;
-			curPosition = c3d_curViewProj * curPosition;
+			prvPosition = c3d_prvView * prvPosition;
+			curPosition = c3d_curView * curPosition;
 			outViewPosition = curPosition.xyz();
 
 			outNormal = normalize( mtxNormal * v4Normal.xyz() );
@@ -606,6 +605,8 @@ namespace castor3d
 			}
 
 			outInstance = writer.cast< UInt >( in.instanceIndex );
+			prvPosition = c3d_projection * prvPosition;
+			curPosition = c3d_projection * curPosition;
 
 			auto tbn = writer.declLocale( "tbn", transpose( mat3( outTangent, outBitangent, outNormal ) ) );
 			outTangentSpaceFragPosition = tbn * outWorldPosition;

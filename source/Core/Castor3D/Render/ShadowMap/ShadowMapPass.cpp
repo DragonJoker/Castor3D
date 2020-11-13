@@ -31,7 +31,10 @@ namespace castor3d
 			, std::move( name )
 			, engine
 			, matrixUbo
-			, culler }
+			, culler
+			, RenderMode::eBoth
+			, true
+			, nullptr }
 		, m_shadowMap{ shadowMap }
 		, m_shadowMapUbo{ engine }
 	{
