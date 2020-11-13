@@ -6,8 +6,6 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/RenderModule.hpp"
 
-#define C3D_UseDepthPrepass 1
-
 namespace castor3d
 {
 	/**@name Render */

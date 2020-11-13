@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
+#include "Castor3D/Render/Passes/DepthPass.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Render/Technique/Opaque/DeferredRendering.hpp"
@@ -19,10 +20,6 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
 #include <CastorUtils/Design/DelayedInitialiser.hpp>
-
-#if C3D_UseDepthPrepass
-#	include "Castor3D/Render/Passes/DepthPass.hpp"
-#endif
 
 #include <CastorUtils/Design/Named.hpp>
 
@@ -234,9 +231,7 @@ namespace castor3d
 		void doCreateShadowMaps();
 		void doInitialiseShadowMaps( RenderDevice const & device );
 		void doInitialiseBackgroundPass( RenderDevice const & device );
-#if C3D_UseDepthPrepass
 		void doInitialiseDepthPass( RenderDevice const & device );
-#endif
 		void doInitialiseOpaquePass( RenderDevice const & device );
 		void doInitialiseTransparentPass( RenderDevice const & device );
 		void doCleanupShadowMaps( RenderDevice const & device );
@@ -248,12 +243,10 @@ namespace castor3d
 			, ashes::Semaphore const & semaphore );
 		ashes::Semaphore const & doRenderEnvironmentMaps( RenderDevice const & device
 			, ashes::Semaphore const & semaphore );
-#if C3D_UseDepthPrepass
 		ashes::Semaphore const & doRenderDepth( RenderDevice const & device
 			, ashes::SemaphoreCRefArray const & semaphores );
 		ashes::Semaphore const & doRenderBackground( RenderDevice const & device
 			, ashes::Semaphore const & semaphore );
-#endif
 		ashes::Semaphore const & doRenderBackground( RenderDevice const & device
 			, ashes::SemaphoreCRefArray const & semaphores );
 		ashes::Semaphore const & doRenderOpaque( RenderDevice const & device
@@ -271,9 +264,7 @@ namespace castor3d
 		MatrixUbo m_matrixUbo;
 		GpInfoUbo m_gpInfoUbo;
 		DebugConfig m_debugConfig;
-#if C3D_UseDepthPrepass
-		std::unique_ptr< DepthPass > m_depthPass;
-#endif
+		DepthPassUPtr m_depthPass;
 		VoxelizerUPtr m_voxelizer;
 		std::unique_ptr< RenderTechniquePass > m_opaquePass;
 		std::unique_ptr< RenderTechniquePass > m_transparentPass;

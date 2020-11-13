@@ -12,7 +12,8 @@ namespace castor3d
 		: public SceneCuller
 	{
 	public:
-		C3D_API explicit DummyCuller( Scene & scene );
+		C3D_API explicit DummyCuller( Scene & scene
+			, Camera * camera = nullptr  );
 
 	private:
 		void doCullGeometries()override;

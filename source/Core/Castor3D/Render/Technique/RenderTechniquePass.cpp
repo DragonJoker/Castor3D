@@ -247,9 +247,22 @@ namespace castor3d
 
 	ashes::PipelineDepthStencilStateCreateInfo RenderTechniquePass::doCreateDepthStencilState( PipelineFlags const & flags )const
 	{
-		return ashes::PipelineDepthStencilStateCreateInfo{ 0u
+#if C3D_UseDepthPrepass
+		return ashes::PipelineDepthStencilStateCreateInfo
+		{
+			0u
 			, VK_TRUE
-			, m_mode != RenderMode::eTransparentOnly };
+			, VK_FALSE
+			, VK_COMPARE_OP_EQUAL
+		};
+#else
+		return ashes::PipelineDepthStencilStateCreateInfo
+		{
+			0u
+			, VK_TRUE
+			, m_mode != RenderMode::eTransparentOnly
+		};
+#endif
 	}
 
 	ashes::PipelineColorBlendStateCreateInfo RenderTechniquePass::doCreateBlendState( PipelineFlags const & flags )const
