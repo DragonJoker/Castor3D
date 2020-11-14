@@ -167,7 +167,7 @@ namespace castor3d
 			m_writer.inlineComment( "// LIGHTING" );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			doDeclareModel();
-			doDeclareComputeOneDirectionalLight();
+			doDeclareComputeDirectionalLight();
 		}
 
 		void LightingModel::declarePointModel( bool lightUbo
@@ -221,7 +221,7 @@ namespace castor3d
 			m_writer.inlineComment( "// LIGHTING" );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			doDeclareModel();
-			doDeclareComputeOneSpotLight();
+			doDeclareComputeSpotLight();
 		}
 
 		DirectionalLight LightingModel::getDirectionalLight( Int const & index )const
