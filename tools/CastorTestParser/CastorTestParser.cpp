@@ -43,6 +43,11 @@ namespace test_parser
 
 		struct Options
 		{
+			Options( Options const & ) = delete;
+			Options & operator=( Options const & ) = delete;
+			Options( Options && ) = default;
+			Options & operator=( Options && ) = default;
+
 			Options( int argc, wxCmdLineArgsArray const & argv )
 				: parser{ argc, argv }
 			{

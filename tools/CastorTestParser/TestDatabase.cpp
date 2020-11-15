@@ -250,6 +250,7 @@ namespace test_parser
 		}
 
 		m_updateTestIgnoreResult = UpdateTestIgnoreResult{ m_database };
+		m_updateTestCastorDate = UpdateTestCastorDate{ m_database };
 		std::string listTests = "SELECT Id, Name, MAX( RunDate ) AS RunDate, Status, Renderer, Category, IgnoreResult, CastorDate\n";
 		listTests += "FROM Test\n";
 		listTests += "GROUP BY Category, Name\n";
@@ -370,6 +371,13 @@ namespace test_parser
 		}
 
 		castor::Logger::logInfo( "Updated ignore result for: " + getDetails( test ) );
+	}
+
+	void TestDatabase::updateTestCastorDate( Test & test )
+	{
+		m_updateTestCastorDate.castorDate->setValue( test.castorDate );
+		m_updateTestCastorDate.id->setValue( int32_t( test.id ) );
+		m_updateTestCastorDate.stmt->executeUpdate();
 	}
 
 	void TestDatabase::doInitDatabase( wxProgressDialog & progress

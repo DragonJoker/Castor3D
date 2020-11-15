@@ -47,6 +47,7 @@ namespace test_parser
 		void updateTestIgnoreResult( Test & test
 			, bool ignore
 			, bool useAsReference );
+		void updateTestCastorDate( Test & test );
 
 	private:
 		void doInitDatabase( wxProgressDialog & progress, int & index );
@@ -98,7 +99,7 @@ namespace test_parser
 			db::Parameter * castorDate{};
 			db::Parameter * id{};
 		};
-		
+
 		struct UpdateTestIgnoreResult
 		{
 			UpdateTestIgnoreResult() = default;
@@ -117,12 +118,29 @@ namespace test_parser
 			db::Parameter * id{};
 		};
 
+		struct UpdateTestCastorDate
+		{
+			UpdateTestCastorDate() = default;
+			explicit UpdateTestCastorDate( db::Connection & connection )
+				: stmt{ connection.createStatement( "UPDATE Test SET CastorDate=? WHERE Id=?;" ) }
+				, castorDate{ stmt->createParameter( "CastorDate", db::FieldType::eDatetime ) }
+				, id{ stmt->createParameter( "Id", db::FieldType::eSint32 ) }
+			{
+				stmt->initialise();
+			}
+
+			db::StatementPtr stmt;
+			db::Parameter * castorDate{};
+			db::Parameter * id{};
+		};
+
 	private:
 		Config m_config;
 		db::Connection m_database;
 		InsertTest m_insertTest;
 		UpdateTestStatus m_updateTestStatus;
 		UpdateTestIgnoreResult m_updateTestIgnoreResult;
+		UpdateTestCastorDate m_updateTestCastorDate;
 		db::StatementPtr m_listTests;
 	};
 }

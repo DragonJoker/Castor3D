@@ -62,16 +62,19 @@ namespace test_parser
 			eID_VIEW_TEST,
 			eID_SET_REF,
 			eID_IGNORE_RESULT,
+			eID_UPDATE_CASTOR,
 			eID_RUN_CATEGORY_TESTS_ALL,
 			eID_RUN_CATEGORY_TESTS_NOTRUN,
 			eID_RUN_CATEGORY_TESTS_ACCEPTABLE,
 			eID_RUN_CATEGORY_TESTS_ALL_BUT_NEGLIGIBLE,
 			eID_RUN_CATEGORY_TESTS_OUTDATED,
+			eID_CATEGORY_UPDATE_CASTOR,
 			eID_RUN_TESTS_ALL,
 			eID_RUN_TESTS_NOTRUN,
 			eID_RUN_TESTS_ACCEPTABLE,
 			eID_RUN_TESTS_ALL_BUT_NEGLIGIBLE,
 			eID_RUN_TESTS_OUTDATED,
+			eID_ALL_UPDATE_CASTOR,
 			eID_CANCEL,
 		};
 
@@ -399,6 +402,7 @@ namespace test_parser
 			menu.Append( eID_SET_REF, _( "Set Reference" ) + wxT( "\tF6" ) );
 			menu.Append( eID_RUN_TEST, _( "Run Test" ) + wxT( "\tF7" ) );
 			menu.Append( eID_IGNORE_RESULT, _( "Ignore test results" ) + wxT( "\tF8" ), wxEmptyString, wxITEM_CHECK );
+			menu.Append( eID_UPDATE_CASTOR, _( "Update Castor3D's date" ) + wxT( "\tF9" ) );
 		};
 		auto addCategoryMenus = []( wxMenu & menu )
 		{
@@ -406,15 +410,17 @@ namespace test_parser
 			menu.Append( eID_RUN_CATEGORY_TESTS_NOTRUN, _( "Run all <not run> category's tests" ) + wxT( "\tCtrl+F8" ) );
 			menu.Append( eID_RUN_CATEGORY_TESTS_ACCEPTABLE, _( "Run all <acceptable> category's tests" ) + wxT( "\tCtrl+F9" ) );
 			menu.Append( eID_RUN_CATEGORY_TESTS_ALL_BUT_NEGLIGIBLE, _( "Run all but <negligible> category's tests" ) + wxT( "\tCtrl+F10" ) );
-			menu.Append( eID_RUN_CATEGORY_TESTS_OUTDATED, _( "Run all outdated category's tests" ) + wxT( "\tCtrl+F10" ) );
+			menu.Append( eID_RUN_CATEGORY_TESTS_OUTDATED, _( "Run all outdated category's tests" ) + wxT( "\tCtrl+F11" ) );
+			menu.Append( eID_CATEGORY_UPDATE_CASTOR, _( "Update category's tests Castor3D's date" ) + wxT( "\tCtrl+F12" ) );
 		};
 		auto addAllMenus = []( wxMenu & menu )
 		{
 			menu.Append( eID_RUN_TESTS_ALL, _( "Run all tests" ) + wxT( "\tCtrl+Alt+F7" ) );
 			menu.Append( eID_RUN_TESTS_NOTRUN, _( "Run all <not run> tests" ) + wxT( "\tCtrl+Alt+F8" ) );
 			menu.Append( eID_RUN_TESTS_ACCEPTABLE, _( "Run all <acceptable> tests" ) + wxT( "\tCtrl+Alt+F9" ) );
-			menu.Append( eID_RUN_TESTS_ALL_BUT_NEGLIGIBLE, _( "Run all but <negligible> tests" ) + wxT( "\tCtrl+F10" ) );
-			menu.Append( eID_RUN_TESTS_OUTDATED, _( "Run all outdated tests" ) + wxT( "\tCtrl+F10" ) );
+			menu.Append( eID_RUN_TESTS_ALL_BUT_NEGLIGIBLE, _( "Run all but <negligible> tests" ) + wxT( "\tCtrl+Alt+F10" ) );
+			menu.Append( eID_RUN_TESTS_OUTDATED, _( "Run all outdated tests" ) + wxT( "\tCtrl+Alt+F11" ) );
+			menu.Append( eID_ALL_UPDATE_CASTOR, _( "Update tests Castor3D's date" ) + wxT( "\tCtrl+Alt+F12" ) );
 		};
 		m_testMenu = std::make_unique< wxMenu >();
 		addTestMenus( *m_testMenu );
@@ -589,6 +595,28 @@ namespace test_parser
 		}
 	}
 
+	void MainFrame::doUpdateCastorDate()
+	{
+		m_cancelled.exchange( false );
+		auto date = getFileDate( m_config.castor );
+
+		if ( !m_selected.items.empty() )
+		{
+			for ( auto & item : m_selected.items )
+			{
+				auto node = static_cast< TreeModelNode * >( item.GetID() );
+				assert( node->test );
+
+				if ( node->test->castorDate != date )
+				{
+					m_statusBar->SetLabel( _( "Updating Castor3D date for " ) + node->test->name );
+					node->test->castorDate = date;
+					m_database.updateTestCastorDate( *node->test );
+				}
+			}
+		}
+	}
+
 	TreeModelNode * MainFrame::getTestNode( Test const & test )
 	{
 		return m_modelNodes[test.id];
@@ -700,6 +728,37 @@ namespace test_parser
 		doProcessTest();
 	}
 
+	void MainFrame::doUpdateCategoryCastorDate()
+	{
+		m_cancelled.exchange( false );
+		auto date = getFileDate( m_config.castor );
+
+		for ( auto & item : m_selected.items )
+		{
+			auto node = static_cast< TreeModelNode * >( item.GetID() );
+			assert( !node->category.empty() );
+			auto it = m_tests.find( makeStdString( node->category ) );
+
+			if ( it != m_tests.end() )
+			{
+				auto & tests = *it;
+
+				for ( auto & test : tests.second )
+				{
+					auto node = static_cast< TreeModelNode * >( item.GetID() );
+					assert( node->test );
+
+					if ( node->test->castorDate != date )
+					{
+						m_statusBar->SetLabel( _( "Updating Castor3D date for " ) + node->test->name );
+						node->test->castorDate = date;
+						m_database.updateTestCastorDate( *node->test );
+					}
+				}
+			}
+		}
+	}
+
 	void MainFrame::doRunAllTests()
 	{
 		m_cancelled.exchange( false );
@@ -768,6 +827,25 @@ namespace test_parser
 		}
 
 		doProcessTest();
+	}
+
+	void MainFrame::doUpdateAllCastorDate()
+	{
+		m_cancelled.exchange( false );
+		auto date = getFileDate( m_config.castor );
+
+		for ( auto & tests : m_tests )
+		{
+			for ( auto & test : tests.second )
+			{
+				if ( test.castorDate != date )
+				{
+					m_statusBar->SetLabel( _( "Updating Castor3D date for " ) + test.name );
+					test.castorDate = date;
+					m_database.updateTestCastorDate( test );
+				}
+			}
+		}
 	}
 
 	void MainFrame::doCancelTest( Test & test
@@ -910,6 +988,9 @@ namespace test_parser
 		case eID_IGNORE_RESULT:
 			doIgnoreTestResult();
 			break;
+		case eID_UPDATE_CASTOR:
+			doUpdateCastorDate();
+			break;
 		case eID_RUN_CATEGORY_TESTS_ALL:
 			doRunAllCategoryTests();
 			break;
@@ -925,6 +1006,9 @@ namespace test_parser
 		case eID_RUN_CATEGORY_TESTS_OUTDATED:
 			doRunAllCategoryOutdatedTests();
 			break;
+		case eID_CATEGORY_UPDATE_CASTOR:
+			doUpdateCategoryCastorDate();
+			break;
 		case eID_RUN_TESTS_ALL:
 			doRunAllTests();
 			break;
@@ -939,6 +1023,9 @@ namespace test_parser
 			break;
 		case eID_RUN_TESTS_OUTDATED:
 			doRunAllOutdatedTests();
+			break;
+		case eID_ALL_UPDATE_CASTOR:
+			doUpdateAllCastorDate();
 			break;
 		case eID_CANCEL:
 			doCancel();

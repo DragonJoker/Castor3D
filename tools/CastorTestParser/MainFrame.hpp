@@ -49,14 +49,17 @@ namespace test_parser
 		void doViewTest();
 		void doSetRef();
 		void doIgnoreTestResult();
+		void doUpdateCastorDate();
 		void doRunAllCategoryTests();
 		void doRunCategoryTests( TestStatus filter );
 		void doRunAllCategoryTestsBut( TestStatus filter );
 		void doRunAllCategoryOutdatedTests();
+		void doUpdateCategoryCastorDate();
 		void doRunAllTests();
 		void doRunTests( TestStatus filter );
 		void doRunAllTestsBut( TestStatus filter );
 		void doRunAllOutdatedTests();
+		void doUpdateAllCastorDate();
 		void doCancelTest( Test & test
 			, TestStatus status );
 		void doCancel();
