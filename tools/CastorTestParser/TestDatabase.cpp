@@ -110,7 +110,7 @@ namespace test_parser
 			};
 			auto allResults = listAllResults( categoryPath, folders );
 			auto scenes = listScenes( categoryPath );
-			auto & categoryIt = tests.emplace( category, TestArray{} ).first;
+			auto categoryIt = tests.emplace( category, TestArray{} ).first;
 
 			for ( auto & testScene : scenes )
 			{
@@ -133,51 +133,6 @@ namespace test_parser
 			}
 
 			return uint32_t( categoryIt->second.size() );
-		}
-
-		void moveFile( castor::Path const & srcFolder
-			, castor::Path const & dstFolder
-			, castor::Path const & srcName
-			, castor::Path const & dstName
-			, bool force )
-		{
-			auto src = srcFolder / srcName;
-			auto dst = dstFolder / dstName;
-
-			if ( castor::File::fileExists( src ) )
-			{
-				if ( !castor::File::directoryExists( dstFolder ) )
-				{
-					if ( !castor::File::directoryCreate( dstFolder ) )
-					{
-						castor::Logger::logError( "Couldn't create folder [" + dstFolder + "]: " + castor::System::getLastErrorText() );
-						return;
-					}
-				}
-
-				if ( force || !castor::File::fileExists( dst ) )
-				{
-					if ( !castor::File::copyFileName( src, dst ) )
-					{
-						castor::Logger::logError( "Couldn't copy image [" + src + "]: " + castor::System::getLastErrorText() );
-						return;
-					}
-				}
-
-				castor::File::deleteFile( src );
-			}
-		}
-
-		void moveFile( castor::Path const & srcFolder
-			, castor::Path const & dstFolder
-			, castor::Path const & name
-			, bool force )
-		{
-			moveFile( srcFolder
-				, dstFolder
-				, name
-				, name
-				, force );
 		}
 
 		void moveTestFile( Test const & test
@@ -219,9 +174,56 @@ namespace test_parser
 
 	//*********************************************************************************************
 
+	void moveFile( castor::Path const & srcFolder
+		, castor::Path const & dstFolder
+		, castor::Path const & srcName
+		, castor::Path const & dstName
+		, bool force )
+	{
+		auto src = srcFolder / srcName;
+		auto dst = dstFolder / dstName;
+
+		if ( castor::File::fileExists( src ) )
+		{
+			if ( !castor::File::directoryExists( dstFolder ) )
+			{
+				if ( !castor::File::directoryCreate( dstFolder ) )
+				{
+					castor::Logger::logError( "Couldn't create folder [" + dstFolder + "]: " + castor::System::getLastErrorText() );
+					return;
+				}
+			}
+
+			if ( force || !castor::File::fileExists( dst ) )
+			{
+				if ( !castor::File::copyFileName( src, dst ) )
+				{
+					castor::Logger::logError( "Couldn't copy image [" + src + "]: " + castor::System::getLastErrorText() );
+					return;
+				}
+			}
+
+			castor::File::deleteFile( src );
+		}
+	}
+
+	void moveFile( castor::Path const & srcFolder
+		, castor::Path const & dstFolder
+		, castor::Path const & name
+		, bool force )
+	{
+		moveFile( srcFolder
+			, dstFolder
+			, name
+			, name
+			, force );
+	}
+
+	//*********************************************************************************************
+
 	TestDatabase::TestDatabase( Config config )
 		: m_config{ std::move( config ) }
-		, m_database{ m_config.work }
+		, m_database{ m_config.database }
 	{
 	}
 
@@ -248,7 +250,8 @@ namespace test_parser
 		}
 
 		m_updateTestIgnoreResult = UpdateTestIgnoreResult{ m_database };
-		std::string listTests = "SELECT Id, Name, MAX( RunDate ) AS RunDate, Status, Renderer, Category, IgnoreResult\n";
+		m_updateTestCastorDate = UpdateTestCastorDate{ m_database };
+		std::string listTests = "SELECT Id, Name, MAX( RunDate ) AS RunDate, Status, Renderer, Category, IgnoreResult, CastorDate\n";
 		listTests += "FROM Test\n";
 		listTests += "GROUP BY Category, Name\n";
 		listTests += "ORDER BY Category, Name;";
@@ -278,7 +281,8 @@ namespace test_parser
 				, TestStatus( row.getField( 3u ).getValue< int32_t >() )
 				, row.getField( 4u ).getValue< std::string >()
 				, row.getField( 5u ).getValue< std::string >()
-				, row.getField( 6u ).getValue< int32_t >() != 0 };
+				, row.getField( 6u ).getValue< int32_t >() != 0
+				, row.getField( 7u ).getValue< db::DateTime >() };
 
 			if ( prevCategory != test.category )
 			{
@@ -313,6 +317,7 @@ namespace test_parser
 		m_insertTest.renderer->setValue( test.renderer );
 		m_insertTest.category->setValue( test.category );
 		m_insertTest.ignoreResult->setValue( test.ignoreResult ? 1 : 0 );
+		m_insertTest.castorDate->setValue( test.castorDate );
 		m_insertTest.stmt->executeUpdate();
 
 		if ( moveFiles )
@@ -329,6 +334,7 @@ namespace test_parser
 	{
 		auto oldStatus = test.status;
 		m_updateTestStatus.status->setValue( int32_t( newStatus ) );
+		m_updateTestStatus.castorDate->setValue( test.castorDate );
 		m_updateTestStatus.id->setValue( int32_t( test.id ) );
 		m_updateTestStatus.stmt->executeUpdate();
 		moveResultFile( test, oldStatus, newStatus, m_config.work );
@@ -348,6 +354,7 @@ namespace test_parser
 	{
 		auto oldStatus = test.status;
 		m_updateTestIgnoreResult.status->setValue( int32_t( ignore ? 1 : 0 ) );
+		m_updateTestIgnoreResult.castorDate->setValue( test.castorDate );
 		m_updateTestIgnoreResult.id->setValue( int32_t( test.id ) );
 		m_updateTestIgnoreResult.stmt->executeUpdate();
 
@@ -366,6 +373,13 @@ namespace test_parser
 		castor::Logger::logInfo( "Updated ignore result for: " + getDetails( test ) );
 	}
 
+	void TestDatabase::updateTestCastorDate( Test & test )
+	{
+		m_updateTestCastorDate.castorDate->setValue( test.castorDate );
+		m_updateTestCastorDate.id->setValue( int32_t( test.id ) );
+		m_updateTestCastorDate.stmt->executeUpdate();
+	}
+
 	void TestDatabase::doInitDatabase( wxProgressDialog & progress
 		, int & index )
 	{
@@ -377,6 +391,7 @@ namespace test_parser
 		createTableTest += "\t, Renderer VARCHAR(10)\n";
 		createTableTest += "\t, Category VARCHAR(50)\n";
 		createTableTest += "\t, IgnoreResult INTEGER\n";
+		createTableTest += "\t, CastorData DATETIME\n";
 		createTableTest += ");";
 		m_database.executeUpdate( createTableTest );
 	}

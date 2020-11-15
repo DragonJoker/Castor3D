@@ -2,8 +2,9 @@
 
 namespace castor3d
 {
-	DummyCuller::DummyCuller( Scene & scene )
-		: SceneCuller{ scene, nullptr, 1u }
+	DummyCuller::DummyCuller( Scene & scene
+		, Camera * camera )
+		: SceneCuller{ scene, camera, 1u }
 	{
 	}
 

@@ -35,6 +35,8 @@
 
 #include <algorithm>
 
+CU_ImplementCUSmartPtr( castor3d, RenderGrid )
+
 using namespace castor;
 
 namespace castor3d

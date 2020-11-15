@@ -287,7 +287,7 @@ namespace castor
 		{
 			std::ofstream dst( string::stringCast< char >( dstFileName ), std::ios::binary );
 
-			if ( src.is_open() )
+			if ( dst.is_open() )
 			{
 				dst << src.rdbuf();
 				result = true;

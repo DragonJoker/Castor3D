@@ -277,6 +277,14 @@ namespace castor3d
 			, gpInfoUbo
 			, hasShadows
 			, generatesIndirect }
+		, m_modelMatrixUbo{ m_device.renderSystem
+			, 1u
+			, VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
+			, getName() + "ModelMatrix" }
+		, m_modelMatrixData{ reinterpret_cast< ModelMatrixUboConfiguration * >( m_modelMatrixUbo.getBuffer().getBuffer().lock( 0u
+			, m_modelMatrixUbo.getAlignedSize()
+			, 0u ) ) }
 		, m_stencilPass{ engine
 			, getName()
 			, lpResult[LpTexture::eDepth].getTexture()->getDefaultView().getTargetView()
@@ -326,8 +334,6 @@ namespace castor3d
 			m_vertexBuffer->unlock();
 		}
 
-		m_matrixUbo.initialise( m_device );
-		m_modelMatrixUbo = m_device.uboPools->getBuffer< ModelMatrixUboConfiguration >( 0u );
 		m_stencilPass.initialise( m_device, declaration, *m_vertexBuffer );
 		doInitialise( scene
 			, gp
@@ -343,7 +349,6 @@ namespace castor3d
 	{
 		doCleanup();
 		m_stencilPass.cleanup();
-		m_device.uboPools->putBuffer( m_modelMatrixUbo );
 		m_matrixUbo.cleanup( m_device );
 		m_vertexBuffer.reset();
 	}
@@ -375,7 +380,7 @@ namespace castor3d
 		auto normal = castor::Matrix3x3f{ model };
 		normal.invert();
 		normal.transpose();
-		auto & data = m_modelMatrixUbo.getData();
+		auto & data = *m_modelMatrixData;
 		data.prvModel = data.curModel;
 		data.prvNormal = data.curNormal;
 		data.curModel = model;

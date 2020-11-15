@@ -62,14 +62,19 @@ namespace test_parser
 			eID_VIEW_TEST,
 			eID_SET_REF,
 			eID_IGNORE_RESULT,
+			eID_UPDATE_CASTOR,
 			eID_RUN_CATEGORY_TESTS_ALL,
 			eID_RUN_CATEGORY_TESTS_NOTRUN,
 			eID_RUN_CATEGORY_TESTS_ACCEPTABLE,
 			eID_RUN_CATEGORY_TESTS_ALL_BUT_NEGLIGIBLE,
+			eID_RUN_CATEGORY_TESTS_OUTDATED,
+			eID_CATEGORY_UPDATE_CASTOR,
 			eID_RUN_TESTS_ALL,
 			eID_RUN_TESTS_NOTRUN,
 			eID_RUN_TESTS_ACCEPTABLE,
 			eID_RUN_TESTS_ALL_BUT_NEGLIGIBLE,
+			eID_RUN_TESTS_OUTDATED,
+			eID_ALL_UPDATE_CASTOR,
 			eID_CANCEL,
 		};
 
@@ -91,7 +96,7 @@ namespace test_parser
 		}
 
 		class DataViewTestStatusRenderer
-			: public wxDataViewRenderer
+			: public wxDataViewCustomRenderer
 		{
 		private:
 			using Clock = std::chrono::high_resolution_clock;
@@ -105,7 +110,7 @@ namespace test_parser
 			DataViewTestStatusRenderer( const wxString & varianttype = GetDefaultType(),
 				wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
 				int align = wxDVR_DEFAULT_ALIGNMENT )
-				: wxDataViewRenderer{ varianttype, mode, align }
+				: wxDataViewCustomRenderer{ varianttype, mode, align }
 				, m_size{ 20, 20 }
 				, m_bitmaps{ createImage( notrun_xpm )
 					, createImage( negligible_xpm )
@@ -248,6 +253,9 @@ namespace test_parser
 			, nullptr
 			, this );
 		m_statusBar->SetLabel( _( "Idle" ) );
+
+		m_categoryView->setAll( m_tests, m_runningTest.tests );
+		m_detailViews->showLayer( 2u );
 	}
 
 	void MainFrame::updateTestStatus( Test & test
@@ -255,6 +263,7 @@ namespace test_parser
 		, bool reference )
 	{
 		auto node = getTestNode( test );
+		test.castorDate = getFileDate( m_config.castor );
 		m_database.updateTestStatus( test, newStatus, reference );
 		test.status = newStatus;
 		m_model->ItemChanged( wxDataViewItem{ node } );
@@ -297,19 +306,19 @@ namespace test_parser
 			, nullptr
 			, this );
 		uint32_t flags = wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_RESIZABLE;
-		auto renCategory = new wxDataViewTextRenderer{ wxDataViewTextRenderer::GetDefaultType() };
+		auto renCategory = new wxDataViewTextRenderer{ wxT( "string" ) };
 		wxDataViewColumn * colCategory = new wxDataViewColumn( _( "Category" ), renCategory, int( TreeModel::Column::eCategory ), 200, wxALIGN_LEFT, flags );
 		colCategory->SetMinWidth( 150 );
 		m_view->AppendColumn( colCategory );
-		auto renScene = new wxDataViewTextRenderer{ wxDataViewTextRenderer::GetDefaultType() };
+		auto renScene = new wxDataViewTextRenderer{ wxT( "string" ) };
 		wxDataViewColumn * colScene = new wxDataViewColumn( _( "Name" ), renScene, int( TreeModel::Column::eName ), 400, wxALIGN_LEFT, flags );
 		colScene->SetMinWidth( 400 );
 		m_view->AppendColumn( colScene );
-		auto renRenderer = new wxDataViewTextRenderer{ wxDataViewTextRenderer::GetDefaultType() };
+		auto renRenderer = new wxDataViewTextRenderer{ wxT( "string" ) };
 		wxDataViewColumn * colRenderer = new wxDataViewColumn( _( "Renderer" ), renRenderer, int( TreeModel::Column::eRenderer ), 40, wxALIGN_LEFT, flags );
 		colRenderer->SetMinWidth( 40 );
 		m_view->AppendColumn( colRenderer );
-		auto renRunDate = new wxDataViewDateRenderer{ wxDataViewDateRenderer::GetDefaultType() };
+		auto renRunDate = new wxDataViewDateRenderer{ wxT( "datetime" ) };
 		wxDataViewColumn * colRunDate = new wxDataViewColumn( _( "Run Date" ), renRunDate, int( TreeModel::Column::eRunDate ), 100, wxALIGN_LEFT, flags );
 		colRunDate->SetMinWidth( 100 );
 		m_view->AppendColumn( colRunDate );
@@ -334,7 +343,7 @@ namespace test_parser
 		m_detailViews->addLayer( layer );
 		m_testView = new TestPanel{ m_detailViews, m_config };
 		m_detailViews->addLayer( m_testView );
-		m_categoryView = new CategoryPanel{ m_detailViews, wxDefaultPosition, wxSize{ 800, 600 } };
+		m_categoryView = new CategoryPanel{ m_config, m_detailViews, wxDefaultPosition, wxSize{ 800, 600 } };
 		m_detailViews->addLayer( m_categoryView );
 		m_detailViews->showLayer( 0 );
 
@@ -393,6 +402,7 @@ namespace test_parser
 			menu.Append( eID_SET_REF, _( "Set Reference" ) + wxT( "\tF6" ) );
 			menu.Append( eID_RUN_TEST, _( "Run Test" ) + wxT( "\tF7" ) );
 			menu.Append( eID_IGNORE_RESULT, _( "Ignore test results" ) + wxT( "\tF8" ), wxEmptyString, wxITEM_CHECK );
+			menu.Append( eID_UPDATE_CASTOR, _( "Update Castor3D's date" ) + wxT( "\tF9" ) );
 		};
 		auto addCategoryMenus = []( wxMenu & menu )
 		{
@@ -400,13 +410,17 @@ namespace test_parser
 			menu.Append( eID_RUN_CATEGORY_TESTS_NOTRUN, _( "Run all <not run> category's tests" ) + wxT( "\tCtrl+F8" ) );
 			menu.Append( eID_RUN_CATEGORY_TESTS_ACCEPTABLE, _( "Run all <acceptable> category's tests" ) + wxT( "\tCtrl+F9" ) );
 			menu.Append( eID_RUN_CATEGORY_TESTS_ALL_BUT_NEGLIGIBLE, _( "Run all but <negligible> category's tests" ) + wxT( "\tCtrl+F10" ) );
+			menu.Append( eID_RUN_CATEGORY_TESTS_OUTDATED, _( "Run all outdated category's tests" ) + wxT( "\tCtrl+F11" ) );
+			menu.Append( eID_CATEGORY_UPDATE_CASTOR, _( "Update category's tests Castor3D's date" ) + wxT( "\tCtrl+F12" ) );
 		};
 		auto addAllMenus = []( wxMenu & menu )
 		{
 			menu.Append( eID_RUN_TESTS_ALL, _( "Run all tests" ) + wxT( "\tCtrl+Alt+F7" ) );
 			menu.Append( eID_RUN_TESTS_NOTRUN, _( "Run all <not run> tests" ) + wxT( "\tCtrl+Alt+F8" ) );
 			menu.Append( eID_RUN_TESTS_ACCEPTABLE, _( "Run all <acceptable> tests" ) + wxT( "\tCtrl+Alt+F9" ) );
-			menu.Append( eID_RUN_TESTS_ALL_BUT_NEGLIGIBLE, _( "Run all but <negligible> tests" ) + wxT( "\tCtrl+F10" ) );
+			menu.Append( eID_RUN_TESTS_ALL_BUT_NEGLIGIBLE, _( "Run all but <negligible> tests" ) + wxT( "\tCtrl+Alt+F10" ) );
+			menu.Append( eID_RUN_TESTS_OUTDATED, _( "Run all outdated tests" ) + wxT( "\tCtrl+Alt+F11" ) );
+			menu.Append( eID_ALL_UPDATE_CASTOR, _( "Update tests Castor3D's date" ) + wxT( "\tCtrl+Alt+F12" ) );
 		};
 		m_testMenu = std::make_unique< wxMenu >();
 		addTestMenus( *m_testMenu );
@@ -437,6 +451,7 @@ namespace test_parser
 
 		m_busyMenu = std::make_unique< wxMenu >();
 		m_busyMenu->Append( eID_VIEW_TEST, "View Test\tF5" );
+		m_busyMenu->Append( eID_SET_REF, _( "Set Reference" ) + wxT( "\tF6" ) );
 		m_busyMenu->Append( eID_CANCEL, "Cancel\tF11" );
 		m_busyMenu->Connect( wxEVT_COMMAND_MENU_SELECTED
 			, wxCommandEventHandler( MainFrame::onMenuOption )
@@ -573,8 +588,31 @@ namespace test_parser
 				assert( node->test );
 				m_statusBar->SetLabel( _( "Setting reference: " ) + node->test->name );
 				node->test->ignoreResult = m_testMenu->IsChecked( eID_IGNORE_RESULT );
+				node->test->castorDate = getFileDate( m_config.castor );
 				m_database.updateTestIgnoreResult( *node->test, node->test->ignoreResult, true );
 				m_model->ItemChanged( item );
+			}
+		}
+	}
+
+	void MainFrame::doUpdateCastorDate()
+	{
+		m_cancelled.exchange( false );
+		auto date = getFileDate( m_config.castor );
+
+		if ( !m_selected.items.empty() )
+		{
+			for ( auto & item : m_selected.items )
+			{
+				auto node = static_cast< TreeModelNode * >( item.GetID() );
+				assert( node->test );
+
+				if ( node->test->castorDate != date )
+				{
+					m_statusBar->SetLabel( _( "Updating Castor3D date for " ) + node->test->name );
+					node->test->castorDate = date;
+					m_database.updateTestCastorDate( *node->test );
+				}
 			}
 		}
 	}
@@ -662,6 +700,65 @@ namespace test_parser
 		doProcessTest();
 	}
 
+	void MainFrame::doRunAllCategoryOutdatedTests()
+	{
+		m_cancelled.exchange( false );
+		auto date = getFileDate( m_config.castor );
+
+		for ( auto & item : m_selected.items )
+		{
+			auto node = static_cast< TreeModelNode * >( item.GetID() );
+			assert( !node->category.empty() );
+			auto it = m_tests.find( makeStdString( node->category ) );
+
+			if ( it != m_tests.end() )
+			{
+				auto & tests = *it;
+
+				for ( auto & test : tests.second )
+				{
+					if ( test.castorDate != date )
+					{
+						m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+					}
+				}
+			}
+		}
+
+		doProcessTest();
+	}
+
+	void MainFrame::doUpdateCategoryCastorDate()
+	{
+		m_cancelled.exchange( false );
+		auto date = getFileDate( m_config.castor );
+
+		for ( auto & item : m_selected.items )
+		{
+			auto node = static_cast< TreeModelNode * >( item.GetID() );
+			assert( !node->category.empty() );
+			auto it = m_tests.find( makeStdString( node->category ) );
+
+			if ( it != m_tests.end() )
+			{
+				auto & tests = *it;
+
+				for ( auto & test : tests.second )
+				{
+					auto node = static_cast< TreeModelNode * >( item.GetID() );
+					assert( node->test );
+
+					if ( node->test->castorDate != date )
+					{
+						m_statusBar->SetLabel( _( "Updating Castor3D date for " ) + node->test->name );
+						node->test->castorDate = date;
+						m_database.updateTestCastorDate( *node->test );
+					}
+				}
+			}
+		}
+	}
+
 	void MainFrame::doRunAllTests()
 	{
 		m_cancelled.exchange( false );
@@ -711,6 +808,44 @@ namespace test_parser
 		}
 
 		doProcessTest();
+	}
+
+	void MainFrame::doRunAllOutdatedTests()
+	{
+		m_cancelled.exchange( false );
+		auto date = getFileDate( m_config.castor );
+
+		for ( auto & tests : m_tests )
+		{
+			for ( auto & test : tests.second )
+			{
+				if ( test.castorDate != date )
+				{
+					m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+				}
+			}
+		}
+
+		doProcessTest();
+	}
+
+	void MainFrame::doUpdateAllCastorDate()
+	{
+		m_cancelled.exchange( false );
+		auto date = getFileDate( m_config.castor );
+
+		for ( auto & tests : m_tests )
+		{
+			for ( auto & test : tests.second )
+			{
+				if ( test.castorDate != date )
+				{
+					m_statusBar->SetLabel( _( "Updating Castor3D date for " ) + test.name );
+					test.castorDate = date;
+					m_database.updateTestCastorDate( test );
+				}
+			}
+		}
 	}
 
 	void MainFrame::doCancelTest( Test & test
@@ -765,8 +900,16 @@ namespace test_parser
 				else if ( !category.empty() )
 				{
 					auto it = m_tests.find( makeStdString( category ) );
-					assert( it != m_tests.end() );
-					m_categoryView->setCategory( category, it->second );
+
+					if ( it != m_tests.end() )
+					{
+						m_categoryView->setCategory( category, it->second );
+					}
+					else
+					{
+						m_categoryView->setAll( m_tests, m_runningTest.tests );
+					}
+
 					m_detailViews->showLayer( 2 );
 					displayCategory = true;
 				}
@@ -845,6 +988,9 @@ namespace test_parser
 		case eID_IGNORE_RESULT:
 			doIgnoreTestResult();
 			break;
+		case eID_UPDATE_CASTOR:
+			doUpdateCastorDate();
+			break;
 		case eID_RUN_CATEGORY_TESTS_ALL:
 			doRunAllCategoryTests();
 			break;
@@ -857,6 +1003,12 @@ namespace test_parser
 		case eID_RUN_CATEGORY_TESTS_ALL_BUT_NEGLIGIBLE:
 			doRunAllCategoryTestsBut( TestStatus::eNegligible );
 			break;
+		case eID_RUN_CATEGORY_TESTS_OUTDATED:
+			doRunAllCategoryOutdatedTests();
+			break;
+		case eID_CATEGORY_UPDATE_CASTOR:
+			doUpdateCategoryCastorDate();
+			break;
 		case eID_RUN_TESTS_ALL:
 			doRunAllTests();
 			break;
@@ -868,6 +1020,12 @@ namespace test_parser
 			break;
 		case eID_RUN_TESTS_ALL_BUT_NEGLIGIBLE:
 			doRunAllTestsBut( TestStatus::eNegligible );
+			break;
+		case eID_RUN_TESTS_OUTDATED:
+			doRunAllOutdatedTests();
+			break;
+		case eID_ALL_UPDATE_CASTOR:
+			doUpdateAllCastorDate();
 			break;
 		case eID_CANCEL:
 			doCancel();
@@ -937,6 +1095,7 @@ namespace test_parser
 			auto path = match.getPath();
 			test.runDate = getFileDate( match );
 			test.status = getStatus( path.getFileName() );
+			test.castorDate = getFileDate( m_config.castor );
 			m_database.insertTest( test );
 
 			if ( test.ignoreResult )

@@ -27,7 +27,7 @@ public:
 #elif defined( VK_USE_PLATFORM_WAYLAND_KHR )
 		, m_waylandHandle{ nullptr, nullptr }
 #elif defined( VK_USE_PLATFORM_XLIB_KHR )
-		, m_waylandHandle{ nullptr, nullptr }
+		, m_xlibHandle{ 0, nullptr }
 #elif defined( VK_USE_PLATFORM_MACOS_MVK )
 		, m_macosHandle{ nullptr }
 #endif

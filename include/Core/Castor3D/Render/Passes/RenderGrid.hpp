@@ -526,7 +526,7 @@ namespace castor3d
 			, VkFilter samplerFilter
 			, uint32_t gridSize )
 		{
-			return std::unique_ptr< RenderGrid >( new RenderGrid{ device
+			return castor::UniquePtr< RenderGrid >( new RenderGrid{ device
 				, name
 				, samplerFilter
 				, gridSize

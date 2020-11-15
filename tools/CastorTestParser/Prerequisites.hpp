@@ -34,9 +34,11 @@ namespace test_parser
 	{
 		castor::Path test;
 		castor::Path work;
+		castor::Path database;
 		castor::Path launcher;
 		castor::Path viewer;
 		castor::Path differ;
+		castor::Path castor;
 		bool skip{};
 	};
 
@@ -80,6 +82,7 @@ namespace test_parser
 		std::string renderer;
 		std::string category;
 		bool ignoreResult;
+		db::DateTime castorDate;
 	};
 	castor::Path getResultFolder( Test const & test, bool useStatus = true );
 	castor::Path getResultName( Test const & test );
@@ -90,6 +93,13 @@ namespace test_parser
 
 	using TestArray = std::vector< Test >;
 	using TestMap = std::map< std::string, TestArray >;
+
+	struct TestNode
+	{
+		Test * test;
+		TestStatus status;
+		TreeModelNode * node;
+	};
 
 	wxString makeWxString( std::string const & in );
 	std::string makeStdString( wxString const & in );

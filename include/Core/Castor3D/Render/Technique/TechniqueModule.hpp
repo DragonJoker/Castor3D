@@ -6,8 +6,6 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/RenderModule.hpp"
 
-#define C3D_UseDepthPrepass 1
-
 namespace castor3d
 {
 	/**@name Render */
@@ -88,6 +86,7 @@ namespace castor3d
 		, uint32_t & index );
 
 	CU_DeclareSmartPtr( RenderTechnique );
+	CU_DeclareCUSmartPtr( castor3d, RenderTechniquePass, C3D_API );
 
 	//@}
 	//@}

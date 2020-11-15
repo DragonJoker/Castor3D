@@ -6,7 +6,10 @@ See LICENSE file in root folder
 
 #include "Prerequisites.hpp"
 
+#include <CastorUtils/Graphics/ImageLoader.hpp>
+
 #include <wx/panel.h>
+#include <wx/image.h>
 
 namespace test_parser
 {
@@ -27,10 +30,22 @@ namespace test_parser
 		}
 
 	private:
+		void loadRef( int index );
+		void loadRes( int index );
+		void onRefSelect( wxCommandEvent & evt );
+		void onResSelect( wxCommandEvent & evt );
+
+	private:
 		Config const & m_config;
 		Test * m_test{};
 		wxImagePanel * m_ref{};
 		wxImagePanel * m_result{};
+		castor::ImageLoader m_loader;
+		int m_currentRef{};
+		int m_currentRes{};
+		wxImage m_refImage;
+		wxImage m_resImage;
+		wxImage m_diffImage;
 	};
 }
 

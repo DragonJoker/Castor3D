@@ -13,6 +13,7 @@
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/RenderWindow.hpp>
 #include <Castor3D/Render/Technique/RenderTechnique.hpp>
+#include <Castor3D/Render/Technique/RenderTechniqueVisitor.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 
 #include <wx/propgrid/advprops.h>

@@ -27,6 +27,12 @@ namespace castor3d
 		}
 	}
 
+	MatrixUbo::MatrixUbo( RenderDevice const & device )
+		: m_engine{ *device.renderSystem.getEngine() }
+	{
+		initialise( device );
+	}
+
 	MatrixUbo::~MatrixUbo()
 	{
 	}

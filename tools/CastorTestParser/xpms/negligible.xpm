@@ -1,5 +1,5 @@
 /* XPM */
-static char * negligible_xpm[] = {
+static const char * negligible_xpm[] = {
 "20 20 68 1",
 " 	c None",
 ".	c #1A8D27",

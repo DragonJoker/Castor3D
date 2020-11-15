@@ -1,5 +1,6 @@
 #include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
 
+#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureView.hpp"
@@ -23,6 +24,8 @@
 #include <ashespp/Image/Sampler.hpp>
 
 #include <ShaderWriter/Source.hpp>
+
+CU_ImplementCUSmartPtr( castor3d, RenderTechniquePass )
 
 using namespace castor;
 
@@ -247,9 +250,16 @@ namespace castor3d
 
 	ashes::PipelineDepthStencilStateCreateInfo RenderTechniquePass::doCreateDepthStencilState( PipelineFlags const & flags )const
 	{
+#if C3D_UseDepthPrepass
+		return ashes::PipelineDepthStencilStateCreateInfo{ 0u
+			, VK_TRUE
+			, VK_FALSE
+			, VK_COMPARE_OP_EQUAL };
+#else
 		return ashes::PipelineDepthStencilStateCreateInfo{ 0u
 			, VK_TRUE
 			, m_mode != RenderMode::eTransparentOnly };
+#endif
 	}
 
 	ashes::PipelineColorBlendStateCreateInfo RenderTechniquePass::doCreateBlendState( PipelineFlags const & flags )const

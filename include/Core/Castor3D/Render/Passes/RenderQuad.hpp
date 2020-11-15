@@ -685,7 +685,7 @@ namespace castor3d
 			, castor::String const & name
 			, VkFilter samplerFilter )
 		{
-			return std::unique_ptr< RenderQuad >( new RenderQuad{ device
+			return castor::UniquePtr< RenderQuad >( new RenderQuad{ device
 				, name
 				, samplerFilter
 				, m_config } );

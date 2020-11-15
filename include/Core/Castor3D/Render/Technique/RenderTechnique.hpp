@@ -11,18 +11,15 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
-#include "Castor3D/Render/Technique/Opaque/DeferredRendering.hpp"
-#include "Castor3D/Render/Technique/Transparent/WeightedBlendRendering.hpp"
-#include "Castor3D/Render/Technique/Voxelize/Voxelizer.hpp"
+#include "Castor3D/Render/Technique/Opaque/OpaqueModule.hpp"
+#include "Castor3D/Render/Technique/Transparent/TransparentModule.hpp"
+#include "Castor3D/Render/Technique/Voxelize/VoxelizeModule.hpp"
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
 #include "Castor3D/Shader/Ubos/DebugConfig.hpp"
+#include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
 #include <CastorUtils/Design/DelayedInitialiser.hpp>
-
-#if C3D_UseDepthPrepass
-#	include "Castor3D/Render/Passes/DepthPass.hpp"
-#endif
 
 #include <CastorUtils/Design/Named.hpp>
 
@@ -234,9 +231,7 @@ namespace castor3d
 		void doCreateShadowMaps();
 		void doInitialiseShadowMaps( RenderDevice const & device );
 		void doInitialiseBackgroundPass( RenderDevice const & device );
-#if C3D_UseDepthPrepass
 		void doInitialiseDepthPass( RenderDevice const & device );
-#endif
 		void doInitialiseOpaquePass( RenderDevice const & device );
 		void doInitialiseTransparentPass( RenderDevice const & device );
 		void doCleanupShadowMaps( RenderDevice const & device );
@@ -248,12 +243,10 @@ namespace castor3d
 			, ashes::Semaphore const & semaphore );
 		ashes::Semaphore const & doRenderEnvironmentMaps( RenderDevice const & device
 			, ashes::Semaphore const & semaphore );
-#if C3D_UseDepthPrepass
 		ashes::Semaphore const & doRenderDepth( RenderDevice const & device
 			, ashes::SemaphoreCRefArray const & semaphores );
 		ashes::Semaphore const & doRenderBackground( RenderDevice const & device
 			, ashes::Semaphore const & semaphore );
-#endif
 		ashes::Semaphore const & doRenderBackground( RenderDevice const & device
 			, ashes::SemaphoreCRefArray const & semaphores );
 		ashes::Semaphore const & doRenderOpaque( RenderDevice const & device
@@ -271,15 +264,13 @@ namespace castor3d
 		MatrixUbo m_matrixUbo;
 		GpInfoUbo m_gpInfoUbo;
 		DebugConfig m_debugConfig;
-#if C3D_UseDepthPrepass
-		std::unique_ptr< DepthPass > m_depthPass;
-#endif
-		std::unique_ptr< Voxelizer > m_voxelizer;
-		std::unique_ptr< RenderTechniquePass > m_opaquePass;
-		std::unique_ptr< RenderTechniquePass > m_transparentPass;
+		DepthPassUPtr m_depthPass;
+		VoxelizerUPtr m_voxelizer;
+		RenderTechniquePassUPtr m_opaquePass;
+		RenderTechniquePassUPtr m_transparentPass;
 		SsaoConfig m_ssaoConfig;
-		std::unique_ptr< DeferredRendering > m_deferredRendering;
-		std::unique_ptr< WeightedBlendRendering > m_weightedBlendRendering;
+		DeferredRenderingUPtr m_deferredRendering;
+		WeightedBlendRenderingUPtr m_weightedBlendRendering;
 		RenderPassTimerSPtr m_particleTimer;
 		ShadowMapUPtr m_directionalShadowMap;
 		ShadowMapUPtr m_pointShadowMap;

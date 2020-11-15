@@ -15,6 +15,8 @@
 #include <ashespp/RenderPass/RenderPass.hpp>
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, WeightedBlendRendering )
+
 using namespace castor;
 
 namespace castor3d

@@ -1,5 +1,5 @@
 /* XPM */
-static char * unacceptable_xpm[] = {
+static const char * unacceptable_xpm[] = {
 "20 20 89 1",
 " 	c None",
 ".	c #FF1A1A",

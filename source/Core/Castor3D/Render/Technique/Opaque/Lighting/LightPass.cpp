@@ -1,7 +1,7 @@
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightPass.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/UniformBufferBase.hpp"
+#include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
@@ -148,7 +148,7 @@ namespace castor3d
 		, MatrixUbo & matrixUbo
 		, SceneUbo & sceneUbo
 		, GpInfoUbo const & gpInfoUbo
-		, UniformBufferOffsetT< ModelMatrixUboConfiguration > const * modelMatrixUbo )
+		, UniformBufferT< ModelMatrixUboConfiguration > const * modelMatrixUbo )
 	{
 		ashes::VkDescriptorSetLayoutBindingArray setLayoutBindings;
 		setLayoutBindings.emplace_back( m_engine.getMaterialCache().getPassBuffer().createLayoutBinding() );
@@ -307,7 +307,7 @@ namespace castor3d
 		, m_blendRenderPass{ getName() + "Blend", std::move( blendRenderPass ), lpResult, generatesIndirect }
 		, m_shadows{ hasShadows }
 		, m_generatesIndirect{ generatesIndirect }
-		, m_matrixUbo{ engine }
+		, m_matrixUbo{ device }
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_sampler{ engine.getDefaultSampler() }
 		, m_signalImgReady{ m_device->createSemaphore( getName() + "ImgReady" ) }
@@ -421,7 +421,6 @@ namespace castor3d
 		ashes::VertexBufferBase & vbo = *m_vertexBuffer;
 		ashes::PipelineVertexInputStateCreateInfo const & vertexLayout = *m_pUsedVertexLayout;
 		SceneUbo & sceneUbo = *m_sceneUbo;
-		UniformBufferOffsetT< ModelMatrixUboConfiguration > const * modelMatrixUbo = m_mmUbo;
 		SceneFlags sceneFlags{ scene.getFlags() };
 		LightPass::Pipeline pipeline;
 		m_vertexShader.shader = doGetVertexShaderSource( sceneFlags );
@@ -456,7 +455,7 @@ namespace castor3d
 			, m_matrixUbo
 			, sceneUbo
 			, m_gpInfoUbo
-			, modelMatrixUbo );
+			, m_mmUbo );
 		pipeline.uboDescriptorSet = pipeline.program->getUboDescriptorPool().createDescriptorSet( getName() + "Ubo", 0u );
 		auto & uboLayout = pipeline.program->getUboDescriptorLayout();
 		m_engine.getMaterialCache().getPassBuffer().createBinding( *pipeline.uboDescriptorSet, uboLayout.getBinding( 0u ) );
@@ -467,10 +466,10 @@ namespace castor3d
 		m_gpInfoUbo.createSizedBinding( *pipeline.uboDescriptorSet
 			, uboLayout.getBinding( GpInfoUbo::BindingPoint ) );
 
-		if ( modelMatrixUbo )
+		if ( m_mmUbo )
 		{
 			pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( ModelMatrixUbo::BindingPoint )
-				, modelMatrixUbo->getBuffer() );
+				, m_mmUbo->getBuffer() );
 		}
 
 		pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( shader::LightingModel::UboBindingPoint )
@@ -575,7 +574,7 @@ namespace castor3d
 		, ashes::VertexBufferBase & vbo
 		, ashes::PipelineVertexInputStateCreateInfo const & vertexLayout
 		, SceneUbo & sceneUbo
-		, UniformBufferOffsetT< ModelMatrixUboConfiguration > const * modelMatrixUbo
+		, UniformBufferT< ModelMatrixUboConfiguration > const * modelMatrixUbo
 		, RenderPassTimer & timer )
 	{
 		m_scene = &scene;

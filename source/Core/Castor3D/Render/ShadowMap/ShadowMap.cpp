@@ -13,15 +13,7 @@
 #include <ashespp/Sync/Semaphore.hpp>
 #include <ashespp/Image/ImageView.hpp>
 
-using namespace castor;
-
-namespace castor
-{
-	void Deleter< castor3d::ShadowMap >::operator()( castor3d::ShadowMap * pointer )noexcept
-	{
-		delete pointer;
-	}
-}
+CU_ImplementCUSmartPtr( castor3d, ShadowMap )
 
 namespace castor3d
 {
@@ -52,7 +44,7 @@ namespace castor3d
 				{
 					m_result[SmTexture( i )].getTexture()->forEachLeafView( [&index, &visitor, this, i]( TextureViewUPtr const & view )
 						{
-							visitor.visit( m_name + getName( SmTexture( i ) ) + cuT( "L" ) + string::toString( index++ )
+							visitor.visit( m_name + getName( SmTexture( i ) ) + cuT( "L" ) + castor::string::toString( index++ )
 								, view->getSampledView()
 								, ( ashes::isDepthOrStencilFormat( view->getTargetView()->format )
 									? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
@@ -63,7 +55,7 @@ namespace castor3d
 				{
 					m_result[SmTexture( i )].getTexture()->forEachView( [&index, &visitor, this, i]( TextureViewUPtr const & view )
 						{
-							visitor.visit( m_name + getName( SmTexture( i ) ) + cuT( "L" ) + string::toString( index++ )
+							visitor.visit( m_name + getName( SmTexture( i ) ) + cuT( "L" ) + castor::string::toString( index++ )
 								, view->getSampledView()
 								, ( ashes::isDepthOrStencilFormat( view->getTargetView()->format )
 									? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL

@@ -16,15 +16,9 @@
 
 #include <ShaderAST/Shader.hpp>
 
-using namespace castor;
+CU_ImplementCUSmartPtr( castor3d, ShadowMapPass )
 
-namespace castor
-{
-	void Deleter< castor3d::ShadowMapPass >::operator()( castor3d::ShadowMapPass * pointer )noexcept
-	{
-		delete pointer;
-	}
-}
+using namespace castor;
 
 namespace castor3d
 {
@@ -33,7 +27,14 @@ namespace castor3d
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, ShadowMap const & shadowMap )
-		: RenderPass{ cuT( "ShadowMap" ), std::move( name ), engine, matrixUbo, culler }
+		: RenderPass{ cuT( "ShadowMap" )
+			, std::move( name )
+			, engine
+			, matrixUbo
+			, culler
+			, RenderMode::eBoth
+			, true
+			, nullptr }
 		, m_shadowMap{ shadowMap }
 		, m_shadowMapUbo{ engine }
 	{

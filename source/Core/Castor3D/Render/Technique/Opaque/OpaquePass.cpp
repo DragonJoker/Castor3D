@@ -1,5 +1,6 @@
 #include "Castor3D/Render/Technique/Opaque/OpaquePass.hpp"
 
+#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/ShaderCache.hpp"
@@ -228,26 +229,6 @@ namespace castor3d
 
 	void OpaquePass::doUpdatePipeline( RenderPipeline & pipeline )
 	{
-	}
-
-	ashes::PipelineDepthStencilStateCreateInfo OpaquePass::doCreateDepthStencilState( PipelineFlags const & flags )const
-	{
-#if C3D_UseDepthPrepass
-		return ashes::PipelineDepthStencilStateCreateInfo
-		{
-			0u
-			, VK_TRUE
-			, VK_FALSE
-			, VK_COMPARE_OP_EQUAL
-		};
-#else
-		return ashes::PipelineDepthStencilStateCreateInfo
-		{
-			0u
-			, VK_TRUE
-			, VK_TRUE
-		};
-#endif
 	}
 
 	ashes::PipelineColorBlendStateCreateInfo OpaquePass::doCreateBlendState( PipelineFlags const & flags )const

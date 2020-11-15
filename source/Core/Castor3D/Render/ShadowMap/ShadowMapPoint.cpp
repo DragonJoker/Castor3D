@@ -38,7 +38,6 @@
 #include <algorithm>
 
 using namespace castor;
-using namespace castor3d;
 
 namespace castor3d
 {
@@ -93,6 +92,7 @@ namespace castor3d
 	{
 		m_passesData[updater.index].shadowType = updater.light->getShadowType();
 		uint32_t offset = updater.index * 6u;
+		updater.light->getPointLight()->updateShadow( updater.index );
 
 		for ( uint32_t face = offset; face < offset + 6u; ++face )
 		{
@@ -110,12 +110,6 @@ namespace castor3d
 			updater.index = face - offset;
 			m_passes[face].pass->update( updater );
 		}
-	}
-
-	ashes::ImageView const & ShadowMapPoint::getView( SmTexture texture
-		, uint32_t index )const
-	{
-		return m_passesData[index].views[size_t( texture )];
 	}
 
 	void ShadowMapPoint::doInitialiseFramebuffers( RenderDevice const & device )

@@ -11,6 +11,8 @@
 
 #include <ashespp/Image/ImageView.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, DownscalePass )
+
 using namespace castor;
 
 namespace castor3d

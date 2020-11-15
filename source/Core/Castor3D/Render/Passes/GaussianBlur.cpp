@@ -19,8 +19,9 @@
 
 #include <ShaderWriter/Source.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, GaussianBlur )
+
 using namespace castor;
-using namespace castor3d;
 
 namespace castor3d
 {

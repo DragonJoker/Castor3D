@@ -41,6 +41,15 @@ namespace castor3d
 		C3D_API explicit MatrixUbo( Engine & engine );
 		/**
 		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	engine	The engine.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	engine	Le moteur.
+		 */
+		C3D_API explicit MatrixUbo( RenderDevice const & device );
+		/**
+		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur

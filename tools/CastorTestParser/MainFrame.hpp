@@ -11,6 +11,7 @@ See LICENSE file in root folder
 
 #include <wx/frame.h>
 #include <wx/dataview.h>
+#include <wx/menu.h>
 #include <wx/process.h>
 #include <wx/aui/framemanager.h>
 #include <wx/aui/auibook.h>
@@ -48,12 +49,17 @@ namespace test_parser
 		void doViewTest();
 		void doSetRef();
 		void doIgnoreTestResult();
+		void doUpdateCastorDate();
 		void doRunAllCategoryTests();
 		void doRunCategoryTests( TestStatus filter );
 		void doRunAllCategoryTestsBut( TestStatus filter );
+		void doRunAllCategoryOutdatedTests();
+		void doUpdateCategoryCastorDate();
 		void doRunAllTests();
 		void doRunTests( TestStatus filter );
 		void doRunAllTestsBut( TestStatus filter );
+		void doRunAllOutdatedTests();
+		void doUpdateAllCastorDate();
 		void doCancelTest( Test & test
 			, TestStatus status );
 		void doCancel();
@@ -89,12 +95,6 @@ namespace test_parser
 			bool allCategories{};
 		};
 		Selection m_selected;
-		struct TestNode
-		{
-			Test * test;
-			TestStatus status;
-			TreeModelNode * node;
-		};
 		struct RunningTest
 		{
 			std::unique_ptr< wxProcess > genProcess{};

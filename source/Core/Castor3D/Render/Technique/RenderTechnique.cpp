@@ -13,9 +13,14 @@
 #include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
+#include "Castor3D/Render/Passes/DepthPass.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
+#include "Castor3D/Render/Technique/ForwardRenderTechniquePass.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePass.hpp"
+#include "Castor3D/Render/Technique/Opaque/DeferredRendering.hpp"
 #include "Castor3D/Render/Technique/Transparent/TransparentPass.hpp"
+#include "Castor3D/Render/Technique/Transparent/WeightedBlendRendering.hpp"
+#include "Castor3D/Render/Technique/Voxelize/Voxelizer.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
@@ -206,19 +211,19 @@ namespace castor3d
 		, m_matrixUbo{ *renderSystem.getEngine() }
 		, m_gpInfoUbo{ *renderSystem.getEngine() }
 #if C3D_UseDeferredRendering
-		, m_opaquePass{ std::make_unique< OpaquePass >( m_matrixUbo
+		, m_opaquePass{ castor::makeUniqueDerived< RenderTechniquePass, OpaquePass >( m_matrixUbo
 			, renderTarget.getCuller()
 			, ssaoConfig ) }
 #else
-		, m_opaquePass{ std::make_unique< ForwardRenderTechniquePass >( cuT( "opaque_pass" )
+		, m_opaquePass{ castor::makeUniqueDerived< RenderTechniquePass, ForwardRenderTechniquePass >( cuT( "opaque_pass" )
 			, m_matrixUbo
 			, renderTarget.getCuller()
 			, false
 			, nullptr
-			, config ) }
+			, ssaoConfig ) }
 #endif
 #if C3D_UseWeightedBlendedRendering
-		, m_transparentPass{ std::make_unique< TransparentPass >( m_matrixUbo
+		, m_transparentPass{ castor::makeUniqueDerived< RenderTechniquePass, TransparentPass >( m_matrixUbo
 			, renderTarget.getCuller()
 			, ssaoConfig ) }
 #else
@@ -228,7 +233,7 @@ namespace castor3d
 			, false
 			, false
 			, nullptr
-			, config ) }
+			, ssaoConfig ) }
 #endif
 		, m_initialised{ false }
 		, m_ssaoConfig{ ssaoConfig }
@@ -471,7 +476,7 @@ namespace castor3d
 		auto * semaphore = &doRenderDepth( device, waitSemaphores );
 		semaphore = &doRenderBackground( device, *semaphore );
 #else
-		auto * semaphore = &doRenderBackground( waitSemaphores );
+		auto * semaphore = &doRenderBackground( device, waitSemaphores );
 #endif
 		semaphore = &doRenderEnvironmentMaps( device, *semaphore );
 		semaphore = &doRenderShadowMaps( device, *semaphore );
@@ -659,7 +664,7 @@ namespace castor3d
 
 	void RenderTechnique::doInitialiseDepthPass( RenderDevice const & device )
 	{
-		m_depthPass = std::make_unique< DepthPass >( cuT( "Depth Prepass" )
+		m_depthPass = castor::makeUnique< DepthPass >( cuT( "Depth Prepass" )
 			, device
 			, m_matrixUbo
 			, m_renderTarget.getCuller()
@@ -676,7 +681,7 @@ namespace castor3d
 
 #if C3D_UseDeferredRendering
 
-		m_deferredRendering = std::make_unique< DeferredRendering >( *getEngine()
+		m_deferredRendering = castor::makeUnique< DeferredRendering >( *getEngine()
 			, device
 			, static_cast< OpaquePass & >( *m_opaquePass )
 			, m_depthBuffer
@@ -693,8 +698,9 @@ namespace castor3d
 
 #else
 
-		static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).initialiseRenderPass( m_colourTexture->getDefaultView().getView()
-			, m_depthBuffer.getTexture()->getDefaultView().getView()
+		static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).initialiseRenderPass( device
+			, m_colourTexture.getTexture()->getDefaultView().getTargetView()
+			, m_depthBuffer.getTexture()->getDefaultView().getTargetView()
 			, m_size
 			, false );
 
@@ -728,7 +734,7 @@ namespace castor3d
 
 #if C3D_UseWeightedBlendedRendering
 
-		m_weightedBlendRendering = std::make_unique< WeightedBlendRendering >( *getEngine()
+		m_weightedBlendRendering = castor::makeUnique< WeightedBlendRendering >( *getEngine()
 			, device
 			, static_cast< TransparentPass & >( *m_transparentPass )
 			, m_depthBuffer
@@ -880,8 +886,6 @@ namespace castor3d
 		return *result;
 	}
 
-#if C3D_UseDepthPrepass
-
 	ashes::Semaphore const & RenderTechnique::doRenderDepth( RenderDevice const & device
 		, ashes::SemaphoreCRefArray const & semaphores )
 	{
@@ -893,8 +897,6 @@ namespace castor3d
 	{
 		return doRenderBackground( device, { 1u, std::ref( semaphore ) } );
 	}
-
-#endif
 
 	ashes::Semaphore const & RenderTechnique::doRenderBackground( RenderDevice const & device
 		, ashes::SemaphoreCRefArray const & semaphores )

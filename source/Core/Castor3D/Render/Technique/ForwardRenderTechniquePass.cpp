@@ -125,7 +125,7 @@ namespace castor3d
 				( clear
 					? VK_IMAGE_LAYOUT_UNDEFINED
 					: VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL ),
-				VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 			},
 		};
 		ashes::SubpassDescriptionArray subpasses;
@@ -425,8 +425,8 @@ namespace castor3d
 		auto in = writer.getIn();
 
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
-		UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0 );
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0 );
+		UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0 );
 		UBO_MODEL( writer, ModelUbo::BindingPoint, 0 );
 		auto skinningData = SkinningUbo::declare( writer, SkinningUbo::BindingPoint, 0, flags.programFlags );
 		UBO_MORPHING( writer, MorphingUbo::BindingPoint, 0, flags.programFlags );

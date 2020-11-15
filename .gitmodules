@@ -1,6 +1,3 @@
-[submodule "data/TestScenes"]
-	path = data/TestScenes
-	url = https://github.com/DragonJoker/Castor3DTestScenes.git
 [submodule "dependencies"]
 	path = dependencies
 	url = https://github.com/DragonJoker/Castor3DDeps.git
