@@ -6,9 +6,9 @@ See LICENSE file in root folder
 
 #include "LightingModule.hpp"
 
+#include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Render/Passes/StencilPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightPass.hpp"
-
 #include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
 
 namespace castor3d
@@ -182,17 +182,10 @@ namespace castor3d
 			, Camera const & camera )const = 0;
 
 	private:
-		//!\~english	The uniform buffer containing the model data.
-		//!\~french		Le tampon d'uniformes contenant les données de modèle.
-		UniformBufferOffsetT< ModelMatrixUboConfiguration > m_modelMatrixUbo;
-		//!\~english	The light's stencil pass.
-		//!\~french		La passe stencil de la lumière.
+		UniformBufferT< ModelMatrixUboConfiguration > m_modelMatrixUbo;
+		ModelMatrixUboConfiguration * m_modelMatrixData;
 		StencilPass m_stencilPass;
-		//!\~english	The light source type.
-		//!\~french		Le type de source lumineuse.
 		LightType m_type;
-		//!\~english	The vertex count.
-		//!\~french		Le nombre de sommets.
 		uint32_t m_count{ 0u };
 	};
 }

@@ -103,7 +103,7 @@ namespace castor3d
 		, String const & prefix
 		, ashes::ImageView const & depthView
 		, MatrixUbo & matrixUbo
-		, UniformBufferOffsetT< ModelMatrixUboConfiguration > const & modelMatrixUbo )
+		, UniformBufferT< ModelMatrixUboConfiguration > const & modelMatrixUbo )
 		: m_engine{ engine }
 		, m_prefix{ prefix }
 		, m_depthView{ depthView }
@@ -139,8 +139,8 @@ namespace castor3d
 		m_descriptorSet = m_descriptorPool->createDescriptorSet( name );
 		m_matrixUbo.createSizedBinding( *m_descriptorSet
 			, m_descriptorLayout->getBinding( 0u ) );
-		m_modelMatrixUbo.createSizedBinding( *m_descriptorSet
-			, m_descriptorLayout->getBinding( 1u ) );
+		m_descriptorSet->createSizedBinding( m_descriptorLayout->getBinding( 1u )
+			, m_modelMatrixUbo.getBuffer() );
 		m_descriptorSet->update();
 
 		m_renderPass = doCreateRenderPass( name, device, m_depthView );
