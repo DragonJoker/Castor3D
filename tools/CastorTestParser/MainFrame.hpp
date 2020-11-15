@@ -11,6 +11,7 @@ See LICENSE file in root folder
 
 #include <wx/frame.h>
 #include <wx/dataview.h>
+#include <wx/menu.h>
 #include <wx/process.h>
 #include <wx/aui/framemanager.h>
 #include <wx/aui/auibook.h>

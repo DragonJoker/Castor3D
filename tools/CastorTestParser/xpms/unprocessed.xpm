@@ -1,5 +1,5 @@
 /* XPM */
-static char * unprocessed_xpm[] = {
+static const char * unprocessed_xpm[] = {
 "20 20 2 1",
 " 	c None",
 ".	c #8A8A8A",

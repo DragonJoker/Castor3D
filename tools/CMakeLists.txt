@@ -33,11 +33,13 @@ function( ToolsBuild )
 				set( GTK2_LIBRARIES
 					"-framework AppKit"
 					"-framework QuartzCore"
-				)				
-			elseif( WIN32 )
+					"-framework Metal"
+				)
+			elseif ( WIN32 )
 				set( GTK2_FOUND TRUE )
 			else()
 				find_package( GTK2 )
+				find_package( X11 )
 			endif()
 
 			#we look for wxWidgets

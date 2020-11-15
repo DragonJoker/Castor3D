@@ -23,6 +23,14 @@
 
 #if defined( CU_PlatformApple )
 #	include "MetalLayer.h"
+#elif defined( CU_PlatformLinux )
+#	include <gdk/gdkx.h>
+#	include <gtk/gtk.h>
+#	include <GL/glx.h>
+#	undef None
+#	undef Bool
+#	undef Always
+using Bool = int;
 #endif
 
 using namespace castor3d;

@@ -93,7 +93,7 @@ namespace test_parser
 		}
 
 		class DataViewTestStatusRenderer
-			: public wxDataViewRenderer
+			: public wxDataViewCustomRenderer
 		{
 		private:
 			using Clock = std::chrono::high_resolution_clock;
@@ -107,7 +107,7 @@ namespace test_parser
 			DataViewTestStatusRenderer( const wxString & varianttype = GetDefaultType(),
 				wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
 				int align = wxDVR_DEFAULT_ALIGNMENT )
-				: wxDataViewRenderer{ varianttype, mode, align }
+				: wxDataViewCustomRenderer{ varianttype, mode, align }
 				, m_size{ 20, 20 }
 				, m_bitmaps{ createImage( notrun_xpm )
 					, createImage( negligible_xpm )
@@ -303,19 +303,19 @@ namespace test_parser
 			, nullptr
 			, this );
 		uint32_t flags = wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_RESIZABLE;
-		auto renCategory = new wxDataViewTextRenderer{ wxDataViewTextRenderer::GetDefaultType() };
+		auto renCategory = new wxDataViewTextRenderer{ wxT( "string" ) };
 		wxDataViewColumn * colCategory = new wxDataViewColumn( _( "Category" ), renCategory, int( TreeModel::Column::eCategory ), 200, wxALIGN_LEFT, flags );
 		colCategory->SetMinWidth( 150 );
 		m_view->AppendColumn( colCategory );
-		auto renScene = new wxDataViewTextRenderer{ wxDataViewTextRenderer::GetDefaultType() };
+		auto renScene = new wxDataViewTextRenderer{ wxT( "string" ) };
 		wxDataViewColumn * colScene = new wxDataViewColumn( _( "Name" ), renScene, int( TreeModel::Column::eName ), 400, wxALIGN_LEFT, flags );
 		colScene->SetMinWidth( 400 );
 		m_view->AppendColumn( colScene );
-		auto renRenderer = new wxDataViewTextRenderer{ wxDataViewTextRenderer::GetDefaultType() };
+		auto renRenderer = new wxDataViewTextRenderer{ wxT( "string" ) };
 		wxDataViewColumn * colRenderer = new wxDataViewColumn( _( "Renderer" ), renRenderer, int( TreeModel::Column::eRenderer ), 40, wxALIGN_LEFT, flags );
 		colRenderer->SetMinWidth( 40 );
 		m_view->AppendColumn( colRenderer );
-		auto renRunDate = new wxDataViewDateRenderer{ wxDataViewDateRenderer::GetDefaultType() };
+		auto renRunDate = new wxDataViewDateRenderer{ wxT( "datetime" ) };
 		wxDataViewColumn * colRunDate = new wxDataViewColumn( _( "Run Date" ), renRunDate, int( TreeModel::Column::eRunDate ), 100, wxALIGN_LEFT, flags );
 		colRunDate->SetMinWidth( 100 );
 		m_view->AppendColumn( colRunDate );

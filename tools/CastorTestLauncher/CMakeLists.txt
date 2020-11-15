@@ -45,6 +45,7 @@ target_include_directories( ${PROJECT_NAME} PRIVATE
 	${CASTOR_BINARY_DIR}/tools
 	${wxWidgets_INCLUDE_DIRS}
 	${GTK2_INCLUDE_DIRS}
+	${X11_LIBRARIES}
 )
 target_link_libraries( ${PROJECT_NAME} PRIVATE
 	${CastorMinLibraries}

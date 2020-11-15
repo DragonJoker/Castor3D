@@ -110,7 +110,7 @@ namespace test_parser
 			};
 			auto allResults = listAllResults( categoryPath, folders );
 			auto scenes = listScenes( categoryPath );
-			auto & categoryIt = tests.emplace( category, TestArray{} ).first;
+			auto categoryIt = tests.emplace( category, TestArray{} ).first;
 
 			for ( auto & testScene : scenes )
 			{

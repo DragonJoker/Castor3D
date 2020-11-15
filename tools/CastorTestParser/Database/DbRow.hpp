@@ -38,13 +38,13 @@ namespace test_parser::db
 		template< typename T >
 		inline void get( uint32_t index, T & value )
 		{
-			getField( index )->getValue( value );
+			getField( index ).getValue( value );
 		}
 
 		template< typename T >
 		inline void get( const std::string & name, T & value )
 		{
-			getField( name )->getValue( value );
+			getField( name ).getValue( value );
 		}
 
 	protected:

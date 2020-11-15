@@ -10,6 +10,10 @@
 #include <CastorUtils/Log/Logger.hpp>
 #include <CastorUtils/Miscellaneous/StringUtils.hpp>
 
+#if defined( __WXGTK__ )
+#	include <X11/Xlib.h>
+#endif
+
 wxIMPLEMENT_APP( test_parser::CastorTestParser );
 
 namespace test_parser

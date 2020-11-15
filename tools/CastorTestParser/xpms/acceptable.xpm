@@ -1,5 +1,5 @@
 /* XPM */
-static char * acceptable_xpm[] = {
+static const char * acceptable_xpm[] = {
 "20 20 34 1",
 " 	c None",
 ".	c #DCAE00",
