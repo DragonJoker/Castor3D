@@ -51,9 +51,11 @@ namespace test_parser
 		void doRunAllCategoryTests();
 		void doRunCategoryTests( TestStatus filter );
 		void doRunAllCategoryTestsBut( TestStatus filter );
+		void doRunAllCategoryOutdatedTests();
 		void doRunAllTests();
 		void doRunTests( TestStatus filter );
 		void doRunAllTestsBut( TestStatus filter );
+		void doRunAllOutdatedTests();
 		void doCancelTest( Test & test
 			, TestStatus status );
 		void doCancel();
@@ -89,12 +91,6 @@ namespace test_parser
 			bool allCategories{};
 		};
 		Selection m_selected;
-		struct TestNode
-		{
-			Test * test;
-			TestStatus status;
-			TreeModelNode * node;
-		};
 		struct RunningTest
 		{
 			std::unique_ptr< wxProcess > genProcess{};

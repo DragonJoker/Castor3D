@@ -66,10 +66,12 @@ namespace test_parser
 			eID_RUN_CATEGORY_TESTS_NOTRUN,
 			eID_RUN_CATEGORY_TESTS_ACCEPTABLE,
 			eID_RUN_CATEGORY_TESTS_ALL_BUT_NEGLIGIBLE,
+			eID_RUN_CATEGORY_TESTS_OUTDATED,
 			eID_RUN_TESTS_ALL,
 			eID_RUN_TESTS_NOTRUN,
 			eID_RUN_TESTS_ACCEPTABLE,
 			eID_RUN_TESTS_ALL_BUT_NEGLIGIBLE,
+			eID_RUN_TESTS_OUTDATED,
 			eID_CANCEL,
 		};
 
@@ -248,6 +250,9 @@ namespace test_parser
 			, nullptr
 			, this );
 		m_statusBar->SetLabel( _( "Idle" ) );
+
+		m_categoryView->setAll( m_tests, m_runningTest.tests );
+		m_detailViews->showLayer( 2u );
 	}
 
 	void MainFrame::updateTestStatus( Test & test
@@ -255,6 +260,7 @@ namespace test_parser
 		, bool reference )
 	{
 		auto node = getTestNode( test );
+		test.castorDate = getFileDate( m_config.castor );
 		m_database.updateTestStatus( test, newStatus, reference );
 		test.status = newStatus;
 		m_model->ItemChanged( wxDataViewItem{ node } );
@@ -334,7 +340,7 @@ namespace test_parser
 		m_detailViews->addLayer( layer );
 		m_testView = new TestPanel{ m_detailViews, m_config };
 		m_detailViews->addLayer( m_testView );
-		m_categoryView = new CategoryPanel{ m_detailViews, wxDefaultPosition, wxSize{ 800, 600 } };
+		m_categoryView = new CategoryPanel{ m_config, m_detailViews, wxDefaultPosition, wxSize{ 800, 600 } };
 		m_detailViews->addLayer( m_categoryView );
 		m_detailViews->showLayer( 0 );
 
@@ -400,6 +406,7 @@ namespace test_parser
 			menu.Append( eID_RUN_CATEGORY_TESTS_NOTRUN, _( "Run all <not run> category's tests" ) + wxT( "\tCtrl+F8" ) );
 			menu.Append( eID_RUN_CATEGORY_TESTS_ACCEPTABLE, _( "Run all <acceptable> category's tests" ) + wxT( "\tCtrl+F9" ) );
 			menu.Append( eID_RUN_CATEGORY_TESTS_ALL_BUT_NEGLIGIBLE, _( "Run all but <negligible> category's tests" ) + wxT( "\tCtrl+F10" ) );
+			menu.Append( eID_RUN_CATEGORY_TESTS_OUTDATED, _( "Run all outdated category's tests" ) + wxT( "\tCtrl+F10" ) );
 		};
 		auto addAllMenus = []( wxMenu & menu )
 		{
@@ -407,6 +414,7 @@ namespace test_parser
 			menu.Append( eID_RUN_TESTS_NOTRUN, _( "Run all <not run> tests" ) + wxT( "\tCtrl+Alt+F8" ) );
 			menu.Append( eID_RUN_TESTS_ACCEPTABLE, _( "Run all <acceptable> tests" ) + wxT( "\tCtrl+Alt+F9" ) );
 			menu.Append( eID_RUN_TESTS_ALL_BUT_NEGLIGIBLE, _( "Run all but <negligible> tests" ) + wxT( "\tCtrl+F10" ) );
+			menu.Append( eID_RUN_TESTS_OUTDATED, _( "Run all outdated tests" ) + wxT( "\tCtrl+F10" ) );
 		};
 		m_testMenu = std::make_unique< wxMenu >();
 		addTestMenus( *m_testMenu );
@@ -437,6 +445,7 @@ namespace test_parser
 
 		m_busyMenu = std::make_unique< wxMenu >();
 		m_busyMenu->Append( eID_VIEW_TEST, "View Test\tF5" );
+		m_busyMenu->Append( eID_SET_REF, _( "Set Reference" ) + wxT( "\tF6" ) );
 		m_busyMenu->Append( eID_CANCEL, "Cancel\tF11" );
 		m_busyMenu->Connect( wxEVT_COMMAND_MENU_SELECTED
 			, wxCommandEventHandler( MainFrame::onMenuOption )
@@ -573,6 +582,7 @@ namespace test_parser
 				assert( node->test );
 				m_statusBar->SetLabel( _( "Setting reference: " ) + node->test->name );
 				node->test->ignoreResult = m_testMenu->IsChecked( eID_IGNORE_RESULT );
+				node->test->castorDate = getFileDate( m_config.castor );
 				m_database.updateTestIgnoreResult( *node->test, node->test->ignoreResult, true );
 				m_model->ItemChanged( item );
 			}
@@ -662,6 +672,34 @@ namespace test_parser
 		doProcessTest();
 	}
 
+	void MainFrame::doRunAllCategoryOutdatedTests()
+	{
+		m_cancelled.exchange( false );
+		auto date = getFileDate( m_config.castor );
+
+		for ( auto & item : m_selected.items )
+		{
+			auto node = static_cast< TreeModelNode * >( item.GetID() );
+			assert( !node->category.empty() );
+			auto it = m_tests.find( makeStdString( node->category ) );
+
+			if ( it != m_tests.end() )
+			{
+				auto & tests = *it;
+
+				for ( auto & test : tests.second )
+				{
+					if ( test.castorDate != date )
+					{
+						m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+					}
+				}
+			}
+		}
+
+		doProcessTest();
+	}
+
 	void MainFrame::doRunAllTests()
 	{
 		m_cancelled.exchange( false );
@@ -704,6 +742,25 @@ namespace test_parser
 			for ( auto & test : tests.second )
 			{
 				if ( test.status != filter )
+				{
+					m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+				}
+			}
+		}
+
+		doProcessTest();
+	}
+
+	void MainFrame::doRunAllOutdatedTests()
+	{
+		m_cancelled.exchange( false );
+		auto date = getFileDate( m_config.castor );
+
+		for ( auto & tests : m_tests )
+		{
+			for ( auto & test : tests.second )
+			{
+				if ( test.castorDate != date )
 				{
 					m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
 				}
@@ -765,8 +822,16 @@ namespace test_parser
 				else if ( !category.empty() )
 				{
 					auto it = m_tests.find( makeStdString( category ) );
-					assert( it != m_tests.end() );
-					m_categoryView->setCategory( category, it->second );
+
+					if ( it != m_tests.end() )
+					{
+						m_categoryView->setCategory( category, it->second );
+					}
+					else
+					{
+						m_categoryView->setAll( m_tests, m_runningTest.tests );
+					}
+
 					m_detailViews->showLayer( 2 );
 					displayCategory = true;
 				}
@@ -857,6 +922,9 @@ namespace test_parser
 		case eID_RUN_CATEGORY_TESTS_ALL_BUT_NEGLIGIBLE:
 			doRunAllCategoryTestsBut( TestStatus::eNegligible );
 			break;
+		case eID_RUN_CATEGORY_TESTS_OUTDATED:
+			doRunAllCategoryOutdatedTests();
+			break;
 		case eID_RUN_TESTS_ALL:
 			doRunAllTests();
 			break;
@@ -868,6 +936,9 @@ namespace test_parser
 			break;
 		case eID_RUN_TESTS_ALL_BUT_NEGLIGIBLE:
 			doRunAllTestsBut( TestStatus::eNegligible );
+			break;
+		case eID_RUN_TESTS_OUTDATED:
+			doRunAllOutdatedTests();
 			break;
 		case eID_CANCEL:
 			doCancel();
@@ -937,6 +1008,7 @@ namespace test_parser
 			auto path = match.getPath();
 			test.runDate = getFileDate( match );
 			test.status = getStatus( path.getFileName() );
+			test.castorDate = getFileDate( m_config.castor );
 			m_database.insertTest( test );
 
 			if ( test.ignoreResult )

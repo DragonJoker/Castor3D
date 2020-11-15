@@ -18,8 +18,12 @@ namespace test_parser
 	{
 #if defined( _WIN32 )
 		static castor::String const BinExt = cuT( ".exe" );
+		static castor::String const DynlibExt = cuT( ".dll" );
+		static castor::String const DynlibPre;
 #else
 		static castor::String const BinExt;
+		static castor::String const DynlibExt = cuT( ".so" );
+		static castor::String const DynlibPre = cuT( "lib" );
 #endif
 
 		namespace option
@@ -30,6 +34,7 @@ namespace test_parser
 			static const wxString Launcher{ wxT( "launcher" ) };
 			static const wxString Viewer{ wxT( "viewer" ) };
 			static const wxString Work{ wxT( "work" ) };
+			static const wxString Castor3D{ wxT( "castor3d" ) };
 		}
 
 		struct Options
@@ -46,6 +51,7 @@ namespace test_parser
 				parser.AddOption( wxT( "l" ), option::Launcher, _( "Path to CastorTestLauncher." ), wxCMD_LINE_VAL_STRING, 0 );
 				parser.AddOption( wxT( "v" ), option::Viewer, _( "Path to CastorViewer." ), wxCMD_LINE_VAL_STRING, 0 );
 				parser.AddOption( wxT( "w" ), option::Work, _( "Specifies the working directory." ), wxCMD_LINE_VAL_STRING, 0 );
+				parser.AddOption( wxT( "a" ), option::Castor3D, _( "Specifies the path to Castor3D's shared library." ), wxCMD_LINE_VAL_STRING, 0 );
 
 				if ( ( parser.Parse( false ) != 0 )
 					|| parser.Found( wxT( 'h' ) ) )
@@ -117,6 +123,7 @@ namespace test_parser
 				configFile->Write( option::Launcher, makeWxString( config.launcher ) );
 				configFile->Write( option::Viewer, makeWxString( config.viewer ) );
 				configFile->Write( option::Diff, makeWxString( config.differ ) );
+				configFile->Write( option::Castor3D, makeWxString( config.castor ) );
 			}
 
 			static wxString findConfigFile( wxCmdLineParser const & parser )
@@ -158,6 +165,7 @@ namespace test_parser
 			config.launcher = options.get( option::Launcher, false, castor::File::getExecutableDirectory() / ( cuT( "CastorTestLauncher" ) + BinExt ) );
 			config.viewer = options.get( option::Viewer, false, castor::File::getExecutableDirectory() / ( cuT( "CastorViewer" ) + BinExt ) );
 			config.differ = options.get( option::Diff, false, castor::File::getExecutableDirectory() / ( cuT( "DiffImage" ) + BinExt ) );
+			config.castor = options.get( option::Castor3D, false, castor::File::getExecutableDirectory() / ( DynlibPre + cuT( "Castor3D" ) + DynlibExt ) );
 			config.skip = options.has( wxT( 's' ) );
 			options.write( config );
 		}

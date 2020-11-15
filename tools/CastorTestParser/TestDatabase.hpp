@@ -15,6 +15,16 @@ class wxProgressDialog;
 
 namespace test_parser
 {
+	void moveFile( castor::Path const & srcFolder
+		, castor::Path const & dstFolder
+		, castor::Path const & srcName
+		, castor::Path const & dstName
+		, bool force );
+	void moveFile( castor::Path const & srcFolder
+		, castor::Path const & dstFolder
+		, castor::Path const & name
+		, bool force );
+
 	class TestDatabase
 	{
 	public:
@@ -49,13 +59,14 @@ namespace test_parser
 		{
 			InsertTest() = default;
 			explicit InsertTest( db::Connection & connection )
-				: stmt{ connection.createStatement( "INSERT INTO Test(Name, RunDate, Status, Renderer, Category, IgnoreResult) VALUES (?, ?, ?, ?, ?, ?);" ) }
+				: stmt{ connection.createStatement( "INSERT INTO Test(Name, RunDate, Status, Renderer, Category, IgnoreResult, CastorDate) VALUES (?, ?, ?, ?, ?, ?, ?);" ) }
 				, name{ stmt->createParameter( "Name", db::FieldType::eVarchar, 1024 ) }
 				, runDate{ stmt->createParameter( "RunDate", db::FieldType::eDatetime ) }
 				, status{ stmt->createParameter( "Status", db::FieldType::eSint32 ) }
 				, renderer{ stmt->createParameter( "Renderer", db::FieldType::eVarchar, 10 ) }
 				, category{ stmt->createParameter( "Category", db::FieldType::eVarchar, 50 ) }
 				, ignoreResult{ stmt->createParameter( "IgnoreResult", db::FieldType::eSint32 ) }
+				, castorDate{ stmt->createParameter( "CastorDate", db::FieldType::eDatetime ) }
 			{
 				stmt->initialise();
 			}
@@ -67,14 +78,16 @@ namespace test_parser
 			db::Parameter * renderer{};
 			db::Parameter * category{};
 			db::Parameter * ignoreResult{};
+			db::Parameter * castorDate{};
 		};
 		
 		struct UpdateTestStatus
 		{
 			UpdateTestStatus() = default;
 			explicit UpdateTestStatus( db::Connection & connection )
-				: stmt{ connection.createStatement( "UPDATE Test SET Status=? WHERE Id=?;" ) }
+				: stmt{ connection.createStatement( "UPDATE Test SET Status=?, CastorDate=? WHERE Id=?;" ) }
 				, status{ stmt->createParameter( "Status", db::FieldType::eSint32 ) }
+				, castorDate{ stmt->createParameter( "CastorDate", db::FieldType::eDatetime ) }
 				, id{ stmt->createParameter( "Id", db::FieldType::eSint32 ) }
 			{
 				stmt->initialise();
@@ -82,6 +95,7 @@ namespace test_parser
 
 			db::StatementPtr stmt;
 			db::Parameter * status{};
+			db::Parameter * castorDate{};
 			db::Parameter * id{};
 		};
 		
@@ -89,8 +103,9 @@ namespace test_parser
 		{
 			UpdateTestIgnoreResult() = default;
 			explicit UpdateTestIgnoreResult( db::Connection & connection )
-				: stmt{ connection.createStatement( "UPDATE Test SET IgnoreResult=? WHERE Id=?;" ) }
+				: stmt{ connection.createStatement( "UPDATE Test SET IgnoreResult=?, CastorDate=? WHERE Id=?;" ) }
 				, status{ stmt->createParameter( "Status", db::FieldType::eSint32 ) }
+				, castorDate{ stmt->createParameter( "CastorDate", db::FieldType::eDatetime ) }
 				, id{ stmt->createParameter( "Id", db::FieldType::eSint32 ) }
 			{
 				stmt->initialise();
@@ -98,6 +113,7 @@ namespace test_parser
 
 			db::StatementPtr stmt;
 			db::Parameter * status{};
+			db::Parameter * castorDate{};
 			db::Parameter * id{};
 		};
 
