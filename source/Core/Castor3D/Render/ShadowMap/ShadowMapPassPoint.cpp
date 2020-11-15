@@ -101,7 +101,6 @@ namespace castor3d
 	void ShadowMapPassPoint::doUpdateUbos( CpuUpdater & updater )
 	{
 		m_viewport.updateFar( updater.light->getFarPlane() );
-		updater.light->getPointLight()->updateShadow( updater.index );
 		auto position = updater.light->getParent()->getDerivedPosition();
 		doUpdateShadowMatrices( position, m_matrices );
 

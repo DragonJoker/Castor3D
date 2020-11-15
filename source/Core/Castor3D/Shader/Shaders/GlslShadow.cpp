@@ -139,8 +139,8 @@ namespace castor3d
 
 			if ( checkFlag( m_shadowOptions.enabled, SceneFlag::eShadowPoint ) )
 			{
-				m_writer.declSampledImage< FImgCubeRgba32 >( MapNormalDepthPoint, index++, 1u );
-				m_writer.declSampledImage< FImgCubeRg32 >( MapVariancePoint, index++, 1u );
+				m_writer.declSampledImage< FImgCubeArrayRgba32 >( MapNormalDepthPoint, index++, 1u );
+				m_writer.declSampledImage< FImgCubeArrayRg32 >( MapVariancePoint, index++, 1u );
 
 				doDeclareGetRandom();
 				doDeclareGetShadowOffset();
@@ -149,7 +149,7 @@ namespace castor3d
 				doDeclareChebyshevUpperBound();
 			}
 
-			doDeclareComputeOnePointShadow();
+			doDeclareComputePointShadow();
 		}
 
 		void Shadow::declareSpot( uint32_t & index )
@@ -271,25 +271,6 @@ namespace castor3d
 		{
 			return m_getLightSpacePosition( lightMatrix
 				, worldSpacePosition );
-		}
-
-		Float Shadow::computeOnePoint( Int const & shadowType
-			, Vec2 const & shadowOffsets
-			, Vec2 const & shadowVariance
-			, Vec3 const & worldSpacePosition
-			, Vec3 const & lightDirection
-			, Vec3 const & normal
-			, sdw::Float const & farPlane
-			, sdw::Int const & index )const
-		{
-			return m_computeOnePoint( shadowType
-				, shadowOffsets
-				, shadowVariance
-				, worldSpacePosition
-				, lightDirection
-				, normal
-				, farPlane
-				, index );
 		}
 
 		void Shadow::doDeclareGetRandom()
@@ -707,7 +688,7 @@ namespace castor3d
 					, Vec3 const & lightPosition
 					, Vec3 const & normal
 					, Float const & farPlane
-					, Int const & index )
+					, Int const & shadowMapIndex )
 				{
 					if ( checkFlag( m_shadowOptions.enabled, SceneFlag::eShadowPoint ) )
 					{
@@ -747,7 +728,7 @@ namespace castor3d
 									{
 										moments = c3d_mapVariancePoint
 											.lod( vec4( vertexToLight + vec3( x, y, z )
-												, m_writer.cast< Float >( index ) )
+												, m_writer.cast< Float >( shadowMapIndex ) )
 											, 0.0_f );
 										shadowFactor += m_chebyshevUpperBound( moments
 											, depth
@@ -801,7 +782,7 @@ namespace castor3d
 										for ( int k = 0; k < samples; ++k )
 										{
 											shadowMapDepth = c3d_mapNormalDepthPoint.sample( vec4( vertexToLight + vec3( x, y, z )
-													, m_writer.cast< Float >( index ) ) ).w();
+													, m_writer.cast< Float >( shadowMapIndex ) ) ).w();
 											shadowFactor += step( depth - bias, shadowMapDepth );
 											numSamplesUsed += 1.0_f;
 											z += inc;
@@ -821,7 +802,7 @@ namespace castor3d
 							{
 								auto shadowMapDepth = m_writer.declLocale( "shadowMapDepth"
 									, c3d_mapNormalDepthPoint.sample( vec4( vertexToLight
-										, m_writer.cast< Float >( index ) ) ).w() );
+										, m_writer.cast< Float >( shadowMapIndex ) ) ).w() );
 								result = step( depth - bias, shadowMapDepth );
 							}
 							FI;
@@ -842,7 +823,7 @@ namespace castor3d
 				, InVec3( m_writer, "lightPosition" )
 				, InVec3( m_writer, "normal" )
 				, InFloat( m_writer, "farPlane" )
-				, InInt( m_writer, "index" ) );
+				, InInt( m_writer, "shadowMapIndex" ) );
 		}
 
 		void Shadow::doDeclareVolumetric()
@@ -946,146 +927,6 @@ namespace castor3d
 				, InUInt{ m_writer, "lightVolumetricSteps" }
 				, InFloat{ m_writer, "lightVolumetricScattering" }
 				, output );
-		}
-
-		void Shadow::doDeclareComputeOnePointShadow()
-		{
-			m_computeOnePoint = m_writer.implementFunction< Float >( "computePointShadow"
-				, [this]( Int const & shadowType
-					, Vec2 const & shadowOffsets
-					, Vec2 const & shadowVariance
-					, Vec3 const & worldSpacePosition
-					, Vec3 const & lightPosition
-					, Vec3 const & normal
-					, Float const & farPlane
-					, Int shadowMapIndex )
-				{
-					if ( checkFlag( m_shadowOptions.enabled, SceneFlag::eShadowPoint ) )
-					{
-						auto c3d_mapNormalDepthPoint = m_writer.getVariable< SampledImageCubeRgba32 >( MapNormalDepthPoint );
-						auto c3d_mapVariancePoint = m_writer.getVariable< SampledImageCubeRg32 >( MapVariancePoint );
-						auto vertexToLight = m_writer.declLocale( "vertexToLight"
-							, worldSpacePosition - lightPosition );
-						auto depth = m_writer.declLocale( "depth"
-							, length( vertexToLight ) / farPlane );
-
-						IF( m_writer, shadowType == Int( int( ShadowType::eVariance ) ) )
-						{
-							auto shadowFactor = m_writer.declLocale( "shadowFactor"
-								, 0.0_f );
-							auto offset = m_writer.declLocale( "offset"
-								, 20.0_f * depth );
-							auto numSamplesUsed = m_writer.declLocale( "numSamplesUsed"
-								, 0.0_f );
-							auto x = m_writer.declLocale( "x"
-								, -offset );
-							auto y = m_writer.declLocale( "y"
-								, -offset );
-							auto z = m_writer.declLocale( "z"
-								, -offset );
-							auto const samples = 4;
-							auto inc = m_writer.declLocale( "inc"
-								, offset / ( samples * 0.5f ) );
-							auto moments = m_writer.declLocale< Vec2 >( "moments" );
-
-							for ( int i = 0; i < samples; ++i )
-							{
-								for ( int j = 0; j < samples; ++j )
-								{
-									for ( int k = 0; k < samples; ++k )
-									{
-										moments = c3d_mapVariancePoint.lod( vertexToLight + vec3( x, y, z )
-											, 0.0_f );
-										shadowFactor += m_chebyshevUpperBound( moments
-											, depth
-											, shadowVariance.x()
-											, shadowVariance.y() );
-										numSamplesUsed += 1.0_f;
-										z += inc;
-									}
-
-									y += inc;
-									z = -offset;
-								}
-
-								x += inc;
-								y = -offset;
-							}
-
-							m_writer.returnStmt( shadowFactor / numSamplesUsed );
-						}
-						ELSE
-						{
-							auto bias = m_writer.declLocale( "bias"
-								, m_getShadowOffset( normal
-									, vertexToLight
-									, shadowOffsets.x()
-									, shadowOffsets.y() ) );
-
-							IF( m_writer, shadowType == Int( int( ShadowType::ePCF ) ) )
-							{
-								auto shadowFactor = m_writer.declLocale( "shadowFactor"
-									, 0.0_f );
-								auto offset = m_writer.declLocale( "offset"
-									, 20.0_f * depth );
-								auto numSamplesUsed = m_writer.declLocale( "numSamplesUsed"
-									, 0.0_f );
-								auto x = m_writer.declLocale( "x"
-									, -offset );
-								auto y = m_writer.declLocale( "y"
-									, -offset );
-								auto z = m_writer.declLocale( "z"
-									, -offset );
-								auto const samples = 4;
-								auto inc = m_writer.declLocale( "inc"
-									, offset / ( samples * 0.5f ) );
-								auto shadowMapDepth = m_writer.declLocale< Float >( "shadowMapDepth" );
-
-								for ( int i = 0; i < samples; ++i )
-								{
-									for ( int j = 0; j < samples; ++j )
-									{
-										for ( int k = 0; k < samples; ++k )
-										{
-											shadowMapDepth = c3d_mapNormalDepthPoint.sample( vertexToLight + vec3( x, y, z ) ).w();
-											shadowFactor += step( depth - bias, shadowMapDepth );
-											numSamplesUsed += 1.0_f;
-											z += inc;
-										}
-
-										y += inc;
-										z = -offset;
-									}
-
-									x += inc;
-									y = -offset;
-								}
-
-								m_writer.returnStmt( shadowFactor / numSamplesUsed );
-							}
-							ELSE
-							{
-								auto shadowMapDepth = m_writer.declLocale( "shadowMapDepth"
-									, c3d_mapNormalDepthPoint.sample( vertexToLight ).w() );
-								m_writer.returnStmt( step( depth - bias, shadowMapDepth ) );
-							}
-							FI;
-						}
-						FI;
-					}
-					else
-					{
-						m_writer.returnStmt( 1.0_f );
-					}
-				}
-				, InInt{ m_writer, "shadowType" }
-				, InVec2( m_writer, "shadowOffsets" )
-				, InVec2( m_writer, "shadowVariance" )
-				, InVec3( m_writer, "worldSpacePosition" )
-				, InVec3( m_writer, "lightPosition" )
-				, InVec3( m_writer, "normal" )
-				, InFloat( m_writer, "farPlane" )
-				, InInt( m_writer, "shadowMapIndex" ) );
 		}
 	}
 }

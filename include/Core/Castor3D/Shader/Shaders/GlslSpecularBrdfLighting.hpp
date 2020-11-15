@@ -84,7 +84,6 @@ namespace castor3d
 			void doDeclareComputeDirectionalLight()override;
 			void doDeclareComputePointLight()override;
 			void doDeclareComputeSpotLight()override;
-			void doDeclareComputeOnePointLight()override;
 
 		public:
 			C3D_API static const castor::String Name;
@@ -113,14 +112,6 @@ namespace castor3d
 				, sdw::InInt
 				, FragmentInput
 				, OutputComponents & > m_computeSpot;
-			sdw::Function< sdw::Void
-				, InPointLight
-				, sdw::InVec3
-				, sdw::InVec3
-				, sdw::InFloat
-				, sdw::InInt
-				, FragmentInput
-				, OutputComponents & > m_computeOnePoint;
 		};
 	}
 }

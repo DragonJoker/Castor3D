@@ -80,14 +80,6 @@ namespace castor3d
 				, sdw::UInt const & lightVolumetricSteps
 				, sdw::Float const & lightVolumetricScattering
 				, OutputComponents & parentOutput )const;
-			C3D_API sdw::Float computeOnePoint( sdw::Int const & shadowType
-				, sdw::Vec2 const & shadowOffsets
-				, sdw::Vec2 const & shadowVariance
-				, sdw::Vec3 const & worldSpacePosition
-				, sdw::Vec3 const & lightDirection
-				, sdw::Vec3 const & normal
-				, sdw::Float const & farPlane
-				, sdw::Int const & index )const;
 			C3D_API sdw::Vec4 getLightSpacePosition( sdw::Mat4 const & lightMatrix
 				, sdw::Vec3 const & worldSpacePosition )const;
 
@@ -109,7 +101,6 @@ namespace castor3d
 			void doDeclareComputeSpotShadow();
 			void doDeclareComputePointShadow();
 			void doDeclareVolumetric();
-			void doDeclareComputeOnePointShadow();
 
 		private:
 			sdw::ShaderWriter & m_writer;
@@ -198,15 +189,6 @@ namespace castor3d
 				, sdw::InUInt
 				, sdw::InFloat
 				, OutputComponents & > m_computeVolumetric;
-			sdw::Function< sdw::Float
-				, sdw::InInt
-				, sdw::InVec2
-				, sdw::InVec2
-				, sdw::InVec3
-				, sdw::InVec3
-				, sdw::InVec3
-				, sdw::InFloat
-				, sdw::InInt > m_computeOnePoint;
 		};
 	}
 }

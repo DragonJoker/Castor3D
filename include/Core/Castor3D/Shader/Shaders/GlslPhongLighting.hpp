@@ -80,7 +80,6 @@ namespace castor3d
 			void doDeclareComputeDirectionalLight()override;
 			void doDeclareComputePointLight()override;
 			void doDeclareComputeSpotLight()override;
-			void doDeclareComputeOnePointLight()override;
 
 			void doComputeLight( Light const & light
 				, sdw::Vec3 const & worldEye
@@ -120,13 +119,6 @@ namespace castor3d
 				, sdw::InInt
 				, FragmentInput
 				, OutputComponents & > m_computeSpot;
-			sdw::Function< sdw::Void
-				, InPointLight
-				, sdw::InVec3
-				, sdw::InFloat
-				, sdw::InInt
-				, FragmentInput
-				, OutputComponents & > m_computeOnePoint;
 		};
 	}
 }

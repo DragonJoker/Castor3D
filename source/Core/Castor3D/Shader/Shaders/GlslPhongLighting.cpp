@@ -45,7 +45,7 @@ namespace castor3d
 
 			FOR( m_writer, Int, dir, begin, dir < end, ++dir )
 			{
-				m_computeDirectional( getDirectionalLight( dir )
+				compute( getDirectionalLight( dir )
 					, worldEye
 					, shininess
 					, receivesShadows
@@ -59,7 +59,7 @@ namespace castor3d
 
 			FOR( m_writer, Int, point, begin, point < end, ++point )
 			{
-				m_computePoint( getPointLight( point )
+				compute( getPointLight( point )
 					, worldEye
 					, shininess
 					, receivesShadows
@@ -73,7 +73,7 @@ namespace castor3d
 
 			FOR( m_writer, Int, spot, begin, spot < end, ++spot )
 			{
-				m_computeSpot( getSpotLight( spot )
+				compute( getSpotLight( spot )
 					, worldEye
 					, shininess
 					, receivesShadows
@@ -105,7 +105,7 @@ namespace castor3d
 			, FragmentInput const & fragmentIn
 			, OutputComponents & parentOutput )const
 		{
-			m_computeOnePoint( light
+			m_computePoint( light
 				, worldEye
 				, shininess
 				, receivesShadows
@@ -634,97 +634,6 @@ namespace castor3d
 #endif
 				}
 				, InSpotLight( m_writer, "light" )
-				, InVec3( m_writer, "worldEye" )
-				, InFloat( m_writer, "shininess" )
-				, InInt( m_writer, "receivesShadows" )
-				, FragmentInput{ m_writer }
-				, output );
-		}
-
-		void PhongLightingModel::doDeclareComputeOnePointLight()
-		{
-			OutputComponents output{ m_writer };
-			m_computeOnePoint = m_writer.implementFunction< sdw::Void >( "computePointLight"
-				, [this]( PointLight const & light
-					, Vec3 const & worldEye
-					, Float const & shininess
-					, Int const & receivesShadows
-					, FragmentInput const & fragmentIn
-					, OutputComponents & parentOutput )
-				{
-					OutputComponents output
-					{
-						m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) ),
-						m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
-					};
-					auto lightToVertex = m_writer.declLocale( "lightToVertex"
-						, fragmentIn.m_worldVertex - light.m_position.xyz() );
-					auto distance = m_writer.declLocale( "distance"
-						, length( lightToVertex ) );
-					auto lightDirection = m_writer.declLocale( "lightDirection"
-						, normalize( lightToVertex ) );
-
-					if ( m_shadowModel->isEnabled() )
-					{
-						IF( m_writer, light.m_lightBase.m_shadowType != Int( int( ShadowType::eNone ) ) )
-						{
-							auto shadowFactor = m_writer.declLocale( "shadowFactor"
-								, max( 1.0_f - m_writer.cast< Float >( receivesShadows )
-									, m_shadowModel->computeOnePoint( light.m_lightBase.m_shadowType
-										, light.m_lightBase.m_shadowOffsets
-										, light.m_lightBase.m_shadowVariance
-										, fragmentIn.m_worldVertex
-										, light.m_position.xyz()
-										, fragmentIn.m_worldNormal
-										, light.m_lightBase.m_farPlane
-										, light.m_lightBase.m_index ) ) );
-
-							IF( m_writer, shadowFactor > 0.0_f )
-							{
-								doComputeLight( light.m_lightBase
-									, worldEye
-									, lightDirection
-									, shininess
-									, fragmentIn
-									, output );
-								output.m_diffuse *= shadowFactor;
-								output.m_specular *= shadowFactor;
-							}
-							FI;
-						}
-						ELSE
-						{
-							doComputeLight( light.m_lightBase
-								, worldEye
-								, lightDirection
-								, shininess
-								, fragmentIn
-								, output );
-						}
-						FI;
-					}
-					else
-					{
-						doComputeLight( light.m_lightBase
-							, worldEye
-							, lightDirection
-							, shininess
-							, fragmentIn
-							, output );
-					}
-
-					auto attenuation = m_writer.declLocale( "attenuation"
-						, sdw::fma( light.m_attenuation.z()
-							, distance * distance
-							, sdw::fma( light.m_attenuation.y()
-								, distance
-								, light.m_attenuation.x() ) ) );
-					output.m_diffuse = output.m_diffuse / attenuation;
-					output.m_specular = output.m_specular / attenuation;
-					parentOutput.m_diffuse = max( vec3( 0.0_f ), output.m_diffuse );
-					parentOutput.m_specular = max( vec3( 0.0_f ), output.m_specular );
-				}
-				, InPointLight( m_writer, "light" )
 				, InVec3( m_writer, "worldEye" )
 				, InFloat( m_writer, "shininess" )
 				, InInt( m_writer, "receivesShadows" )

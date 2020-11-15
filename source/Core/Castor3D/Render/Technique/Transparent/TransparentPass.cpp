@@ -588,9 +588,9 @@ namespace castor3d
 				, prvMtxModel * curPosition );
 			curPosition = curMtxModel * curPosition;
 			outWorldPosition = curPosition.xyz();
-			prvPosition = c3d_prvView * prvPosition;
-			curPosition = c3d_curView * curPosition;
-			outViewPosition = curPosition.xyz();
+			prvPosition = c3d_prvViewProj * prvPosition;
+			curPosition = c3d_curViewProj * curPosition;
+			outViewPosition = ( c3d_curView * vec4( outWorldPosition, 1.0f ) ).xyz();
 
 			outNormal = normalize( mtxNormal * v4Normal.xyz() );
 			outTangent = normalize( mtxNormal * v4Tangent.xyz() );
@@ -605,8 +605,6 @@ namespace castor3d
 			}
 
 			outInstance = writer.cast< UInt >( in.instanceIndex );
-			prvPosition = c3d_projection * prvPosition;
-			curPosition = c3d_projection * curPosition;
 
 			auto tbn = writer.declLocale( "tbn", transpose( mat3( outTangent, outBitangent, outNormal ) ) );
 			outTangentSpaceFragPosition = tbn * outWorldPosition;

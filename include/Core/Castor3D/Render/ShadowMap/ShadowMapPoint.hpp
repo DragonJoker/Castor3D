@@ -54,10 +54,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API ashes::ImageView const & getView( SmTexture texture
-			, uint32_t index )const override;
-
-		inline TextureUnit const & getTexture()const
+		TextureUnit const & getTexture()const
 		{
 			return m_result[SmTexture::eVariance];
 		}

@@ -194,7 +194,7 @@ namespace castor3d
 			m_writer.inlineComment( "// LIGHTING" );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			doDeclareModel();
-			doDeclareComputeOnePointLight();
+			doDeclareComputePointLight();
 		}
 
 		void LightingModel::declareSpotModel( bool lightUbo

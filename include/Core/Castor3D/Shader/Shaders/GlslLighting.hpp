@@ -81,7 +81,6 @@ namespace castor3d
 			virtual void doDeclareComputeDirectionalLight() = 0;
 			virtual void doDeclareComputePointLight() = 0;
 			virtual void doDeclareComputeSpotLight() = 0;
-			virtual void doDeclareComputeOnePointLight() = 0;
 
 		public:
 			C3D_API static uint32_t const UboBindingPoint;
