@@ -77,10 +77,6 @@ namespace castor3d
 		 */
 		void doUpdatePipeline( RenderPipeline & pipeline )override;
 		/**
-		 *\copydoc		castor3d::RenderPass::doCreateDepthStencilState
-		 */
-		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
-		/**
 		 *\copydoc		castor3d::RenderPass::doCreateBlendState
 		 */
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;

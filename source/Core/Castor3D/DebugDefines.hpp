@@ -5,7 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_DebugDefines_H___
 
 #define C3D_UseWeightedBlendedRendering 1
-#define C3D_UseDeferredRendering 0
+#define C3D_UseDeferredRendering 1
 
 #if C3D_UseDeferredRendering
 #define C3D_UseDepthPrepass 1
