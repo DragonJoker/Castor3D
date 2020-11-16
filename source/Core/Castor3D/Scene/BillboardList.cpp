@@ -3,7 +3,7 @@
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
-#include "Castor3D/Render/RenderLoop.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
 using namespace castor;

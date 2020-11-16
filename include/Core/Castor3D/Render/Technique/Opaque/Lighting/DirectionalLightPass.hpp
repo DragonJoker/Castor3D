@@ -91,20 +91,14 @@ namespace castor3d
 		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
 		 *\param[in]	hasShadows	Dit si les ombres sont activées pour cette passe d'éclairage.
 		 */
-		DirectionalLightPass( Engine & engine
-			, RenderDevice const & device
+		DirectionalLightPass( RenderDevice const & device
 			, castor::String const & suffix
-			, LightPassResult const & lpResult
-			, GpInfoUbo const & gpInfoUbo
-			, bool hasShadows = false
-			, bool generatesIndirect = false );
-		DirectionalLightPass( Engine & engine
-			, RenderDevice const & device
-			, LightPassResult const & lpResult
-			, GpInfoUbo const & gpInfoUbo
-			, bool hasShadows = false
-			, bool generatesIndirect = false )
-			: DirectionalLightPass{ engine, device, castor::String{}, lpResult, gpInfoUbo, hasShadows }
+			, LightPassConfig const & lpConfig );
+		DirectionalLightPass( RenderDevice const & device
+			, LightPassConfig const & lpConfig )
+			: DirectionalLightPass{ device
+				, castor::String{}
+				, lpConfig }
 		{
 		}
 		/**

@@ -1,4 +1,4 @@
-#include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LpvConfig.hpp"
+#include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LpvConfig.hpp"
 
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"

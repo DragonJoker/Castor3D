@@ -1,7 +1,7 @@
 #include "Castor3D/Render/Technique/Transparent/WeightedBlendRendering.hpp"
 
 #include "Castor3D/Render/RenderInfo.hpp"
-#include "Castor3D/Render/RenderLoop.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Fog.hpp"

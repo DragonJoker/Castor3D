@@ -14,7 +14,6 @@
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Overlay/PanelOverlay.hpp"
 #include "Castor3D/Overlay/TextOverlay.hpp"
-#include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -31,6 +30,8 @@
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 
 #include <ShaderWriter/Source.hpp>
+
+CU_ImplementCUSmartPtr( castor3d, OverlayRenderer )
 
 using namespace castor;
 

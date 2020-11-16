@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Cache/CacheModule.hpp"
 #include "Castor3D/Overlay/OverlayModule.hpp"
+#include "Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
@@ -237,6 +238,8 @@ namespace castor3d
 		/**@{*/
 		C3D_API MaterialType getMaterialsType()const;
 		C3D_API bool needsGlobalIllumination()const;
+		C3D_API bool needsGlobalIllumination( LightType ltType
+			, GlobalIlluminationType giType )const;
 
 		inline castor::BoundingBox const & getBoundingBox()const
 		{
@@ -427,6 +430,7 @@ namespace castor3d
 		castor::BoundingBox m_boundingBox;
 		std::atomic_bool m_needsGlobalIllumination;
 		std::array< std::atomic_bool, size_t( LightType::eCount ) > m_hasShadows;
+		std::array< std::set< GlobalIlluminationType >, size_t( LightType::eCount ) > m_giTypes;
 		std::atomic_bool m_hasAnyShadows;
 
 	public:

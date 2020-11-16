@@ -7,6 +7,7 @@
 #include "Castor3D/Cache/CameraCache.hpp"
 #include "Castor3D/Cache/GeometryCache.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
+#include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/SceneCache.hpp"
 #include "Castor3D/Cache/SceneNodeCache.hpp"
 #include "Castor3D/Cache/ShaderCache.hpp"

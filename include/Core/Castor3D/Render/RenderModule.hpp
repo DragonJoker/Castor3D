@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
+#include "Castor3D/Scene/Light/LightModule.hpp"
 #include "Castor3D/Material/Pass/PassModule.hpp"
 #include "Castor3D/Material/Texture/TextureModule.hpp"
 #include "Castor3D/Shader/ShaderModule.hpp"
@@ -491,6 +492,44 @@ namespace castor3d
 	CU_DeclareMap( castor::String, RenderWindowSPtr, RenderWindowPtrStr );
 
 	using RenderQueueArray = std::vector< std::reference_wrapper< RenderQueue > >;
+
+	struct CpuUpdater
+	{
+		CpuUpdater()
+		{
+		}
+
+		RenderQueueArray * queues{ nullptr };
+		CameraSPtr camera;
+		SceneNode const * node{ nullptr };
+		LightSPtr light;
+		uint32_t index{ 0u };
+		uint32_t combineIndex{ 0u };
+		castor::Point2f jitter;
+		castor::Milliseconds time;
+		castor::Milliseconds total;
+	};
+
+	struct GpuUpdater
+	{
+		explicit GpuUpdater( RenderDevice const & device
+			, RenderInfo & info )
+			: device{ device }
+			, info{ info }
+		{
+		}
+
+		RenderDevice const & device;
+		RenderInfo & info;
+		castor::Point2f jitter;
+		SceneSPtr scene;
+		CameraSPtr camera;
+		uint32_t index{ 0u };
+		RenderPassTimer * timer{ nullptr };
+		castor::Milliseconds time;
+		castor::Milliseconds total;
+	};
+
 	//@}
 }
 

@@ -1,5 +1,6 @@
 #include "Castor3D/Scene/Scene.hpp"
 
+#include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
 #include "Castor3D/Cache/BillboardCache.hpp"
 #include "Castor3D/Cache/CacheView.hpp"
@@ -7,6 +8,7 @@
 #include "Castor3D/Cache/GeometryCache.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Cache/ListenerCache.hpp"
+#include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/MeshCache.hpp"
 #include "Castor3D/Cache/OverlayCache.hpp"
 #include "Castor3D/Cache/ParticleSystemCache.hpp"
@@ -20,6 +22,7 @@
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
@@ -39,6 +42,7 @@
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
 #include <CastorUtils/Graphics/Font.hpp>
+#include <CastorUtils/Graphics/FontCache.hpp>
 
 using namespace castor;
 
@@ -864,11 +868,13 @@ namespace castor3d
 		bool needsGI = false;
 		bool hasAnyShadows = false;
 		std::array< bool, size_t( LightType::eCount ) > hasShadows{};
+		std::array< std::set< GlobalIlluminationType >, size_t( LightType::eCount ) > giTypes{};
 
-		m_lightCache->forEach( [&needsGI, &hasAnyShadows, &hasShadows]( Light const & light )
+		m_lightCache->forEach( [&giTypes , &needsGI, &hasAnyShadows, &hasShadows]( Light const & light )
 			{
 				if ( light.getGlobalIlluminationType() != GlobalIlluminationType::eNone )
 				{
+					giTypes[uint32_t( light.getLightType() )].insert( light.getGlobalIlluminationType() );
 					needsGI = true;
 				}
 
@@ -887,6 +893,16 @@ namespace castor3d
 				|| changed;
 			++i;
 		}
+
+		i = 0u;
+		for ( auto & types : m_giTypes )
+		{
+			changed = types != giTypes[i]
+				|| changed;
+			types = giTypes[i];
+			++i;
+		}
+
 		changed = m_hasAnyShadows.exchange( hasAnyShadows ) != hasAnyShadows
 			|| changed;
 		changed = m_needsGlobalIllumination.exchange( needsGI ) != needsGI
@@ -1054,6 +1070,12 @@ namespace castor3d
 	bool Scene::needsGlobalIllumination()const
 	{
 		return m_needsGlobalIllumination;
+	}
+
+	bool Scene::needsGlobalIllumination( LightType ltType
+		, GlobalIlluminationType giType )const
+	{
+		return m_giTypes[size_t( ltType )].end() != m_giTypes[size_t( ltType )].find( giType );
 	}
 
 	void Scene::setMaterialsType( MaterialType value )

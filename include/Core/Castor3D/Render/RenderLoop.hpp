@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Event/Frame/FrameEventModule.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 
-#include "Castor3D/Overlay/DebugOverlays.hpp"
+#include "Castor3D/Overlay/OverlayModule.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 
 #include <CastorUtils/Multithreading/ThreadPool.hpp>
@@ -18,43 +18,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	struct CpuUpdater
-	{
-		CpuUpdater()
-		{
-		}
-
-		RenderQueueArray * queues{ nullptr };
-		CameraSPtr camera;
-		SceneNode const * node{ nullptr };
-		LightSPtr light;
-		uint32_t index{ 0u };
-		uint32_t combineIndex{ 0u };
-		castor::Point2f jitter;
-		castor::Milliseconds time;
-		castor::Milliseconds total;
-	};
-
-	struct GpuUpdater
-	{
-		explicit GpuUpdater( RenderDevice const & device
-			, RenderInfo & info )
-			: device{ device }
-			, info{ info }
-		{
-		}
-
-		RenderDevice const & device;
-		RenderInfo & info;
-		castor::Point2f jitter;
-		SceneSPtr scene;
-		CameraSPtr camera;
-		uint32_t index{ 0u };
-		RenderPassTimer * timer{ nullptr };
-		castor::Milliseconds time;
-		castor::Milliseconds total;
-	};
-
 	class RenderLoop
 		: public castor::OwnedBy< Engine >
 	{

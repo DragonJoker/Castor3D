@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_ReflectiveShadowMapGIModule_H___
 
 #include "Castor3D/Render/Technique/Opaque/OpaqueModule.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/LightingModule.hpp"
 
 #include "Castor3D/Scene/Light/LightModule.hpp"
 
@@ -78,6 +79,14 @@ namespace castor3d
 
 	CU_DeclareSmartPtr( RsmGIPass );
 	CU_DeclareSmartPtr( RsmInterpolatePass );
+
+	struct RsmLightPassConfig
+	{
+		LightPassConfig base;
+		LightCache const & lightCache;
+		OpaquePassResult const & gpResult;
+		ShadowMapResult const & smResult;
+	};
 
 	//@}
 	//@}

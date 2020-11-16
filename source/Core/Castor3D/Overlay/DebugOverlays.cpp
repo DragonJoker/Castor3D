@@ -13,6 +13,8 @@
 
 #include <iomanip>
 
+CU_ImplementCUSmartPtr( castor3d, DebugOverlays )
+
 using namespace castor;
 
 namespace castor3d

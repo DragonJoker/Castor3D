@@ -1,4 +1,4 @@
-#include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LightPropagationPass.hpp"
+#include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationPass.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
@@ -37,6 +37,8 @@
 
 #include <numeric>
 #include <random>
+
+CU_ImplementCUSmartPtr( castor3d, LightPropagationPass );
 
 using namespace castor;
 

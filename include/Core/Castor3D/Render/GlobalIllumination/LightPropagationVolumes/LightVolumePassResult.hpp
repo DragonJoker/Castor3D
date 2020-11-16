@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_LightVolumePassResult_H___
 #define ___C3D_LightVolumePassResult_H___
 
-#include "LightVolumeGIModule.hpp"
+#include "LightPropagationVolumesModule.hpp"
 
 #include "Castor3D/Render/GBuffer.hpp"
 

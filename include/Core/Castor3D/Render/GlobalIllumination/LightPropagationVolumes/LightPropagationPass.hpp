@@ -4,15 +4,15 @@ See LICENSE file in root folder
 #ifndef ___C3D_LightPropagationPass_HPP___
 #define ___C3D_LightPropagationPass_HPP___
 
-#include "LightVolumeGIModule.hpp"
+#include "LightPropagationVolumesModule.hpp"
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
+#include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightVolumePassResult.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaqueModule.hpp"
-#include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LightVolumePassResult.hpp"
 #include "Castor3D/Render/Passes/RenderGrid.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"

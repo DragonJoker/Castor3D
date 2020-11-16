@@ -1,18 +1,18 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_GeometryInjectionPass_HPP___
-#define ___C3D_GeometryInjectionPass_HPP___
+#ifndef ___C3D_LightInjectionPass_HPP___
+#define ___C3D_LightInjectionPass_HPP___
 
-#include "LightVolumeGIModule.hpp"
+#include "LightPropagationVolumesModule.hpp"
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Cache/CacheModule.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
+#include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightVolumePassResult.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaqueModule.hpp"
-#include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LightVolumePassResult.hpp"
 #include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"
 #include "Castor3D/Shader/ShaderModule.hpp"
@@ -35,7 +35,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	class GeometryInjectionPass
+	class LightInjectionPass
 		: public castor::Named
 	{
 	public:
@@ -53,16 +53,15 @@ namespace castor3d
 		 *\param[in]	linearisedDepth	Le tampon de profondeur linéarisé.
 		 *\param[in]	scene			Le tampon de scène.
 		 */
-		C3D_API GeometryInjectionPass( Engine & engine
+		C3D_API LightInjectionPass( Engine & engine
 			, RenderDevice const & device
 			, castor::String const & prefix
 			, LightCache const & lightCache
 			, LightType lightType
 			, ShadowMapResult const & smResult
-			, GpInfoUbo const & gpInfoUbo
 			, LpvConfigUbo const & lpvConfigUbo
-			, TextureUnit const & result
-			, uint32_t gridSize
+			, LightVolumePassResult const & result
+			, uint32_t size
 			, uint32_t layerIndex );
 		/**
 		 *\~english
@@ -80,22 +79,11 @@ namespace castor3d
 		 */
 		C3D_API void accept( PipelineVisitorBase & visitor );
 
-		static TextureUnit createResult( Engine & engine
-			, RenderDevice const & device
-			, castor::String const & prefix
-			, uint32_t index
-			, uint32_t gridSize );
-
 	private:
 		Engine & m_engine;
 		RenderDevice const & m_device;
-		LightCache const & m_lightCache;
-		ShadowMapResult const & m_smResult;
-		GpInfoUbo const & m_gpInfoUbo;
-		LpvConfigUbo const & m_lpvConfigUbo;
-		TextureUnit const & m_result;
-		LightType m_lightType;
 		RenderPassTimerSPtr m_timer;
+		uint32_t m_rsmSize;
 
 		ashes::VertexBufferPtr< NonTexturedQuad::Vertex > m_vertexBuffer;
 		ashes::DescriptorSetLayoutPtr m_descriptorSetLayout;

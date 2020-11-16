@@ -1,6 +1,7 @@
 #include "Castor3D/Scene/SceneFileParser.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp"
 #include "Castor3D/Scene/SceneFileParser_Parsers.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 

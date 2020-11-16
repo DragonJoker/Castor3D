@@ -66,22 +66,14 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	PointLightPass::PointLightPass( Engine & engine
-		, RenderDevice const & device
+	PointLightPass::PointLightPass( RenderDevice const & device
 		, castor::String const & suffix
-		, LightPassResult const & lpResult
-		, GpInfoUbo const & gpInfoUbo
-		, bool hasShadows
-		, bool generatesIndirect )
-		: MeshLightPass{ engine
-			, device
+		, LightPassConfig const & lpConfig )
+		: MeshLightPass{ device
 			, cuT( "Point" ) + suffix
-			, lpResult
-			, gpInfoUbo
-			, LightType::ePoint
-			, hasShadows
-			, generatesIndirect }
-		, m_ubo{ makeUniformBuffer< Config >( *engine.getRenderSystem()
+			, lpConfig
+			, LightType::ePoint }
+		, m_ubo{ makeUniformBuffer< Config >( device.renderSystem
 			, 1u
 			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
@@ -89,7 +81,7 @@ namespace castor3d
 	{
 		m_ubo->initialise( device );
 		m_baseUbo = m_ubo.get();
-		log::trace << cuT( "Created PointLightPass" ) << ( hasShadows ? castor::String{ cuT( "Shadow" ) } : cuEmptyString ) << std::endl;
+		log::trace << cuT( "Created PointLightPass" ) << ( lpConfig.hasShadows ? castor::String{ cuT( "Shadow" ) } : cuEmptyString ) << std::endl;
 	}
 
 	PointLightPass::~PointLightPass()

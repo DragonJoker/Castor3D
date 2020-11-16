@@ -7,9 +7,9 @@ See LICENSE file in root folder
 #include "LightModule.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 
-#include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LpvConfig.hpp"
+#include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LpvConfig.hpp"
 #include "Castor3D/Render/Technique/Opaque/ReflectiveShadowMapGI/RsmConfig.hpp"
-#include "Castor3D/Render/Technique/Opaque/Lighting/LightingModule.hpp"
+#include "Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp"
 #include "Castor3D/Scene/MovableObject.hpp"
 #include "Castor3D/Scene/Light/LightCategory.hpp"
 

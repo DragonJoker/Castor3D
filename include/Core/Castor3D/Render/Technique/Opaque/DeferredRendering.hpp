@@ -54,10 +54,15 @@ namespace castor3d
 			, ShadowMapResult const & smDirectionalResult
 			, ShadowMapResult const & smPointResult
 			, ShadowMapResult const & smSpotResult
+			, LightVolumePassResult const & lpvResult
 			, castor::Size const & size
 			, Scene & scene
 			, HdrConfigUbo const & hdrConfigUbo
 			, GpInfoUbo const & gpInfoUbo
+			, LightPropagationVolumesLightType const & lpvs
+			, LayeredLightPropagationVolumesLightType const & llpvs
+			, LightPropagationVolumesGLightType const & lpvgs
+			, LayeredLightPropagationVolumesGLightType const & llpvgs
 			, SsaoConfig & ssaoConfig );
 		/**
 		 *\~english

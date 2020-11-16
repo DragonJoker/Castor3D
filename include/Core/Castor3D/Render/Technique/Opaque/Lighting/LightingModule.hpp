@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_LightingModule_H___
 
 #include "Castor3D/Render/Technique/Opaque/OpaqueModule.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include "Castor3D/Scene/Light/LightModule.hpp"
 
@@ -21,31 +22,6 @@ namespace castor3d
 	/**@name Lighting */
 	//@{
 
-	/**
-	*\~english
-	*\brief
-	*	Enumerator of supported global illumination algorithms.
-	*\~french
-	*\brief
-	*	Enumération des algorithmes de global illumination supportés.
-	*/
-	enum class GlobalIlluminationType
-		: uint8_t
-	{
-		eNone,
-		// Reflective shadow maps.
-		eRsm,
-		// Light Propagation Volumes without geometry injection.
-		eLpv,
-		// Light Propagation Volumes with geometry injection.
-		eLpvG,
-		// Layered Light Propagation Volumes without geometry injection.
-		eLayeredLpv,
-		// Layered Light Propagation Volumes with geometry injection.
-		eLayeredLpvG,
-		CU_ScopedEnumBounds( eNone ),
-	};
-	castor::String getName( GlobalIlluminationType giType );
 	/**
 	*\~english
 	*\brief
@@ -227,6 +203,15 @@ namespace castor3d
 		, float max );
 
 	CU_DeclareSmartPtr( LightPass );
+
+	struct LightPassConfig
+	{
+		LightPassResult const & lpResult;
+		GpInfoUbo const & gpInfoUbo;
+		bool hasShadows{ false };
+		bool generatesIndirect{ false };
+	};
+
 	//@}
 	//@}
 	//@}

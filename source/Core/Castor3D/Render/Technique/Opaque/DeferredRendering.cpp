@@ -1,12 +1,13 @@
 #include "Castor3D/Render/Technique/Opaque/DeferredRendering.hpp"
 
+#include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/SceneCache.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/OverlayCache.hpp"
 #include "Castor3D/Cache/PluginCache.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
-#include "Castor3D/Render/RenderLoop.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/Passes/LineariseDepthPass.hpp"
 #include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
@@ -91,10 +92,15 @@ namespace castor3d
 		, ShadowMapResult const & smDirectionalResult
 		, ShadowMapResult const & smPointResult
 		, ShadowMapResult const & smSpotResult
+		, LightVolumePassResult const & lpvResult
 		, Size const & size
 		, Scene & scene
 		, HdrConfigUbo const & hdrConfigUbo
 		, GpInfoUbo const & gpInfoUbo
+		, LightPropagationVolumesLightType const & lpvs
+		, LayeredLightPropagationVolumesLightType const & llpvs
+		, LightPropagationVolumesGLightType const & lpvgs
+		, LayeredLightPropagationVolumesGLightType const & llpvgs
 		, SsaoConfig & ssaoConfig )
 		: m_engine{ engine }
 		, m_device{ device }
@@ -124,9 +130,14 @@ namespace castor3d
 			, smDirectionalResult
 			, smPointResult
 			, smSpotResult
+			, lpvResult
 			, depthTexture.getTexture()->getDefaultView().getTargetView()
 			, m_opaquePass.getSceneUbo()
-			, m_gpInfoUbo ) }
+			, m_gpInfoUbo
+			, lpvs
+			, llpvs
+			, lpvgs
+			, llpvgs ) }
 		, m_subsurfaceScattering{ std::make_unique< SubsurfaceScatteringPass >( m_engine
 			, m_device
 			, m_gpInfoUbo

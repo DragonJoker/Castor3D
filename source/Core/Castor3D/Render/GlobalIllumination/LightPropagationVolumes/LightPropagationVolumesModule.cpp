@@ -1,19 +1,15 @@
-#include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LightVolumePassResult.hpp"
+#include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumesModule.hpp"
 
-#include "Castor3D/Engine.hpp"
-#include "Castor3D/Cache/SamplerCache.hpp"
-#include "Castor3D/Material/Texture/Sampler.hpp"
-#include "Castor3D/Material/Texture/TextureLayout.hpp"
-#include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
+#include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp"
+#include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumes.hpp"
 
-#include <ashespp/Command/CommandBuffer.hpp>
-
-using namespace castor;
+CU_ImplementCUSmartPtr( castor3d, LightPropagationVolumes )
+CU_ImplementCUSmartPtr( castor3d, LightPropagationVolumesG )
+CU_ImplementCUSmartPtr( castor3d, LayeredLightPropagationVolumes )
+CU_ImplementCUSmartPtr( castor3d, LayeredLightPropagationVolumesG )
 
 namespace castor3d
 {
-	//*********************************************************************************************
-
 	castor::String getTextureName( LpvTexture texture
 		, std::string const & infix )
 	{
@@ -22,7 +18,7 @@ namespace castor3d
 
 	castor::String getName( LpvTexture texture )
 	{
-		static std::array< String, size_t( LpvTexture::eCount ) > Values
+		static std::array< castor::String, size_t( LpvTexture::eCount ) > Values
 		{
 			{
 				cuT( "R" ),
@@ -88,23 +84,4 @@ namespace castor3d
 		return Values[size_t( texture )];
 	}
 
-	//*********************************************************************************************
-
-	LightVolumePassResult::LightVolumePassResult( Engine & engine
-		, RenderDevice const & device
-		, castor::String const & prefix
-		, uint32_t size )
-		: GBufferT< LpvTexture >
-		{
-			engine,
-			prefix + cuT( "LPVResult" ),
-			{ nullptr, nullptr, nullptr },
-			0u,
-			{ size, size, size },
-		}
-	{
-		initialise( device );
-	}
-
-	//*********************************************************************************************
 }

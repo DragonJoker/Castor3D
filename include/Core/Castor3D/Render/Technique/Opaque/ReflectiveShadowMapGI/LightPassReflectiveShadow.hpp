@@ -42,26 +42,17 @@ namespace castor3d
 		 *\param[in]	lpResult	Le résultat de la passe d'éclairage.
 		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
 		 */
-		LightPassReflectiveShadow( Engine & engine
-			, RenderDevice const & device
-			, LightCache const & lightCache
-			, OpaquePassResult const & gpResult
-			, ShadowMapResult const & smResult
-			, LightPassResult const & lpResult
-			, GpInfoUbo const & gpInfoUbo )
-			: LightPassShadow< LtType >{ engine
-				, device
+		LightPassReflectiveShadow( RenderDevice const & device
+			, RsmLightPassConfig const & lpConfig )
+			: LightPassShadow< LtType >{ device
 				, "ReflectiveShadow"
-				, lpResult
-				, gpInfoUbo
-				, true }
-			, m_gpResult{ gpResult }
-			, m_smResult{ smResult }
-			, m_lpResult{ lpResult }
-			, m_gpInfoUbo{ gpInfoUbo }
+				, { lpConfig.base.lpResult, lpConfig.base.gpInfoUbo, true, true } }
+			, m_gpResult{ lpConfig.gpResult }
+			, m_smResult{ lpConfig.smResult }
+			, m_lpResult{ lpConfig.base.lpResult }
+			, m_gpInfoUbo{ lpConfig.base.gpInfoUbo }
 		{
 		}
-
 
 		void initialise( Scene const & scene
 			, OpaquePassResult const & gp

@@ -8,6 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
+#include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumesModule.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
@@ -229,17 +230,24 @@ namespace castor3d
 
 	private:
 		void doCreateShadowMaps();
+		void doCreateLpv( RenderDevice const & device );
 		void doInitialiseShadowMaps( RenderDevice const & device );
+		void doInitialiseLpv( RenderDevice const & device );
 		void doInitialiseBackgroundPass( RenderDevice const & device );
 		void doInitialiseDepthPass( RenderDevice const & device );
 		void doInitialiseOpaquePass( RenderDevice const & device );
 		void doInitialiseTransparentPass( RenderDevice const & device );
 		void doCleanupShadowMaps( RenderDevice const & device );
+		void doCleanupLpv( RenderDevice const & device );
 		void doUpdateShadowMaps( CpuUpdater & updater );
 		void doUpdateShadowMaps( GpuUpdater & updater );
+		void doUpdateLpv( CpuUpdater & updater );
+		void doUpdateLpv( GpuUpdater & updater );
 		void doUpdateParticles( CpuUpdater & updater );
 		void doUpdateParticles( GpuUpdater & updater );
 		ashes::Semaphore const & doRenderShadowMaps( RenderDevice const & device
+			, ashes::Semaphore const & semaphore );
+		ashes::Semaphore const & doRenderLpv( RenderDevice const & device
 			, ashes::Semaphore const & semaphore );
 		ashes::Semaphore const & doRenderEnvironmentMaps( RenderDevice const & device
 			, ashes::Semaphore const & semaphore );
@@ -277,6 +285,11 @@ namespace castor3d
 		ShadowMapUPtr m_spotShadowMap;
 		ShadowMapLightTypeArray m_allShadowMaps;
 		ShadowMapLightTypeArray m_activeShadowMaps;
+		LightVolumePassResultUPtr m_lpvResult;
+		LightPropagationVolumesLightType m_lightPropagationVolumes;
+		LayeredLightPropagationVolumesLightType m_layeredLightPropagationVolumes;
+		LightPropagationVolumesGLightType m_lightPropagationVolumesG;
+		LayeredLightPropagationVolumesGLightType m_layeredLightPropagationVolumesG;
 		ashes::SemaphorePtr m_signalFinished;
 		ashes::RenderPassPtr m_bgRenderPass;
 		ashes::FrameBufferPtr m_bgFrameBuffer;

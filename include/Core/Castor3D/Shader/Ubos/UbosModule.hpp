@@ -409,6 +409,8 @@ namespace castor3d
 		std::array< castor::Point4ui, 3u > indices;
 	};
 
+	CU_DeclareVector( LpvConfigUbo, LpvConfigUbo );
+
 	//@}
 	//@}
 }

@@ -8,6 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
+#include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumesModule.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaqueResolvePass.hpp"
@@ -71,9 +72,14 @@ namespace castor3d
 			, ShadowMapResult const & smDirectionalResult
 			, ShadowMapResult const & smPointResult
 			, ShadowMapResult const & smSpotResult
+			, LightVolumePassResult const & lpvResult
 			, ashes::ImageView const & depthView
 			, SceneUbo & sceneUbo
-			, GpInfoUbo const & gpInfoUbo );
+			, GpInfoUbo const & gpInfoUbo
+			, LightPropagationVolumesLightType const & lpvs
+			, LayeredLightPropagationVolumesLightType const & llpvs
+			, LightPropagationVolumesGLightType const & lpvgs
+			, LayeredLightPropagationVolumesGLightType const & llpvgs );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -148,9 +154,14 @@ namespace castor3d
 		ShadowMapResult const & m_smDirectionalResult;
 		ShadowMapResult const & m_smPointResult;
 		ShadowMapResult const & m_smSpotResult;
+		LightVolumePassResult const & m_lpvResult;
 		ashes::ImageView const & m_depthView;
 		SceneUbo & m_sceneUbo;
 		GpInfoUbo const & m_gpInfoUbo;
+		LightPropagationVolumesLightType const & m_lpvs;
+		LayeredLightPropagationVolumesLightType const & m_llpvs;
+		LightPropagationVolumesGLightType const & m_lpvgs;
+		LayeredLightPropagationVolumesGLightType const & m_llpvgs;
 		castor::Size const m_size;
 		LightPassResult m_result;
 		LightPasses m_lightPasses;

@@ -85,14 +85,10 @@ namespace castor3d
 		 *\param[in]	type		Le type de source lumineuse.
 		 *\param[in]	hasShadows	Dit si les ombres sont activées pour cette passe d'éclairage.
 		 */
-		MeshLightPass( Engine & engine
-			, RenderDevice const & device
+		MeshLightPass( RenderDevice const & device
 			, castor::String const & suffix
-			, LightPassResult const & lpResult
-			, GpInfoUbo const & gpInfoUbo
-			, LightType type
-			, bool hasShadows
-			, bool generatesIndirect );
+			, LightPassConfig const & lpConfig
+			, LightType type );
 		/**
 		 *\~english
 		 *\brief		Destructor.

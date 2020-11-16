@@ -70,22 +70,14 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	SpotLightPass::SpotLightPass( Engine & engine
-		, RenderDevice const & device
+	SpotLightPass::SpotLightPass( RenderDevice const & device
 		, castor::String const & suffix
-		, LightPassResult const & lpResult
-		, GpInfoUbo const & gpInfoUbo
-		, bool hasShadows
-		, bool generatesIndirect )
-		: MeshLightPass{ engine
-			, device
+		, LightPassConfig const & lpConfig )
+		: MeshLightPass{ device
 			, cuT( "Spot" ) + suffix
-			, lpResult
-			, gpInfoUbo
-			, LightType::eSpot
-			, hasShadows
-			, generatesIndirect }
-		, m_ubo{ makeUniformBuffer< Config >( *m_engine.getRenderSystem()
+			, lpConfig
+			, LightType::eSpot }
+		, m_ubo{ makeUniformBuffer< Config >( device.renderSystem
 			, 1u
 			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
@@ -93,7 +85,7 @@ namespace castor3d
 	{
 		m_ubo->initialise( device );
 		m_baseUbo = m_ubo.get();
-		log::trace << cuT( "Created SpotLightPass" ) << ( hasShadows ? castor::String{ cuT( "Shadow" ) } : cuEmptyString ) << std::endl;
+		log::trace << cuT( "Created SpotLightPass" ) << ( lpConfig.hasShadows ? castor::String{ cuT( "Shadow" ) } : cuEmptyString ) << std::endl;
 	}
 
 	SpotLightPass::~SpotLightPass()

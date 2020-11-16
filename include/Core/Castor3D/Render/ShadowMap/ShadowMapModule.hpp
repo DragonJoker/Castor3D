@@ -130,8 +130,8 @@ namespace castor3d
 	*/
 	class ShadowMapPassSpot;
 
-	CU_DeclareSmartPtr( ShadowMap );
-	CU_DeclareSmartPtr( ShadowMapPass );
+	CU_DeclareCUSmartPtr( castor3d, ShadowMap, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, ShadowMapPass, C3D_API );
 
 	using ShadowMapRefIds = std::pair< std::reference_wrapper< ShadowMap >, UInt32Array >;
 	using ShadowMapRefArray = std::vector< ShadowMapRefIds >;
@@ -151,21 +151,6 @@ namespace castor3d
 
 	//@}
 	//@}
-}
-
-namespace castor
-{
-	template<>
-	struct Deleter< castor3d::ShadowMap >
-	{
-		void operator()( castor3d::ShadowMap * pointer )noexcept;
-	};
-
-	template<>
-	struct Deleter< castor3d::ShadowMapPass >
-	{
-		void operator()( castor3d::ShadowMapPass * pointer )noexcept;
-	};
 }
 
 #endif

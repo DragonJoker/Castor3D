@@ -10,9 +10,12 @@
 #include "Castor3D/Cache/ParticleSystemCache.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
-#include "Castor3D/Render/RenderLoop.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
+#include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp"
+#include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumes.hpp"
+#include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightVolumePassResult.hpp"
 #include "Castor3D/Render/Passes/DepthPass.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 #include "Castor3D/Render/Technique/ForwardRenderTechniquePass.hpp"
@@ -314,6 +317,8 @@ namespace castor3d
 			auto & maps = m_renderTarget.getScene()->getEnvironmentMaps();
 
 			doInitialiseShadowMaps( device );
+			doCreateLpv( device );
+			doInitialiseLpv( device );
 #if C3D_UseDepthPrepass
 			doInitialiseDepthPass( device );
 #endif
@@ -344,6 +349,7 @@ namespace castor3d
 		m_particleTimer.reset();
 		m_weightedBlendRendering.reset();
 		m_deferredRendering.reset();
+		doCleanupLpv( device );
 		doCleanupShadowMaps( device );
 		m_transparentPass->cleanup( device );
 		m_opaquePass->cleanup( device );
@@ -402,6 +408,7 @@ namespace castor3d
 		}
 
 		doUpdateShadowMaps( updater );
+		doUpdateLpv( updater );
 		doUpdateParticles( updater );
 
 		auto & camera = *m_renderTarget.getCamera();
@@ -427,6 +434,7 @@ namespace castor3d
 		updater.camera = m_renderTarget.getCamera();
 
 		doInitialiseShadowMaps( updater.device );
+		doInitialiseLpv( updater.device );
 
 		for ( auto & map : m_renderTarget.getScene()->getEnvironmentMaps() )
 		{
@@ -460,6 +468,7 @@ namespace castor3d
 		}
 
 		doUpdateShadowMaps( updater );
+		doUpdateLpv( updater );
 		doUpdateParticles( updater );
 	}
 
@@ -480,6 +489,7 @@ namespace castor3d
 #endif
 		semaphore = &doRenderEnvironmentMaps( device, *semaphore );
 		semaphore = &doRenderShadowMaps( device, *semaphore );
+		semaphore = &doRenderLpv( device, *semaphore );
 
 		// Render part
 		//semaphore = &m_voxelizer->render( *semaphore );
@@ -527,12 +537,45 @@ namespace castor3d
 	void RenderTechnique::doCreateShadowMaps()
 	{
 		auto & scene = *m_renderTarget.getScene();
-		m_directionalShadowMap = std::make_unique< ShadowMapDirectional >( scene );
+		m_directionalShadowMap = castor::makeUniqueDerived< ShadowMap, ShadowMapDirectional >( scene );
 		m_allShadowMaps[size_t( LightType::eDirectional )].emplace_back( std::ref( *m_directionalShadowMap ), UInt32Array{} );
-		m_spotShadowMap = std::make_unique< ShadowMapSpot >( scene );
+		m_spotShadowMap = castor::makeUniqueDerived< ShadowMap, ShadowMapSpot >( scene );
 		m_allShadowMaps[size_t( LightType::eSpot )].emplace_back( std::ref( *m_spotShadowMap ), UInt32Array{} );
-		m_pointShadowMap = std::make_unique< ShadowMapPoint >( scene );
+		m_pointShadowMap = castor::makeUniqueDerived< ShadowMap, ShadowMapPoint >( scene );
 		m_allShadowMaps[size_t( LightType::ePoint )].emplace_back( std::ref( *m_pointShadowMap ), UInt32Array{} );
+	}
+
+	void RenderTechnique::doCreateLpv( RenderDevice const & device )
+	{
+		auto & scene = *m_renderTarget.getScene();
+		m_lpvResult = castor::makeUnique< LightVolumePassResult >( *getEngine()
+			, device
+			, cuEmptyString
+			, getEngine()->getLpvGridSize() );
+
+		for ( auto i = uint32_t( LightType::eMin ); i < uint32_t( LightType::eCount ); ++i )
+		{
+			m_lightPropagationVolumes[i] = castor::makeUnique< LightPropagationVolumes >( scene
+				, LightType( i )
+				, device
+				, m_allShadowMaps[i].front().first.get().getShadowPassResult()
+				, *m_lpvResult );
+			m_layeredLightPropagationVolumes[i] = castor::makeUnique< LayeredLightPropagationVolumes >( scene
+				, LightType( i )
+				, device
+				, m_allShadowMaps[i].front().first.get().getShadowPassResult()
+				, *m_lpvResult );
+			m_lightPropagationVolumesG[i] = castor::makeUnique< LightPropagationVolumesG >( scene
+				, LightType( i )
+				, device
+				, m_allShadowMaps[i].front().first.get().getShadowPassResult()
+				, *m_lpvResult );
+			m_layeredLightPropagationVolumesG[i] = castor::makeUnique< LayeredLightPropagationVolumesG >( scene
+				, LightType( i )
+				, device
+				, m_allShadowMaps[i].front().first.get().getShadowPassResult()
+				, *m_lpvResult );
+		}
 	}
 
 	void RenderTechnique::doInitialiseShadowMaps( RenderDevice const & device )
@@ -540,6 +583,17 @@ namespace castor3d
 		m_directionalShadowMap->initialise( device );
 		m_spotShadowMap->initialise( device );
 		m_pointShadowMap->initialise( device );
+	}
+
+	void RenderTechnique::doInitialiseLpv( RenderDevice const & device )
+	{
+		for ( auto i = uint32_t( LightType::eMin ); i < uint32_t( LightType::eCount ); ++i )
+		{
+			m_lightPropagationVolumes[i]->initialise();
+			m_lightPropagationVolumesG[i]->initialise();
+			m_layeredLightPropagationVolumes[i]->initialise();
+			m_layeredLightPropagationVolumesG[i]->initialise();
+		}
 	}
 
 	void RenderTechnique::doInitialiseBackgroundPass( RenderDevice const & device )
@@ -690,10 +744,15 @@ namespace castor3d
 			, m_directionalShadowMap->getShadowPassResult()
 			, m_pointShadowMap->getShadowPassResult()
 			, m_spotShadowMap->getShadowPassResult()
+			, *m_lpvResult
 			, m_renderTarget.getSize()
 			, *m_renderTarget.getScene()
 			, m_renderTarget.getHdrConfigUbo()
 			, m_gpInfoUbo
+			, m_lightPropagationVolumes
+			, m_layeredLightPropagationVolumes
+			, m_lightPropagationVolumesG
+			, m_layeredLightPropagationVolumesG
 			, m_ssaoConfig );
 
 #else
@@ -763,6 +822,17 @@ namespace castor3d
 		m_pointShadowMap->cleanup( device );
 	}
 
+	void RenderTechnique::doCleanupLpv( RenderDevice const & device )
+	{
+		for ( auto i = uint32_t( LightType::eMin ); i < uint32_t( LightType::eCount ); ++i )
+		{
+			m_lightPropagationVolumes[i]->cleanup();
+			m_lightPropagationVolumesG[i]->cleanup();
+			m_layeredLightPropagationVolumes[i]->cleanup();
+			m_layeredLightPropagationVolumesG[i]->cleanup();
+		}
+	}
+
 	void RenderTechnique::doUpdateShadowMaps( CpuUpdater & updater )
 	{
 		auto & scene = *m_renderTarget.getScene();
@@ -806,6 +876,21 @@ namespace castor3d
 				}
 			}
 		}
+	}
+
+	void RenderTechnique::doUpdateLpv( CpuUpdater & updater )
+	{
+		for ( auto i = uint32_t( LightType::eMin ); i < uint32_t( LightType::eCount ); ++i )
+		{
+			m_lightPropagationVolumes[i]->update( updater );
+			m_lightPropagationVolumesG[i]->update( updater );
+			m_layeredLightPropagationVolumes[i]->update( updater );
+			m_layeredLightPropagationVolumesG[i]->update( updater );
+		}
+	}
+
+	void RenderTechnique::doUpdateLpv( GpuUpdater & updater )
+	{
 	}
 	
 	void RenderTechnique::doUpdateParticles( CpuUpdater & updater )
@@ -868,6 +953,22 @@ namespace castor3d
 					}
 				}
 			}
+		}
+
+		return *result;
+	}
+
+	ashes::Semaphore const & RenderTechnique::doRenderLpv( RenderDevice const & device
+		, ashes::Semaphore const & semaphore )
+	{
+		ashes::Semaphore const * result = &semaphore;
+
+		for ( auto i = uint32_t( LightType::eMin ); i < uint32_t( LightType::eCount ); ++i )
+		{
+			result = &m_lightPropagationVolumes[i]->render( *result );
+			result = &m_lightPropagationVolumesG[i]->render( *result );
+			result = &m_layeredLightPropagationVolumes[i]->render( *result );
+			result = &m_layeredLightPropagationVolumesG[i]->render( *result );
 		}
 
 		return *result;

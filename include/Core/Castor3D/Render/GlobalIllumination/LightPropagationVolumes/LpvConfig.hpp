@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_LpvConfig_H___
 #define ___C3D_LpvConfig_H___
 
-#include "LightVolumeGIModule.hpp"
+#include "LightPropagationVolumesModule.hpp"
 
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 
