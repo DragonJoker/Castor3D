@@ -30,7 +30,8 @@ namespace castor3d
 		, castor::Size const & size
 		, Scene const & scene
 		, HdrConfigUbo const & hdrConfigUbo
-		, GpInfoUbo const & gpInfoUbo )
+		, GpInfoUbo const & gpInfoUbo
+		, LightVolumePassResult const & lpvResult )
 		: m_engine{ engine }
 		, m_transparentPass{ transparentPass }
 		, m_size{ size }
@@ -38,7 +39,7 @@ namespace castor3d
 		, m_finalCombinePass{ engine, device, m_size, m_transparentPass.getSceneUbo(), hdrConfigUbo, gpInfoUbo, m_transparentPassResult, colourView }
 	{
 		m_transparentPass.initialiseRenderPass( device, m_transparentPassResult );
-		m_transparentPass.initialise( device, m_size );
+		m_transparentPass.initialise( device, m_size, &lpvResult );
 	}
 
 	void WeightedBlendRendering::update( CpuUpdater & updater )

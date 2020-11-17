@@ -50,10 +50,11 @@ namespace castor3d
 		}
 
 	public:
+		C3D_API static const uint32_t BindingPoint;
 		C3D_API static const std::string LayeredLpvConfig;
 		C3D_API static const std::string AllMinVolumeCorners;
 		C3D_API static const std::string AllCellSizes;
-		C3D_API static const std::string GridSize;
+		C3D_API static const std::string GridSizes;
 
 	private:
 		RenderDevice const * m_device{};
@@ -61,15 +62,15 @@ namespace castor3d
 	};
 }
 
-#define UBO_LAYERED_LPVGRIDCONFIG( writer, binding, set )\
+#define UBO_LAYERED_LPVGRIDCONFIG( writer, binding, set, enabled )\
 	sdw::Ubo layeredLpvConfig{ writer\
 		, castor3d::LayeredLpvGridConfigUbo::LayeredLpvConfig\
 		, binding\
 		, set\
 		, ast::type::MemoryLayout::eStd140 };\
-	auto c3d_allMinVolumeCorners = layeredLpvConfig.declMember< Vec4 >( castor3d::LayeredLpvGridConfigUbo::AllMinVolumeCorners, 4u );\
-	auto c3d_allCellSizes = layeredLpvConfig.declMember< Vec4 >( castor3d::LayeredLpvGridConfigUbo::AllCellSizes );\
-	auto c3d_gridSize = layeredLpvConfig.declMember< UVec4 >( castor3d::LayeredLpvGridConfigUbo::GridSize );\
+	auto c3d_allMinVolumeCorners = layeredLpvConfig.declMember< Vec4 >( castor3d::LayeredLpvGridConfigUbo::AllMinVolumeCorners, 4u, enabled );\
+	auto c3d_allCellSizes = layeredLpvConfig.declMember< Vec4 >( castor3d::LayeredLpvGridConfigUbo::AllCellSizes, enabled );\
+	auto c3d_gridSizes = layeredLpvConfig.declMember< UVec4 >( castor3d::LayeredLpvGridConfigUbo::GridSizes, enabled );\
 	layeredLpvConfig.end()
 
 #endif

@@ -118,9 +118,13 @@ namespace castor3d
 		eShadowSpot = eShadowBegin << 2,
 		eShadowEnd = eShadowSpot,
 		eShadowAny = eShadowSpot | eShadowPoint | eShadowDirectional,
+		//!\~english	Light Propagation Volumes enabling.
+		//!\~french		Activation des Light Propagation Volumes.
+		eLpvGI = 0x01 << 6,
+		eLayeredLpvGI = 0x01 << 7,
 		//!\~english	All flags.
 		//!\~french		Tous les indicateurs.
-		eAll = 0x3F,
+		eAll = 0xFF,
 	};
 	CU_ImplementFlags( SceneFlag )
 	/**

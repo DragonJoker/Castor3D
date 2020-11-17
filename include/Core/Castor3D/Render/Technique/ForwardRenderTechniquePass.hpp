@@ -37,7 +37,9 @@ namespace castor3d
 			, SceneCuller & culler
 			, bool environment
 			, SceneNode const * ignored
-			, SsaoConfig const & config );
+			, SsaoConfig const & config
+			, LpvGridConfigUbo const * lpvConfigUbo = nullptr
+			, LayeredLpvGridConfigUbo const * llpvConfigUbo = nullptr );
 		/**
 		 *\~english
 		 *\brief		Constructor for transparent nodes.
@@ -64,7 +66,9 @@ namespace castor3d
 			, bool oit
 			, bool environment
 			, SceneNode const * ignored
-			, SsaoConfig const & config );
+			, SsaoConfig const & config
+			, LpvGridConfigUbo const * lpvConfigUbo = nullptr
+			, LayeredLpvGridConfigUbo const * llpvConfigUbo = nullptr );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -113,24 +117,6 @@ namespace castor3d
 		C3D_API void doCleanup( RenderDevice const & device )override;
 
 	private:
-		/**
-		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
-		 */
-		C3D_API ashes::VkDescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
-		 */
-		C3D_API void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
-			, uint32_t & index
-			, BillboardListRenderNode & nodes
-			, ShadowMapLightTypeArray const & shadowMaps )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
-		 */
-		C3D_API void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
-			, uint32_t & index
-			, SubmeshRenderNode & nodes
-			, ShadowMapLightTypeArray const & shadowMaps )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
 		 */

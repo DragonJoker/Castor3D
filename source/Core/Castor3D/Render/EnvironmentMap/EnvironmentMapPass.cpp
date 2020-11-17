@@ -118,7 +118,7 @@ namespace castor3d
 			, getOwner()->getDepthView()
 			, size
 			, true );
-		m_opaquePass->initialise( device, size );
+		m_opaquePass->initialise( device, size, nullptr );
 
 		// Create custom background pass.
 		ashes::ImageViewCRefArray attaches;
@@ -152,7 +152,7 @@ namespace castor3d
 			, getOwner()->getDepthView()
 			, size
 			, false );
-		m_transparentPass->initialise( device, size );
+		m_transparentPass->initialise( device, size, nullptr );
 
 		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( name );
 		m_finished = device->createSemaphore( name );

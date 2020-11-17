@@ -46,7 +46,8 @@ namespace castor3d
 			, castor::Size const & size
 			, Scene const & scene
 			, HdrConfigUbo const & hdrConfigUbo
-			, GpInfoUbo const & gpInfoUbo );
+			, GpInfoUbo const & gpInfoUbo
+			, LightVolumePassResult const & lpvResult );
 		/**
 		 *\~english
 		 *\brief		Renders opaque nodes.

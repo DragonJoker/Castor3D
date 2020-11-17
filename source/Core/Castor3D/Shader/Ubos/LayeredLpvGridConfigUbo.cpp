@@ -8,10 +8,11 @@ CU_ImplementCUSmartPtr( castor3d, LayeredLpvGridConfigUbo )
 
 namespace castor3d
 {
+	uint32_t const LayeredLpvGridConfigUbo::BindingPoint = 13;
 	std::string const LayeredLpvGridConfigUbo::LayeredLpvConfig = "LayeredLpvConfig";
 	std::string const LayeredLpvGridConfigUbo::AllMinVolumeCorners = "c3d_allMinVolumeCorners";
 	std::string const LayeredLpvGridConfigUbo::AllCellSizes = "c3d_allCellSizes";
-	std::string const LayeredLpvGridConfigUbo::GridSize = "c3d_gridSize";
+	std::string const LayeredLpvGridConfigUbo::GridSizes = "c3d_gridSizes";
 
 	LayeredLpvGridConfigUbo::LayeredLpvGridConfigUbo()
 	{

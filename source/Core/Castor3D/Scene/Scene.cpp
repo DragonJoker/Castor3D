@@ -619,11 +619,19 @@ namespace castor3d
 				, SceneNode & parent
 				, LightType lightType )
 				{
-					return std::make_shared< Light >( name
+					auto result = std::make_shared< Light >( name
 						, *this
 						, parent
 						, *m_lightFactory
 						, lightType );
+					m_lightConnections.emplace( name
+						, result->onChanged.connect( [this]( Light const & light )
+						{
+							doUpdateLightDependent( light.getLightType()
+								, light.isShadowProducer()
+								, light.getExpectedGlobalIlluminationType() );
+						} ) );
+					return result;
 				}
 			, dummy
 			, dummy
@@ -792,6 +800,7 @@ namespace castor3d
 	void Scene::initialise()
 	{
 		m_lightCache->initialise();
+		doUpdateLightsDependent();
 		m_initialised = true;
 	}
 
@@ -865,50 +874,7 @@ namespace castor3d
 			}
 		} );
 
-		bool needsGI = false;
-		bool hasAnyShadows = false;
-		std::array< bool, size_t( LightType::eCount ) > hasShadows{};
-		std::array< std::set< GlobalIlluminationType >, size_t( LightType::eCount ) > giTypes{};
-
-		m_lightCache->forEach( [&giTypes , &needsGI, &hasAnyShadows, &hasShadows]( Light const & light )
-			{
-				if ( light.getGlobalIlluminationType() != GlobalIlluminationType::eNone )
-				{
-					giTypes[uint32_t( light.getLightType() )].insert( light.getGlobalIlluminationType() );
-					needsGI = true;
-				}
-
-				if ( light.isShadowProducer() )
-				{
-					hasAnyShadows = true;
-					hasShadows[size_t( light.getLightType() )] = true;
-				}
-			} );
-
-		size_t i = 0u;
-		bool changed = false;
-		for ( auto & shadows : m_hasShadows )
-		{
-			changed = shadows.exchange( hasShadows[i] ) != hasShadows[i]
-				|| changed;
-			++i;
-		}
-
-		i = 0u;
-		for ( auto & types : m_giTypes )
-		{
-			changed = types != giTypes[i]
-				|| changed;
-			types = giTypes[i];
-			++i;
-		}
-
-		changed = m_hasAnyShadows.exchange( hasAnyShadows ) != hasAnyShadows
-			|| changed;
-		changed = m_needsGlobalIllumination.exchange( needsGI ) != needsGI
-			|| changed;
-
-		if ( changed )
+		if ( doUpdateLightsDependent() )
 		{
 			onChanged( *this );
 		}
@@ -1014,6 +980,26 @@ namespace castor3d
 		if ( m_hasShadows[size_t( LightType::eSpot )] )
 		{
 			result |= SceneFlag::eShadowSpot;
+		}
+
+		if ( needsGlobalIllumination( LightType::eDirectional, GlobalIlluminationType::eLpv )
+			|| needsGlobalIllumination( LightType::eDirectional, GlobalIlluminationType::eLpvG )
+			|| needsGlobalIllumination( LightType::ePoint, GlobalIlluminationType::eLpv )
+			|| needsGlobalIllumination( LightType::ePoint, GlobalIlluminationType::eLpvG )
+			|| needsGlobalIllumination( LightType::eSpot, GlobalIlluminationType::eLpv )
+			|| needsGlobalIllumination( LightType::eSpot, GlobalIlluminationType::eLpvG ) )
+		{
+			result |= SceneFlag::eLpvGI;
+		}
+
+		if ( needsGlobalIllumination( LightType::eDirectional, GlobalIlluminationType::eLayeredLpv )
+			|| needsGlobalIllumination( LightType::eDirectional, GlobalIlluminationType::eLayeredLpvG )
+			|| needsGlobalIllumination( LightType::ePoint, GlobalIlluminationType::eLayeredLpv )
+			|| needsGlobalIllumination( LightType::ePoint, GlobalIlluminationType::eLayeredLpvG )
+			|| needsGlobalIllumination( LightType::eSpot, GlobalIlluminationType::eLayeredLpv )
+			|| needsGlobalIllumination( LightType::eSpot, GlobalIlluminationType::eLayeredLpvG ) )
+		{
+			result |= SceneFlag::eLpvGI;
 		}
 
 		return result;
@@ -1188,6 +1174,70 @@ namespace castor3d
 			cache.unlock();
 			m_dirtyMaterials = false;
 		}
+	}
+
+	bool Scene::doUpdateLightDependent( LightType lightType
+		, bool shadowProducer
+		, GlobalIlluminationType globalIllumination )
+	{
+		auto changed = m_hasShadows[size_t( lightType )] != shadowProducer
+			|| m_giTypes[size_t( lightType )].find( globalIllumination ) == m_giTypes[size_t( lightType )].end();
+
+		if ( changed )
+		{
+			m_hasShadows[size_t( lightType )] = shadowProducer;
+			m_giTypes[size_t( lightType )].insert( globalIllumination );
+			onChanged( *this );
+		}
+
+		return changed;
+	}
+
+	bool Scene::doUpdateLightsDependent()
+	{
+		bool needsGI = false;
+		bool hasAnyShadows = false;
+		std::array< bool, size_t( LightType::eCount ) > hasShadows{};
+		std::array< std::set< GlobalIlluminationType >, size_t( LightType::eCount ) > giTypes{};
+
+		m_lightCache->forEach( [&giTypes, &needsGI, &hasAnyShadows, &hasShadows]( Light const & light )
+			{
+				if ( light.getExpectedGlobalIlluminationType() != GlobalIlluminationType::eNone )
+				{
+					giTypes[uint32_t( light.getLightType() )].insert( light.getExpectedGlobalIlluminationType() );
+					needsGI = true;
+				}
+
+				if ( light.isExpectedShadowProducer() )
+				{
+					hasAnyShadows = true;
+					hasShadows[size_t( light.getLightType() )] = true;
+				}
+			} );
+
+		size_t i = 0u;
+		bool changed = false;
+		for ( auto & shadows : m_hasShadows )
+		{
+			changed = shadows.exchange( hasShadows[i] ) != hasShadows[i]
+				|| changed;
+			++i;
+		}
+
+		i = 0u;
+		for ( auto & types : m_giTypes )
+		{
+			changed = types != giTypes[i]
+				|| changed;
+			types = giTypes[i];
+			++i;
+		}
+
+		changed = m_hasAnyShadows.exchange( hasAnyShadows ) != hasAnyShadows
+			|| changed;
+		changed = m_needsGlobalIllumination.exchange( needsGI ) != needsGI
+			|| changed;
+		return changed;
 	}
 
 	void Scene::onMaterialChanged( Material const & material )

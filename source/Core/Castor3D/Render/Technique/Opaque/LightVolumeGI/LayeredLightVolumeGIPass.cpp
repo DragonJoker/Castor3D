@@ -104,12 +104,10 @@ namespace castor3d
 
 			// Shader inputs
 			UBO_GPINFO( writer, GpInfoUboIdx, 0u );
-			UBO_LAYERED_LPVGRIDCONFIG( writer, LpvGridUboIdx, 0u );
+			UBO_LAYERED_LPVGRIDCONFIG( writer, LpvGridUboIdx, 0u, true );
 			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), DepthMapIdx, 0u );
 			auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), Data1MapIdx, 0u );
-			auto c3d_lpvAccumulatorR = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator" ), RLpvAccumIdx, 0u );
-			auto c3d_lpvAccumulatorG = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator" ), GLpvAccumIdx, 0u );
-			auto c3d_lpvAccumulatorB = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator" ), BLpvAccumIdx, 0u );
+			lpvGI.declare( uint32_t( RLpvAccumIdx ) );
 			auto in = writer.getIn();
 
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
@@ -147,10 +145,7 @@ namespace castor3d
 						// l3 is the finest
 						, c3d_allMinVolumeCorners[3].xyz()
 						, c3d_allCellSizes.w()
-						, vec3( c3d_gridSize.xyz() )
-						, c3d_lpvAccumulatorR
-						, c3d_lpvAccumulatorG
-						, c3d_lpvAccumulatorB );
+						, vec3( c3d_gridSizes.xyz() ) );
 				} );
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

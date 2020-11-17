@@ -19,6 +19,7 @@
 #include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
+#include "Castor3D/Shader/Shaders/GlslLpvGI.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslPhongReflection.hpp"
@@ -29,6 +30,8 @@
 #include "Castor3D/Shader/Shaders/GlslSpecularPbrReflection.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp"
+#include "Castor3D/Shader/Ubos/LpvGridConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelUbo.hpp"
@@ -51,7 +54,9 @@ namespace castor3d
 
 	TransparentPass::TransparentPass( MatrixUbo & matrixUbo
 		, SceneCuller & culler
-		, SsaoConfig const & config )
+		, SsaoConfig const & config
+		, LpvGridConfigUbo const & lpvConfigUbo
+		, LayeredLpvGridConfigUbo const & llpvConfigUbo )
 		: castor3d::RenderTechniquePass{ "Transparent"
 			, "Accumulation"
 			, matrixUbo
@@ -59,7 +64,9 @@ namespace castor3d
 			, true
 			, false
 			, nullptr
-			, config }
+			, config
+			, &lpvConfigUbo
+			, &llpvConfigUbo }
 	{
 	}
 
@@ -309,142 +316,6 @@ namespace castor3d
 		};
 	}
 
-	namespace
-	{
-		template< typename DataTypeT, typename InstanceTypeT >
-		void fillTexDescriptor( ashes::DescriptorSetLayout const & layout
-			, uint32_t & index
-			, ObjectRenderNode< DataTypeT, InstanceTypeT > & node
-			, ShadowMapLightTypeArray const & shadowMaps
-			, Scene const & scene )
-		{
-			auto & flags = node.pipeline.getFlags();
-			ashes::WriteDescriptorSetArray writes;
-
-			if ( !flags.textures.empty() )
-			{
-				node.passNode.fillDescriptor( layout
-					, index
-					, writes
-					, flags.textures );
-			}
-
-			if ( checkFlag( flags.passFlags, PassFlag::eReflection )
-				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) )
-			{
-				auto & envMap = scene.getEnvironmentMap( node.sceneNode );
-				bindTexture( envMap.getTexture().getTexture()->getDefaultView().getSampledView()
-					, envMap.getTexture().getSampler()->getSampler()
-					, writes
-					, index );
-			}
-
-			if ( checkFlag( flags.passFlags, PassFlag::eMetallicRoughness )
-				|| checkFlag( flags.passFlags, PassFlag::eSpecularGlossiness ) )
-			{
-				auto & background = *node.sceneNode.getScene()->getBackground();
-
-				if ( background.hasIbl() )
-				{
-					auto & ibl = background.getIbl();
-					bindTexture( ibl.getIrradianceTexture()
-						, ibl.getIrradianceSampler()
-						, writes
-						, index );
-					bindTexture( ibl.getPrefilteredEnvironmentTexture()
-						, ibl.getPrefilteredEnvironmentSampler()
-						, writes
-						, index );
-					bindTexture( ibl.getPrefilteredBrdfTexture()
-						, ibl.getPrefilteredBrdfSampler()
-						, writes
-						, index );
-				}
-			}
-
-			bindShadowMaps( node.pipeline.getFlags()
-				, shadowMaps
-				, writes
-				, index );
-			node.texDescriptorSet->setBindings( writes );
-		}
-	}
-
-	void TransparentPass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
-		, uint32_t & index
-		, BillboardListRenderNode & node
-		, ShadowMapLightTypeArray const & shadowMaps )
-	{
-		fillTexDescriptor( layout
-			, index
-			, node
-			, shadowMaps
-			, m_scene );
-	}
-
-	void TransparentPass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
-		, uint32_t & index
-		, SubmeshRenderNode & node
-		, ShadowMapLightTypeArray const & shadowMaps )
-	{
-		fillTexDescriptor( layout
-			, index
-			, node
-			, shadowMaps
-			, m_scene );
-	}
-
-	ashes::VkDescriptorSetLayoutBindingArray TransparentPass::doCreateTextureBindings( PipelineFlags const & flags )const
-	{
-		auto index = getMinTextureIndex();
-		ashes::VkDescriptorSetLayoutBindingArray textureBindings;
-
-		if ( !flags.textures.empty() )
-		{
-			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT
-				, uint32_t( flags.textures.size() ) ) );
-			index += uint32_t( flags.textures.size() );
-		}
-
-		if ( checkFlag( flags.passFlags, PassFlag::eReflection )
-			|| checkFlag( flags.passFlags, PassFlag::eRefraction ) )
-		{
-			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		}
-
-		if ( checkFlag( flags.passFlags, PassFlag::eMetallicRoughness )
-			|| checkFlag( flags.passFlags, PassFlag::eSpecularGlossiness ) )
-		{
-			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapIrradiance
-			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapPrefiltered
-			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapBrdf
-		}
-
-		for ( uint32_t j = 0u; j < uint32_t( LightType::eCount ); ++j )
-		{
-			// Depth
-			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-			// Variance
-			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		}
-
-		return textureBindings;
-	}
-
 	ShaderPtr TransparentPass::doGetVertexShaderSource( PipelineFlags const & flags )const
 	{
 		// Since their vertex attribute locations overlap, we must not have both set at the same time.
@@ -638,11 +509,6 @@ namespace castor3d
 		FragmentWriter writer;
 		auto & renderSystem = *getEngine()->getRenderSystem();
 
-		// UBOs
-		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
-		UBO_SCENE( writer, SceneUbo::BindingPoint, 0 );
-		UBO_MODEL( writer, ModelUbo::BindingPoint, 0 );
-
 		// Fragment Intputs
 		auto inWorldPosition = writer.declInput< Vec3 >( "inWorldPosition"
 			, RenderPass::VertexOutputs::WorldPositionLocation );
@@ -680,7 +546,12 @@ namespace castor3d
 			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		}
 
+		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
+		UBO_SCENE( writer, SceneUbo::BindingPoint, 0 );
+		UBO_MODEL( writer, ModelUbo::BindingPoint, 0 );
 		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
+		UBO_LPVGRIDCONFIG( writer, LpvGridConfigUbo::BindingPoint, 0u, checkFlag( flags.sceneFlags, SceneFlag::eLpvGI ) );
+		UBO_LAYERED_LPVGRIDCONFIG( writer, LayeredLpvGridConfigUbo::BindingPoint, 0u, checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI ) );
 
 		auto index = getMinTextureIndex();
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
@@ -695,6 +566,8 @@ namespace castor3d
 			, 1u
 			, ( checkFlag( flags.passFlags, PassFlag::eReflection )
 				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ) );
+		shader::LpvGI lpvGI{ writer };
+		lpvGI.declare( 1u, index, flags.sceneFlags );
 
 		auto in = writer.getIn();
 
@@ -841,8 +714,17 @@ namespace castor3d
 				}
 
 				auto colour = writer.declLocale( "colour"
-					, vec3( diffuse + lightSpecular + emissive + ambient ) );
-
+					, lpvGI.computeResult( flags.sceneFlags
+						, inWorldPosition
+						, normal
+						, c3d_minVolumeCorner
+						, c3d_cellSize
+						, c3d_gridSize
+						, c3d_allMinVolumeCorners
+						, c3d_allCellSizes
+						, c3d_gridSizes
+						, diffuse + specular + emissive
+						, ambient ) );
 				pxl_accumulation = utils.computeAccumulation( in.fragCoord.z()
 					, colour
 					, opacity
@@ -865,11 +747,6 @@ namespace castor3d
 		using namespace sdw;
 		FragmentWriter writer;
 		auto & renderSystem = *getEngine()->getRenderSystem();
-
-		// UBOs
-		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
-		UBO_SCENE( writer, SceneUbo::BindingPoint, 0 );
-		UBO_MODEL( writer, ModelUbo::BindingPoint, 0 );
 
 		// Fragment Intputs
 		auto inWorldPosition = writer.declInput< Vec3 >( "inWorldPosition"
@@ -908,7 +785,12 @@ namespace castor3d
 			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		}
 
+		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
+		UBO_SCENE( writer, SceneUbo::BindingPoint, 0 );
+		UBO_MODEL( writer, ModelUbo::BindingPoint, 0 );
 		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
+		UBO_LPVGRIDCONFIG( writer, LpvGridConfigUbo::BindingPoint, 0u, checkFlag( flags.sceneFlags, SceneFlag::eLpvGI ) );
+		UBO_LAYERED_LPVGRIDCONFIG( writer, LayeredLpvGridConfigUbo::BindingPoint, 0u, checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI ) );
 
 		auto index = getMinTextureIndex();
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
@@ -917,6 +799,7 @@ namespace castor3d
 			, std::max( 1u, uint32_t( flags.textures.size() ) )
 			, hasTextures ) );
 		index += uint32_t( flags.textures.size() );
+
 		auto c3d_mapEnvironment( writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapEnvironment"
 			, ( checkFlag( flags.passFlags, PassFlag::eReflection )
 				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ? index++ : 0u
@@ -932,6 +815,8 @@ namespace castor3d
 		auto c3d_mapBrdf = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBrdf"
 			, index++
 			, 1u );
+		shader::LpvGI lpvGI{ writer };
+		lpvGI.declare( 1u, index, flags.sceneFlags );
 
 		auto in = writer.getIn();
 
@@ -1128,8 +1013,17 @@ namespace castor3d
 				}
 
 				auto colour = writer.declLocale( "colour"
-					, vec3( lightDiffuse * albedo + lightSpecular + emissive + ambient ) );
-
+					, lpvGI.computeResult( flags.sceneFlags
+						, inWorldPosition
+						, normal
+						, c3d_minVolumeCorner
+						, c3d_cellSize
+						, c3d_gridSize
+						, c3d_allMinVolumeCorners
+						, c3d_allCellSizes
+						, c3d_gridSizes
+						, lightDiffuse * albedo + lightSpecular + emissive
+						, ambient ) );
 				pxl_accumulation = utils.computeAccumulation( in.fragCoord.z()
 					, colour
 					, opacity
@@ -1152,11 +1046,6 @@ namespace castor3d
 		using namespace sdw;
 		FragmentWriter writer;
 		auto & renderSystem = *getEngine()->getRenderSystem();
-
-		// UBOs
-		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
-		UBO_SCENE( writer, SceneUbo::BindingPoint, 0 );
-		UBO_MODEL( writer, ModelUbo::BindingPoint, 0 );
 
 		// Fragment Intputs
 		auto inWorldPosition = writer.declInput< Vec3 >( "inWorldPosition"
@@ -1195,7 +1084,12 @@ namespace castor3d
 			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		}
 
+		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
+		UBO_SCENE( writer, SceneUbo::BindingPoint, 0 );
+		UBO_MODEL( writer, ModelUbo::BindingPoint, 0 );
 		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
+		UBO_LPVGRIDCONFIG( writer, LpvGridConfigUbo::BindingPoint, 0u, checkFlag( flags.sceneFlags, SceneFlag::eLpvGI ) );
+		UBO_LAYERED_LPVGRIDCONFIG( writer, LayeredLpvGridConfigUbo::BindingPoint, 0u, checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI ) );
 
 		auto index = getMinTextureIndex();
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
@@ -1219,6 +1113,8 @@ namespace castor3d
 		auto c3d_mapBrdf = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBrdf"
 			, index++
 			, 1u );
+		shader::LpvGI lpvGI{ writer };
+		lpvGI.declare( 1u, index, flags.sceneFlags );
 
 		auto in = writer.getIn();
 
@@ -1414,8 +1310,17 @@ namespace castor3d
 				}
 
 				auto colour = writer.declLocale( "colour"
-					, vec3( lightDiffuse * albedo + lightSpecular + emissive + ambient ) );
-
+					, lpvGI.computeResult( flags.sceneFlags
+						, inWorldPosition
+						, normal
+						, c3d_minVolumeCorner
+						, c3d_cellSize
+						, c3d_gridSize
+						, c3d_allMinVolumeCorners
+						, c3d_allCellSizes
+						, c3d_gridSizes
+						, lightDiffuse * albedo + lightSpecular + emissive
+						, ambient ) );
 				pxl_accumulation = utils.computeAccumulation( in.fragCoord.z()
 					, colour
 					, opacity

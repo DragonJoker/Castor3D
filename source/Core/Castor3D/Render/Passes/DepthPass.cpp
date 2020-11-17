@@ -184,6 +184,8 @@ namespace castor3d
 		remFlag( flags.programFlags, ProgramFlag::eLighting );
 		remFlag( flags.programFlags, ProgramFlag::eInvertNormals );
 		remFlag( flags.passFlags, PassFlag::eAlphaBlending );
+		remFlag( flags.sceneFlags, SceneFlag::eLpvGI );
+		remFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI );
 		addFlag( flags.programFlags, ProgramFlag::eDepthPass );
 	}
 
@@ -203,10 +205,29 @@ namespace castor3d
 		, SubmeshRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
+		ashes::WriteDescriptorSetArray writes;
 		node.passNode.fillDescriptor( layout
 			, index
-			, *node.texDescriptorSet
+			, writes
 			, node.pipeline.getFlags().textures );
+		node.texDescriptorSet->setBindings( writes );
+	}
+
+	ashes::VkDescriptorSetLayoutBindingArray DepthPass::doCreateTextureBindings( PipelineFlags const & flags )const
+	{
+		auto index = getMinTextureIndex();
+		ashes::VkDescriptorSetLayoutBindingArray textureBindings;
+
+		if ( !flags.textures.empty() )
+		{
+			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT
+				, uint32_t( flags.textures.size() ) ) );
+			index += uint32_t( flags.textures.size() );
+		}
+
+		return textureBindings;
 	}
 
 	void DepthPass::doUpdatePipeline( RenderPipeline & pipeline )

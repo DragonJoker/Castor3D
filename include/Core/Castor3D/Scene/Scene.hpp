@@ -383,6 +383,10 @@ namespace castor3d
 		void doUpdateBoundingBox();
 		void doUpdateAnimations();
 		void doUpdateMaterials();
+		bool doUpdateLightDependent( LightType lightType
+			, bool shadowProducer
+			, GlobalIlluminationType globalIllumination );
+		bool doUpdateLightsDependent();
 		void onMaterialChanged( Material const & material );
 
 	public:
@@ -432,6 +436,7 @@ namespace castor3d
 		std::array< std::atomic_bool, size_t( LightType::eCount ) > m_hasShadows;
 		std::array< std::set< GlobalIlluminationType >, size_t( LightType::eCount ) > m_giTypes;
 		std::atomic_bool m_hasAnyShadows;
+		std::map< castor::String, OnLightChangedConnection > m_lightConnections;
 
 	public:
 		//!\~english	The cameras root node name.

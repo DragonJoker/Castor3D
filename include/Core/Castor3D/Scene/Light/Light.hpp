@@ -208,6 +208,11 @@ namespace castor3d
 			return m_currentShadowCaster;
 		}
 
+		inline bool isExpectedShadowProducer()const
+		{
+			return m_shadowCaster;
+		}
+
 		inline ShadowType getShadowType()const
 		{
 			return m_shadowType;
@@ -236,6 +241,11 @@ namespace castor3d
 		inline GlobalIlluminationType getGlobalIlluminationType()const
 		{
 			return m_currentGlobalIllumination;
+		}
+
+		inline GlobalIlluminationType getExpectedGlobalIlluminationType()const
+		{
+			return m_globalIllumination;
 		}
 
 		inline RsmConfig const & getRsmConfig()const

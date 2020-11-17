@@ -248,20 +248,26 @@ namespace castor3d
 			, renderTarget.getCuller()
 			, false
 			, nullptr
-			, ssaoConfig ) }
+			, ssaoConfig
+			, &m_lpvConfigUbo
+			, &m_llpvConfigUbo ) }
 #endif
 #if C3D_UseWeightedBlendedRendering
 		, m_transparentPass{ castor::makeUniqueDerived< RenderTechniquePass, TransparentPass >( m_matrixUbo
 			, renderTarget.getCuller()
-			, ssaoConfig ) }
+			, ssaoConfig
+			, m_lpvConfigUbo
+			, m_llpvConfigUbo ) }
 #else
-		, m_transparentPass{ std::make_unique< ForwardRenderTechniquePass >( cuT( "transparent_pass" )
+		, m_transparentPass{ castor::makeUniqueDerived< RenderTechniquePass, ForwardRenderTechniquePass >( cuT( "transparent_pass" )
 			, m_matrixUbo
 			, renderTarget.getCuller()
 			, false
 			, false
 			, nullptr
-			, ssaoConfig ) }
+			, ssaoConfig
+			, &m_lpvConfigUbo
+			, &m_llpvConfigUbo ) }
 #endif
 		, m_initialised{ false }
 		, m_ssaoConfig{ ssaoConfig }
@@ -756,17 +762,17 @@ namespace castor3d
 			, m_renderTarget.getCuller()
 			, m_ssaoConfig
 			, m_depthBuffer.getTexture() );
-		m_depthPass->initialise( device, m_size );
+		m_depthPass->initialise( device, m_size, nullptr );
 	}
 
 #endif
 
 	void RenderTechnique::doInitialiseOpaquePass( RenderDevice const & device )
 	{
-		m_opaquePass->initialise( device, m_size );
 
 #if C3D_UseDeferredRendering
 
+		m_opaquePass->initialise( device, m_size, nullptr );
 		m_deferredRendering = castor::makeUnique< DeferredRendering >( *getEngine()
 			, device
 			, static_cast< OpaquePass & >( *m_opaquePass )
@@ -787,6 +793,7 @@ namespace castor3d
 
 #else
 
+		m_opaquePass->initialise( device, m_size, m_lpvResult.get() );
 		static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).initialiseRenderPass( device
 			, m_colourTexture.getTexture()->getDefaultView().getTargetView()
 			, m_depthBuffer.getTexture()->getDefaultView().getTargetView()
@@ -832,15 +839,17 @@ namespace castor3d
 			, m_renderTarget.getSize()
 			, *m_renderTarget.getScene()
 			, m_renderTarget.getHdrConfigUbo()
-			, m_gpInfoUbo );
+			, m_gpInfoUbo
+			, *m_lpvResult );
 
 #else
 
-		static_cast< ForwardRenderTechniquePass & >( *m_transparentPass ).initialiseRenderPass( m_colourTexture->getDefaultView().getView()
-			, m_depthBuffer.getTexture()->getDefaultView().getView()
+		static_cast< ForwardRenderTechniquePass & >( *m_transparentPass ).initialiseRenderPass( device
+			, m_colourTexture.getTexture()->getDefaultView().getTargetView()
+			, m_depthBuffer.getTexture()->getDefaultView().getTargetView()
 			, m_size
 			, false );
-		m_transparentPass->initialise( device, m_size ); 
+		m_transparentPass->initialise( device, m_size, m_lpvResult.get() ); 
 
 #endif
 	}

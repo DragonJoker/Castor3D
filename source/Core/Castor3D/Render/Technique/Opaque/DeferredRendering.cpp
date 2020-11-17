@@ -173,8 +173,6 @@ namespace castor3d
 
 	void DeferredRendering::update( CpuUpdater & updater )
 	{
-		auto & camera = *updater.camera;
-		auto & scene = *camera.getScene();
 		m_opaquePass.update( updater );
 		m_lightingPass->update( updater );
 
@@ -191,8 +189,6 @@ namespace castor3d
 
 	void DeferredRendering::update( GpuUpdater & updater )
 	{
-		auto & scene = *updater.scene;
-		auto & camera = *updater.camera;
 		m_opaquePass.update( updater );
 		m_lightingPass->update( updater );
 		m_resolve->update( updater );

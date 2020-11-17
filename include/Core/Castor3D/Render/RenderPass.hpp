@@ -1076,8 +1076,6 @@ namespace castor3d
 		 *\brief		Nettoie la passe.
 		 */
 		C3D_API virtual void doCleanup( RenderDevice const & device ) = 0;
-
-	private:
 		/**
 		 *\~english
 		 *\brief		Initialises the pass.
@@ -1150,6 +1148,8 @@ namespace castor3d
 			, uint32_t & index
 			, SubmeshRenderNode & node
 			, ShadowMapLightTypeArray const & shadowMaps ) = 0;
+
+	private:
 		/**
 		 *\~english
 		 *\brief			Modifies the given flags to make them match the render pass requirements.

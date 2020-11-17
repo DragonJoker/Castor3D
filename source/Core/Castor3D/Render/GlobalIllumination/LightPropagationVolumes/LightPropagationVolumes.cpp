@@ -281,7 +281,8 @@ namespace castor3d
 			|| !m_scene.needsGlobalIllumination( m_lightType
 				, ( m_geometryVolumes
 					? GlobalIlluminationType::eLpvG
-					: GlobalIlluminationType::eLpv ) ) )
+					: GlobalIlluminationType::eLpv ) )
+			|| m_lightLpvs.empty() )
 		{
 			return toWait;
 		}

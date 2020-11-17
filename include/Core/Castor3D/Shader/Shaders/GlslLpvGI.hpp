@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "SdwModule.hpp"
 
+#include "Castor3D/Scene/SceneModule.hpp"
+
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 
 namespace castor3d
@@ -16,14 +18,26 @@ namespace castor3d
 		{
 		public:
 			C3D_API LpvGI( sdw::ShaderWriter & writer );
+			C3D_API void declare( uint32_t setIndex
+				, uint32_t & bindingIndex
+				, SceneFlags sceneFlags );
+			C3D_API void declare( uint32_t bindingIndex );
 			C3D_API sdw::Vec3 computeLPVRadiance( sdw::Vec3 wsPosition
 				, sdw::Vec3 wsNormal
 				, sdw::Vec3 minVolumeCorners
 				, sdw::Float cellSize
+				, sdw::Vec3 gridSize );
+			C3D_API sdw::Vec3 computeResult( SceneFlags sceneFlags
+				, sdw::Vec3 wsPosition
+				, sdw::Vec3 wsNormal
+				, sdw::Vec3 minVolumeCorners
+				, sdw::Float cellSize
 				, sdw::Vec3 gridSize
-				, sdw::SampledImage3DRgba16 lpvAccumulatorR
-				, sdw::SampledImage3DRgba16 lpvAccumulatorG
-				, sdw::SampledImage3DRgba16 lpvAccumulatorB );
+				, sdw::Array< sdw::Vec4 > allMinVolumeCorners
+				, sdw::Vec4 allCellSizes
+				, sdw::UVec4 gridSizes
+				, sdw::Vec3 allButAmbient
+				, sdw::Vec3 ambient );
 
 		private:
 			sdw::ShaderWriter & m_writer;
@@ -34,10 +48,7 @@ namespace castor3d
 				, sdw::InVec3
 				, sdw::InVec3
 				, sdw::InFloat
-				, sdw::InVec3
-				, sdw::InSampledImage3DRgba16
-				, sdw::InSampledImage3DRgba16
-				, sdw::InSampledImage3DRgba16 > m_computeLPVRadiance;
+				, sdw::InVec3 > m_computeLPVRadiance;
 		};
 
 	}

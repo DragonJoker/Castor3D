@@ -1,6 +1,8 @@
 #include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
 
 #include "Castor3D/DebugDefines.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureView.hpp"
@@ -9,13 +11,26 @@
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
+#include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
+#include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightVolumePassResult.hpp"
 #include "Castor3D/Render/Node/RenderNode_Render.hpp"
 #include "Castor3D/Render/Node/SceneCulledRenderNodes.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
-#include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
+#include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp"
+#include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
+#include "Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp"
+#include "Castor3D/Shader/Ubos/LpvGridConfigUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelInstancesUbo.hpp"
+#include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
+#include "Castor3D/Shader/Ubos/PickingUbo.hpp"
+#include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
+#include "Castor3D/Shader/Ubos/TexturesUbo.hpp"
 
 #include <CastorUtils/Design/ArrayView.hpp>
 
@@ -111,13 +126,17 @@ namespace castor3d
 		, SceneCuller & culler
 		, bool environment
 		, SceneNode const * ignored
-		, SsaoConfig const & config )
+		, SsaoConfig const & config
+		, LpvGridConfigUbo const * lpvConfigUbo
+		, LayeredLpvGridConfigUbo const * llpvConfigUbo )
 		: RenderPass{ category, name, *culler.getScene().getEngine(), matrixUbo, culler, ignored }
 		, m_scene{ culler.getScene() }
 		, m_camera{ culler.hasCamera() ? &culler.getCamera() : nullptr }
 		, m_sceneNode{}
 		, m_environment{ environment }
 		, m_ssaoConfig{ config }
+		, m_lpvConfigUbo{ lpvConfigUbo }
+		, m_llpvConfigUbo{ llpvConfigUbo }
 	{
 	}
 
@@ -128,13 +147,17 @@ namespace castor3d
 		, bool oit
 		, bool environment
 		, SceneNode const * ignored
-		, SsaoConfig const & config )
+		, SsaoConfig const & config
+		, LpvGridConfigUbo const * lpvConfigUbo
+		, LayeredLpvGridConfigUbo const * llpvConfigUbo )
 		: RenderPass{ category, name, *culler.getScene().getEngine(), matrixUbo, culler, oit, ignored }
 		, m_scene{ culler.getScene() }
 		, m_camera{ culler.hasCamera() ? &culler.getCamera() : nullptr }
 		, m_sceneNode{}
 		, m_environment{ environment }
 		, m_ssaoConfig{ config }
+		, m_lpvConfigUbo{ lpvConfigUbo }
+		, m_llpvConfigUbo{ llpvConfigUbo }
 	{
 	}
 
@@ -142,42 +165,16 @@ namespace castor3d
 	{
 	}
 
+	bool RenderTechniquePass::initialise( RenderDevice const & device
+		, castor::Size const & size
+		, LightVolumePassResult const * lpvResult )
+	{
+		m_lpvResult = lpvResult;
+		return RenderPass::initialise( device, size );
+	}
+
 	void RenderTechniquePass::accept( RenderTechniqueVisitor & visitor )
 	{
-	}
-
-	void RenderTechniquePass::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
-		, BillboardListRenderNode & node )
-	{
-	}
-
-	void RenderTechniquePass::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
-		, SubmeshRenderNode & node )
-	{
-	}
-
-	void RenderTechniquePass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
-		, uint32_t & index
-		, BillboardListRenderNode & node
-		, ShadowMapLightTypeArray const & shadowMaps )
-	{
-		node.passNode.fillDescriptor( layout
-			, index
-			, *node.texDescriptorSet
-			, node.pipeline.getFlags().textures );
-	}
-
-	void RenderTechniquePass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
-		, uint32_t & index
-		, SubmeshRenderNode & node
-		, ShadowMapLightTypeArray const & shadowMaps )
-	{
-		ashes::WriteDescriptorSetArray writes;
-		node.passNode.fillDescriptor( layout
-			, index
-			, writes
-			, node.pipeline.getFlags().textures );
-		node.texDescriptorSet->setBindings( writes );
 	}
 
 	void RenderTechniquePass::update( GpuUpdater & updater )
@@ -267,6 +264,176 @@ namespace castor3d
 		return RenderPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 1u );
 	}
 
+	void RenderTechniquePass::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
+		, BillboardListRenderNode & node )
+	{
+		auto sceneFlags = node.pipeline.getFlags().sceneFlags;
+
+		if ( checkFlag( sceneFlags, SceneFlag::eLpvGI )
+			&& m_lpvConfigUbo )
+		{
+			m_lpvConfigUbo->createSizedBinding( *node.uboDescriptorSet
+				, layout.getBinding( LpvGridConfigUbo::BindingPoint ) );
+		}
+
+		if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI )
+			&& m_llpvConfigUbo )
+		{
+			m_llpvConfigUbo->createSizedBinding( *node.uboDescriptorSet
+				, layout.getBinding( LayeredLpvGridConfigUbo::BindingPoint ) );
+		}
+	}
+
+	void RenderTechniquePass::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
+		, SubmeshRenderNode & node )
+	{
+		auto sceneFlags = node.pipeline.getFlags().sceneFlags;
+
+		if ( checkFlag( sceneFlags, SceneFlag::eLpvGI )
+			&& m_lpvConfigUbo )
+		{
+			m_lpvConfigUbo->createSizedBinding( *node.uboDescriptorSet
+				, layout.getBinding( LpvGridConfigUbo::BindingPoint ) );
+		}
+
+		if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI )
+			&& m_llpvConfigUbo )
+		{
+			m_llpvConfigUbo->createSizedBinding( *node.uboDescriptorSet
+				, layout.getBinding( LayeredLpvGridConfigUbo::BindingPoint ) );
+		}
+	}
+
+	ashes::VkDescriptorSetLayoutBindingArray RenderTechniquePass::doCreateUboBindings( PipelineFlags const & flags )const
+	{
+		auto uboBindings = RenderPass::doCreateUboBindings( flags );
+
+		if ( checkFlag( flags.sceneFlags, SceneFlag::eLpvGI )
+			&& m_lpvConfigUbo )
+		{
+			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( LpvGridConfigUbo::BindingPoint//12
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		}
+
+		if ( checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI )
+			&& m_llpvConfigUbo )
+		{
+			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( LayeredLpvGridConfigUbo::BindingPoint//13
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		}
+
+		return uboBindings;
+	}
+
+	namespace
+	{
+		template< typename DataTypeT, typename InstanceTypeT >
+		void fillTexDescriptor( ashes::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, ObjectRenderNode< DataTypeT, InstanceTypeT > & node
+			, ShadowMapLightTypeArray const & shadowMaps
+			, Scene const & scene
+			, LightVolumePassResult const * lpvResult )
+		{
+			auto & flags = node.pipeline.getFlags();
+			ashes::WriteDescriptorSetArray writes;
+
+			if ( !flags.textures.empty() )
+			{
+				node.passNode.fillDescriptor( layout
+					, index
+					, writes
+					, flags.textures );
+			}
+
+			if ( checkFlag( flags.passFlags, PassFlag::eReflection )
+				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) )
+			{
+				auto & envMap = scene.getEnvironmentMap( node.sceneNode );
+				bindTexture( envMap.getTexture().getTexture()->getDefaultView().getSampledView()
+					, envMap.getTexture().getSampler()->getSampler()
+					, writes
+					, index );
+			}
+
+			if ( checkFlag( flags.passFlags, PassFlag::eMetallicRoughness )
+				|| checkFlag( flags.passFlags, PassFlag::eSpecularGlossiness ) )
+			{
+				auto & background = *node.sceneNode.getScene()->getBackground();
+
+				if ( background.hasIbl() )
+				{
+					auto & ibl = background.getIbl();
+					bindTexture( ibl.getIrradianceTexture()
+						, ibl.getIrradianceSampler()
+						, writes
+						, index );
+					bindTexture( ibl.getPrefilteredEnvironmentTexture()
+						, ibl.getPrefilteredEnvironmentSampler()
+						, writes
+						, index );
+					bindTexture( ibl.getPrefilteredBrdfTexture()
+						, ibl.getPrefilteredBrdfSampler()
+						, writes
+						, index );
+				}
+			}
+
+			if ( lpvResult
+				&& ( checkFlag( flags.sceneFlags, SceneFlag::eLpvGI )
+					|| checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI ) ) )
+			{
+				auto & lpv = *lpvResult;
+				bindTexture( lpv[LpvTexture::eR].getTexture()->getDefaultView().getSampledView()
+					, lpv[LpvTexture::eR].getSampler()->getSampler()
+					, writes
+					, index );
+				bindTexture( lpv[LpvTexture::eG].getTexture()->getDefaultView().getSampledView()
+					, lpv[LpvTexture::eG].getSampler()->getSampler()
+					, writes
+					, index );
+				bindTexture( lpv[LpvTexture::eG].getTexture()->getDefaultView().getSampledView()
+					, lpv[LpvTexture::eG].getSampler()->getSampler()
+					, writes
+					, index );
+			}
+
+			bindShadowMaps( node.pipeline.getFlags()
+				, shadowMaps
+				, writes
+				, index );
+			node.texDescriptorSet->setBindings( writes );
+		}
+	}
+
+	void RenderTechniquePass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
+		, uint32_t & index
+		, BillboardListRenderNode & node
+		, ShadowMapLightTypeArray const & shadowMaps )
+	{
+		fillTexDescriptor( layout
+			, index
+			, node
+			, shadowMaps
+			, m_scene
+			, m_lpvResult );
+	}
+
+	void RenderTechniquePass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
+		, uint32_t & index
+		, SubmeshRenderNode & node
+		, ShadowMapLightTypeArray const & shadowMaps )
+	{
+		fillTexDescriptor( layout
+			, index
+			, node
+			, shadowMaps
+			, m_scene
+			, m_lpvResult );
+	}
+
 	ashes::VkDescriptorSetLayoutBindingArray RenderTechniquePass::doCreateTextureBindings( PipelineFlags const & flags )const
 	{
 		auto index = getMinTextureIndex();
@@ -279,6 +446,55 @@ namespace castor3d
 				, VK_SHADER_STAGE_FRAGMENT_BIT
 				, uint32_t( flags.textures.size() ) ) );
 			index += uint32_t( flags.textures.size() );
+		}
+
+		if ( checkFlag( flags.passFlags, PassFlag::eReflection )
+			|| checkFlag( flags.passFlags, PassFlag::eRefraction ) )
+		{
+			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		}
+
+		if ( checkFlag( flags.passFlags, PassFlag::eMetallicRoughness )
+			|| checkFlag( flags.passFlags, PassFlag::eSpecularGlossiness ) )
+		{
+			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapIrradiance
+			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapPrefiltered
+			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapBrdf
+		}
+
+		if ( m_lpvResult
+			&& ( checkFlag( flags.sceneFlags, SceneFlag::eLpvGI )
+				|| checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI ) ) )
+		{
+			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_lpvAccumulationR
+			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_lpvAccumulationG
+			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_lpvAccumulationB
+		}
+
+		for ( uint32_t j = 0u; j < uint32_t( LightType::eCount ); ++j )
+		{
+			// Depth
+			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+			// Variance
+			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		}
 
 		return textureBindings;

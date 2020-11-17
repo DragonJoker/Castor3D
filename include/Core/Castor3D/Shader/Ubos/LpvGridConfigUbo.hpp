@@ -70,6 +70,7 @@ namespace castor3d
 		}
 
 	public:
+		C3D_API static const uint32_t BindingPoint;
 		C3D_API static const std::string LpvGridConfig;
 		C3D_API static const std::string MinVolumeCornerSize;
 		C3D_API static const std::string GridSizes;
@@ -80,14 +81,14 @@ namespace castor3d
 	};
 }
 
-#define UBO_LPVGRIDCONFIG( writer, binding, set )\
+#define UBO_LPVGRIDCONFIG( writer, binding, set, enabled )\
 	sdw::Ubo lpvGridConfig{ writer\
 		, castor3d::LpvGridConfigUbo::LpvGridConfig\
 		, binding\
 		, set\
 		, ast::type::MemoryLayout::eStd140 };\
-	auto c3d_minVolumeCornerSize = lpvGridConfig.declMember< Vec4 >( castor3d::LpvGridConfigUbo::MinVolumeCornerSize );\
-	auto c3d_gridSize = lpvGridConfig.declMember< Vec3 >( castor3d::LpvGridConfigUbo::GridSizes );\
+	auto c3d_minVolumeCornerSize = lpvGridConfig.declMember< Vec4 >( castor3d::LpvGridConfigUbo::MinVolumeCornerSize, enabled );\
+	auto c3d_gridSize = lpvGridConfig.declMember< Vec3 >( castor3d::LpvGridConfigUbo::GridSizes, enabled );\
 	lpvGridConfig.end();\
 	auto c3d_minVolumeCorner = c3d_minVolumeCornerSize.xyz();\
 	auto c3d_cellSize = c3d_minVolumeCornerSize.w();\

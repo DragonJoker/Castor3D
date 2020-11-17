@@ -65,10 +65,6 @@ namespace castor3d
 
 	private:
 		/**
-		*\copydoc		castor3d::RenderPass::doCreateUboBindings
-		*/
-		ashes::VkDescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;
-		/**
 		 *\copydoc		castor3d::RenderPass::doUpdateFlags
 		 */
 		void doUpdateFlags( PipelineFlags & flags )const override;
@@ -80,6 +76,24 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderPass::doCreateBlendState
 		 */
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
+		 */
+		void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, BillboardListRenderNode & nodes
+			, ShadowMapLightTypeArray const & shadowMaps )override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
+		 */
+		void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, SubmeshRenderNode & nodes
+			, ShadowMapLightTypeArray const & shadowMaps )override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
+		 */
+		ashes::VkDescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
 		 */

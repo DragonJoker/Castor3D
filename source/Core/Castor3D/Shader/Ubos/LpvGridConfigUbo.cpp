@@ -14,6 +14,7 @@ CU_ImplementCUSmartPtr( castor3d, LpvGridConfigUbo )
 
 namespace castor3d
 {
+	uint32_t const LpvGridConfigUbo::BindingPoint = 12;
 	std::string const LpvGridConfigUbo::LpvGridConfig = "LpvGridConfig";
 	std::string const LpvGridConfigUbo::MinVolumeCornerSize = "c3d_minVolumeCornerSize";
 	std::string const LpvGridConfigUbo::GridSizes = "c3d_gridSizes";

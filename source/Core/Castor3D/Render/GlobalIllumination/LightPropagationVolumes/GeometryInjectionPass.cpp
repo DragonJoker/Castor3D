@@ -75,7 +75,7 @@ namespace castor3d
 			auto c3d_rsmPositionMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::ePosition )
 				, RsmPositionIdx
 				, 0u );
-			UBO_LPVGRIDCONFIG( writer, LpvGridUboIdx, 0u );
+			UBO_LPVGRIDCONFIG( writer, LpvGridUboIdx, 0u, true );
 			UBO_LPVLIGHTCONFIG( writer, LpvLightUboIdx, 0u );
 			auto in = writer.getIn();
 
@@ -157,7 +157,7 @@ namespace castor3d
 			auto c3d_rsmPositionMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::eSpot, SmTexture::ePosition )
 				, RsmPositionIdx
 				, 0u );
-			UBO_LPVGRIDCONFIG( writer, LpvGridUboIdx, 0u );
+			UBO_LPVGRIDCONFIG( writer, LpvGridUboIdx, 0u, true );
 			UBO_LPVLIGHTCONFIG( writer, LpvLightUboIdx, 0u );
 			auto in = writer.getIn();
 
@@ -237,7 +237,7 @@ namespace castor3d
 			auto c3d_rsmPositionMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::eSpot, SmTexture::ePosition )
 				, RsmPositionIdx
 				, 0u );
-			UBO_LPVGRIDCONFIG( writer, LpvGridUboIdx, 0u );
+			UBO_LPVGRIDCONFIG( writer, LpvGridUboIdx, 0u, true );
 			UBO_LPVLIGHTCONFIG( writer, LpvLightUboIdx, 0u );
 			auto in = writer.getIn();
 
@@ -377,7 +377,7 @@ namespace castor3d
 
 			//layout( early_fragment_tests )in;//turn on early depth tests
 
-			UBO_LPVGRIDCONFIG( writer, LpvGridUboIdx, 0u );
+			UBO_LPVGRIDCONFIG( writer, LpvGridUboIdx, 0u, true );
 
 			uint32_t index = 0u;
 			auto inVolumeCellIndex = writer.declInput< IVec3 >( "inVolumeCellIndex", index++ );

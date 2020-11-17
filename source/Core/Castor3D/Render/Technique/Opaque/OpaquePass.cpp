@@ -217,14 +217,11 @@ namespace castor3d
 		return TextureFlags{ TextureFlag::eAll };
 	}
 
-	ashes::VkDescriptorSetLayoutBindingArray OpaquePass::doCreateUboBindings( PipelineFlags const & flags )const
-	{
-		return RenderPass::doCreateUboBindings( flags );
-	}
-
 	void OpaquePass::doUpdateFlags( PipelineFlags & flags )const
 	{
 		remFlag( flags.programFlags, ProgramFlag::eLighting );
+		remFlag( flags.sceneFlags, SceneFlag::eLpvGI );
+		remFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI );
 	}
 
 	void OpaquePass::doUpdatePipeline( RenderPipeline & pipeline )
@@ -234,6 +231,47 @@ namespace castor3d
 	ashes::PipelineColorBlendStateCreateInfo OpaquePass::doCreateBlendState( PipelineFlags const & flags )const
 	{
 		return RenderPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 5u );
+	}
+
+	void OpaquePass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
+		, uint32_t & index
+		, BillboardListRenderNode & node
+		, ShadowMapLightTypeArray const & shadowMaps )
+	{
+		node.passNode.fillDescriptor( layout
+			, index
+			, *node.texDescriptorSet
+			, node.pipeline.getFlags().textures );
+	}
+
+	void OpaquePass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
+		, uint32_t & index
+		, SubmeshRenderNode & node
+		, ShadowMapLightTypeArray const & shadowMaps )
+	{
+		ashes::WriteDescriptorSetArray writes;
+		node.passNode.fillDescriptor( layout
+			, index
+			, writes
+			, node.pipeline.getFlags().textures );
+		node.texDescriptorSet->setBindings( writes );
+	}
+
+	ashes::VkDescriptorSetLayoutBindingArray OpaquePass::doCreateTextureBindings( PipelineFlags const & flags )const
+	{
+		auto index = getMinTextureIndex();
+		ashes::VkDescriptorSetLayoutBindingArray textureBindings;
+
+		if ( !flags.textures.empty() )
+		{
+			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT
+				, uint32_t( flags.textures.size() ) ) );
+			index += uint32_t( flags.textures.size() );
+		}
+
+		return textureBindings;
 	}
 
 	ShaderPtr OpaquePass::doGetVertexShaderSource( PipelineFlags const & flags )const

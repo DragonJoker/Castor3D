@@ -79,7 +79,7 @@ namespace castor3d
 			auto c3d_rsmFluxMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eFlux )
 				, RsmFluxIdx
 				, 0u );
-			UBO_LPVGRIDCONFIG( writer, LpvGridUboIdx, 0u );
+			UBO_LPVGRIDCONFIG( writer, LpvGridUboIdx, 0u, true );
 			auto in = writer.getIn();
 
 			uint32_t index = 0u;
@@ -154,7 +154,7 @@ namespace castor3d
 			auto c3d_rsmFluxMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::eSpot, SmTexture::eFlux )
 				, RsmFluxIdx
 				, 0u );
-			UBO_LPVGRIDCONFIG( writer, LpvGridUboIdx, 0u );
+			UBO_LPVGRIDCONFIG( writer, LpvGridUboIdx, 0u, true );
 			UBO_LPVLIGHTCONFIG( writer, LpvLightUboIdx, 0u );
 			auto in = writer.getIn();
 

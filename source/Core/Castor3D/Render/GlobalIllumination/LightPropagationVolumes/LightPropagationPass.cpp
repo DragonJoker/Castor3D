@@ -75,7 +75,7 @@ namespace castor3d
 			auto outCellIndex = writer.declOutput< IVec3 >( "outCellIndex", 0u );
 			auto out = writer.getOut();
 
-			UBO_LPVGRIDCONFIG( writer, LpvGridUboIdx, 0u );
+			UBO_LPVGRIDCONFIG( writer, LpvGridUboIdx, 0u, true );
 
 			writer.implementFunction< Void >( "main"
 				, [&]()
@@ -165,7 +165,7 @@ namespace castor3d
 					ivec2( 0_i, -1_i ),
 				} );
 
-			UBO_LPVGRIDCONFIG( writer, LpvGridUboIdx, 0u );
+			UBO_LPVGRIDCONFIG( writer, LpvGridUboIdx, 0u, true );
 			auto c3d_lpvGridR = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Grid" ), RLpvGridIdx, 0u );
 			auto c3d_lpvGridG = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Grid" ), GLpvGridIdx, 0u );
 			auto c3d_lpvGridB = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Grid" ), BLpvGridIdx, 0u );
