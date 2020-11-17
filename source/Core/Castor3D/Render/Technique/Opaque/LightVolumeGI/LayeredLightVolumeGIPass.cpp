@@ -28,6 +28,7 @@
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
+#include "Castor3D/Shader/Shaders/GlslLpvGI.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslMetallicBrdfLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
@@ -36,7 +37,7 @@
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/RsmConfigUbo.hpp"
-#include "Castor3D/Shader/Ubos/LayeredLpvConfigUbo.hpp"
+#include "Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
 #include <CastorUtils/Design/ArrayView.hpp>
@@ -65,7 +66,7 @@ namespace castor3d
 		enum InIds
 		{
 			GpInfoUboIdx,
-			LIUboIdx,
+			LpvGridUboIdx,
 			DepthMapIdx,
 			Data1MapIdx,
 			RLpvAccumIdx,
@@ -99,16 +100,11 @@ namespace castor3d
 		{
 			using namespace sdw;
 			FragmentWriter writer;
-
-			/*Spherical harmonics coefficients - precomputed*/
-			auto SH_C0 = writer.declConstant( "SH_C0"
-				, Float{ 1.0f / ( 2.0f * sqrt( castor::Pi< float > ) ) } );
-			auto SH_C1 = writer.declConstant( "SH_C1"
-				, Float{ sqrt( 3.0f / castor::Pi< float > ) / 2.0f } );
+			shader::LpvGI lpvGI{ writer };
 
 			// Shader inputs
 			UBO_GPINFO( writer, GpInfoUboIdx, 0u );
-			UBO_LAYERED_LPVCONFIG( writer, LIUboIdx, 0u );
+			UBO_LAYERED_LPVGRIDCONFIG( writer, LpvGridUboIdx, 0u );
 			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), DepthMapIdx, 0u );
 			auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), Data1MapIdx, 0u );
 			auto c3d_lpvAccumulatorR = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator" ), RLpvAccumIdx, 0u );
@@ -126,19 +122,7 @@ namespace castor3d
 			utils.declareCalcWSPosition();
 			utils.declareCalcVSPosition();
 
-			// no normalization
-			auto evalSH_direct = writer.implementFunction< Vec4 >( "evalSH_direct"
-				, [&]( Vec3 direction )
-				{
-					writer.returnStmt( vec4( SH_C0
-						, -SH_C1 * direction.y()
-						, SH_C1 * direction.z()
-						, -SH_C1 * direction.x() ) );
-				}
-				, InVec3{ writer, "direction" } );
-
-			writer.implementFunction< sdw::Void >( "main"
-				, [&]()
+			writer.implementMain( [&]()
 				{
 					auto texCoord = writer.declLocale( "texCoord"
 						, vtx_texture );
@@ -158,26 +142,15 @@ namespace castor3d
 					auto wsNormal = writer.declLocale( "wsNormal"
 						, data1.xyz() );
 
-					auto SHintensity = writer.declLocale( "SHintensity"
-						, evalSH_direct( -wsNormal ) );
-
-					// l3 is the finest
-					auto lpvCellCoords = writer.declLocale( "lpvCellCoords"
-						, ( wsPosition - c3d_allMinVolumeCorners[3].xyz() ) / c3d_allCellSizes.w() );
-
-					auto gridSize = writer.declLocale( "gridSize"
-						, vec3( c3d_gridSize.xyz() ) );
-
-					lpvCellCoords /= gridSize;
-					auto lpvIntensity = writer.declLocale( "lpvIntensity"
-						, vec3(
-							dot( SHintensity, c3d_lpvAccumulatorR.sample( lpvCellCoords ) ),
-							dot( SHintensity, c3d_lpvAccumulatorG.sample( lpvCellCoords ) ),
-							dot( SHintensity, c3d_lpvAccumulatorB.sample( lpvCellCoords ) ) ) );
-
-					auto finalLPVRadiance = writer.declLocale( "finalLPVRadiance"
-						, ( c3d_config.x() / Float{ castor::Pi< float > } ) * max( lpvIntensity, vec3( 0.0_f ) ) );
-					pxl_lpvGI = finalLPVRadiance;
+					pxl_lpvGI = lpvGI.computeLPVRadiance( wsPosition
+						, wsNormal
+						// l3 is the finest
+						, c3d_allMinVolumeCorners[3].xyz()
+						, c3d_allCellSizes.w()
+						, vec3( c3d_gridSize.xyz() )
+						, c3d_lpvAccumulatorR
+						, c3d_lpvAccumulatorG
+						, c3d_lpvAccumulatorB );
 				} );
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -305,7 +278,7 @@ namespace castor3d
 		, RenderDevice const & device
 		, castor::String const & prefix
 		, GpInfoUbo const & gpInfo
-		, LayeredLpvConfigUbo const & lpvConfigUbo
+		, LayeredLpvGridConfigUbo const & lpvConfigUbo
 		, OpaquePassResult const & gpResult
 		, LightVolumePassResult const & lpvResult
 		, TextureUnit const & dst
@@ -341,7 +314,7 @@ namespace castor3d
 			, * m_renderPass
 			, {
 				makeDescriptorWrite( m_gpInfo.getUbo(), GpInfoUboIdx ),
-				makeDescriptorWrite( m_lpvConfigUbo.getUbo(), LIUboIdx ),
+				makeDescriptorWrite( m_lpvConfigUbo.getUbo(), LpvGridUboIdx ),
 				makeDescriptorWrite( m_gpResult[DsTexture::eDepth].getTexture()->getDefaultView().getSampledView()
 				, m_gpResult[DsTexture::eDepth].getSampler()->getSampler()
 					, DepthMapIdx ),

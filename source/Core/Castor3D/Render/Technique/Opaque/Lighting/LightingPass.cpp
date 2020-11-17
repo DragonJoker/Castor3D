@@ -246,37 +246,6 @@ namespace castor3d
 		template< LightingPass::Type PassT, LightType LightT >
 		using PassTypeT = typename PassInfoT< PassT, LightT >::Type;
 
-		template< LightingPass::Type PassT, LightType LightT >
-		LightPassUPtr makeLightPassTT( RenderDevice const & device
-			, LightCache const & lightCache
-			, OpaquePassResult const & gpResult
-			, ShadowMapResult const & smResult
-			, LightPassResult const & lpResult
-			, LightVolumePassResult const & lpvResult
-			, GpInfoUbo const & gpInfoUbo
-			, LpvConfigUbo const & lpvConfigUbo
-			, LayeredLpvConfigUbo const & llpvConfigUbo
-			, std::vector< LpvConfigUbo > const & lpvConfigUbos )
-		{
-			LightPassConfig lpConfig{ lpResult, gpInfoUbo };
-
-			if constexpr ( PassT > getLightType( PassT, LightT ) )
-			{
-				return LightPassUPtr{};
-			}
-			else if constexpr ( PassT > LightingPass::Type::eShadowLpvGGI )
-			{
-				return std::make_unique< PassTypeT< PassT, LightT > >( device
-					, LayeredLpvLightPassConfig{ lpConfig
-						, lightCache
-						, gpResult
-						, smResult
-						, lpvResult
-						, llpvConfigUbo
-						, lpvConfigUbos } );
-			}
-		}
-
 		template< LightingPass::Type PassT >
 		LightPassUPtr makeLightPassNoGIT( LightType lightType
 			, RenderDevice const & device
@@ -336,7 +305,7 @@ namespace castor3d
 			}
 		}
 
-		template< LightingPass::Type PassT, typename LightPropagationVolumesLightTypeT >
+		template< LightingPass::Type PassT >
 		LightPassUPtr makeLightPassLpvGIT( LightType lightType
 			, RenderDevice const & device
 			, LightPassResult const & lpResult
@@ -347,10 +316,8 @@ namespace castor3d
 			, ShadowMapResult const & smPointResult
 			, ShadowMapResult const & smSpotResult
 			, LightVolumePassResult const & lpvResult
-			, LightPropagationVolumesLightTypeT const & lpvs )
+			, LpvGridConfigUbo const & lpvConfigUbo )
 		{
-			auto & lpvConfigUbo = lpvs[size_t( lightType )]->getLpvConfigUbo();
-
 			switch ( lightType )
 			{
 			case LightType::eDirectional:
@@ -383,7 +350,7 @@ namespace castor3d
 			}
 		}
 
-		template< LightingPass::Type PassT, typename LayeredLightPropagationVolumesLightTypeT >
+		template< LightingPass::Type PassT >
 		LightPassUPtr makeLightPassLlpvGIT( LightType lightType
 			, RenderDevice const & device
 			, LightPassResult const & lpResult
@@ -394,11 +361,8 @@ namespace castor3d
 			, ShadowMapResult const & smPointResult
 			, ShadowMapResult const & smSpotResult
 			, LightVolumePassResult const & lpvResult
-			, LayeredLightPropagationVolumesLightTypeT const & lpvs )
+			, LayeredLpvGridConfigUbo const & lpvConfigUbo )
 		{
-			auto & lpvConfigUbo = lpvs[size_t( lightType )]->getLpvConfigUbo();
-			auto & lpvConfigUbos = lpvs[size_t( lightType )]->getLpvConfigUbos();
-
 			switch ( lightType )
 			{
 			case LightType::eDirectional:
@@ -408,8 +372,7 @@ namespace castor3d
 						, gpResult
 						, smDirectionalResult
 						, lpvResult
-						, lpvConfigUbo
-						, lpvConfigUbos } );
+						, lpvConfigUbo } );
 			//case LightType::ePoint:
 			//	return std::make_unique< PassTypeT< PassT, LightType::ePoint > >( device
 			//		, LayeredLpvLightPassConfig{ LightPassConfig{ lpResult, gpInfoUbo }
@@ -446,10 +409,8 @@ namespace castor3d
 			, LightPassResult const & lpResult
 			, LightVolumePassResult const & lpvResult
 			, GpInfoUbo const & gpInfoUbo
-			, LightPropagationVolumesLightType const & lpvs
-			, LayeredLightPropagationVolumesLightType const & llpvs
-			, LightPropagationVolumesGLightType const & lpvgs
-			, LayeredLightPropagationVolumesGLightType const & llpvgs )
+			, LpvGridConfigUbo const & lpvConfigUbo
+			, LayeredLpvGridConfigUbo const & llpvConfigUbo )
 		{
 			switch ( passType )
 			{
@@ -486,7 +447,7 @@ namespace castor3d
 						, smPointResult
 						, smSpotResult
 						, lpvResult
-						, lpvs );
+						, lpvConfigUbo );
 				}
 				return LightPassUPtr{};
 			case LightingPass::Type::eShadowLpvGGI:
@@ -502,7 +463,7 @@ namespace castor3d
 						, smPointResult
 						, smSpotResult
 						, lpvResult
-						, lpvgs );
+						, lpvConfigUbo );
 				}
 				return LightPassUPtr{};
 			case LightingPass::Type::eShadowLayeredLpvGI:
@@ -518,7 +479,7 @@ namespace castor3d
 						, smPointResult
 						, smSpotResult
 						, lpvResult
-						, llpvs );
+						, llpvConfigUbo );
 				}
 				return LightPassUPtr{};
 			case LightingPass::Type::eShadowLayeredLpvGGI:
@@ -534,7 +495,7 @@ namespace castor3d
 						, smPointResult
 						, smSpotResult
 						, lpvResult
-						, llpvgs );
+						, llpvConfigUbo );
 				}
 				return LightPassUPtr{};
 			default:
@@ -556,10 +517,8 @@ namespace castor3d
 		, ashes::ImageView const & depthView
 		, SceneUbo & sceneUbo
 		, GpInfoUbo const & gpInfoUbo
-		, LightPropagationVolumesLightType const & lpvs
-		, LayeredLightPropagationVolumesLightType const & llpvs
-		, LightPropagationVolumesGLightType const & lpvgs
-		, LayeredLightPropagationVolumesGLightType const & llpvgs )
+		, LpvGridConfigUbo const & lpvConfigUbo
+		, LayeredLpvGridConfigUbo const & llpvConfigUbo )
 		: m_engine{ engine }
 		, m_device{ device }
 		, m_gpResult{ gpResult }
@@ -570,10 +529,8 @@ namespace castor3d
 		, m_depthView{ depthView }
 		, m_sceneUbo{ sceneUbo }
 		, m_gpInfoUbo{ gpInfoUbo }
-		, m_lpvs{ lpvs }
-		, m_llpvs{ llpvs }
-		, m_lpvgs{ lpvgs }
-		, m_llpvgs{ llpvgs }
+		, m_lpvConfigUbo{ lpvConfigUbo }
+		, m_llpvConfigUbo{ llpvConfigUbo }
 		, m_size{ size }
 		, m_result{ engine, size }
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, device, cuT( "Opaque" ), cuT( "Lighting pass" ) ) }
@@ -815,10 +772,8 @@ namespace castor3d
 						, m_result
 						, m_lpvResult
 						, m_gpInfoUbo
-						, m_lpvs
-						, m_llpvs
-						, m_lpvgs
-						, m_llpvgs );
+						, m_lpvConfigUbo
+						, m_llpvConfigUbo );
 					lightPass->initialise( scene
 						, m_gpResult
 						, m_sceneUbo

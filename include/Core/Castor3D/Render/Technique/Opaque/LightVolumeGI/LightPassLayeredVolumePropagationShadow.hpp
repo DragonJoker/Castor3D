@@ -21,8 +21,7 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Light/DirectionalLight.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
-#include "Castor3D/Shader/Ubos/LpvConfigUbo.hpp"
-#include "Castor3D/Shader/Ubos/LayeredLpvConfigUbo.hpp"
+#include "Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp"
 
 #include <CastorUtils/Miscellaneous/StringUtils.hpp>
 
@@ -67,7 +66,6 @@ namespace castor3d
 			, m_lpvResult{ lpConfig.lpvResult }
 			, m_gpInfoUbo{ lpConfig.base.gpInfoUbo }
 			, m_lpvConfigUbo{ lpConfig.lpvConfigUbo }
-			, m_lpvConfigUbos{ lpConfig.lpvConfigUbos }
 		{
 		}
 
@@ -135,8 +133,7 @@ namespace castor3d
 		LightPassResult const & m_lpResult;
 		LightVolumePassResult const & m_lpvResult;
 		GpInfoUbo const & m_gpInfoUbo;
-		LayeredLpvConfigUbo const & m_lpvConfigUbo;
-		std::vector< LpvConfigUbo > const & m_lpvConfigUbos;
+		LayeredLpvGridConfigUbo const & m_lpvConfigUbo;
 		LayeredLightVolumeGIPassArray m_lightVolumeGIPasses;
 	};
 }

@@ -59,10 +59,8 @@ namespace castor3d
 			, Scene & scene
 			, HdrConfigUbo const & hdrConfigUbo
 			, GpInfoUbo const & gpInfoUbo
-			, LightPropagationVolumesLightType const & lpvs
-			, LayeredLightPropagationVolumesLightType const & llpvs
-			, LightPropagationVolumesGLightType const & lpvgs
-			, LayeredLightPropagationVolumesGLightType const & llpvgs
+			, LpvGridConfigUbo const & lpvConfigUbo
+			, LayeredLpvGridConfigUbo const & llpvConfigUbo
 			, SsaoConfig & ssaoConfig );
 		/**
 		 *\~english

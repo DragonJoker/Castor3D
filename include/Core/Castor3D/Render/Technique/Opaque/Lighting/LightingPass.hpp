@@ -76,10 +76,8 @@ namespace castor3d
 			, ashes::ImageView const & depthView
 			, SceneUbo & sceneUbo
 			, GpInfoUbo const & gpInfoUbo
-			, LightPropagationVolumesLightType const & lpvs
-			, LayeredLightPropagationVolumesLightType const & llpvs
-			, LightPropagationVolumesGLightType const & lpvgs
-			, LayeredLightPropagationVolumesGLightType const & llpvgs );
+			, LpvGridConfigUbo const & lpvConfigUbo
+			, LayeredLpvGridConfigUbo const & llpvConfigUbos );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -158,10 +156,8 @@ namespace castor3d
 		ashes::ImageView const & m_depthView;
 		SceneUbo & m_sceneUbo;
 		GpInfoUbo const & m_gpInfoUbo;
-		LightPropagationVolumesLightType const & m_lpvs;
-		LayeredLightPropagationVolumesLightType const & m_llpvs;
-		LightPropagationVolumesGLightType const & m_lpvgs;
-		LayeredLightPropagationVolumesGLightType const & m_llpvgs;
+		LpvGridConfigUbo const & m_lpvConfigUbo;
+		LayeredLpvGridConfigUbo const & m_llpvConfigUbo;
 		castor::Size const m_size;
 		LightPassResult m_result;
 		LightPasses m_lightPasses;

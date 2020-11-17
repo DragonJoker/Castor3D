@@ -24,7 +24,8 @@
 #include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
-#include "Castor3D/Shader/Ubos/LpvConfigUbo.hpp"
+#include "Castor3D/Shader/Ubos/LpvGridConfigUbo.hpp"
+#include "Castor3D/Shader/Ubos/LpvLightConfigUbo.hpp"
 
 #include <CastorUtils/Graphics/Image.hpp>
 
@@ -55,7 +56,8 @@ namespace castor3d
 			RsmNormalsIdx,
 			RsmPositionIdx,
 			RsmFluxIdx,
-			LIUboIdx,
+			LpvGridUboIdx,
+			LpvLightUboIdx,
 		};
 
 		std::unique_ptr< ast::Shader > getDirectionalVertexProgram( uint32_t rsmTexSize
@@ -77,7 +79,7 @@ namespace castor3d
 			auto c3d_rsmFluxMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eFlux )
 				, RsmFluxIdx
 				, 0u );
-			UBO_LPVCONFIG( writer, LIUboIdx, 0u );
+			UBO_LPVGRIDCONFIG( writer, LpvGridUboIdx, 0u );
 			auto in = writer.getIn();
 
 			uint32_t index = 0u;
@@ -126,7 +128,7 @@ namespace castor3d
 						, outRsmNormal );
 
 					auto screenPos = writer.declLocale( "screenPos"
-						, ( vec2( outVolumeCellIndex.xy() ) + 0.5_f ) / c3d_gridSizes.xy() * 2.0_f - 1.0_f );
+						, ( vec2( outVolumeCellIndex.xy() ) + 0.5_f ) / c3d_gridSize.xy() * 2.0_f - 1.0_f );
 
 					out.vtx.position = vec4( screenPos, 0.0, 1.0 );
 					out.vtx.pointSize = 1.0f;
@@ -152,7 +154,8 @@ namespace castor3d
 			auto c3d_rsmFluxMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::eSpot, SmTexture::eFlux )
 				, RsmFluxIdx
 				, 0u );
-			UBO_LPVCONFIG( writer, LIUboIdx, 0u );
+			UBO_LPVGRIDCONFIG( writer, LpvGridUboIdx, 0u );
+			UBO_LPVLIGHTCONFIG( writer, LpvLightUboIdx, 0u );
 			auto in = writer.getIn();
 
 			uint32_t index = 0u;
@@ -185,7 +188,7 @@ namespace castor3d
 					outVolumeCellIndex = convertPointToGridIndex( outRsmPos, outRsmNormal );
 
 					auto screenPos = writer.declLocale( "screenPos"
-						, ( vec2( outVolumeCellIndex.xy() ) + 0.5_f ) / c3d_gridSizes.xy() * 2.0_f - 1.0_f );
+						, ( vec2( outVolumeCellIndex.xy() ) + 0.5_f ) / c3d_gridSize.xy() * 2.0_f - 1.0_f );
 					out.vtx.position = vec4( screenPos, 0.0_f, 1.0_f );
 					out.vtx.pointSize = 1.0f;
 				} );
@@ -268,14 +271,14 @@ namespace castor3d
 
 			//layout( early_fragment_tests )in;//turn on early depth tests
 
-			UBO_LPVCONFIG( writer, LIUboIdx, 0u );
-
 			uint32_t index = 0u;
 			auto inVolumeCellIndex = writer.declInput< IVec3 >( "inVolumeCellIndex", index++ );
 			auto inRsmPos = writer.declInput< Vec3 >( "inRsmPos", index++ );
 			auto inRsmNormal = writer.declInput< Vec3 >( "inRsmNormal", index++ );
 			auto inRsmFlux = writer.declInput< Vec4 >( "inRsmFlux", index++ );
 			auto in = writer.getIn();
+
+			UBO_LPVLIGHTCONFIG( writer, LpvLightUboIdx, 0u );
 
 			//Should I normalize the dir vector?
 			auto evalCosineLobeToDir = writer.implementFunction< Vec4 >( "evalCosineLobeToDir"
@@ -294,11 +297,11 @@ namespace castor3d
 				, [&]()
 				{
 					auto SHCoeffsR = writer.declLocale( "SHCoeffsR"
-						, evalCosineLobeToDir( inRsmNormal ) / Float{ Pi< float > } *inRsmFlux.r() );
+						, ( c3d_lpvIndirectAttenuation * evalCosineLobeToDir( inRsmNormal ) ) / Float{ Pi< float > } * inRsmFlux.r() );
 					auto SHCoeffsG = writer.declLocale( "SHCoeffsG"
-						, evalCosineLobeToDir( inRsmNormal ) / Float{ Pi< float > } *inRsmFlux.g() );
+						, ( c3d_lpvIndirectAttenuation * evalCosineLobeToDir( inRsmNormal ) ) / Float{ Pi< float > } * inRsmFlux.g() );
 					auto SHCoeffsB = writer.declLocale( "SHCoeffsB"
-						, evalCosineLobeToDir( inRsmNormal ) / Float{ Pi< float > } *inRsmFlux.b() );
+						, ( c3d_lpvIndirectAttenuation * evalCosineLobeToDir( inRsmNormal ) ) / Float{ Pi< float > } * inRsmFlux.b() );
 
 					outLpvGridR = SHCoeffsR;
 					outLpvGridG = SHCoeffsG;
@@ -441,7 +444,10 @@ namespace castor3d
 				makeDescriptorSetLayoutBinding( RsmFluxIdx
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 					, VK_SHADER_STAGE_VERTEX_BIT ),
-				makeDescriptorSetLayoutBinding( LIUboIdx
+				makeDescriptorSetLayoutBinding( LpvGridUboIdx
+					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+					, VK_SHADER_STAGE_VERTEX_BIT ),
+				makeDescriptorSetLayoutBinding( LpvLightUboIdx
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ),
 			};
@@ -453,7 +459,8 @@ namespace castor3d
 			, ashes::DescriptorSetPool & descriptorSetPool
 			, LightCache const & lightCache
 			, ShadowMapResult const & smResult
-			, UniformBufferOffsetT< LpvConfigUboConfiguration > const & ubo
+			, UniformBufferOffsetT< LpvGridConfigUboConfiguration > const & lpvGridUbo
+			, UniformBufferOffsetT< LpvLightConfigUboConfiguration > const & lpvLightUbo
 			, LightVolumePassResult const & lpvResult )
 		{
 			auto & descriptorSetLayout = descriptorSetPool.getLayout();
@@ -470,8 +477,10 @@ namespace castor3d
 			result->createBinding( descriptorSetLayout.getBinding( RsmFluxIdx )
 				, smResult[SmTexture::eFlux].getTexture()->getDefaultView().getSampledView()
 				, smResult[SmTexture::eFlux].getSampler()->getSampler() );
-			ubo.createSizedBinding( *result
-				, descriptorSetLayout.getBinding( LIUboIdx ) );
+			lpvGridUbo.createSizedBinding( *result
+				, descriptorSetLayout.getBinding( LpvGridUboIdx ) );
+			lpvLightUbo.createSizedBinding( *result
+				, descriptorSetLayout.getBinding( LpvLightUboIdx ) );
 			result->update();
 			return result;
 		}
@@ -540,7 +549,8 @@ namespace castor3d
 		, LightCache const & lightCache
 		, LightType lightType
 		, ShadowMapResult const & smResult
-		, LpvConfigUbo const & lpvConfigUbo
+		, LpvGridConfigUbo const & lpvGridConfigUbo
+		, LpvLightConfigUbo const & lpvLightConfigUbo
 		, LightVolumePassResult const & result
 		, uint32_t gridSize
 		, uint32_t layerIndex )
@@ -557,7 +567,8 @@ namespace castor3d
 			, *m_descriptorSetPool
 			, lightCache
 			, smResult
-			, lpvConfigUbo.getUbo()
+			, lpvGridConfigUbo.getUbo()
+			, lpvLightConfigUbo.getUbo()
 			, result ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram( lightType, smResult[SmTexture::eDepth].getTexture()->getWidth(), layerIndex ) }
 		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, getName(), getGeometryProgram() }

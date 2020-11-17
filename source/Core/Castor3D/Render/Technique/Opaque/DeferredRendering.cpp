@@ -97,10 +97,8 @@ namespace castor3d
 		, Scene & scene
 		, HdrConfigUbo const & hdrConfigUbo
 		, GpInfoUbo const & gpInfoUbo
-		, LightPropagationVolumesLightType const & lpvs
-		, LayeredLightPropagationVolumesLightType const & llpvs
-		, LightPropagationVolumesGLightType const & lpvgs
-		, LayeredLightPropagationVolumesGLightType const & llpvgs
+		, LpvGridConfigUbo const & lpvConfigUbo
+		, LayeredLpvGridConfigUbo const & llpvConfigUbo
 		, SsaoConfig & ssaoConfig )
 		: m_engine{ engine }
 		, m_device{ device }
@@ -134,10 +132,8 @@ namespace castor3d
 			, depthTexture.getTexture()->getDefaultView().getTargetView()
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo
-			, lpvs
-			, llpvs
-			, lpvgs
-			, llpvgs ) }
+			, lpvConfigUbo
+			, llpvConfigUbo ) }
 		, m_subsurfaceScattering{ std::make_unique< SubsurfaceScatteringPass >( m_engine
 			, m_device
 			, m_gpInfoUbo

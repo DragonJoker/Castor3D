@@ -20,7 +20,7 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/Light/DirectionalLight.hpp"
 #include "Castor3D/Scene/Light/PointLight.hpp"
 #include "Castor3D/Scene/Light/SpotLight.hpp"
-#include "Castor3D/Shader/Ubos/LpvConfigUbo.hpp"
+#include "Castor3D/Shader/Ubos/LpvGridConfigUbo.hpp"
 
 #include <CastorUtils/Miscellaneous/StringUtils.hpp>
 
@@ -132,7 +132,7 @@ namespace castor3d
 		LightPassResult const & m_lpResult;
 		LightVolumePassResult const & m_lpvResult;
 		GpInfoUbo const & m_gpInfoUbo;
-		LpvConfigUbo const & m_lpvConfigUbo;
+		LpvGridConfigUbo const & m_lpvConfigUbo;
 		LightVolumeGIPassArray m_lightVolumeGIPasses;
 	};
 }

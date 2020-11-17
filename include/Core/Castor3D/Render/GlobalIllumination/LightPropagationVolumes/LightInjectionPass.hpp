@@ -59,7 +59,8 @@ namespace castor3d
 			, LightCache const & lightCache
 			, LightType lightType
 			, ShadowMapResult const & smResult
-			, LpvConfigUbo const & lpvConfigUbo
+			, LpvGridConfigUbo const & lpvGridConfigUbo
+			, LpvLightConfigUbo const & lpvLightConfigUbo
 			, LightVolumePassResult const & result
 			, uint32_t size
 			, uint32_t layerIndex );

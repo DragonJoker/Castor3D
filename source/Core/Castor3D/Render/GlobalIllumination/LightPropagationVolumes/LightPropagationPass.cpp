@@ -23,7 +23,7 @@
 #include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
-#include "Castor3D/Shader/Ubos/LpvConfigUbo.hpp"
+#include "Castor3D/Shader/Ubos/LpvGridConfigUbo.hpp"
 
 #include <CastorUtils/Graphics/Image.hpp>
 
@@ -48,7 +48,7 @@ namespace castor3d
 	{
 		enum InIdx
 		{
-			LIUboIdx,
+			LpvGridUboIdx,
 			RLpvGridIdx,
 			GLpvGridIdx,
 			BLpvGridIdx,
@@ -75,14 +75,14 @@ namespace castor3d
 			auto outCellIndex = writer.declOutput< IVec3 >( "outCellIndex", 0u );
 			auto out = writer.getOut();
 
-			UBO_LPVCONFIG( writer, LIUboIdx, 0u );
+			UBO_LPVGRIDCONFIG( writer, LpvGridUboIdx, 0u );
 
 			writer.implementFunction< Void >( "main"
 				, [&]()
 				{
 					outCellIndex = ivec3( inPosition );
 					auto screenPos = writer.declLocale( "screenPos"
-						, ( inPosition.xy() + 0.5_f ) / c3d_gridSizes.xy() * 2.0_f - 1.0_f );
+						, ( inPosition.xy() + 0.5_f ) / c3d_gridSize.xy() * 2.0_f - 1.0_f );
 					out.vtx.position = vec4( screenPos, 0.0, 1.0 );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -165,7 +165,7 @@ namespace castor3d
 					ivec2( 0_i, -1_i ),
 				} );
 
-			UBO_LPVCONFIG( writer, LIUboIdx, 0u );
+			UBO_LPVGRIDCONFIG( writer, LpvGridUboIdx, 0u );
 			auto c3d_lpvGridR = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Grid" ), RLpvGridIdx, 0u );
 			auto c3d_lpvGridG = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Grid" ), GLpvGridIdx, 0u );
 			auto c3d_lpvGridB = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Grid" ), BLpvGridIdx, 0u );
@@ -538,13 +538,13 @@ namespace castor3d
 
 	void LightPropagationPass::registerPassIO( TextureUnit const * occlusion
 		, LightVolumePassResult const & injection
-		, LpvConfigUbo const & lpvConfigUbo
+		, LpvGridConfigUbo const & lpvConfigUbo
 		, LightVolumePassResult const & accumulation
 		, LightVolumePassResult const & propagate )
 	{
 		ashes::WriteDescriptorSetArray writes{
 			makeDescriptorWrite( lpvConfigUbo.getUbo()
-				, LIUboIdx ),
+				, LpvGridUboIdx ),
 			makeDescriptorWrite( injection[LpvTexture::eR].getTexture()->getDefaultView().getSampledView()
 				, injection[LpvTexture::eR].getSampler()->getSampler()
 				, RLpvGridIdx ),

@@ -42,7 +42,7 @@ namespace castor3d
 			, castor::String const & prefix
 			, LightType lightType
 			, GpInfoUbo const & gpInfo
-			, LpvConfigUbo const & lpvConfigUbo
+			, LpvGridConfigUbo const & lpvGridConfigUbo
 			, OpaquePassResult const & gpResult
 			, LightVolumePassResult const & lpResult
 			, TextureUnit const & dst
@@ -64,11 +64,7 @@ namespace castor3d
 		C3D_API void accept( PipelineVisitorBase & visitor );
 
 	private:
-		GpInfoUbo const & m_gpInfo;
-		LpvConfigUbo const & m_lpvConfigUbo;
 		OpaquePassResult const & m_gpResult;
-		LightVolumePassResult const & m_lpResult;
-		TextureUnit const & m_result;
 		ShaderModule m_vertexShader;
 		ShaderModule m_pixelShader;
 		ashes::RenderPassPtr m_renderPass;

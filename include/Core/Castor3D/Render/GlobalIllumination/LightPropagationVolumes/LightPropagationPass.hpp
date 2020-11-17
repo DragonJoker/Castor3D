@@ -72,7 +72,7 @@ namespace castor3d
 		*/
 		C3D_API void registerPassIO( TextureUnit const * occlusion
 			, LightVolumePassResult const & injection
-			, LpvConfigUbo const & lpvConfigUbo
+			, LpvGridConfigUbo const & lpvConfigUbo
 			, LightVolumePassResult const & accumulation
 			, LightVolumePassResult const & propagate );
 		/**

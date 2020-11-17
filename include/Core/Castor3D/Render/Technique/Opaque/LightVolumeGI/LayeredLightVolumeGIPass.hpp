@@ -41,7 +41,7 @@ namespace castor3d
 			, RenderDevice const & device
 			, castor::String const & prefix
 			, GpInfoUbo const & gpInfo
-			, LayeredLpvConfigUbo const & lpvConfigUbo
+			, LayeredLpvGridConfigUbo const & lpvConfigUbo
 			, OpaquePassResult const & gpResult
 			, LightVolumePassResult const & lpvResult
 			, TextureUnit const & dst
@@ -64,7 +64,7 @@ namespace castor3d
 
 	private:
 		GpInfoUbo const & m_gpInfo;
-		LayeredLpvConfigUbo const & m_lpvConfigUbo;
+		LayeredLpvGridConfigUbo const & m_lpvConfigUbo;
 		OpaquePassResult const & m_gpResult;
 		LightVolumePassResult const & m_lpvResult;
 		TextureUnit const & m_result;

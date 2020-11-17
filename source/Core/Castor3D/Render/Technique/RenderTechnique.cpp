@@ -138,6 +138,10 @@ namespace castor3d
 			, LightType type
 			, ShadowMap & shadowMap
 			, ShadowMapLightTypeArray & activeShadowMaps
+			, LightPropagationVolumesLightType const & lightPropagationVolumes
+			, LightPropagationVolumesGLightType const & lightPropagationVolumesG
+			, LayeredLightPropagationVolumesLightType const & layeredLightPropagationVolumes
+			, LayeredLightPropagationVolumesGLightType const & layeredLightPropagationVolumesG
 			, CpuUpdater & updater )
 		{
 			auto lights = doSortLights( cache, type, *updater.camera );
@@ -166,6 +170,25 @@ namespace castor3d
 					updater.light = lightIt->second;
 					updater.index = index;
 					shadowMap.update( updater );
+
+					switch ( lightIt->second->getGlobalIlluminationType() )
+					{
+					case GlobalIlluminationType::eLpv:
+						lightPropagationVolumes[size_t( type )]->registerLight( updater.light );
+						break;
+					case GlobalIlluminationType::eLpvG:
+						lightPropagationVolumesG[size_t( type )]->registerLight( updater.light );
+						break;
+					case GlobalIlluminationType::eLayeredLpv:
+						layeredLightPropagationVolumes[size_t( type )]->registerLight( updater.light );
+						break;
+					case GlobalIlluminationType::eLayeredLpvG:
+						layeredLightPropagationVolumesG[size_t( type )]->registerLight( updater.light );
+						break;
+					default:
+						break;
+					}
+
 					++index;
 					++lightIt;
 				}
@@ -213,6 +236,8 @@ namespace castor3d
 		, m_renderSystem{ renderSystem }
 		, m_matrixUbo{ *renderSystem.getEngine() }
 		, m_gpInfoUbo{ *renderSystem.getEngine() }
+		, m_lpvConfigUbo{}
+		, m_llpvConfigUbo{}
 #if C3D_UseDeferredRendering
 		, m_opaquePass{ castor::makeUniqueDerived< RenderTechniquePass, OpaquePass >( m_matrixUbo
 			, renderTarget.getCuller()
@@ -547,6 +572,9 @@ namespace castor3d
 
 	void RenderTechnique::doCreateLpv( RenderDevice const & device )
 	{
+		m_lpvConfigUbo.initialise( device );
+		m_llpvConfigUbo.initialise( device );
+
 		auto & scene = *m_renderTarget.getScene();
 		m_lpvResult = castor::makeUnique< LightVolumePassResult >( *getEngine()
 			, device
@@ -559,22 +587,26 @@ namespace castor3d
 				, LightType( i )
 				, device
 				, m_allShadowMaps[i].front().first.get().getShadowPassResult()
-				, *m_lpvResult );
+				, *m_lpvResult
+				, m_lpvConfigUbo );
 			m_layeredLightPropagationVolumes[i] = castor::makeUnique< LayeredLightPropagationVolumes >( scene
 				, LightType( i )
 				, device
 				, m_allShadowMaps[i].front().first.get().getShadowPassResult()
-				, *m_lpvResult );
+				, *m_lpvResult
+				, m_llpvConfigUbo );
 			m_lightPropagationVolumesG[i] = castor::makeUnique< LightPropagationVolumesG >( scene
 				, LightType( i )
 				, device
 				, m_allShadowMaps[i].front().first.get().getShadowPassResult()
-				, *m_lpvResult );
+				, *m_lpvResult
+				, m_lpvConfigUbo );
 			m_layeredLightPropagationVolumesG[i] = castor::makeUnique< LayeredLightPropagationVolumesG >( scene
 				, LightType( i )
 				, device
 				, m_allShadowMaps[i].front().first.get().getShadowPassResult()
-				, *m_lpvResult );
+				, *m_lpvResult
+				, m_llpvConfigUbo );
 		}
 	}
 
@@ -749,10 +781,8 @@ namespace castor3d
 			, *m_renderTarget.getScene()
 			, m_renderTarget.getHdrConfigUbo()
 			, m_gpInfoUbo
-			, m_lightPropagationVolumes
-			, m_layeredLightPropagationVolumes
-			, m_lightPropagationVolumesG
-			, m_layeredLightPropagationVolumesG
+			, m_lpvConfigUbo
+			, m_llpvConfigUbo
 			, m_ssaoConfig );
 
 #else
@@ -831,6 +861,9 @@ namespace castor3d
 			m_layeredLightPropagationVolumes[i]->cleanup();
 			m_layeredLightPropagationVolumesG[i]->cleanup();
 		}
+
+		m_lpvConfigUbo.cleanup();
+		m_llpvConfigUbo.cleanup();
 	}
 
 	void RenderTechnique::doUpdateShadowMaps( CpuUpdater & updater )
@@ -849,16 +882,28 @@ namespace castor3d
 				, LightType::eDirectional
 				, *m_directionalShadowMap
 				, m_activeShadowMaps
+				, m_lightPropagationVolumes
+				, m_lightPropagationVolumesG
+				, m_layeredLightPropagationVolumes
+				, m_layeredLightPropagationVolumesG
 				, updater );
 			doPrepareShadowMap( cache
 				, LightType::ePoint
 				, *m_pointShadowMap
 				, m_activeShadowMaps
+				, m_lightPropagationVolumes
+				, m_lightPropagationVolumesG
+				, m_layeredLightPropagationVolumes
+				, m_layeredLightPropagationVolumesG
 				, updater );
 			doPrepareShadowMap( cache
 				, LightType::eSpot
 				, *m_spotShadowMap
 				, m_activeShadowMaps
+				, m_lightPropagationVolumes
+				, m_lightPropagationVolumesG
+				, m_layeredLightPropagationVolumes
+				, m_layeredLightPropagationVolumesG
 				, updater );
 		}
 	}

@@ -24,7 +24,8 @@
 #include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
-#include "Castor3D/Shader/Ubos/LpvConfigUbo.hpp"
+#include "Castor3D/Shader/Ubos/LpvGridConfigUbo.hpp"
+#include "Castor3D/Shader/Ubos/LpvLightConfigUbo.hpp"
 
 #include <CastorUtils/Graphics/Image.hpp>
 
@@ -54,7 +55,8 @@ namespace castor3d
 			LightsIdx,
 			RsmNormalsIdx,
 			RsmPositionIdx,
-			LIUboIdx,
+			LpvGridUboIdx,
+			LpvLightUboIdx,
 		};
 
 		std::unique_ptr< ast::Shader > getDirectionalVertexProgram( uint32_t rsmTexSize
@@ -73,7 +75,8 @@ namespace castor3d
 			auto c3d_rsmPositionMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::ePosition )
 				, RsmPositionIdx
 				, 0u );
-			UBO_LPVCONFIG( writer, LIUboIdx, 0u );
+			UBO_LPVGRIDCONFIG( writer, LpvGridUboIdx, 0u );
+			UBO_LPVLIGHTCONFIG( writer, LpvLightUboIdx, 0u );
 			auto in = writer.getIn();
 
 			uint32_t index = 0u;
@@ -132,7 +135,7 @@ namespace castor3d
 					outVolumeCellIndex = convertPointToGridIndex( outRsmPos );
 
 					auto screenPos = writer.declLocale( "screenPos"
-						, ( vec2( outVolumeCellIndex.xy() ) + 0.5_f ) / vec2( c3d_gridSizes.xy() ) * 2.0_f - 1.0_f );
+						, ( vec2( outVolumeCellIndex.xy() ) + 0.5_f ) / vec2( c3d_gridSize.xy() ) * 2.0_f - 1.0_f );
 
 					out.vtx.position = vec4( screenPos, 0.0, 1.0 );
 				} );
@@ -154,7 +157,8 @@ namespace castor3d
 			auto c3d_rsmPositionMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::eSpot, SmTexture::ePosition )
 				, RsmPositionIdx
 				, 0u );
-			UBO_LPVCONFIG( writer, LIUboIdx, 0u );
+			UBO_LPVGRIDCONFIG( writer, LpvGridUboIdx, 0u );
+			UBO_LPVLIGHTCONFIG( writer, LpvLightUboIdx, 0u );
 			auto in = writer.getIn();
 
 			uint32_t index = 0u;
@@ -211,7 +215,7 @@ namespace castor3d
 					outVolumeCellIndex = convertPointToGridIndex( outRsmPos );
 
 					auto screenPos = writer.declLocale( "screenPos"
-						, ( vec2( outVolumeCellIndex.xy() ) + 0.5_f ) / c3d_gridSizes.xy() * 2.0_f - 1.0_f );
+						, ( vec2( outVolumeCellIndex.xy() ) + 0.5_f ) / c3d_gridSize.xy() * 2.0_f - 1.0_f );
 
 					out.vtx.position = vec4( screenPos, 0.0, 1.0 );
 				} );
@@ -233,7 +237,8 @@ namespace castor3d
 			auto c3d_rsmPositionMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::eSpot, SmTexture::ePosition )
 				, RsmPositionIdx
 				, 0u );
-			UBO_LPVCONFIG( writer, LIUboIdx, 0u );
+			UBO_LPVGRIDCONFIG( writer, LpvGridUboIdx, 0u );
+			UBO_LPVLIGHTCONFIG( writer, LpvLightUboIdx, 0u );
 			auto in = writer.getIn();
 
 			uint32_t index = 0u;
@@ -288,7 +293,7 @@ namespace castor3d
 					outVolumeCellIndex = convertPointToGridIndex( outRsmPos );
 
 					auto screenPos = writer.declLocale( "screenPos"
-						, ( vec2( outVolumeCellIndex.xy() ) + 0.5_f ) / c3d_gridSizes.xy() * 2.0_f - 1.0_f );
+						, ( vec2( outVolumeCellIndex.xy() ) + 0.5_f ) / c3d_gridSize.xy() * 2.0_f - 1.0_f );
 
 					out.vtx.position = vec4( screenPos, 0.0, 1.0 );
 				} );
@@ -372,7 +377,7 @@ namespace castor3d
 
 			//layout( early_fragment_tests )in;//turn on early depth tests
 
-			UBO_LPVCONFIG( writer, LIUboIdx, 0u );
+			UBO_LPVGRIDCONFIG( writer, LpvGridUboIdx, 0u );
 
 			uint32_t index = 0u;
 			auto inVolumeCellIndex = writer.declInput< IVec3 >( "inVolumeCellIndex", index++ );
@@ -561,9 +566,12 @@ namespace castor3d
 				makeDescriptorSetLayoutBinding( RsmPositionIdx
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 					, VK_SHADER_STAGE_VERTEX_BIT ),
-				makeDescriptorSetLayoutBinding( LIUboIdx
+				makeDescriptorSetLayoutBinding( LpvGridUboIdx
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ),
+				makeDescriptorSetLayoutBinding( LpvLightUboIdx
+					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+					, VK_SHADER_STAGE_VERTEX_BIT ),
 			};
 			return device->createDescriptorSetLayout( name
 				, std::move( bindings ) );
@@ -573,7 +581,8 @@ namespace castor3d
 			, ashes::DescriptorSetPool & descriptorSetPool
 			, LightCache const & lightCache
 			, ShadowMapResult const & smResult
-			, UniformBufferOffsetT< LpvConfigUboConfiguration > const & ubo )
+			, UniformBufferOffsetT< LpvGridConfigUboConfiguration > const & lpvGrid
+			, UniformBufferOffsetT< LpvLightConfigUboConfiguration > const & lpvLight )
 		{
 			auto & descriptorSetLayout = descriptorSetPool.getLayout();
 			auto result = descriptorSetPool.createDescriptorSet( name );
@@ -586,8 +595,10 @@ namespace castor3d
 			result->createBinding( descriptorSetLayout.getBinding( RsmPositionIdx )
 				, smResult[SmTexture::ePosition].getTexture()->getDefaultView().getSampledView()
 				, smResult[SmTexture::ePosition].getSampler()->getSampler() );
-			ubo.createSizedBinding( *result
-				, descriptorSetLayout.getBinding( LIUboIdx ) );
+			lpvGrid.createSizedBinding( *result
+				, descriptorSetLayout.getBinding( LpvGridUboIdx ) );
+			lpvLight.createSizedBinding( *result
+				, descriptorSetLayout.getBinding( LpvLightUboIdx ) );
 			result->update();
 			return result;
 		}
@@ -656,7 +667,8 @@ namespace castor3d
 		, LightCache const & lightCache
 		, LightType lightType
 		, ShadowMapResult const & smResult
-		, LpvConfigUbo const & lpvConfigUbo
+		, LpvGridConfigUbo const & lpvGridConfigUbo
+		, LpvLightConfigUbo const & lpvLightConfigUbo
 		, TextureUnit const & result
 		, uint32_t gridSize
 		, uint32_t layerIndex )
@@ -673,7 +685,8 @@ namespace castor3d
 			, *m_descriptorSetPool
 			, lightCache
 			, smResult
-			, lpvConfigUbo.getUbo() ) }
+			, lpvGridConfigUbo.getUbo()
+			, lpvLightConfigUbo.getUbo() ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram( lightType, m_rsmSize, layerIndex ) }
 		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, getName(), getGeometryProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram( lightType ) }
