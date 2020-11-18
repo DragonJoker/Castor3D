@@ -265,7 +265,8 @@ namespace castor3d
 			m_lpvGridConfigUbo.cpuUpdate( m_aabb
 				, m_cameraPos
 				, m_cameraDir
-				, m_engine.getLpvGridSize() );
+				, m_engine.getLpvGridSize()
+				, 0.1f );
 		}
 
 		for ( auto & lightLpv : m_lightLpvs )

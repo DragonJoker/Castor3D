@@ -52,7 +52,8 @@ namespace castor3d
 	void LpvGridConfigUbo::cpuUpdate( castor::BoundingBox const & aabb
 		, castor::Point3f const & cameraPos
 		, castor::Point3f const & cameraDir
-		, uint32_t gridDim )
+		, uint32_t gridDim
+		, float indirectAttenuation )
 	{
 		CU_Require( m_ubo );
 		auto & configuration = m_ubo.getData();
@@ -67,7 +68,7 @@ namespace castor3d
 		cellSize = grid.getCellSize();
 
 		configuration.minVolumeCorner = castor::Point4f{ minVolumeCorner->x, minVolumeCorner->y, minVolumeCorner->z, cellSize };
-		configuration.gridSize = castor::Point3f{ gridSize->x, gridSize->y, gridSize->z };
+		configuration.gridSizeAtt = castor::Point4f{ gridSize->x, gridSize->y, gridSize->z, indirectAttenuation };
 	}
 
 	castor::Grid LpvGridConfigUbo::cpuUpdate( uint32_t gridLevel
@@ -75,7 +76,8 @@ namespace castor3d
 		, castor::Grid const & grid
 		, castor::BoundingBox const & aabb
 		, castor::Point3f const & cameraPos
-		, castor::Point3f const & cameraDir )
+		, castor::Point3f const & cameraDir
+		, float indirectAttenuation )
 	{
 		auto & configuration = m_ubo.getData();
 		castor::Grid levelGrid{ grid, gridLevelScale, gridLevel };
@@ -86,7 +88,7 @@ namespace castor3d
 		auto cellSize = levelGrid.getCellSize();
 
 		configuration.minVolumeCorner = castor::Point4f{ minVolumeCorner->x, minVolumeCorner->y, minVolumeCorner->z, cellSize };
-		configuration.gridSize = castor::Point3f{ gridSize->x, gridSize->y, gridSize->z };
+		configuration.gridSizeAtt = castor::Point4f{ gridSize->x, gridSize->y, gridSize->z, indirectAttenuation };
 
 		return levelGrid;
 	}

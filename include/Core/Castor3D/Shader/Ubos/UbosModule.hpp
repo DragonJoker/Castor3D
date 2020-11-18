@@ -92,7 +92,7 @@ namespace castor3d
 	struct LpvGridConfigUboConfiguration
 	{
 		castor::Point4f minVolumeCorner;
-		castor::Point3f gridSize;
+		castor::Point4f gridSizeAtt;
 	};
 	/**
 	*\~english
@@ -144,7 +144,7 @@ namespace castor3d
 	{
 		std::array< castor::Point4f, shader::DirectionalMaxCascadesCount > allMinVolumeCorners;
 		castor::Point4f allCellSizes;
-		castor::Point4ui gridSize;
+		castor::Point4f gridSizeAtt;
 	};
 	/**
 	*\brief

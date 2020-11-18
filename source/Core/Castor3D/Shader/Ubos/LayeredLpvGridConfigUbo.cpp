@@ -58,6 +58,6 @@ namespace castor3d
 		}
 
 		auto dim = grids[0].getDimensions();
-		data.gridSize = castor::Point4ui{ dim->x, dim->y, dim->z, 0u };
+		data.gridSizeAtt = castor::Point4f{ dim->x, dim->y, dim->z, indirectAttenuation };
 	}
 }

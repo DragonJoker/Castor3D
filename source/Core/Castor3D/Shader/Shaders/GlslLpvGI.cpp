@@ -2,6 +2,8 @@
 
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumesModule.hpp"
 
+#include <CastorUtils/Math/Angle.hpp>
+
 #include <ShaderWriter/Source.hpp>
 
 using namespace sdw;
@@ -101,36 +103,42 @@ namespace castor3d
 		sdw::Vec3 LpvGI::computeResult( SceneFlags sceneFlags
 			, sdw::Vec3 wsPosition
 			, sdw::Vec3 wsNormal
+			, sdw::Float indirectAttenuation
 			, sdw::Vec3 minVolumeCorners
 			, sdw::Float cellSize
 			, sdw::Vec3 gridSize
 			, sdw::Array< sdw::Vec4 > allMinVolumeCorners
 			, sdw::Vec4 allCellSizes
-			, sdw::UVec4 gridSizes
+			, sdw::Vec3 gridSizes
+			, sdw::Vec3 diffuse
 			, sdw::Vec3 allButAmbient
 			, sdw::Vec3 ambient )
 		{
 			if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
 			{
-				return fma( computeLPVRadiance( wsPosition
+				auto indirect = m_writer.declLocale( "indirect"
+					, computeLPVRadiance( wsPosition
 						, wsNormal
 						// l3 is the finest
 						, allMinVolumeCorners[3].xyz()
 						, allCellSizes.w()
-						, vec3( gridSizes.xyz() ) )
-					, ambient
-					, allButAmbient );
+						, gridSizes ) );
+				return ( ( indirect * diffuse * ambient / Float{ castor::Pi< float > } )
+					+ ( indirect * indirectAttenuation / Float{ castor::Pi< float > } )
+					+ allButAmbient );
 			}
 
 			if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
 			{
-				return fma( computeLPVRadiance( wsPosition
+				auto indirect = m_writer.declLocale( "indirect"
+					, computeLPVRadiance( wsPosition
 						, wsNormal
 						, minVolumeCorners
 						, cellSize
-						, gridSize )
-					, ambient
-					, allButAmbient );
+						, gridSize ) );
+				return ( ( indirect * diffuse * ambient / Float{ castor::Pi< float > } )
+					+ ( indirect * indirectAttenuation / Float{ castor::Pi< float > } )
+					+ allButAmbient );
 			}
 
 			return allButAmbient + ambient;

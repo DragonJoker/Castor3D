@@ -95,10 +95,6 @@ namespace castor3d
 		 */
 		ashes::VkDescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
 		/**
-		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
-		 */
-		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
-		/**
 		 *\copydoc		castor3d::RenderPass::doGetGeometryShaderSource
 		 */
 		ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;

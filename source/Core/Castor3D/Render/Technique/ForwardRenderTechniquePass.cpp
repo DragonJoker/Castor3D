@@ -258,195 +258,6 @@ namespace castor3d
 		RenderTechniquePass::doCleanup( device );
 	}
 
-	ShaderPtr ForwardRenderTechniquePass::doGetVertexShaderSource( PipelineFlags const & flags )const
-	{
-		// Since their vertex attribute locations overlap, we must not have both set at the same time.
-		CU_Require( ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) ? 1 : 0 )
-			+ ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) ? 1 : 0 ) < 2
-			&& "Can't have both instantiation and morphing yet." );
-		using namespace sdw;
-		VertexWriter writer;
-		// Vertex inputs
-		auto inPosition = writer.declInput< Vec4 >( "inPosition"
-			, RenderPass::VertexInputs::PositionLocation );
-		auto inNormal = writer.declInput< Vec3 >( "inNormal"
-			, RenderPass::VertexInputs::NormalLocation );
-		auto inTangent = writer.declInput< Vec3 >( "inTangent"
-			, RenderPass::VertexInputs::TangentLocation );
-		auto inTexture = writer.declInput< Vec3 >( "inTexture"
-			, RenderPass::VertexInputs::TextureLocation );
-		auto inBoneIds0 = writer.declInput< IVec4 >( "inBoneIds0"
-			, RenderPass::VertexInputs::BoneIds0Location
-			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto inBoneIds1 = writer.declInput< IVec4 >( "inBoneIds1"
-			, RenderPass::VertexInputs::BoneIds1Location
-			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto inWeights0 = writer.declInput< Vec4 >( "inWeights0"
-			, RenderPass::VertexInputs::Weights0Location
-			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto inWeights1 = writer.declInput< Vec4 >( "inWeights1"
-			, RenderPass::VertexInputs::Weights1Location
-			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto inTransform = writer.declInput< Mat4 >( "inTransform"
-			, RenderPass::VertexInputs::TransformLocation
-			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
-		auto inMaterial = writer.declInput< Int >( "inMaterial"
-			, RenderPass::VertexInputs::MaterialLocation
-			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
-		auto inPosition2 = writer.declInput< Vec4 >( "inPosition2"
-			, RenderPass::VertexInputs::Position2Location
-			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
-		auto inNormal2 = writer.declInput< Vec3 >( "inNormal2"
-			, RenderPass::VertexInputs::Normal2Location
-			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
-		auto inTangent2 = writer.declInput< Vec3 >( "inTangent2"
-			, RenderPass::VertexInputs::Tangent2Location
-			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
-		auto inTexture2 = writer.declInput< Vec3 >( "inTexture2"
-			, RenderPass::VertexInputs::Texture2Location
-			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
-		auto in = writer.getIn();
-
-		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
-		UBO_SCENE( writer, SceneUbo::BindingPoint, 0 );
-		UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0 );
-		UBO_MODEL( writer, ModelUbo::BindingPoint, 0 );
-		auto skinningData = SkinningUbo::declare( writer, SkinningUbo::BindingPoint, 0, flags.programFlags );
-		UBO_MORPHING( writer, MorphingUbo::BindingPoint, 0, flags.programFlags );
-
-		// Outputs
-		auto vtx_worldPosition = writer.declOutput< Vec3 >( "vtx_worldPosition"
-			, RenderPass::VertexOutputs::WorldPositionLocation );
-		auto vtx_viewPosition = writer.declOutput< Vec3 >( "vtx_viewPosition"
-			, RenderPass::VertexOutputs::ViewPositionLocation );
-		auto vtx_curPosition = writer.declOutput< Vec3 >( "vtx_curPosition"
-			, RenderPass::VertexOutputs::CurPositionLocation );
-		auto vtx_prvPosition = writer.declOutput< Vec3 >( "vtx_prvPosition"
-			, RenderPass::VertexOutputs::PrvPositionLocation );
-		auto vtx_tangentSpaceFragPosition = writer.declOutput< Vec3 >( "vtx_tangentSpaceFragPosition"
-			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
-		auto vtx_tangentSpaceViewPosition = writer.declOutput< Vec3 >( "vtx_tangentSpaceViewPosition"
-			, RenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
-		auto vtx_normal = writer.declOutput< Vec3 >( "vtx_normal"
-			, RenderPass::VertexOutputs::NormalLocation );
-		auto vtx_tangent = writer.declOutput< Vec3 >( "vtx_tangent"
-			, RenderPass::VertexOutputs::TangentLocation );
-		auto vtx_bitangent = writer.declOutput< Vec3 >( "vtx_bitangent"
-			, RenderPass::VertexOutputs::BitangentLocation );
-		auto vtx_texture = writer.declOutput< Vec3 >( "vtx_texture"
-			, RenderPass::VertexOutputs::TextureLocation );
-		auto vtx_instance = writer.declOutput< UInt >( "vtx_instance"
-			, RenderPass::VertexOutputs::InstanceLocation );
-		auto vtx_material = writer.declOutput< UInt >( "vtx_material"
-			, RenderPass::VertexOutputs::MaterialLocation );
-		auto out = writer.getOut();
-
-		std::function< void() > main = [&]()
-		{
-			auto curPosition = writer.declLocale( "curPosition"
-				, vec4( inPosition.xyz(), 1.0_f ) );
-			auto v4Normal = writer.declLocale( "v4Normal"
-				, vec4( inNormal, 0.0_f ) );
-			auto v4Tangent = writer.declLocale( "v4Tangent"
-				, vec4( inTangent, 0.0_f ) );
-			auto v3Texture = writer.declLocale( "v3Texture"
-				, inTexture );
-
-			if ( checkFlag( flags.programFlags, ProgramFlag::eSkinning ) )
-			{
-				auto curMtxModel = writer.declLocale( "curMtxModel"
-					, SkinningUbo::computeTransform( skinningData, writer, flags.programFlags ) );
-				auto prvMtxModel = writer.declLocale( "prvMtxModel"
-					, curMtxModel );
-			}
-			else if ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
-			{
-				auto curMtxModel = writer.declLocale( "curMtxModel"
-					, inTransform );
-				auto prvMtxModel = writer.declLocale( "prvMtxModel"
-					, curMtxModel );
-			}
-			else
-			{
-				auto curMtxModel = writer.declLocale( "curMtxModel"
-					, c3d_curMtxModel );
-				auto prvMtxModel = writer.declLocale( "prvMtxModel"
-					, c3d_prvMtxModel );
-			}
-
-			auto curMtxModel = writer.getVariable< Mat4 >( "curMtxModel" );
-			auto prvMtxModel = writer.getVariable< Mat4 >( "prvMtxModel" );
-			auto mtxNormal = writer.declLocale( "mtxNormal"
-				, transpose( inverse( mat3( curMtxModel ) ) ) );
-
-			if ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
-			{
-				vtx_material = writer.cast< UInt >( inMaterial );
-			}
-			else
-			{
-				vtx_material = writer.cast< UInt >( c3d_materialIndex );
-			}
-
-			if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
-			{
-				curPosition = vec4( sdw::mix( curPosition.xyz(), inPosition2.xyz(), vec3( c3d_time ) ), 1.0_f );
-				v4Normal = vec4( sdw::mix( v4Normal.xyz(), inNormal2.xyz(), vec3( c3d_time ) ), 1.0_f );
-				v4Tangent = vec4( sdw::mix( v4Tangent.xyz(), inTangent2.xyz(), vec3( c3d_time ) ), 1.0_f );
-				v3Texture = sdw::mix( v3Texture, inTexture2, vec3( c3d_time ) );
-			}
-
-			vtx_texture = v3Texture;
-			auto prvPosition = writer.declLocale( "prvPosition"
-				, prvMtxModel * curPosition );
-			curPosition = curMtxModel * curPosition;
-			vtx_worldPosition = curPosition.xyz();
-			prvPosition = c3d_prvView * curPosition;
-			curPosition = c3d_curView * curPosition;
-			vtx_viewPosition = curPosition.xyz();
-
-			vtx_normal = normalize( mtxNormal * v4Normal.xyz() );
-			vtx_tangent = normalize( mtxNormal * v4Tangent.xyz() );
-			vtx_tangent = normalize( sdw::fma( -vtx_normal, vec3( dot( vtx_tangent, vtx_normal ) ), vtx_tangent ) );
-			vtx_bitangent = cross( vtx_normal, vtx_tangent );
-
-			if ( checkFlag( flags.programFlags, ProgramFlag::eInvertNormals ) )
-			{
-				vtx_normal = -vtx_normal;
-				vtx_tangent = -vtx_tangent;
-				vtx_bitangent = -vtx_bitangent;
-			}
-
-			vtx_instance = writer.cast< UInt >( in.instanceIndex );
-			prvPosition = c3d_projection * prvPosition;
-			curPosition = c3d_projection * curPosition;
-
-			auto tbn = writer.declLocale( "tbn"
-				, transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
-			vtx_tangentSpaceFragPosition = tbn * vtx_worldPosition;
-			vtx_tangentSpaceViewPosition = tbn * c3d_cameraPosition.xyz();
-			// Convert the jitter from non-homogeneous coordiantes to homogeneous
-			// coordinates and add it:
-			// (note that for providing the jitter in non-homogeneous projection space,
-			//  pixel coordinates (screen space) need to multiplied by two in the C++
-			//  code)
-			curPosition.xy() -= c3d_jitter * curPosition.w();
-			prvPosition.xy() -= c3d_jitter * prvPosition.w();
-			out.vtx.position = curPosition;
-
-			vtx_curPosition = curPosition.xyw();
-			vtx_prvPosition = prvPosition.xyw();
-			// Positions in projection space are in [-1, 1] range, while texture
-			// coordinates are in [0, 1] range. So, we divide by 2 to get velocities in
-			// the scale (and flip the y axis):
-			vtx_curPosition.xy() *= vec2( 0.5_f, -0.5_f );
-			vtx_prvPosition.xy() *= vec2( 0.5_f, -0.5_f );
-		};
-
-		writer.implementFunction< sdw::Void >( "main", main );
-		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-	}
-
 	ShaderPtr ForwardRenderTechniquePass::doGetPhongPixelShaderSource( PipelineFlags const & flags )const
 	{
 		using namespace sdw;
@@ -653,12 +464,14 @@ namespace castor3d
 				pxl_fragColor = vec4( lpvGI.computeResult( flags.sceneFlags
 						, vtx_worldPosition
 						, normal
+						, c3d_indirectAttenuation
 						, c3d_minVolumeCorner
 						, c3d_cellSize
 						, c3d_gridSize
 						, c3d_allMinVolumeCorners
 						, c3d_allCellSizes
 						, c3d_gridSizes
+						, diffuse
 						, diffuse + lightSpecular + emissive
 						, ambient )
 					, alpha );
@@ -947,12 +760,14 @@ namespace castor3d
 				pxl_fragColor = vec4( lpvGI.computeResult( flags.sceneFlags
 						, vtx_worldPosition
 						, normal
+						, c3d_indirectAttenuation
 						, c3d_minVolumeCorner
 						, c3d_cellSize
 						, c3d_gridSize
 						, c3d_allMinVolumeCorners
 						, c3d_allCellSizes
 						, c3d_gridSizes
+						, lightDiffuse * albedo
 						, sdw::fma( lightDiffuse
 							, albedo
 							, lightSpecular + emissive )
@@ -1241,12 +1056,14 @@ namespace castor3d
 				pxl_fragColor = vec4( lpvGI.computeResult( flags.sceneFlags
 						, vtx_worldPosition
 						, normal
+						, c3d_indirectAttenuation
 						, c3d_minVolumeCorner
 						, c3d_cellSize
 						, c3d_gridSize
 						, c3d_allMinVolumeCorners
 						, c3d_allCellSizes
 						, c3d_gridSizes
+						, lightDiffuse * albedo
 						, sdw::fma( lightDiffuse
 							, albedo
 							, lightSpecular + emissive )

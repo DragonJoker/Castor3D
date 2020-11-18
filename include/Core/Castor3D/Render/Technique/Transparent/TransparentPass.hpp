@@ -97,10 +97,6 @@ namespace castor3d
 		 */
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
 		/**
-		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
-		 */
-		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
-		/**
 		 *\copydoc		castor3d::RenderPass::doGetPhongPixelShaderSource
 		 */
 		ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;

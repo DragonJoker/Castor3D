@@ -142,12 +142,12 @@ namespace castor3d
 					auto wsNormal = writer.declLocale( "wsNormal"
 						, data1.xyz() );
 
-					pxl_lpvGI = lpvGI.computeLPVRadiance( wsPosition
+					pxl_lpvGI = c3d_indirectAttenuation / Float{ castor::Pi< float > }
+						*lpvGI.computeLPVRadiance( wsPosition
 						, wsNormal
-						// l3 is the finest
 						, c3d_minVolumeCorner
 						, c3d_cellSize
-						, vec3( c3d_gridSize ) );
+						, c3d_gridSize );
 				} );
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

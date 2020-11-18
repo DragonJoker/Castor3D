@@ -1474,37 +1474,40 @@ namespace castor3d
 		writer.implementFunction< sdw::Void >( "main"
 			, [&]()
 			{
-				auto v4Vertex = writer.declLocale( "v4Vertex"
+				auto curPosition = writer.declLocale( "curPosition"
 					, vec4( position.xyz(), 1.0_f ) );
 				auto v4Normal = writer.declLocale( "v4Normal"
 					, vec4( normal, 0.0_f ) );
 				auto v4Tangent = writer.declLocale( "v4Tangent"
 					, vec4( tangent, 0.0_f ) );
-				auto v3Texture = writer.declLocale( "v3Texture"
-					, uv );
-				auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel" );
-				auto prvMtxModel = writer.declLocale< Mat4 >( "prvMtxModel" );
+				vtx_texture = uv;
 
 				if ( checkFlag( flags.programFlags, ProgramFlag::eSkinning ) )
 				{
-					curMtxModel = SkinningUbo::computeTransform( skinningData, writer, flags.programFlags );
-					prvMtxModel = curMtxModel;
+					auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
+						, SkinningUbo::computeTransform( skinningData, writer, flags.programFlags ) );
+					writer.declLocale< Mat4 >( "prvMtxModel"
+						, curMtxModel );
 				}
 				else if ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
 				{
-					curMtxModel = transform;
-					prvMtxModel = curMtxModel;
+					auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
+						, transform );
+					writer.declLocale< Mat4 >( "prvMtxModel"
+						, curMtxModel );
 				}
 				else
 				{
-					curMtxModel = c3d_curMtxModel;
-					prvMtxModel = c3d_prvMtxModel;
+					auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
+						, c3d_curMtxModel );
+					writer.declLocale< Mat4 >( "prvMtxModel"
+						, c3d_prvMtxModel );
 				}
 
-				auto curMtxNormal = writer.declLocale( "curMtxNormal"
+				auto curMtxModel = writer.getVariable< Mat4 >( "curMtxModel" );
+				auto prvMtxModel = writer.getVariable< Mat4 >( "prvMtxModel" );
+				auto mtxNormal = writer.declLocale( "mtxNormal"
 					, transpose( inverse( mat3( curMtxModel ) ) ) );
-				auto prvMtxNormal = writer.declLocale( "prvMtxNormal"
-					, transpose( inverse( mat3( prvMtxModel ) ) ) );
 
 				if ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
 				{
@@ -1517,39 +1520,46 @@ namespace castor3d
 
 				if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
 				{
-					auto time = writer.declLocale( "time"
-						, vec3( 1.0_f - c3d_time ) );
-					v4Vertex = vec4( sdw::fma( v4Vertex.xyz(), time, inPosition2.xyz() * c3d_time ), 1.0_f );
-					v4Normal = vec4( sdw::fma( v4Normal.xyz(), time, inNormal2.xyz() * c3d_time ), 1.0_f );
-					v4Tangent = vec4( sdw::fma( v4Tangent.xyz(), time, inTangent2.xyz() * c3d_time ), 1.0_f );
-					v3Texture = sdw::fma( v3Texture, time, inTexture2 * c3d_time );
+					curPosition = vec4( sdw::mix( curPosition.xyz(), inPosition2.xyz(), vec3( c3d_time ) ), 1.0_f );
+					v4Normal = vec4( sdw::mix( v4Normal.xyz(), inNormal2.xyz(), vec3( c3d_time ) ), 1.0_f );
+					v4Tangent = vec4( sdw::mix( v4Tangent.xyz(), inTangent2.xyz(), vec3( c3d_time ) ), 1.0_f );
+					vtx_texture = sdw::mix( vtx_texture, inTexture2, vec3( c3d_time ) );
 				}
 
-				vtx_texture = v3Texture;
-				v4Vertex = curMtxModel * v4Vertex;
-				vtx_worldPosition = v4Vertex.xyz();
-				v4Vertex = c3d_curView * v4Vertex;
-				auto mtxNormal = writer.getVariable< Mat3 >( "mtxNormal" );
+				auto prvPosition = writer.declLocale( "prvPosition"
+					, prvMtxModel * curPosition );
+				curPosition = curMtxModel * curPosition;
+				vtx_worldPosition = curPosition.xyz();
+				prvPosition = c3d_prvViewProj * prvPosition;
+				curPosition = c3d_curViewProj * curPosition;
 
-				if ( checkFlag( flags.programFlags, ProgramFlag::eInvertNormals ) )
-				{
-					vtx_normal = normalize( mtxNormal * -v4Normal.xyz() );
-				}
-				else
-				{
-					vtx_normal = normalize( mtxNormal * v4Normal.xyz() );
-				}
-
+				vtx_normal = normalize( mtxNormal * v4Normal.xyz() );
 				vtx_tangent = normalize( mtxNormal * v4Tangent.xyz() );
 				vtx_tangent = normalize( sdw::fma( -vtx_normal, vec3( dot( vtx_tangent, vtx_normal ) ), vtx_tangent ) );
 				vtx_bitangent = cross( vtx_normal, vtx_tangent );
+
+				if ( checkFlag( flags.programFlags, ProgramFlag::eInvertNormals ) )
+				{
+					vtx_normal = -vtx_normal;
+					vtx_tangent = -vtx_tangent;
+					vtx_bitangent = -vtx_bitangent;
+				}
+
 				vtx_instance = writer.cast< UInt >( in.instanceIndex );
-				out.vtx.position = c3d_projection * v4Vertex;
 
 				auto tbn = writer.declLocale( "tbn"
 					, transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
 				vtx_tangentSpaceFragPosition = tbn * vtx_worldPosition;
 				vtx_tangentSpaceViewPosition = tbn * c3d_cameraPosition.xyz();
+
+				// Convert the jitter from non-homogeneous coordinates to homogeneous
+				// coordinates and add it:
+				// (note that for providing the jitter in non-homogeneous projection space,
+				//  pixel coordinates (screen space) need to multiplied by two in the C++
+				//  code)
+				curPosition.xy() -= c3d_jitter * curPosition.w();
+				out.vtx.position = curPosition;
+
 			} );
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}

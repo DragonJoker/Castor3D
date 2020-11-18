@@ -118,10 +118,6 @@ namespace castor3d
 
 	private:
 		/**
-		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
-		 */
-		C3D_API ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
-		/**
 		 *\copydoc		castor3d::RenderPass::doGetPhongPixelShaderSource
 		 */
 		C3D_API ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;

@@ -6,12 +6,7 @@ See LICENSE file in root folder
 
 #define C3D_UseWeightedBlendedRendering 1
 #define C3D_UseDeferredRendering 1
-
-#if C3D_UseDeferredRendering
 #define C3D_UseDepthPrepass 1
-#else
-#define C3D_UseDepthPrepass 1
-#endif
 
 #define C3D_DebugPicking 0
 #define C3D_DebugBackgroundPicking 0

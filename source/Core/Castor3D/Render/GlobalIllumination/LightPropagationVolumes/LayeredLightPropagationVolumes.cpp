@@ -300,10 +300,12 @@ namespace castor3d
 					, grid
 					, m_aabb
 					, m_cameraPos
-					, m_cameraDir );
+					, m_cameraDir
+					, 0.1f );
 			}
 
-			m_lpvGridConfigUbo.cpuUpdate( grids );
+			m_lpvGridConfigUbo.cpuUpdate( grids
+				, 0.1f );
 		}
 	}
 

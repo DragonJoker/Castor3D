@@ -217,6 +217,10 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
 		 */
 		ashes::VkDescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
+		 */
+		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const;
 
 	private:
 		using RenderPass::initialise;

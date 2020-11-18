@@ -30,12 +30,14 @@ namespace castor3d
 			C3D_API sdw::Vec3 computeResult( SceneFlags sceneFlags
 				, sdw::Vec3 wsPosition
 				, sdw::Vec3 wsNormal
+				, sdw::Float indirectAttenuation
 				, sdw::Vec3 minVolumeCorners
 				, sdw::Float cellSize
 				, sdw::Vec3 gridSize
 				, sdw::Array< sdw::Vec4 > allMinVolumeCorners
 				, sdw::Vec4 allCellSizes
-				, sdw::UVec4 gridSizes
+				, sdw::Vec3 gridSizes
+				, sdw::Vec3 diffuse
 				, sdw::Vec3 allButAmbient
 				, sdw::Vec3 ambient );
 

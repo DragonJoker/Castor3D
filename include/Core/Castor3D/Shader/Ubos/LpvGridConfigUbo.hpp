@@ -39,7 +39,8 @@ namespace castor3d
 		C3D_API void cpuUpdate( castor::BoundingBox const & aabb
 			, castor::Point3f const & cameraPos
 			, castor::Point3f const & cameraDir
-			, uint32_t gridDim );
+			, uint32_t gridDim
+			, float indirectAttenuation );
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -51,7 +52,8 @@ namespace castor3d
 			, castor::Grid const & grid
 			, castor::BoundingBox const & aabb
 			, castor::Point3f const & cameraPos
-			, castor::Point3f const & cameraDir );
+			, castor::Point3f const & cameraDir
+			, float indirectAttenuation );
 
 		UniformBufferOffsetT< Configuration > & getUbo()
 		{
@@ -88,12 +90,14 @@ namespace castor3d
 		, set\
 		, ast::type::MemoryLayout::eStd140 };\
 	auto c3d_minVolumeCornerSize = lpvGridConfig.declMember< Vec4 >( castor3d::LpvGridConfigUbo::MinVolumeCornerSize, enabled );\
-	auto c3d_gridSize = lpvGridConfig.declMember< Vec3 >( castor3d::LpvGridConfigUbo::GridSizes, enabled );\
+	auto c3d_gridSizeAtt = lpvGridConfig.declMember< Vec4 >( castor3d::LpvGridConfigUbo::GridSizes, enabled );\
 	lpvGridConfig.end();\
 	auto c3d_minVolumeCorner = c3d_minVolumeCornerSize.xyz();\
 	auto c3d_cellSize = c3d_minVolumeCornerSize.w();\
-	auto c3d_gridWidth = c3d_gridSize.x();\
-	auto c3d_gridHeight = c3d_gridSize.y();\
-	auto c3d_gridDepth = c3d_gridSize.z();\
+	auto c3d_gridWidth = c3d_gridSizeAtt.x();\
+	auto c3d_gridHeight = c3d_gridSizeAtt.y();\
+	auto c3d_gridDepth = c3d_gridSizeAtt.z();\
+	auto c3d_gridSize = c3d_gridSizeAtt.xyz();\
+	auto c3d_indirectAttenuation = c3d_gridSizeAtt.w()
 
 #endif

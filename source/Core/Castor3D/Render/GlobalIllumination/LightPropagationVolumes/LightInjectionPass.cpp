@@ -297,11 +297,11 @@ namespace castor3d
 				, [&]()
 				{
 					auto SHCoeffsR = writer.declLocale( "SHCoeffsR"
-						, ( c3d_lpvIndirectAttenuation * evalCosineLobeToDir( inRsmNormal ) ) / Float{ Pi< float > } * inRsmFlux.r() );
+						, evalCosineLobeToDir( inRsmNormal ) / Float{ Pi< float > } * inRsmFlux.r() );
 					auto SHCoeffsG = writer.declLocale( "SHCoeffsG"
-						, ( c3d_lpvIndirectAttenuation * evalCosineLobeToDir( inRsmNormal ) ) / Float{ Pi< float > } * inRsmFlux.g() );
+						, evalCosineLobeToDir( inRsmNormal ) / Float{ Pi< float > } * inRsmFlux.g() );
 					auto SHCoeffsB = writer.declLocale( "SHCoeffsB"
-						, ( c3d_lpvIndirectAttenuation * evalCosineLobeToDir( inRsmNormal ) ) / Float{ Pi< float > } * inRsmFlux.b() );
+						, evalCosineLobeToDir( inRsmNormal ) / Float{ Pi< float > } * inRsmFlux.b() );
 
 					outLpvGridR = SHCoeffsR;
 					outLpvGridG = SHCoeffsG;

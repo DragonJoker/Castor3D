@@ -36,7 +36,7 @@ namespace castor3d
 		 *\brief		Met à jour les données de l'UBO.
 		 */
 		C3D_API void cpuUpdate( std::array< castor::Grid, shader::DirectionalMaxCascadesCount > const & grids
-			, float indirectAttenuation = 1.7f );
+			, float indirectAttenuation );
 
 		void createSizedBinding( ashes::DescriptorSet & descriptorSet
 			, VkDescriptorSetLayoutBinding const & layoutBinding )const
@@ -70,7 +70,9 @@ namespace castor3d
 		, ast::type::MemoryLayout::eStd140 };\
 	auto c3d_allMinVolumeCorners = layeredLpvConfig.declMember< Vec4 >( castor3d::LayeredLpvGridConfigUbo::AllMinVolumeCorners, 4u, enabled );\
 	auto c3d_allCellSizes = layeredLpvConfig.declMember< Vec4 >( castor3d::LayeredLpvGridConfigUbo::AllCellSizes, enabled );\
-	auto c3d_gridSizes = layeredLpvConfig.declMember< UVec4 >( castor3d::LayeredLpvGridConfigUbo::GridSizes, enabled );\
-	layeredLpvConfig.end()
+	auto c3d_gridSizesAtt = layeredLpvConfig.declMember< Vec4 >( castor3d::LayeredLpvGridConfigUbo::GridSizes, enabled );\
+	layeredLpvConfig.end();\
+	auto c3d_gridSizes = c3d_gridSizesAtt.xyz();\
+	auto c3d_indirectAttenuations = c3d_gridSizesAtt.w()
 
 #endif
