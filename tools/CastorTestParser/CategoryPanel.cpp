@@ -1,5 +1,7 @@
 #include "CastorTestParser/CategoryPanel.hpp"
 
+#include "CastorTestParser/Database/DbDateTimeHelpers.hpp"
+
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 
@@ -39,6 +41,7 @@ namespace test_parser
 		uint32_t getOutdatedTests( TestArray const & tests
 			, db::DateTime const & date )
 		{
+			assert( db::date_time::isValid( date ) );
 			return uint32_t( std::count_if( tests.begin()
 				, tests.end()
 				, [&date]( Test const & lookup )
@@ -95,6 +98,7 @@ namespace test_parser
 		{
 			uint32_t result{};
 			auto date = getFileDate( config.castor );
+			assert( db::date_time::isValid( date ) );
 
 			for ( auto & catTtests : tests )
 			{

@@ -58,14 +58,19 @@ namespace test_parser
 				{
 					auto renderer = name.substr( rendererIdx  + 1 );
 					name = name.substr( 0, rendererIdx );
-					tests.emplace( name
-						, Test{ 0u
+					auto dt = getFileDate( imgPath );
+
+					if ( db::date_time::isValid( dt ) )
+					{
+						tests.emplace( name
+							, Test{ 0u
 							, name
-							, getFileDate( imgPath )
+							, dt
 							, status
 							, renderer
 							, category
 							, false } );
+					}
 				}
 			}
 		}
@@ -119,12 +124,17 @@ namespace test_parser
 
 				if ( it == allResults.end() )
 				{
-					categoryIt->second.push_back( Test{ 0
-						, sceneName
-						, getFileDate( testScene )
-						, TestStatus::eNotRun
-						, "vk"
-						, category } );
+					auto dt = getFileDate( testScene );
+
+					if ( db::date_time::isValid( dt ) )
+					{
+						categoryIt->second.push_back( Test{ 0
+							, sceneName
+							, dt
+							, TestStatus::eNotRun
+							, "vk"
+							, category } );
+					}
 				}
 				else
 				{
@@ -425,6 +435,8 @@ namespace test_parser
 		progress.SetTitle( _( "Populating database" ) );
 		progress.SetRange( progress.GetRange() + int( testCount ) );
 		progress.Update( index, _( "Populating database..." ) );
+		auto castorDate = getFileDate( m_config.castor );
+		assert( db::date_time::isValid( castorDate ) );
 
 		auto finderDate = m_database.createStatement( "SELECT Id, Status FROM Test WHERE Name=? AND Category=? AND RunDate=?;" );
 		auto findDateName = finderDate->createParameter( "Name", db::FieldType::eVarchar, 1024 );
@@ -453,6 +465,7 @@ namespace test_parser
 
 					if ( result->empty() )
 					{
+						test.castorDate = castorDate;
 						insertTest( test );
 					}
 					else

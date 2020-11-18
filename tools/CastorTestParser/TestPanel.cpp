@@ -127,6 +127,12 @@ namespace test_parser
 		{
 			m_source = std::move( image );
 			m_current = {};
+
+			if ( m_source.IsOk() )
+			{
+				SetMaxClientSize( m_source.GetSize() );
+			}
+
 			paintNow();
 		}
 
@@ -201,7 +207,7 @@ namespace test_parser
 		wxArrayString refChoices;
 		refChoices.push_back( wxT( "Reference" ) );
 		refChoices.push_back( wxT( "Difference" ) );
-		auto refCombo = new wxComboBox{ refPanel, wxID_ANY, refChoices[0], wxDefaultPosition, wxDefaultSize, refChoices };
+		auto refCombo = new wxComboBox{ refPanel, wxID_ANY, refChoices[0], wxDefaultPosition, wxDefaultSize, refChoices, wxCB_READONLY };
 		refCombo->Connect( wxEVT_COMBOBOX, wxCommandEventHandler( TestPanel::onRefSelect ), nullptr, this );
 		m_ref = new wxImagePanel{ refPanel };
 		wxBoxSizer * refSizer{ new wxBoxSizer{ wxVERTICAL } };
@@ -214,7 +220,7 @@ namespace test_parser
 		wxArrayString resChoices;
 		resChoices.push_back( wxT( "Test Result" ) );
 		resChoices.push_back( wxT( "Difference" ) );
-		auto resCombo = new wxComboBox{ resPanel, wxID_ANY, resChoices[0], wxDefaultPosition, wxDefaultSize, resChoices };
+		auto resCombo = new wxComboBox{ resPanel, wxID_ANY, resChoices[0], wxDefaultPosition, wxDefaultSize, resChoices, wxCB_READONLY };
 		resCombo->Connect( wxEVT_COMBOBOX, wxCommandEventHandler( TestPanel::onResSelect ), nullptr, this );
 		m_result = new wxImagePanel{ resPanel };
 		wxBoxSizer * resSizer{ new wxBoxSizer{ wxVERTICAL } };
@@ -235,9 +241,12 @@ namespace test_parser
 		m_test = &test;
 		m_refImage = loadRefImage( m_config.test, test );
 		m_resImage = loadResultImage( m_config.work, test );
-		m_diffImage = compareImages( m_loader
+		m_resToRefImage = compareImages( m_loader
 			, m_config.test / getReferenceFolder( test ) / getReferenceName( test )
 			, m_config.work / getResultFolder( test ) / getResultName( test ) );
+		m_refToResImage = compareImages( m_loader
+			, m_config.work / getResultFolder( test ) / getResultName( test )
+			, m_config.test / getReferenceFolder( test ) / getReferenceName( test ) );
 		loadRef( m_currentRef );
 		loadRes( m_currentRes );
 	}
@@ -251,7 +260,7 @@ namespace test_parser
 			break;
 
 		case 1:
-			m_ref->setImage( m_diffImage );
+			m_ref->setImage( m_refToResImage );
 			break;
 
 		default:
@@ -271,7 +280,7 @@ namespace test_parser
 			break;
 
 		case 1:
-			m_result->setImage( m_diffImage );
+			m_result->setImage( m_resToRefImage );
 			break;
 
 		default:

@@ -11,6 +11,8 @@ See LICENSE file in root folder
 #include <wx/panel.h>
 #include <wx/image.h>
 
+class wxComboBox;
+
 namespace test_parser
 {
 	class wxImagePanel;
@@ -45,7 +47,8 @@ namespace test_parser
 		int m_currentRes{};
 		wxImage m_refImage;
 		wxImage m_resImage;
-		wxImage m_diffImage;
+		wxImage m_refToResImage;
+		wxImage m_resToRefImage;
 	};
 }
 

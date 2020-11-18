@@ -46,6 +46,7 @@ namespace test_parser
 
 		void doProcessTest();
 		void doRunTest();
+		void doCopyTestFileName();
 		void doViewTest();
 		void doSetRef();
 		void doIgnoreTestResult();
