@@ -65,8 +65,7 @@ namespace castor3d
 	public:
 		C3D_API static const std::string LpvLightConfig;
 		C3D_API static const std::string LightView;
-		C3D_API static const std::string Config1;
-		C3D_API static const std::string Config2;
+		C3D_API static const std::string Config;
 
 	private:
 		RenderDevice const * m_device{};
@@ -81,13 +80,11 @@ namespace castor3d
 		, set\
 		, ast::type::MemoryLayout::eStd140 };\
 	auto c3d_lightView = lpvLightConfig.declMember< Mat4 >( castor3d::LpvLightConfigUbo::LightView );\
-	auto c3d_lpvConfig1 = lpvLightConfig.declMember< Vec4 >( castor3d::LpvLightConfigUbo::Config1 );\
-	auto c3d_lpvConfig2 = lpvLightConfig.declMember< Vec4 >( castor3d::LpvLightConfigUbo::Config2 );\
+	auto c3d_lpvLightConfig = lpvLightConfig.declMember< Vec4 >( castor3d::LpvLightConfigUbo::Config );\
 	lpvLightConfig.end();\
-	auto c3d_lpvIndirectAttenuation = c3d_lpvConfig1.x();\
-	auto c3d_lpvTexelAreaModifier = c3d_lpvConfig1.y();\
-	auto c3d_lpvTanFovXHalf = c3d_lpvConfig1.z();\
-	auto c3d_lpvTanFovYHalf = c3d_lpvConfig1.w();\
-	auto c3d_lightIndex = writer.cast< sdw::Int >( c3d_lpvConfig2.w() )
+	auto c3d_lpvTexelAreaModifier = c3d_lpvLightConfig.x();\
+	auto c3d_lpvTanFovXHalf = c3d_lpvLightConfig.y();\
+	auto c3d_lpvTanFovYHalf = c3d_lpvLightConfig.z();\
+	auto c3d_lightIndex = writer.cast< sdw::Int >( c3d_lpvLightConfig.w() )
 
 #endif

@@ -93,6 +93,7 @@ namespace castor3d
 		, ShadowMapResult const & smPointResult
 		, ShadowMapResult const & smSpotResult
 		, LightVolumePassResult const & lpvResult
+		, LightVolumePassResultArray const & llpvResult
 		, Size const & size
 		, Scene & scene
 		, HdrConfigUbo const & hdrConfigUbo
@@ -129,6 +130,7 @@ namespace castor3d
 			, smPointResult
 			, smSpotResult
 			, lpvResult
+			, llpvResult
 			, depthTexture.getTexture()->getDefaultView().getTargetView()
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo

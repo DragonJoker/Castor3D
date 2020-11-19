@@ -214,9 +214,16 @@ namespace castor3d
 			if ( result )
 			{
 				log::info << cuT( "Scene::write - Fog density" ) << std::endl;
-				result = file.writeText( m_tabs + cuT( "\tfog_density " ) + string::toString( scene.getFog().getDensity(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+				result = file.writeText( m_tabs + cuT( "\tfog_density " ) + string::toString( scene.getFog().getDensity() ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< Scene >::checkError( result, "Scene fog density" );
 			}
+		}
+
+		if ( result )
+		{
+			log::info << cuT( "Scene::write - LPV indirect attenuation" ) << std::endl;
+			result = file.writeText( m_tabs + cuT( "\tlpv_indirect_attenuation " ) + string::toString( scene.getLpvIndirectAttenuation() ) + cuT( "\n" ) ) > 0;
+			castor::TextWriter< Scene >::checkError( result, "Scene LPV indirect attenuation" );
 		}
 
 		if ( result )
@@ -999,7 +1006,7 @@ namespace castor3d
 			|| needsGlobalIllumination( LightType::eSpot, GlobalIlluminationType::eLayeredLpv )
 			|| needsGlobalIllumination( LightType::eSpot, GlobalIlluminationType::eLayeredLpvG ) )
 		{
-			result |= SceneFlag::eLpvGI;
+			result |= SceneFlag::eLayeredLpvGI;
 		}
 
 		return result;
@@ -1088,6 +1095,11 @@ namespace castor3d
 	{
 		CU_Require( value <= shader::DirectionalMaxCascadesCount );
 		m_directionalShadowCascades = value;
+	}
+
+	void Scene::setLpvIndirectAttenuation( float value )
+	{
+		m_lpvIndirectAttenuation = value;
 	}
 
 	void Scene::doUpdateBoundingBox()

@@ -69,9 +69,15 @@ namespace castor3d
 			LpvGridUboIdx,
 			DepthMapIdx,
 			Data1MapIdx,
-			RLpvAccumIdx,
-			GLpvAccumIdx,
-			BLpvAccumIdx,
+			RLpvAccum1Idx,
+			GLpvAccum1Idx,
+			BLpvAccum1Idx,
+			RLpvAccum2Idx,
+			GLpvAccum2Idx,
+			BLpvAccum2Idx,
+			RLpvAccum3Idx,
+			GLpvAccum3Idx,
+			BLpvAccum3Idx,
 		};
 
 		std::unique_ptr< ast::Shader > getVertexProgram()
@@ -107,7 +113,7 @@ namespace castor3d
 			UBO_LAYERED_LPVGRIDCONFIG( writer, LpvGridUboIdx, 0u, true );
 			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), DepthMapIdx, 0u );
 			auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), Data1MapIdx, 0u );
-			lpvGI.declare( uint32_t( RLpvAccumIdx ) );
+			lpvGI.declareLayered( uint32_t( RLpvAccum1Idx ) );
 			auto in = writer.getIn();
 
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
@@ -141,11 +147,10 @@ namespace castor3d
 						, data1.xyz() );
 
 					pxl_lpvGI = c3d_indirectAttenuations / Float{ castor::Pi< float > }
-						* lpvGI.computeLPVRadiance( wsPosition
+						* lpvGI.computeLLPVRadiance( wsPosition
 							, wsNormal
-							// l3 is the finest
-							, c3d_allMinVolumeCorners[3].xyz()
-							, c3d_allCellSizes.w()
+							, c3d_allMinVolumeCorners
+							, c3d_allCellSizes
 							, c3d_gridSizes );
 				} );
 
@@ -264,6 +269,12 @@ namespace castor3d
 				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
 				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
 				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_3D },
 			};
 		}
 	}
@@ -276,7 +287,7 @@ namespace castor3d
 		, GpInfoUbo const & gpInfo
 		, LayeredLpvGridConfigUbo const & lpvConfigUbo
 		, OpaquePassResult const & gpResult
-		, LightVolumePassResult const & lpvResult
+		, LightVolumePassResultArray const & lpvResult
 		, TextureUnit const & dst
 		, BlendMode blendMode )
 		: RenderQuad{ device
@@ -303,6 +314,9 @@ namespace castor3d
 		ashes::PipelineShaderStageCreateInfoArray shaderStages;
 		shaderStages.push_back( makeShaderState( m_device, m_vertexShader ) );
 		shaderStages.push_back( makeShaderState( m_device, m_pixelShader ) );
+		auto & lpv0 = *m_lpvResult[0];
+		auto & lpv1 = *m_lpvResult[1];
+		auto & lpv2 = *m_lpvResult[2];
 
 		createPipelineAndPass( { m_result.getTexture()->getDimensions().width, m_result.getTexture()->getDimensions().height }
 			, {}
@@ -317,15 +331,33 @@ namespace castor3d
 				makeDescriptorWrite( m_gpResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView()
 					, m_gpResult[DsTexture::eData1].getSampler()->getSampler()
 					, Data1MapIdx ),
-				makeDescriptorWrite( m_lpvResult[LpvTexture::eR].getTexture()->getDefaultView().getSampledView()
-					, m_lpvResult[LpvTexture::eR].getSampler()->getSampler()
-					, RLpvAccumIdx ),
-				makeDescriptorWrite( m_lpvResult[LpvTexture::eG].getTexture()->getDefaultView().getSampledView()
-					, m_lpvResult[LpvTexture::eG].getSampler()->getSampler()
-					, GLpvAccumIdx ),
-				makeDescriptorWrite( m_lpvResult[LpvTexture::eB].getTexture()->getDefaultView().getSampledView()
-					, m_lpvResult[LpvTexture::eB].getSampler()->getSampler()
-					, BLpvAccumIdx ),
+				makeDescriptorWrite( lpv0[LpvTexture::eR].getTexture()->getDefaultView().getSampledView()
+					, lpv0[LpvTexture::eR].getSampler()->getSampler()
+					, RLpvAccum1Idx ),
+				makeDescriptorWrite( lpv0[LpvTexture::eG].getTexture()->getDefaultView().getSampledView()
+					, lpv0[LpvTexture::eG].getSampler()->getSampler()
+					, GLpvAccum1Idx ),
+				makeDescriptorWrite( lpv0[LpvTexture::eB].getTexture()->getDefaultView().getSampledView()
+					, lpv0[LpvTexture::eB].getSampler()->getSampler()
+					, BLpvAccum1Idx ),
+				makeDescriptorWrite( lpv1[LpvTexture::eR].getTexture()->getDefaultView().getSampledView()
+					, lpv1[LpvTexture::eR].getSampler()->getSampler()
+					, RLpvAccum2Idx ),
+				makeDescriptorWrite( lpv1[LpvTexture::eG].getTexture()->getDefaultView().getSampledView()
+					, lpv1[LpvTexture::eG].getSampler()->getSampler()
+					, GLpvAccum2Idx ),
+				makeDescriptorWrite( lpv1[LpvTexture::eB].getTexture()->getDefaultView().getSampledView()
+					, lpv1[LpvTexture::eB].getSampler()->getSampler()
+					, BLpvAccum2Idx ),
+				makeDescriptorWrite( lpv2[LpvTexture::eR].getTexture()->getDefaultView().getSampledView()
+					, lpv2[LpvTexture::eR].getSampler()->getSampler()
+					, RLpvAccum3Idx ),
+				makeDescriptorWrite( lpv2[LpvTexture::eG].getTexture()->getDefaultView().getSampledView()
+					, lpv2[LpvTexture::eG].getSampler()->getSampler()
+					, GLpvAccum3Idx ),
+				makeDescriptorWrite( lpv2[LpvTexture::eB].getTexture()->getDefaultView().getSampledView()
+					, lpv2[LpvTexture::eB].getSampler()->getSampler()
+					, BLpvAccum3Idx ),
 			} );
 		m_commands = getCommands( *m_timer, 0u );
 	}
@@ -360,7 +392,7 @@ namespace castor3d
 		cmd.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
 		cmd.memoryBarrier( VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
 			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_gpResult[DsTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeShaderInputResource( VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL ) );
+			, m_gpResult[DsTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeShaderInputResource( VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL ) );
 		timer.beginPass( cmd, index );
 		cmd.beginDebugBlock(
 			{
@@ -375,7 +407,7 @@ namespace castor3d
 		cmd.endRenderPass();
 		cmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 			, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
-			, m_gpResult[DsTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeDepthStencilReadOnly( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+			, m_gpResult[DsTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeDepthStencilAttachment( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 		cmd.endDebugBlock();
 		timer.endPass( cmd, index );
 		cmd.end();

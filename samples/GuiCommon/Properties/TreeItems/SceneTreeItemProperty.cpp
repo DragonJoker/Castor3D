@@ -33,10 +33,12 @@ namespace GuiCommon
 		static wxString PROPERTY_CATEGORY_SCENE = _( "Scene: " );
 		static wxString PROPERTY_SCENE_DEBUG_OVERLAYS = _( "Debug overlays" );
 		static wxString PROPERTY_SCENE_AMBIENT_LIGHT = _( "Ambient light" );
+		static wxString PROPERTY_SHADOW_LPV_INDIRECT_ATT = _( "Indirect Attenuation" );
 
 		addProperty( grid, PROPERTY_CATEGORY_SCENE + m_scene.getName() );
 		addPropertyT( grid, PROPERTY_SCENE_DEBUG_OVERLAYS, m_scene.getEngine()->getRenderLoop().hasDebugOverlays(), &m_scene.getEngine()->getRenderLoop(), &RenderLoop::showDebugOverlays );
 		addPropertyT( grid, PROPERTY_SCENE_AMBIENT_LIGHT, m_scene.getAmbientLight(), &m_scene, &Scene::setAmbientLight );
+		addPropertyT( grid, PROPERTY_SHADOW_LPV_INDIRECT_ATT, m_scene.getLpvIndirectAttenuation(), &m_scene, &Scene::setLpvIndirectAttenuation );
 	}
 
 	void SceneTreeItemProperty::onDebugOverlaysChange( wxVariant const & var )

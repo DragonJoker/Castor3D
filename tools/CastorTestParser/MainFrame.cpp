@@ -572,6 +572,7 @@ namespace test_parser
 			wxString command = m_config.viewer;
 			command << " " << makeWxString( getTestFileName( m_config.test, *node->test ) );
 			command << " -" << node->test->renderer;
+			m_statusBar->SetLabel( _( "Viewing: " ) + node->test->name );
 			auto result = wxExecute( command
 				, wxEXEC_SYNC
 				, m_runningTest.disProcess.get() );
@@ -581,6 +582,8 @@ namespace test_parser
 				castor::Logger::logError( "doViewTest: " + castor::System::getLastErrorText() );
 			}
 		}
+
+		m_statusBar->SetLabel( _( "Idle" ) );
 	}
 
 	void MainFrame::doSetRef()
@@ -620,6 +623,8 @@ namespace test_parser
 				m_model->ItemChanged( item );
 			}
 		}
+
+		m_statusBar->SetLabel( _( "Idle" ) );
 	}
 
 	void MainFrame::doUpdateCastorDate()
@@ -637,7 +642,6 @@ namespace test_parser
 
 				if ( node->test->castorDate != date )
 				{
-					m_statusBar->SetLabel( _( "Updating Castor3D date for " ) + node->test->name );
 					node->test->castorDate = date;
 					m_database.updateTestCastorDate( *node->test );
 				}
@@ -780,7 +784,6 @@ namespace test_parser
 
 					if ( node->test->castorDate != date )
 					{
-						m_statusBar->SetLabel( _( "Updating Castor3D date for " ) + node->test->name );
 						node->test->castorDate = date;
 						m_database.updateTestCastorDate( *node->test );
 					}
@@ -872,7 +875,6 @@ namespace test_parser
 			{
 				if ( test.castorDate != date )
 				{
-					m_statusBar->SetLabel( _( "Updating Castor3D date for " ) + test.name );
 					test.castorDate = date;
 					m_database.updateTestCastorDate( test );
 				}

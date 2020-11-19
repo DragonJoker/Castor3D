@@ -119,7 +119,7 @@ namespace castor3d
 					auto light = writer.declLocale( "light"
 						, lightingModel->getDirectionalLight( c3d_lightIndex ) );
 					auto cascadeIndex = writer.declLocale( "cascadeIndex"
-						, min( UInt{ layerIndex }, max( 1_u, light.m_cascadeCount ) - 1_u ) );
+						, writer.cast< Int >( max( 1_u, light.m_cascadeCount ) - 1_u ) );
 					auto rsmCoords = writer.declLocale( "rsmCoords"
 						, ivec3( in.vertexIndex % rsmTexSize
 							, in.vertexIndex / rsmTexSize

@@ -388,6 +388,7 @@ namespace test_parser
 		m_updateTestCastorDate.castorDate->setValue( test.castorDate );
 		m_updateTestCastorDate.id->setValue( int32_t( test.id ) );
 		m_updateTestCastorDate.stmt->executeUpdate();
+		castor::Logger::logInfo( "Updated Castor3D date for: " + getDetails( test ) );
 	}
 
 	void TestDatabase::doInitDatabase( wxProgressDialog & progress

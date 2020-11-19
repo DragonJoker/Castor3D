@@ -587,6 +587,14 @@ namespace castor3d
 			, cuEmptyString
 			, getEngine()->getLpvGridSize() );
 
+		for ( uint32_t i = 0u; i < shader::LpvMaxCascadesCount; ++i )
+		{
+			m_llpvResult.emplace_back( castor::makeUnique< LightVolumePassResult >( *getEngine()
+				, device
+				, castor::string::toString( i )
+				, getEngine()->getLpvGridSize() ) );
+		}
+
 		for ( auto i = uint32_t( LightType::eMin ); i < uint32_t( LightType::eCount ); ++i )
 		{
 			m_lightPropagationVolumes[i] = castor::makeUnique< LightPropagationVolumes >( scene
@@ -599,7 +607,7 @@ namespace castor3d
 				, LightType( i )
 				, device
 				, m_allShadowMaps[i].front().first.get().getShadowPassResult()
-				, *m_lpvResult
+				, m_llpvResult
 				, m_llpvConfigUbo );
 			m_lightPropagationVolumesG[i] = castor::makeUnique< LightPropagationVolumesG >( scene
 				, LightType( i )
@@ -611,7 +619,7 @@ namespace castor3d
 				, LightType( i )
 				, device
 				, m_allShadowMaps[i].front().first.get().getShadowPassResult()
-				, *m_lpvResult
+				, m_llpvResult
 				, m_llpvConfigUbo );
 		}
 	}
@@ -783,6 +791,7 @@ namespace castor3d
 			, m_pointShadowMap->getShadowPassResult()
 			, m_spotShadowMap->getShadowPassResult()
 			, *m_lpvResult
+			, m_llpvResult
 			, m_renderTarget.getSize()
 			, *m_renderTarget.getScene()
 			, m_renderTarget.getHdrConfigUbo()
@@ -873,6 +882,8 @@ namespace castor3d
 
 		m_lpvConfigUbo.cleanup();
 		m_llpvConfigUbo.cleanup();
+		m_llpvResult.clear();
+		m_lpvResult.reset();
 	}
 
 	void RenderTechnique::doUpdateShadowMaps( CpuUpdater & updater )

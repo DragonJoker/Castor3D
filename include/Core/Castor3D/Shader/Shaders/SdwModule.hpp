@@ -47,6 +47,8 @@ namespace castor3d
 			eSpecularGlossinessMaterial,
 			eTextureConfigData,
 		};
+		// Light Propagation Volumes Cascades.
+		constexpr uint32_t LpvMaxCascadesCount = 3u;
 		// Directional Shadow Cascades.
 		constexpr uint32_t DirectionalMaxCascadesCount = 4u;
 		// Pass Buffer.

@@ -55,6 +55,7 @@ namespace castor3d
 			, ShadowMapResult const & smPointResult
 			, ShadowMapResult const & smSpotResult
 			, LightVolumePassResult const & lpvResult
+			, LightVolumePassResultArray const & llpvResult
 			, castor::Size const & size
 			, Scene & scene
 			, HdrConfigUbo const & hdrConfigUbo

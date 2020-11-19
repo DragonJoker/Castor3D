@@ -348,6 +348,11 @@ namespace castor3d
 			return m_directionalShadowCascades;
 		}
 
+		inline float getLpvIndirectAttenuation()const
+		{
+			return m_lpvIndirectAttenuation;
+		}
+
 		C3D_API ashes::SemaphoreCRefArray getRenderTargetsSemaphores()const;
 		/**@}*/
 		/**
@@ -360,6 +365,7 @@ namespace castor3d
 		*/
 		/**@{*/
 		C3D_API void setDirectionalShadowCascades( uint32_t value );
+		C3D_API void setLpvIndirectAttenuation( float value );
 		C3D_API void setMaterialsType( MaterialType value );
 
 		inline void setBackgroundColour( castor::RgbColour const & value )
@@ -437,6 +443,7 @@ namespace castor3d
 		std::array< std::set< GlobalIlluminationType >, size_t( LightType::eCount ) > m_giTypes;
 		std::atomic_bool m_hasAnyShadows;
 		std::map< castor::String, OnLightChangedConnection > m_lightConnections;
+		float m_lpvIndirectAttenuation{ 1.7f };
 
 	public:
 		//!\~english	The cameras root node name.

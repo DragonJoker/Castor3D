@@ -64,16 +64,19 @@ namespace castor3d
 		}
 	}
 
-	void LightPropagationVolumesBase::LightLpv::update( CpuUpdater & updater )
+	bool LightPropagationVolumesBase::LightLpv::update( CpuUpdater & updater )
 	{
 		auto & light = *updater.light;
-
-		if ( light.hasChanged()
+		auto changed = light.hasChanged()
 			|| light.getLpvConfig().indirectAttenuation.isDirty()
-			|| light.getLpvConfig().texelAreaModifier.isDirty() )
+			|| light.getLpvConfig().texelAreaModifier.isDirty();
+
+		if ( changed )
 		{
 			lpvLightConfigUbo.cpuUpdate( light );
 		}
+
+		return changed;
 	}
 
 	//*********************************************************************************************
@@ -193,6 +196,9 @@ namespace castor3d
 					"Lighting - " + this->getName() + " - Clear",
 					castor3d::makeFloatArray( m_engine.getNextRainbowColour() ),
 				} );
+			clearTex( m_injection, LpvTexture::eR );
+			clearTex( m_injection, LpvTexture::eG );
+			clearTex( m_injection, LpvTexture::eB );
 			clearTex( m_propagate[0u], LpvTexture::eR );
 			clearTex( m_propagate[0u], LpvTexture::eG );
 			clearTex( m_propagate[0u], LpvTexture::eB );
@@ -254,10 +260,18 @@ namespace castor3d
 		auto camPos = camera.getParent()->getDerivedPosition();
 		castor::Point3f camDir{ 0, 0, 1 };
 		camera.getParent()->getDerivedOrientation().transform( camDir, camDir );
-
-		if ( m_aabb != aabb
+		auto changed = m_aabb != aabb
 			|| m_cameraPos != camPos
-			|| m_cameraDir != camDir )
+			|| m_cameraDir != camDir;
+
+		for ( auto & lightLpv : m_lightLpvs )
+		{
+			updater.light = lightLpv.first;
+			changed = lightLpv.second.update( updater )
+				|| changed;
+		}
+
+		if ( changed )
 		{
 			m_aabb = aabb;
 			m_cameraPos = camPos;
@@ -266,13 +280,7 @@ namespace castor3d
 				, m_cameraPos
 				, m_cameraDir
 				, m_engine.getLpvGridSize()
-				, 0.1f );
-		}
-
-		for ( auto & lightLpv : m_lightLpvs )
-		{
-			updater.light = lightLpv.first;
-			lightLpv.second.update( updater );
+				, m_scene.getLpvIndirectAttenuation() );
 		}
 	}
 

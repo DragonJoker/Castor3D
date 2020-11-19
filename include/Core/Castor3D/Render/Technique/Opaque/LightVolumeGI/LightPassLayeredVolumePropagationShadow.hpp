@@ -131,7 +131,7 @@ namespace castor3d
 		OpaquePassResult const & m_gpResult;
 		ShadowMapResult const & m_smResult;
 		LightPassResult const & m_lpResult;
-		LightVolumePassResult const & m_lpvResult;
+		LightVolumePassResultArray const & m_lpvResult;
 		GpInfoUbo const & m_gpInfoUbo;
 		LayeredLpvGridConfigUbo const & m_lpvConfigUbo;
 		LayeredLightVolumeGIPassArray m_lightVolumeGIPasses;

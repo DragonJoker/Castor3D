@@ -16,8 +16,7 @@ namespace castor3d
 {
 	std::string const LpvLightConfigUbo::LpvLightConfig = "LpvLightConfig";
 	std::string const LpvLightConfigUbo::LightView = "c3d_lightView";
-	std::string const LpvLightConfigUbo::Config1 = "c3d_lpvConfig1";
-	std::string const LpvLightConfigUbo::Config2 = "c3d_lpvConfig2";
+	std::string const LpvLightConfigUbo::Config = "c3d_lpvLightConfig";
 
 	LpvLightConfigUbo::LpvLightConfigUbo()
 	{
@@ -56,7 +55,6 @@ namespace castor3d
 		auto & configuration = m_ubo.getData();
 
 		configuration.lightIndex = float( light.getBufferIndex() );
-		configuration.indirectAttenuation = lpvConfig.indirectAttenuation;
 		configuration.texelAreaModifier = lpvConfig.texelAreaModifier;
 		auto ltType = light.getLightType();
 
@@ -89,11 +87,10 @@ namespace castor3d
 		auto & lpvConfig = light.getLight().getLpvConfig();
 		auto & configuration = m_ubo.getData();
 
-		configuration.indirectAttenuation = lpvConfig.indirectAttenuation;
-		configuration.texelAreaModifier = lpvConfig.texelAreaModifier;
-		configuration.lightIndex = float( light.getLight().getBufferIndex() );
 		configuration.lightView = light.getViewMatrix( cascadeIndex );
+		configuration.texelAreaModifier = lpvConfig.texelAreaModifier;
 		configuration.tanFovXHalf = 1.0f;
 		configuration.tanFovYHalf = 1.0f;
+		configuration.lightIndex = float( light.getLight().getBufferIndex() );
 	}
 }

@@ -290,6 +290,7 @@ namespace castor3d
 		LpvGridConfigUbo m_lpvConfigUbo;
 		LayeredLpvGridConfigUbo m_llpvConfigUbo;
 		LightVolumePassResultUPtr m_lpvResult;
+		LightVolumePassResultArray m_llpvResult;
 		LightPropagationVolumesLightType m_lightPropagationVolumes;
 		LayeredLightPropagationVolumesLightType m_layeredLightPropagationVolumes;
 		LightPropagationVolumesGLightType m_lightPropagationVolumesG;

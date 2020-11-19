@@ -148,10 +148,9 @@ namespace castor3d
 
 	CU_DeclareArray( LightPropagationPassUPtr, lpv::PropagationPassCount, LightPropagationPass );
 
-	using LayeredLightVolumePassResult = std::array< LightVolumePassResult, shader::DirectionalMaxCascadesCount >;
-
 	CU_DeclareVector( GeometryInjectionPass, GeometryInjectionPass );
 	CU_DeclareVector( LightInjectionPass, LightInjectionPass );
+	CU_DeclareVector( LightVolumePassResultUPtr, LightVolumePassResult );
 
 	//@}
 	//@}

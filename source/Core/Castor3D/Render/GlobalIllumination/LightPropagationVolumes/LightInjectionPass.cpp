@@ -80,6 +80,7 @@ namespace castor3d
 				, RsmFluxIdx
 				, 0u );
 			UBO_LPVGRIDCONFIG( writer, LpvGridUboIdx, 0u, true );
+			UBO_LPVLIGHTCONFIG( writer, LpvLightUboIdx, 0u );
 			auto in = writer.getIn();
 
 			uint32_t index = 0u;
@@ -113,9 +114,9 @@ namespace castor3d
 				, [&]()
 				{
 					auto light = writer.declLocale( "light"
-						, lightingModel->getDirectionalLight( 0_i ) );
+						, lightingModel->getDirectionalLight( c3d_lightIndex ) );
 					auto cascadeIndex = writer.declLocale( "cascadeIndex"
-						, min( UInt{ layerIndex }, max( 1_u, light.m_cascadeCount ) - 1_u ) );
+						, writer.cast< Int >( max( 1_u, light.m_cascadeCount ) - 1_u ) );
 					auto rsmCoords = writer.declLocale( "rsmCoords"
 						, ivec3( in.vertexIndex % rsmTexSize
 							, in.vertexIndex / rsmTexSize
@@ -321,7 +322,7 @@ namespace castor3d
 					0u,
 					format,
 					VK_SAMPLE_COUNT_1_BIT,
-					VK_ATTACHMENT_LOAD_OP_CLEAR,
+					VK_ATTACHMENT_LOAD_OP_LOAD,
 					VK_ATTACHMENT_STORE_OP_STORE,
 					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 					VK_ATTACHMENT_STORE_OP_DONT_CARE,
@@ -332,7 +333,7 @@ namespace castor3d
 					0u,
 					format,
 					VK_SAMPLE_COUNT_1_BIT,
-					VK_ATTACHMENT_LOAD_OP_CLEAR,
+					VK_ATTACHMENT_LOAD_OP_LOAD,
 					VK_ATTACHMENT_STORE_OP_STORE,
 					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 					VK_ATTACHMENT_STORE_OP_DONT_CARE,
@@ -343,7 +344,7 @@ namespace castor3d
 					0u,
 					format,
 					VK_SAMPLE_COUNT_1_BIT,
-					VK_ATTACHMENT_LOAD_OP_CLEAR,
+					VK_ATTACHMENT_LOAD_OP_LOAD,
 					VK_ATTACHMENT_STORE_OP_STORE,
 					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 					VK_ATTACHMENT_STORE_OP_DONT_CARE,

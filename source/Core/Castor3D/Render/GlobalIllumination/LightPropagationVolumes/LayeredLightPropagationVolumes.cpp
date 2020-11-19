@@ -35,7 +35,7 @@ namespace castor3d
 	{
 		auto & engine = *device.renderSystem.getEngine();
 
-		for ( uint32_t cascade = 0u; cascade < shader::DirectionalMaxCascadesCount; ++cascade )
+		for ( uint32_t cascade = 0u; cascade < CascadeCount; ++cascade )
 		{
 			lpvLightConfigUbos.emplace_back( device );
 			lightInjectionPasses.emplace_back( engine
@@ -48,7 +48,7 @@ namespace castor3d
 				, lpvLightConfigUbos[cascade]
 				, injection[cascade]
 				, engine.getLpvGridSize()
-				, cascade );
+				, CascadeCount - cascade );
 
 			if ( geometry )
 			{
@@ -62,24 +62,27 @@ namespace castor3d
 					, lpvLightConfigUbos[cascade]
 					, ( *geometry )[cascade]
 					, engine.getLpvGridSize()
-					, cascade );
+					, CascadeCount - cascade );
 			}
 		}
 	}
 
-	void LayeredLightPropagationVolumesBase::LightLpv::update( CpuUpdater & updater )
+	bool LayeredLightPropagationVolumesBase::LightLpv::update( CpuUpdater & updater )
 	{
 		auto & light = *updater.light;
-
-		if ( light.hasChanged()
+		auto changed = light.hasChanged()
 			|| light.getLpvConfig().indirectAttenuation.isDirty()
-			|| light.getLpvConfig().texelAreaModifier.isDirty() )
+			|| light.getLpvConfig().texelAreaModifier.isDirty();
+
+		if ( changed )
 		{
 			for ( auto & lpvLightConfigUbo : lpvLightConfigUbos )
 			{
 				lpvLightConfigUbo.cpuUpdate( light );
 			}
 		}
+
+		return changed;
 	}
 
 	//*********************************************************************************************
@@ -88,7 +91,7 @@ namespace castor3d
 		, LightType lightType
 		, RenderDevice const & device
 		, ShadowMapResult const & smResult
-		, LightVolumePassResult const & lpvResult
+		, LightVolumePassResultArray const & lpvResult
 		, LayeredLpvGridConfigUbo & lpvGridConfigUbo
 		, bool geometryVolumes )
 		: castor::Named{ "LayeredLightPropagationVolumes" + ( geometryVolumes ? castor::String( "G" ) : castor::String( "" ) ) }
@@ -106,7 +109,7 @@ namespace castor3d
 			LightVolumePassResult{ m_engine, m_device, getName() + "Propagate1", m_engine.getLpvGridSize() },
 		}
 	{
-		for ( uint32_t cascade = 0u; cascade < shader::DirectionalMaxCascadesCount; ++cascade )
+		for ( uint32_t cascade = 0u; cascade < CascadeCount; ++cascade )
 		{
 			m_lpvGridConfigUbos.emplace_back( m_device );
 			m_injection.emplace_back( m_engine
@@ -172,14 +175,25 @@ namespace castor3d
 					"Lighting - " + this->getName() + " - Clear Accumulation",
 					castor3d::makeFloatArray( m_engine.getNextRainbowColour() ),
 				} );
-			clearTex( cmd, m_lpvResult, LpvTexture::eR );
-			clearTex( cmd, m_lpvResult, LpvTexture::eG );
-			clearTex( cmd, m_lpvResult, LpvTexture::eB );
+
+			for ( auto & injection : m_injection )
+			{
+				clearTex( cmd, injection, LpvTexture::eR );
+				clearTex( cmd, injection, LpvTexture::eG );
+				clearTex( cmd, injection, LpvTexture::eB );
+			}
+
+			for ( auto & lpvResult : m_lpvResult )
+			{
+				clearTex( cmd, *lpvResult, LpvTexture::eR );
+				clearTex( cmd, *lpvResult, LpvTexture::eG );
+				clearTex( cmd, *lpvResult, LpvTexture::eB );
+			}
 
 			cmd.endDebugBlock();
 			cmd.end();
 
-			for ( uint32_t cascade = 0u; cascade < shader::DirectionalMaxCascadesCount; ++cascade )
+			for ( uint32_t cascade = 0u; cascade < CascadeCount; ++cascade )
 			{
 				TextureUnit * geometry{ nullptr };
 
@@ -192,7 +206,7 @@ namespace castor3d
 				passNoOcc.registerPassIO( nullptr
 					, m_injection[cascade]
 					, m_lpvGridConfigUbos[cascade]
-					, m_lpvResult
+					, *m_lpvResult[cascade]
 					, m_propagate[propIndex] );
 
 				for ( uint32_t i = 1u; i < MaxPropagationSteps; ++i )
@@ -200,7 +214,7 @@ namespace castor3d
 					passOcc.registerPassIO( geometry
 						, m_propagate[propIndex]
 						, m_lpvGridConfigUbos[cascade]
-						, m_lpvResult
+						, *m_lpvResult[cascade]
 						, m_propagate[1u - propIndex] );
 					propIndex = 1u - propIndex;
 				}
@@ -274,15 +288,22 @@ namespace castor3d
 		}
 
 		auto & camera = *updater.camera;
-		auto & light = *updater.light;
 		auto aabb = m_scene.getBoundingBox();
 		auto camPos = camera.getParent()->getDerivedPosition();
 		castor::Point3f camDir{ 0, 0, 1 };
 		camera.getParent()->getDerivedOrientation().transform( camDir, camDir );
-
-		if ( m_aabb != aabb
+		auto changed = m_aabb != aabb
 			|| m_cameraPos != camPos
-			|| m_cameraDir != camDir )
+			|| m_cameraDir != camDir;
+
+		for ( auto & lightLpv : m_lightLpvs )
+		{
+			updater.light = lightLpv.first;
+			changed = lightLpv.second.update( updater )
+				|| changed;
+		}
+
+		if ( changed )
 		{
 			m_aabb = aabb;
 			m_cameraPos = camPos;
@@ -290,22 +311,23 @@ namespace castor3d
 			auto cellSize = std::max( std::max( m_aabb.getDimensions()->x
 				, m_aabb.getDimensions()->y )
 				, m_aabb.getDimensions()->z ) / m_engine.getLpvGridSize();
-			std::array< castor::Grid, shader::DirectionalMaxCascadesCount > grids;
+			std::array< castor::Grid, CascadeCount > grids;
 			castor::Grid grid{ m_engine.getLpvGridSize(), cellSize, m_aabb.getMax(), m_aabb.getMin(), 1.0f, 0 };
+			std::array< float, CascadeCount > const scales{ 1.0f, 0.65f, 0.4f };
 
-			for ( auto i = 0u; i < shader::DirectionalMaxCascadesCount; ++i )
+			for ( auto i = 0u; i < CascadeCount; ++i )
 			{
 				grids[i] = m_lpvGridConfigUbos[i].cpuUpdate( i
-					, 1.0f/*directional.getSplitScale()*/
+					, scales[i]
 					, grid
 					, m_aabb
 					, m_cameraPos
 					, m_cameraDir
-					, 0.1f );
+					, m_scene.getLpvIndirectAttenuation() );
 			}
 
 			m_lpvGridConfigUbo.cpuUpdate( grids
-				, 0.1f );
+				, m_scene.getLpvIndirectAttenuation() );
 		}
 	}
 
@@ -322,6 +344,7 @@ namespace castor3d
 		}
 
 		auto result = &toWait;
+		result = &m_clearCommand.submit( *m_device.graphicsQueue, *result );
 
 		for ( auto & lightLpv : m_lightLpvs )
 		{
@@ -336,12 +359,11 @@ namespace castor3d
 			}
 		}
 
-		result = &m_clearCommand.submit( *m_device.graphicsQueue, *result );
 		auto & passNoOcc = *m_lightPropagationPasses[0u];
 		auto & passOcc = *m_lightPropagationPasses[1u];
 		uint32_t occPassIndex = 0u;
 
-		for ( uint32_t cascade = 0u; cascade < shader::DirectionalMaxCascadesCount; ++cascade )
+		for ( uint32_t cascade = 0u; cascade < CascadeCount; ++cascade )
 		{
 			result = &m_clearCommands[cascade].submit( *m_device.graphicsQueue, *result );
 			result = &passNoOcc.compute( *result, cascade );

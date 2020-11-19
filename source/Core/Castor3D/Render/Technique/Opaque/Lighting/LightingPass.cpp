@@ -360,7 +360,7 @@ namespace castor3d
 			, ShadowMapResult const & smDirectionalResult
 			, ShadowMapResult const & smPointResult
 			, ShadowMapResult const & smSpotResult
-			, LightVolumePassResult const & lpvResult
+			, LightVolumePassResultArray const & lpvResult
 			, LayeredLpvGridConfigUbo const & lpvConfigUbo )
 		{
 			switch ( lightType )
@@ -408,6 +408,7 @@ namespace castor3d
 			, ShadowMapResult const & smSpotResult
 			, LightPassResult const & lpResult
 			, LightVolumePassResult const & lpvResult
+			, LightVolumePassResultArray const & llpvResult
 			, GpInfoUbo const & gpInfoUbo
 			, LpvGridConfigUbo const & lpvConfigUbo
 			, LayeredLpvGridConfigUbo const & llpvConfigUbo )
@@ -478,7 +479,7 @@ namespace castor3d
 						, smDirectionalResult
 						, smPointResult
 						, smSpotResult
-						, lpvResult
+						, llpvResult
 						, llpvConfigUbo );
 				}
 				return LightPassUPtr{};
@@ -494,7 +495,7 @@ namespace castor3d
 						, smDirectionalResult
 						, smPointResult
 						, smSpotResult
-						, lpvResult
+						, llpvResult
 						, llpvConfigUbo );
 				}
 				return LightPassUPtr{};
@@ -514,6 +515,7 @@ namespace castor3d
 		, ShadowMapResult const & smPointResult
 		, ShadowMapResult const & smSpotResult
 		, LightVolumePassResult const & lpvResult
+		, LightVolumePassResultArray const & llpvResult
 		, ashes::ImageView const & depthView
 		, SceneUbo & sceneUbo
 		, GpInfoUbo const & gpInfoUbo
@@ -526,6 +528,7 @@ namespace castor3d
 		, m_smPointResult{ smPointResult }
 		, m_smSpotResult{ smSpotResult }
 		, m_lpvResult{ lpvResult }
+		, m_llpvResult{ llpvResult }
 		, m_depthView{ depthView }
 		, m_sceneUbo{ sceneUbo }
 		, m_gpInfoUbo{ gpInfoUbo }
@@ -565,11 +568,11 @@ namespace castor3d
 				makeFloatArray( m_engine.getNextRainbowColour() ),
 			} );
 		// Src depth buffer from depth attach to transfer source
-		m_blitDepth.commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+		m_blitDepth.commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
 			, m_srcDepth.makeTransferSource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 		// Dst depth buffer from unknown to transfer destination
-		m_blitDepth.commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+		m_blitDepth.commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
 			, m_result[LpTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
 		// Copy Src to Dst
@@ -585,7 +588,7 @@ namespace castor3d
 		// Src depth buffer from transfer source to depth stencil read only
 		m_blitDepth.commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 			, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
-			, m_srcDepth.makeDepthStencilReadOnly( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
+			, m_srcDepth.makeDepthStencilAttachment( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
 		m_blitDepth.commandBuffer->endDebugBlock();
 		m_blitDepth.commandBuffer->end();
 
@@ -771,6 +774,7 @@ namespace castor3d
 						, m_smSpotResult
 						, m_result
 						, m_lpvResult
+						, m_llpvResult
 						, m_gpInfoUbo
 						, m_lpvConfigUbo
 						, m_llpvConfigUbo );

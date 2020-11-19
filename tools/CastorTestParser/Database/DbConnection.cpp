@@ -721,7 +721,18 @@ namespace test_parser::db
 	bool Connection::executeUpdate( sqlite3_stmt * statement )
 	{
 		ValuedObjectInfosArray infos;
-		return executeSelect( statement, infos ) != nullptr;
+		ResultPtr result;
+
+		try
+		{
+			result = sqliteFetchResult( statement, infos, *this );
+		}
+		catch ( std::exception & exc )
+		{
+			castor::Logger::logError( std::string( exc.what() ) );
+		}
+
+		return result != nullptr;
 	}
 
 	ResultPtr Connection::executeSelect( sqlite3_stmt * statement

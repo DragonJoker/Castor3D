@@ -44,7 +44,7 @@ namespace castor3d
 		}
 	}
 
-	void LayeredLpvGridConfigUbo::cpuUpdate( std::array< castor::Grid, shader::DirectionalMaxCascadesCount > const & grids
+	void LayeredLpvGridConfigUbo::cpuUpdate( std::array< castor::Grid, shader::LpvMaxCascadesCount > const & grids
 		, float indirectAttenuation )
 	{
 		CU_Require( m_ubo );

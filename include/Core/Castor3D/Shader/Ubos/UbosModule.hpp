@@ -114,14 +114,10 @@ namespace castor3d
 	struct LpvLightConfigUboConfiguration
 	{
 		castor::Matrix4x4f lightView;
-		float indirectAttenuation = 1.7f;
 		float texelAreaModifier = 1.0f;
 		float tanFovXHalf = 1.0f;
 		float tanFovYHalf = 1.0f;
 		float lightIndex = 0.0f;
-
-	private:
-		float fill1{}, fill2{}, fill3{};
 	};
 	/**
 	*\~english
@@ -142,7 +138,7 @@ namespace castor3d
 	*/
 	struct LayeredLpvGridConfigUboConfiguration
 	{
-		std::array< castor::Point4f, shader::DirectionalMaxCascadesCount > allMinVolumeCorners;
+		std::array< castor::Point4f, shader::LpvMaxCascadesCount > allMinVolumeCorners;
 		castor::Point4f allCellSizes;
 		castor::Point4f gridSizeAtt;
 	};

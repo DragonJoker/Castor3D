@@ -28,13 +28,14 @@ namespace castor3d
 	{
 	public:
 		static constexpr uint32_t MaxPropagationSteps = 8u;
+		static constexpr uint32_t CascadeCount = shader::LpvMaxCascadesCount;
 
 	protected:
 		C3D_API LayeredLightPropagationVolumesBase( Scene const & scene
 			, LightType lightType
 			, RenderDevice const & device
 			, ShadowMapResult const & smResult
-			, LightVolumePassResult const & lpvResult
+			, LightVolumePassResultArray const & lpvResult
 			, LayeredLpvGridConfigUbo & lpvGridConfigUbo
 			, bool geometryVolumes );
 
@@ -51,7 +52,7 @@ namespace castor3d
 		Engine & m_engine;
 		RenderDevice const & m_device;
 		ShadowMapResult const & m_smResult;
-		LightVolumePassResult const & m_lpvResult;
+		LightVolumePassResultArray const & m_lpvResult;
 		LayeredLpvGridConfigUbo & m_lpvGridConfigUbo;
 		LpvGridConfigUboArray m_lpvGridConfigUbos;
 		bool m_initialised{ false };
@@ -72,7 +73,7 @@ namespace castor3d
 				, LpvGridConfigUboArray const & lpvGridConfigUbos
 				, std::vector< LightVolumePassResult > const & injection
 				, std::vector< TextureUnit > const * geometry );
-			void update( CpuUpdater & updater );
+			bool update( CpuUpdater & updater );
 			LpvLightConfigUboArray lpvLightConfigUbos;
 			LightInjectionPassArray lightInjectionPasses;
 			GeometryInjectionPassArray geometryInjectionPasses;
@@ -94,7 +95,7 @@ namespace castor3d
 			, LightType lightType
 			, RenderDevice const & device
 			, ShadowMapResult const & smResult
-			, LightVolumePassResult const & lpvResult
+			, LightVolumePassResultArray const & lpvResult
 			, LayeredLpvGridConfigUbo & lpvGridConfigUbo )
 			: LayeredLightPropagationVolumesBase{ scene
 				, lightType

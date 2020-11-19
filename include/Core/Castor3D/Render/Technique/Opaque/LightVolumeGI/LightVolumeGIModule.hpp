@@ -78,18 +78,18 @@ namespace castor3d
 	CU_DeclareArray( LayeredLightVolumeGIPassUPtr, lpv::ResolvePassCount, LayeredLightVolumeGIPass );
 	CU_DeclareArray( LightVolumeGIPassUPtr, lpv::ResolvePassCount, LightVolumeGIPass );
 
-	template< typename LpvGridConfigUboT >
+	template< typename LpvResultT, typename LpvGridConfigUboT >
 	struct LpvLightPassConfigT
 	{
 		LightPassConfig base;
 		LightCache const & lightCache;
 		OpaquePassResult const & gpResult;
 		ShadowMapResult const & smResult;
-		LightVolumePassResult const & lpvResult;
+		LpvResultT const & lpvResult;
 		LpvGridConfigUboT const & lpvConfigUbo;
 	};
-	using LpvLightPassConfig = LpvLightPassConfigT< LpvGridConfigUbo >;
-	using LayeredLpvLightPassConfig = LpvLightPassConfigT< LayeredLpvGridConfigUbo >;
+	using LpvLightPassConfig = LpvLightPassConfigT< LightVolumePassResult, LpvGridConfigUbo >;
+	using LayeredLpvLightPassConfig = LpvLightPassConfigT< LightVolumePassResultArray, LayeredLpvGridConfigUbo >;
 
 	//@}
 	//@}

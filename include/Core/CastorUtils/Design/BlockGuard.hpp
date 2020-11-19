@@ -66,6 +66,21 @@ namespace castor
 	{
 		return BlockGuard< CleanFunc >( init, clean );
 	}
+	/**
+	 *\~english
+	 *\brief		Helper function to declare a BlockGuard.
+	 *\param[in]	clean	The action executed on destruction.
+	 *\return		The block guard.
+	 *\~french
+	 *\brief		fonction d'aide à la construction d'un BlockGuard.
+	 *\param[in]	clean	L'action effectuée lors de la destruction.
+	 *\return		La garde.
+	*/
+	template< typename CleanFunc >
+	BlockGuard< CleanFunc > makeBlockGuard( CleanFunc clean )
+	{
+		return BlockGuard< CleanFunc >( [](){}, clean );
+	}
 }
 
 #endif
