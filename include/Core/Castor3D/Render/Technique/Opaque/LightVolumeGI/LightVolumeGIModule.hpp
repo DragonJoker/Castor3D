@@ -4,7 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_LightVolumeGIModule_H___
 #define ___C3D_LightVolumeGIModule_H___
 
+#include "Castor3D/Cache/CacheModule.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumesModule.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightingModule.hpp"
 
 #include "Castor3D/Scene/Light/LightModule.hpp"

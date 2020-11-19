@@ -42,7 +42,7 @@
 #include <numeric>
 #include <random>
 
-CU_ImplementCUSmartPtr( castor3d, LightInjectionPass );
+CU_ImplementCUSmartPtr( castor3d, LightInjectionPass )
 
 using namespace castor;
 

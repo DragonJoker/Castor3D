@@ -57,7 +57,7 @@
 #include <numeric>
 #include <random>
 
-CU_ImplementCUSmartPtr( castor3d, LightVolumeGIPass );
+CU_ImplementCUSmartPtr( castor3d, LightVolumeGIPass )
 
 using namespace castor;
 

@@ -17,7 +17,7 @@ namespace castor3d
 		class LpvGI
 		{
 		public:
-			C3D_API LpvGI( sdw::ShaderWriter & writer );
+			C3D_API explicit LpvGI( sdw::ShaderWriter & writer );
 			C3D_API void declare( uint32_t setIndex
 				, uint32_t & bindingIndex
 				, SceneFlags sceneFlags );

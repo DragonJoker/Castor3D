@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "LightPropagationVolumesModule.hpp"
 
+#include "Castor3D/Cache/CacheModule.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightVolumePassResult.hpp"

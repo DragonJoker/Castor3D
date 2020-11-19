@@ -59,7 +59,7 @@ namespace castor3d
 		bool m_geometryVolumes{ false };
 		LightType m_lightType;
 		std::vector< LightVolumePassResult > m_injection;
-		std::vector< TextureUnit > m_geometry;;
+		std::vector< TextureUnit > m_geometry;
 		std::array< LightVolumePassResult, 2u > m_propagate;
 		CommandsSemaphore m_clearCommand;
 		std::vector< CommandsSemaphore > m_clearCommands;

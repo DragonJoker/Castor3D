@@ -38,7 +38,7 @@
 #include <numeric>
 #include <random>
 
-CU_ImplementCUSmartPtr( castor3d, LightPropagationPass );
+CU_ImplementCUSmartPtr( castor3d, LightPropagationPass )
 
 using namespace castor;
 

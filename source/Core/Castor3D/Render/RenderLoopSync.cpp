@@ -1,5 +1,6 @@
 #include "Castor3D/Render/RenderLoopSync.hpp"
 
+#include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
 #include <CastorUtils/Design/BlockGuard.hpp>
