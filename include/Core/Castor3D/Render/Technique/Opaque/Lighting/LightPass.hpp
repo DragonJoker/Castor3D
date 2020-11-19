@@ -400,15 +400,11 @@ namespace castor3d
 		 *\param[in]	gpInfoUbo		L'UBO de la geometry pass.
 		 *\param[in]	hasShadows		Dit si les ombres sont activées pour cette passe d'éclairage.
 		 */
-		LightPass( Engine & engine
-			, RenderDevice const & device
+		LightPass( RenderDevice const & device
 			, castor::String const & suffix
 			, ashes::RenderPassPtr firstRenderPass
 			, ashes::RenderPassPtr blendRenderPass
-			, LightPassResult const & lpResult
-			, GpInfoUbo const & gpInfoUbo
-			, bool hasShadows
-			, bool generatesIndirect );
+			, LightPassConfig const & lpConfig );
 		/**
 		 *\~english
 		 *\brief		Initialises the light pass.

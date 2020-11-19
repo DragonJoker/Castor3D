@@ -8,6 +8,8 @@
 #include <CastorUtils/Graphics/Font.hpp>
 #include <CastorUtils/Graphics/Image.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, FontTexture )
+
 using namespace castor;
 
 namespace castor3d

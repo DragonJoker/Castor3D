@@ -107,7 +107,6 @@ namespace GuiCommon
 		static wxString PROPERTY_SHADOW_RSM_INTENSITY = _( "Intensity" );
 		static wxString PROPERTY_SHADOW_RSM_MAX_RADIUS = _( "Max. Radius" );
 		static wxString PROPERTY_SHADOW_RSM_SAMPLE_COUNT = _( "Sample Count" );
-		static wxString PROPERTY_SHADOW_LPV_INDIRECT_ATT = _( "Indirect Attenuation" );
 		static wxString PROPERTY_SHADOW_LPV_SURFEL_AREA = _( "Texel Area Mod." );
 
 		wxArrayString shadowChoices;
@@ -162,7 +161,6 @@ namespace GuiCommon
 		{
 			auto & lpvConfig = m_light.getLpvConfig();
 			m_lpvProperties = addProperty( grid, PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LPV );
-			addPropertyT( grid, PROPERTY_SHADOW_LPV_INDIRECT_ATT, &lpvConfig.indirectAttenuation );
 			addPropertyT( grid, PROPERTY_SHADOW_LPV_SURFEL_AREA, &lpvConfig.texelAreaModifier );
 		}
 

@@ -80,7 +80,7 @@ namespace castor3d
 	*\brief
 	*	UBO de light propagation.
 	*/
-	class LpvConfigUbo;
+	class LpvGridConfigUbo;
 	/**
 	*\~english
 	*\brief
@@ -89,15 +89,10 @@ namespace castor3d
 	*\brief
 	*	Données de light propagation.
 	*/
-	struct LpvConfigUboConfiguration
+	struct LpvGridConfigUboConfiguration
 	{
-		castor::Matrix4x4f lightView;
 		castor::Point4f minVolumeCorner;
-		castor::Point4f gridSizes;
-		float indirectAttenuation = 1.7f;
-		float texelAreaModifier = 1.0f;
-		float tanFovXHalf = 1.0f;
-		float tanFovYHalf = 1.0f;
+		castor::Point4f gridSizeAtt;
 	};
 	/**
 	*\~english
@@ -107,7 +102,7 @@ namespace castor3d
 	*\brief
 	*	UBO de light propagation.
 	*/
-	class LayeredLpvConfigUbo;
+	class LpvLightConfigUbo;
 	/**
 	*\~english
 	*\brief
@@ -116,12 +111,36 @@ namespace castor3d
 	*\brief
 	*	Données de light propagation.
 	*/
-	struct LayeredLpvConfigUboConfiguration
+	struct LpvLightConfigUboConfiguration
 	{
-		std::array< castor::Point4f, shader::DirectionalMaxCascadesCount > allMinVolumeCorners;
+		castor::Matrix4x4f lightView;
+		float texelAreaModifier = 1.0f;
+		float tanFovXHalf = 1.0f;
+		float tanFovYHalf = 1.0f;
+		float lightIndex = 0.0f;
+	};
+	/**
+	*\~english
+	*\brief
+	*	Light propagation UBO.
+	*\~french
+	*\brief
+	*	UBO de light propagation.
+	*/
+	class LayeredLpvGridConfigUbo;
+	/**
+	*\~english
+	*\brief
+	*	Light propagation data.
+	*\~french
+	*\brief
+	*	Données de light propagation.
+	*/
+	struct LayeredLpvGridConfigUboConfiguration
+	{
+		std::array< castor::Point4f, shader::LpvMaxCascadesCount > allMinVolumeCorners;
 		castor::Point4f allCellSizes;
-		castor::Point4ui gridSize;
-		castor::Point4f config;
+		castor::Point4f gridSizeAtt;
 	};
 	/**
 	*\brief
@@ -408,6 +427,12 @@ namespace castor3d
 	{
 		std::array< castor::Point4ui, 3u > indices;
 	};
+
+	CU_DeclareCUSmartPtr( castor3d, LpvGridConfigUbo, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, LpvLightConfigUbo, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, LayeredLpvGridConfigUbo, C3D_API );
+	CU_DeclareVector( LpvLightConfigUbo, LpvLightConfigUbo );
+	CU_DeclareVector( LpvGridConfigUbo, LpvGridConfigUbo );
 
 	//@}
 	//@}

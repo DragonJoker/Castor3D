@@ -85,6 +85,10 @@ namespace castor3d
 			, SubmeshRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		/**
+		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
+		 */
+		ashes::VkDescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
+		/**
 		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
 		 */
 		C3D_API void doUpdatePipeline( RenderPipeline & pipeline)override;

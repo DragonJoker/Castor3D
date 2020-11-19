@@ -262,14 +262,15 @@ namespace castor3d
 	*/
 	class TextOverlay;
 
-	CU_DeclareSmartPtr( BorderPanelOverlay );
-	CU_DeclareSmartPtr( FontTexture );
-	CU_DeclareSmartPtr( Overlay );
-	CU_DeclareSmartPtr( OverlayCategory );
-	CU_DeclareSmartPtr( OverlayFactory );
-	CU_DeclareSmartPtr( OverlayRenderer );
-	CU_DeclareSmartPtr( PanelOverlay );
-	CU_DeclareSmartPtr( TextOverlay );
+	CU_DeclareCUSmartPtr( castor3d, BorderPanelOverlay, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, DebugOverlays, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, FontTexture, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, Overlay, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, OverlayCategory, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, OverlayFactory, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, OverlayRenderer, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, PanelOverlay, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, TextOverlay, C3D_API );
 
 	CU_DeclareVector( OverlaySPtr, OverlayPtr );
 	CU_DeclareMap( castor::String, OverlaySPtr, OverlayPtrStr ); 

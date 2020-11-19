@@ -245,34 +245,26 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	DirectionalLightPass::DirectionalLightPass( Engine & engine
-		, RenderDevice const & device
+	DirectionalLightPass::DirectionalLightPass( RenderDevice const & device
 		, castor::String const & suffix
-		, LightPassResult const & lpResult
-		, GpInfoUbo const & gpInfoUbo
-		, bool hasShadows
-		, bool generatesIndirect )
-		: LightPass{ engine
-			, device
+		, LightPassConfig const & lpConfig )
+		: LightPass{ device
 			, "Directional" + suffix
 			, doCreateRenderPass( device
-				, lpResult
-				, generatesIndirect
+				, lpConfig.lpResult
+				, lpConfig.generatesIndirect
 				, true )
 			, doCreateRenderPass( device
-				, lpResult
-				, generatesIndirect
+				, lpConfig.lpResult
+				, lpConfig.generatesIndirect
 				, false )
-			, lpResult
-			, gpInfoUbo
-			, hasShadows
-			, generatesIndirect }
-		, m_ubo{ makeUniformBuffer< Config >( *engine.getRenderSystem()
+			, lpConfig }
+		, m_ubo{ makeUniformBuffer< Config >( device.renderSystem
 			, 1u
 			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, "SsaoConfigUbo" ) }
-		, m_viewport{ engine }
+		, m_viewport{ m_engine }
 	{
 		m_ubo->initialise( device );
 		m_baseUbo = m_ubo.get();

@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Cache/CacheModule.hpp"
 #include "Castor3D/Overlay/OverlayModule.hpp"
+#include "Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
@@ -237,6 +238,8 @@ namespace castor3d
 		/**@{*/
 		C3D_API MaterialType getMaterialsType()const;
 		C3D_API bool needsGlobalIllumination()const;
+		C3D_API bool needsGlobalIllumination( LightType ltType
+			, GlobalIlluminationType giType )const;
 
 		inline castor::BoundingBox const & getBoundingBox()const
 		{
@@ -345,6 +348,11 @@ namespace castor3d
 			return m_directionalShadowCascades;
 		}
 
+		inline float getLpvIndirectAttenuation()const
+		{
+			return m_lpvIndirectAttenuation;
+		}
+
 		C3D_API ashes::SemaphoreCRefArray getRenderTargetsSemaphores()const;
 		/**@}*/
 		/**
@@ -357,6 +365,7 @@ namespace castor3d
 		*/
 		/**@{*/
 		C3D_API void setDirectionalShadowCascades( uint32_t value );
+		C3D_API void setLpvIndirectAttenuation( float value );
 		C3D_API void setMaterialsType( MaterialType value );
 
 		inline void setBackgroundColour( castor::RgbColour const & value )
@@ -380,6 +389,10 @@ namespace castor3d
 		void doUpdateBoundingBox();
 		void doUpdateAnimations();
 		void doUpdateMaterials();
+		bool doUpdateLightDependent( LightType lightType
+			, bool shadowProducer
+			, GlobalIlluminationType globalIllumination );
+		bool doUpdateLightsDependent();
 		void onMaterialChanged( Material const & material );
 
 	public:
@@ -427,7 +440,10 @@ namespace castor3d
 		castor::BoundingBox m_boundingBox;
 		std::atomic_bool m_needsGlobalIllumination;
 		std::array< std::atomic_bool, size_t( LightType::eCount ) > m_hasShadows;
+		std::array< std::set< GlobalIlluminationType >, size_t( LightType::eCount ) > m_giTypes;
 		std::atomic_bool m_hasAnyShadows;
+		std::map< castor::String, OnLightChangedConnection > m_lightConnections;
+		float m_lpvIndirectAttenuation{ 1.7f };
 
 	public:
 		//!\~english	The cameras root node name.

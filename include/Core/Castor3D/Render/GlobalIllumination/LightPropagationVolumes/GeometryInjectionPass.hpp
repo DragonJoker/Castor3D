@@ -4,15 +4,15 @@ See LICENSE file in root folder
 #ifndef ___C3D_GeometryInjectionPass_HPP___
 #define ___C3D_GeometryInjectionPass_HPP___
 
-#include "LightVolumeGIModule.hpp"
+#include "LightPropagationVolumesModule.hpp"
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Cache/CacheModule.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
+#include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightVolumePassResult.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaqueModule.hpp"
-#include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LightVolumePassResult.hpp"
 #include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"
 #include "Castor3D/Shader/ShaderModule.hpp"
@@ -59,8 +59,8 @@ namespace castor3d
 			, LightCache const & lightCache
 			, LightType lightType
 			, ShadowMapResult const & smResult
-			, GpInfoUbo const & gpInfoUbo
-			, LpvConfigUbo const & lpvConfigUbo
+			, LpvGridConfigUbo const & lpvGridConfigUbo
+			, LpvLightConfigUbo const & lpvLightConfigUbo
 			, TextureUnit const & result
 			, uint32_t gridSize
 			, uint32_t layerIndex );
@@ -89,13 +89,8 @@ namespace castor3d
 	private:
 		Engine & m_engine;
 		RenderDevice const & m_device;
-		LightCache const & m_lightCache;
-		ShadowMapResult const & m_smResult;
-		GpInfoUbo const & m_gpInfoUbo;
-		LpvConfigUbo const & m_lpvConfigUbo;
-		TextureUnit const & m_result;
-		LightType m_lightType;
 		RenderPassTimerSPtr m_timer;
+		uint32_t m_rsmSize;
 
 		ashes::VertexBufferPtr< NonTexturedQuad::Vertex > m_vertexBuffer;
 		ashes::DescriptorSetLayoutPtr m_descriptorSetLayout;

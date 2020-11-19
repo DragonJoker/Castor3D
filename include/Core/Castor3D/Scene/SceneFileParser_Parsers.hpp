@@ -80,6 +80,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserSceneParticleSystem )
 	CU_DeclareAttributeParser( parserMesh )
 	CU_DeclareAttributeParser( parserDirectionalShadowCascades )
+	CU_DeclareAttributeParser( parserLpvIndirectAttenuation )
 
 	// ParticleSystem parsers
 	CU_DeclareAttributeParser( parserParticleSystemParent )
@@ -122,7 +123,6 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserRsmSampleCount )
 
 	// LPV parsers
-	CU_DeclareAttributeParser( parserLpvIndirectAttenuation )
 	CU_DeclareAttributeParser( parserLpvTexelAreaModifier )
 
 	// Scene node parsers

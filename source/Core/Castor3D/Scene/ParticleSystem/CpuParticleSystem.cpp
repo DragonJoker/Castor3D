@@ -1,7 +1,7 @@
 #include "Castor3D/Scene/ParticleSystem/CpuParticleSystem.hpp"
 
 #include "Castor3D/Render/RenderDevice.hpp"
-#include "Castor3D/Render/RenderLoop.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleEmitter.hpp"

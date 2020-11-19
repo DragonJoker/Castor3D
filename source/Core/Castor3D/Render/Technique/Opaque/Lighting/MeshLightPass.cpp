@@ -252,31 +252,23 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	MeshLightPass::MeshLightPass( Engine & engine
-		, RenderDevice const & device
+	MeshLightPass::MeshLightPass( RenderDevice const & device
 		, castor::String const & suffix
-		, LightPassResult const & lpResult
-		, GpInfoUbo const & gpInfoUbo
-		, LightType type
-		, bool hasShadows
-		, bool generatesIndirect )
-		: LightPass{ engine
-			, device
+		, LightPassConfig const & lpConfig
+		, LightType type )
+		: LightPass{ device
 			, suffix
 			, doCreateRenderPass( device
 				, suffix
-				, lpResult
-				, generatesIndirect
+				, lpConfig.lpResult
+				, lpConfig.generatesIndirect
 				, true )
 			, doCreateRenderPass( device
 				, suffix
-				, lpResult
-				, generatesIndirect
+				, lpConfig.lpResult
+				, lpConfig.generatesIndirect
 				, false )
-			, lpResult
-			, gpInfoUbo
-			, hasShadows
-			, generatesIndirect }
+			, lpConfig }
 		, m_modelMatrixUbo{ m_device.renderSystem
 			, 1u
 			, VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
@@ -285,9 +277,9 @@ namespace castor3d
 		, m_modelMatrixData{ reinterpret_cast< ModelMatrixUboConfiguration * >( m_modelMatrixUbo.getBuffer().getBuffer().lock( 0u
 			, m_modelMatrixUbo.getAlignedSize()
 			, 0u ) ) }
-		, m_stencilPass{ engine
+		, m_stencilPass{ m_engine
 			, getName()
-			, lpResult[LpTexture::eDepth].getTexture()->getDefaultView().getTargetView()
+			, lpConfig.lpResult[LpTexture::eDepth].getTexture()->getDefaultView().getTargetView()
 			, m_matrixUbo
 			, m_modelMatrixUbo }
 		, m_type{ type }

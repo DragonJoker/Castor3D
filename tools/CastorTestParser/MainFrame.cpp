@@ -12,6 +12,7 @@
 #include "CastorTestParser/Model/TreeModelNode.hpp"
 
 #include <CastorUtils/Data/File.hpp>
+#include <CastorUtils/Design/BlockGuard.hpp>
 #include <CastorUtils/Log/Logger.hpp>
 #include <CastorUtils/Miscellaneous/Utils.hpp>
 
@@ -35,6 +36,7 @@
 #include "CastorTestParser/xpms/progress_11.xpm"
 #include "CastorTestParser/xpms/progress_12.xpm"
 
+#include <wx/clipbrd.h>
 #include <wx/dc.h>
 #include <wx/menu.h>
 #include <wx/progdlg.h>
@@ -63,6 +65,7 @@ namespace test_parser
 			eID_SET_REF,
 			eID_IGNORE_RESULT,
 			eID_UPDATE_CASTOR,
+			eID_COPY_FILE_NAME,
 			eID_RUN_CATEGORY_TESTS_ALL,
 			eID_RUN_CATEGORY_TESTS_NOTRUN,
 			eID_RUN_CATEGORY_TESTS_ACCEPTABLE,
@@ -170,6 +173,12 @@ namespace test_parser
 			std::array< wxBitmap, size_t( TestStatus::eCount ) > m_bitmaps;
 			TestStatus m_status{ TestStatus::eNegligible };
 		};
+
+		castor::Path getTestFileName( castor::Path const & folder
+			, Test const & test )
+		{
+			return folder / test.category / ( test.name + ".cscn" );
+		}
 	}
 
 	//*********************************************************************************************
@@ -264,6 +273,7 @@ namespace test_parser
 	{
 		auto node = getTestNode( test );
 		test.castorDate = getFileDate( m_config.castor );
+		assert( db::date_time::isValid( test.castorDate ) );
 		m_database.updateTestStatus( test, newStatus, reference );
 		test.status = newStatus;
 		m_model->ItemChanged( wxDataViewItem{ node } );
@@ -398,6 +408,7 @@ namespace test_parser
 	{
 		auto addTestMenus = []( wxMenu & menu )
 		{
+			menu.Append( eID_COPY_FILE_NAME, _( "Copy test file path" ) + wxT( "\tF4" ) );
 			menu.Append( eID_VIEW_TEST, _( "View Test" ) + wxT( "\tF5" ) );
 			menu.Append( eID_SET_REF, _( "Set Reference" ) + wxT( "\tF6" ) );
 			menu.Append( eID_RUN_TEST, _( "Run Test" ) + wxT( "\tF7" ) );
@@ -535,6 +546,21 @@ namespace test_parser
 		}
 	}
 
+	void MainFrame::doCopyTestFileName()
+	{
+		if ( m_selected.items.size() == 1 )
+		{
+			auto & item = *m_selected.items.begin();
+			auto node = static_cast< TreeModelNode * >( item.GetID() );
+
+			if ( wxTheClipboard->Open() )
+			{
+				auto guard = castor::makeBlockGuard( [](){ wxTheClipboard->Close(); } );
+				wxTheClipboard->SetData( new wxTextDataObject( makeWxString( getTestFileName( m_config.test, *node->test ) ) ) );
+			}
+		}
+	}
+
 	void MainFrame::doViewTest()
 	{
 		m_cancelled.exchange( false );
@@ -544,8 +570,9 @@ namespace test_parser
 			auto & item = *m_selected.items.begin();
 			auto node = static_cast< TreeModelNode * >( item.GetID() );
 			wxString command = m_config.viewer;
-			command << " " << ( m_config.test / node->test->category / ( node->test->name + ".cscn" ) );
+			command << " " << makeWxString( getTestFileName( m_config.test, *node->test ) );
 			command << " -" << node->test->renderer;
+			m_statusBar->SetLabel( _( "Viewing: " ) + node->test->name );
 			auto result = wxExecute( command
 				, wxEXEC_SYNC
 				, m_runningTest.disProcess.get() );
@@ -555,6 +582,8 @@ namespace test_parser
 				castor::Logger::logError( "doViewTest: " + castor::System::getLastErrorText() );
 			}
 		}
+
+		m_statusBar->SetLabel( _( "Idle" ) );
 	}
 
 	void MainFrame::doSetRef()
@@ -589,16 +618,20 @@ namespace test_parser
 				m_statusBar->SetLabel( _( "Setting reference: " ) + node->test->name );
 				node->test->ignoreResult = m_testMenu->IsChecked( eID_IGNORE_RESULT );
 				node->test->castorDate = getFileDate( m_config.castor );
+				assert( db::date_time::isValid( node->test->castorDate ) );
 				m_database.updateTestIgnoreResult( *node->test, node->test->ignoreResult, true );
 				m_model->ItemChanged( item );
 			}
 		}
+
+		m_statusBar->SetLabel( _( "Idle" ) );
 	}
 
 	void MainFrame::doUpdateCastorDate()
 	{
 		m_cancelled.exchange( false );
 		auto date = getFileDate( m_config.castor );
+		assert( db::date_time::isValid( date ) );
 
 		if ( !m_selected.items.empty() )
 		{
@@ -609,7 +642,6 @@ namespace test_parser
 
 				if ( node->test->castorDate != date )
 				{
-					m_statusBar->SetLabel( _( "Updating Castor3D date for " ) + node->test->name );
 					node->test->castorDate = date;
 					m_database.updateTestCastorDate( *node->test );
 				}
@@ -704,6 +736,7 @@ namespace test_parser
 	{
 		m_cancelled.exchange( false );
 		auto date = getFileDate( m_config.castor );
+		assert( db::date_time::isValid( date ) );
 
 		for ( auto & item : m_selected.items )
 		{
@@ -732,6 +765,7 @@ namespace test_parser
 	{
 		m_cancelled.exchange( false );
 		auto date = getFileDate( m_config.castor );
+		assert( db::date_time::isValid( date ) );
 
 		for ( auto & item : m_selected.items )
 		{
@@ -750,7 +784,6 @@ namespace test_parser
 
 					if ( node->test->castorDate != date )
 					{
-						m_statusBar->SetLabel( _( "Updating Castor3D date for " ) + node->test->name );
 						node->test->castorDate = date;
 						m_database.updateTestCastorDate( *node->test );
 					}
@@ -814,6 +847,7 @@ namespace test_parser
 	{
 		m_cancelled.exchange( false );
 		auto date = getFileDate( m_config.castor );
+		assert( db::date_time::isValid( date ) );
 
 		for ( auto & tests : m_tests )
 		{
@@ -833,6 +867,7 @@ namespace test_parser
 	{
 		m_cancelled.exchange( false );
 		auto date = getFileDate( m_config.castor );
+		assert( db::date_time::isValid( date ) );
 
 		for ( auto & tests : m_tests )
 		{
@@ -840,7 +875,6 @@ namespace test_parser
 			{
 				if ( test.castorDate != date )
 				{
-					m_statusBar->SetLabel( _( "Updating Castor3D date for " ) + test.name );
 					test.castorDate = date;
 					m_database.updateTestCastorDate( test );
 				}
@@ -979,6 +1013,9 @@ namespace test_parser
 		case eID_RUN_TEST:
 			doRunTest();
 			break;
+		case eID_COPY_FILE_NAME:
+			doCopyTestFileName();
+			break;
 		case eID_VIEW_TEST:
 			doViewTest();
 			break;
@@ -1094,8 +1131,10 @@ namespace test_parser
 			auto & match = matches[0];
 			auto path = match.getPath();
 			test.runDate = getFileDate( match );
+			assert( db::date_time::isValid( test.runDate ) );
 			test.status = getStatus( path.getFileName() );
 			test.castorDate = getFileDate( m_config.castor );
+			assert( db::date_time::isValid( test.castorDate ) );
 			m_database.insertTest( test );
 
 			if ( test.ignoreResult )

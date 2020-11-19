@@ -291,25 +291,21 @@ namespace castor3d
 
 	//************************************************************************************************
 
-	LightPass::LightPass( Engine & engine
-		, RenderDevice const & device
+	LightPass::LightPass( RenderDevice const & device
 		, String const & suffix
 		, ashes::RenderPassPtr firstRenderPass
 		, ashes::RenderPassPtr blendRenderPass
-		, LightPassResult const & lpResult
-		, GpInfoUbo const & gpInfoUbo
-		, bool hasShadows
-		, bool generatesIndirect )
+		, LightPassConfig const & lpConfig )
 		: castor::Named{ "LightPass" + suffix }
-		, m_engine{ engine }
+		, m_engine{ *device.renderSystem.getEngine() }
 		, m_device{ device }
-		, m_firstRenderPass{ getName() + "First", std::move( firstRenderPass ), lpResult, generatesIndirect }
-		, m_blendRenderPass{ getName() + "Blend", std::move( blendRenderPass ), lpResult, generatesIndirect }
-		, m_shadows{ hasShadows }
-		, m_generatesIndirect{ generatesIndirect }
+		, m_firstRenderPass{ getName() + "First", std::move( firstRenderPass ), lpConfig.lpResult, lpConfig.generatesIndirect }
+		, m_blendRenderPass{ getName() + "Blend", std::move( blendRenderPass ), lpConfig.lpResult, lpConfig.generatesIndirect }
+		, m_shadows{ lpConfig.hasShadows }
+		, m_generatesIndirect{ lpConfig.generatesIndirect }
 		, m_matrixUbo{ device }
-		, m_gpInfoUbo{ gpInfoUbo }
-		, m_sampler{ engine.getDefaultSampler() }
+		, m_gpInfoUbo{ lpConfig.gpInfoUbo }
+		, m_sampler{ m_engine.getDefaultSampler() }
 		, m_signalImgReady{ m_device->createSemaphore( getName() + "ImgReady" ) }
 		, m_signalImgFinished{ m_device->createSemaphore( getName() + "ImgFinished" ) }
 		, m_fence{ m_device->createFence( getName(), VK_FENCE_CREATE_SIGNALED_BIT ) }
@@ -496,7 +492,7 @@ namespace castor3d
 			};
 		};
 		uint32_t index = getMinBufferIndex();
-		pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL ) );
+		pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL ) );
 		pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 		pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 		pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );

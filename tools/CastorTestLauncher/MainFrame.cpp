@@ -2,6 +2,7 @@
 
 #include "CastorTestLauncher/CastorTestLauncher.hpp"
 
+#include <Castor3D/Engine.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/RenderLoop.hpp>

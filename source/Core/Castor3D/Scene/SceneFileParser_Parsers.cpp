@@ -7,6 +7,7 @@
 #include "Castor3D/Cache/CameraCache.hpp"
 #include "Castor3D/Cache/GeometryCache.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
+#include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/SceneCache.hpp"
 #include "Castor3D/Cache/SceneNodeCache.hpp"
 #include "Castor3D/Cache/ShaderCache.hpp"
@@ -1325,6 +1326,23 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
+	CU_ImplementAttributeParser( parserLpvIndirectAttenuation )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->scene )
+		{
+			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+		}
+		else
+		{
+			float value{ 0u };
+			params[0]->get( value );
+			parsingContext->scene->setLpvIndirectAttenuation( value );
+		}
+	}
+	CU_EndAttribute()
+
 	CU_ImplementAttributeParser( parserParticleSystemParent )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
@@ -1952,23 +1970,6 @@ namespace castor3d
 			auto range = parsingContext->light->getRsmConfig().sampleCount.value();
 			range = value;
 			parsingContext->light->getRsmConfig().sampleCount = range;
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserLpvIndirectAttenuation )
-	{
-		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
-
-		if ( !parsingContext->light )
-		{
-			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
-		}
-		else
-		{
-			float value{ 0u };
-			params[0]->get( value );
-			parsingContext->light->getLpvConfig().indirectAttenuation = value;
 		}
 	}
 	CU_EndAttribute()

@@ -1,12 +1,13 @@
 #include "Castor3D/Render/Technique/Opaque/DeferredRendering.hpp"
 
+#include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/SceneCache.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/OverlayCache.hpp"
 #include "Castor3D/Cache/PluginCache.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
-#include "Castor3D/Render/RenderLoop.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/Passes/LineariseDepthPass.hpp"
 #include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
@@ -91,10 +92,14 @@ namespace castor3d
 		, ShadowMapResult const & smDirectionalResult
 		, ShadowMapResult const & smPointResult
 		, ShadowMapResult const & smSpotResult
+		, LightVolumePassResult const & lpvResult
+		, LightVolumePassResultArray const & llpvResult
 		, Size const & size
 		, Scene & scene
 		, HdrConfigUbo const & hdrConfigUbo
 		, GpInfoUbo const & gpInfoUbo
+		, LpvGridConfigUbo const & lpvConfigUbo
+		, LayeredLpvGridConfigUbo const & llpvConfigUbo
 		, SsaoConfig & ssaoConfig )
 		: m_engine{ engine }
 		, m_device{ device }
@@ -124,9 +129,13 @@ namespace castor3d
 			, smDirectionalResult
 			, smPointResult
 			, smSpotResult
+			, lpvResult
+			, llpvResult
 			, depthTexture.getTexture()->getDefaultView().getTargetView()
 			, m_opaquePass.getSceneUbo()
-			, m_gpInfoUbo ) }
+			, m_gpInfoUbo
+			, lpvConfigUbo
+			, llpvConfigUbo ) }
 		, m_subsurfaceScattering{ std::make_unique< SubsurfaceScatteringPass >( m_engine
 			, m_device
 			, m_gpInfoUbo
@@ -166,8 +175,6 @@ namespace castor3d
 
 	void DeferredRendering::update( CpuUpdater & updater )
 	{
-		auto & camera = *updater.camera;
-		auto & scene = *camera.getScene();
 		m_opaquePass.update( updater );
 		m_lightingPass->update( updater );
 
@@ -184,8 +191,6 @@ namespace castor3d
 
 	void DeferredRendering::update( GpuUpdater & updater )
 	{
-		auto & scene = *updater.scene;
-		auto & camera = *updater.camera;
 		m_opaquePass.update( updater );
 		m_lightingPass->update( updater );
 		m_resolve->update( updater );

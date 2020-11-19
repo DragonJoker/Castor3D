@@ -83,26 +83,14 @@ namespace castor3d
 		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
 		 *\param[in]	hasShadows	Dit si les ombres sont activées pour cette passe d'éclairage.
 		 */
-		SpotLightPass( Engine & engine
-			, RenderDevice const & device
+		SpotLightPass( RenderDevice const & device
 			, castor::String const & suffix
-			, LightPassResult const & lpResult
-			, GpInfoUbo const & gpInfoUbo
-			, bool hasShadows = false
-			, bool generatesIndirect = false );
-		SpotLightPass( Engine & engine
-			, RenderDevice const & device
-			, LightPassResult const & lpResult
-			, GpInfoUbo const & gpInfoUbo
-			, bool hasShadows = false
-			, bool generatesIndirect = false )
-			: SpotLightPass{ engine
-				, device
+			, LightPassConfig const & lpConfig );
+		SpotLightPass( RenderDevice const & device
+			, LightPassConfig const & lpConfig )
+			: SpotLightPass{ device
 				, castor::String{}
-				, lpResult
-				, gpInfoUbo
-				, hasShadows
-				, generatesIndirect }
+				, lpConfig }
 		{
 		}
 		/**

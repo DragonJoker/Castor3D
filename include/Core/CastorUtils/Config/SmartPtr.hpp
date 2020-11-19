@@ -43,16 +43,16 @@ namespace castor
 	template< typename TypeT >
 	using UniquePtr = std::unique_ptr< TypeT, Deleter< TypeT > >;
 
-	template< typename TypeT, typename ... ParamsT >
-	UniquePtr< TypeT > makeUnique( ParamsT && ... params )
-	{
-		return UniquePtr< TypeT >( new TypeT{ std::forward< ParamsT >( params )... } );
-	}
-
 	template< typename TypeT, typename TypeU, typename ... ParamsT >
 	UniquePtr< TypeT > makeUniqueDerived( ParamsT && ... params )
 	{
 		return UniquePtr< TypeT >( new TypeU{ std::forward< ParamsT >( params )... } );
+	}
+
+	template< typename TypeT, typename ... ParamsT >
+	UniquePtr< TypeT > makeUnique( ParamsT && ... params )
+	{
+		return UniquePtr< TypeT >( new TypeT{ std::forward< ParamsT >( params )... } );
 	}
 }
 
@@ -83,9 +83,9 @@ namespace castor\
 }
 
 #define CU_DeclareCUTemplateSmartPtr( class_name )\
-	template< typename T > using class_name##SPtr = std::shared_ptr< class_name< T > >;\
-	template< typename T > using class_name##WPtr = std::weak_ptr< class_name< T > >;\
-	template< typename T > using class_name##UPtr = castor::UniquePtr< class_name< T > >;\
-	template< typename T > using class_name##RPtr = class_name< T > *
+	template< typename T > using class_name##SPtrT = std::shared_ptr< class_name< T > >;\
+	template< typename T > using class_name##WPtrT = std::weak_ptr< class_name< T > >;\
+	template< typename T > using class_name##UPtrT = castor::UniquePtr< class_name< T > >;\
+	template< typename T > using class_name##RPtrT = class_name< T > *
 
 #endif

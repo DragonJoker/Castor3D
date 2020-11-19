@@ -31,7 +31,9 @@ namespace castor3d
 		 */
 		C3D_API TransparentPass( MatrixUbo & matrixUbo
 			, SceneCuller & culler
-			, SsaoConfig const & config );
+			, SsaoConfig const & config
+			, LpvGridConfigUbo const & lpvConfigUbo
+			, LayeredLpvGridConfigUbo const & llpvConfigUbo );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -94,28 +96,6 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderPass::doCreateBlendState
 		 */
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
-		 */
-		void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
-			, uint32_t & index
-			, BillboardListRenderNode & nodes
-			, ShadowMapLightTypeArray const & shadowMaps )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
-		 */
-		void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
-			, uint32_t & index
-			, SubmeshRenderNode & nodes
-			, ShadowMapLightTypeArray const & shadowMaps )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
-		 */
-		ashes::VkDescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
-		 */
-		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPhongPixelShaderSource
 		 */

@@ -164,32 +164,19 @@ namespace castor3d
 		 *\param[in]	lpResult	Le résultat de la passe d'éclairage.
 		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
 		 */
-		LightPassShadow( Engine & engine
-			, RenderDevice const & device
+		LightPassShadow( RenderDevice const & device
 			, castor::String const & suffix
-			, LightPassResult const & lpResult
-			, GpInfoUbo const & gpInfoUbo
-			, bool generatesIndirect = false )
-			: my_pass_type{ engine
-				, device
+			, LightPassConfig const & lpConfig )
+			: my_pass_type{ device
 				, suffix
-				, lpResult
-				, gpInfoUbo
-				, true
-				, generatesIndirect }
+				, LightPassConfig{ lpConfig.lpResult, lpConfig.gpInfoUbo, true, lpConfig.generatesIndirect } }
 		{
 		}
-		LightPassShadow( Engine & engine
-			, RenderDevice const & device
-			, LightPassResult const & lpResult
-			, GpInfoUbo const & gpInfoUbo
-			, bool generatesIndirect = false )
-			: LightPassShadow{ engine
-				, device
+		LightPassShadow( RenderDevice const & device
+			, LightPassConfig const & lpConfig )
+			: LightPassShadow{ device
 				, cuT( "Shadow" )
-				, lpResult
-				, gpInfoUbo
-				, generatesIndirect }
+				, lpConfig }
 		{
 		}
 

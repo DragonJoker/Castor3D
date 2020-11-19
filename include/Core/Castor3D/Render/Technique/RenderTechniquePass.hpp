@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "TechniqueModule.hpp"
 
+#include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumesModule.hpp"
 #include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
@@ -44,7 +45,9 @@ namespace castor3d
 			, SceneCuller & culler
 			, bool environment
 			, SceneNode const * ignored
-			, SsaoConfig const & config );
+			, SsaoConfig const & config
+			, LpvGridConfigUbo const * lpvConfigUbo = nullptr
+			, LayeredLpvGridConfigUbo const * llpvConfigUbo = nullptr );
 		/**
 		 *\~english
 		 *\brief		Constructor for transparent nodes.
@@ -74,7 +77,9 @@ namespace castor3d
 			, bool oit
 			, bool environment
 			, SceneNode const * ignored
-			, SsaoConfig const & config );
+			, SsaoConfig const & config
+			, LpvGridConfigUbo const * lpvConfigUbo = nullptr
+			, LayeredLpvGridConfigUbo const * llpvConfigUbo = nullptr );
 
 	public:
 		/**
@@ -84,6 +89,12 @@ namespace castor3d
 		 *\brief		Destructeur
 		 */
 		C3D_API virtual ~RenderTechniquePass();
+		/**
+		 *\copydoc		castor3d::RenderPass::initialise
+		 */
+		C3D_API bool initialise( RenderDevice const & device
+			, castor::Size const & size
+			, LightVolumePassResult const * lpvResult = nullptr );
 		/**
 		 *\~english
 		 *\brief		Visitor acceptance function.
@@ -199,12 +210,26 @@ namespace castor3d
 
 	protected:
 		/**
+		 *\copydoc		castor3d::RenderPass::doCreateUboBindings
+		 */
+		ashes::VkDescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;
+		/**
 		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
 		 */
 		ashes::VkDescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
+		 */
+		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const;
+
+	private:
+		using RenderPass::initialise;
 
 	protected:
 		Scene const & m_scene;
+		LpvGridConfigUbo const * m_lpvConfigUbo;
+		LayeredLpvGridConfigUbo const * m_llpvConfigUbo;
+		LightVolumePassResult const * m_lpvResult;
 		Camera * m_camera{ nullptr };
 		SceneRenderNode m_sceneNode;
 		bool m_environment{ false };

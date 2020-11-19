@@ -184,6 +184,8 @@ namespace castor3d
 		remFlag( flags.programFlags, ProgramFlag::eLighting );
 		remFlag( flags.programFlags, ProgramFlag::eInvertNormals );
 		remFlag( flags.passFlags, PassFlag::eAlphaBlending );
+		remFlag( flags.sceneFlags, SceneFlag::eLpvGI );
+		remFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI );
 		addFlag( flags.programFlags, ProgramFlag::eDepthPass );
 	}
 
@@ -203,10 +205,29 @@ namespace castor3d
 		, SubmeshRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
+		ashes::WriteDescriptorSetArray writes;
 		node.passNode.fillDescriptor( layout
 			, index
-			, *node.texDescriptorSet
+			, writes
 			, node.pipeline.getFlags().textures );
+		node.texDescriptorSet->setBindings( writes );
+	}
+
+	ashes::VkDescriptorSetLayoutBindingArray DepthPass::doCreateTextureBindings( PipelineFlags const & flags )const
+	{
+		auto index = getMinTextureIndex();
+		ashes::VkDescriptorSetLayoutBindingArray textureBindings;
+
+		if ( !flags.textures.empty() )
+		{
+			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT
+				, uint32_t( flags.textures.size() ) ) );
+			index += uint32_t( flags.textures.size() );
+		}
+
+		return textureBindings;
 	}
 
 	void DepthPass::doUpdatePipeline( RenderPipeline & pipeline )
@@ -287,15 +308,15 @@ namespace castor3d
 			, RenderPass::VertexOutputs::CurPositionLocation );
 		auto outPrvPosition = writer.declOutput< Vec3 >( "outPrvPosition"
 			, RenderPass::VertexOutputs::PrvPositionLocation );
+		auto outTangentSpaceFragPosition = writer.declOutput< Vec3 >( "outTangentSpaceFragPosition"
+			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
+		auto outTangentSpaceViewPosition = writer.declOutput< Vec3 >( "outTangentSpaceViewPosition"
+			, RenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
 		auto outTexture = writer.declOutput< Vec3 >( "outTexture"
 			, RenderPass::VertexOutputs::TextureLocation
 			, hasTextures );
 		auto outMaterial = writer.declOutput< UInt >( "outMaterial"
 			, RenderPass::VertexOutputs::MaterialLocation );
-		auto outTangentSpaceFragPosition = writer.declOutput< Vec3 >( "outTangentSpaceFragPosition"
-			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
-		auto outTangentSpaceViewPosition = writer.declOutput< Vec3 >( "outTangentSpaceViewPosition"
-			, RenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
 		auto out = writer.getOut();
 
 		writer.implementFunction< sdw::Void >( "main"
@@ -311,19 +332,30 @@ namespace castor3d
 
 				if ( checkFlag( flags.programFlags, ProgramFlag::eSkinning ) )
 				{
-					auto mtxModel = writer.declLocale( "mtxModel"
+					auto curMtxModel = writer.declLocale( "curMtxModel"
 						, SkinningUbo::computeTransform( skinningData, writer, flags.programFlags ) );
+					auto prvMtxModel = writer.declLocale( "prvMtxModel"
+						, curMtxModel );
 				}
 				else if ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
 				{
-					auto mtxModel = writer.declLocale( "mtxModel"
+					auto curMtxModel = writer.declLocale( "curMtxModel"
 						, inTransform );
+					auto prvMtxModel = writer.declLocale( "prvMtxModel"
+						, curMtxModel );
 				}
 				else
 				{
-					auto mtxModel = writer.declLocale( "mtxModel"
+					auto curMtxModel = writer.declLocale( "curMtxModel"
 						, c3d_curMtxModel );
+					auto prvMtxModel = writer.declLocale( "prvMtxModel"
+						, c3d_prvMtxModel );
 				}
+
+				auto curMtxModel = writer.getVariable< Mat4 >( "curMtxModel" );
+				auto prvMtxModel = writer.getVariable< Mat4 >( "prvMtxModel" );
+				auto mtxNormal = writer.declLocale( "mtxNormal"
+					, transpose( inverse( mat3( curMtxModel ) ) ) );
 
 				if ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
 				{
@@ -334,8 +366,6 @@ namespace castor3d
 					outMaterial = writer.cast< UInt >( c3d_materialIndex );
 				}
 
-				auto mtxModel = writer.getVariable< Mat4 >( "mtxModel" );
-
 				if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
 				{
 					curPosition = vec4( sdw::mix( curPosition.xyz(), inPosition2.xyz(), vec3( c3d_time ) ), 1.0_f );
@@ -344,14 +374,13 @@ namespace castor3d
 					outTexture = sdw::mix( outTexture, inTexture2, vec3( c3d_time ) );
 				}
 
-				curPosition = mtxModel * curPosition;
+				auto prvPosition = writer.declLocale( "prvPosition"
+					, prvMtxModel * curPosition );
+				curPosition = curMtxModel * curPosition;
 				auto worldPosition = writer.declLocale( "worldPosition"
 					, curPosition.xyz() );
-				auto prvPosition = writer.declLocale( "prvPosition"
-					, c3d_prvViewProj * curPosition );
+				prvPosition = c3d_prvViewProj * prvPosition;
 				curPosition = c3d_curViewProj * curPosition;
-				auto mtxNormal = writer.declLocale( "mtxNormal"
-					, transpose( inverse( mat3( mtxModel ) ) ) );
 
 				auto normal = writer.declLocale( "normal"
 					, normalize( mtxNormal * v4Normal.xyz() ) );
