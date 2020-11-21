@@ -588,7 +588,7 @@ namespace castor3d
 		// Src depth buffer from transfer source to depth stencil read only
 		m_blitDepth.commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 			, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
-			, m_srcDepth.makeDepthStencilAttachment( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
+			, m_srcDepth.makeDepthStencilReadOnly( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
 		m_blitDepth.commandBuffer->endDebugBlock();
 		m_blitDepth.commandBuffer->end();
 
