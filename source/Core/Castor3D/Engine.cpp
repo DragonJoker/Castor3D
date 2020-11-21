@@ -508,17 +508,22 @@ namespace castor3d
 
 	void Engine::unregisterWindow( RenderWindow const & window )
 	{
-		auto listener = m_windowInputListeners.find( &window )->second;
-		listener->cleanup();
-		auto plistener = listener.get();
-		auto pwindow = &window;
-		log::debug << "Removing UIListener 0x" << std::hex << plistener << std::endl;
-		listener->getFrameListener().postEvent( makeCpuFunctorEvent( EventType::ePostRender
-			, [this, plistener, pwindow]()
-			{
-				m_windowInputListeners.erase( pwindow );
-				log::debug << "Removed UIListener 0x" << std::hex << plistener << std::endl;
-			} ) );
+		auto it = m_windowInputListeners.find( &window );
+
+		if ( it != m_windowInputListeners.end() )
+		{
+			auto listener = m_windowInputListeners.find( &window )->second;
+			listener->cleanup();
+			auto plistener = listener.get();
+			auto pwindow = &window;
+			log::debug << "Removing UIListener 0x" << std::hex << plistener << std::endl;
+			listener->getFrameListener().postEvent( makeCpuFunctorEvent( EventType::ePostRender
+				, [this, plistener, pwindow]()
+				{
+					m_windowInputListeners.erase( pwindow );
+					log::debug << "Removed UIListener 0x" << std::hex << plistener << std::endl;
+				} ) );
+		}
 	}
 
 	void Engine::registerParsers( castor::String const & name, castor::AttributeParsersBySection const & parsers )

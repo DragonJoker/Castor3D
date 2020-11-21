@@ -85,7 +85,10 @@ namespace castor3d
 
 	void BillboardListCache::cleanup( RenderDevice const & device )
 	{
-		m_pools->clear( device );
+		if ( m_pools )
+		{
+			m_pools->clear( device );
+		}
 	}
 
 	void BillboardListCache::clear()
