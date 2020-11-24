@@ -622,6 +622,40 @@ namespace castor3d
 				, m_llpvResult
 				, m_llpvConfigUbo );
 		}
+
+		m_clearLpv = CommandsSemaphore{ device
+			, this->getName() + cuT( "ClearLpv" ) };
+		ashes::CommandBuffer & cmd = *m_clearLpv.commandBuffer;
+		auto clearTex = [&cmd]( LightVolumePassResult const & result
+			, LpvTexture tex )
+		{
+			cmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+				, VK_PIPELINE_STAGE_TRANSFER_BIT
+				, result[tex].getTexture()->getDefaultView().getSampledView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
+			cmd.clear( result[tex].getTexture()->getDefaultView().getSampledView(), getClearValue( tex ).color );
+			cmd.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+				, result[tex].getTexture()->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+		};
+		cmd.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
+		cmd.beginDebugBlock(
+			{
+				"Lighting - " + this->getName() + " - Clear Injection",
+				castor3d::makeFloatArray( device.renderSystem.getEngine()->getNextRainbowColour() ),
+			} );
+		clearTex( *m_lpvResult, LpvTexture::eR );
+		clearTex( *m_lpvResult, LpvTexture::eG );
+		clearTex( *m_lpvResult, LpvTexture::eB );
+
+		for ( auto & lpvResult : m_llpvResult )
+		{
+			clearTex( *lpvResult, LpvTexture::eR );
+			clearTex( *lpvResult, LpvTexture::eG );
+			clearTex( *lpvResult, LpvTexture::eB );
+		}
+
+		cmd.endDebugBlock();
+		cmd.end();
 	}
 
 	void RenderTechnique::doInitialiseShadowMaps( RenderDevice const & device )
@@ -872,6 +906,8 @@ namespace castor3d
 
 	void RenderTechnique::doCleanupLpv( RenderDevice const & device )
 	{
+		m_clearLpv = {};
+
 		for ( auto i = uint32_t( LightType::eMin ); i < uint32_t( LightType::eCount ); ++i )
 		{
 			m_lightPropagationVolumes[i]->cleanup();
@@ -1028,12 +1064,17 @@ namespace castor3d
 	{
 		ashes::Semaphore const * result = &semaphore;
 
-		for ( auto i = uint32_t( LightType::eMin ); i < uint32_t( LightType::eCount ); ++i )
+		if ( m_renderTarget.getScene()->needsGlobalIllumination() )
 		{
-			result = &m_lightPropagationVolumes[i]->render( *result );
-			result = &m_lightPropagationVolumesG[i]->render( *result );
-			result = &m_layeredLightPropagationVolumes[i]->render( *result );
-			result = &m_layeredLightPropagationVolumesG[i]->render( *result );
+			result = &m_clearLpv.submit( *device.graphicsQueue, *result );
+
+			for ( auto i = uint32_t( LightType::eMin ); i < uint32_t( LightType::eCount ); ++i )
+			{
+				result = &m_lightPropagationVolumes[i]->render( *result );
+				result = &m_lightPropagationVolumesG[i]->render( *result );
+				result = &m_layeredLightPropagationVolumes[i]->render( *result );
+				result = &m_layeredLightPropagationVolumesG[i]->render( *result );
+			}
 		}
 
 		return *result;

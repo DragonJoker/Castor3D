@@ -66,9 +66,11 @@ namespace castor3d
 				, LpvGridConfigUbo const & lpvGridConfigUbo
 				, LightVolumePassResult const & injection
 				, uint32_t cascadeIndex
+				, float lpvCellSize
 				, TextureUnit * geometry );
 			bool update( CpuUpdater & updater );
 			LpvLightConfigUbo lpvLightConfigUbo;
+			float lpvCellSize;
 			LightInjectionPassUPtr lightInjectionPass;
 			GeometryInjectionPassUPtr geometryInjectionPass;
 		};

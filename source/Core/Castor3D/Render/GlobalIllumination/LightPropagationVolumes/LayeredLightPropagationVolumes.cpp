@@ -31,7 +31,9 @@ namespace castor3d
 		, ShadowMapResult const & smResult
 		, LpvGridConfigUboArray const & lpvGridConfigUbos
 		, std::vector< LightVolumePassResult > const & injection
-		, std::vector< TextureUnit > const * geometry )
+		, std::vector< TextureUnit > const * geometry
+		, std::vector< float > lpvCellSizes )
+		: lpvCellSizes{ std::move( lpvCellSizes ) }
 	{
 		auto & engine = *device.renderSystem.getEngine();
 
@@ -76,9 +78,11 @@ namespace castor3d
 
 		if ( changed )
 		{
+			uint32_t index = 0;
+
 			for ( auto & lpvLightConfigUbo : lpvLightConfigUbos )
 			{
-				lpvLightConfigUbo.cpuUpdate( light );
+				lpvLightConfigUbo.cpuUpdate( light, lpvCellSizes[index++] );
 			}
 		}
 
@@ -167,12 +171,12 @@ namespace castor3d
 			};
 
 			m_clearCommand = CommandsSemaphore{ m_device
-				, this->getName() + cuT( "ClearAccumulation" ) };
+				, this->getName() + cuT( "ClearInjection" ) };
 			ashes::CommandBuffer & cmd = *m_clearCommand.commandBuffer;
 			cmd.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
 			cmd.beginDebugBlock(
 				{
-					"Lighting - " + this->getName() + " - Clear Accumulation",
+					"Lighting - " + this->getName() + " - Clear Injection",
 					castor3d::makeFloatArray( m_engine.getNextRainbowColour() ),
 				} );
 
@@ -181,13 +185,6 @@ namespace castor3d
 				clearTex( cmd, injection, LpvTexture::eR );
 				clearTex( cmd, injection, LpvTexture::eG );
 				clearTex( cmd, injection, LpvTexture::eB );
-			}
-
-			for ( auto & lpvResult : m_lpvResult )
-			{
-				clearTex( cmd, *lpvResult, LpvTexture::eR );
-				clearTex( cmd, *lpvResult, LpvTexture::eG );
-				clearTex( cmd, *lpvResult, LpvTexture::eB );
 			}
 
 			cmd.endDebugBlock();
@@ -220,13 +217,13 @@ namespace castor3d
 				}
 
 				m_clearCommands.emplace_back( m_device
-					, this->getName() + cuT( "Clear" ) + castor::string::toString( cascade ) );
+					, this->getName() + cuT( "ClearPropagate" ) + castor::string::toString( cascade ) );
 				auto & clearCommands = m_clearCommands[cascade];
 				ashes::CommandBuffer & cmd = *clearCommands.commandBuffer;
 				cmd.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
 				cmd.beginDebugBlock(
 					{
-						"Lighting - " + this->getName() + " - Clear " + castor::string::toString( cascade ),
+						"Lighting - " + this->getName() + " - Clear Propagate " + castor::string::toString( cascade ),
 						castor3d::makeFloatArray( m_engine.getNextRainbowColour() ),
 					} );
 
@@ -272,7 +269,10 @@ namespace castor3d
 					, m_injection
 					, ( m_geometryVolumes
 						? &m_geometry
-						: nullptr ) } );
+						: nullptr )
+					, { m_lpvGridConfigUbo.getUbo().getData().allMinVolumeCorners[0]->w
+						, m_lpvGridConfigUbo.getUbo().getData().allMinVolumeCorners[1]->w
+						, m_lpvGridConfigUbo.getUbo().getData().allMinVolumeCorners[2]->w } } );
 		}
 	}
 
