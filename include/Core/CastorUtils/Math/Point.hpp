@@ -771,23 +771,23 @@ namespace castor
 		template< typename T, uint32_t TCount >
 		static double cosTheta( Point< T, TCount > const & lhs, Coords< T const, TCount > const & rhs );
 	}
+	/**
+	 *\~english
+	 *name Stream operators.
+	 *\~french
+	 *name Opérateurs de flux.
+	**/
+	/**@{*/
+	template< typename T, uint32_t TCount >
+	castor::String & operator<<( castor::String & out, castor::Point< T, TCount > const & in );
+	template< typename T, uint32_t TCount >
+	castor::String & operator>>( castor::String & in, castor::Point< T, TCount > & out );
+	template< typename T, uint32_t TCount, typename CharType >
+	std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & out, castor::Point< T, TCount > const & in );
+	template< typename T, uint32_t TCount, typename CharType >
+	std::basic_istream< CharType > & operator>>( std::basic_istream< CharType > & in, castor::Point< T, TCount > & out );
+	/**@}*/
 }
-/**
- *\~english
- *name Stream operators.
- *\~french
- *name Opérateurs de flux.
-**/
-/**@{*/
-template< typename T, uint32_t TCount >
-castor::String & operator<<( castor::String & out, castor::Point< T, TCount > const & in );
-template< typename T, uint32_t TCount >
-castor::String & operator>>( castor::String & in, castor::Point< T, TCount > & out );
-template< typename T, uint32_t TCount, typename CharType >
-std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & out, castor::Point< T, TCount > const & in );
-template< typename T, uint32_t TCount, typename CharType >
-std::basic_istream< CharType > & operator>>( std::basic_istream< CharType > & in, castor::Point< T, TCount > & out );
-
 #include "Point.inl"
 
 #endif

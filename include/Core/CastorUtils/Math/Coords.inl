@@ -44,7 +44,7 @@ namespace castor
 	template< typename T, uint32_t Count >
 	bool Coords< T, Count >::TextWriter::operator()( Coords< T, Count > const & object, TextFile & file )
 	{
-		StringStream streamWord{ castor::makeStringStream() };
+		StringStream streamWord{ makeStringStream() };
 		streamWord.setf( std::ios::boolalpha );
 		streamWord.setf( std::ios::showpoint );
 
@@ -536,53 +536,53 @@ namespace castor
 			return lengthChebychev( rhs - lhs );
 		}
 	}
-}
 
-//*************************************************************************************************
+	//*************************************************************************************************
 
-template< typename T, uint32_t Count >
-inline castor::String & operator<<( castor::String & out, castor::Coords< T, Count > const & in )
-{
-	castor::StringStream stream{ castor::makeStringStream() };
-	stream << in;
-	out += stream.str();
-	return out;
-}
-
-template< typename T, uint32_t Count >
-inline castor::String & operator>>( castor::String & in, castor::Coords< T, Count > & out )
-{
-	castor::StringStream stream( in );
-	stream >> out;
-	in = stream.str();
-	return in;
-}
-
-template< typename T, uint32_t Count, typename CharType >
-inline std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & out, castor::Coords< T, Count > const & in )
-{
-	if ( Count )
+	template< typename T, uint32_t Count >
+	inline String & operator<<( String & out, Coords< T, Count > const & in )
 	{
-		out << in[0];
+		StringStream stream{ makeStringStream() };
+		stream << in;
+		out += stream.str();
+		return out;
+	}
 
+	template< typename T, uint32_t Count >
+	inline String & operator>>( String & in, Coords< T, Count > & out )
+	{
+		StringStream stream( in );
+		stream >> out;
+		in = stream.str();
+		return in;
+	}
+
+	template< typename T, uint32_t Count, typename CharType >
+	inline std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & out, Coords< T, Count > const & in )
+	{
+		if ( Count )
+		{
+			out << in[0];
+
+			for ( uint32_t i = 0; i < Count; i++ )
+			{
+				out << "\t" << in[i];
+			}
+		}
+
+		return out;
+	}
+
+	template< typename T, uint32_t Count, typename CharType >
+	inline std::basic_istream< CharType > & operator>>( std::basic_istream< CharType > & in, Coords< T, Count > & out )
+	{
 		for ( uint32_t i = 0; i < Count; i++ )
 		{
-			out << "\t" << in[i];
+			in >> out[i];
 		}
+
+		return in;
 	}
 
-	return out;
+	//*************************************************************************************************
 }
-
-template< typename T, uint32_t Count, typename CharType >
-inline std::basic_istream< CharType > & operator>>( std::basic_istream< CharType > & in, castor::Coords< T, Count > & out )
-{
-	for ( uint32_t i = 0; i < Count; i++ )
-	{
-		in >> out[i];
-	}
-
-	return in;
-}
-
-//*************************************************************************************************

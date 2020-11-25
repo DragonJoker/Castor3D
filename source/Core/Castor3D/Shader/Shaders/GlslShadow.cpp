@@ -882,7 +882,7 @@ namespace castor3d
 						auto scattering = m_writer.declLocale( "scattering"
 							, oneMinusVolumeScattering / ( 4.0_f
 								* Float{ Pi< float > }
-						*pow( max( 1.0_f + sqVolumetricScattering - dblVolumetricScattering * RdotL, 0.0_f ), 1.5_f ) ) );
+								* pow( max( 1.0_f + sqVolumetricScattering - dblVolumetricScattering * -RdotL, 0.0_f ), 1.5_f ) ) );
 						auto maxCount = m_writer.declLocale( "maxCount"
 							, m_writer.cast< Int >( lightVolumetricSteps ) );
 
