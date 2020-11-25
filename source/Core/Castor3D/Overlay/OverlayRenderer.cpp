@@ -262,7 +262,7 @@ namespace castor3d
 			, uint32_t maxCount )
 		{
 			auto hash = std::hash< Overlay const * >{}( &overlay );
-			hash = castor::hashCombine( hash, pass );
+			hash = castor::hashCombinePtr( hash, pass );
 			auto it = overlays.find( hash );
 
 			if ( it == overlays.end() )

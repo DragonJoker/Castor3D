@@ -22,14 +22,16 @@ using namespace castor;
 
 namespace castor3d
 {
-	RenderPipeline::RenderPipeline( RenderSystem & renderSystem
+	RenderPipeline::RenderPipeline( RenderPass & owner
+		, RenderSystem & renderSystem
 		, ashes::PipelineDepthStencilStateCreateInfo dsState
 		, ashes::PipelineRasterizationStateCreateInfo rsState
 		, ashes::PipelineColorBlendStateCreateInfo blState
 		, ashes::PipelineMultisampleStateCreateInfo msState
 		, ShaderProgramSPtr program
 		, PipelineFlags const & flags )
-		: OwnedBy< RenderSystem >{ renderSystem }
+		: OwnedBy< RenderPass >{ owner }
+		, m_renderSystem{ renderSystem }
 		, m_dsState{ std::move( dsState ) }
 		, m_rsState{ std::move( rsState ) }
 		, m_blState{ std::move( blState ) }

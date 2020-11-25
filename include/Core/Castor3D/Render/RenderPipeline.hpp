@@ -18,7 +18,7 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	class RenderPipeline
-		: public castor::OwnedBy< RenderSystem >
+		: public castor::OwnedBy< RenderPass >
 	{
 	public:
 		/**
@@ -57,7 +57,8 @@ namespace castor3d
 		*\param[in] flags
 		*	Les indicateurs de création.
 		*/
-		C3D_API explicit RenderPipeline( RenderSystem & renderSystem
+		C3D_API explicit RenderPipeline( RenderPass & owner
+			, RenderSystem & renderSystem
 			, ashes::PipelineDepthStencilStateCreateInfo dsState
 			, ashes::PipelineRasterizationStateCreateInfo rsState
 			, ashes::PipelineColorBlendStateCreateInfo blState
@@ -196,9 +197,15 @@ namespace castor3d
 			CU_Require( index < m_descriptorPools.size() );
 			return *m_descriptorPools[index];
 		}
+
+		inline RenderSystem & getRenderSystem()const
+		{
+			return m_renderSystem;
+		}
 		/**@}*/
 
 	private:
+		RenderSystem & m_renderSystem;
 		ashes::PipelineDepthStencilStateCreateInfo m_dsState;
 		ashes::PipelineRasterizationStateCreateInfo m_rsState;
 		ashes::PipelineColorBlendStateCreateInfo m_blState;

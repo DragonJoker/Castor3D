@@ -224,7 +224,8 @@ namespace castor3d
 		*\return		Les tampons de géométrie associés au materiau donné.
 		*/
 		C3D_API GeometryBuffers const & getGeometryBuffers( MaterialSPtr material
-			, uint32_t instanceMult )const;
+			, uint32_t instanceMult
+			, TextureFlagsArray const & mask )const;
 		/**
 		 *\~english
 		 *\brief		Adds a points list to my list
@@ -379,8 +380,9 @@ namespace castor3d
 		VkPrimitiveTopology m_topology{ VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST };
 		ashes::VertexBufferPtr< InterleavedVertex > m_vertexBuffer;
 		ashes::PipelineVertexInputStateCreateInfoPtr m_vertexLayout;
+		ashes::PipelineVertexInputStateCreateInfoPtr m_vertexLayoutNoTex;
 		ashes::BufferPtr< uint32_t > m_indexBuffer;
-		mutable std::map< MaterialSPtr, GeometryBuffers > m_geometryBuffers;
+		mutable std::unordered_map< size_t, GeometryBuffers > m_geometryBuffers;
 		bool m_needsNormalsCompute{ false };
 
 		friend class BinaryWriter< Submesh >;

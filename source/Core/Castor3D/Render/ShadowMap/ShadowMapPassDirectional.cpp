@@ -224,6 +224,7 @@ namespace castor3d
 			+ ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) ? 1 : 0 ) < 2 );
 		using namespace sdw;
 		VertexWriter writer;
+		bool hasTextures = !flags.textures.empty();
 
 		// Vertex inputs
 		auto position = writer.declInput< Vec4 >( "position"
@@ -233,7 +234,8 @@ namespace castor3d
 		auto tangent = writer.declInput< Vec3 >( "tangent"
 			, RenderPass::VertexInputs::TangentLocation );
 		auto uv = writer.declInput< Vec3 >( "uv"
-			, RenderPass::VertexInputs::TextureLocation );
+			, RenderPass::VertexInputs::TextureLocation
+			, hasTextures );
 		auto inBoneIds0 = writer.declInput< IVec4 >( "inBoneIds0"
 			, RenderPass::VertexInputs::BoneIds0Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
@@ -263,7 +265,7 @@ namespace castor3d
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
 		auto inTexture2 = writer.declInput< Vec3 >( "inTexture2"
 			, RenderPass::VertexInputs::Texture2Location
-			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
+			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) && hasTextures );
 		auto in = writer.getIn();
 
 		UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0 );
@@ -275,8 +277,6 @@ namespace castor3d
 		// Outputs
 		auto vtx_worldPosition = writer.declOutput< Vec3 >( "vtx_worldPosition"
 			, RenderPass::VertexOutputs::WorldPositionLocation );
-		auto vtx_viewPosition = writer.declOutput< Vec3 >( "vtx_viewPosition"
-			, RenderPass::VertexOutputs::ViewPositionLocation );
 		auto vtx_normal = writer.declOutput< Vec3 >( "vtx_normal"
 			, RenderPass::VertexOutputs::NormalLocation );
 		auto vtx_tangent = writer.declOutput< Vec3 >( "vtx_tangent"
@@ -284,7 +284,8 @@ namespace castor3d
 		auto vtx_bitangent = writer.declOutput< Vec3 >( "vtx_bitangent"
 			, RenderPass::VertexOutputs::BitangentLocation );
 		auto vtx_texture = writer.declOutput< Vec3 >( "vtx_texture"
-			, RenderPass::VertexOutputs::TextureLocation );
+			, RenderPass::VertexOutputs::TextureLocation
+			, hasTextures );
 		auto vtx_material = writer.declOutput< UInt >( "vtx_material"
 			, RenderPass::VertexOutputs::MaterialLocation );
 		auto vtx_tangentSpaceFragPosition = writer.declOutput< Vec3 >( "vtx_tangentSpaceFragPosition"
@@ -361,7 +362,6 @@ namespace castor3d
 			vtx_tangentSpaceViewPosition = tbn * vec3( 0.0_f );
 
 			vertexPosition = c3d_lightView * vertexPosition;
-			vtx_viewPosition = vertexPosition.xyz();
 			out.vtx.position = c3d_lightProjection * vertexPosition;
 		};
 
@@ -374,12 +374,11 @@ namespace castor3d
 		using namespace sdw;
 		FragmentWriter writer;
 		auto & renderSystem = *getEngine()->getRenderSystem();
+		bool hasTextures = !flags.textures.empty();
 
 		// Fragment Intputs
 		auto vtx_worldPosition = writer.declInput< Vec3 >( "vtx_worldPosition"
 			, RenderPass::VertexOutputs::WorldPositionLocation );
-		auto vtx_viewPosition = writer.declInput< Vec3 >( "vtx_viewPosition"
-			, RenderPass::VertexOutputs::ViewPositionLocation );
 		auto vtx_normal = writer.declInput< Vec3 >( "vtx_normal"
 			, RenderPass::VertexOutputs::NormalLocation );
 		auto vtx_tangent = writer.declInput< Vec3 >( "vtx_tangent"
@@ -387,7 +386,8 @@ namespace castor3d
 		auto vtx_bitangent = writer.declInput< Vec3 >( "vtx_bitangent"
 			, RenderPass::VertexOutputs::BitangentLocation );
 		auto vtx_texture = writer.declInput< Vec3 >( "vtx_texture"
-			, RenderPass::VertexOutputs::TextureLocation );
+			, RenderPass::VertexOutputs::TextureLocation
+			, hasTextures );
 		auto vtx_material = writer.declInput< UInt >( "vtx_material"
 			, RenderPass::VertexOutputs::MaterialLocation );
 		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( "vtx_tangentSpaceFragPosition"
@@ -400,7 +400,6 @@ namespace castor3d
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", getLightBufferIndex(), 0u );
 		shader::TextureConfigurations textureConfigs{ writer };
-		bool hasTextures = !flags.textures.empty();
 
 		if ( hasTextures )
 		{
@@ -472,24 +471,29 @@ namespace castor3d
 					, vtx_tangentSpaceViewPosition );
 				auto tangentSpaceFragPosition = writer.declLocale( "tangentSpaceFragPosition"
 					, vtx_tangentSpaceFragPosition );
-				lighting->computeMapContributions( flags
-					, gamma
-					, textureConfigs
-					, c3d_textureConfig
-					, c3d_maps
-					, texCoord
-					, normal
-					, tangent
-					, bitangent
-					, emissive
-					, alpha
-					, occlusion
-					, transmittance
-					, diffuse
-					, specular
-					, shininess
-					, tangentSpaceViewPosition
-					, tangentSpaceFragPosition );
+
+				if ( hasTextures )
+				{
+					lighting->computeMapContributions( flags
+						, gamma
+						, textureConfigs
+						, c3d_textureConfig
+						, c3d_maps
+						, texCoord
+						, normal
+						, tangent
+						, bitangent
+						, emissive
+						, alpha
+						, occlusion
+						, transmittance
+						, diffuse
+						, specular
+						, shininess
+						, tangentSpaceViewPosition
+						, tangentSpaceFragPosition );
+				}
+
 				utils.applyAlphaFunc( flags.alphaFunc
 					, alpha
 					, alphaRef );
@@ -530,12 +534,11 @@ namespace castor3d
 		using namespace sdw;
 		FragmentWriter writer;
 		auto & renderSystem = *getEngine()->getRenderSystem();
+		bool hasTextures = !flags.textures.empty();
 
 		// Fragment Intputs
 		auto vtx_worldPosition = writer.declInput< Vec3 >( "vtx_worldPosition"
 			, RenderPass::VertexOutputs::WorldPositionLocation );
-		auto vtx_viewPosition = writer.declInput< Vec3 >( "vtx_viewPosition"
-			, RenderPass::VertexOutputs::ViewPositionLocation );
 		auto vtx_normal = writer.declInput< Vec3 >( "vtx_normal"
 			, RenderPass::VertexOutputs::NormalLocation );
 		auto vtx_tangent = writer.declInput< Vec3 >( "vtx_tangent"
@@ -543,7 +546,8 @@ namespace castor3d
 		auto vtx_bitangent = writer.declInput< Vec3 >( "vtx_bitangent"
 			, RenderPass::VertexOutputs::BitangentLocation );
 		auto vtx_texture = writer.declInput< Vec3 >( "vtx_texture"
-			, RenderPass::VertexOutputs::TextureLocation );
+			, RenderPass::VertexOutputs::TextureLocation
+			, hasTextures );
 		auto vtx_material = writer.declInput< UInt >( "vtx_material"
 			, RenderPass::VertexOutputs::MaterialLocation );
 		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( "vtx_tangentSpaceFragPosition"
@@ -556,7 +560,6 @@ namespace castor3d
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", getLightBufferIndex(), 0u );
 		shader::TextureConfigurations textureConfigs{ writer };
-		bool hasTextures = !flags.textures.empty();
 
 		if ( hasTextures )
 		{
@@ -628,24 +631,29 @@ namespace castor3d
 					, vtx_tangentSpaceViewPosition );
 				auto tangentSpaceFragPosition = writer.declLocale( "tangentSpaceFragPosition"
 					, vtx_tangentSpaceFragPosition );
-				lighting->computeMapContributions( flags
-					, gamma
-					, textureConfigs
-					, c3d_textureConfig
-					, c3d_maps
-					, texCoord
-					, normal
-					, tangent
-					, bitangent
-					, emissive
-					, alpha
-					, occlusion
-					, transmittance
-					, albedo
-					, metallic
-					, roughness
-					, tangentSpaceViewPosition
-					, tangentSpaceFragPosition );
+
+				if ( hasTextures )
+				{
+					lighting->computeMapContributions( flags
+						, gamma
+						, textureConfigs
+						, c3d_textureConfig
+						, c3d_maps
+						, texCoord
+						, normal
+						, tangent
+						, bitangent
+						, emissive
+						, alpha
+						, occlusion
+						, transmittance
+						, albedo
+						, metallic
+						, roughness
+						, tangentSpaceViewPosition
+						, tangentSpaceFragPosition );
+				}
+
 				utils.applyAlphaFunc( flags.alphaFunc
 					, alpha
 					, alphaRef );
@@ -686,12 +694,11 @@ namespace castor3d
 		using namespace sdw;
 		FragmentWriter writer;
 		auto & renderSystem = *getEngine()->getRenderSystem();
+		bool hasTextures = !flags.textures.empty();
 
 		// Fragment Intputs
 		auto vtx_worldPosition = writer.declInput< Vec3 >( "vtx_worldPosition"
 			, RenderPass::VertexOutputs::WorldPositionLocation );
-		auto vtx_viewPosition = writer.declInput< Vec3 >( "vtx_viewPosition"
-			, RenderPass::VertexOutputs::ViewPositionLocation );
 		auto vtx_normal = writer.declInput< Vec3 >( "vtx_normal"
 			, RenderPass::VertexOutputs::NormalLocation );
 		auto vtx_tangent = writer.declInput< Vec3 >( "vtx_tangent"
@@ -699,7 +706,8 @@ namespace castor3d
 		auto vtx_bitangent = writer.declInput< Vec3 >( "vtx_bitangent"
 			, RenderPass::VertexOutputs::BitangentLocation );
 		auto vtx_texture = writer.declInput< Vec3 >( "vtx_texture"
-			, RenderPass::VertexOutputs::TextureLocation );
+			, RenderPass::VertexOutputs::TextureLocation
+			, hasTextures );
 		auto vtx_material = writer.declInput< UInt >( "vtx_material"
 			, RenderPass::VertexOutputs::MaterialLocation );
 		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( "vtx_tangentSpaceFragPosition"
@@ -712,7 +720,6 @@ namespace castor3d
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", getLightBufferIndex(), 0u );
 		shader::TextureConfigurations textureConfigs{ writer };
-		bool hasTextures = !flags.textures.empty();
 
 		if ( hasTextures )
 		{
@@ -784,24 +791,29 @@ namespace castor3d
 					, vtx_tangentSpaceViewPosition );
 				auto tangentSpaceFragPosition = writer.declLocale( "tangentSpaceFragPosition"
 					, vtx_tangentSpaceFragPosition );
-				lighting->computeMapContributions( flags
-					, gamma
-					, textureConfigs
-					, c3d_textureConfig
-					, c3d_maps
-					, texCoord
-					, normal
-					, tangent
-					, bitangent
-					, emissive
-					, alpha
-					, occlusion
-					, transmittance
-					, albedo
-					, specular
-					, glossiness
-					, tangentSpaceViewPosition
-					, tangentSpaceFragPosition );
+
+				if ( hasTextures )
+				{
+					lighting->computeMapContributions( flags
+						, gamma
+						, textureConfigs
+						, c3d_textureConfig
+						, c3d_maps
+						, texCoord
+						, normal
+						, tangent
+						, bitangent
+						, emissive
+						, alpha
+						, occlusion
+						, transmittance
+						, albedo
+						, specular
+						, glossiness
+						, tangentSpaceViewPosition
+						, tangentSpaceFragPosition );
+				}
+
 				utils.applyAlphaFunc( flags.alphaFunc
 					, alpha
 					, alphaRef );

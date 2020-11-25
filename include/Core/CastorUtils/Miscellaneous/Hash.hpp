@@ -17,6 +17,24 @@ namespace castor
 		const uint64_t kMul = 0x9ddfea08eb382d69ULL;
 		auto seed = hash;
 
+		std::hash< T > hasher;
+		uint64_t a = ( hasher( rhs ) ^ seed ) * kMul;
+		a ^= ( a >> 47 );
+
+		uint64_t b = ( seed ^ a ) * kMul;
+		b ^= ( b >> 47 );
+
+		hash = static_cast< std::size_t >( b * kMul );
+		return hash;
+	}
+
+	template< typename T >
+	inline size_t hashCombinePtr( size_t & hash
+		, T const & rhs )
+	{
+		const uint64_t kMul = 0x9ddfea08eb382d69ULL;
+		auto seed = hash;
+
 		std::hash< T const * > hasher;
 		uint64_t a = ( hasher( &rhs ) ^ seed ) * kMul;
 		a ^= ( a >> 47 );

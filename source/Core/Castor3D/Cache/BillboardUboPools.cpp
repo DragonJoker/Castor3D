@@ -22,7 +22,7 @@ namespace castor3d
 		, Pass const & pass )
 	{
 		size_t result = std::hash< BillboardBase const * >{}( &billboard );
-		castor::hashCombine( result, pass );
+		castor::hashCombinePtr( result, pass );
 		return result;
 	}
 
@@ -31,8 +31,8 @@ namespace castor3d
 		, uint32_t instanceMult )
 	{
 		size_t result = std::hash< uint32_t >{}( instanceMult );
-		castor::hashCombine( result, billboard );
-		castor::hashCombine( result, pass );
+		castor::hashCombinePtr( result, billboard );
+		castor::hashCombinePtr( result, pass );
 		return result;
 	}
 

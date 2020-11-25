@@ -61,6 +61,12 @@ namespace castor3d
 		}
 	}
 
+	bool operator==( TextureFlagsId const & lhs, TextureFlagsId const & rhs )
+	{
+		return lhs.id == rhs.id
+			&& lhs.flags == rhs.flags;
+	}
+
 	VkFormat convert( castor::PixelFormat format )
 	{
 		return VkFormat( format );

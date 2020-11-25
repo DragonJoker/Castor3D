@@ -184,6 +184,16 @@ namespace castor3d
 			} );
 	}
 
+	bool Material::isTextured( TextureFlags mask )const
+	{
+		return m_passes.end() != std::find_if( m_passes.begin()
+			, m_passes.end()
+			, [mask]( PassSPtr pass )
+			{
+				return pass->getTextureUnitsCount( mask ) > 0;
+			} );
+	}
+
 	void Material::onPassChanged( Pass const & pass )
 	{
 		onChanged( *this );

@@ -562,7 +562,8 @@ namespace castor3d
 		auto outWorldPosition = writer.declOutput< Vec3 >( "outWorldPosition"
 			, RenderPass::VertexOutputs::WorldPositionLocation );
 		auto outViewPosition = writer.declOutput< Vec3 >( "outViewPosition"
-			, RenderPass::VertexOutputs::ViewPositionLocation );
+			, RenderPass::VertexOutputs::ViewPositionLocation
+			, checkFlag( flags.programFlags, ProgramFlag::eLighting ) );
 		auto outCurPosition = writer.declOutput< Vec3 >( "outCurPosition"
 			, RenderPass::VertexOutputs::CurPositionLocation );
 		auto outPrvPosition = writer.declOutput< Vec3 >( "outPrvPosition"

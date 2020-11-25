@@ -276,7 +276,6 @@ namespace castor3d
 
 		SceneRenderNodes::AnimatedObjects doAdjustFlags( RenderSystem const & renderSystem
 			, ProgramFlags & programFlags
-			, TextureFlagsArray & textures
 			, PassFlags const & passFlags
 			, SceneFlags const & sceneFlags
 			, Scene const & scene
@@ -356,7 +355,6 @@ namespace castor3d
 						auto textures = pass->getTextures( renderPass.getTexturesMask() );
 						auto animated = doAdjustFlags( *renderPass.getEngine()->getRenderSystem()
 							, programFlags
-							, textures
 							, passFlags
 							, sceneFlags
 							, scene
@@ -372,7 +370,7 @@ namespace castor3d
 							, programFlags
 							, sceneFlags
 							, submesh.getTopology()
-							, submesh.getGeometryBuffers( material, instanceMult ).layouts );
+							, submesh.getGeometryBuffers( material, instanceMult, textures ).layouts );
 						nodes.addRenderNode( flags
 							, animated
 							, culledNode
@@ -396,7 +394,7 @@ namespace castor3d
 								, programFlags
 								, sceneFlags
 								, submesh.getTopology()
-								, submesh.getGeometryBuffers( material, instanceMult ).layouts );
+								, submesh.getGeometryBuffers( material, instanceMult, textures ).layouts );
 							nodes.addRenderNode( flags
 								, animated
 								, culledNode

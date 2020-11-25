@@ -65,8 +65,8 @@ namespace castor3d
 		, Pass const & pass )
 	{
 		size_t result = std::hash< Geometry const * >{}( &geometry );
-		castor::hashCombine( result, submesh );
-		castor::hashCombine( result, pass );
+		castor::hashCombinePtr( result, submesh );
+		castor::hashCombinePtr( result, pass );
 		return result;
 	}
 
@@ -76,9 +76,9 @@ namespace castor3d
 		, uint32_t instanceMult )
 	{
 		size_t result = std::hash< uint32_t >{}( instanceMult );
-		castor::hashCombine( result, geometry );
-		castor::hashCombine( result, submesh );
-		castor::hashCombine( result, pass );
+		castor::hashCombinePtr( result, geometry );
+		castor::hashCombinePtr( result, submesh );
+		castor::hashCombinePtr( result, pass );
 		return result;
 	}
 
