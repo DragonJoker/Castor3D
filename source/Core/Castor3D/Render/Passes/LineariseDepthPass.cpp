@@ -705,7 +705,7 @@ namespace castor3d
 			} );
 		cb.memoryBarrier( VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
 			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_depthBuffer.makeShaderInputResource( VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL ) );
+			, m_depthBuffer.makeShaderInputResource( VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL ) );
 		cb.beginRenderPass( *m_renderPass
 			, *m_lineariseFrameBuffer
 			, { transparentBlackClearColor }
@@ -717,7 +717,7 @@ namespace castor3d
 		cb.endRenderPass();
 		cb.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 			, VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT
-			, m_depthBuffer.makeDepthStencilAttachment( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+			, m_depthBuffer.makeDepthStencilReadOnly( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 		cb.endDebugBlock();
 
 		// Minification passes.
