@@ -788,7 +788,7 @@ namespace CastorViewer
 
 			if ( window )
 			{
-				if ( m_altdown )
+				/*if ( m_altdown )
 				{
 					auto x = m_oldX;
 					auto y = m_oldY;
@@ -810,7 +810,7 @@ namespace CastorViewer
 							}
 						} ) );
 				}
-				else if ( m_currentState )
+				else */if ( m_currentState )
 				{
 					doStartTimer( eTIMER_ID_MOUSE );
 				}
