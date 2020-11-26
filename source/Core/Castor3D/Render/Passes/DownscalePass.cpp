@@ -108,7 +108,7 @@ namespace castor3d
 		, m_commandBuffer{ m_device.graphicsCommandPool->createCommandBuffer( "Downscale", VK_COMMAND_BUFFER_LEVEL_PRIMARY ) }
 		, m_finished{ m_device->createSemaphore( "Downscale" ) }
 	{
-		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
+		m_commandBuffer->begin();
 		m_timer->beginPass( *m_commandBuffer, 0u );
 		m_commandBuffer->beginDebugBlock(
 			{

@@ -173,7 +173,7 @@ namespace castor3d
 			m_clearCommand = CommandsSemaphore{ m_device
 				, this->getName() + cuT( "ClearInjection" ) };
 			ashes::CommandBuffer & cmd = *m_clearCommand.commandBuffer;
-			cmd.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
+			cmd.begin();
 			cmd.beginDebugBlock(
 				{
 					"Lighting - " + this->getName() + " - Clear Injection",
@@ -220,7 +220,7 @@ namespace castor3d
 					, this->getName() + cuT( "ClearPropagate" ) + castor::string::toString( cascade ) );
 				auto & clearCommands = m_clearCommands[cascade];
 				ashes::CommandBuffer & cmd = *clearCommands.commandBuffer;
-				cmd.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
+				cmd.begin();
 				cmd.beginDebugBlock(
 					{
 						"Lighting - " + this->getName() + " - Clear Propagate " + castor::string::toString( cascade ),

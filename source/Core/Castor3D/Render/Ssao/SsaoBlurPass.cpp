@@ -587,7 +587,7 @@ namespace castor3d
 			} );
 		m_commandBuffer = m_device.graphicsCommandPool->createCommandBuffer( getName() );
 
-		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
+		m_commandBuffer->begin();
 		m_commandBuffer->beginDebugBlock(
 			{
 				"SSAO - " + getName(),

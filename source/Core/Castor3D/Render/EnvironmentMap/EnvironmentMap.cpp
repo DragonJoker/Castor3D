@@ -263,7 +263,7 @@ namespace castor3d
 
 			m_generateMipmaps = CommandsSemaphore{ device, cuT( "EnvironmentMapMipmaps" ) };
 			auto & cmd = *m_generateMipmaps.commandBuffer;
-			cmd.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
+			cmd.begin();
 			cmd.beginDebugBlock( { m_environmentMap->getTexture()->getName() + " Mipmaps Generation"
 				, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
 			m_environmentMap->getTexture()->generateMipmaps( cmd );

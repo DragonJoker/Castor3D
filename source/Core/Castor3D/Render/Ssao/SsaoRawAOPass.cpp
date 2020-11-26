@@ -781,7 +781,7 @@ namespace castor3d
 			auto & cmd = *m_commandBuffers[i];
 			auto & quad = m_quads[i];
 
-			cmd.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
+			cmd.begin();
 			cmd.beginDebugBlock(
 				{
 					"SSAO - Raw AO",

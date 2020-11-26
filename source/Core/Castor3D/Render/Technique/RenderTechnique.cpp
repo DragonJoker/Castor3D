@@ -637,7 +637,7 @@ namespace castor3d
 				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 				, result[tex].getTexture()->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
 		};
-		cmd.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
+		cmd.begin();
 		cmd.beginDebugBlock(
 			{
 				"Lighting - " + this->getName() + " - Clear Injection",
@@ -847,7 +847,7 @@ namespace castor3d
 
 		m_colorTexTransition = { device, "TechniqueColourTexTransition" };
 		auto & cmd = *m_colorTexTransition.commandBuffer;
-		cmd.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
+		cmd.begin();
 		cmd.beginDebugBlock(
 			{
 				"Technique Colour Texture Transition",

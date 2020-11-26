@@ -605,7 +605,7 @@ namespace castor3d
 		};
 		auto & cmd = *commands.commandBuffer;
 
-		cmd.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
+		cmd.begin();
 		timer.beginPass( cmd, index );
 		cmd.beginDebugBlock(
 			{
