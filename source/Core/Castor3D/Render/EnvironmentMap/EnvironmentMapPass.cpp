@@ -189,6 +189,7 @@ namespace castor3d
 		m_matrixUbo.cpuUpdate( m_camera->getView()
 			, m_camera->getProjection() );
 		m_modelMatrixUbo.cpuUpdate( m_mtxModel );
+		m_hdrConfigUbo.cpuUpdate( m_camera->getHdrConfig() );
 	}
 
 	void EnvironmentMapPass::update( GpuUpdater & updater )
