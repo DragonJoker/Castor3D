@@ -35,59 +35,55 @@ namespace castor3d
 				, wsCamera );
 		}
 
-		void PhongReflectionModel::computeRefl( sdw::Vec3 const & wsIncident
+		sdw::Vec3 PhongReflectionModel::computeRefl( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
-			, sdw::Float const & occlusion
 			, sdw::SampledImageCubeRgba32 const & envMap
 			, sdw::Float const & shininess
-			, sdw::Vec3 & ambient
-			, sdw::Vec3 & diffuse )const
+			, sdw::Vec3 const & diffuse )const
 		{
-			m_computeRefl( wsIncident
+			return m_computeRefl( wsIncident
 				, wsNormal
-				, occlusion
 				, envMap
 				, shininess
-				, ambient
 				, diffuse );
 		}
 
 		void PhongReflectionModel::computeRefr( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
-			, sdw::Float const & occlusion
 			, sdw::SampledImageCubeRgba32 const & envMap
 			, sdw::Float const & refractionRatio
+			, sdw::Vec3 const & diffuse
 			, sdw::Float const & shininess
-			, sdw::Vec3 & ambient
-			, sdw::Vec3 & diffuse )const
+			, sdw::Vec3 & reflection
+			, sdw::Vec3 & refraction )const
 		{
 			m_computeRefr( wsIncident
 				, wsNormal
-				, occlusion
 				, envMap
 				, refractionRatio
+				, diffuse
 				, shininess
-				, ambient
-				, diffuse );
+				, reflection
+				, refraction );
 		}
 
 		void PhongReflectionModel::computeReflRefr( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
-			, sdw::Float const & occlusion
 			, sdw::SampledImageCubeRgba32 const & envMap
 			, sdw::Float const & refractionRatio
+			, sdw::Vec3 const & diffuse
 			, sdw::Float const & shininess
-			, sdw::Vec3 & ambient
-			, sdw::Vec3 & diffuse )const
+			, sdw::Vec3 & reflection
+			, sdw::Vec3 & refraction )const
 		{
 			m_computeReflRefr( wsIncident
 				, wsNormal
-				, occlusion
 				, envMap
 				, refractionRatio
+				, diffuse
 				, shininess
-				, ambient
-				, diffuse );
+				, reflection
+				, refraction );
 		}
 
 		void PhongReflectionModel::doDeclareComputeIncident()
@@ -104,27 +100,23 @@ namespace castor3d
 
 		void PhongReflectionModel::doDeclareComputeRefl()
 		{
-			m_computeRefl = m_writer.implementFunction< Void >( "computeRefl"
+			m_computeRefl = m_writer.implementFunction< Vec3 >( "computeRefl"
 				, [&]( Vec3 const & wsIncident
 					, Vec3 const & wsNormal
-					, Float const & occlusion
 					, SampledImageCubeRgba32 const & envMap
 					, Float const & shininess
-					, Vec3 ambient
-					, Vec3 diffuse )
+					, Vec3 const & diffuse )
 				{
 					auto reflected = m_writer.declLocale( "reflected"
 						, reflect( wsIncident, wsNormal ) );
-					ambient = occlusion * envMap.lod( reflected, ( 256.0f - shininess ) / 32.0f ).xyz() * diffuse;
-					diffuse = vec3( 0.0_f );
+					m_writer.returnStmt( envMap.lod( reflected, ( 256.0f - shininess ) / 32.0f ).xyz()
+						* diffuse / length( diffuse ) );
 				}
 				, InVec3{ m_writer, "wsIncident" }
 				, InVec3{ m_writer, "wsNormal" }
-				, InFloat{ m_writer, "occlusion" }
 				, InSampledImageCubeRgba32{ m_writer, "envMap" }
 				, InFloat{ m_writer, "shininess" }
-				, OutVec3{ m_writer, "ambient" }
-				, OutVec3{ m_writer, "diffuse" } );
+				, InVec3{ m_writer, "diffuse" } );
 		}
 
 		void PhongReflectionModel::doDeclareComputeRefr()
@@ -132,57 +124,13 @@ namespace castor3d
 			m_computeRefr = m_writer.implementFunction< Void >( "computeRefr"
 				, [&]( Vec3 const & wsIncident
 					, Vec3 const & wsNormal
-					, Float const & occlusion
 					, SampledImageCubeRgba32 const & envMap
 					, Float const & refractionRatio
+					, Vec3 const & diffuse
 					, Float const & shininess
-					, Vec3 ambient
-					, Vec3 diffuse )
+					, sdw::Vec3 & reflection
+					, sdw::Vec3 & refraction )
 				{
-					auto refracted = m_writer.declLocale( "refracted"
-						, refract( wsIncident, wsNormal, refractionRatio ) );
-					ambient = vec3( 0.0_f );
-					diffuse = envMap.lod( refracted, ( 256.0f - shininess ) / 32.0f ).xyz() * ( diffuse / length( diffuse ) );
-				}
-				, InVec3{ m_writer, "wsIncident" }
-				, InVec3{ m_writer, "wsNormal" }
-				, InFloat{ m_writer, "occlusion" }
-				, InSampledImageCubeRgba32{ m_writer, "envMap" }
-				, InFloat{ m_writer, "refractionRatio" }
-				, InFloat{ m_writer, "shininess" }
-				, OutVec3{ m_writer, "ambient" }
-				, OutVec3{ m_writer, "diffuse" } );
-		}
-
-		void PhongReflectionModel::doDeclareComputeReflRefr()
-		{
-			m_computeReflRefr = m_writer.implementFunction< Void >( "computeReflRefr"
-				, [&]( Vec3 const & wsIncident
-					, Vec3 const & wsNormal
-					, Float const & occlusion
-					, SampledImageCubeRgba32 const & envMap
-					, Float const & refractionRatio
-					, Float const & shininess
-					, Vec3 ambient
-					, Vec3 diffuse )
-				{
-					auto save = m_writer.declLocale( "save"
-						, diffuse );
-					computeRefl( wsIncident
-						, wsNormal
-						, occlusion
-						, envMap
-						, shininess
-						, ambient // Reflection affects ambient
-						, save );
-					computeRefr( wsIncident
-						, wsNormal
-						, occlusion
-						, envMap
-						, refractionRatio
-						, shininess
-						, save
-						, diffuse ); // Refraction affects diffuse
 					auto subRatio = m_writer.declLocale( "subRatio"
 						, 1.0_f - refractionRatio );
 					auto addRatio = m_writer.declLocale( "addRatio"
@@ -195,19 +143,59 @@ namespace castor3d
 						, sdw::fma( pow( 1.0_f - product, 5.0_f )
 							, 1.0_f - reflectance
 							, reflectance ) );
-					ambient = mix( diffuse
-						, ambient
+					auto refracted = m_writer.declLocale( "refracted"
+						, refract( wsIncident, wsNormal, refractionRatio ) );
+					reflection = mix( vec3( 0.0_f )
+						, reflection
 						, vec3( fresnel ) );
-					diffuse = vec3( 0.0_f );
+					refraction = mix( envMap.lod( refracted, ( 256.0f - shininess ) / 32.0f ).xyz() * diffuse / length( diffuse )
+						, vec3( 0.0_f )
+						, vec3( fresnel ) );
 				}
 				, InVec3{ m_writer, "wsIncident" }
 				, InVec3{ m_writer, "wsNormal" }
-				, InFloat{ m_writer, "occlusion" }
 				, InSampledImageCubeRgba32{ m_writer, "envMap" }
 				, InFloat{ m_writer, "refractionRatio" }
+				, InVec3{ m_writer, "diffuse" }
 				, InFloat{ m_writer, "shininess" }
-				, OutVec3{ m_writer, "ambient" }
-				, OutVec3{ m_writer, "diffuse" } );
+				, InOutVec3{ m_writer, "reflection" }
+				, OutVec3{ m_writer, "refraction" } );
+		}
+
+		void PhongReflectionModel::doDeclareComputeReflRefr()
+		{
+			m_computeReflRefr = m_writer.implementFunction< Void >( "computeReflRefr"
+				, [&]( Vec3 const & wsIncident
+					, Vec3 const & wsNormal
+					, SampledImageCubeRgba32 const & envMap
+					, Float const & refractionRatio
+					, Vec3 const & diffuse
+					, Float const & shininess
+					, sdw::Vec3 & reflection
+					, sdw::Vec3 & refraction )
+				{
+					reflection = computeRefl( wsIncident
+						, wsNormal
+						, envMap
+						, shininess
+						, diffuse );
+					computeRefr( wsIncident
+						, wsNormal
+						, envMap
+						, refractionRatio
+						, diffuse
+						, shininess
+						, reflection
+						, refraction );
+				}
+				, InVec3{ m_writer, "wsIncident" }
+				, InVec3{ m_writer, "wsNormal" }
+				, InSampledImageCubeRgba32{ m_writer, "envMap" }
+				, InFloat{ m_writer, "refractionRatio" }
+				, InVec3{ m_writer, "diffuse" }
+				, InFloat{ m_writer, "shininess" }
+				, OutVec3{ m_writer, "reflection" }
+				, OutVec3{ m_writer, "refraction" } );
 		}
 	}
 }

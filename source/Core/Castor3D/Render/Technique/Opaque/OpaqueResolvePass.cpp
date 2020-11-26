@@ -228,6 +228,10 @@ namespace castor3d
 						, hasGi );
 					lightDiffuse += lightIndirect;
 					lightSpecular *= specular;
+					auto reflected = writer.declLocale( "reflected"
+						, vec3( 0.0_f ) );
+					auto refracted = writer.declLocale( "refracted"
+						, vec3( 0.0_f ) );
 
 					if ( hasSsao )
 					{
@@ -254,12 +258,12 @@ namespace castor3d
 								{
 									reflections.computeReflRefr( incident
 										, normal
-										, occlusion
 										, c3d_mapEnvironment[Int( i )]
 										, material.m_refractionRatio
+										, diffuse
 										, shininess
-										, ambient
-										, diffuse );
+										, reflected
+										, refracted );
 								}
 								FI;
 							}
@@ -270,12 +274,10 @@ namespace castor3d
 							{
 								IF( writer, envMapIndex == Int( i ) )
 								{
-									reflections.computeRefl( incident
+									reflected = reflections.computeRefl( incident
 										, normal
-										, occlusion
 										, c3d_mapEnvironment[Int( i )]
 										, shininess
-										, ambient
 										, diffuse );
 								}
 								FI;
@@ -289,12 +291,12 @@ namespace castor3d
 								{
 									reflections.computeRefr( incident
 										, normal
-										, occlusion
 										, c3d_mapEnvironment[Int( i )]
 										, material.m_refractionRatio
+										, diffuse
 										, shininess
-										, ambient
-										, diffuse );
+										, reflected
+										, refracted );
 								}
 								FI;
 							}
@@ -303,13 +305,19 @@ namespace castor3d
 					}
 					ELSE
 					{
-						ambient *= occlusion;
 						diffuse *= lightDiffuse;
 					}
 					FI;
 
-					ambient *= lightIndirect;
-					pxl_fragColor = vec4( diffuse + lightSpecular + emissive + ambient, 1.0_f );
+					ambient *= c3d_ambientLight.rgb()
+						* occlusion
+						* lightIndirect;
+					pxl_fragColor = vec4( diffuse
+							+ lightSpecular
+							+ emissive
+							+ ambient
+							+ reflected + refracted
+						, 1.0_f );
 
 					if ( fogType != FogType::eDisabled )
 					{
@@ -444,6 +452,10 @@ namespace castor3d
 						, c3d_mapLightIndirect.lod( vtx_texture, 0.0_f ).rgb()
 						, hasGi );
 					lightDiffuse += lightIndirect;
+					auto reflected = writer.declLocale( "reflected"
+						, vec3( 0.0_f ) );
+					auto refracted = writer.declLocale( "refracted"
+						, vec3( 0.0_f ) );
 
 					if ( hasSsao )
 					{
@@ -472,11 +484,9 @@ namespace castor3d
 								IF( writer, envMapIndex == Int( i ) )
 								{
 									// Reflection from environment map.
-									ambient = reflections.computeRefl( incident
+									reflected = reflections.computeRefl( incident
 										, normal
-										, occlusion
 										, c3d_mapEnvironment[Int( i )]
-										, c3d_ambientLight.xyz()
 										, albedo );
 								}
 								FI;
@@ -485,17 +495,15 @@ namespace castor3d
 						ELSE
 						{
 							// Reflection from background skybox.
-							ambient = c3d_ambientLight.rgb()
-								* occlusion
-								* utils.computeMetallicIBL( normal
-									, position
-									, albedo
-									, metalness
-									, roughness
-									, c3d_cameraPosition.xyz()
-									, c3d_mapIrradiance
-									, c3d_mapPrefiltered
-									, c3d_mapBrdf );
+							reflected = utils.computeMetallicIBL( normal
+								, position
+								, albedo
+								, metalness
+								, roughness
+								, c3d_cameraPosition.xyz()
+								, c3d_mapIrradiance
+								, c3d_mapPrefiltered
+								, c3d_mapBrdf );
 						}
 						FI;
 
@@ -506,14 +514,14 @@ namespace castor3d
 								IF( writer, envMapIndex == Int( i ) )
 								{
 									// Refraction from environment map.
-									ambient = reflections.computeRefrEnvMap( incident
+									reflections.computeRefrEnvMap( incident
 										, normal
-										, occlusion
 										, c3d_mapEnvironment[Int( i )]
 										, material.m_refractionRatio
-										, ambient
 										, albedo
-										, roughness );
+										, roughness
+										, reflected
+										, refracted );
 								}
 								FI;
 							}
@@ -521,31 +529,29 @@ namespace castor3d
 						ELSEIF( ratio != 0.0_f )
 						{
 							// Refraction from background skybox.
-							ambient = reflections.computeRefrSkybox( incident
+							reflections.computeRefrSkybox( incident
 								, normal
-								, occlusion
 								, c3d_mapPrefiltered
 								, material.m_refractionRatio
-								, ambient
 								, albedo
-								, roughness );
+								, roughness
+								, reflected
+								, refracted );
 						}
 						FI;
 					}
 					ELSE
 					{
 						// Reflection from background skybox.
-						ambient = c3d_ambientLight.rgb()
-							* occlusion
-							* utils.computeMetallicIBL( normal
-								, position
-								, albedo
-								, metalness
-								, roughness
-								, c3d_cameraPosition.xyz()
-								, c3d_mapIrradiance
-								, c3d_mapPrefiltered
-								, c3d_mapBrdf );
+						reflected = utils.computeMetallicIBL( normal
+							, position
+							, albedo
+							, metalness
+							, roughness
+							, c3d_cameraPosition.xyz()
+							, c3d_mapIrradiance
+							, c3d_mapPrefiltered
+							, c3d_mapBrdf );
 						auto ratio = writer.declLocale( "ratio"
 							, material.m_refractionRatio );
 
@@ -554,21 +560,28 @@ namespace castor3d
 							// Refraction from background skybox.
 							auto incident = writer.declLocale( "incident"
 								, normalize( position - c3d_cameraPosition.xyz() ) );
-							ambient = reflections.computeRefrSkybox( incident
+							reflections.computeRefrSkybox( incident
 								, normal
-								, occlusion
 								, c3d_mapPrefiltered
 								, material.m_refractionRatio
-								, ambient
 								, albedo
-								, roughness );
+								, roughness
+								, reflected
+								, refracted );
 						}
 						FI;
 					}
 					FI;
 
-					ambient *= lightIndirect;
-					pxl_fragColor = vec4( lightDiffuse * albedo + lightSpecular + emissive + ambient, 1.0_f );
+					ambient *= c3d_ambientLight.rgb()
+						* occlusion
+						* lightIndirect;
+					pxl_fragColor = vec4( lightDiffuse * albedo
+							+ lightSpecular
+							+ emissive
+							+ ambient
+							+ reflected + refracted
+						, 1.0_f );
 
 					if ( fogType != FogType::eDisabled )
 					{
@@ -703,6 +716,10 @@ namespace castor3d
 						, c3d_mapLightIndirect.lod( fixedTexCoord, 0.0_f ).rgb()
 						, hasGi );
 					lightDiffuse += lightIndirect;
+					auto reflected = writer.declLocale( "reflected"
+						, vec3( 0.0_f ) );
+					auto refracted = writer.declLocale( "refracted"
+						, vec3( 0.0_f ) );
 
 					if ( hasSsao )
 					{
@@ -731,11 +748,9 @@ namespace castor3d
 								IF( writer, envMapIndex == Int( i ) )
 								{
 									// Reflection from environment map.
-									ambient = reflections.computeRefl( incident
+									reflected = reflections.computeRefl( incident
 										, normal
-										, occlusion
 										, c3d_mapEnvironment[Int( i )]
-										, c3d_ambientLight.xyz()
 										, diffuse );
 								}
 								FI;
@@ -744,17 +759,15 @@ namespace castor3d
 						ELSE
 						{
 							// Reflection from background skybox.
-							ambient = c3d_ambientLight.xyz()
-								* occlusion
-								* utils.computeSpecularIBL( normal
-									, position
-									, diffuse
-									, specular
-									, glossiness
-									, c3d_cameraPosition.xyz()
-									, c3d_mapIrradiance
-									, c3d_mapPrefiltered
-									, c3d_mapBrdf );
+							reflected = utils.computeSpecularIBL( normal
+								, position
+								, diffuse
+								, specular
+								, glossiness
+								, c3d_cameraPosition.xyz()
+								, c3d_mapIrradiance
+								, c3d_mapPrefiltered
+								, c3d_mapBrdf );
 						}
 						FI;
 
@@ -765,14 +778,14 @@ namespace castor3d
 								IF( writer, envMapIndex == Int( i ) )
 								{
 									// Refraction from environment map.
-									ambient = reflections.computeRefrEnvMap( incident
+									reflections.computeRefrEnvMap( incident
 										, normal
-										, occlusion
 										, c3d_mapEnvironment[Int( i )]
 										, material.m_refractionRatio
-										, ambient
 										, diffuse
-										, glossiness );
+										, glossiness
+										, reflected
+										, refracted );
 								}
 								FI;
 							}
@@ -780,31 +793,29 @@ namespace castor3d
 						ELSEIF( ratio != 0.0_f )
 						{
 							// Refraction from background skybox.
-							ambient = reflections.computeRefrSkybox( incident
+							reflections.computeRefrSkybox( incident
 								, normal
-								, occlusion
 								, c3d_mapPrefiltered
 								, material.m_refractionRatio
-								, ambient
 								, diffuse
-								, glossiness );
+								, glossiness
+								, reflected
+								, refracted );
 						}
 						FI;
 					}
 					ELSE
 					{
 						// Reflection from background skybox.
-						ambient = c3d_ambientLight.xyz()
-							* occlusion
-							* utils.computeSpecularIBL( normal
-								, position
-								, diffuse
-								, specular
-								, glossiness
-								, c3d_cameraPosition.xyz()
-								, c3d_mapIrradiance
-								, c3d_mapPrefiltered
-								, c3d_mapBrdf );
+						reflected = utils.computeSpecularIBL( normal
+							, position
+							, diffuse
+							, specular
+							, glossiness
+							, c3d_cameraPosition.xyz()
+							, c3d_mapIrradiance
+							, c3d_mapPrefiltered
+							, c3d_mapBrdf );
 						auto ratio = writer.declLocale( "ratio"
 							, material.m_refractionRatio );
 
@@ -813,21 +824,28 @@ namespace castor3d
 							// Refraction from background skybox.
 							auto incident = writer.declLocale( "incident"
 								, normalize( position - c3d_cameraPosition.xyz() ) );
-							ambient = reflections.computeRefrSkybox( incident
+							reflections.computeRefrSkybox( incident
 								, normal
-								, occlusion
 								, c3d_mapPrefiltered
 								, material.m_refractionRatio
-								, ambient
 								, diffuse
-								, glossiness );
+								, glossiness
+								, reflected
+								, refracted );
 						}
 						FI;
 					}
 					FI;
 
-					ambient *= lightIndirect;
-					pxl_fragColor = vec4( lightDiffuse * diffuse + lightSpecular + emissive + ambient, 1.0_f );
+					ambient *= c3d_ambientLight.xyz()
+						* occlusion
+						* lightIndirect;
+					pxl_fragColor = vec4( lightDiffuse * diffuse
+							+ lightSpecular
+							+ emissive
+							+ ambient
+							+ reflected + refracted
+						, 1.0_f );
 
 					if ( fogType != FogType::eDisabled )
 					{
