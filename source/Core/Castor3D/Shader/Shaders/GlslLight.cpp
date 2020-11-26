@@ -17,7 +17,8 @@ namespace castor3d
 			, m_colourIndex{ getMember< Vec4 >( "m_colourIndex" ) }
 			, m_intensityFarPlane{ getMember< Vec4 >( "m_intensityFarPlane" ) }
 			, m_volumetric{ getMember< Vec4 >( "m_volumetric" ) }
-			, m_shadow{ getMember< Vec4 >( "m_shadow" ) }
+			, m_shadowsOffsets{ getMember< Vec4 >( "m_shadowsOffsets" ) }
+			, m_shadowsVariances{ getMember< Vec4 >( "m_shadowsVariances" ) }
 			, m_colour{ getShader()
 				, makeSwizzle( makeExpr( m_colourIndex )
 					, ast::expr::SwizzleKind::e012 ) }
@@ -42,12 +43,15 @@ namespace castor3d
 			, m_volumetricScattering{ getShader()
 				, makeSwizzle( makeExpr( m_volumetric )
 					, ast::expr::SwizzleKind::e1 ) }
-			, m_shadowOffsets{ getShader()
-				, makeSwizzle( makeExpr( m_shadow )
+			, m_rawShadowOffsets{ getShader()
+				, makeSwizzle( makeExpr( m_shadowsOffsets )
 					, ast::expr::SwizzleKind::e01 ) }
-			, m_shadowVariance{ getShader()
-				, makeSwizzle( makeExpr( m_shadow )
+			, m_pcfShadowOffsets{ getShader()
+				, makeSwizzle( makeExpr( m_shadowsOffsets )
 					, ast::expr::SwizzleKind::e23 ) }
+			, m_vsmShadowVariance{ getShader()
+				, makeSwizzle( makeExpr( m_shadowsVariances )
+					, ast::expr::SwizzleKind::e01 ) }
 		{
 		}
 
@@ -68,7 +72,8 @@ namespace castor3d
 				result->declMember( "m_colourIndex", ast::type::Kind::eVec4F );
 				result->declMember( "m_intensityFarPlane", ast::type::Kind::eVec4F );
 				result->declMember( "m_volumetric", ast::type::Kind::eVec4F );
-				result->declMember( "m_shadow", ast::type::Kind::eVec4F );
+				result->declMember( "m_shadowsOffsets", ast::type::Kind::eVec4F );
+				result->declMember( "m_shadowsVariances", ast::type::Kind::eVec4F );
 			}
 
 			return result;

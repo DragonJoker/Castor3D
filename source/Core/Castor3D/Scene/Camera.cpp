@@ -37,6 +37,11 @@ namespace castor3d
 
 		if ( result )
 		{
+			result = HdrConfig::TextWriter( m_tabs + cuT( "\t" ) )( camera.getHdrConfig(), file );
+		}
+
+		if ( result )
+		{
 			result = file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 

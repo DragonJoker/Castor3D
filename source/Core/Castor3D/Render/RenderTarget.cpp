@@ -107,11 +107,6 @@ namespace castor3d
 
 		if ( result )
 		{
-			result = HdrConfig::TextWriter( m_tabs + cuT( "\t" ) )( target.getHdrConfig(), file );
-		}
-
-		if ( result )
-		{
 			result = SsaoConfig::TextWriter{ m_tabs + cuT( "\t" ) }( target.m_ssaoConfig, file );
 		}
 
@@ -372,7 +367,7 @@ namespace castor3d
 		CU_Require( m_culler );
 		m_culler->compute();
 
-		m_hdrConfigUbo.cpuUpdate( m_hdrConfig );
+		m_hdrConfigUbo.cpuUpdate( getHdrConfig() );
 
 		for ( auto effect : m_hdrPostEffects )
 		{
@@ -516,6 +511,26 @@ namespace castor3d
 		{
 			m_hdrPostEffects.push_back( effect );
 		}
+	}
+
+	HdrConfig const & RenderTarget::getHdrConfig()const
+	{
+		return getCamera()->getHdrConfig();
+	}
+
+	HdrConfig & RenderTarget::getHdrConfig()
+	{
+		return getCamera()->getHdrConfig();
+	}
+
+	void RenderTarget::setExposure( float value )
+	{
+		getCamera()->setExposure( value );
+	}
+
+	void RenderTarget::setGamma( float value )
+	{
+		getCamera()->setGamma( value );
 	}
 
 	void RenderTarget::setSize( Size const & size )

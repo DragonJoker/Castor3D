@@ -574,9 +574,12 @@ namespace castor3d
 			//!\~english	The variable containing the light volumetric scattering data.
 			//!\~french		La variable contenant les données de volumetric scattering.
 			castor::Point4f volumetric;
-			//!\~english	The variable containing the light shadow data.
-			//!\~french		La variable contenant les données d'ombres.
-			castor::Point4f shadow;
+			//!\~english	The variable containing the light raw and PCF shadow data.
+			//!\~french		La variable contenant les données d'ombres raw et PCF.
+			castor::Point4f shadowsOffsets;
+			//!\~english	The variable containing the light VSM shadow data.
+			//!\~french		La variable contenant les données d'ombres VSM.
+			castor::Point4f shadowsVariances;
 		};
 
 		Engine & m_engine;

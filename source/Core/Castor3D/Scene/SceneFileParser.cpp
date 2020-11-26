@@ -313,7 +313,6 @@ namespace castor3d
 		addParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "postfx" ), parserRenderTargetPostEffect, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::eText >() } );
 		addParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "tone_mapping" ), parserRenderTargetToneMapping, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::eText >() } );
 		addParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "ssao" ), parserRenderTargetSsao );
-		addParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "hdr_config" ), parserRenderTargetHdrConfig );
 		addParser( uint32_t( CSCNSection::eRenderTarget ), cuT( "}" ), parserRenderTargetEnd );
 
 		addParser( uint32_t( CSCNSection::eSampler ), cuT( "min_filter" ), parserSamplerMinFilter, { makeParameter< ParameterType::eCheckedText >( m_mapFilters ) } );
@@ -379,14 +378,22 @@ namespace castor3d
 		addParser( uint32_t( CSCNSection::eShadows ), cuT( "producer" ), parserShadowsProducer, { makeParameter< ParameterType::eBool >() } );
 		addParser( uint32_t( CSCNSection::eShadows ), cuT( "filter" ), parserShadowsFilter, { makeParameter< ParameterType::eCheckedText >( m_mapShadowFilters ) } );
 		addParser( uint32_t( CSCNSection::eShadows ), cuT( "global_illumination" ), parserShadowsGlobalIllumination, { makeParameter< ParameterType::eCheckedText >( m_mapGlobalIlluminations ) } );
-		addParser( uint32_t( CSCNSection::eShadows ), cuT( "min_offset" ), parserShadowsMinOffset, { makeParameter< ParameterType::eFloat >() } );
-		addParser( uint32_t( CSCNSection::eShadows ), cuT( "max_slope_offset" ), parserShadowsMaxSlopeOffset, { makeParameter< ParameterType::eFloat >() } );
-		addParser( uint32_t( CSCNSection::eShadows ), cuT( "variance_max" ), parserShadowsVarianceMax, { makeParameter< ParameterType::eFloat >() } );
-		addParser( uint32_t( CSCNSection::eShadows ), cuT( "variance_bias" ), parserShadowsVarianceBias, { makeParameter< ParameterType::eFloat >() } );
 		addParser( uint32_t( CSCNSection::eShadows ), cuT( "volumetric_steps" ), parserShadowsVolumetricSteps, { makeParameter< ParameterType::eUInt32 >() } );
 		addParser( uint32_t( CSCNSection::eShadows ), cuT( "volumetric_scattering" ), parserShadowsVolumetricScatteringFactor, { makeParameter< ParameterType::eFloat >() } );
+		addParser( uint32_t( CSCNSection::eShadows ), cuT( "raw_config" ), parserShadowsRawConfig );
+		addParser( uint32_t( CSCNSection::eShadows ), cuT( "pcf_config" ), parserShadowsPcfConfig );
+		addParser( uint32_t( CSCNSection::eShadows ), cuT( "vsm_config" ), parserShadowsVsmConfig );
 		addParser( uint32_t( CSCNSection::eShadows ), cuT( "rsm_config" ), parserShadowsRsmConfig );
 		addParser( uint32_t( CSCNSection::eShadows ), cuT( "lpv_config" ), parserShadowsLpvConfig );
+
+		addParser( uint32_t( CSCNSection::eRaw ), cuT( "min_offset" ), parserShadowsRawMinOffset, { makeParameter< ParameterType::eFloat >() } );
+		addParser( uint32_t( CSCNSection::eRaw ), cuT( "max_slope_offset" ), parserShadowsRawMaxSlopeOffset, { makeParameter< ParameterType::eFloat >() } );
+
+		addParser( uint32_t( CSCNSection::ePcf ), cuT( "min_offset" ), parserShadowsPcfMinOffset, { makeParameter< ParameterType::eFloat >() } );
+		addParser( uint32_t( CSCNSection::ePcf ), cuT( "max_slope_offset" ), parserShadowsPcfMaxSlopeOffset, { makeParameter< ParameterType::eFloat >() } );
+
+		addParser( uint32_t( CSCNSection::eVsm ), cuT( "variance_max" ), parserShadowsVsmVarianceMax, { makeParameter< ParameterType::eFloat >() } );
+		addParser( uint32_t( CSCNSection::eVsm ), cuT( "variance_bias" ), parserShadowsVsmVarianceBias, { makeParameter< ParameterType::eFloat >() } );
 
 		addParser( uint32_t( CSCNSection::eRsm ), cuT( "intensity" ), parserRsmIntensity, { makeParameter< ParameterType::eFloat >() } );
 		addParser( uint32_t( CSCNSection::eRsm ), cuT( "max_radius" ), parserRsmMaxRadius, { makeParameter< ParameterType::eFloat >() } );
@@ -557,6 +564,7 @@ namespace castor3d
 
 		addParser( uint32_t( CSCNSection::eCamera ), cuT( "parent" ), parserCameraParent, { makeParameter< ParameterType::eName >() } );
 		addParser( uint32_t( CSCNSection::eCamera ), cuT( "viewport" ), parserCameraViewport );
+		addParser( uint32_t( CSCNSection::eCamera ), cuT( "hdr_config" ), parserCameraHdrConfig );
 		addParser( uint32_t( CSCNSection::eCamera ), cuT( "primitive" ), parserCameraPrimitive, { makeParameter< ParameterType::eCheckedText >( m_mapPrimitiveTypes ) } );
 		addParser( uint32_t( CSCNSection::eCamera ), cuT( "}" ), parserCameraEnd );
 

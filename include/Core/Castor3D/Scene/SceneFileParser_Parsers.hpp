@@ -36,7 +36,6 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserRenderTargetPostEffect )
 	CU_DeclareAttributeParser( parserRenderTargetToneMapping )
 	CU_DeclareAttributeParser( parserRenderTargetSsao )
-	CU_DeclareAttributeParser( parserRenderTargetHdrConfig )
 	CU_DeclareAttributeParser( parserRenderTargetEnd )
 
 	// Sampler parsers
@@ -110,12 +109,23 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserShadowsGlobalIllumination )
 	CU_DeclareAttributeParser( parserShadowsVolumetricSteps )
 	CU_DeclareAttributeParser( parserShadowsVolumetricScatteringFactor )
-	CU_DeclareAttributeParser( parserShadowsMinOffset )
-	CU_DeclareAttributeParser( parserShadowsMaxSlopeOffset )
-	CU_DeclareAttributeParser( parserShadowsVarianceMax )
-	CU_DeclareAttributeParser( parserShadowsVarianceBias )
+	CU_DeclareAttributeParser( parserShadowsRawConfig )
+	CU_DeclareAttributeParser( parserShadowsPcfConfig )
+	CU_DeclareAttributeParser( parserShadowsVsmConfig )
 	CU_DeclareAttributeParser( parserShadowsRsmConfig )
 	CU_DeclareAttributeParser( parserShadowsLpvConfig )
+
+	// Raw filter shadow parsers
+	CU_DeclareAttributeParser( parserShadowsRawMinOffset )
+	CU_DeclareAttributeParser( parserShadowsRawMaxSlopeOffset )
+
+	// PCF shadow parsers
+	CU_DeclareAttributeParser( parserShadowsPcfMinOffset )
+	CU_DeclareAttributeParser( parserShadowsPcfMaxSlopeOffset )
+
+	// VSM shadow parsers
+	CU_DeclareAttributeParser( parserShadowsVsmVarianceMax )
+	CU_DeclareAttributeParser( parserShadowsVsmVarianceBias )
 
 	// RSM parsers
 	CU_DeclareAttributeParser( parserRsmIntensity )
@@ -292,6 +302,7 @@ namespace castor3d
 	// Camera parsers
 	CU_DeclareAttributeParser( parserCameraParent )
 	CU_DeclareAttributeParser( parserCameraViewport )
+	CU_DeclareAttributeParser( parserCameraHdrConfig )
 	CU_DeclareAttributeParser( parserCameraPrimitive )
 	CU_DeclareAttributeParser( parserCameraEnd )
 

@@ -92,7 +92,8 @@ namespace castor3d
 		doCopyComponent( getColour(), float( m_shadowMapIndex ), buffer );
 		doCopyComponent( getIntensity(), getFarPlane(), float( getLight().getShadowType() ), buffer );
 		doCopyComponent( float( getVolumetricSteps() ), getVolumetricScatteringFactor(), 0.0f, 0.0f, buffer );
-		doCopyComponent( getShadowOffsets(), getShadowVariance(), buffer );
+		doCopyComponent( getShadowOffsets(), buffer );
+		doCopyComponent( getShadowVariance(), buffer );
 		doBind( buffer );
 	}
 

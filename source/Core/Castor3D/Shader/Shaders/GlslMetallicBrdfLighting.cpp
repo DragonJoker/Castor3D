@@ -323,8 +323,9 @@ namespace castor3d
 							shadowFactor = cascadeFactors.y()
 								* max( 1.0_f - m_writer.cast< Float >( receivesShadows )
 									, m_shadowModel->computeDirectional( light.m_lightBase.m_shadowType
-										, light.m_lightBase.m_shadowOffsets
-										, light.m_lightBase.m_shadowVariance
+										, light.m_lightBase.m_rawShadowOffsets
+										, light.m_lightBase.m_pcfShadowOffsets
+										, light.m_lightBase.m_vsmShadowVariance
 										, light.m_transforms[cascadeIndex]
 										, fragmentIn.m_worldVertex
 										, -lightDirection
@@ -337,8 +338,9 @@ namespace castor3d
 								shadowFactor += cascadeFactors.z()
 									* max( 1.0_f - m_writer.cast< Float >( receivesShadows )
 										, m_shadowModel->computeDirectional( light.m_lightBase.m_shadowType
-											, light.m_lightBase.m_shadowOffsets
-											, light.m_lightBase.m_shadowVariance
+											, light.m_lightBase.m_rawShadowOffsets
+											, light.m_lightBase.m_pcfShadowOffsets
+											, light.m_lightBase.m_vsmShadowVariance
 											, light.m_transforms[cascadeIndex - 1u]
 											, fragmentIn.m_worldVertex
 											, -lightDirection
@@ -368,8 +370,9 @@ namespace castor3d
 								IF( m_writer, light.m_lightBase.m_volumetricSteps != 0_u )
 								{
 									m_shadowModel->computeVolumetric( light.m_lightBase.m_shadowType
-										, light.m_lightBase.m_shadowOffsets
-										, light.m_lightBase.m_shadowVariance
+										, light.m_lightBase.m_rawShadowOffsets
+										, light.m_lightBase.m_pcfShadowOffsets
+										, light.m_lightBase.m_vsmShadowVariance
 										, fragmentIn.m_clipVertex
 										, fragmentIn.m_worldVertex
 										, worldEye
@@ -481,8 +484,9 @@ namespace castor3d
 							auto shadowFactor = m_writer.declLocale( "shadowFactor"
 								, max( 1.0_f - m_writer.cast< Float >( receivesShadows )
 									, m_shadowModel->computePoint( light.m_lightBase.m_shadowType
-										, light.m_lightBase.m_shadowOffsets
-										, light.m_lightBase.m_shadowVariance
+										, light.m_lightBase.m_rawShadowOffsets
+										, light.m_lightBase.m_pcfShadowOffsets
+										, light.m_lightBase.m_vsmShadowVariance
 										, fragmentIn.m_worldVertex
 										, light.m_position.xyz()
 										, fragmentIn.m_worldNormal
@@ -586,8 +590,9 @@ namespace castor3d
 								, 1.0_f - step( spotFactor, light.m_cutOff ) );
 							shadowFactor *= max( 1.0_f - m_writer.cast< Float >( receivesShadows )
 								, m_shadowModel->computeSpot( light.m_lightBase.m_shadowType
-									, light.m_lightBase.m_shadowOffsets
-									, light.m_lightBase.m_shadowVariance
+									, light.m_lightBase.m_rawShadowOffsets
+									, light.m_lightBase.m_pcfShadowOffsets
+									, light.m_lightBase.m_vsmShadowVariance
 									, light.m_transform
 									, fragmentIn.m_worldVertex
 									, -lightToVertex

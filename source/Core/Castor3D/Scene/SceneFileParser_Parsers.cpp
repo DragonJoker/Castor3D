@@ -589,17 +589,6 @@ namespace castor3d
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eSsao )
-		
-	CU_ImplementAttributeParser( parserRenderTargetHdrConfig )
-	{
-		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
-
-		if ( !parsingContext->renderTarget )
-		{
-			CU_ParsingError( cuT( "No scene initialised." ) );
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eHdrConfig )
 
 	CU_ImplementAttributeParser( parserRenderTargetEnd )
 	{
@@ -993,6 +982,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
 		parsingContext->viewport.reset();
+		parsingContext->point2f = { 2.2f, 1.0f };
 		parsingContext->sceneNode = parsingContext->scene->getCameraRootNode();
 
 		if ( !parsingContext->scene )
@@ -1815,7 +1805,7 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserShadowsMinOffset )
+	CU_ImplementAttributeParser( parserShadowsRawConfig )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
 
@@ -1823,20 +1813,10 @@ namespace castor3d
 		{
 			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
 		}
-		else if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing parameter" ) );
-		}
-		else
-		{
-			float value;
-			params[0]->get( value );
-			parsingContext->light->setShadowMinOffset( value );
-		}
 	}
-	CU_EndAttribute()
+	CU_EndAttributePush( CSCNSection::eRaw )
 
-	CU_ImplementAttributeParser( parserShadowsMaxSlopeOffset )
+	CU_ImplementAttributeParser( parserShadowsPcfConfig )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
 
@@ -1844,20 +1824,10 @@ namespace castor3d
 		{
 			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
 		}
-		else if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing parameter" ) );
-		}
-		else
-		{
-			float value;
-			params[0]->get( value );
-			parsingContext->light->setShadowMaxSlopeOffset( value );
-		}
 	}
-	CU_EndAttribute()
+	CU_EndAttributePush( CSCNSection::ePcf )
 
-	CU_ImplementAttributeParser( parserShadowsVarianceMax )
+	CU_ImplementAttributeParser( parserShadowsVsmConfig )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
 
@@ -1865,39 +1835,8 @@ namespace castor3d
 		{
 			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
 		}
-		else if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing parameter" ) );
-		}
-		else
-		{
-			float value;
-			params[0]->get( value );
-			parsingContext->light->setShadowMaxVariance( value );
-		}
 	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserShadowsVarianceBias )
-	{
-		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
-
-		if ( !parsingContext->light )
-		{
-			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
-		}
-		else if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing parameter" ) );
-		}
-		else
-		{
-			float value;
-			params[0]->get( value );
-			parsingContext->light->setShadowVarianceBias( value );
-		}
-	}
-	CU_EndAttribute()
+	CU_EndAttributePush( CSCNSection::eVsm )
 
 	CU_ImplementAttributeParser( parserShadowsRsmConfig )
 	{
@@ -1920,6 +1859,132 @@ namespace castor3d
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eLpv )
+
+	CU_ImplementAttributeParser( parserShadowsRawMinOffset )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->light )
+		{
+			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+		}
+		else if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing parameter" ) );
+		}
+		else
+		{
+			float value;
+			params[0]->get( value );
+			parsingContext->light->setRawMinOffset( value );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserShadowsRawMaxSlopeOffset )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->light )
+		{
+			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+		}
+		else if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing parameter" ) );
+		}
+		else
+		{
+			float value;
+			params[0]->get( value );
+			parsingContext->light->setRawMaxSlopeOffset( value );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserShadowsPcfMinOffset )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->light )
+		{
+			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+		}
+		else if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing parameter" ) );
+		}
+		else
+		{
+			float value;
+			params[0]->get( value );
+			parsingContext->light->setPcfMinOffset( value );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserShadowsPcfMaxSlopeOffset )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->light )
+		{
+			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+		}
+		else if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing parameter" ) );
+		}
+		else
+		{
+			float value;
+			params[0]->get( value );
+			parsingContext->light->setPcfMaxSlopeOffset( value );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserShadowsVsmVarianceMax )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->light )
+		{
+			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+		}
+		else if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing parameter" ) );
+		}
+		else
+		{
+			float value;
+			params[0]->get( value );
+			parsingContext->light->setVsmMaxVariance( value );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserShadowsVsmVarianceBias )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->light )
+		{
+			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+		}
+		else if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing parameter" ) );
+		}
+		else
+		{
+			float value;
+			params[0]->get( value );
+			parsingContext->light->setVsmVarianceBias( value );
+		}
+	}
+	CU_EndAttribute()
 
 	CU_ImplementAttributeParser( parserRsmIntensity )
 	{
@@ -4965,6 +5030,11 @@ namespace castor3d
 		parsingContext->viewport->setPerspective( 0.0_degrees, 1, 0, 1 );
 	}
 	CU_EndAttributePush( CSCNSection::eViewport )
+		
+	CU_ImplementAttributeParser( parserCameraHdrConfig )
+	{
+	}
+	CU_EndAttributePush( CSCNSection::eHdrConfig )
 
 	CU_ImplementAttributeParser( parserCameraPrimitive )
 	{
@@ -4988,9 +5058,11 @@ namespace castor3d
 
 		if ( parsingContext->sceneNode && parsingContext->viewport )
 		{
-			parsingContext->scene->getCameraCache().add( parsingContext->strName
+			auto camera = parsingContext->scene->getCameraCache().add( parsingContext->strName
 				, *parsingContext->sceneNode
 				, std::move( *parsingContext->viewport ) );
+			camera->setGamma( parsingContext->point2f[0] );
+			camera->setExposure( parsingContext->point2f[1] );
 			parsingContext->viewport.reset();
 		}
 	}
@@ -6031,19 +6103,13 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
 
-		if ( !parsingContext->renderTarget )
-		{
-			CU_ParsingError( cuT( "No render target initialised." ) );
-		}
-		else if ( params.empty() )
+		if ( params.empty() )
 		{
 			CU_ParsingError( cuT( "Missing parameter." ) );
 		}
 		else
 		{
-			float value;
-			params[0]->get( value );
-			parsingContext->renderTarget->setExposure( value );
+			params[0]->get( parsingContext->point2f[1] );
 		}
 	}
 	CU_EndAttribute()
@@ -6052,19 +6118,13 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
 
-		if ( !parsingContext->renderTarget )
-		{
-			CU_ParsingError( cuT( "No render target initialised." ) );
-		}
-		else if ( params.empty() )
+		if ( params.empty() )
 		{
 			CU_ParsingError( cuT( "Missing parameter." ) );
 		}
 		else
 		{
-			float value;
-			params[0]->get( value );
-			parsingContext->renderTarget->setGamma( value );
+			params[0]->get( parsingContext->point2f[0] );
 		}
 	}
 	CU_EndAttribute()

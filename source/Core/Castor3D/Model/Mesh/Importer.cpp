@@ -22,7 +22,9 @@ namespace castor3d
 	{
 		std::ostream & operator<<( std::ostream & stream, castor::Point3f const & obj )
 		{
-			stream << obj->x << ", " << obj->y << ", " << obj->z;
+			stream << std::setprecision( 4 ) << obj->x
+				<< ", " << std::setprecision( 4 ) << obj->y
+				<< ", " << std::setprecision( 4 ) << obj->z;
 			return stream;
 		}
 

@@ -143,107 +143,118 @@ namespace GuiCommon
 		template< typename ObjectT, typename ValueT >
 		using ValueSetterT = void ( ObjectT:: * )( ValueT );
 
-		wxPGProperty * addProperty( wxPropertyGrid * grid
+		wxPGProperty * addProperty( wxPropertyGrid * parent
 			, wxString const & name );
-		template< typename MyValueT >
-		wxPGProperty * createProperty( wxPropertyGrid * grid
+		wxPGProperty * addProperty( wxPGProperty * parent
+			, wxString const & name );
+		template< typename ParentT, typename MyValueT >
+		wxPGProperty * createProperty( ParentT * parent
 			, wxString const & name
 			, MyValueT && value
 			, PropertyChangeHandler handler );
-		template< typename EnumT, typename FuncT >
-		wxPGProperty * addPropertyE( wxPropertyGrid * grid
+		template< typename ParentT, typename EnumT, typename FuncT >
+		wxPGProperty * addPropertyE( ParentT * parent
 			, wxString const & name
 			, wxArrayString const & choices
 			, FuncT func );
-		template< typename EnumT, typename FuncT >
-		wxPGProperty * addPropertyE( wxPropertyGrid * grid
+		template< typename ParentT, typename EnumT, typename FuncT >
+		wxPGProperty * addPropertyE( ParentT * parent
 			, wxString const & name
 			, wxArrayString const & choices
 			, EnumT selected
 			, FuncT func );
-		wxPGProperty * addProperty( wxPropertyGrid * grid
+		wxPGProperty * addProperty( wxPropertyGrid * parent
 			, wxString const & name
 			, wxArrayString const & choices
 			, wxString const & selected
 			, PropertyChangeHandler handler );
-		template< typename ValueT >
-		wxPGProperty * addProperty( wxPropertyGrid * grid
+		wxPGProperty * addProperty( wxPGProperty * parent
+			, wxString const & name
+			, wxArrayString const & choices
+			, wxString const & selected
+			, PropertyChangeHandler handler );
+		template< typename ParentT, typename ValueT >
+		wxPGProperty * addProperty( ParentT * parent
 			, wxString const & name
 			, ValueT const & value
 			, PropertyChangeHandler handler );
-		template< typename ValueT >
-		wxPGProperty * addProperty( wxPropertyGrid * grid
+		template< typename ParentT, typename ValueT >
+		wxPGProperty * addProperty( ParentT * parent
 			, wxString const & name
 			, ValueT const & value
 			, ValueT const & step
 			, PropertyChangeHandler handler );
-		wxPGProperty * addProperty( wxPropertyGrid * grid
+		wxPGProperty * addProperty( wxPropertyGrid * parent
+			, wxString const & name
+			, wxPGEditor * editor
+			, PropertyChangeHandler handler );
+		wxPGProperty * addProperty( wxPGProperty * parent
 			, wxString const & name
 			, wxPGEditor * editor
 			, PropertyChangeHandler handler );
 
-		template< typename ValueT >
-		wxPGProperty * addPropertyT( wxPropertyGrid * grid
+		template< typename ParentT, typename ValueT >
+		wxPGProperty * addPropertyT( ParentT * parent
 			, wxString const & name
 			, castor::RangedValue< ValueT > * value );
-		template< typename ValueT >
-		wxPGProperty * addPropertyT( wxPropertyGrid * grid
+		template< typename ParentT, typename ValueT >
+		wxPGProperty * addPropertyT( ParentT * parent
 			, wxString const & name
 			, castor::ChangeTracked< castor::RangedValue< ValueT > > * value );
-		template< typename ValueT >
-		wxPGProperty * addPropertyT( wxPropertyGrid * grid
+		template< typename ParentT, typename ValueT >
+		wxPGProperty * addPropertyT( ParentT * parent
 			, wxString const & name
 			, ValueT * value );
-		template< typename ValueT >
-		wxPGProperty * addPropertyT( wxPropertyGrid * grid
+		template< typename ParentT, typename ValueT >
+		wxPGProperty * addPropertyT( ParentT * parent
 			, wxString const & name
 			, ValueT * value
 			, ValueT step );
-		template< typename ObjectT, typename ObjectU, typename ValueT >
-		wxPGProperty * addPropertyT( wxPropertyGrid * grid
+		template< typename ParentT, typename ObjectT, typename ObjectU, typename ValueT >
+		wxPGProperty * addPropertyT( ParentT * parent
 			, wxString const & name
 			, ValueT value
 			, ObjectT * object
 			, ValueSetterT< ObjectU, ValueT > setter );
-		template< typename ObjectT, typename ObjectU, typename ValueT >
-		wxPGProperty * addPropertyT( wxPropertyGrid * grid
+		template< typename ParentT, typename ObjectT, typename ObjectU, typename ValueT >
+		wxPGProperty * addPropertyT( ParentT * parent
 			, wxString const & name
 			, ValueT  value
 			, ValueT step
 			, ObjectT * object
 			, ValueSetterT< ObjectU, ValueT > setter );
-		template< typename ObjectT, typename ObjectU, typename ValueT >
-		wxPGProperty * addPropertyT( wxPropertyGrid * grid
+		template< typename ParentT, typename ObjectT, typename ObjectU, typename ValueT >
+		wxPGProperty * addPropertyT( ParentT * parent
 			, wxString const & name
 			, ValueT const & value
 			, ObjectT * object
 			, ValueRefSetterT< ObjectU, ValueT > setter );
-		template< typename ObjectT, typename ObjectU, typename ValueT >
-		wxPGProperty * addPropertyT( wxPropertyGrid * grid
+		template< typename ParentT, typename ObjectT, typename ObjectU, typename ValueT >
+		wxPGProperty * addPropertyT( ParentT * parent
 			, wxString const & name
 			, castor::RangedValue< ValueT > const & value
 			, ObjectT * object
 			, ValueSetterT< ObjectU, ValueT > setter );
-		template< typename ObjectT, typename ObjectU, typename EnumT >
-		wxPGProperty * addPropertyET( wxPropertyGrid * grid
+		template< typename ParentT, typename ObjectT, typename ObjectU, typename EnumT >
+		wxPGProperty * addPropertyET( ParentT * parent
 			, wxString const & name
 			, wxArrayString const & choices
 			, ObjectT * object
 			, ValueSetterT< ObjectU, EnumT > setter );
-		template< typename ObjectT, typename ObjectU, typename EnumT >
-		wxPGProperty * addPropertyET( wxPropertyGrid * grid
+		template< typename ParentT, typename ObjectT, typename ObjectU, typename EnumT >
+		wxPGProperty * addPropertyET( ParentT * parent
 			, wxString const & name
 			, wxArrayString const & choices
 			, EnumT selected
 			, ObjectT * object
 			, ValueSetterT< ObjectU, EnumT > setter );
-		template< typename EnumT >
-		wxPGProperty * addPropertyET( wxPropertyGrid * grid
+		template< typename ParentT, typename EnumT >
+		wxPGProperty * addPropertyET( ParentT * parent
 			, wxString const & name
 			, wxArrayString const & choices
 			, EnumT * value );
-		template< typename ObjectT, typename ObjectU, typename EnumT >
-		wxPGProperty * addPropertyT( wxPropertyGrid * grid
+		template< typename ParentT, typename ObjectT, typename ObjectU, typename EnumT >
+		wxPGProperty * addPropertyT( ParentT * parent
 			, wxString const & name
 			, wxArrayString const & choices
 			, wxString const & selected

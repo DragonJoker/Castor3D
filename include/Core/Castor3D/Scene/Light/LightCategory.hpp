@@ -167,7 +167,7 @@ namespace castor3d
 			return m_cubeBox;
 		}
 
-		inline castor::Point2f const & getShadowOffsets()const
+		inline castor::Point4f const & getShadowOffsets()const
 		{
 			return m_shadowOffsets;
 		}
@@ -231,22 +231,32 @@ namespace castor3d
 			m_volumetricScattering = value;
 		}
 
-		inline void setShadowMinOffset( float value )
+		inline void setRawMinOffset( float value )
 		{
 			m_shadowOffsets[0] = value;
 		}
 
-		inline void setShadowMaxSlopeOffset( float value )
+		inline void setRawMaxSlopeOffset( float value )
 		{
 			m_shadowOffsets[1] = value;
 		}
+		
+		inline void setPcfMinOffset( float value )
+		{
+			m_shadowOffsets[2] = value;
+		}
 
-		inline void setShadowMaxVariance( float value )
+		inline void setPcfMaxSlopeOffset( float value )
+		{
+			m_shadowOffsets[3] = value;
+		}
+
+		inline void setVsmMaxVariance( float value )
 		{
 			m_shadowVariance[0] = value;
 		}
 
-		inline void setShadowVarianceBias( float value )
+		inline void setVsmVarianceBias( float value )
 		{
 			m_shadowVariance[1] = value;
 		}
@@ -454,7 +464,7 @@ namespace castor3d
 		castor::Point2f m_intensity{ 1.0, 1.0 };
 		uint32_t m_volumetricSteps{ 0u };
 		float m_volumetricScattering{ 0.2f };
-		castor::Point2f m_shadowOffsets;
+		castor::Point4f m_shadowOffsets;
 		castor::Point2f m_shadowVariance;
 	};
 }

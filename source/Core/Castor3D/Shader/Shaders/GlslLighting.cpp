@@ -300,7 +300,8 @@ namespace castor3d
 					result.m_colourIndex = c3d_sLights.fetch( Int{ offset++ } );
 					result.m_intensityFarPlane = c3d_sLights.fetch( Int{ offset++ } );
 					result.m_volumetric = c3d_sLights.fetch( Int{ offset++ } );
-					result.m_shadow = c3d_sLights.fetch( Int{ offset++ } );
+					result.m_shadowsOffsets = c3d_sLights.fetch( Int{ offset++ } );
+					result.m_shadowsVariances = c3d_sLights.fetch( Int{ offset++ } );
 #endif
 					m_writer.returnStmt( result );
 				}
