@@ -115,7 +115,8 @@ namespace test_parser
 			};
 			auto allResults = listAllResults( categoryPath, folders );
 			auto scenes = listScenes( categoryPath );
-			auto categoryIt = tests.emplace( category, TestArray{} ).first;
+			auto rendererIt = tests.emplace( "vk", TestCategoryMap{} ).first;
+			auto categoryIt = rendererIt->second.emplace( category, TestArray{} ).first;
 
 			for ( auto & testScene : scenes )
 			{
@@ -244,7 +245,7 @@ namespace test_parser
 	void TestDatabase::initialise( wxProgressDialog & progress
 		, int & index )
 	{
-#ifdef NDEBUG
+#if 1 //defined( NDEBUG )
 		if ( !m_config.skip )
 		{
 			doInitDatabase( progress, index );
@@ -263,8 +264,8 @@ namespace test_parser
 		m_updateTestCastorDate = UpdateTestCastorDate{ m_database };
 		std::string listTests = "SELECT Id, Name, MAX( RunDate ) AS RunDate, Status, Renderer, Category, IgnoreResult, CastorDate\n";
 		listTests += "FROM Test\n";
-		listTests += "GROUP BY Category, Name\n";
-		listTests += "ORDER BY Category, Name;";
+		listTests += "GROUP BY Renderer, Category, Name\n";
+		listTests += "ORDER BY Renderer, Category, Name;";
 		m_listTests = m_database.createStatement( listTests );
 		m_listTests->initialise();
 	}
@@ -276,8 +277,10 @@ namespace test_parser
 		testCount = 0;
 		TestMap tests;
 		auto result = m_listTests->executeSelect();
+		std::string prevRenderer;
+		auto rendererIt = tests.end();
 		std::string prevCategory;
-		auto categoryIt = tests.end();
+		TestCategoryMap::iterator categoryIt;
 		castor::Logger::logInfo( "Listing tests" );
 		progress.SetTitle( _( "Listing tests" ) );
 		progress.SetRange( progress.GetRange() + int( result->size() ) );
@@ -294,15 +297,21 @@ namespace test_parser
 				, row.getField( 6u ).getValue< int32_t >() != 0
 				, row.getField( 7u ).getValue< db::DateTime >() };
 
+			if ( prevRenderer != test.renderer )
+			{
+				rendererIt = tests.emplace( test.renderer, TestCategoryMap{} ).first;
+				prevRenderer = test.renderer;
+			}
+
 			if ( prevCategory != test.category )
 			{
-				categoryIt = tests.emplace( test.category, TestArray{} ).first;
+				categoryIt = rendererIt->second.emplace( test.category, TestArray{} ).first;
 				prevCategory = test.category;
 			}
 
 			categoryIt->second.push_back( test );
 			++testCount;
-			progress.Update( index++, makeWxString( test.category ) + wxT( " - " ) + makeWxString( test.name ) + wxT( "..." ) );
+			progress.Update( index++, makeWxString( test.renderer ) + wxT( " - " ) + makeWxString( test.category ) + wxT( " - " ) + makeWxString( test.name ) + wxT( "..." ) );
 		}
 
 		return tests;
@@ -427,6 +436,86 @@ namespace test_parser
 		return result;
 	}
 
+	void TestDatabase::doFillPerRenderer( wxProgressDialog & progress
+		, int & index
+		, TestMap const & tests
+		, uint32_t testCount )
+	{
+		castor::Logger::logInfo( "Sorting tests per renderer" );
+		progress.SetTitle( _( "Sorting tests per renderer" ) );
+		progress.SetRange( progress.GetRange() + int( testCount ) );
+		progress.Update( index, _( "Sorting tests per renderer..." ) );
+		using TestNameMap = std::unordered_map< castor::String, Test const * >;
+		struct Tests
+		{
+			Tests( std::vector< castor::String > const & renderers )
+			{
+				for ( auto & renderer : renderers )
+				{
+					tests[renderer] = nullptr;
+				}
+			}
+			TestNameMap tests;
+		};
+		std::unordered_map< std::string, Tests > rendererTests;
+
+		for ( auto & renderer : tests )
+		{
+			for ( auto & category : renderer.second )
+			{
+				for ( auto & test : category.second )
+				{
+					auto iresult = rendererTests.emplace( renderer.first + category.first, m_config.renderers );
+					iresult.first->second.tests[test.renderer] = &test;
+					progress.Update( index++, makeWxString( test.renderer )
+						+ wxT( " - " ) + makeWxString( test.category )
+						+ wxT( " - " ) + makeWxString( test.name )
+						+ wxT( "..." ) );
+				}
+			}
+		}
+
+		castor::Logger::logInfo( "Adding missing renderer tests" );
+		progress.SetTitle( _( "Adding missing renderer tests" ) );
+		progress.SetRange( progress.GetRange() + int( testCount * 3 ) );
+		progress.Update( index, _( "Adding missing renderer tests..." ) );
+		auto castorDate = getFileDate( m_config.castor );
+
+		for ( auto & test : rendererTests )
+		{
+			auto begin = test.second.tests.begin();
+			auto end = test.second.tests.end();
+			auto refIt = std::find_if( begin
+				, end
+				, []( TestNameMap::value_type const & lookup )
+				{
+					return lookup.second != nullptr;
+				} );
+			auto & test = refIt->second;
+
+			for ( auto it = begin; it != end; ++it )
+			{
+				if ( it != refIt )
+				{
+					if ( !it->second )
+					{
+						auto test = *refIt->second;
+						test.status = TestStatus::eNotRun;
+						test.renderer = it->first;
+						test.castorDate = castorDate;
+						insertTest( test );
+					}
+				}
+
+				progress.Update( index++, makeWxString( refIt->second->renderer )
+					+ wxT( " - " ) + makeWxString( refIt->second->category )
+					+ wxT( " - " ) + makeWxString( refIt->second->name )
+					+ wxT( " - " ) + makeWxString( it->first )
+					+ wxT( "..." ) );
+			}
+		}
+	}
+
 	void TestDatabase::doPopulateDatabase( wxProgressDialog & progress
 		, int & index
 		, TestMap const & tests
@@ -450,74 +539,77 @@ namespace test_parser
 		auto findNameCategory = finderName->createParameter( "Category", db::FieldType::eVarchar, 50 );
 		finderName->initialise();
 
-		for ( auto & tests : tests )
+		for ( auto & renderer : tests )
 		{
-			for ( auto test : tests.second )
+			for ( auto & category : renderer.second )
 			{
-				progress.Update( index++, makeWxString( test.category ) + wxT( " - " ) + makeWxString( test.name ) + wxT( "..." ) );
-				db::ResultPtr result;
-
-				if ( test.status != TestStatus::eNotRun )
+				for ( auto test : category.second )
 				{
-					findDateName->setValue( test.name );
-					findDateCategory->setValue( test.category );
-					findDateRunDate->setValue( test.runDate );
-					result = finderDate->executeSelect();
+					progress.Update( index++, makeWxString( test.category ) + wxT( " - " ) + makeWxString( test.name ) + wxT( "..." ) );
+					db::ResultPtr result;
 
-					if ( result->empty() )
+					if ( test.status != TestStatus::eNotRun )
 					{
-						test.castorDate = castorDate;
-						insertTest( test );
+						findDateName->setValue( test.name );
+						findDateCategory->setValue( test.category );
+						findDateRunDate->setValue( test.runDate );
+						result = finderDate->executeSelect();
+
+						if ( result->empty() )
+						{
+							test.castorDate = castorDate;
+							insertTest( test );
+						}
+						else
+						{
+							auto & row = *result->begin();
+							auto status = row.getField( 1u ).getValue< int32_t >();
+
+							if ( test.status != TestStatus( status ) )
+							{
+								m_updateTestStatus.id->setValue( row.getField( 0u ).getValue< int32_t >() );
+								m_updateTestStatus.status->setValue( int32_t( test.status ) );
+								m_updateTestStatus.stmt->executeUpdate();
+								moveTestFile( test, m_config.test, m_config.work );
+							}
+						}
 					}
 					else
 					{
-						auto & row = *result->begin();
-						auto status = row.getField( 1u ).getValue< int32_t >();
+						findNameName->setValue( test.name );
+						findNameCategory->setValue( test.category );
+						result = finderName->executeSelect();
 
-						if ( test.status != TestStatus( status ) )
+						if ( result->empty() )
 						{
-							m_updateTestStatus.id->setValue( row.getField( 0u ).getValue< int32_t >() );
-							m_updateTestStatus.status->setValue( int32_t( test.status ) );
-							m_updateTestStatus.stmt->executeUpdate();
-							moveTestFile( test, m_config.test, m_config.work );
-						}
-					}
-				}
-				else
-				{
-					findNameName->setValue( test.name );
-					findNameCategory->setValue( test.category );
-					result = finderName->executeSelect();
+							castor::PathArray files = findTestResults( test, m_config.work );
 
-					if ( result->empty() )
-					{
-						castor::PathArray files = findTestResults( test, m_config.work );
+							for ( auto & file : files )
+							{
+								// file = .../Status/YY-MM-DD_HH-MM-SS_Name_Renderer.png
+								auto fullName = file.getFileName();
+								size_t index = 0;
 
-						for ( auto & file : files )
-						{
-							// file = .../Status/YY-MM-DD_HH-MM-SS_Name_Renderer.png
-							auto fullName = file.getFileName();
-							size_t index = 0;
+								//Status
+								test.status = getStatus( file.getPath().getFileName() );
 
-							//Status
-							test.status = getStatus( file.getPath().getFileName() );
+								// Date
+								// YY-MM-DD
+								index = fullName.find( '_', index );
+								assert( index != castor::String::npos );
+								// YY-MM-DD_HH-MM-SS
+								index = fullName.find( '_', index );
+								assert( index != castor::String::npos );
+								auto isDate = isDateTime( fullName.substr( 0, index ), test.runDate );
+								assert( isDate );
 
-							// Date
-							// YY-MM-DD
-							index = fullName.find( '_', index );
-							assert( index != castor::String::npos );
-							// YY-MM-DD_HH-MM-SS
-							index = fullName.find( '_', index );
-							assert( index != castor::String::npos );
-							auto isDate = isDateTime( fullName.substr( 0, index ), test.runDate );
-							assert( isDate );
+								// Renderer
+								auto lastIndex = fullName.find_last_of( '_' );
+								assert( index != lastIndex );
+								test.renderer = fullName.substr( lastIndex );
 
-							// Renderer
-							auto lastIndex = fullName.find_last_of( '_' );
-							assert( index != lastIndex );
-							test.renderer = fullName.substr( lastIndex );
-
-							insertTest( test, false );
+								insertTest( test, false );
+							}
 						}
 					}
 				}
@@ -531,6 +623,7 @@ namespace test_parser
 		uint32_t testCount = 0u;
 		auto tests = doListCategories( progress, index, testCount );
 		doPopulateDatabase( progress, index, tests, testCount );
+		doFillPerRenderer( progress, index, tests, testCount );
 	}
 
 	//*********************************************************************************************

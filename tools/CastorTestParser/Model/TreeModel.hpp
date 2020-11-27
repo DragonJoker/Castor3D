@@ -13,9 +13,9 @@ namespace test_parser
 	/*
 	TreeModel
 	Implements the following data model:
-		Category	Name		Renderer	RunDate					Status
-	--------------------------------------------------------------------------
-	1:	Common		001-test	vk			2020-11-06 15:35:22		1
+		Category	Name		Renderer	RunDate					Status	Ignored	OutOfCastorDate	OutOfSceneDate
+	--------------------------------------------------------------------------------------------------------------
+	1:	Common		001-test	vk			2020-11-06 15:35:22		1		1		1				1
 	*/
 	class TreeModel
 		: public wxDataViewModel
@@ -28,12 +28,21 @@ namespace test_parser
 			eRenderer,
 			eRunDate,
 			eStatus,
+			eIgnored,
+			eCastorDate,
+			eSceneDate,
 			eCount,
 		};
 
 	public:
 		TreeModel();
 		~TreeModel();
+
+		TreeModelNode * addRenderer( std::string const & renderer );
+		TreeModelNode * addCategory( std::string const & renderer
+			, std::string const & category );
+		TreeModelNode * addTest( Test & test );
+		void expandRoots( wxDataViewCtrl * view );
 
 		// helper method for wxLog
 		uint32_t getId( wxDataViewItem const & item )const;
@@ -42,6 +51,9 @@ namespace test_parser
 		TestStatus getStatus( wxDataViewItem const & item )const;
 		std::string getRenderer( wxDataViewItem const & item )const;
 		std::string getCategory( wxDataViewItem const & item )const;
+		bool isIgnored( wxDataViewItem const & item )const;
+		bool isOutOfCastorDate( wxDataViewItem const & item )const;
+		bool isOutOfSceneDate( wxDataViewItem const & item )const;
 
 		TreeModelNode * GetRootNode()const
 		{
@@ -73,6 +85,8 @@ namespace test_parser
 
 	private:
 		TreeModelNode * m_root;
+		std::map< std::string, TreeModelNode * > m_renderers;
+		std::map< std::string, TreeModelNode * > m_categories;
 	};
 }
 

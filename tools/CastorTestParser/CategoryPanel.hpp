@@ -21,6 +21,8 @@ namespace test_parser
 			, wxPoint const & position
 			, wxSize const & size );
 
+		void setRenderer( wxString const & renderer
+			, TestCategoryMap const & tests );
 		void setCategory( wxString const & category
 			, TestArray const & tests );
 		void setAll( TestMap const & tests
@@ -28,8 +30,10 @@ namespace test_parser
 
 	private:
 		Config const & m_config;
+		wxString m_renderer;
 		wxString m_category;
-		TestArray const * m_tests{};
+		TestCategoryMap const * m_rendererTests{};
+		TestArray const * m_categoryTests{};
 		wxStaticText * m_status;
 		wxStaticText * m_negligible;
 		wxStaticText * m_acceptable;

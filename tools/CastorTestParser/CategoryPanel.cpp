@@ -56,13 +56,69 @@ namespace test_parser
 			return getOutdatedTests( tests, getFileDate( config.castor ) );
 		}
 
+		uint32_t getTestsCount( TestCategoryMap const & tests )
+		{
+			uint32_t result{};
+
+			for ( auto & catTests : tests )
+			{
+				result += getTestsCount( catTests.second );
+			}
+
+			return result;
+		}
+
+		uint32_t getStatusTests( TestCategoryMap const & tests
+			, TestStatus status )
+		{
+			uint32_t result{};
+
+			for ( auto & catTests : tests )
+			{
+				result += getStatusTests( catTests.second, status );
+			}
+
+			return result;
+		}
+
+		uint32_t getIgnoredTests( TestCategoryMap const & tests )
+		{
+			uint32_t result{};
+
+			for ( auto & catTests : tests )
+			{
+				result += getIgnoredTests( catTests.second );
+			}
+
+			return result;
+		}
+
+		uint32_t getOutdatedTests( TestCategoryMap const & tests
+			, db::DateTime const & date )
+		{
+			uint32_t result{};
+
+			for ( auto & catTests : tests )
+			{
+				result += getOutdatedTests( catTests.second, date );
+			}
+
+			return result;
+		}
+
+		uint32_t getOutdatedTests( TestCategoryMap const & tests
+			, Config const & config )
+		{
+			return getOutdatedTests( tests, getFileDate( config.castor ) );
+		}
+
 		uint32_t getTestsCount( TestMap const & tests )
 		{
 			uint32_t result{};
 
-			for ( auto & catTtests : tests )
+			for ( auto & rendTests : tests )
 			{
-				result += getTestsCount( catTtests.second );
+				result += getTestsCount( rendTests.second );
 			}
 
 			return result;
@@ -73,9 +129,9 @@ namespace test_parser
 		{
 			uint32_t result{};
 
-			for ( auto & catTtests : tests )
+			for ( auto & rendTests : tests )
 			{
-				result += getStatusTests( catTtests.second, status );
+				result += getStatusTests( rendTests.second, status );
 			}
 
 			return result;
@@ -85,9 +141,9 @@ namespace test_parser
 		{
 			uint32_t result{};
 
-			for ( auto & catTtests : tests )
+			for ( auto & rendTests : tests )
 			{
-				result += getIgnoredTests( catTtests.second );
+				result += getIgnoredTests( rendTests.second );
 			}
 
 			return result;
@@ -100,9 +156,9 @@ namespace test_parser
 			auto date = getFileDate( config.castor );
 			assert( db::date_time::isValid( date ) );
 
-			for ( auto & catTtests : tests )
+			for ( auto & rendTests : tests )
 			{
-				result += getOutdatedTests( catTtests.second, date );
+				result += getOutdatedTests( rendTests.second, date );
 			}
 
 			return result;
@@ -159,11 +215,26 @@ namespace test_parser
 		sizer->SetSizeHints( this );
 	}
 
+	void CategoryPanel::setRenderer( wxString const & renderer
+			, TestCategoryMap const & tests )
+	{
+		m_renderer = renderer;
+		m_rendererTests = &tests;
+		m_status->SetLabel( wxString{ renderer } << ": " << getTestsCount( tests ) << " tests" );
+		m_negligible->SetLabel( wxString{ "- " } << getStatusTests( tests, TestStatus::eNegligible ) << " negligible." );
+		m_acceptable->SetLabel( wxString{ "- " } << getStatusTests( tests, TestStatus::eAcceptable ) << " acceptable." );
+		m_unacceptable->SetLabel( wxString{ "- " } << getStatusTests( tests, TestStatus::eUnacceptable ) << " unacceptable." );
+		m_unprocessed->SetLabel( wxString{ "- " } << getStatusTests( tests, TestStatus::eUnprocessed ) << " unprocessed." );
+		m_ignored->SetLabel( wxString{ "- " } << getIgnoredTests( tests ) << " ignored." );
+		m_outdated->SetLabel( wxString{ "- " } << getOutdatedTests( tests, m_config ) << " outdated." );
+		m_running->SetLabel( wxEmptyString );
+	}
+
 	void CategoryPanel::setCategory( wxString const & category
 		, TestArray const & tests )
 	{
 		m_category = category;
-		m_tests = &tests;
+		m_categoryTests = &tests;
 		m_status->SetLabel( wxString{ category } << ": " << getTestsCount( tests ) << " tests" );
 		m_negligible->SetLabel( wxString{ "- " } << getStatusTests( tests, TestStatus::eNegligible ) << " negligible." );
 		m_acceptable->SetLabel( wxString{ "- " } << getStatusTests( tests, TestStatus::eAcceptable ) << " acceptable." );

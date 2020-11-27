@@ -3,10 +3,12 @@
 namespace test_parser
 {
 	TreeModelNode::TreeModelNode( TreeModelNode * parent
-		, wxString const & category )
-		: category{ category }
+		, wxString const & name
+		, bool isRenderer )
+		: category{ name }
 		, m_parent{ parent }
 		, m_container{ true }
+		, m_isRenderer{ isRenderer }
 	{
 	}
 
@@ -15,6 +17,7 @@ namespace test_parser
 		: test{ &test }
 		, m_parent{ parent }
 		, m_container{ false }
+		, m_isRenderer{ false }
 	{
 	}
 

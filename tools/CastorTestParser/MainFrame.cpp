@@ -19,8 +19,11 @@
 #include <castor.xpm>
 
 #include "CastorTestParser/xpms/acceptable.xpm"
+#include "CastorTestParser/xpms/ignored.xpm"
 #include "CastorTestParser/xpms/negligible.xpm"
+#include "CastorTestParser/xpms/none.xpm"
 #include "CastorTestParser/xpms/notrun.xpm"
+#include "CastorTestParser/xpms/outofdate.xpm"
 #include "CastorTestParser/xpms/unacceptable.xpm"
 #include "CastorTestParser/xpms/unprocessed.xpm"
 #include "CastorTestParser/xpms/progress_1.xpm"
@@ -38,6 +41,7 @@
 
 #include <wx/clipbrd.h>
 #include <wx/dc.h>
+#include <wx/gauge.h>
 #include <wx/menu.h>
 #include <wx/progdlg.h>
 #include <wx/sizer.h>
@@ -72,6 +76,12 @@ namespace test_parser
 			eID_RUN_CATEGORY_TESTS_ALL_BUT_NEGLIGIBLE,
 			eID_RUN_CATEGORY_TESTS_OUTDATED,
 			eID_CATEGORY_UPDATE_CASTOR,
+			eID_RUN_RENDERER_TESTS_ALL,
+			eID_RUN_RENDERER_TESTS_NOTRUN,
+			eID_RUN_RENDERER_TESTS_ACCEPTABLE,
+			eID_RUN_RENDERER_TESTS_ALL_BUT_NEGLIGIBLE,
+			eID_RUN_RENDERER_TESTS_OUTDATED,
+			eID_RENDERER_UPDATE_CASTOR,
 			eID_RUN_TESTS_ALL,
 			eID_RUN_TESTS_NOTRUN,
 			eID_RUN_TESTS_ACCEPTABLE,
@@ -81,22 +91,65 @@ namespace test_parser
 			eID_CANCEL,
 		};
 
-		TreeModelNode * addCategory( TreeModel & model
-			, std::string const & category )
+		class DataViewTestBoolBitmapRenderer
+			: public wxDataViewCustomRenderer
 		{
-			TreeModelNode * node = new TreeModelNode{ nullptr, makeWxString( category ) };
-			model.GetRootNode()->Append( node );
-			return node;
-		}
+			static wxString GetDefaultType()
+			{
+				return wxS( "bool" );
+			}
 
-		TreeModelNode * addTest( TreeModel & model
-			, TreeModelNode * category
-			, Test & test )
-		{
-			TreeModelNode * node = new TreeModelNode{ category, test };
-			category->Append( node );
-			return node;
-		}
+		public:
+			DataViewTestBoolBitmapRenderer( char const * const * xpmTrue
+				, char const * const * xpmFalse
+				, const wxString & varianttype = GetDefaultType()
+				, wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT
+				, int align = wxDVR_DEFAULT_ALIGNMENT )
+				: wxDataViewCustomRenderer{ varianttype, mode, align }
+				, m_size{ 20, 20 }
+				, m_bitmaps{ createImage( xpmFalse )
+					, createImage( xpmTrue ) }
+			{
+			}
+
+			bool SetValue( const wxVariant & value ) override
+			{
+				m_value = value.GetBool();
+				return true;
+			}
+
+			bool GetValue( wxVariant & value ) const override
+			{
+				value = wxVariant{ m_value };
+				return true;
+			}
+
+			bool Render( wxRect cell, wxDC * dc, int state ) override
+			{
+				dc->DrawBitmap( m_bitmaps[m_value ? 1u : 0u]
+					, cell.x
+					, cell.y
+					, true );
+				return false;
+			}
+
+			wxSize GetSize() const override
+			{
+				return m_size;
+			}
+
+		private:
+			wxImage createImage( char const * const * xpmData )
+			{
+				wxImage result{ xpmData };
+				return result.Scale( m_size.x, m_size.y );
+			}
+
+		private:
+			wxSize m_size;
+			std::array< wxBitmap, 2 > m_bitmaps;
+			bool m_value{ false };
+		};
 
 		class DataViewTestStatusRenderer
 			: public wxDataViewCustomRenderer
@@ -190,7 +243,7 @@ namespace test_parser
 		, m_database{ m_config }
 		, m_updater{ m_model }
 	{
-		SetClientSize( 800, 600 );
+		SetClientSize( 900, 600 );
 		doInitGui();
 		doInitMenus();
 		Bind( wxEVT_CLOSE_WINDOW
@@ -233,7 +286,7 @@ namespace test_parser
 
 	void MainFrame::initialise()
 	{
-		m_statusBar->SetLabel( _( "Initialising..." ) );
+		m_statusText->SetLabel( _( "Initialising..." ) );
 		{
 			wxProgressDialog progress{ wxT( "Initialising" )
 				, wxT( "Initialising..." )
@@ -261,7 +314,7 @@ namespace test_parser
 			, wxProcessEventHandler( MainFrame::onTestDisplayEnd )
 			, nullptr
 			, this );
-		m_statusBar->SetLabel( _( "Idle" ) );
+		m_statusText->SetLabel( _( "Idle" ) );
 
 		m_categoryView->setAll( m_tests, m_runningTest.tests );
 		m_detailViews->showLayer( 2u );
@@ -315,7 +368,7 @@ namespace test_parser
 			, wxDataViewEventHandler( MainFrame::onItemContextMenu )
 			, nullptr
 			, this );
-		uint32_t flags = wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_RESIZABLE;
+		uint32_t flags = wxCOL_SORTABLE | wxCOL_RESIZABLE;
 		auto renCategory = new wxDataViewTextRenderer{ wxT( "string" ) };
 		wxDataViewColumn * colCategory = new wxDataViewColumn( _( "Category" ), renCategory, int( TreeModel::Column::eCategory ), 200, wxALIGN_LEFT, flags );
 		colCategory->SetMinWidth( 150 );
@@ -325,35 +378,48 @@ namespace test_parser
 		colScene->SetMinWidth( 400 );
 		m_view->AppendColumn( colScene );
 		auto renRenderer = new wxDataViewTextRenderer{ wxT( "string" ) };
-		wxDataViewColumn * colRenderer = new wxDataViewColumn( _( "Renderer" ), renRenderer, int( TreeModel::Column::eRenderer ), 40, wxALIGN_LEFT, flags );
-		colRenderer->SetMinWidth( 40 );
+		wxDataViewColumn * colRenderer = new wxDataViewColumn( _( "Renderer" ), renRenderer, int( TreeModel::Column::eRenderer ), 100, wxALIGN_LEFT, flags );
+		colRenderer->SetMinWidth( 100 );
 		m_view->AppendColumn( colRenderer );
 		auto renRunDate = new wxDataViewDateRenderer{ wxT( "datetime" ) };
 		wxDataViewColumn * colRunDate = new wxDataViewColumn( _( "Run Date" ), renRunDate, int( TreeModel::Column::eRunDate ), 100, wxALIGN_LEFT, flags );
 		colRunDate->SetMinWidth( 100 );
 		m_view->AppendColumn( colRunDate );
 		auto renStatus = new DataViewTestStatusRenderer;
-		wxDataViewColumn * colStatus = new wxDataViewColumn( _( "Status" ), renStatus, int( TreeModel::Column::eStatus ), 100, wxALIGN_LEFT, flags );
-		colStatus->SetMinWidth( 100 );
+		wxDataViewColumn * colStatus = new wxDataViewColumn( _( "A" ), renStatus, int( TreeModel::Column::eStatus ), 30, wxALIGN_LEFT, flags );
+		colStatus->SetMinWidth( 30 );
 		m_view->AppendColumn( colStatus );
+		auto renIgnored = new DataViewTestBoolBitmapRenderer{ ignored_xpm, none_xpm };
+		wxDataViewColumn * colIgnored = new wxDataViewColumn( _( "I" ), renIgnored, int( TreeModel::Column::eIgnored ), 30, wxALIGN_LEFT, flags );
+		colIgnored->SetMinWidth( 30 );
+		m_view->AppendColumn( colIgnored );
+		auto renCastorOOD = new DataViewTestBoolBitmapRenderer{ outofdate_xpm, none_xpm };
+		wxDataViewColumn * colCastorOOD = new wxDataViewColumn( _( "C" ), renCastorOOD, int( TreeModel::Column::eCastorDate ), 30, wxALIGN_LEFT, flags );
+		colCastorOOD->SetMinWidth( 30 );
+		m_view->AppendColumn( colCastorOOD );
+		auto renSceneOOD = new DataViewTestBoolBitmapRenderer{ outofdate_xpm, none_xpm };
+		wxDataViewColumn * colSceneOOD = new wxDataViewColumn( _( "S" ), renSceneOOD, int( TreeModel::Column::eSceneDate ), 30, wxALIGN_LEFT, flags );
+		colSceneOOD->SetMinWidth( 30 );
+		m_view->AppendColumn( colSceneOOD );
 
 		return listPanel;
 	}
 
 	wxWindow * MainFrame::doInitDetailsView()
 	{
+		auto size = GetClientSize();
 		m_detailViews = new LayeredPanel{ this
 			, wxDefaultPosition
 			, wxDefaultSize };
 		m_detailViews->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		m_detailViews->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
-		auto layer = new wxPanel{ m_detailViews, wxID_ANY, wxDefaultPosition, wxSize{ 800, 600 } };
+		auto layer = new wxPanel{ m_detailViews, wxID_ANY, wxDefaultPosition, size };
 		layer->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		layer->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		m_detailViews->addLayer( layer );
 		m_testView = new TestPanel{ m_detailViews, m_config };
 		m_detailViews->addLayer( m_testView );
-		m_categoryView = new CategoryPanel{ m_config, m_detailViews, wxDefaultPosition, wxSize{ 800, 600 } };
+		m_categoryView = new CategoryPanel{ m_config, m_detailViews, wxDefaultPosition, size };
 		m_detailViews->addLayer( m_categoryView );
 		m_detailViews->showLayer( 0 );
 
@@ -370,9 +436,19 @@ namespace test_parser
 		auto statusBar = CreateStatusBar();
 		statusBar->SetBackgroundColour( INACTIVE_TAB_COLOUR );
 		statusBar->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
-		m_statusBar = new wxStaticText{ statusBar, wxID_ANY, _( "Idle" ), wxPoint( 10, 5 ), wxDefaultSize, 0 };
-		m_statusBar->SetBackgroundColour( INACTIVE_TAB_COLOUR );
-		m_statusBar->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
+		m_statusProgress = new wxGauge{ statusBar, wxID_ANY, 100, wxPoint( 10, 3 ), wxSize( 100, statusBar->GetSize().GetHeight() - 6 ), wxGA_SMOOTH, wxDefaultValidator };
+		m_statusProgress->SetBackgroundColour( INACTIVE_TAB_COLOUR );
+		m_statusProgress->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
+		m_statusProgress->SetValue( 0 );
+		m_statusProgress->Hide();
+		m_testProgress = new wxGauge{ statusBar, wxID_ANY, 100, wxPoint( 10, 3 ), wxSize( 100, statusBar->GetSize().GetHeight() - 6 ), wxGA_SMOOTH, wxDefaultValidator };
+		m_testProgress->SetBackgroundColour( INACTIVE_TAB_COLOUR );
+		m_testProgress->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
+		m_testProgress->SetValue( 0 );
+		m_testProgress->Hide();
+		m_statusText = new wxStaticText{ statusBar, wxID_ANY, _( "Idle" ), wxPoint( 10, 5 ), wxDefaultSize, 0 };
+		m_statusText->SetBackgroundColour( INACTIVE_TAB_COLOUR );
+		m_statusText->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 
 
 		m_auiManager.SetArtProvider( new AuiDockArt );
@@ -415,6 +491,15 @@ namespace test_parser
 			menu.Append( eID_IGNORE_RESULT, _( "Ignore test results" ) + wxT( "\tF8" ), wxEmptyString, wxITEM_CHECK );
 			menu.Append( eID_UPDATE_CASTOR, _( "Update Castor3D's date" ) + wxT( "\tF9" ) );
 		};
+		auto addRendererMenus = []( wxMenu & menu )
+		{
+			menu.Append( eID_RUN_RENDERER_TESTS_ALL, _( "Run all renderer's tests" ) + wxT( "\tCtrl+F7" ) );
+			menu.Append( eID_RUN_RENDERER_TESTS_NOTRUN, _( "Run all <not run> renderer's tests" ) + wxT( "\tCtrl+F8" ) );
+			menu.Append( eID_RUN_RENDERER_TESTS_ACCEPTABLE, _( "Run all <acceptable> renderer's tests" ) + wxT( "\tCtrl+F9" ) );
+			menu.Append( eID_RUN_RENDERER_TESTS_ALL_BUT_NEGLIGIBLE, _( "Run all but <negligible> renderer's tests" ) + wxT( "\tCtrl+F10" ) );
+			menu.Append( eID_RUN_RENDERER_TESTS_OUTDATED, _( "Run all outdated renderer's tests" ) + wxT( "\tCtrl+F11" ) );
+			menu.Append( eID_RENDERER_UPDATE_CASTOR, _( "Update renderer's tests Castor3D's date" ) + wxT( "\tCtrl+F12" ) );
+		};
 		auto addCategoryMenus = []( wxMenu & menu )
 		{
 			menu.Append( eID_RUN_CATEGORY_TESTS_ALL, _( "Run all category's tests" ) + wxT( "\tCtrl+F7" ) );
@@ -438,6 +523,8 @@ namespace test_parser
 		m_testMenu->AppendSeparator();
 		addCategoryMenus( *m_testMenu );
 		m_testMenu->AppendSeparator();
+		addRendererMenus( *m_testMenu );
+		m_testMenu->AppendSeparator();
 		addAllMenus( *m_testMenu );
 		m_testMenu->Connect( wxEVT_COMMAND_MENU_SELECTED
 			, wxCommandEventHandler( MainFrame::onMenuOption )
@@ -447,8 +534,19 @@ namespace test_parser
 		m_categoryMenu = std::make_unique< wxMenu >();
 		addCategoryMenus( *m_categoryMenu );
 		m_categoryMenu->AppendSeparator();
+		addRendererMenus( *m_categoryMenu );
+		m_categoryMenu->AppendSeparator();
 		addAllMenus( *m_categoryMenu );
 		m_categoryMenu->Connect( wxEVT_COMMAND_MENU_SELECTED
+			, wxCommandEventHandler( MainFrame::onMenuOption )
+			, nullptr
+			, this );
+		
+		m_rendererMenu = std::make_unique< wxMenu >();
+		addRendererMenus( *m_rendererMenu );
+		m_rendererMenu->AppendSeparator();
+		addAllMenus( *m_rendererMenu );
+		m_rendererMenu->Connect( wxEVT_COMMAND_MENU_SELECTED
 			, wxCommandEventHandler( MainFrame::onMenuOption )
 			, nullptr
 			, this );
@@ -479,19 +577,24 @@ namespace test_parser
 		progress.SetRange( progress.GetRange() + int( testCount ) );
 		progress.Update( index, _( "Filling Data View..." ) );
 
-		for ( auto & tests : m_tests )
+		for ( auto & renderer : m_tests )
 		{
-			auto node = addCategory( *m_model, tests.first );
+			m_model->addRenderer( renderer.first );
 
-			for ( auto & test : tests.second )
+			for ( auto & category : renderer.second )
 			{
-				auto testNode = addTest( *m_model, node, test );
-				m_modelNodes[test.id] = testNode;
-				progress.Update( index++, makeWxString( test.category ) + wxT( " - " ) + makeWxString( test.name ) + wxT( "..." ) );
+				m_model->addCategory( renderer.first, category.first );
+
+				for ( auto & test : category.second )
+				{
+					auto testNode = m_model->addTest( test );
+					m_modelNodes[test.id] = testNode;
+					progress.Update( index++, makeWxString( test.category ) + wxT( " - " ) + makeWxString( test.name ) + wxT( "..." ) );
+				}
 			}
 		}
 
-		m_view->Expand( wxDataViewItem{ m_model->GetRootNode() } );
+		m_model->expandRoots( m_view );
 	}
 
 	void MainFrame::doProcessTest()
@@ -507,7 +610,7 @@ namespace test_parser
 			test.status = TestStatus::eRunning_Begin;
 			m_updater.addTest( *testNode.node );
 			m_model->ItemChanged( wxDataViewItem{ testNode.node } );
-			m_statusBar->SetLabel( _( "Running test: " ) + test.name );
+			m_statusText->SetLabel( _( "Running test: " ) + test.name );
 			auto result = wxExecute( command
 				, ExecMode
 				, m_runningTest.genProcess.get() );
@@ -521,10 +624,12 @@ namespace test_parser
 #else
 			onTestRunEnd( wxProcessEvent{} );
 #endif
+			m_testProgress->SetValue( m_testProgress->GetValue() + 1u );
 		}
 		else
 		{
-			m_statusBar->SetLabel( _( "Idle" ) );
+			m_statusText->SetLabel( _( "Idle" ) );
+			m_testProgress->Hide();
 		}
 	}
 
@@ -572,7 +677,7 @@ namespace test_parser
 			wxString command = m_config.viewer;
 			command << " " << makeWxString( getTestFileName( m_config.test, *node->test ) );
 			command << " -" << node->test->renderer;
-			m_statusBar->SetLabel( _( "Viewing: " ) + node->test->name );
+			m_statusText->SetLabel( _( "Viewing: " ) + node->test->name );
 			auto result = wxExecute( command
 				, wxEXEC_SYNC
 				, m_runningTest.disProcess.get() );
@@ -583,7 +688,7 @@ namespace test_parser
 			}
 		}
 
-		m_statusBar->SetLabel( _( "Idle" ) );
+		m_statusText->SetLabel( _( "Idle" ) );
 	}
 
 	void MainFrame::doSetRef()
@@ -592,17 +697,24 @@ namespace test_parser
 
 		if ( !m_selected.items.empty() )
 		{
+			m_statusProgress->SetRange( m_selected.items.size() );
+			m_statusProgress->SetValue( 0 );
+			m_statusProgress->Show();
+
 			for ( auto & item : m_selected.items )
 			{
 				auto node = static_cast< TreeModelNode * >( item.GetID() );
 				assert( node->test );
-				m_statusBar->SetLabel( _( "Setting reference: " ) + node->test->name );
+				m_statusText->SetLabel( _( "Setting reference: " ) + node->test->name );
 				updateTestStatus( *node->test, TestStatus::eNegligible, true );
 				m_model->ItemChanged( item );
+				m_statusProgress->SetValue( m_statusProgress->GetValue() + 1 );
 			}
+
+			m_statusProgress->Hide();
 		}
 
-		m_statusBar->SetLabel( _( "Idle" ) );
+		m_statusText->SetLabel( _( "Idle" ) );
 	}
 
 	void MainFrame::doIgnoreTestResult()
@@ -611,20 +723,27 @@ namespace test_parser
 
 		if ( !m_selected.items.empty() )
 		{
+			m_statusProgress->SetRange( m_selected.items.size() );
+			m_statusProgress->SetValue( 0 );
+			m_statusProgress->Show();
+
 			for ( auto & item : m_selected.items )
 			{
 				auto node = static_cast< TreeModelNode * >( item.GetID() );
 				assert( node->test );
-				m_statusBar->SetLabel( _( "Setting reference: " ) + node->test->name );
+				m_statusText->SetLabel( _( "Ignoring: " ) + node->test->name );
 				node->test->ignoreResult = m_testMenu->IsChecked( eID_IGNORE_RESULT );
 				node->test->castorDate = getFileDate( m_config.castor );
 				assert( db::date_time::isValid( node->test->castorDate ) );
 				m_database.updateTestIgnoreResult( *node->test, node->test->ignoreResult, true );
 				m_model->ItemChanged( item );
+				m_statusProgress->SetValue( m_statusProgress->GetValue() + 1 );
 			}
+
+			m_statusProgress->Hide();
 		}
 
-		m_statusBar->SetLabel( _( "Idle" ) );
+		m_statusText->SetLabel( _( "Idle" ) );
 	}
 
 	void MainFrame::doUpdateCastorDate()
@@ -635,6 +754,10 @@ namespace test_parser
 
 		if ( !m_selected.items.empty() )
 		{
+			m_statusProgress->SetRange( m_selected.items.size() );
+			m_statusProgress->SetValue( 0 );
+			m_statusProgress->Show();
+
 			for ( auto & item : m_selected.items )
 			{
 				auto node = static_cast< TreeModelNode * >( item.GetID() );
@@ -645,7 +768,11 @@ namespace test_parser
 					node->test->castorDate = date;
 					m_database.updateTestCastorDate( *node->test );
 				}
+
+				m_statusProgress->SetValue( m_statusProgress->GetValue() + 1 );
 			}
+
+			m_statusProgress->Hide();
 		}
 	}
 
@@ -662,19 +789,30 @@ namespace test_parser
 		{
 			auto node = static_cast< TreeModelNode * >( item.GetID() );
 			assert( !node->category.empty() );
-			auto it = m_tests.find( makeStdString( node->category ) );
+			auto rendererNode = node->getRenderer();
+			assert( !rendererNode->category.empty() && rendererNode->isRenderer() );
+			auto rendIt = m_tests.find( makeStdString( rendererNode->category ) );
 
-			if ( it != m_tests.end() )
+			if ( rendIt != m_tests.end() )
 			{
-				auto & tests = *it;
+				auto & renderer = *rendIt;
+				auto it = renderer.second.find( makeStdString( node->category ) );
 
-				for ( auto & test : tests.second )
+				if ( it != renderer.second.end() )
 				{
-					m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+					auto & category = * it;
+
+					for ( auto & test : category.second )
+					{
+						m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+					}
 				}
 			}
 		}
 
+		m_testProgress->SetRange( m_runningTest.tests.size() );
+		m_testProgress->SetValue( 0 );
+		m_testProgress->Show();
 		doProcessTest();
 	}
 
@@ -686,22 +824,33 @@ namespace test_parser
 		{
 			auto node = static_cast< TreeModelNode * >( item.GetID() );
 			assert( !node->category.empty() );
-			auto it = m_tests.find( makeStdString( node->category ) );
+			auto rendererNode = node->getRenderer();
+			assert( !rendererNode->category.empty() && rendererNode->isRenderer() );
+			auto rendIt = m_tests.find( makeStdString( rendererNode->category ) );
 
-			if ( it != m_tests.end() )
+			if ( rendIt != m_tests.end() )
 			{
-				auto & tests = *it;
+				auto & renderer = *rendIt;
+				auto it = renderer.second.find( makeStdString( node->category ) );
 
-				for ( auto & test : tests.second )
+				if ( it != renderer.second.end() )
 				{
-					if ( test.status == filter )
+					auto & category = *it;
+
+					for ( auto & test : category.second )
 					{
-						m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+						if ( test.status == filter )
+						{
+							m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+						}
 					}
 				}
 			}
 		}
 
+		m_testProgress->SetRange( m_runningTest.tests.size() );
+		m_testProgress->SetValue( 0 );
+		m_testProgress->Show();
 		doProcessTest();
 	}
 
@@ -713,22 +862,33 @@ namespace test_parser
 		{
 			auto node = static_cast< TreeModelNode * >( item.GetID() );
 			assert( !node->category.empty() );
-			auto it = m_tests.find( makeStdString( node->category ) );
+			auto rendererNode = node->getRenderer();
+			assert( !rendererNode->category.empty() && rendererNode->isRenderer() );
+			auto rendIt = m_tests.find( makeStdString( rendererNode->category ) );
 
-			if ( it != m_tests.end() )
+			if ( rendIt != m_tests.end() )
 			{
-				auto & tests = *it;
+				auto & renderer = *rendIt;
+				auto it = renderer.second.find( makeStdString( node->category ) );
 
-				for ( auto & test : tests.second )
+				if ( it != renderer.second.end() )
 				{
-					if ( test.status != filter )
+					auto & category = *it;
+
+					for ( auto & test : category.second )
 					{
-						m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+						if ( test.status != filter )
+						{
+							m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+						}
 					}
 				}
 			}
 		}
 
+		m_testProgress->SetRange( m_runningTest.tests.size() );
+		m_testProgress->SetValue( 0 );
+		m_testProgress->Show();
 		doProcessTest();
 	}
 
@@ -742,22 +902,34 @@ namespace test_parser
 		{
 			auto node = static_cast< TreeModelNode * >( item.GetID() );
 			assert( !node->category.empty() );
-			auto it = m_tests.find( makeStdString( node->category ) );
+			auto rendererNode = node->getRenderer();
+			assert( !rendererNode->category.empty() && rendererNode->isRenderer() );
+			auto rendIt = m_tests.find( makeStdString( rendererNode->category ) );
 
-			if ( it != m_tests.end() )
+			if ( rendIt != m_tests.end() )
 			{
-				auto & tests = *it;
+				auto & renderer = *rendIt;
+				auto it = renderer.second.find( makeStdString( node->category ) );
 
-				for ( auto & test : tests.second )
+				if ( it != renderer.second.end() )
 				{
-					if ( test.castorDate != date )
+					auto & category = *it;
+
+					for ( auto & test : category.second )
 					{
-						m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+						if ( test.castorDate != date
+							|| test.status == TestStatus::eNotRun )
+						{
+							m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+						}
 					}
 				}
 			}
 		}
 
+		m_testProgress->SetRange( m_runningTest.tests.size() );
+		m_testProgress->SetValue( 0 );
+		m_testProgress->Show();
 		doProcessTest();
 	}
 
@@ -792,18 +964,191 @@ namespace test_parser
 		}
 	}
 
+	void MainFrame::doRunAllRendererTests()
+	{
+		m_cancelled.exchange( false );
+
+		for ( auto & item : m_selected.items )
+		{
+			auto node = static_cast< TreeModelNode * >( item.GetID() );
+			assert( !node->category.empty() );
+			auto rendererIt = m_tests.find( makeStdString(  node->category ) );
+
+			if ( rendererIt != m_tests.end() )
+			{
+				for ( auto & category : rendererIt->second )
+				{
+					auto & tests = category.second;
+
+					for ( auto & test : tests )
+					{
+						m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+					}
+				}
+			}
+		}
+
+		m_testProgress->SetRange( m_runningTest.tests.size() );
+		m_testProgress->SetValue( 0 );
+		m_testProgress->Show();
+		doProcessTest();
+	}
+
+	void MainFrame::doRunRendererTests( TestStatus filter )
+	{
+		m_cancelled.exchange( false );
+
+		for ( auto & item : m_selected.items )
+		{
+			auto node = static_cast< TreeModelNode * >( item.GetID() );
+			assert( !node->category.empty() );
+			auto rendererIt = m_tests.find( makeStdString( node->category ) );
+
+			if ( rendererIt != m_tests.end() )
+			{
+				for ( auto & category : rendererIt->second )
+				{
+					auto & tests = category.second;
+
+					for ( auto & test : tests )
+					{
+						if ( test.status == filter )
+						{
+							m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+						}
+					}
+				}
+			}
+		}
+
+		m_testProgress->SetRange( m_runningTest.tests.size() );
+		m_testProgress->SetValue( 0 );
+		m_testProgress->Show();
+		doProcessTest();
+	}
+
+	void MainFrame::doRunAllRendererTestsBut( TestStatus filter )
+	{
+		m_cancelled.exchange( false );
+
+		for ( auto & item : m_selected.items )
+		{
+			auto node = static_cast< TreeModelNode * >( item.GetID() );
+			assert( !node->category.empty() );
+			auto rendererIt = m_tests.find( makeStdString( node->category ) );
+
+			if ( rendererIt != m_tests.end() )
+			{
+				for ( auto & category : rendererIt->second )
+				{
+					auto & tests = category.second;
+
+					for ( auto & test : tests )
+					{
+						if ( test.status != filter )
+						{
+							m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+						}
+					}
+				}
+			}
+		}
+
+		m_testProgress->SetRange( m_runningTest.tests.size() );
+		m_testProgress->SetValue( 0 );
+		m_testProgress->Show();
+		doProcessTest();
+	}
+
+	void MainFrame::doRunAllRendererOutdatedTests()
+	{
+		m_cancelled.exchange( false );
+		auto date = getFileDate( m_config.castor );
+		assert( db::date_time::isValid( date ) );
+
+		for ( auto & item : m_selected.items )
+		{
+			auto node = static_cast< TreeModelNode * >( item.GetID() );
+			assert( !node->category.empty() );
+			auto rendererIt = m_tests.find( makeStdString( node->category ) );
+
+			if ( rendererIt != m_tests.end() )
+			{
+				for ( auto & category : rendererIt->second )
+				{
+					auto & tests = category.second;
+
+					for ( auto & test : tests )
+					{
+						if ( test.castorDate != date
+							|| test.status == TestStatus::eNotRun )
+						{
+							m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+						}
+					}
+				}
+			}
+		}
+
+		m_testProgress->SetRange( m_runningTest.tests.size() );
+		m_testProgress->SetValue( 0 );
+		m_testProgress->Show();
+		doProcessTest();
+	}
+
+	void MainFrame::doUpdateRendererCastorDate()
+	{
+		m_cancelled.exchange( false );
+		auto date = getFileDate( m_config.castor );
+		assert( db::date_time::isValid( date ) );
+
+		for ( auto & item : m_selected.items )
+		{
+			auto node = static_cast< TreeModelNode * >( item.GetID() );
+			assert( !node->category.empty() );
+
+			for ( auto & renderer : m_tests )
+			{
+				auto it = renderer.second.find( makeStdString( node->category ) );
+
+				if ( it != renderer.second.end() )
+				{
+					auto & tests = *it;
+
+					for ( auto & test : tests.second )
+					{
+						auto node = static_cast< TreeModelNode * >( item.GetID() );
+						assert( node->test );
+
+						if ( node->test->castorDate != date )
+						{
+							node->test->castorDate = date;
+							m_database.updateTestCastorDate( *node->test );
+						}
+					}
+				}
+			}
+		}
+	}
+
 	void MainFrame::doRunAllTests()
 	{
 		m_cancelled.exchange( false );
 
-		for ( auto & tests : m_tests )
+		for ( auto & renderer : m_tests )
 		{
-			for ( auto & test : tests.second )
+			for ( auto & category : renderer.second )
 			{
-				m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+				for ( auto & test : category.second )
+				{
+					m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+				}
 			}
 		}
 
+		m_testProgress->SetRange( m_runningTest.tests.size() );
+		m_testProgress->SetValue( 0 );
+		m_testProgress->Show();
 		doProcessTest();
 	}
 
@@ -811,17 +1156,23 @@ namespace test_parser
 	{
 		m_cancelled.exchange( false );
 
-		for ( auto & tests : m_tests )
+		for ( auto & renderer : m_tests )
 		{
-			for ( auto & test : tests.second )
+			for ( auto & category : renderer.second )
 			{
-				if ( test.status == filter )
+				for ( auto & test : category.second )
 				{
-					m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+					if ( test.status == filter )
+					{
+						m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+					}
 				}
 			}
 		}
 
+		m_testProgress->SetRange( m_runningTest.tests.size() );
+		m_testProgress->SetValue( 0 );
+		m_testProgress->Show();
 		doProcessTest();
 	}
 
@@ -829,17 +1180,23 @@ namespace test_parser
 	{
 		m_cancelled.exchange( false );
 
-		for ( auto & tests : m_tests )
+		for ( auto & renderer : m_tests )
 		{
-			for ( auto & test : tests.second )
+			for ( auto & category : renderer.second )
 			{
-				if ( test.status != filter )
+				for ( auto & test : category.second )
 				{
-					m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+					if ( test.status != filter )
+					{
+						m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+					}
 				}
 			}
 		}
 
+		m_testProgress->SetRange( m_runningTest.tests.size() );
+		m_testProgress->SetValue( 0 );
+		m_testProgress->Show();
 		doProcessTest();
 	}
 
@@ -849,17 +1206,23 @@ namespace test_parser
 		auto date = getFileDate( m_config.castor );
 		assert( db::date_time::isValid( date ) );
 
-		for ( auto & tests : m_tests )
+		for ( auto & renderer : m_tests )
 		{
-			for ( auto & test : tests.second )
+			for ( auto & category : renderer.second )
 			{
-				if ( test.castorDate != date )
+				for ( auto & test : category.second )
 				{
-					m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+					if ( test.castorDate != date )
+					{
+						m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+					}
 				}
 			}
 		}
 
+		m_testProgress->SetRange( m_runningTest.tests.size() );
+		m_testProgress->SetValue( 0 );
+		m_testProgress->Show();
 		doProcessTest();
 	}
 
@@ -869,14 +1232,17 @@ namespace test_parser
 		auto date = getFileDate( m_config.castor );
 		assert( db::date_time::isValid( date ) );
 
-		for ( auto & tests : m_tests )
+		for ( auto & renderer : m_tests )
 		{
-			for ( auto & test : tests.second )
+			for ( auto & category : renderer.second )
 			{
-				if ( test.castorDate != date )
+				for ( auto & test : category.second )
 				{
-					test.castorDate = date;
-					m_database.updateTestCastorDate( test );
+					if ( test.castorDate != date )
+					{
+						test.castorDate = date;
+						m_database.updateTestCastorDate( test );
+					}
 				}
 			}
 		}
@@ -888,7 +1254,8 @@ namespace test_parser
 		test.status = status;
 		m_model->ItemChanged( wxDataViewItem{ getTestNode( test ) } );
 		m_runningTest.tests.clear();
-		m_statusBar->SetLabel( _( "Idle" ) );
+		m_statusText->SetLabel( _( "Idle" ) );
+		m_testProgress->Hide();
 	}
 
 	void MainFrame::doCancel()
@@ -902,6 +1269,7 @@ namespace test_parser
 		auto wasDisplayingCategory = m_detailViews->isLayerShown( 2 );
 		m_selected.allTests = true;
 		m_selected.allCategories = true;
+		m_selected.allRenderers = true;
 		m_view->GetSelections( m_selected.items );
 		bool displayTest = false;
 		bool displayCategory = false;
@@ -913,14 +1281,20 @@ namespace test_parser
 			if ( node )
 			{
 				wxString category;
+				wxString renderer;
 				Test * test{};
 
 				if ( node->test )
 				{
 					test = node->test;
 				}
+				else if ( node->isRenderer() )
+				{
+					renderer = node->category;
+				}
 				else
 				{
+					renderer = node->getRenderer()->category;
 					category = node->category;
 				}
 
@@ -933,11 +1307,36 @@ namespace test_parser
 				}
 				else if ( !category.empty() )
 				{
-					auto it = m_tests.find( makeStdString( category ) );
+					auto rendIt = m_tests.find( makeStdString( renderer ) );
 
-					if ( it != m_tests.end() )
+					if ( rendIt != m_tests.end() )
 					{
-						m_categoryView->setCategory( category, it->second );
+						auto it = rendIt->second.find( makeStdString( category ) );
+
+						if ( it != rendIt->second.end() )
+						{
+							m_categoryView->setCategory( category, it->second );
+						}
+						else
+						{
+							m_categoryView->setRenderer( renderer, rendIt->second );
+						}
+					}
+					else
+					{
+						m_categoryView->setAll( m_tests, m_runningTest.tests );
+					}
+
+					m_detailViews->showLayer( 2 );
+					displayCategory = true;
+				}
+				else if ( !renderer.empty() )
+				{
+					auto rendIt = m_tests.find( makeStdString( renderer ) );
+
+					if ( rendIt != m_tests.end() )
+					{
+						m_categoryView->setRenderer( renderer, rendIt->second );
 					}
 					else
 					{
@@ -953,7 +1352,9 @@ namespace test_parser
 		for ( auto & item : m_selected.items )
 		{
 			auto node = static_cast< TreeModelNode * >( item.GetID() );
-			m_selected.allCategories = ( !node->category.empty() )
+			m_selected.allRenderers = ( !node->category.empty() && node->isRenderer() )
+				&& m_selected.allRenderers;
+			m_selected.allCategories = ( !node->category.empty() && !node->isRenderer() )
 				&& m_selected.allCategories;
 			m_selected.allTests = node->test
 				&& m_selected.allTests;
@@ -994,6 +1395,10 @@ namespace test_parser
 			else if ( m_selected.allCategories )
 			{
 				PopupMenu( m_categoryMenu.get() );
+			}
+			else if ( m_selected.allRenderers )
+			{
+				PopupMenu( m_rendererMenu.get() );
 			}
 			else
 			{
@@ -1045,6 +1450,24 @@ namespace test_parser
 			break;
 		case eID_CATEGORY_UPDATE_CASTOR:
 			doUpdateCategoryCastorDate();
+			break;
+		case eID_RUN_RENDERER_TESTS_ALL:
+			doRunAllRendererTests();
+			break;
+		case eID_RUN_RENDERER_TESTS_NOTRUN:
+			doRunRendererTests( TestStatus::eNotRun );
+			break;
+		case eID_RUN_RENDERER_TESTS_ACCEPTABLE:
+			doRunRendererTests( TestStatus::eAcceptable );
+			break;
+		case eID_RUN_RENDERER_TESTS_ALL_BUT_NEGLIGIBLE:
+			doRunAllRendererTestsBut( TestStatus::eNegligible );
+			break;
+		case eID_RUN_RENDERER_TESTS_OUTDATED:
+			doRunAllRendererOutdatedTests();
+			break;
+		case eID_RENDERER_UPDATE_CASTOR:
+			doUpdateRendererCastorDate();
 			break;
 		case eID_RUN_TESTS_ALL:
 			doRunAllTests();

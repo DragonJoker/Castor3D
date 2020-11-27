@@ -12,10 +12,22 @@ namespace test_parser
 	{
 	public:
 		TreeModelNode( TreeModelNode * parent
-			, wxString const & category );
+			, wxString const & name
+			, bool isRenderer = false );
 		TreeModelNode( TreeModelNode * parent
 			, Test & test );
 		~TreeModelNode();
+
+		bool isRenderer()const
+		{
+			return m_isRenderer;
+		}
+
+		TreeModelNode * getRenderer()const
+		{
+			assert( !m_isRenderer && !category.empty() );
+			return m_parent;
+		}
 	
 		void Remove( TreeModelNode * node );
 
@@ -60,6 +72,7 @@ namespace test_parser
 
 	private:
 		bool m_container{};
+		bool m_isRenderer{};
 		TreeModelNode * m_parent;
 		TreeModelNodePtrArray m_children;
 	};

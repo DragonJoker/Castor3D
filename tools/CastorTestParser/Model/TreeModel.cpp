@@ -1,6 +1,7 @@
 #include "CastorTestParser/Model/TreeModel.hpp"
 #include "CastorTestParser/Model/TreeModelNode.hpp"
 
+#include <CastorUtils/Exception/Assertion.hpp>
 #include <CastorUtils/Log/Logger.hpp>
 
 namespace test_parser
@@ -13,6 +14,44 @@ namespace test_parser
 	TreeModel::~TreeModel()
 	{
 		delete m_root;
+	}
+
+	TreeModelNode * TreeModel::addRenderer( std::string const & renderer )
+	{
+		TreeModelNode * node = new TreeModelNode{ m_root, makeWxString( renderer ), true };
+		m_renderers[renderer] = node;
+		m_root->Append( node );
+		return node;
+	}
+
+	TreeModelNode * TreeModel::addCategory( std::string const & renderer
+		, std::string const & category )
+	{
+		auto it = m_renderers.find( renderer );
+		CU_Require( m_renderers.end() != it );
+		TreeModelNode * node = new TreeModelNode{ it->second, makeWxString( category ) };
+		m_categories[renderer + category] = node;
+		it->second->Append( node );
+		return node;
+	}
+
+	TreeModelNode * TreeModel::addTest( Test & test )
+	{
+		auto it = m_categories.find( test.renderer + test.category );
+		CU_Require( m_categories.end() != it );
+		TreeModelNode * node = new TreeModelNode{ it->second, test };
+		it->second->Append( node );
+		return node;
+	}
+
+	void TreeModel::expandRoots( wxDataViewCtrl * view )
+	{
+		view->Expand( wxDataViewItem{ m_root } );
+
+		for ( auto & renderer : m_renderers )
+		{
+			view->Expand( wxDataViewItem{ renderer.second } );
+		}
 	}
 
 	uint32_t TreeModel::getId( wxDataViewItem const & item )const
@@ -100,6 +139,43 @@ namespace test_parser
 		return result;
 	}
 
+	bool TreeModel::isIgnored( wxDataViewItem const & item )const
+	{
+		bool result{ false };
+		auto node = static_cast< TreeModelNode * >( item.GetID() );
+
+		if ( node )
+		{
+			if ( node->test )
+			{
+				result = node->test->ignoreResult;
+			}
+		}
+
+		return result;
+	}
+
+	bool TreeModel::isOutOfCastorDate( wxDataViewItem const & item )const
+	{
+		bool result{ false };
+		auto node = static_cast< TreeModelNode * >( item.GetID() );
+
+		if ( node )
+		{
+			if ( node->test )
+			{
+				result = node->test->runDate < node->test->castorDate;
+			}
+		}
+
+		return result;
+	}
+
+	bool TreeModel::isOutOfSceneDate( wxDataViewItem const & item )const
+	{
+		return false;
+	}
+
 	void TreeModel::Delete( wxDataViewItem const & item )
 	{
 		auto node = static_cast< TreeModelNode * >( item.GetID() );
@@ -183,7 +259,7 @@ namespace test_parser
 
 	unsigned int TreeModel::GetColumnCount()const
 	{
-		return 5;
+		return uint32_t( Column::eCount );
 	}
 
 	wxString TreeModel::GetColumnType( unsigned int col )const
@@ -193,6 +269,9 @@ namespace test_parser
 		case Column::eRunDate:
 			return wxT( "datetime" );
 		case Column::eStatus:
+		case Column::eIgnored:
+		case Column::eCastorDate:
+		case Column::eSceneDate:
 			return wxT( "wxBitmap" );
 		default:
 			return wxT( "string" );
@@ -235,6 +314,18 @@ namespace test_parser
 				variant = wxVariant{ long( node->test->status ) };
 				break;
 
+			case Column::eIgnored:
+				variant = wxVariant{ node->test->ignoreResult };
+				break;
+
+			case Column::eCastorDate:
+				variant = wxVariant{ node->test->runDate < node->test->castorDate };
+				break;
+
+			case Column::eSceneDate:
+				variant = wxVariant{ false };
+				break;
+
 			default:
 				castor::Logger::logError( "TreeModel::GetValue: wrong column " + castor::string::toString( col ) );
 				break;
@@ -252,6 +343,9 @@ namespace test_parser
 			case Column::eRenderer:
 			case Column::eRunDate:
 			case Column::eStatus:
+			case Column::eIgnored:
+			case Column::eCastorDate:
+			case Column::eSceneDate:
 				break;
 
 			default:
@@ -303,6 +397,15 @@ namespace test_parser
 				result = true;
 				break;
 
+			case Column::eIgnored:
+				node->test->ignoreResult = variant.GetBool();
+				result = true;
+				break;
+
+			case Column::eCastorDate:
+			case Column::eSceneDate:
+				break;
+
 			default:
 				castor::Logger::logError( "TreeModel::SetValue: wrong column " + castor::string::toString( col ) );
 				break;
@@ -321,6 +424,8 @@ namespace test_parser
 			case Column::eRenderer:
 			case Column::eRunDate:
 			case Column::eStatus:
+			case Column::eCastorDate:
+			case Column::eSceneDate:
 				break;
 
 			default:
@@ -336,12 +441,11 @@ namespace test_parser
 	{
 		wxDataViewItem result( 0 );
 
-		// the invisible root node has no parent
 		if ( item.IsOk() )
 		{
 			auto node = static_cast< TreeModelNode * >( item.GetID() );
 
-			if ( node && node != m_root )
+			if ( node && m_root != node )
 			{
 				result = wxDataViewItem{ node->GetParent() };
 			}
@@ -352,9 +456,8 @@ namespace test_parser
 
 	bool TreeModel::IsContainer( wxDataViewItem const & item )const
 	{
-		bool result = true;
-		// the invisble root node can have children
-		// (in our model always "MyMusic")
+		bool result = false;
+
 		if ( !item.IsOk() )
 		{
 			result = true;

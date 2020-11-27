@@ -46,14 +46,27 @@ namespace test_parser
 			, castor::Path const & refFile
 			, castor::Path const & testFile )
 		{
-			if ( !castor::File::fileExists( refFile )
-				|| !castor::File::fileExists( testFile ) )
+			if ( !castor::File::fileExists( refFile ) )
 			{
+				castor::Logger::logError( "CompareImages - Image file doesn't exist: " + refFile );
+				return wxImage{};
+			}
+
+			if ( !castor::File::fileExists( testFile ) )
+			{
+				castor::Logger::logError( "CompareImages - Image file doesn't exist: " + testFile );
 				return wxImage{};
 			}
 
 			castor::Image reference = loader.load( castor::cuEmptyString, refFile );
 			castor::Image toTest = loader.load( castor::cuEmptyString, testFile );
+
+			if ( toTest.getDimensions() != reference.getDimensions() )
+			{
+				castor::Logger::logError( "CompareImages - Images dimensions don't match: " + testFile );
+				return wxImage{};
+			}
+
 			auto src = castor::PxBufferBase::create( toTest.getDimensions()
 				, castor::PixelFormat::eR8G8B8A8_UNORM
 				, reference.getPixels()->getConstPtr()

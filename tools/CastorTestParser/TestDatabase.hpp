@@ -53,6 +53,7 @@ namespace test_parser
 		void doInitDatabase( wxProgressDialog & progress, int & index );
 		TestMap doListCategories( wxProgressDialog & progress, int & index, uint32_t & testCount );
 		void doPopulateDatabase( wxProgressDialog & progress, int & index, TestMap const & tests, uint32_t testCount );
+		void doFillPerRenderer( wxProgressDialog & progress, int & index, TestMap const & tests, uint32_t testCount );
 		void doFillDatabase( wxProgressDialog & progress, int & index );
 
 	private:

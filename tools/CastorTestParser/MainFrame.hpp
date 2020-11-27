@@ -19,6 +19,7 @@ See LICENSE file in root folder
 #include <list>
 #include <map>
 
+class wxGauge;
 class wxStaticText;
 
 namespace test_parser
@@ -56,6 +57,11 @@ namespace test_parser
 		void doRunAllCategoryTestsBut( TestStatus filter );
 		void doRunAllCategoryOutdatedTests();
 		void doUpdateCategoryCastorDate();
+		void doRunAllRendererTests();
+		void doRunRendererTests( TestStatus filter );
+		void doRunAllRendererTestsBut( TestStatus filter );
+		void doRunAllRendererOutdatedTests();
+		void doUpdateRendererCastorDate();
 		void doRunAllTests();
 		void doRunTests( TestStatus filter );
 		void doRunAllTestsBut( TestStatus filter );
@@ -83,10 +89,13 @@ namespace test_parser
 		LayeredPanel * m_detailViews{};
 		TestPanel * m_testView{};
 		CategoryPanel * m_categoryView{};
-		wxStaticText * m_statusBar{};
+		wxStaticText * m_statusText{};
+		wxGauge * m_testProgress{};
+		wxGauge * m_statusProgress{};
 		bool m_hasPage{ false };
 		std::unique_ptr< wxMenu > m_testMenu{};
 		std::unique_ptr< wxMenu > m_categoryMenu{};
+		std::unique_ptr< wxMenu > m_rendererMenu{};
 		std::unique_ptr< wxMenu > m_allMenu{};
 		std::unique_ptr< wxMenu > m_busyMenu{};
 		struct Selection
@@ -94,6 +103,7 @@ namespace test_parser
 			wxDataViewItemArray items;
 			bool allTests{};
 			bool allCategories{};
+			bool allRenderers{};
 		};
 		Selection m_selected;
 		struct RunningTest

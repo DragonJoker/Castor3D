@@ -39,6 +39,7 @@ namespace test_parser
 		castor::Path viewer;
 		castor::Path differ;
 		castor::Path castor;
+		std::vector< castor::String > renderers{ cuT( "vk" ), cuT( "gl" ), cuT( "d3d11" ) };
 		bool skip{};
 	};
 
@@ -92,7 +93,8 @@ namespace test_parser
 	castor::Path getReferenceName( Test const & test );
 
 	using TestArray = std::vector< Test >;
-	using TestMap = std::map< std::string, TestArray >;
+	using TestCategoryMap = std::map< std::string, TestArray >;
+	using TestMap = std::map< std::string, TestCategoryMap >;
 
 	struct TestNode
 	{
