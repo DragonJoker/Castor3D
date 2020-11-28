@@ -144,6 +144,9 @@ if ( SQLite3_FOUND AND Boost_FOUND )
 		${${PROJECT_NAME}_SRC_FILES}
 		${${PROJECT_NAME}_FOLDER_SRC_FILES}
 	)
+	if ( WIN32 )
+		find_rsc_file( ${PROJECT_NAME} bin )
+	endif ()
 	add_target_min(
 		${PROJECT_NAME}
 		bin
