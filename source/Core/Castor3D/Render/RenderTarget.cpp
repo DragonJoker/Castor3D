@@ -716,10 +716,6 @@ namespace castor3d
 					makeFloatArray( getEngine()->getNextRainbowColour() ),
 				} );
 			m_toneMappingTimer->beginPass( *m_toneMappingCommandBuffer );
-			// Put render technique image in shader input layout.
-			m_toneMappingCommandBuffer->memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, m_renderTechnique->getResult().getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 			m_toneMappingCommandBuffer->beginRenderPass( *m_renderPass
 				, *m_objectsFrameBuffer.frameBuffer
 				, { clear }
