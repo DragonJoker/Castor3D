@@ -45,8 +45,46 @@ namespace test_parser
 			{ "Unprocessed", TestStatus::eUnprocessed },
 		};
 		auto it = folders.find( name );
-		assert( it != folders.end() );
+
+		if ( it == folders.end() )
+		{
+			return TestStatus::eUnprocessed;
+		}
+
 		return it->second;
+	}
+
+	bool isOutOfDate( Config const & config, Test const & test )
+	{
+		return test.castorDate < config.castorRefDate;
+	}
+
+	void updateCastorRefDate( Config & config )
+	{
+		config.castorRefDate = getFileDate( config.castor );
+		assert( db::date_time::isValid( config.castorRefDate ) );
+	}
+
+	uint32_t getTestStatusIndex( Config const & config 
+		, Test const & test )
+	{
+		uint32_t result{};
+
+		if ( ( !test.ignoreResult )
+			|| ( test.status >= TestStatus::eRunning_Begin
+				&& test.status <= TestStatus::eRunning_End ) )
+		{
+			result = size_t( test.status ) + AdditionalIndices;
+		}
+		else if ( test.ignoreResult )
+		{
+			result = IgnoredIndex;
+		}
+
+		return ( result << 1 )
+			| ( isOutOfDate( config, test )
+				? 0x01u
+				: 0x00u );
 	}
 
 	castor::Path getResultFolder( Test const & test, bool useStatus )

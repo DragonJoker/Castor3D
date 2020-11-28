@@ -6,8 +6,9 @@
 
 namespace test_parser
 {
-	TreeModel::TreeModel()
-		: m_root( new TreeModelNode{ nullptr, _( "Tests database" ) } )
+	TreeModel::TreeModel( Config const & config )
+		: m_config{ config }
+		, m_root( new TreeModelNode{ nullptr, _( "Tests database" ) } )
 	{
 	}
 
@@ -139,43 +140,6 @@ namespace test_parser
 		return result;
 	}
 
-	bool TreeModel::isIgnored( wxDataViewItem const & item )const
-	{
-		bool result{ false };
-		auto node = static_cast< TreeModelNode * >( item.GetID() );
-
-		if ( node )
-		{
-			if ( node->test )
-			{
-				result = node->test->ignoreResult;
-			}
-		}
-
-		return result;
-	}
-
-	bool TreeModel::isOutOfCastorDate( wxDataViewItem const & item )const
-	{
-		bool result{ false };
-		auto node = static_cast< TreeModelNode * >( item.GetID() );
-
-		if ( node )
-		{
-			if ( node->test )
-			{
-				result = node->test->runDate < node->test->castorDate;
-			}
-		}
-
-		return result;
-	}
-
-	bool TreeModel::isOutOfSceneDate( wxDataViewItem const & item )const
-	{
-		return false;
-	}
-
 	void TreeModel::Delete( wxDataViewItem const & item )
 	{
 		auto node = static_cast< TreeModelNode * >( item.GetID() );
@@ -269,9 +233,6 @@ namespace test_parser
 		case Column::eRunDate:
 			return wxT( "datetime" );
 		case Column::eStatus:
-		case Column::eIgnored:
-		case Column::eCastorDate:
-		case Column::eSceneDate:
 			return wxT( "wxBitmap" );
 		default:
 			return wxT( "string" );
@@ -311,19 +272,7 @@ namespace test_parser
 				break;
 
 			case Column::eStatus:
-				variant = wxVariant{ long( node->test->status ) };
-				break;
-
-			case Column::eIgnored:
-				variant = wxVariant{ node->test->ignoreResult };
-				break;
-
-			case Column::eCastorDate:
-				variant = wxVariant{ node->test->runDate < node->test->castorDate };
-				break;
-
-			case Column::eSceneDate:
-				variant = wxVariant{ false };
+				variant = long( getTestStatusIndex( m_config, *node->test ) );
 				break;
 
 			default:
@@ -343,9 +292,6 @@ namespace test_parser
 			case Column::eRenderer:
 			case Column::eRunDate:
 			case Column::eStatus:
-			case Column::eIgnored:
-			case Column::eCastorDate:
-			case Column::eSceneDate:
 				break;
 
 			default:
@@ -368,70 +314,18 @@ namespace test_parser
 			return result;
 		}
 
-		if ( node->test )
+		switch ( Column( col ) )
 		{
-			switch ( Column( col ) )
-			{
-			case Column::eCategory:
-				node->test->category = makeStdString( variant.GetString() );
-				result = true;
-				break;
+		case Column::eCategory:
+		case Column::eName:
+		case Column::eRenderer:
+		case Column::eRunDate:
+		case Column::eStatus:
+			break;
 
-			case Column::eName:
-				node->test->name = makeStdString( variant.GetString() );
-				result = true;
-				break;
-
-			case Column::eRenderer:
-				node->test->renderer = makeStdString( variant.GetString() );
-				result = true;
-				break;
-
-			case Column::eRunDate:
-				node->test->runDate = makeDbDateTime( variant.GetDateTime() );
-				result = true;
-				break;
-
-			case Column::eStatus:
-				node->test->status = TestStatus( variant.GetLong() );
-				result = true;
-				break;
-
-			case Column::eIgnored:
-				node->test->ignoreResult = variant.GetBool();
-				result = true;
-				break;
-
-			case Column::eCastorDate:
-			case Column::eSceneDate:
-				break;
-
-			default:
-				castor::Logger::logError( "TreeModel::SetValue: wrong column " + castor::string::toString( col ) );
-				break;
-			}
-		}
-		else
-		{
-			switch ( Column( col ) )
-			{
-			case Column::eCategory:
-				node->category = variant.GetString();
-				result = true;
-				break;
-
-			case Column::eName:
-			case Column::eRenderer:
-			case Column::eRunDate:
-			case Column::eStatus:
-			case Column::eCastorDate:
-			case Column::eSceneDate:
-				break;
-
-			default:
-				castor::Logger::logError( "TreeModel::SetValue: wrong column " + castor::string::toString( col ) );
-				break;
-			}
+		default:
+			castor::Logger::logError( "TreeModel::SetValue: wrong column " + castor::string::toString( col ) );
+			break;
 		}
 
 		return result;

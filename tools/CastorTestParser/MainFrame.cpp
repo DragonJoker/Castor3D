@@ -168,7 +168,9 @@ namespace test_parser
 				int align = wxDVR_DEFAULT_ALIGNMENT )
 				: wxDataViewCustomRenderer{ varianttype, mode, align }
 				, m_size{ 20, 20 }
-				, m_bitmaps{ createImage( notrun_xpm )
+				, m_outOfDateBmp{ createImage( outofdate_xpm ) }
+				, m_bitmaps{ createImage( ignored_xpm )
+					, createImage( notrun_xpm )
 					, createImage( negligible_xpm )
 					, createImage( acceptable_xpm )
 					, createImage( unacceptable_xpm )
@@ -190,22 +192,33 @@ namespace test_parser
 
 			bool SetValue( const wxVariant & value ) override
 			{
-				m_status = TestStatus( value.GetLong() );
+				m_value = uint32_t( value.GetLong() );
+				m_index = ( m_value >> 1 );
+				m_outOfDate = ( m_value & 0x01u );
 				return true;
 			}
 
 			bool GetValue( wxVariant & value ) const override
 			{
-				value = wxVariant{ long( m_status ) };
+				value = long( m_value );
 				return true;
 			}
 
 			bool Render( wxRect cell, wxDC * dc, int state ) override
 			{
-				dc->DrawBitmap( m_bitmaps[size_t( m_status )]
+				dc->DrawBitmap( m_bitmaps[m_index]
 					, cell.x
 					, cell.y
 					, true );
+
+				if ( m_outOfDate )
+				{
+					dc->DrawBitmap( m_outOfDateBmp
+						, cell.x
+						, cell.y
+						, true );
+				}
+
 				return false;
 			}
 
@@ -223,8 +236,11 @@ namespace test_parser
 
 		private:
 			wxSize m_size;
-			std::array< wxBitmap, size_t( TestStatus::eCount ) > m_bitmaps;
-			TestStatus m_status{ TestStatus::eNegligible };
+			wxBitmap m_outOfDateBmp;
+			std::array< wxBitmap, size_t( TestStatus::eCount ) + AdditionalIndices > m_bitmaps;
+			uint32_t m_value;
+			uint32_t m_index;
+			bool m_outOfDate{};
 		};
 
 		castor::Path getTestFileName( castor::Path const & folder
@@ -242,6 +258,7 @@ namespace test_parser
 		, m_config{ std::move( config ) }
 		, m_database{ m_config }
 		, m_updater{ m_model }
+		, m_processChecker{ this }
 	{
 		SetClientSize( 900, 600 );
 		doInitGui();
@@ -280,6 +297,7 @@ namespace test_parser
 
 	MainFrame::~MainFrame()
 	{
+		m_processChecker.stop();
 		m_updater.stop();
 		m_auiManager.UnInit();
 	}
@@ -299,19 +317,19 @@ namespace test_parser
 			doFillList( progress, index, testCount );
 		}
 
-		m_runningTest.genProcess = std::make_unique< wxProcess >( wxPROCESS_DEFAULT );
+		m_runningTest.genProcess = std::make_unique< TestProcess >( this, wxPROCESS_DEFAULT );
 		m_runningTest.genProcess->Connect( wxEVT_END_PROCESS
-			, wxProcessEventHandler( MainFrame::onTestRunEnd )
+			, wxProcessEventHandler( MainFrame::onProcessEnd )
 			, nullptr
 			, this );
-		m_runningTest.difProcess = std::make_unique< wxProcess >( wxPROCESS_DEFAULT );
+		m_runningTest.difProcess = std::make_unique< TestProcess >( this, wxPROCESS_DEFAULT );
 		m_runningTest.difProcess->Connect( wxEVT_END_PROCESS
-			, wxProcessEventHandler( MainFrame::onTestDiffEnd )
+			, wxProcessEventHandler( MainFrame::onProcessEnd )
 			, nullptr
 			, this );
-		m_runningTest.disProcess = std::make_unique< wxProcess >( wxPROCESS_DEFAULT );
+		m_runningTest.disProcess = std::make_unique< TestProcess >( this, wxPROCESS_DEFAULT );
 		m_runningTest.disProcess->Connect( wxEVT_END_PROCESS
-			, wxProcessEventHandler( MainFrame::onTestDisplayEnd )
+			, wxProcessEventHandler( MainFrame::onProcessEnd )
 			, nullptr
 			, this );
 		m_statusText->SetLabel( _( "Idle" ) );
@@ -325,7 +343,8 @@ namespace test_parser
 		, bool reference )
 	{
 		auto node = getTestNode( test );
-		test.castorDate = getFileDate( m_config.castor );
+		updateCastorRefDate( m_config );
+		test.castorDate = m_config.castorRefDate;
 		assert( db::date_time::isValid( test.castorDate ) );
 		m_database.updateTestStatus( test, newStatus, reference );
 		test.status = newStatus;
@@ -358,7 +377,7 @@ namespace test_parser
 		sizerList->Add( m_view, wxSizerFlags( 1 ).Expand() );
 		listPanel->SetSizer( sizerList );
 		sizerList->SetSizeHints( listPanel );
-		m_model = new TreeModel;
+		m_model = new TreeModel{ m_config };
 		m_view->AssociateModel( m_model.get() );
 		m_view->Connect( wxEVT_DATAVIEW_SELECTION_CHANGED
 			, wxDataViewEventHandler( MainFrame::onSelectionChange )
@@ -386,21 +405,9 @@ namespace test_parser
 		colRunDate->SetMinWidth( 100 );
 		m_view->AppendColumn( colRunDate );
 		auto renStatus = new DataViewTestStatusRenderer;
-		wxDataViewColumn * colStatus = new wxDataViewColumn( _( "A" ), renStatus, int( TreeModel::Column::eStatus ), 30, wxALIGN_LEFT, flags );
+		wxDataViewColumn * colStatus = new wxDataViewColumn( _( "Status" ), renStatus, int( TreeModel::Column::eStatus ), 30, wxALIGN_LEFT, flags );
 		colStatus->SetMinWidth( 30 );
 		m_view->AppendColumn( colStatus );
-		auto renIgnored = new DataViewTestBoolBitmapRenderer{ ignored_xpm, none_xpm };
-		wxDataViewColumn * colIgnored = new wxDataViewColumn( _( "I" ), renIgnored, int( TreeModel::Column::eIgnored ), 30, wxALIGN_LEFT, flags );
-		colIgnored->SetMinWidth( 30 );
-		m_view->AppendColumn( colIgnored );
-		auto renCastorOOD = new DataViewTestBoolBitmapRenderer{ outofdate_xpm, none_xpm };
-		wxDataViewColumn * colCastorOOD = new wxDataViewColumn( _( "C" ), renCastorOOD, int( TreeModel::Column::eCastorDate ), 30, wxALIGN_LEFT, flags );
-		colCastorOOD->SetMinWidth( 30 );
-		m_view->AppendColumn( colCastorOOD );
-		auto renSceneOOD = new DataViewTestBoolBitmapRenderer{ outofdate_xpm, none_xpm };
-		wxDataViewColumn * colSceneOOD = new wxDataViewColumn( _( "S" ), renSceneOOD, int( TreeModel::Column::eSceneDate ), 30, wxALIGN_LEFT, flags );
-		colSceneOOD->SetMinWidth( 30 );
-		m_view->AppendColumn( colSceneOOD );
 
 		return listPanel;
 	}
@@ -446,7 +453,7 @@ namespace test_parser
 		m_testProgress->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		m_testProgress->SetValue( 0 );
 		m_testProgress->Hide();
-		m_statusText = new wxStaticText{ statusBar, wxID_ANY, _( "Idle" ), wxPoint( 10, 5 ), wxDefaultSize, 0 };
+		m_statusText = new wxStaticText{ statusBar, wxID_ANY, _( "Idle" ), wxPoint( 120, 5 ), wxDefaultSize, 0 };
 		m_statusText->SetBackgroundColour( INACTIVE_TAB_COLOUR );
 		m_statusText->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 
@@ -482,50 +489,47 @@ namespace test_parser
 
 	void MainFrame::doInitMenus()
 	{
-		auto addTestMenus = []( wxMenu & menu )
+		auto addTestBaseMenus = []( wxMenu & menu )
 		{
-			menu.Append( eID_COPY_FILE_NAME, _( "Copy test file path" ) + wxT( "\tF4" ) );
-			menu.Append( eID_VIEW_TEST, _( "View Test" ) + wxT( "\tF5" ) );
-			menu.Append( eID_SET_REF, _( "Set Reference" ) + wxT( "\tF6" ) );
-			menu.Append( eID_RUN_TEST, _( "Run Test" ) + wxT( "\tF7" ) );
-			menu.Append( eID_IGNORE_RESULT, _( "Ignore test results" ) + wxT( "\tF8" ), wxEmptyString, wxITEM_CHECK );
-			menu.Append( eID_UPDATE_CASTOR, _( "Update Castor3D's date" ) + wxT( "\tF9" ) );
+			menu.Append( eID_COPY_FILE_NAME, _( "Copy test file path" ) + wxT( "\tF2" ) );
+			menu.Append( eID_VIEW_TEST, _( "View Test" ) + wxT( "\tF3" ) );
+			menu.Append( eID_SET_REF, _( "Set Reference" ) + wxT( "\tF4" ) );
+			menu.Append( eID_CANCEL, _( "Cancel" ) + wxT( "\tF5" ) );
+		};
+		auto addTestRunMenus = []( wxMenu & menu )
+		{
+			menu.Append( eID_RUN_TEST, _( "Run Test" ) + wxT( "\tF6" ) );
 		};
 		auto addRendererMenus = []( wxMenu & menu )
 		{
-			menu.Append( eID_RUN_RENDERER_TESTS_ALL, _( "Run all renderer's tests" ) + wxT( "\tCtrl+F7" ) );
-			menu.Append( eID_RUN_RENDERER_TESTS_NOTRUN, _( "Run all <not run> renderer's tests" ) + wxT( "\tCtrl+F8" ) );
-			menu.Append( eID_RUN_RENDERER_TESTS_ACCEPTABLE, _( "Run all <acceptable> renderer's tests" ) + wxT( "\tCtrl+F9" ) );
-			menu.Append( eID_RUN_RENDERER_TESTS_ALL_BUT_NEGLIGIBLE, _( "Run all but <negligible> renderer's tests" ) + wxT( "\tCtrl+F10" ) );
-			menu.Append( eID_RUN_RENDERER_TESTS_OUTDATED, _( "Run all outdated renderer's tests" ) + wxT( "\tCtrl+F11" ) );
-			menu.Append( eID_RENDERER_UPDATE_CASTOR, _( "Update renderer's tests Castor3D's date" ) + wxT( "\tCtrl+F12" ) );
+			menu.Append( eID_RUN_RENDERER_TESTS_ALL, _( "Run all renderer's tests" ) + wxT( "\tF7" ) );
+			menu.Append( eID_RUN_RENDERER_TESTS_NOTRUN, _( "Run all <not run> renderer's tests" ) + wxT( "\tF8" ) );
+			menu.Append( eID_RUN_RENDERER_TESTS_ACCEPTABLE, _( "Run all <acceptable> renderer's tests" ) + wxT( "\tF9" ) );
+			menu.Append( eID_RUN_RENDERER_TESTS_ALL_BUT_NEGLIGIBLE, _( "Run all but <negligible> renderer's tests" ) + wxT( "\tF10" ) );
+			menu.Append( eID_RUN_RENDERER_TESTS_OUTDATED, _( "Run all outdated renderer's tests" ) + wxT( "\tF11" ) );
+			menu.Append( eID_RENDERER_UPDATE_CASTOR, _( "Update renderer's tests Castor3D's date" ) + wxT( "\tF12" ) );
 		};
 		auto addCategoryMenus = []( wxMenu & menu )
 		{
-			menu.Append( eID_RUN_CATEGORY_TESTS_ALL, _( "Run all category's tests" ) + wxT( "\tCtrl+F7" ) );
-			menu.Append( eID_RUN_CATEGORY_TESTS_NOTRUN, _( "Run all <not run> category's tests" ) + wxT( "\tCtrl+F8" ) );
-			menu.Append( eID_RUN_CATEGORY_TESTS_ACCEPTABLE, _( "Run all <acceptable> category's tests" ) + wxT( "\tCtrl+F9" ) );
-			menu.Append( eID_RUN_CATEGORY_TESTS_ALL_BUT_NEGLIGIBLE, _( "Run all but <negligible> category's tests" ) + wxT( "\tCtrl+F10" ) );
-			menu.Append( eID_RUN_CATEGORY_TESTS_OUTDATED, _( "Run all outdated category's tests" ) + wxT( "\tCtrl+F11" ) );
-			menu.Append( eID_CATEGORY_UPDATE_CASTOR, _( "Update category's tests Castor3D's date" ) + wxT( "\tCtrl+F12" ) );
+			menu.Append( eID_RUN_CATEGORY_TESTS_ALL, _( "Run all category's tests" ) + wxT( "\tF7" ) );
+			menu.Append( eID_RUN_CATEGORY_TESTS_NOTRUN, _( "Run all <not run> category's tests" ) + wxT( "\tF8" ) );
+			menu.Append( eID_RUN_CATEGORY_TESTS_ACCEPTABLE, _( "Run all <acceptable> category's tests" ) + wxT( "\tF9" ) );
+			menu.Append( eID_RUN_CATEGORY_TESTS_ALL_BUT_NEGLIGIBLE, _( "Run all but <negligible> category's tests" ) + wxT( "\tF10" ) );
+			menu.Append( eID_RUN_CATEGORY_TESTS_OUTDATED, _( "Run all outdated category's tests" ) + wxT( "\tF11" ) );
+			menu.Append( eID_CATEGORY_UPDATE_CASTOR, _( "Update category's tests Castor3D's date" ) + wxT( "\tF12" ) );
 		};
 		auto addAllMenus = []( wxMenu & menu )
 		{
-			menu.Append( eID_RUN_TESTS_ALL, _( "Run all tests" ) + wxT( "\tCtrl+Alt+F7" ) );
-			menu.Append( eID_RUN_TESTS_NOTRUN, _( "Run all <not run> tests" ) + wxT( "\tCtrl+Alt+F8" ) );
-			menu.Append( eID_RUN_TESTS_ACCEPTABLE, _( "Run all <acceptable> tests" ) + wxT( "\tCtrl+Alt+F9" ) );
-			menu.Append( eID_RUN_TESTS_ALL_BUT_NEGLIGIBLE, _( "Run all but <negligible> tests" ) + wxT( "\tCtrl+Alt+F10" ) );
-			menu.Append( eID_RUN_TESTS_OUTDATED, _( "Run all outdated tests" ) + wxT( "\tCtrl+Alt+F11" ) );
-			menu.Append( eID_ALL_UPDATE_CASTOR, _( "Update tests Castor3D's date" ) + wxT( "\tCtrl+Alt+F12" ) );
+			menu.Append( eID_RUN_TESTS_ALL, _( "Run all tests" ) + wxT( "\tF7" ) );
+			menu.Append( eID_RUN_TESTS_NOTRUN, _( "Run all <not run> tests" ) + wxT( "\tF8" ) );
+			menu.Append( eID_RUN_TESTS_ACCEPTABLE, _( "Run all <acceptable> tests" ) + wxT( "\tF9" ) );
+			menu.Append( eID_RUN_TESTS_ALL_BUT_NEGLIGIBLE, _( "Run all but <negligible> tests" ) + wxT( "\tF10" ) );
+			menu.Append( eID_RUN_TESTS_OUTDATED, _( "Run all outdated tests" ) + wxT( "\tF11" ) );
+			menu.Append( eID_ALL_UPDATE_CASTOR, _( "Update tests Castor3D's date" ) + wxT( "\tF12" ) );
 		};
 		m_testMenu = std::make_unique< wxMenu >();
-		addTestMenus( *m_testMenu );
-		m_testMenu->AppendSeparator();
-		addCategoryMenus( *m_testMenu );
-		m_testMenu->AppendSeparator();
-		addRendererMenus( *m_testMenu );
-		m_testMenu->AppendSeparator();
-		addAllMenus( *m_testMenu );
+		addTestBaseMenus( *m_testMenu );
+		addTestRunMenus( *m_testMenu );
 		m_testMenu->Connect( wxEVT_COMMAND_MENU_SELECTED
 			, wxCommandEventHandler( MainFrame::onMenuOption )
 			, nullptr
@@ -533,10 +537,6 @@ namespace test_parser
 
 		m_categoryMenu = std::make_unique< wxMenu >();
 		addCategoryMenus( *m_categoryMenu );
-		m_categoryMenu->AppendSeparator();
-		addRendererMenus( *m_categoryMenu );
-		m_categoryMenu->AppendSeparator();
-		addAllMenus( *m_categoryMenu );
 		m_categoryMenu->Connect( wxEVT_COMMAND_MENU_SELECTED
 			, wxCommandEventHandler( MainFrame::onMenuOption )
 			, nullptr
@@ -544,8 +544,6 @@ namespace test_parser
 		
 		m_rendererMenu = std::make_unique< wxMenu >();
 		addRendererMenus( *m_rendererMenu );
-		m_rendererMenu->AppendSeparator();
-		addAllMenus( *m_rendererMenu );
 		m_rendererMenu->Connect( wxEVT_COMMAND_MENU_SELECTED
 			, wxCommandEventHandler( MainFrame::onMenuOption )
 			, nullptr
@@ -559,9 +557,7 @@ namespace test_parser
 			, this );
 
 		m_busyMenu = std::make_unique< wxMenu >();
-		m_busyMenu->Append( eID_VIEW_TEST, "View Test\tF5" );
-		m_busyMenu->Append( eID_SET_REF, _( "Set Reference" ) + wxT( "\tF6" ) );
-		m_busyMenu->Append( eID_CANCEL, "Cancel\tF11" );
+		addTestBaseMenus( *m_busyMenu );
 		m_busyMenu->Connect( wxEVT_COMMAND_MENU_SELECTED
 			, wxCommandEventHandler( MainFrame::onMenuOption )
 			, nullptr
@@ -589,7 +585,10 @@ namespace test_parser
 				{
 					auto testNode = m_model->addTest( test );
 					m_modelNodes[test.id] = testNode;
-					progress.Update( index++, makeWxString( test.category ) + wxT( " - " ) + makeWxString( test.name ) + wxT( "..." ) );
+					progress.Update( index++, makeWxString( test.renderer )
+						+ wxT( " - " ) + makeWxString( test.category )
+						+ wxT( "\n" ) + makeWxString( test.name )
+						+ wxT( "..." ) );
 				}
 			}
 		}
@@ -619,6 +618,11 @@ namespace test_parser
 			if ( result == 0 )
 			{
 				castor::Logger::logError( "doProcessTest: " + castor::System::getLastErrorText() );
+			}
+			else
+			{
+				m_processChecker.checkProcess( result );
+				m_runningTest.currentProcess = m_runningTest.genProcess.get();
 			}
 
 #else
@@ -720,6 +724,7 @@ namespace test_parser
 	void MainFrame::doIgnoreTestResult()
 	{
 		m_cancelled.exchange( false );
+		updateCastorRefDate( m_config );
 
 		if ( !m_selected.items.empty() )
 		{
@@ -733,7 +738,7 @@ namespace test_parser
 				assert( node->test );
 				m_statusText->SetLabel( _( "Ignoring: " ) + node->test->name );
 				node->test->ignoreResult = m_testMenu->IsChecked( eID_IGNORE_RESULT );
-				node->test->castorDate = getFileDate( m_config.castor );
+				node->test->castorDate = m_config.castorRefDate;
 				assert( db::date_time::isValid( node->test->castorDate ) );
 				m_database.updateTestIgnoreResult( *node->test, node->test->ignoreResult, true );
 				m_model->ItemChanged( item );
@@ -749,8 +754,7 @@ namespace test_parser
 	void MainFrame::doUpdateCastorDate()
 	{
 		m_cancelled.exchange( false );
-		auto date = getFileDate( m_config.castor );
-		assert( db::date_time::isValid( date ) );
+		updateCastorRefDate( m_config );
 
 		if ( !m_selected.items.empty() )
 		{
@@ -763,9 +767,9 @@ namespace test_parser
 				auto node = static_cast< TreeModelNode * >( item.GetID() );
 				assert( node->test );
 
-				if ( node->test->castorDate != date )
+				if ( isOutOfDate( m_config, *node->test ) )
 				{
-					node->test->castorDate = date;
+					node->test->castorDate = m_config.castorRefDate;
 					m_database.updateTestCastorDate( *node->test );
 				}
 
@@ -895,8 +899,7 @@ namespace test_parser
 	void MainFrame::doRunAllCategoryOutdatedTests()
 	{
 		m_cancelled.exchange( false );
-		auto date = getFileDate( m_config.castor );
-		assert( db::date_time::isValid( date ) );
+		updateCastorRefDate( m_config );
 
 		for ( auto & item : m_selected.items )
 		{
@@ -917,7 +920,7 @@ namespace test_parser
 
 					for ( auto & test : category.second )
 					{
-						if ( test.castorDate != date
+						if ( isOutOfDate( m_config, test )
 							|| test.status == TestStatus::eNotRun )
 						{
 							m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
@@ -936,8 +939,7 @@ namespace test_parser
 	void MainFrame::doUpdateCategoryCastorDate()
 	{
 		m_cancelled.exchange( false );
-		auto date = getFileDate( m_config.castor );
-		assert( db::date_time::isValid( date ) );
+		updateCastorRefDate( m_config );
 
 		for ( auto & item : m_selected.items )
 		{
@@ -954,9 +956,9 @@ namespace test_parser
 					auto node = static_cast< TreeModelNode * >( item.GetID() );
 					assert( node->test );
 
-					if ( node->test->castorDate != date )
+					if ( isOutOfDate( m_config, *node->test ) )
 					{
-						node->test->castorDate = date;
+						node->test->castorDate = m_config.castorRefDate;
 						m_database.updateTestCastorDate( *node->test );
 					}
 				}
@@ -1063,8 +1065,7 @@ namespace test_parser
 	void MainFrame::doRunAllRendererOutdatedTests()
 	{
 		m_cancelled.exchange( false );
-		auto date = getFileDate( m_config.castor );
-		assert( db::date_time::isValid( date ) );
+		updateCastorRefDate( m_config );
 
 		for ( auto & item : m_selected.items )
 		{
@@ -1080,7 +1081,7 @@ namespace test_parser
 
 					for ( auto & test : tests )
 					{
-						if ( test.castorDate != date
+						if ( isOutOfDate( m_config, test )
 							|| test.status == TestStatus::eNotRun )
 						{
 							m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
@@ -1099,8 +1100,7 @@ namespace test_parser
 	void MainFrame::doUpdateRendererCastorDate()
 	{
 		m_cancelled.exchange( false );
-		auto date = getFileDate( m_config.castor );
-		assert( db::date_time::isValid( date ) );
+		updateCastorRefDate( m_config );
 
 		for ( auto & item : m_selected.items )
 		{
@@ -1120,9 +1120,9 @@ namespace test_parser
 						auto node = static_cast< TreeModelNode * >( item.GetID() );
 						assert( node->test );
 
-						if ( node->test->castorDate != date )
+						if ( isOutOfDate( m_config, *node->test ) )
 						{
-							node->test->castorDate = date;
+							node->test->castorDate = m_config.castorRefDate;
 							m_database.updateTestCastorDate( *node->test );
 						}
 					}
@@ -1203,8 +1203,7 @@ namespace test_parser
 	void MainFrame::doRunAllOutdatedTests()
 	{
 		m_cancelled.exchange( false );
-		auto date = getFileDate( m_config.castor );
-		assert( db::date_time::isValid( date ) );
+		updateCastorRefDate( m_config );
 
 		for ( auto & renderer : m_tests )
 		{
@@ -1212,7 +1211,7 @@ namespace test_parser
 			{
 				for ( auto & test : category.second )
 				{
-					if ( test.castorDate != date )
+					if ( isOutOfDate( m_config, test ) )
 					{
 						m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
 					}
@@ -1229,8 +1228,7 @@ namespace test_parser
 	void MainFrame::doUpdateAllCastorDate()
 	{
 		m_cancelled.exchange( false );
-		auto date = getFileDate( m_config.castor );
-		assert( db::date_time::isValid( date ) );
+		updateCastorRefDate( m_config );
 
 		for ( auto & renderer : m_tests )
 		{
@@ -1238,9 +1236,9 @@ namespace test_parser
 			{
 				for ( auto & test : category.second )
 				{
-					if ( test.castorDate != date )
+					if ( isOutOfDate( m_config, test ) )
 					{
-						test.castorDate = date;
+						test.castorDate = m_config.castorRefDate;
 						m_database.updateTestCastorDate( test );
 					}
 				}
@@ -1261,6 +1259,132 @@ namespace test_parser
 	void MainFrame::doCancel()
 	{
 		m_cancelled.exchange( true );
+	}
+
+	void MainFrame::onTestRunEnd( int status )
+	{
+		auto & testNode = *m_runningTest.tests.begin();
+		auto & test = *testNode.test;
+
+		if ( status < 0 )
+		{
+			m_runningTest.tests.erase( m_runningTest.tests.begin() );
+			castor::Logger::logError( castor::makeStringStream() << "Test run failed (" << status << ")" );
+			doCancel();
+		}
+
+		if ( !m_cancelled )
+		{
+			wxString command = m_config.differ;
+			command << " " << test.renderer;
+			command << " -f " << ( m_config.test / test.category / ( test.name + ".cscn" ) );
+			m_runningTest.difProcess->Redirect();
+			auto result = wxExecute( command
+				, ExecMode
+				, m_runningTest.difProcess.get() );
+#if CTP_UseAsync
+
+			if ( result == 0 )
+			{
+				castor::Logger::logError( "doProcessTest: " + castor::System::getLastErrorText() );
+			}
+			else
+			{
+				m_processChecker.checkProcess( result );
+				m_runningTest.currentProcess = m_runningTest.difProcess.get();
+			}
+
+#else
+			onTestDiffEnd( wxProcessEvent{} );
+#endif
+		}
+		else
+		{
+			doCancelTest( *testNode.test, testNode.status );
+		}
+	}
+
+	void MainFrame::onTestDisplayEnd( int status )
+	{
+	}
+
+	void MainFrame::onTestDiffEnd( int status )
+	{
+		auto testNode = *m_runningTest.tests.begin();
+		m_runningTest.tests.erase( m_runningTest.tests.begin() );
+		auto & test = *testNode.test;
+
+		if ( !m_cancelled )
+		{
+			auto matches = castor::File::filterDirectoryFiles( m_config.test / getCompareFolder( test, false )
+				, [&test]( castor::Path const & folder, castor::String name )
+				{
+					return name.find( test.name ) == 0u
+						&& castor::Path{ name }.getExtension() == "png"
+						&& name.find( "diff.png" ) == castor::String::npos;
+				}
+			, true );
+			assert( matches.size() < 2 );
+
+			if ( matches.empty() )
+			{
+				return;
+			}
+
+			auto & match = matches[0];
+			auto path = match.getPath();
+			test.runDate = getFileDate( match );
+			assert( db::date_time::isValid( test.runDate ) );
+			test.status = getStatus( path.getFileName() );
+			updateCastorRefDate( m_config );
+			test.castorDate = m_config.castorRefDate;
+			assert( db::date_time::isValid( test.castorDate ) );
+			m_database.insertTest( test );
+
+			if ( test.ignoreResult )
+			{
+				updateTestStatus( test, TestStatus::eNegligible, true );
+			}
+			else
+			{
+				m_model->ItemChanged( wxDataViewItem{ testNode.node } );
+
+				if ( m_detailViews->isLayerShown( 1 )
+					&& m_testView->getTest() == &test )
+				{
+					m_testView->setTest( test );
+				}
+			}
+
+			doProcessTest();
+		}
+		else
+		{
+			doCancelTest( *testNode.test, testNode.status );
+		}
+	}
+
+	void MainFrame::onTestProcessEnd( int pid, int status )
+	{
+		m_processChecker.checkProcess( 0 );
+		auto currentProcess = m_runningTest.currentProcess;
+		m_runningTest.currentProcess = nullptr;
+
+		if ( currentProcess )
+		{
+			if ( currentProcess == m_runningTest.difProcess.get() )
+			{
+				onTestDiffEnd( status );
+			}
+			else if ( currentProcess == m_runningTest.disProcess.get() )
+			{
+				onTestDisplayEnd( status );
+			}
+			else if ( currentProcess == m_runningTest.genProcess.get() )
+			{
+				onTestRunEnd( status );
+			}
+		}
 	}
 
 	void MainFrame::onSelectionChange( wxDataViewEvent & evt )
@@ -1493,94 +1617,65 @@ namespace test_parser
 		}
 	}
 
-	void MainFrame::onTestRunEnd( wxProcessEvent & evt )
+	void MainFrame::onProcessEnd( wxProcessEvent & evt )
 	{
-		auto & testNode = *m_runningTest.tests.begin();
-		auto & test = *testNode.test;
-
-		if ( !m_cancelled )
-		{
-			wxString command = m_config.differ;
-			command << " " << test.renderer;
-			command << " -f " << ( m_config.test / test.category / ( test.name + ".cscn" ) );
-			m_runningTest.difProcess->Redirect();
-			auto result = wxExecute( command
-				, ExecMode
-				, m_runningTest.difProcess.get() );
-#if CTP_UseAsync
-
-			if ( result == 0 )
-			{
-				castor::Logger::logError( "doProcessTest: " + castor::System::getLastErrorText() );
-			}
-
-#else
-			onTestDiffEnd( wxProcessEvent{} );
-#endif
-		}
-		else
-		{
-			doCancelTest( *testNode.test, testNode.status );
-		}
+		castor::Logger::logInfo( castor::makeStringStream() << "Process ended " << evt.GetPid() );
+		onTestProcessEnd( evt.GetPid(), evt.GetExitCode() );
 	}
 
-	void MainFrame::onTestDisplayEnd( wxProcessEvent & evt )
+	//*********************************************************************************************
+
+	MainFrame::TestProcess::TestProcess( MainFrame * mainframe
+		, int flags )
+		: wxProcess{ flags }
+		, m_mainframe{ mainframe }
 	{
 	}
 
-	void MainFrame::onTestDiffEnd( wxProcessEvent & evt )
+	void MainFrame::TestProcess::OnTerminate( int pid, int status )
 	{
-		auto testNode = *m_runningTest.tests.begin();
-		m_runningTest.tests.erase( m_runningTest.tests.begin() );
-		auto & test = *testNode.test;
+		castor::Logger::logInfo( castor::makeStringStream() << "Terminating process " << pid );
+		m_mainframe->onTestProcessEnd( pid, status );
+	}
 
-		if ( !m_cancelled )
-		{
-			auto matches = castor::File::filterDirectoryFiles( m_config.test / getCompareFolder( test, false )
-				, [&test]( castor::Path const & folder, castor::String name )
+	//*********************************************************************************************
+
+	MainFrame::TestProcessChecker::TestProcessChecker( MainFrame * mainFrame )
+		: thread{ [this, mainFrame]()
+			{
+				while ( !isStopped )
 				{
-					return name.find( test.name ) == 0u
-						&& castor::Path{ name }.getExtension() == "png"
-						&& name.find( "diff.png" ) == castor::String::npos;
+					auto current = get();
+
+					if ( current )
+					{
+						if ( !wxProcess::Exists( current ) )
+						{
+							castor::Logger::logInfo( castor::makeStringStream() << "Finishing process " << current );
+							mainFrame->onTestProcessEnd( current, std::numeric_limits< int >::max() );
+						}
+					}
+
+					std::this_thread::sleep_for( 1000_ms );
 				}
-			, true );
-			assert( matches.size() < 2 );
+			} }
+	{
+	}
 
-			if ( matches.empty() )
-			{
-				return;
-			}
+	void MainFrame::TestProcessChecker::stop()
+	{
+		isStopped = true;
+		thread.join();
+	}
 
-			auto & match = matches[0];
-			auto path = match.getPath();
-			test.runDate = getFileDate( match );
-			assert( db::date_time::isValid( test.runDate ) );
-			test.status = getStatus( path.getFileName() );
-			test.castorDate = getFileDate( m_config.castor );
-			assert( db::date_time::isValid( test.castorDate ) );
-			m_database.insertTest( test );
+	void MainFrame::TestProcessChecker::checkProcess( int pid )
+	{
+		this->pid = pid;
+	}
 
-			if ( test.ignoreResult )
-			{
-				updateTestStatus( test, TestStatus::eNegligible, true );
-			}
-			else
-			{
-				m_model->ItemChanged( wxDataViewItem{ testNode.node } );
-
-				if ( m_detailViews->isLayerShown( 1 )
-					&& m_testView->getTest() == &test )
-				{
-					m_testView->setTest( test );
-				}
-			}
-
-			doProcessTest();
-		}
-		else
-		{
-			doCancelTest( *testNode.test, testNode.status );
-		}
+	int MainFrame::TestProcessChecker::get()
+	{
+		return pid;
 	}
 
 	//*********************************************************************************************

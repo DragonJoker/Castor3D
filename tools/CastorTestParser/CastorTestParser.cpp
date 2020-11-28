@@ -207,6 +207,11 @@ namespace test_parser
 			castor::Logger::logInfo( "Work folder: " + config.work );
 			castor::Logger::logInfo( "Database: " + config.database );
 
+			if ( castor::File::fileExists( config.castor ) )
+			{
+				updateCastorRefDate( config );
+			}
+
 			try
 			{
 				MainFrame * mainFrame{ new MainFrame{ std::move( config ) } };

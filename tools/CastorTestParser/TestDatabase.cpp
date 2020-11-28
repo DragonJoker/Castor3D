@@ -284,7 +284,7 @@ namespace test_parser
 		castor::Logger::logInfo( "Listing tests" );
 		progress.SetTitle( _( "Listing tests" ) );
 		progress.SetRange( progress.GetRange() + int( result->size() ) );
-		progress.Update( index, _( "Listing tests..." ) );
+		progress.Update( index, _( "Listing tests\n..." ) );
 
 		for ( auto & row : *result )
 		{
@@ -311,7 +311,10 @@ namespace test_parser
 
 			categoryIt->second.push_back( test );
 			++testCount;
-			progress.Update( index++, makeWxString( test.renderer ) + wxT( " - " ) + makeWxString( test.category ) + wxT( " - " ) + makeWxString( test.name ) + wxT( "..." ) );
+			progress.Update( index++, makeWxString( test.renderer )
+				+ wxT( " - " ) + makeWxString( test.category )
+				+ wxT( "\n" ) + makeWxString( test.name )
+				+ wxT( "..." ) );
 		}
 
 		return tests;
@@ -425,11 +428,12 @@ namespace test_parser
 		castor::Logger::logInfo( "Listing Test files" );
 		progress.SetTitle( _( "Listing Test files" ) );
 		progress.SetRange( progress.GetRange() + int( categories.size() ) );
-		progress.Update( index, _( "isting Test files..." ) );
+		progress.Update( index, _( "Listing Test files\n..." ) );
 
 		for ( auto & categoryPath : categories )
 		{
-			progress.Update( index++, wxT( "Category " ) + makeWxString( categoryPath.getFileName() ) + wxT( "..." ) );
+			progress.Update( index++, _( "Listing Test files\n" )
+				+ wxT( "Category " ) + makeWxString( categoryPath.getFileName() ) + wxT( "..." ) );
 			testCount += listTests( categoryPath, result );
 		}
 
@@ -444,7 +448,7 @@ namespace test_parser
 		castor::Logger::logInfo( "Sorting tests per renderer" );
 		progress.SetTitle( _( "Sorting tests per renderer" ) );
 		progress.SetRange( progress.GetRange() + int( testCount ) );
-		progress.Update( index, _( "Sorting tests per renderer..." ) );
+		progress.Update( index, _( "Sorting tests per renderer\n..." ) );
 		using TestNameMap = std::unordered_map< castor::String, Test const * >;
 		struct Tests
 		{
@@ -469,7 +473,7 @@ namespace test_parser
 					iresult.first->second.tests[test.renderer] = &test;
 					progress.Update( index++, makeWxString( test.renderer )
 						+ wxT( " - " ) + makeWxString( test.category )
-						+ wxT( " - " ) + makeWxString( test.name )
+						+ wxT( "\n" ) + makeWxString( test.name )
 						+ wxT( "..." ) );
 				}
 			}
@@ -478,8 +482,8 @@ namespace test_parser
 		castor::Logger::logInfo( "Adding missing renderer tests" );
 		progress.SetTitle( _( "Adding missing renderer tests" ) );
 		progress.SetRange( progress.GetRange() + int( testCount * 3 ) );
-		progress.Update( index, _( "Adding missing renderer tests..." ) );
-		auto castorDate = getFileDate( m_config.castor );
+		progress.Update( index, _( "Adding missing renderer tests\n..." ) );
+		updateCastorRefDate( m_config );
 
 		for ( auto & test : rendererTests )
 		{
@@ -502,14 +506,14 @@ namespace test_parser
 						auto test = *refIt->second;
 						test.status = TestStatus::eNotRun;
 						test.renderer = it->first;
-						test.castorDate = castorDate;
+						test.castorDate = m_config.castorRefDate;
 						insertTest( test );
 					}
 				}
 
 				progress.Update( index++, makeWxString( refIt->second->renderer )
 					+ wxT( " - " ) + makeWxString( refIt->second->category )
-					+ wxT( " - " ) + makeWxString( refIt->second->name )
+					+ wxT( "\n" ) + makeWxString( refIt->second->name )
 					+ wxT( " - " ) + makeWxString( it->first )
 					+ wxT( "..." ) );
 			}
@@ -524,9 +528,8 @@ namespace test_parser
 		castor::Logger::logInfo( "Populating database" );
 		progress.SetTitle( _( "Populating database" ) );
 		progress.SetRange( progress.GetRange() + int( testCount ) );
-		progress.Update( index, _( "Populating database..." ) );
-		auto castorDate = getFileDate( m_config.castor );
-		assert( db::date_time::isValid( castorDate ) );
+		progress.Update( index, _( "Populating database\n..." ) );
+		updateCastorRefDate( m_config );
 
 		auto finderDate = m_database.createStatement( "SELECT Id, Status FROM Test WHERE Name=? AND Category=? AND RunDate=?;" );
 		auto findDateName = finderDate->createParameter( "Name", db::FieldType::eVarchar, 1024 );
@@ -545,7 +548,10 @@ namespace test_parser
 			{
 				for ( auto test : category.second )
 				{
-					progress.Update( index++, makeWxString( test.category ) + wxT( " - " ) + makeWxString( test.name ) + wxT( "..." ) );
+					progress.Update( index++, makeWxString( test.renderer )
+						+ wxT( " - " ) + makeWxString( test.category )
+						+ wxT( "\n" ) + makeWxString( test.name )
+						+ wxT( "..." ) );
 					db::ResultPtr result;
 
 					if ( test.status != TestStatus::eNotRun )
@@ -557,7 +563,7 @@ namespace test_parser
 
 						if ( result->empty() )
 						{
-							test.castorDate = castorDate;
+							test.castorDate = m_config.castorRefDate;
 							insertTest( test );
 						}
 						else

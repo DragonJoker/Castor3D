@@ -39,6 +39,7 @@ namespace test_parser
 		castor::Path viewer;
 		castor::Path differ;
 		castor::Path castor;
+		db::DateTime castorRefDate;
 		std::vector< castor::String > renderers{ cuT( "vk" ), cuT( "gl" ), cuT( "d3d11" ) };
 		bool skip{};
 	};
@@ -85,6 +86,13 @@ namespace test_parser
 		bool ignoreResult;
 		db::DateTime castorDate;
 	};
+	static constexpr size_t IgnoredIndex = 0u;
+	static constexpr size_t AdditionalIndices = 1u;
+
+	bool isOutOfDate( Config const & config, Test const & test );
+	void updateCastorRefDate( Config & config );
+	uint32_t getTestStatusIndex( Config const & config
+		, Test const & test );
 	castor::Path getResultFolder( Test const & test, bool useStatus = true );
 	castor::Path getResultName( Test const & test );
 	castor::Path getCompareFolder( Test const & test, bool useStatus = true );

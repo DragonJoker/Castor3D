@@ -28,14 +28,11 @@ namespace test_parser
 			eRenderer,
 			eRunDate,
 			eStatus,
-			eIgnored,
-			eCastorDate,
-			eSceneDate,
 			eCount,
 		};
 
 	public:
-		TreeModel();
+		TreeModel( Config const & config );
 		~TreeModel();
 
 		TreeModelNode * addRenderer( std::string const & renderer );
@@ -51,9 +48,6 @@ namespace test_parser
 		TestStatus getStatus( wxDataViewItem const & item )const;
 		std::string getRenderer( wxDataViewItem const & item )const;
 		std::string getCategory( wxDataViewItem const & item )const;
-		bool isIgnored( wxDataViewItem const & item )const;
-		bool isOutOfCastorDate( wxDataViewItem const & item )const;
-		bool isOutOfSceneDate( wxDataViewItem const & item )const;
 
 		TreeModelNode * GetRootNode()const
 		{
@@ -85,6 +79,7 @@ namespace test_parser
 
 	private:
 		TreeModelNode * m_root;
+		Config const & m_config;
 		std::map< std::string, TreeModelNode * > m_renderers;
 		std::map< std::string, TreeModelNode * > m_categories;
 	};

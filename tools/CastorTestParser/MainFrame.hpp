@@ -18,6 +18,7 @@ See LICENSE file in root folder
 
 #include <list>
 #include <map>
+#include <thread>
 
 class wxGauge;
 class wxStaticText;
@@ -70,13 +71,15 @@ namespace test_parser
 		void doCancelTest( Test & test
 			, TestStatus status );
 		void doCancel();
+		void onTestRunEnd( int status );
+		void onTestDisplayEnd( int status );
+		void onTestDiffEnd( int status );
+		void onTestProcessEnd( int pid, int status );
 
 		void onSelectionChange( wxDataViewEvent & evt );
 		void onItemContextMenu( wxDataViewEvent & evt );
 		void onMenuOption( wxCommandEvent & evt );
-		void onTestRunEnd( wxProcessEvent & evt );
-		void onTestDisplayEnd( wxProcessEvent & evt );
-		void onTestDiffEnd( wxProcessEvent & evt );
+		void onProcessEnd( wxProcessEvent & evt );
 
 	private:
 		wxAuiManager m_auiManager;
@@ -106,15 +109,43 @@ namespace test_parser
 			bool allRenderers{};
 		};
 		Selection m_selected;
+		class TestProcess
+			: public wxProcess
+		{
+		public:
+			TestProcess( MainFrame * mainframe
+				, int flags );
+
+			void OnTerminate( int pid, int status )override;
+
+		private:
+			MainFrame * m_mainframe;
+		};
 		struct RunningTest
 		{
 			std::unique_ptr< wxProcess > genProcess{};
 			std::unique_ptr< wxProcess > difProcess{};
 			std::unique_ptr< wxProcess > disProcess{};
 			std::list< TestNode > tests{};
+			wxProcess * currentProcess{};
 		};
 		RunningTest m_runningTest;
 		std::atomic_bool m_cancelled;
+
+		struct TestProcessChecker
+		{
+			explicit TestProcessChecker( MainFrame * mainFrame );
+			void checkProcess( int pid );
+			void stop();
+
+		private:
+			int get();
+
+			std::atomic_int pid{};
+			std::atomic_bool isStopped{ false };
+			std::thread thread;
+		};
+		TestProcessChecker m_processChecker;
 
 		struct TestUpdater
 		{
