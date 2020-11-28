@@ -22,7 +22,9 @@
 #include <CastorUtils/Graphics/PixelBufferBase.hpp>
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
+#include <ashespp/Buffer/Buffer.hpp>
 #include <ashespp/Buffer/StagingBuffer.hpp>
+#include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Core/Surface.hpp>
 #include <ashespp/Core/SwapChain.hpp>
 #include <ashespp/Core/SwapChainCreateInfo.hpp>
@@ -273,8 +275,65 @@ namespace castor3d
 				doPrepareFrames();
 
 				m_saveBuffer = castor::PxBufferBase::create( target->getSize(), convert( target->getPixelFormat() ) );
-				m_stagingTexture = getDevice()->createStagingTexture( target->getPixelFormat()
-					, { m_saveBuffer->getWidth(), m_saveBuffer->getHeight() } );
+				auto bufferSize = ashes::getAlignedSize( ashes::getLevelsSize( VkExtent2D{ m_saveBuffer->getWidth(), m_saveBuffer->getHeight() }
+						, target->getPixelFormat()
+						, 0u
+						, 1u
+						, 1u )
+					, getDevice()->getProperties().limits.nonCoherentAtomSize );
+				m_stagingBuffer = getDevice()->createBuffer( "Snapshot"
+					, bufferSize
+					, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT );
+				auto requirements = m_stagingBuffer->getMemoryRequirements();
+				auto deduced = getDevice()->deduceMemoryType( requirements.memoryTypeBits
+					, VkMemoryPropertyFlagBits::VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT );
+				m_stagingBuffer->bindMemory( getDevice()->allocateMemory( "Snapshot"
+					, {
+						VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
+						nullptr,
+						requirements.size,
+						deduced
+					} ) );
+				m_stagingData = castor::makeArrayView( m_stagingBuffer->lock( 0u, bufferSize, 0u )
+					, bufferSize );
+				m_transferCommands = { getDevice(), "Snapshot" };
+				auto & view = target->getTexture().getTexture()->getDefaultView().getTargetView();
+				auto & commands = *m_transferCommands.commandBuffer;
+				commands.begin();
+				commands.beginDebugBlock( { "Staging Texture Download"
+					, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
+				commands.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+					, VK_PIPELINE_STAGE_TRANSFER_BIT
+					, view.makeTransferSource( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+				commands.memoryBarrier( VK_PIPELINE_STAGE_HOST_BIT
+					, VK_PIPELINE_STAGE_TRANSFER_BIT
+					, m_stagingBuffer->makeTransferDestination() );
+				auto extent = view.image->getDimensions();
+				auto mipLevel = view->subresourceRange.baseMipLevel;
+				extent.width = std::max( 1u, extent.width >> mipLevel );
+				extent.height = std::max( 1u, extent.height >> mipLevel );
+				commands.copyToBuffer( VkBufferImageCopy{ 0u
+						, 0u
+						, 0u
+						, { view->subresourceRange.aspectMask
+							, mipLevel
+							, view->subresourceRange.baseArrayLayer
+							, view->subresourceRange.layerCount }
+						, VkOffset3D{}
+						, VkExtent3D{ std::max( 1u, extent.width )
+							, std::max( 1u, extent.height )
+							, 1u } }
+					, *view.image
+					, *m_stagingBuffer );
+				commands.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+					, view.makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
+				commands.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+					, VK_PIPELINE_STAGE_HOST_BIT
+					, m_stagingBuffer->makeHostRead() );
+				commands.endDebugBlock();
+				commands.end();
+
 				m_initialised = true;
 				m_dirty = false;
 				engine.registerWindow( *this );
@@ -335,18 +394,6 @@ namespace castor3d
 					{
 						renderSystem.setCurrentRenderDevice( nullptr );
 					} );
-
-				if ( m_toSave )
-				{
-					castor::ByteArray data;
-					m_stagingTexture->downloadTextureData( *getDevice().transferQueue
-						, *getDevice().graphicsCommandPool
-						, target->getPixelFormat()
-						, m_saveBuffer->getPtr()
-						, target->getTexture().getTexture()->getDefaultView().getTargetView() );
-					auto texture = target->getTexture().getTexture();
-					m_toSave = false;
-				}
 
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
 				m_pickingPass->pick( *m_device
@@ -899,12 +946,25 @@ namespace castor3d
 
 	void RenderWindow::submitFrame( RenderingResources * resources )
 	{
-		RenderTargetSPtr target = getRenderTarget();
+		auto toWait = &getRenderTarget()->getSemaphore();
+		VkPipelineStageFlags waitStage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+
+		if ( m_toSave )
+		{
+			getDevice().graphicsQueue->submit( { *m_transferCommands.commandBuffer }
+				, { *toWait }
+				, { waitStage }
+				, { *m_transferCommands.semaphore }
+				, nullptr );
+			toWait = m_transferCommands.semaphore.get();
+			waitStage = VK_PIPELINE_STAGE_TRANSFER_BIT;
+		}
+		
 		getDevice().graphicsQueue->submit( { ( m_enablePickingDebug
 			? *m_commandBuffers[1][resources->imageIndex]
 			: *m_commandBuffers[0][resources->imageIndex] ) }
-			, { *resources->imageAvailableSemaphore, target->getSemaphore() }
-			, { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT }
+			, { *resources->imageAvailableSemaphore, *toWait }
+			, { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, waitStage }
 			, {}
 			, resources->fence.get() );
 	}
@@ -917,6 +977,12 @@ namespace castor3d
 			resources->fence->reset();
 			getDevice().graphicsQueue->present( *m_swapChain
 				, resources->imageIndex );
+
+			if ( m_toSave )
+			{
+				std::memcpy( m_saveBuffer->getPtr(), m_stagingData.data(), m_stagingData.size() );
+				m_toSave = false;
+			}
 		}
 		catch ( ashes::Exception & exc )
 		{
@@ -973,6 +1039,8 @@ namespace castor3d
 		}
 
 		getDevice()->waitIdle();
+		m_stagingBuffer.reset();
+		m_transferCommands = {};
 
 		if ( m_pickingPass )
 		{
@@ -999,7 +1067,7 @@ namespace castor3d
 		m_renderingResources.clear();
 		m_commandPool.reset();
 		m_frameBuffers.clear();
-		m_stagingTexture.reset();
+		m_stagingBuffer.reset();
 		m_renderPass.reset();
 		m_swapChainImages.clear();
 		m_swapChain.reset();

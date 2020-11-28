@@ -8,10 +8,12 @@ See LICENSE file in root folder
 #include "Castor3D/Overlay/OverlayRenderer.hpp"
 
 #include "Castor3D/Event/UserInput/UserInputListener.hpp"
+#include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
+#include <CastorUtils/Design/ArrayView.hpp>
 #include <CastorUtils/Design/Named.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
 
@@ -471,8 +473,9 @@ namespace castor3d
 		RenderingResourcesArray m_renderingResources;
 		size_t m_resourceIndex{ 0u };
 		ashes::RenderPassPtr m_renderPass;
-		ashes::StagingTexturePtr m_stagingTexture;
-		ashes::CommandBufferPtr m_transferCommandBuffer;
+		ashes::BufferBasePtr m_stagingBuffer;
+		castor::ArrayView< uint8_t > m_stagingData;
+		CommandsSemaphore m_transferCommands;
 		ashes::ImageViewArray m_views;
 		std::vector< ashes::FrameBufferPtr > m_frameBuffers;
 		std::array< ashes::CommandBufferPtrArray, 2u > m_commandBuffers;

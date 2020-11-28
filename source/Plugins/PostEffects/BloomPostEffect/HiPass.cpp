@@ -96,7 +96,7 @@ namespace Bloom
 					0u,
 					format,
 					VK_SAMPLE_COUNT_1_BIT,
-					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+					VK_ATTACHMENT_LOAD_OP_CLEAR,
 					VK_ATTACHMENT_STORE_OP_STORE,
 					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 					VK_ATTACHMENT_STORE_OP_DONT_CARE,
@@ -208,17 +208,14 @@ namespace Bloom
 
 		cmd.begin();
 		timer.beginPass( cmd, index );
-
-		// Put target image in shader input layout.
-		cmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_sceneView.makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
-
+		cmd.beginDebugBlock( { "BloomHiPass"
+			, castor3d::makeFloatArray( m_renderSystem.getEngine()->getNextRainbowColour() ) } );
 		cmd.beginRenderPass( *m_renderPass
 			, *m_surface.frameBuffer
 			, { castor3d::transparentBlackClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE );
 		registerPass( cmd );
+		cmd.endDebugBlock();
 		cmd.endRenderPass();
 #if !Bloom_DebugHiPass
 		m_surface.colourTexture->getTexture().generateMipmaps( cmd

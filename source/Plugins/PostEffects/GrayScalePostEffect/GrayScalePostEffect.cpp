@@ -272,19 +272,15 @@ namespace grayscale
 			auto & cmd = *commands.commandBuffer;
 			cmd.begin();
 			timer.beginPass( cmd );
-
-			// Put target image in shader input layout.
-			cmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, m_target->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
-
+			cmd.beginDebugBlock( { "GrayScale"
+				, castor3d::makeFloatArray( getOwner()->getEngine()->getNextRainbowColour() ) } );
 			cmd.beginRenderPass( *m_renderPass
 				, *m_surface.frameBuffer
 				, { castor3d::transparentBlackClearColor }
 				, VK_SUBPASS_CONTENTS_INLINE );
 			m_quad->registerPass( cmd );
 			cmd.endRenderPass();
-
+			cmd.endDebugBlock();
 			timer.endPass( cmd );
 			cmd.end();
 			m_commands.emplace_back( std::move( commands ) );
