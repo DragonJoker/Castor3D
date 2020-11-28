@@ -34,8 +34,7 @@
 
 #include <random>
 
-using namespace castor;
-using namespace castor3d;
+CU_ImplementCUSmartPtr( castor3d, SubsurfaceScatteringPass );
 
 namespace castor3d
 {
@@ -318,7 +317,7 @@ namespace castor3d
 		SamplerSPtr doCreateSampler( Engine & engine )
 		{
 			SamplerSPtr sampler;
-			String const name{ cuT( "SubsurfaceScatteringPass" ) };
+			castor::String const name{ cuT( "SubsurfaceScatteringPass" ) };
 
 			if ( engine.getSamplerCache().has( name ) )
 			{
@@ -338,7 +337,7 @@ namespace castor3d
 
 		TextureUnit doCreateTexture( Engine & engine
 			, RenderDevice const & device
-			, Size const & size
+			, castor::Size const & size
 			, std::string name )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
@@ -500,10 +499,10 @@ namespace castor3d
 	{
 		auto & configuration = m_blurUbo.getData();
 		configuration.blurCorrection = 1.0f;
-		configuration.blurPixelSize = Point2f{ 1.0f / size.getWidth(), 1.0f / size.getHeight() };
+		configuration.blurPixelSize = castor::Point2f{ 1.0f / size.getWidth(), 1.0f / size.getHeight() };
 		VkExtent2D extent{ size.getWidth(), size.getHeight() };
 		createPipelineAndPass( extent
-			, Position{}
+			, castor::Position{}
 			, shaderStages
 			, *m_renderPass
 			, {
@@ -558,7 +557,7 @@ namespace castor3d
 
 	SubsurfaceScatteringPass::Combine::Combine( RenderSystem & renderSystem
 		, RenderDevice const & device
-		, Size const & size
+		, castor::Size const & size
 		, OpaquePassResult const & gpResult
 		, TextureUnit const & source
 		, SubsurfaceScatteringPass::BlurResult const & blurResults
@@ -578,14 +577,14 @@ namespace castor3d
 		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, size, destination.getTexture()->getDefaultView().getTargetView(), getName() ) }
 	{
 		auto & weights = m_blurUbo.getData();
-		weights.originalWeight = Point4f{ 0.2406f, 0.4475f, 0.6159f, 0.25f };
-		weights.blurWeights[0] = Point4f{ 0.1158, 0.3661, 0.3439, 0.25 };
-		weights.blurWeights[1] = Point4f{ 0.1836, 0.1864, 0.0, 0.25 };
-		weights.blurWeights[2] = Point4f{ 0.46, 0.0, 0.0402, 0.25 };
-		weights.blurVariance = Point4f{ 0.0516, 0.2719, 2.0062 };
+		weights.originalWeight = castor::Point4f{ 0.2406f, 0.4475f, 0.6159f, 0.25f };
+		weights.blurWeights[0] = castor::Point4f{ 0.1158, 0.3661, 0.3439, 0.25 };
+		weights.blurWeights[1] = castor::Point4f{ 0.1836, 0.1864, 0.0, 0.25 };
+		weights.blurWeights[2] = castor::Point4f{ 0.46, 0.0, 0.0402, 0.25 };
+		weights.blurVariance = castor::Point4f{ 0.0516, 0.2719, 2.0062 };
 		VkExtent2D extent{ size.getWidth(), size.getHeight() };
 		createPipelineAndPass( extent
-			, Position{}
+			, castor::Position{}
 			, shaderStages
 			, *m_renderPass
 			, {
@@ -641,18 +640,18 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	String const SubsurfaceScatteringPass::Config = "Config";
-	String const SubsurfaceScatteringPass::Step = "c3d_step";
-	String const SubsurfaceScatteringPass::Correction = "c3d_correction";
-	String const SubsurfaceScatteringPass::PixelSize = "c3d_pixelSize";
-	String const SubsurfaceScatteringPass::Weights = "c3d_weights";
-	String const SubsurfaceScatteringPass::Offsets = "c3d_offsets";
+	castor::String const SubsurfaceScatteringPass::Config = "Config";
+	castor::String const SubsurfaceScatteringPass::Step = "c3d_step";
+	castor::String const SubsurfaceScatteringPass::Correction = "c3d_correction";
+	castor::String const SubsurfaceScatteringPass::PixelSize = "c3d_pixelSize";
+	castor::String const SubsurfaceScatteringPass::Weights = "c3d_weights";
+	castor::String const SubsurfaceScatteringPass::Offsets = "c3d_offsets";
 
 	SubsurfaceScatteringPass::SubsurfaceScatteringPass( Engine & engine
 		, RenderDevice const & device
 		, GpInfoUbo const & gpInfoUbo
 		, SceneUbo & sceneUbo
-		, Size const & textureSize
+		, castor::Size const & textureSize
 		, OpaquePassResult const & gpResult
 		, LightPassResult const & lpResult )
 		: OwnedBy< Engine >{ engine }
@@ -836,7 +835,7 @@ namespace castor3d
 	{
 		for ( size_t i{ 0u }; i < m_blurResults.size(); ++i )
 		{
-			visitor.visit( "SSSSS Blur " + string::toString( i )
+			visitor.visit( "SSSSS Blur " + castor::string::toString( i )
 				, m_blurResults[i].getTexture()->getDefaultView().getSampledView()
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		}

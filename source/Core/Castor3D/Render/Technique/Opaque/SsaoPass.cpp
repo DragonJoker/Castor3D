@@ -12,8 +12,7 @@
 #include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
 #include "Castor3D/Shader/Ubos/SsaoConfigUbo.hpp"
 
-using namespace castor;
-using namespace castor3d;
+CU_ImplementCUSmartPtr( castor3d, SsaoPass )
 
 #define C3D_DebugRawPass 0
 
@@ -55,7 +54,7 @@ namespace castor3d
 			, m_ssaoConfig
 			, *m_ssaoConfigUbo
 			, m_gpInfoUbo
-			, Point2i{ 1, 0 }
+			, castor::Point2i{ 1, 0 }
 			, m_rawAoPass->getResult()
 			, m_rawAoPass->getBentResult()
 			, m_gpResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView() );
@@ -66,7 +65,7 @@ namespace castor3d
 			, m_ssaoConfig
 			, *m_ssaoConfigUbo
 			, m_gpInfoUbo
-			, Point2i{ 0, 1 }
+			, castor::Point2i{ 0, 1 }
 			, m_horizontalBlur->getResult()
 			, m_horizontalBlur->getBentResult()
 			, m_gpResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView() );

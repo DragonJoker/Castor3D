@@ -230,24 +230,23 @@ namespace castor3d
 
 		void TextureConfigurations::declare( bool hasSsbo )
 		{
-			m_type = TextureConfigData::declare( m_writer );
 
 			if ( hasSsbo )
 			{
 				m_ssbo = std::make_unique< sdw::ArraySsboT< TextureConfigData > >( m_writer
 					, TextureConfigurationBufferName
-					, m_type->getType()
 					, getTexturesBufferIndex()
 					, 0u );
 			}
 			else
 			{
-				auto c3d_textureConfigurations = m_writer.declSampledImage< FImgBufferRgba32 >( "c3d_textureConfigurations", getTexturesBufferIndex(), 0u );
+				auto c3d_textureConfigurations = m_writer.declSampledImage< FImgBufferRgba32 >( "c3d_textureConfigurations"
+					, getTexturesBufferIndex()
+					, 0u );
 				m_getTextureConfiguration = m_writer.implementFunction< TextureConfigData >( "getTextureConfiguration"
 					, [this, &c3d_textureConfigurations]( sdw::UInt const & index )
 					{
-						auto result = m_writer.declLocale< TextureConfigData >( "result"
-							, *m_type );
+						auto result = m_writer.declLocale< TextureConfigData >( "result" );
 						auto offset = m_writer.declLocale( cuT( "offset" )
 							, m_writer.cast< sdw::Int >( index ) * sdw::Int( shader::MaxTextureConfigurationComponentsCount ) );
 						result.colrSpec = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );

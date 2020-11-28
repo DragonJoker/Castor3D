@@ -34,15 +34,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Depth linearisation pass, with mipmaps generation.
-	*\~french
-	*\brief
-	*	Passe linéarisation de profondeur, avec génération des mipmaps.
-	*/
-	class LineariseDepthPass;
-	/**
-	*\~english
-	*\brief
 	*	Render technique class
 	*\remarks
 	*	A render technique is the description of a way to render a render target
