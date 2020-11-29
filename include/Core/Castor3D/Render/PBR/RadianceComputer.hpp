@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "PbrModule.hpp"
 
+#include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Render/ToTexture/RenderCube.hpp"
 
 #include <ashespp/Image/ImageView.hpp>
@@ -44,6 +45,13 @@ namespace castor3d
 		 */
 		C3D_API void render();
 		/**
+		 *\~english
+		 *\brief		Computes the radiance map.
+		 *\~french
+		 *\brief		Calcule la texture de radiance.
+		 */
+		C3D_API ashes::Semaphore const & render( ashes::Semaphore const & toWait );
+		/**
 		*\~english
 		*name
 		*	Getters.
@@ -74,7 +82,7 @@ namespace castor3d
 		ashes::ImageView m_srcView;
 		ashes::RenderPassPtr m_renderPass;
 		RenderPasses m_renderPasses;
-		ashes::CommandBufferPtr m_commandBuffer;
+		CommandsSemaphore m_commands;
 	};
 }
 

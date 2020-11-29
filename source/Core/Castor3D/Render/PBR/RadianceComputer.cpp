@@ -242,6 +242,7 @@ namespace castor3d
 		, m_sampler{ doCreateSampler( engine, m_device ) }
 		, m_srcView{ doCreateSrcView( srcTexture ) }
 		, m_renderPass{ doCreateRenderPass( m_device, m_result->getFormat() ) }
+		, m_commands{ m_device, "RadianceComputer" }
 	{
 		auto & dstTexture = *m_result;
 		
@@ -274,33 +275,34 @@ namespace castor3d
 			, *m_renderPass
 			, {} );
 
-		m_commandBuffer = m_device.graphicsCommandPool->createCommandBuffer( "RadianceComputer" );
-		m_commandBuffer->begin();
-		m_commandBuffer->beginDebugBlock(
-			{
-				"Generating irradiance map",
-				makeFloatArray( m_device.renderSystem.getEngine()->getNextRainbowColour() ),
-			} );
+		auto & cmd = *m_commands.commandBuffer;
+		cmd.begin();
+		cmd.beginDebugBlock( { "Generating irradiance map"
+			, makeFloatArray( m_device.renderSystem.getEngine()->getNextRainbowColour() ) } );
 
 		for ( auto face = 0u; face < 6u; ++face )
 		{
 			auto & facePass = m_renderPasses[face];
-			m_commandBuffer->beginRenderPass( *m_renderPass
+			cmd.beginRenderPass( *m_renderPass
 				, *facePass.frameBuffer
 				, { transparentBlackClearColor }
 				, VK_SUBPASS_CONTENTS_INLINE );
-			registerFrame( *m_commandBuffer, face );
-			m_commandBuffer->endRenderPass();
+			registerFrame( *m_commands.commandBuffer, face );
+			cmd.endRenderPass();
 		}
 
-		m_commandBuffer->endDebugBlock();
-		m_commandBuffer->end();
+		cmd.endDebugBlock();
+		cmd.end();
 	}
 
 	void RadianceComputer::render()
 	{
-		m_device.graphicsQueue->submit( *m_commandBuffer, nullptr );
-		m_device.graphicsQueue->waitIdle();
+		m_commands.submit( *m_device.graphicsQueue );
+	}
+
+	ashes::Semaphore const & RadianceComputer::render( ashes::Semaphore const & toWait )
+	{
+		return m_commands.submit( *m_device.graphicsQueue, toWait );
 	}
 
 	ashes::Sampler const & RadianceComputer::getSampler()const

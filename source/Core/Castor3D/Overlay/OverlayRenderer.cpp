@@ -320,7 +320,9 @@ namespace castor3d
 				, device
 				, ( fontTexture
 					? m_renderer.m_textDeclaration
-					: m_renderer.m_declaration )
+					: ( pass.getTextures( TextureFlag::eAlbedo | TextureFlag::eOpacity ).empty()
+						? m_renderer.m_noTexDeclaration
+						: m_renderer.m_texDeclaration ) )
 				, MaxPanelsPerBuffer );
 			doUpdateUbo( bufferIndex.overlayUbo
 				, bufferIndex.texturesUbo
@@ -466,33 +468,24 @@ namespace castor3d
 		, m_uboPools{ uboPools }
 		, m_target{ target }
 		, m_matrixUbo{ *renderSystem.getEngine() }
-		, m_declaration
-		{
-			0u,
-			ashes::VkVertexInputBindingDescriptionArray
-			{
-				{ 0u, sizeof( OverlayCategory::Vertex ), VK_VERTEX_INPUT_RATE_VERTEX },
-			},
-			ashes::VkVertexInputAttributeDescriptionArray
-			{
-				{ 0u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( OverlayCategory::Vertex, coords ) },
-				{ 1u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( OverlayCategory::Vertex, texture ) },
-			},
-		}
-		, m_textDeclaration
-		{
-			0u,
-			ashes::VkVertexInputBindingDescriptionArray
-			{
-				{ 0u, sizeof( TextOverlay::Vertex ), VK_VERTEX_INPUT_RATE_VERTEX },
-			},
-			ashes::VkVertexInputAttributeDescriptionArray
-			{
-				{ 0u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TextOverlay::Vertex, coords ) },
-				{ 1u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TextOverlay::Vertex, texture ) },
-				{ 2u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TextOverlay::Vertex, text ) },
-			},
-		}
+		, m_noTexDeclaration{ 0u
+			, ashes::VkVertexInputBindingDescriptionArray{ { 0u
+				, sizeof( OverlayCategory::Vertex )
+				, VK_VERTEX_INPUT_RATE_VERTEX } }
+			, ashes::VkVertexInputAttributeDescriptionArray{ { 0u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( OverlayCategory::Vertex, coords ) } } }
+		, m_texDeclaration{ 0u
+			, ashes::VkVertexInputBindingDescriptionArray{ { 0u
+				, sizeof( OverlayCategory::Vertex )
+				, VK_VERTEX_INPUT_RATE_VERTEX } }
+			, ashes::VkVertexInputAttributeDescriptionArray{ { 0u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( OverlayCategory::Vertex, coords ) }
+				, { 1u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( OverlayCategory::Vertex, texture ) } } }
+		, m_textDeclaration{ 0u
+			, ashes::VkVertexInputBindingDescriptionArray{ { 0u
+				, sizeof( OverlayCategory::Vertex )
+				, VK_VERTEX_INPUT_RATE_VERTEX } }
+			, ashes::VkVertexInputAttributeDescriptionArray{ { 0u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TextOverlay::Vertex, coords ) }
+				, { 1u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TextOverlay::Vertex, texture ) }
+				, { 2u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TextOverlay::Vertex, text ) } } }
 	{
 	}
 
@@ -518,14 +511,14 @@ namespace castor3d
 		m_panelVertexBuffers.emplace_back( std::make_unique< PanelVertexBufferPool >( *getRenderSystem()->getEngine()
 			, m_uboPools
 			, device
-			, m_declaration
+			, m_texDeclaration
 			, MaxPanelsPerBuffer ) );
 
 		// Create one border overlays buffer pool
 		m_borderVertexBuffers.emplace_back( std::make_unique< BorderPanelVertexBufferPool >( *getRenderSystem()->getEngine()
 			, m_uboPools
 			, device
-			, m_declaration
+			, m_texDeclaration
 			, MaxPanelsPerBuffer ) );
 
 		// create one text overlays buffer
@@ -837,7 +830,10 @@ namespace castor3d
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 
-		auto vertexLayout = &m_declaration;
+		auto textures = pass.getTextures( TextureFlag::eAlbedo | TextureFlag::eOpacity );
+		auto vertexLayout = ( textures.empty() 
+			? &m_noTexDeclaration
+			: &m_texDeclaration );
 
 		if ( text )
 		{
@@ -847,22 +843,12 @@ namespace castor3d
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		}
 
-		auto texturedCount = uint32_t( std::count_if( pass.begin()
-			, pass.end()
-			, []( TextureUnitSPtr unit )
-			{
-				auto config = unit->getConfiguration();
-				return ( config.colourMask[0] || config.opacityMask[0] )
-					? 1u
-					: 0u;
-			} ) );
-
-		if ( texturedCount )
+		if ( !textures.empty() )
 		{
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( MapsBinding
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT
-				, texturedCount ) );
+				, uint32_t( textures.size() ) ) );
 		}
 
 		auto descriptorLayout = device->createDescriptorSetLayout( std::move( bindings ) );
@@ -945,7 +931,7 @@ namespace castor3d
 			// Shader inputs
 			uint32_t index = 0u;
 			auto position = writer.declInput< Vec2 >( "position", 0u );
-			auto uv = writer.declInput< Vec2 >( "uv", 1u, hasTexture != 0u );
+			auto uv = writer.declInput< Vec2 >( "uv", 1u, hasTexture );
 			auto text = writer.declInput< Vec2 >( "text", 2u, textOverlay );
 
 			// Shader outputs

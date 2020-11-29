@@ -163,6 +163,14 @@ namespace castor3d
 		m_environmentPrefilter.render();
 	}
 
+	ashes::Semaphore const & IblTextures::update( ashes::Semaphore const & toWait )
+	{
+		auto result = &toWait;
+		result = &m_radianceComputer.render( *result );
+		result = &m_environmentPrefilter.render( *result );
+		return *result;
+	}
+
 	void IblTextures::debugDisplay( Size const & /*renderSize*/ )const
 	{
 		//int width = int( m_prefilteredBrdf->getDimensions().width );

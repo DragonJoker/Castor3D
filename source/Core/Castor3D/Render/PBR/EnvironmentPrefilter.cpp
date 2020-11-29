@@ -351,8 +351,7 @@ namespace castor3d
 		, SamplerSPtr sampler )
 		: RenderCube{ device, false, std::move( sampler ) }
 		, m_renderPass{ renderPass }
-		, m_commandBuffer{ m_device.graphicsCommandPool->createCommandBuffer( "EnvironmentPrefilter" ) }
-		, m_fence{ m_device->createFence( "EnvironmentPrefilter", VK_FENCE_CREATE_SIGNALED_BIT ) }
+		, m_commands{ m_device, "EnvironmentPrefilter" }
 	{
 		for ( auto face = 0u; face < 6u; ++face )
 		{
@@ -384,34 +383,34 @@ namespace castor3d
 
 	void EnvironmentPrefilter::MipRenderCube::registerFrames()
 	{
-		m_commandBuffer->begin();
-		m_commandBuffer->beginDebugBlock(
-			{
-				"Prefiltering Environment map",
-				makeFloatArray( m_device.renderSystem.getEngine()->getNextRainbowColour() ),
-			} );
+		auto & cmd = *m_commands.commandBuffer;
+		cmd.begin();
+		cmd.beginDebugBlock( { "Prefiltering Environment map"
+			, makeFloatArray( m_device.renderSystem.getEngine()->getNextRainbowColour() ) } );
 
 		for ( uint32_t face = 0u; face < 6u; ++face )
 		{
 			auto & frameBuffer = m_frameBuffers[face];
-			m_commandBuffer->beginRenderPass( m_renderPass
+			cmd.beginRenderPass( m_renderPass
 				, *frameBuffer.frameBuffer
 				, { transparentBlackClearColor }
 				, VK_SUBPASS_CONTENTS_INLINE );
-			registerFrame( *m_commandBuffer, face );
-			m_commandBuffer->endRenderPass();
+			registerFrame( *m_commands.commandBuffer, face );
+			cmd.endRenderPass();
 		}
 
-		m_commandBuffer->endDebugBlock();
-		m_commandBuffer->end();
+		cmd.endDebugBlock();
+		cmd.end();
 	}
 
 	void EnvironmentPrefilter::MipRenderCube::render()
 	{
-		m_fence->reset();
-		m_device.graphicsQueue->submit( *m_commandBuffer, m_fence.get() );
-		m_fence->wait( ashes::MaxTimeout );
-		m_device->waitIdle();
+		m_commands.submit( *m_device.graphicsQueue );
+	}
+
+	ashes::Semaphore const & EnvironmentPrefilter::MipRenderCube::render( ashes::Semaphore const & toWait )
+	{
+		return m_commands.submit( *m_device.graphicsQueue, toWait );
 	}
 
 	//*********************************************************************************************
@@ -456,6 +455,18 @@ namespace castor3d
 		{
 			cubePass->render();
 		}
+	}
+
+	ashes::Semaphore const & EnvironmentPrefilter::render( ashes::Semaphore const & toWait )
+	{
+		ashes::Semaphore const * result = &toWait;
+
+		for ( auto & cubePass : m_renderPasses )
+		{
+			result = &cubePass->render( *result );
+		}
+
+		return *result;
 	}
 
 	//*********************************************************************************************

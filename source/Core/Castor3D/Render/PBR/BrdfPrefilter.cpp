@@ -32,6 +32,7 @@ namespace castor3d
 		, ashes::ImageView const & dstTexture )
 		: m_renderSystem{ *engine.getRenderSystem() }
 		, m_device{ device }
+		, m_commands{ m_device, "BrdfPrefilter" }
 	{
 		// Initialise the vertex buffer.
 		m_vertexBuffer = makeVertexBuffer< TexturedQuad >( m_device
@@ -152,32 +153,26 @@ namespace castor3d
 				*m_pipelineLayout,
 				*m_renderPass
 			} );
-		m_commandBuffer = m_device.graphicsCommandPool->createCommandBuffer( "BrdfPrefilter" );
-		m_fence = m_device->createFence( "BrdfPrefilter" );
+
+		auto & cmd = *m_commands.commandBuffer;
+		cmd.begin();
+		cmd.beginDebugBlock( { "Prefiltering BRDF"
+			, makeFloatArray( m_renderSystem.getEngine()->getNextRainbowColour() ) } );
+		cmd.beginRenderPass( *m_renderPass
+			, *m_frameBuffer
+			, { transparentBlackClearColor }
+			, VK_SUBPASS_CONTENTS_INLINE );
+		cmd.bindPipeline( *m_pipeline );
+		cmd.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
+		cmd.draw( 6u );
+		cmd.endRenderPass();
+		cmd.endDebugBlock();
+		cmd.end();
 	}
 
 	void BrdfPrefilter::render()
 	{
-		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-		m_commandBuffer->beginDebugBlock(
-			{
-				"Prefiltering BRDF",
-				makeFloatArray( m_renderSystem.getEngine()->getNextRainbowColour() ),
-			} );
-		m_commandBuffer->beginRenderPass( *m_renderPass
-			, *m_frameBuffer
-			, { transparentBlackClearColor }
-			, VK_SUBPASS_CONTENTS_INLINE );
-		m_commandBuffer->bindPipeline( *m_pipeline );
-		m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
-		m_commandBuffer->draw( 6u );
-		m_commandBuffer->endRenderPass();
-		m_commandBuffer->endDebugBlock();
-		m_commandBuffer->end();
-
-		m_device.graphicsQueue->submit( *m_commandBuffer, m_fence.get() );
-		m_fence->wait( ashes::MaxTimeout );
-		m_fence->reset();
+		m_commands.submit( *m_device.graphicsQueue );
 	}
 
 	ashes::PipelineShaderStageCreateInfoArray BrdfPrefilter::doCreateProgram()
