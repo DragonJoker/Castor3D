@@ -207,19 +207,6 @@ namespace castor3d
 			} );
 		timerBlock->beginPass( *m_nodesCommands );
 		timerBlock->notifyPassRender();
-		auto & view = m_frameBuffer->begin()->get();
-		auto subresource = view->subresourceRange;
-		subresource.aspectMask = ashes::getAspectMask( view->format );
-		m_nodesCommands->memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
-			, makeVkType< VkImageMemoryBarrier >( VkAccessFlags( 0u )
-				, VkAccessFlags( VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT )
-				, VK_IMAGE_LAYOUT_UNDEFINED
-				, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
-				, VK_QUEUE_FAMILY_IGNORED
-				, VK_QUEUE_FAMILY_IGNORED
-				, view->image
-				, subresource ) );
 		m_nodesCommands->beginRenderPass( *m_renderPass
 			, *m_frameBuffer
 			, clearValues

@@ -958,7 +958,7 @@ namespace smaa
 				0u,
 				depthView->getDefaultView().getTargetView()->format,
 				VK_SAMPLE_COUNT_1_BIT,
-				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+				VK_ATTACHMENT_LOAD_OP_CLEAR,
 				VK_ATTACHMENT_STORE_OP_DONT_CARE,
 				VK_ATTACHMENT_LOAD_OP_LOAD,
 				VK_ATTACHMENT_STORE_OP_DONT_CARE,
@@ -1084,7 +1084,7 @@ namespace smaa
 		// Put edge detection image in shader input layout.
 		blendingWeightCmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_edgeDetectionView.makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+			, m_edgeDetectionView.makeShaderInputResource( VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL ) );
 
 		blendingWeightCmd.beginRenderPass( *m_renderPass
 			, *m_surface.frameBuffer

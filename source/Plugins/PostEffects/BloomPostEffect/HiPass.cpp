@@ -219,7 +219,9 @@ namespace Bloom
 		cmd.endRenderPass();
 #if !Bloom_DebugHiPass
 		m_surface.colourTexture->getTexture().generateMipmaps( cmd
-			, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL );
+			, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 #endif
 
 		timer.endPass( cmd, index );

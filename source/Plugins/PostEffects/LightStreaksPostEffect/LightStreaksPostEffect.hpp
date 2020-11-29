@@ -98,7 +98,8 @@ namespace light_streaks
 
 		castor3d::SamplerSPtr m_linearSampler;
 		castor3d::SamplerSPtr m_nearestSampler;
-		ashes::RenderPassPtr m_renderPass;
+		ashes::RenderPassPtr m_shaderInputRenderPass;
+		ashes::RenderPassPtr m_colorAttachRenderPass;
 		KawaseUbo m_kawaseUbo;
 		std::vector< ashes::ImageView > m_hiPassViews;
 		ashes::VertexBufferPtr< castor3d::NonTexturedQuad > m_vertexBuffer;

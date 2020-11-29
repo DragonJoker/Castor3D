@@ -743,16 +743,11 @@ namespace castor3d
 		commandBuffer = device.graphicsCommandPool->createCommandBuffer( getName() + name + "Copy" );
 
 		commandBuffer->begin();
-		commandBuffer->beginDebugBlock(
-			{
-				getName() + " - " + name + " Copy",
-				makeFloatArray( getEngine()->getNextRainbowColour() ),
-			} );
-		auto layout = VK_IMAGE_LAYOUT_UNDEFINED;
-		auto stage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
 
 		if ( source->image != target->image )
 		{
+			commandBuffer->beginDebugBlock( { getName() + " - " + name + " Copy"
+				, makeFloatArray( getEngine()->getNextRainbowColour() ), } );
 			// Put source image in transfer source layout.
 			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 				, VK_PIPELINE_STAGE_TRANSFER_BIT
@@ -763,15 +758,13 @@ namespace castor3d
 				, target.makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
 			// Copy source to target.
 			commandBuffer->copyImage( source, target );
-			stage = VK_PIPELINE_STAGE_TRANSFER_BIT;
-			layout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+			// Put target image in fragment shader input layout.
+			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+				, target.makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+			commandBuffer->endDebugBlock();
 		}
 
-		// Put target image in fragment shader input layout.
-		commandBuffer->memoryBarrier( stage
-			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, target.makeShaderInputResource( layout ) );
-		commandBuffer->endDebugBlock();
 		commandBuffer->end();
 	}
 

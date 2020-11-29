@@ -347,61 +347,48 @@ namespace light_streaks
 		m_pipelines.kawase.layout.descriptorPool = m_pipelines.kawase.layout.descriptorLayout->createPool( Count * 3u );
 
 		// Create the render pass.
-		ashes::VkAttachmentDescriptionArray attachments
+		auto createRenderPass = [this, &device]( VkImageLayout dstLayout )
 		{
-			{
-				0u,
-				m_target->getPixelFormat(),
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-				VK_ATTACHMENT_STORE_OP_STORE,
-				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-				VK_ATTACHMENT_STORE_OP_DONT_CARE,
-				VK_IMAGE_LAYOUT_UNDEFINED,
-				VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
-			}
+			ashes::VkAttachmentDescriptionArray attachments{ { 0u
+				, m_target->getPixelFormat()
+				, VK_SAMPLE_COUNT_1_BIT
+				, VK_ATTACHMENT_LOAD_OP_CLEAR
+				, VK_ATTACHMENT_STORE_OP_STORE
+				, VK_ATTACHMENT_LOAD_OP_DONT_CARE
+				, VK_ATTACHMENT_STORE_OP_DONT_CARE
+				, VK_IMAGE_LAYOUT_UNDEFINED
+				, dstLayout } };
+			ashes::SubpassDescriptionArray subpasses;
+			subpasses.emplace_back( ashes::SubpassDescription{ 0u
+				, VK_PIPELINE_BIND_POINT_GRAPHICS
+				, {}
+				, { { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } }
+				, {}
+				, ashes::nullopt
+				, {} } );
+			ashes::VkSubpassDependencyArray dependencies{ { VK_SUBPASS_EXTERNAL
+					, 0u
+					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
+					, VK_ACCESS_SHADER_READ_BIT
+					, VK_DEPENDENCY_BY_REGION_BIT }
+				, { 0u
+					, VK_SUBPASS_EXTERNAL
+					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+					, VK_ACCESS_SHADER_READ_BIT
+					, VK_DEPENDENCY_BY_REGION_BIT } };
+			ashes::RenderPassCreateInfo createInfo{ 0u
+				, std::move( attachments )
+				, std::move( subpasses )
+				, std::move( dependencies ) };
+			return device->createRenderPass( "LightStreaks"
+				, std::move( createInfo ) );
 		};
-		ashes::SubpassDescriptionArray subpasses;
-		subpasses.emplace_back( ashes::SubpassDescription
-			{
-				0u,
-				VK_PIPELINE_BIND_POINT_GRAPHICS,
-				{},
-				{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
-				{},
-				ashes::nullopt,
-				{},
-			} );
-		ashes::VkSubpassDependencyArray dependencies
-		{
-			{
-				VK_SUBPASS_EXTERNAL,
-				0u,
-				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-				VK_ACCESS_SHADER_READ_BIT,
-				VK_DEPENDENCY_BY_REGION_BIT,
-			},
-			{
-				0u,
-				VK_SUBPASS_EXTERNAL,
-				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-				VK_ACCESS_SHADER_READ_BIT,
-				VK_DEPENDENCY_BY_REGION_BIT,
-			},
-		};
-		ashes::RenderPassCreateInfo createInfo
-		{
-			0u,
-			std::move( attachments ),
-			std::move( subpasses ),
-			std::move( dependencies ),
-		};
-		m_renderPass = device->createRenderPass( "LightStreaks"
-			, std::move( createInfo ) );
+		m_shaderInputRenderPass = createRenderPass( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+		m_colorAttachRenderPass = createRenderPass( VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL );
 		size.width >>= 2;
 		size.height >>= 2;
 		uint32_t index = 0u;
@@ -422,13 +409,13 @@ namespace light_streaks
 				, device
 				, m_target->getPixelFormat()
 				, size
-				, *m_renderPass
+				, *m_shaderInputRenderPass
 				, cuT( "LightStreaksHiPassSurface" ) );
 			m_pipelines.kawase.surfaces.emplace_back( *getRenderSystem()
 				, device
 				, m_target->getPixelFormat()
 				, size
-				, *m_renderPass
+				, *m_shaderInputRenderPass
 				, cuT( "LightStreaksKawaseSurface" ) );
 
 			for ( uint32_t j = 0u; j < 3u; ++j )
@@ -489,7 +476,8 @@ namespace light_streaks
 		m_linearSampler->cleanup();
 		m_nearestSampler->cleanup();
 
-		m_renderPass.reset();
+		m_shaderInputRenderPass.reset();
+		m_colorAttachRenderPass.reset();
 	}
 
 	bool PostEffect::doWriteInto( castor::TextFile & file, castor::String const & tabs )
@@ -539,39 +527,32 @@ namespace light_streaks
 		m_pipelines.hiPass.pixelShader.shader = getHiPassProgram( getRenderSystem() );
 
 		// Create pipeline
-		ashes::PipelineVertexInputStateCreateInfo inputState
-		{
-			0u,
-			ashes::VkVertexInputBindingDescriptionArray
-			{
-				{ 0u, sizeof( castor3d::NonTexturedQuad::Vertex ), VK_VERTEX_INPUT_RATE_VERTEX },
-			},
-			ashes::VkVertexInputAttributeDescriptionArray
-			{
-				{ 0u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( castor3d::NonTexturedQuad::Vertex, position ) },
-			}
-		};
+		ashes::PipelineVertexInputStateCreateInfo inputState{ 0u
+			, ashes::VkVertexInputBindingDescriptionArray{ { 0u
+				, sizeof( castor3d::NonTexturedQuad::Vertex )
+				, VK_VERTEX_INPUT_RATE_VERTEX } }
+			, ashes::VkVertexInputAttributeDescriptionArray{ { 0u
+				, 0u
+				, VK_FORMAT_R32G32_SFLOAT
+				, offsetof( castor3d::NonTexturedQuad::Vertex, position ) } } };
 
 		ashes::PipelineShaderStageCreateInfoArray stages;
 		stages.push_back( makeShaderState( device, m_pipelines.hiPass.vertexShader ) );
 		stages.push_back( makeShaderState( device, m_pipelines.hiPass.pixelShader ) );
 
-		m_pipelines.hiPass.pipeline = device->createPipeline( ashes::GraphicsPipelineCreateInfo
-			{
-				0u,
-				stages,
-				inputState,
-				ashes::PipelineInputAssemblyStateCreateInfo{},
-				ashes::nullopt,
-				ashes::PipelineViewportStateCreateInfo{},
-				ashes::PipelineRasterizationStateCreateInfo{},
-				ashes::PipelineMultisampleStateCreateInfo{},
-				ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_FALSE, VK_FALSE },
-				ashes::PipelineColorBlendStateCreateInfo{},
-				ashes::PipelineDynamicStateCreateInfo{ 0u, { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR } },
-				*m_pipelines.hiPass.layout.pipelineLayout,
-				*m_renderPass,
-			} );
+		m_pipelines.hiPass.pipeline = device->createPipeline( ashes::GraphicsPipelineCreateInfo{ 0u
+			, stages
+			, inputState
+			, ashes::PipelineInputAssemblyStateCreateInfo{}
+			, ashes::nullopt
+			, ashes::PipelineViewportStateCreateInfo{}
+			, ashes::PipelineRasterizationStateCreateInfo{}
+			, ashes::PipelineMultisampleStateCreateInfo{}
+			, ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_FALSE, VK_FALSE }
+			, ashes::PipelineColorBlendStateCreateInfo{}
+			, ashes::PipelineDynamicStateCreateInfo{ 0u, { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR } }
+			, *m_pipelines.hiPass.layout.pipelineLayout
+			, *m_shaderInputRenderPass } );
 
 		// Create descriptor sets
 		for ( auto & surface : m_pipelines.hiPass.surfaces )
@@ -595,39 +576,32 @@ namespace light_streaks
 		m_pipelines.kawase.pixelShader.shader = getKawaseProgram( getRenderSystem() );
 
 		// Create pipeline
-		ashes::PipelineVertexInputStateCreateInfo inputState
-		{
-			0u,
-			ashes::VkVertexInputBindingDescriptionArray
-			{
-				{ 0u, sizeof( castor3d::NonTexturedQuad::Vertex ), VK_VERTEX_INPUT_RATE_VERTEX },
-			},
-			ashes::VkVertexInputAttributeDescriptionArray
-			{
-				{ 0u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( castor3d::NonTexturedQuad::Vertex, position ) },
-			}
-		};
+		ashes::PipelineVertexInputStateCreateInfo inputState{ 0u
+			, ashes::VkVertexInputBindingDescriptionArray{ { 0u
+				, sizeof( castor3d::NonTexturedQuad::Vertex )
+				, VK_VERTEX_INPUT_RATE_VERTEX } }
+			, ashes::VkVertexInputAttributeDescriptionArray{ { 0u
+				, 0u
+				, VK_FORMAT_R32G32_SFLOAT
+				, offsetof( castor3d::NonTexturedQuad::Vertex, position ) } } };
 
 		ashes::PipelineShaderStageCreateInfoArray stages;
 		stages.push_back( makeShaderState( device, m_pipelines.kawase.vertexShader ) );
 		stages.push_back( makeShaderState( device, m_pipelines.kawase.pixelShader ) );
 
-		m_pipelines.kawase.pipeline = device->createPipeline( ashes::GraphicsPipelineCreateInfo
-			{
-				0u,
-				stages,
-				inputState,
-				ashes::PipelineInputAssemblyStateCreateInfo{},
-				ashes::nullopt,
-				ashes::PipelineViewportStateCreateInfo{},
-				ashes::PipelineRasterizationStateCreateInfo{},
-				ashes::PipelineMultisampleStateCreateInfo{},
-				ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_FALSE, VK_FALSE },
-				ashes::PipelineColorBlendStateCreateInfo{},
-				ashes::PipelineDynamicStateCreateInfo{ 0u, { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR } },
-				*m_pipelines.kawase.layout.pipelineLayout,
-				*m_renderPass,
-			} );
+		m_pipelines.kawase.pipeline = device->createPipeline( ashes::GraphicsPipelineCreateInfo{ 0u
+			, stages
+			, inputState
+			, ashes::PipelineInputAssemblyStateCreateInfo{}
+			, ashes::nullopt
+			, ashes::PipelineViewportStateCreateInfo{}
+			, ashes::PipelineRasterizationStateCreateInfo{}
+			, ashes::PipelineMultisampleStateCreateInfo{}
+			, ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_FALSE, VK_FALSE }
+			, ashes::PipelineColorBlendStateCreateInfo{}
+			, ashes::PipelineDynamicStateCreateInfo{ 0u, { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR } }
+			, *m_pipelines.kawase.layout.pipelineLayout
+			, *m_shaderInputRenderPass } );
 		uint32_t index = 0u;
 
 		for ( uint32_t j = 0u; j < Count; ++j )
@@ -664,18 +638,14 @@ namespace light_streaks
 		m_pipelines.combine.pixelShader.shader = getCombineProgram( &renderSystem );
 
 		// Create pipeline
-		ashes::PipelineVertexInputStateCreateInfo inputState
-		{
-			0u,
-			ashes::VkVertexInputBindingDescriptionArray
-			{
-				{ 0u, sizeof( castor3d::NonTexturedQuad::Vertex ), VK_VERTEX_INPUT_RATE_VERTEX },
-			},
-			ashes::VkVertexInputAttributeDescriptionArray
-			{
-				{ 0u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( castor3d::NonTexturedQuad::Vertex, position ) },
-			}
-		};
+		ashes::PipelineVertexInputStateCreateInfo inputState{ 0u
+			, ashes::VkVertexInputBindingDescriptionArray{ { 0u
+				, sizeof( castor3d::NonTexturedQuad::Vertex )
+				, VK_VERTEX_INPUT_RATE_VERTEX } }
+			, ashes::VkVertexInputAttributeDescriptionArray{ { 0u
+				, 0u
+				, VK_FORMAT_R32G32_SFLOAT
+				, offsetof( castor3d::NonTexturedQuad::Vertex, position ) } } };
 
 		ashes::PipelineShaderStageCreateInfoArray stages;
 		stages.push_back( makeShaderState( device, m_pipelines.combine.vertexShader ) );
@@ -695,7 +665,7 @@ namespace light_streaks
 				ashes::PipelineColorBlendStateCreateInfo{},
 				ashes::PipelineDynamicStateCreateInfo{ 0u, { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR } },
 				*m_pipelines.combine.layout.pipelineLayout,
-				*m_renderPass,
+				*m_colorAttachRenderPass,
 			} );
 
 		// Create view and associated frame buffer.
@@ -703,7 +673,7 @@ namespace light_streaks
 			, device
 			, m_target->getPixelFormat()
 			, size
-			, *m_renderPass
+			, *m_colorAttachRenderPass
 			, cuT( "LightStreaksCombineSurface" ) );
 
 		// Create descriptor
@@ -733,7 +703,7 @@ namespace light_streaks
 	{
 		VkExtent2D size{ m_target->getWidth(), m_target->getHeight() };
 
-		// Fill command buffer.
+		// Fill command buffers.
 		static ashes::VkClearValueArray const clearValues[Count + 1]
 		{
 			{ 1u, castor3d::opaqueBlackClearColor },
@@ -742,6 +712,7 @@ namespace light_streaks
 			{ 1u, castor3d::opaqueBlackClearColor },
 			{ 1u, castor3d::opaqueBlackClearColor },
 		};
+		// Hi-pass.
 		auto & hiPassSurface = m_pipelines.hiPass.surfaces[0];
 		castor3d::CommandsSemaphore hiPassCommands
 		{
@@ -751,13 +722,9 @@ namespace light_streaks
 		auto & hiPassCmd = *hiPassCommands.commandBuffer;
 		hiPassCmd.begin();
 		timer.beginPass( hiPassCmd, 0u );
-		// Put target image in fragment shader input layout.
-		hiPassCmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_target->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL ) );
-
-		// Hi-pass.
-		hiPassCmd.beginRenderPass( *m_renderPass
+		hiPassCmd.beginDebugBlock( { "LightStreaks - HiPass"
+			, castor3d::makeFloatArray( device.renderSystem.getEngine()->getNextRainbowColour() ) } );
+		hiPassCmd.beginRenderPass( *m_shaderInputRenderPass
 			, *hiPassSurface.frameBuffer
 			, clearValues[0]
 			, VK_SUBPASS_CONTENTS_INLINE );
@@ -769,10 +736,7 @@ namespace light_streaks
 		hiPassCmd.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 		hiPassCmd.draw( 6u );
 		hiPassCmd.endRenderPass();
-		// Put source image in transfer source layout
-		hiPassCmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, hiPassSurface.image->getDefaultView().getTargetView().makeTransferSource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+		hiPassCmd.endDebugBlock();
 		timer.endPass( hiPassCmd, 0u );
 		hiPassCmd.end();
 		m_commands.emplace_back( std::move( hiPassCommands ) );
@@ -786,6 +750,13 @@ namespace light_streaks
 		auto & copyCmd = *copyCommands.commandBuffer;
 		copyCmd.begin();
 		timer.beginPass( copyCmd, 1u );
+		copyCmd.beginDebugBlock( { "LightStreaks - Copy"
+			, castor3d::makeFloatArray( device.renderSystem.getEngine()->getNextRainbowColour() ) } );
+		// Put source image in transfer source layout
+		hiPassCmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+			, VK_PIPELINE_STAGE_TRANSFER_BIT
+			, hiPassSurface.image->getDefaultView().getTargetView().makeTransferSource( VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL ) );
+
 		for ( uint32_t i = 1u; i < Count; ++i )
 		{
 			// Put destination image in transfer destination layout
@@ -800,6 +771,11 @@ namespace light_streaks
 				, m_pipelines.hiPass.surfaces[i].image->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
 		}
 
+		// Put back source image in shader input layout
+		copyCmd.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, hiPassSurface.image->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
+		copyCmd.endDebugBlock();
 		timer.endPass( copyCmd, 1u );
 		copyCmd.end();
 		m_commands.emplace_back( std::move( copyCommands ) );
@@ -813,6 +789,9 @@ namespace light_streaks
 		auto & kawaseCmd = *kawaseCommands.commandBuffer;
 		kawaseCmd.begin();
 		timer.beginPass( kawaseCmd, 2u );
+		kawaseCmd.beginDebugBlock( { "LightStreaks - Blur"
+			, castor3d::makeFloatArray( device.renderSystem.getEngine()->getNextRainbowColour() ) } );
+
 		for ( uint32_t i = 0u; i < Count; ++i )
 		{
 			auto * source = &m_pipelines.hiPass.surfaces[i];
@@ -821,12 +800,9 @@ namespace light_streaks
 
 			for ( uint32_t j = 0u; j < 3u; ++j )
 			{
-				// Put source image in shader input layout
-				kawaseCmd.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-					, source->image->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
-
-				kawaseCmd.beginRenderPass( *m_renderPass
+				kawaseCmd.beginDebugBlock( { "LightStreaks - Blur " + castor::string::toString( i ) + " " + castor::string::toString( j )
+					, castor3d::makeFloatArray( device.renderSystem.getEngine()->getNextRainbowColour() ) } );
+				kawaseCmd.beginRenderPass( *m_shaderInputRenderPass
 					, *destination->frameBuffer
 					, clearValues[i]
 					, VK_SUBPASS_CONTENTS_INLINE );
@@ -837,16 +813,13 @@ namespace light_streaks
 					*m_pipelines.kawase.layout.pipelineLayout );
 				kawaseCmd.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 				kawaseCmd.draw( 6u );
+				kawaseCmd.endDebugBlock();
 				kawaseCmd.endRenderPass();
 				std::swap( destination, source );
 			}
-
-			// Put Kawase surface's general view in fragment shader input layout.
-			kawaseCmd.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, kawaseSurface.image->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 		}
 
+		kawaseCmd.endDebugBlock();
 		timer.endPass( kawaseCmd, 2u );
 		kawaseCmd.end();
 		m_commands.emplace_back( std::move( kawaseCommands ) );
@@ -860,8 +833,10 @@ namespace light_streaks
 		auto & combineCmd = *combineCommands.commandBuffer;
 		combineCmd.begin();
 		timer.beginPass( combineCmd, 3u );
+		combineCmd.beginDebugBlock( { "LightStreaks - Combine"
+			, castor3d::makeFloatArray( device.renderSystem.getEngine()->getNextRainbowColour() ) } );
 		auto & combineSurface = m_pipelines.combine.surfaces.back();
-		combineCmd.beginRenderPass( *m_renderPass
+		combineCmd.beginRenderPass( *m_colorAttachRenderPass
 			, *combineSurface.frameBuffer
 			, clearValues[Count]
 			, VK_SUBPASS_CONTENTS_INLINE );
@@ -873,8 +848,12 @@ namespace light_streaks
 		combineCmd.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 		combineCmd.draw( 6u );
 		combineCmd.endRenderPass();
-
+		combineCmd.endDebugBlock();
 		timer.endPass( combineCmd, 3u );
+		// Put back result in color attachment
+		copyCmd.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, hiPassSurface.image->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
 		combineCmd.end();
 		m_commands.emplace_back( std::move( combineCommands ) );
 
