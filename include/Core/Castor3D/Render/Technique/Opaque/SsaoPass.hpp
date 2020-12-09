@@ -99,6 +99,7 @@ namespace castor3d
 		std::shared_ptr< SsaoRawAOPass > m_rawAoPass;
 		std::shared_ptr< SsaoBlurPass > m_horizontalBlur;
 		std::shared_ptr< SsaoBlurPass > m_verticalBlur;
+		bool m_initialised{ false };
 	};
 }
 

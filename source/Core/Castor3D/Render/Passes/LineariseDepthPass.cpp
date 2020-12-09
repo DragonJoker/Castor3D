@@ -380,6 +380,11 @@ namespace castor3d
 
 	void LineariseDepthPass::initialise( RenderDevice const & device )
 	{
+		if ( m_initialised )
+		{
+			return;
+		}
+
 		m_result.initialise( device );
 		m_timer = std::make_shared< RenderPassTimer >( m_engine
 			, device
@@ -404,13 +409,20 @@ namespace castor3d
 		m_clipInfo = device.uboPools->getBuffer< Point3f >( 0u );
 		doInitialiseLinearisePass( device );
 		doInitialiseMinifyPass( device );
+
+		m_initialised = true;
 	}
 
 	void LineariseDepthPass::cleanup( RenderDevice const & device )
 	{
 		doCleanupMinifyPass( device );
 		doCleanupLinearisePass( device );
-		device.uboPools->putBuffer( m_clipInfo );
+
+		if ( m_clipInfo )
+		{
+			device.uboPools->putBuffer( m_clipInfo );
+		}
+
 		m_finished.reset();
 		m_commandBuffer.reset();
 		m_minifySampler.reset();

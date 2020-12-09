@@ -110,17 +110,14 @@ namespace castor3d
 				, 0u
 				, m_engine.getLpvGridSize() )
 			: TextureUnit{ m_engine } ) }
-		, m_propagate
-		{
-			LightVolumePassResult{ m_engine
-			, m_device
-			, this->getName() + "Propagate0"
-			, m_engine.getLpvGridSize() },
-			LightVolumePassResult{ m_engine
-			, m_device
-			, this->getName() + "Propagate1"
-			, m_engine.getLpvGridSize() },
-		}
+		, m_propagate{ LightVolumePassResult{ m_engine
+				, m_device
+				, this->getName() + "Propagate0"
+				, m_engine.getLpvGridSize() }
+			, LightVolumePassResult{ m_engine
+				, m_device
+				, this->getName() + "Propagate1"
+				, m_engine.getLpvGridSize() } }
 	{
 	}
 
@@ -135,6 +132,7 @@ namespace castor3d
 			auto const cascadeIndex = shader::DirectionalMaxCascadesCount - 2u;
 			auto & lightCache = m_scene.getLightCache();
 			m_aabb = m_scene.getBoundingBox();
+			m_injection.initialise( m_device );
 			m_lightPropagationPasses = { castor::makeUnique< LightPropagationPass >( m_device
 					, this->getName()
 					, cuT( "NoOccNoBlend" )
@@ -154,6 +152,12 @@ namespace castor3d
 			if ( m_geometryVolumes )
 			{
 				geometry = &m_geometry;
+				geometry->initialise( m_device );
+			}
+
+			for ( auto & propagate : m_propagate )
+			{
+				propagate.initialise( m_device );
 			}
 
 			LightPropagationPass & passNoOcc = *m_lightPropagationPasses[0u];
@@ -168,6 +172,7 @@ namespace castor3d
 
 			for ( uint32_t i = 1u; i < MaxPropagationSteps; ++i )
 			{
+				m_propagate[i].initialise( m_device );
 				passOcc.registerPassIO( geometry
 					, m_propagate[propIndex]
 					, m_lpvGridConfigUbo

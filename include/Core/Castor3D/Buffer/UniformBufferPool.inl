@@ -47,16 +47,19 @@ namespace castor3d
 	template< typename DataT >
 	void UniformBufferPool::putBuffer( UniformBufferOffsetT< DataT > const & bufferOffset )
 	{
-		auto key = uint32_t( bufferOffset.flags );
-		auto it = m_buffers.find( key );
-		CU_Require( it != m_buffers.end() );
-		auto itB = std::find_if( it->second.begin()
-			, it->second.end()
-			, [&bufferOffset]( Buffer const & lookup )
-			{
-				return &lookup.buffer->getBuffer() == &bufferOffset.getBuffer();
-			} );
-		CU_Require( itB != it->second.end() );
-		itB->buffer->deallocate( bufferOffset.offset );
+		if ( bufferOffset )
+		{
+			auto key = uint32_t( bufferOffset.flags );
+			auto it = m_buffers.find( key );
+			CU_Require( it != m_buffers.end() );
+			auto itB = std::find_if( it->second.begin()
+				, it->second.end()
+				, [&bufferOffset]( Buffer const & lookup )
+				{
+					return &lookup.buffer->getBuffer() == &bufferOffset.getBuffer();
+				} );
+			CU_Require( itB != it->second.end() );
+			itB->buffer->deallocate( bufferOffset.offset );
+		}
 	}
 }

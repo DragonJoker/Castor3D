@@ -100,6 +100,7 @@ namespace castor3d
 		, LayeredLpvGridConfigUbo const & llpvConfigUbo
 		, SsaoConfig & ssaoConfig )
 		: m_engine{ engine }
+		, m_scene{ scene }
 		, m_device{ device }
 		, m_ssaoConfig{ ssaoConfig }
 		, m_opaquePass{ opaquePass }
@@ -157,9 +158,17 @@ namespace castor3d
 	{
 		m_opaquePass.initialiseRenderPass( device, m_opaquePassResult );
 
-		m_linearisePass->initialise( m_device );
-		m_ssao->initialise( m_device );
-		m_subsurfaceScattering->initialise( m_device );
+		if ( m_ssaoConfig.enabled )
+		{
+			m_linearisePass->initialise( m_device );
+			m_ssao->initialise( m_device );
+		}
+
+		if ( scene.needsSubsurfaceScattering() )
+		{
+			m_subsurfaceScattering->initialise( m_device );
+		}
+
 		m_resolve->initialise();
 	}
 
@@ -189,6 +198,17 @@ namespace castor3d
 
 	void DeferredRendering::update( GpuUpdater & updater )
 	{
+		if ( m_ssaoConfig.enabled )
+		{
+			m_linearisePass->initialise( m_device );
+			m_ssao->initialise( m_device );
+		}
+
+		if ( m_scene.needsSubsurfaceScattering() )
+		{
+			m_subsurfaceScattering->initialise( m_device );
+		}
+
 		m_opaquePass.update( updater );
 		m_lightingPass->update( updater );
 		m_resolve->update( updater );
@@ -255,11 +275,6 @@ namespace castor3d
 			|| visitor.config.forceSubPassesVisit )
 		{
 			m_linearisePass->accept( visitor );
-		}
-
-		if ( m_ssaoConfig.enabled
-			|| visitor.config.forceSubPassesVisit )
-		{
 			m_ssao->accept( visitor );
 		}
 

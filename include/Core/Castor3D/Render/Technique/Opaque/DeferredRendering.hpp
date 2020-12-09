@@ -123,6 +123,7 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
+		Scene const & m_scene;
 		RenderDevice const & m_device;
 		SsaoConfig & m_ssaoConfig;
 		OpaquePass & m_opaquePass;

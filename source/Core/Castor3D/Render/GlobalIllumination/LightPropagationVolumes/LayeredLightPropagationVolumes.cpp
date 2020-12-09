@@ -138,6 +138,11 @@ namespace castor3d
 					? GlobalIlluminationType::eLayeredLpvG
 					: GlobalIlluminationType::eLayeredLpv ) ) )
 		{
+			for ( auto & injection : m_injection )
+			{
+				injection.initialise( m_device );
+			}
+
 			auto & lightCache = m_scene.getLightCache();
 			m_aabb = m_scene.getBoundingBox();
 			m_lightPropagationPasses = { castor::makeUnique< LightPropagationPass >( m_device
@@ -190,6 +195,11 @@ namespace castor3d
 			cmd.endDebugBlock();
 			cmd.end();
 
+			for ( auto & propagate : m_propagate )
+			{
+				propagate.initialise( m_device );
+			}
+
 			for ( uint32_t cascade = 0u; cascade < CascadeCount; ++cascade )
 			{
 				TextureUnit * geometry{ nullptr };
@@ -197,6 +207,7 @@ namespace castor3d
 				if ( m_geometryVolumes )
 				{
 					geometry = &m_geometry[cascade];
+					geometry->initialise( m_device );
 				}
 
 				uint32_t propIndex = 0u;

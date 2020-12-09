@@ -286,6 +286,11 @@ namespace castor3d
 
 	bool TextureUnit::initialise( RenderDevice const & device )
 	{
+		if ( m_initialised )
+		{
+			return m_initialised;
+		}
+
 		RenderTargetSPtr target = m_renderTarget.lock();
 		bool result = false;
 
@@ -330,6 +335,7 @@ namespace castor3d
 		}
 
 		m_device = &device;
+		m_initialised = result;
 		return result;
 	}
 

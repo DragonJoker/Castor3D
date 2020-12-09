@@ -36,6 +36,11 @@ namespace castor3d
 
 	void SsaoPass::initialise( RenderDevice const & device )
 	{
+		if ( m_initialised )
+		{
+			return;
+		}
+
 		m_matrixUbo.initialise( device );
 		m_ssaoConfigUbo = std::make_shared< SsaoConfigUbo >( m_engine );
 		m_rawAoPass = std::make_shared< SsaoRawAOPass >( m_engine
@@ -70,15 +75,22 @@ namespace castor3d
 			, m_horizontalBlur->getBentResult()
 			, m_gpResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView() );
 #endif
+		m_initialised = true;
 	}
 
 	void SsaoPass::cleanup( RenderDevice const & device )
 	{
+		m_initialised = false;
 		m_verticalBlur.reset();
 		m_horizontalBlur.reset();
 		m_rawAoPass.reset();
-		m_ssaoConfigUbo->cleanup( device );
-		m_ssaoConfigUbo.reset();
+
+		if ( m_ssaoConfigUbo )
+		{
+			m_ssaoConfigUbo->cleanup( device );
+			m_ssaoConfigUbo.reset();
+		}
+
 		m_matrixUbo.cleanup( device );
 	}
 
