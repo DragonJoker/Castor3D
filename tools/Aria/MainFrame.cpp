@@ -494,7 +494,8 @@ namespace aria
 			menu.Append( eID_COPY_FILE_NAME, _( "Copy test file path" ) + wxT( "\tF2" ) );
 			menu.Append( eID_VIEW_TEST, _( "View Test" ) + wxT( "\tF3" ) );
 			menu.Append( eID_SET_REF, _( "Set Reference" ) + wxT( "\tF4" ) );
-			menu.Append( eID_UPDATE_CASTOR, _( "Update Castor3D's date" ) + wxT( "\tF5" ) );
+			menu.Append( eID_IGNORE_RESULT, _( "Ignore result" ) + wxT( "\tF5" ), wxEmptyString, true );
+			menu.Append( eID_UPDATE_CASTOR, _( "Update Castor3D's date" ) + wxT( "\tF6" ) );
 		};
 		auto addTestRunMenus = []( wxMenu & menu )
 		{
@@ -527,8 +528,8 @@ namespace aria
 			menu.Append( eID_ALL_UPDATE_CASTOR, _( "Update tests Castor3D's date" ) + wxT( "\tF12" ) );
 		};
 		m_testMenu = std::make_unique< wxMenu >();
+		m_testMenu->Append( eID_RUN_TEST, _( "Run Test" ) + wxT( "\tF1" ) );
 		addTestBaseMenus( *m_testMenu );
-		m_testMenu->Append( eID_RUN_TEST, _( "Run Test" ) + wxT( "\tF6" ) );
 		m_testMenu->Connect( wxEVT_COMMAND_MENU_SELECTED
 			, wxCommandEventHandler( MainFrame::onMenuOption )
 			, nullptr
@@ -556,8 +557,8 @@ namespace aria
 			, this );
 
 		m_busyMenu = std::make_unique< wxMenu >();
+		m_busyMenu->Append( eID_CANCEL, _( "Cancel" ) + wxT( "\tF1" ) );
 		addTestBaseMenus( *m_busyMenu );
-		m_busyMenu->Append( eID_CANCEL, _( "Cancel" ) + wxT( "\tF6" ) );
 		m_busyMenu->Connect( wxEVT_COMMAND_MENU_SELECTED
 			, wxCommandEventHandler( MainFrame::onMenuOption )
 			, nullptr
