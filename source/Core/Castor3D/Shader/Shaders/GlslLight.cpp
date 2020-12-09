@@ -11,47 +11,24 @@ namespace castor3d
 	{
 		//*********************************************************************************************
 
-		Light::Light( Shader * shader
+		Light::Light( ShaderWriter & writer
 			, ast::expr::ExprPtr expr )
-			: StructInstance{ shader, std::move( expr ) }
+			: StructInstance{ writer, std::move( expr ) }
 			, m_colourIndex{ getMember< Vec4 >( "m_colourIndex" ) }
 			, m_intensityFarPlane{ getMember< Vec4 >( "m_intensityFarPlane" ) }
 			, m_volumetric{ getMember< Vec4 >( "m_volumetric" ) }
 			, m_shadowsOffsets{ getMember< Vec4 >( "m_shadowsOffsets" ) }
 			, m_shadowsVariances{ getMember< Vec4 >( "m_shadowsVariances" ) }
-			, m_colour{ getShader()
-				, makeSwizzle( makeExpr( m_colourIndex )
-					, ast::expr::SwizzleKind::e012 ) }
-			, m_intensity{ getShader()
-				, makeSwizzle( makeExpr( m_intensityFarPlane )
-					, ast::expr::SwizzleKind::e01 ) }
-			, m_farPlane{ getShader()
-				, makeSwizzle( makeExpr( m_intensityFarPlane )
-					, ast::expr::SwizzleKind::e2 ) }
-			, m_shadowType{ getShader()
-				, makeCast( getShader()->getTypesCache().getInt()
-					, makeSwizzle( makeExpr( m_intensityFarPlane )
-						, ast::expr::SwizzleKind::e3 ) ) }
-			, m_index{ getShader()
-				, makeCast( getShader()->getTypesCache().getInt()
-					, makeSwizzle( makeExpr( m_colourIndex )
-						, ast::expr::SwizzleKind::e3 ) ) }
-			, m_volumetricSteps{ getShader()
-				, makeCast( getShader()->getTypesCache().getUInt()
-					, makeSwizzle( makeExpr( m_volumetric )
-						, ast::expr::SwizzleKind::e0 ) ) }
-			, m_volumetricScattering{ getShader()
-				, makeSwizzle( makeExpr( m_volumetric )
-					, ast::expr::SwizzleKind::e1 ) }
-			, m_rawShadowOffsets{ getShader()
-				, makeSwizzle( makeExpr( m_shadowsOffsets )
-					, ast::expr::SwizzleKind::e01 ) }
-			, m_pcfShadowOffsets{ getShader()
-				, makeSwizzle( makeExpr( m_shadowsOffsets )
-					, ast::expr::SwizzleKind::e23 ) }
-			, m_vsmShadowVariance{ getShader()
-				, makeSwizzle( makeExpr( m_shadowsVariances )
-					, ast::expr::SwizzleKind::e01 ) }
+			, m_colour{ m_colourIndex.xyz() }
+			, m_intensity{ m_intensityFarPlane.xy() }
+			, m_farPlane{ m_intensityFarPlane.z() }
+			, m_shadowType{ writer.cast< Int >( m_intensityFarPlane.w() ) }
+			, m_index{ writer.cast< Int >( m_colourIndex.w() ) }
+			, m_volumetricSteps{ writer.cast< UInt >( m_volumetric.x() ) }
+			, m_volumetricScattering{ m_volumetric.y() }
+			, m_rawShadowOffsets{ m_shadowsOffsets.xy() }
+			, m_pcfShadowOffsets{ m_shadowsOffsets.zw() }
+			, m_vsmShadowVariance{ m_shadowsVariances.xy() }
 		{
 		}
 
@@ -87,21 +64,16 @@ namespace castor3d
 
 		//*********************************************************************************************
 
-		DirectionalLight::DirectionalLight( Shader * shader
+		DirectionalLight::DirectionalLight( ShaderWriter & writer
 			, ast::expr::ExprPtr expr )
-			: StructInstance{ shader, std::move( expr ) }
+			: StructInstance{ writer, std::move( expr ) }
 			, m_lightBase{ getMember< Light >( "m_lightBase" ) }
 			, m_directionCount{ getMember< Vec4 >( "m_directionCount" ) }
 			, m_transforms{ getMemberArray< Mat4 >( "m_transforms" ) }
 			, m_splitDepths{ getMember< Vec4 >( "m_splitDepths" ) }
 			, m_splitScales{ getMember< Vec4 >( "m_splitScales" ) }
-			, m_direction{ getShader()
-				, makeSwizzle( makeExpr( m_directionCount )
-					, ast::expr::SwizzleKind::e012 ) }
-			, m_cascadeCount{ getShader()
-				, makeCast( getShader()->getTypesCache().getUInt()
-					, makeSwizzle( makeExpr( m_directionCount )
-						, ast::expr::SwizzleKind::e3 ) ) }
+			, m_direction{ m_directionCount.xyz() }
+			, m_cascadeCount{ writer.cast< UInt >( m_directionCount.w() ) }
 		{
 		}
 
@@ -131,18 +103,14 @@ namespace castor3d
 
 		//*********************************************************************************************
 
-		PointLight::PointLight( Shader * shader
+		PointLight::PointLight( ShaderWriter & writer
 			, ast::expr::ExprPtr expr )
-			: StructInstance( shader, std::move( expr ) )
+			: StructInstance( writer, std::move( expr ) )
 			, m_lightBase{ getMember< Light >( "m_lightBase" ) }
 			, m_position4{ getMember< Vec4 >( "m_position" ) }
 			, m_attenuation4{ getMember< Vec4 >( "m_attenuation" ) }
-			, m_position{ getShader()
-				, makeSwizzle( makeExpr( m_position4 )
-					, ast::expr::SwizzleKind::e012 ) }
-			, m_attenuation{ getShader()
-				, makeSwizzle( makeExpr( m_attenuation4 )
-					, ast::expr::SwizzleKind::e012 ) }
+			, m_position{ m_position4.xyz() }
+			, m_attenuation{ m_attenuation4.xyz() }
 		{
 		}
 
@@ -170,30 +138,20 @@ namespace castor3d
 
 		//*********************************************************************************************
 
-		SpotLight::SpotLight( Shader * shader
+		SpotLight::SpotLight( ShaderWriter & writer
 			, ast::expr::ExprPtr expr )
-			: StructInstance( shader, std::move( expr ) )
+			: StructInstance( writer, std::move( expr ) )
 			, m_lightBase{ getMember< Light >( "m_lightBase" ) }
 			, m_position4{ getMember< Vec4 >( "m_position" ) }
 			, m_attenuation4{ getMember< Vec4 >( "m_attenuation" ) }
 			, m_direction4{ getMember< Vec4 >( "m_direction" ) }
 			, m_exponentCutOff{ getMember< Vec4 >( "m_exponentCutOff" ) }
 			, m_transform{ getMember< Mat4 >( "m_transform" ) }
-			, m_position{ getShader()
-				, makeSwizzle( makeExpr( m_position4 )
-					, ast::expr::SwizzleKind::e012 ) }
-			, m_attenuation{ getShader()
-				, makeSwizzle( makeExpr( m_attenuation4 )
-					, ast::expr::SwizzleKind::e012 ) }
-			, m_direction{ getShader()
-				, makeSwizzle( makeExpr( m_direction4 )
-					, ast::expr::SwizzleKind::e012 ) }
-			, m_exponent{ getShader()
-				, makeSwizzle( makeExpr( m_exponentCutOff )
-					, ast::expr::SwizzleKind::e0 ) }
-			, m_cutOff{ getShader()
-				, makeSwizzle( makeExpr( m_exponentCutOff )
-					, ast::expr::SwizzleKind::e1 ) }
+			, m_position{ m_position4.xyz() }
+			, m_attenuation{ m_attenuation4.xyz() }
+			, m_direction{ m_direction4.xyz() }
+			, m_exponent{ m_exponentCutOff.x() }
+			, m_cutOff{ m_exponentCutOff.y() }
 		{
 		}
 

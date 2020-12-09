@@ -12,33 +12,33 @@ namespace castor3d
 	{
 		//*****************************************************************************************
 
-		BaseMaterial::BaseMaterial( ast::Shader * shader
+		BaseMaterial::BaseMaterial( ShaderWriter & writer
 			, ast::expr::ExprPtr expr )
-			: StructInstance{ shader, std::move( expr ) }
+			: StructInstance{ writer, std::move( expr ) }
 			, m_common{ getMember< Vec4 >( "m_common" ) }
 			, m_reflRefr{ getMember< Vec4 >( "m_reflRefr" ) }
 			, m_sssInfo{ getMember< Vec4 >( "m_sssInfo" ) }
+			, m_transmittanceProfile{ getMemberArray< Vec4 >( "m_transmittanceProfile" ) }
 			, m_opacity{ m_common.x() }
 			, m_emissive{ m_common.y() }
 			, m_alphaRef{ m_common.z() }
 			, m_gamma{ m_common.w() }
 			, m_refractionRatio{ m_reflRefr.x() }
-			, m_hasRefraction{ shader, makeCast( shader->getTypesCache().getInt(), makeExpr( *shader, m_reflRefr.y() ) ) }
-			, m_hasReflection{ shader, makeCast( shader->getTypesCache().getInt(), makeExpr( *shader, m_reflRefr.z() ) ) }
+			, m_hasRefraction{ writer.cast< Int >( m_reflRefr.y() ) }
+			, m_hasReflection{ writer.cast< Int >( m_reflRefr.z() ) }
 			, m_bwAccumulationOperator{ m_reflRefr.w() }
-			, m_subsurfaceScatteringEnabled{ shader, makeCast( shader->getTypesCache().getInt(), makeExpr( *shader, m_sssInfo.x() ) ) }
-			, m_gaussianWidth{ shader, makeExpr( *shader, m_sssInfo.y() ) }
-			, m_subsurfaceScatteringStrength{ shader, makeExpr( *shader, m_sssInfo.z() ) }
-			, m_transmittanceProfileSize{ shader, makeCast( shader->getTypesCache().getInt(), makeExpr( *shader, m_sssInfo.w() ) ) }
-			, m_transmittanceProfile{ getMemberArray< Vec4 >( "m_transmittanceProfile" ) }
+			, m_subsurfaceScatteringEnabled{ writer.cast< Int >( m_sssInfo.x() ) }
+			, m_gaussianWidth{ m_sssInfo.y() }
+			, m_subsurfaceScatteringStrength{ m_sssInfo.z() }
+			, m_transmittanceProfileSize{ writer.cast< Int >( m_sssInfo.w() ) }
 		{
 		}
 
 		//*****************************************************************************************
 
-		LegacyMaterial::LegacyMaterial( ast::Shader * shader
+		LegacyMaterial::LegacyMaterial( ShaderWriter & writer
 			, ast::expr::ExprPtr expr )
-			: BaseMaterial{ shader, std::move( expr ) }
+			: BaseMaterial{ writer, std::move( expr ) }
 			, m_diffAmb{ getMember< Vec4 >( "m_diffAmb" ) }
 			, m_specShin{ getMember< Vec4 >( "m_specShin" ) }
 			, m_ambient{ m_diffAmb.w() }
@@ -76,9 +76,9 @@ namespace castor3d
 
 		//*****************************************************************************************
 
-		MetallicRoughnessMaterial::MetallicRoughnessMaterial( ast::Shader * shader
+		MetallicRoughnessMaterial::MetallicRoughnessMaterial( ShaderWriter & writer
 			, ast::expr::ExprPtr expr )
-			: BaseMaterial{ shader, std::move( expr ) }
+			: BaseMaterial{ writer, std::move( expr ) }
 			, m_albRough{ getMember< Vec4 >( "m_albRough" ) }
 			, m_metDiv{ getMember< Vec4 >( "m_metDiv" ) }
 			, m_albedo{ m_albRough.xyz() }
@@ -116,9 +116,9 @@ namespace castor3d
 
 		//*****************************************************************************************
 
-		SpecularGlossinessMaterial::SpecularGlossinessMaterial( ast::Shader * shader
+		SpecularGlossinessMaterial::SpecularGlossinessMaterial( ShaderWriter & writer
 			, ast::expr::ExprPtr expr )
-			: BaseMaterial{ shader, std::move( expr ) }
+			: BaseMaterial{ writer, std::move( expr ) }
 			, m_diffDiv{ getMember< Vec4 >( "m_diffDiv" ) }
 			, m_specGloss{ getMember< Vec4 >( "m_specGloss" ) }
 			, m_specular{ m_specGloss.xyz() }

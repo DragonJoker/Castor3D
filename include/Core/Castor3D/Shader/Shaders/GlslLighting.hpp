@@ -23,7 +23,7 @@ namespace castor3d
 				, sdw::InVec3 const & worldNormal );
 
 			C3D_API ast::expr::Expr * getExpr()const;
-			C3D_API ast::Shader * getShader()const;
+			C3D_API sdw::ShaderWriter * getWriter()const;
 			C3D_API void setVar( ast::var::VariableList::const_iterator & var );
 
 			sdw::InVec2 m_clipVertex;
@@ -35,7 +35,7 @@ namespace castor3d
 			ast::expr::ExprPtr m_expr;
 		};
 
-		C3D_API ast::expr::ExprList makeFnArg( ast::Shader & shader
+		C3D_API ast::expr::ExprList makeFnArg( sdw::ShaderWriter & shader
 			, FragmentInput const & value );
 
 		class LightingModel

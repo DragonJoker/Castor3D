@@ -13,9 +13,9 @@ namespace castor3d
 	{
 		//*****************************************************************************************
 
-		TextureConfigData::TextureConfigData( ast::Shader * shader
+		TextureConfigData::TextureConfigData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr )
-			: sdw::StructInstance{ shader, std::move( expr ) }
+			: sdw::StructInstance{ writer, std::move( expr ) }
 			, colrSpec{ getMember< sdw::Vec4 >( "colrSpec" ) }
 			, glossOpa{ getMember< sdw::Vec4 >( "glossOpa" ) }
 			, emisOccl{ getMember< sdw::Vec4 >( "emisOccl" ) }
@@ -35,8 +35,8 @@ namespace castor3d
 			, emissiveMask{ emisOccl.xy() }
 			, occlusionMask{ emisOccl.zw() }
 			, transmittanceMask{ trnsDumm.xy() }
-			, needsGammaCorrection{ shader, sdw::makeCast( shader->getTypesCache().getUInt(), makeExpr( *shader, miscVals.x() ) ) }
-			, needsYInversion{ shader, sdw::makeCast( shader->getTypesCache().getUInt(), makeExpr( *shader, miscVals.y() ) ) }
+			, needsGammaCorrection{ writer.cast< sdw::UInt >( miscVals.x() ) }
+			, needsYInversion{ writer.cast< sdw::UInt >( miscVals.y() ) }
 		{
 		}
 

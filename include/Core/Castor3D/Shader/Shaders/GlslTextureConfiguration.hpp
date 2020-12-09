@@ -21,7 +21,7 @@ namespace castor3d
 			friend class TextureConfigurations;
 
 		public:
-			C3D_API TextureConfigData( ast::Shader * shader
+			C3D_API TextureConfigData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr );
 
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
