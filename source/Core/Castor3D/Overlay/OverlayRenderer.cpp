@@ -481,7 +481,7 @@ namespace castor3d
 				, { 1u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( OverlayCategory::Vertex, texture ) } } }
 		, m_textDeclaration{ 0u
 			, ashes::VkVertexInputBindingDescriptionArray{ { 0u
-				, sizeof( OverlayCategory::Vertex )
+				, sizeof( TextOverlay::Vertex )
 				, VK_VERTEX_INPUT_RATE_VERTEX } }
 			, ashes::VkVertexInputAttributeDescriptionArray{ { 0u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TextOverlay::Vertex, coords ) }
 				, { 1u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TextOverlay::Vertex, texture ) }
