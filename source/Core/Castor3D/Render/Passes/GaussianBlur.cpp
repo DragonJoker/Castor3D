@@ -364,6 +364,23 @@ namespace castor3d
 			return result;
 		}
 
+		VkImageViewType getNonArrayType( VkImageViewType in )
+		{
+			switch ( in )
+			{
+			case VK_IMAGE_VIEW_TYPE_CUBE:
+				return VK_IMAGE_VIEW_TYPE_2D;
+			case VK_IMAGE_VIEW_TYPE_1D_ARRAY:
+				return VK_IMAGE_VIEW_TYPE_1D;
+			case VK_IMAGE_VIEW_TYPE_2D_ARRAY:
+				return VK_IMAGE_VIEW_TYPE_2D;
+			case VK_IMAGE_VIEW_TYPE_CUBE_ARRAY:
+				return VK_IMAGE_VIEW_TYPE_2D;
+			default:
+				return in;
+			}
+		}
+
 		std::vector< ashes::FrameBufferPtrArray > createFbos( std::string const & prefix
 			, ashes::RenderPass const & renderPass
 			, ashes::ImageView const & view
@@ -374,6 +391,7 @@ namespace castor3d
 			auto createInfo = view.createInfo;
 			createInfo.subresourceRange.layerCount = 1u;
 			createInfo.subresourceRange.levelCount = 1u;
+			createInfo.viewType = getNonArrayType( createInfo.viewType );
 
 			for ( uint32_t layerOff = 0u; layerOff < view->subresourceRange.layerCount; ++layerOff )
 			{
@@ -490,6 +508,8 @@ namespace castor3d
 				source.getSampledView().image->generateMipmaps( cmd
 					, layer
 					, 1u
+					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 				cmd.endDebugBlock();
 			}
