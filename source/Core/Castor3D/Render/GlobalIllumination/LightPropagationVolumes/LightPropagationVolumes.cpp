@@ -169,10 +169,8 @@ namespace castor3d
 				, m_lpvResult
 				, m_propagate[propIndex] );
 
-
 			for ( uint32_t i = 1u; i < MaxPropagationSteps; ++i )
 			{
-				m_propagate[i].initialise( m_device );
 				passOcc.registerPassIO( geometry
 					, m_propagate[propIndex]
 					, m_lpvGridConfigUbo
