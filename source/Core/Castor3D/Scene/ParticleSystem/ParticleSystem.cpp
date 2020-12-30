@@ -295,6 +295,9 @@ namespace castor3d
 			time = 0_ms;
 		}
 
+		time = updater.tslf > 0_ms
+			? updater.tslf
+			: time;
 		m_totalTime += time;
 		updater.time = time;
 		updater.total = m_totalTime;

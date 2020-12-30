@@ -192,7 +192,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour toutes les animations
 		 */
-		C3D_API void update();
+		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Starts the animation identified by the given name

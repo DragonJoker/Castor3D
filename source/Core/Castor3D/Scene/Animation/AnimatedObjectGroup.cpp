@@ -274,11 +274,13 @@ namespace castor3d
 			, offsetof( GroupAnimation, stoppingPoint ) );
 	}
 
-	void AnimatedObjectGroup::update()
+	void AnimatedObjectGroup::update( CpuUpdater & updater )
 	{
 #if defined( NDEBUG )
 
-		auto tslf = std::chrono::duration_cast< Milliseconds >( m_timer.getElapsed() );
+		auto tslf = updater.tslf > 0_ms
+			? updater.tslf
+			: std::chrono::duration_cast< Milliseconds >( m_timer.getElapsed() );
 
 #else
 

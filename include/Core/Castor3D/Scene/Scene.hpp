@@ -387,7 +387,7 @@ namespace castor3d
 
 	private:
 		void doUpdateBoundingBox();
-		void doUpdateAnimations();
+		void doUpdateAnimations( CpuUpdater & updater );
 		void doUpdateMaterials();
 		bool doUpdateLightDependent( LightType lightType
 			, bool shadowProducer
