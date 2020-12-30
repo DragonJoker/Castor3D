@@ -262,7 +262,8 @@ namespace aria
 
 		m_updateTestIgnoreResult = UpdateTestIgnoreResult{ m_database };
 		m_updateTestCastorDate = UpdateTestCastorDate{ m_database };
-		std::string listTests = "SELECT Id, Name, MAX( RunDate ) AS RunDate, Status, Renderer, Category, IgnoreResult, CastorDate\n";
+		m_updateTestSceneDate = UpdateTestSceneDate{ m_database };
+		std::string listTests = "SELECT Id, Name, MAX( RunDate ) AS RunDate, Status, Renderer, Category, IgnoreResult, CastorDate, SceneDate\n";
 		listTests += "FROM Test\n";
 		listTests += "GROUP BY Renderer, Category, Name\n";
 		listTests += "ORDER BY Renderer, Category, Name;";
@@ -295,7 +296,8 @@ namespace aria
 				, row.getField( 4u ).getValue< std::string >()
 				, row.getField( 5u ).getValue< std::string >()
 				, row.getField( 6u ).getValue< int32_t >() != 0
-				, row.getField( 7u ).getValue< db::DateTime >() };
+				, row.getField( 7u ).getValue< db::DateTime >()
+				, row.getField( 8u ).getValue< db::DateTime >() };
 
 			if ( prevRenderer != test.renderer )
 			{
@@ -340,6 +342,7 @@ namespace aria
 		m_insertTest.category->setValue( test.category );
 		m_insertTest.ignoreResult->setValue( test.ignoreResult ? 1 : 0 );
 		m_insertTest.castorDate->setValue( test.castorDate );
+		m_insertTest.sceneDate->setValue( test.sceneDate );
 		m_insertTest.stmt->executeUpdate();
 
 		if ( moveFiles )
@@ -357,6 +360,7 @@ namespace aria
 		auto oldStatus = test.status;
 		m_updateTestStatus.status->setValue( int32_t( newStatus ) );
 		m_updateTestStatus.castorDate->setValue( test.castorDate );
+		m_updateTestStatus.sceneDate->setValue( test.sceneDate );
 		m_updateTestStatus.id->setValue( int32_t( test.id ) );
 		m_updateTestStatus.stmt->executeUpdate();
 		moveResultFile( test, oldStatus, newStatus, m_config.work );
@@ -377,6 +381,7 @@ namespace aria
 		auto oldStatus = test.status;
 		m_updateTestIgnoreResult.status->setValue( int32_t( ignore ? 1 : 0 ) );
 		m_updateTestIgnoreResult.castorDate->setValue( test.castorDate );
+		m_updateTestIgnoreResult.sceneDate->setValue( test.sceneDate );
 		m_updateTestIgnoreResult.id->setValue( int32_t( test.id ) );
 		m_updateTestIgnoreResult.stmt->executeUpdate();
 
@@ -403,6 +408,14 @@ namespace aria
 		castor::Logger::logInfo( "Updated Castor3D date for: " + getDetails( test ) );
 	}
 
+	void TestDatabase::updateTestSceneDate( Test & test )
+	{
+		m_updateTestSceneDate.sceneDate->setValue( getSceneDate( m_config, test ) );
+		m_updateTestSceneDate.id->setValue( int32_t( test.id ) );
+		m_updateTestSceneDate.stmt->executeUpdate();
+		castor::Logger::logInfo( "Updated Scene date for: " + getDetails( test ) );
+	}
+
 	void TestDatabase::doInitDatabase( wxProgressDialog & progress
 		, int & index )
 	{
@@ -414,7 +427,8 @@ namespace aria
 		createTableTest += "\t, Renderer VARCHAR(10)\n";
 		createTableTest += "\t, Category VARCHAR(50)\n";
 		createTableTest += "\t, IgnoreResult INTEGER\n";
-		createTableTest += "\t, CastorData DATETIME\n";
+		createTableTest += "\t, CastorDate DATETIME\n";
+		createTableTest += "\t, SceneDate DATETIME\n";
 		createTableTest += ");";
 		m_database.executeUpdate( createTableTest );
 	}
@@ -507,6 +521,7 @@ namespace aria
 						test.status = TestStatus::eNotRun;
 						test.renderer = it->first;
 						test.castorDate = m_config.castorRefDate;
+						test.sceneDate = getSceneDate( m_config, test );
 						insertTest( test );
 					}
 				}
@@ -564,6 +579,7 @@ namespace aria
 						if ( result->empty() )
 						{
 							test.castorDate = m_config.castorRefDate;
+							test.sceneDate = getSceneDate( m_config, test );
 							insertTest( test );
 						}
 						else
@@ -614,6 +630,8 @@ namespace aria
 								assert( index != lastIndex );
 								test.renderer = fullName.substr( lastIndex );
 
+								test.castorDate = m_config.castorRefDate;
+								test.sceneDate = getSceneDate( m_config, test );
 								insertTest( test, false );
 							}
 						}

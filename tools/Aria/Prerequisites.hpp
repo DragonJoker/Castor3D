@@ -85,14 +85,19 @@ namespace aria
 		std::string category;
 		bool ignoreResult;
 		db::DateTime castorDate;
+		db::DateTime sceneDate;
 	};
 	static constexpr size_t IgnoredIndex = 0u;
 	static constexpr size_t AdditionalIndices = 1u;
 
+	db::DateTime getSceneDate( Config const & config, Test const & test );
+	bool isOutOfCastorDate( Config const & config, Test const & test );
+	bool isOutOfSceneDate( Config const & config, Test const & test );
 	bool isOutOfDate( Config const & config, Test const & test );
 	void updateCastorRefDate( Config & config );
 	uint32_t getTestStatusIndex( Config const & config
 		, Test const & test );
+	castor::Path getSceneFile( Test const & test );
 	castor::Path getResultFolder( Test const & test, bool useStatus = true );
 	castor::Path getResultName( Test const & test );
 	castor::Path getCompareFolder( Test const & test, bool useStatus = true );

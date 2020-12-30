@@ -78,7 +78,7 @@ namespace aria::db
 				, int & minutes
 				, int & seconds )
 			{
-				bool bReturn = !format.empty();
+				bool bReturn = !format.empty() && !time.empty();
 
 				hours = 0;
 				minutes = 0;
@@ -256,7 +256,7 @@ namespace aria::db
 				, int & minutes
 				, int & seconds )
 			{
-				bool bReturn = !format.empty();
+				bool bReturn = !format.empty() && !date.empty();
 
 				monthDay = 0;
 				month = 0;
@@ -438,7 +438,7 @@ namespace aria::db
 				, int & month
 				, int & monthDay )
 			{
-				bool bReturn = !format.empty();
+				bool bReturn = !format.empty() && !date.empty();
 
 				monthDay = 0;
 				month = 0;

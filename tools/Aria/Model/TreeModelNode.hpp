@@ -23,6 +23,11 @@ namespace aria
 			return m_isRenderer;
 		}
 
+		bool isRootNode()const
+		{
+			return GetParent() == nullptr;
+		}
+
 		TreeModelNode * getRenderer()const
 		{
 			assert( !m_isRenderer && !category.empty() );

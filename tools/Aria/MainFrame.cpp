@@ -24,6 +24,7 @@
 #include "Aria/xpms/none.xpm"
 #include "Aria/xpms/notrun.xpm"
 #include "Aria/xpms/outofdate.xpm"
+#include "Aria/xpms/outofdate2.xpm"
 #include "Aria/xpms/unacceptable.xpm"
 #include "Aria/xpms/unprocessed.xpm"
 #include "Aria/xpms/progress_1.xpm"
@@ -64,32 +65,51 @@ namespace aria
 		{
 			eID_GRID,
 			eID_DETAIL,
-			eID_RUN_TEST,
-			eID_VIEW_TEST,
-			eID_SET_REF,
-			eID_IGNORE_RESULT,
-			eID_UPDATE_CASTOR,
-			eID_COPY_FILE_NAME,
-			eID_RUN_CATEGORY_TESTS_ALL,
-			eID_RUN_CATEGORY_TESTS_NOTRUN,
-			eID_RUN_CATEGORY_TESTS_ACCEPTABLE,
-			eID_RUN_CATEGORY_TESTS_ALL_BUT_NEGLIGIBLE,
-			eID_RUN_CATEGORY_TESTS_OUTDATED,
+			eID_TEST_RUN,
+			eID_TEST_VIEW,
+			eID_TEST_SET_REF,
+			eID_TEST_IGNORE_RESULT,
+			eID_TEST_UPDATE_CASTOR,
+			eID_TEST_UPDATE_SCENE,
+			eID_TEST_COPY_FILE_NAME,
+			eID_CATEGORY_RUN_TESTS_ALL,
+			eID_CATEGORY_RUN_TESTS_NOTRUN,
+			eID_CATEGORY_RUN_TESTS_ACCEPTABLE,
+			eID_CATEGORY_RUN_TESTS_ALL_BUT_NEGLIGIBLE,
+			eID_CATEGORY_RUN_TESTS_OUTDATED,
 			eID_CATEGORY_UPDATE_CASTOR,
-			eID_RUN_RENDERER_TESTS_ALL,
-			eID_RUN_RENDERER_TESTS_NOTRUN,
-			eID_RUN_RENDERER_TESTS_ACCEPTABLE,
-			eID_RUN_RENDERER_TESTS_ALL_BUT_NEGLIGIBLE,
-			eID_RUN_RENDERER_TESTS_OUTDATED,
+			eID_CATEGORY_UPDATE_SCENE,
+			eID_RENDERER_RUN_TESTS_ALL,
+			eID_RENDERER_RUN_TESTS_NOTRUN,
+			eID_RENDERER_RUN_TESTS_ACCEPTABLE,
+			eID_RENDERER_RUN_TESTS_ALL_BUT_NEGLIGIBLE,
+			eID_RENDERER_RUN_TESTS_OUTDATED,
 			eID_RENDERER_UPDATE_CASTOR,
-			eID_RUN_TESTS_ALL,
-			eID_RUN_TESTS_NOTRUN,
-			eID_RUN_TESTS_ACCEPTABLE,
-			eID_RUN_TESTS_ALL_BUT_NEGLIGIBLE,
-			eID_RUN_TESTS_OUTDATED,
+			eID_RENDERER_UPDATE_SCENE,
+			eID_ALL_RUN_TESTS_ALL,
+			eID_ALL_RUN_TESTS_NOTRUN,
+			eID_ALL_RUN_TESTS_ACCEPTABLE,
+			eID_ALL_RUN_TESTS_ALL_BUT_NEGLIGIBLE,
+			eID_ALL_RUN_TESTS_OUTDATED,
 			eID_ALL_UPDATE_CASTOR,
+			eID_ALL_UPDATE_SCENE,
 			eID_CANCEL,
 		};
+
+		bool isTestNode( TreeModelNode const & node )
+		{
+			return node.test != nullptr;
+		}
+
+		bool isCategoryNode( TreeModelNode const & node )
+		{
+			return !node.category.empty() && !node.isRenderer() && !node.isRootNode();
+		}
+
+		bool isRendererNode( TreeModelNode const & node )
+		{
+			return !node.category.empty() && node.isRenderer();
+		}
 
 		class DataViewTestBoolBitmapRenderer
 			: public wxDataViewCustomRenderer
@@ -168,7 +188,8 @@ namespace aria
 				int align = wxDVR_DEFAULT_ALIGNMENT )
 				: wxDataViewCustomRenderer{ varianttype, mode, align }
 				, m_size{ 20, 20 }
-				, m_outOfDateBmp{ createImage( outofdate_xpm ) }
+				, m_outOfCastorDateBmp{ createImage( outofdate_xpm ) }
+				, m_outOfSceneDateBmp{ createImage( outofdate2_xpm ) }
 				, m_bitmaps{ createImage( ignored_xpm )
 					, createImage( notrun_xpm )
 					, createImage( negligible_xpm )
@@ -193,8 +214,9 @@ namespace aria
 			bool SetValue( const wxVariant & value ) override
 			{
 				m_value = uint32_t( value.GetLong() );
-				m_index = ( m_value >> 1 );
-				m_outOfDate = ( m_value & 0x01u );
+				m_index = ( m_value >> 2 );
+				m_outOfCastorDate = ( m_value & 0x01u );
+				m_outOfSceneDate = ( m_value & 0x02u );
 				return true;
 			}
 
@@ -211,12 +233,23 @@ namespace aria
 					, cell.y
 					, true );
 
-				if ( m_outOfDate && m_index < 6 )
+				if ( m_index < 6 )
 				{
-					dc->DrawBitmap( m_outOfDateBmp
-						, cell.x
-						, cell.y
-						, true );
+					if ( m_outOfCastorDate )
+					{
+						dc->DrawBitmap( m_outOfCastorDateBmp
+							, cell.x
+							, cell.y
+							, true );
+					}
+
+					if ( m_outOfSceneDate )
+					{
+						dc->DrawBitmap( m_outOfSceneDateBmp
+							, cell.x
+							, cell.y
+							, true );
+					}
 				}
 
 				return false;
@@ -236,11 +269,13 @@ namespace aria
 
 		private:
 			wxSize m_size;
-			wxBitmap m_outOfDateBmp;
+			wxBitmap m_outOfCastorDateBmp;
+			wxBitmap m_outOfSceneDateBmp;
 			std::array< wxBitmap, size_t( TestStatus::eCount ) + AdditionalIndices > m_bitmaps;
 			uint32_t m_value;
 			uint32_t m_index;
-			bool m_outOfDate{};
+			bool m_outOfCastorDate{};
+			bool m_outOfSceneDate{};
 		};
 
 		castor::Path getTestFileName( castor::Path const & folder
@@ -263,6 +298,7 @@ namespace aria
 		SetClientSize( 900, 600 );
 		doInitGui();
 		doInitMenus();
+		doInitMenuBar();
 		Bind( wxEVT_CLOSE_WINDOW
 			, [this]( wxCloseEvent & evt )
 			{
@@ -491,44 +527,48 @@ namespace aria
 	{
 		auto addTestBaseMenus = []( wxMenu & menu )
 		{
-			menu.Append( eID_COPY_FILE_NAME, _( "Copy test file path" ) + wxT( "\tF2" ) );
-			menu.Append( eID_VIEW_TEST, _( "View Test" ) + wxT( "\tF3" ) );
-			menu.Append( eID_SET_REF, _( "Set Reference" ) + wxT( "\tF4" ) );
-			menu.Append( eID_IGNORE_RESULT, _( "Ignore result" ) + wxT( "\tF5" ), wxEmptyString, true );
-			menu.Append( eID_UPDATE_CASTOR, _( "Update Castor3D's date" ) + wxT( "\tF6" ) );
+			menu.Append( eID_TEST_COPY_FILE_NAME, _( "Copy test file path" ) + wxT( "\tF2" ) );
+			menu.Append( eID_TEST_VIEW, _( "View Test" ) + wxT( "\tF3" ) );
+			menu.Append( eID_TEST_SET_REF, _( "Set Reference" ) + wxT( "\tF4" ) );
+			menu.Append( eID_TEST_IGNORE_RESULT, _( "Ignore result" ) + wxT( "\tF5" ), wxEmptyString, true );
+			menu.Append( eID_TEST_UPDATE_CASTOR, _( "Update Castor3D's date" ) + wxT( "\tF6" ) );
+			menu.Append( eID_TEST_UPDATE_SCENE, _( "Update Scene's date" ) + wxT( "\tF7" ) );
 		};
 		auto addTestRunMenus = []( wxMenu & menu )
 		{
 		};
 		auto addRendererMenus = []( wxMenu & menu )
 		{
-			menu.Append( eID_RUN_RENDERER_TESTS_ALL, _( "Run all renderer's tests" ) + wxT( "\tF7" ) );
-			menu.Append( eID_RUN_RENDERER_TESTS_NOTRUN, _( "Run all <not run> renderer's tests" ) + wxT( "\tF8" ) );
-			menu.Append( eID_RUN_RENDERER_TESTS_ACCEPTABLE, _( "Run all <acceptable> renderer's tests" ) + wxT( "\tF9" ) );
-			menu.Append( eID_RUN_RENDERER_TESTS_ALL_BUT_NEGLIGIBLE, _( "Run all but <negligible> renderer's tests" ) + wxT( "\tF10" ) );
-			menu.Append( eID_RUN_RENDERER_TESTS_OUTDATED, _( "Run all outdated renderer's tests" ) + wxT( "\tF11" ) );
-			menu.Append( eID_RENDERER_UPDATE_CASTOR, _( "Update renderer's tests Castor3D's date" ) + wxT( "\tF12" ) );
+			menu.Append( eID_RENDERER_RUN_TESTS_ALL, _( "Run all renderer's tests" ) + wxT( "\tCtrl+F1" ) );
+			menu.Append( eID_RENDERER_RUN_TESTS_NOTRUN, _( "Run all <not run> renderer's tests" ) + wxT( "\tCtrl+F2" ) );
+			menu.Append( eID_RENDERER_RUN_TESTS_ACCEPTABLE, _( "Run all <acceptable> renderer's tests" ) + wxT( "\tCtrl+F3" ) );
+			menu.Append( eID_RENDERER_RUN_TESTS_ALL_BUT_NEGLIGIBLE, _( "Run all but <negligible> renderer's tests" ) + wxT( "\tCtrl+F4" ) );
+			menu.Append( eID_RENDERER_RUN_TESTS_OUTDATED, _( "Run all outdated renderer's tests" ) + wxT( "\tFCtrl+5" ) );
+			menu.Append( eID_RENDERER_UPDATE_CASTOR, _( "Update renderer's tests Castor3D's date" ) + wxT( "\tCtrl+F6" ) );
+			menu.Append( eID_RENDERER_UPDATE_SCENE, _( "Update renderer's tests Scene's date" ) + wxT( "\tCtrl+F7" ) );
 		};
 		auto addCategoryMenus = []( wxMenu & menu )
 		{
-			menu.Append( eID_RUN_CATEGORY_TESTS_ALL, _( "Run all category's tests" ) + wxT( "\tF7" ) );
-			menu.Append( eID_RUN_CATEGORY_TESTS_NOTRUN, _( "Run all <not run> category's tests" ) + wxT( "\tF8" ) );
-			menu.Append( eID_RUN_CATEGORY_TESTS_ACCEPTABLE, _( "Run all <acceptable> category's tests" ) + wxT( "\tF9" ) );
-			menu.Append( eID_RUN_CATEGORY_TESTS_ALL_BUT_NEGLIGIBLE, _( "Run all but <negligible> category's tests" ) + wxT( "\tF10" ) );
-			menu.Append( eID_RUN_CATEGORY_TESTS_OUTDATED, _( "Run all outdated category's tests" ) + wxT( "\tF11" ) );
-			menu.Append( eID_CATEGORY_UPDATE_CASTOR, _( "Update category's tests Castor3D's date" ) + wxT( "\tF12" ) );
+			menu.Append( eID_CATEGORY_RUN_TESTS_ALL, _( "Run all category's tests" ) + wxT( "\tAlt+F1" ) );
+			menu.Append( eID_CATEGORY_RUN_TESTS_NOTRUN, _( "Run all <not run> category's tests" ) + wxT( "\tAlt+F2" ) );
+			menu.Append( eID_CATEGORY_RUN_TESTS_ACCEPTABLE, _( "Run all <acceptable> category's tests" ) + wxT( "\tAlt+F3" ) );
+			menu.Append( eID_CATEGORY_RUN_TESTS_ALL_BUT_NEGLIGIBLE, _( "Run all but <negligible> category's tests" ) + wxT( "\tAlt+F4" ) );
+			menu.Append( eID_CATEGORY_RUN_TESTS_OUTDATED, _( "Run all outdated category's tests" ) + wxT( "\tAlt+F5" ) );
+			menu.Append( eID_CATEGORY_UPDATE_CASTOR, _( "Update category's tests Castor3D's date" ) + wxT( "\tAlt+F6" ) );
+			menu.Append( eID_CATEGORY_UPDATE_SCENE, _( "Update category's tests Scene's date" ) + wxT( "\tAlt+F7" ) );
 		};
 		auto addAllMenus = []( wxMenu & menu )
 		{
-			menu.Append( eID_RUN_TESTS_ALL, _( "Run all tests" ) + wxT( "\tF7" ) );
-			menu.Append( eID_RUN_TESTS_NOTRUN, _( "Run all <not run> tests" ) + wxT( "\tF8" ) );
-			menu.Append( eID_RUN_TESTS_ACCEPTABLE, _( "Run all <acceptable> tests" ) + wxT( "\tF9" ) );
-			menu.Append( eID_RUN_TESTS_ALL_BUT_NEGLIGIBLE, _( "Run all but <negligible> tests" ) + wxT( "\tF10" ) );
-			menu.Append( eID_RUN_TESTS_OUTDATED, _( "Run all outdated tests" ) + wxT( "\tF11" ) );
-			menu.Append( eID_ALL_UPDATE_CASTOR, _( "Update tests Castor3D's date" ) + wxT( "\tF12" ) );
+			menu.Append( eID_ALL_RUN_TESTS_ALL, _( "Run all tests" ) + wxT( "\tCtrl+Alt+F1" ) );
+			menu.Append( eID_ALL_RUN_TESTS_NOTRUN, _( "Run all <not run> tests" ) + wxT( "\tCtrl+Alt+F2" ) );
+			menu.Append( eID_ALL_RUN_TESTS_ACCEPTABLE, _( "Run all <acceptable> tests" ) + wxT( "\tCtrl+Alt+F3" ) );
+			menu.Append( eID_ALL_RUN_TESTS_ALL_BUT_NEGLIGIBLE, _( "Run all but <negligible> tests" ) + wxT( "\tCtrl+Alt+F4" ) );
+			menu.Append( eID_ALL_RUN_TESTS_OUTDATED, _( "Run all outdated tests" ) + wxT( "\tCtrl+Alt+F5" ) );
+			menu.Append( eID_ALL_UPDATE_CASTOR, _( "Update tests Castor3D's date" ) + wxT( "\tCtrl+Alt+F6" ) );
+			menu.Append( eID_ALL_UPDATE_SCENE, _( "Update tests Scene's date" ) + wxT( "\tCtrl+Alt+F7" ) );
 		};
 		m_testMenu = std::make_unique< wxMenu >();
-		m_testMenu->Append( eID_RUN_TEST, _( "Run Test" ) + wxT( "\tF1" ) );
+		m_testMenu->Append( eID_TEST_RUN, _( "Run Test" ) + wxT( "\tF1" ) );
 		addTestBaseMenus( *m_testMenu );
 		m_testMenu->Connect( wxEVT_COMMAND_MENU_SELECTED
 			, wxCommandEventHandler( MainFrame::onMenuOption )
@@ -563,6 +603,18 @@ namespace aria
 			, wxCommandEventHandler( MainFrame::onMenuOption )
 			, nullptr
 			, this );
+	}
+
+	void MainFrame::doInitMenuBar()
+	{
+		wxMenuBar * menuBar{ new wxMenuBar };
+		wxMenu * testsMenu{ new wxMenu };
+		testsMenu->AppendSubMenu( m_testMenu.get(), _( "Single" ) );
+		testsMenu->AppendSubMenu( m_categoryMenu.get(), _( "Category" ) );
+		testsMenu->AppendSubMenu( m_rendererMenu.get(), _( "Renderer" ) );
+		testsMenu->AppendSubMenu( m_allMenu.get(), _( "All" ) );
+		menuBar->Append( testsMenu, _( "Tests" ) );
+		SetMenuBar( menuBar );
 	}
 
 	void MainFrame::doFillList( wxProgressDialog & progress
@@ -605,7 +657,7 @@ namespace aria
 			auto & testNode = *m_runningTest.tests.begin();
 			auto & test = *testNode.test;
 			wxString command = m_config.launcher;
-			command << " " << ( m_config.test / test.category / ( test.name + ".cscn" ) );
+			command << " " << m_config.test / getSceneFile( test );
 			command << " -" << test.renderer;
 			test.status = TestStatus::eRunning_Begin;
 			m_updater.addTest( *testNode.node );
@@ -653,8 +705,11 @@ namespace aria
 			for ( auto & item : m_selected.items )
 			{
 				auto node = static_cast< TreeModelNode * >( item.GetID() );
-				assert( node->test );
-				m_runningTest.tests.push_back( { node->test, node->test->status, node } );
+
+				if ( isTestNode( *node ) )
+				{
+					m_runningTest.tests.push_back( { node->test, node->test->status, node } );
+				}
 			}
 
 			doProcessTest();
@@ -668,7 +723,7 @@ namespace aria
 			auto & item = *m_selected.items.begin();
 			auto node = static_cast< TreeModelNode * >( item.GetID() );
 
-			if ( wxTheClipboard->Open() )
+			if ( isTestNode( *node ) && wxTheClipboard->Open() )
 			{
 				auto guard = castor::makeBlockGuard( [](){ wxTheClipboard->Close(); } );
 				wxTheClipboard->SetData( new wxTextDataObject( makeWxString( getTestFileName( m_config.test, *node->test ) ) ) );
@@ -684,17 +739,21 @@ namespace aria
 		{
 			auto & item = *m_selected.items.begin();
 			auto node = static_cast< TreeModelNode * >( item.GetID() );
-			wxString command = m_config.viewer;
-			command << " " << makeWxString( getTestFileName( m_config.test, *node->test ) );
-			command << " -" << node->test->renderer;
-			m_statusText->SetLabel( _( "Viewing: " ) + node->test->name );
-			auto result = wxExecute( command
-				, wxEXEC_SYNC
-				, m_runningTest.disProcess.get() );
 
-			if ( result != 0 )
+			if ( isTestNode( *node ) )
 			{
-				castor::Logger::logError( "doViewTest: " + castor::System::getLastErrorText() );
+				wxString command = m_config.viewer;
+				command << " " << makeWxString( getTestFileName( m_config.test, *node->test ) );
+				command << " -" << node->test->renderer;
+				m_statusText->SetLabel( _( "Viewing: " ) + node->test->name );
+				auto result = wxExecute( command
+					, wxEXEC_SYNC
+					, m_runningTest.disProcess.get() );
+
+				if ( result != 0 )
+				{
+					castor::Logger::logError( "doViewTest: " + castor::System::getLastErrorText() );
+				}
 			}
 		}
 
@@ -714,11 +773,14 @@ namespace aria
 			for ( auto & item : m_selected.items )
 			{
 				auto node = static_cast< TreeModelNode * >( item.GetID() );
-				assert( node->test );
-				m_statusText->SetLabel( _( "Setting reference: " ) + node->test->name );
-				updateTestStatus( *node->test, TestStatus::eNegligible, true );
-				m_model->ItemChanged( item );
-				m_statusProgress->SetValue( m_statusProgress->GetValue() + 1 );
+
+				if ( isTestNode( *node ) )
+				{
+					m_statusText->SetLabel( _( "Setting reference: " ) + node->test->name );
+					updateTestStatus( *node->test, TestStatus::eNegligible, true );
+					m_model->ItemChanged( item );
+					m_statusProgress->SetValue( m_statusProgress->GetValue() + 1 );
+				}
 			}
 
 			m_statusProgress->Hide();
@@ -741,14 +803,17 @@ namespace aria
 			for ( auto & item : m_selected.items )
 			{
 				auto node = static_cast< TreeModelNode * >( item.GetID() );
-				assert( node->test );
-				m_statusText->SetLabel( _( "Ignoring: " ) + node->test->name );
-				node->test->ignoreResult = m_testMenu->IsChecked( eID_IGNORE_RESULT );
-				node->test->castorDate = m_config.castorRefDate;
-				assert( db::date_time::isValid( node->test->castorDate ) );
-				m_database.updateTestIgnoreResult( *node->test, node->test->ignoreResult, true );
-				m_model->ItemChanged( item );
-				m_statusProgress->SetValue( m_statusProgress->GetValue() + 1 );
+
+				if ( isTestNode( *node ) )
+				{
+					m_statusText->SetLabel( _( "Ignoring: " ) + node->test->name );
+					node->test->ignoreResult = m_testMenu->IsChecked( eID_TEST_IGNORE_RESULT );
+					node->test->castorDate = m_config.castorRefDate;
+					assert( db::date_time::isValid( node->test->castorDate ) );
+					m_database.updateTestIgnoreResult( *node->test, node->test->ignoreResult, true );
+					m_model->ItemChanged( item );
+					m_statusProgress->SetValue( m_statusProgress->GetValue() + 1 );
+				}
 			}
 
 			m_statusProgress->Hide();
@@ -771,12 +836,49 @@ namespace aria
 			for ( auto & item : m_selected.items )
 			{
 				auto node = static_cast< TreeModelNode * >( item.GetID() );
-				assert( node->test );
 
-				if ( isOutOfDate( m_config, *node->test ) )
+				if ( isTestNode( *node ) )
 				{
-					node->test->castorDate = m_config.castorRefDate;
-					m_database.updateTestCastorDate( *node->test );
+					auto & test = *node->test;
+
+					if ( test.castorDate < m_config.castorRefDate )
+					{
+						test.castorDate = m_config.castorRefDate;
+						m_database.updateTestCastorDate( test );
+					}
+				}
+
+				m_statusProgress->SetValue( m_statusProgress->GetValue() + 1 );
+			}
+
+			m_statusProgress->Hide();
+		}
+	}
+
+	void MainFrame::doUpdateSceneDate()
+	{
+		m_cancelled.exchange( false );
+
+		if ( !m_selected.items.empty() )
+		{
+			m_statusProgress->SetRange( m_selected.items.size() );
+			m_statusProgress->SetValue( 0 );
+			m_statusProgress->Show();
+
+			for ( auto & item : m_selected.items )
+			{
+				auto node = static_cast< TreeModelNode * >( item.GetID() );
+
+				if ( isTestNode( *node ) )
+				{
+					auto & test = *node->test;
+					auto sceneDate = getSceneDate( m_config, test );
+
+					if ( test.sceneDate < sceneDate )
+					{
+						test.sceneDate = sceneDate;
+						m_database.updateTestSceneDate( test );
+					}
 				}
 
 				m_statusProgress->SetValue( m_statusProgress->GetValue() + 1 );
@@ -798,23 +900,26 @@ namespace aria
 		for ( auto & item : m_selected.items )
 		{
 			auto node = static_cast< TreeModelNode * >( item.GetID() );
-			assert( !node->category.empty() );
-			auto rendererNode = node->getRenderer();
-			assert( !rendererNode->category.empty() && rendererNode->isRenderer() );
-			auto rendIt = m_tests.find( makeStdString( rendererNode->category ) );
 
-			if ( rendIt != m_tests.end() )
+			if ( isCategoryNode( *node ) )
 			{
-				auto & renderer = *rendIt;
-				auto it = renderer.second.find( makeStdString( node->category ) );
+				auto rendererNode = node->getRenderer();
+				assert( !rendererNode->category.empty() && rendererNode->isRenderer() );
+				auto rendIt = m_tests.find( makeStdString( rendererNode->category ) );
 
-				if ( it != renderer.second.end() )
+				if ( rendIt != m_tests.end() )
 				{
-					auto & category = * it;
+					auto & renderer = *rendIt;
+					auto it = renderer.second.find( makeStdString( node->category ) );
 
-					for ( auto & test : category.second )
+					if ( it != renderer.second.end() )
 					{
-						m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+						auto & category = *it;
+
+						for ( auto & test : category.second )
+						{
+							m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+						}
 					}
 				}
 			}
@@ -833,25 +938,28 @@ namespace aria
 		for ( auto & item : m_selected.items )
 		{
 			auto node = static_cast< TreeModelNode * >( item.GetID() );
-			assert( !node->category.empty() );
-			auto rendererNode = node->getRenderer();
-			assert( !rendererNode->category.empty() && rendererNode->isRenderer() );
-			auto rendIt = m_tests.find( makeStdString( rendererNode->category ) );
 
-			if ( rendIt != m_tests.end() )
+			if ( isCategoryNode( *node ) )
 			{
-				auto & renderer = *rendIt;
-				auto it = renderer.second.find( makeStdString( node->category ) );
+				auto rendererNode = node->getRenderer();
+				assert( !rendererNode->category.empty() && rendererNode->isRenderer() );
+				auto rendIt = m_tests.find( makeStdString( rendererNode->category ) );
 
-				if ( it != renderer.second.end() )
+				if ( rendIt != m_tests.end() )
 				{
-					auto & category = *it;
+					auto & renderer = *rendIt;
+					auto it = renderer.second.find( makeStdString( node->category ) );
 
-					for ( auto & test : category.second )
+					if ( it != renderer.second.end() )
 					{
-						if ( test.status == filter )
+						auto & category = *it;
+
+						for ( auto & test : category.second )
 						{
-							m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+							if ( test.status == filter )
+							{
+								m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+							}
 						}
 					}
 				}
@@ -871,25 +979,28 @@ namespace aria
 		for ( auto & item : m_selected.items )
 		{
 			auto node = static_cast< TreeModelNode * >( item.GetID() );
-			assert( !node->category.empty() );
-			auto rendererNode = node->getRenderer();
-			assert( !rendererNode->category.empty() && rendererNode->isRenderer() );
-			auto rendIt = m_tests.find( makeStdString( rendererNode->category ) );
 
-			if ( rendIt != m_tests.end() )
+			if ( isCategoryNode( *node ) )
 			{
-				auto & renderer = *rendIt;
-				auto it = renderer.second.find( makeStdString( node->category ) );
+				auto rendererNode = node->getRenderer();
+				assert( !rendererNode->category.empty() && rendererNode->isRenderer() );
+				auto rendIt = m_tests.find( makeStdString( rendererNode->category ) );
 
-				if ( it != renderer.second.end() )
+				if ( rendIt != m_tests.end() )
 				{
-					auto & category = *it;
+					auto & renderer = *rendIt;
+					auto it = renderer.second.find( makeStdString( node->category ) );
 
-					for ( auto & test : category.second )
+					if ( it != renderer.second.end() )
 					{
-						if ( test.status != filter )
+						auto & category = *it;
+
+						for ( auto & test : category.second )
 						{
-							m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+							if ( test.status != filter )
+							{
+								m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+							}
 						}
 					}
 				}
@@ -910,26 +1021,29 @@ namespace aria
 		for ( auto & item : m_selected.items )
 		{
 			auto node = static_cast< TreeModelNode * >( item.GetID() );
-			assert( !node->category.empty() );
-			auto rendererNode = node->getRenderer();
-			assert( !rendererNode->category.empty() && rendererNode->isRenderer() );
-			auto rendIt = m_tests.find( makeStdString( rendererNode->category ) );
 
-			if ( rendIt != m_tests.end() )
+			if ( isCategoryNode( *node ) )
 			{
-				auto & renderer = *rendIt;
-				auto it = renderer.second.find( makeStdString( node->category ) );
+				auto rendererNode = node->getRenderer();
+				assert( !rendererNode->category.empty() && rendererNode->isRenderer() );
+				auto rendIt = m_tests.find( makeStdString( rendererNode->category ) );
 
-				if ( it != renderer.second.end() )
+				if ( rendIt != m_tests.end() )
 				{
-					auto & category = *it;
+					auto & renderer = *rendIt;
+					auto it = renderer.second.find( makeStdString( node->category ) );
 
-					for ( auto & test : category.second )
+					if ( it != renderer.second.end() )
 					{
-						if ( isOutOfDate( m_config, test )
-							|| test.status == TestStatus::eNotRun )
+						auto & category = *it;
+
+						for ( auto & test : category.second )
 						{
-							m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+							if ( isOutOfDate( m_config, test )
+								|| test.status == TestStatus::eNotRun )
+							{
+								m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+							}
 						}
 					}
 				}
@@ -946,26 +1060,96 @@ namespace aria
 	{
 		m_cancelled.exchange( false );
 		updateCastorRefDate( m_config );
+		wxProgressDialog progress{ wxT( "Updating tests Castor3D date" )
+			, wxT( "Updating tests..." )
+			, int( 1 )
+			, nullptr };
+		int index = 0;
 
 		for ( auto & item : m_selected.items )
 		{
 			auto node = static_cast< TreeModelNode * >( item.GetID() );
-			assert( !node->category.empty() );
-			auto it = m_tests.find( makeStdString( node->category ) );
 
-			if ( it != m_tests.end() )
+			if ( isCategoryNode( *node ) )
 			{
-				auto & tests = *it;
+				auto rendererNode = node->getRenderer();
+				assert( !rendererNode->category.empty() && rendererNode->isRenderer() );
+				auto rendIt = m_tests.find( makeStdString( rendererNode->category ) );
 
-				for ( auto & test : tests.second )
+				if ( rendIt != m_tests.end() )
 				{
-					auto node = static_cast< TreeModelNode * >( item.GetID() );
-					assert( node->test );
+					auto & renderer = *rendIt;
+					auto it = renderer.second.find( makeStdString( node->category ) );
 
-					if ( isOutOfDate( m_config, *node->test ) )
+					if ( it != renderer.second.end() )
 					{
-						node->test->castorDate = m_config.castorRefDate;
-						m_database.updateTestCastorDate( *node->test );
+						auto & category = *it;
+						progress.SetRange( progress.GetRange() + category.second.size() );
+
+						for ( auto & test : category.second )
+						{
+							progress.Update( index++
+								, _( "Updating tests Castor3D date\n" )
+									+ wxT( "- Renderer: " ) + test.renderer + wxT( "\n" )
+									+ wxT( "- Category: " ) + test.category + wxT( "\n" )
+									+ wxT( "- Test: " ) + makeWxString( test.name ) );
+
+							if ( isOutOfCastorDate( m_config, test ) )
+							{
+								test.castorDate = m_config.castorRefDate;
+								m_database.updateTestCastorDate( test );
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	void MainFrame::doUpdateCategorySceneDate()
+	{
+		m_cancelled.exchange( false );
+		wxProgressDialog progress{ wxT( "Updating tests Scene date" )
+			, wxT( "Updating tests..." )
+			, int( 1 )
+			, nullptr };
+		int index = 0;
+
+		for ( auto & item : m_selected.items )
+		{
+			auto node = static_cast< TreeModelNode * >( item.GetID() );
+
+			if ( isCategoryNode( *node ) )
+			{
+				auto rendererNode = node->getRenderer();
+				assert( !rendererNode->category.empty() && rendererNode->isRenderer() );
+				auto rendIt = m_tests.find( makeStdString( rendererNode->category ) );
+
+				if ( rendIt != m_tests.end() )
+				{
+					auto & renderer = *rendIt;
+					auto it = renderer.second.find( makeStdString( node->category ) );
+
+					if ( it != renderer.second.end() )
+					{
+						auto & category = *it;
+						progress.SetRange( progress.GetRange() + category.second.size() );
+
+						for ( auto & test : category.second )
+						{
+							auto sceneDate = getSceneDate( m_config, test );
+							progress.Update( index++
+								, _( "Updating tests Scene date\n" )
+									+ wxT( "- Renderer: " ) + test.renderer + wxT( "\n" )
+									+ wxT( "- Category: " ) + test.category + wxT( "\n" )
+									+ wxT( "- Test: " ) + makeWxString( test.name ) );
+
+							if ( isOutOfSceneDate( m_config, test ) )
+							{
+								test.sceneDate = sceneDate;
+								m_database.updateTestSceneDate( test );
+							}
+						}
 					}
 				}
 			}
@@ -979,18 +1163,19 @@ namespace aria
 		for ( auto & item : m_selected.items )
 		{
 			auto node = static_cast< TreeModelNode * >( item.GetID() );
-			assert( !node->category.empty() );
-			auto rendererIt = m_tests.find( makeStdString(  node->category ) );
 
-			if ( rendererIt != m_tests.end() )
+			if ( isRendererNode( *node ) )
 			{
-				for ( auto & category : rendererIt->second )
-				{
-					auto & tests = category.second;
+				auto rendererIt = m_tests.find( makeStdString( node->category ) );
 
-					for ( auto & test : tests )
+				if ( rendererIt != m_tests.end() )
+				{
+					for ( auto & category : rendererIt->second )
 					{
-						m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+						for ( auto & test : category.second )
+						{
+							m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+						}
 					}
 				}
 			}
@@ -1009,20 +1194,21 @@ namespace aria
 		for ( auto & item : m_selected.items )
 		{
 			auto node = static_cast< TreeModelNode * >( item.GetID() );
-			assert( !node->category.empty() );
-			auto rendererIt = m_tests.find( makeStdString( node->category ) );
 
-			if ( rendererIt != m_tests.end() )
+			if ( isRendererNode( *node ) )
 			{
-				for ( auto & category : rendererIt->second )
-				{
-					auto & tests = category.second;
+				auto rendererIt = m_tests.find( makeStdString( node->category ) );
 
-					for ( auto & test : tests )
+				if ( rendererIt != m_tests.end() )
+				{
+					for ( auto & category : rendererIt->second )
 					{
-						if ( test.status == filter )
+						for ( auto & test : category.second )
 						{
-							m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+							if ( test.status == filter )
+							{
+								m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+							}
 						}
 					}
 				}
@@ -1042,20 +1228,21 @@ namespace aria
 		for ( auto & item : m_selected.items )
 		{
 			auto node = static_cast< TreeModelNode * >( item.GetID() );
-			assert( !node->category.empty() );
-			auto rendererIt = m_tests.find( makeStdString( node->category ) );
 
-			if ( rendererIt != m_tests.end() )
+			if ( isRendererNode( *node ) )
 			{
-				for ( auto & category : rendererIt->second )
-				{
-					auto & tests = category.second;
+				auto rendererIt = m_tests.find( makeStdString( node->category ) );
 
-					for ( auto & test : tests )
+				if ( rendererIt != m_tests.end() )
+				{
+					for ( auto & category : rendererIt->second )
 					{
-						if ( test.status != filter )
+						for ( auto & test : category.second )
 						{
-							m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+							if ( test.status != filter )
+							{
+								m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+							}
 						}
 					}
 				}
@@ -1076,21 +1263,22 @@ namespace aria
 		for ( auto & item : m_selected.items )
 		{
 			auto node = static_cast< TreeModelNode * >( item.GetID() );
-			assert( !node->category.empty() );
-			auto rendererIt = m_tests.find( makeStdString( node->category ) );
 
-			if ( rendererIt != m_tests.end() )
+			if ( isRendererNode( *node ) )
 			{
-				for ( auto & category : rendererIt->second )
-				{
-					auto & tests = category.second;
+				auto rendererIt = m_tests.find( makeStdString( node->category ) );
 
-					for ( auto & test : tests )
+				if ( rendererIt != m_tests.end() )
+				{
+					for ( auto & category : rendererIt->second )
 					{
-						if ( isOutOfDate( m_config, test )
-							|| test.status == TestStatus::eNotRun )
+						for ( auto & test : category.second )
 						{
-							m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+							if ( isOutOfDate( m_config, test )
+								|| test.status == TestStatus::eNotRun )
+							{
+								m_runningTest.tests.push_back( { &test, test.status, getTestNode( test ) } );
+							}
 						}
 					}
 				}
@@ -1107,29 +1295,83 @@ namespace aria
 	{
 		m_cancelled.exchange( false );
 		updateCastorRefDate( m_config );
+		wxProgressDialog progress{ wxT( "Updating tests Castor3D date" )
+			, wxT( "Updating tests..." )
+			, int( 1 )
+			, nullptr };
+		int index = 0;
 
 		for ( auto & item : m_selected.items )
 		{
 			auto node = static_cast< TreeModelNode * >( item.GetID() );
-			assert( !node->category.empty() );
 
-			for ( auto & renderer : m_tests )
+			if ( isRendererNode( *node ) )
 			{
-				auto it = renderer.second.find( makeStdString( node->category ) );
+				auto rendererIt = m_tests.find( makeStdString( node->category ) );
 
-				if ( it != renderer.second.end() )
+				if ( rendererIt != m_tests.end() )
 				{
-					auto & tests = *it;
-
-					for ( auto & test : tests.second )
+					for ( auto & category : rendererIt->second )
 					{
-						auto node = static_cast< TreeModelNode * >( item.GetID() );
-						assert( node->test );
+						progress.SetRange( progress.GetRange() + category.second.size() );
 
-						if ( isOutOfDate( m_config, *node->test ) )
+						for ( auto & test : category.second )
 						{
-							node->test->castorDate = m_config.castorRefDate;
-							m_database.updateTestCastorDate( *node->test );
+							progress.Update( index++
+								, _( "Updating tests Castor3D date\n" )
+									+ wxT( "- Renderer: " ) + test.renderer + wxT( "\n" )
+									+ wxT( "- Category: " ) + test.category + wxT( "\n" )
+									+ wxT( "- Test: " ) + makeWxString( test.name ) );
+
+							if ( isOutOfCastorDate( m_config, test ) )
+							{
+								test.castorDate = m_config.castorRefDate;
+								m_database.updateTestCastorDate( test );
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	void MainFrame::doUpdateRendererSceneDate()
+	{
+		m_cancelled.exchange( false );
+		wxProgressDialog progress{ wxT( "Updating tests Scene date" )
+			, wxT( "Updating tests..." )
+			, int( 1 )
+			, nullptr };
+		int index = 0;
+
+		for ( auto & item : m_selected.items )
+		{
+			auto node = static_cast< TreeModelNode * >( item.GetID() );
+
+			if ( isRendererNode( *node ) )
+			{
+				auto rendererIt = m_tests.find( makeStdString( node->category ) );
+
+				if ( rendererIt != m_tests.end() )
+				{
+					for ( auto & category : rendererIt->second )
+					{
+						progress.SetRange( progress.GetRange() + category.second.size() );
+
+						for ( auto & test : category.second )
+						{
+							auto sceneDate = getSceneDate( m_config, test );
+							progress.Update( index++
+								, _( "Updating tests Scene date\n" )
+									+ wxT( "- Renderer: " ) + test.renderer + wxT( "\n" )
+									+ wxT( "- Category: " ) + test.category + wxT( "\n" )
+									+ wxT( "- Test: " ) + makeWxString( test.name ) );
+
+							if ( isOutOfSceneDate( m_config, test ) )
+							{
+								test.sceneDate = sceneDate;
+								m_database.updateTestSceneDate( test );
+							}
 						}
 					}
 				}
@@ -1235,17 +1477,70 @@ namespace aria
 	{
 		m_cancelled.exchange( false );
 		updateCastorRefDate( m_config );
+		wxProgressDialog progress{ wxT( "Updating tests Castor3D date" )
+			, wxT( "Updating tests..." )
+			, int( 1 )
+			, nullptr };
+		int index = 0;
 
 		for ( auto & renderer : m_tests )
 		{
+			auto rendererName = makeWxString( renderer.first );
+
 			for ( auto & category : renderer.second )
 			{
+				auto categoryName = makeWxString( category.first );
+				progress.SetRange( progress.GetRange() + category.second.size() );
+
 				for ( auto & test : category.second )
 				{
-					if ( isOutOfDate( m_config, test ) )
+					progress.Update( index++
+						, _( "Updating tests Castor3D date\n" )
+							+ wxT( "- Renderer: " ) + test.renderer + wxT( "\n" )
+							+ wxT( "- Category: " ) + test.category + wxT( "\n" )
+							+ wxT( "- Test: " ) + makeWxString( test.name ) );
+
+					if ( isOutOfCastorDate( m_config, test ) )
 					{
 						test.castorDate = m_config.castorRefDate;
 						m_database.updateTestCastorDate( test );
+					}
+				}
+			}
+		}
+	}
+
+	void MainFrame::doUpdateAllSceneDate()
+	{
+		m_cancelled.exchange( false );
+		wxProgressDialog progress{ wxT( "Updating tests Scene date" )
+			, wxT( "Updating tests..." )
+			, int( 1 )
+			, nullptr };
+		int index = 0;
+
+		for ( auto & renderer : m_tests )
+		{
+			auto rendererName = makeWxString( renderer.first );
+
+			for ( auto & category : renderer.second )
+			{
+				auto categoryName = makeWxString( category.first );
+				progress.SetRange( progress.GetRange() + category.second.size() );
+
+				for ( auto & test : category.second )
+				{
+					auto sceneDate = getSceneDate( m_config, test );
+					progress.Update( index++
+						, _( "Updating tests Scene date\n" )
+							+ wxT( "- Renderer: " ) + test.renderer + wxT( "\n" )
+							+ wxT( "- Category: " ) + test.category + wxT( "\n" )
+							+ wxT( "- Test: " ) + makeWxString( test.name ) );
+
+					if ( isOutOfSceneDate( m_config, test ) )
+					{
+						test.sceneDate = sceneDate;
+						m_database.updateTestSceneDate( test );
 					}
 				}
 			}
@@ -1345,6 +1640,8 @@ namespace aria
 			updateCastorRefDate( m_config );
 			test.castorDate = m_config.castorRefDate;
 			assert( db::date_time::isValid( test.castorDate ) );
+			test.sceneDate = getSceneDate( m_config, test );
+			assert( db::date_time::isValid( test.sceneDate ) );
 			m_database.insertTest( test );
 
 			if ( test.ignoreResult )
@@ -1422,7 +1719,7 @@ namespace aria
 				{
 					renderer = node->category;
 				}
-				else
+				else if ( node->GetParent() )
 				{
 					renderer = node->getRenderer()->category;
 					category = node->category;
@@ -1476,15 +1773,21 @@ namespace aria
 					m_detailViews->showLayer( 2 );
 					displayCategory = true;
 				}
+				else
+				{
+					m_categoryView->setAll( m_tests, m_runningTest.tests );
+					m_detailViews->showLayer( 2 );
+					displayCategory = true;
+				}
 			}
 		}
 
 		for ( auto & item : m_selected.items )
 		{
 			auto node = static_cast< TreeModelNode * >( item.GetID() );
-			m_selected.allRenderers = ( !node->category.empty() && node->isRenderer() )
+			m_selected.allRenderers = isRendererNode( *node )
 				&& m_selected.allRenderers;
-			m_selected.allCategories = ( !node->category.empty() && !node->isRenderer() )
+			m_selected.allCategories = isCategoryNode( *node )
 				&& m_selected.allCategories;
 			m_selected.allTests = node->test
 				&& m_selected.allTests;
@@ -1511,13 +1814,13 @@ namespace aria
 			{
 				if ( m_selected.items.size() <= 1 )
 				{
-					m_testMenu->Enable( eID_IGNORE_RESULT, true );
-					m_testMenu->Check( eID_IGNORE_RESULT, static_cast< TreeModelNode * >( m_selected.items.front().GetID() )->test->ignoreResult );
+					m_testMenu->Enable( eID_TEST_IGNORE_RESULT, true );
+					m_testMenu->Check( eID_TEST_IGNORE_RESULT, static_cast< TreeModelNode * >( m_selected.items.front().GetID() )->test->ignoreResult );
 				}
 				else
 				{
-					m_testMenu->Enable( eID_IGNORE_RESULT, false );
-					m_testMenu->Check( eID_IGNORE_RESULT, false );
+					m_testMenu->Enable( eID_TEST_IGNORE_RESULT, false );
+					m_testMenu->Check( eID_TEST_IGNORE_RESULT, false );
 				}
 
 				PopupMenu( m_testMenu.get() );
@@ -1545,77 +1848,89 @@ namespace aria
 	{
 		switch ( evt.GetId() )
 		{
-		case eID_RUN_TEST:
+		case eID_TEST_RUN:
 			doRunTest();
 			break;
-		case eID_COPY_FILE_NAME:
+		case eID_TEST_COPY_FILE_NAME:
 			doCopyTestFileName();
 			break;
-		case eID_VIEW_TEST:
+		case eID_TEST_VIEW:
 			doViewTest();
 			break;
-		case eID_SET_REF:
+		case eID_TEST_SET_REF:
 			doSetRef();
 			break;
-		case eID_IGNORE_RESULT:
+		case eID_TEST_IGNORE_RESULT:
 			doIgnoreTestResult();
 			break;
-		case eID_UPDATE_CASTOR:
+		case eID_TEST_UPDATE_CASTOR:
 			doUpdateCastorDate();
 			break;
-		case eID_RUN_CATEGORY_TESTS_ALL:
+		case eID_TEST_UPDATE_SCENE:
+			doUpdateSceneDate();
+			break;
+		case eID_CATEGORY_RUN_TESTS_ALL:
 			doRunAllCategoryTests();
 			break;
-		case eID_RUN_CATEGORY_TESTS_NOTRUN:
+		case eID_CATEGORY_RUN_TESTS_NOTRUN:
 			doRunCategoryTests( TestStatus::eNotRun );
 			break;
-		case eID_RUN_CATEGORY_TESTS_ACCEPTABLE:
+		case eID_CATEGORY_RUN_TESTS_ACCEPTABLE:
 			doRunCategoryTests( TestStatus::eAcceptable );
 			break;
-		case eID_RUN_CATEGORY_TESTS_ALL_BUT_NEGLIGIBLE:
+		case eID_CATEGORY_RUN_TESTS_ALL_BUT_NEGLIGIBLE:
 			doRunAllCategoryTestsBut( TestStatus::eNegligible );
 			break;
-		case eID_RUN_CATEGORY_TESTS_OUTDATED:
+		case eID_CATEGORY_RUN_TESTS_OUTDATED:
 			doRunAllCategoryOutdatedTests();
 			break;
 		case eID_CATEGORY_UPDATE_CASTOR:
 			doUpdateCategoryCastorDate();
 			break;
-		case eID_RUN_RENDERER_TESTS_ALL:
+		case eID_CATEGORY_UPDATE_SCENE:
+			doUpdateCategorySceneDate();
+			break;
+		case eID_RENDERER_RUN_TESTS_ALL:
 			doRunAllRendererTests();
 			break;
-		case eID_RUN_RENDERER_TESTS_NOTRUN:
+		case eID_RENDERER_RUN_TESTS_NOTRUN:
 			doRunRendererTests( TestStatus::eNotRun );
 			break;
-		case eID_RUN_RENDERER_TESTS_ACCEPTABLE:
+		case eID_RENDERER_RUN_TESTS_ACCEPTABLE:
 			doRunRendererTests( TestStatus::eAcceptable );
 			break;
-		case eID_RUN_RENDERER_TESTS_ALL_BUT_NEGLIGIBLE:
+		case eID_RENDERER_RUN_TESTS_ALL_BUT_NEGLIGIBLE:
 			doRunAllRendererTestsBut( TestStatus::eNegligible );
 			break;
-		case eID_RUN_RENDERER_TESTS_OUTDATED:
+		case eID_RENDERER_RUN_TESTS_OUTDATED:
 			doRunAllRendererOutdatedTests();
 			break;
 		case eID_RENDERER_UPDATE_CASTOR:
 			doUpdateRendererCastorDate();
 			break;
-		case eID_RUN_TESTS_ALL:
+		case eID_RENDERER_UPDATE_SCENE:
+			doUpdateRendererSceneDate();
+			break;
+		case eID_ALL_RUN_TESTS_ALL:
 			doRunAllTests();
 			break;
-		case eID_RUN_TESTS_NOTRUN:
+		case eID_ALL_RUN_TESTS_NOTRUN:
 			doRunTests( TestStatus::eNotRun );
 			break;
-		case eID_RUN_TESTS_ACCEPTABLE:
+		case eID_ALL_RUN_TESTS_ACCEPTABLE:
 			doRunTests( TestStatus::eAcceptable );
 			break;
-		case eID_RUN_TESTS_ALL_BUT_NEGLIGIBLE:
+		case eID_ALL_RUN_TESTS_ALL_BUT_NEGLIGIBLE:
 			doRunAllTestsBut( TestStatus::eNegligible );
 			break;
-		case eID_RUN_TESTS_OUTDATED:
+		case eID_ALL_RUN_TESTS_OUTDATED:
 			doRunAllOutdatedTests();
 			break;
 		case eID_ALL_UPDATE_CASTOR:
 			doUpdateAllCastorDate();
+			break;
+		case eID_ALL_UPDATE_SCENE:
+			doUpdateAllSceneDate();
 			break;
 		case eID_CANCEL:
 			doCancel();

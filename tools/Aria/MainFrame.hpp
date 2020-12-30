@@ -44,6 +44,7 @@ namespace aria
 		wxWindow * doInitDetailsView();
 		void doInitGui();
 		void doInitMenus();
+		void doInitMenuBar();
 		void doFillList( wxProgressDialog & progress, int & index, uint32_t testCount );
 
 		void doProcessTest();
@@ -53,21 +54,25 @@ namespace aria
 		void doSetRef();
 		void doIgnoreTestResult();
 		void doUpdateCastorDate();
+		void doUpdateSceneDate();
 		void doRunAllCategoryTests();
 		void doRunCategoryTests( TestStatus filter );
 		void doRunAllCategoryTestsBut( TestStatus filter );
 		void doRunAllCategoryOutdatedTests();
 		void doUpdateCategoryCastorDate();
+		void doUpdateCategorySceneDate();
 		void doRunAllRendererTests();
 		void doRunRendererTests( TestStatus filter );
 		void doRunAllRendererTestsBut( TestStatus filter );
 		void doRunAllRendererOutdatedTests();
 		void doUpdateRendererCastorDate();
+		void doUpdateRendererSceneDate();
 		void doRunAllTests();
 		void doRunTests( TestStatus filter );
 		void doRunAllTestsBut( TestStatus filter );
 		void doRunAllOutdatedTests();
 		void doUpdateAllCastorDate();
+		void doUpdateAllSceneDate();
 		void doCancelTest( Test & test
 			, TestStatus status );
 		void doCancel();

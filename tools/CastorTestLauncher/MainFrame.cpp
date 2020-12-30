@@ -306,7 +306,7 @@ namespace test_launcher
 			wxBitmap bitmap;
 
 			// Prerender 10 frames, for environment maps.
-			for ( auto i = 0; i < 10; ++i )
+			for ( auto i = 0; i <= 10; ++i )
 			{
 				m_engine.getRenderLoop().renderSyncFrame();
 			}

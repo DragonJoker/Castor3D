@@ -48,6 +48,7 @@ namespace aria
 			, bool ignore
 			, bool useAsReference );
 		void updateTestCastorDate( Test & test );
+		void updateTestSceneDate( Test & test );
 
 	private:
 		void doInitDatabase( wxProgressDialog & progress, int & index );
@@ -61,7 +62,7 @@ namespace aria
 		{
 			InsertTest() = default;
 			explicit InsertTest( db::Connection & connection )
-				: stmt{ connection.createStatement( "INSERT INTO Test(Name, RunDate, Status, Renderer, Category, IgnoreResult, CastorDate) VALUES (?, ?, ?, ?, ?, ?, ?);" ) }
+				: stmt{ connection.createStatement( "INSERT INTO Test(Name, RunDate, Status, Renderer, Category, IgnoreResult, CastorDate, SceneDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?);" ) }
 				, name{ stmt->createParameter( "Name", db::FieldType::eVarchar, 1024 ) }
 				, runDate{ stmt->createParameter( "RunDate", db::FieldType::eDatetime ) }
 				, status{ stmt->createParameter( "Status", db::FieldType::eSint32 ) }
@@ -69,6 +70,7 @@ namespace aria
 				, category{ stmt->createParameter( "Category", db::FieldType::eVarchar, 50 ) }
 				, ignoreResult{ stmt->createParameter( "IgnoreResult", db::FieldType::eSint32 ) }
 				, castorDate{ stmt->createParameter( "CastorDate", db::FieldType::eDatetime ) }
+				, sceneDate{ stmt->createParameter( "SceneDate", db::FieldType::eDatetime ) }
 			{
 				stmt->initialise();
 			}
@@ -81,15 +83,17 @@ namespace aria
 			db::Parameter * category{};
 			db::Parameter * ignoreResult{};
 			db::Parameter * castorDate{};
+			db::Parameter * sceneDate{};
 		};
 		
 		struct UpdateTestStatus
 		{
 			UpdateTestStatus() = default;
 			explicit UpdateTestStatus( db::Connection & connection )
-				: stmt{ connection.createStatement( "UPDATE Test SET Status=?, CastorDate=? WHERE Id=?;" ) }
+				: stmt{ connection.createStatement( "UPDATE Test SET Status=?, CastorDate=?, SceneDate=? WHERE Id=?;" ) }
 				, status{ stmt->createParameter( "Status", db::FieldType::eSint32 ) }
 				, castorDate{ stmt->createParameter( "CastorDate", db::FieldType::eDatetime ) }
+				, sceneDate{ stmt->createParameter( "SceneDate", db::FieldType::eDatetime ) }
 				, id{ stmt->createParameter( "Id", db::FieldType::eSint32 ) }
 			{
 				stmt->initialise();
@@ -98,6 +102,7 @@ namespace aria
 			db::StatementPtr stmt;
 			db::Parameter * status{};
 			db::Parameter * castorDate{};
+			db::Parameter * sceneDate{};
 			db::Parameter * id{};
 		};
 
@@ -105,9 +110,10 @@ namespace aria
 		{
 			UpdateTestIgnoreResult() = default;
 			explicit UpdateTestIgnoreResult( db::Connection & connection )
-				: stmt{ connection.createStatement( "UPDATE Test SET IgnoreResult=?, CastorDate=? WHERE Id=?;" ) }
+				: stmt{ connection.createStatement( "UPDATE Test SET IgnoreResult=?, CastorDate=?, SceneDate=? WHERE Id=?;" ) }
 				, status{ stmt->createParameter( "Status", db::FieldType::eSint32 ) }
 				, castorDate{ stmt->createParameter( "CastorDate", db::FieldType::eDatetime ) }
+				, sceneDate{ stmt->createParameter( "SceneDate", db::FieldType::eDatetime ) }
 				, id{ stmt->createParameter( "Id", db::FieldType::eSint32 ) }
 			{
 				stmt->initialise();
@@ -116,6 +122,7 @@ namespace aria
 			db::StatementPtr stmt;
 			db::Parameter * status{};
 			db::Parameter * castorDate{};
+			db::Parameter * sceneDate{};
 			db::Parameter * id{};
 		};
 
@@ -135,6 +142,22 @@ namespace aria
 			db::Parameter * id{};
 		};
 
+		struct UpdateTestSceneDate
+		{
+			UpdateTestSceneDate() = default;
+			explicit UpdateTestSceneDate( db::Connection & connection )
+				: stmt{ connection.createStatement( "UPDATE Test SET SceneDate=? WHERE Id=?;" ) }
+				, sceneDate{ stmt->createParameter( "SceneDate", db::FieldType::eDatetime ) }
+				, id{ stmt->createParameter( "Id", db::FieldType::eSint32 ) }
+			{
+				stmt->initialise();
+			}
+
+			db::StatementPtr stmt;
+			db::Parameter * sceneDate{};
+			db::Parameter * id{};
+		};
+
 	private:
 		Config m_config;
 		db::Connection m_database;
@@ -142,6 +165,7 @@ namespace aria
 		UpdateTestStatus m_updateTestStatus;
 		UpdateTestIgnoreResult m_updateTestIgnoreResult;
 		UpdateTestCastorDate m_updateTestCastorDate;
+		UpdateTestSceneDate m_updateTestSceneDate;
 		db::StatementPtr m_listTests;
 	};
 }

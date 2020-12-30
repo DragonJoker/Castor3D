@@ -54,9 +54,27 @@ namespace aria
 		return it->second;
 	}
 
+	db::DateTime getSceneDate( Config const & config, Test const & test )
+	{
+		return getFileDate( config.test / getSceneFile( test ) );
+	}
+
+	bool isOutOfCastorDate( Config const & config, Test const & test )
+	{
+		return test.castorDate.is_not_a_date_time()
+			|| test.castorDate < getFileDate( config.castor );
+	}
+
+	bool isOutOfSceneDate( Config const & config, Test const & test )
+	{
+		return test.sceneDate.is_not_a_date_time()
+			|| test.sceneDate < getSceneDate( config, test );
+	}
+
 	bool isOutOfDate( Config const & config, Test const & test )
 	{
-		return test.castorDate < config.castorRefDate;
+		return isOutOfCastorDate( config, test )
+			|| isOutOfSceneDate( config, test );
 	}
 
 	void updateCastorRefDate( Config & config )
@@ -81,10 +99,18 @@ namespace aria
 			result = IgnoredIndex;
 		}
 
-		return ( result << 1 )
-			| ( isOutOfDate( config, test )
+		return ( result << 2 )
+			| ( isOutOfCastorDate( config, test )
 				? 0x01u
+				: 0x00u )
+			| ( isOutOfSceneDate( config, test )
+				? 0x02u
 				: 0x00u );
+	}
+
+	castor::Path getSceneFile( Test const & test )
+	{
+		return castor::Path{ test.category } / ( test.name + ".cscn" );
 	}
 
 	castor::Path getResultFolder( Test const & test, bool useStatus )
