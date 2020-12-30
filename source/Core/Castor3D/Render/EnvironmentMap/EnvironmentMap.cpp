@@ -17,6 +17,7 @@
 
 #include <CastorUtils/Miscellaneous/BitSize.hpp>
 
+#include <ashespp/Image/Image.hpp>
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
@@ -266,7 +267,11 @@ namespace castor3d
 			cmd.begin();
 			cmd.beginDebugBlock( { m_environmentMap->getTexture()->getName() + " Mipmaps Generation"
 				, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
-			m_environmentMap->getTexture()->generateMipmaps( cmd );
+			auto & image = m_environmentMap->getTexture()->getTexture();
+			image.generateMipmaps( cmd
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, VK_IMAGE_LAYOUT_UNDEFINED
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 			cmd.endDebugBlock();
 			cmd.end();
 		}
