@@ -71,7 +71,8 @@ namespace castor3d
 			, sdw::Vec3 const & wsNormal
 			, sdw::SampledImageCubeRgba32 const & envMap
 			, sdw::Float const & refractionRatio
-			, sdw::Vec3 const & diffuse
+			, sdw::Vec3 const & specular
+			, sdw::Vec3 const & transmission
 			, sdw::Float const & shininess
 			, sdw::Vec3 & reflection
 			, sdw::Vec3 & refraction )const
@@ -80,7 +81,8 @@ namespace castor3d
 				, wsNormal
 				, envMap
 				, refractionRatio
-				, diffuse
+				, specular
+				, transmission
 				, shininess
 				, reflection
 				, refraction );
@@ -105,12 +107,12 @@ namespace castor3d
 					, Vec3 const & wsNormal
 					, SampledImageCubeRgba32 const & envMap
 					, Float const & shininess
-					, Vec3 const & diffuse )
+					, Vec3 const & specular )
 				{
 					auto reflected = m_writer.declLocale( "reflected"
 						, reflect( wsIncident, wsNormal ) );
 					m_writer.returnStmt( envMap.lod( reflected, ( 256.0f - shininess ) / 32.0f ).xyz()
-						* diffuse / length( diffuse ) );
+						* specular );
 				}
 				, InVec3{ m_writer, "wsIncident" }
 				, InVec3{ m_writer, "wsNormal" }
@@ -126,7 +128,7 @@ namespace castor3d
 					, Vec3 const & wsNormal
 					, SampledImageCubeRgba32 const & envMap
 					, Float const & refractionRatio
-					, Vec3 const & diffuse
+					, Vec3 const & transmission
 					, Float const & shininess
 					, sdw::Vec3 & reflection
 					, sdw::Vec3 & refraction )
@@ -148,7 +150,7 @@ namespace castor3d
 					reflection = mix( vec3( 0.0_f )
 						, reflection
 						, vec3( fresnel ) );
-					refraction = mix( envMap.lod( refracted, ( 256.0f - shininess ) / 32.0f ).xyz() * diffuse / length( diffuse )
+					refraction = mix( envMap.lod( refracted, ( 256.0f - shininess ) / 32.0f ).xyz() * transmission
 						, vec3( 0.0_f )
 						, vec3( fresnel ) );
 				}
@@ -156,7 +158,7 @@ namespace castor3d
 				, InVec3{ m_writer, "wsNormal" }
 				, InSampledImageCubeRgba32{ m_writer, "envMap" }
 				, InFloat{ m_writer, "refractionRatio" }
-				, InVec3{ m_writer, "diffuse" }
+				, InVec3{ m_writer, "transmission" }
 				, InFloat{ m_writer, "shininess" }
 				, InOutVec3{ m_writer, "reflection" }
 				, OutVec3{ m_writer, "refraction" } );
@@ -169,7 +171,8 @@ namespace castor3d
 					, Vec3 const & wsNormal
 					, SampledImageCubeRgba32 const & envMap
 					, Float const & refractionRatio
-					, Vec3 const & diffuse
+					, Vec3 const & specular
+					, Vec3 const & transmission
 					, Float const & shininess
 					, sdw::Vec3 & reflection
 					, sdw::Vec3 & refraction )
@@ -178,12 +181,12 @@ namespace castor3d
 						, wsNormal
 						, envMap
 						, shininess
-						, diffuse );
+						, specular );
 					computeRefr( wsIncident
 						, wsNormal
 						, envMap
 						, refractionRatio
-						, diffuse
+						, transmission
 						, shininess
 						, reflection
 						, refraction );
@@ -192,7 +195,8 @@ namespace castor3d
 				, InVec3{ m_writer, "wsNormal" }
 				, InSampledImageCubeRgba32{ m_writer, "envMap" }
 				, InFloat{ m_writer, "refractionRatio" }
-				, InVec3{ m_writer, "diffuse" }
+				, InVec3{ m_writer, "specular" }
+				, InVec3{ m_writer, "transmission" }
 				, InFloat{ m_writer, "shininess" }
 				, OutVec3{ m_writer, "reflection" }
 				, OutVec3{ m_writer, "refraction" } );

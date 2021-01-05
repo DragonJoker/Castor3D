@@ -52,6 +52,7 @@ namespace castor3d
 			castor::ArrayView< RgbaColour > diffDiv;
 			castor::ArrayView< RgbaColour > specGloss;
 			castor::ArrayView< RgbaColour > common;
+			castor::ArrayView< RgbaColour > opacity;
 			castor::ArrayView< RgbaColour > reflRefr;
 			ExtendedData extended;
 		};
@@ -63,6 +64,7 @@ namespace castor3d
 			RgbaColour diffDiv;
 			RgbaColour specGloss;
 			RgbaColour common;
+			RgbaColour opacity;
 			RgbaColour reflRefr;
 			ExtendedData extended;
 		};

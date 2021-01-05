@@ -21,12 +21,12 @@ namespace castor3d
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeRgba32 const & envMap
 				, sdw::Float const & shininess
-				, sdw::Vec3 const & diffuse )const;
+				, sdw::Vec3 const & specular )const;
 			C3D_API void computeRefr( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeRgba32 const & envMap
 				, sdw::Float const & refractionRatio
-				, sdw::Vec3 const & diffuse
+				, sdw::Vec3 const & transmission
 				, sdw::Float const & shininess
 				, sdw::Vec3 & reflection
 				, sdw::Vec3 & refraction )const;
@@ -34,7 +34,8 @@ namespace castor3d
 				, sdw::Vec3 const & wsNormal
 				, sdw::SampledImageCubeRgba32 const & envMap
 				, sdw::Float const & refractionRatio
-				, sdw::Vec3 const & diffuse
+				, sdw::Vec3 const & specular
+				, sdw::Vec3 const & transmission
 				, sdw::Float const & shininess
 				, sdw::Vec3 & reflection
 				, sdw::Vec3 & refraction )const;
@@ -71,6 +72,7 @@ namespace castor3d
 				, sdw::InVec3
 				, sdw::InSampledImageCubeRgba32
 				, sdw::InFloat
+				, sdw::InVec3
 				, sdw::InVec3
 				, sdw::InFloat
 				, sdw::OutVec3

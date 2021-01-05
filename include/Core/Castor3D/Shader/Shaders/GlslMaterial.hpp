@@ -33,6 +33,7 @@ namespace castor3d
 
 		protected:
 			sdw::Vec4 m_common;
+			sdw::Vec4 m_opacityTransmission;
 			sdw::Vec4 m_reflRefr;
 			sdw::Vec4 m_sssInfo;
 
@@ -40,6 +41,7 @@ namespace castor3d
 			sdw::Array< sdw::Vec4 > m_transmittanceProfile;
 
 			sdw::Float m_opacity;
+			sdw::Vec3 m_transmission;
 			sdw::Float m_emissive;
 			sdw::Float m_alphaRef;
 			sdw::Float m_gamma;
@@ -132,6 +134,11 @@ namespace castor3d
 			virtual ~Materials() = default;
 			C3D_API virtual void declare( bool hasSsbo ) = 0;
 			C3D_API virtual BaseMaterialUPtr getBaseMaterial( sdw::UInt const & index )const = 0;
+
+		protected:
+			void doFetch( BaseMaterial & result
+				, sdw::SampledImageT< FImgBufferRgba32 > & c3d_materials
+				, sdw::Int & offset );
 
 		protected:
 			sdw::ShaderWriter & m_writer;

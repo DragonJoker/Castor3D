@@ -467,7 +467,8 @@ namespace castor3d
 		addParser( uint32_t( CSCNSection::ePass ), cuT( "parallax_occlusion" ), parserPassParallaxOcclusion, { makeParameter< ParameterType::eCheckedText >( m_mapParallaxOcclusionModes ) } );
 		addParser( uint32_t( CSCNSection::ePass ), cuT( "bw_accumulation" ), parserPassBWAccumulationOperator, { makeParameter< ParameterType::eUInt32 >( makeRange( 0u, 6u ) ) } );
 		addParser( uint32_t( CSCNSection::ePass ), cuT( "reflections" ), parserPassReflections, { makeParameter< ParameterType::eBool >() } );
-		addParser( uint32_t( CSCNSection::ePass ), cuT( "refractions" ), parserPassRefractions, { makeParameter< ParameterType::eBool>() } );
+		addParser( uint32_t( CSCNSection::ePass ), cuT( "refractions" ), parserPassRefractions, { makeParameter< ParameterType::eBool >() } );
+		addParser( uint32_t( CSCNSection::ePass ), cuT( "transmission" ), parserPassTransmission, { makeParameter< ParameterType::ePoint3F >() } );
 		addParser( uint32_t( CSCNSection::ePass ), cuT( "}" ), parserPassEnd );
 
 		addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "image" ), parserUnitImage, { makeParameter< ParameterType::ePath >() } );

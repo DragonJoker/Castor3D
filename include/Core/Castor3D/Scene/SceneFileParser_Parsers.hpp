@@ -210,6 +210,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserPassBWAccumulationOperator )
 	CU_DeclareAttributeParser( parserPassReflections )
 	CU_DeclareAttributeParser( parserPassRefractions )
+	CU_DeclareAttributeParser( parserPassTransmission )
 	CU_DeclareAttributeParser( parserPassEnd )
 
 	// Texture Unit Parsers

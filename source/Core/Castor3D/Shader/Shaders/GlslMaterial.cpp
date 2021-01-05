@@ -16,10 +16,12 @@ namespace castor3d
 			, ast::expr::ExprPtr expr )
 			: StructInstance{ writer, std::move( expr ) }
 			, m_common{ getMember< Vec4 >( "m_common" ) }
+			, m_opacityTransmission{ getMember< Vec4 >( "m_opacity" ) }
 			, m_reflRefr{ getMember< Vec4 >( "m_reflRefr" ) }
 			, m_sssInfo{ getMember< Vec4 >( "m_sssInfo" ) }
 			, m_transmittanceProfile{ getMemberArray< Vec4 >( "m_transmittanceProfile" ) }
-			, m_opacity{ m_common.x() }
+			, m_opacity{ m_opacityTransmission.w() }
+			, m_transmission{ m_opacityTransmission.xyz() }
 			, m_emissive{ m_common.y() }
 			, m_alphaRef{ m_common.z() }
 			, m_gamma{ m_common.w() }
@@ -66,6 +68,7 @@ namespace castor3d
 				result->declMember( "m_diffAmb", ast::type::Kind::eVec4F );
 				result->declMember( "m_specShin", ast::type::Kind::eVec4F );
 				result->declMember( "m_common", ast::type::Kind::eVec4F );
+				result->declMember( "m_opacity", ast::type::Kind::eVec4F );
 				result->declMember( "m_reflRefr", ast::type::Kind::eVec4F );
 				result->declMember( "m_sssInfo", ast::type::Kind::eVec4F );
 				result->declMember( "m_transmittanceProfile", ast::type::Kind::eVec4F, MaxTransmittanceProfileSize );
@@ -106,6 +109,7 @@ namespace castor3d
 				result->declMember( "m_albRough", ast::type::Kind::eVec4F );
 				result->declMember( "m_metDiv", ast::type::Kind::eVec4F );
 				result->declMember( "m_common", ast::type::Kind::eVec4F );
+				result->declMember( "m_opacity", ast::type::Kind::eVec4F );
 				result->declMember( "m_reflRefr", ast::type::Kind::eVec4F );
 				result->declMember( "m_sssInfo", ast::type::Kind::eVec4F );
 				result->declMember( "m_transmittanceProfile", ast::type::Kind::eVec4F, MaxTransmittanceProfileSize );
@@ -145,6 +149,7 @@ namespace castor3d
 				result->declMember( "m_diffDiv", ast::type::Kind::eVec4F );
 				result->declMember( "m_specGloss", ast::type::Kind::eVec4F );
 				result->declMember( "m_common", ast::type::Kind::eVec4F );
+				result->declMember( "m_opacity", ast::type::Kind::eVec4F );
 				result->declMember( "m_reflRefr", ast::type::Kind::eVec4F );
 				result->declMember( "m_sssInfo", ast::type::Kind::eVec4F );
 				result->declMember( "m_transmittanceProfile", ast::type::Kind::eVec4F, MaxTransmittanceProfileSize );
@@ -158,6 +163,21 @@ namespace castor3d
 		Materials::Materials( ShaderWriter & writer )
 			: m_writer{ writer }
 		{
+		}
+
+		void Materials::doFetch( BaseMaterial & result
+			, sdw::SampledImageT< FImgBufferRgba32 > & c3d_materials
+			, sdw::Int & offset )
+		{
+			result.m_common = c3d_materials.fetch( Int{ offset++ } );
+			result.m_opacityTransmission = c3d_materials.fetch( Int{ offset++ } );
+			result.m_reflRefr = c3d_materials.fetch( Int{ offset++ } );
+			result.m_sssInfo = c3d_materials.fetch( Int{ offset++ } );
+
+			for ( uint32_t i = 0; i < MaxTransmittanceProfileSize; ++i )
+			{
+				result.m_transmittanceProfile[i] = c3d_materials.fetch( Int{ offset++ } );
+			}
 		}
 
 		//*********************************************************************************************
@@ -191,15 +211,7 @@ namespace castor3d
 							, m_writer.cast< Int >( index ) * Int( MaxMaterialComponentsCount ) );
 						result.m_diffAmb = c3d_materials.fetch( Int{ offset++ } );
 						result.m_specShin = c3d_materials.fetch( Int{ offset++ } );
-						result.m_common = c3d_materials.fetch( Int{ offset++ } );
-						result.m_reflRefr = c3d_materials.fetch( Int{ offset++ } );
-						result.m_sssInfo = c3d_materials.fetch( Int{ offset++ } );
-
-						for ( uint32_t i = 0; i < MaxTransmittanceProfileSize; ++i )
-						{
-							result.m_transmittanceProfile[i] = c3d_materials.fetch( Int{ offset++ } );
-						}
-
+						doFetch( result, c3d_materials, offset );
 						m_writer.returnStmt( result );
 					}
 					, InUInt{ m_writer, "index" } );
@@ -256,15 +268,7 @@ namespace castor3d
 							, m_writer.cast< Int >( index ) * Int( MaxMaterialComponentsCount ) );
 						result.m_albRough = c3d_materials.fetch( Int{ offset++ } );
 						result.m_metDiv = c3d_materials.fetch( Int{ offset++ } );
-						result.m_common = c3d_materials.fetch( Int{ offset++ } );
-						result.m_reflRefr = c3d_materials.fetch( Int{ offset++ } );
-						result.m_sssInfo = c3d_materials.fetch( Int{ offset++ } );
-
-						for ( uint32_t i = 0; i < MaxTransmittanceProfileSize; ++i )
-						{
-							result.m_transmittanceProfile[i] = c3d_materials.fetch( Int{ offset++ } );
-						}
-
+						doFetch( result, c3d_materials, offset );
 						m_writer.returnStmt( result );
 					}
 					, InUInt{ m_writer, "index" } );
@@ -321,15 +325,7 @@ namespace castor3d
 							, m_writer.cast< Int >( index ) * Int( MaxMaterialComponentsCount ) );
 						result.m_diffDiv = c3d_materials.fetch( Int{ offset++ } );
 						result.m_specGloss = c3d_materials.fetch( Int{ offset++ } );
-						result.m_common = c3d_materials.fetch( Int{ offset++ } );
-						result.m_reflRefr = c3d_materials.fetch( Int{ offset++ } );
-						result.m_sssInfo = c3d_materials.fetch( Int{ offset++ } );
-
-						for ( uint32_t i = 0; i < MaxTransmittanceProfileSize; ++i )
-						{
-							result.m_transmittanceProfile[i] = c3d_materials.fetch( Int{ offset++ } );
-						}
-
+						doFetch( result, c3d_materials, offset );
 						m_writer.returnStmt( result );
 					}
 					, InUInt{ m_writer, "index" } );

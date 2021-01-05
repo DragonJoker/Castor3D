@@ -3689,6 +3689,27 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
+	CU_ImplementAttributeParser( parserPassTransmission )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->pass )
+		{
+			CU_ParsingError( cuT( "No Pass initialised." ) );
+		}
+		else if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			castor::Point3f value{ 1.0f, 1.0f, 1.0f };
+			params[0]->get( value );
+			parsingContext->pass->setTransmission( value );
+		}
+	}
+	CU_EndAttribute()
+
 	CU_ImplementAttributeParser( parserPassEnd )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );

@@ -108,6 +108,13 @@ namespace castor3d
 			castor::TextWriter< Pass >::checkError( result, "Pass emissive" );
 		}
 
+		if ( result && ( pass.getTransmission() != castor::Point3f{ 1.0f, 1.0f, 1.0f } ) )
+		{
+			result = file.writeText( m_tabs + cuT( "\ttransmission " ) ) > 0
+				&& castor::Point3f::TextWriter{ "" }( pass.getTransmission(), file );
+			castor::TextWriter< Pass >::checkError( result, "Pass transmission" );
+		}
+
 		if ( result && pass.IsTwoSided() )
 		{
 			result = file.writeText( m_tabs + cuT( "\ttwo_sided " ) + String( pass.IsTwoSided() ? cuT( "true" ) : cuT( "false" ) ) + cuT( "\n" ) ) > 0;

@@ -39,19 +39,21 @@ namespace castor3d
 		sdw::Vec3 SpecularPbrReflectionModel::computeRefl( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::SampledImageCubeRgba32 const & envMap
-			, Vec3 const & albedo )const
+			, sdw::Vec3 const & specular
+			, sdw::Float const & glossiness )const
 		{
 			return m_computeRefl( wsIncident
 				, wsNormal
 				, envMap
-				, albedo );
+				, specular
+				, glossiness );
 		}
 
 		sdw::Void SpecularPbrReflectionModel::computeRefrEnvMap( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::SampledImageCubeRgba32 const & envMap
 			, sdw::Float const & refractionRatio
-			, sdw::Vec3 const & albedo
+			, sdw::Vec3 const & transmission
 			, sdw::Float const & roughness
 			, sdw::Vec3 & reflection
 			, sdw::Vec3 & refraction )const
@@ -60,7 +62,7 @@ namespace castor3d
 				, wsNormal
 				, envMap
 				, refractionRatio
-				, albedo
+				, transmission
 				, roughness
 				, reflection
 				, refraction );
@@ -70,7 +72,7 @@ namespace castor3d
 			, sdw::Vec3 const & wsNormal
 			, sdw::SampledImageCubeRgba32 const & envMap
 			, sdw::Float const & refractionRatio
-			, sdw::Vec3 const & albedo
+			, sdw::Vec3 const & transmission
 			, sdw::Float const & roughness
 			, sdw::Vec3 & reflection
 			, sdw::Vec3 & refraction )const
@@ -79,7 +81,7 @@ namespace castor3d
 				, wsNormal
 				, envMap
 				, refractionRatio
-				, albedo
+				, transmission
 				, roughness
 				, reflection
 				, refraction );
@@ -103,17 +105,20 @@ namespace castor3d
 				, [&]( Vec3 const & wsIncident
 					, Vec3 const & wsNormal
 					, SampledImageCubeRgba32 const & envMap
-					, Vec3 const & albedo )
+					, Vec3 const & specular
+					, Float const & glossiness )
 				{
 					auto reflected = m_writer.declLocale( "reflected"
 						, reflect( wsIncident, wsNormal ) );
-					m_writer.returnStmt( envMap.sample( reflected ).xyz()
-						* albedo / length( albedo ) );
+					auto radiance = m_writer.declLocale( "radiance"
+						, envMap.lod( reflected, ( 1.0_f - glossiness ) * Float( float( Utils::MaxIblReflectionLod ) ) ).xyz() );
+					m_writer.returnStmt( radiance * specular );
 				}
 				, InVec3{ m_writer, "wsIncident" }
 				, InVec3{ m_writer, "wsNormal" }
 				, InSampledImageCubeRgba32{ m_writer, "envMap" }
-				, InVec3{ m_writer, "diffuse" } );
+				, InVec3{ m_writer, "specular" }
+				, InFloat{ m_writer, "glossiness" } );
 		}
 
 		void SpecularPbrReflectionModel::doDeclareComputeRefrEnvMap()
@@ -123,7 +128,7 @@ namespace castor3d
 					, Vec3 const & wsNormal
 					, SampledImageCubeRgba32 const & envMap
 					, Float const & refractionRatio
-					, Vec3 const & albedo
+					, Vec3 const & transmission
 					, Float const & glossiness
 					, Vec3 reflection
 					, Vec3 refraction )
@@ -145,7 +150,7 @@ namespace castor3d
 					reflection = mix( vec3( 0.0_f )
 						, reflection
 						, vec3( fresnel ) );
-					refraction = mix( envMap.sample( refracted ).xyz() * albedo / length( albedo )
+					refraction = mix( envMap.lod( refracted, ( 1.0_f - glossiness ) * Float( float( Utils::MaxIblReflectionLod ) ) ).xyz() * transmission
 						, vec3( 0.0_f )
 						, vec3( fresnel ) );
 				}
@@ -153,7 +158,7 @@ namespace castor3d
 				, InVec3{ m_writer, "wsNormal" }
 				, InSampledImageCubeRgba32{ m_writer, "envMap" }
 				, InFloat{ m_writer, "refractionRatio" }
-				, InVec3{ m_writer, "albedo" }
+				, InVec3{ m_writer, "transmission" }
 				, InFloat{ m_writer, "glossiness" }
 				, InOutVec3{ m_writer, "reflection" }
 				, OutVec3{ m_writer, "refraction" } );
@@ -166,7 +171,7 @@ namespace castor3d
 					, Vec3 const & wsNormal
 					, SampledImageCubeRgba32 const & envMap
 					, Float const & refractionRatio
-					, Vec3 const & albedo
+					, Vec3 const & transmission
 					, Float const & glossiness
 					, Vec3 reflection
 					, Vec3 refraction )
@@ -188,7 +193,7 @@ namespace castor3d
 					reflection = mix( vec3( 0.0_f )
 						, reflection
 						, vec3( fresnel ) );
-					refraction = mix( envMap.sample( refracted ).xyz() * albedo / length( albedo )
+					refraction = mix( envMap.lod( refracted, ( 1.0_f - glossiness ) * Float( float( Utils::MaxIblReflectionLod ) ) ).xyz() * transmission
 						, vec3( 0.0_f )
 						, vec3( fresnel ) );
 				}
@@ -196,7 +201,7 @@ namespace castor3d
 				, InVec3{ m_writer, "wsNormal" }
 				, InSampledImageCubeRgba32{ m_writer, "envMap" }
 				, InFloat{ m_writer, "refractionRatio" }
-				, InVec3{ m_writer, "albedo" }
+				, InVec3{ m_writer, "transmission" }
 				, InFloat{ m_writer, "glossiness" }
 				, InOutVec3{ m_writer, "reflection" }
 				, OutVec3{ m_writer, "refraction" } );
