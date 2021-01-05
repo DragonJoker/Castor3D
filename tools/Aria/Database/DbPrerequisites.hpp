@@ -43,6 +43,7 @@ namespace aria::db
 	class Result;
 	class Row;
 	class Statement;
+	class Transaction;
 	class ValueBase;
 	class ValuedObject;
 	class ValuedObjectInfos;

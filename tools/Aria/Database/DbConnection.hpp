@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CTP_DbConnection_HPP___
 #define ___CTP_DbConnection_HPP___
 
-#include "DbPrerequisites.hpp"
+#include "DbTransaction.hpp"
 
 namespace aria::db
 {
@@ -16,6 +16,7 @@ namespace aria::db
 
 		bool executeUpdate( sqlite3_stmt * statement );
 		ResultPtr executeSelect( sqlite3_stmt * statement, ValuedObjectInfosArray & infos );
+		Transaction beginTransaction( std::string const & name );
 		sqlite3_stmt * prepareStatement( std::string const & query );
 
 		std::string writeText( const std::string & text ) const;

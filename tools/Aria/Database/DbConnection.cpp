@@ -643,6 +643,11 @@ namespace aria::db
 
 			while ( ( ret = sqlite3_step( statement ) ) != SQLITE_DONE )
 			{
+				if ( ret == SQLITE_ERROR )
+				{
+					return nullptr;
+				}
+
 				if ( ret == SQLITE_ROW )
 				{
 					Row row;
@@ -760,6 +765,11 @@ namespace aria::db
 	sqlite3_stmt * Connection::prepareStatement( std::string const & query )
 	{
 		return sqlitePrepareStatement( query, m_database );
+	}
+
+	Transaction Connection::beginTransaction( std::string const & name )
+	{
+		return Transaction{ *this, name };
 	}
 
 	std::string Connection::writeText( const std::string & text ) const

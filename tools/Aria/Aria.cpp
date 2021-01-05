@@ -175,7 +175,7 @@ namespace aria
 			config.viewer = options.get( option::Viewer, false, castor::File::getExecutableDirectory() / ( cuT( "CastorViewer" ) + BinExt ) );
 			config.differ = options.get( option::Diff, false, castor::File::getExecutableDirectory() / ( cuT( "DiffImage" ) + BinExt ) );
 			config.castor = options.get( option::Castor3D, false, castor::File::getExecutableDirectory() / ( DynlibPre + cuT( "Castor3D" ) + DynlibExt ) );
-			config.skip = !options.has( wxT( 'f' ) );
+			config.initFromFolder = options.has( wxT( 'f' ) );
 			options.write( config );
 		}
 		catch ( bool )

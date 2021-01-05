@@ -34,18 +34,25 @@ namespace aria
 
 		void initialise();
 
-		void updateTestStatus( Test & test
+		void updateTestStatus( DatabaseTest & test
 			, TestStatus newStatus
 			, bool reference );
-		TreeModelNode * getTestNode( Test const & test );
+		TreeModelNode * getTestNode( DatabaseTest const & test );
 
 	private:
-		wxWindow * doInitTestsList();
+		struct TestsPage;
+
+		void doInitTestsLists();
+		void doInitTestsList( Renderer renderer );
 		wxWindow * doInitDetailsView();
 		void doInitGui();
 		void doInitMenus();
 		void doInitMenuBar();
-		void doFillList( wxProgressDialog & progress, int & index, uint32_t testCount );
+		void doFillLists( wxProgressDialog & progress, int & index );
+		void doFillList( Renderer renderer
+			, wxProgressDialog & progress
+			, int & index );
+		TestsPage & doGetPage( wxDataViewItem const & item );
 
 		void doProcessTest();
 		void doRunTest();
@@ -73,85 +80,25 @@ namespace aria
 		void doRunAllOutdatedTests();
 		void doUpdateAllCastorDate();
 		void doUpdateAllSceneDate();
-		void doCancelTest( Test & test
+		void doCancelTest( DatabaseTest & test
 			, TestStatus status );
 		void doCancel();
+		void doNewRenderer();
+		void doNewCategory();
+		void doNewTest();
 		void onTestRunEnd( int status );
 		void onTestDisplayEnd( int status );
 		void onTestDiffEnd( int status );
 		void onTestProcessEnd( int pid, int status );
 
+		void onTestsPageChange( wxAuiNotebookEvent & evt );
 		void onSelectionChange( wxDataViewEvent & evt );
 		void onItemContextMenu( wxDataViewEvent & evt );
-		void onMenuOption( wxCommandEvent & evt );
+		void onTestsMenuOption( wxCommandEvent & evt );
+		void onDatabaseMenuOption( wxCommandEvent & evt );
 		void onProcessEnd( wxProcessEvent & evt );
 
 	private:
-		wxAuiManager m_auiManager;
-		Config m_config;
-		TestDatabase m_database;
-		TestMap m_tests;
-		wxDataViewCtrl * m_view{};
-		wxObjectDataPtr< TreeModel > m_model;
-		std::map< uint32_t, TreeModelNode * > m_modelNodes;
-		LayeredPanel * m_detailViews{};
-		TestPanel * m_testView{};
-		CategoryPanel * m_categoryView{};
-		wxStaticText * m_statusText{};
-		wxGauge * m_testProgress{};
-		wxGauge * m_statusProgress{};
-		bool m_hasPage{ false };
-		std::unique_ptr< wxMenu > m_testMenu{};
-		std::unique_ptr< wxMenu > m_categoryMenu{};
-		std::unique_ptr< wxMenu > m_rendererMenu{};
-		std::unique_ptr< wxMenu > m_allMenu{};
-		std::unique_ptr< wxMenu > m_busyMenu{};
-		struct Selection
-		{
-			wxDataViewItemArray items;
-			bool allTests{};
-			bool allCategories{};
-			bool allRenderers{};
-		};
-		Selection m_selected;
-		class TestProcess
-			: public wxProcess
-		{
-		public:
-			TestProcess( MainFrame * mainframe
-				, int flags );
-
-			void OnTerminate( int pid, int status )override;
-
-		private:
-			MainFrame * m_mainframe;
-		};
-		struct RunningTest
-		{
-			std::unique_ptr< wxProcess > genProcess{};
-			std::unique_ptr< wxProcess > difProcess{};
-			std::unique_ptr< wxProcess > disProcess{};
-			std::list< TestNode > tests{};
-			wxProcess * currentProcess{};
-		};
-		RunningTest m_runningTest;
-		std::atomic_bool m_cancelled;
-
-		struct TestProcessChecker
-		{
-			explicit TestProcessChecker( MainFrame * mainFrame );
-			void checkProcess( int pid );
-			void stop();
-
-		private:
-			int get();
-
-			std::atomic_int pid{};
-			std::atomic_bool isStopped{ false };
-			std::thread thread;
-		};
-		TestProcessChecker m_processChecker;
-
 		struct TestUpdater
 		{
 			explicit TestUpdater( wxObjectDataPtr< TreeModel > & model );
@@ -167,7 +114,96 @@ namespace aria
 			std::atomic_bool isStopped{ false };
 			std::thread thread;
 		};
-		TestUpdater m_updater;
+
+		struct Selection
+		{
+			wxDataViewItemArray items;
+			bool allTests{};
+			bool allCategories{};
+			bool allRenderers{};
+		};
+
+		struct TestsPage
+		{
+			TestsPage( TestsPage && ) = default;
+			TestsPage & operator=( TestsPage && ) = default;
+			TestsPage( Config const & config
+				, Renderer renderer
+				, TestRunCategoryMap & runs );
+			~TestsPage();
+			TestRunCategoryMap * runs;
+			wxObjectDataPtr< TreeModel > model;
+			wxDataViewCtrl * view{};
+			std::map< uint32_t, TreeModelNode * > modelNodes;
+			TestUpdater updater;
+			Selection selected;
+		};
+
+		class TestProcess
+			: public wxProcess
+		{
+		public:
+			TestProcess( MainFrame * mainframe
+				, int flags );
+
+			void OnTerminate( int pid, int status )override;
+
+		private:
+			MainFrame * m_mainframe;
+		};
+
+	public:
+		struct RunningTest
+		{
+			std::unique_ptr< wxProcess > genProcess{};
+			std::unique_ptr< wxProcess > difProcess{};
+			std::unique_ptr< wxProcess > disProcess{};
+			std::list< TestNode > tests{};
+			wxProcess * currentProcess{};
+		};
+
+	private:
+		struct TestProcessChecker
+		{
+			explicit TestProcessChecker( MainFrame * mainFrame );
+			void checkProcess( int pid );
+			void stop();
+
+		private:
+			int get();
+
+			std::atomic_int pid{};
+			std::atomic_bool isStopped{ false };
+			std::thread thread;
+		};
+
+	private:
+		wxAuiManager m_auiManager;
+		Config m_config;
+		TestDatabase m_database;
+		Tests m_tests;
+		LayeredPanel * m_detailViews{};
+		TestPanel * m_testView{};
+		CategoryPanel * m_categoryView{};
+		std::map< Renderer, std::unique_ptr< TestsPage > > m_testsPages;
+		wxAuiNotebook * m_testsBook{};
+		TestsPage * m_selectedPage{};
+		wxStaticText * m_statusText{};
+		wxGauge * m_testProgress{};
+		wxGauge * m_statusProgress{};
+		bool m_hasPage{ false };
+		std::unique_ptr< wxMenu > m_testMenu{};
+		std::unique_ptr< wxMenu > m_categoryMenu{};
+		std::unique_ptr< wxMenu > m_rendererMenu{};
+		std::unique_ptr< wxMenu > m_allMenu{};
+		std::unique_ptr< wxMenu > m_busyMenu{};
+		wxMenu * m_barTestMenu{};
+		wxMenu * m_barCategoryMenu{};
+		wxMenu * m_barRendererMenu{};
+		wxMenu * m_barAllMenu{};
+		RunningTest m_runningTest;
+		std::atomic_bool m_cancelled;
+		TestProcessChecker m_processChecker;
 	};
 }
 

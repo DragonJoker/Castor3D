@@ -21,13 +21,16 @@ namespace aria
 			, wxPoint const & position
 			, wxSize const & size );
 
+		void setAll( TestMap const & tests
+			, TestRunMap const & runs
+			, std::list< TestNode > const & running );
 		void setRenderer( wxString const & renderer
-			, TestCategoryMap const & tests
+			, TestMap const & tests
+			, TestRunCategoryMap const & runs
 			, std::list< TestNode > const & running );
 		void setCategory( wxString const & category
 			, TestArray const & tests
-			, std::list< TestNode > const & running );
-		void setAll( TestMap const & tests
+			, TestRunArray const & runs
 			, std::list< TestNode > const & running );
 
 		void update( std::list< TestNode > const & running );
@@ -49,9 +52,12 @@ namespace aria
 	private:
 		Config const & m_config;
 		Counts m_counts;
-		TestCategoryMap const * m_rendererTests{};
-		TestArray const * m_categoryTests{};
 		TestMap const * m_allTests{};
+		TestRunMap const * m_allRuns{};
+		TestMap const * m_rendererTests{};
+		TestRunCategoryMap const * m_rendererRuns{};
+		TestArray const * m_categoryTests{};
+		TestRunArray const * m_categoryRuns{};
 		wxStaticText * m_status;
 		wxStaticText * m_negligible;
 		wxStaticText * m_acceptable;

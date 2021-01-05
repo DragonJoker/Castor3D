@@ -1,23 +1,25 @@
 #include "Aria/Model/TreeModelNode.hpp"
 
+#include "Aria/TestDatabase.hpp"
+
 namespace aria
 {
 	TreeModelNode::TreeModelNode( TreeModelNode * parent
-		, wxString const & name
-		, bool isRenderer )
-		: category{ name }
+		, Renderer renderer
+		, Category category )
+		: renderer{ renderer }
+		, category{ category }
 		, m_parent{ parent }
 		, m_container{ true }
-		, m_isRenderer{ isRenderer }
 	{
 	}
 
 	TreeModelNode::TreeModelNode( TreeModelNode * parent
-		, Test & test )
+		, DatabaseTest & test )
 		: test{ &test }
+		, renderer{ test->renderer }
 		, m_parent{ parent }
 		, m_container{ false }
-		, m_isRenderer{ false }
 	{
 	}
 

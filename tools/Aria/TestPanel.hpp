@@ -24,9 +24,10 @@ namespace aria
 		TestPanel( wxWindow * parent
 			, Config const & config );
 
-		void setTest( Test & test );
+		void refresh();
+		void setTest( DatabaseTest & test );
 
-		Test * getTest()const
+		DatabaseTest * getTest()const
 		{
 			return m_test;
 		}
@@ -39,7 +40,7 @@ namespace aria
 
 	private:
 		Config const & m_config;
-		Test * m_test{};
+		DatabaseTest * m_test{};
 		wxImagePanel * m_ref{};
 		wxImagePanel * m_result{};
 		castor::ImageLoader m_loader;

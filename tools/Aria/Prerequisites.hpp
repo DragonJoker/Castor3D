@@ -10,40 +10,10 @@ See LICENSE file in root folder
 #include <wx/datetime.h>
 #include <wx/string.h>
 
+#include <unordered_map>
+
 namespace aria
 {
-	class CategoryPanel;
-	class LayeredPanel;
-	class MainFrame;
-	class TestDatabase;
-	class TestPanel;
-	class TreeModelNode;
-	class TreeModel;
-
-	static const wxColour PANEL_BACKGROUND_COLOUR = wxColour( 30, 30, 30 );
-	static const wxColour PANEL_FOREGROUND_COLOUR = wxColour( 220, 220, 220 );
-	static const wxColour BORDER_COLOUR = wxColour( 90, 90, 90 );
-	static const wxColour INACTIVE_TAB_COLOUR = wxColour( 60, 60, 60 );
-	static const wxColour INACTIVE_TEXT_COLOUR = wxColour( 200, 200, 200 );
-	static const wxColour ACTIVE_TAB_COLOUR = wxColour( 51, 153, 255, 255 );
-	static const wxColour ACTIVE_TEXT_COLOUR = wxColour( 255, 255, 255, 255 );
-
-	typedef std::vector< TreeModelNode * > TreeModelNodePtrArray;
-
-	struct Config
-	{
-		castor::Path test;
-		castor::Path work;
-		castor::Path database;
-		castor::Path launcher;
-		castor::Path viewer;
-		castor::Path differ;
-		castor::Path castor;
-		db::DateTime castorRefDate;
-		std::vector< castor::String > renderers{ cuT( "vk" ), cuT( "gl" ), cuT( "d3d11" ) };
-		bool skip{};
-	};
-
 	enum class TestStatus
 	{
 		eNotRun,
@@ -67,51 +37,236 @@ namespace aria
 		eRunning_Begin = eRunning_0,
 		eRunning_End = eRunning_11,
 	};
-	static bool isRunning( TestStatus value )
+	castor::Path getFolderName( TestStatus value );
+	TestStatus getStatus( std::string const & name );
+	inline bool isRunning( TestStatus value )
 	{
 		return value >= TestStatus::eRunning_Begin
 			&& value <= TestStatus::eRunning_End;
 	}
-	castor::Path getFolderName( TestStatus value );
-	TestStatus getStatus( std::string const & name );
-
-	struct Test
+	inline std::string getName( TestStatus status )
 	{
-		uint32_t id;
-		std::string name;
+		switch ( status )
+		{
+		case aria::TestStatus::eNotRun:
+			return "not_run";
+		case aria::TestStatus::eNegligible:
+			return "negligible";
+		case aria::TestStatus::eAcceptable:
+			return "acceptable";
+		case aria::TestStatus::eUnacceptable:
+			return "unacceptable";
+		case aria::TestStatus::eUnprocessed:
+			return "unprocessed";
+		case aria::TestStatus::eRunning_0:
+			return "running_0";
+		case aria::TestStatus::eRunning_1:
+			return "running_1";
+		case aria::TestStatus::eRunning_2:
+			return "running_2";
+		case aria::TestStatus::eRunning_3:
+			return "running_3";
+		case aria::TestStatus::eRunning_4:
+			return "running_4";
+		case aria::TestStatus::eRunning_5:
+			return "running_5";
+		case aria::TestStatus::eRunning_6:
+			return "running_6";
+		case aria::TestStatus::eRunning_7:
+			return "running_7";
+		case aria::TestStatus::eRunning_8:
+			return "running_8";
+		case aria::TestStatus::eRunning_9:
+			return "running_9";
+		case aria::TestStatus::eRunning_10:
+			return "running_10";
+		case aria::TestStatus::eRunning_11:
+			return "running_11";
+		default:
+			return "unknown";
+		}
+	}
+
+	class CategoryPanel;
+	class DatabaseTest;
+	class LayeredPanel;
+	class MainFrame;
+	class TestDatabase;
+	class TestPanel;
+	class TreeModelNode;
+	class TreeModel;
+
+	struct IdValue;
+	struct Test;
+	struct TestRun;
+
+	struct HashNoCase
+	{
+		size_t operator()( std::string const & v )const;
+	};
+
+	struct LessNoCase
+	{
+		bool operator()( const char lhs, const char rhs )const;
+		bool operator()( const char * lhs, const char * rhs, size_t minSize )const;
+		bool operator()( const char * lhs, const char * rhs )const;
+		bool operator()( std::string const & lhs, std::string const & rhs )const;
+	};
+
+	struct EqualNoCase
+	{
+		bool operator()( const char lhs, const char rhs )const;
+		bool operator()( const char * lhs, const char * rhs, size_t minSize )const;
+		bool operator()( const char * lhs, const char * rhs )const;
+		bool operator()( std::string const & lhs, std::string const & rhs )const;
+	};
+
+	using IdValuePtr = std::unique_ptr< IdValue >;
+	using TestPtr = std::unique_ptr< Test >;
+	using Renderer = IdValue *;
+	using Category = IdValue *;
+	using Keyword = IdValue *;
+	using RendererMap = std::unordered_map< std::string, IdValuePtr >;
+	using CategoryMap = std::unordered_map< std::string, IdValuePtr >;
+	using KeywordMap = std::unordered_map< std::string, IdValuePtr, HashNoCase >;
+	using TestArray = std::vector< TestPtr >;
+	using TestMap = std::map< Category, TestArray >;
+	using TestRunArray = std::vector< DatabaseTest >;
+	using TestRunCategoryMap = std::map< Category, TestRunArray >;
+	using TestRunMap = std::map< Renderer, TestRunCategoryMap >;
+
+	struct Tests
+	{
+		TestMap tests;
+		TestRunMap runs;
+	};
+
+	static const wxColour PANEL_BACKGROUND_COLOUR = wxColour( 30, 30, 30 );
+	static const wxColour PANEL_FOREGROUND_COLOUR = wxColour( 220, 220, 220 );
+	static const wxColour BORDER_COLOUR = wxColour( 90, 90, 90 );
+	static const wxColour INACTIVE_TAB_COLOUR = wxColour( 60, 60, 60 );
+	static const wxColour INACTIVE_TEXT_COLOUR = wxColour( 200, 200, 200 );
+	static const wxColour ACTIVE_TAB_COLOUR = wxColour( 51, 153, 255, 255 );
+	static const wxColour ACTIVE_TEXT_COLOUR = wxColour( 255, 255, 255, 255 );
+
+	static const std::string DISPLAY_DATETIME_TIME = "%02d:%02d:%02d";
+	static constexpr size_t DISPLAY_DATETIME_TIME_SIZE = 2u + 3u + 3u;
+	static const std::string DISPLAY_DATETIME_DATE = "%04d-%02d-%02d";
+	static constexpr size_t DISPLAY_DATETIME_DATE_SIZE = 4u + 3u + 3u;
+	static const std::string DISPLAY_DATETIME = "%Y-%m-%d %H:%M:%S";
+	static constexpr size_t DISPLAY_DATETIME_SIZE = 4u + 3u + 3u + 3u + 3u + 3u;
+
+	typedef std::vector< TreeModelNode * > TreeModelNodePtrArray;
+
+	struct Config
+	{
+		castor::Path test;
+		castor::Path work;
+		castor::Path database;
+		castor::Path launcher;
+		castor::Path viewer;
+		castor::Path differ;
+		castor::Path castor;
+		db::DateTime castorRefDate;
+		std::vector< castor::String > renderers{ cuT( "vk" ), cuT( "gl" ), cuT( "d3d11" ) };
+		bool initFromFolder{};
+	};
+
+	struct TestRun
+	{
+		TestRun( Test * test
+			, Renderer renderer
+			, db::DateTime runDate
+			, TestStatus status
+			, db::DateTime castorDate
+			, db::DateTime sceneDate )
+			: test{ test }
+			, renderer{ renderer }
+			, runDate{ std::move( runDate ) }
+			, status{ std::move( status ) }
+			, castorDate{ std::move( castorDate ) }
+			, sceneDate{ std::move( sceneDate ) }
+		{
+		}
+
+		Test * test;
+		int32_t id{};
+		Renderer renderer{};
 		db::DateTime runDate;
 		TestStatus status;
-		std::string renderer;
-		std::string category;
-		bool ignoreResult;
 		db::DateTime castorDate;
 		db::DateTime sceneDate;
 	};
+
+	struct IdValue
+	{
+		IdValue( int32_t id
+			, std::string name )
+			: id{ id }
+			, name{ std::move( name ) }
+		{
+		}
+
+		int32_t id;
+		std::string name;
+	};
+
+	struct Test
+		: IdValue
+	{
+		Test( int32_t id = {}
+			, std::string name = {}
+			, Category category = {} )
+			: IdValue{ id, std::move( name ) }
+			, category{ category }
+		{
+		}
+
+		Category category{};
+		bool ignoreResult{};
+	};
+
 	static constexpr size_t IgnoredIndex = 0u;
 	static constexpr size_t AdditionalIndices = 1u;
 
 	db::DateTime getSceneDate( Config const & config, Test const & test );
-	bool isOutOfCastorDate( Config const & config, Test const & test );
-	bool isOutOfSceneDate( Config const & config, Test const & test );
-	bool isOutOfDate( Config const & config, Test const & test );
 	void updateCastorRefDate( Config & config );
-	uint32_t getTestStatusIndex( Config const & config
-		, Test const & test );
 	castor::Path getSceneFile( Test const & test );
-	castor::Path getResultFolder( Test const & test, bool useStatus = true );
-	castor::Path getResultName( Test const & test );
-	castor::Path getCompareFolder( Test const & test, bool useStatus = true );
-	castor::Path getCompareName( Test const & test );
+	castor::Path getResultFolder( Test const & test );
+	castor::Path getCompareFolder( Test const & test );
 	castor::Path getReferenceFolder( Test const & test );
 	castor::Path getReferenceName( Test const & test );
-
-	using TestArray = std::vector< Test >;
-	using TestCategoryMap = std::map< std::string, TestArray >;
-	using TestMap = std::map< std::string, TestCategoryMap >;
+	castor::PathArray findTestResults( Test const & test
+		, castor::Path const & work );
+	std::string getDetails( Test const & test );
+	wxString getProgressDetails( Test const & test );
+	wxString getProgressDetails( wxString const & catName
+		, wxString const & testName );
+	db::DateTime getSceneDate( Config const & config, TestRun const & test );
+	bool isOutOfCastorDate( Config const & config, TestRun const & test );
+	bool isOutOfSceneDate( Config const & config, TestRun const & test );
+	bool isOutOfDate( Config const & config, TestRun const & test );
+	uint32_t getTestStatusIndex( Config const & config
+		, TestRun const & test );
+	castor::Path getSceneFile( TestRun const & test );
+	castor::Path getResultFolder( TestRun const & test );
+	castor::Path getResultName( TestRun const & test );
+	castor::Path getCompareFolder( TestRun const & test );
+	castor::Path getCompareName( TestRun const & test );
+	castor::Path getReferenceFolder( TestRun const & test );
+	castor::Path getReferenceName( TestRun const & test );
+	castor::PathArray findTestResults( TestRun const & test
+		, castor::Path const & work );
+	std::string getDetails( TestRun const & test );
+	wxString getProgressDetails( DatabaseTest const & test );
+	wxString getProgressDetails( wxString const & catName
+		, wxString const & testName
+		, wxString const & rendName
+		, db::DateTime const & runDate );
 
 	struct TestNode
 	{
-		Test * test;
+		DatabaseTest * test;
 		TestStatus status;
 		TreeModelNode * node;
 	};
@@ -125,9 +280,6 @@ namespace aria
 	castor::Path getFolderName( db::DateTime const & value );
 	bool isDateTime( castor::String const & value
 		, db::DateTime & result );
-	castor::PathArray findTestResults( Test const & test
-		, castor::Path const & work );
-	std::string getDetails( Test const & test );
 }
 
 #endif

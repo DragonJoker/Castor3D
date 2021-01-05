@@ -6,7 +6,7 @@ find_package( Boost QUIET COMPONENTS date_time )
 if ( SQLite3_FOUND AND Boost_FOUND )
 	set( ${PROJECT_NAME}_WXWIDGET 1 )
 	set( ${PROJECT_NAME}_DESCRIPTION "Aria - ${MAIN_PROJECT_NAME} render tests parser" )
-	set( ${PROJECT_NAME}_VERSION_MAJOR 1 )
+	set( ${PROJECT_NAME}_VERSION_MAJOR 2 )
 	set( ${PROJECT_NAME}_VERSION_MINOR 0 )
 	set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
@@ -52,6 +52,7 @@ if ( SQLite3_FOUND AND Boost_FOUND )
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Database/DbStatement.hpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Database/DbStatement.inl
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Database/DbStatementParameter.hpp
+		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Database/DbTransaction.hpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Database/DbValue.hpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Database/DbValue.inl
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Database/DbValueBase.hpp
@@ -70,6 +71,7 @@ if ( SQLite3_FOUND AND Boost_FOUND )
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Database/DbRow.cpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Database/DbStatement.cpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Database/DbStatementParameter.cpp
+		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Database/DbTransaction.cpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Database/DbValueBase.cpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Database/DbValuedObject.cpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Database/DbValuedObjectInfos.cpp

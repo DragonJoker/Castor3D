@@ -12,26 +12,15 @@ namespace aria
 	{
 	public:
 		TreeModelNode( TreeModelNode * parent
-			, wxString const & name
-			, bool isRenderer = false );
+			, Renderer renderer
+			, Category category );
 		TreeModelNode( TreeModelNode * parent
-			, Test & test );
+			, DatabaseTest & test );
 		~TreeModelNode();
-
-		bool isRenderer()const
-		{
-			return m_isRenderer;
-		}
 
 		bool isRootNode()const
 		{
 			return GetParent() == nullptr;
-		}
-
-		TreeModelNode * getRenderer()const
-		{
-			assert( !m_isRenderer && !category.empty() );
-			return m_parent;
 		}
 	
 		void Remove( TreeModelNode * node );
@@ -51,14 +40,14 @@ namespace aria
 			return m_children[n];
 		}
 
-		void Insert( TreeModelNode * p_child, size_t n )
+		void Insert( TreeModelNode * child, size_t n )
 		{
-			m_children.insert( m_children.begin() + n, p_child );
+			m_children.insert( m_children.begin() + n, child );
 		}
 
-		void Append( TreeModelNode * p_child )
+		void Append( TreeModelNode * child )
 		{
-			m_children.push_back( p_child );
+			m_children.push_back( child );
 		}
 
 		size_t GetChildCount()const
@@ -72,12 +61,12 @@ namespace aria
 		}
 
 	public:
-		wxString category;
-		Test * test{};
+		Renderer renderer{};
+		Category category{};
+		DatabaseTest * test{};
 
 	private:
 		bool m_container{};
-		bool m_isRenderer{};
 		TreeModelNode * m_parent;
 		TreeModelNodePtrArray m_children;
 	};

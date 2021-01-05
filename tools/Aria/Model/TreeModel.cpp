@@ -1,14 +1,153 @@
 #include "Aria/Model/TreeModel.hpp"
 #include "Aria/Model/TreeModelNode.hpp"
 
+#include "Aria/TestDatabase.hpp"
+#include "Aria/Database/DbDateTimeHelpers.hpp"
+
 #include <CastorUtils/Exception/Assertion.hpp>
 #include <CastorUtils/Log/Logger.hpp>
 
+#include <wx/dc.h>
+
+#include "Aria/xpms/acceptable.xpm"
+#include "Aria/xpms/ignored.xpm"
+#include "Aria/xpms/negligible.xpm"
+#include "Aria/xpms/none.xpm"
+#include "Aria/xpms/notrun.xpm"
+#include "Aria/xpms/outofdate.xpm"
+#include "Aria/xpms/outofdate2.xpm"
+#include "Aria/xpms/unacceptable.xpm"
+#include "Aria/xpms/unprocessed.xpm"
+#include "Aria/xpms/progress_1.xpm"
+#include "Aria/xpms/progress_2.xpm"
+#include "Aria/xpms/progress_3.xpm"
+#include "Aria/xpms/progress_4.xpm"
+#include "Aria/xpms/progress_5.xpm"
+#include "Aria/xpms/progress_6.xpm"
+#include "Aria/xpms/progress_7.xpm"
+#include "Aria/xpms/progress_8.xpm"
+#include "Aria/xpms/progress_9.xpm"
+#include "Aria/xpms/progress_10.xpm"
+#include "Aria/xpms/progress_11.xpm"
+#include "Aria/xpms/progress_12.xpm"
+
 namespace aria
 {
-	TreeModel::TreeModel( Config const & config )
+	namespace
+	{
+		class DataViewTestStatusRenderer
+			: public wxDataViewCustomRenderer
+		{
+		private:
+			using Clock = std::chrono::high_resolution_clock;
+
+		public:
+			static wxString GetDefaultType()
+			{
+				return wxT( "long" );
+			}
+
+			DataViewTestStatusRenderer( const wxString & varianttype
+				, wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT
+				, int align = wxDVR_DEFAULT_ALIGNMENT )
+				: wxDataViewCustomRenderer{ varianttype, mode, align }
+				, m_size{ 20, 20 }
+				, m_outOfCastorDateBmp{ createImage( outofdate_xpm ) }
+				, m_outOfSceneDateBmp{ createImage( outofdate2_xpm ) }
+				, m_bitmaps{ createImage( ignored_xpm )
+				, createImage( notrun_xpm )
+				, createImage( negligible_xpm )
+				, createImage( acceptable_xpm )
+				, createImage( unacceptable_xpm )
+				, createImage( unprocessed_xpm )
+				, createImage( progress_1_xpm )
+				, createImage( progress_2_xpm )
+				, createImage( progress_3_xpm )
+				, createImage( progress_4_xpm )
+				, createImage( progress_5_xpm )
+				, createImage( progress_6_xpm )
+				, createImage( progress_7_xpm )
+				, createImage( progress_8_xpm )
+				, createImage( progress_9_xpm )
+				, createImage( progress_10_xpm )
+				, createImage( progress_11_xpm )
+				, createImage( progress_12_xpm ) }
+			{
+			}
+
+			bool SetValue( const wxVariant & value ) override
+			{
+				m_value = uint32_t( value.GetLong() );
+				m_index = ( m_value >> 2 );
+				m_outOfCastorDate = ( m_value & 0x01u );
+				m_outOfSceneDate = ( m_value & 0x02u );
+				return true;
+			}
+
+			bool GetValue( wxVariant & value ) const override
+			{
+				value = long( m_value );
+				return true;
+			}
+
+			bool Render( wxRect cell, wxDC * dc, int state ) override
+			{
+				dc->DrawBitmap( m_bitmaps[m_index]
+					, cell.x
+					, cell.y
+					, true );
+
+				if ( m_index < 6 )
+				{
+					if ( m_outOfCastorDate )
+					{
+						dc->DrawBitmap( m_outOfCastorDateBmp
+							, cell.x
+							, cell.y
+							, true );
+					}
+
+					if ( m_outOfSceneDate )
+					{
+						dc->DrawBitmap( m_outOfSceneDateBmp
+							, cell.x
+							, cell.y
+							, true );
+					}
+				}
+
+				return false;
+			}
+
+			wxSize GetSize() const override
+			{
+				return m_size;
+			}
+
+		private:
+			wxImage createImage( char const * const * xpmData )
+			{
+				wxImage result{ xpmData };
+				return result.Scale( m_size.x, m_size.y );
+			}
+
+		private:
+			wxSize m_size;
+			wxBitmap m_outOfCastorDateBmp;
+			wxBitmap m_outOfSceneDateBmp;
+			std::array< wxBitmap, size_t( TestStatus::eCount ) + AdditionalIndices > m_bitmaps;
+			uint32_t m_value;
+			uint32_t m_index;
+			bool m_outOfCastorDate{};
+			bool m_outOfSceneDate{};
+		};
+	}
+
+	TreeModel::TreeModel( Config const & config
+		, Renderer renderer )
 		: m_config{ config }
-		, m_root( new TreeModelNode{ nullptr, _( "Tests database" ) } )
+		, m_renderer{ renderer }
+		, m_root( new TreeModelNode{ nullptr, renderer, nullptr } )
 	{
 	}
 
@@ -17,28 +156,17 @@ namespace aria
 		delete m_root;
 	}
 
-	TreeModelNode * TreeModel::addRenderer( std::string const & renderer )
+	TreeModelNode * TreeModel::addCategory( Category category )
 	{
-		TreeModelNode * node = new TreeModelNode{ m_root, makeWxString( renderer ), true };
-		m_renderers[renderer] = node;
+		TreeModelNode * node = new TreeModelNode{ m_root, m_renderer, category };
+		m_categories[category->name] = node;
 		m_root->Append( node );
 		return node;
 	}
 
-	TreeModelNode * TreeModel::addCategory( std::string const & renderer
-		, std::string const & category )
+	TreeModelNode * TreeModel::addTest( DatabaseTest & test )
 	{
-		auto it = m_renderers.find( renderer );
-		CU_Require( m_renderers.end() != it );
-		TreeModelNode * node = new TreeModelNode{ it->second, makeWxString( category ) };
-		m_categories[renderer + category] = node;
-		it->second->Append( node );
-		return node;
-	}
-
-	TreeModelNode * TreeModel::addTest( Test & test )
-	{
-		auto it = m_categories.find( test.renderer + test.category );
+		auto it = m_categories.find( test->test->category->name );
 		CU_Require( m_categories.end() != it );
 		TreeModelNode * node = new TreeModelNode{ it->second, test };
 		it->second->Append( node );
@@ -48,21 +176,54 @@ namespace aria
 	void TreeModel::expandRoots( wxDataViewCtrl * view )
 	{
 		view->Expand( wxDataViewItem{ m_root } );
-
-		for ( auto & renderer : m_renderers )
-		{
-			view->Expand( wxDataViewItem{ renderer.second } );
-		}
 	}
 
-	uint32_t TreeModel::getId( wxDataViewItem const & item )const
+	void TreeModel::instantiate( wxDataViewCtrl * view )
+	{
+		uint32_t flags = wxCOL_SORTABLE | wxCOL_RESIZABLE;
+		auto renCategory = new wxDataViewTextRenderer{ GetColumnType( unsigned( TreeModel::Column::eCategory ) ) };
+		wxDataViewColumn * colCategory = new wxDataViewColumn( _( "Category" ), renCategory, int( TreeModel::Column::eCategory ), 150, wxALIGN_LEFT, flags );
+		colCategory->SetMinWidth( 150 );
+		view->AppendColumn( colCategory );
+		auto renScene = new wxDataViewTextRenderer{ GetColumnType( unsigned( TreeModel::Column::eName ) ) };
+		wxDataViewColumn * colScene = new wxDataViewColumn( _( "Name" ), renScene, int( TreeModel::Column::eName ), 400, wxALIGN_LEFT, flags );
+		colScene->SetMinWidth( 400 );
+		view->AppendColumn( colScene );
+		auto renRunDate = new wxDataViewTextRenderer{ GetColumnType( unsigned( TreeModel::Column::eRunDate ) ) };
+		wxDataViewColumn * colRunDate = new wxDataViewColumn( _( "Run Date" ), renRunDate, int( TreeModel::Column::eRunDate ), 80, wxALIGN_LEFT, flags );
+		colRunDate->SetMinWidth( 80 );
+		view->AppendColumn( colRunDate );
+		auto renRunTime = new wxDataViewTextRenderer{ GetColumnType( unsigned( TreeModel::Column::eRunTime ) ) };
+		wxDataViewColumn * colRunTime = new wxDataViewColumn( _( "Run Time" ), renRunDate, int( TreeModel::Column::eRunTime ), 80, wxALIGN_LEFT, flags );
+		colRunTime->SetMinWidth( 80 );
+		view->AppendColumn( colRunTime );
+		auto renStatus = new DataViewTestStatusRenderer{ GetColumnType( unsigned( TreeModel::Column::eStatus ) ) };
+		wxDataViewColumn * colStatus = new wxDataViewColumn( _( "Status" ), renStatus, int( TreeModel::Column::eStatus ), 30, wxALIGN_LEFT, flags );
+		colStatus->SetMinWidth( 30 );
+		view->AppendColumn( colStatus );
+	}
+
+	uint32_t TreeModel::getTestId( wxDataViewItem const & item )const
 	{
 		uint32_t result{};
 		auto node = static_cast< TreeModelNode * >( item.GetID() );
 
 		if ( node && node->test )
 		{
-			result = node->test->id;
+			result = node->test->getTestId();
+		}
+
+		return result;
+	}
+
+	uint32_t TreeModel::getRunId( wxDataViewItem const & item )const
+	{
+		uint32_t result{};
+		auto node = static_cast< TreeModelNode * >( item.GetID() );
+
+		if ( node && node->test )
+		{
+			result = node->test->getRunId();
 		}
 
 		return result;
@@ -75,20 +236,33 @@ namespace aria
 
 		if ( node && node->test )
 		{
-			result = node->test->name;
+			result = node->test->getName();
 		}
 
 		return result;
 	}
 
-	db::DateTime TreeModel::getRunDate( wxDataViewItem const & item )const
+	db::Date TreeModel::getRunDate( wxDataViewItem const & item )const
 	{
-		db::DateTime result{ boost::posix_time::not_a_date_time };
+		db::Date result{ boost::posix_time::not_a_date_time };
 		auto node = static_cast< TreeModelNode * >( item.GetID() );
 
 		if ( node && node->test )
 		{
-			result = node->test->runDate;
+			result = node->test->getRunDate().date();
+		}
+
+		return result;
+	}
+
+	db::Time TreeModel::getRunTime( wxDataViewItem const & item )const
+	{
+		db::Time result{ boost::posix_time::not_a_date_time };
+		auto node = static_cast< TreeModelNode * >( item.GetID() );
+
+		if ( node && node->test )
+		{
+			result = node->test->getRunDate().time_of_day();
 		}
 
 		return result;
@@ -101,7 +275,7 @@ namespace aria
 
 		if ( node && node->test )
 		{
-			result = node->test->status;
+			result = node->test->getStatus();
 		}
 
 		return result;
@@ -114,7 +288,7 @@ namespace aria
 
 		if ( node && node->test )
 		{
-			result = node->test->renderer;
+			result = node->test->getRenderer()->name;
 		}
 
 		return result;
@@ -129,11 +303,11 @@ namespace aria
 		{
 			if ( node->test )
 			{
-				result = node->test->category;
+				result = node->test->getCategory()->name;
 			}
 			else
 			{
-				result = makeStdString( node->category );
+				result = node->category->name;
 			}
 		}
 
@@ -204,9 +378,9 @@ namespace aria
 		{
 			auto node1 = static_cast< TreeModelNode const * >( item1.GetID() );
 			auto node2 = static_cast< TreeModelNode const * >( item2.GetID() );
-			result = ( node1->test->status < node2->test->status
+			result = ( node1->test->getStatus() < node2->test->getStatus()
 				? -1
-				: ( node1->test->status == node2->test->status
+				: ( node1->test->getStatus() == node2->test->getStatus()
 					? 0
 					: 1 ) );
 			result = ascending
@@ -230,10 +404,8 @@ namespace aria
 	{
 		switch ( Column( col ) )
 		{
-		case Column::eRunDate:
-			return wxT( "datetime" );
 		case Column::eStatus:
-			return wxT( "wxBitmap" );
+			return DataViewTestStatusRenderer::GetDefaultType();
 		default:
 			return wxT( "string" );
 		}
@@ -256,23 +428,27 @@ namespace aria
 			switch ( Column( col ) )
 			{
 			case Column::eCategory:
-				variant = makeWxString( node->test->category );
+				variant = makeWxString( node->test->getCategory()->name );
 				break;
 
 			case Column::eName:
-				variant = makeWxString( node->test->name );
-				break;
-
-			case Column::eRenderer:
-				variant = makeWxString( node->test->renderer );
+				variant = makeWxString( node->test->getName() );
 				break;
 
 			case Column::eRunDate:
-				variant = makeWxDateTime( node->test->runDate );
+				variant = ( db::date_time::isValid( node->test->getRunDate() ) && db::date::isValid( node->test->getRunDate().date() ) )
+					? makeWxString( db::date::print( node->test->getRunDate().date(), DISPLAY_DATETIME_DATE ) )
+					: wxEmptyString;
+				break;
+
+			case Column::eRunTime:
+				variant = ( db::date_time::isValid( node->test->getRunDate() ) && db::time::isValid( node->test->getRunDate().time_of_day() ) )
+					? makeWxString( db::time::print( node->test->getRunDate().time_of_day(), DISPLAY_DATETIME_TIME ) )
+					: wxEmptyString;
 				break;
 
 			case Column::eStatus:
-				variant = long( getTestStatusIndex( m_config, *node->test ) );
+				variant = long( getTestStatusIndex( m_config, **node->test ) );
 				break;
 
 			default:
@@ -285,12 +461,14 @@ namespace aria
 			switch ( Column( col ) )
 			{
 			case Column::eCategory:
-				variant = node->category;
+				variant = node->category
+					? makeWxString( node->category->name )
+					: wxT( "All" );
 				break;
 
 			case Column::eName:
-			case Column::eRenderer:
 			case Column::eRunDate:
+			case Column::eRunTime:
 			case Column::eStatus:
 				break;
 
@@ -318,8 +496,8 @@ namespace aria
 		{
 		case Column::eCategory:
 		case Column::eName:
-		case Column::eRenderer:
 		case Column::eRunDate:
+		case Column::eRunTime:
 		case Column::eStatus:
 			break;
 

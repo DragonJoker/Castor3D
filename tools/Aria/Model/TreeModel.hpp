@@ -13,9 +13,9 @@ namespace aria
 	/*
 	TreeModel
 	Implements the following data model:
-		Category	Name		Renderer	RunDate					Status	Ignored	OutOfCastorDate	OutOfSceneDate
-	--------------------------------------------------------------------------------------------------------------
-	1:	Common		001-test	vk			2020-11-06 15:35:22		1		1		1				1
+		Category	Name		RunDate		RunTime		Status/Ignored/OutOfCastorDate/OutOfSceneDate
+	--------------------------------------------------------------------------------------------------
+	1:	Common		001-test	2020-11-06	15:35:22	bitmap
 	*/
 	class TreeModel
 		: public wxDataViewModel
@@ -25,26 +25,28 @@ namespace aria
 		{
 			eCategory,
 			eName,
-			eRenderer,
 			eRunDate,
+			eRunTime,
 			eStatus,
 			eCount,
 		};
 
 	public:
-		TreeModel( Config const & config );
+		TreeModel( Config const & config
+			, Renderer renderer );
 		~TreeModel();
 
-		TreeModelNode * addRenderer( std::string const & renderer );
-		TreeModelNode * addCategory( std::string const & renderer
-			, std::string const & category );
-		TreeModelNode * addTest( Test & test );
+		TreeModelNode * addCategory( Category category );
+		TreeModelNode * addTest( DatabaseTest & test );
 		void expandRoots( wxDataViewCtrl * view );
+		void instantiate( wxDataViewCtrl * view );
 
 		// helper method for wxLog
-		uint32_t getId( wxDataViewItem const & item )const;
+		uint32_t getTestId( wxDataViewItem const & item )const;
+		uint32_t getRunId( wxDataViewItem const & item )const;
 		std::string getName( wxDataViewItem const & item )const;
-		db::DateTime getRunDate( wxDataViewItem const & item )const;
+		db::Date getRunDate( wxDataViewItem const & item )const;
+		db::Time getRunTime( wxDataViewItem const & item )const;
 		TestStatus getStatus( wxDataViewItem const & item )const;
 		std::string getRenderer( wxDataViewItem const & item )const;
 		std::string getCategory( wxDataViewItem const & item )const;
@@ -78,9 +80,9 @@ namespace aria
 			, wxDataViewItemArray & array )const override;
 
 	private:
-		TreeModelNode * m_root;
 		Config const & m_config;
-		std::map< std::string, TreeModelNode * > m_renderers;
+		Renderer m_renderer;
+		TreeModelNode * m_root;
 		std::map< std::string, TreeModelNode * > m_categories;
 	};
 }

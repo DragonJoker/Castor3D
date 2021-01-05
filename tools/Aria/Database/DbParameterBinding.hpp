@@ -340,7 +340,8 @@ namespace aria::db
 
 		void updateValue() override
 		{
-			if ( m_value.isNull() )
+			if ( m_value.isNull()
+				|| !db::date_time::isValid( m_value.getValue() ) )
 			{
 				sqliteCheck( sqlite3_bind_null( statement, index ), std::stringstream{} << INFO_SQLITE_SET_PARAMETER_NULL, connection );
 			}

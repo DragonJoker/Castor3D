@@ -1,5 +1,7 @@
 #include "Aria/TestPanel.hpp"
 
+#include "Aria/TestDatabase.hpp"
+
 #include <CastorUtils/Data/File.hpp>
 #include <CastorUtils/Graphics/Image.hpp>
 #include <CastorUtils/Graphics/StbImageLoader.hpp>
@@ -31,13 +33,13 @@ namespace aria
 		}
 		
 		wxImage loadRefImage( castor::Path const & folder
-			, Test const & test )
+			, TestRun const & test )
 		{
-			return loadImage( folder / getReferenceFolder( test )/ getReferenceName( test ) );
+			return loadImage( folder / getReferenceFolder( test ) / getReferenceName( test ) );
 		}
 
 		wxImage loadResultImage( castor::Path const & folder
-			, Test const & test )
+			, TestRun const & test )
 		{
 			return loadImage( folder / getResultFolder( test ) / getResultName( test ) );
 		}
@@ -249,19 +251,29 @@ namespace aria
 		SetSizer( sizer );
 	}
 
-	void TestPanel::setTest( Test & test )
+	void TestPanel::refresh()
+	{
+		auto & test = *m_test;
+
+		if ( test->status != TestStatus::eNotRun )
+		{
+			m_refImage = loadRefImage( m_config.test, *test );
+			m_resImage = loadResultImage( m_config.work, *test );
+			m_resToRefImage = compareImages( m_loader
+				, m_config.test / getReferenceFolder( *test ) / getReferenceName( *test )
+				, m_config.work / getResultFolder( *test ) / getResultName( *test ) );
+			m_refToResImage = compareImages( m_loader
+				, m_config.work / getResultFolder( *test ) / getResultName( *test )
+				, m_config.test / getReferenceFolder( *test ) / getReferenceName( *test ) );
+			loadRef( m_currentRef );
+			loadRes( m_currentRes );
+		}
+	}
+
+	void TestPanel::setTest( DatabaseTest & test )
 	{
 		m_test = &test;
-		m_refImage = loadRefImage( m_config.test, test );
-		m_resImage = loadResultImage( m_config.work, test );
-		m_resToRefImage = compareImages( m_loader
-			, m_config.test / getReferenceFolder( test ) / getReferenceName( test )
-			, m_config.work / getResultFolder( test ) / getResultName( test ) );
-		m_refToResImage = compareImages( m_loader
-			, m_config.work / getResultFolder( test ) / getResultName( test )
-			, m_config.test / getReferenceFolder( test ) / getReferenceName( test ) );
-		loadRef( m_currentRef );
-		loadRes( m_currentRes );
+		refresh();
 	}
 
 	void TestPanel::loadRef( int index )
