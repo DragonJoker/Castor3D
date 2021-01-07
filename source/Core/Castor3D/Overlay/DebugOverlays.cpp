@@ -409,7 +409,7 @@ namespace castor3d
 		}
 
 		fprintf( stdout
-			, "\r%0.7f ms, %0.7f fps"
+			, "\r%0.2f ms, %0.2f fps                           "
 			, total.count() / 1000.0f
 			, m_fps );
 		m_frameIndex = ++m_frameIndex % FRAME_SAMPLES_COUNT;
