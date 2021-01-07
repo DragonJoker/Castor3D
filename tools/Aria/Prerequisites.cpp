@@ -9,6 +9,10 @@
 
 #include <wx/filefn.h>
 
+#if !defined( CU_PlatformWindows )
+#	include <strings.h>
+#endif
+
 namespace aria
 {
 	namespace
@@ -29,7 +33,11 @@ namespace aria
 
 	bool LessNoCase::operator()( const char * lhs, const char * rhs, size_t minSize )const
 	{
+#if defined( CU_PlatformWindows )
 		return strnicmp( lhs, rhs, minSize ) < 0;
+#else
+		return strncasecmp( lhs, rhs, minSize ) < 0;
+#endif
 	}
 
 	bool LessNoCase::operator()( const char * lhs, const char * rhs )const
@@ -49,7 +57,11 @@ namespace aria
 	
 	bool EqualNoCase::operator()( const char * lhs, const char * rhs, size_t minSize )const
 	{
+#if defined( CU_PlatformWindows )
 		return strnicmp( lhs, rhs, minSize ) == 0;
+#else
+		return strncasecmp( lhs, rhs, minSize ) == 0;
+#endif
 	}
 
 	bool EqualNoCase::operator()( const char * lhs, const char * rhs )const

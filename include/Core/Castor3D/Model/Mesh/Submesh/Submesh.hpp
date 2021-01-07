@@ -13,6 +13,7 @@ See LICENSE file in root folder
 #include "Castor3D/Model/Skeleton/SkeletonModule.hpp"
 #include "Castor3D/Shader/ShaderModule.hpp"
 
+#include "Castor3D/Buffer/GeometryBuffers.hpp"
 #include "Castor3D/Model/VertexGroup.hpp"
 
 #include <CastorUtils/Graphics/BoundingBox.hpp>

@@ -1,6 +1,7 @@
 #include "Castor3D/Binary/BinarySubmesh.hpp"
 
 #include "Castor3D/Binary/BinaryBonesComponent.hpp"
+#include "Castor3D/Buffer/GeometryBuffers.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/BonesComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp"

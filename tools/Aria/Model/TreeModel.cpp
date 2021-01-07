@@ -396,13 +396,13 @@ namespace aria
 			case Column::eRunDate:
 				variant = ( db::date_time::isValid( node->test->getRunDate() ) && db::date::isValid( node->test->getRunDate().date() ) )
 					? makeWxString( db::date::print( node->test->getRunDate().date(), DISPLAY_DATETIME_DATE ) )
-					: wxEmptyString;
+					: wxString{};
 				break;
 
 			case Column::eRunTime:
 				variant = ( db::date_time::isValid( node->test->getRunDate() ) && db::time::isValid( node->test->getRunDate().time_of_day() ) )
 					? makeWxString( db::time::print( node->test->getRunDate().time_of_day(), DISPLAY_DATETIME_TIME ) )
-					: wxEmptyString;
+					: wxString{};
 				break;
 
 			default:

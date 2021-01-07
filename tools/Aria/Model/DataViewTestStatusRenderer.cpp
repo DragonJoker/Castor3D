@@ -4,6 +4,7 @@
 #include "Aria/Model/TreeModel.hpp"
 
 #include <wx/dc.h>
+#include <wx/settings.h>
 
 #include "Aria/xpms/acceptable.xpm"
 #include "Aria/xpms/ignored.xpm"

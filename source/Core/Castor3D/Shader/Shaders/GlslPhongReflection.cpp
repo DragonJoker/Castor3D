@@ -130,8 +130,8 @@ namespace castor3d
 					, Float const & refractionRatio
 					, Vec3 const & transmission
 					, Float const & shininess
-					, sdw::Vec3 & reflection
-					, sdw::Vec3 & refraction )
+					, sdw::Vec3 reflection
+					, sdw::Vec3 refraction )
 				{
 					auto subRatio = m_writer.declLocale( "subRatio"
 						, 1.0_f - refractionRatio );
@@ -174,8 +174,8 @@ namespace castor3d
 					, Vec3 const & specular
 					, Vec3 const & transmission
 					, Float const & shininess
-					, sdw::Vec3 & reflection
-					, sdw::Vec3 & refraction )
+					, sdw::Vec3 reflection
+					, sdw::Vec3 refraction )
 				{
 					reflection = computeRefl( wsIncident
 						, wsNormal

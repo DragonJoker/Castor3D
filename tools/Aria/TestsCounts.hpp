@@ -37,7 +37,7 @@ namespace aria
 			, TestRunArray const & runs );
 		// Test
 		void addTest( DatabaseTest & test );
-;
+
 		void add( TestStatus status );
 		void remove( TestStatus status );
 		CountedUInt & getCount( TestsCountsType type );
