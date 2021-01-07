@@ -93,29 +93,14 @@ namespace aria
 		void onTestDiffEnd( int status );
 		void onTestProcessEnd( int pid, int status );
 
+		void onClose( wxCloseEvent & evt );
 		void onTestsPageChange( wxAuiNotebookEvent & evt );
 		void onSelectionChange( wxDataViewEvent & evt );
 		void onItemContextMenu( wxDataViewEvent & evt );
 		void onTestsMenuOption( wxCommandEvent & evt );
 		void onDatabaseMenuOption( wxCommandEvent & evt );
 		void onProcessEnd( wxProcessEvent & evt );
-
-	private:
-		struct TestUpdater
-		{
-			explicit TestUpdater( wxObjectDataPtr< TreeModel > & model );
-			void addTest( TreeModelNode & test );
-			void stop();
-
-		private:
-			std::vector< TreeModelNode * > get();
-			void set( std::vector< TreeModelNode * > current );
-
-			std::mutex mutex;
-			std::vector< TreeModelNode * > running;
-			std::atomic_bool isStopped{ false };
-			std::thread thread;
-		};
+		void onTestUpdateTimer( wxTimerEvent & evt );
 
 		struct Selection
 		{
@@ -146,7 +131,6 @@ namespace aria
 			CategoryPanel * allView{};
 			CategoryPanel * categoryView{};
 			std::map< uint32_t, TreeModelNode * > modelNodes;
-			TestUpdater updater;
 			Selection selected;
 		};
 
@@ -169,7 +153,8 @@ namespace aria
 			std::unique_ptr< wxProcess > genProcess{};
 			std::unique_ptr< wxProcess > difProcess{};
 			std::unique_ptr< wxProcess > disProcess{};
-			std::list< TestNode > tests{};
+			std::list< TestNode > pending{};
+			std::list< TestNode > running{};
 			wxProcess * currentProcess{};
 		};
 
@@ -211,6 +196,7 @@ namespace aria
 		RunningTest m_runningTest;
 		std::atomic_bool m_cancelled;
 		TestProcessChecker m_processChecker;
+		wxTimer * m_testUpdater;
 	};
 }
 

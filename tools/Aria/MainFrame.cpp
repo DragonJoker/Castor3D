@@ -1,8 +1,10 @@
 #include "Aria/MainFrame.hpp"
 
 #include "Aria/CategoryPanel.hpp"
+#include "Aria/DatabaseTest.hpp"
 #include "Aria/LayeredPanel.hpp"
 #include "Aria/TestPanel.hpp"
+#include "Aria/TestsCounts.hpp"
 #include "Aria/Aui/AuiDockArt.hpp"
 #include "Aria/Aui/AuiTabArt.hpp"
 #include "Aria/Database/DbDateTimeHelpers.hpp"
@@ -42,6 +44,7 @@ namespace aria
 #endif
 		enum ID
 		{
+			eID_TEST_UPDATER,
 			eID_GRID,
 			eID_DETAIL,
 			eID_TEST_RUN,
@@ -250,66 +253,6 @@ namespace aria
 
 	//*********************************************************************************************
 
-	MainFrame::TestUpdater::TestUpdater( wxObjectDataPtr< TreeModel > & model )
-		: thread{ [this, &model]()
-			{
-				while ( !isStopped )
-				{
-					auto current = get();
-					auto it = current.begin();
-
-					while ( it != current.end() )
-					{
-						auto node = *it;
-
-						if ( !isRunning( node->test->getStatus() ) )
-						{
-							it = current.erase( it );
-						}
-						else
-						{
-							node->test->updateStatusNW( ( node->test->getStatus() == TestStatus::eRunning_End )
-								? TestStatus::eRunning_Begin
-								: TestStatus( uint32_t( node->test->getStatus() ) + 1 ) );
-							++it;
-						}
-
-						model->ItemChanged( wxDataViewItem{ node } );
-					}
-
-					set( current );
-					std::this_thread::sleep_for( 100_ms );
-				}
-			} }
-	{
-	}
-
-	void MainFrame::TestUpdater::stop()
-	{
-		isStopped = true;
-		thread.join();
-	}
-
-	void MainFrame::TestUpdater::addTest( TreeModelNode & test )
-	{
-		auto lock( castor::makeUniqueLock( mutex ) );
-		running.push_back( &test );
-	}
-
-	std::vector< TreeModelNode * > MainFrame::TestUpdater::get()
-	{
-		auto lock( castor::makeUniqueLock( mutex ) );
-		return running;
-	}
-
-	void MainFrame::TestUpdater::set( std::vector< TreeModelNode * > current )
-	{
-		auto lock( castor::makeUniqueLock( mutex ) );
-		running = current;
-	}
-
-	//*********************************************************************************************
-
 	MainFrame::TestsPage::TestsPage( Config const & config
 		, Renderer renderer
 		, TestRunCategoryMap &runs
@@ -319,14 +262,12 @@ namespace aria
 		, runs{ &runs }
 		, counts{ &counts.categories }
 		, model{ new TreeModel{ config, renderer, *counts.counts } }
-		, updater{ model }
 	{
 	}
 
 	MainFrame::TestsPage::~TestsPage()
 	{
 		auiManager.UnInit();
-		updater.stop();
 	}
 
 	//*********************************************************************************************
@@ -354,33 +295,19 @@ namespace aria
 		Bind( wxEVT_CLOSE_WINDOW
 			, [this]( wxCloseEvent & evt )
 			{
-				if ( m_runningTest.difProcess )
-				{
-					if ( wxProcess::Exists( m_runningTest.disProcess->GetPid() ) )
-					{
-						wxProcess::Kill( m_runningTest.disProcess->GetPid() );
-					}
-
-					if ( wxProcess::Exists( m_runningTest.difProcess->GetPid() ) )
-					{
-						wxProcess::Kill( m_runningTest.difProcess->GetPid() );
-					}
-
-					if ( wxProcess::Exists( m_runningTest.genProcess->GetPid() ) )
-					{
-						wxProcess::Kill( m_runningTest.genProcess->GetPid() );
-					}
-
-					m_runningTest.disProcess->Disconnect( wxEVT_END_PROCESS );
-					m_runningTest.difProcess->Disconnect( wxEVT_END_PROCESS );
-					m_runningTest.genProcess->Disconnect( wxEVT_END_PROCESS );
-					m_runningTest.disProcess = nullptr;
-					m_runningTest.difProcess = nullptr;
-					m_runningTest.genProcess = nullptr;
-				}
-
-				evt.Skip();
+				onClose( evt );
 			} );
+		m_testUpdater = new wxTimer{ this, eID_TEST_UPDATER };
+		Bind( wxEVT_TIMER
+			, [this]( wxTimerEvent & evt )
+			{
+				if ( evt.GetId() == eID_TEST_UPDATER )
+				{
+					onTestUpdateTimer( evt );
+				}
+			}
+			, eID_TEST_UPDATER );
+		m_testUpdater->Start( 100 );
 	}
 
 	MainFrame::~MainFrame()
@@ -860,21 +787,20 @@ namespace aria
 	void MainFrame::doProcessTest()
 	{
 		if ( !m_cancelled
-			&& !m_runningTest.tests.empty() )
+			&& !m_runningTest.pending.empty() )
 		{
-			auto & testNode = *m_runningTest.tests.begin();
+			auto & testNode = *m_runningTest.pending.begin();
 			auto & test = *testNode.test;
 			wxString command = m_config.launcher;
 			command << " " << m_config.test / getSceneFile( *test );
 			command << " -" << test->renderer->name;
 			test.updateStatusNW( TestStatus::eRunning_Begin );
 			auto & page = doGetPage( wxDataViewItem{ testNode.node } );
-			page.updater.addTest( *testNode.node );
+			m_runningTest.running.push_back( { &test, test.getStatus(), testNode.node } );
 			page.model->ItemChanged( wxDataViewItem{ testNode.node } );
 			auto rendIt = m_tests.counts.renderers.find( test.getRenderer() );
 			auto catIt = rendIt->second.categories.find( test.getCategory() );
-			page.categoryView->update( catIt->first->name
-				, *catIt->second );
+			page.categoryView->refresh();
 			m_statusText->SetLabel( _( "Running test: " ) + test.getName() );
 			auto result = wxExecute( command
 				, ExecMode
@@ -906,18 +832,18 @@ namespace aria
 	void MainFrame::doPushTest( TreeModelNode * node )
 	{
 		auto & run = *node->test;
-		m_runningTest.tests.push_back( { &run, run.getStatus(), node } );
+		m_runningTest.pending.push_back( { &run, run.getStatus(), node } );
 		run.updateStatusNW( TestStatus::ePending );
 	}
 
 	void MainFrame::doClearRunning()
 	{
-		for ( auto & running : m_runningTest.tests )
+		for ( auto & running : m_runningTest.pending )
 		{
 			running.test->updateStatusNW( running.status );
 		}
 
-		m_runningTest.tests.clear();
+		m_runningTest.pending.clear();
 	}
 
 	void MainFrame::doRunTest()
@@ -926,7 +852,7 @@ namespace aria
 
 		if ( m_selectedPage
 			&& !m_selectedPage->selected.items.empty()
-			&& m_runningTest.tests.empty() )
+			&& m_runningTest.pending.empty() )
 		{
 			m_testProgress->SetRange( int( m_selectedPage->selected.items.size() ) );
 			m_testProgress->SetValue( 0 );
@@ -989,7 +915,7 @@ namespace aria
 			}
 		}
 
-		if ( m_runningTest.tests.empty() )
+		if ( m_runningTest.pending.empty() )
 		{
 			m_statusText->SetLabel( _( "Idle" ) );
 		}
@@ -1161,7 +1087,7 @@ namespace aria
 			}
 		}
 
-		m_testProgress->SetRange( m_runningTest.tests.size() );
+		m_testProgress->SetRange( m_runningTest.pending.size() );
 		m_testProgress->SetValue( 0 );
 		m_testProgress->Show();
 		doProcessTest();
@@ -1198,7 +1124,7 @@ namespace aria
 			}
 		}
 
-		m_testProgress->SetRange( m_runningTest.tests.size() );
+		m_testProgress->SetRange( m_runningTest.pending.size() );
 		m_testProgress->SetValue( 0 );
 		m_testProgress->Show();
 		doProcessTest();
@@ -1235,7 +1161,7 @@ namespace aria
 			}
 		}
 
-		m_testProgress->SetRange( m_runningTest.tests.size() );
+		m_testProgress->SetRange( m_runningTest.pending.size() );
 		m_testProgress->SetValue( 0 );
 		m_testProgress->Show();
 		doProcessTest();
@@ -1274,7 +1200,7 @@ namespace aria
 			}
 		}
 
-		m_testProgress->SetRange( m_runningTest.tests.size() );
+		m_testProgress->SetRange( m_runningTest.pending.size() );
 		m_testProgress->SetValue( 0 );
 		m_testProgress->Show();
 		doProcessTest();
@@ -1313,7 +1239,7 @@ namespace aria
 								, _( "Updating tests Castor3D date" )
 								+ wxT( "\n" ) + getProgressDetails( run ) );
 
-							if ( isOutOfCastorDate( m_config, *run ) )
+							if ( run.checkOutOfCastorDate() )
 							{
 								run.updateCastorDate( m_config.castorRefDate );
 							}
@@ -1358,7 +1284,7 @@ namespace aria
 								, _( "Updating tests Scene date" )
 								+ wxT( "\n" ) + getProgressDetails( run ) );
 
-							if ( isOutOfSceneDate( m_config, *run ) )
+							if ( run.checkOutOfSceneDate() )
 							{
 								run.updateSceneDate( sceneDate );
 							}
@@ -1396,7 +1322,7 @@ namespace aria
 			}
 		}
 
-		m_testProgress->SetRange( m_runningTest.tests.size() );
+		m_testProgress->SetRange( m_runningTest.pending.size() );
 		m_testProgress->SetValue( 0 );
 		m_testProgress->Show();
 		doProcessTest();
@@ -1431,7 +1357,7 @@ namespace aria
 			}
 		}
 
-		m_testProgress->SetRange( m_runningTest.tests.size() );
+		m_testProgress->SetRange( m_runningTest.pending.size() );
 		m_testProgress->SetValue( 0 );
 		m_testProgress->Show();
 		doProcessTest();
@@ -1466,7 +1392,7 @@ namespace aria
 			}
 		}
 
-		m_testProgress->SetRange( m_runningTest.tests.size() );
+		m_testProgress->SetRange( m_runningTest.pending.size() );
 		m_testProgress->SetValue( 0 );
 		m_testProgress->Show();
 		doProcessTest();
@@ -1503,7 +1429,7 @@ namespace aria
 			}
 		}
 
-		m_testProgress->SetRange( m_runningTest.tests.size() );
+		m_testProgress->SetRange( m_runningTest.pending.size() );
 		m_testProgress->SetValue( 0 );
 		m_testProgress->Show();
 		doProcessTest();
@@ -1541,7 +1467,7 @@ namespace aria
 								, _( "Updating tests Castor3D date" )
 								+ wxT( "\n" ) + getProgressDetails( run ) );
 
-							if ( isOutOfCastorDate( m_config, *run ) )
+							if ( run.checkOutOfCastorDate() )
 							{
 								run.updateCastorDate( m_config.castorRefDate );
 							}
@@ -1584,7 +1510,7 @@ namespace aria
 								, _( "Updating tests Scene date" )
 								+ wxT( "\n" ) + getProgressDetails( run ) );
 
-							if ( isOutOfSceneDate( m_config, *run ) )
+							if ( run.checkOutOfSceneDate() )
 							{
 								run.updateSceneDate( sceneDate );
 							}
@@ -1612,7 +1538,7 @@ namespace aria
 			}
 		}
 
-		m_testProgress->SetRange( m_runningTest.tests.size() );
+		m_testProgress->SetRange( m_runningTest.pending.size() );
 		m_testProgress->SetValue( 0 );
 		m_testProgress->Show();
 		doProcessTest();
@@ -1637,7 +1563,7 @@ namespace aria
 			}
 		}
 
-		m_testProgress->SetRange( m_runningTest.tests.size() );
+		m_testProgress->SetRange( m_runningTest.pending.size() );
 		m_testProgress->SetValue( 0 );
 		m_testProgress->Show();
 		doProcessTest();
@@ -1662,7 +1588,7 @@ namespace aria
 			}
 		}
 
-		m_testProgress->SetRange( m_runningTest.tests.size() );
+		m_testProgress->SetRange( m_runningTest.pending.size() );
 		m_testProgress->SetValue( 0 );
 		m_testProgress->Show();
 		doProcessTest();
@@ -1688,7 +1614,7 @@ namespace aria
 			}
 		}
 
-		m_testProgress->SetRange( m_runningTest.tests.size() );
+		m_testProgress->SetRange( m_runningTest.pending.size() );
 		m_testProgress->SetValue( 0 );
 		m_testProgress->Show();
 		doProcessTest();
@@ -1717,7 +1643,7 @@ namespace aria
 						, _( "Updating tests Castor3D date" )
 						+ wxT( "\n" ) + getProgressDetails( run ) );
 
-					if ( isOutOfCastorDate( m_config, *run ) )
+					if ( run.checkOutOfCastorDate() )
 					{
 						run.updateCastorDate( m_config.castorRefDate );
 					}
@@ -1750,7 +1676,7 @@ namespace aria
 						, _( "Updating tests Scene date" )
 						+ wxT( "\n" ) + getProgressDetails( run ) );
 
-					if ( isOutOfSceneDate( m_config, *run ) )
+					if ( run.checkOutOfSceneDate() )
 					{
 						run.updateSceneDate( sceneDate );
 					}
@@ -1828,7 +1754,7 @@ namespace aria
 
 	void MainFrame::onTestRunEnd( int status )
 	{
-		auto & testNode = *m_runningTest.tests.begin();
+		auto & testNode = *m_runningTest.pending.begin();
 		auto & run = *testNode.test;
 
 		if ( status < 0 && status != std::numeric_limits< int >::max() )
@@ -1873,8 +1799,8 @@ namespace aria
 
 	void MainFrame::onTestDiffEnd( int status )
 	{
-		auto testNode = *m_runningTest.tests.begin();
-		m_runningTest.tests.erase( m_runningTest.tests.begin() );
+		auto testNode = *m_runningTest.pending.begin();
+		m_runningTest.pending.erase( m_runningTest.pending.begin() );
 		auto & test = *testNode.test;
 
 		if ( !m_cancelled )
@@ -1926,6 +1852,38 @@ namespace aria
 				onTestRunEnd( status );
 			}
 		}
+	}
+
+	void MainFrame::onClose( wxCloseEvent & evt )
+	{
+		m_testUpdater->Stop();
+
+		if ( m_runningTest.difProcess )
+		{
+			if ( wxProcess::Exists( m_runningTest.disProcess->GetPid() ) )
+			{
+				wxProcess::Kill( m_runningTest.disProcess->GetPid() );
+			}
+
+			if ( wxProcess::Exists( m_runningTest.difProcess->GetPid() ) )
+			{
+				wxProcess::Kill( m_runningTest.difProcess->GetPid() );
+			}
+
+			if ( wxProcess::Exists( m_runningTest.genProcess->GetPid() ) )
+			{
+				wxProcess::Kill( m_runningTest.genProcess->GetPid() );
+			}
+
+			m_runningTest.disProcess->Disconnect( wxEVT_END_PROCESS );
+			m_runningTest.difProcess->Disconnect( wxEVT_END_PROCESS );
+			m_runningTest.genProcess->Disconnect( wxEVT_END_PROCESS );
+			m_runningTest.disProcess = nullptr;
+			m_runningTest.difProcess = nullptr;
+			m_runningTest.genProcess = nullptr;
+		}
+
+		evt.Skip();
 	}
 
 	void MainFrame::onTestsPageChange( wxAuiNotebookEvent & evt )
@@ -2038,8 +1996,8 @@ namespace aria
 		if ( wasDisplayingCategory != displayCategory
 			|| wasDisplayingTest != displayTest )
 		{
+			// Page change
 			page.auiManager.Update();
-			m_auiManager.Update();
 		}
 	}
 
@@ -2047,7 +2005,7 @@ namespace aria
 	{
 		if ( m_selectedPage
 			&& ( !m_selectedPage->selected.items.empty() )
-			&& m_runningTest.tests.empty() )
+			&& m_runningTest.pending.empty() )
 		{
 			if ( m_selectedPage->selected.allTests )
 			{
@@ -2197,6 +2155,34 @@ namespace aria
 	{
 		castor::Logger::logInfo( castor::makeStringStream() << "Process ended " << evt.GetPid() << "(" << evt.GetExitCode() << ")" );
 		onTestProcessEnd( evt.GetPid(), evt.GetExitCode() );
+	}
+
+	void MainFrame::onTestUpdateTimer( wxTimerEvent & evt )
+	{
+		auto & current = m_runningTest.running;
+		auto it = current.begin();
+
+		while ( it != current.end() )
+		{
+			auto node = it->node;
+
+			if ( !isRunning( node->test->getStatus() ) )
+			{
+				it = current.erase( it );
+			}
+			else
+			{
+				node->test->updateStatusNW( ( node->test->getStatus() == TestStatus::eRunning_End )
+					? TestStatus::eRunning_Begin
+					: TestStatus( uint32_t( node->test->getStatus() ) + 1 ) );
+				++it;
+			}
+
+			auto & page = doGetPage( wxDataViewItem{ node } );
+			page.model->ItemChanged( wxDataViewItem{ node } );
+		}
+
+		evt.Skip();
 	}
 
 	//*********************************************************************************************

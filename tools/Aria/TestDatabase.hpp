@@ -25,102 +25,6 @@ namespace aria
 		, castor::Path const & name
 		, bool force );
 
-	class DatabaseTest
-	{
-		friend class TestDatabase;
-		friend struct TestsCounts;
-
-	public:
-		DatabaseTest( TestDatabase & database
-			, TestRun test );
-
-		void updateIgnoreResult( bool ignore
-			, db::DateTime castorDate
-			, bool useAsReference );
-		void updateCastorDate( db::DateTime const & castorDate );
-		void updateCastorDate();
-		void updateSceneDate( db::DateTime const & castorDate );
-		void updateSceneDate();
-		void updateStatusNW( TestStatus newStatus );
-		void updateStatus( TestStatus newStatus
-			, bool useAsReference );
-		void createNewRun( castor::Path const & match );
-
-		int getTestId()const
-		{
-			return m_test.test->id;
-		}
-
-		int getRunId()const
-		{
-			return m_test.id;
-		}
-
-		Renderer getRenderer()const
-		{
-			return m_test.renderer;
-		}
-
-		Category getCategory()const
-		{
-			return m_test.test->category;
-		}
-
-		bool getIgnoreResult()const
-		{
-			return m_test.test->ignoreResult;
-		}
-
-		TestStatus getStatus()const
-		{
-			return m_test.status;
-		}
-
-		std::string const & getName()const
-		{
-			return m_test.test->name;
-		}
-
-		db::DateTime const & getRunDate()const
-		{
-			return m_test.runDate;
-		}
-
-		db::DateTime const & getCastorDate()const
-		{
-			return m_test.castorDate;
-		}
-
-		db::DateTime const & getSceneDate()const
-		{
-			return m_test.sceneDate;
-		}
-
-		TestRun const * operator->()const
-		{
-			return &m_test;
-		}
-
-		TestRun const & operator*()const
-		{
-			return m_test;
-		}
-
-	private:
-		void update( int id );
-		void update( int id
-			, db::DateTime runDate
-			, TestStatus status
-			, db::DateTime castorDate
-			, db::DateTime sceneDate );
-		void updateReference( TestStatus status );
-
-	private:
-		TestDatabase & m_database;
-		TestsCounts * m_counts{};
-		TestRun m_test;
-	};
-
 	class TestDatabase
 	{
 		friend class DatabaseTest;
@@ -146,8 +50,16 @@ namespace aria
 		Category createCategory( std::string const & name );
 		Keyword createKeyword( std::string const & name );
 
+		TestMap listTests();
+		TestMap listTests( wxProgressDialog & progress
+			, int & index );
 		void listTests( TestMap & result );
 		void listTests( TestMap & result
+			, wxProgressDialog & progress
+			, int & index );
+
+		TestRunMap listLatestRuns( TestMap const & tests );
+		TestRunMap listLatestRuns( TestMap const & tests
 			, wxProgressDialog & progress
 			, int & index );
 		void listLatestRuns( TestMap const & tests
@@ -156,7 +68,12 @@ namespace aria
 			, TestRunMap & result
 			, wxProgressDialog & progress
 			, int & index );
-
+		TestRunCategoryMap listLatestRuns( Renderer renderer
+			, TestMap const & tests );
+		TestRunCategoryMap listLatestRuns( Renderer renderer
+			, TestMap const & tests
+			, wxProgressDialog & progress
+			, int & index );
 		void listLatestRuns( Renderer renderer
 			, TestMap const & tests
 			, TestRunCategoryMap & result );
@@ -168,55 +85,6 @@ namespace aria
 
 		void insertTest( Test & test
 			, bool moveFiles = true );
-
-		TestMap listTests()
-		{
-			TestMap result;
-			listTests( result );
-			return result;
-		}
-
-		TestMap listTests( wxProgressDialog & progress
-			, int & index )
-		{
-			TestMap result;
-			listTests( result, progress, index );
-			return result;
-		}
-
-		TestRunMap listLatestRuns( TestMap const & tests )
-		{
-			TestRunMap result;
-			listLatestRuns( tests, result );
-			return result;
-		}
-
-		TestRunMap listLatestRuns( TestMap const & tests
-			, wxProgressDialog & progress
-			, int & index )
-		{
-			TestRunMap result;
-			listLatestRuns( tests, result, progress, index );
-			return result;
-		}
-
-		TestRunCategoryMap listLatestRuns( Renderer renderer
-			, TestMap const & tests )
-		{
-			TestRunCategoryMap result;
-			listLatestRuns( renderer, tests, result );
-			return result;
-		}
-
-		TestRunCategoryMap listLatestRuns( Renderer renderer
-			, TestMap const & tests
-			, wxProgressDialog & progress
-			, int & index )
-		{
-			TestRunCategoryMap result;
-			listLatestRuns( renderer, tests, result, progress, index );
-			return result;
-		}
 
 	public:
 		struct InsertIdValue
@@ -597,19 +465,13 @@ namespace aria
 				}
 			}
 
+			TestMap listTests( CategoryMap & categories
+				, wxProgressDialog & progress
+				, int & index );
 			void listTests( CategoryMap & categories
 				, TestMap & result
 				, wxProgressDialog & progress
 				, int & index );
-
-			TestMap listTests( CategoryMap & categories
-				, wxProgressDialog & progress
-				, int & index )
-			{
-				TestMap result;
-				listTests( categories, result, progress, index );
-				return result;
-			}
 
 		private:
 			db::StatementPtr stmt;
@@ -658,23 +520,17 @@ namespace aria
 				}
 			}
 
+			TestRunCategoryMap listTests( TestMap const & tests
+				, CategoryMap & categories
+				, Renderer renderer
+				, wxProgressDialog & progress
+				, int & index );
 			void listTests( TestMap const & tests
 				, CategoryMap & categories
 				, Renderer renderer
 				, TestRunCategoryMap & result
 				, wxProgressDialog & progress
 				, int & index );
-
-			TestRunCategoryMap listTests( TestMap const & tests
-				, CategoryMap & categories
-				, Renderer renderer
-				, wxProgressDialog & progress
-				, int & index )
-			{
-				TestRunCategoryMap result;
-				listTests( tests, categories, renderer, result, progress, index );
-				return result;
-			}
 
 		private:
 			TestDatabase * database;

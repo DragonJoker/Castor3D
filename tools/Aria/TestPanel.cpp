@@ -1,5 +1,6 @@
 #include "Aria/TestPanel.hpp"
 
+#include "Aria/DatabaseTest.hpp"
 #include "Aria/TestDatabase.hpp"
 
 #include <CastorUtils/Data/File.hpp>

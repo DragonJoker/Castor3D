@@ -1,7 +1,9 @@
 #include "Aria/Model/TreeModel.hpp"
 #include "Aria/Model/TreeModelNode.hpp"
 
+#include "Aria/DatabaseTest.hpp"
 #include "Aria/TestDatabase.hpp"
+#include "Aria/TestsCounts.hpp"
 #include "Aria/Database/DbDateTimeHelpers.hpp"
 
 #include <CastorUtils/Exception/Assertion.hpp>
@@ -668,7 +670,7 @@ namespace aria
 			switch ( Column( col ) )
 			{
 			case Column::eStatusName:
-				node->statusName.statusIndex = StatusName::getTestStatusIndex( m_config, **node->test );
+				node->statusName.statusIndex = StatusName::getTestStatusIndex( m_config, *node->test );
 				node->statusName.name = getName( item );
 				variant = reinterpret_cast< void * >( &node->statusName );
 				break;

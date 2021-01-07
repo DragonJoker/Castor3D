@@ -1,5 +1,6 @@
 #include "Aria/Model/TreeModelNode.hpp"
 
+#include "Aria/DatabaseTest.hpp"
 #include "Aria/TestDatabase.hpp"
 
 namespace aria

@@ -11,22 +11,27 @@ if ( SQLite3_FOUND AND Boost_FOUND )
 	set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
 	set( ${PROJECT_NAME}_HDR_FILES
-		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/CategoryPanel.hpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Aria.hpp
+		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/CategoryPanel.hpp
+		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/CountedValue.hpp
+		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/DatabaseTest.hpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/LayeredPanel.hpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/MainFrame.hpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Prerequisites.hpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/TestDatabase.hpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/TestPanel.hpp
+		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/TestsCounts.hpp
 	)
 	set( ${PROJECT_NAME}_SRC_FILES
-		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/CategoryPanel.cpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Aria.cpp
+		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/CategoryPanel.cpp
+		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/DatabaseTest.cpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/LayeredPanel.cpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/MainFrame.cpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Prerequisites.cpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/TestDatabase.cpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/TestPanel.cpp
+		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/TestsCounts.cpp
 	)
 	source_group( "Header Files"
 		FILES
@@ -93,14 +98,10 @@ if ( SQLite3_FOUND AND Boost_FOUND )
 		${${PROJECT_NAME}_FOLDER_SRC_FILES}
 	)
 	set( ${PROJECT_NAME}_FOLDER_HDR_FILES
-		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Model/ListModel.hpp
-		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Model/ListStoreDerivedModel.hpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Model/TreeModel.hpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Model/TreeModelNode.hpp
 	)
 	set( ${PROJECT_NAME}_FOLDER_SRC_FILES
-		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Model/ListModel.cpp
-		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Model/ListStoreDerivedModel.cpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Model/TreeModel.cpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Model/TreeModelNode.cpp
 	)

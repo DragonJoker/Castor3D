@@ -17,7 +17,7 @@ See LICENSE file in root folder
 
 namespace aria
 {
-	enum class TestStatus
+	enum class TestStatus : uint32_t
 	{
 		eNotRun,
 		eNegligible,
@@ -41,6 +41,9 @@ namespace aria
 		eRunning_Begin = eRunning_0,
 		eRunning_End = eRunning_11,
 	};
+	static_assert( uint32_t( TestStatus::eCount ) == uint32_t( TestStatus::eRunning_End ) + 1u
+		, "Running status should always end TestStatus enumeration" );
+
 	castor::Path getFolderName( TestStatus value );
 	TestStatus getStatus( std::string const & name );
 	inline bool isPending( TestStatus value )
@@ -193,118 +196,18 @@ namespace aria
 	using TestsCountsCategoryMap = std::map< Category, TestsCountsPtr, LessIdValue >;
 	using TestsCountsMap = std::map< Renderer, RendererTestsCounts, LessIdValue >;
 
-	struct TestsCounts
-	{
-	private:
-		// Renderer
-		TestsCounts( TestsCounts & all
-			, Config const & config
-			, TestMap const & tests
-			, TestRunCategoryMap const & runs );
-		// Category
-		TestsCounts( TestsCounts & renderer
-			, Config const & config
-			, TestArray const & tests
-			, TestRunArray const & runs );
+	template< typename ValueT >
+	struct CountedValueT;
+	template< typename ValueT >
+	using CountedValueSignalFuncT = std::function< void( CountedValueT< ValueT > const & ) >;
+	template< typename ValueT >
+	using CountedValueSignalT = castor::Signal< CountedValueSignalFuncT< ValueT > >;
+	template< typename ValueT >
+	using CountedValueConnectionT = castor::Connection< CountedValueSignalT< ValueT > >;
 
-	public:
-		// All
-		TestsCounts( Config const & config
-			, TestMap const & tests
-			, TestRunMap const & runs );
-		// Renderer
-		TestsCountsPtr addChild( TestMap const & tests
-			, TestRunCategoryMap const & runs );
-		// Category
-		TestsCountsPtr addChild( TestArray const & tests
-			, TestRunArray const & runs );
-		// Test
-		void addTest( DatabaseTest & test );
-;
-		void add( TestStatus status );
-		void remove( TestStatus status );
-		uint32_t getStatusValue( TestStatus status )const;
-		uint32_t getIgnoredValue()const;
-		uint32_t getOutdatedValue()const;
-		uint32_t getAllValue()const;
-		uint32_t getAllRunStatus()const;
-
-		void addIgnored()
-		{
-			assert( m_children.empty()
-				&& "Only Category test counts can unit count tests" );
-			ignored++;
-		}
-
-		void removeIgnored()
-		{
-			assert( m_children.empty()
-				&& "Only Category test counts can unit count tests" );
-			ignored--;
-		}
-
-		void addOutdated()
-		{
-			assert( m_children.empty()
-				&& "Only Category test counts can unit count tests" );
-			outdated++;
-		}
-
-		void removeOutDated()
-		{
-			assert( m_children.empty()
-				&& "Only Category test counts can unit count tests" );
-			outdated--;
-		}
-
-		uint32_t getNotRunValue()const
-		{
-			auto iall = getAllValue();
-			auto allRun = getAllRunStatus();
-			assert( getAllValue() >= allRun );
-			return iall - allRun;
-		}
-
-		float getIgnoredPercent()const
-		{
-			return ( 100.0f * getIgnoredValue() ) / getAllValue();
-		}
-
-		float getOutdatedPercent()const
-		{
-			return ( 100.0f * getOutdatedValue() ) / getAllValue();
-		}
-
-		float getAllPercent()const
-		{
-			return ( 100.0f * getAllValue() ) / getAllValue();
-		}
-
-		float getStatusPercent( TestStatus status )const
-		{
-			return ( 100.0f * getStatusValue( status ) ) / getAllValue();
-		}
-
-		uint32_t getNotRunPercent()const
-		{
-			return ( 100.0f * getNotRunValue() ) / getAllValue();
-		}
-
-	private:
-		uint32_t all{};
-		uint32_t ignored{};
-		uint32_t outdated{};
-		std::array< uint32_t, size_t( TestStatus::eRunning_1 ) > m_values;
-		Config const & m_config;
-		TestMap const * m_allTests{};
-		TestRunMap const * m_allRuns{};
-		TestMap const * m_rendererTests{};
-		TestRunCategoryMap const * m_rendererRuns{};
-		TestArray const * m_categoryTests{};
-		TestRunArray const * m_categoryRuns{};
-		TestsCounts * m_parent{};
-		std::vector< TestsCounts * > m_children;
-	};
+	using CountedUInt = CountedValueT< uint32_t >;
+	using CountedUIntSignal = CountedValueSignalT< uint32_t >;
+	using CountedUIntConnection = CountedValueConnectionT< uint32_t >;
 
 	struct RendererTestsCounts
 	{
@@ -328,7 +231,7 @@ namespace aria
 		static uint32_t getStatusIndex( bool ignoreResult
 			, TestStatus status );
 		static uint32_t getTestStatusIndex( Config const & config
-			, TestRun const & test );
+			, DatabaseTest const & test );
 	};
 
 	struct Tests

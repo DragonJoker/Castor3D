@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CTP_CategoryPanel_HPP___
 #define ___CTP_CategoryPanel_HPP___
 
-#include "Prerequisites.hpp"
+#include "TestsCounts.hpp"
 
 #include <wx/panel.h>
 
@@ -28,15 +28,11 @@ namespace aria
 	private:
 		Config const & m_config;
 		TestsCounts * m_counts{};
-		wxStaticText * m_status;
-		wxStaticText * m_negligible;
-		wxStaticText * m_acceptable;
-		wxStaticText * m_unacceptable;
-		wxStaticText * m_unprocessed;
-		wxStaticText * m_pending;
-		wxStaticText * m_running;
-		wxStaticText * m_outdated;
-		wxStaticText * m_ignored;
+		wxString m_name;
+		std::array< wxStaticText *, TestsCounts::Type::eCount > m_values{};
+#if CTP_UseCountedValue
+		std::array< CountedUIntConnection, TestsCounts::Type::eCount > m_connections{};
+#endif
 	};
 }
 

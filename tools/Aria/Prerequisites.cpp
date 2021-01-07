@@ -1,5 +1,6 @@
 #include "Aria/Prerequisites.hpp"
 
+#include "Aria/DatabaseTest.hpp"
 #include "Aria/Database/DbDateTimeHelpers.hpp"
 #include "Aria/TestDatabase.hpp"
 
@@ -119,13 +120,13 @@ namespace aria
 	}
 
 	uint32_t StatusName::getTestStatusIndex( Config const & config
-		, TestRun const & test )
+		, DatabaseTest const & test )
 	{
-		return getStatusIndex( test.test->ignoreResult, test.status )
-			| ( isOutOfCastorDate( config, test )
+		return getStatusIndex( test.getIgnoreResult(), test.getStatus() )
+			| ( test.checkOutOfCastorDate()
 				? 0x01u
 				: 0x00u )
-			| ( isOutOfSceneDate( config, test )
+			| ( test.checkOutOfSceneDate()
 				? 0x02u
 				: 0x00u );
 	}

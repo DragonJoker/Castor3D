@@ -1,5 +1,6 @@
 #include "Aria/TestDatabase.hpp"
 
+#include "Aria/DatabaseTest.hpp"
 #include "Aria/Database/DbDateTimeHelpers.hpp"
 #include "Aria/Database/DbResult.hpp"
 #include "Aria/Database/DbStatement.hpp"
@@ -286,25 +287,6 @@ namespace aria
 				, getResultName( test )
 				, false );
 		}
-
-		void moveResultFile( TestRun const & test
-			, TestStatus oldStatus
-			, TestStatus newStatus
-			, castor::Path work )
-		{
-			if ( oldStatus == TestStatus::eNotRun
-				|| newStatus == TestStatus::eNotRun
-				|| oldStatus == newStatus )
-			{
-				return;
-			}
-
-			auto resultFolder = work / getResultFolder( *test.test );
-			moveFile( resultFolder / getFolderName( oldStatus )
-				, resultFolder / getFolderName( newStatus )
-				, getResultName( test )
-				, false );
-		}
 	}
 
 	//*********************************************************************************************
@@ -464,6 +446,15 @@ namespace aria
 
 	//*********************************************************************************************
 
+	TestMap TestDatabase::ListTests::listTests( CategoryMap & categories
+		, wxProgressDialog & progress
+		, int & index )
+	{
+		TestMap result;
+		listTests( categories, result, progress, index );
+		return result;
+	}
+
 	void TestDatabase::ListTests::listTests( CategoryMap & categories
 		, TestMap & result
 		, wxProgressDialog & progress
@@ -501,6 +492,17 @@ namespace aria
 	}
 
 	//*********************************************************************************************
+
+	TestRunCategoryMap TestDatabase::ListLatestRendererTests::listTests( TestMap const & tests
+		, CategoryMap & categories
+		, Renderer renderer
+		, wxProgressDialog & progress
+		, int & index )
+	{
+		TestRunCategoryMap result;
+		listTests( tests, categories, renderer, result, progress, index );
+		return result;
+	}
 
 	void TestDatabase::ListLatestRendererTests::listTests( TestMap const & tests
 		, CategoryMap & categories
@@ -600,150 +602,6 @@ namespace aria
 		{
 			throw std::runtime_error{ "Couldn't list tests runs" };
 		}
-	}
-
-	//*********************************************************************************************
-
-	DatabaseTest::DatabaseTest( TestDatabase & database
-		, TestRun test )
-		: m_database{ database }
-		, m_test{ std::move( test ) }
-	{
-	}
-
-	void DatabaseTest::updateCastorDate( db::DateTime const & castorDate )
-	{
-		if ( m_test.castorDate < castorDate )
-		{
-			m_test.castorDate = castorDate;
-			m_database.updateRunCastorDate( m_test );
-		}
-	}
-
-	void DatabaseTest::updateCastorDate()
-	{
-		updateCastorRefDate( m_database.m_config );
-		updateCastorDate( m_database.m_config.castorRefDate );
-	}
-
-	void DatabaseTest::updateSceneDate( db::DateTime const & sceneDate )
-	{
-		if ( m_test.sceneDate < sceneDate )
-		{
-			m_test.sceneDate = sceneDate;
-			m_database.updateRunSceneDate( m_test );
-		}
-	}
-
-	void DatabaseTest::updateSceneDate()
-	{
-		auto sceneDate = aria::getSceneDate( m_database.m_config, m_test );
-		updateSceneDate( sceneDate );
-	}
-
-	void DatabaseTest::updateStatusNW( TestStatus newStatus )
-	{
-		m_counts->remove( m_test.status );
-		m_counts->add( newStatus );
-		m_test.status = newStatus;
-	}
-
-	void DatabaseTest::updateStatus( TestStatus newStatus
-		, bool useAsReference )
-	{
-		auto & config = m_database.m_config;
-		auto oldStatus = m_test.status;
-		updateCastorRefDate( config );
-		m_test.castorDate = config.castorRefDate;
-		updateStatusNW( newStatus );
-		m_database.updateRunStatus( m_test );
-		moveResultFile( m_test, oldStatus, newStatus, config.work );
-
-		if ( useAsReference )
-		{
-			updateReference( newStatus );
-		}
-	}
-
-	void DatabaseTest::createNewRun( castor::Path const & match )
-	{
-		auto & config = m_database.m_config;
-		auto path = match.getPath();
-		auto rawStatus = aria::getStatus( path.getFileName() );
-		auto newStatus = rawStatus;
-		auto runDate = getFileDate( match );
-
-		if ( m_test.test->ignoreResult )
-		{
-			newStatus = TestStatus::eNegligible;
-		}
-
-		m_test.runDate = runDate;
-		assert( db::date_time::isValid( m_test.runDate ) );
-		updateStatusNW( newStatus );
-		updateCastorRefDate( config );
-		m_test.castorDate = config.castorRefDate;
-		assert( db::date_time::isValid( m_test.castorDate ) );
-		m_test.sceneDate = aria::getSceneDate( config, m_test );
-		assert( db::date_time::isValid( m_test.sceneDate ) );
-		m_database.insertRun( m_test );
-
-		if ( m_test.test->ignoreResult )
-		{
-			updateReference( rawStatus );
-		}
-	}
-
-	void DatabaseTest::update( int id )
-	{
-		m_test.id = id;
-	}
-
-	void DatabaseTest::update( int id
-		, db::DateTime runDate
-		, TestStatus status
-		, db::DateTime castorDate
-		, db::DateTime sceneDate )
-	{
-		m_test.id = id;
-		m_test.status = status;
-		m_test.runDate = std::move( runDate );
-		m_test.castorDate = std::move( castorDate );
-		m_test.sceneDate = std::move( sceneDate );
-	}
-
-	void DatabaseTest::updateIgnoreResult( bool ignore
-		, db::DateTime castorDate
-		, bool useAsReference )
-	{
-		if ( m_test.test->ignoreResult != ignore )
-		{
-			if ( ignore )
-			{
-				m_counts->addIgnored();
-			}
-			else
-			{
-				m_counts->removeIgnored();
-			}
-		}
-
-		m_test.test->ignoreResult = ignore;
-		m_test.castorDate = std::move( castorDate );
-		assert( db::date_time::isValid( m_test.castorDate ) );
-		m_database.updateTestIgnoreResult( *m_test.test, ignore );
-
-		if ( ignore )
-		{
-			updateStatus( TestStatus::eNegligible, useAsReference );
-		}
-	}
-
-	void DatabaseTest::updateReference( TestStatus status )
-	{
-		auto & config = m_database.m_config;
-		castor::File::copyFileName( config.work / getResultFolder( *m_test.test ) / getFolderName( status ) / getResultName( m_test )
-			, config.test / getReferenceFolder( m_test ) / getReferenceName( m_test ) );
 	}
 
 	//*********************************************************************************************
@@ -856,6 +714,31 @@ namespace aria
 		return getKeyword( name, m_keywords, m_insertKeyword );
 	}
 
+	TestMap TestDatabase::listTests()
+	{
+		TestMap result;
+		listTests( result );
+		return result;
+	}
+
+	TestMap TestDatabase::listTests( wxProgressDialog & progress
+		, int & index )
+	{
+		TestMap result;
+		listTests( result, progress, index );
+		return result;
+	}
+
+	void TestDatabase::listTests( TestMap & result )
+	{
+		wxProgressDialog progress{ wxT( "Listing tests" )
+			, wxT( "Listing tests..." )
+			, int( 1 )
+			, nullptr };
+		int index = 0;
+		listTests( result, progress, index );
+	}
+
 	void TestDatabase::listTests( TestMap & result
 		, wxProgressDialog & progress
 		, int & index )
@@ -868,14 +751,31 @@ namespace aria
 		m_listTests.listTests( m_categories, result, progress, index );
 	}
 
-	void TestDatabase::listTests( TestMap & result )
+	TestRunMap TestDatabase::listLatestRuns( TestMap const & tests )
 	{
-		wxProgressDialog progress{ wxT( "Listing tests" )
-			, wxT( "Listing tests..." )
+		TestRunMap result;
+		listLatestRuns( tests, result );
+		return result;
+	}
+
+	TestRunMap TestDatabase::listLatestRuns( TestMap const & tests
+		, wxProgressDialog & progress
+		, int & index )
+	{
+		TestRunMap result;
+		listLatestRuns( tests, result, progress, index );
+		return result;
+	}
+
+	void TestDatabase::listLatestRuns( TestMap const & tests
+		, TestRunMap & result )
+	{
+		wxProgressDialog progress{ wxT( "Listing latest runs" )
+			, wxT( "Listing latest runs..." )
 			, int( 1 )
 			, nullptr };
 		int index = 0;
-		listTests( result, progress, index );
+		listLatestRuns( tests, result, progress, index );
 	}
 
 	void TestDatabase::listLatestRuns( TestMap const & tests
@@ -893,27 +793,22 @@ namespace aria
 		}
 	}
 
-	void TestDatabase::listLatestRuns( TestMap const & tests
-		, TestRunMap & result )
+	TestRunCategoryMap TestDatabase::listLatestRuns( Renderer renderer
+		, TestMap const & tests )
 	{
-		wxProgressDialog progress{ wxT( "Listing latest runs" )
-			, wxT( "Listing latest runs..." )
-			, int( 1 )
-			, nullptr };
-		int index = 0;
-		listLatestRuns( tests, result, progress, index );
+		TestRunCategoryMap result;
+		listLatestRuns( renderer, tests, result );
+		return result;
 	}
 
-	void TestDatabase::listLatestRuns( Renderer renderer
+	TestRunCategoryMap TestDatabase::listLatestRuns( Renderer renderer
 		, TestMap const & tests
-		, TestRunCategoryMap & result
 		, wxProgressDialog & progress
 		, int & index )
 	{
-		castor::Logger::logInfo( "Listing latest renderer runs" );
-		progress.SetTitle( _( "Listing latest renderer runs" ) );
-		progress.Update( index, _( "Listing latest renderer runs\n..." ) );
-		m_listLatestRendererRuns.listTests( tests, m_categories, renderer, result, progress, index );
+		TestRunCategoryMap result;
+		listLatestRuns( renderer, tests, result, progress, index );
+		return result;
 	}
 
 	void TestDatabase::listLatestRuns( Renderer renderer
@@ -926,6 +821,18 @@ namespace aria
 			, nullptr };
 		int index = 0;
 		listLatestRuns( renderer, tests, result, progress, index );
+	}
+
+	void TestDatabase::listLatestRuns( Renderer renderer
+		, TestMap const & tests
+		, TestRunCategoryMap & result
+		, wxProgressDialog & progress
+		, int & index )
+	{
+		castor::Logger::logInfo( "Listing latest renderer runs" );
+		progress.SetTitle( _( "Listing latest renderer runs" ) );
+		progress.Update( index, _( "Listing latest renderer runs\n..." ) );
+		m_listLatestRendererRuns.listTests( tests, m_categories, renderer, result, progress, index );
 	}
 
 	void TestDatabase::insertTest( Test & test
