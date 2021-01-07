@@ -76,20 +76,15 @@ namespace aria
 			switch ( status )
 			{
 			case aria::TestStatus::eNotRun:
-				return counts.getNotRun();
+				return counts.getNotRunValue();
 			case aria::TestStatus::eNegligible:
-				return counts.negligible;
 			case aria::TestStatus::eAcceptable:
-				return counts.acceptable;
 			case aria::TestStatus::eUnacceptable:
-				return counts.unacceptable;
 			case aria::TestStatus::eUnprocessed:
-				return counts.unprocessed;
 			case aria::TestStatus::ePending:
-				return counts.pending;
+				return counts.getStatusValue( status );
 			default:
-				// Running.
-				return counts.running;
+				return counts.getStatusValue( TestStatus::eRunning_Begin );
 			}
 		}
 
@@ -97,7 +92,7 @@ namespace aria
 			, int maxWidth
 			, TestsCounts const & counts )
 		{
-			return int( maxWidth * getStatusCount( status, counts ) / float( counts.all ) );
+			return int( maxWidth * getStatusCount( status, counts ) / float( counts.getAllValue() ) );
 		}
 
 		wxColour getStatusColor( TestStatus status )

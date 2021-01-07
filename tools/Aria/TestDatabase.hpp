@@ -28,6 +28,7 @@ namespace aria
 	class DatabaseTest
 	{
 		friend class TestDatabase;
+		friend struct TestsCounts;
 
 	public:
 		DatabaseTest( TestDatabase & database
@@ -116,6 +117,7 @@ namespace aria
 
 	private:
 		TestDatabase & m_database;
+		TestsCounts * m_counts{};
 		TestRun m_test;
 	};
 

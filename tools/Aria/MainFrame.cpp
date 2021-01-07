@@ -432,8 +432,7 @@ namespace aria
 	{
 		auto runsIt = m_tests.runs.emplace( renderer, TestRunCategoryMap{} ).first;
 		auto countsIt = m_tests.counts.renderers.emplace( renderer, RendererTestsCounts{} ).first;
-		countsIt->second.counts = std::make_unique< TestsCounts >( m_config
-			, m_tests.tests
+		countsIt->second.counts = m_tests.counts.counts->addChild( m_tests.tests
 			, runsIt->second );
 		auto it = m_testsPages.find( renderer );
 
@@ -813,27 +812,24 @@ namespace aria
 		{
 			auto testsIt = m_tests.tests.find( category.first );
 			auto catIt = countsIt->second.categories.emplace( category.first
-				, std::make_unique< TestsCounts >( m_config
-					, testsIt->second
+				, countsIt->second.counts->addChild( testsIt->second
 					, category.second ) ).first;
-			testsPage.model->addCategory( category.first, *catIt->second );
+			auto & testsCounts = *catIt->second;
+			testsPage.model->addCategory( category.first, testsCounts );
 
 			for ( auto & run : category.second )
 			{
+				testsCounts.addTest( run );
 				auto testNode = testsPage.model->addTest( run );
 				testsPage.modelNodes[run->test->id] = testNode;
 				progress.Update( index++
 					, _( "Filling tests list" )
 					+ wxT( "\n" ) + getProgressDetails( run ) );
 			}
-
-			countsIt->second.categories[category.first]->update();
 		}
 
-		countsIt->second.counts->update();
 		testsPage.categoryView->update( renderer->name
 			, *countsIt->second.counts );
-		m_tests.counts.counts->update();
 		testsPage.allView->update( _( "All" )
 			, *m_tests.counts.counts );
 		testsPage.model->expandRoots( testsPage.view );
@@ -877,7 +873,6 @@ namespace aria
 			page.model->ItemChanged( wxDataViewItem{ testNode.node } );
 			auto rendIt = m_tests.counts.renderers.find( test.getRenderer() );
 			auto catIt = rendIt->second.categories.find( test.getCategory() );
-			catIt->second->update();
 			page.categoryView->update( catIt->first->name
 				, *catIt->second );
 			m_statusText->SetLabel( _( "Running test: " ) + test.getName() );
@@ -1170,6 +1165,7 @@ namespace aria
 		m_testProgress->SetValue( 0 );
 		m_testProgress->Show();
 		doProcessTest();
+		m_selectedPage->view->Refresh();
 	}
 
 	void MainFrame::doRunCategoryTests( TestStatus filter )
@@ -1206,6 +1202,7 @@ namespace aria
 		m_testProgress->SetValue( 0 );
 		m_testProgress->Show();
 		doProcessTest();
+		m_selectedPage->view->Refresh();
 	}
 
 	void MainFrame::doRunAllCategoryTestsBut( TestStatus filter )
@@ -1242,6 +1239,7 @@ namespace aria
 		m_testProgress->SetValue( 0 );
 		m_testProgress->Show();
 		doProcessTest();
+		m_selectedPage->view->Refresh();
 	}
 
 	void MainFrame::doRunAllCategoryOutdatedTests()
@@ -1280,6 +1278,7 @@ namespace aria
 		m_testProgress->SetValue( 0 );
 		m_testProgress->Show();
 		doProcessTest();
+		m_selectedPage->view->Refresh();
 	}
 
 	void MainFrame::doUpdateCategoryCastorDate()
@@ -1323,6 +1322,8 @@ namespace aria
 				}
 			}
 		}
+
+		m_selectedPage->view->Refresh();
 	}
 
 	void MainFrame::doUpdateCategorySceneDate()
@@ -1366,6 +1367,8 @@ namespace aria
 				}
 			}
 		}
+
+		m_selectedPage->view->Refresh();
 	}
 
 	void MainFrame::doRunAllRendererTests()
@@ -1397,6 +1400,7 @@ namespace aria
 		m_testProgress->SetValue( 0 );
 		m_testProgress->Show();
 		doProcessTest();
+		m_selectedPage->view->Refresh();
 	}
 
 	void MainFrame::doRunRendererTests( TestStatus filter )
@@ -1431,6 +1435,7 @@ namespace aria
 		m_testProgress->SetValue( 0 );
 		m_testProgress->Show();
 		doProcessTest();
+		m_selectedPage->view->Refresh();
 	}
 
 	void MainFrame::doRunAllRendererTestsBut( TestStatus filter )
@@ -1465,6 +1470,7 @@ namespace aria
 		m_testProgress->SetValue( 0 );
 		m_testProgress->Show();
 		doProcessTest();
+		m_selectedPage->view->Refresh();
 	}
 
 	void MainFrame::doRunAllRendererOutdatedTests()
@@ -1501,6 +1507,8 @@ namespace aria
 		m_testProgress->SetValue( 0 );
 		m_testProgress->Show();
 		doProcessTest();
+		m_selectedPage->view->Refresh();
+		m_selectedPage->view->Update();
 	}
 
 	void MainFrame::doUpdateRendererCastorDate()
@@ -1542,6 +1550,8 @@ namespace aria
 				}
 			}
 		}
+
+		m_selectedPage->view->Refresh();
 	}
 
 	void MainFrame::doUpdateRendererSceneDate()
@@ -1583,6 +1593,8 @@ namespace aria
 				}
 			}
 		}
+
+		m_selectedPage->view->Refresh();
 	}
 
 	void MainFrame::doRunAllTests()
@@ -1604,6 +1616,7 @@ namespace aria
 		m_testProgress->SetValue( 0 );
 		m_testProgress->Show();
 		doProcessTest();
+		m_selectedPage->view->Refresh();
 	}
 
 	void MainFrame::doRunTests( TestStatus filter )
@@ -1628,6 +1641,7 @@ namespace aria
 		m_testProgress->SetValue( 0 );
 		m_testProgress->Show();
 		doProcessTest();
+		m_selectedPage->view->Refresh();
 	}
 
 	void MainFrame::doRunAllTestsBut( TestStatus filter )
@@ -1652,6 +1666,7 @@ namespace aria
 		m_testProgress->SetValue( 0 );
 		m_testProgress->Show();
 		doProcessTest();
+		m_selectedPage->view->Refresh();
 	}
 
 	void MainFrame::doRunAllOutdatedTests()
@@ -1677,6 +1692,7 @@ namespace aria
 		m_testProgress->SetValue( 0 );
 		m_testProgress->Show();
 		doProcessTest();
+		m_selectedPage->view->Refresh();
 	}
 
 	void MainFrame::doUpdateAllCastorDate()
@@ -1708,6 +1724,8 @@ namespace aria
 				}
 			}
 		}
+
+		m_selectedPage->view->Refresh();
 	}
 
 	void MainFrame::doUpdateAllSceneDate()
@@ -1739,6 +1757,8 @@ namespace aria
 				}
 			}
 		}
+
+		m_selectedPage->view->Refresh();
 	}
 
 	void MainFrame::doCancelTest( DatabaseTest & test
@@ -1794,9 +1814,7 @@ namespace aria
 		auto & page = doGetPage( item );
 		page.model->ItemChanged( item );
 		auto rendIt = m_tests.counts.renderers.find( test.getRenderer() );
-		rendIt->second.counts->update();
 		auto catIt = rendIt->second.categories.find( test.getCategory() );
-		catIt->second->update();
 
 		if ( page.detailViews->isLayerShown( TestView::eTest )
 			&& page.testView->getTest() == &test )
@@ -1804,7 +1822,6 @@ namespace aria
 			page.testView->refresh();
 		}
 
-		m_tests.counts.counts->update();
 		page.allView->update( _( "All" )
 			, *m_tests.counts.counts );
 	}
@@ -1972,13 +1989,11 @@ namespace aria
 
 						if ( catRunIt != rendRunIt->second.end() )
 						{
-							catCountsIt->second->update();
 							page.categoryView->update( category->name
 								, *catCountsIt->second );
 						}
 						else
 						{
-							rendCountsIt->second.counts->update();
 							page.categoryView->update( renderer->name
 								, *rendCountsIt->second.counts );
 						}
@@ -1994,7 +2009,6 @@ namespace aria
 
 					if ( rendRunIt != m_tests.runs.end() )
 					{
-						rendCountsIt->second.counts->update();
 						page.categoryView->update( renderer->name
 							, *rendCountsIt->second.counts );
 					}

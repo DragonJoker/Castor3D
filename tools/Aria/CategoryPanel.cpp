@@ -7,6 +7,7 @@
 #include <wx/stattext.h>
 
 #include <algorithm>
+#include <numeric>
 
 namespace aria
 {
@@ -225,47 +226,196 @@ namespace aria
 
 	//*********************************************************************************************
 
+	TestsCounts::TestsCounts( TestsCounts & all
+		, Config const & config
+		, TestMap const & tests
+		, TestRunCategoryMap const & runs )
+		: m_config{ config }
+		, m_rendererTests{ &tests }
+		, m_rendererRuns{ &runs }
+		, m_parent{ &all }
+		, m_values{ 0, 0, 0, 0, 0, 0 }
+	{
+	}
+
+	TestsCounts::TestsCounts( TestsCounts & renderer
+		, Config const & config
+		, TestArray const & tests
+		, TestRunArray const & runs )
+		: m_config{ config }
+		, m_categoryTests{ &tests }
+		, m_categoryRuns{ &runs }
+		, m_parent{ &renderer }
+		, m_values{ 0, 0, 0, 0, 0, 0 }
+	{
+	}
+
 	TestsCounts::TestsCounts( Config const & config
 		, TestMap const & tests
 		, TestRunMap const & runs )
 		: m_config{ config }
 		, m_allTests{ &tests }
 		, m_allRuns{ &runs }
+		, m_values{ 0, 0, 0, 0, 0, 0 }
 	{
 	}
 
-	TestsCounts::TestsCounts( Config const & config
-		, TestMap const & tests
+	TestsCountsPtr TestsCounts::addChild( TestMap const & tests
 		, TestRunCategoryMap const & runs )
-		: m_config{ config }
-		, m_rendererTests{ &tests }
-		, m_rendererRuns{ &runs }
 	{
+		TestsCountsPtr result{ new TestsCounts{ *this
+			, m_config
+			, tests
+			, runs } };
+		m_children.push_back( result.get() );
+		return result;
 	}
 
-	TestsCounts::TestsCounts( Config const & config
-		, TestArray const & tests
+	TestsCountsPtr TestsCounts::addChild( TestArray const & tests
 		, TestRunArray const & runs )
-		: m_config{ config }
-		, m_categoryTests{ &tests }
-		, m_categoryRuns{ &runs }
 	{
+		TestsCountsPtr result{ new TestsCounts{ *this
+			, m_config
+			, tests
+			, runs } };
+		m_children.push_back( result.get() );
+		return result;
 	}
 
-	void TestsCounts::update()
+	void TestsCounts::addTest( DatabaseTest & test )
 	{
-		if ( m_allTests )
+		test.m_counts = this;
+		add( test.getStatus() );
+
+		if ( test.getIgnoreResult() )
 		{
-			updateCounts( *m_allTests, *m_allRuns, m_config, *this );
+			addIgnored();
 		}
-		else if ( m_rendererTests )
+
+		if ( isOutOfDate( m_config, *test ) )
 		{
-			updateCounts( *m_rendererTests, *m_rendererRuns, m_config, *this );
+			addOutdated();
+		}
+	}
+
+	void TestsCounts::add( TestStatus status )
+	{
+		assert( m_children.empty()
+			&& "Only Category test counts can unit count tests" );
+		++all;
+
+		if ( isRunning( status ) )
+		{
+			++m_values[size_t( TestStatus::eRunning_Begin )];
 		}
 		else
 		{
-			updateCounts( *m_categoryTests, *m_categoryRuns, m_config, *this );
+			assert( status < TestStatus::eRunning_1 );
+			++m_values[size_t( status )];
 		}
+	}
+
+	void TestsCounts::remove( TestStatus status )
+	{
+		assert( m_children.empty()
+			&& "Only Category test counts can unit count tests" );
+		--all;
+
+		if ( isRunning( status ) )
+		{
+			--m_values[size_t( TestStatus::eRunning_Begin )];
+		}
+		else
+		{
+			assert( status < TestStatus::eRunning_1 );
+			--m_values[size_t( status )];
+		}
+	}
+
+	uint32_t TestsCounts::getStatusValue( TestStatus status )const
+	{
+		if ( m_children.empty() )
+		{
+			if ( isRunning( status ) )
+			{
+				return m_values[size_t( TestStatus::eRunning_Begin )];
+			}
+
+			assert( status < TestStatus::eRunning_1 );
+			return m_values[size_t( status )];
+		}
+
+		uint32_t result{};
+
+		for ( auto & child : m_children )
+		{
+			result += child->getStatusValue( status );
+		}
+
+		return result;
+	}
+
+	uint32_t TestsCounts::getIgnoredValue()const
+	{
+		if ( m_children.empty() )
+		{
+			return ignored;
+		}
+
+		uint32_t result{};
+
+		for ( auto & child : m_children )
+		{
+			result += child->getIgnoredValue();
+		}
+
+		return result;
+	}
+
+	uint32_t TestsCounts::getOutdatedValue()const
+	{
+		if ( m_children.empty() )
+		{
+			return outdated;
+		}
+
+		uint32_t result{};
+
+		for ( auto & child : m_children )
+		{
+			result += child->getOutdatedValue();
+		}
+
+		return result;
+	}
+
+	uint32_t TestsCounts::getAllValue()const
+	{
+		if ( m_children.empty() )
+		{
+			return all;
+		}
+
+		uint32_t result{};
+
+		for ( auto & child : m_children )
+		{
+			result += child->getAllValue();
+		}
+
+		return result;
+	}
+
+	uint32_t TestsCounts::getAllRunStatus()const
+	{
+		uint32_t result{};
+
+		for ( auto i = 0u; i < m_values.size(); ++i )
+		{
+			result += getStatusValue( TestStatus( i ) );
+		}
+
+		return result;
 	}
 
 	//*********************************************************************************************
@@ -324,19 +474,23 @@ namespace aria
 		SetSizer( sizer );
 	}
 
-	std::string displayPercent( uint32_t value, uint32_t max )
+	std::string displayPercent( float percent )
 	{
-		auto percent = ( 100.0f * value ) / max;
 		auto stream = castor::makeStringStream();
 		stream << std::setprecision( 2 ) << std::fixed << percent << "%";
 		return stream.str();
+	}
+
+	std::string displayPercent( uint32_t value, uint32_t max )
+	{
+		return displayPercent( ( 100.0f * value ) / max );
 	}
 
 	void CategoryPanel::update( wxString const & name
 		, TestsCounts & counts )
 	{
 		m_counts = &counts;
-		m_status->SetLabel( wxString{ name } << ": " << m_counts->all << " tests" );
+		m_status->SetLabel( wxString{ name } << ": " << m_counts->getAllValue() << " tests" );
 		refresh();
 	}
 
@@ -344,14 +498,14 @@ namespace aria
 	{
 		if ( m_counts )
 		{
-			m_negligible->SetLabel( wxString{ "- " } << m_counts->negligible << " (" << displayPercent( m_counts->negligible, m_counts->all ) << ") negligible." );
-			m_acceptable->SetLabel( wxString{ "- " } << m_counts->acceptable << " (" << displayPercent( m_counts->acceptable, m_counts->all ) << ") acceptable." );
-			m_unacceptable->SetLabel( wxString{ "- " } << m_counts->unacceptable << " (" << displayPercent( m_counts->unacceptable, m_counts->all ) << ") unacceptable." );
-			m_unprocessed->SetLabel( wxString{ "- " } << m_counts->unprocessed << " (" << displayPercent( m_counts->unprocessed, m_counts->all ) << ") unprocessed." );
-			m_pending->SetLabel( wxString{ "- " } << m_counts->pending << " (" << displayPercent( m_counts->pending, m_counts->all ) << ") pending." );
-			m_running->SetLabel( wxString{ "- " } << m_counts->running << " (" << displayPercent( m_counts->running, m_counts->all ) << ") running." );
-			m_outdated->SetLabel( wxString{ "- " } << m_counts->outdated << " (" << displayPercent( m_counts->outdated, m_counts->all ) << ") outdated." );
-			m_ignored->SetLabel( wxString{ "- " } << m_counts->ignored << " (" << displayPercent( m_counts->ignored, m_counts->all ) << ") ignored." );
+			m_negligible->SetLabel( wxString{ "- " } << m_counts->getStatusValue( TestStatus::eNegligible ) << " (" << displayPercent( m_counts->getStatusPercent( TestStatus::eNegligible ) ) << ") negligible." );
+			m_acceptable->SetLabel( wxString{ "- " } << m_counts->getStatusValue( TestStatus::eAcceptable ) << " (" << displayPercent( m_counts->getStatusPercent( TestStatus::eAcceptable ) ) << ") acceptable." );
+			m_unacceptable->SetLabel( wxString{ "- " } << m_counts->getStatusValue( TestStatus::eUnacceptable ) << " (" << displayPercent( m_counts->getStatusPercent( TestStatus::eUnacceptable ) ) << ") unacceptable." );
+			m_unprocessed->SetLabel( wxString{ "- " } << m_counts->getStatusValue( TestStatus::eUnprocessed ) << " (" << displayPercent( m_counts->getStatusPercent( TestStatus::eUnprocessed ) ) << ") unprocessed." );
+			m_pending->SetLabel( wxString{ "- " } << m_counts->getStatusValue( TestStatus::ePending ) << " (" << displayPercent( m_counts->getStatusPercent( TestStatus::ePending ) ) << ") pending." );
+			m_running->SetLabel( wxString{ "- " } << m_counts->getStatusValue( TestStatus::eRunning_Begin ) << " (" << displayPercent( m_counts->getStatusPercent( TestStatus::eRunning_Begin ) ) << ") running." );
+			m_outdated->SetLabel( wxString{ "- " } << m_counts->getOutdatedValue() << " (" << displayPercent( m_counts->getOutdatedPercent() ) << ") outdated." );
+			m_ignored->SetLabel( wxString{ "- " } << m_counts->getIgnoredValue() << " (" << displayPercent( m_counts->getIgnoredPercent() ) << ") ignored." );
 		}
 	}
 }

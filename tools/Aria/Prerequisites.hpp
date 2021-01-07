@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "Database/DbPrerequisites.hpp"
 
+#include <CastorUtils/Design/Signal.hpp>
+
 #include <wx/colour.h>
 #include <wx/datetime.h>
 #include <wx/string.h>
@@ -102,6 +104,38 @@ namespace aria
 		eTestRun,
 	};
 
+	struct IdValue
+	{
+		IdValue( int32_t id
+			, std::string name )
+			: id{ id }
+			, name{ std::move( name ) }
+		{
+		}
+
+		int32_t id;
+		std::string name;
+	};
+	using IdValuePtr = std::unique_ptr< IdValue >;
+
+	struct LessIdValue
+	{
+		size_t operator()( IdValue const & lhs, IdValue const & rhs )const
+		{
+			return lhs.id < rhs.id;
+		}
+
+		size_t operator()( IdValue const * lhs, IdValue const * rhs )const
+		{
+			return operator()( *lhs, *rhs );
+		}
+
+		size_t operator()( IdValuePtr const & lhs, IdValuePtr const & rhs )const
+		{
+			return operator()( *lhs, *rhs );
+		}
+	};
+
 	struct HashNoCase
 	{
 		size_t operator()( std::string const & v )const;
@@ -142,7 +176,6 @@ namespace aria
 	struct TestNode;
 	struct TestRun;
 
-	using IdValuePtr = std::unique_ptr< IdValue >;
 	using TestPtr = std::unique_ptr< Test >;
 	using TestsCountsPtr = std::unique_ptr< TestsCounts >;
 	using Renderer = IdValue *;
@@ -152,55 +185,116 @@ namespace aria
 	using CategoryMap = std::unordered_map< std::string, IdValuePtr >;
 	using KeywordMap = std::unordered_map< std::string, IdValuePtr, HashNoCase >;
 	using TestArray = std::vector< TestPtr >;
-	using TestMap = std::map< Category, TestArray >;
+	using TestMap = std::map< Category, TestArray, LessIdValue >;
 	using TestRunArray = std::vector< DatabaseTest >;
-	using TestRunCategoryMap = std::map< Category, TestRunArray >;
-	using TestRunMap = std::map< Renderer, TestRunCategoryMap >;
+	using TestRunCategoryMap = std::map< Category, TestRunArray, LessIdValue >;
+	using TestRunMap = std::map< Renderer, TestRunCategoryMap, LessIdValue >;
 	using TestsCountsArray = std::vector< TestsCountsPtr >;
-	using TestsCountsCategoryMap = std::map< Category, TestsCountsPtr >;
-	using TestsCountsMap = std::map< Renderer, RendererTestsCounts >;
+	using TestsCountsCategoryMap = std::map< Category, TestsCountsPtr, LessIdValue >;
+	using TestsCountsMap = std::map< Renderer, RendererTestsCounts, LessIdValue >;
 
 	struct TestsCounts
 	{
-		TestsCounts( Config const & config
-			, TestMap const & tests
-			, TestRunMap const & runs );
-		TestsCounts( Config const & config
+	private:
+		// Renderer
+		TestsCounts( TestsCounts & all
+			, Config const & config
 			, TestMap const & tests
 			, TestRunCategoryMap const & runs );
-		TestsCounts( Config const & config
+		// Category
+		TestsCounts( TestsCounts & renderer
+			, Config const & config
 			, TestArray const & tests
 			, TestRunArray const & runs );
 
-		uint32_t getAllRun()const
+	public:
+		// All
+		TestsCounts( Config const & config
+			, TestMap const & tests
+			, TestRunMap const & runs );
+		// Renderer
+		TestsCountsPtr addChild( TestMap const & tests
+			, TestRunCategoryMap const & runs );
+		// Category
+		TestsCountsPtr addChild( TestArray const & tests
+			, TestRunArray const & runs );
+		// Test
+		void addTest( DatabaseTest & test );
+;
+		void add( TestStatus status );
+		void remove( TestStatus status );
+		uint32_t getStatusValue( TestStatus status )const;
+		uint32_t getIgnoredValue()const;
+		uint32_t getOutdatedValue()const;
+		uint32_t getAllValue()const;
+		uint32_t getAllRunStatus()const;
+
+		void addIgnored()
 		{
-			return negligible
-				+ acceptable
-				+ unacceptable
-				+ unprocessed
-				+ pending
-				+ running;
+			assert( m_children.empty()
+				&& "Only Category test counts can unit count tests" );
+			ignored++;
 		}
 
-		uint32_t getNotRun()const
+		void removeIgnored()
 		{
-			assert( all >= getAllRun() );
-			return all - getAllRun();
+			assert( m_children.empty()
+				&& "Only Category test counts can unit count tests" );
+			ignored--;
 		}
 
-		uint32_t all{};
-		uint32_t negligible{};
-		uint32_t acceptable{};
-		uint32_t unacceptable{};
-		uint32_t unprocessed{};
-		uint32_t pending{};
-		uint32_t running{};
-		uint32_t ignored{};
-		uint32_t outdated{};
+		void addOutdated()
+		{
+			assert( m_children.empty()
+				&& "Only Category test counts can unit count tests" );
+			outdated++;
+		}
 
-		void update();
+		void removeOutDated()
+		{
+			assert( m_children.empty()
+				&& "Only Category test counts can unit count tests" );
+			outdated--;
+		}
+
+		uint32_t getNotRunValue()const
+		{
+			auto iall = getAllValue();
+			auto allRun = getAllRunStatus();
+			assert( getAllValue() >= allRun );
+			return iall - allRun;
+		}
+
+		float getIgnoredPercent()const
+		{
+			return ( 100.0f * getIgnoredValue() ) / getAllValue();
+		}
+
+		float getOutdatedPercent()const
+		{
+			return ( 100.0f * getOutdatedValue() ) / getAllValue();
+		}
+
+		float getAllPercent()const
+		{
+			return ( 100.0f * getAllValue() ) / getAllValue();
+		}
+
+		float getStatusPercent( TestStatus status )const
+		{
+			return ( 100.0f * getStatusValue( status ) ) / getAllValue();
+		}
+
+		uint32_t getNotRunPercent()const
+		{
+			return ( 100.0f * getNotRunValue() ) / getAllValue();
+		}
 
 	private:
+		uint32_t all{};
+		uint32_t ignored{};
+		uint32_t outdated{};
+		std::array< uint32_t, size_t( TestStatus::eRunning_1 ) > m_values;
 		Config const & m_config;
 		TestMap const * m_allTests{};
 		TestRunMap const * m_allRuns{};
@@ -208,6 +302,8 @@ namespace aria
 		TestRunCategoryMap const * m_rendererRuns{};
 		TestArray const * m_categoryTests{};
 		TestRunArray const * m_categoryRuns{};
+		TestsCounts * m_parent{};
+		std::vector< TestsCounts * > m_children;
 	};
 
 	struct RendererTestsCounts
@@ -297,19 +393,6 @@ namespace aria
 		TestStatus status;
 		db::DateTime castorDate;
 		db::DateTime sceneDate;
-	};
-
-	struct IdValue
-	{
-		IdValue( int32_t id
-			, std::string name )
-			: id{ id }
-			, name{ std::move( name ) }
-		{
-		}
-
-		int32_t id;
-		std::string name;
 	};
 
 	struct Test

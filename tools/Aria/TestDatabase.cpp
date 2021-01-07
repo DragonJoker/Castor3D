@@ -20,20 +20,6 @@ namespace aria
 	{
 		template< typename HashT >
 		IdValue * getIdValue( std::string const & name
-			, std::unordered_map< std::string, IdValuePtr, HashT > & map )
-		{
-			auto ires = map.emplace( name, nullptr );
-
-			if ( ires.second )
-			{
-				ires.first->second = std::make_unique< IdValue >( 0, name );
-			}
-
-			return ires.first->second.get();
-		}
-
-		template< typename HashT >
-		IdValue * getIdValue( std::string const & name
 			, std::unordered_map< std::string, IdValuePtr, HashT > & map
 			, TestDatabase::InsertIdValue & insertIdValue )
 		{
@@ -74,12 +60,6 @@ namespace aria
 		}
 
 		Renderer getRenderer( std::string const & name
-			, RendererMap & renderers )
-		{
-			return getIdValue( name, renderers );
-		}
-
-		Renderer getRenderer( std::string const & name
 			, RendererMap & renderers
 			, TestDatabase::InsertRenderer & insertRenderer )
 		{
@@ -93,12 +73,6 @@ namespace aria
 		}
 
 		Category getCategory( std::string const & name
-			, CategoryMap & categories )
-		{
-			return getIdValue( name, categories );
-		}
-
-		Category getCategory( std::string const & name
 			, CategoryMap & categories
 			, TestDatabase::InsertCategory & insertCategory )
 		{
@@ -109,12 +83,6 @@ namespace aria
 			, CategoryMap & categories )
 		{
 			return getIdValue( id, categories );
-		}
-
-		Keyword getKeyword( std::string const & name
-			, KeywordMap & keywords )
-		{
-			return getIdValue( name, keywords );
 		}
 
 		Keyword getKeyword( std::string const & name
@@ -675,6 +643,8 @@ namespace aria
 
 	void DatabaseTest::updateStatusNW( TestStatus newStatus )
 	{
+		m_counts->remove( m_test.status );
+		m_counts->add( newStatus );
 		m_test.status = newStatus;
 	}
 
@@ -710,7 +680,7 @@ namespace aria
 
 		m_test.runDate = runDate;
 		assert( db::date_time::isValid( m_test.runDate ) );
-		m_test.status = newStatus;
+		updateStatusNW( newStatus );
 		updateCastorRefDate( config );
 		m_test.castorDate = config.castorRefDate;
 		assert( db::date_time::isValid( m_test.castorDate ) );
@@ -746,6 +716,18 @@ namespace aria
 		, db::DateTime castorDate
 		, bool useAsReference )
 	{
+		if ( m_test.test->ignoreResult != ignore )
+		{
+			if ( ignore )
+			{
+				m_counts->addIgnored();
+			}
+			else
+			{
+				m_counts->removeIgnored();
+			}
+		}
+
 		m_test.test->ignoreResult = ignore;
 		m_test.castorDate = std::move( castorDate );
 		assert( db::date_time::isValid( m_test.castorDate ) );
