@@ -308,11 +308,11 @@ namespace test_launcher
 			// Prerender 10 frames, for environment maps.
 			for ( auto i = 0; i <= 10; ++i )
 			{
-				m_engine.getRenderLoop().renderSyncFrame();
+				m_engine.getRenderLoop().renderSyncFrame( 25_ms );
 			}
 
 			m_renderWindow->enableSaveFrame();
-			m_engine.getRenderLoop().renderSyncFrame();
+			m_engine.getRenderLoop().renderSyncFrame( 25_ms );
 			auto buffer = m_renderWindow->getSavedFrame();
 			doCreateBitmapFromBuffer( buffer
 				, false
