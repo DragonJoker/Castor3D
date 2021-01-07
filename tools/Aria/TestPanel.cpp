@@ -214,7 +214,7 @@ namespace aria
 		: wxPanel{ parent }
 		, m_config{ config }
 	{
-		castor::StbImageLoader::registerLoader( m_loader );;
+		castor::StbImageLoader::registerLoader( m_loader );
 		SetBackgroundColour( BORDER_COLOUR );
 		SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 
@@ -254,18 +254,19 @@ namespace aria
 	void TestPanel::refresh()
 	{
 		auto & test = *m_test;
+		m_refImage = loadRefImage( m_config.test, *test );
+		loadRef( m_currentRef );
 
-		if ( test->status != TestStatus::eNotRun )
+		if ( test->status != TestStatus::eNotRun
+			&& !isRunning( test->status ) )
 		{
-			m_refImage = loadRefImage( m_config.test, *test );
 			m_resImage = loadResultImage( m_config.work, *test );
-			m_resToRefImage = compareImages( m_loader
+			m_refToResImage = compareImages( m_loader
 				, m_config.test / getReferenceFolder( *test ) / getReferenceName( *test )
 				, m_config.work / getResultFolder( *test ) / getResultName( *test ) );
-			m_refToResImage = compareImages( m_loader
+			m_resToRefImage = compareImages( m_loader
 				, m_config.work / getResultFolder( *test ) / getResultName( *test )
 				, m_config.test / getReferenceFolder( *test ) / getReferenceName( *test ) );
-			loadRef( m_currentRef );
 			loadRes( m_currentRes );
 		}
 	}
