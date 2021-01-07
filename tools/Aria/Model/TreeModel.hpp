@@ -13,9 +13,9 @@ namespace aria
 	/*
 	TreeModel
 	Implements the following data model:
-		Category	Name		RunDate		RunTime		Status/Ignored/OutOfCastorDate/OutOfSceneDate
-	--------------------------------------------------------------------------------------------------
-	1:	Common		001-test	2020-11-06	15:35:22	bitmap
+		Status + Category/Name		RunDate		RunTime		
+	--------------------------------------------------------
+	1:	bitmap + Common/001-test	2020-11-06	15:35:22	
 	*/
 	class TreeModel
 		: public wxDataViewModel
@@ -23,20 +23,20 @@ namespace aria
 	public:
 		enum class Column
 		{
-			eCategory,
-			eName,
+			eStatusName,
 			eRunDate,
 			eRunTime,
-			eStatus,
 			eCount,
 		};
 
 	public:
 		TreeModel( Config const & config
-			, Renderer renderer );
+			, Renderer renderer
+			, TestsCounts & counts );
 		~TreeModel();
 
-		TreeModelNode * addCategory( Category category );
+		TreeModelNode * addCategory( Category category
+			, TestsCounts & counts );
 		TreeModelNode * addTest( DatabaseTest & test );
 		void expandRoots( wxDataViewCtrl * view );
 		void instantiate( wxDataViewCtrl * view );
@@ -78,6 +78,7 @@ namespace aria
 		bool IsContainer( wxDataViewItem const & item )const override;
 		unsigned int GetChildren( wxDataViewItem const & parent
 			, wxDataViewItemArray & array )const override;
+		bool HasContainerColumns( const wxDataViewItem & item )const override;
 
 	private:
 		Config const & m_config;

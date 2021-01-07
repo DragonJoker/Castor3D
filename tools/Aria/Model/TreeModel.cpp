@@ -18,6 +18,7 @@
 #include "Aria/xpms/outofdate2.xpm"
 #include "Aria/xpms/unacceptable.xpm"
 #include "Aria/xpms/unprocessed.xpm"
+#include "Aria/xpms/pending.xpm"
 #include "Aria/xpms/progress_1.xpm"
 #include "Aria/xpms/progress_2.xpm"
 #include "Aria/xpms/progress_3.xpm"
@@ -33,8 +34,93 @@
 
 namespace aria
 {
+	//*********************************************************************************************
+
 	namespace
 	{
+		int getColumnSize( TreeModel::Column col )
+		{
+			switch ( col )
+			{
+			case aria::TreeModel::Column::eStatusName:
+				return 400;
+			case aria::TreeModel::Column::eRunDate:
+				return 80;
+			case aria::TreeModel::Column::eRunTime:
+				return 90;
+			default:
+				return 100;
+			}
+		}
+
+		wxColourBase::ChannelType mix( float percent
+			, wxColourBase::ChannelType const & lhs
+			, wxColourBase::ChannelType const & rhs )
+		{
+			return wxColourBase::ChannelType( ( lhs * ( 1.0f - percent ) ) + ( rhs * percent ) );
+		}
+
+		wxColour mix( float percent
+			, wxColour const & lhs
+			, wxColour const & rhs )
+		{
+			return wxColour{ mix( percent, lhs.Red(), rhs.Red() )
+				, mix( percent, lhs.Green(), rhs.Green() )
+				, mix( percent, lhs.Blue(), rhs.Blue() )
+				, mix( percent, lhs.Alpha(), rhs.Alpha() ) };
+		}
+
+		uint32_t getStatusCount( TestStatus status
+			, TestsCounts const & counts )
+		{
+			switch ( status )
+			{
+			case aria::TestStatus::eNotRun:
+				return counts.getNotRun();
+			case aria::TestStatus::eNegligible:
+				return counts.negligible;
+			case aria::TestStatus::eAcceptable:
+				return counts.acceptable;
+			case aria::TestStatus::eUnacceptable:
+				return counts.unacceptable;
+			case aria::TestStatus::eUnprocessed:
+				return counts.unprocessed;
+			case aria::TestStatus::ePending:
+				return counts.pending;
+			default:
+				// Running.
+				return counts.running;
+			}
+		}
+
+		int getStatusSize( TestStatus status
+			, int maxWidth
+			, TestsCounts const & counts )
+		{
+			return int( maxWidth * getStatusCount( status, counts ) / float( counts.all ) );
+		}
+
+		wxColour getStatusColor( TestStatus status )
+		{
+			switch ( status )
+			{
+			case aria::TestStatus::eNotRun:
+				return wxColour{ 0xFF, 0xFF, 0xFF, 0x00 };
+			case aria::TestStatus::eNegligible:
+				return wxColour{ 0x00, 0x8B, 0x19, 0xFF };
+			case aria::TestStatus::eAcceptable:
+				return wxColour{ 0xDC, 0xAE, 0x00, 0xFF };
+			case aria::TestStatus::eUnacceptable:
+				return wxColour{ 0xFF, 0x00, 0x00, 0xFF };
+			case aria::TestStatus::eUnprocessed:
+				return wxColour{ 0x8A, 0x8A, 0x8A, 0xFF };
+			case aria::TestStatus::ePending:
+				return wxColour{ 0x00, 0x80, 0xC0, 0xFF };
+			default:
+				return wxColour{ 0x00, 0x00, 0xFF, 0xFF };
+			}
+		}
+
 		class DataViewTestStatusRenderer
 			: public wxDataViewCustomRenderer
 		{
@@ -44,60 +130,86 @@ namespace aria
 		public:
 			static wxString GetDefaultType()
 			{
-				return wxT( "long" );
+				return wxT( "void*" );
 			}
 
-			DataViewTestStatusRenderer( const wxString & varianttype
+			DataViewTestStatusRenderer( wxDataViewCtrl * parent
+				, const wxString & varianttype
 				, wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT
 				, int align = wxDVR_DEFAULT_ALIGNMENT )
 				: wxDataViewCustomRenderer{ varianttype, mode, align }
+				, m_parent{ parent }
 				, m_size{ 20, 20 }
 				, m_outOfCastorDateBmp{ createImage( outofdate_xpm ) }
 				, m_outOfSceneDateBmp{ createImage( outofdate2_xpm ) }
 				, m_bitmaps{ createImage( ignored_xpm )
-				, createImage( notrun_xpm )
-				, createImage( negligible_xpm )
-				, createImage( acceptable_xpm )
-				, createImage( unacceptable_xpm )
-				, createImage( unprocessed_xpm )
-				, createImage( progress_1_xpm )
-				, createImage( progress_2_xpm )
-				, createImage( progress_3_xpm )
-				, createImage( progress_4_xpm )
-				, createImage( progress_5_xpm )
-				, createImage( progress_6_xpm )
-				, createImage( progress_7_xpm )
-				, createImage( progress_8_xpm )
-				, createImage( progress_9_xpm )
-				, createImage( progress_10_xpm )
-				, createImage( progress_11_xpm )
-				, createImage( progress_12_xpm ) }
+					, createImage( notrun_xpm )
+					, createImage( negligible_xpm )
+					, createImage( acceptable_xpm )
+					, createImage( unacceptable_xpm )
+					, createImage( unprocessed_xpm )
+					, createImage( pending_xpm )
+					, createImage( progress_1_xpm )
+					, createImage( progress_2_xpm )
+					, createImage( progress_3_xpm )
+					, createImage( progress_4_xpm )
+					, createImage( progress_5_xpm )
+					, createImage( progress_6_xpm )
+					, createImage( progress_7_xpm )
+					, createImage( progress_8_xpm )
+					, createImage( progress_9_xpm )
+					, createImage( progress_10_xpm )
+					, createImage( progress_11_xpm )
+					, createImage( progress_12_xpm ) }
+			{
+			}
+
+			~DataViewTestStatusRenderer()
 			{
 			}
 
 			bool SetValue( const wxVariant & value ) override
 			{
-				m_value = uint32_t( value.GetLong() );
-				m_index = ( m_value >> 2 );
-				m_outOfCastorDate = ( m_value & 0x01u );
-				m_outOfSceneDate = ( m_value & 0x02u );
+				m_statusName = reinterpret_cast< StatusName * >( value.GetVoidPtr() );
+
+				if ( m_statusName )
+				{
+					m_index = ( m_statusName->statusIndex >> 2 );
+					m_outOfCastorDate = ( m_statusName->statusIndex & 0x01u );
+					m_outOfSceneDate = ( m_statusName->statusIndex & 0x02u );
+					m_name = makeWxString( m_statusName->name );
+					m_isTest = ( m_statusName->type == NodeType::eTestRun );
+				}
+				else
+				{
+					m_index = 0;
+					m_outOfCastorDate = false;
+					m_outOfSceneDate = false;
+					m_name = wxEmptyString;
+					m_isTest = true;
+				}
+
 				return true;
 			}
 
 			bool GetValue( wxVariant & value ) const override
 			{
-				value = long( m_value );
+				value = reinterpret_cast< void * >( m_statusName );
 				return true;
 			}
 
 			bool Render( wxRect cell, wxDC * dc, int state ) override
 			{
-				dc->DrawBitmap( m_bitmaps[m_index]
-					, cell.x
-					, cell.y
-					, true );
+				if ( m_isTest )
+				{
+					renderTest( cell, dc, state );
+				}
+				else
+				{
+					renderCategory( cell, dc, state );
+				}
 
-				if ( m_index < 6 )
+				if ( m_index < 6 && m_index )
 				{
 					if ( m_outOfCastorDate )
 					{
@@ -116,12 +228,18 @@ namespace aria
 					}
 				}
 
+				auto size = dc->GetTextExtent( m_name );
+				wxPoint offset{ cell.x + 10 + m_size.x, cell.y + ( cell.height - size.y ) / 2 };
+				auto foreground = dc->GetTextForeground();
+				dc->SetTextForeground( *wxBLACK );
+				dc->DrawText( m_name, offset );
+				dc->SetTextForeground( foreground );
 				return false;
 			}
 
 			wxSize GetSize() const override
 			{
-				return m_size;
+				return { m_parent->GetColumn( 0u )->GetWidth(), m_size.y };
 			}
 
 		private:
@@ -131,23 +249,149 @@ namespace aria
 				return result.Scale( m_size.x, m_size.y );
 			}
 
+			void renderTest( wxRect cell, wxDC * dc, int state )
+			{
+				dc->DrawBitmap( m_bitmaps[m_index]
+					, cell.x
+					, cell.y
+					, true );
+			}
+
+			void renderCategory( wxRect cell, wxDC * dc, int state )
+			{
+				int xOffset = 0;
+				std::vector< TestStatus > valid;
+
+				for ( int i = 1; i <= int( aria::TestStatus::eRunning_Begin ); ++i )
+				{
+					auto status = TestStatus( i );
+
+					if ( getStatusCount( status, *m_statusName->counts ) > 0 )
+					{
+						valid.push_back( status );
+					}
+				}
+				{
+					auto status = TestStatus::eNotRun;
+
+					if ( getStatusCount( status, *m_statusName->counts ) > 0 )
+					{
+						valid.push_back( status );
+					}
+				}
+
+				if ( !valid.empty() )
+				{
+					auto nxt = valid.begin();
+					auto cur = nxt++;
+					auto curColor = state
+						? wxSystemSettings::GetColour( wxSystemColour::wxSYS_COLOUR_GRADIENTACTIVECAPTION )
+						: PANEL_FOREGROUND_COLOUR;
+					auto nxtColor = getStatusColor( *cur );
+					auto curWidth = cell.GetSize().x / 4;
+					auto gradWidth = std::min( 50, curWidth / 4 );
+					auto totalWidth = cell.width;
+
+					curWidth -= gradWidth;
+					dc->GradientFillLinear( wxRect{ cell.x + xOffset, cell.y, curWidth, cell.height }, curColor, curColor );
+					xOffset += curWidth;
+					auto halfColour = mix( 0.5f, curColor, nxtColor );
+					dc->GradientFillLinear( wxRect{ cell.x + xOffset, cell.y, gradWidth, cell.height }, curColor, halfColour );
+					xOffset += gradWidth;
+					totalWidth -= xOffset;
+
+					while ( nxt != valid.end() )
+					{
+						curColor = getStatusColor( *cur );
+						nxtColor = getStatusColor( *nxt );
+						curWidth = getStatusSize( *cur, totalWidth, *m_statusName->counts );
+						gradWidth = std::min( 50, curWidth / 4 );
+						curWidth -= gradWidth * 2;
+
+						dc->GradientFillLinear( wxRect{ cell.x + xOffset, cell.y, gradWidth, cell.height }, halfColour, curColor );
+						xOffset += gradWidth;
+						dc->GradientFillLinear( wxRect{ cell.x + xOffset, cell.y, curWidth, cell.height }, curColor, curColor );
+						xOffset += curWidth;
+						halfColour = mix( 0.5f, curColor, nxtColor );
+						dc->GradientFillLinear( wxRect{ cell.x + xOffset, cell.y, gradWidth, cell.height }, curColor, halfColour );
+						xOffset += gradWidth;
+
+						cur = nxt++;
+					}
+
+					curColor = getStatusColor( *cur );
+					curWidth = cell.width - xOffset;
+					gradWidth = std::min( 50, curWidth / 4 );
+					curWidth -= gradWidth;
+
+					dc->GradientFillLinear( wxRect{ cell.x + xOffset, cell.y, gradWidth, cell.height }, halfColour, curColor );
+					xOffset += gradWidth;
+					dc->GradientFillLinear( wxRect{ cell.x + xOffset, cell.y, curWidth, cell.height }, curColor, curColor );
+					xOffset += curWidth;
+				}
+			}
+
 		private:
+			wxDataViewCtrl * m_parent;
 			wxSize m_size;
 			wxBitmap m_outOfCastorDateBmp;
 			wxBitmap m_outOfSceneDateBmp;
 			std::array< wxBitmap, size_t( TestStatus::eCount ) + AdditionalIndices > m_bitmaps;
-			uint32_t m_value;
-			uint32_t m_index;
+			StatusName * m_statusName{};
+			bool m_isTest{ true };
+			uint32_t m_index{};
+			wxString m_name;
 			bool m_outOfCastorDate{};
 			bool m_outOfSceneDate{};
 		};
+
+		wxString getColumnName( TreeModel::Column col )
+		{
+			switch ( col )
+			{
+			case aria::TreeModel::Column::eStatusName:
+				return wxT( "Name" );
+			case aria::TreeModel::Column::eRunDate:
+				return wxT( "Run Date" );
+			case aria::TreeModel::Column::eRunTime:
+				return wxT( "Run Time" );
+			default:
+				return wxT( "string" );
+			}
+		}
+
+		wxString getColumnType( TreeModel::Column col )
+		{
+			switch ( col )
+			{
+			case TreeModel::Column::eStatusName:
+				return DataViewTestStatusRenderer::GetDefaultType();
+			default:
+				return wxT( "string" );
+			}
+		}
+
+		wxDataViewRenderer * getColumnRenderer( TreeModel::Column col
+			, wxDataViewCtrl * view )
+		{
+			switch ( col )
+			{
+			case aria::TreeModel::Column::eStatusName:
+				return new DataViewTestStatusRenderer{ view, getColumnType( col ) };
+			default:
+				return new wxDataViewTextRenderer{ getColumnType( col ) };
+			}
+		}
 	}
 
+	//*********************************************************************************************
+
 	TreeModel::TreeModel( Config const & config
-		, Renderer renderer )
+		, Renderer renderer
+		, TestsCounts & counts )
 		: m_config{ config }
 		, m_renderer{ renderer }
-		, m_root( new TreeModelNode{ nullptr, renderer, nullptr } )
+		, m_root( new TreeModelNode{ renderer, counts } )
 	{
 	}
 
@@ -156,9 +400,10 @@ namespace aria
 		delete m_root;
 	}
 
-	TreeModelNode * TreeModel::addCategory( Category category )
+	TreeModelNode * TreeModel::addCategory( Category category
+		, TestsCounts & counts )
 	{
-		TreeModelNode * node = new TreeModelNode{ m_root, m_renderer, category };
+		TreeModelNode * node = new TreeModelNode{ m_root, m_renderer, category, counts };
 		m_categories[category->name] = node;
 		m_root->Append( node );
 		return node;
@@ -181,26 +426,18 @@ namespace aria
 	void TreeModel::instantiate( wxDataViewCtrl * view )
 	{
 		uint32_t flags = wxCOL_SORTABLE | wxCOL_RESIZABLE;
-		auto renCategory = new wxDataViewTextRenderer{ GetColumnType( unsigned( TreeModel::Column::eCategory ) ) };
-		wxDataViewColumn * colCategory = new wxDataViewColumn( _( "Category" ), renCategory, int( TreeModel::Column::eCategory ), 150, wxALIGN_LEFT, flags );
-		colCategory->SetMinWidth( 150 );
-		view->AppendColumn( colCategory );
-		auto renScene = new wxDataViewTextRenderer{ GetColumnType( unsigned( TreeModel::Column::eName ) ) };
-		wxDataViewColumn * colScene = new wxDataViewColumn( _( "Name" ), renScene, int( TreeModel::Column::eName ), 400, wxALIGN_LEFT, flags );
-		colScene->SetMinWidth( 400 );
-		view->AppendColumn( colScene );
-		auto renRunDate = new wxDataViewTextRenderer{ GetColumnType( unsigned( TreeModel::Column::eRunDate ) ) };
-		wxDataViewColumn * colRunDate = new wxDataViewColumn( _( "Run Date" ), renRunDate, int( TreeModel::Column::eRunDate ), 80, wxALIGN_LEFT, flags );
-		colRunDate->SetMinWidth( 80 );
-		view->AppendColumn( colRunDate );
-		auto renRunTime = new wxDataViewTextRenderer{ GetColumnType( unsigned( TreeModel::Column::eRunTime ) ) };
-		wxDataViewColumn * colRunTime = new wxDataViewColumn( _( "Run Time" ), renRunDate, int( TreeModel::Column::eRunTime ), 80, wxALIGN_LEFT, flags );
-		colRunTime->SetMinWidth( 80 );
-		view->AppendColumn( colRunTime );
-		auto renStatus = new DataViewTestStatusRenderer{ GetColumnType( unsigned( TreeModel::Column::eStatus ) ) };
-		wxDataViewColumn * colStatus = new wxDataViewColumn( _( "Status" ), renStatus, int( TreeModel::Column::eStatus ), 30, wxALIGN_LEFT, flags );
-		colStatus->SetMinWidth( 30 );
-		view->AppendColumn( colStatus );
+
+		for ( int i = 0; i < int( Column::eCount ); ++i )
+		{
+			auto column = Column( i );
+			wxDataViewColumn * col = new wxDataViewColumn( getColumnName( column )
+				, getColumnRenderer( column, view )
+				, i
+				, getColumnSize( column )
+				, wxALIGN_LEFT, flags );
+			col->SetMinWidth( getColumnSize( column ) );
+			view->AppendColumn( col );
+		}
 	}
 
 	uint32_t TreeModel::getTestId( wxDataViewItem const & item )const
@@ -234,9 +471,20 @@ namespace aria
 		std::string result{};
 		auto node = static_cast< TreeModelNode * >( item.GetID() );
 
-		if ( node && node->test )
+		if ( node )
 		{
-			result = node->test->getName();
+			if ( node->test )
+			{
+				result = node->test->getName();
+			}
+			else if ( node->category )
+			{
+				result = node->category->name;
+			}
+			else if ( node->renderer )
+			{
+				result = node->renderer->name;
+			}
 		}
 
 		return result;
@@ -286,9 +534,12 @@ namespace aria
 		std::string result{};
 		auto node = static_cast< TreeModelNode * >( item.GetID() );
 
-		if ( node && node->test )
+		if ( node )
 		{
-			result = node->test->getRenderer()->name;
+			if ( node->renderer )
+			{
+				result = node->renderer->name;
+			}
 		}
 
 		return result;
@@ -354,12 +605,8 @@ namespace aria
 
 		if ( IsContainer( item1 ) && IsContainer( item2 ) )
 		{
-			wxVariant value1, value2;
-			GetValue( value1, item1, 0 );
-			GetValue( value2, item2, 0 );
-
-			wxString str1 = value1.GetString();
-			wxString str2 = value2.GetString();
+			wxString str1 = getName( item1 );
+			wxString str2 = getName( item2 );
 			int res = str1.Cmp( str2 );
 
 			if ( res )
@@ -373,15 +620,19 @@ namespace aria
 				auto litem2 = wxUIntPtr( item2.GetID() );
 				result = litem1 - litem2;
 			}
+
+			result = ascending
+				? result
+				: -result;
 		}
-		else if ( column == int( Column::eStatus ) )
+		else if ( column == int( Column::eStatusName ) )
 		{
 			auto node1 = static_cast< TreeModelNode const * >( item1.GetID() );
 			auto node2 = static_cast< TreeModelNode const * >( item2.GetID() );
 			result = ( node1->test->getStatus() < node2->test->getStatus()
 				? -1
 				: ( node1->test->getStatus() == node2->test->getStatus()
-					? 0
+					? makeWxString( node1->test->getName() ).Cmp( node2->test->getName() )
 					: 1 ) );
 			result = ascending
 				? result
@@ -402,13 +653,7 @@ namespace aria
 
 	wxString TreeModel::GetColumnType( unsigned int col )const
 	{
-		switch ( Column( col ) )
-		{
-		case Column::eStatus:
-			return DataViewTestStatusRenderer::GetDefaultType();
-		default:
-			return wxT( "string" );
-		}
+		return getColumnType( Column( col ) );
 	}
 
 	void TreeModel::GetValue( wxVariant & variant
@@ -427,12 +672,10 @@ namespace aria
 		{
 			switch ( Column( col ) )
 			{
-			case Column::eCategory:
-				variant = makeWxString( node->test->getCategory()->name );
-				break;
-
-			case Column::eName:
-				variant = makeWxString( node->test->getName() );
+			case Column::eStatusName:
+				node->statusName.statusIndex = StatusName::getTestStatusIndex( m_config, **node->test );
+				node->statusName.name = getName( item );
+				variant = reinterpret_cast< void * >( &node->statusName );
 				break;
 
 			case Column::eRunDate:
@@ -447,10 +690,6 @@ namespace aria
 					: wxEmptyString;
 				break;
 
-			case Column::eStatus:
-				variant = long( getTestStatusIndex( m_config, **node->test ) );
-				break;
-
 			default:
 				castor::Logger::logError( "TreeModel::GetValue: wrong column " + castor::string::toString( col ) );
 				break;
@@ -460,16 +699,16 @@ namespace aria
 		{
 			switch ( Column( col ) )
 			{
-			case Column::eCategory:
-				variant = node->category
-					? makeWxString( node->category->name )
-					: wxT( "All" );
+			case Column::eStatusName:
+				node->statusName.statusIndex = StatusName::getStatusIndex( true, TestStatus::eNotRun );
+				node->statusName.name = getName( item );
+				//node->statusName.counts->update( {}, m_config );
+				variant = reinterpret_cast< void * >( &node->statusName );
 				break;
 
-			case Column::eName:
 			case Column::eRunDate:
 			case Column::eRunTime:
-			case Column::eStatus:
+				variant = wxEmptyString;
 				break;
 
 			default:
@@ -494,11 +733,9 @@ namespace aria
 
 		switch ( Column( col ) )
 		{
-		case Column::eCategory:
-		case Column::eName:
+		case Column::eStatusName:
 		case Column::eRunDate:
 		case Column::eRunTime:
-		case Column::eStatus:
 			break;
 
 		default:
@@ -576,4 +813,11 @@ namespace aria
 
 		return result;
 	}
+
+	bool TreeModel::HasContainerColumns( const wxDataViewItem & item )const
+	{
+		return false;
+	}
+
+	//*********************************************************************************************
 }

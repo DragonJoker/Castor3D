@@ -10,6 +10,7 @@ See LICENSE file in root folder
 #include <wx/datetime.h>
 #include <wx/string.h>
 
+#include <list>
 #include <unordered_map>
 
 namespace aria
@@ -21,6 +22,7 @@ namespace aria
 		eAcceptable,
 		eUnacceptable,
 		eUnprocessed,
+		ePending,
 		eRunning_0,
 		eRunning_1,
 		eRunning_2,
@@ -39,6 +41,10 @@ namespace aria
 	};
 	castor::Path getFolderName( TestStatus value );
 	TestStatus getStatus( std::string const & name );
+	inline bool isPending( TestStatus value )
+	{
+		return value == TestStatus::ePending;
+	}
 	inline bool isRunning( TestStatus value )
 	{
 		return value >= TestStatus::eRunning_Begin
@@ -58,6 +64,8 @@ namespace aria
 			return "unacceptable";
 		case aria::TestStatus::eUnprocessed:
 			return "unprocessed";
+		case aria::TestStatus::ePending:
+			return "pending";
 		case aria::TestStatus::eRunning_0:
 			return "running_0";
 		case aria::TestStatus::eRunning_1:
@@ -87,18 +95,12 @@ namespace aria
 		}
 	}
 
-	class CategoryPanel;
-	class DatabaseTest;
-	class LayeredPanel;
-	class MainFrame;
-	class TestDatabase;
-	class TestPanel;
-	class TreeModelNode;
-	class TreeModel;
-
-	struct IdValue;
-	struct Test;
-	struct TestRun;
+	enum class NodeType
+	{
+		eRenderer,
+		eCategory,
+		eTestRun,
+	};
 
 	struct HashNoCase
 	{
@@ -121,8 +123,28 @@ namespace aria
 		bool operator()( std::string const & lhs, std::string const & rhs )const;
 	};
 
+	class CategoryPanel;
+	class DatabaseTest;
+	class LayeredPanel;
+	class MainFrame;
+	class TestDatabase;
+	class TestPanel;
+	class TreeModelNode;
+	class TreeModel;
+
+	struct Config;
+	struct IdValue;
+	struct StatusName;
+	struct Test;
+	struct TestsCounts;
+	struct AllTestsCounts;
+	struct RendererTestsCounts;
+	struct TestNode;
+	struct TestRun;
+
 	using IdValuePtr = std::unique_ptr< IdValue >;
 	using TestPtr = std::unique_ptr< Test >;
+	using TestsCountsPtr = std::unique_ptr< TestsCounts >;
 	using Renderer = IdValue *;
 	using Category = IdValue *;
 	using Keyword = IdValue *;
@@ -134,11 +156,90 @@ namespace aria
 	using TestRunArray = std::vector< DatabaseTest >;
 	using TestRunCategoryMap = std::map< Category, TestRunArray >;
 	using TestRunMap = std::map< Renderer, TestRunCategoryMap >;
+	using TestsCountsArray = std::vector< TestsCountsPtr >;
+	using TestsCountsCategoryMap = std::map< Category, TestsCountsPtr >;
+	using TestsCountsMap = std::map< Renderer, RendererTestsCounts >;
+
+	struct TestsCounts
+	{
+		TestsCounts( Config const & config
+			, TestMap const & tests
+			, TestRunMap const & runs );
+		TestsCounts( Config const & config
+			, TestMap const & tests
+			, TestRunCategoryMap const & runs );
+		TestsCounts( Config const & config
+			, TestArray const & tests
+			, TestRunArray const & runs );
+
+		uint32_t getAllRun()const
+		{
+			return negligible
+				+ acceptable
+				+ unacceptable
+				+ unprocessed
+				+ pending
+				+ running;
+		}
+
+		uint32_t getNotRun()const
+		{
+			assert( all >= getAllRun() );
+			return all - getAllRun();
+		}
+
+		uint32_t all{};
+		uint32_t negligible{};
+		uint32_t acceptable{};
+		uint32_t unacceptable{};
+		uint32_t unprocessed{};
+		uint32_t pending{};
+		uint32_t running{};
+		uint32_t ignored{};
+		uint32_t outdated{};
+
+		void update();
+
+	private:
+		Config const & m_config;
+		TestMap const * m_allTests{};
+		TestRunMap const * m_allRuns{};
+		TestMap const * m_rendererTests{};
+		TestRunCategoryMap const * m_rendererRuns{};
+		TestArray const * m_categoryTests{};
+		TestRunArray const * m_categoryRuns{};
+	};
+
+	struct RendererTestsCounts
+	{
+		TestsCountsPtr counts;
+		TestsCountsCategoryMap categories;
+	};
+
+	struct AllTestsCounts
+	{
+		TestsCountsPtr counts;
+		TestsCountsMap renderers;
+	};
+
+	struct StatusName
+	{
+		NodeType type;
+		TestsCounts * counts;
+		std::string name;
+		uint32_t statusIndex;
+
+		static uint32_t getStatusIndex( bool ignoreResult
+			, TestStatus status );
+		static uint32_t getTestStatusIndex( Config const & config
+			, TestRun const & test );
+	};
 
 	struct Tests
 	{
 		TestMap tests;
 		TestRunMap runs;
+		AllTestsCounts counts;
 	};
 
 	static const wxColour PANEL_BACKGROUND_COLOUR = wxColour( 30, 30, 30 );
@@ -246,8 +347,6 @@ namespace aria
 	bool isOutOfCastorDate( Config const & config, TestRun const & test );
 	bool isOutOfSceneDate( Config const & config, TestRun const & test );
 	bool isOutOfDate( Config const & config, TestRun const & test );
-	uint32_t getTestStatusIndex( Config const & config
-		, TestRun const & test );
 	castor::Path getSceneFile( TestRun const & test );
 	castor::Path getResultFolder( TestRun const & test );
 	castor::Path getResultName( TestRun const & test );

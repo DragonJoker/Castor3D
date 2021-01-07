@@ -4,11 +4,25 @@
 
 namespace aria
 {
+	TreeModelNode::TreeModelNode( Renderer renderer
+		, TestsCounts & counts )
+		: renderer{ renderer }
+		, statusName{ NodeType::eRenderer
+			, &counts
+			, renderer->name }
+		, m_container{ true }
+	{
+	}
+
 	TreeModelNode::TreeModelNode( TreeModelNode * parent
 		, Renderer renderer
-		, Category category )
+		, Category category
+		, TestsCounts & counts )
 		: renderer{ renderer }
 		, category{ category }
+		, statusName{ NodeType::eCategory
+			, &counts
+			, category->name }
 		, m_parent{ parent }
 		, m_container{ true }
 	{
@@ -17,7 +31,11 @@ namespace aria
 	TreeModelNode::TreeModelNode( TreeModelNode * parent
 		, DatabaseTest & test )
 		: test{ &test }
-		, renderer{ test->renderer }
+		, renderer{ test.getRenderer() }
+		, category{ test.getCategory() }
+		, statusName{ NodeType::eTestRun
+			, nullptr
+			, test.getName() }
 		, m_parent{ parent }
 		, m_container{ false }
 	{

@@ -100,6 +100,36 @@ namespace aria
 		return it->second;
 	}
 
+	uint32_t StatusName::getStatusIndex( bool ignoreResult
+		, TestStatus status )
+	{
+		uint32_t result{};
+
+		if ( ( !ignoreResult )
+			|| ( !isPending( status ) && !isRunning( status ) ) )
+		{
+			result = size_t( status ) + AdditionalIndices;
+		}
+		else if ( ignoreResult )
+		{
+			result = IgnoredIndex;
+		}
+
+		return ( result << 2 );
+	}
+
+	uint32_t StatusName::getTestStatusIndex( Config const & config
+		, TestRun const & test )
+	{
+		return getStatusIndex( test.test->ignoreResult, test.status )
+			| ( isOutOfCastorDate( config, test )
+				? 0x01u
+				: 0x00u )
+			| ( isOutOfSceneDate( config, test )
+				? 0x02u
+				: 0x00u );
+	}
+
 	db::DateTime getSceneDate( Config const & config, Test const & test )
 	{
 		return getFileDate( config.test / getSceneFile( test ) );
@@ -112,13 +142,13 @@ namespace aria
 
 	bool isOutOfCastorDate( Config const & config, TestRun const & test )
 	{
-		return test.castorDate.is_not_a_date_time()
+		return ( !db::date_time::isValid( test.castorDate ) )
 			|| test.castorDate < getFileDate( config.castor );
 	}
 
 	bool isOutOfSceneDate( Config const & config, TestRun const & test )
 	{
-		return test.sceneDate.is_not_a_date_time()
+		return ( !db::date_time::isValid( test.sceneDate ) )
 			|| test.sceneDate < getSceneDate( config, test );
 	}
 
@@ -132,31 +162,6 @@ namespace aria
 	{
 		config.castorRefDate = getFileDate( config.castor );
 		assert( db::date_time::isValid( config.castorRefDate ) );
-	}
-
-	uint32_t getTestStatusIndex( Config const & config
-		, TestRun const & test )
-	{
-		uint32_t result{};
-
-		if ( ( !test.test->ignoreResult )
-			|| ( test.status >= TestStatus::eRunning_Begin
-				&& test.status <= TestStatus::eRunning_End ) )
-		{
-			result = size_t( test.status ) + AdditionalIndices;
-		}
-		else if ( test.test->ignoreResult )
-		{
-			result = IgnoredIndex;
-		}
-
-		return ( result << 2 )
-			| ( isOutOfCastorDate( config, test )
-				? 0x01u
-				: 0x00u )
-			| ( isOutOfSceneDate( config, test )
-				? 0x02u
-				: 0x00u );
 	}
 
 	castor::Path getSceneFile( Test const & test )
@@ -270,7 +275,9 @@ namespace aria
 	{
 		return test.renderer->name
 			+ " - " + getDetails( *test.test )
-			+ " - " + db::date_time::format( test.runDate, DISPLAY_DATETIME );
+			+ " - " + ( db::date_time::isValid( test.runDate )
+				? db::date_time::format( test.runDate, DISPLAY_DATETIME )
+				: std::string{} );
 	}
 
 	wxString getProgressDetails( DatabaseTest const & test )
@@ -355,6 +362,11 @@ namespace aria
 
 	db::DateTime makeDbDateTime( wxDateTime const & in )
 	{
+		if ( !in.IsValid() )
+		{
+			return db::DateTime{};
+		}
+
 		int monthDay = in.GetDay();
 		int month = in.GetMonth() + 1;
 		int year = in.GetYear();
@@ -374,7 +386,9 @@ namespace aria
 
 	castor::Path getFolderName( db::DateTime const & value )
 	{
-		return castor::Path{ db::date_time::format( value, FOLDER_DATETIME ) };
+		return db::date_time::isValid( value )
+			? castor::Path{ db::date_time::format( value, FOLDER_DATETIME ) }
+			: castor::Path{};
 	}
 
 	bool isDateTime( castor::String const & value

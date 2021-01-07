@@ -11,9 +11,12 @@ namespace aria
 	class TreeModelNode
 	{
 	public:
+		TreeModelNode( Renderer renderer
+			, TestsCounts & counts );
 		TreeModelNode( TreeModelNode * parent
 			, Renderer renderer
-			, Category category );
+			, Category category
+			, TestsCounts & counts );
 		TreeModelNode( TreeModelNode * parent
 			, DatabaseTest & test );
 		~TreeModelNode();
@@ -61,13 +64,14 @@ namespace aria
 		}
 
 	public:
+		DatabaseTest * test{};
 		Renderer renderer{};
 		Category category{};
-		DatabaseTest * test{};
+		StatusName statusName{};
 
 	private:
 		bool m_container{};
-		TreeModelNode * m_parent;
+		TreeModelNode * m_parent{};
 		TreeModelNodePtrArray m_children;
 	};
 }

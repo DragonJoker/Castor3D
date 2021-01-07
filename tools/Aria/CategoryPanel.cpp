@@ -20,7 +20,6 @@ namespace aria
 
 		uint32_t getStatusTests( TestArray const & tests
 			, TestRunArray const & runs
-			, std::list< TestNode > const & running
 			, TestStatus status )
 		{
 			return uint32_t( std::count_if( runs.begin()
@@ -31,9 +30,22 @@ namespace aria
 				} ) );
 		}
 
-		uint32_t getIgnoredTests( TestArray const & tests
+		uint32_t getStatusTests( TestArray const & tests
 			, TestRunArray const & runs
-			, std::list< TestNode > const & running )
+			, TestStatus min
+			, TestStatus max )
+		{
+			return uint32_t( std::count_if( runs.begin()
+				, runs.end()
+				, [min, max]( DatabaseTest const & lookup )
+				{
+					return lookup->status >= min
+						&& lookup->status <= max;
+				} ) );
+		}
+
+		uint32_t getIgnoredTests( TestArray const & tests
+			, TestRunArray const & runs )
 		{
 			return uint32_t( std::count_if( tests.begin()
 				, tests.end()
@@ -45,24 +57,14 @@ namespace aria
 
 		uint32_t getOutdatedTests( TestArray const & tests
 			, TestRunArray const & runs
-			, std::list< TestNode > const & running
-			, db::DateTime const & date )
-		{
-			assert( db::date_time::isValid( date ) );
-			return uint32_t( std::count_if( runs.begin()
-				, runs.end()
-				, [&date]( DatabaseTest const & lookup )
-				{
-					return lookup->castorDate != date;
-				} ) );
-		}
-
-		uint32_t getOutdatedTests( TestArray const & tests
-			, TestRunArray const & runs
-			, std::list< TestNode > const & running
 			, Config const & config )
 		{
-			return getOutdatedTests( tests, runs, {}, getFileDate( config.castor ) );
+			return uint32_t( std::count_if( runs.begin()
+				, runs.end()
+				, [&config]( DatabaseTest const & lookup )
+				{
+					return isOutOfDate( config, *lookup );
+				} ) );
 		}
 
 		uint32_t getTestsCount( TestMap const & tests
@@ -80,28 +82,41 @@ namespace aria
 
 		uint32_t getStatusTests( TestMap const & tests
 			, TestRunCategoryMap const & runs
-			, std::list< TestNode > const & running
 			, TestStatus status )
 		{
 			uint32_t result{};
 
 			for ( auto & catRuns : runs )
 			{
-				result += getStatusTests( {}, catRuns.second, running, status );
+				result += getStatusTests( {}, catRuns.second, status );
+			}
+
+			return result;
+		}
+
+		uint32_t getStatusTests( TestMap const & tests
+			, TestRunCategoryMap const & runs
+			, TestStatus min
+			, TestStatus max )
+		{
+			uint32_t result{};
+
+			for ( auto & catRuns : runs )
+			{
+				result += getStatusTests( {}, catRuns.second, min, max );
 			}
 
 			return result;
 		}
 
 		uint32_t getIgnoredTests( TestMap const & tests
-			, TestRunCategoryMap const & runs
-			, std::list< TestNode > const & running )
+			, TestRunCategoryMap const & runs )
 		{
 			uint32_t result{};
 
 			for ( auto & catTests : tests )
 			{
-				result += getIgnoredTests( catTests.second, {}, running );
+				result += getIgnoredTests( catTests.second, {} );
 			}
 
 			return result;
@@ -109,16 +124,13 @@ namespace aria
 
 		uint32_t getOutdatedTests( TestMap const & tests
 			, TestRunCategoryMap const & runs
-			, std::list< TestNode > const & running
 			, Config const & config )
 		{
 			uint32_t result{};
-			auto date = getFileDate( config.castor );
-			assert( db::date_time::isValid( date ) );
 
 			for ( auto & catTests : runs )
 			{
-				result += getOutdatedTests( {}, catTests.second, running, date );
+				result += getOutdatedTests( {}, catTests.second, config );
 			}
 
 			return result;
@@ -139,28 +151,41 @@ namespace aria
 
 		uint32_t getStatusTests( TestMap const & tests
 			, TestRunMap const & runs
-			, std::list< TestNode > const & running
 			, TestStatus status )
 		{
 			uint32_t result{};
 
 			for ( auto & rendRuns : runs )
 			{
-				result += getStatusTests( {}, rendRuns.second, running, status );
+				result += getStatusTests( {}, rendRuns.second, status );
+			}
+
+			return result;
+		}
+
+		uint32_t getStatusTests( TestMap const & tests
+			, TestRunMap const & runs
+			, TestStatus min
+			, TestStatus max )
+		{
+			uint32_t result{};
+
+			for ( auto & rendRuns : runs )
+			{
+				result += getStatusTests( {}, rendRuns.second, min, max );
 			}
 
 			return result;
 		}
 
 		uint32_t getIgnoredTests( TestMap const & tests
-			, TestRunMap const & runs
-			, std::list< TestNode > const & running )
+			, TestRunMap const & runs )
 		{
 			uint32_t result{};
 
 			for ( auto & catTests : tests )
 			{
-				result += getIgnoredTests( catTests.second, {}, running );
+				result += getIgnoredTests( catTests.second, {} );
 			}
 
 			return uint32_t( result * runs.size() );
@@ -168,14 +193,13 @@ namespace aria
 
 		uint32_t getOutdatedTests( TestMap const & tests
 			, TestRunMap const & runs
-			, std::list< TestNode > const & running
 			, Config const & config )
 		{
 			uint32_t result{};
 
 			for ( auto & rendRuns : runs )
 			{
-				result += getOutdatedTests( {}, rendRuns.second, running, config );
+				result += getOutdatedTests( {}, rendRuns.second, config );
 			}
 
 			return result;
@@ -184,20 +208,67 @@ namespace aria
 		template< typename TestContT, typename RunContT >
 		void updateCounts( TestContT const & tests
 			, RunContT const & runs
-			, std::list< TestNode > const & running
 			, Config const & config
-			, CategoryPanel::Counts & counts )
+			, TestsCounts & counts )
 		{
 			counts.all = getTestsCount( tests, runs );
-			counts.negligible = getStatusTests( tests, runs, running, TestStatus::eNegligible );
-			counts.acceptable = getStatusTests( tests, runs, running, TestStatus::eAcceptable );
-			counts.unacceptable = getStatusTests( tests, runs, running, TestStatus::eUnacceptable );
-			counts.unprocessed = getStatusTests( tests, runs, running, TestStatus::eUnprocessed );
-			counts.ignored = getIgnoredTests( tests, runs, running );
-			counts.outdated = getOutdatedTests( tests, runs, running, config );
-			counts.running = uint32_t( running.size() );
+			counts.negligible = getStatusTests( tests, runs, TestStatus::eNegligible );
+			counts.acceptable = getStatusTests( tests, runs, TestStatus::eAcceptable );
+			counts.unacceptable = getStatusTests( tests, runs, TestStatus::eUnacceptable );
+			counts.unprocessed = getStatusTests( tests, runs, TestStatus::eUnprocessed );
+			counts.ignored = getIgnoredTests( tests, runs );
+			counts.outdated = getOutdatedTests( tests, runs, config );
+			counts.pending = getStatusTests( tests, runs, TestStatus::ePending );
+			counts.running = getStatusTests( tests, runs, TestStatus::eRunning_Begin, TestStatus::eRunning_End );
 		}
 	}
+
+	//*********************************************************************************************
+
+	TestsCounts::TestsCounts( Config const & config
+		, TestMap const & tests
+		, TestRunMap const & runs )
+		: m_config{ config }
+		, m_allTests{ &tests }
+		, m_allRuns{ &runs }
+	{
+	}
+
+	TestsCounts::TestsCounts( Config const & config
+		, TestMap const & tests
+		, TestRunCategoryMap const & runs )
+		: m_config{ config }
+		, m_rendererTests{ &tests }
+		, m_rendererRuns{ &runs }
+	{
+	}
+
+	TestsCounts::TestsCounts( Config const & config
+		, TestArray const & tests
+		, TestRunArray const & runs )
+		: m_config{ config }
+		, m_categoryTests{ &tests }
+		, m_categoryRuns{ &runs }
+	{
+	}
+
+	void TestsCounts::update()
+	{
+		if ( m_allTests )
+		{
+			updateCounts( *m_allTests, *m_allRuns, m_config, *this );
+		}
+		else if ( m_rendererTests )
+		{
+			updateCounts( *m_rendererTests, *m_rendererRuns, m_config, *this );
+		}
+		else
+		{
+			updateCounts( *m_categoryTests, *m_categoryRuns, m_config, *this );
+		}
+	}
+
+	//*********************************************************************************************
 
 	CategoryPanel::CategoryPanel( Config const & config
 		, wxWindow * parent
@@ -224,15 +295,18 @@ namespace aria
 		m_unprocessed = new wxStaticText{ this, wxID_ANY, wxEmptyString };
 		m_unprocessed->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		m_unprocessed->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
-		m_ignored = new wxStaticText{ this, wxID_ANY, wxEmptyString };
-		m_ignored->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
-		m_ignored->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
+		m_pending = new wxStaticText{ this, wxID_ANY, wxEmptyString };
+		m_pending->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
+		m_pending->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		m_running = new wxStaticText{ this, wxID_ANY, wxEmptyString };
 		m_running->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		m_running->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		m_outdated = new wxStaticText{ this, wxID_ANY, wxEmptyString };
 		m_outdated->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		m_outdated->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
+		m_ignored = new wxStaticText{ this, wxID_ANY, wxEmptyString };
+		m_ignored->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
+		m_ignored->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		wxBoxSizer * sizer{ new wxBoxSizer{ wxVERTICAL } };
 		sizer->AddStretchSpacer();
 		sizer->Add( m_status, wxSizerFlags{}.Left() );
@@ -240,81 +314,44 @@ namespace aria
 		sizer->Add( m_acceptable, wxSizerFlags{}.Left() );
 		sizer->Add( m_unacceptable, wxSizerFlags{}.Left() );
 		sizer->Add( m_unprocessed, wxSizerFlags{}.Left() );
-		sizer->Add( m_ignored, wxSizerFlags{}.Left() );
-		sizer->Add( m_outdated, wxSizerFlags{}.Left() );
+		sizer->Add( m_pending, wxSizerFlags{}.Left() );
 		sizer->Add( m_running, wxSizerFlags{}.Left() );
+		sizer->Add( m_outdated, wxSizerFlags{}.Left() );
+		sizer->Add( m_ignored, wxSizerFlags{}.Left() );
 		sizer->AddStretchSpacer();
 
-		SetSizer( sizer );
 		sizer->SetSizeHints( this );
+		SetSizer( sizer );
 	}
 
-	void CategoryPanel::setAll( TestMap const & tests
-		, TestRunMap const & runs
-		, std::list< TestNode > const & running )
+	std::string displayPercent( uint32_t value, uint32_t max )
 	{
-		m_allTests = &tests;
-		m_allRuns = &runs;
-		m_rendererTests = nullptr;
-		m_rendererRuns = nullptr;
-		m_categoryTests = nullptr;
-		m_categoryRuns = nullptr;
-		m_counts.name = "All";
-		update( running );
+		auto percent = ( 100.0f * value ) / max;
+		auto stream = castor::makeStringStream();
+		stream << std::setprecision( 2 ) << std::fixed << percent << "%";
+		return stream.str();
 	}
 
-	void CategoryPanel::setRenderer( wxString const & renderer
-		, TestMap const & tests
-		, TestRunCategoryMap const & runs
-		, std::list< TestNode > const & running )
+	void CategoryPanel::update( wxString const & name
+		, TestsCounts & counts )
 	{
-		m_allTests = nullptr;
-		m_allRuns = nullptr;
-		m_rendererTests = &tests;
-		m_rendererRuns = &runs;
-		m_categoryTests = nullptr;
-		m_categoryRuns = nullptr;
-		m_counts.name = renderer;
-		update( running );
+		m_counts = &counts;
+		m_status->SetLabel( wxString{ name } << ": " << m_counts->all << " tests" );
+		refresh();
 	}
 
-	void CategoryPanel::setCategory( wxString const & category
-		, TestArray const & tests
-		, TestRunArray const & runs
-		, std::list< TestNode > const & running )
+	void CategoryPanel::refresh()
 	{
-		m_allTests = nullptr;
-		m_allRuns = nullptr;
-		m_rendererTests = nullptr;
-		m_rendererRuns = nullptr;
-		m_categoryTests = &tests;
-		m_categoryRuns = &runs;
-		m_counts.name = category;
-		update( running );
-	}
-
-	void CategoryPanel::update( std::list< TestNode > const & running )
-	{
-		if ( m_allTests )
+		if ( m_counts )
 		{
-			updateCounts( *m_allTests, *m_allRuns, running, m_config, m_counts );
+			m_negligible->SetLabel( wxString{ "- " } << m_counts->negligible << " (" << displayPercent( m_counts->negligible, m_counts->all ) << ") negligible." );
+			m_acceptable->SetLabel( wxString{ "- " } << m_counts->acceptable << " (" << displayPercent( m_counts->acceptable, m_counts->all ) << ") acceptable." );
+			m_unacceptable->SetLabel( wxString{ "- " } << m_counts->unacceptable << " (" << displayPercent( m_counts->unacceptable, m_counts->all ) << ") unacceptable." );
+			m_unprocessed->SetLabel( wxString{ "- " } << m_counts->unprocessed << " (" << displayPercent( m_counts->unprocessed, m_counts->all ) << ") unprocessed." );
+			m_pending->SetLabel( wxString{ "- " } << m_counts->pending << " (" << displayPercent( m_counts->pending, m_counts->all ) << ") pending." );
+			m_running->SetLabel( wxString{ "- " } << m_counts->running << " (" << displayPercent( m_counts->running, m_counts->all ) << ") running." );
+			m_outdated->SetLabel( wxString{ "- " } << m_counts->outdated << " (" << displayPercent( m_counts->outdated, m_counts->all ) << ") outdated." );
+			m_ignored->SetLabel( wxString{ "- " } << m_counts->ignored << " (" << displayPercent( m_counts->ignored, m_counts->all ) << ") ignored." );
 		}
-		else if ( m_rendererTests )
-		{
-			updateCounts( *m_rendererTests, *m_rendererRuns, running, m_config, m_counts );
-		}
-		else
-		{
-			updateCounts( *m_categoryTests, *m_categoryRuns, running, m_config, m_counts );
-		}
-
-		m_status->SetLabel( wxString{ m_counts.name } << ": " << m_counts.all << " tests" );
-		m_negligible->SetLabel( wxString{ "- " } << m_counts.negligible << " (" << 100.0f * m_counts.negligible / float( m_counts.all ) << "%) negligible." );
-		m_acceptable->SetLabel( wxString{ "- " } << m_counts.acceptable << " (" << 100.0f * m_counts.acceptable / float( m_counts.all ) << "%) acceptable." );
-		m_unacceptable->SetLabel( wxString{ "- " } << m_counts.unacceptable << " (" << 100.0f * m_counts.unacceptable / float( m_counts.all ) << "%) unacceptable." );
-		m_unprocessed->SetLabel( wxString{ "- " } << m_counts.unprocessed << " (" << 100.0f * m_counts.unprocessed / float( m_counts.all ) << "%) unprocessed." );
-		m_ignored->SetLabel( wxString{ "- " } << m_counts.ignored << " (" << 100.0f * m_counts.ignored / float( m_counts.all ) << "%) ignored." );
-		m_outdated->SetLabel( wxString{ "- " } << m_counts.outdated << " (" << 100.0f * m_counts.outdated / float( m_counts.all ) << "%) outdated." );
-		m_running->SetLabel( wxString{ "- " } << m_counts.running << " running." );
 	}
 }

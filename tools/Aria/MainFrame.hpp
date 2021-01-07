@@ -42,9 +42,8 @@ namespace aria
 	private:
 		struct TestsPage;
 
-		void doInitTestsLists();
+		wxWindow * doInitTestsLists();
 		void doInitTestsList( Renderer renderer );
-		wxWindow * doInitDetailsView();
 		void doInitGui();
 		void doInitMenus();
 		void doInitMenuBar();
@@ -55,6 +54,8 @@ namespace aria
 		TestsPage & doGetPage( wxDataViewItem const & item );
 
 		void doProcessTest();
+		void doPushTest( TreeModelNode * node );
+		void doClearRunning();
 		void doRunTest();
 		void doCopyTestFileName();
 		void doViewTest();
@@ -86,6 +87,7 @@ namespace aria
 		void doNewRenderer();
 		void doNewCategory();
 		void doNewTest();
+		void doUpdateTestView( DatabaseTest const & test );
 		void onTestRunEnd( int status );
 		void onTestDisplayEnd( int status );
 		void onTestDiffEnd( int status );
@@ -129,11 +131,20 @@ namespace aria
 			TestsPage & operator=( TestsPage && ) = default;
 			TestsPage( Config const & config
 				, Renderer renderer
-				, TestRunCategoryMap & runs );
+				, TestRunCategoryMap & runs
+				, RendererTestsCounts & counts
+				, wxWindow * list );
 			~TestsPage();
+			wxAuiManager auiManager;
 			TestRunCategoryMap * runs;
+			TestsCountsCategoryMap * counts;
 			wxObjectDataPtr< TreeModel > model;
 			wxDataViewCtrl * view{};
+			LayeredPanel * generalViews{};
+			LayeredPanel * detailViews{};
+			TestPanel * testView{};
+			CategoryPanel * allView{};
+			CategoryPanel * categoryView{};
 			std::map< uint32_t, TreeModelNode * > modelNodes;
 			TestUpdater updater;
 			Selection selected;
@@ -182,15 +193,11 @@ namespace aria
 		Config m_config;
 		TestDatabase m_database;
 		Tests m_tests;
-		LayeredPanel * m_detailViews{};
-		TestPanel * m_testView{};
-		CategoryPanel * m_categoryView{};
 		std::map< Renderer, std::unique_ptr< TestsPage > > m_testsPages;
 		wxAuiNotebook * m_testsBook{};
 		TestsPage * m_selectedPage{};
 		wxStaticText * m_statusText{};
 		wxGauge * m_testProgress{};
-		wxGauge * m_statusProgress{};
 		bool m_hasPage{ false };
 		std::unique_ptr< wxMenu > m_testMenu{};
 		std::unique_ptr< wxMenu > m_categoryMenu{};
