@@ -45,6 +45,7 @@ namespace aria
 		enum ID
 		{
 			eID_TEST_UPDATER,
+			eID_CATEGORY_UPDATER,
 			eID_GRID,
 			eID_DETAIL,
 			eID_TEST_RUN,
@@ -194,6 +195,12 @@ namespace aria
 		{
 			return getTestFileName( folder, *test->test );
 		}
+
+		wxString const & getVersion()
+		{
+			static wxString const result{ wxString{ wxT( "v" ) } << Aria_VERSION_MAJOR << wxT( "." ) << Aria_VERSION_MINOR << wxT( "." ) << Aria_VERSION_BUILD };
+			return result;
+		}
 	}
 
 	//*********************************************************************************************
@@ -273,7 +280,7 @@ namespace aria
 	//*********************************************************************************************
 
 	MainFrame::MainFrame( Config config )
-		: wxFrame{ nullptr, wxID_ANY, wxT( "Aria" ), wxDefaultPosition, wxSize( 800, 700 ) }
+		: wxFrame{ nullptr, wxID_ANY, wxT( "Aria " ) + getVersion(), wxDefaultPosition, wxSize( 800, 700 ) }
 		, m_auiManager{ this, wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE }
 		, m_config{ std::move( config ) }
 		, m_database{ m_config }
@@ -297,16 +304,26 @@ namespace aria
 			{
 				onClose( evt );
 			} );
+		auto onTimer = [this]( wxTimerEvent & evt )
+		{
+			if ( evt.GetId() == eID_TEST_UPDATER )
+			{
+				onTestUpdateTimer( evt );
+			}
+			else if ( evt.GetId() == eID_CATEGORY_UPDATER )
+			{
+				onCategoryUpdateTimer( evt );
+			}
+		};
 		m_testUpdater = new wxTimer{ this, eID_TEST_UPDATER };
 		Bind( wxEVT_TIMER
-			, [this]( wxTimerEvent & evt )
-			{
-				if ( evt.GetId() == eID_TEST_UPDATER )
-				{
-					onTestUpdateTimer( evt );
-				}
-			}
+			, onTimer
 			, eID_TEST_UPDATER );
+		m_testUpdater->Start( 100 );
+		m_categoriesUpdater = new wxTimer{ this, eID_CATEGORY_UPDATER };
+		Bind( wxEVT_TIMER
+			, onTimer
+			, eID_CATEGORY_UPDATER );
 		m_testUpdater->Start( 100 );
 	}
 
@@ -1856,6 +1873,7 @@ namespace aria
 
 	void MainFrame::onClose( wxCloseEvent & evt )
 	{
+		m_categoriesUpdater->Stop();
 		m_testUpdater->Stop();
 
 		if ( m_runningTest.difProcess )
@@ -2166,15 +2184,25 @@ namespace aria
 		{
 			auto node = it->node;
 
-			if ( !isRunning( node->test->getStatus() ) )
+			if ( !isRunning( node->statusName.status ) )
 			{
 				it = current.erase( it );
 			}
 			else
 			{
-				node->test->updateStatusNW( ( node->test->getStatus() == TestStatus::eRunning_End )
-					? TestStatus::eRunning_Begin
-					: TestStatus( uint32_t( node->test->getStatus() ) + 1 ) );
+				if ( isTestNode( *node ) )
+				{
+					node->test->updateStatusNW( ( node->test->getStatus() == TestStatus::eRunning_End )
+						? TestStatus::eRunning_Begin
+						: TestStatus( uint32_t( node->test->getStatus() ) + 1 ) );
+				}
+				else
+				{
+					node->statusName.status = ( node->statusName.status == TestStatus::eRunning_End )
+						? TestStatus::eRunning_Begin
+						: TestStatus( uint32_t( node->statusName.status ) + 1 );
+				}
+
 				++it;
 			}
 
@@ -2182,6 +2210,11 @@ namespace aria
 			page.model->ItemChanged( wxDataViewItem{ node } );
 		}
 
+		evt.Skip();
+	}
+
+	void MainFrame::onCategoryUpdateTimer( wxTimerEvent & evt )
+	{
 		evt.Skip();
 	}
 

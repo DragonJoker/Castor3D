@@ -68,6 +68,7 @@ namespace aria
 		Renderer renderer{};
 		Category category{};
 		StatusName statusName{};
+		TestsCounts const * counts{};
 
 	private:
 		bool m_container{};

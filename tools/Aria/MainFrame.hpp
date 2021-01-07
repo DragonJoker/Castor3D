@@ -101,6 +101,7 @@ namespace aria
 		void onDatabaseMenuOption( wxCommandEvent & evt );
 		void onProcessEnd( wxProcessEvent & evt );
 		void onTestUpdateTimer( wxTimerEvent & evt );
+		void onCategoryUpdateTimer( wxTimerEvent & evt );
 
 		struct Selection
 		{
@@ -197,6 +198,7 @@ namespace aria
 		std::atomic_bool m_cancelled;
 		TestProcessChecker m_processChecker;
 		wxTimer * m_testUpdater;
+		wxTimer * m_categoriesUpdater;
 	};
 }
 

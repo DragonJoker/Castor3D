@@ -12,32 +12,6 @@ namespace aria
 {
 	struct TestsCounts
 	{
-		enum Type : uint32_t
-		{
-			eNotRun,
-			eNegligible,
-			eAcceptable,
-			eUnacceptable,
-			eUnprocessed,
-			ePending,
-			eRunning,
-			eIgnored,
-			eOutdated,
-			eAll,
-			eCount,
-			eCountedInAllEnd = eIgnored,
-		};
-
-		static TestsCounts::Type getType( TestStatus status )
-		{
-			if ( isRunning( status ) )
-			{
-				return Type::eRunning;
-			}
-
-			return Type( status );
-		}
-
 	private:
 		// Renderer
 		TestsCounts( TestsCounts & all
@@ -66,9 +40,9 @@ namespace aria
 ;
 		void add( TestStatus status );
 		void remove( TestStatus status );
-		CountedUInt & getCount( Type type );
-		CountedUInt const & getCount( Type type )const;
-		uint32_t getValue( Type type )const;
+		CountedUInt & getCount( TestsCountsType type );
+		CountedUInt const & getCount( TestsCountsType type )const;
+		uint32_t getValue( TestsCountsType type )const;
 		uint32_t getStatusValue( TestStatus status )const;
 		uint32_t getIgnoredValue()const;
 		uint32_t getOutdatedValue()const;
@@ -79,39 +53,36 @@ namespace aria
 		{
 			assert( m_children.empty()
 				&& "Only Category test counts can unit count tests" );
-			++getCount( Type::eIgnored );
+			++getCount( TestsCountsType::eIgnored );
 		}
 
 		void removeIgnored()
 		{
 			assert( m_children.empty()
 				&& "Only Category test counts can unit count tests" );
-			--getCount( Type::eIgnored );
+			--getCount( TestsCountsType::eIgnored );
 		}
 
 		void addOutdated()
 		{
 			assert( m_children.empty()
 				&& "Only Category test counts can unit count tests" );
-			++getCount( Type::eOutdated );
+			++getCount( TestsCountsType::eOutdated );
 		}
 
 		void removeOutdated()
 		{
 			assert( m_children.empty()
 				&& "Only Category test counts can unit count tests" );
-			--getCount( Type::eOutdated );
+			--getCount( TestsCountsType::eOutdated );
 		}
 
 		uint32_t getNotRunValue()const
 		{
-			auto iall = getAllValue();
-			auto allRun = getAllRunStatus();
-			assert( getAllValue() >= allRun );
-			return iall - allRun;
+			return getValue( TestsCountsType::eNotRun );
 		}
 
-		float getPercent( Type type )const
+		float getPercent( TestsCountsType type )const
 		{
 			return ( 100.0f * getValue( type ) ) / getAllValue();
 		}
@@ -142,8 +113,8 @@ namespace aria
 		}
 
 	private:
-		std::array< CountedUInt, Type::eCount > m_values{};
-		std::array< CountedUIntConnection, Type::eCount > m_connections{};
+		std::array< CountedUInt, TestsCountsType::eCount > m_values{};
+		std::array< CountedUIntConnection, TestsCountsType::eCount > m_connections{};
 		Config const & m_config;
 		TestMap const * m_allTests{};
 		TestRunMap const * m_allRuns{};

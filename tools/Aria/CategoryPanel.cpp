@@ -28,30 +28,30 @@ namespace aria
 			return displayPercent( ( 100.0f * value ) / max );
 		}
 
-		std::string getName( TestsCounts::Type type )
+		std::string getName( TestsCountsType type )
 		{
 			switch ( type )
 			{
-			case aria::TestsCounts::eNotRun:
+			case aria::TestsCountsType::eNotRun:
 				return "Not run";
-			case aria::TestsCounts::eNegligible:
+			case aria::TestsCountsType::eNegligible:
 				return "Negligible";
-			case aria::TestsCounts::eAcceptable:
+			case aria::TestsCountsType::eAcceptable:
 				return "Acceptable";
-			case aria::TestsCounts::eUnacceptable:
+			case aria::TestsCountsType::eUnacceptable:
 				return "Unacceptable";
-			case aria::TestsCounts::eUnprocessed:
+			case aria::TestsCountsType::eUnprocessed:
 				return "Unprocessed";
-			case aria::TestsCounts::ePending:
+			case aria::TestsCountsType::ePending:
 				return "Pending";
-			case aria::TestsCounts::eRunning:
+			case aria::TestsCountsType::eRunning:
 				return "Running";
-			case aria::TestsCounts::eIgnored:
+			case aria::TestsCountsType::eIgnored:
 				return "Ignored";
-			case aria::TestsCounts::eOutdated:
+			case aria::TestsCountsType::eOutdated:
 				return "Out of date";
-			case aria::TestsCounts::eAll:
-				return "Unknown";
+			case aria::TestsCountsType::eAll:
+				return "All";
 			default:
 				return "Unknown";
 			}
@@ -72,12 +72,12 @@ namespace aria
 		wxBoxSizer * sizer{ new wxBoxSizer{ wxVERTICAL } };
 		sizer->AddStretchSpacer();
 
-		m_values[TestsCounts::Type::eAll] = new wxStaticText{ this, wxID_ANY, wxEmptyString };
-		m_values[TestsCounts::Type::eAll]->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
-		m_values[TestsCounts::Type::eAll]->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
-		sizer->Add( m_values[TestsCounts::Type::eAll], wxSizerFlags{}.Left() );
+		m_values[TestsCountsType::eAll] = new wxStaticText{ this, wxID_ANY, wxEmptyString };
+		m_values[TestsCountsType::eAll]->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
+		m_values[TestsCountsType::eAll]->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
+		sizer->Add( m_values[TestsCountsType::eAll], wxSizerFlags{}.Left() );
 
-		for ( uint32_t i = 1; i < TestsCounts::Type::eAll; ++i )
+		for ( uint32_t i = 1; i < TestsCountsType::eAll; ++i )
 		{
 			m_values[i] = new wxStaticText{ this, wxID_ANY, wxEmptyString };
 			m_values[i]->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
@@ -85,10 +85,10 @@ namespace aria
 			sizer->Add( m_values[i], wxSizerFlags{}.Left() );
 		}
 
-		m_values[TestsCounts::Type::eNotRun] = new wxStaticText{ this, wxID_ANY, wxEmptyString };
-		m_values[TestsCounts::Type::eNotRun]->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
-		m_values[TestsCounts::Type::eNotRun]->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
-		sizer->Add( m_values[TestsCounts::Type::eNotRun], wxSizerFlags{}.Left() );
+		m_values[TestsCountsType::eNotRun] = new wxStaticText{ this, wxID_ANY, wxEmptyString };
+		m_values[TestsCountsType::eNotRun]->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
+		m_values[TestsCountsType::eNotRun]->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
+		sizer->Add( m_values[TestsCountsType::eNotRun], wxSizerFlags{}.Left() );
 
 		sizer->AddStretchSpacer();
 
@@ -104,12 +104,12 @@ namespace aria
 
 #if CTP_UseCountedValue
 
-		for ( uint32_t i = 0; i < TestsCounts::Type::eCount; ++i )
+		for ( uint32_t i = 0; i < TestsCountsType::eCount; ++i )
 		{
-			auto type = TestsCounts::Type( i );
+			auto type = TestsCountsType( i );
 			m_connections[i] = m_counts->getCount( type ).onValueChange.connect( [type, this]( CountedUInt const & v )
 				{
-					if ( type == TestsCounts::Type::eAll )
+					if ( type == TestsCountsType::eAll )
 					{
 						m_values[type]->SetLabel( m_name << ": " << m_counts->getValue( type ) << " tests" );
 					}
@@ -133,11 +133,11 @@ namespace aria
 
 		if ( m_counts )
 		{
-			for ( uint32_t i = 0; i < TestsCounts::Type::eCount; ++i )
+			for ( uint32_t i = 0; i < TestsCountsType::eCount; ++i )
 			{
-				auto type = TestsCounts::Type( i );
+				auto type = TestsCountsType( i );
 
-				if ( type == TestsCounts::Type::eAll )
+				if ( type == TestsCountsType::eAll )
 				{
 					m_values[type]->SetLabel( wxString{ m_name } << ": " << m_counts->getValue( type ) << " tests" );
 				}

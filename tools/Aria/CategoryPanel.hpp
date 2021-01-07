@@ -29,9 +29,9 @@ namespace aria
 		Config const & m_config;
 		TestsCounts * m_counts{};
 		wxString m_name;
-		std::array< wxStaticText *, TestsCounts::Type::eCount > m_values{};
+		std::array< wxStaticText *, TestsCountsType::eCount > m_values{};
 #if CTP_UseCountedValue
-		std::array< CountedUIntConnection, TestsCounts::Type::eCount > m_connections{};
+		std::array< CountedUIntConnection, TestsCountsType::eCount > m_connections{};
 #endif
 	};
 }

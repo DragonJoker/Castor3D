@@ -92,6 +92,11 @@ namespace aria
 			return m_test.sceneDate;
 		}
 
+		TestsCounts const & getCounts()const
+		{
+			return *m_counts;
+		}
+
 		TestRun const * operator->()const
 		{
 			return &m_test;

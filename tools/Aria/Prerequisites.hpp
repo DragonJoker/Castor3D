@@ -100,6 +100,32 @@ namespace aria
 		}
 	}
 
+	enum TestsCountsType : uint32_t
+	{
+		eNotRun,
+		eNegligible,
+		eAcceptable,
+		eUnacceptable,
+		eUnprocessed,
+		ePending,
+		eRunning,
+		eIgnored,
+		eOutdated,
+		eAll,
+		eCount,
+		eCountedInAllEnd = eIgnored,
+	};
+
+	static TestsCountsType getType( TestStatus status )
+	{
+		if ( isRunning( status ) )
+		{
+			return TestsCountsType::eRunning;
+		}
+
+		return TestsCountsType( status );
+	}
+
 	enum class NodeType
 	{
 		eRenderer,
@@ -224,9 +250,12 @@ namespace aria
 	struct StatusName
 	{
 		NodeType type;
-		TestsCounts * counts;
+		TestsCounts const * counts;
 		std::string name;
-		uint32_t statusIndex;
+		TestStatus status{};
+		bool outOfCastorDate{};
+		bool outOfSceneDate{};
+		bool ignored{};
 
 		static uint32_t getStatusIndex( bool ignoreResult
 			, TestStatus status );

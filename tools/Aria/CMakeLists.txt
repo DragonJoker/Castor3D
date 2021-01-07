@@ -6,8 +6,8 @@ find_package( Boost QUIET COMPONENTS date_time )
 if ( SQLite3_FOUND AND Boost_FOUND )
 	set( ${PROJECT_NAME}_WXWIDGET 1 )
 	set( ${PROJECT_NAME}_DESCRIPTION "Aria - ${MAIN_PROJECT_NAME} render tests parser" )
-	set( ${PROJECT_NAME}_VERSION_MAJOR 2 )
-	set( ${PROJECT_NAME}_VERSION_MINOR 0 )
+	set( ${PROJECT_NAME}_VERSION_MAJOR 1 )
+	set( ${PROJECT_NAME}_VERSION_MINOR 1 )
 	set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
 	set( ${PROJECT_NAME}_HDR_FILES
@@ -98,10 +98,13 @@ if ( SQLite3_FOUND AND Boost_FOUND )
 		${${PROJECT_NAME}_FOLDER_SRC_FILES}
 	)
 	set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Model/DataViewTestStatusRenderer.hpp
+		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Model/ModelPrerequisites.hpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Model/TreeModel.hpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Model/TreeModelNode.hpp
 	)
 	set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Model/DataViewTestStatusRenderer.cpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Model/TreeModel.cpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Model/TreeModelNode.cpp
 	)

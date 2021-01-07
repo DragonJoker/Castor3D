@@ -11,6 +11,7 @@ namespace aria
 		, statusName{ NodeType::eRenderer
 			, &counts
 			, renderer->name }
+		, counts{ &counts }
 		, m_container{ true }
 	{
 	}
@@ -24,8 +25,9 @@ namespace aria
 		, statusName{ NodeType::eCategory
 			, &counts
 			, category->name }
-		, m_parent{ parent }
+		, counts{ &counts }
 		, m_container{ true }
+		, m_parent{ parent }
 	{
 	}
 
@@ -37,8 +39,9 @@ namespace aria
 		, statusName{ NodeType::eTestRun
 			, nullptr
 			, test.getName() }
-		, m_parent{ parent }
+		, counts{ &test.getCounts() }
 		, m_container{ false }
+		, m_parent{ parent }
 	{
 	}
 

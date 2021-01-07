@@ -17,7 +17,7 @@ namespace aria
 	{
 #if CTP_UseCountedValue
 
-		for ( uint32_t i = 0; i < TestsCounts::Type::eAll; ++i )
+		for ( uint32_t i = 0; i < TestsCountsTestsCountsType::eAll; ++i )
 		{
 			m_connections[i] = m_values[i].onValueChange.connect( [i, this]( CountedUInt const & v )
 				{
@@ -39,7 +39,7 @@ namespace aria
 	{
 #if CTP_UseCountedValue
 
-		for ( uint32_t i = 0; i < TestsCounts::Type::eAll; ++i )
+		for ( uint32_t i = 0; i < TestsCountsTestsCountsType::eAll; ++i )
 		{
 			m_connections[i] = m_values[i].onValueChange.connect( [i, this]( CountedUInt const & v )
 				{
@@ -101,7 +101,7 @@ namespace aria
 	{
 		assert( m_children.empty()
 			&& "Only Category test counts can unit count tests" );
-		++getCount( Type::eAll );
+		++getCount( TestsCountsType::eAll );
 		++getCount( getType( status ) );
 	}
 
@@ -110,21 +110,29 @@ namespace aria
 		assert( m_children.empty()
 			&& "Only Category test counts can unit count tests" );
 		--getCount( getType( status ) );
-		--getCount( Type::eAll );
+		--getCount( TestsCountsType::eAll );
 	}
 
-	CountedUInt & TestsCounts::getCount( Type type )
+	CountedUInt & TestsCounts::getCount( TestsCountsType type )
 	{
 		return m_values[type];
 	}
 
-	CountedUInt const & TestsCounts::getCount( Type type )const
+	CountedUInt const & TestsCounts::getCount( TestsCountsType type )const
 	{
 		return m_values[type];
 	}
 
-	uint32_t TestsCounts::getValue( Type type )const
+	uint32_t TestsCounts::getValue( TestsCountsType type )const
 	{
+		if ( type == TestsCountsType::eNotRun )
+		{
+			auto iall = getAllValue();
+			auto allRun = getAllRunStatus();
+			assert( getAllValue() >= allRun );
+			return iall - allRun;
+		}
+
 		if ( m_children.empty() )
 		{
 			return uint32_t( getCount( type ) );
@@ -147,26 +155,26 @@ namespace aria
 
 	uint32_t TestsCounts::getIgnoredValue()const
 	{
-		return getValue( Type::eIgnored );
+		return getValue( TestsCountsType::eIgnored );
 	}
 
 	uint32_t TestsCounts::getOutdatedValue()const
 	{
-		return getValue( Type::eOutdated );
+		return getValue( TestsCountsType::eOutdated );
 	}
 
 	uint32_t TestsCounts::getAllValue()const
 	{
-		return getValue( Type::eAll );
+		return getValue( TestsCountsType::eAll );
 	}
 
 	uint32_t TestsCounts::getAllRunStatus()const
 	{
 		uint32_t result{};
 
-		for ( auto i = 1u; i < Type::eCountedInAllEnd; ++i )
+		for ( auto i = 1u; i < TestsCountsType::eCountedInAllEnd; ++i )
 		{
-			result += getValue( Type( i ) );
+			result += getValue( TestsCountsType( i ) );
 		}
 
 		return result;
