@@ -97,7 +97,24 @@ namespace GuiCommon
 		return grid->Append( new wxPropertyCategory{ name } );
 	}
 
+	wxPGProperty * TreeItemProperty::addProperty( wxPGProperty * grid
+		, wxString const & name )
+	{
+		return grid->AppendChild( new wxPropertyCategory{ name } );
+	}
+
 	wxPGProperty * TreeItemProperty::addProperty( wxPropertyGrid * grid
+		, wxString const & name
+		, wxArrayString const & choices
+		, wxString const & selected
+		, PropertyChangeHandler handler )
+	{
+		wxPGProperty * prop = createProperty( grid, name, choices, handler );
+		prop->SetValue( selected );
+		return prop;
+	}
+
+	wxPGProperty * TreeItemProperty::addProperty( wxPGProperty * grid
 		, wxString const & name
 		, wxArrayString const & choices
 		, wxString const & selected
@@ -114,6 +131,17 @@ namespace GuiCommon
 		, PropertyChangeHandler handler )
 	{
 		auto prop = grid->Append( new wxStringProperty{ _( "View shaders..." ), wxPG_LABEL, name } );
+		prop->SetEditor( editor );
+		prop->SetClientObject( new ButtonData{ handler } );
+		return prop;
+	}
+
+	wxPGProperty * TreeItemProperty::addProperty( wxPGProperty * grid
+		, wxString const & name
+		, wxPGEditor * editor
+		, PropertyChangeHandler handler )
+	{
+		auto prop = grid->AppendChild( new wxStringProperty{ _( "View shaders..." ), wxPG_LABEL, name } );
 		prop->SetEditor( editor );
 		prop->SetClientObject( new ButtonData{ handler } );
 		return prop;

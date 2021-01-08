@@ -859,7 +859,7 @@ namespace castor3d
 		{
 			m_rootNode->update();
 			doUpdateBoundingBox();
-			doUpdateAnimations();
+			doUpdateAnimations( updater );
 			doUpdateMaterials();
 			getLightCache().update( updater );
 			getGeometryCache().update( updater );
@@ -1127,7 +1127,7 @@ namespace castor3d
 		m_boundingBox.load( min, max );
 	}
 
-	void Scene::doUpdateAnimations()
+	void Scene::doUpdateAnimations( CpuUpdater & updater )
 	{
 		std::vector< std::reference_wrapper< AnimatedObjectGroup > > groups;
 
@@ -1140,9 +1140,9 @@ namespace castor3d
 		{
 			for ( auto & group : groups )
 			{
-				m_animationUpdater.pushJob( [&group]()
+				m_animationUpdater.pushJob( [&group, &updater]()
 				{
-					group.get().update();
+					group.get().update( updater );
 				} );
 			}
 
@@ -1152,7 +1152,7 @@ namespace castor3d
 		{
 			for ( auto & group : groups )
 			{
-				group.get().update();
+				group.get().update( updater );
 			}
 		}
 	}

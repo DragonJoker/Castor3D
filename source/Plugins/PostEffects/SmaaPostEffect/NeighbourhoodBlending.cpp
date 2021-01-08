@@ -384,19 +384,6 @@ namespace smaa
 				castor3d::makeFloatArray( getRenderSystem()->getEngine()->getNextRainbowColour() ),
 			} );
 		timer.beginPass( neighbourhoodBlendingCmd, passIndex );
-		// Put blending weights image in shader input layout.
-		neighbourhoodBlendingCmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_blendView.makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
-
-		if ( m_velocityView )
-		{
-			// Put velocity image in shader input layout.
-			neighbourhoodBlendingCmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, m_velocityView->makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
-		}
-
 		neighbourhoodBlendingCmd.beginRenderPass( *m_renderPass
 			, *m_surfaces[index].frameBuffer
 			, { castor3d::transparentBlackClearColor }

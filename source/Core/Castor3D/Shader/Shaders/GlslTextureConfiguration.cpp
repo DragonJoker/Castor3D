@@ -13,9 +13,9 @@ namespace castor3d
 	{
 		//*****************************************************************************************
 
-		TextureConfigData::TextureConfigData( ast::Shader * shader
+		TextureConfigData::TextureConfigData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr )
-			: sdw::StructInstance{ shader, std::move( expr ) }
+			: sdw::StructInstance{ writer, std::move( expr ) }
 			, colrSpec{ getMember< sdw::Vec4 >( "colrSpec" ) }
 			, glossOpa{ getMember< sdw::Vec4 >( "glossOpa" ) }
 			, emisOccl{ getMember< sdw::Vec4 >( "emisOccl" ) }
@@ -35,8 +35,8 @@ namespace castor3d
 			, emissiveMask{ emisOccl.xy() }
 			, occlusionMask{ emisOccl.zw() }
 			, transmittanceMask{ trnsDumm.xy() }
-			, needsGammaCorrection{ shader, sdw::makeCast( shader->getTypesCache().getUInt(), makeExpr( *shader, miscVals.x() ) ) }
-			, needsYInversion{ shader, sdw::makeCast( shader->getTypesCache().getUInt(), makeExpr( *shader, miscVals.y() ) ) }
+			, needsGammaCorrection{ writer.cast< sdw::UInt >( miscVals.x() ) }
+			, needsYInversion{ writer.cast< sdw::UInt >( miscVals.y() ) }
 		{
 		}
 
@@ -230,24 +230,23 @@ namespace castor3d
 
 		void TextureConfigurations::declare( bool hasSsbo )
 		{
-			m_type = TextureConfigData::declare( m_writer );
 
 			if ( hasSsbo )
 			{
 				m_ssbo = std::make_unique< sdw::ArraySsboT< TextureConfigData > >( m_writer
 					, TextureConfigurationBufferName
-					, m_type->getType()
 					, getTexturesBufferIndex()
 					, 0u );
 			}
 			else
 			{
-				auto c3d_textureConfigurations = m_writer.declSampledImage< FImgBufferRgba32 >( "c3d_textureConfigurations", getTexturesBufferIndex(), 0u );
+				auto c3d_textureConfigurations = m_writer.declSampledImage< FImgBufferRgba32 >( "c3d_textureConfigurations"
+					, getTexturesBufferIndex()
+					, 0u );
 				m_getTextureConfiguration = m_writer.implementFunction< TextureConfigData >( "getTextureConfiguration"
 					, [this, &c3d_textureConfigurations]( sdw::UInt const & index )
 					{
-						auto result = m_writer.declLocale< TextureConfigData >( "result"
-							, *m_type );
+						auto result = m_writer.declLocale< TextureConfigData >( "result" );
 						auto offset = m_writer.declLocale( cuT( "offset" )
 							, m_writer.cast< sdw::Int >( index ) * sdw::Int( shader::MaxTextureConfigurationComponentsCount ) );
 						result.colrSpec = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );

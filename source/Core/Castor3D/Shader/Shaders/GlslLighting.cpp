@@ -20,32 +20,32 @@ namespace castor3d
 	{
 		//***********************************************************************************************
 
-		ast::expr::ExprList makeFnArg( ast::Shader & shader
+		ast::expr::ExprList makeFnArg( sdw::ShaderWriter & writer
 			, FragmentInput const & value )
 		{
 			ast::expr::ExprList result;
-			auto args = sdw::makeFnArg( shader, value.m_clipVertex );
+			auto args = sdw::makeFnArg( writer, value.m_clipVertex );
 
 			for ( auto & expr : args )
 			{
 				result.emplace_back( std::move( expr ) );
 			}
 			
-			args = sdw::makeFnArg( shader, value.m_viewVertex );
+			args = sdw::makeFnArg( writer, value.m_viewVertex );
 
 			for ( auto & expr : args )
 			{
 				result.emplace_back( std::move( expr ) );
 			}
 
-			args = sdw::makeFnArg( shader, value.m_worldVertex );
+			args = sdw::makeFnArg( writer, value.m_worldVertex );
 
 			for ( auto & expr : args )
 			{
 				result.emplace_back( std::move( expr ) );
 			}
 
-			args = sdw::makeFnArg( shader, value.m_worldNormal );
+			args = sdw::makeFnArg( writer, value.m_worldNormal );
 
 			for ( auto & expr : args )
 			{
@@ -69,16 +69,16 @@ namespace castor3d
 
 		FragmentInput::FragmentInput( InVec2 const & clipVertex
 			, InVec3 const & viewVertex
-			, sdw::InVec3 const & worldVertex
+			, InVec3 const & worldVertex
 			, InVec3 const & worldNormal )
 			: m_clipVertex{ clipVertex }
 			, m_viewVertex{ viewVertex }
 			, m_worldVertex{ worldVertex }
 			, m_worldNormal{ worldNormal }
-			, m_expr{ ast::expr::makeComma( makeExpr( *getShader(), m_clipVertex )
-				, ast::expr::makeComma( makeExpr( *getShader(), m_viewVertex )
-					, ast::expr::makeComma( makeExpr( *getShader(), m_worldVertex )
-						, makeExpr( *getShader(), m_worldNormal ) ) ) ) }
+			, m_expr{ ast::expr::makeComma( makeExpr( *getWriter(), m_clipVertex )
+				, ast::expr::makeComma( makeExpr( *getWriter(), m_viewVertex )
+					, ast::expr::makeComma( makeExpr( *getWriter(), m_worldVertex )
+						, makeExpr( *getWriter(), m_worldNormal ) ) ) ) }
 		{
 		}
 
@@ -87,9 +87,9 @@ namespace castor3d
 			return m_expr.get();
 		}
 
-		ast::Shader * FragmentInput::getShader()const
+		sdw::ShaderWriter * FragmentInput::getWriter()const
 		{
-			return findShader( m_clipVertex
+			return findWriter( m_clipVertex
 				, m_viewVertex
 				, m_worldVertex
 				, m_worldNormal );
@@ -300,7 +300,8 @@ namespace castor3d
 					result.m_colourIndex = c3d_sLights.fetch( Int{ offset++ } );
 					result.m_intensityFarPlane = c3d_sLights.fetch( Int{ offset++ } );
 					result.m_volumetric = c3d_sLights.fetch( Int{ offset++ } );
-					result.m_shadow = c3d_sLights.fetch( Int{ offset++ } );
+					result.m_shadowsOffsets = c3d_sLights.fetch( Int{ offset++ } );
+					result.m_shadowsVariances = c3d_sLights.fetch( Int{ offset++ } );
 #endif
 					m_writer.returnStmt( result );
 				}

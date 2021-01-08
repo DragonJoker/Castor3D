@@ -169,13 +169,13 @@ namespace castor3d
 		return result;
 	}
 
-	void RenderLoop::doRenderFrame()
+	void RenderLoop::doRenderFrame( castor::Milliseconds tslf )
 	{
 		if ( m_renderSystem.hasMainDevice() )
 		{
 			RenderInfo & info = m_debugOverlays->beginFrame();
 			doGpuStep( info );
-			doCpuStep();
+			doCpuStep( tslf );
 			m_lastFrameTime = m_debugOverlays->endFrame();
 		}
 	}
@@ -273,10 +273,11 @@ namespace castor3d
 		}
 	}
 
-	void RenderLoop::doCpuStep()
+	void RenderLoop::doCpuStep( castor::Milliseconds tslf )
 	{
 		doProcessEvents( EventType::ePostRender );
 		CpuUpdater updater;
+		updater.tslf = tslf;
 		getEngine()->getMaterialCache().update( updater );
 		getEngine()->getSceneCache().forEach( [&updater]( Scene & scene )
 			{

@@ -24,7 +24,7 @@ namespace castor3d
 			C3D_API virtual sdw::Vec3 m_diffuse()const = 0;
 
 		protected:
-			C3D_API BaseMaterial( ast::Shader * shader
+			C3D_API BaseMaterial( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr );
 
 		protected:
@@ -33,11 +33,15 @@ namespace castor3d
 
 		protected:
 			sdw::Vec4 m_common;
+			sdw::Vec4 m_opacityTransmission;
 			sdw::Vec4 m_reflRefr;
 			sdw::Vec4 m_sssInfo;
 
 		public:
+			sdw::Array< sdw::Vec4 > m_transmittanceProfile;
+
 			sdw::Float m_opacity;
+			sdw::Vec3 m_transmission;
 			sdw::Float m_emissive;
 			sdw::Float m_alphaRef;
 			sdw::Float m_gamma;
@@ -49,7 +53,6 @@ namespace castor3d
 			sdw::Float m_gaussianWidth;
 			sdw::Float m_subsurfaceScatteringStrength;
 			sdw::Int m_transmittanceProfileSize;
-			sdw::Array< sdw::Vec4 > m_transmittanceProfile;
 		};
 
 		CU_DeclareSmartPtr( BaseMaterial );
@@ -59,7 +62,7 @@ namespace castor3d
 		{
 			friend class LegacyMaterials;
 
-			C3D_API LegacyMaterial( ast::Shader * shader
+			C3D_API LegacyMaterial( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr );
 
 			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
@@ -82,7 +85,7 @@ namespace castor3d
 		{
 			friend class PbrMRMaterials;
 
-			C3D_API MetallicRoughnessMaterial( ast::Shader * shader
+			C3D_API MetallicRoughnessMaterial( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr );
 
 			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
@@ -105,7 +108,7 @@ namespace castor3d
 		{
 			friend class PbrSGMaterials;
 
-			C3D_API SpecularGlossinessMaterial( ast::Shader * shader
+			C3D_API SpecularGlossinessMaterial( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr );
 
 			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
@@ -131,6 +134,11 @@ namespace castor3d
 			virtual ~Materials() = default;
 			C3D_API virtual void declare( bool hasSsbo ) = 0;
 			C3D_API virtual BaseMaterialUPtr getBaseMaterial( sdw::UInt const & index )const = 0;
+
+		protected:
+			void doFetch( BaseMaterial & result
+				, sdw::SampledImageT< FImgBufferRgba32 > & c3d_materials
+				, sdw::Int & offset );
 
 		protected:
 			sdw::ShaderWriter & m_writer;

@@ -19,7 +19,7 @@ namespace castor3d
 				, sdw::InOutVec3 const & specular );
 
 			C3D_API ast::expr::Expr * getExpr()const;
-			C3D_API ast::Shader * getShader()const;
+			C3D_API sdw::ShaderWriter * getWriter()const;
 			C3D_API void setVar( ast::var::VariableList::const_iterator & var );
 
 			sdw::InOutVec3 m_diffuse;
@@ -29,7 +29,7 @@ namespace castor3d
 			ast::expr::ExprPtr m_expr;
 		};
 
-		C3D_API ast::expr::ExprList makeFnArg( ast::Shader & shader
+		C3D_API ast::expr::ExprList makeFnArg( sdw::ShaderWriter & shader
 			, OutputComponents const & value );
 	}
 }

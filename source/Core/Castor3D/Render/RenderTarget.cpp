@@ -107,11 +107,6 @@ namespace castor3d
 
 		if ( result )
 		{
-			result = HdrConfig::TextWriter( m_tabs + cuT( "\t" ) )( target.getHdrConfig(), file );
-		}
-
-		if ( result )
-		{
 			result = SsaoConfig::TextWriter{ m_tabs + cuT( "\t" ) }( target.m_ssaoConfig, file );
 		}
 
@@ -372,7 +367,7 @@ namespace castor3d
 		CU_Require( m_culler );
 		m_culler->compute();
 
-		m_hdrConfigUbo.cpuUpdate( m_hdrConfig );
+		m_hdrConfigUbo.cpuUpdate( getHdrConfig() );
 
 		for ( auto effect : m_hdrPostEffects )
 		{
@@ -516,6 +511,26 @@ namespace castor3d
 		{
 			m_hdrPostEffects.push_back( effect );
 		}
+	}
+
+	HdrConfig const & RenderTarget::getHdrConfig()const
+	{
+		return getCamera()->getHdrConfig();
+	}
+
+	HdrConfig & RenderTarget::getHdrConfig()
+	{
+		return getCamera()->getHdrConfig();
+	}
+
+	void RenderTarget::setExposure( float value )
+	{
+		getCamera()->setExposure( value );
+	}
+
+	void RenderTarget::setGamma( float value )
+	{
+		getCamera()->setGamma( value );
 	}
 
 	void RenderTarget::setSize( Size const & size )
@@ -701,10 +716,6 @@ namespace castor3d
 					makeFloatArray( getEngine()->getNextRainbowColour() ),
 				} );
 			m_toneMappingTimer->beginPass( *m_toneMappingCommandBuffer );
-			// Put render technique image in shader input layout.
-			m_toneMappingCommandBuffer->memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, m_renderTechnique->getResult().getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 			m_toneMappingCommandBuffer->beginRenderPass( *m_renderPass
 				, *m_objectsFrameBuffer.frameBuffer
 				, { clear }
@@ -732,31 +743,28 @@ namespace castor3d
 		commandBuffer = device.graphicsCommandPool->createCommandBuffer( getName() + name + "Copy" );
 
 		commandBuffer->begin();
-		commandBuffer->beginDebugBlock(
-			{
-				getName() + " - " + name + " Copy",
-				makeFloatArray( getEngine()->getNextRainbowColour() ),
-			} );
 
 		if ( source->image != target->image )
 		{
+			commandBuffer->beginDebugBlock( { getName() + " - " + name + " Copy"
+				, makeFloatArray( getEngine()->getNextRainbowColour() ), } );
 			// Put source image in transfer source layout.
 			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 				, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, source.makeTransferSource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+				, source.makeTransferSource( VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL ) );
 			// Put target image in transfer destination layout.
 			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 				, VK_PIPELINE_STAGE_TRANSFER_BIT
 				, target.makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
 			// Copy source to target.
 			commandBuffer->copyImage( source, target );
+			// Put target image in fragment shader input layout.
+			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+				, target.makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+			commandBuffer->endDebugBlock();
 		}
 
-		// Put target image in fragment shader input layout.
-		commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, target.makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
-		commandBuffer->endDebugBlock();
 		commandBuffer->end();
 	}
 

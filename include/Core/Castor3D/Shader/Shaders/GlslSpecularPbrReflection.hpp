@@ -19,26 +19,25 @@ namespace castor3d
 				, sdw::Vec3 const & wsCamera )const;
 			C3D_API sdw::Vec3 computeRefl( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
-				, sdw::Float const & occlusion
 				, sdw::SampledImageCubeRgba32 const & envMap
-				, sdw::Vec3 const & ambientLight
-				, sdw::Vec3 const & albedo )const;
-			C3D_API sdw::Vec3 computeRefrEnvMap( sdw::Vec3 const & wsIncident
+				, sdw::Vec3 const & specular
+				, sdw::Float const & glossiness )const;
+			C3D_API sdw::Void computeRefrEnvMap( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
-				, sdw::Float const & occlusion
 				, sdw::SampledImageCubeRgba32 const & envMap
 				, sdw::Float const & refractionRatio
-				, sdw::Vec3 const & reflection
-				, sdw::Vec3 const & albedo
-				, sdw::Float const & glossiness )const;
-			C3D_API sdw::Vec3 computeRefrSkybox( sdw::Vec3 const & wsIncident
+				, sdw::Vec3 const & transmission
+				, sdw::Float const & glossiness
+				, sdw::Vec3 & reflection
+				, sdw::Vec3 & refraction )const;
+			C3D_API sdw::Void computeRefrSkybox( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
-				, sdw::Float const & occlusion
 				, sdw::SampledImageCubeRgba32 const & envMap
 				, sdw::Float const & refractionRatio
-				, sdw::Vec3 const & reflection
-				, sdw::Vec3 const & albedo
-				, sdw::Float const & glossiness )const;
+				, sdw::Vec3 const & transmission
+				, sdw::Float const & glossiness
+				, sdw::Vec3 & reflection
+				, sdw::Vec3 & refraction )const;
 
 		private:
 			void doDeclareComputeIncident();
@@ -55,28 +54,27 @@ namespace castor3d
 			sdw::Function< sdw::Vec3
 				, sdw::InVec3
 				, sdw::InVec3
-				, sdw::InFloat
 				, sdw::InSampledImageCubeRgba32
 				, sdw::InVec3
-				, sdw::InVec3 > m_computeRefl;
-			sdw::Function< sdw::Vec3
+				, sdw::InFloat > m_computeRefl;
+			sdw::Function< sdw::Void
 				, sdw::InVec3
 				, sdw::InVec3
-				, sdw::InFloat
 				, sdw::InSampledImageCubeRgba32
 				, sdw::InFloat
 				, sdw::InVec3
-				, sdw::InVec3
-				, sdw::InFloat > m_computeRefrEnvMap;
-			sdw::Function< sdw::Vec3
-				, sdw::InVec3
-				, sdw::InVec3
 				, sdw::InFloat
+				, sdw::InOutVec3
+				, sdw::OutVec3 > m_computeRefrEnvMap;
+			sdw::Function< sdw::Void
+				, sdw::InVec3
+				, sdw::InVec3
 				, sdw::InSampledImageCubeRgba32
 				, sdw::InFloat
 				, sdw::InVec3
-				, sdw::InVec3
-				, sdw::InFloat > m_computeRefrSkybox;
+				, sdw::InFloat
+				, sdw::InOutVec3
+				, sdw::OutVec3 > m_computeRefrSkybox;
 		};
 	}
 }

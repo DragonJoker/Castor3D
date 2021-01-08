@@ -377,7 +377,8 @@ namespace castor3d
 		, AnimatedSkeleton & skeleton )
 	{
 		auto & buffers = submesh.getGeometryBuffers( pass.getOwner()->shared_from_this()
-			, getInstanceMult() );
+			, getInstanceMult()
+			, pass.getTextures( getTexturesMask() ) );
 		auto & scene = *primitive.getScene();
 		auto geometryEntry = scene.getGeometryCache().getUbos( primitive
 			, submesh
@@ -414,7 +415,8 @@ namespace castor3d
 		, AnimatedMesh & mesh )
 	{
 		auto & buffers = submesh.getGeometryBuffers( pass.getOwner()->shared_from_this()
-			, getInstanceMult() );
+			, getInstanceMult()
+			, pass.getTextures( getTexturesMask() ) );
 		auto & scene = *primitive.getScene();
 		auto geometryEntry = scene.getGeometryCache().getUbos( primitive
 			, submesh
@@ -450,7 +452,8 @@ namespace castor3d
 		, Geometry & primitive )
 	{
 		auto & buffers = submesh.getGeometryBuffers( pass.getOwner()->shared_from_this()
-			, getInstanceMult() );
+			, getInstanceMult()
+			, pass.getTextures( getTexturesMask() ) );
 		auto & scene = *primitive.getScene();
 		auto geometryEntry = scene.getGeometryCache().getUbos( primitive
 			, submesh
@@ -1229,7 +1232,8 @@ namespace castor3d
 			auto dsState = doCreateDepthStencilState( flags );
 			auto bdState = doCreateBlendState( flags );
 			auto & pipeline = *pipelines.emplace( flags
-				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
+				, std::make_unique< RenderPipeline >( *this
+					, *getEngine()->getRenderSystem()
 					, std::move( dsState )
 					, ashes::PipelineRasterizationStateCreateInfo{ 0u, false, false, VK_POLYGON_MODE_FILL, VK_CULL_MODE_FRONT_BIT }
 					, std::move( bdState )
@@ -1253,10 +1257,10 @@ namespace castor3d
 						, std::move( uboBindings ) );
 					auto texLayout = device->createDescriptorSetLayout( getName()
 						, std::move( texBindings ) );
-					std::vector< ashes::DescriptorSetLayoutPtr > layouts;
-					layouts.emplace_back( std::move( uboLayout ) );
-					layouts.emplace_back( std::move( texLayout ) );
-					pipeline.setDescriptorSetLayouts( std::move( layouts ) );
+					std::vector< ashes::DescriptorSetLayoutPtr > dsLayouts;
+					dsLayouts.emplace_back( std::move( uboLayout ) );
+					dsLayouts.emplace_back( std::move( texLayout ) );
+					pipeline.setDescriptorSetLayouts( std::move( dsLayouts ) );
 					pipeline.initialise( device, getRenderPass() );
 				} ) );
 		}
@@ -1273,7 +1277,8 @@ namespace castor3d
 			auto dsState = doCreateDepthStencilState( flags );
 			auto bdState = doCreateBlendState( flags );
 			auto & pipeline = *pipelines.emplace( flags
-				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
+				, std::make_unique< RenderPipeline >( *this
+					, *getEngine()->getRenderSystem()
 					, std::move( dsState )
 					, ashes::PipelineRasterizationStateCreateInfo{ 0u, false, false, VK_POLYGON_MODE_FILL, VK_CULL_MODE_BACK_BIT }
 					, std::move( bdState )
@@ -1295,10 +1300,10 @@ namespace castor3d
 					auto texBindings = doCreateTextureBindings( flags );
 					auto uboLayout = device->createDescriptorSetLayout( std::move( uboBindings ) );
 					auto texLayout = device->createDescriptorSetLayout( std::move( texBindings ) );
-					std::vector< ashes::DescriptorSetLayoutPtr > layouts;
-					layouts.emplace_back( std::move( uboLayout ) );
-					layouts.emplace_back( std::move( texLayout ) );
-					pipeline.setDescriptorSetLayouts( std::move( layouts ) );
+					std::vector< ashes::DescriptorSetLayoutPtr > dsLayouts;
+					dsLayouts.emplace_back( std::move( uboLayout ) );
+					dsLayouts.emplace_back( std::move( texLayout ) );
+					pipeline.setDescriptorSetLayouts( std::move( dsLayouts ) );
 					pipeline.initialise( device, getRenderPass() );
 				} ) );
 		}
@@ -1402,6 +1407,7 @@ namespace castor3d
 	{
 		using namespace sdw;
 		VertexWriter writer;
+		bool hasTextures = !flags.textures.empty();
 		// Vertex inputs
 		auto position = writer.declInput< Vec4 >( "position"
 			, RenderPass::VertexInputs::PositionLocation );
@@ -1410,7 +1416,8 @@ namespace castor3d
 		auto tangent = writer.declInput< Vec3 >( "tangent"
 			, RenderPass::VertexInputs::TangentLocation );
 		auto uv = writer.declInput< Vec3 >( "uv"
-			, RenderPass::VertexInputs::TextureLocation );
+			, RenderPass::VertexInputs::TextureLocation
+			, hasTextures );
 		auto inBoneIds0 = writer.declInput< IVec4 >( "inBoneIds0"
 			, RenderPass::VertexInputs::BoneIds0Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
@@ -1440,7 +1447,7 @@ namespace castor3d
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
 		auto inTexture2 = writer.declInput< Vec3 >( "inTexture2"
 			, RenderPass::VertexInputs::Texture2Location
-			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
+			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) && hasTextures );
 		auto in = writer.getIn();
 
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
@@ -1464,7 +1471,8 @@ namespace castor3d
 		auto vtx_bitangent = writer.declOutput< Vec3 >( "vtx_bitangent"
 			, RenderPass::VertexOutputs::BitangentLocation );
 		auto vtx_texture = writer.declOutput< Vec3 >( "vtx_texture"
-			, RenderPass::VertexOutputs::TextureLocation );
+			, RenderPass::VertexOutputs::TextureLocation
+			, hasTextures );
 		auto vtx_instance = writer.declOutput< UInt >( "vtx_instance"
 			, RenderPass::VertexOutputs::InstanceLocation );
 		auto vtx_material = writer.declOutput< UInt >( "vtx_material"
@@ -1568,10 +1576,11 @@ namespace castor3d
 	{
 		using namespace sdw;
 		VertexWriter writer;
+		bool hasTextures = !flags.textures.empty();
 
 		// Shader inputs
 		auto position = writer.declInput< Vec4 >( "position", 0u );
-		auto uv = writer.declInput< Vec2 >( "uv", 1u );
+		auto uv = writer.declInput< Vec2 >( "uv", 1u, hasTextures );
 		auto center = writer.declInput< Vec3 >( "center", 2u );
 		auto in = writer.getIn();
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
@@ -1600,7 +1609,8 @@ namespace castor3d
 		auto vtx_bitangent = writer.declOutput< Vec3 >( "vtx_bitangent"
 			, RenderPass::VertexOutputs::BitangentLocation );
 		auto vtx_texture = writer.declOutput< Vec3 >( "vtx_texture"
-			, RenderPass::VertexOutputs::TextureLocation );
+			, RenderPass::VertexOutputs::TextureLocation
+			, hasTextures );
 		auto vtx_instance = writer.declOutput< UInt >( "vtx_instance"
 			, RenderPass::VertexOutputs::InstanceLocation );
 		auto vtx_material = writer.declOutput< UInt >( "vtx_material"
@@ -1656,7 +1666,11 @@ namespace castor3d
 				auto prvPosition = writer.declLocale( "prvPosition"
 					, vec4( prvBbcenter + right * position.x() * width + up * position.y() * height, 1.0_f ) );
 
-				vtx_texture = vec3( uv, 0.0_f );
+				if ( hasTextures )
+				{
+					vtx_texture = vec3( uv, 0.0_f );
+				}
+
 				vtx_instance = writer.cast< UInt >( in.instanceIndex );
 				auto curPosition = writer.declLocale( "curPosition"
 					, c3d_curView * vec4( vtx_worldPosition, 1.0_f ) );

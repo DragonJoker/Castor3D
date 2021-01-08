@@ -283,14 +283,6 @@ namespace smaa
 				castor3d::makeFloatArray( getRenderSystem()->getEngine()->getNextRainbowColour() ),
 			} );
 		timer.beginPass( reprojectCmd, passIndex );
-		// Put neighbourhood images in shader input layout.
-		reprojectCmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_currentColourView.makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
-		reprojectCmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_previousColourView.makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
-
 		reprojectCmd.beginRenderPass( *m_renderPass
 			, *m_surface.frameBuffer
 			, { castor3d::transparentBlackClearColor }

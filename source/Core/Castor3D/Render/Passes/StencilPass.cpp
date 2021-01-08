@@ -199,7 +199,7 @@ namespace castor3d
 		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( name, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
 		m_finished = device->createSemaphore( name );
 
-		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
+		m_commandBuffer->begin();
 		m_commandBuffer->beginDebugBlock(
 			{
 				"Deferred - Stencil",

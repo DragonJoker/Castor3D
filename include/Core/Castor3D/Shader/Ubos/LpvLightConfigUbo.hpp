@@ -36,7 +36,8 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
 		 */
-		C3D_API void cpuUpdate( Light const & light );
+		C3D_API void cpuUpdate( Light const & light
+			, float lpvCellSize );
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -44,7 +45,8 @@ namespace castor3d
 		 *\brief		Met à jour l'UBO avec les valeurs données.
 		 */
 		C3D_API void cpuUpdate( DirectionalLight const & light
-			, uint32_t cascadeIndex );
+			, uint32_t cascadeIndex
+			, float lpvCellSize );
 
 		UniformBufferOffsetT< Configuration > & getUbo()
 		{

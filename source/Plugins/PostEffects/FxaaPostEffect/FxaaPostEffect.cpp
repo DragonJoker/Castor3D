@@ -157,7 +157,7 @@ namespace fxaa
 		{
 			return
 			{
-				{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, std::nullopt },
+				{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, std::nullopt, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT },
 				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D },
 			};
 		}
@@ -399,12 +399,8 @@ namespace fxaa
 
 			cmd.begin();
 			timer.beginPass( cmd );
-
-			// Put target image in shader input layout.
-			cmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, targetView.makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
-
+			cmd.beginDebugBlock( { "FXAA"
+				, castor3d::makeFloatArray( getOwner()->getEngine()->getNextRainbowColour() ) } );
 			// Render the effect.
 			cmd.beginRenderPass( *m_renderPass
 				, *m_surface.frameBuffer
@@ -412,7 +408,7 @@ namespace fxaa
 				, VK_SUBPASS_CONTENTS_INLINE );
 			m_fxaaQuad->registerPass( cmd );
 			cmd.endRenderPass();
-
+			cmd.endDebugBlock();
 			timer.endPass( cmd );
 			cmd.end();
 			m_commands.emplace_back( std::move( commands ) );

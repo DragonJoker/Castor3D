@@ -174,6 +174,7 @@ namespace castor3d
 		ashes::CommandBufferPtr m_commandBuffer;
 		ashes::SemaphorePtr m_finished;
 		RenderPassTimerSPtr m_timer;
+		bool m_initialised{ false };
 	};
 }
 

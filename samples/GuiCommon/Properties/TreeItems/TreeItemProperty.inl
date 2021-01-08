@@ -1,7 +1,19 @@
 namespace GuiCommon
 {
-	template< typename MyValueT >
-	wxPGProperty * TreeItemProperty::createProperty( wxPropertyGrid * grid
+	inline wxPGProperty * appendProp( wxPropertyGrid * parent
+		, wxPGProperty * prop )
+	{
+		return parent->Append( prop );
+	}
+	
+	inline wxPGProperty * appendProp( wxPGProperty * parent
+		, wxPGProperty * prop )
+	{
+		return parent->AppendChild( prop );
+	}
+
+	template< typename ParentT, typename MyValueT >
+	wxPGProperty * TreeItemProperty::createProperty( ParentT * parent
 		, wxString const & name
 		, MyValueT && value
 		, PropertyChangeHandler handler )
@@ -11,13 +23,13 @@ namespace GuiCommon
 
 		if constexpr ( std::is_same_v< ValueT, bool > )
 		{
-			wxPGProperty * prop = grid->Append( new wxBoolProperty( name, name, value ) );
+			wxPGProperty * prop = appendProp( parent, new wxBoolProperty( name, name, value ) );
 			prop->SetAttribute( wxPG_BOOL_USE_CHECKBOX, true );
 			return prop;
 		}
 		else if constexpr ( std::is_same_v< ValueT, uint8_t > )
 		{
-			wxPGProperty * prop = grid->Append( new wxUIntProperty( name, name, value ) );
+			wxPGProperty * prop = appendProp( parent, new wxUIntProperty( name, name, value ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
 			prop->SetAttribute( wxPG_ATTR_MIN, getVariant< uint8_t >( std::numeric_limits< uint8_t >::lowest() ) );
 			prop->SetAttribute( wxPG_ATTR_MAX, getVariant< uint8_t >( std::numeric_limits< uint8_t >::max() ) );
@@ -27,7 +39,7 @@ namespace GuiCommon
 		}
 		else if constexpr ( std::is_same_v< ValueT, int16_t > )
 		{
-			wxPGProperty * prop = grid->Append( new wxIntProperty( name, name, value ) );
+			wxPGProperty * prop = appendProp( parent, new wxIntProperty( name, name, value ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
 			prop->SetAttribute( wxPG_ATTR_MIN, getVariant< int16_t >( std::numeric_limits< int16_t >::lowest() ) );
 			prop->SetAttribute( wxPG_ATTR_MAX, getVariant< int16_t >( std::numeric_limits< int16_t >::max() ) );
@@ -37,7 +49,7 @@ namespace GuiCommon
 		}
 		else if constexpr ( std::is_same_v< ValueT, uint16_t > )
 		{
-			wxPGProperty * prop = grid->Append( new wxUIntProperty( name, name, value ) );
+			wxPGProperty * prop = appendProp( parent, new wxUIntProperty( name, name, value ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
 			prop->SetAttribute( wxPG_ATTR_MIN, getVariant< uint16_t >( std::numeric_limits< uint16_t >::lowest() ) );
 			prop->SetAttribute( wxPG_ATTR_MAX, getVariant< uint16_t >( std::numeric_limits< uint16_t >::max() ) );
@@ -47,7 +59,7 @@ namespace GuiCommon
 		}
 		else if constexpr ( std::is_same_v< ValueT, int32_t > )
 		{
-			wxPGProperty * prop = grid->Append( new wxIntProperty( name, name, value ) );
+			wxPGProperty * prop = appendProp( parent, new wxIntProperty( name, name, value ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
 			prop->SetAttribute( wxPG_ATTR_MIN, getVariant< int32_t >( std::numeric_limits< int32_t >::lowest() ) );
 			prop->SetAttribute( wxPG_ATTR_MAX, getVariant< int32_t >( std::numeric_limits< int32_t >::max() ) );
@@ -57,7 +69,7 @@ namespace GuiCommon
 		}
 		else if constexpr ( std::is_same_v< ValueT, uint32_t > )
 		{
-			wxPGProperty * prop = grid->Append( new wxUIntProperty( name, name, value ) );
+			wxPGProperty * prop = appendProp( parent, new wxUIntProperty( name, name, value ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
 			prop->SetAttribute( wxPG_ATTR_MIN, 0 );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
@@ -66,14 +78,14 @@ namespace GuiCommon
 		}
 		else if constexpr ( std::is_same_v< ValueT, int64_t > )
 		{
-			wxPGProperty * prop = grid->Append( new wxIntProperty( name, name, value ) );
+			wxPGProperty * prop = appendProp( parent, new wxIntProperty( name, name, value ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_MOTION, WXVARIANT( true ) );
 			return prop;
 		}
 		else if constexpr ( std::is_same_v< ValueT, uint64_t > )
 		{
-			wxPGProperty * prop = grid->Append( new wxUIntProperty( name, name, value ) );
+			wxPGProperty * prop = appendProp( parent, new wxUIntProperty( name, name, value ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
 			prop->SetAttribute( wxPG_ATTR_MIN, 0 );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
@@ -82,7 +94,7 @@ namespace GuiCommon
 		}
 		else if constexpr ( std::is_same_v< ValueT, float > )
 		{
-			wxPGProperty * prop = grid->Append( new wxFloatProperty( name, name, value ) );
+			wxPGProperty * prop = appendProp( parent, new wxFloatProperty( name, name, value ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_MOTION, WXVARIANT( true ) );
@@ -90,7 +102,7 @@ namespace GuiCommon
 		}
 		else if constexpr ( std::is_same_v< ValueT, double > )
 		{
-			wxPGProperty * prop = grid->Append( new wxFloatProperty( name, name, value ) );
+			wxPGProperty * prop = appendProp( parent, new wxFloatProperty( name, name, value ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_MOTION, WXVARIANT( true ) );
@@ -98,87 +110,87 @@ namespace GuiCommon
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::RgbColour > )
 		{
-			return grid->Append( new wxColourProperty( name, name, wxColour{ toBGRPacked( value ) } ) );
+			return appendProp( parent, new wxColourProperty( name, name, wxColour{ toBGRPacked( value ) } ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Point2f > )
 		{
-			return grid->Append( new Point2fProperty( GC_POINT_XY, name, name, value ) );
+			return appendProp( parent, new Point2fProperty( GC_POINT_XY, name, name, value ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Point3f > )
 		{
-			return grid->Append( new Point3fProperty( GC_POINT_XYZ, name, name, value ) );
+			return appendProp( parent, new Point3fProperty( GC_POINT_XYZ, name, name, value ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Point4f > )
 		{
-			return grid->Append( new Point4fProperty( GC_POINT_XYZW, name, name, value ) );
+			return appendProp( parent, new Point4fProperty( GC_POINT_XYZW, name, name, value ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Point2d > )
 		{
-			return grid->Append( new Point2dProperty( GC_POINT_XY, name, name, value ) );
+			return appendProp( parent, new Point2dProperty( GC_POINT_XY, name, name, value ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Point3d > )
 		{
-			return grid->Append( new Point3dProperty( GC_POINT_XYZ, name, name, value ) );
+			return appendProp( parent, new Point3dProperty( GC_POINT_XYZ, name, name, value ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Point4d > )
 		{
-			return grid->Append( new Point4dProperty( GC_POINT_XYZW, name, name, value ) );
+			return appendProp( parent, new Point4dProperty( GC_POINT_XYZW, name, name, value ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Point2i > )
 		{
-			return grid->Append( new Point2iProperty( GC_POINT_XY, name, name, value ) );
+			return appendProp( parent, new Point2iProperty( GC_POINT_XY, name, name, value ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Point3i > )
 		{
-			return grid->Append( new Point3iProperty( GC_POINT_XYZ, name, name, value ) );
+			return appendProp( parent, new Point3iProperty( GC_POINT_XYZ, name, name, value ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Point4i > )
 		{
-			return grid->Append( new Point4iProperty( GC_POINT_XYZW, name, name, value ) );
+			return appendProp( parent, new Point4iProperty( GC_POINT_XYZW, name, name, value ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Point2ui > )
 		{
-			return grid->Append( new Point2uiProperty( GC_POINT_XY, name, name, value ) );
+			return appendProp( parent, new Point2uiProperty( GC_POINT_XY, name, name, value ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Point3ui > )
 		{
-			return grid->Append( new Point3uiProperty( GC_POINT_XYZ, name, name, value ) );
+			return appendProp( parent, new Point3uiProperty( GC_POINT_XYZ, name, name, value ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Point4ui > )
 		{
-			return grid->Append( new Point4uiProperty( GC_POINT_XYZW, name, name, value ) );
+			return appendProp( parent, new Point4uiProperty( GC_POINT_XYZW, name, name, value ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Matrix4x4f > )
 		{
-			return grid->Append( new Matrix4fProperty( name, name, value ) );
+			return appendProp( parent, new Matrix4fProperty( name, name, value ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Quaternion > )
 		{
-			return grid->Append( new QuaternionProperty( name, name, value ) );
+			return appendProp( parent, new QuaternionProperty( name, name, value ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Position > )
 		{
-			return grid->Append( new PositionProperty( name, name, value ) );
+			return appendProp( parent, new PositionProperty( name, name, value ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Size > )
 		{
-			return grid->Append( new SizeProperty( name, name, value ) );
+			return appendProp( parent, new SizeProperty( name, name, value ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Rectangle > )
 		{
-			return grid->Append( new RectangleProperty( name, name, value ) );
+			return appendProp( parent, new RectangleProperty( name, name, value ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::String > )
 		{
-			return grid->Append( new wxStringProperty( name, name, make_wxString( value ) ) );
+			return appendProp( parent, new wxStringProperty( name, name, make_wxString( value ) ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Path > )
 		{
-			return grid->Append( new wxImageFileProperty( name, name, make_wxString( value ) ) );
+			return appendProp( parent, new wxImageFileProperty( name, name, make_wxString( value ) ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Milliseconds > )
 		{
-			wxPGProperty * prop = grid->Append( new wxFloatProperty( name, name, value.count() / 1000.0 ) );
+			wxPGProperty * prop = appendProp( parent, new wxFloatProperty( name, name, value.count() / 1000.0 ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
 			prop->SetAttribute( wxPG_ATTR_UNITS, wxT( "s" ) );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_STEP, WXVARIANT( 0.1 ) );
@@ -188,19 +200,19 @@ namespace GuiCommon
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::BoundingSphere > )
 		{
-			wxPGProperty * prop = grid->Append( new BoundingSphereProperty( name, name, value ) );
+			wxPGProperty * prop = appendProp( parent, new BoundingSphereProperty( name, name, value ) );
 			prop->Enable( false );
 			return prop;
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::BoundingBox > )
 		{
-			wxPGProperty * prop = grid->Append( new BoundingBoxProperty( name, name, value ) );
+			wxPGProperty * prop = appendProp( parent, new BoundingBoxProperty( name, name, value ) );
 			prop->Enable( false );
 			return prop;
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Angle > )
 		{
-			wxPGProperty * prop = createProperty( grid, name, value.degrees(), handler );
+			wxPGProperty * prop = createProperty( parent, name, value.degrees(), handler );
 			prop->SetAttribute( wxPG_ATTR_UNITS, wxT( "°" ) );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_STEP, WXVARIANT( 1.0 ) );
 			prop->SetAttribute( wxPG_ATTR_MIN, WXVARIANT( 0.0 ) );
@@ -211,15 +223,15 @@ namespace GuiCommon
 		{
 			wxFontInfo info( value.getHeight() );
 			info.FaceName( value.getFaceName() );
-			return grid->Append( new wxFontProperty( name, name, wxFont{ info } ) );
+			return appendProp( parent, new wxFontProperty( name, name, wxFont{ info } ) );
 		}
 		else if constexpr ( castor::isChangeTrackedT< ValueT > )
 		{
-			return createProperty( grid, name, value.value(), handler );
+			return createProperty( parent, name, value.value(), handler );
 		}
 		else if constexpr ( castor::isRangedValueT< ValueT > )
 		{
-			wxPGProperty * prop = createProperty( grid, name, value.value(), handler );
+			wxPGProperty * prop = createProperty( parent, name, value.value(), handler );
 			prop->SetAttribute( wxPG_ATTR_MIN, getVariant< castor::UnRangedValueT< ValueT > >( value.range().getMin() ) );
 			prop->SetAttribute( wxPG_ATTR_MAX, getVariant< castor::UnRangedValueT< ValueT > >( value.range().getMax() ) );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
@@ -228,11 +240,11 @@ namespace GuiCommon
 		}
 		else if constexpr ( std::is_same_v< ValueT, wxString > )
 		{
-			return grid->Append( new wxStringProperty( name, name, value ) );
+			return appendProp( parent, new wxStringProperty( name, name, value ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, wxArrayString > )
 		{
-			return grid->Append( new wxEnumProperty( name, name, value ) );
+			return appendProp( parent, new wxEnumProperty( name, name, value ) );
 		}
 		else
 		{
@@ -240,13 +252,13 @@ namespace GuiCommon
 		}
 	}
 
-	template< typename EnumT, typename FuncT >
-	wxPGProperty * TreeItemProperty::addPropertyE( wxPropertyGrid * grid
+	template< typename ParentT, typename EnumT, typename FuncT >
+	wxPGProperty * TreeItemProperty::addPropertyE( ParentT * parent
 		, wxString const & name
 		, wxArrayString const & choices
 		, FuncT func )
 	{
-		wxPGProperty * prop = createProperty( grid
+		wxPGProperty * prop = createProperty( parent
 			, name
 			, choices
 			, [choices, func, this]( wxVariant const & var )
@@ -256,14 +268,14 @@ namespace GuiCommon
 		return prop;
 	}
 
-	template< typename EnumT, typename FuncT >
-	wxPGProperty * TreeItemProperty::addPropertyE( wxPropertyGrid * grid
+	template< typename ParentT, typename EnumT, typename FuncT >
+	wxPGProperty * TreeItemProperty::addPropertyE( ParentT * parent
 		, wxString const & name
 		, wxArrayString const & choices
 		, EnumT selected
 		, FuncT func )
 	{
-		wxPGProperty * prop = addPropertyE< EnumT, FuncT >( grid
+		wxPGProperty * prop = addPropertyE< ParentT, EnumT, FuncT >( parent
 			, name
 			, choices
 			, func );
@@ -271,34 +283,34 @@ namespace GuiCommon
 		return prop;
 	}
 
-	template< typename ValueT >
-	wxPGProperty * TreeItemProperty::addProperty( wxPropertyGrid * grid
+	template< typename ParentT, typename ValueT >
+	wxPGProperty * TreeItemProperty::addProperty( ParentT * parent
 		, wxString const & name
 		, ValueT const & value
 		, PropertyChangeHandler handler )
 	{
-		wxPGProperty * prop = createProperty( grid, name, value, handler );
+		wxPGProperty * prop = createProperty( parent, name, value, handler );
 		return prop;
 	}
 
-	template< typename ValueT >
-	wxPGProperty * TreeItemProperty::addProperty( wxPropertyGrid * grid
+	template< typename ParentT, typename ValueT >
+	wxPGProperty * TreeItemProperty::addProperty( ParentT * parent
 		, wxString const & name
 		, ValueT const & value
 		, ValueT const & step
 		, PropertyChangeHandler handler )
 	{
-		wxPGProperty * prop = addProperty( grid, name, value, handler );
+		wxPGProperty * prop = addProperty( parent, name, value, handler );
 		prop->SetAttribute( wxPG_ATTR_SPINCTRL_STEP, getVariant< ValueT >( step ) );
 		return prop;
 	}
 
-	template< typename ValueT >
-	wxPGProperty * TreeItemProperty::addPropertyT( wxPropertyGrid * grid
+	template< typename ParentT, typename ValueT >
+	wxPGProperty * TreeItemProperty::addPropertyT( ParentT * parent
 		, wxString const & name
 		, castor::RangedValue< ValueT > * value )
 	{
-		return addProperty( grid
+		return addProperty( parent
 			, name
 			, *value
 			, [value]( wxVariant const & var )
@@ -307,12 +319,12 @@ namespace GuiCommon
 			} );
 	}
 
-	template< typename ValueT >
-	wxPGProperty * TreeItemProperty::addPropertyT( wxPropertyGrid * grid
+	template< typename ParentT, typename ValueT >
+	wxPGProperty * TreeItemProperty::addPropertyT( ParentT * parent
 		, wxString const & name
 		, castor::ChangeTracked< castor::RangedValue< ValueT > > * value )
 	{
-		return addProperty( grid
+		return addProperty( parent
 			, name
 			, value->value()
 			, [value]( wxVariant const & var )
@@ -323,12 +335,12 @@ namespace GuiCommon
 			} );
 	}
 
-	template< typename ValueT >
-	wxPGProperty * TreeItemProperty::addPropertyT( wxPropertyGrid * grid
+	template< typename ParentT, typename ValueT >
+	wxPGProperty * TreeItemProperty::addPropertyT( ParentT * parent
 		, wxString const & name
 		, ValueT * value )
 	{
-		return addProperty( grid
+		return addProperty( parent
 			, name
 			, *value
 			, [value]( wxVariant const & var )
@@ -337,13 +349,13 @@ namespace GuiCommon
 			} );
 	}
 
-	template< typename ValueT >
-	wxPGProperty * TreeItemProperty::addPropertyT( wxPropertyGrid * grid
+	template< typename ParentT, typename ValueT >
+	wxPGProperty * TreeItemProperty::addPropertyT( ParentT * parent
 		, wxString const & name
 		, ValueT * value
 		, ValueT step )
 	{
-		return addProperty( grid
+		return addProperty( parent
 			, name
 			, *value
 			, step
@@ -353,15 +365,15 @@ namespace GuiCommon
 			} );
 	}
 
-	template< typename ObjectT, typename ObjectU, typename ValueT >
-	wxPGProperty * TreeItemProperty::addPropertyT( wxPropertyGrid * grid
+	template< typename ParentT, typename ObjectT, typename ObjectU, typename ValueT >
+	wxPGProperty * TreeItemProperty::addPropertyT( ParentT * parent
 		, wxString const & name
 		, ValueT value
 		, ObjectT * object
 		, ValueSetterT< ObjectU, ValueT > setter )
 	{
 		static_assert( std::is_base_of_v< ObjectU, ObjectT > || std::is_same_v< ObjectU, ObjectT >, "Can't call a function on unrelated types" );
-		return addProperty( grid
+		return addProperty( parent
 			, name
 			, value
 			, [object, setter]( wxVariant const & var )
@@ -370,8 +382,8 @@ namespace GuiCommon
 			} );
 	}
 
-	template< typename ObjectT, typename ObjectU, typename ValueT >
-	wxPGProperty * TreeItemProperty::addPropertyT( wxPropertyGrid * grid
+	template< typename ParentT, typename ObjectT, typename ObjectU, typename ValueT >
+	wxPGProperty * TreeItemProperty::addPropertyT( ParentT * parent
 		, wxString const & name
 		, ValueT  value
 		, ValueT step
@@ -379,7 +391,7 @@ namespace GuiCommon
 		, ValueSetterT< ObjectU, ValueT > setter )
 	{
 		static_assert( std::is_base_of_v< ObjectU, ObjectT > || std::is_same_v< ObjectU, ObjectT >, "Can't call a function on unrelated types" );
-		return addProperty( grid
+		return addProperty( parent
 			, name
 			, value
 			, step
@@ -389,15 +401,15 @@ namespace GuiCommon
 			} );
 	}
 
-	template< typename ObjectT, typename ObjectU, typename ValueT >
-	wxPGProperty * TreeItemProperty::addPropertyT( wxPropertyGrid * grid
+	template< typename ParentT, typename ObjectT, typename ObjectU, typename ValueT >
+	wxPGProperty * TreeItemProperty::addPropertyT( ParentT * parent
 		, wxString const & name
 		, ValueT const & value
 		, ObjectT * object
 		, ValueRefSetterT< ObjectU, ValueT > setter )
 	{
 		static_assert( std::is_base_of_v< ObjectU, ObjectT > || std::is_same_v< ObjectU, ObjectT >, "Can't call a function on unrelated types" );
-		return addProperty( grid
+		return addProperty( parent
 			, name
 			, value
 			, [object, setter]( wxVariant const & var )
@@ -406,15 +418,15 @@ namespace GuiCommon
 			} );
 	}
 
-	template< typename ObjectT, typename ObjectU, typename ValueT >
-	wxPGProperty * TreeItemProperty::addPropertyT( wxPropertyGrid * grid
+	template< typename ParentT, typename ObjectT, typename ObjectU, typename ValueT >
+	wxPGProperty * TreeItemProperty::addPropertyT( ParentT * parent
 		, wxString const & name
 		, castor::RangedValue< ValueT > const & value
 		, ObjectT * object
 		, ValueSetterT< ObjectU, ValueT > setter )
 	{
 		static_assert( std::is_base_of_v< ObjectU, ObjectT > || std::is_same_v< ObjectU, ObjectT >, "Can't call a function on unrelated types" );
-		return addProperty( grid
+		return addProperty( parent
 			, name
 			, value
 			, [object, setter]( wxVariant const & var )
@@ -423,15 +435,15 @@ namespace GuiCommon
 			} );
 	}
 
-	template< typename ObjectT, typename ObjectU, typename EnumT >
-	wxPGProperty * TreeItemProperty::addPropertyET( wxPropertyGrid * grid
+	template< typename ParentT, typename ObjectT, typename ObjectU, typename EnumT >
+	wxPGProperty * TreeItemProperty::addPropertyET( ParentT * parent
 		, wxString const & name
 		, wxArrayString const & choices
 		, ObjectT * object
 		, ValueSetterT< ObjectU, EnumT > setter )
 	{
 		static_assert( std::is_base_of_v< ObjectU, ObjectT > || std::is_same_v< ObjectU, ObjectT >, "Can't call a function on unrelated types" );
-		return addPropertyE( grid
+		return addPropertyE( parent
 			, name
 			, choices
 			, [object, setter]( EnumT type )
@@ -440,8 +452,8 @@ namespace GuiCommon
 			} );
 	}
 
-	template< typename ObjectT, typename ObjectU, typename EnumT >
-	wxPGProperty * TreeItemProperty::addPropertyET( wxPropertyGrid * grid
+	template< typename ParentT, typename ObjectT, typename ObjectU, typename EnumT >
+	wxPGProperty * TreeItemProperty::addPropertyET( ParentT * parent
 		, wxString const & name
 		, wxArrayString const & choices
 		, EnumT selected
@@ -449,7 +461,7 @@ namespace GuiCommon
 		, ValueSetterT< ObjectU, EnumT > setter )
 	{
 		static_assert( std::is_base_of_v< ObjectU, ObjectT > || std::is_same_v< ObjectU, ObjectT >, "Can't call a function on unrelated types" );
-		return addPropertyE( grid
+		return addPropertyE( parent
 			, name
 			, choices
 			, selected
@@ -459,13 +471,13 @@ namespace GuiCommon
 			} );
 	}
 
-	template< typename EnumT >
-	wxPGProperty * TreeItemProperty::addPropertyET( wxPropertyGrid * grid
+	template< typename ParentT, typename EnumT >
+	wxPGProperty * TreeItemProperty::addPropertyET( ParentT * parent
 		, wxString const & name
 		, wxArrayString const & choices
 		, EnumT * value )
 	{
-		return addPropertyE( grid
+		return addPropertyE( parent
 			, name
 			, choices
 			, *value
@@ -475,8 +487,8 @@ namespace GuiCommon
 			} );
 	}
 
-	template< typename ObjectT, typename ObjectU, typename EnumT >
-	wxPGProperty * TreeItemProperty::addPropertyT( wxPropertyGrid * grid
+	template< typename ParentT, typename ObjectT, typename ObjectU, typename EnumT >
+	wxPGProperty * TreeItemProperty::addPropertyT( ParentT * parent
 		, wxString const & name
 		, wxArrayString const & choices
 		, wxString const & selected
@@ -484,7 +496,7 @@ namespace GuiCommon
 		, ValueSetterT< ObjectU, EnumT > setter )
 	{
 		static_assert( std::is_base_of_v< ObjectU, ObjectT > || std::is_same_v< ObjectU, ObjectT >, "Can't call a function on unrelated types" );
-		return addProperty( grid
+		return addProperty( parent
 			, name
 			, choices
 			, selected

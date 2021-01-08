@@ -33,13 +33,13 @@ namespace castor3d
 		CU_Exception( CALL_START_RENDERING );
 	}
 
-	void RenderLoopSync::renderSyncFrame()
+	void RenderLoopSync::renderSyncFrame( castor::Milliseconds tslf )
 	{
 		if ( m_active )
 		{
 			try
 			{
-				doRenderFrame();
+				doRenderFrame( tslf );
 			}
 			catch ( castor::Exception & exc )
 			{

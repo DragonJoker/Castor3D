@@ -72,9 +72,11 @@ namespace castor3d
 				, ShadowMapResult const & smResult
 				, LpvGridConfigUboArray const & lpvGridConfigUbos
 				, std::vector< LightVolumePassResult > const & injection
-				, std::vector< TextureUnit > const * geometry );
+				, std::vector< TextureUnit > const * geometry
+				, std::vector< float > lpvCellSizes );
 			bool update( CpuUpdater & updater );
 			LpvLightConfigUboArray lpvLightConfigUbos;
+			std::vector< float > lpvCellSizes;
 			LightInjectionPassArray lightInjectionPasses;
 			GeometryInjectionPassArray geometryInjectionPasses;
 		};

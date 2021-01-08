@@ -84,14 +84,19 @@ namespace GuiCommon
 	void LightTreeItemProperty::doCreateShadowProperties( wxPropertyGrid * grid )
 	{
 		static wxString PROPERTY_CATEGORY_SHADOW = _( "Shadow:" );
+		static wxString PROPERTY_CATEGORY_SHADOW_RAW = _( "Raw:" );
+		static wxString PROPERTY_CATEGORY_SHADOW_PCF = _( "PCF:" );
+		static wxString PROPERTY_CATEGORY_SHADOW_VSM = _( "VSM:" );
 		static wxString PROPERTY_SHADOW_ENABLED = _( "Enable Shadows" );
 		static wxString PROPERTY_SHADOW_TYPE = _( "Type" );
 		static wxString PROPERTY_SHADOW_TYPE_NONE = _( "None" );
 		static wxString PROPERTY_SHADOW_TYPE_RAW = _( "Raw" );
 		static wxString PROPERTY_SHADOW_TYPE_PCF = _( "PCF" );
 		static wxString PROPERTY_SHADOW_TYPE_VSM = _( "VSM" );
-		static wxString PROPERTY_SHADOW_MIN_OFFSET = _( "Min. Offset" );
-		static wxString PROPERTY_SHADOW_MAX_SLOPE_OFFSET = _( "Max. Slope Offset" );
+		static wxString PROPERTY_SHADOW_RAW_MIN_OFFSET = _( "Raw Min. Offset" );
+		static wxString PROPERTY_SHADOW_RAW_MAX_SLOPE_OFFSET = _( "Raw Max. Slope Offset" );
+		static wxString PROPERTY_SHADOW_PCF_MIN_OFFSET = _( "PCF Min. Offset" );
+		static wxString PROPERTY_SHADOW_PCF_MAX_SLOPE_OFFSET = _( "PCF Max. Slope Offset" );
 		static wxString PROPERTY_SHADOW_MAX_VARIANCE = _( "Max. Variance" );
 		static wxString PROPERTY_SHADOW_VARIANCE_BIAS = _( "Variance Bias" );
 		static wxString PROPERTY_SHADOW_VOLUMETRIC_STEPS = _( "Volumetric Steps" );
@@ -130,38 +135,45 @@ namespace GuiCommon
 			}
 		}
 
-		addProperty( grid, PROPERTY_CATEGORY_SHADOW );
-		addPropertyE( grid, PROPERTY_SHADOW_TYPE, shadowChoices, m_light.getShadowType()
+		auto shadows = addProperty( grid, PROPERTY_CATEGORY_SHADOW );
+		addPropertyE( shadows, PROPERTY_SHADOW_TYPE, shadowChoices, m_light.getShadowType()
 			, [this]( ShadowType value ){ m_light.setShadowProducer( value != ShadowType::eNone );m_light.setShadowType( value ); } );
-		addPropertyT( grid, PROPERTY_SHADOW_MIN_OFFSET, m_light.getCategory()->getShadowOffsets()[0], m_light.getCategory().get(), &LightCategory::setShadowMinOffset );
-		addPropertyT( grid, PROPERTY_SHADOW_MAX_SLOPE_OFFSET, m_light.getCategory()->getShadowOffsets()[1], m_light.getCategory().get(), &LightCategory::setShadowMaxSlopeOffset );
-		addPropertyT( grid, PROPERTY_SHADOW_MAX_VARIANCE, m_light.getCategory()->getShadowVariance()[0], m_light.getCategory().get(), &LightCategory::setShadowMaxVariance );
-		addPropertyT( grid, PROPERTY_SHADOW_VARIANCE_BIAS, m_light.getCategory()->getShadowVariance()[1], m_light.getCategory().get(), &LightCategory::setShadowVarianceBias );
 
 		if ( m_light.getLightType() == LightType::eDirectional )
 		{
-			addPropertyT( grid, PROPERTY_SHADOW_VOLUMETRIC_STEPS, m_light.getCategory()->getVolumetricSteps(), m_light.getCategory().get(), &LightCategory::setVolumetricSteps );
-			addPropertyT( grid, PROPERTY_SHADOW_VOLUMETRIC_SCATTERING_FACTOR, m_light.getCategory()->getVolumetricScatteringFactor(), m_light.getCategory().get(), &LightCategory::setVolumetricScatteringFactor );
+			addPropertyT( shadows, PROPERTY_SHADOW_VOLUMETRIC_STEPS, m_light.getCategory()->getVolumetricSteps(), m_light.getCategory().get(), &LightCategory::setVolumetricSteps );
+			addPropertyT( shadows, PROPERTY_SHADOW_VOLUMETRIC_SCATTERING_FACTOR, m_light.getCategory()->getVolumetricScatteringFactor(), m_light.getCategory().get(), &LightCategory::setVolumetricScatteringFactor );
 		}
 
-		addProperty( grid, PROPERTY_CATEGORY_GLOBAL_ILLUM );
-		addPropertyE( grid, PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE, giChoices, m_light.getGlobalIlluminationType()
+		auto raw = addProperty( shadows, PROPERTY_CATEGORY_SHADOW_RAW );
+		addPropertyT( raw, PROPERTY_SHADOW_RAW_MIN_OFFSET, m_light.getCategory()->getShadowOffsets()[0], m_light.getCategory().get(), &LightCategory::setRawMinOffset );
+		addPropertyT( raw, PROPERTY_SHADOW_RAW_MAX_SLOPE_OFFSET, m_light.getCategory()->getShadowOffsets()[1], m_light.getCategory().get(), &LightCategory::setRawMaxSlopeOffset );
+		auto pcf = addProperty( shadows, PROPERTY_CATEGORY_SHADOW_PCF );
+		addPropertyT( pcf, PROPERTY_SHADOW_PCF_MIN_OFFSET, m_light.getCategory()->getShadowOffsets()[2], m_light.getCategory().get(), &LightCategory::setPcfMinOffset );
+		addPropertyT( pcf, PROPERTY_SHADOW_PCF_MAX_SLOPE_OFFSET, m_light.getCategory()->getShadowOffsets()[3], m_light.getCategory().get(), &LightCategory::setPcfMaxSlopeOffset );
+		auto vsm = addProperty( shadows, PROPERTY_CATEGORY_SHADOW_VSM );
+		addPropertyT( vsm, PROPERTY_SHADOW_MAX_VARIANCE, m_light.getCategory()->getShadowVariance()[0], m_light.getCategory().get(), &LightCategory::setVsmMaxVariance );
+		addPropertyT( vsm, PROPERTY_SHADOW_VARIANCE_BIAS, m_light.getCategory()->getShadowVariance()[1], m_light.getCategory().get(), &LightCategory::setVsmVarianceBias );
+
+		auto globalIllum = addProperty( shadows, PROPERTY_CATEGORY_GLOBAL_ILLUM );
+		addPropertyE( globalIllum, PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE, giChoices, m_light.getGlobalIlluminationType()
 			, [this]( GlobalIlluminationType type )
 			{
 				m_light.setGlobalIlluminationType( type );
 				doUpdateGIProperties( type );
 			} );
+
 		auto & rsmConfig = m_light.getRsmConfig();
-		m_rsmProperties = addProperty( grid, PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_RSM );
-		addPropertyT( grid, PROPERTY_SHADOW_RSM_INTENSITY, &rsmConfig.intensity );
-		addPropertyT( grid, PROPERTY_SHADOW_RSM_MAX_RADIUS, &rsmConfig.maxRadius );
-		addPropertyT( grid, PROPERTY_SHADOW_RSM_SAMPLE_COUNT, &rsmConfig.sampleCount );
+		m_rsmProperties = addProperty( globalIllum, PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_RSM );
+		addPropertyT( m_rsmProperties, PROPERTY_SHADOW_RSM_INTENSITY, &rsmConfig.intensity );
+		addPropertyT( m_rsmProperties, PROPERTY_SHADOW_RSM_MAX_RADIUS, &rsmConfig.maxRadius );
+		addPropertyT( m_rsmProperties, PROPERTY_SHADOW_RSM_SAMPLE_COUNT, &rsmConfig.sampleCount );
 
 		if ( m_light.getLightType() != LightType::ePoint )
 		{
 			auto & lpvConfig = m_light.getLpvConfig();
-			m_lpvProperties = addProperty( grid, PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LPV );
-			addPropertyT( grid, PROPERTY_SHADOW_LPV_SURFEL_AREA, &lpvConfig.texelAreaModifier );
+			m_lpvProperties = addProperty( globalIllum, PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LPV );
+			addPropertyT( m_lpvProperties, PROPERTY_SHADOW_LPV_SURFEL_AREA, &lpvConfig.texelAreaModifier );
 		}
 
 		doUpdateGIProperties( m_light.getGlobalIlluminationType() );

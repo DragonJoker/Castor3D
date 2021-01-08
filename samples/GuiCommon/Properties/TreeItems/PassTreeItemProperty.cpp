@@ -484,6 +484,7 @@ namespace GuiCommon
 	{
 		static wxString PROPERTY_CATEGORY_PASS = _( "Pass: " );
 		static wxString PROPERTY_PASS_DIFFUSE = _( "Diffuse" );
+		static wxString PROPERTY_PASS_TRANSMISSION = _( "Transmission" );
 		static wxString PROPERTY_PASS_SPECULAR = _( "Specular" );
 		static wxString PROPERTY_PASS_AMBIENT = _( "Ambient" );
 		static wxString PROPERTY_PASS_EMISSIVE = _( "Emissive" );
@@ -543,6 +544,7 @@ namespace GuiCommon
 			addPropertyT( grid, PROPERTY_PASS_TWO_SIDED, pass->IsTwoSided(), pass.get(), &Pass::setTwoSided );
 			addPropertyT( grid, PROPERTY_PASS_EMISSIVE, pass->getEmissive(), pass.get(), &Pass::setEmissive );
 			addPropertyT( grid, PROPERTY_PASS_OPACITY, pass->getOpacity(), pass.get(), &Pass::setOpacity );
+			addPropertyT( grid, PROPERTY_PASS_TRANSMISSION, pass->getTransmission(), pass.get(), &Pass::setTransmission );
 			addPropertyT( grid, PROPERTY_PASS_BWACCUM, pass->getBWAccumulationOperator(), pass.get(), &Pass::setBWAccumulationOperator );
 
 			if ( pass->hasRefraction() )

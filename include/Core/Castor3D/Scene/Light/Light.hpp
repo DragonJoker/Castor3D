@@ -332,24 +332,34 @@ namespace castor3d
 			m_category->setVolumetricScatteringFactor( value );
 		}
 
-		inline void setShadowMinOffset( float value )
+		inline void setRawMinOffset( float value )
 		{
-			m_category->setShadowMinOffset( value );
+			m_category->setRawMinOffset( value );
 		}
 
-		inline void setShadowMaxSlopeOffset( float value )
+		inline void setRawMaxSlopeOffset( float value )
 		{
-			m_category->setShadowMaxSlopeOffset( value );
+			m_category->setRawMaxSlopeOffset( value );
 		}
 
-		inline void setShadowMaxVariance( float value )
+		inline void setPcfMinOffset( float value )
 		{
-			m_category->setShadowMaxVariance( value );
+			m_category->setPcfMinOffset( value );
 		}
 
-		inline void setShadowVarianceBias( float value )
+		inline void setPcfMaxSlopeOffset( float value )
 		{
-			m_category->setShadowVarianceBias( value );
+			m_category->setPcfMaxSlopeOffset( value );
+		}
+
+		inline void setVsmMaxVariance( float value )
+		{
+			m_category->setVsmMaxVariance( value );
+		}
+
+		inline void setVsmVarianceBias( float value )
+		{
+			m_category->setVsmVarianceBias( value );
 		}
 
 		inline void setEnabled( bool value )

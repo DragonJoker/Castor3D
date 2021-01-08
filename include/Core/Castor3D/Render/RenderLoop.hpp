@@ -132,7 +132,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Rend une image, uniquement hors de la boucle de rendu.
 		 */
-		C3D_API virtual void renderSyncFrame() = 0;
+		C3D_API virtual void renderSyncFrame( castor::Milliseconds tslf = 0_ms ) = 0;
 		/**
 		 *\~english
 		 *\brief		Pauses the render loop.
@@ -208,7 +208,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Commence le rendu threadé.
 		 */
-		C3D_API void doRenderFrame();
+		C3D_API void doRenderFrame( castor::Milliseconds tslf = 0_ms );
 		/**
 		 *\~english
 		 *\brief		Asks for main render context creation.
@@ -233,7 +233,7 @@ namespace castor3d
 		void doProcessEvents( EventType eventType
 			, RenderDevice const & device );
 		void doGpuStep( RenderInfo & info );
-		void doCpuStep();
+		void doCpuStep( castor::Milliseconds tslf );
 		void doUpdateQueues( std::vector< TechniqueQueues > & queues );
 
 	protected:

@@ -923,15 +923,15 @@ namespace castor3d
 			&& getDefaultView().isMipmapsGenerationNeeded() )
 		{
 			CU_Require( m_texture );
-			auto commandBuffer = device.transferCommandPool->createCommandBuffer( "TextureGenMipmaps" );
+			auto commandBuffer = device.graphicsCommandPool->createCommandBuffer( "TextureGenMipmaps" );
 			commandBuffer->begin();
 			commandBuffer->beginDebugBlock( { getName() + " Mipmaps Generation"
 				, makeFloatArray( getRenderSystem()->getEngine()->getNextRainbowColour() ) } );
 			generateMipmaps( *commandBuffer );
 			commandBuffer->endDebugBlock();
 			commandBuffer->end();
-			device.transferQueue->submit( *commandBuffer, nullptr );
-			device.transferQueue->waitIdle();
+			device.graphicsQueue->submit( *commandBuffer, nullptr );
+			device.graphicsQueue->waitIdle();
 		}
 	}
 

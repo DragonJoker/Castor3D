@@ -21,8 +21,6 @@
 
 CU_ImplementCUSmartPtr( castor3d, DeferredRendering )
 
-using namespace castor;
-
 namespace castor3d
 {
 	//*********************************************************************************************
@@ -31,7 +29,7 @@ namespace castor3d
 	{
 		SamplerSPtr doCreateSampler( Engine & engine
 			, RenderDevice const & device
-			, String const & name )
+			, castor::String const & name )
 		{
 			SamplerSPtr result;
 			auto & cache = engine.getSamplerCache();
@@ -56,7 +54,7 @@ namespace castor3d
 
 		TextureLayoutSPtr createTexture( Engine & engine
 			, RenderDevice const & device
-			, String const & name
+			, castor::String const & name
 			, TextureLayout const & source )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
@@ -94,7 +92,7 @@ namespace castor3d
 		, ShadowMapResult const & smSpotResult
 		, LightVolumePassResult const & lpvResult
 		, LightVolumePassResultArray const & llpvResult
-		, Size const & size
+		, castor::Size const & size
 		, Scene & scene
 		, HdrConfigUbo const & hdrConfigUbo
 		, GpInfoUbo const & gpInfoUbo
@@ -102,6 +100,7 @@ namespace castor3d
 		, LayeredLpvGridConfigUbo const & llpvConfigUbo
 		, SsaoConfig & ssaoConfig )
 		: m_engine{ engine }
+		, m_scene{ scene }
 		, m_device{ device }
 		, m_ssaoConfig{ ssaoConfig }
 		, m_opaquePass{ opaquePass }
@@ -111,11 +110,11 @@ namespace castor3d
 			, device
 			, depthTexture
 			, velocityTexture }
-		, m_linearisePass{ std::make_unique< LineariseDepthPass >( m_engine
+		, m_linearisePass{ castor::makeUnique< LineariseDepthPass >( m_engine
 			, cuT( "Deferred" )
 			, m_size
 			, depthTexture.getTexture()->getDefaultView().getSampledView() ) }
-		, m_ssao{ std::make_unique< SsaoPass >( m_engine
+		, m_ssao{ castor::makeUnique< SsaoPass >( m_engine
 			, m_size
 			, m_ssaoConfig
 			, m_linearisePass->getResult()
@@ -136,18 +135,18 @@ namespace castor3d
 			, m_gpInfoUbo
 			, lpvConfigUbo
 			, llpvConfigUbo ) }
-		, m_subsurfaceScattering{ std::make_unique< SubsurfaceScatteringPass >( m_engine
+		, m_subsurfaceScattering{ castor::makeUnique< SubsurfaceScatteringPass >( m_engine
 			, m_device
 			, m_gpInfoUbo
 			, m_opaquePass.getSceneUbo()
 			, m_size
 			, m_opaquePassResult
 			, m_lightingPass->getResult() ) }
-		, m_resolve{ makeDelayedInitialiser< OpaqueResolvePass >( m_engine
+		, m_resolve{ castor::makeUnique< OpaqueResolvePass >( m_engine
 			, m_device
 			, scene
 			, m_opaquePassResult
-			, *m_ssao.raw()
+			, *m_ssao
 			, m_subsurfaceScattering->getResult()
 			, m_lightingPass->getResult()[LpTexture::eDiffuse]
 			, m_lightingPass->getResult()[LpTexture::eSpecular]
@@ -159,18 +158,26 @@ namespace castor3d
 	{
 		m_opaquePass.initialiseRenderPass( device, m_opaquePassResult );
 
-		m_linearisePass.initialise( m_device );
-		m_ssao.initialise( m_device );
-		m_subsurfaceScattering.initialise( m_device );
-		m_resolve.initialise();
+		if ( m_ssaoConfig.enabled )
+		{
+			m_linearisePass->initialise( m_device );
+			m_ssao->initialise( m_device );
+		}
+
+		if ( scene.needsSubsurfaceScattering() )
+		{
+			m_subsurfaceScattering->initialise( m_device );
+		}
+
+		m_resolve->initialise();
 	}
 
 	DeferredRendering::~DeferredRendering()
 	{
-		m_resolve.cleanup();
-		m_subsurfaceScattering.cleanup( m_device );
-		m_ssao.cleanup( m_device );
-		m_linearisePass.cleanup( m_device );
+		m_resolve->cleanup();
+		m_subsurfaceScattering->cleanup( m_device );
+		m_ssao->cleanup( m_device );
+		m_linearisePass->cleanup( m_device );
 	}
 
 	void DeferredRendering::update( CpuUpdater & updater )
@@ -191,6 +198,17 @@ namespace castor3d
 
 	void DeferredRendering::update( GpuUpdater & updater )
 	{
+		if ( m_ssaoConfig.enabled )
+		{
+			m_linearisePass->initialise( m_device );
+			m_ssao->initialise( m_device );
+		}
+
+		if ( m_scene.needsSubsurfaceScattering() )
+		{
+			m_subsurfaceScattering->initialise( m_device );
+		}
+
 		m_opaquePass.update( updater );
 		m_lightingPass->update( updater );
 		m_resolve->update( updater );
@@ -256,13 +274,8 @@ namespace castor3d
 		if ( m_ssaoConfig.enabled
 			|| visitor.config.forceSubPassesVisit )
 		{
-			m_linearisePass.raw()->accept( visitor );
-		}
-
-		if ( m_ssaoConfig.enabled
-			|| visitor.config.forceSubPassesVisit )
-		{
-			m_ssao.raw()->accept( visitor );
+			m_linearisePass->accept( visitor );
+			m_ssao->accept( visitor );
 		}
 
 		m_lightingPass->accept( visitor );
@@ -270,7 +283,7 @@ namespace castor3d
 		if ( visitor.getScene().needsSubsurfaceScattering()
 			|| visitor.config.forceSubPassesVisit )
 		{
-			m_subsurfaceScattering.raw()->accept( visitor );
+			m_subsurfaceScattering->accept( visitor );
 		}
 
 		m_resolve->accept( visitor );

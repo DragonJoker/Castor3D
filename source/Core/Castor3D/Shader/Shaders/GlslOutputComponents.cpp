@@ -12,18 +12,18 @@ namespace castor3d
 	{
 		//***********************************************************************************************
 
-		ast::expr::ExprList makeFnArg( ast::Shader & shader
+		ast::expr::ExprList makeFnArg( sdw::ShaderWriter & writer
 			, OutputComponents const & value )
 		{
 			ast::expr::ExprList result;
-			auto args = sdw::makeFnArg( shader, value.m_diffuse );
+			auto args = sdw::makeFnArg( writer, value.m_diffuse );
 
 			for ( auto & expr : args )
 			{
 				result.emplace_back( std::move( expr ) );
 			}
 
-			args = sdw::makeFnArg( shader, value.m_specular );
+			args = sdw::makeFnArg( writer, value.m_specular );
 
 			for ( auto & expr : args )
 			{
@@ -53,9 +53,9 @@ namespace castor3d
 			return m_expr.get();
 		}
 
-		ast::Shader * OutputComponents::getShader()const
+		sdw::ShaderWriter * OutputComponents::getWriter()const
 		{
-			return findShader( m_diffuse, m_specular );
+			return findWriter( m_diffuse, m_specular );
 		}
 
 		void OutputComponents::setVar( ast::var::VariableList::const_iterator & var )

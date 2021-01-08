@@ -16,10 +16,25 @@
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
+	namespace
+	{
+		std::ostream & operator<<( std::ostream & stream, castor::Point3f const & obj )
+		{
+			stream << std::setprecision( 4 ) << obj->x
+				<< ", " << std::setprecision( 4 ) << obj->y
+				<< ", " << std::setprecision( 4 ) << obj->z;
+			return stream;
+		}
+
+		std::ostream & operator<<( std::ostream & stream, castor::BoundingBox const & obj )
+		{
+			stream << "min: " << obj.getMin() << ", max: " << obj.getMax();
+			return stream;
+		}
+	}
+
 	MeshImporter::MeshImporter( Engine & engine )
 		: OwnedBy< Engine >( engine )
 		, m_fileName()
@@ -27,7 +42,7 @@ namespace castor3d
 	}
 
 	bool MeshImporter::import( Mesh & mesh
-		, Path const & fileName
+		, castor::Path const & fileName
 		, Parameters const & parameters
 		, bool initialise )
 	{
@@ -61,6 +76,10 @@ namespace castor3d
 				}
 
 				mesh.computeContainers();
+				log::info << "Loaded mesh [" << mesh.getName() << "]"
+					<< " AABB (" << mesh.getBoundingBox() << ")"
+					<< ", " << mesh.getVertexCount() << " vertices"
+					<< ", " << mesh.getSubmeshCount() << " submeshes" << std::endl;
 
 				for ( auto submesh : mesh )
 				{
@@ -79,18 +98,18 @@ namespace castor3d
 		return result;
 	}
 
-	TextureUnitSPtr MeshImporter::loadTexture( Path const & path
+	TextureUnitSPtr MeshImporter::loadTexture( castor::Path const & path
 		, TextureConfiguration const & config )const
 	{
 		TextureUnitSPtr result;
-		Path relative;
-		Path folder;
+		castor::Path relative;
+		castor::Path folder;
 
-		if ( File::fileExists( path ) )
+		if ( castor::File::fileExists( path ) )
 		{
 			relative = path;
 		}
-		else if ( File::fileExists( m_filePath / path ) )
+		else if ( castor::File::fileExists( m_filePath / path ) )
 		{
 			auto fullPath = m_filePath / path;
 			folder = fullPath.getPath();
@@ -98,12 +117,12 @@ namespace castor3d
 		}
 		else
 		{
-			PathArray files;
-			String fileName = path.getFileName( true );
-			File::listDirectoryFiles( m_filePath, files, true );
+			castor::PathArray files;
+			castor::String fileName = path.getFileName( true );
+			castor::File::listDirectoryFiles( m_filePath, files, true );
 			auto it = std::find_if( files.begin()
 				, files.end()
-				, [&fileName]( Path const & file )
+				, [&fileName]( castor::Path const & file )
 				{
 					return file.getFileName( true ) == fileName
 						|| file.getFileName( true ).find( fileName ) == 0;
@@ -114,15 +133,15 @@ namespace castor3d
 			if ( it != files.end() )
 			{
 				relative = *it;
-				relative = Path{ relative.substr( folder.size() + 1 ) };
+				relative = castor::Path{ relative.substr( folder.size() + 1 ) };
 			}
 			else
 			{
-				relative = Path{ fileName };
+				relative = castor::Path{ fileName };
 			}
 		}
 
-		if ( !File::fileExists( folder / relative ) )
+		if ( !castor::File::fileExists( folder / relative ) )
 		{
 			log::error << cuT( "Couldn't load texture file [" ) << path << cuT( "]: File does not exist." ) << std::endl;
 			return nullptr;
@@ -151,7 +170,7 @@ namespace castor3d
 		return nullptr;
 	}
 
-	TextureUnitSPtr MeshImporter::loadTexture( Path const & path
+	TextureUnitSPtr MeshImporter::loadTexture( castor::Path const & path
 		, TextureConfiguration const & config
 		, Pass & pass )const
 	{

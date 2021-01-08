@@ -160,6 +160,31 @@ namespace castor3d
 		return result;
 	}
 
+	bool operator<( TextureFlagsArray const & lhs, TextureFlagsArray const & rhs )
+	{
+		if ( lhs.empty() && rhs.empty()
+			|| lhs.size() > rhs.size() )
+		{
+			return false;
+		}
+
+		if ( lhs.size() < rhs.size() )
+		{
+			return true;
+		}
+
+		bool result = true;
+
+		for ( auto i = 0u; i < lhs.size() && result; ++i )
+		{
+			result = lhs[i].id < rhs[i].id
+				|| ( lhs[i].id == rhs[i].id
+					&& lhs[i].flags < rhs[i].flags );
+		}
+
+		return result;
+	}
+
 	bool operator<( PipelineFlags const & lhs, PipelineFlags const & rhs )
 	{
 		return lhs.alphaFunc < rhs.alphaFunc
@@ -170,19 +195,15 @@ namespace castor3d
 							|| ( lhs.colourBlendMode == rhs.colourBlendMode
 								&& ( lhs.alphaBlendMode < rhs.alphaBlendMode
 									|| ( lhs.alphaBlendMode == rhs.alphaBlendMode
-										&& ( lhs.textures.size() < rhs.textures.size()
-											|| ( lhs.textures.size() == rhs.textures.size()
-												&& ( lhs.texturesFlags < rhs.texturesFlags
-													|| ( lhs.texturesFlags == rhs.texturesFlags
-														&& ( lhs.heightMapIndex < rhs.heightMapIndex
-															|| ( lhs.heightMapIndex == rhs.heightMapIndex
-																&& ( lhs.programFlags < rhs.programFlags
-																	|| ( lhs.programFlags == rhs.programFlags
-																		&& ( lhs.passFlags < rhs.passFlags
-																			|| ( lhs.passFlags == rhs.passFlags
-																				&& lhs.sceneFlags < rhs.sceneFlags )
-																			)
-																		)
+										&& ( lhs.textures < rhs.textures
+											|| ( lhs.textures == rhs.textures
+												&& ( lhs.heightMapIndex < rhs.heightMapIndex
+													|| ( lhs.heightMapIndex == rhs.heightMapIndex
+														&& ( lhs.programFlags < rhs.programFlags
+															|| ( lhs.programFlags == rhs.programFlags
+																&& ( lhs.passFlags < rhs.passFlags
+																	|| ( lhs.passFlags == rhs.passFlags
+																		&& lhs.sceneFlags < rhs.sceneFlags )
 																	)
 																)
 															)

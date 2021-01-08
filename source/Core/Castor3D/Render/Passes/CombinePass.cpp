@@ -399,9 +399,9 @@ namespace castor3d
 			} );
 
 		auto & lhsBarrierView = m_lhsBarrierViews[index];
-		cmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+		cmd.memoryBarrier( ashes::getStageMask( lhsBarrierView.layout )
 			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, lhsBarrierView.view.makeLayoutTransition( VK_IMAGE_LAYOUT_UNDEFINED
+			, lhsBarrierView.view.makeLayoutTransition( lhsBarrierView.layout
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				, VK_QUEUE_FAMILY_IGNORED
 				, VK_QUEUE_FAMILY_IGNORED ) );

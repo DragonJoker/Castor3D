@@ -109,6 +109,7 @@ namespace castor3d
 		TextureFlags flags;
 		uint32_t id;
 	};
+	C3D_API bool operator==( TextureFlagsId const & lhs, TextureFlagsId const & rhs );
 	using TextureFlagsArray = std::vector< TextureFlagsId >;
 	/**
 	*\~english

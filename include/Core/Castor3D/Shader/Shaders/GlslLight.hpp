@@ -16,7 +16,7 @@ namespace castor3d
 		struct Light
 			: public sdw::StructInstance
 		{
-			C3D_API Light( ast::Shader * shader
+			C3D_API Light( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr );
 			C3D_API Light & operator=( Light const & rhs );
 
@@ -27,7 +27,8 @@ namespace castor3d
 			sdw::Vec4 m_colourIndex;
 			sdw::Vec4 m_intensityFarPlane;
 			sdw::Vec4 m_volumetric;
-			sdw::Vec4 m_shadow;
+			sdw::Vec4 m_shadowsOffsets;
+			sdw::Vec4 m_shadowsVariances;
 			// Specific values
 			sdw::Vec3 m_colour;
 			sdw::Vec2 m_intensity;
@@ -36,8 +37,9 @@ namespace castor3d
 			sdw::Int m_index;
 			sdw::UInt m_volumetricSteps;
 			sdw::Float m_volumetricScattering;
-			sdw::Vec2 m_shadowOffsets;
-			sdw::Vec2 m_shadowVariance;
+			sdw::Vec2 m_rawShadowOffsets;
+			sdw::Vec2 m_pcfShadowOffsets;
+			sdw::Vec2 m_vsmShadowVariance;
 
 		private:
 			using sdw::StructInstance::getMember;
@@ -47,7 +49,7 @@ namespace castor3d
 		struct DirectionalLight
 			: public sdw::StructInstance
 		{
-			C3D_API DirectionalLight( ast::Shader * shader
+			C3D_API DirectionalLight( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr );
 
 			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
@@ -71,7 +73,7 @@ namespace castor3d
 		struct PointLight
 			: public sdw::StructInstance
 		{
-			C3D_API PointLight( ast::Shader * shader
+			C3D_API PointLight( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr );
 
 			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
@@ -93,7 +95,7 @@ namespace castor3d
 		struct SpotLight
 			: public sdw::StructInstance
 		{
-			C3D_API SpotLight( ast::Shader * shader
+			C3D_API SpotLight( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr );
 
 			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );

@@ -273,6 +273,11 @@ namespace castor3d
 			return m_alphaValue;
 		}
 
+		inline castor::Point3f getTransmission()const
+		{
+			return m_transmission;
+		}
+
 		inline bool hasSubsurfaceScattering()const
 		{
 			return checkFlag( m_flags, PassFlag::eSubsurfaceScattering )
@@ -368,6 +373,12 @@ namespace castor3d
 		inline void setRefractionRatio( float value )
 		{
 			m_refractionRatio = value;
+			onChanged( *this );
+		}
+
+		inline void setTransmission( castor::Point3f value )
+		{
+			m_transmission = std::move( value );
 			onChanged( *this );
 		}
 
@@ -470,6 +481,7 @@ namespace castor3d
 		BlendMode m_alphaBlendMode{ BlendMode::eNoBlend };
 		BlendMode m_colourBlendMode{ BlendMode::eNoBlend };
 		float m_alphaValue{ 0.0f };
+		castor::Point3f m_transmission{ 1.0f, 1.0f, 1.0f };
 		VkCompareOp m_alphaFunc{ VK_COMPARE_OP_ALWAYS };
 		bool m_texturesReduced{ false };
 		SubsurfaceScatteringUPtr m_subsurfaceScattering;

@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "PbrModule.hpp"
 
+#include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Render/PBR/BrdfPrefilter.hpp"
 #include "Castor3D/Render/PBR/RadianceComputer.hpp"
 #include "Castor3D/Render/PBR/EnvironmentPrefilter.hpp"
@@ -47,6 +48,13 @@ namespace castor3d
 		 *\brief		Met à jour les textures d'environnement.
 		 */
 		C3D_API void update();
+		/**
+		 *\~english
+		 *\brief		Updates the environment maps.
+		 *\~french
+		 *\brief		Met à jour les textures d'environnement.
+		 */
+		C3D_API ashes::Semaphore const & update( ashes::Semaphore const & toWait );
 		/**
 		 *\~english
 		 *\brief		Displays the maps.

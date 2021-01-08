@@ -323,6 +323,8 @@ namespace Bloom
 
 		cmd.begin();
 		timer.beginPass( cmd, 1u + ( m_blurPassesCount * 2u ) );
+		cmd.beginDebugBlock( { "BloomCombine"
+			, castor3d::makeFloatArray( m_device.renderSystem.getEngine()->getNextRainbowColour() ) } );
 		cmd.beginRenderPass( *m_renderPass
 			, *m_frameBuffer
 			, { castor3d::transparentBlackClearColor }
@@ -332,6 +334,7 @@ namespace Bloom
 		cmd.bindVertexBuffer( 0u, vertexBuffer.getBuffer(), 0u );
 		cmd.draw( 6u );
 		cmd.endRenderPass();
+		cmd.endDebugBlock();
 		timer.endPass( cmd, 1u + ( m_blurPassesCount * 2u ) );
 		cmd.end();
 

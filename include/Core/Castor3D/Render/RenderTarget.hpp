@@ -241,6 +241,9 @@ namespace castor3d
 		*	Accesseurs.
 		**/
 		/**@{*/
+		C3D_API HdrConfig const & getHdrConfig()const;
+		C3D_API HdrConfig & getHdrConfig();
+
 		inline bool isInitialised()const
 		{
 			return m_initialised;
@@ -325,16 +328,6 @@ namespace castor3d
 			return *m_culler;
 		}
 
-		inline HdrConfig const & getHdrConfig()const
-		{
-			return m_hdrConfig;
-		}
-
-		inline HdrConfig & getHdrConfig()
-		{
-			return m_hdrConfig;
-		}
-
 		inline castor::Point2f const & getJitter()const
 		{
 			return m_jitter;
@@ -359,6 +352,9 @@ namespace castor3d
 		*	Mutateurs.
 		**/
 		/**@{*/
+		C3D_API void setExposure( float value );
+		C3D_API void setGamma( float value );
+
 		inline void setTechnique( RenderTechniqueSPtr technique )
 		{
 			m_renderTechnique = technique;
@@ -377,16 +373,6 @@ namespace castor3d
 		inline void setJitter( castor::Point2f const & value )
 		{
 			m_jitter = value;
-		}
-
-		inline void setExposure( float value )
-		{
-			m_hdrConfig.exposure = value;
-		}
-
-		inline void setGamma( float value )
-		{
-			m_hdrConfig.gamma = value;
 		}
 
 		inline HdrConfigUbo const & getHdrConfigUbo()const
@@ -455,7 +441,6 @@ namespace castor3d
 		PostEffectPtrArray m_hdrPostEffects;
 		ashes::CommandBufferPtr m_hdrCopyCommands;
 		ashes::SemaphorePtr m_hdrCopyFinished;
-		HdrConfig m_hdrConfig;
 		ToneMappingSPtr m_toneMapping;
 		PostEffectPtrArray m_srgbPostEffects;
 		ashes::CommandBufferPtr m_srgbCopyCommands;

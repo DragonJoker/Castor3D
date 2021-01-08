@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "PbrModule.hpp"
 
+#include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Render/ToTexture/RenderCube.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 
@@ -35,6 +36,7 @@ namespace castor3d
 				, SamplerSPtr sampler );
 			void registerFrames();
 			void render();
+			ashes::Semaphore const & render( ashes::Semaphore const & toWait );
 
 		private:
 			struct FrameBuffer
@@ -43,8 +45,7 @@ namespace castor3d
 				ashes::FrameBufferPtr frameBuffer;
 			};
 			ashes::RenderPass const & m_renderPass;
-			ashes::CommandBufferPtr m_commandBuffer;
-			ashes::FencePtr m_fence;
+			CommandsSemaphore m_commands;
 			SamplerSPtr m_sampler;
 			std::array< FrameBuffer, 6u > m_frameBuffers;
 		};
@@ -76,6 +77,13 @@ namespace castor3d
 		 *\brief		Génère les niveaux de mipmap.
 		 */
 		C3D_API void render();
+		/**
+		 *\~english
+		 *\brief		Generates the mipmap levels.
+		 *\~french
+		 *\brief		Génère les niveaux de mipmap.
+		 */
+		C3D_API ashes::Semaphore const & render( ashes::Semaphore const & toWait );
 		/**
 		*\~english
 		*name

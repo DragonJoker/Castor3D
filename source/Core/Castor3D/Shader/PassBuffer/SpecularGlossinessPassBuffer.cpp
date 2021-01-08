@@ -23,6 +23,9 @@ namespace castor3d
 			auto common = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( data )
 				, reinterpret_cast< PassBuffer::RgbaColour * >( data ) + count );
 			data += sizeof( PassBuffer::RgbaColour ) * count;
+			auto opacity = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( data )
+				, reinterpret_cast< PassBuffer::RgbaColour * >( data ) + count );
+			data += sizeof( PassBuffer::RgbaColour ) * count;
 			auto reflRefr = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( data )
 				, reinterpret_cast< PassBuffer::RgbaColour * >( data ) + count );
 			data += sizeof( PassBuffer::RgbaColour ) * count;
@@ -36,6 +39,7 @@ namespace castor3d
 				diffDiv,
 				specGloss,
 				common,
+				opacity,
 				reflRefr,
 				{
 					sssInfo,
@@ -77,7 +81,8 @@ namespace castor3d
 
 		auto & diffDiv = m_data.diffDiv[index];
 		auto & specGloss = m_data.specGloss[index];
-		auto & metDiv = m_data.metDiv[index];
+		auto & common = m_data.common[index];
+		auto & opacity = m_data.opacity[index];
 		auto & reflRefr = m_data.reflRefr[index];
 		auto & extended = m_data.extended;
 
@@ -87,6 +92,7 @@ namespace castor3d
 		auto & diffDiv = data.diffDiv;
 		auto & specGloss = data.specGloss;
 		auto & common = data.common;
+		auto & opacity = data.opacity;
 		auto & reflRefr = data.reflRefr;
 		auto & extended = data.extended;
 
@@ -103,6 +109,10 @@ namespace castor3d
 		common.g = pass.getEmissive();
 		common.b = pass.getAlphaValue();
 		common.a = pass.needsGammaCorrection() ? 2.2f : 1.0f;
+		opacity.r = pass.getTransmission()->x;
+		opacity.g = pass.getTransmission()->y;
+		opacity.b = pass.getTransmission()->z;
+		opacity.a = pass.getOpacity();
 		reflRefr.r = pass.getRefractionRatio();
 		reflRefr.g = pass.hasRefraction() ? 1.0f : 0.0f;
 		reflRefr.b = pass.hasReflections() ? 1.0f : 0.0f;
@@ -119,7 +129,8 @@ namespace castor3d
 
 		auto & diffDiv = m_data.diffDiv[index];
 		auto & specGloss = m_data.specGloss[index];
-		auto & metDiv = m_data.metDiv[index];
+		auto & common = m_data.common[index];
+		auto & opacity = m_data.opacity[index];
 		auto & reflRefr = m_data.reflRefr[index];
 		auto & extended = m_data.extended;
 
@@ -129,6 +140,7 @@ namespace castor3d
 		auto & diffDiv = data.diffDiv;
 		auto & specGloss = data.specGloss;
 		auto & common = data.common;
+		auto & opacity = data.opacity;
 		auto & reflRefr = data.reflRefr;
 		auto & extended = data.extended;
 
@@ -145,6 +157,10 @@ namespace castor3d
 		common.g = pass.getEmissive();
 		common.b = pass.getAlphaValue();
 		common.a = pass.needsGammaCorrection() ? 2.2f : 1.0f;
+		opacity.r = pass.getTransmission()->x;
+		opacity.g = pass.getTransmission()->y;
+		opacity.b = pass.getTransmission()->z;
+		opacity.a = pass.getOpacity();
 		reflRefr.r = pass.getRefractionRatio();
 		reflRefr.g = pass.hasRefraction() ? 1.0f : 0.0f;
 		reflRefr.b = pass.hasReflections() ? 1.0f : 0.0f;

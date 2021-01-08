@@ -91,7 +91,7 @@ namespace castor3d
 		m_rendering = true;
 	}
 
-	void RenderLoopAsync::renderSyncFrame()
+	void RenderLoopAsync::renderSyncFrame( castor::Milliseconds tslf )
 	{
 		if ( !m_paused )
 		{
@@ -100,7 +100,7 @@ namespace castor3d
 
 		if ( m_rendering )
 		{
-			doRenderFrame();
+			doRenderFrame( tslf );
 		}
 	}
 

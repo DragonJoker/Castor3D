@@ -506,6 +506,7 @@ namespace castor3d
 		uint32_t index{ 0u };
 		uint32_t combineIndex{ 0u };
 		castor::Point2f jitter;
+		castor::Milliseconds tslf;
 		castor::Milliseconds time;
 		castor::Milliseconds total;
 	};

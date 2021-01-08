@@ -144,6 +144,7 @@ namespace castor3d
 		ashes::SamplerPtr m_minifySampler;
 		ashes::CommandBufferPtr m_commandBuffer;
 		ashes::SemaphorePtr m_finished;
+		bool m_initialised{ false };
 		/**
 		*name
 		*	Common.

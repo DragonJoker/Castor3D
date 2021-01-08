@@ -110,7 +110,8 @@ namespace smaa
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ashes::ImageView doCreateDepthView( ashes::ImageView const & depthView )
+		ashes::ImageView doCreateDepthView( castor3d::RenderDevice const & device
+			, ashes::ImageView const & depthView )
 		{
 			ashes::ImageViewCreateInfo view
 			{
@@ -140,7 +141,7 @@ namespace smaa
 		, ashes::ImageView const & depthView
 		, SmaaConfig const & config )
 		: EdgeDetection{ renderTarget, device, config, createBindings() }
-		, m_depthView{ doCreateDepthView( depthView ) }
+		, m_depthView{ doCreateDepthView( device, depthView ) }
 		, m_sourceView{ depthView }
 	{
 		VkExtent2D size{ m_depthView.image->getDimensions().width
@@ -169,11 +170,6 @@ namespace smaa
 				castor3d::makeFloatArray( getRenderSystem()->getEngine()->getNextRainbowColour() ),
 			} );
 		timer.beginPass( edgeDetectionCmd, passIndex );
-		// Put source image in shader input layout.
-		edgeDetectionCmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_sourceView.makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
-
 		edgeDetectionCmd.beginRenderPass( *m_renderPass
 			, *m_surface.frameBuffer
 			, {

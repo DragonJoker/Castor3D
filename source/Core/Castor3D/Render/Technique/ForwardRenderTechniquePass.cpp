@@ -263,38 +263,39 @@ namespace castor3d
 		using namespace sdw;
 		FragmentWriter writer;
 		auto & renderSystem = *getEngine()->getRenderSystem();
+		bool hasTextures = !flags.textures.empty();
 
 		// Fragment Intputs
-		auto vtx_worldPosition = writer.declInput< Vec3 >( "vtx_worldPosition"
+		auto inWorldPosition = writer.declInput< Vec3 >( "inWorldPosition"
 			, RenderPass::VertexOutputs::WorldPositionLocation );
-		auto vtx_viewPosition = writer.declInput< Vec3 >( "vtx_viewPosition"
+		auto inViewPosition = writer.declInput< Vec3 >( "inViewPosition"
 			, RenderPass::VertexOutputs::ViewPositionLocation );
-		auto vtx_curPosition = writer.declInput< Vec3 >( "vtx_curPosition"
+		auto inCurPosition = writer.declInput< Vec3 >( "inCurPosition"
 			, RenderPass::VertexOutputs::CurPositionLocation );
-		auto vtx_prvPosition = writer.declInput< Vec3 >( "vtx_prvPosition"
+		auto inPrvPosition = writer.declInput< Vec3 >( "inPrvPosition"
 			, RenderPass::VertexOutputs::PrvPositionLocation );
-		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( "vtx_tangentSpaceFragPosition"
+		auto inTangentSpaceFragPosition = writer.declInput< Vec3 >( "inTangentSpaceFragPosition"
 			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
-		auto vtx_tangentSpaceViewPosition = writer.declInput< Vec3 >( "vtx_tangentSpaceViewPosition"
+		auto inTangentSpaceViewPosition = writer.declInput< Vec3 >( "inTangentSpaceViewPosition"
 			, RenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
-		auto vtx_normal = writer.declInput< Vec3 >( "vtx_normal"
+		auto inNormal = writer.declInput< Vec3 >( "inNormal"
 			, RenderPass::VertexOutputs::NormalLocation );
-		auto vtx_tangent = writer.declInput< Vec3 >( "vtx_tangent"
+		auto inTangent = writer.declInput< Vec3 >( "inTangent"
 			, RenderPass::VertexOutputs::TangentLocation );
-		auto vtx_bitangent = writer.declInput< Vec3 >( "vtx_bitangent"
+		auto inBitangent = writer.declInput< Vec3 >( "inBitangent"
 			, RenderPass::VertexOutputs::BitangentLocation );
-		auto vtx_texture = writer.declInput< Vec3 >( "vtx_texture"
-			, RenderPass::VertexOutputs::TextureLocation );
-		auto vtx_instance = writer.declInput< UInt >( "vtx_instance"
+		auto inTexture = writer.declInput< Vec3 >( "inTexture"
+			, RenderPass::VertexOutputs::TextureLocation
+			, hasTextures );
+		auto inInstance = writer.declInput< UInt >( "inInstance"
 			, RenderPass::VertexOutputs::InstanceLocation );
-		auto vtx_material = writer.declInput< UInt >( "vtx_material"
+		auto inMaterial = writer.declInput< UInt >( "inMaterial"
 			, RenderPass::VertexOutputs::MaterialLocation );
 
 		shader::LegacyMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", getLightBufferIndex(), 0u );
 		shader::TextureConfigurations textureConfigs{ writer };
-		bool hasTextures = !flags.textures.empty();
 
 		if ( hasTextures )
 		{
@@ -346,19 +347,17 @@ namespace castor3d
 			, [&]()
 			{
 				auto material = writer.declLocale( "material"
-					, materials.getMaterial( vtx_material ) );
-				auto texCoord = writer.declLocale( "texCoord"
-					, vtx_texture );
+					, materials.getMaterial( inMaterial ) );
 				auto alpha = writer.declLocale( "alpha"
 					, material.m_opacity );
 				auto gamma = writer.declLocale( "gamma"
 					, material.m_gamma );
 				auto normal = writer.declLocale( "normal"
-					, normalize( vtx_normal ) );
+					, normalize( inNormal ) );
 				auto tangent = writer.declLocale( "tangent"
-					, normalize( vtx_tangent ) );
+					, normalize( inTangent ) );
 				auto bitangent = writer.declLocale( "bitangent"
-					, normalize( vtx_bitangent ) );
+					, normalize( inBitangent ) );
 				auto diffuse = writer.declLocale( "diffuse"
 					, utils.removeGamma( gamma, material.m_diffuse() ) );
 				auto specular = writer.declLocale( "specular"
@@ -372,27 +371,34 @@ namespace castor3d
 				auto transmittance = writer.declLocale( "transmittance"
 					, 0.0_f );
 				auto tangentSpaceViewPosition = writer.declLocale( "tangentSpaceViewPosition"
-					, vtx_tangentSpaceViewPosition );
+					, inTangentSpaceViewPosition );
 				auto tangentSpaceFragPosition = writer.declLocale( "tangentSpaceFragPosition"
-					, vtx_tangentSpaceFragPosition );
-				lighting->computeMapContributions( flags
-					, gamma
-					, textureConfigs
-					, c3d_textureConfig
-					, c3d_maps
-					, texCoord
-					, normal
-					, tangent
-					, bitangent
-					, emissive
-					, alpha
-					, occlusion
-					, transmittance
-					, diffuse
-					, specular
-					, shininess
-					, tangentSpaceViewPosition
-					, tangentSpaceFragPosition );
+					, inTangentSpaceFragPosition );
+
+				if ( hasTextures )
+				{
+					auto texCoord = writer.declLocale( "texCoord"
+						, inTexture );
+					lighting->computeMapContributions( flags
+						, gamma
+						, textureConfigs
+						, c3d_textureConfig
+						, c3d_maps
+						, texCoord
+						, normal
+						, tangent
+						, bitangent
+						, emissive
+						, alpha
+						, occlusion
+						, transmittance
+						, diffuse
+						, specular
+						, shininess
+						, tangentSpaceViewPosition
+						, tangentSpaceFragPosition );
+				}
+
 				utils.applyAlphaFunc( flags.alphaFunc
 					, alpha
 					, material.m_alphaRef );
@@ -407,62 +413,69 @@ namespace castor3d
 				lighting->computeCombined( worldEye
 					, shininess
 					, c3d_shadowReceiver
-					, shader::FragmentInput( in.fragCoord.xy(), vtx_viewPosition, vtx_worldPosition, normal )
+					, shader::FragmentInput( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal )
 					, output );
+				lightSpecular *= specular;
 
 				auto ambient = writer.declLocale( "ambient"
 					, clamp( c3d_ambientLight.xyz() * material.m_ambient * diffuse
 						, vec3( 0.0_f )
 						, vec3( 1.0_f ) ) );
+				auto reflected = writer.declLocale( "reflected"
+					, vec3( 0.0_f ) );
+				auto refracted = writer.declLocale( "refracted"
+					, vec3( 0.0_f ) );
 				
 				if ( checkFlag( flags.passFlags, PassFlag::eReflection )
 					|| checkFlag( flags.passFlags, PassFlag::eRefraction ) )
 				{
 					auto incident = writer.declLocale( "incident"
-						, reflections.computeIncident( vtx_worldPosition, c3d_cameraPosition.xyz() ) );
+						, reflections.computeIncident( inWorldPosition, c3d_cameraPosition.xyz() ) );
+					ambient = vec3( 0.0_f );
 
 					if ( checkFlag( flags.passFlags, PassFlag::eReflection )
 						&& checkFlag( flags.passFlags, PassFlag::eRefraction ) )
 					{
 						reflections.computeReflRefr( incident
 							, normal
-							, occlusion
 							, c3d_mapEnvironment
 							, material.m_refractionRatio
+							, specular
+							, material.m_transmission * diffuse
 							, shininess
-							, ambient
-							, diffuse );
+							, reflected
+							, refracted );
 					}
 					else if ( checkFlag( flags.passFlags, PassFlag::eReflection ) )
 					{
-						reflections.computeRefl( incident
+						reflected = reflections.computeRefl( incident
 							, normal
-							, occlusion
 							, c3d_mapEnvironment
 							, shininess
-							, ambient
-							, diffuse );
+							, specular );
 					}
 					else
 					{
 						reflections.computeRefr( incident
 							, normal
-							, occlusion
 							, c3d_mapEnvironment
 							, material.m_refractionRatio
+							, material.m_transmission * diffuse
 							, shininess
-							, ambient
-							, diffuse );
+							, reflected
+							, refracted );
 					}
+
+					diffuse = vec3( 0.0_f );
 				}
 				else
 				{
-					ambient *= occlusion * diffuse;
 					diffuse *= lightDiffuse;
 				}
 
+				ambient *= occlusion;
 				pxl_fragColor = vec4( lpvGI.computeResult( flags.sceneFlags
-						, vtx_worldPosition
+						, inWorldPosition
 						, normal
 						, c3d_indirectAttenuation
 						, c3d_minVolumeCorner
@@ -472,7 +485,7 @@ namespace castor3d
 						, c3d_allCellSizes
 						, c3d_gridSizes
 						, diffuse
-						, diffuse + lightSpecular + emissive
+						, diffuse + reflected + refracted + lightSpecular + emissive
 						, ambient )
 					, alpha );
 
@@ -480,8 +493,8 @@ namespace castor3d
 				{
 					pxl_fragColor = fog.apply( vec4( utils.removeGamma( gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
 						, pxl_fragColor
-						, length( vtx_viewPosition )
-						, vtx_viewPosition.y()
+						, length( inViewPosition )
+						, inViewPosition.y()
 						, c3d_fogInfo
 						, c3d_cameraPosition );
 				}
@@ -495,38 +508,39 @@ namespace castor3d
 		using namespace sdw;
 		FragmentWriter writer;
 		auto & renderSystem = *getEngine()->getRenderSystem();
+		bool hasTextures = !flags.textures.empty();
 
 		// Fragment Intputs
-		auto vtx_worldPosition = writer.declInput< Vec3 >( "vtx_worldPosition"
+		auto inWorldPosition = writer.declInput< Vec3 >( "inWorldPosition"
 			, RenderPass::VertexOutputs::WorldPositionLocation );
-		auto vtx_viewPosition = writer.declInput< Vec3 >( "vtx_viewPosition"
+		auto inViewPosition = writer.declInput< Vec3 >( "inViewPosition"
 			, RenderPass::VertexOutputs::ViewPositionLocation );
-		auto vtx_curPosition = writer.declInput< Vec3 >( "vtx_curPosition"
+		auto inCurPosition = writer.declInput< Vec3 >( "inCurPosition"
 			, RenderPass::VertexOutputs::CurPositionLocation );
-		auto vtx_prvPosition = writer.declInput< Vec3 >( "vtx_prvPosition"
+		auto inPrvPosition = writer.declInput< Vec3 >( "inPrvPosition"
 			, RenderPass::VertexOutputs::PrvPositionLocation );
-		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( "vtx_tangentSpaceFragPosition"
+		auto inTangentSpaceFragPosition = writer.declInput< Vec3 >( "inTangentSpaceFragPosition"
 			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
-		auto vtx_tangentSpaceViewPosition = writer.declInput< Vec3 >( "vtx_tangentSpaceViewPosition"
+		auto inTangentSpaceViewPosition = writer.declInput< Vec3 >( "inTangentSpaceViewPosition"
 			, RenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
-		auto vtx_normal = writer.declInput< Vec3 >( "vtx_normal"
+		auto inNormal = writer.declInput< Vec3 >( "inNormal"
 			, RenderPass::VertexOutputs::NormalLocation );
-		auto vtx_tangent = writer.declInput< Vec3 >( "vtx_tangent"
+		auto inTangent = writer.declInput< Vec3 >( "inTangent"
 			, RenderPass::VertexOutputs::TangentLocation );
-		auto vtx_bitangent = writer.declInput< Vec3 >( "vtx_bitangent"
+		auto inBitangent = writer.declInput< Vec3 >( "inBitangent"
 			, RenderPass::VertexOutputs::BitangentLocation );
-		auto vtx_texture = writer.declInput< Vec3 >( "vtx_texture"
-			, RenderPass::VertexOutputs::TextureLocation );
-		auto vtx_instance = writer.declInput< UInt >( "vtx_instance"
+		auto inTexture = writer.declInput< Vec3 >( "inTexture"
+			, RenderPass::VertexOutputs::TextureLocation
+			, hasTextures );
+		auto inInstance = writer.declInput< UInt >( "inInstance"
 			, RenderPass::VertexOutputs::InstanceLocation );
-		auto vtx_material = writer.declInput< UInt >( "vtx_material"
+		auto inMaterial = writer.declInput< UInt >( "inMaterial"
 			, RenderPass::VertexOutputs::MaterialLocation );
 
 		shader::PbrMRMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", getLightBufferIndex(), 0u );
 		shader::TextureConfigurations textureConfigs{ writer };
-		bool hasTextures = !flags.textures.empty();
 
 		if ( hasTextures )
 		{
@@ -590,20 +604,18 @@ namespace castor3d
 			, [&]()
 			{
 				auto material = writer.declLocale( "material"
-					, materials.getMaterial( vtx_material ) );
-				auto texCoord = writer.declLocale( "texCoord"
-					, vtx_texture );
+					, materials.getMaterial( inMaterial ) );
 				auto alpha = writer.declLocale( "alpha"
 					, material.m_opacity );
 				auto normal = writer.declLocale( "normal"
-					, normalize( vtx_normal ) );
+					, normalize( inNormal ) );
 				auto tangent = writer.declLocale( "tangent"
-					, normalize( vtx_tangent ) );
+					, normalize( inTangent ) );
 				auto bitangent = writer.declLocale( "bitangent"
-					, normalize( vtx_bitangent ) );
+					, normalize( inBitangent ) );
 				auto ambient = writer.declLocale( "ambient"
 					, c3d_ambientLight.xyz() );
-				auto metallic = writer.declLocale( "metallic"
+				auto metalness = writer.declLocale( "metalness"
 					, material.m_metallic );
 				auto roughness = writer.declLocale( "roughness"
 					, material.m_roughness );
@@ -624,27 +636,34 @@ namespace castor3d
 				auto transmittance = writer.declLocale( "transmittance"
 					, 0.0_f );
 				auto tangentSpaceViewPosition = writer.declLocale( "tangentSpaceViewPosition"
-					, vtx_tangentSpaceViewPosition );
+					, inTangentSpaceViewPosition );
 				auto tangentSpaceFragPosition = writer.declLocale( "tangentSpaceFragPosition"
-					, vtx_tangentSpaceFragPosition );
-				lighting->computeMapContributions( flags
-					, gamma
-					, textureConfigs
-					, c3d_textureConfig
-					, c3d_maps
-					, texCoord
-					, normal
-					, tangent
-					, bitangent
-					, emissive
-					, alpha
-					, occlusion
-					, transmittance
-					, albedo
-					, metallic
-					, roughness
-					, tangentSpaceViewPosition
-					, tangentSpaceFragPosition );
+					, inTangentSpaceFragPosition );
+
+				if ( hasTextures )
+				{
+					auto texCoord = writer.declLocale( "texCoord"
+						, inTexture );
+					lighting->computeMapContributions( flags
+						, gamma
+						, textureConfigs
+						, c3d_textureConfig
+						, c3d_maps
+						, texCoord
+						, normal
+						, tangent
+						, bitangent
+						, emissive
+						, alpha
+						, occlusion
+						, transmittance
+						, albedo
+						, metalness
+						, roughness
+						, tangentSpaceViewPosition
+						, tangentSpaceFragPosition );
+				}
+
 				utils.applyAlphaFunc( flags.alphaFunc
 					, alpha
 					, material.m_alphaRef );
@@ -656,82 +675,114 @@ namespace castor3d
 				shader::OutputComponents output{ lightDiffuse, lightSpecular };
 				lighting->computeCombined( worldEye
 					, albedo
-					, metallic
+					, metalness
 					, roughness
 					, c3d_shadowReceiver
-					, shader::FragmentInput( in.fragCoord.xy(), vtx_viewPosition, vtx_worldPosition, normal )
+					, shader::FragmentInput( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal )
 					, output );
+				auto reflected = writer.declLocale( "reflected"
+					, vec3( 0.0_f ) );
+				auto refracted = writer.declLocale( "refracted"
+					, vec3( 0.0_f ) );
 
 				if ( checkFlag( flags.passFlags, PassFlag::eReflection )
 					|| checkFlag( flags.passFlags, PassFlag::eRefraction ) )
 				{
 					auto incident = writer.declLocale( "incident"
-						, reflections.computeIncident( vtx_worldPosition, worldEye ) );
+						, reflections.computeIncident( inWorldPosition, worldEye ) );
 					auto ratio = writer.declLocale( "ratio"
 						, material.m_refractionRatio );
 
 					if ( checkFlag( flags.passFlags, PassFlag::eReflection ) )
 					{
 						// Reflection from environment map.
-						ambient = reflections.computeRefl( incident
+						ambient = vec3( 0.0_f );
+						reflected = reflections.computeRefl( incident
 							, normal
-							, occlusion
 							, c3d_mapEnvironment
-							, c3d_ambientLight.xyz()
-							, albedo );
+							, albedo
+							, metalness
+							, roughness );
+
+						if ( checkFlag( flags.passFlags, PassFlag::eRefraction ) )
+						{
+							// Refraction from environment map.
+							reflections.computeRefrEnvMap( incident
+								, normal
+								, c3d_mapEnvironment
+								, ratio
+								, material.m_transmission * albedo
+								, roughness
+								, reflected
+								, refracted );
+						}
+						else
+						{
+							IF( writer, ratio != 0.0_f )
+							{
+								// Refraction from background skybox.
+								reflections.computeRefrSkybox( incident
+									, normal
+									, c3d_mapPrefiltered
+									, material.m_refractionRatio
+									, material.m_transmission * albedo
+									, roughness
+									, reflected
+									, refracted );
+							}
+							FI;
+						}
 					}
 					else
 					{
 						// Reflection from background skybox.
-						ambient = c3d_ambientLight.xyz()
-							* occlusion
-							* utils.computeMetallicIBL( normal
-								, vtx_worldPosition
-								, albedo
-								, metallic
-								, roughness
-								, c3d_cameraPosition.xyz()
-								, c3d_mapIrradiance
-								, c3d_mapPrefiltered
-								, c3d_mapBrdf );
-					}
-
-					if ( checkFlag( flags.passFlags, PassFlag::eRefraction ) )
-					{
-						// Refraction from environment map.
-						ambient = reflections.computeRefrEnvMap( incident
-							, normal
-							, occlusion
-							, c3d_mapEnvironment
-							, ratio
-							, ambient
+						ambient *= utils.computeMetallicIBL( normal
+							, inWorldPosition
 							, albedo
-							, roughness );
-					}
-					else
-					{
-						IF( writer, ratio != 0.0_f )
+							, metalness
+							, roughness
+							, c3d_cameraPosition.xyz()
+							, c3d_mapIrradiance
+							, c3d_mapPrefiltered
+							, c3d_mapBrdf );
+
+						if ( checkFlag( flags.passFlags, PassFlag::eRefraction ) )
 						{
-							// Refraction from background skybox.
-							ambient = reflections.computeRefrSkybox( incident
+							// Refraction from environment map.
+							reflections.computeRefrEnvMap( incident
 								, normal
-								, occlusion
-								, c3d_mapPrefiltered
-								, material.m_refractionRatio
+								, c3d_mapEnvironment
+								, ratio
+								, material.m_transmission * albedo
+								, roughness
 								, ambient
-								, albedo
-								, roughness );
+								, refracted );
 						}
-						FI;
+						else
+						{
+							IF( writer, ratio != 0.0_f )
+							{
+								// Refraction from background skybox.
+								reflections.computeRefrSkybox( incident
+									, normal
+									, c3d_mapPrefiltered
+									, material.m_refractionRatio
+									, material.m_transmission * albedo
+									, roughness
+									, ambient
+									, refracted );
+							}
+							FI;
+						}
 					}
 				}
 				else
 				{
 					// Reflection from background skybox.
-					ambient *= occlusion * utils.computeMetallicIBL( normal
-						, vtx_worldPosition
+					ambient *= utils.computeMetallicIBL( normal
+						, inWorldPosition
 						, albedo
-						, metallic
+						, metalness
 						, roughness
 						, c3d_cameraPosition.xyz()
 						, c3d_mapIrradiance
@@ -744,21 +795,22 @@ namespace castor3d
 					{
 						// Refraction from background skybox.
 						auto incident = writer.declLocale( "incident"
-							, reflections.computeIncident( vtx_worldPosition, worldEye ) );
-						ambient = reflections.computeRefrSkybox( incident
+							, reflections.computeIncident( inWorldPosition, worldEye ) );
+						reflections.computeRefrSkybox( incident
 							, normal
-							, occlusion
 							, c3d_mapPrefiltered
 							, material.m_refractionRatio
+							, material.m_transmission * albedo
+							, roughness
 							, ambient
-							, albedo
-							, roughness );
+							, refracted );
 					}
 					FI;
 				}
 
+				ambient *= occlusion;
 				pxl_fragColor = vec4( lpvGI.computeResult( flags.sceneFlags
-						, vtx_worldPosition
+						, inWorldPosition
 						, normal
 						, c3d_indirectAttenuation
 						, c3d_minVolumeCorner
@@ -768,9 +820,7 @@ namespace castor3d
 						, c3d_allCellSizes
 						, c3d_gridSizes
 						, lightDiffuse * albedo
-						, sdw::fma( lightDiffuse
-							, albedo
-							, lightSpecular + emissive )
+						, lightDiffuse * albedo + reflected + refracted + lightSpecular + emissive
 						, ambient )
 					, alpha );
 
@@ -778,8 +828,8 @@ namespace castor3d
 				{
 					pxl_fragColor = fog.apply( vec4( utils.removeGamma( gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
 						, pxl_fragColor
-						, length( vtx_viewPosition )
-						, vtx_viewPosition.y()
+						, length( inViewPosition )
+						, inViewPosition.y()
 						, c3d_fogInfo
 						, c3d_cameraPosition );
 				}
@@ -793,38 +843,39 @@ namespace castor3d
 		using namespace sdw;
 		FragmentWriter writer;
 		auto & renderSystem = *getEngine()->getRenderSystem();
+		bool hasTextures = !flags.textures.empty();
 
 		// Fragment Intputs
-		auto vtx_worldPosition = writer.declInput< Vec3 >( "vtx_worldPosition"
+		auto inWorldPosition = writer.declInput< Vec3 >( "inWorldPosition"
 			, RenderPass::VertexOutputs::WorldPositionLocation );
-		auto vtx_viewPosition = writer.declInput< Vec3 >( "vtx_viewPosition"
+		auto inViewPosition = writer.declInput< Vec3 >( "inViewPosition"
 			, RenderPass::VertexOutputs::ViewPositionLocation );
-		auto vtx_curPosition = writer.declInput< Vec3 >( "vtx_curPosition"
+		auto inCurPosition = writer.declInput< Vec3 >( "inCurPosition"
 			, RenderPass::VertexOutputs::CurPositionLocation );
-		auto vtx_prvPosition = writer.declInput< Vec3 >( "vtx_prvPosition"
+		auto inPrvPosition = writer.declInput< Vec3 >( "inPrvPosition"
 			, RenderPass::VertexOutputs::PrvPositionLocation );
-		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( "vtx_tangentSpaceFragPosition"
+		auto inTangentSpaceFragPosition = writer.declInput< Vec3 >( "inTangentSpaceFragPosition"
 			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
-		auto vtx_tangentSpaceViewPosition = writer.declInput< Vec3 >( "vtx_tangentSpaceViewPosition"
+		auto inTangentSpaceViewPosition = writer.declInput< Vec3 >( "inTangentSpaceViewPosition"
 			, RenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
-		auto vtx_normal = writer.declInput< Vec3 >( "vtx_normal"
+		auto inNormal = writer.declInput< Vec3 >( "inNormal"
 			, RenderPass::VertexOutputs::NormalLocation );
-		auto vtx_tangent = writer.declInput< Vec3 >( "vtx_tangent"
+		auto inTangent = writer.declInput< Vec3 >( "inTangent"
 			, RenderPass::VertexOutputs::TangentLocation );
-		auto vtx_bitangent = writer.declInput< Vec3 >( "vtx_bitangent"
+		auto inBitangent = writer.declInput< Vec3 >( "inBitangent"
 			, RenderPass::VertexOutputs::BitangentLocation );
-		auto vtx_texture = writer.declInput< Vec3 >( "vtx_texture"
-			, RenderPass::VertexOutputs::TextureLocation );
-		auto vtx_instance = writer.declInput< UInt >( "vtx_instance"
+		auto inTexture = writer.declInput< Vec3 >( "inTexture"
+			, RenderPass::VertexOutputs::TextureLocation
+			, hasTextures );
+		auto inInstance = writer.declInput< UInt >( "inInstance"
 			, RenderPass::VertexOutputs::InstanceLocation );
-		auto vtx_material = writer.declInput< UInt >( "vtx_material"
+		auto inMaterial = writer.declInput< UInt >( "inMaterial"
 			, RenderPass::VertexOutputs::MaterialLocation );
 
 		shader::PbrSGMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", getLightBufferIndex(), 0u );
 		shader::TextureConfigurations textureConfigs{ writer };
-		bool hasTextures = !flags.textures.empty();
 
 		if ( hasTextures )
 		{
@@ -887,17 +938,15 @@ namespace castor3d
 			, [&]()
 			{
 				auto material = writer.declLocale( "material"
-					, materials.getMaterial( vtx_material ) );
-				auto texCoord = writer.declLocale( "texCoord"
-					, vtx_texture );
+					, materials.getMaterial( inMaterial ) );
 				auto alpha = writer.declLocale( "alpha"
 					, material.m_opacity );
 				auto normal = writer.declLocale( "normal"
-					, normalize( vtx_normal ) );
+					, normalize( inNormal ) );
 				auto tangent = writer.declLocale( "tangent"
-					, normalize( vtx_tangent ) );
+					, normalize( inTangent ) );
 				auto bitangent = writer.declLocale( "bitangent"
-					, normalize( vtx_bitangent ) );
+					, normalize( inBitangent ) );
 				auto ambient = writer.declLocale( "ambient"
 					, c3d_ambientLight.xyz() );
 				auto specular = writer.declLocale( "specular"
@@ -921,27 +970,34 @@ namespace castor3d
 				auto transmittance = writer.declLocale( "transmittance"
 					, 0.0_f );
 				auto tangentSpaceViewPosition = writer.declLocale( "tangentSpaceViewPosition"
-					, vtx_tangentSpaceViewPosition );
+					, inTangentSpaceViewPosition );
 				auto tangentSpaceFragPosition = writer.declLocale( "tangentSpaceFragPosition"
-					, vtx_tangentSpaceFragPosition );
-				lighting->computeMapContributions( flags
-					, gamma
-					, textureConfigs
-					, c3d_textureConfig
-					, c3d_maps
-					, texCoord
-					, normal
-					, tangent
-					, bitangent
-					, emissive
-					, alpha
-					, occlusion
-					, transmittance
-					, albedo
-					, specular
-					, glossiness
-					, tangentSpaceViewPosition
-					, tangentSpaceFragPosition );
+					, inTangentSpaceFragPosition );
+
+				if ( hasTextures )
+				{
+					auto texCoord = writer.declLocale( "texCoord"
+						, inTexture );
+					lighting->computeMapContributions( flags
+						, gamma
+						, textureConfigs
+						, c3d_textureConfig
+						, c3d_maps
+						, texCoord
+						, normal
+						, tangent
+						, bitangent
+						, emissive
+						, alpha
+						, occlusion
+						, transmittance
+						, albedo
+						, specular
+						, glossiness
+						, tangentSpaceViewPosition
+						, tangentSpaceFragPosition );
+				}
+
 				utils.applyAlphaFunc( flags.alphaFunc
 					, alpha
 					, material.m_alphaRef );
@@ -955,77 +1011,108 @@ namespace castor3d
 					, specular
 					, glossiness
 					, c3d_shadowReceiver
-					, shader::FragmentInput( in.fragCoord.xy(), vtx_viewPosition, vtx_worldPosition, normal )
+					, shader::FragmentInput( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal )
 					, output );
+				auto reflected = writer.declLocale( "reflected"
+					, vec3( 0.0_f ) );
+				auto refracted = writer.declLocale( "refracted"
+					, vec3( 0.0_f ) );
 
 				if ( checkFlag( flags.passFlags, PassFlag::eReflection )
 					|| checkFlag( flags.passFlags, PassFlag::eRefraction ) )
 				{
 					auto incident = writer.declLocale( "incident"
-						, reflections.computeIncident( vtx_worldPosition, worldEye ) );
+						, reflections.computeIncident( inWorldPosition, worldEye ) );
 					auto ratio = writer.declLocale( "ratio"
 						, material.m_refractionRatio );
 
 					if ( checkFlag( flags.passFlags, PassFlag::eReflection ) )
 					{
 						// Reflection from environment map.
-						ambient = reflections.computeRefl( incident
+						ambient = vec3( 0.0_f );
+						reflected = reflections.computeRefl( incident
 							, normal
-							, occlusion
 							, c3d_mapEnvironment
-							, c3d_ambientLight.xyz()
-							, albedo );
+							, specular
+							, glossiness );
+
+						if ( checkFlag( flags.passFlags, PassFlag::eRefraction ) )
+						{
+							// Refraction from environment map.
+							reflections.computeRefrEnvMap( incident
+								, normal
+								, c3d_mapEnvironment
+								, ratio
+								, material.m_transmission * albedo
+								, glossiness
+								, reflected
+								, refracted );
+						}
+						else
+						{
+							IF( writer, ratio != 0.0_f )
+							{
+								// Refraction from background skybox.
+								reflections.computeRefrSkybox( incident
+									, normal
+									, c3d_mapPrefiltered
+									, material.m_refractionRatio
+									, material.m_transmission * albedo
+									, glossiness
+									, reflected
+									, refracted );
+							}
+							FI;
+						}
 					}
 					else
 					{
 						// Reflection from background skybox.
-						ambient = c3d_ambientLight.xyz()
-							* occlusion
-							* utils.computeSpecularIBL( normal
-								, vtx_worldPosition
-								, albedo
-								, specular
-								, glossiness
-								, c3d_cameraPosition.xyz()
-								, c3d_mapIrradiance
-								, c3d_mapPrefiltered
-								, c3d_mapBrdf );
-					}
-
-					if ( checkFlag( flags.passFlags, PassFlag::eRefraction ) )
-					{
-						// Refraction from environment map.
-						ambient = reflections.computeRefrEnvMap( incident
-							, normal
-							, occlusion
-							, c3d_mapEnvironment
-							, ratio
-							, ambient
+						ambient *= utils.computeSpecularIBL( normal
+							, inWorldPosition
 							, albedo
-							, glossiness );
-					}
-					else
-					{
-						IF( writer, ratio != 0.0_f )
+							, specular
+							, glossiness
+							, c3d_cameraPosition.xyz()
+							, c3d_mapIrradiance
+							, c3d_mapPrefiltered
+							, c3d_mapBrdf );
+
+						if ( checkFlag( flags.passFlags, PassFlag::eRefraction ) )
 						{
-							// Refraction from background skybox.
-							ambient = reflections.computeRefrSkybox( incident
+							// Refraction from environment map.
+							reflections.computeRefrEnvMap( incident
 								, normal
-								, occlusion
-								, c3d_mapPrefiltered
-								, material.m_refractionRatio
+								, c3d_mapEnvironment
+								, ratio
+								, material.m_transmission * albedo
+								, glossiness
 								, ambient
-								, albedo
-								, glossiness );
+								, refracted );
 						}
-						FI;
+						else
+						{
+							IF( writer, ratio != 0.0_f )
+							{
+								// Refraction from background skybox.
+								reflections.computeRefrSkybox( incident
+									, normal
+									, c3d_mapPrefiltered
+									, material.m_refractionRatio
+									, material.m_transmission * albedo
+									, glossiness
+									, ambient
+									, refracted );
+							}
+							FI;
+						}
 					}
 				}
 				else
 				{
 					// Reflection from background skybox.
-					ambient *= occlusion * utils.computeSpecularIBL( normal
-						, vtx_worldPosition
+					ambient *= utils.computeSpecularIBL( normal
+						, inWorldPosition
 						, albedo
 						, specular
 						, glossiness
@@ -1040,21 +1127,22 @@ namespace castor3d
 					{
 						// Refraction from background skybox.
 						auto incident = writer.declLocale( "incident"
-							, reflections.computeIncident( vtx_worldPosition, worldEye ) );
-						ambient = reflections.computeRefrSkybox( incident
+							, reflections.computeIncident( inWorldPosition, worldEye ) );
+						reflections.computeRefrSkybox( incident
 							, normal
-							, occlusion
 							, c3d_mapPrefiltered
 							, material.m_refractionRatio
+							, material.m_transmission * albedo
+							, glossiness
 							, ambient
-							, albedo
-							, glossiness );
+							, refracted );
 					}
 					FI;
 				}
 
+				ambient *= occlusion;
 				pxl_fragColor = vec4( lpvGI.computeResult( flags.sceneFlags
-						, vtx_worldPosition
+						, inWorldPosition
 						, normal
 						, c3d_indirectAttenuation
 						, c3d_minVolumeCorner
@@ -1064,9 +1152,7 @@ namespace castor3d
 						, c3d_allCellSizes
 						, c3d_gridSizes
 						, lightDiffuse * albedo
-						, sdw::fma( lightDiffuse
-							, albedo
-							, lightSpecular + emissive )
+						, lightDiffuse * albedo + reflected + refracted + lightSpecular + emissive
 						, ambient )
 					, alpha );
 
@@ -1074,8 +1160,8 @@ namespace castor3d
 				{
 					pxl_fragColor = fog.apply( vec4( utils.removeGamma( gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
 						, pxl_fragColor
-						, length( vtx_viewPosition )
-						, vtx_viewPosition.y()
+						, length( inViewPosition )
+						, inViewPosition.y()
 						, c3d_fogInfo
 						, c3d_cameraPosition );
 				}

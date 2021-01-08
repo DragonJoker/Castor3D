@@ -97,7 +97,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderLoop::renderSyncFrame
 		 */
-		C3D_API void renderSyncFrame()override;
+		C3D_API void renderSyncFrame( castor::Milliseconds tslf )override;
 		/**
 		 *\copydoc		castor3d::RenderLoop::pause
 		 */

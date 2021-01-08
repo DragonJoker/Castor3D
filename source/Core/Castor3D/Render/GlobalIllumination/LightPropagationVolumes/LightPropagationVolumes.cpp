@@ -33,8 +33,10 @@ namespace castor3d
 		, LpvGridConfigUbo const & lpvGridConfigUbo
 		, LightVolumePassResult const & injection
 		, uint32_t cascadeIndex
+		, float lpvCellSize
 		, TextureUnit * geometry )
 		: lpvLightConfigUbo{ device }
+		, lpvCellSize{ lpvCellSize }
 	{
 		lightInjectionPass = castor::makeUnique< LightInjectionPass >( *device.renderSystem.getEngine()
 			, device
@@ -73,7 +75,7 @@ namespace castor3d
 
 		if ( changed )
 		{
-			lpvLightConfigUbo.cpuUpdate( light );
+			lpvLightConfigUbo.cpuUpdate( light, lpvCellSize );
 		}
 
 		return changed;
@@ -108,17 +110,14 @@ namespace castor3d
 				, 0u
 				, m_engine.getLpvGridSize() )
 			: TextureUnit{ m_engine } ) }
-		, m_propagate
-		{
-			LightVolumePassResult{ m_engine
-			, m_device
-			, this->getName() + "Propagate0"
-			, m_engine.getLpvGridSize() },
-			LightVolumePassResult{ m_engine
-			, m_device
-			, this->getName() + "Propagate1"
-			, m_engine.getLpvGridSize() },
-		}
+		, m_propagate{ LightVolumePassResult{ m_engine
+				, m_device
+				, this->getName() + "Propagate0"
+				, m_engine.getLpvGridSize() }
+			, LightVolumePassResult{ m_engine
+				, m_device
+				, this->getName() + "Propagate1"
+				, m_engine.getLpvGridSize() } }
 	{
 	}
 
@@ -133,12 +132,13 @@ namespace castor3d
 			auto const cascadeIndex = shader::DirectionalMaxCascadesCount - 2u;
 			auto & lightCache = m_scene.getLightCache();
 			m_aabb = m_scene.getBoundingBox();
+			m_injection.initialise( m_device );
 			m_lightPropagationPasses = { castor::makeUnique< LightPropagationPass >( m_device
-				, this->getName()
-				, cuT( "NoOcc" )
-				, false
-				, m_engine.getLpvGridSize()
-				, BlendMode::eAdditive )
+					, this->getName()
+					, cuT( "NoOccNoBlend" )
+					, false
+					, m_engine.getLpvGridSize()
+					, BlendMode::eNoBlend )
 				, castor::makeUnique< LightPropagationPass >( m_device
 					, this->getName()
 					, ( m_geometryVolumes
@@ -152,6 +152,12 @@ namespace castor3d
 			if ( m_geometryVolumes )
 			{
 				geometry = &m_geometry;
+				geometry->initialise( m_device );
+			}
+
+			for ( auto & propagate : m_propagate )
+			{
+				propagate.initialise( m_device );
 			}
 
 			LightPropagationPass & passNoOcc = *m_lightPropagationPasses[0u];
@@ -162,7 +168,6 @@ namespace castor3d
 				, m_lpvGridConfigUbo
 				, m_lpvResult
 				, m_propagate[propIndex] );
-
 
 			for ( uint32_t i = 1u; i < MaxPropagationSteps; ++i )
 			{
@@ -190,7 +195,7 @@ namespace castor3d
 					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 					, result[tex].getTexture()->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
 			};
-			cmd.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
+			cmd.begin();
 			cmd.beginDebugBlock(
 				{
 					"Lighting - " + this->getName() + " - Clear",
@@ -205,9 +210,6 @@ namespace castor3d
 			clearTex( m_propagate[1u], LpvTexture::eR );
 			clearTex( m_propagate[1u], LpvTexture::eG );
 			clearTex( m_propagate[1u], LpvTexture::eB );
-			clearTex( m_lpvResult, LpvTexture::eR );
-			clearTex( m_lpvResult, LpvTexture::eG );
-			clearTex( m_lpvResult, LpvTexture::eB );
 			cmd.endDebugBlock();
 			cmd.end();
 			m_initialised = true;
@@ -238,6 +240,7 @@ namespace castor3d
 					, m_lpvGridConfigUbo
 					, m_injection
 					, cascadeIndex
+					, m_lpvGridConfigUbo.getUbo().getData().minVolumeCorner->w
 					, ( m_geometryVolumes
 						? &m_geometry
 						: nullptr ) } );
@@ -296,7 +299,6 @@ namespace castor3d
 			return toWait;
 		}
 
-		CU_Require( m_initialised );
 		auto result = &toWait;
 		result = &m_clearCommands.submit( *m_device.graphicsQueue, *result );
 

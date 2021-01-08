@@ -220,7 +220,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
 		 */
-		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const;
+		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
 
 	private:
 		using RenderPass::initialise;

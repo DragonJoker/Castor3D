@@ -17,29 +17,28 @@ namespace castor3d
 				, Utils & utils );
 			C3D_API sdw::Vec3 computeIncident( sdw::Vec3 const & wsPosition
 				, sdw::Vec3 const & wsCamera )const;
-			C3D_API void computeRefl( sdw::Vec3 const & wsIncident
+			C3D_API sdw::Vec3 computeRefl( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
-				, sdw::Float const & occlusion
 				, sdw::SampledImageCubeRgba32 const & envMap
 				, sdw::Float const & shininess
-				, sdw::Vec3 & ambient
-				, sdw::Vec3 & diffuse )const;
+				, sdw::Vec3 const & specular )const;
 			C3D_API void computeRefr( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
-				, sdw::Float const & occlusion
 				, sdw::SampledImageCubeRgba32 const & envMap
 				, sdw::Float const & refractionRatio
+				, sdw::Vec3 const & transmission
 				, sdw::Float const & shininess
-				, sdw::Vec3 & ambient
-				, sdw::Vec3 & diffuse )const;
+				, sdw::Vec3 & reflection
+				, sdw::Vec3 & refraction )const;
 			C3D_API void computeReflRefr( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
-				, sdw::Float const & occlusion
 				, sdw::SampledImageCubeRgba32 const & envMap
 				, sdw::Float const & refractionRatio
+				, sdw::Vec3 const & specular
+				, sdw::Vec3 const & transmission
 				, sdw::Float const & shininess
-				, sdw::Vec3 & ambient
-				, sdw::Vec3 & diffuse )const;
+				, sdw::Vec3 & reflection
+				, sdw::Vec3 & refraction )const;
 
 		private:
 			void doDeclareComputeIncident();
@@ -53,29 +52,28 @@ namespace castor3d
 			sdw::Function< sdw::Vec3
 				, sdw::InVec3
 				, sdw::InVec3 > m_computeIncident;
+			sdw::Function< sdw::Vec3
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InSampledImageCubeRgba32
+				, sdw::InFloat
+				, sdw::InVec3 > m_computeRefl;
 			sdw::Function< sdw::Void
 				, sdw::InVec3
 				, sdw::InVec3
-				, sdw::InFloat
 				, sdw::InSampledImageCubeRgba32
 				, sdw::InFloat
-				, sdw::OutVec3
-				, sdw::OutVec3 > m_computeRefl;
-			sdw::Function< sdw::Void
-				, sdw::InVec3
 				, sdw::InVec3
 				, sdw::InFloat
-				, sdw::InSampledImageCubeRgba32
-				, sdw::InFloat
-				, sdw::InFloat
-				, sdw::OutVec3
+				, sdw::InOutVec3
 				, sdw::OutVec3 > m_computeRefr;
 			sdw::Function< sdw::Void
 				, sdw::InVec3
 				, sdw::InVec3
-				, sdw::InFloat
 				, sdw::InSampledImageCubeRgba32
 				, sdw::InFloat
+				, sdw::InVec3
+				, sdw::InVec3
 				, sdw::InFloat
 				, sdw::OutVec3
 				, sdw::OutVec3 > m_computeReflRefr;

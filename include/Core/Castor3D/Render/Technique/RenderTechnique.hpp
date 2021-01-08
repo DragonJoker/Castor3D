@@ -303,6 +303,7 @@ namespace castor3d
 		OnBackgroundChangedConnection m_onBgChanged;
 		OnBackgroundChangedConnection m_onCBgChanged;
 		CommandsSemaphore m_colorTexTransition;
+		CommandsSemaphore m_clearLpv;
 	};
 }
 

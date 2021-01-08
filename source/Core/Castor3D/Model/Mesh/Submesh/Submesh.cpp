@@ -1,16 +1,33 @@
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/GeometryBuffers.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
-#include "Castor3D/Buffer/GeometryBuffers.hpp"
+#include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+
+#include <CastorUtils/Miscellaneous/Hash.hpp>
 
 namespace castor3d
 {
 	namespace
 	{
+		size_t hash( MaterialSPtr material
+			, TextureFlagsArray const & flags )
+		{
+			auto result = std::hash< MaterialSPtr >{}( material );
+
+			for ( auto const & flagId : flags )
+			{
+				result = castor::hashCombine( result, flagId.id );
+				result = castor::hashCombine( result, flagId.flags.value() );
+			}
+
+			return result;
+		}
+
 		bool fix( castor::Point3f & value
 			, castor::Point3f const & defaultValue )
 		{
@@ -123,6 +140,21 @@ namespace castor3d
 						{ RenderPass::VertexInputs::NormalLocation, 0u, VK_FORMAT_R32G32B32_SFLOAT, offsetof( InterleavedVertex, nml ) },
 						{ RenderPass::VertexInputs::TangentLocation, 0u, VK_FORMAT_R32G32B32_SFLOAT, offsetof( InterleavedVertex, tan ) },
 						{ RenderPass::VertexInputs::TextureLocation, 0u, VK_FORMAT_R32G32B32_SFLOAT, offsetof( InterleavedVertex, tex ) },
+					} );
+			}
+
+			if ( !m_vertexLayoutNoTex )
+			{
+				m_vertexLayoutNoTex = std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
+					, ashes::VkVertexInputBindingDescriptionArray
+					{
+						{ 0u, sizeof( InterleavedVertex ), VK_VERTEX_INPUT_RATE_VERTEX },
+					}
+					, ashes::VkVertexInputAttributeDescriptionArray
+					{
+						{ RenderPass::VertexInputs::PositionLocation, 0u, VK_FORMAT_R32G32B32_SFLOAT, offsetof( InterleavedVertex, pos ) },
+						{ RenderPass::VertexInputs::NormalLocation, 0u, VK_FORMAT_R32G32B32_SFLOAT, offsetof( InterleavedVertex, nml ) },
+						{ RenderPass::VertexInputs::TangentLocation, 0u, VK_FORMAT_R32G32B32_SFLOAT, offsetof( InterleavedVertex, tan ) },
 					} );
 			}
 
@@ -366,9 +398,11 @@ namespace castor3d
 	}
 
 	GeometryBuffers const & Submesh::getGeometryBuffers( MaterialSPtr material
-		, uint32_t instanceMult )const
+		, uint32_t instanceMult
+		, TextureFlagsArray const & mask )const
 	{
-		auto it = m_geometryBuffers.find( material );
+		auto key = hash( material, mask );
+		auto it = m_geometryBuffers.find( key );
 
 		if ( it == m_geometryBuffers.end() )
 		{
@@ -377,7 +411,15 @@ namespace castor3d
 			ashes::PipelineVertexInputStateCreateInfoCRefArray layouts;
 			buffers.emplace_back( m_vertexBuffer->getBuffer() );
 			offsets.emplace_back( 0u );
-			layouts.emplace_back( *m_vertexLayout );
+
+			if ( !mask.empty() )
+			{
+				layouts.emplace_back( *m_vertexLayout );
+			}
+			else
+			{
+				layouts.emplace_back( *m_vertexLayoutNoTex );
+			}
 
 			for ( auto & component : m_components )
 			{
@@ -392,7 +434,7 @@ namespace castor3d
 			result.iboOffset = 0u;
 			result.idxCount = uint32_t( m_indexBuffer->getCount() );
 			result.vtxCount = 0u;
-			it = m_geometryBuffers.emplace( material, std::move( result ) ).first;
+			it = m_geometryBuffers.emplace( key, std::move( result ) ).first;
 		}
 
 		return it->second;

@@ -7,9 +7,8 @@ Castor3D
 ========
 
 Castor3D is a 3D engine written in C++ 17.  
-It works on Windows and also on GNU/Linux.  
-It relies on RendererLib as a rendering API, allowing Vulkan, OpenGL 3.X and OpenGL 4.X.  
-It is still a work in progress, feel free to contribute!  
+It works on Windows and on GNU/Linux.  
+It relies on Ashes as a rendering API, allowing Vulkan, OpenGL and Direct3D 11.  
 
 Features
 --------
@@ -20,11 +19,12 @@ Features
 - Screen Space Ambient Occlusion (using Scalable Ambiant Obscurance implementation).
 - Shadow Mapping (allowing to choose between Raw, PCF or Variance Shadow Maps).
 - Reflection/Refraction Mapping.
-- PBR rendering (Metallic and Specular workflows), and Legacy rendering.
+- PBR rendering (Metallic and Specular workflows), and Blinn-Phong rendering.
 - HDR rendering with various tone mapping operators.
 - Screen Space Subsurface Scattering (without backlit transmittance yet).
 - Volumetric Light Scattering for directional light source projecting shadows.
 - Cascaded Shadow Maps for directional light sources.
+- Global Illumination through Ligh Propagation Volumes (layered or non layered, with or without geometry injection).
 - Frustum culling.
 - Scene graph.
 - Modular architecture through plug-ins.
@@ -33,11 +33,6 @@ Features
 
 Implemented Plug-ins
 --------------------
-
-**Renderers**
-- VkRenderSystem.
-- Gl3RenderSystem.
-- Gl4RenderSystem.
 
 **Importers**
 - ASSIMP: Multiple format mesh importer.

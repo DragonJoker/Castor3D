@@ -78,7 +78,7 @@ namespace castor3d
 				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 				VK_ATTACHMENT_STORE_OP_DONT_CARE,
 				VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
-				VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+				VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL,
 			}
 		};
 		ashes::VkAttachmentReferenceArray colorAttachments;
@@ -279,6 +279,7 @@ namespace castor3d
 #if C3D_DebugGeometryShaders
 		using namespace sdw;
 		GeometryWriter writer;
+		bool hasTextures = !flags.textures.empty();
 		writer.inputLayout( ast::stmt::InputLayout::eTriangleList );
 		writer.outputLayout( ast::stmt::OutputLayout::eTriangleStrip, 3u );
 
@@ -303,7 +304,8 @@ namespace castor3d
 		auto inBitangent = writer.declInputArray< Vec3 >( "inBitangent"
 			, RenderPass::VertexOutputs::BitangentLocation, 3u );
 		auto inTexture = writer.declInputArray< Vec3 >( "inTexture"
-			, RenderPass::VertexOutputs::TextureLocation, 3u );
+			, RenderPass::VertexOutputs::TextureLocation, 3u
+			, hasTextures );
 		auto inInstance = writer.declInputArray< UInt >( "inInstance"
 			, RenderPass::VertexOutputs::InstanceLocation, 3u );
 		auto inMaterial = writer.declInputArray< UInt >( "inMaterial"
@@ -327,7 +329,8 @@ namespace castor3d
 		auto outBitangent = writer.declOutput< Vec3 >( "outBitangent"
 			, RenderPass::VertexOutputs::BitangentLocation );
 		auto outTexture = writer.declOutput< Vec3 >( "outTexture"
-			, RenderPass::VertexOutputs::TextureLocation );
+			, RenderPass::VertexOutputs::TextureLocation
+			, hasTextures );
 		auto outInstance = writer.declOutput< UInt >( "outInstance"
 			, RenderPass::VertexOutputs::InstanceLocation );
 		auto Material = writer.declOutput< UInt >( "Material"
@@ -401,7 +404,8 @@ namespace castor3d
 		auto inBitangent = writer.declInput< Vec3 >( "inBitangent"
 			, RenderPass::VertexOutputs::BitangentLocation );
 		auto inTexture = writer.declInput< Vec3 >( "inTexture"
-			, RenderPass::VertexOutputs::TextureLocation );
+			, RenderPass::VertexOutputs::TextureLocation
+			, hasTextures );
 		auto inInstance = writer.declInput< UInt >( "inInstance"
 			, RenderPass::VertexOutputs::InstanceLocation );
 		auto inMaterial = writer.declInput< UInt >( "inMaterial"
@@ -467,24 +471,28 @@ namespace castor3d
 				auto transmittance = writer.declLocale( "transmittance"
 					, 0.0_f );
 
-				lightingModel.computeMapContributions( flags
-					, gamma
-					, textureConfigs
-					, c3d_textureConfig
-					, c3d_maps
-					, texCoord
-					, normal
-					, tangent
-					, bitangent
-					, emissive
-					, alpha
-					, occlusion
-					, transmittance
-					, diffuse
-					, specular
-					, shininess
-					, tangentSpaceViewPosition
-					, tangentSpaceFragPosition );
+				if ( hasTextures )
+				{
+					lightingModel.computeMapContributions( flags
+						, gamma
+						, textureConfigs
+						, c3d_textureConfig
+						, c3d_maps
+						, texCoord
+						, normal
+						, tangent
+						, bitangent
+						, emissive
+						, alpha
+						, occlusion
+						, transmittance
+						, diffuse
+						, specular
+						, shininess
+						, tangentSpaceViewPosition
+						, tangentSpaceFragPosition );
+				}
+
 				utils.applyAlphaFunc( flags.alphaFunc
 					, alpha
 					, material.m_alphaRef );
@@ -550,7 +558,8 @@ namespace castor3d
 		auto inBitangent = writer.declInput< Vec3 >( "inBitangent"
 			, RenderPass::VertexOutputs::BitangentLocation );
 		auto inTexture = writer.declInput< Vec3 >( "inTexture"
-			, RenderPass::VertexOutputs::TextureLocation );
+			, RenderPass::VertexOutputs::TextureLocation
+			, hasTextures );
 		auto inInstance = writer.declInput< UInt >( "inInstance"
 			, RenderPass::VertexOutputs::InstanceLocation );
 		auto inMaterial = writer.declInput< UInt >( "inMaterial"
@@ -616,24 +625,28 @@ namespace castor3d
 				auto transmittance = writer.declLocale( "transmittance"
 					, 0.0_f );
 
-				lightingModel.computeMapContributions( flags
-					, gamma
-					, textureConfigs
-					, c3d_textureConfig
-					, c3d_maps
-					, texCoord
-					, normal
-					, tangent
-					, bitangent
-					, emissive
-					, alpha
-					, occlusion
-					, transmittance
-					, albedo
-					, metallic
-					, roughness
-					, tangentSpaceViewPosition
-					, tangentSpaceFragPosition );
+				if ( hasTextures )
+				{
+					lightingModel.computeMapContributions( flags
+						, gamma
+						, textureConfigs
+						, c3d_textureConfig
+						, c3d_maps
+						, texCoord
+						, normal
+						, tangent
+						, bitangent
+						, emissive
+						, alpha
+						, occlusion
+						, transmittance
+						, albedo
+						, metallic
+						, roughness
+						, tangentSpaceViewPosition
+						, tangentSpaceFragPosition );
+				}
+
 				utils.applyAlphaFunc( flags.alphaFunc
 					, alpha
 					, material.m_alphaRef );
@@ -699,7 +712,8 @@ namespace castor3d
 		auto inBitangent = writer.declInput< Vec3 >( "inBitangent"
 			, RenderPass::VertexOutputs::BitangentLocation );
 		auto inTexture = writer.declInput< Vec3 >( "inTexture"
-			, RenderPass::VertexOutputs::TextureLocation );
+			, RenderPass::VertexOutputs::TextureLocation
+			, hasTextures );
 		auto inInstance = writer.declInput< UInt >( "inInstance"
 			, RenderPass::VertexOutputs::InstanceLocation );
 		auto inMaterial = writer.declInput< UInt >( "inMaterial"
@@ -765,24 +779,28 @@ namespace castor3d
 				auto transmittance = writer.declLocale( "transmittance"
 					, 0.0_f );
 
-				lightingModel.computeMapContributions( flags
-					, gamma
-					, textureConfigs
-					, c3d_textureConfig
-					, c3d_maps
-					, texCoord
-					, normal
-					, tangent
-					, bitangent
-					, emissive
-					, alpha
-					, occlusion
-					, transmittance
-					, albedo
-					, specular
-					, glossiness
-					, tangentSpaceViewPosition
-					, tangentSpaceFragPosition );
+				if ( hasTextures )
+				{
+					lightingModel.computeMapContributions( flags
+						, gamma
+						, textureConfigs
+						, c3d_textureConfig
+						, c3d_maps
+						, texCoord
+						, normal
+						, tangent
+						, bitangent
+						, emissive
+						, alpha
+						, occlusion
+						, transmittance
+						, albedo
+						, specular
+						, glossiness
+						, tangentSpaceViewPosition
+						, tangentSpaceFragPosition );
+				}
+
 				utils.applyAlphaFunc( flags.alphaFunc
 					, alpha
 					, material.m_alphaRef );

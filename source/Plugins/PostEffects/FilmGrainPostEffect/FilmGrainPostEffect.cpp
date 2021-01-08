@@ -442,25 +442,17 @@ namespace film_grain
 			};
 			auto & cmd = *commands.commandBuffer;
 			cmd.begin();
-			cmd.beginDebugBlock(
-				{
-					"Film Grain",
-					castor3d::makeFloatArray( getRenderSystem()->getEngine()->getNextRainbowColour() ),
-				} );
 			timer.beginPass( cmd );
-			// Put image in the right state for rendering.
-			cmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, m_target->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
-
+			cmd.beginDebugBlock( { "FilmGrain"
+				, castor3d::makeFloatArray( getOwner()->getEngine()->getNextRainbowColour() ) } );
 			cmd.beginRenderPass( *m_renderPass
 				, *m_surface.frameBuffer
 				, { castor3d::transparentBlackClearColor }
 				, VK_SUBPASS_CONTENTS_INLINE );
 			m_quad->registerPass( cmd );
 			cmd.endRenderPass();
-			timer.endPass( cmd );
 			cmd.endDebugBlock();
+			timer.endPass( cmd );
 			cmd.end();
 			m_commands.emplace_back( std::move( commands ) );
 		}

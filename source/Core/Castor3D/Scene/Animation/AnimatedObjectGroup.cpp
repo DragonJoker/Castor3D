@@ -3,6 +3,7 @@
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Scene/Animation/AnimatedObject.hpp"
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
 #include "Castor3D/Scene/Animation/AnimatedMesh.hpp"
@@ -274,11 +275,13 @@ namespace castor3d
 			, offsetof( GroupAnimation, stoppingPoint ) );
 	}
 
-	void AnimatedObjectGroup::update()
+	void AnimatedObjectGroup::update( CpuUpdater & updater )
 	{
 #if defined( NDEBUG )
 
-		auto tslf = std::chrono::duration_cast< Milliseconds >( m_timer.getElapsed() );
+		auto tslf = updater.tslf > 0_ms
+			? updater.tslf
+			: std::chrono::duration_cast< Milliseconds >( m_timer.getElapsed() );
 
 #else
 

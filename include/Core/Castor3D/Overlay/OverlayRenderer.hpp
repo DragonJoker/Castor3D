@@ -293,7 +293,8 @@ namespace castor3d
 		std::map< size_t, PanelVertexBufferIndex > m_panelOverlays;
 		std::map< size_t, BorderPanelVertexBufferIndex > m_borderPanelOverlays;
 		std::map< size_t, TextVertexBufferIndex > m_textOverlays;
-		ashes::PipelineVertexInputStateCreateInfo m_declaration;
+		ashes::PipelineVertexInputStateCreateInfo m_noTexDeclaration;
+		ashes::PipelineVertexInputStateCreateInfo m_texDeclaration;
 		ashes::PipelineVertexInputStateCreateInfo m_textDeclaration;
 		castor::Size m_size;
 		std::map< Pass const *, OverlayRenderNode > m_mapPanelNodes;

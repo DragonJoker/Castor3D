@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "PbrModule.hpp"
 
+#include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Render/Passes/RenderQuad.hpp"
 
 #include <ashespp/RenderPass/FrameBuffer.hpp>
@@ -57,8 +58,7 @@ namespace castor3d
 		ashes::FrameBufferPtr m_frameBuffer;
 		ashes::PipelineLayoutPtr m_pipelineLayout;
 		ashes::GraphicsPipelinePtr m_pipeline;
-		ashes::CommandBufferPtr m_commandBuffer;
-		ashes::FencePtr m_fence;
+		CommandsSemaphore m_commands;
 	};
 }
 

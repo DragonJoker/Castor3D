@@ -879,52 +879,52 @@ namespace castor
 			return result;
 		}
 	}
-}
 
-//*************************************************************************************************
+	//*************************************************************************************************
 
-template< typename T, uint32_t TCount >
-inline castor::String & operator<<( castor::String & out, castor::Point< T, TCount > const & in )
-{
-	castor::StringStream stream{ castor::makeStringStream() };
-	stream << in;
-	out += stream.str();
-	return out;
-}
-
-template< typename T, uint32_t TCount >
-inline castor::String & operator>>( castor::String & in, castor::Point< T, TCount > & out )
-{
-	castor::StringStream stream( in );
-	stream >> out;
-	in = stream.str();
-	return in;
-}
-
-template< typename T, uint32_t TCount, typename CharType >
-inline std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & out, castor::Point< T, TCount > const & in )
-{
-	if ( TCount )
+	template< typename T, uint32_t TCount >
+	inline String & operator<<( String & out, Point< T, TCount > const & in )
 	{
-		out << in[0];
+		StringStream stream{ makeStringStream() };
+		stream << in;
+		out += stream.str();
+		return out;
+	}
 
-		for ( uint32_t i = 1; i < TCount; i++ )
+	template< typename T, uint32_t TCount >
+	inline String & operator>>( String & in, Point< T, TCount > & out )
+	{
+		StringStream stream( in );
+		stream >> out;
+		in = stream.str();
+		return in;
+	}
+
+	template< typename T, uint32_t TCount, typename CharType >
+	inline std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & out, Point< T, TCount > const & in )
+	{
+		if ( TCount )
 		{
-			out << "\t" << in[i];
+			out << in[0];
+
+			for ( uint32_t i = 1; i < TCount; i++ )
+			{
+				out << "\t" << in[i];
+			}
 		}
-	}
 
-	return out;
-}
-template< typename T, uint32_t TCount, typename CharType >
-inline std::basic_istream< CharType > & operator>>( std::basic_istream< CharType > & in, castor::Point< T, TCount > & out )
-{
-	for ( uint32_t i = 0; i < TCount; i++ )
+		return out;
+	}
+	template< typename T, uint32_t TCount, typename CharType >
+	inline std::basic_istream< CharType > & operator>>( std::basic_istream< CharType > & in, Point< T, TCount > & out )
 	{
-		in >> out[i];
+		for ( uint32_t i = 0; i < TCount; i++ )
+		{
+			in >> out[i];
+		}
+
+		return in;
 	}
 
-	return in;
+	//*************************************************************************************************
 }
-
-//*************************************************************************************************

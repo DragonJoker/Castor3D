@@ -152,6 +152,13 @@ namespace castor3d
 		C3D_API bool hasSubsurfaceScattering()const;
 		/**
 		 *\~english
+		 *\return		Tells if the material is textured.
+		 *\~french
+		 *\return		Dit si le matériau a des textures.
+		 */
+		C3D_API bool isTextured( TextureFlags mask = TextureFlag::eAll )const;
+		/**
+		 *\~english
 		 *\return		The passes count.
 		 *\~french
 		 *\return		Le nombre de passes.

@@ -111,7 +111,11 @@ namespace castor3d
 		}
 
 		m_generatedCountBuffer.reset();
-		device.uboPools->putBuffer( m_ubo );
+
+		if ( m_ubo )
+		{
+			device.uboPools->putBuffer( m_ubo );
+		}
 	}
 
 	void ComputeParticleSystem::update( CpuUpdater & updater )

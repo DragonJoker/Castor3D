@@ -203,6 +203,7 @@ namespace castor3d
 		, float max );
 
 	CU_DeclareSmartPtr( LightPass );
+	CU_DeclareCUSmartPtr( castor3d, SubsurfaceScatteringPass, C3D_API );
 
 	struct LightPassConfig
 	{

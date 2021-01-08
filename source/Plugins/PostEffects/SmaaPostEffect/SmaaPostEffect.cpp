@@ -333,7 +333,7 @@ namespace smaa
 		case EdgeDetectionType::eDepth:
 			m_edgeDetection = std::make_unique< DepthEdgeDetection >( m_renderTarget
 				, device
-				, m_renderTarget.getTechnique()->getDepth().getDefaultView().getSampledView()
+				, m_renderTarget.getTechnique()->getDepth().getDefaultView().getTargetView()
 				, m_config );
 			break;
 
@@ -373,6 +373,9 @@ namespace smaa
 #		if !C3D_DebugNeighbourhoodBlending
 		if ( m_config.data.mode == Mode::eT2X )
 		{
+			auto commandBuffer = device.graphicsCommandPool->createCommandBuffer();
+			commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
+
 			for ( uint32_t i = 0u; i < m_config.maxSubsampleIndices; ++i )
 			{
 				auto & previous = i == 0u
@@ -385,7 +388,18 @@ namespace smaa
 					, previous
 					, velocityView
 					, m_config ) );
+				commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
+					, VK_PIPELINE_STAGE_TRANSFER_BIT
+					, m_neighbourhoodBlending->getSurface( i )->getDefaultView().getTargetView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
+				commandBuffer->clear( m_neighbourhoodBlending->getSurface( i )->getDefaultView().getTargetView()
+					, castor3d::opaqueBlackClearColor.color );
+				commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+					, m_neighbourhoodBlending->getSurface( i )->getDefaultView().getTargetView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
 			}
+
+			commandBuffer->end();
+			device.graphicsQueue->submit( *commandBuffer, nullptr );
 		}
 #		endif
 #	endif
@@ -503,9 +517,6 @@ namespace smaa
 				castor3d::makeFloatArray( getRenderSystem()->getEngine()->getNextRainbowColour() ),
 			} );
 		timer.beginPass( copyCmd, passIndex );
-		copyCmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_smaaResult->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 		copyCmd.beginRenderPass( *m_copyRenderPass
 			, *m_copyFrameBuffer
 			, { castor3d::transparentBlackClearColor }

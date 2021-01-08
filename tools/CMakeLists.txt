@@ -7,7 +7,7 @@ option( CASTOR_BUILD_TOOL_DIFF_IMAGE "Build DiffImage" ON )
 option( CASTOR_BUILD_TOOL_MESH_UPGRADER "Build CastorMeshUpgrader" ON )
 option( CASTOR_BUILD_TOOL_MESH_CONVERTER "Build CastorMeshConverter" ON )
 option( CASTOR_BUILD_TOOL_CASTOR_TEST_LAUNCHER "Build CastorTestLauncher" ON )
-option( CASTOR_BUILD_TOOL_CASTOR_TEST_PARSER "Build CastorTestParser" ON )
+option( CASTOR_BUILD_TOOL_ARIA "Build Aria (Castor3D render tests manager)" ON )
 
 function( ToolsInit )
 	set( ImgConv "no (Not wanted)" PARENT_SCOPE )
@@ -15,7 +15,7 @@ function( ToolsInit )
 	set( MshUpgd "no (Not wanted)" PARENT_SCOPE )
 	set( MshConv "no (Not wanted)" PARENT_SCOPE )
 	set( TestLcr "no (Not wanted)" PARENT_SCOPE )
-	set( TestPsr "no (Not wanted)" PARENT_SCOPE )
+	set( Aria "no (Not wanted)" PARENT_SCOPE )
 endfunction( ToolsInit )
 
 function( ToolsBuild )
@@ -27,7 +27,8 @@ function( ToolsBuild )
 		)
 
 		if( CASTOR_BUILD_TOOL_IMG_CONVERTER
-			OR CASTOR_BUILD_TOOL_CASTOR_TEST_LAUNCHER )
+			OR CASTOR_BUILD_TOOL_CASTOR_TEST_LAUNCHER
+			OR CASTOR_BUILD_TOOL_ARIA )
 			if( APPLE )
 				set( GTK2_FOUND TRUE )
 				set( GTK2_LIBRARIES
@@ -85,14 +86,14 @@ function( ToolsBuild )
 					set( ImgConv ${Build} PARENT_SCOPE )
 				endif ()
 
-				if( CASTOR_BUILD_TOOL_CASTOR_TEST_PARSER )
-					set( Build ${TestPsr} )
-					add_subdirectory( CastorTestParser )
+				if( CASTOR_BUILD_TOOL_ARIA )
+					set( Build ${Aria} )
+					add_subdirectory( Aria )
 					set( CPACK_PACKAGE_EXECUTABLES
 						${CPACK_PACKAGE_EXECUTABLES}
-						CastorTestParser "CastorTestParser"
+						Aria "Aria"
 						PARENT_SCOPE )
-					set( TestPsr ${Build} PARENT_SCOPE )
+					set( Aria ${Build} PARENT_SCOPE )
 				endif ()
 
 				if( CASTOR_BUILD_CASTOR3D AND CASTOR_BUILD_TOOL_CASTOR_TEST_LAUNCHER )
@@ -108,9 +109,11 @@ function( ToolsBuild )
 				if( NOT wxWidgets_FOUND )
 					set( ImgConv "no (wxWidgets libraries not found)" PARENT_SCOPE )
 					set( TestLcr "no (wxWidgets libraries not found)" PARENT_SCOPE )
+					set( Aria "no (wxWidgets libraries not found)" PARENT_SCOPE )
 				else()
 					set( ImgConv "no (GTK2 libraries not found)" PARENT_SCOPE )
 					set( TestLcr "no (GTK2 libraries not found)" PARENT_SCOPE )
+					set( Aria "no (GTK2 libraries not found)" PARENT_SCOPE )
 				endif()
 			endif()
 		endif()
@@ -177,8 +180,8 @@ function( ToolsSummary )
 				set( msg_tmp "${msg_tmp}\n    CastorTestLauncher   ${TestLcr}" )
 			endif ()
 		endif ()
-		if( CASTOR_BUILD_TOOL_CASTOR_TEST_PARSER )
-			set( msg_tmp "${msg_tmp}\n    CastorTestParser     ${TestPsr}" )
+		if( CASTOR_BUILD_TOOL_ARIA )
+			set( msg_tmp "${msg_tmp}\n    Aria                 ${Aria}" )
 		endif ()
 		set( msg "${msg}${msg_tmp}" )
 		message( STATUS "${msg}\n" )
@@ -196,10 +199,10 @@ function( ToolsSetup )
 			)
 		endif()
 
-		if( CASTOR_BUILD_TOOL_CASTOR_TEST_PARSER )
-			cpack_add_component( CastorTestParser
-				DISPLAY_NAME "CastorTestParser application"
-				DESCRIPTION "An application used to compulse Castor3D render tests."
+		if( CASTOR_BUILD_TOOL_ARIA )
+			cpack_add_component( Aria
+				DISPLAY_NAME "Aria application"
+				DESCRIPTION "An application used to manage Castor3D render tests."
 				GROUP Tools
 				INSTALL_TYPES Full Developer
 			)

@@ -568,9 +568,9 @@ namespace castor3d
 				makeFloatArray( m_engine.getNextRainbowColour() ),
 			} );
 		// Src depth buffer from depth attach to transfer source
-		m_blitDepth.commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
+		m_blitDepth.commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, m_srcDepth.makeTransferSource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+			, m_srcDepth.makeTransferSource( VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL ) );
 		// Dst depth buffer from unknown to transfer destination
 		m_blitDepth.commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
@@ -588,7 +588,7 @@ namespace castor3d
 		// Src depth buffer from transfer source to depth stencil read only
 		m_blitDepth.commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 			, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
-			, m_srcDepth.makeDepthStencilAttachment( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
+			, m_srcDepth.makeDepthStencilReadOnly( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
 		m_blitDepth.commandBuffer->endDebugBlock();
 		m_blitDepth.commandBuffer->end();
 

@@ -14,6 +14,18 @@ CU_ImplementCUSmartPtr( castor3d, LpvLightConfigUbo )
 
 namespace castor3d
 {
+	namespace
+	{
+		castor::Matrix4x4f snapMatrix( float lpvCellSize
+			, castor::Matrix4x4f mtx )
+		{
+			mtx[0][3] = mtx[0][3] - fmod( mtx[0][3], lpvCellSize );
+			mtx[1][3] = mtx[1][3] - fmod( mtx[1][3], lpvCellSize );
+			mtx[2][3] = mtx[2][3] - fmod( mtx[2][3], lpvCellSize );
+			return mtx;
+		}
+	}
+
 	std::string const LpvLightConfigUbo::LpvLightConfig = "LpvLightConfig";
 	std::string const LpvLightConfigUbo::LightView = "c3d_lightView";
 	std::string const LpvLightConfigUbo::Config = "c3d_lpvLightConfig";
@@ -48,20 +60,22 @@ namespace castor3d
 		}
 	}
 
-	void LpvLightConfigUbo::cpuUpdate( Light const & light )
+	void LpvLightConfigUbo::cpuUpdate( Light const & light
+		, float lpvCellSize )
 	{
 		CU_Require( m_ubo );
 		auto & lpvConfig = light.getLpvConfig();
 		auto & configuration = m_ubo.getData();
 
-		configuration.lightIndex = float( light.getBufferIndex() );
+		configuration.lightIndex = float( light.getShadowMapIndex() );
 		configuration.texelAreaModifier = lpvConfig.texelAreaModifier;
 		auto ltType = light.getLightType();
 
 		switch ( ltType )
 		{
 		case LightType::eDirectional:
-			configuration.lightView = light.getDirectionalLight()->getViewMatrix( 3u );
+			configuration.lightView = snapMatrix( lpvCellSize
+				, light.getDirectionalLight()->getViewMatrix( 3u ) );
 			configuration.tanFovXHalf = 1.0f;
 			configuration.tanFovYHalf = 1.0f;
 			break;
@@ -72,7 +86,8 @@ namespace castor3d
 		case LightType::eSpot:
 			{
 				auto & spotLight = *light.getSpotLight();
-				configuration.lightView = spotLight.getViewMatrix();
+				configuration.lightView = snapMatrix( lpvCellSize
+					, spotLight.getViewMatrix() );
 				auto lightFov = spotLight.getCutOff();
 				configuration.tanFovXHalf = ( lightFov * 0.5 ).tan();
 				configuration.tanFovYHalf = ( lightFov * 0.5 ).tan();
@@ -82,12 +97,14 @@ namespace castor3d
 	}
 
 	void LpvLightConfigUbo::cpuUpdate( DirectionalLight const & light
-		, uint32_t cascadeIndex )
+		, uint32_t cascadeIndex
+		, float lpvCellSize )
 	{
 		auto & lpvConfig = light.getLight().getLpvConfig();
 		auto & configuration = m_ubo.getData();
 
-		configuration.lightView = light.getViewMatrix( cascadeIndex );
+		configuration.lightView = snapMatrix( lpvCellSize
+			, light.getViewMatrix( cascadeIndex ) );
 		configuration.texelAreaModifier = lpvConfig.texelAreaModifier;
 		configuration.tanFovXHalf = 1.0f;
 		configuration.tanFovYHalf = 1.0f;

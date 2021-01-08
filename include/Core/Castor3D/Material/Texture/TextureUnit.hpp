@@ -248,6 +248,7 @@ namespace castor3d
 		uint32_t m_id{ 0u };
 		mutable bool m_changed;
 		castor::String m_name;
+		bool m_initialised{ false };
 	};
 }
 

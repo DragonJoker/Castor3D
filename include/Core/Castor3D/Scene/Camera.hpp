@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_Camera_H___
 
 #include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
+#include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
 
 #include "Castor3D/Scene/MovableObject.hpp"
@@ -249,6 +250,16 @@ namespace castor3d
 		{
 			return m_frustum;
 		}
+
+		inline HdrConfig const & getHdrConfig()const
+		{
+			return m_hdrConfig;
+		}
+
+		inline HdrConfig & getHdrConfig()
+		{
+			return m_hdrConfig;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -284,6 +295,18 @@ namespace castor3d
 			m_viewport.updateType( value );
 			onChanged( *this );
 		}
+
+		inline void setExposure( float value )
+		{
+			m_hdrConfig.exposure = value;
+			onChanged( *this );
+		}
+
+		inline void setGamma( float value )
+		{
+			m_hdrConfig.gamma = value;
+			onChanged( *this );
+		}
 		/**@}*/
 
 	private:
@@ -299,6 +322,7 @@ namespace castor3d
 		Viewport m_viewport;
 		Frustum m_frustum;
 		castor::Matrix4x4f m_view;
+		HdrConfig m_hdrConfig;
 		bool m_nodeChanged{ true };
 		bool m_ownProjection{ false };
 		castor::Matrix4x4f m_projection;

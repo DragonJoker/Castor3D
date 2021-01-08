@@ -260,7 +260,7 @@ namespace castor3d
 					|| camera.isVisible( light->getBoundingBox()
 						, light->getParent()->getDerivedTransformationMatrix() ) )
 				{
-					light->bind( lightIndex, data );
+					light->bind( lightIndex++, data );
 					data += shader::getMaxLightComponentsCount();
 					index += shader::getMaxLightComponentsCount();
 				}

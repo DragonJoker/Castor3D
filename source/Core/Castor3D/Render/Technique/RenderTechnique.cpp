@@ -586,6 +586,7 @@ namespace castor3d
 			, device
 			, cuEmptyString
 			, getEngine()->getLpvGridSize() );
+		m_lpvResult->initialise( device );
 
 		for ( uint32_t i = 0u; i < shader::LpvMaxCascadesCount; ++i )
 		{
@@ -593,35 +594,42 @@ namespace castor3d
 				, device
 				, castor::string::toString( i )
 				, getEngine()->getLpvGridSize() ) );
+			m_llpvResult.back()->initialise( device );
 		}
 
-		for ( auto i = uint32_t( LightType::eMin ); i < uint32_t( LightType::eCount ); ++i )
+		m_clearLpv = CommandsSemaphore{ device
+			, this->getName() + cuT( "ClearLpv" ) };
+		ashes::CommandBuffer & cmd = *m_clearLpv.commandBuffer;
+		auto clearTex = [&cmd]( LightVolumePassResult const & result
+			, LpvTexture tex )
 		{
-			m_lightPropagationVolumes[i] = castor::makeUnique< LightPropagationVolumes >( scene
-				, LightType( i )
-				, device
-				, m_allShadowMaps[i].front().first.get().getShadowPassResult()
-				, *m_lpvResult
-				, m_lpvConfigUbo );
-			m_layeredLightPropagationVolumes[i] = castor::makeUnique< LayeredLightPropagationVolumes >( scene
-				, LightType( i )
-				, device
-				, m_allShadowMaps[i].front().first.get().getShadowPassResult()
-				, m_llpvResult
-				, m_llpvConfigUbo );
-			m_lightPropagationVolumesG[i] = castor::makeUnique< LightPropagationVolumesG >( scene
-				, LightType( i )
-				, device
-				, m_allShadowMaps[i].front().first.get().getShadowPassResult()
-				, *m_lpvResult
-				, m_lpvConfigUbo );
-			m_layeredLightPropagationVolumesG[i] = castor::makeUnique< LayeredLightPropagationVolumesG >( scene
-				, LightType( i )
-				, device
-				, m_allShadowMaps[i].front().first.get().getShadowPassResult()
-				, m_llpvResult
-				, m_llpvConfigUbo );
+			cmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+				, VK_PIPELINE_STAGE_TRANSFER_BIT
+				, result[tex].getTexture()->getDefaultView().getSampledView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
+			cmd.clear( result[tex].getTexture()->getDefaultView().getSampledView(), getClearValue( tex ).color );
+			cmd.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+				, result[tex].getTexture()->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+		};
+		cmd.begin();
+		cmd.beginDebugBlock(
+			{
+				"Lighting - " + this->getName() + " - Clear Injection",
+				castor3d::makeFloatArray( device.renderSystem.getEngine()->getNextRainbowColour() ),
+			} );
+		clearTex( *m_lpvResult, LpvTexture::eR );
+		clearTex( *m_lpvResult, LpvTexture::eG );
+		clearTex( *m_lpvResult, LpvTexture::eB );
+
+		for ( auto & lpvResult : m_llpvResult )
+		{
+			clearTex( *lpvResult, LpvTexture::eR );
+			clearTex( *lpvResult, LpvTexture::eG );
+			clearTex( *lpvResult, LpvTexture::eB );
 		}
+
+		cmd.endDebugBlock();
+		cmd.end();
 	}
 
 	void RenderTechnique::doInitialiseShadowMaps( RenderDevice const & device )
@@ -633,12 +641,62 @@ namespace castor3d
 
 	void RenderTechnique::doInitialiseLpv( RenderDevice const & device )
 	{
+		auto & scene = *m_renderTarget.getScene();
+
 		for ( auto i = uint32_t( LightType::eMin ); i < uint32_t( LightType::eCount ); ++i )
 		{
-			m_lightPropagationVolumes[i]->initialise();
-			m_lightPropagationVolumesG[i]->initialise();
-			m_layeredLightPropagationVolumes[i]->initialise();
-			m_layeredLightPropagationVolumesG[i]->initialise();
+			auto needLpv = scene.needsGlobalIllumination( LightType( i )
+				, GlobalIlluminationType::eLpv );
+			auto needLpvG = scene.needsGlobalIllumination( LightType( i )
+				, GlobalIlluminationType::eLpvG );
+			auto needLLpv = scene.needsGlobalIllumination( LightType( i )
+				, GlobalIlluminationType::eLayeredLpv );
+			auto needLLpvG = scene.needsGlobalIllumination( LightType( i )
+				, GlobalIlluminationType::eLayeredLpvG );
+
+			if ( needLpv && !m_lightPropagationVolumes[i] )
+			{
+				m_lightPropagationVolumes[i] = castor::makeUnique< LightPropagationVolumes >( scene
+					, LightType( i )
+					, device
+					, m_allShadowMaps[i].front().first.get().getShadowPassResult()
+					, *m_lpvResult
+					, m_lpvConfigUbo );
+				m_lightPropagationVolumes[i]->initialise();
+			}
+
+			if ( needLpvG && !m_lightPropagationVolumesG[i] )
+			{
+				m_lightPropagationVolumesG[i] = castor::makeUnique< LightPropagationVolumesG >( scene
+					, LightType( i )
+					, device
+					, m_allShadowMaps[i].front().first.get().getShadowPassResult()
+					, *m_lpvResult
+					, m_lpvConfigUbo );
+				m_lightPropagationVolumesG[i]->initialise();
+			}
+
+			if ( needLLpv && !m_layeredLightPropagationVolumes[i] )
+			{
+				m_layeredLightPropagationVolumes[i] = castor::makeUnique< LayeredLightPropagationVolumes >( scene
+					, LightType( i )
+					, device
+					, m_allShadowMaps[i].front().first.get().getShadowPassResult()
+					, m_llpvResult
+					, m_llpvConfigUbo );
+				m_layeredLightPropagationVolumes[i]->initialise();
+			}
+
+			if ( needLLpvG && !m_layeredLightPropagationVolumesG[i] )
+			{
+				m_layeredLightPropagationVolumesG[i] = castor::makeUnique< LayeredLightPropagationVolumesG >( scene
+					, LightType( i )
+					, device
+					, m_allShadowMaps[i].front().first.get().getShadowPassResult()
+					, m_llpvResult
+					, m_llpvConfigUbo );
+				m_layeredLightPropagationVolumesG[i]->initialise();
+			}
 		}
 	}
 
@@ -813,7 +871,7 @@ namespace castor3d
 
 		m_colorTexTransition = { device, "TechniqueColourTexTransition" };
 		auto & cmd = *m_colorTexTransition.commandBuffer;
-		cmd.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
+		cmd.begin();
 		cmd.beginDebugBlock(
 			{
 				"Technique Colour Texture Transition",
@@ -872,12 +930,29 @@ namespace castor3d
 
 	void RenderTechnique::doCleanupLpv( RenderDevice const & device )
 	{
+		m_clearLpv = {};
+
 		for ( auto i = uint32_t( LightType::eMin ); i < uint32_t( LightType::eCount ); ++i )
 		{
-			m_lightPropagationVolumes[i]->cleanup();
-			m_lightPropagationVolumesG[i]->cleanup();
-			m_layeredLightPropagationVolumes[i]->cleanup();
-			m_layeredLightPropagationVolumesG[i]->cleanup();
+			if ( m_lightPropagationVolumes[i] )
+			{
+				m_lightPropagationVolumes[i]->cleanup();
+			}
+
+			if ( m_lightPropagationVolumesG[i] )
+			{
+				m_lightPropagationVolumesG[i]->cleanup();
+			}
+
+			if ( m_layeredLightPropagationVolumes[i] )
+			{
+				m_layeredLightPropagationVolumes[i]->cleanup();
+			}
+
+			if ( m_layeredLightPropagationVolumesG[i] )
+			{
+				m_layeredLightPropagationVolumesG[i]->cleanup();
+			}
 		}
 
 		m_lpvConfigUbo.cleanup();
@@ -947,10 +1022,25 @@ namespace castor3d
 	{
 		for ( auto i = uint32_t( LightType::eMin ); i < uint32_t( LightType::eCount ); ++i )
 		{
-			m_lightPropagationVolumes[i]->update( updater );
-			m_lightPropagationVolumesG[i]->update( updater );
-			m_layeredLightPropagationVolumes[i]->update( updater );
-			m_layeredLightPropagationVolumesG[i]->update( updater );
+			if ( m_lightPropagationVolumes[i] )
+			{
+				m_lightPropagationVolumes[i]->update( updater );
+			}
+
+			if ( m_lightPropagationVolumesG[i] )
+			{
+				m_lightPropagationVolumesG[i]->update( updater );
+			}
+
+			if ( m_layeredLightPropagationVolumes[i] )
+			{
+				m_layeredLightPropagationVolumes[i]->update( updater );
+			}
+
+			if ( m_layeredLightPropagationVolumesG[i] )
+			{
+				m_layeredLightPropagationVolumesG[i]->update( updater );
+			}
 		}
 	}
 
@@ -1028,12 +1118,32 @@ namespace castor3d
 	{
 		ashes::Semaphore const * result = &semaphore;
 
-		for ( auto i = uint32_t( LightType::eMin ); i < uint32_t( LightType::eCount ); ++i )
+		if ( m_renderTarget.getScene()->needsGlobalIllumination() )
 		{
-			result = &m_lightPropagationVolumes[i]->render( *result );
-			result = &m_lightPropagationVolumesG[i]->render( *result );
-			result = &m_layeredLightPropagationVolumes[i]->render( *result );
-			result = &m_layeredLightPropagationVolumesG[i]->render( *result );
+			result = &m_clearLpv.submit( *device.graphicsQueue, *result );
+
+			for ( auto i = uint32_t( LightType::eMin ); i < uint32_t( LightType::eCount ); ++i )
+			{
+				if ( m_lightPropagationVolumes[i] )
+				{
+					result = &m_lightPropagationVolumes[i]->render( *result );
+				}
+
+				if ( m_lightPropagationVolumesG[i] )
+				{
+					result = &m_lightPropagationVolumesG[i]->render( *result );
+				}
+
+				if ( m_layeredLightPropagationVolumes[i] )
+				{
+					result = &m_layeredLightPropagationVolumes[i]->render( *result );
+				}
+
+				if ( m_layeredLightPropagationVolumesG[i] )
+				{
+					result = &m_layeredLightPropagationVolumesG[i]->render( *result );
+				}
+			}
 		}
 
 		return *result;

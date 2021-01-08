@@ -6,10 +6,17 @@
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
+	namespace
+	{
+		std::ostream & operator<<( std::ostream & stream, castor::BoundingBox const & obj )
+		{
+			stream << "min: " << obj.getMin() << ", max: " << obj.getMax();
+			return stream;
+		}
+	}
+
 	//*************************************************************************************************
 
 	bool BinaryWriter< Mesh >::doWrite( Mesh const & obj )
@@ -34,7 +41,7 @@ namespace castor3d
 		bool result = true;
 		SubmeshSPtr submesh;
 		SkeletonSPtr skeleton;
-		String name;
+		castor::String name;
 		BinaryChunk chunk;
 
 		while ( result && doGetSubChunk( chunk ) )
@@ -82,7 +89,7 @@ namespace castor3d
 		bool result = true;
 		SubmeshSPtr submesh;
 		SkeletonSPtr skeleton;
-		String name;
+		castor::String name;
 		BinaryChunk chunk;
 
 		while ( result && doGetSubChunk( chunk ) )

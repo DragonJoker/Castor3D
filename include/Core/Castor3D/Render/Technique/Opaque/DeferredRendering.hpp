@@ -123,17 +123,18 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
+		Scene const & m_scene;
 		RenderDevice const & m_device;
 		SsaoConfig & m_ssaoConfig;
 		OpaquePass & m_opaquePass;
 		GpInfoUbo const & m_gpInfoUbo;
 		castor::Size m_size;
 		OpaquePassResult m_opaquePassResult;
-		castor::DelayedInitialiserT< LineariseDepthPass > m_linearisePass;
-		castor::DelayedInitialiserT< SsaoPass > m_ssao;
+		LineariseDepthPassUPtr m_linearisePass;
+		SsaoPassUPtr m_ssao;
 		std::unique_ptr< LightingPass > m_lightingPass;
-		castor::DelayedInitialiserT< SubsurfaceScatteringPass > m_subsurfaceScattering;
-		castor::DelayedInitialiserT< OpaqueResolvePass > m_resolve;
+		SubsurfaceScatteringPassUPtr m_subsurfaceScattering;
+		OpaqueResolvePassUPtr m_resolve;
 		std::vector< ashes::ImagePtr > m_results;
 	};
 }
