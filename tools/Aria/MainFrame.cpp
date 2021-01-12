@@ -21,6 +21,7 @@
 #include <castor.xpm>
 
 #include <wx/clipbrd.h>
+#include <wx/choicdlg.h>
 #include <wx/dc.h>
 #include <wx/gauge.h>
 #include <wx/menu.h>
@@ -1749,6 +1750,58 @@ namespace aria
 
 	void MainFrame::doNewTest()
 	{
+		wxArrayString categories;
+
+		for ( auto & category : m_database.getCategories() )
+		{
+			categories.push_back( category.first );
+		}
+
+		wxSingleChoiceDialog categoryDlg{ this
+			, _( "Select the test's category" )
+			, _( "Test creation" )
+			, categories };
+
+		if ( categoryDlg.ShowModal() == wxID_OK )
+		{
+			wxString categoryName = categoryDlg.GetStringSelection();
+			auto catIt = m_database.getCategories().find( makeStdString( categoryName ) );
+
+			if ( catIt == m_database.getCategories().end() )
+			{
+				castor::Logger::logError( castor::makeStringStream() << "Invalid category name: " << categoryName );
+				return;
+			}
+
+			auto category = catIt->second.get();
+			wxTextEntryDialog dialog{ this
+				, _( "Enter the new test name" )
+				, _( "Test creation" ) };
+
+			if ( dialog.ShowModal() == wxID_OK )
+			{
+				auto testName = makeStdString( dialog.GetValue() );
+				auto catTestIt = m_tests.tests.find( category );
+				catTestIt->second.emplace_back( std::make_unique< Test >( 0
+					, testName
+					, category ) );
+				auto & test = *catTestIt->second.back();
+				m_database.insertTest( test, false );
+
+				for ( auto & renderer : m_database.getRenderers() )
+				{
+					auto rendRunIt = m_tests.runs.find( renderer.second.get() );
+					auto catRunIt = rendRunIt->second.find( category );
+					catRunIt->second.emplace_back( m_database
+						, TestRun{ &test
+							, renderer.second.get()
+							, db::DateTime{}
+							, TestStatus::eNotRun
+							, db::DateTime{}
+							, db::DateTime{} } );
+				}
+			}
+		}
 	}
 
 	void MainFrame::doUpdateTestView( DatabaseTest const & test )

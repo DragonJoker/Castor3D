@@ -271,7 +271,7 @@ namespace aria
 				dc->GradientFillLinear( wxRect{ cell.x + xOffset, cell.y, gradWidth, cell.height }, curColor, halfColour );
 				xOffset += gradWidth;
 				dc->SetPen( wxPen{ curColor, 2 } );
-				dc->DrawLine( cell.x + xOffset - 2, cell.y, cell.x + xOffset - 2, cell.y + cell.height );
+				dc->DrawLine( cell.x + xOffset - 2, cell.y, cell.x + xOffset - 2, cell.y + cell.height - 1 );
 
 				cur = nxt++;
 			}

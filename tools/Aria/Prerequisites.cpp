@@ -34,7 +34,7 @@ namespace aria
 	bool LessNoCase::operator()( const char * lhs, const char * rhs, size_t minSize )const
 	{
 #if defined( CU_PlatformWindows )
-		return strnicmp( lhs, rhs, minSize ) < 0;
+		return _strnicmp( lhs, rhs, minSize ) < 0;
 #else
 		return strncasecmp( lhs, rhs, minSize ) < 0;
 #endif
@@ -58,7 +58,7 @@ namespace aria
 	bool EqualNoCase::operator()( const char * lhs, const char * rhs, size_t minSize )const
 	{
 #if defined( CU_PlatformWindows )
-		return strnicmp( lhs, rhs, minSize ) == 0;
+		return _strnicmp( lhs, rhs, minSize ) == 0;
 #else
 		return strncasecmp( lhs, rhs, minSize ) == 0;
 #endif
