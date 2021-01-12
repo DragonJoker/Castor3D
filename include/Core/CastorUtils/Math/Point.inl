@@ -187,11 +187,17 @@ namespace castor
 	}
 
 	template< typename T, uint32_t TCount >
+	template< typename ValueA >
+	Point< T, TCount >::Point( ValueA a )
+		: m_data{ std::array< T, TCount >{ T( a ) } }
+	{
+	}
+
+	template< typename T, uint32_t TCount >
 	template< typename ValueA, typename ValueB >
 	Point< T, TCount >::Point( ValueA a, ValueB b )
 		: m_data{ std::array< T, TCount >{ T( a ), T( b ) } }
 	{
-
 	}
 
 	template< typename T, uint32_t TCount >

@@ -417,6 +417,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/RangedValue.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Simd.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Simd.inl
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Speed.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/SphericalVertex.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/SquareMatrix.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/SquareMatrix.inl

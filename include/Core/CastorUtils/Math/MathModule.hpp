@@ -169,6 +169,22 @@ namespace castor
 	class SphericalVertex;
 	/**
 	\~english
+	\brief		The traits for aspeed.
+	\~french
+	\brief		Les traits pour une vitesse.
+	*/
+	template< typename ValueT >
+	struct SpeedTraitsT;
+	/**
+	\~english
+	\brief		A speed.
+	\~french
+	\brief		Une vitesse.
+	*/
+	template< typename ValueT, typename DurationT, typename TraitsT = SpeedTraitsT< ValueT > >
+	class SpeedT;
+	/**
+	\~english
 	\brief		Templated column major square matrix representation
 	\~french
 	\brief		Représentation d'une matrice carrée column major
