@@ -79,8 +79,8 @@ namespace castor3d
 	};
 	using GroupAnimationMap = std::map< castor::String, GroupAnimation >;
 
-	using Animable = AnimableT< Scene >;
-	using Animation = AnimationT< Scene >;
+	using Animable = AnimableT< Engine >;
+	using Animation = AnimationT< Engine >;
 
 	CU_DeclareSmartPtr( Animable );
 	CU_DeclareSmartPtr( AnimatedObjectGroup );

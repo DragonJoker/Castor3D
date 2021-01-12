@@ -5,8 +5,8 @@
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Scene/Animation/AnimatedObject.hpp"
-#include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
 #include "Castor3D/Scene/Animation/AnimatedMesh.hpp"
+#include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 
 using namespace castor;

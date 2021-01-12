@@ -3,11 +3,13 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Model/Skeleton/Bone.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 
 namespace castor3d
 {
 	Skeleton::Skeleton( Scene & scene )
-		: Animable{ scene }
+		: Animable{ *scene.getEngine() }
+		, m_scene{ &scene }
 		, m_globalInverse{ 1 }
 	{
 	}

@@ -22,7 +22,7 @@ namespace castor3d
 		 *\param[in]	object		L'AnimatedObject parent.
 		 *\param[in]	animation	L'animation.
 		 */
-		C3D_API AnimationInstance( AnimatedObject & object, AnimationT< Scene > & animation );
+		C3D_API AnimationInstance( AnimatedObject & object, Animation & animation );
 		/**
 		 *\~english
 		 *\brief		Destructor.

@@ -1,6 +1,7 @@
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Model/Mesh/Animation/MeshAnimation.hpp"
@@ -72,7 +73,8 @@ namespace castor3d
 
 	Mesh::Mesh( String const & name, Scene & scene )
 		: Resource< Mesh >{ name }
-		, Animable{ scene }
+		, Animable{ *scene.getEngine() }
+		, m_scene{ &scene }
 		, m_modified{ false }
 	{
 	}

@@ -23,8 +23,9 @@ namespace castor3d
 		, Scene & scene
 		, MovableType type
 		, SceneNode & node )
-		: Animable{ scene }
+		: Animable{ *scene.getEngine() }
 		, Named( name )
+		, m_scene{ &scene }
 		, m_type( type )
 		, m_sceneNode( &node )
 	{
