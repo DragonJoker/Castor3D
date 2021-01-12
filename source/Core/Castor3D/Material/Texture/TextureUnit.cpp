@@ -6,6 +6,7 @@
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
 
 using namespace castor;
 
@@ -152,7 +153,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	TextureUnit::TextureUnit( Engine & engine )
-		: OwnedBy< Engine >( engine )
+		: AnimableT< Engine >{ engine }
 		, m_changed{ false }
 		, m_sampler{ engine.getDefaultSampler() }
 		, m_descriptor
@@ -284,6 +285,31 @@ namespace castor3d
 		}
 	}
 
+	TextureAnimation & TextureUnit::createAnimation()
+	{
+		if ( !hasAnimation() )
+		{
+			doAddAnimation( std::make_unique< TextureAnimation >( *this, "Default" ) );
+			m_animated = true;
+		}
+
+		return doGetAnimation< TextureAnimation >( "Default" );
+	}
+
+	void TextureUnit::removeAnimation()
+	{
+		if ( hasAnimation() )
+		{
+			doRemoveAnimation( "Default" );
+		}
+	}
+
+	TextureAnimation & TextureUnit::getAnimation()
+	{
+		CU_Require( m_animated );
+		return doGetAnimation< TextureAnimation >( "Default" );
+	}
+
 	bool TextureUnit::initialise( RenderDevice const & device )
 	{
 		if ( m_initialised )
@@ -413,6 +439,23 @@ namespace castor3d
 		doUpdateShift( m_configuration.heightMask );
 		doUpdateShift( m_configuration.occlusionMask );
 		doUpdateShift( m_configuration.transmittanceMask );
+		onChanged( *this );
+	}
+
+	void TextureUnit::setTransform( castor::Point3f const & translate
+		, castor::Angle const & rotate
+		, castor::Point3f const & scale )
+	{
+		m_configuration.translate->x = translate->x;
+		m_configuration.translate->y = translate->y;
+		m_configuration.translate->z = translate->z;
+		m_configuration.translate->w = rotate.cos();
+
+		m_configuration.scale->x = 1.0f + scale->x;
+		m_configuration.scale->y = 1.0f + scale->y;
+		m_configuration.scale->z = 1.0f + scale->z;
+		m_configuration.scale->w = rotate.sin();
+
 		onChanged( *this );
 	}
 }

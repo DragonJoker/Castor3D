@@ -6,7 +6,10 @@ See LICENSE file in root folder
 #pragma once
 
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
+#include "Castor3D/Material/Texture/Animation/TextureAnimationModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
+
+#include "Castor3D/Animation/Animable.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
@@ -16,7 +19,7 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	class TextureUnit
-		: public castor::OwnedBy< Engine >
+		: public AnimableT< Engine >
 	{
 	public:
 		/**
@@ -149,6 +152,39 @@ namespace castor3d
 		/**
 		*\~english
 		*name
+		*	Animation.
+		*\~french
+		*name
+		*	Animation.
+		*/
+		/**@{*/
+		/**
+		 *\~english
+		 *\brief		Creates the animation
+		 *\return		The animation
+		 *\~french
+		 *\brief		Crée l'animation
+		 *\return		l'animation
+		 */
+		C3D_API TextureAnimation & createAnimation();
+		/**
+		 *\~english
+		 *\brief		Removes the animation
+		 *\~french
+		 *\brief		Retire l'animation
+		 */
+		C3D_API void removeAnimation();
+		/**
+		 *\~english
+		 *\return		The animation.
+		 *\~french
+		 *\return		L'animation.
+		 */
+		TextureAnimation & getAnimation();
+		/**@}*/
+		/**
+		*\~english
+		*name
 		*	Getters.
 		*\~french
 		*name
@@ -205,6 +241,11 @@ namespace castor3d
 			CU_Require( hasDevice() );
 			return *m_device;
 		}
+
+		bool hasAnimation()const
+		{
+			return m_animated;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -216,6 +257,9 @@ namespace castor3d
 		*/
 		/**@{*/
 		C3D_API void setConfiguration( TextureConfiguration value );
+		C3D_API void setTransform( castor::Point3f const & translate
+			, castor::Angle const & rotate
+			, castor::Point3f const & scale );
 
 		inline void setRenderTarget( RenderTargetSPtr value )
 		{
@@ -237,6 +281,10 @@ namespace castor3d
 		OnTextureUnitChanged onChanged;
 
 	private:
+		using AnimableT< Engine >::hasAnimation;
+		using AnimableT< Engine >::getAnimation;
+
+	private:
 		friend class TextureRenderer;
 		RenderDevice const * m_device{ nullptr };
 		TextureConfiguration m_configuration;
@@ -249,6 +297,7 @@ namespace castor3d
 		mutable bool m_changed;
 		castor::String m_name;
 		bool m_initialised{ false };
+		bool m_animated{ false };
 	};
 }
 

@@ -120,6 +120,18 @@ namespace castor3d
 			, castor::String const & name );
 		/**
 		 *\~english
+		 *\brief		Creates an AnimatedObject from the given TextureUnit, adds it to the list.
+		 *\param[in]	texture		The TextureUnit from which AnimatedObject is created.
+		 *\param[in]	pass		The pass instanciating the texture.
+		 *\~french
+		 *\brief		Crée un AnimatedObject à partir de la TextureUnit donnée, l'ajoute à la liste.
+		 *\param[in]	texture		La TextureUnit à partir duquel l'AnimatedObject est créé.
+		 *\param[in]	pass		La passe instanciant la texture.
+		 */
+		C3D_API AnimatedObjectSPtr addObject( TextureUnit & texture
+			, Pass & pass );
+		/**
+		 *\~english
 		 *\brief		adds an AnimatedObject to this group.
 		 *\remarks		This function assumes the object has already been created in order to be put in this group (with the good scene and animations map)
 		 *\param[in]	object	The AnimatedObject to add

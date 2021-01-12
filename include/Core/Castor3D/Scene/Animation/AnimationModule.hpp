@@ -58,6 +58,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Represents the animated textures
+	*\~french
+	*\brief
+	*	Représente les texture animées.
+	*/
+	class AnimatedTexture;
+	/**
+	*\~english
+	*\brief
 	*	Animation instance class.
 	*\remarks
 	*	Used to play an Animation on a specific object.

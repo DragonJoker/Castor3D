@@ -752,6 +752,7 @@ namespace castor3d
 		m_onBillboardListChanged = m_billboardCache->onChanged.connect( setThisChanged );
 		m_onGeometryChanged = m_geometryCache->onChanged.connect( setThisChanged );
 		m_onSceneNodeChanged = m_sceneNodeCache->onChanged.connect( setThisChanged );
+		m_animatedObjectGroupCache->add( cuT( "C3D_Textures" ) );
 	}
 
 	Scene::~Scene()
@@ -1053,6 +1054,14 @@ namespace castor3d
 	{
 		CU_Require( hasEnvironmentMap( node ) );
 		return *m_reflectionMaps.find( &node )->second;
+	}
+
+	AnimatedObjectSPtr Scene::addAnimatedTexture( TextureUnit & texture
+		, Pass & pass )
+	{
+		auto & cache = getAnimatedObjectGroupCache();
+		auto group = cache.find( cuT( "C3D_Textures" ) );
+		return group->addObject( texture, pass );
 	}
 
 	MaterialType Scene::getMaterialsType()const

@@ -7,6 +7,7 @@
 #include "Castor3D/Scene/Animation/AnimatedObject.hpp"
 #include "Castor3D/Scene/Animation/AnimatedMesh.hpp"
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
+#include "Castor3D/Scene/Animation/AnimatedTexture.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 
 using namespace castor;
@@ -173,6 +174,19 @@ namespace castor3d
 		, String const & name )
 	{
 		auto object = std::make_shared< AnimatedSkeleton >( name, skeleton, mesh, geometry );
+
+		if ( !addObject( object ) )
+		{
+			object.reset();
+		}
+
+		return object;
+	}
+
+	AnimatedObjectSPtr AnimatedObjectGroup::addObject( TextureUnit & texture
+		, Pass & pass )
+	{
+		auto object = std::make_shared< AnimatedTexture >( texture, pass );
 
 		if ( !addObject( object ) )
 		{

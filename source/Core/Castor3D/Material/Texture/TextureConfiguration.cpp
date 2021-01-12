@@ -128,6 +128,44 @@ namespace castor3d
 			result = writeOpt( cuT( "invert_y" ), configuration.needsYInversion, file );
 		}
 
+		if ( result )
+		{
+			if ( configuration.translate != castor::Point4f{}
+				|| configuration.scale != castor::Point4f{ 1.0, 1.0, 1.0, 1.0 } )
+			{
+				result = file.writeText( m_tabs + cuT( "animation" ) ) > 0;
+				result = file.writeText( m_tabs + cuT( "{" ) ) > 0;
+				auto translate = castor::Point3f{ configuration.translate };
+
+				if ( translate != castor::Point3f{} )
+				{
+					result = file.print( 256, cuT( "%s\ttranslate " ), m_tabs.c_str() ) > 0
+						&& castor::Point3f::TextWriter( castor::String() )( translate, file )
+						&& file.writeText( cuT( "\n" ) ) > 0;
+				}
+
+				auto rotate = configuration.translate[3];
+
+				if ( rotate != 0.0 )
+				{
+					result = write( cuT( "\trotate" ), configuration.translate[3], file );
+				}
+
+				auto scale = castor::Point3f{ configuration.scale };
+
+				if ( scale != castor::Point3f{} )
+				{
+					result = file.print( 256, cuT( "%s\tscale " ), m_tabs.c_str() ) > 0
+						&& castor::Point3f::TextWriter( castor::String() )( scale, file )
+						&& file.writeText( cuT( "\n" ) ) > 0;
+				}
+
+				result = file.writeText( m_tabs + cuT( "}" ) ) > 0;
+				result = writeOpt( cuT( "{" ), configuration.needsYInversion, file );
+				result = writeOpt( cuT( "}" ), configuration.needsYInversion, file );
+			}
+		}
+
 		return result;
 	}
 
