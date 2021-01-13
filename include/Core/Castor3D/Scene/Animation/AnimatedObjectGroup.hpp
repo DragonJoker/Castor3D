@@ -5,6 +5,8 @@ See LICENSE file in root folder
 #define ___C3D_ANIMATED_OBJECT_GROUP_H___
 
 #include "AnimationModule.hpp"
+#include "Castor3D/Material/Texture/TextureModule.hpp"
+#include "Castor3D/Material/Pass/PassModule.hpp"
 #include "Castor3D/Model/Skeleton/SkeletonModule.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>

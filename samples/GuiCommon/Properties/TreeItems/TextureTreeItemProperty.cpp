@@ -6,6 +6,7 @@
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Material/Texture/TextureLayout.hpp>
 #include <Castor3D/Material/Texture/TextureUnit.hpp>
+#include <Castor3D/Material/Texture/Animation/TextureAnimation.hpp>
 
 #include <wx/propgrid/advprops.h>
 
@@ -140,7 +141,7 @@ namespace GuiCommon
 
 	void TextureTreeItemProperty::doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )
 	{
-		static wxString PROPERTY_CATEGORY_TEXTURE = _( "Texture" );
+		static wxString CATEGORY_TEXTURE = _( "Texture" );
 		static wxString PROPERTY_TEXTURE_IMAGE = _( "Image" );
 		static wxString PROPERTY_FLAG_DIFFUSE = _( "Diffuse" );
 		static wxString PROPERTY_FLAG_SPECULAR = _( "Specular" );
@@ -191,7 +192,7 @@ namespace GuiCommon
 
 		if ( unit )
 		{
-			grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_TEXTURE ) );
+			grid->Append( new wxPropertyCategory( CATEGORY_TEXTURE ) );
 
 			if ( m_materialType == MaterialType::ePhong )
 			{
@@ -242,6 +243,18 @@ namespace GuiCommon
 			{
 				addProperty( grid, PROPERTY_FACTOR_HEIGHT, Path{ unit->getTexture()->getDefaultView().toString() }
 					, [this]( wxVariant const & var ){ onImageChange( var ); } );
+			}
+
+			if ( unit->hasAnimation() )
+			{
+				static wxString CATEGORY_ANIMATION = _( "Animation" );
+				static wxString PROPERTY_ANIMATION_TRANSLATE = _( "Translate" );
+				static wxString PROPERTY_ANIMATION_ROTATE = _( "Rotate" );
+
+				auto & anim = unit->getAnimation();
+				grid->Append( new wxPropertyCategory( CATEGORY_ANIMATION ) );
+				addPropertyT( grid, PROPERTY_ANIMATION_TRANSLATE, anim.getTranslateSpeed(), &anim, &TextureAnimation::setTranslateSpeed );
+				addPropertyT( grid, PROPERTY_ANIMATION_ROTATE, anim.getRotateSpeed(), &anim, &TextureAnimation::setRotateSpeed );
 			}
 		}
 	}

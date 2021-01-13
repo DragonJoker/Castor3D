@@ -8,6 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Scene/Animation/Texture/TextureAnimationModule.hpp"
 #include "Castor3D/Material/Texture/TextureModule.hpp"
+#include "Castor3D/Material/Pass/PassModule.hpp"
 
 namespace castor3d
 {
