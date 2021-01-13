@@ -29,7 +29,7 @@ endif()
 
 set( ${PROJECT_NAME}_DESCRIPTION "${PROJECT_NAME} application" )
 set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
-set( ${PROJECT_NAME}_VERSION_MINOR 3 )
+set( ${PROJECT_NAME}_VERSION_MINOR 4 )
 set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
 include_directories(

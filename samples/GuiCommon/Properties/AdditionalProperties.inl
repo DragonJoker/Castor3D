@@ -1,8 +1,9 @@
-#include <CastorUtils/Data/Path.hpp>
+﻿#include <CastorUtils/Data/Path.hpp>
 #include <CastorUtils/Design/ChangeTracked.hpp>
 #include <CastorUtils/Graphics/Font.hpp>
 #include <CastorUtils/Math/Angle.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
+#include <CastorUtils/Math/Speed.hpp>
 
 namespace GuiCommon
 {
@@ -24,6 +25,11 @@ namespace GuiCommon
 		{
 			return WXVARIANT( value );
 		}
+
+		static inline wxString getUnit()
+		{
+			return wxEmptyString;
+		}
 	};
 
 	//************************************************************************************************
@@ -42,6 +48,10 @@ namespace GuiCommon
 		static inline wxVariant convert( ParamType value )\
 		{\
 			return WXVARIANT( long( value ) );\
+		}\
+		static inline wxString getUnit()\
+		{\
+			return wxEmptyString;\
 		}\
 	}
 
@@ -73,6 +83,10 @@ namespace GuiCommon
 		{\
 			return WXVARIANT( double( value ) );\
 		}\
+		static inline wxString getUnit()\
+		{\
+			return wxEmptyString;\
+		}\
 	}
 
 	FloatValueTraitsT( float );
@@ -98,6 +112,36 @@ namespace GuiCommon
 		{
 			return WXVARIANT( make_wxString( value ) );
 		}
+
+		static inline wxString getUnit()
+		{
+			return wxEmptyString;
+		}
+	};
+
+	//************************************************************************************************
+
+	template<>
+	struct ValueTraitsT< castor::Seconds >
+	{
+		using ValueT = castor::Seconds;
+		using ParamType = ValueT const &;
+		using RetType = ValueT;
+
+		static inline RetType convert( wxVariant const & var )
+		{
+			return ValueT( int64_t( var.GetDouble() ) );
+		}
+
+		static inline wxVariant convert( ParamType value )
+		{
+			return WXVARIANT( value.count() );
+		}
+
+		static inline wxString getUnit()
+		{
+			return wxT( "s" );
+		}
 	};
 
 	//************************************************************************************************
@@ -111,12 +155,67 @@ namespace GuiCommon
 
 		static inline RetType convert( wxVariant const & var )
 		{
-			return ValueT( int64_t( var.GetDouble() * 1000.0 ) );
+			return ValueT( int64_t( var.GetDouble() ) );
 		}
 
 		static inline wxVariant convert( ParamType value )
 		{
-			return WXVARIANT( value.count() / 1000.0 );
+			return WXVARIANT( value.count() );
+		}
+
+		static inline wxString getUnit()
+		{
+			return wxT( "ms" );
+		}
+	};
+
+	//************************************************************************************************
+
+	template<>
+	struct ValueTraitsT< castor::Microseconds >
+	{
+		using ValueT = castor::Microseconds;
+		using ParamType = ValueT const &;
+		using RetType = ValueT;
+
+		static inline RetType convert( wxVariant const & var )
+		{
+			return ValueT( int64_t( var.GetDouble() ) );
+		}
+
+		static inline wxVariant convert( ParamType value )
+		{
+			return WXVARIANT( value.count() );
+		}
+
+		static inline wxString getUnit()
+		{
+			return wxT( "µs" );
+		}
+	};
+
+	//************************************************************************************************
+
+	template<>
+	struct ValueTraitsT< castor::Nanoseconds >
+	{
+		using ValueT = castor::Nanoseconds;
+		using ParamType = ValueT const &;
+		using RetType = ValueT;
+
+		static inline RetType convert( wxVariant const & var )
+		{
+			return ValueT( int64_t( var.GetDouble() ) );
+		}
+
+		static inline wxVariant convert( ParamType value )
+		{
+			return WXVARIANT( value.count() );
+		}
+
+		static inline wxString getUnit()
+		{
+			return wxT( "ns" );
 		}
 	};
 
@@ -137,6 +236,11 @@ namespace GuiCommon
 		static inline wxVariant convert( ParamType value )
 		{
 			return getVariant< castor::String >( value );
+		}
+
+		static inline wxString getUnit()
+		{
+			return wxEmptyString;
 		}
 	};
 
@@ -160,6 +264,11 @@ namespace GuiCommon
 		{
 			return WXVARIANT( wxColour{ toBGRPacked( value ) } );
 		}
+
+		static inline wxString getUnit()
+		{
+			return wxEmptyString;
+		}
 	};
 
 	//************************************************************************************************
@@ -182,6 +291,11 @@ namespace GuiCommon
 		{
 			return WXVARIANT( wxColour{ toBGRAPacked( value ) } );
 		}
+
+		static inline wxString getUnit()
+		{
+			return wxEmptyString;
+		}
 	};
 
 	//************************************************************************************************
@@ -201,6 +315,11 @@ namespace GuiCommon
 		static inline wxVariant convert( ParamType value )
 		{
 			return WXVARIANT( value.degrees() );
+		}
+
+		static inline wxString getUnit()
+		{
+			return wxT( "°" );
 		}
 	};
 
@@ -226,6 +345,11 @@ namespace GuiCommon
 			info.FaceName( value->getFaceName() );
 			return WXVARIANT( wxFont{ info } );
 		}
+
+		static inline wxString getUnit()
+		{
+			return wxEmptyString;
+		}
 	};
 
 	//************************************************************************************************
@@ -247,6 +371,115 @@ namespace GuiCommon
 		{
 			return getVariant( value.value() );
 		}
+
+		static inline wxString getUnit()
+		{
+			return ValueTraitsT< TypeT >::getUnit();
+		}
+	};
+
+	//************************************************************************************************
+
+	template< typename MyValueT >
+	struct ValueTraitsT< castor::SpeedT< MyValueT, castor::Nanoseconds > >
+	{
+		using ValueT = castor::SpeedT< MyValueT, castor::Nanoseconds >;
+		using TypeT = MyValueT;
+		using ParamType = ValueT const &;
+		using RetType = ValueT;
+
+		static inline RetType convert( wxVariant const & var )
+		{
+			return variantCast< TypeT >( var );
+		}
+
+		static inline wxVariant convert( ParamType value )
+		{
+			return getVariant( value.value() );
+		}
+
+		static inline wxString getUnit()
+		{
+			return ValueTraitsT< TypeT >::getUnit() + wxT( "/ns" );
+		}
+	};
+
+	//************************************************************************************************
+
+	template< typename MyValueT >
+	struct ValueTraitsT< castor::SpeedT< MyValueT, castor::Microseconds > >
+	{
+		using ValueT = castor::SpeedT< MyValueT, castor::Microseconds >;
+		using TypeT = MyValueT;
+		using ParamType = ValueT const &;
+		using RetType = ValueT;
+
+		static inline RetType convert( wxVariant const & var )
+		{
+			return variantCast< TypeT >( var );
+		}
+
+		static inline wxVariant convert( ParamType value )
+		{
+			return getVariant( value.value() );
+		}
+
+		static inline wxString getUnit()
+		{
+			return ValueTraitsT< TypeT >::getUnit() + wxT( "/µs" );
+		}
+	};
+
+	//************************************************************************************************
+
+	template< typename MyValueT >
+	struct ValueTraitsT< castor::SpeedT< MyValueT, castor::Milliseconds > >
+	{
+		using ValueT = castor::SpeedT< MyValueT, castor::Milliseconds >;
+		using TypeT = MyValueT;
+		using ParamType = ValueT const &;
+		using RetType = ValueT;
+
+		static inline RetType convert( wxVariant const & var )
+		{
+			return variantCast< TypeT >( var );
+		}
+
+		static inline wxVariant convert( ParamType value )
+		{
+			return getVariant( value.value() );
+		}
+
+		static inline wxString getUnit()
+		{
+			return ValueTraitsT< TypeT >::getUnit() + wxT( "/ms" );
+		}
+	};
+
+	//************************************************************************************************
+
+	template< typename MyValueT >
+	struct ValueTraitsT< castor::SpeedT< MyValueT, castor::Seconds > >
+	{
+		using ValueT = castor::SpeedT< MyValueT, castor::Seconds >;
+		using TypeT = MyValueT;
+		using ParamType = ValueT const &;
+		using RetType = ValueT;
+
+		static inline RetType convert( wxVariant const & var )
+		{
+			return ValueT{ variantCast< TypeT >( var ) };
+		}
+
+		static inline wxVariant convert( ParamType value )
+		{
+			return getVariant( value.value() );
+		}
+
+		static inline wxString getUnit()
+		{
+			return ValueTraitsT< TypeT >::getUnit() + wxT( "/s" );
+		}
 	};
 
 	//************************************************************************************************
@@ -267,6 +500,11 @@ namespace GuiCommon
 		static inline wxVariant convert( ParamType value )
 		{
 			return getVariant( value.value() );
+		}
+
+		static inline wxString getUnit()
+		{
+			return ValueTraitsT< TypeT >::getUnit();
 		}
 	};
 
@@ -290,6 +528,11 @@ namespace GuiCommon
 		{
 			return getVariant( value.value() );
 		}
+
+		static inline wxString getUnit()
+		{
+			return ValueTraitsT< TypeT >::getUnit();
+		}
 	};
 
 	//************************************************************************************************
@@ -309,6 +552,11 @@ namespace GuiCommon
 		static inline wxVariant convert( ParamType value )
 		{
 			return WXVARIANT( value );
+		}
+
+		static inline wxString getUnit()
+		{
+			return wxEmptyString;
 		}
 	};
 

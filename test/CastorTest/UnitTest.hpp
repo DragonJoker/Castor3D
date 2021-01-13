@@ -24,6 +24,14 @@ namespace Testing
 	}
 
 	template<>
+	inline std::string toString< std::chrono::seconds >( std::chrono::seconds const & p_value )
+	{
+		std::stringstream stream;
+		stream << p_value.count() << "s";
+		return stream.str();
+	}
+
+	template<>
 	inline std::string toString< std::chrono::milliseconds >( std::chrono::milliseconds const & p_value )
 	{
 		std::stringstream stream;

@@ -128,6 +128,33 @@ namespace castor3d
 			result = writeOpt( cuT( "invert_y" ), configuration.needsYInversion, file );
 		}
 
+		if ( result )
+		{
+			auto rotate = configuration.rotate[0];
+			auto translate = castor::Point3f{ configuration.translate };
+
+			if ( translate != castor::Point3f{}
+				|| rotate != 0.0f )
+			{
+				result = result && file.writeText( m_tabs + cuT( "animation" ) ) > 0;
+				result = result && file.writeText( m_tabs + cuT( "{" ) ) > 0;
+
+				if ( result && translate != castor::Point3f{} )
+				{
+					result = file.print( 256, cuT( "%s\ttranslate " ), m_tabs.c_str() ) > 0
+						&& castor::Point3f::TextWriter( castor::String() )( translate, file )
+						&& file.writeText( cuT( "\n" ) ) > 0;
+				}
+
+				if ( result && rotate != 0.0 )
+				{
+					result = write( cuT( "\trotate" ), rotate, file );
+				}
+
+				result = result && file.writeText( m_tabs + cuT( "}" ) ) > 0;
+			}
+		}
+
 		return result;
 	}
 
@@ -239,7 +266,8 @@ namespace castor3d
 			&& lhs.heightFactor == rhs.heightFactor
 			&& lhs.normalGMultiplier == rhs.normalGMultiplier
 			&& lhs.needsGammaCorrection == rhs.needsGammaCorrection
-			&& lhs.needsYInversion == rhs.needsYInversion;
+			&& lhs.needsYInversion == rhs.needsYInversion
+			&& lhs.translate == rhs.translate;
 	}
 
 	bool operator!=( TextureConfiguration const & lhs, TextureConfiguration const & rhs )

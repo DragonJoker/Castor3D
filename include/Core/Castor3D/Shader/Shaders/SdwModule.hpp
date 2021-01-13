@@ -57,7 +57,7 @@ namespace castor3d
 		static uint32_t constexpr MaxTransmittanceProfileSize = 10u;
 		// Texture Configuration Buffer.
 		static uint32_t constexpr MaxTextureConfigurationCount = 4000u;
-		static int constexpr MaxTextureConfigurationComponentsCount = 7;
+		static int constexpr MaxTextureConfigurationComponentsCount = 9;
 
 		class Utils;
 		class Shadow;

@@ -8,6 +8,7 @@ See LICENSE file in root folder
 #include "TextureModule.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
+#include <CastorUtils/Math/SquareMatrix.hpp>
 
 namespace castor3d
 {
@@ -101,6 +102,8 @@ namespace castor3d
 		float normalGMultiplier{ 1.0f };
 		uint32_t needsGammaCorrection{ 0u };
 		uint32_t needsYInversion{ 0u };
+		castor::Point4f translate{ 0, 0, 0, 0 };
+		castor::Point4f rotate{ 1, 0, 0, 0 };
 		TextureSpace textureSpace{ TextureSpace::eColour };
 		/**@}*/
 		/**

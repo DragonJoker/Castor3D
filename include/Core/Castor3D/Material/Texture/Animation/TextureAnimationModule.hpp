@@ -1,0 +1,32 @@
+/*
+See LICENSE file in root folder
+*/
+#ifndef ___C3D_MaterialTextureAnimationModule_H___
+#define ___C3D_MaterialTextureAnimationModule_H___
+
+#include "Castor3D/Material/Texture/TextureModule.hpp"
+
+#include <CastorUtils/Math/MathModule.hpp>
+
+namespace castor3d
+{
+	/**@name Material */
+	//@{
+	/**@name Texture */
+	//@{
+	/**@name Animation */
+	//@{
+
+	class TextureAnimation;
+
+	CU_DeclareSmartPtr( TextureAnimation );
+
+	using TextureRotateSpeed = castor::SpeedT< castor::Angle, castor::Seconds >;
+	using TextureTranslateSpeed = castor::SpeedT< castor::Point2f, castor::Seconds >;
+
+	//@}
+	//@}
+	//@}
+}
+
+#endif

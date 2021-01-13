@@ -96,6 +96,8 @@ namespace castor3d
 			castor::ArrayView< castor::Point4f > normalFc;
 			castor::ArrayView< castor::Point4f > heightFc;
 			castor::ArrayView< castor::Point4f > miscVals;
+			castor::ArrayView< castor::Point4f > translate;
+			castor::ArrayView< castor::Point4f > rotate;
 		};
 
 #else
@@ -109,6 +111,8 @@ namespace castor3d
 			castor::Point4f normalFc;
 			castor::Point4f heightFc;
 			castor::Point4f miscVals;
+			castor::Point4f translate;
+			castor::Point4f rotate;
 		};
 
 		using TextureConfigurationsData = castor::ArrayView< Data >;

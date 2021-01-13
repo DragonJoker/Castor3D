@@ -338,6 +338,24 @@ source_group( "Header Files\\Material\\Texture" FILES ${${PROJECT_NAME}_FOLDER_H
 source_group( "Source Files\\Material\\Texture" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Texture/Animation/TextureAnimation.cpp
+)
+set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Texture/Animation/TextureAnimation.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Texture/Animation/TextureAnimationModule.hpp
+)
+set( ${PROJECT_NAME}_SRC_FILES
+	${${PROJECT_NAME}_SRC_FILES}
+	${${PROJECT_NAME}_FOLDER_SRC_FILES}
+)
+set( ${PROJECT_NAME}_HDR_FILES
+	${${PROJECT_NAME}_HDR_FILES}
+	${${PROJECT_NAME}_FOLDER_HDR_FILES}
+)
+source_group( "Header Files\\Material\\Texture\\Animation" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
+source_group( "Source Files\\Material\\Texture\\Animation" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
+
+set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Miscellaneous/DebugCallbacks.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Miscellaneous/DebugName.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Miscellaneous/GpuInformations.cpp
@@ -1241,6 +1259,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Animation/AnimatedMesh.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Animation/AnimatedObject.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Animation/AnimatedObjectGroup.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Animation/AnimatedTexture.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Animation/AnimatedSkeleton.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Animation/AnimationInstance.cpp
 )
@@ -1249,6 +1268,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Animation/AnimatedObject.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Animation/AnimatedObjectGroup.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Animation/AnimatedSkeleton.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Animation/AnimatedTexture.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Animation/AnimationInstance.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Animation/AnimationModule.hpp
 )
@@ -1308,6 +1328,24 @@ set( ${PROJECT_NAME}_HDR_FILES
 )
 source_group( "Header Files\\Scene\\Animation\\Skeleton" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
 source_group( "Source Files\\Scene\\Animation\\Skeleton" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
+
+set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Animation/Texture/TextureAnimationInstance.cpp
+)
+set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Animation/Texture/TextureAnimationInstance.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/Animation/Texture/TextureAnimationModule.hpp
+)
+set( ${PROJECT_NAME}_SRC_FILES
+	${${PROJECT_NAME}_SRC_FILES}
+	${${PROJECT_NAME}_FOLDER_SRC_FILES}
+)
+set( ${PROJECT_NAME}_HDR_FILES
+	${${PROJECT_NAME}_HDR_FILES}
+	${${PROJECT_NAME}_FOLDER_HDR_FILES}
+)
+source_group( "Header Files\\Scene\\Animation\\Texture" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
+source_group( "Source Files\\Scene\\Animation\\Texture" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Background/Background.cpp

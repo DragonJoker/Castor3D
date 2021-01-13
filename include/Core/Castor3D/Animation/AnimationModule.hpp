@@ -56,6 +56,9 @@ namespace castor3d
 		//!\~english	Submesh animation (morphing).
 		//!\~french		Animation de sous-maillage (morphing).
 		eMesh,
+		//!\~english	Texture animation.
+		//!\~french		Animation de texture.
+		eTexture,
 		CU_ScopedEnumBounds( eMovable )
 	};
 	C3D_API castor::String getName( AnimationType value );

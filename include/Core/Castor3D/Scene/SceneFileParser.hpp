@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_SceneFileParser_H___
 
 #include "Castor3D/Material/Pass/PassModule.hpp"
+#include "Castor3D/Material/Texture/Animation/TextureAnimationModule.hpp"
 #include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
 #include "Castor3D/Overlay/OverlayModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
@@ -76,6 +77,7 @@ namespace castor3d
 		eRaw = CU_MakeSectionName( 'R', 'A', 'W', 'S' ),
 		ePcf = CU_MakeSectionName( 'P', 'C', 'F', 'S' ),
 		eVsm = CU_MakeSectionName( 'V', 'S', 'M', 'S' ),
+		eTextureAnimation = CU_MakeSectionName( 'T', 'X', 'A', 'N' ),
 	};
 
 	class SceneFileContext
@@ -165,7 +167,8 @@ namespace castor3d
 		AnimatedObjectSPtr pAnimSkeleton;
 		AnimatedObjectSPtr pAnimMesh;
 		AnimatedObjectSPtr pAnimMovable;
-		AnimationInstanceRPtr pAnimation{};
+		AnimatedObjectSPtr pAnimTexture;
+		TextureAnimation * textureAnimation{};
 		SceneBackgroundSPtr pBackground;
 		ParticleSystemSPtr particleSystem;
 		SsaoConfig ssaoConfig{};

@@ -334,26 +334,21 @@ namespace castor3d
 			m_serialisable = value;
 		}
 
-	protected:
+		Scene * getScene()const
+		{
+			return m_scene;
+		}
+
+	private:
 		friend class MeshGenerator;
 		CU_DeclareVector( AnimationPtrStrMap, AnimationMap );
-		//!\~english	Tells whether or not the mesh is modified.
-		//!\~french		Dit si le maillage est modifié.
+
+		Scene * m_scene;
 		bool m_modified;
-		//!\~english	The collision box.
-		//!\~french		La boîte de collision.
 		castor::BoundingBox m_box;
-		//!\~english	The collision sphere.
-		//!\~french		La sphere de collision.
 		castor::BoundingSphere m_sphere;
-		//!\~english	The submeshes array.
-		//!\~french		Le tableau de sous maillages.
 		SubmeshPtrArray m_submeshes;
-		//!\~english	The skeleton.
-		//!\~french		Le squelette.
 		SkeletonSPtr m_skeleton;
-		//!\~english	Tells that the mesh is serialisable.
-		//!\~french		Dit que le maillage est sérialisable.
 		bool m_serialisable{ true };
 
 		friend class BinaryWriter< Mesh >;

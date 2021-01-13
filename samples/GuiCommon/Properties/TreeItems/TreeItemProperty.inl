@@ -192,7 +192,7 @@ namespace GuiCommon
 		{
 			wxPGProperty * prop = appendProp( parent, new wxFloatProperty( name, name, value.count() / 1000.0 ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
-			prop->SetAttribute( wxPG_ATTR_UNITS, wxT( "s" ) );
+			prop->SetAttribute( wxPG_ATTR_UNITS, ValueTraitsT< ValueT >::getUnit() );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_STEP, WXVARIANT( 0.1 ) );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_MOTION, WXVARIANT( true ) );
@@ -210,10 +210,16 @@ namespace GuiCommon
 			prop->Enable( false );
 			return prop;
 		}
+		else if constexpr ( castor::isSpeedT< ValueT > )
+		{
+			wxPGProperty * prop = createProperty( parent, name, value.getValue(), handler );
+			prop->SetAttribute( wxPG_ATTR_UNITS, ValueTraitsT< ValueT >::getUnit() );
+			return prop;
+		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Angle > )
 		{
 			wxPGProperty * prop = createProperty( parent, name, value.degrees(), handler );
-			prop->SetAttribute( wxPG_ATTR_UNITS, wxT( "°" ) );
+			prop->SetAttribute( wxPG_ATTR_UNITS, ValueTraitsT< ValueT >::getUnit() );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_STEP, WXVARIANT( 1.0 ) );
 			prop->SetAttribute( wxPG_ATTR_MIN, WXVARIANT( 0.0 ) );
 			prop->SetAttribute( wxPG_ATTR_MAX, WXVARIANT( 359.0 ) );

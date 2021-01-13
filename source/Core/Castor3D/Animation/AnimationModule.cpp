@@ -12,6 +12,8 @@ namespace castor3d
 			return cuT( "skeleton" );
 		case AnimationType::eMesh:
 			return cuT( "mesh" );
+		case AnimationType::eTexture:
+			return cuT( "texture" );
 		default:
 			CU_Failure( "Unsupported AnimationType" );
 			return castor::cuEmptyString;

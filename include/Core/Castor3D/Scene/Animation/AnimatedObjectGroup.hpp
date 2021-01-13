@@ -5,6 +5,8 @@ See LICENSE file in root folder
 #define ___C3D_ANIMATED_OBJECT_GROUP_H___
 
 #include "AnimationModule.hpp"
+#include "Castor3D/Material/Texture/TextureModule.hpp"
+#include "Castor3D/Material/Pass/PassModule.hpp"
 #include "Castor3D/Model/Skeleton/SkeletonModule.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
@@ -118,6 +120,18 @@ namespace castor3d
 			, Mesh & mesh
 			, Geometry & geometry
 			, castor::String const & name );
+		/**
+		 *\~english
+		 *\brief		Creates an AnimatedObject from the given TextureUnit, adds it to the list.
+		 *\param[in]	texture		The TextureUnit from which AnimatedObject is created.
+		 *\param[in]	pass		The pass instanciating the texture.
+		 *\~french
+		 *\brief		Crée un AnimatedObject à partir de la TextureUnit donnée, l'ajoute à la liste.
+		 *\param[in]	texture		La TextureUnit à partir duquel l'AnimatedObject est créé.
+		 *\param[in]	pass		La passe instanciant la texture.
+		 */
+		C3D_API AnimatedObjectSPtr addObject( TextureUnit & texture
+			, Pass & pass );
 		/**
 		 *\~english
 		 *\brief		adds an AnimatedObject to this group.

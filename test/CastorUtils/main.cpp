@@ -10,6 +10,7 @@
 #include "CastorUtilsObjectsPoolTest.hpp"
 #include "CastorUtilsQuaternionTest.hpp"
 #include "CastorUtilsSignalTest.hpp"
+#include "CastorUtilsSpeedTest.hpp"
 #include "CastorUtilsThreadPoolTest.hpp"
 #include "CastorUtilsWorkerThreadTest.hpp"
 
@@ -53,6 +54,7 @@ int main( int argc, char const * argv[] )
 	Testing::registerType( std::make_unique< Testing::CastorUtilsZipTest >() );
 	Testing::registerType( std::make_unique< Testing::CastorUtilsObjectsPoolTest >() );
 	Testing::registerType( std::make_unique< Testing::CastorUtilsQuaternionTest >() );
+	Testing::registerType( std::make_unique< Testing::CastorUtilsSpeedTest >() );
 	BENCHLOOP( iCount, iReturn );
 	castor::Logger::cleanup();
 	return iReturn;

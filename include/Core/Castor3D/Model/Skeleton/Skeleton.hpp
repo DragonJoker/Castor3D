@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "SkeletonModule.hpp"
 #include "Castor3D/Binary/BinaryModule.hpp"
+#include "Castor3D/Scene/SceneModule.hpp"
 
 #include "Castor3D/Animation/Animable.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
@@ -195,15 +196,15 @@ namespace castor3d
 			return dummy;
 		}
 
+		Scene * getScene()const
+		{
+			return m_scene;
+		}
+
 	private:
-		//!\~english	The bones.
-		//!\~french		Les bones.
+		Scene * m_scene;
 		BonePtrArray m_bones;
-		//!\~english	The global skeleton transform.
-		//!\~french		La transformation globale du squelette.
 		castor::Matrix4x4f m_globalInverse;
-		//!\~english	The bounding box for each bone, sorted by mesh.
-		//!\~french		La bounding box pour chaque os, trié par maillage.
 		std::map< Mesh *, std::vector< castor::BoundingBox > > m_boxes;
 
 		friend class BinaryWriter< Skeleton >;

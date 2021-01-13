@@ -227,12 +227,14 @@ namespace castor3d
 		 *\param[in]	node	Le noeud de scène.
 		 */
 		C3D_API EnvironmentMap const & getEnvironmentMap( SceneNode const & node )const;
+		C3D_API AnimatedObjectSPtr addAnimatedTexture( TextureUnit & texture
+			, Pass & pass );
 		/**
 		*\~english
-		*name
+		*\name
 		*	Getters.
 		*\~french
-		*name
+		*\name
 		*	Accesseurs.
 		*/
 		/**@{*/
@@ -240,120 +242,119 @@ namespace castor3d
 		C3D_API bool needsGlobalIllumination()const;
 		C3D_API bool needsGlobalIllumination( LightType ltType
 			, GlobalIlluminationType giType )const;
+		C3D_API ashes::SemaphoreCRefArray getRenderTargetsSemaphores()const;
 
-		inline castor::BoundingBox const & getBoundingBox()const
+		castor::BoundingBox const & getBoundingBox()const
 		{
 			return m_boundingBox;
 		}
 
-		inline SceneBackgroundSPtr getBackground()const
+		SceneBackgroundSPtr getBackground()const
 		{
 			return m_background;
 		}
 
-		inline SceneBackground const & getColourBackground()const
+		SceneBackground const & getColourBackground()const
 		{
 			return *m_colourBackground;
 		}
 
-		inline SceneBackground & getColourBackground()
+		SceneBackground & getColourBackground()
 		{
 			return *m_colourBackground;
 		}
 
-		inline std::vector< std::reference_wrapper< EnvironmentMap > > & getEnvironmentMaps()
+		std::vector< std::reference_wrapper< EnvironmentMap > > & getEnvironmentMaps()
 		{
 			return m_reflectionMapsArray;
 		}
 
-		inline std::vector< std::reference_wrapper< EnvironmentMap > > const & getEnvironmentMaps()const
+		std::vector< std::reference_wrapper< EnvironmentMap > > const & getEnvironmentMaps()const
 		{
 			return m_reflectionMapsArray;
 		}
 
-		inline castor::RgbColour const & getBackgroundColour()const
+		castor::RgbColour const & getBackgroundColour()const
 		{
 			return m_backgroundColour;
 		}
 
-		inline SceneNodeSPtr getRootNode()const
+		SceneNodeSPtr getRootNode()const
 		{
 			return m_rootNode;
 		}
 
-		inline SceneNodeSPtr getCameraRootNode()const
+		SceneNodeSPtr getCameraRootNode()const
 		{
 			return m_rootCameraNode;
 		}
 
-		inline SceneNodeSPtr getObjectRootNode()const
+		SceneNodeSPtr getObjectRootNode()const
 		{
 			return m_rootObjectNode;
 		}
 
-		inline bool hasChanged()const
+		bool hasChanged()const
 		{
 			return m_changed;
 		}
 
-		inline castor::RgbColour const & getAmbientLight()const
+		castor::RgbColour const & getAmbientLight()const
 		{
 			return m_ambientLight;
 		}
 
-		inline Fog const & getFog()const
+		Fog const & getFog()const
 		{
 			return m_fog;
 		}
 
-		inline Fog & getFog()
+		Fog & getFog()
 		{
 			return m_fog;
 		}
 
-		inline FrameListener const & getListener()const
+		FrameListener const & getListener()const
 		{
 			CU_Require( !m_listener.expired() );
 			return *m_listener.lock();
 		}
 
-		inline FrameListener & getListener()
+		FrameListener & getListener()
 		{
 			CU_Require( !m_listener.expired() );
 			return *m_listener.lock();
 		}
 
-		inline bool isInitialised()const
+		bool isInitialised()const
 		{
 			return m_initialised;
 		}
 
-		inline bool needsSubsurfaceScattering()const
+		bool needsSubsurfaceScattering()const
 		{
 			return m_needsSubsurfaceScattering;
 		}
 
-		inline bool hasOpaqueObjects()const
+		bool hasOpaqueObjects()const
 		{
 			return m_hasOpaqueObjects;
 		}
 
-		inline bool hasTransparentObjects()const
+		bool hasTransparentObjects()const
 		{
 			return m_hasTransparentObjects;
 		}
 
-		inline uint32_t getDirectionalShadowCascades()const
+		uint32_t getDirectionalShadowCascades()const
 		{
 			return m_directionalShadowCascades;
 		}
 
-		inline float getLpvIndirectAttenuation()const
+		float getLpvIndirectAttenuation()const
 		{
 			return m_lpvIndirectAttenuation;
 		}
-
-		C3D_API ashes::SemaphoreCRefArray getRenderTargetsSemaphores()const;
 		/**@}*/
 		/**
 		*\~english
@@ -368,18 +369,18 @@ namespace castor3d
 		C3D_API void setLpvIndirectAttenuation( float value );
 		C3D_API void setMaterialsType( MaterialType value );
 
-		inline void setBackgroundColour( castor::RgbColour const & value )
+		void setBackgroundColour( castor::RgbColour const & value )
 		{
 			m_backgroundColour = value;
 		}
 
-		inline void setChanged()
+		void setChanged()
 		{
 			m_changed = true;
 			onChanged( *this );
 		}
 
-		inline void setAmbientLight( castor::RgbColour const & value )
+		void setAmbientLight( castor::RgbColour const & value )
 		{
 			m_ambientLight = value;
 		}

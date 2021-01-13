@@ -39,6 +39,10 @@ See LICENSE file in root folder
 			{\
 				return WXVARIANT( value );\
 			}\
+			static inline wxString getUnit()\
+			{\
+				return wxEmptyString;\
+			}\
 		};\
 	}
 
