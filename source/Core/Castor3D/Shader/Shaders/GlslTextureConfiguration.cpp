@@ -20,13 +20,6 @@ namespace castor3d
 				return translate + uv;
 			}
 
-			template< typename LhsT, typename RhsT >
-			LhsT scaleUV( LhsT const & scale
-				, RhsT const & uv )
-			{
-				return scale * uv;
-			}
-
 			sdw::Vec2 rotateUV( sdw::Vec2 const & rotate
 				, sdw::Vec2 const & uv )
 			{
@@ -55,7 +48,7 @@ namespace castor3d
 			, heightFc{ getMember< sdw::Vec4 >( "heightFc" ) }
 			, miscVals{ getMember< sdw::Vec4 >( "miscVals" ) }
 			, translate{ getMember< sdw::Vec4 >( "translate" ) }
-			, scale{ getMember< sdw::Vec4 >( "scale" ) }
+			, rotate{ getMember< sdw::Vec4 >( "rotate" ) }
 			, colourMask{ colrSpec.xy() }
 			, specularMask{ colrSpec.zw() }
 			, glossinessMask{ glossOpa.xy() }
@@ -92,7 +85,7 @@ namespace castor3d
 				result->declMember( "heightFc", ast::type::Kind::eVec4F );
 				result->declMember( "miscVals", ast::type::Kind::eVec4F );
 				result->declMember( "translate", ast::type::Kind::eVec4F );
-				result->declMember( "scale", ast::type::Kind::eVec4F );
+				result->declMember( "rotate", ast::type::Kind::eVec4F );
 			}
 
 			return result;
@@ -244,22 +237,20 @@ namespace castor3d
 			, sdw::Vec2 const & uv )const
 		{
 			return translateUV( translate.xy()
-				, rotateUV( vec2( translate.w(), scale.w() )
-					, scaleUV( scale.xy()
-						, mix( uv
-							, vec2( uv.x(), 1.0_f - uv.y() )
-							, vec2( writer.cast< sdw::Float >( needsYInversion ) ) ) ) ) );
+				, rotateUV( vec2( rotate.xy() )
+					, mix( uv
+						, vec2( uv.x(), 1.0_f - uv.y() )
+						, vec2( writer.cast< sdw::Float >( needsYInversion ) ) ) ) );
 		}
 
 		sdw::Vec3 TextureConfigData::convertUVW( sdw::ShaderWriter & writer
 			, sdw::Vec3 const & uvw )const
 		{
 			return translateUV( translate.xyz()
-				, rotateUV( vec3( translate.w(), scale.w(), 0.0f )
-					, scaleUV( scale.xyz()
-						, mix( uvw
-							, vec3( uvw.x(), 1.0_f - uvw.y(), uvw.z() )
-							, vec3( writer.cast< sdw::Float >( needsYInversion ) ) ) ) ) );
+				, rotateUV( vec3( rotate.xy(), 0.0f )
+					, mix( uvw
+						, vec3( uvw.x(), 1.0_f - uvw.y(), uvw.z() )
+						, vec3( writer.cast< sdw::Float >( needsYInversion ) ) ) ) );
 		}
 
 		//*********************************************************************************************
@@ -298,7 +289,7 @@ namespace castor3d
 						result.heightFc = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
 						result.miscVals = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
 						result.translate = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
-						result.scale = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
+						result.rotate = c3d_textureConfigurations.fetch( sdw::Int{ offset++ } );
 						m_writer.returnStmt( result );
 					}
 					, sdw::InUInt{ m_writer, cuT( "index" ) } );

@@ -42,7 +42,11 @@ namespace castor3d
 			buffer += sizeof( castor::Point4f ) * count;
 			auto miscVals = makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
 				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
-			auto transform = makeArrayView( reinterpret_cast< castor::Matrix4x4f * >( buffer )
+			buffer += sizeof( castor::Point4f ) * count;
+			auto translate = makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
+				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
+			buffer += sizeof( castor::Point4f ) * count;
+			auto scale = makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
 				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
 			return
 			{
@@ -53,7 +57,8 @@ namespace castor3d
 				normalFc,
 				heightFc,
 				miscVals,
-				transform,
+				translate,
+				scale,
 			};
 		}
 
@@ -193,7 +198,7 @@ namespace castor3d
 					data.miscVals = writeFlags( float( config.needsGammaCorrection )
 						, float( config.needsYInversion ) );
 					data.translate = config.translate;
-					data.scale = config.scale;
+					data.rotate = config.rotate;
 
 #endif
 				} );

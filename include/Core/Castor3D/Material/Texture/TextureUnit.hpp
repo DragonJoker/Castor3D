@@ -180,7 +180,7 @@ namespace castor3d
 		 *\~french
 		 *\return		L'animation.
 		 */
-		TextureAnimation & getAnimation();
+		C3D_API TextureAnimation & getAnimation();
 		/**@}*/
 		/**
 		*\~english
@@ -258,8 +258,7 @@ namespace castor3d
 		/**@{*/
 		C3D_API void setConfiguration( TextureConfiguration value );
 		C3D_API void setTransform( castor::Point3f const & translate
-			, castor::Angle const & rotate
-			, castor::Point3f const & scale );
+			, castor::Angle const & rotate );
 
 		inline void setRenderTarget( RenderTargetSPtr value )
 		{

@@ -103,7 +103,7 @@ namespace castor3d
 			sdw::Vec4 heightFc;
 			sdw::Vec4 miscVals;
 			sdw::Vec4 translate;
-			sdw::Vec4 scale;
+			sdw::Vec4 rotate;
 
 		public:
 			sdw::Vec2 colourMask;

@@ -27,8 +27,7 @@ namespace castor3d
 	void TextureAnimationInstance::doUpdate()
 	{
 		m_animatedTexture.getTexture().setTransform( m_textureAnimation.getTranslate( m_currentTime )
-			, m_textureAnimation.getRotate( m_currentTime )
-			, m_textureAnimation.getScale( m_currentTime ) );
+			, m_textureAnimation.getRotate( m_currentTime ) );
 	}
 
 	//*************************************************************************************************

@@ -498,7 +498,6 @@ namespace castor3d
 
 		addParser( uint32_t( CSCNSection::eTextureAnimation ), cuT( "rotate" ), parserTexAnimRotate, { makeParameter< ParameterType::eFloat >() } );
 		addParser( uint32_t( CSCNSection::eTextureAnimation ), cuT( "translate" ), parserTexAnimTranslate, { makeParameter< ParameterType::ePoint2F >() } );
-		addParser( uint32_t( CSCNSection::eTextureAnimation ), cuT( "scale" ), parserTexAnimTranslate, { makeParameter< ParameterType::ePoint2F >() } );
 
 		addParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "vertex_program" ), parserVertexShader );
 		addParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "pixel_program" ), parserPixelShader );

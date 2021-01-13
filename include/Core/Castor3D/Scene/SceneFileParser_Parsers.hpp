@@ -244,7 +244,6 @@ namespace castor3d
 	// Texture Animation Parsers
 	CU_DeclareAttributeParser( parserTexAnimRotate )
 	CU_DeclareAttributeParser( parserTexAnimTranslate )
-	CU_DeclareAttributeParser( parserTexAnimTranslate )
 
 	// Shader Parsers
 	CU_DeclareAttributeParser( parserVertexShader )

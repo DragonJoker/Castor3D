@@ -4388,27 +4388,6 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserTexAnimScale )
-	{
-		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
-
-		if ( !parsingContext->textureAnimation )
-		{
-			CU_ParsingError( cuT( "TextureAnimation not initialised" ) );
-		}
-		else if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing parameter" ) );
-		}
-		else
-		{
-			castor::Point2f value;
-			params[0]->get( value );
-			parsingContext->textureAnimation->setScaleSpeed( TextureScaleSpeed{ value } );
-		}
-	}
-	CU_EndAttribute()
-
 	CU_ImplementAttributeParser( parserVertexShader )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );

@@ -130,39 +130,28 @@ namespace castor3d
 
 		if ( result )
 		{
-			if ( configuration.translate != castor::Point4f{}
-				|| configuration.scale != castor::Point4f{ 1.0, 1.0, 1.0, 1.0 } )
-			{
-				result = file.writeText( m_tabs + cuT( "animation" ) ) > 0;
-				result = file.writeText( m_tabs + cuT( "{" ) ) > 0;
-				auto translate = castor::Point3f{ configuration.translate };
+			auto rotate = configuration.rotate[0];
+			auto translate = castor::Point3f{ configuration.translate };
 
-				if ( translate != castor::Point3f{} )
+			if ( translate != castor::Point3f{}
+				|| rotate != 0.0f )
+			{
+				result = result && file.writeText( m_tabs + cuT( "animation" ) ) > 0;
+				result = result && file.writeText( m_tabs + cuT( "{" ) ) > 0;
+
+				if ( result && translate != castor::Point3f{} )
 				{
 					result = file.print( 256, cuT( "%s\ttranslate " ), m_tabs.c_str() ) > 0
 						&& castor::Point3f::TextWriter( castor::String() )( translate, file )
 						&& file.writeText( cuT( "\n" ) ) > 0;
 				}
 
-				auto rotate = configuration.translate[3];
-
-				if ( rotate != 0.0 )
+				if ( result && rotate != 0.0 )
 				{
-					result = write( cuT( "\trotate" ), configuration.translate[3], file );
+					result = write( cuT( "\trotate" ), rotate, file );
 				}
 
-				auto scale = castor::Point3f{ configuration.scale };
-
-				if ( scale != castor::Point3f{} )
-				{
-					result = file.print( 256, cuT( "%s\tscale " ), m_tabs.c_str() ) > 0
-						&& castor::Point3f::TextWriter( castor::String() )( scale, file )
-						&& file.writeText( cuT( "\n" ) ) > 0;
-				}
-
-				result = file.writeText( m_tabs + cuT( "}" ) ) > 0;
-				result = writeOpt( cuT( "{" ), configuration.needsYInversion, file );
-				result = writeOpt( cuT( "}" ), configuration.needsYInversion, file );
+				result = result && file.writeText( m_tabs + cuT( "}" ) ) > 0;
 			}
 		}
 
@@ -277,7 +266,8 @@ namespace castor3d
 			&& lhs.heightFactor == rhs.heightFactor
 			&& lhs.normalGMultiplier == rhs.normalGMultiplier
 			&& lhs.needsGammaCorrection == rhs.needsGammaCorrection
-			&& lhs.needsYInversion == rhs.needsYInversion;
+			&& lhs.needsYInversion == rhs.needsYInversion
+			&& lhs.translate == rhs.translate;
 	}
 
 	bool operator!=( TextureConfiguration const & lhs, TextureConfiguration const & rhs )
