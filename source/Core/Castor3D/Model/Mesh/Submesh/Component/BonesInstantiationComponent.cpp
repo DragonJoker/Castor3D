@@ -43,7 +43,7 @@ namespace castor3d
 			{
 				auto stride = uint32_t( sizeof( float ) * 16u * 400u );
 				auto size = count * stride * getOwner()->getOwner()->getScene()->getDirectionalShadowCascades();
-				m_instancedBonesBuffer = std::make_unique< ShaderBuffer >( *getOwner()->getOwner()->getScene()->getEngine()
+				m_instancedBonesBuffer = castor::makeUnique< ShaderBuffer >( *getOwner()->getOwner()->getScene()->getEngine()
 					, device
 					, uint32_t( size )
 					, cuT( "InstancedBonesBuffer" ) );
@@ -73,7 +73,7 @@ namespace castor3d
 			if ( count > m_instantiation.getThreshold()
 				&& ( !m_instancedBonesBuffer || m_instancedBonesBuffer->getSize() < size ) )
 			{
-				m_instancedBonesBuffer = std::make_unique< ShaderBuffer >( *getOwner()->getOwner()->getScene()->getEngine()
+				m_instancedBonesBuffer = castor::makeUnique< ShaderBuffer >( *getOwner()->getOwner()->getScene()->getEngine()
 					, device
 					, uint32_t( size )
 					, cuT( "InstancedBonesBuffer" ) );

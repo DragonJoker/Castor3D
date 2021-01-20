@@ -142,6 +142,30 @@ namespace castor3d
 			doDeclareComputeSpotLight();
 		}
 
+		void LightingModel::declareDiffuseModel( uint32_t & index )
+		{
+			m_shadowModel->declare( index );
+			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
+			m_writer.inlineComment( "// LIGHTS" );
+			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
+			doDeclareLight();
+			doDeclareGetCascadeFactors();
+			doDeclareDirectionalLight();
+			doDeclarePointLight();
+			doDeclareSpotLight();
+			doDeclareGetBaseLight();
+			doDeclareGetDirectionalLight();
+			doDeclareGetPointLight();
+			doDeclareGetSpotLight();
+			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
+			m_writer.inlineComment( "// DIFFUSE LIGHTING" );
+			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
+			doDeclareDiffuseModel();
+			doDeclareComputeDirectionalLightDiffuse();
+			doDeclareComputePointLightDiffuse();
+			doDeclareComputeSpotLightDiffuse();
+		}
+
 		void LightingModel::declareDirectionalModel( bool lightUbo
 			, uint32_t & index )
 		{

@@ -42,6 +42,8 @@ namespace castor3d
 			C3D_API void declareParallaxMappingFunc( PipelineFlags const & flags );
 			C3D_API void declareParallaxShadowFunc( PipelineFlags const & flags );
 
+			C3D_API void declareVoxelizeFunctions();
+
 			C3D_API sdw::Vec2 topDownToBottomUp( sdw::Vec2 const & texCoord )const;
 			C3D_API sdw::Vec3 topDownToBottomUp( sdw::Vec3 const & texCoord )const;
 			C3D_API sdw::Vec4 topDownToBottomUp( sdw::Vec4 const & texCoord )const;
@@ -160,6 +162,16 @@ namespace castor3d
 				, sdw::Float & transmittance
 				, sdw::Vec3 & tangentSpaceViewPosition
 				, sdw::Vec3 & tangentSpaceFragPosition );
+			C3D_API sdw::Vec4 computeCommonMapVoxelContribution( TextureFlags const & textureFlags
+				, PassFlags const & passFlags
+				, std::string const & name
+				, shader::TextureConfigData const & config
+				, sdw::SampledImage2DRgba32 const & map
+				, sdw::Float const & gamma
+				, sdw::Vec3 const & texCoords
+				, sdw::Vec3 & emissive
+				, sdw::Float & opacity
+				, sdw::Float & occlusion );
 			C3D_API void computeCommonMapsContributions( TextureFlagsArray const & flags
 				, PassFlags const & passFlags
 				, sdw::Float const & gamma
@@ -251,6 +263,38 @@ namespace castor3d
 			C3D_API void applyAlphaFunc( VkCompareOp alphaFunc
 				, sdw::Float & alpha
 				, sdw::Float const & alphaRef );
+
+			C3D_API sdw::Boolean isSaturated( sdw::Vec3 const & p );
+			/**
+			*\~english
+			*\brief
+			*	Encode HDR color to a 32 bit uint.
+			*	Alpha is 1 bit + 7 bit HDR remapping.
+			*/
+			C3D_API sdw::UInt encodeColor( sdw::Vec4 const & color );
+			/**
+			*\~english
+			*\brief
+			*	Encode specified normal (normalized) into 32 bits uint.
+			*	Each axis of the normal is encoded into 9 bits (1 for the sign/ 8 for the value).
+			*/
+			C3D_API sdw::UInt encodeNormal( sdw::Vec3 const & normal );
+			C3D_API sdw::Vec4 decodeColor( sdw::UInt const & colorMask );
+			C3D_API sdw::Vec3 decodeNormal( sdw::UInt const & normalMask );
+			/**
+			*\~english
+			*\brief
+			*	3D array index to flattened 1D array index
+			*/
+			C3D_API sdw::UInt flatten( sdw::UVec3 const & p
+				, sdw::UVec3 const & dim );
+			/**
+			*\~english
+			*\brief
+			*	Flattened array index to 3D array index
+			*/
+			C3D_API sdw::UVec3 unflatten( sdw::UInt const & p
+				, sdw::UVec3 const & dim );
 
 		public:
 			C3D_API static uint32_t const MaxIblReflectionLod;
@@ -344,6 +388,22 @@ namespace castor3d
 				, sdw::InFloat
 				, sdw::InSampledImage2DRgba32
 				, InTextureConfigData > m_parallaxShadow;
+			sdw::Function< sdw::Boolean
+				, sdw::InVec3 > m_isSaturated3D;
+			sdw::Function< sdw::UInt
+				, sdw::InVec4 > m_encodeColor;
+			sdw::Function< sdw::UInt
+				, sdw::InVec3 > m_encodeNormal;
+			sdw::Function< sdw::Vec4
+				, sdw::InUInt > m_decodeColor;
+			sdw::Function< sdw::Vec3
+				, sdw::InUInt > m_decodeNormal;
+			sdw::Function< sdw::UInt
+				, sdw::InUVec3
+				, sdw::InUVec3 > m_flatten3D;
+			sdw::Function< sdw::UVec3
+				, sdw::InUInt
+				, sdw::InUVec3 > m_unflatten3D;
 		};
 	}
 }

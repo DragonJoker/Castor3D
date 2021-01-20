@@ -34,8 +34,18 @@ namespace castor3d
 	*	Contient toutes les données pour voxelliser une scène.
 	*/
 	class Voxelizer;
+	/**
+	*\~english
+	*\brief
+	*	Renders voxels on screen.
+	*\~french
+	*\brief
+	*	Dessine les voxels à l'écran.
+	*/
+	class VoxelRenderer;
 
 	CU_DeclareCUSmartPtr( castor3d, Voxelizer, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, VoxelRenderer, C3D_API );
 
 	//@}
 	//@}

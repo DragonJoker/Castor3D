@@ -983,11 +983,6 @@ namespace castor3d
 	{
 	}
 
-	ashes::VkDescriptorSetLayoutBindingArray PickingPass::doCreateUboBindings( PipelineFlags const & flags )const
-	{
-		return RenderPass::doCreateUboBindings( flags );
-	}
-
 	ashes::VkDescriptorSetLayoutBindingArray PickingPass::doCreateTextureBindings( PipelineFlags const & flags )const
 	{
 		auto index = getMinTextureIndex();

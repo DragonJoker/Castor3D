@@ -27,10 +27,12 @@ namespace castor3d
 		 *\param[in]	culler		Le culler pour cette passe.
 		 */
 		C3D_API VoxelizePass( Engine & engine
+			, RenderDevice const & device
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
-			, TextureLayoutSPtr result
-			, ashes::ImageView colourView );
+			, UniformBufferOffsetT< VoxelizerUboConfiguration > const & voxelizerUbo
+			, TextureUnit const & result
+			, uint32_t voxelGridSize );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -75,6 +77,10 @@ namespace castor3d
 		using RenderPass::update;
 
 	private:
+		/**
+		 *\copydoc		castor3d::RenderPass::doCreateUboBindings
+		 */
+		C3D_API ashes::VkDescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
 		 */
@@ -141,10 +147,6 @@ namespace castor3d
 		 */
 		C3D_API ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
 		/**
-		 *\copydoc		castor3d::RenderPass::doGetGeometryShaderSource
-		 */
-		C3D_API ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const;
-		/**
 		 *\copydoc		castor3d::RenderPass::doGetPhongPixelShaderSource
 		 */
 		C3D_API ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;
@@ -160,10 +162,11 @@ namespace castor3d
 	private:
 		Scene const & m_scene;
 		Camera const & m_camera;
+		TextureUnit const & m_result;
 		CommandsSemaphore m_commands;
-		TextureLayoutSPtr m_result;
 		ashes::FrameBufferPtr m_frameBuffer;
-		ashes::ImageView m_colourView;
+		uint32_t m_voxelGridSize;
+		UniformBufferOffsetT< VoxelizerUboConfiguration > const & m_voxelizerUbo;
 	};
 }
 

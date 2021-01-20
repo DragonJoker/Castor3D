@@ -339,11 +339,12 @@ namespace castor3d
 			m_gpInfoUbo.initialise( device );
 			m_matrixUbo.initialise( device );
 
-			//m_voxelizer = std::make_unique< Voxelizer >( *m_renderSystem.getEngine()
-			//	, VkExtent3D{ 64u, 64u, 64u }
-			//	, *m_renderTarget.getScene()
-			//	, m_renderTarget.getCuller()
-			//	, m_renderTarget.getTexture().getTexture()->getDefaultView().getTargetView() );
+			m_voxelizer = castor::makeUnique< Voxelizer >( *m_renderSystem.getEngine()
+				, device
+				, 256u
+				, *m_renderTarget.getScene()
+				, m_renderTarget.getCuller()
+				, m_colourTexture.getTexture()->getDefaultView().getTargetView() );
 
 			auto & maps = m_renderTarget.getScene()->getEnvironmentMaps();
 
@@ -408,7 +409,7 @@ namespace castor3d
 #if C3D_UseDepthPrepass
 		m_depthPass->update( updater );
 #endif
-		//m_voxelizer->update( updater );
+		m_voxelizer->update( updater );
 #if C3D_UseDeferredRendering
 		m_deferredRendering->update( updater );
 #else
@@ -475,7 +476,8 @@ namespace castor3d
 #if C3D_UseDepthPrepass
 		m_depthPass->update( updater );
 #endif
-		//m_voxelizer->update( updater );
+		m_voxelizer->update( updater );
+
 #if C3D_UseDeferredRendering
 		m_deferredRendering->update( updater );
 #else
@@ -523,9 +525,13 @@ namespace castor3d
 		semaphore = &doRenderLpv( device, *semaphore );
 
 		// Render part
-		//semaphore = &m_voxelizer->render( *semaphore );
+		semaphore = &m_voxelizer->render( device, *semaphore );
+#if C3D_DebugVoxelizer
+		semaphore = &m_voxelizer->debug( device, *semaphore );
+#else
 		semaphore = &doRenderOpaque( device, *semaphore );
 		semaphore = &doRenderTransparent( device, *semaphore );
+#endif
 		return *semaphore;
 	}
 

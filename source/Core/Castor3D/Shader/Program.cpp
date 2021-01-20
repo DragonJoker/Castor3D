@@ -4,6 +4,8 @@
 
 #include <CastorUtils/Stream/StreamPrefixManipulators.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, ShaderProgram )
+
 using namespace castor;
 
 namespace castor3d

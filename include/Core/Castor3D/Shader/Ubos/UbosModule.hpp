@@ -427,6 +427,36 @@ namespace castor3d
 	{
 		std::array< castor::Point4ui, 3u > indices;
 	};
+	/**
+	*\~english
+	*\brief
+	*	Voxelizer configuration data UBO.
+	*\~french
+	*\brief
+	*	UBO des données de configuration du voxelizer.
+	*/
+	class VoxelizerUbo;
+	/**
+	*\~english
+	*\brief
+	*	Voxelizer configuration data.
+	*\~french
+	*\brief
+	*	Données de configuration du voxelizer.
+	*/
+	struct VoxelizerUboConfiguration
+	{
+		// Voxel render transform matrix
+		castor::Matrix4x4f transform;
+		// Center of the voxel grid, in world space units
+		castor::Point4f center;
+		//! Voxel half-extent, in world space units
+		float size;
+		float sizeInverse;
+		//! Voxel grid resolution
+		float resolution;
+		float resolutionInverse;
+	};
 
 	CU_DeclareCUSmartPtr( castor3d, LpvGridConfigUbo, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, LpvLightConfigUbo, C3D_API );

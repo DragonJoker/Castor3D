@@ -128,6 +128,97 @@ namespace castor3d
 				, parentOutput );
 		}
 
+		Vec3 PhongLightingModel::computeCombinedDiffuse( Vec3 const & worldEye
+			, Float const & shininess
+			, Int const & receivesShadows
+			, FragmentInput const & fragmentIn )const
+		{
+			auto c3d_lightsCount = m_writer.getVariable< IVec4 >( "c3d_lightsCount" );
+			auto result = m_writer.declLocale( "result"
+				, vec3( 0.0_f ) );
+			auto begin = m_writer.declLocale( "begin"
+				, 0_i );
+			auto end = m_writer.declLocale( "end"
+				, m_writer.cast< Int >( c3d_lightsCount.x() ) );
+
+			FOR( m_writer, Int, dir, begin, dir < end, ++dir )
+			{
+				result += computeDiffuse( getDirectionalLight( dir )
+					, worldEye
+					, shininess
+					, receivesShadows
+					, FragmentInput{ fragmentIn } );
+			}
+			ROF;
+
+			begin = end;
+			end += m_writer.cast< Int >( c3d_lightsCount.y() );
+
+			FOR( m_writer, Int, point, begin, point < end, ++point )
+			{
+				result += computeDiffuse( getPointLight( point )
+					, worldEye
+					, shininess
+					, receivesShadows
+					, FragmentInput{ fragmentIn } );
+			}
+			ROF;
+
+			begin = end;
+			end += m_writer.cast< Int >( c3d_lightsCount.z() );
+
+			FOR( m_writer, Int, spot, begin, spot < end, ++spot )
+			{
+				result += computeDiffuse( getSpotLight( spot )
+					, worldEye
+					, shininess
+					, receivesShadows
+					, FragmentInput{ fragmentIn } );
+			}
+			ROF;
+
+			return result;
+		}
+
+		Vec3 PhongLightingModel::computeDiffuse( DirectionalLight const & light
+			, Vec3 const & worldEye
+			, Float const & shininess
+			, Int const & receivesShadows
+			, FragmentInput const & fragmentIn )const
+		{
+			return m_computeDirectionalDiffuse( light
+				, worldEye
+				, shininess
+				, receivesShadows
+				, FragmentInput{ fragmentIn } );
+		}
+
+		Vec3 PhongLightingModel::computeDiffuse( PointLight const & light
+			, Vec3 const & worldEye
+			, Float const & shininess
+			, Int const & receivesShadows
+			, FragmentInput const & fragmentIn )const
+		{
+			return m_computePointDiffuse( light
+				, worldEye
+				, shininess
+				, receivesShadows
+				, FragmentInput{ fragmentIn } );
+		}
+
+		Vec3 PhongLightingModel::computeDiffuse( SpotLight const & light
+			, Vec3 const & worldEye
+			, Float const & shininess
+			, Int const & receivesShadows
+			, FragmentInput const & fragmentIn )const
+		{
+			return m_computeSpotDiffuse( light
+				, worldEye
+				, shininess
+				, receivesShadows
+				, FragmentInput{ fragmentIn } );
+		}
+
 		std::shared_ptr< PhongLightingModel > PhongLightingModel::createModel( sdw::ShaderWriter & writer
 			, Utils & utils
 			, SceneFlags sceneFlags
@@ -184,6 +275,21 @@ namespace castor3d
 			return result;
 		}
 
+		std::shared_ptr< PhongLightingModel > PhongLightingModel::createDiffuseModel( sdw::ShaderWriter & writer
+			, Utils & utils
+			, SceneFlags sceneFlags
+			, bool rsm
+			, uint32_t & index
+			, bool isOpaqueProgram )
+		{
+			auto result = std::make_shared< PhongLightingModel >( writer
+				, utils
+				, ShadowOptions{ ( sceneFlags & SceneFlag::eShadowAny ), rsm }
+				, isOpaqueProgram );
+			result->declareDiffuseModel( index );
+			return result;
+		}
+
 		void PhongLightingModel::computeMapContributions( PipelineFlags const & flags
 			, sdw::Float const & gamma
 			, TextureConfigurations const & textureConfigs
@@ -225,6 +331,53 @@ namespace castor3d
 						, transmittance
 						, tangentSpaceViewPosition
 						, tangentSpaceFragPosition ) );
+
+				if ( checkFlag( flags.textures[i].flags, TextureFlag::eDiffuse ) )
+				{
+					diffuse = config.getDiffuse( m_writer, sampled, diffuse, gamma );
+				}
+
+				if ( checkFlag( flags.textures[i].flags, TextureFlag::eSpecular ) )
+				{
+					specular = config.getSpecular( m_writer, sampled, specular );
+				}
+
+				if ( checkFlag( flags.textures[i].flags, TextureFlag::eShininess ) )
+				{
+					shininess = config.getShininess( m_writer, sampled, shininess );
+				}
+			}
+		}
+
+		void PhongLightingModel::computeMapVoxelContributions( PipelineFlags const & flags
+			, sdw::Float const & gamma
+			, TextureConfigurations const & textureConfigs
+			, sdw::Array< sdw::UVec4 > const & textureConfig
+			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
+			, sdw::Vec3 const & texCoords
+			, sdw::Vec3 & emissive
+			, sdw::Float & opacity
+			, sdw::Float & occlusion
+			, sdw::Vec3 & diffuse
+			, sdw::Vec3 & specular
+			, sdw::Float & shininess )
+		{
+			for ( uint32_t i = 0u; i < flags.textures.size(); ++i )
+			{
+				auto name = string::stringCast< char >( string::toString( i ) );
+				auto config = m_writer.declLocale( "config" + name
+					, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( flags.textures[i].id ) ) );
+				auto sampled = m_writer.declLocale( "sampled" + name
+					, m_utils.computeCommonMapVoxelContribution( flags.textures[i].flags
+						, flags.passFlags
+						, name
+						, config
+						, maps[i]
+						, gamma
+						, texCoords
+						, emissive
+						, opacity
+						, occlusion ) );
 
 				if ( checkFlag( flags.textures[i].flags, TextureFlag::eDiffuse ) )
 				{
@@ -708,6 +861,385 @@ namespace castor3d
 				, shininess
 				, FragmentInput{ fragmentIn }
 				, parentOutput );
+		}
+
+		void PhongLightingModel::doDeclareDiffuseModel()
+		{
+			doDeclareComputeLightDiffuse();
+		}
+
+		void PhongLightingModel::doDeclareComputeDirectionalLightDiffuse()
+		{
+			m_computeDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computeDirectionalLight"
+				, [this]( DirectionalLight const & light
+					, Vec3 const & worldEye
+					, Float const & shininess
+					, Int const & receivesShadows
+					, FragmentInput const & fragmentIn )
+				{
+					auto diffuse = m_writer.declLocale( "diffuse"
+						, vec3( 0.0_f ) );
+					auto lightDirection = m_writer.declLocale( "lightDirection"
+						, normalize( light.m_direction ) );
+
+					if ( m_shadowModel->isEnabled() )
+					{
+						IF( m_writer, light.m_lightBase.m_shadowType != Int( int( ShadowType::eNone ) ) )
+						{
+							auto shadowFactor = m_writer.declLocale( "shadowFactor"
+								, 1.0_f );
+							auto cascadeFactors = m_writer.declLocale( "cascadeFactors"
+								, vec3( 0.0_f, 1.0_f, 0.0_f ) );
+							auto cascadeIndex = m_writer.declLocale( "cascadeIndex"
+								, 0_u );
+							auto c3d_maxCascadeCount = m_writer.getVariable< UInt >( "c3d_maxCascadeCount" );
+							auto maxCount = m_writer.declLocale( "maxCount"
+								, m_writer.cast< UInt >( clamp( light.m_cascadeCount, 1_u, c3d_maxCascadeCount ) - 1_u ) );
+
+							// Get cascade index for the current fragment's view position
+							FOR( m_writer, UInt, i, 0u, i < maxCount, ++i )
+							{
+								auto factors = m_writer.declLocale( "factors"
+									, m_getCascadeFactors( Vec3{ fragmentIn.m_viewVertex }
+										, light.m_splitDepths
+										, i ) );
+
+								IF( m_writer, factors.x() != 0.0_f )
+								{
+									cascadeFactors = factors;
+								}
+								FI;
+							}
+							ROF;
+
+							cascadeIndex = m_writer.cast< UInt >( cascadeFactors.x() );
+							shadowFactor = cascadeFactors.y()
+								* max( 1.0_f - m_writer.cast< Float >( receivesShadows )
+									, m_shadowModel->computeDirectional( light.m_lightBase.m_shadowType
+										, light.m_lightBase.m_rawShadowOffsets
+										, light.m_lightBase.m_pcfShadowOffsets
+										, light.m_lightBase.m_vsmShadowVariance
+										, light.m_transforms[cascadeIndex]
+										, fragmentIn.m_worldVertex
+										, lightDirection
+										, cascadeIndex
+										, light.m_cascadeCount
+										, fragmentIn.m_worldNormal ) );
+
+							IF( m_writer, cascadeIndex > 0_u )
+							{
+								shadowFactor += cascadeFactors.z()
+									* max( 1.0_f - m_writer.cast< Float >( receivesShadows )
+										, m_shadowModel->computeDirectional( light.m_lightBase.m_shadowType
+											, light.m_lightBase.m_rawShadowOffsets
+											, light.m_lightBase.m_pcfShadowOffsets
+											, light.m_lightBase.m_vsmShadowVariance
+											, light.m_transforms[cascadeIndex - 1u]
+											, fragmentIn.m_worldVertex
+											, -lightDirection
+											, cascadeIndex - 1u
+											, light.m_cascadeCount
+											, fragmentIn.m_worldNormal ) );
+							}
+							FI;
+
+							IF( m_writer, shadowFactor > 0.0_f )
+							{
+								diffuse = shadowFactor * doComputeLightDiffuse( light.m_lightBase
+									, worldEye
+									, lightDirection
+									, shininess
+									, fragmentIn );
+							}
+							FI;
+
+#if C3D_DebugCascades
+							IF( m_writer, cascadeIndex == 0_u )
+							{
+								output.m_diffuse.rgb() *= vec3( 1.0_f, 0.25f, 0.25f );
+								output.m_specular.rgb() *= vec3( 1.0_f, 0.25f, 0.25f );
+							}
+							ELSEIF( cascadeIndex == 1_u )
+							{
+								output.m_diffuse.rgb() *= vec3( 0.25_f, 1.0f, 0.25f );
+								output.m_specular.rgb() *= vec3( 0.25_f, 1.0f, 0.25f );
+							}
+							ELSEIF( cascadeIndex == 2_u )
+							{
+								output.m_diffuse.rgb() *= vec3( 0.25_f, 0.25f, 1.0f );
+								output.m_specular.rgb() *= vec3( 0.25_f, 0.25f, 1.0f );
+							}
+							ELSE
+							{
+								output.m_diffuse.rgb() *= vec3( 1.0_f, 1.0f, 0.25f );
+								output.m_specular.rgb() *= vec3( 1.0_f, 1.0f, 0.25f );
+							}
+							FI;
+#endif
+						}
+						ELSE
+						{
+							diffuse = doComputeLightDiffuse( light.m_lightBase
+								, worldEye
+								, lightDirection
+								, shininess
+								, fragmentIn );
+						}
+						FI;
+					}
+					else
+					{
+						diffuse = doComputeLightDiffuse( light.m_lightBase
+							, worldEye
+							, lightDirection
+							, shininess
+							, fragmentIn );
+					}
+
+					m_writer.returnStmt( max( vec3( 0.0_f ), diffuse ) );
+				}
+				, InDirectionalLight( m_writer, "light" )
+				, InVec3( m_writer, "worldEye" )
+				, InFloat( m_writer, "shininess" )
+				, InInt( m_writer, "receivesShadows" )
+				, FragmentInput{ m_writer } );
+		}
+
+		void PhongLightingModel::doDeclareComputePointLightDiffuse()
+		{
+			m_computePointDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computePointLight"
+				, [this]( PointLight const & light
+					, Vec3 const & worldEye
+					, Float const & shininess
+					, Int const & receivesShadows
+					, FragmentInput const & fragmentIn )
+				{
+					auto diffuse = m_writer.declLocale( "diffuse"
+						, vec3( 0.0_f ) );
+					auto lightToVertex = m_writer.declLocale( "lightToVertex"
+						, fragmentIn.m_worldVertex - light.m_position.xyz() );
+					auto distance = m_writer.declLocale( "distance"
+						, length( lightToVertex ) );
+					auto lightDirection = m_writer.declLocale( "lightDirection"
+						, normalize( lightToVertex ) );
+
+					if ( m_shadowModel->isEnabled() )
+					{
+						IF( m_writer, light.m_lightBase.m_shadowType != Int( int( ShadowType::eNone ) ) )
+						{
+							auto shadowFactor = m_writer.declLocale( "shadowFactor"
+								, 1.0_f );
+
+							IF( m_writer, light.m_lightBase.m_index >= 0_i )
+							{
+								shadowFactor = max( 1.0_f - m_writer.cast< Float >( receivesShadows )
+									, m_shadowModel->computePoint( light.m_lightBase.m_shadowType
+										, light.m_lightBase.m_rawShadowOffsets
+										, light.m_lightBase.m_pcfShadowOffsets
+										, light.m_lightBase.m_vsmShadowVariance
+										, fragmentIn.m_worldVertex
+										, light.m_position.xyz()
+										, fragmentIn.m_worldNormal
+										, light.m_lightBase.m_farPlane
+										, light.m_lightBase.m_index ) );
+							}
+							FI;
+
+							IF( m_writer, shadowFactor > 0.0_f )
+							{
+								diffuse = shadowFactor * doComputeLightDiffuse( light.m_lightBase
+									, worldEye
+									, lightDirection
+									, shininess
+									, fragmentIn );
+							}
+							FI;
+						}
+						ELSE
+						{
+							diffuse = doComputeLightDiffuse( light.m_lightBase
+								, worldEye
+								, lightDirection
+								, shininess
+								, fragmentIn );
+						}
+						FI;
+					}
+					else
+					{
+						diffuse = doComputeLightDiffuse( light.m_lightBase
+							, worldEye
+							, lightDirection
+							, shininess
+							, fragmentIn );
+					}
+
+					auto attenuation = m_writer.declLocale( "attenuation"
+						, sdw::fma( light.m_attenuation.z()
+							, distance * distance
+							, sdw::fma( light.m_attenuation.y()
+								, distance
+								, light.m_attenuation.x() ) ) );
+#if C3D_DebugSpotShadows
+					parentOutput.m_diffuse += shadowFactor;
+					parentOutput.m_specular += shadowFactor;
+#else
+					m_writer.returnStmt( max( vec3( 0.0_f ), diffuse / attenuation ) );
+#endif
+				}
+				, InPointLight( m_writer, "light" )
+				, InVec3( m_writer, "worldEye" )
+				, InFloat( m_writer, "shininess" )
+				, InInt( m_writer, "receivesShadows" )
+				, FragmentInput{ m_writer } );
+		}
+
+		void PhongLightingModel::doDeclareComputeSpotLightDiffuse()
+		{
+			m_computeSpotDiffuse = m_writer.implementFunction< sdw::Vec3 >( "computeSpotLight"
+				, [this]( SpotLight const & light
+					, Vec3 const & worldEye
+					, Float const & shininess
+					, Int const & receivesShadows
+					, FragmentInput const & fragmentIn )
+				{
+					auto diffuse = m_writer.declLocale( "diffuse"
+						, vec3( 0.0_f ) );
+					auto lightToVertex = m_writer.declLocale( "lightToVertex"
+						, fragmentIn.m_worldVertex - light.m_position.xyz() );
+					auto distLightToVertex = m_writer.declLocale( "distLightToVertex"
+						, length( lightToVertex ) );
+					auto lightDirection = m_writer.declLocale( "lightDirection"
+						, normalize( lightToVertex ) );
+					auto spotFactor = m_writer.declLocale( "spotFactor"
+						, dot( lightDirection, light.m_direction ) );
+
+					if ( m_shadowModel->isEnabled() )
+					{
+						IF( m_writer, light.m_lightBase.m_shadowType != Int( int( ShadowType::eNone ) ) )
+						{
+							auto shadowFactor = m_writer.declLocale( "shadowFactor"
+								, 1.0_f - step( spotFactor, light.m_cutOff ) );
+
+							IF( m_writer, light.m_lightBase.m_index >= 0_i )
+							{
+#if C3D_DebugSpotShadows
+
+								shadowFactor = m_shadowModel->computeSpot( light.m_lightBase.m_shadowType
+									, light.m_lightBase.m_rawShadowOffsets
+									, light.m_lightBase.m_pcfShadowOffsets
+									, light.m_lightBase.m_vsmShadowVariance
+									, light.m_transform
+									, fragmentIn.m_worldVertex
+									, lightToVertex
+									, fragmentIn.m_worldNormal
+									, light.m_lightBase.m_index );
+
+#else
+
+								shadowFactor *= max( 1.0_f - m_writer.cast< Float >( receivesShadows )
+									, m_shadowModel->computeSpot( light.m_lightBase.m_shadowType
+										, light.m_lightBase.m_rawShadowOffsets
+										, light.m_lightBase.m_pcfShadowOffsets
+										, light.m_lightBase.m_vsmShadowVariance
+										, light.m_transform
+										, fragmentIn.m_worldVertex
+										, lightToVertex
+										, fragmentIn.m_worldNormal
+										, light.m_lightBase.m_index ) );
+
+#endif
+							}
+							FI;
+
+							IF( m_writer, shadowFactor > 0.0_f )
+							{
+								diffuse = shadowFactor * doComputeLightDiffuse( light.m_lightBase
+									, worldEye
+									, lightDirection
+									, shininess
+									, fragmentIn );
+							}
+							FI;
+						}
+						ELSE
+						{
+							diffuse = doComputeLightDiffuse( light.m_lightBase
+								, worldEye
+								, lightDirection
+								, shininess
+								, fragmentIn );
+						}
+						FI;
+					}
+					else
+					{
+						diffuse = doComputeLightDiffuse( light.m_lightBase
+							, worldEye
+							, lightDirection
+							, shininess
+							, fragmentIn );
+					}
+
+					auto attenuation = m_writer.declLocale( "attenuation"
+						, sdw::fma( light.m_attenuation.z()
+							, distLightToVertex * distLightToVertex
+							, sdw::fma( light.m_attenuation.y()
+								, distLightToVertex
+								, light.m_attenuation.x() ) ) );
+					spotFactor = sdw::fma( ( spotFactor - 1.0_f )
+						, 1.0_f / ( 1.0_f - light.m_cutOff )
+						, 1.0_f );
+#if C3D_DebugSpotShadows
+					m_writer.returnStmt( vec3( shadowFactor ) );
+#else
+					m_writer.returnStmt( max( vec3( 0.0_f ), spotFactor * diffuse / attenuation ) );
+#endif
+				}
+				, InSpotLight( m_writer, "light" )
+				, InVec3( m_writer, "worldEye" )
+				, InFloat( m_writer, "shininess" )
+				, InInt( m_writer, "receivesShadows" )
+				, FragmentInput{ m_writer } );
+		}
+
+		void PhongLightingModel::doDeclareComputeLightDiffuse()
+		{
+			m_computeLightDiffuse = m_writer.implementFunction< sdw::Vec3 >( "doComputeLight"
+				, [this]( Light const & light
+					, Vec3 const & worldEye
+					, Vec3 const & lightDirection
+					, Float const & shininess
+					, FragmentInput const & fragmentIn )
+				{
+					// Diffuse term.
+					auto diffuseFactor = m_writer.declLocale( "diffuseFactor"
+						, dot( fragmentIn.m_worldNormal, -lightDirection ) );
+					auto isLit = m_writer.declLocale( "isLit"
+						, 1.0_f - step( diffuseFactor, 0.0_f ) );
+					m_writer.returnStmt( isLit
+						* light.m_colour
+						* light.m_intensity.x()
+						* diffuseFactor );
+				}
+				, InLight( m_writer, "light" )
+				, InVec3( m_writer, "worldEye" )
+				, InVec3( m_writer, "lightDirection" )
+				, InFloat( m_writer, "shininess" )
+				, FragmentInput{ m_writer } );
+		}
+
+		Vec3 PhongLightingModel::doComputeLightDiffuse( Light const & light
+			, Vec3 const & worldEye
+			, Vec3 const & lightDirection
+			, Float const & shininess
+			, FragmentInput const & fragmentIn )
+		{
+			return m_computeLightDiffuse( light
+				, worldEye
+				, lightDirection
+				, shininess
+				, FragmentInput{ fragmentIn } );
 		}
 	}
 }

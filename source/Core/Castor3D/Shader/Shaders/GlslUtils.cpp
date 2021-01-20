@@ -631,6 +631,132 @@ namespace castor3d
 			}
 		}
 
+		void Utils::declareVoxelizeFunctions()
+		{
+			using namespace sdw;
+			m_isSaturated3D = m_writer.implementFunction< sdw::Boolean >( "isSaturated"
+				, [&]( Vec3 const & p )
+				{
+					m_writer.returnStmt( p.x() == clamp( p.x(), 0.0_f, 1.0_f )
+						&& p.y() == clamp( p.y(), 0.0_f, 1.0_f )
+						&& p.z() == clamp( p.z(), 0.0_f, 1.0_f ) );
+				}
+				, InVec3{ m_writer, "p" } );
+			
+			m_encodeColor = m_writer.implementFunction< UInt >( "encodeColor"
+				, [&]( Vec4 const & color )
+				{
+					auto hdrRange = m_writer.declConstant( "hdrRange", 10.0_f );
+
+					// normalize color to LDR
+					auto hdr = m_writer.declLocale( "hdr"
+						, length( color.rgb() ) );
+					color.rgb() /= hdr;
+
+					// encode LDR color and HDR range
+					auto iColor = m_writer.declLocale( "iColor"
+						, uvec3( color.rgb() * 255.0_f ) );
+					auto iHDR = m_writer.declLocale( "iHDR"
+						, m_writer.cast< UInt >( clamp( hdr / hdrRange, 0.0_f, 1.0_f ) * 127.0_f ) );
+					auto colorMask = m_writer.declLocale( "colorMask"
+						, ( iHDR << 24_u ) | ( iColor.r() << 16_u ) | ( iColor.g() << 8_u ) | iColor.b() );
+
+					// encode alpha into highest bit
+					auto iAlpha = m_writer.declLocale( "iAlpha"
+						, m_writer.ternary( color.a() > 0.0_f, 1_u, 0_u ) );
+					colorMask |= ( iAlpha << 31_u );
+
+					m_writer.returnStmt( colorMask );
+				}
+				, InVec4{ m_writer, "color" } );
+
+			m_encodeNormal = m_writer.implementFunction< UInt >( "encodeNormal"
+				, [&]( Vec3 const & normal )
+				{
+					auto iNormal = m_writer.declLocale( "iNormal"
+						, ivec3( normal * 255.0_f ) );
+					auto uNormalSigns = m_writer.declLocale< UVec3 >( "uNormalSigns"
+						, uvec3( m_writer.cast< UInt >( ( iNormal.x() >> 5 ) & 0x04000000 )
+							, m_writer.cast< UInt >( ( iNormal.y() >> 14 ) & 0x00020000 )
+							, m_writer.cast< UInt >( ( iNormal.z() >> 23 ) & 0x00000100 ) ) );
+					auto uNormal = m_writer.declLocale( "uNormal"
+						, uvec3( abs( iNormal ) ) );
+					auto normalMask = m_writer.declLocale( "normalMask"
+						, ( uNormalSigns.x() | ( uNormal.x() << 18_u )
+							| uNormalSigns.y() | ( uNormal.y() << 9_u )
+							| uNormalSigns.z() | uNormal.z() ) );
+					m_writer.returnStmt( normalMask );
+				}
+				, InVec3{ m_writer, "normal" } );
+			
+			m_decodeColor = m_writer.implementFunction< Vec4 >( "decodeColor"
+				, [&]( UInt const & colorMask )
+				{
+					auto hdrRange = m_writer.declConstant( "hdrRange", 10.0_f );
+
+					auto color = m_writer.declLocale< Vec4 >( "color" );
+					auto hdr = m_writer.declLocale( "hdr"
+						, m_writer.cast< Float >( ( colorMask >> 24u ) & 0x0000007f ) );
+					color.r() = m_writer.cast< Float >( ( colorMask >> 16u ) & 0x000000ff );
+					color.g() = m_writer.cast< Float >( ( colorMask >> 8u ) & 0x000000ff );
+					color.b() = m_writer.cast< Float >( colorMask & 0x000000ff );
+
+					hdr /= 127.0f;
+					color.rgb() /= vec3( 255.0_f );
+
+					color.rgb() *= hdr * hdrRange;
+
+					color.a() = m_writer.cast< Float >( ( colorMask >> 31u ) & 0x00000001_u );
+
+					m_writer.returnStmt( color );
+				}
+				, InUInt{ m_writer, "colorMask" } );
+
+			m_decodeNormal = m_writer.implementFunction< Vec3 >( "decodeNormal"
+				, [&]( UInt const & normalMask )
+				{
+					auto iNormal = m_writer.declLocale( "iNormal"
+						, ivec3( m_writer.cast< Int >( ( normalMask >> 18 ) & 0x000000ff )
+							, m_writer.cast< Int >( ( normalMask >> 9 ) & 0x000000ff )
+							, m_writer.cast< Int >( normalMask & 0x000000ff ) ) );
+					auto iNormalSigns = m_writer.declLocale( "iNormalSigns"
+						, ivec3( m_writer.cast< Int >( ( normalMask >> 25 ) & 0x00000002 )
+							, m_writer.cast< Int >( ( normalMask >> 16 ) & 0x00000002 )
+							, m_writer.cast< Int >( ( normalMask >> 7 ) & 0x00000002 ) ) );
+					iNormalSigns = 1_i - iNormalSigns;
+					auto normal = m_writer.declLocale( "normal"
+						, vec3( iNormal ) / 255.0f );
+					normal *= vec3( iNormalSigns );
+					m_writer.returnStmt( normal );
+				}
+				, InUInt{ m_writer, "normalMask" } );
+
+			m_flatten3D = m_writer.implementFunction< UInt >( "flatten3D"
+				, [&]( UVec3 const & coord
+					, UVec3 const & dim )
+				{
+					m_writer.returnStmt( ( coord.z() * dim.x() * dim.y() ) + ( coord.y() * dim.x() ) + coord.x() );
+				}
+				, InUVec3{ m_writer, "coord" }
+				, InUVec3{ m_writer, "dim" } );
+
+			m_unflatten3D = m_writer.implementFunction< UVec3 >( "unflatten3D"
+				, [&]( UInt idx
+					, UVec3 const & dim )
+				{
+					auto z = m_writer.declLocale( "z"
+						, idx / ( dim.x() * dim.y() ) );
+					idx -= ( z * dim.x() * dim.y() );
+					auto y = m_writer.declLocale( "y"
+						, idx / dim.x() );
+					auto x = m_writer.declLocale( "x"
+						, idx % dim.x() );
+					m_writer.returnStmt( uvec3( x, y, z ) );
+				}
+				, InUInt{ m_writer, "idx" }
+				, InUVec3{ m_writer, "dim" } );
+		}
+
 		void Utils::declareParallaxShadowFunc( PipelineFlags const & flags )
 		{
 			if ( checkFlags( flags.textures, TextureFlag::eHeight ) != flags.textures.end()
@@ -799,6 +925,43 @@ namespace castor3d
 					break;
 				}
 			}
+		}
+
+		sdw::Boolean Utils::isSaturated( sdw::Vec3 const & p )
+		{
+			return m_isSaturated3D( p );
+		}
+
+		sdw::UInt Utils::encodeColor( sdw::Vec4 const & color )
+		{
+			return m_encodeColor( color );
+		}
+
+		sdw::UInt Utils::encodeNormal( sdw::Vec3 const & normal )
+		{
+			return m_encodeNormal( normal );
+		}
+
+		sdw::Vec4 Utils::decodeColor( sdw::UInt const & colorMask )
+		{
+			return m_decodeColor( colorMask );
+		}
+
+		sdw::Vec3 Utils::decodeNormal( sdw::UInt const & normalMask )
+		{
+			return m_decodeNormal( normalMask );
+		}
+
+		sdw::UInt Utils::flatten( sdw::UVec3 const & p
+			, sdw::UVec3 const & dim )
+		{
+			return m_flatten3D( p, dim );
+		}
+
+		sdw::UVec3 Utils::unflatten( sdw::UInt const & p
+			, sdw::UVec3 const & dim )
+		{
+			return m_unflatten3D( p, dim );
 		}
 
 		sdw::Vec2 Utils::topDownToBottomUp( sdw::Vec2 const & texCoord )const
@@ -1175,6 +1338,38 @@ namespace castor3d
 			if ( checkFlag( textureFlags, TextureFlag::eTransmittance ) )
 			{
 				transmittance = config.getTransmittance( m_writer, result, transmittance );
+			}
+
+			return result;
+		}
+
+		sdw::Vec4 Utils::computeCommonMapVoxelContribution( TextureFlags const & textureFlags
+			, PassFlags const & passFlags
+			, std::string const & name
+			, shader::TextureConfigData const & config
+			, sdw::SampledImage2DRgba32 const & map
+			, sdw::Float const & gamma
+			, sdw::Vec3 const & texCoords
+			, sdw::Vec3 & emissive
+			, sdw::Float & opacity
+			, sdw::Float & occlusion )
+		{
+			auto result = m_writer.declLocale< Vec4 >( "result" + name
+				, map.sample( config.convertUV( m_writer, texCoords.xy() ) ) );
+
+			if ( checkFlag( textureFlags, TextureFlag::eOpacity ) )
+			{
+				opacity = config.getOpacity( m_writer, result, opacity );
+			}
+
+			if ( checkFlag( textureFlags, TextureFlag::eEmissive ) )
+			{
+				emissive = config.getEmissive( m_writer, result, emissive, gamma );
+			}
+
+			if ( checkFlag( textureFlags, TextureFlag::eOcclusion ) )
+			{
+				occlusion = config.getOcclusion( m_writer, result, occlusion );
 			}
 
 			return result;

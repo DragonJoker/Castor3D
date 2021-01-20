@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/Technique/Voxelize/VoxelizePass.hpp"
+#include "Castor3D/Render/Technique/Voxelize/VoxelRenderer.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
 namespace castor3d
@@ -25,7 +26,7 @@ namespace castor3d
 		 */
 		C3D_API Voxelizer( Engine & engine
 			, RenderDevice const & device
-			, VkExtent3D const & size
+			, uint32_t voxelGridSize
 			, Scene & scene
 			, SceneCuller & culler
 			, ashes::ImageView colourView );
@@ -59,6 +60,16 @@ namespace castor3d
 		C3D_API ashes::Semaphore const & render( RenderDevice const & device
 			, ashes::Semaphore const & toWait );
 		/**
+		 *\~english
+		 *\brief		Renders nodes.
+		 *\param[in]	toWait	The semaphore from the previous render pass.
+		 *\~french
+		 *\brief		Dessine les noeuds.
+		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
+		 */
+		C3D_API ashes::Semaphore const & debug( RenderDevice const & device
+			, ashes::Semaphore const & toWait );
+		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor );
@@ -66,9 +77,11 @@ namespace castor3d
 	private:
 		Engine & m_engine;
 		MatrixUbo m_matrixUbo;
-		VkExtent3D m_size;
+		uint32_t m_voxelGridSize;
 		TextureUnit m_result;
+		UniformBufferOffsetT< VoxelizerUboConfiguration > m_voxelizerUbo;
 		VoxelizePass m_voxelizePass;
+		VoxelRenderer m_voxelRenderer;
 	};
 }
 

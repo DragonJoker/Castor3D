@@ -15,6 +15,7 @@ namespace castor3d
 		public:
 			C3D_API explicit CookTorranceBRDF( sdw::ShaderWriter & writer );
 			C3D_API void declare();
+			C3D_API void declareDiffuse();
 			C3D_API void compute( Light const & light
 				, sdw::Vec3 const & worldEye
 				, sdw::Vec3 const & direction
@@ -30,12 +31,24 @@ namespace castor3d
 				, sdw::Float const & roughness
 				, FragmentInput const & fragmentIn
 				, OutputComponents & output );
+			C3D_API sdw::Vec3 computeDiffuse( Light const & light
+				, sdw::Vec3 const & worldEye
+				, sdw::Vec3 const & direction
+				, sdw::Vec3 const & albedo
+				, sdw::Float const & metallic
+				, FragmentInput const & fragmentIn );
+			C3D_API sdw::Vec3 computeDiffuse( Light const & light
+				, sdw::Vec3 const & worldEye
+				, sdw::Vec3 const & direction
+				, sdw::Vec3 const & specular
+				, FragmentInput const & fragmentIn );
 
 		protected:
 			void doDeclareDistribution();
 			void doDeclareGeometry();
 			void doDeclareFresnelShlick();
 			void doDeclareComputeCookTorrance();
+			void doDeclareComputeCookTorranceDiffuse();
 
 		public:
 			sdw::ShaderWriter & m_writer;
@@ -66,6 +79,13 @@ namespace castor3d
 				, sdw::InFloat
 				, FragmentInput
 				, OutputComponents & > m_computeCookTorrance;
+			sdw::Function< sdw::Vec3
+				, InLight
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InFloat
+				, FragmentInput > m_computeCookTorranceDiffuse;
 		};
 	}
 }

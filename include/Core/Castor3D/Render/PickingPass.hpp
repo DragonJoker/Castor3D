@@ -212,10 +212,6 @@ namespace castor3d
 		 */
 		void doUpdatePipeline( RenderPipeline & pipeline )override;
 		/**
-		 *\copydoc		castor3d::RenderPass::doCreateUboBindings
-		 */
-		ashes::VkDescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;
-		/**
 		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
 		 */
 		ashes::VkDescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
