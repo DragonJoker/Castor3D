@@ -30,24 +30,34 @@ namespace castor3d
 			initialise( engine.getRenderSystem()->getCurrentRenderDevice() );
 		}
 	}
+	
+	SceneUbo::SceneUbo( RenderDevice const & device )
+		: m_engine{ *device.renderSystem.getEngine() }
+	{
+		initialise( device );
+	}
 
 	SceneUbo::~SceneUbo()
 	{
+		cleanup();
 	}
 
 	void SceneUbo::initialise( RenderDevice const & device )
 	{
 		if ( !m_ubo )
 		{
+			m_device = &device;
 			m_ubo = device.uboPools->getBuffer< Configuration >( 0u );
 		}
 	}
 
-	void SceneUbo::cleanup( RenderDevice const & device )
+	void SceneUbo::cleanup()
 	{
-		if ( m_ubo )
+		if ( m_ubo && m_device )
 		{
-			device.uboPools->putBuffer( m_ubo );
+			m_device->uboPools->putBuffer( m_ubo );
+			m_device = nullptr;
+			m_ubo = {};
 		}
 	}
 

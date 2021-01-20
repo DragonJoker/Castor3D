@@ -194,155 +194,6 @@ namespace castor3d
 			return result;
 		}
 
-		namespace rc
-		{
-			enum IDs : uint32_t
-			{
-				eVoxelUbo,
-			};
-
-			ShaderPtr getVertexProgram( uint32_t voxelGridSize )
-			{
-				using namespace sdw;
-				VertexWriter writer;
-
-				// Shader inputs
-				UBO_VOXELIZER( writer, eVoxelUbo, 0u );
-				auto inPosition = writer.declInput< Vec4 >( "inPosition", 0u );
-
-				// Shader outputs
-				auto outWorldPosition = writer.declOutput< Vec3 >( "outWorldPosition", 0u );
-				auto out = writer.getOut();
-
-				writer.implementFunction< void >( "main"
-					, [&]()
-					{
-						outWorldPosition = inPosition.xyz();
-						out.vtx.position = c3d_voxelTransform * inPosition;
-					} );
-				return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-			}
-
-			ShaderPtr getPixelProgram()
-			{
-				using namespace sdw;
-				FragmentWriter writer;
-
-				// Shader inputs
-				auto inWorldPosition = writer.declInput< Vec3 >( "inWorldPosition", 0u );
-
-				// Shader outputs
-				auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0u );
-
-				writer.implementFunction< Void >( "main"
-					, [&]()
-					{
-						pxl_fragColor.rgb() = inWorldPosition;
-					} );
-				return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-			}
-
-			ashes::DescriptorSetLayoutPtr createDescriptorLayout( RenderDevice const & device )
-			{
-				ashes::VkDescriptorSetLayoutBindingArray bindings{ makeDescriptorSetLayoutBinding( eVoxelUbo
-					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-					, VK_SHADER_STAGE_VERTEX_BIT ) };
-				return device->createDescriptorSetLayout( std::move( bindings ) );
-			}
-
-			ashes::PipelineLayoutPtr createPipelineLayout( RenderDevice const & device
-				, ashes::DescriptorSetLayout const & dslayout )
-			{
-				return device->createPipelineLayout( "VoxelWorldPosition"
-					, ashes::DescriptorSetLayoutCRefArray{ std::ref( dslayout ) } );
-			}
-
-			TextureUnit createColorTexture( RenderDevice const & device
-				, ashes::ImageView const & colourView )
-			{
-				return createTexture( device
-					, colourView
-					, "VoxelWorldPosition"
-					, VK_FORMAT_R32G32B32A32_SFLOAT
-					, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT );
-			}
-
-			ashes::PipelineVertexInputStateCreateInfo createVertexLayout()
-			{
-				return ashes::PipelineVertexInputStateCreateInfo{ 0u
-					, { { 0u, uint32_t( sizeof( castor::Point3f ) ), VK_VERTEX_INPUT_RATE_VERTEX } }
-					, { { 0u, 0u, VK_FORMAT_R32G32B32_SFLOAT, 0u } } };
-			}
-
-			ashes::GraphicsPipelinePtr createPipeline( RenderDevice const & device
-				, ashes::PipelineLayout const & layout
-				, ashes::RenderPass const & renderPass
-				, ShaderModule const & vertexShader
-				, ShaderModule const & pixelShader
-				, ashes::ImageView const & target
-				, bool back )
-			{
-				ashes::PipelineShaderStageCreateInfoArray program;
-				program.push_back( makeShaderState( device, vertexShader ) );
-				program.push_back( makeShaderState( device, pixelShader ) );
-				VkViewport viewport{ 0.0f, 0.0f, float( target.image->getDimensions().width ), float( target.image->getDimensions().height ) };
-				VkRect2D scissor{ 0, 0, target.image->getDimensions().width, target.image->getDimensions().height };
-				return device->createPipeline( "VoxelWorldPosition"
-					, ashes::GraphicsPipelineCreateInfo( 0u
-						, program
-						, createVertexLayout()
-						, ashes::PipelineInputAssemblyStateCreateInfo{ 0u, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST }
-						, ashes::nullopt
-						, ashes::PipelineViewportStateCreateInfo{ 0u, 1u, ashes::VkViewportArray{ viewport }, 1u, ashes::VkScissorArray{ scissor } }
-						, ashes::PipelineRasterizationStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_POLYGON_MODE_FILL, VkCullModeFlags( back ? VK_CULL_MODE_FRONT_BIT : VK_CULL_MODE_BACK_BIT ) }
-						, ashes::PipelineMultisampleStateCreateInfo{}
-						, ashes::PipelineDepthStencilStateCreateInfo{}
-						, RenderPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u )
-						, ashes::nullopt
-						, layout
-						, static_cast< VkRenderPass const & >( renderPass ) ) );
-			}
-
-			ashes::DescriptorSetPtr createDescriptorSet( ashes::DescriptorSetPool const & pool
-				, UniformBufferOffsetT< VoxelizerUboConfiguration > const & voxelizerUbo
-				, TextureUnit const & voxels )
-			{
-				auto descriptorSet = pool.createDescriptorSet( "VoxelWorldPosition" );
-				voxelizerUbo.createSizedBinding( *descriptorSet, pool.getLayout().getBinding( eVoxelUbo ) );
-				descriptorSet->update();
-				return descriptorSet;
-			}
-
-			CommandsSemaphore createCommandBuffer( RenderDevice const & device
-				, ashes::RenderPass const & renderPass
-				, ashes::FrameBuffer const & frameBuffer
-				, ashes::PipelineLayout const & pipelineLayout
-				, ashes::GraphicsPipeline const & pipeline
-				, ashes::DescriptorSet const & descriptorSet
-				, ashes::BufferBase const & vertexBuffer
-				, uint32_t voxelGridSize )
-			{
-				CommandsSemaphore result{ device, "VoxelWorldPosition" };
-				auto & cb = *result.commandBuffer;
-				cb.begin();
-				cb.beginDebugBlock( { "Render voxels world position"
-					, makeFloatArray( device.renderSystem.getEngine()->getNextRainbowColour() ) } );
-				cb.beginRenderPass( renderPass
-					, frameBuffer
-					, { opaqueBlackClearColor, defaultClearDepthStencil }
-				, VK_SUBPASS_CONTENTS_INLINE );
-				cb.bindPipeline( pipeline );
-				cb.bindDescriptorSet( descriptorSet, pipelineLayout );
-				cb.bindVertexBuffer( 0u, vertexBuffer, 0ull );
-				cb.draw( 36u );
-				cb.endRenderPass();
-				cb.endDebugBlock();
-				cb.end();
-
-				return result;
-			}
-		}
-
 		namespace vx2scr
 		{
 			enum IDs : uint32_t
@@ -552,28 +403,6 @@ namespace castor3d
 		}
 	}
 
-	VoxelRenderer::RayCube::RayCube( RenderDevice const & device
-		, UniformBufferOffsetT< VoxelizerUboConfiguration > const & voxelizerUbo
-		, TextureUnit const & voxels
-		, ashes::ImageView depth
-		, ashes::BufferBase const & vertexBuffer
-		, uint32_t voxelGridSize
-		, bool back )
-		: castor::Named{ "VoxelWorldPosition" + castor::String{ back ? "Back" : "Frnt" } }
-		, color{ rc::createColorTexture( device, depth ) }
-		, descriptorSetLayout{ rc::createDescriptorLayout( device ) }
-		, pipelineLayout{ rc::createPipelineLayout( device, *descriptorSetLayout ) }
-		, renderPass{ createRenderPass( device, getName(), color.getTexture()->getDefaultView().getTargetView(), depth ) }
-		, vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), rc::getVertexProgram( voxelGridSize ) }
-		, pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), rc::getPixelProgram() }
-		, pipeline{ rc::createPipeline( device, *pipelineLayout, *renderPass, vertexShader, pixelShader, color.getTexture()->getDefaultView().getTargetView(), back ) }
-		, frameBuffer{ createFramebuffer( *renderPass, getName(), color.getTexture()->getDefaultView().getTargetView(), depth ) }
-		, descriptorSetPool{ descriptorSetLayout->createPool( 1u ) }
-		, descriptorSet{ rc::createDescriptorSet( *descriptorSetPool, voxelizerUbo, voxels ) }
-		, commands{ rc::createCommandBuffer( device, *renderPass, *frameBuffer, *pipelineLayout, *pipeline, *descriptorSet, vertexBuffer, voxelGridSize ) }
-	{
-	}
-
 	VoxelRenderer::VoxelToScreen::VoxelToScreen( RenderDevice const & device
 		, UniformBufferOffsetT< VoxelizerUboConfiguration > const & voxelizerUbo
 		, TextureUnit const & voxels
@@ -603,9 +432,6 @@ namespace castor3d
 		: m_renderSystem{ device.renderSystem }
 		, m_device{ device }
 		, m_depthBuffer{ createDepthBuffer( device, target ) }
-		, m_cubeVertexBuffer{ createVertexBuffer( device ) }
-		, m_backCube{ device, voxelizerUbo, voxels, m_depthBuffer.getTexture()->getDefaultView().getTargetView(), m_cubeVertexBuffer->getBuffer(), voxelGridSize, true }
-		, m_frontCube{ device, voxelizerUbo, voxels, m_depthBuffer.getTexture()->getDefaultView().getTargetView(), m_cubeVertexBuffer->getBuffer(), voxelGridSize, false }
 		, m_voxelToScreen{ device, voxelizerUbo, voxels, target, m_depthBuffer.getTexture()->getDefaultView().getTargetView(), voxelGridSize }
 	{
 	}
@@ -614,8 +440,6 @@ namespace castor3d
 		, ashes::Semaphore const & toWait )
 	{
 		auto result = &toWait;
-		//result = &m_backCube.commands.submit( *device.graphicsQueue, *result );
-		//result = &m_frontCube.commands.submit( *device.graphicsQueue, *result );
 		result = &m_voxelToScreen.commands.submit( *device.graphicsQueue, *result );
 		return *result;
 	}

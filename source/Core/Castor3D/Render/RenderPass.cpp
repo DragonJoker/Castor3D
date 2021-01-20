@@ -188,7 +188,7 @@ namespace castor3d
 
 	void RenderPass::cleanup( RenderDevice const & device )
 	{
-		m_sceneUbo.cleanup( device );
+		m_sceneUbo.cleanup();
 		m_renderPass.reset();
 		doCleanup( device );
 		m_timer.reset();

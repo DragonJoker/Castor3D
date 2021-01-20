@@ -623,7 +623,7 @@ namespace castor3d
 					, normalize( positions[2].xy() - positions[1].xy() ) );
 				auto side2N = writer.declLocale( "side2N"
 					, normalize( positions[0].xy() - positions[2].xy() ) );
-				positions[0].xy() += normalize( -side0N + side2N ) * c3d_voxelResolutionInverse;
+				positions[0].xy() += normalize( side2N - side0N ) * c3d_voxelResolutionInverse;
 				positions[1].xy() += normalize( side0N - side1N ) * c3d_voxelResolutionInverse;
 				positions[2].xy() += normalize( side1N - side2N ) * c3d_voxelResolutionInverse;
 

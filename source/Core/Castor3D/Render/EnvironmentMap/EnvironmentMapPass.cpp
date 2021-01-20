@@ -170,7 +170,7 @@ namespace castor3d
 		m_opaquePass->cleanup( device );
 		m_transparentPass->cleanup( device );
 		m_hdrConfigUbo.cleanup( device );
-		m_modelMatrixUbo.cleanup( device );
+		m_modelMatrixUbo.cleanup();
 		m_matrixUbo.cleanup( device );
 	}
 

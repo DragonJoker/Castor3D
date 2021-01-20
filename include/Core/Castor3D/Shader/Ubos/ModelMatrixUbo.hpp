@@ -41,6 +41,15 @@ namespace castor3d
 		C3D_API explicit ModelMatrixUbo( Engine & engine );
 		/**
 		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	engine	The engine.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	engine	Le moteur.
+		 */
+		C3D_API explicit ModelMatrixUbo( RenderDevice const & device );
+		/**
+		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
@@ -59,7 +68,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Fonction de nettoyage.
 		 */
-		C3D_API void cleanup( RenderDevice const & device );
+		C3D_API void cleanup();
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -103,6 +112,7 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
+		RenderDevice const * m_device{};
 		UniformBufferOffsetT< Configuration > m_ubo;
 	};
 }

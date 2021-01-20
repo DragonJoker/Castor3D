@@ -139,7 +139,7 @@ namespace castor3d
 		m_pipeline.reset();
 		m_pipelineLayout.reset();
 		m_matrixUbo.cleanup( device );
-		m_modelMatrixUbo.cleanup( device );
+		m_modelMatrixUbo.cleanup();
 		m_sampler.reset();
 		m_vertexBuffer.reset();
 		m_descriptorSet.reset();

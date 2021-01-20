@@ -34,33 +34,6 @@ namespace castor3d
 		RenderSystem & m_renderSystem;
 		RenderDevice const & m_device;
 		TextureUnit m_depthBuffer;
-		ashes::VertexBufferPtr< castor::Point3f > m_cubeVertexBuffer;
-
-		struct RayCube : castor::Named
-		{
-			RayCube( RenderDevice const & device
-				, UniformBufferOffsetT< VoxelizerUboConfiguration > const & voxelizerUbo
-				, TextureUnit const & voxels
-				, ashes::ImageView depth
-				, ashes::BufferBase const & vertexBuffer
-				, uint32_t voxelGridSize
-				, bool back );
-
-			TextureUnit color;
-			ashes::DescriptorSetLayoutPtr descriptorSetLayout;
-			ashes::PipelineLayoutPtr pipelineLayout;
-			ashes::RenderPassPtr renderPass;
-			ShaderModule vertexShader;
-			ShaderModule pixelShader;
-			ashes::GraphicsPipelinePtr pipeline;
-			ashes::FrameBufferPtr frameBuffer;
-			ashes::DescriptorSetPoolPtr descriptorSetPool;
-			ashes::DescriptorSetPtr descriptorSet;
-			CommandsSemaphore commands;
-		};
-
-		RayCube m_backCube;
-		RayCube m_frontCube;
 
 		struct VoxelToScreen : castor::Named
 		{
