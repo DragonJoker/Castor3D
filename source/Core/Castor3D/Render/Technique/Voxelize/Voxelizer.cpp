@@ -65,10 +65,6 @@ namespace castor3d
 		, m_matrixUbo{ engine }
 		, m_voxelGridSize{ voxelGridSize }
 		, m_result{ createTexture( engine, device, "VoxelizedScene", { voxelGridSize, voxelGridSize, voxelGridSize } ) }
-		//, m_result{ castor::makeUnique< ShaderBuffer >( m_engine
-		//	, device
-		//	, m_voxelGridSize * m_voxelGridSize * m_voxelGridSize * shader::Voxel::DataSize
-		//	, "VoxelizeBuffer" ) }
 		, m_voxelizerUbo{ device.uboPools->getBuffer< VoxelizerUboConfiguration >( 0u ) }
 		, m_voxelizePass{ engine
 			, device

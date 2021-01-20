@@ -616,16 +616,16 @@ namespace castor3d
 				}
 				ROF;
 
-				// Conservative Rasterization setup:
-				auto side0N = writer.declLocale( "side0N"
-					, normalize( positions[1].xy() - positions[0].xy() ) );
-				auto side1N = writer.declLocale( "side1N"
-					, normalize( positions[2].xy() - positions[1].xy() ) );
-				auto side2N = writer.declLocale( "side2N"
-					, normalize( positions[0].xy() - positions[2].xy() ) );
-				positions[0].xy() += normalize( side2N - side0N ) * c3d_voxelResolutionInverse;
-				positions[1].xy() += normalize( side0N - side1N ) * c3d_voxelResolutionInverse;
-				positions[2].xy() += normalize( side1N - side2N ) * c3d_voxelResolutionInverse;
+				//// Conservative Rasterization setup:
+				//auto side0N = writer.declLocale( "side0N"
+				//	, normalize( positions[1].xy() - positions[0].xy() ) );
+				//auto side1N = writer.declLocale( "side1N"
+				//	, normalize( positions[2].xy() - positions[1].xy() ) );
+				//auto side2N = writer.declLocale( "side2N"
+				//	, normalize( positions[0].xy() - positions[2].xy() ) );
+				//positions[0].xy() += normalize( side2N - side0N ) * c3d_voxelResolutionInverse;
+				//positions[1].xy() += normalize( side0N - side1N ) * c3d_voxelResolutionInverse;
+				//positions[2].xy() += normalize( side1N - side2N ) * c3d_voxelResolutionInverse;
 
 				// Output
 				FOR( writer, UInt, i, 0_u, i < 3_u, ++i )
@@ -896,6 +896,7 @@ namespace castor3d
 
 					auto writecoord = writer.declLocale( "writecoord"
 						, uvec3( floor( uvw * c3d_voxelResolution ) ) );
+					color = max( color, output.load( ivec3( writecoord ) ) );
 					output.store( ivec3( writecoord ), color );
 				}
 				FI;
