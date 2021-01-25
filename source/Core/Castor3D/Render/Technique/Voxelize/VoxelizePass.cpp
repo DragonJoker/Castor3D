@@ -40,6 +40,7 @@
 
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 #include <ashespp/Descriptor/DescriptorSetLayout.hpp>
+#include <ashespp/Image/Image.hpp>
 #include <ashespp/Image/ImageView.hpp>
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
@@ -172,6 +173,10 @@ namespace castor3d
 
 		cmd.endRenderPass();
 		timerBlock->endPass( cmd );
+		m_result.getTexture()->getTexture().generateMipmaps( cmd
+			, VK_IMAGE_LAYOUT_GENERAL
+			, VK_IMAGE_LAYOUT_GENERAL
+			, VK_IMAGE_LAYOUT_GENERAL );
 		cmd.endDebugBlock();
 		cmd.end();
 
