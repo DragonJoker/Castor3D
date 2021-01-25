@@ -29,7 +29,8 @@ namespace castor3d
 			, uint32_t voxelGridSize
 			, Scene & scene
 			, SceneCuller & culler
-			, ashes::ImageView colourView );
+			, ashes::ImageView colourView
+			, MatrixUbo & matrixUbo );
 		C3D_API ~Voxelizer();
 		/**
 		 *\~english

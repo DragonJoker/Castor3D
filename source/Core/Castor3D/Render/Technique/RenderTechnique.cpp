@@ -344,7 +344,8 @@ namespace castor3d
 				, 256u
 				, *m_renderTarget.getScene()
 				, m_renderTarget.getCuller()
-				, m_colourTexture.getTexture()->getDefaultView().getTargetView() );
+				, m_colourTexture.getTexture()->getDefaultView().getTargetView()
+				, m_matrixUbo );
 
 			auto & maps = m_renderTarget.getScene()->getEnvironmentMaps();
 

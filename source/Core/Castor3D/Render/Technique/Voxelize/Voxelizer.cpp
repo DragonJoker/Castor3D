@@ -60,7 +60,8 @@ namespace castor3d
 		, uint32_t voxelGridSize
 		, Scene & scene
 		, SceneCuller & culler
-		, ashes::ImageView colourView )
+		, ashes::ImageView colourView
+		, MatrixUbo & matrixUbo )
 		: m_engine{ engine }
 		, m_matrixUbo{ engine }
 		, m_voxelGridSize{ voxelGridSize }
@@ -75,6 +76,7 @@ namespace castor3d
 			, voxelGridSize }
 		, m_voxelRenderer{ device
 			, m_voxelizerUbo
+			, matrixUbo
 			, m_result
 			, colourView
 			, voxelGridSize }

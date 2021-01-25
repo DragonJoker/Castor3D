@@ -23,6 +23,7 @@ namespace castor3d
 	public:
 		C3D_API VoxelRenderer( RenderDevice const & device
 			, UniformBufferOffsetT< VoxelizerUboConfiguration > const & voxelizerUbo
+			, MatrixUbo & matrixUbo
 			, TextureUnit const & voxels
 			, ashes::ImageView target
 			, uint32_t voxelGridSize );
@@ -34,12 +35,17 @@ namespace castor3d
 		RenderSystem & m_renderSystem;
 		RenderDevice const & m_device;
 		TextureUnit m_depthBuffer;
+		ashes::BufferPtr< castor::Point4f > m_vertexBuffer;
+		ashes::BufferPtr< uint32_t > m_indexBuffer;
 
 		struct VoxelToScreen : castor::Named
 		{
 			VoxelToScreen( RenderDevice const & device
 				, UniformBufferOffsetT< VoxelizerUboConfiguration > const & voxelizerUbo
+				, MatrixUbo & matrixUbo
 				, TextureUnit const & voxels
+				, ashes::BufferBase const & vertexBuffer
+				, ashes::BufferBase const & indexBuffer
 				, ashes::ImageView color
 				, ashes::ImageView depth
 				, uint32_t voxelGridSize );
