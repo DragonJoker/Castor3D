@@ -242,7 +242,7 @@ namespace castor3d
 					VertexWriter writer;
 
 					// Shader inputs
-					UBO_VOXELIZER( writer, eVoxelUbo, 0u );
+					UBO_VOXELIZER( writer, eVoxelUbo, 0u, true );
 					auto voxels( writer.declImage< RWFImg3DRgba32 >( "voxels"
 						, eVoxels
 						, 0u ) );
@@ -277,7 +277,7 @@ namespace castor3d
 					writer.outputLayout( stmt::OutputLayout::eTriangleStrip, 14u );
 
 					// Shader inputs
-					UBO_VOXELIZER( writer, eVoxelUbo, 0u );
+					UBO_VOXELIZER( writer, eVoxelUbo, 0u, true );
 					UBO_MATRIX( writer, eMatrixUbo, 0u );
 					auto inVoxelColor = writer.declInputArray< Vec4 >( "inVoxelColor", 0u, 1u );
 					auto in = writer.getIn();
@@ -310,15 +310,11 @@ namespace castor3d
 								{
 									auto pos = writer.declLocale( "pos"
 										, in.vtx[0].position.xyz() );
-									pos.xyz() = pos.xyz() / c3d_voxelResolution * 2 - 1;
+									pos.xyz() = pos.xyz() / c3d_voxelData.resolution * 2 - 1;
 									pos.y() = -pos.y();
-									pos.xyz() *= c3d_voxelResolution;
+									pos.xyz() *= c3d_voxelData.resolution;
 									pos.xyz() += ( createCube( i ) - vec3( 0.0_f, 1.0f, 0.0f ) ) * 2.0f;
-									pos.xyz() *= c3d_voxelResolution * c3d_voxelSize / c3d_voxelResolution;
-
-									//pos -= vec3( c3d_voxelResolution / 2.0f );
-									//pos *= c3d_voxelSize;
-									//pos += createCube( i ) * c3d_voxelSize;
+									pos.xyz() *= c3d_voxelData.resolution * c3d_voxelData.size / c3d_voxelData.resolution;
 
 									outVoxelColor = inVoxelColor[0];
 									out.vtx.position = c3d_curViewProj  * vec4( pos, 1.0f );
@@ -345,7 +341,8 @@ namespace castor3d
 						, makeDescriptorSetLayoutBinding( eVoxels
 							, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
 							, VK_SHADER_STAGE_VERTEX_BIT ) };
-					return device->createDescriptorSetLayout( std::move( bindings ) );
+					return device->createDescriptorSetLayout( "VoxelRenderer"
+						, std::move( bindings ) );
 				}
 
 				ashes::PipelineVertexInputStateCreateInfo createVertexLayout()
@@ -356,7 +353,7 @@ namespace castor3d
 				}
 
 				ashes::DescriptorSetPtr createDescriptorSet( ashes::DescriptorSetPool const & pool
-					, UniformBufferOffsetT< VoxelizerUboConfiguration > const & voxelizerUbo
+					, VoxelizerUbo const & voxelizerUbo
 					, MatrixUbo & matrixUbo
 					, ashes::BufferBase const & vertexBuffer
 					, TextureUnit const & voxels )
@@ -381,7 +378,7 @@ namespace castor3d
 					VertexWriter writer;
 
 					// Shader inputs
-					UBO_VOXELIZER( writer, eVoxelUbo, 0u );
+					UBO_VOXELIZER( writer, eVoxelUbo, 0u, true );
 					UBO_MATRIX( writer, eMatrixUbo, 0u );
 					auto voxels( writer.declImage< RWFImg3DRgba32 >( "voxels"
 						, eVoxels
@@ -406,10 +403,10 @@ namespace castor3d
 
 							auto pos = writer.declLocale( "pos"
 								, vec3( voxelPosition ) );
-							pos -= vec3( c3d_voxelResolution / 2.0f );
+							pos -= vec3( c3d_voxelData.resolution / 2.0f );
 
-							pos *= c3d_voxelSize;
-							pos += inPosition.xyz() * c3d_voxelSize;
+							pos *= c3d_voxelData.size;
+							pos += inPosition.xyz() * c3d_voxelData.size;
 							out.vtx.position = c3d_curViewProj * vec4( pos, 1.0f );
 						} );
 					return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -437,7 +434,7 @@ namespace castor3d
 				}
 
 				ashes::DescriptorSetPtr createDescriptorSet( ashes::DescriptorSetPool const & pool
-					, UniformBufferOffsetT< VoxelizerUboConfiguration > const & voxelizerUbo
+					, VoxelizerUbo const & voxelizerUbo
 					, MatrixUbo & matrixUbo
 					, ashes::BufferBase const & vertexBuffer
 					, TextureUnit const & voxels )
@@ -462,7 +459,7 @@ namespace castor3d
 					VertexWriter writer;
 
 					// Shader inputs
-					UBO_VOXELIZER( writer, eVoxelUbo, 0u );
+					UBO_VOXELIZER( writer, eVoxelUbo, 0u, true );
 					UBO_MATRIX( writer, eMatrixUbo, 0u );
 					auto voxels( writer.declImage< RWFImg3DRgba32 >( "voxels"
 						, eVoxels
@@ -472,7 +469,8 @@ namespace castor3d
 						, writer.getTypesCache().getVec4F()
 						, type::MemoryLayout::eStd140
 						, eVertex
-						, 0u };
+						, 0u
+						, true };
 					auto in = writer.getIn();
 
 					// Shader outputs
@@ -494,14 +492,14 @@ namespace castor3d
 								, writer.cast< UInt >( in.vertexIndex ) % UInt{ CubeIdxCount } );
 							auto pos = writer.declLocale( "pos"
 								, vec3( voxelPosition ) );
-							//pos *= c3d_voxelResolutionInverse * 2.0f - 1.0f;
-							//pos *= c3d_voxelResolution;
+							//pos *= c3d_voxelData.resolutionInv * 2.0f - 1.0f;
+							//pos *= c3d_voxelData.resolution;
 							//pos += ( vertex[index].xyz() - vec3( 0.0_f, 1.0f, 0.0f ) ) * 2.0f;
-							//pos *= c3d_voxelResolution * c3d_voxelSize * c3d_voxelResolutionInverse;
+							//pos *= c3d_voxelData.resolution * c3d_voxelData.size * c3d_voxelData.resolutionInv;
 
-							pos -= c3d_voxelResolution / 2.0f;
-							pos *= c3d_voxelSize;
-							pos += vertex[index].xyz() * c3d_voxelSize;
+							pos -= c3d_voxelData.resolution / 2.0f;
+							pos *= c3d_voxelData.size;
+							pos += vertex[index].xyz() * c3d_voxelData.size;
 
 							out.vtx.position = c3d_curViewProj * vec4( pos, 1.0f );
 						} );
@@ -533,7 +531,7 @@ namespace castor3d
 				}
 
 				ashes::DescriptorSetPtr createDescriptorSet( ashes::DescriptorSetPool const & pool
-					, UniformBufferOffsetT< VoxelizerUboConfiguration > const & voxelizerUbo
+					, VoxelizerUbo const & voxelizerUbo
 					, MatrixUbo & matrixUbo
 					, ashes::BufferBase const & vertexBuffer
 					, TextureUnit const & voxels )
@@ -675,7 +673,7 @@ namespace castor3d
 	}
 
 	VoxelRenderer::VoxelToScreen::VoxelToScreen( RenderDevice const & device
-		, UniformBufferOffsetT< VoxelizerUboConfiguration > const & voxelizerUbo
+		, VoxelizerUbo const & voxelizerUbo
 		, MatrixUbo & matrixUbo
 		, TextureUnit const & voxels
 		, ashes::BufferBase const & vertexBuffer
@@ -717,7 +715,7 @@ namespace castor3d
 	}
 
 	VoxelRenderer::VoxelRenderer( RenderDevice const & device
-		, UniformBufferOffsetT< VoxelizerUboConfiguration > const & voxelizerUbo
+		, VoxelizerUbo const & voxelizerUbo
 		, MatrixUbo & matrixUbo
 		, TextureUnit const & voxels
 		, ashes::ImageView target

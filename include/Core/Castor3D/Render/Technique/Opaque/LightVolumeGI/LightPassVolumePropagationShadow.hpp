@@ -55,7 +55,7 @@ namespace castor3d
 			, LpvLightPassConfig lpConfig )
 			: LightPassShadow< LtType >{ device
 				, "LPVShadow"
-				, { lpConfig.base.lpResult, lpConfig.base.gpInfoUbo, true, true } }
+				, { lpConfig.base.lpResult, lpConfig.base.gpInfoUbo, true, false, true } }
 			, m_gpResult{ lpConfig.gpResult }
 			, m_smResult{ lpConfig.smResult }
 			, m_lpResult{ lpConfig.base.lpResult }

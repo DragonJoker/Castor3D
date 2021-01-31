@@ -13,8 +13,9 @@ namespace castor3d
 		//*****************************************************************************************
 
 		BaseMaterial::BaseMaterial( ShaderWriter & writer
-			, ast::expr::ExprPtr expr )
-			: StructInstance{ writer, std::move( expr ) }
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstance{ writer, std::move( expr ), enabled }
 			, m_common{ getMember< Vec4 >( "m_common" ) }
 			, m_opacityTransmission{ getMember< Vec4 >( "m_opacity" ) }
 			, m_reflRefr{ getMember< Vec4 >( "m_reflRefr" ) }
@@ -39,8 +40,9 @@ namespace castor3d
 		//*****************************************************************************************
 
 		LegacyMaterial::LegacyMaterial( ShaderWriter & writer
-			, ast::expr::ExprPtr expr )
-			: BaseMaterial{ writer, std::move( expr ) }
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: BaseMaterial{ writer, std::move( expr ), enabled }
 			, m_diffAmb{ getMember< Vec4 >( "m_diffAmb" ) }
 			, m_specShin{ getMember< Vec4 >( "m_specShin" ) }
 			, m_ambient{ m_diffAmb.w() }
@@ -80,8 +82,9 @@ namespace castor3d
 		//*****************************************************************************************
 
 		MetallicRoughnessMaterial::MetallicRoughnessMaterial( ShaderWriter & writer
-			, ast::expr::ExprPtr expr )
-			: BaseMaterial{ writer, std::move( expr ) }
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: BaseMaterial{ writer, std::move( expr ), enabled }
 			, m_albRough{ getMember< Vec4 >( "m_albRough" ) }
 			, m_metDiv{ getMember< Vec4 >( "m_metDiv" ) }
 			, m_albedo{ m_albRough.xyz() }
@@ -121,8 +124,9 @@ namespace castor3d
 		//*****************************************************************************************
 
 		SpecularGlossinessMaterial::SpecularGlossinessMaterial( ShaderWriter & writer
-			, ast::expr::ExprPtr expr )
-			: BaseMaterial{ writer, std::move( expr ) }
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: BaseMaterial{ writer, std::move( expr ), enabled }
 			, m_diffDiv{ getMember< Vec4 >( "m_diffDiv" ) }
 			, m_specGloss{ getMember< Vec4 >( "m_specGloss" ) }
 			, m_specular{ m_specGloss.xyz() }
@@ -197,7 +201,8 @@ namespace castor3d
 					, PassBufferName
 					, m_type->getType()
 					, getPassBufferIndex()
-					, 0u );
+					, 0u
+					, true );
 			}
 			else
 			{
@@ -254,7 +259,8 @@ namespace castor3d
 					, PassBufferName
 					, m_type->getType()
 					, getPassBufferIndex()
-					, 0u );
+					, 0u
+					, true );
 			}
 			else
 			{
@@ -311,7 +317,8 @@ namespace castor3d
 					, PassBufferName
 					, m_type->getType()
 					, getPassBufferIndex()
-					, 0u );
+					, 0u
+					, true );
 			}
 			else
 			{

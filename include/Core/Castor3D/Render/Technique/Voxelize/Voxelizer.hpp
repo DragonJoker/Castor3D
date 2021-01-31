@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_Voxelizer_H___
 
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Render/Technique/Voxelize/VoxelBufferToTexture.hpp"
 #include "Castor3D/Render/Technique/Voxelize/VoxelizePass.hpp"
 #include "Castor3D/Render/Technique/Voxelize/VoxelRenderer.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
@@ -30,7 +31,9 @@ namespace castor3d
 			, Scene & scene
 			, SceneCuller & culler
 			, ashes::ImageView colourView
-			, MatrixUbo & matrixUbo );
+			, MatrixUbo & matrixUbo
+			, VoxelizerUbo & voxelizerUbo
+			, VoxelSceneData const & voxelConfig );
 		C3D_API ~Voxelizer();
 		/**
 		 *\~english
@@ -75,14 +78,22 @@ namespace castor3d
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor );
 
+		TextureUnit const & getResult()const
+		{
+			return m_result;
+		}
+
 	private:
 		Engine & m_engine;
 		MatrixUbo m_matrixUbo;
 		uint32_t m_voxelGridSize;
 		TextureUnit m_result;
-		UniformBufferOffsetT< VoxelizerUboConfiguration > m_voxelizerUbo;
+		ashes::BufferPtr< Voxel > m_voxels;
+		VoxelizerUbo & m_voxelizerUbo;
 		VoxelizePass m_voxelizePass;
+		VoxelBufferToTexture m_voxelToTexture;
 		VoxelRenderer m_voxelRenderer;
+		VoxelSceneData const & m_voxelConfig;
 	};
 }
 

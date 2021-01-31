@@ -55,8 +55,8 @@ namespace castor3d
 		, RenderDevice const & device
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
-		, UniformBufferOffsetT< VoxelizerUboConfiguration > const & voxelizerUbo
-		, TextureUnit const & result
+		, VoxelizerUbo const & voxelizerUbo
+		, ashes::Buffer< Voxel > const & voxels
 		, uint32_t voxelGridSize )
 		: RenderPass{ "Voxelize"
 			, "Voxelization"
@@ -69,7 +69,7 @@ namespace castor3d
 			, 1u }
 		, m_scene{ culler.getScene() }
 		, m_camera{ culler.getCamera() }
-		, m_result{ result }
+		, m_voxels{ voxels }
 		, m_commands{ nullptr, nullptr }
 		, m_voxelGridSize{ voxelGridSize }
 		, m_voxelizerUbo{ voxelizerUbo }
@@ -152,15 +152,6 @@ namespace castor3d
 				"Voxelization Pass",
 				makeFloatArray( getEngine()->getNextRainbowColour() ),
 			} );
-		cmd.memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
-			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, m_result.getTexture()->getDefaultView().getSampledView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
-		cmd.clear( m_result.getTexture()->getDefaultView().getSampledView()
-			, transparentBlackClearColor.color );
-		cmd.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_result.getTexture()->getDefaultView().getSampledView().makeGeneralLayout( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-				, VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT ) );
 		cmd.beginRenderPass( getRenderPass()
 			, *m_frameBuffer
 			, { opaqueBlackClearColor }
@@ -172,12 +163,8 @@ namespace castor3d
 		}
 
 		cmd.endRenderPass();
-		timerBlock->endPass( cmd );
-		m_result.getTexture()->getTexture().generateMipmaps( cmd
-			, VK_IMAGE_LAYOUT_GENERAL
-			, VK_IMAGE_LAYOUT_GENERAL
-			, VK_IMAGE_LAYOUT_GENERAL );
 		cmd.endDebugBlock();
+		timerBlock->endPass( cmd );
 		cmd.end();
 
 		device.graphicsQueue->submit( { cmd }
@@ -253,7 +240,6 @@ namespace castor3d
 		m_renderQueue.cleanup();
 		m_commands = { nullptr, nullptr };
 		m_frameBuffer.reset();
-		device.uboPools->putBuffer( m_voxelizerUbo );
 	}
 
 	void VoxelizePass::doUpdateFlags( PipelineFlags & flags )const
@@ -289,7 +275,7 @@ namespace castor3d
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( VoxelizerUbo::BindingPoint + 1u
-			, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
+			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		return uboBindings;
 	}
@@ -347,7 +333,9 @@ namespace castor3d
 		m_voxelizerUbo.createSizedBinding( *node.uboDescriptorSet
 			, layout.getBinding( VoxelizerUbo::BindingPoint ) );
 		node.uboDescriptorSet->createBinding( layout.getBinding( VoxelizerUbo::BindingPoint + 1u )
-			, m_result.getTexture()->getDefaultView().getSampledView() );
+			, m_voxels
+			, 0u
+			, m_voxels.getCount() );
 	}
 
 	void VoxelizePass::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
@@ -356,7 +344,9 @@ namespace castor3d
 		m_voxelizerUbo.createSizedBinding( *node.uboDescriptorSet
 			, layout.getBinding( VoxelizerUbo::BindingPoint ) );
 		node.uboDescriptorSet->createBinding( layout.getBinding( VoxelizerUbo::BindingPoint + 1u )
-			, m_result.getTexture()->getDefaultView().getSampledView() );
+			, m_voxels
+			, 0u
+			, m_voxels.getCount() );
 	}
 
 	namespace
@@ -570,7 +560,7 @@ namespace castor3d
 		writer.inputLayout( ast::stmt::InputLayout::eTriangleList );
 		writer.outputLayout( ast::stmt::OutputLayout::eTriangleStrip, 3u );
 
-		UBO_VOXELIZER( writer, VoxelizerUbo::BindingPoint, 0u );
+		UBO_VOXELIZER( writer, VoxelizerUbo::BindingPoint, 0u, true );
 
 		// Shader inputs
 		uint32_t index = 0u;
@@ -602,7 +592,7 @@ namespace castor3d
 				FOR( writer, UInt, i, 0_u, i < 3_u, ++i )
 				{
 					// World space -> Voxel grid space:
-					positions[i] = in.vtx[i].position.xyz() * c3d_voxelSizeInverse;
+					positions[i] = in.vtx[i].position.xyz() * c3d_voxelData.sizeInv;
 
 					// Project onto dominant axis:
 					IF( writer, maxi == 0_u )
@@ -616,7 +606,7 @@ namespace castor3d
 					FI;
 
 					// Voxel grid space -> Clip space
-					positions[i].xy() *= c3d_voxelResolutionInverse;
+					positions[i].xy() *= c3d_voxelData.resolutionInv;
 					positions[i].z() = 1.0_f;
 				}
 				ROF;
@@ -628,9 +618,9 @@ namespace castor3d
 					, normalize( positions[2].xy() - positions[1].xy() ) );
 				auto side2N = writer.declLocale( "side2N"
 					, normalize( positions[0].xy() - positions[2].xy() ) );
-				positions[0].xy() += normalize( side2N - side0N ) * c3d_voxelResolutionInverse;
-				positions[1].xy() += normalize( side0N - side1N ) * c3d_voxelResolutionInverse;
-				positions[2].xy() += normalize( side1N - side2N ) * c3d_voxelResolutionInverse;
+				positions[0].xy() += normalize( side2N - side0N ) * c3d_voxelData.resolutionInv;
+				positions[1].xy() += normalize( side0N - side1N ) * c3d_voxelData.resolutionInv;
+				positions[2].xy() += normalize( side1N - side2N ) * c3d_voxelData.resolutionInv;
 
 				// Output
 				FOR( writer, UInt, i, 0_u, i < 3_u, ++i )
@@ -680,9 +670,9 @@ namespace castor3d
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
 		UBO_MODEL( writer, ModelUbo::BindingPoint, 0u );
 		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
-		UBO_VOXELIZER( writer, VoxelizerUbo::BindingPoint, 0u );
+		UBO_VOXELIZER( writer, VoxelizerUbo::BindingPoint, 0u, true );
 
-		auto output( writer.declImage< RWFImg3DRgba32 >( "voxels"
+		auto output( writer.declArrayShaderStorageBuffer< shader::Voxel >( "voxels"
 			, VoxelizerUbo::BindingPoint + 1u
 			, 0u ) );
 
@@ -710,7 +700,7 @@ namespace castor3d
 			, [&]()
 			{
 				auto diff = writer.declLocale( "diff"
-					, inWorldPosition * c3d_voxelResolutionInverse * c3d_voxelSizeInverse );
+					, inWorldPosition * c3d_voxelData.resolutionInv * c3d_voxelData.sizeInv );
 				auto uvw = writer.declLocale( "uvw"
 					, diff * vec3( 0.5_f, -0.5f, 0.5f ) + 0.5f );
 
@@ -764,9 +754,18 @@ namespace castor3d
 						, alpha ) );
 					color.xyz() *= diffuse * occlusion;
 					color.xyz() += emissive;
+
+					auto encodedColor = writer.declLocale( "encodedColor"
+						, utils.encodeColor( color ) );
+					auto encodedNormal = writer.declLocale( "encodedNormal"
+						, utils.encodeNormal( normal ) );
+
 					auto writecoord = writer.declLocale( "writecoord"
-						, uvec3( floor( uvw * c3d_voxelResolution ) ) );
-					output.store( ivec3( writecoord ), color );
+						, uvec3( floor( uvw * c3d_voxelData.resolution ) ) );
+					auto id = writer.declLocale( "id"
+						, utils.flatten( writecoord, uvec3( writer.cast< UInt >( c3d_voxelData.resolution ) ) ) );
+					atomicMax( output[id].colorMask, encodedColor );
+					atomicMax( output[id].normalMask, encodedNormal );
 				}
 				FI;
 			} );
@@ -802,9 +801,9 @@ namespace castor3d
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
 		UBO_MODEL( writer, ModelUbo::BindingPoint, 0u );
 		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
-		UBO_VOXELIZER( writer, VoxelizerUbo::BindingPoint, 0u );
+		UBO_VOXELIZER( writer, VoxelizerUbo::BindingPoint, 0u, true );
 
-		auto output( writer.declImage< RWFImg3DRgba32 >( "voxels"
+		auto output( writer.declArrayShaderStorageBuffer< shader::Voxel >( "voxels"
 			, VoxelizerUbo::BindingPoint + 1u
 			, 0u ) );
 
@@ -832,7 +831,7 @@ namespace castor3d
 			, [&]()
 			{
 				auto diff = writer.declLocale( "diff"
-					, inWorldPosition * c3d_voxelResolutionInverse * c3d_voxelSizeInverse );
+					, inWorldPosition * c3d_voxelData.resolutionInv * c3d_voxelData.sizeInv );
 				auto uvw = writer.declLocale( "uvw"
 					, diff * vec3( 0.5_f, -0.5f, 0.5f ) + 0.5f );
 
@@ -899,10 +898,17 @@ namespace castor3d
 					color.xyz() *= albedo * occlusion;
 					color.xyz() += emissive;
 
+					auto encodedColor = writer.declLocale( "encodedColor"
+						, utils.encodeColor( color ) );
+					auto encodedNormal = writer.declLocale( "encodedNormal"
+						, utils.encodeNormal( normal ) );
+
 					auto writecoord = writer.declLocale( "writecoord"
-						, uvec3( floor( uvw * c3d_voxelResolution ) ) );
-					color = max( color, output.load( ivec3( writecoord ) ) );
-					output.store( ivec3( writecoord ), color );
+						, uvec3( floor( uvw * c3d_voxelData.resolution ) ) );
+					auto id = writer.declLocale( "id"
+						, utils.flatten( writecoord, uvec3( writer.cast< UInt >( c3d_voxelData.resolution ) ) ) );
+					atomicMax( output[id].colorMask, encodedColor );
+					atomicMax( output[id].normalMask, encodedNormal );
 				}
 				FI;
 			} );
@@ -938,9 +944,9 @@ namespace castor3d
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
 		UBO_MODEL( writer, ModelUbo::BindingPoint, 0u );
 		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
-		UBO_VOXELIZER( writer, VoxelizerUbo::BindingPoint, 0u );
+		UBO_VOXELIZER( writer, VoxelizerUbo::BindingPoint, 0u, true );
 
-		auto output( writer.declImage< RWFImg3DRgba32 >( "voxels"
+		auto output( writer.declArrayShaderStorageBuffer< shader::Voxel >( "voxels"
 			, VoxelizerUbo::BindingPoint + 1u
 			, 0u ) );
 
@@ -968,7 +974,7 @@ namespace castor3d
 			, [&]()
 			{
 				auto diff = writer.declLocale( "diff"
-					, inWorldPosition * c3d_voxelResolutionInverse * c3d_voxelSizeInverse );
+					, inWorldPosition * c3d_voxelData.resolutionInv * c3d_voxelData.sizeInv );
 				auto uvw = writer.declLocale( "uvw"
 					, diff * vec3( 0.5_f, -0.5f, 0.5f ) + 0.5f );
 
@@ -1023,9 +1029,18 @@ namespace castor3d
 						, alpha ) );
 					color.xyz() *= albedo * occlusion;
 					color.xyz() += emissive;
+
+					auto encodedColor = writer.declLocale( "encodedColor"
+						, utils.encodeColor( color ) );
+					auto encodedNormal = writer.declLocale( "encodedNormal"
+						, utils.encodeNormal( normal ) );
+
 					auto writecoord = writer.declLocale( "writecoord"
-						, uvec3( floor( uvw * c3d_voxelResolution ) ) );
-					output.store( ivec3( writecoord ), color );
+						, uvec3( floor( uvw * c3d_voxelData.resolution ) ) );
+					auto id = writer.declLocale( "id"
+						, utils.flatten( writecoord, uvec3( writer.cast< UInt >( c3d_voxelData.resolution ) ) ) );
+					atomicMax( output[id].colorMask, encodedColor );
+					atomicMax( output[id].normalMask, encodedNormal );
 				}
 				FI;
 			} );

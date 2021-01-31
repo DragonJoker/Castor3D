@@ -27,6 +27,8 @@ namespace castor3d
 		eNone,
 		// Reflective shadow maps.
 		eRsm,
+		// Voxel Cone Tracing.
+		eVoxelConeTracing,
 		// Light Propagation Volumes without geometry injection.
 		eLpv,
 		// Light Propagation Volumes with geometry injection.

@@ -56,12 +56,14 @@ namespace castor3d
 			, ShadowMapResult const & smSpotResult
 			, LightVolumePassResult const & lpvResult
 			, LightVolumePassResultArray const & llpvResult
+			, TextureUnit const & voxels
 			, castor::Size const & size
 			, Scene & scene
 			, HdrConfigUbo const & hdrConfigUbo
 			, GpInfoUbo const & gpInfoUbo
 			, LpvGridConfigUbo const & lpvConfigUbo
 			, LayeredLpvGridConfigUbo const & llpvConfigUbo
+			, VoxelizerUbo const & vctConfigUbo
 			, SsaoConfig & ssaoConfig );
 		/**
 		 *\~english

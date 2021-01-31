@@ -89,7 +89,7 @@ namespace castor3d
 				{ 2u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
 			};
 
-			if ( !generatesIndirect )
+			if ( generatesIndirect )
 			{
 				attaches.push_back( {
 					0u,
@@ -102,7 +102,19 @@ namespace castor3d
 					VK_IMAGE_LAYOUT_UNDEFINED,
 					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 					} );
+				attaches.push_back( {
+					0u,
+					lpResult[LpTexture::eIndirectSpecular].getTexture()->getPixelFormat(),
+					VK_SAMPLE_COUNT_1_BIT,
+					VK_ATTACHMENT_LOAD_OP_CLEAR,
+					VK_ATTACHMENT_STORE_OP_STORE,
+					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+					VK_ATTACHMENT_STORE_OP_DONT_CARE,
+					VK_IMAGE_LAYOUT_UNDEFINED,
+					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+					} );
 				references.push_back( { 3u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } );
+				references.push_back( { 4u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } );
 			}
 
 			ashes::SubpassDescriptionArray subpasses;
@@ -159,6 +171,7 @@ namespace castor3d
 		, ShaderModule const & vtx
 		, ShaderModule const & pxl
 		, bool hasShadows
+		, bool hasVoxels
 		, bool generatesIndirect )
 		: LightPass::Program{ engine
 			, device
@@ -166,6 +179,7 @@ namespace castor3d
 			, vtx
 			, pxl
 			, hasShadows
+			, hasVoxels
 			, generatesIndirect }
 		, m_lightPass{ pass }
 	{
@@ -212,8 +226,9 @@ namespace castor3d
 
 		blstate.attachments.push_back( blstate.attachments.back() );
 
-		if ( !m_generatesIndirect )
+		if ( m_generatesIndirect )
 		{
+			blstate.attachments.push_back( blstate.attachments.back() );
 			blstate.attachments.push_back( blstate.attachments.back() );
 		}
 
@@ -247,7 +262,8 @@ namespace castor3d
 
 	DirectionalLightPass::DirectionalLightPass( RenderDevice const & device
 		, castor::String const & suffix
-		, LightPassConfig const & lpConfig )
+		, LightPassConfig const & lpConfig
+		, VoxelizerUbo const * vctConfig )
 		: LightPass{ device
 			, "Directional" + suffix
 			, doCreateRenderPass( device
@@ -258,7 +274,8 @@ namespace castor3d
 				, lpConfig.lpResult
 				, lpConfig.generatesIndirect
 				, false )
-			, lpConfig }
+			, lpConfig
+			, vctConfig }
 		, m_ubo{ makeUniformBuffer< Config >( device.renderSystem
 			, 1u
 			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
@@ -352,6 +369,7 @@ namespace castor3d
 		, Light const & light
 		, Camera const & camera
 		, ShadowMap const * shadowMap
+		, TextureUnit const * voxels
 		, uint32_t shadowMapIndex )
 	{
 		m_viewport.resize( size );
@@ -389,6 +407,7 @@ namespace castor3d
 			, m_vertexShader
 			, m_pixelShader
 			, m_shadows
+			, m_voxels
 			, m_generatesIndirect );
 	}
 }

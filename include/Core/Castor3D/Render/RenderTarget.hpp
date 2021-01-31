@@ -13,6 +13,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Passes/CombinePass.hpp"
 #include "Castor3D/Render/PostEffect/PostEffectModule.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
+#include "Castor3D/Render/Technique/Voxelize/VoxelSceneData.hpp"
 #include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
 #include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
@@ -244,7 +245,17 @@ namespace castor3d
 		C3D_API HdrConfig const & getHdrConfig()const;
 		C3D_API HdrConfig & getHdrConfig();
 
-		inline bool isInitialised()const
+		VoxelSceneData const & getVoxelConeTracingConfig()const
+		{
+			return m_voxelConfig;
+		}
+
+		VoxelSceneData & getVoxelConeTracingConfig()
+		{
+			return m_voxelConfig;
+		}
+
+		bool isInitialised()const
 		{
 			return m_initialised;
 		}
@@ -254,93 +265,98 @@ namespace castor3d
 			return m_size;
 		}
 
-		inline RenderTechniqueSPtr getTechnique()const
+		RenderTechniqueSPtr getTechnique()const
 		{
 			return m_renderTechnique;
 		}
 
-		inline SceneSPtr getScene()const
+		SceneSPtr getScene()const
 		{
 			return m_scene.lock();
 		}
 
-		inline CameraSPtr getCamera()const
+		CameraSPtr getCamera()const
 		{
 			return m_camera.lock();
 		}
 
-		inline TextureUnit const & getTexture()const
+		TextureUnit const & getTexture()const
 		{
 			return m_combinedFrameBuffer.colourTexture;
 		}
 
-		inline TextureUnit const & getVelocity()const
+		TextureUnit const & getVelocity()const
 		{
 			return m_velocityTexture;
 		}
 
-		inline VkFormat getPixelFormat()const
+		VkFormat getPixelFormat()const
 		{
 			return m_pixelFormat;
 		}
 
-		inline TargetType getTargetType()const
+		TargetType getTargetType()const
 		{
 			return m_type;
 		}
 
-		inline uint32_t getIndex()const
+		uint32_t getIndex()const
 		{
 			return m_index;
 		}
 
-		inline PostEffectPtrArray const & getHDRPostEffects()const
+		PostEffectPtrArray const & getHDRPostEffects()const
 		{
 			return m_hdrPostEffects;
 		}
 
-		inline PostEffectPtrArray const & getSRGBPostEffects()const
+		PostEffectPtrArray const & getSRGBPostEffects()const
 		{
 			return m_srgbPostEffects;
 		}
 
-		inline ToneMappingSPtr getToneMapping()const
+		ToneMappingSPtr getToneMapping()const
 		{
 			CU_Require( m_toneMapping );
 			return m_toneMapping;
 		}
 
-		inline ashes::Semaphore const & getSemaphore()const
+		ashes::Semaphore const & getSemaphore()const
 		{
 			CU_Require( m_signalFinished );
 			return *m_signalFinished;
 		}
 
-		inline SceneCuller const & getCuller()const
+		SceneCuller const & getCuller()const
 		{
 			CU_Require( m_culler );
 			return *m_culler;
 		}
 
-		inline SceneCuller & getCuller()
+		SceneCuller & getCuller()
 		{
 			CU_Require( m_culler );
 			return *m_culler;
 		}
 
-		inline castor::Point2f const & getJitter()const
+		castor::Point2f const & getJitter()const
 		{
 			return m_jitter;
 		}
 
-		inline castor::String const & getName()const
+		castor::String const & getName()const
 		{
 			return m_name;
 		}
 
-		inline std::vector< IntermediateView > const & getIntermediateViews()const
+		std::vector< IntermediateView > const & getIntermediateViews()const
 		{
 			return m_intermediates;
+		}
+
+		HdrConfigUbo const & getHdrConfigUbo()const
+		{
+			return m_hdrConfigUbo;
 		}
 		/**@}*/
 		/**
@@ -355,29 +371,24 @@ namespace castor3d
 		C3D_API void setExposure( float value );
 		C3D_API void setGamma( float value );
 
-		inline void setTechnique( RenderTechniqueSPtr technique )
+		void setTechnique( RenderTechniqueSPtr technique )
 		{
 			m_renderTechnique = technique;
 		}
 
-		inline void setSsaoConfig( SsaoConfig const & config )
+		void setSsaoConfig( SsaoConfig const & config )
 		{
 			m_ssaoConfig = config;
 		}
 
-		inline void setPixelFormat( VkFormat value )
+		void setPixelFormat( VkFormat value )
 		{
 			m_pixelFormat = value;
 		}
 
-		inline void setJitter( castor::Point2f const & value )
+		void setJitter( castor::Point2f const & value )
 		{
 			m_jitter = value;
-		}
-
-		inline HdrConfigUbo const & getHdrConfigUbo()const
-		{
-			return m_hdrConfigUbo;
 		}
 		/**@}*/
 
@@ -409,7 +420,7 @@ namespace castor3d
 			, ashes::Semaphore const & toWait );
 		C3D_API ashes::Semaphore const & doCombine( ashes::Semaphore const & toWait );
 
-		inline void addIntermediateView( castor::String name
+		void addIntermediateView( castor::String name
 			, ashes::ImageView view
 			, VkImageLayout layout )
 		{
@@ -459,6 +470,7 @@ namespace castor3d
 		castor::PreciseTimer m_timer;
 		SceneCullerUPtr m_culler;
 		IntermediateViewArray m_intermediates;
+		VoxelSceneData m_voxelConfig;
 	};
 }
 

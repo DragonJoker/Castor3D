@@ -21,9 +21,6 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.10.0
-	\date		08/06/2017
 	\~english
 	\brief		Traits structure to specialise light passes with shadows.
 	\remarks	Specialisation for LightType::eDirectional.
@@ -45,9 +42,6 @@ namespace castor3d
 		using shadow_pass_type = ShadowMapDirectional;
 	};
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.10.0
-	\date		08/06/2017
 	\~english
 	\brief		Traits structure to specialise light passes with shadows.
 	\remarks	Specialisation for LightType::ePoint.
@@ -69,9 +63,6 @@ namespace castor3d
 		using shadow_pass_type = ShadowMapPoint;
 	};
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.10.0
-	\date		08/06/2017
 	\~english
 	\brief		Traits structure to specialise light passes with shadows.
 	\remarks	Specialisation for LightType::eSpot.
@@ -139,6 +130,7 @@ namespace castor3d
 				, LightPassShadow & lightPass
 				, ShaderModule const & vtx
 				, ShaderModule const & pxl
+				, bool hasVoxels
 				, bool generatesIndirect )
 				: my_program_type( engine
 					, device
@@ -146,6 +138,7 @@ namespace castor3d
 					, vtx
 					, pxl
 					, true
+					, hasVoxels
 					, generatesIndirect )
 			{
 			}
@@ -166,17 +159,25 @@ namespace castor3d
 		 */
 		LightPassShadow( RenderDevice const & device
 			, castor::String const & suffix
-			, LightPassConfig const & lpConfig )
+			, LightPassConfig const & lpConfig
+			, VoxelizerUbo const * vctConfig = nullptr )
 			: my_pass_type{ device
 				, suffix
-				, LightPassConfig{ lpConfig.lpResult, lpConfig.gpInfoUbo, true, lpConfig.generatesIndirect } }
+				, LightPassConfig{ lpConfig.lpResult
+					, lpConfig.gpInfoUbo
+					, true
+					, lpConfig.hasVoxels && vctConfig
+					, lpConfig.generatesIndirect }
+				, vctConfig }
 		{
 		}
 		LightPassShadow( RenderDevice const & device
-			, LightPassConfig const & lpConfig )
+			, LightPassConfig const & lpConfig
+			, VoxelizerUbo const * vctConfig = nullptr )
 			: LightPassShadow{ device
 				, cuT( "Shadow" )
-				, lpConfig }
+				, lpConfig
+				, vctConfig }
 		{
 		}
 
@@ -191,6 +192,7 @@ namespace castor3d
 				, *this
 				, this->m_vertexShader
 				, this->m_pixelShader
+				, this->m_voxels
 				, this->m_generatesIndirect );
 			return result;
 		}

@@ -7,10 +7,10 @@ See LICENSE file in root folder
 #define C3D_UseWeightedBlendedRendering 1
 #define C3D_UseDeferredRendering 1
 #define C3D_UseDepthPrepass 1
+#define C3D_DisableSSSTransmittance 1
 
 #define C3D_DebugPicking 0
 #define C3D_DebugBackgroundPicking 0
 #define C3D_DebugPickingTransfer 0
-#define C3D_DebugVoxelizer 1
 
 #endif

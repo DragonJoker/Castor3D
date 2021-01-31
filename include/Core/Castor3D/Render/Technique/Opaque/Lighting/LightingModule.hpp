@@ -37,6 +37,7 @@ namespace castor3d
 		eDiffuse,
 		eSpecular,
 		eIndirectDiffuse,
+		eIndirectSpecular,
 		CU_ScopedEnumBounds( eDepth ),
 	};
 	castor::String getTextureName( LpTexture texture );
@@ -210,6 +211,7 @@ namespace castor3d
 		LightPassResult const & lpResult;
 		GpInfoUbo const & gpInfoUbo;
 		bool hasShadows{ false };
+		bool hasVoxels{ false };
 		bool generatesIndirect{ false };
 	};
 

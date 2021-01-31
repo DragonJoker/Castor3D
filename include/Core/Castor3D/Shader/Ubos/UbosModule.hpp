@@ -447,15 +447,26 @@ namespace castor3d
 	struct VoxelizerUboConfiguration
 	{
 		// Voxel render transform matrix
-		castor::Matrix4x4f transform;
-		// Center of the voxel grid, in world space units
-		castor::Point4f center;
-		//! Voxel half-extent, in world space units
-		float size;
-		float sizeInverse;
-		//! Voxel grid resolution
-		float resolution;
-		float resolutionInverse;
+		castor::Matrix4x4f voxelTransform;
+		/**
+		*	- float size: Voxel half-extent, in world space units
+		*	- float sizeInverse
+		*	- float resolution: Voxel grid size
+		*	- float resolutionInverse
+		*/
+		castor::Point4f sizeResolution;
+		/**
+		*	- float radianceMaxDistance;
+		*	- float radianceMips;
+		*	- uint radianceNumCones;
+		*	- float radianceNumConesInv;
+		*/
+		castor::Point4f radiance;
+		/**
+		*	- float rayStepSize
+		*	- vec3 voxel: Center of the voxel grid, in world space units
+		*/
+		castor::Point4f other;
 	};
 
 	CU_DeclareCUSmartPtr( castor3d, LpvGridConfigUbo, C3D_API );

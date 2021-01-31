@@ -7,39 +7,100 @@ See LICENSE file in root folder
 #include "UbosModule.hpp"
 
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
+#include "Castor3D/Render/Technique/Voxelize/VoxelizeModule.hpp"
 
-#include <ShaderWriter/Optional/OptionalUbo.hpp>
+#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/MatTypes/Mat4.hpp>
 
 namespace castor3d
 {
+	namespace shader
+	{
+		struct VoxelData
+			: public sdw::StructInstance
+		{
+			C3D_API VoxelData( sdw::ShaderWriter & writer
+				, ast::expr::ExprPtr expr
+				, bool enabled );
+			C3D_API VoxelData & operator=( VoxelData const & rhs );
+
+			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+
+			// Raw values
+			sdw::Mat4 voxelTransform;
+			sdw::Vec4 sizeResolution;
+			sdw::Vec4 radiance;
+			sdw::Vec4 other;
+			// Specific values
+			sdw::Float size;
+			sdw::Float sizeInv;
+			sdw::Float resolution;
+			sdw::Float resolutionInv;
+			sdw::Float radianceMaxDistance;
+			sdw::Float radianceMips;
+			sdw::UInt radianceNumCones;
+			sdw::Float radianceNumConesInv;
+			sdw::Float rayStepSize;
+			sdw::Vec3 voxelCenter;
+
+		private:
+			using sdw::StructInstance::getMember;
+			using sdw::StructInstance::getMemberArray;
+		};
+	}
+
 	class VoxelizerUbo
 	{
 	public:
 		using Configuration = VoxelizerUboConfiguration;
 
 	public:
+		C3D_API VoxelizerUbo( VoxelizerUbo const & ) = delete;
+		C3D_API VoxelizerUbo & operator=( VoxelizerUbo const & ) = delete;
+		C3D_API VoxelizerUbo( VoxelizerUbo && ) = default;
+		C3D_API VoxelizerUbo & operator=( VoxelizerUbo && ) = delete;
+
+		C3D_API explicit VoxelizerUbo();
+		C3D_API explicit VoxelizerUbo( RenderDevice const & device );
+		C3D_API ~VoxelizerUbo();
+
+		C3D_API void initialise( RenderDevice const & device );
+		C3D_API void cleanup();
+		C3D_API void cpuUpdate( VoxelSceneData const & voxelConfig
+			, Camera const & camera
+			, uint32_t voxelGridSize );
+
+		void createSizedBinding( ashes::DescriptorSet & descriptorSet
+			, VkDescriptorSetLayoutBinding const & layoutBinding )const
+		{
+			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
+		}
+
+		UniformBufferOffsetT< Configuration > const & getUbo()const
+		{
+			return m_ubo;
+		}
+
+	public:
 		C3D_API static uint32_t const BindingPoint;
 		C3D_API static castor::String const BufferVoxelizer;
-		C3D_API static castor::String const Center;
-		C3D_API static castor::String const Size;
-		C3D_API static castor::String const SizeInverse;
-		C3D_API static castor::String const Resolution;
-		C3D_API static castor::String const ResolutionInverse;
-		C3D_API static castor::String const Transform;
+		C3D_API static castor::String const VoxelData;
+
+	private:
+		RenderDevice const * m_device{};
+		UniformBufferOffsetT< Configuration > m_ubo{};
 	};
 }
 
-#define UBO_VOXELIZER( writer, binding, set )\
+#define UBO_VOXELIZER( writer, binding, set, enable )\
 	sdw::Ubo voxelizer{ writer\
 		, castor3d::VoxelizerUbo::BufferVoxelizer\
 		, binding\
-		, set };\
-	auto c3d_voxelTransform = voxelizer.declMember< sdw::Mat4 >( castor3d::VoxelizerUbo::Transform );\
-	auto c3d_voxelCenter = voxelizer.declMember< sdw::Vec4 >( castor3d::VoxelizerUbo::Center );\
-	auto c3d_voxelSize = voxelizer.declMember< sdw::Float >( castor3d::VoxelizerUbo::Size );\
-	auto c3d_voxelSizeInverse = voxelizer.declMember< sdw::Float >( castor3d::VoxelizerUbo::SizeInverse );\
-	auto c3d_voxelResolution = voxelizer.declMember< sdw::Float >( castor3d::VoxelizerUbo::Resolution );\
-	auto c3d_voxelResolutionInverse = voxelizer.declMember< sdw::Float >( castor3d::VoxelizerUbo::ResolutionInverse );\
+		, set\
+		, ast::type::MemoryLayout::eStd140\
+		, enable };\
+	auto c3d_voxelData = voxelizer.declStructMember< shader::VoxelData >( castor3d::VoxelizerUbo::VoxelData );\
 	voxelizer.end()
 
 #endif

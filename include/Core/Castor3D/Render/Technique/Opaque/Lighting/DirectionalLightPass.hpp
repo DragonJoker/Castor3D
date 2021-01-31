@@ -51,6 +51,7 @@ namespace castor3d
 				, ShaderModule const & vtx
 				, ShaderModule const & pxl
 				, bool hasShadows = false
+				, bool hasVoxels = false
 				, bool generatesIndirect = false );
 			/**
 			 *\~english
@@ -93,12 +94,15 @@ namespace castor3d
 		 */
 		DirectionalLightPass( RenderDevice const & device
 			, castor::String const & suffix
-			, LightPassConfig const & lpConfig );
+			, LightPassConfig const & lpConfig
+			, VoxelizerUbo const * vctConfig = nullptr );
 		DirectionalLightPass( RenderDevice const & device
-			, LightPassConfig const & lpConfig )
+			, LightPassConfig const & lpConfig
+			, VoxelizerUbo const * vctConfig = nullptr )
 			: DirectionalLightPass{ device
 				, castor::String{}
-				, lpConfig }
+				, lpConfig
+				, vctConfig }
 		{
 		}
 		/**
@@ -133,6 +137,7 @@ namespace castor3d
 			, Light const & light
 			, Camera const & camera
 			, ShadowMap const * shadowMap = nullptr
+			, TextureUnit const * voxels = nullptr
 			, uint32_t shadowMapIndex = 0u )override;
 		/**
 		 *\copydoc		castor3d::LightPass::doGetVertexShaderSource

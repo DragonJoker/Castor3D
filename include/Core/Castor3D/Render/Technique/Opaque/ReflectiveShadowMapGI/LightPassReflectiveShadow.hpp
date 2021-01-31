@@ -46,7 +46,7 @@ namespace castor3d
 			, RsmLightPassConfig const & lpConfig )
 			: LightPassShadow< LtType >{ device
 				, "ReflectiveShadow"
-				, { lpConfig.base.lpResult, lpConfig.base.gpInfoUbo, true, true } }
+				, { lpConfig.base.lpResult, lpConfig.base.gpInfoUbo, true, false, true } }
 			, m_gpResult{ lpConfig.gpResult }
 			, m_smResult{ lpConfig.smResult }
 			, m_lpResult{ lpConfig.base.lpResult }
@@ -144,6 +144,7 @@ namespace castor3d
 			, Light const & light
 			, Camera const & camera
 			, ShadowMap const * shadowMap
+			, TextureUnit const * voxels
 			, uint32_t shadowMapIndex )override
 		{
 			my_pass_type::doUpdate( first
@@ -151,6 +152,7 @@ namespace castor3d
 				, light
 				, camera
 				, shadowMap
+				, voxels
 				, shadowMapIndex );
 			m_rsmGiPass->update( light );
 		}

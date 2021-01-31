@@ -234,34 +234,36 @@ namespace castor3d
 		, Named{ name }
 		, m_renderTarget{ renderTarget }
 		, m_renderSystem{ renderSystem }
-		, m_matrixUbo{ *renderSystem.getEngine() }
-		, m_gpInfoUbo{ *renderSystem.getEngine() }
+		, m_matrixUbo{ *m_renderSystem.getEngine() }
+		, m_gpInfoUbo{ *m_renderSystem.getEngine() }
 		, m_lpvConfigUbo{}
 		, m_llpvConfigUbo{}
+		, m_vctConfigUbo{}
 #if C3D_UseDeferredRendering
 		, m_opaquePass{ castor::makeUniqueDerived< RenderTechniquePass, OpaquePass >( m_matrixUbo
-			, renderTarget.getCuller()
+			, m_renderTarget.getCuller()
 			, ssaoConfig ) }
 #else
 		, m_opaquePass{ castor::makeUniqueDerived< RenderTechniquePass, ForwardRenderTechniquePass >( cuT( "opaque_pass" )
 			, m_matrixUbo
-			, renderTarget.getCuller()
+			, m_renderTarget.getCuller()
 			, false
 			, nullptr
 			, ssaoConfig
 			, &m_lpvConfigUbo
-			, &m_llpvConfigUbo ) }
+			, &m_llpvConfigUbo
+			, &m_vctConfigUbo ) }
 #endif
 #if C3D_UseWeightedBlendedRendering
 		, m_transparentPass{ castor::makeUniqueDerived< RenderTechniquePass, TransparentPass >( m_matrixUbo
-			, renderTarget.getCuller()
+			, m_renderTarget.getCuller()
 			, ssaoConfig
 			, m_lpvConfigUbo
 			, m_llpvConfigUbo ) }
 #else
 		, m_transparentPass{ castor::makeUniqueDerived< RenderTechniquePass, ForwardRenderTechniquePass >( cuT( "transparent_pass" )
 			, m_matrixUbo
-			, renderTarget.getCuller()
+			, m_renderTarget.getCuller()
 			, false
 			, false
 			, nullptr
@@ -271,8 +273,8 @@ namespace castor3d
 #endif
 		, m_initialised{ false }
 		, m_ssaoConfig{ ssaoConfig }
-		, m_colourTexture{ *renderSystem.getEngine() }
-		, m_depthBuffer{ *renderSystem.getEngine() }
+		, m_colourTexture{ *m_renderSystem.getEngine() }
+		, m_depthBuffer{ *m_renderSystem.getEngine() }
 	{
 		doCreateShadowMaps();
 	}
@@ -338,6 +340,7 @@ namespace castor3d
 			m_signalFinished = device->createSemaphore( "RenderTechnique" );
 			m_gpInfoUbo.initialise( device );
 			m_matrixUbo.initialise( device );
+			m_vctConfigUbo.initialise( device );
 
 			m_voxelizer = castor::makeUnique< Voxelizer >( *m_renderSystem.getEngine()
 				, device
@@ -345,7 +348,9 @@ namespace castor3d
 				, *m_renderTarget.getScene()
 				, m_renderTarget.getCuller()
 				, m_colourTexture.getTexture()->getDefaultView().getTargetView()
-				, m_matrixUbo );
+				, m_matrixUbo
+				, m_vctConfigUbo
+				, m_renderTarget.getVoxelConeTracingConfig() );
 
 			auto & maps = m_renderTarget.getScene()->getEnvironmentMaps();
 
@@ -391,6 +396,7 @@ namespace castor3d
 		m_depthPass->cleanup( device );
 		m_depthPass.reset();
 #endif
+		m_vctConfigUbo.cleanup();
 		m_gpInfoUbo.cleanup( device );
 		m_matrixUbo.cleanup( device );
 		m_initialised = false;
@@ -406,11 +412,17 @@ namespace castor3d
 		}
 
 		updater.camera = m_renderTarget.getCamera();
+		updater.voxelConeTracing = m_renderTarget.getVoxelConeTracingConfig().enabled;
 
 #if C3D_UseDepthPrepass
 		m_depthPass->update( updater );
 #endif
-		m_voxelizer->update( updater );
+
+		if ( updater.voxelConeTracing )
+		{
+			m_voxelizer->update( updater );
+		}
+
 #if C3D_UseDeferredRendering
 		m_deferredRendering->update( updater );
 #else
@@ -465,6 +477,7 @@ namespace castor3d
 
 		updater.scene = m_renderTarget.getScene();
 		updater.camera = m_renderTarget.getCamera();
+		updater.voxelConeTracing = m_renderTarget.getVoxelConeTracingConfig().enabled;
 
 		doInitialiseShadowMaps( updater.device );
 		doInitialiseLpv( updater.device );
@@ -477,28 +490,34 @@ namespace castor3d
 #if C3D_UseDepthPrepass
 		m_depthPass->update( updater );
 #endif
-		m_voxelizer->update( updater );
+		if ( updater.voxelConeTracing )
+		{
+			m_voxelizer->update( updater );
+		}
 
+		if ( !m_renderTarget.getVoxelConeTracingConfig().debugVoxels )
+		{
 #if C3D_UseDeferredRendering
-		m_deferredRendering->update( updater );
+			m_deferredRendering->update( updater );
 #else
-		static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).update( updater );
+			static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).update( updater );
 #endif
 #if C3D_UseWeightedBlendedRendering
-		m_weightedBlendRendering->update( updater );
+			m_weightedBlendRendering->update( updater );
 #else
-		static_cast< ForwardRenderTechniquePass & >( *m_transparentPass ).update( updater );
+			static_cast< ForwardRenderTechniquePass & >( *m_transparentPass ).update( updater );
 #endif
 
-		if ( m_renderTarget.getScene()->getFog().getType() != FogType::eDisabled )
-		{
-			auto & background = m_renderTarget.getScene()->getColourBackground();
-			background.update( updater );
-		}
-		else
-		{
-			auto & background = *m_renderTarget.getScene()->getBackground();
-			background.update( updater );
+			if ( m_renderTarget.getScene()->getFog().getType() != FogType::eDisabled )
+			{
+				auto & background = m_renderTarget.getScene()->getColourBackground();
+				background.update( updater );
+			}
+			else
+			{
+				auto & background = *m_renderTarget.getScene()->getBackground();
+				background.update( updater );
+			}
 		}
 
 		doUpdateShadowMaps( updater );
@@ -526,13 +545,22 @@ namespace castor3d
 		semaphore = &doRenderLpv( device, *semaphore );
 
 		// Render part
-		semaphore = &m_voxelizer->render( device, *semaphore );
-#if C3D_DebugVoxelizer
-		semaphore = &m_voxelizer->debug( device, *semaphore );
-#else
-		semaphore = &doRenderOpaque( device, *semaphore );
-		semaphore = &doRenderTransparent( device, *semaphore );
-#endif
+		if ( m_renderTarget.getVoxelConeTracingConfig().enabled )
+		{
+			semaphore = &m_voxelizer->render( device, *semaphore );
+
+		}
+
+		if ( m_renderTarget.getVoxelConeTracingConfig().debugVoxels )
+		{
+			semaphore = &m_voxelizer->debug( device, *semaphore );
+		}
+		else
+		{
+			semaphore = &doRenderOpaque( device, *semaphore );
+			semaphore = &doRenderTransparent( device, *semaphore );
+		}
+
 		return *semaphore;
 	}
 
@@ -842,7 +870,6 @@ namespace castor3d
 
 	void RenderTechnique::doInitialiseOpaquePass( RenderDevice const & device )
 	{
-
 #if C3D_UseDeferredRendering
 
 		m_opaquePass->initialise( device, m_size, nullptr );
@@ -857,12 +884,14 @@ namespace castor3d
 			, m_spotShadowMap->getShadowPassResult()
 			, *m_lpvResult
 			, m_llpvResult
+			, m_voxelizer->getResult()
 			, m_renderTarget.getSize()
 			, *m_renderTarget.getScene()
 			, m_renderTarget.getHdrConfigUbo()
 			, m_gpInfoUbo
 			, m_lpvConfigUbo
 			, m_llpvConfigUbo
+			, m_vctConfigUbo
 			, m_ssaoConfig );
 
 #else

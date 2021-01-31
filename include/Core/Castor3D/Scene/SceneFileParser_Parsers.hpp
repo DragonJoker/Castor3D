@@ -36,6 +36,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserRenderTargetPostEffect )
 	CU_DeclareAttributeParser( parserRenderTargetToneMapping )
 	CU_DeclareAttributeParser( parserRenderTargetSsao )
+	CU_DeclareAttributeParser( parserRenderTargetVoxelConeTracing )
 	CU_DeclareAttributeParser( parserRenderTargetEnd )
 
 	// Sampler parsers
@@ -250,7 +251,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserPixelShader )
 	CU_DeclareAttributeParser( parserGeometryShader )
 	CU_DeclareAttributeParser( parserHullShader )
-	CU_DeclareAttributeParser( parserdomainShader )
+	CU_DeclareAttributeParser( parserDomainShader )
 	CU_DeclareAttributeParser( parserComputeShader )
 	CU_DeclareAttributeParser( parserConstantsBuffer )
 	CU_DeclareAttributeParser( parserShaderEnd )
@@ -389,6 +390,12 @@ namespace castor3d
 	// HDR config parsers
 	CU_DeclareAttributeParser( parserHdrExponent )
 	CU_DeclareAttributeParser( parserHdrGamma )
+
+	// Voxel Cone Tracing config parsers
+	CU_DeclareAttributeParser( parserVctEnabled )
+	CU_DeclareAttributeParser( parserVctNumCones )
+	CU_DeclareAttributeParser( parserVctMaxDistance )
+	CU_DeclareAttributeParser( parserVctRayStepSize )
 }
 
 #endif

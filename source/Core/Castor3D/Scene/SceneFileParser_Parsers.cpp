@@ -592,6 +592,17 @@ namespace castor3d
 	}
 	CU_EndAttributePush( CSCNSection::eSsao )
 
+	CU_ImplementAttributeParser( parserRenderTargetVoxelConeTracing )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->renderTarget )
+		{
+			CU_ParsingError( cuT( "No render target initialised." ) );
+		}
+	}
+	CU_EndAttributePush( CSCNSection::eVoxelConeTracing )
+
 	CU_ImplementAttributeParser( parserRenderTargetEnd )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
@@ -4393,42 +4404,42 @@ namespace castor3d
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
 		parsingContext->shaderStage = VK_SHADER_STAGE_VERTEX_BIT;
 	}
-	CU_EndAttributePush( CSCNSection::shaderStage )
+	CU_EndAttributePush( CSCNSection::eShaderStage )
 
 	CU_ImplementAttributeParser( parserPixelShader )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
 		parsingContext->shaderStage = VK_SHADER_STAGE_FRAGMENT_BIT;
 	}
-	CU_EndAttributePush( CSCNSection::shaderStage )
+	CU_EndAttributePush( CSCNSection::eShaderStage )
 
 	CU_ImplementAttributeParser( parserGeometryShader )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
 		parsingContext->shaderStage = VK_SHADER_STAGE_GEOMETRY_BIT;
 	}
-	CU_EndAttributePush( CSCNSection::shaderStage )
+	CU_EndAttributePush( CSCNSection::eShaderStage )
 
 	CU_ImplementAttributeParser( parserHullShader )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
 		parsingContext->shaderStage = VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT;
 	}
-	CU_EndAttributePush( CSCNSection::shaderStage )
+	CU_EndAttributePush( CSCNSection::eShaderStage )
 
-	CU_ImplementAttributeParser( parserdomainShader )
+	CU_ImplementAttributeParser( parserDomainShader )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
 		parsingContext->shaderStage = VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT;
 	}
-	CU_EndAttributePush( CSCNSection::shaderStage )
+	CU_EndAttributePush( CSCNSection::eShaderStage )
 
 	CU_ImplementAttributeParser( parserComputeShader )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
 		parsingContext->shaderStage = VK_SHADER_STAGE_COMPUTE_BIT;
 	}
-	CU_EndAttributePush( CSCNSection::shaderStage )
+	CU_EndAttributePush( CSCNSection::eShaderStage )
 
 	CU_ImplementAttributeParser( parserConstantsBuffer )
 	{
@@ -6211,6 +6222,88 @@ namespace castor3d
 		else
 		{
 			params[0]->get( parsingContext->point2f[0] );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserVctEnabled )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->renderTarget )
+		{
+			CU_ParsingError( cuT( "No render target initialised." ) );
+		}
+		else if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			auto & vctConfig = parsingContext->renderTarget->getVoxelConeTracingConfig();
+			params[0]->get( vctConfig.enabled );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserVctNumCones )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->renderTarget )
+		{
+			CU_ParsingError( cuT( "No render target initialised." ) );
+		}
+		else if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			auto & vctConfig = parsingContext->renderTarget->getVoxelConeTracingConfig();
+			uint32_t result;
+			params[0]->get( result );
+			vctConfig.numCones = result;
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserVctMaxDistance )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->renderTarget )
+		{
+			CU_ParsingError( cuT( "No render target initialised." ) );
+		}
+		else if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			auto & vctConfig = parsingContext->renderTarget->getVoxelConeTracingConfig();
+			params[0]->get( vctConfig.maxDistance );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserVctRayStepSize )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->renderTarget )
+		{
+			CU_ParsingError( cuT( "No render target initialised." ) );
+		}
+		else if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			auto & vctConfig = parsingContext->renderTarget->getVoxelConeTracingConfig();
+			params[0]->get( vctConfig.rayStepSize );
 		}
 	}
 	CU_EndAttribute()

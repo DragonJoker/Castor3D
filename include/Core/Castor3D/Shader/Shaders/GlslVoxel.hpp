@@ -17,7 +17,8 @@ namespace castor3d
 			: public sdw::StructInstance
 		{
 			C3D_API Voxel( sdw::ShaderWriter & writer
-				, ast::expr::ExprPtr expr );
+				, ast::expr::ExprPtr expr
+				, bool enabled );
 			C3D_API Voxel & operator=( Voxel const & rhs );
 
 			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );

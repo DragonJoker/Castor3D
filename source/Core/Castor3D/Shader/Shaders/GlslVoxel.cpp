@@ -12,8 +12,9 @@ namespace castor3d
 		//*********************************************************************************************
 
 		Voxel::Voxel( ShaderWriter & writer
-			, ast::expr::ExprPtr expr )
-			: StructInstance{ writer, std::move( expr ) }
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstance{ writer, std::move( expr ), enabled }
 			, colorMask{ getMember< UInt >( "colorMask" ) }
 			, normalMask{ getMember< UInt >( "normalMask" ) }
 		{

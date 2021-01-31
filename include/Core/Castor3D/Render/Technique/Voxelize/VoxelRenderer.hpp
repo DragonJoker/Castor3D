@@ -22,7 +22,7 @@ namespace castor3d
 	{
 	public:
 		C3D_API VoxelRenderer( RenderDevice const & device
-			, UniformBufferOffsetT< VoxelizerUboConfiguration > const & voxelizerUbo
+			, VoxelizerUbo const & voxelizerUbo
 			, MatrixUbo & matrixUbo
 			, TextureUnit const & voxels
 			, ashes::ImageView target
@@ -41,7 +41,7 @@ namespace castor3d
 		struct VoxelToScreen : castor::Named
 		{
 			VoxelToScreen( RenderDevice const & device
-				, UniformBufferOffsetT< VoxelizerUboConfiguration > const & voxelizerUbo
+				, VoxelizerUbo const & voxelizerUbo
 				, MatrixUbo & matrixUbo
 				, TextureUnit const & voxels
 				, ashes::BufferBase const & vertexBuffer

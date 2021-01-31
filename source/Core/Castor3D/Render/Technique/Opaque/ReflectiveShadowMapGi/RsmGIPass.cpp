@@ -103,15 +103,13 @@ namespace castor3d
 
 			// Shader inputs
 			UBO_RSM_CONFIG( writer, RsmCfgUboIdx, 0u );
-			ArraySsboT< Vec2 > c3d_rsmSamples
-			{
-				writer,
-				"c3d_rsmSamples",
-				writer.getTypesCache().getVec2F(),
-				type::MemoryLayout::eStd430,
-				RsmSamplesIdx,
-				0u
-			};
+			ArraySsboT< Vec2 > c3d_rsmSamples{ writer
+				, "c3d_rsmSamples"
+				, writer.getTypesCache().getVec2F()
+				, type::MemoryLayout::eStd430
+				, RsmSamplesIdx
+				, 0u
+				, true };
 			UBO_GPINFO( writer, GpInfoUboIdx, 0u );
 			auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", LightsMapIdx, 0u );
 			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), DepthMapIdx, 0u );
@@ -188,15 +186,13 @@ namespace castor3d
 
 			// Shader inputs
 			UBO_RSM_CONFIG( writer, RsmCfgUboIdx, 0u );
-			ArraySsboT< Vec2 > c3d_rsmSamples
-			{
-				writer,
-				"c3d_rsmSamples",
-				writer.getTypesCache().getVec2F(),
-				type::MemoryLayout::eStd430,
-				RsmSamplesIdx,
-				0u
-			};
+			ArraySsboT< Vec2 > c3d_rsmSamples{ writer
+				, "c3d_rsmSamples"
+				, writer.getTypesCache().getVec2F()
+				, type::MemoryLayout::eStd430
+				, RsmSamplesIdx
+				, 0u
+				, true };
 			UBO_GPINFO( writer, GpInfoUboIdx, 0u );
 			auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", LightsMapIdx, 0u );
 			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), DepthMapIdx, 0u );
@@ -277,15 +273,13 @@ namespace castor3d
 
 			// Shader inputs
 			UBO_RSM_CONFIG( writer, RsmCfgUboIdx, 0u );
-			ArraySsboT< Vec2 > c3d_rsmSamples
-			{
-				writer,
-				"c3d_rsmSamples",
-				writer.getTypesCache().getVec2F(),
-				type::MemoryLayout::eStd430,
-				RsmSamplesIdx,
-				0u
-			};
+			ArraySsboT< Vec2 > c3d_rsmSamples{ writer
+				, "c3d_rsmSamples"
+				, writer.getTypesCache().getVec2F()
+				, type::MemoryLayout::eStd430
+				, RsmSamplesIdx
+				, 0u
+				, true };
 			UBO_GPINFO( writer, GpInfoUboIdx, 0u );
 			auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", LightsMapIdx, 0u );
 			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), DepthMapIdx, 0u );

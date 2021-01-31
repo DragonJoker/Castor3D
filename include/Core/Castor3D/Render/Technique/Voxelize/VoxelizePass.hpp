@@ -30,8 +30,8 @@ namespace castor3d
 			, RenderDevice const & device
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
-			, UniformBufferOffsetT< VoxelizerUboConfiguration > const & voxelizerUbo
-			, TextureUnit const & result
+			, VoxelizerUbo const & voxelizerUbo
+			, ashes::Buffer< Voxel > const & voxels
 			, uint32_t voxelGridSize );
 		/**
 		 *\~english
@@ -162,11 +162,11 @@ namespace castor3d
 	private:
 		Scene const & m_scene;
 		Camera const & m_camera;
-		TextureUnit const & m_result;
+		ashes::Buffer< Voxel > const & m_voxels;
 		CommandsSemaphore m_commands;
 		ashes::FrameBufferPtr m_frameBuffer;
 		uint32_t m_voxelGridSize;
-		UniformBufferOffsetT< VoxelizerUboConfiguration > const & m_voxelizerUbo;
+		VoxelizerUbo const & m_voxelizerUbo;
 	};
 }
 

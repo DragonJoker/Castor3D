@@ -26,6 +26,11 @@ namespace castor3d
 			C3D_API sdw::ShaderWriter * getWriter()const;
 			C3D_API void setVar( ast::var::VariableList::const_iterator & var );
 
+			bool isEnabled()const
+			{
+				return true;
+			}
+
 			sdw::InVec2 m_clipVertex;
 			sdw::InVec3 m_viewVertex;
 			sdw::InVec3 m_worldVertex;

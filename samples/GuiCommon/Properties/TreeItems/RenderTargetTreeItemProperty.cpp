@@ -10,6 +10,7 @@
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/PostEffect/PostEffect.hpp>
 #include <Castor3D/Render/Technique/RenderTechnique.hpp>
+#include <Castor3D/Render/Technique/Voxelize/VoxelSceneData.hpp>
 
 #include <wx/propgrid/advprops.h>
 
@@ -72,20 +73,6 @@ namespace GuiCommon
 		static wxString PROPERTY_CATEGORY_RENDER_TARGET = _( "Render Target: " );
 		static wxString PROPERTY_RENDER_TARGET_SHADER = _( "Shader" );
 		static wxString PROPERTY_RENDER_TARGET_EDIT_SHADER = _( "View Shaders..." );
-		static wxString PROPERTY_RENDER_TARGET_SSAO = _( "SSAO" );
-		static wxString PROPERTY_RENDER_TARGET_SSAO_ENABLED = _( "Enable SSAO" );
-		static wxString PROPERTY_RENDER_TARGET_SSAO_HIGH_QUALITY = _( "High Quality" );
-		static wxString PROPERTY_RENDER_TARGET_SSAO_NORMALS_BUFFER = _( "Normals Buffer" );
-		static wxString PROPERTY_RENDER_TARGET_SSAO_RADIUS = _( "Radius" );
-		static wxString PROPERTY_RENDER_TARGET_SSAO_BIAS = _( "Bias" );
-		static wxString PROPERTY_RENDER_TARGET_SSAO_INTENSITY = _( "Intensity" );
-		static wxString PROPERTY_RENDER_TARGET_SSAO_SAMPLES = _( "Samples" );
-		static wxString PROPERTY_RENDER_TARGET_SSAO_EDGE_SHARPNESS = _( "Edge Sharpness" );
-		static wxString PROPERTY_RENDER_TARGET_SSAO_BLUR_HIGH_QUALITY = _( "High Quality Blur" );
-		static wxString PROPERTY_RENDER_TARGET_SSAO_BLUR_STEP_SIZE = _( "Blur Step Size" );
-		static wxString PROPERTY_RENDER_TARGET_SSAO_BLUR_RADIUS = _( "Blur Radius" );
-		static wxString PROPERTY_RENDER_TARGET_SSAO_BEND_STEP_COUNT = _( "Bend Step Count" );
-		static wxString PROPERTY_RENDER_TARGET_SSAO_BEND_STEP_SIZE = _( "Bend Step Size" );
 #if C3D_DebugQuads
 		static wxString PROPERTY_RENDER_TARGET_DEBUG_VIEW = _( "Debug View" );
 #endif
@@ -110,7 +97,29 @@ namespace GuiCommon
 
 		addPropertyET( grid, PROPERTY_RENDER_TARGET_DEBUG_VIEW, debugChoices, &debugConfig.debugIndex );
 #endif
+		doCreateSsaoProperties( editor, grid );
+		doCreateVctProperties( editor, grid );
+	}
 
+	void RenderTargetTreeItemProperty::doCreateSsaoProperties( wxPGEditor * editor
+		, wxPropertyGrid * grid )
+	{
+		static wxString PROPERTY_RENDER_TARGET_SSAO = _( "SSAO" );
+		static wxString PROPERTY_RENDER_TARGET_SSAO_ENABLED = _( "Enable SSAO" );
+		static wxString PROPERTY_RENDER_TARGET_SSAO_HIGH_QUALITY = _( "High Quality" );
+		static wxString PROPERTY_RENDER_TARGET_SSAO_NORMALS_BUFFER = _( "Normals Buffer" );
+		static wxString PROPERTY_RENDER_TARGET_SSAO_RADIUS = _( "Radius" );
+		static wxString PROPERTY_RENDER_TARGET_SSAO_BIAS = _( "Bias" );
+		static wxString PROPERTY_RENDER_TARGET_SSAO_INTENSITY = _( "Intensity" );
+		static wxString PROPERTY_RENDER_TARGET_SSAO_SAMPLES = _( "Samples" );
+		static wxString PROPERTY_RENDER_TARGET_SSAO_EDGE_SHARPNESS = _( "Edge Sharpness" );
+		static wxString PROPERTY_RENDER_TARGET_SSAO_BLUR_HIGH_QUALITY = _( "High Quality Blur" );
+		static wxString PROPERTY_RENDER_TARGET_SSAO_BLUR_STEP_SIZE = _( "Blur Step Size" );
+		static wxString PROPERTY_RENDER_TARGET_SSAO_BLUR_RADIUS = _( "Blur Radius" );
+		static wxString PROPERTY_RENDER_TARGET_SSAO_BEND_STEP_COUNT = _( "Bend Step Count" );
+		static wxString PROPERTY_RENDER_TARGET_SSAO_BEND_STEP_SIZE = _( "Bend Step Size" );
+
+		auto & target = getRenderTarget();
 		auto & ssaoConfig = target.getTechnique()->getSsaoConfig();
 		addProperty( grid, PROPERTY_RENDER_TARGET_SSAO );
 		addPropertyT( grid, PROPERTY_RENDER_TARGET_SSAO_ENABLED, &ssaoConfig.enabled );
@@ -126,5 +135,25 @@ namespace GuiCommon
 		addPropertyT( grid, PROPERTY_RENDER_TARGET_SSAO_BLUR_RADIUS, &ssaoConfig.blurRadius );
 		addPropertyT( grid, PROPERTY_RENDER_TARGET_SSAO_BEND_STEP_COUNT, &ssaoConfig.bendStepCount );
 		addPropertyT( grid, PROPERTY_RENDER_TARGET_SSAO_BEND_STEP_SIZE, &ssaoConfig.bendStepSize );
+	}
+
+	void RenderTargetTreeItemProperty::doCreateVctProperties( wxPGEditor * editor
+		, wxPropertyGrid * grid )
+	{
+		static wxString PROPERTY_RENDER_TARGET_VCT = _( "Voxel Cone Tracing" );
+		static wxString PROPERTY_RENDER_TARGET_VCT_ENABLED = _( "Enable VCT" );
+		static wxString PROPERTY_RENDER_TARGET_VCT_DEBUG = _( "Debug Voxels" );
+		static wxString PROPERTY_RENDER_TARGET_VCT_NUM_CONES = _( "Num. Cones" );
+		static wxString PROPERTY_RENDER_TARGET_VCT_MAX_DISTANCE = _( "Max. Distance" );
+		static wxString PROPERTY_RENDER_TARGET_VCT_RAY_STEP_SIZE = _( "Ray Step Size" );
+
+		auto & target = getRenderTarget();
+		auto & vctConfig = target.getVoxelConeTracingConfig();
+		addProperty( grid, PROPERTY_RENDER_TARGET_VCT );
+		addPropertyT( grid, PROPERTY_RENDER_TARGET_VCT_ENABLED, &vctConfig.enabled );
+		addPropertyT( grid, PROPERTY_RENDER_TARGET_VCT_DEBUG, &vctConfig.debugVoxels );
+		addPropertyT( grid, PROPERTY_RENDER_TARGET_VCT_NUM_CONES, &vctConfig.numCones );
+		addPropertyT( grid, PROPERTY_RENDER_TARGET_VCT_MAX_DISTANCE, &vctConfig.maxDistance );
+		addPropertyT( grid, PROPERTY_RENDER_TARGET_VCT_RAY_STEP_SIZE, &vctConfig.rayStepSize );
 	}
 }

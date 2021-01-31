@@ -506,6 +506,7 @@ namespace castor3d
 		uint32_t index{ 0u };
 		uint32_t combineIndex{ 0u };
 		castor::Point2f jitter;
+		bool voxelConeTracing{ false };
 		castor::Milliseconds tslf;
 		castor::Milliseconds time;
 		castor::Milliseconds total;
@@ -526,6 +527,7 @@ namespace castor3d
 		SceneSPtr scene;
 		CameraSPtr camera;
 		uint32_t index{ 0u };
+		bool voxelConeTracing{ false };
 		RenderPassTimer * timer{ nullptr };
 		castor::Milliseconds time;
 		castor::Milliseconds total;

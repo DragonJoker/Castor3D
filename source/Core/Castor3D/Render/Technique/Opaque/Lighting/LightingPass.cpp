@@ -9,17 +9,18 @@
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumes.hpp"
 #include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePass.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/DirectionalLightPass.hpp"
-#include "Castor3D/Render/Technique/Opaque/ReflectiveShadowMapGI/LightPassReflectiveShadow.hpp"
-#include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp"
-#include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightPassShadow.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/PointLightPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/SpotLightPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/ReflectiveShadowMapGI/LightPassReflectiveShadow.hpp"
+#include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp"
+#include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -114,6 +115,56 @@ namespace castor3d
 			}
 		}
 
+		LightingPass::Type getLightingType( Engine const & engine
+			, bool voxelConeTracing
+			, bool shadow
+			, GlobalIlluminationType giType )
+		{
+			if ( voxelConeTracing )
+			{
+				giType = GlobalIlluminationType::eVoxelConeTracing;
+			}
+
+			if ( !engine.getRenderSystem()->getGpuInformations().hasShaderType( VK_SHADER_STAGE_GEOMETRY_BIT ) )
+			{
+				giType = std::min( GlobalIlluminationType::eRsm, giType );
+			}
+
+			if ( shadow )
+			{
+				switch ( giType )
+				{
+				case GlobalIlluminationType::eNone:
+					return LightingPass::Type::eShadowNoGI;
+				case GlobalIlluminationType::eVoxelConeTracing:
+					return LightingPass::Type::eShadowVoxelConeTracingGI;
+				case GlobalIlluminationType::eRsm:
+					return LightingPass::Type::eShadowRsmGI;
+				case GlobalIlluminationType::eLpv:
+					return LightingPass::Type::eShadowLpvGI;
+				case GlobalIlluminationType::eLpvG:
+					return LightingPass::Type::eShadowLpvGGI;
+				case GlobalIlluminationType::eLayeredLpv:
+					return LightingPass::Type::eShadowLayeredLpvGI;
+				case GlobalIlluminationType::eLayeredLpvG:
+					return LightingPass::Type::eShadowLayeredLpvGGI;
+				default:
+					return LightingPass::Type::eShadowNoGI;
+				}
+			}
+
+			switch ( giType )
+			{
+			case GlobalIlluminationType::eNone:
+				return LightingPass::Type::eNoShadow;
+			case GlobalIlluminationType::eVoxelConeTracing:
+				return LightingPass::Type::eNoShadowVoxelConeTracingGI;
+			default:
+				CU_Failure( "Unsupported GI without shadow maps (WTF are you doing here)" );
+				return LightingPass::Type::eNoShadow;
+			}
+		}
+
 		template< LightingPass::Type PassT, LightType LightT >
 		struct PassInfoT;
 
@@ -136,6 +187,24 @@ namespace castor3d
 		};
 
 		template<>
+		struct PassInfoT< LightingPass::Type::eNoShadowVoxelConeTracingGI, LightType::eDirectional >
+		{
+			using Type = DirectionalLightPass;
+		};
+
+		template<>
+		struct PassInfoT< LightingPass::Type::eNoShadowVoxelConeTracingGI, LightType::ePoint >
+		{
+			using Type = PointLightPass;
+		};
+
+		template<>
+		struct PassInfoT< LightingPass::Type::eNoShadowVoxelConeTracingGI, LightType::eSpot >
+		{
+			using Type = SpotLightPass;
+		};
+
+		template<>
 		struct PassInfoT< LightingPass::Type::eShadowNoGI, LightType::eDirectional >
 		{
 			using Type = DirectionalLightPassShadow;
@@ -149,6 +218,24 @@ namespace castor3d
 
 		template<>
 		struct PassInfoT< LightingPass::Type::eShadowNoGI, LightType::eSpot >
+		{
+			using Type = SpotLightPassShadow;
+		};
+
+		template<>
+		struct PassInfoT< LightingPass::Type::eShadowVoxelConeTracingGI, LightType::eDirectional >
+		{
+			using Type = DirectionalLightPassShadow;
+		};
+
+		template<>
+		struct PassInfoT< LightingPass::Type::eShadowVoxelConeTracingGI, LightType::ePoint >
+		{
+			using Type = PointLightPassShadow;
+		};
+
+		template<>
+		struct PassInfoT< LightingPass::Type::eShadowVoxelConeTracingGI, LightType::eSpot >
 		{
 			using Type = SpotLightPassShadow;
 		};
@@ -250,9 +337,10 @@ namespace castor3d
 		LightPassUPtr makeLightPassNoGIT( LightType lightType
 			, RenderDevice const & device
 			, LightPassResult const & lpResult
-			, GpInfoUbo const & gpInfoUbo )
+			, GpInfoUbo const & gpInfoUbo
+			, bool shadows )
 		{
-			LightPassConfig lpConfig{ lpResult, gpInfoUbo };
+			LightPassConfig lpConfig{ lpResult, gpInfoUbo, shadows, false, false };
 
 			switch ( lightType )
 			{
@@ -262,6 +350,30 @@ namespace castor3d
 				return std::make_unique< PassTypeT< PassT, LightType::ePoint > >( device, lpConfig );
 			case LightType::eSpot:
 				return std::make_unique< PassTypeT< PassT, LightType::eSpot > >( device, lpConfig );
+			default:
+				CU_Failure( "Unsupported LightType" );
+				return LightPassUPtr{};
+			}
+		}
+
+		template< LightingPass::Type PassT >
+		LightPassUPtr makeLightPassVctGIT( LightType lightType
+			, RenderDevice const & device
+			, LightPassResult const & lpResult
+			, GpInfoUbo const & gpInfoUbo
+			, bool shadows
+			, VoxelizerUbo const & vctConfig )
+		{
+			LightPassConfig lpConfig{ lpResult, gpInfoUbo, shadows, true, true };
+
+			switch ( lightType )
+			{
+			case LightType::eDirectional:
+				return std::make_unique< PassTypeT< PassT, LightType::eDirectional > >( device, lpConfig, &vctConfig );
+			case LightType::ePoint:
+				return std::make_unique< PassTypeT< PassT, LightType::ePoint > >( device, lpConfig, &vctConfig );
+			case LightType::eSpot:
+				return std::make_unique< PassTypeT< PassT, LightType::eSpot > >( device, lpConfig, &vctConfig );
 			default:
 				CU_Failure( "Unsupported LightType" );
 				return LightPassUPtr{};
@@ -411,7 +523,8 @@ namespace castor3d
 			, LightVolumePassResultArray const & llpvResult
 			, GpInfoUbo const & gpInfoUbo
 			, LpvGridConfigUbo const & lpvConfigUbo
-			, LayeredLpvGridConfigUbo const & llpvConfigUbo )
+			, LayeredLpvGridConfigUbo const & llpvConfigUbo
+			, VoxelizerUbo const & vctConfig )
 		{
 			switch ( passType )
 			{
@@ -419,12 +532,28 @@ namespace castor3d
 				return makeLightPassNoGIT< LightingPass::Type::eNoShadow >( lightType
 					, device
 					, lpResult
-					, gpInfoUbo );
+					, gpInfoUbo
+					, false );
+			case LightingPass::Type::eNoShadowVoxelConeTracingGI:
+				return makeLightPassVctGIT< LightingPass::Type::eNoShadowVoxelConeTracingGI >( lightType
+					, device
+					, lpResult
+					, gpInfoUbo
+					, false
+					, vctConfig );
 			case LightingPass::Type::eShadowNoGI:
 				return makeLightPassNoGIT< LightingPass::Type::eShadowNoGI >( lightType
 					, device
 					, lpResult
-					, gpInfoUbo );
+					, gpInfoUbo
+					, true );
+			case LightingPass::Type::eShadowVoxelConeTracingGI:
+				return makeLightPassVctGIT< LightingPass::Type::eShadowVoxelConeTracingGI >( lightType
+					, device
+					, lpResult
+					, gpInfoUbo
+					, true
+					, vctConfig );
 			case LightingPass::Type::eShadowRsmGI:
 				return makeLightPassRsmGIT< LightingPass::Type::eShadowRsmGI >( lightType
 					, device
@@ -516,11 +645,13 @@ namespace castor3d
 		, ShadowMapResult const & smSpotResult
 		, LightVolumePassResult const & lpvResult
 		, LightVolumePassResultArray const & llpvResult
+		, TextureUnit const & voxels
 		, ashes::ImageView const & depthView
 		, SceneUbo & sceneUbo
 		, GpInfoUbo const & gpInfoUbo
 		, LpvGridConfigUbo const & lpvConfigUbo
-		, LayeredLpvGridConfigUbo const & llpvConfigUbo )
+		, LayeredLpvGridConfigUbo const & llpvConfigUbo
+		, VoxelizerUbo const & vctConfigUbo )
 		: m_engine{ engine }
 		, m_device{ device }
 		, m_gpResult{ gpResult }
@@ -529,11 +660,13 @@ namespace castor3d
 		, m_smSpotResult{ smSpotResult }
 		, m_lpvResult{ lpvResult }
 		, m_llpvResult{ llpvResult }
+		, m_voxels{ voxels }
 		, m_depthView{ depthView }
 		, m_sceneUbo{ sceneUbo }
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_lpvConfigUbo{ lpvConfigUbo }
 		, m_llpvConfigUbo{ llpvConfigUbo }
+		, m_vctConfigUbo{ vctConfigUbo }
 		, m_size{ size }
 		, m_result{ engine, size }
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, device, cuT( "Opaque" ), cuT( "Lighting pass" ) ) }
@@ -641,6 +774,7 @@ namespace castor3d
 	{
 		auto & scene = *updater.camera->getScene();
 		auto & cache = scene.getLightCache();
+		m_voxelConeTracing = updater.voxelConeTracing;
 
 		if ( !cache.isEmpty() )
 		{
@@ -724,6 +858,9 @@ namespace castor3d
 		visitor.visit( "Light Indirect Diffuse"
 			, m_result[LpTexture::eIndirectDiffuse].getTexture()->getDefaultView().getSampledView()
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+		visitor.visit( "Light Indirect Specular"
+			, m_result[LpTexture::eIndirectSpecular].getTexture()->getDefaultView().getSampledView()
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 
 		for ( auto & lightPass : m_active )
 		{
@@ -743,20 +880,11 @@ namespace castor3d
 			if ( light->getLightType() == LightType::eDirectional
 				|| camera.isVisible( light->getBoundingBox(), light->getParent()->getDerivedTransformationMatrix() ) )
 			{
-				Type type = Type::eNoShadow;
-
-				if ( light->isShadowProducer() )
-				{
-					auto giType = light->getGlobalIlluminationType();
-
-					if ( !m_engine.getRenderSystem()->getGpuInformations().hasShaderType( VK_SHADER_STAGE_GEOMETRY_BIT ) )
-					{
-						giType = std::min( GlobalIlluminationType::eRsm, giType );
-					}
-
-					type = Type( uint32_t( giType ) + 1u );
-				}
-
+				auto giType = light->getGlobalIlluminationType();
+				auto type = getLightingType( m_engine
+					, m_voxelConeTracing
+					, light->isShadowProducer()
+					, giType );
 				auto & lightPass = getLightPass( type
 					, lightType
 					, m_lightPasses );
@@ -777,7 +905,8 @@ namespace castor3d
 						, m_llpvResult
 						, m_gpInfoUbo
 						, m_lpvConfigUbo
-						, m_llpvConfigUbo );
+						, m_llpvConfigUbo
+						, m_vctConfigUbo );
 					lightPass->initialise( scene
 						, m_gpResult
 						, m_sceneUbo
@@ -804,9 +933,9 @@ namespace castor3d
 				if ( light->getLightType() == LightType::eDirectional
 					|| camera.isVisible( light->getBoundingBox(), light->getParent()->getDerivedTransformationMatrix() ) )
 				{
-					LightPass * pass = ( light->isShadowProducer() && light->getShadowMap() )
-						? doGetShadowLightPass( type, light->getGlobalIlluminationType() )
-						: doGetLightPass( type );
+					LightPass * pass = doGetLightPass( type
+						, light->isShadowProducer() && light->getShadowMap()
+						, light->getGlobalIlluminationType() );
 					CU_Require( pass != nullptr );
 					m_active.insert( pass );
 					pass->update( index == 0u
@@ -814,6 +943,7 @@ namespace castor3d
 						, *light
 						, camera
 						, light->getShadowMap()
+						, &m_voxels
 						, light->getShadowMapIndex() );
 					result = &pass->render( index
 						, *result );
@@ -825,22 +955,11 @@ namespace castor3d
 		return *result;
 	}
 
-	LightPass * LightingPass::doGetLightPass( LightType lightType )const
-	{
-		return getLightPass( Type::eNoShadow
-			, lightType
-			, m_lightPasses );
-	}
-
-	LightPass * LightingPass::doGetShadowLightPass( LightType lightType
+	LightPass * LightingPass::doGetLightPass( LightType lightType
+		, bool shadows
 		, GlobalIlluminationType giType )const
 	{
-		if ( !m_engine.getRenderSystem()->getGpuInformations().hasShaderType( VK_SHADER_STAGE_GEOMETRY_BIT ) )
-		{
-			giType = std::min( GlobalIlluminationType::eRsm, giType );
-		}
-
-		return getLightPass( Type( uint32_t( giType ) + 1u )
+		return getLightPass( getLightingType( m_engine, m_voxelConeTracing, shadows, giType )
 			, lightType
 			, m_lightPasses );
 	}

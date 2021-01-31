@@ -85,7 +85,7 @@ namespace castor3d
 				{ 2u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
 			};
 
-			if ( !generatesIndirect )
+			if ( generatesIndirect )
 			{
 				attaches.push_back( {
 					0u,
@@ -98,7 +98,19 @@ namespace castor3d
 					VK_IMAGE_LAYOUT_UNDEFINED,
 					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 					} );
+				attaches.push_back( {
+					0u,
+					lpResult[LpTexture::eIndirectSpecular].getTexture()->getPixelFormat(),
+					VK_SAMPLE_COUNT_1_BIT,
+					VK_ATTACHMENT_LOAD_OP_CLEAR,
+					VK_ATTACHMENT_STORE_OP_STORE,
+					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+					VK_ATTACHMENT_STORE_OP_DONT_CARE,
+					VK_IMAGE_LAYOUT_UNDEFINED,
+					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+					} );
 				references.push_back( { 3u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } );
+				references.push_back( { 4u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } );
 			}
 			
 			ashes::SubpassDescriptionArray subpasses;
@@ -154,6 +166,7 @@ namespace castor3d
 		, ShaderModule const & vtx
 		, ShaderModule const & pxl
 		, bool hasShadows
+		, bool hasVoxels
 		, bool generatesIndirect )
 		: LightPass::Program{ engine
 			, device
@@ -161,6 +174,7 @@ namespace castor3d
 			, vtx
 			, pxl
 			, hasShadows
+			, hasVoxels
 			, generatesIndirect }
 	{
 	}
@@ -225,8 +239,9 @@ namespace castor3d
 
 		blattaches.push_back( blattaches.back() );
 
-		if ( !m_generatesIndirect )
+		if ( m_generatesIndirect )
 		{
+			blattaches.push_back( blattaches.back() );
 			blattaches.push_back( blattaches.back() );
 		}
 
@@ -255,6 +270,7 @@ namespace castor3d
 	MeshLightPass::MeshLightPass( RenderDevice const & device
 		, castor::String const & suffix
 		, LightPassConfig const & lpConfig
+		, VoxelizerUbo const * vctConfig
 		, LightType type )
 		: LightPass{ device
 			, suffix
@@ -268,7 +284,8 @@ namespace castor3d
 				, lpConfig.lpResult
 				, lpConfig.generatesIndirect
 				, false )
-			, lpConfig }
+			, lpConfig
+			, vctConfig }
 		, m_modelMatrixUbo{ m_device.renderSystem
 			, 1u
 			, VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
@@ -364,6 +381,7 @@ namespace castor3d
 		, Light const & light
 		, Camera const & camera
 		, ShadowMap const * shadowMap
+		, TextureUnit const * voxels
 		, uint32_t shadowMapIndex )
 	{
 		m_matrixUbo.cpuUpdate( camera.getView(), camera.getProjection() );

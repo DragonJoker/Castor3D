@@ -46,6 +46,7 @@ namespace castor3d
 			eMetallicRoughnessMaterial,
 			eSpecularGlossinessMaterial,
 			eTextureConfigData,
+			eVoxelData,
 		};
 		// Light Propagation Volumes Cascades.
 		constexpr uint32_t LpvMaxCascadesCount = 3u;
@@ -80,12 +81,14 @@ namespace castor3d
 		struct TextureConfigData;
 		class TextureConfigurations;
 		struct OutputComponents;
+		class VoxelData;
 
 		Writer_Parameter( Light );
 		Writer_Parameter( DirectionalLight );
 		Writer_Parameter( PointLight );
 		Writer_Parameter( SpotLight );
 		Writer_Parameter( TextureConfigData );
+		Writer_Parameter( VoxelData );
 		/**
 		 *\~english
 		 *\brief		Creates the appropriate GLSL materials buffer.
@@ -162,6 +165,12 @@ namespace sdw
 	struct TypeTraits< castor3d::shader::TextureConfigData >
 	{
 		static ast::type::Kind constexpr TypeEnum = ast::type::Kind( castor3d::shader::TypeName::eTextureConfigData );
+	};
+
+	template<>
+	struct TypeTraits< castor3d::shader::VoxelData >
+	{
+		static ast::type::Kind constexpr TypeEnum = ast::type::Kind( castor3d::shader::TypeName::eVoxelData );
 	};
 }
 

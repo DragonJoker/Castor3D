@@ -21,6 +21,7 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/LpvGridConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
 
 #include <CastorUtils/Design/DelayedInitialiser.hpp>
 
@@ -289,6 +290,7 @@ namespace castor3d
 		ShadowMapLightTypeArray m_activeShadowMaps;
 		LpvGridConfigUbo m_lpvConfigUbo;
 		LayeredLpvGridConfigUbo m_llpvConfigUbo;
+		VoxelizerUbo m_vctConfigUbo;
 		LightVolumePassResultUPtr m_lpvResult;
 		LightVolumePassResultArray m_llpvResult;
 		LightPropagationVolumesLightType m_lightPropagationVolumes;

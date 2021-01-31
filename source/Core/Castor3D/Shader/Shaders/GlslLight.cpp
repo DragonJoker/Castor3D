@@ -12,8 +12,9 @@ namespace castor3d
 		//*********************************************************************************************
 
 		Light::Light( ShaderWriter & writer
-			, ast::expr::ExprPtr expr )
-			: StructInstance{ writer, std::move( expr ) }
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstance{ writer, std::move( expr ), enabled }
 			, m_colourIndex{ getMember< Vec4 >( "m_colourIndex" ) }
 			, m_intensityFarPlane{ getMember< Vec4 >( "m_intensityFarPlane" ) }
 			, m_volumetric{ getMember< Vec4 >( "m_volumetric" ) }
@@ -64,8 +65,9 @@ namespace castor3d
 		//*********************************************************************************************
 
 		DirectionalLight::DirectionalLight( ShaderWriter & writer
-			, ast::expr::ExprPtr expr )
-			: StructInstance{ writer, std::move( expr ) }
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstance{ writer, std::move( expr ), enabled }
 			, m_lightBase{ getMember< Light >( "m_lightBase" ) }
 			, m_directionCount{ getMember< Vec4 >( "m_directionCount" ) }
 			, m_transforms{ getMemberArray< Mat4 >( "m_transforms" ) }
@@ -102,8 +104,9 @@ namespace castor3d
 		//*********************************************************************************************
 
 		PointLight::PointLight( ShaderWriter & writer
-			, ast::expr::ExprPtr expr )
-			: StructInstance( writer, std::move( expr ) )
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstance{ writer, std::move( expr ), enabled }
 			, m_lightBase{ getMember< Light >( "m_lightBase" ) }
 			, m_position4{ getMember< Vec4 >( "m_position" ) }
 			, m_attenuation4{ getMember< Vec4 >( "m_attenuation" ) }
@@ -136,8 +139,9 @@ namespace castor3d
 		//*********************************************************************************************
 
 		SpotLight::SpotLight( ShaderWriter & writer
-			, ast::expr::ExprPtr expr )
-			: StructInstance( writer, std::move( expr ) )
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstance{ writer, std::move( expr ), enabled }
 			, m_lightBase{ getMember< Light >( "m_lightBase" ) }
 			, m_position4{ getMember< Vec4 >( "m_position" ) }
 			, m_attenuation4{ getMember< Vec4 >( "m_attenuation" ) }
