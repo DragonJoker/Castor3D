@@ -44,8 +44,6 @@ namespace castor3d
 	namespace
 	{
 		static uint32_t constexpr CubeIdxCount = 36u;
-		static bool constexpr Instanced = false;
-		static bool constexpr UseGeometry = true;
 
 		TextureUnit createTexture( RenderDevice const & device
 			, ashes::ImageView const & colourView
@@ -234,322 +232,137 @@ namespace castor3d
 				eVertex,
 			};
 
-			namespace gs
+			ShaderPtr getVertexProgram( uint32_t voxelGridSize )
 			{
-				ShaderPtr getVertexProgram( uint32_t voxelGridSize )
-				{
-					using namespace sdw;
-					VertexWriter writer;
+				using namespace sdw;
+				VertexWriter writer;
 
-					// Shader inputs
-					UBO_VOXELIZER( writer, eVoxelUbo, 0u, true );
-					auto voxels( writer.declImage< RWFImg3DRgba32 >( "voxels"
-						, eVoxels
-						, 0u ) );
-					auto in = writer.getIn();
+				// Shader inputs
+				UBO_VOXELIZER( writer, eVoxelUbo, 0u, true );
+				auto voxels( writer.declImage< RWFImg3DRgba32 >( "voxels"
+					, eVoxels
+					, 0u ) );
+				auto in = writer.getIn();
 
-					// Shader outputs
-					auto outVoxelColor = writer.declOutput< Vec4 >( "outVoxelColor", 0u );
-					auto out = writer.getOut();
+				// Shader outputs
+				auto outVoxelColor = writer.declOutput< Vec4 >( "outVoxelColor", 0u );
+				auto out = writer.getOut();
 
-					shader::Utils utils{ writer };
-					utils.declareVoxelizeFunctions();
+				shader::Utils utils{ writer };
+				utils.declareVoxelizeFunctions();
 
-					writer.implementFunction< void >( "main"
-						, [&]()
+				writer.implementFunction< void >( "main"
+					, [&]()
+					{
+						auto coord = writer.declLocale( "coord"
+							, utils.unflatten( writer.cast< UInt >( in.vertexIndex )
+								, uvec3( UInt{ voxelGridSize } ) ) );
+						out.vtx.position = vec4( vec3( coord ), 1.0f );
+
+						outVoxelColor = voxels.load( ivec3( coord ) );
+					} );
+				return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			}
+
+			ShaderPtr getGeometryProgram( uint32_t voxelGridSize )
+			{
+				using namespace sdw;
+				GeometryWriter writer;
+
+				writer.inputLayout( stmt::InputLayout::ePointList );
+				writer.outputLayout( stmt::OutputLayout::eTriangleStrip, 14u );
+
+				// Shader inputs
+				UBO_VOXELIZER( writer, eVoxelUbo, 0u, true );
+				UBO_MATRIX( writer, eMatrixUbo, 0u );
+				auto inVoxelColor = writer.declInputArray< Vec4 >( "inVoxelColor", 0u, 1u );
+				auto in = writer.getIn();
+
+				// Shader outputs
+				auto outVoxelColor = writer.declOutput< Vec4 >( "outVoxelColor", 0u );
+				auto out = writer.getOut();
+
+				shader::Utils utils{ writer };
+				utils.declareVoxelizeFunctions();
+
+				// Creates a unit cube triangle strip from just vertex ID (14 vertices)
+				auto createCube = writer.implementFunction< Vec3 >( "createCube"
+					, [&]( UInt const vertexID )
+					{
+						auto b = writer.declLocale( "b"
+							, 1_u << vertexID );
+						writer.returnStmt( vec3( writer.ternary( ( 0x287a_u & b ) != 0, 1.0_f, 0.0_f )
+							, writer.ternary( ( 0x02af_u & b ) != 0, 1.0_f, 0.0_f )
+							, writer.ternary( ( 0x31e3_u & b ) != 0, 1.0_f, 0.0_f ) ) );
+					}
+					, InUInt{ writer, "vertexID" } );
+
+				writer.implementFunction< void >( "main"
+					, [&]()
+					{
+						IF( writer, inVoxelColor[0].a() > 0 )
 						{
-							auto coord = writer.declLocale( "coord"
-								, utils.unflatten( writer.cast< UInt >( in.vertexIndex )
-									, uvec3( UInt{ voxelGridSize } ) ) );
-							out.vtx.position = vec4( vec3( coord ), 1.0f );
-
-							outVoxelColor = voxels.load( ivec3( coord ) );
-						} );
-					return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-				}
-
-				ShaderPtr getGeometryProgram( uint32_t voxelGridSize )
-				{
-					using namespace sdw;
-					GeometryWriter writer;
-
-					writer.inputLayout( stmt::InputLayout::ePointList );
-					writer.outputLayout( stmt::OutputLayout::eTriangleStrip, 14u );
-
-					// Shader inputs
-					UBO_VOXELIZER( writer, eVoxelUbo, 0u, true );
-					UBO_MATRIX( writer, eMatrixUbo, 0u );
-					auto inVoxelColor = writer.declInputArray< Vec4 >( "inVoxelColor", 0u, 1u );
-					auto in = writer.getIn();
-
-					// Shader outputs
-					auto outVoxelColor = writer.declOutput< Vec4 >( "outVoxelColor", 0u );
-					auto out = writer.getOut();
-
-					shader::Utils utils{ writer };
-					utils.declareVoxelizeFunctions();
-
-					// Creates a unit cube triangle strip from just vertex ID (14 vertices)
-					auto createCube = writer.implementFunction< Vec3 >( "createCube"
-						, [&]( UInt const vertexID )
-						{
-							auto b = writer.declLocale( "b"
-								, 1_u << vertexID );
-							writer.returnStmt( vec3( writer.ternary( ( 0x287a_u & b ) != 0, 1.0_f, 0.0_f )
-								, writer.ternary( ( 0x02af_u & b ) != 0, 1.0_f, 0.0_f )
-								, writer.ternary( ( 0x31e3_u & b ) != 0, 1.0_f, 0.0_f ) ) );
-						}
-						, InUInt{ writer, "vertexID" } );
-
-					writer.implementFunction< void >( "main"
-						, [&]()
-						{
-							IF( writer, inVoxelColor[0].a() > 0 )
+							FOR( writer, UInt, i, 0_u, i < 14_u, ++i )
 							{
-								FOR( writer, UInt, i, 0_u, i < 14_u, ++i )
-								{
-									auto pos = writer.declLocale( "pos"
-										, in.vtx[0].position.xyz() );
-									pos.xyz() = pos.xyz() / c3d_voxelData.resolution * 2 - 1;
-									pos.y() = -pos.y();
-									pos.xyz() *= c3d_voxelData.resolution;
-									pos.xyz() += ( createCube( i ) - vec3( 0.0_f, 1.0f, 0.0f ) ) * 2.0f;
-									pos.xyz() *= c3d_voxelData.resolution * c3d_voxelData.size / c3d_voxelData.resolution;
+								auto pos = writer.declLocale( "pos"
+									, in.vtx[0].position.xyz() );
+								pos.xyz() = pos.xyz() / c3d_voxelData.resolution * 2 - 1;
+								pos.y() = -pos.y();
+								pos.xyz() *= c3d_voxelData.resolution;
+								pos.xyz() += ( createCube( i ) - vec3( 0.0_f, 1.0f, 0.0f ) ) * 2.0f;
+								pos.xyz() *= c3d_voxelData.resolution * c3d_voxelData.size / c3d_voxelData.resolution;
 
-									outVoxelColor = inVoxelColor[0];
-									out.vtx.position = c3d_curViewProj  * vec4( pos, 1.0f );
+								outVoxelColor = inVoxelColor[0];
+								out.vtx.position = c3d_curViewProj  * vec4( pos, 1.0f );
 
-									EmitVertex( writer );
-								}
-								ROF;
-
-								EndPrimitive( writer );
+								EmitVertex( writer );
 							}
-							FI;
-						} );
-					return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-				}
+							ROF;
 
-				ashes::DescriptorSetLayoutPtr createDescriptorLayout( RenderDevice const & device )
-				{
-					ashes::VkDescriptorSetLayoutBindingArray bindings{ makeDescriptorSetLayoutBinding( eVoxelUbo
-							, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-							, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_GEOMETRY_BIT )
-						, makeDescriptorSetLayoutBinding( eMatrixUbo
-							, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-							, VK_SHADER_STAGE_GEOMETRY_BIT )
-						, makeDescriptorSetLayoutBinding( eVoxels
-							, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
-							, VK_SHADER_STAGE_VERTEX_BIT ) };
-					return device->createDescriptorSetLayout( "VoxelRenderer"
-						, std::move( bindings ) );
-				}
-
-				ashes::PipelineVertexInputStateCreateInfo createVertexLayout()
-				{
-					return ashes::PipelineVertexInputStateCreateInfo{ 0u
-						, {}
-						, {} };
-				}
-
-				ashes::DescriptorSetPtr createDescriptorSet( ashes::DescriptorSetPool const & pool
-					, VoxelizerUbo const & voxelizerUbo
-					, MatrixUbo & matrixUbo
-					, ashes::BufferBase const & vertexBuffer
-					, TextureUnit const & voxels )
-				{
-					auto descriptorSet = pool.createDescriptorSet( "VoxelRenderer" );
-					voxelizerUbo.createSizedBinding( *descriptorSet
-						, pool.getLayout().getBinding( eVoxelUbo ) );
-					matrixUbo.createSizedBinding( *descriptorSet
-						, pool.getLayout().getBinding( eMatrixUbo ) );
-					descriptorSet->createBinding( pool.getLayout().getBinding( eVoxels )
-						, voxels.getTexture()->getDefaultView().getSampledView() );
-					descriptorSet->update();
-					return descriptorSet;
-				}
+							EndPrimitive( writer );
+						}
+						FI;
+					} );
+				return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 			}
 
-			namespace is
+			ashes::DescriptorSetLayoutPtr createDescriptorLayout( RenderDevice const & device )
 			{
-				ShaderPtr getVertexProgram( uint32_t voxelGridSize )
-				{
-					using namespace sdw;
-					VertexWriter writer;
-
-					// Shader inputs
-					UBO_VOXELIZER( writer, eVoxelUbo, 0u, true );
-					UBO_MATRIX( writer, eMatrixUbo, 0u );
-					auto voxels( writer.declImage< RWFImg3DRgba32 >( "voxels"
-						, eVoxels
-						, 0u ) );
-					auto inPosition( writer.declInput< Vec4 >( "inPosition", 0u ) );
-					auto in = writer.getIn();
-
-					// Shader outputs
-					auto outVoxelColor = writer.declOutput< Vec4 >( "outVoxelColor", 0u );
-					auto out = writer.getOut();
-
-					shader::Utils utils{ writer };
-					utils.declareVoxelizeFunctions();
-
-					writer.implementFunction< void >( "main"
-						, [&]()
-						{
-							auto voxelPosition = writer.declLocale( "voxelPosition"
-								, utils.unflatten( writer.cast< UInt >( in.instanceIndex )
-									, uvec3( UInt{ voxelGridSize } ) ) );
-							outVoxelColor = voxels.load( ivec3( voxelPosition ) );
-
-							auto pos = writer.declLocale( "pos"
-								, vec3( voxelPosition ) );
-							pos -= vec3( c3d_voxelData.resolution / 2.0f );
-
-							pos *= c3d_voxelData.size;
-							pos += inPosition.xyz() * c3d_voxelData.size;
-							out.vtx.position = c3d_curViewProj * vec4( pos, 1.0f );
-						} );
-					return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-				}
-
-				ashes::DescriptorSetLayoutPtr createDescriptorLayout( RenderDevice const & device )
-				{
-					ashes::VkDescriptorSetLayoutBindingArray bindings{ makeDescriptorSetLayoutBinding( eVoxelUbo
-							, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-							, VK_SHADER_STAGE_VERTEX_BIT )
-						, makeDescriptorSetLayoutBinding( eMatrixUbo
-							, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-							, VK_SHADER_STAGE_VERTEX_BIT )
-						, makeDescriptorSetLayoutBinding( eVoxels
-							, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
-							, VK_SHADER_STAGE_VERTEX_BIT ) };
-					return device->createDescriptorSetLayout( std::move( bindings ) );
-				}
-
-				ashes::PipelineVertexInputStateCreateInfo createVertexLayout()
-				{
-					return ashes::PipelineVertexInputStateCreateInfo{ 0u
-						, { { 0u, sizeof( castor::Point4f ), VK_VERTEX_INPUT_RATE_VERTEX } }
-						, { { 0u, 0u, VK_FORMAT_R32G32B32A32_SFLOAT, 0u } } };
-				}
-
-				ashes::DescriptorSetPtr createDescriptorSet( ashes::DescriptorSetPool const & pool
-					, VoxelizerUbo const & voxelizerUbo
-					, MatrixUbo & matrixUbo
-					, ashes::BufferBase const & vertexBuffer
-					, TextureUnit const & voxels )
-				{
-					auto descriptorSet = pool.createDescriptorSet( "VoxelRenderer" );
-					voxelizerUbo.createSizedBinding( *descriptorSet
-						, pool.getLayout().getBinding( eVoxelUbo ) );
-					matrixUbo.createSizedBinding( *descriptorSet
-						, pool.getLayout().getBinding( eMatrixUbo ) );
-					descriptorSet->createBinding( pool.getLayout().getBinding( eVoxels )
-						, voxels.getTexture()->getDefaultView().getSampledView() );
-					descriptorSet->update();
-					return descriptorSet;
-				}
+				ashes::VkDescriptorSetLayoutBindingArray bindings{ makeDescriptorSetLayoutBinding( eVoxelUbo
+						, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+						, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_GEOMETRY_BIT )
+					, makeDescriptorSetLayoutBinding( eMatrixUbo
+						, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+						, VK_SHADER_STAGE_GEOMETRY_BIT )
+					, makeDescriptorSetLayoutBinding( eVoxels
+						, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
+						, VK_SHADER_STAGE_VERTEX_BIT ) };
+				return device->createDescriptorSetLayout( "VoxelRenderer"
+					, std::move( bindings ) );
 			}
 
-			namespace raw
+			ashes::PipelineVertexInputStateCreateInfo createVertexLayout()
 			{
-				ShaderPtr getVertexProgram( uint32_t voxelGridSize )
-				{
-					using namespace sdw;
-					VertexWriter writer;
+				return ashes::PipelineVertexInputStateCreateInfo{ 0u
+					, {}
+					, {} };
+			}
 
-					// Shader inputs
-					UBO_VOXELIZER( writer, eVoxelUbo, 0u, true );
-					UBO_MATRIX( writer, eMatrixUbo, 0u );
-					auto voxels( writer.declImage< RWFImg3DRgba32 >( "voxels"
-						, eVoxels
-						, 0u ) );
-					ArraySsboT< Vec4 > vertex{ writer
-						, "vertex"
-						, writer.getTypesCache().getVec4F()
-						, type::MemoryLayout::eStd140
-						, eVertex
-						, 0u
-						, true };
-					auto in = writer.getIn();
-
-					// Shader outputs
-					auto outVoxelColor = writer.declOutput< Vec4 >( "outVoxelColor", 0u );
-					auto out = writer.getOut();
-
-					shader::Utils utils{ writer };
-					utils.declareVoxelizeFunctions();
-
-					writer.implementFunction< void >( "main"
-						, [&]()
-						{
-							auto voxelPosition = writer.declLocale( "voxelPosition"
-								, utils.unflatten( writer.cast< UInt >( in.vertexIndex ) / UInt{ CubeIdxCount }
-									, uvec3( UInt{ voxelGridSize } ) ) );
-							outVoxelColor = voxels.load( ivec3( voxelPosition ) );
-
-							auto index = writer.declLocale( "index"
-								, writer.cast< UInt >( in.vertexIndex ) % UInt{ CubeIdxCount } );
-							auto pos = writer.declLocale( "pos"
-								, vec3( voxelPosition ) );
-							//pos *= c3d_voxelData.resolutionInv * 2.0f - 1.0f;
-							//pos *= c3d_voxelData.resolution;
-							//pos += ( vertex[index].xyz() - vec3( 0.0_f, 1.0f, 0.0f ) ) * 2.0f;
-							//pos *= c3d_voxelData.resolution * c3d_voxelData.size * c3d_voxelData.resolutionInv;
-
-							pos -= c3d_voxelData.resolution / 2.0f;
-							pos *= c3d_voxelData.size;
-							pos += vertex[index].xyz() * c3d_voxelData.size;
-
-							out.vtx.position = c3d_curViewProj * vec4( pos, 1.0f );
-						} );
-					return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-				}
-
-				ashes::DescriptorSetLayoutPtr createDescriptorLayout( RenderDevice const & device )
-				{
-					ashes::VkDescriptorSetLayoutBindingArray bindings{ makeDescriptorSetLayoutBinding( eVoxelUbo
-							, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-							, VK_SHADER_STAGE_VERTEX_BIT )
-						, makeDescriptorSetLayoutBinding( eMatrixUbo
-							, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-							, VK_SHADER_STAGE_VERTEX_BIT )
-						, makeDescriptorSetLayoutBinding( eVoxels
-							, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
-							, VK_SHADER_STAGE_VERTEX_BIT )
-						, makeDescriptorSetLayoutBinding( eVertex
-							, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-							, VK_SHADER_STAGE_VERTEX_BIT ) };
-					return device->createDescriptorSetLayout( std::move( bindings ) );
-				}
-
-				ashes::PipelineVertexInputStateCreateInfo createVertexLayout()
-				{
-					return ashes::PipelineVertexInputStateCreateInfo{ 0u
-						, {}
-						, {} };
-				}
-
-				ashes::DescriptorSetPtr createDescriptorSet( ashes::DescriptorSetPool const & pool
-					, VoxelizerUbo const & voxelizerUbo
-					, MatrixUbo & matrixUbo
-					, ashes::BufferBase const & vertexBuffer
-					, TextureUnit const & voxels )
-				{
-					auto descriptorSet = pool.createDescriptorSet( "VoxelRenderer" );
-					voxelizerUbo.createSizedBinding( *descriptorSet
-						, pool.getLayout().getBinding( eVoxelUbo ) );
-					matrixUbo.createSizedBinding( *descriptorSet
-						, pool.getLayout().getBinding( eMatrixUbo ) );
-					descriptorSet->createBinding( pool.getLayout().getBinding( eVoxels )
-						, voxels.getTexture()->getDefaultView().getSampledView() );
-					descriptorSet->createBinding( pool.getLayout().getBinding( eVertex )
-						, vertexBuffer
-						, 0u
-						, vertexBuffer.getSize() );
-					descriptorSet->update();
-					return descriptorSet;
-				}
+			ashes::DescriptorSetPtr createDescriptorSet( ashes::DescriptorSetPool const & pool
+				, VoxelizerUbo const & voxelizerUbo
+				, MatrixUbo & matrixUbo
+				, ashes::BufferBase const & vertexBuffer
+				, TextureUnit const & voxels )
+			{
+				auto descriptorSet = pool.createDescriptorSet( "VoxelRenderer" );
+				voxelizerUbo.createSizedBinding( *descriptorSet
+					, pool.getLayout().getBinding( eVoxelUbo ) );
+				matrixUbo.createSizedBinding( *descriptorSet
+					, pool.getLayout().getBinding( eMatrixUbo ) );
+				descriptorSet->createBinding( pool.getLayout().getBinding( eVoxels )
+					, voxels.getTexture()->getDefaultView().getSampledView() );
+				descriptorSet->update();
+				return descriptorSet;
 			}
 
 			ShaderPtr getPixelProgram()
@@ -596,12 +409,7 @@ namespace castor3d
 			{
 				ashes::PipelineShaderStageCreateInfoArray program;
 				program.push_back( makeShaderState( device, vertexShader ) );
-
-				if constexpr ( UseGeometry )
-				{
-					program.push_back( makeShaderState( device, geometryShader ) );
-				}
-
+				program.push_back( makeShaderState( device, geometryShader ) );
 				program.push_back( makeShaderState( device, pixelShader ) );
 				// Initialise the pipeline.
 				VkViewport viewport{ 0.0f, 0.0f, float( target.image->getDimensions().width ), float( target.image->getDimensions().height ), 0.0f, 1.0f };
@@ -609,12 +417,8 @@ namespace castor3d
 				return device->createPipeline( "VoxelRenderer"
 					, ashes::GraphicsPipelineCreateInfo( 0u
 						, program
-						, ( UseGeometry
-							? gs::createVertexLayout()
-							: ( Instanced
-								? is::createVertexLayout()
-								: raw::createVertexLayout() ) )
-						, ashes::PipelineInputAssemblyStateCreateInfo{ 0u, UseGeometry ? VK_PRIMITIVE_TOPOLOGY_POINT_LIST : VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST }
+						, createVertexLayout()
+						, ashes::PipelineInputAssemblyStateCreateInfo{ 0u, VK_PRIMITIVE_TOPOLOGY_POINT_LIST }
 						, ashes::nullopt
 						, ashes::PipelineViewportStateCreateInfo{ 0u, 1u, ashes::VkViewportArray{ viewport }, 1u, ashes::VkScissorArray{ scissor } }
 						, ashes::PipelineRasterizationStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_BACK_BIT }
@@ -647,22 +451,7 @@ namespace castor3d
 					, VK_SUBPASS_CONTENTS_INLINE );
 				cb.bindPipeline( pipeline );
 				cb.bindDescriptorSet( descriptorSet, pipelineLayout );
-
-				if constexpr ( UseGeometry )
-				{
-					cb.draw( voxelGridSize * voxelGridSize * voxelGridSize );
-				}
-				else if constexpr ( Instanced )
-				{
-					cb.bindVertexBuffer( 0u, vertexBuffer, 0u );
-					cb.draw( CubeIdxCount, voxelGridSize * voxelGridSize * voxelGridSize );
-				}
-				else
-				{
-					cb.bindIndexBuffer( indexBuffer, 0u, VK_INDEX_TYPE_UINT32 );
-					cb.drawIndexed( voxelGridSize * voxelGridSize * voxelGridSize * CubeIdxCount );
-				}
-
+				cb.draw( voxelGridSize * voxelGridSize * voxelGridSize );
 				cb.endRenderPass();
 				cb.endDebugBlock();
 				cb.end();
@@ -682,34 +471,20 @@ namespace castor3d
 		, ashes::ImageView depth
 		, uint32_t voxelGridSize )
 		: castor::Named{ "VoxelRenderer" }
-		, descriptorSetLayout{ ( UseGeometry
-			? vx2scr::gs::createDescriptorLayout( device )
-			: ( Instanced
-				? vx2scr::is::createDescriptorLayout( device )
-				: vx2scr::raw::createDescriptorLayout( device ) ) ) }
+		, descriptorSetLayout{ vx2scr::createDescriptorLayout( device ) }
 		, pipelineLayout{ vx2scr::createPipelineLayout( device, *descriptorSetLayout ) }
 		, renderPass{ createRenderPass( device, getName(), color, depth ) }
 		, vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
 			, getName()
-			, ( UseGeometry
-				? vx2scr::gs::getVertexProgram( voxelGridSize )
-				: ( Instanced
-					? vx2scr::is::getVertexProgram( voxelGridSize )
-					: vx2scr::raw::getVertexProgram( voxelGridSize ) ) ) }
+			, vx2scr::getVertexProgram( voxelGridSize ) }
 		, geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT
 			, getName()
-			, ( UseGeometry
-				? vx2scr::gs::getGeometryProgram( voxelGridSize )
-				: nullptr ) }
+			, vx2scr::getGeometryProgram( voxelGridSize ) }
 		, pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), vx2scr::getPixelProgram() }
 		, pipeline{ vx2scr::createPipeline( device, *pipelineLayout, *renderPass, vertexShader, geometryShader, pixelShader, color ) }
 		, frameBuffer{ createFramebuffer( *renderPass, getName(), color, depth ) }
 		, descriptorSetPool{ descriptorSetLayout->createPool( 1u ) }
-		, descriptorSet{ ( UseGeometry
-			? vx2scr::gs::createDescriptorSet( *descriptorSetPool, voxelizerUbo, matrixUbo, vertexBuffer, voxels )
-			: ( Instanced
-				? vx2scr::is::createDescriptorSet( *descriptorSetPool, voxelizerUbo, matrixUbo, vertexBuffer, voxels )
-				: vx2scr::raw::createDescriptorSet( *descriptorSetPool, voxelizerUbo, matrixUbo, vertexBuffer, voxels ) ) ) }
+		, descriptorSet{ vx2scr::createDescriptorSet( *descriptorSetPool, voxelizerUbo, matrixUbo, vertexBuffer, voxels ) }
 		, commands{ vx2scr::createCommandBuffer( device, *renderPass, *frameBuffer, *pipelineLayout, *pipeline, *descriptorSet, vertexBuffer, indexBuffer, voxelGridSize ) }
 	{
 	}

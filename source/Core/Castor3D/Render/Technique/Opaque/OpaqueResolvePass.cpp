@@ -244,7 +244,7 @@ namespace castor3d
 					{
 						auto V = writer.declLocale( "V"
 							, normalize( c3d_cameraPosition.xyz() - position ) );
-						auto NdotV = writer.declLocale( "HdotV"
+						auto NdotV = writer.declLocale( "NdotV"
 							, max( 0.0_f, dot( normal, V ) ) );
 						lightSpecular += lightIndirectSpecular * utils.fresnelSchlick( NdotV, specular, ( 256.0_f - shininess ) / 256.0_f );
 					}
@@ -493,7 +493,7 @@ namespace castor3d
 					{
 						auto V = writer.declLocale( "V"
 							, normalize( c3d_cameraPosition.xyz() - position ) );
-						auto NdotV = writer.declLocale( "HdotV"
+						auto NdotV = writer.declLocale( "NdotV"
 							, max( 0.0_f, dot( normal, V ) ) );
 						lightSpecular += lightIndirectSpecular * utils.fresnelSchlick( NdotV, mix( vec3( 0.04_f ), albedo, vec3( metalness ) ), roughness );
 					}
@@ -814,7 +814,7 @@ namespace castor3d
 					{
 						auto V = writer.declLocale( "V"
 							, normalize( c3d_cameraPosition.xyz() - position ) );
-						auto NdotV = writer.declLocale( "HdotV"
+						auto NdotV = writer.declLocale( "NdotV"
 							, max( 0.0_f, dot( normal, V ) ) );
 						lightSpecular += lightIndirectSpecular * utils.fresnelSchlick( NdotV, specular, 1.0_f - glossiness );
 					}

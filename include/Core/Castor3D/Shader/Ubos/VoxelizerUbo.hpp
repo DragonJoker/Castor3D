@@ -28,7 +28,6 @@ namespace castor3d
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
 			// Raw values
-			sdw::Mat4 voxelTransform;
 			sdw::Vec4 sizeResolution;
 			sdw::Vec4 radiance;
 			sdw::Vec4 other;
@@ -42,7 +41,6 @@ namespace castor3d
 			sdw::UInt radianceNumCones;
 			sdw::Float radianceNumConesInv;
 			sdw::Float rayStepSize;
-			sdw::Vec3 voxelCenter;
 
 		private:
 			using sdw::StructInstance::getMember;

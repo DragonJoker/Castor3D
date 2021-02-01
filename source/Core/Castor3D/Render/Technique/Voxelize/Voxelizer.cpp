@@ -91,6 +91,7 @@ namespace castor3d
 			, culler
 			, m_voxelizerUbo
 			, *m_voxels
+			, voxelConfig
 			, m_voxelGridSize }
 		, m_voxelToTexture{ device
 			, m_voxelizerUbo

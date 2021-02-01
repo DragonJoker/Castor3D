@@ -50,6 +50,7 @@ namespace castor3d
 	public:
 		bool enabled{ false };
 		bool debugVoxels{ false };
+		bool conservativeRasterization{ false };
 		//!\~english	The maximum distance for cones.
 		//!\~french		La distance maximale pour les cones.
 		float maxDistance{ 20.0f };
@@ -59,6 +60,7 @@ namespace castor3d
 		//!\~english	The size of a ray step in voxel cone tracint.
 		//!\~french		La taille d'un pas de rayon dans le voxel cone tracing.
 		float rayStepSize{ 0.75f };
+		float voxelSize{ 1.0f };
 	};
 }
 

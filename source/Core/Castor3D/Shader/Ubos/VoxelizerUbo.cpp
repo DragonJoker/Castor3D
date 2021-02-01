@@ -21,7 +21,6 @@ namespace castor3d
 			, ast::expr::ExprPtr expr
 			, bool enabled )
 			: StructInstance{ writer, std::move( expr ), enabled }
-			, voxelTransform{ getMember< sdw::Mat4 >( "voxelTransform" ) }
 			, sizeResolution{ getMember< sdw::Vec4 >( "sizeResolution" ) }
 			, radiance{ getMember< sdw::Vec4 >( "radiance" ) }
 			, other{ getMember< sdw::Vec4 >( "other" ) }
@@ -34,7 +33,6 @@ namespace castor3d
 			, radianceNumCones{ writer.cast< sdw::UInt >( radiance.z() ) }
 			, radianceNumConesInv{ radiance.w() }
 			, rayStepSize{ other.x() }
-			, voxelCenter{ other.yzw() }
 		{
 		}
 
@@ -51,7 +49,6 @@ namespace castor3d
 
 			if ( result->empty() )
 			{
-				result->declMember( "voxelTransform", ast::type::Kind::eMat4x4F );
 				result->declMember( "sizeResolution", ast::type::Kind::eVec4F );
 				result->declMember( "radiance", ast::type::Kind::eVec4F );
 				result->declMember( "other", ast::type::Kind::eVec4F );
@@ -107,17 +104,9 @@ namespace castor3d
 		, Camera const & camera
 		, uint32_t voxelGridSize )
 	{
-		static auto constexpr f = 0.05f;
-
 		CU_Require( m_ubo );
-		auto aabb = camera.getScene()->getBoundingBox();
-		auto cellSize = std::max( std::max( aabb.getDimensions()->x
-			, aabb.getDimensions()->y )
-			, aabb.getDimensions()->z ) / voxelGridSize;
-
 		auto & voxelData = m_ubo.getData();
-		voxelData.voxelTransform = ( camera.getProjection() * camera.getView() );
-		voxelData.sizeResolution->x = cellSize;
+		voxelData.sizeResolution->x = voxelConfig.voxelSize;
 		voxelData.sizeResolution->y = 1.0f / voxelData.sizeResolution->x;
 		voxelData.sizeResolution->z = float( voxelGridSize );
 		voxelData.sizeResolution->w = 1.0f / voxelData.sizeResolution->z;
@@ -126,9 +115,6 @@ namespace castor3d
 		voxelData.radiance->z = voxelConfig.numCones.value();
 		voxelData.radiance->w = 1.0f / voxelData.radiance->z;
 		voxelData.other->x = voxelConfig.rayStepSize;
-		voxelData.other->y = floorf( camera.getParent()->getDerivedPosition()->x * f ) / f;
-		voxelData.other->z = floorf( camera.getParent()->getDerivedPosition()->y * f ) / f;
-		voxelData.other->w = floorf( camera.getParent()->getDerivedPosition()->z * f ) / f;
 	}
 
 	//*********************************************************************************************

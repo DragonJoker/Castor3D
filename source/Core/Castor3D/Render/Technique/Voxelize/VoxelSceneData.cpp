@@ -34,6 +34,18 @@ namespace castor3d
 
 		if ( result )
 		{
+			result = file.writeText( m_tabs + cuT( "\tvoxel_size " ) + string::toString( obj.voxelSize, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+			castor::TextWriter< VoxelSceneData >::checkError( result, "VoxelSceneData voxel size." );
+		}
+
+		if ( result )
+		{
+			result = file.writeText( m_tabs + cuT( "\tconservative_rasterization " ) + ( obj.conservativeRasterization ? String{ "true" } : String{ "false" } ) + cuT( "\n" ) ) > 0;
+			castor::TextWriter< VoxelSceneData >::checkError( result, "VoxelSceneData conservative rasterization." );
+		}
+
+		if ( result )
+		{
 			result = file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 

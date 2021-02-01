@@ -32,6 +32,7 @@ namespace castor3d
 			, SceneCuller & culler
 			, VoxelizerUbo const & voxelizerUbo
 			, ashes::Buffer< Voxel > const & voxels
+			, VoxelSceneData const & voxelConfig
 			, uint32_t voxelGridSize );
 		/**
 		 *\~english
@@ -167,6 +168,7 @@ namespace castor3d
 		ashes::FrameBufferPtr m_frameBuffer;
 		uint32_t m_voxelGridSize;
 		VoxelizerUbo const & m_voxelizerUbo;
+		VoxelSceneData const & m_voxelConfig;
 	};
 }
 

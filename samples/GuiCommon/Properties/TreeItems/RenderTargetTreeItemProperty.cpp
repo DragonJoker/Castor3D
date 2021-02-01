@@ -146,6 +146,7 @@ namespace GuiCommon
 		static wxString PROPERTY_RENDER_TARGET_VCT_NUM_CONES = _( "Num. Cones" );
 		static wxString PROPERTY_RENDER_TARGET_VCT_MAX_DISTANCE = _( "Max. Distance" );
 		static wxString PROPERTY_RENDER_TARGET_VCT_RAY_STEP_SIZE = _( "Ray Step Size" );
+		static wxString PROPERTY_RENDER_TARGET_VCT_VOXEL_SIZE = _( "Voxel Size" );
 
 		auto & target = getRenderTarget();
 		auto & vctConfig = target.getVoxelConeTracingConfig();
@@ -155,5 +156,6 @@ namespace GuiCommon
 		addPropertyT( grid, PROPERTY_RENDER_TARGET_VCT_NUM_CONES, &vctConfig.numCones );
 		addPropertyT( grid, PROPERTY_RENDER_TARGET_VCT_MAX_DISTANCE, &vctConfig.maxDistance );
 		addPropertyT( grid, PROPERTY_RENDER_TARGET_VCT_RAY_STEP_SIZE, &vctConfig.rayStepSize );
+		addPropertyT( grid, PROPERTY_RENDER_TARGET_VCT_VOXEL_SIZE, &vctConfig.voxelSize );
 	}
 }

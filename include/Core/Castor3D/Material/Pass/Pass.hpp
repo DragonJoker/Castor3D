@@ -217,7 +217,7 @@ namespace castor3d
 			return m_automaticShader;
 		}
 
-		inline bool IsTwoSided()const
+		inline bool isTwoSided()const
 		{
 			return m_twoSided;
 		}

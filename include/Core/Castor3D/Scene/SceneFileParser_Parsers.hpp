@@ -396,6 +396,8 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserVctNumCones )
 	CU_DeclareAttributeParser( parserVctMaxDistance )
 	CU_DeclareAttributeParser( parserVctRayStepSize )
+	CU_DeclareAttributeParser( parserVctVoxelSize )
+	CU_DeclareAttributeParser( parserVctConservativeRasterization )
 }
 
 #endif

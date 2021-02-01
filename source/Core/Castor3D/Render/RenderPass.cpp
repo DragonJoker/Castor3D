@@ -110,6 +110,7 @@ namespace castor3d
 		, SceneCuller & culler
 		, RenderMode mode
 		, bool oit
+		, bool forceTwoSided
 		, SceneNode const * ignored
 		, uint32_t instanceMult )
 		: OwnedBy< Engine >{ engine }
@@ -120,6 +121,7 @@ namespace castor3d
 		, m_renderQueue{ *this, mode, ignored }
 		, m_category{ category }
 		, m_oit{ oit }
+		, m_forceTwoSided{ forceTwoSided }
 		, m_mode{ mode }
 		, m_sceneUbo{ engine }
 		, m_instanceMult{ instanceMult }
@@ -134,7 +136,7 @@ namespace castor3d
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, uint32_t instanceMult )
-		: RenderPass{ category, name, engine, matrixUbo, culler, RenderMode::eOpaqueOnly, true, nullptr, instanceMult }
+		: RenderPass{ category, name, engine, matrixUbo, culler, RenderMode::eOpaqueOnly, true, false, nullptr, instanceMult }
 	{
 	}
 
@@ -145,7 +147,7 @@ namespace castor3d
 		, SceneCuller & culler
 		, bool oit
 		, uint32_t instanceMult )
-		: RenderPass{ category, name, engine, matrixUbo, culler, RenderMode::eTransparentOnly, oit, nullptr, instanceMult }
+		: RenderPass{ category, name, engine, matrixUbo, culler, RenderMode::eTransparentOnly, oit, false, nullptr, instanceMult }
 	{
 	}
 
@@ -156,7 +158,7 @@ namespace castor3d
 		, SceneCuller & culler
 		, SceneNode const * ignored
 		, uint32_t instanceMult )
-		: RenderPass{ category, name, engine, matrixUbo, culler, RenderMode::eOpaqueOnly, true, ignored, instanceMult }
+		: RenderPass{ category, name, engine, matrixUbo, culler, RenderMode::eOpaqueOnly, true, false, ignored, instanceMult }
 	{
 	}
 
@@ -168,7 +170,7 @@ namespace castor3d
 		, bool oit
 		, SceneNode const * ignored
 		, uint32_t instanceMult )
-		: RenderPass{ category, name, engine, matrixUbo, culler, RenderMode::eTransparentOnly, oit, ignored, instanceMult }
+		: RenderPass{ category, name, engine, matrixUbo, culler, RenderMode::eTransparentOnly, oit, false, ignored, instanceMult }
 	{
 	}
 

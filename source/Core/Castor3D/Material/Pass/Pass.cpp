@@ -115,9 +115,9 @@ namespace castor3d
 			castor::TextWriter< Pass >::checkError( result, "Pass transmission" );
 		}
 
-		if ( result && pass.IsTwoSided() )
+		if ( result && pass.isTwoSided() )
 		{
-			result = file.writeText( m_tabs + cuT( "\ttwo_sided " ) + String( pass.IsTwoSided() ? cuT( "true" ) : cuT( "false" ) ) + cuT( "\n" ) ) > 0;
+			result = file.writeText( m_tabs + cuT( "\ttwo_sided " ) + String( pass.isTwoSided() ? cuT( "true" ) : cuT( "false" ) ) + cuT( "\n" ) ) > 0;
 			castor::TextWriter< Pass >::checkError( result, "Pass sidedness" );
 		}
 

@@ -882,22 +882,20 @@ namespace castor3d
 					auto vxlBlend = writer.declLocale( "vxlBlend"
 						, 1.0_f - pow( max( vxlPosition.x(), max( vxlPosition.y(), vxlPosition.z() ) ), 4.0_f ) );
 
-					auto voxelData = writer.declLocale( "voxelData"
-						, c3d_voxelData );
 					auto vxlRadiance = writer.declLocale( "vxlRadiance"
 						, utils.traceConeRadiance( c3d_mapVoxels
 							, wsPosition
 							, wsNormal
-							, voxelData ) );
+							, c3d_voxelData ) );
 					auto vxlReflection = writer.declLocale( "vxlReflection"
 						, utils.traceConeReflection( c3d_mapVoxels
 							, wsPosition
 							, wsNormal
 							, eye - wsPosition
 							, ( 256.0_f - shininess ) / 256.0_f
-							, voxelData ) );
-					pxl_indirectDiffuse = vxlRadiance.xyz() * vxlRadiance.a() * vxlBlend;
-					pxl_indirectSpecular = vxlReflection.xyz() * vxlReflection.a() * vxlBlend;
+							, c3d_voxelData ) );
+					pxl_indirectDiffuse = mix( vec3( 0.0_f ), vxlRadiance.xyz(), vec3( vxlRadiance.a() * vxlBlend ) );
+					pxl_indirectSpecular = mix( vec3( 0.0_f ), vxlReflection.xyz(), vec3( vxlReflection.a() * vxlBlend ) );
 				}
 				else
 				{
@@ -1180,22 +1178,20 @@ namespace castor3d
 					auto vxlBlend = writer.declLocale( "vxlBlend"
 						, 1.0_f - pow( max( vxlPosition.x(), max( vxlPosition.y(), vxlPosition.z() ) ), 4.0_f ) );
 
-					auto voxelData = writer.declLocale( "voxelData"
-						, c3d_voxelData );
 					auto vxlRadiance = writer.declLocale( "vxlRadiance"
 						, utils.traceConeRadiance( c3d_mapVoxels
 							, wsPosition
 							, wsNormal
-							, voxelData ) );
+							, c3d_voxelData ) );
 					auto vxlReflection = writer.declLocale( "vxlReflection"
 						, utils.traceConeReflection( c3d_mapVoxels
 							, wsPosition
 							, wsNormal
 							, eye - wsPosition
 							, roughness
-							, voxelData ) );
-					pxl_indirectDiffuse = vxlRadiance.xyz() * vxlRadiance.a() * vxlBlend;
-					pxl_indirectSpecular = vxlReflection.xyz() * vxlReflection.a() * vxlBlend;
+							, c3d_voxelData ) );
+					pxl_indirectDiffuse = mix( vec3( 0.0_f ), vxlRadiance.xyz(), vec3( vxlRadiance.a() * vxlBlend ) );
+					pxl_indirectSpecular = mix( vec3( 0.0_f ), vxlReflection.xyz(), vec3( vxlReflection.a() * vxlBlend ) );
 				}
 				else
 				{
@@ -1409,22 +1405,20 @@ namespace castor3d
 					auto vxlBlend = writer.declLocale( "vxlBlend"
 						, 1.0_f - pow( max( vxlPosition.x(), max( vxlPosition.y(), vxlPosition.z() ) ), 4.0_f ) );
 
-					auto voxelData = writer.declLocale( "voxelData"
-						, c3d_voxelData );
 					auto vxlRadiance = writer.declLocale( "vxlRadiance"
 						, utils.traceConeRadiance( c3d_mapVoxels
 							, wsPosition
 							, wsNormal
-							, voxelData ) );
+							, c3d_voxelData ) );
 					auto vxlReflection = writer.declLocale( "vxlReflection"
 						, utils.traceConeReflection( c3d_mapVoxels
 							, wsPosition
 							, wsNormal
 							, eye - wsPosition
 							, 1.0_f - glossiness
-							, voxelData ) );
-					pxl_indirectDiffuse = vxlRadiance.xyz() * vxlRadiance.a() * vxlBlend;
-					pxl_indirectSpecular = vxlReflection.xyz() * vxlReflection.a() * vxlBlend;
+							, c3d_voxelData ) );
+					pxl_indirectDiffuse = mix( vec3( 0.0_f ), vxlRadiance.xyz(), vec3( vxlRadiance.a() * vxlBlend ) );
+					pxl_indirectSpecular = mix( vec3( 0.0_f ), vxlReflection.xyz(), vec3( vxlReflection.a() * vxlBlend ) );
 				}
 				else
 				{

@@ -285,6 +285,7 @@ namespace castor3d
 			, culler
 			, RenderMode::eBoth
 			, true
+			, false
 			, nullptr }
 	{
 		engine.sendEvent( makeGpuFunctorEvent( EventType::ePreRender

@@ -34,6 +34,7 @@ namespace castor3d
 			, culler
 			, RenderMode::eBoth
 			, true
+			, false
 			, nullptr }
 		, m_shadowMap{ shadowMap }
 		, m_shadowMapUbo{ engine }

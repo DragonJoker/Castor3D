@@ -14,12 +14,14 @@
 #include "Castor3D/Render/Node/RenderNode_Render.hpp"
 #include "Castor3D/Render/Node/SceneCulledRenderNodes.hpp"
 #include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
+#include "Castor3D/Render/Technique/Voxelize/VoxelSceneData.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslMetallicBrdfLighting.hpp"
+#include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslSpecularBrdfLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
@@ -57,6 +59,7 @@ namespace castor3d
 		, SceneCuller & culler
 		, VoxelizerUbo const & voxelizerUbo
 		, ashes::Buffer< Voxel > const & voxels
+		, VoxelSceneData const & voxelConfig
 		, uint32_t voxelGridSize )
 		: RenderPass{ "Voxelize"
 			, "Voxelization"
@@ -64,6 +67,7 @@ namespace castor3d
 			, matrixUbo
 			, culler
 			, RenderMode::eBoth
+			, true
 			, true
 			, nullptr
 			, 1u }
@@ -73,6 +77,7 @@ namespace castor3d
 		, m_commands{ nullptr, nullptr }
 		, m_voxelGridSize{ voxelGridSize }
 		, m_voxelizerUbo{ voxelizerUbo }
+		, m_voxelConfig{ voxelConfig }
 	{
 		initialise( device, { m_voxelGridSize, m_voxelGridSize } );
 	}
@@ -611,16 +616,19 @@ namespace castor3d
 				}
 				ROF;
 
-				// Conservative Rasterization setup:
-				auto side0N = writer.declLocale( "side0N"
-					, normalize( positions[1].xy() - positions[0].xy() ) );
-				auto side1N = writer.declLocale( "side1N"
-					, normalize( positions[2].xy() - positions[1].xy() ) );
-				auto side2N = writer.declLocale( "side2N"
-					, normalize( positions[0].xy() - positions[2].xy() ) );
-				positions[0].xy() += normalize( side2N - side0N ) * c3d_voxelData.resolutionInv;
-				positions[1].xy() += normalize( side0N - side1N ) * c3d_voxelData.resolutionInv;
-				positions[2].xy() += normalize( side1N - side2N ) * c3d_voxelData.resolutionInv;
+				if ( m_voxelConfig.conservativeRasterization )
+				{
+					// Conservative Rasterization setup:
+					auto side0N = writer.declLocale( "side0N"
+						, normalize( positions[1].xy() - positions[0].xy() ) );
+					auto side1N = writer.declLocale( "side1N"
+						, normalize( positions[2].xy() - positions[1].xy() ) );
+					auto side2N = writer.declLocale( "side2N"
+						, normalize( positions[0].xy() - positions[2].xy() ) );
+					positions[0].xy() += normalize( side2N - side0N ) * c3d_voxelData.resolutionInv;
+					positions[1].xy() += normalize( side0N - side1N ) * c3d_voxelData.resolutionInv;
+					positions[2].xy() += normalize( side1N - side2N ) * c3d_voxelData.resolutionInv;
+				}
 
 				// Output
 				FOR( writer, UInt, i, 0_u, i < 3_u, ++i )
@@ -747,16 +755,15 @@ namespace castor3d
 					auto worldEye = writer.declLocale( "worldEye"
 						, c3d_cameraPosition.xyz() );
 					auto color = writer.declLocale( "lightDiffuse"
-						, vec4( lighting->computeCombinedDiffuse( worldEye
-								, shininess
-								, c3d_shadowReceiver
-								, shader::FragmentInput( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal ) )
-						, alpha ) );
+						, lighting->computeCombinedDiffuse( worldEye
+							, shininess
+							, c3d_shadowReceiver
+							, shader::FragmentInput( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal ) ) );
 					color.xyz() *= diffuse * occlusion;
 					color.xyz() += emissive;
 
 					auto encodedColor = writer.declLocale( "encodedColor"
-						, utils.encodeColor( color ) );
+						, utils.encodeColor( vec4( color, alpha ) ) );
 					auto encodedNormal = writer.declLocale( "encodedNormal"
 						, utils.encodeNormal( normal ) );
 
@@ -888,18 +895,17 @@ namespace castor3d
 					auto worldEye = writer.declLocale( "worldEye"
 						, c3d_cameraPosition.xyz() );
 					auto color = writer.declLocale( "color"
-						, vec4( lighting->computeCombinedDiffuse( worldEye
-								, albedo
-								, metalness
-								, roughness
-								, c3d_shadowReceiver
-								, shader::FragmentInput( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal ) )
-							, alpha ) );
-					color.xyz() *= albedo * occlusion;
-					color.xyz() += emissive;
+						, lighting->computeCombinedDiffuse( worldEye
+							, albedo
+							, metalness
+							, roughness
+							, c3d_shadowReceiver
+							, shader::FragmentInput( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal ) ) );
+					color *= albedo * occlusion;
+					color += emissive;
 
 					auto encodedColor = writer.declLocale( "encodedColor"
-						, utils.encodeColor( color ) );
+						, utils.encodeColor( vec4( color, alpha ) ) );
 					auto encodedNormal = writer.declLocale( "encodedNormal"
 						, utils.encodeNormal( normal ) );
 
@@ -1021,17 +1027,16 @@ namespace castor3d
 					auto worldEye = writer.declLocale( "worldEye"
 						, c3d_cameraPosition.xyz() );
 					auto color = writer.declLocale( "lightDiffuse"
-						, vec4( lighting->computeCombinedDiffuse( worldEye
-								, specular
-								, glossiness
-								, c3d_shadowReceiver
-								, shader::FragmentInput( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal ) )
-						, alpha ) );
+						, lighting->computeCombinedDiffuse( worldEye
+							, specular
+							, glossiness
+							, c3d_shadowReceiver
+							, shader::FragmentInput( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal ) ) );
 					color.xyz() *= albedo * occlusion;
 					color.xyz() += emissive;
 
 					auto encodedColor = writer.declLocale( "encodedColor"
-						, utils.encodeColor( color ) );
+						, utils.encodeColor( vec4( color, alpha ) ) );
 					auto encodedNormal = writer.declLocale( "encodedNormal"
 						, utils.encodeNormal( normal ) );
 

@@ -446,8 +446,6 @@ namespace castor3d
 	*/
 	struct VoxelizerUboConfiguration
 	{
-		// Voxel render transform matrix
-		castor::Matrix4x4f voxelTransform;
 		/**
 		*	- float size: Voxel half-extent, in world space units
 		*	- float sizeInverse

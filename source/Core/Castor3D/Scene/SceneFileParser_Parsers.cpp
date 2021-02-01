@@ -6307,4 +6307,44 @@ namespace castor3d
 		}
 	}
 	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserVctVoxelSize )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->renderTarget )
+		{
+			CU_ParsingError( cuT( "No render target initialised." ) );
+		}
+		else if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			auto & vctConfig = parsingContext->renderTarget->getVoxelConeTracingConfig();
+			params[0]->get( vctConfig.voxelSize );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserVctConservativeRasterization )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->renderTarget )
+		{
+			CU_ParsingError( cuT( "No render target initialised." ) );
+		}
+		else if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			auto & vctConfig = parsingContext->renderTarget->getVoxelConeTracingConfig();
+			params[0]->get( vctConfig.conservativeRasterization );
+		}
+	}
+	CU_EndAttribute()
 }

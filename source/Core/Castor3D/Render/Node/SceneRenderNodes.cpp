@@ -107,7 +107,9 @@ namespace castor3d
 			, CulledType const & culled
 			, CreatorFunc creator )
 		{
-			if ( pass.IsTwoSided() || pass.hasAlphaBlending() )
+			if ( pass.isTwoSided()
+				|| renderPass.forceTwoSided()
+				|| pass.hasAlphaBlending() )
 			{
 				auto pipeline = renderPass.getPipelineFront( flags );
 
@@ -144,7 +146,8 @@ namespace castor3d
 			if ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
 			{
 				if ( pass.hasAlphaBlending()
-					|| pass.IsTwoSided() )
+					|| pass.isTwoSided()
+					|| renderPass.forceTwoSided() )
 				{
 					auto pipeline = renderPass.getPipelineFront( flags );
 
@@ -227,7 +230,8 @@ namespace castor3d
 			if ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
 			{
 				if ( pass.hasAlphaBlending()
-					|| pass.IsTwoSided() )
+					|| pass.isTwoSided()
+					|| renderPass.forceTwoSided() )
 				{
 					auto pipeline = renderPass.getPipelineFront( flags );
 
@@ -380,7 +384,8 @@ namespace castor3d
 							, renderPass );
 
 						auto needsFront = ( mode == RenderMode::eTransparentOnly )
-							|| pass->IsTwoSided()
+							|| pass->isTwoSided()
+							|| renderPass.forceTwoSided()
 							|| checkFlags( textures, TextureFlag::eOpacity ) != textures.end();
 
 						if ( needsFront )

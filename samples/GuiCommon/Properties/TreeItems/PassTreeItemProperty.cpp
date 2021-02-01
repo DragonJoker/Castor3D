@@ -541,7 +541,7 @@ namespace GuiCommon
 				break;
 			}
 
-			addPropertyT( grid, PROPERTY_PASS_TWO_SIDED, pass->IsTwoSided(), pass.get(), &Pass::setTwoSided );
+			addPropertyT( grid, PROPERTY_PASS_TWO_SIDED, pass->isTwoSided(), pass.get(), &Pass::setTwoSided );
 			addPropertyT( grid, PROPERTY_PASS_EMISSIVE, pass->getEmissive(), pass.get(), &Pass::setEmissive );
 			addPropertyT( grid, PROPERTY_PASS_OPACITY, pass->getOpacity(), pass.get(), &Pass::setOpacity );
 			addPropertyT( grid, PROPERTY_PASS_TRANSMISSION, pass->getTransmission(), pass.get(), &Pass::setTransmission );

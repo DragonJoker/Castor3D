@@ -30,11 +30,13 @@ namespace GuiCommon
 			this->m_holder->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 			this->m_container = new PropertiesContainer{ true, this->m_holder, wxDefaultPosition, wxDefaultSize };
 			this->m_holder->setGrid( this->m_container );
+			this->m_holder->SetMinSize( { 100, 300 } );
 
 			auto holder = new TreeHolder{ this, wxDefaultPosition, wxDefaultSize };
 			this->m_list = new ListT{ this->m_container, holder, wxDefaultPosition, wxDefaultSize };
 			this->m_list->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 			this->m_list->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
+			this->m_list->SetMinSize( { 100, 300 } );
 			holder->setTree( this->m_list );
 
 			this->m_auiManager.SetArtProvider( new AuiDockArt );
@@ -44,19 +46,20 @@ namespace GuiCommon
 				.Show()
 				.Name( wxT( "Tree" ) )
 				.Caption( _( "Tree" ) )
-				.Center()
+				.Top()
 				.Dock()
-				.PaneBorder( false ) );
+				.PaneBorder( false )
+				.MinSize( 100, 300 ) );
 			this->m_auiManager.AddPane( this->m_holder
 				, wxAuiPaneInfo()
 				.CaptionVisible( false )
 				.Show()
 				.Name( wxT( "Properties" ) )
 				.Caption( _( "Properties" ) )
-				.Bottom()
+				.Center()
 				.Dock()
 				.PaneBorder( false )
-				.MinSize( 100, 200 ) );
+				.MinSize( 100, 300 ) );
 			this->m_auiManager.Update();
 		}
 

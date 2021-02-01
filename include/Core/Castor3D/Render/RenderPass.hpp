@@ -35,6 +35,7 @@ namespace castor3d
 			, SceneCuller & culler
 			, RenderMode mode
 			, bool oit
+			, bool forceTwoSided
 			, SceneNode const * ignored
 			, uint32_t instanceMult = 1u );
 
@@ -622,75 +623,80 @@ namespace castor3d
 		/**@{*/
 		C3D_API virtual TextureFlags getTexturesMask()const;
 
-		inline bool isOrderIndependent()const
+		bool isOrderIndependent()const
 		{
 			return m_oit;
 		}
 
-		inline SceneCuller const & getCuller()const
+		SceneCuller const & getCuller()const
 		{
 			return m_culler;
 		}
 
-		inline SceneCuller & getCuller()
+		SceneCuller & getCuller()
 		{
 			return m_culler;
 		}
 
-		inline SceneUbo & getSceneUbo()
+		SceneUbo & getSceneUbo()
 		{
 			return m_sceneUbo;
 		}
 
-		inline SceneUbo const & getSceneUbo()const
+		SceneUbo const & getSceneUbo()const
 		{
 			return m_sceneUbo;
 		}
 
-		inline MatrixUbo & getMatrixUbo()const
+		MatrixUbo & getMatrixUbo()const
 		{
 			return m_matrixUbo;
 		}
 
-		inline ashes::CommandBuffer const & getCommandBuffer()const
+		ashes::CommandBuffer const & getCommandBuffer()const
 		{
 			return m_renderQueue.getCommandBuffer();
 		}
 
-		inline bool hasNodes()const
+		bool hasNodes()const
 		{
 			return m_renderQueue.hasNodes();
 		}
 
-		inline ashes::RenderPass const & getRenderPass()const
+		ashes::RenderPass const & getRenderPass()const
 		{
 			return *m_renderPass;
 		}
 
-		inline RenderPassTimer const & getTimer()const
+		RenderPassTimer const & getTimer()const
 		{
 			return *m_timer;
 		}
 
-		inline RenderPassTimer & getTimer()
+		RenderPassTimer & getTimer()
 		{
 			return *m_timer;
 		}
 
-		inline uint32_t getPipelinesCount()const
+		uint32_t getPipelinesCount()const
 		{
 			return uint32_t( m_backPipelines.size()
 				+ m_frontPipelines.size() );
 		}
 
-		inline uint32_t getInstanceMult()const
+		uint32_t getInstanceMult()const
 		{
 			return m_instanceMult;
 		}
 
-		inline bool isDirty()const
+		bool isDirty()const
 		{
 			return m_isDirty;
+		}
+
+		bool forceTwoSided()const
+		{
+			return m_forceTwoSided;
 		}
 		/**@}*/
 
@@ -1269,6 +1275,7 @@ namespace castor3d
 		castor::String m_category;
 		RenderMode m_mode{ RenderMode::eBoth };
 		bool m_oit{ false };
+		bool m_forceTwoSided{ false };
 		bool m_isDirty{ true };
 		SceneUbo m_sceneUbo;
 		ashes::RenderPassPtr m_renderPass;
