@@ -6,6 +6,7 @@
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
+#include "Castor3D/Render/Technique/Voxelize/VoxelSceneData.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Shaders/GlslVoxel.hpp"
@@ -90,22 +91,35 @@ namespace castor3d
 			, ashes::DescriptorSet const & descriptorSet
 			, ashes::BufferBase const & voxels
 			, TextureUnit const & vxResult
-			, uint32_t voxelGridSize )
+			, uint32_t voxelGridSize
+			, bool temporalSmoothing )
 		{
 			CommandsSemaphore result{ device, "VoxelBufferToTexture" };
 			auto & cmd = *result.commandBuffer;
 			cmd.begin();
 			cmd.beginDebugBlock( { "Copy voxels to texture"
 				, makeFloatArray( device.renderSystem.getEngine()->getNextRainbowColour() ) } );
-			cmd.memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
-				, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, vxResult.getTexture()->getDefaultView().getSampledView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
-			cmd.clear( vxResult.getTexture()->getDefaultView().getSampledView()
-				, transparentBlackClearColor.color );
-			cmd.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-				, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
-				, vxResult.getTexture()->getDefaultView().getSampledView().makeGeneralLayout( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-					, VK_ACCESS_SHADER_WRITE_BIT ) );
+
+			if ( temporalSmoothing )
+			{
+				cmd.memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
+					, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
+					, vxResult.getTexture()->getDefaultView().getSampledView().makeGeneralLayout( VK_IMAGE_LAYOUT_UNDEFINED
+						, VK_ACCESS_SHADER_WRITE_BIT | VK_ACCESS_SHADER_READ_BIT ) );
+			}
+			else
+			{
+				cmd.memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
+					, VK_PIPELINE_STAGE_TRANSFER_BIT
+					, vxResult.getTexture()->getDefaultView().getSampledView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
+				cmd.clear( vxResult.getTexture()->getDefaultView().getSampledView()
+					, transparentBlackClearColor.color );
+				cmd.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+					, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
+					, vxResult.getTexture()->getDefaultView().getSampledView().makeGeneralLayout( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+						, VK_ACCESS_SHADER_WRITE_BIT ) );
+			}
+
 			cmd.bindPipeline( pipeline );
 			cmd.bindDescriptorSet( descriptorSet
 				, pipelineLayout
@@ -121,7 +135,7 @@ namespace castor3d
 			return result;
 		}
 
-		ShaderPtr createShader()
+		ShaderPtr createShader( bool temporalSmoothing )
 		{
 			using namespace sdw;
 			ComputeWriter writer;
@@ -153,7 +167,16 @@ namespace castor3d
 						auto coord = writer.declLocale( "coord"
 							, ivec3( utils.unflatten( in.globalInvocationID.x()
 								, uvec3( writer.cast< UInt >( c3d_voxelData.resolution ) ) ) ) );
-						output.store( coord, color );
+
+						if ( temporalSmoothing )
+						{
+							output.store( coord
+								, mix( output.load( coord ), vec4( color.rgb(), 1.0_f ), vec4( 0.2_f ) ) );
+						}
+						else
+						{
+							output.store( coord, vec4( color.rgb(), 1.0_f ) );
+						}
 					}
 					FI;
 
@@ -166,31 +189,63 @@ namespace castor3d
 
 	//*********************************************************************************************
 
+	VoxelBufferToTexture::Pipeline::Pipeline( RenderDevice const & device
+		, ashes::PipelineLayout const & pipelineLayout
+		, ashes::DescriptorSet const & descriptorSet
+		, ashes::Buffer< Voxel > const & voxels
+		, TextureUnit const & result
+		, uint32_t voxelGridSize
+		, bool temporalSmoothing )
+		: computeShader{ VK_SHADER_STAGE_COMPUTE_BIT, "VoxelBufferToTexture", createShader( temporalSmoothing ) }
+		, pipeline{ createPipeline( device, pipelineLayout, computeShader ) }
+		, commands{ createCommandBuffer( device, pipelineLayout, *pipeline, descriptorSet, voxels.getBuffer(), result, voxelGridSize, temporalSmoothing ) }
+	{
+	}
+	
+	//*********************************************************************************************
+
 	VoxelBufferToTexture::VoxelBufferToTexture( RenderDevice const & device
+		, VoxelSceneData const & vctConfig
 		, VoxelizerUbo const & voxelizerUbo
 		, ashes::Buffer< Voxel > const & voxels
 		, TextureUnit const & result
 		, uint32_t voxelGridSize )
-		: m_descriptorSetLayout{ createDescriptorLayout( device ) }
+		: m_vctConfig{ vctConfig }
+		, m_descriptorSetLayout{ createDescriptorLayout( device ) }
 		, m_pipelineLayout{ createPipelineLayout( device, *m_descriptorSetLayout ) }
-		, m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT, "VoxelBufferToTexture", createShader() }
-		, m_pipeline{ createPipeline( device, *m_pipelineLayout, m_computeShader ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( 1u ) }
 		, m_descriptorSet{ createDescriptorSet( *m_descriptorSetPool, voxelizerUbo, voxels, result ) }
-		, m_commands{ createCommandBuffer( device, *m_pipelineLayout, *m_pipeline, *m_descriptorSet, voxels.getBuffer(), result, voxelGridSize ) }
+		, m_pipelines{ Pipeline{ device, *m_pipelineLayout, *m_descriptorSet, voxels, result, voxelGridSize, false }
+			, Pipeline{ device, *m_pipelineLayout, *m_descriptorSet, voxels, result, voxelGridSize, true } }
 	{
 	}
 
 	void VoxelBufferToTexture::accept( RenderTechniqueVisitor & visitor )
 	{
-		visitor.visit( m_computeShader );
+		if ( m_vctConfig.temporalSmoothing )
+		{
+			visitor.visit( m_pipelines[1].computeShader );
+		}
+		else
+		{
+			visitor.visit( m_pipelines[0].computeShader );
+		}
 	}
 
 	ashes::Semaphore const & VoxelBufferToTexture::render( RenderDevice const & device
 		, ashes::Semaphore const & toWait )
 	{
 		auto result = &toWait;
-		result = &m_commands.submit( *device.computeQueue, *result );
+
+		if ( m_vctConfig.temporalSmoothing )
+		{
+			result = &m_pipelines[1].commands.submit( *device.computeQueue, *result );
+		}
+		else
+		{
+			result = &m_pipelines[0].commands.submit( *device.computeQueue, *result );
+		}
+
 		device.computeQueue->waitIdle();
 		return *result;
 	}

@@ -50,6 +50,7 @@ namespace castor3d
 	public:
 		bool enabled{ false };
 		bool conservativeRasterization{ false };
+		bool temporalSmoothing{ false };
 		//!\~english	The maximum distance for cones.
 		//!\~french		La distance maximale pour les cones.
 		float maxDistance{ 20.0f };

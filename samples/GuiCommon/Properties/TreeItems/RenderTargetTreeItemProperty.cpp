@@ -142,6 +142,7 @@ namespace GuiCommon
 	{
 		static wxString PROPERTY_RENDER_TARGET_VCT = _( "Voxel Cone Tracing" );
 		static wxString PROPERTY_RENDER_TARGET_VCT_ENABLED = _( "Enable VCT" );
+		static wxString PROPERTY_RENDER_TARGET_VCT_TEMPORAL_SMOOTHING = _( "Temporal Smoothing" );
 		static wxString PROPERTY_RENDER_TARGET_VCT_NUM_CONES = _( "Num. Cones" );
 		static wxString PROPERTY_RENDER_TARGET_VCT_MAX_DISTANCE = _( "Max. Distance" );
 		static wxString PROPERTY_RENDER_TARGET_VCT_RAY_STEP_SIZE = _( "Ray Step Size" );
@@ -151,6 +152,7 @@ namespace GuiCommon
 		auto & vctConfig = target.getVoxelConeTracingConfig();
 		addProperty( grid, PROPERTY_RENDER_TARGET_VCT );
 		addPropertyT( grid, PROPERTY_RENDER_TARGET_VCT_ENABLED, &vctConfig.enabled );
+		addPropertyT( grid, PROPERTY_RENDER_TARGET_VCT_TEMPORAL_SMOOTHING, &vctConfig.temporalSmoothing );
 		addPropertyT( grid, PROPERTY_RENDER_TARGET_VCT_NUM_CONES, &vctConfig.numCones );
 		addPropertyT( grid, PROPERTY_RENDER_TARGET_VCT_MAX_DISTANCE, &vctConfig.maxDistance );
 		addPropertyT( grid, PROPERTY_RENDER_TARGET_VCT_RAY_STEP_SIZE, &vctConfig.rayStepSize );

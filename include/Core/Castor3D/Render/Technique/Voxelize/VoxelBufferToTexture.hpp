@@ -30,6 +30,7 @@ namespace castor3d
 		 *\param[in]	scene			La scène rendue.
 		 */
 		C3D_API VoxelBufferToTexture( RenderDevice const & device
+			, VoxelSceneData const & vctConfig
 			, VoxelizerUbo const & voxelizerUbo
 			, ashes::Buffer< Voxel > const & voxels
 			, TextureUnit const & result
@@ -50,13 +51,26 @@ namespace castor3d
 		C3D_API void accept( RenderTechniqueVisitor & visitor );
 
 	private:
+		VoxelSceneData const & m_vctConfig;
 		ashes::DescriptorSetLayoutPtr m_descriptorSetLayout;
 		ashes::PipelineLayoutPtr m_pipelineLayout;
-		ShaderModule m_computeShader;
-		ashes::ComputePipelinePtr m_pipeline;
 		ashes::DescriptorSetPoolPtr m_descriptorSetPool;
 		ashes::DescriptorSetPtr m_descriptorSet;
-		CommandsSemaphore m_commands;
+		struct Pipeline
+		{
+			Pipeline( RenderDevice const & device
+				, ashes::PipelineLayout const & pipelineLayout
+				, ashes::DescriptorSet const & descriptorSet
+				, ashes::Buffer< Voxel > const & voxels
+				, TextureUnit const & result
+				, uint32_t voxelGridSize
+				, bool temporalSmoothing );
+
+			ShaderModule computeShader;
+			ashes::ComputePipelinePtr pipeline;
+			CommandsSemaphore commands;
+		};
+		std::array< Pipeline, 2u > m_pipelines;
 	};
 }
 

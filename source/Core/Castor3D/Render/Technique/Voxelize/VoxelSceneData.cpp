@@ -46,6 +46,12 @@ namespace castor3d
 
 		if ( result )
 		{
+			result = file.writeText( m_tabs + cuT( "\ttemporal_smoothing " ) + ( obj.temporalSmoothing ? String{ "true" } : String{ "false" } ) + cuT( "\n" ) ) > 0;
+			castor::TextWriter< VoxelSceneData >::checkError( result, "VoxelSceneData temporal smoothing." );
+		}
+
+		if ( result )
+		{
 			result = file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
