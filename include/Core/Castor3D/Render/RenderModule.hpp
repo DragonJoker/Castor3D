@@ -507,6 +507,7 @@ namespace castor3d
 		uint32_t combineIndex{ 0u };
 		castor::Point2f jitter;
 		bool voxelConeTracing{ false };
+		float cellSize{ 0.0f };
 		castor::Milliseconds tslf;
 		castor::Milliseconds time;
 		castor::Milliseconds total;

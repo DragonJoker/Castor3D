@@ -58,12 +58,23 @@ namespace castor3d
 	*	Projette une texture dans une cube map.
 	*/
 	class TextureProjectionToCube;
+	/**
+	*\~english
+	*\brief
+	*	Renders a 3D texture into a 2D texture.
+	*\~french
+	*\brief
+	*	Dessine une texture 3D dans une texture 2D.
+	*/
+	class Texture3DTo2D;
 
 	CU_DeclareSmartPtr( EquirectangularToCube );
 	CU_DeclareSmartPtr( RenderCube );
 	CU_DeclareSmartPtr( RenderDepthQuad );
 	CU_DeclareSmartPtr( TextureProjection );
 	CU_DeclareSmartPtr( TextureProjectionToCube );
+
+	CU_DeclareCUSmartPtr( castor3d, Texture3DTo2D, C3D_API );
 
 	//@}
 	//@}

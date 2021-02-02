@@ -36,6 +36,7 @@ namespace castor3d
 		WrapperT< TextureLayoutSPtr > resultTexture;
 		WrapperT< VkImageLayout > lhsLayout;
 		WrapperT< VkImageLayout > rhsLayout;
+		WrapperT< IntermediateView > tex3DResult;
 	};
 
 	using CombinePassConfig = CombinePassConfigT< ashes::Optional >;
@@ -65,7 +66,7 @@ namespace castor3d
 		C3D_API CommandsSemaphore getCommands( RenderPassTimer const & timer
 			, uint32_t index )const;
 
-		inline TextureLayout const & getResult()const
+		TextureLayout const & getResult()const
 		{
 			return *m_image;
 		}
@@ -79,7 +80,7 @@ namespace castor3d
 			: public RenderQuad
 		{
 		public:
-			explicit CombineQuad( Engine & engine
+			CombineQuad( Engine & engine
 				, RenderDevice const & device
 				, castor::String const & prefix
 				, IntermediateViewArray const & lhsViews
@@ -138,6 +139,14 @@ namespace castor3d
 		inline CombinePassBuilder & rhsViewLayout( VkImageLayout layout )
 		{
 			m_config.rhsLayout = layout;
+			return *this;
+		}
+
+		inline CombinePassBuilder & tex3DResult( ashes::ImageView result )
+		{
+			m_config.tex3DResult = { "Texture3DTo2DResult"
+				, result
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL };
 			return *this;
 		}
 

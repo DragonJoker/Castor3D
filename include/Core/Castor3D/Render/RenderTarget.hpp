@@ -15,6 +15,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Render/Technique/Voxelize/VoxelSceneData.hpp"
 #include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
+#include "Castor3D/Render/ToTexture/RenderToTextureModule.hpp"
 #include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 
@@ -471,6 +472,7 @@ namespace castor3d
 		SceneCullerUPtr m_culler;
 		IntermediateViewArray m_intermediates;
 		VoxelSceneData m_voxelConfig;
+		Texture3DTo2DUPtr m_texture3Dto2D;
 	};
 }
 

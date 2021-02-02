@@ -8,6 +8,7 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
+#include "Castor3D/Render/Technique/Voxelize/VoxelSceneData.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
@@ -82,8 +83,8 @@ namespace castor3d
 		: m_engine{ engine }
 		, m_matrixUbo{ engine }
 		, m_voxelGridSize{ voxelGridSize }
-		, m_result{ createTexture( engine, device, "VoxelizedScene", { m_voxelGridSize, m_voxelGridSize, m_voxelGridSize } ) }
-		, m_voxels{ createSsbo( engine, device, "VoxelizedScene", m_voxelGridSize ) }
+		, m_result{ createTexture( engine, device, "VoxelizedSceneColor", { m_voxelGridSize, m_voxelGridSize, m_voxelGridSize } ) }
+		, m_voxels{ createSsbo( engine, device, "VoxelizedSceneBuffer", m_voxelGridSize ) }
 		, m_voxelizerUbo{ voxelizerUbo }
 		, m_voxelizePass{ engine
 			, device
@@ -98,12 +99,6 @@ namespace castor3d
 			, *m_voxels
 			, m_result
 			, m_voxelGridSize }
-		, m_voxelRenderer{ device
-			, m_voxelizerUbo
-			, matrixUbo
-			, m_result
-			, colourView
-			, m_voxelGridSize }
 		, m_voxelConfig{ voxelConfig }
 	{
 	}
@@ -114,6 +109,7 @@ namespace castor3d
 
 	void Voxelizer::update( CpuUpdater & updater )
 	{
+		updater.cellSize = m_voxelConfig.voxelSize;
 		m_voxelizePass.update( updater );
 		m_voxelizerUbo.cpuUpdate( m_voxelConfig
 			, m_voxelizePass.getCuller().getCamera()
@@ -134,16 +130,16 @@ namespace castor3d
 		return *result;
 	}
 
-	ashes::Semaphore const & Voxelizer::debug( RenderDevice const & device
-		, ashes::Semaphore const & toWait )
-	{
-		ashes::Semaphore const * result = &toWait;
-		result = &m_voxelRenderer.render( device, *result );
-		return *result;
-	}
-
 	void Voxelizer::accept( RenderTechniqueVisitor & visitor )
 	{
 		m_voxelizePass.accept( visitor );
+	}
+
+	void Voxelizer::listIntermediates( RenderTechniqueVisitor & visitor )
+	{
+		visitor.visit( "Voxelisation Result"
+			, m_result.getTexture()->getDefaultView().getSampledView()
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, TextureFactors::tex3D( &m_voxelConfig.voxelSize ) );
 	}
 }

@@ -46,15 +46,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Renders voxels on screen.
-	*\~french
-	*\brief
-	*	Dessine les voxels à l'écran.
-	*/
-	class VoxelRenderer;
-	/**
-	*\~english
-	*\brief
 	*	Voxel configuration.
 	*\~french
 	*\brief
@@ -63,7 +54,6 @@ namespace castor3d
 	class VoxelSceneData;
 
 	CU_DeclareCUSmartPtr( castor3d, Voxelizer, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, VoxelRenderer, C3D_API );
 
 	struct Voxel
 	{

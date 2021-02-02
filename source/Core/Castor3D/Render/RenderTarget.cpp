@@ -19,6 +19,7 @@
 #include "Castor3D/Render/PostEffect/PostEffect.hpp"
 #include "Castor3D/Render/Technique/RenderTechnique.hpp"
 #include "Castor3D/Render/ToneMapping/ToneMapping.hpp"
+#include "Castor3D/Render/ToTexture/Texture3DTo2D.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
@@ -383,6 +384,17 @@ namespace castor3d
 		auto technique = this->getTechnique();
 		auto & debugConfig = technique->getDebugConfig();
 		updater.combineIndex = debugConfig.debugIndex;
+
+		if ( m_intermediates[debugConfig.debugIndex].factors.cellSize )
+		{
+			updater.cellSize = *m_intermediates[debugConfig.debugIndex].factors.cellSize;
+		}
+		else
+		{
+			updater.cellSize = 0.0f;
+		}
+
+		m_texture3Dto2D->update( updater );
 		m_combinePass->update( updater );
 #endif
 	}
@@ -843,15 +855,21 @@ namespace castor3d
 		mainBuilder.resultTexture( m_combinedFrameBuffer.colourTexture.getTexture() );
 		mainBuilder.texcoordConfig( rq::Texcoord{} );
 
+		m_texture3Dto2D = castor::makeUnique< Texture3DTo2D >( device
+			, extent
+			, m_renderTechnique->getMatrixUbo() );
+
 #if C3D_DebugQuads
 		auto intermediates = m_intermediates;
 #else
 		IntermediateViewArray intermediates{ m_intermediates[0] };
 #endif
+		m_texture3Dto2D->createPasses( intermediates );
 
 		m_combinePass = CombinePassBuilder{ mainBuilder }
 			.binding( VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D )
 			.binding( VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D )
+			.tex3DResult( m_texture3Dto2D->getTarget() )
 			.build( *getEngine()
 				, device
 				, "Target"
@@ -1007,6 +1025,8 @@ namespace castor3d
 
 	ashes::Semaphore const & RenderTarget::doCombine( ashes::Semaphore const & toWait )
 	{
-		return m_combinePass->combine( toWait );
+		ashes::Semaphore const * result = &toWait;
+		result = &m_texture3Dto2D->render( *result );
+		return m_combinePass->combine( *result );
 	}
 }

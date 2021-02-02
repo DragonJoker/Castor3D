@@ -851,7 +851,7 @@ namespace castor3d
 					auto normal = writer.declLocale( "normal"
 						, normalize( inNormal ) );
 					auto albedo = writer.declLocale( "albedo"
-						, utils.removeGamma( gamma, material.m_diffuse() ) );
+						, utils.removeGamma( gamma, material.m_albedo ) );
 					auto metalness = writer.declLocale( "metalness"
 						, material.m_metallic );
 					auto roughness = writer.declLocale( "roughness"
@@ -891,6 +891,9 @@ namespace castor3d
 							, roughness );
 					}
 
+					utils.applyAlphaFunc( flags.alphaFunc
+						, alpha
+						, material.m_alphaRef );
 					emissive *= albedo;
 					auto worldEye = writer.declLocale( "worldEye"
 						, c3d_cameraPosition.xyz() );

@@ -7,7 +7,6 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/Technique/Voxelize/VoxelBufferToTexture.hpp"
 #include "Castor3D/Render/Technique/Voxelize/VoxelizePass.hpp"
-#include "Castor3D/Render/Technique/Voxelize/VoxelRenderer.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
 namespace castor3d
@@ -64,19 +63,11 @@ namespace castor3d
 		C3D_API ashes::Semaphore const & render( RenderDevice const & device
 			, ashes::Semaphore const & toWait );
 		/**
-		 *\~english
-		 *\brief		Renders nodes.
-		 *\param[in]	toWait	The semaphore from the previous render pass.
-		 *\~french
-		 *\brief		Dessine les noeuds.
-		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
-		 */
-		C3D_API ashes::Semaphore const & debug( RenderDevice const & device
-			, ashes::Semaphore const & toWait );
-		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor );
+
+		C3D_API void listIntermediates( RenderTechniqueVisitor & visitor );
 
 		TextureUnit const & getResult()const
 		{
@@ -92,7 +83,6 @@ namespace castor3d
 		VoxelizerUbo & m_voxelizerUbo;
 		VoxelizePass m_voxelizePass;
 		VoxelBufferToTexture m_voxelToTexture;
-		VoxelRenderer m_voxelRenderer;
 		VoxelSceneData const & m_voxelConfig;
 	};
 }

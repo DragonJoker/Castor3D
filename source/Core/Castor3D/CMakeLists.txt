@@ -1153,7 +1153,6 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Technique/Voxelize/VoxelBufferToTexture.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Technique/Voxelize/VoxelizePass.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Technique/Voxelize/Voxelizer.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Technique/Voxelize/VoxelRenderer.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Technique/Voxelize/VoxelSceneData.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
@@ -1161,7 +1160,6 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Technique/Voxelize/VoxelizeModule.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Technique/Voxelize/VoxelizePass.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Technique/Voxelize/Voxelizer.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Technique/Voxelize/VoxelRenderer.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Technique/Voxelize/VoxelSceneData.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
@@ -1202,6 +1200,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/ToTexture/EquirectangularToCube.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/ToTexture/RenderCube.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/ToTexture/RenderDepthQuad.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/ToTexture/Texture3DTo2D.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/ToTexture/TextureProjection.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/ToTexture/TextureProjectionToCube.cpp
 )
@@ -1211,6 +1210,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/ToTexture/RenderDepthQuad.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/ToTexture/RenderToTextureModule.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/ToTexture/TextureProjection.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/ToTexture/Texture3DTo2D.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/ToTexture/TextureProjectionToCube.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES

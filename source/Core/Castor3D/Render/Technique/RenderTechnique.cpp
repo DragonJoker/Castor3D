@@ -75,10 +75,11 @@ namespace castor3d
 
 			bool doFilter( VkImageViewCreateInfo const & info )const override
 			{
-				return info.viewType == VK_IMAGE_VIEW_TYPE_2D
-					&& info.subresourceRange.baseMipLevel == 0u
-					&& info.subresourceRange.levelCount == 1u
-					&& info.subresourceRange.layerCount == 1u
+				return ( info.viewType == VK_IMAGE_VIEW_TYPE_3D
+					|| ( info.viewType == VK_IMAGE_VIEW_TYPE_2D
+						&& info.subresourceRange.baseMipLevel == 0u
+						&& info.subresourceRange.levelCount == 1u
+						&& info.subresourceRange.layerCount == 1u ) )
 					&& m_cache.end() == m_cache.find( info );
 			}
 
@@ -495,29 +496,26 @@ namespace castor3d
 			m_voxelizer->update( updater );
 		}
 
-		if ( !m_renderTarget.getVoxelConeTracingConfig().debugVoxels )
-		{
 #if C3D_UseDeferredRendering
-			m_deferredRendering->update( updater );
+		m_deferredRendering->update( updater );
 #else
-			static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).update( updater );
+		static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).update( updater );
 #endif
 #if C3D_UseWeightedBlendedRendering
-			m_weightedBlendRendering->update( updater );
+		m_weightedBlendRendering->update( updater );
 #else
-			static_cast< ForwardRenderTechniquePass & >( *m_transparentPass ).update( updater );
+		static_cast< ForwardRenderTechniquePass & >( *m_transparentPass ).update( updater );
 #endif
 
-			if ( m_renderTarget.getScene()->getFog().getType() != FogType::eDisabled )
-			{
-				auto & background = m_renderTarget.getScene()->getColourBackground();
-				background.update( updater );
-			}
-			else
-			{
-				auto & background = *m_renderTarget.getScene()->getBackground();
-				background.update( updater );
-			}
+		if ( m_renderTarget.getScene()->getFog().getType() != FogType::eDisabled )
+		{
+			auto & background = m_renderTarget.getScene()->getColourBackground();
+			background.update( updater );
+		}
+		else
+		{
+			auto & background = *m_renderTarget.getScene()->getBackground();
+			background.update( updater );
 		}
 
 		doUpdateShadowMaps( updater );
@@ -551,16 +549,8 @@ namespace castor3d
 
 		}
 
-		if ( m_renderTarget.getVoxelConeTracingConfig().debugVoxels )
-		{
-			semaphore = &m_voxelizer->debug( device, *semaphore );
-		}
-		else
-		{
-			semaphore = &doRenderOpaque( device, *semaphore );
-			semaphore = &doRenderTransparent( device, *semaphore );
-		}
-
+		semaphore = &doRenderOpaque( device, *semaphore );
+		semaphore = &doRenderTransparent( device, *semaphore );
 		return *semaphore;
 	}
 
@@ -577,6 +567,8 @@ namespace castor3d
 		visitor.visit( "Technique Depth"
 			, m_depthBuffer.getTexture()->getDefaultView().getSampledView()
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+
+		m_voxelizer->listIntermediates( visitor );
 
 		if ( checkFlag( visitor.getFlags().passFlags, PassFlag::eAlphaBlending ) )
 		{

@@ -49,7 +49,6 @@ namespace castor3d
 
 	public:
 		bool enabled{ false };
-		bool debugVoxels{ false };
 		bool conservativeRasterization{ false };
 		//!\~english	The maximum distance for cones.
 		//!\~french		La distance maximale pour les cones.

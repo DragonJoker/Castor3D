@@ -72,6 +72,23 @@ namespace castor3d
 	{
 		castor::Point3f multiply{ 1.0f, 1.0f, 1.0f };
 		castor::Point3f add{};
+		float const * cellSize{ nullptr };
+
+		static TextureFactors tex2D( castor::Point3f multiply = castor::Point3f{ 1.0f, 1.0f, 1.0f }
+			, castor::Point3f add = castor::Point3f{} )
+		{
+			TextureFactors result;
+			result.multiply = multiply;
+			result.add = add;
+			return result;
+		}
+
+		static TextureFactors tex3D( float const * cellSize )
+		{
+			TextureFactors result;
+			result.cellSize = cellSize;
+			return result;
+		}
 	};
 	/**
 	*\~english

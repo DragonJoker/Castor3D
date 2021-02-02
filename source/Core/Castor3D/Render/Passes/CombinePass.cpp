@@ -126,7 +126,11 @@ namespace castor3d
 
 			for ( auto & view : views )
 			{
-				if ( view.view->image != outputView->image
+				if ( view.view->viewType == VK_IMAGE_VIEW_TYPE_3D )
+				{
+					result.push_back( doCreateBarrierView( config.tex3DResult.value() ) );
+				}
+				else if ( view.view->image != outputView->image
 					|| view.view->subresourceRange != outputView->subresourceRange )
 				{
 					result.push_back( doCreateBarrierView( view ) );
@@ -184,7 +188,11 @@ namespace castor3d
 
 			for ( auto & view : views )
 			{
-				if ( view.view->image != outputView->image
+				if ( view.view->viewType == VK_IMAGE_VIEW_TYPE_3D )
+				{
+					result.push_back( doCreateBarrierView( config.tex3DResult.value() ) );
+				}
+				else if ( view.view->image != outputView->image
 					|| view.view->subresourceRange != outputView->subresourceRange )
 				{
 					result.push_back( doCreateSampledView( view ) );
