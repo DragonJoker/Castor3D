@@ -37,6 +37,14 @@
 
 CU_ImplementCUSmartPtr( castor3d, Texture3DTo2D )
 
+#define UBO_GRID( Writer, Binding )\
+	auto ubo = Writer.declUniformBuffer<>( "ubo", Binding, 0u );\
+	auto gridCenterCellSize = ubo.declMember< sdw::Vec4 >( "gridCenter" );\
+	auto gridSize = ubo.declMember< sdw::UInt >( "gridSize" );\
+	ubo.end();\
+	auto gridCenter = gridCenterCellSize.xyz();\
+	auto cellSize = gridCenterCellSize.w()
+
 namespace castor3d
 {
 	//*********************************************************************************************
@@ -45,7 +53,7 @@ namespace castor3d
 	{
 		enum IDs : uint32_t
 		{
-			eSizeUbo,
+			eGridUbo,
 			eMatrixUbo,
 			eSource,
 		};
@@ -178,7 +186,7 @@ namespace castor3d
 
 		ashes::DescriptorSetLayoutPtr createDescriptorLayout( RenderDevice const & device )
 		{
-			ashes::VkDescriptorSetLayoutBindingArray bindings{ makeDescriptorSetLayoutBinding( eSizeUbo
+			ashes::VkDescriptorSetLayoutBindingArray bindings{ makeDescriptorSetLayoutBinding( eGridUbo
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_GEOMETRY_BIT )
 				, makeDescriptorSetLayoutBinding( eMatrixUbo
@@ -198,7 +206,7 @@ namespace castor3d
 		{
 			auto descriptorSet = pool.createDescriptorSet( "Texture3DTo2D" );
 			uniformBuffer.createSizedBinding( *descriptorSet
-				, pool.getLayout().getBinding( eSizeUbo ) );
+				, pool.getLayout().getBinding( eGridUbo ) );
 			matrixUbo.createSizedBinding( *descriptorSet
 				, pool.getLayout().getBinding( eMatrixUbo ) );
 			descriptorSet->createBinding( pool.getLayout().getBinding( eSource )
@@ -301,10 +309,7 @@ namespace castor3d
 			VertexWriter writer;
 
 			// Shader inputs
-			auto ubo = writer.declUniformBuffer<>( "ubo", eSizeUbo, 0u );
-			auto gridSize = ubo.declMember< UInt >( "gridSize" );
-			auto cellSize = ubo.declMember< Float >( "cellSize" );
-			ubo.end();
+			UBO_GRID( writer, eGridUbo );
 			auto inSource( writer.declImage< RWFImg3DRgba32 >( "inSource"
 				, eSource
 				, 0u ) );
@@ -339,10 +344,7 @@ namespace castor3d
 			writer.outputLayout( stmt::OutputLayout::eTriangleStrip, 14u );
 
 			// Shader inputs
-			auto ubo = writer.declUniformBuffer<>( "ubo", eSizeUbo, 0u );
-			auto gridSize = ubo.declMember< UInt >( "gridSize" );
-			auto cellSize = ubo.declMember< Float >( "cellSize" );
-			ubo.end();
+			UBO_GRID( writer, eGridUbo );
 			UBO_MATRIX( writer, eMatrixUbo, 0u );
 			auto inVoxelColor = writer.declInputArray< Vec4 >( "inVoxelColor", 0u, 1u );
 			auto in = writer.getIn();
@@ -511,7 +513,10 @@ namespace castor3d
 		if ( updater.cellSize != 0.0f )
 		{
 			auto & data = m_uniformBuffer.getData();
-			data.cellSize = updater.cellSize;
+			data.gridCenterCellSize = castor::Point4f{ updater.gridCenter->x
+				, updater.gridCenter->y
+				, updater.gridCenter->z
+				, updater.cellSize };
 			data.gridSize = m_textures[m_index].view.image->getDimensions().width;
 		}
 	}

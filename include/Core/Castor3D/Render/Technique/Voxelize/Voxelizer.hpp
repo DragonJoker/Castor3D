@@ -84,6 +84,7 @@ namespace castor3d
 		VoxelizePass m_voxelizePass;
 		VoxelBufferToTexture m_voxelToTexture;
 		VoxelSceneData const & m_voxelConfig;
+		castor::Point4f m_grid;
 	};
 }
 

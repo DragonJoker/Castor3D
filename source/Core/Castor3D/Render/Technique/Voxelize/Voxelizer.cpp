@@ -109,7 +109,7 @@ namespace castor3d
 
 	void Voxelizer::update( CpuUpdater & updater )
 	{
-		updater.cellSize = m_voxelConfig.voxelSize;
+		m_grid = castor::Point4f{ 0, 0, 0, m_voxelConfig.voxelSize };
 		m_voxelizePass.update( updater );
 		m_voxelizerUbo.cpuUpdate( m_voxelConfig
 			, m_voxelizePass.getCuller().getCamera()
@@ -140,6 +140,6 @@ namespace castor3d
 		visitor.visit( "Voxelisation Result"
 			, m_result.getTexture()->getDefaultView().getSampledView()
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, TextureFactors::tex3D( &m_voxelConfig.voxelSize ) );
+			, TextureFactors::tex3D( &m_grid ) );
 	}
 }

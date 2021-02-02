@@ -385,13 +385,15 @@ namespace castor3d
 		auto & debugConfig = technique->getDebugConfig();
 		updater.combineIndex = debugConfig.debugIndex;
 
-		if ( m_intermediates[debugConfig.debugIndex].factors.cellSize )
+		if ( m_intermediates[debugConfig.debugIndex].factors.grid )
 		{
-			updater.cellSize = *m_intermediates[debugConfig.debugIndex].factors.cellSize;
+			updater.cellSize = ( *m_intermediates[debugConfig.debugIndex].factors.grid )[3];
+			updater.gridCenter = castor::Point3f{ *m_intermediates[debugConfig.debugIndex].factors.grid };
 		}
 		else
 		{
 			updater.cellSize = 0.0f;
+			updater.gridCenter = {};
 		}
 
 		m_texture3Dto2D->update( updater );

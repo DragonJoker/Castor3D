@@ -20,8 +20,8 @@ namespace castor3d
 {
 	struct Texture3DTo2DData
 	{
+		castor::Point4f gridCenterCellSize;
 		uint32_t gridSize;
-		float cellSize;
 	};
 
 	class Texture3DTo2D
