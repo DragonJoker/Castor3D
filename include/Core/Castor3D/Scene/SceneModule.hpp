@@ -96,23 +96,23 @@ namespace castor3d
 	*	Enumération des indicateurs de scène.
 	*/
 	enum class SceneFlag
-		: uint8_t
+		: uint16_t
 	{
 		//!\~english	No flag.
 		//!\~french		Aucun indicateur.
-		eNone = 0x00,
+		eNone = 0x0000,
 		//!\~english	Linear fog.
 		//!\~french		Brouillard linéaire.
-		eFogLinear = 0x01 << 0,
+		eFogLinear = 0x0001 << 0,
 		//!\~english	Exponential fog.
 		//!\~french		Brouillard exponentiel.
-		eFogExponential = 0x01 << 1,
+		eFogExponential = 0x0001 << 1,
 		//!\~english	Squared exponential fog.
 		//!\~french		Brouillard exponentiel au carré.
-		eFogSquaredExponential = 0x01 << 2,
+		eFogSquaredExponential = 0x0001 << 2,
 		//!\~english	Shadow enabling, by light source type.
 		//!\~french		Activation des ombres, par type de source lumineuse.
-		eShadowBegin = 0x01 << 3,
+		eShadowBegin = 0x0001 << 3,
 		eShadowDirectional = eShadowBegin << 0,
 		eShadowPoint = eShadowBegin << 1,
 		eShadowSpot = eShadowBegin << 2,
@@ -120,11 +120,14 @@ namespace castor3d
 		eShadowAny = eShadowSpot | eShadowPoint | eShadowDirectional,
 		//!\~english	Light Propagation Volumes enabling.
 		//!\~french		Activation des Light Propagation Volumes.
-		eLpvGI = 0x01 << 6,
-		eLayeredLpvGI = 0x01 << 7,
+		eLpvGI = 0x0001 << 6,
+		eLayeredLpvGI = 0x0001 << 7,
+		//!\~english	Voxel Cone Tracing enabling.
+		//!\~french		Activation du Voxel Cone Tracing.
+		eVoxelConeTracing = 0x0001 << 8,
 		//!\~english	All flags.
 		//!\~french		Tous les indicateurs.
-		eAll = 0xFF,
+		eAll = 0x01FF,
 	};
 	CU_ImplementFlags( SceneFlag )
 	/**

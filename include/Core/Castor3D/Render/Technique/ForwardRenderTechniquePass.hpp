@@ -39,7 +39,8 @@ namespace castor3d
 			, SceneNode const * ignored
 			, SsaoConfig const & config
 			, LpvGridConfigUbo const * lpvConfigUbo = nullptr
-			, LayeredLpvGridConfigUbo const * llpvConfigUbo = nullptr );
+			, LayeredLpvGridConfigUbo const * llpvConfigUbo = nullptr
+			, VoxelizerUbo const * vctConfigUbo = nullptr );
 		/**
 		 *\~english
 		 *\brief		Constructor for transparent nodes.
@@ -68,7 +69,8 @@ namespace castor3d
 			, SceneNode const * ignored
 			, SsaoConfig const & config
 			, LpvGridConfigUbo const * lpvConfigUbo = nullptr
-			, LayeredLpvGridConfigUbo const * llpvConfigUbo = nullptr );
+			, LayeredLpvGridConfigUbo const * llpvConfigUbo = nullptr
+			, VoxelizerUbo const * vctConfigUbo = nullptr );
 		/**
 		 *\~english
 		 *\brief		Destructor

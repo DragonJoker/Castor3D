@@ -24,6 +24,8 @@ namespace castor3d
 			C3D_API void declare( uint32_t setIndex
 				, uint32_t & bindingIndex
 				, SceneFlags sceneFlags );
+			C3D_API void declareVct( uint32_t & bindingIndex
+				, uint32_t setIndex = 0u );
 			C3D_API void declareLpv( uint32_t & bindingIndex
 				, uint32_t setIndex = 0u );
 			C3D_API void declareLayeredLpv( uint32_t & bindingIndex
@@ -40,6 +42,13 @@ namespace castor3d
 				, sdw::Vec3 diffuse
 				, sdw::Vec3 allButAmbient
 				, sdw::Vec3 ambient );
+			C3D_API sdw::Vec3 computeSpecular( SceneFlags sceneFlags
+				, sdw::Vec3 wsCamera
+				, sdw::Vec3 wsPosition
+				, sdw::Vec3 wsNormal
+				, sdw::Float roughness
+				, sdw::Vec3 f0
+				, sdw::Vec3 specular );
 
 		private:
 			sdw::ShaderWriter & m_writer;

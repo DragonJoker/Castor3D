@@ -27,6 +27,12 @@ namespace castor3d
 		{
 			using namespace sdw;
 
+			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
+			{
+				declareVct( bindingIndex, setIndex );
+			}
+			else
+			{
 				if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
 				{
 					declareLpv( bindingIndex, setIndex );
@@ -36,6 +42,16 @@ namespace castor3d
 				{
 					declareLayeredLpv( bindingIndex, setIndex );
 				}
+			}
+		}
+
+		void GlobalIllumination::declareVct( uint32_t & bindingIndex
+			, uint32_t setIndex )
+		{
+			UBO_VOXELIZER( m_writer, VoxelizerUbo::BindingPoint, 0u, true );
+			auto c3d_mapVoxels = m_writer.declSampledImage< FImg3DRgba32 >( "c3d_mapVoxels", bindingIndex++, setIndex );
+			m_utils.declareFresnelSchlick();
+			m_utils.declareTraceCone();
 		}
 
 		void GlobalIllumination::declareLpv( uint32_t & bindingIndex
@@ -246,6 +262,40 @@ namespace castor3d
 			}
 
 			return ambient + allButAmbient;
+		}
+
+		sdw::Vec3 GlobalIllumination::computeSpecular( SceneFlags sceneFlags
+			, sdw::Vec3 wsCamera
+			, sdw::Vec3 wsPosition
+			, sdw::Vec3 wsNormal
+			, sdw::Float roughness
+			, sdw::Vec3 f0
+			, sdw::Vec3 specular )
+		{
+			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
+			{
+				auto voxelData = m_writer.getVariable< VoxelData >( "c3d_voxelData" );
+				auto mapVoxels = m_writer.getVariable< SampledImage3DRgba32 >( "c3d_mapVoxels" );
+				auto vxlPosition = m_writer.getVariable< sdw::Vec3 >( "vxlPosition" );
+				auto vxlBlend = m_writer.getVariable< sdw::Float >( "vxlBlend" );
+
+				auto vxlReflection = m_writer.declLocale( "vxlReflection"
+					, m_utils.traceConeReflection( mapVoxels
+						, wsPosition
+						, wsNormal
+						, wsCamera - wsPosition
+						, roughness
+						, voxelData ) );
+				auto indirectSpecular = m_writer.declLocale( "indirectSpecular"
+					, mix( vec3( 0.0_f ), vxlReflection.xyz(), vec3( vxlReflection.a() * vxlBlend ) ) );
+				auto V = m_writer.declLocale( "V"
+					, normalize( wsCamera - wsPosition ) );
+				auto NdotV = m_writer.declLocale( "NdotV"
+					, max( 0.0_f, dot( wsNormal, V ) ) );
+				return specular + indirectSpecular * m_utils.fresnelSchlick( NdotV, f0, roughness );
+			}
+
+			return specular;
 		}
 	}
 }

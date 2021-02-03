@@ -47,7 +47,8 @@ namespace castor3d
 			, SceneNode const * ignored
 			, SsaoConfig const & config
 			, LpvGridConfigUbo const * lpvConfigUbo = nullptr
-			, LayeredLpvGridConfigUbo const * llpvConfigUbo = nullptr );
+			, LayeredLpvGridConfigUbo const * llpvConfigUbo = nullptr
+			, VoxelizerUbo const * vctConfigUbo = nullptr );
 		/**
 		 *\~english
 		 *\brief		Constructor for transparent nodes.
@@ -79,7 +80,8 @@ namespace castor3d
 			, SceneNode const * ignored
 			, SsaoConfig const & config
 			, LpvGridConfigUbo const * lpvConfigUbo = nullptr
-			, LayeredLpvGridConfigUbo const * llpvConfigUbo = nullptr );
+			, LayeredLpvGridConfigUbo const * llpvConfigUbo = nullptr
+			, VoxelizerUbo const * vctConfigUbo = nullptr );
 
 	public:
 		/**
@@ -94,7 +96,8 @@ namespace castor3d
 		 */
 		C3D_API bool initialise( RenderDevice const & device
 			, castor::Size const & size
-			, LightVolumePassResult const * lpvResult = nullptr );
+			, LightVolumePassResult const * lpvResult = nullptr
+			, TextureUnit const * vctResult = nullptr );
 		/**
 		 *\~english
 		 *\brief		Visitor acceptance function.
@@ -229,7 +232,9 @@ namespace castor3d
 		Scene const & m_scene;
 		LpvGridConfigUbo const * m_lpvConfigUbo;
 		LayeredLpvGridConfigUbo const * m_llpvConfigUbo;
+		VoxelizerUbo const * m_vctConfigUbo;
 		LightVolumePassResult const * m_lpvResult;
+		TextureUnit const * m_vctResult;
 		Camera * m_camera{ nullptr };
 		SceneRenderNode m_sceneNode;
 		bool m_environment{ false };

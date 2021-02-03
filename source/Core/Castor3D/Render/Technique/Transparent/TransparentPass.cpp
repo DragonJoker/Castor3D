@@ -522,8 +522,15 @@ namespace castor3d
 						, inWorldPosition
 						, normal
 						, diffuse
-						, diffuse + reflected + refracted + lightSpecular + emissive
+						, diffuse + reflected + refracted + emissive
 						, ambient ) );
+				colour += indirect.computeSpecular( flags.sceneFlags
+						, worldEye
+						, inWorldPosition
+						, normal
+						, ( 256.0_f - shininess ) / 256.0_f
+						, specular
+						, lightSpecular );
 				pxl_accumulation = utils.computeAccumulation( in.fragCoord.z()
 					, colour
 					, opacity
@@ -847,8 +854,15 @@ namespace castor3d
 						, inWorldPosition
 						, normal
 						, lightDiffuse * albedo
-						, lightDiffuse * albedo + reflected + refracted + lightSpecular + emissive
+						, lightDiffuse * albedo + reflected + refracted + emissive
 						, ambient ) );
+				colour += indirect.computeSpecular( flags.sceneFlags
+						, worldEye
+						, inWorldPosition
+						, normal
+						, roughness
+						, mix( vec3( 0.04_f ), albedo, vec3( metalness ) )
+						, lightSpecular );
 				pxl_accumulation = utils.computeAccumulation( in.fragCoord.z()
 					, colour
 					, opacity
@@ -1169,8 +1183,15 @@ namespace castor3d
 						, inWorldPosition
 						, normal
 						, lightDiffuse * albedo
-						, lightDiffuse * albedo + reflected + refracted + lightSpecular + emissive
+						, lightDiffuse * albedo + reflected + refracted + emissive
 						, ambient ) );
+				colour += indirect.computeSpecular( flags.sceneFlags
+						, worldEye
+						, inWorldPosition
+						, normal
+						, ( 1.0_f - glossiness )
+						, specular
+						, lightSpecular );
 				pxl_accumulation = utils.computeAccumulation( in.fragCoord.z()
 					, colour
 					, opacity

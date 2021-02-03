@@ -867,7 +867,10 @@ namespace castor3d
 
 #else
 
-		m_opaquePass->initialise( device, m_size, m_lpvResult.get() );
+		m_opaquePass->initialise( device
+			, m_size
+			, m_lpvResult.get()
+			, &m_voxelizer->getResult() );
 		static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).initialiseRenderPass( device
 			, m_colourTexture.getTexture()->getDefaultView().getTargetView()
 			, m_depthBuffer.getTexture()->getDefaultView().getTargetView()
