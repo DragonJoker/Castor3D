@@ -61,8 +61,6 @@ namespace GuiCommon
 			, wxPropertyGrid * grid )override;
 		void doCreateSsaoProperties( wxPGEditor * editor
 			, wxPropertyGrid * grid );
-		void doCreateVctProperties( wxPGEditor * editor
-			, wxPropertyGrid * grid );
 
 	private:
 		castor3d::RenderTarget & m_target;

@@ -815,6 +815,8 @@ namespace castor3d::shader
 			return;
 		}
 
+		declareIsSaturated();
+
 		auto cones = m_writer.declConstantArray( "cones"
 			, std::vector< sdw::Vec3 >{ vec3( 0.57735_f, 0.57735, 0.57735 )
 				, vec3( 0.57735_f, -0.57735, -0.57735 )

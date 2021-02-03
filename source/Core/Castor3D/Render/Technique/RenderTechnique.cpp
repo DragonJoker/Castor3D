@@ -351,7 +351,7 @@ namespace castor3d
 				, m_colourTexture.getTexture()->getDefaultView().getTargetView()
 				, m_matrixUbo
 				, m_vctConfigUbo
-				, m_renderTarget.getVoxelConeTracingConfig() );
+				, m_renderTarget.getScene()->getVoxelConeTracingConfig() );
 
 			auto & maps = m_renderTarget.getScene()->getEnvironmentMaps();
 
@@ -413,7 +413,7 @@ namespace castor3d
 		}
 
 		updater.camera = m_renderTarget.getCamera();
-		updater.voxelConeTracing = m_renderTarget.getVoxelConeTracingConfig().enabled;
+		updater.voxelConeTracing = m_renderTarget.getScene()->getVoxelConeTracingConfig().enabled;
 
 #if C3D_UseDepthPrepass
 		m_depthPass->update( updater );
@@ -478,7 +478,7 @@ namespace castor3d
 
 		updater.scene = m_renderTarget.getScene();
 		updater.camera = m_renderTarget.getCamera();
-		updater.voxelConeTracing = m_renderTarget.getVoxelConeTracingConfig().enabled;
+		updater.voxelConeTracing = m_renderTarget.getScene()->getVoxelConeTracingConfig().enabled;
 
 		doInitialiseShadowMaps( updater.device );
 		doInitialiseLpv( updater.device );
@@ -543,7 +543,7 @@ namespace castor3d
 		semaphore = &doRenderLpv( device, *semaphore );
 
 		// Render part
-		if ( m_renderTarget.getVoxelConeTracingConfig().enabled )
+		if ( m_renderTarget.getScene()->getVoxelConeTracingConfig().enabled )
 		{
 			semaphore = &m_voxelizer->render( device, *semaphore );
 

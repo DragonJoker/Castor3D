@@ -39,6 +39,8 @@ namespace GuiCommon
 		addPropertyT( grid, PROPERTY_SCENE_DEBUG_OVERLAYS, m_scene.getEngine()->getRenderLoop().hasDebugOverlays(), &m_scene.getEngine()->getRenderLoop(), &RenderLoop::showDebugOverlays );
 		addPropertyT( grid, PROPERTY_SCENE_AMBIENT_LIGHT, m_scene.getAmbientLight(), &m_scene, &Scene::setAmbientLight );
 		addPropertyT( grid, PROPERTY_SHADOW_LPV_INDIRECT_ATT, m_scene.getLpvIndirectAttenuation(), &m_scene, &Scene::setLpvIndirectAttenuation );
+
+		doCreateVctProperties( editor, grid );
 	}
 
 	void SceneTreeItemProperty::onDebugOverlaysChange( wxVariant const & var )
@@ -51,5 +53,26 @@ namespace GuiCommon
 		wxColour colour;
 		colour << var;
 		m_scene.setAmbientLight( RgbColour::fromBGR( colour.GetRGB() ) );
+	}
+
+	void SceneTreeItemProperty::doCreateVctProperties( wxPGEditor * editor
+		, wxPropertyGrid * grid )
+	{
+		static wxString PROPERTY_VCT = _( "Voxel Cone Tracing" );
+		static wxString PROPERTY_VCT_ENABLED = _( "Enable VCT" );
+		static wxString PROPERTY_VCT_TEMPORAL_SMOOTHING = _( "Temporal Smoothing" );
+		static wxString PROPERTY_VCT_NUM_CONES = _( "Num. Cones" );
+		static wxString PROPERTY_VCT_MAX_DISTANCE = _( "Max. Distance" );
+		static wxString PROPERTY_VCT_RAY_STEP_SIZE = _( "Ray Step Size" );
+		static wxString PROPERTY_VCT_VOXEL_SIZE = _( "Voxel Size" );
+
+		auto & vctConfig = m_scene.getVoxelConeTracingConfig();
+		addProperty( grid, PROPERTY_VCT );
+		addPropertyT( grid, PROPERTY_VCT_ENABLED, &vctConfig.enabled );
+		addPropertyT( grid, PROPERTY_VCT_TEMPORAL_SMOOTHING, &vctConfig.temporalSmoothing );
+		addPropertyT( grid, PROPERTY_VCT_NUM_CONES, &vctConfig.numCones );
+		addPropertyT( grid, PROPERTY_VCT_MAX_DISTANCE, &vctConfig.maxDistance );
+		addPropertyT( grid, PROPERTY_VCT_RAY_STEP_SIZE, &vctConfig.rayStepSize );
+		addPropertyT( grid, PROPERTY_VCT_VOXEL_SIZE, &vctConfig.voxelSize );
 	}
 }

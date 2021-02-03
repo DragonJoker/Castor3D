@@ -98,7 +98,6 @@ namespace GuiCommon
 		addPropertyET( grid, PROPERTY_RENDER_TARGET_DEBUG_VIEW, debugChoices, &debugConfig.debugIndex );
 #endif
 		doCreateSsaoProperties( editor, grid );
-		doCreateVctProperties( editor, grid );
 	}
 
 	void RenderTargetTreeItemProperty::doCreateSsaoProperties( wxPGEditor * editor
@@ -135,27 +134,5 @@ namespace GuiCommon
 		addPropertyT( grid, PROPERTY_RENDER_TARGET_SSAO_BLUR_RADIUS, &ssaoConfig.blurRadius );
 		addPropertyT( grid, PROPERTY_RENDER_TARGET_SSAO_BEND_STEP_COUNT, &ssaoConfig.bendStepCount );
 		addPropertyT( grid, PROPERTY_RENDER_TARGET_SSAO_BEND_STEP_SIZE, &ssaoConfig.bendStepSize );
-	}
-
-	void RenderTargetTreeItemProperty::doCreateVctProperties( wxPGEditor * editor
-		, wxPropertyGrid * grid )
-	{
-		static wxString PROPERTY_RENDER_TARGET_VCT = _( "Voxel Cone Tracing" );
-		static wxString PROPERTY_RENDER_TARGET_VCT_ENABLED = _( "Enable VCT" );
-		static wxString PROPERTY_RENDER_TARGET_VCT_TEMPORAL_SMOOTHING = _( "Temporal Smoothing" );
-		static wxString PROPERTY_RENDER_TARGET_VCT_NUM_CONES = _( "Num. Cones" );
-		static wxString PROPERTY_RENDER_TARGET_VCT_MAX_DISTANCE = _( "Max. Distance" );
-		static wxString PROPERTY_RENDER_TARGET_VCT_RAY_STEP_SIZE = _( "Ray Step Size" );
-		static wxString PROPERTY_RENDER_TARGET_VCT_VOXEL_SIZE = _( "Voxel Size" );
-
-		auto & target = getRenderTarget();
-		auto & vctConfig = target.getVoxelConeTracingConfig();
-		addProperty( grid, PROPERTY_RENDER_TARGET_VCT );
-		addPropertyT( grid, PROPERTY_RENDER_TARGET_VCT_ENABLED, &vctConfig.enabled );
-		addPropertyT( grid, PROPERTY_RENDER_TARGET_VCT_TEMPORAL_SMOOTHING, &vctConfig.temporalSmoothing );
-		addPropertyT( grid, PROPERTY_RENDER_TARGET_VCT_NUM_CONES, &vctConfig.numCones );
-		addPropertyT( grid, PROPERTY_RENDER_TARGET_VCT_MAX_DISTANCE, &vctConfig.maxDistance );
-		addPropertyT( grid, PROPERTY_RENDER_TARGET_VCT_RAY_STEP_SIZE, &vctConfig.rayStepSize );
-		addPropertyT( grid, PROPERTY_RENDER_TARGET_VCT_VOXEL_SIZE, &vctConfig.voxelSize );
 	}
 }

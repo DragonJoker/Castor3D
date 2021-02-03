@@ -36,7 +36,6 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserRenderTargetPostEffect )
 	CU_DeclareAttributeParser( parserRenderTargetToneMapping )
 	CU_DeclareAttributeParser( parserRenderTargetSsao )
-	CU_DeclareAttributeParser( parserRenderTargetVoxelConeTracing )
 	CU_DeclareAttributeParser( parserRenderTargetEnd )
 
 	// Sampler parsers
@@ -81,6 +80,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserMesh )
 	CU_DeclareAttributeParser( parserDirectionalShadowCascades )
 	CU_DeclareAttributeParser( parserLpvIndirectAttenuation )
+	CU_DeclareAttributeParser( parserVoxelConeTracing )
 
 	// ParticleSystem parsers
 	CU_DeclareAttributeParser( parserParticleSystemParent )

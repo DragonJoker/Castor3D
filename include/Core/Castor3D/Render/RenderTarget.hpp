@@ -13,7 +13,6 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Passes/CombinePass.hpp"
 #include "Castor3D/Render/PostEffect/PostEffectModule.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
-#include "Castor3D/Render/Technique/Voxelize/VoxelSceneData.hpp"
 #include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
 #include "Castor3D/Render/ToTexture/RenderToTextureModule.hpp"
 #include "Castor3D/Render/Passes/RenderQuad.hpp"
@@ -246,16 +245,6 @@ namespace castor3d
 		C3D_API HdrConfig const & getHdrConfig()const;
 		C3D_API HdrConfig & getHdrConfig();
 
-		VoxelSceneData const & getVoxelConeTracingConfig()const
-		{
-			return m_voxelConfig;
-		}
-
-		VoxelSceneData & getVoxelConeTracingConfig()
-		{
-			return m_voxelConfig;
-		}
-
 		bool isInitialised()const
 		{
 			return m_initialised;
@@ -471,7 +460,6 @@ namespace castor3d
 		castor::PreciseTimer m_timer;
 		SceneCullerUPtr m_culler;
 		IntermediateViewArray m_intermediates;
-		VoxelSceneData m_voxelConfig;
 		Texture3DTo2DUPtr m_texture3Dto2D;
 	};
 }

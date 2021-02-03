@@ -592,17 +592,6 @@ namespace castor3d
 	}
 	CU_EndAttributePush( CSCNSection::eSsao )
 
-	CU_ImplementAttributeParser( parserRenderTargetVoxelConeTracing )
-	{
-		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
-
-		if ( !parsingContext->renderTarget )
-		{
-			CU_ParsingError( cuT( "No render target initialised." ) );
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eVoxelConeTracing )
-
 	CU_ImplementAttributeParser( parserRenderTargetEnd )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
@@ -1285,6 +1274,17 @@ namespace castor3d
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eParticleSystem )
+
+	CU_ImplementAttributeParser( parserVoxelConeTracing )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->renderTarget )
+		{
+			CU_ParsingError( cuT( "No render target initialised." ) );
+		}
+	}
+	CU_EndAttributePush( CSCNSection::eVoxelConeTracing )
 
 	CU_ImplementAttributeParser( parserMesh )
 	{
@@ -6230,9 +6230,9 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
 
-		if ( !parsingContext->renderTarget )
+		if ( !parsingContext->scene )
 		{
-			CU_ParsingError( cuT( "No render target initialised." ) );
+			CU_ParsingError( cuT( "No scene initialised." ) );
 		}
 		else if ( params.empty() )
 		{
@@ -6240,7 +6240,7 @@ namespace castor3d
 		}
 		else
 		{
-			auto & vctConfig = parsingContext->renderTarget->getVoxelConeTracingConfig();
+			auto & vctConfig = parsingContext->scene->getVoxelConeTracingConfig();
 			params[0]->get( vctConfig.enabled );
 		}
 	}
@@ -6250,9 +6250,9 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
 
-		if ( !parsingContext->renderTarget )
+		if ( !parsingContext->scene )
 		{
-			CU_ParsingError( cuT( "No render target initialised." ) );
+			CU_ParsingError( cuT( "No scene initialised." ) );
 		}
 		else if ( params.empty() )
 		{
@@ -6260,7 +6260,7 @@ namespace castor3d
 		}
 		else
 		{
-			auto & vctConfig = parsingContext->renderTarget->getVoxelConeTracingConfig();
+			auto & vctConfig = parsingContext->scene->getVoxelConeTracingConfig();
 			uint32_t result;
 			params[0]->get( result );
 			vctConfig.numCones = result;
@@ -6272,9 +6272,9 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
 
-		if ( !parsingContext->renderTarget )
+		if ( !parsingContext->scene )
 		{
-			CU_ParsingError( cuT( "No render target initialised." ) );
+			CU_ParsingError( cuT( "No scene initialised." ) );
 		}
 		else if ( params.empty() )
 		{
@@ -6282,7 +6282,7 @@ namespace castor3d
 		}
 		else
 		{
-			auto & vctConfig = parsingContext->renderTarget->getVoxelConeTracingConfig();
+			auto & vctConfig = parsingContext->scene->getVoxelConeTracingConfig();
 			params[0]->get( vctConfig.maxDistance );
 		}
 	}
@@ -6292,9 +6292,9 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
 
-		if ( !parsingContext->renderTarget )
+		if ( !parsingContext->scene )
 		{
-			CU_ParsingError( cuT( "No render target initialised." ) );
+			CU_ParsingError( cuT( "No scene initialised." ) );
 		}
 		else if ( params.empty() )
 		{
@@ -6302,7 +6302,7 @@ namespace castor3d
 		}
 		else
 		{
-			auto & vctConfig = parsingContext->renderTarget->getVoxelConeTracingConfig();
+			auto & vctConfig = parsingContext->scene->getVoxelConeTracingConfig();
 			params[0]->get( vctConfig.rayStepSize );
 		}
 	}
@@ -6312,9 +6312,9 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
 
-		if ( !parsingContext->renderTarget )
+		if ( !parsingContext->scene )
 		{
-			CU_ParsingError( cuT( "No render target initialised." ) );
+			CU_ParsingError( cuT( "No scene initialised." ) );
 		}
 		else if ( params.empty() )
 		{
@@ -6322,7 +6322,7 @@ namespace castor3d
 		}
 		else
 		{
-			auto & vctConfig = parsingContext->renderTarget->getVoxelConeTracingConfig();
+			auto & vctConfig = parsingContext->scene->getVoxelConeTracingConfig();
 			params[0]->get( vctConfig.voxelSize );
 		}
 	}
@@ -6332,9 +6332,9 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
 
-		if ( !parsingContext->renderTarget )
+		if ( !parsingContext->scene )
 		{
-			CU_ParsingError( cuT( "No render target initialised." ) );
+			CU_ParsingError( cuT( "No scene initialised." ) );
 		}
 		else if ( params.empty() )
 		{
@@ -6342,7 +6342,7 @@ namespace castor3d
 		}
 		else
 		{
-			auto & vctConfig = parsingContext->renderTarget->getVoxelConeTracingConfig();
+			auto & vctConfig = parsingContext->scene->getVoxelConeTracingConfig();
 			params[0]->get( vctConfig.conservativeRasterization );
 		}
 	}
@@ -6352,9 +6352,9 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
 
-		if ( !parsingContext->renderTarget )
+		if ( !parsingContext->scene )
 		{
-			CU_ParsingError( cuT( "No render target initialised." ) );
+			CU_ParsingError( cuT( "No scene initialised." ) );
 		}
 		else if ( params.empty() )
 		{
@@ -6362,7 +6362,7 @@ namespace castor3d
 		}
 		else
 		{
-			auto & vctConfig = parsingContext->renderTarget->getVoxelConeTracingConfig();
+			auto & vctConfig = parsingContext->scene->getVoxelConeTracingConfig();
 			params[0]->get( vctConfig.temporalSmoothing );
 		}
 	}

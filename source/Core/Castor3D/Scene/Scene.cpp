@@ -990,24 +990,31 @@ namespace castor3d
 			result |= SceneFlag::eShadowSpot;
 		}
 
-		if ( needsGlobalIllumination( LightType::eDirectional, GlobalIlluminationType::eLpv )
-			|| needsGlobalIllumination( LightType::eDirectional, GlobalIlluminationType::eLpvG )
-			|| needsGlobalIllumination( LightType::ePoint, GlobalIlluminationType::eLpv )
-			|| needsGlobalIllumination( LightType::ePoint, GlobalIlluminationType::eLpvG )
-			|| needsGlobalIllumination( LightType::eSpot, GlobalIlluminationType::eLpv )
-			|| needsGlobalIllumination( LightType::eSpot, GlobalIlluminationType::eLpvG ) )
+		if ( m_voxelConfig.enabled )
 		{
-			result |= SceneFlag::eLpvGI;
+			result |= SceneFlag::eVoxelConeTracing;
 		}
-
-		if ( needsGlobalIllumination( LightType::eDirectional, GlobalIlluminationType::eLayeredLpv )
-			|| needsGlobalIllumination( LightType::eDirectional, GlobalIlluminationType::eLayeredLpvG )
-			|| needsGlobalIllumination( LightType::ePoint, GlobalIlluminationType::eLayeredLpv )
-			|| needsGlobalIllumination( LightType::ePoint, GlobalIlluminationType::eLayeredLpvG )
-			|| needsGlobalIllumination( LightType::eSpot, GlobalIlluminationType::eLayeredLpv )
-			|| needsGlobalIllumination( LightType::eSpot, GlobalIlluminationType::eLayeredLpvG ) )
+		else
 		{
-			result |= SceneFlag::eLayeredLpvGI;
+			if ( needsGlobalIllumination( LightType::eDirectional, GlobalIlluminationType::eLpv )
+				|| needsGlobalIllumination( LightType::eDirectional, GlobalIlluminationType::eLpvG )
+				|| needsGlobalIllumination( LightType::ePoint, GlobalIlluminationType::eLpv )
+				|| needsGlobalIllumination( LightType::ePoint, GlobalIlluminationType::eLpvG )
+				|| needsGlobalIllumination( LightType::eSpot, GlobalIlluminationType::eLpv )
+				|| needsGlobalIllumination( LightType::eSpot, GlobalIlluminationType::eLpvG ) )
+			{
+				result |= SceneFlag::eLpvGI;
+			}
+
+			if ( needsGlobalIllumination( LightType::eDirectional, GlobalIlluminationType::eLayeredLpv )
+				|| needsGlobalIllumination( LightType::eDirectional, GlobalIlluminationType::eLayeredLpvG )
+				|| needsGlobalIllumination( LightType::ePoint, GlobalIlluminationType::eLayeredLpv )
+				|| needsGlobalIllumination( LightType::ePoint, GlobalIlluminationType::eLayeredLpvG )
+				|| needsGlobalIllumination( LightType::eSpot, GlobalIlluminationType::eLayeredLpv )
+				|| needsGlobalIllumination( LightType::eSpot, GlobalIlluminationType::eLayeredLpvG ) )
+			{
+				result |= SceneFlag::eLayeredLpvGI;
+			}
 		}
 
 		return result;
