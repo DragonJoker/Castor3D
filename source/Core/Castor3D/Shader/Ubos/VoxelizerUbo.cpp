@@ -38,6 +38,7 @@ namespace castor3d
 			, rayStepSize{ other.w() }
 			, enabled{ status.x() }
 			, conservativeRasterization{ status.y() }
+			, enableOcclusion{ status.z() }
 		{
 		}
 
@@ -123,6 +124,7 @@ namespace castor3d
 		voxelData.other->w = voxelConfig.rayStepSize;
 		voxelData.status->x = voxelConfig.enabled;
 		voxelData.status->y = voxelConfig.conservativeRasterization;
+		voxelData.status->z = voxelConfig.enableOcclusion;
 	}
 
 	//*********************************************************************************************

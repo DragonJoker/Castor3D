@@ -834,7 +834,7 @@ namespace castor3d::shader
 				, vec3( 0.182696_f, 0.388844, -0.903007 )
 				, vec3( -0.182696_f, 0.388844, 0.903007 )
 				, vec3( 0.182696_f, -0.388844, 0.903007 ) } );
-		
+
 		m_traceCone = m_writer.implementFunction< sdw::Vec4 >( "traceCone"
 			, [&]( sdw::SampledImage3DRgba32 const & voxels
 				, sdw::Vec3 const & wsPosition
@@ -911,17 +911,17 @@ namespace castor3d::shader
 				{
 					// approximate a hemisphere from random points inside a sphere:
 					//  (and modulate cone with surface normal, no banding this way)
-					auto coneDirection = m_writer.declLocale( "coneDirection"
+					auto wsConeDirection = m_writer.declLocale( "wsConeDirection"
 						, normalize( cones[cone] + wsNormal ) );
 					// if point on sphere is facing below normal (so it's located on bottom hemisphere), put it on the opposite hemisphere instead:
-					coneDirection *= m_writer.ternary( dot( coneDirection, wsNormal ) < 0.0_f, -1.0_f, 1.0_f );
+					wsConeDirection *= m_writer.ternary( dot( wsConeDirection, wsNormal ) < 0.0_f, -1.0_f, 1.0_f );
 
 					radiance += m_traceCone( voxels
 						, wsPosition
 						, wsNormal
-						, coneDirection
+						, wsConeDirection
 						, sdw::Float{ castor::Angle::fromRadians( castor::PiDiv2< float > / 3 ).tan() }
-						, voxelData );
+					, voxelData );
 				}
 				ROF;
 
@@ -946,14 +946,14 @@ namespace castor3d::shader
 			{
 				auto aperture = m_writer.declLocale( "aperture"
 					, tan( roughness * sdw::Float{ castor::PiDiv2< float > / 10 } ) );
-				auto coneDirection = m_writer.declLocale( "coneDirection"
+				auto wsConeDirection = m_writer.declLocale( "wsConeDirection"
 					, reflect( -wsViewVector, wsNormal ) );
 
 				auto reflection = m_writer.declLocale( "reflection"
 					, m_traceCone( voxels
 						, wsPosition
 						, wsNormal
-						, coneDirection
+						, wsConeDirection
 						, aperture
 						, voxelData ) );
 
@@ -965,6 +965,65 @@ namespace castor3d::shader
 			, sdw::InVec3{ m_writer, "wsNormal" }
 			, sdw::InVec3{ m_writer, "wsViewVector" }
 			, sdw::InFloat{ m_writer, "roughness" }
+			, InVoxelData{ m_writer, "voxelData" } );
+
+		m_traceConeOcclusion = m_writer.implementFunction< sdw::Float >( "traceConeOcclusion"
+			, [&]( sdw::SampledImage3DRgba32 const & voxels
+				, sdw::Vec3 const & wsPosition
+				, sdw::Vec3 const & wsNormal
+				, sdw::Vec3 const & wsConeDirection
+				, shader::VoxelData const & voxelData )
+			{
+				auto coneAperture = m_writer.declLocale( "coneAperture"
+					, sdw::Float{ castor::Angle::fromRadians( castor::PiDiv2< float > ).tan() } );
+				auto occlusion = m_writer.declLocale( "occlusion"
+					, 0.0_f );
+				// We need to offset the cone start position to avoid sampling its own voxel (self-occlusion):
+				//	Unfortunately, it will result in disconnection between nearby surfaces :(
+				auto wsDist = m_writer.declLocale( "wsDist"
+					, voxelData.gridToWorld ); // offset by cone dir so that first sample of all cones are not the same
+				auto wsStartPos = m_writer.declLocale( "wsStartPos"
+					, wsPosition + wsNormal * vec3( voxelData.gridToWorld * 2.0f * sqrt( 2.0f ) ) ); // sqrt2 is diagonal voxel half-extent
+
+				// We will break off the loop if the sampling distance is too far for performance reasons:
+				WHILE( m_writer, wsDist < voxelData.radianceMaxDistance && occlusion < 1.0_f )
+				{
+					auto wsDiameter = m_writer.declLocale( "wsDiameter"
+						, max( voxelData.gridToWorld, 2.0_f * coneAperture * wsDist ) );
+					auto mip = m_writer.declLocale( "mip"
+						, log2( wsDiameter * voxelData.worldToGrid ) );
+
+					auto tsCoord = m_writer.declLocale( "tsCoord"
+						, wsStartPos + wsConeDirection * vec3( wsDist ) );
+					tsCoord *= voxelData.worldToClip;
+					tsCoord = tsCoord * vec3( 0.5_f, -0.5f, 0.5f ) + 0.5f;
+
+					// break if the ray exits the voxel grid, or we sample from the last mip:
+					IF( m_writer, !isSaturated( tsCoord ) || mip >= voxelData.radianceMips )
+					{
+						m_writer.loopBreakStmt();
+					}
+					FI;
+
+					auto sam = m_writer.declLocale( "sam"
+						, voxels.lod( tsCoord, mip ) );
+
+					// this is the correct blending to avoid black-staircase artifact (ray stepped front-to back, so blend front to back):
+					auto a = m_writer.declLocale( "a"
+						, 1.0_f - occlusion );
+					occlusion += a * sam.a() * smoothStep( 0.0_f, voxelData.radianceMaxDistance, sqrt( wsDist ) );
+
+					// step along ray:
+					wsDist += wsDiameter * voxelData.rayStepSize;
+				}
+				ELIHW;
+
+				m_writer.returnStmt( occlusion );
+			}
+			, sdw::InSampledImage3DRgba32{ m_writer, "voxels" }
+			, sdw::InVec3{ m_writer, "wsPosition" }
+			, sdw::InVec3{ m_writer, "wsNormal" }
+			, sdw::InVec3{ m_writer, "wsConeDirection" }
 			, InVoxelData{ m_writer, "voxelData" } );
 	}
 
@@ -1210,6 +1269,19 @@ namespace castor3d::shader
 			, wsNormal
 			, wsViewVector
 			, roughness
+			, voxelData );
+	}
+
+	sdw::Float Utils::traceConeOcclusion( sdw::SampledImage3DRgba32 const & voxels
+		, sdw::Vec3 const & wsPosition
+		, sdw::Vec3 const & wsNormal
+		, sdw::Vec3 const & wsConeDirection
+		, VoxelData const & voxelData )const
+	{
+		return m_traceConeOcclusion( voxels
+			, wsPosition
+			, wsNormal
+			, wsConeDirection
 			, voxelData );
 	}
 

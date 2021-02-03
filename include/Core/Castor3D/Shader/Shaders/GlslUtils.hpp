@@ -311,6 +311,11 @@ namespace castor3d::shader
 			, sdw::Vec3 const & wsViewVector
 			, sdw::Float const & roughness
 			, VoxelData const & voxelData )const;
+		C3D_API sdw::Float traceConeOcclusion( sdw::SampledImage3DRgba32 const & voxels
+			, sdw::Vec3 const & wsPosition
+			, sdw::Vec3 const & wsNormal
+			, sdw::Vec3 const & wsConeDirection
+			, VoxelData const & voxelData )const;
 
 	public:
 		C3D_API static uint32_t const MaxIblReflectionLod;
@@ -439,6 +444,12 @@ namespace castor3d::shader
 			, sdw::InVec3
 			, sdw::InFloat
 			, InVoxelData > m_traceConeReflection;
+		sdw::Function< sdw::Float
+			, sdw::InSampledImage3DRgba32
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InVec3
+			, InVoxelData > m_traceConeOcclusion;
 	};
 }
 

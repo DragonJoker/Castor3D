@@ -6367,4 +6367,24 @@ namespace castor3d
 		}
 	}
 	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserVctOcclusion )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->scene )
+		{
+			CU_ParsingError( cuT( "No scene initialised." ) );
+		}
+		else if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			auto & vctConfig = parsingContext->scene->getVoxelConeTracingConfig();
+			params[0]->get( vctConfig.enableOcclusion );
+		}
+	}
+	CU_EndAttribute()
 }

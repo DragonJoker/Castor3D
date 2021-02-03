@@ -46,6 +46,7 @@ namespace castor3d
 			sdw::Float rayStepSize;
 			sdw::UInt enabled;
 			sdw::UInt conservativeRasterization;
+			sdw::UInt enableOcclusion;
 
 		private:
 			using sdw::StructInstance::getMember;
@@ -77,7 +78,7 @@ namespace castor3d
 		/**
 		*	- uint enabled;
 		*	- uint conservativeRasterization;
-		*	- uint unused;
+		*	- uint enableOcclusion;
 		*	- uint unused;
 		*/
 		castor::Point4ui status;
