@@ -46,6 +46,9 @@ namespace castor3d
 			eMetallicRoughnessMaterial,
 			eSpecularGlossinessMaterial,
 			eTextureConfigData,
+			eLpvGridData,
+			eLayeredLpvGridData,
+			eLpvLightData,
 			eVoxelData,
 		};
 		// Light Propagation Volumes Cascades.
@@ -81,6 +84,9 @@ namespace castor3d
 		struct TextureConfigData;
 		class TextureConfigurations;
 		struct OutputComponents;
+		class LpvGridData;
+		class LayeredLpvGridData;
+		class LpvLightData;
 		class VoxelData;
 
 		Writer_Parameter( Light );
@@ -88,6 +94,9 @@ namespace castor3d
 		Writer_Parameter( PointLight );
 		Writer_Parameter( SpotLight );
 		Writer_Parameter( TextureConfigData );
+		Writer_Parameter( LayeredLpvGridData );
+		Writer_Parameter( LpvLightData );
+		Writer_Parameter( LpvGridData );
 		Writer_Parameter( VoxelData );
 		/**
 		 *\~english
@@ -165,6 +174,24 @@ namespace sdw
 	struct TypeTraits< castor3d::shader::TextureConfigData >
 	{
 		static ast::type::Kind constexpr TypeEnum = ast::type::Kind( castor3d::shader::TypeName::eTextureConfigData );
+	};
+
+	template<>
+	struct TypeTraits< castor3d::shader::LpvGridData >
+	{
+		static ast::type::Kind constexpr TypeEnum = ast::type::Kind( castor3d::shader::TypeName::eLpvGridData );
+	};
+
+	template<>
+	struct TypeTraits< castor3d::shader::LayeredLpvGridData >
+	{
+		static ast::type::Kind constexpr TypeEnum = ast::type::Kind( castor3d::shader::TypeName::eLayeredLpvGridData );
+	};
+
+	template<>
+	struct TypeTraits< castor3d::shader::LpvLightData >
+	{
+		static ast::type::Kind constexpr TypeEnum = ast::type::Kind( castor3d::shader::TypeName::eLpvLightData );
 	};
 
 	template<>

@@ -105,7 +105,7 @@ namespace castor3d
 				, [&]( Vec3 pos
 					, Vec3 normal )
 				{
-					writer.returnStmt( ivec3( ( pos - c3d_minVolumeCorner ) / vec3( c3d_cellSize ) + 0.5_f * normal ) );
+					writer.returnStmt( ivec3( ( pos - c3d_lpvGridData.minVolumeCorner ) / vec3( c3d_lpvGridData.cellSize ) + 0.5_f * normal ) );
 				}
 				, InVec3{ writer, "pos" }
 				, InVec3{ writer, "normal" } );
@@ -114,7 +114,7 @@ namespace castor3d
 				, [&]()
 				{
 					auto light = writer.declLocale( "light"
-						, lightingModel->getDirectionalLight( c3d_lightIndex ) );
+						, lightingModel->getDirectionalLight( c3d_lpvLightData.lightIndex ) );
 					auto cascadeIndex = writer.declLocale( "cascadeIndex"
 						, writer.cast< Int >( max( 1_u, light.m_cascadeCount ) - 1_u ) );
 					auto rsmCoords = writer.declLocale( "rsmCoords"
@@ -129,7 +129,7 @@ namespace castor3d
 						, outRsmNormal );
 
 					auto screenPos = writer.declLocale( "screenPos"
-						, ( vec2( outVolumeCellIndex.xy() ) + 0.5_f ) / c3d_gridSize.xy() * 2.0_f - 1.0_f );
+						, ( vec2( outVolumeCellIndex.xy() ) + 0.5_f ) / c3d_lpvGridData.gridSize.xy() * 2.0_f - 1.0_f );
 
 					out.vtx.position = vec4( screenPos, 0.0, 1.0 );
 					out.vtx.pointSize = 1.0f;
@@ -170,7 +170,7 @@ namespace castor3d
 				, [&]( Vec3 pos
 					, Vec3 normal )
 				{
-					writer.returnStmt( ivec3( ( pos - c3d_minVolumeCorner ) / vec3( c3d_cellSize ) + 0.5_f * normal ) );
+					writer.returnStmt( ivec3( ( pos - c3d_lpvGridData.minVolumeCorner ) / vec3( c3d_lpvGridData.cellSize ) + 0.5_f * normal ) );
 				}
 				, InVec3{ writer, "pos" }
 				, InVec3{ writer, "normal" } );
@@ -181,7 +181,7 @@ namespace castor3d
 					auto rsmCoords = writer.declLocale( "rsmCoords"
 						, ivec3( in.vertexIndex % rsmTexSize
 							, in.vertexIndex / rsmTexSize
-							, c3d_lightIndex ) );
+							, c3d_lpvLightData.lightIndex ) );
 
 					outRsmPos = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
 					outRsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
@@ -189,7 +189,7 @@ namespace castor3d
 					outVolumeCellIndex = convertPointToGridIndex( outRsmPos, outRsmNormal );
 
 					auto screenPos = writer.declLocale( "screenPos"
-						, ( vec2( outVolumeCellIndex.xy() ) + 0.5_f ) / c3d_gridSize.xy() * 2.0_f - 1.0_f );
+						, ( vec2( outVolumeCellIndex.xy() ) + 0.5_f ) / c3d_lpvGridData.gridSize.xy() * 2.0_f - 1.0_f );
 					out.vtx.position = vec4( screenPos, 0.0_f, 1.0_f );
 					out.vtx.pointSize = 1.0f;
 				} );

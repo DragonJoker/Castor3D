@@ -14,6 +14,8 @@ CU_ImplementCUSmartPtr( castor3d, LpvLightConfigUbo )
 
 namespace castor3d
 {
+	//*********************************************************************************************
+
 	namespace
 	{
 		castor::Matrix4x4f snapMatrix( float lpvCellSize
@@ -26,9 +28,54 @@ namespace castor3d
 		}
 	}
 
+	//*********************************************************************************************
+
+	namespace shader
+	{
+		LpvLightData::LpvLightData( sdw::ShaderWriter & writer
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstance{ writer, std::move( expr ), enabled }
+			, lightView{ getMember< sdw::Mat4 >( "lightView" ) }
+			, lightConfig{ getMember< sdw::Vec4 >( "lightConfig" ) }
+			, texelAreaModifier{ lightConfig.x() }
+			, tanFovXHalf{ lightConfig.y() }
+			, tanFovYHalf{ lightConfig.z() }
+			, lightIndex{ writer.cast< sdw::Int >( lightConfig.w() ) }
+		{
+		}
+
+		LpvLightData & LpvLightData::operator=( LpvLightData const & rhs )
+		{
+			StructInstance::operator=( rhs );
+			return *this;
+		}
+
+		ast::type::StructPtr LpvLightData::makeType( ast::type::TypesCache & cache )
+		{
+			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
+				, "LpvLightData" );
+
+			if ( result->empty() )
+			{
+				result->declMember( "lightView", ast::type::Kind::eMat4x4F );
+				result->declMember( "lightConfig", ast::type::Kind::eVec4F );
+			}
+
+			return result;
+		}
+
+		std::unique_ptr< sdw::Struct > LpvLightData::declare( sdw::ShaderWriter & writer )
+		{
+			return std::make_unique< sdw::Struct >( writer
+				, makeType( writer.getTypesCache() ) );
+		}
+	}
+
+	//*********************************************************************************************
+
 	std::string const LpvLightConfigUbo::LpvLightConfig = "LpvLightConfig";
-	std::string const LpvLightConfigUbo::LightView = "c3d_lightView";
-	std::string const LpvLightConfigUbo::Config = "c3d_lpvLightConfig";
+	std::string const LpvLightConfigUbo::LpvLightData = "c3d_lpvLightData";
 
 	LpvLightConfigUbo::LpvLightConfigUbo()
 	{

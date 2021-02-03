@@ -26,9 +26,9 @@
 #include "Castor3D/Scene/Light/SpotLight.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
+#include "Castor3D/Shader/Shaders/GlslGlobalIllumination.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
-#include "Castor3D/Shader/Shaders/GlslLpvGI.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslMetallicBrdfLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
@@ -106,14 +106,16 @@ namespace castor3d
 		{
 			using namespace sdw;
 			FragmentWriter writer;
-			shader::LpvGI lpvGI{ writer };
+			shader::Utils utils{ writer };
+			shader::GlobalIllumination lpvGI{ writer, utils };
 
 			// Shader inputs
 			UBO_GPINFO( writer, GpInfoUboIdx, 0u );
 			UBO_LAYERED_LPVGRIDCONFIG( writer, LpvGridUboIdx, 0u, true );
 			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), DepthMapIdx, 0u );
 			auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), Data1MapIdx, 0u );
-			lpvGI.declareLayered( uint32_t( RLpvAccum1Idx ) );
+			auto index = uint32_t( RLpvAccum1Idx );
+			lpvGI.declareLayeredLpv( index );
 			auto in = writer.getIn();
 
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
@@ -122,7 +124,6 @@ namespace castor3d
 			auto pxl_lpvGI = writer.declOutput< Vec3 >( "pxl_lpvGI", 0 );
 
 			// Utility functions
-			shader::Utils utils{ writer };
 			utils.declareCalcWSPosition();
 			utils.declareCalcVSPosition();
 
@@ -146,12 +147,10 @@ namespace castor3d
 					auto wsNormal = writer.declLocale( "wsNormal"
 						, data1.xyz() );
 
-					pxl_lpvGI = c3d_indirectAttenuations / Float{ castor::Pi< float > }
+					pxl_lpvGI = c3d_llpvGridData.indirectAttenuation / Float{ castor::Pi< float > }
 						* lpvGI.computeLLPVRadiance( wsPosition
 							, wsNormal
-							, c3d_allMinVolumeCorners
-							, c3d_allCellSizes
-							, c3d_gridSizes );
+							, c3d_llpvGridData );
 				} );
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

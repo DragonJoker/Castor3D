@@ -20,7 +20,7 @@
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 #include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
-#include "Castor3D/Shader/Shaders/GlslLpvGI.hpp"
+#include "Castor3D/Shader/Shaders/GlslGlobalIllumination.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslMetallicPbrReflection.hpp"
 #include "Castor3D/Shader/Shaders/GlslMetallicBrdfLighting.hpp"
@@ -306,8 +306,6 @@ namespace castor3d
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
 		UBO_MODEL( writer, ModelUbo::BindingPoint, 0u );
 		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
-		UBO_LPVGRIDCONFIG( writer, LpvGridConfigUbo::BindingPoint, 0u, checkFlag( flags.sceneFlags, SceneFlag::eLpvGI ) );
-		UBO_LAYERED_LPVGRIDCONFIG( writer, LayeredLpvGridConfigUbo::BindingPoint, 0u, checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI ) );
 
 		auto index = getMinTextureIndex();
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
@@ -322,13 +320,13 @@ namespace castor3d
 			, 1u
 			, ( checkFlag( flags.passFlags, PassFlag::eReflection )
 				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ) );
-		shader::LpvGI lpvGI{ writer };
-		lpvGI.declare( 1u, index, flags.sceneFlags );
+		shader::Utils utils{ writer };
+		shader::GlobalIllumination indirect{ writer, utils };
+		indirect.declare( 1u, index, flags.sceneFlags );
 
 		auto in = writer.getIn();
 
 		shader::Fog fog{ getFogType( flags.sceneFlags ), writer };
-		shader::Utils utils{ writer };
 		utils.declareApplyGamma();
 		utils.declareRemoveGamma();
 		utils.declareParallaxMappingFunc( flags );
@@ -474,20 +472,14 @@ namespace castor3d
 				}
 
 				ambient *= occlusion;
-				pxl_fragColor = vec4( lpvGI.computeResult( flags.sceneFlags
+				auto colour = writer.declLocale( "colour"
+					, indirect.computeDiffuse( flags.sceneFlags
 						, inWorldPosition
 						, normal
-						, c3d_indirectAttenuation
-						, c3d_minVolumeCorner
-						, c3d_cellSize
-						, c3d_gridSize
-						, c3d_allMinVolumeCorners
-						, c3d_allCellSizes
-						, c3d_gridSizes
 						, diffuse
 						, diffuse + reflected + refracted + lightSpecular + emissive
-						, ambient )
-					, alpha );
+						, ambient ) );
+				pxl_fragColor = vec4( colour, alpha );
 
 				if ( getFogType( flags.sceneFlags ) != FogType::eDisabled )
 				{
@@ -551,8 +543,6 @@ namespace castor3d
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
 		UBO_MODEL( writer, ModelUbo::BindingPoint, 0u );
 		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
-		UBO_LPVGRIDCONFIG( writer, LpvGridConfigUbo::BindingPoint, 0u, checkFlag( flags.sceneFlags, SceneFlag::eLpvGI ) );
-		UBO_LAYERED_LPVGRIDCONFIG( writer, LayeredLpvGridConfigUbo::BindingPoint, 0u, checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI ) );
 
 		auto index = getMinTextureIndex();
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
@@ -576,12 +566,12 @@ namespace castor3d
 		auto c3d_mapBrdf = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBrdf"
 			, index++
 			, 1u );
-		shader::LpvGI lpvGI{ writer };
-		lpvGI.declare( 1u, index, flags.sceneFlags );
+		shader::Utils utils{ writer };
+		shader::GlobalIllumination indirect{ writer, utils };
+		indirect.declare( 1u, index, flags.sceneFlags );
 
 		auto in = writer.getIn();
 
-		shader::Utils utils{ writer };
 		utils.declareApplyGamma();
 		utils.declareRemoveGamma();
 		utils.declareFresnelSchlick();
@@ -809,20 +799,14 @@ namespace castor3d
 				}
 
 				ambient *= occlusion;
-				pxl_fragColor = vec4( lpvGI.computeResult( flags.sceneFlags
+				auto colour = writer.declLocale( "colour"
+					, indirect.computeDiffuse( flags.sceneFlags
 						, inWorldPosition
 						, normal
-						, c3d_indirectAttenuation
-						, c3d_minVolumeCorner
-						, c3d_cellSize
-						, c3d_gridSize
-						, c3d_allMinVolumeCorners
-						, c3d_allCellSizes
-						, c3d_gridSizes
 						, lightDiffuse * albedo
 						, lightDiffuse * albedo + reflected + refracted + lightSpecular + emissive
-						, ambient )
-					, alpha );
+						, ambient ) );
+				pxl_fragColor = vec4( colour, alpha );
 
 				if ( getFogType( flags.sceneFlags ) != FogType::eDisabled )
 				{
@@ -886,8 +870,6 @@ namespace castor3d
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
 		UBO_MODEL( writer, ModelUbo::BindingPoint, 0u );
 		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
-		UBO_LPVGRIDCONFIG( writer, LpvGridConfigUbo::BindingPoint, 0u, checkFlag( flags.sceneFlags, SceneFlag::eLpvGI ) );
-		UBO_LAYERED_LPVGRIDCONFIG( writer, LayeredLpvGridConfigUbo::BindingPoint, 0u, checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI ) );
 
 		auto index = getMinTextureIndex();
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
@@ -911,13 +893,13 @@ namespace castor3d
 		auto c3d_mapBrdf = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBrdf"
 			, index++
 			, 1u );
-		shader::LpvGI lpvGI{ writer };
-		lpvGI.declare( 1u, index, flags.sceneFlags );
+		shader::Utils utils{ writer };
+		shader::GlobalIllumination indirect{ writer, utils };
+		indirect.declare( 1u, index, flags.sceneFlags );
 
 		auto in = writer.getIn();
 
 		shader::Fog fog{ getFogType( flags.sceneFlags ), writer };
-		shader::Utils utils{ writer };
 		utils.declareApplyGamma();
 		utils.declareRemoveGamma();
 		utils.declareFresnelSchlick();
@@ -1141,20 +1123,14 @@ namespace castor3d
 				}
 
 				ambient *= occlusion;
-				pxl_fragColor = vec4( lpvGI.computeResult( flags.sceneFlags
+				auto colour = writer.declLocale( "colour"
+					, indirect.computeDiffuse( flags.sceneFlags
 						, inWorldPosition
 						, normal
-						, c3d_indirectAttenuation
-						, c3d_minVolumeCorner
-						, c3d_cellSize
-						, c3d_gridSize
-						, c3d_allMinVolumeCorners
-						, c3d_allCellSizes
-						, c3d_gridSizes
 						, lightDiffuse * albedo
 						, lightDiffuse * albedo + reflected + refracted + lightSpecular + emissive
-						, ambient )
-					, alpha );
+						, ambient ) );
+				pxl_fragColor = vec4( colour, alpha );
 
 				if ( getFogType( flags.sceneFlags ) != FogType::eDisabled )
 				{
