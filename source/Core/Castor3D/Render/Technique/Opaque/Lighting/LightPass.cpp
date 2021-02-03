@@ -875,9 +875,7 @@ namespace castor3d
 				if ( m_voxels )
 				{
 					auto vxlPosition = writer.declLocale( "vxlPosition"
-						, wsPosition );
-					vxlPosition *= c3d_voxelData.sizeInv;
-					vxlPosition *= c3d_voxelData.resolutionInv;
+						, ( wsPosition * c3d_voxelData.worldToClip ) );
 					vxlPosition = clamp( abs( vxlPosition ), vec3( 0.0_f ), vec3( 1.0_f ) );
 					auto vxlBlend = writer.declLocale( "vxlBlend"
 						, 1.0_f - pow( max( vxlPosition.x(), max( vxlPosition.y(), vxlPosition.z() ) ), 4.0_f ) );
@@ -1171,9 +1169,7 @@ namespace castor3d
 				if ( m_voxels )
 				{
 					auto vxlPosition = writer.declLocale( "vxlPosition"
-						, wsPosition );
-					vxlPosition *= c3d_voxelData.sizeInv;
-					vxlPosition *= c3d_voxelData.resolutionInv;
+						, ( wsPosition * c3d_voxelData.worldToClip ) );
 					vxlPosition = clamp( abs( vxlPosition ), vec3( 0.0_f ), vec3( 1.0_f ) );
 					auto vxlBlend = writer.declLocale( "vxlBlend"
 						, 1.0_f - pow( max( vxlPosition.x(), max( vxlPosition.y(), vxlPosition.z() ) ), 4.0_f ) );
@@ -1398,9 +1394,7 @@ namespace castor3d
 				if ( m_voxels )
 				{
 					auto vxlPosition = writer.declLocale( "vxlPosition"
-						, wsPosition );
-					vxlPosition *= c3d_voxelData.sizeInv;
-					vxlPosition *= c3d_voxelData.resolutionInv;
+						, ( wsPosition * c3d_voxelData.worldToClip ) );
 					vxlPosition = clamp( abs( vxlPosition ), vec3( 0.0_f ), vec3( 1.0_f ) );
 					auto vxlBlend = writer.declLocale( "vxlBlend"
 						, 1.0_f - pow( max( vxlPosition.x(), max( vxlPosition.y(), vxlPosition.z() ) ), 4.0_f ) );

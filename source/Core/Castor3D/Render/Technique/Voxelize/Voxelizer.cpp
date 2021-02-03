@@ -112,18 +112,18 @@ namespace castor3d
 	void Voxelizer::update( CpuUpdater & updater )
 	{
 		auto & camera = *updater.camera;
-		float f = 0.05f / m_voxelConfig.voxelSize;
-		auto center = camera.getParent()->getDerivedPosition();
-		center->x = floorf( center->x * f ) / f;
-		center->y = floorf( center->y * f ) / f;
-		center->z = floorf( center->z * f ) / f;
-		m_grid = castor::Point4f{ center->x
-			, center->y
-			, center->z
-			, m_voxelConfig.voxelSize };
+		auto & aabb = camera.getScene()->getBoundingBox();
+		auto max = std::max( aabb.getDimensions()->x, std::max( aabb.getDimensions()->y, aabb.getDimensions()->z ) );
+		auto cellSize = 2.0f * m_voxelGridSize / max;
+		auto voxelSize = ( cellSize * m_voxelConfig.voxelSizeFactor );
+		float f = 0.05f / voxelSize;
+		m_grid = castor::Point4f{ 0.0f
+			, 0.0f
+			, 0.0f
+			, voxelSize };
 		m_voxelizePass.update( updater );
 		m_voxelizerUbo.cpuUpdate( m_voxelConfig
-			, center
+			, voxelSize
 			, m_voxelGridSize );
 	}
 

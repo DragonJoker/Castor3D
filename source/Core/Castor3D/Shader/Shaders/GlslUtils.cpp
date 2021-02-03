@@ -845,54 +845,51 @@ namespace castor3d::shader
 			{
 				auto color = m_writer.declLocale( "color"
 					, vec3( 0.0_f ) );
-				auto alpha = m_writer.declLocale( "alpha"
+				auto occlusion = m_writer.declLocale( "occlusion"
 					, 0.0_f );
 
 				// We need to offset the cone start position to avoid sampling its own voxel (self-occlusion):
 				//	Unfortunately, it will result in disconnection between nearby surfaces :(
-				auto dist = m_writer.declLocale( "dist"
-					, sdw::Float{ voxelData.size } ); // offset by cone dir so that first sample of all cones are not the same
-				auto startPos = m_writer.declLocale( "startPos"
-					, wsPosition + wsNormal * vec3( voxelData.size * 2.0f * sqrt( 2.0f ) ) ); // sqrt2 is diagonal voxel half-extent
+				auto wsDist = m_writer.declLocale( "wsDist"
+					, voxelData.gridToWorld ); // offset by cone dir so that first sample of all cones are not the same
+				auto wsStartPos = m_writer.declLocale( "wsStartPos"
+					, wsPosition + wsNormal * vec3( voxelData.gridToWorld * 2.0f * sqrt( 2.0f ) ) ); // sqrt2 is diagonal voxel half-extent
 
 				// We will break off the loop if the sampling distance is too far for performance reasons:
-				WHILE( m_writer, dist < voxelData.radianceMaxDistance && alpha < 1.0_f )
+				WHILE( m_writer, wsDist < voxelData.radianceMaxDistance && occlusion < 1.0_f )
 				{
-					auto diameter = m_writer.declLocale( "diameter"
-						, max( voxelData.size, 2 * coneAperture * dist ) );
+					auto wsDiameter = m_writer.declLocale( "wsDiameter"
+						, max( voxelData.gridToWorld, 2.0_f * coneAperture * wsDist ) );
 					auto mip = m_writer.declLocale( "mip"
-						, log2( diameter * voxelData.sizeInv ) );
+						, log2( wsDiameter * voxelData.worldToGrid ) );
 
-					// Because we do the ray-marching in world space, we need to remap into 3d texture space before sampling:
-					//	todo: optimization could be doing ray-marching in texture space
-					auto tc = m_writer.declLocale( "tc"
-						, startPos + wsConeDirection * vec3( dist ) );
-					tc = tc * vec3( voxelData.sizeInv );
-					tc *= voxelData.resolutionInv;
-					tc = tc * vec3( 0.5_f, -0.5f, 0.5f ) + 0.5f;
+					auto tsCoord = m_writer.declLocale( "tsCoord"
+						, wsStartPos + wsConeDirection * vec3( wsDist ) );
+					tsCoord *= voxelData.worldToClip;
+					tsCoord = tsCoord * vec3( 0.5_f, -0.5f, 0.5f ) + 0.5f;
 
 					// break if the ray exits the voxel grid, or we sample from the last mip:
-					IF( m_writer, !isSaturated( tc ) || mip >= voxelData.radianceMips )
+					IF( m_writer, !isSaturated( tsCoord ) || mip >= voxelData.radianceMips )
 					{
 						m_writer.loopBreakStmt();
 					}
 					FI;
 
 					auto sam = m_writer.declLocale( "sam"
-						, voxels.lod( tc, mip ) );
+						, voxels.lod( tsCoord, mip ) );
 
 					// this is the correct blending to avoid black-staircase artifact (ray stepped front-to back, so blend front to back):
 					auto a = m_writer.declLocale( "a"
-						, 1.0_f - alpha );
+						, 1.0_f - occlusion );
 					color += a * sam.rgb();
-					alpha += a * sam.a();
+					occlusion += a * sam.a();
 
 					// step along ray:
-					dist += diameter * voxelData.rayStepSize;
+					wsDist += wsDiameter * voxelData.rayStepSize;
 				}
 				ELIHW;
 
-				m_writer.returnStmt( vec4( color, alpha ) );
+				m_writer.returnStmt( vec4( color, occlusion ) );
 			}
 			, sdw::InSampledImage3DRgba32{ m_writer, "voxels" }
 			, sdw::InVec3{ m_writer, "wsPosition" }
@@ -961,7 +958,7 @@ namespace castor3d::shader
 						, voxelData ) );
 
 				m_writer.returnStmt( vec4( max( vec3( 0.0_f ), reflection.rgb() )
-					, clamp( reflection.a(), 0.0_f, 1.0_f ) ) );
+					, clamp( reflection.a() * ( 1.0_f - roughness ), 0.0_f, 1.0_f ) ) );
 			}
 			, sdw::InSampledImage3DRgba32{ m_writer, "voxels" }
 			, sdw::InVec3{ m_writer, "wsPosition" }

@@ -237,7 +237,6 @@ namespace castor3d
 					auto lightIndirectSpecular = writer.declLocale( "lightIndirectSpecular"
 						, c3d_mapLightIndirectSpecular.lod( vtx_texture, 0.0_f ).rgb()
 						, hasSpecularGi );
-					lightDiffuse += lightIndirectDiffuse;
 					lightSpecular *= specular;
 
 					if ( hasSpecularGi )
@@ -246,7 +245,7 @@ namespace castor3d
 							, normalize( c3d_cameraPosition.xyz() - position ) );
 						auto NdotV = writer.declLocale( "NdotV"
 							, max( 0.0_f, dot( normal, V ) ) );
-						lightSpecular += lightIndirectSpecular * utils.fresnelSchlick( NdotV, specular, ( 256.0_f - shininess ) / 256.0_f );
+						lightIndirectSpecular *= utils.fresnelSchlick( NdotV, specular, ( 256.0_f - shininess ) / 256.0_f );
 					}
 
 					auto reflected = writer.declLocale( "reflected"
@@ -336,6 +335,8 @@ namespace castor3d
 
 					ambient *= occlusion;
 					ambient *= lightIndirectDiffuse;
+					lightDiffuse += lightIndirectDiffuse * occlusion;
+					lightSpecular += lightIndirectSpecular * occlusion;
 					pxl_fragColor = vec4( diffuse
 							+ reflected
 							+ refracted
@@ -487,7 +488,6 @@ namespace castor3d
 					auto lightIndirectSpecular = writer.declLocale( "lightIndirectSpecular"
 						, c3d_mapLightIndirectSpecular.lod( vtx_texture, 0.0_f ).rgb()
 						, hasSpecularGi );
-					lightDiffuse += lightIndirectDiffuse;
 
 					if ( hasSpecularGi )
 					{
@@ -495,7 +495,7 @@ namespace castor3d
 							, normalize( c3d_cameraPosition.xyz() - position ) );
 						auto NdotV = writer.declLocale( "NdotV"
 							, max( 0.0_f, dot( normal, V ) ) );
-						lightSpecular += lightIndirectSpecular * utils.fresnelSchlick( NdotV, mix( vec3( 0.04_f ), albedo, vec3( metalness ) ), roughness );
+						lightIndirectSpecular *= utils.fresnelSchlick( NdotV, mix( vec3( 0.04_f ), albedo, vec3( metalness ) ), roughness );
 					}
 
 					auto reflected = writer.declLocale( "reflected"
@@ -658,6 +658,8 @@ namespace castor3d
 
 					ambient *= occlusion;
 					ambient *= lightIndirectDiffuse;
+					lightDiffuse += lightIndirectDiffuse * occlusion;
+					lightSpecular += lightIndirectSpecular * occlusion;
 					pxl_fragColor = vec4( lightDiffuse * albedo
 							+ lightSpecular
 							+ emissive
@@ -808,7 +810,6 @@ namespace castor3d
 					auto lightIndirectSpecular = writer.declLocale( "lightIndirectSpecular"
 						, c3d_mapLightIndirectSpecular.lod( vtx_texture, 0.0_f ).rgb()
 						, hasSpecularGi );
-					lightDiffuse += lightIndirectDiffuse;
 
 					if ( hasSpecularGi )
 					{
@@ -816,7 +817,7 @@ namespace castor3d
 							, normalize( c3d_cameraPosition.xyz() - position ) );
 						auto NdotV = writer.declLocale( "NdotV"
 							, max( 0.0_f, dot( normal, V ) ) );
-						lightSpecular += lightIndirectSpecular * utils.fresnelSchlick( NdotV, specular, 1.0_f - glossiness );
+						lightIndirectSpecular *= utils.fresnelSchlick( NdotV, specular, 1.0_f - glossiness );
 					}
 
 					auto reflected = writer.declLocale( "reflected"
@@ -978,6 +979,8 @@ namespace castor3d
 
 					ambient *= occlusion;
 					ambient *= lightIndirectDiffuse;
+					lightDiffuse += lightIndirectDiffuse * occlusion;
+					lightSpecular += lightIndirectSpecular * occlusion;
 					pxl_fragColor = vec4( lightDiffuse * diffuse
 							+ lightSpecular
 							+ emissive

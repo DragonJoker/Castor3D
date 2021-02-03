@@ -602,8 +602,7 @@ namespace castor3d
 
 				FOR( writer, UInt, i, 0_u, i < 3_u, ++i )
 				{
-					// World space -> Voxel grid space:
-					positions[i] = in.vtx[i].position.xyz() * c3d_voxelData.sizeInv;
+					positions[i] = in.vtx[i].position.xyz() * c3d_voxelData.worldToGrid;
 
 					// Project onto dominant axis:
 					IF( writer, maxi == 0_u )
@@ -616,25 +615,24 @@ namespace castor3d
 					}
 					FI;
 
-					// Voxel grid space -> Clip space
-					positions[i].xy() *= c3d_voxelData.resolutionInv;
+					positions[i].xy() *= c3d_voxelData.gridToClip;
 					positions[i].z() = 1.0_f;
 				}
 				ROF;
 
-				if ( m_voxelConfig.conservativeRasterization )
+				IF( writer, c3d_voxelData.conservativeRasterization != 0_u )
 				{
-					// Conservative Rasterization setup:
 					auto side0N = writer.declLocale( "side0N"
 						, normalize( positions[1].xy() - positions[0].xy() ) );
 					auto side1N = writer.declLocale( "side1N"
 						, normalize( positions[2].xy() - positions[1].xy() ) );
 					auto side2N = writer.declLocale( "side2N"
 						, normalize( positions[0].xy() - positions[2].xy() ) );
-					positions[0].xy() += normalize( side2N - side0N ) * c3d_voxelData.resolutionInv;
-					positions[1].xy() += normalize( side0N - side1N ) * c3d_voxelData.resolutionInv;
-					positions[2].xy() += normalize( side1N - side2N ) * c3d_voxelData.resolutionInv;
+					positions[0].xy() += normalize( side2N - side0N ) * c3d_voxelData.gridToClip;
+					positions[1].xy() += normalize( side0N - side1N ) * c3d_voxelData.gridToClip;
+					positions[2].xy() += normalize( side1N - side2N ) * c3d_voxelData.gridToClip;
 				}
+				FI;
 
 				// Output
 				FOR( writer, UInt, i, 0_u, i < 3_u, ++i )
@@ -714,7 +712,7 @@ namespace castor3d
 			, [&]()
 			{
 				auto diff = writer.declLocale( "diff"
-					, inWorldPosition * c3d_voxelData.resolutionInv * c3d_voxelData.sizeInv );
+					, inWorldPosition * c3d_voxelData.worldToClip );
 				auto uvw = writer.declLocale( "uvw"
 					, diff * vec3( 0.5_f, -0.5f, 0.5f ) + 0.5f );
 
@@ -772,11 +770,10 @@ namespace castor3d
 						, utils.encodeColor( vec4( color, alpha ) ) );
 					auto encodedNormal = writer.declLocale( "encodedNormal"
 						, utils.encodeNormal( normal ) );
-
 					auto writecoord = writer.declLocale( "writecoord"
-						, uvec3( floor( uvw * c3d_voxelData.resolution ) ) );
+						, uvec3( floor( uvw * c3d_voxelData.clipToGrid ) ) );
 					auto id = writer.declLocale( "id"
-						, utils.flatten( writecoord, uvec3( writer.cast< UInt >( c3d_voxelData.resolution ) ) ) );
+						, utils.flatten( writecoord, uvec3( sdw::UInt{ m_voxelGridSize } ) ) );
 					atomicMax( output[id].colorMask, encodedColor );
 					atomicMax( output[id].normalMask, encodedNormal );
 				}
@@ -844,7 +841,7 @@ namespace castor3d
 			, [&]()
 			{
 				auto diff = writer.declLocale( "diff"
-					, inWorldPosition * c3d_voxelData.resolutionInv * c3d_voxelData.sizeInv );
+					, inWorldPosition * c3d_voxelData.worldToClip );
 				auto uvw = writer.declLocale( "uvw"
 					, diff * vec3( 0.5_f, -0.5f, 0.5f ) + 0.5f );
 
@@ -914,11 +911,10 @@ namespace castor3d
 						, utils.encodeColor( vec4( color, alpha ) ) );
 					auto encodedNormal = writer.declLocale( "encodedNormal"
 						, utils.encodeNormal( normal ) );
-
 					auto writecoord = writer.declLocale( "writecoord"
-						, uvec3( floor( uvw * c3d_voxelData.resolution ) ) );
+						, uvec3( floor( uvw * c3d_voxelData.clipToGrid ) ) );
 					auto id = writer.declLocale( "id"
-						, utils.flatten( writecoord, uvec3( writer.cast< UInt >( c3d_voxelData.resolution ) ) ) );
+						, utils.flatten( writecoord, uvec3( sdw::UInt{ m_voxelGridSize } ) ) );
 					atomicMax( output[id].colorMask, encodedColor );
 					atomicMax( output[id].normalMask, encodedNormal );
 				}
@@ -986,7 +982,7 @@ namespace castor3d
 			, [&]()
 			{
 				auto diff = writer.declLocale( "diff"
-					, inWorldPosition * c3d_voxelData.resolutionInv * c3d_voxelData.sizeInv );
+					, inWorldPosition * c3d_voxelData.worldToClip );
 				auto uvw = writer.declLocale( "uvw"
 					, diff * vec3( 0.5_f, -0.5f, 0.5f ) + 0.5f );
 
@@ -1045,11 +1041,10 @@ namespace castor3d
 						, utils.encodeColor( vec4( color, alpha ) ) );
 					auto encodedNormal = writer.declLocale( "encodedNormal"
 						, utils.encodeNormal( normal ) );
-
 					auto writecoord = writer.declLocale( "writecoord"
-						, uvec3( floor( uvw * c3d_voxelData.resolution ) ) );
+						, uvec3( floor( uvw * c3d_voxelData.clipToGrid ) ) );
 					auto id = writer.declLocale( "id"
-						, utils.flatten( writecoord, uvec3( writer.cast< UInt >( c3d_voxelData.resolution ) ) ) );
+						, utils.flatten( writecoord, uvec3( sdw::UInt{ m_voxelGridSize } ) ) );
 					atomicMax( output[id].colorMask, encodedColor );
 					atomicMax( output[id].normalMask, encodedNormal );
 				}

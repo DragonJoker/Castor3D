@@ -210,29 +210,33 @@ namespace castor3d
 			, sdw::Vec3 wsNormal
 			, sdw::Vec3 diffuse
 			, sdw::Vec3 allButAmbient
-			, sdw::Vec3 ambient )
+			, sdw::Vec3 ambient
+			, sdw::Float occlusion )
 		{
 			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 			{
 				auto voxelData = m_writer.getVariable< VoxelData >( "c3d_voxelData" );
 				auto mapVoxels = m_writer.getVariable< SampledImage3DRgba32 >( "c3d_mapVoxels" );
-
+				auto indirectDiffuse = m_writer.declLocale< sdw::Vec3 >( "indirectDiffuse"
+					, ambient );
 				auto vxlPosition = m_writer.declLocale( "vxlPosition"
-					, wsPosition );
-				vxlPosition *= voxelData.sizeInv;
-				vxlPosition *= voxelData.resolutionInv;
+					, ( wsPosition * voxelData.worldToClip ) );
 				vxlPosition = clamp( abs( vxlPosition ), vec3( 0.0_f ), vec3( 1.0_f ) );
 				auto vxlBlend = m_writer.declLocale( "vxlBlend"
 					, 1.0_f - pow( max( vxlPosition.x(), max( vxlPosition.y(), vxlPosition.z() ) ), 4.0_f ) );
 
-				auto vxlRadiance = m_writer.declLocale( "vxlRadiance"
-					, m_utils.traceConeRadiance( mapVoxels
-						, wsPosition
-						, wsNormal
-						, voxelData ) );
-				auto indirect = m_writer.declLocale( "indirect"
-					, mix( vec3( 0.0_f ), vxlRadiance.xyz(), vec3( vxlRadiance.a() * vxlBlend ) ) );
-				return ( indirect * ambient ) + allButAmbient;
+				IF( m_writer, voxelData.enabled != 0_u )
+				{
+					auto vxlRadiance = m_writer.declLocale( "vxlRadiance"
+						, m_utils.traceConeRadiance( mapVoxels
+							, wsPosition
+							, wsNormal
+							, voxelData ) );
+					indirectDiffuse *= mix( vec3( 0.0_f ), vxlRadiance.xyz(), vec3( vxlRadiance.a() * vxlBlend ) );
+				}
+				FI;
+
+				return indirectDiffuse * occlusion + allButAmbient;
 			}
 			else
 			{
@@ -245,7 +249,7 @@ namespace castor3d
 							, llpvGridData ) );
 					return ( ( indirect * diffuse * ambient / Float{ castor::Pi< float > } )
 						+ ( indirect * llpvGridData.indirectAttenuation / Float{ castor::Pi< float > } )
-						+ allButAmbient );
+						+ allButAmbient ) * occlusion;
 				}
 
 				if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
@@ -257,7 +261,7 @@ namespace castor3d
 							, lpvGridData ) );
 					return ( ( indirect * diffuse * ambient / Float{ castor::Pi< float > } )
 						+ ( indirect * lpvGridData.indirectAttenuation / Float{ castor::Pi< float > } )
-						+ allButAmbient );
+						+ allButAmbient ) * occlusion;
 				}
 			}
 
@@ -270,7 +274,8 @@ namespace castor3d
 			, sdw::Vec3 wsNormal
 			, sdw::Float roughness
 			, sdw::Vec3 f0
-			, sdw::Vec3 specular )
+			, sdw::Vec3 specular
+			, sdw::Float occlusion )
 		{
 			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 			{
@@ -278,21 +283,28 @@ namespace castor3d
 				auto mapVoxels = m_writer.getVariable< SampledImage3DRgba32 >( "c3d_mapVoxels" );
 				auto vxlPosition = m_writer.getVariable< sdw::Vec3 >( "vxlPosition" );
 				auto vxlBlend = m_writer.getVariable< sdw::Float >( "vxlBlend" );
+				auto indirectSpecular = m_writer.declLocale< sdw::Vec3 >( "indirectSpecular"
+					, vec3( 0.0_f ) );
 
-				auto vxlReflection = m_writer.declLocale( "vxlReflection"
-					, m_utils.traceConeReflection( mapVoxels
-						, wsPosition
-						, wsNormal
-						, wsCamera - wsPosition
-						, roughness
-						, voxelData ) );
-				auto indirectSpecular = m_writer.declLocale( "indirectSpecular"
-					, mix( vec3( 0.0_f ), vxlReflection.xyz(), vec3( vxlReflection.a() * vxlBlend ) ) );
-				auto V = m_writer.declLocale( "V"
-					, normalize( wsCamera - wsPosition ) );
-				auto NdotV = m_writer.declLocale( "NdotV"
-					, max( 0.0_f, dot( wsNormal, V ) ) );
-				return specular + indirectSpecular * m_utils.fresnelSchlick( NdotV, f0, roughness );
+				IF( m_writer, voxelData.enabled != 0_u )
+				{
+					auto vxlReflection = m_writer.declLocale( "vxlReflection"
+						, m_utils.traceConeReflection( mapVoxels
+							, wsPosition
+							, wsNormal
+							, wsCamera - wsPosition
+							, roughness
+							, voxelData ) );
+					indirectSpecular = mix( vec3( 0.0_f ), vxlReflection.xyz(), vec3( vxlReflection.a() * vxlBlend ) );
+					auto V = m_writer.declLocale( "V"
+						, normalize( wsCamera - wsPosition ) );
+					auto NdotV = m_writer.declLocale( "NdotV"
+						, max( 0.0_f, dot( wsNormal, V ) ) );
+					indirectSpecular *= m_utils.fresnelSchlick( NdotV, f0, roughness ) * occlusion;
+				}
+				FI;
+
+				return specular + indirectSpecular;
 			}
 
 			return specular;

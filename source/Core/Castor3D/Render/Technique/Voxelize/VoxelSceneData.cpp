@@ -34,7 +34,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			result = file.writeText( m_tabs + cuT( "\tvoxel_size " ) + string::toString( obj.voxelSize, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+			result = file.writeText( m_tabs + cuT( "\tvoxel_size " ) + string::toString( obj.voxelSizeFactor, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 			castor::TextWriter< VoxelSceneData >::checkError( result, "VoxelSceneData voxel size." );
 		}
 

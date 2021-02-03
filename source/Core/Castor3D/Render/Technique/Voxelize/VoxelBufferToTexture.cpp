@@ -135,7 +135,8 @@ namespace castor3d
 			return result;
 		}
 
-		ShaderPtr createShader( bool temporalSmoothing )
+		ShaderPtr createShader( bool temporalSmoothing
+			, uint32_t voxelGridSize )
 		{
 			using namespace sdw;
 			ComputeWriter writer;
@@ -166,7 +167,7 @@ namespace castor3d
 					{
 						auto coord = writer.declLocale( "coord"
 							, ivec3( utils.unflatten( in.globalInvocationID.x()
-								, uvec3( writer.cast< UInt >( c3d_voxelData.resolution ) ) ) ) );
+								, uvec3( UInt{ voxelGridSize } ) ) ) );
 
 						if ( temporalSmoothing )
 						{
@@ -196,7 +197,7 @@ namespace castor3d
 		, TextureUnit const & result
 		, uint32_t voxelGridSize
 		, bool temporalSmoothing )
-		: computeShader{ VK_SHADER_STAGE_COMPUTE_BIT, "VoxelBufferToTexture", createShader( temporalSmoothing ) }
+		: computeShader{ VK_SHADER_STAGE_COMPUTE_BIT, "VoxelBufferToTexture", createShader( temporalSmoothing, voxelGridSize ) }
 		, pipeline{ createPipeline( device, pipelineLayout, computeShader ) }
 		, commands{ createCommandBuffer( device, pipelineLayout, *pipeline, descriptorSet, voxels.getBuffer(), result, voxelGridSize, temporalSmoothing ) }
 	{

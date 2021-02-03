@@ -6323,7 +6323,7 @@ namespace castor3d
 		else
 		{
 			auto & vctConfig = parsingContext->scene->getVoxelConeTracingConfig();
-			params[0]->get( vctConfig.voxelSize );
+			params[0]->get( vctConfig.voxelSizeFactor );
 		}
 	}
 	CU_EndAttribute()

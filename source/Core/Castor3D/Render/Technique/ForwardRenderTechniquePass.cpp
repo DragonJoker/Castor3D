@@ -482,14 +482,16 @@ namespace castor3d
 						, normal
 						, diffuse
 						, diffuse + reflected + refracted + emissive
-						, ambient ) );
+						, ambient
+						, occlusion ) );
 				colour += indirect.computeSpecular( flags.sceneFlags
-						, worldEye
-						, inWorldPosition
-						, normal
-						, ( 256.0_f - shininess ) / 256.0_f
-						, specular
-						, lightSpecular );
+					, worldEye
+					, inWorldPosition
+					, normal
+					, ( 256.0_f - shininess ) / 256.0_f
+					, specular
+					, lightSpecular
+					, occlusion );
 				pxl_fragColor = vec4( colour, alpha );
 
 				if ( getFogType( flags.sceneFlags ) != FogType::eDisabled )
@@ -816,14 +818,16 @@ namespace castor3d
 						, normal
 						, lightDiffuse * albedo
 						, lightDiffuse * albedo + reflected + refracted + emissive
-						, ambient ) );
+						, ambient
+						, occlusion ) );
 				colour += indirect.computeSpecular( flags.sceneFlags
-						, worldEye
-						, inWorldPosition
-						, normal
-						, roughness
-						, mix( vec3( 0.04_f ), albedo, vec3( metalness ) )
-						, lightSpecular );
+					, worldEye
+					, inWorldPosition
+					, normal
+					, roughness
+					, mix( vec3( 0.04_f ), albedo, vec3( metalness ) )
+					, lightSpecular
+					, occlusion );
 				pxl_fragColor = vec4( colour, alpha );
 
 				if ( getFogType( flags.sceneFlags ) != FogType::eDisabled )
@@ -1147,14 +1151,16 @@ namespace castor3d
 						, normal
 						, lightDiffuse * albedo
 						, lightDiffuse * albedo + reflected + refracted + emissive
-						, ambient ) );
+						, ambient
+						, occlusion ) );
 				colour += indirect.computeSpecular( flags.sceneFlags
-						, worldEye
-						, inWorldPosition
-						, normal
-						, ( 1.0_f - glossiness )
-						, specular
-						, lightSpecular );
+					, worldEye
+					, inWorldPosition
+					, normal
+					, ( 1.0_f - glossiness )
+					, specular
+					, lightSpecular
+					, occlusion );
 				pxl_fragColor = vec4( colour, alpha );
 
 				if ( getFogType( flags.sceneFlags ) != FogType::eDisabled )

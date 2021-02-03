@@ -28,26 +28,60 @@ namespace castor3d
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
 			// Raw values
-			sdw::Vec4 sizeResolution;
+			sdw::Vec4 gridConv;
 			sdw::Vec4 radiance;
 			sdw::Vec4 other;
+			sdw::UVec4 status;
 			// Specific values
-			sdw::Float size;
-			sdw::Float sizeInv;
-			sdw::Float resolution;
-			sdw::Float resolutionInv;
+			sdw::Float worldToGrid;
+			sdw::Float gridToWorld;
+			sdw::Float clipToGrid;
+			sdw::Float gridToClip;
+			sdw::Float worldToClip;
 			sdw::Float radianceMaxDistance;
 			sdw::Float radianceMips;
 			sdw::UInt radianceNumCones;
 			sdw::Float radianceNumConesInv;
+			sdw::Vec3 gridCenter;
 			sdw::Float rayStepSize;
-			sdw::Vec3 center;
+			sdw::UInt enabled;
+			sdw::UInt conservativeRasterization;
 
 		private:
 			using sdw::StructInstance::getMember;
 			using sdw::StructInstance::getMemberArray;
 		};
 	}
+
+	struct VoxelizerUboConfiguration
+	{
+		/**
+		*	- float worldToGrid: Factor from world position to grid position
+		*	- float gridToWorld: Factor from grid position to world position
+		*	- float gridToClip: Factor from grid position to clip position
+		*	- float clipToGrid: Factor from clip position to grid position
+		*/
+		castor::Point4f gridConv;
+		/**
+		*	- float radianceMaxDistance;
+		*	- float radianceMips;
+		*	- uint radianceNumCones;
+		*	- float radianceNumConesInv;
+		*/
+		castor::Point4f radiance;
+		/**
+		*	- vec3 gridCenter: Center of the voxel grid, in world space units
+		*	- float rayStepSize;
+		*/
+		castor::Point4f other;
+		/**
+		*	- uint enabled;
+		*	- uint conservativeRasterization;
+		*	- uint unused;
+		*	- uint unused;
+		*/
+		castor::Point4ui status;
+	};
 
 	class VoxelizerUbo
 	{
@@ -67,7 +101,7 @@ namespace castor3d
 		C3D_API void initialise( RenderDevice const & device );
 		C3D_API void cleanup();
 		C3D_API void cpuUpdate( VoxelSceneData const & voxelConfig
-			, castor::Point3f const & center
+			, float worldToGrid
 			, uint32_t voxelGridSize );
 
 		void createSizedBinding( ashes::DescriptorSet & descriptorSet

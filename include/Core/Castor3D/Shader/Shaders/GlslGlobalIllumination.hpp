@@ -41,14 +41,16 @@ namespace castor3d
 				, sdw::Vec3 wsNormal
 				, sdw::Vec3 diffuse
 				, sdw::Vec3 allButAmbient
-				, sdw::Vec3 ambient );
+				, sdw::Vec3 ambient
+				, sdw::Float occlusion );
 			C3D_API sdw::Vec3 computeSpecular( SceneFlags sceneFlags
 				, sdw::Vec3 wsCamera
 				, sdw::Vec3 wsPosition
 				, sdw::Vec3 wsNormal
 				, sdw::Float roughness
 				, sdw::Vec3 f0
-				, sdw::Vec3 specular );
+				, sdw::Vec3 specular
+				, sdw::Float occlusion );
 
 		private:
 			sdw::ShaderWriter & m_writer;

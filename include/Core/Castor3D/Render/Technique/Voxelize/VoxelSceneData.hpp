@@ -60,7 +60,7 @@ namespace castor3d
 		//!\~english	The size of a ray step in voxel cone tracint.
 		//!\~french		La taille d'un pas de rayon dans le voxel cone tracing.
 		float rayStepSize{ 0.75f };
-		float voxelSize{ 1.0f };
+		uint32_t voxelSizeFactor{ 1u };
 	};
 }
 

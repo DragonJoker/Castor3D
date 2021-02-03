@@ -21,19 +21,23 @@ namespace castor3d
 			, ast::expr::ExprPtr expr
 			, bool enabled )
 			: StructInstance{ writer, std::move( expr ), enabled }
-			, sizeResolution{ getMember< sdw::Vec4 >( "sizeResolution" ) }
+			, gridConv{ getMember< sdw::Vec4 >( "gridConv" ) }
 			, radiance{ getMember< sdw::Vec4 >( "radiance" ) }
 			, other{ getMember< sdw::Vec4 >( "other" ) }
-			, size{ sizeResolution.x() }
-			, sizeInv{ sizeResolution.y() }
-			, resolution{ sizeResolution.z() }
-			, resolutionInv{ sizeResolution.w() }
+			, status{ getMember< sdw::UVec4 >( "status" ) }
+			, worldToGrid{ gridConv.x() }
+			, gridToWorld{ gridConv.y() }
+			, clipToGrid{ gridConv.z() }
+			, gridToClip{ gridConv.w() }
+			, worldToClip{ worldToGrid * gridToClip }
 			, radianceMaxDistance{ radiance.x() }
 			, radianceMips{ radiance.y() }
 			, radianceNumCones{ writer.cast< sdw::UInt >( radiance.z() ) }
 			, radianceNumConesInv{ radiance.w() }
+			, gridCenter{ other.xyz() }
 			, rayStepSize{ other.w() }
-			, center{ other.xyz() }
+			, enabled{ status.x() }
+			, conservativeRasterization{ status.y() }
 		{
 		}
 
@@ -50,9 +54,10 @@ namespace castor3d
 
 			if ( result->empty() )
 			{
-				result->declMember( "sizeResolution", ast::type::Kind::eVec4F );
+				result->declMember( "gridConv", ast::type::Kind::eVec4F );
 				result->declMember( "radiance", ast::type::Kind::eVec4F );
 				result->declMember( "other", ast::type::Kind::eVec4F );
+				result->declMember( "status", ast::type::Kind::eVec4U );
 			}
 
 			return result;
@@ -102,23 +107,22 @@ namespace castor3d
 	}
 
 	void VoxelizerUbo::cpuUpdate( VoxelSceneData const & voxelConfig
-		, castor::Point3f const & center
+		, float worldToGrid
 		, uint32_t voxelGridSize )
 	{
 		CU_Require( m_ubo );
 		auto & voxelData = m_ubo.getData();
-		voxelData.sizeResolution->x = voxelConfig.voxelSize;
-		voxelData.sizeResolution->y = 1.0f / voxelData.sizeResolution->x;
-		voxelData.sizeResolution->z = float( voxelGridSize );
-		voxelData.sizeResolution->w = 1.0f / voxelData.sizeResolution->z;
+		voxelData.gridConv->x = worldToGrid;
+		voxelData.gridConv->y = 1.0f / worldToGrid;
+		voxelData.gridConv->z = float( voxelGridSize );
+		voxelData.gridConv->w = 1.0f / voxelGridSize;
 		voxelData.radiance->x = voxelConfig.maxDistance;
 		voxelData.radiance->y = uint32_t( castor::getBitSize( voxelGridSize ) );
 		voxelData.radiance->z = voxelConfig.numCones.value();
 		voxelData.radiance->w = 1.0f / voxelData.radiance->z;
-		voxelData.other->x = center->x;
-		voxelData.other->y = center->y;
-		voxelData.other->z = center->z;
 		voxelData.other->w = voxelConfig.rayStepSize;
+		voxelData.status->x = voxelConfig.enabled;
+		voxelData.status->y = voxelConfig.conservativeRasterization;
 	}
 
 	//*********************************************************************************************

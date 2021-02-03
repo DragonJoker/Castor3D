@@ -444,28 +444,7 @@ namespace castor3d
 	*\brief
 	*	Données de configuration du voxelizer.
 	*/
-	struct VoxelizerUboConfiguration
-	{
-		/**
-		*	- float size: Voxel half-extent, in world space units
-		*	- float sizeInverse
-		*	- float resolution: Voxel grid size
-		*	- float resolutionInverse
-		*/
-		castor::Point4f sizeResolution;
-		/**
-		*	- float radianceMaxDistance;
-		*	- float radianceMips;
-		*	- uint radianceNumCones;
-		*	- float radianceNumConesInv;
-		*/
-		castor::Point4f radiance;
-		/**
-		*	- float rayStepSize
-		*	- vec3 voxel: Center of the voxel grid, in world space units
-		*/
-		castor::Point4f other;
-	};
+	struct VoxelizerUboConfiguration;
 
 	CU_DeclareCUSmartPtr( castor3d, LpvGridConfigUbo, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, LpvLightConfigUbo, C3D_API );
