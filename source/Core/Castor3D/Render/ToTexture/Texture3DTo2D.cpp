@@ -375,13 +375,21 @@ namespace castor3d
 					{
 						FOR( writer, UInt, i, 0_u, i < 14_u, ++i )
 						{
+							// [0, 1] => [0, 2] (y => [-1, 1])
+							auto cubeVtxPos = writer.declLocale( "cubeVtxPos"
+								, ( createCube( i ) - vec3( 0.0_f, 1.0f, 0.0f ) ) * 2.0f );
+
+							// [0, gridSize]
 							auto pos = writer.declLocale( "pos"
 								, in.vtx[0].position.xyz() );
-							pos.xyz() = pos.xyz() / writer.cast< Float >( gridSize ) * 2 - 1;
+							// [0, gridSize] => [0, 1] => [-1, 1]
+							pos = pos / writer.cast< Float >( gridSize ) * 2 - 1;
 							pos.y() = -pos.y();
-							pos.xyz() *= writer.cast< Float >( gridSize );
-							pos.xyz() += ( createCube( i ) - vec3( 0.0_f, 1.0f, 0.0f ) ) * 2.0f;
-							pos.xyz() *= writer.cast< Float >( gridSize ) * cellSize / writer.cast< Float >( gridSize );
+							// [-1, 1] => [-gridSize, gridSize]
+							pos *= writer.cast< Float >( gridSize );
+							// Offset by cube position
+							pos += cubeVtxPos;
+							pos *= ( writer.cast< Float >( gridSize ) * ( 1.0_f / cellSize ) ) / writer.cast< Float >( gridSize );
 
 							outVoxelColor = inVoxelColor[0];
 							out.vtx.position = c3d_curViewProj * vec4( pos, 1.0f );
