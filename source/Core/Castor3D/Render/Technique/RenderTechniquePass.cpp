@@ -255,16 +255,10 @@ namespace castor3d
 		}
 		else
 		{
-#if C3D_UseDepthPrepass
 			return ashes::PipelineDepthStencilStateCreateInfo{ 0u
 				, VK_TRUE
 				, VK_FALSE
 				, VK_COMPARE_OP_EQUAL };
-#else
-			return ashes::PipelineDepthStencilStateCreateInfo{ 0u
-				, VK_TRUE
-				, m_mode != RenderMode::eTransparentOnly };
-#endif
 		}
 	}
 

@@ -358,9 +358,7 @@ namespace castor3d
 			doInitialiseShadowMaps( device );
 			doCreateLpv( device );
 			doInitialiseLpv( device );
-#if C3D_UseDepthPrepass
 			doInitialiseDepthPass( device );
-#endif
 			doInitialiseBackgroundPass( device );
 			doInitialiseOpaquePass( device );
 			doInitialiseTransparentPass( device );
@@ -393,10 +391,8 @@ namespace castor3d
 		m_transparentPass->cleanup( device );
 		m_opaquePass->cleanup( device );
 		m_voxelizer.reset();
-#if C3D_UseDepthPrepass
 		m_depthPass->cleanup( device );
 		m_depthPass.reset();
-#endif
 		m_vctConfigUbo.cleanup();
 		m_gpInfoUbo.cleanup( device );
 		m_matrixUbo.cleanup( device );
@@ -415,9 +411,7 @@ namespace castor3d
 		updater.camera = m_renderTarget.getCamera();
 		updater.voxelConeTracing = m_renderTarget.getScene()->getVoxelConeTracingConfig().enabled;
 
-#if C3D_UseDepthPrepass
 		m_depthPass->update( updater );
-#endif
 
 		if ( updater.voxelConeTracing )
 		{
@@ -488,9 +482,8 @@ namespace castor3d
 			map.get().update( updater );
 		}
 
-#if C3D_UseDepthPrepass
 		m_depthPass->update( updater );
-#endif
+
 		if ( updater.voxelConeTracing )
 		{
 			m_voxelizer->update( updater );
@@ -532,12 +525,8 @@ namespace castor3d
 			return waitSemaphores.front();
 		}
 
-#if C3D_UseDepthPrepass
 		auto * semaphore = &doRenderDepth( device, waitSemaphores );
 		semaphore = &doRenderBackground( device, *semaphore );
-#else
-		auto * semaphore = &doRenderBackground( device, waitSemaphores );
-#endif
 		semaphore = &doRenderEnvironmentMaps( device, *semaphore );
 		semaphore = &doRenderShadowMaps( device, *semaphore );
 		semaphore = &doRenderLpv( device, *semaphore );
@@ -732,12 +721,6 @@ namespace castor3d
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		m_bgCommandBuffer = device.graphicsCommandPool->createCommandBuffer( "Background" );
 		m_cbgCommandBuffer = device.graphicsCommandPool->createCommandBuffer( "ColourBackground" );
-		auto depthLoadOp = C3D_UseDepthPrepass
-			? VK_ATTACHMENT_LOAD_OP_LOAD
-			: VK_ATTACHMENT_LOAD_OP_CLEAR;
-		auto depthInitialLayout = C3D_UseDepthPrepass
-			? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
-			: VK_IMAGE_LAYOUT_UNDEFINED;
 
 		ashes::VkAttachmentDescriptionArray attachments
 		{
@@ -745,11 +728,11 @@ namespace castor3d
 				0u,
 				m_depthBuffer.getTexture()->getPixelFormat(),
 				VK_SAMPLE_COUNT_1_BIT,
-				depthLoadOp,
+				VK_ATTACHMENT_LOAD_OP_LOAD,
 				VK_ATTACHMENT_STORE_OP_STORE,
 				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 				VK_ATTACHMENT_STORE_OP_DONT_CARE,
-				depthInitialLayout,
+				VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
 				VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
 			},
 			{
@@ -845,8 +828,6 @@ namespace castor3d
 			} );
 	}
 
-#if C3D_UseDepthPrepass
-
 	void RenderTechnique::doInitialiseDepthPass( RenderDevice const & device )
 	{
 		m_depthPass = castor::makeUnique< DepthPass >( cuT( "Depth Prepass" )
@@ -857,8 +838,6 @@ namespace castor3d
 			, m_depthBuffer.getTexture() );
 		m_depthPass->initialise( device, m_size, nullptr );
 	}
-
-#endif
 
 	void RenderTechnique::doInitialiseOpaquePass( RenderDevice const & device )
 	{
