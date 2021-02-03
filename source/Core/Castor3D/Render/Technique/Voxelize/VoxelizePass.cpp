@@ -95,6 +95,12 @@ namespace castor3d
 		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ) );
 	}
 
+	void VoxelizePass::update( CpuUpdater & updater )
+	{
+		getCuller().compute();
+		RenderPass::update( updater );
+	}
+
 	void VoxelizePass::update( GpuUpdater & updater )
 	{
 		auto & nodes = m_renderQueue.getCulledRenderNodes();
@@ -891,9 +897,6 @@ namespace castor3d
 							, roughness );
 					}
 
-					utils.applyAlphaFunc( flags.alphaFunc
-						, alpha
-						, material.m_alphaRef );
 					emissive *= albedo;
 					auto worldEye = writer.declLocale( "worldEye"
 						, c3d_cameraPosition.xyz() );

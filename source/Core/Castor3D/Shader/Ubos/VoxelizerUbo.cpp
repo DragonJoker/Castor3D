@@ -32,7 +32,8 @@ namespace castor3d
 			, radianceMips{ radiance.y() }
 			, radianceNumCones{ writer.cast< sdw::UInt >( radiance.z() ) }
 			, radianceNumConesInv{ radiance.w() }
-			, rayStepSize{ other.x() }
+			, rayStepSize{ other.w() }
+			, center{ other.xyz() }
 		{
 		}
 
@@ -101,7 +102,7 @@ namespace castor3d
 	}
 
 	void VoxelizerUbo::cpuUpdate( VoxelSceneData const & voxelConfig
-		, Camera const & camera
+		, castor::Point3f const & center
 		, uint32_t voxelGridSize )
 	{
 		CU_Require( m_ubo );
@@ -114,7 +115,10 @@ namespace castor3d
 		voxelData.radiance->y = uint32_t( castor::getBitSize( voxelGridSize ) );
 		voxelData.radiance->z = voxelConfig.numCones.value();
 		voxelData.radiance->w = 1.0f / voxelData.radiance->z;
-		voxelData.other->x = voxelConfig.rayStepSize;
+		voxelData.other->x = center->x;
+		voxelData.other->y = center->y;
+		voxelData.other->z = center->z;
+		voxelData.other->w = voxelConfig.rayStepSize;
 	}
 
 	//*********************************************************************************************

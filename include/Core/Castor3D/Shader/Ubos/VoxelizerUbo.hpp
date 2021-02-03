@@ -41,6 +41,7 @@ namespace castor3d
 			sdw::UInt radianceNumCones;
 			sdw::Float radianceNumConesInv;
 			sdw::Float rayStepSize;
+			sdw::Vec3 center;
 
 		private:
 			using sdw::StructInstance::getMember;
@@ -66,7 +67,7 @@ namespace castor3d
 		C3D_API void initialise( RenderDevice const & device );
 		C3D_API void cleanup();
 		C3D_API void cpuUpdate( VoxelSceneData const & voxelConfig
-			, Camera const & camera
+			, castor::Point3f const & center
 			, uint32_t voxelGridSize );
 
 		void createSizedBinding( ashes::DescriptorSet & descriptorSet

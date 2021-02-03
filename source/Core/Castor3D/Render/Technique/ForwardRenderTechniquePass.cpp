@@ -59,7 +59,6 @@ namespace castor3d
 		, SceneNode const * ignored
 		, SsaoConfig const & config
 		, LpvGridConfigUbo const * lpvConfigUbo
-		, LayeredLpvGridConfigUbo const * llpvConfigUbo )
 		: RenderTechniquePass{ name
 			, name
 			, matrixUbo

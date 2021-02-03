@@ -75,12 +75,14 @@ namespace castor3d
 		, RenderDevice const & device
 		, uint32_t voxelGridSize
 		, Scene & scene
-		, SceneCuller & culler
+		, Camera & camera
 		, ashes::ImageView colourView
 		, MatrixUbo & matrixUbo
 		, VoxelizerUbo & voxelizerUbo
 		, VoxelSceneData const & voxelConfig )
 		: m_engine{ engine }
+		, m_voxelConfig{ voxelConfig }
+		, m_culler{ scene, &camera }
 		, m_matrixUbo{ engine }
 		, m_voxelGridSize{ voxelGridSize }
 		, m_result{ createTexture( engine, device, "VoxelizedSceneColor", { m_voxelGridSize, m_voxelGridSize, m_voxelGridSize } ) }
@@ -89,7 +91,7 @@ namespace castor3d
 		, m_voxelizePass{ engine
 			, device
 			, m_matrixUbo
-			, culler
+			, m_culler
 			, m_voxelizerUbo
 			, *m_voxels
 			, voxelConfig
@@ -100,7 +102,6 @@ namespace castor3d
 			, *m_voxels
 			, m_result
 			, m_voxelGridSize }
-		, m_voxelConfig{ voxelConfig }
 	{
 	}
 
@@ -110,10 +111,19 @@ namespace castor3d
 
 	void Voxelizer::update( CpuUpdater & updater )
 	{
-		m_grid = castor::Point4f{ 0, 0, 0, m_voxelConfig.voxelSize };
+		auto & camera = *updater.camera;
+		float f = 0.05f / m_voxelConfig.voxelSize;
+		auto center = camera.getParent()->getDerivedPosition();
+		center->x = floorf( center->x * f ) / f;
+		center->y = floorf( center->y * f ) / f;
+		center->z = floorf( center->z * f ) / f;
+		m_grid = castor::Point4f{ center->x
+			, center->y
+			, center->z
+			, m_voxelConfig.voxelSize };
 		m_voxelizePass.update( updater );
 		m_voxelizerUbo.cpuUpdate( m_voxelConfig
-			, m_voxelizePass.getCuller().getCamera()
+			, center
 			, m_voxelGridSize );
 	}
 

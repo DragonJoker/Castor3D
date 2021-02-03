@@ -347,7 +347,7 @@ namespace castor3d
 				, device
 				, 256u
 				, *m_renderTarget.getScene()
-				, m_renderTarget.getCuller()
+				, *m_renderTarget.getCamera()
 				, m_colourTexture.getTexture()->getDefaultView().getTargetView()
 				, m_matrixUbo
 				, m_vctConfigUbo

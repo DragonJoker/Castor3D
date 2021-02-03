@@ -48,6 +48,10 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::update
 		 */
+		C3D_API void update( CpuUpdater & updater );
+		/**
+		 *\copydoc		castor3d::RenderTechniquePass::update
+		 */
 		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english

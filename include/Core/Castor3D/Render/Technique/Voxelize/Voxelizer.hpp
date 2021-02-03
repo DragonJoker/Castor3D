@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_Voxelizer_H___
 
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Render/Culling/DummyCuller.hpp"
 #include "Castor3D/Render/Technique/Voxelize/VoxelBufferToTexture.hpp"
 #include "Castor3D/Render/Technique/Voxelize/VoxelizePass.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
@@ -28,7 +29,7 @@ namespace castor3d
 			, RenderDevice const & device
 			, uint32_t voxelGridSize
 			, Scene & scene
-			, SceneCuller & culler
+			, Camera & camera
 			, ashes::ImageView colourView
 			, MatrixUbo & matrixUbo
 			, VoxelizerUbo & voxelizerUbo
@@ -76,6 +77,8 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
+		VoxelSceneData const & m_voxelConfig;
+		DummyCuller m_culler;
 		MatrixUbo m_matrixUbo;
 		uint32_t m_voxelGridSize;
 		TextureUnit m_result;
@@ -83,7 +86,6 @@ namespace castor3d
 		VoxelizerUbo & m_voxelizerUbo;
 		VoxelizePass m_voxelizePass;
 		VoxelBufferToTexture m_voxelToTexture;
-		VoxelSceneData const & m_voxelConfig;
 		castor::Point4f m_grid;
 	};
 }
