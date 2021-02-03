@@ -260,7 +260,8 @@ namespace castor3d
 			, m_renderTarget.getCuller()
 			, ssaoConfig
 			, m_lpvConfigUbo
-			, m_llpvConfigUbo ) }
+			, m_llpvConfigUbo
+			, m_vctConfigUbo ) }
 #else
 		, m_transparentPass{ castor::makeUniqueDerived< RenderTechniquePass, ForwardRenderTechniquePass >( cuT( "transparent_pass" )
 			, m_matrixUbo
@@ -270,7 +271,8 @@ namespace castor3d
 			, nullptr
 			, ssaoConfig
 			, &m_lpvConfigUbo
-			, &m_llpvConfigUbo ) }
+			, &m_llpvConfigUbo
+			, &m_vctConfigUbo ) }
 #endif
 		, m_initialised{ false }
 		, m_ssaoConfig{ ssaoConfig }
@@ -412,11 +414,7 @@ namespace castor3d
 		updater.voxelConeTracing = m_renderTarget.getScene()->getVoxelConeTracingConfig().enabled;
 
 		m_depthPass->update( updater );
-
-		if ( updater.voxelConeTracing )
-		{
-			m_voxelizer->update( updater );
-		}
+		m_voxelizer->update( updater );
 
 #if C3D_UseDeferredRendering
 		m_deferredRendering->update( updater );
@@ -843,7 +841,10 @@ namespace castor3d
 	{
 #if C3D_UseDeferredRendering
 
-		m_opaquePass->initialise( device, m_size, nullptr );
+		m_opaquePass->initialise( device
+			, m_size
+			, nullptr
+			, nullptr );
 		m_deferredRendering = castor::makeUnique< DeferredRendering >( *getEngine()
 			, device
 			, static_cast< OpaquePass & >( *m_opaquePass )
@@ -904,6 +905,10 @@ namespace castor3d
 
 	void RenderTechnique::doInitialiseTransparentPass( RenderDevice const & device )
 	{
+		m_transparentPass->initialise( device
+			, m_size
+			, m_lpvResult.get()
+			, &m_voxelizer->getResult() );
 
 #if C3D_UseWeightedBlendedRendering
 
@@ -926,7 +931,6 @@ namespace castor3d
 			, m_depthBuffer.getTexture()->getDefaultView().getTargetView()
 			, m_size
 			, false );
-		m_transparentPass->initialise( device, m_size, m_lpvResult.get() ); 
 
 #endif
 	}

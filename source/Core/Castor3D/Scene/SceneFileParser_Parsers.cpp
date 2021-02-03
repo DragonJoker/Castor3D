@@ -1279,9 +1279,9 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
 
-		if ( !parsingContext->renderTarget )
+		if ( !parsingContext->scene )
 		{
-			CU_ParsingError( cuT( "No render target initialised." ) );
+			CU_ParsingError( cuT( "No scene initialised." ) );
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eVoxelConeTracing )

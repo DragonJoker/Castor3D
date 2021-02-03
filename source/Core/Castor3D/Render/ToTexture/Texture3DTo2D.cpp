@@ -381,7 +381,7 @@ namespace castor3d
 							pos.y() = -pos.y();
 							pos.xyz() *= writer.cast< Float >( gridSize );
 							pos.xyz() += ( createCube( i ) - vec3( 0.0_f, 1.0f, 0.0f ) ) * 2.0f;
-							pos.xyz() *= writer.cast< Float >( gridSize ) *cellSize / writer.cast< Float >( gridSize );
+							pos.xyz() *= writer.cast< Float >( gridSize ) * cellSize / writer.cast< Float >( gridSize );
 
 							outVoxelColor = inVoxelColor[0];
 							out.vtx.position = c3d_curViewProj * vec4( pos, 1.0f );

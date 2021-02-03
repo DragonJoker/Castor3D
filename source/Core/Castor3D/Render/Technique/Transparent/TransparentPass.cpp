@@ -56,7 +56,8 @@ namespace castor3d
 		, SceneCuller & culler
 		, SsaoConfig const & config
 		, LpvGridConfigUbo const & lpvConfigUbo
-		, LayeredLpvGridConfigUbo const & llpvConfigUbo )
+		, LayeredLpvGridConfigUbo const & llpvConfigUbo
+		, VoxelizerUbo const & vctConfigUbo )
 		: castor3d::RenderTechniquePass{ "Transparent"
 			, "Accumulation"
 			, matrixUbo
@@ -66,7 +67,8 @@ namespace castor3d
 			, nullptr
 			, config
 			, &lpvConfigUbo
-			, &llpvConfigUbo }
+			, &llpvConfigUbo
+			, &vctConfigUbo }
 	{
 	}
 
@@ -87,7 +89,7 @@ namespace castor3d
 				VK_ATTACHMENT_STORE_OP_DONT_CARE,
 				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 				VK_ATTACHMENT_STORE_OP_DONT_CARE,
-				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+				VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
 				VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
 			},
 			{
