@@ -4,7 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_LightingPass_H___
 #define ___C3D_LightingPass_H___
 
-#include "LightingModule.hpp"
+#include "OpaqueModule.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/LightingModule.hpp"
 
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"

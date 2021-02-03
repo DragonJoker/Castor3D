@@ -1,4 +1,4 @@
-#include "Castor3D/Render/Technique/Opaque/Lighting/LightingPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/LightingPass.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/LightCache.hpp"

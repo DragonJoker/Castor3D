@@ -58,6 +58,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Handles the light passes.
+	*\~french
+	*\brief
+	*	Gère les passes d'éclairage.
+	*/
+	class LightingPass;
+	/**
+	*\~english
+	*\brief
 	*	The result of the geometry pass in deferred rendering.
 	*\~french
 	*\brief
