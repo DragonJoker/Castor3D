@@ -13,35 +13,33 @@ namespace castor3d
 {
 	namespace shader
 	{
-		struct FragmentInput
+		struct Surface
+			: public sdw::StructInstance
 		{
-			C3D_API FragmentInput( FragmentInput const & rhs );
-			C3D_API explicit FragmentInput( sdw::ShaderWriter & writer );
-			C3D_API FragmentInput( sdw::InVec2 const & clipVertex
-				, sdw::InVec3 const & viewVertex
-				, sdw::InVec3 const & worldVertex
-				, sdw::InVec3 const & worldNormal );
+			C3D_API Surface( sdw::ShaderWriter & writer
+				, ast::expr::ExprPtr expr
+				, bool enabled );
+			C3D_API Surface & operator=( Surface const & rhs );
 
-			C3D_API ast::expr::Expr * getExpr()const;
-			C3D_API sdw::ShaderWriter * getWriter()const;
-			C3D_API void setVar( ast::var::VariableList::const_iterator & var );
+			C3D_API void create( sdw::Vec2 clip
+				, sdw::Vec3 view
+				, sdw::Vec3 world
+				, sdw::Vec3 normal );
+			C3D_API void create( sdw::Vec3 world
+				, sdw::Vec3 normal );
 
-			bool isEnabled()const
-			{
-				return true;
-			}
+			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
-			sdw::InVec2 m_clipVertex;
-			sdw::InVec3 m_viewVertex;
-			sdw::InVec3 m_worldVertex;
-			sdw::InVec3 m_worldNormal;
+			sdw::Vec2 clipPosition;
+			sdw::Vec3 viewPosition;
+			sdw::Vec3 worldPosition;
+			sdw::Vec3 worldNormal;
 
 		private:
-			ast::expr::ExprPtr m_expr;
+			using sdw::StructInstance::getMember;
+			using sdw::StructInstance::getMemberArray;
 		};
-
-		C3D_API ast::expr::ExprList makeFnArg( sdw::ShaderWriter & shader
-			, FragmentInput const & value );
 
 		class LightingModel
 		{

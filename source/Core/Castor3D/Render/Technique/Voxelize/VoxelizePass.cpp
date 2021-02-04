@@ -756,11 +756,13 @@ namespace castor3d
 					emissive *= diffuse;
 					auto worldEye = writer.declLocale( "worldEye"
 						, c3d_cameraPosition.xyz() );
+					auto surface = writer.declLocale< shader::Surface >( "surface" );
+					surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
 					auto color = writer.declLocale( "lightDiffuse"
 						, lighting->computeCombinedDiffuse( worldEye
 							, shininess
 							, c3d_shadowReceiver
-							, shader::FragmentInput( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal ) ) );
+							, surface ) );
 					color.xyz() *= diffuse * occlusion;
 					color.xyz() += emissive;
 
@@ -895,13 +897,15 @@ namespace castor3d
 					emissive *= albedo;
 					auto worldEye = writer.declLocale( "worldEye"
 						, c3d_cameraPosition.xyz() );
+					auto surface = writer.declLocale< shader::Surface >( "surface" );
+					surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
 					auto color = writer.declLocale( "color"
 						, lighting->computeCombinedDiffuse( worldEye
 							, albedo
 							, metalness
 							, roughness
 							, c3d_shadowReceiver
-							, shader::FragmentInput( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal ) ) );
+							, surface ) );
 					color *= albedo * occlusion;
 					color += emissive;
 
@@ -1026,12 +1030,14 @@ namespace castor3d
 					emissive *= albedo;
 					auto worldEye = writer.declLocale( "worldEye"
 						, c3d_cameraPosition.xyz() );
+					auto surface = writer.declLocale< shader::Surface >( "surface" );
+					surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
 					auto color = writer.declLocale( "lightDiffuse"
 						, lighting->computeCombinedDiffuse( worldEye
 							, specular
 							, glossiness
 							, c3d_shadowReceiver
-							, shader::FragmentInput( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal ) ) );
+							, surface ) );
 					color.xyz() *= albedo * occlusion;
 					color.xyz() += emissive;
 

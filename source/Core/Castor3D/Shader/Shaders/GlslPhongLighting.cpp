@@ -34,7 +34,7 @@ namespace castor3d
 		void PhongLightingModel::computeCombined( Vec3 const & worldEye
 			, Float const & shininess
 			, Int const & receivesShadows
-			, FragmentInput const & fragmentIn
+			, Surface const & surface
 			, OutputComponents & parentOutput )const
 		{
 			auto c3d_lightsCount = m_writer.getVariable< IVec4 >( "c3d_lightsCount" );
@@ -49,7 +49,7 @@ namespace castor3d
 					, worldEye
 					, shininess
 					, receivesShadows
-					, FragmentInput{ fragmentIn }
+					, surface
 					, parentOutput );
 			}
 			ROF;
@@ -63,7 +63,7 @@ namespace castor3d
 					, worldEye
 					, shininess
 					, receivesShadows
-					, FragmentInput{ fragmentIn }
+					, surface
 					, parentOutput );
 			}
 			ROF;
@@ -77,7 +77,7 @@ namespace castor3d
 					, worldEye
 					, shininess
 					, receivesShadows
-					, FragmentInput{ fragmentIn }
+					, surface
 					, parentOutput );
 			}
 			ROF;
@@ -87,14 +87,14 @@ namespace castor3d
 			, Vec3 const & worldEye
 			, Float const & shininess
 			, Int const & receivesShadows
-			, FragmentInput const & fragmentIn
+			, Surface const & surface
 			, OutputComponents & parentOutput )const
 		{
 			m_computeDirectional( light
 				, worldEye
 				, shininess
 				, receivesShadows
-				, FragmentInput{ fragmentIn }
+				, surface
 				, parentOutput );
 		}
 
@@ -102,14 +102,14 @@ namespace castor3d
 			, Vec3 const & worldEye
 			, Float const & shininess
 			, Int const & receivesShadows
-			, FragmentInput const & fragmentIn
+			, Surface const & surface
 			, OutputComponents & parentOutput )const
 		{
 			m_computePoint( light
 				, worldEye
 				, shininess
 				, receivesShadows
-				, FragmentInput{ fragmentIn }
+				, surface
 				, parentOutput );
 		}
 
@@ -117,21 +117,21 @@ namespace castor3d
 			, Vec3 const & worldEye
 			, Float const & shininess
 			, Int const & receivesShadows
-			, FragmentInput const & fragmentIn
+			, Surface const & surface
 			, OutputComponents & parentOutput )const
 		{
 			m_computeSpot( light
 				, worldEye
 				, shininess
 				, receivesShadows
-				, FragmentInput{ fragmentIn }
+				, surface
 				, parentOutput );
 		}
 
 		Vec3 PhongLightingModel::computeCombinedDiffuse( Vec3 const & worldEye
 			, Float const & shininess
 			, Int const & receivesShadows
-			, FragmentInput const & fragmentIn )const
+			, Surface const & surface )const
 		{
 			auto c3d_lightsCount = m_writer.getVariable< IVec4 >( "c3d_lightsCount" );
 			auto result = m_writer.declLocale( "result"
@@ -147,7 +147,7 @@ namespace castor3d
 					, worldEye
 					, shininess
 					, receivesShadows
-					, FragmentInput{ fragmentIn } );
+					, surface );
 			}
 			ROF;
 
@@ -160,7 +160,7 @@ namespace castor3d
 					, worldEye
 					, shininess
 					, receivesShadows
-					, FragmentInput{ fragmentIn } );
+					, surface );
 			}
 			ROF;
 
@@ -173,7 +173,7 @@ namespace castor3d
 					, worldEye
 					, shininess
 					, receivesShadows
-					, FragmentInput{ fragmentIn } );
+					, surface );
 			}
 			ROF;
 
@@ -184,39 +184,39 @@ namespace castor3d
 			, Vec3 const & worldEye
 			, Float const & shininess
 			, Int const & receivesShadows
-			, FragmentInput const & fragmentIn )const
+			, Surface const & surface )const
 		{
 			return m_computeDirectionalDiffuse( light
 				, worldEye
 				, shininess
 				, receivesShadows
-				, FragmentInput{ fragmentIn } );
+				, surface );
 		}
 
 		Vec3 PhongLightingModel::computeDiffuse( PointLight const & light
 			, Vec3 const & worldEye
 			, Float const & shininess
 			, Int const & receivesShadows
-			, FragmentInput const & fragmentIn )const
+			, Surface const & surface )const
 		{
 			return m_computePointDiffuse( light
 				, worldEye
 				, shininess
 				, receivesShadows
-				, FragmentInput{ fragmentIn } );
+				, surface );
 		}
 
 		Vec3 PhongLightingModel::computeDiffuse( SpotLight const & light
 			, Vec3 const & worldEye
 			, Float const & shininess
 			, Int const & receivesShadows
-			, FragmentInput const & fragmentIn )const
+			, Surface const & surface )const
 		{
 			return m_computeSpotDiffuse( light
 				, worldEye
 				, shininess
 				, receivesShadows
-				, FragmentInput{ fragmentIn } );
+				, surface );
 		}
 
 		std::shared_ptr< PhongLightingModel > PhongLightingModel::createModel( sdw::ShaderWriter & writer
@@ -409,7 +409,7 @@ namespace castor3d
 					, Vec3 const & worldEye
 					, Float const & shininess
 					, Int const & receivesShadows
-					, FragmentInput const & fragmentIn
+					, Surface const & surface
 					, OutputComponents & parentOutput )
 				{
 					OutputComponents output
@@ -438,7 +438,7 @@ namespace castor3d
 							FOR( m_writer, UInt, i, 0u, i < maxCount, ++i )
 							{
 								auto factors = m_writer.declLocale( "factors"
-									, m_getCascadeFactors( Vec3{ fragmentIn.m_viewVertex }
+									, m_getCascadeFactors( Vec3{ surface.viewPosition }
 										, light.m_splitDepths
 										, i ) );
 
@@ -458,11 +458,11 @@ namespace castor3d
 										, light.m_lightBase.m_pcfShadowOffsets
 										, light.m_lightBase.m_vsmShadowVariance
 										, light.m_transforms[cascadeIndex]
-										, fragmentIn.m_worldVertex
+										, surface.worldPosition
 										, lightDirection
 										, cascadeIndex
 										, light.m_cascadeCount
-										, fragmentIn.m_worldNormal ) );
+										, surface.worldNormal ) );
 
 							IF( m_writer, cascadeIndex > 0_u )
 							{
@@ -473,11 +473,11 @@ namespace castor3d
 											, light.m_lightBase.m_pcfShadowOffsets
 											, light.m_lightBase.m_vsmShadowVariance
 											, light.m_transforms[cascadeIndex - 1u]
-											, fragmentIn.m_worldVertex
+											, surface.worldPosition
 											, -lightDirection
 											, cascadeIndex - 1u
 											, light.m_cascadeCount
-											, fragmentIn.m_worldNormal ) );
+											, surface.worldNormal ) );
 							}
 							FI;
 
@@ -487,7 +487,7 @@ namespace castor3d
 									, worldEye
 									, lightDirection
 									, shininess
-									, fragmentIn
+									, surface
 									, output );
 								output.m_diffuse *= shadowFactor;
 								output.m_specular *= shadowFactor;
@@ -502,8 +502,8 @@ namespace castor3d
 										, light.m_lightBase.m_rawShadowOffsets
 										, light.m_lightBase.m_pcfShadowOffsets
 										, light.m_lightBase.m_vsmShadowVariance
-										, fragmentIn.m_clipVertex
-										, fragmentIn.m_worldVertex
+										, surface.clipPosition
+										, surface.worldPosition
 										, worldEye
 										, light.m_transforms[cascadeIndex]
 										, light.m_direction
@@ -548,7 +548,7 @@ namespace castor3d
 								, worldEye
 								, lightDirection
 								, shininess
-								, fragmentIn
+								, surface
 								, output );
 						}
 						FI;
@@ -559,7 +559,7 @@ namespace castor3d
 						, worldEye
 						, lightDirection
 						, shininess
-						, fragmentIn
+						, surface
 						, output );
 					}
 
@@ -570,7 +570,7 @@ namespace castor3d
 				, InVec3( m_writer, "worldEye" )
 				, InFloat( m_writer, "shininess" )
 				, InInt( m_writer, "receivesShadows" )
-				, FragmentInput{ m_writer }
+				, InSurface{ m_writer, "surface" }
 				, output );
 		}
 
@@ -582,7 +582,7 @@ namespace castor3d
 					, Vec3 const & worldEye
 					, Float const & shininess
 					, Int const & receivesShadows
-					, FragmentInput const & fragmentIn
+					, Surface const & surface
 					, OutputComponents & parentOutput )
 				{
 					OutputComponents output
@@ -591,7 +591,7 @@ namespace castor3d
 						m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
 					};
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
-						, fragmentIn.m_worldVertex - light.m_position.xyz() );
+						, surface.worldPosition - light.m_position.xyz() );
 					auto distance = m_writer.declLocale( "distance"
 						, length( lightToVertex ) );
 					auto lightDirection = m_writer.declLocale( "lightDirection"
@@ -611,9 +611,9 @@ namespace castor3d
 										, light.m_lightBase.m_rawShadowOffsets
 										, light.m_lightBase.m_pcfShadowOffsets
 										, light.m_lightBase.m_vsmShadowVariance
-										, fragmentIn.m_worldVertex
+										, surface.worldPosition
 										, light.m_position.xyz()
-										, fragmentIn.m_worldNormal
+										, surface.worldNormal
 										, light.m_lightBase.m_farPlane
 										, light.m_lightBase.m_index ) );
 							}
@@ -625,7 +625,7 @@ namespace castor3d
 									, worldEye
 									, lightDirection
 									, shininess
-									, fragmentIn
+									, surface
 									, output );
 								output.m_diffuse *= shadowFactor;
 								output.m_specular *= shadowFactor;
@@ -638,7 +638,7 @@ namespace castor3d
 								, worldEye
 								, lightDirection
 								, shininess
-								, fragmentIn
+								, surface
 								, output );
 						}
 						FI;
@@ -649,7 +649,7 @@ namespace castor3d
 							, worldEye
 							, lightDirection
 							, shininess
-							, fragmentIn
+							, surface
 							, output );
 					}
 
@@ -673,7 +673,7 @@ namespace castor3d
 				, InVec3( m_writer, "worldEye" )
 				, InFloat( m_writer, "shininess" )
 				, InInt( m_writer, "receivesShadows" )
-				, FragmentInput{ m_writer }
+				, InSurface{ m_writer, "surface" }
 				, output );
 		}
 
@@ -685,7 +685,7 @@ namespace castor3d
 					, Vec3 const & worldEye
 					, Float const & shininess
 					, Int const & receivesShadows
-					, FragmentInput const & fragmentIn
+					, Surface const & surface
 					, OutputComponents & parentOutput )
 				{
 					OutputComponents output
@@ -694,7 +694,7 @@ namespace castor3d
 						m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
 					};
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
-						, fragmentIn.m_worldVertex - light.m_position.xyz() );
+						, surface.worldPosition - light.m_position.xyz() );
 					auto distLightToVertex = m_writer.declLocale( "distLightToVertex"
 						, length( lightToVertex ) );
 					auto lightDirection = m_writer.declLocale( "lightDirection"
@@ -718,9 +718,9 @@ namespace castor3d
 									, light.m_lightBase.m_pcfShadowOffsets
 									, light.m_lightBase.m_vsmShadowVariance
 									, light.m_transform
-									, fragmentIn.m_worldVertex
+									, surface.worldPosition
 									, lightToVertex
-									, fragmentIn.m_worldNormal
+									, surface.worldNormal
 									, light.m_lightBase.m_index );
 
 #else
@@ -731,9 +731,9 @@ namespace castor3d
 										, light.m_lightBase.m_pcfShadowOffsets
 										, light.m_lightBase.m_vsmShadowVariance
 										, light.m_transform
-										, fragmentIn.m_worldVertex
+										, surface.worldPosition
 										, lightToVertex
-										, fragmentIn.m_worldNormal
+										, surface.worldNormal
 										, light.m_lightBase.m_index ) );
 
 #endif
@@ -746,7 +746,7 @@ namespace castor3d
 									, worldEye
 									, lightDirection
 									, shininess
-									, fragmentIn
+									, surface
 									, output );
 								output.m_diffuse *= shadowFactor;
 								output.m_specular *= shadowFactor;
@@ -759,7 +759,7 @@ namespace castor3d
 								, worldEye
 								, lightDirection
 								, shininess
-								, fragmentIn
+								, surface
 								, output );
 						}
 						FI;
@@ -770,7 +770,7 @@ namespace castor3d
 							, worldEye
 							, lightDirection
 							, shininess
-							, fragmentIn
+							, surface
 							, output );
 					}
 
@@ -797,7 +797,7 @@ namespace castor3d
 				, InVec3( m_writer, "worldEye" )
 				, InFloat( m_writer, "shininess" )
 				, InInt( m_writer, "receivesShadows" )
-				, FragmentInput{ m_writer }
+				, InSurface{ m_writer, "surface" }
 				, output );
 		}
 
@@ -809,12 +809,12 @@ namespace castor3d
 					, Vec3 const & worldEye
 					, Vec3 const & lightDirection
 					, Float const & shininess
-					, FragmentInput const & fragmentIn
+					, Surface const & surface
 					, OutputComponents & output )
 				{
 					// Diffuse term.
 					auto diffuseFactor = m_writer.declLocale( "diffuseFactor"
-						, dot( fragmentIn.m_worldNormal, -lightDirection ) );
+						, dot( surface.worldNormal, -lightDirection ) );
 					auto isLit = m_writer.declLocale( "isLit"
 						, 1.0_f - step( diffuseFactor, 0.0_f ) );
 					output.m_diffuse = isLit
@@ -824,15 +824,15 @@ namespace castor3d
 
 					// Specular term.
 					auto vertexToEye = m_writer.declLocale( "vertexToEye"
-						, normalize( worldEye - fragmentIn.m_worldVertex ) );
+						, normalize( worldEye - surface.worldPosition ) );
 					// Blinn Phong
 					auto halfwayDir = m_writer.declLocale( "halfwayDir"
 						, normalize( vertexToEye - lightDirection ) );
 					auto specularFactor = m_writer.declLocale( "specularFactor"
-						, max( dot( fragmentIn.m_worldNormal, halfwayDir ), 0.0_f ) );
+						, max( dot( surface.worldNormal, halfwayDir ), 0.0_f ) );
 					// Phong
 					//auto lightReflect = m_writer.declLocale( "lightReflect"
-					//	, normalize( reflect( lightDirection, fragmentIn.m_worldNormal ) ) );
+					//	, normalize( reflect( lightDirection, surface.worldNormal ) ) );
 					//auto specularFactor = m_writer.declLocale( "specularFactor"
 					//	, max( dot( vertexToEye, lightReflect ), 0.0_f ) );
 					output.m_specular = isLit
@@ -844,7 +844,7 @@ namespace castor3d
 				, InVec3( m_writer, "worldEye" )
 				, InVec3( m_writer, "lightDirection" )
 				, InFloat( m_writer, "shininess" )
-				, FragmentInput{ m_writer }
+				, InSurface{ m_writer, "surface" }
 				, output );
 		}
 
@@ -852,14 +852,14 @@ namespace castor3d
 			, Vec3 const & worldEye
 			, Vec3 const & lightDirection
 			, Float const & shininess
-			, FragmentInput const & fragmentIn
+			, Surface const & surface
 			, OutputComponents & parentOutput )
 		{
 			m_computeLight( light
 				, worldEye
 				, lightDirection
 				, shininess
-				, FragmentInput{ fragmentIn }
+				, surface
 				, parentOutput );
 		}
 
@@ -875,7 +875,7 @@ namespace castor3d
 					, Vec3 const & worldEye
 					, Float const & shininess
 					, Int const & receivesShadows
-					, FragmentInput const & fragmentIn )
+					, Surface const & surface )
 				{
 					auto diffuse = m_writer.declLocale( "diffuse"
 						, vec3( 0.0_f ) );
@@ -900,7 +900,7 @@ namespace castor3d
 							FOR( m_writer, UInt, i, 0u, i < maxCount, ++i )
 							{
 								auto factors = m_writer.declLocale( "factors"
-									, m_getCascadeFactors( Vec3{ fragmentIn.m_viewVertex }
+									, m_getCascadeFactors( Vec3{ surface.viewPosition }
 										, light.m_splitDepths
 										, i ) );
 
@@ -920,11 +920,11 @@ namespace castor3d
 										, light.m_lightBase.m_pcfShadowOffsets
 										, light.m_lightBase.m_vsmShadowVariance
 										, light.m_transforms[cascadeIndex]
-										, fragmentIn.m_worldVertex
+										, surface.worldPosition
 										, lightDirection
 										, cascadeIndex
 										, light.m_cascadeCount
-										, fragmentIn.m_worldNormal ) );
+										, surface.worldNormal ) );
 
 							IF( m_writer, cascadeIndex > 0_u )
 							{
@@ -935,11 +935,11 @@ namespace castor3d
 											, light.m_lightBase.m_pcfShadowOffsets
 											, light.m_lightBase.m_vsmShadowVariance
 											, light.m_transforms[cascadeIndex - 1u]
-											, fragmentIn.m_worldVertex
+											, surface.worldPosition
 											, -lightDirection
 											, cascadeIndex - 1u
 											, light.m_cascadeCount
-											, fragmentIn.m_worldNormal ) );
+											, surface.worldNormal ) );
 							}
 							FI;
 
@@ -949,7 +949,7 @@ namespace castor3d
 									, worldEye
 									, lightDirection
 									, shininess
-									, fragmentIn );
+									, surface );
 							}
 							FI;
 
@@ -983,7 +983,7 @@ namespace castor3d
 								, worldEye
 								, lightDirection
 								, shininess
-								, fragmentIn );
+								, surface );
 						}
 						FI;
 					}
@@ -993,7 +993,7 @@ namespace castor3d
 							, worldEye
 							, lightDirection
 							, shininess
-							, fragmentIn );
+							, surface );
 					}
 
 					m_writer.returnStmt( max( vec3( 0.0_f ), diffuse ) );
@@ -1002,7 +1002,7 @@ namespace castor3d
 				, InVec3( m_writer, "worldEye" )
 				, InFloat( m_writer, "shininess" )
 				, InInt( m_writer, "receivesShadows" )
-				, FragmentInput{ m_writer } );
+				, InSurface{ m_writer, "surface" } );
 		}
 
 		void PhongLightingModel::doDeclareComputePointLightDiffuse()
@@ -1012,12 +1012,12 @@ namespace castor3d
 					, Vec3 const & worldEye
 					, Float const & shininess
 					, Int const & receivesShadows
-					, FragmentInput const & fragmentIn )
+					, Surface const & surface )
 				{
 					auto diffuse = m_writer.declLocale( "diffuse"
 						, vec3( 0.0_f ) );
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
-						, fragmentIn.m_worldVertex - light.m_position.xyz() );
+						, surface.worldPosition - light.m_position.xyz() );
 					auto distance = m_writer.declLocale( "distance"
 						, length( lightToVertex ) );
 					auto lightDirection = m_writer.declLocale( "lightDirection"
@@ -1037,9 +1037,9 @@ namespace castor3d
 										, light.m_lightBase.m_rawShadowOffsets
 										, light.m_lightBase.m_pcfShadowOffsets
 										, light.m_lightBase.m_vsmShadowVariance
-										, fragmentIn.m_worldVertex
+										, surface.worldPosition
 										, light.m_position.xyz()
-										, fragmentIn.m_worldNormal
+										, surface.worldNormal
 										, light.m_lightBase.m_farPlane
 										, light.m_lightBase.m_index ) );
 							}
@@ -1051,7 +1051,7 @@ namespace castor3d
 									, worldEye
 									, lightDirection
 									, shininess
-									, fragmentIn );
+									, surface );
 							}
 							FI;
 						}
@@ -1061,7 +1061,7 @@ namespace castor3d
 								, worldEye
 								, lightDirection
 								, shininess
-								, fragmentIn );
+								, surface );
 						}
 						FI;
 					}
@@ -1071,7 +1071,7 @@ namespace castor3d
 							, worldEye
 							, lightDirection
 							, shininess
-							, fragmentIn );
+							, surface );
 					}
 
 					auto attenuation = m_writer.declLocale( "attenuation"
@@ -1091,7 +1091,7 @@ namespace castor3d
 				, InVec3( m_writer, "worldEye" )
 				, InFloat( m_writer, "shininess" )
 				, InInt( m_writer, "receivesShadows" )
-				, FragmentInput{ m_writer } );
+				, InSurface{ m_writer, "surface" } );
 		}
 
 		void PhongLightingModel::doDeclareComputeSpotLightDiffuse()
@@ -1101,12 +1101,12 @@ namespace castor3d
 					, Vec3 const & worldEye
 					, Float const & shininess
 					, Int const & receivesShadows
-					, FragmentInput const & fragmentIn )
+					, Surface const & surface )
 				{
 					auto diffuse = m_writer.declLocale( "diffuse"
 						, vec3( 0.0_f ) );
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
-						, fragmentIn.m_worldVertex - light.m_position.xyz() );
+						, surface.worldPosition - light.m_position.xyz() );
 					auto distLightToVertex = m_writer.declLocale( "distLightToVertex"
 						, length( lightToVertex ) );
 					auto lightDirection = m_writer.declLocale( "lightDirection"
@@ -1130,9 +1130,9 @@ namespace castor3d
 									, light.m_lightBase.m_pcfShadowOffsets
 									, light.m_lightBase.m_vsmShadowVariance
 									, light.m_transform
-									, fragmentIn.m_worldVertex
+									, surface.worldPosition
 									, lightToVertex
-									, fragmentIn.m_worldNormal
+									, surface.worldNormal
 									, light.m_lightBase.m_index );
 
 #else
@@ -1143,9 +1143,9 @@ namespace castor3d
 										, light.m_lightBase.m_pcfShadowOffsets
 										, light.m_lightBase.m_vsmShadowVariance
 										, light.m_transform
-										, fragmentIn.m_worldVertex
+										, surface.worldPosition
 										, lightToVertex
-										, fragmentIn.m_worldNormal
+										, surface.worldNormal
 										, light.m_lightBase.m_index ) );
 
 #endif
@@ -1158,7 +1158,7 @@ namespace castor3d
 									, worldEye
 									, lightDirection
 									, shininess
-									, fragmentIn );
+									, surface );
 							}
 							FI;
 						}
@@ -1168,7 +1168,7 @@ namespace castor3d
 								, worldEye
 								, lightDirection
 								, shininess
-								, fragmentIn );
+								, surface );
 						}
 						FI;
 					}
@@ -1178,7 +1178,7 @@ namespace castor3d
 							, worldEye
 							, lightDirection
 							, shininess
-							, fragmentIn );
+							, surface );
 					}
 
 					auto attenuation = m_writer.declLocale( "attenuation"
@@ -1200,7 +1200,7 @@ namespace castor3d
 				, InVec3( m_writer, "worldEye" )
 				, InFloat( m_writer, "shininess" )
 				, InInt( m_writer, "receivesShadows" )
-				, FragmentInput{ m_writer } );
+				, InSurface{ m_writer, "surface" } );
 		}
 
 		void PhongLightingModel::doDeclareComputeLightDiffuse()
@@ -1210,11 +1210,11 @@ namespace castor3d
 					, Vec3 const & worldEye
 					, Vec3 const & lightDirection
 					, Float const & shininess
-					, FragmentInput const & fragmentIn )
+					, Surface const & surface )
 				{
 					// Diffuse term.
 					auto diffuseFactor = m_writer.declLocale( "diffuseFactor"
-						, dot( fragmentIn.m_worldNormal, -lightDirection ) );
+						, dot( surface.worldNormal, -lightDirection ) );
 					auto isLit = m_writer.declLocale( "isLit"
 						, 1.0_f - step( diffuseFactor, 0.0_f ) );
 					m_writer.returnStmt( isLit
@@ -1226,20 +1226,20 @@ namespace castor3d
 				, InVec3( m_writer, "worldEye" )
 				, InVec3( m_writer, "lightDirection" )
 				, InFloat( m_writer, "shininess" )
-				, FragmentInput{ m_writer } );
+				, InSurface{ m_writer, "surface" } );
 		}
 
 		Vec3 PhongLightingModel::doComputeLightDiffuse( Light const & light
 			, Vec3 const & worldEye
 			, Vec3 const & lightDirection
 			, Float const & shininess
-			, FragmentInput const & fragmentIn )
+			, Surface const & surface )
 		{
 			return m_computeLightDiffuse( light
 				, worldEye
 				, lightDirection
 				, shininess
-				, FragmentInput{ fragmentIn } );
+				, surface );
 		}
 	}
 }

@@ -35,7 +35,7 @@ namespace castor3d
 			, Float const & metallic
 			, Float const & roughness
 			, Int const & receivesShadows
-			, FragmentInput const & fragmentIn
+			, Surface const & surface
 			, OutputComponents & parentOutput )const
 		{
 			auto c3d_lightsCount = m_writer.getVariable< IVec4 >( "c3d_lightsCount" );
@@ -52,7 +52,7 @@ namespace castor3d
 					, metallic
 					, roughness
 					, receivesShadows
-					, FragmentInput{ fragmentIn }
+					, surface
 					, parentOutput );
 			}
 			ROF;
@@ -68,7 +68,7 @@ namespace castor3d
 					, metallic
 					, roughness
 					, receivesShadows
-					, FragmentInput{ fragmentIn }
+					, surface
 					, parentOutput );
 			}
 			ROF;
@@ -84,7 +84,7 @@ namespace castor3d
 					, metallic
 					, roughness
 					, receivesShadows
-					, FragmentInput{ fragmentIn }
+					, surface
 					, parentOutput );
 			}
 			ROF;
@@ -96,7 +96,7 @@ namespace castor3d
 			, Float const & metallic
 			, Float const & roughness
 			, Int const & receivesShadows
-			, FragmentInput const & fragmentIn
+			, Surface const & surface
 			, OutputComponents & parentOutput )const
 		{
 			m_computeDirectional( light
@@ -105,7 +105,7 @@ namespace castor3d
 				, metallic
 				, roughness
 				, receivesShadows
-				, FragmentInput{ fragmentIn }
+				, surface
 				, parentOutput );
 		}
 
@@ -115,7 +115,7 @@ namespace castor3d
 			, Float const & metallic
 			, Float const & roughness
 			, Int const & receivesShadows
-			, FragmentInput const & fragmentIn
+			, Surface const & surface
 			, OutputComponents & parentOutput )const
 		{
 			m_computePoint( light
@@ -124,7 +124,7 @@ namespace castor3d
 				, metallic
 				, roughness
 				, receivesShadows
-				, FragmentInput{ fragmentIn }
+				, surface
 				, parentOutput );
 		}
 
@@ -134,7 +134,7 @@ namespace castor3d
 			, Float const & metallic
 			, Float const & roughness
 			, Int const & receivesShadows
-			, FragmentInput const & fragmentIn
+			, Surface const & surface
 			, OutputComponents & parentOutput )const
 		{
 			m_computeSpot( light
@@ -143,7 +143,7 @@ namespace castor3d
 				, metallic
 				, roughness
 				, receivesShadows
-				, FragmentInput{ fragmentIn }
+				, surface
 				, parentOutput );
 		}
 
@@ -152,7 +152,7 @@ namespace castor3d
 			, Float const & metallic
 			, Float const & roughness
 			, Int const & receivesShadows
-			, FragmentInput const & fragmentIn )const
+			, Surface const & surface )const
 		{
 			auto c3d_lightsCount = m_writer.getVariable< IVec4 >( "c3d_lightsCount" );
 			auto result = m_writer.declLocale( "result"
@@ -170,7 +170,7 @@ namespace castor3d
 					, metallic
 					, roughness
 					, receivesShadows
-					, FragmentInput{ fragmentIn } );
+					, surface );
 			}
 			ROF;
 
@@ -185,7 +185,7 @@ namespace castor3d
 					, metallic
 					, roughness
 					, receivesShadows
-					, FragmentInput{ fragmentIn } );
+					, surface );
 			}
 			ROF;
 
@@ -200,7 +200,7 @@ namespace castor3d
 					, metallic
 					, roughness
 					, receivesShadows
-					, FragmentInput{ fragmentIn } );
+					, surface );
 			}
 			ROF;
 
@@ -213,7 +213,7 @@ namespace castor3d
 			, Float const & metallic
 			, Float const & roughness
 			, Int const & receivesShadows
-			, FragmentInput const & fragmentIn )const
+			, Surface const & surface )const
 		{
 			return m_computeDirectionalDiffuse( light
 				, worldEye
@@ -221,7 +221,7 @@ namespace castor3d
 				, metallic
 				, roughness
 				, receivesShadows
-				, FragmentInput{ fragmentIn } );
+				, surface );
 		}
 
 		Vec3 MetallicBrdfLightingModel::computeDiffuse( PointLight const & light
@@ -230,7 +230,7 @@ namespace castor3d
 			, Float const & metallic
 			, Float const & roughness
 			, Int const & receivesShadows
-			, FragmentInput const & fragmentIn )const
+			, Surface const & surface )const
 		{
 			return m_computePointDiffuse( light
 				, worldEye
@@ -238,7 +238,7 @@ namespace castor3d
 				, metallic
 				, roughness
 				, receivesShadows
-				, FragmentInput{ fragmentIn } );
+				, surface );
 		}
 
 		Vec3 MetallicBrdfLightingModel::computeDiffuse( SpotLight const & light
@@ -247,7 +247,7 @@ namespace castor3d
 			, Float const & metallic
 			, Float const & roughness
 			, Int const & receivesShadows
-			, FragmentInput const & fragmentIn )const
+			, Surface const & surface )const
 		{
 			return m_computeSpotDiffuse( light
 				, worldEye
@@ -255,7 +255,7 @@ namespace castor3d
 				, metallic
 				, roughness
 				, receivesShadows
-				, FragmentInput{ fragmentIn } );
+				, surface );
 		}
 
 		std::shared_ptr< MetallicBrdfLightingModel > MetallicBrdfLightingModel::createModel( sdw::ShaderWriter & writer
@@ -450,7 +450,7 @@ namespace castor3d
 					, Float const & metallic
 					, Float const & roughness
 					, Int const & receivesShadows
-					, FragmentInput const & fragmentIn
+					, Surface const & surface
 					, OutputComponents & parentOutput )
 				{
 					OutputComponents output
@@ -480,7 +480,7 @@ namespace castor3d
 							FOR( m_writer, UInt, i, 0u, i < maxCount, ++i )
 							{
 								auto factors = m_writer.declLocale( "factors"
-									, m_getCascadeFactors( Vec3{ fragmentIn.m_viewVertex }
+									, m_getCascadeFactors( Vec3{ surface.viewPosition }
 										, light.m_splitDepths
 										, i ) );
 
@@ -500,11 +500,11 @@ namespace castor3d
 										, light.m_lightBase.m_pcfShadowOffsets
 										, light.m_lightBase.m_vsmShadowVariance
 										, light.m_transforms[cascadeIndex]
-										, fragmentIn.m_worldVertex
+										, surface.worldPosition
 										, -lightDirection
 										, cascadeIndex
 										, light.m_cascadeCount
-										, fragmentIn.m_worldNormal ) );
+										, surface.worldNormal ) );
 
 							IF( m_writer, cascadeIndex > 0_u )
 							{
@@ -515,11 +515,11 @@ namespace castor3d
 											, light.m_lightBase.m_pcfShadowOffsets
 											, light.m_lightBase.m_vsmShadowVariance
 											, light.m_transforms[cascadeIndex - 1u]
-											, fragmentIn.m_worldVertex
+											, surface.worldPosition
 											, -lightDirection
 											, cascadeIndex - 1u
 											, light.m_cascadeCount
-											, fragmentIn.m_worldNormal ) );
+											, surface.worldNormal ) );
 							}
 							FI;
 
@@ -531,7 +531,7 @@ namespace castor3d
 									, albedo
 									, metallic
 									, roughness
-									, fragmentIn
+									, surface
 									, output );
 								output.m_diffuse *= shadowFactor;
 								output.m_specular *= shadowFactor;
@@ -546,8 +546,8 @@ namespace castor3d
 										, light.m_lightBase.m_rawShadowOffsets
 										, light.m_lightBase.m_pcfShadowOffsets
 										, light.m_lightBase.m_vsmShadowVariance
-										, fragmentIn.m_clipVertex
-										, fragmentIn.m_worldVertex
+										, surface.clipPosition
+										, surface.worldPosition
 										, worldEye
 										, light.m_transforms[cascadeIndex]
 										, -lightDirection
@@ -594,7 +594,7 @@ namespace castor3d
 								, albedo
 								, metallic
 								, roughness
-								, fragmentIn
+								, surface
 								, output );
 						}
 						FI;
@@ -607,7 +607,7 @@ namespace castor3d
 							, albedo
 							, metallic
 							, roughness
-							, fragmentIn
+							, surface
 							, output );
 					}
 
@@ -620,7 +620,7 @@ namespace castor3d
 				, InFloat( m_writer, "metallic" )
 				, InFloat( m_writer, "roughness" )
 				, InInt( m_writer, "receivesShadows" )
-				, FragmentInput{ m_writer }
+				, InSurface{ m_writer, "surface" }
 				, output );
 		}
 
@@ -634,7 +634,7 @@ namespace castor3d
 					, Float const & metallic
 					, Float const & roughness
 					, Int const & receivesShadows
-					, FragmentInput const & fragmentIn
+					, Surface const & surface
 					, OutputComponents & parentOutput )
 				{
 					OutputComponents output
@@ -644,7 +644,7 @@ namespace castor3d
 					};
 					PbrMRMaterials materials{ m_writer };
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
-						, light.m_position.xyz() - fragmentIn.m_worldVertex );
+						, light.m_position.xyz() - surface.worldPosition );
 					auto distance = m_writer.declLocale( "distance"
 						, length( lightToVertex ) );
 					auto lightDirection = m_writer.declLocale( "lightDirection"
@@ -660,9 +660,9 @@ namespace castor3d
 										, light.m_lightBase.m_rawShadowOffsets
 										, light.m_lightBase.m_pcfShadowOffsets
 										, light.m_lightBase.m_vsmShadowVariance
-										, fragmentIn.m_worldVertex
+										, surface.worldPosition
 										, light.m_position.xyz()
-										, fragmentIn.m_worldNormal
+										, surface.worldNormal
 										, light.m_lightBase.m_farPlane
 										, light.m_lightBase.m_index ) ) );
 
@@ -674,7 +674,7 @@ namespace castor3d
 									, albedo
 									, metallic
 									, roughness
-									, fragmentIn
+									, surface
 									, output );
 								output.m_diffuse *= shadowFactor;
 								output.m_specular *= shadowFactor;
@@ -689,7 +689,7 @@ namespace castor3d
 								, albedo
 								, metallic
 								, roughness
-								, fragmentIn
+								, surface
 								, output );
 						}
 						FI;
@@ -702,7 +702,7 @@ namespace castor3d
 							, albedo
 							, metallic
 							, roughness
-							, fragmentIn
+							, surface
 							, output );
 					}
 
@@ -723,7 +723,7 @@ namespace castor3d
 				, InFloat( m_writer, "metallic" )
 				, InFloat( m_writer, "roughness" )
 				, InInt( m_writer, "receivesShadows" )
-				, FragmentInput{ m_writer }
+				, InSurface{ m_writer, "surface" }
 				, output );
 		}
 
@@ -737,7 +737,7 @@ namespace castor3d
 					, Float const & metallic
 					, Float const & roughness
 					, Int const & receivesShadows
-					, FragmentInput const & fragmentIn
+					, Surface const & surface
 					, OutputComponents & parentOutput )
 				{
 					OutputComponents output
@@ -747,7 +747,7 @@ namespace castor3d
 					};
 					PbrMRMaterials materials{ m_writer };
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
-						, light.m_position.xyz() - fragmentIn.m_worldVertex );
+						, light.m_position.xyz() - surface.worldPosition );
 					auto distance = m_writer.declLocale( "distance"
 						, length( lightToVertex ) );
 					auto lightDirection = m_writer.declLocale( "lightDirection"
@@ -767,9 +767,9 @@ namespace castor3d
 									, light.m_lightBase.m_pcfShadowOffsets
 									, light.m_lightBase.m_vsmShadowVariance
 									, light.m_transform
-									, fragmentIn.m_worldVertex
+									, surface.worldPosition
 									, -lightToVertex
-									, fragmentIn.m_worldNormal
+									, surface.worldNormal
 									, light.m_lightBase.m_index ) );
 
 							IF( m_writer, shadowFactor )
@@ -780,7 +780,7 @@ namespace castor3d
 									, albedo
 									, metallic
 									, roughness
-									, fragmentIn
+									, surface
 									, output );
 								output.m_diffuse *= shadowFactor;
 								output.m_specular *= shadowFactor;
@@ -795,7 +795,7 @@ namespace castor3d
 								, albedo
 								, metallic
 								, roughness
-								, fragmentIn
+								, surface
 								, output );
 						}
 						FI;
@@ -808,7 +808,7 @@ namespace castor3d
 							, albedo
 							, metallic
 							, roughness
-							, fragmentIn
+							, surface
 							, output );
 					}
 
@@ -832,7 +832,7 @@ namespace castor3d
 				, InFloat( m_writer, "metallic" )
 				, InFloat( m_writer, "roughness" )
 				, InInt( m_writer, "receivesShadows" )
-				, FragmentInput{ m_writer }
+				, InSurface{ m_writer, "surface" }
 				, output );
 		}
 
@@ -850,7 +850,7 @@ namespace castor3d
 					, Float const & metallic
 					, Float const & roughness
 					, Int const & receivesShadows
-					, FragmentInput const & fragmentIn )
+					, Surface const & surface )
 				{
 					auto diffuse = m_writer.declLocale( "lightDiffuse"
 						, vec3( 0.0_f ) );
@@ -876,7 +876,7 @@ namespace castor3d
 							FOR( m_writer, UInt, i, 0u, i < maxCount, ++i )
 							{
 								auto factors = m_writer.declLocale( "factors"
-									, m_getCascadeFactors( Vec3{ fragmentIn.m_viewVertex }
+									, m_getCascadeFactors( Vec3{ surface.viewPosition }
 										, light.m_splitDepths
 										, i ) );
 
@@ -896,11 +896,11 @@ namespace castor3d
 										, light.m_lightBase.m_pcfShadowOffsets
 										, light.m_lightBase.m_vsmShadowVariance
 										, light.m_transforms[cascadeIndex]
-										, fragmentIn.m_worldVertex
+										, surface.worldPosition
 										, -lightDirection
 										, cascadeIndex
 										, light.m_cascadeCount
-										, fragmentIn.m_worldNormal ) );
+										, surface.worldNormal ) );
 
 							IF( m_writer, cascadeIndex > 0_u )
 							{
@@ -911,11 +911,11 @@ namespace castor3d
 											, light.m_lightBase.m_pcfShadowOffsets
 											, light.m_lightBase.m_vsmShadowVariance
 											, light.m_transforms[cascadeIndex - 1u]
-											, fragmentIn.m_worldVertex
+											, surface.worldPosition
 											, -lightDirection
 											, cascadeIndex - 1u
 											, light.m_cascadeCount
-											, fragmentIn.m_worldNormal ) );
+											, surface.worldNormal ) );
 							}
 							FI;
 
@@ -926,7 +926,7 @@ namespace castor3d
 									, lightDirection
 									, albedo
 									, metallic
-									, fragmentIn );
+									, surface );
 							}
 							FI;
 
@@ -961,7 +961,7 @@ namespace castor3d
 								, lightDirection
 								, albedo
 								, metallic
-								, fragmentIn );
+								, surface );
 						}
 						FI;
 					}
@@ -972,7 +972,7 @@ namespace castor3d
 							, lightDirection
 							, albedo
 							, metallic
-							, fragmentIn );
+							, surface );
 					}
 
 					m_writer.returnStmt( max( vec3( 0.0_f ), diffuse ) );
@@ -983,7 +983,7 @@ namespace castor3d
 				, InFloat( m_writer, "metallic" )
 				, InFloat( m_writer, "roughness" )
 				, InInt( m_writer, "receivesShadows" )
-				, FragmentInput{ m_writer } );
+				, InSurface{ m_writer, "surface" } );
 		}
 
 		void MetallicBrdfLightingModel::doDeclareComputePointLightDiffuse()
@@ -996,13 +996,13 @@ namespace castor3d
 					, Float const & metallic
 					, Float const & roughness
 					, Int const & receivesShadows
-					, FragmentInput const & fragmentIn )
+					, Surface const & surface )
 				{
 					auto diffuse = m_writer.declLocale( "lightDiffuse"
 						, vec3( 0.0_f ) );
 					PbrMRMaterials materials{ m_writer };
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
-						, light.m_position.xyz() - fragmentIn.m_worldVertex );
+						, light.m_position.xyz() - surface.worldPosition );
 					auto distance = m_writer.declLocale( "distance"
 						, length( lightToVertex ) );
 					auto lightDirection = m_writer.declLocale( "lightDirection"
@@ -1018,9 +1018,9 @@ namespace castor3d
 										, light.m_lightBase.m_rawShadowOffsets
 										, light.m_lightBase.m_pcfShadowOffsets
 										, light.m_lightBase.m_vsmShadowVariance
-										, fragmentIn.m_worldVertex
+										, surface.worldPosition
 										, light.m_position.xyz()
-										, fragmentIn.m_worldNormal
+										, surface.worldNormal
 										, light.m_lightBase.m_farPlane
 										, light.m_lightBase.m_index ) ) );
 
@@ -1031,7 +1031,7 @@ namespace castor3d
 									, lightDirection
 									, albedo
 									, metallic
-									, fragmentIn );
+									, surface );
 							}
 							FI;
 						}
@@ -1042,7 +1042,7 @@ namespace castor3d
 								, lightDirection
 								, albedo
 								, metallic
-								, fragmentIn );
+								, surface );
 						}
 						FI;
 					}
@@ -1053,7 +1053,7 @@ namespace castor3d
 							, lightDirection
 							, albedo
 							, metallic
-							, fragmentIn );
+							, surface );
 					}
 
 					auto attenuation = m_writer.declLocale( "attenuation"
@@ -1070,7 +1070,7 @@ namespace castor3d
 				, InFloat( m_writer, "metallic" )
 				, InFloat( m_writer, "roughness" )
 				, InInt( m_writer, "receivesShadows" )
-				, FragmentInput{ m_writer } );
+				, InSurface{ m_writer, "surface" } );
 		}
 
 		void MetallicBrdfLightingModel::doDeclareComputeSpotLightDiffuse()
@@ -1082,13 +1082,13 @@ namespace castor3d
 					, Float const & metallic
 					, Float const & roughness
 					, Int const & receivesShadows
-					, FragmentInput const & fragmentIn )
+					, Surface const & surface )
 				{
 					auto diffuse = m_writer.declLocale( "lightDiffuse"
 						, vec3( 0.0_f ) );
 					PbrMRMaterials materials{ m_writer };
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
-						, light.m_position.xyz() - fragmentIn.m_worldVertex );
+						, light.m_position.xyz() - surface.worldPosition );
 					auto distance = m_writer.declLocale( "distance"
 						, length( lightToVertex ) );
 					auto lightDirection = m_writer.declLocale( "lightDirection"
@@ -1108,9 +1108,9 @@ namespace castor3d
 									, light.m_lightBase.m_pcfShadowOffsets
 									, light.m_lightBase.m_vsmShadowVariance
 									, light.m_transform
-									, fragmentIn.m_worldVertex
+									, surface.worldPosition
 									, -lightToVertex
-									, fragmentIn.m_worldNormal
+									, surface.worldNormal
 									, light.m_lightBase.m_index ) );
 
 							IF( m_writer, shadowFactor )
@@ -1120,7 +1120,7 @@ namespace castor3d
 									, lightDirection
 									, albedo
 									, metallic
-									, fragmentIn );
+									, surface );
 							}
 							FI;
 						}
@@ -1131,7 +1131,7 @@ namespace castor3d
 								, lightDirection
 								, albedo
 								, metallic
-								, fragmentIn );
+								, surface );
 						}
 						FI;
 					}
@@ -1142,7 +1142,7 @@ namespace castor3d
 							, lightDirection
 							, albedo
 							, metallic
-							, fragmentIn );
+							, surface );
 					}
 
 					auto attenuation = m_writer.declLocale( "attenuation"
@@ -1162,7 +1162,7 @@ namespace castor3d
 				, InFloat( m_writer, "metallic" )
 				, InFloat( m_writer, "roughness" )
 				, InInt( m_writer, "receivesShadows" )
-				, FragmentInput{ m_writer } );
+				, InSurface{ m_writer, "surface" } );
 		}
 
 		//***********************************************************************************************

@@ -18,89 +18,63 @@ namespace castor3d
 {
 	namespace shader
 	{
-		//***********************************************************************************************
+		//*********************************************************************************************
 
-		ast::expr::ExprList makeFnArg( sdw::ShaderWriter & writer
-			, FragmentInput const & value )
+		Surface::Surface( ShaderWriter & writer
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstance{ writer, std::move( expr ), enabled }
+			, clipPosition{ getMember< sdw::Vec2 >( "clipPosition" ) }
+			, viewPosition{ getMember< sdw::Vec3 >( "viewPosition" ) }
+			, worldPosition{ getMember< sdw::Vec3 >( "worldPosition" ) }
+			, worldNormal{ getMember< sdw::Vec3 >( "worldNormal" ) }
 		{
-			ast::expr::ExprList result;
-			auto args = sdw::makeFnArg( writer, value.m_clipVertex );
+		}
 
-			for ( auto & expr : args )
+		Surface & Surface::operator=( Surface const & rhs )
+		{
+			StructInstance::operator=( rhs );
+			return *this;
+		}
+
+		void Surface::create( sdw::Vec2 clip
+			, sdw::Vec3 view
+			, sdw::Vec3 world
+			, sdw::Vec3 normal )
+		{
+			clipPosition = clip;
+			viewPosition = view;
+			worldPosition = world;
+			worldNormal = normal;
+		}
+
+		void Surface::create( sdw::Vec3 world
+			, sdw::Vec3 normal )
+		{
+			worldPosition = world;
+			worldNormal = normal;
+		}
+
+		ast::type::StructPtr Surface::makeType( ast::type::TypesCache & cache )
+		{
+			auto result = cache.getStruct( ast::type::MemoryLayout::eStd430
+				, "Surface" );
+
+			if ( result->empty() )
 			{
-				result.emplace_back( std::move( expr ) );
-			}
-			
-			args = sdw::makeFnArg( writer, value.m_viewVertex );
-
-			for ( auto & expr : args )
-			{
-				result.emplace_back( std::move( expr ) );
-			}
-
-			args = sdw::makeFnArg( writer, value.m_worldVertex );
-
-			for ( auto & expr : args )
-			{
-				result.emplace_back( std::move( expr ) );
-			}
-
-			args = sdw::makeFnArg( writer, value.m_worldNormal );
-
-			for ( auto & expr : args )
-			{
-				result.emplace_back( std::move( expr ) );
+				result->declMember( "clipPosition", ast::type::Kind::eVec2F );
+				result->declMember( "viewPosition", ast::type::Kind::eVec3F );
+				result->declMember( "worldPosition", ast::type::Kind::eVec3F );
+				result->declMember( "worldNormal", ast::type::Kind::eVec3F );
 			}
 
 			return result;
 		}
 
-		//***********************************************************************************************
-
-		FragmentInput::FragmentInput( FragmentInput const & rhs )
-			: FragmentInput{ rhs.m_clipVertex, rhs.m_viewVertex, rhs.m_worldVertex, rhs.m_worldNormal }
+		std::unique_ptr< sdw::Struct > Surface::declare( sdw::ShaderWriter & writer )
 		{
-		}
-
-		FragmentInput::FragmentInput( ShaderWriter & writer )
-			: FragmentInput{ { writer, "inClipVertex" }, { writer, "inViewVertex" }, { writer, "inWorldVertex" }, { writer, "inWorldNormal" } }
-		{
-		}
-
-		FragmentInput::FragmentInput( InVec2 const & clipVertex
-			, InVec3 const & viewVertex
-			, InVec3 const & worldVertex
-			, InVec3 const & worldNormal )
-			: m_clipVertex{ clipVertex }
-			, m_viewVertex{ viewVertex }
-			, m_worldVertex{ worldVertex }
-			, m_worldNormal{ worldNormal }
-			, m_expr{ ast::expr::makeComma( makeExpr( *getWriter(), m_clipVertex )
-				, ast::expr::makeComma( makeExpr( *getWriter(), m_viewVertex )
-					, ast::expr::makeComma( makeExpr( *getWriter(), m_worldVertex )
-						, makeExpr( *getWriter(), m_worldNormal ) ) ) ) }
-		{
-		}
-
-		ast::expr::Expr * FragmentInput::getExpr()const
-		{
-			return m_expr.get();
-		}
-
-		sdw::ShaderWriter * FragmentInput::getWriter()const
-		{
-			return findWriter( m_clipVertex
-				, m_viewVertex
-				, m_worldVertex
-				, m_worldNormal );
-		}
-
-		void FragmentInput::setVar( ast::var::VariableList::const_iterator & var )
-		{
-			m_clipVertex.setVar( var );
-			m_viewVertex.setVar( var );
-			m_worldVertex.setVar( var );
-			m_worldNormal.setVar( var );
+			return std::make_unique< sdw::Struct >( writer
+				, makeType( writer.getTypesCache() ) );
 		}
 
 		//***********************************************************************************************

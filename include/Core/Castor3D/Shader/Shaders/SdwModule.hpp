@@ -35,22 +35,6 @@ namespace castor3d
 			bool rsm{ false };
 		};
 
-		enum class TypeName
-		{
-			eLight = int( ast::type::Kind::eCount ),
-			eDirectionalLight,
-			ePointLight,
-			eSpotLight,
-			eMaterial,
-			eLegacyMaterial,
-			eMetallicRoughnessMaterial,
-			eSpecularGlossinessMaterial,
-			eTextureConfigData,
-			eLpvGridData,
-			eLayeredLpvGridData,
-			eLpvLightData,
-			eVoxelData,
-		};
 		// Light Propagation Volumes Cascades.
 		constexpr uint32_t LpvMaxCascadesCount = 3u;
 		// Directional Shadow Cascades.
@@ -88,6 +72,7 @@ namespace castor3d
 		class LayeredLpvGridData;
 		class LpvLightData;
 		class VoxelData;
+		class Surface;
 
 		Writer_Parameter( Light );
 		Writer_Parameter( DirectionalLight );
@@ -98,6 +83,7 @@ namespace castor3d
 		Writer_Parameter( LpvLightData );
 		Writer_Parameter( LpvGridData );
 		Writer_Parameter( VoxelData );
+		Writer_Parameter( Surface );
 		/**
 		 *\~english
 		 *\brief		Creates the appropriate GLSL materials buffer.
@@ -118,87 +104,6 @@ namespace castor3d
 
 	//@}
 	//@}
-}
-
-namespace sdw
-{
-	template<>
-	struct TypeTraits< castor3d::shader::Light >
-	{
-		static ast::type::Kind constexpr TypeEnum = ast::type::Kind( castor3d::shader::TypeName::eLight );
-	};
-
-	template<>
-	struct TypeTraits< castor3d::shader::DirectionalLight >
-	{
-		static ast::type::Kind constexpr TypeEnum = ast::type::Kind( castor3d::shader::TypeName::eDirectionalLight );
-	};
-
-	template<>
-	struct TypeTraits< castor3d::shader::PointLight >
-	{
-		static ast::type::Kind constexpr TypeEnum = ast::type::Kind( castor3d::shader::TypeName::ePointLight );
-	};
-
-	template<>
-	struct TypeTraits< castor3d::shader::SpotLight >
-	{
-		static ast::type::Kind constexpr TypeEnum = ast::type::Kind( castor3d::shader::TypeName::eSpotLight );
-	};
-
-	template<>
-	struct TypeTraits< castor3d::shader::BaseMaterial >
-	{
-		static ast::type::Kind constexpr TypeEnum = ast::type::Kind( castor3d::shader::TypeName::eMaterial );
-	};
-
-	template<>
-	struct TypeTraits< castor3d::shader::LegacyMaterial >
-	{
-		static ast::type::Kind constexpr TypeEnum = ast::type::Kind( castor3d::shader::TypeName::eLegacyMaterial );
-	};
-
-	template<>
-	struct TypeTraits< castor3d::shader::MetallicRoughnessMaterial >
-	{
-		static ast::type::Kind constexpr TypeEnum = ast::type::Kind( castor3d::shader::TypeName::eMetallicRoughnessMaterial );
-	};
-
-	template<>
-	struct TypeTraits< castor3d::shader::SpecularGlossinessMaterial >
-	{
-		static ast::type::Kind constexpr TypeEnum = ast::type::Kind( castor3d::shader::TypeName::eSpecularGlossinessMaterial );
-	};
-
-	template<>
-	struct TypeTraits< castor3d::shader::TextureConfigData >
-	{
-		static ast::type::Kind constexpr TypeEnum = ast::type::Kind( castor3d::shader::TypeName::eTextureConfigData );
-	};
-
-	template<>
-	struct TypeTraits< castor3d::shader::LpvGridData >
-	{
-		static ast::type::Kind constexpr TypeEnum = ast::type::Kind( castor3d::shader::TypeName::eLpvGridData );
-	};
-
-	template<>
-	struct TypeTraits< castor3d::shader::LayeredLpvGridData >
-	{
-		static ast::type::Kind constexpr TypeEnum = ast::type::Kind( castor3d::shader::TypeName::eLayeredLpvGridData );
-	};
-
-	template<>
-	struct TypeTraits< castor3d::shader::LpvLightData >
-	{
-		static ast::type::Kind constexpr TypeEnum = ast::type::Kind( castor3d::shader::TypeName::eLpvLightData );
-	};
-
-	template<>
-	struct TypeTraits< castor3d::shader::VoxelData >
-	{
-		static ast::type::Kind constexpr TypeEnum = ast::type::Kind( castor3d::shader::TypeName::eVoxelData );
-	};
 }
 
 #endif

@@ -26,7 +26,7 @@ namespace castor3d
 				, sdw::Float const & metallic
 				, sdw::Float const & roughness
 				, sdw::Int const & receivesShadows
-				, FragmentInput const & fragmentIn
+				, Surface const & surface
 				, OutputComponents & output )const;
 			C3D_API void compute( DirectionalLight const & light
 				, sdw::Vec3 const & worldEye
@@ -34,7 +34,7 @@ namespace castor3d
 				, sdw::Float const & metallic
 				, sdw::Float const & roughness
 				, sdw::Int const & receivesShadows
-				, FragmentInput const & fragmentIn
+				, Surface const & surface
 				, OutputComponents & output )const;
 			C3D_API void compute( PointLight const & light
 				, sdw::Vec3 const & worldEye
@@ -42,7 +42,7 @@ namespace castor3d
 				, sdw::Float const & metallic
 				, sdw::Float const & roughness
 				, sdw::Int const & receivesShadows
-				, FragmentInput const & fragmentIn
+				, Surface const & surface
 				, OutputComponents & output )const;
 			C3D_API void compute( SpotLight const & light
 				, sdw::Vec3 const & worldEye
@@ -50,35 +50,35 @@ namespace castor3d
 				, sdw::Float const & metallic
 				, sdw::Float const & roughness
 				, sdw::Int const & receivesShadows
-				, FragmentInput const & fragmentIn
+				, Surface const & surface
 				, OutputComponents & output )const;
 			C3D_API sdw::Vec3 computeCombinedDiffuse( sdw::Vec3 const & worldEye
 				, sdw::Vec3 const & albedo
 				, sdw::Float const & metallic
 				, sdw::Float const & roughness
 				, sdw::Int const & receivesShadows
-				, FragmentInput const & fragmentIn )const;
+				, Surface const & surface )const;
 			C3D_API sdw::Vec3 computeDiffuse( DirectionalLight const & light
 				, sdw::Vec3 const & worldEye
 				, sdw::Vec3 const & albedo
 				, sdw::Float const & metallic
 				, sdw::Float const & roughness
 				, sdw::Int const & receivesShadows
-				, FragmentInput const & fragmentIn )const;
+				, Surface const & surface )const;
 			C3D_API sdw::Vec3 computeDiffuse( PointLight const & light
 				, sdw::Vec3 const & worldEye
 				, sdw::Vec3 const & albedo
 				, sdw::Float const & metallic
 				, sdw::Float const & roughness
 				, sdw::Int const & receivesShadows
-				, FragmentInput const & fragmentIn )const;
+				, Surface const & surface )const;
 			C3D_API sdw::Vec3 computeDiffuse( SpotLight const & light
 				, sdw::Vec3 const & worldEye
 				, sdw::Vec3 const & albedo
 				, sdw::Float const & metallic
 				, sdw::Float const & roughness
 				, sdw::Int const & receivesShadows
-				, FragmentInput const & fragmentIn )const;
+				, Surface const & surface )const;
 			C3D_API static std::shared_ptr< MetallicBrdfLightingModel > createModel( sdw::ShaderWriter & writer
 				, Utils & utils
 				, SceneFlags sceneFlags
@@ -149,7 +149,7 @@ namespace castor3d
 				, sdw::InFloat
 				, sdw::InFloat
 				, sdw::InInt
-				, FragmentInput
+				, InSurface
 				, OutputComponents & > m_computeDirectional;
 			sdw::Function< sdw::Void
 				, InPointLight
@@ -158,7 +158,7 @@ namespace castor3d
 				, sdw::InFloat
 				, sdw::InFloat
 				, sdw::InInt
-				, FragmentInput
+				, InSurface
 				, OutputComponents & > m_computePoint;
 			sdw::Function< sdw::Void
 				, InSpotLight
@@ -167,7 +167,7 @@ namespace castor3d
 				, sdw::InFloat
 				, sdw::InFloat
 				, sdw::InInt
-				, FragmentInput
+				, InSurface
 				, OutputComponents & > m_computeSpot;
 			sdw::Function< sdw::Vec3
 				, InDirectionalLight
@@ -176,7 +176,7 @@ namespace castor3d
 				, sdw::InFloat
 				, sdw::InFloat
 				, sdw::InInt
-				, FragmentInput > m_computeDirectionalDiffuse;
+				, InSurface > m_computeDirectionalDiffuse;
 			sdw::Function< sdw::Vec3
 				, InPointLight
 				, sdw::InVec3
@@ -184,7 +184,7 @@ namespace castor3d
 				, sdw::InFloat
 				, sdw::InFloat
 				, sdw::InInt
-				, FragmentInput > m_computePointDiffuse;
+				, InSurface > m_computePointDiffuse;
 			sdw::Function< sdw::Vec3
 				, InSpotLight
 				, sdw::InVec3
@@ -192,7 +192,7 @@ namespace castor3d
 				, sdw::InFloat
 				, sdw::InFloat
 				, sdw::InInt
-				, FragmentInput > m_computeSpotDiffuse;
+				, InSurface > m_computeSpotDiffuse;
 		};
 	}
 }

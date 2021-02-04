@@ -41,7 +41,7 @@ namespace castor3d
 			, sdw::Vec3 const & albedo
 			, sdw::Float const & metallic
 			, sdw::Float const & roughness
-			, FragmentInput const & fragmentIn
+			, Surface const & surface
 			, OutputComponents & output )
 		{
 			m_computeCookTorrance( light
@@ -50,7 +50,7 @@ namespace castor3d
 				, mix( vec3( 0.04_f ), albedo, vec3( metallic ) )
 				, metallic
 				, roughness
-				, FragmentInput{ fragmentIn }
+				, surface
 				, output );
 		}
 
@@ -59,7 +59,7 @@ namespace castor3d
 			, sdw::Vec3 const & direction
 			, sdw::Vec3 const & specular
 			, sdw::Float const & roughness
-			, FragmentInput const & fragmentIn
+			, Surface const & surface
 			, OutputComponents & output )
 		{
 			m_computeCookTorrance( light
@@ -68,7 +68,7 @@ namespace castor3d
 				, specular
 				, length( specular )
 				, roughness
-				, FragmentInput{ fragmentIn }
+				, surface
 				, output );
 		}
 
@@ -77,28 +77,28 @@ namespace castor3d
 			, sdw::Vec3 const & direction
 			, sdw::Vec3 const & albedo
 			, sdw::Float const & metallic
-			, FragmentInput const & fragmentIn )
+			, Surface const & surface )
 		{
 			return m_computeCookTorranceDiffuse( light
 				, worldEye
 				, direction
 				, mix( vec3( 0.04_f ), albedo, vec3( metallic ) )
 				, metallic
-				, FragmentInput{ fragmentIn } );
+				, surface );
 		}
 
 		sdw::Vec3 CookTorranceBRDF::computeDiffuse( Light const & light
 			, sdw::Vec3 const & worldEye
 			, sdw::Vec3 const & direction
 			, sdw::Vec3 const & specular
-			, FragmentInput const & fragmentIn )
+			, Surface const & surface )
 		{
 			return m_computeCookTorranceDiffuse( light
 				, worldEye
 				, direction
 				, specular
 				, length( specular )
-				, FragmentInput{ fragmentIn } );
+				, surface );
 		}
 
 		void CookTorranceBRDF::doDeclareDistribution()
@@ -199,18 +199,18 @@ namespace castor3d
 					, Vec3 const & f0
 					, Float const & metallic
 					, Float const & roughness
-					, FragmentInput const & fragmentIn
+					, Surface const & surface
 					, OutputComponents & output )
 				{
 					// From https://learnopengl.com/#!PBR/Lighting
 					auto L = m_writer.declLocale( "L"
 						, normalize( direction ) );
 					auto V = m_writer.declLocale( "V"
-						, normalize( worldEye - fragmentIn.m_worldVertex ) );
+						, normalize( worldEye - surface.worldPosition ) );
 					auto H = m_writer.declLocale( "H"
 						, normalize( L + V ) );
 					auto N = m_writer.declLocale( "N"
-						, normalize( fragmentIn.m_worldNormal ) );
+						, normalize( surface.worldNormal ) );
 					auto radiance = m_writer.declLocale( "radiance"
 						, light.m_colour );
 
@@ -256,7 +256,7 @@ namespace castor3d
 				, InVec3( m_writer, "f0" )
 				, InFloat( m_writer, "metallic" )
 				, InFloat( m_writer, "roughness" )
-				, FragmentInput{ m_writer }
+				, InSurface{ m_writer, "surface" }
 				, output );
 		}
 
@@ -268,17 +268,17 @@ namespace castor3d
 					, Vec3 const & direction
 					, Vec3 const & f0
 					, Float const & metallic
-					, FragmentInput const & fragmentIn )
+					, Surface const & surface )
 				{
 					// From https://learnopengl.com/#!PBR/Lighting
 					auto L = m_writer.declLocale( "L"
 						, normalize( direction ) );
 					auto V = m_writer.declLocale( "V"
-						, normalize( worldEye - fragmentIn.m_worldVertex ) );
+						, normalize( worldEye - surface.worldPosition ) );
 					auto H = m_writer.declLocale( "H"
 						, normalize( L + V ) );
 					auto N = m_writer.declLocale( "N"
-						, normalize( fragmentIn.m_worldNormal ) );
+						, normalize( surface.worldNormal ) );
 					auto radiance = m_writer.declLocale( "radiance"
 						, light.m_colour );
 
@@ -303,7 +303,7 @@ namespace castor3d
 				, InVec3( m_writer, "direction" )
 				, InVec3( m_writer, "f0" )
 				, InFloat( m_writer, "metallic" )
-				, FragmentInput{ m_writer } );
+				, InSurface{ m_writer, "surface" } );
 		}
 
 		//***********************************************************************************************

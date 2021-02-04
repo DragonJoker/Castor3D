@@ -412,10 +412,12 @@ namespace castor3d
 				auto lightSpecular = writer.declLocale( "lightSpecular"
 					, vec3( 0.0_f ) );
 				shader::OutputComponents output{ lightDiffuse, lightSpecular };
+				auto surface = writer.declLocale< shader::Surface >( "surface" );
+				surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
 				lighting->computeCombined( worldEye
 					, shininess
 					, c3d_shadowReceiver
-					, shader::FragmentInput( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal )
+					, surface
 					, output );
 				lightSpecular *= specular;
 
@@ -676,12 +678,14 @@ namespace castor3d
 				auto lightSpecular = writer.declLocale( "lightSpecular"
 					, vec3( 0.0_f ) );
 				shader::OutputComponents output{ lightDiffuse, lightSpecular };
+				auto surface = writer.declLocale< shader::Surface >( "surface" );
+				surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
 				lighting->computeCombined( worldEye
 					, albedo
 					, metalness
 					, roughness
 					, c3d_shadowReceiver
-					, shader::FragmentInput( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal )
+					, surface
 					, output );
 				auto reflected = writer.declLocale( "reflected"
 					, vec3( 0.0_f ) );
@@ -1011,11 +1015,13 @@ namespace castor3d
 				auto lightSpecular = writer.declLocale( "lightSpecular"
 					, vec3( 0.0_f ) );
 				shader::OutputComponents output{ lightDiffuse, lightSpecular };
+				auto surface = writer.declLocale< shader::Surface >( "surface" );
+				surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
 				lighting->computeCombined( worldEye
 					, specular
 					, glossiness
 					, c3d_shadowReceiver
-					, shader::FragmentInput( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal )
+					, surface
 					, output );
 				auto reflected = writer.declLocale( "reflected"
 					, vec3( 0.0_f ) );

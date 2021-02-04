@@ -799,6 +799,8 @@ namespace castor3d
 					, C3D_DisableSSSTransmittance == 0 );
 
 				shader::OutputComponents output{ lightDiffuse, lightSpecular };
+				auto surface = writer.declLocale< shader::Surface >( "surface" );
+				surface.create( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal );
 
 				switch ( lightType )
 				{
@@ -810,7 +812,7 @@ namespace castor3d
 						, eye
 						, shininess
 						, shadowReceiver
-						, shader::FragmentInput( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal )
+						, surface
 						, output );
 #if !C3D_DisableSSSTransmittance
 					lightDiffuse += sss.compute( material
@@ -831,7 +833,7 @@ namespace castor3d
 						, eye
 						, shininess
 						, shadowReceiver
-						, shader::FragmentInput( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal )
+						, surface
 						, output );
 #if !C3D_DisableSSSTransmittance
 					lightDiffuse += sss.compute( material
@@ -852,7 +854,7 @@ namespace castor3d
 						, eye
 						, shininess
 						, shadowReceiver
-						, shader::FragmentInput( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal )
+						, surface
 						, output );
 #if !C3D_DisableSSSTransmittance
 					lightDiffuse += sss.compute( material
@@ -1021,6 +1023,8 @@ namespace castor3d
 					, C3D_DisableSSSTransmittance == 0 );
 
 				shader::OutputComponents output{ lightDiffuse, lightSpecular };
+				auto surface = writer.declLocale< shader::Surface >( "surface" );
+				surface.create( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal );
 
 				switch ( lightType )
 				{
@@ -1037,7 +1041,7 @@ namespace castor3d
 							, metallic
 							, roughness
 							, shadowReceiver
-							, shader::FragmentInput( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal )
+							, surface
 							, output );
 						lightDiffuse += sss.compute( material
 							, light
@@ -1063,7 +1067,7 @@ namespace castor3d
 						, metallic
 						, roughness
 						, shadowReceiver
-						, shader::FragmentInput( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal )
+						, surface
 						, output );
 #endif
 					break;
@@ -1082,7 +1086,7 @@ namespace castor3d
 							, metallic
 							, roughness
 							, shadowReceiver
-							, shader::FragmentInput( wsPosition, wsNormal )
+							, surface
 							, output );
 						lightDiffuse += sss.compute( material
 							, light
@@ -1108,7 +1112,7 @@ namespace castor3d
 						, metallic
 						, roughness
 						, shadowReceiver
-						, shader::FragmentInput( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal )
+						, surface
 						, output );
 #endif
 					break;
@@ -1127,7 +1131,7 @@ namespace castor3d
 							, metallic
 							, roughness
 							, shadowReceiver
-							, shader::FragmentInput( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal )
+							, surface
 							, output );
 						lightDiffuse += sss.compute( material
 							, light
@@ -1153,7 +1157,7 @@ namespace castor3d
 						, metallic
 						, roughness
 						, shadowReceiver
-						, shader::FragmentInput( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal )
+						, surface
 						, output );
 #endif
 					break;
@@ -1356,6 +1360,8 @@ namespace castor3d
 					, C3D_DisableSSSTransmittance == 0 );
 
 				shader::OutputComponents output{ lightDiffuse, lightSpecular };
+				auto surface = writer.declLocale< shader::Surface >( "surface" );
+				surface.create( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal );
 
 				switch ( lightType )
 				{
@@ -1368,7 +1374,7 @@ namespace castor3d
 						, specular
 						, glossiness
 						, shadowReceiver
-						, shader::FragmentInput( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal )
+						, surface
 						, output );
 #if !C3D_DisableSSSTransmittance
 					lightDiffuse += sss.compute( material
@@ -1390,7 +1396,7 @@ namespace castor3d
 						, specular
 						, glossiness
 						, shadowReceiver
-						, shader::FragmentInput( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal )
+						, surface
 						, output );
 #if !C3D_DisableSSSTransmittance
 					lightDiffuse += sss.compute( material
@@ -1412,7 +1418,7 @@ namespace castor3d
 						, specular
 						, glossiness
 						, shadowReceiver
-						, shader::FragmentInput( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal )
+						, surface
 						, output );
 #if !C3D_DisableSSSTransmittance
 					lightDiffuse += sss.compute( material

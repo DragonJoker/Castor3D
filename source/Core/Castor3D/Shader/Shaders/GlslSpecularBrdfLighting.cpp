@@ -34,7 +34,7 @@ namespace castor3d
 			, Vec3 const & specular
 			, Float const & glossiness
 			, Int const & receivesShadows
-			, FragmentInput const & fragmentIn
+			, Surface const & surface
 			, OutputComponents & parentOutput )const
 		{
 			auto c3d_lightsCount = m_writer.getVariable< IVec4 >( "c3d_lightsCount" );
@@ -50,7 +50,7 @@ namespace castor3d
 					, specular
 					, glossiness
 					, receivesShadows
-					, FragmentInput{ fragmentIn }
+					, surface
 					, parentOutput );
 			}
 			ROF;
@@ -65,7 +65,7 @@ namespace castor3d
 					, specular
 					, glossiness
 					, receivesShadows
-					, FragmentInput{ fragmentIn }
+					, surface
 					, parentOutput );
 			}
 			ROF;
@@ -80,7 +80,7 @@ namespace castor3d
 					, specular
 					, glossiness
 					, receivesShadows
-					, FragmentInput{ fragmentIn }
+					, surface
 					, parentOutput );
 			}
 			ROF;
@@ -91,7 +91,7 @@ namespace castor3d
 			, Vec3 const & specular
 			, Float const & glossiness
 			, Int const & receivesShadows
-			, FragmentInput const & fragmentIn
+			, Surface const & surface
 			, OutputComponents & parentOutput )const
 		{
 			m_computeDirectional( DirectionalLight{ light }
@@ -99,7 +99,7 @@ namespace castor3d
 				, specular
 				, glossiness
 				, receivesShadows
-				, FragmentInput{ fragmentIn }
+				, surface
 				, parentOutput );
 		}
 
@@ -108,7 +108,7 @@ namespace castor3d
 			, Vec3 const & specular
 			, Float const & glossiness
 			, Int const & receivesShadows
-			, FragmentInput const & fragmentIn
+			, Surface const & surface
 			, OutputComponents & parentOutput )const
 		{
 			m_computePoint( PointLight{ light }
@@ -116,7 +116,7 @@ namespace castor3d
 				, specular
 				, glossiness
 				, receivesShadows
-				, FragmentInput{ fragmentIn }
+				, surface
 				, parentOutput );
 		}
 
@@ -125,7 +125,7 @@ namespace castor3d
 			, Vec3 const & specular
 			, Float const & glossiness
 			, Int const & receivesShadows
-			, FragmentInput const & fragmentIn
+			, Surface const & surface
 			, OutputComponents & parentOutput )const
 		{
 			m_computeSpot( SpotLight{ light }
@@ -133,7 +133,7 @@ namespace castor3d
 				, specular
 				, glossiness
 				, receivesShadows
-				, FragmentInput{ fragmentIn }
+				, surface
 				, parentOutput );
 		}
 
@@ -141,7 +141,7 @@ namespace castor3d
 			, Vec3 const & specular
 			, Float const & glossiness
 			, Int const & receivesShadows
-			, FragmentInput const & fragmentIn )const
+			, Surface const & surface )const
 		{
 			auto c3d_lightsCount = m_writer.getVariable< IVec4 >( "c3d_lightsCount" );
 			auto begin = m_writer.declLocale( "begin"
@@ -158,7 +158,7 @@ namespace castor3d
 					, specular
 					, glossiness
 					, receivesShadows
-					, FragmentInput{ fragmentIn } );
+					, surface );
 			}
 			ROF;
 
@@ -172,7 +172,7 @@ namespace castor3d
 					, specular
 					, glossiness
 					, receivesShadows
-					, FragmentInput{ fragmentIn } );
+					, surface );
 			}
 			ROF;
 
@@ -186,7 +186,7 @@ namespace castor3d
 					, specular
 					, glossiness
 					, receivesShadows
-					, FragmentInput{ fragmentIn } );
+					, surface );
 			}
 			ROF;
 
@@ -198,14 +198,14 @@ namespace castor3d
 			, Vec3 const & specular
 			, Float const & glossiness
 			, Int const & receivesShadows
-			, FragmentInput const & fragmentIn )const
+			, Surface const & surface )const
 		{
 			return m_computeDirectionalDiffuse( DirectionalLight{ light }
 				, worldEye
 				, specular
 				, glossiness
 				, receivesShadows
-				, FragmentInput{ fragmentIn } );
+				, surface );
 		}
 
 		Vec3 SpecularBrdfLightingModel::computeDiffuse( PointLight const & light
@@ -213,14 +213,14 @@ namespace castor3d
 			, Vec3 const & specular
 			, Float const & glossiness
 			, Int const & receivesShadows
-			, FragmentInput const & fragmentIn )const
+			, Surface const & surface )const
 		{
 			return m_computePointDiffuse( PointLight{ light }
 				, worldEye
 				, specular
 				, glossiness
 				, receivesShadows
-				, FragmentInput{ fragmentIn } );
+				, surface );
 		}
 
 		Vec3 SpecularBrdfLightingModel::computeDiffuse( SpotLight const & light
@@ -228,14 +228,14 @@ namespace castor3d
 			, Vec3 const & specular
 			, Float const & glossiness
 			, Int const & receivesShadows
-			, FragmentInput const & fragmentIn )const
+			, Surface const & surface )const
 		{
 			return m_computeSpotDiffuse( SpotLight{ light }
 				, worldEye
 				, specular
 				, glossiness
 				, receivesShadows
-				, FragmentInput{ fragmentIn } );
+				, surface );
 		}
 
 		std::shared_ptr< SpecularBrdfLightingModel > SpecularBrdfLightingModel::createModel( sdw::ShaderWriter & writer
@@ -429,7 +429,7 @@ namespace castor3d
 					, Vec3 const & specular
 					, Float const & glossiness
 					, Int const & receivesShadows
-					, FragmentInput const & fragmentIn
+					, Surface const & surface
 					, OutputComponents & parentOutput )
 				{
 					OutputComponents output
@@ -462,7 +462,7 @@ namespace castor3d
 								FOR( m_writer, UInt, i, 0u, i < maxCount, ++i )
 								{
 									auto factors = m_writer.declLocale( "factors"
-										, m_getCascadeFactors( Vec3{ fragmentIn.m_viewVertex }
+										, m_getCascadeFactors( Vec3{ surface.viewPosition }
 											, light.m_splitDepths
 											, i ) );
 
@@ -482,11 +482,11 @@ namespace castor3d
 											, light.m_lightBase.m_pcfShadowOffsets
 											, light.m_lightBase.m_vsmShadowVariance
 											, light.m_transforms[cascadeIndex]
-											, fragmentIn.m_worldVertex
+											, surface.worldPosition
 											, -lightDirection
 											, cascadeIndex
 											, light.m_cascadeCount
-											, fragmentIn.m_worldNormal ) );
+											, surface.worldNormal ) );
 
 								IF( m_writer, cascadeIndex > 0_u )
 								{
@@ -497,11 +497,11 @@ namespace castor3d
 												, light.m_lightBase.m_pcfShadowOffsets
 												, light.m_lightBase.m_vsmShadowVariance
 												, light.m_transforms[cascadeIndex - 1u]
-												, fragmentIn.m_worldVertex
+												, surface.worldPosition
 												, -lightDirection
 												, cascadeIndex - 1u
 												, light.m_cascadeCount
-												, fragmentIn.m_worldNormal ) );
+												, surface.worldNormal ) );
 								}
 								FI;
 							}
@@ -514,7 +514,7 @@ namespace castor3d
 									, lightDirection
 									, specular
 									, 1.0_f - glossiness
-									, fragmentIn
+									, surface
 									, output );
 								output.m_diffuse *= shadowFactor;
 								output.m_specular *= shadowFactor;
@@ -529,8 +529,8 @@ namespace castor3d
 										, light.m_lightBase.m_rawShadowOffsets
 										, light.m_lightBase.m_pcfShadowOffsets
 										, light.m_lightBase.m_vsmShadowVariance
-										, fragmentIn.m_clipVertex
-										, fragmentIn.m_worldVertex
+										, surface.clipPosition
+										, surface.worldPosition
 										, worldEye
 										, light.m_transforms[cascadeIndex]
 										, light.m_direction
@@ -576,7 +576,7 @@ namespace castor3d
 								, lightDirection
 								, specular
 								, 1.0_f - glossiness
-								, fragmentIn
+								, surface
 								, output );
 						}
 						FI;
@@ -588,7 +588,7 @@ namespace castor3d
 							, lightDirection
 							, specular
 							, 1.0_f - glossiness
-							, fragmentIn
+							, surface
 							, output );
 					}
 
@@ -600,7 +600,7 @@ namespace castor3d
 				, InVec3( m_writer, "specular" )
 				, InFloat( m_writer, "glossiness" )
 				, InInt( m_writer, "receivesShadows" )
-				, FragmentInput{ m_writer }
+				, InSurface{ m_writer, "surface" }
 				, output );
 		}
 
@@ -613,7 +613,7 @@ namespace castor3d
 					, Vec3 const & specular
 					, Float const & glossiness
 					, Int const & receivesShadows
-					, FragmentInput const & fragmentIn
+					, Surface const & surface
 					, OutputComponents & parentOutput )
 				{
 					OutputComponents output
@@ -623,7 +623,7 @@ namespace castor3d
 					};
 					PbrSGMaterials materials{ m_writer };
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
-						, light.m_position.xyz() - fragmentIn.m_worldVertex );
+						, light.m_position.xyz() - surface.worldPosition );
 					auto distance = m_writer.declLocale( "distance"
 						, length( lightToVertex ) );
 					auto lightDirection = m_writer.declLocale( "lightDirection"
@@ -643,9 +643,9 @@ namespace castor3d
 										, light.m_lightBase.m_rawShadowOffsets
 										, light.m_lightBase.m_pcfShadowOffsets
 										, light.m_lightBase.m_vsmShadowVariance
-										, fragmentIn.m_worldVertex
+										, surface.worldPosition
 										, light.m_position.xyz()
-										, fragmentIn.m_worldNormal
+										, surface.worldNormal
 										, light.m_lightBase.m_farPlane
 										, light.m_lightBase.m_index ) );
 							}
@@ -658,7 +658,7 @@ namespace castor3d
 									, lightDirection
 									, specular
 									, 1.0_f - glossiness
-									, fragmentIn
+									, surface
 									, output );
 								output.m_diffuse *= shadowFactor;
 								output.m_specular *= shadowFactor;
@@ -672,7 +672,7 @@ namespace castor3d
 								, lightDirection
 								, specular
 								, 1.0_f - glossiness
-								, fragmentIn
+								, surface
 								, output );
 						}
 						FI;
@@ -684,7 +684,7 @@ namespace castor3d
 							, lightDirection
 							, specular
 							, 1.0_f - glossiness
-							, fragmentIn
+							, surface
 							, output );
 					}
 
@@ -704,7 +704,7 @@ namespace castor3d
 				, InVec3( m_writer, "specular" )
 				, InFloat( m_writer, "glossiness" )
 				, InInt( m_writer, "receivesShadows" )
-				, FragmentInput{ m_writer }
+				, InSurface{ m_writer, "surface" }
 				, output );
 		}
 
@@ -717,7 +717,7 @@ namespace castor3d
 					, Vec3 const & specular
 					, Float const & glossiness
 					, Int const & receivesShadows
-					, FragmentInput const & fragmentIn
+					, Surface const & surface
 					, OutputComponents & parentOutput )
 				{
 					OutputComponents output
@@ -727,7 +727,7 @@ namespace castor3d
 					};
 					PbrSGMaterials materials{ m_writer };
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
-						, light.m_position.xyz() - fragmentIn.m_worldVertex );
+						, light.m_position.xyz() - surface.worldPosition );
 					auto distance = m_writer.declLocale( "distance"
 						, length( lightToVertex ) );
 					auto lightDirection = m_writer.declLocale( "lightDirection"
@@ -747,9 +747,9 @@ namespace castor3d
 									, light.m_lightBase.m_pcfShadowOffsets
 									, light.m_lightBase.m_vsmShadowVariance
 									, light.m_transform
-									, fragmentIn.m_worldVertex
+									, surface.worldPosition
 									, -lightToVertex
-									, fragmentIn.m_worldNormal
+									, surface.worldNormal
 									, light.m_lightBase.m_index ) );
 
 							IF( m_writer, shadowFactor )
@@ -759,7 +759,7 @@ namespace castor3d
 									, lightDirection
 									, specular
 									, 1.0_f - glossiness
-									, fragmentIn
+									, surface
 									, output );
 								output.m_diffuse *= shadowFactor;
 								output.m_specular *= shadowFactor;
@@ -773,7 +773,7 @@ namespace castor3d
 								, lightDirection
 								, specular
 								, 1.0_f - glossiness
-								, fragmentIn
+								, surface
 								, output );
 						}
 						FI;
@@ -785,7 +785,7 @@ namespace castor3d
 							, lightDirection
 							, specular
 							, 1.0_f - glossiness
-							, fragmentIn
+							, surface
 							, output );
 					}
 
@@ -808,7 +808,7 @@ namespace castor3d
 				, InVec3( m_writer, "specular" )
 				, InFloat( m_writer, "glossiness" )
 				, InInt( m_writer, "receivesShadows" )
-				, FragmentInput{ m_writer }
+				, InSurface{ m_writer, "surface" }
 				, output );
 		}
 
@@ -825,7 +825,7 @@ namespace castor3d
 					, Vec3 const & specular
 					, Float const & glossiness
 					, Int const & receivesShadows
-					, FragmentInput const & fragmentIn )
+					, Surface const & surface )
 				{
 					PbrSGMaterials materials{ m_writer };
 					auto diffuse = m_writer.declLocale( "diffuse"
@@ -854,7 +854,7 @@ namespace castor3d
 								FOR( m_writer, UInt, i, 0u, i < maxCount, ++i )
 								{
 									auto factors = m_writer.declLocale( "factors"
-										, m_getCascadeFactors( Vec3{ fragmentIn.m_viewVertex }
+										, m_getCascadeFactors( Vec3{ surface.viewPosition }
 											, light.m_splitDepths
 											, i ) );
 
@@ -874,11 +874,11 @@ namespace castor3d
 											, light.m_lightBase.m_pcfShadowOffsets
 											, light.m_lightBase.m_vsmShadowVariance
 											, light.m_transforms[cascadeIndex]
-											, fragmentIn.m_worldVertex
+											, surface.worldPosition
 											, -lightDirection
 											, cascadeIndex
 											, light.m_cascadeCount
-											, fragmentIn.m_worldNormal ) );
+											, surface.worldNormal ) );
 
 								IF( m_writer, cascadeIndex > 0_u )
 								{
@@ -889,11 +889,11 @@ namespace castor3d
 												, light.m_lightBase.m_pcfShadowOffsets
 												, light.m_lightBase.m_vsmShadowVariance
 												, light.m_transforms[cascadeIndex - 1u]
-												, fragmentIn.m_worldVertex
+												, surface.worldPosition
 												, -lightDirection
 												, cascadeIndex - 1u
 												, light.m_cascadeCount
-												, fragmentIn.m_worldNormal ) );
+												, surface.worldNormal ) );
 								}
 								FI;
 							}
@@ -905,7 +905,7 @@ namespace castor3d
 									, worldEye
 									, lightDirection
 									, specular
-									, fragmentIn );
+									, surface );
 							}
 							FI;
 
@@ -939,7 +939,7 @@ namespace castor3d
 								, worldEye
 								, lightDirection
 								, specular
-								, fragmentIn );
+								, surface );
 						}
 						FI;
 					}
@@ -949,7 +949,7 @@ namespace castor3d
 							, worldEye
 							, lightDirection
 							, specular
-							, fragmentIn );
+							, surface );
 					}
 
 					m_writer.returnStmt( max( vec3( 0.0_f ), diffuse ) );
@@ -959,7 +959,7 @@ namespace castor3d
 				, InVec3( m_writer, "specular" )
 				, InFloat( m_writer, "glossiness" )
 				, InInt( m_writer, "receivesShadows" )
-				, FragmentInput{ m_writer } );
+				, InSurface{ m_writer, "surface" } );
 		}
 
 		void SpecularBrdfLightingModel::doDeclareComputePointLightDiffuse()
@@ -970,13 +970,13 @@ namespace castor3d
 					, Vec3 const & specular
 					, Float const & glossiness
 					, Int const & receivesShadows
-					, FragmentInput const & fragmentIn )
+					, Surface const & surface )
 				{
 					PbrSGMaterials materials{ m_writer };
 					auto diffuse = m_writer.declLocale( "diffuse"
 						, vec3( 0.0_f ) );
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
-						, light.m_position.xyz() - fragmentIn.m_worldVertex );
+						, light.m_position.xyz() - surface.worldPosition );
 					auto distance = m_writer.declLocale( "distance"
 						, length( lightToVertex ) );
 					auto lightDirection = m_writer.declLocale( "lightDirection"
@@ -996,9 +996,9 @@ namespace castor3d
 										, light.m_lightBase.m_rawShadowOffsets
 										, light.m_lightBase.m_pcfShadowOffsets
 										, light.m_lightBase.m_vsmShadowVariance
-										, fragmentIn.m_worldVertex
+										, surface.worldPosition
 										, light.m_position.xyz()
-										, fragmentIn.m_worldNormal
+										, surface.worldNormal
 										, light.m_lightBase.m_farPlane
 										, light.m_lightBase.m_index ) );
 							}
@@ -1010,7 +1010,7 @@ namespace castor3d
 									, worldEye
 									, lightDirection
 									, specular
-									, fragmentIn );
+									, surface );
 							}
 							FI;
 						}
@@ -1020,7 +1020,7 @@ namespace castor3d
 								, worldEye
 								, lightDirection
 								, specular
-								, fragmentIn );
+								, surface );
 						}
 						FI;
 					}
@@ -1030,7 +1030,7 @@ namespace castor3d
 							, worldEye
 							, lightDirection
 							, specular
-							, fragmentIn );
+							, surface );
 					}
 
 					auto attenuation = m_writer.declLocale( "attenuation"
@@ -1046,7 +1046,7 @@ namespace castor3d
 				, InVec3( m_writer, "specular" )
 				, InFloat( m_writer, "glossiness" )
 				, InInt( m_writer, "receivesShadows" )
-				, FragmentInput{ m_writer } );
+				, InSurface{ m_writer, "surface" } );
 		}
 
 		void SpecularBrdfLightingModel::doDeclareComputeSpotLightDiffuse()
@@ -1057,13 +1057,13 @@ namespace castor3d
 					, Vec3 const & specular
 					, Float const & glossiness
 					, Int const & receivesShadows
-					, FragmentInput const & fragmentIn )
+					, Surface const & surface )
 				{
 					PbrSGMaterials materials{ m_writer };
 					auto diffuse = m_writer.declLocale( "diffuse"
 						, vec3( 0.0_f ) );
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
-						, light.m_position.xyz() - fragmentIn.m_worldVertex );
+						, light.m_position.xyz() - surface.worldPosition );
 					auto distance = m_writer.declLocale( "distance"
 						, length( lightToVertex ) );
 					auto lightDirection = m_writer.declLocale( "lightDirection"
@@ -1083,9 +1083,9 @@ namespace castor3d
 									, light.m_lightBase.m_pcfShadowOffsets
 									, light.m_lightBase.m_vsmShadowVariance
 									, light.m_transform
-									, fragmentIn.m_worldVertex
+									, surface.worldPosition
 									, -lightToVertex
-									, fragmentIn.m_worldNormal
+									, surface.worldNormal
 									, light.m_lightBase.m_index ) );
 
 							IF( m_writer, shadowFactor )
@@ -1094,7 +1094,7 @@ namespace castor3d
 									, worldEye
 									, lightDirection
 									, specular
-									, fragmentIn );
+									, surface );
 							}
 							FI;
 						}
@@ -1104,7 +1104,7 @@ namespace castor3d
 								, worldEye
 								, lightDirection
 								, specular
-								, fragmentIn );
+								, surface );
 						}
 						FI;
 					}
@@ -1114,7 +1114,7 @@ namespace castor3d
 							, worldEye
 							, lightDirection
 							, specular
-							, fragmentIn );
+							, surface );
 					}
 
 					auto attenuation = m_writer.declLocale( "attenuation"
@@ -1133,7 +1133,7 @@ namespace castor3d
 				, InVec3( m_writer, "specular" )
 				, InFloat( m_writer, "glossiness" )
 				, InInt( m_writer, "receivesShadows" )
-				, FragmentInput{ m_writer } );
+				, InSurface{ m_writer, "surface" } );
 		}
 
 		//***********************************************************************************************
