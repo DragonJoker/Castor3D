@@ -31,7 +31,6 @@ namespace castor3d
 		 */
 		C3D_API VoxelBufferToTexture( RenderDevice const & device
 			, VoxelSceneData const & vctConfig
-			, VoxelizerUbo const & voxelizerUbo
 			, ashes::Buffer< Voxel > const & voxels
 			, TextureUnit const & result );
 		/**

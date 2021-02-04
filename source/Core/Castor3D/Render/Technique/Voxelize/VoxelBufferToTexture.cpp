@@ -29,17 +29,13 @@ namespace castor3d
 	{
 		enum IDs : uint32_t
 		{
-			eVoxelUbo,
 			eVoxels,
 			eResult,
 		};
 
 		ashes::DescriptorSetLayoutPtr createDescriptorLayout( RenderDevice const & device )
 		{
-			ashes::VkDescriptorSetLayoutBindingArray bindings{ makeDescriptorSetLayoutBinding( eVoxelUbo
-					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-					, VK_SHADER_STAGE_COMPUTE_BIT )
-				, makeDescriptorSetLayoutBinding( eVoxels
+			ashes::VkDescriptorSetLayoutBindingArray bindings{ makeDescriptorSetLayoutBinding( eVoxels
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, VK_SHADER_STAGE_COMPUTE_BIT )
 				, makeDescriptorSetLayoutBinding( eResult
@@ -50,13 +46,10 @@ namespace castor3d
 		}
 
 		ashes::DescriptorSetPtr createDescriptorSet( ashes::DescriptorSetPool const & pool
-			, VoxelizerUbo const & voxelizerUbo
 			, ashes::Buffer< Voxel > const & voxels
 			, TextureUnit const & result )
 		{
 			auto descriptorSet = pool.createDescriptorSet( "VoxelBufferToTexture" );
-			voxelizerUbo.createSizedBinding( *descriptorSet
-				, pool.getLayout().getBinding( eVoxelUbo ) );
 			descriptorSet->createBinding( pool.getLayout().getBinding( eVoxels )
 				, voxels
 				, 0u
@@ -144,7 +137,6 @@ namespace castor3d
 			writer.inputLayout( 256u, 1u, 1u );
 
 			// Inputs
-			UBO_VOXELIZER( writer, eVoxelUbo, 0u, true );
 			auto voxels( writer.declArrayShaderStorageBuffer< shader::Voxel >( "voxels"
 				, eVoxels
 				, 0u ) );
@@ -207,14 +199,13 @@ namespace castor3d
 
 	VoxelBufferToTexture::VoxelBufferToTexture( RenderDevice const & device
 		, VoxelSceneData const & vctConfig
-		, VoxelizerUbo const & voxelizerUbo
 		, ashes::Buffer< Voxel > const & voxels
 		, TextureUnit const & result )
 		: m_vctConfig{ vctConfig }
 		, m_descriptorSetLayout{ createDescriptorLayout( device ) }
 		, m_pipelineLayout{ createPipelineLayout( device, *m_descriptorSetLayout ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( 1u ) }
-		, m_descriptorSet{ createDescriptorSet( *m_descriptorSetPool, voxelizerUbo, voxels, result ) }
+		, m_descriptorSet{ createDescriptorSet( *m_descriptorSetPool, voxels, result ) }
 		, m_pipelines{ Pipeline{ device, *m_pipelineLayout, *m_descriptorSet, voxels, result, vctConfig.gridSize.value(), false }
 			, Pipeline{ device, *m_pipelineLayout, *m_descriptorSet, voxels, result, vctConfig.gridSize.value(), true } }
 	{

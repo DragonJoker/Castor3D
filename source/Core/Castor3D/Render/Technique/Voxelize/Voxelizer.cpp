@@ -95,7 +95,6 @@ namespace castor3d
 			, m_voxelConfig }
 		, m_voxelToTexture{ device
 			, m_voxelConfig
-			, m_voxelizerUbo
 			, *m_voxels
 			, m_result }
 	{
