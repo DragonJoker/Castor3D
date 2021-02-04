@@ -27,7 +27,6 @@ namespace castor3d
 		 */
 		C3D_API Voxelizer( Engine & engine
 			, RenderDevice const & device
-			, uint32_t voxelGridSize
 			, Scene & scene
 			, Camera & camera
 			, ashes::ImageView colourView
@@ -80,7 +79,6 @@ namespace castor3d
 		VoxelSceneData const & m_voxelConfig;
 		DummyCuller m_culler;
 		MatrixUbo m_matrixUbo;
-		uint32_t m_voxelGridSize;
 		TextureUnit m_result;
 		ashes::BufferPtr< Voxel > m_voxels;
 		VoxelizerUbo & m_voxelizerUbo;

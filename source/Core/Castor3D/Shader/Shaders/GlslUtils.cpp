@@ -864,9 +864,7 @@ namespace castor3d::shader
 						, log2( wsDiameter * voxelData.worldToGrid ) );
 
 					auto tsCoord = m_writer.declLocale( "tsCoord"
-						, wsStartPos + wsConeDirection * vec3( wsDist ) );
-					tsCoord *= voxelData.worldToClip;
-					tsCoord = tsCoord * vec3( 0.5_f, -0.5f, 0.5f ) + 0.5f;
+						, voxelData.worldToTex( wsStartPos + wsConeDirection * vec3( wsDist ) ) );
 
 					// break if the ray exits the voxel grid, or we sample from the last mip:
 					IF( m_writer, !isSaturated( tsCoord ) || mip >= voxelData.radianceMips )
@@ -994,9 +992,7 @@ namespace castor3d::shader
 						, log2( wsDiameter * voxelData.worldToGrid ) );
 
 					auto tsCoord = m_writer.declLocale( "tsCoord"
-						, wsStartPos + wsConeDirection * vec3( wsDist ) );
-					tsCoord *= voxelData.worldToClip;
-					tsCoord = tsCoord * vec3( 0.5_f, -0.5f, 0.5f ) + 0.5f;
+						, voxelData.worldToTex( wsStartPos + wsConeDirection * vec3( wsDist ) ) );
 
 					// break if the ray exits the voxel grid, or we sample from the last mip:
 					IF( m_writer, !isSaturated( tsCoord ) || mip >= voxelData.radianceMips )

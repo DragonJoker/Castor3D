@@ -29,7 +29,6 @@ namespace castor3d
 			, gridToWorld{ gridConv.y() }
 			, clipToGrid{ gridConv.z() }
 			, gridToClip{ gridConv.w() }
-			, worldToClip{ worldToGrid * gridToClip }
 			, radianceMaxDistance{ radiance.x() }
 			, radianceMips{ radiance.y() }
 			, radianceNumCones{ writer.cast< sdw::UInt >( radiance.z() ) }
@@ -68,6 +67,16 @@ namespace castor3d
 		{
 			return std::make_unique< sdw::Struct >( writer
 				, makeType( writer.getTypesCache() ) );
+		}
+
+		sdw::Vec3 VoxelData::worldToTex( sdw::Vec3 const & wsPosition )const
+		{
+			return worldToClip( wsPosition ) * vec3( 0.5_f, -0.5_f, 0.5_f ) + vec3( 0.5_f );
+		}
+
+		sdw::Vec3 VoxelData::worldToClip( sdw::Vec3 const & wsPosition )const
+		{
+			return wsPosition * worldToGrid * gridToClip;
 		}
 	}
 

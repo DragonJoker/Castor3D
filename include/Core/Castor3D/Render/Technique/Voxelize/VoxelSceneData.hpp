@@ -52,6 +52,7 @@ namespace castor3d
 		bool conservativeRasterization{ false };
 		bool enableOcclusion{ false };
 		bool temporalSmoothing{ false };
+		castor::RangedValue< uint32_t > gridSize{ 256u, castor::makeRange( 2u, 512u ) };
 		//!\~english	The maximum distance for cones.
 		//!\~french		La distance maximale pour les cones.
 		float maxDistance{ 20.0f };

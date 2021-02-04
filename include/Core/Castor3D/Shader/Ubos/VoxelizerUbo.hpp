@@ -27,6 +27,9 @@ namespace castor3d
 			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
+			C3D_API sdw::Vec3 worldToTex( sdw::Vec3 const & wsPosition )const;
+			C3D_API sdw::Vec3 worldToClip( sdw::Vec3 const & wsPosition )const;
+
 			// Raw values
 			sdw::Vec4 gridConv;
 			sdw::Vec4 radiance;
@@ -37,7 +40,6 @@ namespace castor3d
 			sdw::Float gridToWorld;
 			sdw::Float clipToGrid;
 			sdw::Float gridToClip;
-			sdw::Float worldToClip;
 			sdw::Float radianceMaxDistance;
 			sdw::Float radianceMips;
 			sdw::UInt radianceNumCones;

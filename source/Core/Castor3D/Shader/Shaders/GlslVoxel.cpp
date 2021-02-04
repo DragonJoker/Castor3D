@@ -9,8 +9,6 @@ namespace castor3d
 {
 	namespace shader
 	{
-		//*********************************************************************************************
-
 		Voxel::Voxel( ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )

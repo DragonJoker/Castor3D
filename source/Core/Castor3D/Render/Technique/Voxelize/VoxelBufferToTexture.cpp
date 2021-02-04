@@ -209,15 +209,14 @@ namespace castor3d
 		, VoxelSceneData const & vctConfig
 		, VoxelizerUbo const & voxelizerUbo
 		, ashes::Buffer< Voxel > const & voxels
-		, TextureUnit const & result
-		, uint32_t voxelGridSize )
+		, TextureUnit const & result )
 		: m_vctConfig{ vctConfig }
 		, m_descriptorSetLayout{ createDescriptorLayout( device ) }
 		, m_pipelineLayout{ createPipelineLayout( device, *m_descriptorSetLayout ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( 1u ) }
 		, m_descriptorSet{ createDescriptorSet( *m_descriptorSetPool, voxelizerUbo, voxels, result ) }
-		, m_pipelines{ Pipeline{ device, *m_pipelineLayout, *m_descriptorSet, voxels, result, voxelGridSize, false }
-			, Pipeline{ device, *m_pipelineLayout, *m_descriptorSet, voxels, result, voxelGridSize, true } }
+		, m_pipelines{ Pipeline{ device, *m_pipelineLayout, *m_descriptorSet, voxels, result, vctConfig.gridSize.value(), false }
+			, Pipeline{ device, *m_pipelineLayout, *m_descriptorSet, voxels, result, vctConfig.gridSize.value(), true } }
 	{
 	}
 

@@ -220,8 +220,8 @@ namespace castor3d
 				auto indirectDiffuse = m_writer.declLocale< sdw::Vec3 >( "indirectDiffuse"
 					, ambient );
 				auto vxlPosition = m_writer.declLocale( "vxlPosition"
-					, ( wsPosition * voxelData.worldToClip ) );
-				vxlPosition = clamp( abs( vxlPosition ), vec3( 0.0_f ), vec3( 1.0_f ) );
+					, voxelData.worldToClip( wsPosition ) );
+				vxlPosition = clamp( abs( vxlPosition ), vec3( -1.0_f ), vec3( 1.0_f ) );
 				auto vxlBlend = m_writer.declLocale( "vxlBlend"
 					, 1.0_f - pow( max( vxlPosition.x(), max( vxlPosition.y(), vxlPosition.z() ) ), 4.0_f ) );
 

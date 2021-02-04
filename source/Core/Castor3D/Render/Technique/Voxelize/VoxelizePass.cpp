@@ -59,8 +59,7 @@ namespace castor3d
 		, SceneCuller & culler
 		, VoxelizerUbo const & voxelizerUbo
 		, ashes::Buffer< Voxel > const & voxels
-		, VoxelSceneData const & voxelConfig
-		, uint32_t voxelGridSize )
+		, VoxelSceneData const & voxelConfig )
 		: RenderPass{ "Voxelize"
 			, "Voxelization"
 			, engine
@@ -75,11 +74,10 @@ namespace castor3d
 		, m_camera{ culler.getCamera() }
 		, m_voxels{ voxels }
 		, m_commands{ nullptr, nullptr }
-		, m_voxelGridSize{ voxelGridSize }
 		, m_voxelizerUbo{ voxelizerUbo }
 		, m_voxelConfig{ voxelConfig }
 	{
-		initialise( device, { m_voxelGridSize, m_voxelGridSize } );
+		initialise( device, { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } );
 	}
 
 	VoxelizePass::~VoxelizePass()
@@ -235,7 +233,7 @@ namespace castor3d
 		ashes::ImageViewCRefArray fbAttaches;
 
 		m_frameBuffer = m_renderPass->createFrameBuffer( getName()
-			, { m_voxelGridSize, m_voxelGridSize }
+			, { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() }
 			, std::move( fbAttaches ) );
 
 		m_commands =
@@ -712,7 +710,7 @@ namespace castor3d
 			, [&]()
 			{
 				auto diff = writer.declLocale( "diff"
-					, inWorldPosition * c3d_voxelData.worldToClip );
+					, c3d_voxelData.worldToClip( inWorldPosition ) );
 				auto uvw = writer.declLocale( "uvw"
 					, diff * vec3( 0.5_f, -0.5f, 0.5f ) + 0.5f );
 
@@ -773,7 +771,7 @@ namespace castor3d
 					auto writecoord = writer.declLocale( "writecoord"
 						, uvec3( floor( uvw * c3d_voxelData.clipToGrid ) ) );
 					auto id = writer.declLocale( "id"
-						, utils.flatten( writecoord, uvec3( sdw::UInt{ m_voxelGridSize } ) ) );
+						, utils.flatten( writecoord, uvec3( sdw::UInt{ m_voxelConfig.gridSize.value() } ) ) );
 					atomicMax( output[id].colorMask, encodedColor );
 					atomicMax( output[id].normalMask, encodedNormal );
 				}
@@ -841,7 +839,7 @@ namespace castor3d
 			, [&]()
 			{
 				auto diff = writer.declLocale( "diff"
-					, inWorldPosition * c3d_voxelData.worldToClip );
+					, c3d_voxelData.worldToClip( inWorldPosition ) );
 				auto uvw = writer.declLocale( "uvw"
 					, diff * vec3( 0.5_f, -0.5f, 0.5f ) + 0.5f );
 
@@ -914,7 +912,7 @@ namespace castor3d
 					auto writecoord = writer.declLocale( "writecoord"
 						, uvec3( floor( uvw * c3d_voxelData.clipToGrid ) ) );
 					auto id = writer.declLocale( "id"
-						, utils.flatten( writecoord, uvec3( sdw::UInt{ m_voxelGridSize } ) ) );
+						, utils.flatten( writecoord, uvec3( sdw::UInt{ m_voxelConfig.gridSize.value() } ) ) );
 					atomicMax( output[id].colorMask, encodedColor );
 					atomicMax( output[id].normalMask, encodedNormal );
 				}
@@ -982,7 +980,7 @@ namespace castor3d
 			, [&]()
 			{
 				auto diff = writer.declLocale( "diff"
-					, inWorldPosition * c3d_voxelData.worldToClip );
+					, c3d_voxelData.worldToClip( inWorldPosition ) );
 				auto uvw = writer.declLocale( "uvw"
 					, diff * vec3( 0.5_f, -0.5f, 0.5f ) + 0.5f );
 
@@ -1044,7 +1042,7 @@ namespace castor3d
 					auto writecoord = writer.declLocale( "writecoord"
 						, uvec3( floor( uvw * c3d_voxelData.clipToGrid ) ) );
 					auto id = writer.declLocale( "id"
-						, utils.flatten( writecoord, uvec3( sdw::UInt{ m_voxelGridSize } ) ) );
+						, utils.flatten( writecoord, uvec3( sdw::UInt{ m_voxelConfig.gridSize.value() } ) ) );
 					atomicMax( output[id].colorMask, encodedColor );
 					atomicMax( output[id].normalMask, encodedNormal );
 				}

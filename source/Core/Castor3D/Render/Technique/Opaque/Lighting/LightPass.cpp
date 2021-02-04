@@ -875,7 +875,7 @@ namespace castor3d
 				if ( m_voxels )
 				{
 					auto vxlPosition = writer.declLocale( "vxlPosition"
-						, ( wsPosition * c3d_voxelData.worldToClip ) );
+						, c3d_voxelData.worldToClip( wsPosition ) );
 					vxlPosition = clamp( abs( vxlPosition ), vec3( 0.0_f ), vec3( 1.0_f ) );
 					auto vxlBlend = writer.declLocale( "vxlBlend"
 						, 1.0_f - pow( max( vxlPosition.x(), max( vxlPosition.y(), vxlPosition.z() ) ), 4.0_f ) );
@@ -1169,7 +1169,7 @@ namespace castor3d
 				if ( m_voxels )
 				{
 					auto vxlPosition = writer.declLocale( "vxlPosition"
-						, ( wsPosition * c3d_voxelData.worldToClip ) );
+						, c3d_voxelData.worldToClip( wsPosition ) );
 					vxlPosition = clamp( abs( vxlPosition ), vec3( 0.0_f ), vec3( 1.0_f ) );
 					auto vxlBlend = writer.declLocale( "vxlBlend"
 						, 1.0_f - pow( max( vxlPosition.x(), max( vxlPosition.y(), vxlPosition.z() ) ), 4.0_f ) );
@@ -1435,7 +1435,7 @@ namespace castor3d
 				if ( m_voxels )
 				{
 					auto vxlPosition = writer.declLocale( "vxlPosition"
-						, ( wsPosition * c3d_voxelData.worldToClip ) );
+						, c3d_voxelData.worldToClip( wsPosition ) );
 					vxlPosition = clamp( abs( vxlPosition ), vec3( 0.0_f ), vec3( 1.0_f ) );
 					auto vxlBlend = writer.declLocale( "vxlBlend"
 						, 1.0_f - pow( max( vxlPosition.x(), max( vxlPosition.y(), vxlPosition.z() ) ), 4.0_f ) );

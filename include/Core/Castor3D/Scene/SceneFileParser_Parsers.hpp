@@ -393,6 +393,7 @@ namespace castor3d
 
 	// Voxel Cone Tracing config parsers
 	CU_DeclareAttributeParser( parserVctEnabled )
+	CU_DeclareAttributeParser( parserVctGridSize )
 	CU_DeclareAttributeParser( parserVctNumCones )
 	CU_DeclareAttributeParser( parserVctMaxDistance )
 	CU_DeclareAttributeParser( parserVctRayStepSize )

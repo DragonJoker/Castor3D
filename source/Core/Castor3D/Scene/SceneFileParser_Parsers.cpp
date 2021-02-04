@@ -6246,6 +6246,28 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
+	CU_ImplementAttributeParser( parserVctGridSize )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->scene )
+		{
+			CU_ParsingError( cuT( "No scene initialised." ) );
+		}
+		else if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			auto & vctConfig = parsingContext->scene->getVoxelConeTracingConfig();
+			uint32_t result;
+			params[0]->get( result );
+			vctConfig.gridSize = result;
+		}
+	}
+	CU_EndAttribute()
+
 	CU_ImplementAttributeParser( parserVctNumCones )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );

@@ -347,7 +347,6 @@ namespace castor3d
 
 			m_voxelizer = castor::makeUnique< Voxelizer >( *m_renderSystem.getEngine()
 				, device
-				, 256u
 				, *m_renderTarget.getScene()
 				, *m_renderTarget.getCamera()
 				, m_colourTexture.getTexture()->getDefaultView().getTargetView()

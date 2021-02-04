@@ -73,7 +73,6 @@ namespace castor3d
 
 	Voxelizer::Voxelizer( Engine & engine
 		, RenderDevice const & device
-		, uint32_t voxelGridSize
 		, Scene & scene
 		, Camera & camera
 		, ashes::ImageView colourView
@@ -84,9 +83,8 @@ namespace castor3d
 		, m_voxelConfig{ voxelConfig }
 		, m_culler{ scene, &camera }
 		, m_matrixUbo{ engine }
-		, m_voxelGridSize{ voxelGridSize }
-		, m_result{ createTexture( engine, device, "VoxelizedSceneColor", { m_voxelGridSize, m_voxelGridSize, m_voxelGridSize } ) }
-		, m_voxels{ createSsbo( engine, device, "VoxelizedSceneBuffer", m_voxelGridSize ) }
+		, m_result{ createTexture( engine, device, "VoxelizedSceneColor", { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
+		, m_voxels{ createSsbo( engine, device, "VoxelizedSceneBuffer", m_voxelConfig.gridSize.value() ) }
 		, m_voxelizerUbo{ voxelizerUbo }
 		, m_voxelizePass{ engine
 			, device
@@ -94,14 +92,12 @@ namespace castor3d
 			, m_culler
 			, m_voxelizerUbo
 			, *m_voxels
-			, voxelConfig
-			, m_voxelGridSize }
+			, m_voxelConfig }
 		, m_voxelToTexture{ device
-			, voxelConfig
+			, m_voxelConfig
 			, m_voxelizerUbo
 			, *m_voxels
-			, m_result
-			, m_voxelGridSize }
+			, m_result }
 	{
 	}
 
@@ -114,7 +110,7 @@ namespace castor3d
 		auto & camera = *updater.camera;
 		auto & aabb = camera.getScene()->getBoundingBox();
 		auto max = std::max( aabb.getDimensions()->x, std::max( aabb.getDimensions()->y, aabb.getDimensions()->z ) );
-		auto cellSize = 2.0f * m_voxelGridSize / max;
+		auto cellSize = 2.0f * m_voxelConfig.gridSize.value() / max;
 		auto voxelSize = ( cellSize * m_voxelConfig.voxelSizeFactor );
 		float f = 0.05f / voxelSize;
 		m_grid = castor::Point4f{ 0.0f
@@ -124,7 +120,7 @@ namespace castor3d
 		m_voxelizePass.update( updater );
 		m_voxelizerUbo.cpuUpdate( m_voxelConfig
 			, voxelSize
-			, m_voxelGridSize );
+			, m_voxelConfig.gridSize.value() );
 	}
 
 	void Voxelizer::update( GpuUpdater & updater )

@@ -33,8 +33,7 @@ namespace castor3d
 			, VoxelSceneData const & vctConfig
 			, VoxelizerUbo const & voxelizerUbo
 			, ashes::Buffer< Voxel > const & voxels
-			, TextureUnit const & result
-			, uint32_t voxelGridSize );
+			, TextureUnit const & result );
 		/**
 		 *\~english
 		 *\brief		Renders nodes.
