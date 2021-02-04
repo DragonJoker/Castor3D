@@ -1,5 +1,6 @@
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
+#include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
 
@@ -317,8 +318,7 @@ namespace castor3d::shader
 		}
 
 		m_computeIBL = m_writer.implementFunction< sdw::Vec3 >( "computeIBL"
-			, [&]( sdw::Vec3 const & normal
-				, sdw::Vec3 const & position
+			, [&]( Surface const & surface
 				, sdw::Vec3 const & baseColour
 				, sdw::Vec3 const & f0
 				, sdw::Float const & roughness
@@ -329,9 +329,9 @@ namespace castor3d::shader
 				, sdw::SampledImage2DRgba32 const & brdfMap )
 			{
 				auto V = m_writer.declLocale( "V"
-					, normalize( worldEye - position ) );
+					, normalize( worldEye - surface.worldPosition ) );
 				auto NdotV = m_writer.declLocale( "NdotV"
-					, max( dot( normal, V ), 0.0_f ) );
+					, max( dot( surface.worldNormal, V ), 0.0_f ) );
 				auto F = m_writer.declLocale( "F"
 					, fresnelSchlick( NdotV, f0, roughness ) );
 				auto kS = m_writer.declLocale( "kS"
@@ -341,11 +341,11 @@ namespace castor3d::shader
 				kD *= 1.0_f - metallic;
 
 				auto irradiance = m_writer.declLocale( "irradiance"
-					, irradianceMap.sample( vec3( normal.x(), -normal.y(), normal.z() ) ).rgb() );
+					, irradianceMap.sample( vec3( surface.worldNormal.x(), -surface.worldNormal.y(), surface.worldNormal.z() ) ).rgb() );
 				auto diffuseReflection = m_writer.declLocale( "diffuseReflection"
 					, irradiance * baseColour );
 				auto R = m_writer.declLocale( "R"
-					, reflect( -V, normal ) );
+					, reflect( -V, surface.worldNormal ) );
 				R.y() = -R.y();
 
 				auto prefilteredColor = m_writer.declLocale( "prefilteredColor"
@@ -363,8 +363,7 @@ namespace castor3d::shader
 					, diffuseReflection
 					, specularReflection ) );
 			}
-			, sdw::InVec3{ m_writer, "normal" }
-			, sdw::InVec3{ m_writer, "position" }
+			, InSurface{ m_writer, "surface" }
 			, sdw::InVec3{ m_writer, "albedo" }
 			, sdw::InVec3{ m_writer, "f0" }
 			, sdw::InFloat{ m_writer, "roughness" }
@@ -837,8 +836,7 @@ namespace castor3d::shader
 
 		m_traceCone = m_writer.implementFunction< sdw::Vec4 >( "traceCone"
 			, [&]( sdw::SampledImage3DRgba32 const & voxels
-				, sdw::Vec3 const & wsPosition
-				, sdw::Vec3 const & wsNormal
+				, Surface surface
 				, sdw::Vec3 const & wsConeDirection
 				, sdw::Float const & coneAperture
 				, VoxelData const & voxelData )
@@ -853,7 +851,7 @@ namespace castor3d::shader
 				auto wsDist = m_writer.declLocale( "wsDist"
 					, voxelData.gridToWorld ); // offset by cone dir so that first sample of all cones are not the same
 				auto wsStartPos = m_writer.declLocale( "wsStartPos"
-					, wsPosition + wsNormal * vec3( voxelData.gridToWorld * 2.0f * sqrt( 2.0f ) ) ); // sqrt2 is diagonal voxel half-extent
+					, surface.worldPosition + surface.worldNormal * vec3( voxelData.gridToWorld * 2.0f * sqrt( 2.0f ) ) ); // sqrt2 is diagonal voxel half-extent
 
 				// We will break off the loop if the sampling distance is too far for performance reasons:
 				WHILE( m_writer, wsDist < voxelData.radianceMaxDistance && occlusion < 1.0_f )
@@ -890,16 +888,14 @@ namespace castor3d::shader
 				m_writer.returnStmt( vec4( color, occlusion ) );
 			}
 			, sdw::InSampledImage3DRgba32{ m_writer, "voxels" }
-			, sdw::InVec3{ m_writer, "wsPosition" }
-			, sdw::InVec3{ m_writer, "wsNormal" }
+			, InSurface{ m_writer, "surface" }
 			, sdw::InVec3{ m_writer, "wsConeDirection" }
 			, sdw::InFloat{ m_writer, "coneAperture" }
 			, InVoxelData{ m_writer, "voxelData" } );
 
 		m_traceConeRadiance = m_writer.implementFunction< sdw::Vec4 >( "traceConeRadiance"
 			, [&]( sdw::SampledImage3DRgba32 const & voxels
-				, sdw::Vec3 const & wsPosition
-				, sdw::Vec3 const & wsNormal
+				, Surface surface
 				, shader::VoxelData const & voxelData )
 			{
 				auto radiance = m_writer.declLocale( "radiance"
@@ -910,13 +906,12 @@ namespace castor3d::shader
 					// approximate a hemisphere from random points inside a sphere:
 					//  (and modulate cone with surface normal, no banding this way)
 					auto wsConeDirection = m_writer.declLocale( "wsConeDirection"
-						, normalize( cones[cone] + wsNormal ) );
+						, normalize( cones[cone] + surface.worldNormal ) );
 					// if point on sphere is facing below normal (so it's located on bottom hemisphere), put it on the opposite hemisphere instead:
-					wsConeDirection *= m_writer.ternary( dot( wsConeDirection, wsNormal ) < 0.0_f, -1.0_f, 1.0_f );
+					wsConeDirection *= m_writer.ternary( dot( wsConeDirection, surface.worldNormal ) < 0.0_f, -1.0_f, 1.0_f );
 
 					radiance += m_traceCone( voxels
-						, wsPosition
-						, wsNormal
+						, surface
 						, wsConeDirection
 						, sdw::Float{ castor::Angle::fromRadians( castor::PiDiv2< float > / 3 ).tan() }
 					, voxelData );
@@ -930,14 +925,12 @@ namespace castor3d::shader
 				m_writer.returnStmt( max( vec4( 0.0_f ), radiance ) );
 			}
 			, sdw::InSampledImage3DRgba32{ m_writer, "voxels" }
-			, sdw::InVec3{ m_writer, "wsPosition" }
-			, sdw::InVec3{ m_writer, "wsNormal" }
+			, InSurface{ m_writer, "surface" }
 			, InVoxelData{ m_writer, "voxelData" } );
 
 		m_traceConeReflection = m_writer.implementFunction< sdw::Vec4 >( "traceConeReflection"
 			, [&]( sdw::SampledImage3DRgba32 const & voxels
-				, sdw::Vec3 const & wsPosition
-				, sdw::Vec3 const & wsNormal
+				, Surface surface
 				, sdw::Vec3 const & wsViewVector
 				, sdw::Float const & roughness
 				, shader::VoxelData const & voxelData )
@@ -945,12 +938,11 @@ namespace castor3d::shader
 				auto aperture = m_writer.declLocale( "aperture"
 					, tan( roughness * sdw::Float{ castor::PiDiv2< float > / 10 } ) );
 				auto wsConeDirection = m_writer.declLocale( "wsConeDirection"
-					, reflect( -wsViewVector, wsNormal ) );
+					, reflect( -wsViewVector, surface.worldNormal ) );
 
 				auto reflection = m_writer.declLocale( "reflection"
 					, m_traceCone( voxels
-						, wsPosition
-						, wsNormal
+						, surface
 						, wsConeDirection
 						, aperture
 						, voxelData ) );
@@ -959,16 +951,14 @@ namespace castor3d::shader
 					, clamp( reflection.a() * ( 1.0_f - roughness ), 0.0_f, 1.0_f ) ) );
 			}
 			, sdw::InSampledImage3DRgba32{ m_writer, "voxels" }
-			, sdw::InVec3{ m_writer, "wsPosition" }
-			, sdw::InVec3{ m_writer, "wsNormal" }
+			, InSurface{ m_writer, "surface" }
 			, sdw::InVec3{ m_writer, "wsViewVector" }
 			, sdw::InFloat{ m_writer, "roughness" }
 			, InVoxelData{ m_writer, "voxelData" } );
 
 		m_traceConeOcclusion = m_writer.implementFunction< sdw::Float >( "traceConeOcclusion"
 			, [&]( sdw::SampledImage3DRgba32 const & voxels
-				, sdw::Vec3 const & wsPosition
-				, sdw::Vec3 const & wsNormal
+				, Surface surface
 				, sdw::Vec3 const & wsConeDirection
 				, shader::VoxelData const & voxelData )
 			{
@@ -981,7 +971,7 @@ namespace castor3d::shader
 				auto wsDist = m_writer.declLocale( "wsDist"
 					, voxelData.gridToWorld ); // offset by cone dir so that first sample of all cones are not the same
 				auto wsStartPos = m_writer.declLocale( "wsStartPos"
-					, wsPosition + wsNormal * vec3( voxelData.gridToWorld * 2.0f * sqrt( 2.0f ) ) ); // sqrt2 is diagonal voxel half-extent
+					, surface.worldPosition + surface.worldNormal * vec3( voxelData.gridToWorld * 2.0f * sqrt( 2.0f ) ) ); // sqrt2 is diagonal voxel half-extent
 
 				// We will break off the loop if the sampling distance is too far for performance reasons:
 				WHILE( m_writer, wsDist < voxelData.radianceMaxDistance && occlusion < 1.0_f )
@@ -1017,8 +1007,7 @@ namespace castor3d::shader
 				m_writer.returnStmt( occlusion );
 			}
 			, sdw::InSampledImage3DRgba32{ m_writer, "voxels" }
-			, sdw::InVec3{ m_writer, "wsPosition" }
-			, sdw::InVec3{ m_writer, "wsNormal" }
+			, InSurface{ m_writer, "surface" }
 			, sdw::InVec3{ m_writer, "wsConeDirection" }
 			, InVoxelData{ m_writer, "voxelData" } );
 	}
@@ -1243,40 +1232,34 @@ namespace castor3d::shader
 	}
 
 	sdw::Vec4 Utils::traceConeRadiance( sdw::SampledImage3DRgba32 const & voxels
-		, sdw::Vec3 const & wsPosition
-		, sdw::Vec3 const & wsNormal
+		, Surface surface
 		, VoxelData const & voxelData )const
 	{
 		return m_traceConeRadiance( voxels
-			, wsPosition
-			, wsNormal
+			, surface
 			, voxelData );
 	}
 
 	sdw::Vec4 Utils::traceConeReflection( sdw::SampledImage3DRgba32 const & voxels
-		, sdw::Vec3 const & wsPosition
-		, sdw::Vec3 const & wsNormal
+		, Surface surface
 		, sdw::Vec3 const & wsViewVector
 		, sdw::Float const & roughness
 		, VoxelData const & voxelData )const
 	{
 		return m_traceConeReflection( voxels
-			, wsPosition
-			, wsNormal
+			, surface
 			, wsViewVector
 			, roughness
 			, voxelData );
 	}
 
 	sdw::Float Utils::traceConeOcclusion( sdw::SampledImage3DRgba32 const & voxels
-		, sdw::Vec3 const & wsPosition
-		, sdw::Vec3 const & wsNormal
+		, Surface surface
 		, sdw::Vec3 const & wsConeDirection
 		, VoxelData const & voxelData )const
 	{
 		return m_traceConeOcclusion( voxels
-			, wsPosition
-			, wsNormal
+			, surface
 			, wsConeDirection
 			, voxelData );
 	}
@@ -1387,8 +1370,7 @@ namespace castor3d::shader
 			, roughness );
 	}
 
-	sdw::Vec3 Utils::computeMetallicIBL( sdw::Vec3 const & normal
-		, sdw::Vec3 const & position
+	sdw::Vec3 Utils::computeMetallicIBL( Surface surface
 		, sdw::Vec3 const & albedo
 		, sdw::Float const & metallic
 		, sdw::Float const & roughness
@@ -1397,8 +1379,7 @@ namespace castor3d::shader
 		, sdw::SampledImageCubeRgba32 const & prefilteredEnvMap
 		, sdw::SampledImage2DRgba32 const & brdfMap )const
 	{
-		return m_computeIBL( normal
-			, position
+		return m_computeIBL( surface
 			, albedo
 			, mix( vec3( 0.04_f ), albedo, vec3( metallic ) )
 			, roughness
@@ -1409,8 +1390,7 @@ namespace castor3d::shader
 			, brdfMap );
 	}
 
-	sdw::Vec3 Utils::computeSpecularIBL( sdw::Vec3 const & normal
-		, sdw::Vec3 const & position
+	sdw::Vec3 Utils::computeSpecularIBL( Surface surface
 		, sdw::Vec3 const & diffuse
 		, sdw::Vec3 const & specular
 		, sdw::Float const & glossiness
@@ -1419,8 +1399,7 @@ namespace castor3d::shader
 		, sdw::SampledImageCubeRgba32 const & prefilteredEnvMap
 		, sdw::SampledImage2DRgba32 const & brdfMap )const
 	{
-		return m_computeIBL( normal
-			, position
+		return m_computeIBL( surface
 			, diffuse
 			, specular
 			, 1.0_f - glossiness

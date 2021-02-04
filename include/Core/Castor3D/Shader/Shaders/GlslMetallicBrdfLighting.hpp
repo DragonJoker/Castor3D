@@ -26,7 +26,7 @@ namespace castor3d
 				, sdw::Float const & metallic
 				, sdw::Float const & roughness
 				, sdw::Int const & receivesShadows
-				, Surface const & surface
+				, Surface surface
 				, OutputComponents & output )const;
 			C3D_API void compute( DirectionalLight const & light
 				, sdw::Vec3 const & worldEye
@@ -34,7 +34,7 @@ namespace castor3d
 				, sdw::Float const & metallic
 				, sdw::Float const & roughness
 				, sdw::Int const & receivesShadows
-				, Surface const & surface
+				, Surface surface
 				, OutputComponents & output )const;
 			C3D_API void compute( PointLight const & light
 				, sdw::Vec3 const & worldEye
@@ -42,7 +42,7 @@ namespace castor3d
 				, sdw::Float const & metallic
 				, sdw::Float const & roughness
 				, sdw::Int const & receivesShadows
-				, Surface const & surface
+				, Surface surface
 				, OutputComponents & output )const;
 			C3D_API void compute( SpotLight const & light
 				, sdw::Vec3 const & worldEye
@@ -50,35 +50,35 @@ namespace castor3d
 				, sdw::Float const & metallic
 				, sdw::Float const & roughness
 				, sdw::Int const & receivesShadows
-				, Surface const & surface
+				, Surface surface
 				, OutputComponents & output )const;
 			C3D_API sdw::Vec3 computeCombinedDiffuse( sdw::Vec3 const & worldEye
 				, sdw::Vec3 const & albedo
 				, sdw::Float const & metallic
 				, sdw::Float const & roughness
 				, sdw::Int const & receivesShadows
-				, Surface const & surface )const;
+				, Surface surface )const;
 			C3D_API sdw::Vec3 computeDiffuse( DirectionalLight const & light
 				, sdw::Vec3 const & worldEye
 				, sdw::Vec3 const & albedo
 				, sdw::Float const & metallic
 				, sdw::Float const & roughness
 				, sdw::Int const & receivesShadows
-				, Surface const & surface )const;
+				, Surface surface )const;
 			C3D_API sdw::Vec3 computeDiffuse( PointLight const & light
 				, sdw::Vec3 const & worldEye
 				, sdw::Vec3 const & albedo
 				, sdw::Float const & metallic
 				, sdw::Float const & roughness
 				, sdw::Int const & receivesShadows
-				, Surface const & surface )const;
+				, Surface surface )const;
 			C3D_API sdw::Vec3 computeDiffuse( SpotLight const & light
 				, sdw::Vec3 const & worldEye
 				, sdw::Vec3 const & albedo
 				, sdw::Float const & metallic
 				, sdw::Float const & roughness
 				, sdw::Int const & receivesShadows
-				, Surface const & surface )const;
+				, Surface surface )const;
 			C3D_API static std::shared_ptr< MetallicBrdfLightingModel > createModel( sdw::ShaderWriter & writer
 				, Utils & utils
 				, SceneFlags sceneFlags

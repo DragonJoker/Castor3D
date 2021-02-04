@@ -4,6 +4,7 @@
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
+#include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
@@ -34,7 +35,7 @@ namespace castor3d
 			, Vec3 const & specular
 			, Float const & glossiness
 			, Int const & receivesShadows
-			, Surface const & surface
+			, Surface surface
 			, OutputComponents & parentOutput )const
 		{
 			auto c3d_lightsCount = m_writer.getVariable< IVec4 >( "c3d_lightsCount" );
@@ -91,7 +92,7 @@ namespace castor3d
 			, Vec3 const & specular
 			, Float const & glossiness
 			, Int const & receivesShadows
-			, Surface const & surface
+			, Surface surface
 			, OutputComponents & parentOutput )const
 		{
 			m_computeDirectional( DirectionalLight{ light }
@@ -108,7 +109,7 @@ namespace castor3d
 			, Vec3 const & specular
 			, Float const & glossiness
 			, Int const & receivesShadows
-			, Surface const & surface
+			, Surface surface
 			, OutputComponents & parentOutput )const
 		{
 			m_computePoint( PointLight{ light }
@@ -125,7 +126,7 @@ namespace castor3d
 			, Vec3 const & specular
 			, Float const & glossiness
 			, Int const & receivesShadows
-			, Surface const & surface
+			, Surface surface
 			, OutputComponents & parentOutput )const
 		{
 			m_computeSpot( SpotLight{ light }
@@ -141,7 +142,7 @@ namespace castor3d
 			, Vec3 const & specular
 			, Float const & glossiness
 			, Int const & receivesShadows
-			, Surface const & surface )const
+			, Surface surface )const
 		{
 			auto c3d_lightsCount = m_writer.getVariable< IVec4 >( "c3d_lightsCount" );
 			auto begin = m_writer.declLocale( "begin"
@@ -198,7 +199,7 @@ namespace castor3d
 			, Vec3 const & specular
 			, Float const & glossiness
 			, Int const & receivesShadows
-			, Surface const & surface )const
+			, Surface surface )const
 		{
 			return m_computeDirectionalDiffuse( DirectionalLight{ light }
 				, worldEye
@@ -213,7 +214,7 @@ namespace castor3d
 			, Vec3 const & specular
 			, Float const & glossiness
 			, Int const & receivesShadows
-			, Surface const & surface )const
+			, Surface surface )const
 		{
 			return m_computePointDiffuse( PointLight{ light }
 				, worldEye
@@ -228,7 +229,7 @@ namespace castor3d
 			, Vec3 const & specular
 			, Float const & glossiness
 			, Int const & receivesShadows
-			, Surface const & surface )const
+			, Surface surface )const
 		{
 			return m_computeSpotDiffuse( SpotLight{ light }
 				, worldEye
@@ -429,7 +430,7 @@ namespace castor3d
 					, Vec3 const & specular
 					, Float const & glossiness
 					, Int const & receivesShadows
-					, Surface const & surface
+					, Surface surface
 					, OutputComponents & parentOutput )
 				{
 					OutputComponents output
@@ -482,11 +483,10 @@ namespace castor3d
 											, light.m_lightBase.m_pcfShadowOffsets
 											, light.m_lightBase.m_vsmShadowVariance
 											, light.m_transforms[cascadeIndex]
-											, surface.worldPosition
+											, surface
 											, -lightDirection
 											, cascadeIndex
-											, light.m_cascadeCount
-											, surface.worldNormal ) );
+											, light.m_cascadeCount ) );
 
 								IF( m_writer, cascadeIndex > 0_u )
 								{
@@ -497,11 +497,10 @@ namespace castor3d
 												, light.m_lightBase.m_pcfShadowOffsets
 												, light.m_lightBase.m_vsmShadowVariance
 												, light.m_transforms[cascadeIndex - 1u]
-												, surface.worldPosition
+												, surface
 												, -lightDirection
 												, cascadeIndex - 1u
-												, light.m_cascadeCount
-												, surface.worldNormal ) );
+												, light.m_cascadeCount ) );
 								}
 								FI;
 							}
@@ -529,8 +528,7 @@ namespace castor3d
 										, light.m_lightBase.m_rawShadowOffsets
 										, light.m_lightBase.m_pcfShadowOffsets
 										, light.m_lightBase.m_vsmShadowVariance
-										, surface.clipPosition
-										, surface.worldPosition
+										, surface
 										, worldEye
 										, light.m_transforms[cascadeIndex]
 										, light.m_direction
@@ -613,7 +611,7 @@ namespace castor3d
 					, Vec3 const & specular
 					, Float const & glossiness
 					, Int const & receivesShadows
-					, Surface const & surface
+					, Surface surface
 					, OutputComponents & parentOutput )
 				{
 					OutputComponents output
@@ -643,9 +641,8 @@ namespace castor3d
 										, light.m_lightBase.m_rawShadowOffsets
 										, light.m_lightBase.m_pcfShadowOffsets
 										, light.m_lightBase.m_vsmShadowVariance
-										, surface.worldPosition
+										, surface
 										, light.m_position.xyz()
-										, surface.worldNormal
 										, light.m_lightBase.m_farPlane
 										, light.m_lightBase.m_index ) );
 							}
@@ -717,7 +714,7 @@ namespace castor3d
 					, Vec3 const & specular
 					, Float const & glossiness
 					, Int const & receivesShadows
-					, Surface const & surface
+					, Surface surface
 					, OutputComponents & parentOutput )
 				{
 					OutputComponents output
@@ -747,9 +744,8 @@ namespace castor3d
 									, light.m_lightBase.m_pcfShadowOffsets
 									, light.m_lightBase.m_vsmShadowVariance
 									, light.m_transform
-									, surface.worldPosition
+									, surface
 									, -lightToVertex
-									, surface.worldNormal
 									, light.m_lightBase.m_index ) );
 
 							IF( m_writer, shadowFactor )
@@ -825,7 +821,7 @@ namespace castor3d
 					, Vec3 const & specular
 					, Float const & glossiness
 					, Int const & receivesShadows
-					, Surface const & surface )
+					, Surface surface )
 				{
 					PbrSGMaterials materials{ m_writer };
 					auto diffuse = m_writer.declLocale( "diffuse"
@@ -874,11 +870,10 @@ namespace castor3d
 											, light.m_lightBase.m_pcfShadowOffsets
 											, light.m_lightBase.m_vsmShadowVariance
 											, light.m_transforms[cascadeIndex]
-											, surface.worldPosition
+											, surface
 											, -lightDirection
 											, cascadeIndex
-											, light.m_cascadeCount
-											, surface.worldNormal ) );
+											, light.m_cascadeCount ) );
 
 								IF( m_writer, cascadeIndex > 0_u )
 								{
@@ -889,11 +884,10 @@ namespace castor3d
 												, light.m_lightBase.m_pcfShadowOffsets
 												, light.m_lightBase.m_vsmShadowVariance
 												, light.m_transforms[cascadeIndex - 1u]
-												, surface.worldPosition
+												, surface
 												, -lightDirection
 												, cascadeIndex - 1u
-												, light.m_cascadeCount
-												, surface.worldNormal ) );
+												, light.m_cascadeCount ) );
 								}
 								FI;
 							}
@@ -970,7 +964,7 @@ namespace castor3d
 					, Vec3 const & specular
 					, Float const & glossiness
 					, Int const & receivesShadows
-					, Surface const & surface )
+					, Surface surface )
 				{
 					PbrSGMaterials materials{ m_writer };
 					auto diffuse = m_writer.declLocale( "diffuse"
@@ -996,9 +990,8 @@ namespace castor3d
 										, light.m_lightBase.m_rawShadowOffsets
 										, light.m_lightBase.m_pcfShadowOffsets
 										, light.m_lightBase.m_vsmShadowVariance
-										, surface.worldPosition
+										, surface
 										, light.m_position.xyz()
-										, surface.worldNormal
 										, light.m_lightBase.m_farPlane
 										, light.m_lightBase.m_index ) );
 							}
@@ -1057,7 +1050,7 @@ namespace castor3d
 					, Vec3 const & specular
 					, Float const & glossiness
 					, Int const & receivesShadows
-					, Surface const & surface )
+					, Surface surface )
 				{
 					PbrSGMaterials materials{ m_writer };
 					auto diffuse = m_writer.declLocale( "diffuse"
@@ -1083,9 +1076,8 @@ namespace castor3d
 									, light.m_lightBase.m_pcfShadowOffsets
 									, light.m_lightBase.m_vsmShadowVariance
 									, light.m_transform
-									, surface.worldPosition
+									, surface
 									, -lightToVertex
-									, surface.worldNormal
 									, light.m_lightBase.m_index ) );
 
 							IF( m_writer, shadowFactor )

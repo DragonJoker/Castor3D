@@ -3,6 +3,7 @@
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
@@ -41,7 +42,7 @@ namespace castor3d
 			, sdw::Vec3 const & albedo
 			, sdw::Float const & metallic
 			, sdw::Float const & roughness
-			, Surface const & surface
+			, Surface surface
 			, OutputComponents & output )
 		{
 			m_computeCookTorrance( light
@@ -59,7 +60,7 @@ namespace castor3d
 			, sdw::Vec3 const & direction
 			, sdw::Vec3 const & specular
 			, sdw::Float const & roughness
-			, Surface const & surface
+			, Surface surface
 			, OutputComponents & output )
 		{
 			m_computeCookTorrance( light
@@ -77,7 +78,7 @@ namespace castor3d
 			, sdw::Vec3 const & direction
 			, sdw::Vec3 const & albedo
 			, sdw::Float const & metallic
-			, Surface const & surface )
+			, Surface surface )
 		{
 			return m_computeCookTorranceDiffuse( light
 				, worldEye
@@ -91,7 +92,7 @@ namespace castor3d
 			, sdw::Vec3 const & worldEye
 			, sdw::Vec3 const & direction
 			, sdw::Vec3 const & specular
-			, Surface const & surface )
+			, Surface surface )
 		{
 			return m_computeCookTorranceDiffuse( light
 				, worldEye
@@ -199,7 +200,7 @@ namespace castor3d
 					, Vec3 const & f0
 					, Float const & metallic
 					, Float const & roughness
-					, Surface const & surface
+					, Surface surface
 					, OutputComponents & output )
 				{
 					// From https://learnopengl.com/#!PBR/Lighting
@@ -268,7 +269,7 @@ namespace castor3d
 					, Vec3 const & direction
 					, Vec3 const & f0
 					, Float const & metallic
-					, Surface const & surface )
+					, Surface surface )
 				{
 					// From https://learnopengl.com/#!PBR/Lighting
 					auto L = m_writer.declLocale( "L"

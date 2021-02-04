@@ -29,6 +29,7 @@
 #include "Castor3D/Shader/Shaders/GlslPhongReflection.hpp"
 #include "Castor3D/Shader/Shaders/GlslSpecularBrdfLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslSpecularPbrReflection.hpp"
+#include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp"
@@ -480,16 +481,14 @@ namespace castor3d
 				ambient *= occlusion;
 				auto colour = writer.declLocale( "colour"
 					, indirect.computeDiffuse( flags.sceneFlags
-						, inWorldPosition
-						, normal
+						, surface
 						, diffuse
 						, diffuse + reflected + refracted + emissive
 						, ambient
 						, occlusion ) );
 				colour += indirect.computeSpecular( flags.sceneFlags
 					, worldEye
-					, inWorldPosition
-					, normal
+					, surface
 					, ( 256.0_f - shininess ) / 256.0_f
 					, specular
 					, lightSpecular
@@ -743,8 +742,7 @@ namespace castor3d
 					else
 					{
 						// Reflection from background skybox.
-						ambient *= utils.computeMetallicIBL( normal
-							, inWorldPosition
+						ambient *= utils.computeMetallicIBL( surface
 							, albedo
 							, metalness
 							, roughness
@@ -786,8 +784,7 @@ namespace castor3d
 				else
 				{
 					// Reflection from background skybox.
-					ambient *= utils.computeMetallicIBL( normal
-						, inWorldPosition
+					ambient *= utils.computeMetallicIBL( surface
 						, albedo
 						, metalness
 						, roughness
@@ -818,16 +815,14 @@ namespace castor3d
 				ambient *= occlusion;
 				auto colour = writer.declLocale( "colour"
 					, indirect.computeDiffuse( flags.sceneFlags
-						, inWorldPosition
-						, normal
+						, surface
 						, lightDiffuse * albedo
 						, lightDiffuse * albedo + reflected + refracted + emissive
 						, ambient
 						, occlusion ) );
 				colour += indirect.computeSpecular( flags.sceneFlags
 					, worldEye
-					, inWorldPosition
-					, normal
+					, surface
 					, roughness
 					, mix( vec3( 0.04_f ), albedo, vec3( metalness ) )
 					, lightSpecular
@@ -1078,8 +1073,7 @@ namespace castor3d
 					else
 					{
 						// Reflection from background skybox.
-						ambient *= utils.computeSpecularIBL( normal
-							, inWorldPosition
+						ambient *= utils.computeSpecularIBL( surface
 							, albedo
 							, specular
 							, glossiness
@@ -1121,8 +1115,7 @@ namespace castor3d
 				else
 				{
 					// Reflection from background skybox.
-					ambient *= utils.computeSpecularIBL( normal
-						, inWorldPosition
+					ambient *= utils.computeSpecularIBL( surface
 						, albedo
 						, specular
 						, glossiness
@@ -1153,16 +1146,14 @@ namespace castor3d
 				ambient *= occlusion;
 				auto colour = writer.declLocale( "colour"
 					, indirect.computeDiffuse( flags.sceneFlags
-						, inWorldPosition
-						, normal
+						, surface
 						, lightDiffuse * albedo
 						, lightDiffuse * albedo + reflected + refracted + emissive
 						, ambient
 						, occlusion ) );
 				colour += indirect.computeSpecular( flags.sceneFlags
 					, worldEye
-					, inWorldPosition
-					, normal
+					, surface
 					, ( 1.0_f - glossiness )
 					, specular
 					, lightSpecular

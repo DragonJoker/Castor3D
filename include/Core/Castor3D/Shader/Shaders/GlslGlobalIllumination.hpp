@@ -30,23 +30,19 @@ namespace castor3d
 				, uint32_t setIndex = 0u );
 			C3D_API void declareLayeredLpv( uint32_t & bindingIndex
 				, uint32_t setIndex = 0u );
-			C3D_API sdw::Vec3 computeLPVRadiance( sdw::Vec3 wsPosition
-				, sdw::Vec3 wsNormal
+			C3D_API sdw::Vec3 computeLPVRadiance( Surface surface
 				, LpvGridData lpvGridData );
-			C3D_API sdw::Vec3 computeLLPVRadiance( sdw::Vec3 wsPosition
-				, sdw::Vec3 wsNormal
+			C3D_API sdw::Vec3 computeLLPVRadiance( Surface surface
 				, LayeredLpvGridData llpvGridData );
 			C3D_API sdw::Vec3 computeDiffuse( SceneFlags sceneFlags
-				, sdw::Vec3 wsPosition
-				, sdw::Vec3 wsNormal
+				, Surface surface
 				, sdw::Vec3 diffuse
 				, sdw::Vec3 allButAmbient
 				, sdw::Vec3 ambient
 				, sdw::Float occlusion );
 			C3D_API sdw::Vec3 computeSpecular( SceneFlags sceneFlags
 				, sdw::Vec3 wsCamera
-				, sdw::Vec3 wsPosition
-				, sdw::Vec3 wsNormal
+				, Surface surface
 				, sdw::Float roughness
 				, sdw::Vec3 f0
 				, sdw::Vec3 specular
@@ -58,12 +54,10 @@ namespace castor3d
 			sdw::Function< sdw::Vec4
 				, sdw::InVec3 > m_evalSH;
 			sdw::Function< sdw::Vec3
-				, sdw::InVec3
-				, sdw::InVec3
+				, InSurface
 				, InLpvGridData > m_computeLPVRadiance;
 			sdw::Function< sdw::Vec3
-				, sdw::InVec3
-				, sdw::InVec3
+				, InSurface
 				, InLayeredLpvGridData > m_computeLLPVRadiance;
 		};
 

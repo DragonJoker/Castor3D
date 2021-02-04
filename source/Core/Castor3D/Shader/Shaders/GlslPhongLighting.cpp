@@ -4,6 +4,7 @@
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
+#include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
@@ -34,7 +35,7 @@ namespace castor3d
 		void PhongLightingModel::computeCombined( Vec3 const & worldEye
 			, Float const & shininess
 			, Int const & receivesShadows
-			, Surface const & surface
+			, Surface surface
 			, OutputComponents & parentOutput )const
 		{
 			auto c3d_lightsCount = m_writer.getVariable< IVec4 >( "c3d_lightsCount" );
@@ -87,7 +88,7 @@ namespace castor3d
 			, Vec3 const & worldEye
 			, Float const & shininess
 			, Int const & receivesShadows
-			, Surface const & surface
+			, Surface surface
 			, OutputComponents & parentOutput )const
 		{
 			m_computeDirectional( light
@@ -102,7 +103,7 @@ namespace castor3d
 			, Vec3 const & worldEye
 			, Float const & shininess
 			, Int const & receivesShadows
-			, Surface const & surface
+			, Surface surface
 			, OutputComponents & parentOutput )const
 		{
 			m_computePoint( light
@@ -117,7 +118,7 @@ namespace castor3d
 			, Vec3 const & worldEye
 			, Float const & shininess
 			, Int const & receivesShadows
-			, Surface const & surface
+			, Surface surface
 			, OutputComponents & parentOutput )const
 		{
 			m_computeSpot( light
@@ -131,7 +132,7 @@ namespace castor3d
 		Vec3 PhongLightingModel::computeCombinedDiffuse( Vec3 const & worldEye
 			, Float const & shininess
 			, Int const & receivesShadows
-			, Surface const & surface )const
+			, Surface surface )const
 		{
 			auto c3d_lightsCount = m_writer.getVariable< IVec4 >( "c3d_lightsCount" );
 			auto result = m_writer.declLocale( "result"
@@ -184,7 +185,7 @@ namespace castor3d
 			, Vec3 const & worldEye
 			, Float const & shininess
 			, Int const & receivesShadows
-			, Surface const & surface )const
+			, Surface surface )const
 		{
 			return m_computeDirectionalDiffuse( light
 				, worldEye
@@ -197,7 +198,7 @@ namespace castor3d
 			, Vec3 const & worldEye
 			, Float const & shininess
 			, Int const & receivesShadows
-			, Surface const & surface )const
+			, Surface surface )const
 		{
 			return m_computePointDiffuse( light
 				, worldEye
@@ -210,7 +211,7 @@ namespace castor3d
 			, Vec3 const & worldEye
 			, Float const & shininess
 			, Int const & receivesShadows
-			, Surface const & surface )const
+			, Surface surface )const
 		{
 			return m_computeSpotDiffuse( light
 				, worldEye
@@ -409,7 +410,7 @@ namespace castor3d
 					, Vec3 const & worldEye
 					, Float const & shininess
 					, Int const & receivesShadows
-					, Surface const & surface
+					, Surface surface
 					, OutputComponents & parentOutput )
 				{
 					OutputComponents output
@@ -458,11 +459,10 @@ namespace castor3d
 										, light.m_lightBase.m_pcfShadowOffsets
 										, light.m_lightBase.m_vsmShadowVariance
 										, light.m_transforms[cascadeIndex]
-										, surface.worldPosition
+										, surface
 										, lightDirection
 										, cascadeIndex
-										, light.m_cascadeCount
-										, surface.worldNormal ) );
+										, light.m_cascadeCount ) );
 
 							IF( m_writer, cascadeIndex > 0_u )
 							{
@@ -473,11 +473,10 @@ namespace castor3d
 											, light.m_lightBase.m_pcfShadowOffsets
 											, light.m_lightBase.m_vsmShadowVariance
 											, light.m_transforms[cascadeIndex - 1u]
-											, surface.worldPosition
+											, surface
 											, -lightDirection
 											, cascadeIndex - 1u
-											, light.m_cascadeCount
-											, surface.worldNormal ) );
+											, light.m_cascadeCount ) );
 							}
 							FI;
 
@@ -502,8 +501,7 @@ namespace castor3d
 										, light.m_lightBase.m_rawShadowOffsets
 										, light.m_lightBase.m_pcfShadowOffsets
 										, light.m_lightBase.m_vsmShadowVariance
-										, surface.clipPosition
-										, surface.worldPosition
+										, surface
 										, worldEye
 										, light.m_transforms[cascadeIndex]
 										, light.m_direction
@@ -582,7 +580,7 @@ namespace castor3d
 					, Vec3 const & worldEye
 					, Float const & shininess
 					, Int const & receivesShadows
-					, Surface const & surface
+					, Surface surface
 					, OutputComponents & parentOutput )
 				{
 					OutputComponents output
@@ -611,9 +609,8 @@ namespace castor3d
 										, light.m_lightBase.m_rawShadowOffsets
 										, light.m_lightBase.m_pcfShadowOffsets
 										, light.m_lightBase.m_vsmShadowVariance
-										, surface.worldPosition
+										, surface
 										, light.m_position.xyz()
-										, surface.worldNormal
 										, light.m_lightBase.m_farPlane
 										, light.m_lightBase.m_index ) );
 							}
@@ -685,7 +682,7 @@ namespace castor3d
 					, Vec3 const & worldEye
 					, Float const & shininess
 					, Int const & receivesShadows
-					, Surface const & surface
+					, Surface surface
 					, OutputComponents & parentOutput )
 				{
 					OutputComponents output
@@ -731,9 +728,8 @@ namespace castor3d
 										, light.m_lightBase.m_pcfShadowOffsets
 										, light.m_lightBase.m_vsmShadowVariance
 										, light.m_transform
-										, surface.worldPosition
+										, surface
 										, lightToVertex
-										, surface.worldNormal
 										, light.m_lightBase.m_index ) );
 
 #endif
@@ -809,7 +805,7 @@ namespace castor3d
 					, Vec3 const & worldEye
 					, Vec3 const & lightDirection
 					, Float const & shininess
-					, Surface const & surface
+					, Surface surface
 					, OutputComponents & output )
 				{
 					// Diffuse term.
@@ -852,7 +848,7 @@ namespace castor3d
 			, Vec3 const & worldEye
 			, Vec3 const & lightDirection
 			, Float const & shininess
-			, Surface const & surface
+			, Surface surface
 			, OutputComponents & parentOutput )
 		{
 			m_computeLight( light
@@ -875,7 +871,7 @@ namespace castor3d
 					, Vec3 const & worldEye
 					, Float const & shininess
 					, Int const & receivesShadows
-					, Surface const & surface )
+					, Surface surface )
 				{
 					auto diffuse = m_writer.declLocale( "diffuse"
 						, vec3( 0.0_f ) );
@@ -920,11 +916,10 @@ namespace castor3d
 										, light.m_lightBase.m_pcfShadowOffsets
 										, light.m_lightBase.m_vsmShadowVariance
 										, light.m_transforms[cascadeIndex]
-										, surface.worldPosition
+										, surface
 										, lightDirection
 										, cascadeIndex
-										, light.m_cascadeCount
-										, surface.worldNormal ) );
+										, light.m_cascadeCount ) );
 
 							IF( m_writer, cascadeIndex > 0_u )
 							{
@@ -935,11 +930,10 @@ namespace castor3d
 											, light.m_lightBase.m_pcfShadowOffsets
 											, light.m_lightBase.m_vsmShadowVariance
 											, light.m_transforms[cascadeIndex - 1u]
-											, surface.worldPosition
+											, surface
 											, -lightDirection
 											, cascadeIndex - 1u
-											, light.m_cascadeCount
-											, surface.worldNormal ) );
+											, light.m_cascadeCount ) );
 							}
 							FI;
 
@@ -1012,7 +1006,7 @@ namespace castor3d
 					, Vec3 const & worldEye
 					, Float const & shininess
 					, Int const & receivesShadows
-					, Surface const & surface )
+					, Surface surface )
 				{
 					auto diffuse = m_writer.declLocale( "diffuse"
 						, vec3( 0.0_f ) );
@@ -1037,9 +1031,8 @@ namespace castor3d
 										, light.m_lightBase.m_rawShadowOffsets
 										, light.m_lightBase.m_pcfShadowOffsets
 										, light.m_lightBase.m_vsmShadowVariance
-										, surface.worldPosition
+										, surface
 										, light.m_position.xyz()
-										, surface.worldNormal
 										, light.m_lightBase.m_farPlane
 										, light.m_lightBase.m_index ) );
 							}
@@ -1101,7 +1094,7 @@ namespace castor3d
 					, Vec3 const & worldEye
 					, Float const & shininess
 					, Int const & receivesShadows
-					, Surface const & surface )
+					, Surface surface )
 				{
 					auto diffuse = m_writer.declLocale( "diffuse"
 						, vec3( 0.0_f ) );
@@ -1143,9 +1136,8 @@ namespace castor3d
 										, light.m_lightBase.m_pcfShadowOffsets
 										, light.m_lightBase.m_vsmShadowVariance
 										, light.m_transform
-										, surface.worldPosition
+										, surface
 										, lightToVertex
-										, surface.worldNormal
 										, light.m_lightBase.m_index ) );
 
 #endif
@@ -1210,7 +1202,7 @@ namespace castor3d
 					, Vec3 const & worldEye
 					, Vec3 const & lightDirection
 					, Float const & shininess
-					, Surface const & surface )
+					, Surface surface )
 				{
 					// Diffuse term.
 					auto diffuseFactor = m_writer.declLocale( "diffuseFactor"
@@ -1233,7 +1225,7 @@ namespace castor3d
 			, Vec3 const & worldEye
 			, Vec3 const & lightDirection
 			, Float const & shininess
-			, Surface const & surface )
+			, Surface surface )
 		{
 			return m_computeLightDiffuse( light
 				, worldEye

@@ -24,20 +24,17 @@ namespace castor3d
 			C3D_API sdw::Vec3 compute( shader::BaseMaterial const & material
 				, shader::DirectionalLight const & light
 				, sdw::Vec2 const & uv
-				, sdw::Vec3 const & position
-				, sdw::Vec3 const & normal
+				, Surface surface
 				, sdw::Float const & translucency )const;
 			C3D_API sdw::Vec3 compute( shader::BaseMaterial const & material
 				, shader::PointLight const & light
 				, sdw::Vec2 const & uv
-				, sdw::Vec3 const & position
-				, sdw::Vec3 const & normal
+				, Surface surface
 				, sdw::Float const & translucency )const;
 			C3D_API sdw::Vec3 compute( shader::BaseMaterial const & material
 				, shader::SpotLight const & light
 				, sdw::Vec2 const & uv
-				, sdw::Vec3 const & position
-				, sdw::Vec3 const & normal
+				, Surface surface
 				, sdw::Float const & translucency )const;
 
 		private:

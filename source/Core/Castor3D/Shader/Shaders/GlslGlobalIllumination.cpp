@@ -2,6 +2,7 @@
 
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumesModule.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
 
 #include <CastorUtils/Math/Angle.hpp>
@@ -83,8 +84,7 @@ namespace castor3d
 				, InVec3{ m_writer, "direction" } );
 
 			m_computeLPVRadiance = m_writer.implementFunction< sdw::Vec3 >( "computeLPVRadiance"
-				, [this]( Vec3 wsPosition
-					, Vec3 wsNormal
+				, [this]( Surface surface
 					, LpvGridData lpvGridData )
 				{
 					auto c3d_lpvAccumulatorR = m_writer.getVariable< SampledImage3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator" ) );
@@ -92,17 +92,16 @@ namespace castor3d
 					auto c3d_lpvAccumulatorB = m_writer.getVariable< SampledImage3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator" ) );
 
 					auto SHintensity = m_writer.declLocale( "SHintensity"
-						, m_evalSH( -wsNormal ) );
+						, m_evalSH( -surface.worldNormal ) );
 					auto lpvCellCoords = m_writer.declLocale( "lpvCellCoords"
-						, ( wsPosition - lpvGridData.minVolumeCorner ) / lpvGridData.cellSize / lpvGridData.gridSize );
+						, ( surface.worldPosition - lpvGridData.minVolumeCorner ) / lpvGridData.cellSize / lpvGridData.gridSize );
 					auto lpvIntensity = m_writer.declLocale( "lpvIntensity"
 						, vec3( dot( SHintensity, c3d_lpvAccumulatorR.sample( lpvCellCoords ) )
 							, dot( SHintensity, c3d_lpvAccumulatorG.sample( lpvCellCoords ) )
 							, dot( SHintensity, c3d_lpvAccumulatorB.sample( lpvCellCoords ) ) ) );
 					m_writer.returnStmt( max( lpvIntensity, vec3( 0.0_f ) ) );
 				}
-				, InVec3{ m_writer, "wsPosition" }
-				, InVec3{ m_writer, "wsNormal" }
+				, InSurface{ m_writer, "surface" }
 				, InLpvGridData{ m_writer, "lpvGridData" } );
 		}
 
@@ -142,8 +141,7 @@ namespace castor3d
 			, InVec3{ m_writer, "direction" } );
 
 			m_computeLLPVRadiance = m_writer.implementFunction< sdw::Vec3 >( "computeLPVRadiance"
-				, [this]( Vec3 wsPosition
-					, Vec3 wsNormal
+				, [this]( Surface surface
 					, LayeredLpvGridData llpvGridData )
 				{
 					auto c3d_lpvAccumulator1R = m_writer.getVariable< SampledImage3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator1" ) );
@@ -157,13 +155,13 @@ namespace castor3d
 					auto c3d_lpvAccumulator3B = m_writer.getVariable< SampledImage3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator3" ) );
 
 					auto SHintensity = m_writer.declLocale( "SHintensity"
-						, m_evalSH( -wsNormal ) );
+						, m_evalSH( -surface.worldNormal ) );
 					auto lpvCellCoords1 = m_writer.declLocale( "lpvCellCoords1"
-						, ( wsPosition - llpvGridData.allMinVolumeCorners[0].xyz() ) / llpvGridData.allCellSizes.x() / llpvGridData.gridSizes );
+						, ( surface.worldPosition - llpvGridData.allMinVolumeCorners[0].xyz() ) / llpvGridData.allCellSizes.x() / llpvGridData.gridSizes );
 					auto lpvCellCoords2 = m_writer.declLocale( "lpvCellCoords2"
-						, ( wsPosition - llpvGridData.allMinVolumeCorners[1].xyz() ) / llpvGridData.allCellSizes.y() / llpvGridData.gridSizes );
+						, ( surface.worldPosition - llpvGridData.allMinVolumeCorners[1].xyz() ) / llpvGridData.allCellSizes.y() / llpvGridData.gridSizes );
 					auto lpvCellCoords3 = m_writer.declLocale( "lpvCellCoords3"
-						, ( wsPosition - llpvGridData.allMinVolumeCorners[2].xyz() ) / llpvGridData.allCellSizes.z() / llpvGridData.gridSizes );
+						, ( surface.worldPosition - llpvGridData.allMinVolumeCorners[2].xyz() ) / llpvGridData.allCellSizes.z() / llpvGridData.gridSizes );
 
 					auto lpvIntensity1 = m_writer.declLocale( "lpvIntensity1"
 						, vec3( dot( SHintensity, c3d_lpvAccumulator1R.sample( lpvCellCoords1 ) )
@@ -180,34 +178,28 @@ namespace castor3d
 
 					m_writer.returnStmt( max( lpvIntensity1 + lpvIntensity2 + lpvIntensity3, vec3( 0.0_f ) ) );
 				}
-				, InVec3{ m_writer, "wsPosition" }
-				, InVec3{ m_writer, "wsNormal" }
+				, InSurface{ m_writer, "surface" }
 				, InLayeredLpvGridData{ m_writer, "llpvGridData" } );
 		}
 
-		sdw::Vec3 GlobalIllumination::computeLPVRadiance( sdw::Vec3 wsPosition
-			, sdw::Vec3 wsNormal
+		sdw::Vec3 GlobalIllumination::computeLPVRadiance( Surface surface
 			, LpvGridData lpvGridData )
 		{
 			CU_Require( m_computeLPVRadiance );
-			return m_computeLPVRadiance( wsPosition
-				, wsNormal
+			return m_computeLPVRadiance( surface
 				, lpvGridData );
 		}
 
-		sdw::Vec3 GlobalIllumination::computeLLPVRadiance( sdw::Vec3 wsPosition
-			, sdw::Vec3 wsNormal
+		sdw::Vec3 GlobalIllumination::computeLLPVRadiance( Surface surface
 			, LayeredLpvGridData llpvGridData )
 		{
 			CU_Require( m_computeLLPVRadiance );
-			return m_computeLLPVRadiance( wsPosition
-				, wsNormal
+			return m_computeLLPVRadiance( surface
 				, llpvGridData );
 		}
 
 		sdw::Vec3 GlobalIllumination::computeDiffuse( SceneFlags sceneFlags
-			, sdw::Vec3 wsPosition
-			, sdw::Vec3 wsNormal
+			, Surface surface
 			, sdw::Vec3 diffuse
 			, sdw::Vec3 allButAmbient
 			, sdw::Vec3 ambient
@@ -220,7 +212,7 @@ namespace castor3d
 				auto indirectDiffuse = m_writer.declLocale< sdw::Vec3 >( "indirectDiffuse"
 					, ambient );
 				auto vxlPosition = m_writer.declLocale( "vxlPosition"
-					, voxelData.worldToClip( wsPosition ) );
+					, voxelData.worldToClip( surface.worldPosition ) );
 				vxlPosition = clamp( abs( vxlPosition ), vec3( -1.0_f ), vec3( 1.0_f ) );
 				auto vxlBlend = m_writer.declLocale( "vxlBlend"
 					, 1.0_f - pow( max( vxlPosition.x(), max( vxlPosition.y(), vxlPosition.z() ) ), 4.0_f ) );
@@ -229,8 +221,7 @@ namespace castor3d
 				{
 					auto vxlRadiance = m_writer.declLocale( "vxlRadiance"
 						, m_utils.traceConeRadiance( mapVoxels
-							, wsPosition
-							, wsNormal
+							, surface
 							, voxelData ) );
 					indirectDiffuse *= mix( vec3( 0.0_f ), vxlRadiance.xyz(), vec3( vxlRadiance.a() * vxlBlend ) );
 				}
@@ -244,8 +235,7 @@ namespace castor3d
 				{
 					auto llpvGridData = m_writer.getVariable< LayeredLpvGridData >( "c3d_llpvGridData" );
 					auto indirect = m_writer.declLocale( "indirect"
-						, computeLLPVRadiance( wsPosition
-							, wsNormal
+						, computeLLPVRadiance( surface
 							, llpvGridData ) );
 					return ( ( indirect * diffuse * ambient / Float{ castor::Pi< float > } )
 						+ ( indirect * llpvGridData.indirectAttenuation / Float{ castor::Pi< float > } )
@@ -256,8 +246,7 @@ namespace castor3d
 				{
 					auto lpvGridData = m_writer.getVariable< LpvGridData >( "c3d_lpvGridData" );
 					auto indirect = m_writer.declLocale( "indirect"
-						, computeLPVRadiance( wsPosition
-							, wsNormal
+						, computeLPVRadiance( surface
 							, lpvGridData ) );
 					return ( ( indirect * diffuse * ambient / Float{ castor::Pi< float > } )
 						+ ( indirect * lpvGridData.indirectAttenuation / Float{ castor::Pi< float > } )
@@ -270,8 +259,7 @@ namespace castor3d
 
 		sdw::Vec3 GlobalIllumination::computeSpecular( SceneFlags sceneFlags
 			, sdw::Vec3 wsCamera
-			, sdw::Vec3 wsPosition
-			, sdw::Vec3 wsNormal
+			, Surface surface
 			, sdw::Float roughness
 			, sdw::Vec3 f0
 			, sdw::Vec3 specular
@@ -290,16 +278,15 @@ namespace castor3d
 				{
 					auto vxlReflection = m_writer.declLocale( "vxlReflection"
 						, m_utils.traceConeReflection( mapVoxels
-							, wsPosition
-							, wsNormal
-							, wsCamera - wsPosition
+							, surface
+							, wsCamera - surface.worldPosition
 							, roughness
 							, voxelData ) );
 					indirectSpecular = mix( vec3( 0.0_f ), vxlReflection.xyz(), vec3( vxlReflection.a() * vxlBlend ) );
 					auto V = m_writer.declLocale( "V"
-						, normalize( wsCamera - wsPosition ) );
+						, normalize( wsCamera - surface.worldPosition ) );
 					auto NdotV = m_writer.declLocale( "NdotV"
-						, max( 0.0_f, dot( wsNormal, V ) ) );
+						, max( 0.0_f, dot( surface.worldNormal, V ) ) );
 					indirectSpecular *= m_utils.fresnelSchlick( NdotV, f0, roughness ) * occlusion;
 				}
 				FI;

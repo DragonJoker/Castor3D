@@ -23,45 +23,45 @@ namespace castor3d
 			C3D_API void computeCombined( sdw::Vec3 const & worldEye
 				, sdw::Float const & shininess
 				, sdw::Int const & receivesShadows
-				, Surface const & surface
+				, Surface surface
 				, OutputComponents & output )const;
 			C3D_API void compute( DirectionalLight const & light
 				, sdw::Vec3 const & worldEye
 				, sdw::Float const & shininess
 				, sdw::Int const & receivesShadows
-				, Surface const & surface
+				, Surface surface
 				, OutputComponents & output )const;
 			C3D_API void compute( PointLight const & light
 				, sdw::Vec3 const & worldEye
 				, sdw::Float const & shininess
 				, sdw::Int const & receivesShadows
-				, Surface const & surface
+				, Surface surface
 				, OutputComponents & output )const;
 			C3D_API void compute( SpotLight const & light
 				, sdw::Vec3 const & worldEye
 				, sdw::Float const & shininess
 				, sdw::Int const & receivesShadows
-				, Surface const & surface
+				, Surface surface
 				, OutputComponents & output )const;
 			C3D_API sdw::Vec3 computeCombinedDiffuse( sdw::Vec3 const & worldEye
 				, sdw::Float const & shininess
 				, sdw::Int const & receivesShadows
-				, Surface const & surface )const;
+				, Surface surface )const;
 			C3D_API sdw::Vec3 computeDiffuse( DirectionalLight const & light
 				, sdw::Vec3 const & worldEye
 				, sdw::Float const & shininess
 				, sdw::Int const & receivesShadows
-				, Surface const & surface )const;
+				, Surface surface )const;
 			C3D_API sdw::Vec3 computeDiffuse( PointLight const & light
 				, sdw::Vec3 const & worldEye
 				, sdw::Float const & shininess
 				, sdw::Int const & receivesShadows
-				, Surface const & surface )const;
+				, Surface surface )const;
 			C3D_API sdw::Vec3 computeDiffuse( SpotLight const & light
 				, sdw::Vec3 const & worldEye
 				, sdw::Float const & shininess
 				, sdw::Int const & receivesShadows
-				, Surface const & surface )const;
+				, Surface surface )const;
 			C3D_API static std::shared_ptr< PhongLightingModel > createModel( sdw::ShaderWriter & writer
 				, Utils & utils
 				, SceneFlags sceneFlags
@@ -126,14 +126,14 @@ namespace castor3d
 				, sdw::Vec3 const & worldEye
 				, sdw::Vec3 const & lightDirection
 				, sdw::Float const & shininess
-				, Surface const & surface
+				, Surface surface
 				, OutputComponents & output );
 			void doDeclareComputeLight();
 			sdw::Vec3 doComputeLightDiffuse( Light const & light
 				, sdw::Vec3 const & worldEye
 				, sdw::Vec3 const & lightDirection
 				, sdw::Float const & shininess
-				, Surface const & surface );
+				, Surface surface );
 			void doDeclareComputeLightDiffuse();
 
 		public:

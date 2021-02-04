@@ -27,6 +27,7 @@
 #include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslSpecularBrdfLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
+#include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
@@ -884,18 +885,54 @@ namespace castor3d
 
 					auto vxlRadiance = writer.declLocale( "vxlRadiance"
 						, utils.traceConeRadiance( c3d_mapVoxels
-							, wsPosition
-							, wsNormal
+							, surface
 							, c3d_voxelData ) );
 					auto vxlReflection = writer.declLocale( "vxlReflection"
 						, utils.traceConeReflection( c3d_mapVoxels
-							, wsPosition
-							, wsNormal
+							, surface
 							, eye - wsPosition
 							, ( 256.0_f - shininess ) / 256.0_f
 							, c3d_voxelData ) );
-					pxl_indirectDiffuse = mix( vec3( 0.0_f ), vxlRadiance.xyz(), vec3( vxlRadiance.a() * vxlBlend ) );
-					pxl_indirectSpecular = mix( vec3( 0.0_f ), vxlReflection.xyz(), vec3( vxlReflection.a() * vxlBlend ) );
+					auto vxlOcclusion = writer.declLocale( "vxlOcclusion"
+						, 1.0_f );
+
+					IF( writer, c3d_voxelData.enableOcclusion )
+					{
+						switch ( lightType )
+						{
+						case LightType::eDirectional:
+							{
+								auto c3d_light = writer.getVariable< shader::DirectionalLight >( "c3d_light" );
+								vxlOcclusion = utils.traceConeOcclusion( c3d_mapVoxels
+									, surface
+									, c3d_light.m_direction
+									, c3d_voxelData );
+							}
+							break;
+						case LightType::ePoint:
+							{
+								auto c3d_light = writer.getVariable< shader::PointLight >( "c3d_light" );
+								vxlOcclusion = utils.traceConeOcclusion( c3d_mapVoxels
+									, surface
+									, c3d_light.m_position - wsPosition
+									, c3d_voxelData );
+							}
+							break;
+						case LightType::eSpot:
+							{
+								auto c3d_light = writer.getVariable< shader::SpotLight >( "c3d_light" );
+								vxlOcclusion = utils.traceConeOcclusion( c3d_mapVoxels
+									, surface
+									, c3d_light.m_position - wsPosition
+									, c3d_voxelData );
+							}
+							break;
+						}
+					}
+					FI;
+
+					pxl_indirectDiffuse = mix( vec3( 0.0_f ), vxlRadiance.xyz() * vxlOcclusion, vec3( vxlRadiance.a() * vxlBlend ) );
+					pxl_indirectSpecular = mix( vec3( 0.0_f ), vxlReflection.xyz() * vxlOcclusion, vec3( vxlReflection.a() * vxlBlend ) );
 				}
 				else
 				{
@@ -1180,13 +1217,11 @@ namespace castor3d
 
 					auto vxlRadiance = writer.declLocale( "vxlRadiance"
 						, utils.traceConeRadiance( c3d_mapVoxels
-							, wsPosition
-							, wsNormal
+							, surface
 							, c3d_voxelData ) );
 					auto vxlReflection = writer.declLocale( "vxlReflection"
 						, utils.traceConeReflection( c3d_mapVoxels
-							, wsPosition
-							, wsNormal
+							, surface
 							, eye - wsPosition
 							, roughness
 							, c3d_voxelData ) );
@@ -1201,8 +1236,7 @@ namespace castor3d
 							{
 								auto c3d_light = writer.getVariable< shader::DirectionalLight >( "c3d_light" );
 								vxlOcclusion = utils.traceConeOcclusion( c3d_mapVoxels
-									, wsPosition
-									, wsNormal
+									, surface
 									, c3d_light.m_direction
 									, c3d_voxelData );
 							}
@@ -1211,8 +1245,7 @@ namespace castor3d
 							{
 								auto c3d_light = writer.getVariable< shader::PointLight >( "c3d_light" );
 								vxlOcclusion = utils.traceConeOcclusion( c3d_mapVoxels
-									, wsPosition
-									, wsNormal
+									, surface
 									, c3d_light.m_position - wsPosition
 									, c3d_voxelData );
 							}
@@ -1221,8 +1254,7 @@ namespace castor3d
 							{
 								auto c3d_light = writer.getVariable< shader::SpotLight >( "c3d_light" );
 								vxlOcclusion = utils.traceConeOcclusion( c3d_mapVoxels
-									, wsPosition
-									, wsNormal
+									, surface
 									, c3d_light.m_position - wsPosition
 									, c3d_voxelData );
 							}
@@ -1448,18 +1480,54 @@ namespace castor3d
 
 					auto vxlRadiance = writer.declLocale( "vxlRadiance"
 						, utils.traceConeRadiance( c3d_mapVoxels
-							, wsPosition
-							, wsNormal
+							, surface
 							, c3d_voxelData ) );
 					auto vxlReflection = writer.declLocale( "vxlReflection"
 						, utils.traceConeReflection( c3d_mapVoxels
-							, wsPosition
-							, wsNormal
+							, surface
 							, eye - wsPosition
 							, 1.0_f - glossiness
 							, c3d_voxelData ) );
-					pxl_indirectDiffuse = mix( vec3( 0.0_f ), vxlRadiance.xyz(), vec3( vxlRadiance.a() * vxlBlend ) );
-					pxl_indirectSpecular = mix( vec3( 0.0_f ), vxlReflection.xyz(), vec3( vxlReflection.a() * vxlBlend ) );
+					auto vxlOcclusion = writer.declLocale( "vxlOcclusion"
+						, 1.0_f );
+
+					IF( writer, c3d_voxelData.enableOcclusion )
+					{
+						switch ( lightType )
+						{
+						case LightType::eDirectional:
+							{
+								auto c3d_light = writer.getVariable< shader::DirectionalLight >( "c3d_light" );
+								vxlOcclusion = utils.traceConeOcclusion( c3d_mapVoxels
+									, surface
+									, c3d_light.m_direction
+									, c3d_voxelData );
+							}
+							break;
+						case LightType::ePoint:
+							{
+								auto c3d_light = writer.getVariable< shader::PointLight >( "c3d_light" );
+								vxlOcclusion = utils.traceConeOcclusion( c3d_mapVoxels
+									, surface
+									, c3d_light.m_position - wsPosition
+									, c3d_voxelData );
+							}
+							break;
+						case LightType::eSpot:
+							{
+								auto c3d_light = writer.getVariable< shader::SpotLight >( "c3d_light" );
+								vxlOcclusion = utils.traceConeOcclusion( c3d_mapVoxels
+									, surface
+									, c3d_light.m_position - wsPosition
+									, c3d_voxelData );
+							}
+							break;
+						}
+					}
+					FI;
+
+					pxl_indirectDiffuse = mix( vec3( 0.0_f ), vxlRadiance.xyz() * vxlOcclusion, vec3( vxlRadiance.a() * vxlBlend ) );
+					pxl_indirectSpecular = mix( vec3( 0.0_f ), vxlReflection.xyz() * vxlOcclusion, vec3( vxlReflection.a() * vxlBlend ) );
 				}
 				else
 				{

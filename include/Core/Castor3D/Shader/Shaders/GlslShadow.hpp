@@ -45,35 +45,31 @@ namespace castor3d
 				, sdw::Vec2 const & pcfOffsets
 				, sdw::Vec2 const & vsmVariance
 				, sdw::Mat4 const & lightMatrix
-				, sdw::Vec3 const & worldSpacePosition
+				, Surface surface
 				, sdw::Vec3 const & lightDirection
 				, sdw::UInt const & cascadeIndex
-				, sdw::UInt const & maxCascade
-				, sdw::Vec3 const & normal )const;
+				, sdw::UInt const & maxCascade )const;
 			C3D_API sdw::Float computeSpot( sdw::Int const & shadowType
 				, sdw::Vec2 const & rawOffsets
 				, sdw::Vec2 const & pcfOffsets
 				, sdw::Vec2 const & vsmVariance
 				, sdw::Mat4 const & lightMatrix
-				, sdw::Vec3 const & worldSpacePosition
+				, Surface surface
 				, sdw::Vec3 const & lightDirection
-				, sdw::Vec3 const & normal
 				, sdw::Int const & index )const;
 			C3D_API sdw::Float computePoint( sdw::Int const & shadowType
 				, sdw::Vec2 const & rawOffsets
 				, sdw::Vec2 const & pcfOffsets
 				, sdw::Vec2 const & vsmVariance
-				, sdw::Vec3 const & worldSpacePosition
+				, Surface surface
 				, sdw::Vec3 const & lightDirection
-				, sdw::Vec3 const & normal
 				, sdw::Float const & farPlane
 				, sdw::Int const & index )const;
 			C3D_API void computeVolumetric( sdw::Int const & shadowType
 				, sdw::Vec2 const & rawOffsets
 				, sdw::Vec2 const & pcfOffsets
 				, sdw::Vec2 const & vsmVariance
-				, sdw::Vec2 const & clipSpacePosition
-				, sdw::Vec3 const & worldSpacePosition
+				, Surface surface
 				, sdw::Vec3 const & eyePosition
 				, sdw::Mat4 const & lightMatrix
 				, sdw::Vec3 const & lightDirection
@@ -155,19 +151,17 @@ namespace castor3d
 				, sdw::InVec2
 				, sdw::InVec2
 				, sdw::InMat4
-				, sdw::InVec3
+				, InSurface
 				, sdw::InVec3
 				, sdw::InUInt
-				, sdw::InUInt
-				, sdw::InVec3 > m_computeDirectional;
+				, sdw::InUInt > m_computeDirectional;
 			sdw::Function< sdw::Float
 				, sdw::InInt
 				, sdw::InVec2
 				, sdw::InVec2
 				, sdw::InVec2
 				, sdw::InMat4
-				, sdw::InVec3
-				, sdw::InVec3
+				, InSurface
 				, sdw::InVec3
 				, sdw::InInt > m_computeSpot;
 			sdw::Function< sdw::Float
@@ -175,8 +169,7 @@ namespace castor3d
 				, sdw::InVec2
 				, sdw::InVec2
 				, sdw::InVec2
-				, sdw::InVec3
-				, sdw::InVec3
+				, InSurface
 				, sdw::InVec3
 				, sdw::InFloat
 				, sdw::InInt > m_computePoint;
@@ -185,8 +178,7 @@ namespace castor3d
 				, sdw::InVec2
 				, sdw::InVec2
 				, sdw::InVec2
-				, sdw::InVec2
-				, sdw::InVec3
+				, InSurface
 				, sdw::InVec3
 				, sdw::InMat4
 				, sdw::InVec3

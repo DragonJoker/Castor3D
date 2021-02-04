@@ -4,8 +4,9 @@
 #include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMetallicBrdfLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslSpecularBrdfLighting.hpp"
-#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
+#include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
 #include <ShaderWriter/Source.hpp>
@@ -129,8 +130,7 @@ namespace castor3d
 		Vec3 SssTransmittance::compute( BaseMaterial const & material
 			, DirectionalLight const & light
 			, Vec2 const & uv
-			, Vec3 const & position
-			, Vec3 const & normal
+			, Surface surface
 			, Float const & translucency )const
 		{
 			auto ssstResult = m_writer.declLocale( "ssstResult"
@@ -146,7 +146,7 @@ namespace castor3d
 					* (Note that this can be done once for all the lights)
 					*/
 					auto shrinkedPos = m_writer.declLocale( "shrinkedPos"
-						, position - normal * 0.005_f );
+						, surface.worldPosition - surface.worldNormal * 0.005_f );
 					auto lightSpacePosition = m_writer.declLocale( "lightSpacePosition"
 						, m_shadow.getLightSpacePosition( light.m_transforms[0_u]
 							, shrinkedPos ) );
@@ -157,7 +157,7 @@ namespace castor3d
 						, material.m_transmittanceProfile
 						, material.m_gaussianWidth
 						, lightSpacePosition.xyz()
-						, normal
+						, surface.worldNormal
 						, translucency
 						, light.m_direction
 						, light.m_lightBase.m_farPlane
@@ -172,8 +172,7 @@ namespace castor3d
 		Vec3 SssTransmittance::compute( BaseMaterial const & material
 			, PointLight const & light
 			, Vec2 const & uv
-			, Vec3 const & position
-			, Vec3 const & normal
+			, Surface surface
 			, Float const & translucency )const
 		{
 			auto ssstResult = m_writer.declLocale( "ssstResult"
@@ -190,7 +189,7 @@ namespace castor3d
 					* (Note that this can be done once for all the lights)
 					*/
 					auto shrinkedPos = m_writer.declLocale( "shrinkedPos"
-						, position - normal * 0.005_f );
+						, surface.worldPosition - surface.worldNormal * 0.005_f );
 
 					auto vertexToLight = m_writer.declLocale( "vertexToLight"
 						, shrinkedPos - light.m_position );
@@ -207,7 +206,7 @@ namespace castor3d
 						, material.m_transmittanceProfile
 						, material.m_gaussianWidth
 						, lightSpacePosition
-						, normal
+						, surface.worldNormal
 						, translucency
 						, normalize( -vertexToLight )
 						, light.m_lightBase.m_farPlane
@@ -222,8 +221,7 @@ namespace castor3d
 		Vec3 SssTransmittance::compute( BaseMaterial const & material
 			, SpotLight const & light
 			, Vec2 const & uv
-			, Vec3 const & position
-			, Vec3 const & normal
+			, Surface surface
 			, Float const & translucency )const
 		{
 			auto ssstResult = m_writer.declLocale( "ssstResult"
@@ -236,7 +234,7 @@ namespace castor3d
 					auto c3d_mapDepthSpot = m_writer.getVariable< SampledImage2DRgba32 >( Shadow::MapNormalDepthSpot );
 					// We shrink the position inwards the surface to avoid artifacts.
 					auto shrinkedPos = m_writer.declLocale( "shrinkedPos"
-						, position - normal * 0.005_f );
+						, surface.worldPosition - surface.worldNormal * 0.005_f );
 					auto lightSpacePosition = m_writer.declLocale( "lightSpacePosition"
 						, m_shadow.getLightSpacePosition( light.m_transform
 							, shrinkedPos ) );
@@ -247,9 +245,9 @@ namespace castor3d
 						, material.m_transmittanceProfile
 						, material.m_gaussianWidth
 						, lightSpacePosition.xyz()
-						, normal
+						, surface.worldNormal
 						, translucency
-						, normalize( light.m_position - position )
+						, normalize( light.m_position - surface.worldPosition )
 						, light.m_lightBase.m_farPlane
 						, light.m_attenuation );
 				}

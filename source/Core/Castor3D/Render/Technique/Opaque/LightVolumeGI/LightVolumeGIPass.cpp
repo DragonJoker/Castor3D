@@ -34,6 +34,7 @@
 #include "Castor3D/Shader/Shaders/GlslMetallicBrdfLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
+#include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
@@ -138,14 +139,12 @@ namespace castor3d
 
 					auto data1 = writer.declLocale( "data1"
 						, c3d_mapData1.lod( texCoord, 0.0_f ) );
-					auto wsPosition = writer.declLocale( "wsPosition"
-						, utils.calcWSPosition( texCoord, depth, c3d_mtxInvViewProj ) );
-					auto wsNormal = writer.declLocale( "wsNormal"
+					auto surface = writer.declLocale< shader::Surface >( "surface" );
+					surface.create( utils.calcWSPosition( texCoord, depth, c3d_mtxInvViewProj )
 						, data1.xyz() );
 
 					pxl_lpvGI = c3d_lpvGridData.indirectAttenuation / Float{ castor::Pi< float > }
-						* lpvGI.computeLPVRadiance( wsPosition
-							, wsNormal
+						* lpvGI.computeLPVRadiance( surface
 							, c3d_lpvGridData );
 				} );
 

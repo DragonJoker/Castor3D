@@ -22,6 +22,7 @@
 #include "Castor3D/Shader/Shaders/GlslPhongReflection.hpp"
 #include "Castor3D/Shader/Shaders/GlslSpecularPbrReflection.hpp"
 #include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
+#include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
@@ -209,10 +210,6 @@ namespace castor3d
 						, materials.getMaterial( materialId ) );
 					auto depth = writer.declLocale( "depth"
 						, c3d_mapDepth.lod( vtx_texture, 0.0_f ).x() );
-					auto position = writer.declLocale( "position"
-						, utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj ) );
-					auto normal = writer.declLocale( "normal"
-						, normalize( data1.xyz() ) );
 					auto diffuse = writer.declLocale( "diffuse"
 						, data2.xyz() );
 					auto shininess = writer.declLocale( "shininess"
@@ -238,13 +235,16 @@ namespace castor3d
 						, c3d_mapLightIndirectSpecular.lod( vtx_texture, 0.0_f ).rgb()
 						, hasSpecularGi );
 					lightSpecular *= specular;
+					auto surface = writer.declLocale< shader::Surface >( "surface" );
+					surface.create( utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj )
+						, data1.rgb() );
 
 					if ( hasSpecularGi )
 					{
 						auto V = writer.declLocale( "V"
-							, normalize( c3d_cameraPosition.xyz() - position ) );
+							, normalize( c3d_cameraPosition.xyz() - surface.worldPosition ) );
 						auto NdotV = writer.declLocale( "NdotV"
-							, max( 0.0_f, dot( normal, V ) ) );
+							, max( 0.0_f, dot( surface.worldNormal, V ) ) );
 						lightIndirectSpecular *= utils.fresnelSchlick( NdotV, specular, ( 256.0_f - shininess ) / 256.0_f );
 					}
 
@@ -261,7 +261,7 @@ namespace castor3d
 					IF( writer, envMapIndex > 0_i && ( reflection != 0_i || refraction != 0_i ) )
 					{
 						auto incident = writer.declLocale( "incident"
-							, reflections.computeIncident( position, c3d_cameraPosition.xyz() ) );
+							, reflections.computeIncident( surface.worldPosition, c3d_cameraPosition.xyz() ) );
 						envMapIndex = envMapIndex - 1_i;
 						ambient = vec3( 0.0_f );
 
@@ -278,7 +278,7 @@ namespace castor3d
 								IF( writer, envMapIndex == Int( i ) )
 								{
 									reflections.computeReflRefr( incident
-										, normal
+										, surface.worldNormal
 										, c3d_mapEnvironment[Int( i )]
 										, material.m_refractionRatio
 										, specular
@@ -297,7 +297,7 @@ namespace castor3d
 								IF( writer, envMapIndex == Int( i ) )
 								{
 									reflected = reflections.computeRefl( incident
-										, normal
+										, surface.worldNormal
 										, c3d_mapEnvironment[Int( i )]
 										, shininess
 										, specular );
@@ -312,7 +312,7 @@ namespace castor3d
 								IF( writer, envMapIndex == Int( i ) )
 								{
 									reflections.computeRefr( incident
-										, normal
+										, surface.worldNormal
 										, c3d_mapEnvironment[Int( i )]
 										, material.m_refractionRatio
 										, material.m_transmission * diffuse
@@ -347,13 +347,13 @@ namespace castor3d
 
 					if ( fogType != FogType::eDisabled )
 					{
-						position = utils.calcVSPosition( vtx_texture
+						surface.viewPosition = utils.calcVSPosition( vtx_texture
 							, c3d_mapDepth.lod( vtx_texture, 0.0_f ).x()
 							, c3d_mtxInvProj );
 						pxl_fragColor = fog.apply( vec4( utils.removeGamma( c3d_gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
 							, pxl_fragColor
-							, length( position )
-							, position.z()
+							, length( surface.viewPosition )
+							, surface.viewPosition.z()
 							, c3d_fogInfo
 							, c3d_cameraPosition );
 					}
@@ -460,8 +460,6 @@ namespace castor3d
 						, c3d_mapData3.lod( fixedTexCoord, 0.0_f ) );
 					auto data4 = writer.declLocale( "data4"
 						, c3d_mapData4.lod( fixedTexCoord, 0.0_f ) );
-					auto normal = writer.declLocale( "normal"
-						, data1.rgb() );
 					auto albedo = writer.declLocale( "albedo"
 						, data2.rgb() );
 					auto roughness = writer.declLocale( "roughness"
@@ -474,8 +472,6 @@ namespace castor3d
 						, data4.rgb() );
 					auto depth = writer.declLocale( "depth"
 						, c3d_mapDepth.lod( vtx_texture, 0.0_f ).x() );
-					auto position = writer.declLocale( "position"
-						, utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj ) );
 					auto ambient = writer.declLocale( "ambient"
 						, c3d_ambientLight.xyz() );
 					auto lightDiffuse = writer.declLocale( "lightDiffuse"
@@ -488,13 +484,16 @@ namespace castor3d
 					auto lightIndirectSpecular = writer.declLocale( "lightIndirectSpecular"
 						, c3d_mapLightIndirectSpecular.lod( vtx_texture, 0.0_f ).rgb()
 						, hasSpecularGi );
+					auto surface = writer.declLocale< shader::Surface >( "surface" );
+					surface.create( utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj )
+						, data1.rgb() );
 
 					if ( hasSpecularGi )
 					{
 						auto V = writer.declLocale( "V"
-							, normalize( c3d_cameraPosition.xyz() - position ) );
+							, normalize( c3d_cameraPosition.xyz() - surface.worldPosition ) );
 						auto NdotV = writer.declLocale( "NdotV"
-							, max( 0.0_f, dot( normal, V ) ) );
+							, max( 0.0_f, dot( surface.worldNormal, V ) ) );
 						lightIndirectSpecular *= utils.fresnelSchlick( NdotV, mix( vec3( 0.04_f ), albedo, vec3( metalness ) ), roughness );
 					}
 
@@ -519,7 +518,7 @@ namespace castor3d
 						FI;
 
 						auto incident = writer.declLocale( "incident"
-							, normalize( position - c3d_cameraPosition.xyz() ) );
+							, normalize( surface.worldPosition - c3d_cameraPosition.xyz() ) );
 						auto ratio = writer.declLocale( "ratio"
 							, material.m_refractionRatio );
 
@@ -533,7 +532,7 @@ namespace castor3d
 								{
 									// Reflection from environment map.
 									reflected = reflections.computeRefl( incident
-										, normal
+										, surface.worldNormal
 										, c3d_mapEnvironment[Int( i )]
 										, albedo
 										, metalness
@@ -550,7 +549,7 @@ namespace castor3d
 									{
 										// Refraction from environment map.
 										reflections.computeRefrEnvMap( incident
-											, normal
+											, surface.worldNormal
 											, c3d_mapEnvironment[Int( i )]
 											, material.m_refractionRatio
 											, material.m_transmission * albedo
@@ -565,7 +564,7 @@ namespace castor3d
 							{
 								// Refraction from background skybox.
 								reflections.computeRefrSkybox( incident
-									, normal
+									, surface.worldNormal
 									, c3d_mapPrefiltered
 									, material.m_refractionRatio
 									, material.m_transmission * albedo
@@ -578,8 +577,7 @@ namespace castor3d
 						ELSE
 						{
 							// Reflection from background skybox.
-							ambient *= utils.computeMetallicIBL( normal
-								, position
+							ambient *= utils.computeMetallicIBL( surface
 								, albedo
 								, metalness
 								, roughness
@@ -596,7 +594,7 @@ namespace castor3d
 									{
 										// Refraction from environment map.
 										reflections.computeRefrEnvMap( incident
-											, normal
+											, surface.worldNormal
 											, c3d_mapEnvironment[Int( i )]
 											, material.m_refractionRatio
 											, material.m_transmission * albedo
@@ -611,7 +609,7 @@ namespace castor3d
 							{
 								// Refraction from background skybox.
 								reflections.computeRefrSkybox( incident
-									, normal
+									, surface.worldNormal
 									, c3d_mapPrefiltered
 									, material.m_refractionRatio
 									, material.m_transmission * albedo
@@ -626,8 +624,7 @@ namespace castor3d
 					ELSE
 					{
 						// Reflection from background skybox.
-						ambient *= utils.computeMetallicIBL( normal
-							, position
+						ambient *= utils.computeMetallicIBL( surface
 							, albedo
 							, metalness
 							, roughness
@@ -642,9 +639,9 @@ namespace castor3d
 						{
 							// Refraction from background skybox.
 							auto incident = writer.declLocale( "incident"
-								, normalize( position - c3d_cameraPosition.xyz() ) );
+								, normalize( surface.worldPosition - c3d_cameraPosition.xyz() ) );
 							reflections.computeRefrSkybox( incident
-								, normal
+								, surface.worldNormal
 								, c3d_mapPrefiltered
 								, material.m_refractionRatio
 								, material.m_transmission * albedo
@@ -669,13 +666,13 @@ namespace castor3d
 
 					if ( fogType != FogType::eDisabled )
 					{
-						position = utils.calcVSPosition( fixedTexCoord
+						surface.viewPosition = utils.calcVSPosition( fixedTexCoord
 							, c3d_mapDepth.lod( fixedTexCoord, 0.0_f ).x()
 							, c3d_mtxInvProj );
 						pxl_fragColor = fog.apply( vec4( utils.removeGamma( c3d_gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
 							, pxl_fragColor
-							, length( position )
-							, position.z()
+							, length( surface.viewPosition )
+							, surface.viewPosition.z()
 							, c3d_fogInfo
 							, c3d_cameraPosition );
 					}
@@ -782,8 +779,6 @@ namespace castor3d
 						, c3d_mapData3.lod( fixedTexCoord, 0.0_f ) );
 					auto data4 = writer.declLocale( "data4"
 						, c3d_mapData4.lod( fixedTexCoord, 0.0_f ) );
-					auto normal = writer.declLocale( "normal"
-						, data1.xyz() );
 					auto diffuse = writer.declLocale( "diffuse"
 						, data2.xyz() );
 					auto glossiness = writer.declLocale( "glossiness"
@@ -796,8 +791,6 @@ namespace castor3d
 						, data4.xyz() );
 					auto depth = writer.declLocale( "depth"
 						, c3d_mapDepth.lod( vtx_texture, 0.0_f ).x() );
-					auto position = writer.declLocale( "position"
-						, utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj ) );
 					auto ambient = writer.declLocale( "ambient"
 						, c3d_ambientLight.xyz() );
 					auto lightDiffuse = writer.declLocale( "lightDiffuse"
@@ -810,13 +803,16 @@ namespace castor3d
 					auto lightIndirectSpecular = writer.declLocale( "lightIndirectSpecular"
 						, c3d_mapLightIndirectSpecular.lod( vtx_texture, 0.0_f ).rgb()
 						, hasSpecularGi );
+					auto surface = writer.declLocale< shader::Surface >( "surface" );
+					surface.create( utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj )
+						, data1.rgb() );
 
 					if ( hasSpecularGi )
 					{
 						auto V = writer.declLocale( "V"
-							, normalize( c3d_cameraPosition.xyz() - position ) );
+							, normalize( c3d_cameraPosition.xyz() - surface.worldPosition ) );
 						auto NdotV = writer.declLocale( "NdotV"
-							, max( 0.0_f, dot( normal, V ) ) );
+							, max( 0.0_f, dot( surface.worldNormal, V ) ) );
 						lightIndirectSpecular *= utils.fresnelSchlick( NdotV, specular, 1.0_f - glossiness );
 					}
 
@@ -841,7 +837,7 @@ namespace castor3d
 						FI;
 
 						auto incident = writer.declLocale( "incident"
-							, normalize( position - c3d_cameraPosition.xyz() ) );
+							, normalize( surface.worldPosition - c3d_cameraPosition.xyz() ) );
 						auto ratio = writer.declLocale( "ratio"
 							, material.m_refractionRatio );
 
@@ -855,7 +851,7 @@ namespace castor3d
 								{
 									// Reflection from environment map.
 									reflected = reflections.computeRefl( incident
-										, normal
+										, surface.worldNormal
 										, c3d_mapEnvironment[Int( i )]
 										, specular
 										, glossiness );
@@ -871,7 +867,7 @@ namespace castor3d
 									{
 										// Refraction from environment map.
 										reflections.computeRefrEnvMap( incident
-											, normal
+											, surface.worldNormal
 											, c3d_mapEnvironment[Int( i )]
 											, material.m_refractionRatio
 											, material.m_transmission * diffuse
@@ -886,7 +882,7 @@ namespace castor3d
 							{
 								// Refraction from background skybox.
 								reflections.computeRefrSkybox( incident
-									, normal
+									, surface.worldNormal
 									, c3d_mapPrefiltered
 									, material.m_refractionRatio
 									, material.m_transmission * diffuse
@@ -899,8 +895,7 @@ namespace castor3d
 						ELSE
 						{
 							// Reflection from background skybox.
-							ambient *= utils.computeSpecularIBL( normal
-								, position
+							ambient *= utils.computeSpecularIBL( surface
 								, diffuse
 								, specular
 								, glossiness
@@ -917,7 +912,7 @@ namespace castor3d
 									{
 										// Refraction from environment map.
 										reflections.computeRefrEnvMap( incident
-											, normal
+											, surface.worldNormal
 											, c3d_mapEnvironment[Int( i )]
 											, material.m_refractionRatio
 											, material.m_transmission * diffuse
@@ -932,7 +927,7 @@ namespace castor3d
 							{
 								// Refraction from background skybox.
 								reflections.computeRefrSkybox( incident
-									, normal
+									, surface.worldNormal
 									, c3d_mapPrefiltered
 									, material.m_refractionRatio
 									, material.m_transmission * diffuse
@@ -947,8 +942,7 @@ namespace castor3d
 					ELSE
 					{
 						// Reflection from background skybox.
-						ambient *= utils.computeSpecularIBL( normal
-							, position
+						ambient *= utils.computeSpecularIBL( surface
 							, diffuse
 							, specular
 							, glossiness
@@ -963,9 +957,9 @@ namespace castor3d
 						{
 							// Refraction from background skybox.
 							auto incident = writer.declLocale( "incident"
-								, normalize( position - c3d_cameraPosition.xyz() ) );
+								, normalize( surface.worldPosition - c3d_cameraPosition.xyz() ) );
 							reflections.computeRefrSkybox( incident
-								, normal
+								, surface.worldNormal
 								, c3d_mapPrefiltered
 								, material.m_refractionRatio
 								, material.m_transmission * diffuse
@@ -990,13 +984,13 @@ namespace castor3d
 
 					if ( fogType != FogType::eDisabled )
 					{
-						position = utils.calcVSPosition( fixedTexCoord
+						surface.viewPosition = utils.calcVSPosition( fixedTexCoord
 							, c3d_mapDepth.lod( fixedTexCoord, 0.0_f ).x()
 							, c3d_mtxInvProj );
 						pxl_fragColor = fog.apply( vec4( utils.removeGamma( c3d_gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
 							, pxl_fragColor
-							, length( position )
-							, position.z()
+							, length( surface.viewPosition )
+							, surface.viewPosition.z()
 							, c3d_fogInfo
 							, c3d_cameraPosition );
 					}

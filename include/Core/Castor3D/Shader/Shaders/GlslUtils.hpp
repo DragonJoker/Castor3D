@@ -86,8 +86,7 @@ namespace castor3d::shader
 		C3D_API static sdw::Mat3 getTBN( sdw::Vec3 const & normal
 			, sdw::Vec3 const & tangent
 			, sdw::Vec3 const & bitangent );
-		C3D_API sdw::Vec3 computeMetallicIBL( sdw::Vec3 const & normal
-			, sdw::Vec3 const & position
+		C3D_API sdw::Vec3 computeMetallicIBL( Surface surface
 			, sdw::Vec3 const & albedo
 			, sdw::Float const & metalness
 			, sdw::Float const & roughness
@@ -95,8 +94,7 @@ namespace castor3d::shader
 			, sdw::SampledImageCubeRgba32 const & irradiance
 			, sdw::SampledImageCubeRgba32 const & prefiltered
 			, sdw::SampledImage2DRgba32 const & brdf )const;
-		C3D_API sdw::Vec3 computeSpecularIBL( sdw::Vec3 const & normal
-			, sdw::Vec3 const & position
+		C3D_API sdw::Vec3 computeSpecularIBL( Surface surface
 			, sdw::Vec3 const & diffuse
 			, sdw::Vec3 const & specular
 			, sdw::Float const & glossiness
@@ -302,18 +300,15 @@ namespace castor3d::shader
 		C3D_API sdw::UVec3 unflatten( sdw::UInt const & p
 			, sdw::UVec3 const & dim )const;
 		C3D_API sdw::Vec4 traceConeRadiance( sdw::SampledImage3DRgba32 const & voxels
-			, sdw::Vec3 const & wsPosition
-			, sdw::Vec3 const & wsNormal
+			, Surface surface
 			, VoxelData const & voxelData )const;
 		C3D_API sdw::Vec4 traceConeReflection( sdw::SampledImage3DRgba32 const & voxels
-			, sdw::Vec3 const & wsPosition
-			, sdw::Vec3 const & wsNormal
+			, Surface surface
 			, sdw::Vec3 const & wsViewVector
 			, sdw::Float const & roughness
 			, VoxelData const & voxelData )const;
 		C3D_API sdw::Float traceConeOcclusion( sdw::SampledImage3DRgba32 const & voxels
-			, sdw::Vec3 const & wsPosition
-			, sdw::Vec3 const & wsNormal
+			, Surface surface
 			, sdw::Vec3 const & wsConeDirection
 			, VoxelData const & voxelData )const;
 
@@ -359,8 +354,7 @@ namespace castor3d::shader
 			, sdw::InVec3
 			, sdw::InFloat > m_fresnelSchlick;
 		sdw::Function< sdw::Vec3
-			, sdw::InVec3
-			, sdw::InVec3
+			, InSurface
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InFloat
@@ -427,27 +421,23 @@ namespace castor3d::shader
 			, sdw::InUVec3 > m_unflatten3D;
 		sdw::Function< sdw::Vec4
 			, sdw::InSampledImage3DRgba32
-			, sdw::InVec3
-			, sdw::InVec3
+			, InSurface
 			, sdw::InVec3
 			, sdw::InFloat
 			, InVoxelData > m_traceCone;
 		sdw::Function< sdw::Vec4
 			, sdw::InSampledImage3DRgba32
-			, sdw::InVec3
-			, sdw::InVec3
+			, InSurface
 			, InVoxelData > m_traceConeRadiance;
 		sdw::Function< sdw::Vec4
 			, sdw::InSampledImage3DRgba32
-			, sdw::InVec3
-			, sdw::InVec3
+			, InSurface
 			, sdw::InVec3
 			, sdw::InFloat
 			, InVoxelData > m_traceConeReflection;
 		sdw::Function< sdw::Float
 			, sdw::InSampledImage3DRgba32
-			, sdw::InVec3
-			, sdw::InVec3
+			, InSurface
 			, sdw::InVec3
 			, InVoxelData > m_traceConeOcclusion;
 	};
