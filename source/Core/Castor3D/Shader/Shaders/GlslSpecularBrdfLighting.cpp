@@ -478,12 +478,9 @@ namespace castor3d
 								cascadeIndex = m_writer.cast< UInt >( cascadeFactors.x() );
 								shadowFactor = cascadeFactors.y()
 									* max( 1.0_f - m_writer.cast< Float >( receivesShadows )
-										, m_shadowModel->computeDirectional( light.m_lightBase.m_shadowType
-											, light.m_lightBase.m_rawShadowOffsets
-											, light.m_lightBase.m_pcfShadowOffsets
-											, light.m_lightBase.m_vsmShadowVariance
-											, light.m_transforms[cascadeIndex]
+										, m_shadowModel->computeDirectional( light.m_lightBase
 											, surface
+											, light.m_transforms[cascadeIndex]
 											, -lightDirection
 											, cascadeIndex
 											, light.m_cascadeCount ) );
@@ -492,12 +489,9 @@ namespace castor3d
 								{
 									shadowFactor += cascadeFactors.z()
 										* max( 1.0_f - m_writer.cast< Float >( receivesShadows )
-											, m_shadowModel->computeDirectional( light.m_lightBase.m_shadowType
-												, light.m_lightBase.m_rawShadowOffsets
-												, light.m_lightBase.m_pcfShadowOffsets
-												, light.m_lightBase.m_vsmShadowVariance
-												, light.m_transforms[cascadeIndex - 1u]
+											, m_shadowModel->computeDirectional( light.m_lightBase
 												, surface
+												, light.m_transforms[cascadeIndex - 1u]
 												, -lightDirection
 												, cascadeIndex - 1u
 												, light.m_cascadeCount ) );
@@ -524,20 +518,13 @@ namespace castor3d
 							{
 								IF( m_writer, light.m_lightBase.m_volumetricSteps != 0_u )
 								{
-									m_shadowModel->computeVolumetric( light.m_lightBase.m_shadowType
-										, light.m_lightBase.m_rawShadowOffsets
-										, light.m_lightBase.m_pcfShadowOffsets
-										, light.m_lightBase.m_vsmShadowVariance
+									m_shadowModel->computeVolumetric( light.m_lightBase
 										, surface
 										, worldEye
 										, light.m_transforms[cascadeIndex]
 										, light.m_direction
 										, cascadeIndex
 										, light.m_cascadeCount
-										, light.m_lightBase.m_colour
-										, light.m_lightBase.m_intensity
-										, light.m_lightBase.m_volumetricSteps
-										, light.m_lightBase.m_volumetricScattering
 										, output );
 								}
 								FI;
@@ -637,14 +624,9 @@ namespace castor3d
 							IF( m_writer, receivesShadows != 0_i )
 							{
 								shadowFactor = max( 1.0_f - m_writer.cast< Float >( receivesShadows )
-									, m_shadowModel->computePoint( light.m_lightBase.m_shadowType
-										, light.m_lightBase.m_rawShadowOffsets
-										, light.m_lightBase.m_pcfShadowOffsets
-										, light.m_lightBase.m_vsmShadowVariance
+									, m_shadowModel->computePoint( light.m_lightBase
 										, surface
-										, light.m_position.xyz()
-										, light.m_lightBase.m_farPlane
-										, light.m_lightBase.m_index ) );
+										, light.m_position.xyz() ) );
 							}
 							FI;
 
@@ -739,14 +721,10 @@ namespace castor3d
 							auto shadowFactor = m_writer.declLocale( "shadowFactor"
 								, 1.0_f - step( spotFactor, light.m_cutOff ) );
 							shadowFactor *= max( 1.0_f - m_writer.cast< Float >( receivesShadows )
-								, m_shadowModel->computeSpot( light.m_lightBase.m_shadowType
-									, light.m_lightBase.m_rawShadowOffsets
-									, light.m_lightBase.m_pcfShadowOffsets
-									, light.m_lightBase.m_vsmShadowVariance
-									, light.m_transform
+								, m_shadowModel->computeSpot( light.m_lightBase
 									, surface
-									, -lightToVertex
-									, light.m_lightBase.m_index ) );
+									, light.m_transform
+									, -lightToVertex ) );
 
 							IF( m_writer, shadowFactor )
 							{
@@ -865,12 +843,9 @@ namespace castor3d
 								cascadeIndex = m_writer.cast< UInt >( cascadeFactors.x() );
 								shadowFactor = cascadeFactors.y()
 									* max( 1.0_f - m_writer.cast< Float >( receivesShadows )
-										, m_shadowModel->computeDirectional( light.m_lightBase.m_shadowType
-											, light.m_lightBase.m_rawShadowOffsets
-											, light.m_lightBase.m_pcfShadowOffsets
-											, light.m_lightBase.m_vsmShadowVariance
-											, light.m_transforms[cascadeIndex]
+										, m_shadowModel->computeDirectional( light.m_lightBase
 											, surface
+											, light.m_transforms[cascadeIndex]
 											, -lightDirection
 											, cascadeIndex
 											, light.m_cascadeCount ) );
@@ -879,12 +854,9 @@ namespace castor3d
 								{
 									shadowFactor += cascadeFactors.z()
 										* max( 1.0_f - m_writer.cast< Float >( receivesShadows )
-											, m_shadowModel->computeDirectional( light.m_lightBase.m_shadowType
-												, light.m_lightBase.m_rawShadowOffsets
-												, light.m_lightBase.m_pcfShadowOffsets
-												, light.m_lightBase.m_vsmShadowVariance
-												, light.m_transforms[cascadeIndex - 1u]
+											, m_shadowModel->computeDirectional( light.m_lightBase
 												, surface
+												, light.m_transforms[cascadeIndex - 1u]
 												, -lightDirection
 												, cascadeIndex - 1u
 												, light.m_cascadeCount ) );
@@ -986,14 +958,9 @@ namespace castor3d
 							IF( m_writer, receivesShadows != 0_i )
 							{
 								shadowFactor = max( 1.0_f - m_writer.cast< Float >( receivesShadows )
-									, m_shadowModel->computePoint( light.m_lightBase.m_shadowType
-										, light.m_lightBase.m_rawShadowOffsets
-										, light.m_lightBase.m_pcfShadowOffsets
-										, light.m_lightBase.m_vsmShadowVariance
+									, m_shadowModel->computePoint( light.m_lightBase
 										, surface
-										, light.m_position.xyz()
-										, light.m_lightBase.m_farPlane
-										, light.m_lightBase.m_index ) );
+										, light.m_position.xyz() ) );
 							}
 							FI;
 
@@ -1071,14 +1038,10 @@ namespace castor3d
 							auto shadowFactor = m_writer.declLocale( "shadowFactor"
 								, 1.0_f - step( spotFactor, light.m_cutOff ) );
 							shadowFactor *= max( 1.0_f - m_writer.cast< Float >( receivesShadows )
-								, m_shadowModel->computeSpot( light.m_lightBase.m_shadowType
-									, light.m_lightBase.m_rawShadowOffsets
-									, light.m_lightBase.m_pcfShadowOffsets
-									, light.m_lightBase.m_vsmShadowVariance
-									, light.m_transform
+								, m_shadowModel->computeSpot( light.m_lightBase
 									, surface
-									, -lightToVertex
-									, light.m_lightBase.m_index ) );
+									, light.m_transform
+									, -lightToVertex ) );
 
 							IF( m_writer, shadowFactor )
 							{

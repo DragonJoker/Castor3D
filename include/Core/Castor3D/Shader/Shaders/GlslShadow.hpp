@@ -40,45 +40,26 @@ namespace castor3d
 			C3D_API void declareDirectional( uint32_t & index );
 			C3D_API void declarePoint( uint32_t & index );
 			C3D_API void declareSpot( uint32_t & index );
-			C3D_API sdw::Float computeDirectional( sdw::Int const & shadowType
-				, sdw::Vec2 const & rawOffsets
-				, sdw::Vec2 const & pcfOffsets
-				, sdw::Vec2 const & vsmVariance
-				, sdw::Mat4 const & lightMatrix
+			C3D_API sdw::Float computeDirectional( shader::Light light
 				, Surface surface
+				, sdw::Mat4 const & lightMatrix
 				, sdw::Vec3 const & lightDirection
 				, sdw::UInt const & cascadeIndex
 				, sdw::UInt const & maxCascade )const;
-			C3D_API sdw::Float computeSpot( sdw::Int const & shadowType
-				, sdw::Vec2 const & rawOffsets
-				, sdw::Vec2 const & pcfOffsets
-				, sdw::Vec2 const & vsmVariance
+			C3D_API sdw::Float computeSpot( shader::Light light
+				, Surface surface
 				, sdw::Mat4 const & lightMatrix
+				, sdw::Vec3 const & lightDirection )const;
+			C3D_API sdw::Float computePoint( shader::Light light
 				, Surface surface
-				, sdw::Vec3 const & lightDirection
-				, sdw::Int const & index )const;
-			C3D_API sdw::Float computePoint( sdw::Int const & shadowType
-				, sdw::Vec2 const & rawOffsets
-				, sdw::Vec2 const & pcfOffsets
-				, sdw::Vec2 const & vsmVariance
-				, Surface surface
-				, sdw::Vec3 const & lightDirection
-				, sdw::Float const & farPlane
-				, sdw::Int const & index )const;
-			C3D_API void computeVolumetric( sdw::Int const & shadowType
-				, sdw::Vec2 const & rawOffsets
-				, sdw::Vec2 const & pcfOffsets
-				, sdw::Vec2 const & vsmVariance
+				, sdw::Vec3 const & lightDirection )const;
+			C3D_API void computeVolumetric( shader::Light light
 				, Surface surface
 				, sdw::Vec3 const & eyePosition
 				, sdw::Mat4 const & lightMatrix
 				, sdw::Vec3 const & lightDirection
 				, sdw::UInt const & cascadeIndex
 				, sdw::UInt const & maxCascade
-				, sdw::Vec3 const & lightColour
-				, sdw::Vec2 const & lightIntensity
-				, sdw::UInt const & lightVolumetricSteps
-				, sdw::Float const & lightVolumetricScattering
 				, OutputComponents & parentOutput )const;
 			C3D_API sdw::Vec4 getLightSpacePosition( sdw::Mat4 const & lightMatrix
 				, sdw::Vec3 const & worldSpacePosition )const;
@@ -146,48 +127,29 @@ namespace castor3d
 				, sdw::InMat4
 				, sdw::InVec3 > m_getLightSpacePosition;
 			sdw::Function< sdw::Float
-				, sdw::InInt
-				, sdw::InVec2
-				, sdw::InVec2
-				, sdw::InVec2
-				, sdw::InMat4
+				, InLight
 				, InSurface
+				, sdw::InMat4
 				, sdw::InVec3
 				, sdw::InUInt
 				, sdw::InUInt > m_computeDirectional;
 			sdw::Function< sdw::Float
-				, sdw::InInt
-				, sdw::InVec2
-				, sdw::InVec2
-				, sdw::InVec2
-				, sdw::InMat4
+				, InLight
 				, InSurface
-				, sdw::InVec3
-				, sdw::InInt > m_computeSpot;
+				, sdw::InMat4
+				, sdw::InVec3 > m_computeSpot;
 			sdw::Function< sdw::Float
-				, sdw::InInt
-				, sdw::InVec2
-				, sdw::InVec2
-				, sdw::InVec2
+				, InLight
 				, InSurface
-				, sdw::InVec3
-				, sdw::InFloat
-				, sdw::InInt > m_computePoint;
+				, sdw::InVec3 > m_computePoint;
 			sdw::Function< sdw::Void
-				, sdw::InInt
-				, sdw::InVec2
-				, sdw::InVec2
-				, sdw::InVec2
+				, InLight
 				, InSurface
 				, sdw::InVec3
 				, sdw::InMat4
 				, sdw::InVec3
 				, sdw::InUInt
 				, sdw::InUInt
-				, sdw::InVec3
-				, sdw::InVec2
-				, sdw::InUInt
-				, sdw::InFloat
 				, OutputComponents & > m_computeVolumetric;
 		};
 	}
