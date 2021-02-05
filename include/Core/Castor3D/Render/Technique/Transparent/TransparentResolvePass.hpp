@@ -32,7 +32,8 @@ namespace castor3d
 		void prepare( ashes::FrameBuffer const & frameBuffer
 			, ashes::DescriptorSet const & uboDescriptorSet
 			, ashes::DescriptorSet const & texDescriptorSet
-			, ashes::BufferBase const & vbo );
+			, ashes::BufferBase const & vbo
+			, TransparentPassResult const & wbResult );
 		void accept( PipelineVisitorBase & visitor );
 		inline ashes::CommandBuffer const & getCommandBuffer()const
 		{
@@ -126,6 +127,7 @@ namespace castor3d
 		Engine & m_engine;
 		SceneUbo & m_sceneUbo;
 		GpInfoUbo const & m_gpInfo;
+		TransparentPassResult const & m_wbResult;
 		SamplerSPtr m_sampler;
 		ashes::VertexBufferPtr< TexturedQuad > m_vertexBuffer;
 		ashes::PipelineVertexInputStateCreateInfoPtr m_vertexLayout;

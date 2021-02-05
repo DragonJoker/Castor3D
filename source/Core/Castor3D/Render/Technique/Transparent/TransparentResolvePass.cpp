@@ -474,7 +474,8 @@ namespace castor3d
 	void TransparentResolveProgram::prepare( ashes::FrameBuffer const & frameBuffer
 		, ashes::DescriptorSet const & uboDescriptorSet
 		, ashes::DescriptorSet const & texDescriptorSet
-		, ashes::BufferBase const & vbo )
+		, ashes::BufferBase const & vbo
+		, TransparentPassResult const & wbResult )
 	{
 		m_commandBuffer->begin();
 		m_commandBuffer->beginDebugBlock(
@@ -483,6 +484,9 @@ namespace castor3d
 				makeFloatArray( m_engine.getNextRainbowColour() ),
 			} );
 		m_timer.beginPass( *m_commandBuffer );
+		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT
+			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, wbResult[WbTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeShaderInputResource( VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL ) );
 		m_commandBuffer->beginRenderPass( m_renderPass
 			, frameBuffer
 			, { transparentBlackClearColor }
@@ -494,6 +498,9 @@ namespace castor3d
 		m_commandBuffer->bindVertexBuffer( 0u, vbo, 0u );
 		m_commandBuffer->draw( 6u );
 		m_commandBuffer->endRenderPass();
+		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
+			, wbResult[WbTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeDepthStencilReadOnly( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 		m_timer.endPass( *m_commandBuffer );
 		m_commandBuffer->endDebugBlock();
 		m_commandBuffer->end();
@@ -519,6 +526,7 @@ namespace castor3d
 		, m_engine{ engine }
 		, m_sceneUbo{ sceneUbo }
 		, m_gpInfo{ gpInfoUbo }
+		, m_wbResult{ wbResult }
 		, m_sampler{ doCreateSampler( m_engine, device ) }
 		, m_vertexBuffer{ doCreateVbo( device ) }
 		, m_vertexLayout{ doCreateVertexLayout( m_engine ) }
@@ -586,7 +594,8 @@ namespace castor3d
 			result.first->second->prepare( *m_frameBuffer
 				, *m_uboDescriptorSet
 				, *m_texDescriptorSet
-				, m_vertexBuffer->getBuffer() );
+				, m_vertexBuffer->getBuffer()
+				, m_wbResult );
 		}
 
 		return result.first->second.get();

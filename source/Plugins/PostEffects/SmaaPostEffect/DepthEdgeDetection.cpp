@@ -170,6 +170,9 @@ namespace smaa
 				castor3d::makeFloatArray( getRenderSystem()->getEngine()->getNextRainbowColour() ),
 			} );
 		timer.beginPass( edgeDetectionCmd, passIndex );
+		edgeDetectionCmd.memoryBarrier( VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT
+			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, m_depthView.makeShaderInputResource( VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL ) );
 		edgeDetectionCmd.beginRenderPass( *m_renderPass
 			, *m_surface.frameBuffer
 			, {
@@ -179,6 +182,9 @@ namespace smaa
 			, VK_SUBPASS_CONTENTS_INLINE );
 		registerPass( edgeDetectionCmd );
 		edgeDetectionCmd.endRenderPass();
+		edgeDetectionCmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
+			, m_depthView.makeDepthStencilReadOnly( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 		timer.endPass( edgeDetectionCmd, passIndex );
 		edgeDetectionCmd.endDebugBlock();
 		edgeDetectionCmd.end();

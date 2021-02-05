@@ -728,7 +728,7 @@ namespace castor3d
 		cb.draw( 6u );
 		cb.endRenderPass();
 		cb.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT
+			, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
 			, m_depthBuffer.makeDepthStencilReadOnly( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 		cb.endDebugBlock();
 

@@ -1468,6 +1468,9 @@ namespace castor3d
 		commandBuffer->bindVertexBuffer( 0u, vbo.getBuffer(), 0u );
 		commandBuffer->draw( 6u );
 		commandBuffer->endRenderPass();
+		commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
+			, opaquePassResult[DsTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeDepthStencilReadOnly( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 		timer.endPass( *commandBuffer );
 		commandBuffer->endDebugBlock();
 		commandBuffer->end();
