@@ -537,7 +537,7 @@ namespace castor3d
 		, m_texDescriptorPool{ m_texDescriptorLayout->createPool( "TransparentResolveTex", uint32_t( FogType::eCount ) ) }
 		, m_texDescriptorSet{ doCreateTexDescriptorSet( *m_texDescriptorPool, wbResult, *m_sampler ) }
 		, m_renderPass{ doCreateRenderPass( device, colourView ) }
-		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, device, cuT( "Transparent" ), cuT( "Resolve" ) ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( device, cuT( "Transparent" ), cuT( "Resolve" ) ) }
 		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, m_size, colourView ) }
 		, m_semaphore{ device->createSemaphore( "TransparentResolve" ) }
 	{

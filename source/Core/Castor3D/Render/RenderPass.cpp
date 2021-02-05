@@ -181,7 +181,7 @@ namespace castor3d
 	bool RenderPass::initialise( RenderDevice const & device
 		, Size const & size )
 	{
-		m_timer = std::make_shared< RenderPassTimer >( *getEngine(), device, m_category, getName() );
+		m_timer = std::make_shared< RenderPassTimer >( device, m_category, getName() );
 		m_sceneUbo.initialise( device );
 		m_sceneUbo.setWindowSize( size );
 		m_size = size;

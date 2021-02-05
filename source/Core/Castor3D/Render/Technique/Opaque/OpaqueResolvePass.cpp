@@ -1530,7 +1530,7 @@ namespace castor3d
 		m_renderPass = doCreateRenderPass( m_device, result.getPixelFormat() );
 		m_frameBuffer = doCreateFrameBuffer( *m_renderPass, size, result.getDefaultView().getSampledView() );
 		m_finished = m_device->createSemaphore( "OpaqueResolvePass" );
-		m_timer = std::make_shared< RenderPassTimer >( engine, m_device, cuT( "Opaque" ), cuT( "Resolve pass" ) );
+		m_timer = std::make_shared< RenderPassTimer >( m_device, cuT( "Opaque" ), cuT( "Resolve pass" ) );
 		m_viewport.setOrtho( 0, 1, 0, 1, 0, 1 );
 		m_viewport.resize( { m_size.width, m_size.height } );
 		m_viewport.update();

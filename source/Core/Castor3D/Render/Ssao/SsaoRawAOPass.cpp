@@ -774,7 +774,7 @@ namespace castor3d
 		, m_commandBuffers{ m_device.graphicsCommandPool->createCommandBuffer( "SsaoRawAO" )
 			, m_device.graphicsCommandPool->createCommandBuffer( "SsaoRawAONormals" ) }
 		, m_finished{ m_device->createSemaphore( "SsaoRawAO" ) }
-		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, m_device, cuT( "Scalable Ambient Obscurance" ), cuT( "Raw AO" ) ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( m_device, cuT( "Scalable Ambient Obscurance" ), cuT( "Raw AO" ) ) }
 	{
 		for ( auto i = 0u; i < m_commandBuffers.size(); ++i )
 		{

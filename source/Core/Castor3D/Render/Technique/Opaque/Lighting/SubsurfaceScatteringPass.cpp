@@ -743,7 +743,7 @@ namespace castor3d
 			, combineProgram );
 
 		// Commands.
-		m_timer = std::make_shared< RenderPassTimer >( engine, device, cuT( "Opaque" ), cuT( "SSSSS pass" ) );
+		m_timer = std::make_shared< RenderPassTimer >( device, cuT( "Opaque" ), cuT( "SSSSS pass" ) );
 		m_finished = device->createSemaphore( "SSSSS pass" );
 		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( "SSSSS pass" );
 		m_commandBuffer->begin();

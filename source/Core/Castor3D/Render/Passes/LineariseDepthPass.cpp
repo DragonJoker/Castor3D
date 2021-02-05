@@ -386,8 +386,7 @@ namespace castor3d
 		}
 
 		m_result.initialise( device );
-		m_timer = std::make_shared< RenderPassTimer >( m_engine
-			, device
+		m_timer = std::make_shared< RenderPassTimer >( device
 			, m_prefix
 			, cuT( "Linearise depth" ) );
 		m_renderPass = doCreateRenderPass( device );

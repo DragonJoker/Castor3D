@@ -46,13 +46,12 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	RenderPassTimer::RenderPassTimer( Engine & engine
-		, RenderDevice const & device
+	RenderPassTimer::RenderPassTimer( RenderDevice const & device
 		, String const & category
 		, String const & name
 		, uint32_t passesCount )
 		: Named{ name }
-		, m_engine{ engine }
+		, m_engine{ *device.renderSystem.getEngine() }
 		, m_device{ device }
 		, m_passesCount{ passesCount }
 		, m_category{ category }
@@ -64,7 +63,7 @@ namespace castor3d
 		, m_gpuTime{ 0_ns }
 		, m_startedPasses( size_t( m_passesCount ), false )
 	{
-		engine.getRenderLoop().registerTimer( *this );
+		m_engine.getRenderLoop().registerTimer( *this );
 	}
 
 	RenderPassTimer::~RenderPassTimer()

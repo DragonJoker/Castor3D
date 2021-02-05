@@ -369,7 +369,7 @@ namespace castor3d
 				map.get().initialise( device );
 			}
 
-			m_particleTimer = std::make_shared< RenderPassTimer >( *getEngine(), device, cuT( "Particles" ), cuT( "Particles" ) );
+			m_particleTimer = std::make_shared< RenderPassTimer >( device, cuT( "Particles" ), cuT( "Particles" ) );
 			IntermediatesLister::submit( *this, intermediates );
 			m_initialised = true;
 		}

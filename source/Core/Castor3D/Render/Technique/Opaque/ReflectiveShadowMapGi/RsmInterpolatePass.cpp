@@ -526,7 +526,7 @@ namespace castor3d
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram( engine, lightType, gi.getTexture()->getWidth(), gi.getTexture()->getHeight() ) }
 		, m_renderPass{ doCreateRenderPass( m_device, dst.getTexture()->getPixelFormat() ) }
 		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, dst.getTexture()->getDefaultView().getTargetView() ) }
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, m_device, cuT( "Reflective Shadow Maps" ), cuT( "Interpolate" ) ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( m_device, cuT( "Reflective Shadow Maps" ), cuT( "Interpolate" ) ) }
 	{
 		ashes::PipelineShaderStageCreateInfoArray shaderStages;
 		shaderStages.push_back( makeShaderState( m_device, m_vertexShader ) );

@@ -104,7 +104,7 @@ namespace castor3d
 		: m_engine{ engine }
 		, m_device{ device }
 		, m_result{ doCreateTextures( engine, m_device, "Downscaled", srcViews, dstSize ) }
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, device, category, cuT( "Downscale" ) ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( device, category, cuT( "Downscale" ) ) }
 		, m_commandBuffer{ m_device.graphicsCommandPool->createCommandBuffer( "Downscale", VK_COMMAND_BUFFER_LEVEL_PRIMARY ) }
 		, m_finished{ m_device->createSemaphore( "Downscale" ) }
 	{

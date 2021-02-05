@@ -307,7 +307,7 @@ namespace castor3d
 			, blendMode ) }
 		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass
 			, m_result.getTexture()->getDefaultView().getTargetView() ) }
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, m_device, cuT( "Light Propagation Volumes" ), cuT( "Layered GI Resolve" ) ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( m_device, cuT( "Light Propagation Volumes" ), cuT( "Layered GI Resolve" ) ) }
 	{
 		ashes::PipelineShaderStageCreateInfoArray shaderStages;
 		shaderStages.push_back( makeShaderState( m_device, m_vertexShader ) );

@@ -29,8 +29,7 @@ namespace castor3d
 		getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
 			, [this]( RenderDevice const & device )
 			{
-				m_updateTimer = std::make_shared< RenderPassTimer >( *getEngine()
-					, device
+				m_updateTimer = std::make_shared< RenderPassTimer >( device
 					, cuT( "Update" )
 					, cuT( "Animation UBOs" )
 					, 1u );

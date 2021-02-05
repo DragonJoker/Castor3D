@@ -669,7 +669,7 @@ namespace castor3d
 		, m_vctConfigUbo{ vctConfigUbo }
 		, m_size{ size }
 		, m_result{ engine, size }
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, device, cuT( "Opaque" ), cuT( "Lighting pass" ) ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( device, cuT( "Opaque" ), cuT( "Lighting pass" ) ) }
 		, m_srcDepth{ depthView }
 		, m_blitDepth
 		{

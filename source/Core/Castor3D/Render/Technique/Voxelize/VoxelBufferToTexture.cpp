@@ -4,6 +4,7 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
+#include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
 #include "Castor3D/Render/Technique/Voxelize/VoxelSceneData.hpp"
@@ -84,12 +85,16 @@ namespace castor3d
 			, ashes::DescriptorSet const & descriptorSet
 			, ashes::BufferBase const & voxels
 			, TextureUnit const & vxResult
+			, RenderPassTimer & timer
 			, uint32_t voxelGridSize
 			, bool temporalSmoothing )
 		{
 			CommandsSemaphore result{ device, "VoxelBufferToTexture" };
+			RenderPassTimerBlock timerBlock{ timer.start() };
 			auto & cmd = *result.commandBuffer;
 			cmd.begin();
+			timerBlock->beginPass( cmd );
+			timerBlock->notifyPassRender();
 			cmd.beginDebugBlock( { "Copy voxels to texture"
 				, makeFloatArray( device.renderSystem.getEngine()->getNextRainbowColour() ) } );
 
@@ -123,6 +128,7 @@ namespace castor3d
 				, VK_IMAGE_LAYOUT_GENERAL
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 			cmd.endDebugBlock();
+			timerBlock->endPass( cmd );
 			cmd.end();
 
 			return result;
@@ -187,11 +193,12 @@ namespace castor3d
 		, ashes::DescriptorSet const & descriptorSet
 		, ashes::Buffer< Voxel > const & voxels
 		, TextureUnit const & result
+		, RenderPassTimer & timer
 		, uint32_t voxelGridSize
 		, bool temporalSmoothing )
 		: computeShader{ VK_SHADER_STAGE_COMPUTE_BIT, "VoxelBufferToTexture", createShader( temporalSmoothing, voxelGridSize ) }
 		, pipeline{ createPipeline( device, pipelineLayout, computeShader ) }
-		, commands{ createCommandBuffer( device, pipelineLayout, *pipeline, descriptorSet, voxels.getBuffer(), result, voxelGridSize, temporalSmoothing ) }
+		, commands{ createCommandBuffer( device, pipelineLayout, *pipeline, descriptorSet, voxels.getBuffer(), result, timer, voxelGridSize, temporalSmoothing ) }
 	{
 	}
 	
@@ -202,12 +209,13 @@ namespace castor3d
 		, ashes::Buffer< Voxel > const & voxels
 		, TextureUnit const & result )
 		: m_vctConfig{ vctConfig }
+		, m_timer{ std::make_shared< RenderPassTimer >( device, "Voxelize", "VoxelBufferToTexture" ) }
 		, m_descriptorSetLayout{ createDescriptorLayout( device ) }
 		, m_pipelineLayout{ createPipelineLayout( device, *m_descriptorSetLayout ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( 1u ) }
 		, m_descriptorSet{ createDescriptorSet( *m_descriptorSetPool, voxels, result ) }
-		, m_pipelines{ Pipeline{ device, *m_pipelineLayout, *m_descriptorSet, voxels, result, vctConfig.gridSize.value(), false }
-			, Pipeline{ device, *m_pipelineLayout, *m_descriptorSet, voxels, result, vctConfig.gridSize.value(), true } }
+		, m_pipelines{ Pipeline{ device, *m_pipelineLayout, *m_descriptorSet, voxels, result, *m_timer, vctConfig.gridSize.value(), false }
+			, Pipeline{ device, *m_pipelineLayout, *m_descriptorSet, voxels, result, *m_timer, vctConfig.gridSize.value(), true } }
 	{
 	}
 

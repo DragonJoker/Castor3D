@@ -511,7 +511,7 @@ namespace castor3d
 				, std::nullopt
 				, blendMode } }
 		, m_engine{ *device.renderSystem.getEngine() }
-		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, m_device, cuT( "Light Propagation Volumes" ), cuT( "Light Propagation" ) ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( m_device, cuT( "Light Propagation Volumes" ), cuT( "Light Propagation" ) ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
 			, getName()
 			, getVertexProgram() }

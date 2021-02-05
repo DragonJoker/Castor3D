@@ -50,6 +50,7 @@ namespace castor3d
 
 	private:
 		VoxelSceneData const & m_vctConfig;
+		RenderPassTimerSPtr m_timer;
 		ashes::DescriptorSetLayoutPtr m_descriptorSetLayout;
 		ashes::PipelineLayoutPtr m_pipelineLayout;
 		ashes::DescriptorSetPoolPtr m_descriptorSetPool;
@@ -61,6 +62,7 @@ namespace castor3d
 				, ashes::DescriptorSet const & descriptorSet
 				, ashes::Buffer< Voxel > const & voxels
 				, TextureUnit const & result
+				, RenderPassTimer & timer
 				, uint32_t voxelGridSize
 				, bool temporalSmoothing );
 

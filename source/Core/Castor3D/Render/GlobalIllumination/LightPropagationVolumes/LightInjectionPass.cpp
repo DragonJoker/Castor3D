@@ -558,7 +558,7 @@ namespace castor3d
 		: Named{ prefix + "LightInjection" + std::to_string( layerIndex ) }
 		, m_engine{ engine }
 		, m_device{ device }
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, m_device, cuT( "Light Propagation Volumes" ), cuT( " Light Injection" ) ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( m_device, cuT( "Light Propagation Volumes" ), cuT( " Light Injection" ) ) }
 		, m_rsmSize{ smResult[SmTexture::eDepth].getTexture()->getWidth() }
 		, m_vertexBuffer{ doCreateVertexBuffer( getName(), m_device, m_rsmSize ) }
 		, m_descriptorSetLayout{ doCreateDescriptorLayout( getName(), m_device ) }

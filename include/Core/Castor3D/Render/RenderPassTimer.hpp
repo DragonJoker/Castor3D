@@ -50,8 +50,7 @@ namespace castor3d
 		 *\param[in]	name		Le nom du timer.
 		 *\param[in]	passesCount	Le nombre de passes de rendu.
 		 */
-		C3D_API RenderPassTimer( Engine & engine
-			, RenderDevice const & device
+		C3D_API RenderPassTimer( RenderDevice const & device
 			, castor::String const & category
 			, castor::String const & name
 			, uint32_t passesCount = 1u );

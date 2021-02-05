@@ -95,7 +95,7 @@ namespace castor3d
 
 		if ( m_initialised )
 		{
-			m_timer = std::make_shared< RenderPassTimer >( *getEngine(), device, cuT( "Background" ), cuT( "Background" ) );
+			m_timer = std::make_shared< RenderPassTimer >( device, cuT( "Background" ), cuT( "Background" ) );
 		}
 
 		return m_initialised;

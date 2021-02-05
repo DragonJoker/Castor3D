@@ -235,8 +235,8 @@ namespace castor3d
 				m_initialised = doInitialiseTechnique( device );
 			}
 
-			m_overlaysTimer = std::make_shared< RenderPassTimer >( *getEngine(), device, cuT( "Overlays" ), cuT( "Overlays" ) );
-			m_toneMappingTimer = std::make_shared< RenderPassTimer >( *getEngine(), device, cuT( "Tone Mapping" ), cuT( "Tone Mapping" ) );
+			m_overlaysTimer = std::make_shared< RenderPassTimer >( device, cuT( "Overlays" ), cuT( "Overlays" ) );
+			m_toneMappingTimer = std::make_shared< RenderPassTimer >( device, cuT( "Tone Mapping" ), cuT( "Tone Mapping" ) );
 
 			if ( !m_hdrPostEffects.empty() )
 			{
