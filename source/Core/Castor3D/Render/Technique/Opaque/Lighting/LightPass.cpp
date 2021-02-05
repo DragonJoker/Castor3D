@@ -210,9 +210,6 @@ namespace castor3d
 			makeDescriptorSetLayoutBinding( index++
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-			makeDescriptorSetLayoutBinding( index++ // voxels
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
 		};
 
 		if ( m_voxels )
@@ -709,7 +706,7 @@ namespace castor3d
 		auto c3d_mapData3 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData3 ), index++, 1u );
 		auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), index++, 1u );
 		auto c3d_mapData5 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData5 ), index++, 1u );
-		auto c3d_mapVoxels = writer.declSampledImage< FImg3DRgba32 >( "c3d_mapVoxels", index++, 1u, m_voxels );
+		auto c3d_mapVoxels = writer.declSampledImage< FImg3DRgba32 >( "c3d_mapVoxels", m_voxels ? index++ : 0u, 1u, m_voxels );
 		auto in = writer.getIn();
 
 		shadowType = m_shadows
@@ -965,7 +962,7 @@ namespace castor3d
 		auto c3d_mapData3 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData3 ), index++, 1u );
 		auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), index++, 1u );
 		auto c3d_mapData5 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData5 ), index++, 1u );
-		auto c3d_mapVoxels = writer.declSampledImage< FImg3DRgba32 >( "c3d_mapVoxels", index++, 1u, m_voxels );
+		auto c3d_mapVoxels = writer.declSampledImage< FImg3DRgba32 >( "c3d_mapVoxels", m_voxels ? index++ : 0u, 1u, m_voxels );
 		auto in = writer.getIn();
 
 		shadowType = m_shadows
@@ -1297,7 +1294,7 @@ namespace castor3d
 		auto c3d_mapData3 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData3 ), index++, 1u );
 		auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), index++, 1u );
 		auto c3d_mapData5 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData5 ), index++, 1u );
-		auto c3d_mapVoxels = writer.declSampledImage< FImg3DRgba32 >( "c3d_mapVoxels", index++, 1u, m_voxels );
+		auto c3d_mapVoxels = writer.declSampledImage< FImg3DRgba32 >( "c3d_mapVoxels", m_voxels ? index++ : 0u, 1u, m_voxels );
 		auto in = writer.getIn();
 
 		shadowType = m_shadows

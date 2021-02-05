@@ -876,7 +876,6 @@ namespace castor3d
 						auto ditherValue = m_writer.declLocale( "ditherValue"
 							, c3d_volumetricDither[screenUV.x() % 4_u][screenUV.y() % 4_u] );
 
-						surface.worldNormal = vec3( 0.0_f );
 						surface.worldPosition = eyePosition + step * ditherValue;
 						auto volumetric = m_writer.declLocale( "volumetric"
 							, 0.0_f );

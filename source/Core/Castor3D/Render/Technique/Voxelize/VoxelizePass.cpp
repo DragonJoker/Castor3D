@@ -791,14 +791,15 @@ namespace castor3d
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		bool hasTextures = !flags.textures.empty();
 
-		auto texIndex = getMinTextureIndex();
-		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
-			, texIndex
-			, 1u
-			, std::max( 1u, uint32_t( flags.textures.size() ) )
-			, hasTextures ) );
-		texIndex += uint32_t( flags.textures.size() );
-		
+		// Shader inputs
+		auto index = 0u;
+		auto inWorldPosition = writer.declInput< Vec3 >( "inWorldPosition", index++ );
+		auto inViewPosition = writer.declInput< Vec3 >( "inViewPosition", index++ );
+		auto inNormal = writer.declInput< Vec3 >( "inNormal", index++ );
+		auto inTexture = writer.declInput< Vec3 >( "inTexture", index++, hasTextures );
+		auto inMaterial = writer.declInput< UInt >( "inMaterial", index++ );
+		auto in = writer.getIn();
+
 		shader::PbrMRMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", getLightBufferIndex(), 0u );
@@ -809,23 +810,18 @@ namespace castor3d
 			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		}
 
+		auto texIndex = getMinTextureIndex();
+		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
+			, texIndex
+			, 1u
+			, std::max( 1u, uint32_t( flags.textures.size() ) )
+			, hasTextures ) );
+		texIndex += uint32_t( flags.textures.size() );
+		
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
 		UBO_MODEL( writer, ModelUbo::BindingPoint, 0u );
 		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
 		UBO_VOXELIZER( writer, VoxelizerUbo::BindingPoint, 0u, true );
-
-		auto output( writer.declArrayShaderStorageBuffer< shader::Voxel >( "voxels"
-			, VoxelizerUbo::BindingPoint + 1u
-			, 0u ) );
-
-		// Shader inputs
-		auto index = 0u;
-		auto inWorldPosition = writer.declInput< Vec3 >( "inWorldPosition", index++ );
-		auto inViewPosition = writer.declInput< Vec3 >( "inViewPosition", index++ );
-		auto inNormal = writer.declInput< Vec3 >( "inNormal", index++ );
-		auto inTexture = writer.declInput< Vec3 >( "inTexture", index++, hasTextures );
-		auto inMaterial = writer.declInput< UInt >( "inMaterial", index++ );
-		auto in = writer.getIn();
 
 		shader::Utils utils{ writer };
 		utils.declareApplyGamma();
@@ -837,6 +833,11 @@ namespace castor3d
 			, false // rsm
 			, texIndex
 			, m_mode != RenderMode::eTransparentOnly );
+
+		// Fragment Outputs
+		auto output( writer.declArrayShaderStorageBuffer< shader::Voxel >( "voxels"
+			, VoxelizerUbo::BindingPoint + 1u
+			, 0u ) );
 
 		writer.implementFunction< sdw::Void >( "main"
 			, [&]()
