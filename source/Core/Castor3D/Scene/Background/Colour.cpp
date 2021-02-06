@@ -50,7 +50,7 @@ namespace castor3d
 
 	ColourBackground::ColourBackground( Engine & engine
 		, Scene & scene )
-		: SceneBackground{ engine, scene, BackgroundType::eColour }
+		: SceneBackground{ engine, scene, cuT( "Colour" ), BackgroundType::eColour }
 		, m_viewport{ engine }
 	{
 		m_hdr = false;

@@ -18,14 +18,12 @@ namespace std
 	}
 }
 
-//*********************************************************************************************
-
 namespace castor3d
 {
 	//*********************************************************************************************
 
 	template< typename T >
-	DebugOverlays::DebugPanel< T >::DebugPanel( castor::String const & name
+	DebugOverlays::DebugPanelT< T >::DebugPanelT( castor::String const & name
 		, castor::String const & label
 		, PanelOverlaySPtr panel
 		, OverlayCache & cache
@@ -63,7 +61,7 @@ namespace castor3d
 	}
 
 	template< typename T >
-	DebugOverlays::DebugPanel< T >::~DebugPanel()
+	DebugOverlays::DebugPanelT< T >::~DebugPanelT()
 	{
 		if ( m_value )
 		{
@@ -79,14 +77,14 @@ namespace castor3d
 	}
 
 	template< typename T >
-	void DebugOverlays::DebugPanel< T >::updatePosition( int y )
+	void DebugOverlays::DebugPanelT< T >::updatePosition( int y )
 	{
 		m_value->setPixelPosition( castor::Position{ 200, y } );
 		m_label->setPixelPosition( castor::Position{ 10, y } );
 	}
 
 	template< typename T >
-	void DebugOverlays::DebugPanel< T >::update()
+	void DebugOverlays::DebugPanelT< T >::update()
 	{
 		m_value->setCaption( castor::makeStringStream() << std::setprecision( 4 ) << m_v );
 	}
@@ -94,7 +92,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	template< typename T >
-	DebugOverlays::DebugPanels< T >::DebugPanels( castor::String const & title
+	DebugOverlays::DebugPanelsT< T >::DebugPanelsT( castor::String const & title
 		, PanelOverlaySPtr panel
 		, OverlayCache & cache )
 		: m_cache{ cache }
@@ -122,7 +120,7 @@ namespace castor3d
 	}
 
 	template< typename T >
-	DebugOverlays::DebugPanels< T >::~DebugPanels()
+	DebugOverlays::DebugPanelsT< T >::~DebugPanelsT()
 	{
 		m_panels.clear();
 
@@ -140,7 +138,7 @@ namespace castor3d
 	}
 
 	template< typename T >
-	void DebugOverlays::DebugPanels< T >::update()
+	void DebugOverlays::DebugPanelsT< T >::update()
 	{
 		for ( auto & panel : m_panels )
 		{
@@ -149,7 +147,7 @@ namespace castor3d
 	}
 
 	template< typename T >
-	int DebugOverlays::DebugPanels< T >::updatePosition( int y )
+	int DebugOverlays::DebugPanelsT< T >::updatePosition( int y )
 	{
 		m_titlePanel->setPixelPosition( castor::Position{ 0, y } );
 		m_titleText->setPixelPosition( castor::Position{ 10, 0 } );
@@ -165,7 +163,7 @@ namespace castor3d
 	}
 
 	template< typename T >
-	void DebugOverlays::DebugPanels< T >::add( castor::String const & name
+	void DebugOverlays::DebugPanelsT< T >::add( castor::String const & name
 		, castor::String const & label
 		, T const & value )
 	{

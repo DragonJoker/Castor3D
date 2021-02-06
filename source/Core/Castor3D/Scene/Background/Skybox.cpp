@@ -156,7 +156,7 @@ namespace castor3d
 
 	SkyboxBackground::SkyboxBackground( Engine & engine
 		, Scene & scene )
-		: SceneBackground{ engine, scene, BackgroundType::eSkybox }
+		: SceneBackground{ engine, scene, cuT( "Skybox" ), BackgroundType::eSkybox }
 		, m_viewport{ engine }
 	{
 		m_texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()

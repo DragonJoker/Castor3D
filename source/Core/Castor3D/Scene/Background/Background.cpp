@@ -26,8 +26,10 @@ namespace castor3d
 {
 	SceneBackground::SceneBackground( Engine & engine
 		, Scene & scene
+		, castor::String name
 		, BackgroundType type )
-		: OwnedBy< Engine >{ engine }
+		: castor::OwnedBy< Engine >{ engine }
+		, castor::Named{ std::move( name ) }
 		, m_scene{ scene }
 		, m_type{ type }
 		, m_matrixUbo{ engine }
@@ -95,7 +97,7 @@ namespace castor3d
 
 		if ( m_initialised )
 		{
-			m_timer = std::make_shared< RenderPassTimer >( device, cuT( "Background" ), cuT( "Background" ) );
+			m_timer = std::make_shared< RenderPassTimer >( device, cuT( "Background" ), getName() );
 		}
 
 		return m_initialised;

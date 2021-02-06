@@ -176,7 +176,6 @@ namespace castor3d
 		std::map< AnimatedObjectGroup *, OnAnimatedSkeletonChangeConnection > m_skeletonRemovedConnections;
 		std::map< AnimatedObjectGroup *, OnAnimatedMeshChangeConnection > m_meshAddedConnections;
 		std::map< AnimatedObjectGroup *, OnAnimatedMeshChangeConnection > m_meshRemovedConnections;
-		RenderPassTimerSPtr m_updateTimer;
 	};
 }
 

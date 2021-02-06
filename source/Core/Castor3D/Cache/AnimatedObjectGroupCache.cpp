@@ -26,14 +26,6 @@ namespace castor3d
 			, std::move( clean )
 			, std::move( merge ) }
 	{
-		getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
-			, [this]( RenderDevice const & device )
-			{
-				m_updateTimer = std::make_shared< RenderPassTimer >( device
-					, cuT( "Update" )
-					, cuT( "Animation UBOs" )
-					, 1u );
-			} ) );
 	}
 
 	AnimatedObjectGroupCache::~Cache()
