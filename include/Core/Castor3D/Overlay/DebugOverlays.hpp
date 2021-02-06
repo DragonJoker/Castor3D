@@ -300,7 +300,7 @@ namespace castor3d
 			OverlayCache & m_cache;
 			int m_posX{ 0 };
 			std::vector< PassOverlaysPtr > m_passes;
-			BorderPanelOverlaySPtr m_container;
+			PanelOverlaySPtr m_container;
 			PanelOverlaySPtr m_firstLinePanel;
 			TextOverlaySPtr m_name;
 			TimeOverlays m_cpu;

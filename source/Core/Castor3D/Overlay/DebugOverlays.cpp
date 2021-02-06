@@ -230,9 +230,9 @@ namespace castor3d
 	{
 		auto baseName = cuT( "RenderPassOverlays-" ) + category;
 		m_container = cache.add( baseName
-			, OverlayType::eBorderPanel
+			, OverlayType::ePanel
 			, nullptr
-			, nullptr )->getBorderPanelOverlay();
+			, nullptr )->getPanelOverlay();
 		m_firstLinePanel = cache.add( baseName + cuT( "_TitlePanel" )
 			, OverlayType::ePanel
 			, nullptr
@@ -289,8 +289,6 @@ namespace castor3d
 		m_gpu.name->setCaption( cuT( "GPU:" ) );
 
 		auto & materials = cache.getEngine()->getMaterialCache();
-		m_container->setBorderPixelSize( { 1, 1, 1, 1 } );
-		m_container->setBorderMaterial( materials.find( cuT( "DarkRed" ) ) );
 		m_container->setMaterial( materials.find( cuT( "AlphaDarkBlue" ) ) );
 		m_firstLinePanel->setMaterial( materials.find( cuT( "AlphaDarkBlue" ) ) );
 		m_name->setMaterial( materials.find( cuT( "White" ) ) );
