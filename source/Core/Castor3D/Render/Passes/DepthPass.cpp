@@ -186,6 +186,7 @@ namespace castor3d
 		remFlag( flags.passFlags, PassFlag::eAlphaBlending );
 		remFlag( flags.sceneFlags, SceneFlag::eLpvGI );
 		remFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI );
+		remFlag( flags.sceneFlags, SceneFlag::eVoxelConeTracing );
 		addFlag( flags.programFlags, ProgramFlag::eDepthPass );
 	}
 

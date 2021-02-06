@@ -227,6 +227,7 @@ namespace castor3d
 		remFlag( flags.programFlags, ProgramFlag::eLighting );
 		remFlag( flags.sceneFlags, SceneFlag::eLpvGI );
 		remFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI );
+		remFlag( flags.sceneFlags, SceneFlag::eVoxelConeTracing );
 	}
 
 	void OpaquePass::doUpdatePipeline( RenderPipeline & pipeline )

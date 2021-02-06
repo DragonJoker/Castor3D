@@ -302,24 +302,24 @@ namespace castor3d
 	{
 		auto sceneFlags = node.pipeline.getFlags().sceneFlags;
 
-		if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing )
-			&& m_vctConfigUbo )
+		if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 		{
+			CU_Require( m_vctConfigUbo );
 			m_vctConfigUbo->createSizedBinding( *node.uboDescriptorSet
 				, layout.getBinding( VoxelizerUbo::BindingPoint ) );
 		}
 		else
 		{
-			if ( checkFlag( sceneFlags, SceneFlag::eLpvGI )
-				&& m_lpvConfigUbo )
+			if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
 			{
+				CU_Require( m_lpvConfigUbo );
 				m_lpvConfigUbo->createSizedBinding( *node.uboDescriptorSet
 					, layout.getBinding( LpvGridConfigUbo::BindingPoint ) );
 			}
 
-			if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI )
-				&& m_llpvConfigUbo )
+			if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
 			{
+				CU_Require( m_llpvConfigUbo );
 				m_llpvConfigUbo->createSizedBinding( *node.uboDescriptorSet
 					, layout.getBinding( LayeredLpvGridConfigUbo::BindingPoint ) );
 			}
@@ -331,24 +331,24 @@ namespace castor3d
 	{
 		auto sceneFlags = node.pipeline.getFlags().sceneFlags;
 
-		if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing )
-			&& m_vctConfigUbo )
+		if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 		{
+			CU_Require( m_vctConfigUbo );
 			m_vctConfigUbo->createSizedBinding( *node.uboDescriptorSet
 				, layout.getBinding( VoxelizerUbo::BindingPoint ) );
 		}
 		else
 		{
-			if ( checkFlag( sceneFlags, SceneFlag::eLpvGI )
-				&& m_lpvConfigUbo )
+			if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
 			{
+				CU_Require( m_lpvConfigUbo );
 				m_lpvConfigUbo->createSizedBinding( *node.uboDescriptorSet
 					, layout.getBinding( LpvGridConfigUbo::BindingPoint ) );
 			}
 
-			if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI )
-				&& m_llpvConfigUbo )
+			if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
 			{
+				CU_Require( m_llpvConfigUbo );
 				m_llpvConfigUbo->createSizedBinding( *node.uboDescriptorSet
 					, layout.getBinding( LayeredLpvGridConfigUbo::BindingPoint ) );
 			}
@@ -359,26 +359,26 @@ namespace castor3d
 	{
 		auto uboBindings = SceneRenderPass::doCreateUboBindings( flags );
 
-		if ( checkFlag( flags.sceneFlags, SceneFlag::eVoxelConeTracing )
-			&& m_vctConfigUbo )
+		if ( checkFlag( flags.sceneFlags, SceneFlag::eVoxelConeTracing ) )
 		{
+			CU_Require( m_vctConfigUbo );
 			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( VoxelizerUbo::BindingPoint//13
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		}
 		else
 		{
-			if ( checkFlag( flags.sceneFlags, SceneFlag::eLpvGI )
-				&& m_lpvConfigUbo )
+			if ( checkFlag( flags.sceneFlags, SceneFlag::eLpvGI ) )
 			{
+				CU_Require( m_lpvConfigUbo );
 				uboBindings.emplace_back( makeDescriptorSetLayoutBinding( LpvGridConfigUbo::BindingPoint//12
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 			}
 
-			if ( checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI )
-				&& m_llpvConfigUbo )
+			if ( checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI ) )
 			{
+				CU_Require( m_llpvConfigUbo );
 				uboBindings.emplace_back( makeDescriptorSetLayoutBinding( LayeredLpvGridConfigUbo::BindingPoint//13
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
@@ -443,9 +443,9 @@ namespace castor3d
 				}
 			}
 
-			if ( vctResult
-				&& ( checkFlag( flags.sceneFlags, SceneFlag::eVoxelConeTracing ) ) )
+			if ( checkFlag( flags.sceneFlags, SceneFlag::eVoxelConeTracing ) )
 			{
+				CU_Require( vctResult );
 				bindTexture( vctResult->getTexture()->getDefaultView().getSampledView()
 					, vctResult->getSampler()->getSampler()
 					, writes
@@ -453,10 +453,10 @@ namespace castor3d
 			}
 			else
 			{
-				if ( lpvResult
-					&& ( checkFlag( flags.sceneFlags, SceneFlag::eLpvGI )
-						|| checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI ) ) )
+				if ( checkFlag( flags.sceneFlags, SceneFlag::eLpvGI )
+					|| checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI ) )
 				{
+					CU_Require( lpvResult );
 					auto & lpv = *lpvResult;
 						bindTexture( lpv[LpvTexture::eR].getTexture()->getDefaultView().getSampledView()
 							, lpv[LpvTexture::eR].getSampler()->getSampler()
@@ -545,19 +545,19 @@ namespace castor3d
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapBrdf
 		}
 
-		if ( m_vctResult
-			&& ( checkFlag( flags.sceneFlags, SceneFlag::eVoxelConeTracing ) ) )
+		if ( checkFlag( flags.sceneFlags, SceneFlag::eVoxelConeTracing ) )
 		{
+			CU_Require( m_vctResult );
 			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapVoxels
 		}
 		else
 		{
-			if ( m_lpvResult
-				&& ( checkFlag( flags.sceneFlags, SceneFlag::eLpvGI )
-					|| checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI ) ) )
+			if ( checkFlag( flags.sceneFlags, SceneFlag::eLpvGI )
+				|| checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI ) )
 			{
+				CU_Require( m_lpvResult );
 				textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_lpvAccumulationR
