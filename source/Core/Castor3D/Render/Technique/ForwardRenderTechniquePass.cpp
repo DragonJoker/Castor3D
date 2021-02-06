@@ -217,41 +217,43 @@ namespace castor3d
 	{
 		ashes::Semaphore const * result = &toWait;
 
+		static ashes::VkClearValueArray const clearValues
+		{
+			defaultClearDepthStencil,
+			opaqueBlackClearColor,
+		};
+
+		RenderPassTimerBlock timerBlock{ getTimer().start() };
+
+		m_nodesCommands->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
+		m_nodesCommands->beginDebugBlock(
+			{
+				"Forward Pass",
+				makeFloatArray( getEngine()->getNextRainbowColour() ),
+			} );
+		timerBlock->beginPass( *m_nodesCommands );
+		timerBlock->notifyPassRender();
+		m_nodesCommands->beginRenderPass( getRenderPass()
+			, *m_frameBuffer
+			, clearValues
+			, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
+
 		if ( hasNodes() )
 		{
-			static ashes::VkClearValueArray const clearValues
-			{
-				defaultClearDepthStencil,
-				opaqueBlackClearColor,
-			};
-
-			RenderPassTimerBlock timerBlock{ getTimer().start() };
-
-			m_nodesCommands->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-			m_nodesCommands->beginDebugBlock(
-				{
-					"Forward Pass",
-					makeFloatArray( getEngine()->getNextRainbowColour() ),
-				} );
-			timerBlock->beginPass( *m_nodesCommands );
-			timerBlock->notifyPassRender();
-			m_nodesCommands->beginRenderPass( getRenderPass()
-				, *m_frameBuffer
-				, clearValues
-				, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 			m_nodesCommands->executeCommands( { getCommandBuffer() } );
-			m_nodesCommands->endRenderPass();
-			timerBlock->endPass( *m_nodesCommands );
-			m_nodesCommands->endDebugBlock();
-			m_nodesCommands->end();
-
-			device.graphicsQueue->submit( { *m_nodesCommands }
-				, { *result }
-				, { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT }
-				, { getSemaphore() }
-				, nullptr );
-			result = &getSemaphore();
 		}
+
+		m_nodesCommands->endRenderPass();
+		timerBlock->endPass( *m_nodesCommands );
+		m_nodesCommands->endDebugBlock();
+		m_nodesCommands->end();
+
+		device.graphicsQueue->submit( { *m_nodesCommands }
+			, { *result }
+			, { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT }
+			, { getSemaphore() }
+			, nullptr );
+		result = &getSemaphore();
 
 		return *result;
 	}

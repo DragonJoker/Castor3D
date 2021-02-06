@@ -612,7 +612,8 @@ namespace castor3d
 		, RenderPassTimer & timer )
 	{
 		auto & queue = *device.graphicsQueue;
-		timer.notifyPassRender();
+		RenderPassTimerBlock timerBlock{ timer.start() };
+		timerBlock->notifyPassRender();
 		queue.submit( *m_commandBuffer
 			, *m_toWait
 			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT

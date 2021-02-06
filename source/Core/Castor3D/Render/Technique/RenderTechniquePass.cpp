@@ -240,6 +240,21 @@ namespace castor3d
 		{
 			addFlag( flags.programFlags, ProgramFlag::eEnvironmentMapping );
 		}
+
+		if ( !m_vctConfigUbo || !m_vctResult )
+		{
+			remFlag( flags.sceneFlags, SceneFlag::eVoxelConeTracing );
+		}
+
+		if ( !m_lpvConfigUbo || !m_lpvResult )
+		{
+			remFlag( flags.sceneFlags, SceneFlag::eLpvGI );
+		}
+
+		if ( !m_llpvConfigUbo || !m_lpvResult )
+		{
+			remFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI );
+		}
 	}
 
 	ShaderPtr RenderTechniquePass::doGetGeometryShaderSource( PipelineFlags const & flags )const

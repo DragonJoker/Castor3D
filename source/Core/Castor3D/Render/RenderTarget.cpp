@@ -950,10 +950,11 @@ namespace castor3d
 			for ( auto effect : effects )
 			{
 				auto timerBlock = effect->start();
+				uint32_t index = 0u;
 
 				for ( auto & commands : effect->getCommands() )
 				{
-					timerBlock->notifyPassRender();
+					timerBlock->notifyPassRender( index++ );
 
 					queue.submit( *commands.commandBuffer
 						, *result

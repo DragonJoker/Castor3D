@@ -367,6 +367,7 @@ namespace castor3d
 		auto result = &toWait;
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto & commandBuffer = *m_commandBuffers[m_commandBufferIndex];
+		auto timerBlock = m_timer->start();
 
 		commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 		commandBuffer.beginDebugBlock(
@@ -374,8 +375,8 @@ namespace castor3d
 				"Deferred - " + getName(),
 				makeFloatArray( m_engine.getNextRainbowColour() ),
 			} );
-		m_timer->beginPass( commandBuffer, index );
-		m_timer->notifyPassRender( index );
+		timerBlock->beginPass( commandBuffer, index );
+		timerBlock->notifyPassRender( index );
 
 		if ( !index )
 		{
@@ -395,7 +396,7 @@ namespace castor3d
 		}
 
 		commandBuffer.endRenderPass();
-		m_timer->endPass( commandBuffer, index );
+		timerBlock->endPass( commandBuffer, index );
 		commandBuffer.endDebugBlock();
 		commandBuffer.end();
 
