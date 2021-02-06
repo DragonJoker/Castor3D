@@ -26,10 +26,10 @@ namespace castor3d
 {
 	SceneBackground::SceneBackground( Engine & engine
 		, Scene & scene
-		, castor::String name
+		, castor::String const & name
 		, BackgroundType type )
 		: castor::OwnedBy< Engine >{ engine }
-		, castor::Named{ std::move( name ) }
+		, castor::Named{ scene.getName() + name }
 		, m_scene{ scene }
 		, m_type{ type }
 		, m_matrixUbo{ engine }
@@ -167,7 +167,7 @@ namespace castor3d
 				"Background Render",
 				makeFloatArray( getScene().getEngine()->getNextRainbowColour() ),
 			} );
-		m_timer->beginPass( commandBuffer );
+		m_timer->beginPass( commandBuffer, 0u );
 		commandBuffer.beginRenderPass( renderPass
 			, frameBuffer
 			, { defaultClearDepthStencil, opaqueBlackClearColor }
@@ -178,7 +178,7 @@ namespace castor3d
 			, *m_uboDescriptorSet
 			, *m_texDescriptorSet );
 		commandBuffer.endRenderPass();
-		m_timer->endPass( commandBuffer );
+		m_timer->endPass( commandBuffer, 0u );
 		commandBuffer.endDebugBlock();
 		commandBuffer.end();
 

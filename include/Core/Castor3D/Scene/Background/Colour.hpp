@@ -35,7 +35,8 @@ namespace castor3d
 		*	La scène.
 		*/
 		C3D_API ColourBackground( Engine & engine
-			, Scene & scene );
+			, Scene & scene
+			, castor::String const & name = castor::String{} );
 		/**
 		*\~english
 		*\brief

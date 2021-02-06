@@ -68,7 +68,7 @@ namespace castor3d
 		*/
 		C3D_API explicit SceneBackground( Engine & engine
 			, Scene & scene
-			, castor::String name
+			, castor::String const & name
 			, BackgroundType type );
 		/**
 		*\~english

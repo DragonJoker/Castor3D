@@ -235,6 +235,8 @@ namespace castor3d
 		, ashes::Semaphore const & toWait )
 	{
 		auto result = &toWait;
+		auto timerBlock = m_timer->start();
+		timerBlock->notifyPassRender();
 
 		if ( m_vctConfig.temporalSmoothing )
 		{
@@ -245,7 +247,6 @@ namespace castor3d
 			result = &m_pipelines[0].commands.submit( *device.computeQueue, *result );
 		}
 
-		device.computeQueue->waitIdle();
 		return *result;
 	}
 

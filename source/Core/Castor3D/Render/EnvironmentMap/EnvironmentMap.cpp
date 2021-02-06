@@ -98,12 +98,12 @@ namespace castor3d
 			static castor::Point3f const position;
 			std::array< SceneNodeSPtr, size_t( CubeMapFace::eCount ) > nodes
 			{
-				std::make_shared< SceneNode >( cuT( "EnvironmentMap_PosX" ), *node.getScene() ),
-				std::make_shared< SceneNode >( cuT( "EnvironmentMap_NegX" ), *node.getScene() ),
-				std::make_shared< SceneNode >( cuT( "EnvironmentMap_PosY" ), *node.getScene() ),
-				std::make_shared< SceneNode >( cuT( "EnvironmentMap_NegY" ), *node.getScene() ),
-				std::make_shared< SceneNode >( cuT( "EnvironmentMap_PosZ" ), *node.getScene() ),
-				std::make_shared< SceneNode >( cuT( "EnvironmentMap_NegZ" ), *node.getScene() ),
+				std::make_shared< SceneNode >( node.getName() + cuT( " PosX" ), *node.getScene() ),
+				std::make_shared< SceneNode >( node.getName() + cuT( " NegX" ), *node.getScene() ),
+				std::make_shared< SceneNode >( node.getName() + cuT( " PosY" ), *node.getScene() ),
+				std::make_shared< SceneNode >( node.getName() + cuT( " NegY" ), *node.getScene() ),
+				std::make_shared< SceneNode >( node.getName() + cuT( " PosZ" ), *node.getScene() ),
+				std::make_shared< SceneNode >( node.getName() + cuT( " NegZ" ), *node.getScene() ),
 			};
 			std::array< Quaternion, size_t( CubeMapFace::eCount ) > orients
 			{
@@ -126,12 +126,12 @@ namespace castor3d
 			return EnvironmentMap::EnvironmentMapPasses
 			{
 				{
-					std::make_unique< EnvironmentMapPass >( map, nodes[0], node ),
-					std::make_unique< EnvironmentMapPass >( map, nodes[1], node ),
-					std::make_unique< EnvironmentMapPass >( map, nodes[2], node ),
-					std::make_unique< EnvironmentMapPass >( map, nodes[3], node ),
-					std::make_unique< EnvironmentMapPass >( map, nodes[4], node ),
-					std::make_unique< EnvironmentMapPass >( map, nodes[5], node ),
+					std::make_unique< EnvironmentMapPass >( map, nodes[0], node, CubeMapFace::ePositiveX ),
+					std::make_unique< EnvironmentMapPass >( map, nodes[1], node, CubeMapFace::eNegativeX ),
+					std::make_unique< EnvironmentMapPass >( map, nodes[2], node, CubeMapFace::ePositiveY ),
+					std::make_unique< EnvironmentMapPass >( map, nodes[3], node, CubeMapFace::eNegativeY ),
+					std::make_unique< EnvironmentMapPass >( map, nodes[4], node, CubeMapFace::ePositiveZ ),
+					std::make_unique< EnvironmentMapPass >( map, nodes[5], node, CubeMapFace::eNegativeZ ),
 				}
 			};
 		}
@@ -159,6 +159,10 @@ namespace castor3d
 	{
 		if ( !m_environmentMap->isInitialised() )
 		{
+			m_timer = std::make_shared< RenderPassTimer >( device
+				, cuT( "EnvironmentMap" )
+				, m_node.getName()
+				, uint32_t( m_passes.size() + 1u ) ); // passes + mipmap generation
 			m_environmentMap->initialise( device );
 			ashes::ImageCreateInfo depthStencil
 			{
@@ -259,12 +263,14 @@ namespace castor3d
 					, *m_renderPass
 					, background
 					, *m_backgroundUboDescriptorPool
-					, *m_backgroundTexDescriptorPool );
+					, *m_backgroundTexDescriptorPool
+					, *m_timer );
 			}
 
 			m_generateMipmaps = CommandsSemaphore{ device, cuT( "EnvironmentMapMipmaps" ) };
 			auto & cmd = *m_generateMipmaps.commandBuffer;
 			cmd.begin();
+			m_timer->beginPass( cmd, 6u );
 			cmd.beginDebugBlock( { m_environmentMap->getTexture()->getName() + " Mipmaps Generation"
 				, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
 			auto & image = m_environmentMap->getTexture()->getTexture();
@@ -273,6 +279,7 @@ namespace castor3d
 				, VK_IMAGE_LAYOUT_UNDEFINED
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 			cmd.endDebugBlock();
+			m_timer->endPass( cmd, 6u );
 			cmd.end();
 		}
 
@@ -325,6 +332,7 @@ namespace castor3d
 		, ashes::Semaphore const & toWait )
 	{
 		ashes::Semaphore const * result = &toWait;
+		auto timerBlock = m_timer->start();
 
 		// Render current frame (or first)
 		if ( m_first || ( m_render % 5u ) == 0u )
@@ -334,6 +342,7 @@ namespace castor3d
 				result = &pass->render( device, *result );
 			}
 
+			timerBlock->notifyPassRender( uint32_t( m_passes.size() ) );
 			result = &m_generateMipmaps.submit( *device.graphicsQueue, *result );
 			m_render = 0u;
 		}

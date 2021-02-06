@@ -78,8 +78,9 @@ namespace castor3d
 	//************************************************************************************************
 
 	ImageBackground::ImageBackground( Engine & engine
-		, Scene & scene )
-		: SceneBackground{ engine, scene, cuT( "Image" ), BackgroundType::eImage }
+		, Scene & scene
+		, castor::String const & name )
+		: SceneBackground{ engine, scene, name + cuT( "Image" ), BackgroundType::eImage }
 		, m_viewport{ engine }
 	{
 		m_texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()

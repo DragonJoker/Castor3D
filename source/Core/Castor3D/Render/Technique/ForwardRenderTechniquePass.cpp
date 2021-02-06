@@ -53,7 +53,8 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	ForwardRenderTechniquePass::ForwardRenderTechniquePass( String const & name
+	ForwardRenderTechniquePass::ForwardRenderTechniquePass( castor::String const & category
+		, castor::String const & name
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, bool environment
@@ -62,7 +63,7 @@ namespace castor3d
 		, LpvGridConfigUbo const * lpvConfigUbo
 		, LayeredLpvGridConfigUbo const * llpvConfigUbo
 		, VoxelizerUbo const * vctConfigUbo )
-		: RenderTechniquePass{ name
+		: RenderTechniquePass{ category
 			, name
 			, matrixUbo
 			, culler
@@ -75,7 +76,8 @@ namespace castor3d
 	{
 	}
 
-	ForwardRenderTechniquePass::ForwardRenderTechniquePass( String const & name
+	ForwardRenderTechniquePass::ForwardRenderTechniquePass( castor::String const & category
+		, castor::String const & name
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, bool oit
@@ -85,7 +87,7 @@ namespace castor3d
 		, LpvGridConfigUbo const * lpvConfigUbo
 		, LayeredLpvGridConfigUbo const * llpvConfigUbo
 		, VoxelizerUbo const * vctConfigUbo )
-		: RenderTechniquePass{ name
+		: RenderTechniquePass{ category
 			, name
 			, matrixUbo
 			, culler
@@ -96,10 +98,6 @@ namespace castor3d
 			, lpvConfigUbo
 			, llpvConfigUbo
 			, vctConfigUbo }
-	{
-	}
-
-	ForwardRenderTechniquePass::~ForwardRenderTechniquePass()
 	{
 	}
 

@@ -87,11 +87,17 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::initialise
 		 */
+		C3D_API bool initialise( RenderDevice const & device
+			, castor::Size const & size
+			, LightVolumePassResult const * lpvResult = nullptr
+			, TextureUnit const * vctResult = nullptr );
 		/**
 		 *\copydoc		castor3d::RenderPass::initialise
 		 */
 		C3D_API bool initialise( RenderDevice const & device
 			, castor::Size const & size
+			, RenderPassTimer & timer
+			, uint32_t index
 			, LightVolumePassResult const * lpvResult = nullptr
 			, TextureUnit const * vctResult = nullptr );
 		/**

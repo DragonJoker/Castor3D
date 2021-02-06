@@ -245,7 +245,8 @@ namespace castor3d
 			, m_renderTarget.getCuller()
 			, ssaoConfig ) }
 #else
-		, m_opaquePass{ castor::makeUniqueDerived< RenderTechniquePass, ForwardRenderTechniquePass >( cuT( "opaque_pass" )
+		, m_opaquePass{ castor::makeUniqueDerived< RenderTechniquePass, ForwardRenderTechniquePass >( cuT( "Opaque" )
+			, cuT( "Forward" )
 			, m_matrixUbo
 			, m_renderTarget.getCuller()
 			, false
@@ -263,7 +264,8 @@ namespace castor3d
 			, m_llpvConfigUbo
 			, m_vctConfigUbo ) }
 #else
-		, m_transparentPass{ castor::makeUniqueDerived< RenderTechniquePass, ForwardRenderTechniquePass >( cuT( "transparent_pass" )
+		, m_transparentPass{ castor::makeUniqueDerived< RenderTechniquePass, ForwardRenderTechniquePass >( cuT( "Transparent" )
+			, cuT( "Forward" )
 			, m_matrixUbo
 			, m_renderTarget.getCuller()
 			, false
