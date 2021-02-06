@@ -376,7 +376,7 @@ namespace castor3d
 				makeFloatArray( m_engine.getNextRainbowColour() ),
 			} );
 		timerBlock->beginPass( commandBuffer, index );
-		timerBlock->notifyPassRender( index );
+		timerBlock->notifyPassRender( index, C3D_UseLightPassFence );
 
 		if ( !index )
 		{

@@ -74,7 +74,8 @@ namespace castor3d
 		 *\~french
 		 *\brief		Notifie le rendu de la passe donnée.
 		 */
-		C3D_API void notifyPassRender( uint32_t passIndex = 0u );
+		C3D_API void notifyPassRender( uint32_t passIndex = 0u
+			, bool subtractGpuFromCpu = false );
 		/**
 		 *\~english
 		 *\brief		Reset the timer's times.
@@ -159,8 +160,9 @@ namespace castor3d
 		castor::PreciseTimer m_cpuTimer;
 		castor::Nanoseconds m_cpuTime;
 		castor::Nanoseconds m_gpuTime;
+		castor::Nanoseconds m_subtracteGpuTime;
 		ashes::QueryPoolPtr m_timerQuery;
-		std::vector< bool > m_startedPasses;
+		std::vector< std::pair< bool, bool > > m_startedPasses;
 	};
 }
 

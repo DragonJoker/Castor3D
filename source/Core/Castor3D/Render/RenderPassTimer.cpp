@@ -63,7 +63,7 @@ namespace castor3d
 			, 0u ) }
 		, m_cpuTime{ 0_ns }
 		, m_gpuTime{ 0_ns }
-		, m_startedPasses( size_t( m_passesCount ), false )
+		, m_startedPasses( size_t( m_passesCount ), { false, false } )
 	{
 		m_engine.getRenderLoop().registerTimer( *this );
 	}
@@ -84,14 +84,18 @@ namespace castor3d
 		return RenderPassTimerBlock{ *this };
 	}
 
-	void RenderPassTimer::notifyPassRender( uint32_t passIndex )
+	void RenderPassTimer::notifyPassRender( uint32_t passIndex
+		, bool subtractGpuFromCpu )
 	{
-		m_startedPasses[passIndex] = true;
+		auto & started = m_startedPasses[passIndex];
+		started.first = true;
+		started.second = subtractGpuFromCpu;
 	}
 
 	void RenderPassTimer::stop()
 	{
 		m_cpuTime += m_cpuTimer.getElapsed();
+		m_cpuTime -= m_subtracteGpuTime;
 	}
 
 	void RenderPassTimer::reset()
@@ -125,10 +129,13 @@ namespace castor3d
 	{
 		static float const period = float( m_device->getTimestampPeriod() );
 		m_gpuTime = 0_ns;
+		m_subtracteGpuTime = 0_ns;
 
 		for ( uint32_t i = 0; i < m_passesCount; ++i )
 		{
-			if ( m_startedPasses[i] )
+			auto & started = m_startedPasses[i];
+
+			if ( started.first )
 			{
 				try
 				{
@@ -138,14 +145,21 @@ namespace castor3d
 						, 0u
 						, VK_QUERY_RESULT_WAIT_BIT
 						, values );
-					m_gpuTime += Nanoseconds{ uint64_t( ( values[1] - values[0] ) / period ) };
+					auto gpuTime = Nanoseconds{ uint64_t( ( values[1] - values[0] ) / period ) };
+					m_gpuTime += gpuTime;
+
+					if ( started.second )
+					{
+						m_subtracteGpuTime += gpuTime;
+					}
 				}
 				catch ( ashes::Exception & exc )
 				{
 					std::cerr << exc.what() << std::endl;
 				}
 
-				m_startedPasses[i] = false;
+				started.first = false;
+				started.second = false;
 			}
 		}
 	}
