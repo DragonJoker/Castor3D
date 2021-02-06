@@ -50,10 +50,10 @@ namespace castor3d
 				}
 				, ashes::VkVertexInputAttributeDescriptionArray
 				{
-					{ RenderPass::VertexInputs::Position2Location + 0u, BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InterleavedVertex, pos ) },
-					{ RenderPass::VertexInputs::Normal2Location + 1u, BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InterleavedVertex, nml ) },
-					{ RenderPass::VertexInputs::Tangent2Location + 2u, BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InterleavedVertex, tan ) },
-					{ RenderPass::VertexInputs::Texture2Location + 3u, BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InterleavedVertex, tex ) },
+					{ SceneRenderPass::VertexInputs::Position2Location + 0u, BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InterleavedVertex, pos ) },
+					{ SceneRenderPass::VertexInputs::Normal2Location + 1u, BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InterleavedVertex, nml ) },
+					{ SceneRenderPass::VertexInputs::Tangent2Location + 2u, BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InterleavedVertex, tan ) },
+					{ SceneRenderPass::VertexInputs::Texture2Location + 3u, BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InterleavedVertex, tex ) },
 				} );
 		}
 

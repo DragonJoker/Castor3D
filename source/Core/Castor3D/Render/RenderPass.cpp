@@ -103,7 +103,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	RenderPass::RenderPass( String const & category
+	SceneRenderPass::SceneRenderPass( String const & category
 		, String const & name
 		, Engine & engine
 		, MatrixUbo & matrixUbo
@@ -130,39 +130,39 @@ namespace castor3d
 		m_culler.getScene().getBillboardListCache().registerPass( *this );
 	}
 
-	RenderPass::RenderPass( String const & category
+	SceneRenderPass::SceneRenderPass( String const & category
 		, String const & name
 		, Engine & engine
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, uint32_t instanceMult )
-		: RenderPass{ category, name, engine, matrixUbo, culler, RenderMode::eOpaqueOnly, true, false, nullptr, instanceMult }
+		: SceneRenderPass{ category, name, engine, matrixUbo, culler, RenderMode::eOpaqueOnly, true, false, nullptr, instanceMult }
 	{
 	}
 
-	RenderPass::RenderPass( String const & category
+	SceneRenderPass::SceneRenderPass( String const & category
 		, String const & name
 		, Engine & engine
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, bool oit
 		, uint32_t instanceMult )
-		: RenderPass{ category, name, engine, matrixUbo, culler, RenderMode::eTransparentOnly, oit, false, nullptr, instanceMult }
+		: SceneRenderPass{ category, name, engine, matrixUbo, culler, RenderMode::eTransparentOnly, oit, false, nullptr, instanceMult }
 	{
 	}
 
-	RenderPass::RenderPass( String const & category
+	SceneRenderPass::SceneRenderPass( String const & category
 		, String const & name
 		, Engine & engine
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, SceneNode const * ignored
 		, uint32_t instanceMult )
-		: RenderPass{ category, name, engine, matrixUbo, culler, RenderMode::eOpaqueOnly, true, false, ignored, instanceMult }
+		: SceneRenderPass{ category, name, engine, matrixUbo, culler, RenderMode::eOpaqueOnly, true, false, ignored, instanceMult }
 	{
 	}
 
-	RenderPass::RenderPass( String const & category
+	SceneRenderPass::SceneRenderPass( String const & category
 		, String const & name
 		, Engine & engine
 		, MatrixUbo & matrixUbo
@@ -170,42 +170,48 @@ namespace castor3d
 		, bool oit
 		, SceneNode const * ignored
 		, uint32_t instanceMult )
-		: RenderPass{ category, name, engine, matrixUbo, culler, RenderMode::eTransparentOnly, oit, false, ignored, instanceMult }
+		: SceneRenderPass{ category, name, engine, matrixUbo, culler, RenderMode::eTransparentOnly, oit, false, ignored, instanceMult }
 	{
 	}
 
-	RenderPass::~RenderPass()
+	bool SceneRenderPass::initialise( RenderDevice const & device
+		, Size const & size
+		, RenderPassTimer & timer
+		, uint32_t index )
 	{
-	}
-
-	bool RenderPass::initialise( RenderDevice const & device
-		, Size const & size )
-	{
-		m_timer = std::make_shared< RenderPassTimer >( device, m_category, getName() );
+		m_timer = &timer;
+		m_index = index;
 		m_sceneUbo.initialise( device );
 		m_sceneUbo.setWindowSize( size );
 		m_size = size;
 		return doInitialise( device, size );
 	}
 
-	void RenderPass::cleanup( RenderDevice const & device )
+	bool SceneRenderPass::initialise( RenderDevice const & device
+		, Size const & size )
+	{
+		m_ownTimer = std::make_shared< RenderPassTimer >( device, m_category, getName() );
+		return initialise( device, size, *m_ownTimer.get(), 0u );
+	}
+
+	void SceneRenderPass::cleanup( RenderDevice const & device )
 	{
 		m_sceneUbo.cleanup();
 		m_renderPass.reset();
 		doCleanup( device );
-		m_timer.reset();
+		m_ownTimer.reset();
 		m_backPipelines.clear();
 		m_frontPipelines.clear();
 	}
 
-	void RenderPass::update( CpuUpdater & updater )
+	void SceneRenderPass::update( CpuUpdater & updater )
 	{
 		doUpdate( *updater.queues );
 		doUpdateUbos( updater );
 		m_isDirty = false;
 	}
 
-	ShaderPtr RenderPass::getVertexShaderSource( PipelineFlags const & flags )const
+	ShaderPtr SceneRenderPass::getVertexShaderSource( PipelineFlags const & flags )const
 	{
 		ShaderPtr result;
 
@@ -221,12 +227,12 @@ namespace castor3d
 		return result;
 	}
 
-	ShaderPtr RenderPass::getGeometryShaderSource( PipelineFlags const & flags )const
+	ShaderPtr SceneRenderPass::getGeometryShaderSource( PipelineFlags const & flags )const
 	{
 		return doGetGeometryShaderSource( flags );
 	}
 
-	ShaderPtr RenderPass::getPixelShaderSource( PipelineFlags const & flags )const
+	ShaderPtr SceneRenderPass::getPixelShaderSource( PipelineFlags const & flags )const
 	{
 		ShaderPtr result;
 
@@ -246,7 +252,7 @@ namespace castor3d
 		return result;
 	}
 
-	void RenderPass::prepareBackPipeline( PipelineFlags & flags
+	void SceneRenderPass::prepareBackPipeline( PipelineFlags & flags
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts )
 	{
 		doUpdateFlags( flags );
@@ -266,7 +272,7 @@ namespace castor3d
 		}
 	}
 
-	PipelineFlags RenderPass::prepareBackPipeline( BlendMode colourBlendMode
+	PipelineFlags SceneRenderPass::prepareBackPipeline( BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
 		, VkCompareOp alphaFunc
 		, PassFlags const & passFlags
@@ -290,7 +296,7 @@ namespace castor3d
 		return flags;
 	}
 
-	void RenderPass::prepareFrontPipeline( PipelineFlags & flags
+	void SceneRenderPass::prepareFrontPipeline( PipelineFlags & flags
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts )
 	{
 		doUpdateFlags( flags );
@@ -310,7 +316,7 @@ namespace castor3d
 		}
 	}
 
-	PipelineFlags RenderPass::prepareFrontPipeline( BlendMode colourBlendMode
+	PipelineFlags SceneRenderPass::prepareFrontPipeline( BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
 		, VkCompareOp alphaFunc
 		, PassFlags const & passFlags
@@ -334,7 +340,7 @@ namespace castor3d
 		return flags;
 	}
 
-	RenderPipeline * RenderPass::getPipelineFront( PipelineFlags flags )const
+	RenderPipeline * SceneRenderPass::getPipelineFront( PipelineFlags flags )const
 	{
 		if ( m_mode != RenderMode::eTransparentOnly )
 		{
@@ -353,7 +359,7 @@ namespace castor3d
 		return result;
 	}
 
-	RenderPipeline * RenderPass::getPipelineBack( PipelineFlags flags )const
+	RenderPipeline * SceneRenderPass::getPipelineBack( PipelineFlags flags )const
 	{
 		if ( m_mode != RenderMode::eTransparentOnly )
 		{
@@ -372,7 +378,7 @@ namespace castor3d
 		return result;
 	}
 
-	SkinningRenderNode RenderPass::createSkinningNode( Pass & pass
+	SkinningRenderNode SceneRenderPass::createSkinningNode( Pass & pass
 		, RenderPipeline & pipeline
 		, Submesh & submesh
 		, Geometry & primitive
@@ -410,7 +416,7 @@ namespace castor3d
 		};
 	}
 
-	MorphingRenderNode RenderPass::createMorphingNode( Pass & pass
+	MorphingRenderNode SceneRenderPass::createMorphingNode( Pass & pass
 		, RenderPipeline & pipeline
 		, Submesh & submesh
 		, Geometry & primitive
@@ -448,7 +454,7 @@ namespace castor3d
 		};
 	}
 
-	StaticRenderNode RenderPass::createStaticNode( Pass & pass
+	StaticRenderNode SceneRenderPass::createStaticNode( Pass & pass
 		, RenderPipeline & pipeline
 		, Submesh & submesh
 		, Geometry & primitive )
@@ -482,7 +488,7 @@ namespace castor3d
 		};
 	}
 
-	BillboardRenderNode RenderPass::createBillboardNode( Pass & pass
+	BillboardRenderNode SceneRenderPass::createBillboardNode( Pass & pass
 		, RenderPipeline & pipeline
 		, BillboardBase & billboard )
 	{
@@ -512,17 +518,17 @@ namespace castor3d
 		};
 	}
 
-	void RenderPass::updatePipeline( RenderPipeline & pipeline )
+	void SceneRenderPass::updatePipeline( RenderPipeline & pipeline )
 	{
 		doUpdatePipeline( pipeline );
 	}
 
-	void RenderPass::updateFlags( PipelineFlags & flags )const
+	void SceneRenderPass::updateFlags( PipelineFlags & flags )const
 	{
 		doUpdateFlags( flags );
 	}
 
-	ashes::PipelineColorBlendStateCreateInfo RenderPass::createBlendState( BlendMode colourBlendMode
+	ashes::PipelineColorBlendStateCreateInfo SceneRenderPass::createBlendState( BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
 		, uint32_t attachesCount )
 	{
@@ -617,7 +623,7 @@ namespace castor3d
 		};
 	}
 
-	TextureFlags RenderPass::getTexturesMask()const
+	TextureFlags SceneRenderPass::getTexturesMask()const
 	{
 		return TextureFlags{ TextureFlag::eAll };
 	}
@@ -677,7 +683,7 @@ namespace castor3d
 		}
 	}
 
-	void RenderPass::initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
+	void SceneRenderPass::initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
 		, BillboardRenderNode & node )
 	{
 		auto & layout = descriptorPool.getLayout();
@@ -694,7 +700,7 @@ namespace castor3d
 		node.uboDescriptorSet->update();
 	}
 
-	void RenderPass::initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
+	void SceneRenderPass::initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
 		, MorphingRenderNode & node )
 	{
 		auto & layout = descriptorPool.getLayout();
@@ -711,7 +717,7 @@ namespace castor3d
 		node.uboDescriptorSet->update();
 	}
 
-	void RenderPass::initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
+	void SceneRenderPass::initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
 		, SkinningRenderNode & node )
 	{
 		auto & layout = descriptorPool.getLayout();
@@ -738,7 +744,7 @@ namespace castor3d
 		node.uboDescriptorSet->update();
 	}
 
-	void RenderPass::initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
+	void SceneRenderPass::initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
 		, StaticRenderNode & node )
 	{
 		auto & layout = descriptorPool.getLayout();
@@ -753,7 +759,7 @@ namespace castor3d
 		node.uboDescriptorSet->update();
 	}
 
-	void RenderPass::initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
+	void SceneRenderPass::initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
 		, SubmeshSkinninRenderNodesByPassMap & nodes )
 	{
 		for ( auto & passNodes : nodes )
@@ -765,7 +771,7 @@ namespace castor3d
 		}
 	}
 
-	void RenderPass::initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
+	void SceneRenderPass::initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
 		, SubmeshStaticRenderNodesByPassMap & nodes )
 	{
 		for ( auto & passNodes : nodes )
@@ -777,7 +783,7 @@ namespace castor3d
 		}
 	}
 
-	void RenderPass::initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
+	void SceneRenderPass::initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
 		, BillboardRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
@@ -789,7 +795,7 @@ namespace castor3d
 		node.texDescriptorSet->update();
 	}
 
-	void RenderPass::initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
+	void SceneRenderPass::initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
 		, MorphingRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
@@ -801,7 +807,7 @@ namespace castor3d
 		node.texDescriptorSet->update();
 	}
 
-	void RenderPass::initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
+	void SceneRenderPass::initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
 		, SkinningRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
@@ -813,7 +819,7 @@ namespace castor3d
 		node.texDescriptorSet->update();
 	}
 
-	void RenderPass::initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
+	void SceneRenderPass::initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
 		, StaticRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
@@ -828,7 +834,7 @@ namespace castor3d
 	namespace
 	{
 		template< typename MapType >
-		void initialiseTextureDescriptors( RenderPass & renderPass
+		void initialiseTextureDescriptors( SceneRenderPass & renderPass
 			, ashes::DescriptorSetPool const & descriptorPool
 			, MapType & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )
@@ -849,7 +855,7 @@ namespace castor3d
 		}
 	}
 
-	void RenderPass::initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
+	void SceneRenderPass::initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
 		, SubmeshSkinninRenderNodesByPassMap & nodes
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
@@ -859,7 +865,7 @@ namespace castor3d
 			, shadowMaps );
 	}
 
-	void RenderPass::initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
+	void SceneRenderPass::initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
 		, SubmeshStaticRenderNodesByPassMap & nodes
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
@@ -869,7 +875,7 @@ namespace castor3d
 			, shadowMaps );
 	}
 
-	PassRenderNode RenderPass::doCreatePassRenderNode( Pass & pass
+	PassRenderNode SceneRenderPass::doCreatePassRenderNode( Pass & pass
 		, RenderPipeline & pipeline )
 	{
 		return PassRenderNode
@@ -878,13 +884,13 @@ namespace castor3d
 		};
 	}
 
-	SceneRenderNode RenderPass::doCreateSceneRenderNode( Scene & scene
+	SceneRenderNode SceneRenderPass::doCreateSceneRenderNode( Scene & scene
 		, RenderPipeline & pipeline )
 	{
 		return SceneRenderNode{};
 	}
 
-	ShaderProgramSPtr RenderPass::doGetProgram( PipelineFlags const & flags )const
+	ShaderProgramSPtr SceneRenderPass::doGetProgram( PipelineFlags const & flags )const
 	{
 		return getEngine()->getShaderProgramCache().getAutomaticProgram( *this
 			, flags );
@@ -922,13 +928,13 @@ namespace castor3d
 		}
 	}
 
-	uint32_t RenderPass::doCopyNodesMatrices( StaticRenderNodePtrArray const & renderNodes
+	uint32_t SceneRenderPass::doCopyNodesMatrices( StaticRenderNodePtrArray const & renderNodes
 		, std::vector< InstantiationData > & matrixBuffer )const
 	{
 		return copyNodesMatrices( renderNodes, matrixBuffer, m_instanceMult );
 	}
 
-	uint32_t RenderPass::doCopyNodesMatrices( StaticRenderNodePtrArray const & renderNodes
+	uint32_t SceneRenderPass::doCopyNodesMatrices( StaticRenderNodePtrArray const & renderNodes
 		, std::vector< InstantiationData > & matrixBuffer
 		, RenderInfo & info )const
 	{
@@ -937,13 +943,13 @@ namespace castor3d
 		return count;
 	}
 
-	uint32_t RenderPass::doCopyNodesMatrices( SkinningRenderNodePtrArray const & renderNodes
+	uint32_t SceneRenderPass::doCopyNodesMatrices( SkinningRenderNodePtrArray const & renderNodes
 		, std::vector< InstantiationData > & matrixBuffer )const
 	{
 		return copyNodesMatrices( renderNodes, matrixBuffer, m_instanceMult );
 	}
 
-	uint32_t RenderPass::doCopyNodesMatrices( SkinningRenderNodePtrArray const & renderNodes
+	uint32_t SceneRenderPass::doCopyNodesMatrices( SkinningRenderNodePtrArray const & renderNodes
 		, std::vector< InstantiationData > & matrixBuffer
 		, RenderInfo & info )const
 	{
@@ -952,7 +958,7 @@ namespace castor3d
 		return count;
 	}
 
-	uint32_t RenderPass::doCopyNodesBones( SkinningRenderNodePtrArray const & renderNodes
+	uint32_t SceneRenderPass::doCopyNodesBones( SkinningRenderNodePtrArray const & renderNodes
 		, ShaderBuffer & bonesBuffer )const
 	{
 		uint32_t const mtxSize = sizeof( float ) * 16;
@@ -981,7 +987,7 @@ namespace castor3d
 		return count;
 	}
 
-	uint32_t RenderPass::doCopyNodesBones( SkinningRenderNodePtrArray const & renderNodes
+	uint32_t SceneRenderPass::doCopyNodesBones( SkinningRenderNodePtrArray const & renderNodes
 		, ShaderBuffer & bonesBuffer
 		, RenderInfo & info )const
 	{
@@ -990,7 +996,7 @@ namespace castor3d
 		return count;
 	}
 
-	void RenderPass::doUpdate( SubmeshStaticRenderNodesPtrByPipelineMap & nodes )
+	void SceneRenderPass::doUpdate( SubmeshStaticRenderNodesPtrByPipelineMap & nodes )
 	{
 		traverseNodes( nodes
 			, [this]( RenderPipeline & pipeline
@@ -1012,7 +1018,7 @@ namespace castor3d
 			} );
 	}
 
-	void RenderPass::doUpdate( SubmeshStaticRenderNodesPtrByPipelineMap & nodes
+	void SceneRenderPass::doUpdate( SubmeshStaticRenderNodesPtrByPipelineMap & nodes
 		, RenderInfo & info )
 	{
 		traverseNodes( nodes
@@ -1042,7 +1048,7 @@ namespace castor3d
 	namespace
 	{
 		template< typename MapType >
-		inline void renderNonInstanced( RenderPass & pass
+		inline void renderNonInstanced( SceneRenderPass & pass
 			, MapType & nodes )
 		{
 			for ( auto & itPipelines : nodes )
@@ -1052,7 +1058,7 @@ namespace castor3d
 		}
 
 		template< typename MapType >
-		inline void renderNonInstanced( RenderPass & pass
+		inline void renderNonInstanced( SceneRenderPass & pass
 			, MapType & nodes
 			, RenderInfo & info )
 		{
@@ -1071,13 +1077,13 @@ namespace castor3d
 		}
 	}
 
-	void RenderPass::doUpdate( StaticRenderNodesPtrByPipelineMap & nodes )
+	void SceneRenderPass::doUpdate( StaticRenderNodesPtrByPipelineMap & nodes )
 	{
 		renderNonInstanced( *this
 			, nodes );
 	}
 
-	void RenderPass::doUpdate( StaticRenderNodesPtrByPipelineMap & nodes
+	void SceneRenderPass::doUpdate( StaticRenderNodesPtrByPipelineMap & nodes
 		, RenderInfo & info )
 	{
 		renderNonInstanced( *this
@@ -1085,13 +1091,13 @@ namespace castor3d
 			, info );
 	}
 
-	void RenderPass::doUpdate( SkinningRenderNodesPtrByPipelineMap & nodes )
+	void SceneRenderPass::doUpdate( SkinningRenderNodesPtrByPipelineMap & nodes )
 	{
 		renderNonInstanced( *this
 			, nodes );
 	}
 
-	void RenderPass::doUpdate( SkinningRenderNodesPtrByPipelineMap & nodes
+	void SceneRenderPass::doUpdate( SkinningRenderNodesPtrByPipelineMap & nodes
 		, RenderInfo & info )
 	{
 		renderNonInstanced( *this
@@ -1099,7 +1105,7 @@ namespace castor3d
 			, info );
 	}
 
-	void RenderPass::doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes )
+	void SceneRenderPass::doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes )
 	{
 		traverseNodes( nodes
 			, [this]( RenderPipeline & pipeline
@@ -1124,7 +1130,7 @@ namespace castor3d
 			} );
 	}
 
-	void RenderPass::doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes
+	void SceneRenderPass::doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes
 		, RenderInfo & info )
 	{
 		traverseNodes( nodes
@@ -1153,13 +1159,13 @@ namespace castor3d
 			} );
 	}
 
-	void RenderPass::doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes )
+	void SceneRenderPass::doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes )
 	{
 		renderNonInstanced( *this
 			, nodes );
 	}
 
-	void RenderPass::doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes
+	void SceneRenderPass::doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes
 		, RenderInfo & info )
 	{
 		renderNonInstanced( *this
@@ -1167,13 +1173,13 @@ namespace castor3d
 			, info );
 	}
 
-	void RenderPass::doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes )
+	void SceneRenderPass::doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes )
 	{
 		renderNonInstanced( *this
 			, nodes );
 	}
 
-	void RenderPass::doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes
+	void SceneRenderPass::doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes
 		, RenderInfo & info )
 	{
 		renderNonInstanced( *this
@@ -1181,7 +1187,7 @@ namespace castor3d
 			, info );
 	}
 
-	void RenderPass::doUpdateUbos( CpuUpdater & updater )
+	void SceneRenderPass::doUpdateUbos( CpuUpdater & updater )
 	{
 		auto & camera = *updater.camera;
 		auto jitterProjSpace = updater.jitter * 2.0f;
@@ -1203,27 +1209,27 @@ namespace castor3d
 		}
 	}
 
-	std::map< PipelineFlags, RenderPipelineUPtr > & RenderPass::doGetFrontPipelines()
+	std::map< PipelineFlags, RenderPipelineUPtr > & SceneRenderPass::doGetFrontPipelines()
 	{
 		return m_frontPipelines;
 	}
 
-	std::map< PipelineFlags, RenderPipelineUPtr > & RenderPass::doGetBackPipelines()
+	std::map< PipelineFlags, RenderPipelineUPtr > & SceneRenderPass::doGetBackPipelines()
 	{
 		return m_backPipelines;
 	}
 
-	std::map< PipelineFlags, RenderPipelineUPtr > const & RenderPass::doGetFrontPipelines()const
+	std::map< PipelineFlags, RenderPipelineUPtr > const & SceneRenderPass::doGetFrontPipelines()const
 	{
 		return m_frontPipelines;
 	}
 
-	std::map< PipelineFlags, RenderPipelineUPtr > const & RenderPass::doGetBackPipelines()const
+	std::map< PipelineFlags, RenderPipelineUPtr > const & SceneRenderPass::doGetBackPipelines()const
 	{
 		return m_backPipelines;
 	}
 
-	void RenderPass::doPrepareFrontPipeline( ShaderProgramSPtr program
+	void SceneRenderPass::doPrepareFrontPipeline( ShaderProgramSPtr program
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts
 		, PipelineFlags const & flags )
 	{
@@ -1234,7 +1240,7 @@ namespace castor3d
 			auto dsState = doCreateDepthStencilState( flags );
 			auto bdState = doCreateBlendState( flags );
 			auto & pipeline = *pipelines.emplace( flags
-				, std::make_unique< RenderPipeline >( *this
+				, castor::makeUnique< RenderPipeline >( *this
 					, *getEngine()->getRenderSystem()
 					, std::move( dsState )
 					, ashes::PipelineRasterizationStateCreateInfo{ 0u, false, false, VK_POLYGON_MODE_FILL, VK_CULL_MODE_FRONT_BIT }
@@ -1268,7 +1274,7 @@ namespace castor3d
 		}
 	}
 
-	void RenderPass::doPrepareBackPipeline( ShaderProgramSPtr program
+	void SceneRenderPass::doPrepareBackPipeline( ShaderProgramSPtr program
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts
 		, PipelineFlags const & flags )
 	{
@@ -1279,7 +1285,7 @@ namespace castor3d
 			auto dsState = doCreateDepthStencilState( flags );
 			auto bdState = doCreateBlendState( flags );
 			auto & pipeline = *pipelines.emplace( flags
-				, std::make_unique< RenderPipeline >( *this
+				, castor::makeUnique< RenderPipeline >( *this
 					, *getEngine()->getRenderSystem()
 					, std::move( dsState )
 					, ashes::PipelineRasterizationStateCreateInfo{ 0u, false, false, VK_POLYGON_MODE_FILL, VK_CULL_MODE_BACK_BIT }
@@ -1311,7 +1317,7 @@ namespace castor3d
 		}
 	}
 
-	ashes::VkDescriptorSetLayoutBindingArray RenderPass::doCreateUboBindings( PipelineFlags const & flags )const
+	ashes::VkDescriptorSetLayoutBindingArray SceneRenderPass::doCreateUboBindings( PipelineFlags const & flags )const
 	{
 		ashes::VkDescriptorSetLayoutBindingArray uboBindings;
 		uboBindings.emplace_back( getEngine()->getMaterialCache().getPassBuffer().createLayoutBinding() );
@@ -1400,55 +1406,55 @@ namespace castor3d
 		return uboBindings;
 	}
 
-	void RenderPass::doUpdate( RenderQueueArray & queues )
+	void SceneRenderPass::doUpdate( RenderQueueArray & queues )
 	{
 		queues.emplace_back( m_renderQueue );
 	}
 
-	ShaderPtr RenderPass::doGetVertexShaderSource( PipelineFlags const & flags )const
+	ShaderPtr SceneRenderPass::doGetVertexShaderSource( PipelineFlags const & flags )const
 	{
 		using namespace sdw;
 		VertexWriter writer;
 		bool hasTextures = !flags.textures.empty();
 		// Vertex inputs
 		auto position = writer.declInput< Vec4 >( "position"
-			, RenderPass::VertexInputs::PositionLocation );
+			, SceneRenderPass::VertexInputs::PositionLocation );
 		auto normal = writer.declInput< Vec3 >( "normal"
-			, RenderPass::VertexInputs::NormalLocation );
+			, SceneRenderPass::VertexInputs::NormalLocation );
 		auto tangent = writer.declInput< Vec3 >( "tangent"
-			, RenderPass::VertexInputs::TangentLocation );
+			, SceneRenderPass::VertexInputs::TangentLocation );
 		auto uv = writer.declInput< Vec3 >( "uv"
-			, RenderPass::VertexInputs::TextureLocation
+			, SceneRenderPass::VertexInputs::TextureLocation
 			, hasTextures );
 		auto inBoneIds0 = writer.declInput< IVec4 >( "inBoneIds0"
-			, RenderPass::VertexInputs::BoneIds0Location
+			, SceneRenderPass::VertexInputs::BoneIds0Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
 		auto inBoneIds1 = writer.declInput< IVec4 >( "inBoneIds1"
-			, RenderPass::VertexInputs::BoneIds1Location
+			, SceneRenderPass::VertexInputs::BoneIds1Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
 		auto inWeights0 = writer.declInput< Vec4 >( "inWeights0"
-			, RenderPass::VertexInputs::Weights0Location
+			, SceneRenderPass::VertexInputs::Weights0Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
 		auto inWeights1 = writer.declInput< Vec4 >( "inWeights1"
-			, RenderPass::VertexInputs::Weights1Location
+			, SceneRenderPass::VertexInputs::Weights1Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
 		auto transform = writer.declInput< Mat4 >( "transform"
-			, RenderPass::VertexInputs::TransformLocation
+			, SceneRenderPass::VertexInputs::TransformLocation
 			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
 		auto material = writer.declInput< Int >( "material"
-			, RenderPass::VertexInputs::MaterialLocation
+			, SceneRenderPass::VertexInputs::MaterialLocation
 			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
 		auto inPosition2 = writer.declInput< Vec4 >( "inPosition2"
-			, RenderPass::VertexInputs::Position2Location
+			, SceneRenderPass::VertexInputs::Position2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
 		auto inNormal2 = writer.declInput< Vec3 >( "inNormal2"
-			, RenderPass::VertexInputs::Normal2Location
+			, SceneRenderPass::VertexInputs::Normal2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
 		auto inTangent2 = writer.declInput< Vec3 >( "inTangent2"
-			, RenderPass::VertexInputs::Tangent2Location
+			, SceneRenderPass::VertexInputs::Tangent2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
 		auto inTexture2 = writer.declInput< Vec3 >( "inTexture2"
-			, RenderPass::VertexInputs::Texture2Location
+			, SceneRenderPass::VertexInputs::Texture2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) && hasTextures );
 		auto in = writer.getIn();
 
@@ -1461,24 +1467,24 @@ namespace castor3d
 
 		// Outputs
 		auto vtx_worldPosition = writer.declOutput< Vec3 >( "vtx_worldPosition"
-			, RenderPass::VertexOutputs::WorldPositionLocation );
+			, SceneRenderPass::VertexOutputs::WorldPositionLocation );
 		auto vtx_tangentSpaceFragPosition = writer.declOutput< Vec3 >( "vtx_tangentSpaceFragPosition"
-			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
+			, SceneRenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
 		auto vtx_tangentSpaceViewPosition = writer.declOutput< Vec3 >( "vtx_tangentSpaceViewPosition"
-			, RenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
+			, SceneRenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
 		auto vtx_normal = writer.declOutput< Vec3 >( "vtx_normal"
-			, RenderPass::VertexOutputs::NormalLocation );
+			, SceneRenderPass::VertexOutputs::NormalLocation );
 		auto vtx_tangent = writer.declOutput< Vec3 >( "vtx_tangent"
-			, RenderPass::VertexOutputs::TangentLocation );
+			, SceneRenderPass::VertexOutputs::TangentLocation );
 		auto vtx_bitangent = writer.declOutput< Vec3 >( "vtx_bitangent"
-			, RenderPass::VertexOutputs::BitangentLocation );
+			, SceneRenderPass::VertexOutputs::BitangentLocation );
 		auto vtx_texture = writer.declOutput< Vec3 >( "vtx_texture"
-			, RenderPass::VertexOutputs::TextureLocation
+			, SceneRenderPass::VertexOutputs::TextureLocation
 			, hasTextures );
 		auto vtx_instance = writer.declOutput< UInt >( "vtx_instance"
-			, RenderPass::VertexOutputs::InstanceLocation );
+			, SceneRenderPass::VertexOutputs::InstanceLocation );
 		auto vtx_material = writer.declOutput< UInt >( "vtx_material"
-			, RenderPass::VertexOutputs::MaterialLocation );
+			, SceneRenderPass::VertexOutputs::MaterialLocation );
 		auto out = writer.getOut();
 
 		writer.implementFunction< sdw::Void >( "main"
@@ -1574,7 +1580,7 @@ namespace castor3d
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
-	ShaderPtr RenderPass::doGetBillboardShaderSource( PipelineFlags const & flags )const
+	ShaderPtr SceneRenderPass::doGetBillboardShaderSource( PipelineFlags const & flags )const
 	{
 		using namespace sdw;
 		VertexWriter writer;
@@ -1593,30 +1599,30 @@ namespace castor3d
 
 		// Shader outputs
 		auto vtx_worldPosition = writer.declOutput< Vec3 >( "vtx_worldPosition"
-			, RenderPass::VertexOutputs::WorldPositionLocation );
+			, SceneRenderPass::VertexOutputs::WorldPositionLocation );
 		auto vtx_viewPosition = writer.declOutput< Vec3 >( "vtx_viewPosition"
-			, RenderPass::VertexOutputs::ViewPositionLocation );
+			, SceneRenderPass::VertexOutputs::ViewPositionLocation );
 		auto vtx_curPosition = writer.declOutput< Vec3 >( "vtx_curPosition"
-			, RenderPass::VertexOutputs::CurPositionLocation );
+			, SceneRenderPass::VertexOutputs::CurPositionLocation );
 		auto vtx_prvPosition = writer.declOutput< Vec3 >( "vtx_prvPosition"
-			, RenderPass::VertexOutputs::PrvPositionLocation );
+			, SceneRenderPass::VertexOutputs::PrvPositionLocation );
 		auto vtx_tangentSpaceFragPosition = writer.declOutput< Vec3 >( "vtx_tangentSpaceFragPosition"
-			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
+			, SceneRenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
 		auto vtx_tangentSpaceViewPosition = writer.declOutput< Vec3 >( "vtx_tangentSpaceViewPosition"
-			, RenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
+			, SceneRenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
 		auto vtx_normal = writer.declOutput< Vec3 >( "vtx_normal"
-			, RenderPass::VertexOutputs::NormalLocation );
+			, SceneRenderPass::VertexOutputs::NormalLocation );
 		auto vtx_tangent = writer.declOutput< Vec3 >( "vtx_tangent"
-			, RenderPass::VertexOutputs::TangentLocation );
+			, SceneRenderPass::VertexOutputs::TangentLocation );
 		auto vtx_bitangent = writer.declOutput< Vec3 >( "vtx_bitangent"
-			, RenderPass::VertexOutputs::BitangentLocation );
+			, SceneRenderPass::VertexOutputs::BitangentLocation );
 		auto vtx_texture = writer.declOutput< Vec3 >( "vtx_texture"
-			, RenderPass::VertexOutputs::TextureLocation
+			, SceneRenderPass::VertexOutputs::TextureLocation
 			, hasTextures );
 		auto vtx_instance = writer.declOutput< UInt >( "vtx_instance"
-			, RenderPass::VertexOutputs::InstanceLocation );
+			, SceneRenderPass::VertexOutputs::InstanceLocation );
 		auto vtx_material = writer.declOutput< UInt >( "vtx_material"
-			, RenderPass::VertexOutputs::MaterialLocation );
+			, SceneRenderPass::VertexOutputs::MaterialLocation );
 		auto out = writer.getOut();
 
 		writer.implementFunction< Void >( "main"

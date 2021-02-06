@@ -18,11 +18,13 @@
 
 #include <ShaderWriter/Source.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, RenderPipeline )
+
 using namespace castor;
 
 namespace castor3d
 {
-	RenderPipeline::RenderPipeline( RenderPass & owner
+	RenderPipeline::RenderPipeline( SceneRenderPass & owner
 		, RenderSystem & renderSystem
 		, ashes::PipelineDepthStencilStateCreateInfo dsState
 		, ashes::PipelineRasterizationStateCreateInfo rsState
@@ -30,7 +32,7 @@ namespace castor3d
 		, ashes::PipelineMultisampleStateCreateInfo msState
 		, ShaderProgramSPtr program
 		, PipelineFlags const & flags )
-		: OwnedBy< RenderPass >{ owner }
+		: OwnedBy< SceneRenderPass >{ owner }
 		, m_renderSystem{ renderSystem }
 		, m_dsState{ std::move( dsState ) }
 		, m_rsState{ std::move( rsState ) }

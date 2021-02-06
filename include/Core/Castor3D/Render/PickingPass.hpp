@@ -15,7 +15,7 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	class PickingPass
-		: public RenderPass
+		: public SceneRenderPass
 	{
 	public:
 		/**

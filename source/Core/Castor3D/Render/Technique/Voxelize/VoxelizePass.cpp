@@ -61,7 +61,7 @@ namespace castor3d
 		, VoxelizerUbo const & voxelizerUbo
 		, ashes::Buffer< Voxel > const & voxels
 		, VoxelSceneData const & voxelConfig )
-		: RenderPass{ "Voxelize"
+		: SceneRenderPass{ "Voxelize"
 			, "Voxelization"
 			, engine
 			, matrixUbo
@@ -97,7 +97,7 @@ namespace castor3d
 	void VoxelizePass::update( CpuUpdater & updater )
 	{
 		getCuller().compute();
-		RenderPass::update( updater );
+		SceneRenderPass::update( updater );
 	}
 
 	void VoxelizePass::update( GpuUpdater & updater )
@@ -106,19 +106,19 @@ namespace castor3d
 
 		if ( nodes.hasNodes() )
 		{
-			RenderPass::doUpdate( nodes.instancedStaticNodes.frontCulled );
-			RenderPass::doUpdate( nodes.staticNodes.frontCulled );
-			RenderPass::doUpdate( nodes.skinnedNodes.frontCulled );
-			RenderPass::doUpdate( nodes.instancedSkinnedNodes.frontCulled );
-			RenderPass::doUpdate( nodes.morphingNodes.frontCulled );
-			RenderPass::doUpdate( nodes.billboardNodes.frontCulled );
+			SceneRenderPass::doUpdate( nodes.instancedStaticNodes.frontCulled );
+			SceneRenderPass::doUpdate( nodes.staticNodes.frontCulled );
+			SceneRenderPass::doUpdate( nodes.skinnedNodes.frontCulled );
+			SceneRenderPass::doUpdate( nodes.instancedSkinnedNodes.frontCulled );
+			SceneRenderPass::doUpdate( nodes.morphingNodes.frontCulled );
+			SceneRenderPass::doUpdate( nodes.billboardNodes.frontCulled );
 
-			RenderPass::doUpdate( nodes.instancedStaticNodes.backCulled, updater.info );
-			RenderPass::doUpdate( nodes.staticNodes.backCulled, updater.info );
-			RenderPass::doUpdate( nodes.skinnedNodes.backCulled, updater.info );
-			RenderPass::doUpdate( nodes.instancedSkinnedNodes.backCulled, updater.info );
-			RenderPass::doUpdate( nodes.morphingNodes.backCulled, updater.info );
-			RenderPass::doUpdate( nodes.billboardNodes.backCulled, updater.info );
+			SceneRenderPass::doUpdate( nodes.instancedStaticNodes.backCulled, updater.info );
+			SceneRenderPass::doUpdate( nodes.staticNodes.backCulled, updater.info );
+			SceneRenderPass::doUpdate( nodes.skinnedNodes.backCulled, updater.info );
+			SceneRenderPass::doUpdate( nodes.instancedSkinnedNodes.backCulled, updater.info );
+			SceneRenderPass::doUpdate( nodes.morphingNodes.backCulled, updater.info );
+			SceneRenderPass::doUpdate( nodes.billboardNodes.backCulled, updater.info );
 		}
 
 		static const Matrix4x4f identity
@@ -280,7 +280,7 @@ namespace castor3d
 
 	ashes::VkDescriptorSetLayoutBindingArray VoxelizePass::doCreateUboBindings( PipelineFlags const & flags )const
 	{
-		auto uboBindings = RenderPass::doCreateUboBindings( flags );
+		auto uboBindings = SceneRenderPass::doCreateUboBindings( flags );
 		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( VoxelizerUbo::BindingPoint//13
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
@@ -334,7 +334,7 @@ namespace castor3d
 
 	ashes::PipelineColorBlendStateCreateInfo VoxelizePass::doCreateBlendState( PipelineFlags const & flags )const
 	{
-		return RenderPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 1u );
+		return SceneRenderPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 1u );
 	}
 
 	void VoxelizePass::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
@@ -422,38 +422,38 @@ namespace castor3d
 		UBO_MORPHING( writer, MorphingUbo::BindingPoint, 0, flags.programFlags );
 
 		auto inPosition = writer.declInput< Vec4 >( "inPosition"
-			, RenderPass::VertexInputs::PositionLocation );
+			, SceneRenderPass::VertexInputs::PositionLocation );
 		auto inNormal = writer.declInput< Vec3 >( "inNormal"
-			, RenderPass::VertexInputs::NormalLocation );
+			, SceneRenderPass::VertexInputs::NormalLocation );
 		auto inTexcoord = writer.declInput< Vec3 >( "inTexcoord"
-			, RenderPass::VertexInputs::TextureLocation
+			, SceneRenderPass::VertexInputs::TextureLocation
 			, hasTextures );
 		auto inBoneIds0 = writer.declInput< IVec4 >( "inBoneIds0"
-			, RenderPass::VertexInputs::BoneIds0Location
+			, SceneRenderPass::VertexInputs::BoneIds0Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
 		auto inBoneIds1 = writer.declInput< IVec4 >( "inBoneIds1"
-			, RenderPass::VertexInputs::BoneIds1Location
+			, SceneRenderPass::VertexInputs::BoneIds1Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
 		auto inWeights0 = writer.declInput< Vec4 >( "inWeights0"
-			, RenderPass::VertexInputs::Weights0Location
+			, SceneRenderPass::VertexInputs::Weights0Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
 		auto inWeights1 = writer.declInput< Vec4 >( "inWeights1"
-			, RenderPass::VertexInputs::Weights1Location
+			, SceneRenderPass::VertexInputs::Weights1Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
 		auto inTransform = writer.declInput< Mat4 >( "inTransform"
-			, RenderPass::VertexInputs::TransformLocation
+			, SceneRenderPass::VertexInputs::TransformLocation
 			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
 		auto inMaterial = writer.declInput< Int >( "inMaterial"
-			, RenderPass::VertexInputs::MaterialLocation
+			, SceneRenderPass::VertexInputs::MaterialLocation
 			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
 		auto inPosition2 = writer.declInput< Vec4 >( "inPosition2"
-			, RenderPass::VertexInputs::Position2Location
+			, SceneRenderPass::VertexInputs::Position2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
 		auto inNormal2 = writer.declInput< Vec3 >( "inNormal2"
-			, RenderPass::VertexInputs::Normal2Location
+			, SceneRenderPass::VertexInputs::Normal2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
 		auto inTexcoord2 = writer.declInput< Vec3 >( "inTexcoord2"
-			, RenderPass::VertexInputs::Texture2Location
+			, SceneRenderPass::VertexInputs::Texture2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) && hasTextures );
 		auto in = writer.getIn();
 

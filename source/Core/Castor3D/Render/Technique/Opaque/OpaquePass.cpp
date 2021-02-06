@@ -235,7 +235,7 @@ namespace castor3d
 
 	ashes::PipelineColorBlendStateCreateInfo OpaquePass::doCreateBlendState( PipelineFlags const & flags )const
 	{
-		return RenderPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 5u );
+		return SceneRenderPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 5u );
 	}
 
 	void OpaquePass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
@@ -293,53 +293,53 @@ namespace castor3d
 
 		// Geometry Inputs
 		auto inWorldPosition = writer.declInputArray< Vec3 >( "inWorldPosition"
-			, RenderPass::VertexOutputs::WorldPositionLocation, 3u );
+			, SceneRenderPass::VertexOutputs::WorldPositionLocation, 3u );
 		auto inCurPosition = writer.declInputArray< Vec3 >( "inCurPosition"
-			, RenderPass::VertexOutputs::CurPositionLocation, 3u );
+			, SceneRenderPass::VertexOutputs::CurPositionLocation, 3u );
 		auto inPrvPosition = writer.declInputArray< Vec3 >( "inPrvPosition"
-			, RenderPass::VertexOutputs::PrvPositionLocation, 3u );
+			, SceneRenderPass::VertexOutputs::PrvPositionLocation, 3u );
 		auto inTangentSpaceFragPosition = writer.declInputArray< Vec3 >( "inTangentSpaceFragPosition"
-			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation, 3u );
+			, SceneRenderPass::VertexOutputs::TangentSpaceFragPositionLocation, 3u );
 		auto inTangentSpaceViewPosition = writer.declInputArray< Vec3 >( "inTangentSpaceViewPosition"
-			, RenderPass::VertexOutputs::TangentSpaceViewPositionLocation, 3u );
+			, SceneRenderPass::VertexOutputs::TangentSpaceViewPositionLocation, 3u );
 		auto inNormal = writer.declInputArray< Vec3 >( "inNormal"
-			, RenderPass::VertexOutputs::NormalLocation, 3u );
+			, SceneRenderPass::VertexOutputs::NormalLocation, 3u );
 		auto inTangent = writer.declInputArray< Vec3 >( "inTangent"
-			, RenderPass::VertexOutputs::TangentLocation, 3u );
+			, SceneRenderPass::VertexOutputs::TangentLocation, 3u );
 		auto inBitangent = writer.declInputArray< Vec3 >( "inBitangent"
-			, RenderPass::VertexOutputs::BitangentLocation, 3u );
+			, SceneRenderPass::VertexOutputs::BitangentLocation, 3u );
 		auto inTexture = writer.declInputArray< Vec3 >( "inTexture"
-			, RenderPass::VertexOutputs::TextureLocation, 3u
+			, SceneRenderPass::VertexOutputs::TextureLocation, 3u
 			, hasTextures );
 		auto inInstance = writer.declInputArray< UInt >( "inInstance"
-			, RenderPass::VertexOutputs::InstanceLocation, 3u );
+			, SceneRenderPass::VertexOutputs::InstanceLocation, 3u );
 		auto inMaterial = writer.declInputArray< UInt >( "inMaterial"
-			, RenderPass::VertexOutputs::MaterialLocation, 3u );
+			, SceneRenderPass::VertexOutputs::MaterialLocation, 3u );
 
 		// Geometry Outputs
 		auto outWorldPosition = writer.declOutput< Vec3 >( "outWorldPosition"
-			, RenderPass::VertexOutputs::WorldPositionLocation );
+			, SceneRenderPass::VertexOutputs::WorldPositionLocation );
 		auto outCurPosition = writer.declOutput< Vec3 >( "outCurPosition"
-			, RenderPass::VertexOutputs::CurPositionLocation );
+			, SceneRenderPass::VertexOutputs::CurPositionLocation );
 		auto outPrvPosition = writer.declOutput< Vec3 >( "outPrvPosition"
-			, RenderPass::VertexOutputs::PrvPositionLocation );
+			, SceneRenderPass::VertexOutputs::PrvPositionLocation );
 		auto outTangentSpaceFragPosition = writer.declOutput< Vec3 >( "outTangentSpaceFragPosition"
-			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
+			, SceneRenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
 		auto outTangentSpaceViewPosition = writer.declOutput< Vec3 >( "outTangentSpaceViewPosition"
-			, RenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
+			, SceneRenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
 		auto outNormal = writer.declOutput< Vec3 >( "outNormal"
-			, RenderPass::VertexOutputs::NormalLocation );
+			, SceneRenderPass::VertexOutputs::NormalLocation );
 		auto outTangent = writer.declOutput< Vec3 >( "outTangent"
-			, RenderPass::VertexOutputs::TangentLocation );
+			, SceneRenderPass::VertexOutputs::TangentLocation );
 		auto outBitangent = writer.declOutput< Vec3 >( "outBitangent"
-			, RenderPass::VertexOutputs::BitangentLocation );
+			, SceneRenderPass::VertexOutputs::BitangentLocation );
 		auto outTexture = writer.declOutput< Vec3 >( "outTexture"
-			, RenderPass::VertexOutputs::TextureLocation
+			, SceneRenderPass::VertexOutputs::TextureLocation
 			, hasTextures );
 		auto outInstance = writer.declOutput< UInt >( "outInstance"
-			, RenderPass::VertexOutputs::InstanceLocation );
+			, SceneRenderPass::VertexOutputs::InstanceLocation );
 		auto Material = writer.declOutput< UInt >( "Material"
-			, RenderPass::VertexOutputs::MaterialLocation );
+			, SceneRenderPass::VertexOutputs::MaterialLocation );
 
 		writer.implementFunction< sdw::Void >( "main"
 			, [&]()
@@ -393,28 +393,28 @@ namespace castor3d
 
 		// Fragment Inputs
 		auto inWorldPosition = writer.declInput< Vec3 >( "inWorldPosition"
-			, RenderPass::VertexOutputs::WorldPositionLocation );
+			, SceneRenderPass::VertexOutputs::WorldPositionLocation );
 		auto inCurPosition = writer.declInput< Vec3 >( "inCurPosition"
-			, RenderPass::VertexOutputs::CurPositionLocation );
+			, SceneRenderPass::VertexOutputs::CurPositionLocation );
 		auto inPrvPosition = writer.declInput< Vec3 >( "inPrvPosition"
-			, RenderPass::VertexOutputs::PrvPositionLocation );
+			, SceneRenderPass::VertexOutputs::PrvPositionLocation );
 		auto inTangentSpaceFragPosition = writer.declInput< Vec3 >( "inTangentSpaceFragPosition"
-			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
+			, SceneRenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
 		auto inTangentSpaceViewPosition = writer.declInput< Vec3 >( "inTangentSpaceViewPosition"
-			, RenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
+			, SceneRenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
 		auto inNormal = writer.declInput< Vec3 >( "inNormal"
-			, RenderPass::VertexOutputs::NormalLocation );
+			, SceneRenderPass::VertexOutputs::NormalLocation );
 		auto inTangent = writer.declInput< Vec3 >( "inTangent"
-			, RenderPass::VertexOutputs::TangentLocation );
+			, SceneRenderPass::VertexOutputs::TangentLocation );
 		auto inBitangent = writer.declInput< Vec3 >( "inBitangent"
-			, RenderPass::VertexOutputs::BitangentLocation );
+			, SceneRenderPass::VertexOutputs::BitangentLocation );
 		auto inTexture = writer.declInput< Vec3 >( "inTexture"
-			, RenderPass::VertexOutputs::TextureLocation
+			, SceneRenderPass::VertexOutputs::TextureLocation
 			, hasTextures );
 		auto inInstance = writer.declInput< UInt >( "inInstance"
-			, RenderPass::VertexOutputs::InstanceLocation );
+			, SceneRenderPass::VertexOutputs::InstanceLocation );
 		auto inMaterial = writer.declInput< UInt >( "inMaterial"
-			, RenderPass::VertexOutputs::MaterialLocation );
+			, SceneRenderPass::VertexOutputs::MaterialLocation );
 
 		auto index = getMinTextureIndex();
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
@@ -547,28 +547,28 @@ namespace castor3d
 
 		// Fragment Inputs
 		auto inWorldPosition = writer.declInput< Vec3 >( "inWorldPosition"
-			, RenderPass::VertexOutputs::WorldPositionLocation );
+			, SceneRenderPass::VertexOutputs::WorldPositionLocation );
 		auto inCurPosition = writer.declInput< Vec3 >( "inCurPosition"
-			, RenderPass::VertexOutputs::CurPositionLocation );
+			, SceneRenderPass::VertexOutputs::CurPositionLocation );
 		auto inPrvPosition = writer.declInput< Vec3 >( "inPrvPosition"
-			, RenderPass::VertexOutputs::PrvPositionLocation );
+			, SceneRenderPass::VertexOutputs::PrvPositionLocation );
 		auto inTangentSpaceFragPosition = writer.declInput< Vec3 >( "inTangentSpaceFragPosition"
-			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
+			, SceneRenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
 		auto inTangentSpaceViewPosition = writer.declInput< Vec3 >( "inTangentSpaceViewPosition"
-			, RenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
+			, SceneRenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
 		auto inNormal = writer.declInput< Vec3 >( "inNormal"
-			, RenderPass::VertexOutputs::NormalLocation );
+			, SceneRenderPass::VertexOutputs::NormalLocation );
 		auto inTangent = writer.declInput< Vec3 >( "inTangent"
-			, RenderPass::VertexOutputs::TangentLocation );
+			, SceneRenderPass::VertexOutputs::TangentLocation );
 		auto inBitangent = writer.declInput< Vec3 >( "inBitangent"
-			, RenderPass::VertexOutputs::BitangentLocation );
+			, SceneRenderPass::VertexOutputs::BitangentLocation );
 		auto inTexture = writer.declInput< Vec3 >( "inTexture"
-			, RenderPass::VertexOutputs::TextureLocation
+			, SceneRenderPass::VertexOutputs::TextureLocation
 			, hasTextures );
 		auto inInstance = writer.declInput< UInt >( "inInstance"
-			, RenderPass::VertexOutputs::InstanceLocation );
+			, SceneRenderPass::VertexOutputs::InstanceLocation );
 		auto inMaterial = writer.declInput< UInt >( "inMaterial"
-			, RenderPass::VertexOutputs::MaterialLocation );
+			, SceneRenderPass::VertexOutputs::MaterialLocation );
 
 		auto index = getMinTextureIndex();
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
@@ -701,28 +701,28 @@ namespace castor3d
 
 		// Fragment Inputs
 		auto inWorldPosition = writer.declInput< Vec3 >( "inWorldPosition"
-			, RenderPass::VertexOutputs::WorldPositionLocation );
+			, SceneRenderPass::VertexOutputs::WorldPositionLocation );
 		auto inCurPosition = writer.declInput< Vec3 >( "inCurPosition"
-			, RenderPass::VertexOutputs::CurPositionLocation );
+			, SceneRenderPass::VertexOutputs::CurPositionLocation );
 		auto inPrvPosition = writer.declInput< Vec3 >( "inPrvPosition"
-			, RenderPass::VertexOutputs::PrvPositionLocation );
+			, SceneRenderPass::VertexOutputs::PrvPositionLocation );
 		auto inTangentSpaceFragPosition = writer.declInput< Vec3 >( "inTangentSpaceFragPosition"
-			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
+			, SceneRenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
 		auto inTangentSpaceViewPosition = writer.declInput< Vec3 >( "inTangentSpaceViewPosition"
-			, RenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
+			, SceneRenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
 		auto inNormal = writer.declInput< Vec3 >( "inNormal"
-			, RenderPass::VertexOutputs::NormalLocation );
+			, SceneRenderPass::VertexOutputs::NormalLocation );
 		auto inTangent = writer.declInput< Vec3 >( "inTangent"
-			, RenderPass::VertexOutputs::TangentLocation );
+			, SceneRenderPass::VertexOutputs::TangentLocation );
 		auto inBitangent = writer.declInput< Vec3 >( "inBitangent"
-			, RenderPass::VertexOutputs::BitangentLocation );
+			, SceneRenderPass::VertexOutputs::BitangentLocation );
 		auto inTexture = writer.declInput< Vec3 >( "inTexture"
-			, RenderPass::VertexOutputs::TextureLocation
+			, SceneRenderPass::VertexOutputs::TextureLocation
 			, hasTextures );
 		auto inInstance = writer.declInput< UInt >( "inInstance"
-			, RenderPass::VertexOutputs::InstanceLocation );
+			, SceneRenderPass::VertexOutputs::InstanceLocation );
 		auto inMaterial = writer.declInput< UInt >( "inMaterial"
-			, RenderPass::VertexOutputs::MaterialLocation );
+			, SceneRenderPass::VertexOutputs::MaterialLocation );
 
 		auto index = getMinTextureIndex();
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"

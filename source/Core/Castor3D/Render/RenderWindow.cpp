@@ -36,6 +36,8 @@
 
 #include <CastorUtils/Design/BlockGuard.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, RenderWindow )
+
 namespace castor3d
 {
 	namespace

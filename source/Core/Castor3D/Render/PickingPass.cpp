@@ -40,6 +40,8 @@
 
 #include <ShaderWriter/Source.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, PickingPass )
+
 using namespace castor;
 
 namespace castor3d
@@ -278,7 +280,7 @@ namespace castor3d
 	PickingPass::PickingPass( Engine & engine
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler )
-		: RenderPass{ cuT( "Picking" )
+		: SceneRenderPass{ cuT( "Picking" )
 			, cuT( "Picking" )
 			, engine
 			, matrixUbo
@@ -286,7 +288,8 @@ namespace castor3d
 			, RenderMode::eBoth
 			, true
 			, false
-			, nullptr }
+			, nullptr
+			, 1u }
 	{
 		engine.sendEvent( makeGpuFunctorEvent( EventType::ePreRender
 			, [this]( RenderDevice const & device )
@@ -793,32 +796,32 @@ namespace castor3d
 		VertexWriter writer;
 		// Vertex inputs
 		auto inPosition = writer.declInput< Vec4 >( "inPosition"
-			, RenderPass::VertexInputs::PositionLocation );
+			, SceneRenderPass::VertexInputs::PositionLocation );
 		auto inTexture = writer.declInput< Vec3 >( "inTexture"
-			, RenderPass::VertexInputs::TextureLocation );
+			, SceneRenderPass::VertexInputs::TextureLocation );
 		auto inBoneIds0 = writer.declInput< IVec4 >( "inBoneIds0"
-			, RenderPass::VertexInputs::BoneIds0Location
+			, SceneRenderPass::VertexInputs::BoneIds0Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
 		auto inBoneIds1 = writer.declInput< IVec4 >( "inBoneIds1"
-			, RenderPass::VertexInputs::BoneIds1Location
+			, SceneRenderPass::VertexInputs::BoneIds1Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
 		auto inWeights0 = writer.declInput< Vec4 >( "inWeights0"
-			, RenderPass::VertexInputs::Weights0Location
+			, SceneRenderPass::VertexInputs::Weights0Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
 		auto inWeights1 = writer.declInput< Vec4 >( "inWeights1"
-			, RenderPass::VertexInputs::Weights1Location
+			, SceneRenderPass::VertexInputs::Weights1Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
 		auto inTransform = writer.declInput< Mat4 >( "inTransform"
-			, RenderPass::VertexInputs::TransformLocation
+			, SceneRenderPass::VertexInputs::TransformLocation
 			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
 		auto inMaterial = writer.declInput< Int >( "inMaterial"
-			, RenderPass::VertexInputs::MaterialLocation
+			, SceneRenderPass::VertexInputs::MaterialLocation
 			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
 		auto inPosition2 = writer.declInput< Vec4 >( "inPosition2"
-			, RenderPass::VertexInputs::Position2Location
+			, SceneRenderPass::VertexInputs::Position2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
 		auto inTexture2 = writer.declInput< Vec3 >( "inTexture2"
-			, RenderPass::VertexInputs::Texture2Location
+			, SceneRenderPass::VertexInputs::Texture2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
 		auto in = writer.getIn();
 
@@ -830,11 +833,11 @@ namespace castor3d
 
 		// Outputs
 		auto outTexture = writer.declOutput< Vec3 >( "outTexture"
-			, RenderPass::VertexOutputs::TextureLocation );
+			, SceneRenderPass::VertexOutputs::TextureLocation );
 		auto outInstance = writer.declOutput< UInt >( "outInstance"
-			, RenderPass::VertexOutputs::InstanceLocation );
+			, SceneRenderPass::VertexOutputs::InstanceLocation );
 		auto outMaterial = writer.declOutput< UInt >( "outMaterial"
-			, RenderPass::VertexOutputs::MaterialLocation );
+			, SceneRenderPass::VertexOutputs::MaterialLocation );
 		auto out = writer.getOut();
 
 		writer.implementFunction< sdw::Void >( "main"
@@ -928,11 +931,11 @@ namespace castor3d
 		// Fragment Intputs
 		auto in = writer.getIn();
 		auto vtx_texture = writer.declInput< Vec3 >( "vtx_texture"
-			, RenderPass::VertexOutputs::TextureLocation );
+			, SceneRenderPass::VertexOutputs::TextureLocation );
 		auto vtx_instance = writer.declInput< UInt >( "vtx_instance"
-			, RenderPass::VertexOutputs::InstanceLocation );
+			, SceneRenderPass::VertexOutputs::InstanceLocation );
 		auto vtx_material = writer.declInput< UInt >( "vtx_material"
-			, RenderPass::VertexOutputs::MaterialLocation );
+			, SceneRenderPass::VertexOutputs::MaterialLocation );
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
 			, getMinTextureIndex()
 			, 1u
@@ -1008,7 +1011,7 @@ namespace castor3d
 
 	ashes::PipelineColorBlendStateCreateInfo PickingPass::doCreateBlendState( PipelineFlags const & flags )const
 	{
-		return RenderPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u );
+		return SceneRenderPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u );
 	}
 
 	//*********************************************************************************************

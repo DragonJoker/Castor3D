@@ -136,10 +136,10 @@ namespace castor3d
 					}
 					, ashes::VkVertexInputAttributeDescriptionArray
 					{
-						{ RenderPass::VertexInputs::PositionLocation, 0u, VK_FORMAT_R32G32B32_SFLOAT, offsetof( InterleavedVertex, pos ) },
-						{ RenderPass::VertexInputs::NormalLocation, 0u, VK_FORMAT_R32G32B32_SFLOAT, offsetof( InterleavedVertex, nml ) },
-						{ RenderPass::VertexInputs::TangentLocation, 0u, VK_FORMAT_R32G32B32_SFLOAT, offsetof( InterleavedVertex, tan ) },
-						{ RenderPass::VertexInputs::TextureLocation, 0u, VK_FORMAT_R32G32B32_SFLOAT, offsetof( InterleavedVertex, tex ) },
+						{ SceneRenderPass::VertexInputs::PositionLocation, 0u, VK_FORMAT_R32G32B32_SFLOAT, offsetof( InterleavedVertex, pos ) },
+						{ SceneRenderPass::VertexInputs::NormalLocation, 0u, VK_FORMAT_R32G32B32_SFLOAT, offsetof( InterleavedVertex, nml ) },
+						{ SceneRenderPass::VertexInputs::TangentLocation, 0u, VK_FORMAT_R32G32B32_SFLOAT, offsetof( InterleavedVertex, tan ) },
+						{ SceneRenderPass::VertexInputs::TextureLocation, 0u, VK_FORMAT_R32G32B32_SFLOAT, offsetof( InterleavedVertex, tex ) },
 					} );
 			}
 
@@ -152,9 +152,9 @@ namespace castor3d
 					}
 					, ashes::VkVertexInputAttributeDescriptionArray
 					{
-						{ RenderPass::VertexInputs::PositionLocation, 0u, VK_FORMAT_R32G32B32_SFLOAT, offsetof( InterleavedVertex, pos ) },
-						{ RenderPass::VertexInputs::NormalLocation, 0u, VK_FORMAT_R32G32B32_SFLOAT, offsetof( InterleavedVertex, nml ) },
-						{ RenderPass::VertexInputs::TangentLocation, 0u, VK_FORMAT_R32G32B32_SFLOAT, offsetof( InterleavedVertex, tan ) },
+						{ SceneRenderPass::VertexInputs::PositionLocation, 0u, VK_FORMAT_R32G32B32_SFLOAT, offsetof( InterleavedVertex, pos ) },
+						{ SceneRenderPass::VertexInputs::NormalLocation, 0u, VK_FORMAT_R32G32B32_SFLOAT, offsetof( InterleavedVertex, nml ) },
+						{ SceneRenderPass::VertexInputs::TangentLocation, 0u, VK_FORMAT_R32G32B32_SFLOAT, offsetof( InterleavedVertex, tan ) },
 					} );
 			}
 

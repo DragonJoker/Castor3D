@@ -313,11 +313,11 @@ namespace castor3d
 
 		if ( threaded )
 		{
-			m_renderLoop = std::make_unique< RenderLoopAsync >( *this, wanted );
+			m_renderLoop.reset( new RenderLoopAsync{ *this, wanted } );
 		}
 		else
 		{
-			m_renderLoop = std::make_unique< RenderLoopSync >( *this, wanted );
+			m_renderLoop.reset( new RenderLoopSync{ *this, wanted } );
 		}
 
 		m_cleaned = false;
@@ -378,7 +378,7 @@ namespace castor3d
 
 		if ( it != m_rendererList.end() )
 		{
-			m_renderSystem = std::make_unique< RenderSystem >( *this
+			m_renderSystem = castor::makeUnique< RenderSystem >( *this
 				, *it );
 		}
 

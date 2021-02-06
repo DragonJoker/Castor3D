@@ -41,7 +41,7 @@ namespace castor3d
 	{
 	}
 
-	void BillboardUboPools::registerPass( RenderPass const & renderPass )
+	void BillboardUboPools::registerPass( SceneRenderPass const & renderPass )
 	{
 		auto instanceMult = renderPass.getInstanceMult();
 		auto iresult = m_instances.emplace( instanceMult, RenderPassSet{} );
@@ -65,7 +65,7 @@ namespace castor3d
 		iresult.first->second.insert( &renderPass );
 	}
 
-	void BillboardUboPools::unregisterPass( RenderPass const * renderPass
+	void BillboardUboPools::unregisterPass( SceneRenderPass const * renderPass
 		, uint32_t instanceMult )
 	{
 		auto instIt = m_instances.find( instanceMult );

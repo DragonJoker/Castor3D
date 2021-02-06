@@ -16,7 +16,7 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	class RenderTechniquePass
-		: public RenderPass
+		: public SceneRenderPass
 	{
 	protected:
 		/**
@@ -85,12 +85,8 @@ namespace castor3d
 
 	public:
 		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
+		 *\copydoc		castor3d::RenderPass::initialise
 		 */
-		C3D_API virtual ~RenderTechniquePass();
 		/**
 		 *\copydoc		castor3d::RenderPass::initialise
 		 */
@@ -133,7 +129,7 @@ namespace castor3d
 		/**@}*/
 
 	public:
-		using RenderPass::update;
+		using SceneRenderPass::update;
 
 	protected:
 		/**
@@ -226,7 +222,7 @@ namespace castor3d
 		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
 
 	private:
-		using RenderPass::initialise;
+		using SceneRenderPass::initialise;
 
 	protected:
 		Scene const & m_scene;

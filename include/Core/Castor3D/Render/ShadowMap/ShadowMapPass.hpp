@@ -19,7 +19,7 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	class ShadowMapPass
-		: public RenderPass
+		: public SceneRenderPass
 	{
 	public:
 		/**

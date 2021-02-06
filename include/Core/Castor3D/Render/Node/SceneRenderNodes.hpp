@@ -72,12 +72,12 @@ namespace castor3d
 			, Geometry & instance
 			, Pass & pass
 			, Submesh & submesh
-			, RenderPass & renderPass );
+			, SceneRenderPass & renderPass );
 		C3D_API void addRenderNode( PipelineFlags const & flags
 			, CulledBillboard const & culledNode
 			, Pass & pass
 			, BillboardBase & billboard
-			, RenderPass & renderPass );
+			, SceneRenderPass & renderPass );
 
 		inline bool hasNodes()const
 		{

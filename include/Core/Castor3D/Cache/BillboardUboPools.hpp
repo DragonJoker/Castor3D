@@ -44,8 +44,8 @@ namespace castor3d
 		 */
 		C3D_API explicit BillboardUboPools( RenderDevice const & device );
 
-		C3D_API void registerPass( RenderPass const & renderPass );
-		C3D_API void unregisterPass( RenderPass const * renderPass
+		C3D_API void registerPass( SceneRenderPass const & renderPass );
+		C3D_API void unregisterPass( SceneRenderPass const * renderPass
 			, uint32_t instanceMult );
 		/**
 		 *\~english
@@ -100,7 +100,7 @@ namespace castor3d
 		std::map< BillboardBase *, OnBillboardMaterialChangedConnection > m_connections;
 		RenderPassTimerSPtr m_updateTimer;
 		std::shared_ptr< BillboardUboPools > m_billboardPools;
-		using RenderPassSet = std::set< RenderPass const * >;
+		using RenderPassSet = std::set< SceneRenderPass const * >;
 		std::map< uint32_t, RenderPassSet > m_instances;
 	};
 }

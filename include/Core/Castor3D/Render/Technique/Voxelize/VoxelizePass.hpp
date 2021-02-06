@@ -13,7 +13,7 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	class VoxelizePass
-		: public RenderPass
+		: public SceneRenderPass
 	{
 	public:
 		/**
@@ -78,7 +78,7 @@ namespace castor3d
 		}
 		/**@}*/
 
-		using RenderPass::update;
+		using SceneRenderPass::update;
 
 	private:
 		/**

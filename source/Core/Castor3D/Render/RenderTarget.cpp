@@ -39,6 +39,8 @@
 
 #include <ShaderWriter/Source.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, RenderTarget )
+
 using namespace castor;
 
 namespace castor3d

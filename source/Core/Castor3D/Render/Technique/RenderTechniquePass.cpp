@@ -54,7 +54,7 @@ namespace castor3d
 		template< typename MapType >
 		void doSortAlpha( MapType & input
 			, Camera const & camera
-			, RenderPass::DistanceSortedNodeMap & output )
+			, SceneRenderPass::DistanceSortedNodeMap & output )
 		{
 			for ( auto & itPipelines : input )
 			{
@@ -131,7 +131,7 @@ namespace castor3d
 		, LpvGridConfigUbo const * lpvConfigUbo
 		, LayeredLpvGridConfigUbo const * llpvConfigUbo
 		, VoxelizerUbo const * vctConfigUbo )
-		: RenderPass{ category, name, *culler.getScene().getEngine(), matrixUbo, culler, ignored }
+		: SceneRenderPass{ category, name, *culler.getScene().getEngine(), matrixUbo, culler, ignored }
 		, m_scene{ culler.getScene() }
 		, m_camera{ culler.hasCamera() ? &culler.getCamera() : nullptr }
 		, m_sceneNode{}
@@ -154,7 +154,7 @@ namespace castor3d
 		, LpvGridConfigUbo const * lpvConfigUbo
 		, LayeredLpvGridConfigUbo const * llpvConfigUbo
 		, VoxelizerUbo const * vctConfigUbo )
-		: RenderPass{ category, name, *culler.getScene().getEngine(), matrixUbo, culler, oit, ignored }
+		: SceneRenderPass{ category, name, *culler.getScene().getEngine(), matrixUbo, culler, oit, ignored }
 		, m_scene{ culler.getScene() }
 		, m_camera{ culler.hasCamera() ? &culler.getCamera() : nullptr }
 		, m_sceneNode{}
@@ -166,10 +166,6 @@ namespace castor3d
 	{
 	}
 
-	RenderTechniquePass::~RenderTechniquePass()
-	{
-	}
-
 	bool RenderTechniquePass::initialise( RenderDevice const & device
 		, castor::Size const & size
 		, LightVolumePassResult const * lpvResult
@@ -177,7 +173,19 @@ namespace castor3d
 	{
 		m_lpvResult = lpvResult;
 		m_vctResult = vctResult;
-		return RenderPass::initialise( device, size );
+		return SceneRenderPass::initialise( device, size );
+	}
+
+	bool RenderTechniquePass::initialise( RenderDevice const & device
+		, castor::Size const & size
+		, RenderPassTimer & timer
+		, uint32_t index
+		, LightVolumePassResult const * lpvResult
+		, TextureUnit const * vctResult )
+	{
+		m_lpvResult = lpvResult;
+		m_vctResult = vctResult;
+		return SceneRenderPass::initialise( device, size, timer, index );
 	}
 
 	void RenderTechniquePass::accept( RenderTechniqueVisitor & visitor )
@@ -197,19 +205,19 @@ namespace castor3d
 	{
 		if ( nodes.hasNodes() )
 		{
-			RenderPass::doUpdate( nodes.instancedStaticNodes.frontCulled );
-			RenderPass::doUpdate( nodes.staticNodes.frontCulled );
-			RenderPass::doUpdate( nodes.skinnedNodes.frontCulled );
-			RenderPass::doUpdate( nodes.instancedSkinnedNodes.frontCulled );
-			RenderPass::doUpdate( nodes.morphingNodes.frontCulled );
-			RenderPass::doUpdate( nodes.billboardNodes.frontCulled );
+			SceneRenderPass::doUpdate( nodes.instancedStaticNodes.frontCulled );
+			SceneRenderPass::doUpdate( nodes.staticNodes.frontCulled );
+			SceneRenderPass::doUpdate( nodes.skinnedNodes.frontCulled );
+			SceneRenderPass::doUpdate( nodes.instancedSkinnedNodes.frontCulled );
+			SceneRenderPass::doUpdate( nodes.morphingNodes.frontCulled );
+			SceneRenderPass::doUpdate( nodes.billboardNodes.frontCulled );
 
-			RenderPass::doUpdate( nodes.instancedStaticNodes.backCulled, info );
-			RenderPass::doUpdate( nodes.staticNodes.backCulled, info );
-			RenderPass::doUpdate( nodes.skinnedNodes.backCulled, info );
-			RenderPass::doUpdate( nodes.instancedSkinnedNodes.backCulled, info );
-			RenderPass::doUpdate( nodes.morphingNodes.backCulled, info );
-			RenderPass::doUpdate( nodes.billboardNodes.backCulled, info );
+			SceneRenderPass::doUpdate( nodes.instancedStaticNodes.backCulled, info );
+			SceneRenderPass::doUpdate( nodes.staticNodes.backCulled, info );
+			SceneRenderPass::doUpdate( nodes.skinnedNodes.backCulled, info );
+			SceneRenderPass::doUpdate( nodes.instancedSkinnedNodes.backCulled, info );
+			SceneRenderPass::doUpdate( nodes.morphingNodes.backCulled, info );
+			SceneRenderPass::doUpdate( nodes.billboardNodes.backCulled, info );
 		}
 	}
 
@@ -286,7 +294,7 @@ namespace castor3d
 
 	ashes::PipelineColorBlendStateCreateInfo RenderTechniquePass::doCreateBlendState( PipelineFlags const & flags )const
 	{
-		return RenderPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 1u );
+		return SceneRenderPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 1u );
 	}
 
 	void RenderTechniquePass::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
@@ -349,7 +357,7 @@ namespace castor3d
 
 	ashes::VkDescriptorSetLayoutBindingArray RenderTechniquePass::doCreateUboBindings( PipelineFlags const & flags )const
 	{
-		auto uboBindings = RenderPass::doCreateUboBindings( flags );
+		auto uboBindings = SceneRenderPass::doCreateUboBindings( flags );
 
 		if ( checkFlag( flags.sceneFlags, SceneFlag::eVoxelConeTracing )
 			&& m_vctConfigUbo )
@@ -588,43 +596,43 @@ namespace castor3d
 		bool hasTextures = !flags.textures.empty();
 		// Vertex inputs
 		auto inPosition = writer.declInput< Vec4 >( "inPosition"
-			, RenderPass::VertexInputs::PositionLocation );
+			, SceneRenderPass::VertexInputs::PositionLocation );
 		auto inNormal = writer.declInput< Vec3 >( "inNormal"
-			, RenderPass::VertexInputs::NormalLocation );
+			, SceneRenderPass::VertexInputs::NormalLocation );
 		auto inTangent = writer.declInput< Vec3 >( "inTangent"
-			, RenderPass::VertexInputs::TangentLocation );
+			, SceneRenderPass::VertexInputs::TangentLocation );
 		auto inTexture = writer.declInput< Vec3 >( "inTexture"
-			, RenderPass::VertexInputs::TextureLocation
+			, SceneRenderPass::VertexInputs::TextureLocation
 			, hasTextures );
 		auto inBoneIds0 = writer.declInput< IVec4 >( "inBoneIds0"
-			, RenderPass::VertexInputs::BoneIds0Location
+			, SceneRenderPass::VertexInputs::BoneIds0Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
 		auto inBoneIds1 = writer.declInput< IVec4 >( "inBoneIds1"
-			, RenderPass::VertexInputs::BoneIds1Location
+			, SceneRenderPass::VertexInputs::BoneIds1Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
 		auto inWeights0 = writer.declInput< Vec4 >( "inWeights0"
-			, RenderPass::VertexInputs::Weights0Location
+			, SceneRenderPass::VertexInputs::Weights0Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
 		auto inWeights1 = writer.declInput< Vec4 >( "inWeights1"
-			, RenderPass::VertexInputs::Weights1Location
+			, SceneRenderPass::VertexInputs::Weights1Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
 		auto inTransform = writer.declInput< Mat4 >( "inTransform"
-			, RenderPass::VertexInputs::TransformLocation
+			, SceneRenderPass::VertexInputs::TransformLocation
 			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
 		auto inMaterial = writer.declInput< Int >( "inMaterial"
-			, RenderPass::VertexInputs::MaterialLocation
+			, SceneRenderPass::VertexInputs::MaterialLocation
 			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
 		auto inPosition2 = writer.declInput< Vec4 >( "inPosition2"
-			, RenderPass::VertexInputs::Position2Location
+			, SceneRenderPass::VertexInputs::Position2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
 		auto inNormal2 = writer.declInput< Vec3 >( "inNormal2"
-			, RenderPass::VertexInputs::Normal2Location
+			, SceneRenderPass::VertexInputs::Normal2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
 		auto inTangent2 = writer.declInput< Vec3 >( "inTangent2"
-			, RenderPass::VertexInputs::Tangent2Location
+			, SceneRenderPass::VertexInputs::Tangent2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
 		auto inTexture2 = writer.declInput< Vec3 >( "inTexture2"
-			, RenderPass::VertexInputs::Texture2Location
+			, SceneRenderPass::VertexInputs::Texture2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) && hasTextures );
 		auto in = writer.getIn();
 
@@ -637,31 +645,31 @@ namespace castor3d
 
 		// Outputs
 		auto outWorldPosition = writer.declOutput< Vec3 >( "outWorldPosition"
-			, RenderPass::VertexOutputs::WorldPositionLocation );
+			, SceneRenderPass::VertexOutputs::WorldPositionLocation );
 		auto outViewPosition = writer.declOutput< Vec3 >( "outViewPosition"
-			, RenderPass::VertexOutputs::ViewPositionLocation
+			, SceneRenderPass::VertexOutputs::ViewPositionLocation
 			, checkFlag( flags.programFlags, ProgramFlag::eLighting ) );
 		auto outCurPosition = writer.declOutput< Vec3 >( "outCurPosition"
-			, RenderPass::VertexOutputs::CurPositionLocation );
+			, SceneRenderPass::VertexOutputs::CurPositionLocation );
 		auto outPrvPosition = writer.declOutput< Vec3 >( "outPrvPosition"
-			, RenderPass::VertexOutputs::PrvPositionLocation );
+			, SceneRenderPass::VertexOutputs::PrvPositionLocation );
 		auto outTangentSpaceFragPosition = writer.declOutput< Vec3 >( "outTangentSpaceFragPosition"
-			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
+			, SceneRenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
 		auto outTangentSpaceViewPosition = writer.declOutput< Vec3 >( "outTangentSpaceViewPosition"
-			, RenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
+			, SceneRenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
 		auto outNormal = writer.declOutput< Vec3 >( "outNormal"
-			, RenderPass::VertexOutputs::NormalLocation );
+			, SceneRenderPass::VertexOutputs::NormalLocation );
 		auto outTangent = writer.declOutput< Vec3 >( "outTangent"
-			, RenderPass::VertexOutputs::TangentLocation );
+			, SceneRenderPass::VertexOutputs::TangentLocation );
 		auto outBitangent = writer.declOutput< Vec3 >( "outBitangent"
-			, RenderPass::VertexOutputs::BitangentLocation );
+			, SceneRenderPass::VertexOutputs::BitangentLocation );
 		auto outTexture = writer.declOutput< Vec3 >( "outTexture"
-			, RenderPass::VertexOutputs::TextureLocation
+			, SceneRenderPass::VertexOutputs::TextureLocation
 			, hasTextures );
 		auto outInstance = writer.declOutput< UInt >( "outInstance"
-			, RenderPass::VertexOutputs::InstanceLocation );
+			, SceneRenderPass::VertexOutputs::InstanceLocation );
 		auto outMaterial = writer.declOutput< UInt >( "outMaterial"
-			, RenderPass::VertexOutputs::MaterialLocation );
+			, SceneRenderPass::VertexOutputs::MaterialLocation );
 		auto out = writer.getOut();
 
 		writer.implementMain( [&]()

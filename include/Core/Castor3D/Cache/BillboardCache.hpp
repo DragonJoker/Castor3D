@@ -84,8 +84,8 @@ namespace castor3d
 		 */
 		C3D_API ~ObjectCache();
 
-		C3D_API void registerPass( RenderPass const & renderPass );
-		C3D_API void unregisterPass( RenderPass const * renderPass
+		C3D_API void registerPass( SceneRenderPass const & renderPass );
+		C3D_API void unregisterPass( SceneRenderPass const * renderPass
 			, uint32_t instanceMult );
 		/**
 		 *\~english
@@ -155,7 +155,7 @@ namespace castor3d
 
 	private:
 		BillboardUboPoolsSPtr m_pools;
-		std::set< RenderPass const * > m_pendingPasses;
+		std::set< SceneRenderPass const * > m_pendingPasses;
 	};
 	using BillboardListCache = ObjectCache< BillboardList, castor::String >;
 	CU_DeclareSmartPtr( BillboardListCache );

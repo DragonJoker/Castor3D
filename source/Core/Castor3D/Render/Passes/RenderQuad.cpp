@@ -56,7 +56,7 @@ namespace castor3d
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( ashes::RenderPass const & pass
 			, BlendMode blendMode )
 		{
-			return RenderPass::createBlendState( blendMode
+			return SceneRenderPass::createBlendState( blendMode
 				, blendMode
 				, doGetColourAttachmentCount( pass ) );
 		}

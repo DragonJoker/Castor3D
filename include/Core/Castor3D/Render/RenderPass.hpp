@@ -20,7 +20,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	class RenderPass
+	class SceneRenderPass
 		: public castor::OwnedBy< Engine >
 		, public castor::Named
 	{
@@ -28,7 +28,7 @@ namespace castor3d
 		using DistanceSortedNodeMap = std::multimap< double, std::unique_ptr< DistanceRenderNodeBase > >;
 
 	protected:
-		C3D_API RenderPass( castor::String const & category
+		C3D_API SceneRenderPass( castor::String const & category
 			, castor::String const & name
 			, Engine & engine
 			, MatrixUbo & matrixUbo
@@ -37,7 +37,7 @@ namespace castor3d
 			, bool oit
 			, bool forceTwoSided
 			, SceneNode const * ignored
-			, uint32_t instanceMult = 1u );
+			, uint32_t instanceMult );
 
 	protected:
 		/**
@@ -58,7 +58,7 @@ namespace castor3d
 		 *\param[in]	culler			Le culler pour cette passe.
 		 *\param[in]	instanceMult	Le multiplicateur d'instances d'objets.
 		 */
-		C3D_API RenderPass( castor::String const & category
+		C3D_API SceneRenderPass( castor::String const & category
 			, castor::String const & name
 			, Engine & engine
 			, MatrixUbo & matrixUbo
@@ -84,7 +84,7 @@ namespace castor3d
 		 *\param[in]	oit				Le statut de rendu indépendant de l'ordre des objets.
 		 *\param[in]	instanceMult	Le multiplicateur d'instances d'objets.
 		 */
-		C3D_API RenderPass( castor::String const & category
+		C3D_API SceneRenderPass( castor::String const & category
 			, castor::String const & name
 			, Engine & engine
 			, MatrixUbo & matrixUbo
@@ -111,7 +111,7 @@ namespace castor3d
 		 *\param[in]	ignored			Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 *\param[in]	instanceMult	Le multiplicateur d'instances d'objets.
 		 */
-		C3D_API RenderPass( castor::String const & category
+		C3D_API SceneRenderPass( castor::String const & category
 			, castor::String const & name
 			, Engine & engine
 			, MatrixUbo & matrixUbo
@@ -140,7 +140,7 @@ namespace castor3d
 		 *\param[in]	ignored			Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 *\param[in]	instanceMult	Le multiplicateur d'instances d'objets.
 		 */
-		C3D_API RenderPass( castor::String const & category
+		C3D_API SceneRenderPass( castor::String const & category
 			, castor::String const & name
 			, Engine & engine
 			, MatrixUbo & matrixUbo
@@ -156,7 +156,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~RenderPass();
+		C3D_API virtual ~SceneRenderPass() = default;
 		/**
 		 *\~english
 		 *\brief		Initialises the pass.
@@ -169,6 +169,20 @@ namespace castor3d
 		 */
 		C3D_API bool initialise( RenderDevice const & device
 			, castor::Size const & size );
+		/**
+		 *\~english
+		 *\brief		Initialises the pass.
+		 *\param		size	The pass needed dimensions.
+		 *\return		\p true on ok.
+		 *\~french
+		 *\brief		Initialise la passe.
+		 *\param		size	Les dimensions voulues pour la passe.
+		 *\return		\p true si tout s'est bien passé.
+		 */
+		C3D_API bool initialise( RenderDevice const & device
+			, castor::Size const & size
+			, RenderPassTimer & timer
+			, uint32_t index );
 		/**
 		 *\~english
 		 *\brief		Cleans up the pass.
@@ -1279,7 +1293,9 @@ namespace castor3d
 		bool m_isDirty{ true };
 		SceneUbo m_sceneUbo;
 		ashes::RenderPassPtr m_renderPass;
-		RenderPassTimerSPtr m_timer;
+		RenderPassTimer * m_timer{ nullptr };
+		uint32_t m_index{ 0u };
+		RenderPassTimerSPtr m_ownTimer;
 		castor::Size m_size;
 		uint32_t const m_instanceMult{ 1u };
 		std::map< size_t, UniformBufferOffsetT< ModelInstancesUboConfiguration > > m_modelsInstances;

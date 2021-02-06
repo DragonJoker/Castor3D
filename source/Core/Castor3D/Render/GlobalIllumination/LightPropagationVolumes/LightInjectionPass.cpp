@@ -534,7 +534,7 @@ namespace castor3d
 					ashes::PipelineRasterizationStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE },
 					ashes::PipelineMultisampleStateCreateInfo{},
 					ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_FALSE, VK_FALSE },
-					RenderPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 3u ),
+					SceneRenderPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 3u ),
 					ashes::nullopt,
 					pipelineLayout,
 					renderPass,

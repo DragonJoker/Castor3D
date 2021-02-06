@@ -7,6 +7,8 @@
 
 #include <ashespp/Core/Instance.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, RenderDevice )
+
 namespace castor3d
 {
 	namespace

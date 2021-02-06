@@ -8,6 +8,8 @@
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Miscellaneous/QueryPool.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, RenderPassTimer )
+
 using namespace castor;
 
 namespace castor3d

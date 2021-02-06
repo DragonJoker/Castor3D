@@ -20,7 +20,7 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	class RenderQueue
-		: public castor::OwnedBy< RenderPass >
+		: public castor::OwnedBy< SceneRenderPass >
 	{
 	public:
 		/**
@@ -35,7 +35,7 @@ namespace castor3d
 		 *\param[in]	opaque		Dit si cette file de rendu est pour les noeuds opaques.
 		 *\param[in]	ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 */
-		C3D_API RenderQueue( RenderPass & renderPass
+		C3D_API RenderQueue( SceneRenderPass & renderPass
 			, RenderMode mode
 			, SceneNode const * ignored );
 		/**

@@ -366,7 +366,7 @@ namespace castor3d
 	*\brief
 	*	Classe de base d'une passe de rendu.
 	*/
-	class RenderPass;
+	class SceneRenderPass;
 	/**
 	*\~english
 	*\brief
@@ -476,15 +476,15 @@ namespace castor3d
 	*/
 	class Viewport;
 
-	CU_DeclareSmartPtr( PickingPass );
-	CU_DeclareSmartPtr( RenderDevice );
-	CU_DeclareSmartPtr( RenderLoop );
-	CU_DeclareSmartPtr( RenderPassTimer );
-	CU_DeclareSmartPtr( RenderPipeline );
-	CU_DeclareSmartPtr( RenderSystem );
-	CU_DeclareSmartPtr( RenderTarget );
-	CU_DeclareSmartPtr( RenderWindow );
-	CU_DeclareSmartPtr( Viewport );
+	CU_DeclareCUSmartPtr( castor3d, PickingPass, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, RenderDevice, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, RenderLoop, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, RenderPassTimer, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, RenderPipeline, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, RenderSystem, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, RenderTarget, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, RenderWindow, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, Viewport, C3D_API );
 
 	CU_DeclareVector( RenderWindowSPtr, RenderWindowPtr );
 	CU_DeclareVector( IntermediateView, IntermediateView );
