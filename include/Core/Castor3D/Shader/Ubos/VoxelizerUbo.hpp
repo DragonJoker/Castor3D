@@ -28,6 +28,7 @@ namespace castor3d
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
 			C3D_API sdw::Vec3 worldToTex( sdw::Vec3 const & wsPosition )const;
+			C3D_API sdw::IVec3 worldToImg( sdw::Vec3 const & wsPosition )const;
 			C3D_API sdw::Vec3 worldToClip( sdw::Vec3 const & wsPosition )const;
 
 			// Raw values
@@ -47,8 +48,9 @@ namespace castor3d
 			sdw::Vec3 gridCenter;
 			sdw::Float rayStepSize;
 			sdw::UInt enabled;
-			sdw::UInt conservativeRasterization;
+			sdw::UInt enableConservativeRasterization;
 			sdw::UInt enableOcclusion;
+			sdw::UInt enableSecondaryBounce;
 
 		private:
 			using sdw::StructInstance::getMember;
@@ -81,7 +83,7 @@ namespace castor3d
 		*	- uint enabled;
 		*	- uint conservativeRasterization;
 		*	- uint enableOcclusion;
-		*	- uint unused;
+		*	- uint enableSecondaryBounce;
 		*/
 		castor::Point4ui status;
 	};

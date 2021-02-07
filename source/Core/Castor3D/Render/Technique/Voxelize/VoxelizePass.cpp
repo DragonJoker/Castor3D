@@ -48,7 +48,7 @@
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
-using namespace castor;
+CU_ImplementCUSmartPtr( castor3d, VoxelizePass )
 
 namespace castor3d
 {
@@ -121,18 +121,18 @@ namespace castor3d
 			SceneRenderPass::doUpdate( nodes.billboardNodes.backCulled, updater.info );
 		}
 
-		static const Matrix4x4f identity
+		static const castor::Matrix4x4f identity
 		{
 			[]()
 			{
-				Matrix4x4f res;
+				castor::Matrix4x4f res;
 				res.setIdentity();
 				return res;
 			}()
 		};
 		//Orthograhic projection
 		auto sceneBoundingBox = m_scene.getBoundingBox();
-		auto ortho = matrix::ortho( sceneBoundingBox.getMin()->x
+		auto ortho = castor::matrix::ortho( sceneBoundingBox.getMin()->x
 			, sceneBoundingBox.getMax()->x
 			, sceneBoundingBox.getMin()->y
 			, sceneBoundingBox.getMax()->y
@@ -151,43 +151,44 @@ namespace castor3d
 		, ashes::Semaphore const & toWait )
 	{
 		ashes::Semaphore const * result = &toWait;
-		RenderPassTimerBlock timerBlock{ getTimer().start() };
-
-		auto & cmd = *m_commands.commandBuffer;
-		cmd.begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-		timerBlock->beginPass( cmd );
-		timerBlock->notifyPassRender();
-		cmd.beginDebugBlock(
-			{
-				"Voxelization Pass",
-				makeFloatArray( getEngine()->getNextRainbowColour() ),
-			} );
-		cmd.beginRenderPass( getRenderPass()
-			, *m_frameBuffer
-			, { opaqueBlackClearColor }
-			, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 
 		if ( hasNodes() )
 		{
-			cmd.executeCommands( { getCommandBuffer() } );
+			RenderPassTimerBlock timerBlock{ getTimer().start() };
+
+			auto & cmd = *m_commands.commandBuffer;
+			cmd.begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
+			timerBlock->beginPass( cmd );
+			timerBlock->notifyPassRender();
+			cmd.beginDebugBlock(
+				{
+					"Voxelization Pass",
+					makeFloatArray( getEngine()->getNextRainbowColour() ),
+				} );
+			cmd.beginRenderPass( getRenderPass()
+				, *m_frameBuffer
+				, { opaqueBlackClearColor }
+				, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
+				cmd.executeCommands( { getCommandBuffer() } );
+
+			cmd.endRenderPass();
+			cmd.endDebugBlock();
+			timerBlock->endPass( cmd );
+			cmd.end();
+
+			device.graphicsQueue->submit( { cmd }
+				, { *result }
+				, { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT }
+				, { getSemaphore() }
+				, nullptr );
+			result = &getSemaphore();
 		}
 
-		cmd.endRenderPass();
-		cmd.endDebugBlock();
-		timerBlock->endPass( cmd );
-		cmd.end();
-
-		device.graphicsQueue->submit( { cmd }
-			, { *result }
-			, { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT }
-			, { getSemaphore() }
-			, nullptr );
-		result = &getSemaphore();
 		return *result;
 	}
 
 	bool VoxelizePass::doInitialise( RenderDevice const & device
-		, Size const & CU_UnusedParam( size ) )
+		, castor::Size const & CU_UnusedParam( size ) )
 	{
 		ashes::VkAttachmentDescriptionArray attaches;
 		ashes::SubpassDescriptionArray subpasses;
@@ -619,7 +620,7 @@ namespace castor3d
 				}
 				ROF;
 
-				IF( writer, c3d_voxelData.conservativeRasterization != 0_u )
+				IF( writer, c3d_voxelData.enableConservativeRasterization != 0_u )
 				{
 					auto side0N = writer.declLocale( "side0N"
 						, normalize( positions[1].xy() - positions[0].xy() ) );
@@ -699,7 +700,10 @@ namespace castor3d
 		shader::Utils utils{ writer };
 		utils.declareApplyGamma();
 		utils.declareRemoveGamma();
-		utils.declareVoxelizeFunctions();
+		utils.declareIsSaturated();
+		utils.declareEncodeColor();
+		utils.declareEncodeNormal();
+		utils.declareFlatten();
 		auto lighting = shader::PhongLightingModel::createDiffuseModel( writer
 			, utils
 			, flags.sceneFlags
@@ -826,7 +830,10 @@ namespace castor3d
 		shader::Utils utils{ writer };
 		utils.declareApplyGamma();
 		utils.declareRemoveGamma();
-		utils.declareVoxelizeFunctions();
+		utils.declareIsSaturated();
+		utils.declareEncodeColor();
+		utils.declareEncodeNormal();
+		utils.declareFlatten();
 		auto lighting = shader::MetallicBrdfLightingModel::createDiffuseModel( writer
 			, utils
 			, flags.sceneFlags
@@ -974,7 +981,10 @@ namespace castor3d
 		shader::Utils utils{ writer };
 		utils.declareApplyGamma();
 		utils.declareRemoveGamma();
-		utils.declareVoxelizeFunctions();
+		utils.declareIsSaturated();
+		utils.declareEncodeColor();
+		utils.declareEncodeNormal();
+		utils.declareFlatten();
 		auto lighting = shader::SpecularBrdfLightingModel::createDiffuseModel( writer
 			, utils
 			, flags.sceneFlags

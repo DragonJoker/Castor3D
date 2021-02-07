@@ -10,7 +10,7 @@
 
 CU_ImplementCUSmartPtr( castor3d, RenderPassTimer )
 
-using namespace castor;
+#define C3D_DebugQueryLock 0
 
 namespace castor3d
 {
@@ -49,10 +49,10 @@ namespace castor3d
 	//*********************************************************************************************
 
 	RenderPassTimer::RenderPassTimer( RenderDevice const & device
-		, String const & category
-		, String const & name
+		, castor::String const & category
+		, castor::String const & name
 		, uint32_t passesCount )
-		: Named{ name }
+		: castor::Named{ name }
 		, m_engine{ *device.renderSystem.getEngine() }
 		, m_device{ device }
 		, m_passesCount{ passesCount }
@@ -137,15 +137,52 @@ namespace castor3d
 
 			if ( started.first )
 			{
+#if C3D_DebugQueryLock
+				ashes::UInt64Array valueswa{ 0u, 0u, 0u, 0u };
+				bool ok{ false };
+				uint32_t count = 0u;
+
+				while ( count < 1000u && !ok )
+				{
+					try
+					{
+						m_timerQuery->getResults( i * 2u
+							, 2u
+							, 0u
+							, VK_QUERY_RESULT_WITH_AVAILABILITY_BIT
+							, valueswa );
+						ok = true;
+					}
+					catch ( ashes::Exception & exc )
+					{
+						if ( exc.getResult() != VK_NOT_READY )
+						{
+							std::cerr << exc.what() << std::endl;
+						}
+					}
+
+					std::this_thread::sleep_for( 1_ms );
+					++count;
+				}
+
+				if ( count == 1000u )
+				{
+					std::cerr << "Couldn't retrieve RenderPassTimer [" << getCategory() << "] - ["  << getName() << "] results." << std::endl;
+				}
+				else
+				{
+#else
 				try
 				{
+#endif
 					ashes::UInt64Array values{ 0u, 0u };
 					m_timerQuery->getResults( i * 2u
 						, 2u
 						, 0u
 						, VK_QUERY_RESULT_WAIT_BIT
 						, values );
-					auto gpuTime = Nanoseconds{ uint64_t( ( values[1] - values[0] ) / period ) };
+
+					auto gpuTime = castor::Nanoseconds{ uint64_t( ( values[1] - values[0] ) / period ) };
 					m_gpuTime += gpuTime;
 
 					if ( started.second )
@@ -153,10 +190,12 @@ namespace castor3d
 						m_subtracteGpuTime += gpuTime;
 					}
 				}
+#if !C3D_DebugQueryLock
 				catch ( ashes::Exception & exc )
 				{
 					std::cerr << exc.what() << std::endl;
 				}
+#endif
 
 				started.first = false;
 				started.second = false;

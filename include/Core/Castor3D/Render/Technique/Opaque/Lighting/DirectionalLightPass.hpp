@@ -135,10 +135,7 @@ namespace castor3d
 		void doUpdate( bool first
 			, castor::Size const & size
 			, Light const & light
-			, Camera const & camera
-			, ShadowMap const * shadowMap = nullptr
-			, TextureUnit const * voxels = nullptr
-			, uint32_t shadowMapIndex = 0u )override;
+			, Camera const & camera )override;
 		/**
 		 *\copydoc		castor3d::LightPass::doGetVertexShaderSource
 		 */

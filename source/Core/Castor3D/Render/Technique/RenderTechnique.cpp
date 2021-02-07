@@ -845,6 +845,7 @@ namespace castor3d
 		m_opaquePass->initialise( device
 			, m_size
 			, nullptr
+			, nullptr
 			, nullptr );
 		m_deferredRendering = castor::makeUnique< DeferredRendering >( *getEngine()
 			, device
@@ -857,7 +858,8 @@ namespace castor3d
 			, m_spotShadowMap->getShadowPassResult()
 			, *m_lpvResult
 			, m_llpvResult
-			, m_voxelizer->getResult()
+			, m_voxelizer->getFirstBounce()
+			, m_voxelizer->getSecondaryBounce()
 			, m_renderTarget.getSize()
 			, *m_renderTarget.getScene()
 			, m_renderTarget.getHdrConfigUbo()
@@ -872,7 +874,8 @@ namespace castor3d
 		m_opaquePass->initialise( device
 			, m_size
 			, m_lpvResult.get()
-			, &m_voxelizer->getResult() );
+			, &m_voxelizer->getFirstBounce()
+			, m_voxelizer->getSecondaryBounce() );
 		static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).initialiseRenderPass( device
 			, m_colourTexture.getTexture()->getDefaultView().getTargetView()
 			, m_depthBuffer.getTexture()->getDefaultView().getTargetView()
@@ -909,7 +912,8 @@ namespace castor3d
 		m_transparentPass->initialise( device
 			, m_size
 			, m_lpvResult.get()
-			, &m_voxelizer->getResult() );
+			, &m_voxelizer->getFirstBounce()
+			, &m_voxelizer->getSecondaryBounce() );
 
 #if C3D_UseWeightedBlendedRendering
 

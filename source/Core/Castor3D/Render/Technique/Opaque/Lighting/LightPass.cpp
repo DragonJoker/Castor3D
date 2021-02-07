@@ -19,6 +19,7 @@
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
+#include "Castor3D/Shader/Shaders/GlslGlobalIllumination.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
@@ -217,6 +218,9 @@ namespace castor3d
 			setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+			setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		}
 
 		if ( m_shadows )
@@ -344,20 +348,18 @@ namespace castor3d
 		, Light const & light
 		, Camera const & camera
 		, ShadowMap const * shadowMap
-		, TextureUnit const * voxels
-		, uint32_t shadowMapIndex )
+		, TextureUnit const * vctFirstBounce
+		, TextureUnit const * vctSecondaryBounce )
 	{
 		m_pipeline = doGetPipeline( first
 			, light
 			, shadowMap
-			, voxels );
+			, vctFirstBounce
+			, vctSecondaryBounce );
 		doUpdate( first
 			, size
 			, light
-			, camera
-			, shadowMap
-			, voxels
-			, shadowMapIndex );
+			, camera );
 	}
 
 	ashes::Semaphore const & LightPass::render( uint32_t index
@@ -426,14 +428,16 @@ namespace castor3d
 
 	size_t LightPass::makeKey( Light const & light
 		, ShadowMap const * shadowMap
-		, TextureUnit const * voxels )
+		, TextureUnit const * vctFirstBounce
+		, TextureUnit const * vctSecondaryBounce )
 	{
 		size_t hash = std::hash< LightType >{}( light.getLightType() );
 		castor::hashCombine( hash, shadowMap ? light.getShadowType() : ShadowType::eNone );
 		castor::hashCombine( hash, shadowMap ? light.getVolumetricSteps() > 0 : false );
 		castor::hashCombine( hash, shadowMap ? light.needsRsmShadowMaps() : false );
 		castor::hashCombine( hash, shadowMap );
-		castor::hashCombine( hash, voxels );
+		castor::hashCombine( hash, vctFirstBounce );
+		castor::hashCombine( hash, vctSecondaryBounce );
 		return hash;
 	}
 
@@ -441,7 +445,8 @@ namespace castor3d
 		, ShadowType shadowType
 		, bool rsm
 		, ShadowMap const * shadowMap
-		, TextureUnit const * voxels )
+		, TextureUnit const * vctFirstBounce
+		, TextureUnit const * vctSecondaryBounce )
 	{
 		Scene const & scene = *m_scene;
 		OpaquePassResult const & gp = *m_opaquePassResult;
@@ -537,52 +542,37 @@ namespace castor3d
 		pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 		pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 
-		if ( voxels && m_voxels )
+		if ( vctFirstBounce && vctSecondaryBounce && m_voxels )
 		{
-			pipeline.textureWrites.push_back( ashes::WriteDescriptorSet
-				{
-					index++,
-					0u,
-					VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-					{
-						{
-							voxels->getSampler()->getSampler(),
-							voxels->getTexture()->getDefaultView().getSampledView(),
-							VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-						}
-					}
-				} );
+			pipeline.textureWrites.push_back( ashes::WriteDescriptorSet{ index++
+				, 0u
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+				{ { vctFirstBounce->getSampler()->getSampler()
+					, vctFirstBounce->getTexture()->getDefaultView().getSampledView()
+					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } } );
+			pipeline.textureWrites.push_back( ashes::WriteDescriptorSet{ index++
+				, 0u
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+				{ { vctSecondaryBounce->getSampler()->getSampler()
+					, vctSecondaryBounce->getTexture()->getDefaultView().getSampledView()
+					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } } );
 		}
 
 		if ( shadowMap && m_shadows )
 		{
 			auto & smResult = shadowMap->getShadowPassResult();
-			pipeline.textureWrites.push_back( ashes::WriteDescriptorSet
-				{
-					index++,
-					0u,
-					VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-					{
-						{
-							shadowMap->getSampler( SmTexture::eNormalLinear ),
-							shadowMap->getView( SmTexture::eNormalLinear ),
-							VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-						}
-					}
-				} );
-			pipeline.textureWrites.push_back( ashes::WriteDescriptorSet
-				{
-					index++,
-					0u,
-					VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-					{
-						{
-							shadowMap->getSampler( SmTexture::eVariance ),
-							shadowMap->getView( SmTexture::eVariance ),
-							VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-						}
-					}
-				} );
+			pipeline.textureWrites.push_back( ashes::WriteDescriptorSet{ index++
+				, 0u
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+				{ { shadowMap->getSampler( SmTexture::eNormalLinear )
+					, shadowMap->getView( SmTexture::eNormalLinear )
+					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } } );
+			pipeline.textureWrites.push_back( ashes::WriteDescriptorSet{ index++
+				, 0u
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+				{ { shadowMap->getSampler( SmTexture::eVariance )
+					, shadowMap->getView( SmTexture::eVariance )
+					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } } );
 		}
 
 		pipeline.textureDescriptorSet->setBindings( pipeline.textureWrites );
@@ -594,9 +584,13 @@ namespace castor3d
 	LightPass::Pipeline * LightPass::doGetPipeline( bool first
 		, Light const & light
 		, ShadowMap const * shadowMap
-		, TextureUnit const * voxels )
+		, TextureUnit const * vctFirstBounce
+		, TextureUnit const * vctSecondaryBounce )
 	{
-		auto key = makeKey( light, shadowMap, voxels );
+		auto key = makeKey( light
+			, shadowMap
+			, vctFirstBounce
+			, vctSecondaryBounce );
 		auto it = m_pipelines.emplace( key, nullptr );
 
 		if ( it.second )
@@ -607,12 +601,11 @@ namespace castor3d
 					: ShadowType::eNone )
 				, light.needsRsmShadowMaps()
 				, shadowMap
-				, voxels ) );
+				, vctFirstBounce
+				, vctSecondaryBounce ) );
 		}
 
 		doPrepareCommandBuffer( *it.first->second
-			, shadowMap
-			, voxels
 			, first );
 		return it.first->second.get();
 	}
@@ -653,8 +646,6 @@ namespace castor3d
 	}
 
 	void LightPass::doPrepareCommandBuffer( Pipeline & pipeline
-		, ShadowMap const * shadowMap
-		, TextureUnit const * voxels
 		, bool first )
 	{
 		if ( ( first && !pipeline.isFirstSet )
@@ -696,10 +687,15 @@ namespace castor3d
 		FragmentWriter writer;
 		auto & renderSystem = *m_engine.getRenderSystem();
 
+		// Shader outputs
+		auto pxl_diffuse = writer.declOutput< Vec3 >( "pxl_diffuse", 0 );
+		auto pxl_specular = writer.declOutput< Vec3 >( "pxl_specular", 1 );
+		auto pxl_indirectDiffuse = writer.declOutput< Vec3 >( "pxl_indirectDiffuse", 2, m_generatesIndirect );
+		auto pxl_indirectSpecular = writer.declOutput< Vec3 >( "pxl_indirectSpecular", 3, m_generatesIndirect );
+
 		// Shader inputs
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
 		UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
-		UBO_VOXELIZER( writer, VoxelizerUbo::BindingPoint, 0u, m_voxels );
 		auto index = getMinBufferIndex();
 		auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), index++, 1u );
 		auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), index++, 1u );
@@ -707,18 +703,11 @@ namespace castor3d
 		auto c3d_mapData3 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData3 ), index++, 1u );
 		auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), index++, 1u );
 		auto c3d_mapData5 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData5 ), index++, 1u );
-		auto c3d_mapVoxels = writer.declSampledImage< FImg3DRgba32 >( "c3d_mapVoxels", m_voxels ? index++ : 0u, 1u, m_voxels );
 		auto in = writer.getIn();
 
 		shadowType = m_shadows
 			? shadowType
 			: ShadowType::eNone;
-
-		// Shader outputs
-		auto pxl_diffuse = writer.declOutput< Vec3 >( "pxl_diffuse", 0 );
-		auto pxl_specular = writer.declOutput< Vec3 >( "pxl_specular", 1 );
-		auto pxl_indirectDiffuse = writer.declOutput< Vec3 >( "pxl_indirectDiffuse", 2, m_generatesIndirect );
-		auto pxl_indirectSpecular = writer.declOutput< Vec3 >( "pxl_indirectSpecular", 3, m_generatesIndirect );
 
 		// Utility functions
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
@@ -729,11 +718,11 @@ namespace castor3d
 		utils.declareDecodeReceiver();
 		utils.declareInvertVec2Y();
 
+		shader::GlobalIllumination indirect{ writer, utils, true };
+
 		if ( m_voxels )
 		{
-			utils.declareIsSaturated();
-			utils.declareTraceCone();
-			utils.declareFresnelSchlick();
+			indirect.declare( 1u, index, sceneFlags );
 		}
 
 		auto lighting = shader::PhongLightingModel::createModel( writer
@@ -875,62 +864,19 @@ namespace castor3d
 
 				if ( m_voxels )
 				{
-					auto vxlPosition = writer.declLocale( "vxlPosition"
-						, c3d_voxelData.worldToClip( wsPosition ) );
-					vxlPosition = clamp( abs( vxlPosition ), vec3( 0.0_f ), vec3( 1.0_f ) );
-					auto vxlBlend = writer.declLocale( "vxlBlend"
-						, 1.0_f - pow( max( vxlPosition.x(), max( vxlPosition.y(), vxlPosition.z() ) ), 4.0_f ) );
-
-					auto vxlRadiance = writer.declLocale( "vxlRadiance"
-						, utils.traceConeRadiance( c3d_mapVoxels
-							, surface
-							, c3d_voxelData ) );
-					auto vxlReflection = writer.declLocale( "vxlReflection"
-						, utils.traceConeReflection( c3d_mapVoxels
-							, surface
-							, eye - wsPosition
-							, ( 256.0_f - shininess ) / 256.0_f
-							, c3d_voxelData ) );
-					auto vxlOcclusion = writer.declLocale( "vxlOcclusion"
-						, 1.0_f );
-
-					IF( writer, c3d_voxelData.enableOcclusion )
-					{
-						switch ( lightType )
-						{
-						case LightType::eDirectional:
-							{
-								auto c3d_light = writer.getVariable< shader::DirectionalLight >( "c3d_light" );
-								vxlOcclusion = utils.traceConeOcclusion( c3d_mapVoxels
-									, surface
-									, c3d_light.m_direction
-									, c3d_voxelData );
-							}
-							break;
-						case LightType::ePoint:
-							{
-								auto c3d_light = writer.getVariable< shader::PointLight >( "c3d_light" );
-								vxlOcclusion = utils.traceConeOcclusion( c3d_mapVoxels
-									, surface
-									, c3d_light.m_position - wsPosition
-									, c3d_voxelData );
-							}
-							break;
-						case LightType::eSpot:
-							{
-								auto c3d_light = writer.getVariable< shader::SpotLight >( "c3d_light" );
-								vxlOcclusion = utils.traceConeOcclusion( c3d_mapVoxels
-									, surface
-									, c3d_light.m_position - wsPosition
-									, c3d_voxelData );
-							}
-							break;
-						}
-					}
-					FI;
-
-					pxl_indirectDiffuse = mix( vec3( 0.0_f ), vxlRadiance.xyz() * vxlOcclusion, vec3( vxlRadiance.a() * vxlBlend ) );
-					pxl_indirectSpecular = mix( vec3( 0.0_f ), vxlReflection.xyz() * vxlOcclusion, vec3( vxlReflection.a() * vxlBlend ) );
+					auto occlusion = indirect.computeOcclusion( sceneFlags
+						, lightType
+						, surface );
+					auto indirectDiffuse = indirect.computeDiffuse( sceneFlags
+						, surface
+						, occlusion );
+					auto indirectSpecular = indirect.computeSpecular( sceneFlags
+						, eye
+						, surface
+						, ( 256.0_f - shininess ) / 256.0_f
+						, occlusion );
+					pxl_indirectDiffuse = indirectDiffuse;
+					pxl_indirectSpecular = indirectSpecular;
 				}
 				else
 				{
@@ -951,11 +897,16 @@ namespace castor3d
 		FragmentWriter writer;
 		auto & renderSystem = *m_engine.getRenderSystem();
 
+		// Shader outputs
+		auto pxl_diffuse = writer.declOutput< Vec3 >( "pxl_diffuse", 0 );
+		auto pxl_specular = writer.declOutput< Vec3 >( "pxl_specular", 1 );
+		auto pxl_indirectDiffuse = writer.declOutput< Vec3 >( "pxl_indirectDiffuse", 2, m_generatesIndirect );
+		auto pxl_indirectSpecular = writer.declOutput< Vec3 >( "pxl_indirectSpecular", 3, m_generatesIndirect );
+
 		// Shader inputs
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
 		UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
-		UBO_VOXELIZER( writer, VoxelizerUbo::BindingPoint, 0u, m_voxels );
 		auto index = getMinBufferIndex();
 		auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), index++, 1u );
 		auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), index++, 1u );
@@ -963,18 +914,11 @@ namespace castor3d
 		auto c3d_mapData3 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData3 ), index++, 1u );
 		auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), index++, 1u );
 		auto c3d_mapData5 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData5 ), index++, 1u );
-		auto c3d_mapVoxels = writer.declSampledImage< FImg3DRgba32 >( "c3d_mapVoxels", m_voxels ? index++ : 0u, 1u, m_voxels );
 		auto in = writer.getIn();
 
 		shadowType = m_shadows
 			? shadowType
 			: ShadowType::eNone;
-
-		// Shader outputs
-		auto pxl_diffuse = writer.declOutput< Vec3 >( "pxl_diffuse", 0 );
-		auto pxl_specular = writer.declOutput< Vec3 >( "pxl_specular", 1 );
-		auto pxl_indirectDiffuse = writer.declOutput< Vec3 >( "pxl_indirectDiffuse", 2, m_generatesIndirect );
-		auto pxl_indirectSpecular = writer.declOutput< Vec3 >( "pxl_indirectSpecular", 3, m_generatesIndirect );
 
 		// Utility functions
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
@@ -985,11 +929,11 @@ namespace castor3d
 		utils.declareDecodeReceiver();
 		utils.declareInvertVec2Y();
 
+		shader::GlobalIllumination indirect{ writer, utils, true };
+
 		if ( m_voxels )
 		{
-			utils.declareIsSaturated();
-			utils.declareTraceCone();
-			utils.declareFresnelSchlick();
+			indirect.declare( 1u, index, sceneFlags );
 		}
 
 		auto lighting = shader::MetallicBrdfLightingModel::createModel( writer
@@ -1207,62 +1151,19 @@ namespace castor3d
 
 				if ( m_voxels )
 				{
-					auto vxlPosition = writer.declLocale( "vxlPosition"
-						, c3d_voxelData.worldToClip( wsPosition ) );
-					vxlPosition = clamp( abs( vxlPosition ), vec3( 0.0_f ), vec3( 1.0_f ) );
-					auto vxlBlend = writer.declLocale( "vxlBlend"
-						, 1.0_f - pow( max( vxlPosition.x(), max( vxlPosition.y(), vxlPosition.z() ) ), 4.0_f ) );
-
-					auto vxlRadiance = writer.declLocale( "vxlRadiance"
-						, utils.traceConeRadiance( c3d_mapVoxels
-							, surface
-							, c3d_voxelData ) );
-					auto vxlReflection = writer.declLocale( "vxlReflection"
-						, utils.traceConeReflection( c3d_mapVoxels
-							, surface
-							, eye - wsPosition
-							, roughness
-							, c3d_voxelData ) );
-					auto vxlOcclusion = writer.declLocale( "vxlOcclusion"
-						, 1.0_f );
-					
-					IF( writer, c3d_voxelData.enableOcclusion )
-					{
-						switch ( lightType )
-						{
-						case LightType::eDirectional:
-							{
-								auto c3d_light = writer.getVariable< shader::DirectionalLight >( "c3d_light" );
-								vxlOcclusion = utils.traceConeOcclusion( c3d_mapVoxels
-									, surface
-									, c3d_light.m_direction
-									, c3d_voxelData );
-							}
-							break;
-						case LightType::ePoint:
-							{
-								auto c3d_light = writer.getVariable< shader::PointLight >( "c3d_light" );
-								vxlOcclusion = utils.traceConeOcclusion( c3d_mapVoxels
-									, surface
-									, c3d_light.m_position - wsPosition
-									, c3d_voxelData );
-							}
-							break;
-						case LightType::eSpot:
-							{
-								auto c3d_light = writer.getVariable< shader::SpotLight >( "c3d_light" );
-								vxlOcclusion = utils.traceConeOcclusion( c3d_mapVoxels
-									, surface
-									, c3d_light.m_position - wsPosition
-									, c3d_voxelData );
-							}
-							break;
-						}
-					}
-					FI;
-
-					pxl_indirectDiffuse = mix( vec3( 0.0_f ), vxlRadiance.xyz() * vxlOcclusion, vec3( vxlRadiance.a() * vxlBlend ) );
-					pxl_indirectSpecular = mix( vec3( 0.0_f ), vxlReflection.xyz() * vxlOcclusion, vec3( vxlReflection.a() * vxlBlend ) );
+					auto occlusion = indirect.computeOcclusion( sceneFlags
+						, lightType
+						, surface );
+					auto indirectDiffuse = indirect.computeDiffuse( sceneFlags
+						, surface
+						, occlusion );
+					auto indirectSpecular = indirect.computeSpecular( sceneFlags
+						, eye
+						, surface
+						, roughness
+						, occlusion );
+					pxl_indirectDiffuse = indirectDiffuse;
+					pxl_indirectSpecular = indirectSpecular;
 				}
 				else
 				{
@@ -1287,7 +1188,6 @@ namespace castor3d
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
 		UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
-		UBO_VOXELIZER( writer, VoxelizerUbo::BindingPoint, 0u, m_voxels );
 		auto index = getMinBufferIndex();
 		auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), index++, 1u );
 		auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), index++, 1u );
@@ -1295,7 +1195,6 @@ namespace castor3d
 		auto c3d_mapData3 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData3 ), index++, 1u );
 		auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), index++, 1u );
 		auto c3d_mapData5 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData5 ), index++, 1u );
-		auto c3d_mapVoxels = writer.declSampledImage< FImg3DRgba32 >( "c3d_mapVoxels", m_voxels ? index++ : 0u, 1u, m_voxels );
 		auto in = writer.getIn();
 
 		shadowType = m_shadows
@@ -1311,11 +1210,11 @@ namespace castor3d
 		utils.declareDecodeReceiver();
 		utils.declareInvertVec2Y();
 
+		shader::GlobalIllumination indirect{ writer, utils, true };
+
 		if ( m_voxels )
 		{
-			utils.declareIsSaturated();
-			utils.declareTraceCone();
-			utils.declareFresnelSchlick();
+			indirect.declare( 1u, index, sceneFlags );
 		}
 
 		auto lighting = shader::SpecularBrdfLightingModel::createModel( writer
@@ -1470,62 +1369,19 @@ namespace castor3d
 
 				if ( m_voxels )
 				{
-					auto vxlPosition = writer.declLocale( "vxlPosition"
-						, c3d_voxelData.worldToClip( wsPosition ) );
-					vxlPosition = clamp( abs( vxlPosition ), vec3( 0.0_f ), vec3( 1.0_f ) );
-					auto vxlBlend = writer.declLocale( "vxlBlend"
-						, 1.0_f - pow( max( vxlPosition.x(), max( vxlPosition.y(), vxlPosition.z() ) ), 4.0_f ) );
-
-					auto vxlRadiance = writer.declLocale( "vxlRadiance"
-						, utils.traceConeRadiance( c3d_mapVoxels
-							, surface
-							, c3d_voxelData ) );
-					auto vxlReflection = writer.declLocale( "vxlReflection"
-						, utils.traceConeReflection( c3d_mapVoxels
-							, surface
-							, eye - wsPosition
-							, 1.0_f - glossiness
-							, c3d_voxelData ) );
-					auto vxlOcclusion = writer.declLocale( "vxlOcclusion"
-						, 1.0_f );
-
-					IF( writer, c3d_voxelData.enableOcclusion )
-					{
-						switch ( lightType )
-						{
-						case LightType::eDirectional:
-							{
-								auto c3d_light = writer.getVariable< shader::DirectionalLight >( "c3d_light" );
-								vxlOcclusion = utils.traceConeOcclusion( c3d_mapVoxels
-									, surface
-									, c3d_light.m_direction
-									, c3d_voxelData );
-							}
-							break;
-						case LightType::ePoint:
-							{
-								auto c3d_light = writer.getVariable< shader::PointLight >( "c3d_light" );
-								vxlOcclusion = utils.traceConeOcclusion( c3d_mapVoxels
-									, surface
-									, c3d_light.m_position - wsPosition
-									, c3d_voxelData );
-							}
-							break;
-						case LightType::eSpot:
-							{
-								auto c3d_light = writer.getVariable< shader::SpotLight >( "c3d_light" );
-								vxlOcclusion = utils.traceConeOcclusion( c3d_mapVoxels
-									, surface
-									, c3d_light.m_position - wsPosition
-									, c3d_voxelData );
-							}
-							break;
-						}
-					}
-					FI;
-
-					pxl_indirectDiffuse = mix( vec3( 0.0_f ), vxlRadiance.xyz() * vxlOcclusion, vec3( vxlRadiance.a() * vxlBlend ) );
-					pxl_indirectSpecular = mix( vec3( 0.0_f ), vxlReflection.xyz() * vxlOcclusion, vec3( vxlReflection.a() * vxlBlend ) );
+					auto occlusion = indirect.computeOcclusion( sceneFlags
+						, lightType
+						, surface );
+					auto indirectDiffuse = indirect.computeDiffuse( sceneFlags
+						, surface
+						, occlusion );
+					auto indirectSpecular = indirect.computeSpecular( sceneFlags
+						, eye
+						, surface
+						, 1.0_f - glossiness
+						, occlusion );
+					pxl_indirectDiffuse = indirectDiffuse;
+					pxl_indirectSpecular = indirectSpecular;
 				}
 				else
 				{

@@ -6365,7 +6365,7 @@ namespace castor3d
 		else
 		{
 			auto & vctConfig = parsingContext->scene->getVoxelConeTracingConfig();
-			params[0]->get( vctConfig.conservativeRasterization );
+			params[0]->get( vctConfig.enableConservativeRasterization );
 		}
 	}
 	CU_EndAttribute()
@@ -6385,7 +6385,7 @@ namespace castor3d
 		else
 		{
 			auto & vctConfig = parsingContext->scene->getVoxelConeTracingConfig();
-			params[0]->get( vctConfig.temporalSmoothing );
+			params[0]->get( vctConfig.enableTemporalSmoothing );
 		}
 	}
 	CU_EndAttribute()
@@ -6406,6 +6406,26 @@ namespace castor3d
 		{
 			auto & vctConfig = parsingContext->scene->getVoxelConeTracingConfig();
 			params[0]->get( vctConfig.enableOcclusion );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserVctSecondaryBounce )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->scene )
+		{
+			CU_ParsingError( cuT( "No scene initialised." ) );
+		}
+		else if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			auto & vctConfig = parsingContext->scene->getVoxelConeTracingConfig();
+			params[0]->get( vctConfig.enableSecondaryBounce );
 		}
 	}
 	CU_EndAttribute()

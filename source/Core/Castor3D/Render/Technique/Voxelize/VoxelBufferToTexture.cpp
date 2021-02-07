@@ -20,7 +20,7 @@
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/Image/ImageView.hpp>
 
-using namespace castor;
+CU_ImplementCUSmartPtr( castor3d, VoxelBufferToTexture )
 
 namespace castor3d
 {
@@ -87,14 +87,13 @@ namespace castor3d
 			, TextureUnit const & vxResult
 			, RenderPassTimer & timer
 			, uint32_t voxelGridSize
-			, bool temporalSmoothing )
+			, bool temporalSmoothing
+			, bool secondaryBounce )
 		{
 			CommandsSemaphore result{ device, "VoxelBufferToTexture" };
-			RenderPassTimerBlock timerBlock{ timer.start() };
 			auto & cmd = *result.commandBuffer;
 			cmd.begin();
-			timerBlock->beginPass( cmd );
-			timerBlock->notifyPassRender();
+			timer.beginPass( cmd );
 			cmd.beginDebugBlock( { "Copy voxels to texture"
 				, makeFloatArray( device.renderSystem.getEngine()->getNextRainbowColour() ) } );
 
@@ -123,12 +122,24 @@ namespace castor3d
 				, pipelineLayout
 				, VK_PIPELINE_BIND_POINT_COMPUTE );
 			cmd.dispatch( voxelGridSize * voxelGridSize * voxelGridSize / 256, 1u, 1u );
-			vxResult.getTexture()->getTexture().generateMipmaps( cmd
-				, VK_IMAGE_LAYOUT_GENERAL
-				, VK_IMAGE_LAYOUT_GENERAL
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+
+			if ( secondaryBounce )
+			{
+				vxResult.getTexture()->getTexture().generateMipmaps( cmd
+					, VK_IMAGE_LAYOUT_GENERAL
+					, VK_IMAGE_LAYOUT_GENERAL
+					, VK_IMAGE_LAYOUT_GENERAL );
+			}
+			else
+			{
+				vxResult.getTexture()->getTexture().generateMipmaps( cmd
+					, VK_IMAGE_LAYOUT_GENERAL
+					, VK_IMAGE_LAYOUT_GENERAL
+					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			}
+
 			cmd.endDebugBlock();
-			timerBlock->endPass( cmd );
+			timer.endPass( cmd );
 			cmd.end();
 
 			return result;
@@ -154,7 +165,8 @@ namespace castor3d
 				, 0u ) );
 
 			shader::Utils utils{ writer };
-			utils.declareVoxelizeFunctions();
+			utils.declareDecodeColor();
+			utils.declareUnflatten();
 
 			writer.implementMain( [&]()
 				{
@@ -195,10 +207,11 @@ namespace castor3d
 		, TextureUnit const & result
 		, RenderPassTimer & timer
 		, uint32_t voxelGridSize
-		, bool temporalSmoothing )
+		, bool temporalSmoothing
+		, bool secondaryBounce )
 		: computeShader{ VK_SHADER_STAGE_COMPUTE_BIT, "VoxelBufferToTexture", createShader( temporalSmoothing, voxelGridSize ) }
 		, pipeline{ createPipeline( device, pipelineLayout, computeShader ) }
-		, commands{ createCommandBuffer( device, pipelineLayout, *pipeline, descriptorSet, voxels.getBuffer(), result, timer, voxelGridSize, temporalSmoothing ) }
+		, commands{ createCommandBuffer( device, pipelineLayout, *pipeline, descriptorSet, voxels.getBuffer(), result, timer, voxelGridSize, temporalSmoothing, secondaryBounce ) }
 	{
 	}
 	
@@ -208,27 +221,22 @@ namespace castor3d
 		, VoxelSceneData const & vctConfig
 		, ashes::Buffer< Voxel > const & voxels
 		, TextureUnit const & result )
-		: m_vctConfig{ vctConfig }
-		, m_timer{ std::make_shared< RenderPassTimer >( device, "Voxelize", "VoxelBufferToTexture" ) }
-		, m_descriptorSetLayout{ createDescriptorLayout( device ) }
-		, m_pipelineLayout{ createPipelineLayout( device, *m_descriptorSetLayout ) }
+		: m_device{ device }
+		, m_vctConfig{ vctConfig }
+		, m_voxels{ voxels }
+		, m_result{ result }
+		, m_timer{ std::make_shared< RenderPassTimer >( m_device, "Voxelize", "Buffer To Texture" ) }
+		, m_descriptorSetLayout{ createDescriptorLayout( m_device ) }
+		, m_pipelineLayout{ createPipelineLayout( m_device, *m_descriptorSetLayout ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( 1u ) }
-		, m_descriptorSet{ createDescriptorSet( *m_descriptorSetPool, voxels, result ) }
-		, m_pipelines{ Pipeline{ device, *m_pipelineLayout, *m_descriptorSet, voxels, result, *m_timer, vctConfig.gridSize.value(), false }
-			, Pipeline{ device, *m_pipelineLayout, *m_descriptorSet, voxels, result, *m_timer, vctConfig.gridSize.value(), true } }
+		, m_descriptorSet{ createDescriptorSet( *m_descriptorSetPool, m_voxels, m_result ) }
 	{
 	}
 
 	void VoxelBufferToTexture::accept( RenderTechniqueVisitor & visitor )
 	{
-		if ( m_vctConfig.temporalSmoothing )
-		{
-			visitor.visit( m_pipelines[1].computeShader );
-		}
-		else
-		{
-			visitor.visit( m_pipelines[0].computeShader );
-		}
+		auto & pipeline = getPipeline();
+		visitor.visit( pipeline.computeShader );
 	}
 
 	ashes::Semaphore const & VoxelBufferToTexture::render( RenderDevice const & device
@@ -237,17 +245,30 @@ namespace castor3d
 		auto result = &toWait;
 		auto timerBlock = m_timer->start();
 		timerBlock->notifyPassRender();
-
-		if ( m_vctConfig.temporalSmoothing )
-		{
-			result = &m_pipelines[1].commands.submit( *device.computeQueue, *result );
-		}
-		else
-		{
-			result = &m_pipelines[0].commands.submit( *device.computeQueue, *result );
-		}
-
+		auto & pipeline = getPipeline();
+		result = &pipeline.commands.submit( *device.computeQueue, *result );
 		return *result;
+	}
+
+	VoxelBufferToTexture::Pipeline & VoxelBufferToTexture::getPipeline()
+	{
+		uint32_t index = ( m_vctConfig.enableSecondaryBounce ? 2u : 0u )
+			+ ( m_vctConfig.enableTemporalSmoothing ? 1u : 0u );
+
+		if ( !m_pipelines[index] )
+		{
+			m_pipelines[index] = std::make_unique< Pipeline >( m_device
+				, *m_pipelineLayout
+				, *m_descriptorSet
+				, m_voxels
+				, m_result
+				, *m_timer
+				, m_vctConfig.gridSize.value()
+				, m_vctConfig.enableTemporalSmoothing
+				, m_vctConfig.enableSecondaryBounce );
+		}
+
+		return *m_pipelines[index];
 	}
 
 	//*********************************************************************************************

@@ -8,7 +8,10 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
+#include "Castor3D/Render/Technique/Voxelize/VoxelBufferToTexture.hpp"
+#include "Castor3D/Render/Technique/Voxelize/VoxelizePass.hpp"
 #include "Castor3D/Render/Technique/Voxelize/VoxelSceneData.hpp"
+#include "Castor3D/Render/Technique/Voxelize/VoxelSecondaryBounce.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
@@ -83,20 +86,27 @@ namespace castor3d
 		, m_voxelConfig{ voxelConfig }
 		, m_culler{ scene, &camera }
 		, m_matrixUbo{ engine }
-		, m_result{ createTexture( engine, device, "VoxelizedSceneColor", { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
+		, m_firstBounce{ createTexture( engine, device, "VoxelizedSceneFirstBounce", { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
+		, m_secondaryBounce{ createTexture( engine, device, "VoxelizedSceneSecondaryBounce", { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
 		, m_voxels{ createSsbo( engine, device, "VoxelizedSceneBuffer", m_voxelConfig.gridSize.value() ) }
 		, m_voxelizerUbo{ voxelizerUbo }
-		, m_voxelizePass{ engine
+		, m_voxelizePass{ castor::makeUnique< VoxelizePass >( engine
 			, device
 			, m_matrixUbo
 			, m_culler
 			, m_voxelizerUbo
 			, *m_voxels
-			, m_voxelConfig }
-		, m_voxelToTexture{ device
+			, m_voxelConfig ) }
+		, m_voxelToTexture{ castor::makeUnique< VoxelBufferToTexture >( device
 			, m_voxelConfig
 			, *m_voxels
-			, m_result }
+			, m_firstBounce ) }
+		, m_voxelSecondaryBounce{ castor::makeUnique< VoxelSecondaryBounce >( device
+			, m_voxelConfig
+			, *m_voxels
+			, m_voxelizerUbo
+			, m_firstBounce
+			, m_secondaryBounce ) }
 	{
 	}
 
@@ -116,7 +126,7 @@ namespace castor3d
 			, 0.0f
 			, 0.0f
 			, voxelSize };
-		m_voxelizePass.update( updater );
+		m_voxelizePass->update( updater );
 		m_voxelizerUbo.cpuUpdate( m_voxelConfig
 			, voxelSize
 			, m_voxelConfig.gridSize.value() );
@@ -124,27 +134,37 @@ namespace castor3d
 
 	void Voxelizer::update( GpuUpdater & updater )
 	{
-		m_voxelizePass.update( updater );
+		m_voxelizePass->update( updater );
 	}
 
 	ashes::Semaphore const & Voxelizer::render( RenderDevice const & device
 		, ashes::Semaphore const & toWait )
 	{
 		ashes::Semaphore const * result = &toWait;
-		result = &m_voxelizePass.render( device, *result );
-		result = &m_voxelToTexture.render( device, *result );
+		result = &m_voxelizePass->render( device, *result );
+		result = &m_voxelToTexture->render( device, *result );
+
+		if ( m_voxelConfig.enableSecondaryBounce )
+		{
+			result = &m_voxelSecondaryBounce->render( device, *result );
+		}
+
 		return *result;
 	}
 
 	void Voxelizer::accept( RenderTechniqueVisitor & visitor )
 	{
-		m_voxelizePass.accept( visitor );
+		m_voxelizePass->accept( visitor );
 	}
 
 	void Voxelizer::listIntermediates( RenderTechniqueVisitor & visitor )
 	{
 		visitor.visit( "Voxelisation Result"
-			, m_result.getTexture()->getDefaultView().getSampledView()
+			, m_firstBounce.getTexture()->getDefaultView().getSampledView()
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, TextureFactors::tex3D( &m_grid ) );
+		visitor.visit( "Voxelisation SecondaryBounce"
+			, m_secondaryBounce.getTexture()->getDefaultView().getSampledView()
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors::tex3D( &m_grid ) );
 	}

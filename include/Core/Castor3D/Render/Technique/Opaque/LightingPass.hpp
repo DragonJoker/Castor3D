@@ -77,7 +77,8 @@ namespace castor3d
 			, ShadowMapResult const & smSpotResult
 			, LightVolumePassResult const & lpvResult
 			, LightVolumePassResultArray const & llpvResult
-			, TextureUnit const & voxels
+			, TextureUnit const & vctFirstBounce
+			, TextureUnit const & vctSecondaryBounce
 			, ashes::ImageView const & depthView
 			, SceneUbo & sceneUbo
 			, GpInfoUbo const & gpInfoUbo
@@ -160,7 +161,8 @@ namespace castor3d
 		ShadowMapResult const & m_smSpotResult;
 		LightVolumePassResult const & m_lpvResult;
 		LightVolumePassResultArray const & m_llpvResult;
-		TextureUnit const & m_voxels;
+		TextureUnit const & m_vctFirstBounce;
+		TextureUnit const & m_vctSecondaryBounce;
 		ashes::ImageView const & m_depthView;
 		SceneUbo & m_sceneUbo;
 		GpInfoUbo const & m_gpInfoUbo;

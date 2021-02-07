@@ -142,18 +142,12 @@ namespace castor3d
 		void doUpdate( bool first
 			, castor::Size const & size
 			, Light const & light
-			, Camera const & camera
-			, ShadowMap const * shadowMap
-			, TextureUnit const * voxels
-			, uint32_t shadowMapIndex )override
+			, Camera const & camera )override
 		{
 			my_pass_type::doUpdate( first
 				, size
 				, light
-				, camera
-				, shadowMap
-				, voxels
-				, shadowMapIndex );
+				, camera );
 			m_rsmGiPass->update( light );
 		}
 

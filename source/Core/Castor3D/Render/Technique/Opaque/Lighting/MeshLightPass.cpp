@@ -379,10 +379,7 @@ namespace castor3d
 	void MeshLightPass::doUpdate( bool first
 		, Size const & size
 		, Light const & light
-		, Camera const & camera
-		, ShadowMap const * shadowMap
-		, TextureUnit const * voxels
-		, uint32_t shadowMapIndex )
+		, Camera const & camera )
 	{
 		m_matrixUbo.cpuUpdate( camera.getView(), camera.getProjection() );
 

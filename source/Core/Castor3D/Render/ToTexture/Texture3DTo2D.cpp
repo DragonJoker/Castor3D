@@ -320,7 +320,7 @@ namespace castor3d
 			auto out = writer.getOut();
 
 			shader::Utils utils{ writer };
-			utils.declareVoxelizeFunctions();
+			utils.declareUnflatten();
 
 			writer.implementFunction< void >( "main"
 				, [&]()
@@ -352,9 +352,6 @@ namespace castor3d
 			// Shader outputs
 			auto outVoxelColor = writer.declOutput< Vec4 >( "outVoxelColor", 0u );
 			auto out = writer.getOut();
-
-			shader::Utils utils{ writer };
-			utils.declareVoxelizeFunctions();
 
 			// Creates a unit cube triangle strip from just vertex ID (14 vertices)
 			auto createCube = writer.implementFunction< Vec3 >( "createCube"

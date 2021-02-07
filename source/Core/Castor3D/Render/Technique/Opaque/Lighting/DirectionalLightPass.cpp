@@ -367,10 +367,7 @@ namespace castor3d
 	void DirectionalLightPass::doUpdate( bool first
 		, Size const & size
 		, Light const & light
-		, Camera const & camera
-		, ShadowMap const * shadowMap
-		, TextureUnit const * voxels
-		, uint32_t shadowMapIndex )
+		, Camera const & camera )
 	{
 		m_viewport.resize( size );
 		m_matrixUbo.cpuUpdate( camera.getView(), m_viewport.getProjection() );

@@ -169,10 +169,12 @@ namespace castor3d
 	bool RenderTechniquePass::initialise( RenderDevice const & device
 		, castor::Size const & size
 		, LightVolumePassResult const * lpvResult
-		, TextureUnit const * vctResult )
+		, TextureUnit const * vctFirstBounce
+		, TextureUnit const * vctSecondaryBounce )
 	{
 		m_lpvResult = lpvResult;
-		m_vctResult = vctResult;
+		m_vctFirstBounce = vctFirstBounce;
+		m_vctSecondaryBounce = vctSecondaryBounce;
 		return SceneRenderPass::initialise( device, size );
 	}
 
@@ -181,10 +183,12 @@ namespace castor3d
 		, RenderPassTimer & timer
 		, uint32_t index
 		, LightVolumePassResult const * lpvResult
-		, TextureUnit const * vctResult )
+		, TextureUnit const * vctFirstBounce
+		, TextureUnit const * vctSecondaryBounce )
 	{
 		m_lpvResult = lpvResult;
-		m_vctResult = vctResult;
+		m_vctFirstBounce = vctFirstBounce;
+		m_vctSecondaryBounce = vctSecondaryBounce;
 		return SceneRenderPass::initialise( device, size, timer, index );
 	}
 
@@ -249,7 +253,7 @@ namespace castor3d
 			addFlag( flags.programFlags, ProgramFlag::eEnvironmentMapping );
 		}
 
-		if ( !m_vctConfigUbo || !m_vctResult )
+		if ( !m_vctConfigUbo || !m_vctFirstBounce || !m_vctSecondaryBounce )
 		{
 			remFlag( flags.sceneFlags, SceneFlag::eVoxelConeTracing );
 		}
@@ -397,7 +401,8 @@ namespace castor3d
 			, ShadowMapLightTypeArray const & shadowMaps
 			, Scene const & scene
 			, LightVolumePassResult const * lpvResult
-			, TextureUnit const * vctResult )
+			, TextureUnit const * vctFirstBounce
+			, TextureUnit const * vctSecondaryBounce )
 		{
 			auto & flags = node.pipeline.getFlags();
 			ashes::WriteDescriptorSetArray writes;
@@ -445,9 +450,14 @@ namespace castor3d
 
 			if ( checkFlag( flags.sceneFlags, SceneFlag::eVoxelConeTracing ) )
 			{
-				CU_Require( vctResult );
-				bindTexture( vctResult->getTexture()->getDefaultView().getSampledView()
-					, vctResult->getSampler()->getSampler()
+				CU_Require( vctFirstBounce );
+				CU_Require( vctSecondaryBounce );
+				bindTexture( vctFirstBounce->getTexture()->getDefaultView().getSampledView()
+					, vctFirstBounce->getSampler()->getSampler()
+					, writes
+					, index );
+				bindTexture( vctSecondaryBounce->getTexture()->getDefaultView().getSampledView()
+					, vctSecondaryBounce->getSampler()->getSampler()
 					, writes
 					, index );
 			}
@@ -492,7 +502,8 @@ namespace castor3d
 			, shadowMaps
 			, m_scene
 			, m_lpvResult
-			, m_vctResult );
+			, m_vctFirstBounce
+			, m_vctSecondaryBounce );
 	}
 
 	void RenderTechniquePass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
@@ -506,7 +517,8 @@ namespace castor3d
 			, shadowMaps
 			, m_scene
 			, m_lpvResult
-			, m_vctResult );
+			, m_vctFirstBounce
+			, m_vctSecondaryBounce );
 	}
 
 	ashes::VkDescriptorSetLayoutBindingArray RenderTechniquePass::doCreateTextureBindings( PipelineFlags const & flags )const
@@ -547,10 +559,14 @@ namespace castor3d
 
 		if ( checkFlag( flags.sceneFlags, SceneFlag::eVoxelConeTracing ) )
 		{
-			CU_Require( m_vctResult );
+			CU_Require( m_vctFirstBounce );
+			CU_Require( m_vctSecondaryBounce );
 			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapVoxels
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapVoxelsFirstBounce
+			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapVoxelsSecondaryBounce
 		}
 		else
 		{

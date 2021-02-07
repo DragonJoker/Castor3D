@@ -401,6 +401,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserVctConservativeRasterization )
 	CU_DeclareAttributeParser( parserVctTemporalSmoothing )
 	CU_DeclareAttributeParser( parserVctOcclusion )
+	CU_DeclareAttributeParser( parserVctSecondaryBounce )
 }
 
 #endif

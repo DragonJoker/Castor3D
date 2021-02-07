@@ -90,7 +90,8 @@ namespace castor3d
 		C3D_API bool initialise( RenderDevice const & device
 			, castor::Size const & size
 			, LightVolumePassResult const * lpvResult = nullptr
-			, TextureUnit const * vctResult = nullptr );
+			, TextureUnit const * vctFirstBounce = nullptr
+			, TextureUnit const * vctSecondaryBounce = nullptr );
 		/**
 		 *\copydoc		castor3d::RenderPass::initialise
 		 */
@@ -99,7 +100,8 @@ namespace castor3d
 			, RenderPassTimer & timer
 			, uint32_t index
 			, LightVolumePassResult const * lpvResult = nullptr
-			, TextureUnit const * vctResult = nullptr );
+			, TextureUnit const * vctResult = nullptr
+			, TextureUnit const * vctSecondaryBounce = nullptr );
 		/**
 		 *\~english
 		 *\brief		Visitor acceptance function.
@@ -236,7 +238,8 @@ namespace castor3d
 		LayeredLpvGridConfigUbo const * m_llpvConfigUbo;
 		VoxelizerUbo const * m_vctConfigUbo;
 		LightVolumePassResult const * m_lpvResult;
-		TextureUnit const * m_vctResult;
+		TextureUnit const * m_vctFirstBounce;
+		TextureUnit const * m_vctSecondaryBounce;
 		Camera * m_camera{ nullptr };
 		SceneRenderNode m_sceneNode;
 		bool m_environment{ false };

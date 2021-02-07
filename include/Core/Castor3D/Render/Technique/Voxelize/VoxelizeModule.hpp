@@ -37,6 +37,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Handles secondary bounce.
+	*\~french
+	*\brief
+	*	Gère le second rebond.
+	*/
+	class VoxelSecondaryBounce;
+	/**
+	*\~english
+	*\brief
 	*	Holds all data needed to voxelize a scene.
 	*\~french
 	*\brief
@@ -53,6 +62,9 @@ namespace castor3d
 	*/
 	class VoxelSceneData;
 
+	CU_DeclareCUSmartPtr( castor3d, VoxelBufferToTexture, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, VoxelizePass, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, VoxelSecondaryBounce, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, Voxelizer, C3D_API );
 
 	struct Voxel

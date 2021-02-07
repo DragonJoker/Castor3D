@@ -307,8 +307,8 @@ namespace castor3d
 			, Light const & light
 			, Camera const & camera
 			, ShadowMap const * shadowMap
-			, TextureUnit const * voxels
-			, uint32_t shadowMapIndex );
+			, TextureUnit const * vctFirstBounce
+			, TextureUnit const * vctSecondaryBounce );
 		/**
 		 *\~english
 		 *\brief		Renders the light pass.
@@ -368,7 +368,8 @@ namespace castor3d
 		};
 		static size_t makeKey( Light const & light
 			, ShadowMap const * shadowMap
-			, TextureUnit const * voxels );
+			, TextureUnit const * vctFirstBounce
+			, TextureUnit const * vctSecondaryBounce );
 		using PipelinePtr = std::unique_ptr< Pipeline >;
 		using PipelineMap = std::map< size_t, PipelinePtr >;
 		using PipelineArray = std::array< Pipeline, size_t( ShadowType::eCount ) * 2u >; // * 2u for volumetric scattering or not.
@@ -377,13 +378,15 @@ namespace castor3d
 			, ShadowType shadowType
 			, bool rsm
 			, ShadowMap const * shadowMap
-			, TextureUnit const * voxels );
+			, TextureUnit const * vctFirstBounce
+			, TextureUnit const * vctSecondaryBounce );
 
 	protected:
 		virtual Pipeline * doGetPipeline( bool first
 			, Light const & light
 			, ShadowMap const * shadowMap
-			, TextureUnit const * voxels );
+			, TextureUnit const * vctFirstBounce
+			, TextureUnit const * vctSecondaryBounce );
 
 	private:
 		virtual VkClearValue doGetIndirectClearColor()const;
@@ -471,10 +474,7 @@ namespace castor3d
 		virtual void doUpdate( bool first
 			, castor::Size const & size
 			, Light const & light
-			, Camera const & camera
-			, ShadowMap const * shadowMap
-			, TextureUnit const * voxels
-			, uint32_t shadowMapIndex ) = 0;
+			, Camera const & camera ) = 0;
 		/**
 		 *\~english
 		 *\brief		Prepares the command buffer for given pipeline.
@@ -488,8 +488,6 @@ namespace castor3d
 		 *\param[in]	first			Dit s'il s'agit de la première passe (\p true) ou la passe de mélange (\p false).
 		 */
 		void doPrepareCommandBuffer( Pipeline & pipeline
-			, ShadowMap const * shadowMap
-			, TextureUnit const * voxels
 			, bool first );
 		/**
 		 *\~english

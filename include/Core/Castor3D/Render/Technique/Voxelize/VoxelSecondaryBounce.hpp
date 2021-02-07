@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_VoxelBufferToTexture_H___
-#define ___C3D_VoxelBufferToTexture_H___
+#ifndef ___C3D_VoxelSecondaryBounce_H___
+#define ___C3D_VoxelSecondaryBounce_H___
 
 #include "VoxelizeModule.hpp"
 
@@ -16,7 +16,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	class VoxelBufferToTexture
+	class VoxelSecondaryBounce
 	{
 	public:
 		/**
@@ -29,9 +29,11 @@ namespace castor3d
 		 *\param[in]	size			Les dimensions du rendu.
 		 *\param[in]	scene			La scène rendue.
 		 */
-		C3D_API VoxelBufferToTexture( RenderDevice const & device
+		C3D_API VoxelSecondaryBounce( RenderDevice const & device
 			, VoxelSceneData const & vctConfig
 			, ashes::Buffer< Voxel > const & voxels
+			, VoxelizerUbo const & voxelUbo
+			, TextureUnit const & firstBounce
 			, TextureUnit const & result );
 		/**
 		 *\~english
@@ -49,35 +51,31 @@ namespace castor3d
 		C3D_API void accept( RenderTechniqueVisitor & visitor );
 
 	private:
-		RenderDevice const & m_device;
 		VoxelSceneData const & m_vctConfig;
-		ashes::Buffer< Voxel > const & m_voxels;
-		TextureUnit const & m_result;
 		RenderPassTimerSPtr m_timer;
 		ashes::DescriptorSetLayoutPtr m_descriptorSetLayout;
 		ashes::PipelineLayoutPtr m_pipelineLayout;
 		ashes::DescriptorSetPoolPtr m_descriptorSetPool;
 		ashes::DescriptorSetPtr m_descriptorSet;
-		struct Pipeline
+
+		struct SecondaryBounce
 		{
-			Pipeline( RenderDevice const & device
+			SecondaryBounce( RenderDevice const & device
 				, ashes::PipelineLayout const & pipelineLayout
 				, ashes::DescriptorSet const & descriptorSet
 				, ashes::Buffer< Voxel > const & voxels
+				, VoxelizerUbo const & voxelUbo
+				, TextureUnit const & firstBounce
 				, TextureUnit const & result
 				, RenderPassTimer & timer
-				, uint32_t voxelGridSize
-				, bool temporalSmoothing
-				, bool secondaryBounce );
+				, uint32_t voxelGridSize );
 
 			ShaderModule computeShader;
 			ashes::ComputePipelinePtr pipeline;
 			CommandsSemaphore commands;
 		};
-		std::array< std::unique_ptr< Pipeline >, 4u > m_pipelines;
 
-	private:
-		Pipeline & getPipeline();
+		SecondaryBounce m_secondaryBounce;
 	};
 }
 

@@ -36,8 +36,9 @@ namespace castor3d
 			, gridCenter{ other.xyz() }
 			, rayStepSize{ other.w() }
 			, enabled{ status.x() }
-			, conservativeRasterization{ status.y() }
+			, enableConservativeRasterization{ status.y() }
 			, enableOcclusion{ status.z() }
+			, enableSecondaryBounce{ status.w() }
 		{
 		}
 
@@ -72,6 +73,11 @@ namespace castor3d
 		sdw::Vec3 VoxelData::worldToTex( sdw::Vec3 const & wsPosition )const
 		{
 			return worldToClip( wsPosition ) * vec3( 0.5_f, -0.5_f, 0.5_f ) + vec3( 0.5_f );
+		}
+
+		sdw::IVec3 VoxelData::worldToImg( sdw::Vec3 const & wsPosition )const
+		{
+			return ivec3( worldToTex( wsPosition ) * clipToGrid );
 		}
 
 		sdw::Vec3 VoxelData::worldToClip( sdw::Vec3 const & wsPosition )const
@@ -132,8 +138,9 @@ namespace castor3d
 		voxelData.radiance->w = 1.0f / voxelData.radiance->z;
 		voxelData.other->w = voxelConfig.rayStepSize;
 		voxelData.status->x = voxelConfig.enabled;
-		voxelData.status->y = voxelConfig.conservativeRasterization;
+		voxelData.status->y = voxelConfig.enableConservativeRasterization;
 		voxelData.status->z = voxelConfig.enableOcclusion;
+		voxelData.status->z = voxelConfig.enableSecondaryBounce;
 	}
 
 	//*********************************************************************************************

@@ -40,14 +40,26 @@ namespace castor3d
 
 		if ( result )
 		{
-			result = file.writeText( m_tabs + cuT( "\tconservative_rasterization " ) + ( obj.conservativeRasterization ? String{ "true" } : String{ "false" } ) + cuT( "\n" ) ) > 0;
+			result = file.writeText( m_tabs + cuT( "\tconservative_rasterization " ) + ( obj.enableConservativeRasterization ? String{ "true" } : String{ "false" } ) + cuT( "\n" ) ) > 0;
 			castor::TextWriter< VoxelSceneData >::checkError( result, "VoxelSceneData conservative rasterization." );
 		}
 
 		if ( result )
 		{
-			result = file.writeText( m_tabs + cuT( "\ttemporal_smoothing " ) + ( obj.temporalSmoothing ? String{ "true" } : String{ "false" } ) + cuT( "\n" ) ) > 0;
+			result = file.writeText( m_tabs + cuT( "\ttemporal_smoothing " ) + ( obj.enableTemporalSmoothing ? String{ "true" } : String{ "false" } ) + cuT( "\n" ) ) > 0;
 			castor::TextWriter< VoxelSceneData >::checkError( result, "VoxelSceneData temporal smoothing." );
+		}
+
+		if ( result )
+		{
+			result = file.writeText( m_tabs + cuT( "\tocclusion" ) + ( obj.enableOcclusion ? String{ "true" } : String{ "false" } ) + cuT( "\n" ) ) > 0;
+			castor::TextWriter< VoxelSceneData >::checkError( result, "VoxelSceneData occlusion." );
+		}
+
+		if ( result )
+		{
+			result = file.writeText( m_tabs + cuT( "\tsecondary_bounce" ) + ( obj.enableSecondaryBounce ? String{ "true" } : String{ "false" } ) + cuT( "\n" ) ) > 0;
+			castor::TextWriter< VoxelSceneData >::checkError( result, "VoxelSceneData second rebound." );
 		}
 
 		if ( result )

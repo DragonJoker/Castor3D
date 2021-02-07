@@ -226,6 +226,12 @@ namespace castor3d
 			castor::TextWriter< Scene >::checkError( result, "Scene LPV indirect attenuation" );
 		}
 
+		if ( result && scene.getVoxelConeTracingConfig().enabled )
+		{
+			log::info << cuT( "Scene::write - Voxel Cone Tracing" ) << std::endl;
+			result = VoxelSceneData::TextWriter( m_tabs + cuT( "\t" ) )( scene.getVoxelConeTracingConfig(), file );
+		}
+
 		if ( result )
 		{
 			result = writeView< castor::Font >( scene.getFontView()

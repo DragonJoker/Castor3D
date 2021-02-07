@@ -47,8 +47,7 @@ namespace castor3d::shader
 		C3D_API void declareDecodeNormal();
 		C3D_API void declareFlatten();
 		C3D_API void declareUnflatten();
-		C3D_API void declareTraceCone();
-		C3D_API void declareVoxelizeFunctions();
+		C3D_API void declareIsSaturatedImg();
 
 		C3D_API sdw::Vec2 topDownToBottomUp( sdw::Vec2 const & texCoord )const;
 		C3D_API sdw::Vec3 topDownToBottomUp( sdw::Vec3 const & texCoord )const;
@@ -269,6 +268,8 @@ namespace castor3d::shader
 			, sdw::Float const & alphaRef )const;
 
 		C3D_API sdw::Boolean isSaturated( sdw::Vec3 const & p )const;
+		C3D_API sdw::Boolean isSaturated( sdw::IVec3 const & p
+			, sdw::Int const & imax )const;
 		/**
 		*\~english
 		*\brief
@@ -299,18 +300,6 @@ namespace castor3d::shader
 		*/
 		C3D_API sdw::UVec3 unflatten( sdw::UInt const & p
 			, sdw::UVec3 const & dim )const;
-		C3D_API sdw::Vec4 traceConeRadiance( sdw::SampledImage3DRgba32 const & voxels
-			, Surface surface
-			, VoxelData const & voxelData )const;
-		C3D_API sdw::Vec4 traceConeReflection( sdw::SampledImage3DRgba32 const & voxels
-			, Surface surface
-			, sdw::Vec3 const & wsViewVector
-			, sdw::Float const & roughness
-			, VoxelData const & voxelData )const;
-		C3D_API sdw::Float traceConeOcclusion( sdw::SampledImage3DRgba32 const & voxels
-			, Surface surface
-			, sdw::Vec3 const & wsConeDirection
-			, VoxelData const & voxelData )const;
 
 	public:
 		C3D_API static uint32_t const MaxIblReflectionLod;
@@ -405,6 +394,9 @@ namespace castor3d::shader
 			, InTextureConfigData > m_parallaxShadow;
 		sdw::Function< sdw::Boolean
 			, sdw::InVec3 > m_isSaturated3D;
+		sdw::Function< sdw::Boolean
+			, sdw::InIVec3
+			, sdw::InInt > m_isSaturated3DImg;
 		sdw::Function< sdw::UInt
 			, sdw::InVec4 > m_encodeColor;
 		sdw::Function< sdw::UInt
@@ -419,27 +411,6 @@ namespace castor3d::shader
 		sdw::Function< sdw::UVec3
 			, sdw::InUInt
 			, sdw::InUVec3 > m_unflatten3D;
-		sdw::Function< sdw::Vec4
-			, sdw::InSampledImage3DRgba32
-			, InSurface
-			, sdw::InVec3
-			, sdw::InFloat
-			, InVoxelData > m_traceCone;
-		sdw::Function< sdw::Vec4
-			, sdw::InSampledImage3DRgba32
-			, InSurface
-			, InVoxelData > m_traceConeRadiance;
-		sdw::Function< sdw::Vec4
-			, sdw::InSampledImage3DRgba32
-			, InSurface
-			, sdw::InVec3
-			, sdw::InFloat
-			, InVoxelData > m_traceConeReflection;
-		sdw::Function< sdw::Float
-			, sdw::InSampledImage3DRgba32
-			, InSurface
-			, sdw::InVec3
-			, InVoxelData > m_traceConeOcclusion;
 	};
 }
 

@@ -645,7 +645,8 @@ namespace castor3d
 		, ShadowMapResult const & smSpotResult
 		, LightVolumePassResult const & lpvResult
 		, LightVolumePassResultArray const & llpvResult
-		, TextureUnit const & voxels
+		, TextureUnit const & vctFirstBounce
+		, TextureUnit const & vctSecondaryBounce
 		, ashes::ImageView const & depthView
 		, SceneUbo & sceneUbo
 		, GpInfoUbo const & gpInfoUbo
@@ -660,7 +661,8 @@ namespace castor3d
 		, m_smSpotResult{ smSpotResult }
 		, m_lpvResult{ lpvResult }
 		, m_llpvResult{ llpvResult }
-		, m_voxels{ voxels }
+		, m_vctFirstBounce{ vctFirstBounce }
+		, m_vctSecondaryBounce{ vctSecondaryBounce }
 		, m_depthView{ depthView }
 		, m_sceneUbo{ sceneUbo }
 		, m_gpInfoUbo{ gpInfoUbo }
@@ -943,8 +945,8 @@ namespace castor3d
 						, *light
 						, camera
 						, light->getShadowMap()
-						, &m_voxels
-						, light->getShadowMapIndex() );
+						, &m_vctFirstBounce
+						, &m_vctSecondaryBounce );
 					result = &pass->render( index
 						, *result );
 					++index;
