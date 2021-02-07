@@ -46,6 +46,14 @@ namespace castor3d
 			: public castor::TextWriter< Scene >
 		{
 		public:
+			struct Options
+			{
+				castor::Path materialsFile;
+				castor::Path meshesFile;
+				castor::Path nodesFile;
+				castor::Path objectsFile;
+				castor::Path lightsFile;
+			};
 			/**
 			 *\~english
 			 *\brief		Constructor
@@ -53,7 +61,7 @@ namespace castor3d
 			 *\brief		Constructeur
 			 */
 			C3D_API explicit TextWriter( castor::String const & tabs
-				, castor::Path const & materialsFile = castor::Path{} );
+				, Options options = {} );
 			/**
 			 *\~english
 			 *\brief		Writes a scene into a text file
@@ -67,7 +75,7 @@ namespace castor3d
 			C3D_API bool operator()( Scene const & scene, castor::TextFile & file )override;
 
 		private:
-			castor::Path const & m_materialsFile;
+			Options m_options;
 		};
 
 	public:

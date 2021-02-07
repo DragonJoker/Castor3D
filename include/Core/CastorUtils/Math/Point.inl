@@ -83,8 +83,10 @@ namespace castor
 	//*************************************************************************************************
 
 	template< typename T, uint32_t TCount >
-	Point< T, TCount >::TextWriter::TextWriter( String const & tabs )
+	Point< T, TCount >::TextWriter::TextWriter( String const & tabs
+		, float scale )
 		: castor::TextWriter< Point< T, TCount > >( tabs )
+		, m_scale{ scale }
 	{
 	}
 
@@ -100,7 +102,7 @@ namespace castor
 				streamWord << cuT( " " );
 			}
 
-			streamWord << object[i];
+			streamWord << T( object[i] * m_scale );
 		}
 
 		bool result = file.print( 1024, cuT( "%s%s" ), this->m_tabs.c_str(), streamWord.str().c_str() ) > 0;

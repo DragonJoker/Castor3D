@@ -130,14 +130,14 @@ namespace castor3d
 
 		if ( result )
 		{
-			auto rotate = configuration.rotate[0];
+			auto rotate = castor::Point2f{ configuration.rotate };
 			auto translate = castor::Point3f{ configuration.translate };
 
 			if ( translate != castor::Point3f{}
-				|| rotate != 0.0f )
+				|| rotate != castor::Point2f{ 1.0f, 0.0f } )
 			{
-				result = result && file.writeText( m_tabs + cuT( "animation" ) ) > 0;
-				result = result && file.writeText( m_tabs + cuT( "{" ) ) > 0;
+				result = result && file.writeText( m_tabs + cuT( "\tanimation\n" ) ) > 0;
+				result = result && file.writeText( m_tabs + cuT( "\t{\n" ) ) > 0;
 
 				if ( result && translate != castor::Point3f{} )
 				{
@@ -146,12 +146,14 @@ namespace castor3d
 						&& file.writeText( cuT( "\n" ) ) > 0;
 				}
 
-				if ( result && rotate != 0.0 )
+				if ( result && rotate != castor::Point2f{ 1.0f, 0.0f } )
 				{
-					result = write( cuT( "\trotate" ), rotate, file );
+					result = file.print( 256, cuT( "%s\trotate " ), m_tabs.c_str() ) > 0
+						&& castor::Point2f::TextWriter( castor::String() )( rotate, file )
+						&& file.writeText( cuT( "\n" ) ) > 0;
 				}
 
-				result = result && file.writeText( m_tabs + cuT( "}" ) ) > 0;
+				result = result && file.writeText( m_tabs + cuT( "\t}\n" ) ) > 0;
 			}
 		}
 

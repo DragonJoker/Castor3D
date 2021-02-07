@@ -68,7 +68,8 @@ namespace castor
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			inline explicit TextWriter( String const & tabs );
+			inline explicit TextWriter( String const & tabs
+				, float scale = 1.0f );
 			/**
 			 *\~english
 			 *\brief		Writes a Point2f object into a text file
@@ -82,6 +83,9 @@ namespace castor
 			 *\return		\p true si ok
 			 */
 			inline bool operator()( Point const & object, TextFile & file )override;
+
+		private:
+			float m_scale;
 		};
 
 	private:

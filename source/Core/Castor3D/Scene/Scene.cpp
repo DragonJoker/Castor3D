@@ -130,9 +130,9 @@ namespace castor3d
 	//*************************************************************************************************
 
 	Scene::TextWriter::TextWriter( castor::String const & tabs
-		, castor::Path const & materialsFile )
+		, Options options )
 		: castor::TextWriter< Scene >{ tabs }
-		, m_materialsFile{ materialsFile }
+		, m_options{ std::move( options ) }
 	{
 	}
 
@@ -189,13 +189,56 @@ namespace castor3d
 			castor::TextWriter< Scene >::checkError( result, "Scene background colour" );
 		}
 
-		if ( result && !m_materialsFile.empty() )
+		if ( result )
+		{
+			log::info << cuT( "Scene::write - LPV indirect attenuation" ) << std::endl;
+			result = file.writeText( m_tabs + cuT( "\tlpv_indirect_attenuation " ) + string::toString( scene.getLpvIndirectAttenuation() ) + cuT( "\n" ) ) > 0;
+			castor::TextWriter< Scene >::checkError( result, "Scene LPV indirect attenuation" );
+		}
+
+		if ( result && !m_options.materialsFile.empty() )
 		{
 			log::info << cuT( "Scene::write - Materials file" ) << std::endl;
-			String path = m_materialsFile;
+			String path = m_options.materialsFile;
 			string::replace( path, cuT( "\\" ), cuT( "/" ) );
 			result = file.writeText( m_tabs + cuT( "\tinclude \"" ) + path +cuT( "\"\n" ) ) > 0;
-			castor::TextWriter< Scene >::checkError( result, "Scene material file" );
+			castor::TextWriter< Scene >::checkError( result, "Scene Materials file" );
+		}
+
+		if ( result && !m_options.meshesFile.empty() )
+		{
+			log::info << cuT( "Scene::write - Meshes file" ) << std::endl;
+			String path = m_options.meshesFile;
+			string::replace( path, cuT( "\\" ), cuT( "/" ) );
+			result = file.writeText( m_tabs + cuT( "\tinclude \"" ) + path +cuT( "\"\n" ) ) > 0;
+			castor::TextWriter< Scene >::checkError( result, "Scene Meshes file" );
+		}
+
+		if ( result && !m_options.nodesFile.empty() )
+		{
+			log::info << cuT( "Scene::write - Nodes file" ) << std::endl;
+			String path = m_options.nodesFile;
+			string::replace( path, cuT( "\\" ), cuT( "/" ) );
+			result = file.writeText( m_tabs + cuT( "\tinclude \"" ) + path +cuT( "\"\n" ) ) > 0;
+			castor::TextWriter< Scene >::checkError( result, "Scene Nodes file" );
+		}
+
+		if ( result && !m_options.objectsFile.empty() )
+		{
+			log::info << cuT( "Scene::write - Objects file" ) << std::endl;
+			String path = m_options.objectsFile;
+			string::replace( path, cuT( "\\" ), cuT( "/" ) );
+			result = file.writeText( m_tabs + cuT( "\tinclude \"" ) + path +cuT( "\"\n" ) ) > 0;
+			castor::TextWriter< Scene >::checkError( result, "Scene Objects file" );
+		}
+
+		if ( result && !m_options.lightsFile.empty() )
+		{
+			log::info << cuT( "Scene::write - Lights file" ) << std::endl;
+			String path = m_options.lightsFile;
+			string::replace( path, cuT( "\\" ), cuT( "/" ) );
+			result = file.writeText( m_tabs + cuT( "\tinclude \"" ) + path +cuT( "\"\n" ) ) > 0;
+			castor::TextWriter< Scene >::checkError( result, "Scene Lights file" );
 		}
 
 		if ( result )
@@ -219,13 +262,6 @@ namespace castor3d
 			}
 		}
 
-		if ( result )
-		{
-			log::info << cuT( "Scene::write - LPV indirect attenuation" ) << std::endl;
-			result = file.writeText( m_tabs + cuT( "\tlpv_indirect_attenuation " ) + string::toString( scene.getLpvIndirectAttenuation() ) + cuT( "\n" ) ) > 0;
-			castor::TextWriter< Scene >::checkError( result, "Scene LPV indirect attenuation" );
-		}
-
 		if ( result && scene.getVoxelConeTracingConfig().enabled )
 		{
 			log::info << cuT( "Scene::write - Voxel Cone Tracing" ) << std::endl;
@@ -240,15 +276,13 @@ namespace castor3d
 				, file );
 		}
 
-		if ( m_materialsFile.empty() )
+		if ( result
+			&& m_options.materialsFile.empty() )
 		{
-			if ( result )
-			{
-				result = writeView< Sampler >( scene.getSamplerView()
-					, cuT( "Samplers" )
-					, m_tabs
-					, file );
-			}
+			result = writeView< Sampler >( scene.getSamplerView()
+				, cuT( "Samplers" )
+				, m_tabs
+				, file );
 
 			if ( result )
 			{
@@ -259,7 +293,8 @@ namespace castor3d
 			}
 		}
 
-		if ( result && !scene.getOverlayView().isEmpty() )
+		if ( result
+			&& !scene.getOverlayView().isEmpty() )
 		{
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Overlays\n" ) ) > 0;
 
@@ -279,7 +314,9 @@ namespace castor3d
 			}
 		}
 
-		if ( result && !scene.getMeshCache().isEmpty() )
+		if ( result
+			&& m_options.meshesFile.empty()
+			&& !scene.getMeshCache().isEmpty() )
 		{
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Meshes\n" ) ) > 0;
 
@@ -299,7 +336,8 @@ namespace castor3d
 			}
 		}
 
-		if ( result && !scene.getCameraRootNode()->getChildren().empty() )
+		if ( result
+			&& !scene.getCameraRootNode()->getChildren().empty() )
 		{
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Cameras nodes\n" ) ) > 0;
 
@@ -319,7 +357,8 @@ namespace castor3d
 			}
 		}
 
-		if ( result && !scene.getCameraCache().isEmpty() )
+		if ( result
+			&& !scene.getCameraCache().isEmpty() )
 		{
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Cameras\n" ) ) > 0;
 
@@ -341,7 +380,9 @@ namespace castor3d
 			}
 		}
 
-		if ( result && !scene.getObjectRootNode()->getChildren().empty() )
+		if ( result
+			&& m_options.nodesFile.empty()
+			&& !scene.getObjectRootNode()->getChildren().empty() )
 		{
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Objects nodes\n" ) ) > 0;
 
@@ -356,7 +397,9 @@ namespace castor3d
 			}
 		}
 
-		if ( result && !scene.getLightCache() .isEmpty() )
+		if ( result
+			&& m_options.lightsFile.empty()
+			&& !scene.getLightCache() .isEmpty() )
 		{
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Lights\n" ) ) > 0;
 
@@ -373,7 +416,9 @@ namespace castor3d
 			}
 		}
 
-		if ( result && !scene.getGeometryCache().isEmpty() )
+		if ( result
+			&& m_options.objectsFile.empty()
+			&& !scene.getGeometryCache().isEmpty() )
 		{
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Geometries\n" ) ) > 0;
 
@@ -395,7 +440,8 @@ namespace castor3d
 			}
 		}
 
-		if ( result && !scene.getParticleSystemCache().isEmpty() )
+		if ( result
+			&& !scene.getParticleSystemCache().isEmpty() )
 		{
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Particle systems\n" ) ) > 0;
 
@@ -412,7 +458,8 @@ namespace castor3d
 			}
 		}
 
-		if ( result && !scene.getAnimatedObjectGroupCache().isEmpty() )
+		if ( result
+			&& scene.getAnimatedObjectGroupCache().getObjectCount() > 1 )
 		{
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Animated object groups\n" ) ) > 0;
 
@@ -424,7 +471,10 @@ namespace castor3d
 
 				for ( auto const & it : scene.getAnimatedObjectGroupCache() )
 				{
-					result = result && AnimatedObjectGroup::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, file );
+					if ( it.first != cuT( "C3D_Textures" ) )
+					{
+						result = result && AnimatedObjectGroup::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, file );
+					}
 				}
 			}
 		}

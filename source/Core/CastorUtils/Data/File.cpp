@@ -285,7 +285,7 @@ namespace castor
 
 		if ( src.is_open() )
 		{
-			std::ofstream dst( string::stringCast< char >( dstFileName ), std::ios::binary );
+			std::ofstream dst( string::stringCast< char >( dstFileName ), std::ios::binary | std::ios::trunc );
 
 			if ( dst.is_open() )
 			{

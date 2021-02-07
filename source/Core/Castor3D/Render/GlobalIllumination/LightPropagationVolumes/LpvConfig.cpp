@@ -20,13 +20,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			result = file.writeText( m_tabs + cuT( "\tindirect_attenuation" ) + string::toString( object.indirectAttenuation.value() ) ) > 0;
-			castor::TextWriter< LpvConfig >::checkError( result, "LpvConfig indirectAttenuation" );
-		}
-
-		if ( result )
-		{
-			result = file.writeText( m_tabs + cuT( "\ttexel_area_modifier" ) + string::toString( object.texelAreaModifier.value() ) ) > 0;
+			result = file.writeText( m_tabs + cuT( "\ttexel_area_modifier " ) + string::toString( object.texelAreaModifier.value() ) + cuT( "\n" ) ) > 0;
 			castor::TextWriter< LpvConfig >::checkError( result, "LpvConfig texelAreaModifier" );
 		}
 

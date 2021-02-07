@@ -20,19 +20,19 @@ namespace castor3d
 
 		if ( result )
 		{
-			result = file.writeText( m_tabs + cuT( "\tintensity" ) + string::toString( object.intensity.value() ) ) > 0;
+			result = file.writeText( m_tabs + cuT( "\tintensity " ) + string::toString( object.intensity.value() ) + cuT( "\n" ) ) > 0;
 			castor::TextWriter< RsmConfig >::checkError( result, "RsmConfig intensity" );
 		}
 
 		if ( result )
 		{
-			result = file.writeText( m_tabs + cuT( "\tmax_radius" ) + string::toString( object.maxRadius.value() ) ) > 0;
+			result = file.writeText( m_tabs + cuT( "\tmax_radius " ) + string::toString( object.maxRadius.value() ) + cuT( "\n" ) ) > 0;
 			castor::TextWriter< RsmConfig >::checkError( result, "RsmConfig maxRadius" );
 		}
 
 		if ( result )
 		{
-			result = file.writeText( m_tabs + cuT( "\tsample_count" ) + string::toString( object.sampleCount.value().value() ) ) > 0;
+			result = file.writeText( m_tabs + cuT( "\tsample_count " ) + string::toString( object.sampleCount.value().value() ) + cuT( "\n" ) ) > 0;
 			castor::TextWriter< RsmConfig >::checkError( result, "RsmConfig sampleCount" );
 		}
 
