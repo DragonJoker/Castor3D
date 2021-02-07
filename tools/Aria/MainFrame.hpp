@@ -154,24 +154,19 @@ namespace aria
 			std::unique_ptr< wxProcess > genProcess{};
 			std::unique_ptr< wxProcess > difProcess{};
 			std::unique_ptr< wxProcess > disProcess{};
-			std::list< TestNode > pending{};
-			std::list< TestNode > running{};
 			wxProcess * currentProcess{};
-		};
 
-	private:
-		struct TestProcessChecker
-		{
-			explicit TestProcessChecker( MainFrame * mainFrame );
-			void checkProcess( int pid );
-			void stop();
+			TestNode current();
+			void push( TestNode node );
+			TestNode next();
+			void end();
+			void clear();
+			bool empty();
+			size_t size();
 
 		private:
-			int get();
-
-			std::atomic_int pid{};
-			std::atomic_bool isStopped{ false };
-			std::thread thread;
+			std::list< TestNode > pending{};
+			TestNode running{};
 		};
 
 	private:
@@ -196,7 +191,6 @@ namespace aria
 		wxMenu * m_barAllMenu{};
 		RunningTest m_runningTest;
 		std::atomic_bool m_cancelled;
-		TestProcessChecker m_processChecker;
 		wxTimer * m_testUpdater;
 		wxTimer * m_categoriesUpdater;
 	};
