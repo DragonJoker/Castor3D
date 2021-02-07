@@ -29,9 +29,11 @@ namespace castor3d
 			C3D_API void declareVct( uint32_t & bindingIndex
 				, uint32_t setIndex = 0u );
 			C3D_API void declareLpv( uint32_t & bindingIndex
-				, uint32_t setIndex = 0u );
+				, uint32_t setIndex = 0u
+				, bool declUbo = true );
 			C3D_API void declareLayeredLpv( uint32_t & bindingIndex
-				, uint32_t setIndex = 0u );
+				, uint32_t setIndex = 0u
+				, bool declUbo = true );
 			C3D_API sdw::Vec3 computeLPVRadiance( Surface surface
 				, LpvGridData lpvGridData );
 			C3D_API sdw::Vec3 computeLLPVRadiance( Surface surface

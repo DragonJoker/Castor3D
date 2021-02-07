@@ -381,9 +381,14 @@ namespace castor3d
 		}
 
 		void GlobalIllumination::declareLpv( uint32_t & bindingIndex
-			, uint32_t setIndex )
+			, uint32_t setIndex
+			, bool declUbo )
 		{
-			UBO_LPVGRIDCONFIG( m_writer, LpvGridConfigUbo::BindingPoint, 0u, true );
+			if ( declUbo )
+			{
+				UBO_LPVGRIDCONFIG( m_writer, LpvGridConfigUbo::BindingPoint, 0u, true );
+			}
+
 			auto c3d_lpvAccumulatorR = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator" ), bindingIndex++, setIndex );
 			auto c3d_lpvAccumulatorG = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator" ), bindingIndex++, setIndex );
 			auto c3d_lpvAccumulatorB = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator" ), bindingIndex++, setIndex );
@@ -431,10 +436,16 @@ namespace castor3d
 		}
 
 		void GlobalIllumination::declareLayeredLpv( uint32_t & bindingIndex
-			, uint32_t setIndex )
+			, uint32_t setIndex
+			, bool declUbo )
 		{
 			using namespace sdw;
-			UBO_LAYERED_LPVGRIDCONFIG( m_writer, LayeredLpvGridConfigUbo::BindingPoint, 0u, true );
+
+			if ( declUbo )
+			{
+				UBO_LAYERED_LPVGRIDCONFIG( m_writer, LayeredLpvGridConfigUbo::BindingPoint, 0u, true );
+			}
+
 			auto c3d_lpvAccumulator1R = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator1" ), bindingIndex++, setIndex );
 			auto c3d_lpvAccumulator1G = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator1" ), bindingIndex++, setIndex );
 			auto c3d_lpvAccumulator1B = m_writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator1" ), bindingIndex++, setIndex );
