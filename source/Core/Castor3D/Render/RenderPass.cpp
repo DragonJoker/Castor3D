@@ -1306,8 +1306,10 @@ namespace castor3d
 				{
 					auto uboBindings = doCreateUboBindings( flags );
 					auto texBindings = doCreateTextureBindings( flags );
-					auto uboLayout = device->createDescriptorSetLayout( std::move( uboBindings ) );
-					auto texLayout = device->createDescriptorSetLayout( std::move( texBindings ) );
+					auto uboLayout = device->createDescriptorSetLayout( getName()
+						, std::move( uboBindings ) );
+					auto texLayout = device->createDescriptorSetLayout( getName()
+						, std::move( texBindings ) );
 					std::vector< ashes::DescriptorSetLayoutPtr > dsLayouts;
 					dsLayouts.emplace_back( std::move( uboLayout ) );
 					dsLayouts.emplace_back( std::move( texLayout ) );
