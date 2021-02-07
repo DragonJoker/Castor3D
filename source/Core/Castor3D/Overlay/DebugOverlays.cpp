@@ -22,16 +22,6 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace
-	{
-		String getFullName( RenderPassTimer & timer )
-		{
-			return timer.getCategory();
-		}
-	}
-
-	//*********************************************************************************************
-
 	DebugOverlays::MainDebugPanel::MainDebugPanel( OverlayCache & cache )
 		: m_cache{ cache }
 		, m_panel{ m_cache.add( cuT( "MainDebugPanel" )
@@ -113,13 +103,14 @@ namespace castor3d
 
 	DebugOverlays::PassOverlays::PassOverlays( OverlayCache & cache
 		, OverlaySPtr parent
-		, RenderPassTimer & timer
+		, castor::String const & category
+		, castor::String const & name
 		, uint32_t index )
 		: m_cache{ cache }
-		, m_timer{ timer }
 		, m_index{ index }
+		, m_name{ name }
 	{
-		auto baseName = cuT( "RenderPassOverlays-" ) + timer.getCategory() + cuT( "-" ) + timer.getName();
+		auto baseName = cuT( "RenderPassOverlays-" ) + category + cuT( "-" ) + name;
 		m_panel = cache.add( baseName
 			, OverlayType::ePanel
 			, nullptr
@@ -170,7 +161,7 @@ namespace castor3d
 		m_cpu.value->setFont( cuT( "Arial10" ) );
 		m_gpu.value->setFont( cuT( "Arial10" ) );
 
-		m_passName->setCaption( timer.getName() );
+		m_passName->setCaption( name );
 		m_cpu.name->setCaption( cuT( "CPU:" ) );
 		m_gpu.name->setCaption( cuT( "GPU:" ) );
 
@@ -210,16 +201,46 @@ namespace castor3d
 	{
 		m_cpu.time = 0_ns;
 		m_gpu.time = 0_ns;
-		m_cpu.time += m_timer.get().getCpuTime();
-		m_gpu.time += m_timer.get().getGpuTime();
-		m_timer.get().reset();
+
+		for ( auto timer : m_timers )
+		{
+			m_cpu.time += timer->getCpuTime();
+			m_gpu.time += timer->getGpuTime();
+			timer->reset();
+		}
+
 		m_cpu.value->setCaption( makeStringStream() << m_cpu.time );
 		m_gpu.value->setCaption( makeStringStream() << m_gpu.time );
 	}
 
 	void DebugOverlays::PassOverlays::retrieveGpuTime()
 	{
-		m_timer.get().retrieveGpuTime();
+		for ( auto timer : m_timers )
+		{
+			timer->retrieveGpuTime();
+		}
+	}
+
+	void DebugOverlays::PassOverlays::addTimer( RenderPassTimer & timer )
+	{
+		m_timers.emplace_back( &timer );
+	}
+
+	bool DebugOverlays::PassOverlays::removeTimer( RenderPassTimer & timer )
+	{
+		auto it = std::find_if( m_timers.begin()
+			, m_timers.end()
+			, [&timer]( auto const & lookup )
+			{
+				return lookup == &timer;
+			} );
+
+		if ( it != m_timers.end() )
+		{
+			m_timers.erase( it );
+		}
+
+		return m_timers.empty();
 	}
 
 	//*********************************************************************************************
@@ -332,11 +353,25 @@ namespace castor3d
 
 	void DebugOverlays::CategoryOverlays::addTimer( RenderPassTimer & timer )
 	{
-		auto index = uint32_t( m_passes.size() );
-		m_passes.emplace_back( std::make_unique< PassOverlays >( m_cache
-			, m_container->getOverlay().shared_from_this()
-			, timer
-			, index ) );
+		auto it = std::find_if( m_passes.begin()
+			, m_passes.end()
+			, [&timer]( auto const & lookup )
+			{
+				return lookup->getName() == timer.getName();
+			} );
+
+		if ( it == m_passes.end() )
+		{
+			auto index = uint32_t( m_passes.size() );
+			m_passes.emplace_back( std::make_unique< PassOverlays >( m_cache
+				, m_container->getOverlay().shared_from_this()
+				, timer.getCategory()
+				, timer.getName()
+				, index ) );
+			it = m_passes.begin() + m_passes.size() - 1;
+		}
+
+		( *it )->addTimer( timer );
 	}
 
 	bool DebugOverlays::CategoryOverlays::removeTimer( RenderPassTimer & timer )
@@ -345,12 +380,12 @@ namespace castor3d
 			, m_passes.end()
 			, [&timer]( auto const & lookup )
 			{
-				return &lookup->getTimer() == &timer;
+				return lookup->getName() == timer.getName();
 			} );
 
 		if ( it != m_passes.end() )
 		{
-			m_passes.erase( it );
+			( *it )->removeTimer( timer );
 		}
 
 		return m_passes.empty();
@@ -442,13 +477,12 @@ namespace castor3d
 	uint32_t DebugOverlays::registerTimer( RenderPassTimer & timer )
 	{
 		auto & cache = getEngine()->getOverlayCache();
-		auto fullName = getFullName( timer );
-		auto it = m_renderPasses.find( fullName );
+		auto it = m_renderPasses.find( timer.getCategory() );
 
 		if ( it == m_renderPasses.end() )
 		{
 			it = m_renderPasses.emplace( timer.getCategory()
-				, CategoryOverlays{ fullName, cache } ).first;
+				, CategoryOverlays{ timer.getCategory(), cache } ).first;
 			it->second.setVisible( m_visible );
 		}
 
@@ -460,8 +494,7 @@ namespace castor3d
 	void DebugOverlays::unregisterTimer( RenderPassTimer & timer )
 	{
 		m_dirty = true;
-		auto fullName = getFullName( timer );
-		auto it = m_renderPasses.find( fullName );
+		auto it = m_renderPasses.find( timer.getCategory() );
 
 		if ( it != m_renderPasses.end() )
 		{

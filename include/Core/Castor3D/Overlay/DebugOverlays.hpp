@@ -223,11 +223,14 @@ namespace castor3d
 			PassOverlays & operator=( PassOverlays && ) = default;
 			PassOverlays( OverlayCache & cache
 				, OverlaySPtr parent
-				, RenderPassTimer & timer
+				, castor::String const & category
+				, castor::String const & name
 				, uint32_t index );
 			~PassOverlays();
 			void retrieveGpuTime();
 			void update();
+			void addTimer( RenderPassTimer & timer );
+			bool removeTimer( RenderPassTimer & timer );
 
 			inline castor::Nanoseconds getGpuTime()
 			{
@@ -239,15 +242,16 @@ namespace castor3d
 				return m_cpu.time;
 			}
 
-			inline RenderPassTimer const & getTimer()const
+			inline castor::String const & getName()
 			{
-				return m_timer.get();
+				return m_name;
 			}
 
 		private:
 			OverlayCache & m_cache;
-			std::reference_wrapper< RenderPassTimer > m_timer;
+			castor::String m_name;
 			uint32_t m_index;
+			std::vector< RenderPassTimer * > m_timers;
 			PanelOverlaySPtr m_panel;
 			TextOverlaySPtr m_passName;
 			TimeOverlays m_cpu;
