@@ -20,6 +20,7 @@ namespace Bloom
 			, VkExtent2D const & size
 			, uint32_t blurPassesCount );
 		castor3d::CommandsSemaphore getCommands( castor3d::RenderPassTimer const & timer
+			, uint32_t & index
 			, ashes::VertexBuffer< castor3d::NonTexturedQuad > const & vertexBuffer )const;
 		void accept( castor3d::PipelineVisitorBase & visitor );
 

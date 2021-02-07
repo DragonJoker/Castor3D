@@ -194,7 +194,7 @@ namespace Bloom
 	}
 
 	castor3d::CommandsSemaphore HiPass::getCommands( castor3d::RenderPassTimer const & timer
-		, uint32_t index )const
+		, uint32_t & index )const
 	{
 		castor3d::CommandsSemaphore commands
 		{
@@ -224,6 +224,7 @@ namespace Bloom
 		timer.endPass( cmd, index );
 		cmd.end();
 
+		++index;
 		return commands;
 	}
 

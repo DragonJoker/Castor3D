@@ -315,13 +315,14 @@ namespace Bloom
 	}
 
 	castor3d::CommandsSemaphore CombinePass::getCommands( castor3d::RenderPassTimer const & timer
+		, uint32_t & index
 		, ashes::VertexBuffer< castor3d::NonTexturedQuad > const & vertexBuffer )const
 	{
 		auto result = m_device.graphicsCommandPool->createCommandBuffer( "BloomCombine" );
 		auto & cmd = *result;
 
 		cmd.begin();
-		timer.beginPass( cmd, 1u + ( m_blurPassesCount * 2u ) );
+		timer.beginPass( cmd, index );
 		cmd.beginDebugBlock( { "BloomCombine"
 			, castor3d::makeFloatArray( m_device.renderSystem.getEngine()->getNextRainbowColour() ) } );
 		cmd.beginRenderPass( *m_renderPass
@@ -334,9 +335,10 @@ namespace Bloom
 		cmd.draw( 6u );
 		cmd.endRenderPass();
 		cmd.endDebugBlock();
-		timer.endPass( cmd, 1u + ( m_blurPassesCount * 2u ) );
+		timer.endPass( cmd, index );
 		cmd.end();
 
+		++index;
 		return { std::move( result ), m_device->createSemaphore( "BloomCombine" ) };
 	}
 
