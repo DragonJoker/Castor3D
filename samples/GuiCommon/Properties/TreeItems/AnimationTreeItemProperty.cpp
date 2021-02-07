@@ -18,7 +18,7 @@ namespace GuiCommon
 		, AnimatedObjectGroup & group
 		, castor::String const & name
 		, GroupAnimation const & anim )
-		: TreeItemProperty( engine, editable, ePROPERTY_DATA_TYPE_LIGHT )
+		: TreeItemProperty( engine, editable )
 		, m_name( name )
 		, m_group( group )
 		, m_groupAnim( anim )

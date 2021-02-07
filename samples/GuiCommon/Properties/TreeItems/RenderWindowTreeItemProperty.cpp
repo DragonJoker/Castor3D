@@ -13,7 +13,7 @@ namespace GuiCommon
 {
 	RenderWindowTreeItemProperty::RenderWindowTreeItemProperty( bool editable
 		, RenderWindow & window )
-		: TreeItemProperty( window.getEngine(), editable, ePROPERTY_DATA_TYPE_RENDER_WINDOW )
+		: TreeItemProperty( window.getEngine(), editable )
 		, m_window( window )
 	{
 		CreateTreeItemMenu();

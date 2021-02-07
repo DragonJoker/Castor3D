@@ -16,7 +16,7 @@ namespace GuiCommon
 	}
 
 	AnimatedObjectTreeItemProperty::AnimatedObjectTreeItemProperty( Engine * engine, bool p_editable, AnimatedObjectSPtr p_object )
-		: TreeItemProperty( engine, p_editable, ePROPERTY_DATA_TYPE_ANIMATED_OBJECT )
+		: TreeItemProperty( engine, p_editable )
 		, m_object( p_object )
 	{
 		PROPERTY_CATEGORY_ANIMATED_OBJECT = _( "Animated Object: " );

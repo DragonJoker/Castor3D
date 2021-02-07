@@ -3,7 +3,7 @@
 #include "GuiCommon/System/ImagesLoader.hpp"
 #include "GuiCommon/Properties/TreeItems/FrameVariableBufferTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/FrameVariableTreeItemProperty.hpp"
-#include "GuiCommon/Properties/Math/PropertiesContainer.hpp"
+#include "GuiCommon/Properties/PropertiesContainer.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Render/RenderPipeline.hpp>
@@ -106,7 +106,7 @@ namespace GuiCommon
 			, eID_FRAME_VARIABLE_BUFFER
 			, eID_FRAME_VARIABLE_BUFFER_SEL
 			, new FrameVariableBufferTreeItemProperty( m_engine
-				, m_propertiesHolder->IsEditable()
+				, m_propertiesHolder->isEditable()
 				, buffer ) );
 
 		for ( auto & uniform : buffer.uniforms )
@@ -123,7 +123,7 @@ namespace GuiCommon
 			, eID_FRAME_VARIABLE
 			, eID_FRAME_VARIABLE_SEL
 			, new FrameVariableTreeItemProperty( m_engine
-				, m_propertiesHolder->IsEditable()
+				, m_propertiesHolder->isEditable()
 				, uniform ) );
 	}
 

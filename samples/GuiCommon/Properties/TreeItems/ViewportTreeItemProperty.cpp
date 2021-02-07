@@ -14,7 +14,7 @@ namespace GuiCommon
 	ViewportTreeItemProperty::ViewportTreeItemProperty( bool editable
 		, castor3d::Engine & engine
 		, castor3d::Viewport & viewport )
-		: TreeItemProperty( &engine, editable, ePROPERTY_DATA_TYPE_VIEWPORT )
+		: TreeItemProperty( &engine, editable )
 		, m_viewport( viewport )
 	{
 		CreateTreeItemMenu();

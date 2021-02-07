@@ -57,7 +57,7 @@ namespace GuiCommon
 
 	RenderTargetTreeItemProperty::RenderTargetTreeItemProperty( bool editable
 		, RenderTarget & target )
-		: TreeItemProperty( target.getEngine(), editable, ePROPERTY_DATA_TYPE_RENDER_TARGET )
+		: TreeItemProperty( target.getEngine(), editable )
 		, m_target( target )
 	{
 		CreateTreeItemMenu();

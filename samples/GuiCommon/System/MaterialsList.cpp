@@ -1,7 +1,7 @@
 #include "GuiCommon/System/MaterialsList.hpp"
 
 #include "GuiCommon/System/ImagesLoader.hpp"
-#include "GuiCommon/Properties/Math/PropertiesContainer.hpp"
+#include "GuiCommon/Properties/PropertiesContainer.hpp"
 #include "GuiCommon/Properties/TreeItems/MaterialTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/PassTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/RenderTargetTreeItemProperty.hpp"
@@ -96,7 +96,7 @@ namespace GuiCommon
 		{
 			addMaterial( this
 				, *m_scene
-				, m_propertiesHolder->IsEditable()
+				, m_propertiesHolder->isEditable()
 				, root
 				, pair.second
 				, eBMP_MATERIAL );

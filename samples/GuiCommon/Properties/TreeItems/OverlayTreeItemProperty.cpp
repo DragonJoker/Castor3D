@@ -23,7 +23,7 @@ using namespace castor3d;
 namespace GuiCommon
 {
 	OverlayTreeItemProperty::OverlayTreeItemProperty( bool p_editable, castor3d::OverlayCategorySPtr p_overlay )
-		: TreeItemProperty( p_overlay->getOverlay().getEngine(), p_editable, ePROPERTY_DATA_TYPE_OVERLAY )
+		: TreeItemProperty( p_overlay->getOverlay().getEngine(), p_editable )
 		, m_overlay( p_overlay )
 	{
 		CreateTreeItemMenu();

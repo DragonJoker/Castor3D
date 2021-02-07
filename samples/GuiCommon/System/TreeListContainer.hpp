@@ -6,8 +6,8 @@ See LICENSE file in root folder
 
 #include "GuiCommon/GuiCommonPrerequisites.hpp"
 
-#include "GuiCommon/Properties/Math/PropertiesContainer.hpp"
-#include "GuiCommon/Properties/Math/PropertiesHolder.hpp"
+#include "GuiCommon/Properties/PropertiesContainer.hpp"
+#include "GuiCommon/Properties/PropertiesHolder.hpp"
 
 #include <wx/panel.h>
 #include <wx/aui/aui.h>

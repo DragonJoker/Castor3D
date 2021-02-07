@@ -12,7 +12,7 @@ namespace GuiCommon
 	FrameVariableBufferTreeItemProperty::FrameVariableBufferTreeItemProperty( Engine * engine
 		, bool editable
 		, UniformBufferValues & buffer )
-		: TreeItemProperty{ engine, editable, ePROPERTY_DATA_TYPE_CAMERA }
+		: TreeItemProperty{ engine, editable }
 		, m_buffer{ buffer }
 	{
 		CreateTreeItemMenu();

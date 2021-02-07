@@ -14,10 +14,13 @@ namespace GuiCommon
 		: public wxPropertyGrid
 	{
 	public:
-		PropertiesContainer( bool p_bCanEdit, wxWindow * p_parent, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
+		PropertiesContainer( bool canEdit
+			, wxWindow * parent
+			, wxPoint const & pos = wxDefaultPosition
+			, wxSize const & size = wxDefaultSize );
 		~PropertiesContainer();
 
-		void setPropertyData( TreeItemProperty * p_data );
+		void setPropertyData( TreeItemProperty * data );
 		/**
 		 *\~english
 		 *\brief		Retrieves the editable status
@@ -26,9 +29,9 @@ namespace GuiCommon
 		 *\brief		Récupère le statut de modifiabilità
 		 *\return		La valeur
 		 */
-		inline bool IsEditable()const
+		bool isEditable()const
 		{
-			return m_bCanEdit;
+			return m_canEdit;
 		}
 		/**
 		 *\~english
@@ -38,16 +41,16 @@ namespace GuiCommon
 		 *\brief		Récupère l'àditeur bouton
 		 *\return		La valeur
 		 */
-		static inline wxPGEditor * getButtonEditor()
+		static wxPGEditor * getButtonEditor()
 		{
 			return m_buttonEditor;
 		}
 
 	private:
-		void onPropertyChange( wxPropertyGridEvent & p_event );
+		void onPropertyChange( wxPropertyGridEvent & event );
 
 	private:
-		bool m_bCanEdit;
+		bool m_canEdit;
 		TreeItemProperty * m_data;
 		static wxPGEditor * m_buttonEditor;
 	};

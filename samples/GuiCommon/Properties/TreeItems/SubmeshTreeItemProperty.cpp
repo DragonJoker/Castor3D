@@ -20,7 +20,7 @@ using namespace castor3d;
 namespace GuiCommon
 {
 	SubmeshTreeItemProperty::SubmeshTreeItemProperty( bool editable, Geometry & geometry, Submesh & submesh )
-		: TreeItemProperty( submesh.getOwner()->getScene()->getEngine(), editable, ePROPERTY_DATA_TYPE_SUBMESH )
+		: TreeItemProperty( submesh.getOwner()->getScene()->getEngine(), editable )
 		, m_geometry( geometry )
 		, m_submesh( submesh )
 	{

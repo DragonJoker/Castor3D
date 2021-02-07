@@ -13,7 +13,7 @@ using namespace castor;
 namespace GuiCommon
 {
 	CameraTreeItemProperty::CameraTreeItemProperty( bool p_editable, castor3d::Camera & p_camera )
-		: TreeItemProperty( p_camera.getScene()->getEngine(), p_editable, ePROPERTY_DATA_TYPE_CAMERA )
+		: TreeItemProperty( p_camera.getScene()->getEngine(), p_editable )
 		, m_camera( p_camera )
 	{
 		CreateTreeItemMenu();

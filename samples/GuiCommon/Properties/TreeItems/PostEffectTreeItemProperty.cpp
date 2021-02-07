@@ -427,7 +427,7 @@ namespace GuiCommon
 	PostEffectTreeItemProperty::PostEffectTreeItemProperty( bool editable
 		, PostEffect & effect
 		, wxWindow * parent )
-		: TreeItemProperty{ effect.getRenderSystem()->getEngine(), editable, ePROPERTY_DATA_TYPE_POST_EFFECT }
+		: TreeItemProperty{ effect.getRenderSystem()->getEngine(), editable }
 		, m_effect{ effect }
 		, m_parent{ parent }
 	{

@@ -14,7 +14,7 @@ using namespace castor;
 namespace GuiCommon
 {
 	BoneTreeItemProperty::BoneTreeItemProperty( bool editable, Bone & bone )
-		: TreeItemProperty( bone.getSkeleton().getScene()->getEngine(), editable, ePROPERTY_DATA_TYPE_BONE )
+		: TreeItemProperty( bone.getSkeleton().getScene()->getEngine(), editable )
 		, m_bone( bone )
 	{
 		CreateTreeItemMenu();

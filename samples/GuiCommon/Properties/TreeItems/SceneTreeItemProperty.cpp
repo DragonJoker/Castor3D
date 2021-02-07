@@ -17,7 +17,7 @@ namespace GuiCommon
 	SceneTreeItemProperty::SceneTreeItemProperty( wxWindow * parent
 		, bool editable
 		, Scene & scene )
-		: TreeItemProperty{ scene.getEngine(), editable, ePROPERTY_DATA_TYPE_SCENE }
+		: TreeItemProperty{ scene.getEngine(), editable }
 		, m_parent{ parent }
 		, m_scene( scene )
 	{

@@ -7,7 +7,7 @@
 #include "GuiCommon/Shader/FrameVariablesList.hpp"
 #include "GuiCommon/Shader/ShaderEditor.hpp"
 #include "GuiCommon/Shader/ShaderProgramPage.hpp"
-#include "GuiCommon/Properties/Math/PropertiesContainer.hpp"
+#include "GuiCommon/Properties/PropertiesContainer.hpp"
 
 #include <Castor3D/Engine.hpp>
 

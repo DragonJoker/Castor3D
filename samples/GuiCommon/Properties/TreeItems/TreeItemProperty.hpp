@@ -26,36 +26,6 @@ namespace GuiCommon
 {
 	/**
 	\version	0.8.0
-	\brief		The supported object types, for display, and properties
-	*/
-	typedef enum ePROPERTY_DATA_TYPE
-	{
-		ePROPERTY_DATA_TYPE_SCENE,
-		ePROPERTY_DATA_TYPE_RENDER_TARGET,
-		ePROPERTY_DATA_TYPE_VIEWPORT,
-		ePROPERTY_DATA_TYPE_RENDER_WINDOW,
-		ePROPERTY_DATA_TYPE_BILLBOARD,
-		ePROPERTY_DATA_TYPE_CAMERA,
-		ePROPERTY_DATA_TYPE_GEOMETRY,
-		ePROPERTY_DATA_TYPE_SUBMESH,
-		ePROPERTY_DATA_TYPE_LIGHT,
-		ePROPERTY_DATA_TYPE_NODE,
-		ePROPERTY_DATA_TYPE_OVERLAY,
-		ePROPERTY_DATA_TYPE_MATERIAL,
-		ePROPERTY_DATA_TYPE_PASS,
-		ePROPERTY_DATA_TYPE_TEXTURE,
-		ePROPERTY_DATA_TYPE_ANIMATED_OBJECT_GROUP,
-		ePROPERTY_DATA_TYPE_ANIMATED_OBJECT,
-		ePROPERTY_DATA_TYPE_ANIMATION,
-		ePROPERTY_DATA_TYPE_POST_EFFECT,
-		ePROPERTY_DATA_TYPE_TONE_MAPPING,
-		ePROPERTY_DATA_TYPE_BONE,
-		ePROPERTY_DATA_TYPE_SKELETON,
-		ePROPERTY_DATA_TYPE_SKELETON_ANIMATION,
-		ePROPERTY_DATA_TYPE_BACKGROUND,
-	}	ePROPERTY_DATA_TYPE;
-	/**
-	\version	0.8.0
 	\brief		Helper class to communicate between Scene objects or Materials lists and PropertiesContainer
 	*/
 	class TreeItemProperty
@@ -69,8 +39,7 @@ namespace GuiCommon
 		 *\param[in]	type		The object type
 		 */
 		TreeItemProperty( castor3d::Engine * engine
-			, bool editable
-			, ePROPERTY_DATA_TYPE type );
+			, bool editable );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -96,14 +65,6 @@ namespace GuiCommon
 		 *\param[in]	event	The event
 		 */
 		void onPropertyChange( wxPropertyGridEvent & event );
-		/**
-		 *\brief		Retrieves the object type
-		 *\return		The value
-		 */
-		inline ePROPERTY_DATA_TYPE getType()const
-		{
-			return m_type;
-		}
 		/**
 		 *\brief		Retrieves the editable status
 		 *\return		The value
@@ -265,7 +226,6 @@ namespace GuiCommon
 		wxMenu * m_menu;
 
 	private:
-		ePROPERTY_DATA_TYPE m_type;
 		bool m_editable;
 		castor3d::Engine * m_engine;
 		std::map< wxString, PropertyChangeHandler > m_handlers;

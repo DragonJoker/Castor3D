@@ -1,7 +1,8 @@
-#include "GuiCommon/Properties/Math/PropertiesContainer.hpp"
+#include "GuiCommon/Properties/PropertiesContainer.hpp"
 
 #include "GuiCommon/Properties/AdditionalProperties.hpp"
 #include "GuiCommon/Properties/TreeItems/CameraTreeItemProperty.hpp"
+#include "GuiCommon/Properties/TreeItems/ExportOptionsTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/GeometryTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/LightTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/NodeTreeItemProperty.hpp"
@@ -38,11 +39,20 @@ namespace GuiCommon
 {
 	wxPGEditor * PropertiesContainer::m_buttonEditor = nullptr;
 
-	PropertiesContainer::PropertiesContainer( bool p_bCanEdit, wxWindow * p_parent, wxPoint const & p_ptPos, wxSize const & p_size )
-		: wxPropertyGrid( p_parent, wxID_ANY, p_ptPos, p_size, wxPG_BOLD_MODIFIED | wxPG_SPLITTER_AUTO_CENTER | wxPG_DEFAULT_STYLE )
-		, m_bCanEdit( p_bCanEdit )
+	PropertiesContainer::PropertiesContainer( bool canEdit
+		, wxWindow * parent
+		, wxPoint const & pos
+		, wxSize const & size )
+		: wxPropertyGrid( parent, wxID_ANY, pos, size, wxPG_BOLD_MODIFIED | wxPG_SPLITTER_AUTO_CENTER | wxPG_DEFAULT_STYLE )
+		, m_canEdit( canEdit )
 		, m_data( nullptr )
 	{
+		if ( !m_buttonEditor )
+		{
+			m_buttonEditor = RegisterEditorClass( new ButtonEventEditor() );
+		}
+
+		Connect( wxEVT_PG_CHANGED, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, PropertiesContainer::onPropertyChange ) );
 		SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		SetCaptionBackgroundColour( PANEL_BACKGROUND_COLOUR );
@@ -53,27 +63,20 @@ namespace GuiCommon
 		SetCellTextColour( INACTIVE_TEXT_COLOUR );
 		SetLineColour( BORDER_COLOUR );
 		SetMarginColour( BORDER_COLOUR );
-
-		if ( !m_buttonEditor )
-		{
-			m_buttonEditor = RegisterEditorClass( new ButtonEventEditor() );
-		}
-
-		Connect( wxEVT_PG_CHANGED, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, PropertiesContainer::onPropertyChange ) );
 	}
 
 	PropertiesContainer::~PropertiesContainer()
 	{
 	}
 
-	void PropertiesContainer::setPropertyData( TreeItemProperty * p_data )
+	void PropertiesContainer::setPropertyData( TreeItemProperty * data )
 	{
 		if ( m_data )
 		{
 			wxPropertyGrid::Clear();
 		}
 
-		m_data = p_data;
+		m_data = data;
 
 		if ( m_data )
 		{
@@ -81,11 +84,11 @@ namespace GuiCommon
 		}
 	}
 
-	void PropertiesContainer::onPropertyChange( wxPropertyGridEvent & p_event )
+	void PropertiesContainer::onPropertyChange( wxPropertyGridEvent & event )
 	{
 		if ( m_data )
 		{
-			m_data->onPropertyChange( p_event );
+			m_data->onPropertyChange( event );
 		}
 	}
 }

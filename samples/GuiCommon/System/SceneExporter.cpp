@@ -1,6 +1,8 @@
 #include "GuiCommon/System/SceneExporter.hpp"
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/GeometryCache.hpp>
+#include <Castor3D/Cache/LightCache.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
 #include <Castor3D/Cache/MeshCache.hpp>
 #include <Castor3D/Binary/BinaryMesh.hpp>
@@ -19,6 +21,8 @@
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Model/Vertex.hpp>
 #include <Castor3D/Render/RenderWindow.hpp>
+#include <Castor3D/Scene/Geometry.hpp>
+#include <Castor3D/Scene/Light/Light.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Material/Texture/Sampler.hpp>
 #include <Castor3D/Material/Texture/TextureLayout.hpp>
@@ -71,6 +75,11 @@ namespace GuiCommon
 	}
 
 	//************************************************************************************************
+	
+	ObjSceneExporter::ObjSceneExporter( ExportOptions options )
+		: SceneExporter{ std::move( options ) }
+	{
+	}
 
 	void ObjSceneExporter::exportScene( Scene const & scene
 		, Path const & fileName )
@@ -356,31 +365,84 @@ namespace GuiCommon
 
 	namespace
 	{
+		template< typename ObjType >
+		using FilterFuncT = bool ( * )( ObjType const & obj );
+
 		template< typename ObjType, typename ViewType >
 		bool writeView( ViewType const & view
 			, String const & elemsName
-			, TextFile & file )
+			, TextFile & file
+			, FilterFuncT< ObjType > filter = []( ObjType const & )
+			{
+				return true;
+			} )
 		{
 			bool result = true;
 
 			if ( !view.isEmpty() )
 			{
-				result = file.writeText( cuT( "\n// " ) + elemsName + cuT( "\n" ) ) > 0;
+				result = file.writeText( cuT( "// " ) + elemsName + cuT( "\n" ) ) > 0;
 
 				if ( result )
 				{
 					Logger::logInfo( cuT( "Scene::write - " ) + elemsName );
+					typename ObjType::TextWriter writer{ String{} };
 
 					for ( auto const & name : view )
 					{
 						auto elem = view.find( name );
-						result &= typename ObjType::TextWriter{ String{} }( *elem, file );
+
+						if ( filter( *elem ) )
+						{
+							result = result && writer( *elem, file );
+						}
 					}
 				}
 			}
 
 			return result;
 		}
+
+		template< typename ObjType, typename CacheType >
+		bool writeCache( CacheType const & cache
+			, String const & elemsName
+			, TextFile & file
+			, FilterFuncT< ObjType > filter = []( ObjType const & )
+			{
+				return true;
+			} )
+		{
+			bool result = true;
+
+			if ( !cache.isEmpty() )
+			{
+				result = file.writeText( cuT( "// " ) + elemsName + cuT( "\n" ) ) > 0;
+
+				if ( result )
+				{
+					Logger::logInfo( cuT( "Scene::write - " ) + elemsName );
+					typename ObjType::TextWriter writer{ String{} };
+					auto lock = castor::makeUniqueLock( cache );
+
+					for ( auto const & elemIt : cache )
+					{
+						if ( filter( *elemIt.second ) )
+						{
+							result = result && writer( *elemIt.second, file );
+						}
+					}
+				}
+			}
+
+			return result;
+		}
+	}
+
+	//************************************************************************************************
+
+	CscnSceneExporter::CscnSceneExporter( ExportOptions options )
+		: SceneExporter{ std::move( options ) }
+	{
 	}
 
 	void CscnSceneExporter::exportScene( Scene const & scene
@@ -393,33 +455,126 @@ namespace GuiCommon
 			File::directoryCreate( folder );
 		}
 
-		if ( !File::directoryExists( folder / cuT( "Materials" ) ) )
-		{
-			File::directoryCreate( folder / cuT( "Materials" ) );
-		}
-
 		Path filePath{ folder / ( fileName.getFileName() + cuT( ".cscn" ) ) };
-		bool result = false;
-		{
-			TextFile mtlFile( filePath, File::OpenMode::eWrite );
-			result = writeView< Sampler >( scene.getSamplerView()
-				, cuT( "Samplers" )
-				, mtlFile );
 
+		bool result = false;
+		Scene::TextWriter::Options options;
+		{
+			if ( !File::directoryExists( folder / cuT( "Materials" ) ) )
+			{
+				File::directoryCreate( folder / cuT( "Materials" ) );
+			}
+			{
+				TextFile file( filePath, File::OpenMode::eWrite );
+				result = writeView< Sampler >( scene.getSamplerView()
+					, cuT( "Samplers" )
+					, file );
+
+				if ( result )
+				{
+					result = file.writeText( cuT( "\n" ) ) > 0
+						&& writeView< Material >( scene.getMaterialView()
+							, cuT( "Materials" )
+							, file );
+				}
+			}
 			if ( result )
 			{
-				result = writeView< Material >( scene.getMaterialView()
-					, cuT( "Materials" )
-					, mtlFile );
+				options.materialsFile = cuT( "Materials" ) / filePath.getFileName( true );
+				File::copyFile( filePath, folder / cuT( "Materials" ) );
+				File::deleteFile( filePath );
 			}
 		}
 
 		if ( result )
 		{
-			File::copyFile( filePath, folder / cuT( "Materials" ) );
-			File::deleteFile( filePath );
+			{
+				TextFile file( filePath, File::OpenMode::eWrite );
+				result = writeCache< Mesh >( scene.getMeshCache()
+					, cuT( "Meshes" )
+					, file
+					, []( Mesh const & object )
+					{
+						return object.isSerialisable();
+					} );
+			}
+			if ( result )
+			{
+				options.meshesFile = cuT( "Meshes" ) / filePath.getFileName( true );
+				File::directoryCreate( folder / cuT( "Meshes" ) );
+				File::copyFile( filePath, folder / cuT( "Meshes" ) );
+				File::deleteFile( filePath );
+			}
+		}
+
+		if ( result )
+		{
+			{
+				TextFile file( filePath, File::OpenMode::eWrite );
+				result = writeCache< Geometry >( scene.getGeometryCache()
+					, cuT( "Objects" )
+					, file
+					, []( Geometry const & object )
+					{
+						return object.getMesh()
+							&& object.getMesh()->isSerialisable();
+					} );
+			}
+			if ( result )
+			{
+				options.objectsFile = cuT( "Objects" ) / filePath.getFileName( true );
+				File::directoryCreate( folder / cuT( "Objects" ) );
+				File::copyFile( filePath, folder / cuT( "Objects" ) );
+				File::deleteFile( filePath );
+			}
+		}
+
+		if ( result )
+		{
+			{
+				TextFile file( filePath, File::OpenMode::eWrite );
+				result = writeCache< Light >( scene.getLightCache()
+					, cuT( "Lights" )
+					, file
+					, []( Light const & object )
+					{
+						return true;
+					} );
+			}
+			if ( result )
+			{
+				options.lightsFile = cuT( "Lights" ) / filePath.getFileName( true );
+				File::directoryCreate( folder / cuT( "Lights" ) );
+				File::copyFile( filePath, folder / cuT( "Lights" ) );
+				File::deleteFile( filePath );
+			}
+		}
+
+		if ( result )
+		{
+			{
+				TextFile file( filePath, File::OpenMode::eWrite );
+				SceneNode::TextWriter writer{ cuEmptyString, m_options.scale };
+
+				for ( auto const & it : scene.getObjectRootNode()->getChildren() )
+				{
+					result = result
+						&& writer( *it.second.lock(), file );
+				}
+			}
+			if ( result )
+			{
+				options.nodesFile = cuT( "Nodes" ) / filePath.getFileName( true );
+				File::directoryCreate( folder / cuT( "Nodes" ) );
+				File::copyFile( filePath, folder / cuT( "Nodes" ) );
+				File::deleteFile( filePath );
+			}
+		}
+
+		if ( result )
+		{
 			TextFile scnFile( Path{ filePath }, File::OpenMode::eWrite );
-			result = Scene::TextWriter( String(), cuT( "Materials" ) / filePath.getFileName( true ) )( scene, scnFile );
+			result = Scene::TextWriter( String(), std::move( options ) )( scene, scnFile );
 		}
 
 		Path subfolder{ cuT( "Meshes" ) };

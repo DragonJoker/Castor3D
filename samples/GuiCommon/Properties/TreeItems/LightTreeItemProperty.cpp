@@ -17,7 +17,7 @@ using namespace castor;
 namespace GuiCommon
 {
 	LightTreeItemProperty::LightTreeItemProperty( bool editable, Light & light )
-		: TreeItemProperty( light.getScene()->getEngine(), editable, ePROPERTY_DATA_TYPE_LIGHT )
+		: TreeItemProperty( light.getScene()->getEngine(), editable )
 		, m_light( light )
 	{
 		CreateTreeItemMenu();

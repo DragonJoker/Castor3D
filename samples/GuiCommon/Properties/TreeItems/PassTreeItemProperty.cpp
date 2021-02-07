@@ -468,7 +468,7 @@ namespace GuiCommon
 		, PassSPtr pass
 		, Scene & scene
 		, wxWindow * parent )
-		: TreeItemProperty{ pass->getOwner()->getEngine(), editable, ePROPERTY_DATA_TYPE_PASS }
+		: TreeItemProperty{ pass->getOwner()->getEngine(), editable }
 		, m_pass{ pass }
 		, m_scene{ scene }
 		, m_parent{ parent }

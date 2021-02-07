@@ -3,7 +3,7 @@
 #include "GuiCommon/Aui/AuiDockArt.hpp"
 #include "GuiCommon/Shader/StcTextEditor.hpp"
 #include "GuiCommon/Shader/FrameVariablesList.hpp"
-#include "GuiCommon/Properties/Math/PropertiesContainer.hpp"
+#include "GuiCommon/Properties/PropertiesContainer.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Cache/WindowCache.hpp>
