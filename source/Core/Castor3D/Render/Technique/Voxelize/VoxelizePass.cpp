@@ -96,55 +96,60 @@ namespace castor3d
 
 	void VoxelizePass::update( CpuUpdater & updater )
 	{
-		getCuller().compute();
-		SceneRenderPass::update( updater );
+		if ( m_voxelConfig.enabled )
+		{
+			getCuller().compute();
+			SceneRenderPass::update( updater );
+		}
 	}
 
 	void VoxelizePass::update( GpuUpdater & updater )
 	{
-		auto & nodes = m_renderQueue.getCulledRenderNodes();
-
-		if ( nodes.hasNodes() )
+		if ( m_voxelConfig.enabled )
 		{
-			SceneRenderPass::doUpdate( nodes.instancedStaticNodes.frontCulled );
-			SceneRenderPass::doUpdate( nodes.staticNodes.frontCulled );
-			SceneRenderPass::doUpdate( nodes.skinnedNodes.frontCulled );
-			SceneRenderPass::doUpdate( nodes.instancedSkinnedNodes.frontCulled );
-			SceneRenderPass::doUpdate( nodes.morphingNodes.frontCulled );
-			SceneRenderPass::doUpdate( nodes.billboardNodes.frontCulled );
+			auto & nodes = m_renderQueue.getCulledRenderNodes();
 
-			SceneRenderPass::doUpdate( nodes.instancedStaticNodes.backCulled, updater.info );
-			SceneRenderPass::doUpdate( nodes.staticNodes.backCulled, updater.info );
-			SceneRenderPass::doUpdate( nodes.skinnedNodes.backCulled, updater.info );
-			SceneRenderPass::doUpdate( nodes.instancedSkinnedNodes.backCulled, updater.info );
-			SceneRenderPass::doUpdate( nodes.morphingNodes.backCulled, updater.info );
-			SceneRenderPass::doUpdate( nodes.billboardNodes.backCulled, updater.info );
-		}
-
-		static const castor::Matrix4x4f identity
-		{
-			[]()
+			if ( nodes.hasNodes() )
 			{
-				castor::Matrix4x4f res;
-				res.setIdentity();
-				return res;
-			}()
-		};
-		//Orthograhic projection
-		auto sceneBoundingBox = m_scene.getBoundingBox();
-		auto ortho = castor::matrix::ortho( sceneBoundingBox.getMin()->x
-			, sceneBoundingBox.getMax()->x
-			, sceneBoundingBox.getMin()->y
-			, sceneBoundingBox.getMax()->y
-			, -1.0f * sceneBoundingBox.getMin()->z
-			, -1.0f * sceneBoundingBox.getMax()->z );
-		auto jitterProjSpace = updater.jitter * 2.0f;
-		jitterProjSpace[0] /= m_camera.getWidth();
-		jitterProjSpace[1] /= m_camera.getHeight();
-		m_matrixUbo.cpuUpdate( identity
-			, ortho
-			, jitterProjSpace );
+				SceneRenderPass::doUpdate( nodes.instancedStaticNodes.frontCulled );
+				SceneRenderPass::doUpdate( nodes.staticNodes.frontCulled );
+				SceneRenderPass::doUpdate( nodes.skinnedNodes.frontCulled );
+				SceneRenderPass::doUpdate( nodes.instancedSkinnedNodes.frontCulled );
+				SceneRenderPass::doUpdate( nodes.morphingNodes.frontCulled );
+				SceneRenderPass::doUpdate( nodes.billboardNodes.frontCulled );
 
+				SceneRenderPass::doUpdate( nodes.instancedStaticNodes.backCulled, updater.info );
+				SceneRenderPass::doUpdate( nodes.staticNodes.backCulled, updater.info );
+				SceneRenderPass::doUpdate( nodes.skinnedNodes.backCulled, updater.info );
+				SceneRenderPass::doUpdate( nodes.instancedSkinnedNodes.backCulled, updater.info );
+				SceneRenderPass::doUpdate( nodes.morphingNodes.backCulled, updater.info );
+				SceneRenderPass::doUpdate( nodes.billboardNodes.backCulled, updater.info );
+			}
+
+			static const castor::Matrix4x4f identity
+			{
+				[]()
+				{
+					castor::Matrix4x4f res;
+					res.setIdentity();
+					return res;
+			}( )
+			};
+			//Orthograhic projection
+			auto sceneBoundingBox = m_scene.getBoundingBox();
+			auto ortho = castor::matrix::ortho( sceneBoundingBox.getMin()->x
+				, sceneBoundingBox.getMax()->x
+				, sceneBoundingBox.getMin()->y
+				, sceneBoundingBox.getMax()->y
+				, -1.0f * sceneBoundingBox.getMin()->z
+				, -1.0f * sceneBoundingBox.getMax()->z );
+			auto jitterProjSpace = updater.jitter * 2.0f;
+			jitterProjSpace[0] /= m_camera.getWidth();
+			jitterProjSpace[1] /= m_camera.getHeight();
+			m_matrixUbo.cpuUpdate( identity
+				, ortho
+				, jitterProjSpace );
+		}
 	}
 
 	ashes::Semaphore const & VoxelizePass::render( RenderDevice const & device
@@ -152,7 +157,7 @@ namespace castor3d
 	{
 		ashes::Semaphore const * result = &toWait;
 
-		if ( hasNodes() )
+		if ( hasNodes() && m_voxelConfig.enabled )
 		{
 			RenderPassTimerBlock timerBlock{ getTimer().start() };
 
