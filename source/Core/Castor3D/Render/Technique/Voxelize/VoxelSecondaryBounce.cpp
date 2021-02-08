@@ -197,12 +197,18 @@ namespace castor3d
 					{
 						auto normal = writer.declLocale( "normal"
 							, utils.decodeNormal( voxels[in.globalInvocationID.x()].normalMask ) );
+						// [0.5,gridSize.5] => [0,1]
+						// center of voxel, to apply normal on it.
 						auto position = writer.declLocale( "position"
 							, ( vec3( coord ) + vec3( 0.5_f ) ) * c3d_voxelData.gridToClip );
+						// [0,1] => [-1,1]
 						position = position * 2 - 1;
 						position.y() *= -1;
-						position *= c3d_voxelData.clipToGrid;
+						// [-1,1] => [-gridSize/2,gridSize/2]
+						position *= c3d_voxelData.clipToGrid / 2.0f;
+						// to world
 						position *= c3d_voxelData.gridToWorld;
+
 						auto surface = writer.declLocale< shader::Surface >( "surface" );
 						surface.create( position, normal );
 						auto radiance = writer.declLocale( "radiance"
