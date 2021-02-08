@@ -17,9 +17,7 @@ namespace castor3d
 	bool Material::TextWriter::operator()( Material const & material, TextFile & file )
 	{
 		log::info << m_tabs + cuT( "Writing Material " ) << material.getName() << std::endl;
-		bool result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "material \"" ) + material.getName() + cuT( "\"\n" ) ) > 0
-						&& file.writeText( m_tabs + cuT( "{" ) ) > 0;
-		castor::TextWriter< Material >::checkError( result, "Material name" );
+		bool result = beginBlock( cuT( "material \"" ) + material.getName() + cuT( "\"" ), file );
 
 		if ( result )
 		{
@@ -28,21 +26,21 @@ namespace castor3d
 			case MaterialType::ePhong:
 				for ( auto pass : material )
 				{
-					result = result && PhongPass::TextWriter( m_tabs + cuT( "\t" ) )( *std::static_pointer_cast< PhongPass >( pass ), file );
+					result = result && PhongPass::TextWriter( tabs() )( *std::static_pointer_cast< PhongPass >( pass ), file );
 				}
 				break;
 
 			case MaterialType::eMetallicRoughness:
 				for ( auto pass : material )
 				{
-					result = result && MetallicRoughnessPbrPass::TextWriter( m_tabs + cuT( "\t" ) )( *std::static_pointer_cast< MetallicRoughnessPbrPass >( pass ), file );
+					result = result && MetallicRoughnessPbrPass::TextWriter( tabs() )( *std::static_pointer_cast< MetallicRoughnessPbrPass >( pass ), file );
 				}
 				break;
 
 			case MaterialType::eSpecularGlossiness:
 				for ( auto pass : material )
 				{
-					result = result && SpecularGlossinessPbrPass::TextWriter( m_tabs + cuT( "\t" ) )( *std::static_pointer_cast< SpecularGlossinessPbrPass >( pass ), file );
+					result = result && SpecularGlossinessPbrPass::TextWriter( tabs() )( *std::static_pointer_cast< SpecularGlossinessPbrPass >( pass ), file );
 				}
 				break;
 
@@ -54,7 +52,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			result = file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
+			result = endBlock( file );
 		}
 
 		return result;

@@ -14,18 +14,10 @@ namespace castor3d
 
 	bool LpvConfig::TextWriter::operator()( LpvConfig const & object, TextFile & file )
 	{
-		bool result{ true };
 		log::info << m_tabs << cuT( "Writing LpvConfig" ) << std::endl;
-		result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "lpv_config\n" ) + m_tabs + cuT( "{\n" ) ) > 0;
-
-		if ( result )
-		{
-			result = file.writeText( m_tabs + cuT( "\ttexel_area_modifier " ) + string::toString( object.texelAreaModifier.value() ) + cuT( "\n" ) ) > 0;
-			castor::TextWriter< LpvConfig >::checkError( result, "LpvConfig texelAreaModifier" );
-		}
-
-		file.writeText( m_tabs + cuT( "}\n" ) );
-		return result;
+		return beginBlock( cuT( "lpv_config" ), file )
+			&& write( cuT( "texel_area_modifier" ), object.texelAreaModifier, file )
+			&& endBlock( file );
 	}
 
 	void LpvConfig::accept( castor::String const & name

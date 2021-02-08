@@ -71,19 +71,19 @@ namespace castor3d
 		result = result && LpvConfig::TextWriter( m_tabs + cuT( "\t\t" ) )( light.getLight().getLpvConfig(), file );
 		castor::TextWriter< LightCategory >::checkError( result, "LightCategory shadow LPV config" );
 
-		result = file.writeText( m_tabs + cuT( "\t\traw_config\n" ) ) > 0
+		result = file.writeText( m_tabs + cuT( "\n\t\traw_config\n" ) ) > 0
 			&& file.writeText( m_tabs + cuT( "\t\t{\n" ) ) > 0
 			&& file.writeText( m_tabs + cuT( "\t\t\tmin_offset " ) + castor::string::toString( light.getShadowOffsets()[0] ) + cuT( "\n" ) ) > 0
 			&& file.writeText( m_tabs + cuT( "\t\t\tmax_slope_offset " ) + castor::string::toString( light.getShadowOffsets()[1] ) + cuT( "\n" ) ) > 0
 			&& file.writeText( m_tabs + cuT( "\t\t}\n" ) ) > 0;
 
-		result = file.writeText( m_tabs + cuT( "\t\tpcf_config\n" ) ) > 0
+		result = file.writeText( m_tabs + cuT( "\n\t\tpcf_config\n" ) ) > 0
 			&& file.writeText( m_tabs + cuT( "\t\t{\n" ) ) > 0
 			&& file.writeText( m_tabs + cuT( "\t\t\tmin_offset " ) + castor::string::toString( light.getShadowOffsets()[2] ) + cuT( "\n" ) ) > 0
 			&& file.writeText( m_tabs + cuT( "\t\t\tmax_slope_offset " ) + castor::string::toString( light.getShadowOffsets()[3] ) + cuT( "\n" ) ) > 0
 			&& file.writeText( m_tabs + cuT( "\t\t}\n" ) ) > 0;
 
-		result = file.writeText( m_tabs + cuT( "\t\tvsm_config\n" ) ) > 0
+		result = file.writeText( m_tabs + cuT( "\n\t\tvsm_config\n" ) ) > 0
 			&& file.writeText( m_tabs + cuT( "\t\t{\n" ) ) > 0
 			&& file.writeText( m_tabs + cuT( "\t\t\tvariance_max " ) + castor::string::toString( light.getShadowVariance()[0] ) + cuT( "\n" ) ) > 0
 			&& file.writeText( m_tabs + cuT( "\t\t\tvariance_bias " ) + castor::string::toString( light.getShadowVariance()[1] ) + cuT( "\n" ) ) > 0

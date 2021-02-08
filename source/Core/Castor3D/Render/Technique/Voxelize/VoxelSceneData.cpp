@@ -11,62 +11,17 @@ namespace castor3d
 
 	bool VoxelSceneData::TextWriter::operator()( VoxelSceneData const & obj, TextFile & file )
 	{
-		bool result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "voxel_cone_tracing\n" ) ) > 0
-			&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
-
-		if ( result )
-		{
-			result = file.writeText( m_tabs + cuT( "\tnum_cones " ) + string::toString( obj.numCones.value(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
-			castor::TextWriter< VoxelSceneData >::checkError( result, "VoxelSceneData num cones." );
-		}
-
-		if ( result )
-		{
-			result = file.writeText( m_tabs + cuT( "\tmax_distance " ) + string::toString( obj.maxDistance, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
-			castor::TextWriter< VoxelSceneData >::checkError( result, "VoxelSceneData max distance." );
-		}
-
-		if ( result )
-		{
-			result = file.writeText( m_tabs + cuT( "\tray_step_size " ) + string::toString( obj.rayStepSize, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
-			castor::TextWriter< VoxelSceneData >::checkError( result, "VoxelSceneData ray step size." );
-		}
-
-		if ( result )
-		{
-			result = file.writeText( m_tabs + cuT( "\tvoxel_size " ) + string::toString( obj.voxelSizeFactor, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
-			castor::TextWriter< VoxelSceneData >::checkError( result, "VoxelSceneData voxel size." );
-		}
-
-		if ( result )
-		{
-			result = file.writeText( m_tabs + cuT( "\tconservative_rasterization " ) + ( obj.enableConservativeRasterization ? String{ "true" } : String{ "false" } ) + cuT( "\n" ) ) > 0;
-			castor::TextWriter< VoxelSceneData >::checkError( result, "VoxelSceneData conservative rasterization." );
-		}
-
-		if ( result )
-		{
-			result = file.writeText( m_tabs + cuT( "\ttemporal_smoothing " ) + ( obj.enableTemporalSmoothing ? String{ "true" } : String{ "false" } ) + cuT( "\n" ) ) > 0;
-			castor::TextWriter< VoxelSceneData >::checkError( result, "VoxelSceneData temporal smoothing." );
-		}
-
-		if ( result )
-		{
-			result = file.writeText( m_tabs + cuT( "\tocclusion" ) + ( obj.enableOcclusion ? String{ "true" } : String{ "false" } ) + cuT( "\n" ) ) > 0;
-			castor::TextWriter< VoxelSceneData >::checkError( result, "VoxelSceneData occlusion." );
-		}
-
-		if ( result )
-		{
-			result = file.writeText( m_tabs + cuT( "\tsecondary_bounce" ) + ( obj.enableSecondaryBounce ? String{ "true" } : String{ "false" } ) + cuT( "\n" ) ) > 0;
-			castor::TextWriter< VoxelSceneData >::checkError( result, "VoxelSceneData second rebound." );
-		}
-
-		if ( result )
-		{
-			result = file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
-		}
-
-		return result;
+		log::info << m_tabs << cuT( "Writing VoxelSceneData" ) << std::endl;
+		return beginBlock( cuT( "voxel_cone_tracing" ), file )
+			&& write( cuT( "enabled" ), obj.enabled, file )
+			&& write( cuT( "conservative_rasterization" ), obj.enableConservativeRasterization, file )
+			&& write( cuT( "temporal_smoothing" ), obj.enableTemporalSmoothing, file )
+			&& write( cuT( "occlusion" ), obj.enableOcclusion, file )
+			&& write( cuT( "secondary_bounce" ), obj.enableSecondaryBounce, file )
+			&& write( cuT( "num_cones" ), obj.numCones, file )
+			&& write( cuT( "max_distance" ), obj.maxDistance, file )
+			&& write( cuT( "ray_step_size" ), obj.rayStepSize, file )
+			&& write( cuT( "voxel_size" ), obj.voxelSizeFactor, file )
+			&& endBlock( file );
 	}
 }
