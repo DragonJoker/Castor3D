@@ -364,6 +364,7 @@ namespace castor3d
 		}
 
 		auto & camera = *getCamera();
+		updater.camera = getCamera();
 		camera.resize( m_size );
 		camera.update();
 
