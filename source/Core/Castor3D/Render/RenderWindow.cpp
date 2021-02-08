@@ -379,7 +379,7 @@ namespace castor3d
 
 	void RenderWindow::render( bool waitOnly )
 	{
-		if ( m_initialised )
+		if ( m_initialised && !m_dirty )
 		{
 			RenderTargetSPtr target = getRenderTarget();
 
@@ -441,9 +441,8 @@ namespace castor3d
 	{
 		m_size = size;
 
-		if ( m_initialised && !m_dirty )
+		if ( m_initialised && !m_dirty.exchange( true ) )
 		{
-			m_dirty = true;
 			getListener()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
 				, [this]( RenderDevice const & device )
 				{
@@ -850,13 +849,13 @@ namespace castor3d
 #else
 				RenderQuad::makeDescriptorWrite( getRenderTarget()->getTexture().getTexture()->getDefaultView().getSampledView()
 #endif
-				, m_renderQuad->getSampler().getSampler()
+					, m_renderQuad->getSampler().getSampler()
 					, 0u ),
 			} );
 		m_renderQuad->registerPassInputs(
 			{
 				RenderQuad::makeDescriptorWrite( m_pickingPass->getResult()
-				, m_renderQuad->getSampler().getSampler()
+					, m_renderQuad->getSampler().getSampler()
 					, 0u ),
 			} );
 		m_renderQuad->initialisePasses();
