@@ -140,7 +140,7 @@ namespace castor3d
 		voxelData.status->x = voxelConfig.enabled;
 		voxelData.status->y = voxelConfig.enableConservativeRasterization;
 		voxelData.status->z = voxelConfig.enableOcclusion;
-		voxelData.status->z = voxelConfig.enableSecondaryBounce;
+		voxelData.status->w = voxelConfig.enableSecondaryBounce;
 	}
 
 	//*********************************************************************************************
