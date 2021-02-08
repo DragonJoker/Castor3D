@@ -39,6 +39,28 @@ namespace castor3d
 
 	namespace
 	{
+		struct VkImageViewCreateInfoComp
+		{
+			bool operator()( VkImageViewCreateInfo const & lhs
+				, VkImageViewCreateInfo const & rhs )const
+			{
+				return ( lhs.image < rhs.image
+					|| ( lhs.image == rhs.image
+						&& ( lhs.subresourceRange.baseArrayLayer < rhs.subresourceRange.baseArrayLayer
+							|| ( lhs.subresourceRange.baseArrayLayer == rhs.subresourceRange.baseArrayLayer
+								&& ( lhs.subresourceRange.baseMipLevel < rhs.subresourceRange.baseMipLevel
+									|| ( lhs.subresourceRange.baseMipLevel == rhs.subresourceRange.baseMipLevel
+										&& ( lhs.subresourceRange.layerCount < rhs.subresourceRange.layerCount
+											|| ( lhs.subresourceRange.layerCount == rhs.subresourceRange.layerCount
+												&& ( lhs.subresourceRange.levelCount < rhs.subresourceRange.levelCount
+													|| ( lhs.subresourceRange.levelCount == rhs.subresourceRange.levelCount
+														&& ( lhs.viewType < rhs.viewType
+															|| ( lhs.viewType == rhs.viewType
+																&& ( lhs.format < rhs.format ) ) ) ) ) ) ) ) ) ) ) ) );
+
+			}
+		};
+
 		class IntermediatesLister
 			: public RenderTechniqueVisitor
 		{
@@ -46,21 +68,25 @@ namespace castor3d
 			static void submit( RenderTechnique & technique
 				, std::vector< IntermediateView > & intermediates )
 			{
+				std::set< VkImageViewCreateInfo, VkImageViewCreateInfoComp > cache;
+
 				PipelineFlags flags{};
-				IntermediatesLister visOpaque{ flags, *technique.getRenderTarget().getScene(), intermediates };
+				IntermediatesLister visOpaque{ flags, *technique.getRenderTarget().getScene(), cache, intermediates };
 				technique.accept( visOpaque );
 
 				flags.passFlags |= PassFlag::eAlphaBlending;
-				IntermediatesLister visTransparent{ flags, *technique.getRenderTarget().getScene(), intermediates };
+				IntermediatesLister visTransparent{ flags, *technique.getRenderTarget().getScene(), cache, intermediates };
 				technique.accept( visTransparent );
 			}
 
 		private:
 			IntermediatesLister( PipelineFlags const & flags
 				, Scene const & scene
+				, std::set< VkImageViewCreateInfo, VkImageViewCreateInfoComp > & cache
 				, std::vector< IntermediateView > & result )
 				: RenderTechniqueVisitor{ flags, scene, { true, false } }
 				, m_result{ result }
+				, m_cache{ cache }
 			{
 			}
 
@@ -85,28 +111,7 @@ namespace castor3d
 
 		private:
 			std::vector< IntermediateView > & m_result;
-			struct VkImageViewCreateInfoComp
-			{
-				bool operator()( VkImageViewCreateInfo const & lhs
-					, VkImageViewCreateInfo const & rhs )const
-				{
-					return ( lhs.image < rhs.image
-						|| ( lhs.image == rhs.image
-							&& ( lhs.subresourceRange.baseArrayLayer < rhs.subresourceRange.baseArrayLayer
-								|| ( lhs.subresourceRange.baseArrayLayer == rhs.subresourceRange.baseArrayLayer
-									&& ( lhs.subresourceRange.baseMipLevel < rhs.subresourceRange.baseMipLevel
-										|| ( lhs.subresourceRange.baseMipLevel == rhs.subresourceRange.baseMipLevel
-											&& ( lhs.subresourceRange.layerCount < rhs.subresourceRange.layerCount
-												|| ( lhs.subresourceRange.layerCount == rhs.subresourceRange.layerCount
-													&& ( lhs.subresourceRange.levelCount < rhs.subresourceRange.levelCount
-														|| ( lhs.subresourceRange.levelCount == rhs.subresourceRange.levelCount
-															&& ( lhs.viewType < rhs.viewType
-																|| ( lhs.viewType == rhs.viewType
-																	&& ( lhs.format < rhs.format ) ) ) ) ) ) ) ) ) ) ) ) );
-
-				}
-			};
-			std::set< VkImageViewCreateInfo, VkImageViewCreateInfoComp > m_cache;
+			std::set< VkImageViewCreateInfo, VkImageViewCreateInfoComp > & m_cache;
 		};
 
 		std::map< double, LightSPtr > doSortLights( LightCache const & cache

@@ -60,12 +60,12 @@ namespace castor3d
 		*	Accesseurs.
 		**/
 		/**@{*/
-		inline PipelineFlags const & getFlags()const
+		PipelineFlags const & getFlags()const
 		{
 			return m_flags;
 		}
 
-		inline Scene const & getScene()const
+		Scene const & getScene()const
 		{
 			return m_scene;
 		}
