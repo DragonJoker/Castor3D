@@ -4,6 +4,8 @@
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
+#include <ShaderWriter/Writer.hpp>
+
 CU_ImplementCUSmartPtr( castor3d, LayeredLpvGridConfigUbo )
 
 namespace castor3d

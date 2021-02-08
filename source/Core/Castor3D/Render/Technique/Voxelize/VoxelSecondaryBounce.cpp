@@ -25,7 +25,7 @@
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/Image/ImageView.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, VoxelSecondaryBounce );
+CU_ImplementCUSmartPtr( castor3d, VoxelSecondaryBounce )
 
 namespace castor3d
 {

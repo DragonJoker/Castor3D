@@ -10,6 +10,8 @@
 
 #include <CastorUtils/Graphics/Grid.hpp>
 
+#include <ShaderWriter/Writer.hpp>
+
 CU_ImplementCUSmartPtr( castor3d, LpvLightConfigUbo )
 
 namespace castor3d
