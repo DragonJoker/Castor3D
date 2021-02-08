@@ -136,7 +136,7 @@ namespace GuiCommon
 		}
 
 		auto shadows = addProperty( grid, PROPERTY_CATEGORY_SHADOW );
-		addPropertyE( shadows, PROPERTY_SHADOW_TYPE, shadowChoices, m_light.getShadowType()
+		addPropertyE( shadows, PROPERTY_SHADOW_TYPE, shadowChoices, m_light.isShadowProducer() ? m_light.getShadowType() : ShadowType::eNone
 			, [this]( ShadowType value ){ m_light.setShadowProducer( value != ShadowType::eNone );m_light.setShadowType( value ); } );
 
 		if ( m_light.getLightType() == LightType::eDirectional )
