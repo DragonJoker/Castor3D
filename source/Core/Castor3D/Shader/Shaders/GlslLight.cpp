@@ -12,8 +12,9 @@ namespace castor3d
 		//*********************************************************************************************
 
 		Light::Light( ShaderWriter & writer
-			, ast::expr::ExprPtr expr )
-			: StructInstance{ writer, std::move( expr ) }
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstance{ writer, std::move( expr ), enabled }
 			, m_colourIndex{ getMember< Vec4 >( "m_colourIndex" ) }
 			, m_intensityFarPlane{ getMember< Vec4 >( "m_intensityFarPlane" ) }
 			, m_volumetric{ getMember< Vec4 >( "m_volumetric" ) }
@@ -40,8 +41,7 @@ namespace castor3d
 
 		ast::type::StructPtr Light::makeType( ast::type::TypesCache & cache )
 		{
-			auto result = std::make_unique< ast::type::Struct >( cache
-				, ast::type::MemoryLayout::eStd140
+			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
 				, "Light" );
 
 			if ( result->empty() )
@@ -65,8 +65,9 @@ namespace castor3d
 		//*********************************************************************************************
 
 		DirectionalLight::DirectionalLight( ShaderWriter & writer
-			, ast::expr::ExprPtr expr )
-			: StructInstance{ writer, std::move( expr ) }
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstance{ writer, std::move( expr ), enabled }
 			, m_lightBase{ getMember< Light >( "m_lightBase" ) }
 			, m_directionCount{ getMember< Vec4 >( "m_directionCount" ) }
 			, m_transforms{ getMemberArray< Mat4 >( "m_transforms" ) }
@@ -79,8 +80,7 @@ namespace castor3d
 
 		ast::type::StructPtr DirectionalLight::makeType( ast::type::TypesCache & cache )
 		{
-			auto result = std::make_unique< ast::type::Struct >( cache
-				, ast::type::MemoryLayout::eStd140
+			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
 				, "DirectionalLight" );
 
 			if ( result->empty() )
@@ -104,8 +104,9 @@ namespace castor3d
 		//*********************************************************************************************
 
 		PointLight::PointLight( ShaderWriter & writer
-			, ast::expr::ExprPtr expr )
-			: StructInstance( writer, std::move( expr ) )
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstance{ writer, std::move( expr ), enabled }
 			, m_lightBase{ getMember< Light >( "m_lightBase" ) }
 			, m_position4{ getMember< Vec4 >( "m_position" ) }
 			, m_attenuation4{ getMember< Vec4 >( "m_attenuation" ) }
@@ -116,8 +117,7 @@ namespace castor3d
 
 		ast::type::StructPtr PointLight::makeType( ast::type::TypesCache & cache )
 		{
-			auto result = std::make_unique< ast::type::Struct >( cache
-				, ast::type::MemoryLayout::eStd140
+			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
 				, "PointLight" );
 
 			if ( result->empty() )
@@ -139,8 +139,9 @@ namespace castor3d
 		//*********************************************************************************************
 
 		SpotLight::SpotLight( ShaderWriter & writer
-			, ast::expr::ExprPtr expr )
-			: StructInstance( writer, std::move( expr ) )
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstance{ writer, std::move( expr ), enabled }
 			, m_lightBase{ getMember< Light >( "m_lightBase" ) }
 			, m_position4{ getMember< Vec4 >( "m_position" ) }
 			, m_attenuation4{ getMember< Vec4 >( "m_attenuation" ) }
@@ -157,15 +158,19 @@ namespace castor3d
 
 		ast::type::StructPtr SpotLight::makeType( ast::type::TypesCache & cache )
 		{
-			auto result = std::make_unique< ast::type::Struct >( cache
-				, ast::type::MemoryLayout::eStd140
+			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
 				, "SpotLight" );
-			result->declMember( "m_lightBase", Light::makeType( cache ) );
-			result->declMember( "m_position", ast::type::Kind::eVec4F );
-			result->declMember( "m_attenuation", ast::type::Kind::eVec4F );
-			result->declMember( "m_direction", ast::type::Kind::eVec4F );
-			result->declMember( "m_exponentCutOff", ast::type::Kind::eVec4F );
-			result->declMember( "m_transform", ast::type::Kind::eMat4x4F );
+
+			if ( result->empty() )
+			{
+				result->declMember( "m_lightBase", Light::makeType( cache ) );
+				result->declMember( "m_position", ast::type::Kind::eVec4F );
+				result->declMember( "m_attenuation", ast::type::Kind::eVec4F );
+				result->declMember( "m_direction", ast::type::Kind::eVec4F );
+				result->declMember( "m_exponentCutOff", ast::type::Kind::eVec4F );
+				result->declMember( "m_transform", ast::type::Kind::eMat4x4F );
+			}
+
 			return result;
 		}
 

@@ -8,8 +8,6 @@ See LICENSE file in root folder
 
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
 
-#include <ShaderWriter/Optional/OptionalUbo.hpp>
-
 namespace castor3d
 {
 	class TexturesUbo
@@ -29,12 +27,13 @@ namespace castor3d
 }
 
 #define UBO_TEXTURES( writer, binding, set, enabled )\
-	Optional< Ubo > textures{ writer\
-		, enabled\
+	sdw::Ubo textures{ writer\
 		, castor3d::TexturesUbo::BufferTextures\
 		, binding\
-		, set };\
-	auto c3d_textureConfig = textures.declMember< UVec4 >( castor3d::TexturesUbo::TexturesConfig, 3u );\
+		, set\
+		, ast::type::MemoryLayout::eStd140\
+		, enabled };\
+	auto c3d_textureConfig = textures.declMember< sdw::UVec4 >( castor3d::TexturesUbo::TexturesConfig, 3u );\
 	textures.end()
 
 #endif

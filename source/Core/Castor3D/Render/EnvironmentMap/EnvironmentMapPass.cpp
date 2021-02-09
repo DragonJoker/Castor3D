@@ -53,19 +53,23 @@ namespace castor3d
 
 	EnvironmentMapPass::EnvironmentMapPass( EnvironmentMap & reflectionMap
 		, SceneNodeSPtr node
-		, SceneNode const & objectNode )
+		, SceneNode const & objectNode
+		, CubeMapFace face )
 		: OwnedBy< EnvironmentMap >{ reflectionMap }
 		, m_node{ node }
+		, m_face{ face }
 		, m_camera{ doCreateCamera( *node ) }
 		, m_culler{ std::make_unique< FrustumCuller >( *m_camera->getScene(), *m_camera ) }
 		, m_matrixUbo{ *reflectionMap.getEngine() }
-		, m_opaquePass{ std::make_shared< ForwardRenderTechniquePass >( cuT( "environment_opaque" )
+		, m_opaquePass{ std::make_shared< ForwardRenderTechniquePass >( cuT( "EnvironmentMap" )
+			, m_node->getName() + cuT( " Opaque" )
 			, m_matrixUbo
 			, *m_culler
 			, true
 			, &objectNode
 			, SsaoConfig{} ) }
-		, m_transparentPass{ std::make_shared< ForwardRenderTechniquePass >( cuT( "environment_transparent" )
+		, m_transparentPass{ std::make_shared< ForwardRenderTechniquePass >( cuT( "EnvironmentMap" )
+			, m_node->getName() + cuT( " Transparent" )
 			, m_matrixUbo
 			, *m_culler
 			, true
@@ -89,7 +93,8 @@ namespace castor3d
 		, ashes::RenderPass const & renderPass
 		, SceneBackground const & background
 		, ashes::DescriptorSetPool const & uboPool
-		, ashes::DescriptorSetPool const & texPool )
+		, ashes::DescriptorSetPool const & texPool
+		, RenderPassTimer & timer )
 	{
 		float const aspect = float( size.getWidth() ) / size.getHeight();
 		float const nearZ = 0.1f;
@@ -118,7 +123,7 @@ namespace castor3d
 			, getOwner()->getDepthView()
 			, size
 			, true );
-		m_opaquePass->initialise( device, size, nullptr );
+		m_opaquePass->initialise( device, size, timer, uint32_t( m_face ) * 3u + 0u, nullptr );
 
 		// Create custom background pass.
 		ashes::ImageViewCRefArray attaches;
@@ -152,7 +157,7 @@ namespace castor3d
 			, getOwner()->getDepthView()
 			, size
 			, false );
-		m_transparentPass->initialise( device, size, nullptr );
+		m_transparentPass->initialise( device, size, timer, uint32_t( m_face ) * 3u + 2u, nullptr );
 
 		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( name );
 		m_finished = device->createSemaphore( name );
@@ -170,7 +175,7 @@ namespace castor3d
 		m_opaquePass->cleanup( device );
 		m_transparentPass->cleanup( device );
 		m_hdrConfigUbo.cleanup( device );
-		m_modelMatrixUbo.cleanup( device );
+		m_modelMatrixUbo.cleanup();
 		m_matrixUbo.cleanup( device );
 	}
 
@@ -203,6 +208,7 @@ namespace castor3d
 		, ashes::Semaphore const & toWait )
 	{
 		ashes::Semaphore const * result = &toWait;
+		auto timer = &getOwner()->getTimer();
 
 		m_commandBuffer->begin();
 		m_commandBuffer->beginDebugBlock(
@@ -210,6 +216,8 @@ namespace castor3d
 				"EnvironmentMapPass render",
 				makeFloatArray( getOwner()->getEngine()->getNextRainbowColour() ),
 			} );
+		timer->beginPass( *m_commandBuffer, uint32_t( m_face ) );
+		timer->notifyPassRender( uint32_t( m_face ) );
 		m_commandBuffer->beginRenderPass( *m_renderPass
 			, *m_frameBuffer
 			, { defaultClearDepthStencil, opaqueBlackClearColor }
@@ -230,6 +238,7 @@ namespace castor3d
 
 		m_commandBuffer->executeCommands( commandBuffers );
 		m_commandBuffer->endRenderPass();
+		timer->endPass( *m_commandBuffer, uint32_t( m_face ) );
 		m_commandBuffer->endDebugBlock();
 		m_commandBuffer->end();
 

@@ -17,7 +17,7 @@ using namespace castor;
 namespace GuiCommon
 {
 	BillboardTreeItemProperty::BillboardTreeItemProperty( bool p_editable, BillboardList & p_billboard )
-		: TreeItemProperty( p_billboard.getParentScene().getEngine(), p_editable, ePROPERTY_DATA_TYPE_BILLBOARD )
+		: TreeItemProperty( p_billboard.getParentScene().getEngine(), p_editable )
 		, m_billboard( p_billboard )
 	{
 		CreateTreeItemMenu();

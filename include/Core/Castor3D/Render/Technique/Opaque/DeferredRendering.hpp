@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaqueResolvePass.hpp"
 #include "Castor3D/Render/Technique/Opaque/SsaoPass.hpp"
-#include "Castor3D/Render/Technique/Opaque/Lighting/LightingPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/LightingPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 
@@ -56,12 +56,15 @@ namespace castor3d
 			, ShadowMapResult const & smSpotResult
 			, LightVolumePassResult const & lpvResult
 			, LightVolumePassResultArray const & llpvResult
+			, TextureUnit const & vctFirstBounce
+			, TextureUnit const & vctSecondaryBounce
 			, castor::Size const & size
 			, Scene & scene
 			, HdrConfigUbo const & hdrConfigUbo
 			, GpInfoUbo const & gpInfoUbo
 			, LpvGridConfigUbo const & lpvConfigUbo
 			, LayeredLpvGridConfigUbo const & llpvConfigUbo
+			, VoxelizerUbo const & vctConfigUbo
 			, SsaoConfig & ssaoConfig );
 		/**
 		 *\~english

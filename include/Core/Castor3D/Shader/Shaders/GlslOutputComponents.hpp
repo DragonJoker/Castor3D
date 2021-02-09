@@ -22,6 +22,11 @@ namespace castor3d
 			C3D_API sdw::ShaderWriter * getWriter()const;
 			C3D_API void setVar( ast::var::VariableList::const_iterator & var );
 
+			bool isEnabled()const
+			{
+				return true;
+			}
+
 			sdw::InOutVec3 m_diffuse;
 			sdw::InOutVec3 m_specular;
 

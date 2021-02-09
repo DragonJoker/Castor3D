@@ -23,26 +23,45 @@ namespace castor3d
 			C3D_API void computeCombined( sdw::Vec3 const & worldEye
 				, sdw::Float const & shininess
 				, sdw::Int const & receivesShadows
-				, FragmentInput const & fragmentIn
+				, Surface surface
 				, OutputComponents & output )const;
 			C3D_API void compute( DirectionalLight const & light
 				, sdw::Vec3 const & worldEye
 				, sdw::Float const & shininess
 				, sdw::Int const & receivesShadows
-				, FragmentInput const & fragmentIn
+				, Surface surface
 				, OutputComponents & output )const;
 			C3D_API void compute( PointLight const & light
 				, sdw::Vec3 const & worldEye
 				, sdw::Float const & shininess
 				, sdw::Int const & receivesShadows
-				, FragmentInput const & fragmentIn
+				, Surface surface
 				, OutputComponents & output )const;
 			C3D_API void compute( SpotLight const & light
 				, sdw::Vec3 const & worldEye
 				, sdw::Float const & shininess
 				, sdw::Int const & receivesShadows
-				, FragmentInput const & fragmentIn
+				, Surface surface
 				, OutputComponents & output )const;
+			C3D_API sdw::Vec3 computeCombinedDiffuse( sdw::Vec3 const & worldEye
+				, sdw::Float const & shininess
+				, sdw::Int const & receivesShadows
+				, Surface surface )const;
+			C3D_API sdw::Vec3 computeDiffuse( DirectionalLight const & light
+				, sdw::Vec3 const & worldEye
+				, sdw::Float const & shininess
+				, sdw::Int const & receivesShadows
+				, Surface surface )const;
+			C3D_API sdw::Vec3 computeDiffuse( PointLight const & light
+				, sdw::Vec3 const & worldEye
+				, sdw::Float const & shininess
+				, sdw::Int const & receivesShadows
+				, Surface surface )const;
+			C3D_API sdw::Vec3 computeDiffuse( SpotLight const & light
+				, sdw::Vec3 const & worldEye
+				, sdw::Float const & shininess
+				, sdw::Int const & receivesShadows
+				, Surface surface )const;
 			C3D_API static std::shared_ptr< PhongLightingModel > createModel( sdw::ShaderWriter & writer
 				, Utils & utils
 				, SceneFlags sceneFlags
@@ -56,6 +75,12 @@ namespace castor3d
 				, bool shadows
 				, bool rsm
 				, uint32_t & index );
+			C3D_API static std::shared_ptr< PhongLightingModel > createDiffuseModel( sdw::ShaderWriter & writer
+				, Utils & utils
+				, SceneFlags sceneFlags
+				, bool rsm
+				, uint32_t & index
+				, bool isOpaqueProgram );
 			C3D_API void computeMapContributions( PipelineFlags const & flags
 				, sdw::Float const & gamma
 				, TextureConfigurations const & textureConfigs
@@ -74,20 +99,42 @@ namespace castor3d
 				, sdw::Float & shininess
 				, sdw::Vec3 & tangentSpaceViewPosition
 				, sdw::Vec3 & tangentSpaceFragPosition );
+			C3D_API void computeMapVoxelContributions( PipelineFlags const & flags
+				, sdw::Float const & gamma
+				, TextureConfigurations const & textureConfigs
+				, sdw::Array< sdw::UVec4 > const & textureConfig
+				, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
+				, sdw::Vec3 const & texCoords
+				, sdw::Vec3 & emissive
+				, sdw::Float & opacity
+				, sdw::Float & occlusion
+				, sdw::Vec3 & diffuse
+				, sdw::Vec3 & specular
+				, sdw::Float & shininess );
 
 		protected:
 			void doDeclareModel()override;
 			void doDeclareComputeDirectionalLight()override;
 			void doDeclareComputePointLight()override;
 			void doDeclareComputeSpotLight()override;
+			void doDeclareDiffuseModel()override;
+			void doDeclareComputeDirectionalLightDiffuse()override;
+			void doDeclareComputePointLightDiffuse()override;
+			void doDeclareComputeSpotLightDiffuse()override;
 
 			void doComputeLight( Light const & light
 				, sdw::Vec3 const & worldEye
 				, sdw::Vec3 const & lightDirection
 				, sdw::Float const & shininess
-				, FragmentInput const & fragmentIn
+				, Surface surface
 				, OutputComponents & output );
 			void doDeclareComputeLight();
+			sdw::Vec3 doComputeLightDiffuse( Light const & light
+				, sdw::Vec3 const & worldEye
+				, sdw::Vec3 const & lightDirection
+				, sdw::Float const & shininess
+				, Surface surface );
+			void doDeclareComputeLightDiffuse();
 
 		public:
 			C3D_API static const castor::String Name;
@@ -96,29 +143,53 @@ namespace castor3d
 				, sdw::InVec3
 				, sdw::InVec3
 				, sdw::InFloat
-				, FragmentInput
+				, InSurface
 				, OutputComponents & > m_computeLight;
 			sdw::Function< sdw::Void
 				, InDirectionalLight
 				, sdw::InVec3
 				, sdw::InFloat
 				, sdw::InInt
-				, FragmentInput
+				, InSurface
 				, OutputComponents & > m_computeDirectional;
 			sdw::Function< sdw::Void
 				, InPointLight
 				, sdw::InVec3
 				, sdw::InFloat
 				, sdw::InInt
-				, FragmentInput
+				, InSurface
 				, OutputComponents & > m_computePoint;
 			sdw::Function< sdw::Void
 				, InSpotLight
 				, sdw::InVec3
 				, sdw::InFloat
 				, sdw::InInt
-				, FragmentInput
+				, InSurface
 				, OutputComponents & > m_computeSpot;
+			sdw::Function< sdw::Vec3
+				, InLight
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InFloat
+				, InSurface > m_computeLightDiffuse;
+			sdw::Function< sdw::Vec3
+				, InDirectionalLight
+				, sdw::InVec3
+				, sdw::InFloat
+				, sdw::InInt
+				, InSurface > m_computeDirectionalDiffuse;
+			sdw::Function< sdw::Vec3
+				, InPointLight
+				, sdw::InVec3
+				, sdw::InFloat
+				, sdw::InInt
+				, InSurface > m_computePointDiffuse;
+			sdw::Function< sdw::Vec3
+				, InSpotLight
+				, sdw::InVec3
+				, sdw::InFloat
+				, sdw::InInt
+				, InSurface > m_computeSpotDiffuse;
 		};
 	}
 }

@@ -23,8 +23,10 @@ namespace castor3d
 		}
 	}
 
-	SceneNode::TextWriter::TextWriter( castor::String const & tabs )
+	SceneNode::TextWriter::TextWriter( castor::String const & tabs
+		, float scale )
 		: castor::TextWriter< SceneNode >{ tabs }
+		, m_scale{ scale }
 	{
 	}
 
@@ -58,15 +60,15 @@ namespace castor3d
 			if ( result && node.getPosition() != castor::Point3f{} )
 			{
 				result = file.print( 256, cuT( "%s\tposition " ), m_tabs.c_str() ) > 0
-						   && castor::Point3f::TextWriter( castor::String() )( node.getPosition(), file )
+						   && castor::Point3f::TextWriter( castor::String(), m_scale )( node.getPosition(), file )
 						   && file.writeText( cuT( "\n" ) ) > 0;
 				castor::TextWriter< SceneNode >::checkError( result, "Node position" );
 			}
 
-			if ( result && node.getScale() != castor::Point3f{ 1, 1, 1 } )
+			if ( result && ( node.getScale() != castor::Point3f{ 1, 1, 1 } || m_scale != 1.0f ) )
 			{
 				result = file.print( 256, cuT( "%s\tscale " ), m_tabs.c_str() ) > 0
-						   && castor::Point3f::TextWriter( castor::String() )( node.getScale(), file )
+						   && castor::Point3f::TextWriter( castor::String(), m_scale )( node.getScale(), file )
 						   && file.writeText( cuT( "\n" ) ) > 0;
 				castor::TextWriter< SceneNode >::checkError( result, "Node scale" );
 			}

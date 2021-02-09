@@ -111,7 +111,7 @@ namespace castor3d
 	{
 	}
 
-	void GeometryCache::registerPass( RenderPass const & renderPass )
+	void GeometryCache::registerPass( SceneRenderPass const & renderPass )
 	{
 		auto instanceMult = renderPass.getInstanceMult();
 		auto iresult = m_instances.emplace( instanceMult, RenderPassSet{} );
@@ -142,7 +142,7 @@ namespace castor3d
 		iresult.first->second.insert( &renderPass );
 	}
 
-	void GeometryCache::unregisterPass( RenderPass const * renderPass
+	void GeometryCache::unregisterPass( SceneRenderPass const * renderPass
 		, uint32_t instanceMult )
 	{
 		auto instIt = m_instances.find( instanceMult );

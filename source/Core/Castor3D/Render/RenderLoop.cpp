@@ -23,6 +23,8 @@
 
 #include <CastorUtils/Design/BlockGuard.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, RenderLoop )
+
 using namespace castor;
 
 namespace castor3d

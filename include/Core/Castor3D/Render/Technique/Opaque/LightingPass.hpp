@@ -4,7 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_LightingPass_H___
 #define ___C3D_LightingPass_H___
 
-#include "LightingModule.hpp"
+#include "OpaqueModule.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/LightingModule.hpp"
 
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
@@ -31,7 +32,9 @@ namespace castor3d
 		enum class Type
 		{
 			eNoShadow = 0u,
+			eNoShadowVoxelConeTracingGI,
 			eShadowNoGI,
+			eShadowVoxelConeTracingGI,
 			eShadowRsmGI,
 			eShadowLpvGI,
 			eShadowLpvGGI,
@@ -39,7 +42,7 @@ namespace castor3d
 			eShadowLayeredLpvGGI,
 			CU_ScopedEnumBounds( eNoShadow ),
 		};
-		static_assert( uint32_t( Type::eCount ) == uint32_t( GlobalIlluminationType::eCount ) + 1u );
+		static_assert( uint32_t( Type::eCount ) == uint32_t( GlobalIlluminationType::eCount ) + 2u );
 		using TypeLightPasses = std::array< LightPassUPtr, size_t( LightType::eCount ) >;
 		using LightPasses = std::array< TypeLightPasses, size_t( Type::eCount ) >;
 
@@ -74,11 +77,14 @@ namespace castor3d
 			, ShadowMapResult const & smSpotResult
 			, LightVolumePassResult const & lpvResult
 			, LightVolumePassResultArray const & llpvResult
+			, TextureUnit const & vctFirstBounce
+			, TextureUnit const & vctSecondaryBounce
 			, ashes::ImageView const & depthView
 			, SceneUbo & sceneUbo
 			, GpInfoUbo const & gpInfoUbo
 			, LpvGridConfigUbo const & lpvConfigUbo
-			, LayeredLpvGridConfigUbo const & llpvConfigUbos );
+			, LayeredLpvGridConfigUbo const & llpvConfigUbo
+			, VoxelizerUbo const & vctConfigUbo );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -142,8 +148,8 @@ namespace castor3d
 			, OpaquePassResult const & gp
 			, ashes::Semaphore const & toWait
 			, uint32_t & index );
-		LightPass * doGetLightPass( LightType lightType )const;
-		LightPass * doGetShadowLightPass( LightType lightType
+		LightPass * doGetLightPass( LightType lightType
+			, bool shadows
 			, GlobalIlluminationType giType )const;
 
 	private:
@@ -155,11 +161,14 @@ namespace castor3d
 		ShadowMapResult const & m_smSpotResult;
 		LightVolumePassResult const & m_lpvResult;
 		LightVolumePassResultArray const & m_llpvResult;
+		TextureUnit const & m_vctFirstBounce;
+		TextureUnit const & m_vctSecondaryBounce;
 		ashes::ImageView const & m_depthView;
 		SceneUbo & m_sceneUbo;
 		GpInfoUbo const & m_gpInfoUbo;
 		LpvGridConfigUbo const & m_lpvConfigUbo;
 		LayeredLpvGridConfigUbo const & m_llpvConfigUbo;
+		VoxelizerUbo const & m_vctConfigUbo;
 		castor::Size const m_size;
 		LightPassResult m_result;
 		LightPasses m_lightPasses;
@@ -169,6 +178,7 @@ namespace castor3d
 		CommandsSemaphore m_blitDepth;
 		CommandsSemaphore m_lpResultBarrier;
 		std::unordered_set< LightPass * > m_active;
+		bool m_voxelConeTracing{ false };
 	};
 }
 

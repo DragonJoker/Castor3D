@@ -19,6 +19,15 @@ namespace castor3d
 	/*
 	*\~english
 	*\brief
+	*	Copies the voxels buffer into a 3D texture.
+	*\~french
+	*\brief
+	*	Copie le buffer de voxels dans une texture 3D.
+	*/
+	class VoxelBufferToTexture;
+	/*
+	*\~english
+	*\brief
 	*	Handles the voxelization of a scene.
 	*\~french
 	*\brief
@@ -28,14 +37,41 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Handles secondary bounce.
+	*\~french
+	*\brief
+	*	Gère le second rebond.
+	*/
+	class VoxelSecondaryBounce;
+	/**
+	*\~english
+	*\brief
 	*	Holds all data needed to voxelize a scene.
 	*\~french
 	*\brief
 	*	Contient toutes les données pour voxelliser une scène.
 	*/
 	class Voxelizer;
+	/**
+	*\~english
+	*\brief
+	*	Voxel configuration.
+	*\~french
+	*\brief
+	*	Configuration des voxels.
+	*/
+	class VoxelSceneData;
 
+	CU_DeclareCUSmartPtr( castor3d, VoxelBufferToTexture, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, VoxelizePass, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, VoxelSecondaryBounce, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, Voxelizer, C3D_API );
+
+	struct Voxel
+	{
+		uint32_t colorMask;
+		uint32_t normalMask;
+	};
 
 	//@}
 	//@}

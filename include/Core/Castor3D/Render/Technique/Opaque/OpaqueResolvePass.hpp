@@ -67,7 +67,8 @@ namespace castor3d
 			, TextureUnit const & subsurfaceScattering
 			, TextureUnit const & lightDiffuse
 			, TextureUnit const & lightSpecular
-			, TextureUnit const & lightIndirect
+			, TextureUnit const & lightIndirectDiffuse
+			, TextureUnit const & lightIndirectSpecular
 			, TextureUnit const & result
 			, SceneUbo const & sceneUbo
 			, GpInfoUbo const & gpInfoUbo
@@ -112,7 +113,8 @@ namespace castor3d
 				, ashes::ImageView const * subsurfaceScattering
 				, ashes::ImageView const & lightDiffuse
 				, ashes::ImageView const & lightSpecular
-				, ashes::ImageView const * lightIndirect
+				, ashes::ImageView const * lightIndirectDiffuse
+				, ashes::ImageView const * lightIndirectSpecular
 				, SamplerSPtr const & sampler
 				, VkExtent2D const & size
 				, FogType fogType
@@ -140,8 +142,9 @@ namespace castor3d
 		using ProgramPipelinePtr = std::unique_ptr< ProgramPipeline >;
 		static size_t constexpr SsaoCount = 2u;
 		static size_t constexpr SsssCount = 2u;
-		static size_t constexpr GiCount = 2u;
-		static size_t constexpr AllButFogCount = SsaoCount * SsssCount * GiCount;
+		static size_t constexpr DiffuseGiCount = 2u;
+		static size_t constexpr SpecularGiCount = 2u;
+		static size_t constexpr AllButFogCount = SsaoCount * SsssCount * DiffuseGiCount * SpecularGiCount;
 		static size_t constexpr MaxProgramsCount = size_t( FogType::eCount ) * AllButFogCount;
 		using ReflectionPrograms = std::array< ProgramPipelinePtr, MaxProgramsCount >;
 
@@ -162,7 +165,8 @@ namespace castor3d
 		TextureUnit const & m_subsurfaceScattering;
 		TextureUnit const & m_lightDiffuse;
 		TextureUnit const & m_lightSpecular;
-		TextureUnit const & m_lightIndirect;
+		TextureUnit const & m_lightIndirectDiffuse;
+		TextureUnit const & m_lightIndirectSpecular;
 		ashes::VertexBufferBasePtr m_vertexBuffer;
 		ashes::DescriptorSetLayoutPtr m_uboDescriptorLayout;
 		ashes::DescriptorSetPoolPtr m_uboDescriptorPool;
@@ -174,6 +178,7 @@ namespace castor3d
 		RenderPassTimerSPtr m_timer;
 		ReflectionPrograms m_programs;
 		ProgramPipeline * m_currentProgram;
+		bool m_voxelConeTracing;
 	};
 }
 

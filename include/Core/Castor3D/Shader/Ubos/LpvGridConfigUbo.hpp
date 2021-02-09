@@ -11,8 +11,42 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Graphics/GraphicsModule.hpp>
 
+#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/MatTypes/Mat4.hpp>
+
 namespace castor3d
 {
+	namespace shader
+	{
+		struct LpvGridData
+			: public sdw::StructInstance
+		{
+			C3D_API LpvGridData( sdw::ShaderWriter & writer
+				, ast::expr::ExprPtr expr
+				, bool enabled );
+			C3D_API LpvGridData & operator=( LpvGridData const & rhs );
+
+			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+
+			// Raw values
+			sdw::Vec4 minVolumeCornerSize;
+			sdw::Vec4 gridSizeAtt;
+			// Specific values
+			sdw::Vec3 minVolumeCorner;
+			sdw::Float cellSize;
+			sdw::Float gridWidth;
+			sdw::Float gridHeight;
+			sdw::Float gridDepth;
+			sdw::Vec3 gridSize;
+			sdw::Float indirectAttenuation;
+
+		private:
+			using sdw::StructInstance::getMember;
+			using sdw::StructInstance::getMemberArray;
+		};
+	}
+
 	class LpvGridConfigUbo
 	{
 	public:
@@ -74,8 +108,7 @@ namespace castor3d
 	public:
 		C3D_API static const uint32_t BindingPoint;
 		C3D_API static const std::string LpvGridConfig;
-		C3D_API static const std::string MinVolumeCornerSize;
-		C3D_API static const std::string GridSizes;
+		C3D_API static const std::string LpvGridData;
 
 	private:
 		RenderDevice const * m_device{};
@@ -89,15 +122,7 @@ namespace castor3d
 		, binding\
 		, set\
 		, ast::type::MemoryLayout::eStd140 };\
-	auto c3d_minVolumeCornerSize = lpvGridConfig.declMember< Vec4 >( castor3d::LpvGridConfigUbo::MinVolumeCornerSize, enabled );\
-	auto c3d_gridSizeAtt = lpvGridConfig.declMember< Vec4 >( castor3d::LpvGridConfigUbo::GridSizes, enabled );\
-	lpvGridConfig.end();\
-	auto c3d_minVolumeCorner = c3d_minVolumeCornerSize.xyz();\
-	auto c3d_cellSize = c3d_minVolumeCornerSize.w();\
-	auto c3d_gridWidth = c3d_gridSizeAtt.x();\
-	auto c3d_gridHeight = c3d_gridSizeAtt.y();\
-	auto c3d_gridDepth = c3d_gridSizeAtt.z();\
-	auto c3d_gridSize = c3d_gridSizeAtt.xyz();\
-	auto c3d_indirectAttenuation = c3d_gridSizeAtt.w()
+	auto c3d_lpvGridData = lpvGridConfig.declStructMember< castor3d::shader::LpvGridData >( castor3d::LpvGridConfigUbo::LpvGridData, enabled );\
+	lpvGridConfig.end()
 
 #endif

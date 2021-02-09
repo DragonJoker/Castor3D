@@ -175,7 +175,7 @@ namespace GuiCommon
 	BackgroundTreeItemProperty::BackgroundTreeItemProperty( wxWindow * parent
 		, bool editable
 		, SceneBackground & background )
-		: TreeItemProperty{ background.getScene().getEngine(), editable, ePROPERTY_DATA_TYPE_BACKGROUND }
+		: TreeItemProperty{ background.getScene().getEngine(), editable }
 		, m_parent{ parent }
 		, m_background{ background }
 	{

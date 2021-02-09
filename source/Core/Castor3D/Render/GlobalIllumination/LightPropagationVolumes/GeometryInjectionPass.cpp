@@ -101,7 +101,7 @@ namespace castor3d
 			auto convertPointToGridIndex = writer.implementFunction< IVec3 >( "convertPointToGridIndex"
 				, [&]( Vec3 pos )
 				{
-					writer.returnStmt( ivec3( ( pos - c3d_minVolumeCorner ) / vec3( c3d_cellSize ) - vec3( 0.5_f ) ) );
+					writer.returnStmt( ivec3( ( pos - c3d_lpvGridData.minVolumeCorner ) / vec3( c3d_lpvGridData.cellSize ) - vec3( 0.5_f ) ) );
 				}
 				, InVec3{ writer, "pos" } );
 
@@ -109,7 +109,7 @@ namespace castor3d
 			auto calculateSurfelAreaLightViewM = writer.implementFunction< Float >( "calculateSurfelAreaLightViewM"
 				, [&]( Vec3 viewPos )
 				{
-					writer.returnStmt( ( 4.0_f * viewPos.z() * viewPos.z() * c3d_lpvTanFovXHalf * c3d_lpvTanFovYHalf ) / Float{ float( rsmTexSize * rsmTexSize ) } );
+					writer.returnStmt( ( 4.0_f * viewPos.z() * viewPos.z() * c3d_lpvLightData.tanFovXHalf * c3d_lpvLightData.tanFovYHalf ) / Float{ float( rsmTexSize * rsmTexSize ) } );
 				}
 				, InVec3{ writer, "viewPos" } );
 
@@ -117,7 +117,7 @@ namespace castor3d
 				, [&]()
 				{
 					auto light = writer.declLocale( "light"
-						, lightingModel->getDirectionalLight( c3d_lightIndex ) );
+						, lightingModel->getDirectionalLight( c3d_lpvLightData.lightIndex ) );
 					auto cascadeIndex = writer.declLocale( "cascadeIndex"
 						, writer.cast< Int >( max( 1_u, light.m_cascadeCount ) - 1_u ) );
 					auto rsmCoords = writer.declLocale( "rsmCoords"
@@ -128,14 +128,14 @@ namespace castor3d
 					outRsmPos = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
 					outRsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
 					auto viewPos = writer.declLocale( "viewPos"
-						, c3d_lightView * vec4( outRsmPos, 1.0 ) );
-					outSurfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvTexelAreaModifier;
+						, c3d_lpvLightData.lightView * vec4( outRsmPos, 1.0 ) );
+					outSurfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvLightData.texelAreaModifier;
 					outLightPos = outRsmPos - light.m_direction;
 
 					outVolumeCellIndex = convertPointToGridIndex( outRsmPos );
 
 					auto screenPos = writer.declLocale( "screenPos"
-						, ( vec2( outVolumeCellIndex.xy() ) + 0.5_f ) / vec2( c3d_gridSize.xy() ) * 2.0_f - 1.0_f );
+						, ( vec2( outVolumeCellIndex.xy() ) + 0.5_f ) / vec2( c3d_lpvGridData.gridSize.xy() ) * 2.0_f - 1.0_f );
 
 					out.vtx.position = vec4( screenPos, 0.0, 1.0 );
 				} );
@@ -183,7 +183,7 @@ namespace castor3d
 			auto convertPointToGridIndex = writer.implementFunction< IVec3 >( "convertPointToGridIndex"
 				, [&]( Vec3 pos )
 				{
-					writer.returnStmt( ivec3( ( pos - c3d_minVolumeCorner ) / vec3( c3d_cellSize ) - vec3( 0.5_f ) ) );
+					writer.returnStmt( ivec3( ( pos - c3d_lpvGridData.minVolumeCorner ) / vec3( c3d_lpvGridData.cellSize ) - vec3( 0.5_f ) ) );
 				}
 				, InVec3{ writer, "pos" } );
 
@@ -191,7 +191,7 @@ namespace castor3d
 			auto calculateSurfelAreaLightViewM = writer.implementFunction< Float >( "calculateSurfelAreaLightViewM"
 				, [&]( Vec3 viewPos )
 				{
-					writer.returnStmt( ( 4.0 * viewPos.z() * viewPos.z() * c3d_lpvTanFovXHalf * c3d_lpvTanFovYHalf ) / Float{ float( rsmTexSize * rsmTexSize ) } );
+					writer.returnStmt( ( 4.0 * viewPos.z() * viewPos.z() * c3d_lpvLightData.tanFovXHalf * c3d_lpvLightData.tanFovYHalf ) / Float{ float( rsmTexSize * rsmTexSize ) } );
 				}
 				, InVec3{ writer, "viewPos" } );
 
@@ -199,23 +199,23 @@ namespace castor3d
 				, [&]()
 				{
 					auto light = writer.declLocale( "light"
-						, lightingModel->getSpotLight( c3d_lightIndex ) );
+						, lightingModel->getSpotLight( c3d_lpvLightData.lightIndex ) );
 					auto rsmCoords = writer.declLocale( "rsmCoords"
 						, ivec3( in.vertexIndex % rsmTexSize
 							, in.vertexIndex / rsmTexSize
-							, c3d_lightIndex ) );
+							, c3d_lpvLightData.lightIndex ) );
 
 					outLightPos = light.m_position;
 					outRsmPos = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
 					outRsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
 					auto viewPos = writer.declLocale( "viewPos"
-						, c3d_lightView * vec4( outRsmPos, 1.0 ) );
-					outSurfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvTexelAreaModifier;
+						, c3d_lpvLightData.lightView * vec4( outRsmPos, 1.0 ) );
+					outSurfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvLightData.texelAreaModifier;
 
 					outVolumeCellIndex = convertPointToGridIndex( outRsmPos );
 
 					auto screenPos = writer.declLocale( "screenPos"
-						, ( vec2( outVolumeCellIndex.xy() ) + 0.5_f ) / c3d_gridSize.xy() * 2.0_f - 1.0_f );
+						, ( vec2( outVolumeCellIndex.xy() ) + 0.5_f ) / c3d_lpvGridData.gridSize.xy() * 2.0_f - 1.0_f );
 
 					out.vtx.position = vec4( screenPos, 0.0, 1.0 );
 				} );
@@ -263,7 +263,7 @@ namespace castor3d
 			auto convertPointToGridIndex = writer.implementFunction< IVec3 >( "convertPointToGridIndex"
 				, [&]( Vec3 pos )
 				{
-					writer.returnStmt( ivec3( ( pos - c3d_minVolumeCorner ) / vec3( c3d_cellSize ) - vec3( 0.5_f ) ) );
+					writer.returnStmt( ivec3( ( pos - c3d_lpvGridData.minVolumeCorner ) / vec3( c3d_lpvGridData.cellSize ) - vec3( 0.5_f ) ) );
 				}
 				, InVec3{ writer, "pos" } );
 
@@ -271,7 +271,7 @@ namespace castor3d
 			auto calculateSurfelAreaLightViewM = writer.implementFunction< Float >( "calculateSurfelAreaLightViewM"
 				, [&]( Vec3 viewPos )
 				{
-					writer.returnStmt( ( 4.0 * viewPos.z() * viewPos.z() * c3d_lpvTanFovXHalf * c3d_lpvTanFovYHalf ) / Float{ float( rsmTexSize * rsmTexSize ) } );
+					writer.returnStmt( ( 4.0 * viewPos.z() * viewPos.z() * c3d_lpvLightData.tanFovXHalf * c3d_lpvLightData.tanFovYHalf ) / Float{ float( rsmTexSize * rsmTexSize ) } );
 				}
 				, InVec3{ writer, "viewPos" } );
 
@@ -279,21 +279,21 @@ namespace castor3d
 				, [&]()
 				{
 					auto light = writer.declLocale( "light"
-						, lightingModel->getPointLight( c3d_lightIndex ) );
+						, lightingModel->getPointLight( c3d_lpvLightData.lightIndex ) );
 					auto rsmCoords = writer.declLocale( "rsmCoords"
 						, ivec3( in.vertexIndex % rsmTexSize
 							, in.vertexIndex / rsmTexSize
-							, c3d_lightIndex ) );
+							, c3d_lpvLightData.lightIndex ) );
 
 					outLightPos = light.m_position;
 					outRsmPos = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
 					outRsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
-					outSurfelArea = calculateSurfelAreaLightViewM( outLightPos ) * c3d_lpvTexelAreaModifier;
+					outSurfelArea = calculateSurfelAreaLightViewM( outLightPos ) * c3d_lpvLightData.texelAreaModifier;
 
 					outVolumeCellIndex = convertPointToGridIndex( outRsmPos );
 
 					auto screenPos = writer.declLocale( "screenPos"
-						, ( vec2( outVolumeCellIndex.xy() ) + 0.5_f ) / c3d_gridSize.xy() * 2.0_f - 1.0_f );
+						, ( vec2( outVolumeCellIndex.xy() ) + 0.5_f ) / c3d_lpvGridData.gridSize.xy() * 2.0_f - 1.0_f );
 
 					out.vtx.position = vec4( screenPos, 0.0, 1.0 );
 				} );
@@ -407,7 +407,7 @@ namespace castor3d
 				, [&]( Vec3 dir
 					, Vec3 normal )
 				{
-					writer.returnStmt( clamp( ( inSurfelArea * clamp( dot( normal, dir ), 0.0_f, 1.0_f ) ) / ( c3d_cellSize * c3d_cellSize )
+					writer.returnStmt( clamp( ( inSurfelArea * clamp( dot( normal, dir ), 0.0_f, 1.0_f ) ) / ( c3d_lpvGridData.cellSize * c3d_lpvGridData.cellSize )
 						, 0.0_f
 						, 1.0_f ) ); //It is probability so 0.0 - 1.0
 				}
@@ -651,7 +651,7 @@ namespace castor3d
 					ashes::PipelineRasterizationStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE },
 					ashes::PipelineMultisampleStateCreateInfo{},
 					ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_FALSE, VK_FALSE },
-					RenderPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u ),
+					SceneRenderPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u ),
 					ashes::nullopt,
 					pipelineLayout,
 					renderPass,
@@ -675,7 +675,7 @@ namespace castor3d
 		: Named{ prefix + "GeometryInjection" + string::toString( layerIndex ) }
 		, m_engine{ engine }
 		, m_device{ device }
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, device, cuT( "Light Propagation Volumes" ), cuT( "Geometry Injection" ) ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( device, cuT( "Light Propagation Volumes" ), cuT( "Geometry Injection" ) ) }
 		, m_rsmSize{ smResult[SmTexture::eDepth].getTexture()->getWidth() }
 		, m_vertexBuffer{ doCreateVertexBuffer( getName(), m_device, m_rsmSize ) }
 		, m_descriptorSetLayout{ doCreateDescriptorLayout( getName(), m_device ) }

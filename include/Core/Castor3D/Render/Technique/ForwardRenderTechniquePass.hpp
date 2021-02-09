@@ -32,14 +32,16 @@ namespace castor3d
 		 *\param[in]	ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 *\param[in]	config		La configuration du SSAO.
 		 */
-		C3D_API ForwardRenderTechniquePass( castor::String const & name
+		C3D_API ForwardRenderTechniquePass( castor::String const & category
+			, castor::String const & name
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, bool environment
 			, SceneNode const * ignored
 			, SsaoConfig const & config
 			, LpvGridConfigUbo const * lpvConfigUbo = nullptr
-			, LayeredLpvGridConfigUbo const * llpvConfigUbo = nullptr );
+			, LayeredLpvGridConfigUbo const * llpvConfigUbo = nullptr
+			, VoxelizerUbo const * vctConfigUbo = nullptr );
 		/**
 		 *\~english
 		 *\brief		Constructor for transparent nodes.
@@ -60,7 +62,8 @@ namespace castor3d
 		 *\param[in]	ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 *\param[in]	config		La configuration du SSAO.
 		 */
-		C3D_API ForwardRenderTechniquePass( castor::String const & name
+		C3D_API ForwardRenderTechniquePass( castor::String const & category
+			, castor::String const & name
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, bool oit
@@ -68,14 +71,8 @@ namespace castor3d
 			, SceneNode const * ignored
 			, SsaoConfig const & config
 			, LpvGridConfigUbo const * lpvConfigUbo = nullptr
-			, LayeredLpvGridConfigUbo const * llpvConfigUbo = nullptr );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API virtual ~ForwardRenderTechniquePass();
+			, LayeredLpvGridConfigUbo const * llpvConfigUbo = nullptr
+			, VoxelizerUbo const * vctConfigUbo = nullptr );
 		/**
 		 *\~english
 		 *\brief		Initialises the render pass.

@@ -19,6 +19,7 @@
 #include "Castor3D/Render/PostEffect/PostEffect.hpp"
 #include "Castor3D/Render/Technique/RenderTechnique.hpp"
 #include "Castor3D/Render/ToneMapping/ToneMapping.hpp"
+#include "Castor3D/Render/ToTexture/Texture3DTo2D.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
@@ -37,6 +38,8 @@
 #include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
 
 #include <ShaderWriter/Source.hpp>
+
+CU_ImplementCUSmartPtr( castor3d, RenderTarget )
 
 using namespace castor;
 
@@ -234,8 +237,8 @@ namespace castor3d
 				m_initialised = doInitialiseTechnique( device );
 			}
 
-			m_overlaysTimer = std::make_shared< RenderPassTimer >( *getEngine(), device, cuT( "Overlays" ), cuT( "Overlays" ) );
-			m_toneMappingTimer = std::make_shared< RenderPassTimer >( *getEngine(), device, cuT( "Tone Mapping" ), cuT( "Tone Mapping" ) );
+			m_overlaysTimer = std::make_shared< RenderPassTimer >( device, cuT( "Overlays" ), cuT( "Overlays" ) );
+			m_toneMappingTimer = std::make_shared< RenderPassTimer >( device, cuT( "Tone Mapping" ), cuT( "Tone Mapping" ) );
 
 			if ( !m_hdrPostEffects.empty() )
 			{
@@ -361,6 +364,7 @@ namespace castor3d
 		}
 
 		auto & camera = *getCamera();
+		updater.camera = getCamera();
 		camera.resize( m_size );
 		camera.update();
 
@@ -383,6 +387,19 @@ namespace castor3d
 		auto technique = this->getTechnique();
 		auto & debugConfig = technique->getDebugConfig();
 		updater.combineIndex = debugConfig.debugIndex;
+
+		if ( m_intermediates[debugConfig.debugIndex].factors.grid )
+		{
+			updater.cellSize = ( *m_intermediates[debugConfig.debugIndex].factors.grid )[3];
+			updater.gridCenter = castor::Point3f{ *m_intermediates[debugConfig.debugIndex].factors.grid };
+		}
+		else
+		{
+			updater.cellSize = 0.0f;
+			updater.gridCenter = {};
+		}
+
+		m_texture3Dto2D->update( updater );
 		m_combinePass->update( updater );
 #endif
 	}
@@ -749,9 +766,9 @@ namespace castor3d
 			commandBuffer->beginDebugBlock( { getName() + " - " + name + " Copy"
 				, makeFloatArray( getEngine()->getNextRainbowColour() ), } );
 			// Put source image in transfer source layout.
-			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 				, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, source.makeTransferSource( VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL ) );
+				, source.makeTransferSource( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 			// Put target image in transfer destination layout.
 			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 				, VK_PIPELINE_STAGE_TRANSFER_BIT
@@ -843,15 +860,21 @@ namespace castor3d
 		mainBuilder.resultTexture( m_combinedFrameBuffer.colourTexture.getTexture() );
 		mainBuilder.texcoordConfig( rq::Texcoord{} );
 
+		m_texture3Dto2D = castor::makeUnique< Texture3DTo2D >( device
+			, extent
+			, m_renderTechnique->getMatrixUbo() );
+
 #if C3D_DebugQuads
 		auto intermediates = m_intermediates;
 #else
 		IntermediateViewArray intermediates{ m_intermediates[0] };
 #endif
+		m_texture3Dto2D->createPasses( intermediates );
 
 		m_combinePass = CombinePassBuilder{ mainBuilder }
 			.binding( VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D )
 			.binding( VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D )
+			.tex3DResult( m_texture3Dto2D->getTarget() )
 			.build( *getEngine()
 				, device
 				, "Target"
@@ -930,10 +953,11 @@ namespace castor3d
 			for ( auto effect : effects )
 			{
 				auto timerBlock = effect->start();
+				uint32_t index = 0u;
 
 				for ( auto & commands : effect->getCommands() )
 				{
-					timerBlock->notifyPassRender();
+					timerBlock->notifyPassRender( index++ );
 
 					queue.submit( *commands.commandBuffer
 						, *result
@@ -1007,6 +1031,8 @@ namespace castor3d
 
 	ashes::Semaphore const & RenderTarget::doCombine( ashes::Semaphore const & toWait )
 	{
-		return m_combinePass->combine( toWait );
+		ashes::Semaphore const * result = &toWait;
+		result = &m_texture3Dto2D->render( *result );
+		return m_combinePass->combine( *result );
 	}
 }

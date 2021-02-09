@@ -126,7 +126,11 @@ namespace castor3d
 
 			for ( auto & view : views )
 			{
-				if ( view.view->image != outputView->image
+				if ( view.view->viewType == VK_IMAGE_VIEW_TYPE_3D )
+				{
+					result.push_back( doCreateBarrierView( config.tex3DResult.value() ) );
+				}
+				else if ( view.view->image != outputView->image
 					|| view.view->subresourceRange != outputView->subresourceRange )
 				{
 					result.push_back( doCreateBarrierView( view ) );
@@ -184,7 +188,11 @@ namespace castor3d
 
 			for ( auto & view : views )
 			{
-				if ( view.view->image != outputView->image
+				if ( view.view->viewType == VK_IMAGE_VIEW_TYPE_3D )
+				{
+					result.push_back( doCreateBarrierView( config.tex3DResult.value() ) );
+				}
+				else if ( view.view->image != outputView->image
 					|| view.view->subresourceRange != outputView->subresourceRange )
 				{
 					result.push_back( doCreateSampledView( view ) );
@@ -334,7 +342,7 @@ namespace castor3d
 		, m_rhsView{ doCreateSampledView( rhsView ) }
 		, m_config{ config }
 		, m_prefix{ prefix }
-		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, device, m_prefix, cuT( "Combine" ) ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( device, m_prefix, cuT( "Combine" ) ) }
 		, m_renderPass{ doCreateRenderPass( device, m_prefix, outputFormat ) }
 		, m_frameBuffer{ doCreateFrameBuffer( m_prefix, *m_renderPass, m_view, outputSize ) }
 		, m_quad{ engine, device, m_prefix, m_lhsViews, m_rhsView, m_vertexShader, m_pixelShader, *m_renderPass, outputSize, std::move( config ) }

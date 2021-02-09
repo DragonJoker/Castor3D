@@ -7,11 +7,12 @@ See LICENSE file in root folder
 #include "Castor3D/Cache/CacheModule.hpp"
 #include "Castor3D/Overlay/OverlayModule.hpp"
 #include "Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp"
+#include "Castor3D/Render/EnvironmentMap/EnvironmentMapModule.hpp"
+#include "Castor3D/Render/Technique/Voxelize/VoxelSceneData.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"
-#include "Castor3D/Render/EnvironmentMap/EnvironmentMapModule.hpp"
 
 #include "Castor3D/Scene/Fog.hpp"
 #include "Castor3D/Scene/Shadow.hpp"
@@ -45,6 +46,14 @@ namespace castor3d
 			: public castor::TextWriter< Scene >
 		{
 		public:
+			struct Options
+			{
+				castor::Path materialsFile;
+				castor::Path meshesFile;
+				castor::Path nodesFile;
+				castor::Path objectsFile;
+				castor::Path lightsFile;
+			};
 			/**
 			 *\~english
 			 *\brief		Constructor
@@ -52,7 +61,7 @@ namespace castor3d
 			 *\brief		Constructeur
 			 */
 			C3D_API explicit TextWriter( castor::String const & tabs
-				, castor::Path const & materialsFile = castor::Path{} );
+				, Options options = {} );
 			/**
 			 *\~english
 			 *\brief		Writes a scene into a text file
@@ -66,7 +75,7 @@ namespace castor3d
 			C3D_API bool operator()( Scene const & scene, castor::TextFile & file )override;
 
 		private:
-			castor::Path const & m_materialsFile;
+			Options m_options;
 		};
 
 	public:
@@ -355,6 +364,16 @@ namespace castor3d
 		{
 			return m_lpvIndirectAttenuation;
 		}
+
+		VoxelSceneData const & getVoxelConeTracingConfig()const
+		{
+			return m_voxelConfig;
+		}
+
+		VoxelSceneData & getVoxelConeTracingConfig()
+		{
+			return m_voxelConfig;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -445,6 +464,7 @@ namespace castor3d
 		std::atomic_bool m_hasAnyShadows;
 		std::map< castor::String, OnLightChangedConnection > m_lightConnections;
 		float m_lpvIndirectAttenuation{ 1.7f };
+		VoxelSceneData m_voxelConfig;
 
 	public:
 		//!\~english	The cameras root node name.

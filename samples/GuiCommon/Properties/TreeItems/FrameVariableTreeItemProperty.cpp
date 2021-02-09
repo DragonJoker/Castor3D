@@ -99,7 +99,7 @@ namespace GuiCommon
 	FrameVariableTreeItemProperty::FrameVariableTreeItemProperty( Engine * engine
 		, bool editable
 		, UniformValueBase & uniform )
-		: TreeItemProperty{ engine, editable, ePROPERTY_DATA_TYPE_CAMERA }
+		: TreeItemProperty{ engine, editable }
 		, m_uniform{ uniform }
 	{
 		CreateTreeItemMenu();

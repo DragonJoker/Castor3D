@@ -71,7 +71,7 @@ namespace castor3d
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, ShadowMap const & shadowMap )
-		: ShadowMapPass{ cuT( "ShadowMapPassPoint" ) + string::toString( index / 6u ) + "F" + string::toString( index % 6u ), engine, matrixUbo, culler, shadowMap }
+		: ShadowMapPass{ cuT( "Point Layer " ) + string::toString( index / 6u ) + " Face " + string::toString( index % 6u ), engine, matrixUbo, culler, shadowMap }
 		, m_viewport{ engine }
 	{
 		log::trace << "Created " << m_name << std::endl;
@@ -87,7 +87,7 @@ namespace castor3d
 		m_outOfDate = m_outOfDate
 			|| getCuller().areAllChanged()
 			|| getCuller().areCulledChanged();
-		RenderPass::update( updater );
+		SceneRenderPass::update( updater );
 		return m_outOfDate;
 	}
 
@@ -111,12 +111,12 @@ namespace castor3d
 
 	void ShadowMapPassPoint::doUpdateNodes( SceneCulledRenderNodes & nodes )
 	{
-		RenderPass::doUpdate( nodes.instancedStaticNodes.backCulled );
-		RenderPass::doUpdate( nodes.staticNodes.backCulled );
-		RenderPass::doUpdate( nodes.skinnedNodes.backCulled );
-		RenderPass::doUpdate( nodes.instancedSkinnedNodes.backCulled );
-		RenderPass::doUpdate( nodes.morphingNodes.backCulled );
-		RenderPass::doUpdate( nodes.billboardNodes.backCulled );
+		SceneRenderPass::doUpdate( nodes.instancedStaticNodes.backCulled );
+		SceneRenderPass::doUpdate( nodes.staticNodes.backCulled );
+		SceneRenderPass::doUpdate( nodes.skinnedNodes.backCulled );
+		SceneRenderPass::doUpdate( nodes.instancedSkinnedNodes.backCulled );
+		SceneRenderPass::doUpdate( nodes.morphingNodes.backCulled );
+		SceneRenderPass::doUpdate( nodes.billboardNodes.backCulled );
 	}
 
 	bool ShadowMapPassPoint::doInitialise( RenderDevice const & device
@@ -232,7 +232,7 @@ namespace castor3d
 
 	ashes::VkDescriptorSetLayoutBindingArray ShadowMapPassPoint::doCreateUboBindings( PipelineFlags const & flags )const
 	{
-		auto uboBindings = RenderPass::doCreateUboBindings( flags );
+		auto uboBindings = SceneRenderPass::doCreateUboBindings( flags );
 		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( ShadowMapUbo::BindingPoint
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
@@ -247,7 +247,7 @@ namespace castor3d
 
 	ashes::PipelineColorBlendStateCreateInfo ShadowMapPassPoint::doCreateBlendState( PipelineFlags const & flags )const
 	{
-		return RenderPass::createBlendState( BlendMode::eNoBlend
+		return SceneRenderPass::createBlendState( BlendMode::eNoBlend
 			, BlendMode::eNoBlend
 			, uint32_t( SmTexture::eCount ) - 1u );
 	}
@@ -271,43 +271,43 @@ namespace castor3d
 
 		// Vertex inputs
 		auto position = writer.declInput< Vec4 >( "position"
-			, RenderPass::VertexInputs::PositionLocation );
+			, SceneRenderPass::VertexInputs::PositionLocation );
 		auto normal = writer.declInput< Vec3 >( "normal"
-			, RenderPass::VertexInputs::NormalLocation );
+			, SceneRenderPass::VertexInputs::NormalLocation );
 		auto tangent = writer.declInput< Vec3 >( "tangent"
-			, RenderPass::VertexInputs::TangentLocation );
+			, SceneRenderPass::VertexInputs::TangentLocation );
 		auto uv = writer.declInput< Vec3 >( "uv"
-			, RenderPass::VertexInputs::TextureLocation
+			, SceneRenderPass::VertexInputs::TextureLocation
 			, hasTextures );
 		auto inBoneIds0 = writer.declInput< IVec4 >( "inBoneIds0"
-			, RenderPass::VertexInputs::BoneIds0Location
+			, SceneRenderPass::VertexInputs::BoneIds0Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
 		auto inBoneIds1 = writer.declInput< IVec4 >( "inBoneIds1"
-			, RenderPass::VertexInputs::BoneIds1Location
+			, SceneRenderPass::VertexInputs::BoneIds1Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
 		auto inWeights0 = writer.declInput< Vec4 >( "inWeights0"
-			, RenderPass::VertexInputs::Weights0Location
+			, SceneRenderPass::VertexInputs::Weights0Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
 		auto inWeights1 = writer.declInput< Vec4 >( "inWeights1"
-			, RenderPass::VertexInputs::Weights1Location
+			, SceneRenderPass::VertexInputs::Weights1Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
 		auto transform = writer.declInput< Mat4 >( "transform"
-			, RenderPass::VertexInputs::TransformLocation
+			, SceneRenderPass::VertexInputs::TransformLocation
 			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
 		auto material = writer.declInput< Int >( "material"
-			, RenderPass::VertexInputs::MaterialLocation
+			, SceneRenderPass::VertexInputs::MaterialLocation
 			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
 		auto inPosition2 = writer.declInput< Vec4 >( "inPosition2"
-			, RenderPass::VertexInputs::Position2Location
+			, SceneRenderPass::VertexInputs::Position2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
 		auto inNormal2 = writer.declInput< Vec3 >( "inNormal2"
-			, RenderPass::VertexInputs::Normal2Location
+			, SceneRenderPass::VertexInputs::Normal2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
 		auto inTangent2 = writer.declInput< Vec3 >( "inTangent2"
-			, RenderPass::VertexInputs::Tangent2Location
+			, SceneRenderPass::VertexInputs::Tangent2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
 		auto inTexture2 = writer.declInput< Vec3 >( "inTexture2"
-			, RenderPass::VertexInputs::Texture2Location
+			, SceneRenderPass::VertexInputs::Texture2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) && hasTextures );
 		auto in = writer.getIn();
 
@@ -319,24 +319,24 @@ namespace castor3d
 
 		// Outputs
 		auto vtx_worldPosition = writer.declOutput< Vec3 >( "vtx_worldPosition"
-			, RenderPass::VertexOutputs::WorldPositionLocation );
+			, SceneRenderPass::VertexOutputs::WorldPositionLocation );
 		auto vtx_normal = writer.declOutput< Vec3 >( "vtx_normal"
-			, RenderPass::VertexOutputs::NormalLocation );
+			, SceneRenderPass::VertexOutputs::NormalLocation );
 		auto vtx_tangent = writer.declOutput< Vec3 >( "vtx_tangent"
-			, RenderPass::VertexOutputs::TangentLocation );
+			, SceneRenderPass::VertexOutputs::TangentLocation );
 		auto vtx_bitangent = writer.declOutput< Vec3 >( "vtx_bitangent"
-			, RenderPass::VertexOutputs::BitangentLocation );
+			, SceneRenderPass::VertexOutputs::BitangentLocation );
 		auto vtx_texture = writer.declOutput< Vec3 >( "vtx_texture"
-			, RenderPass::VertexOutputs::TextureLocation
+			, SceneRenderPass::VertexOutputs::TextureLocation
 			, hasTextures );
 		auto vtx_material = writer.declOutput< UInt >( "vtx_material"
-			, RenderPass::VertexOutputs::MaterialLocation );
+			, SceneRenderPass::VertexOutputs::MaterialLocation );
 		auto vtx_cameraPosition = writer.declOutput< Vec3 >( "vtx_cameraPosition"
 			, 12u );
 		auto vtx_tangentSpaceFragPosition = writer.declOutput< Vec3 >( "vtx_tangentSpaceFragPosition"
-			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
+			, SceneRenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
 		auto vtx_tangentSpaceViewPosition = writer.declOutput< Vec3 >( "vtx_tangentSpaceViewPosition"
-			, RenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
+			, SceneRenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
 		auto out = writer.getOut();
 
 		std::function< void() > main = [&]()
@@ -424,24 +424,24 @@ namespace castor3d
 
 		// Fragment Intputs
 		auto vtx_worldPosition = writer.declInput< Vec3 >( "vtx_worldPosition"
-			, RenderPass::VertexOutputs::WorldPositionLocation );
+			, SceneRenderPass::VertexOutputs::WorldPositionLocation );
 		auto vtx_normal = writer.declInput< Vec3 >( "vtx_normal"
-			, RenderPass::VertexOutputs::NormalLocation );
+			, SceneRenderPass::VertexOutputs::NormalLocation );
 		auto vtx_tangent = writer.declInput< Vec3 >( "vtx_tangent"
-			, RenderPass::VertexOutputs::TangentLocation );
+			, SceneRenderPass::VertexOutputs::TangentLocation );
 		auto vtx_bitangent = writer.declInput< Vec3 >( "vtx_bitangent"
-			, RenderPass::VertexOutputs::BitangentLocation );
+			, SceneRenderPass::VertexOutputs::BitangentLocation );
 		auto vtx_texture = writer.declInput< Vec3 >( "vtx_texture"
-			, RenderPass::VertexOutputs::TextureLocation
+			, SceneRenderPass::VertexOutputs::TextureLocation
 			, hasTextures );
 		auto vtx_material = writer.declInput< UInt >( "vtx_material"
-			, RenderPass::VertexOutputs::MaterialLocation );
+			, SceneRenderPass::VertexOutputs::MaterialLocation );
 		auto vtx_cameraPosition = writer.declInput< Vec3 >( "vtx_cameraPosition"
 			, 12u );
 		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( "vtx_tangentSpaceFragPosition"
-			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
+			, SceneRenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
 		auto vtx_tangentSpaceViewPosition = writer.declInput< Vec3 >( "vtx_tangentSpaceViewPosition"
-			, RenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
+			, SceneRenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
 		auto in = writer.getIn();
 
 		shader::LegacyMaterials materials{ writer };
@@ -597,24 +597,24 @@ namespace castor3d
 
 		// Fragment Intputs
 		auto vtx_worldPosition = writer.declInput< Vec3 >( "vtx_worldPosition"
-			, RenderPass::VertexOutputs::WorldPositionLocation );
+			, SceneRenderPass::VertexOutputs::WorldPositionLocation );
 		auto vtx_normal = writer.declInput< Vec3 >( "vtx_normal"
-			, RenderPass::VertexOutputs::NormalLocation );
+			, SceneRenderPass::VertexOutputs::NormalLocation );
 		auto vtx_tangent = writer.declInput< Vec3 >( "vtx_tangent"
-			, RenderPass::VertexOutputs::TangentLocation );
+			, SceneRenderPass::VertexOutputs::TangentLocation );
 		auto vtx_bitangent = writer.declInput< Vec3 >( "vtx_bitangent"
-			, RenderPass::VertexOutputs::BitangentLocation );
+			, SceneRenderPass::VertexOutputs::BitangentLocation );
 		auto vtx_texture = writer.declInput< Vec3 >( "vtx_texture"
-			, RenderPass::VertexOutputs::TextureLocation
+			, SceneRenderPass::VertexOutputs::TextureLocation
 			, hasTextures );
 		auto vtx_material = writer.declInput< UInt >( "vtx_material"
-			, RenderPass::VertexOutputs::MaterialLocation );
+			, SceneRenderPass::VertexOutputs::MaterialLocation );
 		auto vtx_cameraPosition = writer.declInput< Vec3 >( "vtx_cameraPosition"
 			, 12u );
 		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( "vtx_tangentSpaceFragPosition"
-			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
+			, SceneRenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
 		auto vtx_tangentSpaceViewPosition = writer.declInput< Vec3 >( "vtx_tangentSpaceViewPosition"
-			, RenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
+			, SceneRenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
 		auto in = writer.getIn();
 
 		shader::PbrMRMaterials materials{ writer };
@@ -770,24 +770,24 @@ namespace castor3d
 
 		// Fragment Intputs
 		auto vtx_worldPosition = writer.declInput< Vec3 >( "vtx_worldPosition"
-			, RenderPass::VertexOutputs::WorldPositionLocation );
+			, SceneRenderPass::VertexOutputs::WorldPositionLocation );
 		auto vtx_normal = writer.declInput< Vec3 >( "vtx_normal"
-			, RenderPass::VertexOutputs::NormalLocation );
+			, SceneRenderPass::VertexOutputs::NormalLocation );
 		auto vtx_tangent = writer.declInput< Vec3 >( "vtx_tangent"
-			, RenderPass::VertexOutputs::TangentLocation );
+			, SceneRenderPass::VertexOutputs::TangentLocation );
 		auto vtx_bitangent = writer.declInput< Vec3 >( "vtx_bitangent"
-			, RenderPass::VertexOutputs::BitangentLocation );
+			, SceneRenderPass::VertexOutputs::BitangentLocation );
 		auto vtx_texture = writer.declInput< Vec3 >( "vtx_texture"
-			, RenderPass::VertexOutputs::TextureLocation
+			, SceneRenderPass::VertexOutputs::TextureLocation
 			, hasTextures );
 		auto vtx_material = writer.declInput< UInt >( "vtx_material"
-			, RenderPass::VertexOutputs::MaterialLocation );
+			, SceneRenderPass::VertexOutputs::MaterialLocation );
 		auto vtx_cameraPosition = writer.declInput< Vec3 >( "vtx_cameraPosition"
 			, 12u );
 		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( "vtx_tangentSpaceFragPosition"
-			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
+			, SceneRenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
 		auto vtx_tangentSpaceViewPosition = writer.declInput< Vec3 >( "vtx_tangentSpaceViewPosition"
-			, RenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
+			, SceneRenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
 		auto in = writer.getIn();
 
 		shader::PbrSGMaterials materials{ writer };

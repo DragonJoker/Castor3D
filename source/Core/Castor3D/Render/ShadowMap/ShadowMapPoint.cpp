@@ -202,7 +202,7 @@ namespace castor3d
 		, uint32_t index )
 	{
 		auto & myTimer = m_passes[0].pass->getTimer();
-		auto timerBlock = myTimer.start();
+		auto myTimerBlock = myTimer.start();
 		auto * result = &toWait;
 		uint32_t offset = index * 6u;
 
@@ -220,6 +220,7 @@ namespace castor3d
 		{
 			auto & pass = m_passes[offset + face];
 			auto & timer = pass.pass->getTimer();
+			auto timerBlock = timer.start();
 			auto & renderPass = pass.pass->getRenderPass();
 			auto & frameBuffer = passData.frameBuffers[face];
 
@@ -228,13 +229,18 @@ namespace castor3d
 					m_name + " " + std::to_string( index ) + " face " + std::to_string( face ),
 					makeFloatArray( getEngine()->getNextRainbowColour() ),
 				} );
-			timerBlock->notifyPassRender();
+			timerBlock->notifyPassRender( );
 			timerBlock->beginPass( commandBuffer );
 			commandBuffer.beginRenderPass( renderPass
 				, *frameBuffer.frameBuffer
 				, getClearValues()
 				, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
-			commandBuffer.executeCommands( { pass.pass->getCommandBuffer() } );
+
+			if ( pass.pass->hasNodes() )
+			{
+				commandBuffer.executeCommands( { pass.pass->getCommandBuffer() } );
+			}
+
 			commandBuffer.endRenderPass();
 			timerBlock->endPass( commandBuffer );
 			commandBuffer.endDebugBlock();

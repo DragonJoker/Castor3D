@@ -347,48 +347,44 @@ namespace light_streaks
 		m_pipelines.kawase.layout.descriptorPool = m_pipelines.kawase.layout.descriptorLayout->createPool( Count * 3u );
 
 		// Create the render pass.
-		auto createRenderPass = [this, &device]( VkImageLayout dstLayout )
-		{
-			ashes::VkAttachmentDescriptionArray attachments{ { 0u
-				, m_target->getPixelFormat()
-				, VK_SAMPLE_COUNT_1_BIT
-				, VK_ATTACHMENT_LOAD_OP_CLEAR
-				, VK_ATTACHMENT_STORE_OP_STORE
-				, VK_ATTACHMENT_LOAD_OP_DONT_CARE
-				, VK_ATTACHMENT_STORE_OP_DONT_CARE
-				, VK_IMAGE_LAYOUT_UNDEFINED
-				, dstLayout } };
-			ashes::SubpassDescriptionArray subpasses;
-			subpasses.emplace_back( ashes::SubpassDescription{ 0u
-				, VK_PIPELINE_BIND_POINT_GRAPHICS
-				, {}
-				, { { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } }
-				, {}
-				, ashes::nullopt
-				, {} } );
-			ashes::VkSubpassDependencyArray dependencies{ { VK_SUBPASS_EXTERNAL
-					, 0u
-					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
-					, VK_ACCESS_SHADER_READ_BIT
-					, VK_DEPENDENCY_BY_REGION_BIT }
-				, { 0u
-					, VK_SUBPASS_EXTERNAL
-					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-					, VK_ACCESS_SHADER_READ_BIT
-					, VK_DEPENDENCY_BY_REGION_BIT } };
-			ashes::RenderPassCreateInfo createInfo{ 0u
-				, std::move( attachments )
-				, std::move( subpasses )
-				, std::move( dependencies ) };
-			return device->createRenderPass( "LightStreaks"
-				, std::move( createInfo ) );
-		};
-		m_shaderInputRenderPass = createRenderPass( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-		m_colorAttachRenderPass = createRenderPass( VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL );
+		ashes::VkAttachmentDescriptionArray attachments{ { 0u
+			, m_target->getPixelFormat()
+			, VK_SAMPLE_COUNT_1_BIT
+			, VK_ATTACHMENT_LOAD_OP_CLEAR
+			, VK_ATTACHMENT_STORE_OP_STORE
+			, VK_ATTACHMENT_LOAD_OP_DONT_CARE
+			, VK_ATTACHMENT_STORE_OP_DONT_CARE
+			, VK_IMAGE_LAYOUT_UNDEFINED
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } };
+		ashes::SubpassDescriptionArray subpasses;
+		subpasses.emplace_back( ashes::SubpassDescription{ 0u
+			, VK_PIPELINE_BIND_POINT_GRAPHICS
+			, {}
+			, { { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } }
+			, {}
+			, ashes::nullopt
+			, {} } );
+		ashes::VkSubpassDependencyArray dependencies{ { VK_SUBPASS_EXTERNAL
+				, 0u
+				, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+				, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
+				, VK_ACCESS_SHADER_READ_BIT
+				, VK_DEPENDENCY_BY_REGION_BIT }
+			, { 0u
+				, VK_SUBPASS_EXTERNAL
+				, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+				, VK_ACCESS_SHADER_READ_BIT
+				, VK_DEPENDENCY_BY_REGION_BIT } };
+		ashes::RenderPassCreateInfo createInfo{ 0u
+			, std::move( attachments )
+			, std::move( subpasses )
+			, std::move( dependencies ) };
+		m_renderPass = device->createRenderPass( "LightStreaks"
+			, std::move( createInfo ) );
+
 		size.width >>= 2;
 		size.height >>= 2;
 		uint32_t index = 0u;
@@ -409,13 +405,13 @@ namespace light_streaks
 				, device
 				, m_target->getPixelFormat()
 				, size
-				, *m_shaderInputRenderPass
+				, *m_renderPass
 				, cuT( "LightStreaksHiPassSurface" ) );
 			m_pipelines.kawase.surfaces.emplace_back( *getRenderSystem()
 				, device
 				, m_target->getPixelFormat()
 				, size
-				, *m_shaderInputRenderPass
+				, *m_renderPass
 				, cuT( "LightStreaksKawaseSurface" ) );
 
 			for ( uint32_t j = 0u; j < 3u; ++j )
@@ -476,8 +472,7 @@ namespace light_streaks
 		m_linearSampler->cleanup();
 		m_nearestSampler->cleanup();
 
-		m_shaderInputRenderPass.reset();
-		m_colorAttachRenderPass.reset();
+		m_renderPass.reset();
 	}
 
 	bool PostEffect::doWriteInto( castor::TextFile & file, castor::String const & tabs )
@@ -552,7 +547,7 @@ namespace light_streaks
 			, ashes::PipelineColorBlendStateCreateInfo{}
 			, ashes::PipelineDynamicStateCreateInfo{ 0u, { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR } }
 			, *m_pipelines.hiPass.layout.pipelineLayout
-			, *m_shaderInputRenderPass } );
+			, * m_renderPass } );
 
 		// Create descriptor sets
 		for ( auto & surface : m_pipelines.hiPass.surfaces )
@@ -601,7 +596,7 @@ namespace light_streaks
 			, ashes::PipelineColorBlendStateCreateInfo{}
 			, ashes::PipelineDynamicStateCreateInfo{ 0u, { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR } }
 			, *m_pipelines.kawase.layout.pipelineLayout
-			, *m_shaderInputRenderPass } );
+			, * m_renderPass } );
 		uint32_t index = 0u;
 
 		for ( uint32_t j = 0u; j < Count; ++j )
@@ -665,7 +660,7 @@ namespace light_streaks
 				ashes::PipelineColorBlendStateCreateInfo{},
 				ashes::PipelineDynamicStateCreateInfo{ 0u, { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR } },
 				*m_pipelines.combine.layout.pipelineLayout,
-				*m_colorAttachRenderPass,
+				* m_renderPass,
 			} );
 
 		// Create view and associated frame buffer.
@@ -673,7 +668,7 @@ namespace light_streaks
 			, device
 			, m_target->getPixelFormat()
 			, size
-			, *m_colorAttachRenderPass
+			, *m_renderPass
 			, cuT( "LightStreaksCombineSurface" ) );
 
 		// Create descriptor
@@ -724,7 +719,7 @@ namespace light_streaks
 		timer.beginPass( hiPassCmd, 0u );
 		hiPassCmd.beginDebugBlock( { "LightStreaks - HiPass"
 			, castor3d::makeFloatArray( device.renderSystem.getEngine()->getNextRainbowColour() ) } );
-		hiPassCmd.beginRenderPass( *m_shaderInputRenderPass
+		hiPassCmd.beginRenderPass( *m_renderPass
 			, *hiPassSurface.frameBuffer
 			, clearValues[0]
 			, VK_SUBPASS_CONTENTS_INLINE );
@@ -802,7 +797,7 @@ namespace light_streaks
 			{
 				kawaseCmd.beginDebugBlock( { "LightStreaks - Blur " + castor::string::toString( i ) + " " + castor::string::toString( j )
 					, castor3d::makeFloatArray( device.renderSystem.getEngine()->getNextRainbowColour() ) } );
-				kawaseCmd.beginRenderPass( *m_shaderInputRenderPass
+				kawaseCmd.beginRenderPass( *m_renderPass
 					, *destination->frameBuffer
 					, clearValues[i]
 					, VK_SUBPASS_CONTENTS_INLINE );
@@ -836,7 +831,7 @@ namespace light_streaks
 		combineCmd.beginDebugBlock( { "LightStreaks - Combine"
 			, castor3d::makeFloatArray( device.renderSystem.getEngine()->getNextRainbowColour() ) } );
 		auto & combineSurface = m_pipelines.combine.surfaces.back();
-		combineCmd.beginRenderPass( *m_colorAttachRenderPass
+		combineCmd.beginRenderPass( *m_renderPass
 			, *combineSurface.frameBuffer
 			, clearValues[Count]
 			, VK_SUBPASS_CONTENTS_INLINE );

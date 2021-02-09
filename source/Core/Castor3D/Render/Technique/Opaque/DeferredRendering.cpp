@@ -92,12 +92,15 @@ namespace castor3d
 		, ShadowMapResult const & smSpotResult
 		, LightVolumePassResult const & lpvResult
 		, LightVolumePassResultArray const & llpvResult
+		, TextureUnit const & vctFirstBounce
+		, TextureUnit const & vctSecondaryBounce
 		, castor::Size const & size
 		, Scene & scene
 		, HdrConfigUbo const & hdrConfigUbo
 		, GpInfoUbo const & gpInfoUbo
 		, LpvGridConfigUbo const & lpvConfigUbo
 		, LayeredLpvGridConfigUbo const & llpvConfigUbo
+		, VoxelizerUbo const & vctConfigUbo
 		, SsaoConfig & ssaoConfig )
 		: m_engine{ engine }
 		, m_scene{ scene }
@@ -130,11 +133,14 @@ namespace castor3d
 			, smSpotResult
 			, lpvResult
 			, llpvResult
+			, vctFirstBounce
+			, vctSecondaryBounce
 			, depthTexture.getTexture()->getDefaultView().getTargetView()
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo
 			, lpvConfigUbo
-			, llpvConfigUbo ) }
+			, llpvConfigUbo
+			, vctConfigUbo ) }
 		, m_subsurfaceScattering{ castor::makeUnique< SubsurfaceScatteringPass >( m_engine
 			, m_device
 			, m_gpInfoUbo
@@ -151,6 +157,7 @@ namespace castor3d
 			, m_lightingPass->getResult()[LpTexture::eDiffuse]
 			, m_lightingPass->getResult()[LpTexture::eSpecular]
 			, m_lightingPass->getResult()[LpTexture::eIndirectDiffuse]
+			, m_lightingPass->getResult()[LpTexture::eIndirectSpecular]
 			, resultTexture
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo

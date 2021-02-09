@@ -34,7 +34,7 @@
 
 #include <random>
 
-CU_ImplementCUSmartPtr( castor3d, SubsurfaceScatteringPass );
+CU_ImplementCUSmartPtr( castor3d, SubsurfaceScatteringPass )
 
 namespace castor3d
 {
@@ -484,7 +484,7 @@ namespace castor3d
 				, makeDescriptorWrite( m_blurUbo, BlurSssUboId )
 				, makeDescriptorWrite( m_geometryBufferResult[DsTexture::eDepth].getTexture()->getDefaultView().getSampledView()
 					, m_sampler->getSampler()
-						, BlurDepthImgId )
+					, BlurDepthImgId )
 				, makeDescriptorWrite( m_geometryBufferResult[DsTexture::eData4].getTexture()->getDefaultView().getSampledView()
 					, m_sampler->getSampler()
 					, BlurData4ImgId )
@@ -743,13 +743,16 @@ namespace castor3d
 			, combineProgram );
 
 		// Commands.
-		m_timer = std::make_shared< RenderPassTimer >( engine, device, cuT( "Opaque" ), cuT( "SSSSS pass" ) );
+		m_timer = std::make_shared< RenderPassTimer >( device, cuT( "Opaque" ), cuT( "SSSSS pass" ) );
 		m_finished = device->createSemaphore( "SSSSS pass" );
 		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( "SSSSS pass" );
 		m_commandBuffer->begin();
 		m_commandBuffer->beginDebugBlock( { "Deferred - Subsurface Subscattering"
 			, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
 		m_timer->beginPass( *m_commandBuffer );
+		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT
+			, VK_PIPELINE_STAGE_TRANSFER_BIT
+			, m_gpResult[DsTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeShaderInputResource( VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL ) );
 
 		for ( size_t i{ 0u }; i < m_blurResults.size(); ++i )
 		{
@@ -759,6 +762,9 @@ namespace castor3d
 
 		m_combine->prepareFrame( *m_commandBuffer );
 		m_timer->endPass( *m_commandBuffer );
+		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
+			, m_gpResult[DsTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeDepthStencilReadOnly( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 		m_commandBuffer->endDebugBlock();
 		m_commandBuffer->end();
 

@@ -1,4 +1,4 @@
-#include "GuiCommon/Properties/Math/PropertiesHolder.hpp"
+#include "GuiCommon/Properties/PropertiesHolder.hpp"
 
 #include "GuiCommon/Aui/AuiDockArt.hpp"
 

@@ -32,7 +32,7 @@ namespace Bloom
 {
 	namespace
 	{
-		std::unique_ptr< ast::Shader > getVertexProgram( castor3d::RenderSystem const & renderSystem )
+		std::unique_ptr< ast::Shader > getVertexProgram()
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -54,7 +54,7 @@ namespace Bloom
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< ast::Shader > getPixelProgram( castor3d::RenderSystem const & renderSystem )
+		std::unique_ptr< ast::Shader > getPixelProgram()
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -151,8 +151,7 @@ namespace Bloom
 
 	//*********************************************************************************************
 
-	HiPass::HiPass( castor3d::RenderSystem & renderSystem
-		, castor3d::RenderDevice const & device
+	HiPass::HiPass( castor3d::RenderDevice const & device
 		, VkFormat format
 		, ashes::ImageView const & sceneView
 		, VkExtent2D size
@@ -164,10 +163,10 @@ namespace Bloom
 				, ashes::nullopt
 				, castor3d::rq::Texcoord{} } }
 		, m_sceneView{ sceneView }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram( renderSystem ) }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram( renderSystem ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram() }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram() }
 		, m_renderPass{ doCreateRenderPass( m_device, format ) }
-		, m_surface{ *renderSystem.getEngine(), getName() }
+		, m_surface{ *device.renderSystem.getEngine(), getName() }
 	{
 		ashes::PipelineShaderStageCreateInfoArray shaderStages;
 		shaderStages.push_back( makeShaderState( m_device, m_vertexShader ) );
@@ -185,9 +184,7 @@ namespace Bloom
 			, {}
 			, shaderStages
 			, *m_renderPass
-			, {
-				makeDescriptorWrite( sceneView, m_sampler->getSampler(), 0u )
-			}
+			, { makeDescriptorWrite( sceneView, m_sampler->getSampler(), 0u ) }
 			, {} );
 		m_surface.initialise( device
 			, *m_renderPass
@@ -197,7 +194,7 @@ namespace Bloom
 	}
 
 	castor3d::CommandsSemaphore HiPass::getCommands( castor3d::RenderPassTimer const & timer
-		, uint32_t index )const
+		, uint32_t & index )const
 	{
 		castor3d::CommandsSemaphore commands
 		{
@@ -220,13 +217,14 @@ namespace Bloom
 #if !Bloom_DebugHiPass
 		m_surface.colourTexture->getTexture().generateMipmaps( cmd
 			, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, VK_IMAGE_LAYOUT_UNDEFINED
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 #endif
 
 		timer.endPass( cmd, index );
 		cmd.end();
 
+		++index;
 		return commands;
 	}
 

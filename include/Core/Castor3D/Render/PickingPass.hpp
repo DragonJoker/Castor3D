@@ -15,7 +15,7 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	class PickingPass
-		: public RenderPass
+		: public SceneRenderPass
 	{
 	public:
 		/**
@@ -211,10 +211,6 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
 		 */
 		void doUpdatePipeline( RenderPipeline & pipeline )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doCreateUboBindings
-		 */
-		ashes::VkDescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
 		 */

@@ -33,7 +33,8 @@ namespace castor3d
 			, SceneCuller & culler
 			, SsaoConfig const & config
 			, LpvGridConfigUbo const & lpvConfigUbo
-			, LayeredLpvGridConfigUbo const & llpvConfigUbo );
+			, LayeredLpvGridConfigUbo const & llpvConfigUbo
+			, VoxelizerUbo const & vctConfigUbo );
 		/**
 		 *\~english
 		 *\brief		Destructor

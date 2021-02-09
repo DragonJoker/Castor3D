@@ -4,8 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_Voxelizer_H___
 #define ___C3D_Voxelizer_H___
 
+#include "VoxelizeModule.hpp"
+
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
-#include "Castor3D/Render/Technique/Voxelize/VoxelizePass.hpp"
+#include "Castor3D/Render/Culling/DummyCuller.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
 namespace castor3d
@@ -25,10 +27,12 @@ namespace castor3d
 		 */
 		C3D_API Voxelizer( Engine & engine
 			, RenderDevice const & device
-			, VkExtent3D const & size
 			, Scene & scene
-			, SceneCuller & culler
-			, ashes::ImageView colourView );
+			, Camera & camera
+			, ashes::ImageView colourView
+			, MatrixUbo & matrixUbo
+			, VoxelizerUbo & voxelizerUbo
+			, VoxelSceneData const & voxelConfig );
 		C3D_API ~Voxelizer();
 		/**
 		 *\~english
@@ -63,12 +67,31 @@ namespace castor3d
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor );
 
+		C3D_API void listIntermediates( RenderTechniqueVisitor & visitor );
+
+		TextureUnit const & getFirstBounce()const
+		{
+			return m_firstBounce;
+		}
+		
+		TextureUnit const & getSecondaryBounce()const
+		{
+			return m_secondaryBounce;
+		}
+
 	private:
 		Engine & m_engine;
+		VoxelSceneData const & m_voxelConfig;
+		DummyCuller m_culler;
 		MatrixUbo m_matrixUbo;
-		VkExtent3D m_size;
-		TextureUnit m_result;
-		VoxelizePass m_voxelizePass;
+		TextureUnit m_firstBounce;
+		TextureUnit m_secondaryBounce;
+		ashes::BufferPtr< Voxel > m_voxels;
+		VoxelizerUbo & m_voxelizerUbo;
+		VoxelizePassUPtr m_voxelizePass;
+		VoxelBufferToTextureUPtr m_voxelToTexture;
+		VoxelSecondaryBounceUPtr m_voxelSecondaryBounce;
+		castor::Point4f m_grid;
 	};
 }
 

@@ -43,7 +43,8 @@ namespace castor3d
 		 */
 		C3D_API EnvironmentMapPass( EnvironmentMap & reflectionMap
 			, SceneNodeSPtr node
-			, SceneNode const & objectNode );
+			, SceneNode const & objectNode
+			, CubeMapFace face );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -75,7 +76,8 @@ namespace castor3d
 			, ashes::RenderPass const & renderPass
 			, SceneBackground const & background
 			, ashes::DescriptorSetPool const & uboPool
-			, ashes::DescriptorSetPool const & texPool );
+			, ashes::DescriptorSetPool const & texPool
+			, RenderPassTimer & timer );
 		/**
 		 *\~english
 		 *\brief		Cleans up the pass.
@@ -116,6 +118,7 @@ namespace castor3d
 
 	private:
 		SceneNodeSPtr m_node;
+		CubeMapFace m_face;
 		CameraSPtr m_camera;
 		SceneCullerUPtr m_culler;
 		ashes::ImageView m_envView;

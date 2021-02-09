@@ -419,6 +419,7 @@ namespace Bloom
 	}
 
 	castor3d::CommandsSemaphoreArray BlurPass::getCommands( castor3d::RenderPassTimer const & timer
+		, uint32_t & index
 		, ashes::VertexBuffer< castor3d::NonTexturedQuad > const & vertexBuffer )const
 	{
 		castor3d::CommandsSemaphoreArray result;
@@ -431,7 +432,7 @@ namespace Bloom
 			auto & cmd = *commandBuffer;
 
 			cmd.begin();
-			timer.beginPass( cmd, 1u + ( m_isVertical ? 1u : 0u ) * m_blurPassesCount + i );
+			timer.beginPass( cmd, index );
 			cmd.beginDebugBlock( { "BloomBlurPass" + castor::string::toString( i )
 				, castor3d::makeFloatArray( m_device.renderSystem.getEngine()->getNextRainbowColour() ) } );
 			cmd.beginRenderPass( *m_renderPass
@@ -444,9 +445,10 @@ namespace Bloom
 			cmd.draw( 6u );
 			cmd.endRenderPass();
 			cmd.endDebugBlock();
-			timer.endPass( cmd, 1u + ( m_isVertical ? 1u : 0u ) * m_blurPassesCount + i );
+			timer.endPass( cmd, index );
 			cmd.end();
 
+			++index;
 			result.emplace_back( std::move( commandBuffer ), m_device->createSemaphore( "BloomBlurPass" ) );
 		}
 

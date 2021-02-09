@@ -23,6 +23,7 @@ See LICENSE file in root folder
 #include <ashespp/Sync/Semaphore.hpp>
 
 #include <array>
+#include <atomic>
 
 namespace castor3d
 {
@@ -489,7 +490,7 @@ namespace castor3d
 		bool m_fullscreen{ false };
 		castor::Size m_size;
 		bool m_toSave{ false };
-		bool m_dirty{ true };
+		std::atomic_bool m_dirty{ true };
 		castor::PxBufferBaseSPtr m_saveBuffer;
 		PickingPassSPtr m_pickingPass;
 		castor::Position m_mousePosition;

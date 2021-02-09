@@ -31,6 +31,7 @@
 #include "Castor3D/Shader/Ubos/PickingUbo.hpp"
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
 #include "Castor3D/Shader/Ubos/TexturesUbo.hpp"
+#include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
 
 #include <CastorUtils/Design/ArrayView.hpp>
 
@@ -53,7 +54,7 @@ namespace castor3d
 		template< typename MapType >
 		void doSortAlpha( MapType & input
 			, Camera const & camera
-			, RenderPass::DistanceSortedNodeMap & output )
+			, SceneRenderPass::DistanceSortedNodeMap & output )
 		{
 			for ( auto & itPipelines : input )
 			{
@@ -128,8 +129,9 @@ namespace castor3d
 		, SceneNode const * ignored
 		, SsaoConfig const & config
 		, LpvGridConfigUbo const * lpvConfigUbo
-		, LayeredLpvGridConfigUbo const * llpvConfigUbo )
-		: RenderPass{ category, name, *culler.getScene().getEngine(), matrixUbo, culler, ignored }
+		, LayeredLpvGridConfigUbo const * llpvConfigUbo
+		, VoxelizerUbo const * vctConfigUbo )
+		: SceneRenderPass{ category, name, *culler.getScene().getEngine(), matrixUbo, culler, ignored }
 		, m_scene{ culler.getScene() }
 		, m_camera{ culler.hasCamera() ? &culler.getCamera() : nullptr }
 		, m_sceneNode{}
@@ -137,6 +139,7 @@ namespace castor3d
 		, m_ssaoConfig{ config }
 		, m_lpvConfigUbo{ lpvConfigUbo }
 		, m_llpvConfigUbo{ llpvConfigUbo }
+		, m_vctConfigUbo{ vctConfigUbo }
 	{
 	}
 
@@ -149,8 +152,9 @@ namespace castor3d
 		, SceneNode const * ignored
 		, SsaoConfig const & config
 		, LpvGridConfigUbo const * lpvConfigUbo
-		, LayeredLpvGridConfigUbo const * llpvConfigUbo )
-		: RenderPass{ category, name, *culler.getScene().getEngine(), matrixUbo, culler, oit, ignored }
+		, LayeredLpvGridConfigUbo const * llpvConfigUbo
+		, VoxelizerUbo const * vctConfigUbo )
+		: SceneRenderPass{ category, name, *culler.getScene().getEngine(), matrixUbo, culler, oit, ignored }
 		, m_scene{ culler.getScene() }
 		, m_camera{ culler.hasCamera() ? &culler.getCamera() : nullptr }
 		, m_sceneNode{}
@@ -158,19 +162,34 @@ namespace castor3d
 		, m_ssaoConfig{ config }
 		, m_lpvConfigUbo{ lpvConfigUbo }
 		, m_llpvConfigUbo{ llpvConfigUbo }
-	{
-	}
-
-	RenderTechniquePass::~RenderTechniquePass()
+		, m_vctConfigUbo{ vctConfigUbo }
 	{
 	}
 
 	bool RenderTechniquePass::initialise( RenderDevice const & device
 		, castor::Size const & size
-		, LightVolumePassResult const * lpvResult )
+		, LightVolumePassResult const * lpvResult
+		, TextureUnit const * vctFirstBounce
+		, TextureUnit const * vctSecondaryBounce )
 	{
 		m_lpvResult = lpvResult;
-		return RenderPass::initialise( device, size );
+		m_vctFirstBounce = vctFirstBounce;
+		m_vctSecondaryBounce = vctSecondaryBounce;
+		return SceneRenderPass::initialise( device, size );
+	}
+
+	bool RenderTechniquePass::initialise( RenderDevice const & device
+		, castor::Size const & size
+		, RenderPassTimer & timer
+		, uint32_t index
+		, LightVolumePassResult const * lpvResult
+		, TextureUnit const * vctFirstBounce
+		, TextureUnit const * vctSecondaryBounce )
+	{
+		m_lpvResult = lpvResult;
+		m_vctFirstBounce = vctFirstBounce;
+		m_vctSecondaryBounce = vctSecondaryBounce;
+		return SceneRenderPass::initialise( device, size, timer, index );
 	}
 
 	void RenderTechniquePass::accept( RenderTechniqueVisitor & visitor )
@@ -190,19 +209,19 @@ namespace castor3d
 	{
 		if ( nodes.hasNodes() )
 		{
-			RenderPass::doUpdate( nodes.instancedStaticNodes.frontCulled );
-			RenderPass::doUpdate( nodes.staticNodes.frontCulled );
-			RenderPass::doUpdate( nodes.skinnedNodes.frontCulled );
-			RenderPass::doUpdate( nodes.instancedSkinnedNodes.frontCulled );
-			RenderPass::doUpdate( nodes.morphingNodes.frontCulled );
-			RenderPass::doUpdate( nodes.billboardNodes.frontCulled );
+			SceneRenderPass::doUpdate( nodes.instancedStaticNodes.frontCulled );
+			SceneRenderPass::doUpdate( nodes.staticNodes.frontCulled );
+			SceneRenderPass::doUpdate( nodes.skinnedNodes.frontCulled );
+			SceneRenderPass::doUpdate( nodes.instancedSkinnedNodes.frontCulled );
+			SceneRenderPass::doUpdate( nodes.morphingNodes.frontCulled );
+			SceneRenderPass::doUpdate( nodes.billboardNodes.frontCulled );
 
-			RenderPass::doUpdate( nodes.instancedStaticNodes.backCulled, info );
-			RenderPass::doUpdate( nodes.staticNodes.backCulled, info );
-			RenderPass::doUpdate( nodes.skinnedNodes.backCulled, info );
-			RenderPass::doUpdate( nodes.instancedSkinnedNodes.backCulled, info );
-			RenderPass::doUpdate( nodes.morphingNodes.backCulled, info );
-			RenderPass::doUpdate( nodes.billboardNodes.backCulled, info );
+			SceneRenderPass::doUpdate( nodes.instancedStaticNodes.backCulled, info );
+			SceneRenderPass::doUpdate( nodes.staticNodes.backCulled, info );
+			SceneRenderPass::doUpdate( nodes.skinnedNodes.backCulled, info );
+			SceneRenderPass::doUpdate( nodes.instancedSkinnedNodes.backCulled, info );
+			SceneRenderPass::doUpdate( nodes.morphingNodes.backCulled, info );
+			SceneRenderPass::doUpdate( nodes.billboardNodes.backCulled, info );
 		}
 	}
 
@@ -233,6 +252,21 @@ namespace castor3d
 		{
 			addFlag( flags.programFlags, ProgramFlag::eEnvironmentMapping );
 		}
+
+		if ( !m_vctConfigUbo || !m_vctFirstBounce || !m_vctSecondaryBounce )
+		{
+			remFlag( flags.sceneFlags, SceneFlag::eVoxelConeTracing );
+		}
+
+		if ( !m_lpvConfigUbo || !m_lpvResult )
+		{
+			remFlag( flags.sceneFlags, SceneFlag::eLpvGI );
+		}
+
+		if ( !m_llpvConfigUbo || !m_lpvResult )
+		{
+			remFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI );
+		}
 	}
 
 	ShaderPtr RenderTechniquePass::doGetGeometryShaderSource( PipelineFlags const & flags )const
@@ -255,22 +289,16 @@ namespace castor3d
 		}
 		else
 		{
-#if C3D_UseDepthPrepass
 			return ashes::PipelineDepthStencilStateCreateInfo{ 0u
 				, VK_TRUE
 				, VK_FALSE
 				, VK_COMPARE_OP_EQUAL };
-#else
-			return ashes::PipelineDepthStencilStateCreateInfo{ 0u
-				, VK_TRUE
-				, m_mode != RenderMode::eTransparentOnly };
-#endif
 		}
 	}
 
 	ashes::PipelineColorBlendStateCreateInfo RenderTechniquePass::doCreateBlendState( PipelineFlags const & flags )const
 	{
-		return RenderPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 1u );
+		return SceneRenderPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 1u );
 	}
 
 	void RenderTechniquePass::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
@@ -278,18 +306,27 @@ namespace castor3d
 	{
 		auto sceneFlags = node.pipeline.getFlags().sceneFlags;
 
-		if ( checkFlag( sceneFlags, SceneFlag::eLpvGI )
-			&& m_lpvConfigUbo )
+		if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 		{
-			m_lpvConfigUbo->createSizedBinding( *node.uboDescriptorSet
-				, layout.getBinding( LpvGridConfigUbo::BindingPoint ) );
+			CU_Require( m_vctConfigUbo );
+			m_vctConfigUbo->createSizedBinding( *node.uboDescriptorSet
+				, layout.getBinding( VoxelizerUbo::BindingPoint ) );
 		}
-
-		if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI )
-			&& m_llpvConfigUbo )
+		else
 		{
-			m_llpvConfigUbo->createSizedBinding( *node.uboDescriptorSet
-				, layout.getBinding( LayeredLpvGridConfigUbo::BindingPoint ) );
+			if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
+			{
+				CU_Require( m_lpvConfigUbo );
+				m_lpvConfigUbo->createSizedBinding( *node.uboDescriptorSet
+					, layout.getBinding( LpvGridConfigUbo::BindingPoint ) );
+			}
+
+			if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
+			{
+				CU_Require( m_llpvConfigUbo );
+				m_llpvConfigUbo->createSizedBinding( *node.uboDescriptorSet
+					, layout.getBinding( LayeredLpvGridConfigUbo::BindingPoint ) );
+			}
 		}
 	}
 
@@ -298,39 +335,58 @@ namespace castor3d
 	{
 		auto sceneFlags = node.pipeline.getFlags().sceneFlags;
 
-		if ( checkFlag( sceneFlags, SceneFlag::eLpvGI )
-			&& m_lpvConfigUbo )
+		if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 		{
-			m_lpvConfigUbo->createSizedBinding( *node.uboDescriptorSet
-				, layout.getBinding( LpvGridConfigUbo::BindingPoint ) );
+			CU_Require( m_vctConfigUbo );
+			m_vctConfigUbo->createSizedBinding( *node.uboDescriptorSet
+				, layout.getBinding( VoxelizerUbo::BindingPoint ) );
 		}
-
-		if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI )
-			&& m_llpvConfigUbo )
+		else
 		{
-			m_llpvConfigUbo->createSizedBinding( *node.uboDescriptorSet
-				, layout.getBinding( LayeredLpvGridConfigUbo::BindingPoint ) );
+			if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
+			{
+				CU_Require( m_lpvConfigUbo );
+				m_lpvConfigUbo->createSizedBinding( *node.uboDescriptorSet
+					, layout.getBinding( LpvGridConfigUbo::BindingPoint ) );
+			}
+
+			if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
+			{
+				CU_Require( m_llpvConfigUbo );
+				m_llpvConfigUbo->createSizedBinding( *node.uboDescriptorSet
+					, layout.getBinding( LayeredLpvGridConfigUbo::BindingPoint ) );
+			}
 		}
 	}
 
 	ashes::VkDescriptorSetLayoutBindingArray RenderTechniquePass::doCreateUboBindings( PipelineFlags const & flags )const
 	{
-		auto uboBindings = RenderPass::doCreateUboBindings( flags );
+		auto uboBindings = SceneRenderPass::doCreateUboBindings( flags );
 
-		if ( checkFlag( flags.sceneFlags, SceneFlag::eLpvGI )
-			&& m_lpvConfigUbo )
+		if ( checkFlag( flags.sceneFlags, SceneFlag::eVoxelConeTracing ) )
 		{
-			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( LpvGridConfigUbo::BindingPoint//12
+			CU_Require( m_vctConfigUbo );
+			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( VoxelizerUbo::BindingPoint//13
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		}
-
-		if ( checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI )
-			&& m_llpvConfigUbo )
+		else
 		{
-			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( LayeredLpvGridConfigUbo::BindingPoint//13
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+			if ( checkFlag( flags.sceneFlags, SceneFlag::eLpvGI ) )
+			{
+				CU_Require( m_lpvConfigUbo );
+				uboBindings.emplace_back( makeDescriptorSetLayoutBinding( LpvGridConfigUbo::BindingPoint//12
+					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+			}
+
+			if ( checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI ) )
+			{
+				CU_Require( m_llpvConfigUbo );
+				uboBindings.emplace_back( makeDescriptorSetLayoutBinding( LayeredLpvGridConfigUbo::BindingPoint//13
+					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+			}
 		}
 
 		return uboBindings;
@@ -344,7 +400,9 @@ namespace castor3d
 			, ObjectRenderNode< DataTypeT, InstanceTypeT > & node
 			, ShadowMapLightTypeArray const & shadowMaps
 			, Scene const & scene
-			, LightVolumePassResult const * lpvResult )
+			, LightVolumePassResult const * lpvResult
+			, TextureUnit const * vctFirstBounce
+			, TextureUnit const * vctSecondaryBounce )
 		{
 			auto & flags = node.pipeline.getFlags();
 			ashes::WriteDescriptorSetArray writes;
@@ -390,23 +448,39 @@ namespace castor3d
 				}
 			}
 
-			if ( lpvResult
-				&& ( checkFlag( flags.sceneFlags, SceneFlag::eLpvGI )
-					|| checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI ) ) )
+			if ( checkFlag( flags.sceneFlags, SceneFlag::eVoxelConeTracing ) )
 			{
-				auto & lpv = *lpvResult;
-				bindTexture( lpv[LpvTexture::eR].getTexture()->getDefaultView().getSampledView()
-					, lpv[LpvTexture::eR].getSampler()->getSampler()
+				CU_Require( vctFirstBounce );
+				CU_Require( vctSecondaryBounce );
+				bindTexture( vctFirstBounce->getTexture()->getDefaultView().getSampledView()
+					, vctFirstBounce->getSampler()->getSampler()
 					, writes
 					, index );
-				bindTexture( lpv[LpvTexture::eG].getTexture()->getDefaultView().getSampledView()
-					, lpv[LpvTexture::eG].getSampler()->getSampler()
+				bindTexture( vctSecondaryBounce->getTexture()->getDefaultView().getSampledView()
+					, vctSecondaryBounce->getSampler()->getSampler()
 					, writes
 					, index );
-				bindTexture( lpv[LpvTexture::eG].getTexture()->getDefaultView().getSampledView()
-					, lpv[LpvTexture::eG].getSampler()->getSampler()
-					, writes
-					, index );
+			}
+			else
+			{
+				if ( checkFlag( flags.sceneFlags, SceneFlag::eLpvGI )
+					|| checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI ) )
+				{
+					CU_Require( lpvResult );
+					auto & lpv = *lpvResult;
+						bindTexture( lpv[LpvTexture::eR].getTexture()->getDefaultView().getSampledView()
+							, lpv[LpvTexture::eR].getSampler()->getSampler()
+							, writes
+							, index );
+					bindTexture( lpv[LpvTexture::eG].getTexture()->getDefaultView().getSampledView()
+						, lpv[LpvTexture::eG].getSampler()->getSampler()
+						, writes
+						, index );
+					bindTexture( lpv[LpvTexture::eG].getTexture()->getDefaultView().getSampledView()
+						, lpv[LpvTexture::eG].getSampler()->getSampler()
+						, writes
+						, index );
+				}
 			}
 
 			bindShadowMaps( node.pipeline.getFlags()
@@ -427,7 +501,9 @@ namespace castor3d
 			, node
 			, shadowMaps
 			, m_scene
-			, m_lpvResult );
+			, m_lpvResult
+			, m_vctFirstBounce
+			, m_vctSecondaryBounce );
 	}
 
 	void RenderTechniquePass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
@@ -440,7 +516,9 @@ namespace castor3d
 			, node
 			, shadowMaps
 			, m_scene
-			, m_lpvResult );
+			, m_lpvResult
+			, m_vctFirstBounce
+			, m_vctSecondaryBounce );
 	}
 
 	ashes::VkDescriptorSetLayoutBindingArray RenderTechniquePass::doCreateTextureBindings( PipelineFlags const & flags )const
@@ -479,19 +557,33 @@ namespace castor3d
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapBrdf
 		}
 
-		if ( m_lpvResult
-			&& ( checkFlag( flags.sceneFlags, SceneFlag::eLpvGI )
-				|| checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI ) ) )
+		if ( checkFlag( flags.sceneFlags, SceneFlag::eVoxelConeTracing ) )
 		{
+			CU_Require( m_vctFirstBounce );
+			CU_Require( m_vctSecondaryBounce );
 			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_lpvAccumulationR
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapVoxelsFirstBounce
 			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_lpvAccumulationG
-			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_lpvAccumulationB
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapVoxelsSecondaryBounce
+		}
+		else
+		{
+			if ( checkFlag( flags.sceneFlags, SceneFlag::eLpvGI )
+				|| checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI ) )
+			{
+				CU_Require( m_lpvResult );
+				textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+					, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_lpvAccumulationR
+				textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+					, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_lpvAccumulationG
+				textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+					, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_lpvAccumulationB
+			}
 		}
 
 		for ( uint32_t j = 0u; j < uint32_t( LightType::eCount ); ++j )
@@ -520,43 +612,43 @@ namespace castor3d
 		bool hasTextures = !flags.textures.empty();
 		// Vertex inputs
 		auto inPosition = writer.declInput< Vec4 >( "inPosition"
-			, RenderPass::VertexInputs::PositionLocation );
+			, SceneRenderPass::VertexInputs::PositionLocation );
 		auto inNormal = writer.declInput< Vec3 >( "inNormal"
-			, RenderPass::VertexInputs::NormalLocation );
+			, SceneRenderPass::VertexInputs::NormalLocation );
 		auto inTangent = writer.declInput< Vec3 >( "inTangent"
-			, RenderPass::VertexInputs::TangentLocation );
+			, SceneRenderPass::VertexInputs::TangentLocation );
 		auto inTexture = writer.declInput< Vec3 >( "inTexture"
-			, RenderPass::VertexInputs::TextureLocation
+			, SceneRenderPass::VertexInputs::TextureLocation
 			, hasTextures );
 		auto inBoneIds0 = writer.declInput< IVec4 >( "inBoneIds0"
-			, RenderPass::VertexInputs::BoneIds0Location
+			, SceneRenderPass::VertexInputs::BoneIds0Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
 		auto inBoneIds1 = writer.declInput< IVec4 >( "inBoneIds1"
-			, RenderPass::VertexInputs::BoneIds1Location
+			, SceneRenderPass::VertexInputs::BoneIds1Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
 		auto inWeights0 = writer.declInput< Vec4 >( "inWeights0"
-			, RenderPass::VertexInputs::Weights0Location
+			, SceneRenderPass::VertexInputs::Weights0Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
 		auto inWeights1 = writer.declInput< Vec4 >( "inWeights1"
-			, RenderPass::VertexInputs::Weights1Location
+			, SceneRenderPass::VertexInputs::Weights1Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
 		auto inTransform = writer.declInput< Mat4 >( "inTransform"
-			, RenderPass::VertexInputs::TransformLocation
+			, SceneRenderPass::VertexInputs::TransformLocation
 			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
 		auto inMaterial = writer.declInput< Int >( "inMaterial"
-			, RenderPass::VertexInputs::MaterialLocation
+			, SceneRenderPass::VertexInputs::MaterialLocation
 			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
 		auto inPosition2 = writer.declInput< Vec4 >( "inPosition2"
-			, RenderPass::VertexInputs::Position2Location
+			, SceneRenderPass::VertexInputs::Position2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
 		auto inNormal2 = writer.declInput< Vec3 >( "inNormal2"
-			, RenderPass::VertexInputs::Normal2Location
+			, SceneRenderPass::VertexInputs::Normal2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
 		auto inTangent2 = writer.declInput< Vec3 >( "inTangent2"
-			, RenderPass::VertexInputs::Tangent2Location
+			, SceneRenderPass::VertexInputs::Tangent2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
 		auto inTexture2 = writer.declInput< Vec3 >( "inTexture2"
-			, RenderPass::VertexInputs::Texture2Location
+			, SceneRenderPass::VertexInputs::Texture2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) && hasTextures );
 		auto in = writer.getIn();
 
@@ -569,31 +661,31 @@ namespace castor3d
 
 		// Outputs
 		auto outWorldPosition = writer.declOutput< Vec3 >( "outWorldPosition"
-			, RenderPass::VertexOutputs::WorldPositionLocation );
+			, SceneRenderPass::VertexOutputs::WorldPositionLocation );
 		auto outViewPosition = writer.declOutput< Vec3 >( "outViewPosition"
-			, RenderPass::VertexOutputs::ViewPositionLocation
+			, SceneRenderPass::VertexOutputs::ViewPositionLocation
 			, checkFlag( flags.programFlags, ProgramFlag::eLighting ) );
 		auto outCurPosition = writer.declOutput< Vec3 >( "outCurPosition"
-			, RenderPass::VertexOutputs::CurPositionLocation );
+			, SceneRenderPass::VertexOutputs::CurPositionLocation );
 		auto outPrvPosition = writer.declOutput< Vec3 >( "outPrvPosition"
-			, RenderPass::VertexOutputs::PrvPositionLocation );
+			, SceneRenderPass::VertexOutputs::PrvPositionLocation );
 		auto outTangentSpaceFragPosition = writer.declOutput< Vec3 >( "outTangentSpaceFragPosition"
-			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
+			, SceneRenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
 		auto outTangentSpaceViewPosition = writer.declOutput< Vec3 >( "outTangentSpaceViewPosition"
-			, RenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
+			, SceneRenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
 		auto outNormal = writer.declOutput< Vec3 >( "outNormal"
-			, RenderPass::VertexOutputs::NormalLocation );
+			, SceneRenderPass::VertexOutputs::NormalLocation );
 		auto outTangent = writer.declOutput< Vec3 >( "outTangent"
-			, RenderPass::VertexOutputs::TangentLocation );
+			, SceneRenderPass::VertexOutputs::TangentLocation );
 		auto outBitangent = writer.declOutput< Vec3 >( "outBitangent"
-			, RenderPass::VertexOutputs::BitangentLocation );
+			, SceneRenderPass::VertexOutputs::BitangentLocation );
 		auto outTexture = writer.declOutput< Vec3 >( "outTexture"
-			, RenderPass::VertexOutputs::TextureLocation
+			, SceneRenderPass::VertexOutputs::TextureLocation
 			, hasTextures );
 		auto outInstance = writer.declOutput< UInt >( "outInstance"
-			, RenderPass::VertexOutputs::InstanceLocation );
+			, SceneRenderPass::VertexOutputs::InstanceLocation );
 		auto outMaterial = writer.declOutput< UInt >( "outMaterial"
-			, RenderPass::VertexOutputs::MaterialLocation );
+			, SceneRenderPass::VertexOutputs::MaterialLocation );
 		auto out = writer.getOut();
 
 		writer.implementMain( [&]()

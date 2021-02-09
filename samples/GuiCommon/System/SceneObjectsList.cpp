@@ -1,6 +1,6 @@
 #include "GuiCommon/System/SceneObjectsList.hpp"
 
-#include "GuiCommon/Properties/Math/PropertiesContainer.hpp"
+#include "GuiCommon/Properties/PropertiesContainer.hpp"
 #include "GuiCommon/Properties/TreeItems/AnimatedObjectGroupTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/AnimatedObjectTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/AnimationTreeItemProperty.hpp"
@@ -167,13 +167,13 @@ namespace GuiCommon
 			wxTreeItemId sceneId = AddRoot( scene->getName()
 				, eBMP_SCENE
 				, eBMP_SCENE_SEL
-				, new SceneTreeItemProperty( this, m_propertiesHolder->IsEditable(), *scene ) );
+				, new SceneTreeItemProperty( this, m_propertiesHolder->isEditable(), *scene ) );
 
 			AppendItem( sceneId
 				, _( "Background" )
 				, eBMP_BACKGROUND
 				, eBMP_BACKGROUND_SEL
-				, new BackgroundTreeItemProperty( this, m_propertiesHolder->IsEditable(), *scene->getBackground() ) );
+				, new BackgroundTreeItemProperty( this, m_propertiesHolder->isEditable(), *scene->getBackground() ) );
 
 			auto catId = AppendItem( sceneId
 				, _( "Render Windows" )
@@ -191,7 +191,7 @@ namespace GuiCommon
 			scene->getEngine()->getRenderTargetCache().forEach( [this, catId]( RenderTarget & elem )
 				{
 					AppendRenderTarget( this
-						, m_propertiesHolder->IsEditable()
+						, m_propertiesHolder->isEditable()
 						, catId
 						, elem );
 				} );
@@ -242,7 +242,7 @@ namespace GuiCommon
 				auto material = engine->getMaterialCache().find( materialName );
 				MaterialsList::addMaterial( this
 					, *scene
-					, m_propertiesHolder->IsEditable()
+					, m_propertiesHolder->isEditable()
 					, catId
 					, material );
 			}
@@ -257,7 +257,7 @@ namespace GuiCommon
 							, elem.getName()
 							, eBMP_ANIMATED_OBJECTGROUP
 							, eBMP_ANIMATED_OBJECTGROUP_SEL
-							, new AnimatedObjectGroupTreeItemProperty{ m_propertiesHolder->IsEditable(), elem } )
+							, new AnimatedObjectGroupTreeItemProperty{ m_propertiesHolder->isEditable(), elem } )
 						, elem );
 				} );
 
@@ -279,7 +279,7 @@ namespace GuiCommon
 								, overlay->getOverlayName()
 								, eBMP_PANEL_OVERLAY
 								, eBMP_PANEL_OVERLAY_SEL
-								, new OverlayTreeItemProperty( m_propertiesHolder->IsEditable(), overlay ) )
+								, new OverlayTreeItemProperty( m_propertiesHolder->isEditable(), overlay ) )
 							, *overlay );
 						break;
 
@@ -288,7 +288,7 @@ namespace GuiCommon
 								, overlay->getOverlayName()
 								, eBMP_BORDER_PANEL_OVERLAY
 								, eBMP_BORDER_PANEL_OVERLAY_SEL
-								, new OverlayTreeItemProperty( m_propertiesHolder->IsEditable(), overlay ) )
+								, new OverlayTreeItemProperty( m_propertiesHolder->isEditable(), overlay ) )
 							, *overlay );
 						break;
 
@@ -297,7 +297,7 @@ namespace GuiCommon
 								, overlay->getOverlayName()
 								, eBMP_TEXT_OVERLAY
 								, eBMP_TEXT_OVERLAY_SEL
-								, new OverlayTreeItemProperty( m_propertiesHolder->IsEditable(), overlay ) )
+								, new OverlayTreeItemProperty( m_propertiesHolder->isEditable(), overlay ) )
 							, *overlay );
 						break;
 					}
@@ -346,13 +346,13 @@ namespace GuiCommon
 			, make_wxString( window.getName() )
 			, eBMP_RENDER_WINDOW
 			, eBMP_RENDER_WINDOW_SEL
-			, new RenderWindowTreeItemProperty( m_propertiesHolder->IsEditable(), window ) );
+			, new RenderWindowTreeItemProperty( m_propertiesHolder->isEditable(), window ) );
 		RenderTargetSPtr target = window.getRenderTarget();
 
 		if ( target )
 		{
 			AppendRenderTarget( this
-				, m_propertiesHolder->IsEditable()
+				, m_propertiesHolder->isEditable()
 				, id
 				, *target );
 		}
@@ -365,7 +365,7 @@ namespace GuiCommon
 			, geometry.getName()
 			, eBMP_GEOMETRY
 			, eBMP_GEOMETRY_SEL
-			, new GeometryTreeItemProperty( m_propertiesHolder->IsEditable(), geometry ) );
+			, new GeometryTreeItemProperty( m_propertiesHolder->isEditable(), geometry ) );
 		auto mesh = geometry.getMesh();
 
 		if ( mesh )
@@ -380,7 +380,7 @@ namespace GuiCommon
 					, name
 					, eBMP_SUBMESH
 					, eBMP_SUBMESH_SEL
-					, new SubmeshTreeItemProperty( m_propertiesHolder->IsEditable(), geometry, *submesh ) );
+					, new SubmeshTreeItemProperty( m_propertiesHolder->isEditable(), geometry, *submesh ) );
 				doAddSubmesh( std::static_pointer_cast< Geometry >( geometry.shared_from_this() )
 					, submesh
 					, idSubmesh );
@@ -394,7 +394,7 @@ namespace GuiCommon
 					, mesh->getName()
 					, eBMP_SKELETON
 					, eBMP_SKELETON_SEL
-					, new SkeletonTreeItemProperty( m_propertiesHolder->IsEditable(), *skeleton ) );
+					, new SkeletonTreeItemProperty( m_propertiesHolder->isEditable(), *skeleton ) );
 				doAddSkeleton( *skeleton, idSkeleton );
 			}
 		}
@@ -409,7 +409,7 @@ namespace GuiCommon
 				, bone->getName()
 				, eBMP_SKELETON
 				, eBMP_SKELETON_SEL
-				, new BoneTreeItemProperty( m_propertiesHolder->IsEditable(), *bone ) );
+				, new BoneTreeItemProperty( m_propertiesHolder->isEditable(), *bone ) );
 		}
 
 		for ( auto & anim : skeleton.getAnimations() )
@@ -418,7 +418,7 @@ namespace GuiCommon
 				, anim.first
 				, eBMP_ANIMATION
 				, eBMP_ANIMATION_SEL
-				, new SkeletonAnimationTreeItemProperty( m_propertiesHolder->IsEditable()
+				, new SkeletonAnimationTreeItemProperty( m_propertiesHolder->isEditable()
 					, static_cast< SkeletonAnimation & >( *anim.second ) ) );
 		}
 	}
@@ -430,12 +430,12 @@ namespace GuiCommon
 			, camera.getName()
 			, eBMP_CAMERA
 			, eBMP_CAMERA_SEL
-			, new CameraTreeItemProperty( m_propertiesHolder->IsEditable(), camera ) );
+			, new CameraTreeItemProperty( m_propertiesHolder->isEditable(), camera ) );
 		AppendItem( cameraId
 			, _( "Viewport" )
 			, eBMP_VIEWPORT
 			, eBMP_VIEWPORT_SEL
-			, new ViewportTreeItemProperty( m_propertiesHolder->IsEditable()
+			, new ViewportTreeItemProperty( m_propertiesHolder->isEditable()
 				, *camera.getScene()->getEngine()
 				, camera.getViewport() ) );
 	}
@@ -447,7 +447,7 @@ namespace GuiCommon
 			, billboard.getName()
 			, eBMP_BILLBOARD
 			, eBMP_BILLBOARD_SEL
-			, new BillboardTreeItemProperty( m_propertiesHolder->IsEditable(), billboard ) );
+			, new BillboardTreeItemProperty( m_propertiesHolder->isEditable(), billboard ) );
 	}
 
 	void SceneObjectsList::doAddLight( wxTreeItemId id
@@ -460,7 +460,7 @@ namespace GuiCommon
 				, light.getName()
 				, eBMP_DIRECTIONAL_LIGHT
 				, eBMP_DIRECTIONAL_LIGHT_SEL
-				, new LightTreeItemProperty( m_propertiesHolder->IsEditable(), light ) );
+				, new LightTreeItemProperty( m_propertiesHolder->isEditable(), light ) );
 			break;
 
 		case LightType::ePoint:
@@ -468,7 +468,7 @@ namespace GuiCommon
 				, light.getName()
 				, eBMP_POINT_LIGHT
 				, eBMP_POINT_LIGHT_SEL
-				, new LightTreeItemProperty( m_propertiesHolder->IsEditable(), light ) );
+				, new LightTreeItemProperty( m_propertiesHolder->isEditable(), light ) );
 			break;
 
 		case LightType::eSpot:
@@ -476,7 +476,7 @@ namespace GuiCommon
 				, light.getName()
 				, eBMP_SPOT_LIGHT
 				, eBMP_SPOT_LIGHT_SEL
-				, new LightTreeItemProperty( m_propertiesHolder->IsEditable(), light ) );
+				, new LightTreeItemProperty( m_propertiesHolder->isEditable(), light ) );
 			break;
 		}
 	}
@@ -512,7 +512,7 @@ namespace GuiCommon
 					, pair.first
 					, eBMP_NODE
 					, eBMP_NODE_SEL
-					, new NodeTreeItemProperty( m_propertiesHolder->IsEditable(), m_engine, pair.second.lock() ) )
+					, new NodeTreeItemProperty( m_propertiesHolder->isEditable(), m_engine, pair.second.lock() ) )
 				, pair.second.lock() );
 		}
 	}
@@ -529,7 +529,7 @@ namespace GuiCommon
 				, new AnimationTreeItemProperty
 				{
 					m_engine,
-					m_propertiesHolder->IsEditable(),
+					m_propertiesHolder->isEditable(),
 					group,
 					it.first,
 					it.second,
@@ -549,7 +549,7 @@ namespace GuiCommon
 						, overlay->getName()
 						, eBMP_PANEL_OVERLAY
 						, eBMP_PANEL_OVERLAY_SEL
-						, new OverlayTreeItemProperty( m_propertiesHolder->IsEditable(), overlay->getCategory() ) )
+						, new OverlayTreeItemProperty( m_propertiesHolder->isEditable(), overlay->getCategory() ) )
 					, *overlay->getCategory() );
 				break;
 
@@ -558,7 +558,7 @@ namespace GuiCommon
 						, overlay->getName()
 						, eBMP_BORDER_PANEL_OVERLAY
 						, eBMP_BORDER_PANEL_OVERLAY_SEL
-						, new OverlayTreeItemProperty( m_propertiesHolder->IsEditable(), overlay->getCategory() ) )
+						, new OverlayTreeItemProperty( m_propertiesHolder->isEditable(), overlay->getCategory() ) )
 					, *overlay->getCategory() );
 				break;
 
@@ -567,7 +567,7 @@ namespace GuiCommon
 						, overlay->getName()
 						, eBMP_TEXT_OVERLAY
 						, eBMP_TEXT_OVERLAY_SEL
-						, new OverlayTreeItemProperty( m_propertiesHolder->IsEditable(), overlay->getCategory() ) )
+						, new OverlayTreeItemProperty( m_propertiesHolder->isEditable(), overlay->getCategory() ) )
 					, *overlay->getCategory() );
 				break;
 			}

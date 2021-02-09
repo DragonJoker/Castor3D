@@ -110,27 +110,32 @@ namespace castor3d
 		/**@{*/
 		C3D_API VkExtent3D const & getSize()const;
 
-		inline TextureUnit & getTexture()
+		TextureUnit & getTexture()
 		{
 			return *m_environmentMap;
 		}
 
-		inline TextureUnit const & getTexture()const
+		TextureUnit const & getTexture()const
 		{
 			return *m_environmentMap;
 		}
 
-		inline ashes::ImageView & getDepthView()
+		ashes::ImageView & getDepthView()
 		{
 			return m_depthBufferView;
 		}
 
-		inline ashes::ImageView const & getDepthView()const
+		ashes::ImageView const & getDepthView()const
 		{
 			return m_depthBufferView;
 		}
 
-		inline uint32_t getIndex()const
+		RenderPassTimer & getTimer()const
+		{
+			return *m_timer;
+		}
+
+		uint32_t getIndex()const
 		{
 			return m_index;
 		}
@@ -149,6 +154,7 @@ namespace castor3d
 		CubeMatrices m_matrices;
 		castor::Size m_size;
 		uint32_t m_index{ 0u };
+		RenderPassTimerSPtr m_timer;
 		EnvironmentMapPasses m_passes;
 		bool m_first{ true };
 		uint32_t m_render{ 0u };

@@ -92,13 +92,6 @@ namespace castor3d
 			, Scene const & scene
 			, ashes::Semaphore const & toWait );
 		/**
-		 *\~english
-		 *\brief		Lists the pass' intermediate views.
-		 *\~french
-		 *\brief		Liste les vues intermédiaires de la passe.
-		 */
-		void listIntermediates( std::vector< IntermediateView > & intermediates )const;
-		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		void accept( RenderTechniqueVisitor & visitor );

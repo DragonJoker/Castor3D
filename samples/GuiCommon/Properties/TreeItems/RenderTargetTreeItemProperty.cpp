@@ -10,6 +10,7 @@
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/PostEffect/PostEffect.hpp>
 #include <Castor3D/Render/Technique/RenderTechnique.hpp>
+#include <Castor3D/Render/Technique/Voxelize/VoxelSceneData.hpp>
 
 #include <wx/propgrid/advprops.h>
 
@@ -56,7 +57,7 @@ namespace GuiCommon
 
 	RenderTargetTreeItemProperty::RenderTargetTreeItemProperty( bool editable
 		, RenderTarget & target )
-		: TreeItemProperty( target.getEngine(), editable, ePROPERTY_DATA_TYPE_RENDER_TARGET )
+		: TreeItemProperty( target.getEngine(), editable )
 		, m_target( target )
 	{
 		CreateTreeItemMenu();
@@ -72,20 +73,6 @@ namespace GuiCommon
 		static wxString PROPERTY_CATEGORY_RENDER_TARGET = _( "Render Target: " );
 		static wxString PROPERTY_RENDER_TARGET_SHADER = _( "Shader" );
 		static wxString PROPERTY_RENDER_TARGET_EDIT_SHADER = _( "View Shaders..." );
-		static wxString PROPERTY_RENDER_TARGET_SSAO = _( "SSAO" );
-		static wxString PROPERTY_RENDER_TARGET_SSAO_ENABLED = _( "Enable SSAO" );
-		static wxString PROPERTY_RENDER_TARGET_SSAO_HIGH_QUALITY = _( "High Quality" );
-		static wxString PROPERTY_RENDER_TARGET_SSAO_NORMALS_BUFFER = _( "Normals Buffer" );
-		static wxString PROPERTY_RENDER_TARGET_SSAO_RADIUS = _( "Radius" );
-		static wxString PROPERTY_RENDER_TARGET_SSAO_BIAS = _( "Bias" );
-		static wxString PROPERTY_RENDER_TARGET_SSAO_INTENSITY = _( "Intensity" );
-		static wxString PROPERTY_RENDER_TARGET_SSAO_SAMPLES = _( "Samples" );
-		static wxString PROPERTY_RENDER_TARGET_SSAO_EDGE_SHARPNESS = _( "Edge Sharpness" );
-		static wxString PROPERTY_RENDER_TARGET_SSAO_BLUR_HIGH_QUALITY = _( "High Quality Blur" );
-		static wxString PROPERTY_RENDER_TARGET_SSAO_BLUR_STEP_SIZE = _( "Blur Step Size" );
-		static wxString PROPERTY_RENDER_TARGET_SSAO_BLUR_RADIUS = _( "Blur Radius" );
-		static wxString PROPERTY_RENDER_TARGET_SSAO_BEND_STEP_COUNT = _( "Bend Step Count" );
-		static wxString PROPERTY_RENDER_TARGET_SSAO_BEND_STEP_SIZE = _( "Bend Step Size" );
 #if C3D_DebugQuads
 		static wxString PROPERTY_RENDER_TARGET_DEBUG_VIEW = _( "Debug View" );
 #endif
@@ -110,7 +97,28 @@ namespace GuiCommon
 
 		addPropertyET( grid, PROPERTY_RENDER_TARGET_DEBUG_VIEW, debugChoices, &debugConfig.debugIndex );
 #endif
+		doCreateSsaoProperties( editor, grid );
+	}
 
+	void RenderTargetTreeItemProperty::doCreateSsaoProperties( wxPGEditor * editor
+		, wxPropertyGrid * grid )
+	{
+		static wxString PROPERTY_RENDER_TARGET_SSAO = _( "SSAO" );
+		static wxString PROPERTY_RENDER_TARGET_SSAO_ENABLED = _( "Enable SSAO" );
+		static wxString PROPERTY_RENDER_TARGET_SSAO_HIGH_QUALITY = _( "High Quality" );
+		static wxString PROPERTY_RENDER_TARGET_SSAO_NORMALS_BUFFER = _( "Normals Buffer" );
+		static wxString PROPERTY_RENDER_TARGET_SSAO_RADIUS = _( "Radius" );
+		static wxString PROPERTY_RENDER_TARGET_SSAO_BIAS = _( "Bias" );
+		static wxString PROPERTY_RENDER_TARGET_SSAO_INTENSITY = _( "Intensity" );
+		static wxString PROPERTY_RENDER_TARGET_SSAO_SAMPLES = _( "Samples" );
+		static wxString PROPERTY_RENDER_TARGET_SSAO_EDGE_SHARPNESS = _( "Edge Sharpness" );
+		static wxString PROPERTY_RENDER_TARGET_SSAO_BLUR_HIGH_QUALITY = _( "High Quality Blur" );
+		static wxString PROPERTY_RENDER_TARGET_SSAO_BLUR_STEP_SIZE = _( "Blur Step Size" );
+		static wxString PROPERTY_RENDER_TARGET_SSAO_BLUR_RADIUS = _( "Blur Radius" );
+		static wxString PROPERTY_RENDER_TARGET_SSAO_BEND_STEP_COUNT = _( "Bend Step Count" );
+		static wxString PROPERTY_RENDER_TARGET_SSAO_BEND_STEP_SIZE = _( "Bend Step Size" );
+
+		auto & target = getRenderTarget();
 		auto & ssaoConfig = target.getTechnique()->getSsaoConfig();
 		addProperty( grid, PROPERTY_RENDER_TARGET_SSAO );
 		addPropertyT( grid, PROPERTY_RENDER_TARGET_SSAO_ENABLED, &ssaoConfig.enabled );

@@ -27,6 +27,7 @@ namespace castor3d
 {
 	class SceneBackground
 		: public castor::OwnedBy< Engine >
+		, public castor::Named
 	{
 	protected:
 		struct Cube
@@ -67,6 +68,7 @@ namespace castor3d
 		*/
 		C3D_API explicit SceneBackground( Engine & engine
 			, Scene & scene
+			, castor::String const & name
 			, BackgroundType type );
 		/**
 		*\~english

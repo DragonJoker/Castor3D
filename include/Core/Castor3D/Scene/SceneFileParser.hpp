@@ -56,7 +56,7 @@ namespace castor3d
 		eTextureUnit = CU_MakeSectionName( 'U', 'N', 'I', 'T' ),
 		eRenderTarget = CU_MakeSectionName( 'R', 'T', 'G', 'R' ),
 		eShaderProgram = CU_MakeSectionName( 'G', 'L', 'S', 'L' ),
-		shaderStage = CU_MakeSectionName( 'S', 'P', 'G', 'M' ),
+		eShaderStage = CU_MakeSectionName( 'S', 'P', 'G', 'M' ),
 		eShaderUBO = CU_MakeSectionName( 'S', 'U', 'B', 'O' ),
 		eUBOVariable = CU_MakeSectionName( 'S', 'U', 'B', 'V' ),
 		eBillboard = CU_MakeSectionName( 'B', 'L', 'B', 'd' ),
@@ -78,6 +78,7 @@ namespace castor3d
 		ePcf = CU_MakeSectionName( 'P', 'C', 'F', 'S' ),
 		eVsm = CU_MakeSectionName( 'V', 'S', 'M', 'S' ),
 		eTextureAnimation = CU_MakeSectionName( 'T', 'X', 'A', 'N' ),
+		eVoxelConeTracing = CU_MakeSectionName( 'V', 'C', 'T', 'C' ),
 	};
 
 	class SceneFileContext

@@ -45,6 +45,7 @@ namespace castor3d
 		, ShaderModule const & vtx
 		, ShaderModule const & pxl
 		, bool hasShadows
+		, bool hasVoxels
 		, bool generatesIndirect )
 		: MeshLightPass::Program{ engine
 			, device
@@ -52,6 +53,7 @@ namespace castor3d
 			, vtx
 			, pxl
 			, hasShadows
+			, hasVoxels
 			, generatesIndirect }
 		, m_lightPass{ lightPass }
 	{
@@ -72,10 +74,12 @@ namespace castor3d
 
 	SpotLightPass::SpotLightPass( RenderDevice const & device
 		, castor::String const & suffix
-		, LightPassConfig const & lpConfig )
+		, LightPassConfig const & lpConfig
+		, VoxelizerUbo const * vctConfig )
 		: MeshLightPass{ device
 			, cuT( "Spot" ) + suffix
 			, lpConfig
+			, vctConfig
 			, LightType::eSpot }
 		, m_ubo{ makeUniformBuffer< Config >( device.renderSystem
 			, 1u
@@ -134,6 +138,7 @@ namespace castor3d
 			, m_vertexShader
 			, m_pixelShader
 			, m_shadows
+			, m_voxels
 			, m_generatesIndirect );
 	}
 

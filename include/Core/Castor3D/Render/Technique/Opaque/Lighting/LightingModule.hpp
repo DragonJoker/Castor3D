@@ -37,6 +37,7 @@ namespace castor3d
 		eDiffuse,
 		eSpecular,
 		eIndirectDiffuse,
+		eIndirectSpecular,
 		CU_ScopedEnumBounds( eDepth ),
 	};
 	castor::String getTextureName( LpTexture texture );
@@ -56,15 +57,6 @@ namespace castor3d
 		return getMipLevels( texture
 			, castor::Size{ size.width, size.height } );
 	}
-	/**
-	*\~english
-	*\brief
-	*	Handles the light passes.
-	*\~french
-	*\brief
-	*	Gère les passes d'éclairage.
-	*/
-	class LightingPass;
 	/**
 	*\~english
 	*\brief
@@ -210,6 +202,7 @@ namespace castor3d
 		LightPassResult const & lpResult;
 		GpInfoUbo const & gpInfoUbo;
 		bool hasShadows{ false };
+		bool hasVoxels{ false };
 		bool generatesIndirect{ false };
 	};
 

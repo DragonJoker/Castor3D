@@ -50,6 +50,7 @@ namespace castor3d
 				, ShaderModule const & vtx
 				, ShaderModule const & pxl
 				, bool hasShadows
+				, bool hasVoxels
 				, bool generatesIndirect );
 			/**
 			 *\~english
@@ -88,6 +89,7 @@ namespace castor3d
 		MeshLightPass( RenderDevice const & device
 			, castor::String const & suffix
 			, LightPassConfig const & lpConfig
+			, VoxelizerUbo const * vctConfig
 			, LightType type );
 		/**
 		 *\~english
@@ -148,9 +150,7 @@ namespace castor3d
 		void doUpdate( bool first
 			, castor::Size const & size
 			, Light const & light
-			, Camera const & camera
-			, ShadowMap const * shadowMap = nullptr
-			, uint32_t shadowMapIndex = 0u )override;
+			, Camera const & camera )override;
 		/**
 		 *\copydoc		castor3d::LightPass::doGetVertexShaderSource
 		 */

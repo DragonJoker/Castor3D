@@ -13,31 +13,6 @@ namespace castor3d
 {
 	namespace shader
 	{
-		struct FragmentInput
-		{
-			C3D_API FragmentInput( FragmentInput const & rhs );
-			C3D_API explicit FragmentInput( sdw::ShaderWriter & writer );
-			C3D_API FragmentInput( sdw::InVec2 const & clipVertex
-				, sdw::InVec3 const & viewVertex
-				, sdw::InVec3 const & worldVertex
-				, sdw::InVec3 const & worldNormal );
-
-			C3D_API ast::expr::Expr * getExpr()const;
-			C3D_API sdw::ShaderWriter * getWriter()const;
-			C3D_API void setVar( ast::var::VariableList::const_iterator & var );
-
-			sdw::InVec2 m_clipVertex;
-			sdw::InVec3 m_viewVertex;
-			sdw::InVec3 m_worldVertex;
-			sdw::InVec3 m_worldNormal;
-
-		private:
-			ast::expr::ExprPtr m_expr;
-		};
-
-		C3D_API ast::expr::ExprList makeFnArg( sdw::ShaderWriter & shader
-			, FragmentInput const & value );
-
 		class LightingModel
 		{
 		public:
@@ -45,7 +20,8 @@ namespace castor3d
 				, Utils & utils
 				, ShadowOptions shadowOptions
 				, bool isOpaqueProgram );
-			C3D_API void declareModel( uint32_t & index);
+			C3D_API void declareModel( uint32_t & index );
+			C3D_API void declareDiffuseModel( uint32_t & index );
 			C3D_API void declareDirectionalModel( bool lightUbo
 				, uint32_t & index );
 			C3D_API void declarePointModel( bool lightUbo
@@ -81,6 +57,10 @@ namespace castor3d
 			virtual void doDeclareComputeDirectionalLight() = 0;
 			virtual void doDeclareComputePointLight() = 0;
 			virtual void doDeclareComputeSpotLight() = 0;
+			virtual void doDeclareDiffuseModel() = 0;
+			virtual void doDeclareComputeDirectionalLightDiffuse() = 0;
+			virtual void doDeclareComputePointLightDiffuse() = 0;
+			virtual void doDeclareComputeSpotLightDiffuse() = 0;
 
 		public:
 			C3D_API static uint32_t const UboBindingPoint;

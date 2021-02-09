@@ -72,7 +72,7 @@ namespace castor3d
 		 *\param[in]	flags		Les flags de pipeline.
 		 *\return		Le programme trouvé ou créé.
 		 */
-		C3D_API ShaderProgramSPtr getAutomaticProgram( RenderPass const & renderPass
+		C3D_API ShaderProgramSPtr getAutomaticProgram( SceneRenderPass const & renderPass
 			, PipelineFlags const & flags );
 		/**
 		 *\~english
@@ -145,7 +145,7 @@ namespace castor3d
 
 	private:
 		ShaderProgramSPtr doFindAutomaticProgram( PipelineFlags const & flags );
-		ShaderProgramSPtr doCreateAutomaticProgram( RenderPass const & renderPass
+		ShaderProgramSPtr doCreateAutomaticProgram( SceneRenderPass const & renderPass
 			, PipelineFlags const & flags )const;
 		void doAddAutomaticProgram( ShaderProgramSPtr program
 			, PipelineFlags const & flags );

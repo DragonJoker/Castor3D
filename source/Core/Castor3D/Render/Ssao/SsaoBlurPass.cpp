@@ -558,7 +558,7 @@ namespace castor3d
 		, m_bentResult{ doCreateTexture( m_engine, m_device, getName() + cuT( "BentNormals" ), m_bentInput.getTexture()->getPixelFormat(), m_size ) }
 		, m_renderPass{ doCreateRenderPass( m_device, getName() ) }
 		, m_fbo{ doCreateFrameBuffer( m_engine, getName(), *m_renderPass, m_result, m_bentResult ) }
-		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, m_device, cuT( "Scalable Ambient Obscurance" ), prefix + cuT( " Blur" ) ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( m_device, cuT( "Scalable Ambient Obscurance" ), prefix + cuT( " Blur" ) ) }
 		, m_finished{ m_device->createSemaphore( getName() ) }
 		, m_configurationUbo{ m_device.uboPools->getBuffer< Configuration >( 0u ) }
 	{

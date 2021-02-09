@@ -1,5 +1,6 @@
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightPass.hpp"
 
+#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
@@ -18,6 +19,7 @@
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
+#include "Castor3D/Shader/Shaders/GlslGlobalIllumination.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
@@ -26,10 +28,12 @@
 #include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslSpecularBrdfLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
+#include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
+#include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
@@ -47,7 +51,6 @@ using namespace castor;
 using namespace castor3d;
 
 #define C3D_UseLightPassFence 1
-#define C3D_DisableSSSTransmittance 1
 
 namespace castor3d
 {
@@ -131,12 +134,14 @@ namespace castor3d
 		, ShaderModule const & vtx
 		, ShaderModule const & pxl
 		, bool hasShadows
+		, bool hasVoxels
 		, bool generatesIndirect )
 		: castor::Named{ name }
 		, m_engine{ engine }
 		, m_device{ device }
 		, m_program{ ::doCreateProgram( device, vtx, pxl ) }
 		, m_shadows{ hasShadows }
+		, m_voxels{ hasVoxels }
 		, m_generatesIndirect{ generatesIndirect }
 	{
 	}
@@ -148,7 +153,8 @@ namespace castor3d
 		, MatrixUbo & matrixUbo
 		, SceneUbo & sceneUbo
 		, GpInfoUbo const & gpInfoUbo
-		, UniformBufferT< ModelMatrixUboConfiguration > const * modelMatrixUbo )
+		, UniformBufferT< ModelMatrixUboConfiguration > const * modelMatrixUbo
+		, VoxelizerUbo const * voxelUbo )
 	{
 		ashes::VkDescriptorSetLayoutBindingArray setLayoutBindings;
 		setLayoutBindings.emplace_back( m_engine.getMaterialCache().getPassBuffer().createLayoutBinding() );
@@ -172,6 +178,14 @@ namespace castor3d
 		setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( shader::LightingModel::UboBindingPoint
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+
+		if ( voxelUbo )
+		{
+			setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( VoxelizerUbo::BindingPoint
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		}
+
 		m_uboDescriptorLayout = m_device->createDescriptorSetLayout( getName() + "Ubo"
 			, std::move( setLayoutBindings ) );
 		m_uboDescriptorPool = m_uboDescriptorLayout->createPool( getName() + "Ubo", 2u );
@@ -198,6 +212,16 @@ namespace castor3d
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ),
 		};
+
+		if ( m_voxels )
+		{
+			setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+			setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		}
 
 		if ( m_shadows )
 		{
@@ -278,9 +302,10 @@ namespace castor3d
 			lpResult[LpTexture::eSpecular].getTexture()->getDefaultView().getTargetView(),
 		};
 
-		if ( !generatesIndirect )
+		if ( generatesIndirect )
 		{
 			attaches.emplace_back( lpResult[LpTexture::eIndirectDiffuse].getTexture()->getDefaultView().getTargetView() );
+			attaches.emplace_back( lpResult[LpTexture::eIndirectSpecular].getTexture()->getDefaultView().getTargetView() );
 		}
 
 		frameBuffer = this->renderPass->createFrameBuffer( name
@@ -295,13 +320,16 @@ namespace castor3d
 		, String const & suffix
 		, ashes::RenderPassPtr firstRenderPass
 		, ashes::RenderPassPtr blendRenderPass
-		, LightPassConfig const & lpConfig )
+		, LightPassConfig const & lpConfig
+		, VoxelizerUbo const * vctConfig )
 		: castor::Named{ "LightPass" + suffix }
 		, m_engine{ *device.renderSystem.getEngine() }
 		, m_device{ device }
+		, m_vctUbo{ vctConfig }
 		, m_firstRenderPass{ getName() + "First", std::move( firstRenderPass ), lpConfig.lpResult, lpConfig.generatesIndirect }
 		, m_blendRenderPass{ getName() + "Blend", std::move( blendRenderPass ), lpConfig.lpResult, lpConfig.generatesIndirect }
 		, m_shadows{ lpConfig.hasShadows }
+		, m_voxels{ lpConfig.hasVoxels && vctConfig }
 		, m_generatesIndirect{ lpConfig.generatesIndirect }
 		, m_matrixUbo{ device }
 		, m_gpInfoUbo{ lpConfig.gpInfoUbo }
@@ -320,17 +348,18 @@ namespace castor3d
 		, Light const & light
 		, Camera const & camera
 		, ShadowMap const * shadowMap
-		, uint32_t shadowMapIndex )
+		, TextureUnit const * vctFirstBounce
+		, TextureUnit const * vctSecondaryBounce )
 	{
 		m_pipeline = doGetPipeline( first
 			, light
-			, shadowMap );
+			, shadowMap
+			, vctFirstBounce
+			, vctSecondaryBounce );
 		doUpdate( first
 			, size
 			, light
-			, camera
-			, shadowMap
-			, shadowMapIndex );
+			, camera );
 	}
 
 	ashes::Semaphore const & LightPass::render( uint32_t index
@@ -340,6 +369,7 @@ namespace castor3d
 		auto result = &toWait;
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto & commandBuffer = *m_commandBuffers[m_commandBufferIndex];
+		auto timerBlock = m_timer->start();
 
 		commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 		commandBuffer.beginDebugBlock(
@@ -347,14 +377,14 @@ namespace castor3d
 				"Deferred - " + getName(),
 				makeFloatArray( m_engine.getNextRainbowColour() ),
 			} );
-		m_timer->beginPass( commandBuffer, index );
-		m_timer->notifyPassRender( index );
+		timerBlock->beginPass( commandBuffer, index );
+		timerBlock->notifyPassRender( index, C3D_UseLightPassFence );
 
 		if ( !index )
 		{
 			commandBuffer.beginRenderPass( *m_firstRenderPass.renderPass
 				, *m_firstRenderPass.frameBuffer
-				, { defaultClearDepthStencil, opaqueBlackClearColor, opaqueBlackClearColor, doGetIndirectClearColor() }
+				, { defaultClearDepthStencil, opaqueBlackClearColor, opaqueBlackClearColor, doGetIndirectClearColor(), doGetIndirectClearColor() }
 				, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 			commandBuffer.executeCommands( { *m_pipeline->firstCommandBuffer } );
 		}
@@ -362,13 +392,13 @@ namespace castor3d
 		{
 			commandBuffer.beginRenderPass( *m_blendRenderPass.renderPass
 				, *m_blendRenderPass.frameBuffer
-				, { defaultClearDepthStencil, opaqueBlackClearColor, opaqueBlackClearColor, doGetIndirectClearColor() }
+				, { defaultClearDepthStencil, opaqueBlackClearColor, opaqueBlackClearColor, doGetIndirectClearColor(), doGetIndirectClearColor() }
 				, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 			commandBuffer.executeCommands( { *m_pipeline->blendCommandBuffer } );
 		}
 
 		commandBuffer.endRenderPass();
-		m_timer->endPass( commandBuffer, index );
+		timerBlock->endPass( commandBuffer, index );
 		commandBuffer.endDebugBlock();
 		commandBuffer.end();
 
@@ -397,20 +427,26 @@ namespace castor3d
 	}
 
 	size_t LightPass::makeKey( Light const & light
-		, ShadowMap const * shadowMap )
+		, ShadowMap const * shadowMap
+		, TextureUnit const * vctFirstBounce
+		, TextureUnit const * vctSecondaryBounce )
 	{
 		size_t hash = std::hash< LightType >{}( light.getLightType() );
 		castor::hashCombine( hash, shadowMap ? light.getShadowType() : ShadowType::eNone );
 		castor::hashCombine( hash, shadowMap ? light.getVolumetricSteps() > 0 : false );
 		castor::hashCombine( hash, shadowMap ? light.needsRsmShadowMaps() : false );
 		castor::hashCombine( hash, shadowMap );
+		castor::hashCombine( hash, vctFirstBounce );
+		castor::hashCombine( hash, vctSecondaryBounce );
 		return hash;
 	}
 
 	LightPass::Pipeline LightPass::createPipeline( LightType lightType
 		, ShadowType shadowType
 		, bool rsm
-		, ShadowMap const * shadowMap )
+		, ShadowMap const * shadowMap
+		, TextureUnit const * vctFirstBounce
+		, TextureUnit const * vctSecondaryBounce )
 	{
 		Scene const & scene = *m_scene;
 		OpaquePassResult const & gp = *m_opaquePassResult;
@@ -451,7 +487,8 @@ namespace castor3d
 			, m_matrixUbo
 			, sceneUbo
 			, m_gpInfoUbo
-			, m_mmUbo );
+			, m_mmUbo
+			, m_vctUbo );
 		pipeline.uboDescriptorSet = pipeline.program->getUboDescriptorPool().createDescriptorSet( getName() + "Ubo", 0u );
 		auto & uboLayout = pipeline.program->getUboDescriptorLayout();
 		m_engine.getMaterialCache().getPassBuffer().createBinding( *pipeline.uboDescriptorSet, uboLayout.getBinding( 0u ) );
@@ -466,6 +503,12 @@ namespace castor3d
 		{
 			pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( ModelMatrixUbo::BindingPoint )
 				, m_mmUbo->getBuffer() );
+		}
+
+		if ( m_vctUbo )
+		{
+			m_vctUbo->createSizedBinding( *pipeline.uboDescriptorSet
+				, uboLayout.getBinding( VoxelizerUbo::BindingPoint ) );
 		}
 
 		pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( shader::LightingModel::UboBindingPoint )
@@ -499,35 +542,37 @@ namespace castor3d
 		pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 		pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 
+		if ( vctFirstBounce && vctSecondaryBounce && m_voxels )
+		{
+			pipeline.textureWrites.push_back( ashes::WriteDescriptorSet{ index++
+				, 0u
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+				{ { vctFirstBounce->getSampler()->getSampler()
+					, vctFirstBounce->getTexture()->getDefaultView().getSampledView()
+					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } } );
+			pipeline.textureWrites.push_back( ashes::WriteDescriptorSet{ index++
+				, 0u
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+				{ { vctSecondaryBounce->getSampler()->getSampler()
+					, vctSecondaryBounce->getTexture()->getDefaultView().getSampledView()
+					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } } );
+		}
+
 		if ( shadowMap && m_shadows )
 		{
 			auto & smResult = shadowMap->getShadowPassResult();
-			pipeline.textureWrites.push_back( ashes::WriteDescriptorSet
-				{
-					index++,
-					0u,
-					VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-					{
-						{
-							shadowMap->getSampler( SmTexture::eNormalLinear ),
-							shadowMap->getView( SmTexture::eNormalLinear ),
-							VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-						}
-					}
-				} );
-			pipeline.textureWrites.push_back( ashes::WriteDescriptorSet
-				{
-					index++,
-					0u,
-					VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-					{
-						{
-							shadowMap->getSampler( SmTexture::eVariance ),
-							shadowMap->getView( SmTexture::eVariance ),
-							VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-						}
-					}
-				} );
+			pipeline.textureWrites.push_back( ashes::WriteDescriptorSet{ index++
+				, 0u
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+				{ { shadowMap->getSampler( SmTexture::eNormalLinear )
+					, shadowMap->getView( SmTexture::eNormalLinear )
+					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } } );
+			pipeline.textureWrites.push_back( ashes::WriteDescriptorSet{ index++
+				, 0u
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+				{ { shadowMap->getSampler( SmTexture::eVariance )
+					, shadowMap->getView( SmTexture::eVariance )
+					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } } );
 		}
 
 		pipeline.textureDescriptorSet->setBindings( pipeline.textureWrites );
@@ -538,9 +583,14 @@ namespace castor3d
 
 	LightPass::Pipeline * LightPass::doGetPipeline( bool first
 		, Light const & light
-		, ShadowMap const * shadowMap )
+		, ShadowMap const * shadowMap
+		, TextureUnit const * vctFirstBounce
+		, TextureUnit const * vctSecondaryBounce )
 	{
-		auto key = makeKey( light, shadowMap );
+		auto key = makeKey( light
+			, shadowMap
+			, vctFirstBounce
+			, vctSecondaryBounce );
 		auto it = m_pipelines.emplace( key, nullptr );
 
 		if ( it.second )
@@ -550,11 +600,12 @@ namespace castor3d
 					? light.getShadowType()
 					: ShadowType::eNone )
 				, light.needsRsmShadowMaps()
-				, shadowMap ) );
+				, shadowMap
+				, vctFirstBounce
+				, vctSecondaryBounce ) );
 		}
 
 		doPrepareCommandBuffer( *it.first->second
-			, shadowMap
 			, first );
 		return it.first->second.get();
 	}
@@ -595,7 +646,6 @@ namespace castor3d
 	}
 
 	void LightPass::doPrepareCommandBuffer( Pipeline & pipeline
-		, ShadowMap const * shadowMap
 		, bool first )
 	{
 		if ( ( first && !pipeline.isFirstSet )
@@ -637,6 +687,12 @@ namespace castor3d
 		FragmentWriter writer;
 		auto & renderSystem = *m_engine.getRenderSystem();
 
+		// Shader outputs
+		auto pxl_diffuse = writer.declOutput< Vec3 >( "pxl_diffuse", 0 );
+		auto pxl_specular = writer.declOutput< Vec3 >( "pxl_specular", 1 );
+		auto pxl_indirectDiffuse = writer.declOutput< Vec3 >( "pxl_indirectDiffuse", 2, m_generatesIndirect );
+		auto pxl_indirectSpecular = writer.declOutput< Vec3 >( "pxl_indirectSpecular", 3, m_generatesIndirect );
+
 		// Shader inputs
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
 		UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
@@ -653,11 +709,6 @@ namespace castor3d
 			? shadowType
 			: ShadowType::eNone;
 
-		// Shader outputs
-		auto pxl_diffuse = writer.declOutput< Vec3 >( "pxl_diffuse", 0 );
-		auto pxl_specular = writer.declOutput< Vec3 >( "pxl_specular", 1 );
-		auto pxl_indirect = writer.declOutput< Vec3 >( "pxl_indirect", 2, !m_generatesIndirect );
-
 		// Utility functions
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
 		shader::Utils utils{ writer };
@@ -666,6 +717,14 @@ namespace castor3d
 		utils.declareCalcWSPosition();
 		utils.declareDecodeReceiver();
 		utils.declareInvertVec2Y();
+
+		shader::GlobalIllumination indirect{ writer, utils, true };
+
+		if ( m_voxels )
+		{
+			indirect.declare( 1u, index, sceneFlags );
+		}
+
 		auto lighting = shader::PhongLightingModel::createModel( writer
 			, utils
 			, lightType
@@ -728,6 +787,8 @@ namespace castor3d
 					, C3D_DisableSSSTransmittance == 0 );
 
 				shader::OutputComponents output{ lightDiffuse, lightSpecular };
+				auto surface = writer.declLocale< shader::Surface >( "surface" );
+				surface.create( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal );
 
 				switch ( lightType )
 				{
@@ -739,7 +800,7 @@ namespace castor3d
 						, eye
 						, shininess
 						, shadowReceiver
-						, shader::FragmentInput( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal )
+						, surface
 						, output );
 #if !C3D_DisableSSSTransmittance
 					lightDiffuse += sss.compute( material
@@ -760,7 +821,7 @@ namespace castor3d
 						, eye
 						, shininess
 						, shadowReceiver
-						, shader::FragmentInput( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal )
+						, surface
 						, output );
 #if !C3D_DisableSSSTransmittance
 					lightDiffuse += sss.compute( material
@@ -781,7 +842,7 @@ namespace castor3d
 						, eye
 						, shininess
 						, shadowReceiver
-						, shader::FragmentInput( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal )
+						, surface
 						, output );
 #if !C3D_DisableSSSTransmittance
 					lightDiffuse += sss.compute( material
@@ -800,7 +861,28 @@ namespace castor3d
 
 				pxl_diffuse = lightDiffuse;
 				pxl_specular = lightSpecular;
-				pxl_indirect = vec3( 1.0_f, 1.0_f, 1.0_f );
+
+				if ( m_voxels )
+				{
+					auto occlusion = indirect.computeOcclusion( sceneFlags
+						, lightType
+						, surface );
+					auto indirectDiffuse = indirect.computeDiffuse( sceneFlags
+						, surface
+						, occlusion );
+					auto indirectSpecular = indirect.computeSpecular( sceneFlags
+						, eye
+						, surface
+						, ( 256.0_f - shininess ) / 256.0_f
+						, occlusion );
+					pxl_indirectDiffuse = indirectDiffuse;
+					pxl_indirectSpecular = indirectSpecular;
+				}
+				else
+				{
+					pxl_indirectDiffuse = vec3( 1.0_f, 1.0_f, 1.0_f );
+					pxl_indirectSpecular = vec3( 0.0_f, 0.0_f, 0.0_f );
+				}
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -814,6 +896,12 @@ namespace castor3d
 		using namespace sdw;
 		FragmentWriter writer;
 		auto & renderSystem = *m_engine.getRenderSystem();
+
+		// Shader outputs
+		auto pxl_diffuse = writer.declOutput< Vec3 >( "pxl_diffuse", 0 );
+		auto pxl_specular = writer.declOutput< Vec3 >( "pxl_specular", 1 );
+		auto pxl_indirectDiffuse = writer.declOutput< Vec3 >( "pxl_indirectDiffuse", 2, m_generatesIndirect );
+		auto pxl_indirectSpecular = writer.declOutput< Vec3 >( "pxl_indirectSpecular", 3, m_generatesIndirect );
 
 		// Shader inputs
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
@@ -832,11 +920,6 @@ namespace castor3d
 			? shadowType
 			: ShadowType::eNone;
 
-		// Shader outputs
-		auto pxl_diffuse = writer.declOutput< Vec3 >( "pxl_diffuse", 0 );
-		auto pxl_specular = writer.declOutput< Vec3 >( "pxl_specular", 1 );
-		auto pxl_indirect = writer.declOutput< Vec3 >( "pxl_indirect", 2, !m_generatesIndirect );
-
 		// Utility functions
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
 		shader::Utils utils{ writer };
@@ -845,6 +928,14 @@ namespace castor3d
 		utils.declareCalcWSPosition();
 		utils.declareDecodeReceiver();
 		utils.declareInvertVec2Y();
+
+		shader::GlobalIllumination indirect{ writer, utils, true };
+
+		if ( m_voxels )
+		{
+			indirect.declare( 1u, index, sceneFlags );
+		}
+
 		auto lighting = shader::MetallicBrdfLightingModel::createModel( writer
 			, utils
 			, lightType
@@ -911,6 +1002,8 @@ namespace castor3d
 					, C3D_DisableSSSTransmittance == 0 );
 
 				shader::OutputComponents output{ lightDiffuse, lightSpecular };
+				auto surface = writer.declLocale< shader::Surface >( "surface" );
+				surface.create( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal );
 
 				switch ( lightType )
 				{
@@ -927,7 +1020,7 @@ namespace castor3d
 							, metallic
 							, roughness
 							, shadowReceiver
-							, shader::FragmentInput( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal )
+							, surface
 							, output );
 						lightDiffuse += sss.compute( material
 							, light
@@ -953,7 +1046,7 @@ namespace castor3d
 						, metallic
 						, roughness
 						, shadowReceiver
-						, shader::FragmentInput( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal )
+						, surface
 						, output );
 #endif
 					break;
@@ -972,7 +1065,7 @@ namespace castor3d
 							, metallic
 							, roughness
 							, shadowReceiver
-							, shader::FragmentInput( wsPosition, wsNormal )
+							, surface
 							, output );
 						lightDiffuse += sss.compute( material
 							, light
@@ -998,7 +1091,7 @@ namespace castor3d
 						, metallic
 						, roughness
 						, shadowReceiver
-						, shader::FragmentInput( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal )
+						, surface
 						, output );
 #endif
 					break;
@@ -1017,7 +1110,7 @@ namespace castor3d
 							, metallic
 							, roughness
 							, shadowReceiver
-							, shader::FragmentInput( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal )
+							, surface
 							, output );
 						lightDiffuse += sss.compute( material
 							, light
@@ -1043,7 +1136,7 @@ namespace castor3d
 						, metallic
 						, roughness
 						, shadowReceiver
-						, shader::FragmentInput( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal )
+						, surface
 						, output );
 #endif
 					break;
@@ -1055,7 +1148,28 @@ namespace castor3d
 
 				pxl_diffuse = lightDiffuse;
 				pxl_specular = lightSpecular;
-				pxl_indirect = vec3( 1.0_f, 1.0_f, 1.0_f );
+
+				if ( m_voxels )
+				{
+					auto occlusion = indirect.computeOcclusion( sceneFlags
+						, lightType
+						, surface );
+					auto indirectDiffuse = indirect.computeDiffuse( sceneFlags
+						, surface
+						, occlusion );
+					auto indirectSpecular = indirect.computeSpecular( sceneFlags
+						, eye
+						, surface
+						, roughness
+						, occlusion );
+					pxl_indirectDiffuse = indirectDiffuse;
+					pxl_indirectSpecular = indirectSpecular;
+				}
+				else
+				{
+					pxl_indirectDiffuse = vec3( 1.0_f, 1.0_f, 1.0_f );
+					pxl_indirectSpecular = vec3( 0.0_f, 0.0_f, 0.0_f );
+				}
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -1095,6 +1209,14 @@ namespace castor3d
 		utils.declareCalcWSPosition();
 		utils.declareDecodeReceiver();
 		utils.declareInvertVec2Y();
+
+		shader::GlobalIllumination indirect{ writer, utils, true };
+
+		if ( m_voxels )
+		{
+			indirect.declare( 1u, index, sceneFlags );
+		}
+
 		auto lighting = shader::SpecularBrdfLightingModel::createModel( writer
 			, utils
 			, lightType
@@ -1113,7 +1235,8 @@ namespace castor3d
 		// Shader outputs
 		auto pxl_diffuse = writer.declOutput< Vec3 >( "pxl_diffuse", 0 );
 		auto pxl_specular = writer.declOutput< Vec3 >( "pxl_specular", 1 );
-		auto pxl_indirect = writer.declOutput< Vec3 >( "pxl_indirect", 2, !m_generatesIndirect );
+		auto pxl_indirectDiffuse = writer.declOutput< Vec3 >( "pxl_indirectDiffuse", 2, m_generatesIndirect );
+		auto pxl_indirectSpecular = writer.declOutput< Vec3 >( "pxl_indirectSpecular", 3, m_generatesIndirect );
 
 		writer.implementFunction< sdw::Void >( "main"
 			, [&]()
@@ -1166,6 +1289,8 @@ namespace castor3d
 					, C3D_DisableSSSTransmittance == 0 );
 
 				shader::OutputComponents output{ lightDiffuse, lightSpecular };
+				auto surface = writer.declLocale< shader::Surface >( "surface" );
+				surface.create( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal );
 
 				switch ( lightType )
 				{
@@ -1178,7 +1303,7 @@ namespace castor3d
 						, specular
 						, glossiness
 						, shadowReceiver
-						, shader::FragmentInput( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal )
+						, surface
 						, output );
 #if !C3D_DisableSSSTransmittance
 					lightDiffuse += sss.compute( material
@@ -1200,7 +1325,7 @@ namespace castor3d
 						, specular
 						, glossiness
 						, shadowReceiver
-						, shader::FragmentInput( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal )
+						, surface
 						, output );
 #if !C3D_DisableSSSTransmittance
 					lightDiffuse += sss.compute( material
@@ -1222,7 +1347,7 @@ namespace castor3d
 						, specular
 						, glossiness
 						, shadowReceiver
-						, shader::FragmentInput( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal )
+						, surface
 						, output );
 #if !C3D_DisableSSSTransmittance
 					lightDiffuse += sss.compute( material
@@ -1241,7 +1366,28 @@ namespace castor3d
 
 				pxl_diffuse = lightDiffuse;
 				pxl_specular = lightSpecular;
-				pxl_indirect = vec3( 1.0_f, 1.0_f, 1.0_f );
+
+				if ( m_voxels )
+				{
+					auto occlusion = indirect.computeOcclusion( sceneFlags
+						, lightType
+						, surface );
+					auto indirectDiffuse = indirect.computeDiffuse( sceneFlags
+						, surface
+						, occlusion );
+					auto indirectSpecular = indirect.computeSpecular( sceneFlags
+						, eye
+						, surface
+						, 1.0_f - glossiness
+						, occlusion );
+					pxl_indirectDiffuse = indirectDiffuse;
+					pxl_indirectSpecular = indirectSpecular;
+				}
+				else
+				{
+					pxl_indirectDiffuse = vec3( 1.0_f, 1.0_f, 1.0_f );
+					pxl_indirectSpecular = vec3( 0.0_f, 0.0_f, 0.0_f );
+				}
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

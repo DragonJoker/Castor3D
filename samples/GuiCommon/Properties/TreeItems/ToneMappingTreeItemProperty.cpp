@@ -81,7 +81,7 @@ namespace GuiCommon
 	ToneMappingTreeItemProperty::ToneMappingTreeItemProperty( bool editable
 		, castor3d::RenderTarget & target
 		, wxWindow * parent )
-		: TreeItemProperty{ target.getEngine(), editable, ePROPERTY_DATA_TYPE_POST_EFFECT }
+		: TreeItemProperty{ target.getEngine(), editable }
 		, m_target{ target }
 		, m_parent{ parent }
 	{

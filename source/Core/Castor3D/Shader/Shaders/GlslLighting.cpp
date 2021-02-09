@@ -18,93 +18,6 @@ namespace castor3d
 {
 	namespace shader
 	{
-		//***********************************************************************************************
-
-		ast::expr::ExprList makeFnArg( sdw::ShaderWriter & writer
-			, FragmentInput const & value )
-		{
-			ast::expr::ExprList result;
-			auto args = sdw::makeFnArg( writer, value.m_clipVertex );
-
-			for ( auto & expr : args )
-			{
-				result.emplace_back( std::move( expr ) );
-			}
-			
-			args = sdw::makeFnArg( writer, value.m_viewVertex );
-
-			for ( auto & expr : args )
-			{
-				result.emplace_back( std::move( expr ) );
-			}
-
-			args = sdw::makeFnArg( writer, value.m_worldVertex );
-
-			for ( auto & expr : args )
-			{
-				result.emplace_back( std::move( expr ) );
-			}
-
-			args = sdw::makeFnArg( writer, value.m_worldNormal );
-
-			for ( auto & expr : args )
-			{
-				result.emplace_back( std::move( expr ) );
-			}
-
-			return result;
-		}
-
-		//***********************************************************************************************
-
-		FragmentInput::FragmentInput( FragmentInput const & rhs )
-			: FragmentInput{ rhs.m_clipVertex, rhs.m_viewVertex, rhs.m_worldVertex, rhs.m_worldNormal }
-		{
-		}
-
-		FragmentInput::FragmentInput( ShaderWriter & writer )
-			: FragmentInput{ { writer, "inClipVertex" }, { writer, "inViewVertex" }, { writer, "inWorldVertex" }, { writer, "inWorldNormal" } }
-		{
-		}
-
-		FragmentInput::FragmentInput( InVec2 const & clipVertex
-			, InVec3 const & viewVertex
-			, InVec3 const & worldVertex
-			, InVec3 const & worldNormal )
-			: m_clipVertex{ clipVertex }
-			, m_viewVertex{ viewVertex }
-			, m_worldVertex{ worldVertex }
-			, m_worldNormal{ worldNormal }
-			, m_expr{ ast::expr::makeComma( makeExpr( *getWriter(), m_clipVertex )
-				, ast::expr::makeComma( makeExpr( *getWriter(), m_viewVertex )
-					, ast::expr::makeComma( makeExpr( *getWriter(), m_worldVertex )
-						, makeExpr( *getWriter(), m_worldNormal ) ) ) ) }
-		{
-		}
-
-		ast::expr::Expr * FragmentInput::getExpr()const
-		{
-			return m_expr.get();
-		}
-
-		sdw::ShaderWriter * FragmentInput::getWriter()const
-		{
-			return findWriter( m_clipVertex
-				, m_viewVertex
-				, m_worldVertex
-				, m_worldNormal );
-		}
-
-		void FragmentInput::setVar( ast::var::VariableList::const_iterator & var )
-		{
-			m_clipVertex.setVar( var );
-			m_viewVertex.setVar( var );
-			m_worldVertex.setVar( var );
-			m_worldNormal.setVar( var );
-		}
-
-		//***********************************************************************************************
-
 		uint32_t const LightingModel::UboBindingPoint = 7u;
 
 		LightingModel::LightingModel( ShaderWriter & writer
@@ -140,6 +53,30 @@ namespace castor3d
 			doDeclareComputeDirectionalLight();
 			doDeclareComputePointLight();
 			doDeclareComputeSpotLight();
+		}
+
+		void LightingModel::declareDiffuseModel( uint32_t & index )
+		{
+			m_shadowModel->declare( index );
+			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
+			m_writer.inlineComment( "// LIGHTS" );
+			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
+			doDeclareLight();
+			doDeclareGetCascadeFactors();
+			doDeclareDirectionalLight();
+			doDeclarePointLight();
+			doDeclareSpotLight();
+			doDeclareGetBaseLight();
+			doDeclareGetDirectionalLight();
+			doDeclareGetPointLight();
+			doDeclareGetSpotLight();
+			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
+			m_writer.inlineComment( "// DIFFUSE LIGHTING" );
+			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
+			doDeclareDiffuseModel();
+			doDeclareComputeDirectionalLightDiffuse();
+			doDeclareComputePointLightDiffuse();
+			doDeclareComputeSpotLightDiffuse();
 		}
 
 		void LightingModel::declareDirectionalModel( bool lightUbo

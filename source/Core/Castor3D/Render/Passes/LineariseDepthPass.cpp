@@ -386,8 +386,7 @@ namespace castor3d
 		}
 
 		m_result.initialise( device );
-		m_timer = std::make_shared< RenderPassTimer >( m_engine
-			, device
+		m_timer = std::make_shared< RenderPassTimer >( device
 			, m_prefix
 			, cuT( "Linearise depth" ) );
 		m_renderPass = doCreateRenderPass( device );
@@ -728,7 +727,7 @@ namespace castor3d
 		cb.draw( 6u );
 		cb.endRenderPass();
 		cb.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT
+			, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
 			, m_depthBuffer.makeDepthStencilReadOnly( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 		cb.endDebugBlock();
 

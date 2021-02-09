@@ -39,7 +39,6 @@ namespace castor3d
 		, m_finalCombinePass{ engine, device, m_size, m_transparentPass.getSceneUbo(), hdrConfigUbo, gpInfoUbo, m_transparentPassResult, colourView }
 	{
 		m_transparentPass.initialiseRenderPass( device, m_transparentPassResult );
-		m_transparentPass.initialise( device, m_size, &lpvResult );
 	}
 
 	void WeightedBlendRendering::update( CpuUpdater & updater )

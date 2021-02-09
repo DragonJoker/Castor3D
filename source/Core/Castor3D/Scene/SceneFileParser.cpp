@@ -355,6 +355,7 @@ namespace castor3d
 		addParser( uint32_t( CSCNSection::eScene ), cuT( "mesh" ), parserMesh, { makeParameter< ParameterType::eName >() } );
 		addParser( uint32_t( CSCNSection::eScene ), cuT( "directional_shadow_cascades" ), parserDirectionalShadowCascades, { makeParameter< ParameterType::eUInt32 >( castor::makeRange( 0u, shader::DirectionalMaxCascadesCount ) ) } );
 		addParser( uint32_t( CSCNSection::eScene ), cuT( "lpv_indirect_attenuation" ), parserLpvIndirectAttenuation, { makeParameter< ParameterType::eFloat >() } );
+		addParser( uint32_t( CSCNSection::eScene ), cuT( "voxel_cone_tracing" ), parserVoxelConeTracing );
 
 		addParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "parent" ), parserParticleSystemParent, { makeParameter< ParameterType::eName >() } );
 		addParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "particles_count" ), parserParticleSystemCount, { makeParameter< ParameterType::eUInt32 >() } );
@@ -503,13 +504,13 @@ namespace castor3d
 		addParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "pixel_program" ), parserPixelShader );
 		addParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "geometry_program" ), parserGeometryShader );
 		addParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "hull_program" ), parserHullShader );
-		addParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "domain_program" ), parserdomainShader );
+		addParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "domain_program" ), parserDomainShader );
 		addParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "compute_program" ), parserComputeShader );
 		addParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "constants_buffer" ), parserConstantsBuffer, { makeParameter< ParameterType::eName >() } );
 		addParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "}" ), parserShaderEnd );
 
-		addParser( uint32_t( CSCNSection::shaderStage ), cuT( "file" ), parserShaderProgramFile, { makeParameter< ParameterType::ePath >() } );
-		addParser( uint32_t( CSCNSection::shaderStage ), cuT( "group_sizes" ), parserShaderGroupSizes, { makeParameter< ParameterType::ePoint3I >() } );
+		addParser( uint32_t( CSCNSection::eShaderStage ), cuT( "file" ), parserShaderProgramFile, { makeParameter< ParameterType::ePath >() } );
+		addParser( uint32_t( CSCNSection::eShaderStage ), cuT( "group_sizes" ), parserShaderGroupSizes, { makeParameter< ParameterType::ePoint3I >() } );
 
 		addParser( uint32_t( CSCNSection::eShaderUBO ), cuT( "shaders" ), parserShaderUboShaders, { makeParameter< ParameterType::eBitwiseOred32BitsCheckedText >( m_mapShaderTypes ) } );
 		addParser( uint32_t( CSCNSection::eShaderUBO ), cuT( "variable" ), parserShaderUboVariable, { makeParameter< ParameterType::eName >() } );
@@ -642,6 +643,17 @@ namespace castor3d
 		addParser( uint32_t( CSCNSection::eHdrConfig ), cuT( "exposure" ), parserHdrExponent, { makeParameter< ParameterType::eFloat >() } );
 		addParser( uint32_t( CSCNSection::eHdrConfig ), cuT( "gamma" ), parserHdrGamma, { makeParameter< ParameterType::eFloat >() } );
 
+		addParser( uint32_t( CSCNSection::eVoxelConeTracing ), cuT( "enabled" ), parserVctEnabled, { makeParameter< ParameterType::eBool >() } );
+		addParser( uint32_t( CSCNSection::eVoxelConeTracing ), cuT( "grid_size" ), parserVctGridSize, { makeParameter< ParameterType::eUInt32 >( castor::Range< uint32_t >( 2u, 512u ) ) } );
+		addParser( uint32_t( CSCNSection::eVoxelConeTracing ), cuT( "num_cones" ), parserVctNumCones, { makeParameter< ParameterType::eUInt32 >( castor::Range< uint32_t >( 1u, 16u ) ) } );
+		addParser( uint32_t( CSCNSection::eVoxelConeTracing ), cuT( "max_distance" ), parserVctMaxDistance, { makeParameter< ParameterType::eFloat >() } );
+		addParser( uint32_t( CSCNSection::eVoxelConeTracing ), cuT( "ray_step_size" ), parserVctRayStepSize, { makeParameter< ParameterType::eFloat >() } );
+		addParser( uint32_t( CSCNSection::eVoxelConeTracing ), cuT( "voxel_size" ), parserVctVoxelSize, { makeParameter< ParameterType::eFloat >() } );
+		addParser( uint32_t( CSCNSection::eVoxelConeTracing ), cuT( "conservative_rasterization" ), parserVctConservativeRasterization, { makeParameter< ParameterType::eBool >() } );
+		addParser( uint32_t( CSCNSection::eVoxelConeTracing ), cuT( "temporal_smoothing" ), parserVctTemporalSmoothing, { makeParameter< ParameterType::eBool >() } );
+		addParser( uint32_t( CSCNSection::eVoxelConeTracing ), cuT( "occlusion" ), parserVctOcclusion, { makeParameter< ParameterType::eBool >() } );
+		addParser( uint32_t( CSCNSection::eVoxelConeTracing ), cuT( "secondary_bounce" ), parserVctSecondaryBounce, { makeParameter< ParameterType::eBool >() } );
+
 		for ( auto const & it : getEngine()->getAdditionalParsers() )
 		{
 			for ( auto const & itSections : it.second )
@@ -681,159 +693,70 @@ namespace castor3d
 	String SceneFileParser::doGetSectionName( uint32_t section )
 	{
 		String result;
+		static const std::map< CSCNSection, String > baseSections
+		{ { CSCNSection::eRoot, String{} }
+			, { CSCNSection::eScene, cuT( "scene" ) }
+			, { CSCNSection::eWindow, cuT( "window" ) }
+			, { CSCNSection::eSampler, cuT( "sampler" ) }
+			, { CSCNSection::eCamera, cuT( "camera" ) }
+			, { CSCNSection::eViewport, cuT( "viewport" ) }
+			, { CSCNSection::eLight, cuT( "light" ) }
+			, { CSCNSection::eNode, cuT( "scene_node" ) }
+			, { CSCNSection::eObject, cuT( "object" ) }
+			, { CSCNSection::eObjectMaterials, cuT( "materials" ) }
+			, { CSCNSection::eFont, cuT( "font" ) }
+			, { CSCNSection::ePanelOverlay, cuT( "panel_overlay" ) }
+			, { CSCNSection::eBorderPanelOverlay, cuT( "border_panel_overlay" ) }
+			, { CSCNSection::eTextOverlay, cuT( "text_overlay" ) }
+			, { CSCNSection::eMesh, cuT( "mesh" ) }
+			, { CSCNSection::eSubmesh, cuT( "submesh" ) }
+			, { CSCNSection::eMaterial, cuT( "material" ) }
+			, { CSCNSection::ePass, cuT( "pass" ) }
+			, { CSCNSection::eTextureUnit, cuT( "texture_unit" ) }
+			, { CSCNSection::eRenderTarget, cuT( "render_target" ) }
+			, { CSCNSection::eShaderProgram, cuT( "shader_program" ) }
+			, { CSCNSection::eShaderStage, cuT( "shader_object" ) }
+			, { CSCNSection::eShaderUBO, cuT( "constants_buffer" ) }
+			, { CSCNSection::eUBOVariable, cuT( "variable" ) }
+			, { CSCNSection::eBillboard, cuT( "billboard" ) }
+			, { CSCNSection::eBillboardList, cuT( "positions" ) }
+			, { CSCNSection::eAnimGroup, cuT( "animated_object_group" ) }
+			, { CSCNSection::eAnimation, cuT( "animation" ) }
+			, { CSCNSection::eSkybox, cuT( "skybox" ) }
+			, { CSCNSection::eParticleSystem, cuT( "particle_system" ) }
+			, { CSCNSection::eParticle, cuT( "particle" ) }
+			, { CSCNSection::eSsao, cuT( "ssao" ) }
+			, { CSCNSection::eSubsurfaceScattering, cuT( "subsurface_scattering" ) }
+			, { CSCNSection::eTransmittanceProfile, cuT( "transmittance_profile" ) }
+			, { CSCNSection::eHdrConfig, cuT( "hdr_config" ) }
+			, { CSCNSection::eShadows, cuT( "shadows" ) }
+			, { CSCNSection::eMeshDefaultMaterials, cuT( "default_materials" ) }
+			, { CSCNSection::eRsm, cuT( "rsm" ) }
+			, { CSCNSection::eLpv, cuT( "lpv" ) }
+			, { CSCNSection::eRaw, cuT( "raw" ) }
+			, { CSCNSection::ePcf, cuT( "pcf" ) }
+			, { CSCNSection::eVsm, cuT( "vsm" ) }
+			, { CSCNSection::eTextureAnimation, cuT( "texture_animation" ) }
+			, { CSCNSection::eVoxelConeTracing, cuT( "voxel_cone_tracing" ) } };
+		auto it = baseSections.find( CSCNSection( section ) );
 
-		switch ( CSCNSection( section ) )
+		if ( it != baseSections.end() )
 		{
-		case CSCNSection::eRoot:
-			break;
-
-		case CSCNSection::eScene:
-			result = cuT( "scene" );
-			break;
-
-		case CSCNSection::eWindow:
-			result = cuT( "window" );
-			break;
-
-		case CSCNSection::eSampler:
-			result = cuT( "sampler" );
-			break;
-
-		case CSCNSection::eCamera:
-			result = cuT( "camera" );
-			break;
-
-		case CSCNSection::eViewport:
-			result = cuT( "viewport" );
-			break;
-
-		case CSCNSection::eLight:
-			result = cuT( "light" );
-			break;
-
-		case CSCNSection::eNode:
-			result = cuT( "scene_node" );
-			break;
-
-		case CSCNSection::eObject:
-			result = cuT( "object" );
-			break;
-
-		case CSCNSection::eObjectMaterials:
-			result = cuT( "materials" );
-			break;
-
-		case CSCNSection::eFont:
-			result = cuT( "font" );
-			break;
-
-		case CSCNSection::ePanelOverlay:
-			result = cuT( "panel_overlay" );
-			break;
-
-		case CSCNSection::eBorderPanelOverlay:
-			result = cuT( "border_panel_overlay" );
-			break;
-
-		case CSCNSection::eTextOverlay:
-			result = cuT( "text_overlay" );
-			break;
-
-		case CSCNSection::eMesh:
-			result = cuT( "mesh" );
-			break;
-
-		case CSCNSection::eSubmesh:
-			result = cuT( "submesh" );
-			break;
-
-		case CSCNSection::eMaterial:
-			result = cuT( "material" );
-			break;
-
-		case CSCNSection::ePass:
-			result = cuT( "pass" );
-			break;
-
-		case CSCNSection::eTextureUnit:
-			result = cuT( "texture_unit" );
-			break;
-
-		case CSCNSection::eRenderTarget:
-			result = cuT( "render_target" );
-			break;
-
-		case CSCNSection::eShaderProgram:
-			result = cuT( "gl_shader_program" );
-			break;
-
-		case CSCNSection::shaderStage:
-			result = cuT( "shader_object" );
-			break;
-
-		case CSCNSection::eShaderUBO:
-			result = cuT( "constants_buffer" );
-			break;
-
-		case CSCNSection::eUBOVariable:
-			result = cuT( "variable" );
-			break;
-
-		case CSCNSection::eBillboard:
-			result = cuT( "billboard" );
-			break;
-
-		case CSCNSection::eBillboardList:
-			result = cuT( "positions" );
-			break;
-
-		case CSCNSection::eAnimGroup:
-			result = cuT( "animated_object_group" );
-			break;
-
-		case CSCNSection::eAnimation:
-			result = cuT( "animation" );
-			break;
-
-		case CSCNSection::eSkybox:
-			result = cuT( "skybox" );
-			break;
-
-		case CSCNSection::eParticleSystem:
-			result = cuT( "particle_system" );
-			break;
-
-		case CSCNSection::eParticle:
-			result = cuT( "particle" );
-			break;
-
-		case CSCNSection::eRsm:
-			result = cuT( "rsm" );
-			break;
-
-		default:
-			for ( auto const & sections : getEngine()->getAdditionalSections() )
-			{
-				if ( result.empty() )
-				{
-					auto it = sections.second.find( section );
-
-					if ( it != sections.second.end() )
-					{
-						result = it->second;
-					}
-				}
-			}
-
-			if ( result.empty() )
-			{
-				CU_Failure( "Section not found" );
-			}
-
-			break;
+			return it->second;
 		}
 
-		return result;
+		for ( auto const & sections : getEngine()->getAdditionalSections() )
+		{
+			auto it = sections.second.find( section );
+
+			if ( it != sections.second.end() )
+			{
+				return it->second;
+			}
+		}
+
+		CU_Failure( "Section not found" );
+		return cuT( "unknown" );
 	}
 }
 //****************************************************************************************************

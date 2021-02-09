@@ -17,10 +17,8 @@ namespace GuiCommon
 	TreeItemProperty::PropertyChangeHandler const TreeItemProperty::EmptyHandler = []( wxVariant const & ){};
 
 	TreeItemProperty::TreeItemProperty( castor3d::Engine * engine
-		, bool editable
-		, ePROPERTY_DATA_TYPE type )
+		, bool editable )
 		: wxTreeItemData()
-		, m_type( type )
 		, m_editable( editable )
 		, m_engine( engine )
 		, m_menu( nullptr )
@@ -54,24 +52,36 @@ namespace GuiCommon
 		{
 			auto handler = it->second;
 			auto value = event.GetValue();
-			m_engine->postEvent( makeCpuFunctorEvent( EventType::ePreRender
-				, [value, handler]()
-				{
-					handler( value );
-				} ) );
+
+			if ( m_engine )
+			{
+				m_engine->postEvent( makeCpuFunctorEvent( EventType::ePreRender
+					, [value, handler]()
+					{
+						handler( value );
+					} ) );
+			}
+			else
+			{
+				handler( value );
+			}
 		}
 	}
 
 	wxArrayString TreeItemProperty::getMaterialsList()
 	{
-		auto & cache = m_engine->getMaterialCache();
 		wxArrayString choices;
-		using LockType = std::unique_lock< MaterialCache >;
-		LockType lock{ castor::makeUniqueLock( cache ) };
 
-		for ( auto pair : cache )
+		if ( m_engine )
 		{
-			choices.push_back( pair.first );
+			auto & cache = m_engine->getMaterialCache();
+			using LockType = std::unique_lock< MaterialCache >;
+			LockType lock{ castor::makeUniqueLock( cache ) };
+
+			for ( auto pair : cache )
+			{
+				choices.push_back( pair.first );
+			}
 		}
 
 		return choices;

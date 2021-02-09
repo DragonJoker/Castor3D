@@ -80,7 +80,8 @@ namespace castor3d
 		*	La scène parente.
 		*/
 		C3D_API explicit SkyboxBackground( Engine & engine
-			, Scene & scene );
+			, Scene & scene
+			, castor::String const & name = castor::String{} );
 		/**
 		*\~english
 		*\brief

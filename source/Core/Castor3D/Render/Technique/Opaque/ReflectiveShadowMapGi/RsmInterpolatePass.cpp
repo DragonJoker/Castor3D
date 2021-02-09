@@ -77,15 +77,13 @@ namespace castor3d
 
 			// Shader inputs
 			UBO_RSM_CONFIG( writer, RsmCfgUboIdx, 0u );
-			ArraySsboT< Vec2 > c3d_rsmSamples
-			{
-				writer,
-				"c3d_rsmSamples",
-				writer.getTypesCache().getVec2F(),
-				type::MemoryLayout::eStd430,
-				RsmSamplesIdx,
-				0u
-			};
+			ArraySsboT< Vec2 > c3d_rsmSamples{ writer
+				, "c3d_rsmSamples"
+				, writer.getTypesCache().getVec2F()
+				, type::MemoryLayout::eStd430
+				, RsmSamplesIdx
+				, 0u
+				, true };
 			UBO_GPINFO( writer, GpInfoUboIdx, 0u );
 			auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", LightsMapIdx, 0u );
 			auto c3d_mapGi = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapGi", GiMapIdx, 0u );
@@ -183,15 +181,13 @@ namespace castor3d
 
 			// Shader inputs
 			UBO_RSM_CONFIG( writer, RsmCfgUboIdx, 0u );
-			ArraySsboT< Vec2 > c3d_rsmSamples
-			{
-				writer,
-				"c3d_rsmSamples",
-				writer.getTypesCache().getVec2F(),
-				type::MemoryLayout::eStd430,
-				RsmSamplesIdx,
-				0u
-			};
+			ArraySsboT< Vec2 > c3d_rsmSamples{ writer
+				, "c3d_rsmSamples"
+				, writer.getTypesCache().getVec2F()
+				, type::MemoryLayout::eStd430
+				, RsmSamplesIdx
+				, 0u
+				, true };
 			UBO_GPINFO( writer, GpInfoUboIdx, 0u );
 			auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", LightsMapIdx, 0u );
 			auto c3d_mapGi = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapGi", GiMapIdx, 0u );
@@ -293,15 +289,13 @@ namespace castor3d
 
 			// Shader inputs
 			UBO_RSM_CONFIG( writer, RsmCfgUboIdx, 0u );
-			ArraySsboT< Vec2 > c3d_rsmSamples
-			{
-				writer,
-				"c3d_rsmSamples",
-				writer.getTypesCache().getVec2F(),
-				type::MemoryLayout::eStd430,
-				RsmSamplesIdx,
-				0u
-			};
+			ArraySsboT< Vec2 > c3d_rsmSamples{ writer
+				, "c3d_rsmSamples"
+				, writer.getTypesCache().getVec2F()
+				, type::MemoryLayout::eStd430
+				, RsmSamplesIdx
+				, 0u
+				, true };
 			UBO_GPINFO( writer, GpInfoUboIdx, 0u );
 			auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", LightsMapIdx, 0u );
 			auto c3d_mapGi = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapGi", GiMapIdx, 0u );
@@ -532,7 +526,7 @@ namespace castor3d
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram( engine, lightType, gi.getTexture()->getWidth(), gi.getTexture()->getHeight() ) }
 		, m_renderPass{ doCreateRenderPass( m_device, dst.getTexture()->getPixelFormat() ) }
 		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, dst.getTexture()->getDefaultView().getTargetView() ) }
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, m_device, cuT( "Reflective Shadow Maps" ), cuT( "Interpolate" ) ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( m_device, cuT( "Reflective Shadow Maps" ), cuT( "Interpolate" ) ) }
 	{
 		ashes::PipelineShaderStageCreateInfoArray shaderStages;
 		shaderStages.push_back( makeShaderState( m_device, m_vertexShader ) );

@@ -20,7 +20,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	class RenderPass
+	class SceneRenderPass
 		: public castor::OwnedBy< Engine >
 		, public castor::Named
 	{
@@ -28,15 +28,16 @@ namespace castor3d
 		using DistanceSortedNodeMap = std::multimap< double, std::unique_ptr< DistanceRenderNodeBase > >;
 
 	protected:
-		C3D_API RenderPass( castor::String const & category
+		C3D_API SceneRenderPass( castor::String const & category
 			, castor::String const & name
 			, Engine & engine
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, RenderMode mode
 			, bool oit
+			, bool forceTwoSided
 			, SceneNode const * ignored
-			, uint32_t instanceMult = 1u );
+			, uint32_t instanceMult );
 
 	protected:
 		/**
@@ -57,7 +58,7 @@ namespace castor3d
 		 *\param[in]	culler			Le culler pour cette passe.
 		 *\param[in]	instanceMult	Le multiplicateur d'instances d'objets.
 		 */
-		C3D_API RenderPass( castor::String const & category
+		C3D_API SceneRenderPass( castor::String const & category
 			, castor::String const & name
 			, Engine & engine
 			, MatrixUbo & matrixUbo
@@ -83,7 +84,7 @@ namespace castor3d
 		 *\param[in]	oit				Le statut de rendu indépendant de l'ordre des objets.
 		 *\param[in]	instanceMult	Le multiplicateur d'instances d'objets.
 		 */
-		C3D_API RenderPass( castor::String const & category
+		C3D_API SceneRenderPass( castor::String const & category
 			, castor::String const & name
 			, Engine & engine
 			, MatrixUbo & matrixUbo
@@ -110,7 +111,7 @@ namespace castor3d
 		 *\param[in]	ignored			Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 *\param[in]	instanceMult	Le multiplicateur d'instances d'objets.
 		 */
-		C3D_API RenderPass( castor::String const & category
+		C3D_API SceneRenderPass( castor::String const & category
 			, castor::String const & name
 			, Engine & engine
 			, MatrixUbo & matrixUbo
@@ -139,7 +140,7 @@ namespace castor3d
 		 *\param[in]	ignored			Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 *\param[in]	instanceMult	Le multiplicateur d'instances d'objets.
 		 */
-		C3D_API RenderPass( castor::String const & category
+		C3D_API SceneRenderPass( castor::String const & category
 			, castor::String const & name
 			, Engine & engine
 			, MatrixUbo & matrixUbo
@@ -155,7 +156,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~RenderPass();
+		C3D_API virtual ~SceneRenderPass() = default;
 		/**
 		 *\~english
 		 *\brief		Initialises the pass.
@@ -168,6 +169,20 @@ namespace castor3d
 		 */
 		C3D_API bool initialise( RenderDevice const & device
 			, castor::Size const & size );
+		/**
+		 *\~english
+		 *\brief		Initialises the pass.
+		 *\param		size	The pass needed dimensions.
+		 *\return		\p true on ok.
+		 *\~french
+		 *\brief		Initialise la passe.
+		 *\param		size	Les dimensions voulues pour la passe.
+		 *\return		\p true si tout s'est bien passé.
+		 */
+		C3D_API bool initialise( RenderDevice const & device
+			, castor::Size const & size
+			, RenderPassTimer & timer
+			, uint32_t index );
 		/**
 		 *\~english
 		 *\brief		Cleans up the pass.
@@ -622,75 +637,80 @@ namespace castor3d
 		/**@{*/
 		C3D_API virtual TextureFlags getTexturesMask()const;
 
-		inline bool isOrderIndependent()const
+		bool isOrderIndependent()const
 		{
 			return m_oit;
 		}
 
-		inline SceneCuller const & getCuller()const
+		SceneCuller const & getCuller()const
 		{
 			return m_culler;
 		}
 
-		inline SceneCuller & getCuller()
+		SceneCuller & getCuller()
 		{
 			return m_culler;
 		}
 
-		inline SceneUbo & getSceneUbo()
+		SceneUbo & getSceneUbo()
 		{
 			return m_sceneUbo;
 		}
 
-		inline SceneUbo const & getSceneUbo()const
+		SceneUbo const & getSceneUbo()const
 		{
 			return m_sceneUbo;
 		}
 
-		inline MatrixUbo & getMatrixUbo()const
+		MatrixUbo & getMatrixUbo()const
 		{
 			return m_matrixUbo;
 		}
 
-		inline ashes::CommandBuffer const & getCommandBuffer()const
+		ashes::CommandBuffer const & getCommandBuffer()const
 		{
 			return m_renderQueue.getCommandBuffer();
 		}
 
-		inline bool hasNodes()const
+		bool hasNodes()const
 		{
 			return m_renderQueue.hasNodes();
 		}
 
-		inline ashes::RenderPass const & getRenderPass()const
+		ashes::RenderPass const & getRenderPass()const
 		{
 			return *m_renderPass;
 		}
 
-		inline RenderPassTimer const & getTimer()const
+		RenderPassTimer const & getTimer()const
 		{
 			return *m_timer;
 		}
 
-		inline RenderPassTimer & getTimer()
+		RenderPassTimer & getTimer()
 		{
 			return *m_timer;
 		}
 
-		inline uint32_t getPipelinesCount()const
+		uint32_t getPipelinesCount()const
 		{
 			return uint32_t( m_backPipelines.size()
 				+ m_frontPipelines.size() );
 		}
 
-		inline uint32_t getInstanceMult()const
+		uint32_t getInstanceMult()const
 		{
 			return m_instanceMult;
 		}
 
-		inline bool isDirty()const
+		bool isDirty()const
 		{
 			return m_isDirty;
+		}
+
+		bool forceTwoSided()const
+		{
+			return m_forceTwoSided;
 		}
 		/**@}*/
 
@@ -1269,10 +1289,13 @@ namespace castor3d
 		castor::String m_category;
 		RenderMode m_mode{ RenderMode::eBoth };
 		bool m_oit{ false };
+		bool m_forceTwoSided{ false };
 		bool m_isDirty{ true };
 		SceneUbo m_sceneUbo;
 		ashes::RenderPassPtr m_renderPass;
-		RenderPassTimerSPtr m_timer;
+		RenderPassTimer * m_timer{ nullptr };
+		uint32_t m_index{ 0u };
+		RenderPassTimerSPtr m_ownTimer;
 		castor::Size m_size;
 		uint32_t const m_instanceMult{ 1u };
 		std::map< size_t, UniformBufferOffsetT< ModelInstancesUboConfiguration > > m_modelsInstances;

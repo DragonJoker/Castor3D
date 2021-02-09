@@ -22,7 +22,8 @@ namespace castor3d
 
 		public:
 			C3D_API TextureConfigData( sdw::ShaderWriter & writer
-				, ast::expr::ExprPtr expr );
+				, ast::expr::ExprPtr expr
+				, bool enabled );
 
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );

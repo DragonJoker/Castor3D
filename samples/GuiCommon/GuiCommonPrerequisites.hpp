@@ -10,6 +10,11 @@ See LICENSE file in root folder
 
 namespace GuiCommon
 {
+	struct ExportOptions
+	{
+		float scale{ 1.0f };
+	};
+
 	typedef enum eBMP
 	{
 		eBMP_ANIMATED_OBJECTGROUP,
@@ -128,6 +133,7 @@ namespace GuiCommon
 	typedef std::shared_ptr< LanguageFileContext > LanguageFileContextPtr;
 	typedef std::shared_ptr< StyleInfo > StyleInfoPtr;
 
+	CU_DeclareSmartPtr( TreeItemProperty );
 	CU_DeclareMap( uint32_t, wxImage *, ImageId );
 	CU_DeclareVector( thread_sptr, ThreadPtr );
 	CU_DeclareVector( LanguageInfoPtr, LanguageInfoPtr );

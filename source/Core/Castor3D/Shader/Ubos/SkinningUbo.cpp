@@ -30,7 +30,8 @@ namespace castor3d
 					, writer.getTypesCache().getMat4x4F()
 					, ast::type::MemoryLayout::eStd140
 					, binding
-					, set );
+					, set
+					, true );
 			}
 			else
 			{

@@ -4,15 +4,61 @@
 #include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
+#include <ShaderWriter/Writer.hpp>
+
 CU_ImplementCUSmartPtr( castor3d, LayeredLpvGridConfigUbo )
 
 namespace castor3d
 {
+	//*********************************************************************************************
+
+	namespace shader
+	{
+		LayeredLpvGridData::LayeredLpvGridData( sdw::ShaderWriter & writer
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstance{ writer, std::move( expr ), enabled }
+			, allMinVolumeCorners{ getMemberArray< sdw::Vec4 >( "allMinVolumeCorners" ) }
+			, allCellSizes{ getMember< sdw::Vec4 >( "allCellSizes" ) }
+			, gridSizesAtt{ getMember< sdw::Vec4 >( "gridSizesAtt" ) }
+			, gridSizes{ gridSizesAtt.xyz() }
+			, indirectAttenuation{ gridSizesAtt.w() }
+		{
+		}
+
+		LayeredLpvGridData & LayeredLpvGridData::operator=( LayeredLpvGridData const & rhs )
+		{
+			StructInstance::operator=( rhs );
+			return *this;
+		}
+
+		ast::type::StructPtr LayeredLpvGridData::makeType( ast::type::TypesCache & cache )
+		{
+			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
+				, "LayeredLpvGridData" );
+
+			if ( result->empty() )
+			{
+				result->declMember( "allMinVolumeCorners", ast::type::Kind::eVec4F, LpvMaxCascadesCount );
+				result->declMember( "allCellSizes", ast::type::Kind::eVec4F );
+				result->declMember( "gridSizesAtt", ast::type::Kind::eVec4F );
+			}
+
+			return result;
+		}
+
+		std::unique_ptr< sdw::Struct > LayeredLpvGridData::declare( sdw::ShaderWriter & writer )
+		{
+			return std::make_unique< sdw::Struct >( writer
+				, makeType( writer.getTypesCache() ) );
+		}
+	}
+
+	//*********************************************************************************************
+
 	uint32_t const LayeredLpvGridConfigUbo::BindingPoint = 13;
 	std::string const LayeredLpvGridConfigUbo::LayeredLpvConfig = "LayeredLpvConfig";
-	std::string const LayeredLpvGridConfigUbo::AllMinVolumeCorners = "c3d_allMinVolumeCorners";
-	std::string const LayeredLpvGridConfigUbo::AllCellSizes = "c3d_allCellSizes";
-	std::string const LayeredLpvGridConfigUbo::GridSizes = "c3d_gridSizes";
+	std::string const LayeredLpvGridConfigUbo::LayeredLpvGridData = "c3d_llpvGridData";
 
 	LayeredLpvGridConfigUbo::LayeredLpvGridConfigUbo()
 	{

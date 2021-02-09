@@ -25,7 +25,8 @@ namespace castor3d
 
 		protected:
 			C3D_API BaseMaterial( sdw::ShaderWriter & writer
-				, ast::expr::ExprPtr expr );
+				, ast::expr::ExprPtr expr
+				, bool enabled );
 
 		protected:
 			using sdw::StructInstance::getMember;
@@ -63,7 +64,8 @@ namespace castor3d
 			friend class LegacyMaterials;
 
 			C3D_API LegacyMaterial( sdw::ShaderWriter & writer
-				, ast::expr::ExprPtr expr );
+				, ast::expr::ExprPtr expr
+				, bool enabled );
 
 			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
@@ -86,7 +88,8 @@ namespace castor3d
 			friend class PbrMRMaterials;
 
 			C3D_API MetallicRoughnessMaterial( sdw::ShaderWriter & writer
-				, ast::expr::ExprPtr expr );
+				, ast::expr::ExprPtr expr
+				, bool enabled );
 
 			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
@@ -109,7 +112,8 @@ namespace castor3d
 			friend class PbrSGMaterials;
 
 			C3D_API SpecularGlossinessMaterial( sdw::ShaderWriter & writer
-				, ast::expr::ExprPtr expr );
+				, ast::expr::ExprPtr expr
+				, bool enabled );
 
 			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );

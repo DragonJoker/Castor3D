@@ -61,8 +61,7 @@ namespace castor3d
 		auto name = m_fullName;
 		name = castor::string::replace( name, cuT( "PostEffect" ), castor::String{} );
 		name = castor::string::replace( name, cuT( "Post Effect" ), castor::String{} );
-		m_timer = std::make_unique< RenderPassTimer >( *getRenderSystem()->getEngine()
-			, device
+		m_timer = std::make_unique< RenderPassTimer >( device
 			, getKindName( m_kind ) + cuT( " PostEffect" )
 			, name
 			, m_passesCount );

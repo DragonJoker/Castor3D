@@ -16,7 +16,7 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	class RenderTechniquePass
-		: public RenderPass
+		: public SceneRenderPass
 	{
 	protected:
 		/**
@@ -47,7 +47,8 @@ namespace castor3d
 			, SceneNode const * ignored
 			, SsaoConfig const & config
 			, LpvGridConfigUbo const * lpvConfigUbo = nullptr
-			, LayeredLpvGridConfigUbo const * llpvConfigUbo = nullptr );
+			, LayeredLpvGridConfigUbo const * llpvConfigUbo = nullptr
+			, VoxelizerUbo const * vctConfigUbo = nullptr );
 		/**
 		 *\~english
 		 *\brief		Constructor for transparent nodes.
@@ -79,22 +80,28 @@ namespace castor3d
 			, SceneNode const * ignored
 			, SsaoConfig const & config
 			, LpvGridConfigUbo const * lpvConfigUbo = nullptr
-			, LayeredLpvGridConfigUbo const * llpvConfigUbo = nullptr );
+			, LayeredLpvGridConfigUbo const * llpvConfigUbo = nullptr
+			, VoxelizerUbo const * vctConfigUbo = nullptr );
 
 	public:
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API virtual ~RenderTechniquePass();
 		/**
 		 *\copydoc		castor3d::RenderPass::initialise
 		 */
 		C3D_API bool initialise( RenderDevice const & device
 			, castor::Size const & size
-			, LightVolumePassResult const * lpvResult = nullptr );
+			, LightVolumePassResult const * lpvResult = nullptr
+			, TextureUnit const * vctFirstBounce = nullptr
+			, TextureUnit const * vctSecondaryBounce = nullptr );
+		/**
+		 *\copydoc		castor3d::RenderPass::initialise
+		 */
+		C3D_API bool initialise( RenderDevice const & device
+			, castor::Size const & size
+			, RenderPassTimer & timer
+			, uint32_t index
+			, LightVolumePassResult const * lpvResult = nullptr
+			, TextureUnit const * vctResult = nullptr
+			, TextureUnit const * vctSecondaryBounce = nullptr );
 		/**
 		 *\~english
 		 *\brief		Visitor acceptance function.
@@ -130,7 +137,7 @@ namespace castor3d
 		/**@}*/
 
 	public:
-		using RenderPass::update;
+		using SceneRenderPass::update;
 
 	protected:
 		/**
@@ -223,13 +230,16 @@ namespace castor3d
 		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
 
 	private:
-		using RenderPass::initialise;
+		using SceneRenderPass::initialise;
 
 	protected:
 		Scene const & m_scene;
 		LpvGridConfigUbo const * m_lpvConfigUbo;
 		LayeredLpvGridConfigUbo const * m_llpvConfigUbo;
+		VoxelizerUbo const * m_vctConfigUbo;
 		LightVolumePassResult const * m_lpvResult;
+		TextureUnit const * m_vctFirstBounce;
+		TextureUnit const * m_vctSecondaryBounce;
 		Camera * m_camera{ nullptr };
 		SceneRenderNode m_sceneNode;
 		bool m_environment{ false };

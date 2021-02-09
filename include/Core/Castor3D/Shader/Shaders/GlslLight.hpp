@@ -17,7 +17,8 @@ namespace castor3d
 			: public sdw::StructInstance
 		{
 			C3D_API Light( sdw::ShaderWriter & writer
-				, ast::expr::ExprPtr expr );
+				, ast::expr::ExprPtr expr
+				, bool enabled );
 			C3D_API Light & operator=( Light const & rhs );
 
 			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
@@ -50,7 +51,8 @@ namespace castor3d
 			: public sdw::StructInstance
 		{
 			C3D_API DirectionalLight( sdw::ShaderWriter & writer
-				, ast::expr::ExprPtr expr );
+				, ast::expr::ExprPtr expr
+				, bool enabled );
 
 			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
@@ -74,7 +76,8 @@ namespace castor3d
 			: public sdw::StructInstance
 		{
 			C3D_API PointLight( sdw::ShaderWriter & writer
-				, ast::expr::ExprPtr expr );
+				, ast::expr::ExprPtr expr
+				, bool enabled );
 
 			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
@@ -96,7 +99,8 @@ namespace castor3d
 			: public sdw::StructInstance
 		{
 			C3D_API SpotLight( sdw::ShaderWriter & writer
-				, ast::expr::ExprPtr expr );
+				, ast::expr::ExprPtr expr
+				, bool enabled );
 
 			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
 			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
@@ -119,11 +123,6 @@ namespace castor3d
 			using sdw::StructInstance::getMember;
 			using sdw::StructInstance::getMemberArray;
 		};
-
-		Writer_Parameter( Light );
-		Writer_Parameter( DirectionalLight );
-		Writer_Parameter( PointLight );
-		Writer_Parameter( SpotLight );
 	}
 }
 

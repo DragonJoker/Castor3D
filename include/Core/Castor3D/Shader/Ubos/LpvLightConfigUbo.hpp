@@ -11,8 +11,39 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Graphics/GraphicsModule.hpp>
 
+#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/MatTypes/Mat4.hpp>
+
 namespace castor3d
 {
+	namespace shader
+	{
+		struct LpvLightData
+			: public sdw::StructInstance
+		{
+			C3D_API LpvLightData( sdw::ShaderWriter & writer
+				, ast::expr::ExprPtr expr
+				, bool enabled );
+			C3D_API LpvLightData & operator=( LpvLightData const & rhs );
+
+			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+
+			// Raw values
+			sdw::Mat4 lightView;
+			sdw::Vec4 lightConfig;
+			// Specific values
+			sdw::Float texelAreaModifier;
+			sdw::Float tanFovXHalf;
+			sdw::Float tanFovYHalf;
+			sdw::Int lightIndex;
+
+		private:
+			using sdw::StructInstance::getMember;
+			using sdw::StructInstance::getMemberArray;
+		};
+	}
+
 	class LpvLightConfigUbo
 	{
 	public:
@@ -66,8 +97,7 @@ namespace castor3d
 
 	public:
 		C3D_API static const std::string LpvLightConfig;
-		C3D_API static const std::string LightView;
-		C3D_API static const std::string Config;
+		C3D_API static const std::string LpvLightData;
 
 	private:
 		RenderDevice const * m_device{};
@@ -81,12 +111,7 @@ namespace castor3d
 		, binding\
 		, set\
 		, ast::type::MemoryLayout::eStd140 };\
-	auto c3d_lightView = lpvLightConfig.declMember< Mat4 >( castor3d::LpvLightConfigUbo::LightView );\
-	auto c3d_lpvLightConfig = lpvLightConfig.declMember< Vec4 >( castor3d::LpvLightConfigUbo::Config );\
-	lpvLightConfig.end();\
-	auto c3d_lpvTexelAreaModifier = c3d_lpvLightConfig.x();\
-	auto c3d_lpvTanFovXHalf = c3d_lpvLightConfig.y();\
-	auto c3d_lpvTanFovYHalf = c3d_lpvLightConfig.z();\
-	auto c3d_lightIndex = writer.cast< sdw::Int >( c3d_lpvLightConfig.w() )
+	auto c3d_lpvLightData = lpvLightConfig.declStructMember< castor3d::shader::LpvLightData >( castor3d::LpvLightConfigUbo::LpvLightData );\
+	lpvLightConfig.end()
 
 #endif

@@ -67,7 +67,7 @@ namespace castor3d
 		return nullptr;
 	}
 
-	ShaderProgramSPtr ShaderProgramCache::getAutomaticProgram( RenderPass const & renderPass
+	ShaderProgramSPtr ShaderProgramCache::getAutomaticProgram( SceneRenderPass const & renderPass
 		, PipelineFlags const & flags )
 	{
 		auto result = doFindAutomaticProgram( flags );
@@ -84,7 +84,7 @@ namespace castor3d
 		return result;
 	}
 
-	ShaderProgramSPtr ShaderProgramCache::doCreateAutomaticProgram( RenderPass const & renderPass
+	ShaderProgramSPtr ShaderProgramCache::doCreateAutomaticProgram( SceneRenderPass const & renderPass
 		, PipelineFlags const & flags )const
 	{
 		ShaderProgramSPtr result = std::make_shared< ShaderProgram >( renderPass.getName(), *getEngine()->getRenderSystem() );

@@ -27,14 +27,16 @@ namespace castor3d
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, ShadowMap const & shadowMap )
-		: RenderPass{ cuT( "ShadowMap" )
+		: SceneRenderPass{ cuT( "ShadowMap" )
 			, std::move( name )
 			, engine
 			, matrixUbo
 			, culler
 			, RenderMode::eBoth
 			, true
-			, nullptr }
+			, false
+			, nullptr
+			, 1u }
 		, m_shadowMap{ shadowMap }
 		, m_shadowMapUbo{ engine }
 	{
@@ -44,19 +46,19 @@ namespace castor3d
 	{
 		if ( nodes.hasNodes() )
 		{
-			RenderPass::doUpdate( nodes.instancedStaticNodes.frontCulled );
-			RenderPass::doUpdate( nodes.staticNodes.frontCulled );
-			RenderPass::doUpdate( nodes.skinnedNodes.frontCulled );
-			RenderPass::doUpdate( nodes.instancedSkinnedNodes.frontCulled );
-			RenderPass::doUpdate( nodes.morphingNodes.frontCulled );
-			RenderPass::doUpdate( nodes.billboardNodes.frontCulled );
+			SceneRenderPass::doUpdate( nodes.instancedStaticNodes.frontCulled );
+			SceneRenderPass::doUpdate( nodes.staticNodes.frontCulled );
+			SceneRenderPass::doUpdate( nodes.skinnedNodes.frontCulled );
+			SceneRenderPass::doUpdate( nodes.instancedSkinnedNodes.frontCulled );
+			SceneRenderPass::doUpdate( nodes.morphingNodes.frontCulled );
+			SceneRenderPass::doUpdate( nodes.billboardNodes.frontCulled );
 
-			RenderPass::doUpdate( nodes.instancedStaticNodes.backCulled );
-			RenderPass::doUpdate( nodes.staticNodes.backCulled );
-			RenderPass::doUpdate( nodes.skinnedNodes.backCulled );
-			RenderPass::doUpdate( nodes.instancedSkinnedNodes.backCulled );
-			RenderPass::doUpdate( nodes.morphingNodes.backCulled );
-			RenderPass::doUpdate( nodes.billboardNodes.backCulled );
+			SceneRenderPass::doUpdate( nodes.instancedStaticNodes.backCulled );
+			SceneRenderPass::doUpdate( nodes.staticNodes.backCulled );
+			SceneRenderPass::doUpdate( nodes.skinnedNodes.backCulled );
+			SceneRenderPass::doUpdate( nodes.instancedSkinnedNodes.backCulled );
+			SceneRenderPass::doUpdate( nodes.morphingNodes.backCulled );
+			SceneRenderPass::doUpdate( nodes.billboardNodes.backCulled );
 		}
 	}
 	

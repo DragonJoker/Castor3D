@@ -13,7 +13,7 @@ using namespace castor;
 namespace GuiCommon
 {
 	SkeletonTreeItemProperty::SkeletonTreeItemProperty( bool editable, Skeleton & skeleton )
-		: TreeItemProperty( skeleton.getScene()->getEngine(), editable, ePROPERTY_DATA_TYPE_MATERIAL )
+		: TreeItemProperty( skeleton.getScene()->getEngine(), editable )
 		, m_skeleton( skeleton )
 	{
 		CreateTreeItemMenu();

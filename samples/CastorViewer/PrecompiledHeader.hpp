@@ -99,8 +99,9 @@ See LICENSE file in root folder
 #	include <vector>
 #	include <cmath>
 
-#	include <GuiCommon/Properties/Math/PropertiesContainer.hpp>
-#	include <GuiCommon/Properties/Math/PropertiesHolder.hpp>
+#	include <GuiCommon/Properties/PropertiesContainer.hpp>
+#	include <GuiCommon/Properties/PropertiesDialog.hpp>
+#	include <GuiCommon/Properties/PropertiesHolder.hpp>
 #	include <GuiCommon/Shader/ShaderDialog.hpp>
 #	include <GuiCommon/System/SceneObjectsList.hpp>
 #	include <GuiCommon/System/ImagesLoader.hpp>

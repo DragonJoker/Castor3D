@@ -3,6 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Miscellaneous/DebugName.hpp"
+#include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -18,11 +19,13 @@
 
 #include <ShaderWriter/Source.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, RenderPipeline )
+
 using namespace castor;
 
 namespace castor3d
 {
-	RenderPipeline::RenderPipeline( RenderPass & owner
+	RenderPipeline::RenderPipeline( SceneRenderPass & owner
 		, RenderSystem & renderSystem
 		, ashes::PipelineDepthStencilStateCreateInfo dsState
 		, ashes::PipelineRasterizationStateCreateInfo rsState
@@ -30,7 +33,7 @@ namespace castor3d
 		, ashes::PipelineMultisampleStateCreateInfo msState
 		, ShaderProgramSPtr program
 		, PipelineFlags const & flags )
-		: OwnedBy< RenderPass >{ owner }
+		: OwnedBy< SceneRenderPass >{ owner }
 		, m_renderSystem{ renderSystem }
 		, m_dsState{ std::move( dsState ) }
 		, m_rsState{ std::move( rsState ) }
@@ -101,7 +104,7 @@ namespace castor3d
 			dynamicState = ashes::PipelineDynamicStateCreateInfo{ 0u, std::move( dynamicStates ) };
 		}
 
-		m_pipelineLayout = device->createPipelineLayout( "RenderPipeline"
+		m_pipelineLayout = device->createPipelineLayout( getOwner()->getName() + "RenderPipeline"
 			, descriptorLayouts
 			, m_pushConstantRanges );
 		ashes::GraphicsPipelineCreateInfo createInfo
@@ -120,7 +123,7 @@ namespace castor3d
 			*m_pipelineLayout,
 			renderPass
 		);
-		m_pipeline = device->createPipeline( "RenderPipeline"
+		m_pipeline = device->createPipeline( getOwner()->getName() + "RenderPipeline"
 			, std::move( createInfo ) );
 	}
 
@@ -147,7 +150,7 @@ namespace castor3d
 			if ( it == bindings.end()
 				&& !bindings.empty() )
 			{
-				m_descriptorPools.emplace_back( layout->createPool( "RenderPipeline", maxSets ) );
+				m_descriptorPools.emplace_back( layout->createPool( getOwner()->getName() + "RenderPipeline", maxSets ) );
 			}
 		}
 	}

@@ -70,7 +70,7 @@ namespace castor3d
 	*	Indicateurs à utiliser lors de la recherche de programme généré automatiquement
 	*/
 	enum class ProgramFlag
-		: uint16_t
+		: uint32_t
 	{
 		//!\~english	No flag.
 		//!\~french		Aucun indicateur.
@@ -123,9 +123,12 @@ namespace castor3d
 		//!\~english	Vertex shader inverts normals (for front culling).
 		//\~french		Le vertex shader inverse les normales (pour le front culling).
 		eHasGeometry = 0x8000,
+		//!\~english	Voxelization uses conservative rasterization.
+		//\~french		La voxelisation utilise la conservative rasterization.
+		eConservativeRasterization = 0x10000,
 		//!\~english	All flags.
 		//\~french		Tous les indicateurs.
-		eAll = 0xFFFF,
+		eAll = 0x1FFFF,
 	};
 	CU_ImplementFlags( ProgramFlag )
 	/**
@@ -227,8 +230,8 @@ namespace castor3d
 	template< typename ElementTypeTraits >
 	class StructuredShaderBuffer;
 
-	CU_DeclareSmartPtr( ShaderBuffer );
-	CU_DeclareSmartPtr( ShaderProgram );
+	CU_DeclareCUSmartPtr( castor3d, ShaderBuffer, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, ShaderProgram, C3D_API );
 
 	//@}
 }

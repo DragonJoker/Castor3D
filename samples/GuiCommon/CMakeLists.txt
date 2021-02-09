@@ -49,10 +49,16 @@ source_group( "Source Files\\Aui" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	Properties/AdditionalProperties.cpp
+	Properties/PropertiesContainer.cpp
+	Properties/PropertiesDialog.cpp
+	Properties/PropertiesHolder.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	Properties/AdditionalProperties.hpp
 	Properties/AdditionalProperties.inl
+	Properties/PropertiesContainer.hpp
+	Properties/PropertiesDialog.hpp
+	Properties/PropertiesHolder.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
 	${${PROJECT_NAME}_SRC_FILES}
@@ -70,8 +76,6 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	Properties/Math/MatrixProperties.cpp
 	Properties/Math/PointProperties.cpp
 	Properties/Math/PositionProperties.cpp
-	Properties/Math/PropertiesContainer.cpp
-	Properties/Math/PropertiesHolder.cpp
 	Properties/Math/QuaternionProperties.cpp
 	Properties/Math/RectangleProperties.cpp
 	Properties/Math/SizeProperties.cpp
@@ -84,8 +88,6 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	Properties/Math/PointProperties.hpp
 	Properties/Math/PointProperties.inl
 	Properties/Math/PositionProperties.hpp
-	Properties/Math/PropertiesContainer.hpp
-	Properties/Math/PropertiesHolder.hpp
 	Properties/Math/QuaternionProperties.hpp
 	Properties/Math/RectangleProperties.hpp
 	Properties/Math/SizeProperties.hpp
@@ -110,6 +112,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	Properties/TreeItems/BillboardTreeItemProperty.cpp
 	Properties/TreeItems/BoneTreeItemProperty.cpp
 	Properties/TreeItems/CameraTreeItemProperty.cpp
+	Properties/TreeItems/ExportOptionsTreeItemProperty.cpp
 	Properties/TreeItems/FrameVariableBufferTreeItemProperty.cpp
 	Properties/TreeItems/FrameVariableTreeItemProperty.cpp
 	Properties/TreeItems/GeometryTreeItemProperty.cpp
@@ -139,6 +142,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	Properties/TreeItems/BillboardTreeItemProperty.hpp
 	Properties/TreeItems/BoneTreeItemProperty.hpp
 	Properties/TreeItems/CameraTreeItemProperty.hpp
+	Properties/TreeItems/ExportOptionsTreeItemProperty.hpp
 	Properties/TreeItems/FrameVariableBufferTreeItemProperty.hpp
 	Properties/TreeItems/FrameVariableTreeItemProperty.hpp
 	Properties/TreeItems/GeometryTreeItemProperty.hpp

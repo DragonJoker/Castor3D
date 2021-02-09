@@ -18,7 +18,7 @@ namespace GuiCommon
 
 	AnimatedObjectGroupTreeItemProperty::AnimatedObjectGroupTreeItemProperty( bool editable
 		, AnimatedObjectGroup & group )
-		: TreeItemProperty( group.getScene()->getEngine(), editable, ePROPERTY_DATA_TYPE_ANIMATED_OBJECT_GROUP )
+		: TreeItemProperty( group.getScene()->getEngine(), editable )
 		, m_group( group )
 	{
 		PROPERTY_CATEGORY_ANIMATED_OBJECT_GROUP = _( "Animated Objects Group: " );

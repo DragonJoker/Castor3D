@@ -49,6 +49,7 @@ namespace castor3d
 				, ShaderModule const & vtx
 				, ShaderModule const & pxl
 				, bool hasShadows = false
+				, bool hasVoxels = false
 				, bool generatesIndirect = false );
 			/**
 			 *\~english
@@ -85,12 +86,15 @@ namespace castor3d
 		 */
 		SpotLightPass( RenderDevice const & device
 			, castor::String const & suffix
-			, LightPassConfig const & lpConfig );
+			, LightPassConfig const & lpConfig
+			, VoxelizerUbo const * vctConfig = nullptr );
 		SpotLightPass( RenderDevice const & device
-			, LightPassConfig const & lpConfig )
+			, LightPassConfig const & lpConfig
+			, VoxelizerUbo const * vctConfig = nullptr )
 			: SpotLightPass{ device
 				, castor::String{}
-				, lpConfig }
+				, lpConfig
+				, vctConfig }
 		{
 		}
 		/**

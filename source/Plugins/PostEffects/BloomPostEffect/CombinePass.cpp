@@ -33,7 +33,7 @@ namespace Bloom
 {
 	namespace
 	{
-		std::unique_ptr< ast::Shader > getVertexProgram( castor3d::RenderSystem & renderSystem )
+		std::unique_ptr< ast::Shader > getVertexProgram()
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -54,8 +54,7 @@ namespace Bloom
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< ast::Shader > getPixelProgram( castor3d::RenderSystem & renderSystem
-			, uint32_t blurPassesCount )
+		std::unique_ptr< ast::Shader > getPixelProgram( uint32_t blurPassesCount )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -138,7 +137,7 @@ namespace Bloom
 					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 					VK_ATTACHMENT_STORE_OP_DONT_CARE,
 					VK_IMAGE_LAYOUT_UNDEFINED,
-					VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 				}
 			};
 			ashes::SubpassDescriptionArray subpasses;
@@ -287,8 +286,8 @@ namespace Bloom
 		: m_device{ device }
 		, m_image{ doCreateTexture( device, size, format ) }
 		, m_view{ doCreateView( m_image->getTexture() ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "BloomCombine", getVertexProgram( device.renderSystem ) }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "BloomCombine", getPixelProgram( device.renderSystem, blurPassesCount ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "BloomCombine", getVertexProgram() }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "BloomCombine", getPixelProgram( blurPassesCount ) }
 		, m_renderPass{ doCreateRenderPass( m_device, format ) }
 		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, m_view, size ) }
 		, m_descriptorLayout{ doCreateDescriptorLayout( m_device ) }
@@ -316,13 +315,14 @@ namespace Bloom
 	}
 
 	castor3d::CommandsSemaphore CombinePass::getCommands( castor3d::RenderPassTimer const & timer
+		, uint32_t & index
 		, ashes::VertexBuffer< castor3d::NonTexturedQuad > const & vertexBuffer )const
 	{
 		auto result = m_device.graphicsCommandPool->createCommandBuffer( "BloomCombine" );
 		auto & cmd = *result;
 
 		cmd.begin();
-		timer.beginPass( cmd, 1u + ( m_blurPassesCount * 2u ) );
+		timer.beginPass( cmd, index );
 		cmd.beginDebugBlock( { "BloomCombine"
 			, castor3d::makeFloatArray( m_device.renderSystem.getEngine()->getNextRainbowColour() ) } );
 		cmd.beginRenderPass( *m_renderPass
@@ -335,9 +335,10 @@ namespace Bloom
 		cmd.draw( 6u );
 		cmd.endRenderPass();
 		cmd.endDebugBlock();
-		timer.endPass( cmd, 1u + ( m_blurPassesCount * 2u ) );
+		timer.endPass( cmd, index );
 		cmd.end();
 
+		++index;
 		return { std::move( result ), m_device->createSemaphore( "BloomCombine" ) };
 	}
 

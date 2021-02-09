@@ -31,6 +31,8 @@
 #define C3D_UseAllocationCallbacks 0
 #define C3D_DebugSpirV 0
 
+CU_ImplementCUSmartPtr( castor3d, RenderSystem )
+
 namespace castor3d
 {
 	//*************************************************************************

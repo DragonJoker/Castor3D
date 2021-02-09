@@ -38,8 +38,9 @@ namespace castor3d
 		//*****************************************************************************************
 
 		TextureConfigData::TextureConfigData( sdw::ShaderWriter & writer
-			, ast::expr::ExprPtr expr )
-			: sdw::StructInstance{ writer, std::move( expr ) }
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: sdw::StructInstance{ writer, std::move( expr ), enabled }
 			, colrSpec{ getMember< sdw::Vec4 >( "colrSpec" ) }
 			, glossOpa{ getMember< sdw::Vec4 >( "glossOpa" ) }
 			, emisOccl{ getMember< sdw::Vec4 >( "emisOccl" ) }
@@ -268,7 +269,8 @@ namespace castor3d
 				m_ssbo = std::make_unique< sdw::ArraySsboT< TextureConfigData > >( m_writer
 					, TextureConfigurationBufferName
 					, getTexturesBufferIndex()
-					, 0u );
+					, 0u
+					, true );
 			}
 			else
 			{

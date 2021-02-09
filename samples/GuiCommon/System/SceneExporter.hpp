@@ -22,6 +22,10 @@ namespace GuiCommon
 	class SceneExporter
 	{
 	public:
+		SceneExporter( ExportOptions options )
+			: m_options{ std::move( options ) }
+		{
+		}
 		/**
 		 *\~english
 		 *\brief		Export function.
@@ -33,6 +37,9 @@ namespace GuiCommon
 		 *\param[in]	p_fileName	Le nom du fichier exportà.
 		 */
 		virtual void exportScene( castor3d::Scene const & p_scene, castor::Path const & p_fileName ) = 0;
+
+	protected:
+		ExportOptions const m_options;
 	};
 	/**
 	\author 	Sylvain DOREMUS
@@ -47,6 +54,7 @@ namespace GuiCommon
 		: public SceneExporter
 	{
 	public:
+		ObjSceneExporter( ExportOptions options );
 		void exportScene( castor3d::Scene const & p_scene, castor::Path const & p_fileName )override;
 
 	private:
@@ -69,6 +77,7 @@ namespace GuiCommon
 		: public SceneExporter
 	{
 	public:
+		CscnSceneExporter( ExportOptions options );
 		void exportScene( castor3d::Scene const & p_scene, castor::Path const & p_fileName )override;
 	};
 }

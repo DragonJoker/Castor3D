@@ -230,7 +230,12 @@ namespace castor3d
 				, *frameBuffer.frameBuffer
 				, getClearValues()
 				, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
-			m_commandBuffer->executeCommands( { pass.pass->getCommandBuffer() } );
+
+			if ( pass.pass->hasNodes() )
+			{
+				m_commandBuffer->executeCommands( { pass.pass->getCommandBuffer() } );
+			}
+
 			m_commandBuffer->endRenderPass();
 			timerBlock->endPass( *m_commandBuffer );
 

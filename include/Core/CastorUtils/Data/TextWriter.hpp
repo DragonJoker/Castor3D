@@ -10,6 +10,8 @@ See LICENSE file in root folder
 #include "CastorUtils/Data/Path.hpp"
 #include "CastorUtils/Data/TextFile.hpp"
 #include "CastorUtils/Data/Writer.hpp"
+#include "CastorUtils/Design/ChangeTracked.hpp"
+#include "CastorUtils/Math/RangedValue.hpp"
 
 #include <iomanip>
 
@@ -56,7 +58,7 @@ namespace castor
 		 *\param[in]	subfolder	Le sous-dossier de sortie.
 		 *\return		Le chemin du fichier copié, relatif au dossier de sortie.
 		 */
-		static inline Path copyFile( Path const & path, Path const & folder, Path const & subfolder )
+		static Path copyFile( Path const & path, Path const & folder, Path const & subfolder )
 		{
 			Path relative{ subfolder.empty() ? path.getFileName( true ) : subfolder / path.getFileName( true ) };
 
@@ -74,7 +76,7 @@ namespace castor
 		 *\~french
 		 *\brief		Rapporte une erreur éventuelle.
 		 */
-		inline void checkError( bool error, char const * const action )const
+		void checkError( bool error, char const * const action )const
 		{
 			if ( !error )
 			{
@@ -87,7 +89,7 @@ namespace castor
 		 *\~french
 		 *\brief		Rapporte une erreur éventuelle.
 		 */
-		inline void checkError( bool error, std::string const & action )const
+		void checkError( bool error, std::string const & action )const
 		{
 			if ( !error )
 			{
@@ -171,7 +173,7 @@ namespace castor
 			bool result;
 		};
 
-		inline WriterBlock writeHeader( String const & name, TextFile & file )const
+		WriterBlock writeHeader( String const & name, TextFile & file )const
 		{
 			return WriterBlock
 			{
@@ -181,111 +183,152 @@ namespace castor
 			};
 		}
 
-		inline bool writeMask( String const & name, uint32_t mask, TextFile & file )const
+		bool writeMask( String const & name, uint32_t mask, TextFile & file )const
 		{
 			auto stream = makeStringStream();
 			stream << cuT( "0x" ) << std::hex << std::setw( 8u ) << std::setfill( cuT( '0' ) ) << mask;
-			auto result = file.writeText( m_tabs + cuT( "\t" ) + name + cuT( " " ) + stream.str() + cuT( "\n" ) ) > 0;
+			auto result = file.writeText( tabs() + name + cuT( " " ) + stream.str() + cuT( "\n" ) ) > 0;
 			checkError( result, name.c_str() );
 			return result;
 		}
 
-		inline bool write( String const & name, float value, TextFile & file )const
+		bool write( String const & name, float value, TextFile & file )const
 		{
 			auto stream = makeStringStream();
 			stream << value;
-			auto result = file.writeText( m_tabs + cuT( "\t" ) + name + cuT( " " ) + stream.str() + cuT( "\n" ) ) > 0;
+			auto result = file.writeText( tabs() + name + cuT( " " ) + stream.str() + cuT( "\n" ) ) > 0;
 			checkError( result, name.c_str() );
 			return result;
 		}
 
-		inline bool write( String const & name, uint32_t value, TextFile & file )const
+		bool write( String const & name, uint32_t value, TextFile & file )const
 		{
 			auto stream = makeStringStream();
 			stream << value;
-			auto result = file.writeText( m_tabs + cuT( "\t" ) + name + cuT( " " ) + stream.str() + cuT( "\n" ) ) > 0;
+			auto result = file.writeText( tabs() + name + cuT( " " ) + stream.str() + cuT( "\n" ) ) > 0;
 			checkError( result, name.c_str() );
 			return result;
 		}
 
-		inline bool write( String const & name, int32_t value, TextFile & file )const
+		bool write( String const & name, int32_t value, TextFile & file )const
 		{
 			auto stream = makeStringStream();
 			stream << value;
-			auto result = file.writeText( m_tabs + cuT( "\t" ) + name + cuT( " " ) + stream.str() + cuT( "\n" ) ) > 0;
+			auto result = file.writeText( tabs() + name + cuT( " " ) + stream.str() + cuT( "\n" ) ) > 0;
 			checkError( result, name.c_str() );
 			return result;
 		}
 
-		inline bool write( String const & name, uint64_t value, TextFile & file )const
+		bool write( String const & name, uint64_t value, TextFile & file )const
 		{
 			auto stream = makeStringStream();
 			stream << value;
-			auto result = file.writeText( m_tabs + cuT( "\t" ) + name + cuT( " " ) + stream.str() + cuT( "\n" ) ) > 0;
+			auto result = file.writeText( tabs() + name + cuT( " " ) + stream.str() + cuT( "\n" ) ) > 0;
 			checkError( result, name.c_str() );
 			return result;
 		}
 
-		inline bool write( String const & name, int64_t value, TextFile & file )const
+		bool write( String const & name, int64_t value, TextFile & file )const
 		{
 			auto stream = makeStringStream();
 			stream << value;
-			auto result = file.writeText( m_tabs + cuT( "\t" ) + name + cuT( " " ) + stream.str() + cuT( "\n" ) ) > 0;
+			auto result = file.writeText( tabs() + name + cuT( " " ) + stream.str() + cuT( "\n" ) ) > 0;
 			checkError( result, name.c_str() );
 			return result;
 		}
 
-		inline bool write( String const & name, bool value, TextFile & file )const
+		bool write( String const & name, bool value, TextFile & file )const
 		{
 			if ( value )
 			{
-				auto result = file.writeText( m_tabs + cuT( "\t" ) + name + cuT( " true\n" ) ) > 0;
+				auto result = file.writeText( tabs() + name + cuT( " true\n" ) ) > 0;
 				checkError( result, name.c_str() );
 				return result;
 			}
 
-			auto result = file.writeText( m_tabs + cuT( "\t" ) + name + cuT( " false\n" ) ) > 0;
+			auto result = file.writeText( tabs() + name + cuT( " false\n" ) ) > 0;
 			checkError( result, name.c_str() );
 			return result;
 		}
 
-		inline bool writeOpt( String const & name, bool value, TextFile & file )const
+		bool write( String const & name, String const & value, TextFile & file )const
+		{
+			auto result = file.writeText( tabs() + name + cuT( " " ) + value + cuT( "\n" ) ) > 0;
+			checkError( result, name.c_str() );
+			return result;
+		}
+
+		bool writeOpt( String const & name, bool value, TextFile & file )const
 		{
 			bool result{ !value };
 
 			if ( !result )
 			{
-				result = file.writeText( m_tabs + cuT( "\t" ) + name + cuT( " true\n" ) ) > 0;
+				result = file.writeText( tabs() + name + cuT( " true\n" ) ) > 0;
 				checkError( result, name.c_str() );
 			}
 
 			return result;
 		}
 
-		inline bool writeName( String const & name, String const & value, TextFile & file )const
+		bool writeName( String const & name, String const & value, TextFile & file )const
 		{
-			auto result = file.writeText( m_tabs + cuT( "\t" ) + name + cuT( " \"" ) + value + cuT( "\"\n" ) ) > 0;
+			auto result = file.writeText( tabs() + name + cuT( " \"" ) + value + cuT( "\"\n" ) ) > 0;
 			checkError( result, name.c_str() );
 			return result;
 		}
 
-		inline bool writeFile( String const & name, Path const & value, TextFile & file )const
+		bool writeFile( String const & name, Path const & value, TextFile & file )const
 		{
-			auto result = file.writeText( m_tabs + cuT( "\t" ) + name + cuT( " \"" ) + value.toGeneric() + cuT( "\"\n" ) ) > 0;
+			auto result = file.writeText( tabs() + name + cuT( " \"" ) + value.toGeneric() + cuT( "\"\n" ) ) > 0;
 			checkError( result, name.c_str() );
 			return result;
 		}
 
-		inline bool writeFile( String const & name, Path const & value, String const & subfolder, TextFile & file )const
+		bool writeFile( String const & name, Path const & value, String const & subfolder, TextFile & file )const
 		{
 			Path relative{ copyFile( Path{ value }, file.getFilePath(), Path{ subfolder } ) };
 			return writeFile( name, relative, file );
 		}
 
+		template< typename ValueT >
+		bool write( String const & name, castor::RangedValue< ValueT > value, TextFile & file )const
+		{
+			return write( name, value.value(), file );
+		}
+
+		template< typename ValueT >
+		bool write( String const & name, castor::ChangeTracked< ValueT > value, TextFile & file )const
+		{
+			return write( name, value.value(), file );
+		}
+
+		bool beginBlock( String const & name, TextFile & file )
+		{
+			auto result = file.writeText( cuT( "\n" ) + m_tabs + name + cuT( "\n" ) ) > 0
+				&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
+			m_indent++;
+			checkError( result, ( cuT( "Begin block " ) + name ).c_str() );
+			return result;
+		}
+
+		bool endBlock( TextFile & file )
+		{
+			assert( m_indent > 0 );
+			m_indent--;
+			auto result = file.writeText( tabs() + cuT( "}\n" ) ) > 0;
+			checkError( result, cuT( "End block" ) );
+			return result;
+		}
+
+		String tabs()const
+		{
+			return m_tabs + String( m_indent, '\t' );
+		}
+
 	protected:
-		//!\~english	The current indentation.
-		//!\~french		L'indentation courante.
 		String m_tabs;
+		uint32_t m_indent{ 0u };
 
 	private:
 		String m_name;

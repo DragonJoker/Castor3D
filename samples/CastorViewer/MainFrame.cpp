@@ -10,9 +10,11 @@
 #include <GuiCommon/Aui/AuiDockArt.hpp>
 #include <GuiCommon/Aui/AuiTabArt.hpp>
 #include <GuiCommon/Aui/AuiToolBarArt.hpp>
-#include <GuiCommon/Properties/Math/PropertiesContainer.hpp>
-#include <GuiCommon/Properties/Math/PropertiesHolder.hpp>
+#include <GuiCommon/Properties/PropertiesContainer.hpp>
+#include <GuiCommon/Properties/PropertiesDialog.hpp>
+#include <GuiCommon/Properties/PropertiesHolder.hpp>
 #include <GuiCommon/Properties/TreeItems/TreeHolder.hpp>
+#include <GuiCommon/Properties/TreeItems/ExportOptionsTreeItemProperty.hpp>
 #include <GuiCommon/System/ImagesLoader.hpp>
 #include <GuiCommon/System/MaterialsList.hpp>
 #include <GuiCommon/System/RendererSelector.hpp>
@@ -141,31 +143,6 @@ namespace CastorViewer
 
 		Show( result );
 		return result;
-	}
-
-	void MainFrame::doCleanupScene()
-	{
-		m_fpsTimer->Stop();
-		auto scene = m_mainScene.lock();
-
-		if ( scene )
-		{
-			m_materials->getList()->unloadMaterials();
-			m_sceneObjects->getList()->unloadScene();
-			m_mainCamera.reset();
-			m_sceneNode.reset();
-			auto engine = wxGetApp().getCastor();
-			engine->getRenderWindowCache().cleanup();
-			scene->cleanup();
-			engine->getRenderLoop().renderSyncFrame();
-			engine->getRenderWindowCache().clear();
-			engine->getRenderLoop().cleanup();
-			engine->getSceneCache().remove( scene->getName() );
-			Logger::logDebug( cuT( "MainFrame::doCleanupScene - Scene related objects unloaded." ) );
-			scene.reset();
-		}
-
-		m_mainScene.reset();
 	}
 
 	void MainFrame::loadScene( wxString const & fileName )
@@ -612,6 +589,31 @@ namespace CastorViewer
 		}
 	}
 
+	void MainFrame::doCleanupScene()
+	{
+		m_fpsTimer->Stop();
+		auto scene = m_mainScene.lock();
+
+		if ( scene )
+		{
+			m_materials->getList()->unloadMaterials();
+			m_sceneObjects->getList()->unloadScene();
+			m_mainCamera.reset();
+			m_sceneNode.reset();
+			auto engine = wxGetApp().getCastor();
+			engine->getRenderWindowCache().cleanup();
+			scene->cleanup();
+			engine->getRenderLoop().renderSyncFrame();
+			engine->getRenderWindowCache().clear();
+			engine->getRenderLoop().cleanup();
+			engine->getSceneCache().remove( scene->getName() );
+			Logger::logDebug( cuT( "MainFrame::doCleanupScene - Scene related objects unloaded." ) );
+			scene.reset();
+		}
+
+		m_mainScene.reset();
+	}
+
 	void MainFrame::doSaveFrame()
 	{
 		if ( m_renderPanel && m_renderPanel->getRenderWindow() )
@@ -982,6 +984,16 @@ namespace CastorViewer
 
 	void MainFrame::onExportScene( wxCommandEvent & event )
 	{
+		GuiCommon::ExportOptions options;
+		PropertiesDialog dialog{ this
+			, _( "Export" )
+			, std::make_unique< GuiCommon::ExportOptionsTreeItemProperty >( true, options ) };
+
+		if ( dialog.ShowModal() == wxID_CANCEL )
+		{
+			return;
+		}
+		
 		SceneSPtr scene = m_mainScene.lock();
 
 		if ( scene )
@@ -1001,12 +1013,12 @@ namespace CastorViewer
 
 					if ( pathFile.getExtension() == cuT( "obj" ) )
 					{
-						ObjSceneExporter exporter;
+						ObjSceneExporter exporter{ options };
 						exporter.exportScene( *scene, pathFile );
 					}
 					else if ( pathFile.getExtension() == cuT( "cscn" ) )
 					{
-						CscnSceneExporter exporter;
+						CscnSceneExporter exporter{ options };
 						exporter.exportScene( *scene, pathFile );
 					}
 				}

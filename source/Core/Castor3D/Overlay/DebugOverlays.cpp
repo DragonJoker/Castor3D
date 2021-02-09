@@ -3,6 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
+#include "Castor3D/Overlay/BorderPanelOverlay.hpp"
 #include "Castor3D/Overlay/PanelOverlay.hpp"
 #include "Castor3D/Overlay/TextOverlay.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
@@ -21,60 +22,15 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace
-	{
-		String getFullName( RenderPassTimer & timer )
-		{
-			auto timerName = timer.getName();
-			auto timerCategory = timer.getCategory();
-
-			if ( timerName.find( cuT( "ShadowMap" ) ) != String::npos )
-			{
-				if ( timerName.find( cuT( "Directional" ) ) != String::npos )
-				{
-					return cuT( "ShadowMap: Directional" );
-				}
-
-				if ( timerName.find( cuT( "Point" ) ) != String::npos )
-				{
-					return cuT( "ShadowMap: Point" );
-				}
-
-				if ( timerName.find( cuT( "Spot" ) ) != String::npos )
-				{
-					return cuT( "ShadowMap: Spot" );
-				}
-			}
-
-			if ( timerName.find( cuT( "UBOs" ) ) != String::npos )
-			{
-				return cuT( "UBOs" );
-			}
-
-			if ( timerCategory == cuT( "Light Propagation Volumes" )
-				|| timerCategory == cuT( "Reflective Shadow Maps" )
-				|| timerCategory == cuT( "Scalable Ambient Obscurance" ) )
-			{
-				return timerCategory;
-			}
-
-			return timerCategory == timerName
-				? timerCategory
-				: timerCategory + cuT( ": " ) + timerName;
-		}
-	}
-
-	//*********************************************************************************************
-
 	DebugOverlays::MainDebugPanel::MainDebugPanel( OverlayCache & cache )
 		: m_cache{ cache }
 		, m_panel{ m_cache.add( cuT( "MainDebugPanel" )
 			, OverlayType::ePanel
 			, nullptr
 			, nullptr )->getPanelOverlay() }
-		, m_times{ std::make_unique< DebugPanels< castor::Nanoseconds > >( cuT( "Times" ), m_panel, cache ) }
-		, m_fps{ std::make_unique< DebugPanels< float > >( cuT( "FPS" ), m_panel, cache ) }
-		, m_counts{ std::make_unique< DebugPanels< uint32_t > >( cuT( "Counts" ), m_panel, cache ) }
+		, m_times{ std::make_unique< DebugPanelsT< castor::Nanoseconds > >( cuT( "Times" ), m_panel, cache ) }
+		, m_fps{ std::make_unique< DebugPanelsT< float > >( cuT( "FPS" ), m_panel, cache ) }
+		, m_counts{ std::make_unique< DebugPanelsT< uint32_t > >( cuT( "Counts" ), m_panel, cache ) }
 	{
 		auto & materials = m_cache.getEngine()->getMaterialCache();
 		m_panel->setPixelPosition( Position{ 0, 0 } );
@@ -145,23 +101,24 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	DebugOverlays::RenderPassOverlays::RenderPassOverlays( castor::String const & category
-		, OverlayCache & cache )
+	DebugOverlays::PassOverlays::PassOverlays( OverlayCache & cache
+		, OverlaySPtr parent
+		, castor::String const & category
+		, castor::String const & name
+		, uint32_t index )
 		: m_cache{ cache }
+		, m_index{ index }
+		, m_name{ name }
 	{
-		auto baseName = cuT( "RenderPassOverlays-" ) + category;
+		auto baseName = cuT( "RenderPassOverlays-" ) + category + cuT( "-" ) + name;
 		m_panel = cache.add( baseName
 			, OverlayType::ePanel
 			, nullptr
-			, nullptr )->getPanelOverlay();
-		m_titlePanel = cache.add( baseName + cuT( "_Title" )
-			, OverlayType::ePanel
-			, nullptr
-			, m_panel->getOverlay().shared_from_this() )->getPanelOverlay();
-		m_titleText = cache.add( baseName + cuT( "_TitleText" )
+			, parent )->getPanelOverlay();
+		m_passName = cache.add( baseName + cuT( "_PassName" )
 			, OverlayType::eText
 			, nullptr
-			, m_titlePanel->getOverlay().shared_from_this() )->getTextOverlay();
+			, m_panel->getOverlay().shared_from_this() )->getTextOverlay();
 		m_cpu.name = cache.add( baseName + cuT( "_CPUName" )
 			, OverlayType::eText
 			, nullptr
@@ -179,59 +136,55 @@ namespace castor3d
 			, nullptr
 			, m_panel->getOverlay().shared_from_this() )->getTextOverlay();
 
-		m_panel->setPixelPosition( Position{ 330, 0u } );
-		m_titlePanel->setPixelPosition( Position{ 0, 0 } );
-		m_titleText->setPixelPosition( Position{ 10, 0 } );
-		m_cpu.name->setPixelPosition( Position{ 10, 20 } );
-		m_cpu.value->setPixelPosition( Position{ 45, 20 } );
-		m_gpu.name->setPixelPosition( Position{ 130, 20 } );
-		m_gpu.value->setPixelPosition( Position{ 165, 20 } );
-
-		m_panel->setPixelSize( Size{ 250, 40 } );
-		m_titlePanel->setPixelSize( Size{ 250, 20 } );
-		m_titleText->setPixelSize( Size{ 230, 20 } );
+		m_panel->setPixelPosition( Position{ 0, 20 + int32_t( 20 * index ) } );
+		auto posX = 0;
+		m_passName->setPixelPosition( Position{ posX, 0 } );
+		m_passName->setPixelSize( Size{ 250, 20 } );
+		posX += 250;
+		m_cpu.name->setPixelPosition( Position{ posX, 0 } );
 		m_cpu.name->setPixelSize( Size{ 30, 20 } );
+		posX += 30;
+		m_cpu.value->setPixelPosition( Position{ posX, 0 } );
 		m_cpu.value->setPixelSize( Size{ 75, 20 } );
+		posX += 75;
+		m_gpu.name->setPixelPosition( Position{ posX, 0 } );
 		m_gpu.name->setPixelSize( Size{ 30, 20 } );
+		posX += 30;
+		m_gpu.value->setPixelPosition( Position{ posX, 0 } );
 		m_gpu.value->setPixelSize( Size{ 75, 20 } );
+		posX += 75;
+		m_panel->setPixelSize( Size{ uint32_t( posX ), 20 } );
 
-		m_titleText->setFont( cuT( "Arial20" ) );
+		m_passName->setFont( cuT( "Arial20" ) );
 		m_cpu.name->setFont( cuT( "Arial10" ) );
 		m_gpu.name->setFont( cuT( "Arial10" ) );
 		m_cpu.value->setFont( cuT( "Arial10" ) );
 		m_gpu.value->setFont( cuT( "Arial10" ) );
 
-		m_titleText->setCaption( category );
+		m_passName->setCaption( name );
 		m_cpu.name->setCaption( cuT( "CPU:" ) );
 		m_gpu.name->setCaption( cuT( "GPU:" ) );
 
 		auto & materials = cache.getEngine()->getMaterialCache();
-		m_panel->setMaterial( materials.find( cuT( "AlphaDarkBlue" ) ) );
-		m_titlePanel->setMaterial( materials.find( cuT( "AlphaDarkBlue" ) ) );
-		m_titleText->setMaterial( materials.find( cuT( "White" ) ) );
+		m_panel->setMaterial( materials.find( cuT( "TransparentBlack" ) ) );
+		m_passName->setMaterial( materials.find( cuT( "White" ) ) );
 		m_cpu.name->setMaterial( materials.find( cuT( "White" ) ) );
 		m_gpu.name->setMaterial( materials.find( cuT( "White" ) ) );
 		m_cpu.value->setMaterial( materials.find( cuT( "White" ) ) );
 		m_gpu.value->setMaterial( materials.find( cuT( "White" ) ) );
 
-		m_titleText->setVAlign( VAlign::eCenter );
-		m_titleText->setHAlign( HAlign::eLeft );
+		m_passName->setVAlign( VAlign::eCenter );
+		m_passName->setHAlign( HAlign::eLeft );
 
 		m_panel->setVisible( true );
-		m_titlePanel->setVisible( true );
-		m_titleText->setVisible( true );
+		m_passName->setVisible( true );
 		m_cpu.name->setVisible( true );
 		m_gpu.name->setVisible( true );
 		m_cpu.value->setVisible( true );
 		m_gpu.value->setVisible( true );
 	}
 
-	void DebugOverlays::RenderPassOverlays::initialise( uint32_t index )
-	{
-		m_panel->setPixelPosition( Position{ 330, int32_t( 40 * index ) } );
-	}
-
-	DebugOverlays::RenderPassOverlays::~RenderPassOverlays()
+	DebugOverlays::PassOverlays::~PassOverlays()
 	{
 		if ( m_cpu.name )
 		{
@@ -239,24 +192,47 @@ namespace castor3d
 			m_cache.remove( m_gpu.name->getOverlayName() );
 			m_cache.remove( m_gpu.value->getOverlayName() );
 			m_cache.remove( m_cpu.value->getOverlayName() );
-			m_cache.remove( m_titleText->getOverlayName() );
-			m_cache.remove( m_titlePanel->getOverlayName() );
+			m_cache.remove( m_passName->getOverlayName() );
 			m_cache.remove( m_panel->getOverlayName() );
 		}
 	}
 
-	void DebugOverlays::RenderPassOverlays::addTimer( RenderPassTimer & timer )
+	void DebugOverlays::PassOverlays::update()
 	{
-		m_timers.emplace_back( std::ref( timer ) );
+		m_cpu.time = 0_ns;
+		m_gpu.time = 0_ns;
+
+		for ( auto timer : m_timers )
+		{
+			m_cpu.time += timer->getCpuTime();
+			m_gpu.time += timer->getGpuTime();
+			timer->reset();
+		}
+
+		m_cpu.value->setCaption( makeStringStream() << m_cpu.time );
+		m_gpu.value->setCaption( makeStringStream() << m_gpu.time );
 	}
 
-	bool DebugOverlays::RenderPassOverlays::removeTimer( RenderPassTimer & timer )
+	void DebugOverlays::PassOverlays::retrieveGpuTime()
+	{
+		for ( auto timer : m_timers )
+		{
+			timer->retrieveGpuTime();
+		}
+	}
+
+	void DebugOverlays::PassOverlays::addTimer( RenderPassTimer & timer )
+	{
+		m_timers.emplace_back( &timer );
+	}
+
+	bool DebugOverlays::PassOverlays::removeTimer( RenderPassTimer & timer )
 	{
 		auto it = std::find_if( m_timers.begin()
 			, m_timers.end()
 			, [&timer]( auto const & lookup )
 			{
-				return &lookup.get() == &timer;
+				return lookup == &timer;
 			} );
 
 		if ( it != m_timers.end() )
@@ -267,33 +243,181 @@ namespace castor3d
 		return m_timers.empty();
 	}
 
-	void DebugOverlays::RenderPassOverlays::update()
+	//*********************************************************************************************
+
+	DebugOverlays::CategoryOverlays::CategoryOverlays( castor::String const & category
+		, OverlayCache & cache )
+		: m_cache{ cache }
+	{
+		auto baseName = cuT( "RenderPassOverlays-" ) + category;
+		m_container = cache.add( baseName
+			, OverlayType::ePanel
+			, nullptr
+			, nullptr )->getPanelOverlay();
+		m_firstLinePanel = cache.add( baseName + cuT( "_TitlePanel" )
+			, OverlayType::ePanel
+			, nullptr
+			, m_container->getOverlay().shared_from_this() )->getPanelOverlay();
+		m_name = cache.add( baseName + cuT( "_TitleName" )
+			, OverlayType::eText
+			, nullptr
+			, m_container->getOverlay().shared_from_this() )->getTextOverlay();
+		m_cpu.name = cache.add( baseName + cuT( "_CPUName" )
+			, OverlayType::eText
+			, nullptr
+			, m_container->getOverlay().shared_from_this() )->getTextOverlay();
+		m_cpu.value = cache.add( baseName + cuT( "_CPUValue" )
+			, OverlayType::eText
+			, nullptr
+			, m_container->getOverlay().shared_from_this() )->getTextOverlay();
+		m_gpu.name = cache.add( baseName + cuT( "_GPUName" )
+			, OverlayType::eText
+			, nullptr
+			, m_container->getOverlay().shared_from_this() )->getTextOverlay();
+		m_gpu.value = cache.add( baseName + cuT( "_GPUValue" )
+			, OverlayType::eText
+			, nullptr
+			, m_container->getOverlay().shared_from_this() )->getTextOverlay();
+
+		m_container->setPixelPosition( Position{ 330, 0 } );
+		m_firstLinePanel->setPixelPosition( Position{ m_posX, 0 } );
+		m_name->setPixelPosition( Position{ 0, 0 } );
+		m_name->setPixelSize( Size{ 250, 20 } );
+		m_posX += 250;
+		m_cpu.name->setPixelPosition( Position{ m_posX, 0 } );
+		m_cpu.name->setPixelSize( Size{ 30, 20 } );
+		m_posX += 30;
+		m_cpu.value->setPixelPosition( Position{ m_posX, 0 } );
+		m_cpu.value->setPixelSize( Size{ 75, 20 } );
+		m_posX += 75;
+		m_gpu.name->setPixelPosition( Position{ m_posX, 0 } );
+		m_gpu.name->setPixelSize( Size{ 30, 20 } );
+		m_posX += 30;
+		m_gpu.value->setPixelPosition( Position{ m_posX, 0 } );
+		m_gpu.value->setPixelSize( Size{ 75, 20 } );
+		m_posX += 75;
+		m_container->setPixelSize( Size{ uint32_t( m_posX ), 20 } );
+		m_firstLinePanel->setPixelSize( Size{ uint32_t( m_posX ), 20 } );
+
+		m_name->setFont( cuT( "Arial20" ) );
+		m_cpu.name->setFont( cuT( "Arial10" ) );
+		m_gpu.name->setFont( cuT( "Arial10" ) );
+		m_cpu.value->setFont( cuT( "Arial10" ) );
+		m_gpu.value->setFont( cuT( "Arial10" ) );
+
+		m_name->setCaption( category );
+		m_cpu.name->setCaption( cuT( "CPU:" ) );
+		m_gpu.name->setCaption( cuT( "GPU:" ) );
+
+		auto & materials = cache.getEngine()->getMaterialCache();
+		m_container->setMaterial( materials.find( cuT( "AlphaDarkBlue" ) ) );
+		m_firstLinePanel->setMaterial( materials.find( cuT( "AlphaDarkBlue" ) ) );
+		m_name->setMaterial( materials.find( cuT( "White" ) ) );
+		m_cpu.name->setMaterial( materials.find( cuT( "White" ) ) );
+		m_gpu.name->setMaterial( materials.find( cuT( "White" ) ) );
+		m_cpu.value->setMaterial( materials.find( cuT( "White" ) ) );
+		m_gpu.value->setMaterial( materials.find( cuT( "White" ) ) );
+
+		m_name->setVAlign( VAlign::eCenter );
+		m_name->setHAlign( HAlign::eLeft );
+
+		m_container->setVisible( true );
+		m_name->setVisible( true );
+		m_cpu.name->setVisible( true );
+		m_gpu.name->setVisible( true );
+		m_cpu.value->setVisible( true );
+		m_gpu.value->setVisible( true );
+	}
+
+	void DebugOverlays::CategoryOverlays::initialise( uint32_t offset )
+	{
+		m_container->setPixelPosition( Position{ 330, int32_t( 20 * offset ) } );
+		m_container->setPixelSize( Size{ uint32_t( m_posX ), getPanelCount() * 20u } );
+	}
+
+	DebugOverlays::CategoryOverlays::~CategoryOverlays()
+	{
+		m_passes.clear();
+
+		if ( m_cpu.name )
+		{
+			m_cache.remove( m_cpu.name->getOverlayName() );
+			m_cache.remove( m_gpu.name->getOverlayName() );
+			m_cache.remove( m_gpu.value->getOverlayName() );
+			m_cache.remove( m_cpu.value->getOverlayName() );
+			m_cache.remove( m_name->getOverlayName() );
+			m_cache.remove( m_firstLinePanel->getOverlayName() );
+			m_cache.remove( m_container->getOverlayName() );
+		}
+	}
+
+	void DebugOverlays::CategoryOverlays::addTimer( RenderPassTimer & timer )
+	{
+		auto it = std::find_if( m_passes.begin()
+			, m_passes.end()
+			, [&timer]( auto const & lookup )
+			{
+				return lookup->getName() == timer.getName();
+			} );
+
+		if ( it == m_passes.end() )
+		{
+			auto index = uint32_t( m_passes.size() );
+			m_passes.emplace_back( std::make_unique< PassOverlays >( m_cache
+				, m_container->getOverlay().shared_from_this()
+				, timer.getCategory()
+				, timer.getName()
+				, index ) );
+			it = m_passes.begin() + m_passes.size() - 1;
+		}
+
+		( *it )->addTimer( timer );
+	}
+
+	bool DebugOverlays::CategoryOverlays::removeTimer( RenderPassTimer & timer )
+	{
+		auto it = std::find_if( m_passes.begin()
+			, m_passes.end()
+			, [&timer]( auto const & lookup )
+			{
+				return lookup->getName() == timer.getName();
+			} );
+
+		if ( it != m_passes.end() )
+		{
+			( *it )->removeTimer( timer );
+		}
+
+		return m_passes.empty();
+	}
+
+	void DebugOverlays::CategoryOverlays::update()
 	{
 		m_cpu.time = 0_ns;
 		m_gpu.time = 0_ns;
 
-		for ( auto & timer : m_timers )
+		for ( auto & pass : m_passes )
 		{
-			m_cpu.time += timer.get().getCpuTime();
-			m_gpu.time += timer.get().getGpuTime();
-			timer.get().reset();
+			pass->update();
+			m_cpu.time += pass->getCpuTime();
+			m_gpu.time += pass->getGpuTime();
 		}
 
 		m_cpu.value->setCaption( makeStringStream() << m_cpu.time );
 		m_gpu.value->setCaption( makeStringStream() << m_gpu.time );
 	}
 
-	void DebugOverlays::RenderPassOverlays::retrieveGpuTime()
+	void DebugOverlays::CategoryOverlays::retrieveGpuTime()
 	{
-		for ( auto & timer : m_timers )
+		for ( auto & pass : m_passes )
 		{
-			timer.get().retrieveGpuTime();
+			pass->retrieveGpuTime();
 		}
 	}
 
-	void DebugOverlays::RenderPassOverlays::setVisible( bool visible )
+	void DebugOverlays::CategoryOverlays::setVisible( bool visible )
 	{
-		m_panel->setVisible( visible );
+		m_container->setVisible( visible );
 	}
 
 	//*********************************************************************************************
@@ -337,11 +461,12 @@ namespace castor3d
 
 		if ( m_dirty )
 		{
-			uint32_t index = 0u;
+			uint32_t offset = 0u;
 
 			for ( auto & renderPass : m_renderPasses )
 			{
-				renderPass.second.initialise( index++ );
+				renderPass.second.initialise( offset );
+				offset += renderPass.second.getPanelCount();
 			}
 		}
 
@@ -352,13 +477,12 @@ namespace castor3d
 	uint32_t DebugOverlays::registerTimer( RenderPassTimer & timer )
 	{
 		auto & cache = getEngine()->getOverlayCache();
-		auto fullName = getFullName( timer );
-		auto it = m_renderPasses.find( fullName );
+		auto it = m_renderPasses.find( timer.getCategory() );
 
 		if ( it == m_renderPasses.end() )
 		{
-			it = m_renderPasses.emplace( fullName
-				, RenderPassOverlays{ fullName, cache } ).first;
+			it = m_renderPasses.emplace( timer.getCategory()
+				, CategoryOverlays{ timer.getCategory(), cache } ).first;
 			it->second.setVisible( m_visible );
 		}
 
@@ -370,8 +494,7 @@ namespace castor3d
 	void DebugOverlays::unregisterTimer( RenderPassTimer & timer )
 	{
 		m_dirty = true;
-		auto fullName = getFullName( timer );
-		auto it = m_renderPasses.find( fullName );
+		auto it = m_renderPasses.find( timer.getCategory() );
 
 		if ( it != m_renderPasses.end() )
 		{

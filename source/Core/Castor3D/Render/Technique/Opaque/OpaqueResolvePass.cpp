@@ -22,6 +22,7 @@
 #include "Castor3D/Shader/Shaders/GlslPhongReflection.hpp"
 #include "Castor3D/Shader/Shaders/GlslSpecularPbrReflection.hpp"
 #include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
+#include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
@@ -45,7 +46,7 @@ namespace castor3d
 {
 	namespace
 	{
-		static uint32_t constexpr c_noIblEnvironmentCount = 6u;
+		static uint32_t constexpr c_noIblEnvironmentCount = 5u;
 		static uint32_t constexpr c_iblTexturesCount = 3u;
 		static uint32_t constexpr c_iblEnvironmentCount = c_noIblEnvironmentCount - c_iblTexturesCount;
 
@@ -118,7 +119,8 @@ namespace castor3d
 		ShaderPtr doCreatePhongPixelProgram( RenderDevice const & device
 			, FogType fogType
 			, bool hasSsao
-			, bool hasGi )
+			, bool hasDiffuseGi
+			, bool hasSpecularGi )
 		{
 			auto & renderSystem = device.renderSystem;
 			using namespace sdw;
@@ -138,7 +140,8 @@ namespace castor3d
 			auto c3d_mapSsao = writer.declSampledImage< FImg2DRg32 >( "c3d_mapSsao", hasSsao ? index++ : 0u, 1u, hasSsao );
 			auto c3d_mapLightDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightDiffuse", index++, 1u );
 			auto c3d_mapLightSpecular = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightSpecular", index++, 1u );
-			auto c3d_mapLightIndirect = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightIndirect", hasGi ? index++ : 0u, 1u, hasGi );
+			auto c3d_mapLightIndirectDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightIndirectDiffuse", hasDiffuseGi ? index++ : 0u, 1u, hasDiffuseGi );
+			auto c3d_mapLightIndirectSpecular = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightIndirectSpecular", hasSpecularGi ? index++ : 0u, 1u, hasSpecularGi );
 			auto c3d_mapEnvironment = writer.declSampledImageArray< FImgCubeRgba32 >( "c3d_mapEnvironment", index++, 1u, c_noIblEnvironmentCount );
 			CU_Require( index < device.properties.limits.maxDescriptorSetSampledImages );
 
@@ -153,6 +156,12 @@ namespace castor3d
 			utils.declareCalcVSPosition();
 			utils.declareDecodeMaterial();
 			utils.declareInvertVec2Y();
+
+			if ( hasSpecularGi )
+			{
+				utils.declareFresnelSchlick();
+			}
+
 			shader::PhongReflectionModel reflections{ writer, utils };
 			shader::Fog fog{ fogType, writer };
 
@@ -201,10 +210,6 @@ namespace castor3d
 						, materials.getMaterial( materialId ) );
 					auto depth = writer.declLocale( "depth"
 						, c3d_mapDepth.lod( vtx_texture, 0.0_f ).x() );
-					auto position = writer.declLocale( "position"
-						, utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj ) );
-					auto normal = writer.declLocale( "normal"
-						, normalize( data1.xyz() ) );
 					auto diffuse = writer.declLocale( "diffuse"
 						, data2.xyz() );
 					auto shininess = writer.declLocale( "shininess"
@@ -223,11 +228,26 @@ namespace castor3d
 						, c3d_mapLightDiffuse.lod( vtx_texture, 0.0_f ).xyz() );
 					auto lightSpecular = writer.declLocale( "lightSpecular"
 						, c3d_mapLightSpecular.lod( vtx_texture, 0.0_f ).xyz() );
-					auto lightIndirect = writer.declLocale( "lightIndirect"
-						, c3d_mapLightIndirect.lod( vtx_texture, 0.0_f ).rgb()
-						, hasGi );
-					lightDiffuse += lightIndirect;
+					auto lightIndirectDiffuse = writer.declLocale( "lightIndirectDiffuse"
+						, c3d_mapLightIndirectDiffuse.lod( vtx_texture, 0.0_f ).rgb()
+						, hasDiffuseGi );
+					auto lightIndirectSpecular = writer.declLocale( "lightIndirectSpecular"
+						, c3d_mapLightIndirectSpecular.lod( vtx_texture, 0.0_f ).rgb()
+						, hasSpecularGi );
 					lightSpecular *= specular;
+					auto surface = writer.declLocale< shader::Surface >( "surface" );
+					surface.create( utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj )
+						, data1.rgb() );
+
+					if ( hasSpecularGi )
+					{
+						auto V = writer.declLocale( "V"
+							, normalize( c3d_cameraPosition.xyz() - surface.worldPosition ) );
+						auto NdotV = writer.declLocale( "NdotV"
+							, max( 0.0_f, dot( surface.worldNormal, V ) ) );
+						lightIndirectSpecular *= utils.fresnelSchlick( NdotV, specular, ( 256.0_f - shininess ) / 256.0_f );
+					}
+
 					auto reflected = writer.declLocale( "reflected"
 						, vec3( 0.0_f ) );
 					auto refracted = writer.declLocale( "refracted"
@@ -241,7 +261,7 @@ namespace castor3d
 					IF( writer, envMapIndex > 0_i && ( reflection != 0_i || refraction != 0_i ) )
 					{
 						auto incident = writer.declLocale( "incident"
-							, reflections.computeIncident( position, c3d_cameraPosition.xyz() ) );
+							, reflections.computeIncident( surface.worldPosition, c3d_cameraPosition.xyz() ) );
 						envMapIndex = envMapIndex - 1_i;
 						ambient = vec3( 0.0_f );
 
@@ -258,7 +278,7 @@ namespace castor3d
 								IF( writer, envMapIndex == Int( i ) )
 								{
 									reflections.computeReflRefr( incident
-										, normal
+										, surface.worldNormal
 										, c3d_mapEnvironment[Int( i )]
 										, material.m_refractionRatio
 										, specular
@@ -277,7 +297,7 @@ namespace castor3d
 								IF( writer, envMapIndex == Int( i ) )
 								{
 									reflected = reflections.computeRefl( incident
-										, normal
+										, surface.worldNormal
 										, c3d_mapEnvironment[Int( i )]
 										, shininess
 										, specular );
@@ -292,7 +312,7 @@ namespace castor3d
 								IF( writer, envMapIndex == Int( i ) )
 								{
 									reflections.computeRefr( incident
-										, normal
+										, surface.worldNormal
 										, c3d_mapEnvironment[Int( i )]
 										, material.m_refractionRatio
 										, material.m_transmission * diffuse
@@ -314,7 +334,9 @@ namespace castor3d
 					FI;
 
 					ambient *= occlusion;
-					ambient *= lightIndirect;
+					ambient *= lightIndirectDiffuse;
+					lightDiffuse += lightIndirectDiffuse * occlusion;
+					lightSpecular += lightIndirectSpecular * occlusion;
 					pxl_fragColor = vec4( diffuse
 							+ reflected
 							+ refracted
@@ -325,13 +347,13 @@ namespace castor3d
 
 					if ( fogType != FogType::eDisabled )
 					{
-						position = utils.calcVSPosition( vtx_texture
+						surface.viewPosition = utils.calcVSPosition( vtx_texture
 							, c3d_mapDepth.lod( vtx_texture, 0.0_f ).x()
 							, c3d_mtxInvProj );
 						pxl_fragColor = fog.apply( vec4( utils.removeGamma( c3d_gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
 							, pxl_fragColor
-							, length( position )
-							, position.z()
+							, length( surface.viewPosition )
+							, surface.viewPosition.z()
 							, c3d_fogInfo
 							, c3d_cameraPosition );
 					}
@@ -342,7 +364,8 @@ namespace castor3d
 		ShaderPtr doCreatePbrMRPixelProgram( RenderDevice const & device
 			, FogType fogType
 			, bool hasSsao
-			, bool hasGi )
+			, bool hasDiffuseGi
+			, bool hasSpecularGi )
 		{
 			auto & renderSystem = device.renderSystem;
 			using namespace sdw;
@@ -362,7 +385,8 @@ namespace castor3d
 			auto c3d_mapSsao = writer.declSampledImage< FImg2DRg32 >( "c3d_mapSsao", hasSsao ? index++ : 0u, 1u, hasSsao );
 			auto c3d_mapLightDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightDiffuse", index++, 1u );
 			auto c3d_mapLightSpecular = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightSpecular", index++, 1u );
-			auto c3d_mapLightIndirect = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightIndirect", hasGi ? index++ : 0u, 1u, hasGi );
+			auto c3d_mapLightIndirectDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightIndirectDiffuse", hasDiffuseGi ? index++ : 0u, 1u, hasDiffuseGi );
+			auto c3d_mapLightIndirectSpecular = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightIndirectSpecular", hasSpecularGi ? index++ : 0u, 1u, hasSpecularGi );
 			auto c3d_mapBrdf = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBrdf", index++, 1u );
 			auto c3d_mapIrradiance = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapIrradiance", index++, 1u );
 			auto c3d_mapPrefiltered = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapPrefiltered", index++, 1u );
@@ -382,6 +406,12 @@ namespace castor3d
 			utils.declareComputeIBL();
 			utils.declareDecodeMaterial();
 			utils.declareInvertVec2Y();
+
+			if ( hasSpecularGi )
+			{
+				utils.declareFresnelSchlick();
+			}
+
 			shader::MetallicPbrReflectionModel reflections{ writer, utils };
 			shader::Fog fog{ fogType, writer };
 
@@ -430,8 +460,6 @@ namespace castor3d
 						, c3d_mapData3.lod( fixedTexCoord, 0.0_f ) );
 					auto data4 = writer.declLocale( "data4"
 						, c3d_mapData4.lod( fixedTexCoord, 0.0_f ) );
-					auto normal = writer.declLocale( "normal"
-						, data1.rgb() );
 					auto albedo = writer.declLocale( "albedo"
 						, data2.rgb() );
 					auto roughness = writer.declLocale( "roughness"
@@ -444,18 +472,31 @@ namespace castor3d
 						, data4.rgb() );
 					auto depth = writer.declLocale( "depth"
 						, c3d_mapDepth.lod( vtx_texture, 0.0_f ).x() );
-					auto position = writer.declLocale( "position"
-						, utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj ) );
 					auto ambient = writer.declLocale( "ambient"
 						, c3d_ambientLight.xyz() );
 					auto lightDiffuse = writer.declLocale( "lightDiffuse"
 						, c3d_mapLightDiffuse.lod( fixedTexCoord, 0.0_f ).rgb() );
 					auto lightSpecular = writer.declLocale( "lightSpecular"
 						, c3d_mapLightSpecular.lod( fixedTexCoord, 0.0_f ).rgb() );
-					auto lightIndirect = writer.declLocale( "lightIndirect"
-						, c3d_mapLightIndirect.lod( vtx_texture, 0.0_f ).rgb()
-						, hasGi );
-					lightDiffuse += lightIndirect;
+					auto lightIndirectDiffuse = writer.declLocale( "lightIndirectDiffuse"
+						, c3d_mapLightIndirectDiffuse.lod( vtx_texture, 0.0_f ).rgb()
+						, hasDiffuseGi );
+					auto lightIndirectSpecular = writer.declLocale( "lightIndirectSpecular"
+						, c3d_mapLightIndirectSpecular.lod( vtx_texture, 0.0_f ).rgb()
+						, hasSpecularGi );
+					auto surface = writer.declLocale< shader::Surface >( "surface" );
+					surface.create( utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj )
+						, data1.rgb() );
+
+					if ( hasSpecularGi )
+					{
+						auto V = writer.declLocale( "V"
+							, normalize( c3d_cameraPosition.xyz() - surface.worldPosition ) );
+						auto NdotV = writer.declLocale( "NdotV"
+							, max( 0.0_f, dot( surface.worldNormal, V ) ) );
+						lightIndirectSpecular *= utils.fresnelSchlick( NdotV, mix( vec3( 0.04_f ), albedo, vec3( metalness ) ), roughness );
+					}
+
 					auto reflected = writer.declLocale( "reflected"
 						, vec3( 0.0_f ) );
 					auto refracted = writer.declLocale( "refracted"
@@ -477,7 +518,7 @@ namespace castor3d
 						FI;
 
 						auto incident = writer.declLocale( "incident"
-							, normalize( position - c3d_cameraPosition.xyz() ) );
+							, normalize( surface.worldPosition - c3d_cameraPosition.xyz() ) );
 						auto ratio = writer.declLocale( "ratio"
 							, material.m_refractionRatio );
 
@@ -491,7 +532,7 @@ namespace castor3d
 								{
 									// Reflection from environment map.
 									reflected = reflections.computeRefl( incident
-										, normal
+										, surface.worldNormal
 										, c3d_mapEnvironment[Int( i )]
 										, albedo
 										, metalness
@@ -508,7 +549,7 @@ namespace castor3d
 									{
 										// Refraction from environment map.
 										reflections.computeRefrEnvMap( incident
-											, normal
+											, surface.worldNormal
 											, c3d_mapEnvironment[Int( i )]
 											, material.m_refractionRatio
 											, material.m_transmission * albedo
@@ -523,7 +564,7 @@ namespace castor3d
 							{
 								// Refraction from background skybox.
 								reflections.computeRefrSkybox( incident
-									, normal
+									, surface.worldNormal
 									, c3d_mapPrefiltered
 									, material.m_refractionRatio
 									, material.m_transmission * albedo
@@ -536,8 +577,7 @@ namespace castor3d
 						ELSE
 						{
 							// Reflection from background skybox.
-							ambient *= utils.computeMetallicIBL( normal
-								, position
+							ambient *= utils.computeMetallicIBL( surface
 								, albedo
 								, metalness
 								, roughness
@@ -554,7 +594,7 @@ namespace castor3d
 									{
 										// Refraction from environment map.
 										reflections.computeRefrEnvMap( incident
-											, normal
+											, surface.worldNormal
 											, c3d_mapEnvironment[Int( i )]
 											, material.m_refractionRatio
 											, material.m_transmission * albedo
@@ -569,7 +609,7 @@ namespace castor3d
 							{
 								// Refraction from background skybox.
 								reflections.computeRefrSkybox( incident
-									, normal
+									, surface.worldNormal
 									, c3d_mapPrefiltered
 									, material.m_refractionRatio
 									, material.m_transmission * albedo
@@ -584,8 +624,7 @@ namespace castor3d
 					ELSE
 					{
 						// Reflection from background skybox.
-						ambient *= utils.computeMetallicIBL( normal
-							, position
+						ambient *= utils.computeMetallicIBL( surface
 							, albedo
 							, metalness
 							, roughness
@@ -600,9 +639,9 @@ namespace castor3d
 						{
 							// Refraction from background skybox.
 							auto incident = writer.declLocale( "incident"
-								, normalize( position - c3d_cameraPosition.xyz() ) );
+								, normalize( surface.worldPosition - c3d_cameraPosition.xyz() ) );
 							reflections.computeRefrSkybox( incident
-								, normal
+								, surface.worldNormal
 								, c3d_mapPrefiltered
 								, material.m_refractionRatio
 								, material.m_transmission * albedo
@@ -615,7 +654,9 @@ namespace castor3d
 					FI;
 
 					ambient *= occlusion;
-					ambient *= lightIndirect;
+					ambient *= lightIndirectDiffuse;
+					lightDiffuse += lightIndirectDiffuse * occlusion;
+					lightSpecular += lightIndirectSpecular * occlusion;
 					pxl_fragColor = vec4( lightDiffuse * albedo
 							+ lightSpecular
 							+ emissive
@@ -625,13 +666,13 @@ namespace castor3d
 
 					if ( fogType != FogType::eDisabled )
 					{
-						position = utils.calcVSPosition( fixedTexCoord
+						surface.viewPosition = utils.calcVSPosition( fixedTexCoord
 							, c3d_mapDepth.lod( fixedTexCoord, 0.0_f ).x()
 							, c3d_mtxInvProj );
 						pxl_fragColor = fog.apply( vec4( utils.removeGamma( c3d_gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
 							, pxl_fragColor
-							, length( position )
-							, position.z()
+							, length( surface.viewPosition )
+							, surface.viewPosition.z()
 							, c3d_fogInfo
 							, c3d_cameraPosition );
 					}
@@ -642,7 +683,8 @@ namespace castor3d
 		ShaderPtr doCreatePbrSGPixelProgram( RenderDevice const & device
 			, FogType fogType
 			, bool hasSsao
-			, bool hasGi )
+			, bool hasDiffuseGi
+			, bool hasSpecularGi )
 		{
 			auto & renderSystem = device.renderSystem;
 			using namespace sdw;
@@ -662,7 +704,8 @@ namespace castor3d
 			auto c3d_mapSsao = writer.declSampledImage< FImg2DRg32 >( "c3d_mapSsao", hasSsao ? index++ : 0u, 1u, hasSsao );
 			auto c3d_mapLightDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightDiffuse", index++, 1u );
 			auto c3d_mapLightSpecular = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightSpecular", index++, 1u );
-			auto c3d_mapLightIndirect = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightIndirect", hasGi ? index++ : 0u, 1u, hasGi );
+			auto c3d_mapLightIndirectDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightIndirectDiffuse", hasDiffuseGi ? index++ : 0u, 1u, hasDiffuseGi );
+			auto c3d_mapLightIndirectSpecular = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightIndirectSpecular", hasSpecularGi ? index++ : 0u, 1u, hasSpecularGi );
 			auto c3d_mapBrdf = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBrdf", index++, 1u );
 			auto c3d_mapIrradiance = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapIrradiance", index++, 1u );
 			auto c3d_mapPrefiltered = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapPrefiltered", index++, 1u );
@@ -682,6 +725,12 @@ namespace castor3d
 			utils.declareComputeIBL();
 			utils.declareDecodeMaterial();
 			utils.declareInvertVec2Y();
+
+			if ( hasSpecularGi )
+			{
+				utils.declareFresnelSchlick();
+			}
+
 			shader::SpecularPbrReflectionModel reflections{ writer, utils };
 			shader::Fog fog{ fogType, writer };
 
@@ -730,8 +779,6 @@ namespace castor3d
 						, c3d_mapData3.lod( fixedTexCoord, 0.0_f ) );
 					auto data4 = writer.declLocale( "data4"
 						, c3d_mapData4.lod( fixedTexCoord, 0.0_f ) );
-					auto normal = writer.declLocale( "normal"
-						, data1.xyz() );
 					auto diffuse = writer.declLocale( "diffuse"
 						, data2.xyz() );
 					auto glossiness = writer.declLocale( "glossiness"
@@ -744,18 +791,31 @@ namespace castor3d
 						, data4.xyz() );
 					auto depth = writer.declLocale( "depth"
 						, c3d_mapDepth.lod( vtx_texture, 0.0_f ).x() );
-					auto position = writer.declLocale( "position"
-						, utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj ) );
 					auto ambient = writer.declLocale( "ambient"
 						, c3d_ambientLight.xyz() );
 					auto lightDiffuse = writer.declLocale( "lightDiffuse"
 						, c3d_mapLightDiffuse.lod( fixedTexCoord, 0.0_f ).xyz() );
 					auto lightSpecular = writer.declLocale( "lightSpecular"
 						, c3d_mapLightSpecular.lod( fixedTexCoord, 0.0_f ).xyz() );
-					auto lightIndirect = writer.declLocale( "lightIndirect"
-						, c3d_mapLightIndirect.lod( fixedTexCoord, 0.0_f ).rgb()
-						, hasGi );
-					lightDiffuse += lightIndirect;
+					auto lightIndirectDiffuse = writer.declLocale( "lightIndirectDiffuse"
+						, c3d_mapLightIndirectDiffuse.lod( vtx_texture, 0.0_f ).rgb()
+						, hasDiffuseGi );
+					auto lightIndirectSpecular = writer.declLocale( "lightIndirectSpecular"
+						, c3d_mapLightIndirectSpecular.lod( vtx_texture, 0.0_f ).rgb()
+						, hasSpecularGi );
+					auto surface = writer.declLocale< shader::Surface >( "surface" );
+					surface.create( utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj )
+						, data1.rgb() );
+
+					if ( hasSpecularGi )
+					{
+						auto V = writer.declLocale( "V"
+							, normalize( c3d_cameraPosition.xyz() - surface.worldPosition ) );
+						auto NdotV = writer.declLocale( "NdotV"
+							, max( 0.0_f, dot( surface.worldNormal, V ) ) );
+						lightIndirectSpecular *= utils.fresnelSchlick( NdotV, specular, 1.0_f - glossiness );
+					}
+
 					auto reflected = writer.declLocale( "reflected"
 						, vec3( 0.0_f ) );
 					auto refracted = writer.declLocale( "refracted"
@@ -777,7 +837,7 @@ namespace castor3d
 						FI;
 
 						auto incident = writer.declLocale( "incident"
-							, normalize( position - c3d_cameraPosition.xyz() ) );
+							, normalize( surface.worldPosition - c3d_cameraPosition.xyz() ) );
 						auto ratio = writer.declLocale( "ratio"
 							, material.m_refractionRatio );
 
@@ -791,7 +851,7 @@ namespace castor3d
 								{
 									// Reflection from environment map.
 									reflected = reflections.computeRefl( incident
-										, normal
+										, surface.worldNormal
 										, c3d_mapEnvironment[Int( i )]
 										, specular
 										, glossiness );
@@ -807,7 +867,7 @@ namespace castor3d
 									{
 										// Refraction from environment map.
 										reflections.computeRefrEnvMap( incident
-											, normal
+											, surface.worldNormal
 											, c3d_mapEnvironment[Int( i )]
 											, material.m_refractionRatio
 											, material.m_transmission * diffuse
@@ -822,7 +882,7 @@ namespace castor3d
 							{
 								// Refraction from background skybox.
 								reflections.computeRefrSkybox( incident
-									, normal
+									, surface.worldNormal
 									, c3d_mapPrefiltered
 									, material.m_refractionRatio
 									, material.m_transmission * diffuse
@@ -835,8 +895,7 @@ namespace castor3d
 						ELSE
 						{
 							// Reflection from background skybox.
-							ambient *= utils.computeSpecularIBL( normal
-								, position
+							ambient *= utils.computeSpecularIBL( surface
 								, diffuse
 								, specular
 								, glossiness
@@ -853,7 +912,7 @@ namespace castor3d
 									{
 										// Refraction from environment map.
 										reflections.computeRefrEnvMap( incident
-											, normal
+											, surface.worldNormal
 											, c3d_mapEnvironment[Int( i )]
 											, material.m_refractionRatio
 											, material.m_transmission * diffuse
@@ -868,7 +927,7 @@ namespace castor3d
 							{
 								// Refraction from background skybox.
 								reflections.computeRefrSkybox( incident
-									, normal
+									, surface.worldNormal
 									, c3d_mapPrefiltered
 									, material.m_refractionRatio
 									, material.m_transmission * diffuse
@@ -883,8 +942,7 @@ namespace castor3d
 					ELSE
 					{
 						// Reflection from background skybox.
-						ambient *= utils.computeSpecularIBL( normal
-							, position
+						ambient *= utils.computeSpecularIBL( surface
 							, diffuse
 							, specular
 							, glossiness
@@ -899,9 +957,9 @@ namespace castor3d
 						{
 							// Refraction from background skybox.
 							auto incident = writer.declLocale( "incident"
-								, normalize( position - c3d_cameraPosition.xyz() ) );
+								, normalize( surface.worldPosition - c3d_cameraPosition.xyz() ) );
 							reflections.computeRefrSkybox( incident
-								, normal
+								, surface.worldNormal
 								, c3d_mapPrefiltered
 								, material.m_refractionRatio
 								, material.m_transmission * diffuse
@@ -914,7 +972,9 @@ namespace castor3d
 					FI;
 
 					ambient *= occlusion;
-					ambient *= lightIndirect;
+					ambient *= lightIndirectDiffuse;
+					lightDiffuse += lightIndirectDiffuse * occlusion;
+					lightSpecular += lightIndirectSpecular * occlusion;
 					pxl_fragColor = vec4( lightDiffuse * diffuse
 							+ lightSpecular
 							+ emissive
@@ -924,13 +984,13 @@ namespace castor3d
 
 					if ( fogType != FogType::eDisabled )
 					{
-						position = utils.calcVSPosition( fixedTexCoord
+						surface.viewPosition = utils.calcVSPosition( fixedTexCoord
 							, c3d_mapDepth.lod( fixedTexCoord, 0.0_f ).x()
 							, c3d_mtxInvProj );
 						pxl_fragColor = fog.apply( vec4( utils.removeGamma( c3d_gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
 							, pxl_fragColor
-							, length( position )
-							, position.z()
+							, length( surface.viewPosition )
+							, surface.viewPosition.z()
 							, c3d_fogInfo
 							, c3d_cameraPosition );
 					}
@@ -941,17 +1001,18 @@ namespace castor3d
 		ashes::PipelineShaderStageCreateInfoArray doCreateProgram( RenderDevice const & device
 			, FogType fogType
 			, bool hasSsao
-			, bool hasGi
+			, bool hasDiffuseGi
+			, bool hasSpecularGi
 			, MaterialType matType
 			, ShaderModule & vertexShader
 			, ShaderModule & pixelShader )
 		{
 			vertexShader.shader = doCreateVertexProgram( device );
 			pixelShader.shader = ( matType == MaterialType::ePhong
-				? doCreatePhongPixelProgram( device, fogType, hasSsao, hasGi )
+				? doCreatePhongPixelProgram( device, fogType, hasSsao, hasDiffuseGi, hasSpecularGi )
 				: ( matType == MaterialType::eMetallicRoughness
-					? doCreatePbrMRPixelProgram( device, fogType, hasSsao, hasGi )
-					: doCreatePbrSGPixelProgram( device, fogType, hasSsao, hasGi ) ) );
+					? doCreatePbrMRPixelProgram( device, fogType, hasSsao, hasDiffuseGi, hasSpecularGi )
+					: doCreatePbrSGPixelProgram( device, fogType, hasSsao, hasDiffuseGi, hasSpecularGi ) ) );
 
 			return ashes::PipelineShaderStageCreateInfoArray
 			{
@@ -1079,7 +1140,8 @@ namespace castor3d
 
 		inline ashes::DescriptorSetLayoutPtr doCreateTexDescriptorLayout( RenderDevice const & device
 			, bool hasSsao
-			, bool hasGi
+			, bool hasDiffuseGi
+			, bool hasSpecularGi
 			, MaterialType matType )
 		{
 			uint32_t index = 1u;
@@ -1119,11 +1181,18 @@ namespace castor3d
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapLightSpecular
 
-			if ( hasGi )
+			if ( hasDiffuseGi )
 			{
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-					, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapLightIndirect
+					, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapLightIndirectDiffuse
+			}
+
+			if ( hasSpecularGi )
+			{
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+					, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapLightIndirectSpecular
 			}
 
 			auto envMapCount = c_noIblEnvironmentCount;
@@ -1160,7 +1229,8 @@ namespace castor3d
 			, ashes::ImageView const * sssss
 			, ashes::ImageView const & lightDiffuse
 			, ashes::ImageView const & lightSpecular
-			, ashes::ImageView const * lightIndirect
+			, ashes::ImageView const * lightIndirectDiffuse
+			, ashes::ImageView const * lightIndirectSpecular
 			, SamplerSPtr sampler
 			, Scene const & scene
 			, MaterialType matType
@@ -1203,9 +1273,14 @@ namespace castor3d
 
 			writes.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { sampler->getSampler(), lightSpecular, imgLayout } } } );
 
-			if ( lightIndirect )
+			if ( lightIndirectDiffuse )
 			{
-				writes.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { sampler->getSampler(), *lightIndirect, imgLayout } } } );
+				writes.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { sampler->getSampler(), *lightIndirectDiffuse, imgLayout } } } );
+			}
+
+			if ( lightIndirectSpecular )
+			{
+				writes.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { sampler->getSampler(), *lightIndirectSpecular, imgLayout } } } );
 			}
 
 			auto & background = *scene.getBackground();
@@ -1324,7 +1399,8 @@ namespace castor3d
 		, ashes::ImageView const * subsurfaceScattering
 		, ashes::ImageView const & lightDiffuse
 		, ashes::ImageView const & lightSpecular
-		, ashes::ImageView const * lightIndirect
+		, ashes::ImageView const * lightIndirectDiffuse
+		, ashes::ImageView const * lightIndirectSpecular
 		, SamplerSPtr const & sampler
 		, VkExtent2D const & size
 		, FogType fogType
@@ -1335,8 +1411,18 @@ namespace castor3d
 		, renderPass{ &renderPass }
 		, vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "DeferredResolve" }
 		, pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "DeferredResolve" }
-		, program{ doCreateProgram( device, fogType, ssao != nullptr, lightIndirect != nullptr, matType, vertexShader, pixelShader ) }
-		, texDescriptorLayout{ doCreateTexDescriptorLayout( device, ssao != nullptr, lightIndirect != nullptr, engine.getMaterialsType() ) }
+		, program{ doCreateProgram( device
+			, fogType, ssao != nullptr
+			, lightIndirectDiffuse != nullptr
+			, lightIndirectSpecular != nullptr
+			, matType
+			, vertexShader
+			, pixelShader ) }
+		, texDescriptorLayout{ doCreateTexDescriptorLayout( device
+			, ssao != nullptr
+			, lightIndirectDiffuse != nullptr
+			, lightIndirectSpecular != nullptr
+			, engine.getMaterialsType() ) }
 		, texDescriptorPool{ texDescriptorLayout->createPool( "OpaqueResolvePassTex", 1u ) }
 		, texDescriptorSet{ doCreateTexDescriptorSet( device
 			, *texDescriptorPool
@@ -1346,7 +1432,8 @@ namespace castor3d
 			, subsurfaceScattering
 			, lightDiffuse
 			, lightSpecular
-			, lightIndirect
+			, lightIndirectDiffuse
+			, lightIndirectSpecular
 			, sampler
 			, scene
 			, matType
@@ -1381,6 +1468,9 @@ namespace castor3d
 		commandBuffer->bindVertexBuffer( 0u, vbo.getBuffer(), 0u );
 		commandBuffer->draw( 6u );
 		commandBuffer->endRenderPass();
+		commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
+			, opaquePassResult[DsTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeDepthStencilReadOnly( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 		timer.endPass( *commandBuffer );
 		commandBuffer->endDebugBlock();
 		commandBuffer->end();
@@ -1402,7 +1492,8 @@ namespace castor3d
 		, TextureUnit const & subsurfaceScattering
 		, TextureUnit const & lightDiffuse
 		, TextureUnit const & lightSpecular
-		, TextureUnit const & lightIndirect
+		, TextureUnit const & lightIndirectDiffuse
+		, TextureUnit const & lightIndirectSpecular
 		, TextureUnit const & result
 		, SceneUbo const & sceneUbo
 		, GpInfoUbo const & gpInfoUbo
@@ -1420,7 +1511,8 @@ namespace castor3d
 		, m_subsurfaceScattering{ subsurfaceScattering }
 		, m_lightDiffuse{ lightDiffuse }
 		, m_lightSpecular{ lightSpecular }
-		, m_lightIndirect{ lightIndirect }
+		, m_lightIndirectDiffuse{ lightIndirectDiffuse }
+		, m_lightIndirectSpecular{ lightIndirectSpecular }
 		, m_viewport{ engine }
 		, m_programs{ nullptr }
 	{
@@ -1438,7 +1530,7 @@ namespace castor3d
 		m_renderPass = doCreateRenderPass( m_device, result.getPixelFormat() );
 		m_frameBuffer = doCreateFrameBuffer( *m_renderPass, size, result.getDefaultView().getSampledView() );
 		m_finished = m_device->createSemaphore( "OpaqueResolvePass" );
-		m_timer = std::make_shared< RenderPassTimer >( engine, m_device, cuT( "Opaque" ), cuT( "Resolve pass" ) );
+		m_timer = std::make_shared< RenderPassTimer >( m_device, cuT( "Opaque" ), cuT( "Resolve pass" ) );
 		m_viewport.setOrtho( 0, 1, 0, 1, 0, 1 );
 		m_viewport.resize( { m_size.width, m_size.height } );
 		m_viewport.update();
@@ -1459,6 +1551,7 @@ namespace castor3d
 
 	void OpaqueResolvePass::update( GpuUpdater & updater )
 	{
+		m_voxelConeTracing = updater.voxelConeTracing;
 		auto & program = getProgram();
 		program.updateCommandBuffer( *m_vertexBuffer
 			, *m_uboDescriptorSet
@@ -1494,11 +1587,13 @@ namespace castor3d
 		auto fog = m_scene.getFog().getType();
 		bool hasSsao = m_ssao.getConfig().enabled;
 		bool hasSssss = m_scene.needsSubsurfaceScattering();
-		bool hasGi = m_scene.needsGlobalIllumination();
-		auto index = ( size_t( fog ) * SsaoCount * SsssCount * GiCount )
-			+ ( ( hasSsao ? 1u : 0 ) * SsssCount * GiCount )
-			+ ( ( hasSssss ? 1u : 0u ) * GiCount )
-			+ ( hasGi ? 1u : 0u );
+		bool hasDiffuseGi = m_scene.needsGlobalIllumination() || m_voxelConeTracing;
+		bool hasSpecularGi = m_voxelConeTracing;
+		auto index = ( size_t( fog ) * SsaoCount * SsssCount * DiffuseGiCount * SpecularGiCount )
+			+ ( ( hasSsao ? 1u : 0 ) * SsssCount * DiffuseGiCount * SpecularGiCount )
+			+ ( ( hasSssss ? 1u : 0u ) * DiffuseGiCount * SpecularGiCount )
+			+ ( ( hasDiffuseGi ? 1u : 0u ) * SpecularGiCount )
+			+ ( hasSpecularGi ? 1u : 0u );
 		auto & result = m_programs[index];
 
 		if ( !result )
@@ -1519,8 +1614,11 @@ namespace castor3d
 					: nullptr )
 				, m_lightDiffuse.getTexture()->getDefaultView().getSampledView()
 				, m_lightSpecular.getTexture()->getDefaultView().getSampledView()
-				, ( hasGi
-					? &m_lightIndirect.getTexture()->getDefaultView().getSampledView()
+				, ( hasDiffuseGi
+					? &m_lightIndirectDiffuse.getTexture()->getDefaultView().getSampledView()
+					: nullptr )
+				, ( hasSpecularGi
+					? &m_lightIndirectSpecular.getTexture()->getDefaultView().getSampledView()
 					: nullptr )
 				, m_sampler
 				, size

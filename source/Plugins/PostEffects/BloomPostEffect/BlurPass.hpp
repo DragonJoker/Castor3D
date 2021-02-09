@@ -24,6 +24,7 @@ namespace Bloom
 			, uint32_t blurPassesCount
 			, bool isVertical );
 		castor3d::CommandsSemaphoreArray getCommands( castor3d::RenderPassTimer const & timer
+			, uint32_t & index
 			, ashes::VertexBuffer< castor3d::NonTexturedQuad > const & vertexBuffer )const;
 		void accept( castor3d::PipelineVisitorBase & visitor );
 

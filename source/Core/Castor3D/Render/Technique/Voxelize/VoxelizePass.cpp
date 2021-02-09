@@ -2,15 +2,33 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/UniformBuffer.hpp"
+#include "Castor3D/Buffer/UniformBufferPools.hpp"
 #include "Castor3D/Cache/ShaderCache.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
+#include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Render/Node/RenderNode_Render.hpp"
 #include "Castor3D/Render/Node/SceneCulledRenderNodes.hpp"
 #include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
+#include "Castor3D/Render/Technique/Voxelize/VoxelSceneData.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslMetallicBrdfLighting.hpp"
+#include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
+#include "Castor3D/Shader/Shaders/GlslSpecularBrdfLighting.hpp"
+#include "Castor3D/Shader/Shaders/GlslSurface.hpp"
+#include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
+#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Shaders/GlslVoxel.hpp"
+#include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp"
 #include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
@@ -18,37 +36,49 @@
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
+#include "Castor3D/Shader/Ubos/TexturesUbo.hpp"
+#include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
 
 #include <ShaderWriter/Source.hpp>
 
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 #include <ashespp/Descriptor/DescriptorSetLayout.hpp>
+#include <ashespp/Image/Image.hpp>
 #include <ashespp/Image/ImageView.hpp>
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
-using namespace castor;
+CU_ImplementCUSmartPtr( castor3d, VoxelizePass )
 
 namespace castor3d
 {
 	//*********************************************************************************************
 
 	VoxelizePass::VoxelizePass( Engine & engine
+		, RenderDevice const & device
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
-		, TextureLayoutSPtr result
-		, ashes::ImageView colourView )
-		: RenderPass{ "Voxelize"
+		, VoxelizerUbo const & voxelizerUbo
+		, ashes::Buffer< Voxel > const & voxels
+		, VoxelSceneData const & voxelConfig )
+		: SceneRenderPass{ "Voxelize"
 			, "Voxelization"
 			, engine
 			, matrixUbo
-			, culler }
+			, culler
+			, RenderMode::eBoth
+			, true
+			, true
+			, nullptr
+			, 1u }
 		, m_scene{ culler.getScene() }
 		, m_camera{ culler.getCamera() }
+		, m_voxels{ voxels }
 		, m_commands{ nullptr, nullptr }
-		, m_result{ result }
-		, m_colourView{ colourView }
+		, m_voxelizerUbo{ voxelizerUbo }
+		, m_voxelConfig{ voxelConfig }
 	{
+		initialise( device, { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } );
 	}
 
 	VoxelizePass::~VoxelizePass()
@@ -64,51 +94,62 @@ namespace castor3d
 		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ) );
 	}
 
+	void VoxelizePass::update( CpuUpdater & updater )
+	{
+		if ( m_voxelConfig.enabled )
+		{
+			getCuller().compute();
+			SceneRenderPass::update( updater );
+		}
+	}
+
 	void VoxelizePass::update( GpuUpdater & updater )
 	{
-		auto & nodes = m_renderQueue.getCulledRenderNodes();
-
-		if ( nodes.hasNodes() )
+		if ( m_voxelConfig.enabled )
 		{
-			RenderPass::doUpdate( nodes.instancedStaticNodes.frontCulled );
-			RenderPass::doUpdate( nodes.staticNodes.frontCulled );
-			RenderPass::doUpdate( nodes.skinnedNodes.frontCulled );
-			RenderPass::doUpdate( nodes.instancedSkinnedNodes.frontCulled );
-			RenderPass::doUpdate( nodes.morphingNodes.frontCulled );
-			RenderPass::doUpdate( nodes.billboardNodes.frontCulled );
+			auto & nodes = m_renderQueue.getCulledRenderNodes();
 
-			RenderPass::doUpdate( nodes.instancedStaticNodes.backCulled, updater.info );
-			RenderPass::doUpdate( nodes.staticNodes.backCulled, updater.info );
-			RenderPass::doUpdate( nodes.skinnedNodes.backCulled, updater.info );
-			RenderPass::doUpdate( nodes.instancedSkinnedNodes.backCulled, updater.info );
-			RenderPass::doUpdate( nodes.morphingNodes.backCulled, updater.info );
-			RenderPass::doUpdate( nodes.billboardNodes.backCulled, updater.info );
-		}
-
-		static const Matrix4x4f identity
-		{
-			[]()
+			if ( nodes.hasNodes() )
 			{
-				Matrix4x4f res;
-				res.setIdentity();
-				return res;
-			}()
-		};
-		//Orthograhic projection
-		auto sceneBoundingBox = m_scene.getBoundingBox();
-		auto ortho = matrix::ortho( sceneBoundingBox.getMin()->x
-			, sceneBoundingBox.getMax()->x
-			, sceneBoundingBox.getMin()->y
-			, sceneBoundingBox.getMax()->y
-			, -1.0f * sceneBoundingBox.getMin()->z
-			, -1.0f * sceneBoundingBox.getMax()->z );
-		auto jitterProjSpace = updater.jitter * 2.0f;
-		jitterProjSpace[0] /= m_camera.getWidth();
-		jitterProjSpace[1] /= m_camera.getHeight();
-		m_matrixUbo.cpuUpdate( identity
-			, ortho
-			, jitterProjSpace );
+				SceneRenderPass::doUpdate( nodes.instancedStaticNodes.frontCulled );
+				SceneRenderPass::doUpdate( nodes.staticNodes.frontCulled );
+				SceneRenderPass::doUpdate( nodes.skinnedNodes.frontCulled );
+				SceneRenderPass::doUpdate( nodes.instancedSkinnedNodes.frontCulled );
+				SceneRenderPass::doUpdate( nodes.morphingNodes.frontCulled );
+				SceneRenderPass::doUpdate( nodes.billboardNodes.frontCulled );
 
+				SceneRenderPass::doUpdate( nodes.instancedStaticNodes.backCulled, updater.info );
+				SceneRenderPass::doUpdate( nodes.staticNodes.backCulled, updater.info );
+				SceneRenderPass::doUpdate( nodes.skinnedNodes.backCulled, updater.info );
+				SceneRenderPass::doUpdate( nodes.instancedSkinnedNodes.backCulled, updater.info );
+				SceneRenderPass::doUpdate( nodes.morphingNodes.backCulled, updater.info );
+				SceneRenderPass::doUpdate( nodes.billboardNodes.backCulled, updater.info );
+			}
+
+			static const castor::Matrix4x4f identity
+			{
+				[]()
+				{
+					castor::Matrix4x4f res;
+					res.setIdentity();
+					return res;
+			}( )
+			};
+			//Orthograhic projection
+			auto sceneBoundingBox = m_scene.getBoundingBox();
+			auto ortho = castor::matrix::ortho( sceneBoundingBox.getMin()->x
+				, sceneBoundingBox.getMax()->x
+				, sceneBoundingBox.getMin()->y
+				, sceneBoundingBox.getMax()->y
+				, -1.0f * sceneBoundingBox.getMin()->z
+				, -1.0f * sceneBoundingBox.getMax()->z );
+			auto jitterProjSpace = updater.jitter * 2.0f;
+			jitterProjSpace[0] /= m_camera.getWidth();
+			jitterProjSpace[1] /= m_camera.getHeight();
+			m_matrixUbo.cpuUpdate( identity
+				, ortho
+				, jitterProjSpace );
+		}
 	}
 
 	ashes::Semaphore const & VoxelizePass::render( RenderDevice const & device
@@ -116,31 +157,28 @@ namespace castor3d
 	{
 		ashes::Semaphore const * result = &toWait;
 
-		if ( hasNodes() )
+		if ( hasNodes() && m_voxelConfig.enabled )
 		{
 			RenderPassTimerBlock timerBlock{ getTimer().start() };
 
 			auto & cmd = *m_commands.commandBuffer;
 			cmd.begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-			cmd.memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
-				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, m_result->getDefaultView().getSampledView().makeGeneralLayout( VK_IMAGE_LAYOUT_UNDEFINED
-					, VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT ) );
+			timerBlock->beginPass( cmd );
+			timerBlock->notifyPassRender();
 			cmd.beginDebugBlock(
 				{
 					"Voxelization Pass",
 					makeFloatArray( getEngine()->getNextRainbowColour() ),
 				} );
-			timerBlock->beginPass( cmd );
-			timerBlock->notifyPassRender();
 			cmd.beginRenderPass( getRenderPass()
 				, *m_frameBuffer
 				, { opaqueBlackClearColor }
 				, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
-			cmd.executeCommands( { getCommandBuffer() } );
+				cmd.executeCommands( { getCommandBuffer() } );
+
 			cmd.endRenderPass();
-			timerBlock->endPass( cmd );
 			cmd.endDebugBlock();
+			timerBlock->endPass( cmd );
 			cmd.end();
 
 			device.graphicsQueue->submit( { cmd }
@@ -155,29 +193,16 @@ namespace castor3d
 	}
 
 	bool VoxelizePass::doInitialise( RenderDevice const & device
-		, Size const & CU_UnusedParam( size ) )
+		, castor::Size const & CU_UnusedParam( size ) )
 	{
-		ashes::VkAttachmentDescriptionArray attaches
-		{
-			{
-				0u,
-				m_colourView->format,
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_ATTACHMENT_LOAD_OP_LOAD,
-				VK_ATTACHMENT_STORE_OP_STORE,
-				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-				VK_ATTACHMENT_STORE_OP_DONT_CARE,
-				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-			},
-		};
+		ashes::VkAttachmentDescriptionArray attaches;
 		ashes::SubpassDescriptionArray subpasses;
 		subpasses.emplace_back( ashes::SubpassDescription
 			{
 				0u,
 				VK_PIPELINE_BIND_POINT_GRAPHICS,
 				{},
-				{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
+				{},
 				{},
 				ashes::nullopt,
 				{},
@@ -213,10 +238,9 @@ namespace castor3d
 		m_renderPass = device->createRenderPass( getName()
 			, std::move( createInfo ) );
 		ashes::ImageViewCRefArray fbAttaches;
-		fbAttaches.emplace_back( m_colourView );
 
 		m_frameBuffer = m_renderPass->createFrameBuffer( getName()
-			, { m_result->getWidth(), m_result->getHeight() }
+			, { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() }
 			, std::move( fbAttaches ) );
 
 		m_commands =
@@ -236,8 +260,23 @@ namespace castor3d
 
 	void VoxelizePass::doUpdateFlags( PipelineFlags & flags )const
 	{
-		flags.textures.clear();
 		addFlag( flags.programFlags, ProgramFlag::eHasGeometry );
+		addFlag( flags.programFlags, ProgramFlag::eLighting );
+
+		remFlag( flags.sceneFlags, SceneFlag::eLpvGI );
+		remFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI );
+		remFlag( flags.sceneFlags, SceneFlag::eFogLinear );
+		remFlag( flags.sceneFlags, SceneFlag::eFogExponential );
+		remFlag( flags.sceneFlags, SceneFlag::eFogSquaredExponential );
+
+		remFlag( flags.passFlags, PassFlag::eReflection );
+		remFlag( flags.passFlags, PassFlag::eReflection );
+		remFlag( flags.passFlags, PassFlag::eParallaxOcclusionMappingOne );
+		remFlag( flags.passFlags, PassFlag::eParallaxOcclusionMappingRepeat );
+		remFlag( flags.passFlags, PassFlag::eDistanceBasedTransmittance );
+		remFlag( flags.passFlags, PassFlag::eSubsurfaceScattering );
+		remFlag( flags.passFlags, PassFlag::eAlphaBlending );
+		remFlag( flags.passFlags, PassFlag::eAlphaTest );
 	}
 
 	void VoxelizePass::doUpdatePipeline( RenderPipeline & pipeline )
@@ -245,13 +284,47 @@ namespace castor3d
 		m_sceneUbo.cpuUpdate( m_scene, &m_camera );
 	}
 
+	ashes::VkDescriptorSetLayoutBindingArray VoxelizePass::doCreateUboBindings( PipelineFlags const & flags )const
+	{
+		auto uboBindings = SceneRenderPass::doCreateUboBindings( flags );
+		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( VoxelizerUbo::BindingPoint//13
+			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			, VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( VoxelizerUbo::BindingPoint + 1u
+			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		return uboBindings;
+	}
+
 	ashes::VkDescriptorSetLayoutBindingArray VoxelizePass::doCreateTextureBindings( PipelineFlags const & flags )const
 	{
+		auto index = getMinTextureIndex();
 		ashes::VkDescriptorSetLayoutBindingArray textureBindings;
-		textureBindings.emplace_back( makeDescriptorSetLayoutBinding( 0u
-			, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
-			, VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_FRAGMENT_BIT
-			, 1u ) );
+
+		if ( !flags.textures.empty() )
+		{
+			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT
+				, uint32_t( flags.textures.size() ) ) );
+			index += uint32_t( flags.textures.size() );
+		}
+
+		for ( uint32_t j = 0u; j < uint32_t( LightType::eCount ); ++j )
+		{
+			if ( checkFlag( flags.sceneFlags, SceneFlag( uint8_t( SceneFlag::eShadowBegin ) << j ) ) )
+			{
+				// Depth
+				textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+				// Variance
+				textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+			}
+		}
+
 		return textureBindings;
 	}
 
@@ -267,17 +340,56 @@ namespace castor3d
 
 	ashes::PipelineColorBlendStateCreateInfo VoxelizePass::doCreateBlendState( PipelineFlags const & flags )const
 	{
-		return RenderPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 1u );
+		return SceneRenderPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 1u );
 	}
 
 	void VoxelizePass::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 		, BillboardListRenderNode & node )
 	{
+		m_voxelizerUbo.createSizedBinding( *node.uboDescriptorSet
+			, layout.getBinding( VoxelizerUbo::BindingPoint ) );
+		node.uboDescriptorSet->createBinding( layout.getBinding( VoxelizerUbo::BindingPoint + 1u )
+			, m_voxels
+			, 0u
+			, m_voxels.getCount() );
 	}
 
 	void VoxelizePass::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 		, SubmeshRenderNode & node )
 	{
+		m_voxelizerUbo.createSizedBinding( *node.uboDescriptorSet
+			, layout.getBinding( VoxelizerUbo::BindingPoint ) );
+		node.uboDescriptorSet->createBinding( layout.getBinding( VoxelizerUbo::BindingPoint + 1u )
+			, m_voxels
+			, 0u
+			, m_voxels.getCount() );
+	}
+
+	namespace
+	{
+		template< typename DataTypeT, typename InstanceTypeT >
+		void fillTexDescriptor( ashes::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, ObjectRenderNode< DataTypeT, InstanceTypeT > & node
+			, ShadowMapLightTypeArray const & shadowMaps )
+		{
+			auto & flags = node.pipeline.getFlags();
+			ashes::WriteDescriptorSetArray writes;
+
+			if ( !flags.textures.empty() )
+			{
+				node.passNode.fillDescriptor( layout
+					, index
+					, writes
+					, flags.textures );
+			}
+
+			bindShadowMaps( node.pipeline.getFlags()
+				, shadowMaps
+				, writes
+				, index );
+			node.texDescriptorSet->setBindings( writes );
+		}
 	}
 
 	void VoxelizePass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
@@ -285,19 +397,10 @@ namespace castor3d
 		, BillboardListRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		ashes::WriteDescriptorSetArray writes;
-		writes.push_back( ashes::WriteDescriptorSet
-			{
-				0u,
-				0u,
-				VK_DESCRIPTOR_TYPE_STORAGE_IMAGE,
-				{ {
-					nullptr,
-					m_result->getDefaultView().getSampledView(),
-					VK_IMAGE_LAYOUT_GENERAL,
-				} }
-			} );
-		node.texDescriptorSet->setBindings( writes );
+		fillTexDescriptor( layout
+			, index
+			, node
+			, shadowMaps );
 	}
 
 	void VoxelizePass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
@@ -305,87 +408,98 @@ namespace castor3d
 		, SubmeshRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		ashes::WriteDescriptorSetArray writes;
-		writes.push_back( ashes::WriteDescriptorSet
-			{
-				0u,
-				0u,
-				VK_DESCRIPTOR_TYPE_STORAGE_IMAGE,
-				{ {
-					nullptr,
-					m_result->getDefaultView().getSampledView(),
-					VK_IMAGE_LAYOUT_GENERAL,
-				} }
-			} );
-		node.texDescriptorSet->setBindings( writes );
+		fillTexDescriptor( layout
+			, index
+			, node
+			, shadowMaps );
 	}
 
 	ShaderPtr VoxelizePass::doGetVertexShaderSource( PipelineFlags const & flags )const
 	{
 		using namespace sdw;
 		VertexWriter writer;
+		bool hasTextures = !flags.textures.empty();
 
 		// Inputs
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
 		UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0u );
+		UBO_MODEL( writer, ModelUbo::BindingPoint, 0 );
 		auto skinningData = SkinningUbo::declare( writer, SkinningUbo::BindingPoint, 0, flags.programFlags );
 		UBO_MORPHING( writer, MorphingUbo::BindingPoint, 0, flags.programFlags );
 
 		auto inPosition = writer.declInput< Vec4 >( "inPosition"
-			, RenderPass::VertexInputs::PositionLocation );
+			, SceneRenderPass::VertexInputs::PositionLocation );
+		auto inNormal = writer.declInput< Vec3 >( "inNormal"
+			, SceneRenderPass::VertexInputs::NormalLocation );
+		auto inTexcoord = writer.declInput< Vec3 >( "inTexcoord"
+			, SceneRenderPass::VertexInputs::TextureLocation
+			, hasTextures );
 		auto inBoneIds0 = writer.declInput< IVec4 >( "inBoneIds0"
-			, RenderPass::VertexInputs::BoneIds0Location
+			, SceneRenderPass::VertexInputs::BoneIds0Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
 		auto inBoneIds1 = writer.declInput< IVec4 >( "inBoneIds1"
-			, RenderPass::VertexInputs::BoneIds1Location
+			, SceneRenderPass::VertexInputs::BoneIds1Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
 		auto inWeights0 = writer.declInput< Vec4 >( "inWeights0"
-			, RenderPass::VertexInputs::Weights0Location
+			, SceneRenderPass::VertexInputs::Weights0Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
 		auto inWeights1 = writer.declInput< Vec4 >( "inWeights1"
-			, RenderPass::VertexInputs::Weights1Location
+			, SceneRenderPass::VertexInputs::Weights1Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
 		auto inTransform = writer.declInput< Mat4 >( "inTransform"
-			, RenderPass::VertexInputs::TransformLocation
+			, SceneRenderPass::VertexInputs::TransformLocation
+			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
+		auto inMaterial = writer.declInput< Int >( "inMaterial"
+			, SceneRenderPass::VertexInputs::MaterialLocation
 			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
 		auto inPosition2 = writer.declInput< Vec4 >( "inPosition2"
-			, RenderPass::VertexInputs::Position2Location
+			, SceneRenderPass::VertexInputs::Position2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
+		auto inNormal2 = writer.declInput< Vec3 >( "inNormal2"
+			, SceneRenderPass::VertexInputs::Normal2Location
+			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
+		auto inTexcoord2 = writer.declInput< Vec3 >( "inTexcoord2"
+			, SceneRenderPass::VertexInputs::Texture2Location
+			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) && hasTextures );
 		auto in = writer.getIn();
 
 		// Outputs
+		uint32_t index = 0u;
+		auto outViewPosition = writer.declOutput< Vec3 >( "outViewPosition", index++ );
+		auto outNormal = writer.declOutput< Vec3 >( "outNormal", index++ );
+		auto outTexture = writer.declOutput< Vec3 >( "outTexture", index++, hasTextures );
+		auto outMaterial = writer.declOutput< UInt >( "outMaterial", index++ );
 		auto out = writer.getOut();
 
 		writer.implementFunction< sdw::Void >( "main"
 			, [&]()
 			{
-				auto curPosition = writer.declLocale( "curPosition"
-					, vec4( inPosition.xyz(), 1.0_f ) );
+				auto position = writer.declLocale( "position"
+					, ( checkFlag( flags.programFlags, ProgramFlag::eMorphing )
+						? vec4( sdw::mix( inPosition.xyz(), inPosition2.xyz(), vec3( c3d_time ) ), 1.0_f )
+						: vec4( inPosition.xyz(), 1.0_f ) ) );
+				auto normal = writer.declLocale( "normal"
+					, ( checkFlag( flags.programFlags, ProgramFlag::eMorphing )
+						? sdw::mix( inNormal, inNormal2, vec3( c3d_time ) )
+						: inNormal ) );
+				auto texcoord = writer.declLocale( "texcoord"
+					, ( checkFlag( flags.programFlags, ProgramFlag::eMorphing )
+						? sdw::mix( inTexcoord, inTexcoord2, vec3( c3d_time ) )
+						: inTexcoord ) );
+				auto modelMtx = writer.declLocale( "modelMtx"
+					, ( checkFlag( flags.programFlags, ProgramFlag::eSkinning )
+						? SkinningUbo::computeTransform( skinningData, writer, flags.programFlags )
+						: ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation )
+							? inTransform
+							: c3d_curMtxModel ) ) );
 
-				if ( checkFlag( flags.programFlags, ProgramFlag::eSkinning ) )
-				{
-					auto curMtxModel = writer.declLocale( "curMtxModel"
-						, SkinningUbo::computeTransform( skinningData, writer, flags.programFlags ) );
-				}
-				else if ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
-				{
-					auto curMtxModel = writer.declLocale( "curMtxModel"
-						, inTransform );
-				}
-				else
-				{
-					auto curMtxModel = writer.declLocale( "curMtxModel"
-						, c3d_curMtxModel );
-				}
-
-				auto curMtxModel = writer.getVariable< Mat4 >( "curMtxModel" );
-
-				if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
-				{
-					curPosition = vec4( sdw::mix( curPosition.xyz(), inPosition2.xyz(), vec3( c3d_time ) ), 1.0_f );
-				}
-
-				out.vtx.position = c3d_projection * curMtxModel * curPosition;
+				out.vtx.position = ( modelMtx * position );
+				outViewPosition = ( c3d_curView * out.vtx.position ).xyz();
+				outNormal = normalize( mat3( transpose( inverse( modelMtx ) ) ) * normal );
+				outTexture = texcoord;
+				outMaterial = ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation )
+					? writer.cast< UInt >( inMaterial )
+					: writer.cast< UInt >( c3d_materialIndex ) );
 			} );
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
@@ -394,6 +508,7 @@ namespace castor3d
 	{
 		using namespace sdw;
 		VertexWriter writer;
+		bool hasTextures = !flags.textures.empty();
 
 		// Shader inputs
 		auto inPosition = writer.declInput< Vec4 >( "inPosition", 0u );
@@ -406,6 +521,11 @@ namespace castor3d
 		auto in = writer.getIn();
 
 		// Outputs
+		uint32_t index = 0u;
+		auto outViewPosition = writer.declOutput< Vec3 >( "outViewPosition", index++ );
+		auto outNormal = writer.declOutput< Vec3 >( "outNormal", index++ );
+		auto outTexture = writer.declOutput< Vec3 >( "outTexture", index++, hasTextures );
+		auto outMaterial = writer.declOutput< UInt >( "outMaterial", index++ );
 		auto out = writer.getOut();
 
 		writer.implementFunction< Void >( "main"
@@ -418,40 +538,30 @@ namespace castor3d
 				curToCamera.y() = 0.0_f;
 				curToCamera = normalize( curToCamera );
 				auto right = writer.declLocale( "right"
-					, vec3( c3d_curView[0][0], c3d_curView[1][0], c3d_curView[2][0] ) );
-
-				if ( checkFlag( flags.programFlags, ProgramFlag::eSpherical ) )
-				{
-					writer.declLocale( "up"
-						, vec3( c3d_curView[0][1], c3d_curView[1][1], c3d_curView[2][1] ) );
-				}
-				else
-				{
-					right = normalize( vec3( right.x(), 0.0_f, right.z() ) );
-					writer.declLocale( "up"
-						, vec3( 0.0_f, 1.0f, 0.0f ) );
-				}
-
-				auto up = writer.getVariable< Vec3 >( "up" );
-
+					, normalize( checkFlag( flags.programFlags, ProgramFlag::eSpherical )
+						? vec3( c3d_curView[0][0], c3d_curView[1][0], c3d_curView[2][0] )
+						: vec3( c3d_curView[0][0], 0.0_f, c3d_curView[2][0] ) ) );
+				auto up = writer.declLocale( "up"
+					, ( checkFlag( flags.programFlags, ProgramFlag::eSpherical )
+						? vec3( c3d_curView[0][1], c3d_curView[1][1], c3d_curView[2][1] )
+						: vec3( 0.0_f, 1.0f, 0.0f ) ) );
 				auto width = writer.declLocale( "width"
-					, c3d_dimensions.x() );
+					, ( checkFlag( flags.programFlags, ProgramFlag::eFixedSize )
+						? c3d_dimensions.x() / c3d_clipInfo.x()
+						: c3d_dimensions.x() ) );
 				auto height = writer.declLocale( "height"
-					, c3d_dimensions.y() );
+					, ( checkFlag( flags.programFlags, ProgramFlag::eFixedSize )
+						? c3d_dimensions.y() / c3d_clipInfo.y()
+						: c3d_dimensions.y() ) );
 
-				if ( checkFlag( flags.programFlags, ProgramFlag::eFixedSize ) )
-				{
-					width = c3d_dimensions.x() / c3d_clipInfo.x();
-					height = c3d_dimensions.y() / c3d_clipInfo.y();
-				}
-
-				auto outPosition = writer.declLocale( "outPosition"
-					, vec4( curBbcenter
+				out.vtx.position = vec4( curBbcenter
 						+ right * inPosition.x() * width
 						+ up * inPosition.y() * height
-						, 1.0_f ) );
-				outPosition = c3d_projection * outPosition;
-				out.vtx.position = outPosition;
+					, 1.0_f );
+				auto viewPosition = writer.declLocale( "viewPosition"
+					, c3d_curView * out.vtx.position );
+				outViewPosition = viewPosition.xyz();
+				outNormal = normalize( c3d_cameraPosition.xyz() - curBbcenter );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -461,99 +571,84 @@ namespace castor3d
 	{
 		using namespace sdw;
 		GeometryWriter writer;
+		bool hasTextures = !flags.textures.empty();
+
 		writer.inputLayout( ast::stmt::InputLayout::eTriangleList );
 		writer.outputLayout( ast::stmt::OutputLayout::eTriangleStrip, 3u );
 
-		auto pxl_voxelVisibility = writer.declImage< WFImg3DR32 >( "pxl_voxelVisibility", 0u, 1u );
+		UBO_VOXELIZER( writer, VoxelizerUbo::BindingPoint, 0u, true );
 
 		// Shader inputs
+		uint32_t index = 0u;
+		auto inViewPosition = writer.declInputArray< Vec3 >( "inViewPosition", index++, 3u );
+		auto inNormal = writer.declInputArray< Vec3 >( "inNormal", index++, 3u );
+		auto inTexture = writer.declInputArray< Vec3 >( "inTexture", index++, 3u, hasTextures );
+		auto inMaterial = writer.declInputArray< UInt >( "inMaterial", index++, 3u );
 		auto in = writer.getIn();
 
 		// Outputs
-		uint32_t index = 0u;
-		auto geo_position = writer.declOutput< Vec4 >( "geo_position", index++ );
-		auto geo_minAabb = writer.declOutput< Vec3 >( "geo_minAabb", index++, uint32_t( sdw::var::Flag::eFlat ) );
-		auto geo_maxAabb = writer.declOutput< Vec3 >( "geo_maxAabb", index++, uint32_t( sdw::var::Flag::eFlat ) );
+		index = 0u;
+		auto outWorldPosition = writer.declOutput< Vec3 >( "outWorldPosition", index++ );
+		auto outViewPosition = writer.declOutput< Vec3 >( "outViewPosition", index++ );
+		auto outNormal = writer.declOutput< Vec3 >( "outNormal", index++ );
+		auto outTexture = writer.declOutput< Vec3 >( "outTexture", index++, hasTextures );
+		auto outMaterial = writer.declOutput< UInt >( "outMaterial", index++ );
 		auto out = writer.getOut();
 
 		writer.implementFunction< sdw::Void >( "main"
 			, [&]()
 			{
-				auto faceNormal = writer.declLocale( "faceNormal"
-					, normalize( cross( in.vtx[1].position.xyz() - in.vtx[0].position.xyz()
-						, in.vtx[2].position.xyz() - in.vtx[0].position.xyz() ) ) );
-				auto faceN = writer.declLocale( "faceN"
-					, abs( faceNormal ) );
-
-				auto imgSize = writer.declLocale( "imgSize"
-					, vec3( pxl_voxelVisibility.getSize() ) );
-				auto pixelSize = writer.declLocale( "pixelSize"
-					, vec3( 1.0_f ) / imgSize );
-				auto pixelDiagonal = writer.declLocale< Float >( "pixelDiagonal"
-					, Float{ sqrt( 3.0f ) } * pixelSize.x() );
-
-				auto vertPosition = writer.declLocaleArray< Vec4 >( "vertPosition", 3u );
-				auto edges = writer.declLocaleArray< Vec3 >( "edges", 3u );
-				auto edgeNormals = writer.declLocaleArray< Vec3 >( "edgeNormals", 3u );
-				auto minAABB = writer.declLocale< Vec3 >( "minAABB"
-					, vec3( 2.0_f, 2.0f, 2.0f ) );
-				auto maxAABB = writer.declLocale< Vec3 >( "maxAABB"
-					, vec3( -2.0_f, -2.0f, -2.0f ) );
+				auto facenormal = writer.declLocale( "facenormal"
+					, abs( inNormal[0] + inNormal[1] + inNormal[2] ) );
+				auto maxi = writer.declLocale( "maxi"
+					, writer.ternary( facenormal[1] > facenormal[0], 1_u, 0_u ) );
+				maxi = writer.ternary( facenormal[2] > facenormal[maxi], 2_u, maxi );
+				auto positions = writer.declLocaleArray< Vec3 >( "positions", 3u );
 
 				FOR( writer, UInt, i, 0_u, i < 3_u, ++i )
 				{
-					vertPosition[i] = in.vtx[i].position;
-					edges[i] = normalize( ( in.vtx[( i + 1 ) % 3].position.xyz() / vec3( in.vtx[( i + 1 ) % 3].position.w() ) )
-						- ( in.vtx[i].position.xyz() / vec3( in.vtx[i].position.w() ) ) );
-					edgeNormals[i] = normalize( cross( edges[i], faceNormal ) );
-					minAABB = min( minAABB, vertPosition[i].xyz() );
-					maxAABB = max( maxAABB, vertPosition[i].xyz() );
+					positions[i] = in.vtx[i].position.xyz() * c3d_voxelData.worldToGrid;
+
+					// Project onto dominant axis:
+					IF( writer, maxi == 0_u )
+					{
+						positions[i] = positions[i].zyx();
+					}
+					ELSEIF( maxi == 1_u )
+					{
+						positions[i] = positions[i].xzy();
+					}
+					FI;
+
+					positions[i].xy() *= c3d_voxelData.gridToClip;
+					positions[i].z() = 1.0_f;
 				}
 				ROF;
 
-				// calculating on which plane this triangle will be projected. Which value is maximum ? x=0, y=1, z=2
-				auto maxIndex = writer.declLocale( "maxIndex"
-					, writer.ternary( faceN.y() > faceN.x()
-						, writer.ternary( faceN.z() > faceN.y(), 2_u, 1_u )
-						, writer.ternary( faceN.z() > faceN.x(), 2_u, 0_u ) ) );
+				IF( writer, c3d_voxelData.enableConservativeRasterization != 0_u )
+				{
+					auto side0N = writer.declLocale( "side0N"
+						, normalize( positions[1].xy() - positions[0].xy() ) );
+					auto side1N = writer.declLocale( "side1N"
+						, normalize( positions[2].xy() - positions[1].xy() ) );
+					auto side2N = writer.declLocale( "side2N"
+						, normalize( positions[0].xy() - positions[2].xy() ) );
+					positions[0].xy() += normalize( side2N - side0N ) * c3d_voxelData.gridToClip;
+					positions[1].xy() += normalize( side0N - side1N ) * c3d_voxelData.gridToClip;
+					positions[2].xy() += normalize( side1N - side2N ) * c3d_voxelData.gridToClip;
+				}
+				FI;
 
-				minAABB -= pixelSize;
-				maxAABB += pixelSize;
-
-				auto biSector = writer.declLocale< Vec3 >( "biSector" );
-				// project triangle on xy, yz or yz plane where it's visible most
-				// also - calculate data for conservative rasterization
+				// Output
 				FOR( writer, UInt, i, 0_u, i < 3_u, ++i )
 				{
-				  // calculate bisector for conservative rasterization
-					biSector = pixelDiagonal * ( ( edges[( i + 2 ) % 3] / dot( edges[( i + 2 ) % 3], edgeNormals[i] ) ) + ( edges[i] / dot( edges[i], edgeNormals[( i + 2 ) % 3] ) ) );
-					geo_position = vec4( vertPosition[i].xyz() / vertPosition[i].w() + biSector, 1 );
+					outWorldPosition = in.vtx[i].position.xyz();
+					outViewPosition = inViewPosition[i];
+					outNormal = inNormal[i];
+					outMaterial = inMaterial[i];
+					outTexture = inTexture[i];
+					out.vtx.position = vec4( positions[i], 1.0f );
 
-					SWITCH( writer, maxIndex )
-					{
-						CASE( 0u )
-						{
-							out.vtx.position = vec4( vertPosition[i].yz() + biSector.yz(), 0, vertPosition[i].w() );
-							writer.caseBreakStmt();
-						}
-						ESAC;
-						CASE( 1u )
-						{
-							out.vtx.position = vec4( vertPosition[i].xz() + biSector.xz(), 0, vertPosition[i].w() );
-							writer.caseBreakStmt();
-						}
-						ESAC;
-						CASE( 2u )
-						{
-							out.vtx.position = vec4( vertPosition[i].xy() + biSector.xy(), 0, vertPosition[i].w() );
-							writer.caseBreakStmt();
-						}
-						ESAC;
-					}
-					HCTIWS;
-
-					geo_minAabb = minAABB;
-					geo_maxAabb = maxAABB;
 					EmitVertex( writer );
 				}
 				ROF;
@@ -564,57 +659,420 @@ namespace castor3d
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
-	ShaderPtr VoxelizePass::doGetPixelShaderSource( PipelineFlags const & flags )const
+	ShaderPtr VoxelizePass::doGetPhongPixelShaderSource( PipelineFlags const & flags )const
 	{
 		using namespace sdw;
 		FragmentWriter writer;
 		auto & renderSystem = *getEngine()->getRenderSystem();
+		bool hasTextures = !flags.textures.empty();
 
-		auto pxl_voxelVisibility = writer.declImage< WFImg3DR32 >( "pxl_voxelVisibility", 0u, 1u );
+		auto texIndex = getMinTextureIndex();
+		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
+			, texIndex
+			, 1u
+			, std::max( 1u, uint32_t( flags.textures.size() ) )
+			, hasTextures ) );
+		texIndex += uint32_t( flags.textures.size() );
 
-		uint32_t index = 0u;
-		auto geo_position = writer.declInput< Vec3 >( "geo_position", index++ );
-		auto geo_minAabb = writer.declInput< Vec3 >( "geo_minAabb", index++, uint32_t( sdw::var::Flag::eFlat ) );
-		auto geo_maxAabb = writer.declInput< Vec3 >( "geo_maxAabb", index++, uint32_t( sdw::var::Flag::eFlat ) );
+		shader::LegacyMaterials materials{ writer };
+		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", getLightBufferIndex(), 0u );
+		shader::TextureConfigurations textureConfigs{ writer };
+
+		if ( hasTextures )
+		{
+			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+		}
+
+		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
+		UBO_MODEL( writer, ModelUbo::BindingPoint, 0u );
+		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
+		UBO_VOXELIZER( writer, VoxelizerUbo::BindingPoint, 0u, true );
+
+		auto output( writer.declArrayShaderStorageBuffer< shader::Voxel >( "voxels"
+			, VoxelizerUbo::BindingPoint + 1u
+			, 0u ) );
+
+		// Shader inputs
+		auto index = 0u;
+		auto inWorldPosition = writer.declInput< Vec3 >( "inWorldPosition", index++ );
+		auto inViewPosition = writer.declInput< Vec3 >( "inViewPosition", index++ );
+		auto inNormal = writer.declInput< Vec3 >( "inNormal", index++ );
+		auto inTexture = writer.declInput< Vec3 >( "inTexture", index++, hasTextures );
+		auto inMaterial = writer.declInput< UInt >( "inMaterial", index++ );
 		auto in = writer.getIn();
 
-		auto pxl_fragColor( writer.declOutput< Vec4 >( "pxl_fragColor", 0 ) );
+		shader::Utils utils{ writer };
+		utils.declareApplyGamma();
+		utils.declareRemoveGamma();
+		utils.declareIsSaturated();
+		utils.declareEncodeColor();
+		utils.declareEncodeNormal();
+		utils.declareFlatten();
+		auto lighting = shader::PhongLightingModel::createDiffuseModel( writer
+			, utils
+			, flags.sceneFlags
+			, false // rsm
+			, texIndex
+			, m_mode != RenderMode::eTransparentOnly );
 
 		writer.implementFunction< sdw::Void >( "main"
 			, [&]()
 			{
-				IF( writer
-					, any( lessThan( geo_position, geo_minAabb ) )
-					|| any( lessThan( geo_maxAabb, geo_position ) ) )
+				auto diff = writer.declLocale( "diff"
+					, c3d_voxelData.worldToClip( inWorldPosition ) );
+				auto uvw = writer.declLocale( "uvw"
+					, diff * vec3( 0.5_f, -0.5f, 0.5f ) + 0.5f );
+
+				IF( writer, utils.isSaturated( uvw ) )
 				{
-					writer.discard();
+					auto material = writer.declLocale( "material"
+						, materials.getMaterial( inMaterial ) );
+					auto gamma = writer.declLocale( "gamma"
+						, material.m_gamma );
+					auto normal = writer.declLocale( "normal"
+						, normalize( inNormal ) );
+					auto diffuse = writer.declLocale( "diffuse"
+						, utils.removeGamma( gamma, material.m_diffuse() ) );
+					auto specular = writer.declLocale( "specular"
+						, material.m_specular );
+					auto shininess = writer.declLocale( "shininess"
+						, material.m_shininess );
+					auto emissive = writer.declLocale( "emissive"
+						, vec3( material.m_emissive ) );
+					auto alpha = writer.declLocale( "alpha"
+						, material.m_opacity );
+					auto occlusion = writer.declLocale( "occlusion"
+						, 1.0_f );
+
+					if ( hasTextures )
+					{
+						auto texCoord = writer.declLocale( "texCoord"
+							, inTexture );
+						lighting->computeMapVoxelContributions( flags
+							, gamma
+							, textureConfigs
+							, c3d_textureConfig
+							, c3d_maps
+							, texCoord
+							, emissive
+							, alpha
+							, occlusion
+							, diffuse
+							, specular
+							, shininess );
+					}
+
+					emissive *= diffuse;
+					auto worldEye = writer.declLocale( "worldEye"
+						, c3d_cameraPosition.xyz() );
+					auto surface = writer.declLocale< shader::Surface >( "surface" );
+					surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
+					auto color = writer.declLocale( "lightDiffuse"
+						, lighting->computeCombinedDiffuse( worldEye
+							, shininess
+							, c3d_shadowReceiver
+							, surface ) );
+					color.xyz() *= diffuse * occlusion;
+					color.xyz() += emissive;
+
+					auto encodedColor = writer.declLocale( "encodedColor"
+						, utils.encodeColor( vec4( color, alpha ) ) );
+					auto encodedNormal = writer.declLocale( "encodedNormal"
+						, utils.encodeNormal( normal ) );
+					auto writecoord = writer.declLocale( "writecoord"
+						, uvec3( floor( uvw * c3d_voxelData.clipToGrid ) ) );
+					auto id = writer.declLocale( "id"
+						, utils.flatten( writecoord, uvec3( sdw::UInt{ m_voxelConfig.gridSize.value() } ) ) );
+					atomicMax( output[id].colorMask, encodedColor );
+					atomicMax( output[id].normalMask, encodedNormal );
 				}
 				FI;
-
-				auto texcoord = writer.declLocale( "texcoord"
-					, geo_position * 0.5 + vec3( 0.5_f ) );
-				pxl_voxelVisibility
-					.store( pxl_voxelVisibility.getSize() * ivec3( texcoord )
-					, 1.0_f );
-				pxl_fragColor = vec4( 1.0_f );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
-	ShaderPtr VoxelizePass::doGetPhongPixelShaderSource( PipelineFlags const & flags )const
-	{
-		return doGetPixelShaderSource( flags );
-	}
-
 	ShaderPtr VoxelizePass::doGetPbrMRPixelShaderSource( PipelineFlags const & flags )const
 	{
-		return doGetPixelShaderSource( flags );
+		using namespace sdw;
+		FragmentWriter writer;
+		auto & renderSystem = *getEngine()->getRenderSystem();
+		bool hasTextures = !flags.textures.empty();
+
+		// Shader inputs
+		auto index = 0u;
+		auto inWorldPosition = writer.declInput< Vec3 >( "inWorldPosition", index++ );
+		auto inViewPosition = writer.declInput< Vec3 >( "inViewPosition", index++ );
+		auto inNormal = writer.declInput< Vec3 >( "inNormal", index++ );
+		auto inTexture = writer.declInput< Vec3 >( "inTexture", index++, hasTextures );
+		auto inMaterial = writer.declInput< UInt >( "inMaterial", index++ );
+		auto in = writer.getIn();
+
+		shader::PbrMRMaterials materials{ writer };
+		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", getLightBufferIndex(), 0u );
+		shader::TextureConfigurations textureConfigs{ writer };
+
+		if ( hasTextures )
+		{
+			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+		}
+
+		auto texIndex = getMinTextureIndex();
+		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
+			, texIndex
+			, 1u
+			, std::max( 1u, uint32_t( flags.textures.size() ) )
+			, hasTextures ) );
+		texIndex += uint32_t( flags.textures.size() );
+		
+		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
+		UBO_MODEL( writer, ModelUbo::BindingPoint, 0u );
+		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
+		UBO_VOXELIZER( writer, VoxelizerUbo::BindingPoint, 0u, true );
+
+		shader::Utils utils{ writer };
+		utils.declareApplyGamma();
+		utils.declareRemoveGamma();
+		utils.declareIsSaturated();
+		utils.declareEncodeColor();
+		utils.declareEncodeNormal();
+		utils.declareFlatten();
+		auto lighting = shader::MetallicBrdfLightingModel::createDiffuseModel( writer
+			, utils
+			, flags.sceneFlags
+			, false // rsm
+			, texIndex
+			, m_mode != RenderMode::eTransparentOnly );
+
+		// Fragment Outputs
+		auto output( writer.declArrayShaderStorageBuffer< shader::Voxel >( "voxels"
+			, VoxelizerUbo::BindingPoint + 1u
+			, 0u ) );
+
+		writer.implementFunction< sdw::Void >( "main"
+			, [&]()
+			{
+				auto diff = writer.declLocale( "diff"
+					, c3d_voxelData.worldToClip( inWorldPosition ) );
+				auto uvw = writer.declLocale( "uvw"
+					, diff * vec3( 0.5_f, -0.5f, 0.5f ) + 0.5f );
+
+				IF( writer, utils.isSaturated( uvw ) )
+				{
+					auto material = writer.declLocale( "material"
+						, materials.getMaterial( inMaterial ) );
+					auto gamma = writer.declLocale( "gamma"
+						, material.m_gamma );
+					auto normal = writer.declLocale( "normal"
+						, normalize( inNormal ) );
+					auto albedo = writer.declLocale( "albedo"
+						, utils.removeGamma( gamma, material.m_albedo ) );
+					auto metalness = writer.declLocale( "metalness"
+						, material.m_metallic );
+					auto roughness = writer.declLocale( "roughness"
+						, material.m_roughness );
+					auto emissive = writer.declLocale( "emissive"
+						, vec3( material.m_emissive ) );
+					auto alpha = writer.declLocale( "alpha"
+						, material.m_opacity );
+					auto occlusion = writer.declLocale( "occlusion"
+						, 1.0_f );
+					auto transmittance = writer.declLocale( "transmittance"
+						, 0.0_f );
+					auto tangentSpaceViewPosition = writer.declLocale( "tangentSpaceViewPosition"
+						, vec3( 0.0_f ) );
+					auto tangentSpaceFragPosition = writer.declLocale( "tangentSpaceFragPosition"
+						, vec3( 0.0_f ) );
+					auto tangent = writer.declLocale( "tangent"
+						, vec3( 0.0_f ) );
+					auto bitangent = writer.declLocale( "bitangent"
+						, vec3( 0.0_f ) );
+
+					if ( hasTextures )
+					{
+						auto texCoord = writer.declLocale( "texCoord"
+							, inTexture );
+						lighting->computeMapVoxelContributions( flags
+							, gamma
+							, textureConfigs
+							, c3d_textureConfig
+							, c3d_maps
+							, texCoord
+							, emissive
+							, alpha
+							, occlusion
+							, albedo
+							, metalness
+							, roughness );
+					}
+
+					emissive *= albedo;
+					auto worldEye = writer.declLocale( "worldEye"
+						, c3d_cameraPosition.xyz() );
+					auto surface = writer.declLocale< shader::Surface >( "surface" );
+					surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
+					auto color = writer.declLocale( "color"
+						, lighting->computeCombinedDiffuse( worldEye
+							, albedo
+							, metalness
+							, roughness
+							, c3d_shadowReceiver
+							, surface ) );
+					color *= albedo * occlusion;
+					color += emissive;
+
+					auto encodedColor = writer.declLocale( "encodedColor"
+						, utils.encodeColor( vec4( color, alpha ) ) );
+					auto encodedNormal = writer.declLocale( "encodedNormal"
+						, utils.encodeNormal( normal ) );
+					auto writecoord = writer.declLocale( "writecoord"
+						, uvec3( floor( uvw * c3d_voxelData.clipToGrid ) ) );
+					auto id = writer.declLocale( "id"
+						, utils.flatten( writecoord, uvec3( sdw::UInt{ m_voxelConfig.gridSize.value() } ) ) );
+					atomicMax( output[id].colorMask, encodedColor );
+					atomicMax( output[id].normalMask, encodedNormal );
+				}
+				FI;
+			} );
+
+		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
 	ShaderPtr VoxelizePass::doGetPbrSGPixelShaderSource( PipelineFlags const & flags )const
 	{
-		return doGetPixelShaderSource( flags );
+		using namespace sdw;
+		FragmentWriter writer;
+		auto & renderSystem = *getEngine()->getRenderSystem();
+		bool hasTextures = !flags.textures.empty();
+
+		auto texIndex = getMinTextureIndex();
+		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
+			, texIndex
+			, 1u
+			, std::max( 1u, uint32_t( flags.textures.size() ) )
+			, hasTextures ) );
+		texIndex += uint32_t( flags.textures.size() );
+
+		shader::PbrSGMaterials materials{ writer };
+		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", getLightBufferIndex(), 0u );
+		shader::TextureConfigurations textureConfigs{ writer };
+
+		if ( hasTextures )
+		{
+			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+		}
+
+		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
+		UBO_MODEL( writer, ModelUbo::BindingPoint, 0u );
+		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
+		UBO_VOXELIZER( writer, VoxelizerUbo::BindingPoint, 0u, true );
+
+		auto output( writer.declArrayShaderStorageBuffer< shader::Voxel >( "voxels"
+			, VoxelizerUbo::BindingPoint + 1u
+			, 0u ) );
+
+		// Shader inputs
+		auto index = 0u;
+		auto inWorldPosition = writer.declInput< Vec3 >( "inWorldPosition", index++ );
+		auto inViewPosition = writer.declInput< Vec3 >( "inViewPosition", index++ );
+		auto inNormal = writer.declInput< Vec3 >( "inNormal", index++ );
+		auto inTexture = writer.declInput< Vec3 >( "inTexture", index++, hasTextures );
+		auto inMaterial = writer.declInput< UInt >( "inMaterial", index++ );
+		auto in = writer.getIn();
+
+		shader::Utils utils{ writer };
+		utils.declareApplyGamma();
+		utils.declareRemoveGamma();
+		utils.declareIsSaturated();
+		utils.declareEncodeColor();
+		utils.declareEncodeNormal();
+		utils.declareFlatten();
+		auto lighting = shader::SpecularBrdfLightingModel::createDiffuseModel( writer
+			, utils
+			, flags.sceneFlags
+			, false // rsm
+			, texIndex
+			, m_mode != RenderMode::eTransparentOnly );
+
+		writer.implementFunction< sdw::Void >( "main"
+			, [&]()
+			{
+				auto diff = writer.declLocale( "diff"
+					, c3d_voxelData.worldToClip( inWorldPosition ) );
+				auto uvw = writer.declLocale( "uvw"
+					, diff * vec3( 0.5_f, -0.5f, 0.5f ) + 0.5f );
+
+				IF( writer, utils.isSaturated( uvw ) )
+				{
+					auto material = writer.declLocale( "material"
+						, materials.getMaterial( inMaterial ) );
+					auto gamma = writer.declLocale( "gamma"
+						, material.m_gamma );
+					auto normal = writer.declLocale( "normal"
+						, normalize( inNormal ) );
+					auto albedo = writer.declLocale( "albedo"
+						, utils.removeGamma( gamma, material.m_diffuse() ) );
+					auto specular = writer.declLocale( "specular"
+						, material.m_specular );
+					auto glossiness = writer.declLocale( "glossiness"
+						, material.m_glossiness );
+					auto emissive = writer.declLocale( "emissive"
+						, vec3( material.m_emissive ) );
+					auto alpha = writer.declLocale( "alpha"
+						, material.m_opacity );
+					auto occlusion = writer.declLocale( "occlusion"
+						, 1.0_f );
+
+					if ( hasTextures )
+					{
+						auto texCoord = writer.declLocale( "texCoord"
+							, inTexture );
+						lighting->computeMapVoxelContributions( flags
+							, gamma
+							, textureConfigs
+							, c3d_textureConfig
+							, c3d_maps
+							, texCoord
+							, emissive
+							, alpha
+							, occlusion
+							, albedo
+							, specular
+							, glossiness );
+					}
+
+					emissive *= albedo;
+					auto worldEye = writer.declLocale( "worldEye"
+						, c3d_cameraPosition.xyz() );
+					auto surface = writer.declLocale< shader::Surface >( "surface" );
+					surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
+					auto color = writer.declLocale( "lightDiffuse"
+						, lighting->computeCombinedDiffuse( worldEye
+							, specular
+							, glossiness
+							, c3d_shadowReceiver
+							, surface ) );
+					color.xyz() *= albedo * occlusion;
+					color.xyz() += emissive;
+
+					auto encodedColor = writer.declLocale( "encodedColor"
+						, utils.encodeColor( vec4( color, alpha ) ) );
+					auto encodedNormal = writer.declLocale( "encodedNormal"
+						, utils.encodeNormal( normal ) );
+					auto writecoord = writer.declLocale( "writecoord"
+						, uvec3( floor( uvw * c3d_voxelData.clipToGrid ) ) );
+					auto id = writer.declLocale( "id"
+						, utils.flatten( writecoord, uvec3( sdw::UInt{ m_voxelConfig.gridSize.value() } ) ) );
+					atomicMax( output[id].colorMask, encodedColor );
+					atomicMax( output[id].normalMask, encodedNormal );
+				}
+				FI;
+			} );
+
+		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
 	//*********************************************************************************************

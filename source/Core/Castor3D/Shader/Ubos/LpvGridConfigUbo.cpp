@@ -10,14 +10,64 @@
 
 #include <CastorUtils/Graphics/Grid.hpp>
 
+#include <ShaderWriter/Writer.hpp>
+
 CU_ImplementCUSmartPtr( castor3d, LpvGridConfigUbo )
 
 namespace castor3d
 {
+	//*********************************************************************************************
+
+	namespace shader
+	{
+		LpvGridData::LpvGridData( sdw::ShaderWriter & writer
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstance{ writer, std::move( expr ), enabled }
+			, minVolumeCornerSize{ getMember< sdw::Vec4 >( "minVolumeCornerSize" ) }
+			, gridSizeAtt{ getMember< sdw::Vec4 >( "gridSizeAtt" ) }
+			, minVolumeCorner{ minVolumeCornerSize.xyz() }
+			, cellSize{ minVolumeCornerSize.w() }
+			, gridSize{ gridSizeAtt.xyz() }
+			, gridWidth{ gridSizeAtt.x() }
+			, gridHeight{ gridSizeAtt.y() }
+			, gridDepth{ gridSizeAtt.z() }
+			, indirectAttenuation{ gridSizeAtt.w() }
+		{
+		}
+
+		LpvGridData & LpvGridData::operator=( LpvGridData const & rhs )
+		{
+			StructInstance::operator=( rhs );
+			return *this;
+		}
+
+		ast::type::StructPtr LpvGridData::makeType( ast::type::TypesCache & cache )
+		{
+			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
+				, "LpvGridData" );
+
+			if ( result->empty() )
+			{
+				result->declMember( "minVolumeCornerSize", ast::type::Kind::eVec4F );
+				result->declMember( "gridSizeAtt", ast::type::Kind::eVec4F );
+			}
+
+			return result;
+		}
+
+		std::unique_ptr< sdw::Struct > LpvGridData::declare( sdw::ShaderWriter & writer )
+		{
+			return std::make_unique< sdw::Struct >( writer
+				, makeType( writer.getTypesCache() ) );
+		}
+	}
+
+	//*********************************************************************************************
+
 	uint32_t const LpvGridConfigUbo::BindingPoint = 12;
-	std::string const LpvGridConfigUbo::LpvGridConfig = "LpvGridConfig";
-	std::string const LpvGridConfigUbo::MinVolumeCornerSize = "c3d_minVolumeCornerSize";
-	std::string const LpvGridConfigUbo::GridSizes = "c3d_gridSizes";
+	std::string const LpvGridConfigUbo::LpvGridData = "c3d_lpvGridData";
+	std::string const LpvGridConfigUbo::LpvGridConfig = "lpvGridConfig";
 
 	LpvGridConfigUbo::LpvGridConfigUbo()
 	{

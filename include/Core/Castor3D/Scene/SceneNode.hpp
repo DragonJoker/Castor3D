@@ -43,7 +43,8 @@ namespace castor3d
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API explicit TextWriter( castor::String const & tabs );
+			C3D_API explicit TextWriter( castor::String const & tabs
+				, float scale = 1.0f );
 			/**
 			 *\~english
 			 * Writes a castor3d::SceneNode into a text file
@@ -57,6 +58,9 @@ namespace castor3d
 			 *\return \p true si tout s'est bien passé, \p false sinon
 			 */
 			C3D_API bool operator()( SceneNode const & node, castor::TextFile & file )override;
+
+		private:
+			float m_scale;
 		};
 
 	protected:

@@ -126,19 +126,19 @@ namespace castor3d
 
 	private:
 		template< typename T >
-		class DebugPanel
+		class DebugPanelT
 		{
 		public:
-			DebugPanel( DebugPanel const & ) = delete;
-			DebugPanel & operator=( DebugPanel const & ) = delete;
-			DebugPanel( DebugPanel && ) = default;
-			DebugPanel & operator=( DebugPanel && ) = default;
-			DebugPanel( castor::String const & name
+			DebugPanelT( DebugPanelT const & ) = delete;
+			DebugPanelT & operator=( DebugPanelT const & ) = delete;
+			DebugPanelT( DebugPanelT && ) = default;
+			DebugPanelT & operator=( DebugPanelT && ) = default;
+			DebugPanelT( castor::String const & name
 				, castor::String const & label
 				, PanelOverlaySPtr panel
 				, OverlayCache & cache
 				, T const & value );
-			~DebugPanel();
+			~DebugPanelT();
 			void update();
 			void updatePosition( int y );
 
@@ -150,19 +150,19 @@ namespace castor3d
 		};
 
 		template< typename T >
-		class DebugPanels
+		class DebugPanelsT
 		{
-			using DebugPanelArray = std::vector< DebugPanel< T > >;
+			using DebugPanelArray = std::vector< DebugPanelT< T > >;
 
 		public:
-			DebugPanels( DebugPanels const & ) = delete;
-			DebugPanels & operator=( DebugPanels const & ) = delete;
-			DebugPanels( DebugPanels && ) = default;
-			DebugPanels & operator=( DebugPanels && ) = default;
-			DebugPanels( castor::String const & title
+			DebugPanelsT( DebugPanelsT const & ) = delete;
+			DebugPanelsT & operator=( DebugPanelsT const & ) = delete;
+			DebugPanelsT( DebugPanelsT && ) = default;
+			DebugPanelsT & operator=( DebugPanelsT && ) = default;
+			DebugPanelsT( castor::String const & title
 				, PanelOverlaySPtr panel
 				, OverlayCache & cache );
-			~DebugPanels();
+			~DebugPanelsT();
 			void update();
 			int updatePosition( int y );
 			void add( castor::String const & name
@@ -178,7 +178,7 @@ namespace castor3d
 		};
 
 		template< typename T >
-		using DebugPanelsPtr = std::unique_ptr< DebugPanels< T > >;
+		using DebugPanelsPtrT = std::unique_ptr< DebugPanelsT< T > >;
 
 		class MainDebugPanel
 		{
@@ -201,12 +201,12 @@ namespace castor3d
 		private:
 			OverlayCache & m_cache;
 			PanelOverlaySPtr m_panel;
-			DebugPanelsPtr< castor::Nanoseconds > m_times;
-			DebugPanelsPtr< float > m_fps;
-			DebugPanelsPtr< uint32_t > m_counts;
+			DebugPanelsPtrT< castor::Nanoseconds > m_times;
+			DebugPanelsPtrT< float > m_fps;
+			DebugPanelsPtrT< uint32_t > m_counts;
 		};
 
-		class RenderPassOverlays
+		class PassOverlays
 		{
 		private:
 			struct TimeOverlays
@@ -217,19 +217,78 @@ namespace castor3d
 			};
 
 		public:
-			RenderPassOverlays( RenderPassOverlays const & ) = delete;
-			RenderPassOverlays & operator=( RenderPassOverlays const & ) = delete;
-			RenderPassOverlays( RenderPassOverlays && ) = default;
-			RenderPassOverlays & operator=( RenderPassOverlays && ) = delete;
-			RenderPassOverlays( castor::String const & category
+			PassOverlays( PassOverlays const & ) = delete;
+			PassOverlays & operator=( PassOverlays const & ) = delete;
+			PassOverlays( PassOverlays && ) = default;
+			PassOverlays & operator=( PassOverlays && ) = default;
+			PassOverlays( OverlayCache & cache
+				, OverlaySPtr parent
+				, castor::String const & category
+				, castor::String const & name
+				, uint32_t index );
+			~PassOverlays();
+			void retrieveGpuTime();
+			void update();
+			void addTimer( RenderPassTimer & timer );
+			bool removeTimer( RenderPassTimer & timer );
+
+			inline castor::Nanoseconds getGpuTime()
+			{
+				return m_gpu.time;
+			}
+
+			inline castor::Nanoseconds getCpuTime()
+			{
+				return m_cpu.time;
+			}
+
+			inline castor::String const & getName()
+			{
+				return m_name;
+			}
+
+		private:
+			OverlayCache & m_cache;
+			castor::String m_name;
+			uint32_t m_index;
+			std::vector< RenderPassTimer * > m_timers;
+			PanelOverlaySPtr m_panel;
+			TextOverlaySPtr m_passName;
+			TimeOverlays m_cpu;
+			TimeOverlays m_gpu;
+		};
+
+		using PassOverlaysPtr = std::unique_ptr< PassOverlays >;
+
+		class CategoryOverlays
+		{
+		private:
+			struct TimeOverlays
+			{
+				castor::Nanoseconds time{ 0_ns };
+				TextOverlaySPtr name;
+				TextOverlaySPtr value;
+			};
+
+		public:
+			CategoryOverlays( CategoryOverlays const & ) = delete;
+			CategoryOverlays & operator=( CategoryOverlays const & ) = delete;
+			CategoryOverlays( CategoryOverlays && ) = default;
+			CategoryOverlays & operator=( CategoryOverlays && ) = delete;
+			CategoryOverlays( castor::String const & category
 				, OverlayCache & cache );
-			~RenderPassOverlays();
-			void initialise( uint32_t index );
+			~CategoryOverlays();
+			void initialise( uint32_t offset );
 			void addTimer( RenderPassTimer & timer );
 			bool removeTimer( RenderPassTimer & timer );
 			void retrieveGpuTime();
 			void update();
 			void setVisible( bool visible );
+
+			uint32_t getPanelCount()const
+			{
+				return uint32_t( 1u + m_passes.size() );
+			}
 
 			inline castor::Nanoseconds getGpuTime()
 			{
@@ -243,15 +302,16 @@ namespace castor3d
 
 		private:
 			OverlayCache & m_cache;
-			std::vector< std::reference_wrapper< RenderPassTimer > > m_timers;
-			PanelOverlaySPtr m_panel;
-			PanelOverlaySPtr m_titlePanel;
-			TextOverlaySPtr m_titleText;
+			int m_posX{ 0 };
+			std::vector< PassOverlaysPtr > m_passes;
+			PanelOverlaySPtr m_container;
+			PanelOverlaySPtr m_firstLinePanel;
+			TextOverlaySPtr m_name;
 			TimeOverlays m_cpu;
 			TimeOverlays m_gpu;
 		};
 
-		using RenderPassOverlaysArray = std::map< castor::String, RenderPassOverlays >;
+		using CategoryOverlaysArray = std::map< castor::String, CategoryOverlays >;
 
 	private:
 #if defined( _NDEBUG )
@@ -263,7 +323,7 @@ namespace castor3d
 		castor::PreciseTimer m_frameTimer{};
 		castor::PreciseTimer m_debugTimer{};
 		std::unique_ptr< MainDebugPanel > m_debugPanel;
-		RenderPassOverlaysArray m_renderPasses;
+		CategoryOverlaysArray m_renderPasses;
 		std::array< castor::Nanoseconds, FRAME_SAMPLES_COUNT > m_framesTimes{};
 		uint32_t m_frameIndex{ 0 };
 		bool m_visible{ false };

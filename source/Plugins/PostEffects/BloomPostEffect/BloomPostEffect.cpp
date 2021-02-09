@@ -46,7 +46,7 @@ namespace Bloom
 			, renderTarget
 			, renderSystem
 			, params
-			, 3u }
+			, BaseFilterCount + BaseFilterCount + 1u + 1u }
 		, m_blurKernelSize{ BaseKernelSize }
 		, m_blurPassesCount{ BaseFilterCount }
 	{
@@ -139,8 +139,7 @@ namespace Bloom
 		m_blurTexture->initialise( device );
 #endif
 
-		m_hiPass = std::make_unique< HiPass >( *getRenderSystem()
-			, device
+		m_hiPass = std::make_unique< HiPass >( device
 			, m_target->getPixelFormat()
 			, m_target->getDefaultView().getSampledView()
 			, size
@@ -169,20 +168,21 @@ namespace Bloom
 			, size
 			, m_blurPassesCount );
 #endif
-		m_commands.emplace_back( std::move( m_hiPass->getCommands( timer, 0u ) ) );
+		uint32_t index = 0u;
+		m_commands.emplace_back( std::move( m_hiPass->getCommands( timer, index ) ) );
 
 #if !Bloom_DebugHiPass
-		for ( auto & command : m_blurXPass->getCommands( timer, *m_vertexBuffer ) )
+		for ( auto & command : m_blurXPass->getCommands( timer, index, *m_vertexBuffer ) )
 		{
 			m_commands.emplace_back( std::move( command ) );
 		}
 
-		for ( auto & command : m_blurYPass->getCommands( timer, *m_vertexBuffer ) )
+		for ( auto & command : m_blurYPass->getCommands( timer, index, *m_vertexBuffer ) )
 		{
 			m_commands.emplace_back( std::move( command ) );
 		}
 
-		m_commands.emplace_back( std::move( m_combinePass->getCommands( timer, *m_vertexBuffer ) ) );
+		m_commands.emplace_back( std::move( m_combinePass->getCommands( timer, index, *m_vertexBuffer ) ) );
 #endif
 
 #if Bloom_DebugHiPass

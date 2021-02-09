@@ -98,6 +98,13 @@ namespace castor3d
 			, const VkDebugUtilsMessengerCallbackDataEXT * pCallbackData
 			, void * pUserData )
 		{
+			VkBool32 result = VK_FALSE;
+
+			if ( !pCallbackData->messageIdNumber )
+			{
+				return result;
+			}
+
 			// Select prefix depending on flags passed to the callback
 			// Note that multiple flags may be set for a single validation message
 			std::locale loc{ "C" };
@@ -149,13 +156,12 @@ namespace castor3d
 			{
 				stream << lineBegin << "Message ID: " << pCallbackData->pMessageIdName << lineEnd;
 			}
+
 			stream << lineBegin << "Code: 0x" << std::hex << pCallbackData->messageIdNumber << lineEnd;
 			stream << lineBegin << "Message: " << formatMessage( lineBegin + "  ", pCallbackData->pMessage ) << lineEnd;
 			print( stream, "Objects", pCallbackData->objectCount, pCallbackData->pObjects, lineEnd, lineBegin );
 			print( stream, "Queue Labels", pCallbackData->queueLabelCount, pCallbackData->pQueueLabels, lineEnd, lineBegin );
 			print( stream, "CommmandBuffer Labels", pCallbackData->cmdBufLabelCount, pCallbackData->pCmdBufLabels, lineEnd, lineBegin );
-
-			VkBool32 result = VK_FALSE;
 
 			switch ( messageSeverity )
 			{

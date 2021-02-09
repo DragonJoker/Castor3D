@@ -77,7 +77,7 @@ namespace GuiCommon
 	TextureTreeItemProperty::TextureTreeItemProperty( bool editable
 		, TextureUnitSPtr texture
 		, MaterialType type )
-		: TreeItemProperty( texture->getEngine(), editable, ePROPERTY_DATA_TYPE_TEXTURE )
+		: TreeItemProperty( texture->getEngine(), editable )
 		, m_texture{ texture }
 		, m_configuration{ texture->getConfiguration()}
 		, m_materialType{ type }

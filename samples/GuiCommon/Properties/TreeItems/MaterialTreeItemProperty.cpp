@@ -12,7 +12,7 @@ using namespace castor;
 namespace GuiCommon
 {
 	MaterialTreeItemProperty::MaterialTreeItemProperty( bool p_editable, MaterialSPtr p_material )
-		: TreeItemProperty( p_material->getEngine(), p_editable, ePROPERTY_DATA_TYPE_MATERIAL )
+		: TreeItemProperty( p_material->getEngine(), p_editable )
 		, m_material( p_material )
 	{
 		CreateTreeItemMenu();

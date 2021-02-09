@@ -3,6 +3,7 @@
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
@@ -29,13 +30,19 @@ namespace castor3d
 			doDeclareComputeCookTorrance();
 		}
 
+		void CookTorranceBRDF::declareDiffuse()
+		{
+			doDeclareFresnelShlick();
+			doDeclareComputeCookTorranceDiffuse();
+		}
+
 		void CookTorranceBRDF::compute( Light const & light
 			, sdw::Vec3 const & worldEye
 			, sdw::Vec3 const & direction
 			, sdw::Vec3 const & albedo
 			, sdw::Float const & metallic
 			, sdw::Float const & roughness
-			, FragmentInput const & fragmentIn
+			, Surface surface
 			, OutputComponents & output )
 		{
 			m_computeCookTorrance( light
@@ -44,7 +51,7 @@ namespace castor3d
 				, mix( vec3( 0.04_f ), albedo, vec3( metallic ) )
 				, metallic
 				, roughness
-				, FragmentInput{ fragmentIn }
+				, surface
 				, output );
 		}
 
@@ -53,7 +60,7 @@ namespace castor3d
 			, sdw::Vec3 const & direction
 			, sdw::Vec3 const & specular
 			, sdw::Float const & roughness
-			, FragmentInput const & fragmentIn
+			, Surface surface
 			, OutputComponents & output )
 		{
 			m_computeCookTorrance( light
@@ -62,8 +69,37 @@ namespace castor3d
 				, specular
 				, length( specular )
 				, roughness
-				, FragmentInput{ fragmentIn }
+				, surface
 				, output );
+		}
+
+		sdw::Vec3 CookTorranceBRDF::computeDiffuse( Light const & light
+			, sdw::Vec3 const & worldEye
+			, sdw::Vec3 const & direction
+			, sdw::Vec3 const & albedo
+			, sdw::Float const & metallic
+			, Surface surface )
+		{
+			return m_computeCookTorranceDiffuse( light
+				, worldEye
+				, direction
+				, mix( vec3( 0.04_f ), albedo, vec3( metallic ) )
+				, metallic
+				, surface );
+		}
+
+		sdw::Vec3 CookTorranceBRDF::computeDiffuse( Light const & light
+			, sdw::Vec3 const & worldEye
+			, sdw::Vec3 const & direction
+			, sdw::Vec3 const & specular
+			, Surface surface )
+		{
+			return m_computeCookTorranceDiffuse( light
+				, worldEye
+				, direction
+				, specular
+				, length( specular )
+				, surface );
 		}
 
 		void CookTorranceBRDF::doDeclareDistribution()
@@ -164,18 +200,18 @@ namespace castor3d
 					, Vec3 const & f0
 					, Float const & metallic
 					, Float const & roughness
-					, FragmentInput const & fragmentIn
+					, Surface surface
 					, OutputComponents & output )
 				{
 					// From https://learnopengl.com/#!PBR/Lighting
 					auto L = m_writer.declLocale( "L"
 						, normalize( direction ) );
 					auto V = m_writer.declLocale( "V"
-						, normalize( worldEye - fragmentIn.m_worldVertex ) );
+						, normalize( worldEye - surface.worldPosition ) );
 					auto H = m_writer.declLocale( "H"
 						, normalize( L + V ) );
 					auto N = m_writer.declLocale( "N"
-						, normalize( fragmentIn.m_worldNormal ) );
+						, normalize( surface.worldNormal ) );
 					auto radiance = m_writer.declLocale( "radiance"
 						, light.m_colour );
 
@@ -221,8 +257,54 @@ namespace castor3d
 				, InVec3( m_writer, "f0" )
 				, InFloat( m_writer, "metallic" )
 				, InFloat( m_writer, "roughness" )
-				, FragmentInput{ m_writer }
+				, InSurface{ m_writer, "surface" }
 				, output );
+		}
+
+		void CookTorranceBRDF::doDeclareComputeCookTorranceDiffuse()
+		{
+			m_computeCookTorranceDiffuse = m_writer.implementFunction< Vec3 >( "doComputeCookTorrance"
+				, [this]( Light const & light
+					, Vec3 const & worldEye
+					, Vec3 const & direction
+					, Vec3 const & f0
+					, Float const & metallic
+					, Surface surface )
+				{
+					// From https://learnopengl.com/#!PBR/Lighting
+					auto L = m_writer.declLocale( "L"
+						, normalize( direction ) );
+					auto V = m_writer.declLocale( "V"
+						, normalize( worldEye - surface.worldPosition ) );
+					auto H = m_writer.declLocale( "H"
+						, normalize( L + V ) );
+					auto N = m_writer.declLocale( "N"
+						, normalize( surface.worldNormal ) );
+					auto radiance = m_writer.declLocale( "radiance"
+						, light.m_colour );
+
+					auto NdotL = m_writer.declLocale( "NdotL"
+						, max( dot( N, L ), 0.0_f ) );
+					auto HdotV = m_writer.declLocale( "HdotV"
+						, max( dot( H, V ), 0.0_f ) );
+
+					auto F = m_writer.declLocale( "F"
+						, m_schlickFresnel( HdotV, f0 ) );
+					auto kS = m_writer.declLocale( "kS"
+						, F );
+					auto kD = m_writer.declLocale( "kD"
+						, vec3( 1.0_f ) - kS );
+
+					kD *= 1.0_f - metallic;
+
+					m_writer.returnStmt( ( radiance * light.m_intensity.r() * NdotL * kD / Float{ castor::Pi< float > } ) );
+				}
+				, InLight( m_writer, "light" )
+				, InVec3( m_writer, "worldEye" )
+				, InVec3( m_writer, "direction" )
+				, InVec3( m_writer, "f0" )
+				, InFloat( m_writer, "metallic" )
+				, InSurface{ m_writer, "surface" } );
 		}
 
 		//***********************************************************************************************

@@ -53,7 +53,7 @@ namespace castor3d
 	{
 	}
 
-	void BillboardListCache::registerPass( RenderPass const & renderPass )
+	void BillboardListCache::registerPass( SceneRenderPass const & renderPass )
 	{
 		if ( m_pools )
 		{
@@ -65,7 +65,7 @@ namespace castor3d
 		}
 	}
 
-	void BillboardListCache::unregisterPass( RenderPass const * renderPass
+	void BillboardListCache::unregisterPass( SceneRenderPass const * renderPass
 		, uint32_t instanceMult )
 	{
 		if ( m_pools )

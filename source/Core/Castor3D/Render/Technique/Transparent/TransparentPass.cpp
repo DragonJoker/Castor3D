@@ -19,7 +19,7 @@
 #include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
-#include "Castor3D/Shader/Shaders/GlslLpvGI.hpp"
+#include "Castor3D/Shader/Shaders/GlslGlobalIllumination.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslPhongReflection.hpp"
@@ -28,6 +28,7 @@
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslSpecularBrdfLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslSpecularPbrReflection.hpp"
+#include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp"
@@ -56,7 +57,8 @@ namespace castor3d
 		, SceneCuller & culler
 		, SsaoConfig const & config
 		, LpvGridConfigUbo const & lpvConfigUbo
-		, LayeredLpvGridConfigUbo const & llpvConfigUbo )
+		, LayeredLpvGridConfigUbo const & llpvConfigUbo
+		, VoxelizerUbo const & vctConfigUbo )
 		: castor3d::RenderTechniquePass{ "Transparent"
 			, "Accumulation"
 			, matrixUbo
@@ -66,7 +68,8 @@ namespace castor3d
 			, nullptr
 			, config
 			, &lpvConfigUbo
-			, &llpvConfigUbo }
+			, &llpvConfigUbo
+			, &vctConfigUbo }
 	{
 	}
 
@@ -87,8 +90,8 @@ namespace castor3d
 				VK_ATTACHMENT_STORE_OP_DONT_CARE,
 				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 				VK_ATTACHMENT_STORE_OP_DONT_CARE,
-				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-				VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+				VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL,
+				VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL,
 			},
 			{
 				0u,
@@ -211,7 +214,12 @@ namespace castor3d
 			, *m_frameBuffer
 			, clearValues
 			, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
-		m_nodesCommands->executeCommands( { getCommandBuffer() } );
+
+		if ( hasNodes() )
+		{
+			m_nodesCommands->executeCommands( { getCommandBuffer() } );
+		}
+
 		m_nodesCommands->endRenderPass();
 		timerBlock->endPass( *m_nodesCommands );
 		m_nodesCommands->endDebugBlock();
@@ -311,29 +319,29 @@ namespace castor3d
 
 		// Fragment Intputs
 		auto inWorldPosition = writer.declInput< Vec3 >( "inWorldPosition"
-			, RenderPass::VertexOutputs::WorldPositionLocation );
+			, SceneRenderPass::VertexOutputs::WorldPositionLocation );
 		auto inViewPosition = writer.declInput< Vec3 >( "inViewPosition"
-			, RenderPass::VertexOutputs::ViewPositionLocation );
+			, SceneRenderPass::VertexOutputs::ViewPositionLocation );
 		auto inCurPosition = writer.declInput< Vec3 >( "inCurPosition"
-			, RenderPass::VertexOutputs::CurPositionLocation );
+			, SceneRenderPass::VertexOutputs::CurPositionLocation );
 		auto inPrvPosition = writer.declInput< Vec3 >( "inPrvPosition"
-			, RenderPass::VertexOutputs::PrvPositionLocation );
+			, SceneRenderPass::VertexOutputs::PrvPositionLocation );
 		auto inTangentSpaceFragPosition = writer.declInput< Vec3 >( "inTangentSpaceFragPosition"
-			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
+			, SceneRenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
 		auto inTangentSpaceViewPosition = writer.declInput< Vec3 >( "inTangentSpaceViewPosition"
-			, RenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
+			, SceneRenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
 		auto inNormal = writer.declInput< Vec3 >( "inNormal"
-			, RenderPass::VertexOutputs::NormalLocation );
+			, SceneRenderPass::VertexOutputs::NormalLocation );
 		auto inTangent = writer.declInput< Vec3 >( "inTangent"
-			, RenderPass::VertexOutputs::TangentLocation );
+			, SceneRenderPass::VertexOutputs::TangentLocation );
 		auto inBitangent = writer.declInput< Vec3 >( "inBitangent"
-			, RenderPass::VertexOutputs::BitangentLocation );
+			, SceneRenderPass::VertexOutputs::BitangentLocation );
 		auto inTexture = writer.declInput< Vec3 >( "inTexture"
-			, RenderPass::VertexOutputs::TextureLocation );
+			, SceneRenderPass::VertexOutputs::TextureLocation );
 		auto inInstance = writer.declInput< UInt >( "inInstance"
-			, RenderPass::VertexOutputs::InstanceLocation );
+			, SceneRenderPass::VertexOutputs::InstanceLocation );
 		auto inMaterial = writer.declInput< UInt >( "inMaterial"
-			, RenderPass::VertexOutputs::MaterialLocation );
+			, SceneRenderPass::VertexOutputs::MaterialLocation );
 
 		shader::LegacyMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
@@ -350,8 +358,6 @@ namespace castor3d
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0 );
 		UBO_MODEL( writer, ModelUbo::BindingPoint, 0 );
 		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
-		UBO_LPVGRIDCONFIG( writer, LpvGridConfigUbo::BindingPoint, 0u, checkFlag( flags.sceneFlags, SceneFlag::eLpvGI ) );
-		UBO_LAYERED_LPVGRIDCONFIG( writer, LayeredLpvGridConfigUbo::BindingPoint, 0u, checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI ) );
 
 		auto index = getMinTextureIndex();
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
@@ -366,13 +372,13 @@ namespace castor3d
 			, 1u
 			, ( checkFlag( flags.passFlags, PassFlag::eReflection )
 				|| checkFlag( flags.passFlags, PassFlag::eRefraction ) ) ) );
-		shader::LpvGI lpvGI{ writer };
-		lpvGI.declare( 1u, index, flags.sceneFlags );
+		shader::Utils utils{ writer };
+		shader::GlobalIllumination indirect{ writer, utils };
+		indirect.declare( 1u, index, flags.sceneFlags );
 
 		auto in = writer.getIn();
 
 		shader::Fog fog{ getFogType( flags.sceneFlags ), writer };
-		shader::Utils utils{ writer };
 		utils.declareApplyGamma();
 		utils.declareRemoveGamma();
 		utils.declareLineariseDepth();
@@ -455,10 +461,12 @@ namespace castor3d
 				auto lightSpecular = writer.declLocale( "lightSpecular"
 					, vec3( 0.0_f ) );
 				shader::OutputComponents output{ lightDiffuse, lightSpecular };
+				auto surface = writer.declLocale< shader::Surface >( "surface" );
+				surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
 				lighting->computeCombined( worldEye
 					, shininess
 					, c3d_shadowReceiver
-					, shader::FragmentInput( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal )
+					, surface
 					, output );
 				lightSpecular *= specular;
 
@@ -520,19 +528,19 @@ namespace castor3d
 
 				ambient *= occlusion;
 				auto colour = writer.declLocale( "colour"
-					, lpvGI.computeResult( flags.sceneFlags
-						, inWorldPosition
-						, normal
-						, c3d_indirectAttenuation
-						, c3d_minVolumeCorner
-						, c3d_cellSize
-						, c3d_gridSize
-						, c3d_allMinVolumeCorners
-						, c3d_allCellSizes
-						, c3d_gridSizes
+					, indirect.computeDiffuse( flags.sceneFlags
+						, surface
 						, diffuse
-						, diffuse + reflected + refracted + lightSpecular + emissive
-						, ambient ) );
+						, diffuse + reflected + refracted + emissive
+						, ambient
+						, occlusion ) );
+				colour += indirect.computeSpecular( flags.sceneFlags
+					, worldEye
+					, surface
+					, ( 256.0_f - shininess ) / 256.0_f
+					, specular
+					, lightSpecular
+					, occlusion );
 				pxl_accumulation = utils.computeAccumulation( in.fragCoord.z()
 					, colour
 					, opacity
@@ -558,29 +566,29 @@ namespace castor3d
 
 		// Fragment Intputs
 		auto inWorldPosition = writer.declInput< Vec3 >( "inWorldPosition"
-			, RenderPass::VertexOutputs::WorldPositionLocation );
+			, SceneRenderPass::VertexOutputs::WorldPositionLocation );
 		auto inViewPosition = writer.declInput< Vec3 >( "inViewPosition"
-			, RenderPass::VertexOutputs::ViewPositionLocation );
+			, SceneRenderPass::VertexOutputs::ViewPositionLocation );
 		auto inCurPosition = writer.declInput< Vec3 >( "inCurPosition"
-			, RenderPass::VertexOutputs::CurPositionLocation );
+			, SceneRenderPass::VertexOutputs::CurPositionLocation );
 		auto inPrvPosition = writer.declInput< Vec3 >( "inPrvPosition"
-			, RenderPass::VertexOutputs::PrvPositionLocation );
+			, SceneRenderPass::VertexOutputs::PrvPositionLocation );
 		auto inTangentSpaceFragPosition = writer.declInput< Vec3 >( "inTangentSpaceFragPosition"
-			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
+			, SceneRenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
 		auto inTangentSpaceViewPosition = writer.declInput< Vec3 >( "inTangentSpaceViewPosition"
-			, RenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
+			, SceneRenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
 		auto inNormal = writer.declInput< Vec3 >( "inNormal"
-			, RenderPass::VertexOutputs::NormalLocation );
+			, SceneRenderPass::VertexOutputs::NormalLocation );
 		auto inTangent = writer.declInput< Vec3 >( "inTangent"
-			, RenderPass::VertexOutputs::TangentLocation );
+			, SceneRenderPass::VertexOutputs::TangentLocation );
 		auto inBitangent = writer.declInput< Vec3 >( "inBitangent"
-			, RenderPass::VertexOutputs::BitangentLocation );
+			, SceneRenderPass::VertexOutputs::BitangentLocation );
 		auto inTexture = writer.declInput< Vec3 >( "inTexture"
-			, RenderPass::VertexOutputs::TextureLocation );
+			, SceneRenderPass::VertexOutputs::TextureLocation );
 		auto inInstance = writer.declInput< UInt >( "inInstance"
-			, RenderPass::VertexOutputs::InstanceLocation );
+			, SceneRenderPass::VertexOutputs::InstanceLocation );
 		auto inMaterial = writer.declInput< UInt >( "inMaterial"
-			, RenderPass::VertexOutputs::MaterialLocation );
+			, SceneRenderPass::VertexOutputs::MaterialLocation );
 
 		shader::PbrMRMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
@@ -597,8 +605,6 @@ namespace castor3d
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0 );
 		UBO_MODEL( writer, ModelUbo::BindingPoint, 0 );
 		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
-		UBO_LPVGRIDCONFIG( writer, LpvGridConfigUbo::BindingPoint, 0u, checkFlag( flags.sceneFlags, SceneFlag::eLpvGI ) );
-		UBO_LAYERED_LPVGRIDCONFIG( writer, LayeredLpvGridConfigUbo::BindingPoint, 0u, checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI ) );
 
 		auto index = getMinTextureIndex();
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
@@ -623,12 +629,12 @@ namespace castor3d
 		auto c3d_mapBrdf = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBrdf"
 			, index++
 			, 1u );
-		shader::LpvGI lpvGI{ writer };
-		lpvGI.declare( 1u, index, flags.sceneFlags );
+		shader::Utils utils{ writer };
+		shader::GlobalIllumination indirect{ writer, utils };
+		indirect.declare( 1u, index, flags.sceneFlags );
 
 		auto in = writer.getIn();
 
-		shader::Utils utils{ writer };
 		utils.declareApplyGamma();
 		utils.declareRemoveGamma();
 		utils.declareLineariseDepth();
@@ -717,12 +723,14 @@ namespace castor3d
 				auto lightSpecular = writer.declLocale( "lightSpecular"
 					, vec3( 0.0_f ) );
 				shader::OutputComponents output{ lightDiffuse, lightSpecular };
+				auto surface = writer.declLocale< shader::Surface >( "surface" );
+				surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
 				lighting->computeCombined( worldEye
 					, albedo
 					, metalness
 					, roughness
 					, c3d_shadowReceiver
-					, shader::FragmentInput( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal )
+					, surface
 					, output );
 				auto reflected = writer.declLocale( "reflected"
 					, vec3( 0.0_f ) );
@@ -780,8 +788,7 @@ namespace castor3d
 					else
 					{
 						// Reflection from background skybox.
-						ambient *= utils.computeMetallicIBL( normal
-							, inWorldPosition
+						ambient *= utils.computeMetallicIBL( surface
 							, albedo
 							, metalness
 							, roughness
@@ -823,8 +830,7 @@ namespace castor3d
 				else
 				{
 					// Reflection from background skybox.
-					ambient *= utils.computeMetallicIBL( normal
-						, inWorldPosition
+					ambient *= utils.computeMetallicIBL( surface
 						, albedo
 						, metalness
 						, roughness
@@ -854,19 +860,19 @@ namespace castor3d
 
 				ambient *= occlusion;
 				auto colour = writer.declLocale( "colour"
-					, lpvGI.computeResult( flags.sceneFlags
-						, inWorldPosition
-						, normal
-						, c3d_indirectAttenuation
-						, c3d_minVolumeCorner
-						, c3d_cellSize
-						, c3d_gridSize
-						, c3d_allMinVolumeCorners
-						, c3d_allCellSizes
-						, c3d_gridSizes
+					, indirect.computeDiffuse( flags.sceneFlags
+						, surface
 						, lightDiffuse * albedo
-						, lightDiffuse * albedo + reflected + refracted + lightSpecular + emissive
-						, ambient ) );
+						, lightDiffuse * albedo + reflected + refracted + emissive
+						, ambient
+						, occlusion ) );
+				colour += indirect.computeSpecular( flags.sceneFlags
+					, worldEye
+					, surface
+					, roughness
+					, mix( vec3( 0.04_f ), albedo, vec3( metalness ) )
+					, lightSpecular
+					, occlusion );
 				pxl_accumulation = utils.computeAccumulation( in.fragCoord.z()
 					, colour
 					, opacity
@@ -892,29 +898,29 @@ namespace castor3d
 
 		// Fragment Intputs
 		auto inWorldPosition = writer.declInput< Vec3 >( "inWorldPosition"
-			, RenderPass::VertexOutputs::WorldPositionLocation );
+			, SceneRenderPass::VertexOutputs::WorldPositionLocation );
 		auto inViewPosition = writer.declInput< Vec3 >( "inViewPosition"
-			, RenderPass::VertexOutputs::ViewPositionLocation );
+			, SceneRenderPass::VertexOutputs::ViewPositionLocation );
 		auto inCurPosition = writer.declInput< Vec3 >( "inCurPosition"
-			, RenderPass::VertexOutputs::CurPositionLocation );
+			, SceneRenderPass::VertexOutputs::CurPositionLocation );
 		auto inPrvPosition = writer.declInput< Vec3 >( "inPrvPosition"
-			, RenderPass::VertexOutputs::PrvPositionLocation );
+			, SceneRenderPass::VertexOutputs::PrvPositionLocation );
 		auto inTangentSpaceFragPosition = writer.declInput< Vec3 >( "inTangentSpaceFragPosition"
-			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
+			, SceneRenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
 		auto inTangentSpaceViewPosition = writer.declInput< Vec3 >( "inTangentSpaceViewPosition"
-			, RenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
+			, SceneRenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
 		auto inNormal = writer.declInput< Vec3 >( "inNormal"
-			, RenderPass::VertexOutputs::NormalLocation );
+			, SceneRenderPass::VertexOutputs::NormalLocation );
 		auto inTangent = writer.declInput< Vec3 >( "inTangent"
-			, RenderPass::VertexOutputs::TangentLocation );
+			, SceneRenderPass::VertexOutputs::TangentLocation );
 		auto inBitangent = writer.declInput< Vec3 >( "inBitangent"
-			, RenderPass::VertexOutputs::BitangentLocation );
+			, SceneRenderPass::VertexOutputs::BitangentLocation );
 		auto inTexture = writer.declInput< Vec3 >( "inTexture"
-			, RenderPass::VertexOutputs::TextureLocation );
+			, SceneRenderPass::VertexOutputs::TextureLocation );
 		auto inInstance = writer.declInput< UInt >( "inInstance"
-			, RenderPass::VertexOutputs::InstanceLocation );
+			, SceneRenderPass::VertexOutputs::InstanceLocation );
 		auto inMaterial = writer.declInput< UInt >( "inMaterial"
-			, RenderPass::VertexOutputs::MaterialLocation );
+			, SceneRenderPass::VertexOutputs::MaterialLocation );
 
 		shader::PbrSGMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
@@ -931,8 +937,6 @@ namespace castor3d
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0 );
 		UBO_MODEL( writer, ModelUbo::BindingPoint, 0 );
 		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
-		UBO_LPVGRIDCONFIG( writer, LpvGridConfigUbo::BindingPoint, 0u, checkFlag( flags.sceneFlags, SceneFlag::eLpvGI ) );
-		UBO_LAYERED_LPVGRIDCONFIG( writer, LayeredLpvGridConfigUbo::BindingPoint, 0u, checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI ) );
 
 		auto index = getMinTextureIndex();
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
@@ -956,12 +960,12 @@ namespace castor3d
 		auto c3d_mapBrdf = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBrdf"
 			, index++
 			, 1u );
-		shader::LpvGI lpvGI{ writer };
-		lpvGI.declare( 1u, index, flags.sceneFlags );
+		shader::Utils utils{ writer };
+		shader::GlobalIllumination indirect{ writer, utils };
+		indirect.declare( 1u, index, flags.sceneFlags );
 
 		auto in = writer.getIn();
 
-		shader::Utils utils{ writer };
 		utils.declareApplyGamma();
 		utils.declareRemoveGamma();
 		utils.declareLineariseDepth();
@@ -1050,11 +1054,13 @@ namespace castor3d
 				auto lightSpecular = writer.declLocale( "lightSpecular"
 					, vec3( 0.0_f ) );
 				shader::OutputComponents output{ lightDiffuse, lightSpecular };
+				auto surface = writer.declLocale< shader::Surface >( "surface" );
+				surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
 				lighting->computeCombined( worldEye
 					, specular
 					, glossiness
 					, c3d_shadowReceiver
-					, shader::FragmentInput( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal )
+					, surface
 					, output );
 				auto reflected = writer.declLocale( "reflected"
 					, vec3( 0.0_f ) );
@@ -1111,8 +1117,7 @@ namespace castor3d
 					else
 					{
 						// Reflection from background skybox.
-						ambient *= utils.computeSpecularIBL( normal
-							, inWorldPosition
+						ambient *= utils.computeSpecularIBL( surface
 							, albedo
 							, specular
 							, glossiness
@@ -1154,8 +1159,7 @@ namespace castor3d
 				else
 				{
 					// Reflection from background skybox.
-					ambient *= utils.computeSpecularIBL( normal
-						, inWorldPosition
+					ambient *= utils.computeSpecularIBL( surface
 						, albedo
 						, specular
 						, glossiness
@@ -1185,19 +1189,19 @@ namespace castor3d
 
 				ambient *= occlusion;
 				auto colour = writer.declLocale( "colour"
-					, lpvGI.computeResult( flags.sceneFlags
-						, inWorldPosition
-						, normal
-						, c3d_indirectAttenuation
-						, c3d_minVolumeCorner
-						, c3d_cellSize
-						, c3d_gridSize
-						, c3d_allMinVolumeCorners
-						, c3d_allCellSizes
-						, c3d_gridSizes
+					, indirect.computeDiffuse( flags.sceneFlags
+						, surface
 						, lightDiffuse * albedo
-						, lightDiffuse * albedo + reflected + refracted + lightSpecular + emissive
-						, ambient ) );
+						, lightDiffuse * albedo + reflected + refracted + emissive
+						, ambient
+						, occlusion ) );
+				colour += indirect.computeSpecular( flags.sceneFlags
+					, worldEye
+					, surface
+					, ( 1.0_f - glossiness )
+					, specular
+					, lightSpecular
+					, occlusion );
 				pxl_accumulation = utils.computeAccumulation( in.fragCoord.z()
 					, colour
 					, opacity

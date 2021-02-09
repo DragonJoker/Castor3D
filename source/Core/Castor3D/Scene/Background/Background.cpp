@@ -26,8 +26,10 @@ namespace castor3d
 {
 	SceneBackground::SceneBackground( Engine & engine
 		, Scene & scene
+		, castor::String const & name
 		, BackgroundType type )
-		: OwnedBy< Engine >{ engine }
+		: castor::OwnedBy< Engine >{ engine }
+		, castor::Named{ scene.getName() + name }
 		, m_scene{ scene }
 		, m_type{ type }
 		, m_matrixUbo{ engine }
@@ -95,7 +97,7 @@ namespace castor3d
 
 		if ( m_initialised )
 		{
-			m_timer = std::make_shared< RenderPassTimer >( *getEngine(), device, cuT( "Background" ), cuT( "Background" ) );
+			m_timer = std::make_shared< RenderPassTimer >( device, cuT( "Background" ), getName() );
 		}
 
 		return m_initialised;
@@ -108,7 +110,7 @@ namespace castor3d
 		doCleanup();
 
 		m_matrixUbo.cleanup( device );
-		m_modelMatrixUbo.cleanup( device );
+		m_modelMatrixUbo.cleanup();
 		m_pipeline.reset();
 		m_indexBuffer.reset();
 		m_vertexBuffer.reset();
@@ -165,7 +167,7 @@ namespace castor3d
 				"Background Render",
 				makeFloatArray( getScene().getEngine()->getNextRainbowColour() ),
 			} );
-		m_timer->beginPass( commandBuffer );
+		m_timer->beginPass( commandBuffer, 0u );
 		commandBuffer.beginRenderPass( renderPass
 			, frameBuffer
 			, { defaultClearDepthStencil, opaqueBlackClearColor }
@@ -176,7 +178,7 @@ namespace castor3d
 			, *m_uboDescriptorSet
 			, *m_texDescriptorSet );
 		commandBuffer.endRenderPass();
-		m_timer->endPass( commandBuffer );
+		m_timer->endPass( commandBuffer, 0u );
 		commandBuffer.endDebugBlock();
 		commandBuffer.end();
 

@@ -18,10 +18,10 @@ using ashes::operator!=;
 
 namespace castor3d
 {
-	RenderQueue::RenderQueue( RenderPass & renderPass
+	RenderQueue::RenderQueue( SceneRenderPass & renderPass
 		, RenderMode mode
 		, SceneNode const * ignored )
-		: OwnedBy< RenderPass >{ renderPass }
+		: OwnedBy< SceneRenderPass >{ renderPass }
 		, m_mode{ mode }
 		, m_ignoredNode{ ignored }
 		, m_culler{ getOwner()->getCuller() }

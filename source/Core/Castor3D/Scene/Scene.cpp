@@ -130,9 +130,9 @@ namespace castor3d
 	//*************************************************************************************************
 
 	Scene::TextWriter::TextWriter( castor::String const & tabs
-		, castor::Path const & materialsFile )
+		, Options options )
 		: castor::TextWriter< Scene >{ tabs }
-		, m_materialsFile{ materialsFile }
+		, m_options{ std::move( options ) }
 	{
 	}
 
@@ -189,13 +189,56 @@ namespace castor3d
 			castor::TextWriter< Scene >::checkError( result, "Scene background colour" );
 		}
 
-		if ( result && !m_materialsFile.empty() )
+		if ( result )
+		{
+			log::info << cuT( "Scene::write - LPV indirect attenuation" ) << std::endl;
+			result = file.writeText( m_tabs + cuT( "\tlpv_indirect_attenuation " ) + string::toString( scene.getLpvIndirectAttenuation() ) + cuT( "\n" ) ) > 0;
+			castor::TextWriter< Scene >::checkError( result, "Scene LPV indirect attenuation" );
+		}
+
+		if ( result && !m_options.materialsFile.empty() )
 		{
 			log::info << cuT( "Scene::write - Materials file" ) << std::endl;
-			String path = m_materialsFile;
+			String path = m_options.materialsFile;
 			string::replace( path, cuT( "\\" ), cuT( "/" ) );
 			result = file.writeText( m_tabs + cuT( "\tinclude \"" ) + path +cuT( "\"\n" ) ) > 0;
-			castor::TextWriter< Scene >::checkError( result, "Scene material file" );
+			castor::TextWriter< Scene >::checkError( result, "Scene Materials file" );
+		}
+
+		if ( result && !m_options.meshesFile.empty() )
+		{
+			log::info << cuT( "Scene::write - Meshes file" ) << std::endl;
+			String path = m_options.meshesFile;
+			string::replace( path, cuT( "\\" ), cuT( "/" ) );
+			result = file.writeText( m_tabs + cuT( "\tinclude \"" ) + path +cuT( "\"\n" ) ) > 0;
+			castor::TextWriter< Scene >::checkError( result, "Scene Meshes file" );
+		}
+
+		if ( result && !m_options.nodesFile.empty() )
+		{
+			log::info << cuT( "Scene::write - Nodes file" ) << std::endl;
+			String path = m_options.nodesFile;
+			string::replace( path, cuT( "\\" ), cuT( "/" ) );
+			result = file.writeText( m_tabs + cuT( "\tinclude \"" ) + path +cuT( "\"\n" ) ) > 0;
+			castor::TextWriter< Scene >::checkError( result, "Scene Nodes file" );
+		}
+
+		if ( result && !m_options.objectsFile.empty() )
+		{
+			log::info << cuT( "Scene::write - Objects file" ) << std::endl;
+			String path = m_options.objectsFile;
+			string::replace( path, cuT( "\\" ), cuT( "/" ) );
+			result = file.writeText( m_tabs + cuT( "\tinclude \"" ) + path +cuT( "\"\n" ) ) > 0;
+			castor::TextWriter< Scene >::checkError( result, "Scene Objects file" );
+		}
+
+		if ( result && !m_options.lightsFile.empty() )
+		{
+			log::info << cuT( "Scene::write - Lights file" ) << std::endl;
+			String path = m_options.lightsFile;
+			string::replace( path, cuT( "\\" ), cuT( "/" ) );
+			result = file.writeText( m_tabs + cuT( "\tinclude \"" ) + path +cuT( "\"\n" ) ) > 0;
+			castor::TextWriter< Scene >::checkError( result, "Scene Lights file" );
 		}
 
 		if ( result )
@@ -219,11 +262,10 @@ namespace castor3d
 			}
 		}
 
-		if ( result )
+		if ( result && scene.getVoxelConeTracingConfig().enabled )
 		{
-			log::info << cuT( "Scene::write - LPV indirect attenuation" ) << std::endl;
-			result = file.writeText( m_tabs + cuT( "\tlpv_indirect_attenuation " ) + string::toString( scene.getLpvIndirectAttenuation() ) + cuT( "\n" ) ) > 0;
-			castor::TextWriter< Scene >::checkError( result, "Scene LPV indirect attenuation" );
+			log::info << cuT( "Scene::write - Voxel Cone Tracing" ) << std::endl;
+			result = VoxelSceneData::TextWriter( m_tabs + cuT( "\t" ) )( scene.getVoxelConeTracingConfig(), file );
 		}
 
 		if ( result )
@@ -234,15 +276,13 @@ namespace castor3d
 				, file );
 		}
 
-		if ( m_materialsFile.empty() )
+		if ( result
+			&& m_options.materialsFile.empty() )
 		{
-			if ( result )
-			{
-				result = writeView< Sampler >( scene.getSamplerView()
-					, cuT( "Samplers" )
-					, m_tabs
-					, file );
-			}
+			result = writeView< Sampler >( scene.getSamplerView()
+				, cuT( "Samplers" )
+				, m_tabs
+				, file );
 
 			if ( result )
 			{
@@ -253,7 +293,8 @@ namespace castor3d
 			}
 		}
 
-		if ( result && !scene.getOverlayView().isEmpty() )
+		if ( result
+			&& !scene.getOverlayView().isEmpty() )
 		{
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Overlays\n" ) ) > 0;
 
@@ -273,7 +314,9 @@ namespace castor3d
 			}
 		}
 
-		if ( result && !scene.getMeshCache().isEmpty() )
+		if ( result
+			&& m_options.meshesFile.empty()
+			&& !scene.getMeshCache().isEmpty() )
 		{
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Meshes\n" ) ) > 0;
 
@@ -293,7 +336,8 @@ namespace castor3d
 			}
 		}
 
-		if ( result && !scene.getCameraRootNode()->getChildren().empty() )
+		if ( result
+			&& !scene.getCameraRootNode()->getChildren().empty() )
 		{
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Cameras nodes\n" ) ) > 0;
 
@@ -313,7 +357,8 @@ namespace castor3d
 			}
 		}
 
-		if ( result && !scene.getCameraCache().isEmpty() )
+		if ( result
+			&& !scene.getCameraCache().isEmpty() )
 		{
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Cameras\n" ) ) > 0;
 
@@ -335,7 +380,9 @@ namespace castor3d
 			}
 		}
 
-		if ( result && !scene.getObjectRootNode()->getChildren().empty() )
+		if ( result
+			&& m_options.nodesFile.empty()
+			&& !scene.getObjectRootNode()->getChildren().empty() )
 		{
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Objects nodes\n" ) ) > 0;
 
@@ -350,7 +397,9 @@ namespace castor3d
 			}
 		}
 
-		if ( result && !scene.getLightCache() .isEmpty() )
+		if ( result
+			&& m_options.lightsFile.empty()
+			&& !scene.getLightCache() .isEmpty() )
 		{
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Lights\n" ) ) > 0;
 
@@ -367,7 +416,9 @@ namespace castor3d
 			}
 		}
 
-		if ( result && !scene.getGeometryCache().isEmpty() )
+		if ( result
+			&& m_options.objectsFile.empty()
+			&& !scene.getGeometryCache().isEmpty() )
 		{
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Geometries\n" ) ) > 0;
 
@@ -389,7 +440,8 @@ namespace castor3d
 			}
 		}
 
-		if ( result && !scene.getParticleSystemCache().isEmpty() )
+		if ( result
+			&& !scene.getParticleSystemCache().isEmpty() )
 		{
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Particle systems\n" ) ) > 0;
 
@@ -406,7 +458,8 @@ namespace castor3d
 			}
 		}
 
-		if ( result && !scene.getAnimatedObjectGroupCache().isEmpty() )
+		if ( result
+			&& scene.getAnimatedObjectGroupCache().getObjectCount() > 1 )
 		{
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\t// Animated object groups\n" ) ) > 0;
 
@@ -418,7 +471,10 @@ namespace castor3d
 
 				for ( auto const & it : scene.getAnimatedObjectGroupCache() )
 				{
-					result = result && AnimatedObjectGroup::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, file );
+					if ( it.first != cuT( "C3D_Textures" ) )
+					{
+						result = result && AnimatedObjectGroup::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, file );
+					}
 				}
 			}
 		}
@@ -460,7 +516,7 @@ namespace castor3d
 		, m_listener{ engine.getFrameListenerCache().add( cuT( "Scene_" ) + name + string::toString( (size_t)this ) ) }
 		, m_animationUpdater{ std::max( 2u, engine.getCpuInformations().getCoreCount() - ( engine.isThreaded() ? 2u : 1u ) ) }
 		, m_background{ std::make_shared< ColourBackground >( engine, *this ) }
-		, m_colourBackground{ std::make_shared< ColourBackground >( engine, *this ) }
+		, m_colourBackground{ std::make_shared< ColourBackground >( engine, *this, cuT( "Default" ) ) }
 		, m_lightFactory{ std::make_shared< LightFactory >() }
 	{
 		auto mergeObject = [this]( auto const & source
@@ -990,24 +1046,31 @@ namespace castor3d
 			result |= SceneFlag::eShadowSpot;
 		}
 
-		if ( needsGlobalIllumination( LightType::eDirectional, GlobalIlluminationType::eLpv )
-			|| needsGlobalIllumination( LightType::eDirectional, GlobalIlluminationType::eLpvG )
-			|| needsGlobalIllumination( LightType::ePoint, GlobalIlluminationType::eLpv )
-			|| needsGlobalIllumination( LightType::ePoint, GlobalIlluminationType::eLpvG )
-			|| needsGlobalIllumination( LightType::eSpot, GlobalIlluminationType::eLpv )
-			|| needsGlobalIllumination( LightType::eSpot, GlobalIlluminationType::eLpvG ) )
+		if ( m_voxelConfig.enabled )
 		{
-			result |= SceneFlag::eLpvGI;
+			result |= SceneFlag::eVoxelConeTracing;
 		}
-
-		if ( needsGlobalIllumination( LightType::eDirectional, GlobalIlluminationType::eLayeredLpv )
-			|| needsGlobalIllumination( LightType::eDirectional, GlobalIlluminationType::eLayeredLpvG )
-			|| needsGlobalIllumination( LightType::ePoint, GlobalIlluminationType::eLayeredLpv )
-			|| needsGlobalIllumination( LightType::ePoint, GlobalIlluminationType::eLayeredLpvG )
-			|| needsGlobalIllumination( LightType::eSpot, GlobalIlluminationType::eLayeredLpv )
-			|| needsGlobalIllumination( LightType::eSpot, GlobalIlluminationType::eLayeredLpvG ) )
+		else
 		{
-			result |= SceneFlag::eLayeredLpvGI;
+			if ( needsGlobalIllumination( LightType::eDirectional, GlobalIlluminationType::eLpv )
+				|| needsGlobalIllumination( LightType::eDirectional, GlobalIlluminationType::eLpvG )
+				|| needsGlobalIllumination( LightType::ePoint, GlobalIlluminationType::eLpv )
+				|| needsGlobalIllumination( LightType::ePoint, GlobalIlluminationType::eLpvG )
+				|| needsGlobalIllumination( LightType::eSpot, GlobalIlluminationType::eLpv )
+				|| needsGlobalIllumination( LightType::eSpot, GlobalIlluminationType::eLpvG ) )
+			{
+				result |= SceneFlag::eLpvGI;
+			}
+
+			if ( needsGlobalIllumination( LightType::eDirectional, GlobalIlluminationType::eLayeredLpv )
+				|| needsGlobalIllumination( LightType::eDirectional, GlobalIlluminationType::eLayeredLpvG )
+				|| needsGlobalIllumination( LightType::ePoint, GlobalIlluminationType::eLayeredLpv )
+				|| needsGlobalIllumination( LightType::ePoint, GlobalIlluminationType::eLayeredLpvG )
+				|| needsGlobalIllumination( LightType::eSpot, GlobalIlluminationType::eLayeredLpv )
+				|| needsGlobalIllumination( LightType::eSpot, GlobalIlluminationType::eLayeredLpvG ) )
+			{
+				result |= SceneFlag::eLayeredLpvGI;
+			}
 		}
 
 		return result;

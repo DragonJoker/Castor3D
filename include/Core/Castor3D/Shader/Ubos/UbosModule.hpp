@@ -427,6 +427,24 @@ namespace castor3d
 	{
 		std::array< castor::Point4ui, 3u > indices;
 	};
+	/**
+	*\~english
+	*\brief
+	*	Voxelizer configuration data UBO.
+	*\~french
+	*\brief
+	*	UBO des données de configuration du voxelizer.
+	*/
+	class VoxelizerUbo;
+	/**
+	*\~english
+	*\brief
+	*	Voxelizer configuration data.
+	*\~french
+	*\brief
+	*	Données de configuration du voxelizer.
+	*/
+	struct VoxelizerUboConfiguration;
 
 	CU_DeclareCUSmartPtr( castor3d, LpvGridConfigUbo, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, LpvLightConfigUbo, C3D_API );

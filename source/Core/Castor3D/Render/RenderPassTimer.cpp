@@ -8,7 +8,9 @@
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Miscellaneous/QueryPool.hpp>
 
-using namespace castor;
+CU_ImplementCUSmartPtr( castor3d, RenderPassTimer )
+
+#define C3D_DebugQueryLock 0
 
 namespace castor3d
 {
@@ -46,13 +48,12 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	RenderPassTimer::RenderPassTimer( Engine & engine
-		, RenderDevice const & device
-		, String const & category
-		, String const & name
+	RenderPassTimer::RenderPassTimer( RenderDevice const & device
+		, castor::String const & category
+		, castor::String const & name
 		, uint32_t passesCount )
-		: Named{ name }
-		, m_engine{ engine }
+		: castor::Named{ name }
+		, m_engine{ *device.renderSystem.getEngine() }
 		, m_device{ device }
 		, m_passesCount{ passesCount }
 		, m_category{ category }
@@ -62,9 +63,9 @@ namespace castor3d
 			, 0u ) }
 		, m_cpuTime{ 0_ns }
 		, m_gpuTime{ 0_ns }
-		, m_startedPasses( size_t( m_passesCount ), false )
+		, m_startedPasses( size_t( m_passesCount ), { false, false } )
 	{
-		engine.getRenderLoop().registerTimer( *this );
+		m_engine.getRenderLoop().registerTimer( *this );
 	}
 
 	RenderPassTimer::~RenderPassTimer()
@@ -83,14 +84,18 @@ namespace castor3d
 		return RenderPassTimerBlock{ *this };
 	}
 
-	void RenderPassTimer::notifyPassRender( uint32_t passIndex )
+	void RenderPassTimer::notifyPassRender( uint32_t passIndex
+		, bool subtractGpuFromCpu )
 	{
-		m_startedPasses[passIndex] = true;
+		auto & started = m_startedPasses[passIndex];
+		started.first = true;
+		started.second = subtractGpuFromCpu;
 	}
 
 	void RenderPassTimer::stop()
 	{
 		m_cpuTime += m_cpuTimer.getElapsed();
+		m_cpuTime -= m_subtracteGpuTime;
 	}
 
 	void RenderPassTimer::reset()
@@ -124,27 +129,76 @@ namespace castor3d
 	{
 		static float const period = float( m_device->getTimestampPeriod() );
 		m_gpuTime = 0_ns;
+		m_subtracteGpuTime = 0_ns;
 
 		for ( uint32_t i = 0; i < m_passesCount; ++i )
 		{
-			if ( m_startedPasses[i] )
+			auto & started = m_startedPasses[i];
+
+			if ( started.first )
 			{
+#if C3D_DebugQueryLock
+				ashes::UInt64Array valueswa{ 0u, 0u, 0u, 0u };
+				bool ok{ false };
+				uint32_t count = 0u;
+
+				while ( count < 1000u && !ok )
+				{
+					try
+					{
+						m_timerQuery->getResults( i * 2u
+							, 2u
+							, 0u
+							, VK_QUERY_RESULT_WITH_AVAILABILITY_BIT
+							, valueswa );
+						ok = true;
+					}
+					catch ( ashes::Exception & exc )
+					{
+						if ( exc.getResult() != VK_NOT_READY )
+						{
+							std::cerr << exc.what() << std::endl;
+						}
+					}
+
+					std::this_thread::sleep_for( 1_ms );
+					++count;
+				}
+
+				if ( count == 1000u )
+				{
+					std::cerr << "Couldn't retrieve RenderPassTimer [" << getCategory() << "] - ["  << getName() << "] results." << std::endl;
+				}
+				else
+				{
+#else
 				try
 				{
+#endif
 					ashes::UInt64Array values{ 0u, 0u };
 					m_timerQuery->getResults( i * 2u
 						, 2u
 						, 0u
 						, VK_QUERY_RESULT_WAIT_BIT
 						, values );
-					m_gpuTime += Nanoseconds{ uint64_t( ( values[1] - values[0] ) / period ) };
+
+					auto gpuTime = castor::Nanoseconds{ uint64_t( ( values[1] - values[0] ) / period ) };
+					m_gpuTime += gpuTime;
+
+					if ( started.second )
+					{
+						m_subtracteGpuTime += gpuTime;
+					}
 				}
+#if !C3D_DebugQueryLock
 				catch ( ashes::Exception & exc )
 				{
 					std::cerr << exc.what() << std::endl;
 				}
+#endif
 
-				m_startedPasses[i] = false;
+				started.first = false;
+				started.second = false;
 			}
 		}
 	}
