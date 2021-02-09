@@ -55,64 +55,6 @@ namespace castor
 	//*************************************************************************************************
 
 	template< typename T, uint32_t TCount >
-	Point< T, TCount >::TextLoader::TextLoader()
-		: castor::TextLoader< Point< T, TCount > >()
-	{
-	}
-
-	template< typename T, uint32_t TCount >
-	bool Point< T, TCount >::TextLoader::operator()( Point< T, TCount > & object, TextFile & file )
-	{
-		String strWord;
-
-		for ( uint32_t i = 0; i < TCount; ++i )
-		{
-			if ( file.readLine( strWord, 1024, cuT( " \r\n;\t" ) ) > 0 )
-			{
-				StringStream streamWord( strWord );
-				streamWord >> object[i];
-			}
-
-			xchar cDump;
-			file.readChar( cDump );
-		}
-
-		return true;
-	}
-
-	//*************************************************************************************************
-
-	template< typename T, uint32_t TCount >
-	Point< T, TCount >::TextWriter::TextWriter( String const & tabs
-		, float scale )
-		: castor::TextWriter< Point< T, TCount > >( tabs )
-		, m_scale{ scale }
-	{
-	}
-
-	template< typename T, uint32_t TCount >
-	bool Point< T, TCount >::TextWriter::operator()( Point< T, TCount > const & object, TextFile & file )
-	{
-		StringStream streamWord{ castor::makeStringStream() };
-
-		for ( uint32_t i = 0; i < TCount; ++i )
-		{
-			if ( !streamWord.str().empty() )
-			{
-				streamWord << cuT( " " );
-			}
-
-			streamWord << T( object[i] * m_scale );
-		}
-
-		bool result = file.print( 1024, cuT( "%s%s" ), this->m_tabs.c_str(), streamWord.str().c_str() ) > 0;
-		castor::TextWriter< Point< T, TCount > >::checkError( result, "Point value" );
-		return result;
-	}
-
-	//*************************************************************************************************
-
-	template< typename T, uint32_t TCount >
 	Point< T, TCount >::Point()
 		: m_data{}
 	{

@@ -8,6 +8,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Data/File.hpp"
 #include "CastorUtils/Data/LoaderException.hpp"
+#include "CastorUtils/Design/NonCopyable.hpp"
 
 namespace castor
 {
@@ -19,20 +20,6 @@ namespace castor
 		using Type = typename FileTyper< FT >::Type;
 
 	public:
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\~french
-		 *\brief		Constructeur
-		 */
-		Writer() = default;
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		virtual ~Writer() = default;
 		/**
 		 *\~english
 		 *\brief			Writes a resource to a file.

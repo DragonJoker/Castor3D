@@ -152,6 +152,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Data/File.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Data/Path.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Data/TextFile.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Data/TextWriter.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Data/ZipArchive.cpp
 	)
 	set( ${PROJECT_NAME}_FOLDER_HDR_FILES
@@ -182,6 +183,33 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 	)
 	source_group( "Header Files\\Data" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
 	source_group( "Source Files\\Data" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
+
+	set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Data/Text/TextFont.cpp
+	)
+	set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/Text/TextCoords.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/Text/TextCoords.inl
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/Text/TextFont.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/Text/TextPoint.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/Text/TextPoint.inl
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/Text/TextQuaternion.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/Text/TextQuaternion.inl
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/Text/TextRgbaColour.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/Text/TextRgbaColour.inl
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/Text/TextRgbColour.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/Text/TextRgbColour.inl
+	)
+	set( ${PROJECT_NAME}_SRC_FILES
+		${${PROJECT_NAME}_SRC_FILES}
+		${${PROJECT_NAME}_FOLDER_SRC_FILES}
+	)
+	set( ${PROJECT_NAME}_HDR_FILES
+		${${PROJECT_NAME}_HDR_FILES}
+		${${PROJECT_NAME}_FOLDER_HDR_FILES}
+	)
+	source_group( "Header Files\\Data\\Text" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
+	source_group( "Source Files\\Data\\Text" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 	set( ${PROJECT_NAME}_FOLDER_SRC_C_FILES
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Data/MiniZip/ioapi.c

@@ -12,7 +12,7 @@ See LICENSE file in root folder
 namespace castor
 {
 	template< class T >
-	class TextLoader
+	class TextLoaderT
 		: public Loader< T, FileType::eText >
 	{
 	protected:
@@ -25,14 +25,14 @@ namespace castor
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		TextLoader() = default;
+		TextLoaderT() = default;
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~TextLoader() = default;
+		virtual ~TextLoaderT() = default;
 	};
 }
 

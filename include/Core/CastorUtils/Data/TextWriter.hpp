@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___CASTOR_TEXT_WRITER_H___
-#define ___CASTOR_TEXT_WRITER_H___
+#ifndef ___CU_TextWriter_H___
+#define ___CU_TextWriter_H___
 
 #include "CastorUtils/Data/DataModule.hpp"
 
@@ -13,16 +13,47 @@ See LICENSE file in root folder
 #include "CastorUtils/Design/ChangeTracked.hpp"
 #include "CastorUtils/Math/RangedValue.hpp"
 
+#include <cmath>
+#include <cstring>
 #include <iomanip>
+#include <iostream>
+#include <numeric>
 
 namespace castor
 {
-	template< class T >
-	class TextWriter
-		: public Writer< T, FileType::eText >
+	class TextWriterBase
 	{
-	protected:
-		using Type = typename Writer< T, FileType::eText >::Type;
+	public:
+		class WriterBlock
+		{
+		public:
+			CU_API WriterBlock( WriterBlock const & rhs ) = delete;
+			CU_API WriterBlock & operator=( WriterBlock const & rhs ) = delete;
+			CU_API WriterBlock( WriterBlock && rhs );
+			CU_API WriterBlock & operator=( WriterBlock && rhs );
+
+			CU_API WriterBlock( TextWriterBase * writer
+				, String const & type
+				, String const & name
+				, TextFile & rfile );
+			CU_API WriterBlock( TextWriterBase * writer
+				, String const & name
+				, TextFile & file );
+			CU_API WriterBlock( TextWriterBase * writer
+				, TextFile & file );
+			CU_API ~WriterBlock();
+
+			CU_API operator bool()const;
+			CU_API TextWriterBase const * operator->()const;
+
+		private:
+			TextWriterBase * m_writer;
+			String m_name;
+			TextFile & m_file;
+			bool m_result;
+		};
+
+		friend struct WriterBlock;
 
 	public:
 		/**
@@ -31,19 +62,15 @@ namespace castor
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		explicit TextWriter( String tabs
-			, String const & name = String{} )
-			: m_tabs{ std::move( tabs ) }
-			, m_name{ name.empty() ? name : name + " - " }
-		{
-		}
+		CU_API explicit TextWriterBase( String tabs = cuEmptyString
+			, String const & name = cuEmptyString );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~TextWriter() = default;
+		CU_API virtual ~TextWriterBase() = default;
 		/**
 		 *\~english
 		 *\brief		Copies the file with given path to output folder.
@@ -58,237 +85,55 @@ namespace castor
 		 *\param[in]	subfolder	Le sous-dossier de sortie.
 		 *\return		Le chemin du fichier copié, relatif au dossier de sortie.
 		 */
-		static Path copyFile( Path const & path, Path const & folder, Path const & subfolder )
-		{
-			Path relative{ subfolder.empty() ? path.getFileName( true ) : subfolder / path.getFileName( true ) };
-
-			if ( !File::directoryExists( folder / subfolder ) )
-			{
-				File::directoryCreate( folder / subfolder );
-			}
-
-			File::copyFile( path, folder / subfolder );
-			return relative;
-		}
+		CU_API static Path copyFile( Path const & path, Path const & folder, Path const & subfolder );
 		/**
 		 *\~english
 		 *\brief		Reports eventual error.
 		 *\~french
 		 *\brief		Rapporte une erreur éventuelle.
 		 */
-		void checkError( bool error, char const * const action )const
-		{
-			if ( !error )
-			{
-				Logger::logError( makeStringStream() << m_name << action << " writing failed." );
-			}
-		}
+		CU_API void checkError( bool error, char const * const action )const;
 		/**
 		 *\~english
 		 *\brief		Reports eventual error.
 		 *\~french
 		 *\brief		Rapporte une erreur éventuelle.
 		 */
-		void checkError( bool error, std::string const & action )const
+		CU_API void checkError( bool error, std::string const & action )const;
+
+		CU_API WriterBlock beginBlock( TextFile & file );
+		CU_API WriterBlock beginBlock( String const & name, TextFile & file );
+		CU_API WriterBlock beginBlock( String const & type, String const & name, TextFile & file );
+		CU_API bool writeMask( String const & name, uint32_t mask, TextFile & file )const;
+		CU_API bool writeMask( String const & name, uint64_t mask, TextFile & file )const;
+		CU_API bool write( String const & name, float value, TextFile & file )const;
+		CU_API bool write( String const & name, double value, TextFile & file )const;
+		CU_API bool write( String const & name, uint16_t value, TextFile & file )const;
+		CU_API bool write( String const & name, int16_t value, TextFile & file )const;
+		CU_API bool write( String const & name, uint32_t value, TextFile & file )const;
+		CU_API bool write( String const & name, int32_t value, TextFile & file )const;
+		CU_API bool write( String const & name, uint64_t value, TextFile & file )const;
+		CU_API bool write( String const & name, int64_t value, TextFile & file )const;
+		CU_API bool write( String const & name, bool value, TextFile & file )const;
+		CU_API bool write( String const & name, String const & value, TextFile & file )const;
+
+		CU_API bool writeOpt( String const & name, bool value, TextFile & file )const;
+
+		CU_API bool writeName( String const & name, String const & value, TextFile & file )const;
+
+		CU_API bool writeFile( String const & name, Path const & value, TextFile & file )const;
+		CU_API bool writeFile( String const & name, Path const & value, String const & subfolder, TextFile & file )const;
+
+		CU_API String tabs()const;
+
+		template< typename ValueT >
+		bool write( String const & name, ValueT value, TextFile & file )const
 		{
-			if ( !error )
-			{
-				Logger::logError( makeStringStream() << m_name << action << " writing failed." );
-			}
-		}
-
-		struct WriterBlock
-		{
-			WriterBlock( TextWriter const * writer
-				, String const & blockName
-				, String const & objectName
-				, TextFile & rfile )
-				: writer{ writer }
-				, name{ ( ( !blockName.empty() && !objectName.empty() )
-					? blockName + cuT( " \"" ) + objectName + cuT( "\"" )
-					: ( !blockName.empty()
-						? blockName
-						: String{} ) ) }
-				, file{ rfile }
-			{
-				result = ( !name.empty()
-						? file.writeText( cuT( "\n" ) + writer->m_tabs + name + cuT( "\n" ) )
-						: 1ull ) > 0
-					&& file.writeText( writer->m_tabs + cuT( "{\n" ) ) > 0;
-				writer->checkError( result, ( "header " + name ).c_str() );
-			}
-
-			WriterBlock( TextWriter const * writer
-				, String const & blockName
-				, TextFile & file )
-				: WriterBlock{ writer, blockName, {}, file }
-			{
-			}
-
-			WriterBlock( TextWriter const * writer
-				, TextFile & file )
-				: WriterBlock{ writer, {}, {}, file }
-			{
-			}
-
-			WriterBlock( WriterBlock && rhs )
-				: writer{ rhs.writer }
-				, name{ rhs.name }
-				, file{ rhs.file }
-				, result{ rhs.result }
-			{
-				rhs.writer = nullptr;
-			}
-
-			WriterBlock & operator=( WriterBlock && rhs )
-			{
-				writer = rhs.writer;
-				name = rhs.name;
-				file = rhs.file;
-				result = rhs.result;
-				rhs.writer = nullptr;
-				return *this;
-			}
-
-			WriterBlock( WriterBlock const & rhs ) = delete;
-			WriterBlock & operator=( WriterBlock const & rhs ) = delete;
-
-			operator bool()const
-			{
-				return result;
-			}
-
-			~WriterBlock()
-			{
-				if ( writer )
-				{
-					auto result = file.writeText( writer->m_tabs + cuT( "} // " ) + name + cuT( "\n" ) ) > 0;
-					writer->checkError( result, ( "footer " + name ).c_str() );
-				}
-			}
-
-			TextWriter const * writer;
-			String name;
-			TextFile & file;
-			bool result;
-		};
-
-		WriterBlock writeHeader( String const & name, TextFile & file )const
-		{
-			return WriterBlock
-			{
-				this,
-				name,
-				file,
-			};
-		}
-
-		bool writeMask( String const & name, uint32_t mask, TextFile & file )const
-		{
-			auto stream = makeStringStream();
-			stream << cuT( "0x" ) << std::hex << std::setw( 8u ) << std::setfill( cuT( '0' ) ) << mask;
-			auto result = file.writeText( tabs() + name + cuT( " " ) + stream.str() + cuT( "\n" ) ) > 0;
+			auto result = file.writeText( tabs() + name + cuT( " " ) ) > 0
+				&& TextWriter< ValueT >{ tabs() }( value, file )
+				&& file.writeText( cuT( "\n" ) ) > 0;
 			checkError( result, name.c_str() );
 			return result;
-		}
-
-		bool write( String const & name, float value, TextFile & file )const
-		{
-			auto stream = makeStringStream();
-			stream << value;
-			auto result = file.writeText( tabs() + name + cuT( " " ) + stream.str() + cuT( "\n" ) ) > 0;
-			checkError( result, name.c_str() );
-			return result;
-		}
-
-		bool write( String const & name, uint32_t value, TextFile & file )const
-		{
-			auto stream = makeStringStream();
-			stream << value;
-			auto result = file.writeText( tabs() + name + cuT( " " ) + stream.str() + cuT( "\n" ) ) > 0;
-			checkError( result, name.c_str() );
-			return result;
-		}
-
-		bool write( String const & name, int32_t value, TextFile & file )const
-		{
-			auto stream = makeStringStream();
-			stream << value;
-			auto result = file.writeText( tabs() + name + cuT( " " ) + stream.str() + cuT( "\n" ) ) > 0;
-			checkError( result, name.c_str() );
-			return result;
-		}
-
-		bool write( String const & name, uint64_t value, TextFile & file )const
-		{
-			auto stream = makeStringStream();
-			stream << value;
-			auto result = file.writeText( tabs() + name + cuT( " " ) + stream.str() + cuT( "\n" ) ) > 0;
-			checkError( result, name.c_str() );
-			return result;
-		}
-
-		bool write( String const & name, int64_t value, TextFile & file )const
-		{
-			auto stream = makeStringStream();
-			stream << value;
-			auto result = file.writeText( tabs() + name + cuT( " " ) + stream.str() + cuT( "\n" ) ) > 0;
-			checkError( result, name.c_str() );
-			return result;
-		}
-
-		bool write( String const & name, bool value, TextFile & file )const
-		{
-			if ( value )
-			{
-				auto result = file.writeText( tabs() + name + cuT( " true\n" ) ) > 0;
-				checkError( result, name.c_str() );
-				return result;
-			}
-
-			auto result = file.writeText( tabs() + name + cuT( " false\n" ) ) > 0;
-			checkError( result, name.c_str() );
-			return result;
-		}
-
-		bool write( String const & name, String const & value, TextFile & file )const
-		{
-			auto result = file.writeText( tabs() + name + cuT( " " ) + value + cuT( "\n" ) ) > 0;
-			checkError( result, name.c_str() );
-			return result;
-		}
-
-		bool writeOpt( String const & name, bool value, TextFile & file )const
-		{
-			bool result{ !value };
-
-			if ( !result )
-			{
-				result = file.writeText( tabs() + name + cuT( " true\n" ) ) > 0;
-				checkError( result, name.c_str() );
-			}
-
-			return result;
-		}
-
-		bool writeName( String const & name, String const & value, TextFile & file )const
-		{
-			auto result = file.writeText( tabs() + name + cuT( " \"" ) + value + cuT( "\"\n" ) ) > 0;
-			checkError( result, name.c_str() );
-			return result;
-		}
-
-		bool writeFile( String const & name, Path const & value, TextFile & file )const
-		{
-			auto result = file.writeText( tabs() + name + cuT( " \"" ) + value.toGeneric() + cuT( "\"\n" ) ) > 0;
-			checkError( result, name.c_str() );
-			return result;
-		}
-
-		bool writeFile( String const & name, Path const & value, String const & subfolder, TextFile & file )const
-		{
-			Path relative{ copyFile( Path{ value }, file.getFilePath(), Path{ subfolder } ) };
-			return writeFile( name, relative, file );
 		}
 
 		template< typename ValueT >
@@ -303,29 +148,6 @@ namespace castor
 			return write( name, value.value(), file );
 		}
 
-		bool beginBlock( String const & name, TextFile & file )
-		{
-			auto result = file.writeText( cuT( "\n" ) + m_tabs + name + cuT( "\n" ) ) > 0
-				&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
-			m_indent++;
-			checkError( result, ( cuT( "Begin block " ) + name ).c_str() );
-			return result;
-		}
-
-		bool endBlock( TextFile & file )
-		{
-			assert( m_indent > 0 );
-			m_indent--;
-			auto result = file.writeText( tabs() + cuT( "}\n" ) ) > 0;
-			checkError( result, cuT( "End block" ) );
-			return result;
-		}
-
-		String tabs()const
-		{
-			return m_tabs + String( m_indent, '\t' );
-		}
-
 	protected:
 		String m_tabs;
 		uint32_t m_indent{ 0u };
@@ -333,6 +155,25 @@ namespace castor
 	private:
 		String m_name;
 	};
+
+	template< class T >
+	class TextWriterT
+		: public TextWriterBase
+		, public Writer< T, FileType::eText >
+	{
+	protected:
+		using Type = typename Writer< T, FileType::eText >::Type;
+
+	public:
+		explicit TextWriterT( String tabs
+			, String const & name = String{} )
+			: TextWriterBase{ std::move( tabs ), name }
+		{
+		}
+	};
+
+	template< class T >
+	class TextWriter;
 }
 
 #endif
