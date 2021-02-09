@@ -106,6 +106,7 @@ namespace castor
 		CU_API WriterBlock beginBlock( String const & type, String const & name, TextFile & file );
 		CU_API bool writeMask( String const & name, uint32_t mask, TextFile & file )const;
 		CU_API bool writeMask( String const & name, uint64_t mask, TextFile & file )const;
+		CU_API bool writeComment( String const & comment, TextFile & file )const;
 		CU_API bool write( String const & name, float value, TextFile & file )const;
 		CU_API bool write( String const & name, double value, TextFile & file )const;
 		CU_API bool write( String const & name, uint16_t value, TextFile & file )const;
@@ -133,6 +134,14 @@ namespace castor
 				&& TextWriter< ValueT >{ tabs() }( value, file )
 				&& file.writeText( cuT( "\n" ) ) > 0;
 			checkError( result, name.c_str() );
+			return result;
+		}
+
+		template< typename ValueT >
+		bool write( ValueT value, TextFile & file )const
+		{
+			auto result = TextWriter< ValueT >{ tabs() }( value, file );
+			checkError( result, cuT( "" ) );
 			return result;
 		}
 

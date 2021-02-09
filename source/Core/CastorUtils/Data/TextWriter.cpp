@@ -181,6 +181,13 @@ namespace castor
 		return result;
 	}
 
+	bool TextWriterBase::writeComment( String const & comment, TextFile & file )const
+	{
+		auto result = file.writeText( tabs() + cuT( "// " ) + comment + cuT( "\n" ) ) > 0;
+		checkError( result, comment.c_str() );
+		return result;
+	}
+
 	bool TextWriterBase::write( String const & name, float value, TextFile & file )const
 	{
 		auto stream = makeStringStream();

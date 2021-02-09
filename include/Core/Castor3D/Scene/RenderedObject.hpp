@@ -15,40 +15,6 @@ namespace castor3d
 	{
 	public:
 		/**
-		\author		Sylvain DOREMUS
-		\version	0.6.1.0
-		\date		19/10/2011
-		\~english
-		\brief		Geometry loader
-		\~french
-		\brief		Loader de Geometry
-		*/
-		class TextWriter
-			: public castor::TextWriter< RenderedObject >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\~french
-			 *\brief		Constructeur
-			 */
-			C3D_API explicit TextWriter( castor::String const & tabs );
-			/**
-			 *\~english
-			 *\brief		Writes a RenderedObject into a text file.
-			 *\param[in]	file		The file to save the cameras in.
-			 *\param[in]	object	The RenderedObject to save.
-			 *\~french
-			 *\brief		Ecrit une RenderedObject dans un fichier texte.
-			 *\param[in]	file		Le fichier.
-			 *\param[in]	object	Le RenderedObject.
-			 */
-			C3D_API bool operator()( RenderedObject const & object, castor::TextFile & file )override;
-		};
-
-	public:
-		/**
 		 *\~english
 		 *\return		The visibility status.
 		 *\~french
