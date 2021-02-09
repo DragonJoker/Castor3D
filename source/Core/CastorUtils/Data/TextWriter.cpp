@@ -279,15 +279,7 @@ namespace castor
 
 	bool TextWriterBase::writeOpt( String const & name, bool value, TextFile & file )const
 	{
-		bool result{ !value };
-
-		if ( !result )
-		{
-			result = file.writeText( tabs() + name + cuT( " true\n" ) ) > 0;
-			checkError( result, name.c_str() );
-		}
-
-		return result;
+		return writeOpt( name, value, true, file );
 	}
 
 	bool TextWriterBase::writeName( String const & name, String const & value, TextFile & file )const
@@ -297,7 +289,7 @@ namespace castor
 		return result;
 	}
 
-	bool TextWriterBase::writeFile( String const & name, Path const & value, TextFile & file )const
+	bool TextWriterBase::writePath( String const & name, Path const & value, TextFile & file )const
 	{
 		auto result = file.writeText( tabs() + name + cuT( " \"" ) + value.toGeneric() + cuT( "\"\n" ) ) > 0;
 		checkError( result, name.c_str() );
@@ -307,7 +299,7 @@ namespace castor
 	bool TextWriterBase::writeFile( String const & name, Path const & value, String const & subfolder, TextFile & file )const
 	{
 		Path relative{ copyFile( Path{ value }, file.getFilePath(), Path{ subfolder } ) };
-		return writeFile( name, relative, file );
+		return writePath( name, relative, file );
 	}
 
 	String TextWriterBase::tabs()const

@@ -1,34 +1,23 @@
-#include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
+#include "Castor3D/Text/TextHdrConfig.hpp"
 
-using namespace castor;
+using namespace castor3d;
 
-namespace castor3d
+namespace castor
 {
-	HdrConfig::TextWriter::TextWriter( String const & tabs )
-		: castor::TextWriter< HdrConfig >{ tabs }
+	TextWriter< HdrConfig >::TextWriter( String const & tabs )
+		: TextWriterT< HdrConfig >{ tabs }
 	{
 	}
 
-	bool HdrConfig::TextWriter::operator()( HdrConfig const & obj, TextFile & file )
+	bool TextWriter< HdrConfig >::operator()( HdrConfig const & obj
+		, TextFile & file )
 	{
-		bool result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "hdr_config\n" ) ) > 0
-			&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
+		bool result = false;
 
-		if ( result )
+		if ( auto block = beginBlock( cuT( "hdr_config" ), file ) )
 		{
-			result = file.writeText( m_tabs + cuT( "\texposure " ) + string::toString( obj.exposure, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
-			castor::TextWriter< HdrConfig >::checkError( result, "HdrConfig exposure." );
-		}
-
-		if ( result )
-		{
-			result = file.writeText( m_tabs + cuT( "\tgamma " ) + string::toString( obj.gamma, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
-			castor::TextWriter< HdrConfig >::checkError( result, "HdrConfig gamma." );
-		}
-
-		if ( result )
-		{
-			result = file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
+			result = write( cuT( "exposure" ), obj.exposure, file )
+				&& write( cuT( "gamma " ), obj.gamma, file );
 		}
 
 		return result;

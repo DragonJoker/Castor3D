@@ -27,6 +27,13 @@
 #include <Castor3D/Material/Texture/Sampler.hpp>
 #include <Castor3D/Material/Texture/TextureLayout.hpp>
 #include <Castor3D/Material/Texture/TextureUnit.hpp>
+#include <Castor3D/Text/TextGeometry.hpp>
+#include <Castor3D/Text/TextLight.hpp>
+#include <Castor3D/Text/TextMaterial.hpp>
+#include <Castor3D/Text/TextMesh.hpp>
+#include <Castor3D/Text/TextSampler.hpp>
+#include <Castor3D/Text/TextScene.hpp>
+#include <Castor3D/Text/TextSceneNode.hpp>
 
 #include <CastorUtils/Data/BinaryFile.hpp>
 
@@ -386,7 +393,7 @@ namespace GuiCommon
 				if ( result )
 				{
 					Logger::logInfo( cuT( "Scene::write - " ) + elemsName );
-					typename ObjType::TextWriter writer{ String{} };
+					castor::TextWriter< ObjType > writer{ String{} };
 
 					for ( auto const & name : view )
 					{
@@ -421,7 +428,7 @@ namespace GuiCommon
 				if ( result )
 				{
 					Logger::logInfo( cuT( "Scene::write - " ) + elemsName );
-					typename ObjType::TextWriter writer{ String{} };
+					castor::TextWriter< ObjType > writer{ String{} };
 					auto lock = castor::makeUniqueLock( cache );
 
 					for ( auto const & elemIt : cache )
@@ -458,7 +465,7 @@ namespace GuiCommon
 		Path filePath{ folder / ( fileName.getFileName() + cuT( ".cscn" ) ) };
 
 		bool result = false;
-		Scene::TextWriter::Options options;
+		castor::TextWriter< Scene >::Options options;
 		{
 			if ( !File::directoryExists( folder / cuT( "Materials" ) ) )
 			{
@@ -554,7 +561,7 @@ namespace GuiCommon
 		{
 			{
 				TextFile file( filePath, File::OpenMode::eWrite );
-				SceneNode::TextWriter writer{ cuEmptyString, m_options.scale };
+				castor::TextWriter< SceneNode > writer{ cuEmptyString, m_options.scale };
 
 				for ( auto const & it : scene.getObjectRootNode()->getChildren() )
 				{
@@ -574,7 +581,7 @@ namespace GuiCommon
 		if ( result )
 		{
 			TextFile scnFile( Path{ filePath }, File::OpenMode::eWrite );
-			result = Scene::TextWriter( String(), std::move( options ) )( scene, scnFile );
+			result = castor::TextWriter< Scene >( String(), std::move( options ) )( scene, scnFile );
 		}
 
 		Path subfolder{ cuT( "Meshes" ) };

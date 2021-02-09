@@ -186,6 +186,8 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 
 	set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Data/Text/TextFont.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Data/Text/TextPosition.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Data/Text/TextSize.cpp
 	)
 	set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/Text/TextCoords.hpp
@@ -193,12 +195,14 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/Text/TextFont.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/Text/TextPoint.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/Text/TextPoint.inl
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/Text/TextPosition.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/Text/TextQuaternion.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/Text/TextQuaternion.inl
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/Text/TextRgbaColour.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/Text/TextRgbaColour.inl
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/Text/TextRgbColour.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/Text/TextRgbColour.inl
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/Text/TextSize.hpp
 	)
 	set( ${PROJECT_NAME}_SRC_FILES
 		${${PROJECT_NAME}_SRC_FILES}

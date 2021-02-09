@@ -146,11 +146,11 @@ namespace GuiCommon
 		}
 
 		auto raw = addProperty( shadows, PROPERTY_CATEGORY_SHADOW_RAW );
-		addPropertyT( raw, PROPERTY_SHADOW_RAW_MIN_OFFSET, m_light.getCategory()->getShadowOffsets()[0], m_light.getCategory().get(), &LightCategory::setRawMinOffset );
-		addPropertyT( raw, PROPERTY_SHADOW_RAW_MAX_SLOPE_OFFSET, m_light.getCategory()->getShadowOffsets()[1], m_light.getCategory().get(), &LightCategory::setRawMaxSlopeOffset );
+		addPropertyT( raw, PROPERTY_SHADOW_RAW_MIN_OFFSET, m_light.getCategory()->getShadowRawOffsets()[0], m_light.getCategory().get(), &LightCategory::setRawMinOffset );
+		addPropertyT( raw, PROPERTY_SHADOW_RAW_MAX_SLOPE_OFFSET, m_light.getCategory()->getShadowRawOffsets()[1], m_light.getCategory().get(), &LightCategory::setRawMaxSlopeOffset );
 		auto pcf = addProperty( shadows, PROPERTY_CATEGORY_SHADOW_PCF );
-		addPropertyT( pcf, PROPERTY_SHADOW_PCF_MIN_OFFSET, m_light.getCategory()->getShadowOffsets()[2], m_light.getCategory().get(), &LightCategory::setPcfMinOffset );
-		addPropertyT( pcf, PROPERTY_SHADOW_PCF_MAX_SLOPE_OFFSET, m_light.getCategory()->getShadowOffsets()[3], m_light.getCategory().get(), &LightCategory::setPcfMaxSlopeOffset );
+		addPropertyT( pcf, PROPERTY_SHADOW_PCF_MIN_OFFSET, m_light.getCategory()->getShadowPcfOffsets()[0], m_light.getCategory().get(), &LightCategory::setPcfMinOffset );
+		addPropertyT( pcf, PROPERTY_SHADOW_PCF_MAX_SLOPE_OFFSET, m_light.getCategory()->getShadowPcfOffsets()[1], m_light.getCategory().get(), &LightCategory::setPcfMaxSlopeOffset );
 		auto vsm = addProperty( shadows, PROPERTY_CATEGORY_SHADOW_VSM );
 		addPropertyT( vsm, PROPERTY_SHADOW_MAX_VARIANCE, m_light.getCategory()->getShadowVariance()[0], m_light.getCategory().get(), &LightCategory::setVsmMaxVariance );
 		addPropertyT( vsm, PROPERTY_SHADOW_VARIANCE_BIAS, m_light.getCategory()->getShadowVariance()[1], m_light.getCategory().get(), &LightCategory::setVsmVarianceBias );

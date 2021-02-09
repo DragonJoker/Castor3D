@@ -11,92 +11,6 @@ using namespace castor;
 
 namespace castor3d
 {
-	LightCategory::TextWriter::TextWriter( String const & tabs )
-		: castor::TextWriter< LightCategory >{ tabs }
-	{
-	}
-
-	bool LightCategory::TextWriter::operator()( LightCategory const & light, TextFile & file )
-	{
-		log::info << m_tabs << cuT( "Writing Light " ) << light.getLight().getName() << std::endl;
-		bool result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "light \"" ) + light.getLight().getName() + cuT( "\"\n" ) ) > 0
-			&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
-		castor::TextWriter< LightCategory >::checkError( result, "LightCategory name" );
-
-		if ( result )
-		{
-			result = MovableObject::TextWriter{ m_tabs + cuT( "\t" ) }( light.getLight(), file );
-		}
-
-		if ( result )
-		{
-			result = file.writeText( m_tabs + cuT( "\ttype " ) + castor3d::getName( light.getLightType() ) + cuT( "\n" ) ) > 0;
-			castor::TextWriter< LightCategory >::checkError( result, "LightCategory type" );
-		}
-
-		if ( result )
-		{
-			result = file.writeText( m_tabs + cuT( "\tcolour " ) ) > 0
-				&& Point3f::TextWriter( String{} )( light.getColour(), file )
-				&& file.writeText( cuT( "\n" ) ) > 0;
-			castor::TextWriter< LightCategory >::checkError( result, "LightCategory colour" );
-		}
-
-		if ( result )
-		{
-			result = file.writeText( m_tabs + cuT( "\tintensity " ) ) > 0
-				&& Point2f::TextWriter( String{} )( light.getIntensity(), file )
-				&& file.writeText( cuT( "\n" ) ) > 0;
-			castor::TextWriter< LightCategory >::checkError( result, "LightCategory intensity" );
-		}
-
-		result = file.writeText( m_tabs + cuT( "\tshadows\n" ) ) > 0
-			&& file.writeText( m_tabs + cuT( "\t{\n" ) ) > 0
-			&& file.writeText( m_tabs + cuT( "\t\tproducer " ) + ( light.getLight().isShadowProducer() ? String{ "true" } : String{ "false" } ) + cuT( "\n" ) ) > 0
-			&& file.writeText( m_tabs + cuT( "\t\tfilter " ) + castor3d::getName( light.getLight().getShadowType() ) + cuT( "\n" ) ) > 0
-			&& file.writeText( m_tabs + cuT( "\t\tglobal_illumination " ) + castor3d::getName( light.getLight().getGlobalIlluminationType() ) + cuT( "\n" ) ) > 0;
-		castor::TextWriter< LightCategory >::checkError( result, "LightCategory shadow" );
-
-		if ( result && light.getVolumetricSteps() )
-		{
-			result = file.writeText( m_tabs + cuT( "\t\tvolumetric_steps " )
-					+ string::toString( light.getVolumetricSteps(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0
-				&& file.writeText( m_tabs + cuT( "\t\tvolumetric_scattering " )
-					+ string::toString( light.getVolumetricScatteringFactor(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
-			castor::TextWriter< LightCategory >::checkError( result, "LightCategory shadow volumetric steps" );
-		}
-
-		result = result && RsmConfig::TextWriter( m_tabs + cuT( "\t\t" ) )( light.getLight().getRsmConfig(), file );
-		castor::TextWriter< LightCategory >::checkError( result, "LightCategory shadow RSM config" );
-		result = result && LpvConfig::TextWriter( m_tabs + cuT( "\t\t" ) )( light.getLight().getLpvConfig(), file );
-		castor::TextWriter< LightCategory >::checkError( result, "LightCategory shadow LPV config" );
-
-		result = file.writeText( m_tabs + cuT( "\n\t\traw_config\n" ) ) > 0
-			&& file.writeText( m_tabs + cuT( "\t\t{\n" ) ) > 0
-			&& file.writeText( m_tabs + cuT( "\t\t\tmin_offset " ) + castor::string::toString( light.getShadowOffsets()[0] ) + cuT( "\n" ) ) > 0
-			&& file.writeText( m_tabs + cuT( "\t\t\tmax_slope_offset " ) + castor::string::toString( light.getShadowOffsets()[1] ) + cuT( "\n" ) ) > 0
-			&& file.writeText( m_tabs + cuT( "\t\t}\n" ) ) > 0;
-
-		result = file.writeText( m_tabs + cuT( "\n\t\tpcf_config\n" ) ) > 0
-			&& file.writeText( m_tabs + cuT( "\t\t{\n" ) ) > 0
-			&& file.writeText( m_tabs + cuT( "\t\t\tmin_offset " ) + castor::string::toString( light.getShadowOffsets()[2] ) + cuT( "\n" ) ) > 0
-			&& file.writeText( m_tabs + cuT( "\t\t\tmax_slope_offset " ) + castor::string::toString( light.getShadowOffsets()[3] ) + cuT( "\n" ) ) > 0
-			&& file.writeText( m_tabs + cuT( "\t\t}\n" ) ) > 0;
-
-		result = file.writeText( m_tabs + cuT( "\n\t\tvsm_config\n" ) ) > 0
-			&& file.writeText( m_tabs + cuT( "\t\t{\n" ) ) > 0
-			&& file.writeText( m_tabs + cuT( "\t\t\tvariance_max " ) + castor::string::toString( light.getShadowVariance()[0] ) + cuT( "\n" ) ) > 0
-			&& file.writeText( m_tabs + cuT( "\t\t\tvariance_bias " ) + castor::string::toString( light.getShadowVariance()[1] ) + cuT( "\n" ) ) > 0
-			&& file.writeText( m_tabs + cuT( "\t\t}\n" ) ) > 0;
-
-		result = result && file.writeText( m_tabs + cuT( "\t}\n" ) ) > 0;
-		castor::TextWriter< LightCategory >::checkError( result, "LightCategory shadow" );
-
-		return result;
-	}
-
-	//*************************************************************************************************
-
 	LightCategory::LightCategory( LightType lightType, Light & light )
 		: m_lightType{ lightType }
 		, m_light{ light }
@@ -112,9 +26,89 @@ namespace castor3d
 		doCopyComponent( getColour(), float( m_shadowMapIndex ), buffer );
 		doCopyComponent( getIntensity(), getFarPlane(), float( getLight().getShadowType() ), buffer );
 		doCopyComponent( float( getVolumetricSteps() ), getVolumetricScatteringFactor(), 0.0f, 0.0f, buffer );
-		doCopyComponent( getShadowOffsets(), buffer );
+		doCopyComponent( getShadowRawOffsets(), getShadowPcfOffsets(), buffer );
 		doCopyComponent( getShadowVariance(), buffer );
 		doBind( buffer );
+	}
+
+	uint32_t LightCategory::getVolumetricSteps()const
+	{
+		return m_light.getVolumetricSteps();
+	}
+
+	float LightCategory::getVolumetricScatteringFactor()const
+	{
+		return m_light.getVolumetricScatteringFactor();
+	}
+
+	castor::Point2f const & LightCategory::getShadowRawOffsets()const
+	{
+		return m_light.getShadowRawOffsets();
+	}
+
+	castor::Point2f const & LightCategory::getShadowPcfOffsets()const
+	{
+		return m_light.getShadowPcfOffsets();
+	}
+
+	castor::Point2f const & LightCategory::getShadowVariance()const
+	{
+		return m_light.getShadowVariance();
+	}
+
+	Shadow const & LightCategory::getShadowConfig()const
+	{
+		return m_light.getShadowConfig();
+	}
+
+	RsmConfig const & LightCategory::getRsmConfig()const
+	{
+		return m_light.getRsmConfig();
+	}
+
+	LpvConfig const & LightCategory::getLpvConfig()const
+	{
+		return m_light.getLpvConfig();
+	}
+
+	void LightCategory::setVolumetricSteps( uint32_t value )
+	{
+		m_light.setVolumetricSteps( value );
+	}
+
+	void LightCategory::setVolumetricScatteringFactor( float value )
+	{
+		m_light.setVolumetricScatteringFactor( value );
+	}
+
+	void LightCategory::setRawMinOffset( float value )
+	{
+		m_light.setRawMinOffset( value );
+	}
+
+	void LightCategory::setRawMaxSlopeOffset( float value )
+	{
+		m_light.setRawMaxSlopeOffset( value );
+	}
+
+	void LightCategory::setPcfMinOffset( float value )
+	{
+		m_light.setPcfMinOffset( value );
+	}
+
+	void LightCategory::setPcfMaxSlopeOffset( float value )
+	{
+		m_light.setPcfMaxSlopeOffset( value );
+	}
+
+	void LightCategory::setVsmMaxVariance( float value )
+	{
+		m_light.setVsmMaxVariance( value );
+	}
+
+	void LightCategory::setVsmVarianceBias( float value )
+	{
+		m_light.setVsmVarianceBias( value );
 	}
 
 	void LightCategory::doCopyComponent( Point2f const & component

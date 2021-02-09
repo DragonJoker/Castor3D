@@ -1,88 +1,33 @@
-#include "Castor3D/Material/Pass/MetallicRoughnessPbrPass.hpp"
+#include "Castor3D/Text/TextMetallicRoughnessPbrPass.hpp"
 
 #include "Castor3D/Miscellaneous/Logger.hpp"
-#include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
+#include "Castor3D/Text/TextPass.hpp"
 
-using namespace castor;
+#include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
-namespace castor3d
+using namespace castor3d;
+
+namespace castor
 {
-	//*********************************************************************************************
-
-	MetallicRoughnessPbrPass::TextWriter::TextWriter( String const & tabs )
-		: castor::TextWriter< MetallicRoughnessPbrPass >{ tabs }
+	TextWriter< MetallicRoughnessPbrPass >::TextWriter( String const & tabs )
+		: TextWriterT< MetallicRoughnessPbrPass >{ tabs }
 	{
 	}
 
-	bool MetallicRoughnessPbrPass::TextWriter::operator()( MetallicRoughnessPbrPass const & pass, TextFile & file )
+	bool TextWriter< MetallicRoughnessPbrPass >::operator()( MetallicRoughnessPbrPass const & pass
+		, TextFile & file )
 	{
-		log::info << m_tabs << cuT( "Writing MetallicRoughnessPbrPass " ) << std::endl;
-		bool result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "pass\n" ) ) > 0
-						&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
-		
-		if ( result )
-		{
-			result = file.print( 256, cuT( "%s\talbedo " ), m_tabs.c_str() ) > 0
-				&& RgbColour::TextWriter( String() )( pass.getAlbedo(), file )
-				&& file.writeText( cuT( "\n" ) ) > 0;
-			castor::TextWriter< MetallicRoughnessPbrPass >::checkError( result, "MetallicRoughnessPbrPass albedo" );
-		}
+		log::info << tabs() << cuT( "Writing MetallicRoughnessPbrPass " ) << std::endl;
+		bool result = false;
 
-		if ( result && pass.getRoughness() != 1 )
+		if ( auto block = beginBlock( "pass", file ) )
 		{
-			result = file.writeText( m_tabs + cuT( "\troughness " )
-				+ string::toString( pass.getRoughness(), std::locale{ "C" } )
-				+ cuT( "\n" ) ) > 0;
-			castor::TextWriter< MetallicRoughnessPbrPass >::checkError( result, "MetallicRoughnessPbrPass roughness" );
-		}
-
-		if ( result && pass.getMetallic() != 0 )
-		{
-			result = file.writeText( m_tabs + cuT( "\tmetallic " )
-				+ string::toString( pass.getMetallic(), std::locale{ "C" } )
-				+ cuT( "\n" ) ) > 0;
-			castor::TextWriter< MetallicRoughnessPbrPass >::checkError( result, "MetallicRoughnessPbrPass reflectance" );
-		}
-
-		if ( result )
-		{
-			result = Pass::TextWriter{ m_tabs }( pass, file );
-		}
-
-		if ( result )
-		{
-			result = file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
+			result = write( "albedo", pass.getAlbedo(), file )
+				&& write( "roughness", pass.getRoughness(), file )
+				&& write( "metallic", pass.getMetallic(), file )
+				&& write< Pass >( pass, file );
 		}
 
 		return result;
-	}
-
-	//*********************************************************************************************
-
-	MetallicRoughnessPbrPass::MetallicRoughnessPbrPass( Material & parent )
-		: Pass{ parent }
-		, m_albedo{ RgbColour::fromRGBA( 0xFFFFFFFF ) }
-	{
-	}
-
-	MetallicRoughnessPbrPass::~MetallicRoughnessPbrPass()
-	{
-	}
-
-	void MetallicRoughnessPbrPass::accept( PassBuffer & buffer )const
-	{
-		buffer.visit( *this );
-	}
-
-	void MetallicRoughnessPbrPass::doInitialise()
-	{
-	}
-
-	void MetallicRoughnessPbrPass::doCleanup()
-	{
-	}
-
-	void MetallicRoughnessPbrPass::doSetOpacity( float value )
-	{
 	}
 }

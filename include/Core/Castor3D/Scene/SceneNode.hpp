@@ -22,46 +22,6 @@ namespace castor3d
 		//!\~english	The total number of scene nodes.
 		//!\~french		Le nombre total de noeuds de scène.
 		static uint64_t Count;
-		/**
-		\author Sylvain DOREMUS
-		\version 0.6.1.0
-		\date 19/10/2011
-		\~english
-		\brief SceneNode loader
-		\remark Loads and saves castor3d::SceneNode from/into a file
-		\~french
-		\brief SceneNode loader
-		\remark Charge/écrit des castor3d::SceneNode à partir de/dans un fichier
-		*/
-		class TextWriter
-			: public castor::TextWriter< SceneNode >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\~french
-			 *\brief		Constructeur
-			 */
-			C3D_API explicit TextWriter( castor::String const & tabs
-				, float scale = 1.0f );
-			/**
-			 *\~english
-			 * Writes a castor3d::SceneNode into a text file
-			 *\param[in]	file	the file to write the scene node in
-			 *\param[in]	node	the scene node to write
-			 *\return \p true if successful
-			 *\~french
-			 * Ecrit un castor3d::SceneNode dans un fichier texte
-			 *\param[in]	file	le fichier dans lequel le castor3d::SceneNode est écrit
-			 *\param[in]	node	Le castor3d::SceneNode à écrire
-			 *\return \p true si tout s'est bien passé, \p false sinon
-			 */
-			C3D_API bool operator()( SceneNode const & node, castor::TextFile & file )override;
-
-		private:
-			float m_scale;
-		};
 
 	protected:
 		using SceneNodePtrStrMap = std::map< castor::String, SceneNodeWPtr >;

@@ -22,6 +22,7 @@
 #include <Castor3D/Render/RenderLoop.hpp>
 #include <Castor3D/Render/RenderWindow.hpp>
 #include <Castor3D/Scene/SceneFileParser.hpp>
+#include <Castor3D/Text/TextScene.hpp>
 
 #include <CastorUtils/Data/BinaryFile.hpp>
 
@@ -52,7 +53,7 @@ namespace Testing
 
 			Path filePath = folder / p_fileName.getFileName();
 			TextFile scnFile( Path{ filePath + cuT( ".cscn" ) }, File::OpenMode::eWrite, File::EncodingMode::eASCII );
-			auto result = Scene::TextWriter( String() )( p_scene, scnFile );
+			auto result = castor::TextWriter< Scene >( String() )( p_scene, scnFile );
 
 			Path subfolder{ cuT( "Meshes" ) };
 

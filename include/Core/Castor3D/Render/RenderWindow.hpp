@@ -67,38 +67,6 @@ namespace castor3d
 		using RenderingResourcesArray = std::vector< RenderingResourcesPtr >;
 
 	public:
-		/**
-		\author		Sylvain DOREMUS
-		\date		14/02/2010
-		\~english
-		\brief		RenderTarget loader.
-		\~english
-		\brief		Loader de RenderTarget.
-		*/
-		class TextWriter
-			: public castor::TextWriter< RenderWindow >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\~french
-			 *\brief		Constructeur
-			 */
-			C3D_API explicit TextWriter( castor::String const & tabs );
-			/**
-			 *\~english
-			 *\brief		Writes a render window into a text file.
-			 *\param[in]	window	the render window.
-			 *\param[in]	file	the file.
-			 *\~french
-			 *\brief		Ecrit une fenêtre de rendu dans un fichier texte.
-			 *\param[in]	window	La fenêtre de rendu.
-			 *\param[in]	file	Le fichier.
-			 */
-			C3D_API bool operator()( RenderWindow const & window, castor::TextFile & file )override;
-		};
-
 		class InputListener
 			: public UserInputListener
 		{

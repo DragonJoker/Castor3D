@@ -1,5 +1,7 @@
 #include "Castor3D/Text/TextAnimatedObjectGroup.hpp"
 
+#include "Castor3D/Miscellaneous/Logger.hpp"
+
 using namespace castor3d;
 
 namespace castor
@@ -33,7 +35,7 @@ namespace castor
 	bool TextWriter< AnimatedObjectGroup >::TextWriter::operator()( AnimatedObjectGroup const & group
 		, TextFile & file )
 	{
-		log::info << m_tabs << cuT( "Writing AnimatedObjectGroup " ) << group.getName() << std::endl;
+		log::info << tabs() << cuT( "Writing AnimatedObjectGroup " ) << group.getName() << std::endl;
 		bool result = false;
 
 		if ( beginBlock( "animated_object_group", group.getName(), file ) )

@@ -21,39 +21,6 @@ namespace castor3d
 	public:
 		C3D_API static const std::array< castor::String, size_t( ViewportType::eCount ) > TypeName;
 
-		/**
-		\author		Sylvain DOREMUS
-		\version	0.6.1.0
-		\date		19/10/2011
-		\~english
-		\brief		Viewport loader
-		\~french
-		\brief		Loader de Viewport
-		*/
-		class TextWriter
-			: public castor::TextWriter< Viewport >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\~french
-			 *\brief		Constructeur
-			 */
-			C3D_API explicit TextWriter( castor::String const & tabs );
-			/**
-			 *\~english
-			 *\brief		Writes a Viewport into a text file
-			 *\param[in]	file		The file to save the cameras in
-			 *\param[in]	viewport	The Viewport to save
-			 *\~french
-			 *\brief		Ecrit un Viewport dans un fichier texte
-			 *\param[in]	file		Le fichier
-			 *\param[in]	viewport	Le Viewport
-			 */
-			C3D_API bool operator()( castor3d::Viewport const & viewport, castor::TextFile & file )override;
-		};
-
 	private:
 		C3D_API Viewport( Engine const & engine
 			, ViewportType type

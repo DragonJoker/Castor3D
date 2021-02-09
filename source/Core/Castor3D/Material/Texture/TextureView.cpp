@@ -46,18 +46,6 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	TextureView::TextWriter::TextWriter( String const & tabs )
-		: castor::TextWriter< TextureView >{ tabs }
-	{
-	}
-
-	bool TextureView::TextWriter::operator()( TextureView const & obj, TextFile & file )
-	{
-		return file.writeText( obj.m_source.toString() ) > 0;
-	}
-
-	//*********************************************************************************************
-
 	TextureView::TextureView( TextureLayout & layout
 		, ashes::ImageViewCreateInfo info
 		, uint32_t index

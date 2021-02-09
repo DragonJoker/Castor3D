@@ -34,42 +34,6 @@ namespace castor3d
 	public:
 		/**
 		\author		Sylvain DOREMUS
-		\date		14/02/2010
-		\~english
-		\brief		RenderTarget loader
-		\~english
-		\brief		Loader de RenderTarget
-		*/
-		class TextWriter
-			: public castor::TextWriter< RenderTarget >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\param[in]	tabs	The tabulations to put at the beginning of each line
-			 *\~french
-			 *\brief		Constructeur
-			 *\param[in]	tabs	Les tabulations à mettre à chaque début de ligne
-			 */
-			C3D_API explicit TextWriter( castor::String const & tabs );
-			/**
-			 *\~english
-			 *\brief		Writes a render target into a text file
-			 *\param[in]	target	the render target
-			 *\param[in]	file	the file
-			 *\~french
-			 *\brief		Ecrit une cible de rendu dans un fichier texte
-			 *\param[in]	target	La cible de rendu
-			 *\param[in]	file	Le fichier
-			 */
-			C3D_API bool operator()( castor3d::RenderTarget const & target
-				, castor::TextFile & file )override;
-		};
-
-	public:
-		/**
-		\author		Sylvain DOREMUS
 		\version	0.7.0.0
 		\date		19/12/2012
 		\~english
@@ -244,6 +208,11 @@ namespace castor3d
 		/**@{*/
 		C3D_API HdrConfig const & getHdrConfig()const;
 		C3D_API HdrConfig & getHdrConfig();
+
+		SsaoConfig const & getSsaoConfig()const
+		{
+			return m_ssaoConfig;
+		}
 
 		bool isInitialised()const
 		{

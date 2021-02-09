@@ -1629,6 +1629,7 @@ source_group( "Source Files\\Shader\\Ubos" FILES ${${PROJECT_NAME}_FOLDER_SRC_FI
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextAnimatedObjectGroup.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextBackground.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextBillboardList.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextBorderPanelOverlay.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextCamera.cpp
@@ -1638,14 +1639,19 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextGeometry.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextHdrConfig.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextImageBackground.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextLight.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextLpvConfig.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextMaterial.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextMesh.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextMetallicRoughnessPbrPass.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextOverlay.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextOverlayCategory.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextPanelOverlay.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextParticleSystem.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextPass.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextPhongPass.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextPointLight.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextPostEffect.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextProgram.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextRenderTarget.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextRenderWindow.cpp
@@ -1668,6 +1674,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextAnimatedObjectGroup.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextBackground.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextBillboardList.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextBorderPanelOverlay.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextCamera.hpp
@@ -1677,14 +1684,19 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextGeometry.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextHdrConfig.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextImageBackground.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextLight.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextLpvConfig.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextMaterial.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextMesh.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextMetallicRoughnessPbrPass.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextOverlay.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextOverlayCategory.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextPanelOverlay.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextParticleSystem.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextPass.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextPhongPass.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextPointLight.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextPostEffect.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextProgram.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextRenderTarget.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Text/TextRenderWindow.hpp

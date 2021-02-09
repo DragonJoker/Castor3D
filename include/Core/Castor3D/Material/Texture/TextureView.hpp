@@ -23,40 +23,6 @@ namespace castor3d
 
 	public:
 		/**
-		\author		Sylvain DOREMUS
-		\date		24/05/2016
-		\~english
-		\brief		TextureView loader
-		\~french
-		\brief		Loader de TextureView
-		*/
-		class TextWriter
-			: public castor::TextWriter< TextureView >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\~french
-			 *\brief		Constructeur
-			 */
-			C3D_API explicit TextWriter( castor::String const & tabs );
-			/**
-			 *\~english
-			 *\brief		Writes a TextureView into a text file
-			 *\param[in]	file	The file
-			 *\param[in]	obj		The TextureView
-			 *\~french
-			 *\brief		Ecrit une TextureView dans un fichier texte
-			 *\param[in]	file	Le fichier
-			 *\param[in]	obj		La TextureView
-			 */
-			C3D_API bool operator()( TextureView const & obj
-				, castor::TextFile & file )override;
-		};
-
-	public:
-		/**
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	layout	The parent layout.
@@ -120,32 +86,32 @@ namespace castor3d
 		C3D_API ashes::ImageView const & getSampledView()const;
 		C3D_API ashes::ImageView const & getTargetView()const;
 
-		inline uint32_t getIndex()const
+		uint32_t getIndex()const
 		{
 			return m_index;
 		}
 
-		inline VkImageSubresourceRange const & getSubresourceRange()const
+		VkImageSubresourceRange const & getSubresourceRange()const
 		{
 			return m_info->subresourceRange;
 		}
 
-		inline uint32_t getBaseMipLevel()const
+		uint32_t getBaseMipLevel()const
 		{
 			return m_info->subresourceRange.baseMipLevel;
 		}
 
-		inline void setMipmapsGenerationNeeded( bool value )
+		void setMipmapsGenerationNeeded( bool value )
 		{
 			m_needsMipmapsGeneration = value;
 		}
 
-		inline bool isMipmapsGenerationNeeded()const
+		bool isMipmapsGenerationNeeded()const
 		{
 			return m_needsMipmapsGeneration;
 		}
 
-		inline bool needsYInversion()const
+		bool needsYInversion()const
 		{
 			return m_needsYInversion;
 		}

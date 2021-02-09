@@ -17,52 +17,6 @@ namespace castor3d
 		/**
 		*\~english
 		*\brief
-		*	ImageBackground loader.
-		*\~english
-		*\brief
-		*	Loader de ImageBackground.
-		*/
-		class TextWriter
-			: public castor::TextWriter< ImageBackground >
-		{
-		public:
-			/**
-			*\~english
-			*\brief
-			*	Constructor.
-			*\param[in] tabs
-			*	The current indentation.
-			*\~french
-			*\brief
-			*	Constructeur.
-			*\param[in] tabs
-			*	L'indentation actuelle.
-			*/
-			C3D_API explicit TextWriter( castor::String const & tabs );
-			/**
-			*\~english
-			*\brief
-			*	Writes a Skybox into a text file.
-			*\param[in] obj
-			*	The Skybox to save.
-			*\param[in] file
-			*	The file to write the ImageBackground in.
-			*\~french
-			*\brief
-			*	Ecrit une ImageBackground dans un fichier texte.
-			*\param[in] obj
-			*	La Skybox.
-			*\param[in] file
-			*	Le fichier.
-			*/
-			C3D_API bool operator()( ImageBackground const & obj
-				, castor::TextFile & file )override;
-		};
-
-	public:
-		/**
-		*\~english
-		*\brief
 		*	Constructor.
 		*\param[in] engine
 		*	The engine.

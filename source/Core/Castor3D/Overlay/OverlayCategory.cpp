@@ -14,58 +14,6 @@ using namespace castor;
 
 namespace castor3d
 {
-	OverlayCategory::TextWriter::TextWriter( String const & tabs )
-		: castor::TextWriter< OverlayCategory >{ tabs }
-	{
-	}
-
-	bool OverlayCategory::TextWriter::operator()( OverlayCategory const & overlay, TextFile & file )
-	{
-		bool result = file.writeText( m_tabs + cuT( "\tposition " ) ) > 0
-						&& Point2d::TextWriter{ String{} }( overlay.getPosition(), file )
-						&& file.writeText( cuT( "\n" ) ) > 0;
-		castor::TextWriter< OverlayCategory >::checkError( result, "OverlayCategory position" );
-
-		if ( result )
-		{
-			result = file.writeText( m_tabs + cuT( "\tsize " ) ) > 0
-					   && Point2d::TextWriter{ String{} }( overlay.getSize(), file )
-					   && file.writeText( cuT( "\n" ) ) > 0;
-			castor::TextWriter< OverlayCategory >::checkError( result, "OverlayCategory size" );
-		}
-
-		if ( result && overlay.getMaterial() )
-		{
-			result = file.writeText( m_tabs + cuT( "\tmaterial \"" ) + overlay.getMaterial()->getName() + cuT( "\"\n" ) ) > 0;
-			castor::TextWriter< OverlayCategory >::checkError( result, "OverlayCategory material" );
-		}
-
-		for ( auto overlay : overlay.getOverlay() )
-		{
-			switch ( overlay->getType() )
-			{
-			case OverlayType::ePanel:
-				result = result && PanelOverlay::TextWriter( m_tabs + cuT( "\t" ) )( *overlay->getPanelOverlay(), file );
-				break;
-
-			case OverlayType::eBorderPanel:
-				result = result && BorderPanelOverlay::TextWriter( m_tabs + cuT( "\t" ) )( *overlay->getBorderPanelOverlay(), file );
-				break;
-
-			case OverlayType::eText:
-				result = result && TextOverlay::TextWriter( m_tabs + cuT( "\t" ) )( *overlay->getTextOverlay(), file );
-				break;
-
-			default:
-				result = false;
-			}
-		}
-
-		return result;
-	}
-
-	//*************************************************************************************************
-
 	OverlayCategory::OverlayCategory( OverlayType type )
 		: m_type( type )
 	{

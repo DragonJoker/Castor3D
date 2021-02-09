@@ -291,7 +291,6 @@ namespace castor3d
 	template<> struct VkTypeTraits< VkPipelineCoverageToColorStateCreateInfoNV>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_PIPELINE_COVERAGE_TO_COLOR_STATE_CREATE_INFO_NV; };
 	template<> struct VkTypeTraits< VkPipelineCoverageModulationStateCreateInfoNV>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_PIPELINE_COVERAGE_MODULATION_STATE_CREATE_INFO_NV; };
 	template<> struct VkTypeTraits< VkDrmFormatModifierPropertiesListEXT>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_DRM_FORMAT_MODIFIER_PROPERTIES_LIST_EXT; };
-	template<> struct VkTypeTraits< VkDrmFormatModifierPropertiesEXT>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_DRM_FORMAT_MODIFIER_PROPERTIES_EXT; };
 	template<> struct VkTypeTraits< VkPhysicalDeviceImageDrmFormatModifierInfoEXT>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_DRM_FORMAT_MODIFIER_INFO_EXT; };
 	template<> struct VkTypeTraits< VkImageDrmFormatModifierListCreateInfoEXT>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_IMAGE_DRM_FORMAT_MODIFIER_LIST_CREATE_INFO_EXT; };
 	template<> struct VkTypeTraits< VkImageDrmFormatModifierExplicitCreateInfoEXT>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_IMAGE_DRM_FORMAT_MODIFIER_EXPLICIT_CREATE_INFO_EXT; };

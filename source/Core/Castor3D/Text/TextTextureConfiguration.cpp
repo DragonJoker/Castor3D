@@ -1,27 +1,21 @@
-#include "Castor3D/Material/Texture/TextureConfiguration.hpp"
+#include "Castor3D/Text/TextTextureConfiguration.hpp"
 
-namespace castor3d
+#include "Castor3D/Miscellaneous/Logger.hpp"
+
+#include <CastorUtils/Data/Text/TextPoint.hpp>
+
+using namespace castor3d;
+
+namespace castor
 {
-	namespace
-	{
-		void mergeMasks( uint32_t toMerge
-			, TextureFlag flag
-			, TextureFlags & result )
-		{
-			result |= toMerge
-				? flag
-				: TextureFlag::eNone;
-		}
-	}
-
-	TextureConfiguration::TextWriter::TextWriter( castor::String const & tabs
+	TextWriter< TextureConfiguration >::TextWriter( String const & tabs
 		, MaterialType type )
-		: castor::TextWriter< TextureConfiguration >{ tabs, cuT( "TextureConfiguration" ) }
+		: TextWriterT< TextureConfiguration >{ tabs, cuT( "TextureConfiguration" ) }
 		, m_type{ type }
 	{
 	}
 
-	bool TextureConfiguration::TextWriter::operator()( TextureConfiguration const & configuration
+	bool TextWriter< TextureConfiguration >::operator()( TextureConfiguration const & configuration
 		, castor::TextFile & file )
 	{
 		bool result = true;
@@ -136,159 +130,14 @@ namespace castor3d
 			if ( translate != castor::Point3f{}
 				|| rotate != castor::Point2f{ 1.0f, 0.0f } )
 			{
-				result = result && file.writeText( m_tabs + cuT( "\tanimation\n" ) ) > 0;
-				result = result && file.writeText( m_tabs + cuT( "\t{\n" ) ) > 0;
-
-				if ( result && translate != castor::Point3f{} )
+				if ( auto animBlock = beginBlock( "animation", file ) )
 				{
-					result = file.print( 256, cuT( "%s\ttranslate " ), m_tabs.c_str() ) > 0
-						&& castor::Point3f::TextWriter( castor::String() )( translate, file )
-						&& file.writeText( cuT( "\n" ) ) > 0;
+					result = writeOpt( cuT( "translate" ), translate, castor::Point3f{}, file )
+						&& writeOpt( cuT( "rotate" ), rotate, castor::Point2f{ 1.0f, 0.0f }, file );
 				}
-
-				if ( result && rotate != castor::Point2f{ 1.0f, 0.0f } )
-				{
-					result = file.print( 256, cuT( "%s\trotate " ), m_tabs.c_str() ) > 0
-						&& castor::Point2f::TextWriter( castor::String() )( rotate, file )
-						&& file.writeText( cuT( "\n" ) ) > 0;
-				}
-
-				result = result && file.writeText( m_tabs + cuT( "\t}\n" ) ) > 0;
 			}
 		}
 
-		return result;
-	}
-
-	//*********************************************************************************************
-
-	TextureConfiguration const TextureConfiguration::DiffuseTexture = []()
-	{
-		TextureConfiguration result;
-		result.colourMask[0] = 0x00FFFFFF;
-		return result;
-	}();
-
-	TextureConfiguration const TextureConfiguration::AlbedoTexture = []()
-	{
-		TextureConfiguration result;
-		result.colourMask[0] = 0x00FFFFFF;
-		return result;
-	}();
-
-	TextureConfiguration const TextureConfiguration::SpecularTexture = []()
-	{
-		TextureConfiguration result;
-		result.specularMask[0] = 0x00FFFFFF;
-		return result;
-	}();
-
-	TextureConfiguration const TextureConfiguration::MetalnessTexture = []()
-	{
-		TextureConfiguration result;
-		result.specularMask[0] = 0x000000FF;
-		return result;
-	}();
-
-	TextureConfiguration const TextureConfiguration::ShininessTexture = []()
-	{
-		TextureConfiguration result;
-		result.glossinessMask[0] = 0x000000FF;
-		return result;
-	}();
-
-	TextureConfiguration const TextureConfiguration::GlossinessTexture = []()
-	{
-		TextureConfiguration result;
-		result.glossinessMask[0] = 0x000000FF;
-		return result;
-	}();
-
-	TextureConfiguration const TextureConfiguration::RoughnessTexture = []()
-	{
-		TextureConfiguration result;
-		result.glossinessMask[0] = 0x000000FF;
-		return result;
-	}();
-
-	TextureConfiguration const TextureConfiguration::OpacityTexture = []()
-	{
-		TextureConfiguration result;
-		result.opacityMask[0] = 0xFF000000;
-		return result;
-	}();
-
-	TextureConfiguration const TextureConfiguration::EmissiveTexture = []()
-	{
-		TextureConfiguration result;
-		result.emissiveMask[0] = 0x00FFFFFF;
-		return result;
-	}();
-
-	TextureConfiguration const TextureConfiguration::NormalTexture = []()
-	{
-		TextureConfiguration result;
-		result.normalMask[0] = 0x00FFFFFF;
-		return result;
-	}();
-
-	TextureConfiguration const TextureConfiguration::HeightTexture = []()
-	{
-		TextureConfiguration result;
-		result.heightMask[0] = 0x000000FF;
-		return result;
-	}();
-
-	TextureConfiguration const TextureConfiguration::OcclusionTexture = []()
-	{
-		TextureConfiguration result;
-		result.occlusionMask[0] = 0x000000FF;
-		return result;
-	}();
-
-	TextureConfiguration const TextureConfiguration::TransmittanceTexture = []()
-	{
-		TextureConfiguration result;
-		result.transmittanceMask[0] = 0xFF000000;
-		return result;
-	}();
-
-	bool operator==( TextureConfiguration const & lhs, TextureConfiguration const & rhs )
-	{
-		return lhs.colourMask == rhs.colourMask
-			&& lhs.specularMask == rhs.specularMask
-			&& lhs.glossinessMask == rhs.glossinessMask
-			&& lhs.opacityMask == rhs.opacityMask
-			&& lhs.emissiveMask == rhs.emissiveMask
-			&& lhs.normalMask == rhs.normalMask
-			&& lhs.heightMask == rhs.heightMask
-			&& lhs.occlusionMask == rhs.occlusionMask
-			&& lhs.transmittanceMask == rhs.transmittanceMask
-			&& lhs.normalFactor == rhs.normalFactor
-			&& lhs.heightFactor == rhs.heightFactor
-			&& lhs.normalGMultiplier == rhs.normalGMultiplier
-			&& lhs.needsGammaCorrection == rhs.needsGammaCorrection
-			&& lhs.needsYInversion == rhs.needsYInversion
-			&& lhs.translate == rhs.translate;
-	}
-
-	bool operator!=( TextureConfiguration const & lhs, TextureConfiguration const & rhs )
-	{
-		return !( lhs == rhs );
-	}
-
-	TextureFlags getFlags( TextureConfiguration const & config )
-	{
-		TextureFlags result = TextureFlag::eNone;
-		mergeMasks( config.colourMask[0], TextureFlag::eDiffuse, result );
-		mergeMasks( config.specularMask[0], TextureFlag::eSpecular, result );
-		mergeMasks( config.glossinessMask[0], TextureFlag::eGlossiness, result );
-		mergeMasks( config.opacityMask[0], TextureFlag::eOpacity, result );
-		mergeMasks( config.emissiveMask[0], TextureFlag::eEmissive, result );
-		mergeMasks( config.normalMask[0], TextureFlag::eNormal, result );
-		mergeMasks( config.heightMask[0], TextureFlag::eHeight, result );
-		mergeMasks( config.occlusionMask[0], TextureFlag::eOcclusion, result );
-		mergeMasks( config.transmittanceMask[0], TextureFlag::eTransmittance, result );
 		return result;
 	}
 }

@@ -1,41 +1,23 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_Shadow_H___
-#define ___C3D_Shadow_H___
+#ifndef ___C3D_TextShadow_H___
+#define ___C3D_TextShadow_H___
 
-#include "SceneModule.hpp"
+#include "Castor3D/Scene/Shadow.hpp"
 
-namespace castor3d
+#include <CastorUtils/Data/TextWriter.hpp>
+
+namespace castor
 {
-	class Shadow
+	template<>
+	class TextWriter< castor3d::Shadow >
+		: public TextWriterT< castor3d::Shadow >
 	{
 	public:
-		/**
-		 *\~english
-		 *\return		The fog's density.
-		 *\~french
-		 *\return		La densité du brouillard.
-		 */
-		inline ShadowType getFilterType()const
-		{
-			return m_filterType;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the fog type.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit le type de brouillard.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		inline void setFilterType( ShadowType value )
-		{
-			m_filterType = value;
-		}
-
-	private:
-		ShadowType m_filterType{ ShadowType::ePCF };
+		C3D_API explicit TextWriter( String const & tabs );
+		C3D_API bool operator()( castor3d::Shadow const & config
+			, TextFile & file )override;
 	};
 }
 

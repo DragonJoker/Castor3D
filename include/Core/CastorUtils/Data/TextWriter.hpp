@@ -119,16 +119,14 @@ namespace castor
 		CU_API bool write( String const & name, String const & value, TextFile & file )const;
 
 		CU_API bool writeOpt( String const & name, bool value, TextFile & file )const;
-
 		CU_API bool writeName( String const & name, String const & value, TextFile & file )const;
-
-		CU_API bool writeFile( String const & name, Path const & value, TextFile & file )const;
+		CU_API bool writePath( String const & name, Path const & value, TextFile & file )const;
 		CU_API bool writeFile( String const & name, Path const & value, String const & subfolder, TextFile & file )const;
 
 		CU_API String tabs()const;
 
 		template< typename ValueT >
-		bool write( String const & name, ValueT value, TextFile & file )const
+		bool write( String const & name, ValueT const & value, TextFile & file )const
 		{
 			auto result = file.writeText( tabs() + name + cuT( " " ) ) > 0
 				&& TextWriter< ValueT >{ tabs() }( value, file )
@@ -138,7 +136,7 @@ namespace castor
 		}
 
 		template< typename ValueT >
-		bool write( ValueT value, TextFile & file )const
+		bool write( ValueT const & value, TextFile & file )const
 		{
 			auto result = TextWriter< ValueT >{ tabs() }( value, file );
 			checkError( result, cuT( "" ) );
@@ -146,22 +144,36 @@ namespace castor
 		}
 
 		template< typename ValueT >
-		bool write( String const & name, castor::RangedValue< ValueT > value, TextFile & file )const
+		bool writeOpt( String const & name
+			, ValueT const & value
+			, ValueT const & comp
+			, TextFile & file )const
+		{
+			bool result{ true };
+
+			if ( value != comp )
+			{
+				result = write( name, value, file );
+			}
+
+			return result;
+		}
+
+		template< typename ValueT >
+		bool write( String const & name, castor::RangedValue< ValueT > const & value, TextFile & file )const
 		{
 			return write( name, value.value(), file );
 		}
 
 		template< typename ValueT >
-		bool write( String const & name, castor::ChangeTracked< ValueT > value, TextFile & file )const
+		bool write( String const & name, castor::ChangeTracked< ValueT > const & value, TextFile & file )const
 		{
 			return write( name, value.value(), file );
 		}
 
-	protected:
+	private:
 		String m_tabs;
 		uint32_t m_indent{ 0u };
-
-	private:
 		String m_name;
 	};
 

@@ -35,51 +35,6 @@ namespace castor3d
 	{
 	public:
 		/**
-		\author		Sylvain DOREMUS
-		\date		14/02/2010
-		\~english
-		\brief		Scene loader
-		\~english
-		\brief		Loader de scène
-		*/
-		class TextWriter
-			: public castor::TextWriter< Scene >
-		{
-		public:
-			struct Options
-			{
-				castor::Path materialsFile;
-				castor::Path meshesFile;
-				castor::Path nodesFile;
-				castor::Path objectsFile;
-				castor::Path lightsFile;
-			};
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\~french
-			 *\brief		Constructeur
-			 */
-			C3D_API explicit TextWriter( castor::String const & tabs
-				, Options options = {} );
-			/**
-			 *\~english
-			 *\brief		Writes a scene into a text file
-			 *\param[in]	scene	the write to save
-			 *\param[in]	file	the file to write the scene in
-			 *\~french
-			 *\brief		Ecrit une scène dans un fichier texte
-			 *\param[in]	scene	La scène
-			 *\param[in]	file	Le fichier
-			 */
-			C3D_API bool operator()( Scene const & scene, castor::TextFile & file )override;
-
-		private:
-			Options m_options;
-		};
-
-	public:
-		/**
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	name	The scene name

@@ -11,20 +11,6 @@ using namespace castor;
 
 namespace castor3d
 {
-	//*************************************************************************************************
-
-	Light::TextWriter::TextWriter( String const & tabs )
-		: castor::TextWriter< Light >{ tabs }
-	{
-	}
-
-	bool Light::TextWriter::operator()( Light const & object, TextFile & file )
-	{
-		return object.m_category->createTextWriter( m_tabs )->writeInto( file );
-	}
-
-	//*************************************************************************************************
-
 	Light::Light( String const & name
 		, Scene & scene
 		, SceneNode & node

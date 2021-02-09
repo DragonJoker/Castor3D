@@ -44,52 +44,6 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	ShaderProgram::TextWriter::TextWriter( String const & tabs
-		, String const & name )
-		: castor::TextWriter< ShaderProgram >{ tabs }
-		, m_name{ name }
-	{
-	}
-
-	bool ShaderProgram::TextWriter::operator()( ShaderProgram const & shaderProgram
-		, TextFile & file )
-	{
-		bool result = false;
-		bool hasFile = false;
-
-		for ( auto file : shaderProgram.m_files )
-		{
-			hasFile |= !file.second.empty();
-		}
-
-		if ( hasFile )
-		{
-			// TODO : Implement castor3d::ShaderModule::TextWriter (to support at least SPIR-V external shaders).
-			//auto tabs = m_tabs + cuT( "\t" );
-			result = file.writeText( cuT( "\n" ) + m_tabs + m_name + cuT( "\n" ) ) > 0
-				&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
-			checkError( result, "Shader program" );
-
-			//for ( auto & module : shaderProgram.m_modules )
-			//{
-			//	result = ShaderModule::TextWriter( tabs, module.first )( module.second, file );
-			//}
-
-			if ( result )
-			{
-				result = file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
-			}
-		}
-		else
-		{
-			result = true;
-		}
-
-		return result;
-	}
-
-	//*************************************************************************************************
-
 	struct VariableApply
 	{
 		template <class T> void operator()( T & p ) const

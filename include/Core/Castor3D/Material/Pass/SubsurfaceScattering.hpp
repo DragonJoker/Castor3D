@@ -20,37 +20,6 @@ namespace castor3d
 
 	public:
 		/**
-		\~english
-		\brief Pass loader.
-		\~french
-		\brief Loader de Pass.
-		*/
-		class TextWriter
-			: public castor::TextWriter< SubsurfaceScattering >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor.
-			 *\~french
-			 *\brief		Constructeur.
-			 */
-			C3D_API explicit TextWriter( castor::String const & tabs );
-			/**
-			 *\~english
-			 *\brief			Writes a SubsurfaceScattering into a text file.
-			 *\param[in]		pass	The SubsurfaceScattering to write.
-			 *\param[in,out]	file	The file where to write the Pass.
-			 *\~french
-			 *\brief			Ecrit une SubsurfaceScattering dans un fichier texte.
-			 *\param[in]		pass	La SubsurfaceScattering à écrire.
-			 *\param[in,out]	file	Le file où écrire la Pass.
-			 */
-			C3D_API bool operator()( SubsurfaceScattering const & pass, castor::TextFile & file )override;
-		};
-
-	public:
-		/**
 		 *\~english
 		 *\return		The Gaussian filter width.
 		 *\~french

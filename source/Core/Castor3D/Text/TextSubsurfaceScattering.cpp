@@ -1,57 +1,35 @@
-#include "Castor3D/Material/Pass/SubsurfaceScattering.hpp"
+#include "Castor3D/Text/TextSubsurfaceScattering.hpp"
 
-using namespace castor;
+#include "Castor3D/Miscellaneous/Logger.hpp"
 
-namespace castor3d
+#include <CastorUtils/Data/Text/TextPoint.hpp>
+
+using namespace castor3d;
+
+namespace castor
 {
-	SubsurfaceScattering::TextWriter::TextWriter( String const & tabs )
-		: castor::TextWriter< SubsurfaceScattering >{ tabs }
+	TextWriter< SubsurfaceScattering >::TextWriter( String const & tabs )
+		: TextWriterT< SubsurfaceScattering >{ tabs }
 	{
 	}
 
-	bool SubsurfaceScattering::TextWriter::operator()( SubsurfaceScattering const & obj
+	bool TextWriter< SubsurfaceScattering >::operator()( SubsurfaceScattering const & obj
 		, TextFile & file )
 	{
-		bool result = file.writeText( cuT( "\n" )
-			+ m_tabs + cuT( "subsurface_scattering\n" )
-			+ m_tabs + cuT( "{\n" ) ) > 0;
+		auto result = false;
 
-		if ( result )
+		if ( auto block = beginBlock( "subsurface_scattering", file ) )
 		{
-			if ( result )
-			{
-				result = file.writeText( m_tabs + cuT( "\tstrength " )
-					+ string::toString( obj.getStrength(), std::locale{ "C" } )
-					+ cuT( "\n" ) ) > 0;
-				castor::TextWriter< SubsurfaceScattering >::checkError( result, "SubsurfaceScattering strength" );
-			}
+			result = write( cuT( "strength" ), obj.getStrength(), file )
+				&& write( cuT( "gaussian_width" ), obj.getGaussianWidth(), file );
 
-			if ( result )
+			if ( auto profBlock = beginBlock( cuT( "transmittance_profile" ), file ) )
 			{
-				result = file.writeText( m_tabs + cuT( "\tgaussian_width " )
-					+ string::toString( obj.getGaussianWidth(), std::locale{ "C" } )
-					+ cuT( "\n" ) ) > 0;
-				castor::TextWriter< SubsurfaceScattering >::checkError( result, "SubsurfaceScattering Gaussian width" );
-			}
-
-			if ( result )
-			{
-				result = file.writeText( m_tabs + cuT( "\ttransmittance_profile\n" )
-					+ m_tabs + cuT( "\t{\n" ) ) > 0;
-				castor::TextWriter< SubsurfaceScattering >::checkError( result, "SubsurfaceScattering transmittance profile" );
-
 				for ( auto & factor : obj )
 				{
-					result = file.writeText( m_tabs + cuT( "\t\tfactor " ) ) > 0
-						&& Point4f::TextWriter( String() )( factor, file )
-						&& file.writeText( cuT( "\n" ) ) > 0;
-					castor::TextWriter< SubsurfaceScattering >::checkError( result, "SubsurfaceScattering transmittance profile factor" );
+					result = result && write( cuT( "factor" ), factor, file );
 				}
-
-				result = file.writeText( m_tabs + cuT( "\t}\n" ) ) > 0;
 			}
-
-			file.writeText( m_tabs + cuT( "}\n" ) );
 		}
 
 		return result;

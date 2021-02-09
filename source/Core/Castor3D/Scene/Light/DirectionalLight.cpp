@@ -175,33 +175,6 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	DirectionalLight::TextWriter::TextWriter( String const & tabs
-		, DirectionalLight const * category )
-		: LightCategory::TextWriter{ tabs }
-		, m_category{ category }
-	{
-	}
-
-	bool DirectionalLight::TextWriter::operator()( DirectionalLight const & light
-		, TextFile & file )
-	{
-		bool result = LightCategory::TextWriter::operator()( light, file );
-
-		if ( result )
-		{
-			result = file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
-		}
-
-		return result;
-	}
-
-	bool DirectionalLight::TextWriter::writeInto( castor::TextFile & file )
-	{
-		return ( *this )( *m_category, file );
-	}
-
-	//*************************************************************************************************
-
 	DirectionalLight::DirectionalLight( Light & light )
 		: LightCategory{ LightType::eDirectional, light }
 		, m_cascades( light.getScene()->getDirectionalShadowCascades() )

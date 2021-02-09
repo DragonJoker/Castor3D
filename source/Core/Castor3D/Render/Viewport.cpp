@@ -9,54 +9,6 @@ using namespace castor;
 
 namespace castor3d
 {
-	Viewport::TextWriter::TextWriter( String const & tabs )
-		: castor::TextWriter< Viewport >{ tabs }
-	{
-	}
-
-	bool Viewport::TextWriter::operator()( Viewport const & viewport, TextFile & file )
-	{
-		bool result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "viewport\n" ) ) > 0
-						&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
-
-		if ( result )
-		{
-			result = file.writeText( m_tabs + cuT( "\ttype " ) + Viewport::TypeName[size_t( viewport.getType() )] + cuT( "\n" ) ) > 0;
-			castor::TextWriter< Viewport >::checkError( result, "Viewport type" );
-		}
-
-		if ( result )
-		{
-			if ( viewport.getType() == ViewportType::eOrtho || viewport.getType() == ViewportType::eFrustum )
-			{
-				result = file.writeText( m_tabs + cuT( "\tnear " ) + string::toString( viewport.getNear(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0
-					&& file.writeText( m_tabs + cuT( "\tfar " ) + string::toString( viewport.getFar(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0
-					&& file.writeText( m_tabs + cuT( "\tleft " ) + string::toString( viewport.getLeft(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0
-					&& file.writeText( m_tabs + cuT( "\tright " ) + string::toString( viewport.getRight(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0
-					&& file.writeText( m_tabs + cuT( "\ttop " ) + string::toString( viewport.getTop(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0
-					&& file.writeText( m_tabs + cuT( "\tbottom " ) + string::toString( viewport.getBottom(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
-			}
-			else
-			{
-				result = file.writeText( m_tabs + cuT( "\tnear " ) + string::toString( viewport.getNear(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0
-					&& file.writeText( m_tabs + cuT( "\tfar " ) + string::toString( viewport.getFar(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0
-					&& file.writeText( m_tabs + cuT( "\taspect_ratio " ) + string::toString( viewport.getRatio(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0
-					&& file.writeText( m_tabs + cuT( "\tfov_y " ) + string::toString( viewport.getFovY().degrees(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
-			}
-
-			castor::TextWriter< Viewport >::checkError( result, "Viewport values" );
-		}
-
-		if ( result )
-		{
-			result = file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
-		}
-
-		return result;
-	}
-
-	//*************************************************************************************************
-
 	const std::array< String, size_t( ViewportType::eCount ) > Viewport::TypeName
 	{
 		cuT( "ortho" ),

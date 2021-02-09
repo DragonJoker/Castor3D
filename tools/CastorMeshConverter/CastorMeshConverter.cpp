@@ -14,6 +14,8 @@
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Model/Skeleton/Skeleton.hpp>
 #include <Castor3D/Scene/Scene.hpp>
+#include <Castor3D/Text/TextMaterial.hpp>
+#include <Castor3D/Text/TextScene.hpp>
 
 using StringArray = std::vector< std::string >;
 
@@ -221,7 +223,7 @@ bool writeView( ViewType const & view
 			if ( result )
 			{
 				auto elem = view.find( name );
-				result = typename ObjType::TextWriter{ castor::cuEmptyString }( *elem, file );
+				result = castor::TextWriter< ObjType >{ castor::cuEmptyString }( *elem, file );
 			}
 		}
 	}

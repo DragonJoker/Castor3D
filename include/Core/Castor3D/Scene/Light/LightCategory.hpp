@@ -5,6 +5,8 @@ See LICENSE file in root folder
 #define ___C3D_LIGHT_CATEGORY_H___
 
 #include "LightModule.hpp"
+#include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumesModule.hpp"
+#include "Castor3D/Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapGIModule.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Graphics/BoundingBox.hpp>
@@ -13,50 +15,6 @@ namespace castor3d
 {
 	class LightCategory
 	{
-	public:
-		/**
-		\author 	Sylvain DOREMUS
-		\date 		14/02/2010
-		\~english
-		\brief		LightCategory loader
-		\~french
-		\brief		Loader de LightCategory
-		*/
-		class TextWriter
-			: public castor::TextWriter< LightCategory >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Writes a LightCategory into a text file.
-			 *\param[in]	file	The file.
-			 *\~french
-			 *\brief		Ecrit une LightCategory dans un fichier texte.
-			 *\param[in]	file	Le fichier.
-			 */
-			C3D_API virtual bool writeInto( castor::TextFile & file ) = 0;
-
-		protected:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\~french
-			 *\brief		Constructeur
-			 */
-			C3D_API explicit TextWriter( castor::String const & tabs );
-			/**
-			 *\~english
-			 *\brief		Writes a LightCategory into a text file.
-			 *\param[in]	file	The file.
-			 *\param[in]	light	The LightCategory to save.
-			 *\~french
-			 *\brief		Ecrit une LightCategory dans un fichier texte.
-			 *\param[in]	file	Le fichier.
-			 *\param[in]	light	La LightCategory.
-			 */
-			C3D_API bool operator()( LightCategory const & light, castor::TextFile & file )override;
-		};
-
 	private:
 		friend class Light;
 
@@ -90,17 +48,6 @@ namespace castor3d
 		C3D_API virtual void update() = 0;
 		/**
 		 *\~english
-		 *\brief		Creates a LightCategroy specific TextLoader.
-		 *\param[in]	tabs	The current indentation level.
-		 *\return		The TextLoader.
-		 *\~french
-		 *\brief		Crée un TextLoader spécifique à la LightCategory.
-		 *\param[in]	tabs	Le niveau d'intentation actuel.
-		 *\return		Le TextLoader.
-		 */
-		C3D_API virtual std::unique_ptr< TextWriter > createTextWriter( castor::String const & tabs ) = 0;
-		/**
-		 *\~english
 		 *\brief		Puts the light into the given texture.
 		 *\param[out]	buffer	The buffer that receives the light's data.
 		 *\~french
@@ -117,64 +64,53 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline LightType getLightType()const
+		C3D_API uint32_t getVolumetricSteps()const;
+		C3D_API float getVolumetricScatteringFactor()const;
+		C3D_API castor::Point2f const & getShadowRawOffsets()const;
+		C3D_API castor::Point2f const & getShadowPcfOffsets()const;
+		C3D_API castor::Point2f const & getShadowVariance()const;
+		C3D_API Shadow const & getShadowConfig()const;
+		C3D_API RsmConfig const & getRsmConfig()const;
+		C3D_API LpvConfig const & getLpvConfig()const;
+
+		LightType getLightType()const
 		{
 			return m_lightType;
 		}
 
-		inline float getDiffuseIntensity()const
+		float getDiffuseIntensity()const
 		{
 			return m_intensity[0];
 		}
 
-		inline float getSpecularIntensity()const
+		float getSpecularIntensity()const
 		{
 			return m_intensity[1];
 		}
 
-		inline castor::Point2f const & getIntensity()const
+		castor::Point2f const & getIntensity()const
 		{
 			return m_intensity;
 		}
 
-		inline float getFarPlane()const
+		float getFarPlane()const
 		{
 			return m_farPlane;
 		}
 
-		inline uint32_t getVolumetricSteps()const
-		{
-			return m_volumetricSteps;
-		}
-
-		inline float getVolumetricScatteringFactor()const
-		{
-			return m_volumetricScattering;
-		}
-
-		inline castor::Point3f const & getColour()const
+		castor::Point3f const & getColour()const
 		{
 			return m_colour;
 		}
 
-		inline Light const & getLight()const
+		Light const & getLight()const
 		{
 			return m_light;
 		}
 
-		inline castor::BoundingBox const & getBoundingBox()const
+		castor::BoundingBox const & getBoundingBox()const
 		{
 			return m_cubeBox;
-		}
-
-		inline castor::Point4f const & getShadowOffsets()const
-		{
-			return m_shadowOffsets;
-		}
-
-		inline castor::Point2f const & getShadowVariance()const
-		{
-			return m_shadowVariance;
 		}
 		/**@}*/
 		/**
@@ -186,79 +122,48 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		inline Light & getLight()
+		C3D_API void setVolumetricSteps( uint32_t value );
+		C3D_API void setVolumetricScatteringFactor( float value );
+		C3D_API void setRawMinOffset( float value );
+		C3D_API void setRawMaxSlopeOffset( float value );
+		C3D_API void setPcfMinOffset( float value );
+		C3D_API void setPcfMaxSlopeOffset( float value );
+		C3D_API void setVsmMaxVariance( float value );
+		C3D_API void setVsmVarianceBias( float value );
+
+		Light & getLight()
 		{
 			return m_light;
 		}
 
-		inline castor::Point3f & getColour()
+		castor::Point3f & getColour()
 		{
 			return m_colour;
 		}
 
-		inline castor::Point2f & getIntensity()
+		castor::Point2f & getIntensity()
 		{
 			return m_intensity;
 		}
 
-		inline void setColour( castor::Point3f const & value )
+		void setColour( castor::Point3f const & value )
 		{
 			m_colour = value;
 		}
 
-		inline void setIntensity( castor::Point2f const & value )
+		void setIntensity( castor::Point2f const & value )
 		{
 			m_intensity = value;
 		}
 
-		inline void setDiffuseIntensity( float value )
+		void setDiffuseIntensity( float value )
 		{
 			m_intensity[0] = value;
 		}
 
-		inline void setSpecularIntensity( float value )
+		void setSpecularIntensity( float value )
 		{
 			m_intensity[1] = value;
-		}
-
-		inline void setVolumetricSteps( uint32_t value )
-		{
-			m_volumetricSteps = value;
-		}
-
-		inline void setVolumetricScatteringFactor( float value )
-		{
-			m_volumetricScattering = value;
-		}
-
-		inline void setRawMinOffset( float value )
-		{
-			m_shadowOffsets[0] = value;
-		}
-
-		inline void setRawMaxSlopeOffset( float value )
-		{
-			m_shadowOffsets[1] = value;
-		}
-		
-		inline void setPcfMinOffset( float value )
-		{
-			m_shadowOffsets[2] = value;
-		}
-
-		inline void setPcfMaxSlopeOffset( float value )
-		{
-			m_shadowOffsets[3] = value;
-		}
-
-		inline void setVsmMaxVariance( float value )
-		{
-			m_shadowVariance[0] = value;
-		}
-
-		inline void setVsmVarianceBias( float value )
-		{
-			m_shadowVariance[1] = value;
 		}
 		/**@}*/
 
@@ -462,10 +367,6 @@ namespace castor3d
 		Light & m_light;
 		castor::Point3f m_colour{ 1.0, 1.0, 1.0 };
 		castor::Point2f m_intensity{ 1.0, 1.0 };
-		uint32_t m_volumetricSteps{ 0u };
-		float m_volumetricScattering{ 0.2f };
-		castor::Point4f m_shadowOffsets;
-		castor::Point2f m_shadowVariance;
 	};
 }
 

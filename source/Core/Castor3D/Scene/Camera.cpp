@@ -13,43 +13,6 @@ using namespace castor;
 
 namespace castor3d
 {
-	Camera::TextWriter::TextWriter( String const & tabs )
-		: castor::TextWriter< Camera >{ tabs }
-	{
-	}
-
-	bool Camera::TextWriter::operator()( Camera const & camera, TextFile & file )
-	{
-		log::info << m_tabs << cuT( "Writing Camera " ) << camera.getName() << std::endl;
-		bool result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "camera \"" ) + camera.getName() + cuT( "\"\n" ) ) > 0
-						&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
-		castor::TextWriter< Camera >::checkError( result, "Camera name" );
-
-		if ( result )
-		{
-			result = MovableObject::TextWriter{ m_tabs + cuT( "\t" ) }( camera, file );
-		}
-
-		if ( result )
-		{
-			result = Viewport::TextWriter( m_tabs + cuT( "\t" ) )( camera.getViewport(), file );
-		}
-
-		if ( result )
-		{
-			result = HdrConfig::TextWriter( m_tabs + cuT( "\t" ) )( camera.getHdrConfig(), file );
-		}
-
-		if ( result )
-		{
-			result = file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
-		}
-
-		return result;
-	}
-
-	//*************************************************************************************************
-
 	Camera::Camera( String const & name
 		, Scene & scene
 		, SceneNode & node
