@@ -65,7 +65,7 @@ namespace castor3d
 	{
 		if ( !hasAnimation( name ) )
 		{
-			doAddAnimation( std::make_unique< SkeletonAnimation >( *this, name ) );
+			addAnimation( std::make_unique< SkeletonAnimation >( *this, name ) );
 		}
 
 		return doGetAnimation< SkeletonAnimation >( name );

@@ -11,7 +11,6 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Texture/TextureModule.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBufferModule.hpp"
 
-#include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Design/FlagCombination.hpp>
 #include <CastorUtils/Design/Signal.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
@@ -21,41 +20,6 @@ namespace castor3d
 	class Pass
 		: public castor::OwnedBy< Material >
 	{
-	public:
-		/**
-		\author Sylvain DOREMUS
-		\version 0.6.1.0
-		\date 19/10/2011
-		\~english
-		\brief Pass loader.
-		\~french
-		\brief Loader de Pass.
-		*/
-		class TextWriter
-			: public castor::TextWriter< Pass >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor.
-			 *\~french
-			 *\brief		Constructeur.
-			 */
-			C3D_API explicit TextWriter( castor::String const & tabs );
-			/**
-			 *\~english
-			 *\brief			Writes a Pass into a text file.
-			 *\param[in]		pass	The Pass to write.
-			 *\param[in,out]	file	The file where to write the Pass.
-			 *\~french
-			 *\brief			Ecrit une Pass dans un fichier texte.
-			 *\param[in]		pass	La Pass à écrire.
-			 *\param[in,out]	file	Le file où écrire la Pass.
-			 */
-			C3D_API bool operator()( Pass const & pass
-				, castor::TextFile & file )override;
-		};
-
 	protected:
 		/**
 		 *\~english

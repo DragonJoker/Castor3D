@@ -79,13 +79,13 @@ namespace castor3d
 						&& file.getFileName().find( meshName ) == 0u )
 					{
 						auto animName = cleanName( file.getFileName().substr( meshName.size() ) );
-						auto & animation = skeleton->createAnimation( animName );
+						auto animation = std::make_unique< SkeletonAnimation >( *skeleton, animName );
 						BinaryFile animFile{ file, File::OpenMode::eRead };
-						result = BinaryParser< SkeletonAnimation >{}.parse( animation, animFile );
+						result = BinaryParser< SkeletonAnimation >{}.parse( *animation, animFile );
 
-						if ( !result )
+						if ( result )
 						{
-							skeleton->removeAnimation( animation.getName() );
+							skeleton->addAnimation( std::move( animation ) );
 						}
 					}
 				}
@@ -95,13 +95,13 @@ namespace castor3d
 				&& file.getFileName().find( meshName ) == 0u )
 			{
 				auto animName = cleanName( file.getFileName().substr( meshName.size() ) );
-				auto & animation = mesh.createAnimation( animName );
+				auto animation = std::make_unique< MeshAnimation >( mesh, animName );
 				BinaryFile animFile{ file, File::OpenMode::eRead };
-				result = BinaryParser< MeshAnimation >{}.parse( animation, animFile );
+				result = BinaryParser< MeshAnimation >{}.parse( *animation, animFile );
 
-				if ( !result )
+				if ( result )
 				{
-					mesh.removeAnimation( animation.getName() );
+					mesh.addAnimation( std::move( animation ) );
 				}
 			}
 		}

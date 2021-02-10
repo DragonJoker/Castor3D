@@ -16,7 +16,7 @@ namespace castor3d
 
 	bool BinaryWriter< SkeletonAnimation >::doWrite( SkeletonAnimation const & obj )
 	{
-		bool result = true;
+		bool result = doWriteChunk( obj.getName(), ChunkType::eName, m_chunk );
 
 		for ( auto moving : obj.m_arrayMoving )
 		{
@@ -62,6 +62,17 @@ namespace castor3d
 		{
 			switch ( chunk.getChunkType() )
 			{
+			case ChunkType::eName:
+				result = doParseChunk( name, chunk );
+				checkError( result, "Couldn't parse name." );
+
+				if ( result )
+				{
+					obj.m_name = name;
+				}
+
+				break;
+
 			case ChunkType::eSkeletonAnimationNode:
 				node = std::make_shared< SkeletonAnimationNode >( obj );
 				result = createBinaryParser< SkeletonAnimationNode >().parse( *node, chunk );

@@ -20,42 +20,6 @@ namespace castor3d
 	{
 	public:
 		/**
-		\author Sylvain DOREMUS
-		\version 0.6.1.0
-		\date 19/10/2011
-		\~english
-		\brief Material loader
-		\remark
-		\~french
-		\brief Loader de Material
-		*/
-		class TextWriter
-			: public castor::TextWriter< Material >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\~french
-			 *\brief		Constructeur
-			 */
-			C3D_API explicit TextWriter( castor::String const & tabs );
-			/**
-			 *\~english
-			 *\brief			Writes a material into a text file
-			 *\param[in]		material	The material to save
-			 *\param[in,out]	file		The file where to save the material
-			 *\~french
-			 *\brief			Ecrit un matériau dans un fichier texte
-			 *\param[in]		material	Le matériau
-			 *\param[in,out]	file		Le fichier
-			 */
-			C3D_API bool operator()( Material const & material
-				, castor::TextFile & file )override;
-		};
-
-	public:
-		/**
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	name	The material name.

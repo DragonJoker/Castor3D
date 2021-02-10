@@ -26,49 +26,6 @@ namespace castor3d
 		}
 	}
 
-	SpotLight::TextWriter::TextWriter( String const & p_tabs, SpotLight const * p_category )
-		: LightCategory::TextWriter{ p_tabs }
-		, m_category{ p_category }
-	{
-	}
-
-	bool SpotLight::TextWriter::operator()( SpotLight const & p_light, TextFile & p_file )
-	{
-		bool result = LightCategory::TextWriter::operator()( p_light, p_file );
-
-		if ( result )
-		{
-			result = p_file.print( 256, cuT( "%s\tattenuation " ), m_tabs.c_str() ) > 0
-					   && Point3f::TextWriter( String() )( p_light.getAttenuation(), p_file )
-					   && p_file.writeText( cuT( "\n" ) ) > 0;
-			LightCategory::TextWriter::checkError( result, "SpotLight attenuation" );
-		}
-
-		if ( result )
-		{
-			result = p_file.print( 256, cuT( "%s\texponent %f\n" ), m_tabs.c_str(), p_light.getExponent() ) > 0;
-			LightCategory::TextWriter::checkError( result, "SpotLight exponent" );
-		}
-
-		if ( result )
-		{
-			result = p_file.print( 256, cuT( "%s\tcut_off %f\n" ), m_tabs.c_str(), p_light.getCutOff().degrees() ) > 0;
-			LightCategory::TextWriter::checkError( result, "SpotLight cutoff" );
-		}
-
-		if ( result )
-		{
-			result = p_file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
-		}
-
-		return result;
-	}
-
-	bool SpotLight::TextWriter::writeInto( castor::TextFile & p_file )
-	{
-		return ( *this )( *m_category, p_file );
-	}
-
 	//*************************************************************************************************
 
 	SpotLight::SpotLight( Light & p_light )

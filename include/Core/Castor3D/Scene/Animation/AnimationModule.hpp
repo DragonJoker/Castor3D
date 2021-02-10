@@ -80,6 +80,7 @@ namespace castor3d
 
 	struct GroupAnimation
 	{
+		castor::String name;
 		AnimationState state{};
 		bool looped{};
 		float scale{};

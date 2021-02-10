@@ -22,41 +22,6 @@ namespace castor3d
 	{
 	public:
 		/**
-		\author		Sylvain DOREMUS
-		\version	0.6.1.0
-		\date		19/10/2011
-		\~english
-		\brief		AnimatedObjectGroup loader
-		\~french
-		\brief		Loader d'AnimatedObjectGroup
-		*/
-		class TextWriter
-			: public castor::TextWriter< AnimatedObjectGroup >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\~french
-			 *\brief		Constructeur
-			 */
-			C3D_API explicit TextWriter( castor::String const & tabs );
-			/**
-			 *\~english
-			 *\brief		Writes an animated object group into a text file
-			 *\param[in]	file	The file to save the animated object group in
-			 *\param[in]	group	The animated object group to save
-			 *\~french
-			 *\brief		Ecrit un AnimatedObjectGroup dans un fichie texte
-			 *\param[in]	file	Le fichier où écrire le AnimatedObjectGroup
-			 *\param[in]	group	Le AnimatedObjectGroup à écrire
-			 */
-			C3D_API virtual bool operator()( AnimatedObjectGroup const & group
-				, castor::TextFile & file )override;
-		};
-
-	public:
-		/**
 		 *\~english
 		 *\brief		Specified constructor
 		 *\param[in]	name	The group name

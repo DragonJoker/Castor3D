@@ -29,50 +29,6 @@ namespace castor3d
 			castor::Point2f texture;
 		};
 		CU_DeclareVector( Vertex, Vertex );
-		/**
-		\author 	Sylvain DOREMUS
-		\date 		14/02/2010
-		\~english
-		\brief		TextOverlay loader
-		\remark		Loads and saves overlays from/into a file
-		\~french
-		\brief		TextOverlay loader
-		\remark		Charge et enregistre les incrustations dans des fichiers
-		*/
-		class TextWriter
-			: public OverlayCategory::TextWriter
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\~french
-			 *\brief		Constructeur
-			 */
-			C3D_API explicit TextWriter( castor::String const & tabs
-				, TextOverlay const * category = nullptr );
-			/**
-			 *\~english
-			 *\brief		Saves an overlay into a text file
-			 *\param[in]	file		the file to save the overlay in
-			 *\param[in]	overlay	the overlay to save
-			 *\return		\p true if everything is OK
-			 *\~french
-			 *\brief		Sauvegarde l'incrustation donnée dans un fichier texte
-			 *\param[in]	file		Le fichier où enregistrer l'incrustation
-			 *\param[in]	overlay	L'incrustation à enregistrer
-			 *\return		\p true si tout s'est bien passé
-			 */
-			C3D_API bool operator()( TextOverlay const & overlay
-				, castor::TextFile & file );
-			/**
-			 *\copydoc		castor3d::OverlayCategory::TextWriter::writeInto
-			 */
-			C3D_API bool writeInto( castor::TextFile & file )override;
-
-		private:
-			TextOverlay const * m_category;
-		};
 
 	public:
 		CU_DeclareMap( char32_t, castor::Position, GlyphPosition );
@@ -105,13 +61,6 @@ namespace castor3d
 		 *\copydoc	castor3d::OverlayCategory::accept
 		 */
 		C3D_API void accept( OverlayVisitor & visitor )const override;
-		/**
-		 *\copydoc		castor3d::OverlayCategory::createTextWriter
-		 */
-		C3D_API std::unique_ptr < OverlayCategory::TextWriter > createTextWriter( castor::String const & tabs )override
-		{
-			return std::make_unique< TextWriter >( tabs, this );
-		}
 		/**
 		 *\~english
 		 *\brief		Sets the text font

@@ -9,57 +9,6 @@ using namespace castor;
 
 namespace castor3d
 {
-	Material::TextWriter::TextWriter( String const & tabs )
-		: castor::TextWriter< Material >{ tabs }
-	{
-	}
-
-	bool Material::TextWriter::operator()( Material const & material, TextFile & file )
-	{
-		log::info << m_tabs + cuT( "Writing Material " ) << material.getName() << std::endl;
-		bool result = beginBlock( cuT( "material \"" ) + material.getName() + cuT( "\"" ), file );
-
-		if ( result )
-		{
-			switch ( material.getType() )
-			{
-			case MaterialType::ePhong:
-				for ( auto pass : material )
-				{
-					result = result && PhongPass::TextWriter( tabs() )( *std::static_pointer_cast< PhongPass >( pass ), file );
-				}
-				break;
-
-			case MaterialType::eMetallicRoughness:
-				for ( auto pass : material )
-				{
-					result = result && MetallicRoughnessPbrPass::TextWriter( tabs() )( *std::static_pointer_cast< MetallicRoughnessPbrPass >( pass ), file );
-				}
-				break;
-
-			case MaterialType::eSpecularGlossiness:
-				for ( auto pass : material )
-				{
-					result = result && SpecularGlossinessPbrPass::TextWriter( tabs() )( *std::static_pointer_cast< SpecularGlossinessPbrPass >( pass ), file );
-				}
-				break;
-
-			default:
-				CU_Failure( cuT( "Unsupported pass type" ) );
-				break;
-			}
-		}
-
-		if ( result )
-		{
-			result = endBlock( file );
-		}
-
-		return result;
-	}
-
-	//*********************************************************************************************
-
 	const castor::String Material::DefaultMaterialName = cuT( "DefaultMaterial" );
 
 	Material::Material( String const & name

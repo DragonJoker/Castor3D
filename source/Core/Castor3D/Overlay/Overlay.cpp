@@ -12,20 +12,6 @@ using namespace castor;
 
 namespace castor3d
 {
-	//*************************************************************************************************
-
-	Overlay::TextWriter::TextWriter( String const & tabs )
-		: castor::TextWriter< Overlay >{ tabs }
-	{
-	}
-
-	bool Overlay::TextWriter::operator()( Overlay const & overlay, TextFile & file )
-	{
-		return overlay.m_category->createTextWriter( m_tabs )->writeInto( file );
-	}
-
-	//*************************************************************************************************
-
 	Overlay::Overlay( Engine & engine, OverlayType type )
 		: OwnedBy< Engine >( engine )
 		, m_parent()

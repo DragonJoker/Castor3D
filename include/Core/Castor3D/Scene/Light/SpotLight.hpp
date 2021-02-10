@@ -15,46 +15,6 @@ namespace castor3d
 	class SpotLight
 		: public LightCategory
 	{
-	public:
-		/**
-		\author 	Sylvain DOREMUS
-		\date 		14/02/2010
-		\~english
-		\brief		SpotLight loader
-		\~french
-		\brief		Loader de SpotLight
-		*/
-		class TextWriter
-			: public LightCategory::TextWriter
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\~french
-			 *\brief		Constructeur
-			 */
-			C3D_API explicit TextWriter( castor::String const & tabs, SpotLight const * category = nullptr );
-			/**
-			 *\~english
-			 *\brief		Writes a light into a text file
-			 *\param[in]	file	The file to save the cameras in
-			 *\param[in]	light	The light to save
-			 *\~french
-			 *\brief		Ecrit une lumière dans un fichier texte
-			 *\param[in]	file	Le fichier
-			 *\param[in]	light	La lumière
-			 */
-			C3D_API bool operator()( SpotLight const & light, castor::TextFile & file );
-			/**
-			 *\copydoc		castor3d::LightCategory::TextWriter::writeInto
-			 */
-			C3D_API bool writeInto( castor::TextFile & file )override;
-
-		private:
-			SpotLight const * m_category;
-		};
-
 	private:
 		friend class Scene;
 
@@ -109,13 +69,6 @@ namespace castor3d
 		 */
 		C3D_API void updateShadow( Camera & lightCamera
 			, int32_t index );
-		/**
-		 *\copydoc		castor3d::LightCategory::createTextWriter
-		 */
-		C3D_API std::unique_ptr < LightCategory::TextWriter > createTextWriter( castor::String const & tabs )override
-		{
-			return std::make_unique< TextWriter >( tabs, this );
-		}
 		/**
 		 *\~english
 		 *\name Mutators.

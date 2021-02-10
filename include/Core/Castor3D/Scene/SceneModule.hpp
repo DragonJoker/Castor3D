@@ -328,7 +328,7 @@ namespace castor3d
 	*\brief
 	*	Classe de configuration des ombres.
 	*/
-	class Shadow;
+	struct ShadowConfig;
 
 	CU_DeclareSmartPtr( BillboardBase );
 	CU_DeclareSmartPtr( BillboardList );

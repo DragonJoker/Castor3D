@@ -22,13 +22,9 @@ namespace castor3d
 
 	void BackgroundTextWriter::visit( SkyboxBackground & background )
 	{
-		SkyboxBackground::TextWriter writer{ m_tabs };
-		writer( background, m_file );
 	}
 
 	void BackgroundTextWriter::visit( ImageBackground & background )
 	{
-		ImageBackground::TextWriter writer{ m_tabs };
-		writer( background, m_file );
 	}
 }

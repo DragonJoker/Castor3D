@@ -7,18 +7,6 @@ using namespace castor;
 
 namespace castor3d
 {
-	MovableObject::TextWriter::TextWriter( String const & p_tabs )
-		: castor::TextWriter< MovableObject >{ p_tabs }
-	{
-	}
-
-	bool MovableObject::TextWriter::operator()( MovableObject const & p_object, TextFile & p_file )
-	{
-		return p_file.writeText( m_tabs + cuT( "parent \"" ) + p_object.getParent()->getName() + cuT( "\"\n" ) ) > 0;
-	}
-
-	//*************************************************************************************************
-
 	MovableObject::MovableObject( String const & name
 		, Scene & scene
 		, MovableType type

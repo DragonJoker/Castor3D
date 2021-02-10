@@ -6,36 +6,22 @@ See LICENSE file in root folder
 
 #include "SceneModule.hpp"
 
+#include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LpvConfig.hpp"
+#include "Castor3D/Render/Technique/Opaque/ReflectiveShadowMapGI/RsmConfig.hpp"
+
 namespace castor3d
 {
-	class Shadow
+	struct ShadowConfig
 	{
-	public:
-		/**
-		 *\~english
-		 *\return		The fog's density.
-		 *\~french
-		 *\return		La densité du brouillard.
-		 */
-		inline ShadowType getFilterType()const
-		{
-			return m_filterType;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the fog type.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit le type de brouillard.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		inline void setFilterType( ShadowType value )
-		{
-			m_filterType = value;
-		}
-
-	private:
-		ShadowType m_filterType{ ShadowType::ePCF };
+		ShadowType filterType{ ShadowType::eNone };
+		GlobalIlluminationType globalIllumination{ GlobalIlluminationType::eNone };
+		uint32_t volumetricSteps{ 0u };
+		float volumetricScattering{ 0.2f };
+		castor::Point2f rawOffsets;
+		castor::Point2f pcfOffsets;
+		castor::Point2f variance;
+		RsmConfig rsmConfig;
+		LpvConfig lpvConfig;
 	};
 }
 

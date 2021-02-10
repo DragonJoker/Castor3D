@@ -341,12 +341,12 @@ namespace motion_blur
 
 		if ( result && m_configuration.vectorDivider != ref.vectorDivider )
 		{
-			result = file.writeText( tabs + cuT( "\tvectorDivider " ) + castor::string::toString( m_configuration.vectorDivider, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+			result = file.writeText( tabs + cuT( "\tvectorDivider " ) + castor::string::toString( m_configuration.vectorDivider ) + cuT( "\n" ) ) > 0;
 		}
 
 		if ( result && m_configuration.samplesCount != ref.samplesCount )
 		{
-			result = file.writeText( tabs + cuT( "\tsamples " ) + castor::string::toString( m_configuration.samplesCount, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+			result = file.writeText( tabs + cuT( "\tsamples " ) + castor::string::toString( m_configuration.samplesCount ) + cuT( "\n" ) ) > 0;
 		}
 
 		if ( result && !m_fpsScale )

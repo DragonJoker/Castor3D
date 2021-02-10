@@ -12,64 +12,6 @@ namespace castor3d
 {
 	//*************************************************************************************************
 
-	BillboardList::TextWriter::TextWriter( String const & tabs )
-		: MovableObject::TextWriter{ tabs }
-	{
-	}
-
-	bool BillboardList::TextWriter::operator()( BillboardList const & obj, castor::TextFile & file )
-	{
-		bool result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "billboard \"" ) + obj.getName() + cuT( "\"\n" ) ) > 0
-						&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
-		MovableObject::TextWriter::checkError( result, "BillboardList name" );
-
-		if ( result )
-		{
-			result = MovableObject::TextWriter{ m_tabs + cuT( "\t" ) }( obj, file );
-		}
-
-		if ( result )
-		{
-			result = file.writeText( m_tabs + cuT( "\tmaterial \"" ) + obj.getMaterial()->getName() + cuT( "\"\n" ) ) > 0;
-			MovableObject::TextWriter::checkError( result, "BillboardList material" );
-		}
-
-		if ( result )
-		{
-			result = file.writeText( m_tabs + cuT( "\tdimensions " )
-				+ string::toString( obj.getDimensions()[0], std::locale{ "C" } ) + cuT( " " )
-				+ string::toString( obj.getDimensions()[1], std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
-			MovableObject::TextWriter::checkError( result, "BillboardList dimensions" );
-		}
-
-		if ( result && obj.getCount() )
-		{
-			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "\tpositions\n" ) ) > 0
-					   && file.writeText( m_tabs + cuT( "\t{\n" ) ) > 0;
-			MovableObject::TextWriter::checkError( result, "BillboardList positions" );
-
-			for ( auto const & point : obj )
-			{
-				result = file.writeText( m_tabs + cuT( "\t\tpos " )
-					+ string::toString( point[0], std::locale{ "C" } ) + cuT( " " )
-					+ string::toString( point[1], std::locale{ "C" } ) + cuT( " " )
-					+ string::toString( point[2], std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
-				MovableObject::TextWriter::checkError( result, "BillboardList position" );
-			}
-
-			result = result && ( file.writeText( m_tabs + cuT( "\t}\n" ) ) > 0 );
-		}
-
-		if ( result )
-		{
-			result = file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
-		}
-
-		return result;
-	}
-
-	//*************************************************************************************************
-
 	BillboardBase::BillboardBase( Scene & scene
 		, SceneNode * node
 		, ashes::PipelineVertexInputStateCreateInfoPtr vertexLayout

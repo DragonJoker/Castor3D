@@ -21,7 +21,7 @@ namespace castor3d
 
 	bool BinaryWriter< Mesh >::doWrite( Mesh const & obj )
 	{
-		bool result = doWriteChunk( obj.getName(), ChunkType::eName, m_chunk );
+		bool result = true;
 
 		for ( auto submesh : obj )
 		{
@@ -48,17 +48,6 @@ namespace castor3d
 		{
 			switch ( chunk.getChunkType() )
 			{
-			case ChunkType::eName:
-				result = doParseChunk( name, chunk );
-				checkError( result, "Couldn't parse name." );
-
-				if ( result )
-				{
-					obj.m_name = name;
-				}
-
-				break;
-
 			case ChunkType::eSubmesh:
 				submesh = std::make_shared< Submesh >( obj, obj.getSubmeshCount() );
 				result = createBinaryParser< Submesh >().parse( *submesh, chunk );
@@ -106,6 +95,30 @@ namespace castor3d
 					obj.setSkeleton( skeleton );
 				}
 
+				break;
+
+			default:
+				break;
+			}
+		}
+
+		return result;
+	}
+
+	bool BinaryParser< Mesh >::doParse_v1_4( Mesh & obj )
+	{
+		bool result = true;
+		castor::String name;
+		BinaryChunk chunk;
+
+		while ( result && doGetSubChunk( chunk ) )
+		{
+			switch ( chunk.getChunkType() )
+			{
+			case ChunkType::eName:
+				// Name is parsed then ignored, since it's now set by the scene file
+				result = doParseChunk( name, chunk );
+				checkError( result, "Couldn't parse name." );
 				break;
 
 			default:

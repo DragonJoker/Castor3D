@@ -10,39 +10,6 @@ using namespace castor;
 
 namespace castor3d
 {
-	PanelOverlay::TextWriter::TextWriter( String const & tabs, PanelOverlay const * category )
-		: OverlayCategory::TextWriter{ tabs }
-		, m_category{ category }
-	{
-	}
-
-	bool PanelOverlay::TextWriter::operator()( PanelOverlay const & overlay, TextFile & file )
-	{
-		log::info << m_tabs << cuT( "Writing PanelOverlay " ) << overlay.getOverlayName() << std::endl;
-		bool result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "panel_overlay \"" ) + overlay.getOverlay().getName() + cuT( "\"\n" ) ) > 0
-						&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
-		OverlayCategory::TextWriter::checkError( result, "PanelOverlay name" );
-
-		if ( result )
-		{
-			result = OverlayCategory::TextWriter{ m_tabs }( overlay, file );
-		}
-
-		if ( result )
-		{
-			result = file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
-		}
-
-		return result;
-	}
-
-	bool PanelOverlay::TextWriter::writeInto( castor::TextFile & file )
-	{
-		return ( *this )( *m_category, file );
-	}
-
-	//*************************************************************************************************
-
 	PanelOverlay::PanelOverlay()
 		: OverlayCategory( OverlayType::ePanel )
 	{

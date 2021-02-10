@@ -24,48 +24,6 @@ namespace castor3d
 		/**
 		*\~english
 		*\brief
-		*	Skybox loader.
-		*\~english
-		*\brief
-		*	Loader de Skybox.
-		*/
-		class TextWriter
-			: public castor::TextWriter< SkyboxBackground >
-		{
-		public:
-			/**
-			*\~english
-			*\brief
-			*	Constructor.
-			*\~french
-			*\brief
-			*	Constructeur.
-			*/
-			C3D_API explicit TextWriter( castor::String const & tabs );
-			/**
-			*\~english
-			*\brief
-			*	Writes a Skybox into a text file.
-			*\param[in] obj
-			*	The Skybox to save.
-			*\param[in] file
-			*	The file to write the Skybox in.
-			*\~french
-			*\brief
-			*	Ecrit une Skybox dans un fichier texte.
-			*\param[in] obj
-			*	La Skybox.
-			*\param[in] file
-			*	Le fichier.
-			*/
-			C3D_API bool operator()( SkyboxBackground const & obj
-				, castor::TextFile & file )override;
-		};
-
-	public:
-		/**
-		*\~english
-		*\brief
 		*	Constructor.
 		*\param[in] engine
 		*	The engine.

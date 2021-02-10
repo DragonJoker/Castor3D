@@ -11,7 +11,6 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/MovableObject.hpp"
 #include "Castor3D/Scene/RenderedObject.hpp"
 
-#include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Graphics/BoundingBox.hpp>
 #include <CastorUtils/Graphics/BoundingSphere.hpp>
 
@@ -21,40 +20,6 @@ namespace castor3d
 		: public MovableObject
 		, public RenderedObject
 	{
-	public:
-		/**
-		\author		Sylvain DOREMUS
-		\version	0.6.1.0
-		\date		19/10/2011
-		\~english
-		\brief		Geometry loader
-		\~french
-		\brief		Loader de Geometry
-		*/
-		class TextWriter
-			: public castor::TextWriter< Geometry >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\~french
-			 *\brief		Constructeur
-			 */
-			C3D_API explicit TextWriter( castor::String const & tabs );
-			/**
-			 *\~english
-			 *\brief		Writes a geometry into a text file
-			 *\param[in]	file		The file to save the cameras in
-			 *\param[in]	geometry	The geometry to save
-			 *\~french
-			 *\brief		Ecrit une géométrie dans un fichier texte
-			 *\param[in]	file		Le fichier
-			 *\param[in]	geometry	La géométrie
-			 */
-			C3D_API bool operator()( Geometry const & geometry, castor::TextFile & file )override;
-		};
-
 	public:
 		/**
 		 *\~english

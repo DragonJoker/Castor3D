@@ -11,53 +11,6 @@ using namespace castor;
 
 namespace castor3d
 {
-	BorderPanelOverlay::TextWriter::TextWriter( String const & tabs, BorderPanelOverlay const * category )
-		: OverlayCategory::TextWriter{ tabs }
-		, m_category{ category }
-	{
-	}
-
-	bool BorderPanelOverlay::TextWriter::operator()( BorderPanelOverlay const & overlay, TextFile & file )
-	{
-		log::info << m_tabs << cuT( "Writing BorderPanelOverlay " ) << overlay.getOverlayName() << std::endl;
-		bool result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "border_panel_overlay \"" ) + overlay.getOverlay().getName() + cuT( "\"\n" ) ) > 0
-						&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
-		OverlayCategory::TextWriter::checkError( result, "BorderPanelOverlay name" );
-
-		if ( result )
-		{
-			result = file.writeText( m_tabs + cuT( "\tborder_size " ) ) > 0
-					   && Point4d::TextWriter{ String{} }( overlay.getBorderSize(), file )
-					   && file.writeText( cuT( "\n" ) ) > 0;
-			OverlayCategory::TextWriter::checkError( result, "BorderPanelOverlay borders size" );
-		}
-
-		if ( result && overlay.getBorderMaterial() )
-		{
-			result = file.writeText( m_tabs + cuT( "\tborder_material \"" ) + overlay.getBorderMaterial()->getName() + cuT( "\"\n" ) ) > 0;
-			OverlayCategory::TextWriter::checkError( result, "BorderPanelOverlay borders material" );
-		}
-
-		if ( result )
-		{
-			result = OverlayCategory::TextWriter{ m_tabs }( overlay, file );
-		}
-
-		if ( result )
-		{
-			result = file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
-		}
-
-		return result;
-	}
-
-	bool BorderPanelOverlay::TextWriter::writeInto( castor::TextFile & file )
-	{
-		return ( *this )( *m_category, file );
-	}
-
-	//*************************************************************************************************
-
 	BorderPanelOverlay::BorderPanelOverlay()
 		: OverlayCategory( OverlayType::eBorderPanel )
 		, m_borderOuterUv( 0, 0, 1, 1 )

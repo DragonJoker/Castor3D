@@ -161,39 +161,6 @@ namespace castor3d
 		}
 	}
 
-	RenderWindow::TextWriter::TextWriter( castor::String const & tabs )
-		: castor::TextWriter< RenderWindow >{ tabs }
-	{
-	}
-
-	bool RenderWindow::TextWriter::operator()( RenderWindow const & window, castor::TextFile & file )
-	{
-		log::info << m_tabs << cuT( "Writing Window " ) << window.getName() << std::endl;
-		bool result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "window \"" ) + window.getName() + cuT( "\"\n" ) ) > 0
-						&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
-		castor::TextWriter< RenderWindow >::checkError( result, "RenderWindow name" );
-
-		if ( result )
-		{
-			result = file.print( 256, cuT( "%s\tvsync %s\n" ), m_tabs.c_str(), window.isVSyncEnabled() ? cuT( "true" ) : cuT( "false" ) ) > 0;
-			castor::TextWriter< RenderWindow >::checkError( result, "RenderWindow vsync" );
-		}
-
-		if ( result )
-		{
-			result = file.print( 256, cuT( "%s\tfullscreen %s\n" ), m_tabs.c_str(), window.isFullscreen() ? cuT( "true" ) : cuT( "false" ) ) > 0;
-			castor::TextWriter< RenderWindow >::checkError( result, "RenderWindow fullscreen" );
-		}
-
-		if ( result && window.getRenderTarget() )
-		{
-			result = RenderTarget::TextWriter( m_tabs + cuT( "\t" ) )( *window.getRenderTarget(), file );
-		}
-
-		file.writeText( m_tabs + cuT( "}\n" ) );
-		return result;
-	}
-
 	//*************************************************************************************************
 
 	uint32_t RenderWindow::s_nbRenderWindows = 0;

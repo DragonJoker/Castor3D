@@ -75,8 +75,15 @@ namespace castor
 	\~french
 	\brief		Spécialisation partielle de castor::Writer, pour les fichiers texte
 	*/
+	class TextWriterBase;
+	/**
+	\~english
+	\brief		Partial castor::Writer specialisation for text files
+	\~french
+	\brief		Spécialisation partielle de castor::Writer, pour les fichiers texte
+	*/
 	template< class T >
-	class TextWriter;
+	class TextWriterT;
 	/**
 	\~english
 	\brief		Main resource writer class.
@@ -93,14 +100,6 @@ namespace castor
 	*/
 	template< class T >
 	class BinaryLoader;
-	/**
-	\~english
-	\brief		Partial castor::Loader specialisation for text files
-	\~french
-	\brief		Spécialisation partielle de castor::Loader, pour les fichiers texte
-	*/
-	template< class T >
-	class TextLoader;
 	/**
 	\~english
 	\brief		Main resource loader class.

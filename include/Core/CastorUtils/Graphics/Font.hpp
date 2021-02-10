@@ -19,37 +19,6 @@ namespace castor
 	public:
 		/**
 		\author		Sylvain DOREMUS
-		\date		14/02/2010
-		\~english
-		\brief		Font text loader
-		\~french
-		\brief		Loader de Font à partir d'un texte
-		*/
-		class TextWriter
-			: public castor::TextWriter< Font >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\~french
-			 *\brief		Constructeur
-			 */
-			CU_API explicit TextWriter( String const & tabs );
-			/**
-			 *\~english
-			 *\brief			Writes a Font into a text file
-			 *\param[in]		object	The Font to write
-			 *\param[in,out]	file	The file into which Font is written
-			 *\~french
-			 *\brief			Ecrit une Font dans un fichier texte
-			 *\param[in]		object	La Font à écrire
-			 *\param[in,out]	file	Le fichier dans lequel on écrit la Font
-			 */
-			CU_API bool operator()( Font const & object, TextFile & file )override;
-		};
-		/**
-		\author		Sylvain DOREMUS
 		\version	0.6.1.0
 		\date		03/01/2011
 		\~english

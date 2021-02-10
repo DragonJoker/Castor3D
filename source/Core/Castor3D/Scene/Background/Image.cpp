@@ -57,23 +57,6 @@ namespace castor3d
 			};
 		}
 	}
-	
-	//************************************************************************************************
-
-	ImageBackground::TextWriter::TextWriter( String const & tabs )
-		: castor::TextWriter< ImageBackground >{ tabs }
-	{
-	}
-
-	bool ImageBackground::TextWriter::operator()( ImageBackground const & obj, TextFile & file )
-	{
-		castor::Path relative = Scene::TextWriter::copyFile( castor::Path{ obj.getTexture().getDefaultView().toString() }
-			, file.getFilePath()
-			, castor::Path{ cuT( "Textures" ) } );
-		auto result = file.writeText( m_tabs + cuT( "background_image \"" ) + relative + cuT( "\"\n" ) ) > 0;
-		checkError( result, "Background image" );
-		return result;
-	}
 
 	//************************************************************************************************
 

@@ -8,64 +8,6 @@ namespace castor
 	//*************************************************************************************************
 
 	template< typename T, uint32_t Count >
-	Coords< T, Count >::TextLoader::TextLoader()
-		: castor::TextLoader< Coords< T, Count > >()
-	{
-	}
-
-	template< typename T, uint32_t Count >
-	bool Coords< T, Count >::TextLoader::operator()( Coords< T, Count > & object, TextFile & file )
-	{
-		String strWord;
-
-		for ( uint32_t i = 0; i < Count; ++i )
-		{
-			if ( file.readLine( strWord, 1024, cuT( " \r\n;\t" ) ) > 0 )
-			{
-				StringStream streamWord( strWord );
-				streamWord >> object[i];
-			}
-
-			xchar cDump;
-			file.readChar( cDump );
-		}
-
-		return true;
-	}
-
-	//*************************************************************************************************
-
-	template< typename T, uint32_t Count >
-	Coords< T, Count >::TextWriter::TextWriter( String const & tabs )
-		: castor::TextWriter< Coords< T, Count > >( tabs )
-	{
-	}
-
-	template< typename T, uint32_t Count >
-	bool Coords< T, Count >::TextWriter::operator()( Coords< T, Count > const & object, TextFile & file )
-	{
-		StringStream streamWord{ makeStringStream() };
-		streamWord.setf( std::ios::boolalpha );
-		streamWord.setf( std::ios::showpoint );
-
-		for ( uint32_t i = 0; i < Count; ++i )
-		{
-			if ( !streamWord.str().empty() )
-			{
-				streamWord << cuT( " " );
-			}
-
-			streamWord << object[i];
-		}
-
-		bool result = file.print( 1024, cuT( "%s%s" ), this->m_tabs.c_str(), streamWord.str().c_str() ) > 0;
-		castor::TextWriter< Coords< T, Count > >::checkError( result, "Coords value" );
-		return result;
-	}
-
-	//*************************************************************************************************
-
-	template< typename T, uint32_t Count >
 	Coords< T, Count >::Coords()
 		: m_coords( nullptr )
 	{

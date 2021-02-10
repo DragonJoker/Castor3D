@@ -22,43 +22,6 @@ namespace castor3d
 		: public AnimableT< Engine >
 	{
 	public:
-		/**
-		\author		Sylvain DOREMUS
-		\date		14/02/2010
-		\~english
-		\brief		TextureUnit loader.
-		\~french
-		\brief		Loader de TextureUnit.
-		*/
-		class TextWriter
-			: public castor::TextWriter< TextureUnit >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor.
-			 *\~french
-			 *\brief		Constructeur.
-			 */
-			C3D_API explicit TextWriter( castor::String const & tabs
-				, MaterialType type );
-			/**
-			 *\~english
-			 *\brief		Writes a TextureUnit into a text file.
-			 *\param[in]	file	The file.
-			 *\param[in]	unit	The TextureUnit.
-			 *\~french
-			 *\brief		Ecrit une TextureUnit dans un fichier texte.
-			 *\param[in]	file	Le fichier.
-			 *\param[in]	unit	La TextureUnit.
-			 */
-			C3D_API bool operator()( TextureUnit const & unit, castor::TextFile & file )override;
-
-		private:
-			MaterialType m_type;
-		};
-
-	public:
 		TextureUnit( TextureUnit const & ) = delete;
 		TextureUnit( TextureUnit && ) = default;
 		TextureUnit & operator=( TextureUnit const & ) = delete;

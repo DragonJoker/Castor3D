@@ -18,43 +18,6 @@ namespace castor3d
 		, public castor::OwnedBy< Engine >
 	{
 	public:
-		/**
-		\author 	Sylvain DOREMUS
-		\date 		14/02/2010
-		\~english
-		\brief		Overlay loader
-		\remark		Loads and saves overlays from/into a file
-		\~french
-		\brief		Overlay loader
-		\remark		Charge et enregistre les incrustations dans des fichiers
-		*/
-		class TextWriter
-			: public castor::TextWriter< Overlay >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\~french
-			 *\brief		Constructeur
-			 */
-			C3D_API explicit TextWriter( castor::String const & tabs );
-			/**
-			 *\~english
-			 *\brief		Saves an overlay into a text file
-			 *\param[in]	file		the file to save the overlay in
-			 *\param[in]	overlay	the overlay to save
-			 *\return		\p true if everything is OK
-			 *\~french
-			 *\brief		Sauvegarde l'incrustation donné dans un fichier texte
-			 *\param[in]	file		Le fichier où enregistrer l'incrustation
-			 *\param[in]	overlay	L'incrustation à enregistrer
-			 *\return		\p true si tout s'est bien passé
-			 */
-			C3D_API bool operator()( Overlay const & overlay, castor::TextFile & file )override;
-		};
-
-	public:
 		using iterator = OverlayPtrArray::iterator;
 		using const_iterator = OverlayPtrArray::const_iterator;
 

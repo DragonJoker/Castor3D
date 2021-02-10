@@ -11,20 +11,6 @@ using namespace castor;
 
 namespace castor3d
 {
-	//*************************************************************************************************
-
-	Light::TextWriter::TextWriter( String const & tabs )
-		: castor::TextWriter< Light >{ tabs }
-	{
-	}
-
-	bool Light::TextWriter::operator()( Light const & object, TextFile & file )
-	{
-		return object.m_category->createTextWriter( m_tabs )->writeInto( file );
-	}
-
-	//*************************************************************************************************
-
 	Light::Light( String const & name
 		, Scene & scene
 		, SceneNode & node
@@ -48,7 +34,7 @@ namespace castor3d
 	{
 		m_category->update();
 		m_dirty = false;
-		m_currentGlobalIllumination = m_globalIllumination;
+		m_currentGlobalIllumination = m_shadows.globalIllumination;
 		m_currentShadowCaster = m_shadowCaster;
 	}
 

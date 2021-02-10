@@ -6,7 +6,6 @@ See LICENSE file in root folder
 
 #include "Castor3D/Material/Pass/Pass.hpp"
 
-#include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Graphics/RgbColour.hpp>
 
 #include "Castor3D/Shader/PassBuffer/PassBufferModule.hpp"
@@ -16,40 +15,6 @@ namespace castor3d
 	class PhongPass
 		: public Pass
 	{
-	public:
-		/**
-		\author Sylvain DOREMUS
-		\version 0.6.1.0
-		\date 19/10/2011
-		\~english
-		\brief Pass loader.
-		\~french
-		\brief Loader de Pass.
-		*/
-		class TextWriter
-			: public castor::TextWriter< PhongPass >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor.
-			 *\~french
-			 *\brief		Constructeur.
-			 */
-			C3D_API explicit TextWriter( castor::String const & tabs );
-			/**
-			 *\~english
-			 *\brief			Writes a PhongPass into a text file.
-			 *\param[in]		pass	The PhongPass to write.
-			 *\param[in,out]	file	The file where to write the PhongPass.
-			 *\~french
-			 *\brief			Ecrit une PhongPass dans un fichier texte.
-			 *\param[in]		pass	La PhongPass à écrire.
-			 *\param[in,out]	file	Le file où écrire la PhongPass.
-			 */
-			C3D_API bool operator()( PhongPass const & pass, castor::TextFile & file )override;
-		};
-
 	public:
 		/**
 		 *\~english

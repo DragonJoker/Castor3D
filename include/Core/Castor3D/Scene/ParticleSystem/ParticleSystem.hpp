@@ -19,42 +19,6 @@ namespace castor3d
 	{
 	public:
 		/**
-		\author		Sylvain DOREMUS
-		\version	0.9.0
-		\date		19/10/2016
-		\~english
-		\brief		ParticleSystem loader
-		\~french
-		\brief		Loader de ParticleSystem
-		*/
-		class TextWriter
-			: public MovableObject::TextWriter
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\~french
-			 *\brief		Constructeur
-			 */
-			C3D_API explicit TextWriter( castor::String const & tabs );
-			/**
-			 *\~english
-			 *\brief		Writes a ParticleSystem into a text file
-			 *\param[in]	file	The file to save the object in
-			 *\param[in]	obj		The object to save
-			 *\~french
-			 *\brief		Ecrit un ParticleSystem dans un fichier texte
-			 *\param[in]	file	Le fichier
-			 *\param[in]	obj		L'objet
-			 */
-			C3D_API bool operator()( ParticleSystem const & obj, castor::TextFile & file );
-		};
-
-		friend class TextWriter;
-
-	public:
-		/**
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	name		The name.
@@ -242,6 +206,16 @@ namespace castor3d
 		inline ParticleDeclaration const & getParticleVariables()const
 		{
 			return m_inputs;
+		}
+		/**
+		 *\~english
+		 *\return		The compute shader based implementation.
+		 *\~french
+		 *\return		L'implémentation basée sur les compute shaders.
+		 */
+		inline ComputeParticleSystem const & getCompute()const
+		{
+			return *m_csImpl;
 		}
 
 	protected:

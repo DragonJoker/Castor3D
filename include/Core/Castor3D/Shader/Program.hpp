@@ -38,43 +38,6 @@ namespace castor3d
 
 	public:
 		/**
-		\author		Sylvain DOREMUS
-		\version	0.6.1.0
-		\date		19/10/2011
-		\~english
-		\brief		ShaderProgram loader.
-		\~french
-		\brief		Loader de ShaderProgram.
-		*/
-		class TextWriter
-			: public castor::TextWriter< ShaderProgram >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor.
-			 *\~french
-			 *\brief		Constructeur.
-			 */
-			C3D_API explicit TextWriter( castor::String const & tabs, castor::String const & name = cuT( "shader_program" ) );
-			/**
-			 *\~english
-			 *\brief			Writes a ShaderProgram into a text file.
-			 *\param[in]		program	The ShaderProgram.
-			 *\param[in,out]	file		The file.
-			 *\~french
-			 *\brief			Ecrit ShaderProgram dans un fichier texte.
-			 *\param[in]		program	Le ShaderProgram.
-			 *\param[in,out]	file		Le fichier.
-			 */
-			C3D_API bool operator()( ShaderProgram const & program, castor::TextFile & file )override;
-
-		private:
-			castor::String m_name;
-		};
-
-	public:
-		/**
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	renderSystem	The RenderSystem instance.

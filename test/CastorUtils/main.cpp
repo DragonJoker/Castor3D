@@ -11,6 +11,7 @@
 #include "CastorUtilsQuaternionTest.hpp"
 #include "CastorUtilsSignalTest.hpp"
 #include "CastorUtilsSpeedTest.hpp"
+#include "CastorUtilsTextWriterTest.hpp"
 #include "CastorUtilsThreadPoolTest.hpp"
 #include "CastorUtilsWorkerThreadTest.hpp"
 
@@ -55,6 +56,7 @@ int main( int argc, char const * argv[] )
 	Testing::registerType( std::make_unique< Testing::CastorUtilsObjectsPoolTest >() );
 	Testing::registerType( std::make_unique< Testing::CastorUtilsQuaternionTest >() );
 	Testing::registerType( std::make_unique< Testing::CastorUtilsSpeedTest >() );
+	Testing::registerType( std::make_unique< Testing::CastorUtilsTextWriterTest >() );
 	BENCHLOOP( iCount, iReturn );
 	castor::Logger::cleanup();
 	return iReturn;

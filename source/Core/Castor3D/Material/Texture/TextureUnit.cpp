@@ -87,69 +87,6 @@ namespace castor3d
 		}
 	}
 
-	TextureUnit::TextWriter::TextWriter( String const & tabs, MaterialType type )
-		: castor::TextWriter< TextureUnit >{ tabs, "TextureUnit" }
-		, m_type{ type }
-	{
-	}
-
-	bool TextureUnit::TextWriter::operator()( TextureUnit const & unit, TextFile & file )
-	{
-		bool result = true;
-		auto hasTexture = unit.isTextured() && unit.getTexture();
-
-		if ( hasTexture )
-		{
-			auto texture = unit.getTexture();
-			auto image = texture->getPath();
-			hasTexture = !image.empty() || !texture->isStatic();
-
-			if ( hasTexture )
-			{
-				if ( auto block = writeHeader( cuT( "texture_unit" ), file ) )
-				{
-					if ( unit.getSampler() && unit.getSampler()->getName() != cuT( "Default" ) )
-					{
-						result = writeName( cuT( "sampler" ), unit.getSampler()->getName(), file );
-					}
-
-					if ( result && unit.getTexture()->getMipmapCount() > 1 )
-					{
-						result = write( cuT( "levels_count" ), unit.getTexture()->getMipmapCount(), file );
-					}
-
-					if ( result )
-					{
-						if ( !texture->isStatic() )
-						{
-							if ( unit.getRenderTarget() )
-							{
-								result = RenderTarget::TextWriter( m_tabs + cuT( "\t" ) )( *unit.getRenderTarget(), file );
-								checkError( result, "render_target" );
-							}
-							else
-							{
-								// Procedurally generated textures, certainly will go here
-							}
-						}
-						else
-						{
-							result = writeFile( cuT( "image" ), Path{ image }, cuT( "Textures" ), file );
-						}
-					}
-
-					if ( result )
-					{
-						result = TextureConfiguration::TextWriter{ m_tabs, m_type }( unit.getConfiguration(), file );
-						checkError( result, "configuration" );
-					}
-				}
-			}
-		}
-
-		return result;
-	}
-
 	//*********************************************************************************************
 
 	TextureUnit::TextureUnit( Engine & engine )
@@ -289,7 +226,7 @@ namespace castor3d
 	{
 		if ( !hasAnimation() )
 		{
-			doAddAnimation( std::make_unique< TextureAnimation >( *this, "Default" ) );
+			addAnimation( std::make_unique< TextureAnimation >( *this, "Default" ) );
 			m_animated = true;
 		}
 

@@ -10,7 +10,6 @@ See LICENSE file in root folder
 #include <ashespp/Image/SamplerCreateInfo.hpp>
 #include <ashespp/Image/Sampler.hpp>
 
-#include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Design/Named.hpp>
 
 namespace castor3d
@@ -24,41 +23,6 @@ namespace castor3d
 		: public castor::OwnedBy< Engine >
 		, public castor::Named
 	{
-	public:
-		/**
-		\author		Sylvain DOREMUS
-		\version	0.7.0
-		\date		21/03/2014
-		\~english
-		\brief		Sampler loader
-		\remark
-		\~french
-		\brief		Loader de Sampler
-		*/
-		class TextWriter
-			: public castor::TextWriter< Sampler >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\~french
-			 *\brief		Constructeur
-			 */
-			C3D_API explicit TextWriter( castor::String const & tabs );
-			/**
-			 *\~english
-			 *\brief			Writes a sampler into a text file
-			 *\param[in]		sampler	The sampler to save
-			 *\param[in,out]	file	The file where to save the sampler
-			 *\~french
-			 *\brief			Ecrit un échantillonneur dans un fichier texte
-			 *\param[in]		sampler	L'échantillonneur
-			 *\param[in,out]	file	Le fichier
-			 */
-			C3D_API bool operator()( Sampler const & sampler, castor::TextFile & file )override;
-		};
-
 	public:
 		/**
 		 *\~english

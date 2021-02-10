@@ -49,7 +49,7 @@ namespace castor3d
 	}
 
 	template< typename AnimableHanlerT >
-	inline void AnimableT< AnimableHanlerT >::doAddAnimation( AnimationPtr animation )
+	inline void AnimableT< AnimableHanlerT >::addAnimation( AnimationPtr animation )
 	{
 		CU_Require( animation != nullptr );
 		auto it = m_animations.emplace( animation->getName(), nullptr ).first;

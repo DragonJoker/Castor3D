@@ -20,37 +20,6 @@ namespace castor3d
 		}
 	}
 
-	PointLight::TextWriter::TextWriter( String const & p_tabs, PointLight const * p_category )
-		: LightCategory::TextWriter{ p_tabs }
-		, m_category{ p_category }
-	{
-	}
-
-	bool PointLight::TextWriter::operator()( PointLight const & p_light, TextFile & p_file )
-	{
-		bool result = LightCategory::TextWriter::operator()( p_light, p_file );
-
-		if ( result )
-		{
-			result = p_file.print( 256, cuT( "%s\tattenuation " ), m_tabs.c_str() ) > 0
-					   && Point3f::TextWriter( String() )( p_light.getAttenuation(), p_file )
-					   && p_file.writeText( cuT( "\n" ) ) > 0;
-			LightCategory::TextWriter::checkError( result, "PointLight attenuation" );
-		}
-
-		if ( result )
-		{
-			result = p_file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
-		}
-
-		return result;
-	}
-
-	bool PointLight::TextWriter::writeInto( castor::TextFile & p_file )
-	{
-		return ( *this )( *m_category, p_file );
-	}
-
 	//*************************************************************************************************
 
 	PointLight::PointLight( Light & p_light )

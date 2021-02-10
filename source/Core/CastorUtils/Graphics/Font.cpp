@@ -193,42 +193,6 @@ namespace castor
 
 	//************************************************************************************************
 
-	Font::TextWriter::TextWriter( String const & p_tabs )
-		: castor::TextWriter< Font >{ p_tabs }
-	{
-	}
-
-
-	bool Font::TextWriter::operator()( Font const & p_object, TextFile & p_file )
-	{
-		Logger::logInfo( m_tabs + cuT( "Writing Font " ) + p_object.getName() );
-		bool result = p_file.writeText( cuT( "\n" ) + m_tabs + cuT( "font \"" ) + p_object.getName() + cuT( "\"\n" ) ) > 0
-						&& p_file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
-		castor::TextWriter< Font >::checkError( result, "Font name" );
-
-		if ( result )
-		{
-			Path relative = copyFile( p_object.getFilePath(), p_file.getFilePath(), Path{} );
-			result = p_file.writeText( m_tabs + cuT( "\tfile \"" ) + relative + cuT( "\"\n" ) ) > 0;
-			castor::TextWriter< Font >::checkError( result, "Font file" );
-		}
-
-		if ( result )
-		{
-			result = p_file.writeText( m_tabs + cuT( "\theight " ) + string::toString( p_object.getHeight() ) + cuT( "\n" ) ) > 0;
-			castor::TextWriter< Font >::checkError( result, "Font height" );
-		}
-
-		if ( result )
-		{
-			result = p_file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
-		}
-
-		return result;
-	}
-
-	//************************************************************************************************
-
 	Font::BinaryLoader::BinaryLoader()
 	{
 	}

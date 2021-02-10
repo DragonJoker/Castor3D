@@ -233,41 +233,6 @@ namespace castor3d
 	{
 	public:
 		/**
-		\author		Sylvain DOREMUS
-		\version	0.6.1.0
-		\date		19/10/2011
-		\~english
-		\brief		Camera loader
-		\~french
-		\brief		Loader de Camera
-		*/
-		class TextWriter
-			: public MovableObject::TextWriter
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\~french
-			 *\brief		Constructeur
-			 */
-			C3D_API explicit TextWriter( castor::String const & tabs );
-			/**
-			 *\~english
-			 *\brief		Writes a billboards list into a text file
-			 *\param[in]	file	The file to save the object in
-			 *\param[in]	obj	The object to save
-			 *\~french
-			 *\brief		Ecrit une camera dans un fichier texte
-			 *\param[in]	file	Le fichier
-			 *\param[in]	obj	L'objet
-			 */
-			C3D_API bool operator()( BillboardList const & obj
-				, castor::TextFile & file );
-		};
-
-	public:
-		/**
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	name		The name.
