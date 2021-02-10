@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_TextSsaoConfig_H___
 #define ___C3D_TextSsaoConfig_H___
 
-#include "Castor3D/Render/SSAO/SsaoConfig.hpp"
+#include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
 
