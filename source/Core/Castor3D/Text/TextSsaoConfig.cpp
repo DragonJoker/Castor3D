@@ -17,7 +17,7 @@ namespace castor
 		bool result{ false };
 		log::info << tabs() << cuT( "Writing SsaoConfig" ) << std::endl;
 
-		if ( auto block = beginBlock( file, "ssao" ) )
+		if ( auto block{ beginBlock( file, "ssao" ) } )
 		{
 			result = write( file, cuT( "enabled" ), object.enabled )
 				&& write( file, cuT( "high_quality" ), object.highQuality )

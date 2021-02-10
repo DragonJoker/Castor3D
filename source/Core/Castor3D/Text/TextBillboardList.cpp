@@ -20,7 +20,7 @@ namespace castor
 		log::info << tabs() << cuT( "Writing BillboardList " ) << obj.getName() << std::endl;
 		bool result = false;
 
-		if ( auto block = beginBlock( file, "billboard", obj.getName() ) )
+		if ( auto block{ beginBlock( file, "billboard", obj.getName() ) } )
 		{
 			result = writeName( file, "parent", obj.getParent()->getName() )
 				&& write( file, cuT( "cast_shadows" ), obj.isShadowCaster() )
@@ -30,7 +30,7 @@ namespace castor
 
 			if ( result && obj.getCount() )
 			{
-				if ( auto posBlock = beginBlock( file, "positions" ) )
+				if ( auto posBlock{ beginBlock( file, "positions" ) } )
 				{
 					for ( auto const & point : obj )
 					{

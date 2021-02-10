@@ -21,7 +21,7 @@ namespace castor
 		log::info << tabs() << cuT( "Writing PanelOverlay " ) << overlay.getOverlayName() << std::endl;
 		bool result = false;
 
-		if ( auto block = beginBlock( file, cuT( "panel_overlay" ), overlay.getOverlay().getName() ) )
+		if ( auto block{ beginBlock( file, cuT( "panel_overlay" ), overlay.getOverlay().getName() ) } )
 		{
 			result = write< OverlayCategory >( file, overlay );
 		}

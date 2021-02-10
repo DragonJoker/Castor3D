@@ -297,7 +297,7 @@ namespace aria
 	size_t MainFrame::RunningTest::size()
 	{
 		return pending.size()
-			+ running.test ? 1u : 0u;
+			+ ( running.test ? 1u : 0u );
 	}
 
 	//*********************************************************************************************
@@ -381,7 +381,6 @@ namespace aria
 		, TestStatus newStatus
 		, bool reference )
 	{
-		auto node = getTestNode( test );
 		test.updateStatus( newStatus, reference );
 		doUpdateTestView( test );
 	}
@@ -829,8 +828,6 @@ namespace aria
 			test.updateStatusNW( TestStatus::eRunning_Begin );
 			auto & page = doGetPage( wxDataViewItem{ testNode.node } );
 			page.model->ItemChanged( wxDataViewItem{ testNode.node } );
-			auto rendIt = m_tests.counts.renderers.find( test.getRenderer() );
-			auto catIt = rendIt->second.categories.find( test.getCategory() );
 			page.categoryView->refresh();
 			m_statusText->SetLabel( _( "Running test: " ) + test.getName() );
 			auto result = wxExecute( command
@@ -956,11 +953,11 @@ namespace aria
 			, wxT( "Updating tests reference..." )
 			, int( 1 )
 			, this };
-		int index = 0;
 
 		if ( m_selectedPage
 			&& !m_selectedPage->selected.items.empty() )
 		{
+			int index = 0;
 			progress.SetRange( m_selectedPage->selected.items.size() );
 
 			for ( auto & item : m_selectedPage->selected.items )
@@ -2029,7 +2026,6 @@ namespace aria
 
 					if ( rendRunIt != m_tests.runs.end() )
 					{
-						auto catTestIt = m_tests.tests.find( category );
 						auto catRunIt = rendRunIt->second.find( category );
 						auto catCountsIt = rendCountsIt->second.categories.find( category );
 

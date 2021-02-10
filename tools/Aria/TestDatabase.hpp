@@ -95,7 +95,7 @@ namespace aria
 			InsertIdValue( InsertIdValue && ) = default;
 			InsertIdValue & operator=( InsertIdValue && ) = default;
 			InsertIdValue() = default;
-			explicit InsertIdValue( std::string tableName
+			explicit InsertIdValue( std::string const & tableName
 				, uint32_t nameSize
 				, db::Connection & connection )
 				: stmt{ connection.createStatement( "INSERT INTO " + tableName + " (Name) VALUES (?);" ) }
@@ -132,9 +132,9 @@ namespace aria
 			InsertIdId( InsertIdId && ) = default;
 			InsertIdId & operator=( InsertIdId && ) = default;
 			InsertIdId() = default;
-			explicit InsertIdId( std::string tableName
-				, std::string lhsIdName
-				, std::string rhsIdName
+			explicit InsertIdId( std::string const & tableName
+				, std::string const & lhsIdName
+				, std::string const & rhsIdName
 				, db::Connection & connection )
 				: stmt{ connection.createStatement( "INSERT INTO " + tableName + " (" + lhsIdName + ", " + rhsIdName + ") VALUES (?, ?);" ) }
 				, lhsId{ stmt->createParameter( lhsIdName, db::FieldType::eSint32 ) }

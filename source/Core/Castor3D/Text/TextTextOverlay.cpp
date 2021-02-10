@@ -21,7 +21,7 @@ namespace castor
 		log::info << tabs() << cuT( "Writing TextOverlay " ) << overlay.getOverlayName() << std::endl;
 		bool result = false;
 
-		if ( auto block = beginBlock( file, cuT( "text_overlay" ), overlay.getOverlayName() ) )
+		if ( auto block{ beginBlock( file, cuT( "text_overlay" ), overlay.getOverlayName() ) } )
 		{
 			result = writeName( file, cuT( "font" ), overlay.getFontTexture()->getFontName() )
 				&& writeName( file, cuT( "text" ), overlay.getCaption() )

@@ -18,26 +18,26 @@ namespace castor
 		log::info << tabs() << cuT( "Writing ShadowConfig" ) << std::endl;
 		bool result = false;
 
-		if ( auto block = beginBlock( file, "shadows" ) )
+		if ( auto block{ beginBlock( file, "shadows" ) } )
 		{
 			result = write( file, "filter", getName( object.filterType ) )
 				&& write( file, "global_illumination", getName( object.globalIllumination ) );
 
-			if ( auto rawBlock = beginBlock( file, "raw_config" ) )
+			if ( auto rawBlock{ beginBlock( file, "raw_config" ) } )
 			{
 				result = result
 					&& write( file, cuT( "min_offset" ), object.rawOffsets[0] )
 					&& write( file, cuT( "max_slope_offset" ), object.rawOffsets[1] );
 			}
 
-			if ( auto pcfBlock = beginBlock( file, "pcf_config" ) )
+			if ( auto pcfBlock{ beginBlock( file, "pcf_config" ) } )
 			{
 				result = result
 					&& write( file, cuT( "min_offset" ), object.pcfOffsets[0] )
 					&& write( file, cuT( "max_slope_offset" ), object.pcfOffsets[1] );
 			}
 
-			if ( auto vsmBlock = beginBlock( file, "vsm_config" ) )
+			if ( auto vsmBlock{ beginBlock( file, "vsm_config" ) } )
 			{
 				result = result
 					&& write( file, cuT( "variance_max" ), object.variance[0] )

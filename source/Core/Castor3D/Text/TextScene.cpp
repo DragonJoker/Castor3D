@@ -270,7 +270,7 @@ namespace castor
 		{
 			result = false;
 
-			if ( auto block = beginBlock( file, "scene", scene.getName() ) )
+			if ( auto block{ beginBlock( file, "scene", scene.getName() ) } )
 			{
 				result = writeComment( file, cuT( "Scene configuration" ) );
 
@@ -308,7 +308,7 @@ namespace castor
 				struct IsWritable
 				{
 					Scene const & scene;
-					IsWritable( Scene const & scene )
+					explicit IsWritable( Scene const & scene )
 						: scene{ scene }
 					{
 					}

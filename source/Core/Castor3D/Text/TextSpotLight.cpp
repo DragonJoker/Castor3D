@@ -23,7 +23,7 @@ namespace castor
 		log::info << tabs() << cuT( "Writing SpotLight " ) << light.getLight().getName() << std::endl;
 		bool result{ false };
 
-		if ( auto block = beginBlock( file, "light", light.getLight().getName() ) )
+		if ( auto block{ beginBlock( file, "light", light.getLight().getName() ) } )
 		{
 			result = writeName( file, "parent", light.getLight().getParent()->getName() )
 				&& write( file, cuT( "type" ), castor3d::getName( light.getLightType() ) )

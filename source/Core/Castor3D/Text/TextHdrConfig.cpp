@@ -14,7 +14,7 @@ namespace castor
 	{
 		bool result = false;
 
-		if ( auto block = beginBlock( file, cuT( "hdr_config" ) ) )
+		if ( auto block{ beginBlock( file, cuT( "hdr_config" ) ) } )
 		{
 			result = write( file, cuT( "exposure" ), obj.exposure )
 				&& write( file, cuT( "gamma" ), obj.gamma );

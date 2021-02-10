@@ -259,7 +259,6 @@ namespace aria
 				curColor = getStatusColor( *cur );
 				nxtColor = getStatusColor( *nxt );
 				curWidth = getStatusSize( *cur, totalWidth, *m_statusName.counts );
-				gradWidth = std::min( 50, curWidth / 4 );
 				gradWidth = curWidth / 4;
 				curWidth -= gradWidth * 2;
 

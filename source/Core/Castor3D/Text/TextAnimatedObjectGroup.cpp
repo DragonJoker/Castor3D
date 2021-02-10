@@ -21,7 +21,7 @@ namespace castor
 		{
 			bool result = false;
 
-			if ( auto block = beginBlock( file, "animation", group.name ) )
+			if ( auto block{ beginBlock( file, "animation", group.name ) } )
 			{
 				result = write( file, "looped", group.looped )
 					&& write( file, "scale", group.scale )
@@ -44,7 +44,7 @@ namespace castor
 		log::info << tabs() << cuT( "Writing AnimatedObjectGroup " ) << group.getName() << std::endl;
 		bool result = false;
 
-		if ( auto block = beginBlock( file, "animated_object_group", group.getName() ) )
+		if ( auto block{ beginBlock( file, "animated_object_group", group.getName() ) } )
 		{
 			result = true;
 			StrSet written;

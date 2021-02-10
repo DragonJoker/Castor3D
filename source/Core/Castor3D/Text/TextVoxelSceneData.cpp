@@ -20,7 +20,7 @@ namespace castor
 		{
 			result = false;
 
-			if ( auto block = beginBlock( file, cuT( "voxel_cone_tracing" ) ) )
+			if ( auto block{ beginBlock( file, cuT( "voxel_cone_tracing" ) ) } )
 			{
 				result = write( file, cuT( "enabled" ), obj.enabled )
 					&& write( file, cuT( "conservative_rasterization" ), obj.enableConservativeRasterization )

@@ -18,7 +18,7 @@ namespace castor
 		log::info << tabs() << cuT( "Writing Window " ) << window.getName() << std::endl;
 		bool result = false;
 
-		if ( auto block = beginBlock( file, cuT( "window" ), window.getName() ) )
+		if ( auto block{ beginBlock( file, cuT( "window" ), window.getName() ) } )
 		{
 			result = write( file, cuT( "vsync" ), window.isVSyncEnabled() )
 				&& write( file, cuT( "fullscreen" ), window.isFullscreen() );

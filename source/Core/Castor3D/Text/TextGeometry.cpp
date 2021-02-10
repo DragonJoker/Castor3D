@@ -24,7 +24,7 @@ namespace castor
 			log::info << tabs() << cuT( "Writing Geometry " ) << geometry.getName() << std::endl;
 			result = false;
 
-			if ( auto block = beginBlock( file, cuT( "object" ), geometry.getName() ) )
+			if ( auto block{ beginBlock( file, cuT( "object" ), geometry.getName() ) } )
 			{
 				result = writeName( file, "parent", geometry.getParent()->getName() )
 					&& write( file, cuT( "cast_shadows" ), geometry.isShadowCaster() )
@@ -46,7 +46,7 @@ namespace castor
 						{
 							result = writeName( file, cuT( "material" ), geometry.getMaterial( *geometry.getMesh()->getSubmesh( 0u ) )->getName() );
 						}
-						else if ( auto matsBlock = beginBlock( file, "materials" ) )
+						else if ( auto matsBlock{ beginBlock( file, "materials" ) } )
 						{
 							for ( auto submesh : *geometry.getMesh() )
 							{

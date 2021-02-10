@@ -26,7 +26,7 @@ namespace castor
 		log::info << tabs() << cuT( "Writing RenderTarget" ) << std::endl;
 		bool result = false;
 
-		if ( auto block = beginBlock( file, "render_target" ) )
+		if ( auto block{ beginBlock( file, "render_target" ) } )
 		{
 			if ( target.getScene() )
 			{

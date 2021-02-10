@@ -202,7 +202,7 @@ namespace castor3d
 		, uint32_t index )
 	{
 		auto & myTimer = m_passes[0].pass->getTimer();
-		auto myTimerBlock = myTimer.start();
+		auto myTimerBlock( myTimer.start() );
 		auto * result = &toWait;
 		uint32_t offset = index * 6u;
 

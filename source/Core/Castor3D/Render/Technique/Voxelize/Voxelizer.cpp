@@ -121,7 +121,6 @@ namespace castor3d
 		auto max = std::max( aabb.getDimensions()->x, std::max( aabb.getDimensions()->y, aabb.getDimensions()->z ) );
 		auto cellSize = m_voxelConfig.gridSize.value() / max;
 		auto voxelSize = ( cellSize * m_voxelConfig.voxelSizeFactor );
-		float f = 0.05f / voxelSize;
 		m_grid = castor::Point4f{ 0.0f
 			, 0.0f
 			, 0.0f

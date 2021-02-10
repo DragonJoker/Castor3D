@@ -20,7 +20,7 @@ namespace castor
 		log::info << tabs() << cuT( "Writing SpecularGlossinessPbrPass " ) << std::endl;
 		bool result = false;
 
-		if ( auto block = beginBlock( file, "pass" ) )
+		if ( auto block{ beginBlock( file, "pass" ) } )
 		{
 			result = write( file, "albedo", pass.getDiffuse() )
 				&& write( file, "roughness", pass.getSpecular() )

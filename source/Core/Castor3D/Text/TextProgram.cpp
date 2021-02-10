@@ -24,7 +24,7 @@ namespace castor
 
 		if ( hasFile )
 		{
-			if ( auto block = beginBlock( file, "cs_shader_program" ) )
+			if ( auto block{ beginBlock( file, "cs_shader_program" ) } )
 			{
 				// TODO : Implement castor3d::ShaderModule::TextWriter (to support at least SPIR-V external shaders).
 
