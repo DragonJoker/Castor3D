@@ -19,28 +19,30 @@ namespace castor
 		log::info << tabs() << cuT( "Writing Material " ) << material.getName() << std::endl;
 		bool result = false;
 
-		if ( auto block = beginBlock( cuT( "material" ), material.getName(), file ) )
+		if ( auto block = beginBlock( file, cuT( "material" ), material.getName() ) )
 		{
+			result = true;
+
 			switch ( material.getType() )
 			{
 			case MaterialType::ePhong:
 				for ( auto pass : material )
 				{
-					result = result && TextWriter< PhongPass >{ tabs() }( *std::static_pointer_cast< PhongPass >( pass ), file );
+					result = result && write( file, *std::static_pointer_cast< PhongPass >( pass ) );
 				}
 				break;
 
 			case MaterialType::eMetallicRoughness:
 				for ( auto pass : material )
 				{
-					result = result && TextWriter< MetallicRoughnessPbrPass >{ tabs() }( *std::static_pointer_cast< MetallicRoughnessPbrPass >( pass ), file );
+					result = result && write( file, *std::static_pointer_cast< MetallicRoughnessPbrPass >( pass ) );
 				}
 				break;
 
 			case MaterialType::eSpecularGlossiness:
 				for ( auto pass : material )
 				{
-					result = result && TextWriter< SpecularGlossinessPbrPass >{ tabs() }( *std::static_pointer_cast< SpecularGlossinessPbrPass >( pass ), file );
+					result = result && write( file, *std::static_pointer_cast< SpecularGlossinessPbrPass >( pass ) );
 				}
 				break;
 

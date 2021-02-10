@@ -20,12 +20,12 @@ namespace castor
 		log::info << tabs() << cuT( "Writing SpecularGlossinessPbrPass " ) << std::endl;
 		bool result = false;
 
-		if ( auto block = beginBlock( "pass", file ) )
+		if ( auto block = beginBlock( file, "pass" ) )
 		{
-			result = write( "albedo", pass.getDiffuse(), file )
-				&& write( "roughness", pass.getSpecular(), file )
-				&& write( "metallic", pass.getGlossiness(), file )
-				&& write< Pass >( pass, file );
+			result = write( file, "albedo", pass.getDiffuse() )
+				&& write( file, "roughness", pass.getSpecular() )
+				&& write( file, "metallic", pass.getGlossiness() )
+				&& write< Pass >( file, pass );
 		}
 
 		return result;

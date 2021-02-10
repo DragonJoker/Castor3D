@@ -12,7 +12,7 @@ namespace castor3d
 
 	bool BinaryWriter< MeshAnimation >::doWrite( MeshAnimation const & obj )
 	{
-		bool result = true;
+		bool result = doWriteChunk( obj.getName(), ChunkType::eName, m_chunk );
 
 		for ( auto const & keyframe : obj )
 		{
@@ -31,12 +31,24 @@ namespace castor3d
 	{
 		bool result = true;
 		MeshAnimationKeyFrameUPtr keyFrame;
+		String name;
 		BinaryChunk chunk;
 
 		while ( result && doGetSubChunk( chunk ) )
 		{
 			switch ( chunk.getChunkType() )
 			{
+			case ChunkType::eName:
+				result = doParseChunk( name, chunk );
+				checkError( result, "Couldn't parse name." );
+
+				if ( result )
+				{
+					obj.m_name = name;
+				}
+
+				break;
+
 			case ChunkType::eMeshAnimationKeyFrame:
 				keyFrame = std::make_unique< MeshAnimationKeyFrame >( obj, 0_ms );
 				result = createBinaryParser< MeshAnimationKeyFrame >().parse( *keyFrame, chunk );

@@ -226,7 +226,7 @@ namespace castor3d
 	{
 		if ( !hasAnimation() )
 		{
-			doAddAnimation( std::make_unique< TextureAnimation >( *this, "Default" ) );
+			addAnimation( std::make_unique< TextureAnimation >( *this, "Default" ) );
 			m_animated = true;
 		}
 

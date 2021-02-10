@@ -19,11 +19,17 @@ namespace castor
 		C3D_API virtual bool operator()( GroupAnimation const & group
 			, castor::TextFile & file )override
 		{
-			return beginBlock( "animation", group.name, file )
-				&& write( "looped", group.looped, file )
-				&& write( "scale", group.scale, file )
-				&& write( "start_at", group.startingPoint.count() / 1000.0, file )
-				&& write( "stop_at", group.stoppingPoint.count() / 1000.0, file );
+			bool result = false;
+
+			if ( auto block = beginBlock( file, "animation", group.name ) )
+			{
+				result = write( file, "looped", group.looped )
+					&& write( file, "scale", group.scale )
+					&& write( file, "start_at", group.startingPoint.count() / 1000.0 )
+					&& write( file, "stop_at", group.stoppingPoint.count() / 1000.0 );
+			}
+
+			return result;
 		}
 	};
 
@@ -38,8 +44,9 @@ namespace castor
 		log::info << tabs() << cuT( "Writing AnimatedObjectGroup " ) << group.getName() << std::endl;
 		bool result = false;
 
-		if ( beginBlock( "animated_object_group", group.getName(), file ) )
+		if ( auto block = beginBlock( file, "animated_object_group", group.getName() ) )
 		{
+			result = true;
 			StrSet written;
 
 			for ( auto it : group.getObjects() )
@@ -66,7 +73,7 @@ namespace castor
 				if ( write )
 				{
 					result = result
-						&& writeName( "animated_object", name, file );
+						&& writeName( file, "animated_object", name );
 					written.insert( name );
 				}
 			}
@@ -76,7 +83,7 @@ namespace castor
 				for ( auto it : group.getAnimations() )
 				{
 					result = result
-						&& write( it.second, file );
+						&& write( file, it.second );
 				}
 			}
 
@@ -88,7 +95,7 @@ namespace castor
 				{
 					if ( it.second.state == AnimationState::ePlaying )
 					{
-						result = result && writeName( cuT( "start_animation" ), it.first, file );
+						result = result && writeName( file, cuT( "start_animation" ), it.first );
 					}
 				}
 			}

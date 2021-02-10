@@ -69,7 +69,7 @@ namespace castor3d
 		C3D_API castor::Point2f const & getShadowRawOffsets()const;
 		C3D_API castor::Point2f const & getShadowPcfOffsets()const;
 		C3D_API castor::Point2f const & getShadowVariance()const;
-		C3D_API Shadow const & getShadowConfig()const;
+		C3D_API ShadowConfig const & getShadowConfig()const;
 		C3D_API RsmConfig const & getRsmConfig()const;
 		C3D_API LpvConfig const & getLpvConfig()const;
 

@@ -17,17 +17,18 @@ namespace castor
 		, TextFile & file )
 	{
 		auto result = false;
+		log::info << tabs() << cuT( "Writing SubsurfaceScattering" ) << std::endl;
 
-		if ( auto block = beginBlock( "subsurface_scattering", file ) )
+		if ( auto block = beginBlock( file, "subsurface_scattering" ) )
 		{
-			result = write( cuT( "strength" ), obj.getStrength(), file )
-				&& write( cuT( "gaussian_width" ), obj.getGaussianWidth(), file );
+			result = write( file, cuT( "strength" ), obj.getStrength() )
+				&& write( file, cuT( "gaussian_width" ), obj.getGaussianWidth() );
 
-			if ( auto profBlock = beginBlock( cuT( "transmittance_profile" ), file ) )
+			if ( auto profBlock = beginBlock( file, cuT( "transmittance_profile" ) ) )
 			{
 				for ( auto & factor : obj )
 				{
-					result = result && write( cuT( "factor" ), factor, file );
+					result = result && write( file, cuT( "factor" ), factor );
 				}
 			}
 		}

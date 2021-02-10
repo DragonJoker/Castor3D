@@ -97,7 +97,7 @@ namespace castor
 		if ( m_writer )
 		{
 			m_writer->m_indent--;
-			m_result = m_file.writeText( m_writer->tabs() + cuT( "} // " ) + m_name + cuT( "\n" ) ) > 0;
+			m_result = m_file.writeText( m_writer->tabs() + cuT( "}\n" ) ) > 0;
 			m_writer->checkError( m_result, ( "footer " + m_name ).c_str() );
 		}
 	}
@@ -146,16 +146,15 @@ namespace castor
 			, file };
 	}
 
-	TextWriterBase::WriterBlock TextWriterBase::beginBlock( String const & name, TextFile & file )
+	TextWriterBase::WriterBlock TextWriterBase::beginBlock( TextFile & file, String const & name )
 	{
 		return WriterBlock{ this
 			, name
 			, file };
 	}
 
-	TextWriterBase::WriterBlock TextWriterBase::beginBlock( String const & type
-		, String const & name
-		, TextFile & file )
+	TextWriterBase::WriterBlock TextWriterBase::beginBlock( TextFile & file, String const & type
+		, String const & name )
 	{
 		return WriterBlock{ this
 			, type
@@ -163,7 +162,7 @@ namespace castor
 			, file };
 	}
 
-	bool TextWriterBase::writeMask( String const & name, uint32_t mask, TextFile & file )const
+	bool TextWriterBase::writeMask( TextFile & file, String const & name, uint32_t mask )const
 	{
 		auto stream = makeStringStream();
 		stream << cuT( "0x" ) << std::hex << std::setw( 8u ) << std::setfill( cuT( '0' ) ) << mask;
@@ -172,7 +171,7 @@ namespace castor
 		return result;
 	}
 
-	bool TextWriterBase::writeMask( String const & name, uint64_t mask, TextFile & file )const
+	bool TextWriterBase::writeMask( TextFile & file, String const & name, uint64_t mask )const
 	{
 		auto stream = makeStringStream();
 		stream << cuT( "0x" ) << std::hex << std::setw( 16u ) << std::setfill( cuT( '0' ) ) << mask;
@@ -181,14 +180,21 @@ namespace castor
 		return result;
 	}
 
-	bool TextWriterBase::writeComment( String const & comment, TextFile & file )const
+	bool TextWriterBase::writeComment( TextFile & file, String const & comment )const
 	{
 		auto result = file.writeText( tabs() + cuT( "// " ) + comment + cuT( "\n" ) ) > 0;
 		checkError( result, comment.c_str() );
 		return result;
 	}
 
-	bool TextWriterBase::write( String const & name, float value, TextFile & file )const
+	bool TextWriterBase::write( TextFile & file, String const & name )const
+	{
+		auto result = file.writeText( tabs() + name + cuT( "\n" ) ) > 0;
+		checkError( result, name.c_str() );
+		return result;
+	}
+
+	bool TextWriterBase::write( TextFile & file, String const & name, float value )const
 	{
 		auto stream = makeStringStream();
 		stream << std::showpoint << value;
@@ -197,7 +203,7 @@ namespace castor
 		return result;
 	}
 
-	bool TextWriterBase::write( String const & name, double value, TextFile & file )const
+	bool TextWriterBase::write( TextFile & file, String const & name, double value )const
 	{
 		auto stream = makeStringStream();
 		stream << std::showpoint << value;
@@ -206,7 +212,7 @@ namespace castor
 		return result;
 	}
 
-	bool TextWriterBase::write( String const & name, uint16_t value, TextFile & file )const
+	bool TextWriterBase::write( TextFile & file, String const & name, uint16_t value )const
 	{
 		auto stream = makeStringStream();
 		stream << value;
@@ -215,7 +221,7 @@ namespace castor
 		return result;
 	}
 
-	bool TextWriterBase::write( String const & name, int16_t value, TextFile & file )const
+	bool TextWriterBase::write( TextFile & file, String const & name, int16_t value )const
 	{
 		auto stream = makeStringStream();
 		stream << value;
@@ -224,7 +230,7 @@ namespace castor
 		return result;
 	}
 
-	bool TextWriterBase::write( String const & name, uint32_t value, TextFile & file )const
+	bool TextWriterBase::write( TextFile & file, String const & name, uint32_t value )const
 	{
 		auto stream = makeStringStream();
 		stream << value;
@@ -233,7 +239,7 @@ namespace castor
 		return result;
 	}
 
-	bool TextWriterBase::write( String const & name, int32_t value, TextFile & file )const
+	bool TextWriterBase::write( TextFile & file, String const & name, int32_t value )const
 	{
 		auto stream = makeStringStream();
 		stream << value;
@@ -242,7 +248,7 @@ namespace castor
 		return result;
 	}
 
-	bool TextWriterBase::write( String const & name, uint64_t value, TextFile & file )const
+	bool TextWriterBase::write( TextFile & file, String const & name, uint64_t value )const
 	{
 		auto stream = makeStringStream();
 		stream << value;
@@ -251,7 +257,7 @@ namespace castor
 		return result;
 	}
 
-	bool TextWriterBase::write( String const & name, int64_t value, TextFile & file )const
+	bool TextWriterBase::write( TextFile & file, String const & name, int64_t value )const
 	{
 		auto stream = makeStringStream();
 		stream << value;
@@ -260,7 +266,7 @@ namespace castor
 		return result;
 	}
 
-	bool TextWriterBase::write( String const & name, bool value, TextFile & file )const
+	bool TextWriterBase::write( TextFile & file, String const & name, bool value )const
 	{
 		auto stream = makeStringStream();
 		stream.setf( std::ios::boolalpha );
@@ -270,41 +276,210 @@ namespace castor
 		return result;
 	}
 
-	bool TextWriterBase::write( String const & name, String const & value, TextFile & file )const
+	bool TextWriterBase::write( TextFile & file, String const & name, String const & value )const
 	{
 		auto result = file.writeText( tabs() + name + cuT( " " ) + value + cuT( "\n" ) ) > 0;
 		checkError( result, name.c_str() );
 		return result;
 	}
 
-	bool TextWriterBase::writeOpt( String const & name, bool value, TextFile & file )const
+	bool TextWriterBase::writeOpt( TextFile & file, String const & name, bool value )const
 	{
-		return writeOpt( name, value, true, file );
+		return writeOpt( file, name, value, false );
 	}
 
-	bool TextWriterBase::writeName( String const & name, String const & value, TextFile & file )const
+	bool TextWriterBase::writeName( TextFile & file, String const & name, String const & value )const
 	{
 		auto result = file.writeText( tabs() + name + cuT( " \"" ) + value + cuT( "\"\n" ) ) > 0;
 		checkError( result, name.c_str() );
 		return result;
 	}
 
-	bool TextWriterBase::writePath( String const & name, Path const & value, TextFile & file )const
+	bool TextWriterBase::writePath( TextFile & file, String const & name, Path const & value )const
 	{
 		auto result = file.writeText( tabs() + name + cuT( " \"" ) + value.toGeneric() + cuT( "\"\n" ) ) > 0;
 		checkError( result, name.c_str() );
 		return result;
 	}
 
-	bool TextWriterBase::writeFile( String const & name, Path const & value, String const & subfolder, TextFile & file )const
+	bool TextWriterBase::writeFile( TextFile & file, String const & name, Path const & value, String const & subfolder )const
 	{
 		Path relative{ copyFile( Path{ value }, file.getFilePath(), Path{ subfolder } ) };
-		return writePath( name, relative, file );
+		return writePath( file, name, relative );
 	}
 
 	String TextWriterBase::tabs()const
 	{
 		return m_tabs + String( m_indent, '\t' );
+	}
+
+	//*********************************************************************************************
+
+	TextWriter< int8_t >::TextWriter( String tabs )
+		: TextWriterT< int8_t >{ std::move( tabs ) }
+	{
+	}
+
+	bool TextWriter< int8_t >::operator()( int8_t const & value
+		, TextFile & file )
+	{
+		auto result = file.writeText( string::toString( value ) ) > 0;
+		checkError( result, "" );
+		return result;
+	}
+
+	//*********************************************************************************************
+
+	TextWriter< uint8_t >::TextWriter( String tabs )
+		: TextWriterT< uint8_t >{ std::move( tabs ) }
+	{
+	}
+
+	bool TextWriter< uint8_t >::operator()( uint8_t const & value
+		, TextFile & file )
+	{
+		auto result = file.writeText( string::toString( value ) ) > 0;
+		checkError( result, "" );
+		return result;
+	}
+
+	//*********************************************************************************************
+
+	TextWriter< int16_t >::TextWriter( String tabs )
+		: TextWriterT< int16_t >{ std::move( tabs ) }
+	{
+	}
+
+	bool TextWriter< int16_t >::operator()( int16_t const & value
+		, TextFile & file )
+	{
+		auto result = file.writeText( string::toString( value ) ) > 0;
+		checkError( result, "" );
+		return result;
+	}
+
+	//*********************************************************************************************
+
+	TextWriter< uint16_t >::TextWriter( String tabs )
+		: TextWriterT< uint16_t >{ std::move( tabs ) }
+	{
+	}
+
+	bool TextWriter< uint16_t >::operator()( uint16_t const & value
+		, TextFile & file )
+	{
+		auto result = file.writeText( string::toString( value ) ) > 0;
+		checkError( result, "" );
+		return result;
+	}
+
+	//*********************************************************************************************
+
+	TextWriter< int32_t >::TextWriter( String tabs )
+		: TextWriterT< int32_t >{ std::move( tabs ) }
+	{
+	}
+
+	bool TextWriter< int32_t >::operator()( int32_t const & value
+		, TextFile & file )
+	{
+		auto result = file.writeText( string::toString( value ) ) > 0;
+		checkError( result, "" );
+		return result;
+	}
+
+	//*********************************************************************************************
+
+	TextWriter< uint32_t >::TextWriter( String tabs )
+		: TextWriterT< uint32_t >{ std::move( tabs ) }
+	{
+	}
+
+	bool TextWriter< uint32_t >::operator()( uint32_t const & value
+		, TextFile & file )
+	{
+		auto result = file.writeText( string::toString( value ) ) > 0;
+		checkError( result, "" );
+		return result;
+	}
+
+	//*********************************************************************************************
+
+	TextWriter< int64_t >::TextWriter( String tabs )
+		: TextWriterT< int64_t >{ std::move( tabs ) }
+	{
+	}
+
+	bool TextWriter< int64_t >::operator()( int64_t const & value
+		, TextFile & file )
+	{
+		auto result = file.writeText( string::toString( value ) ) > 0;
+		checkError( result, "" );
+		return result;
+	}
+
+	//*********************************************************************************************
+
+	TextWriter< uint64_t >::TextWriter( String tabs )
+		: TextWriterT< uint64_t >{ std::move( tabs ) }
+	{
+	}
+
+	bool TextWriter< uint64_t >::operator()( uint64_t const & value
+		, TextFile & file )
+	{
+		auto result = file.writeText( string::toString( value ) ) > 0;
+		checkError( result, "" );
+		return result;
+	}
+
+	//*********************************************************************************************
+
+	TextWriter< float >::TextWriter( String tabs )
+		: TextWriterT< float >{ std::move( tabs ) }
+	{
+	}
+
+	bool TextWriter< float >::operator()( float const & value
+		, TextFile & file )
+	{
+		auto stream = makeStringStream();
+		stream << std::showpoint << value;
+		auto result = file.writeText( stream.str() ) > 0;
+		checkError( result, stream.str() );
+		return result;
+	}
+
+	//*********************************************************************************************
+
+	TextWriter< double >::TextWriter( String tabs )
+		: TextWriterT< double >{ std::move( tabs ) }
+	{
+	}
+
+	bool TextWriter< double >::operator()( double const & value
+		, TextFile & file )
+	{
+		auto stream = makeStringStream();
+		stream << std::showpoint << value;
+		auto result = file.writeText( stream.str() ) > 0;
+		checkError( result, stream.str() );
+		return result;
+	}
+
+	//*********************************************************************************************
+
+	TextWriter< String >::TextWriter( String tabs )
+		: TextWriterT< String >{ std::move( tabs ) }
+	{
+	}
+
+	bool TextWriter< String >::operator()( String const & value
+		, TextFile & file )
+	{
+		auto result = file.writeText( value ) > 0;
+		checkError( result, value );
+		return result;
 	}
 
 	//*********************************************************************************************

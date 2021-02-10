@@ -18,9 +18,9 @@ namespace castor
 
 		if ( config.getType() != FogType::eDisabled )
 		{
-			log::info << cuT( "Write Fog" ) << std::endl;
-			result = write( cuT( "fog_type" ), castor3d::getName( config.getType() ), file )
-				&& write( cuT( "fog_density " ), config.getDensity(), file );
+			log::info << tabs() << cuT( "Write Fog" ) << std::endl;
+			result = write( file, cuT( "fog_type" ), castor3d::getName( config.getType() ) )
+				&& write( file, cuT( "fog_density " ), config.getDensity() );
 		}
 
 		return result;

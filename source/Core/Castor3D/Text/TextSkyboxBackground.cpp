@@ -25,14 +25,14 @@ namespace castor
 			cuT( "front" ),
 		};
 
-		auto result = writeComment( cuT( "Skybox" ), file );
+		auto result = file.writeText( cuT( "\n" ) + tabs() + cuT( "//Skybox\n" ) ) > 0;
 
 		if ( !background.getEquiTexturePath().empty()
 			&& castor::File::fileExists( background.getEquiTexturePath() ) )
 		{
 			result = false;
 
-			if ( auto block = beginBlock( "skybox", file ) )
+			if ( auto block = beginBlock( file, "skybox" ) )
 			{
 				Path subfolder{ cuT( "Textures" ) };
 				String relative = copyFile( background.getEquiTexturePath()
@@ -51,9 +51,9 @@ namespace castor
 		{
 			result = false;
 
-			if ( auto block = beginBlock( "skybox", file ) )
+			if ( auto block = beginBlock( file, "skybox" ) )
 			{
-				result = writeFile( cuT( "cross" ), background.getCrossTexturePath(), cuT( "Textures" ), file );
+				result = writeFile( file, cuT( "cross" ), background.getCrossTexturePath(), cuT( "Textures" ) );
 			}
 		}
 		else if ( castor::File::fileExists( Path{ background.getTexture().getLayerCubeFaceView( 0, CubeMapFace( 0u ) ).toString() } )
@@ -65,16 +65,18 @@ namespace castor
 		{
 			result = false;
 
-			if ( auto block = beginBlock( "skybox", file ) )
+			if ( auto block = beginBlock( file, "skybox" ) )
 			{
+				result = true;
+
 				Path subfolder{ cuT( "Textures" ) };
 
 				for ( uint32_t i = 0; i < 6 && result; ++i )
 				{
-					result = writeFile( faces[i]
+					result = writeFile( file
+						, faces[i]
 						, Path{ background.getTexture().getLayerCubeFaceView( 0u, CubeMapFace( i ) ).toString() }
-						, cuT( "Textures" )
-						, file );
+						, cuT( "Textures" ) );
 				}
 			}
 		}

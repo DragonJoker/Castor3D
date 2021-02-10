@@ -17,24 +17,24 @@ namespace castor
 
 	bool TextWriter< BillboardList >::operator()( BillboardList const & obj, castor::TextFile & file )
 	{
-		log::info << cuT( "Writing BillboardList " ) << obj.getName() << std::endl;
+		log::info << tabs() << cuT( "Writing BillboardList " ) << obj.getName() << std::endl;
 		bool result = false;
 
-		if ( beginBlock( "billboard", obj.getName(), file ) )
+		if ( auto block = beginBlock( file, "billboard", obj.getName() ) )
 		{
-			result = writeName( "parent", obj.getParent()->getName(), file )
-				&& write( cuT( "cast_shadows" ), obj.isShadowCaster(), file )
-				&& write( cuT( "receives_shadows" ), obj.isShadowReceiver(), file )
-				&& writeName( "material", obj.getMaterial()->getName(), file )
-				&& write( "dimensions", obj.getDimensions(), file );
+			result = writeName( file, "parent", obj.getParent()->getName() )
+				&& write( file, cuT( "cast_shadows" ), obj.isShadowCaster() )
+				&& write( file, cuT( "receive_shadows" ), obj.isShadowReceiver() )
+				&& writeName( file, "material", obj.getMaterial()->getName() )
+				&& write( file, "dimensions", obj.getDimensions() );
 
 			if ( result && obj.getCount() )
 			{
-				if ( beginBlock( "positions", file ) )
+				if ( auto posBlock = beginBlock( file, "positions" ) )
 				{
 					for ( auto const & point : obj )
 					{
-						result = result && write( "pos", point, file );
+						result = result && write( file, "pos", point );
 					}
 				}
 			}

@@ -56,7 +56,7 @@ namespace castor3d
 		return m_light.getShadowVariance();
 	}
 
-	Shadow const & LightCategory::getShadowConfig()const
+	ShadowConfig const & LightCategory::getShadowConfig()const
 	{
 		return m_light.getShadowConfig();
 	}

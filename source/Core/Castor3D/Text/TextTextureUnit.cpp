@@ -49,22 +49,23 @@ namespace castor
 
 		if ( hasTexture )
 		{
+			log::info << tabs() << cuT( "Writing TextureUnit" ) << std::endl;
 			auto texture = unit.getTexture();
 			auto image = texture->getPath();
 			hasTexture = !image.empty() || !texture->isStatic();
 
 			if ( hasTexture )
 			{
-				if ( auto block = beginBlock( cuT( "texture_unit" ), file ) )
+				if ( auto block = beginBlock( file, cuT( "texture_unit" ) ) )
 				{
 					if ( unit.getSampler() && unit.getSampler()->getName() != cuT( "Default" ) )
 					{
-						result = writeName( cuT( "sampler" ), unit.getSampler()->getName(), file );
+						result = writeName( file, cuT( "sampler" ), unit.getSampler()->getName() );
 					}
 
 					if ( result && unit.getTexture()->getMipmapCount() > 1 )
 					{
-						result = write( cuT( "levels_count" ), unit.getTexture()->getMipmapCount(), file );
+						result = write( file, cuT( "levels_count" ), unit.getTexture()->getMipmapCount() );
 					}
 
 					if ( result )
@@ -73,7 +74,7 @@ namespace castor
 						{
 							if ( unit.getRenderTarget() )
 							{
-								result = write( *unit.getRenderTarget(), file );
+								result = write( file, *unit.getRenderTarget() );
 							}
 							else
 							{
@@ -82,7 +83,7 @@ namespace castor
 						}
 						else
 						{
-							result = writeFile( cuT( "image" ), Path{ image }, cuT( "Textures" ), file );
+							result = writeFile( file, cuT( "image" ), Path{ image }, cuT( "Textures" ) );
 						}
 					}
 

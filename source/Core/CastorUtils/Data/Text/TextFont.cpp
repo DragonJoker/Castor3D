@@ -12,10 +12,10 @@ namespace castor
 		Logger::logInfo( cuT( "Writing Font " ) + object.getName() );
 		bool result = false;
 
-		if ( beginBlock( cuT( "font" ), object.getName(), file ) )
+		if ( auto block = beginBlock( file, cuT( "font" ), object.getName() ) )
 		{
-			result = writeFile( "file", object.getFilePath(), {}, file )
-				&& write( "height", object.getHeight(), file );
+			result = writeFile( file, "file", object.getFilePath(), {} )
+				&& write( file, "height", object.getHeight() );
 		}
 
 		return result;

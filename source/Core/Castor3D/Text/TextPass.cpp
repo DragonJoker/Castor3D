@@ -8,7 +8,7 @@
 using namespace castor3d;
 
 namespace castor
-{	
+{
 	TextWriter< Pass >::TextWriter( String const & tabs )
 		: TextWriterT< Pass >{ tabs }
 	{
@@ -42,35 +42,35 @@ namespace castor
 
 		if ( pass.getOpacity() < 1 )
 		{
-			result = write( cuT( "alpha" ), pass.getOpacity(), file )
-				&& write( cuT( "bw_accumulation" ), uint32_t( pass.getBWAccumulationOperator() ), file );
+			result = write( file, cuT( "alpha" ), pass.getOpacity() )
+				&& write( file, cuT( "bw_accumulation" ), uint32_t( pass.getBWAccumulationOperator() ) );
 		}
 
 		if ( result )
 		{
-			result = writeOpt( cuT( "emissive" ), pass.getEmissive(), 0.0f, file )
-				&& writeOpt( cuT( "transmission" ), pass.getTransmission(), castor::Point3f{ 1.0f, 1.0f, 1.0f }, file )
-				&& writeOpt( cuT( "two_sided" ), pass.isTwoSided(), true, file )
-				&& writeOpt( cuT( "colour_blend_mode" ), StrBlendModes[uint32_t( pass.getColourBlendMode() )], StrBlendModes[uint32_t( BlendMode::eNoBlend )], file );
+			result = writeOpt( file, cuT( "emissive" ), pass.getEmissive(), 0.0f )
+				&& writeOpt( file, cuT( "transmission" ), pass.getTransmission(), castor::Point3f{ 1.0f, 1.0f, 1.0f } )
+				&& writeOpt( file, cuT( "two_sided" ), pass.isTwoSided(), true )
+				&& writeOpt( file, cuT( "colour_blend_mode" ), StrBlendModes[uint32_t( pass.getColourBlendMode() )], StrBlendModes[uint32_t( BlendMode::eNoBlend )] );
 		}
 
 		if ( result )
 		{
 			if ( pass.hasAlphaTest() )
 			{
-				result = write( cuT( "alpha_func" ), strAlphaFuncs[pass.getAlphaFunc()], file );
+				result = write( file, cuT( "alpha_func" ), strAlphaFuncs[pass.getAlphaFunc()], pass.getAlphaValue() );
 			}
 			else if ( pass.hasAlphaBlending()
 				&& pass.getAlphaBlendMode() != BlendMode::eNoBlend )
 			{
-				result = write( cuT( "alpha_blend_mode" ), StrBlendModes[uint32_t( pass.getAlphaBlendMode() )], file );
+				result = write( file, cuT( "alpha_blend_mode" ), StrBlendModes[uint32_t( pass.getAlphaBlendMode() )] );
 			}
 		}
 
 		if ( result )
 		{
-			result = writeOpt( cuT( "parallax_occlusion" ), pass.hasParallaxOcclusion(), file )
-				&& writeOpt( cuT( "parallax_occlusion" ), pass.hasEnvironmentMapping(), file );
+			result = writeOpt( file, cuT( "parallax_occlusion" ), pass.hasParallaxOcclusion() )
+				&& writeOpt( file, cuT( "parallax_occlusion" ), pass.hasEnvironmentMapping() );
 		}
 
 		if ( result )
@@ -83,7 +83,7 @@ namespace castor
 
 		if ( result && pass.hasSubsurfaceScattering() )
 		{
-			result = TextWriter< SubsurfaceScattering >{ tabs() }( pass.getSubsurfaceScattering(), file );
+			result = write( file, pass.getSubsurfaceScattering() );
 		}
 
 		return result;

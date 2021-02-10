@@ -19,11 +19,11 @@ namespace castor
 		log::info << tabs() << cuT( "Writing Camera " ) << camera.getName() << std::endl;
 		bool result = false;
 		
-		if ( auto block = beginBlock( cuT( "camera" ), camera.getName(), file ) )
+		if ( auto block = beginBlock( file, cuT( "camera" ), camera.getName() ) )
 		{
-			result = writeName( "parent", camera.getParent()->getName(), file )
-				&& write( camera.getViewport(), file )
-				&& write( camera.getHdrConfig(), file );
+			result = writeName( file, "parent", camera.getParent()->getName() )
+				&& write( file, camera.getViewport() )
+				&& write( file, camera.getHdrConfig() );
 		}
 
 		return result;

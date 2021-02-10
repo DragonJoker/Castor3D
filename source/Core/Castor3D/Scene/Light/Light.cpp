@@ -34,7 +34,7 @@ namespace castor3d
 	{
 		m_category->update();
 		m_dirty = false;
-		m_currentGlobalIllumination = m_globalIllumination;
+		m_currentGlobalIllumination = m_shadows.globalIllumination;
 		m_currentShadowCaster = m_shadowCaster;
 	}
 

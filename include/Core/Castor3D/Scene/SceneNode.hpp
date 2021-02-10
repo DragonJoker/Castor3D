@@ -22,8 +22,6 @@ namespace castor3d
 		//!\~english	The total number of scene nodes.
 		//!\~french		Le nombre total de noeuds de scène.
 		static uint64_t Count;
-
-	protected:
 		using SceneNodePtrStrMap = std::map< castor::String, SceneNodeWPtr >;
 		using MovableObjectArray = std::list< std::reference_wrapper< MovableObject > >;
 

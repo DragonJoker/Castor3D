@@ -13,12 +13,12 @@ namespace castor
 
 	bool TextWriter< LpvConfig >::operator()( LpvConfig const & object, TextFile & file )
 	{
-		log::info << cuT( "Writing LpvConfig" ) << std::endl;
+		log::info << tabs() << cuT( "Writing LpvConfig" ) << std::endl;
 		bool result{ false };
 
-		if ( beginBlock( cuT( "lpv_config" ), file ) )
+		if ( auto block = beginBlock( file, cuT( "lpv_config" ) ) )
 		{
-			result = write( cuT( "texel_area_modifier" ), object.texelAreaModifier, file );
+			result = write( file, cuT( "texel_area_modifier" ), object.texelAreaModifier );
 		}
 
 		return result;

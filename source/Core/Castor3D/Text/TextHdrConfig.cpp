@@ -14,10 +14,10 @@ namespace castor
 	{
 		bool result = false;
 
-		if ( auto block = beginBlock( cuT( "hdr_config" ), file ) )
+		if ( auto block = beginBlock( file, cuT( "hdr_config" ) ) )
 		{
-			result = write( cuT( "exposure" ), obj.exposure, file )
-				&& write( cuT( "gamma " ), obj.gamma, file );
+			result = write( file, cuT( "exposure" ), obj.exposure )
+				&& write( file, cuT( "gamma" ), obj.gamma );
 		}
 
 		return result;

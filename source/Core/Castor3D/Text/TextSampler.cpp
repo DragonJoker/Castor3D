@@ -20,28 +20,28 @@ namespace castor
 		if ( sampler.getName() != cuT( "LightsSampler" ) && sampler.getName() != RenderTarget::DefaultSamplerName )
 		{
 			result = false;
-			log::info << cuT( "Writing Sampler " ) << sampler.getName() << std::endl;
+			log::info << tabs() << cuT( "Writing Sampler " ) << sampler.getName() << std::endl;
 
-			if ( auto block = beginBlock( "sampler", sampler.getName(), file ) )
+			if ( auto block = beginBlock( file, "sampler", sampler.getName() ) )
 			{
-				result = write( "min_filter", ashes::getName( sampler.getMinFilter() ), file )
-					&& write( "mag_filter", ashes::getName( sampler.getMagFilter() ), file )
-					&& write( "mip_filter", ashes::getName( sampler.getMipFilter() ), file )
-					&& write( "u_wrap_mode", ashes::getName( sampler.getWrapS() ), file )
-					&& write( "v_wrap_mode", ashes::getName( sampler.getWrapT() ), file )
-					&& write( "w_wrap_mode", ashes::getName( sampler.getWrapR() ), file )
-					&& write( "min_lod", sampler.getMinLod(), file )
-					&& write( "max_lod", sampler.getMaxLod(), file )
-					&& write( "lod_bias", sampler.getLodBias(), file )
-					&& write( "border_colour", ashes::getName( sampler.getBorderColour() ), file )
-					&& write( "max_anisotropy", sampler.getMaxAnisotropy(), file );
+				result = write( file, "min_filter", ashes::getName( sampler.getMinFilter() ) )
+					&& write( file, "mag_filter", ashes::getName( sampler.getMagFilter() ) )
+					&& write( file, "mip_filter", ashes::getName( sampler.getMipFilter() ) )
+					&& write( file, "u_wrap_mode", ashes::getName( sampler.getWrapS() ) )
+					&& write( file, "v_wrap_mode", ashes::getName( sampler.getWrapT() ) )
+					&& write( file, "w_wrap_mode", ashes::getName( sampler.getWrapR() ) )
+					&& write( file, "min_lod", sampler.getMinLod() )
+					&& write( file, "max_lod", sampler.getMaxLod() )
+					&& write( file, "lod_bias", sampler.getLodBias() )
+					&& write( file, "border_colour", ashes::getName( sampler.getBorderColour() ) )
+					&& write( file, "max_anisotropy", sampler.getMaxAnisotropy() );
 
 				if ( result
 					&& sampler.getCompareOp() != VK_COMPARE_OP_NEVER
 					&& sampler.getCompareOp() != VK_COMPARE_OP_ALWAYS )
 				{
-					result = write( "comparison_mode", String{ "ref_to_texture" }, file )
-						&& write( "comparison_func", ashes::getName( sampler.getCompareOp() ), file );
+					result = write( file, "comparison_mode", String{ "ref_to_texture" } )
+						&& write( file, "comparison_func", ashes::getName( sampler.getCompareOp() ) );
 				}
 			}
 		}

@@ -11,12 +11,12 @@ See LICENSE file in root folder
 namespace castor
 {
 	template<>
-	class TextWriter< castor3d::Shadow >
-		: public TextWriterT< castor3d::Shadow >
+	class TextWriter< castor3d::ShadowConfig >
+		: public TextWriterT< castor3d::ShadowConfig >
 	{
 	public:
 		C3D_API explicit TextWriter( String const & tabs );
-		C3D_API bool operator()( castor3d::Shadow const & config
+		C3D_API bool operator()( castor3d::ShadowConfig const & config
 			, TextFile & file )override;
 	};
 }

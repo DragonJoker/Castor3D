@@ -13,20 +13,25 @@ namespace castor
 
 	bool TextWriter< VoxelSceneData >::operator()( VoxelSceneData const & obj, TextFile & file )
 	{
-		log::info << cuT( "Writing VoxelSceneData" ) << std::endl;
-		bool result{ false };
+		log::info << tabs() << cuT( "Writing VoxelSceneData" ) << std::endl;
+		auto result = file.writeText( cuT( "\n" ) + tabs() + cuT( "//Voxel Cone Tracing\n" ) ) > 0;
 
-		if ( auto block = beginBlock( cuT( "voxel_cone_tracing" ), file ) )
+		if ( result )
 		{
-			result = write( cuT( "enabled" ), obj.enabled, file )
-				&& write( cuT( "conservative_rasterization" ), obj.enableConservativeRasterization, file )
-				&& write( cuT( "temporal_smoothing" ), obj.enableTemporalSmoothing, file )
-				&& write( cuT( "occlusion" ), obj.enableOcclusion, file )
-				&& write( cuT( "secondary_bounce" ), obj.enableSecondaryBounce, file )
-				&& write( cuT( "num_cones" ), obj.numCones, file )
-				&& write( cuT( "max_distance" ), obj.maxDistance, file )
-				&& write( cuT( "ray_step_size" ), obj.rayStepSize, file )
-				&& write( cuT( "voxel_size" ), obj.voxelSizeFactor, file );
+			result = false;
+
+			if ( auto block = beginBlock( file, cuT( "voxel_cone_tracing" ) ) )
+			{
+				result = write( file, cuT( "enabled" ), obj.enabled )
+					&& write( file, cuT( "conservative_rasterization" ), obj.enableConservativeRasterization )
+					&& write( file, cuT( "temporal_smoothing" ), obj.enableTemporalSmoothing )
+					&& write( file, cuT( "occlusion" ), obj.enableOcclusion )
+					&& write( file, cuT( "secondary_bounce" ), obj.enableSecondaryBounce )
+					&& write( file, cuT( "num_cones" ), obj.numCones )
+					&& write( file, cuT( "max_distance" ), obj.maxDistance )
+					&& write( file, cuT( "ray_step_size" ), obj.rayStepSize )
+					&& write( file, cuT( "voxel_size" ), obj.voxelSizeFactor );
+			}
 		}
 
 		return result;

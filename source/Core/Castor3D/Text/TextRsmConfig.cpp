@@ -16,11 +16,11 @@ namespace castor
 		log::info << tabs() << cuT( "Writing RsmConfig" ) << std::endl;
 		auto result = false;
 
-		if ( auto block = beginBlock( cuT( "lpv_config" ), file ) )
+		if ( auto block = beginBlock( file, cuT( "rsm_config" ) ) )
 		{
-			result = write( cuT( "intensity" ), object.intensity, file )
-				&& write( cuT( "max_radius" ), object.maxRadius, file )
-				&& write( cuT( "sample_count" ), object.sampleCount, file );
+			result = write( file, cuT( "intensity" ), object.intensity )
+				&& write( file, cuT( "max_radius" ), object.maxRadius )
+				&& write( file, cuT( "sample_count" ), object.sampleCount );
 		}
 
 		return result;

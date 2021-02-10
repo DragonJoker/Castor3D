@@ -36,15 +36,15 @@ namespace Testing
 		{
 			castor::TextFile file{ fileName, castor::File::OpenMode::eWrite };
 			castor::TextWriterBase writer;
-			CT_CHECK( writer.write( "bool", true, file ) );
-			CT_CHECK( writer.write( "int16_t", int16_t( 1 ), file ) );
-			CT_CHECK( writer.write( "uint16_t", uint16_t( 2u ), file ) );
-			CT_CHECK( writer.write( "int32_t", int32_t( 3 ), file ) );
-			CT_CHECK( writer.write( "uint32_t", uint32_t( 4u ), file ) );
-			CT_CHECK( writer.write( "int64_t", int64_t( 5 ), file ) );
-			CT_CHECK( writer.write( "uint64_t", uint64_t( 6u ), file ) );
-			CT_CHECK( writer.write( "float", 7.0f, file ) );
-			CT_CHECK( writer.write( "double", 8.0, file ) );
+			CT_CHECK( writer.write( file, "bool", true ) );
+			CT_CHECK( writer.write( file, "int16_t", int16_t( 1 ) ) );
+			CT_CHECK( writer.write( file, "uint16_t", uint16_t( 2u ) ) );
+			CT_CHECK( writer.write( file, "int32_t", int32_t( 3 ) ) );
+			CT_CHECK( writer.write( file, "uint32_t", uint32_t( 4u ) ) );
+			CT_CHECK( writer.write( file, "int64_t", int64_t( 5 ) ) );
+			CT_CHECK( writer.write( file, "uint64_t", uint64_t( 6u ) ) );
+			CT_CHECK( writer.write( file, "float", 7.0f ) );
+			CT_CHECK( writer.write( file, "double", 8.0 ) );
 		}
 		castor::File::deleteFile( fileName );
 	}
@@ -55,9 +55,9 @@ namespace Testing
 		{
 			castor::TextFile file{ fileName, castor::File::OpenMode::eWrite };
 			castor::TextWriterBase writer;
-			CT_CHECK( writer.write( "Point2f", castor::Point2f{ 0.0f, 1.0f }, file ) );
-			CT_CHECK( writer.write( "Point3f", castor::Point3f{ 2.0f, 3.0f, 4.0f }, file ) );
-			CT_CHECK( writer.write( "Point4f", castor::Point4f{ 5.0f, 6.0f, 7.0f, 8.0f }, file ) );
+			CT_CHECK( writer.write( file, "Point2f", castor::Point2f{ 0.0f, 1.0f } ) );
+			CT_CHECK( writer.write( file, "Point3f", castor::Point3f{ 2.0f, 3.0f, 4.0f } ) );
+			CT_CHECK( writer.write( file, "Point4f", castor::Point4f{ 5.0f, 6.0f, 7.0f, 8.0f } ) );
 		}
 		castor::File::deleteFile( fileName );
 	}
@@ -68,7 +68,7 @@ namespace Testing
 		{
 			castor::TextFile file{ fileName, castor::File::OpenMode::eWrite };
 			castor::TextWriterBase writer;
-			CT_CHECK( writer.write( "Quaternion", castor::Quaternion::fromAxisAngle( castor::Point3f{ 0.0f, 1.0f, 0.5f }, castor::Angle::fromDegrees( 90.0f ) ), file ) );
+			CT_CHECK( writer.write( file, "Quaternion", castor::Quaternion::fromAxisAngle( castor::Point3f{ 0.0f, 1.0f, 0.5f }, castor::Angle::fromDegrees( 90.0f ) ) ) );
 		}
 		castor::File::deleteFile( fileName );
 	}
@@ -79,8 +79,8 @@ namespace Testing
 		{
 			castor::TextFile file{ fileName, castor::File::OpenMode::eWrite };
 			castor::TextWriterBase writer;
-			CT_CHECK( writer.write( "RgbColour", castor::RgbColour{ 0.0f, 0.5f, 1.0f }, file ) );
-			CT_CHECK( writer.write( "HdrRgbColour", castor::HdrRgbColour{ 1.5f, 2.0f, 2.5f }, file ) );
+			CT_CHECK( writer.write( file, "RgbColour", castor::RgbColour{ 0.0f, 0.5f, 1.0f } ) );
+			CT_CHECK( writer.write( file, "HdrRgbColour", castor::HdrRgbColour{ 1.5f, 2.0f, 2.5f } ) );
 		}
 		castor::File::deleteFile( fileName );
 	}
@@ -91,8 +91,8 @@ namespace Testing
 		{
 			castor::TextFile file{ fileName, castor::File::OpenMode::eWrite };
 			castor::TextWriterBase writer;
-			CT_CHECK( writer.write( "RgbaColour", castor::RgbaColour{ 0.0f, 0.25f, 0.75f, 1.0f }, file ) );
-			CT_CHECK( writer.write( "HdrRgbaColour", castor::HdrRgbaColour{ 1.25f, 1.5f, 1.75f, 2.0f }, file ) );
+			CT_CHECK( writer.write( file, "RgbaColour", castor::RgbaColour{ 0.0f, 0.25f, 0.75f, 1.0f } ) );
+			CT_CHECK( writer.write( file, "HdrRgbaColour", castor::HdrRgbaColour{ 1.25f, 1.5f, 1.75f, 2.0f } ) );
 		}
 		castor::File::deleteFile( fileName );
 	}
@@ -105,8 +105,8 @@ namespace Testing
 			castor::TextWriterBase writer;
 			auto block = writer.beginBlock( file );
 			CT_CHECK( bool( block ) );
-			CT_CHECK( writer.write( "RgbaColour", castor::RgbaColour{ 0.0f, 0.25f, 0.75f, 1.0f }, file ) );
-			CT_CHECK( writer.write( "HdrRgbaColour", castor::HdrRgbaColour{ 1.25f, 1.5f, 1.75f, 2.0f }, file ) );
+			CT_CHECK( writer.write( file, "RgbaColour", castor::RgbaColour{ 0.0f, 0.25f, 0.75f, 1.0f } ) );
+			CT_CHECK( writer.write( file, "HdrRgbaColour", castor::HdrRgbaColour{ 1.25f, 1.5f, 1.75f, 2.0f } ) );
 		}
 		castor::File::deleteFile( fileName );
 	}
@@ -117,10 +117,10 @@ namespace Testing
 		{
 			castor::TextFile file{ fileName, castor::File::OpenMode::eWrite };
 			castor::TextWriterBase writer;
-			auto block = writer.beginBlock( "colours", file );
+			auto block = writer.beginBlock( file, "colours" );
 			CT_CHECK( bool( block ) );
-			CT_CHECK( writer.write( "RgbaColour", castor::RgbaColour{ 0.0f, 0.25f, 0.75f, 1.0f }, file ) );
-			CT_CHECK( writer.write( "HdrRgbaColour", castor::HdrRgbaColour{ 1.25f, 1.5f, 1.75f, 2.0f }, file ) );
+			CT_CHECK( writer.write( file, "RgbaColour", castor::RgbaColour{ 0.0f, 0.25f, 0.75f, 1.0f } ) );
+			CT_CHECK( writer.write( file, "HdrRgbaColour", castor::HdrRgbaColour{ 1.25f, 1.5f, 1.75f, 2.0f } ) );
 		}
 		castor::File::deleteFile( fileName );
 	}
@@ -131,10 +131,10 @@ namespace Testing
 		{
 			castor::TextFile file{ fileName, castor::File::OpenMode::eWrite };
 			castor::TextWriterBase writer;
-			auto block = writer.beginBlock( "colours", "named", file );
+			auto block = writer.beginBlock( file, "colours", "named" );
 			CT_CHECK( bool( block ) );
-			CT_CHECK( writer.write( "RgbaColour", castor::RgbaColour{ 0.0f, 0.25f, 0.75f, 1.0f }, file ) );
-			CT_CHECK( writer.write( "HdrRgbaColour", castor::HdrRgbaColour{ 1.25f, 1.5f, 1.75f, 2.0f }, file ) );
+			CT_CHECK( writer.write( file, "RgbaColour", castor::RgbaColour{ 0.0f, 0.25f, 0.75f, 1.0f } ) );
+			CT_CHECK( writer.write( file, "HdrRgbaColour", castor::HdrRgbaColour{ 1.25f, 1.5f, 1.75f, 2.0f } ) );
 		}
 		castor::File::deleteFile( fileName );
 	}

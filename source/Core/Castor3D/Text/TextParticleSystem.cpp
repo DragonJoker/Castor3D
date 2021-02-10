@@ -23,20 +23,20 @@ namespace castor
 		log::info << tabs() << cuT( "Writing ParticleSystem " ) << obj.getName() << std::endl;
 		bool result = false;
 
-		if ( auto block = beginBlock( cuT( "particle_system" ), obj.getName(), file ) )
+		if ( auto block = beginBlock( file, cuT( "particle_system" ), obj.getName() ) )
 		{
-			result = writeName( "parent", obj.getParent()->getName(), file )
-				&& write( cuT( "particles_count" ), obj.getMaxParticlesCount(), file )
-				&& write( cuT( "dimensions" ), obj.getDimensions(), file )
-				&& writeName( cuT( "material" ), obj.getMaterial()->getName(), file );
+			result = writeName( file, "parent", obj.getParent()->getName() )
+				&& write( file, cuT( "particles_count" ), obj.getMaxParticlesCount() )
+				&& write( file, cuT( "dimensions" ), obj.getDimensions() )
+				&& writeName( file, cuT( "material" ), obj.getMaterial()->getName() );
 
 			if ( result )
 			{
-				if ( auto partBlock = beginBlock( "particle", file ) )
+				if ( auto partBlock = beginBlock( file, "particle" ) )
 				{
 					if ( result && !obj.getParticleType().empty() )
 					{
-						result = writeName( cuT( "type" ), obj.getParticleType(), file );
+						result = writeName( file, cuT( "type" ), obj.getParticleType() );
 					}
 
 					auto values = obj.getDefaultValues();
@@ -55,7 +55,7 @@ namespace castor
 
 			if ( result && obj.getCompute().hasUpdateProgram() )
 			{
-				result = write( cuT( "cs_shader_program" ), obj.getCompute().getUpdateProgram(), file );
+				result = write( file, cuT( "cs_shader_program" ), obj.getCompute().getUpdateProgram() );
 			}
 		}
 

@@ -43,23 +43,27 @@ namespace castor
 			log::info << tabs() << cuT( "Writing Node " ) << node.getName() << std::endl;
 			result = false;
 
-			if ( auto block = beginBlock( "scene_node", node.getName(), file ) )
+			if ( auto block = beginBlock( file, "scene_node", node.getName() ) )
 			{
 				if ( node.getParent()
 					&& !isIgnored( *node.getParent() ) )
 				{
-					result = writeName( "parent", node.getParent()->getName(), file );
+					result = writeName( file, "parent", node.getParent()->getName() );
+				}
+				else
+				{
+					result = true;
 				}
 
 				if ( result )
 				{
-					result = writeOpt( "orientation", node.getOrientation(), castor::Quaternion::identity(), file )
-						&& writeOpt( "position", node.getPosition(), castor::Point3f{}, file );
+					result = writeOpt( file, "orientation", node.getOrientation(), castor::Quaternion::identity() )
+						&& writeOpt( file, "position", node.getPosition(), castor::Point3f{} );
 				}
 
 				if ( result && ( node.getScale() != castor::Point3f{ 1, 1, 1 } || m_scale != 1.0f ) )
 				{
-					result = write( "scale", node.getScale() * m_scale, file );
+					result = write( file, "scale", node.getScale() * m_scale );
 				}
 			}
 		}

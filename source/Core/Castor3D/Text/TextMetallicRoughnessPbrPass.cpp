@@ -20,12 +20,12 @@ namespace castor
 		log::info << tabs() << cuT( "Writing MetallicRoughnessPbrPass " ) << std::endl;
 		bool result = false;
 
-		if ( auto block = beginBlock( "pass", file ) )
+		if ( auto block = beginBlock( file, "pass" ) )
 		{
-			result = write( "albedo", pass.getAlbedo(), file )
-				&& write( "roughness", pass.getRoughness(), file )
-				&& write( "metallic", pass.getMetallic(), file )
-				&& write< Pass >( pass, file );
+			result = write( file, "albedo", pass.getAlbedo() )
+				&& write( file, "roughness", pass.getRoughness() )
+				&& write( file, "metallic", pass.getMetallic() )
+				&& write< Pass >( file, pass );
 		}
 
 		return result;

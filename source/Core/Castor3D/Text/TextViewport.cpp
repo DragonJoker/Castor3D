@@ -14,29 +14,30 @@ namespace castor
 	bool TextWriter< Viewport >::operator()( Viewport const & viewport
 		, TextFile & file )
 	{
+		log::info << tabs() << cuT( "Writing Viewport" ) << std::endl;
 		bool result = false;
 
-		if ( auto block = beginBlock( "viewport", file ) )
+		if ( auto block = beginBlock( file, "viewport" ) )
 		{
-			result = write( "type", Viewport::TypeName[size_t( viewport.getType() )], file );
+			result = write( file, "type", Viewport::TypeName[size_t( viewport.getType() )] );
 
 			if ( result )
 			{
 				if ( viewport.getType() == ViewportType::eOrtho || viewport.getType() == ViewportType::eFrustum )
 				{
-					result = write( cuT( "near " ), viewport.getNear(), file )
-						&& write( cuT( "far " ), viewport.getFar(), file )
-						&& write( cuT( "left " ), viewport.getLeft(), file )
-						&& write( cuT( "right " ), viewport.getRight(), file )
-						&& write( cuT( "top " ), viewport.getTop(), file )
-						&& write( cuT( "bottom " ), viewport.getBottom(), file );
+					result = write( file, cuT( "near" ), viewport.getNear() )
+						&& write( file, cuT( "far" ), viewport.getFar() )
+						&& write( file, cuT( "left" ), viewport.getLeft() )
+						&& write( file, cuT( "right" ), viewport.getRight() )
+						&& write( file, cuT( "top" ), viewport.getTop() )
+						&& write( file, cuT( "bottom" ), viewport.getBottom() );
 				}
 				else
 				{
-					result = write( cuT( "near " ), viewport.getNear(), file )
-						&& write( cuT( "far " ), viewport.getFar(), file )
-						&& write( cuT( "aspect_ratio " ), viewport.getRatio(), file )
-						&& write( cuT( "fov_y " ), viewport.getFovY().degrees(), file );
+					result = write( file, cuT( "near" ), viewport.getNear() )
+						&& write( file, cuT( "far" ), viewport.getFar() )
+						&& write( file, cuT( "aspect_ratio" ), viewport.getRatio() )
+						&& write( file, cuT( "fov_y" ), viewport.getFovY().degrees() );
 				}
 			}
 		}

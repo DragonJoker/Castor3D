@@ -19,11 +19,11 @@ namespace castor
 		switch ( background.getType() )
 		{
 		case BackgroundType::eColour:
-			return write( static_cast< ColourBackground const & >( background ), file );
+			return true;
 		case BackgroundType::eImage:
-			return write< >( static_cast< ImageBackground const & >( background ), file );
+			return write( file, static_cast< ImageBackground const & >( background ) );
 		case BackgroundType::eSkybox:
-			return write< >( static_cast< SkyboxBackground const & >( background ), file );
+			return write( file, static_cast< SkyboxBackground const & >( background ) );
 		default:
 			return false;
 		}

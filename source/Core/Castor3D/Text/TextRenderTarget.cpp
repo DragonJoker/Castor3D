@@ -23,26 +23,26 @@ namespace castor
 
 	bool TextWriter< RenderTarget >::operator()( RenderTarget const & target, TextFile & file )
 	{
-		log::info << cuT( "Writing RenderTarget" ) << std::endl;
+		log::info << tabs() << cuT( "Writing RenderTarget" ) << std::endl;
 		bool result = false;
 
-		if ( auto block = beginBlock( "render_target", file ) )
+		if ( auto block = beginBlock( file, "render_target" ) )
 		{
 			if ( target.getScene() )
 			{
-				result = writeName( cuT( "scene" ), target.getScene()->getName(), file );
+				result = writeName( file, cuT( "scene" ), target.getScene()->getName() );
 			}
 
 			if ( result && target.getCamera() )
 			{
-				result = writeName( cuT( "camera" ), target.getCamera()->getName(), file );
+				result = writeName( file, cuT( "camera" ), target.getCamera()->getName() );
 			}
 
 			if ( result )
 			{
-				result = write( cuT( "size" ), target.getSize(), file )
-					&& write( cuT( "format" ), PF::getFormatName( convert( target.getPixelFormat() ) ), file )
-					&& writeName( cuT( "tone_mapping" ), target.getToneMapping()->getName(), file );
+				result = write( file, cuT( "size" ), target.getSize() )
+					&& write( file, cuT( "format" ), PF::getFormatName( convert( target.getPixelFormat() ) ) )
+					&& writeName( file, cuT( "tone_mapping" ), target.getToneMapping()->getName() );
 			}
 
 			if ( result )
@@ -63,7 +63,7 @@ namespace castor
 
 			if ( result )
 			{
-				result = TextWriter< SsaoConfig >{ tabs() }( target.getSsaoConfig(), file );
+				result = write( file, target.getSsaoConfig() );
 			}
 		}
 

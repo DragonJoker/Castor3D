@@ -102,31 +102,32 @@ namespace castor
 		CU_API void checkError( bool error, std::string const & action )const;
 
 		CU_API WriterBlock beginBlock( TextFile & file );
-		CU_API WriterBlock beginBlock( String const & name, TextFile & file );
-		CU_API WriterBlock beginBlock( String const & type, String const & name, TextFile & file );
-		CU_API bool writeMask( String const & name, uint32_t mask, TextFile & file )const;
-		CU_API bool writeMask( String const & name, uint64_t mask, TextFile & file )const;
-		CU_API bool writeComment( String const & comment, TextFile & file )const;
-		CU_API bool write( String const & name, float value, TextFile & file )const;
-		CU_API bool write( String const & name, double value, TextFile & file )const;
-		CU_API bool write( String const & name, uint16_t value, TextFile & file )const;
-		CU_API bool write( String const & name, int16_t value, TextFile & file )const;
-		CU_API bool write( String const & name, uint32_t value, TextFile & file )const;
-		CU_API bool write( String const & name, int32_t value, TextFile & file )const;
-		CU_API bool write( String const & name, uint64_t value, TextFile & file )const;
-		CU_API bool write( String const & name, int64_t value, TextFile & file )const;
-		CU_API bool write( String const & name, bool value, TextFile & file )const;
-		CU_API bool write( String const & name, String const & value, TextFile & file )const;
+		CU_API WriterBlock beginBlock( TextFile & file, String const & name );
+		CU_API WriterBlock beginBlock( TextFile & file, String const & type, String const & name );
+		CU_API bool writeMask( TextFile & file, String const & name, uint32_t mask )const;
+		CU_API bool writeMask( TextFile & file, String const & name, uint64_t mask )const;
+		CU_API bool writeComment( TextFile & file, String const & comment )const;
+		CU_API bool write( TextFile & file, String const & value )const;
+		CU_API bool write( TextFile & file, String const & name, float value )const;
+		CU_API bool write( TextFile & file, String const & name, double value )const;
+		CU_API bool write( TextFile & file, String const & name, uint16_t value )const;
+		CU_API bool write( TextFile & file, String const & name, int16_t value )const;
+		CU_API bool write( TextFile & file, String const & name, uint32_t value )const;
+		CU_API bool write( TextFile & file, String const & name, int32_t value )const;
+		CU_API bool write( TextFile & file, String const & name, uint64_t value )const;
+		CU_API bool write( TextFile & file, String const & name, int64_t value )const;
+		CU_API bool write( TextFile & file, String const & name, bool value )const;
+		CU_API bool write( TextFile & file, String const & name, String const & value )const;
 
-		CU_API bool writeOpt( String const & name, bool value, TextFile & file )const;
-		CU_API bool writeName( String const & name, String const & value, TextFile & file )const;
-		CU_API bool writePath( String const & name, Path const & value, TextFile & file )const;
-		CU_API bool writeFile( String const & name, Path const & value, String const & subfolder, TextFile & file )const;
+		CU_API bool writeOpt( TextFile & file, String const & name, bool value )const;
+		CU_API bool writeName( TextFile & file, String const & name, String const & value )const;
+		CU_API bool writePath( TextFile & file, String const & name, Path const & value )const;
+		CU_API bool writeFile( TextFile & file, String const & name, Path const & value, String const & subfolder )const;
 
 		CU_API String tabs()const;
 
 		template< typename ValueT >
-		bool write( String const & name, ValueT const & value, TextFile & file )const
+		bool write( TextFile & file, String const & name, ValueT const & value )const
 		{
 			auto result = file.writeText( tabs() + name + cuT( " " ) ) > 0
 				&& TextWriter< ValueT >{ tabs() }( value, file )
@@ -136,39 +137,51 @@ namespace castor
 		}
 
 		template< typename ValueT >
-		bool write( ValueT const & value, TextFile & file )const
+		bool write( TextFile & file, ValueT const & value )const
 		{
 			auto result = TextWriter< ValueT >{ tabs() }( value, file );
 			checkError( result, cuT( "" ) );
 			return result;
 		}
 
+		template< typename Value1T, typename Value2T >
+		bool write( TextFile & file, String const & name, Value1T const & value1, Value2T const & value2 )const
+		{
+			auto result = file.writeText( tabs() + name + cuT( " " ) ) > 0
+				&& TextWriter< Value1T >{ tabs() }( value1, file )
+				&& file.writeText( cuT( " " ) ) > 0
+				&& TextWriter< Value2T >{ tabs() }( value2, file )
+				&& file.writeText( cuT( "\n" ) ) > 0;
+			checkError( result, name.c_str() );
+			return result;
+		}
+
 		template< typename ValueT >
-		bool writeOpt( String const & name
+		bool writeOpt( TextFile & file
+			, String const & name
 			, ValueT const & value
-			, ValueT const & comp
-			, TextFile & file )const
+			, ValueT const & comp )const
 		{
 			bool result{ true };
 
 			if ( value != comp )
 			{
-				result = write( name, value, file );
+				result = write( file, name, value );
 			}
 
 			return result;
 		}
 
 		template< typename ValueT >
-		bool write( String const & name, castor::RangedValue< ValueT > const & value, TextFile & file )const
+		bool write( TextFile & file, String const & name, castor::RangedValue< ValueT > const & value )const
 		{
-			return write( name, value.value(), file );
+			return write( file, name, value.value() );
 		}
 
 		template< typename ValueT >
-		bool write( String const & name, castor::ChangeTracked< ValueT > const & value, TextFile & file )const
+		bool write( TextFile & file, String const & name, castor::ChangeTracked< ValueT > const & value )const
 		{
-			return write( name, value.value(), file );
+			return write( file, name, value.value() );
 		}
 
 	private:
@@ -195,6 +208,116 @@ namespace castor
 
 	template< class T >
 	class TextWriter;
+
+	template<>
+	class TextWriter< int8_t >
+		: TextWriterT< int8_t >
+	{
+	public:
+		CU_API explicit TextWriter( String tabs );
+		CU_API bool operator()( int8_t const & value
+			, castor::TextFile & file )override;
+	};
+
+	template<>
+	class TextWriter< uint8_t >
+		: TextWriterT< uint8_t >
+	{
+	public:
+		CU_API explicit TextWriter( String tabs );
+		CU_API bool operator()( uint8_t const & value
+			, castor::TextFile & file )override;
+	};
+
+	template<>
+	class TextWriter< int16_t >
+		: TextWriterT< int16_t >
+	{
+	public:
+		CU_API explicit TextWriter( String tabs );
+		CU_API bool operator()( int16_t const & value
+			, castor::TextFile & file )override;
+	};
+
+	template<>
+	class TextWriter< uint16_t >
+		: TextWriterT< uint16_t >
+	{
+	public:
+		CU_API explicit TextWriter( String tabs );
+		CU_API bool operator()( uint16_t const & value
+			, castor::TextFile & file )override;
+	};
+
+	template<>
+	class TextWriter< int32_t >
+		: TextWriterT< int32_t >
+	{
+	public:
+		CU_API explicit TextWriter( String tabs );
+		CU_API bool operator()( int32_t const & value
+			, castor::TextFile & file )override;
+	};
+
+	template<>
+	class TextWriter< uint32_t >
+		: TextWriterT< uint32_t >
+	{
+	public:
+		CU_API explicit TextWriter( String tabs );
+		CU_API bool operator()( uint32_t const & value
+			, castor::TextFile & file )override;
+	};
+
+	template<>
+	class TextWriter< int64_t >
+		: TextWriterT< int64_t >
+	{
+	public:
+		CU_API explicit TextWriter( String tabs );
+		CU_API bool operator()( int64_t const & value
+			, castor::TextFile & file )override;
+	};
+
+	template<>
+	class TextWriter< uint64_t >
+		: TextWriterT< uint64_t >
+	{
+	public:
+		CU_API explicit TextWriter( String tabs );
+		CU_API bool operator()( uint64_t const & value
+			, castor::TextFile & file )override;
+	};
+
+	template<>
+	class TextWriter< float >
+		: TextWriterT< float >
+	{
+	public:
+		CU_API explicit TextWriter( String tabs );
+		CU_API bool operator()( float const & value
+			, castor::TextFile & file )override;
+	};
+
+	template<>
+	class TextWriter< double >
+		: TextWriterT< double >
+	{
+	public:
+		CU_API explicit TextWriter( String tabs );
+		CU_API bool operator()( double const & value
+			, castor::TextFile & file )override;
+	};
+
+	template<>
+	class TextWriter< String >
+		: TextWriterT< String >
+	{
+	public:
+		CU_API explicit TextWriter( String tabs );
+		CU_API bool operator()( String const & value
+			, castor::TextFile & file )override;
+	};
 }
 
 #endif

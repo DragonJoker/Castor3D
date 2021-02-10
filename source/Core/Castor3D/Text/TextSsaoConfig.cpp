@@ -17,21 +17,21 @@ namespace castor
 		bool result{ false };
 		log::info << tabs() << cuT( "Writing SsaoConfig" ) << std::endl;
 
-		if ( auto block = beginBlock( "ssao", file ) )
+		if ( auto block = beginBlock( file, "ssao" ) )
 		{
-			result = write( cuT( "enabled" ), object.enabled, file )
-				&& write( cuT( "high_quality" ), object.highQuality, file )
-				&& write( cuT( "use_normals_buffer" ), object.useNormalsBuffer, file )
-				&& write( cuT( "blur_high_quality" ), object.blurHighQuality, file )
-				&& write( cuT( "intensity" ), object.intensity, file )
-				&& write( cuT( "radius" ), object.radius, file )
-				&& write( cuT( "bias" ), object.bias, file )
-				&& write( cuT( "num_samples" ), object.numSamples, file )
-				&& write( cuT( "edge_sharpness" ), object.edgeSharpness, file )
-				&& write( cuT( "blur_step_size" ), object.blurStepSize, file )
-				&& write( cuT( "blur_radius" ), object.blurRadius, file )
-				&& write( cuT( "bend_step_count" ), object.bendStepCount, file )
-				&& write( cuT( "bend_step_size" ), object.bendStepSize, file );
+			result = write( file, cuT( "enabled" ), object.enabled )
+				&& write( file, cuT( "high_quality" ), object.highQuality )
+				&& write( file, cuT( "use_normals_buffer" ), object.useNormalsBuffer )
+				&& write( file, cuT( "blur_high_quality" ), object.blurHighQuality )
+				&& write( file, cuT( "intensity" ), object.intensity )
+				&& write( file, cuT( "radius" ), object.radius )
+				&& write( file, cuT( "bias" ), object.bias )
+				&& write( file, cuT( "num_samples" ), object.numSamples )
+				&& write( file, cuT( "edge_sharpness" ), object.edgeSharpness )
+				&& write( file, cuT( "blur_step_size" ), object.blurStepSize )
+				&& write( file, cuT( "blur_radius" ), object.blurRadius )
+				&& write( file, cuT( "bend_step_count" ), object.bendStepCount )
+				&& write( file, cuT( "bend_step_size" ), object.bendStepSize );
 		}
 
 		return result;

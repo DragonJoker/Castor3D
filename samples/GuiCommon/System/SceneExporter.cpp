@@ -467,9 +467,9 @@ namespace GuiCommon
 		bool result = false;
 		castor::TextWriter< Scene >::Options options;
 		{
-			if ( !File::directoryExists( folder / cuT( "Materials" ) ) )
+			if ( !File::directoryExists( folder / cuT( "Helpers" ) ) )
 			{
-				File::directoryCreate( folder / cuT( "Materials" ) );
+				File::directoryCreate( folder / cuT( "Helpers" ) );
 			}
 			{
 				TextFile file( filePath, File::OpenMode::eWrite );
@@ -487,8 +487,8 @@ namespace GuiCommon
 			}
 			if ( result )
 			{
-				options.materialsFile = cuT( "Materials" ) / filePath.getFileName( true );
-				File::copyFile( filePath, folder / cuT( "Materials" ) );
+				options.materialsFile = cuT( "Helpers" ) / Path( filePath.getFileName( false ) + cuT( "-Materials.cscn" ) );
+				File::copyFileName( filePath, folder / options.materialsFile );
 				File::deleteFile( filePath );
 			}
 		}
@@ -507,9 +507,8 @@ namespace GuiCommon
 			}
 			if ( result )
 			{
-				options.meshesFile = cuT( "Meshes" ) / filePath.getFileName( true );
-				File::directoryCreate( folder / cuT( "Meshes" ) );
-				File::copyFile( filePath, folder / cuT( "Meshes" ) );
+				options.meshesFile = cuT( "Helpers" ) / Path( filePath.getFileName( false ) + cuT( "-Meshes.cscn" ) );
+				File::copyFileName( filePath, folder / options.meshesFile );
 				File::deleteFile( filePath );
 			}
 		}
@@ -529,9 +528,8 @@ namespace GuiCommon
 			}
 			if ( result )
 			{
-				options.objectsFile = cuT( "Objects" ) / filePath.getFileName( true );
-				File::directoryCreate( folder / cuT( "Objects" ) );
-				File::copyFile( filePath, folder / cuT( "Objects" ) );
+				options.objectsFile = cuT( "Helpers" ) / Path( filePath.getFileName( false ) + cuT( "-Objects.cscn" ) );
+				File::copyFileName( filePath, folder / options.objectsFile );
 				File::deleteFile( filePath );
 			}
 		}
@@ -550,9 +548,8 @@ namespace GuiCommon
 			}
 			if ( result )
 			{
-				options.lightsFile = cuT( "Lights" ) / filePath.getFileName( true );
-				File::directoryCreate( folder / cuT( "Lights" ) );
-				File::copyFile( filePath, folder / cuT( "Lights" ) );
+				options.lightsFile = cuT( "Helpers" ) / Path( filePath.getFileName( false ) + cuT( "-Lights.cscn" ) );
+				File::copyFileName( filePath, folder / options.lightsFile );
 				File::deleteFile( filePath );
 			}
 		}
@@ -571,9 +568,8 @@ namespace GuiCommon
 			}
 			if ( result )
 			{
-				options.nodesFile = cuT( "Nodes" ) / filePath.getFileName( true );
-				File::directoryCreate( folder / cuT( "Nodes" ) );
-				File::copyFile( filePath, folder / cuT( "Nodes" ) );
+				options.nodesFile = cuT( "Helpers" ) / Path( filePath.getFileName( false ) + cuT( "-Nodes.cscn" ) );
+				File::copyFileName( filePath, folder / options.nodesFile );
 				File::deleteFile( filePath );
 			}
 		}
@@ -620,7 +616,7 @@ namespace GuiCommon
 						{
 							if ( result )
 							{
-								BinaryFile animFile{ base / ( it.first + cuT( ".cska" ) ), File::OpenMode::eWrite };
+								BinaryFile animFile{ base / ( it.first + cuT( "-" ) + animation.first + cuT( ".cska" ) ), File::OpenMode::eWrite };
 								result = castor3d::BinaryWriter< SkeletonAnimation >{}.write( static_cast< SkeletonAnimation const & >( *animation.second ), animFile );
 							}
 						}
@@ -630,7 +626,7 @@ namespace GuiCommon
 					{
 						if ( result )
 						{
-							BinaryFile animFile{ base / ( it.first + cuT( ".cmsa" ) ), File::OpenMode::eWrite };
+							BinaryFile animFile{ base / ( it.first + cuT( "-" ) + animation.first + cuT( ".cmsa" ) ), File::OpenMode::eWrite };
 							result = castor3d::BinaryWriter< MeshAnimation >{}.write( static_cast< MeshAnimation const & >( *animation.second ), animFile );
 						}
 					}

@@ -1,37 +1,52 @@
 #include "Castor3D/Text/TextShadow.hpp"
 
 #include "Castor3D/Miscellaneous/Logger.hpp"
+#include "Castor3D/Text/TextLpvConfig.hpp"
+#include "Castor3D/Text/TextRsmConfig.hpp"
 
 using namespace castor3d;
 
 namespace castor
 {
-	TextWriter< Shadow >::TextWriter( String const & tabs )
-		: TextWriterT< Shadow >{ tabs }
+	TextWriter< ShadowConfig >::TextWriter( String const & tabs )
+		: TextWriterT< ShadowConfig >{ tabs }
 	{
 	}
 
-	bool TextWriter< Shadow >::operator()( Shadow const & light, TextFile & file )
+	bool TextWriter< ShadowConfig >::operator()( ShadowConfig const & object, TextFile & file )
 	{
-		log::info << tabs() << cuT( "Writing Shadow" ) << std::endl;
+		log::info << tabs() << cuT( "Writing ShadowConfig" ) << std::endl;
 		bool result = false;
 
-		if ( auto block = beginBlock( "raw_config", file ) )
+		if ( auto block = beginBlock( file, "shadows" ) )
 		{
-			result = write( cuT( "min_offset" ), light.getShadowRawOffsets()[0], file )
-				&& write( cuT( "max_slope_offset" ), light.getShadowRawOffsets()[1], file );
-		}
+			result = write( file, "filter", getName( object.filterType ) )
+				&& write( file, "global_illumination", getName( object.globalIllumination ) );
 
-		if ( auto block = beginBlock( "pcf_config", file ) )
-		{
-			result = write( cuT( "min_offset" ), light.getShadowPcfOffsets()[0], file )
-				&& write( cuT( "max_slope_offset" ), light.getShadowPcfOffsets()[1], file );
-		}
+			if ( auto rawBlock = beginBlock( file, "raw_config" ) )
+			{
+				result = result
+					&& write( file, cuT( "min_offset" ), object.rawOffsets[0] )
+					&& write( file, cuT( "max_slope_offset" ), object.rawOffsets[1] );
+			}
 
-		if ( auto block = beginBlock( "vsm_config", file ) )
-		{
-			result = write( cuT( "variance_max" ), light.getShadowVariance()[0], file )
-				&& write( cuT( "variance_bias" ), light.getShadowVariance()[1], file );
+			if ( auto pcfBlock = beginBlock( file, "pcf_config" ) )
+			{
+				result = result
+					&& write( file, cuT( "min_offset" ), object.pcfOffsets[0] )
+					&& write( file, cuT( "max_slope_offset" ), object.pcfOffsets[1] );
+			}
+
+			if ( auto vsmBlock = beginBlock( file, "vsm_config" ) )
+			{
+				result = result
+					&& write( file, cuT( "variance_max" ), object.variance[0] )
+					&& write( file, cuT( "variance_bias" ), object.variance[1] );
+			}
+
+			result = result
+				&& write( file, object.rsmConfig )
+				&& write( file, object.lpvConfig );
 		}
 
 		return result;

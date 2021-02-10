@@ -22,18 +22,18 @@ namespace castor
 		log::info << tabs() << cuT( "Writing BorderPanelOverlay " ) << overlay.getOverlayName() << std::endl;
 		bool result = false;
 
-		if ( auto block = beginBlock( cuT( "border_panel_overlay" ), overlay.getOverlay().getName(), file ) )
+		if ( auto block = beginBlock( file, cuT( "border_panel_overlay" ), overlay.getOverlay().getName() ) )
 		{
-			result = write( cuT( "border_size" ), overlay.getBorderSize(), file );
+			result = write( file, cuT( "border_size" ), overlay.getBorderSize() );
 
 			if ( result && overlay.getBorderMaterial() )
 			{
-				result = writeName( cuT( "border_material" ), overlay.getBorderMaterial()->getName(), file );
+				result = writeName( file, cuT( "border_material" ), overlay.getBorderMaterial()->getName() );
 			}
 
 			if ( result )
 			{
-				result = write< OverlayCategory >( overlay, file );
+				result = write< OverlayCategory >( file, overlay );
 			}
 		}
 

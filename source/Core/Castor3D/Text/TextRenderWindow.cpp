@@ -18,14 +18,14 @@ namespace castor
 		log::info << tabs() << cuT( "Writing Window " ) << window.getName() << std::endl;
 		bool result = false;
 
-		if ( auto block = beginBlock( cuT( "window" ), window.getName(), file ) )
+		if ( auto block = beginBlock( file, cuT( "window" ), window.getName() ) )
 		{
-			result = write( cuT( "vsync" ), window.isVSyncEnabled(), file )
-				&& write( cuT( "fullscreen" ), window.isFullscreen(), file );
+			result = write( file, cuT( "vsync" ), window.isVSyncEnabled() )
+				&& write( file, cuT( "fullscreen" ), window.isFullscreen() );
 
 			if ( result && window.getRenderTarget() )
 			{
-				result = write( *window.getRenderTarget(), file );
+				result = write( file, *window.getRenderTarget() );
 			}
 		}
 

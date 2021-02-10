@@ -6,10 +6,8 @@ See LICENSE file in root folder
 
 #include "LightModule.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
-
-#include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LpvConfig.hpp"
-#include "Castor3D/Render/Technique/Opaque/ReflectiveShadowMapGI/RsmConfig.hpp"
 #include "Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp"
+
 #include "Castor3D/Scene/MovableObject.hpp"
 #include "Castor3D/Scene/Shadow.hpp"
 #include "Castor3D/Scene/Light/LightCategory.hpp"
@@ -168,7 +166,7 @@ namespace castor3d
 
 		ShadowType getShadowType()const
 		{
-			return m_shadows.getFilterType();
+			return m_shadows.filterType;
 		}
 
 		ShadowMapRPtr getShadowMap()const
@@ -198,55 +196,55 @@ namespace castor3d
 
 		GlobalIlluminationType getExpectedGlobalIlluminationType()const
 		{
-			return m_globalIllumination;
+			return m_shadows.globalIllumination;
 		}
 
 		RsmConfig const & getRsmConfig()const
 		{
-			return m_rsmConfig;
+			return m_shadows.rsmConfig;
 		}
 
 		RsmConfig & getRsmConfig()
 		{
-			return m_rsmConfig;
+			return m_shadows.rsmConfig;
 		}
 
 		LpvConfig const & getLpvConfig()const
 		{
-			return m_lpvConfig;
+			return m_shadows.lpvConfig;
 		}
 
 		LpvConfig & getLpvConfig()
 		{
-			return m_lpvConfig;
+			return m_shadows.lpvConfig;
 		}
 
 		uint32_t getVolumetricSteps()const
 		{
-			return m_shadows.getVolumetricSteps();
+			return m_shadows.volumetricSteps;
 		}
 
 		float getVolumetricScatteringFactor()const
 		{
-			return m_shadows.getVolumetricScatteringFactor();
+			return m_shadows.volumetricScattering;
 		}
 
 		castor::Point2f const & getShadowRawOffsets()const
 		{
-			return m_shadows.getShadowRawOffsets();
+			return m_shadows.rawOffsets;
 		}
 
 		castor::Point2f const & getShadowPcfOffsets()const
 		{
-			return m_shadows.getShadowPcfOffsets();
+			return m_shadows.pcfOffsets;
 		}
 
 		castor::Point2f const & getShadowVariance()const
 		{
-			return m_shadows.getShadowVariance();
+			return m_shadows.variance;
 		}
 
-		Shadow const & getShadowConfig()const
+		ShadowConfig const & getShadowConfig()const
 		{
 			return m_shadows;
 		}
@@ -334,53 +332,53 @@ namespace castor3d
 
 		void setGlobalIlluminationType( GlobalIlluminationType value )
 		{
-			m_globalIllumination = value;
+			m_shadows.globalIllumination = value;
 			onChanged( *this );
 		}
 
 		void setShadowType( ShadowType value )
 		{
-			m_shadows.setFilterType( value );
+			m_shadows.filterType = value;
 		}
 
 		void setVolumetricSteps( uint32_t value )
 		{
-			m_shadows.setVolumetricSteps( value );
+			m_shadows.volumetricSteps = value;
 		}
 
 		void setVolumetricScatteringFactor( float value )
 		{
-			m_shadows.setVolumetricScatteringFactor( value );
+			m_shadows.volumetricScattering = value;
 		}
 
 		void setRawMinOffset( float value )
 		{
-			m_shadows.setRawMinOffset( value );
+			m_shadows.rawOffsets[0] = value;
 		}
 
 		void setRawMaxSlopeOffset( float value )
 		{
-			m_shadows.setRawMaxSlopeOffset( value );
+			m_shadows.rawOffsets[1] = value;
 		}
 
 		void setPcfMinOffset( float value )
 		{
-			m_shadows.setPcfMinOffset( value );
+			m_shadows.pcfOffsets[0] = value;
 		}
 
 		void setPcfMaxSlopeOffset( float value )
 		{
-			m_shadows.setPcfMaxSlopeOffset( value );
+			m_shadows.pcfOffsets[1] = value;
 		}
 
 		void setVsmMaxVariance( float value )
 		{
-			m_shadows.setVsmMaxVariance( value );
+			m_shadows.variance[0] = value;
 		}
 
 		void setVsmVarianceBias( float value )
 		{
-			m_shadows.setVsmVarianceBias( value );
+			m_shadows.variance[1] = value;
 		}
 		/**@}*/
 
@@ -395,15 +393,12 @@ namespace castor3d
 		bool m_shadowCaster{ false };
 		std::atomic_bool m_currentShadowCaster{ false };
 		bool m_dirty{ true };
-		Shadow m_shadows;
+		ShadowConfig m_shadows;
 		LightCategorySPtr m_category;
 		ShadowMapRPtr m_shadowMap{ nullptr };
 		uint32_t m_shadowMapIndex{ 0u };
-		GlobalIlluminationType m_globalIllumination{ GlobalIlluminationType::eNone };
 		std::atomic< GlobalIlluminationType > m_currentGlobalIllumination{ GlobalIlluminationType::eNone };
 		uint32_t m_bufferIndex{ 0u };
-		RsmConfig m_rsmConfig;
-		LpvConfig m_lpvConfig;
 	};
 }
 

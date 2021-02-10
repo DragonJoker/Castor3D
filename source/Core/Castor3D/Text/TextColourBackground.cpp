@@ -17,6 +17,6 @@ namespace castor
 		, TextFile & file )
 	{
 		log::info << tabs() << cuT( "Writing ColourBackground" ) << std::endl;
-		return write( "background_colour", background.getColour(), file );
+		return write( file, "background_colour", background.getColour() );
 	}
 }

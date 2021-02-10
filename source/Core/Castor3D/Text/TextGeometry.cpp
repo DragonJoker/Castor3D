@@ -21,15 +21,15 @@ namespace castor
 
 		if ( geometry.getMesh() )
 		{
-			log::info << cuT( "Writing Geometry " ) << geometry.getName() << std::endl;
+			log::info << tabs() << cuT( "Writing Geometry " ) << geometry.getName() << std::endl;
 			result = false;
 
-			if ( auto block = beginBlock( cuT( "object" ), geometry.getName(), file ) )
+			if ( auto block = beginBlock( file, cuT( "object" ), geometry.getName() ) )
 			{
-				result = writeName( "parent", geometry.getParent()->getName(), file )
-					&& write( cuT( "cast_shadows" ), geometry.isShadowCaster(), file )
-					&& write( cuT( "receives_shadows" ), geometry.isShadowReceiver(), file )
-					&& write( cuT( "mesh" ), geometry.getMesh()->getName(), file );
+				result = writeName( file, "parent", geometry.getParent()->getName() )
+					&& write( file, cuT( "cast_shadows" ), geometry.isShadowCaster() )
+					&& write( file, cuT( "receive_shadows" ), geometry.isShadowReceiver() )
+					&& writeName( file, cuT( "mesh" ), geometry.getMesh()->getName() );
 
 				if ( result )
 				{
@@ -44,9 +44,9 @@ namespace castor
 					{
 						if ( geometry.getMesh()->getSubmeshCount() == 1 )
 						{
-							result = writeName( cuT( "material" ), geometry.getMaterial( *geometry.getMesh()->getSubmesh( 0u ) )->getName(), file );
+							result = writeName( file, cuT( "material" ), geometry.getMaterial( *geometry.getMesh()->getSubmesh( 0u ) )->getName() );
 						}
-						else if ( auto matsBlock = beginBlock( "materials", file ) )
+						else if ( auto matsBlock = beginBlock( file, "materials" ) )
 						{
 							for ( auto submesh : *geometry.getMesh() )
 							{

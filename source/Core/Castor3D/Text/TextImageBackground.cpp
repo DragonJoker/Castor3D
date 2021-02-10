@@ -15,9 +15,9 @@ namespace castor
 		, TextFile & file )
 	{
 		log::info << tabs() << cuT( "Writing ImageBackground" ) << std::endl;
-		return writeFile( "background_image"
+		return writeFile( file
+			, "background_image"
 			, castor::Path{ obj.getTexture().getDefaultView().toString() }
-			, cuT( "Textures" )
-			, file );
+			, cuT( "Textures" ) );
 	}
 }

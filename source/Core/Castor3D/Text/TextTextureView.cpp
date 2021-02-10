@@ -13,6 +13,6 @@ namespace castor
 
 	bool TextWriter< TextureView >::operator()( TextureView const & obj, TextFile & file )
 	{
-		return write( "", obj.toString(), file );
+		return write( file, "", obj.toString() );
 	}
 }

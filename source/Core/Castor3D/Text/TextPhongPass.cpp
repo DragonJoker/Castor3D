@@ -20,13 +20,13 @@ namespace castor
 		log::info << tabs() << cuT( "Writing PhongPass " ) << std::endl;
 		bool result = false;
 
-		if ( auto block = beginBlock( "pass", file ) )
+		if ( auto block = beginBlock( file, "pass" ) )
 		{
-			result = write( "diffuse", pass.getDiffuse(), file )
-				&& write( "specular", pass.getSpecular(), file )
-				&& write( "ambient", pass.getAmbient(), file )
-				&& write( "shininess", pass.getShininess(), file )
-				&& write< Pass >( pass, file );
+			result = write( file, "diffuse", pass.getDiffuse() )
+				&& write( file, "specular", pass.getSpecular() )
+				&& write( file, "ambient", pass.getAmbient() )
+				&& write( file, "shininess", pass.getShininess() )
+				&& write< Pass >( file, pass );
 		}
 
 		return result;

@@ -205,7 +205,7 @@ namespace Bloom
 
 	bool PostEffect::doWriteInto( TextFile & file, String const & tabs )
 	{
-		return file.writeText( tabs + cuT( "postfx \"" ) + Type + cuT( "\" -Size=" ) + string::toString( m_blurKernelSize, std::locale{ "C" } )
-			+ cuT( " -Passes=" ) + string::toString( m_blurPassesCount, std::locale{ "C" } ) ) > 0;
+		return file.writeText( tabs + cuT( "postfx \"" ) + Type + cuT( "\" -Size=" ) + string::toString( m_blurKernelSize )
+			+ cuT( " -Passes=" ) + string::toString( m_blurPassesCount ) ) > 0;
 	}
 }

@@ -135,7 +135,7 @@ namespace castor3d
 	{
 		if ( !hasAnimation( name ) )
 		{
-			doAddAnimation( std::make_unique< MeshAnimation >( *this, name ) );
+			addAnimation( std::make_unique< MeshAnimation >( *this, name ) );
 		}
 
 		return doGetAnimation< MeshAnimation >( name );
