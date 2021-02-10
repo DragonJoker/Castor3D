@@ -34,7 +34,6 @@ namespace castor3d
 		stream << "    API version: " << object.getVersion() << "\n";
 		stream << "    Storage Buffers: " << support( object.hasFeature( GpuFeature::eShaderStorageBuffers ) ) << "\n";
 		stream << "    Stereo Rendering: " << support( object.hasFeature( GpuFeature::eStereoRendering ) ) << "\n";
-		stream << "    Shader language version: " << object.getShaderLanguageVersion() << "\n";
 		stream << "    Vertex shaders: " << object.hasShaderType( VK_SHADER_STAGE_VERTEX_BIT ) << "\n";
 		stream << "    Tessellation Control shaders: " << object.hasShaderType( VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT ) << "\n";
 		stream << "    Tessellation Evaluation shaders: " << object.hasShaderType( VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT ) << "\n";

@@ -521,7 +521,6 @@ namespace castor3d
 			m_gpuInformations.setVendor( vendors[properties.vendorID] );
 			m_gpuInformations.setRenderer( properties.deviceName );
 			m_gpuInformations.setVersion( stream.str() );
-			m_gpuInformations.setShaderLanguageVersion( device.device->getShaderVersion() );
 			m_gpuInformations.updateFeature( castor3d::GpuFeature::eShaderStorageBuffers, m_desc.features.hasStorageBuffers );
 			m_gpuInformations.updateFeature( castor3d::GpuFeature::eStereoRendering, limits.maxViewports > 1u );
 
