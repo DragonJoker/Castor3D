@@ -170,6 +170,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/TextFile.inl
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/TextLoader.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/TextWriter.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/TextWriter.inl
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/Writer.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/ZipArchive.hpp
 	)
