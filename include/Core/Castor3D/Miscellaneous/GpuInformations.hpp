@@ -134,28 +134,6 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\return		The shader language version.
-		 *\~french
-		 *\return		La version du langage shader.
-		 */
-		inline std::string const & getShaderLanguageVersion()const
-		{
-			return m_shaderLanguageVersion;
-		}
-		/**
-		 *\~english
-		 *\brief		Defines the shader language version.
-		 *\param[in]	value	The version.
-		 *\~french
-		 *\brief		Définit la version du langage shader.
-		 *\param[in]	value	La version.
-		 */
-		inline void setShaderLanguageVersion( std::string value )
-		{
-			m_shaderLanguageVersion = std::move( value );
-		}
-		/**
-		 *\~english
 		 *\param[in]	index	The index.
 		 *\return		The maximum value for given index.
 		 *\~french
@@ -261,7 +239,6 @@ namespace castor3d
 
 	private:
 		GpuFeatures m_features{ 0u };
-		std::string m_shaderLanguageVersion{ 0 };
 		std::map< VkShaderStageFlagBits, bool > m_useShader;
 		std::map< GpuMax, int32_t > m_maxValues;
 		uint32_t m_totalMemorySize{};

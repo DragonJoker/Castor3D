@@ -57,14 +57,30 @@ namespace castor3d
 						, vec4( 0.75_f, 0.22_f, 0.875_f, 0.375_f )
 						, vec4( 0.1875_f, 0.6875_f, 0.0625_f, 0.5625_f )
 						, vec4( 0.9375_f, 0.4375_f, 0.8125_f, 0.3125_f ) } );
-				m_writer.declSampledImage< FImg2DArrayRgba32 >( MapNormalDepthDirectional
-					, ( directionalEnabled ? index++ : index )
-					, 1u
-					, directionalEnabled );
-				m_writer.declSampledImage< FImg2DArrayRg32 >( MapVarianceDirectional
-					, ( directionalEnabled ? index++ : index )
-					, 1u
-					, directionalEnabled );
+
+				if ( DirectionalMaxCascadesCount > 1u )
+				{
+					m_writer.declSampledImage< FImg2DArrayRgba32 >( MapNormalDepthDirectional
+						, ( directionalEnabled ? index++ : index )
+						, 1u
+						, directionalEnabled );
+					m_writer.declSampledImage< FImg2DArrayRg32 >( MapVarianceDirectional
+						, ( directionalEnabled ? index++ : index )
+						, 1u
+						, directionalEnabled );
+				}
+				else
+				{
+					m_writer.declSampledImage< FImg2DRgba32 >( MapNormalDepthDirectional
+						, ( directionalEnabled ? index++ : index )
+						, 1u
+						, directionalEnabled );
+					m_writer.declSampledImage< FImg2DRg32 >( MapVarianceDirectional
+						, ( directionalEnabled ? index++ : index )
+						, 1u
+						, directionalEnabled );
+				}
+
 				m_writer.declSampledImage< FImgCubeArrayRgba32 >( MapNormalDepthPoint
 					, ( pointEnabled ? index++ : index )
 					, 1u
@@ -86,8 +102,18 @@ namespace castor3d
 				doDeclareGetRandom();
 				doDeclareTextureProj();
 				doDeclareFilterPCF();
-				doDeclareTextureProjCascade();
-				doDeclareFilterPCFCascade();
+
+				if ( DirectionalMaxCascadesCount > 1u )
+				{
+					doDeclareTextureProjCascade();
+					doDeclareFilterPCFCascade();
+				}
+				else
+				{
+					doDeclareTextureProjNoCascade();
+					doDeclareFilterPCFNoCascade();
+				}
+
 				doDeclareGetShadowOffset();
 				doDeclareChebyshevUpperBound();
 				doDeclareGetLightSpacePosition();
@@ -114,14 +140,33 @@ namespace castor3d
 						, vec4( 0.75_f, 0.22_f, 0.875_f, 0.375_f )
 						, vec4( 0.1875_f, 0.6875_f, 0.0625_f, 0.5625_f )
 						, vec4( 0.9375_f, 0.4375_f, 0.8125_f, 0.3125_f ) } );
-				m_writer.declSampledImage< FImg2DArrayRgba32 >( MapNormalDepthDirectional, index++, 1u );
-				m_writer.declSampledImage< FImg2DArrayRg32 >( MapVarianceDirectional, index++, 1u );
+
+				if ( DirectionalMaxCascadesCount > 1u )
+				{
+					m_writer.declSampledImage< FImg2DArrayRgba32 >( MapNormalDepthDirectional, index++, 1u );
+					m_writer.declSampledImage< FImg2DArrayRg32 >( MapVarianceDirectional, index++, 1u );
+				}
+				else
+				{
+					m_writer.declSampledImage< FImg2DRgba32 >( MapNormalDepthDirectional, index++, 1u );
+					m_writer.declSampledImage< FImg2DRg32 >( MapVarianceDirectional, index++, 1u );
+				}
 
 				m_utils.declareInvertVec2Y();
 				doDeclareGetRandom();
 				doDeclareGetShadowOffset();
-				doDeclareTextureProjCascade();
-				doDeclareFilterPCFCascade();
+
+				if ( DirectionalMaxCascadesCount > 1u )
+				{
+					doDeclareTextureProjCascade();
+					doDeclareFilterPCFCascade();
+				}
+				else
+				{
+					doDeclareTextureProjNoCascade();
+					doDeclareFilterPCFNoCascade();
+				}
+
 				doDeclareChebyshevUpperBound();
 				doDeclareGetLightSpacePosition();
 			}
@@ -375,6 +420,82 @@ namespace castor3d
 				, InFloat{ m_writer, "bias" } );
 		}
 
+		void Shadow::doDeclareTextureProjNoCascade()
+		{
+			m_textureProjNoCascade = m_writer.implementFunction< Float >( "textureProjCascade"
+				, [this]( Vec4 const & lightSpacePosition
+					, Vec2 const & offset
+					, SampledImage2DRgba32 const & shadowMap
+					, Float const & bias )
+				{
+					auto shadow = m_writer.declLocale( "shadow"
+						, 1.0_f );
+					auto shadowCoord = m_writer.declLocale( "shadowCoord"
+						, lightSpacePosition );
+
+					IF( m_writer, shadowCoord.z() > -1.0_f && shadowCoord.z() < 1.0_f )
+					{
+						auto uv = m_writer.declLocale( "uv"
+							, shadowCoord.st() + offset );
+						auto dist = m_writer.declLocale( "dist"
+							, shadowMap.sample( uv ) );
+
+						IF( m_writer, shadowCoord.w() > 0 )
+						{
+							shadow = step( shadowCoord.z() - bias, dist.w() );
+						}
+						FI;
+					}
+					FI;
+
+					m_writer.returnStmt( shadow );
+				}
+				, InVec4{ m_writer, "lightSpacePosition" }
+				, InVec2{ m_writer, "offset" }
+				, InSampledImage2DRgba32{ m_writer, "shadowMap" }
+				, InFloat{ m_writer, "bias" } );
+		}
+
+		void Shadow::doDeclareFilterPCFNoCascade()
+		{
+			m_filterPCFNoCascade = m_writer.implementFunction< Float >( "filterPCFCascade"
+				, [this]( Vec4 const & lightSpacePosition
+					, SampledImage2DRgba32 const & shadowMap
+					, Vec2 const & invTexDim
+					, Float const & bias )
+				{
+					auto scale = m_writer.declLocale( "scale"
+						, 1.0_f );
+					auto dx = m_writer.declLocale( "dx"
+						, scale * invTexDim.x() );
+					auto dy = m_writer.declLocale( "dy"
+						, scale * invTexDim.y() );
+
+					auto shadowFactor = m_writer.declLocale( "shadowFactor"
+						, 0.0_f );
+					auto count = 0;
+					auto const range = 1;
+
+					for ( int x = -range; x <= range; ++x )
+					{
+						for ( int y = -range; y <= range; ++y )
+						{
+							shadowFactor += m_textureProjNoCascade( lightSpacePosition
+								, vec2( dx * float( x ), dy * float( y ) )
+								, shadowMap
+								, bias );
+							++count;
+						}
+					}
+
+					m_writer.returnStmt( shadowFactor / float( count ) );
+				}
+				, InVec4{ m_writer, "lightSpacePosition" }
+				, InSampledImage2DRgba32{ m_writer, "shadowMap" }
+				, InVec2{ m_writer, "invTexDim" }
+				, InFloat{ m_writer, "bias" } );
+		}
+
 		void Shadow::doDeclareTextureProjCascade()
 		{
 			m_textureProjCascade = m_writer.implementFunction< Float >( "textureProjCascade"
@@ -484,56 +605,107 @@ namespace castor3d
 				{
 					if ( checkFlag( m_shadowOptions.enabled, SceneFlag::eShadowDirectional ) )
 					{
-						auto c3d_mapNormalDepthDirectional = m_writer.getVariable< SampledImage2DArrayRgba32 >( Shadow::MapNormalDepthDirectional );
-						auto c3d_mapVarianceDirectional = m_writer.getVariable< SampledImage2DArrayRg32 >( Shadow::MapVarianceDirectional );
-						auto lightSpacePosition = m_writer.declLocale( "lightSpacePosition"
-							, getLightSpacePosition( lightMatrix, surface.worldPosition ) );
 						auto result = m_writer.declLocale( "result"
 							, 1.0_f );
 
-						IF( m_writer, light.m_shadowType == Int( int( ShadowType::eVariance ) ) )
+						if ( DirectionalMaxCascadesCount > 1u )
 						{
-							auto moments = m_writer.declLocale( "moments"
-								, c3d_mapVarianceDirectional
-									.lod( vec3( lightSpacePosition.xy()
-										, m_writer.cast< Float >( cascadeIndex ) )
-									, 0.0_f ) );
-							result = m_chebyshevUpperBound( moments
-								, lightSpacePosition.z()
-								, light.m_vsmShadowVariance.x()
-								, light.m_vsmShadowVariance.y() );
-						}
-						ELSE
-						{
-							IF( m_writer, light.m_shadowType == Int( int( ShadowType::ePCF ) ) )
+							auto c3d_mapNormalDepthDirectional = m_writer.getVariable< SampledImage2DArrayRgba32 >( Shadow::MapNormalDepthDirectional );
+							auto c3d_mapVarianceDirectional = m_writer.getVariable< SampledImage2DArrayRg32 >( Shadow::MapVarianceDirectional );
+							auto lightSpacePosition = m_writer.declLocale( "lightSpacePosition"
+								, getLightSpacePosition( lightMatrix, surface.worldPosition ) );
+
+							IF( m_writer, light.m_shadowType == Int( int( ShadowType::eVariance ) ) )
 							{
-								auto bias = m_writer.declLocale( "bias"
-									, m_getShadowOffset( surface.worldNormal
-									, lightDirection
-									, light.m_pcfShadowOffsets.x()
-									, light.m_pcfShadowOffsets.y() ) );
-								result = m_filterPCFCascade( lightSpacePosition
-									, c3d_mapNormalDepthDirectional
-									, vec2( Float( 1.0f / float( ShadowMapPassDirectional::TextureSize ) ) )
-									, cascadeIndex
-									, bias );
+								auto moments = m_writer.declLocale( "moments"
+									, c3d_mapVarianceDirectional
+										.lod( vec3( lightSpacePosition.xy()
+											, m_writer.cast< Float >( cascadeIndex ) )
+										, 0.0_f ) );
+								result = m_chebyshevUpperBound( moments
+									, lightSpacePosition.z()
+									, light.m_vsmShadowVariance.x()
+									, light.m_vsmShadowVariance.y() );
 							}
 							ELSE
 							{
-								auto bias = m_writer.declLocale( "bias"
-									, m_getShadowOffset( surface.worldNormal
-									, lightDirection
-									, light.m_rawShadowOffsets.x()
-									, light.m_rawShadowOffsets.y() ) );
-								result = m_textureProjCascade( lightSpacePosition
-									, vec2( 0.0_f )
-									, c3d_mapNormalDepthDirectional
-									, cascadeIndex
-									, bias );
+								IF( m_writer, light.m_shadowType == Int( int( ShadowType::ePCF ) ) )
+								{
+									auto bias = m_writer.declLocale( "bias"
+										, m_getShadowOffset( surface.worldNormal
+										, lightDirection
+										, light.m_pcfShadowOffsets.x()
+										, light.m_pcfShadowOffsets.y() ) );
+									result = m_filterPCFCascade( lightSpacePosition
+										, c3d_mapNormalDepthDirectional
+										, vec2( Float( 1.0f / float( ShadowMapPassDirectional::TextureSize ) ) )
+										, cascadeIndex
+										, bias );
+								}
+								ELSE
+								{
+									auto bias = m_writer.declLocale( "bias"
+										, m_getShadowOffset( surface.worldNormal
+										, lightDirection
+										, light.m_rawShadowOffsets.x()
+										, light.m_rawShadowOffsets.y() ) );
+									result = m_textureProjCascade( lightSpacePosition
+										, vec2( 0.0_f )
+										, c3d_mapNormalDepthDirectional
+										, cascadeIndex
+										, bias );
+								}
+								FI;
 							}
 							FI;
 						}
-						FI;
+						else
+						{
+							auto c3d_mapNormalDepthDirectional = m_writer.getVariable< SampledImage2DRgba32 >( Shadow::MapNormalDepthDirectional );
+							auto c3d_mapVarianceDirectional = m_writer.getVariable< SampledImage2DRg32 >( Shadow::MapVarianceDirectional );
+							auto lightSpacePosition = m_writer.declLocale( "lightSpacePosition"
+								, getLightSpacePosition( lightMatrix, surface.worldPosition ) );
+
+							IF( m_writer, light.m_shadowType == Int( int( ShadowType::eVariance ) ) )
+							{
+								auto moments = m_writer.declLocale( "moments"
+									, c3d_mapVarianceDirectional
+										.lod( lightSpacePosition.xy(), 0.0_f ) );
+								result = m_chebyshevUpperBound( moments
+									, lightSpacePosition.z()
+									, light.m_vsmShadowVariance.x()
+									, light.m_vsmShadowVariance.y() );
+							}
+							ELSE
+							{
+								IF( m_writer, light.m_shadowType == Int( int( ShadowType::ePCF ) ) )
+								{
+									auto bias = m_writer.declLocale( "bias"
+										, m_getShadowOffset( surface.worldNormal
+										, lightDirection
+										, light.m_pcfShadowOffsets.x()
+										, light.m_pcfShadowOffsets.y() ) );
+									result = m_filterPCFNoCascade( lightSpacePosition
+										, c3d_mapNormalDepthDirectional
+										, vec2( Float( 1.0f / float( ShadowMapPassDirectional::TextureSize ) ) )
+										, bias );
+								}
+								ELSE
+								{
+									auto bias = m_writer.declLocale( "bias"
+										, m_getShadowOffset( surface.worldNormal
+										, lightDirection
+										, light.m_rawShadowOffsets.x()
+										, light.m_rawShadowOffsets.y() ) );
+									result = m_textureProjNoCascade( lightSpacePosition
+										, vec2( 0.0_f )
+										, c3d_mapNormalDepthDirectional
+										, bias );
+								}
+								FI;
+							}
+							FI;
+						}
 
 						m_writer.returnStmt( result );
 					}

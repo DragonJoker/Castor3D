@@ -43,7 +43,7 @@ namespace castor
 			log::info << tabs() << cuT( "Writing Node " ) << node.getName() << std::endl;
 			result = false;
 
-			if ( auto block = beginBlock( file, "scene_node", node.getName() ) )
+			if ( auto block{ beginBlock( file, "scene_node", node.getName() ) } )
 			{
 				if ( node.getParent()
 					&& !isIgnored( *node.getParent() ) )

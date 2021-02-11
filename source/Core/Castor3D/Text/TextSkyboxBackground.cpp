@@ -32,7 +32,7 @@ namespace castor
 		{
 			result = false;
 
-			if ( auto block = beginBlock( file, "skybox" ) )
+			if ( auto block{ beginBlock( file, "skybox" ) } )
 			{
 				Path subfolder{ cuT( "Textures" ) };
 				String relative = copyFile( background.getEquiTexturePath()
@@ -51,7 +51,7 @@ namespace castor
 		{
 			result = false;
 
-			if ( auto block = beginBlock( file, "skybox" ) )
+			if ( auto block{ beginBlock( file, "skybox" ) } )
 			{
 				result = writeFile( file, cuT( "cross" ), background.getCrossTexturePath(), cuT( "Textures" ) );
 			}
@@ -65,7 +65,7 @@ namespace castor
 		{
 			result = false;
 
-			if ( auto block = beginBlock( file, "skybox" ) )
+			if ( auto block{ beginBlock( file, "skybox" ) } )
 			{
 				result = true;
 

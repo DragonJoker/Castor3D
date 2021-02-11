@@ -22,7 +22,7 @@ namespace castor
 			result = false;
 			log::info << tabs() << cuT( "Writing Sampler " ) << sampler.getName() << std::endl;
 
-			if ( auto block = beginBlock( file, "sampler", sampler.getName() ) )
+			if ( auto block{ beginBlock( file, "sampler", sampler.getName() ) } )
 			{
 				result = write( file, "min_filter", ashes::getName( sampler.getMinFilter() ) )
 					&& write( file, "mag_filter", ashes::getName( sampler.getMagFilter() ) )

@@ -23,7 +23,7 @@ namespace castor
 		log::info << tabs() << cuT( "Writing ParticleSystem " ) << obj.getName() << std::endl;
 		bool result = false;
 
-		if ( auto block = beginBlock( file, cuT( "particle_system" ), obj.getName() ) )
+		if ( auto block{ beginBlock( file, cuT( "particle_system" ), obj.getName() ) } )
 		{
 			result = writeName( file, "parent", obj.getParent()->getName() )
 				&& write( file, cuT( "particles_count" ), obj.getMaxParticlesCount() )
@@ -32,9 +32,13 @@ namespace castor
 
 			if ( result )
 			{
-				if ( auto partBlock = beginBlock( file, "particle" ) )
+				result = false;
+
+				if ( auto partBlock{ beginBlock( file, "particle" ) } )
 				{
-					if ( result && !obj.getParticleType().empty() )
+					result = true;
+
+					if ( !obj.getParticleType().empty() )
 					{
 						result = writeName( file, cuT( "type" ), obj.getParticleType() );
 					}

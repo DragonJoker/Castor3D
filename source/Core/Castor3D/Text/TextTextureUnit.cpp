@@ -56,7 +56,7 @@ namespace castor
 
 			if ( hasTexture )
 			{
-				if ( auto block = beginBlock( file, cuT( "texture_unit" ) ) )
+				if ( auto block{ beginBlock( file, cuT( "texture_unit" ) ) } )
 				{
 					if ( unit.getSampler() && unit.getSampler()->getName() != cuT( "Default" ) )
 					{

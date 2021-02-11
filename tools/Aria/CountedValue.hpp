@@ -16,7 +16,7 @@ namespace aria
 		{
 		}
 
-		CountedValueT( ValueT value )
+		explicit CountedValueT( ValueT value )
 			: m_value{ std::move( value ) }
 		{
 		}

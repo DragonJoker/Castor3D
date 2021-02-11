@@ -16,7 +16,7 @@ namespace castor
 		log::info << tabs() << cuT( "Writing LpvConfig" ) << std::endl;
 		bool result{ false };
 
-		if ( auto block = beginBlock( file, cuT( "lpv_config" ) ) )
+		if ( auto block{ beginBlock( file, cuT( "lpv_config" ) ) } )
 		{
 			result = write( file, cuT( "texel_area_modifier" ), object.texelAreaModifier );
 		}

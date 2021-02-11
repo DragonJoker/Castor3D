@@ -19,7 +19,7 @@ namespace castor
 		log::info << tabs() << cuT( "Writing Material " ) << material.getName() << std::endl;
 		bool result = false;
 
-		if ( auto block = beginBlock( file, cuT( "material" ), material.getName() ) )
+		if ( auto block{ beginBlock( file, cuT( "material" ), material.getName() ) } )
 		{
 			result = true;
 

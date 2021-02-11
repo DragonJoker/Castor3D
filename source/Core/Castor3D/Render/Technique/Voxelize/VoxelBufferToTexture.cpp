@@ -123,21 +123,10 @@ namespace castor3d
 				, VK_PIPELINE_BIND_POINT_COMPUTE );
 			cmd.dispatch( voxelGridSize * voxelGridSize * voxelGridSize / 256, 1u, 1u );
 
-			if ( secondaryBounce )
-			{
-				vxResult.getTexture()->getTexture().generateMipmaps( cmd
-					, VK_IMAGE_LAYOUT_GENERAL
-					, VK_IMAGE_LAYOUT_GENERAL
-					, VK_IMAGE_LAYOUT_GENERAL );
-			}
-			else
-			{
-				vxResult.getTexture()->getTexture().generateMipmaps( cmd
-					, VK_IMAGE_LAYOUT_GENERAL
-					, VK_IMAGE_LAYOUT_GENERAL
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-			}
-
+			vxResult.getTexture()->getTexture().generateMipmaps( cmd
+				, VK_IMAGE_LAYOUT_GENERAL
+				, VK_IMAGE_LAYOUT_GENERAL
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 			cmd.endDebugBlock();
 			timer.endPass( cmd );
 			cmd.end();

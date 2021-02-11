@@ -17,7 +17,7 @@ namespace castor
 		log::info << tabs() << cuT( "Writing Viewport" ) << std::endl;
 		bool result = false;
 
-		if ( auto block = beginBlock( file, "viewport" ) )
+		if ( auto block{ beginBlock( file, "viewport" ) } )
 		{
 			result = write( file, "type", Viewport::TypeName[size_t( viewport.getType() )] );
 

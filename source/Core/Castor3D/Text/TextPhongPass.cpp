@@ -20,7 +20,7 @@ namespace castor
 		log::info << tabs() << cuT( "Writing PhongPass " ) << std::endl;
 		bool result = false;
 
-		if ( auto block = beginBlock( file, "pass" ) )
+		if ( auto block{ beginBlock( file, "pass" ) } )
 		{
 			result = write( file, "diffuse", pass.getDiffuse() )
 				&& write( file, "specular", pass.getSpecular() )

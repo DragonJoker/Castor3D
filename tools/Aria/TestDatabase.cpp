@@ -230,7 +230,7 @@ namespace aria
 			, Category category
 			, RendererMap & renderers )
 		{
-			auto renderer = getRenderer( "vk", renderers, insertRenderer );
+			getRenderer( "vk", renderers, insertRenderer );
 			auto compareFolder = categoryPath / cuT( "Compare" );
 			castor::PathArray folders
 			{

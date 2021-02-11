@@ -75,6 +75,8 @@ namespace castor3d
 			void doDeclareChebyshevUpperBound();
 			void doDeclareTextureProj();
 			void doDeclareFilterPCF();
+			void doDeclareTextureProjNoCascade();
+			void doDeclareFilterPCFNoCascade();
 			void doDeclareTextureProjCascade();
 			void doDeclareFilterPCFCascade();
 			void doDeclareGetLightSpacePosition();
@@ -111,6 +113,16 @@ namespace castor3d
 				, sdw::InFloat
 				, sdw::InFloat
 				, sdw::InFloat > m_chebyshevUpperBound;
+			sdw::Function< sdw::Float
+				, sdw::InVec4
+				, sdw::InVec2
+				, sdw::InSampledImage2DRgba32
+				, sdw::InFloat > m_textureProjNoCascade;
+			sdw::Function< sdw::Float
+				, sdw::InVec4
+				, sdw::InSampledImage2DRgba32
+				, sdw::InVec2
+				, sdw::InFloat > m_filterPCFNoCascade;
 			sdw::Function< sdw::Float
 				, sdw::InVec4
 				, sdw::InVec2

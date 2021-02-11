@@ -16,7 +16,7 @@ namespace castor
 		log::info << tabs() << cuT( "Writing RsmConfig" ) << std::endl;
 		auto result = false;
 
-		if ( auto block = beginBlock( file, cuT( "rsm_config" ) ) )
+		if ( auto block{ beginBlock( file, cuT( "rsm_config" ) ) } )
 		{
 			result = write( file, cuT( "intensity" ), object.intensity )
 				&& write( file, cuT( "max_radius" ), object.maxRadius )

@@ -19,7 +19,7 @@ namespace castor
 		log::info << tabs() << cuT( "Writing Mesh " ) << object.getName() << std::endl;
 		bool result{ false };
 
-		if ( auto block = beginBlock( file, "mesh", object.getName() ) )
+		if ( auto block{ beginBlock( file, "mesh", object.getName() ) } )
 		{
 			result = writeName( file, "import", "Meshes/" + object.getName() + ".cmsh" );
 			auto it = std::find_if( object.begin()
@@ -35,7 +35,7 @@ namespace castor
 				{
 					result = writeName( file, cuT( "default_material" ), object.getSubmesh( 0u )->getDefaultMaterial()->getName() );
 				}
-				else if ( auto matsBlock = beginBlock( file, "default_materials" ) )
+				else if ( auto matsBlock{ beginBlock( file, "default_materials" ) } )
 				{
 					for ( auto & submesh : object )
 					{
