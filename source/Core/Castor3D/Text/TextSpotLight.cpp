@@ -27,13 +27,13 @@ namespace castor
 		{
 			result = writeName( file, "parent", light.getLight().getParent()->getName() )
 				&& write( file, cuT( "type" ), castor3d::getName( light.getLightType() ) )
-				&& write( file, cuT( "colour" ), light.getColour() )
-				&& write( file, cuT( "intensity" ), light.getIntensity() )
-				&& write( file, cuT( "attenuation" ), light.getAttenuation() )
+				&& writeNamedSub( file, cuT( "colour" ), light.getColour() )
+				&& writeNamedSub( file, cuT( "intensity" ), light.getIntensity() )
+				&& writeNamedSub( file, cuT( "attenuation" ), light.getAttenuation() )
 				&& write( file, cuT( "exponent" ), light.getExponent() )
 				&& write( file, cuT( "cut_off" ), light.getCutOff().degrees() )
 				&& write( file, cuT( "shadow_producer" ), light.getLight().isShadowProducer() )
-				&& write( file, light.getShadowConfig() );
+				&& writeSub( file, light.getShadowConfig() );
 		}
 
 		return result;

@@ -23,7 +23,7 @@ namespace castor
 
 		if ( auto block{ beginBlock( file, cuT( "panel_overlay" ), overlay.getOverlay().getName() ) } )
 		{
-			result = write< OverlayCategory >( file, overlay );
+			result = writeSub< OverlayCategory >( file, overlay );
 		}
 
 		return result;

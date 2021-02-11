@@ -9,8 +9,10 @@ using namespace castor3d;
 
 namespace castor
 {
-	TextWriter< PhongPass >::TextWriter( String const & tabs )
+	TextWriter< PhongPass >::TextWriter( String const & tabs
+		, String const & subfolder )
 		: TextWriterT< PhongPass >{ tabs }
+		, m_subfolder{ subfolder }
 	{
 	}
 
@@ -22,11 +24,11 @@ namespace castor
 
 		if ( auto block{ beginBlock( file, "pass" ) } )
 		{
-			result = write( file, "diffuse", pass.getDiffuse() )
-				&& write( file, "specular", pass.getSpecular() )
+			result = writeNamedSub( file, "diffuse", pass.getDiffuse() )
+				&& writeNamedSub( file, "specular", pass.getSpecular() )
 				&& write( file, "ambient", pass.getAmbient() )
 				&& write( file, "shininess", pass.getShininess() )
-				&& write< Pass >( file, pass );
+				&& writeSub< Pass >( file, pass, m_subfolder );
 		}
 
 		return result;

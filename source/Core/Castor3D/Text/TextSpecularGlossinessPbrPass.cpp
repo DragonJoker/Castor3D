@@ -9,8 +9,10 @@ using namespace castor3d;
 
 namespace castor
 {
-	TextWriter< SpecularGlossinessPbrPass >::TextWriter( String const & tabs )
+	TextWriter< SpecularGlossinessPbrPass >::TextWriter( String const & tabs
+		, String const & subfolder )
 		: TextWriterT< SpecularGlossinessPbrPass >{ tabs }
+		, m_subfolder{ subfolder }
 	{
 	}
 
@@ -22,10 +24,10 @@ namespace castor
 
 		if ( auto block{ beginBlock( file, "pass" ) } )
 		{
-			result = write( file, "albedo", pass.getDiffuse() )
-				&& write( file, "roughness", pass.getSpecular() )
+			result = writeNamedSub( file, "albedo", pass.getDiffuse() )
+				&& writeNamedSub( file, "roughness", pass.getSpecular() )
 				&& write( file, "metallic", pass.getGlossiness() )
-				&& write< Pass >( file, pass );
+				&& writeSub< Pass >( file, pass, m_subfolder );
 		}
 
 		return result;

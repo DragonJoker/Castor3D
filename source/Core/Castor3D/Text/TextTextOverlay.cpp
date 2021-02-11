@@ -30,7 +30,7 @@ namespace castor
 				&& write( file, cuT( "horizontal_align" ), castor3d::getName( overlay.getHAlign() ) )
 				&& write( file, cuT( "texturing_mode" ), castor3d::getName( overlay.getTexturingMode() ) )
 				&& write( file, cuT( "line_spacing_mode" ), castor3d::getName( overlay.getLineSpacingMode() ) )
-				&& write< OverlayCategory >( file, overlay );
+				&& writeSub< OverlayCategory >( file, overlay );
 		}
 
 		return result;

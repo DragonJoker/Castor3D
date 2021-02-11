@@ -19,11 +19,11 @@ namespace castor
 		switch ( overlay.getType() )
 		{
 		case OverlayType::ePanel:
-			return write( file, *overlay.getPanelOverlay() );
+			return writeSub( file, *overlay.getPanelOverlay() );
 		case OverlayType::eBorderPanel:
-			return write( file, *overlay.getBorderPanelOverlay() );
+			return writeSub( file, *overlay.getBorderPanelOverlay() );
 		case OverlayType::eText:
-			return write( file, *overlay.getTextOverlay() );
+			return writeSub( file, *overlay.getTextOverlay() );
 		default:
 			return false;
 		}

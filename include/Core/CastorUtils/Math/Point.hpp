@@ -347,6 +347,50 @@ namespace castor
 	{
 		/**
 		 *\~english
+		 *\brief		Floors every value of a point's data.
+		 *\param[in]	point	The point.
+		 *\~french
+		 *\brief		Arrondit à l'inférieur chaque donnée du point donné.
+		 *\param[in]	point	Le point.
+		 */
+		template< typename T, uint32_t TCount >
+		static void floor( Point< T, TCount > & point );
+		/**
+		 *\~english
+		 *\brief		Floors every value of a point's data.
+		 *\param[in]	point	The point.
+		 *\return		The rounded point.
+		 *\~french
+		 *\brief		Arrondit à l'inférieur chaque donnée du point donné.
+		 *\param[in]	point	Le point.
+		 *\return		Le point arrondi.
+		 */
+		template< typename T, uint32_t TCount >
+		static Point< T, TCount > getFloored( Point< T, TCount > const & point );
+		/**
+		 *\~english
+		 *\brief		Ceils every value of a point's data.
+		 *\param[in]	point	The point.
+		 *\~french
+		 *\brief		Arrondit au supérieur chaque donnée du point donné.
+		 *\param[in]	point	Le point.
+		 */
+		template< typename T, uint32_t TCount >
+		static void ceil( Point< T, TCount > & point );
+		/**
+		 *\~english
+		 *\brief		Ceils every value of a point's data.
+		 *\param[in]	point	The point.
+		 *\return		The rounded point.
+		 *\~french
+		 *\brief		Arrondit au supérieur chaque donnée du point donné.
+		 *\param[in]	point	Le point.
+		 *\return		Le point arrondi.
+		 */
+		template< typename T, uint32_t TCount >
+		static Point< T, TCount > getCeiled( Point< T, TCount > const & point );
+		/**
+		 *\~english
 		 *\brief		Rounds every value of a point's data.
 		 *\param[in]	point	The point.
 		 *\~french
@@ -366,7 +410,7 @@ namespace castor
 		 *\return		Le point arrondi.
 		 */
 		template< typename T, uint32_t TCount >
-		static Point< T, TCount > getRounded( Point< T, TCount > & point );
+		static Point< T, TCount > getRounded( Point< T, TCount > const & point );
 		/**
 		 *\~english
 		 *\brief		Negates every value of a point's data

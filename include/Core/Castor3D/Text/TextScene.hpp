@@ -12,16 +12,17 @@ namespace castor
 {
 	template<>
 	class TextWriter< castor3d::Scene >
-		: public castor::TextWriterT< castor3d::Scene >
+		: public TextWriterT< castor3d::Scene >
 	{
 	public:
 		struct Options
 		{
-			castor::Path materialsFile;
-			castor::Path meshesFile;
-			castor::Path nodesFile;
-			castor::Path objectsFile;
-			castor::Path lightsFile;
+			Path materialsFile;
+			Path meshesFile;
+			Path nodesFile;
+			Path objectsFile;
+			Path lightsFile;
+			String subfolder;
 		};
 
 		C3D_API explicit TextWriter( String const & tabs

@@ -66,7 +66,7 @@ namespace castor3d
 
 			bool isEnabled()const
 			{
-				return m_shadowOptions.enabled;
+				return m_shadowOptions.type != SceneFlag::eNone;
 			}
 
 		private:

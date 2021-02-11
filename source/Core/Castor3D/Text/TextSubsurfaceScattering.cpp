@@ -28,7 +28,7 @@ namespace castor
 			{
 				for ( auto & factor : obj )
 				{
-					result = result && write( file, cuT( "factor" ), factor );
+					result = result && writeNamedSub( file, cuT( "factor" ), factor );
 				}
 			}
 		}

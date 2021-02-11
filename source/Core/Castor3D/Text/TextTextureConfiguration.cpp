@@ -133,8 +133,8 @@ namespace castor
 			{
 				if ( auto animBlock{ beginBlock( file, "animation" ) } )
 				{
-					result = writeOpt( file, cuT( "translate" ), translate, castor::Point3f{} )
-						&& writeOpt( file, cuT( "rotate" ), rotate, castor::Point2f{ 1.0f, 0.0f } );
+					result = writeNamedSubOpt( file, cuT( "translate" ), translate, castor::Point3f{} )
+						&& writeNamedSubOpt( file, cuT( "rotate" ), rotate, castor::Point2f{ 1.0f, 0.0f } );
 				}
 			}
 		}

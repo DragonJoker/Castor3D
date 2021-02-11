@@ -241,14 +241,13 @@ namespace castor3d
 
 		std::shared_ptr< SpecularBrdfLightingModel > SpecularBrdfLightingModel::createModel( sdw::ShaderWriter & writer
 			, Utils & utils
-			, SceneFlags sceneFlags
-			, bool rsm
+			, ShadowOptions const & shadows
 			, uint32_t & index
 			, bool isOpaqueProgram )
 		{
 			auto result = std::make_shared< SpecularBrdfLightingModel >( writer
 				, utils
-				, ShadowOptions{ ( sceneFlags & SceneFlag::eShadowAny ), rsm }
+				, shadows
 				, isOpaqueProgram );
 			result->declareModel( index );
 			return result;
@@ -258,19 +257,12 @@ namespace castor3d
 			, Utils & utils
 			, LightType lightType
 			, bool lightUbo
-			, bool shadows
-			, bool rsm
+			, ShadowOptions const & shadows
 			, uint32_t & index )
 		{
 			auto result = std::make_shared< SpecularBrdfLightingModel >( writer
 				, utils
-				, ShadowOptions
-				{
-					( shadows
-						? SceneFlag( uint8_t( SceneFlag::eShadowBegin ) << int( lightType ) )
-						: SceneFlags( 0u ) ),
-					rsm
-				}
+				, shadows
 				, true );
 
 			switch ( lightType )
@@ -297,14 +289,13 @@ namespace castor3d
 
 		std::shared_ptr< SpecularBrdfLightingModel > SpecularBrdfLightingModel::createDiffuseModel( sdw::ShaderWriter & writer
 			, Utils & utils
-			, SceneFlags sceneFlags
-			, bool rsm
+			, ShadowOptions const & shadows
 			, uint32_t & index
 			, bool isOpaqueProgram )
 		{
 			auto result = std::make_shared< SpecularBrdfLightingModel >( writer
 				, utils
-				, ShadowOptions{ ( sceneFlags & SceneFlag::eShadowAny ), rsm }
+				, shadows
 				, isOpaqueProgram );
 			result->declareDiffuseModel( index );
 			return result;
@@ -814,54 +805,19 @@ namespace castor3d
 							auto cascadeFactors = m_writer.declLocale( "cascadeFactors"
 								, vec3( 0.0_f, 1.0_f, 0.0_f ) );
 							auto cascadeIndex = m_writer.declLocale( "cascadeIndex"
-								, 0_u );
+								, light.m_cascadeCount - 1_u );
 							auto shadowFactor = m_writer.declLocale( "shadowFactor"
 								, 1.0_f );
 
 							IF ( m_writer, receivesShadows != 0_i )
 							{
-								auto c3d_maxCascadeCount = m_writer.getVariable< UInt >( "c3d_maxCascadeCount" );
-								auto maxCount = m_writer.declLocale( "maxCount"
-									, m_writer.cast< UInt >( clamp( light.m_cascadeCount, 1_u, c3d_maxCascadeCount ) - 1_u ) );
-
-								// Get cascade index for the current fragment's view position
-								FOR( m_writer, UInt, i, 0u, i < maxCount, ++i )
-								{
-									auto factors = m_writer.declLocale( "factors"
-										, m_getCascadeFactors( Vec3{ surface.viewPosition }
-											, light.m_splitDepths
-											, i ) );
-
-									IF( m_writer, factors.x() != 0.0_f )
-									{
-										cascadeFactors = factors;
-									}
-									FI;
-								}
-								ROF;
-
-								cascadeIndex = m_writer.cast< UInt >( cascadeFactors.x() );
-								shadowFactor = cascadeFactors.y()
-									* max( 1.0_f - m_writer.cast< Float >( receivesShadows )
-										, m_shadowModel->computeDirectional( light.m_lightBase
-											, surface
-											, light.m_transforms[cascadeIndex]
-											, -lightDirection
-											, cascadeIndex
-											, light.m_cascadeCount ) );
-
-								IF( m_writer, cascadeIndex > 0_u )
-								{
-									shadowFactor += cascadeFactors.z()
-										* max( 1.0_f - m_writer.cast< Float >( receivesShadows )
-											, m_shadowModel->computeDirectional( light.m_lightBase
-												, surface
-												, light.m_transforms[cascadeIndex - 1u]
-												, -lightDirection
-												, cascadeIndex - 1u
-												, light.m_cascadeCount ) );
-								}
-								FI;
+								shadowFactor = max( 1.0_f - m_writer.cast< Float >( receivesShadows )
+									, m_shadowModel->computeDirectional( light.m_lightBase
+										, surface
+										, light.m_transforms[cascadeIndex]
+										, -lightDirection
+										, cascadeIndex
+										, light.m_cascadeCount ) );
 							}
 							FI;
 
@@ -874,30 +830,6 @@ namespace castor3d
 									, surface );
 							}
 							FI;
-
-#if C3D_DebugCascades
-							IF( m_writer, cascadeIndex == 0_u )
-							{
-								output.m_diffuse.rgb() *= vec3( 1.0_f, 0.25f, 0.25f );
-								output.m_specular.rgb() *= vec3( 1.0_f, 0.25f, 0.25f );
-							}
-							ELSEIF( cascadeIndex == 1_u )
-							{
-								output.m_diffuse.rgb() *= vec3( 0.25_f, 1.0f, 0.25f );
-								output.m_specular.rgb() *= vec3( 0.25_f, 1.0f, 0.25f );
-							}
-							ELSEIF( cascadeIndex == 2_u )
-							{
-								output.m_diffuse.rgb() *= vec3( 0.25_f, 0.25f, 1.0f );
-								output.m_specular.rgb() *= vec3( 0.25_f, 0.25f, 1.0f );
-							}
-							ELSE
-							{
-								output.m_diffuse.rgb() *= vec3( 1.0_f, 1.0f, 0.25f );
-								output.m_specular.rgb() *= vec3( 1.0_f, 1.0f, 0.25f );
-							}
-							FI;
-#endif
 						}
 						ELSE
 						{

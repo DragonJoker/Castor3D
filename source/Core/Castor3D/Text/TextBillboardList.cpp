@@ -26,7 +26,7 @@ namespace castor
 				&& write( file, cuT( "cast_shadows" ), obj.isShadowCaster() )
 				&& write( file, cuT( "receive_shadows" ), obj.isShadowReceiver() )
 				&& writeName( file, "material", obj.getMaterial()->getName() )
-				&& write( file, "dimensions", obj.getDimensions() );
+				&& writeNamedSub( file, "dimensions", obj.getDimensions() );
 
 			if ( result && obj.getCount() )
 			{
@@ -34,7 +34,7 @@ namespace castor
 				{
 					for ( auto const & point : obj )
 					{
-						result = result && write( file, "pos", point );
+						result = result && writeNamedSub( file, "pos", point );
 					}
 				}
 			}

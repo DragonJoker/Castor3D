@@ -410,6 +410,42 @@ namespace GuiCommon
 			return result;
 		}
 
+		template< typename ObjType, typename ViewType >
+		bool writeView( ViewType const & view
+			, String const & elemsName
+			, String const & subfolder
+			, TextFile & file
+			, FilterFuncT< ObjType > filter = []( ObjType const & )
+			{
+				return true;
+			} )
+		{
+			bool result = true;
+
+			if ( !view.isEmpty() )
+			{
+				result = file.writeText( cuT( "// " ) + elemsName + cuT( "\n" ) ) > 0;
+
+				if ( result )
+				{
+					Logger::logInfo( cuT( "Scene::write - " ) + elemsName );
+					castor::TextWriter< ObjType > writer{ String{}, subfolder };
+
+					for ( auto const & name : view )
+					{
+						auto elem = view.find( name );
+
+						if ( filter( *elem ) )
+						{
+							result = result && writer( *elem, file );
+						}
+					}
+				}
+			}
+
+			return result;
+		}
+
 		template< typename ObjType, typename CacheType >
 		bool writeCache( CacheType const & cache
 			, String const & elemsName
@@ -443,6 +479,41 @@ namespace GuiCommon
 
 			return result;
 		}
+
+		template< typename ObjType, typename CacheType >
+		bool writeCache( CacheType const & cache
+			, String const & elemsName
+			, String const & subfolder
+			, TextFile & file
+			, FilterFuncT< ObjType > filter = []( ObjType const & )
+			{
+				return true;
+			} )
+		{
+			bool result = true;
+
+			if ( !cache.isEmpty() )
+			{
+				result = file.writeText( cuT( "// " ) + elemsName + cuT( "\n" ) ) > 0;
+
+				if ( result )
+				{
+					Logger::logInfo( cuT( "Scene::write - " ) + elemsName );
+					castor::TextWriter< ObjType > writer{ String{}, subfolder };
+					auto lock = castor::makeUniqueLock( cache );
+
+					for ( auto const & elemIt : cache )
+					{
+						if ( filter( *elemIt.second ) )
+						{
+							result = result && writer( *elemIt.second, file );
+						}
+					}
+				}
+			}
+
+			return result;
+		}
 	}
 
 	//************************************************************************************************
@@ -462,10 +533,18 @@ namespace GuiCommon
 			File::directoryCreate( folder );
 		}
 
+		castor::TextWriter< Scene >::Options options;
+		String dataSubfolder;
+
+		if ( m_options.dataSubfolders )
+		{
+			dataSubfolder = fileName.getFileName();
+			options.subfolder = dataSubfolder;
+		}
+
 		Path filePath{ folder / ( fileName.getFileName() + cuT( ".cscn" ) ) };
 
 		bool result = false;
-		castor::TextWriter< Scene >::Options options;
 		{
 			if ( !File::directoryExists( folder / cuT( "Helpers" ) ) )
 			{
@@ -482,6 +561,7 @@ namespace GuiCommon
 					result = file.writeText( cuT( "\n" ) ) > 0
 						&& writeView< Material >( scene.getMaterialView()
 							, cuT( "Materials" )
+							, dataSubfolder
 							, file );
 				}
 			}
@@ -499,6 +579,7 @@ namespace GuiCommon
 				TextFile file( filePath, File::OpenMode::eWrite );
 				result = writeCache< Mesh >( scene.getMeshCache()
 					, cuT( "Meshes" )
+					, dataSubfolder
 					, file
 					, []( Mesh const & object )
 					{
@@ -584,9 +665,21 @@ namespace GuiCommon
 
 		if ( result )
 		{
-			if ( !File::directoryExists( folder / subfolder ) )
+			Path base{ folder / subfolder };
+
+			if ( !File::directoryExists( base ) )
 			{
-				File::directoryCreate( folder / subfolder );
+				File::directoryCreate( base );
+			}
+
+			if ( m_options.dataSubfolders )
+			{
+				base /= dataSubfolder;
+
+				if ( !File::directoryExists( base ) )
+				{
+					File::directoryCreate( base );
+				}
 			}
 
 			using LockType = std::unique_lock< MeshCache const >;
@@ -598,7 +691,6 @@ namespace GuiCommon
 
 				if ( result && it.second->isSerialisable() )
 				{
-					Path base{ folder / subfolder };
 					Path path{ base / it.first + cuT( ".cmsh" ) };
 					{
 						BinaryFile file{ path, File::OpenMode::eWrite };

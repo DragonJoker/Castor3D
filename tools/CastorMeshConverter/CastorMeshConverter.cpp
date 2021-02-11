@@ -231,6 +231,28 @@ bool writeView( ViewType const & view
 	return result;
 }
 
+template< typename ObjType, typename ViewType >
+bool writeView( ViewType const & view
+	, castor::String const & subfolder
+	, castor::TextFile & file )
+{
+	bool result = true;
+
+	if ( !view.isEmpty() )
+	{
+		for ( auto const & name : view )
+		{
+			if ( result )
+			{
+				auto elem = view.find( name );
+				result = castor::TextWriter< ObjType >{ castor::cuEmptyString, subfolder }( *elem, file );
+			}
+		}
+	}
+
+	return result;
+}
+
 template< bool Split, typename T >
 struct ObjectWriter;
 
@@ -298,6 +320,7 @@ struct ObjectPostWriter< false, castor3d::Mesh >
 			auto newPath = path / ( options.output + cuT( "Materials.cscn" ) );
 			castor::TextFile file{ newPath, castor::File::OpenMode::eWrite };
 			result = writeView< castor3d::Material >( scene.getMaterialView()
+				, castor::cuEmptyString
 				, file );
 		}
 

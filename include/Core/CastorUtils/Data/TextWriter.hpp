@@ -126,10 +126,6 @@ namespace castor
 
 		CU_API String tabs()const;
 
-		template< typename ValueT >
-		bool write( TextFile & file, String const & name, ValueT const & value )const;
-		template< typename ValueT >
-		bool write( TextFile & file, ValueT const & value )const;
 		template< typename Value1T, typename Value2T >
 		bool write( TextFile & file, String const & name, Value1T const & value1, Value2T const & value2 )const;
 		template< typename ValueT >
@@ -138,6 +134,14 @@ namespace castor
 		bool write( TextFile & file, String const & name, castor::ChangeTracked< ValueT > const & value )const;
 		template< typename ValueT >
 		bool writeOpt( TextFile & file, String const & name, ValueT const & value, ValueT const & comp )const;
+		template< typename ValueT, typename ... ParamsT >
+		bool writeSub( TextFile & file, ValueT const & value, ParamsT const & ... params )const;
+		template< typename ValueT, typename ... ParamsT >
+		bool writeNamedSub( TextFile & file, String const & name, ValueT const & value, ParamsT const & ... params )const;
+		template< typename ValueT, typename ... ParamsT >
+		bool writeSubOpt( TextFile & file, ValueT const & value, ValueT const & comp, ParamsT const & ... params )const;
+		template< typename ValueT, typename ... ParamsT >
+		bool writeNamedSubOpt( TextFile & file, String const & name, ValueT const & value, ValueT const & comp, ParamsT const & ... params )const;
 
 	private:
 		String m_tabs;

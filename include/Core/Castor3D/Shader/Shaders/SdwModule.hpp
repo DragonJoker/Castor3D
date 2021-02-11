@@ -8,6 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Material/Pass/PassModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
+#include "Castor3D/Scene/Light/LightModule.hpp"
 
 #include <ShaderWriter/BaseTypes/Array.hpp>
 #include <ShaderWriter/BaseTypes/Bool.hpp>
@@ -31,8 +32,38 @@ namespace castor3d
 	{
 		struct ShadowOptions
 		{
-			SceneFlags enabled = SceneFlags( 0 );
+			SceneFlags type = SceneFlags( 0 );
+			// Use RSM result
 			bool rsm{ false };
+
+			ShadowOptions()
+				: type{ SceneFlag::eNone }
+				, rsm{ false }
+			{
+			}
+
+			explicit ShadowOptions( bool rsm )
+				: type{ SceneFlag::eNone }
+				, rsm{ rsm }
+			{
+			}
+
+			ShadowOptions( bool enabled
+				, LightType lightType
+				, bool rsm )
+				: type{ ( enabled
+					? SceneFlag( uint8_t( SceneFlag::eShadowBegin ) << int( lightType ) )
+					: SceneFlag::eNone ) }
+				, rsm{ rsm }
+			{
+			}
+
+			ShadowOptions( SceneFlags sceneFlags
+				, bool rsm )
+				: type{ sceneFlags & SceneFlag::eShadowAny }
+				, rsm{ rsm }
+			{
+			}
 		};
 
 		// Light Propagation Volumes Cascades.

@@ -9,8 +9,10 @@ using namespace castor3d;
 
 namespace castor
 {
-	TextWriter< Pass >::TextWriter( String const & tabs )
+	TextWriter< Pass >::TextWriter( String const & tabs
+		, String const & subfolder )
 		: TextWriterT< Pass >{ tabs }
+		, m_subfolder{ subfolder }
 	{
 	}
 
@@ -49,7 +51,7 @@ namespace castor
 		if ( result )
 		{
 			result = writeOpt( file, cuT( "emissive" ), pass.getEmissive(), 0.0f )
-				&& writeOpt( file, cuT( "transmission" ), pass.getTransmission(), castor::Point3f{ 1.0f, 1.0f, 1.0f } )
+				&& writeNamedSubOpt( file, cuT( "transmission" ), pass.getTransmission(), castor::Point3f{ 1.0f, 1.0f, 1.0f } )
 				&& writeOpt( file, cuT( "two_sided" ), pass.isTwoSided(), true )
 				&& writeOpt( file, cuT( "colour_blend_mode" ), StrBlendModes[uint32_t( pass.getColourBlendMode() )], StrBlendModes[uint32_t( BlendMode::eNoBlend )] );
 		}
@@ -77,13 +79,14 @@ namespace castor
 		{
 			for ( auto unit : pass )
 			{
-				result = result && TextWriter< TextureUnit >{ tabs(), pass.getType() }( *unit, file );
+				result = result
+					&& writeSub( file, *unit, pass.getType(), m_subfolder );
 			}
 		}
 
 		if ( result && pass.hasSubsurfaceScattering() )
 		{
-			result = write( file, pass.getSubsurfaceScattering() );
+			result = writeSub( file, pass.getSubsurfaceScattering() );
 		}
 
 		return result;

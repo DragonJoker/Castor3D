@@ -8,8 +8,10 @@ using namespace castor3d;
 
 namespace castor
 {
-	TextWriter< Mesh >::TextWriter( String const & tabs )
+	TextWriter< Mesh >::TextWriter( String const & tabs
+		, String const & subfolder )
 		: TextWriterT< Mesh >{ tabs }
+		, m_subfolder{ subfolder }
 	{
 	}
 
@@ -21,7 +23,15 @@ namespace castor
 
 		if ( auto block{ beginBlock( file, "mesh", object.getName() ) } )
 		{
-			result = writeName( file, "import", "Meshes/" + object.getName() + ".cmsh" );
+			if ( !m_subfolder.empty() )
+			{
+				result = writeName( file, "import", "Meshes/" + m_subfolder + "/" + object.getName() + ".cmsh" );
+			}
+			else
+			{
+				result = writeName( file, "import", "Meshes/" + object.getName() + ".cmsh" );
+			}
+
 			auto it = std::find_if( object.begin()
 				, object.end()
 				, []( SubmeshSPtr lookup )

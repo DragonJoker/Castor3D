@@ -23,8 +23,8 @@ namespace castor
 	bool TextWriter< OverlayCategory >::operator()( OverlayCategory const & overlay
 		, TextFile & file )
 	{
-		bool result = write( file, cuT( "position" ), overlay.getPosition() )
-			&& write( file, cuT( "size" ), overlay.getSize() );
+		bool result = writeNamedSub( file, cuT( "position" ), overlay.getPosition() )
+			&& writeNamedSub( file, cuT( "size" ), overlay.getSize() );
 
 		if ( result && overlay.getMaterial() )
 		{
@@ -36,15 +36,15 @@ namespace castor
 			switch ( overlay->getType() )
 			{
 			case OverlayType::ePanel:
-				result = result && write( file, *overlay->getPanelOverlay() );
+				result = result && writeSub( file, *overlay->getPanelOverlay() );
 				break;
 
 			case OverlayType::eBorderPanel:
-				result = result && write( file, *overlay->getBorderPanelOverlay() );
+				result = result && writeSub( file, *overlay->getBorderPanelOverlay() );
 				break;
 
 			case OverlayType::eText:
-				result = result && write( file, *overlay->getTextOverlay() );
+				result = result && writeSub( file, *overlay->getTextOverlay() );
 				break;
 
 			default:

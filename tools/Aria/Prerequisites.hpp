@@ -332,9 +332,11 @@ namespace aria
 	{
 		Test( int32_t id = {}
 			, std::string name = {}
-			, Category category = {} )
+			, Category category = {}
+			, bool ignoreResult = {} )
 			: IdValue{ id, std::move( name ) }
 			, category{ category }
+			, ignoreResult{ ignoreResult }
 		{
 		}
 

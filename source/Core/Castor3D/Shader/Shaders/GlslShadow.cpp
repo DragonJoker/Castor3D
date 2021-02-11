@@ -44,11 +44,11 @@ namespace castor3d
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			m_writer.inlineComment( "// SHADOWS" );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
-			auto directionalEnabled = checkFlag( m_shadowOptions.enabled, SceneFlag::eShadowDirectional );
-			auto pointEnabled = checkFlag( m_shadowOptions.enabled, SceneFlag::eShadowPoint );
-			auto spotEnabled = checkFlag( m_shadowOptions.enabled, SceneFlag::eShadowSpot );
+			auto directionalEnabled = checkFlag( m_shadowOptions.type, SceneFlag::eShadowDirectional );
+			auto pointEnabled = checkFlag( m_shadowOptions.type, SceneFlag::eShadowPoint );
+			auto spotEnabled = checkFlag( m_shadowOptions.type, SceneFlag::eShadowSpot );
 
-			if ( m_shadowOptions.enabled )
+			if ( m_shadowOptions.type )
 			{
 				m_writer.declConstant( "c3d_maxCascadeCount"
 					, UInt( DirectionalMaxCascadesCount ) );
@@ -131,7 +131,7 @@ namespace castor3d
 			m_writer.inlineComment( "// SHADOWS" );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 
-			if ( checkFlag( m_shadowOptions.enabled, SceneFlag::eShadowDirectional ) )
+			if ( checkFlag( m_shadowOptions.type, SceneFlag::eShadowDirectional ) )
 			{
 				m_writer.declConstant( "c3d_maxCascadeCount"
 					, UInt( DirectionalMaxCascadesCount ) );
@@ -181,7 +181,7 @@ namespace castor3d
 			m_writer.inlineComment( "// SHADOWS" );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 
-			if ( checkFlag( m_shadowOptions.enabled, SceneFlag::eShadowPoint ) )
+			if ( checkFlag( m_shadowOptions.type, SceneFlag::eShadowPoint ) )
 			{
 				m_writer.declSampledImage< FImgCubeArrayRgba32 >( MapNormalDepthPoint, index++, 1u );
 				m_writer.declSampledImage< FImgCubeArrayRg32 >( MapVariancePoint, index++, 1u );
@@ -202,7 +202,7 @@ namespace castor3d
 			m_writer.inlineComment( "// SHADOWS" );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 
-			if ( checkFlag( m_shadowOptions.enabled, SceneFlag::eShadowSpot ) )
+			if ( checkFlag( m_shadowOptions.type, SceneFlag::eShadowSpot ) )
 			{
 				m_writer.declSampledImage< FImg2DArrayRgba32 >( MapNormalDepthSpot, index++, 1u );
 				m_writer.declSampledImage< FImg2DArrayRg32 >( MapVarianceSpot, index++, 1u );
@@ -603,7 +603,7 @@ namespace castor3d
 					, UInt cascadeIndex
 					, UInt const & maxCascade )
 				{
-					if ( checkFlag( m_shadowOptions.enabled, SceneFlag::eShadowDirectional ) )
+					if ( checkFlag( m_shadowOptions.type, SceneFlag::eShadowDirectional ) )
 					{
 						auto result = m_writer.declLocale( "result"
 							, 1.0_f );
@@ -730,7 +730,7 @@ namespace castor3d
 					, Mat4 const & lightMatrix
 					, Vec3 const & lightDirection )
 				{
-					if ( checkFlag( m_shadowOptions.enabled, SceneFlag::eShadowSpot ) )
+					if ( checkFlag( m_shadowOptions.type, SceneFlag::eShadowSpot ) )
 					{
 						auto c3d_mapNormalDepthSpot = m_writer.getVariable< SampledImage2DArrayRgba32 >( Shadow::MapNormalDepthSpot );
 						auto c3d_mapVarianceSpot = m_writer.getVariable< SampledImage2DArrayRg32 >( Shadow::MapVarianceSpot );
@@ -812,7 +812,7 @@ namespace castor3d
 					, Surface const & surface
 					, Vec3 const & lightPosition )
 				{
-					if ( checkFlag( m_shadowOptions.enabled, SceneFlag::eShadowPoint ) )
+					if ( checkFlag( m_shadowOptions.type, SceneFlag::eShadowPoint ) )
 					{
 						auto c3d_mapNormalDepthPoint = m_writer.getVariable< SampledImageCubeArrayRgba32 >( Shadow::MapNormalDepthPoint );
 						auto c3d_mapVariancePoint = m_writer.getVariable< SampledImageCubeArrayRg32 >( Shadow::MapVariancePoint );
@@ -960,7 +960,7 @@ namespace castor3d
 					, UInt const & maxCascade
 					, OutputComponents & parentOutput )
 				{
-					if ( checkFlag( m_shadowOptions.enabled, SceneFlag::eShadowDirectional ) )
+					if ( checkFlag( m_shadowOptions.type, SceneFlag::eShadowDirectional ) )
 					{
 						auto c3d_volumetricDither = m_writer.getVariableArray< Vec4 >( "c3d_volumetricDither" );
 

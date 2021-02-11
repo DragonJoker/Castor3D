@@ -729,8 +729,7 @@ namespace castor3d
 			, utils
 			, lightType
 			, true // lightUbo
-			, m_shadows
-			, rsm
+			, shader::ShadowOptions{ m_shadows, lightType, rsm }
 			, index );
 		shader::LegacyMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
@@ -940,8 +939,7 @@ namespace castor3d
 			, utils
 			, lightType
 			, true // lightUbo
-			, m_shadows
-			, rsm
+			, shader::ShadowOptions{ m_shadows, lightType, rsm }
 			, index );
 		shader::LegacyMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
@@ -1221,8 +1219,7 @@ namespace castor3d
 			, utils
 			, lightType
 			, true // lightUbo
-			, m_shadows
-			, rsm
+			, shader::ShadowOptions{ m_shadows, lightType, rsm }
 			, index );
 		shader::LegacyMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );

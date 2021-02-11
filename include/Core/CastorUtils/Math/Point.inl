@@ -496,6 +496,40 @@ namespace castor
 	namespace point
 	{
 		template< typename T, uint32_t TCount >
+		static void floor( Point< T, TCount > & point )
+		{
+			for ( uint32_t i = 0; i < TCount; i++ )
+			{
+				point[i] = std::floor( point[i] );
+			}
+		}
+
+		template< typename T, uint32_t TCount >
+		static Point< T, TCount > getFloored( Point< T, TCount > const & point )
+		{
+			Point< T, TCount > result{ point };
+			point::floor( result );
+			return result;
+		}
+		
+		template< typename T, uint32_t TCount >
+		static void ceil( Point< T, TCount > & point )
+		{
+			for ( uint32_t i = 0; i < TCount; i++ )
+			{
+				point[i] = std::ceil( point[i] );
+			}
+		}
+
+		template< typename T, uint32_t TCount >
+		static Point< T, TCount > getCeiled( Point< T, TCount > const & point )
+		{
+			Point< T, TCount > result{ point };
+			point::ceil( result );
+			return result;
+		}
+
+		template< typename T, uint32_t TCount >
 		static void round( Point< T, TCount > & point )
 		{
 			for ( uint32_t i = 0; i < TCount; i++ )
@@ -505,7 +539,7 @@ namespace castor
 		}
 
 		template< typename T, uint32_t TCount >
-		static Point< T, TCount > getRounded( Point< T, TCount > & point )
+		static Point< T, TCount > getRounded( Point< T, TCount > const & point )
 		{
 			Point< T, TCount > result{ point };
 			point::round( result );

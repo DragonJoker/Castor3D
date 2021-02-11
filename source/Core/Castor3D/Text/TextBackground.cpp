@@ -21,9 +21,9 @@ namespace castor
 		case BackgroundType::eColour:
 			return true;
 		case BackgroundType::eImage:
-			return write( file, static_cast< ImageBackground const & >( background ) );
+			return writeSub( file, static_cast< ImageBackground const & >( background ) );
 		case BackgroundType::eSkybox:
-			return write( file, static_cast< SkyboxBackground const & >( background ) );
+			return writeSub( file, static_cast< SkyboxBackground const & >( background ) );
 		default:
 			return false;
 		}

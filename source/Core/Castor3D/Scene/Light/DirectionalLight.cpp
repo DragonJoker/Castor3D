@@ -28,12 +28,18 @@ namespace castor3d
 			, uint32_t cascades )
 		{
 			auto & scene = *light.getLight().getScene();
+			auto & node = *light.getLight().getParent();
 			auto & renderSystem = *scene.getEngine()->getRenderSystem();
 			std::vector< DirectionalLight::Cascade > result( cascades );
+			Point3f lightDirection = light.getDirection();
 
-			// Compute camera inverse view transform.
+			Point3f up{ 0.0f, 1.0f, 0.0f };
+			Point3f right( point::getNormalised( point::cross( up, lightDirection ) ) );
+			up = point::getNormalised( point::cross( lightDirection, right ) );
 			auto cameraVP = camera.getProjection() * camera.getView();
 			auto invCameraVP = cameraVP.getInverse();
+
+			auto lightViewMatrix = matrix::lookAt( castor::Point3f{}, lightDirection, up );
 			auto nearClip = camera.getNear();
 			auto farClip = camera.getFar();
 
@@ -57,105 +63,86 @@ namespace castor3d
 				cascadeSplits[i] = ( d - nearClip ) / clipRange;
 			}
 
-			// Calculate orthographic projection matrix for each cascade
+			std::array< Point3f, 8u > frustumCorners
+			{
+				Point3f( -1.0f, +1.0f, -1.0f ),
+				Point3f( +1.0f, +1.0f, -1.0f ),
+				Point3f( +1.0f, -1.0f, -1.0f ),
+				Point3f( -1.0f, -1.0f, -1.0f ),
+				Point3f( -1.0f, +1.0f, +1.0f ),
+				Point3f( +1.0f, +1.0f, +1.0f ),
+				Point3f( +1.0f, -1.0f, +1.0f ),
+				Point3f( -1.0f, -1.0f, +1.0f ),
+			};
+
+			// Project main frustum corners into world space
+			for ( auto & frustumCorner : frustumCorners )
+			{
+				auto invCorner = invCameraVP * Point4f{ frustumCorner->x, frustumCorner->y, frustumCorner->z, 1.0f };
+				frustumCorner = Point3f{ invCorner / invCorner->w };
+			}
+
 			float prevSplitDist = 0.0;
 
 			for ( uint32_t cascadeIdx = 0; cascadeIdx < cascades; ++cascadeIdx )
 			{
 				float splitDist = cascadeSplits[cascadeIdx];
-				Point3f frustumCorners[8]
-				{
-					Point3f( -1.0f, 1.0f, -1.0f ),
-					Point3f( 1.0f, 1.0f, -1.0f ),
-					Point3f( 1.0f, -1.0f, -1.0f ),
-					Point3f( -1.0f, -1.0f, -1.0f ),
-					Point3f( -1.0f, 1.0f, 1.0f ),
-					Point3f( 1.0f, 1.0f, 1.0f ),
-					Point3f( 1.0f, -1.0f, 1.0f ),
-					Point3f( -1.0f, -1.0f, 1.0f ),
-				};
+				auto cascadeFrustum = frustumCorners;
 
-				// Project frustum corners into world space
-				for ( auto & frustumCorner : frustumCorners )
-				{
-					auto invCorner = invCameraVP * Point4f{ frustumCorner->x, frustumCorner->y, frustumCorner->z, 1.0f };
-					frustumCorner = Point3f{ invCorner / invCorner->w };
-				}
-
+				// Compute cascade frustum in light view space.
 				for ( uint32_t i = 0; i < 4; ++i )
 				{
-					auto cornerRay = frustumCorners[i + 4] - frustumCorners[i];
+					auto cornerRay = cascadeFrustum[i + 4] - cascadeFrustum[i];
 					auto nearCornerRay = cornerRay * prevSplitDist;
 					auto farCornerRay = cornerRay * splitDist;
-					frustumCorners[i + 4] = frustumCorners[i] + farCornerRay;
-					frustumCorners[i] = frustumCorners[i] + nearCornerRay;
+					cascadeFrustum[i + 4] = lightViewMatrix * ( cascadeFrustum[i] + farCornerRay );
+					cascadeFrustum[i] = lightViewMatrix * ( cascadeFrustum[i] + nearCornerRay );
 				}
 
-				// Get frustum center
+				// Get cascade bounding sphere center
 				Point3f frustumCenter{ 0, 0, 0 };
-				for ( auto frustumCorner : frustumCorners )
+				for ( auto frustumCorner : cascadeFrustum )
 				{
 					frustumCenter += frustumCorner;
 				}
-				frustumCenter /= 8.0f;
+				frustumCenter /= cascadeFrustum.size();
 
+				// Get cascade bounding sphere radius
 				float radius = 0.0f;
-				for ( auto frustumCorner : frustumCorners )
+				for ( auto frustumCorner : cascadeFrustum )
 				{
 					float distance = float( point::length( frustumCorner - frustumCenter ) );
 					radius = std::max( radius, distance );
 				}
 				radius = std::ceil( radius * 16.0f ) / 16.0f;
 
-				Point3f maxExtents{ radius, radius, radius };
-				Point3f minExtents = -maxExtents;
+				// Compute AABB
+				Point3f frustumRadius{ radius, radius, radius };
+				Point3f maxExtents = frustumCenter + frustumRadius;
+				Point3f minExtents = frustumCenter - frustumRadius;
 
-#	if 0
-				Point3f lightDir = light.getDirection();
-				auto aabb = scene.getBoundingBox();
+				// Snap cascade to texel grid:
+				auto extent = maxExtents - minExtents;
+				auto texelSize = extent / float( ShadowMapPassDirectional::TextureSize );
+				minExtents = castor::point::getFloored( minExtents / texelSize ) * texelSize;
+				maxExtents = castor::point::getFloored( maxExtents / texelSize ) * texelSize;
+
+				// Extrude bounds to avoid early shadow clipping:
+				float ext = abs( frustumCenter->z - minExtents->z );
+				ext = std::max( ext, farClip * 0.5f );
+				minExtents->z =frustumCenter->z - ext;
+				maxExtents->z =frustumCenter->z + ext;
+
+				// Fill cascade
 				auto & cascade = result[cascadeIdx];
-				cascade.viewMatrix = matrix::lookAt( frustumCenter - lightDir * -minExtents->z, frustumCenter, { 0.0f, 1.0f, 0.0f } );
-				cascade.projMatrix = matrix::ortho( minExtents->x, maxExtents->x
+				cascade.viewMatrix = lightViewMatrix;
+				cascade.projMatrix = renderSystem.getOrtho( minExtents->x, maxExtents->x
 					, minExtents->y, maxExtents->y
-					, 0.0f, maxExtents->z - minExtents->z );
-
-				// Store split distance and matrix in cascade
-				cascade.splitDepth = ( nearClip + splitDist * clipRange ) * -1.0f;
-				cascade.viewProjMatrix = cascade.projMatrix * cascade.viewMatrix;
-#	else
-				Point3f lightDirection = frustumCenter - light.getDirection() * -minExtents[2];
-
-				Point3f up{ 0.0f, 1.0f, 0.0f };
-				Point3f right( point::getNormalised( point::cross( up, lightDirection ) ) );
-				up = point::getNormalised( point::cross( lightDirection, right ) );
-
-				// Store split distance and matrix in cascade
-				auto & cascade = result[cascadeIdx];
-				cascade.viewMatrix = matrix::lookAt( lightDirection, frustumCenter, up );
-				auto cascadeExtents = maxExtents - minExtents;
-				cascade.projMatrix = renderSystem.getOrtho( minExtents[0], maxExtents[0]
-					, minExtents[1], maxExtents[1]
-					, 10.0f * -cascadeExtents[2], cascadeExtents[2] );
-
-				// Create a rounding matrix so we move in texel sized increments.
-				Matrix4x4f shadowMatrix = cascade.projMatrix * cascade.viewMatrix;
-				Point4f shadowOrigin{ 0.0f, 0.0f, 0.0f, 1.0f };
-				auto shadowMapSize = float( ShadowMapPassDirectional::TextureSize );
-				shadowOrigin = shadowMatrix * shadowOrigin;
-				shadowOrigin = shadowOrigin * shadowMapSize / 2.0f;
-				Point4f roundedOrigin{ point::getRounded( shadowOrigin ) };
-				Point4f roundOffset{ roundedOrigin - shadowOrigin };
-				roundOffset = roundOffset * 2.0f / shadowMapSize;
-				roundOffset[2] = 0.0f;
-				roundOffset[3] = 0.0f;
-
-				Matrix4x4f shadowProj = cascade.projMatrix;
-				shadowProj[3] += roundOffset;
-				cascade.projMatrix = shadowProj;
+					, minExtents->z, maxExtents->z );
 				cascade.viewProjMatrix = cascade.projMatrix * cascade.viewMatrix;
 				cascade.splitDepthScale->x = ( nearClip + splitDist * clipRange ) * -1.0f;
 				cascade.splitDepthScale->y = -cascade.splitDepthScale->x / clipRange;
-#	endif
+
 				prevSplitDist = splitDist;
 			}
 

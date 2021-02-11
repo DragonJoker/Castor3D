@@ -132,12 +132,11 @@ namespace castor3d
 
 			uint32_t index = 0;
 			auto lightingModel = shader::PhongLightingModel::createModel( writer
-					, utils
-					, LightType::eDirectional
-					, false // lightUbo
-					, false // shadows
-					, true // rsm
-					, index );
+				, utils
+				, LightType::eDirectional
+				, false // lightUbo
+				, shader::ShadowOptions{ true }
+				, index );
 			ReflectiveShadowMapping rsm{ writer, c3d_rsmSamples, LightType::eDirectional };
 
 			writer.implementFunction< sdw::Void >( "main"
@@ -217,8 +216,7 @@ namespace castor3d
 				, utils
 				, LightType::eSpot
 				, false // lightUbo
-				, false // shadows
-				, true // rsm
+				, shader::ShadowOptions{ true }
 				, index );
 			ReflectiveShadowMapping rsm{ writer, c3d_rsmSamples, LightType::eSpot };
 
@@ -303,8 +301,7 @@ namespace castor3d
 				, utils
 				, LightType::ePoint
 				, false // lightUbo
-				, false // shadows
-				, true // rsm
+				, shader::ShadowOptions{ true }
 				, index );
 			ReflectiveShadowMapping rsm{ writer, c3d_rsmSamples, LightType::ePoint };
 
