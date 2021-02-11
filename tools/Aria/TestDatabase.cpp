@@ -469,9 +469,10 @@ namespace aria
 				auto id = row.getField( 0 ).getValue< int32_t >();
 				auto catId = row.getField( 1 ).getValue< int32_t >();
 				auto name = row.getField( 2 ).getValue< std::string >();
+				auto ignoreResult = row.getField( 3 ).getValue< int32_t >();
 				auto category = getCategory( catId, categories );
 				auto catIt = result.emplace( category, TestArray{} ).first;
-				catIt->second.emplace_back( std::make_unique< Test >( id, name, category ) );
+				catIt->second.emplace_back( std::make_unique< Test >( id, name, category, ignoreResult != 0 ) );
 				progress.Update( index++
 					, _( "Listing tests" )
 					+ wxT( "\n" ) + getDetails( *catIt->second.back() ) );
