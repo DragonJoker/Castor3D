@@ -124,7 +124,7 @@ namespace castor3d
 		{
 		case LightType::eDirectional:
 			configuration.lightView = snapMatrix( lpvCellSize
-				, light.getDirectionalLight()->getViewMatrix( 3u ) );
+				, light.getDirectionalLight()->getViewMatrix( shader::DirectionalMaxCascadesCount - 1u ) );
 			configuration.tanFovXHalf = 1.0f;
 			configuration.tanFovYHalf = 1.0f;
 			break;

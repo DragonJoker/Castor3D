@@ -140,29 +140,31 @@ namespace castor3d
 			ShadowMapPassDirectional::TextureSize,
 			ShadowMapPassDirectional::TextureSize,
 		};
-		auto & depth = m_result[SmTexture::eDepth].getTexture()->getArray2D();
-		auto & linear = m_result[SmTexture::eNormalLinear].getTexture()->getArray2D();
-		auto & variance = m_result[SmTexture::eVariance].getTexture()->getArray2D();
-		auto & position = m_result[SmTexture::ePosition].getTexture()->getArray2D();
-		auto & flux = m_result[SmTexture::eFlux].getTexture()->getArray2D();
 
-		m_blur = std::make_unique< GaussianBlur >( *getEngine()
-			, device
-			, "ShadowMapDirectional"
-			, *variance.view->view
-			, 5u );
-
-		for ( uint32_t cascade = 0u; cascade < m_passes.size(); ++cascade )
+		if ( m_passes.size() == 1u )
 		{
-			std::string debugName = "ShadowMapDirectionalCascade" + std::to_string( cascade );
+			auto & depth = m_result[SmTexture::eDepth].getTexture()->getDefault();
+			auto & linear = m_result[SmTexture::eNormalLinear].getTexture()->getDefault();
+			auto & variance = m_result[SmTexture::eVariance].getTexture()->getDefault();
+			auto & position = m_result[SmTexture::ePosition].getTexture()->getDefault();
+			auto & flux = m_result[SmTexture::eFlux].getTexture()->getDefault();
+
+			m_blur = std::make_unique< GaussianBlur >( *getEngine()
+				, device
+				, "ShadowMapDirectional"
+				, *variance.view
+				, 5u );
+
+			std::string debugName = "ShadowMapDirectional";
+			auto cascade = 0u;
 			auto & pass = m_passes[cascade];
 			auto & renderPass = pass.pass->getRenderPass();
 			auto & frameBuffer = m_frameBuffers[cascade];
-			frameBuffer.depthView = depth.layers[cascade].view->getTargetView();
-			frameBuffer.linearView = linear.layers[cascade].view->getTargetView();
-			frameBuffer.varianceView = variance.layers[cascade].view->getTargetView();
-			frameBuffer.positionView = position.layers[cascade].view->getTargetView();
-			frameBuffer.fluxView = flux.layers[cascade].view->getTargetView();
+			frameBuffer.depthView = depth.view->getTargetView();
+			frameBuffer.linearView = linear.view->getTargetView();
+			frameBuffer.varianceView = variance.view->getTargetView();
+			frameBuffer.positionView = position.view->getTargetView();
+			frameBuffer.fluxView = flux.view->getTargetView();
 			ashes::ImageViewCRefArray attaches;
 			attaches.emplace_back( frameBuffer.depthView );
 			attaches.emplace_back( frameBuffer.linearView );
@@ -172,6 +174,42 @@ namespace castor3d
 			frameBuffer.frameBuffer = renderPass.createFrameBuffer( debugName, size, std::move( attaches ) );
 
 			frameBuffer.blurCommands = m_blur->getCommands( true, cascade );
+		}
+		else
+		{
+			auto & depth = m_result[SmTexture::eDepth].getTexture()->getArray2D();
+			auto & linear = m_result[SmTexture::eNormalLinear].getTexture()->getArray2D();
+			auto & variance = m_result[SmTexture::eVariance].getTexture()->getArray2D();
+			auto & position = m_result[SmTexture::ePosition].getTexture()->getArray2D();
+			auto & flux = m_result[SmTexture::eFlux].getTexture()->getArray2D();
+
+			m_blur = std::make_unique< GaussianBlur >( *getEngine()
+				, device
+				, "ShadowMapDirectional"
+				, *variance.view->view
+				, 5u );
+
+			for ( uint32_t cascade = 0u; cascade < m_passes.size(); ++cascade )
+			{
+				std::string debugName = "ShadowMapDirectionalCascade" + std::to_string( cascade );
+				auto & pass = m_passes[cascade];
+				auto & renderPass = pass.pass->getRenderPass();
+				auto & frameBuffer = m_frameBuffers[cascade];
+				frameBuffer.depthView = depth.layers[cascade].view->getTargetView();
+				frameBuffer.linearView = linear.layers[cascade].view->getTargetView();
+				frameBuffer.varianceView = variance.layers[cascade].view->getTargetView();
+				frameBuffer.positionView = position.layers[cascade].view->getTargetView();
+				frameBuffer.fluxView = flux.layers[cascade].view->getTargetView();
+				ashes::ImageViewCRefArray attaches;
+				attaches.emplace_back( frameBuffer.depthView );
+				attaches.emplace_back( frameBuffer.linearView );
+				attaches.emplace_back( frameBuffer.varianceView );
+				attaches.emplace_back( frameBuffer.positionView );
+				attaches.emplace_back( frameBuffer.fluxView );
+				frameBuffer.frameBuffer = renderPass.createFrameBuffer( debugName, size, std::move( attaches ) );
+
+				frameBuffer.blurCommands = m_blur->getCommands( true, cascade );
+			}
 		}
 	}
 
@@ -204,7 +242,6 @@ namespace castor3d
 	{
 		auto & myTimer = m_passes[0].pass->getTimer();
 		auto timerBlock = myTimer.start();
-		auto & variance = m_result[SmTexture::eVariance].getTexture()->getArray2D();
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 		m_commandBuffer->beginDebugBlock(
 			{

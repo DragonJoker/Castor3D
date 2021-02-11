@@ -129,7 +129,6 @@ namespace castor3d
 					? GlobalIlluminationType::eLpvG
 					: GlobalIlluminationType::eLpv ) ) )
 		{
-			auto const cascadeIndex = shader::DirectionalMaxCascadesCount - 2u;
 			auto & lightCache = m_scene.getLightCache();
 			m_aabb = m_scene.getBoundingBox();
 			m_injection.initialise( m_device );
@@ -226,7 +225,9 @@ namespace castor3d
 
 	void LightPropagationVolumesBase::registerLight( LightSPtr light )
 	{
-		auto const cascadeIndex = shader::DirectionalMaxCascadesCount - 2u;
+		auto const cascadeIndex = shader::DirectionalMaxCascadesCount > 1u
+			? shader::DirectionalMaxCascadesCount - 2u
+			: 0u;
 		auto it = m_lightLpvs.find( light );
 
 		if ( it == m_lightLpvs.end() )

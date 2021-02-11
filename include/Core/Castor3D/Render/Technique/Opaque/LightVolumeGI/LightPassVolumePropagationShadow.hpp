@@ -70,7 +70,6 @@ namespace castor3d
 			, SceneUbo & sceneUbo
 			, RenderPassTimer & timer )override
 		{
-			auto const cascadeIndex( shader::DirectionalMaxCascadesCount - 2u );
 			auto & lightCache = scene.getLightCache();
 			m_lightVolumeGIPasses = { castor::makeUnique< LightVolumeGIPass >( this->m_engine
 					, this->m_device
