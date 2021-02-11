@@ -505,7 +505,7 @@ namespace castor
 		}
 
 		template< typename T, uint32_t TCount >
-		static Point< T, TCount > getFloored( Point< T, TCount > & point )
+		static Point< T, TCount > getFloored( Point< T, TCount > const & point )
 		{
 			Point< T, TCount > result{ point };
 			point::floor( result );
@@ -522,7 +522,7 @@ namespace castor
 		}
 
 		template< typename T, uint32_t TCount >
-		static Point< T, TCount > getCeiled( Point< T, TCount > & point )
+		static Point< T, TCount > getCeiled( Point< T, TCount > const & point )
 		{
 			Point< T, TCount > result{ point };
 			point::ceil( result );
@@ -539,7 +539,7 @@ namespace castor
 		}
 
 		template< typename T, uint32_t TCount >
-		static Point< T, TCount > getRounded( Point< T, TCount > & point )
+		static Point< T, TCount > getRounded( Point< T, TCount > const & point )
 		{
 			Point< T, TCount > result{ point };
 			point::round( result );
