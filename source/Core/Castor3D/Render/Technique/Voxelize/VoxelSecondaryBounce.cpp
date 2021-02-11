@@ -37,26 +37,25 @@ namespace castor3d
 		{
 			eVoxelBuffer,
 			eVoxelConfig,
+			eFirstBounce,
 			eResult,
-			eFirstBounceLevel0,
 		};
 
 		ashes::DescriptorSetLayoutPtr createDescriptorLayout( RenderDevice const & device
 			, uint32_t voxelGridSize )
 		{
 			ashes::VkDescriptorSetLayoutBindingArray bindings{ makeDescriptorSetLayoutBinding( eVoxelBuffer
-				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, VK_SHADER_STAGE_COMPUTE_BIT )
+					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+					, VK_SHADER_STAGE_COMPUTE_BIT )
 				, makeDescriptorSetLayoutBinding( eVoxelConfig
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, VK_SHADER_STAGE_COMPUTE_BIT )
+				, makeDescriptorSetLayoutBinding( eFirstBounce
+					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+					, VK_SHADER_STAGE_COMPUTE_BIT )
 				, makeDescriptorSetLayoutBinding( eResult
 					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
-					, VK_SHADER_STAGE_COMPUTE_BIT )
-				, makeDescriptorSetLayoutBinding( eFirstBounceLevel0
-					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
-					, VK_SHADER_STAGE_COMPUTE_BIT
-					, castor::getBitSize( voxelGridSize ) ) };
+					, VK_SHADER_STAGE_COMPUTE_BIT ) };
 
 			return device->createDescriptorSetLayout( "VoxelSecondaryBounce"
 				, std::move( bindings ) );
@@ -76,16 +75,11 @@ namespace castor3d
 				, voxels.getCount() );
 			voxelUbo.createSizedBinding( *descriptorSet
 				, pool.getLayout().getBinding( eVoxelConfig ) );
+			descriptorSet->createBinding( pool.getLayout().getBinding( eFirstBounce )
+				, firstBounce.getTexture()->getDefaultView().getSampledView()
+				, firstBounce.getSampler()->getSampler() );
 			descriptorSet->createBinding( pool.getLayout().getBinding( eResult )
 				, result.getTexture()->getDefaultView().getSampledView() );
-
-			for ( uint32_t i = 0; i < castor::getBitSize( voxelGridSize ); ++i )
-			{
-				descriptorSet->createBinding( pool.getLayout().getBinding( eFirstBounceLevel0 )
-					, firstBounce.getTexture()->getMipView( i ).getSampledView()
-					, i );
-			}
-
 			descriptorSet->update();
 			return descriptorSet;
 		}
@@ -141,9 +135,6 @@ namespace castor3d
 				, VK_PIPELINE_BIND_POINT_COMPUTE );
 			cmd.dispatch( voxelGridSize * voxelGridSize * voxelGridSize / 64u, 1u, 1u );
 
-			cmd.memoryBarrier( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
-				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, firstBounce.getTexture()->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_GENERAL ) );
 			secondaryBounce.getTexture()->getTexture().generateMipmaps( cmd
 				, VK_IMAGE_LAYOUT_GENERAL
 				, VK_IMAGE_LAYOUT_GENERAL
@@ -167,10 +158,9 @@ namespace castor3d
 				, eVoxelBuffer
 				, 0u ) );
 			UBO_VOXELIZER( writer, eVoxelConfig, 0u, true );
-			auto firstBounce( writer.declImageArray< RFImg3DRgba32 >( "firstBounce"
-				, eFirstBounceLevel0
-				, 0u
-				, castor::getBitSize( voxelGridSize ) ) );
+			auto firstBounce( writer.declSampledImage< FImg3DRgba32 >( "firstBounce"
+				, eFirstBounce
+				, 0u ) );
 			auto in = writer.getIn();
 
 			// Outputs
@@ -183,7 +173,7 @@ namespace castor3d
 			utils.declareUnflatten();
 
 			shader::GlobalIllumination indirect{ writer, utils };
-			indirect.declareTraceConeRadianceImg( "firstBounce" );
+			indirect.declareTraceConeRadiance();
 
 			writer.implementMain( [&]()
 				{
@@ -191,7 +181,7 @@ namespace castor3d
 						, ivec3( utils.unflatten( in.globalInvocationID.x()
 							, uvec3( UInt{ voxelGridSize } ) ) ) );
 					auto color = writer.declLocale( "color"
-						, firstBounce[0].load( coord ) );
+						, firstBounce.lod( vec3( c3d_voxelData.gridToClip ) * vec3( coord ), 0.0_f ) );
 
 					IF( writer, color.a() > 0.0_f )
 					{
@@ -212,7 +202,9 @@ namespace castor3d
 						auto surface = writer.declLocale< shader::Surface >( "surface" );
 						surface.create( position, normal );
 						auto radiance = writer.declLocale( "radiance"
-							, indirect.traceConeRadiance( surface, c3d_voxelData ) );
+							, indirect.traceConeRadiance( firstBounce
+								, surface
+								, c3d_voxelData ) );
 						output.store( coord, vec4( color.rgb() + radiance.rgb(), color.a() ) );
 					}
 					ELSE

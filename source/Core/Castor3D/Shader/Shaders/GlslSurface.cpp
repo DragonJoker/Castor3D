@@ -37,8 +37,7 @@ namespace castor3d
 		void Surface::create( sdw::Vec3 world
 			, sdw::Vec3 normal )
 		{
-			worldPosition = world;
-			worldNormal = normal;
+			create( vec2( 0.0_f ), vec3( 0.0_f ), world, normal );
 		}
 
 		ast::type::StructPtr Surface::makeType( ast::type::TypesCache & cache )

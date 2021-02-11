@@ -22,10 +22,10 @@ namespace castor3d
 			C3D_API explicit GlobalIllumination( sdw::ShaderWriter & writer
 				, Utils & utils
 				, bool deferred = false );
-			C3D_API void declareTraceConeRadianceImg( std::string const & voxelsName );
 			C3D_API void declare( uint32_t setIndex
 				, uint32_t & bindingIndex
 				, SceneFlags sceneFlags );
+			C3D_API void declareTraceConeRadiance();
 			C3D_API void declareVct( uint32_t & bindingIndex
 				, uint32_t setIndex = 0u );
 			C3D_API void declareLpv( uint32_t & bindingIndex
@@ -64,14 +64,14 @@ namespace castor3d
 				, sdw::Vec3 f0
 				, sdw::Vec3 specular
 				, sdw::Float occlusion );
-			// Secondary bounce
-			sdw::Vec4 traceConeRadiance( Surface surface
-				, VoxelData const & voxelData )const;
-
-		private:
 			sdw::Vec4 traceConeRadiance( sdw::SampledImage3DRgba32 const & voxels
 				, Surface surface
 				, VoxelData const & voxelData )const;
+
+		private:
+			void declareTraceCone();
+			void declareTraceConeReflection();
+			void declareTraceConeOcclusion();
 			sdw::Vec4 traceConeReflection( sdw::SampledImage3DRgba32 const & voxels
 				, Surface surface
 				, sdw::Vec3 const & wsViewVector
@@ -115,14 +115,6 @@ namespace castor3d
 				, InSurface
 				, sdw::InVec3
 				, InVoxelData > m_traceConeOcclusion;
-			sdw::Function< sdw::Vec4
-				, InSurface
-				, sdw::InVec3
-				, sdw::InFloat
-				, InVoxelData > m_traceConeImg;
-			sdw::Function< sdw::Vec4
-				, InSurface
-				, InVoxelData > m_traceConeRadianceImg;
 		};
 
 	}
