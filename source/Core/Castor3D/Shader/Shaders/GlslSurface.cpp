@@ -1,6 +1,7 @@
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 
 #include <ShaderWriter/Writer.hpp>
+#include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 
 namespace castor3d
 {
@@ -37,7 +38,7 @@ namespace castor3d
 		void Surface::create( sdw::Vec3 world
 			, sdw::Vec3 normal )
 		{
-			create( vec2( 0.0_f ), vec3( 0.0_f ), world, normal );
+			create( sdw::vec2( 0.0_f ), sdw::vec3( 0.0_f ), world, normal );
 		}
 
 		ast::type::StructPtr Surface::makeType( ast::type::TypesCache & cache )
