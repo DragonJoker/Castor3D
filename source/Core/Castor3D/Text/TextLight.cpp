@@ -19,11 +19,11 @@ namespace castor
 		switch ( light.getLightType() )
 		{
 		case LightType::eDirectional:
-			return write( file, *light.getDirectionalLight() );
+			return writeSub( file, *light.getDirectionalLight() );
 		case LightType::ePoint:
-			return write( file, *light.getPointLight() );
+			return writeSub( file, *light.getPointLight() );
 		case LightType::eSpot:
-			return write( file, *light.getSpotLight() );
+			return writeSub( file, *light.getSpotLight() );
 		default:
 			return false;
 		}

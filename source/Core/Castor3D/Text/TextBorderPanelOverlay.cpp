@@ -24,7 +24,7 @@ namespace castor
 
 		if ( auto block{ beginBlock( file, cuT( "border_panel_overlay" ), overlay.getOverlay().getName() ) } )
 		{
-			result = write( file, cuT( "border_size" ), overlay.getBorderSize() );
+			result = writeNamedSub( file, cuT( "border_size" ), overlay.getBorderSize() );
 
 			if ( result && overlay.getBorderMaterial() )
 			{
@@ -33,7 +33,7 @@ namespace castor
 
 			if ( result )
 			{
-				result = write< OverlayCategory >( file, overlay );
+				result = writeSub< OverlayCategory >( file, overlay );
 			}
 		}
 

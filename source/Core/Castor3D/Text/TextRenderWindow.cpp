@@ -25,7 +25,7 @@ namespace castor
 
 			if ( result && window.getRenderTarget() )
 			{
-				result = write( file, *window.getRenderTarget() );
+				result = writeSub( file, *window.getRenderTarget() );
 			}
 		}
 

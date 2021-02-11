@@ -36,9 +36,11 @@ namespace castor
 	}
 
 	TextWriter< TextureUnit >::TextWriter( String const & tabs
-		, MaterialType type )
+		, MaterialType type
+		, String subFolder )
 		: TextWriterT< TextureUnit >{ tabs, "TextureUnit" }
 		, m_type{ type }
+		, m_subFolder{ subFolder }
 	{
 	}
 
@@ -74,7 +76,7 @@ namespace castor
 						{
 							if ( unit.getRenderTarget() )
 							{
-								result = write( file, *unit.getRenderTarget() );
+								result = writeSub( file, *unit.getRenderTarget() );
 							}
 							else
 							{
@@ -83,13 +85,20 @@ namespace castor
 						}
 						else
 						{
-							result = writeFile( file, cuT( "image" ), Path{ image }, cuT( "Textures" ) );
+							if ( m_subFolder.empty() )
+							{
+								result = writeFile( file, cuT( "image" ), Path{ image }, cuT( "Textures" ) );
+							}
+							else
+							{
+								result = writeFile( file, cuT( "image" ), Path{ image }, String{ cuT( "Textures" ) } + Path::GenericSeparator + m_subFolder );
+							}
 						}
 					}
 
 					if ( result )
 					{
-						result = TextWriter< TextureConfiguration >{ tabs(), m_type }( unit.getConfiguration(), file );
+						result = writeSub( file, unit.getConfiguration(), m_type );
 						checkError( result, "configuration" );
 					}
 				}

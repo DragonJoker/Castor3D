@@ -27,7 +27,7 @@ namespace castor
 		{
 			result = writeName( file, "parent", obj.getParent()->getName() )
 				&& write( file, cuT( "particles_count" ), obj.getMaxParticlesCount() )
-				&& write( file, cuT( "dimensions" ), obj.getDimensions() )
+				&& writeNamedSub( file, cuT( "dimensions" ), obj.getDimensions() )
 				&& writeName( file, cuT( "material" ), obj.getMaterial()->getName() );
 
 			if ( result )
@@ -59,7 +59,7 @@ namespace castor
 
 			if ( result && obj.getCompute().hasUpdateProgram() )
 			{
-				result = write( file, cuT( "cs_shader_program" ), obj.getCompute().getUpdateProgram() );
+				result = writeNamedSub( file, cuT( "cs_shader_program" ), obj.getCompute().getUpdateProgram() );
 			}
 		}
 

@@ -40,7 +40,7 @@ namespace castor
 
 			if ( result )
 			{
-				result = write( file, cuT( "size" ), target.getSize() )
+				result = writeNamedSub( file, cuT( "size" ), target.getSize() )
 					&& write( file, cuT( "format" ), PF::getFormatName( convert( target.getPixelFormat() ) ) )
 					&& writeName( file, cuT( "tone_mapping" ), target.getToneMapping()->getName() );
 			}
@@ -63,7 +63,7 @@ namespace castor
 
 			if ( result )
 			{
-				result = write( file, target.getSsaoConfig() );
+				result = writeSub( file, target.getSsaoConfig() );
 			}
 		}
 

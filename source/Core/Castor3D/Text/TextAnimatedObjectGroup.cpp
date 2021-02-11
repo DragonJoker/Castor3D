@@ -83,7 +83,7 @@ namespace castor
 				for ( auto it : group.getAnimations() )
 				{
 					result = result
-						&& write( file, it.second );
+						&& writeSub( file, it.second );
 				}
 			}
 

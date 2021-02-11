@@ -13,6 +13,7 @@ namespace GuiCommon
 	struct ExportOptions
 	{
 		float scale{ 1.0f };
+		bool dataSubfolders{ false };
 	};
 
 	typedef enum eBMP

@@ -17,12 +17,14 @@ namespace castor
 	{
 	public:
 		C3D_API explicit TextWriter( String const & tabs
-			, castor3d::MaterialType type );
+			, castor3d::MaterialType type
+			, String subFolder );
 		C3D_API bool operator()( castor3d::TextureUnit const & unit
 			, TextFile & file )override;
 
 	private:
 		castor3d::MaterialType m_type;
+		String m_subFolder;
 	};
 }
 

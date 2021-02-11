@@ -16,10 +16,10 @@ namespace castor
 	public:
 		//!\~english	Path separator (OS dependant).
 		//!\~french		Séparateur de chemin (dépendant de l'OS)
-		static const xchar NativeSeparator;
+		CU_API static const xchar NativeSeparator;
 		//!\~english	Path separator (OS independant).
 		//!\~french		Séparateur de chemin (indépendant de l'OS)
-		static const xchar GenericSeparator;
+		CU_API static const xchar GenericSeparator;
 
 	public:
 		CU_API Path();

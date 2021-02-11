@@ -9,8 +9,10 @@ using namespace castor3d;
 
 namespace castor
 {
-	TextWriter< Material >::TextWriter( String const & tabs )
+	TextWriter< Material >::TextWriter( String const & tabs
+		, String const & subfolder )
 		: TextWriterT< Material >{ tabs }
+		, m_subfolder{ subfolder }
 	{
 	}
 
@@ -28,21 +30,24 @@ namespace castor
 			case MaterialType::ePhong:
 				for ( auto pass : material )
 				{
-					result = result && write( file, *std::static_pointer_cast< PhongPass >( pass ) );
+					result = result
+						&& writeSub( file, *std::static_pointer_cast< PhongPass >( pass ), m_subfolder );
 				}
 				break;
 
 			case MaterialType::eMetallicRoughness:
 				for ( auto pass : material )
 				{
-					result = result && write( file, *std::static_pointer_cast< MetallicRoughnessPbrPass >( pass ) );
+					result = result
+						&& writeSub( file, *std::static_pointer_cast< MetallicRoughnessPbrPass >( pass ), m_subfolder );
 				}
 				break;
 
 			case MaterialType::eSpecularGlossiness:
 				for ( auto pass : material )
 				{
-					result = result && write( file, *std::static_pointer_cast< SpecularGlossinessPbrPass >( pass ) );
+					result = result
+						&& writeSub( file, *std::static_pointer_cast< SpecularGlossinessPbrPass >( pass ), m_subfolder );
 				}
 				break;
 

@@ -15,9 +15,13 @@ namespace castor
 		: public TextWriterT< castor3d::MetallicRoughnessPbrPass >
 	{
 	public:
-		C3D_API explicit TextWriter( String const & tabs );
+		C3D_API explicit TextWriter( String const & tabs
+			, String const & subfolder );
 		C3D_API bool operator()( castor3d::MetallicRoughnessPbrPass const & pass
 			, TextFile & file )override;
+
+	private:
+		String m_subfolder;
 	};
 }
 

@@ -112,7 +112,7 @@ namespace castor
 				{
 					if ( result && filter( *it.second ) )
 					{
-						result = writer.write( file, *it.second );
+						result = writer.writeSub( file, *it.second );
 					}
 				}
 			}
@@ -134,6 +134,57 @@ namespace castor
 			}
 
 			return writeCache( file, cache, elemsName, writer, filter );
+		}
+
+		template< typename CacheTypeT, typename FilterT >
+		bool writeCache( TextFile & file
+			, CacheTypeT const & cache
+			, String const & elemsName
+			, String const & subfolder
+			, TextWriterBase const & writer
+			, FilterT filter )
+		{
+			bool result = true;
+			bool empty = cache.isEmpty();
+
+			if constexpr ( std::is_same_v< CacheTypeT, AnimatedObjectGroupCache > )
+			{
+				empty = cache.getObjectCount() <= 1u;
+			}
+
+			if ( !empty )
+			{
+				result = file.writeText( cuT( "\n" ) + writer.tabs() + cuT( "//" ) + elemsName + cuT( "\n" ) ) > 0;
+				log::info << writer.tabs() << cuT( "Scene::write - " ) << elemsName << std::endl;
+				auto lock( castor::makeUniqueLock( cache ) );
+
+				for ( auto const & it : cache )
+				{
+					if ( result && filter( *it.second ) )
+					{
+						result = writer.writeSub( file, *it.second, subfolder );
+					}
+				}
+			}
+
+			return result;
+		}
+
+		template< typename CacheTypeT, typename FilterT >
+		bool writeIncludedCache( TextFile & file
+			, CacheTypeT const & cache
+			, String const & elemsName
+			, Path const & includePath
+			, String const & subfolder
+			, TextWriterBase const & writer
+			, FilterT filter )
+		{
+			if ( !includePath.empty() )
+			{
+				return true;
+			}
+
+			return writeCache( file, cache, elemsName, subfolder, writer, filter );
 		}
 		
 		template< typename ViewTypeT, typename FilterT >
@@ -158,7 +209,7 @@ namespace castor
 
 						if ( filter( *elem ) )
 						{
-							result = writer.write( file, *elem );
+							result = writer.writeSub( file, *elem );
 						}
 					}
 				}
@@ -195,6 +246,68 @@ namespace castor
 			return writeView( file, view, elemsName, writer );
 		}
 
+		template< typename ViewTypeT, typename FilterT >
+		bool writeView( TextFile & file
+			, ViewTypeT const & view
+			, String const & elemsName
+			, String const & subfolder
+			, TextWriterBase const & writer
+			, FilterT filter )
+		{
+			bool result = true;
+
+			if ( !view.isEmpty() )
+			{
+				result = file.writeText( cuT( "\n" ) + writer.tabs() + cuT( "//" ) + elemsName + cuT( "\n" ) ) > 0;
+				log::info << writer.tabs() << cuT( "Scene::write - " ) << elemsName << std::endl;
+
+				for ( auto const & name : view )
+				{
+					if ( result )
+					{
+						auto elem = view.find( name );
+
+						if ( filter( *elem ) )
+						{
+							result = writer.writeSub( file, *elem, subfolder );
+						}
+					}
+				}
+			}
+
+			return result;
+		}
+
+		template< typename ViewTypeT >
+		bool writeView( TextFile & file
+			, ViewTypeT const & view
+			, String const & elemsName
+			, String const & subfolder
+			, TextWriterBase const & writer )
+		{
+			return writeView( file, view, elemsName, subfolder, writer
+				, []( auto const & lookup )
+				{
+					return true;
+				} );
+		}
+
+		template< typename ViewTypeT >
+		bool writeIncludedView( TextFile & file
+			, ViewTypeT const & view
+			, String const & elemsName
+			, Path const & includePath
+			, String const & subfolder
+			, TextWriterBase const & writer )
+		{
+			if ( !includePath.empty() )
+			{
+				return true;
+			}
+
+			return writeView( file, view, elemsName, subfolder, writer );
+		}
+
 		bool writeInclude( TextFile & file
 			, Path const & path
 			, TextWriterBase const & writer )
@@ -225,7 +338,7 @@ namespace castor
 
 					if ( result && writable( *node ) )
 					{
-						result = writer.write( file, *node );
+						result = writer.writeSub( file, *node );
 					}
 				}
 			}
@@ -277,22 +390,22 @@ namespace castor
 				if ( result )
 				{
 					log::info << cuT( "Scene::write - Ambient light" ) << std::endl;
-					result = write( file, cuT( "ambient_light" ), scene.getAmbientLight() )
-						&& write( file, cuT( "background_colour" ), scene.getBackgroundColour() )
+					result = writeNamedSub( file, cuT( "ambient_light" ), scene.getAmbientLight() )
+						&& writeNamedSub( file, cuT( "background_colour" ), scene.getBackgroundColour() )
 						&& write( file, cuT( "lpv_indirect_attenuation" ), scene.getLpvIndirectAttenuation() )
 						&& writeInclude( file, m_options.materialsFile, *this )
 						&& writeInclude( file, m_options.meshesFile, *this )
 						&& writeInclude( file, m_options.nodesFile, *this )
 						&& writeInclude( file, m_options.objectsFile, *this )
 						&& writeInclude( file, m_options.lightsFile, *this )
-						&& write( file, *scene.getBackground() )
-						&& write( file, scene.getFog() )
-						&& write( file, scene.getVoxelConeTracingConfig() )
+						&& writeSub( file, *scene.getBackground() )
+						&& writeSub( file, scene.getFog() )
+						&& writeSub( file, scene.getVoxelConeTracingConfig() )
 						&& writeView( file, scene.getFontView(), cuT( "Fonts" ), *this )
 						&& writeIncludedView( file, scene.getSamplerView(), cuT( "Samplers" ), m_options.materialsFile, *this )
-						&& writeIncludedView( file, scene.getMaterialView(), cuT( "Materials" ), m_options.materialsFile, *this )
+						&& writeIncludedView( file, scene.getMaterialView(), cuT( "Materials" ), m_options.materialsFile, m_options.subfolder, *this )
 						&& writeView( file, scene.getOverlayView(), cuT( "Overlays" ), *this, writable< Overlay > )
-						&& writeIncludedCache( file, scene.getMeshCache(), cuT( "Meshes" ), m_options.meshesFile, *this, writable< Mesh > )
+						&& writeIncludedCache( file, scene.getMeshCache(), cuT( "Meshes" ), m_options.meshesFile, m_options.subfolder, *this, writable< Mesh > )
 						&& writeNodes( file, scene.getCameraRootNode()->getChildren(), cuT( "Cameras nodes" ), *this )
 						&& writeCache( file, scene.getCameraCache(), cuT( "Cameras" ), *this, writable< Camera > )
 						&& writeIncludedNodes( file, scene.getCameraRootNode()->getChildren(), cuT( "Objects nodes" ), m_options.nodesFile, *this )
