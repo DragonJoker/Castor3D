@@ -241,14 +241,13 @@ namespace castor3d
 
 		std::shared_ptr< SpecularBrdfLightingModel > SpecularBrdfLightingModel::createModel( sdw::ShaderWriter & writer
 			, Utils & utils
-			, SceneFlags sceneFlags
-			, bool rsm
+			, ShadowOptions const & shadows
 			, uint32_t & index
 			, bool isOpaqueProgram )
 		{
 			auto result = std::make_shared< SpecularBrdfLightingModel >( writer
 				, utils
-				, ShadowOptions{ ( sceneFlags & SceneFlag::eShadowAny ), rsm }
+				, shadows
 				, isOpaqueProgram );
 			result->declareModel( index );
 			return result;
@@ -258,19 +257,12 @@ namespace castor3d
 			, Utils & utils
 			, LightType lightType
 			, bool lightUbo
-			, bool shadows
-			, bool rsm
+			, ShadowOptions const & shadows
 			, uint32_t & index )
 		{
 			auto result = std::make_shared< SpecularBrdfLightingModel >( writer
 				, utils
-				, ShadowOptions
-				{
-					( shadows
-						? SceneFlag( uint8_t( SceneFlag::eShadowBegin ) << int( lightType ) )
-						: SceneFlags( 0u ) ),
-					rsm
-				}
+				, shadows
 				, true );
 
 			switch ( lightType )
@@ -297,14 +289,13 @@ namespace castor3d
 
 		std::shared_ptr< SpecularBrdfLightingModel > SpecularBrdfLightingModel::createDiffuseModel( sdw::ShaderWriter & writer
 			, Utils & utils
-			, SceneFlags sceneFlags
-			, bool rsm
+			, ShadowOptions const & shadows
 			, uint32_t & index
 			, bool isOpaqueProgram )
 		{
 			auto result = std::make_shared< SpecularBrdfLightingModel >( writer
 				, utils
-				, ShadowOptions{ ( sceneFlags & SceneFlag::eShadowAny ), rsm }
+				, shadows
 				, isOpaqueProgram );
 			result->declareDiffuseModel( index );
 			return result;

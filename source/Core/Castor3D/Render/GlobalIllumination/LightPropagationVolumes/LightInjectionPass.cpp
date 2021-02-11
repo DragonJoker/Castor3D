@@ -99,8 +99,7 @@ namespace castor3d
 					, utils
 					, LightType::eDirectional
 					, false // lightUbo
-					, false // shadows
-					, true // rsm
+					, shader::ShadowOptions{ SceneFlag::eNone, true }
 					, index );
 
 				auto convertPointToGridIndex = writer.implementFunction< IVec3 >( "convertPointToGridIndex"
@@ -170,8 +169,7 @@ namespace castor3d
 					, utils
 					, LightType::eDirectional
 					, false // lightUbo
-					, false // shadows
-					, true // rsm
+					, shader::ShadowOptions{ SceneFlag::eNone, true }
 					, index );
 
 				auto convertPointToGridIndex = writer.implementFunction< IVec3 >( "convertPointToGridIndex"

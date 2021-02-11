@@ -72,21 +72,18 @@ namespace castor3d
 				, Surface surface )const;
 			C3D_API static std::shared_ptr< SpecularBrdfLightingModel > createModel( sdw::ShaderWriter & writer
 				, Utils & utils
-				, SceneFlags sceneFlags
-				, bool rsm
+				, ShadowOptions const & shadows
 				, uint32_t & index
 				, bool isOpaqueProgram );
 			C3D_API static std::shared_ptr< SpecularBrdfLightingModel > createModel( sdw::ShaderWriter & writer
 				, Utils & utils
 				, LightType light
 				, bool lightUbo
-				, bool shadows
-				, bool rsm
+				, ShadowOptions const & shadows
 				, uint32_t & index );
 			C3D_API static std::shared_ptr< SpecularBrdfLightingModel > createDiffuseModel( sdw::ShaderWriter & writer
 				, Utils & utils
-				, SceneFlags sceneFlags
-				, bool rsm
+				, ShadowOptions const & shadows
 				, uint32_t & index
 				, bool isOpaqueProgram );
 			C3D_API void computeMapContributions( PipelineFlags const & flags

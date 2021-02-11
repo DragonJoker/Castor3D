@@ -430,8 +430,7 @@ namespace castor3d
 			, utils
 			, LightType::eSpot
 			, false // lightUbo
-			, false // shadows
-			, false // rsm
+			, shader::ShadowOptions{ SceneFlag::eNone, false }
 			, index );
 
 		// Fragment Outputs
@@ -612,8 +611,7 @@ namespace castor3d
 			, utils
 			, LightType::eSpot
 			, false // lightUbo
-			, false // shadows
-			, false // rsm
+			, shader::ShadowOptions{ SceneFlag::eNone, false }
 			, index );
 
 		// Fragment Outputs
@@ -794,8 +792,7 @@ namespace castor3d
 			, utils
 			, LightType::eSpot
 			, false // lightUbo
-			, false // shadows
-			, false // rsm
+			, shader::ShadowOptions{ SceneFlag::eNone, false }
 			, index );
 
 		// Fragment Outputs

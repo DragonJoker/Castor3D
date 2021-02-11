@@ -711,8 +711,7 @@ namespace castor3d
 		utils.declareFlatten();
 		auto lighting = shader::PhongLightingModel::createDiffuseModel( writer
 			, utils
-			, flags.sceneFlags
-			, false // rsm
+			, shader::ShadowOptions{ flags.sceneFlags, false }
 			, texIndex
 			, m_mode != RenderMode::eTransparentOnly );
 
@@ -841,8 +840,7 @@ namespace castor3d
 		utils.declareFlatten();
 		auto lighting = shader::MetallicBrdfLightingModel::createDiffuseModel( writer
 			, utils
-			, flags.sceneFlags
-			, false // rsm
+			, shader::ShadowOptions{ flags.sceneFlags, false }
 			, texIndex
 			, m_mode != RenderMode::eTransparentOnly );
 
@@ -992,8 +990,7 @@ namespace castor3d
 		utils.declareFlatten();
 		auto lighting = shader::SpecularBrdfLightingModel::createDiffuseModel( writer
 			, utils
-			, flags.sceneFlags
-			, false // rsm
+			, shader::ShadowOptions{ flags.sceneFlags, false }
 			, texIndex
 			, m_mode != RenderMode::eTransparentOnly );
 
