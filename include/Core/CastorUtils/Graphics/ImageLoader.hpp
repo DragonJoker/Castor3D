@@ -95,12 +95,14 @@ namespace castor
 		 *\~english
 		 *\brief		Loads an image file data.
 		 *\param[in]	name		The image name.
+		 *\param[in]	imagePath	Path to the image file.
 		 *\param[in]	data		The image data.
 		 *\param[in]	size		The image data size.
 		 *\return		The pixel buffer containing the image data.
 		 *\~french
 		 *\brief		Charge les données d'un fichier image.
 		 *\param[in]	name		Le nom de l'image.
+		 *\param[in]	imagePath	Cheminvers le fichier de l'image.
 		 *\param[in]	data		Les données de l'image.
 		 *\param[in]	size		La taille des données de l'image.
 		 *\return		Le tampon de pixels contenant les données de l'image.

@@ -820,7 +820,8 @@ namespace castor
 		 *\return		A castor::PixelFormat::eR8 buffer containing the extracted component, \p nullptr if source didn't have the wanted component.
 		 *\~french
 		 *\brief		Extrait les valeurs d'une composante de pixel d'un tampon source pour les mettre dans un tampon à part.
-		 *\param[in]	src	Le tampon source
+		 *\param[in]	src			Le tampon source
+		 *\param[in]	component	La composante à extraire
 		 *\return		Le tampon contenant la composante extraite, au format castor::PixelFormat::eR8, \p nullptr si la source n'avait pas la coposante voulue.
 		 */
 		CU_API PxBufferBaseSPtr extractComponent( PxBufferBaseSPtr src

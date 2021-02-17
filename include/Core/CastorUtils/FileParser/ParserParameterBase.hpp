@@ -27,20 +27,16 @@ namespace castor
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the parameter type.
-		 *\return		The type.
+		 *\return		The parameter type.
 		 *\~french
-		 *\brief		Récupère le type du paramètre.
-		 *\return		Le type.
+		 *\return		Le type du paramètre.
 		 */
 		CU_API virtual ParameterType getType()const = 0;
 		/**
 		 *\~english
-		 *\brief		Retrieves the parameter base type (like ParameterType::eText for ParameterType::eName).
-		 *\return		The type.
+		 *\return		The parameter base type (like ParameterType::eText for ParameterType::eName).
 		 *\~french
-		 *\brief		Récupère le type de base du paramètre (comme ParameterType::eText pour ParameterType::eName).
-		 *\return		Le type.
+		 *\return		Le type de base du paramètre (comme ParameterType::eText pour ParameterType::eName).
 		 */
 		CU_API virtual ParameterType getBaseType()const
 		{
@@ -48,11 +44,9 @@ namespace castor
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the parameter string type.
-		 *\return		The type.
+		 *\return		The parameter string type.
 		 *\~french
-		 *\brief		Récupère le type du chaîne paramètre.
-		 *\return		Le type.
+		 *\return		Le type du chaîne paramètre.
 		 */
 		CU_API virtual xchar const * const getStrType()const = 0;
 		/**
@@ -65,12 +59,14 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief			Checks the parameter.
+		 *\param[in,out]	logger	The logger instance.
 		 *\param[in,out]	params	The text containing the parameter value.
 		 *\return			\p false if any error occured.
 		 *\~french
 		 *\brief			Vérifie le paramètre.
+		 *\param[in,out]	logger	L'instance de logger.
 		 *\param[in,out]	params	Le texte contenant la valeur du paramètre.
-		 *\return			\p si un problème quelconque est arrivé.
+		 *\return			\p false si un problème quelconque est arrivé.
 		 */
 		CU_API virtual bool parse( LoggerInstance & logger
 			, String & params ) = 0;
