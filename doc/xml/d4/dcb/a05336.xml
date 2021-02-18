@@ -1,0 +1,333 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d4/dcb/a05336" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::Light</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">StructInstance</basecompoundref>
+    <includes local="no">GlslLight.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d4/dcb/a05336_1ae97f7b461a57393d207b1eccdc8a62aa" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::Light::m_colourIndex</definition>
+        <argsstring></argsstring>
+        <name>m_colourIndex</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="28" column="1" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/dcb/a05336_1aec082acb4772067f7a949e33b3b5ae88" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::Light::m_intensityFarPlane</definition>
+        <argsstring></argsstring>
+        <name>m_intensityFarPlane</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="29" column="1" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/dcb/a05336_1a5d419b7d75cfc10bd6ad4df412e85142" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::Light::m_volumetric</definition>
+        <argsstring></argsstring>
+        <name>m_volumetric</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="30" column="1" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/dcb/a05336_1ac257e9fc32a109918d8960958b04497c" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::Light::m_shadowsOffsets</definition>
+        <argsstring></argsstring>
+        <name>m_shadowsOffsets</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="31" column="1" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/dcb/a05336_1a43c55a6b4ce6c73d13614495dcc0887c" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::Light::m_shadowsVariances</definition>
+        <argsstring></argsstring>
+        <name>m_shadowsVariances</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="32" column="1" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/dcb/a05336_1acf95ea5ca3464a28ed25f0b731176c75" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::Light::m_colour</definition>
+        <argsstring></argsstring>
+        <name>m_colour</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="34" column="1" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/dcb/a05336_1ad907621d5cdb7423141b2a2639ed726a" prot="public" static="no" mutable="no">
+        <type>sdw::Vec2</type>
+        <definition>sdw::Vec2 castor3d::shader::Light::m_intensity</definition>
+        <argsstring></argsstring>
+        <name>m_intensity</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="35" column="1" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/dcb/a05336_1a00a862a081faf38f74d3c2ee4110fa05" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::Light::m_farPlane</definition>
+        <argsstring></argsstring>
+        <name>m_farPlane</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="36" column="1" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/dcb/a05336_1af4926dba12a1353995bffe038870171b" prot="public" static="no" mutable="no">
+        <type>sdw::Int</type>
+        <definition>sdw::Int castor3d::shader::Light::m_shadowType</definition>
+        <argsstring></argsstring>
+        <name>m_shadowType</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="37" column="1" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/dcb/a05336_1a0edc90bff14e3e308e6216e14bebd07d" prot="public" static="no" mutable="no">
+        <type>sdw::Int</type>
+        <definition>sdw::Int castor3d::shader::Light::m_index</definition>
+        <argsstring></argsstring>
+        <name>m_index</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="38" column="1" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/dcb/a05336_1abbc2d5e3669afd2f5713ad4b245bd241" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::Light::m_volumetricSteps</definition>
+        <argsstring></argsstring>
+        <name>m_volumetricSteps</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="39" column="1" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/dcb/a05336_1a922c7dd712550f77c40dcda1a01c943d" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::Light::m_volumetricScattering</definition>
+        <argsstring></argsstring>
+        <name>m_volumetricScattering</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="40" column="1" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/dcb/a05336_1a4ba8a48e7dcc8099d70009468650a523" prot="public" static="no" mutable="no">
+        <type>sdw::Vec2</type>
+        <definition>sdw::Vec2 castor3d::shader::Light::m_rawShadowOffsets</definition>
+        <argsstring></argsstring>
+        <name>m_rawShadowOffsets</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="41" column="1" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/dcb/a05336_1a05b06a299a0f60e14405648a71011db4" prot="public" static="no" mutable="no">
+        <type>sdw::Vec2</type>
+        <definition>sdw::Vec2 castor3d::shader::Light::m_pcfShadowOffsets</definition>
+        <argsstring></argsstring>
+        <name>m_pcfShadowOffsets</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="42" column="1" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/dcb/a05336_1a2e9d95a0b9c7971d2ec65621290d87f9" prot="public" static="no" mutable="no">
+        <type>sdw::Vec2</type>
+        <definition>sdw::Vec2 castor3d::shader::Light::m_vsmShadowVariance</definition>
+        <argsstring></argsstring>
+        <name>m_vsmShadowVariance</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="43" column="1" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/dcb/a05336_1ad6eb48e33a1152b852b6c7e859113f3a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::Light::Light</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>Light</name>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="19" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dcb/a05336_1a98b8db6a693183d566a70aa7e1b2edae" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/dcb/a05336" kindref="compound">Light</ref> &amp;</type>
+        <definition>C3D_API Light&amp; castor3d::shader::Light::operator=</definition>
+        <argsstring>(Light const &amp;rhs)</argsstring>
+        <name>operator=</name>
+        <param>
+          <type><ref refid="d4/dcb/a05336" kindref="compound">Light</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="22" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d4/dcb/a05336_1a77bb7fbec50c316e9e98e5785c6f2b6e" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::type::StructPtr</type>
+        <definition>static C3D_API ast::type::StructPtr castor3d::shader::Light::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="24" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dcb/a05336_1af70e139f359928d276fe739fc2f6d593" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::unique_ptr&lt; sdw::Struct &gt;</type>
+        <definition>static C3D_API std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::Light::declare</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>declare</name>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="25" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3444">
+        <label>castor3d::shader::Light</label>
+        <link refid="d4/dcb/a05336"/>
+        <childnode refid="3445" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3445">
+        <label>StructInstance</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3446">
+        <label>castor3d::shader::Light</label>
+        <link refid="d4/dcb/a05336"/>
+        <childnode refid="3447" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3447">
+        <label>StructInstance</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslLight.hpp" line="18" column="1" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="16" bodyend="48"/>
+    <listofallmembers>
+      <member refid="d4/dcb/a05336_1af70e139f359928d276fe739fc2f6d593" prot="public" virt="non-virtual"><scope>castor3d::shader::Light</scope><name>declare</name></member>
+      <member refid="d4/dcb/a05336_1ad6eb48e33a1152b852b6c7e859113f3a" prot="public" virt="non-virtual"><scope>castor3d::shader::Light</scope><name>Light</name></member>
+      <member refid="d4/dcb/a05336_1acf95ea5ca3464a28ed25f0b731176c75" prot="public" virt="non-virtual"><scope>castor3d::shader::Light</scope><name>m_colour</name></member>
+      <member refid="d4/dcb/a05336_1ae97f7b461a57393d207b1eccdc8a62aa" prot="public" virt="non-virtual"><scope>castor3d::shader::Light</scope><name>m_colourIndex</name></member>
+      <member refid="d4/dcb/a05336_1a00a862a081faf38f74d3c2ee4110fa05" prot="public" virt="non-virtual"><scope>castor3d::shader::Light</scope><name>m_farPlane</name></member>
+      <member refid="d4/dcb/a05336_1a0edc90bff14e3e308e6216e14bebd07d" prot="public" virt="non-virtual"><scope>castor3d::shader::Light</scope><name>m_index</name></member>
+      <member refid="d4/dcb/a05336_1ad907621d5cdb7423141b2a2639ed726a" prot="public" virt="non-virtual"><scope>castor3d::shader::Light</scope><name>m_intensity</name></member>
+      <member refid="d4/dcb/a05336_1aec082acb4772067f7a949e33b3b5ae88" prot="public" virt="non-virtual"><scope>castor3d::shader::Light</scope><name>m_intensityFarPlane</name></member>
+      <member refid="d4/dcb/a05336_1a05b06a299a0f60e14405648a71011db4" prot="public" virt="non-virtual"><scope>castor3d::shader::Light</scope><name>m_pcfShadowOffsets</name></member>
+      <member refid="d4/dcb/a05336_1a4ba8a48e7dcc8099d70009468650a523" prot="public" virt="non-virtual"><scope>castor3d::shader::Light</scope><name>m_rawShadowOffsets</name></member>
+      <member refid="d4/dcb/a05336_1ac257e9fc32a109918d8960958b04497c" prot="public" virt="non-virtual"><scope>castor3d::shader::Light</scope><name>m_shadowsOffsets</name></member>
+      <member refid="d4/dcb/a05336_1a43c55a6b4ce6c73d13614495dcc0887c" prot="public" virt="non-virtual"><scope>castor3d::shader::Light</scope><name>m_shadowsVariances</name></member>
+      <member refid="d4/dcb/a05336_1af4926dba12a1353995bffe038870171b" prot="public" virt="non-virtual"><scope>castor3d::shader::Light</scope><name>m_shadowType</name></member>
+      <member refid="d4/dcb/a05336_1a5d419b7d75cfc10bd6ad4df412e85142" prot="public" virt="non-virtual"><scope>castor3d::shader::Light</scope><name>m_volumetric</name></member>
+      <member refid="d4/dcb/a05336_1a922c7dd712550f77c40dcda1a01c943d" prot="public" virt="non-virtual"><scope>castor3d::shader::Light</scope><name>m_volumetricScattering</name></member>
+      <member refid="d4/dcb/a05336_1abbc2d5e3669afd2f5713ad4b245bd241" prot="public" virt="non-virtual"><scope>castor3d::shader::Light</scope><name>m_volumetricSteps</name></member>
+      <member refid="d4/dcb/a05336_1a2e9d95a0b9c7971d2ec65621290d87f9" prot="public" virt="non-virtual"><scope>castor3d::shader::Light</scope><name>m_vsmShadowVariance</name></member>
+      <member refid="d4/dcb/a05336_1a77bb7fbec50c316e9e98e5785c6f2b6e" prot="public" virt="non-virtual"><scope>castor3d::shader::Light</scope><name>makeType</name></member>
+      <member refid="d4/dcb/a05336_1a98b8db6a693183d566a70aa7e1b2edae" prot="public" virt="non-virtual"><scope>castor3d::shader::Light</scope><name>operator=</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

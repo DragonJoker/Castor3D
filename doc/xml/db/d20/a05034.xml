@@ -1,0 +1,158 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="db/d20/a05034" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::VoxelSecondaryBounce::SecondaryBounce</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="db/d20/a05034_1a5f643b63a0a5baa70b56d423205a5891" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/d63/a05306" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::VoxelSecondaryBounce::SecondaryBounce::computeShader</definition>
+        <argsstring></argsstring>
+        <name>computeShader</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Voxelize/VoxelSecondaryBounce.hpp" line="84" column="1" bodyfile="Render/Voxelize/VoxelSecondaryBounce.hpp" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d20/a05034_1afc5ec3f414b68d7f99d3f14868aacf4e" prot="public" static="no" mutable="no">
+        <type>ashes::ComputePipelinePtr</type>
+        <definition>ashes::ComputePipelinePtr castor3d::VoxelSecondaryBounce::SecondaryBounce::pipeline</definition>
+        <argsstring></argsstring>
+        <name>pipeline</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Voxelize/VoxelSecondaryBounce.hpp" line="85" column="1" bodyfile="Render/Voxelize/VoxelSecondaryBounce.hpp" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d20/a05034_1af0921d90d413abd8fbebf260ff3a273b" prot="public" static="no" mutable="no">
+        <type><ref refid="db/da9/a04374" kindref="compound">CommandsSemaphore</ref></type>
+        <definition>CommandsSemaphore castor3d::VoxelSecondaryBounce::SecondaryBounce::commands</definition>
+        <argsstring></argsstring>
+        <name>commands</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Voxelize/VoxelSecondaryBounce.hpp" line="86" column="1" bodyfile="Render/Voxelize/VoxelSecondaryBounce.hpp" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/d20/a05034_1a1b1cbc247f5530edc7da124614ee25ea" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::VoxelSecondaryBounce::SecondaryBounce::SecondaryBounce</definition>
+        <argsstring>(RenderDevice const &amp;device, ashes::PipelineLayout const &amp;pipelineLayout, ashes::DescriptorSet const &amp;descriptorSet, ashes::Buffer&lt; Voxel &gt; const &amp;voxels, VoxelizerUbo const &amp;voxelUbo, TextureUnit const &amp;firstBounce, TextureUnit const &amp;result, RenderPassTimer &amp;timer, uint32_t voxelGridSize)</argsstring>
+        <name>SecondaryBounce</name>
+        <param>
+          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>ashes::PipelineLayout const &amp;</type>
+          <declname>pipelineLayout</declname>
+        </param>
+        <param>
+          <type>ashes::DescriptorSet const &amp;</type>
+          <declname>descriptorSet</declname>
+        </param>
+        <param>
+          <type>ashes::Buffer&lt; <ref refid="dc/d66/a05014" kindref="compound">Voxel</ref> &gt; const &amp;</type>
+          <declname>voxels</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d05/a05626" kindref="compound">VoxelizerUbo</ref> const &amp;</type>
+          <declname>voxelUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d14/a02658" kindref="compound">TextureUnit</ref> const &amp;</type>
+          <declname>firstBounce</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d14/a02658" kindref="compound">TextureUnit</ref> const &amp;</type>
+          <declname>result</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d76/a04606" kindref="compound">RenderPassTimer</ref> &amp;</type>
+          <declname>timer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>voxelGridSize</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Voxelize/VoxelSecondaryBounce.hpp" line="74" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="5296">
+        <label>T</label>
+      </node>
+      <node id="5291">
+        <label>castor3d::VoxelSecondaryBounce::SecondaryBounce</label>
+        <childnode refid="5292" relation="usage">
+          <edgelabel>commands</edgelabel>
+        </childnode>
+        <childnode refid="5293" relation="usage">
+          <edgelabel>computeShader</edgelabel>
+        </childnode>
+      </node>
+      <node id="5295">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="5296" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="5298">
+        <label>std::basic_string&lt; char &gt;</label>
+      </node>
+      <node id="5294">
+        <label>std::unique_ptr&lt; ast::Shader &gt;</label>
+        <childnode refid="5295" relation="template-instance">
+          <edgelabel>&lt; ast::Shader &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5292">
+        <label>castor3d::CommandsSemaphore</label>
+        <link refid="db/da9/a04374"/>
+      </node>
+      <node id="5293">
+        <label>castor3d::ShaderModule</label>
+        <link refid="d2/d63/a05306"/>
+        <childnode refid="5294" relation="usage">
+          <edgelabel>shader</edgelabel>
+        </childnode>
+        <childnode refid="5297" relation="usage">
+          <edgelabel>source</edgelabel>
+          <edgelabel>name</edgelabel>
+        </childnode>
+      </node>
+      <node id="5297">
+        <label>std::string</label>
+        <childnode refid="5298" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Voxelize/VoxelSecondaryBounce.hpp" line="73" column="1" bodyfile="Render/Voxelize/VoxelSecondaryBounce.hpp" bodystart="72" bodyend="87"/>
+    <listofallmembers>
+      <member refid="db/d20/a05034_1af0921d90d413abd8fbebf260ff3a273b" prot="public" virt="non-virtual"><scope>castor3d::VoxelSecondaryBounce::SecondaryBounce</scope><name>commands</name></member>
+      <member refid="db/d20/a05034_1a5f643b63a0a5baa70b56d423205a5891" prot="public" virt="non-virtual"><scope>castor3d::VoxelSecondaryBounce::SecondaryBounce</scope><name>computeShader</name></member>
+      <member refid="db/d20/a05034_1afc5ec3f414b68d7f99d3f14868aacf4e" prot="public" virt="non-virtual"><scope>castor3d::VoxelSecondaryBounce::SecondaryBounce</scope><name>pipeline</name></member>
+      <member refid="db/d20/a05034_1a1b1cbc247f5530edc7da124614ee25ea" prot="public" virt="non-virtual"><scope>castor3d::VoxelSecondaryBounce::SecondaryBounce</scope><name>SecondaryBounce</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

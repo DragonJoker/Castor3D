@@ -1,0 +1,321 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dd/dde/a04820" kind="struct" language="C++" prot="protected">
+    <compoundname>castor3d::SpotLightPass::Program</compoundname>
+    <basecompoundref refid="dd/df4/a04800" prot="public" virt="non-virtual">castor3d::MeshLightPass::Program</basecompoundref>
+    <includes local="no">SpotLightPass.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dd/dde/a04820_1a9419702e4a089a9b431c741cc67f7b41" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/daa/a04816" kindref="compound">SpotLightPass</ref> &amp;</type>
+        <definition>SpotLightPass&amp; castor3d::SpotLightPass::Program::m_lightPass</definition>
+        <argsstring></argsstring>
+        <name>m_lightPass</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" line="69" column="1" bodyfile="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" bodystart="69" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/dde/a04820_1a59d71eb9b4de0bfee46bc8d8b3e53927" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::SpotLightPass::Program::Program</definition>
+        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, SpotLightPass &amp;lightPass, ShaderModule const &amp;vtx, ShaderModule const &amp;pxl, bool hasShadows=false, bool hasVoxels=false, bool generatesIndirect=false)</argsstring>
+        <name>Program</name>
+        <param>
+          <type><ref refid="dc/dbb/a02520" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/daa/a04816" kindref="compound">SpotLightPass</ref> &amp;</type>
+          <declname>lightPass</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d32/a05312" kindref="compound">ShaderModule</ref> const &amp;</type>
+          <declname>vtx</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d32/a05312" kindref="compound">ShaderModule</ref> const &amp;</type>
+          <declname>pxl</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>hasShadows</declname>
+          <defval>false</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>hasVoxels</declname>
+          <defval>false</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>generatesIndirect</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The engine. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lightPass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The light pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">vtx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The vertex shader source. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pxl</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The fragment shader source. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">hasShadows</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Tells if this program uses shadow map. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">hasVoxels</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Tells if this program uses voxellisation result. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">generatesIndirect</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Tells if this program generates indirect lighting. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" line="49" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dde/a04820_1acaca8fd5bdb9e0f55fd425113b6959c9" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>virtual castor3d::SpotLightPass::Program::~Program</definition>
+        <argsstring>()</argsstring>
+        <name>~Program</name>
+        <reimplements refid="dd/df4/a04800_1a133ea9bcedef3fabee18a11d638f591a">~Program</reimplements>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" line="63" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="dd/dde/a04820_1a6b85bc2409d590aa9a5c5c464ef158b0" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::SpotLightPass::Program::doBind</definition>
+        <argsstring>(Light const &amp;light) override</argsstring>
+        <name>doBind</name>
+        <reimplements refid="da/deb/a04764_1a8490c1cfa85a383de04fb235f22ea40e">doBind</reimplements>
+        <param>
+          <type><ref refid="d8/de4/a05172" kindref="compound">Light</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" line="66" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Spot light pass program. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="4187">
+        <label>castor3d::MeshLightPass::Program</label>
+        <link refid="dd/df4/a04800"/>
+        <childnode refid="4188" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4189">
+        <label>Named</label>
+      </node>
+      <node id="4188">
+        <label>castor3d::LightPass::Program</label>
+        <link refid="da/deb/a04764"/>
+        <childnode refid="4189" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4186">
+        <label>castor3d::SpotLightPass::Program</label>
+        <link refid="dd/dde/a04820"/>
+        <childnode refid="4187" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="4200">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d9/d38/a04624"/>
+        <childnode refid="4201" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4199">
+        <label>T</label>
+      </node>
+      <node id="4203">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="4199" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="4198">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="4199" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="4202">
+        <label>std::vector&lt; ashes::CommandPoolPtr &gt;</label>
+        <childnode refid="4203" relation="template-instance">
+          <edgelabel>&lt; ashes::CommandPoolPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4197">
+        <label>std::array&lt; uint32_t, 4u &gt;</label>
+        <childnode refid="4198" relation="template-instance">
+          <edgelabel>&lt; uint32_t, 4u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4191">
+        <label>castor3d::MeshLightPass::Program</label>
+        <link refid="dd/df4/a04800"/>
+        <childnode refid="4192" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4193">
+        <label>Named</label>
+      </node>
+      <node id="4195">
+        <label>castor::Unique&lt; Engine &gt;</label>
+      </node>
+      <node id="4201">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="4192">
+        <label>castor3d::LightPass::Program</label>
+        <link refid="da/deb/a04764"/>
+        <childnode refid="4193" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4194" relation="usage">
+          <edgelabel>m_engine</edgelabel>
+        </childnode>
+        <childnode refid="4196" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+      </node>
+      <node id="4194">
+        <label>castor3d::Engine</label>
+        <link refid="dc/dbb/a02520"/>
+        <childnode refid="4195" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4196">
+        <label>castor3d::RenderDevice</label>
+        <link refid="d1/def/a04512"/>
+        <childnode refid="4197" relation="usage">
+          <edgelabel>queueFamiliesIndex</edgelabel>
+        </childnode>
+        <childnode refid="4200" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="4202" relation="usage">
+          <edgelabel>commandPools</edgelabel>
+        </childnode>
+      </node>
+      <node id="4190">
+        <label>castor3d::SpotLightPass::Program</label>
+        <link refid="dd/dde/a04820"/>
+        <childnode refid="4191" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" line="25" column="1" bodyfile="Render/Technique/Opaque/Lighting/SpotLightPass.hpp" bodystart="23" bodyend="70"/>
+    <listofallmembers>
+      <member refid="da/deb/a04764_1a56ae01d65b01883f5ce0118daf64690c" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>bind</name></member>
+      <member refid="da/deb/a04764_1ab598c54b90bcd66c546c754af0851d90" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>cleanup</name></member>
+      <member refid="dd/dde/a04820_1a6b85bc2409d590aa9a5c5c464ef158b0" prot="private" virt="virtual"><scope>castor3d::SpotLightPass::Program</scope><name>doBind</name></member>
+      <member refid="da/deb/a04764_1aaa746a9a99bcd0198ee554c3ab69659e" prot="protected" virt="virtual"><scope>castor3d::SpotLightPass::Program</scope><name>doRender</name></member>
+      <member refid="da/deb/a04764_1aee4b36aedabffd104d41e37c53f5a941" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>getPipelineLayout</name></member>
+      <member refid="da/deb/a04764_1a4750cb3a226efed78fc75d73b1e1d66a" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>getTextureDescriptorLayout</name></member>
+      <member refid="da/deb/a04764_1adc6a0d70291a75c8685b58f74c1d051d" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>getTextureDescriptorPool</name></member>
+      <member refid="da/deb/a04764_1abc2748c3e65cfc9e4c431e908c561dd0" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>getUboDescriptorLayout</name></member>
+      <member refid="da/deb/a04764_1a8316aee9157855bdf8893f1554aff8bf" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>getUboDescriptorPool</name></member>
+      <member refid="da/deb/a04764_1a132d6370f071a2cb266aac2881f7ecf7" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>initialise</name></member>
+      <member refid="da/deb/a04764_1a54eaf135f9b1b974d00a93dea2db533c" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>m_blendPipeline</name></member>
+      <member refid="da/deb/a04764_1a37c0b2cded3354383db9d9cd359c99fc" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>m_device</name></member>
+      <member refid="da/deb/a04764_1a62a9586b46c1be6ffbd51cb7775953f0" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>m_engine</name></member>
+      <member refid="da/deb/a04764_1af3308b8669402be33760c617119aa3f8" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>m_firstPipeline</name></member>
+      <member refid="da/deb/a04764_1a0e77f08bb3f9f9e1bc13b7d60ea50d29" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>m_generatesIndirect</name></member>
+      <member refid="dd/dde/a04820_1a9419702e4a089a9b431c741cc67f7b41" prot="private" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>m_lightPass</name></member>
+      <member refid="da/deb/a04764_1a112df3e757b429a123f4935a339fa4b6" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>m_pipelineLayout</name></member>
+      <member refid="da/deb/a04764_1a315224ba3f2ea81ccf95774e5bc39b2f" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>m_program</name></member>
+      <member refid="da/deb/a04764_1a56c94264c585da624967063f72a1ae8a" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>m_shadows</name></member>
+      <member refid="da/deb/a04764_1af9fef7d04765b65116ef087761c8584c" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>m_textureDescriptorLayout</name></member>
+      <member refid="da/deb/a04764_1a00d14bb14ae6bc413c9b29f42f5cb40f" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>m_textureDescriptorPool</name></member>
+      <member refid="da/deb/a04764_1aee516c4a94abe87058cfc9f4248a6ef8" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>m_uboDescriptorLayout</name></member>
+      <member refid="da/deb/a04764_1a1d562428e80aec816dad9255fb988568" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>m_uboDescriptorPool</name></member>
+      <member refid="da/deb/a04764_1afdde2c7c935db702388ce72f4e87422f" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>m_voxels</name></member>
+      <member refid="dd/dde/a04820_1a59d71eb9b4de0bfee46bc8d8b3e53927" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>Program</name></member>
+      <member refid="dd/df4/a04800_1acc4bf419371c31f1db0571bbea310987" prot="public" virt="non-virtual" ambiguityscope="castor3d::MeshLightPass::Program::"><scope>castor3d::SpotLightPass::Program</scope><name>Program</name></member>
+      <member refid="da/deb/a04764_1a8a4da088de05ee41c00ba7cb17bc5178" prot="public" virt="non-virtual"><scope>castor3d::SpotLightPass::Program</scope><name>render</name></member>
+      <member refid="dd/dde/a04820_1acaca8fd5bdb9e0f55fd425113b6959c9" prot="public" virt="virtual"><scope>castor3d::SpotLightPass::Program</scope><name>~Program</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

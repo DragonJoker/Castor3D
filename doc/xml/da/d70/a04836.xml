@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="da/d70/a04836" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SubsurfaceScatteringPass::BlurWeights</compoundname>
+    <includes local="no">SubsurfaceScatteringPass.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="da/d70/a04836_1a9f824803d0628b0dd429b3a58f6dfa69" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::SubsurfaceScatteringPass::BlurWeights::originalWeight</definition>
+        <argsstring></argsstring>
+        <name>originalWeight</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="117" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="117" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d70/a04836_1a3229ded5b54533f92a6332f493eced2e" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::SubsurfaceScatteringPass::BlurWeights::blurWeights[3u]</definition>
+        <argsstring>[3u]</argsstring>
+        <name>blurWeights</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="118" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="118" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d70/a04836_1a0bf0b2b2456f6fed0218719ac6e99e3e" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::SubsurfaceScatteringPass::BlurWeights::blurVariance</definition>
+        <argsstring></argsstring>
+        <name>blurVariance</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="119" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="119" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" line="116" column="1" bodyfile="Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp" bodystart="115" bodyend="120"/>
+    <listofallmembers>
+      <member refid="da/d70/a04836_1a0bf0b2b2456f6fed0218719ac6e99e3e" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::BlurWeights</scope><name>blurVariance</name></member>
+      <member refid="da/d70/a04836_1a3229ded5b54533f92a6332f493eced2e" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::BlurWeights</scope><name>blurWeights</name></member>
+      <member refid="da/d70/a04836_1a9f824803d0628b0dd429b3a58f6dfa69" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::BlurWeights</scope><name>originalWeight</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

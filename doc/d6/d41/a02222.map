@@ -1,6 +1,6 @@
-<map id="castor3d::VertexBoneData" name="castor3d::VertexBoneData">
-<area shape="rect" id="node1" title="Holds bone data for one vertex." alt="" coords="480,49,655,76"/>
-<area shape="rect" id="node2" title=" " alt="" coords="166,5,353,61"/>
-<area shape="rect" id="node3" title=" " alt="" coords="153,86,365,127"/>
-<area shape="rect" id="node4" title=" " alt="" coords="5,93,48,120"/>
+<map id="castor3d::BinaryWriter&lt; SkeletonAnimationNode &gt;" name="castor3d::BinaryWriter&lt; SkeletonAnimationNode &gt;">
+<area shape="rect" id="node1" title="MovingBone binary loader." alt="" coords="5,289,191,331"/>
+<area shape="rect" id="node2" href="$dd/d3f/a02156.html" title=" " alt="" coords="5,199,191,240"/>
+<area shape="rect" id="node3" href="$d8/dd8/a02108.html" title=" " alt="" coords="53,5,207,32"/>
+<area shape="rect" id="node4" href="$dd/d3f/a02156.html" title="Binary data chunk writer base class." alt="" coords="159,95,341,136"/>
 </map>

@@ -1,0 +1,166 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dd/d2d/a05220" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ParticleEmitter</compoundname>
+    <includes local="no">ParticleEmitter.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="dd/d2d/a05220_1a452c5137dbfd637eacf3e294c7ee980d" prot="public" static="no">
+        <type>std::function&lt; void(<ref refid="df/dfd/a05208" kindref="compound">Particle</ref> const &amp;particle) &gt;</type>
+        <definition>using castor3d::ParticleEmitter::OnEmitFunction =  std::function&lt; void( Particle const &amp; particle ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>OnEmitFunction</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ParticleEmitter.hpp" line="31" column="1" bodyfile="Scene/ParticleSystem/ParticleEmitter.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/d2d/a05220_1af4be5fdb637e6282765b43d91a3b2788" prot="public" static="no">
+        <type>castor::Signal&lt; <ref refid="dd/d2d/a05220_1a452c5137dbfd637eacf3e294c7ee980d" kindref="member">OnEmitFunction</ref> &gt;</type>
+        <definition>using castor3d::ParticleEmitter::OnEmitSignal =  castor::Signal&lt; OnEmitFunction &gt;</definition>
+        <argsstring></argsstring>
+        <name>OnEmitSignal</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ParticleEmitter.hpp" line="32" column="1" bodyfile="Scene/ParticleSystem/ParticleEmitter.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/d2d/a05220_1a9bcc1d08ae2bf0c1b81575bc0664e141" prot="public" static="no">
+        <type>OnEmitSignal::connection</type>
+        <definition>using castor3d::ParticleEmitter::OnEmitConnection =  OnEmitSignal::connection</definition>
+        <argsstring></argsstring>
+        <name>OnEmitConnection</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ParticleEmitter.hpp" line="33" column="1" bodyfile="Scene/ParticleSystem/ParticleEmitter.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dd/d2d/a05220_1a837e184338b825ff536d219bbbceca52" prot="public" static="no" mutable="no">
+        <type><ref refid="dd/d2d/a05220_1af4be5fdb637e6282765b43d91a3b2788" kindref="member">OnEmitSignal</ref></type>
+        <definition>OnEmitSignal castor3d::ParticleEmitter::onEmit</definition>
+        <argsstring></argsstring>
+        <name>onEmit</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ParticleEmitter.hpp" line="35" column="1" bodyfile="Scene/ParticleSystem/ParticleEmitter.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="dd/d2d/a05220_1a1aef180a603936f3b613ec9ca0ddea24" prot="protected" static="no" mutable="no">
+        <type><ref refid="d4/d61/a05212" kindref="compound">castor3d::ParticleDeclaration</ref> const  &amp;</type>
+        <definition>castor3d::ParticleDeclaration const&amp; castor3d::ParticleEmitter::m_decl</definition>
+        <argsstring></argsstring>
+        <name>m_decl</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ParticleEmitter.hpp" line="38" column="1" bodyfile="Scene/ParticleSystem/ParticleEmitter.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/d2d/a05220_1a59df8fd2767dcdc7968ffcdf50d7e7a5" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ParticleEmitter::ParticleEmitter</definition>
+        <argsstring>(castor3d::ParticleDeclaration const &amp;decl)</argsstring>
+        <name>ParticleEmitter</name>
+        <param>
+          <type><ref refid="d4/d61/a05212" kindref="compound">castor3d::ParticleDeclaration</ref> const &amp;</type>
+          <declname>decl</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ParticleEmitter.hpp" line="19" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d2d/a05220_1a02a22e9fa9e379baf2f1f9820f386773" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::ParticleEmitter::~ParticleEmitter</definition>
+        <argsstring>()=default</argsstring>
+        <name>~ParticleEmitter</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ParticleEmitter.hpp" line="20" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d2d/a05220_1ad866a9082523d455f3551150f388b5fa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="df/dfd/a05208" kindref="compound">castor3d::Particle</ref></type>
+        <definition>C3D_API castor3d::Particle castor3d::ParticleEmitter::emit</definition>
+        <argsstring>(ParticleValues const &amp;value)</argsstring>
+        <name>emit</name>
+        <param>
+          <type><ref refid="da/d1e/a01479_1a04f5362c821ed84ec9897c8636970f7d" kindref="member">ParticleValues</ref> const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Emits a particle with given values. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The particle values. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ParticleEmitter.hpp" line="29" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2528">
+        <label>castor3d::ParticleDeclaration</label>
+        <link refid="d4/d61/a05212"/>
+      </node>
+      <node id="2527">
+        <label>castor3d::ParticleEmitter</label>
+        <link refid="dd/d2d/a05220"/>
+        <childnode refid="2528" relation="usage">
+          <edgelabel>m_decl</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Scene/ParticleSystem/ParticleEmitter.hpp" line="17" column="1" bodyfile="Scene/ParticleSystem/ParticleEmitter.hpp" bodystart="16" bodyend="39"/>
+    <listofallmembers>
+      <member refid="dd/d2d/a05220_1ad866a9082523d455f3551150f388b5fa" prot="public" virt="non-virtual"><scope>castor3d::ParticleEmitter</scope><name>emit</name></member>
+      <member refid="dd/d2d/a05220_1a1aef180a603936f3b613ec9ca0ddea24" prot="protected" virt="non-virtual"><scope>castor3d::ParticleEmitter</scope><name>m_decl</name></member>
+      <member refid="dd/d2d/a05220_1a837e184338b825ff536d219bbbceca52" prot="public" virt="non-virtual"><scope>castor3d::ParticleEmitter</scope><name>onEmit</name></member>
+      <member refid="dd/d2d/a05220_1a9bcc1d08ae2bf0c1b81575bc0664e141" prot="public" virt="non-virtual"><scope>castor3d::ParticleEmitter</scope><name>OnEmitConnection</name></member>
+      <member refid="dd/d2d/a05220_1a452c5137dbfd637eacf3e294c7ee980d" prot="public" virt="non-virtual"><scope>castor3d::ParticleEmitter</scope><name>OnEmitFunction</name></member>
+      <member refid="dd/d2d/a05220_1af4be5fdb637e6282765b43d91a3b2788" prot="public" virt="non-virtual"><scope>castor3d::ParticleEmitter</scope><name>OnEmitSignal</name></member>
+      <member refid="dd/d2d/a05220_1a59df8fd2767dcdc7968ffcdf50d7e7a5" prot="public" virt="non-virtual"><scope>castor3d::ParticleEmitter</scope><name>ParticleEmitter</name></member>
+      <member refid="dd/d2d/a05220_1a02a22e9fa9e379baf2f1f9820f386773" prot="public" virt="virtual"><scope>castor3d::ParticleEmitter</scope><name>~ParticleEmitter</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

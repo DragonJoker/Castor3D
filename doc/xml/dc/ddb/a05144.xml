@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dc/ddb/a05144" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::BillboardBase::Vertex</compoundname>
+    <includes local="no">BillboardList.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dc/ddb/a05144_1a593c736459e354413967f1b8a5aab9b0" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::BillboardBase::Vertex::position</definition>
+        <argsstring></argsstring>
+        <name>position</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/BillboardList.hpp" line="213" column="1" bodyfile="Scene/BillboardList.hpp" bodystart="213" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/ddb/a05144_1a2f94ae756c163856a8d24cbbd76bb56f" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::BillboardBase::Vertex::uv</definition>
+        <argsstring></argsstring>
+        <name>uv</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/BillboardList.hpp" line="214" column="1" bodyfile="Scene/BillboardList.hpp" bodystart="214" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Scene/BillboardList.hpp" line="212" column="1" bodyfile="Scene/BillboardList.hpp" bodystart="211" bodyend="215"/>
+    <listofallmembers>
+      <member refid="dc/ddb/a05144_1a593c736459e354413967f1b8a5aab9b0" prot="public" virt="non-virtual"><scope>castor3d::BillboardBase::Vertex</scope><name>position</name></member>
+      <member refid="dc/ddb/a05144_1a2f94ae756c163856a8d24cbbd76bb56f" prot="public" virt="non-virtual"><scope>castor3d::BillboardBase::Vertex</scope><name>uv</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

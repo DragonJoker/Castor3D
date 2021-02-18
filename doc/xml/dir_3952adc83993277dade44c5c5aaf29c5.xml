@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_3952adc83993277dade44c5c5aaf29c5" kind="dir">
+    <compoundname>Render/ToTexture</compoundname>
+    <innerfile refid="d5/d6c/a00977">EquirectangularToCube.hpp</innerfile>
+    <innerfile refid="db/d20/a00980">RenderCube.hpp</innerfile>
+    <innerfile refid="d7/d98/a00983">RenderDepthQuad.hpp</innerfile>
+    <innerfile refid="d3/d7b/a00986">RenderToTextureModule.hpp</innerfile>
+    <innerfile refid="d4/d95/a00989">Texture3DTo2D.hpp</innerfile>
+    <innerfile refid="d7/d76/a00992">TextureProjection.hpp</innerfile>
+    <innerfile refid="dd/d48/a00995">TextureProjectionToCube.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/ToTexture/"/>
+  </compounddef>
+</doxygen>

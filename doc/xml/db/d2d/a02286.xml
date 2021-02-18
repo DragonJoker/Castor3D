@@ -1,0 +1,186 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="db/d2d/a02286" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::GpuBufferOffsetT</compoundname>
+    <includes local="no">GpuBufferOffset.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename</type>
+        <declname>DataT</declname>
+        <defname>DataT</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="db/d2d/a02286_1ae1a6bf14919fc534c6d39453b53e0a91" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/dc5/a02306" kindref="compound">GpuBuffer</ref> *</type>
+        <definition>GpuBuffer* castor3d::GpuBufferOffsetT&lt; DataT &gt;::buffer</definition>
+        <argsstring></argsstring>
+        <name>buffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferOffset.hpp" line="15" column="1" bodyfile="Buffer/GpuBufferOffset.hpp" bodystart="15" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="db/d2d/a02286_1a45500e1399aa28a4591569385051e7b7" prot="public" static="no" mutable="no">
+        <type>VkBufferUsageFlagBits</type>
+        <definition>VkBufferUsageFlagBits castor3d::GpuBufferOffsetT&lt; DataT &gt;::target</definition>
+        <argsstring></argsstring>
+        <name>target</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferOffset.hpp" line="18" column="1" bodyfile="Buffer/GpuBufferOffset.hpp" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d2d/a02286_1acb98f24d20ec341a11fe8ded93eb5411" prot="public" static="no" mutable="no">
+        <type>VkMemoryPropertyFlags</type>
+        <definition>VkMemoryPropertyFlags castor3d::GpuBufferOffsetT&lt; DataT &gt;::memory</definition>
+        <argsstring></argsstring>
+        <name>memory</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferOffset.hpp" line="19" column="1" bodyfile="Buffer/GpuBufferOffset.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d2d/a02286_1ab7426d2a0dd4557021fbc0f71eaa5134" prot="public" static="no" mutable="no">
+        <type><ref refid="d0/dd4/a02298" kindref="compound">MemChunk</ref></type>
+        <definition>MemChunk castor3d::GpuBufferOffsetT&lt; DataT &gt;::chunk</definition>
+        <argsstring></argsstring>
+        <name>chunk</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferOffset.hpp" line="20" column="1" bodyfile="Buffer/GpuBufferOffset.hpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/d2d/a02286_1ae41be44c0cd52b5cd5c9e280ef02f612" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::GpuBufferOffsetT&lt; DataT &gt;::setPool</definition>
+        <argsstring>(GpuBuffer &amp;pool)</argsstring>
+        <name>setPool</name>
+        <param>
+          <type><ref refid="d3/dc5/a02306" kindref="compound">GpuBuffer</ref> &amp;</type>
+          <declname>pool</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferOffset.hpp" line="22" column="1" bodyfile="Buffer/GpuBufferOffset.hpp" bodystart="22" bodyend="25"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d2d/a02286_1a661b1a290c461596f62b66adf4502835" prot="public" static="no" const="yes" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::GpuBufferOffsetT&lt; DataT &gt;::operator bool</definition>
+        <argsstring>() const</argsstring>
+        <name>operator bool</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferOffset.hpp" line="27" column="1" bodyfile="Buffer/GpuBufferOffset.hpp" bodystart="27" bodyend="31"/>
+        <references refid="d3/dc5/a02306_1a9aec1d0902b5ea13976799458e7d2b8f" compoundref="d7/d9a/a00152" startline="235" endline="238">castor3d::GpuBuffer::hasBuffer</references>
+      </memberdef>
+      <memberdef kind="function" id="db/d2d/a02286_1a40dade7bf8c3d99cdde491a25dc38d36" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/dc5/a02306" kindref="compound">GpuBuffer</ref> const  &amp;</type>
+        <definition>GpuBuffer const&amp; castor3d::GpuBufferOffsetT&lt; DataT &gt;::getPool</definition>
+        <argsstring>() const</argsstring>
+        <name>getPool</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferOffset.hpp" line="33" column="1" bodyfile="Buffer/GpuBufferOffset.hpp" bodystart="33" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d2d/a02286_1a09c02d6906cd2e3d2e53aaf72786974c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/dc5/a02306" kindref="compound">GpuBuffer</ref> &amp;</type>
+        <definition>GpuBuffer&amp; castor3d::GpuBufferOffsetT&lt; DataT &gt;::getPool</definition>
+        <argsstring>()</argsstring>
+        <name>getPool</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferOffset.hpp" line="38" column="1" bodyfile="Buffer/GpuBufferOffset.hpp" bodystart="38" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d2d/a02286_1a0f87dddc61b3568ce3f6fd884168114c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::Buffer&lt; uint8_t &gt; const  &amp;</type>
+        <definition>ashes::Buffer&lt; uint8_t &gt; const&amp; castor3d::GpuBufferOffsetT&lt; DataT &gt;::getBuffer</definition>
+        <argsstring>() const</argsstring>
+        <name>getBuffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferOffset.hpp" line="43" column="1" bodyfile="Buffer/GpuBufferOffset.hpp" bodystart="43" bodyend="46"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d2d/a02286_1ae1e6785f3d1859fca4c1e0632b942491" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::Buffer&lt; uint8_t &gt; &amp;</type>
+        <definition>ashes::Buffer&lt; uint8_t &gt;&amp; castor3d::GpuBufferOffsetT&lt; DataT &gt;::getBuffer</definition>
+        <argsstring>()</argsstring>
+        <name>getBuffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferOffset.hpp" line="48" column="1" bodyfile="Buffer/GpuBufferOffset.hpp" bodystart="48" bodyend="51"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>An offset and range of a <ref refid="d3/dc5/a02306" kindref="compound">GpuBuffer</ref>. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1353">
+        <label>castor3d::MemChunk</label>
+        <link refid="d0/dd4/a02298"/>
+      </node>
+      <node id="1352">
+        <label>castor3d::GpuBufferOffsetT&lt; DataT &gt;</label>
+        <link refid="db/d2d/a02286"/>
+        <childnode refid="1353" relation="usage">
+          <edgelabel>chunk</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Buffer/BufferModule.hpp" line="56" column="1" bodyfile="Buffer/BufferModule.hpp" bodystart="56" bodyend="-1"/>
+    <listofallmembers>
+      <member refid="db/d2d/a02286_1ae1a6bf14919fc534c6d39453b53e0a91" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferOffsetT</scope><name>buffer</name></member>
+      <member refid="db/d2d/a02286_1ab7426d2a0dd4557021fbc0f71eaa5134" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferOffsetT</scope><name>chunk</name></member>
+      <member refid="db/d2d/a02286_1a0f87dddc61b3568ce3f6fd884168114c" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferOffsetT</scope><name>getBuffer</name></member>
+      <member refid="db/d2d/a02286_1ae1e6785f3d1859fca4c1e0632b942491" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferOffsetT</scope><name>getBuffer</name></member>
+      <member refid="db/d2d/a02286_1a40dade7bf8c3d99cdde491a25dc38d36" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferOffsetT</scope><name>getPool</name></member>
+      <member refid="db/d2d/a02286_1a09c02d6906cd2e3d2e53aaf72786974c" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferOffsetT</scope><name>getPool</name></member>
+      <member refid="db/d2d/a02286_1acb98f24d20ec341a11fe8ded93eb5411" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferOffsetT</scope><name>memory</name></member>
+      <member refid="db/d2d/a02286_1a661b1a290c461596f62b66adf4502835" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferOffsetT</scope><name>operator bool</name></member>
+      <member refid="db/d2d/a02286_1ae41be44c0cd52b5cd5c9e280ef02f612" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferOffsetT</scope><name>setPool</name></member>
+      <member refid="db/d2d/a02286_1a45500e1399aa28a4591569385051e7b7" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferOffsetT</scope><name>target</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

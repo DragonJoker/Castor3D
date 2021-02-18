@@ -1,4 +1,5 @@
-<map id="castor3d::ComputePipeline" name="castor3d::ComputePipeline">
-<area shape="rect" id="node1" title="The computing pipeline." alt="" coords="32,80,211,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,237,32"/>
+<map id="castor3d::UniformBufferBase" name="castor3d::UniformBufferBase">
+<area shape="rect" id="node1" title=" " alt="" coords="5,49,192,75"/>
+<area shape="rect" id="node2" href="$d8/d9a/a02296.html" title="A uniform typed buffer, than can contain multiple sub&#45;buffers." alt="" coords="241,5,405,47"/>
+<area shape="rect" id="node3" href="$d8/d9a/a02296.html" title=" " alt="" coords="623,39,896,80"/>
 </map>

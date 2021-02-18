@@ -5,11 +5,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: castor3d::Subdivider Class Reference</title>
+<title>Castor3D: castor3d::BinaryParser&lt; SkeletonAnimationNode &gt; Class Template Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
 <link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+<link href="../../Castor3D.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -17,10 +18,12 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Castor3D
-   &#160;<span id="projectnumber">..</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
+   <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
  </tr>
  </tbody>
@@ -39,1122 +42,115 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../d0/d85/a00976.html">castor3d</a></li><li class="navelem"><a class="el" href="../../de/dfd/a02228.html">Subdivider</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/d1e/a01479.html">castor3d</a></li><li class="navelem"><a class="el" href="../../de/dfd/a02228.html">BinaryParser&lt; SkeletonAnimationNode &gt;</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pro-types">Protected Types</a> &#124;
-<a href="#pro-methods">Protected Member Functions</a> &#124;
-<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="../../d4/dc0/a02225.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">castor3d::Subdivider Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
+<div class="title">castor3d::BinaryParser&lt; SkeletonAnimationNode &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Subdividers main class C3D_API.  
+<p>MovingBone binary loader.  
  <a href="../../de/dfd/a02228.html#details">More...</a></p>
-<div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-0-trigger" src="../../closed.png" alt="+"/> Collaboration diagram for castor3d::Subdivider:</div>
-<div id="dynsection-0-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../d3/d10/a02226.png" border="0" usemap="#castor3d_1_1Subdivider_coll__map" alt="Collaboration graph"/></div>
-<map name="castor3d_1_1Subdivider_coll__map" id="castor3d_1_1Subdivider_coll__map">
-<area shape="rect"  title="Subdividers main class C3D_API." alt="" coords="5,199,144,225"/>
-<area shape="rect"  title=" " alt="" coords="5,95,144,136"/>
-<area shape="rect"  title="STL class." alt="" coords="33,5,117,32"/>
+<div class="dynheader">
+Inheritance diagram for castor3d::BinaryParser&lt; SkeletonAnimationNode &gt;:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d2/d9a/a02227.png" border="0" usemap="#castor3d_1_1BinaryParser_3_01SkeletonAnimationNode_01_4_inherit__map" alt="Inheritance graph"/></div>
+<map name="castor3d_1_1BinaryParser_3_01SkeletonAnimationNode_01_4_inherit__map" id="castor3d_1_1BinaryParser_3_01SkeletonAnimationNode_01_4_inherit__map">
+<area shape="rect"  title="MovingBone binary loader." alt="" coords="5,200,191,241"/>
+<area shape="rect"  href="../../d2/d08/a02148.html" title=" " alt="" coords="5,109,191,151"/>
+<area shape="rect"  href="../../d2/d08/a02148.html" title="Binary data chunk reader base class." alt="" coords="5,5,191,47"/>
+</map>
+<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
+<div class="dynheader">
+Collaboration diagram for castor3d::BinaryParser&lt; SkeletonAnimationNode &gt;:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d3/d10/a02226.png" border="0" usemap="#castor3d_1_1BinaryParser_3_01SkeletonAnimationNode_01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="castor3d_1_1BinaryParser_3_01SkeletonAnimationNode_01_4_coll__map" id="castor3d_1_1BinaryParser_3_01SkeletonAnimationNode_01_4_coll__map">
+<area shape="rect"  title="MovingBone binary loader." alt="" coords="85,289,270,331"/>
+<area shape="rect"  href="../../d2/d08/a02148.html" title=" " alt="" coords="85,199,270,240"/>
+<area shape="rect"  href="../../d8/dd8/a02108.html" title=" " alt="" coords="5,5,160,32"/>
+<area shape="rect"  href="../../d2/d08/a02148.html" title="Binary data chunk reader base class." alt="" coords="131,95,317,136"/>
+<area shape="rect"  href="../../de/de6/a03848.html" title=" " alt="" coords="218,5,342,32"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
-Public Member Functions</h2></td></tr>
-<tr class="memitem:a21af79d3a8790a8f74c6fa9d1431cec3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/dfd/a02228.html#a21af79d3a8790a8f74c6fa9d1431cec3">Subdivider</a> ()</td></tr>
-<tr class="memdesc:a21af79d3a8790a8f74c6fa9d1431cec3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#a21af79d3a8790a8f74c6fa9d1431cec3">More...</a><br /></td></tr>
-<tr class="separator:a21af79d3a8790a8f74c6fa9d1431cec3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a11470fb9f91d8a09824eda19deae6767"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/dfd/a02228.html#a11470fb9f91d8a09824eda19deae6767">~Subdivider</a> ()</td></tr>
-<tr class="memdesc:a11470fb9f91d8a09824eda19deae6767"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="#a11470fb9f91d8a09824eda19deae6767">More...</a><br /></td></tr>
-<tr class="separator:a11470fb9f91d8a09824eda19deae6767"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7c2d83f2ec15a2968d9aaac23d80fece"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/dfd/a02228.html#a7c2d83f2ec15a2968d9aaac23d80fece">subdivide</a> (SubmeshSPtr p_submesh, int p_occurences, bool p_generateBuffers=true, bool p_threaded=false)</td></tr>
-<tr class="memdesc:a7c2d83f2ec15a2968d9aaac23d80fece"><td class="mdescLeft">&#160;</td><td class="mdescRight">Main subdivision function.  <a href="#a7c2d83f2ec15a2968d9aaac23d80fece">More...</a><br /></td></tr>
-<tr class="separator:a7c2d83f2ec15a2968d9aaac23d80fece"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac6dc1410926d99f66e18228a018bdda4"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/dfd/a02228.html#ac6dc1410926d99f66e18228a018bdda4">cleanup</a> ()</td></tr>
-<tr class="memdesc:ac6dc1410926d99f66e18228a018bdda4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cleans all member variables.  <a href="#ac6dc1410926d99f66e18228a018bdda4">More...</a><br /></td></tr>
-<tr class="separator:ac6dc1410926d99f66e18228a018bdda4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a49516525cae2eb66602b514c14109160"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> BufferElementGroupSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/dfd/a02228.html#a49516525cae2eb66602b514c14109160">addPoint</a> (real x, real y, real z)</td></tr>
-<tr class="memdesc:a49516525cae2eb66602b514c14109160"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates and adds a vertex to my list.  <a href="#a49516525cae2eb66602b514c14109160">More...</a><br /></td></tr>
-<tr class="separator:a49516525cae2eb66602b514c14109160"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec4773041ec77dc95ee32887ee74bc58"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> BufferElementGroupSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/dfd/a02228.html#aec4773041ec77dc95ee32887ee74bc58">addPoint</a> (castor::Point3r const &amp;p_v)</td></tr>
-<tr class="memdesc:aec4773041ec77dc95ee32887ee74bc58"><td class="mdescLeft">&#160;</td><td class="mdescRight">adds a vertex to my list  <a href="#aec4773041ec77dc95ee32887ee74bc58">More...</a><br /></td></tr>
-<tr class="separator:aec4773041ec77dc95ee32887ee74bc58"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:accfb92e48898e22abe5a10ad4bf8de20"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> BufferElementGroupSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/dfd/a02228.html#accfb92e48898e22abe5a10ad4bf8de20">addPoint</a> (real *p_v)</td></tr>
-<tr class="memdesc:accfb92e48898e22abe5a10ad4bf8de20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates and adds a vertex to my list.  <a href="#accfb92e48898e22abe5a10ad4bf8de20">More...</a><br /></td></tr>
-<tr class="separator:accfb92e48898e22abe5a10ad4bf8de20"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac645805df99f7fd396b25c0dde7be96e"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../d5/dc0/a02272.html">Face</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/dfd/a02228.html#ac645805df99f7fd396b25c0dde7be96e">addFace</a> (uint32_t a, uint32_t b, uint32_t c)</td></tr>
-<tr class="memdesc:ac645805df99f7fd396b25c0dde7be96e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates and adds a face.  <a href="#ac645805df99f7fd396b25c0dde7be96e">More...</a><br /></td></tr>
-<tr class="separator:ac645805df99f7fd396b25c0dde7be96e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0b857ff889b746efc339f05e4d9f3a3f"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/dfd/a02228.html#a0b857ff889b746efc339f05e4d9f3a3f">isInMyPoints</a> (castor::Point3r const &amp;p_vertex, double p_precision)</td></tr>
-<tr class="memdesc:a0b857ff889b746efc339f05e4d9f3a3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tests if the given Point3r is in mine.  <a href="#a0b857ff889b746efc339f05e4d9f3a3f">More...</a><br /></td></tr>
-<tr class="separator:a0b857ff889b746efc339f05e4d9f3a3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaf5e310d6eddef5945ad778a05605fd1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/dfd/a02228.html#aaf5e310d6eddef5945ad778a05605fd1">getPointsCount</a> () const</td></tr>
-<tr class="memdesc:aaf5e310d6eddef5945ad778a05605fd1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the points count.  <a href="#aaf5e310d6eddef5945ad778a05605fd1">More...</a><br /></td></tr>
-<tr class="separator:aaf5e310d6eddef5945ad778a05605fd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acebcf7c877d6c08da23d484c01769ab9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> BufferElementGroupSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/dfd/a02228.html#acebcf7c877d6c08da23d484c01769ab9">getPoint</a> (uint32_t i) const</td></tr>
-<tr class="memdesc:acebcf7c877d6c08da23d484c01769ab9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the wanted point.  <a href="#acebcf7c877d6c08da23d484c01769ab9">More...</a><br /></td></tr>
-<tr class="separator:acebcf7c877d6c08da23d484c01769ab9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa218f5aa890acf44dc80a3d733323e5c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> VertexPtrArray const  &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/dfd/a02228.html#aa218f5aa890acf44dc80a3d733323e5c">getPoints</a> () const</td></tr>
-<tr class="separator:aa218f5aa890acf44dc80a3d733323e5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a602a47f1660e376c15e473fec5d7ab7c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/dfd/a02228.html#a602a47f1660e376c15e473fec5d7ab7c">setSubdivisionEndCallback</a> (<a class="el" href="../../de/dfd/a02228.html#a6af2a8c45b92e0c29509f46c6facc1d1">SubdivisionEndFunction</a> p_pfnSubdivisionEnd)</td></tr>
-<tr class="memdesc:a602a47f1660e376c15e473fec5d7ab7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines a function to execute when the threaded subdivision ends.  <a href="#a602a47f1660e376c15e473fec5d7ab7c">More...</a><br /></td></tr>
-<tr class="separator:a602a47f1660e376c15e473fec5d7ab7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-types"></a>
-Protected Types</h2></td></tr>
-<tr class="memitem:a6af2a8c45b92e0c29509f46c6facc1d1"><td class="memItemLeft" align="right" valign="top">typedef std::function&lt; void(<a class="el" href="../../de/dfd/a02228.html">Subdivider</a> &amp;) &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/dfd/a02228.html#a6af2a8c45b92e0c29509f46c6facc1d1">SubdivisionEndFunction</a></td></tr>
-<tr class="separator:a6af2a8c45b92e0c29509f46c6facc1d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
-Protected Member Functions</h2></td></tr>
-<tr class="memitem:a7ae8a7529f4fe8f7e39415bc7ab454bd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/dfd/a02228.html#a7ae8a7529f4fe8f7e39415bc7ab454bd">doSubdivideThreaded</a> ()</td></tr>
-<tr class="memdesc:a7ae8a7529f4fe8f7e39415bc7ab454bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Threaded subdivision function.  <a href="#a7ae8a7529f4fe8f7e39415bc7ab454bd">More...</a><br /></td></tr>
-<tr class="separator:a7ae8a7529f4fe8f7e39415bc7ab454bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a24b217b77ce56b5b8f1a0371ff5a1825"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::BufferElementGroupSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/dfd/a02228.html#a24b217b77ce56b5b8f1a0371ff5a1825">doTryAddPoint</a> (castor::Point3r const &amp;p_point)</td></tr>
-<tr class="memdesc:a24b217b77ce56b5b8f1a0371ff5a1825"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the given point is in my list and if not creates and adds it.  <a href="#a24b217b77ce56b5b8f1a0371ff5a1825">More...</a><br /></td></tr>
-<tr class="separator:a24b217b77ce56b5b8f1a0371ff5a1825"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a18fdf0836fc3293a536bcab004877ade"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/dfd/a02228.html#a18fdf0836fc3293a536bcab004877ade">doSubdivide</a> (SubmeshSPtr p_submesh, bool p_generateBuffers, bool p_threaded)</td></tr>
-<tr class="memdesc:a18fdf0836fc3293a536bcab004877ade"><td class="mdescLeft">&#160;</td><td class="mdescRight">Main subdivision function.  <a href="#a18fdf0836fc3293a536bcab004877ade">More...</a><br /></td></tr>
-<tr class="separator:a18fdf0836fc3293a536bcab004877ade"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a494b1a74ff12e4b0f4bc98829093ab6e"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/dfd/a02228.html#a494b1a74ff12e4b0f4bc98829093ab6e">doInitialise</a> ()</td></tr>
-<tr class="memdesc:a494b1a74ff12e4b0f4bc98829093ab6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialisation function.  <a href="#a494b1a74ff12e4b0f4bc98829093ab6e">More...</a><br /></td></tr>
-<tr class="separator:a494b1a74ff12e4b0f4bc98829093ab6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acef226a9a746a2bc1877ff61aaebbf2f"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/dfd/a02228.html#acef226a9a746a2bc1877ff61aaebbf2f">doAddGeneratedFaces</a> ()=0</td></tr>
-<tr class="memdesc:acef226a9a746a2bc1877ff61aaebbf2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds generated faces to the submesh.  <a href="#acef226a9a746a2bc1877ff61aaebbf2f">More...</a><br /></td></tr>
-<tr class="separator:acef226a9a746a2bc1877ff61aaebbf2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b145d17db1503c3dfd88614751e049f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/dfd/a02228.html#a1b145d17db1503c3dfd88614751e049f">doSwapBuffers</a> ()</td></tr>
-<tr class="memdesc:a1b145d17db1503c3dfd88614751e049f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Swaps the internal faces with the submeshes ones.  <a href="#a1b145d17db1503c3dfd88614751e049f">More...</a><br /></td></tr>
-<tr class="separator:a1b145d17db1503c3dfd88614751e049f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a40b004309bf916ffa887641c256ae817"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/dfd/a02228.html#a40b004309bf916ffa887641c256ae817">doSubdivide</a> ()=0</td></tr>
-<tr class="memdesc:a40b004309bf916ffa887641c256ae817"><td class="mdescLeft">&#160;</td><td class="mdescRight">Effectively subdivides the submesh.  <a href="#a40b004309bf916ffa887641c256ae817">More...</a><br /></td></tr>
-<tr class="separator:a40b004309bf916ffa887641c256ae817"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a061f7afbac5180bdfa96777073e6edc6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/dfd/a02228.html#a061f7afbac5180bdfa96777073e6edc6">doSetTextCoords</a> (<a class="el" href="../../db/d87/a02076.html">BufferElementGroup</a> const &amp;p_a, <a class="el" href="../../db/d87/a02076.html">BufferElementGroup</a> const &amp;p_b, <a class="el" href="../../db/d87/a02076.html">BufferElementGroup</a> const &amp;p_c, <a class="el" href="../../db/d87/a02076.html">BufferElementGroup</a> &amp;p_d, <a class="el" href="../../db/d87/a02076.html">BufferElementGroup</a> &amp;p_e, <a class="el" href="../../db/d87/a02076.html">BufferElementGroup</a> &amp;p_f)</td></tr>
-<tr class="memdesc:a061f7afbac5180bdfa96777073e6edc6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the texture coordinates for given vertices, creates the faces.  <a href="#a061f7afbac5180bdfa96777073e6edc6">More...</a><br /></td></tr>
-<tr class="separator:a061f7afbac5180bdfa96777073e6edc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a478346d005631f7af77ca45edcf8b1bd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/dfd/a02228.html#a478346d005631f7af77ca45edcf8b1bd">doSetTextCoords</a> (<a class="el" href="../../db/d87/a02076.html">BufferElementGroup</a> const &amp;p_a, <a class="el" href="../../db/d87/a02076.html">BufferElementGroup</a> const &amp;p_b, <a class="el" href="../../db/d87/a02076.html">BufferElementGroup</a> const &amp;p_c, <a class="el" href="../../db/d87/a02076.html">BufferElementGroup</a> &amp;p_p)</td></tr>
-<tr class="memdesc:a478346d005631f7af77ca45edcf8b1bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the texture coordinates for the new vertex, creates the faces.  <a href="#a478346d005631f7af77ca45edcf8b1bd">More...</a><br /></td></tr>
-<tr class="separator:a478346d005631f7af77ca45edcf8b1bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
-Protected Attributes</h2></td></tr>
-<tr class="memitem:a75d4eb7b16b6862f8a965428bd0b16a8"><td class="memItemLeft" align="right" valign="top">SubmeshSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/dfd/a02228.html#a75d4eb7b16b6862f8a965428bd0b16a8">m_submesh</a></td></tr>
-<tr class="memdesc:a75d4eb7b16b6862f8a965428bd0b16a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">The submesh being subdivided.  <a href="#a75d4eb7b16b6862f8a965428bd0b16a8">More...</a><br /></td></tr>
-<tr class="separator:a75d4eb7b16b6862f8a965428bd0b16a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a72fddfb8eb0ab1f51061257325481800"><td class="memItemLeft" align="right" valign="top">FaceArray&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/dfd/a02228.html#a72fddfb8eb0ab1f51061257325481800">m_arrayFaces</a></td></tr>
-<tr class="memdesc:a72fddfb8eb0ab1f51061257325481800"><td class="mdescLeft">&#160;</td><td class="mdescRight">The faces.  <a href="#a72fddfb8eb0ab1f51061257325481800">More...</a><br /></td></tr>
-<tr class="separator:a72fddfb8eb0ab1f51061257325481800"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a24b60afb0747a4583ce40d87b1c947e9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/dfd/a02228.html#a24b60afb0747a4583ce40d87b1c947e9">m_bGenerateBuffers</a></td></tr>
-<tr class="memdesc:a24b60afb0747a4583ce40d87b1c947e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tells if the buffers must be generatef.  <a href="#a24b60afb0747a4583ce40d87b1c947e9">More...</a><br /></td></tr>
-<tr class="separator:a24b60afb0747a4583ce40d87b1c947e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae690a11f44f29f2c648ac842fda0057f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../de/dfd/a02228.html#a6af2a8c45b92e0c29509f46c6facc1d1">SubdivisionEndFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/dfd/a02228.html#ae690a11f44f29f2c648ac842fda0057f">m_pfnSubdivisionEnd</a></td></tr>
-<tr class="memdesc:ae690a11f44f29f2c648ac842fda0057f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The subdivision end callback.  <a href="#ae690a11f44f29f2c648ac842fda0057f">More...</a><br /></td></tr>
-<tr class="separator:ae690a11f44f29f2c648ac842fda0057f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af54cf7ba9b4561c22c17c02b08d79c3b"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; std::thread &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/dfd/a02228.html#af54cf7ba9b4561c22c17c02b08d79c3b">m_pThread</a></td></tr>
-<tr class="memdesc:af54cf7ba9b4561c22c17c02b08d79c3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The subdivision thread.  <a href="#af54cf7ba9b4561c22c17c02b08d79c3b">More...</a><br /></td></tr>
-<tr class="separator:af54cf7ba9b4561c22c17c02b08d79c3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6358f0ff3ee6219328d1048971e41ecb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/dfd/a02228.html#a6358f0ff3ee6219328d1048971e41ecb">m_bThreaded</a></td></tr>
-<tr class="memdesc:a6358f0ff3ee6219328d1048971e41ecb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tells that the subdivision is threaded.  <a href="#a6358f0ff3ee6219328d1048971e41ecb">More...</a><br /></td></tr>
-<tr class="separator:a6358f0ff3ee6219328d1048971e41ecb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a41ab7192391e3b4f7a014cf10f032b70"><td class="memItemLeft" align="right" valign="top">std::recursive_mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/dfd/a02228.html#a41ab7192391e3b4f7a014cf10f032b70">m_mutex</a></td></tr>
-<tr class="memdesc:a41ab7192391e3b4f7a014cf10f032b70"><td class="mdescLeft">&#160;</td><td class="mdescRight">The subdivision thread mutex.  <a href="#a41ab7192391e3b4f7a014cf10f032b70">More...</a><br /></td></tr>
-<tr class="separator:a41ab7192391e3b4f7a014cf10f032b70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pub_methods_a02148"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_a02148')"><img src="../../closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="../../d2/d08/a02148.html">castor3d::BinaryParserBase&lt; SkeletonAnimationNode &gt;</a></td></tr>
+<tr class="memitem:ae6f4694ede819151fe4e30e33235ff07 inherit pub_methods_a02148"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/d28/a02152.html">BinaryParser</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d08/a02148.html#ae6f4694ede819151fe4e30e33235ff07">createBinaryParser</a> ()</td></tr>
+<tr class="memdesc:ae6f4694ede819151fe4e30e33235ff07 inherit pub_methods_a02148"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a binary parser.  <a href="../../d2/d08/a02148.html#ae6f4694ede819151fe4e30e33235ff07">More...</a><br /></td></tr>
+<tr class="separator:ae6f4694ede819151fe4e30e33235ff07 inherit pub_methods_a02148"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5db83668684ca219f67de3a381898e64 inherit pub_methods_a02148"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d08/a02148.html#a5db83668684ca219f67de3a381898e64">parse</a> (<a class="el" href="../../df/d49/a04020.html">SkeletonAnimationNode</a> &amp;obj, castor::BinaryFile &amp;file)</td></tr>
+<tr class="memdesc:a5db83668684ca219f67de3a381898e64 inherit pub_methods_a02148"><td class="mdescLeft">&#160;</td><td class="mdescRight">From file reader function.  <a href="../../d2/d08/a02148.html#a5db83668684ca219f67de3a381898e64">More...</a><br /></td></tr>
+<tr class="separator:a5db83668684ca219f67de3a381898e64 inherit pub_methods_a02148"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6bbbb529f463085c7d259600ae1b3e99 inherit pub_methods_a02148"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d08/a02148.html#a6bbbb529f463085c7d259600ae1b3e99">parse</a> (<a class="el" href="../../df/d49/a04020.html">SkeletonAnimationNode</a> &amp;obj, <a class="el" href="../../d8/dd8/a02108.html">BinaryChunk</a> &amp;chunk)</td></tr>
+<tr class="memdesc:a6bbbb529f463085c7d259600ae1b3e99 inherit pub_methods_a02148"><td class="mdescLeft">&#160;</td><td class="mdescRight">From chunk reader function.  <a href="../../d2/d08/a02148.html#a6bbbb529f463085c7d259600ae1b3e99">More...</a><br /></td></tr>
+<tr class="separator:a6bbbb529f463085c7d259600ae1b3e99 inherit pub_methods_a02148"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a61b02dbf69d89569eff5be22facd5f07 inherit pub_methods_a02148"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d08/a02148.html#a61b02dbf69d89569eff5be22facd5f07">parse_v1_1</a> (<a class="el" href="../../df/d49/a04020.html">SkeletonAnimationNode</a> &amp;obj, <a class="el" href="../../d8/dd8/a02108.html">BinaryChunk</a> &amp;chunk)</td></tr>
+<tr class="memdesc:a61b02dbf69d89569eff5be22facd5f07 inherit pub_methods_a02148"><td class="mdescLeft">&#160;</td><td class="mdescRight">From chunk reader function.  <a href="../../d2/d08/a02148.html#a61b02dbf69d89569eff5be22facd5f07">More...</a><br /></td></tr>
+<tr class="separator:a61b02dbf69d89569eff5be22facd5f07 inherit pub_methods_a02148"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95788692ddd6fae91074c299b674aaab inherit pub_methods_a02148"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d08/a02148.html#a95788692ddd6fae91074c299b674aaab">parse_v1_2</a> (<a class="el" href="../../df/d49/a04020.html">SkeletonAnimationNode</a> &amp;obj, <a class="el" href="../../d8/dd8/a02108.html">BinaryChunk</a> &amp;chunk)</td></tr>
+<tr class="memdesc:a95788692ddd6fae91074c299b674aaab inherit pub_methods_a02148"><td class="mdescLeft">&#160;</td><td class="mdescRight">From chunk reader function.  <a href="../../d2/d08/a02148.html#a95788692ddd6fae91074c299b674aaab">More...</a><br /></td></tr>
+<tr class="separator:a95788692ddd6fae91074c299b674aaab inherit pub_methods_a02148"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f39b66d980e4a65660016f71115a89c inherit pub_methods_a02148"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d08/a02148.html#a6f39b66d980e4a65660016f71115a89c">parse_v1_3</a> (<a class="el" href="../../df/d49/a04020.html">SkeletonAnimationNode</a> &amp;obj, <a class="el" href="../../d8/dd8/a02108.html">BinaryChunk</a> &amp;chunk)</td></tr>
+<tr class="memdesc:a6f39b66d980e4a65660016f71115a89c inherit pub_methods_a02148"><td class="mdescLeft">&#160;</td><td class="mdescRight">From chunk reader function.  <a href="../../d2/d08/a02148.html#a6f39b66d980e4a65660016f71115a89c">More...</a><br /></td></tr>
+<tr class="separator:a6f39b66d980e4a65660016f71115a89c inherit pub_methods_a02148"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aabc068daf8d99718497aa35f7a17c346 inherit pub_methods_a02148"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d08/a02148.html#aabc068daf8d99718497aa35f7a17c346">parse_v1_4</a> (<a class="el" href="../../df/d49/a04020.html">SkeletonAnimationNode</a> &amp;obj, <a class="el" href="../../d8/dd8/a02108.html">BinaryChunk</a> &amp;chunk)</td></tr>
+<tr class="memdesc:aabc068daf8d99718497aa35f7a17c346 inherit pub_methods_a02148"><td class="mdescLeft">&#160;</td><td class="mdescRight">From chunk reader function.  <a href="../../d2/d08/a02148.html#aabc068daf8d99718497aa35f7a17c346">More...</a><br /></td></tr>
+<tr class="separator:aabc068daf8d99718497aa35f7a17c346 inherit pub_methods_a02148"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_methods_a02148"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_a02148')"><img src="../../closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="../../d2/d08/a02148.html">castor3d::BinaryParserBase&lt; SkeletonAnimationNode &gt;</a></td></tr>
+<tr class="memitem:a035881aba2b64571b30a5efd3faaf3d9 inherit pro_methods_a02148"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d08/a02148.html#a035881aba2b64571b30a5efd3faaf3d9">doParseHeader</a> (<a class="el" href="../../d8/dd8/a02108.html">BinaryChunk</a> &amp;chunk) const</td></tr>
+<tr class="memdesc:a035881aba2b64571b30a5efd3faaf3d9 inherit pro_methods_a02148"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses the header chunk.  <a href="../../d2/d08/a02148.html#a035881aba2b64571b30a5efd3faaf3d9">More...</a><br /></td></tr>
+<tr class="separator:a035881aba2b64571b30a5efd3faaf3d9 inherit pro_methods_a02148"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e1aa917e3bf897fab03a32d20890062 inherit pro_methods_a02148"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d08/a02148.html#a0e1aa917e3bf897fab03a32d20890062">doParseChunk</a> (T *values, size_t count, <a class="el" href="../../d8/dd8/a02108.html">BinaryChunk</a> &amp;chunk) const</td></tr>
+<tr class="memdesc:a0e1aa917e3bf897fab03a32d20890062 inherit pro_methods_a02148"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a value array from a chunk.  <a href="../../d2/d08/a02148.html#a0e1aa917e3bf897fab03a32d20890062">More...</a><br /></td></tr>
+<tr class="separator:a0e1aa917e3bf897fab03a32d20890062 inherit pro_methods_a02148"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22ca62addb3ab167995e18f49267efcf inherit pro_methods_a02148"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d08/a02148.html#a22ca62addb3ab167995e18f49267efcf">doParseChunk</a> (T(&amp;values)[Count], <a class="el" href="../../d8/dd8/a02108.html">BinaryChunk</a> &amp;chunk) const</td></tr>
+<tr class="memdesc:a22ca62addb3ab167995e18f49267efcf inherit pro_methods_a02148"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a value array from a chunk.  <a href="../../d2/d08/a02148.html#a22ca62addb3ab167995e18f49267efcf">More...</a><br /></td></tr>
+<tr class="separator:a22ca62addb3ab167995e18f49267efcf inherit pro_methods_a02148"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a648553ce168f5bc34adeedc8d169a7 inherit pro_methods_a02148"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d08/a02148.html#a5a648553ce168f5bc34adeedc8d169a7">doParseChunk</a> (std::array&lt; T, Count &gt; &amp;values, <a class="el" href="../../d8/dd8/a02108.html">BinaryChunk</a> &amp;chunk) const</td></tr>
+<tr class="memdesc:a5a648553ce168f5bc34adeedc8d169a7 inherit pro_methods_a02148"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a value array from a chunk.  <a href="../../d2/d08/a02148.html#a5a648553ce168f5bc34adeedc8d169a7">More...</a><br /></td></tr>
+<tr class="separator:a5a648553ce168f5bc34adeedc8d169a7 inherit pro_methods_a02148"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90df4e46072e5ef14aebebd00cbcc1f5 inherit pro_methods_a02148"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d08/a02148.html#a90df4e46072e5ef14aebebd00cbcc1f5">doParseChunk</a> (std::vector&lt; T &gt; &amp;values, <a class="el" href="../../d8/dd8/a02108.html">BinaryChunk</a> &amp;chunk) const</td></tr>
+<tr class="memdesc:a90df4e46072e5ef14aebebd00cbcc1f5 inherit pro_methods_a02148"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a value array from a chunk.  <a href="../../d2/d08/a02148.html#a90df4e46072e5ef14aebebd00cbcc1f5">More...</a><br /></td></tr>
+<tr class="separator:a90df4e46072e5ef14aebebd00cbcc1f5 inherit pro_methods_a02148"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5fac84360102001f5e730be1927c024e inherit pro_methods_a02148"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d08/a02148.html#a5fac84360102001f5e730be1927c024e">doParseChunk</a> (T &amp;value, <a class="el" href="../../d8/dd8/a02108.html">BinaryChunk</a> &amp;chunk) const</td></tr>
+<tr class="memdesc:a5fac84360102001f5e730be1927c024e inherit pro_methods_a02148"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a value from a chunk.  <a href="../../d2/d08/a02148.html#a5fac84360102001f5e730be1927c024e">More...</a><br /></td></tr>
+<tr class="separator:a5fac84360102001f5e730be1927c024e inherit pro_methods_a02148"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5f9ba53ad5865f967b41e5a27ed73a9 inherit pro_methods_a02148"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d08/a02148.html#ab5f9ba53ad5865f967b41e5a27ed73a9">doGetSubChunk</a> (<a class="el" href="../../d8/dd8/a02108.html">BinaryChunk</a> &amp;chunk)</td></tr>
+<tr class="memdesc:ab5f9ba53ad5865f967b41e5a27ed73a9 inherit pro_methods_a02148"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a subchunk.  <a href="../../d2/d08/a02148.html#ab5f9ba53ad5865f967b41e5a27ed73a9">More...</a><br /></td></tr>
+<tr class="separator:ab5f9ba53ad5865f967b41e5a27ed73a9 inherit pro_methods_a02148"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1fbebf70ad5b1caae1a7eb57c2f82e4 inherit pro_methods_a02148"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d08/a02148.html#ad1fbebf70ad5b1caae1a7eb57c2f82e4">checkError</a> (bool result, castor::String const &amp;text) const</td></tr>
+<tr class="separator:ad1fbebf70ad5b1caae1a7eb57c2f82e4 inherit pro_methods_a02148"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_a02148"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_a02148')"><img src="../../closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="../../d2/d08/a02148.html">castor3d::BinaryParserBase&lt; SkeletonAnimationNode &gt;</a></td></tr>
+<tr class="memitem:ab3df04f9aa2eb1f7a533ed18631f09c4 inherit pro_attribs_a02148"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/dd8/a02108.html">BinaryChunk</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d08/a02148.html#ab3df04f9aa2eb1f7a533ed18631f09c4">m_chunk</a></td></tr>
+<tr class="separator:ab3df04f9aa2eb1f7a533ed18631f09c4 inherit pro_attribs_a02148"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a455764ca72b659dab2652baf56ce5885 inherit pro_attribs_a02148"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../de/de6/a03848.html">Version</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d08/a02148.html#a455764ca72b659dab2652baf56ce5885">m_fileVersion</a></td></tr>
+<tr class="separator:a455764ca72b659dab2652baf56ce5885 inherit pro_attribs_a02148"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_static_attribs_a02148"><td colspan="2" onclick="javascript:toggleInherit('pro_static_attribs_a02148')"><img src="../../closed.png" alt="-"/>&#160;Static Protected Attributes inherited from <a class="el" href="../../d2/d08/a02148.html">castor3d::BinaryParserBase&lt; SkeletonAnimationNode &gt;</a></td></tr>
+<tr class="memitem:ae4820a3ab3e4b282240e5f1b969153c1 inherit pro_static_attribs_a02148"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor::String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d08/a02148.html#ae4820a3ab3e4b282240e5f1b969153c1">Name</a></td></tr>
+<tr class="separator:ae4820a3ab3e4b282240e5f1b969153c1 inherit pro_static_attribs_a02148"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Subdividers main class C3D_API. </p>
+<div class="textblock"><h3>template&lt;&gt;<br />
+class castor3d::BinaryParser&lt; SkeletonAnimationNode &gt;</h3>
+
+<p>MovingBone binary loader. </p>
 <dl class="section author"><dt>Author</dt><dd>Sylvain DOREMUS </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>12/03/2010</dd></dl>
-<dl class="section remark"><dt>Remarks</dt><dd>Abstract class C3D_API for subdivisers, contains the header for the main Subdivide function </dd></dl>
-</div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="a6af2a8c45b92e0c29509f46c6facc1d1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6af2a8c45b92e0c29509f46c6facc1d1">&#9670;&nbsp;</a></span>SubdivisionEndFunction</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef std::function&lt; void( <a class="el" href="../../de/dfd/a02228.html">Subdivider</a> &amp; ) &gt; <a class="el" href="../../de/dfd/a02228.html#a6af2a8c45b92e0c29509f46c6facc1d1">castor3d::Subdivider::SubdivisionEndFunction</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a21af79d3a8790a8f74c6fa9d1431cec3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a21af79d3a8790a8f74c6fa9d1431cec3">&#9670;&nbsp;</a></span>Subdivider()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::Subdivider::Subdivider </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Default constructor. </p>
-
-</div>
-</div>
-<a id="a11470fb9f91d8a09824eda19deae6767"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a11470fb9f91d8a09824eda19deae6767">&#9670;&nbsp;</a></span>~Subdivider()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::Subdivider::~Subdivider </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Destructor. </p>
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="ac645805df99f7fd396b25c0dde7be96e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac645805df99f7fd396b25c0dde7be96e">&#9670;&nbsp;</a></span>addFace()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../d5/dc0/a02272.html">Face</a> castor3d::Subdivider::addFace </td>
-          <td>(</td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>a</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>b</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>c</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Creates and adds a face. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>The first face's vertex index </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">b</td><td>The second face's vertex index </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">c</td><td>The third face's vertex index </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The created face </dd></dl>
-
-</div>
-</div>
-<a id="a49516525cae2eb66602b514c14109160"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a49516525cae2eb66602b514c14109160">&#9670;&nbsp;</a></span>addPoint() <span class="overload">[1/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> BufferElementGroupSPtr castor3d::Subdivider::addPoint </td>
-          <td>(</td>
-          <td class="paramtype">real&#160;</td>
-          <td class="paramname"><em>x</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">real&#160;</td>
-          <td class="paramname"><em>y</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">real&#160;</td>
-          <td class="paramname"><em>z</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Creates and adds a vertex to my list. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">x,y,z</td><td>The vertex coordinates </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The created vertex </dd></dl>
-
-</div>
-</div>
-<a id="aec4773041ec77dc95ee32887ee74bc58"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aec4773041ec77dc95ee32887ee74bc58">&#9670;&nbsp;</a></span>addPoint() <span class="overload">[2/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> BufferElementGroupSPtr castor3d::Subdivider::addPoint </td>
-          <td>(</td>
-          <td class="paramtype">castor::Point3r const &amp;&#160;</td>
-          <td class="paramname"><em>p_v</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>adds a vertex to my list </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_v</td><td>The vertex to add </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The created vertex </dd></dl>
-
-</div>
-</div>
-<a id="accfb92e48898e22abe5a10ad4bf8de20"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#accfb92e48898e22abe5a10ad4bf8de20">&#9670;&nbsp;</a></span>addPoint() <span class="overload">[3/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> BufferElementGroupSPtr castor3d::Subdivider::addPoint </td>
-          <td>(</td>
-          <td class="paramtype">real *&#160;</td>
-          <td class="paramname"><em>p_v</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Creates and adds a vertex to my list. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_v</td><td>The vertex coordinates </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The created vertex </dd></dl>
-
-</div>
-</div>
-<a id="ac6dc1410926d99f66e18228a018bdda4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac6dc1410926d99f66e18228a018bdda4">&#9670;&nbsp;</a></span>cleanup()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::Subdivider::cleanup </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Cleans all member variables. </p>
-
-</div>
-</div>
-<a id="acef226a9a746a2bc1877ff61aaebbf2f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acef226a9a746a2bc1877ff61aaebbf2f">&#9670;&nbsp;</a></span>doAddGeneratedFaces()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::Subdivider::doAddGeneratedFaces </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Adds generated faces to the submesh. </p>
-
-</div>
-</div>
-<a id="a494b1a74ff12e4b0f4bc98829093ab6e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a494b1a74ff12e4b0f4bc98829093ab6e">&#9670;&nbsp;</a></span>doInitialise()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::Subdivider::doInitialise </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Initialisation function. </p>
-
-</div>
-</div>
-<a id="a061f7afbac5180bdfa96777073e6edc6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a061f7afbac5180bdfa96777073e6edc6">&#9670;&nbsp;</a></span>doSetTextCoords() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::Subdivider::doSetTextCoords </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../db/d87/a02076.html">BufferElementGroup</a> const &amp;&#160;</td>
-          <td class="paramname"><em>p_a</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../db/d87/a02076.html">BufferElementGroup</a> const &amp;&#160;</td>
-          <td class="paramname"><em>p_b</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../db/d87/a02076.html">BufferElementGroup</a> const &amp;&#160;</td>
-          <td class="paramname"><em>p_c</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../db/d87/a02076.html">BufferElementGroup</a> &amp;&#160;</td>
-          <td class="paramname"><em>p_d</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../db/d87/a02076.html">BufferElementGroup</a> &amp;&#160;</td>
-          <td class="paramname"><em>p_e</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../db/d87/a02076.html">BufferElementGroup</a> &amp;&#160;</td>
-          <td class="paramname"><em>p_f</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Computes the texture coordinates for given vertices, creates the faces. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_a,p_b,p_c</td><td>The source vertices </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_d,p_e,p_f</td><td>The new vertices </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a478346d005631f7af77ca45edcf8b1bd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a478346d005631f7af77ca45edcf8b1bd">&#9670;&nbsp;</a></span>doSetTextCoords() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::Subdivider::doSetTextCoords </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../db/d87/a02076.html">BufferElementGroup</a> const &amp;&#160;</td>
-          <td class="paramname"><em>p_a</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../db/d87/a02076.html">BufferElementGroup</a> const &amp;&#160;</td>
-          <td class="paramname"><em>p_b</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../db/d87/a02076.html">BufferElementGroup</a> const &amp;&#160;</td>
-          <td class="paramname"><em>p_c</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../db/d87/a02076.html">BufferElementGroup</a> &amp;&#160;</td>
-          <td class="paramname"><em>p_p</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Computes the texture coordinates for the new vertex, creates the faces. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_a,p_b,p_c</td><td>The source vertices </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_p</td><td>The new vertex </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a18fdf0836fc3293a536bcab004877ade"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a18fdf0836fc3293a536bcab004877ade">&#9670;&nbsp;</a></span>doSubdivide() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::Subdivider::doSubdivide </td>
-          <td>(</td>
-          <td class="paramtype">SubmeshSPtr&#160;</td>
-          <td class="paramname"><em>p_submesh</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>p_generateBuffers</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>p_threaded</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Main subdivision function. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_submesh</td><td>The submesh to subdivide </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_generateBuffers</td><td>Tells if the buffers must be generated after subdivision </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_threaded</td><td>Tells if subdivision must be threaded </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a40b004309bf916ffa887641c256ae817"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a40b004309bf916ffa887641c256ae817">&#9670;&nbsp;</a></span>doSubdivide() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::Subdivider::doSubdivide </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Effectively subdivides the submesh. </p>
-
-</div>
-</div>
-<a id="a7ae8a7529f4fe8f7e39415bc7ab454bd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7ae8a7529f4fe8f7e39415bc7ab454bd">&#9670;&nbsp;</a></span>doSubdivideThreaded()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> uint32_t castor3d::Subdivider::doSubdivideThreaded </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Threaded subdivision function. </p>
-
-</div>
-</div>
-<a id="a1b145d17db1503c3dfd88614751e049f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1b145d17db1503c3dfd88614751e049f">&#9670;&nbsp;</a></span>doSwapBuffers()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::Subdivider::doSwapBuffers </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Swaps the internal faces with the submeshes ones. </p>
-
-</div>
-</div>
-<a id="a24b217b77ce56b5b8f1a0371ff5a1825"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a24b217b77ce56b5b8f1a0371ff5a1825">&#9670;&nbsp;</a></span>doTryAddPoint()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::BufferElementGroupSPtr castor3d::Subdivider::doTryAddPoint </td>
-          <td>(</td>
-          <td class="paramtype">castor::Point3r const &amp;&#160;</td>
-          <td class="paramname"><em>p_point</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Checks if the given point is in my list and if not creates and adds it. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_point</td><td>The vertex coordinates </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The created vertex </dd></dl>
-
-</div>
-</div>
-<a id="acebcf7c877d6c08da23d484c01769ab9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acebcf7c877d6c08da23d484c01769ab9">&#9670;&nbsp;</a></span>getPoint()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> BufferElementGroupSPtr castor3d::Subdivider::getPoint </td>
-          <td>(</td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>i</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Retrieves the wanted point. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">i</td><td>The point index </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The value </dd></dl>
-
-</div>
-</div>
-<a id="aa218f5aa890acf44dc80a3d733323e5c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa218f5aa890acf44dc80a3d733323e5c">&#9670;&nbsp;</a></span>getPoints()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> VertexPtrArray const&amp; castor3d::Subdivider::getPoints </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>Retrieves the points array </dd></dl>
-
-</div>
-</div>
-<a id="aaf5e310d6eddef5945ad778a05605fd1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaf5e310d6eddef5945ad778a05605fd1">&#9670;&nbsp;</a></span>getPointsCount()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> uint32_t castor3d::Subdivider::getPointsCount </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Retrieves the points count. </p>
-<dl class="section return"><dt>Returns</dt><dd>The value </dd></dl>
-
-</div>
-</div>
-<a id="a0b857ff889b746efc339f05e4d9f3a3f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0b857ff889b746efc339f05e4d9f3a3f">&#9670;&nbsp;</a></span>isInMyPoints()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> int castor3d::Subdivider::isInMyPoints </td>
-          <td>(</td>
-          <td class="paramtype">castor::Point3r const &amp;&#160;</td>
-          <td class="paramname"><em>p_vertex</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>p_precision</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Tests if the given Point3r is in mine. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_vertex</td><td>The vertex to test </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_precision</td><td>The comparison precision </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The index of the vertex equal to parameter, -1 if not found </dd></dl>
-
-</div>
-</div>
-<a id="a602a47f1660e376c15e473fec5d7ab7c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a602a47f1660e376c15e473fec5d7ab7c">&#9670;&nbsp;</a></span>setSubdivisionEndCallback()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void castor3d::Subdivider::setSubdivisionEndCallback </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../de/dfd/a02228.html#a6af2a8c45b92e0c29509f46c6facc1d1">SubdivisionEndFunction</a>&#160;</td>
-          <td class="paramname"><em>p_pfnSubdivisionEnd</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Defines a function to execute when the threaded subdivision ends. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>That function <em>MUST NEITHER</em> destroy the thread <em>NOR</em> the subdivider </dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_pfnSubdivisionEnd</td><td>Pointer over the function to execute </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="reference">References <a class="el" href="../../de/dfd/a02228.html#ae690a11f44f29f2c648ac842fda0057f">m_pfnSubdivisionEnd</a>.</p>
-
-</div>
-</div>
-<a id="a7c2d83f2ec15a2968d9aaac23d80fece"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7c2d83f2ec15a2968d9aaac23d80fece">&#9670;&nbsp;</a></span>subdivide()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::Subdivider::subdivide </td>
-          <td>(</td>
-          <td class="paramtype">SubmeshSPtr&#160;</td>
-          <td class="paramname"><em>p_submesh</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>p_occurences</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>p_generateBuffers</em> = <code>true</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>p_threaded</em> = <code>false</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Main subdivision function. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_submesh</td><td>The submesh to subdivide </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_occurences</td><td>The subdivisions occurences </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_generateBuffers</td><td>Tells if the buffers must be generated after subdivision </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_threaded</td><td>Tells if subdivision must be threaded </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a72fddfb8eb0ab1f51061257325481800"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a72fddfb8eb0ab1f51061257325481800">&#9670;&nbsp;</a></span>m_arrayFaces</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">FaceArray castor3d::Subdivider::m_arrayFaces</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The faces. </p>
-
-</div>
-</div>
-<a id="a24b60afb0747a4583ce40d87b1c947e9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a24b60afb0747a4583ce40d87b1c947e9">&#9670;&nbsp;</a></span>m_bGenerateBuffers</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool castor3d::Subdivider::m_bGenerateBuffers</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Tells if the buffers must be generatef. </p>
-
-</div>
-</div>
-<a id="a6358f0ff3ee6219328d1048971e41ecb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6358f0ff3ee6219328d1048971e41ecb">&#9670;&nbsp;</a></span>m_bThreaded</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool castor3d::Subdivider::m_bThreaded</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Tells that the subdivision is threaded. </p>
-
-</div>
-</div>
-<a id="a41ab7192391e3b4f7a014cf10f032b70"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a41ab7192391e3b4f7a014cf10f032b70">&#9670;&nbsp;</a></span>m_mutex</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::recursive_mutex castor3d::Subdivider::m_mutex</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The subdivision thread mutex. </p>
-
-</div>
-</div>
-<a id="ae690a11f44f29f2c648ac842fda0057f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae690a11f44f29f2c648ac842fda0057f">&#9670;&nbsp;</a></span>m_pfnSubdivisionEnd</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../de/dfd/a02228.html#a6af2a8c45b92e0c29509f46c6facc1d1">SubdivisionEndFunction</a> castor3d::Subdivider::m_pfnSubdivisionEnd</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The subdivision end callback. </p>
-
-<p class="reference">Referenced by <a class="el" href="../../de/dfd/a02228.html#a602a47f1660e376c15e473fec5d7ab7c">setSubdivisionEndCallback()</a>.</p>
-
-</div>
-</div>
-<a id="af54cf7ba9b4561c22c17c02b08d79c3b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af54cf7ba9b4561c22c17c02b08d79c3b">&#9670;&nbsp;</a></span>m_pThread</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::shared_ptr&lt; std::thread &gt; castor3d::Subdivider::m_pThread</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The subdivision thread. </p>
-
-</div>
-</div>
-<a id="a75d4eb7b16b6862f8a965428bd0b16a8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a75d4eb7b16b6862f8a965428bd0b16a8">&#9670;&nbsp;</a></span>m_submesh</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">SubmeshSPtr castor3d::Subdivider::m_submesh</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The submesh being subdivided. </p>
-
-</div>
-</div>
-<hr/>The documentation for this class was generated from the following file:<ul>
-<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/Mesh/<a class="el" href="../../d3/d07/a00305.html">Subdivider.hpp</a></li>
+<dl class="section version"><dt>Version</dt><dd>0.8.0 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>26/01/2016</dd></dl>
+<p>Loader binaire de MovingBone. </p>
+</div><hr/>The documentation for this class was generated from the following file:<ul>
+<li>Binary/<a class="el" href="../../d1/d88/a00128.html">BinarySkeletonAnimationNode.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 13:38:50 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Feb 18 2021 01:09:09 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

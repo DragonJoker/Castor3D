@@ -10,6 +10,7 @@
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="Castor3D.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -17,10 +18,12 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="castor-small.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Castor3D
-   &#160;<span id="projectnumber">..</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
+   <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
  </tr>
  </tbody>
@@ -42,66 +45,96 @@ $(function() {
 &#160;
 
 <h3><a id="index_c"></a>- c -</h3><ul>
+<li>Cascade
+: <a class="el" href="df/d18/a05168.html#a6382d8979823ee8e079f3361b205e9cd">castor3d::DirectionalLight</a>
+</li>
 <li>Changed
-: <a class="el" href="d5/d8b/a02060.html#a937b49557187f05df7d022d22a4e342a">castor3d::SubsurfaceScattering</a>
+: <a class="el" href="d8/d09/a02624.html#a937b49557187f05df7d022d22a4e342a">castor3d::SubsurfaceScattering</a>
 </li>
 <li>Cleaner
-: <a class="el" href="dc/d51/a01764.html#aec9da84e7f63f89b04e22d514fbc9050">castor3d::Cache&lt; ElementType, KeyType &gt;</a>
-, <a class="el" href="d1/d42/a01800.html#a53fc37e02f367346df96adb5d9fd6d4f">castor3d::Cache&lt; Material, castor::String &gt;</a>
-, <a class="el" href="d2/dbd/a01844.html#a09c33236506080ed751868a1a46ff082">castor3d::Cache&lt; Plugin, castor::String &gt;</a>
-, <a class="el" href="d0/d9d/a01760.html#ac144f9ea07cb00eb2b01788678792fa4">castor3d::CacheBase&lt; ElementType, KeyType &gt;</a>
-, <a class="el" href="dc/d5b/a01812.html#a3d924cdf5a12fbe5cf1bc9c08ccf46bf">castor3d::ObjectCache&lt; ElementType, KeyType &gt;</a>
-, <a class="el" href="d0/dce/a01780.html#aa2a53debb85013f58b17c1f0a6ed5308">castor3d::ObjectCache&lt; Geometry, castor::String &gt;</a>
-, <a class="el" href="d4/d77/a01788.html#a5c2d54433d893f9c45bfced9274eb7b5">castor3d::ObjectCache&lt; Light, castor::String &gt;</a>
-, <a class="el" href="d2/d38/a01860.html#a17a7b1158ef12ec45151b9af8a94bad0">castor3d::ObjectCache&lt; SceneNode, castor::String &gt;</a>
-, <a class="el" href="d7/d02/a01808.html#ae9d6a190e7471d9ee2fd8b23d35d084f">castor3d::ObjectCacheBase&lt; ElementType, KeyType &gt;</a>
+: <a class="el" href="da/d75/a02372.html#aec9da84e7f63f89b04e22d514fbc9050">castor3d::Cache&lt; ElementType, KeyType &gt;</a>
+, <a class="el" href="da/db4/a02348.html#a33f7ff502696fab8e0e112a11d82b49c">castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</a>
+, <a class="el" href="d9/de2/a02508.html#a09c33236506080ed751868a1a46ff082">castor3d::Cache&lt; Plugin, castor::String &gt;</a>
+, <a class="el" href="df/d46/a02376.html#ac144f9ea07cb00eb2b01788678792fa4">castor3d::CacheBase&lt; ElementType, KeyType &gt;</a>
+, <a class="el" href="d6/d57/a02488.html#ae4ea1cfee5a4df365df48efcc048f32a">castor3d::MaterialCache</a>
+, <a class="el" href="da/d5c/a02432.html#a3d924cdf5a12fbe5cf1bc9c08ccf46bf">castor3d::ObjectCache&lt; ElementType, KeyType &gt;</a>
+, <a class="el" href="d3/d35/a02360.html#afc37c522f43039939d40b274a6882093">castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</a>
+, <a class="el" href="d4/d0c/a02476.html#aa2a53debb85013f58b17c1f0a6ed5308">castor3d::ObjectCache&lt; Geometry, castor::String &gt;</a>
+, <a class="el" href="de/d4e/a02484.html#a5c2d54433d893f9c45bfced9274eb7b5">castor3d::ObjectCache&lt; Light, castor::String &gt;</a>
+, <a class="el" href="d5/d04/a02428.html#ae9d6a190e7471d9ee2fd8b23d35d084f">castor3d::ObjectCacheBase&lt; ElementType, KeyType &gt;</a>
 </li>
 <li>ClientHandlerFunction
-: <a class="el" href="d0/dde/a01924.html#a44a9a40d9e96a4527000479b4702ae79">castor3d::EventHandler</a>
-, <a class="el" href="d1/db0/a01928.html#a703c7cbc98f4fbc25ac04600257c7c0c">castor3d::NonClientEventHandler&lt; Derived &gt;</a>
+: <a class="el" href="d1/df6/a02544.html#a44a9a40d9e96a4527000479b4702ae79">castor3d::EventHandler</a>
+, <a class="el" href="da/dc4/a02548.html#a703c7cbc98f4fbc25ac04600257c7c0c">castor3d::NonClientEventHandler&lt; Derived &gt;</a>
 </li>
 <li>ClientKeyboardFunction
-: <a class="el" href="d0/dde/a01924.html#a0d16d006a598b652f004c2541855d916">castor3d::EventHandler</a>
-, <a class="el" href="d1/db0/a01928.html#a45ffbf50f17a665404170fd665624011">castor3d::NonClientEventHandler&lt; Derived &gt;</a>
+: <a class="el" href="d1/df6/a02544.html#a0d16d006a598b652f004c2541855d916">castor3d::EventHandler</a>
+, <a class="el" href="da/dc4/a02548.html#a45ffbf50f17a665404170fd665624011">castor3d::NonClientEventHandler&lt; Derived &gt;</a>
 </li>
 <li>ClientMouseFunction
-: <a class="el" href="d0/dde/a01924.html#abf8b7cff9d28a78406eeee8b7b6ebd86">castor3d::EventHandler</a>
-, <a class="el" href="d1/db0/a01928.html#aea92aaf9b48684355876a7c81409ccf3">castor3d::NonClientEventHandler&lt; Derived &gt;</a>
+: <a class="el" href="d1/df6/a02544.html#abf8b7cff9d28a78406eeee8b7b6ebd86">castor3d::EventHandler</a>
+, <a class="el" href="da/dc4/a02548.html#aea92aaf9b48684355876a7c81409ccf3">castor3d::NonClientEventHandler&lt; Derived &gt;</a>
 </li>
 <li>Collection
-: <a class="el" href="dc/d51/a01764.html#a2b2306f4304e71fd0b67fc45b1cbae00">castor3d::Cache&lt; ElementType, KeyType &gt;</a>
-, <a class="el" href="d1/d42/a01800.html#a3ee4ad6919f8708e681ea5ba0ecc66ab">castor3d::Cache&lt; Material, castor::String &gt;</a>
-, <a class="el" href="d2/d77/a01824.html#a4b3e00a27819c0fd4f67f083a126f499">castor3d::Cache&lt; Overlay, castor::String &gt;</a>
-, <a class="el" href="d2/dbd/a01844.html#ac527fb1a2441972de7b59fe609288599">castor3d::Cache&lt; Plugin, castor::String &gt;</a>
-, <a class="el" href="d0/d9d/a01760.html#a73f0fe787eab6e9f181c8c23f1760e45">castor3d::CacheBase&lt; ElementType, KeyType &gt;</a>
-, <a class="el" href="dc/d5b/a01812.html#a04da5d041d247a72068e5f086801b8d4">castor3d::ObjectCache&lt; ElementType, KeyType &gt;</a>
-, <a class="el" href="d0/dce/a01780.html#a7f7da4be92811bc3808662f3e656bc61">castor3d::ObjectCache&lt; Geometry, castor::String &gt;</a>
-, <a class="el" href="d4/d77/a01788.html#ad5f2ee3cf5b316295545b4a5517819ef">castor3d::ObjectCache&lt; Light, castor::String &gt;</a>
-, <a class="el" href="d2/d38/a01860.html#a4992988629391b08eee0005d9ea8ccfd">castor3d::ObjectCache&lt; SceneNode, castor::String &gt;</a>
-, <a class="el" href="d7/d02/a01808.html#af44fe4e2622342b0256466f52d791869">castor3d::ObjectCacheBase&lt; ElementType, KeyType &gt;</a>
+: <a class="el" href="da/d75/a02372.html#a2b2306f4304e71fd0b67fc45b1cbae00">castor3d::Cache&lt; ElementType, KeyType &gt;</a>
+, <a class="el" href="da/db4/a02348.html#abe86bab10ef4b028e4274edc0c811191">castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</a>
+, <a class="el" href="d1/df5/a02496.html#a4b3e00a27819c0fd4f67f083a126f499">castor3d::Cache&lt; Overlay, castor::String &gt;</a>
+, <a class="el" href="d9/de2/a02508.html#ac527fb1a2441972de7b59fe609288599">castor3d::Cache&lt; Plugin, castor::String &gt;</a>
+, <a class="el" href="df/d46/a02376.html#a73f0fe787eab6e9f181c8c23f1760e45">castor3d::CacheBase&lt; ElementType, KeyType &gt;</a>
+, <a class="el" href="d6/d57/a02488.html#adcfcdb053ba38a478a72857e2e44d968">castor3d::MaterialCache</a>
+, <a class="el" href="da/d5c/a02432.html#a04da5d041d247a72068e5f086801b8d4">castor3d::ObjectCache&lt; ElementType, KeyType &gt;</a>
+, <a class="el" href="d3/d35/a02360.html#aa82d7a578f20c248aa78e5b6bc6971ce">castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</a>
+, <a class="el" href="d4/d0c/a02476.html#a7f7da4be92811bc3808662f3e656bc61">castor3d::ObjectCache&lt; Geometry, castor::String &gt;</a>
+, <a class="el" href="de/d4e/a02484.html#ad5f2ee3cf5b316295545b4a5517819ef">castor3d::ObjectCache&lt; Light, castor::String &gt;</a>
+, <a class="el" href="d5/d04/a02428.html#af44fe4e2622342b0256466f52d791869">castor3d::ObjectCacheBase&lt; ElementType, KeyType &gt;</a>
+</li>
+<li>Configuration
+: <a class="el" href="d4/dac/a05456.html#a203da64d01d4e5aa09e86c8ceb28c9cf">castor3d::BillboardUbo</a>
+, <a class="el" href="d1/d22/a05464.html#adfd9d07dfced9b1ab9727c898ca457e4">castor3d::GpInfoUbo</a>
+, <a class="el" href="d1/d06/a05468.html#a2440dca559ddaf38cf51bf61b701990b">castor3d::HdrConfigUbo</a>
+, <a class="el" href="d4/db7/a05476.html#a769c65d7b0402a70a4c46d71abd1cad9">castor3d::LayeredLpvGridConfigUbo</a>
+, <a class="el" href="db/d15/a05484.html#ac6a11f0d4131e5d1fa34a6cafb3c195a">castor3d::LpvGridConfigUbo</a>
+, <a class="el" href="de/d62/a05492.html#a5fb8fc110f4ddaccfc55143b1fa1e0d1">castor3d::LpvLightConfigUbo</a>
+, <a class="el" href="d2/d0e/a05496.html#ab366057cde7f2778837daab6f7a4ab03">castor3d::MatrixUbo</a>
+, <a class="el" href="da/de2/a05500.html#aa3cd2a5fe299156a3e4f8787754670dd">castor3d::ModelInstancesUbo</a>
+, <a class="el" href="d2/d81/a05504.html#a67aa0f98d3e02ab1eab535b413d78567">castor3d::ModelMatrixUbo</a>
+, <a class="el" href="d7/d56/a05508.html#a4ceeee9bdbc68e82ce59e903b53832bb">castor3d::ModelUbo</a>
+, <a class="el" href="d9/ddd/a05512.html#ae9712b7914b5ced4cecb70af38133466">castor3d::MorphingUbo</a>
+, <a class="el" href="db/d2d/a05520.html#a4f6eb396af9641484e571c9b4937d19d">castor3d::PickingUbo</a>
+, <a class="el" href="d7/d66/a05524.html#aa9747da5cde15d324013b50e2db47344">castor3d::RsmConfigUbo</a>
+, <a class="el" href="d4/de3/a05532.html#a1e87d2bd828b4d232e057f9f5d3c0a01">castor3d::ShadowMapUbo</a>
+, <a class="el" href="d9/df0/a05540.html#a4f257776fdbcd577263361e617acf356">castor3d::SkinningUbo</a>
+, <a class="el" href="d6/dfa/a05552.html#a23fb677f7b96c3ebe0a5c589b1eac5ad">castor3d::TexturesUbo</a>
+, <a class="el" href="dd/da7/a05632.html#a2657e71a252ebe78bf33bcd4b93a0cb8">castor3d::VoxelizerUbo</a>
 </li>
 <li>const_iterator
-: <a class="el" href="df/dfb/a02068.html#a847864b0194b2839c956503567193b34">castor3d::BufferDeclaration</a>
-, <a class="el" href="d2/d77/a01824.html#afdd1792166d9565e3b30e55c823b10fa">castor3d::Cache&lt; Overlay, castor::String &gt;</a>
-, <a class="el" href="dd/d0a/a02436.html#a77863eef09719a95277c761181761273">castor3d::Overlay</a>
+: <a class="el" href="d1/df5/a02496.html#a17191045451146ea231035df8888e0bc">castor3d::Cache&lt; Overlay, castor::String &gt;</a>
+, <a class="el" href="d1/da3/a04100.html#a77863eef09719a95277c761181761273">castor3d::Overlay</a>
+, <a class="el" href="d4/d61/a05212.html#a4218788ea671d00ca5f5b0b6f56db038">castor3d::ParticleDeclaration</a>
 </li>
 <li>CubeCameras
-: <a class="el" href="d9/d63/a01896.html#a0b8198f3c2b3c98cc2904c15923cb81c">castor3d::EnvironmentMap</a>
-</li>
-<li>CubeColourAttachment
-: <a class="el" href="d9/d63/a01896.html#af82e00926b71d14941e1030b50805360">castor3d::EnvironmentMap</a>
-</li>
-<li>CubeDepthAttachment
-: <a class="el" href="d9/d63/a01896.html#a4581668775e1be765ca9caccf7103eb7">castor3d::EnvironmentMap</a>
+: <a class="el" href="dc/d32/a04240.html#ae74fbb78d985fedbde103f98ee833f7d">castor3d::EnvironmentMap</a>
 </li>
 <li>CubeMatrices
-: <a class="el" href="d9/d63/a01896.html#ab786383a3014bf5271646e98826aa524">castor3d::EnvironmentMap</a>
+: <a class="el" href="dc/d32/a04240.html#a7d69bb2a7afa0b7d1c3900d4982677dd">castor3d::EnvironmentMap</a>
+</li>
+<li>CulledInstanceArrayT
+: <a class="el" href="d4/d4b/a04232.html#ad426a8a02ca5248ca852870d93f29b90">castor3d::SceneCuller</a>
+</li>
+<li>CulledInstancePtrArrayT
+: <a class="el" href="d4/d4b/a04232.html#a0b052cfdf0e054608216e99895bf0fcb">castor3d::SceneCuller</a>
+</li>
+<li>CulledInstancesPtrT
+: <a class="el" href="d4/d4b/a04232.html#aa19eba8ff864b8bd60cabea05b2a8e82">castor3d::SceneCuller</a>
+</li>
+<li>CulledInstancesT
+: <a class="el" href="d4/d4b/a04232.html#a9c15fc0d7699cb7f229301f26254823b">castor3d::SceneCuller</a>
 </li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 13:39:13 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Feb 18 2021 01:09:24 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

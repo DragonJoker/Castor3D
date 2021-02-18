@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="de/dc9/a02414" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::CacheTraits&lt; Scene, KeyType &gt;</compoundname>
+    <includes local="no">CacheModule.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename KeyType</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="de/dc9/a02414_1a7d72a204a7c85414fb63b46b3a3c709d" prot="public" static="no">
+        <type>std::function&lt; std::shared_ptr&lt; <ref refid="d6/d66/a05238" kindref="compound">Scene</ref> &gt;(KeyType const &amp;) &gt;</type>
+        <definition>using castor3d::CacheTraits&lt; Scene, KeyType &gt;::Producer =  std::function&lt; std::shared_ptr&lt; Scene &gt;( KeyType const &amp; ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>Producer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheModule.hpp" line="290" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="290" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/dc9/a02414_1a63b922a2459cdd516f0d9395577b2c81" prot="public" static="no">
+        <type>std::function&lt; void(<ref refid="dc/dfd/a02370" kindref="compound">CacheBase</ref>&lt; <ref refid="d6/d66/a05238" kindref="compound">Scene</ref>, KeyType &gt; const &amp;, castor::Collection&lt; <ref refid="d6/d66/a05238" kindref="compound">Scene</ref>, KeyType &gt; &amp;, std::shared_ptr&lt; <ref refid="d6/d66/a05238" kindref="compound">Scene</ref> &gt;) &gt;</type>
+        <definition>using castor3d::CacheTraits&lt; Scene, KeyType &gt;::Merger =  std::function&lt; void( CacheBase&lt; Scene, KeyType &gt; const &amp; , castor::Collection&lt; Scene, KeyType &gt; &amp; , std::shared_ptr&lt; Scene &gt; ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>Merger</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheModule.hpp" line="291" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="293" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="de/dc9/a02414_1a7d27ed485da5979c5f48b15e54f97b47" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const castor::String</type>
+        <definition>C3D_API const castor::String castor3d::CacheTraits&lt; Scene, KeyType &gt;::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheModule.hpp" line="289" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="289" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Helper structure to specialise a cache behaviour. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Specialisation for <ref refid="d6/d66/a05238" kindref="compound">Scene</ref>. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="Cache/CacheModule.hpp" line="288" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="287" bodyend="294"/>
+    <listofallmembers>
+      <member refid="de/dc9/a02414_1a63b922a2459cdd516f0d9395577b2c81" prot="public" virt="non-virtual"><scope>castor3d::CacheTraits&lt; Scene, KeyType &gt;</scope><name>Merger</name></member>
+      <member refid="de/dc9/a02414_1a7d27ed485da5979c5f48b15e54f97b47" prot="public" virt="non-virtual"><scope>castor3d::CacheTraits&lt; Scene, KeyType &gt;</scope><name>Name</name></member>
+      <member refid="de/dc9/a02414_1a7d72a204a7c85414fb63b46b3a3c709d" prot="public" virt="non-virtual"><scope>castor3d::CacheTraits&lt; Scene, KeyType &gt;</scope><name>Producer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

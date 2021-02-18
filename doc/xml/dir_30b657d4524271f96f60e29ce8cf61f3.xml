@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_30b657d4524271f96f60e29ce8cf61f3" kind="dir">
+    <compoundname>Render/EnvironmentMap</compoundname>
+    <innerfile refid="df/d6f/a00623">EnvironmentMap.hpp</innerfile>
+    <innerfile refid="d6/dfa/a00626">EnvironmentMapModule.hpp</innerfile>
+    <innerfile refid="da/dd1/a00629">EnvironmentMapPass.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/EnvironmentMap/"/>
+  </compounddef>
+</doxygen>

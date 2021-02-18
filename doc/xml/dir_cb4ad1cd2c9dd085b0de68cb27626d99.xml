@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_cb4ad1cd2c9dd085b0de68cb27626d99" kind="dir">
+    <compoundname>Cache</compoundname>
+    <innerfile refid="dc/de6/a00167">AnimatedObjectGroupCache.hpp</innerfile>
+    <innerfile refid="d5/dcb/a00170">BillboardCache.hpp</innerfile>
+    <innerfile refid="d7/d3f/a00173">BillboardUboPools.hpp</innerfile>
+    <innerfile refid="d5/de9/a00176">Cache.hpp</innerfile>
+    <innerfile refid="db/dd9/a00179">CacheBase.hpp</innerfile>
+    <innerfile refid="d7/d25/a00182">CacheModule.hpp</innerfile>
+    <innerfile refid="de/df3/a00185">CacheView.hpp</innerfile>
+    <innerfile refid="da/d15/a00188">CameraCache.hpp</innerfile>
+    <innerfile refid="d9/dd0/a00191">ElementProducer.hpp</innerfile>
+    <innerfile refid="dc/d57/a00194">GeometryCache.hpp</innerfile>
+    <innerfile refid="de/db1/a00197">LightCache.hpp</innerfile>
+    <innerfile refid="d3/db1/a00200">ListenerCache.hpp</innerfile>
+    <innerfile refid="de/d79/a00203">MaterialCache.hpp</innerfile>
+    <innerfile refid="d5/df1/a00206">MeshCache.hpp</innerfile>
+    <innerfile refid="d3/de5/a00209">ObjectCache.hpp</innerfile>
+    <innerfile refid="dd/dc1/a00212">ObjectCacheBase.hpp</innerfile>
+    <innerfile refid="d3/dd5/a00215">OverlayCache.hpp</innerfile>
+    <innerfile refid="dc/d9a/a00218">ParticleSystemCache.hpp</innerfile>
+    <innerfile refid="dd/d52/a00221">PluginCache.hpp</innerfile>
+    <innerfile refid="d5/ddf/a00224">SamplerCache.hpp</innerfile>
+    <innerfile refid="d9/d01/a00227">SceneCache.hpp</innerfile>
+    <innerfile refid="d1/da8/a00230">SceneNodeCache.hpp</innerfile>
+    <innerfile refid="d6/de1/a00233">ShaderCache.hpp</innerfile>
+    <innerfile refid="d7/d40/a00236">TargetCache.hpp</innerfile>
+    <innerfile refid="d0/d27/a00239">TechniqueCache.hpp</innerfile>
+    <innerfile refid="d2/dc8/a00242">WindowCache.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Cache/"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dc/d2f/a00425" kind="file" language="C++">
+    <compoundname>Cube.hpp</compoundname>
+    <includes refid="d5/d5f/a00461" local="yes">Castor3D/Model/Mesh/MeshGenerator.hpp</includes>
+    <incdepgraph>
+      <node id="8230">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="8233">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="8234">
+        <label>cstdint</label>
+      </node>
+      <node id="8232">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="8225">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d5/d35/a00266"/>
+        <childnode refid="8226" relation="include">
+        </childnode>
+        <childnode refid="8227" relation="include">
+        </childnode>
+        <childnode refid="8228" relation="include">
+        </childnode>
+        <childnode refid="8229" relation="include">
+        </childnode>
+        <childnode refid="8230" relation="include">
+        </childnode>
+        <childnode refid="8231" relation="include">
+        </childnode>
+        <childnode refid="8232" relation="include">
+        </childnode>
+        <childnode refid="8233" relation="include">
+        </childnode>
+        <childnode refid="8234" relation="include">
+        </childnode>
+        <childnode refid="8235" relation="include">
+        </childnode>
+        <childnode refid="8236" relation="include">
+        </childnode>
+        <childnode refid="8237" relation="include">
+        </childnode>
+      </node>
+      <node id="8222">
+        <label>Castor3D/Model/Mesh/MeshGenerator.hpp</label>
+        <link refid="d5/d5f/a00461"/>
+        <childnode refid="8223" relation="include">
+        </childnode>
+        <childnode refid="8239" relation="include">
+        </childnode>
+      </node>
+      <node id="8236">
+        <label>string</label>
+      </node>
+      <node id="8224">
+        <label>Castor3D/Model/ModelModule.hpp</label>
+        <link refid="d7/def/a00521"/>
+        <childnode refid="8225" relation="include">
+        </childnode>
+      </node>
+      <node id="8229">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="8226">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="8228">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="8239">
+        <label>Castor3D/Miscellaneous/MiscellaneousModule.hpp</label>
+        <link refid="d4/d27/a00392"/>
+        <childnode refid="8225" relation="include">
+        </childnode>
+      </node>
+      <node id="8227">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="8223">
+        <label>MeshModule.hpp</label>
+        <link refid="d2/d9d/a00464"/>
+        <childnode refid="8224" relation="include">
+        </childnode>
+        <childnode refid="8238" relation="include">
+        </childnode>
+      </node>
+      <node id="8237">
+        <label>vector</label>
+      </node>
+      <node id="8231">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="8238">
+        <label>CastorUtils/Design/Factory.hpp</label>
+      </node>
+      <node id="8221">
+        <label>Model/Mesh/Generator/Cube.hpp</label>
+        <link refid="dc/d2f/a00425"/>
+        <childnode refid="8222" relation="include">
+        </childnode>
+      </node>
+      <node id="8235">
+        <label>memory</label>
+      </node>
+    </incdepgraph>
+    <innerclass refid="d0/d84/a03872" prot="public">castor3d::Cube</innerclass>
+    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Model/Mesh/Generator/Cube.hpp"/>
+  </compounddef>
+</doxygen>

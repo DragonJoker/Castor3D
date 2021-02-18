@@ -1,0 +1,149 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="df/dcf/a02038" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::AnimationKeyFrame</compoundname>
+    <derivedcompoundref refid="d3/d83/a03854" prot="public" virt="non-virtual">castor3d::MeshAnimationKeyFrame</derivedcompoundref>
+    <derivedcompoundref refid="df/d75/a04010" prot="public" virt="non-virtual">castor3d::SkeletonAnimationKeyFrame</derivedcompoundref>
+    <includes local="no">AnimationKeyFrame.hpp</includes>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="df/dcf/a02038_1a093b74b56f13b6376ea4a51e28893db5" prot="protected" static="no" mutable="no">
+        <type>castor::Milliseconds</type>
+        <definition>castor::Milliseconds castor3d::AnimationKeyFrame::m_timeIndex</definition>
+        <argsstring></argsstring>
+        <name>m_timeIndex</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The start time index. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/AnimationKeyFrame.hpp" line="58" column="1" bodyfile="Animation/AnimationKeyFrame.hpp" bodystart="58" bodyend="-1"/>
+        <referencedby refid="df/dcf/a02038_1af7d64b424ad5d12f2a9970e134365a81" compoundref="db/db6/a00074" startline="50" endline="53">getTimeIndex</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="df/dcf/a02038_1abc9e4e2a76ef5ec53fe3308add665082" prot="protected" static="no" mutable="no">
+        <type>castor::BoundingBox</type>
+        <definition>castor::BoundingBox castor3d::AnimationKeyFrame::m_boundingBox</definition>
+        <argsstring></argsstring>
+        <name>m_boundingBox</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The bounding box. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/AnimationKeyFrame.hpp" line="61" column="1" bodyfile="Animation/AnimationKeyFrame.hpp" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/dcf/a02038_1a4c0d4b7afbe022ee8f9dcb9dc1ea54f0" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::AnimationKeyFrame::AnimationKeyFrame</definition>
+        <argsstring>(castor::Milliseconds const &amp;timeIndex=0_ms)</argsstring>
+        <name>AnimationKeyFrame</name>
+        <param>
+          <type>castor::Milliseconds const &amp;</type>
+          <declname>timeIndex</declname>
+          <defval>0_ms</defval>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">timeIndex</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>When the key frame starts. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/AnimationKeyFrame.hpp" line="24" column="1" bodyfile="Animation/AnimationKeyFrame.hpp" bodystart="24" bodyend="27"/>
+      </memberdef>
+      <memberdef kind="function" id="df/dcf/a02038_1a0e38208bad19dd09708af045818c2f8d" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::AnimationKeyFrame::~AnimationKeyFrame</definition>
+        <argsstring>()=default</argsstring>
+        <name>~AnimationKeyFrame</name>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/AnimationKeyFrame.hpp" line="34" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/dcf/a02038_1a14d9b59106f5406a66f2b8af33367991" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::AnimationKeyFrame::initialise</definition>
+        <argsstring>()</argsstring>
+        <name>initialise</name>
+        <reimplementedby refid="df/d75/a04010_1a6a7d31f9aedb17d0b8c29177e5a14918">initialise</reimplementedby>
+        <briefdescription>
+<para>Initialises the keyframe. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/AnimationKeyFrame.hpp" line="41" column="1" bodyfile="Animation/AnimationKeyFrame.hpp" bodystart="41" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="function" id="df/dcf/a02038_1af7d64b424ad5d12f2a9970e134365a81" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Milliseconds const  &amp;</type>
+        <definition>castor::Milliseconds const&amp; castor3d::AnimationKeyFrame::getTimeIndex</definition>
+        <argsstring>() const</argsstring>
+        <name>getTimeIndex</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The start time index. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/AnimationKeyFrame.hpp" line="50" column="1" bodyfile="Animation/AnimationKeyFrame.hpp" bodystart="50" bodyend="53"/>
+        <references refid="df/dcf/a02038_1a093b74b56f13b6376ea4a51e28893db5" compoundref="db/db6/a00074" startline="58">m_timeIndex</references>
+        <referencedby refid="db/df6/a05082_1a74a63235a414569a606c9fe7479f1a7c" compoundref="d9/db3/a01064" startline="48" endline="51">castor3d::SkeletonAnimationInstanceKeyFrame::getTimeIndex</referencedby>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="102">
+        <label>castor3d::SkeletonAnimationKeyFrame</label>
+        <link refid="df/d75/a04010"/>
+        <childnode refid="100" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="100">
+        <label>castor3d::AnimationKeyFrame</label>
+        <link refid="df/dcf/a02038"/>
+      </node>
+      <node id="101">
+        <label>castor3d::MeshAnimationKeyFrame</label>
+        <link refid="d3/d83/a03854"/>
+        <childnode refid="100" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <location file="Animation/AnimationKeyFrame.hpp" line="14" column="1" bodyfile="Animation/AnimationKeyFrame.hpp" bodystart="13" bodyend="62"/>
+    <listofallmembers>
+      <member refid="df/dcf/a02038_1a4c0d4b7afbe022ee8f9dcb9dc1ea54f0" prot="public" virt="non-virtual"><scope>castor3d::AnimationKeyFrame</scope><name>AnimationKeyFrame</name></member>
+      <member refid="df/dcf/a02038_1af7d64b424ad5d12f2a9970e134365a81" prot="public" virt="non-virtual"><scope>castor3d::AnimationKeyFrame</scope><name>getTimeIndex</name></member>
+      <member refid="df/dcf/a02038_1a14d9b59106f5406a66f2b8af33367991" prot="public" virt="virtual"><scope>castor3d::AnimationKeyFrame</scope><name>initialise</name></member>
+      <member refid="df/dcf/a02038_1abc9e4e2a76ef5ec53fe3308add665082" prot="protected" virt="non-virtual"><scope>castor3d::AnimationKeyFrame</scope><name>m_boundingBox</name></member>
+      <member refid="df/dcf/a02038_1a093b74b56f13b6376ea4a51e28893db5" prot="protected" virt="non-virtual"><scope>castor3d::AnimationKeyFrame</scope><name>m_timeIndex</name></member>
+      <member refid="df/dcf/a02038_1a0e38208bad19dd09708af045818c2f8d" prot="public" virt="virtual"><scope>castor3d::AnimationKeyFrame</scope><name>~AnimationKeyFrame</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

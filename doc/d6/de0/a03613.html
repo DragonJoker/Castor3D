@@ -10,6 +10,7 @@
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
 <link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+<link href="../../Castor3D.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -17,10 +18,12 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Castor3D
-   &#160;<span id="projectnumber">..</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
+   <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
  </tr>
  </tbody>
@@ -39,35 +42,22 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../d0/d85/a00976.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d9/ddd/a03616.html">TextureStorage</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/d1e/a01479.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d9/ddd/a03616.html">VkTypeTraits&lt; VkWriteDescriptorSetAccelerationStructureNV &gt;</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="headertitle">
-<div class="title">castor3d::TextureStorage Member List</div>  </div>
+<div class="title">castor3d::VkTypeTraits&lt; VkWriteDescriptorSetAccelerationStructureNV &gt; Member List</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>This is the complete list of members for <a class="el" href="../../d9/ddd/a03616.html">castor3d::TextureStorage</a>, including all inherited members.</p>
+<p>This is the complete list of members for <a class="el" href="../../d9/ddd/a03616.html">castor3d::VkTypeTraits&lt; VkWriteDescriptorSetAccelerationStructureNV &gt;</a>, including all inherited members.</p>
 <table class="directory">
-  <tr class="even"><td class="entry"><a class="el" href="../../d9/ddd/a03616.html#a0bc573a7eed0786b9de36133d6ddb33e">bind</a>(uint32_t p_index) const =0</td><td class="entry"><a class="el" href="../../d9/ddd/a03616.html">castor3d::TextureStorage</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d9/ddd/a03616.html#aa4c5ade308a5569d3e3a97e04232e013">getCPUAccess</a>() const</td><td class="entry"><a class="el" href="../../d9/ddd/a03616.html">castor3d::TextureStorage</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d9/ddd/a03616.html#abbb84839228d930ca2da51f6c0b46a5a">getGPUAccess</a>() const</td><td class="entry"><a class="el" href="../../d9/ddd/a03616.html">castor3d::TextureStorage</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d9/ddd/a03616.html#accca1571b7ec1323142e0e7a057eb955">getType</a>() const</td><td class="entry"><a class="el" href="../../d9/ddd/a03616.html">castor3d::TextureStorage</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d9/ddd/a03616.html#a6f300236eef487852e9b4d53c082efd6">lock</a>(AccessTypes const &amp;p_lock)=0</td><td class="entry"><a class="el" href="../../d9/ddd/a03616.html">castor3d::TextureStorage</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d9/ddd/a03616.html#a94ea28f7318280565d8e5d6a8960bb75">lock</a>(AccessTypes const &amp;p_lock, uint32_t p_index)=0</td><td class="entry"><a class="el" href="../../d9/ddd/a03616.html">castor3d::TextureStorage</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d9/ddd/a03616.html#ac7aba8b78b45319bfe8cafa9042ec598">m_cpuAccess</a></td><td class="entry"><a class="el" href="../../d9/ddd/a03616.html">castor3d::TextureStorage</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d9/ddd/a03616.html#a0f2873e2e901f77984447b697254f6a3">m_gpuAccess</a></td><td class="entry"><a class="el" href="../../d9/ddd/a03616.html">castor3d::TextureStorage</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d9/ddd/a03616.html#a5d16d4082fa1a4eaa35309cfb51cd4b6">m_type</a></td><td class="entry"><a class="el" href="../../d9/ddd/a03616.html">castor3d::TextureStorage</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d9/ddd/a03616.html#a2eedfe341fe40e1ac4e2fe5e735a7bfe">TextureStorage</a>(TextureStorageType p_type, TextureLayout &amp;p_layout, AccessTypes const &amp;cpuAccess, AccessTypes const &amp;gpuAccess)</td><td class="entry"><a class="el" href="../../d9/ddd/a03616.html">castor3d::TextureStorage</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d9/ddd/a03616.html#a8dc6a23be220c548ef3cd366ee825407">unbind</a>(uint32_t p_index) const =0</td><td class="entry"><a class="el" href="../../d9/ddd/a03616.html">castor3d::TextureStorage</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d9/ddd/a03616.html#a8cb92ca7527b147c77f124ac881c5bf2">unlock</a>(bool p_modified)=0</td><td class="entry"><a class="el" href="../../d9/ddd/a03616.html">castor3d::TextureStorage</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d9/ddd/a03616.html#a701c707a24fa913b56a0dac4d9240050">unlock</a>(bool p_modified, uint32_t p_index)=0</td><td class="entry"><a class="el" href="../../d9/ddd/a03616.html">castor3d::TextureStorage</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d9/ddd/a03616.html#a50affe42c01cb8ac704b6d44f0086b0d">~TextureStorage</a>()</td><td class="entry"><a class="el" href="../../d9/ddd/a03616.html">castor3d::TextureStorage</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d9/ddd/a03616.html#ac94f6b3cbf33ef9e6de4b96c8bea9285">value</a></td><td class="entry"><a class="el" href="../../d9/ddd/a03616.html">castor3d::VkTypeTraits&lt; VkWriteDescriptorSetAccelerationStructureNV &gt;</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
 </table></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 13:38:52 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Feb 18 2021 01:09:22 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

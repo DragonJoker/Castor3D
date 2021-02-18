@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d8/d12/a04694" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::ShadowMapSpot::PassData</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d8/d12/a04694_1a2606537372e7b6ced486e2445673143a" prot="public" static="no" mutable="no">
+        <type>ashes::CommandBufferPtr</type>
+        <definition>ashes::CommandBufferPtr castor3d::ShadowMapSpot::PassData::commandBuffer</definition>
+        <argsstring></argsstring>
+        <name>commandBuffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMapSpot.hpp" line="61" column="1" bodyfile="Render/ShadowMap/ShadowMapSpot.hpp" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d12/a04694_1a4f6872e13c9a8a33de941e612e1d5cfd" prot="public" static="no" mutable="no">
+        <type>ashes::FrameBufferPtr</type>
+        <definition>ashes::FrameBufferPtr castor3d::ShadowMapSpot::PassData::frameBuffer</definition>
+        <argsstring></argsstring>
+        <name>frameBuffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMapSpot.hpp" line="62" column="1" bodyfile="Render/ShadowMap/ShadowMapSpot.hpp" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d12/a04694_1a58d6e8241e0156600e26a52731eea39e" prot="public" static="no" mutable="no">
+        <type>ashes::SemaphorePtr</type>
+        <definition>ashes::SemaphorePtr castor3d::ShadowMapSpot::PassData::finished</definition>
+        <argsstring></argsstring>
+        <name>finished</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMapSpot.hpp" line="63" column="1" bodyfile="Render/ShadowMap/ShadowMapSpot.hpp" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d12/a04694_1a1e6d88d4e55073dedb73bf5a222f9e40" prot="public" static="no" mutable="no">
+        <type><ref refid="db/da9/a04374" kindref="compound">CommandsSemaphore</ref></type>
+        <definition>CommandsSemaphore castor3d::ShadowMapSpot::PassData::blurCommands</definition>
+        <argsstring></argsstring>
+        <name>blurCommands</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMapSpot.hpp" line="64" column="1" bodyfile="Render/ShadowMap/ShadowMapSpot.hpp" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="3917">
+        <label>castor3d::CommandsSemaphore</label>
+        <link refid="db/da9/a04374"/>
+      </node>
+      <node id="3916">
+        <label>castor3d::ShadowMapSpot::PassData</label>
+        <childnode refid="3917" relation="usage">
+          <edgelabel>blurCommands</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/ShadowMap/ShadowMapSpot.hpp" line="60" column="1" bodyfile="Render/ShadowMap/ShadowMapSpot.hpp" bodystart="59" bodyend="65"/>
+    <listofallmembers>
+      <member refid="d8/d12/a04694_1a1e6d88d4e55073dedb73bf5a222f9e40" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapSpot::PassData</scope><name>blurCommands</name></member>
+      <member refid="d8/d12/a04694_1a2606537372e7b6ced486e2445673143a" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapSpot::PassData</scope><name>commandBuffer</name></member>
+      <member refid="d8/d12/a04694_1a58d6e8241e0156600e26a52731eea39e" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapSpot::PassData</scope><name>finished</name></member>
+      <member refid="d8/d12/a04694_1a4f6872e13c9a8a33de941e612e1d5cfd" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapSpot::PassData</scope><name>frameBuffer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

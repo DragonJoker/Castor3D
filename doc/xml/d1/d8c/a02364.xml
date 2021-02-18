@@ -1,0 +1,421 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d1/d8c/a02364" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::BillboardUboPools</compoundname>
+    <includes local="no">BillboardUboPools.hpp</includes>
+    <innerclass refid="d1/da2/a02368" prot="public">castor3d::BillboardUboPools::PoolsEntry</innerclass>
+      <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="d1/d8c/a02364_1aebcde5b6243709542d4489aee2da1f45" prot="private" static="no">
+        <type>std::set&lt; <ref refid="d8/d25/a04596" kindref="compound">SceneRenderPass</ref> const * &gt;</type>
+        <definition>using castor3d::BillboardUboPools::RenderPassSet =  std::set&lt; SceneRenderPass const * &gt;</definition>
+        <argsstring></argsstring>
+        <name>RenderPassSet</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardUboPools.hpp" line="130" column="1" bodyfile="Cache/BillboardUboPools.hpp" bodystart="130" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d1/d8c/a02364_1a8fe1d67894cd9e03f69d579edd969c34" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::BillboardUboPools::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardUboPools.hpp" line="124" column="1" bodyfile="Cache/BillboardUboPools.hpp" bodystart="124" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d8c/a02364_1a5a2a9f71b4653b9874140b5a91fa0937" prot="private" static="no" mutable="no">
+        <type>std::map&lt; size_t, <ref refid="d1/da2/a02368" kindref="compound">PoolsEntry</ref> &gt;</type>
+        <definition>std::map&lt; size_t, PoolsEntry &gt; castor3d::BillboardUboPools::m_baseEntries</definition>
+        <argsstring></argsstring>
+        <name>m_baseEntries</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardUboPools.hpp" line="125" column="1" bodyfile="Cache/BillboardUboPools.hpp" bodystart="125" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d8c/a02364_1aea5796cfb03f83f98b89f398cc7f3e02" prot="private" static="no" mutable="no">
+        <type>std::map&lt; size_t, <ref refid="d1/da2/a02368" kindref="compound">PoolsEntry</ref> &gt;</type>
+        <definition>std::map&lt; size_t, PoolsEntry &gt; castor3d::BillboardUboPools::m_entries</definition>
+        <argsstring></argsstring>
+        <name>m_entries</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardUboPools.hpp" line="126" column="1" bodyfile="Cache/BillboardUboPools.hpp" bodystart="126" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d8c/a02364_1a69925bf87227e16782c2bed4eb7ea9b6" prot="private" static="no" mutable="no">
+        <type>std::map&lt; <ref refid="d3/dc0/a05140" kindref="compound">BillboardBase</ref> *, <ref refid="da/d1e/a01479_1a21698845af912005f0ce8c4fd573f16a" kindref="member">OnBillboardMaterialChangedConnection</ref> &gt;</type>
+        <definition>std::map&lt; BillboardBase *, OnBillboardMaterialChangedConnection &gt; castor3d::BillboardUboPools::m_connections</definition>
+        <argsstring></argsstring>
+        <name>m_connections</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardUboPools.hpp" line="127" column="1" bodyfile="Cache/BillboardUboPools.hpp" bodystart="127" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d8c/a02364_1a8c8b79dfb5a2a50040ea13d929bd5288" prot="private" static="no" mutable="no">
+        <type>RenderPassTimerSPtr</type>
+        <definition>RenderPassTimerSPtr castor3d::BillboardUboPools::m_updateTimer</definition>
+        <argsstring></argsstring>
+        <name>m_updateTimer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardUboPools.hpp" line="128" column="1" bodyfile="Cache/BillboardUboPools.hpp" bodystart="128" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d8c/a02364_1a0724ac6d18642d0e97af4c1454220068" prot="private" static="no" mutable="no">
+        <type>std::shared_ptr&lt; <ref refid="d1/d8c/a02364" kindref="compound">BillboardUboPools</ref> &gt;</type>
+        <definition>std::shared_ptr&lt; BillboardUboPools &gt; castor3d::BillboardUboPools::m_billboardPools</definition>
+        <argsstring></argsstring>
+        <name>m_billboardPools</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardUboPools.hpp" line="129" column="1" bodyfile="Cache/BillboardUboPools.hpp" bodystart="129" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d8c/a02364_1aa824fcb1c44188f2a2b65fe686fbf973" prot="private" static="no" mutable="no">
+        <type>std::map&lt; uint32_t, RenderPassSet &gt;</type>
+        <definition>std::map&lt; uint32_t, RenderPassSet &gt; castor3d::BillboardUboPools::m_instances</definition>
+        <argsstring></argsstring>
+        <name>m_instances</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardUboPools.hpp" line="131" column="1" bodyfile="Cache/BillboardUboPools.hpp" bodystart="131" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/d8c/a02364_1ab40454a3060c0bcc877bf68fe4d234fe" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::BillboardUboPools::BillboardUboPools</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>BillboardUboPools</name>
+        <param>
+          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The current device. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardUboPools.hpp" line="45" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d8c/a02364_1a0a02530699b8b5b4ebe592f2e4027af2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::BillboardUboPools::registerPass</definition>
+        <argsstring>(SceneRenderPass const &amp;renderPass)</argsstring>
+        <name>registerPass</name>
+        <param>
+          <type><ref refid="d8/d25/a04596" kindref="compound">SceneRenderPass</ref> const &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <briefdescription>
+<para>Registers a render pass for nodes registration. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>renderPass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render pass. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardUboPools.hpp" line="54" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d8c/a02364_1a7397c7a8318cc3a9653b4c4aaa617e7a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::BillboardUboPools::unregisterPass</definition>
+        <argsstring>(SceneRenderPass const *renderPass, uint32_t instanceMult)</argsstring>
+        <name>unregisterPass</name>
+        <param>
+          <type><ref refid="d8/d25/a04596" kindref="compound">SceneRenderPass</ref> const *</type>
+          <declname>renderPass</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>instanceMult</declname>
+        </param>
+        <briefdescription>
+<para>Unregisters a render pass. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>renderPass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>instanceMult</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The instance multiplier, to know where the nodes are registered. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardUboPools.hpp" line="65" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d8c/a02364_1aaee3b0c7a3d5e5f2af62b8aecd278ec1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::BillboardUboPools::update</definition>
+        <argsstring>()</argsstring>
+        <name>update</name>
+        <briefdescription>
+<para>Updates the UBO pools data. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardUboPools.hpp" line="73" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d8c/a02364_1a97443b80716555a3ade1866f25639496" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::BillboardUboPools::registerElement</definition>
+        <argsstring>(BillboardBase &amp;billboard)</argsstring>
+        <name>registerElement</name>
+        <param>
+          <type><ref refid="d3/dc0/a05140" kindref="compound">BillboardBase</ref> &amp;</type>
+          <declname>billboard</declname>
+        </param>
+        <briefdescription>
+<para>Register the entries for given billboard. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>billboard</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The instance. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardUboPools.hpp" line="82" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d8c/a02364_1a250fe40367bbfdd0eee889717c2bcf6d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::BillboardUboPools::unregisterElement</definition>
+        <argsstring>(BillboardBase &amp;billboard)</argsstring>
+        <name>unregisterElement</name>
+        <param>
+          <type><ref refid="d3/dc0/a05140" kindref="compound">BillboardBase</ref> &amp;</type>
+          <declname>billboard</declname>
+        </param>
+        <briefdescription>
+<para>Removes the entries for given billboard. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>billboard</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The instance. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardUboPools.hpp" line="91" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d8c/a02364_1ac17898e58faa3fc8b8158de325ffe412" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/da2/a02368" kindref="compound">PoolsEntry</ref></type>
+        <definition>C3D_API PoolsEntry castor3d::BillboardUboPools::getUbos</definition>
+        <argsstring>(BillboardBase const &amp;billboard, Pass const &amp;pass, uint32_t instanceMult) const</argsstring>
+        <name>getUbos</name>
+        <param>
+          <type><ref refid="d3/dc0/a05140" kindref="compound">BillboardBase</ref> const &amp;</type>
+          <declname>billboard</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d5d/a02596" kindref="compound">Pass</ref> const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>instanceMult</declname>
+        </param>
+        <briefdescription>
+<para>Cleans up the UBO pools. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Assumes the entry has been previously created. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>billboard</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The instance. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The instance material pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>instanceMult</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The instance multiplier, to know where to register the nodes. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardUboPools.hpp" line="106" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d8c/a02364_1aeb745856568019a53fd56fe9c02a7b7f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::BillboardUboPools::clear</definition>
+        <argsstring>()</argsstring>
+        <name>clear</name>
+        <briefdescription>
+<para>Flushes the pools. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardUboPools.hpp" line="115" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d1/d8c/a02364_1aa33ea766dc8da193c1d919e22516da1c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::BillboardUboPools::doCreateEntry</definition>
+        <argsstring>(BillboardBase const &amp;billboard, Pass const &amp;pass)</argsstring>
+        <name>doCreateEntry</name>
+        <param>
+          <type><ref refid="d3/dc0/a05140" kindref="compound">BillboardBase</ref> const &amp;</type>
+          <declname>billboard</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d5d/a02596" kindref="compound">Pass</ref> const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardUboPools.hpp" line="118" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d8c/a02364_1ade9cfda709d048226e8b312cf3341117" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::BillboardUboPools::doRemoveEntry</definition>
+        <argsstring>(BillboardBase const &amp;billboard, Pass const &amp;pass)</argsstring>
+        <name>doRemoveEntry</name>
+        <param>
+          <type><ref refid="d3/dc0/a05140" kindref="compound">BillboardBase</ref> const &amp;</type>
+          <declname>billboard</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d5d/a02596" kindref="compound">Pass</ref> const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/BillboardUboPools.hpp" line="120" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Cache/BillboardUboPools.hpp" line="21" column="1" bodyfile="Cache/BillboardUboPools.hpp" bodystart="20" bodyend="132"/>
+    <listofallmembers>
+      <member refid="d1/d8c/a02364_1ab40454a3060c0bcc877bf68fe4d234fe" prot="public" virt="non-virtual"><scope>castor3d::BillboardUboPools</scope><name>BillboardUboPools</name></member>
+      <member refid="d1/d8c/a02364_1aeb745856568019a53fd56fe9c02a7b7f" prot="public" virt="non-virtual"><scope>castor3d::BillboardUboPools</scope><name>clear</name></member>
+      <member refid="d1/d8c/a02364_1aa33ea766dc8da193c1d919e22516da1c" prot="private" virt="non-virtual"><scope>castor3d::BillboardUboPools</scope><name>doCreateEntry</name></member>
+      <member refid="d1/d8c/a02364_1ade9cfda709d048226e8b312cf3341117" prot="private" virt="non-virtual"><scope>castor3d::BillboardUboPools</scope><name>doRemoveEntry</name></member>
+      <member refid="d1/d8c/a02364_1ac17898e58faa3fc8b8158de325ffe412" prot="public" virt="non-virtual"><scope>castor3d::BillboardUboPools</scope><name>getUbos</name></member>
+      <member refid="d1/d8c/a02364_1a5a2a9f71b4653b9874140b5a91fa0937" prot="private" virt="non-virtual"><scope>castor3d::BillboardUboPools</scope><name>m_baseEntries</name></member>
+      <member refid="d1/d8c/a02364_1a0724ac6d18642d0e97af4c1454220068" prot="private" virt="non-virtual"><scope>castor3d::BillboardUboPools</scope><name>m_billboardPools</name></member>
+      <member refid="d1/d8c/a02364_1a69925bf87227e16782c2bed4eb7ea9b6" prot="private" virt="non-virtual"><scope>castor3d::BillboardUboPools</scope><name>m_connections</name></member>
+      <member refid="d1/d8c/a02364_1a8fe1d67894cd9e03f69d579edd969c34" prot="private" virt="non-virtual"><scope>castor3d::BillboardUboPools</scope><name>m_device</name></member>
+      <member refid="d1/d8c/a02364_1aea5796cfb03f83f98b89f398cc7f3e02" prot="private" virt="non-virtual"><scope>castor3d::BillboardUboPools</scope><name>m_entries</name></member>
+      <member refid="d1/d8c/a02364_1aa824fcb1c44188f2a2b65fe686fbf973" prot="private" virt="non-virtual"><scope>castor3d::BillboardUboPools</scope><name>m_instances</name></member>
+      <member refid="d1/d8c/a02364_1a8c8b79dfb5a2a50040ea13d929bd5288" prot="private" virt="non-virtual"><scope>castor3d::BillboardUboPools</scope><name>m_updateTimer</name></member>
+      <member refid="d1/d8c/a02364_1a97443b80716555a3ade1866f25639496" prot="public" virt="non-virtual"><scope>castor3d::BillboardUboPools</scope><name>registerElement</name></member>
+      <member refid="d1/d8c/a02364_1a0a02530699b8b5b4ebe592f2e4027af2" prot="public" virt="non-virtual"><scope>castor3d::BillboardUboPools</scope><name>registerPass</name></member>
+      <member refid="d1/d8c/a02364_1aebcde5b6243709542d4489aee2da1f45" prot="private" virt="non-virtual"><scope>castor3d::BillboardUboPools</scope><name>RenderPassSet</name></member>
+      <member refid="d1/d8c/a02364_1a250fe40367bbfdd0eee889717c2bcf6d" prot="public" virt="non-virtual"><scope>castor3d::BillboardUboPools</scope><name>unregisterElement</name></member>
+      <member refid="d1/d8c/a02364_1a7397c7a8318cc3a9653b4c4aaa617e7a" prot="public" virt="non-virtual"><scope>castor3d::BillboardUboPools</scope><name>unregisterPass</name></member>
+      <member refid="d1/d8c/a02364_1aaee3b0c7a3d5e5f2af62b8aecd278ec1" prot="public" virt="non-virtual"><scope>castor3d::BillboardUboPools</scope><name>update</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

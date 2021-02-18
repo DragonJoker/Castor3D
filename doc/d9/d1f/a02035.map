@@ -1,5 +1,14 @@
-<map id="castor3d::MetallicRoughnessPbrPass" name="castor3d::MetallicRoughnessPbrPass">
-<area shape="rect" id="node1" title="Definition of a PBR Metallic/Roughness pass." alt="" coords="6,155,197,196"/>
-<area shape="rect" id="node2" href="$d8/d22/a02044.html" title="Base class of a material pass." alt="" coords="46,80,157,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,197,32"/>
+<map id="castor3d::AnimableT&lt; AnimableHanlerT &gt;" name="castor3d::AnimableT&lt; AnimableHanlerT &gt;">
+<area shape="rect" id="node1" title="Animable public interface." alt="" coords="243,125,387,166"/>
+<area shape="rect" id="node3" href="$dc/dce/a03908.html" title=" " alt="" coords="504,73,680,100"/>
+<area shape="rect" id="node4" href="$d9/d4a/a05192.html" title=" " alt="" coords="509,125,675,166"/>
+<area shape="rect" id="node10" href="$d7/db2/a02036.html" title=" " alt="" coords="521,251,663,293"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,125,193,166"/>
+<area shape="rect" id="node5" href="$d4/dc5/a05148.html" title=" " alt="" coords="739,5,889,32"/>
+<area shape="rect" id="node6" href="$d5/d9c/a05152.html" title=" " alt="" coords="751,56,877,83"/>
+<area shape="rect" id="node7" href="$df/df0/a05160.html" title=" " alt="" coords="745,107,883,133"/>
+<area shape="rect" id="node8" href="$d8/de4/a05172.html" title=" " alt="" coords="760,157,868,184"/>
+<area shape="rect" id="node9" href="$d6/dd5/a05228.html" title=" " alt="" coords="729,208,899,235"/>
+<area shape="rect" id="node11" href="$db/d13/a04032.html" title=" " alt="" coords="749,259,879,285"/>
+<area shape="rect" id="node12" href="$d6/d18/a02664.html" title=" " alt="" coords="741,309,887,336"/>
 </map>

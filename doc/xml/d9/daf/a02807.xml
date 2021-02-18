@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d9/daf/a02807" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::VkTypeTraits&lt; VkDescriptorPoolCreateInfo &gt;</compoundname>
+    <includes local="no">makeVkType.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d9/daf/a02807_1a377032495beacca3b1d7c97afd408ed5" prot="public" static="yes" mutable="no">
+        <type>VkStructureType constexpr</type>
+        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkDescriptorPoolCreateInfo &gt;::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <initializer>= VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/makeVkType.hpp" line="47" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Miscellaneous/makeVkType.hpp" line="47" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="47" bodyend="47"/>
+    <listofallmembers>
+      <member refid="d9/daf/a02807_1a377032495beacca3b1d7c97afd408ed5" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkDescriptorPoolCreateInfo &gt;</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

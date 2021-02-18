@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_a0dc41515a0de70151d1e108057c1ded" kind="dir">
+    <compoundname>Overlay</compoundname>
+    <innerfile refid="d0/ddb/a00542">BorderPanelOverlay.hpp</innerfile>
+    <innerfile refid="d8/deb/a00545">DebugOverlays.hpp</innerfile>
+    <innerfile refid="dd/de6/a00548">FontTexture.hpp</innerfile>
+    <innerfile refid="d9/d87/a00551">Overlay.hpp</innerfile>
+    <innerfile refid="dc/df9/a00554">OverlayCategory.hpp</innerfile>
+    <innerfile refid="d8/df0/a00557">OverlayFactory.hpp</innerfile>
+    <innerfile refid="d9/d19/a00560">OverlayModule.hpp</innerfile>
+    <innerfile refid="dc/dae/a00563">OverlayRenderer.hpp</innerfile>
+    <innerfile refid="d0/d3e/a00566">OverlayVisitor.hpp</innerfile>
+    <innerfile refid="d4/d9e/a00569">PanelOverlay.hpp</innerfile>
+    <innerfile refid="d0/d71/a07304">TextOverlay.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Overlay/"/>
+  </compounddef>
+</doxygen>

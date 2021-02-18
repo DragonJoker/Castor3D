@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d5/de0/a02220" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ChunkTyper&lt; SkeletonAnimationNode &gt;</compoundname>
+    <includes local="no">BinarySkeletonAnimationNode.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d5/de0/a02220_1a5713a20264e0ee8c90e7e1d8d4d22fb8" prot="public" static="yes" mutable="no">
+        <type><ref refid="da/d1e/a01479_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref> const</type>
+        <definition>ChunkType const castor3d::ChunkTyper&lt; SkeletonAnimationNode &gt;::Value</definition>
+        <argsstring></argsstring>
+        <name>Value</name>
+        <initializer>= <ref refid="da/d1e/a01479_1a742783d4e4b7354fac3e375ae107414da0acf24819b388bf13a6881408227607f" kindref="member">ChunkType::eSkeletonAnimationNode</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinarySkeletonAnimationNode.hpp" line="28" column="1" bodyfile="Binary/BinarySkeletonAnimationNode.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Helper structure to find ChunkType from a type. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="version"><para>0.9.0 </para>
+</simplesect>
+<simplesect kind="date"><para>28/05/2016</para>
+</simplesect>
+<simplesect kind="remark"><para>Specialisation for <ref refid="df/d49/a04020" kindref="compound">SkeletonAnimationNode</ref>. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="Binary/BinarySkeletonAnimationNode.hpp" line="27" column="1" bodyfile="Binary/BinarySkeletonAnimationNode.hpp" bodystart="26" bodyend="29"/>
+    <listofallmembers>
+      <member refid="d5/de0/a02220_1a5713a20264e0ee8c90e7e1d8d4d22fb8" prot="public" virt="non-virtual"><scope>castor3d::ChunkTyper&lt; SkeletonAnimationNode &gt;</scope><name>Value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

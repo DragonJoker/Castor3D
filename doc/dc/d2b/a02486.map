@@ -1,5 +1,7 @@
-<map id="castor3d::TextOverlay::TextWriter" name="castor3d::TextOverlay::TextWriter">
-<area shape="rect" id="node1" title="TextOverlay loader." alt="" coords="19,184,167,225"/>
-<area shape="rect" id="node2" href="$da/d23/a02452.html" title="OverlayCategory loader." alt="" coords="5,95,180,136"/>
-<area shape="rect" id="node3" title=" " alt="" coords="22,5,163,47"/>
+<map id="castor3d::MaterialCache" name="castor3d::MaterialCache">
+<area shape="rect" id="node1" title="Material collection, with additional functions." alt="" coords="43,395,205,421"/>
+<area shape="rect" id="node2" href="$df/d46/a02376.html" title=" " alt="" coords="51,289,197,345"/>
+<area shape="rect" id="node3" href="$dc/dbb/a02520.html" title=" " alt="" coords="31,81,151,108"/>
+<area shape="rect" id="node5" href="$df/d46/a02376.html" title="Base class for an element cache." alt="" coords="155,171,336,212"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,5,176,32"/>
 </map>

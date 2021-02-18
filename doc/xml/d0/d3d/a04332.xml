@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d0/d3d/a04332" kind="struct" language="C++" prot="public">
+    <compoundname>castor::Deleter&lt; castor3d::SceneCulledRenderNodes &gt;</compoundname>
+    <includes local="no">RenderNodeModule.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/d3d/a04332_1a89c64936806001091026580ebb2f81e3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor::Deleter&lt; castor3d::SceneCulledRenderNodes &gt;::operator()</definition>
+        <argsstring>(castor3d::SceneCulledRenderNodes *ptr) noexcept</argsstring>
+        <name>operator()</name>
+        <param>
+          <type><ref refid="da/d16/a04336" kindref="compound">castor3d::SceneCulledRenderNodes</ref> *</type>
+          <declname>ptr</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/RenderNodeModule.hpp" line="158" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Deleter structure. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Specialisation to hide implementation in .cpp (to reduce includes dependencies). </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="Render/Node/RenderNodeModule.hpp" line="157" column="1" bodyfile="Render/Node/RenderNodeModule.hpp" bodystart="156" bodyend="159"/>
+    <listofallmembers>
+      <member refid="d0/d3d/a04332_1a89c64936806001091026580ebb2f81e3" prot="public" virt="non-virtual"><scope>castor::Deleter&lt; castor3d::SceneCulledRenderNodes &gt;</scope><name>operator()</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,602 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dd/dd8/a02655" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::GpuInformations</compoundname>
+    <includes local="no">GpuInformations.hpp</includes>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="dd/dd8/a02655_1ac26c806e60ca4a0547680edb68f6e39b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>friend class</type>
+        <definition>friend class Context</definition>
+        <argsstring></argsstring>
+        <name>Context</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/GpuInformations.hpp" line="22" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dd/dd8/a02655_1aa903bcbe525a7d4d8fd2c92eb3f7f450" prot="private" static="no" mutable="no">
+        <type><ref refid="d7/dd1/a01458_1a5a9b5f4cf020bb0542dcb66762b8f3ef" kindref="member">GpuFeatures</ref></type>
+        <definition>GpuFeatures castor3d::GpuInformations::m_features</definition>
+        <argsstring></argsstring>
+        <name>m_features</name>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/GpuInformations.hpp" line="241" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="241" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dd8/a02655_1a1ec38e388d2180a4e4e16f6f32e69db4" prot="private" static="no" mutable="no">
+        <type>std::map&lt; VkShaderStageFlagBits, bool &gt;</type>
+        <definition>std::map&lt; VkShaderStageFlagBits, bool &gt; castor3d::GpuInformations::m_useShader</definition>
+        <argsstring></argsstring>
+        <name>m_useShader</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/GpuInformations.hpp" line="242" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="242" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dd8/a02655_1add3096c23a5d6be5e91219f80b92b1d6" prot="private" static="no" mutable="no">
+        <type>std::map&lt; <ref refid="d7/dd1/a01458_1aa8db7fdfd75692716c162f6d6c1b9cb6" kindref="member">GpuMax</ref>, int32_t &gt;</type>
+        <definition>std::map&lt; GpuMax, int32_t &gt; castor3d::GpuInformations::m_maxValues</definition>
+        <argsstring></argsstring>
+        <name>m_maxValues</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/GpuInformations.hpp" line="243" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="243" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dd8/a02655_1a6fc9f5cc58db157543f68ff00cead7c5" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::GpuInformations::m_totalMemorySize</definition>
+        <argsstring></argsstring>
+        <name>m_totalMemorySize</name>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/GpuInformations.hpp" line="244" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="244" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dd8/a02655_1afd6810aadff3a79cda9b6f4622a60c31" prot="private" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::GpuInformations::m_vendor</definition>
+        <argsstring></argsstring>
+        <name>m_vendor</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/GpuInformations.hpp" line="245" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="245" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dd8/a02655_1adc42e66d0024a7c94161ff1293f75c4d" prot="private" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::GpuInformations::m_renderer</definition>
+        <argsstring></argsstring>
+        <name>m_renderer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/GpuInformations.hpp" line="246" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="246" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dd8/a02655_1a9f5de498a5c73d1c3c72a77a2e4aedc6" prot="private" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::GpuInformations::m_version</definition>
+        <argsstring></argsstring>
+        <name>m_version</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/GpuInformations.hpp" line="247" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="247" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/dd8/a02655_1a23508153e9a5af0604881548c9600e70" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::GpuInformations::GpuInformations</definition>
+        <argsstring>()</argsstring>
+        <name>GpuInformations</name>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/GpuInformations.hpp" line="31" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="31" bodyend="46"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dd8/a02655_1a920655b10f814af0305b05da4994567c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::GpuInformations::addFeature</definition>
+        <argsstring>(GpuFeature feature)</argsstring>
+        <name>addFeature</name>
+        <param>
+          <type><ref refid="d7/dd1/a01458_1a592ae630c434fe2af95c3eefcc900698" kindref="member">GpuFeature</ref></type>
+          <declname>feature</declname>
+        </param>
+        <briefdescription>
+<para>Adds a supported feature. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/GpuInformations.hpp" line="53" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="53" bodyend="56"/>
+        <referencedby refid="dd/dd8/a02655_1a8f6280381240315eb6a1ed5cda23d863" compoundref="d4/def/a00359" startline="73" endline="78">updateFeature</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/dd8/a02655_1a54e7993e2b67ed913955497e6f0bccd3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::GpuInformations::removeFeature</definition>
+        <argsstring>(GpuFeature feature)</argsstring>
+        <name>removeFeature</name>
+        <param>
+          <type><ref refid="d7/dd1/a01458_1a592ae630c434fe2af95c3eefcc900698" kindref="member">GpuFeature</ref></type>
+          <declname>feature</declname>
+        </param>
+        <briefdescription>
+<para>Removes a supported feature. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/GpuInformations.hpp" line="63" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="63" bodyend="66"/>
+        <referencedby refid="dd/dd8/a02655_1a8f6280381240315eb6a1ed5cda23d863" compoundref="d4/def/a00359" startline="73" endline="78">updateFeature</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/dd8/a02655_1a8f6280381240315eb6a1ed5cda23d863" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::GpuInformations::updateFeature</definition>
+        <argsstring>(GpuFeature feature, bool supported)</argsstring>
+        <name>updateFeature</name>
+        <param>
+          <type><ref refid="d7/dd1/a01458_1a592ae630c434fe2af95c3eefcc900698" kindref="member">GpuFeature</ref></type>
+          <declname>feature</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>supported</declname>
+        </param>
+        <briefdescription>
+<para>Updates the support for a feature. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/GpuInformations.hpp" line="73" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="73" bodyend="78"/>
+        <references refid="dd/dd8/a02655_1a920655b10f814af0305b05da4994567c" compoundref="d4/def/a00359" startline="53" endline="56">addFeature</references>
+        <references refid="dd/dd8/a02655_1a54e7993e2b67ed913955497e6f0bccd3" compoundref="d4/def/a00359" startline="63" endline="66">removeFeature</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/dd8/a02655_1a77ad12ba88030c8938bf7c5a76d8f733" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::GpuInformations::hasFeature</definition>
+        <argsstring>(GpuFeature feature) const</argsstring>
+        <name>hasFeature</name>
+        <param>
+          <type><ref refid="d7/dd1/a01458_1a592ae630c434fe2af95c3eefcc900698" kindref="member">GpuFeature</ref></type>
+          <declname>feature</declname>
+        </param>
+        <briefdescription>
+<para>Tells if the feature is supported supports stereo. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/GpuInformations.hpp" line="85" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="85" bodyend="88"/>
+        <referencedby refid="dd/dd8/a02655_1ac1dce053c9680a03f15630687fe8ea21" compoundref="d4/def/a00359" startline="105" endline="108">hasShaderStorageBuffers</referencedby>
+        <referencedby refid="dd/dd8/a02655_1a27fd0413c1d5302ecb4df383919385b1" compoundref="d4/def/a00359" startline="95" endline="98">hasStereoRendering</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/dd8/a02655_1a27fd0413c1d5302ecb4df383919385b1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::GpuInformations::hasStereoRendering</definition>
+        <argsstring>() const</argsstring>
+        <name>hasStereoRendering</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The stereo support status. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/GpuInformations.hpp" line="95" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="95" bodyend="98"/>
+        <references refid="d7/dd1/a01458_1a592ae630c434fe2af95c3eefcc900698ad427bacfb2917febdb3d7159276612e0">castor3d::eStereoRendering</references>
+        <references refid="dd/dd8/a02655_1a77ad12ba88030c8938bf7c5a76d8f733" compoundref="d4/def/a00359" startline="85" endline="88">hasFeature</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/dd8/a02655_1ac1dce053c9680a03f15630687fe8ea21" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::GpuInformations::hasShaderStorageBuffers</definition>
+        <argsstring>() const</argsstring>
+        <name>hasShaderStorageBuffers</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The SSBO support status. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/GpuInformations.hpp" line="105" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="105" bodyend="108"/>
+        <references refid="d7/dd1/a01458_1a592ae630c434fe2af95c3eefcc900698aceb457852896087c2fd755b19274b164">castor3d::eShaderStorageBuffers</references>
+        <references refid="dd/dd8/a02655_1a77ad12ba88030c8938bf7c5a76d8f733" compoundref="d4/def/a00359" startline="85" endline="88">hasFeature</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/dd8/a02655_1ae1081f130b61e04a81e7b9b5aa875d88" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::GpuInformations::hasShaderType</definition>
+        <argsstring>(VkShaderStageFlagBits type) const</argsstring>
+        <name>hasShaderType</name>
+        <param>
+          <type>VkShaderStageFlagBits</type>
+          <declname>type</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The shader type. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The shader type support status. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/GpuInformations.hpp" line="117" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="117" bodyend="120"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dd8/a02655_1af5de1bc6a466e517149d968c53a0bd55" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::GpuInformations::useShaderType</definition>
+        <argsstring>(VkShaderStageFlagBits type, bool value)</argsstring>
+        <name>useShaderType</name>
+        <param>
+          <type>VkShaderStageFlagBits</type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Defines the support for given shader type. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The shader type. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/GpuInformations.hpp" line="131" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="131" bodyend="134"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dd8/a02655_1ab3e59c395984ebec066d765ef9c21902" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t castor3d::GpuInformations::getMaxValue</definition>
+        <argsstring>(GpuMax index) const</argsstring>
+        <name>getMaxValue</name>
+        <param>
+          <type><ref refid="d7/dd1/a01458_1aa8db7fdfd75692716c162f6d6c1b9cb6" kindref="member">GpuMax</ref></type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The index. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The maximum value for given index. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/GpuInformations.hpp" line="143" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="143" bodyend="146"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dd8/a02655_1a9d444edf78bdf453bedbed7e1235a68c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::GpuInformations::setMaxValue</definition>
+        <argsstring>(GpuMax index, int32_t value)</argsstring>
+        <name>setMaxValue</name>
+        <param>
+          <type><ref refid="d7/dd1/a01458_1aa8db7fdfd75692716c162f6d6c1b9cb6" kindref="member">GpuMax</ref></type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The index. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The maximum value for given index. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/GpuInformations.hpp" line="155" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="155" bodyend="158"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dd8/a02655_1a6019f736c637d2eb47beb7fbe15025d3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::GpuInformations::getTotalMemorySize</definition>
+        <argsstring>() const</argsstring>
+        <name>getTotalMemorySize</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The total VRAM size. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/GpuInformations.hpp" line="165" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="165" bodyend="168"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dd8/a02655_1a3b2251f9205cbab1d67c8e8745d5e127" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::GpuInformations::setTotalMemorySize</definition>
+        <argsstring>(uint32_t value)</argsstring>
+        <name>setTotalMemorySize</name>
+        <param>
+          <type>uint32_t</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The total VRAM size. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/GpuInformations.hpp" line="175" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="175" bodyend="178"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dd8/a02655_1af2729f7cb4c8b8b33af8e43c3ae19c69" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::String const  &amp;</type>
+        <definition>castor::String const&amp; castor3d::GpuInformations::getVendor</definition>
+        <argsstring>() const</argsstring>
+        <name>getVendor</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The GPU vendor name. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/GpuInformations.hpp" line="185" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="185" bodyend="188"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dd8/a02655_1ab0ac9f65ba13c1e0bd4fbf4ecfde6c66" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::GpuInformations::setVendor</definition>
+        <argsstring>(castor::String const &amp;value)</argsstring>
+        <name>setVendor</name>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU vendor name. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/GpuInformations.hpp" line="195" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="195" bodyend="198"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dd8/a02655_1a461e961def70c8675711fe9907b05662" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::String const  &amp;</type>
+        <definition>castor::String const&amp; castor3d::GpuInformations::getRenderer</definition>
+        <argsstring>() const</argsstring>
+        <name>getRenderer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The GPU platform. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/GpuInformations.hpp" line="205" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="205" bodyend="208"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dd8/a02655_1a7deaf472384cf8d678d2124ccfd50878" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::GpuInformations::setRenderer</definition>
+        <argsstring>(castor::String const &amp;value)</argsstring>
+        <name>setRenderer</name>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU platform. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/GpuInformations.hpp" line="215" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="215" bodyend="218"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dd8/a02655_1ad5615e9cda13527565bf3f7986357289" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::String const  &amp;</type>
+        <definition>castor::String const&amp; castor3d::GpuInformations::getVersion</definition>
+        <argsstring>() const</argsstring>
+        <name>getVersion</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The rendering API version. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/GpuInformations.hpp" line="225" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="225" bodyend="228"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dd8/a02655_1a66470d90f68b6f97353a14d871b31608" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::GpuInformations::setVersion</definition>
+        <argsstring>(castor::String const &amp;value)</argsstring>
+        <name>setVersion</name>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The rendering API version. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/GpuInformations.hpp" line="235" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="235" bodyend="238"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Holds GPU informations. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="date"><para>04/05/2016 </para>
+</simplesect>
+<simplesect kind="version"><para>0.9.0 </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="Miscellaneous/GpuInformations.hpp" line="21" column="1" bodyfile="Miscellaneous/GpuInformations.hpp" bodystart="20" bodyend="248"/>
+    <listofallmembers>
+      <member refid="dd/dd8/a02655_1a920655b10f814af0305b05da4994567c" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>addFeature</name></member>
+      <member refid="dd/dd8/a02655_1ac26c806e60ca4a0547680edb68f6e39b" prot="private" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>Context</name></member>
+      <member refid="dd/dd8/a02655_1ab3e59c395984ebec066d765ef9c21902" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>getMaxValue</name></member>
+      <member refid="dd/dd8/a02655_1a461e961def70c8675711fe9907b05662" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>getRenderer</name></member>
+      <member refid="dd/dd8/a02655_1a6019f736c637d2eb47beb7fbe15025d3" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>getTotalMemorySize</name></member>
+      <member refid="dd/dd8/a02655_1af2729f7cb4c8b8b33af8e43c3ae19c69" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>getVendor</name></member>
+      <member refid="dd/dd8/a02655_1ad5615e9cda13527565bf3f7986357289" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>getVersion</name></member>
+      <member refid="dd/dd8/a02655_1a23508153e9a5af0604881548c9600e70" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>GpuInformations</name></member>
+      <member refid="dd/dd8/a02655_1a77ad12ba88030c8938bf7c5a76d8f733" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>hasFeature</name></member>
+      <member refid="dd/dd8/a02655_1ac1dce053c9680a03f15630687fe8ea21" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>hasShaderStorageBuffers</name></member>
+      <member refid="dd/dd8/a02655_1ae1081f130b61e04a81e7b9b5aa875d88" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>hasShaderType</name></member>
+      <member refid="dd/dd8/a02655_1a27fd0413c1d5302ecb4df383919385b1" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>hasStereoRendering</name></member>
+      <member refid="dd/dd8/a02655_1aa903bcbe525a7d4d8fd2c92eb3f7f450" prot="private" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>m_features</name></member>
+      <member refid="dd/dd8/a02655_1add3096c23a5d6be5e91219f80b92b1d6" prot="private" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>m_maxValues</name></member>
+      <member refid="dd/dd8/a02655_1adc42e66d0024a7c94161ff1293f75c4d" prot="private" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>m_renderer</name></member>
+      <member refid="dd/dd8/a02655_1a6fc9f5cc58db157543f68ff00cead7c5" prot="private" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>m_totalMemorySize</name></member>
+      <member refid="dd/dd8/a02655_1a1ec38e388d2180a4e4e16f6f32e69db4" prot="private" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>m_useShader</name></member>
+      <member refid="dd/dd8/a02655_1afd6810aadff3a79cda9b6f4622a60c31" prot="private" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>m_vendor</name></member>
+      <member refid="dd/dd8/a02655_1a9f5de498a5c73d1c3c72a77a2e4aedc6" prot="private" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>m_version</name></member>
+      <member refid="dd/dd8/a02655_1a54e7993e2b67ed913955497e6f0bccd3" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>removeFeature</name></member>
+      <member refid="dd/dd8/a02655_1a9d444edf78bdf453bedbed7e1235a68c" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>setMaxValue</name></member>
+      <member refid="dd/dd8/a02655_1a7deaf472384cf8d678d2124ccfd50878" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>setRenderer</name></member>
+      <member refid="dd/dd8/a02655_1a3b2251f9205cbab1d67c8e8745d5e127" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>setTotalMemorySize</name></member>
+      <member refid="dd/dd8/a02655_1ab0ac9f65ba13c1e0bd4fbf4ecfde6c66" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>setVendor</name></member>
+      <member refid="dd/dd8/a02655_1a66470d90f68b6f97353a14d871b31608" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>setVersion</name></member>
+      <member refid="dd/dd8/a02655_1a8f6280381240315eb6a1ed5cda23d863" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>updateFeature</name></member>
+      <member refid="dd/dd8/a02655_1af5de1bc6a466e517149d968c53a0bd55" prot="public" virt="non-virtual"><scope>castor3d::GpuInformations</scope><name>useShaderType</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d8/da5/a05247" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::MetallicRoughnessPassBuffer::PassData</compoundname>
+    <includes local="no">MetallicRoughnessPassBuffer.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d8/da5/a05247_1a88dc67a3402181970185e3ff0d75d2e2" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/d56/a05259" kindref="compound">RgbaColour</ref></type>
+        <definition>RgbaColour castor3d::MetallicRoughnessPassBuffer::PassData::albRough</definition>
+        <argsstring></argsstring>
+        <name>albRough</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp" line="65" column="1" bodyfile="Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/da5/a05247_1ac4a6500b2d235ac260bc90d6f41db6fa" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/d56/a05259" kindref="compound">RgbaColour</ref></type>
+        <definition>RgbaColour castor3d::MetallicRoughnessPassBuffer::PassData::metDiv</definition>
+        <argsstring></argsstring>
+        <name>metDiv</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp" line="66" column="1" bodyfile="Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/da5/a05247_1a019c4daaefc61ca93aa8592445ee50c8" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/d56/a05259" kindref="compound">RgbaColour</ref></type>
+        <definition>RgbaColour castor3d::MetallicRoughnessPassBuffer::PassData::common</definition>
+        <argsstring></argsstring>
+        <name>common</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp" line="67" column="1" bodyfile="Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/da5/a05247_1af175e4dd14d6bb75879cf40224ec8268" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/d56/a05259" kindref="compound">RgbaColour</ref></type>
+        <definition>RgbaColour castor3d::MetallicRoughnessPassBuffer::PassData::opacity</definition>
+        <argsstring></argsstring>
+        <name>opacity</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp" line="68" column="1" bodyfile="Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/da5/a05247_1a24e039b450202d635dbb46ca9f1a24f3" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/d56/a05259" kindref="compound">RgbaColour</ref></type>
+        <definition>RgbaColour castor3d::MetallicRoughnessPassBuffer::PassData::reflRefr</definition>
+        <argsstring></argsstring>
+        <name>reflRefr</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp" line="69" column="1" bodyfile="Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp" bodystart="69" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/da5/a05247_1a77577406cd4b869af3ea77d5d9c5be42" prot="public" static="no" mutable="no">
+        <type>ExtendedData</type>
+        <definition>ExtendedData castor3d::MetallicRoughnessPassBuffer::PassData::extended</definition>
+        <argsstring></argsstring>
+        <name>extended</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp" line="70" column="1" bodyfile="Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp" line="64" column="1" bodyfile="Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp" bodystart="63" bodyend="71"/>
+    <listofallmembers>
+      <member refid="d8/da5/a05247_1a88dc67a3402181970185e3ff0d75d2e2" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPassBuffer::PassData</scope><name>albRough</name></member>
+      <member refid="d8/da5/a05247_1a019c4daaefc61ca93aa8592445ee50c8" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPassBuffer::PassData</scope><name>common</name></member>
+      <member refid="d8/da5/a05247_1a77577406cd4b869af3ea77d5d9c5be42" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPassBuffer::PassData</scope><name>extended</name></member>
+      <member refid="d8/da5/a05247_1ac4a6500b2d235ac260bc90d6f41db6fa" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPassBuffer::PassData</scope><name>metDiv</name></member>
+      <member refid="d8/da5/a05247_1af175e4dd14d6bb75879cf40224ec8268" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPassBuffer::PassData</scope><name>opacity</name></member>
+      <member refid="d8/da5/a05247_1a24e039b450202d635dbb46ca9f1a24f3" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPassBuffer::PassData</scope><name>reflRefr</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

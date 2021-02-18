@@ -1,0 +1,1003 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="da/de3/a05388" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::MetallicBrdfLightingModel</compoundname>
+    <basecompoundref refid="dd/d2f/a05352" prot="public" virt="non-virtual">castor3d::shader::LightingModel</basecompoundref>
+    <includes local="no">GlslMetallicBrdfLighting.hpp</includes>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="da/de3/a05388_1aece49dea6f4b40047abed1e644c64fd8" prot="public" static="yes" mutable="no">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const castor::String</type>
+        <definition>C3D_API const castor::String castor3d::shader::MetallicBrdfLightingModel::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMetallicBrdfLighting.hpp" line="140" column="1" bodyfile="Shader/Shaders/GlslMetallicBrdfLighting.hpp" bodystart="140" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="da/de3/a05388_1ab89f1d5e4249c1bee19e5ba39c0d1b2b" prot="public" static="no" mutable="no">
+        <type><ref refid="d6/d9d/a05324" kindref="compound">CookTorranceBRDF</ref></type>
+        <definition>CookTorranceBRDF castor3d::shader::MetallicBrdfLightingModel::m_cookTorrance</definition>
+        <argsstring></argsstring>
+        <name>m_cookTorrance</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMetallicBrdfLighting.hpp" line="141" column="1" bodyfile="Shader/Shaders/GlslMetallicBrdfLighting.hpp" bodystart="141" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/de3/a05388_1a677610f5d70de9f130978e61ab1ffbb5" prot="public" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Void, InDirectionalLight, sdw::InVec3, sdw::InVec3, sdw::InFloat, sdw::InFloat, sdw::InInt, InSurface, <ref refid="db/d21/a05396" kindref="compound">OutputComponents</ref> &amp; &gt;</type>
+        <definition>sdw::Function&lt; sdw::Void , InDirectionalLight , sdw::InVec3 , sdw::InVec3 , sdw::InFloat , sdw::InFloat , sdw::InInt , InSurface , OutputComponents &amp; &gt; castor3d::shader::MetallicBrdfLightingModel::m_computeDirectional</definition>
+        <argsstring></argsstring>
+        <name>m_computeDirectional</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMetallicBrdfLighting.hpp" line="150" column="1" bodyfile="Shader/Shaders/GlslMetallicBrdfLighting.hpp" bodystart="150" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/de3/a05388_1a8a0fba01f47797a964c217259e522d41" prot="public" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Void, InPointLight, sdw::InVec3, sdw::InVec3, sdw::InFloat, sdw::InFloat, sdw::InInt, InSurface, <ref refid="db/d21/a05396" kindref="compound">OutputComponents</ref> &amp; &gt;</type>
+        <definition>sdw::Function&lt; sdw::Void , InPointLight , sdw::InVec3 , sdw::InVec3 , sdw::InFloat , sdw::InFloat , sdw::InInt , InSurface , OutputComponents &amp; &gt; castor3d::shader::MetallicBrdfLightingModel::m_computePoint</definition>
+        <argsstring></argsstring>
+        <name>m_computePoint</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMetallicBrdfLighting.hpp" line="159" column="1" bodyfile="Shader/Shaders/GlslMetallicBrdfLighting.hpp" bodystart="159" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/de3/a05388_1a56465b44263cdb4790bcd10b9335266b" prot="public" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Void, InSpotLight, sdw::InVec3, sdw::InVec3, sdw::InFloat, sdw::InFloat, sdw::InInt, InSurface, <ref refid="db/d21/a05396" kindref="compound">OutputComponents</ref> &amp; &gt;</type>
+        <definition>sdw::Function&lt; sdw::Void , InSpotLight , sdw::InVec3 , sdw::InVec3 , sdw::InFloat , sdw::InFloat , sdw::InInt , InSurface , OutputComponents &amp; &gt; castor3d::shader::MetallicBrdfLightingModel::m_computeSpot</definition>
+        <argsstring></argsstring>
+        <name>m_computeSpot</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMetallicBrdfLighting.hpp" line="168" column="1" bodyfile="Shader/Shaders/GlslMetallicBrdfLighting.hpp" bodystart="168" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/de3/a05388_1a1704d1c7d778185edb481fae212d98e2" prot="public" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, InDirectionalLight, sdw::InVec3, sdw::InVec3, sdw::InFloat, sdw::InFloat, sdw::InInt, InSurface &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , InDirectionalLight , sdw::InVec3 , sdw::InVec3 , sdw::InFloat , sdw::InFloat , sdw::InInt , InSurface &gt; castor3d::shader::MetallicBrdfLightingModel::m_computeDirectionalDiffuse</definition>
+        <argsstring></argsstring>
+        <name>m_computeDirectionalDiffuse</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMetallicBrdfLighting.hpp" line="176" column="1" bodyfile="Shader/Shaders/GlslMetallicBrdfLighting.hpp" bodystart="176" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/de3/a05388_1a1769ec799d52dc053e17cf7c5da4ed3a" prot="public" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, InPointLight, sdw::InVec3, sdw::InVec3, sdw::InFloat, sdw::InFloat, sdw::InInt, InSurface &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , InPointLight , sdw::InVec3 , sdw::InVec3 , sdw::InFloat , sdw::InFloat , sdw::InInt , InSurface &gt; castor3d::shader::MetallicBrdfLightingModel::m_computePointDiffuse</definition>
+        <argsstring></argsstring>
+        <name>m_computePointDiffuse</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMetallicBrdfLighting.hpp" line="184" column="1" bodyfile="Shader/Shaders/GlslMetallicBrdfLighting.hpp" bodystart="184" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/de3/a05388_1a903cd85bb1dcd7735e0c4c52d9a33bdd" prot="public" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, InSpotLight, sdw::InVec3, sdw::InVec3, sdw::InFloat, sdw::InFloat, sdw::InInt, InSurface &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , InSpotLight , sdw::InVec3 , sdw::InVec3 , sdw::InFloat , sdw::InFloat , sdw::InInt , InSurface &gt; castor3d::shader::MetallicBrdfLightingModel::m_computeSpotDiffuse</definition>
+        <argsstring></argsstring>
+        <name>m_computeSpotDiffuse</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMetallicBrdfLighting.hpp" line="192" column="1" bodyfile="Shader/Shaders/GlslMetallicBrdfLighting.hpp" bodystart="192" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/de3/a05388_1ab2d15b308ebae1b6d560f9ff9c9fb1ce" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::MetallicBrdfLightingModel::MetallicBrdfLightingModel</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, Utils &amp;utils, ShadowOptions shadowOptions, bool isOpaqueProgram)</argsstring>
+        <name>MetallicBrdfLightingModel</name>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d54/a05436" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/ddf/a05444" kindref="compound">ShadowOptions</ref></type>
+          <declname>shadowOptions</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isOpaqueProgram</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMetallicBrdfLighting.hpp" line="20" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="da/de3/a05388_1a40ddfab7030928b02c8828058f542712" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::MetallicBrdfLightingModel::computeCombined</definition>
+        <argsstring>(sdw::Vec3 const &amp;worldEye, sdw::Vec3 const &amp;albedo, sdw::Float const &amp;metallic, sdw::Float const &amp;roughness, sdw::Int const &amp;receivesShadows, Surface surface, OutputComponents &amp;output) const</argsstring>
+        <name>computeCombined</name>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldEye</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>albedo</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>metallic</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>roughness</declname>
+        </param>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>receivesShadows</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d39/a05424" kindref="compound">Surface</ref></type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type><ref refid="db/d21/a05396" kindref="compound">OutputComponents</ref> &amp;</type>
+          <declname>output</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMetallicBrdfLighting.hpp" line="24" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="da/de3/a05388_1af21347aedf4ac85f1976f364a29213ad" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::MetallicBrdfLightingModel::compute</definition>
+        <argsstring>(DirectionalLight const &amp;light, sdw::Vec3 const &amp;worldEye, sdw::Vec3 const &amp;albedo, sdw::Float const &amp;metallic, sdw::Float const &amp;roughness, sdw::Int const &amp;receivesShadows, Surface surface, OutputComponents &amp;output) const</argsstring>
+        <name>compute</name>
+        <param>
+          <type><ref refid="d0/d8d/a05340" kindref="compound">DirectionalLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldEye</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>albedo</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>metallic</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>roughness</declname>
+        </param>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>receivesShadows</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d39/a05424" kindref="compound">Surface</ref></type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type><ref refid="db/d21/a05396" kindref="compound">OutputComponents</ref> &amp;</type>
+          <declname>output</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMetallicBrdfLighting.hpp" line="31" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="da/de3/a05388_1a30ed8d3194889aba2cfd4cfb6bc91ee4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::MetallicBrdfLightingModel::compute</definition>
+        <argsstring>(PointLight const &amp;light, sdw::Vec3 const &amp;worldEye, sdw::Vec3 const &amp;albedo, sdw::Float const &amp;metallic, sdw::Float const &amp;roughness, sdw::Int const &amp;receivesShadows, Surface surface, OutputComponents &amp;output) const</argsstring>
+        <name>compute</name>
+        <param>
+          <type><ref refid="da/def/a05344" kindref="compound">PointLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldEye</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>albedo</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>metallic</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>roughness</declname>
+        </param>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>receivesShadows</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d39/a05424" kindref="compound">Surface</ref></type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type><ref refid="db/d21/a05396" kindref="compound">OutputComponents</ref> &amp;</type>
+          <declname>output</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMetallicBrdfLighting.hpp" line="39" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="da/de3/a05388_1a52745e53cb8e9c11716b33073f9a8885" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::MetallicBrdfLightingModel::compute</definition>
+        <argsstring>(SpotLight const &amp;light, sdw::Vec3 const &amp;worldEye, sdw::Vec3 const &amp;albedo, sdw::Float const &amp;metallic, sdw::Float const &amp;roughness, sdw::Int const &amp;receivesShadows, Surface surface, OutputComponents &amp;output) const</argsstring>
+        <name>compute</name>
+        <param>
+          <type><ref refid="d8/dd6/a05348" kindref="compound">SpotLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldEye</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>albedo</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>metallic</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>roughness</declname>
+        </param>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>receivesShadows</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d39/a05424" kindref="compound">Surface</ref></type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type><ref refid="db/d21/a05396" kindref="compound">OutputComponents</ref> &amp;</type>
+          <declname>output</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMetallicBrdfLighting.hpp" line="47" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="da/de3/a05388_1a5635645dedb6bf56d055bbd5e76323d6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::MetallicBrdfLightingModel::computeCombinedDiffuse</definition>
+        <argsstring>(sdw::Vec3 const &amp;worldEye, sdw::Vec3 const &amp;albedo, sdw::Float const &amp;metallic, sdw::Float const &amp;roughness, sdw::Int const &amp;receivesShadows, Surface surface) const</argsstring>
+        <name>computeCombinedDiffuse</name>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldEye</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>albedo</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>metallic</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>roughness</declname>
+        </param>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>receivesShadows</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d39/a05424" kindref="compound">Surface</ref></type>
+          <declname>surface</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMetallicBrdfLighting.hpp" line="55" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="da/de3/a05388_1ac53f08b18bce573354875b15ad0163fb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::MetallicBrdfLightingModel::computeDiffuse</definition>
+        <argsstring>(DirectionalLight const &amp;light, sdw::Vec3 const &amp;worldEye, sdw::Vec3 const &amp;albedo, sdw::Float const &amp;metallic, sdw::Float const &amp;roughness, sdw::Int const &amp;receivesShadows, Surface surface) const</argsstring>
+        <name>computeDiffuse</name>
+        <param>
+          <type><ref refid="d0/d8d/a05340" kindref="compound">DirectionalLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldEye</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>albedo</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>metallic</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>roughness</declname>
+        </param>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>receivesShadows</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d39/a05424" kindref="compound">Surface</ref></type>
+          <declname>surface</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMetallicBrdfLighting.hpp" line="61" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="da/de3/a05388_1aeac355536097e8194f9756488d1da7fb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::MetallicBrdfLightingModel::computeDiffuse</definition>
+        <argsstring>(PointLight const &amp;light, sdw::Vec3 const &amp;worldEye, sdw::Vec3 const &amp;albedo, sdw::Float const &amp;metallic, sdw::Float const &amp;roughness, sdw::Int const &amp;receivesShadows, Surface surface) const</argsstring>
+        <name>computeDiffuse</name>
+        <param>
+          <type><ref refid="da/def/a05344" kindref="compound">PointLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldEye</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>albedo</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>metallic</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>roughness</declname>
+        </param>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>receivesShadows</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d39/a05424" kindref="compound">Surface</ref></type>
+          <declname>surface</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMetallicBrdfLighting.hpp" line="68" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="da/de3/a05388_1a8fef28757b24a804b45af9f334443a28" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::MetallicBrdfLightingModel::computeDiffuse</definition>
+        <argsstring>(SpotLight const &amp;light, sdw::Vec3 const &amp;worldEye, sdw::Vec3 const &amp;albedo, sdw::Float const &amp;metallic, sdw::Float const &amp;roughness, sdw::Int const &amp;receivesShadows, Surface surface) const</argsstring>
+        <name>computeDiffuse</name>
+        <param>
+          <type><ref refid="d8/dd6/a05348" kindref="compound">SpotLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldEye</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>albedo</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>metallic</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>roughness</declname>
+        </param>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>receivesShadows</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d39/a05424" kindref="compound">Surface</ref></type>
+          <declname>surface</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMetallicBrdfLighting.hpp" line="75" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="da/de3/a05388_1ad52f312a35650b9edf0c8bcdeaca2d07" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::MetallicBrdfLightingModel::computeMapContributions</definition>
+        <argsstring>(PipelineFlags const &amp;flags, sdw::Float const &amp;gamma, TextureConfigurations const &amp;textureConfigs, sdw::Array&lt; sdw::UVec4 &gt; const &amp;textureConfig, sdw::Array&lt; sdw::SampledImage2DRgba32 &gt; const &amp;maps, sdw::Vec3 const &amp;texCoords, sdw::Vec3 &amp;normal, sdw::Vec3 &amp;tangent, sdw::Vec3 &amp;bitangent, sdw::Vec3 &amp;emissive, sdw::Float &amp;opacity, sdw::Float &amp;occlusion, sdw::Float &amp;transmittance, sdw::Vec3 &amp;albedo, sdw::Float &amp;metallic, sdw::Float &amp;roughness, sdw::Vec3 &amp;tangentSpaceViewPosition, sdw::Vec3 &amp;tangentSpaceFragPosition)</argsstring>
+        <name>computeMapContributions</name>
+        <param>
+          <type><ref refid="dd/db6/a04580" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>gamma</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/d73/a05432" kindref="compound">TextureConfigurations</ref> const &amp;</type>
+          <declname>textureConfigs</declname>
+        </param>
+        <param>
+          <type>sdw::Array&lt; sdw::UVec4 &gt; const &amp;</type>
+          <declname>textureConfig</declname>
+        </param>
+        <param>
+          <type>sdw::Array&lt; sdw::SampledImage2DRgba32 &gt; const &amp;</type>
+          <declname>maps</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>texCoords</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>normal</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>tangent</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>bitangent</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>emissive</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>opacity</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>occlusion</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>transmittance</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>albedo</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>metallic</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>roughness</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>tangentSpaceViewPosition</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>tangentSpaceFragPosition</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMetallicBrdfLighting.hpp" line="98" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="da/de3/a05388_1ab4bfa00e845e4ed1965af29927a2d98d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::MetallicBrdfLightingModel::computeMapVoxelContributions</definition>
+        <argsstring>(PipelineFlags const &amp;flags, sdw::Float const &amp;gamma, TextureConfigurations const &amp;textureConfigs, sdw::Array&lt; sdw::UVec4 &gt; const &amp;textureConfig, sdw::Array&lt; sdw::SampledImage2DRgba32 &gt; const &amp;maps, sdw::Vec3 const &amp;texCoords, sdw::Vec3 &amp;emissive, sdw::Float &amp;opacity, sdw::Float &amp;occlusion, sdw::Vec3 &amp;albedo, sdw::Float &amp;metallic, sdw::Float &amp;roughness)</argsstring>
+        <name>computeMapVoxelContributions</name>
+        <param>
+          <type><ref refid="dd/db6/a04580" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>gamma</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/d73/a05432" kindref="compound">TextureConfigurations</ref> const &amp;</type>
+          <declname>textureConfigs</declname>
+        </param>
+        <param>
+          <type>sdw::Array&lt; sdw::UVec4 &gt; const &amp;</type>
+          <declname>textureConfig</declname>
+        </param>
+        <param>
+          <type>sdw::Array&lt; sdw::SampledImage2DRgba32 &gt; const &amp;</type>
+          <declname>maps</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>texCoords</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>emissive</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>opacity</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>occlusion</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>albedo</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>metallic</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>roughness</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMetallicBrdfLighting.hpp" line="116" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="da/de3/a05388_1a5753b9614d35e914772dc1a6cf9124c6" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::shared_ptr&lt; <ref refid="da/de3/a05388" kindref="compound">MetallicBrdfLightingModel</ref> &gt;</type>
+        <definition>static C3D_API std::shared_ptr&lt; MetallicBrdfLightingModel &gt; castor3d::shader::MetallicBrdfLightingModel::createModel</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, Utils &amp;utils, ShadowOptions const &amp;shadows, uint32_t &amp;index, bool isOpaqueProgram)</argsstring>
+        <name>createModel</name>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d54/a05436" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/ddf/a05444" kindref="compound">ShadowOptions</ref> const &amp;</type>
+          <declname>shadows</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isOpaqueProgram</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMetallicBrdfLighting.hpp" line="82" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="da/de3/a05388_1ab3ffb78198847e7f4051636b86f3f3bb" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::shared_ptr&lt; <ref refid="da/de3/a05388" kindref="compound">MetallicBrdfLightingModel</ref> &gt;</type>
+        <definition>static C3D_API std::shared_ptr&lt; MetallicBrdfLightingModel &gt; castor3d::shader::MetallicBrdfLightingModel::createModel</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, Utils &amp;utils, LightType light, bool lightUbo, ShadowOptions const &amp;shadows, uint32_t &amp;index)</argsstring>
+        <name>createModel</name>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d54/a05436" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d1e/a01479_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>lightUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/ddf/a05444" kindref="compound">ShadowOptions</ref> const &amp;</type>
+          <declname>shadows</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMetallicBrdfLighting.hpp" line="87" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="da/de3/a05388_1ae8872f993e5ad5385e4796e9141aba73" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::shared_ptr&lt; <ref refid="da/de3/a05388" kindref="compound">MetallicBrdfLightingModel</ref> &gt;</type>
+        <definition>static C3D_API std::shared_ptr&lt; MetallicBrdfLightingModel &gt; castor3d::shader::MetallicBrdfLightingModel::createDiffuseModel</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, Utils &amp;utils, ShadowOptions const &amp;shadows, uint32_t &amp;index, bool isOpaqueProgram)</argsstring>
+        <name>createDiffuseModel</name>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d54/a05436" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/ddf/a05444" kindref="compound">ShadowOptions</ref> const &amp;</type>
+          <declname>shadows</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isOpaqueProgram</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMetallicBrdfLighting.hpp" line="93" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="da/de3/a05388_1a03f0740e55597ce241f5b4050f608eed" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::MetallicBrdfLightingModel::doDeclareModel</definition>
+        <argsstring>() override</argsstring>
+        <name>doDeclareModel</name>
+        <reimplements refid="dd/d2f/a05352_1ae2a3ded61a442482f06c85c29ea24b04">doDeclareModel</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMetallicBrdfLighting.hpp" line="130" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="da/de3/a05388_1a33a04ccab759c274a0f907a16c26296c" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::MetallicBrdfLightingModel::doDeclareComputeDirectionalLight</definition>
+        <argsstring>() override</argsstring>
+        <name>doDeclareComputeDirectionalLight</name>
+        <reimplements refid="dd/d2f/a05352_1a9c6a575c7a121556d1fb476bea5d6bf2">doDeclareComputeDirectionalLight</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMetallicBrdfLighting.hpp" line="131" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="da/de3/a05388_1ae7217eac829305926541a27b56335a70" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::MetallicBrdfLightingModel::doDeclareComputePointLight</definition>
+        <argsstring>() override</argsstring>
+        <name>doDeclareComputePointLight</name>
+        <reimplements refid="dd/d2f/a05352_1afa3f59926bb5d7666b9243de69d7a9c2">doDeclareComputePointLight</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMetallicBrdfLighting.hpp" line="132" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="da/de3/a05388_1a21db73144a8499736853abe84e30ebb1" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::MetallicBrdfLightingModel::doDeclareComputeSpotLight</definition>
+        <argsstring>() override</argsstring>
+        <name>doDeclareComputeSpotLight</name>
+        <reimplements refid="dd/d2f/a05352_1af34a816a20b6c7d5ec6286f5045f40d2">doDeclareComputeSpotLight</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMetallicBrdfLighting.hpp" line="133" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="da/de3/a05388_1a689b8bb6a4074d78208b4952a2cdfc1f" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::MetallicBrdfLightingModel::doDeclareDiffuseModel</definition>
+        <argsstring>() override</argsstring>
+        <name>doDeclareDiffuseModel</name>
+        <reimplements refid="dd/d2f/a05352_1af58895948c91e3f79ff8230e9534a281">doDeclareDiffuseModel</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMetallicBrdfLighting.hpp" line="134" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="da/de3/a05388_1a7b152a5083da5d980509e22b5bde36c8" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::MetallicBrdfLightingModel::doDeclareComputeDirectionalLightDiffuse</definition>
+        <argsstring>() override</argsstring>
+        <name>doDeclareComputeDirectionalLightDiffuse</name>
+        <reimplements refid="dd/d2f/a05352_1aad2f92a29681d4b0511973af3a31e276">doDeclareComputeDirectionalLightDiffuse</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMetallicBrdfLighting.hpp" line="135" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="da/de3/a05388_1aa28c0aaca85a245a06f682141c79eb93" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::MetallicBrdfLightingModel::doDeclareComputePointLightDiffuse</definition>
+        <argsstring>() override</argsstring>
+        <name>doDeclareComputePointLightDiffuse</name>
+        <reimplements refid="dd/d2f/a05352_1a7490bf6134ff2b323b10fbaf781a37bc">doDeclareComputePointLightDiffuse</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMetallicBrdfLighting.hpp" line="136" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="da/de3/a05388_1ac32713bb75b6837a9f12460f6d1e6f39" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::MetallicBrdfLightingModel::doDeclareComputeSpotLightDiffuse</definition>
+        <argsstring>() override</argsstring>
+        <name>doDeclareComputeSpotLightDiffuse</name>
+        <reimplements refid="dd/d2f/a05352_1afd78d88ba2a1d93ec50557dc64993977">doDeclareComputeSpotLightDiffuse</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMetallicBrdfLighting.hpp" line="137" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3477">
+        <label>castor3d::shader::LightingModel</label>
+        <link refid="dd/d2f/a05352"/>
+      </node>
+      <node id="3476">
+        <label>castor3d::shader::MetallicBrdfLightingModel</label>
+        <link refid="da/de3/a05388"/>
+        <childnode refid="3477" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3482">
+        <label>T</label>
+      </node>
+      <node id="3485">
+        <label>std::shared_ptr&lt; T &gt;</label>
+        <childnode refid="3482" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="3483">
+        <label>std::shared_ptr&lt; castor3d::shader::Shadow &gt;</label>
+        <childnode refid="3484" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+        <childnode refid="3485" relation="template-instance">
+          <edgelabel>&lt; castor3d::shader::Shadow &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3486">
+        <label>castor3d::shader::Utils</label>
+        <link refid="d9/d54/a05436"/>
+      </node>
+      <node id="3481">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="3482" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="3479">
+        <label>castor3d::shader::LightingModel</label>
+        <link refid="dd/d2f/a05352"/>
+        <childnode refid="3480" relation="usage">
+          <edgelabel>m_directionalLightType</edgelabel>
+          <edgelabel>m_spotLightType</edgelabel>
+          <edgelabel>m_pointLightType</edgelabel>
+          <edgelabel>m_lightType</edgelabel>
+        </childnode>
+        <childnode refid="3483" relation="usage">
+          <edgelabel>m_shadowModel</edgelabel>
+        </childnode>
+        <childnode refid="3486" relation="usage">
+          <edgelabel>m_utils</edgelabel>
+        </childnode>
+      </node>
+      <node id="3484">
+        <label>castor3d::shader::Shadow</label>
+        <link refid="da/df4/a05408"/>
+      </node>
+      <node id="3480">
+        <label>std::unique_ptr&lt; sdw::Struct &gt;</label>
+        <childnode refid="3481" relation="template-instance">
+          <edgelabel>&lt; sdw::Struct &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3487">
+        <label>castor3d::shader::CookTorranceBRDF</label>
+        <link refid="d6/d9d/a05324"/>
+      </node>
+      <node id="3478">
+        <label>castor3d::shader::MetallicBrdfLightingModel</label>
+        <link refid="da/de3/a05388"/>
+        <childnode refid="3479" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3487" relation="usage">
+          <edgelabel>m_cookTorrance</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslMetallicBrdfLighting.hpp" line="18" column="1" bodyfile="Shader/Shaders/GlslMetallicBrdfLighting.hpp" bodystart="16" bodyend="193"/>
+    <listofallmembers>
+      <member refid="da/de3/a05388_1af21347aedf4ac85f1976f364a29213ad" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>compute</name></member>
+      <member refid="da/de3/a05388_1a30ed8d3194889aba2cfd4cfb6bc91ee4" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>compute</name></member>
+      <member refid="da/de3/a05388_1a52745e53cb8e9c11716b33073f9a8885" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>compute</name></member>
+      <member refid="da/de3/a05388_1a40ddfab7030928b02c8828058f542712" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>computeCombined</name></member>
+      <member refid="da/de3/a05388_1a5635645dedb6bf56d055bbd5e76323d6" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>computeCombinedDiffuse</name></member>
+      <member refid="da/de3/a05388_1ac53f08b18bce573354875b15ad0163fb" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>computeDiffuse</name></member>
+      <member refid="da/de3/a05388_1aeac355536097e8194f9756488d1da7fb" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>computeDiffuse</name></member>
+      <member refid="da/de3/a05388_1a8fef28757b24a804b45af9f334443a28" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>computeDiffuse</name></member>
+      <member refid="da/de3/a05388_1ad52f312a35650b9edf0c8bcdeaca2d07" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>computeMapContributions</name></member>
+      <member refid="da/de3/a05388_1ab4bfa00e845e4ed1965af29927a2d98d" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>computeMapVoxelContributions</name></member>
+      <member refid="da/de3/a05388_1ae8872f993e5ad5385e4796e9141aba73" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>createDiffuseModel</name></member>
+      <member refid="da/de3/a05388_1a5753b9614d35e914772dc1a6cf9124c6" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>createModel</name></member>
+      <member refid="da/de3/a05388_1ab3ffb78198847e7f4051636b86f3f3bb" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>createModel</name></member>
+      <member refid="dd/d2f/a05352_1ae6a7960238d8c4c895e761055d25f71e" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>declareDiffuseModel</name></member>
+      <member refid="dd/d2f/a05352_1a59de007eae6f78a97dc6613e20687cfa" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>declareDirectionalModel</name></member>
+      <member refid="dd/d2f/a05352_1a6fa012bb8e25e81c54552f4a0622fd51" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>declareModel</name></member>
+      <member refid="dd/d2f/a05352_1adb3fdba9dbcaa69cb9c047caee5023d3" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>declarePointModel</name></member>
+      <member refid="dd/d2f/a05352_1aaafcbc52cbc035824573a5507f6560fe" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>declareSpotModel</name></member>
+      <member refid="da/de3/a05388_1a33a04ccab759c274a0f907a16c26296c" prot="protected" virt="virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>doDeclareComputeDirectionalLight</name></member>
+      <member refid="da/de3/a05388_1a7b152a5083da5d980509e22b5bde36c8" prot="protected" virt="virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>doDeclareComputeDirectionalLightDiffuse</name></member>
+      <member refid="da/de3/a05388_1ae7217eac829305926541a27b56335a70" prot="protected" virt="virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>doDeclareComputePointLight</name></member>
+      <member refid="da/de3/a05388_1aa28c0aaca85a245a06f682141c79eb93" prot="protected" virt="virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>doDeclareComputePointLightDiffuse</name></member>
+      <member refid="da/de3/a05388_1a21db73144a8499736853abe84e30ebb1" prot="protected" virt="virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>doDeclareComputeSpotLight</name></member>
+      <member refid="da/de3/a05388_1ac32713bb75b6837a9f12460f6d1e6f39" prot="protected" virt="virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>doDeclareComputeSpotLightDiffuse</name></member>
+      <member refid="da/de3/a05388_1a689b8bb6a4074d78208b4952a2cdfc1f" prot="protected" virt="virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>doDeclareDiffuseModel</name></member>
+      <member refid="dd/d2f/a05352_1ab75ebaade730fc204cb1c49d5c9b1e79" prot="protected" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>doDeclareDirectionalLight</name></member>
+      <member refid="dd/d2f/a05352_1aad852f3394711dd1ca914dd553051c7a" prot="protected" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>doDeclareDirectionalLightUbo</name></member>
+      <member refid="dd/d2f/a05352_1a601b0d6adbf1d1cfe51140debba408a9" prot="protected" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>doDeclareGetBaseLight</name></member>
+      <member refid="dd/d2f/a05352_1a581d0e6a5c217533e521488ae0309d3c" prot="protected" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>doDeclareGetCascadeFactors</name></member>
+      <member refid="dd/d2f/a05352_1a47f393ce5b750d7a8132df92ede2eaab" prot="protected" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>doDeclareGetDirectionalLight</name></member>
+      <member refid="dd/d2f/a05352_1aa639e3a479f852a8738a962669961f79" prot="protected" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>doDeclareGetPointLight</name></member>
+      <member refid="dd/d2f/a05352_1a14e3657549948e3665c5b7f47bc0e2a2" prot="protected" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>doDeclareGetSpotLight</name></member>
+      <member refid="dd/d2f/a05352_1a3d6d09b7fe9685af9258658d250f23e7" prot="protected" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>doDeclareLight</name></member>
+      <member refid="da/de3/a05388_1a03f0740e55597ce241f5b4050f608eed" prot="protected" virt="virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>doDeclareModel</name></member>
+      <member refid="dd/d2f/a05352_1a3c3992c172379ebf21ab50aa9391376e" prot="protected" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>doDeclarePointLight</name></member>
+      <member refid="dd/d2f/a05352_1a83eb154360ce36bf2434156d6d02c335" prot="protected" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>doDeclarePointLightUbo</name></member>
+      <member refid="dd/d2f/a05352_1a0339e3d72944e69ff66aeb0241aaa6b3" prot="protected" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>doDeclareSpotLight</name></member>
+      <member refid="dd/d2f/a05352_1a5695af4e75e3b709f5f517e4fbf5a07c" prot="protected" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>doDeclareSpotLightUbo</name></member>
+      <member refid="dd/d2f/a05352_1a737f308cd9c4f80cabeb2d64ec298d18" prot="protected" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>getBaseLight</name></member>
+      <member refid="dd/d2f/a05352_1a39fb5d9d359a1c94ceb2dc0f8708ef64" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>getDirectionalLight</name></member>
+      <member refid="dd/d2f/a05352_1a026da585989c9d145e8f6c19ca7d89c5" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>getPointLight</name></member>
+      <member refid="dd/d2f/a05352_1a7059cb1128a39d0a2448fe23ae8fbbac" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>getShadowModel</name></member>
+      <member refid="dd/d2f/a05352_1a6d2910a01a8e91b85d9ed6df85ceb151" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>getSpotLight</name></member>
+      <member refid="dd/d2f/a05352_1ae160c6345ef23a0a0b804e11c1cd0f87" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>LightingModel</name></member>
+      <member refid="da/de3/a05388_1a677610f5d70de9f130978e61ab1ffbb5" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>m_computeDirectional</name></member>
+      <member refid="da/de3/a05388_1a1704d1c7d778185edb481fae212d98e2" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>m_computeDirectionalDiffuse</name></member>
+      <member refid="da/de3/a05388_1a8a0fba01f47797a964c217259e522d41" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>m_computePoint</name></member>
+      <member refid="da/de3/a05388_1a1769ec799d52dc053e17cf7c5da4ed3a" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>m_computePointDiffuse</name></member>
+      <member refid="da/de3/a05388_1a56465b44263cdb4790bcd10b9335266b" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>m_computeSpot</name></member>
+      <member refid="da/de3/a05388_1a903cd85bb1dcd7735e0c4c52d9a33bdd" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>m_computeSpotDiffuse</name></member>
+      <member refid="da/de3/a05388_1ab89f1d5e4249c1bee19e5ba39c0d1b2b" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>m_cookTorrance</name></member>
+      <member refid="dd/d2f/a05352_1a4ea653241ca0d3c9bdb57237c555b641" prot="protected" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>m_directionalLightType</name></member>
+      <member refid="dd/d2f/a05352_1a7ef6a49df779cb9c673272418da7e7fa" prot="protected" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>m_getBaseLight</name></member>
+      <member refid="dd/d2f/a05352_1a64689c5bb7ce2682e205cd001b5f6fd8" prot="protected" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>m_getCascadeFactors</name></member>
+      <member refid="dd/d2f/a05352_1a31203146876984766b13922b4d9bd624" prot="protected" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>m_getDirectionalLight</name></member>
+      <member refid="dd/d2f/a05352_1af74c257d8fde9ff920c7aa50f3c94e29" prot="protected" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>m_getPointLight</name></member>
+      <member refid="dd/d2f/a05352_1af23d4d479d255debdd0576dd00616e9d" prot="protected" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>m_getSpotLight</name></member>
+      <member refid="dd/d2f/a05352_1a8bc492d16fd0eddb81da5af6017f6aa4" prot="protected" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>m_isOpaqueProgram</name></member>
+      <member refid="dd/d2f/a05352_1a5b4a48e5d0b71a3023c71005e85c02c3" prot="protected" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>m_lightType</name></member>
+      <member refid="dd/d2f/a05352_1aa4be9073ceba038190a889971091f0c5" prot="protected" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>m_pointLightType</name></member>
+      <member refid="dd/d2f/a05352_1a3e9407685cf7ba55a752a27437c09a74" prot="protected" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>m_shadowModel</name></member>
+      <member refid="dd/d2f/a05352_1a821f9af61e23ca562f5afcd5d394be4d" prot="protected" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>m_spotLightType</name></member>
+      <member refid="dd/d2f/a05352_1a9e5d3c9e33f06597c63d4c64b62bc564" prot="protected" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>m_utils</name></member>
+      <member refid="dd/d2f/a05352_1a129490d8e4f0ea553f16dcaeb2b2c089" prot="protected" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>m_writer</name></member>
+      <member refid="da/de3/a05388_1ab2d15b308ebae1b6d560f9ff9c9fb1ce" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>MetallicBrdfLightingModel</name></member>
+      <member refid="da/de3/a05388_1aece49dea6f4b40047abed1e644c64fd8" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>Name</name></member>
+      <member refid="dd/d2f/a05352_1af836e764194e1d3119a7778fa34252ae" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicBrdfLightingModel</scope><name>UboBindingPoint</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="de/d26/a03940" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::FaceInfos</compoundname>
+    <includes local="no">FaceInfos.hpp</includes>
+    <innerclass refid="dd/dde/a03944" prot="public">castor3d::FaceInfos::Vertex</innerclass>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="de/d26/a03940_1a4a3ac3f4c86c3e2eae6aac994965e162" prot="public" static="no" mutable="no">
+        <type>std::array&lt; <ref refid="dd/dde/a03944" kindref="compound">Vertex</ref>, 3 &gt;</type>
+        <definition>std::array&lt; Vertex, 3 &gt; castor3d::FaceInfos::m_vertex</definition>
+        <argsstring></argsstring>
+        <name>m_vertex</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The 3 vertex informations. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/FaceInfos.hpp" line="42" column="1" bodyfile="Model/Mesh/Submesh/Component/FaceInfos.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1146">
+        <label>T</label>
+      </node>
+      <node id="1145">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="1146" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="1142">
+        <label>std::array&lt; castor3d::FaceInfos::Vertex, 3 &gt;</label>
+        <childnode refid="1143" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="1145" relation="template-instance">
+          <edgelabel>&lt; castor3d::FaceInfos::Vertex, 3 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1147">
+        <label>std::array&lt; float, 3 &gt;</label>
+        <childnode refid="1145" relation="template-instance">
+          <edgelabel>&lt; float, 3 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1143">
+        <label>castor3d::FaceInfos::Vertex</label>
+        <link refid="dd/dde/a03944"/>
+        <childnode refid="1144" relation="usage">
+          <edgelabel>m_fTexCoords</edgelabel>
+        </childnode>
+        <childnode refid="1147" relation="usage">
+          <edgelabel>m_fNormal</edgelabel>
+        </childnode>
+      </node>
+      <node id="1144">
+        <label>std::array&lt; float, 2 &gt;</label>
+        <childnode refid="1145" relation="template-instance">
+          <edgelabel>&lt; float, 2 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1141">
+        <label>castor3d::FaceInfos</label>
+        <link refid="de/d26/a03940"/>
+        <childnode refid="1142" relation="usage">
+          <edgelabel>m_vertex</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Model/Mesh/Submesh/Component/FaceInfos.hpp" line="12" column="1" bodyfile="Model/Mesh/Submesh/Component/FaceInfos.hpp" bodystart="11" bodyend="43"/>
+    <listofallmembers>
+      <member refid="de/d26/a03940_1a4a3ac3f4c86c3e2eae6aac994965e162" prot="public" virt="non-virtual"><scope>castor3d::FaceInfos</scope><name>m_vertex</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,4 +1,4 @@
-<map id="castor3d::BrdfPrefilter" name="castor3d::BrdfPrefilter">
-<area shape="rect" id="node1" title="Class used to render colour equirectangular textures to cube maps." alt="" coords="25,80,172,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,192,32"/>
+<map id="castor3d::Engine" name="castor3d::Engine">
+<area shape="rect" id="node1" title=" " alt="" coords="31,80,151,107"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,176,32"/>
 </map>

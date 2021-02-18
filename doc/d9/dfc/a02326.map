@@ -1,5 +1,5 @@
-<map id="castor3d::InterleavedVertexT&lt; T &gt;" name="castor3d::InterleavedVertexT&lt; T &gt;">
-<area shape="rect" id="node1" title="Holds the all components of a vertex." alt="" coords="5,243,184,284"/>
-<area shape="rect" id="node2" title=" " alt="" coords="33,95,156,121"/>
-<area shape="rect" id="node3" title=" " alt="" coords="75,5,114,32"/>
+<map id="castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;" name="castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;">
+<area shape="rect" id="node1" title="AnimatedObjectGroup cache." alt="" coords="5,229,199,271"/>
+<area shape="rect" id="node2" href="$d9/d5e/a02355.html" title=" " alt="" coords="19,124,185,180"/>
+<area shape="rect" id="node3" href="$d9/d5e/a02355.html" title="Base class for an element cache." alt="" coords="11,5,193,47"/>
 </map>

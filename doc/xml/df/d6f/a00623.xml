@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="df/d6f/a00623" kind="file" language="C++">
+    <compoundname>ToneMappingPlugin.hpp</compoundname>
+    <includes refid="dd/dc0/a00611" local="yes">Castor3D/Plugin/Plugin.hpp</includes>
+    <incdepgraph>
+      <node id="11666">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="11659">
+        <label>Castor3D/Plugin/Plugin.hpp</label>
+        <link refid="dd/dc0/a00611"/>
+        <childnode refid="11660" relation="include">
+        </childnode>
+        <childnode refid="11675" relation="include">
+        </childnode>
+      </node>
+      <node id="11669">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="11658">
+        <label>Plugin/ToneMappingPlugin.hpp</label>
+        <link refid="df/d6f/a00623"/>
+        <childnode refid="11659" relation="include">
+        </childnode>
+      </node>
+      <node id="11670">
+        <label>cstdint</label>
+      </node>
+      <node id="11668">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="11661">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d5/d35/a00266"/>
+        <childnode refid="11662" relation="include">
+        </childnode>
+        <childnode refid="11663" relation="include">
+        </childnode>
+        <childnode refid="11664" relation="include">
+        </childnode>
+        <childnode refid="11665" relation="include">
+        </childnode>
+        <childnode refid="11666" relation="include">
+        </childnode>
+        <childnode refid="11667" relation="include">
+        </childnode>
+        <childnode refid="11668" relation="include">
+        </childnode>
+        <childnode refid="11669" relation="include">
+        </childnode>
+        <childnode refid="11670" relation="include">
+        </childnode>
+        <childnode refid="11671" relation="include">
+        </childnode>
+        <childnode refid="11672" relation="include">
+        </childnode>
+        <childnode refid="11673" relation="include">
+        </childnode>
+      </node>
+      <node id="11672">
+        <label>string</label>
+      </node>
+      <node id="11665">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="11662">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="11664">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="11675">
+        <label>Castor3D/Miscellaneous/MiscellaneousModule.hpp</label>
+        <link refid="d4/d27/a00392"/>
+        <childnode refid="11661" relation="include">
+        </childnode>
+      </node>
+      <node id="11660">
+        <label>PluginModule.hpp</label>
+        <link refid="d4/dc4/a00617"/>
+        <childnode refid="11661" relation="include">
+        </childnode>
+        <childnode refid="11674" relation="include">
+        </childnode>
+      </node>
+      <node id="11663">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="11673">
+        <label>vector</label>
+      </node>
+      <node id="11667">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="11674">
+        <label>CastorUtils/Data/Path.hpp</label>
+      </node>
+      <node id="11671">
+        <label>memory</label>
+      </node>
+    </incdepgraph>
+    <innerclass refid="db/d9d/a04204" prot="public">castor3d::ToneMappingPlugin</innerclass>
+    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Plugin/ToneMappingPlugin.hpp"/>
+  </compounddef>
+</doxygen>

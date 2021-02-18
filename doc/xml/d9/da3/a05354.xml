@@ -1,0 +1,240 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d9/da3/a05354" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::LegacyMaterial</compoundname>
+    <basecompoundref refid="d7/d24/a05350" prot="public" virt="non-virtual">castor3d::shader::BaseMaterial</basecompoundref>
+    <includes local="no">GlslMaterial.hpp</includes>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="d9/da3/a05354_1ad7d996606f4248b16c37fdf5eac787b2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>friend class</type>
+        <definition>friend class LegacyMaterials</definition>
+        <argsstring></argsstring>
+        <name>LegacyMaterials</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="64" column="1" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d9/da3/a05354_1a5a81826142ef7e5eba472f63e4f7eea2" prot="private" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::LegacyMaterial::m_diffAmb</definition>
+        <argsstring></argsstring>
+        <name>m_diffAmb</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="76" column="1" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/da3/a05354_1aeebb2ab399607cfc213d0f8322041b1b" prot="private" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::LegacyMaterial::m_specShin</definition>
+        <argsstring></argsstring>
+        <name>m_specShin</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="77" column="1" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d9/da3/a05354_1af8bf1dcc1c769c44cd2494fee2007276" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::LegacyMaterial::m_ambient</definition>
+        <argsstring></argsstring>
+        <name>m_ambient</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="80" column="1" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/da3/a05354_1af43d92dc05d1079661bbe4303f7e1937" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::LegacyMaterial::m_specular</definition>
+        <argsstring></argsstring>
+        <name>m_specular</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="81" column="1" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/da3/a05354_1a201c6fdb502dd8eabb3dbe5f8bba1ad5" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::LegacyMaterial::m_shininess</definition>
+        <argsstring></argsstring>
+        <name>m_shininess</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="82" column="1" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d9/da3/a05354_1a9a110dfb09d9928b18af4e77649576a5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::LegacyMaterial::LegacyMaterial</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>LegacyMaterial</name>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="66" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/da3/a05354_1a43e7f8dbd1591803a4325d850c94adc4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::LegacyMaterial::m_diffuse</definition>
+        <argsstring>() const override</argsstring>
+        <name>m_diffuse</name>
+        <reimplements refid="d7/d24/a05350_1a53d2125ad2cf89035480642c4b5935a3">m_diffuse</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="73" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d9/da3/a05354_1a3799f3832ff5b5bcbe0169e0cd72b999" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::type::StructPtr</type>
+        <definition>static C3D_API ast::type::StructPtr castor3d::shader::LegacyMaterial::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="70" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/da3/a05354_1aee6547dd980c7b6ddda1a33c27236907" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::unique_ptr&lt; sdw::Struct &gt;</type>
+        <definition>static C3D_API std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::LegacyMaterial::declare</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>declare</name>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="71" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3431">
+        <label>castor3d::shader::LegacyMaterial</label>
+        <link refid="d9/da3/a05354"/>
+        <childnode refid="3432" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3432">
+        <label>castor3d::shader::BaseMaterial</label>
+        <link refid="d7/d24/a05350"/>
+        <childnode refid="3433" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3433">
+        <label>StructInstance</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3434">
+        <label>castor3d::shader::LegacyMaterial</label>
+        <link refid="d9/da3/a05354"/>
+        <childnode refid="3435" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3435">
+        <label>castor3d::shader::BaseMaterial</label>
+        <link refid="d7/d24/a05350"/>
+        <childnode refid="3436" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3436">
+        <label>StructInstance</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslMaterial.hpp" line="63" column="1" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="61" bodyend="83"/>
+    <listofallmembers>
+      <member refid="d7/d24/a05350_1aa92c5f97f77d29ff8f0dfece868728f7" prot="protected" virt="non-virtual"><scope>castor3d::shader::LegacyMaterial</scope><name>BaseMaterial</name></member>
+      <member refid="d9/da3/a05354_1aee6547dd980c7b6ddda1a33c27236907" prot="public" virt="non-virtual"><scope>castor3d::shader::LegacyMaterial</scope><name>declare</name></member>
+      <member refid="d9/da3/a05354_1a9a110dfb09d9928b18af4e77649576a5" prot="public" virt="non-virtual"><scope>castor3d::shader::LegacyMaterial</scope><name>LegacyMaterial</name></member>
+      <member refid="d9/da3/a05354_1ad7d996606f4248b16c37fdf5eac787b2" prot="public" virt="non-virtual"><scope>castor3d::shader::LegacyMaterial</scope><name>LegacyMaterials</name></member>
+      <member refid="d7/d24/a05350_1a3bf09051e10d4e33258b24c01211f689" prot="public" virt="non-virtual"><scope>castor3d::shader::LegacyMaterial</scope><name>m_alphaRef</name></member>
+      <member refid="d9/da3/a05354_1af8bf1dcc1c769c44cd2494fee2007276" prot="public" virt="non-virtual"><scope>castor3d::shader::LegacyMaterial</scope><name>m_ambient</name></member>
+      <member refid="d7/d24/a05350_1a80628310c3c9c349571077fd8cc50777" prot="public" virt="non-virtual"><scope>castor3d::shader::LegacyMaterial</scope><name>m_bwAccumulationOperator</name></member>
+      <member refid="d7/d24/a05350_1af37e5a55ae00676740dcee102673baf5" prot="protected" virt="non-virtual"><scope>castor3d::shader::LegacyMaterial</scope><name>m_common</name></member>
+      <member refid="d9/da3/a05354_1a5a81826142ef7e5eba472f63e4f7eea2" prot="private" virt="non-virtual"><scope>castor3d::shader::LegacyMaterial</scope><name>m_diffAmb</name></member>
+      <member refid="d9/da3/a05354_1a43e7f8dbd1591803a4325d850c94adc4" prot="public" virt="virtual"><scope>castor3d::shader::LegacyMaterial</scope><name>m_diffuse</name></member>
+      <member refid="d7/d24/a05350_1a92dbe2c949da45cf814354d6f75f27d3" prot="public" virt="non-virtual"><scope>castor3d::shader::LegacyMaterial</scope><name>m_emissive</name></member>
+      <member refid="d7/d24/a05350_1a7873a018d579b288529701becf5ccd46" prot="public" virt="non-virtual"><scope>castor3d::shader::LegacyMaterial</scope><name>m_gamma</name></member>
+      <member refid="d7/d24/a05350_1acfe264c79efa253c5475927be54b031b" prot="public" virt="non-virtual"><scope>castor3d::shader::LegacyMaterial</scope><name>m_gaussianWidth</name></member>
+      <member refid="d7/d24/a05350_1a04d5d58486d182883228da98df0d961d" prot="public" virt="non-virtual"><scope>castor3d::shader::LegacyMaterial</scope><name>m_hasReflection</name></member>
+      <member refid="d7/d24/a05350_1a94a2eb1db895a2969442109edd1e7c3a" prot="public" virt="non-virtual"><scope>castor3d::shader::LegacyMaterial</scope><name>m_hasRefraction</name></member>
+      <member refid="d7/d24/a05350_1a61b357710c945abd446a2287a1682fdf" prot="public" virt="non-virtual"><scope>castor3d::shader::LegacyMaterial</scope><name>m_opacity</name></member>
+      <member refid="d7/d24/a05350_1a1c5c02ef3092dd62800a57fb5d210090" prot="protected" virt="non-virtual"><scope>castor3d::shader::LegacyMaterial</scope><name>m_opacityTransmission</name></member>
+      <member refid="d7/d24/a05350_1aee61a848046229fc94d8fadf7d6e1fdb" prot="protected" virt="non-virtual"><scope>castor3d::shader::LegacyMaterial</scope><name>m_reflRefr</name></member>
+      <member refid="d7/d24/a05350_1ab2b67f4bb4d4019078e38a115ed9cdd9" prot="public" virt="non-virtual"><scope>castor3d::shader::LegacyMaterial</scope><name>m_refractionRatio</name></member>
+      <member refid="d9/da3/a05354_1a201c6fdb502dd8eabb3dbe5f8bba1ad5" prot="public" virt="non-virtual"><scope>castor3d::shader::LegacyMaterial</scope><name>m_shininess</name></member>
+      <member refid="d9/da3/a05354_1aeebb2ab399607cfc213d0f8322041b1b" prot="private" virt="non-virtual"><scope>castor3d::shader::LegacyMaterial</scope><name>m_specShin</name></member>
+      <member refid="d9/da3/a05354_1af43d92dc05d1079661bbe4303f7e1937" prot="public" virt="non-virtual"><scope>castor3d::shader::LegacyMaterial</scope><name>m_specular</name></member>
+      <member refid="d7/d24/a05350_1a868ef28d386d3e432f3101b971c984fc" prot="protected" virt="non-virtual"><scope>castor3d::shader::LegacyMaterial</scope><name>m_sssInfo</name></member>
+      <member refid="d7/d24/a05350_1a6d1fa7f1eccbd915bc192db9197a0e85" prot="public" virt="non-virtual"><scope>castor3d::shader::LegacyMaterial</scope><name>m_subsurfaceScatteringEnabled</name></member>
+      <member refid="d7/d24/a05350_1a8788c73cab884e2629dad0c58a042171" prot="public" virt="non-virtual"><scope>castor3d::shader::LegacyMaterial</scope><name>m_subsurfaceScatteringStrength</name></member>
+      <member refid="d7/d24/a05350_1a419dd5311a61d939db0aa17de9917e18" prot="public" virt="non-virtual"><scope>castor3d::shader::LegacyMaterial</scope><name>m_transmission</name></member>
+      <member refid="d7/d24/a05350_1a229ae30e10cd8e5fc96ff3235543954a" prot="public" virt="non-virtual"><scope>castor3d::shader::LegacyMaterial</scope><name>m_transmittanceProfile</name></member>
+      <member refid="d7/d24/a05350_1aba4f901d07e5cd1f65512ea90a0b945c" prot="public" virt="non-virtual"><scope>castor3d::shader::LegacyMaterial</scope><name>m_transmittanceProfileSize</name></member>
+      <member refid="d9/da3/a05354_1a3799f3832ff5b5bcbe0169e0cd72b999" prot="public" virt="non-virtual"><scope>castor3d::shader::LegacyMaterial</scope><name>makeType</name></member>
+      <member refid="d7/d24/a05350_1a8cdd035d9c7a874450446c705d3a7f82" prot="public" virt="virtual"><scope>castor3d::shader::LegacyMaterial</scope><name>~BaseMaterial</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

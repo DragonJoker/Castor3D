@@ -10,6 +10,7 @@
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="Castor3D.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -17,10 +18,12 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="castor-small.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Castor3D
-   &#160;<span id="projectnumber">..</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
+   <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
  </tr>
  </tbody>
@@ -43,556 +46,818 @@ $(function() {
 
 <h3><a id="index_c"></a>- c -</h3><ul>
 <li>Cache()
-: <a class="el" href="dc/d51/a01764.html#a8fef3c63e79828f22ab9ac05051742ed">castor3d::Cache&lt; ElementType, KeyType &gt;</a>
-, <a class="el" href="d1/d42/a01800.html#a502897db6fd8d64ce12b55d98703e990">castor3d::Cache&lt; Material, castor::String &gt;</a>
-, <a class="el" href="d2/d77/a01824.html#a38e5467e68b1c2c3e6e793b8f37714ef">castor3d::Cache&lt; Overlay, castor::String &gt;</a>
-, <a class="el" href="d2/dbd/a01844.html#a3e8d1f219b3b9b55cdb7b1300ff21269">castor3d::Cache&lt; Plugin, castor::String &gt;</a>
+: <a class="el" href="da/d75/a02372.html#a8fef3c63e79828f22ab9ac05051742ed">castor3d::Cache&lt; ElementType, KeyType &gt;</a>
+, <a class="el" href="da/db4/a02348.html#a3945ce1e5ac552fc020ebf832c791810">castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</a>
+, <a class="el" href="d1/df5/a02496.html#a535e30e0472d87ab641b80cf5ee17413">castor3d::Cache&lt; Overlay, castor::String &gt;</a>
+, <a class="el" href="d9/de2/a02508.html#a6b64058412123e5cf44dc7e4d444b03f">castor3d::Cache&lt; Plugin, castor::String &gt;</a>
 </li>
 <li>CacheBase()
-: <a class="el" href="d0/d9d/a01760.html#aeda43feb65387eb303a98b1d7716c115">castor3d::CacheBase&lt; ElementType, KeyType &gt;</a>
+: <a class="el" href="df/d46/a02376.html#aeda43feb65387eb303a98b1d7716c115">castor3d::CacheBase&lt; ElementType, KeyType &gt;</a>
 </li>
 <li>CacheView()
-: <a class="el" href="de/dda/a01768.html#a0d4e0e5b71caf3f0b2f0de118875adaf">castor3d::CacheView&lt; ResourceType, CacheType, EventType &gt;</a>
+: <a class="el" href="d5/de6/a02424.html#a1cc440614aab463e0c53b034493724aa">castor3d::CacheView&lt; ResourceType, CacheType, EventType &gt;</a>
+</li>
+<li>calcTexCoord()
+: <a class="el" href="d9/d54/a05436.html#aa9c4c241fdd8b4d062ea48d9e5d33a89">castor3d::shader::Utils</a>
+</li>
+<li>calcVSPosition()
+: <a class="el" href="d9/d54/a05436.html#a9260069ff0eca29f9109339971666864">castor3d::shader::Utils</a>
+</li>
+<li>calcWSPosition()
+: <a class="el" href="d9/d54/a05436.html#a7ee2debfb82e46514b5aaba7101d0531">castor3d::shader::Utils</a>
 </li>
 <li>Camera()
-: <a class="el" href="da/d47/a02864.html#afa0861757dff4ca83542939d595098bb">castor3d::Camera</a>
+: <a class="el" href="d5/d9c/a05152.html#a7b76d7d3f8dca9678a029d9a8e615203">castor3d::Camera</a>
 </li>
-<li>CameraFarPlane
-: <a class="el" href="d5/d2f/a03216.html#a741e4a38991556b4eef6daf1ac432b45">castor3d::SceneUbo</a>
-</li>
-<li>CameraNearPlane
-: <a class="el" href="d5/d2f/a03216.html#aac61846936545c4ab0ac88fee2015250">castor3d::SceneUbo</a>
+<li>camera
+: <a class="el" href="dc/d0d/a04588.html#a23ad8239b745b39604bf24da4fb24f13">castor3d::CpuUpdater</a>
+, <a class="el" href="da/d34/a04592.html#a904e259c42f1ef7afa15a8ff7bef0934">castor3d::GpuUpdater</a>
+, <a class="el" href="df/d8e/a05248.html#a4a7fdf9b164f1a220d6a5a3c63d8c7ce">castor3d::SceneFileContext</a>
+, <a class="el" href="d1/d2b/a04652.html#a4336e9fa692ced4edf49a884e521dccb">castor3d::ShadowMap::PassData</a>
 </li>
 <li>CameraPos
-: <a class="el" href="d5/d2f/a03216.html#acde7c33f9b4a0979a1dbb50c53bcc4e3">castor3d::SceneUbo</a>
+: <a class="el" href="df/d63/a05528.html#acde7c33f9b4a0979a1dbb50c53bcc4e3">castor3d::SceneUbo</a>
+</li>
+<li>cameraPos
+: <a class="el" href="d8/d10/a05608.html#ab560df530dc84ab3bffd3fda9531bbad">castor3d::SceneUboConfiguration</a>
 </li>
 <li>CameraRootNode
-: <a class="el" href="d6/db9/a02980.html#a2f47124224d128eeffaeef0e0eaec02e">castor3d::Scene</a>
+: <a class="el" href="d5/d76/a05244.html#a2f47124224d128eeffaeef0e0eaec02e">castor3d::Scene</a>
+</li>
+<li>Cascade
+: <a class="el" href="df/d18/a05168.html#a6382d8979823ee8e079f3361b205e9cd">castor3d::DirectionalLight</a>
+</li>
+<li>CascadeCount
+: <a class="el" href="d7/deb/a04264.html#a8f9c86575460447e4b75c702af19d7e8">castor3d::LayeredLightPropagationVolumesBase</a>
 </li>
 <li>castor::TextWriter&lt; castor3d::ShaderProgram &gt;
-: <a class="el" href="d1/d7a/a03080.html#ae2b61e1c1fdf7dd2eb92cef8f2455dab">castor3d::ShaderProgram</a>
-</li>
-<li>castor::TextWriter&lt; castor3d::UniformBuffer &gt;
-: <a class="el" href="d4/dd6/a03364.html#a39a573c338ee64d9c1e0e5ea47de602c">castor3d::UniformBuffer</a>
+: <a class="el" href="dc/da0/a05304.html#ae2b61e1c1fdf7dd2eb92cef8f2455dab">castor3d::ShaderProgram</a>
 </li>
 <li>catchesMouseEvents()
-: <a class="el" href="d0/dde/a01924.html#af9b127733fe059b464db3d7857142075">castor3d::EventHandler</a>
+: <a class="el" href="d1/df6/a02544.html#af9b127733fe059b464db3d7857142075">castor3d::EventHandler</a>
 </li>
 <li>catchesReturnKey()
-: <a class="el" href="d0/dde/a01924.html#a3941edcde2e8ac2ed205548386e1bf46">castor3d::EventHandler</a>
+: <a class="el" href="d1/df6/a02544.html#a3941edcde2e8ac2ed205548386e1bf46">castor3d::EventHandler</a>
 </li>
 <li>catchesTabKey()
-: <a class="el" href="d0/dde/a01924.html#a312bd6454656d77b7906ac620216b84d">castor3d::EventHandler</a>
+: <a class="el" href="d1/df6/a02544.html#a312bd6454656d77b7906ac620216b84d">castor3d::EventHandler</a>
+</li>
+<li>cbegin()
+: <a class="el" href="d8/dc6/a04256.html#a77d65937285e0954c33bc1834b099dbf">castor3d::GBufferT&lt; TextureEnumT &gt;</a>
+</li>
+<li>cellSize
+: <a class="el" href="dc/d0d/a04588.html#a6b047fa13737aa54a5b3b6431e87f566">castor3d::CpuUpdater</a>
+, <a class="el" href="dd/d34/a05480.html#aac97df521afb75b13487faff89df53a2">castor3d::shader::LpvGridData</a>
+</li>
+<li>cend()
+: <a class="el" href="d8/dc6/a04256.html#a0ca55ac3a4cfb4c27acbd6867f420a41">castor3d::GBufferT&lt; TextureEnumT &gt;</a>
+</li>
+<li>changed
+: <a class="el" href="d0/df5/a02576.html#a81e8749da34a72c7489ae8f6652016b5">castor3d::MouseState</a>
 </li>
 <li>Changed
-: <a class="el" href="d5/d8b/a02060.html#a937b49557187f05df7d022d22a4e342a">castor3d::SubsurfaceScattering</a>
+: <a class="el" href="d8/d09/a02624.html#a937b49557187f05df7d022d22a4e342a">castor3d::SubsurfaceScattering</a>
 </li>
 <li>checkAvailable()
-: <a class="el" href="d4/d26/a01700.html#aaabdd95c8c89483081b836c0011147cf">castor3d::BinaryChunk</a>
+: <a class="el" href="d8/dd8/a02108.html#af711032d94753cb2d482fe2bcf3afb17">castor3d::BinaryChunk</a>
 </li>
-<li>checkSupport()
-: <a class="el" href="da/d6b/a02352.html#a7409693b679056ecd45f1d7132a54fcd">castor3d::GpuInformations</a>
+<li>checkError()
+: <a class="el" href="d2/d08/a02148.html#ad1fbebf70ad5b1caae1a7eb57c2f82e4">castor3d::BinaryParserBase&lt; TParsed &gt;</a>
 </li>
 <li>childrenBegin()
-: <a class="el" href="d3/d8b/a02996.html#ae6c95149fa2606d01361ec29a5024ea9">castor3d::SceneNode</a>
+: <a class="el" href="da/d44/a05256.html#ae6c95149fa2606d01361ec29a5024ea9">castor3d::SceneNode</a>
 </li>
 <li>childrenEnd()
-: <a class="el" href="d3/d8b/a02996.html#a23e283df75c697dbfb52e83b5e8a9935">castor3d::SceneNode</a>
+: <a class="el" href="da/d44/a05256.html#a23e283df75c697dbfb52e83b5e8a9935">castor3d::SceneNode</a>
+</li>
+<li>chunk
+: <a class="el" href="d4/d8c/a02292.html#ab7426d2a0dd4557021fbc0f71eaa5134">castor3d::GpuBufferOffsetT&lt; DataT &gt;</a>
 </li>
 <li>Cleaner
-: <a class="el" href="dc/d51/a01764.html#aec9da84e7f63f89b04e22d514fbc9050">castor3d::Cache&lt; ElementType, KeyType &gt;</a>
-, <a class="el" href="d1/d42/a01800.html#a53fc37e02f367346df96adb5d9fd6d4f">castor3d::Cache&lt; Material, castor::String &gt;</a>
-, <a class="el" href="d2/dbd/a01844.html#a09c33236506080ed751868a1a46ff082">castor3d::Cache&lt; Plugin, castor::String &gt;</a>
-, <a class="el" href="d0/d9d/a01760.html#ac144f9ea07cb00eb2b01788678792fa4">castor3d::CacheBase&lt; ElementType, KeyType &gt;</a>
-, <a class="el" href="dc/d5b/a01812.html#a3d924cdf5a12fbe5cf1bc9c08ccf46bf">castor3d::ObjectCache&lt; ElementType, KeyType &gt;</a>
-, <a class="el" href="d0/dce/a01780.html#aa2a53debb85013f58b17c1f0a6ed5308">castor3d::ObjectCache&lt; Geometry, castor::String &gt;</a>
-, <a class="el" href="d4/d77/a01788.html#a5c2d54433d893f9c45bfced9274eb7b5">castor3d::ObjectCache&lt; Light, castor::String &gt;</a>
-, <a class="el" href="d2/d38/a01860.html#a17a7b1158ef12ec45151b9af8a94bad0">castor3d::ObjectCache&lt; SceneNode, castor::String &gt;</a>
-, <a class="el" href="d7/d02/a01808.html#ae9d6a190e7471d9ee2fd8b23d35d084f">castor3d::ObjectCacheBase&lt; ElementType, KeyType &gt;</a>
+: <a class="el" href="da/d75/a02372.html#aec9da84e7f63f89b04e22d514fbc9050">castor3d::Cache&lt; ElementType, KeyType &gt;</a>
+, <a class="el" href="da/db4/a02348.html#a33f7ff502696fab8e0e112a11d82b49c">castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</a>
+, <a class="el" href="d9/de2/a02508.html#a09c33236506080ed751868a1a46ff082">castor3d::Cache&lt; Plugin, castor::String &gt;</a>
+, <a class="el" href="df/d46/a02376.html#ac144f9ea07cb00eb2b01788678792fa4">castor3d::CacheBase&lt; ElementType, KeyType &gt;</a>
+, <a class="el" href="d6/d57/a02488.html#ae4ea1cfee5a4df365df48efcc048f32a">castor3d::MaterialCache</a>
+, <a class="el" href="da/d5c/a02432.html#a3d924cdf5a12fbe5cf1bc9c08ccf46bf">castor3d::ObjectCache&lt; ElementType, KeyType &gt;</a>
+, <a class="el" href="d3/d35/a02360.html#afc37c522f43039939d40b274a6882093">castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</a>
+, <a class="el" href="d4/d0c/a02476.html#aa2a53debb85013f58b17c1f0a6ed5308">castor3d::ObjectCache&lt; Geometry, castor::String &gt;</a>
+, <a class="el" href="de/d4e/a02484.html#a5c2d54433d893f9c45bfced9274eb7b5">castor3d::ObjectCache&lt; Light, castor::String &gt;</a>
+, <a class="el" href="d5/d04/a02428.html#ae9d6a190e7471d9ee2fd8b23d35d084f">castor3d::ObjectCacheBase&lt; ElementType, KeyType &gt;</a>
 </li>
 <li>cleanup()
-: <a class="el" href="d0/d9d/a03016.html#aa82d7d1c15810fcebca1e77235651dd9">castor3d::AtomicCounterBuffer</a>
-, <a class="el" href="da/de8/a02852.html#ae6b29ff17b7e1c6de6fa8eb099604f4c">castor3d::BillboardBase</a>
-, <a class="el" href="d1/d42/a01800.html#ad06c418f6c0774fb2d95f645a8fa70ec">castor3d::Cache&lt; Material, castor::String &gt;</a>
-, <a class="el" href="d2/d77/a01824.html#a8a7757fb898e86515d1cb9f0bc67a122">castor3d::Cache&lt; Overlay, castor::String &gt;</a>
-, <a class="el" href="d0/d9d/a01760.html#a5b8853e4191f80d06633e7adc80bfad6">castor3d::CacheBase&lt; ElementType, KeyType &gt;</a>
-, <a class="el" href="de/db0/a02940.html#a60b5802179f3c01ace04de1b50b336f6">castor3d::ComputeParticleSystem</a>
-, <a class="el" href="d1/d03/a02332.html#aee157020122630e3d6de086fb5ba76e8">castor3d::ComputePipeline</a>
-, <a class="el" href="d8/d09/a02624.html#ac5992118ed241089e59f06c3085c25f1">castor3d::Context</a>
-, <a class="el" href="d3/d8d/a02944.html#ab0a9b5bc2017f32a4bc271fbd9d3f88a">castor3d::CpuParticleSystem</a>
-, <a class="el" href="d0/da6/a02412.html#a927efa4d1297b9000c6c3237fe5a2fd7">castor3d::DebugOverlays</a>
-, <a class="el" href="d2/d29/a03448.html#a02d0f5372525ae4a452032bb789f4af0">castor3d::DirectionalLightPass</a>
-, <a class="el" href="dc/d31/a01892.html#a22e67669ad2954a42ce97e3d62c7f299">castor3d::Engine</a>
-, <a class="el" href="d9/d63/a01896.html#ae0f56a288250b098bdf8ee3174af20fe">castor3d::EnvironmentMap</a>
-, <a class="el" href="d5/dcc/a01900.html#a3afc2499d414d144d4c78ca718bd0969">castor3d::EnvironmentMapPass</a>
-, <a class="el" href="da/d5c/a02432.html#ac2bc3ba29ee27502c810c89c674f3200">castor3d::FontTexture</a>
-, <a class="el" href="db/d9d/a01972.html#a9f2bd3da5b8c09fa6c1af2385325d6ac">castor3d::FrameBuffer</a>
-, <a class="el" href="da/dbe/a02084.html#ac2e77a371f5f7acf59c1a121ec93162a">castor3d::GeometryBuffers</a>
-, <a class="el" href="d8/d72/a02104.html#ae6acffcf67b481aa3c631ccd2a9a9104">castor3d::GpuBufferPool</a>
-, <a class="el" href="d1/d8c/a02364.html#a07d6917c0876d6a62d033ee114b4a097">castor3d::GpuQuery</a>
-, <a class="el" href="d8/dd8/a02108.html#a7192310829678a1fd9e63ce86872f7e2">castor3d::IndexBuffer</a>
-, <a class="el" href="dc/d18/a03460.html#a426f0725b3e6caa5c3982fc6aecbb9c8">castor3d::LightPass</a>
-, <a class="el" href="d4/d4b/a03464.html#ab598c54b90bcd66c546c754af0851d90">castor3d::LightPass::Program</a>
-, <a class="el" href="db/d68/a02028.html#a3f87e00d4d4b1a6d138b4ab1f712923c">castor3d::Material</a>
-, <a class="el" href="dc/d25/a02160.html#a72cbfbfd3e19549c2760019890173c60">castor3d::Mesh</a>
-, <a class="el" href="d8/d3d/a03492.html#aaf766672d8273c8c31abf6599e7a2a45">castor3d::MeshLightPass</a>
-, <a class="el" href="d4/d77/a01788.html#a4a3b467d27ed595657f05a61e3e1b85c">castor3d::ObjectCache&lt; Light, castor::String &gt;</a>
-, <a class="el" href="d7/d02/a01808.html#af2d19098583cd5ea5b54c904d755cd0b">castor3d::ObjectCacheBase&lt; ElementType, KeyType &gt;</a>
-, <a class="el" href="d9/d04/a02460.html#a2370fd9fa546c4aa60d242d1ab15037c">castor3d::OverlayRenderer</a>
-, <a class="el" href="d5/d6c/a02956.html#afb5fd8324f038f1dc881ff5cda293ec0">castor3d::ParticleSystem</a>
-, <a class="el" href="db/db9/a02964.html#a845ef7010fedda5d43e540737bfbc0e9">castor3d::ParticleSystemImpl</a>
-, <a class="el" href="d8/d22/a02044.html#ad88707e47153d55ec3a87a12a6259787">castor3d::Pass</a>
-, <a class="el" href="d1/d03/a02560.html#ac4641ed8e5159a84b94ed6da55f70428">castor3d::PostEffect</a>
-, <a class="el" href="db/d44/a02564.html#a0f76d6ce7e35e2084f9a1b865991138f">castor3d::PostEffect::PostEffectSurface</a>
-, <a class="el" href="d7/db8/a03060.html#aa3b1a3e76d0a73996f19ccf661e8d7da">castor3d::ProgramInputLayout</a>
-, <a class="el" href="d5/d70/a01980.html#afce767f648d6cb1eaa9c983c735a751b">castor3d::RenderBuffer</a>
-, <a class="el" href="d0/d1f/a02748.html#aff82b09ed07bdd8c40e085ce68701378">castor3d::RenderColourCubeToTexture</a>
-, <a class="el" href="dc/d3d/a02752.html#a0d0453c35773059e24674eb575825c35">castor3d::RenderColourLayerCubeToTexture</a>
-, <a class="el" href="dc/d80/a02756.html#a5171b2853b14e909373ed2b88aba24a0">castor3d::RenderColourLayerToTexture</a>
-, <a class="el" href="d3/d55/a02760.html#a7f795e2c5aef12ae069e28e41725f8d6">castor3d::RenderColourToCube</a>
-, <a class="el" href="df/d25/a02764.html#a9a696f4ca31a4610091da00704a1b9b1">castor3d::RenderColourToTexture</a>
-, <a class="el" href="d3/d7e/a02768.html#af1e0b4273c1172b338cc766cf06b257c">castor3d::RenderDepthCubeToTexture</a>
-, <a class="el" href="d9/d4a/a02772.html#a3892b059772e391a8b093cffe9d9743b">castor3d::RenderDepthLayerCubeToTexture</a>
-, <a class="el" href="d5/dba/a02776.html#a4e143338242874c6edf17dfa0b96190c">castor3d::RenderDepthLayerToTexture</a>
-, <a class="el" href="df/de4/a02780.html#a97d58375561888ba4ad0b8b7f4159148">castor3d::RenderDepthToTexture</a>
-, <a class="el" href="dd/dc4/a02632.html#ad8988f97407d38c23b3f7ab1c5aa6c91">castor3d::RenderLoop</a>
-, <a class="el" href="de/db4/a02684.html#a673528136aa20a01ef5ce5c7f5c44dd7">castor3d::RenderPass</a>
-, <a class="el" href="d2/dba/a02692.html#a326f9c13ec56dcde8a8245d931560bdc">castor3d::RenderPipeline</a>
-, <a class="el" href="d7/d73/a02708.html#a5b394993713753f31e5a4e5cbcc1d42b">castor3d::RenderSystem</a>
-, <a class="el" href="db/d1d/a02716.html#a08f63b0d152f42f08f549685f00fc547">castor3d::RenderTarget</a>
-, <a class="el" href="d9/d79/a03564.html#a4c6c16a2f2283e280aa0d092c4513911">castor3d::RenderTechnique</a>
-, <a class="el" href="dc/d29/a03568.html#a8e6c2f68bd59a5deec9c3384af8d342b">castor3d::RenderTechniqueFbo</a>
-, <a class="el" href="d0/d5a/a02784.html#a0611f27b5de4fe67fe709e0a3b80d80e">castor3d::RenderVarianceCubeToTexture</a>
-, <a class="el" href="de/db6/a02792.html#a0d8061a33f57c78317b8a78063d97fa2">castor3d::RenderVarianceToTexture</a>
-, <a class="el" href="db/d59/a02728.html#acb5f3210546d285b55a6d6d9511e9a17">castor3d::RenderWindow</a>
-, <a class="el" href="d8/d1b/a03592.html#a551adef82f846102c1f7f8a1285389d7">castor3d::Sampler</a>
-, <a class="el" href="d6/db9/a02980.html#aa059d292e5fecf927a7db43edbbaca14">castor3d::Scene</a>
-, <a class="el" href="d1/d7a/a03080.html#a87560ed66da17617a027af79cb1038fc">castor3d::ShaderProgram</a>
-, <a class="el" href="dd/d87/a01864.html#a4e8022d402d969d471a233dbfca8ace7">castor3d::ShaderProgramCache</a>
-, <a class="el" href="df/d0d/a03176.html#ada1ccb247fba8d11d83209484b445fbf">castor3d::ShaderStorageBuffer</a>
-, <a class="el" href="d0/d57/a03380.html#a08b99a777650f9be872ea7f0577ae39d">castor3d::ShadowMap</a>
-, <a class="el" href="d8/dbd/a03008.html#adf96a21fdda2a89e3bf96c3634349283">castor3d::Skybox</a>
-, <a class="el" href="d3/df0/a03556.html#a2fa65ad2647bdd3e509d4322cef91565">castor3d::StencilPass</a>
-, <a class="el" href="de/dfd/a02228.html#ac6dc1410926d99f66e18228a018bdda4">castor3d::Subdivider</a>
-, <a class="el" href="de/d1f/a02236.html#af29b97be20e1032c158e92ca2a8c1917">castor3d::Submesh</a>
-, <a class="el" href="df/d73/a02312.html#af13d08b9487f0501a06c0f7df4c89f8c">castor3d::SubmeshComponent</a>
-, <a class="el" href="d1/d43/a03612.html#a3ef716cd4701738d3650079621d93b4e">castor3d::TextureLayout</a>
-, <a class="el" href="d3/dac/a02796.html#a688f20bfee704cd43f9aeaaaa0786c93">castor3d::TextureProjection</a>
-, <a class="el" href="d0/da2/a03620.html#a4fd3a4cafac96999715382e8836e449a">castor3d::TextureUnit</a>
-, <a class="el" href="da/d51/a02000.html#a2f48cd3a95a3a9af000c5d308aa974aa">castor3d::ToneMapping</a>
-, <a class="el" href="d2/d11/a02384.html#ab5db073a28f2684b65cdbe07dbff8559">castor3d::TransformFeedback</a>
-, <a class="el" href="d0/d7b/a02968.html#acbf239bf353452ed0cc2c11cc40e3774">castor3d::TransformFeedbackParticleSystem</a>
-, <a class="el" href="d4/dd6/a03364.html#a8f7d4b333f0cb89bf2afb989a958b7bf">castor3d::UniformBuffer</a>
-, <a class="el" href="d0/d59/a01956.html#aa8ce17bc77eb834003cced1abea4e322">castor3d::UserInputListener</a>
-, <a class="el" href="d8/d84/a02112.html#add58ba19fdc40c3a4d700ceda79e523c">castor3d::VertexBuffer</a>
-, <a class="el" href="da/d20/a02740.html#a6f9160f7821b76fa9e23c971922e50aa">castor3d::Viewport</a>
+: <a class="el" href="d3/dc0/a05140.html#af25ebbfa518667b58bbeff5f9ff633d2">castor3d::BillboardBase</a>
+, <a class="el" href="d1/df5/a02496.html#a8a7757fb898e86515d1cb9f0bc67a122">castor3d::Cache&lt; Overlay, castor::String &gt;</a>
+, <a class="el" href="df/d46/a02376.html#a5b8853e4191f80d06633e7adc80bfad6">castor3d::CacheBase&lt; ElementType, KeyType &gt;</a>
+, <a class="el" href="d9/dff/a05196.html#a018a8fe8400dd53216507a3f4a619cc0">castor3d::ComputeParticleSystem</a>
+, <a class="el" href="d6/d3f/a05204.html#af5177e33c6a50fa2ab79fc07433edf53">castor3d::CpuParticleSystem</a>
+, <a class="el" href="dc/ddd/a04064.html#a927efa4d1297b9000c6c3237fe5a2fd7">castor3d::DebugOverlays</a>
+, <a class="el" href="d7/deb/a04732.html#a02d0f5372525ae4a452032bb789f4af0">castor3d::DirectionalLightPass</a>
+, <a class="el" href="dc/dbb/a02520.html#a22e67669ad2954a42ce97e3d62c7f299">castor3d::Engine</a>
+, <a class="el" href="dc/d32/a04240.html#a40e073e45095e1ef4ef7081287ccf238">castor3d::EnvironmentMap</a>
+, <a class="el" href="d2/d98/a04244.html#ab40e9ebd6411fa6a66537afa48cbb035">castor3d::EnvironmentMapPass</a>
+, <a class="el" href="de/df2/a04096.html#a69078a7f7213946c3b09d47e769b74d2">castor3d::FontTexture</a>
+, <a class="el" href="d8/dc6/a04256.html#a2dbf9ef234080f55751db9f2ced2db94">castor3d::GBufferT&lt; TextureEnumT &gt;</a>
+, <a class="el" href="d1/d22/a05464.html#aa74bfbe74e69f1f903bdb811687aeb9a">castor3d::GpInfoUbo</a>
+, <a class="el" href="df/d73/a02312.html#a199461bb551877ce279b953dba382fa0">castor3d::GpuBuffer</a>
+, <a class="el" href="dd/d6e/a02324.html#af2df2e4d26a67cb709cb3ae8ae60135b">castor3d::GpuBufferPool</a>
+, <a class="el" href="d1/d06/a05468.html#ac1300a679b9ac311584ca45368c68453">castor3d::HdrConfigUbo</a>
+, <a class="el" href="d7/deb/a04264.html#a37e180379f2be1c7312a4a31f2d7f4a2">castor3d::LayeredLightPropagationVolumesBase</a>
+, <a class="el" href="d4/db7/a05476.html#aaba26a25e5ccb574e2659f6b0003480f">castor3d::LayeredLpvGridConfigUbo</a>
+, <a class="el" href="d8/dfa/a04756.html#a426f0725b3e6caa5c3982fc6aecbb9c8">castor3d::LightPass</a>
+, <a class="el" href="da/deb/a04764.html#ab598c54b90bcd66c546c754af0851d90">castor3d::LightPass::Program</a>
+, <a class="el" href="db/dde/a04856.html#ab163c43772732b7ad6fcd9194e066cbb">castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;</a>
+, <a class="el" href="db/d9e/a04892.html#af7a7ce5428ef17dd708edb46a2b3f09b">castor3d::LightPassReflectiveShadow&lt; LtType &gt;</a>
+, <a class="el" href="d1/dda/a04860.html#a87fd08f69a97404bdbf6e2095dbd01b6">castor3d::LightPassVolumePropagationShadowT&lt; LtType &gt;</a>
+, <a class="el" href="dd/ddf/a04284.html#a1a3d3f70b7aa829a621de1f11d8c82ac">castor3d::LightPropagationVolumesBase</a>
+, <a class="el" href="d5/dbb/a04408.html#ad60ada8c7c0965a970470547443874d2">castor3d::LineariseDepthPass</a>
+, <a class="el" href="db/d15/a05484.html#a597591f56380875c0e9569dfe998171d">castor3d::LpvGridConfigUbo</a>
+, <a class="el" href="de/d62/a05492.html#a70b3d7136fd511b9daed2120ab22c9b7">castor3d::LpvLightConfigUbo</a>
+, <a class="el" href="dc/d28/a02584.html#a3f87e00d4d4b1a6d138b4ab1f712923c">castor3d::Material</a>
+, <a class="el" href="d6/d57/a02488.html#ac30c1c374d74b398977b62449976b763">castor3d::MaterialCache</a>
+, <a class="el" href="d2/d0e/a05496.html#a7a8513fbea57d419115c6ead8712d1bc">castor3d::MatrixUbo</a>
+, <a class="el" href="dc/dce/a03908.html#a72cbfbfd3e19549c2760019890173c60">castor3d::Mesh</a>
+, <a class="el" href="d8/dc6/a04796.html#aaf766672d8273c8c31abf6599e7a2a45">castor3d::MeshLightPass</a>
+, <a class="el" href="d7/d01/a03920.html#af78d4a588425c361a9417787bceed71e">castor3d::MeshSubdivider</a>
+, <a class="el" href="da/de2/a05500.html#a8ce960d799300131d43f836ebaa28573">castor3d::ModelInstancesUbo</a>
+, <a class="el" href="d2/d81/a05504.html#a036b57739f246f8146bc2b087d0ed310">castor3d::ModelMatrixUbo</a>
+, <a class="el" href="d3/d35/a02360.html#a4c5ecf27d33710845ad36a85e58bb68e">castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</a>
+, <a class="el" href="de/d4e/a02484.html#a4a3b467d27ed595657f05a61e3e1b85c">castor3d::ObjectCache&lt; Light, castor::String &gt;</a>
+, <a class="el" href="d5/d04/a02428.html#af2d19098583cd5ea5b54c904d755cd0b">castor3d::ObjectCacheBase&lt; ElementType, KeyType &gt;</a>
+, <a class="el" href="dc/d32/a04884.html#a6376c10793572f84b499d77fee24d420">castor3d::OpaqueResolvePass</a>
+, <a class="el" href="db/da3/a04116.html#a902684ffefdefd0b404e377201dbaa9c">castor3d::OverlayRenderer</a>
+, <a class="el" href="d6/dd5/a05228.html#a8cdb7ee4e763a3467527f38d9bcbbac3">castor3d::ParticleSystem</a>
+, <a class="el" href="d5/d8b/a05232.html#a3e66a4283ec662354f4f5bcee495eb9e">castor3d::ParticleSystemImpl</a>
+, <a class="el" href="df/d5d/a02596.html#ad88707e47153d55ec3a87a12a6259787">castor3d::Pass</a>
+, <a class="el" href="db/d2d/a05520.html#afa8541a57d3629c6245fd1b6ddd2fade">castor3d::PickingUbo</a>
+, <a class="el" href="db/d83/a02328.html#ab2dde565384597c456092f4a8c884c13">castor3d::PoolUniformBuffer</a>
+, <a class="el" href="da/d6e/a04500.html#a7095bdd059e4057a3effa3272ecc21b7">castor3d::PostEffect</a>
+, <a class="el" href="de/da6/a04504.html#a09fba11b7e672923bf40ca678b99baba">castor3d::PostEffectSurface</a>
+, <a class="el" href="d3/d49/a04972.html#a3f0330fd2cd0b556433e50c505c2cfd0">castor3d::RenderCube</a>
+, <a class="el" href="dd/d4b/a04432.html#a182e89b66ccc3b0ecef2e1e2bf2643e1">castor3d::RenderGrid</a>
+, <a class="el" href="d3/d83/a04520.html#ad8988f97407d38c23b3f7ab1c5aa6c91">castor3d::RenderLoop</a>
+, <a class="el" href="de/dfb/a04616.html#a200fe69bdbff144f5ef1170d7adcd4dc">castor3d::RenderPipeline</a>
+, <a class="el" href="d4/d45/a04456.html#ab31f1f028639e2280dc81a5207c19361">castor3d::RenderQuad</a>
+, <a class="el" href="d2/dfe/a04620.html#a2ee30e7e9ce414eb215432659d919f3c">castor3d::RenderQueue</a>
+, <a class="el" href="d9/d38/a04624.html#a5b394993713753f31e5a4e5cbcc1d42b">castor3d::RenderSystem</a>
+, <a class="el" href="d3/d6e/a04628.html#abbac7c8ac0a6ebba8bd47f2be9819a97">castor3d::RenderTarget</a>
+, <a class="el" href="dc/de6/a04632.html#a7a7d2a2598187fb8d17a10f89752519f">castor3d::RenderTarget::TargetFbo</a>
+, <a class="el" href="da/d05/a04920.html#aa52f82ba80dcc81c38a5c818f92b6923">castor3d::RenderTechnique</a>
+, <a class="el" href="d4/d6d/a04636.html#acb5f3210546d285b55a6d6d9511e9a17">castor3d::RenderWindow</a>
+, <a class="el" href="d7/d66/a05524.html#ae395507b383f4964f26be5778c75ca80">castor3d::RsmConfigUbo</a>
+, <a class="el" href="dd/dc4/a02632.html#a551fe619eca5fc22296bee70808166f2">castor3d::Sampler</a>
+, <a class="el" href="d5/d76/a05244.html#aa059d292e5fecf927a7db43edbbaca14">castor3d::Scene</a>
+, <a class="el" href="d0/d47/a05104.html#a31a64b0a48a9634db8602f3eb6320f5b">castor3d::SceneBackground</a>
+, <a class="el" href="d8/d25/a04596.html#ac5627bf8072801b914f5a7a8fde7c4ef">castor3d::SceneRenderPass</a>
+, <a class="el" href="df/d63/a05528.html#a1c35028db5539f8ee4ed0157b54917f9">castor3d::SceneUbo</a>
+, <a class="el" href="dc/da0/a05304.html#a0e6987865b21135bc91516b0a58e15d3">castor3d::ShaderProgram</a>
+, <a class="el" href="db/da2/a02512.html#a4e8022d402d969d471a233dbfca8ace7">castor3d::ShaderProgramCache</a>
+, <a class="el" href="d5/d62/a04648.html#ac7414e8fd4c25cbda96711b1ab286450">castor3d::ShadowMap</a>
+, <a class="el" href="d4/de3/a05532.html#a7c72e2eb40e327ca1408e72b5af54222">castor3d::ShadowMapUbo</a>
+, <a class="el" href="df/d64/a05544.html#a543c2d0169c5c7b26ba1bcaa65185db1">castor3d::SsaoConfigUbo</a>
+, <a class="el" href="d1/d58/a04916.html#a8578a44c92504b245fc3136e9bc5ee76">castor3d::SsaoPass</a>
+, <a class="el" href="df/d25/a04464.html#a2fa65ad2647bdd3e509d4322cef91565">castor3d::StencilPass</a>
+, <a class="el" href="d9/d0c/a03992.html#af29b97be20e1032c158e92ca2a8c1917">castor3d::Submesh</a>
+, <a class="el" href="dd/d78/a03980.html#af13d08b9487f0501a06c0f7df4c89f8c">castor3d::SubmeshComponent</a>
+, <a class="el" href="df/da2/a04828.html#a4f2b6e8552ebcb68dfde1d4221b450d3">castor3d::SubsurfaceScatteringPass</a>
+, <a class="el" href="d2/d7d/a02656.html#a3ef716cd4701738d3650079621d93b4e">castor3d::TextureLayout</a>
+, <a class="el" href="dd/dc9/a04996.html#a7b6180ab7d65254723b38278ef89e5db">castor3d::TextureProjection</a>
+, <a class="el" href="d6/d18/a02664.html#a4fd3a4cafac96999715382e8836e449a">castor3d::TextureUnit</a>
+, <a class="el" href="d9/d5b/a02668.html#a164958bb211db456e2ed5dd61205008c">castor3d::TextureView</a>
+, <a class="el" href="d7/de6/a04956.html#a2f48cd3a95a3a9af000c5d308aa974aa">castor3d::ToneMapping</a>
+, <a class="el" href="d1/d03/a02332.html#aa538b53f279b4dbc2257c5ed3c226a0a">castor3d::UniformBufferBase</a>
+, <a class="el" href="d3/d9c/a02336.html#ab89552434457ac675f106a9df0c31bd0">castor3d::UniformBufferPool</a>
+, <a class="el" href="d7/d66/a02580.html#aa8ce17bc77eb834003cced1abea4e322">castor3d::UserInputListener</a>
+, <a class="el" href="dd/da7/a05632.html#a4b4c8f234c71d013e46efe17c44ee714">castor3d::VoxelizerUbo</a>
 </li>
 <li>cleanupAnimations()
-: <a class="el" href="d0/da6/a01536.html#a819023fe062bb4ab1a15557c9d1445d8">castor3d::Animable</a>
+: <a class="el" href="d7/db2/a02036.html#a55e0aa0f614359a89b2c4f8b85c90b96">castor3d::AnimableT&lt; AnimableHanlerT &gt;</a>
 </li>
-<li>CleanupEvent()
-: <a class="el" href="d4/d0d/a01904.html#a6b7ded7574c602298029581bfa25ac64">castor3d::CleanupEvent&lt; T &gt;</a>
-</li>
-<li>cleanupPool()
-: <a class="el" href="d7/d73/a02708.html#a594ba8fb805d78f9f0a0b156d8073b47">castor3d::RenderSystem</a>
+<li>cleanupUbos()
+: <a class="el" href="da/db4/a02348.html#a13a4f1b592d1310847ccdd83352bbe9d">castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</a>
 </li>
 <li>clear()
-: <a class="el" href="d1/d42/a01800.html#a669ee19dc34dd84bdba0caa15aaca693">castor3d::Cache&lt; Material, castor::String &gt;</a>
-, <a class="el" href="d2/d77/a01824.html#aadda08d37942fb37cd313b3edea5af89">castor3d::Cache&lt; Overlay, castor::String &gt;</a>
-, <a class="el" href="d2/dbd/a01844.html#ad21aa37f96a438cd6b7b50528f58804c">castor3d::Cache&lt; Plugin, castor::String &gt;</a>
-, <a class="el" href="d0/d9d/a01760.html#adb6be8b05884ebde0c91e11e0e289054">castor3d::CacheBase&lt; ElementType, KeyType &gt;</a>
-, <a class="el" href="de/dda/a01768.html#a7adb180153e1ed2de1925ee714e2764c">castor3d::CacheView&lt; ResourceType, CacheType, EventType &gt;</a>
-, <a class="el" href="d6/d0c/a02080.html#ae829cdca229f7a4ea32e3b5007cd482d">castor3d::CpuBuffer&lt; T &gt;</a>
-, <a class="el" href="db/d9d/a01972.html#acfa62c970558937a02da422b7639e794">castor3d::FrameBuffer</a>
-, <a class="el" href="d9/da1/a01976.html#a437a43c8f2937fe1b18015980913c9d6">castor3d::FrameBufferAttachment</a>
-, <a class="el" href="d7/d02/a01808.html#a2fa04676822f28ba029d1fb729f44816">castor3d::ObjectCacheBase&lt; ElementType, KeyType &gt;</a>
-, <a class="el" href="dd/de7/a01868.html#a629b5668938dacc76df988e3ee49f401">castor3d::RenderTargetCache</a>
-, <a class="el" href="dd/d87/a01864.html#a2646825307d03552ac9269e4836db4cc">castor3d::ShaderProgramCache</a>
-</li>
-<li>ClearAllThreads()
-: <a class="el" href="d6/d71/a02344.html#afd9e627ca816c914c3b61202de378dc7">castor3d::Generator</a>
+: <a class="el" href="d1/d8c/a02364.html#aeb745856568019a53fd56fe9c02a7b7f">castor3d::BillboardUboPools</a>
+, <a class="el" href="da/db4/a02348.html#a92335222813cde31be50bc98a1298ba7">castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</a>
+, <a class="el" href="d1/df5/a02496.html#aadda08d37942fb37cd313b3edea5af89">castor3d::Cache&lt; Overlay, castor::String &gt;</a>
+, <a class="el" href="d9/de2/a02508.html#ad21aa37f96a438cd6b7b50528f58804c">castor3d::Cache&lt; Plugin, castor::String &gt;</a>
+, <a class="el" href="df/d46/a02376.html#adb6be8b05884ebde0c91e11e0e289054">castor3d::CacheBase&lt; ElementType, KeyType &gt;</a>
+, <a class="el" href="d5/de6/a02424.html#a7adb180153e1ed2de1925ee714e2764c">castor3d::CacheView&lt; ResourceType, CacheType, EventType &gt;</a>
+, <a class="el" href="d6/d57/a02488.html#a4a8385025eb9bb448cbb230901b1e73d">castor3d::MaterialCache</a>
+, <a class="el" href="d3/d35/a02360.html#afed71deff5d17b219093a027ee98fee6">castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</a>
+, <a class="el" href="d4/d0c/a02476.html#afedc69a657c075af82dfc2cc955b788c">castor3d::ObjectCache&lt; Geometry, castor::String &gt;</a>
+, <a class="el" href="d5/d04/a02428.html#a2fa04676822f28ba029d1fb729f44816">castor3d::ObjectCacheBase&lt; ElementType, KeyType &gt;</a>
+, <a class="el" href="d2/dab/a02516.html#a629b5668938dacc76df988e3ee49f401">castor3d::RenderTargetCache</a>
+, <a class="el" href="d8/d12/a04236.html#affc6db3cf2cb6dd2e0086f7357b7f468">castor3d::SceneCuller::CulledInstancesArrayT&lt; CulledT, ArrayT &gt;</a>
+, <a class="el" href="db/da2/a02512.html#a2646825307d03552ac9269e4836db4cc">castor3d::ShaderProgramCache</a>
 </li>
 <li>clearFaces()
-: <a class="el" href="d3/d01/a02316.html#aae0c3befa1e3e73872245300acc110de">castor3d::TriFaceMapping</a>
+: <a class="el" href="d9/da3/a03984.html#aae0c3befa1e3e73872245300acc110de">castor3d::TriFaceMapping</a>
 </li>
 <li>clearLines()
-: <a class="el" href="db/d77/a02304.html#aebfb6c9cdfe0cdd3ed77487990e9e601">castor3d::LinesMapping</a>
+: <a class="el" href="de/d6f/a03972.html#aebfb6c9cdfe0cdd3ed77487990e9e601">castor3d::LinesMapping</a>
 </li>
 <li>ClientHandlerFunction
-: <a class="el" href="d0/dde/a01924.html#a44a9a40d9e96a4527000479b4702ae79">castor3d::EventHandler</a>
-, <a class="el" href="d1/db0/a01928.html#a703c7cbc98f4fbc25ac04600257c7c0c">castor3d::NonClientEventHandler&lt; Derived &gt;</a>
+: <a class="el" href="d1/df6/a02544.html#a44a9a40d9e96a4527000479b4702ae79">castor3d::EventHandler</a>
+, <a class="el" href="da/dc4/a02548.html#a703c7cbc98f4fbc25ac04600257c7c0c">castor3d::NonClientEventHandler&lt; Derived &gt;</a>
 </li>
 <li>ClientKeyboardFunction
-: <a class="el" href="d0/dde/a01924.html#a0d16d006a598b652f004c2541855d916">castor3d::EventHandler</a>
-, <a class="el" href="d1/db0/a01928.html#a45ffbf50f17a665404170fd665624011">castor3d::NonClientEventHandler&lt; Derived &gt;</a>
+: <a class="el" href="d1/df6/a02544.html#a0d16d006a598b652f004c2541855d916">castor3d::EventHandler</a>
+, <a class="el" href="da/dc4/a02548.html#a45ffbf50f17a665404170fd665624011">castor3d::NonClientEventHandler&lt; Derived &gt;</a>
 </li>
 <li>ClientMouseFunction
-: <a class="el" href="d0/dde/a01924.html#abf8b7cff9d28a78406eeee8b7b6ebd86">castor3d::EventHandler</a>
-, <a class="el" href="d1/db0/a01928.html#aea92aaf9b48684355876a7c81409ccf3">castor3d::NonClientEventHandler&lt; Derived &gt;</a>
+: <a class="el" href="d1/df6/a02544.html#abf8b7cff9d28a78406eeee8b7b6ebd86">castor3d::EventHandler</a>
+, <a class="el" href="da/dc4/a02548.html#aea92aaf9b48684355876a7c81409ccf3">castor3d::NonClientEventHandler&lt; Derived &gt;</a>
+</li>
+<li>ClipInfo
+: <a class="el" href="df/d63/a05528.html#a142f9118083441858217d3bd7fa18f6a">castor3d::SceneUbo</a>
+</li>
+<li>clipInfo
+: <a class="el" href="d8/d10/a05608.html#a0fcb772bf8a6a7cb52c7816a8acc3a36">castor3d::SceneUboConfiguration</a>
+</li>
+<li>clipPosition
+: <a class="el" href="df/d39/a05424.html#a461f69acff51c2673a32c368700a4728">castor3d::shader::Surface</a>
+</li>
+<li>clipToGrid
+: <a class="el" href="d8/d04/a05624.html#a72d999d766be6df5cb2a3bc48f9ac3c9">castor3d::shader::VoxelData</a>
 </li>
 <li>CmshImporter()
-: <a class="el" href="dc/d29/a02116.html#ac512c60208151dcdbc11d51dc5fe5af3">castor3d::CmshImporter</a>
+: <a class="el" href="dc/d1a/a02288.html#ac512c60208151dcdbc11d51dc5fe5af3">castor3d::CmshImporter</a>
 </li>
 <li>Coefficients
-: <a class="el" href="df/d49/a02340.html#ac8ebb7021bacc19bb4fdc943f53670da">castor3d::GaussianBlur</a>
+: <a class="el" href="dd/d8e/a04392.html#a3ea0db3cb529a51262383c2989e1db5b">castor3d::GaussianBlur</a>
 </li>
 <li>CoefficientsCount
-: <a class="el" href="df/d49/a02340.html#acf37ef8a75ec7dee4942c337a9e09680">castor3d::GaussianBlur</a>
+: <a class="el" href="dd/d8e/a04392.html#ad4e5e21985b62833eb4f0dbf94a7626d">castor3d::GaussianBlur</a>
 </li>
 <li>Collection
-: <a class="el" href="dc/d51/a01764.html#a2b2306f4304e71fd0b67fc45b1cbae00">castor3d::Cache&lt; ElementType, KeyType &gt;</a>
-, <a class="el" href="d1/d42/a01800.html#a3ee4ad6919f8708e681ea5ba0ecc66ab">castor3d::Cache&lt; Material, castor::String &gt;</a>
-, <a class="el" href="d2/d77/a01824.html#a4b3e00a27819c0fd4f67f083a126f499">castor3d::Cache&lt; Overlay, castor::String &gt;</a>
-, <a class="el" href="d2/dbd/a01844.html#ac527fb1a2441972de7b59fe609288599">castor3d::Cache&lt; Plugin, castor::String &gt;</a>
-, <a class="el" href="d0/d9d/a01760.html#a73f0fe787eab6e9f181c8c23f1760e45">castor3d::CacheBase&lt; ElementType, KeyType &gt;</a>
-, <a class="el" href="dc/d5b/a01812.html#a04da5d041d247a72068e5f086801b8d4">castor3d::ObjectCache&lt; ElementType, KeyType &gt;</a>
-, <a class="el" href="d0/dce/a01780.html#a7f7da4be92811bc3808662f3e656bc61">castor3d::ObjectCache&lt; Geometry, castor::String &gt;</a>
-, <a class="el" href="d4/d77/a01788.html#ad5f2ee3cf5b316295545b4a5517819ef">castor3d::ObjectCache&lt; Light, castor::String &gt;</a>
-, <a class="el" href="d2/d38/a01860.html#a4992988629391b08eee0005d9ea8ccfd">castor3d::ObjectCache&lt; SceneNode, castor::String &gt;</a>
-, <a class="el" href="d7/d02/a01808.html#af44fe4e2622342b0256466f52d791869">castor3d::ObjectCacheBase&lt; ElementType, KeyType &gt;</a>
+: <a class="el" href="da/d75/a02372.html#a2b2306f4304e71fd0b67fc45b1cbae00">castor3d::Cache&lt; ElementType, KeyType &gt;</a>
+, <a class="el" href="da/db4/a02348.html#abe86bab10ef4b028e4274edc0c811191">castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</a>
+, <a class="el" href="d1/df5/a02496.html#a4b3e00a27819c0fd4f67f083a126f499">castor3d::Cache&lt; Overlay, castor::String &gt;</a>
+, <a class="el" href="d9/de2/a02508.html#ac527fb1a2441972de7b59fe609288599">castor3d::Cache&lt; Plugin, castor::String &gt;</a>
+, <a class="el" href="df/d46/a02376.html#a73f0fe787eab6e9f181c8c23f1760e45">castor3d::CacheBase&lt; ElementType, KeyType &gt;</a>
+, <a class="el" href="d6/d57/a02488.html#adcfcdb053ba38a478a72857e2e44d968">castor3d::MaterialCache</a>
+, <a class="el" href="da/d5c/a02432.html#a04da5d041d247a72068e5f086801b8d4">castor3d::ObjectCache&lt; ElementType, KeyType &gt;</a>
+, <a class="el" href="d3/d35/a02360.html#aa82d7a578f20c248aa78e5b6bc6971ce">castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</a>
+, <a class="el" href="d4/d0c/a02476.html#a7f7da4be92811bc3808662f3e656bc61">castor3d::ObjectCache&lt; Geometry, castor::String &gt;</a>
+, <a class="el" href="de/d4e/a02484.html#ad5f2ee3cf5b316295545b4a5517819ef">castor3d::ObjectCache&lt; Light, castor::String &gt;</a>
+, <a class="el" href="d5/d04/a02428.html#af44fe4e2622342b0256466f52d791869">castor3d::ObjectCacheBase&lt; ElementType, KeyType &gt;</a>
+</li>
+<li>colorMask
+: <a class="el" href="d3/d72/a05440.html#afbb1c24c073783521e2f303b1346233d">castor3d::shader::Voxel</a>
+, <a class="el" href="d4/d79/a05020.html#a500e862acbbc63ac0d82aecf2d8c6070">castor3d::Voxel</a>
 </li>
 <li>Colour
-: <a class="el" href="d1/d7a/a03080.html#a78febc78d330488e7d3bf4b672f27fb1">castor3d::ShaderProgram</a>
+: <a class="el" href="dc/da0/a05304.html#a78febc78d330488e7d3bf4b672f27fb1">castor3d::ShaderProgram</a>
 </li>
 <li>Colour2
-: <a class="el" href="d1/d7a/a03080.html#ae2d6b4b3bc409cf82dec90eab099e8f3">castor3d::ShaderProgram</a>
+: <a class="el" href="dc/da0/a05304.html#ae2d6b4b3bc409cf82dec90eab099e8f3">castor3d::ShaderProgram</a>
 </li>
-<li>ColourRenderBuffer()
-: <a class="el" href="d6/d90/a01964.html#a7710e9688acf8920aa095580ea922ca5">castor3d::ColourRenderBuffer</a>
+<li>ColourBackground()
+: <a class="el" href="d0/dbf/a05124.html#a81c10d99488d162108627a433dfebd85">castor3d::ColourBackground</a>
 </li>
-<li>ColourSkybox()
-: <a class="el" href="d9/dcc/a02872.html#add7629a3f369e7c7478863b4981428da">castor3d::ColourSkybox</a>
+<li>colourBlendMode
+: <a class="el" href="dd/db6/a04580.html#aab051b1ee46ace763681dfea200198d2">castor3d::PipelineFlags</a>
 </li>
-<li>cols
-: <a class="el" href="d3/d55/a03256.html#a7e31cfbbf61b4b3e9bd1bd09420eee92">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat2x2b||Type==UniformType::eMat2x2i||Type==UniformType::eMat2x2ui||Type==UniformType::eMat2x2f||Type==UniformType::eMat2x2d &gt;::type &gt;</a>
-, <a class="el" href="d1/dda/a03260.html#a5ad2e0040e9a90fa2d58dceb74aa0f9a">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat2x3b||Type==UniformType::eMat2x3i||Type==UniformType::eMat2x3ui||Type==UniformType::eMat2x3f||Type==UniformType::eMat2x3d &gt;::type &gt;</a>
-, <a class="el" href="d4/d1a/a03264.html#a6601919de99d7328a5dfe4c982133ef6">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat2x4b||Type==UniformType::eMat2x4i||Type==UniformType::eMat2x4ui||Type==UniformType::eMat2x4f||Type==UniformType::eMat2x4d &gt;::type &gt;</a>
-, <a class="el" href="d4/dcb/a03268.html#a10bf655a14e55a311871a88e95942224">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat3x2b||Type==UniformType::eMat3x2i||Type==UniformType::eMat3x2ui||Type==UniformType::eMat3x2f||Type==UniformType::eMat3x2d &gt;::type &gt;</a>
-, <a class="el" href="d4/d1c/a03272.html#a47b19cb5d5a4f97edad6e0b445d8c78a">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat3x3b||Type==UniformType::eMat3x3i||Type==UniformType::eMat3x3ui||Type==UniformType::eMat3x3f||Type==UniformType::eMat3x3d &gt;::type &gt;</a>
-, <a class="el" href="d0/ded/a03276.html#a8bc0d18ce96900c9030145db630c6641">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat3x4b||Type==UniformType::eMat3x4i||Type==UniformType::eMat3x4ui||Type==UniformType::eMat3x4f||Type==UniformType::eMat3x4d &gt;::type &gt;</a>
-, <a class="el" href="de/d7f/a03280.html#a5112a3e02d45a8610d5dcb48dc03f253">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat4x2b||Type==UniformType::eMat4x2i||Type==UniformType::eMat4x2ui||Type==UniformType::eMat4x2f||Type==UniformType::eMat4x2d &gt;::type &gt;</a>
-, <a class="el" href="d6/d25/a03284.html#af9dc8793a044dcccb3a617bfd3e9ec9c">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat4x3b||Type==UniformType::eMat4x3i||Type==UniformType::eMat4x3ui||Type==UniformType::eMat4x3f||Type==UniformType::eMat4x3d &gt;::type &gt;</a>
-, <a class="el" href="db/de4/a03288.html#a7ef68dd54ac778132dac7b5d122423f4">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat4x4b||Type==UniformType::eMat4x4i||Type==UniformType::eMat4x4ui||Type==UniformType::eMat4x4f||Type==UniformType::eMat4x4d &gt;::type &gt;</a>
+<li>colourIndex
+: <a class="el" href="d0/d95/a04772.html#a2041d60b5ed7805c684ed5b447bbc74c">castor3d::LightPass::Config</a>
+</li>
+<li>colourMask
+: <a class="el" href="d4/d98/a05428.html#a0380e440ec2bfa1ae8d6497145358985">castor3d::shader::TextureConfigData</a>
+, <a class="el" href="dd/d32/a02636.html#a05a2089f0200bcc2f8c98dd16996c0f2">castor3d::TextureConfiguration</a>
+</li>
+<li>colourTexture
+: <a class="el" href="de/da6/a04504.html#a8919e470f09c07cc27c3920f1f2b38e9">castor3d::PostEffectSurface</a>
+, <a class="el" href="dc/de6/a04632.html#acbbe79d311f07fc99e6ed120526cba78">castor3d::RenderTarget::TargetFbo</a>
+</li>
+<li>colrSpec
+: <a class="el" href="d4/d98/a05428.html#add30eea8e56879b72482d9e476810ead">castor3d::shader::TextureConfigData</a>
+, <a class="el" href="dd/d67/a05452.html#a4910688755c4e20247560b240227ca5e">castor3d::TextureConfigurationBuffer::Data</a>
+</li>
+<li>combine()
+: <a class="el" href="d1/d13/a04368.html#ade8f4085aaad8192ff65df0049a9d008">castor3d::CombinePass</a>
+</li>
+<li>combineIndex
+: <a class="el" href="dc/d0d/a04588.html#ae226f28360b34614794d218babdb4c9f">castor3d::CpuUpdater</a>
+</li>
+<li>CombinePass()
+: <a class="el" href="d1/d13/a04368.html#a18ecef96945cd671b11a6a836b2567cd">castor3d::CombinePass</a>
+</li>
+<li>CombinePassBuilder
+: <a class="el" href="d1/d13/a04368.html#a613ace3ac5310ad77227ecde5e2f6e1f">castor3d::CombinePass</a>
+, <a class="el" href="d0/de0/a04376.html#a7161ea1b6427a243bdc1654edba56cd4">castor3d::CombinePassBuilder</a>
+</li>
+<li>commandBuffer
+: <a class="el" href="d1/da6/a04380.html#a69f8a98779e7005fc1494f7cef97ebb4">castor3d::CommandsSemaphore</a>
+, <a class="el" href="d8/dab/a04404.html#ab728812496205f228d0e4879244154e7">castor3d::GaussianBlur::BlurPass</a>
+</li>
+<li>commandPools
+: <a class="el" href="d1/def/a04512.html#a4f40cfd937a91529bc302f0b856d10bd">castor3d::RenderDevice</a>
+</li>
+<li>commands
+: <a class="el" href="d2/dd6/a04528.html#a3256790fc4ca73c472ea54741399c8f1">castor3d::RenderLoop::UploadResources</a>
+</li>
+<li>CommandsSemaphore()
+: <a class="el" href="d1/da6/a04380.html#a2a84ae509877c923b4a13d559eb1de3a">castor3d::CommandsSemaphore</a>
 </li>
 <li>common
-: <a class="el" href="d4/dc8/a03024.html#a2d253a59c174d186109bc6e2550657e9">castor3d::LegacyPassBuffer::PassData</a>
+: <a class="el" href="d9/d33/a05268.html#a019c4daaefc61ca93aa8592445ee50c8">castor3d::MetallicRoughnessPassBuffer::PassData</a>
+, <a class="el" href="dc/d2f/a05292.html#a53f0240cf5d6b5cec9381ccb297848cf">castor3d::PhongPassBuffer::PassData</a>
+, <a class="el" href="d1/d9e/a05300.html#a6c930437d663d92264ca906c68bb45c9">castor3d::SpecularGlossinessPassBuffer::PassData</a>
 </li>
-<li>compile()
-: <a class="el" href="da/d5d/a03068.html#a870902c98fbbcb4d9fd060787b4a6c45">castor3d::ShaderObject</a>
+<li>compileShader()
+: <a class="el" href="d9/d38/a04624.html#a9599729a3686caaf9a14a602b09af33e">castor3d::RenderSystem</a>
+</li>
+<li>completeLayerNames()
+: <a class="el" href="d9/d38/a04624.html#ad1244955956462935442aa8f69ba5b25">castor3d::RenderSystem</a>
 </li>
 <li>compute()
-: <a class="el" href="d1/dfd/a03536.html#a33cbd3d26b979ccb1b9b5d32f69b16b7">castor3d::RawSsaoPass</a>
-, <a class="el" href="d0/d9f/a03152.html#a371dec631fd9277ddb302f6e0c1790e4">castor3d::shader::MetallicBrdfLightingModel</a>
-, <a class="el" href="d7/da0/a03156.html#a44c284d23cad87783bb4e02612b12228">castor3d::shader::PhongLightingModel</a>
-, <a class="el" href="d8/d87/a03168.html#a9bcf077fac13080b7de237bc8b330e7a">castor3d::shader::SpecularBrdfLightingModel</a>
-, <a class="el" href="db/dc1/a03172.html#a93b24ae9290bd2722b127c7f0bb8583a">castor3d::shader::SssTransmittance</a>
+: <a class="el" href="d6/d5c/a04388.html#a7043a945ed9f65c43cd28b37ffc852b5">castor3d::DownscalePass</a>
+, <a class="el" href="dc/dca/a04260.html#a71e7444793c75c6ee65bb6404a221d95">castor3d::GeometryInjectionPass</a>
+, <a class="el" href="de/d75/a04852.html#a066a2612221ba490fe5e4aa8897f687b">castor3d::LayeredLightVolumeGIPass</a>
+, <a class="el" href="d4/d45/a04276.html#a59a4e189de8dbc1983636c7ab7097fac">castor3d::LightInjectionPass</a>
+, <a class="el" href="d3/d45/a04280.html#a59b42a2aef8eb943471d7c13783bd75e">castor3d::LightPropagationPass</a>
+, <a class="el" href="de/d6f/a04872.html#a9fdee971246b781c932c8fb71410ffba">castor3d::LightVolumeGIPass</a>
+, <a class="el" href="da/db8/a04908.html#a9c9ca728e3e8d51935d8c30fe307af45">castor3d::RsmGIPass</a>
+, <a class="el" href="dc/d52/a04912.html#a5b098109d78cdd96fae041d6dd0d8e12">castor3d::RsmInterpolatePass</a>
+, <a class="el" href="d4/d4b/a04232.html#a7857d0d5c604e95479f3fa25346f5c0f">castor3d::SceneCuller</a>
+, <a class="el" href="d6/d9d/a05324.html#a7399f48df1f23f55588120d65aa032b7">castor3d::shader::CookTorranceBRDF</a>
+, <a class="el" href="da/de3/a05388.html#af21347aedf4ac85f1976f364a29213ad">castor3d::shader::MetallicBrdfLightingModel</a>
+, <a class="el" href="dd/dc9/a05400.html#ab2e92b60278ec546f04945b264cc8be9">castor3d::shader::PhongLightingModel</a>
+, <a class="el" href="d8/d73/a05412.html#a05dbb0098035c19c7982a57c1ac8f3b9">castor3d::shader::SpecularBrdfLightingModel</a>
+, <a class="el" href="dd/d1f/a05420.html#ac3c9ded7a4455c1c86d655c62261eda7">castor3d::shader::SssTransmittance</a>
+, <a class="el" href="df/d38/a04716.html#a326b7dfea39095530b021dfbb42fc5c0">castor3d::SsaoRawAOPass</a>
 </li>
-<li>computeBitangents()
-: <a class="el" href="df/d2a/a02320.html#ae81c367339297026bdfeb6b67a63304b">castor3d::SubmeshUtils</a>
-, <a class="el" href="d3/d01/a02316.html#a27cdba5906e7fc8d45d5a898b8a15861">castor3d::TriFaceMapping</a>
+<li>computeAccumulation()
+: <a class="el" href="d9/d54/a05436.html#af809da0919e407ef8faea7827327fd67">castor3d::shader::Utils</a>
 </li>
 <li>computeBoundingBox()
-: <a class="el" href="dc/d3c/a02188.html#a370ccc032019351ca060693ef105c44b">castor3d::Bone</a>
+: <a class="el" href="d7/dcb/a04028.html#a370ccc032019351ca060693ef105c44b">castor3d::Bone</a>
+</li>
+<li>computeColourMapContribution()
+: <a class="el" href="d9/d54/a05436.html#a7886747a3bdefc0c89c271ef0b8ad569">castor3d::shader::Utils</a>
 </li>
 <li>computeCombined()
-: <a class="el" href="d0/d9f/a03152.html#afd45fa66240ee26ed5b2b5b8bd995c03">castor3d::shader::MetallicBrdfLightingModel</a>
-, <a class="el" href="d7/da0/a03156.html#a047d948933137ae2d4a20fb7171e5931">castor3d::shader::PhongLightingModel</a>
-, <a class="el" href="d8/d87/a03168.html#a8815562878e33100d62e0f25832c6595">castor3d::shader::SpecularBrdfLightingModel</a>
+: <a class="el" href="da/de3/a05388.html#a40ddfab7030928b02c8828058f542712">castor3d::shader::MetallicBrdfLightingModel</a>
+, <a class="el" href="dd/dc9/a05400.html#a6b63b77aebf69a5a585b746c3702dac0">castor3d::shader::PhongLightingModel</a>
+, <a class="el" href="d8/d73/a05412.html#a905f9e23d6208c00aca5f908d7dcd46b">castor3d::shader::SpecularBrdfLightingModel</a>
+</li>
+<li>computeCombinedDiffuse()
+: <a class="el" href="da/de3/a05388.html#a5635645dedb6bf56d055bbd5e76323d6">castor3d::shader::MetallicBrdfLightingModel</a>
+, <a class="el" href="dd/dc9/a05400.html#a009722da3c78d5bdcaebc35097ec832c">castor3d::shader::PhongLightingModel</a>
+, <a class="el" href="d8/d73/a05412.html#a6e86e1190511f5f5b449d25d9538d132">castor3d::shader::SpecularBrdfLightingModel</a>
+</li>
+<li>computeCommandPool
+: <a class="el" href="d1/def/a04512.html#aaf7f2637aebfec7d50f1be4e89902e29">castor3d::RenderDevice</a>
+</li>
+<li>computeCommonMapContribution()
+: <a class="el" href="d9/d54/a05436.html#aa3357f81cf5c26b7923f92dce4e63939">castor3d::shader::Utils</a>
+</li>
+<li>computeCommonMapsContributions()
+: <a class="el" href="d9/d54/a05436.html#aa7ba576b3851dfde2f77eec34c26e506">castor3d::shader::Utils</a>
+</li>
+<li>computeCommonMapVoxelContribution()
+: <a class="el" href="d9/d54/a05436.html#a38dafe9e8fbb2a22a5a26927991bb7e3">castor3d::shader::Utils</a>
 </li>
 <li>computeContainers()
-: <a class="el" href="dc/d25/a02160.html#ae0c03c3bf358fcd1f1d9386e06c60366">castor3d::Mesh</a>
-, <a class="el" href="d8/d1e/a02208.html#a7e5ef66bafab23fb8fa787e32d8190c9">castor3d::Skeleton</a>
-, <a class="el" href="de/d1f/a02236.html#a3364d08ba1b300f7b30672b4877f9205">castor3d::Submesh</a>
+: <a class="el" href="dc/dce/a03908.html#ae0c03c3bf358fcd1f1d9386e06c60366">castor3d::Mesh</a>
+, <a class="el" href="db/d13/a04032.html#a7e5ef66bafab23fb8fa787e32d8190c9">castor3d::Skeleton</a>
+, <a class="el" href="d9/d0c/a03992.html#a3364d08ba1b300f7b30672b4877f9205">castor3d::Submesh</a>
 </li>
-<li>computeDirectionalShadow()
-: <a class="el" href="d8/dec/a03164.html#ae22b493e6d250a2ac03ca6853d5b13d2">castor3d::shader::Shadow</a>
+<li>computeDiffuse()
+: <a class="el" href="d6/d9d/a05324.html#a28e3d28d597aa01119f327d6e549a7b7">castor3d::shader::CookTorranceBRDF</a>
+, <a class="el" href="d8/d27/a05332.html#a809dc4475c343f12444153f6afa2f08b">castor3d::shader::GlobalIllumination</a>
+, <a class="el" href="da/de3/a05388.html#a8fef28757b24a804b45af9f334443a28">castor3d::shader::MetallicBrdfLightingModel</a>
+, <a class="el" href="dd/dc9/a05400.html#adc7a26ed979a3da91aa35264a7f12ec2">castor3d::shader::PhongLightingModel</a>
+, <a class="el" href="d8/d73/a05412.html#ac34d8cda0db230356541a1863fc7d2b7">castor3d::shader::SpecularBrdfLightingModel</a>
+</li>
+<li>computeDirectional()
+: <a class="el" href="da/df4/a05408.html#a6f93af867f1d925960051b58f14f5a8a">castor3d::shader::Shadow</a>
 </li>
 <li>computeFacesFromPolygonVertex()
-: <a class="el" href="df/d2a/a02320.html#af5a2272067bace9b3e863df0f302a2d7">castor3d::SubmeshUtils</a>
-, <a class="el" href="d3/d01/a02316.html#a2468296783b8a341c9d0074f2e193ee3">castor3d::TriFaceMapping</a>
+: <a class="el" href="d7/d02/a04000.html#af5a2272067bace9b3e863df0f302a2d7">castor3d::SubmeshUtils</a>
+, <a class="el" href="d9/da3/a03984.html#a2468296783b8a341c9d0074f2e193ee3">castor3d::TriFaceMapping</a>
+</li>
+<li>computeGeometryMapContribution()
+: <a class="el" href="d9/d54/a05436.html#a34b434add0763bb7783950fc90045e5e">castor3d::shader::Utils</a>
+</li>
+<li>computeGeometryMapsContributions()
+: <a class="el" href="d9/d54/a05436.html#addb2d365df425514af92044de16f740f">castor3d::shader::Utils</a>
+</li>
+<li>computeHeightMapContribution()
+: <a class="el" href="d9/d54/a05436.html#a9dc2d552201970771dff3e967c2f530b">castor3d::shader::Utils</a>
+</li>
+<li>ComputeIdx
+: <a class="el" href="d1/def/a04512.html#a1beb05e924ea8466639f3aa63f0ef08f">castor3d::RenderDevice</a>
 </li>
 <li>computeIncident()
-: <a class="el" href="d8/d08/a03160.html#a03f96e4f8927fb9ff9fc9420867c0936">castor3d::shader::PhongReflectionModel</a>
+: <a class="el" href="da/dc0/a05392.html#a8a82e8f7480358d204fdbab3c3d68a1a">castor3d::shader::MetallicPbrReflectionModel</a>
+, <a class="el" href="d4/d15/a05404.html#a9a1e3e056f8e907065d34614fc9fc125">castor3d::shader::PhongReflectionModel</a>
+, <a class="el" href="d3/d7f/a05416.html#a6fd5965d57a70d4bafe359432cc0316a">castor3d::shader::SpecularPbrReflectionModel</a>
+</li>
+<li>computeLLPVRadiance()
+: <a class="el" href="d8/d27/a05332.html#aee8262cdb29ee5c37282e302f50361f3">castor3d::shader::GlobalIllumination</a>
+</li>
+<li>computeLPVRadiance()
+: <a class="el" href="d8/d27/a05332.html#a743d624d01e60e025ccc2d43eb9d6e7b">castor3d::shader::GlobalIllumination</a>
+</li>
+<li>computeMapContributions()
+: <a class="el" href="da/de3/a05388.html#ad52f312a35650b9edf0c8bcdeaca2d07">castor3d::shader::MetallicBrdfLightingModel</a>
+, <a class="el" href="dd/dc9/a05400.html#a20a80f9096b675eb84a74161a75d7e7f">castor3d::shader::PhongLightingModel</a>
+, <a class="el" href="d8/d73/a05412.html#abcadc88d88c64f7de01abd29d940fdac">castor3d::shader::SpecularBrdfLightingModel</a>
+</li>
+<li>computeMapVoxelContributions()
+: <a class="el" href="da/de3/a05388.html#ab4bfa00e845e4ed1965af29927a2d98d">castor3d::shader::MetallicBrdfLightingModel</a>
+, <a class="el" href="dd/dc9/a05400.html#ae13ecfbf9cca80b3fadbb1ac7d29b5b4">castor3d::shader::PhongLightingModel</a>
+, <a class="el" href="d8/d73/a05412.html#aec93e2c1aa2d45121d0a199afd3f57f4">castor3d::shader::SpecularBrdfLightingModel</a>
+</li>
+<li>computeMetallicIBL()
+: <a class="el" href="d9/d54/a05436.html#abdd112b7c5495472bdf89de884eca596">castor3d::shader::Utils</a>
+</li>
+<li>computeNormalMapContribution()
+: <a class="el" href="d9/d54/a05436.html#a17a8892794f94dc936933bf64326a84c">castor3d::shader::Utils</a>
 </li>
 <li>computeNormals()
-: <a class="el" href="dc/d1a/a02288.html#a6f19747b6795855d0048b85952e54521">castor3d::IndexMapping</a>
-, <a class="el" href="db/d77/a02304.html#a30d5ab7ad31c300da3d08dc7b36fdb73">castor3d::LinesMapping</a>
-, <a class="el" href="dc/d25/a02160.html#a6b8f98af39638ecf6562bad8d7036c1c">castor3d::Mesh</a>
-, <a class="el" href="d5/ddd/a02184.html#af05a30169b7c25b68e5c2f08f58fb30f">castor3d::MeshGenerator</a>
-, <a class="el" href="de/d1f/a02236.html#a6152ef001195bccf68390115d3d001ba">castor3d::Submesh</a>
-, <a class="el" href="df/d2a/a02320.html#a1585405ca8819ce0e327639fa1fe3670">castor3d::SubmeshUtils</a>
-, <a class="el" href="d3/d01/a02316.html#a9c3fb39743810be7038d7ce94cf17aaf">castor3d::TriFaceMapping</a>
+: <a class="el" href="d3/d4a/a03948.html#a6f19747b6795855d0048b85952e54521">castor3d::IndexMapping</a>
+, <a class="el" href="de/d6f/a03972.html#a30d5ab7ad31c300da3d08dc7b36fdb73">castor3d::LinesMapping</a>
+, <a class="el" href="dc/dce/a03908.html#a7238cc5a200c976fd43cb7e9b11bae47">castor3d::Mesh</a>
+, <a class="el" href="d2/d05/a03916.html#a3207825be521c851f6fc654751f54cf1">castor3d::MeshGenerator</a>
+, <a class="el" href="d9/d0c/a03992.html#a6152ef001195bccf68390115d3d001ba">castor3d::Submesh</a>
+, <a class="el" href="d7/d02/a04000.html#a1585405ca8819ce0e327639fa1fe3670">castor3d::SubmeshUtils</a>
+, <a class="el" href="d9/da3/a03984.html#a9c3fb39743810be7038d7ce94cf17aaf">castor3d::TriFaceMapping</a>
+</li>
+<li>computeOcclusion()
+: <a class="el" href="d8/d27/a05332.html#ab2ad76f992811b2319129a8a43b9a364">castor3d::shader::GlobalIllumination</a>
+</li>
+<li>computeOpacityMapContribution()
+: <a class="el" href="d9/d54/a05436.html#a132e39de90b8558ee0374051ab6354d5">castor3d::shader::Utils</a>
 </li>
 <li>ComputeParticleSystem()
-: <a class="el" href="de/db0/a02940.html#ad1b15703ea3e389edea200b7063c7409">castor3d::ComputeParticleSystem</a>
+: <a class="el" href="d9/dff/a05196.html#a00de2edebb5a79d8da382e0ca67f05d8">castor3d::ComputeParticleSystem</a>
 </li>
-<li>ComputePipeline()
-: <a class="el" href="d1/d03/a02332.html#a5cabf1da52e7353a0e97e65e3b05c8af">castor3d::ComputePipeline</a>
+<li>computePoint()
+: <a class="el" href="da/df4/a05408.html#a1750af3e6f620caaea565a19b7f8306e">castor3d::shader::Shadow</a>
 </li>
-<li>computePointShadow()
-: <a class="el" href="d8/dec/a03164.html#abb6b41dd39c76752d83b400152a6821d">castor3d::shader::Shadow</a>
+<li>computeQueue
+: <a class="el" href="d1/def/a04512.html#a68901524384bcd2156d1d5cf1589e532">castor3d::RenderDevice</a>
 </li>
 <li>computeRefl()
-: <a class="el" href="d8/d08/a03160.html#af8276525df6c96bbb5e3d34e2d510ef8">castor3d::shader::PhongReflectionModel</a>
+: <a class="el" href="da/dc0/a05392.html#aa2211f91e122a73da89cb5c322809c0f">castor3d::shader::MetallicPbrReflectionModel</a>
+, <a class="el" href="d4/d15/a05404.html#abf9bf95e6b199d14c5fb7cae80c78319">castor3d::shader::PhongReflectionModel</a>
+, <a class="el" href="d3/d7f/a05416.html#acfc5d971f397463c1a38e185dd440d20">castor3d::shader::SpecularPbrReflectionModel</a>
 </li>
 <li>computeReflRefr()
-: <a class="el" href="d8/d08/a03160.html#a1ccfba2240410aee3d6b4d87680698c2">castor3d::shader::PhongReflectionModel</a>
+: <a class="el" href="d4/d15/a05404.html#addef76633102504712349b6461182074">castor3d::shader::PhongReflectionModel</a>
 </li>
 <li>computeRefr()
-: <a class="el" href="d8/d08/a03160.html#a20137dbdf26fa59ecd81594880d0de38">castor3d::shader::PhongReflectionModel</a>
+: <a class="el" href="d4/d15/a05404.html#af0de7cb5bd479479fb8ce4b616deab8f">castor3d::shader::PhongReflectionModel</a>
 </li>
-<li>computeSpotShadow()
-: <a class="el" href="d8/dec/a03164.html#a9ddba8f91c32d78c564fc8146e1aca5e">castor3d::shader::Shadow</a>
+<li>computeRefrEnvMap()
+: <a class="el" href="da/dc0/a05392.html#aa5ea9d771a3d201fb4c888406bdeb426">castor3d::shader::MetallicPbrReflectionModel</a>
+, <a class="el" href="d3/d7f/a05416.html#af18f1037a2275d80d75e0cee42ee9aa1">castor3d::shader::SpecularPbrReflectionModel</a>
+</li>
+<li>computeRefrSkybox()
+: <a class="el" href="da/dc0/a05392.html#ad72dc8ad5c59a0768feb2a988499a92c">castor3d::shader::MetallicPbrReflectionModel</a>
+, <a class="el" href="d3/d7f/a05416.html#aa9dc7bdc8280ad65f4a8acb441112bfe">castor3d::shader::SpecularPbrReflectionModel</a>
+</li>
+<li>computeSpecular()
+: <a class="el" href="d8/d27/a05332.html#a35eaaac954de83e911d9a517fd5dd6bf">castor3d::shader::GlobalIllumination</a>
+</li>
+<li>computeSpecularIBL()
+: <a class="el" href="d9/d54/a05436.html#af6c042b278063b1e678986ab6ef05ef7">castor3d::shader::Utils</a>
+</li>
+<li>computeSpot()
+: <a class="el" href="da/df4/a05408.html#a7d28f25977bb662d6e930d377db5f6eb">castor3d::shader::Shadow</a>
 </li>
 <li>computeTangents()
-: <a class="el" href="df/d2a/a02320.html#a8a5f4dd8a17d982ff6b914e59d2faa7c">castor3d::SubmeshUtils</a>
-, <a class="el" href="d3/d01/a02316.html#ab00cf919f043bf88a5d7b27a7edc1b36">castor3d::TriFaceMapping</a>
-</li>
-<li>computeTangentsFromBitangents()
-: <a class="el" href="df/d2a/a02320.html#af1cf3de6cba181bc7598859e50e27013">castor3d::SubmeshUtils</a>
-, <a class="el" href="d3/d01/a02316.html#a5b08652d28342f93a44bc5797beb4d7b">castor3d::TriFaceMapping</a>
+: <a class="el" href="d7/d02/a04000.html#a8a5f4dd8a17d982ff6b914e59d2faa7c">castor3d::SubmeshUtils</a>
+, <a class="el" href="d9/da3/a03984.html#ab00cf919f043bf88a5d7b27a7edc1b36">castor3d::TriFaceMapping</a>
 </li>
 <li>computeTangentsFromNormals()
-: <a class="el" href="df/d2a/a02320.html#a3896dfa6da511b2d1099f55c868df6a8">castor3d::SubmeshUtils</a>
-, <a class="el" href="d3/d01/a02316.html#a9ea15725eebf3b74b749dda82f11d03d">castor3d::TriFaceMapping</a>
+: <a class="el" href="d7/d02/a04000.html#a3896dfa6da511b2d1099f55c868df6a8">castor3d::SubmeshUtils</a>
+, <a class="el" href="d9/da3/a03984.html#a9ea15725eebf3b74b749dda82f11d03d">castor3d::TriFaceMapping</a>
 </li>
 <li>computeTransform()
-: <a class="el" href="da/df5/a03220.html#a18f088f09777a068f65ff02461f9c1b6">castor3d::SkinningUbo</a>
+: <a class="el" href="d9/df0/a05540.html#a270c3567911252999d00338a5460d6c8">castor3d::SkinningUbo</a>
+</li>
+<li>computeVolumetric()
+: <a class="el" href="da/df4/a05408.html#a89995ac9f558a90412c5aa6927218a7b">castor3d::shader::Shadow</a>
 </li>
 <li>Cone()
-: <a class="el" href="d3/d23/a02120.html#a506caf237144d5c2b467b1be2b2c95b9">castor3d::Cone</a>
+: <a class="el" href="d0/de0/a03868.html#a506caf237144d5c2b467b1be2b2c95b9">castor3d::Cone</a>
 </li>
 <li>Config
-: <a class="el" href="df/d49/a02340.html#ad4decab809ce84468c008bbd6934f35b">castor3d::GaussianBlur</a>
-, <a class="el" href="d5/dda/a03560.html#a901fd327809eb399652e361c56b08941">castor3d::SubsurfaceScatteringPass</a>
+: <a class="el" href="dd/d8e/a04392.html#ad4e5e92fc3459d70640cdc903ecc179b">castor3d::GaussianBlur</a>
+</li>
+<li>config
+: <a class="el" href="d5/d73/a03836.html#a7dd3b92f7aca2b9a09113dd9f3f9e78a">castor3d::PipelineVisitorBase</a>
+</li>
+<li>Config
+: <a class="el" href="df/da2/a04828.html#a901fd327809eb399652e361c56b08941">castor3d::SubsurfaceScatteringPass</a>
+</li>
+<li>Configuration
+: <a class="el" href="d4/dac/a05456.html#a203da64d01d4e5aa09e86c8ceb28c9cf">castor3d::BillboardUbo</a>
+, <a class="el" href="d1/d22/a05464.html#adfd9d07dfced9b1ab9727c898ca457e4">castor3d::GpInfoUbo</a>
+, <a class="el" href="d1/d06/a05468.html#a2440dca559ddaf38cf51bf61b701990b">castor3d::HdrConfigUbo</a>
+, <a class="el" href="d4/db7/a05476.html#a769c65d7b0402a70a4c46d71abd1cad9">castor3d::LayeredLpvGridConfigUbo</a>
+, <a class="el" href="db/d15/a05484.html#ac6a11f0d4131e5d1fa34a6cafb3c195a">castor3d::LpvGridConfigUbo</a>
+, <a class="el" href="de/d62/a05492.html#a5fb8fc110f4ddaccfc55143b1fa1e0d1">castor3d::LpvLightConfigUbo</a>
+, <a class="el" href="d2/d0e/a05496.html#ab366057cde7f2778837daab6f7a4ab03">castor3d::MatrixUbo</a>
+, <a class="el" href="da/de2/a05500.html#aa3cd2a5fe299156a3e4f8787754670dd">castor3d::ModelInstancesUbo</a>
+, <a class="el" href="d2/d81/a05504.html#a67aa0f98d3e02ab1eab535b413d78567">castor3d::ModelMatrixUbo</a>
+, <a class="el" href="d7/d56/a05508.html#a4ceeee9bdbc68e82ce59e903b53832bb">castor3d::ModelUbo</a>
+, <a class="el" href="d9/ddd/a05512.html#ae9712b7914b5ced4cecb70af38133466">castor3d::MorphingUbo</a>
+, <a class="el" href="db/d2d/a05520.html#a4f6eb396af9641484e571c9b4937d19d">castor3d::PickingUbo</a>
+, <a class="el" href="d7/d66/a05524.html#aa9747da5cde15d324013b50e2db47344">castor3d::RsmConfigUbo</a>
+, <a class="el" href="d4/de3/a05532.html#a1e87d2bd828b4d232e057f9f5d3c0a01">castor3d::ShadowMapUbo</a>
+, <a class="el" href="d9/df0/a05540.html#a4f257776fdbcd577263361e617acf356">castor3d::SkinningUbo</a>
+, <a class="el" href="d6/dfa/a05552.html#a23fb677f7b96c3ebe0a5c589b1eac5ad">castor3d::TexturesUbo</a>
+, <a class="el" href="dd/da7/a05632.html#a2657e71a252ebe78bf33bcd4b93a0cb8">castor3d::VoxelizerUbo</a>
 </li>
 <li>connect()
-: <a class="el" href="d0/dde/a01924.html#ab8370d7b781d8aa2a0c41f5b42ef63ec">castor3d::EventHandler</a>
+: <a class="el" href="d1/df6/a02544.html#a6f95a70a6d584295f3d3ccfec0cb17fd">castor3d::EventHandler</a>
 </li>
 <li>connectNC()
-: <a class="el" href="d1/db0/a01928.html#a2b178920898982ef2e0516ed42772e83">castor3d::NonClientEventHandler&lt; Derived &gt;</a>
+: <a class="el" href="da/dc4/a02548.html#a7c772af5b472ac82d7a40ebe4968cfb2">castor3d::NonClientEventHandler&lt; Derived &gt;</a>
 </li>
 <li>const_iterator
-: <a class="el" href="df/dfb/a02068.html#a847864b0194b2839c956503567193b34">castor3d::BufferDeclaration</a>
-, <a class="el" href="d2/d77/a01824.html#afdd1792166d9565e3b30e55c823b10fa">castor3d::Cache&lt; Overlay, castor::String &gt;</a>
-, <a class="el" href="dd/d0a/a02436.html#a77863eef09719a95277c761181761273">castor3d::Overlay</a>
+: <a class="el" href="d1/df5/a02496.html#a17191045451146ea231035df8888e0bc">castor3d::Cache&lt; Overlay, castor::String &gt;</a>
+, <a class="el" href="d1/da3/a04100.html#a77863eef09719a95277c761181761273">castor3d::Overlay</a>
+, <a class="el" href="d4/d61/a05212.html#a4218788ea671d00ca5f5b0b6f56db038">castor3d::ParticleDeclaration</a>
 </li>
-<li>constPtr()
-: <a class="el" href="db/d87/a02076.html#a2660f74882e10ad6db6858c1d76811f8">castor3d::BufferElementGroup</a>
-, <a class="el" href="dc/d28/a02584.html#a4bcd4089dd39af403e041e0e09d5f19c">castor3d::TUniform&lt; Type &gt;</a>
-, <a class="el" href="d6/d63/a03228.html#af335038f134f54411371a6f144ac5a3d">castor3d::Uniform</a>
+<li>Context
+: <a class="el" href="df/d97/a02676.html#ac26c806e60ca4a0547680edb68f6e39b">castor3d::GpuInformations</a>
 </li>
-<li>Context()
-: <a class="el" href="d8/d09/a02624.html#a24a96ada8039300224ea087b59e4c8d0">castor3d::Context</a>
-, <a class="el" href="da/d6b/a02352.html#ac26c806e60ca4a0547680edb68f6e39b">castor3d::GpuInformations</a>
+<li>convertToSampledView()
+: <a class="el" href="d9/d5b/a02668.html#ad812ea6749bd79eeda9ff2d537893538">castor3d::TextureView</a>
+</li>
+<li>convertToTargetView()
+: <a class="el" href="d9/d5b/a02668.html#a784e4d2771cda7c016866fc6e3b35629">castor3d::TextureView</a>
+</li>
+<li>convertUV()
+: <a class="el" href="d4/d98/a05428.html#a6e7acd083595798a11bae9dc4228bc42">castor3d::shader::TextureConfigData</a>
+</li>
+<li>convertUVW()
+: <a class="el" href="d4/d98/a05428.html#ac9a21d90962c82f1e4764f59dd478c45">castor3d::shader::TextureConfigData</a>
+</li>
+<li>CookTorranceBRDF()
+: <a class="el" href="d6/d9d/a05324.html#a250a96eefa30a43e9c304b330a807b9a">castor3d::shader::CookTorranceBRDF</a>
 </li>
 <li>coords
-: <a class="el" href="d0/dbb/a02448.html#aa13d9db1b9fbf4ba4ef2419b6b901f47">castor3d::OverlayCategory::Vertex</a>
-, <a class="el" href="de/d4e/a02484.html#a0e494f12fc151ed30531188ecc1f488d">castor3d::TextOverlay::Vertex</a>
+: <a class="el" href="d3/ddf/a04108.html#ae8cb56953aef04c695e0900e49c64727">castor3d::OverlayCategory::Vertex</a>
+, <a class="el" href="dc/d95/a04160.html#a3b8b801aafd5932b736d54c022855c1d">castor3d::TextOverlay::Vertex</a>
 </li>
 <li>copy()
-: <a class="el" href="d0/d9d/a03016.html#ac03a08fc1efdcf10dc0b76dd7b6927a0">castor3d::AtomicCounterBuffer</a>
-, <a class="el" href="d6/d0c/a02080.html#a05eb984d0a1f5c89da24b50ea4a1fd34">castor3d::CpuBuffer&lt; T &gt;</a>
-, <a class="el" href="dd/d77/a02096.html#a1319bce0dfde85c5adc2a9d1a260128a">castor3d::GpuBuffer</a>
+: <a class="el" href="df/d73/a02312.html#a293727abb998c004e02610e729545335">castor3d::GpuBuffer</a>
+, <a class="el" href="d8/d12/a04236.html#a598fe5cf72a41c65b3e21543e34d6260">castor3d::SceneCuller::CulledInstancesArrayT&lt; CulledT, ArrayT &gt;</a>
 </li>
 <li>Correction
-: <a class="el" href="d5/dda/a03560.html#af7706e05c28e70845346ec7fc53c9993">castor3d::SubsurfaceScatteringPass</a>
-</li>
-<li>Count
-: <a class="el" href="d3/d8b/a02996.html#ae0114da6c0d65908c72928c61cc2c440">castor3d::SceneNode</a>
+: <a class="el" href="df/da2/a04828.html#af7706e05c28e70845346ec7fc53c9993">castor3d::SubsurfaceScatteringPass</a>
 </li>
 <li>count
-: <a class="el" href="d9/de5/a03240.html#aa98e50901b013ee61137484dd05ad467">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eBool||Type==UniformType::eInt||Type==UniformType::eUInt||Type==UniformType::eFloat||Type==UniformType::eDouble||Type==UniformType::eSampler &gt;::type &gt;</a>
-, <a class="el" href="d3/d55/a03256.html#af1694e9ed5f6f72d87e69d48ee39dc92">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat2x2b||Type==UniformType::eMat2x2i||Type==UniformType::eMat2x2ui||Type==UniformType::eMat2x2f||Type==UniformType::eMat2x2d &gt;::type &gt;</a>
-, <a class="el" href="d1/dda/a03260.html#aea68524b69beb2665848033597483034">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat2x3b||Type==UniformType::eMat2x3i||Type==UniformType::eMat2x3ui||Type==UniformType::eMat2x3f||Type==UniformType::eMat2x3d &gt;::type &gt;</a>
-, <a class="el" href="d4/d1a/a03264.html#aeb3d457ed26423826475f7a140121c54">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat2x4b||Type==UniformType::eMat2x4i||Type==UniformType::eMat2x4ui||Type==UniformType::eMat2x4f||Type==UniformType::eMat2x4d &gt;::type &gt;</a>
-, <a class="el" href="d4/dcb/a03268.html#a9c8d783805556cee3fe21477eb4c8655">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat3x2b||Type==UniformType::eMat3x2i||Type==UniformType::eMat3x2ui||Type==UniformType::eMat3x2f||Type==UniformType::eMat3x2d &gt;::type &gt;</a>
-, <a class="el" href="d4/d1c/a03272.html#a0606e3a174f9723f9e70453418019b7a">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat3x3b||Type==UniformType::eMat3x3i||Type==UniformType::eMat3x3ui||Type==UniformType::eMat3x3f||Type==UniformType::eMat3x3d &gt;::type &gt;</a>
-, <a class="el" href="d0/ded/a03276.html#ac64448ab88d2273622bc4b745cced018">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat3x4b||Type==UniformType::eMat3x4i||Type==UniformType::eMat3x4ui||Type==UniformType::eMat3x4f||Type==UniformType::eMat3x4d &gt;::type &gt;</a>
-, <a class="el" href="de/d7f/a03280.html#a54eb98dffc1f277b3762f827ae76d875">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat4x2b||Type==UniformType::eMat4x2i||Type==UniformType::eMat4x2ui||Type==UniformType::eMat4x2f||Type==UniformType::eMat4x2d &gt;::type &gt;</a>
-, <a class="el" href="d6/d25/a03284.html#a15de10127821cd23a954761741c9f7b9">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat4x3b||Type==UniformType::eMat4x3i||Type==UniformType::eMat4x3ui||Type==UniformType::eMat4x3f||Type==UniformType::eMat4x3d &gt;::type &gt;</a>
-, <a class="el" href="db/de4/a03288.html#a3ba8a53f4036617e3e47d369ebf7b090">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat4x4b||Type==UniformType::eMat4x4i||Type==UniformType::eMat4x4ui||Type==UniformType::eMat4x4f||Type==UniformType::eMat4x4d &gt;::type &gt;</a>
-, <a class="el" href="d1/dfa/a03244.html#a07ee53d2b99538e60e5d71b5d6ddb907">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eVec2b||Type==UniformType::eVec2i||Type==UniformType::eVec2ui||Type==UniformType::eVec2f||Type==UniformType::eVec2d &gt;::type &gt;</a>
-, <a class="el" href="d9/d01/a03248.html#a2fedc36c2a1390df8c1434ec3651d1e8">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eVec3b||Type==UniformType::eVec3i||Type==UniformType::eVec3ui||Type==UniformType::eVec3f||Type==UniformType::eVec3d &gt;::type &gt;</a>
-, <a class="el" href="d7/d44/a03252.html#a0930bc49c4eafd9703ba3f3d267d7987">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eVec4b||Type==UniformType::eVec4i||Type==UniformType::eVec4ui||Type==UniformType::eVec4f||Type==UniformType::eVec4d &gt;::type &gt;</a>
+: <a class="el" href="d2/df2/a03960.html#a2283bed474f3f6c91a4d976d55fbb44c">castor3d::InstantiationComponent::Data</a>
+, <a class="el" href="d4/d61/a05212.html#a2801ab754c2996e43bf6acf5681aa9d1">castor3d::ParticleDeclaration</a>
+, <a class="el" href="d8/d12/a04236.html#a4406af5bc2d34cc43587ae9252b5930d">castor3d::SceneCuller::CulledInstancesArrayT&lt; CulledT, ArrayT &gt;</a>
 </li>
-<li>CpuBuffer()
-: <a class="el" href="d6/d0c/a02080.html#a21379c42adf57dd88123da96096f38c8">castor3d::CpuBuffer&lt; T &gt;</a>
+<li>Count
+: <a class="el" href="da/d44/a05256.html#ae0114da6c0d65908c72928c61cc2c440">castor3d::SceneNode</a>
+</li>
+<li>CpuFrameEvent()
+: <a class="el" href="de/dec/a02524.html#aaf3cac5e82d244c2c6dbe23debd5d915">castor3d::CpuFrameEvent</a>
+</li>
+<li>CpuFunctorEvent()
+: <a class="el" href="d8/d65/a02528.html#a5be9e5cea2243fb0e162a6968f0a1194">castor3d::CpuFunctorEvent</a>
 </li>
 <li>CpuParticleSystem()
-: <a class="el" href="d3/d8d/a02944.html#a842a0686752787c49dcb0c7c411ea8c7">castor3d::CpuParticleSystem</a>
+: <a class="el" href="d6/d3f/a05204.html#a251484bbd669c0f46a3c0cfc828194f9">castor3d::CpuParticleSystem</a>
+</li>
+<li>cpuUpdate()
+: <a class="el" href="d1/d22/a05464.html#aad50a1fefda242429daea5370f2e6be6">castor3d::GpInfoUbo</a>
+, <a class="el" href="d1/d06/a05468.html#a2f30a1d39e9c5ea861177803e507195b">castor3d::HdrConfigUbo</a>
+, <a class="el" href="d4/db7/a05476.html#ae019e98ed96dc35d3cb0d88065f05362">castor3d::LayeredLpvGridConfigUbo</a>
+, <a class="el" href="db/d15/a05484.html#a27fbfdf182f12434ab08cf0cf5de656d">castor3d::LpvGridConfigUbo</a>
+, <a class="el" href="de/d62/a05492.html#a99b9cc5fa02bc38657c9ca85e8b0deee">castor3d::LpvLightConfigUbo</a>
+, <a class="el" href="d2/d0e/a05496.html#a6a00775f136350227e835e042607dfd6">castor3d::MatrixUbo</a>
+, <a class="el" href="da/de2/a05500.html#ace5289cc60dbcbe8397f64bd0b2592c2">castor3d::ModelInstancesUbo</a>
+, <a class="el" href="d2/d81/a05504.html#ab759e1cf3c250ef4c5c3badf4d827ed0">castor3d::ModelMatrixUbo</a>
+, <a class="el" href="df/d63/a05528.html#ad9969ceabf7f0058e5305e17428cf1ef">castor3d::SceneUbo</a>
+, <a class="el" href="df/d64/a05544.html#ae29e0218fad72725f30c5f66caa6600a">castor3d::SsaoConfigUbo</a>
+, <a class="el" href="dd/da7/a05632.html#a7a93780c1cdf101e7d09c57146c09fc9">castor3d::VoxelizerUbo</a>
+</li>
+<li>cpuUpdateCameraPosition()
+: <a class="el" href="df/d63/a05528.html#aa7897ac4a6fa2942549a9f5dae6ab39a">castor3d::SceneUbo</a>
+</li>
+<li>CpuUpdater()
+: <a class="el" href="dc/d0d/a04588.html#a3906683df8171db9299ecad76de8684d">castor3d::CpuUpdater</a>
 </li>
 <li>create()
-: <a class="el" href="db/db1/a02404.html#aaa1d0ae3e23120c7331efc4e21d5d965">castor3d::BorderPanelOverlay</a>
-, <a class="el" href="d0/d9d/a01760.html#ab7b359e6d1bdc027bcac492bf965d02b">castor3d::CacheBase&lt; ElementType, KeyType &gt;</a>
-, <a class="el" href="dc/d29/a02116.html#a41b5fcbeb72cd1e667a9ae9da1fb4627">castor3d::CmshImporter</a>
-, <a class="el" href="d3/d23/a02120.html#a7d76f802fefb576f67de15041e19129c">castor3d::Cone</a>
-, <a class="el" href="db/d0e/a02124.html#a77e1b64b5598bed7fca6e26bd44db17c">castor3d::Cube</a>
-, <a class="el" href="d1/d60/a02128.html#afabd42a17eef7b694eeffcb7185bf992">castor3d::Cylinder</a>
-, <a class="el" href="d4/d04/a02888.html#a76bf0b2c8ad8fbb8ca771062ba529d59">castor3d::DirectionalLight</a>
-, <a class="el" href="dd/d77/a02096.html#a74de8d60b26cb9142d4b954c12177e7f">castor3d::GpuBuffer</a>
-, <a class="el" href="dd/d07/a02132.html#a40f8f0e672f8eedd3a9b278dd5f6cf6d">castor3d::Icosahedron</a>
-, <a class="el" href="d5/ddd/a02184.html#a8127572fa9988909cabb37dd343fc26d">castor3d::MeshGenerator</a>
-, <a class="el" href="d9/ded/a02472.html#ad4c3de263a83ca50bc7ade68171af2f2">castor3d::PanelOverlay</a>
-, <a class="el" href="db/ddd/a02136.html#ad1dbadcd2049957fead93a7b49858d50">castor3d::Plane</a>
-, <a class="el" href="d6/dd2/a02916.html#a0ecdf5adfb5c822b0b4d5a56307d5e48">castor3d::PointLight</a>
-, <a class="el" href="de/d81/a02140.html#a226b77ad4eb41d29bf7597b9a13e31be">castor3d::Projection</a>
-, <a class="el" href="d5/d70/a01980.html#a1c59b7fd4af50e519df7e12556ee1ef0">castor3d::RenderBuffer</a>
-, <a class="el" href="da/d5d/a03068.html#af6429d5805eea4a1ef5ac144cb8c36a5">castor3d::ShaderObject</a>
-, <a class="el" href="dc/d29/a02144.html#a67ab721549baf7cdcf68825698b451bb">castor3d::Sphere</a>
-, <a class="el" href="d9/dc5/a02924.html#a1b804ec8246205ebbca1dacf8f02bef7">castor3d::SpotLight</a>
-, <a class="el" href="d2/d35/a02480.html#a5f3b6641c6be45c18fdf42fab7172582">castor3d::TextOverlay</a>
-, <a class="el" href="d2/d08/a02148.html#a67f55e8213492914c85b960ad0ff223e">castor3d::Torus</a>
+: <a class="el" href="d5/dbe/a04060.html#aaa1d0ae3e23120c7331efc4e21d5d965">castor3d::BorderPanelOverlay</a>
+, <a class="el" href="df/d46/a02376.html#ab7b359e6d1bdc027bcac492bf965d02b">castor3d::CacheBase&lt; ElementType, KeyType &gt;</a>
+, <a class="el" href="dc/d1a/a02288.html#acf84b34150a4808faf7b29da1037204c">castor3d::CmshImporter</a>
+, <a class="el" href="d0/de0/a03868.html#a7d76f802fefb576f67de15041e19129c">castor3d::Cone</a>
+, <a class="el" href="d0/d84/a03872.html#a77e1b64b5598bed7fca6e26bd44db17c">castor3d::Cube</a>
+, <a class="el" href="d4/dfc/a03876.html#afabd42a17eef7b694eeffcb7185bf992">castor3d::Cylinder</a>
+, <a class="el" href="df/d18/a05168.html#a76bf0b2c8ad8fbb8ca771062ba529d59">castor3d::DirectionalLight</a>
+, <a class="el" href="df/d0d/a03880.html#a40f8f0e672f8eedd3a9b278dd5f6cf6d">castor3d::Icosahedron</a>
+, <a class="el" href="d2/d05/a03916.html#a8127572fa9988909cabb37dd343fc26d">castor3d::MeshGenerator</a>
+, <a class="el" href="d3/db3/a04152.html#ad4c3de263a83ca50bc7ade68171af2f2">castor3d::PanelOverlay</a>
+, <a class="el" href="d6/db7/a03884.html#ad1dbadcd2049957fead93a7b49858d50">castor3d::Plane</a>
+, <a class="el" href="dc/ded/a05184.html#a0ecdf5adfb5c822b0b4d5a56307d5e48">castor3d::PointLight</a>
+, <a class="el" href="d6/d74/a03888.html#a226b77ad4eb41d29bf7597b9a13e31be">castor3d::Projection</a>
+, <a class="el" href="df/d39/a05424.html#ab37231fde6d0dceadc9dd53c4febaa60">castor3d::shader::Surface</a>
+, <a class="el" href="db/dc1/a03892.html#a67ab721549baf7cdcf68825698b451bb">castor3d::Sphere</a>
+, <a class="el" href="d6/d8c/a05188.html#a1b804ec8246205ebbca1dacf8f02bef7">castor3d::SpotLight</a>
+, <a class="el" href="d3/db2/a04156.html#a5f3b6641c6be45c18fdf42fab7172582">castor3d::TextOverlay</a>
+, <a class="el" href="d6/d18/a02664.html#af21f063b2aa3c526eb26b3cf00ff8e67">castor3d::TextureUnit</a>
+, <a class="el" href="d1/dba/a03896.html#a67f55e8213492914c85b960ad0ff223e">castor3d::Torus</a>
 </li>
 <li>createAnimation()
-: <a class="el" href="dc/d25/a02160.html#a08aa3351435beb4f34deb6c5ea97f708">castor3d::Mesh</a>
-, <a class="el" href="d8/d1e/a02208.html#acaf34cbe825dbdfccaa5929bdf151fff">castor3d::Skeleton</a>
-</li>
-<li>createAtomicCounterBuffer()
-: <a class="el" href="d1/d7a/a03080.html#ae51800f15339abed061df2b6ee050237">castor3d::ShaderProgram</a>
-</li>
-<li>createAttachment()
-: <a class="el" href="de/d7f/a01960.html#a83fae4bfda8d3b06be4077e613c19601">castor3d::BackBuffers</a>
-, <a class="el" href="db/d9d/a01972.html#a43c12c869217e6b2f57a7272dd8e4a76">castor3d::FrameBuffer</a>
-</li>
-<li>createBackBuffers()
-: <a class="el" href="d7/d73/a02708.html#a30d9714e2383fd64229761e9ecf10b75">castor3d::RenderSystem</a>
+: <a class="el" href="dc/dce/a03908.html#aec24f56c258980be1be39115d020ab1f">castor3d::Mesh</a>
+, <a class="el" href="db/d13/a04032.html#acaf34cbe825dbdfccaa5929bdf151fff">castor3d::Skeleton</a>
+, <a class="el" href="d6/d18/a02664.html#a0712cdf13a73bfff4ec6e5336151ed7d">castor3d::TextureUnit</a>
 </li>
 <li>createBillboardNode()
-: <a class="el" href="de/db4/a02684.html#af6ae74876ed12cf97aa80978dfca64fa">castor3d::RenderPass</a>
+: <a class="el" href="d8/d25/a04596.html#a7534bc2c8e7a5e8812685d23cf92da18">castor3d::SceneRenderPass</a>
+</li>
+<li>createBinaryParser()
+: <a class="el" href="d2/d08/a02148.html#ae6f4694ede819151fe4e30e33235ff07">castor3d::BinaryParserBase&lt; TParsed &gt;</a>
 </li>
 <li>createBinding()
-: <a class="el" href="d4/dd6/a03364.html#ac27c9eadef2ece7ec94865578818c1f5">castor3d::UniformBuffer</a>
+: <a class="el" href="d1/d54/a05272.html#a6170481289ab367b47234ae0eb0b67b6">castor3d::PassBuffer</a>
+, <a class="el" href="d6/d72/a05308.html#ac9c9b5bd6bfa38c10d1e83d5ca74967b">castor3d::ShaderBuffer</a>
+, <a class="el" href="d9/d21/a05448.html#a5b35be8d96b7a06453674ece612697b4">castor3d::TextureConfigurationBuffer</a>
+</li>
+<li>createBlendState()
+: <a class="el" href="d8/d25/a04596.html#a85a295a43ea151d07bbb59a983fc0a9b">castor3d::SceneRenderPass</a>
 </li>
 <li>createBone()
-: <a class="el" href="d8/d1e/a02208.html#acd69d8a8df5ab5967653f85e7ecd38d7">castor3d::Skeleton</a>
+: <a class="el" href="db/d13/a04032.html#a53c334f4c9a01377cc59b9e69f5217d0">castor3d::Skeleton</a>
 </li>
-<li>createColourRenderBuffer()
-: <a class="el" href="db/d9d/a01972.html#addf1c0b0ca6cdcc5631317fb7d1dec28">castor3d::FrameBuffer</a>
+<li>createDescriptorPools()
+: <a class="el" href="de/dfb/a04616.html#acd859986dfda7ccbc1a6a169c83f192f">castor3d::RenderPipeline</a>
 </li>
-<li>createComputePipeline()
-: <a class="el" href="d7/d73/a02708.html#a3d5fd8386c94887e5f81e2b7abc1a744">castor3d::RenderSystem</a>
+<li>createDevice()
+: <a class="el" href="d3/d83/a04520.html#a680de530d55207b6c3135752b81b4cb6">castor3d::RenderLoop</a>
+, <a class="el" href="d9/d38/a04624.html#aa33eda6426e0d6b530f992bec90f246f">castor3d::RenderSystem</a>
 </li>
-<li>createContext()
-: <a class="el" href="dd/dc4/a02632.html#a9640fed50bf265a33435acbcbe751ee2">castor3d::RenderLoop</a>
-, <a class="el" href="d7/d73/a02708.html#ac587c21516e721ce90581be8aa9c4a36">castor3d::RenderSystem</a>
-</li>
-<li>createDepthStencilRenderBuffer()
-: <a class="el" href="db/d9d/a01972.html#aaa3bbff2358c912ef7adc987cda6e2e9">castor3d::FrameBuffer</a>
+<li>createDiffuseModel()
+: <a class="el" href="da/de3/a05388.html#ae8872f993e5ad5385e4796e9141aba73">castor3d::shader::MetallicBrdfLightingModel</a>
+, <a class="el" href="dd/dc9/a05400.html#a9d448c7d1614221762fba980a9dd5714">castor3d::shader::PhongLightingModel</a>
+, <a class="el" href="d8/d73/a05412.html#acb01c2299ce446b8b8b3aa50026c878a">castor3d::shader::SpecularBrdfLightingModel</a>
 </li>
 <li>createEnvironmentMap()
-: <a class="el" href="d6/db9/a02980.html#a5cd16a5e0fe678e77a1b91d37f20ac30">castor3d::Scene</a>
+: <a class="el" href="d5/d76/a05244.html#a5cd16a5e0fe678e77a1b91d37f20ac30">castor3d::Scene</a>
 </li>
 <li>createFontTexture()
-: <a class="el" href="d2/d77/a01824.html#ad13c9a50ccfea2703ff37f6564a46e82">castor3d::Cache&lt; Overlay, castor::String &gt;</a>
+: <a class="el" href="d1/df5/a02496.html#a22340a1b75ed6bdc59fc14900bc386d8">castor3d::Cache&lt; Overlay, castor::String &gt;</a>
 </li>
-<li>createFrameBuffer()
-: <a class="el" href="d7/d73/a02708.html#aef60bcd7373c3b575f3d0b0a895ac4fa">castor3d::RenderSystem</a>
+<li>createLayoutBinding()
+: <a class="el" href="d1/d54/a05272.html#ae05b64f9cef5b212a31186b835c96beb">castor3d::PassBuffer</a>
+, <a class="el" href="d6/d72/a05308.html#af41e5031daa84ddf0159ab484a953e96">castor3d::ShaderBuffer</a>
+, <a class="el" href="d9/df0/a05540.html#a9275775ca066f7d5c02839fcd680d8c0">castor3d::SkinningUbo</a>
+, <a class="el" href="d9/d21/a05448.html#a26b922388eb1b362cf2fc9f2dcef5ad7">castor3d::TextureConfigurationBuffer</a>
 </li>
-<li>createGeometryBuffers()
-: <a class="el" href="d7/d73/a02708.html#ae9a7ae6e4530210d8ed13d6aaa39f18c">castor3d::RenderSystem</a>
+<li>createMaterial
+: <a class="el" href="df/d8e/a05248.html#ad4cf8ae93cad9c6a9d5dd1ec03abebce">castor3d::SceneFileContext</a>
 </li>
-<li>createGlslWriter()
-: <a class="el" href="d7/d73/a02708.html#a1338dd3baccb336f95fbe19cf604e1b5">castor3d::RenderSystem</a>
+<li>createModel()
+: <a class="el" href="da/de3/a05388.html#ab3ffb78198847e7f4051636b86f3f3bb">castor3d::shader::MetallicBrdfLightingModel</a>
+, <a class="el" href="dd/dc9/a05400.html#a108ca914ea08ed96244cbcbc2ddaacec">castor3d::shader::PhongLightingModel</a>
+, <a class="el" href="d8/d73/a05412.html#a3b42bece1bb45647b3411804705f220c">castor3d::shader::SpecularBrdfLightingModel</a>
 </li>
 <li>createMorphingNode()
-: <a class="el" href="de/db4/a02684.html#ad96b11734c7df98cf706bd3981c5c08b">castor3d::RenderPass</a>
-</li>
-<li>createObject()
-: <a class="el" href="d1/d7a/a03080.html#aceb343268f08977fcc5cbd01661e502e">castor3d::ShaderProgram</a>
+: <a class="el" href="d8/d25/a04596.html#aef15f688cd35f6b8b50970e7b5f57d1b">castor3d::SceneRenderPass</a>
 </li>
 <li>createPass()
-: <a class="el" href="db/d68/a02028.html#aed6380c591d1877c2a5b784a51d49c23">castor3d::Material</a>
+: <a class="el" href="dc/d28/a02584.html#aed6380c591d1877c2a5b784a51d49c23">castor3d::Material</a>
+, <a class="el" href="df/d8e/a05248.html#aec8d91f4c54b2a29fe545ad4178d66d0">castor3d::SceneFileContext</a>
 </li>
-<li>createQuery()
-: <a class="el" href="d7/d73/a02708.html#a1c0eef906d15e8c01d02c565b53dc9cb">castor3d::RenderSystem</a>
+<li>createPasses()
+: <a class="el" href="d5/d6e/a04988.html#a15ced831f372c218070d972d4ff4877d">castor3d::Texture3DTo2D</a>
 </li>
-<li>createRenderPipeline()
-: <a class="el" href="d7/d73/a02708.html#ac859cefe1bf1250752f0d409795b67eb">castor3d::RenderSystem</a>
+<li>createPipeline()
+: <a class="el" href="d8/dfa/a04756.html#a4afddcea7663fa13cce58a077ad11129">castor3d::LightPass</a>
+, <a class="el" href="dd/d4b/a04432.html#a36f5e5c47521947b2b7d1a2b87be1250">castor3d::RenderGrid</a>
+, <a class="el" href="d4/d45/a04456.html#a2d8f7fe31e95ec7563ab7e49d47f847f">castor3d::RenderQuad</a>
 </li>
-<li>createSampler()
-: <a class="el" href="d7/d73/a02708.html#a1dc1c69e05b24dbb58d0760e781b82fe">castor3d::RenderSystem</a>
+<li>createPipelineAndPass()
+: <a class="el" href="dd/d4b/a04432.html#aef0947b97b293c7391fd426b102331a9">castor3d::RenderGrid</a>
+, <a class="el" href="d4/d45/a04456.html#a9eed2ab1f518d2d215e10f79dd66b980">castor3d::RenderQuad</a>
 </li>
-<li>createShaderProgram()
-: <a class="el" href="d7/d73/a02708.html#a95bd74d56cdf41e86df94f3c3abaf45b">castor3d::RenderSystem</a>
+<li>createPipelines()
+: <a class="el" href="d3/d49/a04972.html#a03e099cd27fb31640352a9925effa710">castor3d::RenderCube</a>
+</li>
+<li>createResult()
+: <a class="el" href="dc/dca/a04260.html#a161bbb6eec314f57a8731ec29786694a">castor3d::GeometryInjectionPass</a>
+</li>
+<li>createSizedBinding()
+: <a class="el" href="d1/d22/a05464.html#a5d2c9c7da7669ef53a90758a44b7619c">castor3d::GpInfoUbo</a>
+, <a class="el" href="d1/d06/a05468.html#a22919fcbcf1d1c282e876e99e5e7cabe">castor3d::HdrConfigUbo</a>
+, <a class="el" href="d4/db7/a05476.html#ab75a8a861f800ea0ac6a5f95b39b3683">castor3d::LayeredLpvGridConfigUbo</a>
+, <a class="el" href="db/d15/a05484.html#a25c8501fecd9349223a1b66f7a9393e7">castor3d::LpvGridConfigUbo</a>
+, <a class="el" href="de/d62/a05492.html#a55564c6a2a416333c26436076181029c">castor3d::LpvLightConfigUbo</a>
+, <a class="el" href="d2/d0e/a05496.html#ac31062a614833908640fbbeed9cb92fe">castor3d::MatrixUbo</a>
+, <a class="el" href="da/de2/a05500.html#ae20924059170ff6f59e934828e26ef9c">castor3d::ModelInstancesUbo</a>
+, <a class="el" href="d2/d81/a05504.html#a00aa24677e5950ec3108ac546ef1cdf5">castor3d::ModelMatrixUbo</a>
+, <a class="el" href="db/d2d/a05520.html#a329e3cca96d30cfb46fcfa67c51ca404">castor3d::PickingUbo</a>
+, <a class="el" href="d7/d66/a05524.html#a409d04099ce176f7ba8601720b85c9b5">castor3d::RsmConfigUbo</a>
+, <a class="el" href="df/d63/a05528.html#a3820ea1f3fdb87e2fe8b95009c8a55fa">castor3d::SceneUbo</a>
+, <a class="el" href="d4/de3/a05532.html#a33ff803524d407253ea98caeeb038418">castor3d::ShadowMapUbo</a>
+, <a class="el" href="df/d64/a05544.html#a073ca04d26a7b693d1bad1049ed59890">castor3d::SsaoConfigUbo</a>
+, <a class="el" href="d1/d47/a02300.html#a2c6ad146d4910651544564c25ca7dccd">castor3d::UniformBufferOffsetT&lt; DataT &gt;</a>
+, <a class="el" href="dd/da7/a05632.html#ac12f32dda8736e904642f50f0d6be562">castor3d::VoxelizerUbo</a>
 </li>
 <li>createSkinningNode()
-: <a class="el" href="de/db4/a02684.html#ad110c1114dd577524d16a5a18300e427">castor3d::RenderPass</a>
+: <a class="el" href="d8/d25/a04596.html#a1f6309ff1990fcf752d1b1fc4162707e">castor3d::SceneRenderPass</a>
 </li>
 <li>createStaticNode()
-: <a class="el" href="de/db4/a02684.html#ada43a5bf09c9fc34341cb41fd3ada310">castor3d::RenderPass</a>
+: <a class="el" href="d8/d25/a04596.html#ad06a7b233133bd72a5f40a6309bbb636">castor3d::SceneRenderPass</a>
 </li>
 <li>createSubmesh()
-: <a class="el" href="dc/d25/a02160.html#a5ef7917e650ee2a61adea8c333858045">castor3d::Mesh</a>
+: <a class="el" href="dc/dce/a03908.html#a5ef7917e650ee2a61adea8c333858045">castor3d::Mesh</a>
 </li>
-<li>createTexture()
-: <a class="el" href="d7/d73/a02708.html#ae796e98c79109f5e8495eb3478b780e3">castor3d::RenderSystem</a>
+<li>createUnit
+: <a class="el" href="df/d8e/a05248.html#a8f9d325b45a32b289f04a41f048021b7">castor3d::SceneFileContext</a>
 </li>
-<li>createTextureStorage()
-: <a class="el" href="d7/d73/a02708.html#a91b46c8a53592cc714578eb8797e2d4f">castor3d::RenderSystem</a>
+<li>ctrl
+: <a class="el" href="d9/de7/a02572.html#ae40eab00317a2b8e1b5c58545eadc894">castor3d::KeyboardState</a>
 </li>
-<li>createTextureVariables()
-: <a class="el" href="dd/d87/a01864.html#ab56dbe1ef41461e3a86798356410c9ae">castor3d::ShaderProgramCache</a>
+<li>CU_DeclareMap()
+: <a class="el" href="d1/df5/a02496.html#a45e44768d70176976d78bea5fa497a7a">castor3d::Cache&lt; Overlay, castor::String &gt;</a>
+, <a class="el" href="de/df2/a04096.html#a27fa9962815715a314bf4ab0355be9b8">castor3d::FontTexture</a>
+, <a class="el" href="d3/db2/a04156.html#aaf065f2be0b4da3d8a380ac2f142c85a">castor3d::TextOverlay</a>
 </li>
-<li>createTextWriter()
-: <a class="el" href="db/db1/a02404.html#a4b0e38e5a5c8faae35dd8be8ab8bab41">castor3d::BorderPanelOverlay</a>
-, <a class="el" href="d4/d04/a02888.html#ab52c57adec38e9e1fbad0af14b4d60ad">castor3d::DirectionalLight</a>
-, <a class="el" href="d8/d05/a02904.html#a8258758b47c3ccd982a0a21bdd9e320d">castor3d::LightCategory</a>
-, <a class="el" href="d4/da8/a02444.html#a3fbbf57166bab5399feed964e0e9ea87">castor3d::OverlayCategory</a>
-, <a class="el" href="d9/ded/a02472.html#a78cf1d7a17a9372165919444c131c448">castor3d::PanelOverlay</a>
-, <a class="el" href="d6/dd2/a02916.html#af4e81a4043b4391767962a3592ad2bc3">castor3d::PointLight</a>
-, <a class="el" href="d9/dc5/a02924.html#a913190331d59a271ea7d48d8df5cedb2">castor3d::SpotLight</a>
-, <a class="el" href="d2/d35/a02480.html#a532f6a5ced42515245a797b0dab19746">castor3d::TextOverlay</a>
+<li>CU_DeclareSmartPtr()
+: <a class="el" href="da/dc4/a02548.html#a4279fa9420669e19563cd42111f206e4">castor3d::NonClientEventHandler&lt; Derived &gt;</a>
 </li>
-<li>CreateThread()
-: <a class="el" href="d6/d71/a02344.html#aeb73994f16a70bce511544fcb02b2bd6">castor3d::Generator</a>
-</li>
-<li>createTransformFeedback()
-: <a class="el" href="d7/d73/a02708.html#a929f5dfeb0c5d7eb907a2a8f130828aa">castor3d::RenderSystem</a>
-</li>
-<li>createUniform()
-: <a class="el" href="da/d5d/a03068.html#ab92b55136c725e017dc22266d5b742b1">castor3d::ShaderObject</a>
-, <a class="el" href="d1/d7a/a03080.html#aab48bd3faa02ea4d5b1f836870f00907">castor3d::ShaderProgram</a>
-, <a class="el" href="d4/dd6/a03364.html#a109ac7d58aa4bd53343bb3ba605bf701">castor3d::UniformBuffer</a>
-</li>
-<li>createUniformBufferBinding()
-: <a class="el" href="d7/d73/a02708.html#a220f32a079234e755b85b713087a8c29">castor3d::RenderSystem</a>
-</li>
-<li>createViewport()
-: <a class="el" href="d7/d73/a02708.html#afae66cbbaaca6bbe416fda438cf99be0">castor3d::RenderSystem</a>
+<li>CU_DeclareVector()
+: <a class="el" href="d1/dd9/a04184.html#a91d7467f09fbcf5448b61888d33b3fc8">castor3d::ImporterPlugin</a>
+, <a class="el" href="d5/dd9/a04104.html#af30a39d84244e6f097d7b245d75e16f4">castor3d::OverlayCategory</a>
+, <a class="el" href="d4/d61/a05212.html#a94906dc420ab54fe789e78978b9afb11">castor3d::ParticleDeclaration</a>
+, <a class="el" href="d3/db2/a04156.html#a97ee4b74fabcd3a89e0e767e1285184f">castor3d::TextOverlay</a>
 </li>
 <li>Cube()
-: <a class="el" href="db/d0e/a02124.html#a078076d81df069f7b3225c30445b1279">castor3d::Cube</a>
+: <a class="el" href="d0/d84/a03872.html#a078076d81df069f7b3225c30445b1279">castor3d::Cube</a>
 </li>
 <li>CubeCameras
-: <a class="el" href="d9/d63/a01896.html#a0b8198f3c2b3c98cc2904c15923cb81c">castor3d::EnvironmentMap</a>
-</li>
-<li>CubeColourAttachment
-: <a class="el" href="d9/d63/a01896.html#af82e00926b71d14941e1030b50805360">castor3d::EnvironmentMap</a>
-</li>
-<li>CubeDepthAttachment
-: <a class="el" href="d9/d63/a01896.html#a4581668775e1be765ca9caccf7103eb7">castor3d::EnvironmentMap</a>
+: <a class="el" href="dc/d32/a04240.html#ae74fbb78d985fedbde103f98ee833f7d">castor3d::EnvironmentMap</a>
 </li>
 <li>CubeMatrices
-: <a class="el" href="d9/d63/a01896.html#ab786383a3014bf5271646e98826aa524">castor3d::EnvironmentMap</a>
+: <a class="el" href="dc/d32/a04240.html#a7d69bb2a7afa0b7d1c3900d4982677dd">castor3d::EnvironmentMap</a>
 </li>
-<li>CurJitter
-: <a class="el" href="dc/ddd/a03196.html#adde041b39130687427f3ee52f271cf0d">castor3d::MatrixUbo</a>
+<li>CulledInstanceArrayT
+: <a class="el" href="d4/d4b/a04232.html#ad426a8a02ca5248ca852870d93f29b90">castor3d::SceneCuller</a>
+</li>
+<li>CulledInstancePtrArrayT
+: <a class="el" href="d4/d4b/a04232.html#a0b052cfdf0e054608216e99895bf0fcb">castor3d::SceneCuller</a>
+</li>
+<li>CulledInstancesPtrT
+: <a class="el" href="d4/d4b/a04232.html#aa19eba8ff864b8bd60cabea05b2a8e82">castor3d::SceneCuller</a>
+</li>
+<li>CulledInstancesT
+: <a class="el" href="d4/d4b/a04232.html#a9c15fc0d7699cb7f229301f26254823b">castor3d::SceneCuller</a>
+</li>
+<li>culler
+: <a class="el" href="d1/d2b/a04652.html#a337ed1e63511a39d4587c17ca0a2ef09">castor3d::ShadowMap::PassData</a>
+</li>
+<li>curModel
+: <a class="el" href="da/d9f/a05584.html#a6346a503e1873ed038c7fdd81b6e8568">castor3d::ModelMatrixUboConfiguration</a>
+</li>
+<li>CurMtxModel
+: <a class="el" href="d2/d81/a05504.html#a8bfb9c20a6a219d49f7f16fc9992d657">castor3d::ModelMatrixUbo</a>
+</li>
+<li>CurMtxNormal
+: <a class="el" href="d2/d81/a05504.html#aa4d974752e409496fae1ee3dcca1e8ca">castor3d::ModelMatrixUbo</a>
+</li>
+<li>curNormal
+: <a class="el" href="da/d9f/a05584.html#a9c75d679f01bebdc89a2f4397e011455">castor3d::ModelMatrixUboConfiguration</a>
+</li>
+<li>CurPositionLocation
+: <a class="el" href="dd/d03/a04604.html#a957a62f86fc08f7a5e90666b33433d10">castor3d::SceneRenderPass::VertexOutputs</a>
+</li>
+<li>currentParticleCount
+: <a class="el" href="d6/d6a/a05200.html#af65a433cb2d05b035ca8bb918c6af932">castor3d::ComputeParticleSystem::Configuration</a>
 </li>
 <li>CurView
-: <a class="el" href="dc/ddd/a03196.html#a5d3ff7c3dc673265c3971fa21be5a46e">castor3d::MatrixUbo</a>
+: <a class="el" href="d2/d0e/a05496.html#a5d3ff7c3dc673265c3971fa21be5a46e">castor3d::MatrixUbo</a>
+</li>
+<li>curView
+: <a class="el" href="d7/d33/a05576.html#a0701e43cde9aea98d6e2881fa17af17f">castor3d::MatrixUboConfiguration</a>
 </li>
 <li>CurViewProj
-: <a class="el" href="dc/ddd/a03196.html#ae3403a8d251e88cd7e9f68aa6c68c0ab">castor3d::MatrixUbo</a>
+: <a class="el" href="d2/d0e/a05496.html#ae3403a8d251e88cd7e9f68aa6c68c0ab">castor3d::MatrixUbo</a>
+</li>
+<li>curViewProj
+: <a class="el" href="d7/d33/a05576.html#a594bac871b9fa0648bf9571e2711ac6e">castor3d::MatrixUboConfiguration</a>
 </li>
 <li>Cylinder()
-: <a class="el" href="d1/d60/a02128.html#a618f9a927a2b79b9e47f2d6cddf6eb52">castor3d::Cylinder</a>
+: <a class="el" href="d4/dfc/a03876.html#a618f9a927a2b79b9e47f2d6cddf6eb52">castor3d::Cylinder</a>
 </li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 13:39:12 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Feb 18 2021 01:09:24 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

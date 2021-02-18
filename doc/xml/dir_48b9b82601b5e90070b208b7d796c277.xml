@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_48b9b82601b5e90070b208b7d796c277" kind="dir">
+    <compoundname>Model</compoundname>
+    <innerdir refid="dir_eb05c2e81f584c27ccf0b1e73c563a6d">Model/Mesh</innerdir>
+    <innerdir refid="dir_a9ab8c7ca784123ca81fe7c7c1bfdee1">Model/Skeleton</innerdir>
+    <innerfile refid="d7/def/a00521">ModelModule.hpp</innerfile>
+    <innerfile refid="d8/df0/a00557">Vertex.hpp</innerfile>
+    <innerfile refid="d9/d19/a00560">VertexGroup.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Model/"/>
+  </compounddef>
+</doxygen>

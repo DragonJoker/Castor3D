@@ -1,0 +1,524 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="de/d0a/a02015" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::AnimableT</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; AnimableHanlerT &gt;</basecompoundref>
+    <derivedcompoundref refid="d5/d45/a03887" prot="public" virt="non-virtual">castor3d::Mesh</derivedcompoundref>
+    <derivedcompoundref refid="dc/d66/a05171" prot="public" virt="non-virtual">castor3d::MovableObject</derivedcompoundref>
+    <includes local="no">AnimationModule.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename</type>
+        <declname>AnimableHanlerT</declname>
+        <defname>AnimableHanlerT</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="user-defined">
+      <header>Construction / Destruction.</header>
+      <memberdef kind="function" id="de/d0a/a02015_1a299fd668f3d9d65aeb7d0dbc259f921b" prot="protected" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::AnimableT&lt; AnimableHanlerT &gt;::AnimableT</definition>
+        <argsstring>(AnimableHanlerT &amp;owner)</argsstring>
+        <name>AnimableT</name>
+        <param>
+          <type>AnimableHanlerT &amp;</type>
+          <declname>owner</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animable.hpp" line="26" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d0a/a02015_1a31508c53a42741c828ca42c079631d69" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::AnimableT&lt; AnimableHanlerT &gt;::~AnimableT</definition>
+        <argsstring>()=default</argsstring>
+        <name>~AnimableT</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animable.hpp" line="27" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d0a/a02015_1ad87437d17aba848283c70537eeeea2f9" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::AnimableT&lt; AnimableHanlerT &gt;::AnimableT</definition>
+        <argsstring>(AnimableT &amp;&amp;rhs)=default</argsstring>
+        <name>AnimableT</name>
+        <param>
+          <type><ref refid="de/d0a/a02015" kindref="compound">AnimableT</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animable.hpp" line="28" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d0a/a02015_1ac175c65ac8b324cee120925fd7d10773" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="de/d0a/a02015" kindref="compound">AnimableT</ref> &amp;</type>
+        <definition>C3D_API AnimableT&amp; castor3d::AnimableT&lt; AnimableHanlerT &gt;::operator=</definition>
+        <argsstring>(AnimableT &amp;&amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <param>
+          <type><ref refid="de/d0a/a02015" kindref="compound">AnimableT</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animable.hpp" line="29" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d0a/a02015_1a09051c18d0af770f8a622b62f707a90e" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::AnimableT&lt; AnimableHanlerT &gt;::AnimableT</definition>
+        <argsstring>(AnimableT const &amp;rhs)=delete</argsstring>
+        <name>AnimableT</name>
+        <param>
+          <type><ref refid="de/d0a/a02015" kindref="compound">AnimableT</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animable.hpp" line="30" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d0a/a02015_1a6d58963898645284c95c86d7da5c23ee" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="de/d0a/a02015" kindref="compound">AnimableT</ref> &amp;</type>
+        <definition>C3D_API AnimableT&amp; castor3d::AnimableT&lt; AnimableHanlerT &gt;::operator=</definition>
+        <argsstring>(AnimableT const &amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <param>
+          <type><ref refid="de/d0a/a02015" kindref="compound">AnimableT</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animable.hpp" line="31" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-type">
+      <memberdef kind="typedef" id="de/d0a/a02015_1af166df7163a5b574419988ded46251ec" prot="protected" static="no">
+        <type><ref refid="df/d78/a02019" kindref="compound">AnimationT</ref>&lt; AnimableHanlerT &gt;</type>
+        <definition>using castor3d::AnimableT&lt; AnimableHanlerT &gt;::Animation =  AnimationT&lt; AnimableHanlerT &gt;</definition>
+        <argsstring></argsstring>
+        <name>Animation</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animable.hpp" line="16" column="1" bodyfile="Animation/Animable.hpp" bodystart="16" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d0a/a02015_1aa3dd4f795f385e026ec4137d1b3d53f7" prot="protected" static="no">
+        <type>std::unique_ptr&lt; <ref refid="de/d0a/a02015_1af166df7163a5b574419988ded46251ec" kindref="member">Animation</ref> &gt;</type>
+        <definition>using castor3d::AnimableT&lt; AnimableHanlerT &gt;::AnimationPtr =  std::unique_ptr&lt; Animation &gt;</definition>
+        <argsstring></argsstring>
+        <name>AnimationPtr</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animable.hpp" line="17" column="1" bodyfile="Animation/Animable.hpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d0a/a02015_1a20eee9b6a0eff7dc185a62905823ce8c" prot="protected" static="no">
+        <type>std::map&lt; castor::String, <ref refid="de/d0a/a02015_1aa3dd4f795f385e026ec4137d1b3d53f7" kindref="member">AnimationPtr</ref> &gt;</type>
+        <definition>using castor3d::AnimableT&lt; AnimableHanlerT &gt;::AnimationPtrStrMap =  std::map&lt; castor::String, AnimationPtr &gt;</definition>
+        <argsstring></argsstring>
+        <name>AnimationPtrStrMap</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animable.hpp" line="18" column="1" bodyfile="Animation/Animable.hpp" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="de/d0a/a02015_1ae1eba45f60f9583c766623aa1165415e" prot="protected" static="no" mutable="no">
+        <type><ref refid="de/d0a/a02015_1a20eee9b6a0eff7dc185a62905823ce8c" kindref="member">AnimationPtrStrMap</ref></type>
+        <definition>AnimationPtrStrMap castor3d::AnimableT&lt; AnimableHanlerT &gt;::m_animations</definition>
+        <argsstring></argsstring>
+        <name>m_animations</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>All animations. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animable.hpp" line="121" column="1" bodyfile="Animation/Animable.hpp" bodystart="121" bodyend="-1"/>
+        <referencedby refid="de/d0a/a02015_1a0f731e4fa9d105d9dda6f409e552a755" compoundref="dc/dee/a00053" startline="90" endline="93">castor3d::AnimableT&lt; Engine &gt;::getAnimations</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="de/d0a/a02015_1a5cea5dff71a256fd1f56afd64d4ac065" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::AnimableT&lt; AnimableHanlerT &gt;::doRemoveAnimation</definition>
+        <argsstring>(castor::String const &amp;name)</argsstring>
+        <name>doRemoveAnimation</name>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Removes an animation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The animation name </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animable.hpp" line="104" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d0a/a02015_1af490514e33d457d6ccb9a5f6417b9857" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename <ref refid="d7/dd1/a01458_1a62712d9ea9e9184dffafc59c48e8e6e5" kindref="member">AnimationType</ref></type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d7/dd1/a01458_1a62712d9ea9e9184dffafc59c48e8e6e5" kindref="member">AnimationType</ref> &amp;</type>
+        <definition>AnimationType&amp; castor3d::AnimableT&lt; AnimableHanlerT &gt;::doGetAnimation</definition>
+        <argsstring>(castor::String const &amp;name)</argsstring>
+        <name>doGetAnimation</name>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves an animation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The animation name </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The animation </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animable.hpp" line="116" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/d0a/a02015_1a55e0aa0f614359a89b2c4f8b85c90b96" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::AnimableT&lt; AnimableHanlerT &gt;::cleanupAnimations</definition>
+        <argsstring>()</argsstring>
+        <name>cleanupAnimations</name>
+        <briefdescription>
+<para>Empties the animations map. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animable.hpp" line="41" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d0a/a02015_1a599c19a3b4de9a4b80ad9a04d9dcdce3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::AnimableT&lt; AnimableHanlerT &gt;::hasAnimation</definition>
+        <argsstring>(castor::String const &amp;name) const</argsstring>
+        <name>hasAnimation</name>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves an animation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The animation name </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The animation </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animable.hpp" line="52" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d0a/a02015_1a56b5cc702f8369124b1bd0f74d5de9f8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="de/d0a/a02015_1af166df7163a5b574419988ded46251ec" kindref="member">Animation</ref> const  &amp;</type>
+        <definition>Animation const&amp; castor3d::AnimableT&lt; AnimableHanlerT &gt;::getAnimation</definition>
+        <argsstring>(castor::String const &amp;name) const</argsstring>
+        <name>getAnimation</name>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves an animation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The animation name </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The animation </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animable.hpp" line="63" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d0a/a02015_1a4501da7f825e9b8a41fc8ab4f1aacfb0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="de/d0a/a02015_1af166df7163a5b574419988ded46251ec" kindref="member">Animation</ref> &amp;</type>
+        <definition>Animation&amp; castor3d::AnimableT&lt; AnimableHanlerT &gt;::getAnimation</definition>
+        <argsstring>(castor::String const &amp;name)</argsstring>
+        <name>getAnimation</name>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves an animation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The animation name </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The animation </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animable.hpp" line="74" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d0a/a02015_1ad7eba8a02433ff32863bebcc5969f09e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::AnimableT&lt; AnimableHanlerT &gt;::addAnimation</definition>
+        <argsstring>(AnimationPtr animation)</argsstring>
+        <name>addAnimation</name>
+        <param>
+          <type><ref refid="de/d0a/a02015_1aa3dd4f795f385e026ec4137d1b3d53f7" kindref="member">AnimationPtr</ref></type>
+          <declname>animation</declname>
+        </param>
+        <briefdescription>
+<para>Adds an animation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">animation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The animation. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animable.hpp" line="83" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d0a/a02015_1a0f731e4fa9d105d9dda6f409e552a755" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="de/d0a/a02015_1a20eee9b6a0eff7dc185a62905823ce8c" kindref="member">AnimationPtrStrMap</ref> const  &amp;</type>
+        <definition>AnimationPtrStrMap const&amp; castor3d::AnimableT&lt; AnimableHanlerT &gt;::getAnimations</definition>
+        <argsstring>() const</argsstring>
+        <name>getAnimations</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The animations. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Animable.hpp" line="90" column="1" bodyfile="Animation/Animable.hpp" bodystart="90" bodyend="93"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Animable public interface. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="11">
+        <label>castor3d::TextureUnit</label>
+        <link refid="d8/dd7/a02643"/>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::Geometry</label>
+        <link refid="db/d6b/a05139"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::Camera</label>
+        <link refid="d0/dcf/a05131"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::Light</label>
+        <link refid="df/dc5/a05151"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::AnimableT&lt; Engine &gt;</label>
+        <link refid="de/d0a/a02015"/>
+        <childnode refid="0" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::ParticleSystem</label>
+        <link refid="d8/d42/a05207"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="0">
+        <label>castor3d::AnimableT&lt; AnimableHanlerT &gt;</label>
+        <link refid="de/d0a/a02015"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::OwnedBy&lt; AnimableHanlerT &gt;</label>
+      </node>
+      <node id="3">
+        <label>castor3d::MovableObject&lt; Engine &gt;</label>
+        <link refid="dc/d66/a05171"/>
+        <childnode refid="0" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::Mesh&lt; Engine &gt;</label>
+        <link refid="d5/d45/a03887"/>
+        <childnode refid="0" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::BillboardList</label>
+        <link refid="d0/d42/a05127"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor3d::Skeleton</label>
+        <link refid="d7/d30/a04011"/>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="14">
+        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
+        <childnode refid="15" relation="template-instance">
+          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>K</label>
+      </node>
+      <node id="17">
+        <label>T</label>
+      </node>
+      <node id="15">
+        <label>std::map&lt; K, T &gt;</label>
+        <childnode refid="16" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="17" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor3d::AnimableT&lt; AnimableHanlerT &gt;</label>
+        <link refid="de/d0a/a02015"/>
+        <childnode refid="13" relation="public-inheritance">
+        </childnode>
+        <childnode refid="14" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor::OwnedBy&lt; AnimableHanlerT &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Animation/Animable.hpp" line="14" column="1" bodyfile="Animation/Animable.hpp" bodystart="12" bodyend="122"/>
+    <listofallmembers>
+      <member refid="de/d0a/a02015_1ad7eba8a02433ff32863bebcc5969f09e" prot="public" virt="non-virtual"><scope>castor3d::AnimableT</scope><name>addAnimation</name></member>
+      <member refid="de/d0a/a02015_1a299fd668f3d9d65aeb7d0dbc259f921b" prot="protected" virt="non-virtual"><scope>castor3d::AnimableT</scope><name>AnimableT</name></member>
+      <member refid="de/d0a/a02015_1ad87437d17aba848283c70537eeeea2f9" prot="protected" virt="non-virtual"><scope>castor3d::AnimableT</scope><name>AnimableT</name></member>
+      <member refid="de/d0a/a02015_1a09051c18d0af770f8a622b62f707a90e" prot="protected" virt="non-virtual"><scope>castor3d::AnimableT</scope><name>AnimableT</name></member>
+      <member refid="de/d0a/a02015_1af166df7163a5b574419988ded46251ec" prot="protected" virt="non-virtual"><scope>castor3d::AnimableT</scope><name>Animation</name></member>
+      <member refid="de/d0a/a02015_1aa3dd4f795f385e026ec4137d1b3d53f7" prot="protected" virt="non-virtual"><scope>castor3d::AnimableT</scope><name>AnimationPtr</name></member>
+      <member refid="de/d0a/a02015_1a20eee9b6a0eff7dc185a62905823ce8c" prot="protected" virt="non-virtual"><scope>castor3d::AnimableT</scope><name>AnimationPtrStrMap</name></member>
+      <member refid="de/d0a/a02015_1a55e0aa0f614359a89b2c4f8b85c90b96" prot="public" virt="non-virtual"><scope>castor3d::AnimableT</scope><name>cleanupAnimations</name></member>
+      <member refid="de/d0a/a02015_1af490514e33d457d6ccb9a5f6417b9857" prot="protected" virt="non-virtual"><scope>castor3d::AnimableT</scope><name>doGetAnimation</name></member>
+      <member refid="de/d0a/a02015_1a5cea5dff71a256fd1f56afd64d4ac065" prot="protected" virt="non-virtual"><scope>castor3d::AnimableT</scope><name>doRemoveAnimation</name></member>
+      <member refid="de/d0a/a02015_1a56b5cc702f8369124b1bd0f74d5de9f8" prot="public" virt="non-virtual"><scope>castor3d::AnimableT</scope><name>getAnimation</name></member>
+      <member refid="de/d0a/a02015_1a4501da7f825e9b8a41fc8ab4f1aacfb0" prot="public" virt="non-virtual"><scope>castor3d::AnimableT</scope><name>getAnimation</name></member>
+      <member refid="de/d0a/a02015_1a0f731e4fa9d105d9dda6f409e552a755" prot="public" virt="non-virtual"><scope>castor3d::AnimableT</scope><name>getAnimations</name></member>
+      <member refid="de/d0a/a02015_1a599c19a3b4de9a4b80ad9a04d9dcdce3" prot="public" virt="non-virtual"><scope>castor3d::AnimableT</scope><name>hasAnimation</name></member>
+      <member refid="de/d0a/a02015_1ae1eba45f60f9583c766623aa1165415e" prot="protected" virt="non-virtual"><scope>castor3d::AnimableT</scope><name>m_animations</name></member>
+      <member refid="de/d0a/a02015_1ac175c65ac8b324cee120925fd7d10773" prot="protected" virt="non-virtual"><scope>castor3d::AnimableT</scope><name>operator=</name></member>
+      <member refid="de/d0a/a02015_1a6d58963898645284c95c86d7da5c23ee" prot="protected" virt="non-virtual"><scope>castor3d::AnimableT</scope><name>operator=</name></member>
+      <member refid="de/d0a/a02015_1a31508c53a42741c828ca42c079631d69" prot="protected" virt="virtual"><scope>castor3d::AnimableT</scope><name>~AnimableT</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

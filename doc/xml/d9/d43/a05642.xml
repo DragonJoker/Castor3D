@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d9/d43/a05642" kind="class" language="C++" prot="public">
+    <compoundname>castor::TextWriter&lt; castor3d::BorderPanelOverlay &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::BorderPanelOverlay &gt;</basecompoundref>
+    <includes local="no">TextBorderPanelOverlay.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d9/d43/a05642_1a4fbcb55c9e95f87c9ff5c276d396e9b5" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor::TextWriter&lt; castor3d::BorderPanelOverlay &gt;::TextWriter</definition>
+        <argsstring>(castor::String const &amp;tabs)</argsstring>
+        <name>TextWriter</name>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextBorderPanelOverlay.hpp" line="18" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d43/a05642_1a5b6ec970c3e5a48168122dc084c1a8d5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::TextWriter&lt; castor3d::BorderPanelOverlay &gt;::operator()</definition>
+        <argsstring>(castor3d::BorderPanelOverlay const &amp;overlay, castor::TextFile &amp;file)</argsstring>
+        <name>operator()</name>
+        <param>
+          <type><ref refid="d3/d54/a04054" kindref="compound">castor3d::BorderPanelOverlay</ref> const &amp;</type>
+          <declname>overlay</declname>
+        </param>
+        <param>
+          <type>castor::TextFile &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextBorderPanelOverlay.hpp" line="19" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="5313">
+        <label>castor::TextWriter&lt; castor3d::BorderPanelOverlay &gt;</label>
+        <link refid="d9/d43/a05642"/>
+        <childnode refid="5314" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5314">
+        <label>TextWriterT&lt; castor3d::BorderPanelOverlay &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="5315">
+        <label>castor::TextWriter&lt; castor3d::BorderPanelOverlay &gt;</label>
+        <link refid="d9/d43/a05642"/>
+        <childnode refid="5316" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5316">
+        <label>TextWriterT&lt; castor3d::BorderPanelOverlay &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Text/TextBorderPanelOverlay.hpp" line="16" column="1" bodyfile="Text/TextBorderPanelOverlay.hpp" bodystart="14" bodyend="21"/>
+    <listofallmembers>
+      <member refid="d9/d43/a05642_1a5b6ec970c3e5a48168122dc084c1a8d5" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::BorderPanelOverlay &gt;</scope><name>operator()</name></member>
+      <member refid="d9/d43/a05642_1a4fbcb55c9e95f87c9ff5c276d396e9b5" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::BorderPanelOverlay &gt;</scope><name>TextWriter</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

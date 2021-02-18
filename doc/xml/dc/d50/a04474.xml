@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dc/d50/a04474" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::EnvironmentPrefilter::MipRenderCube::FrameBuffer</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dc/d50/a04474_1addda96af1117ca20089e7b96b721098c" prot="public" static="no" mutable="no">
+        <type>ashes::ImageView</type>
+        <definition>ashes::ImageView castor3d::EnvironmentPrefilter::MipRenderCube::FrameBuffer::dstView</definition>
+        <argsstring></argsstring>
+        <name>dstView</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="44" column="1" bodyfile="Render/PBR/EnvironmentPrefilter.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d50/a04474_1abb0b54ea5c0183acd99ceab6307c998d" prot="public" static="no" mutable="no">
+        <type>ashes::FrameBufferPtr</type>
+        <definition>ashes::FrameBufferPtr castor3d::EnvironmentPrefilter::MipRenderCube::FrameBuffer::frameBuffer</definition>
+        <argsstring></argsstring>
+        <name>frameBuffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="45" column="1" bodyfile="Render/PBR/EnvironmentPrefilter.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/PBR/EnvironmentPrefilter.hpp" line="43" column="1" bodyfile="Render/PBR/EnvironmentPrefilter.hpp" bodystart="42" bodyend="46"/>
+    <listofallmembers>
+      <member refid="dc/d50/a04474_1addda96af1117ca20089e7b96b721098c" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube::FrameBuffer</scope><name>dstView</name></member>
+      <member refid="dc/d50/a04474_1abb0b54ea5c0183acd99ceab6307c998d" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube::FrameBuffer</scope><name>frameBuffer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d3/dee/a02862" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::VkTypeTraits&lt; VkRenderPassBeginInfo &gt;</compoundname>
+    <includes local="no">makeVkType.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d3/dee/a02862_1a4c360a3ba77bd4165043c4e707569666" prot="public" static="yes" mutable="no">
+        <type>VkStructureType constexpr</type>
+        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkRenderPassBeginInfo &gt;::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <initializer>= VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/makeVkType.hpp" line="57" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Miscellaneous/makeVkType.hpp" line="57" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="57" bodyend="57"/>
+    <listofallmembers>
+      <member refid="d3/dee/a02862_1a4c360a3ba77bd4165043c4e707569666" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkRenderPassBeginInfo &gt;</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

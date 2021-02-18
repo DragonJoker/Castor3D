@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d4/da1/a04423" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::rq::BindingDescription</compoundname>
+    <includes local="no">RenderQuad.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d4/da1/a04423_1a669b2abbcb1d55eaa4177b9bc8b7b999" prot="public" static="no" mutable="no">
+        <type>VkDescriptorType</type>
+        <definition>VkDescriptorType castor3d::rq::BindingDescription::descriptorType</definition>
+        <argsstring></argsstring>
+        <name>descriptorType</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderQuad.hpp" line="68" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="68" bodyend="-1"/>
+        <referencedby refid="d4/da1/a04423_1accfe1676d21c4bd23ffbebd0716b371c" compoundref="df/d3b/a00728" startline="59" endline="66">BindingDescription</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d4/da1/a04423_1ab331014d7407b22dfb1ce016809c402b" prot="public" static="no" mutable="no">
+        <type>ashes::Optional&lt; VkImageViewType &gt;</type>
+        <definition>ashes::Optional&lt; VkImageViewType &gt; castor3d::rq::BindingDescription::viewType</definition>
+        <argsstring></argsstring>
+        <name>viewType</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderQuad.hpp" line="69" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="69" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/da1/a04423_1add6e83c862a05bf15a0c3e83fa1a5349" prot="public" static="no" mutable="no">
+        <type>VkShaderStageFlags</type>
+        <definition>VkShaderStageFlags castor3d::rq::BindingDescription::stageFlags</definition>
+        <argsstring></argsstring>
+        <name>stageFlags</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderQuad.hpp" line="70" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/da1/a04423_1accfe1676d21c4bd23ffbebd0716b371c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::rq::BindingDescription::BindingDescription</definition>
+        <argsstring>(VkDescriptorType descriptorType, ashes::Optional&lt; VkImageViewType &gt; viewType, VkShaderStageFlags stageFlags=VK_SHADER_STAGE_FRAGMENT_BIT)</argsstring>
+        <name>BindingDescription</name>
+        <param>
+          <type>VkDescriptorType</type>
+          <declname>descriptorType</declname>
+        </param>
+        <param>
+          <type>ashes::Optional&lt; VkImageViewType &gt;</type>
+          <declname>viewType</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>stageFlags</declname>
+          <defval>VK_SHADER_STAGE_FRAGMENT_BIT</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderQuad.hpp" line="59" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="59" bodyend="66"/>
+        <references refid="d4/da1/a04423_1a669b2abbcb1d55eaa4177b9bc8b7b999" compoundref="df/d3b/a00728" startline="68">descriptorType</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Passes/RenderQuad.hpp" line="58" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="57" bodyend="71"/>
+    <listofallmembers>
+      <member refid="d4/da1/a04423_1accfe1676d21c4bd23ffbebd0716b371c" prot="public" virt="non-virtual"><scope>castor3d::rq::BindingDescription</scope><name>BindingDescription</name></member>
+      <member refid="d4/da1/a04423_1a669b2abbcb1d55eaa4177b9bc8b7b999" prot="public" virt="non-virtual"><scope>castor3d::rq::BindingDescription</scope><name>descriptorType</name></member>
+      <member refid="d4/da1/a04423_1add6e83c862a05bf15a0c3e83fa1a5349" prot="public" virt="non-virtual"><scope>castor3d::rq::BindingDescription</scope><name>stageFlags</name></member>
+      <member refid="d4/da1/a04423_1ab331014d7407b22dfb1ce016809c402b" prot="public" virt="non-virtual"><scope>castor3d::rq::BindingDescription</scope><name>viewType</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

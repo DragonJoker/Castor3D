@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: castor3d::LegacyPass Class Reference</title>
+<title>Castor3D: castor3d::BinaryWriter&lt; Animation &gt; Class Template Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -17,10 +17,12 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Castor3D
-   &#160;<span id="projectnumber">..</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
+   <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
  </tr>
  </tbody>
@@ -39,656 +41,92 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../d0/d85/a00976.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d3/dbb/a02004.html">LegacyPass</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../d8/d31/a01407.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d3/dbb/a02004.html">BinaryWriter&lt; Animation &gt;</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
-<a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="../../d8/d24/a02001.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">castor3d::LegacyPass Class Reference</div>  </div>
+<div class="title">castor3d::BinaryWriter&lt; Animation &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Definition of a traditional (pre-PBR) pass.  
+<p>Animation binary loader.  
  <a href="../../d3/dbb/a02004.html#details">More...</a></p>
-<div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-0-trigger" src="../../closed.png" alt="+"/> Inheritance diagram for castor3d::LegacyPass:</div>
-<div id="dynsection-0-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../d7/d98/a02003.png" border="0" usemap="#castor3d_1_1LegacyPass_inherit__map" alt="Inheritance graph"/></div>
-<map name="castor3d_1_1LegacyPass_inherit__map" id="castor3d_1_1LegacyPass_inherit__map">
-<area shape="rect"  title="Definition of a traditional (pre&#45;PBR) pass." alt="" coords="25,155,177,181"/>
-<area shape="rect"  href="../../d8/d22/a02044.html" title="Base class of a material pass." alt="" coords="46,80,157,107"/>
-<area shape="rect"  title=" " alt="" coords="5,5,197,32"/>
+<div class="dynheader">
+Inheritance diagram for castor3d::BinaryWriter&lt; Animation &gt;:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d7/d98/a02003.png" border="0" usemap="#castor3d_1_1BinaryWriter_3_01Animation_01_4_inherit__map" alt="Inheritance graph"/></div>
+<map name="castor3d_1_1BinaryWriter_3_01Animation_01_4_inherit__map" id="castor3d_1_1BinaryWriter_3_01Animation_01_4_inherit__map">
+<area shape="rect"  title="Animation binary loader." alt="" coords="21,200,173,241"/>
+<area shape="rect"  href="../../da/dbe/a02084.html" title=" " alt="" coords="5,109,188,151"/>
+<area shape="rect"  href="../../da/dbe/a02084.html" title="Binary data chunk writer base class." alt="" coords="5,5,188,47"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
-<div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-1-trigger" src="../../closed.png" alt="+"/> Collaboration diagram for castor3d::LegacyPass:</div>
-<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../df/d37/a02002.png" border="0" usemap="#castor3d_1_1LegacyPass_coll__map" alt="Collaboration graph"/></div>
-<map name="castor3d_1_1LegacyPass_coll__map" id="castor3d_1_1LegacyPass_coll__map">
-<area shape="rect"  title="Definition of a traditional (pre&#45;PBR) pass." alt="" coords="25,155,177,181"/>
-<area shape="rect"  href="../../d8/d22/a02044.html" title="Base class of a material pass." alt="" coords="46,80,157,107"/>
-<area shape="rect"  title=" " alt="" coords="5,5,197,32"/>
+<div class="dynheader">
+Collaboration diagram for castor3d::BinaryWriter&lt; Animation &gt;:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../df/d37/a02002.png" border="0" usemap="#castor3d_1_1BinaryWriter_3_01Animation_01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="castor3d_1_1BinaryWriter_3_01Animation_01_4_coll__map" id="castor3d_1_1BinaryWriter_3_01Animation_01_4_coll__map">
+<area shape="rect"  title="Animation binary loader." alt="" coords="21,289,173,331"/>
+<area shape="rect"  href="../../da/dbe/a02084.html" title=" " alt="" coords="5,199,188,240"/>
+<area shape="rect"  href="../../d7/db2/a02036.html" title=" " alt="" coords="51,5,206,32"/>
+<area shape="rect"  href="../../da/dbe/a02084.html" title="Binary data chunk writer base class." alt="" coords="157,95,340,136"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d6e/a02008.html">TextWriter</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../d8/d22/a02044.html" title="Base class of a material pass.">Pass</a> loader.  <a href="../../d5/d6e/a02008.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
-Public Member Functions</h2></td></tr>
-<tr class="memitem:a4af6810f4dc3b064255e4b05c3f97a82"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/dbb/a02004.html#a4af6810f4dc3b064255e4b05c3f97a82">LegacyPass</a> (<a class="el" href="../../db/d68/a02028.html">Material</a> &amp;parent)</td></tr>
-<tr class="memdesc:a4af6810f4dc3b064255e4b05c3f97a82"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#a4af6810f4dc3b064255e4b05c3f97a82">More...</a><br /></td></tr>
-<tr class="separator:a4af6810f4dc3b064255e4b05c3f97a82"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa0c6b2040f0f493d30af3a88526f1ceb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/dbb/a02004.html#aa0c6b2040f0f493d30af3a88526f1ceb">~LegacyPass</a> ()</td></tr>
-<tr class="memdesc:aa0c6b2040f0f493d30af3a88526f1ceb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="#aa0c6b2040f0f493d30af3a88526f1ceb">More...</a><br /></td></tr>
-<tr class="separator:aa0c6b2040f0f493d30af3a88526f1ceb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac026201d3970645a70758ce306cd5a95"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/dbb/a02004.html#ac026201d3970645a70758ce306cd5a95">accept</a> (<a class="el" href="../../d5/d7f/a03036.html">PassBuffer</a> &amp;buffer) const override</td></tr>
-<tr class="memdesc:ac026201d3970645a70758ce306cd5a95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fills shader variables of given render node.  <a href="#ac026201d3970645a70758ce306cd5a95">More...</a><br /></td></tr>
-<tr class="separator:ac026201d3970645a70758ce306cd5a95"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a69fa151afb2e80091dad4ea9fb9ad153"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/dbb/a02004.html#a69fa151afb2e80091dad4ea9fb9ad153">getPassSize</a> () const override</td></tr>
-<tr class="separator:a69fa151afb2e80091dad4ea9fb9ad153"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2d5f62668ab19db55e70a542468973d0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/dbb/a02004.html#a2d5f62668ab19db55e70a542468973d0">setDiffuse</a> (castor::RgbColour const &amp;value)</td></tr>
-<tr class="memdesc:a2d5f62668ab19db55e70a542468973d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">sets the diffuse colour.  <a href="#a2d5f62668ab19db55e70a542468973d0">More...</a><br /></td></tr>
-<tr class="separator:a2d5f62668ab19db55e70a542468973d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a74d794e65f1da8cd71e98f5ee3abc96c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/dbb/a02004.html#a74d794e65f1da8cd71e98f5ee3abc96c">setSpecular</a> (castor::RgbColour const &amp;value)</td></tr>
-<tr class="memdesc:a74d794e65f1da8cd71e98f5ee3abc96c"><td class="mdescLeft">&#160;</td><td class="mdescRight">sets the specular colour.  <a href="#a74d794e65f1da8cd71e98f5ee3abc96c">More...</a><br /></td></tr>
-<tr class="separator:a74d794e65f1da8cd71e98f5ee3abc96c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a97716ac8a4ff83e9b790b1d6494c2426"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/dbb/a02004.html#a97716ac8a4ff83e9b790b1d6494c2426">setAmbient</a> (float const &amp;value)</td></tr>
-<tr class="memdesc:a97716ac8a4ff83e9b790b1d6494c2426"><td class="mdescLeft">&#160;</td><td class="mdescRight">sets the ambient factor.  <a href="#a97716ac8a4ff83e9b790b1d6494c2426">More...</a><br /></td></tr>
-<tr class="separator:a97716ac8a4ff83e9b790b1d6494c2426"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abbbddc144bc8c93d762c84a05bc0bd02"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/dbb/a02004.html#abbbddc144bc8c93d762c84a05bc0bd02">setShininess</a> (float value)</td></tr>
-<tr class="memdesc:abbbddc144bc8c93d762c84a05bc0bd02"><td class="mdescLeft">&#160;</td><td class="mdescRight">sets the shininess.  <a href="#abbbddc144bc8c93d762c84a05bc0bd02">More...</a><br /></td></tr>
-<tr class="separator:abbbddc144bc8c93d762c84a05bc0bd02"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac9d529b93739d05c023440aea738218d"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/dbb/a02004.html#ac9d529b93739d05c023440aea738218d">getShininess</a> () const</td></tr>
-<tr class="separator:ac9d529b93739d05c023440aea738218d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3e8c00f773d2dfa30985a2169a71dee1"><td class="memItemLeft" align="right" valign="top">castor::RgbColour const  &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/dbb/a02004.html#a3e8c00f773d2dfa30985a2169a71dee1">getDiffuse</a> () const</td></tr>
-<tr class="separator:a3e8c00f773d2dfa30985a2169a71dee1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab9ec30e7650edb4ea3edff3376e33931"><td class="memItemLeft" align="right" valign="top">castor::RgbColour const  &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/dbb/a02004.html#ab9ec30e7650edb4ea3edff3376e33931">getSpecular</a> () const</td></tr>
-<tr class="separator:ab9ec30e7650edb4ea3edff3376e33931"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a222160303a26c50bcd0380f4674b5c97"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/dbb/a02004.html#a222160303a26c50bcd0380f4674b5c97">getAmbient</a> () const</td></tr>
-<tr class="separator:a222160303a26c50bcd0380f4674b5c97"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa303dad95959cafbd493aa296bd2d31d"><td class="memItemLeft" align="right" valign="top">castor::RgbColour &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/dbb/a02004.html#aa303dad95959cafbd493aa296bd2d31d">getDiffuse</a> ()</td></tr>
-<tr class="separator:aa303dad95959cafbd493aa296bd2d31d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad556e92e62792b7f7a78d821041320f6"><td class="memItemLeft" align="right" valign="top">castor::RgbColour &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/dbb/a02004.html#ad556e92e62792b7f7a78d821041320f6">getSpecular</a> ()</td></tr>
-<tr class="separator:ad556e92e62792b7f7a78d821041320f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_a02044"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_a02044')"><img src="../../closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="../../d8/d22/a02044.html">castor3d::Pass</a></td></tr>
-<tr class="memitem:aa938a204f40aebe75d5eba4d702ba64a inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#aa938a204f40aebe75d5eba4d702ba64a">initialise</a> ()</td></tr>
-<tr class="memdesc:aa938a204f40aebe75d5eba4d702ba64a inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialises the pass and all it's dependencies.  <a href="../../d8/d22/a02044.html#aa938a204f40aebe75d5eba4d702ba64a">More...</a><br /></td></tr>
-<tr class="separator:aa938a204f40aebe75d5eba4d702ba64a inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad88707e47153d55ec3a87a12a6259787 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#ad88707e47153d55ec3a87a12a6259787">cleanup</a> ()</td></tr>
-<tr class="memdesc:ad88707e47153d55ec3a87a12a6259787 inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cleans up the pass and all it's dependencies.  <a href="../../d8/d22/a02044.html#ad88707e47153d55ec3a87a12a6259787">More...</a><br /></td></tr>
-<tr class="separator:ad88707e47153d55ec3a87a12a6259787 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b4f4973ab774938c3d142efeaade40e inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a1b4f4973ab774938c3d142efeaade40e">bindTextures</a> ()</td></tr>
-<tr class="memdesc:a1b4f4973ab774938c3d142efeaade40e inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Binds the pass' textures.  <a href="../../d8/d22/a02044.html#a1b4f4973ab774938c3d142efeaade40e">More...</a><br /></td></tr>
-<tr class="separator:a1b4f4973ab774938c3d142efeaade40e inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acad680a5076084e2fa50e9df47720297 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#acad680a5076084e2fa50e9df47720297">unbindTextures</a> ()</td></tr>
-<tr class="memdesc:acad680a5076084e2fa50e9df47720297 inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unbinds the pass' textures.  <a href="../../d8/d22/a02044.html#acad680a5076084e2fa50e9df47720297">More...</a><br /></td></tr>
-<tr class="separator:acad680a5076084e2fa50e9df47720297 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a27d6bff35bc573d9c64d36d431b315b6 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a27d6bff35bc573d9c64d36d431b315b6">addTextureUnit</a> (TextureUnitSPtr p_unit)</td></tr>
-<tr class="memdesc:a27d6bff35bc573d9c64d36d431b315b6 inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">adds a texture unit.  <a href="../../d8/d22/a02044.html#a27d6bff35bc573d9c64d36d431b315b6">More...</a><br /></td></tr>
-<tr class="separator:a27d6bff35bc573d9c64d36d431b315b6 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae1770a31fdb4d6126cd0cb8e0f4ac22b inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> TextureUnitSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#ae1770a31fdb4d6126cd0cb8e0f4ac22b">getTextureUnit</a> (<a class="el" href="../../d0/d85/a00976.html#afac4ec72b798000597676aebd077dca6">TextureChannel</a> channel) const</td></tr>
-<tr class="memdesc:ae1770a31fdb4d6126cd0cb8e0f4ac22b inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the <a class="el" href="../../d0/da2/a03620.html" title="Texture unit representation.">TextureUnit</a> at wanted channel.  <a href="../../d8/d22/a02044.html#ae1770a31fdb4d6126cd0cb8e0f4ac22b">More...</a><br /></td></tr>
-<tr class="separator:ae1770a31fdb4d6126cd0cb8e0f4ac22b inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0152e47a1ad83aebd045f6ed6cc16669 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a0152e47a1ad83aebd045f6ed6cc16669">destroyTextureUnit</a> (uint32_t index)</td></tr>
-<tr class="memdesc:a0152e47a1ad83aebd045f6ed6cc16669 inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys a <a class="el" href="../../d0/da2/a03620.html" title="Texture unit representation.">TextureUnit</a> at the given index.  <a href="../../d8/d22/a02044.html#a0152e47a1ad83aebd045f6ed6cc16669">More...</a><br /></td></tr>
-<tr class="separator:a0152e47a1ad83aebd045f6ed6cc16669 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a97ceb48b79e58532c774f19336671bfc inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> TextureUnitSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a97ceb48b79e58532c774f19336671bfc">getTextureUnit</a> (uint32_t index) const</td></tr>
-<tr class="memdesc:a97ceb48b79e58532c774f19336671bfc inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the <a class="el" href="../../d0/da2/a03620.html" title="Texture unit representation.">TextureUnit</a> at the given index.  <a href="../../d8/d22/a02044.html#a97ceb48b79e58532c774f19336671bfc">More...</a><br /></td></tr>
-<tr class="separator:a97ceb48b79e58532c774f19336671bfc inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae87ec5c3a8297d7d27f4d28071173629 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#ae87ec5c3a8297d7d27f4d28071173629">hasAlphaBlending</a> () const</td></tr>
-<tr class="memdesc:ae87ec5c3a8297d7d27f4d28071173629 inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tells if the pass needs alpha blending.  <a href="../../d8/d22/a02044.html#ae87ec5c3a8297d7d27f4d28071173629">More...</a><br /></td></tr>
-<tr class="separator:ae87ec5c3a8297d7d27f4d28071173629 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2e62df25714263fa6f73b50e5cd645e3 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a2e62df25714263fa6f73b50e5cd645e3">prepareTextures</a> ()</td></tr>
-<tr class="memdesc:a2e62df25714263fa6f73b50e5cd645e3 inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reduces the textures.  <a href="../../d8/d22/a02044.html#a2e62df25714263fa6f73b50e5cd645e3">More...</a><br /></td></tr>
-<tr class="separator:a2e62df25714263fa6f73b50e5cd645e3 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af1056149c9fd47c2406e8406756091d3 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../d0/d85/a00976.html#a90306964da63b9bbc97f4e205ecc5b7a">MaterialType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#af1056149c9fd47c2406e8406756091d3">getType</a> () const</td></tr>
-<tr class="separator:af1056149c9fd47c2406e8406756091d3 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4144dbf8c545566e2567e4b685c332c1 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a4144dbf8c545566e2567e4b685c332c1">setOpacity</a> (float value)</td></tr>
-<tr class="memdesc:a4144dbf8c545566e2567e4b685c332c1 inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the global alpha value.  <a href="../../d8/d22/a02044.html#a4144dbf8c545566e2567e4b685c332c1">More...</a><br /></td></tr>
-<tr class="separator:a4144dbf8c545566e2567e4b685c332c1 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a362c719ff6af42aa94550a526bd554a8 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> PassFlags&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a362c719ff6af42aa94550a526bd554a8">getPassFlags</a> () const</td></tr>
-<tr class="separator:a362c719ff6af42aa94550a526bd554a8 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab0c56afa2b134ad3948ec6dfc5b461e3 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#ab0c56afa2b134ad3948ec6dfc5b461e3">setSubsurfaceScattering</a> (SubsurfaceScatteringUPtr &amp;&amp;value)</td></tr>
-<tr class="memdesc:ab0c56afa2b134ad3948ec6dfc5b461e3 inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the subsurface scattering extended informations.  <a href="../../d8/d22/a02044.html#ab0c56afa2b134ad3948ec6dfc5b461e3">More...</a><br /></td></tr>
-<tr class="separator:ab0c56afa2b134ad3948ec6dfc5b461e3 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ce5b0e4d13f38600b9ba9bb122ce973 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">TextureChannels const  &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a7ce5b0e4d13f38600b9ba9bb122ce973">getTextureFlags</a> () const</td></tr>
-<tr class="separator:a7ce5b0e4d13f38600b9ba9bb122ce973 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac79b5fc42779ef6c26d94d9aa8624d8e inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#ac79b5fc42779ef6c26d94d9aa8624d8e">hasAutomaticShader</a> () const</td></tr>
-<tr class="separator:ac79b5fc42779ef6c26d94d9aa8624d8e inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a21496a3f31507920af9fce21254458ae inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a21496a3f31507920af9fce21254458ae">setTwoSided</a> (bool value)</td></tr>
-<tr class="memdesc:a21496a3f31507920af9fce21254458ae inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the two sided status.  <a href="../../d8/d22/a02044.html#a21496a3f31507920af9fce21254458ae">More...</a><br /></td></tr>
-<tr class="separator:a21496a3f31507920af9fce21254458ae inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9260376e612bb8e9e608649c2e2bdd8b inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a9260376e612bb8e9e608649c2e2bdd8b">setEmissive</a> (float const &amp;value)</td></tr>
-<tr class="memdesc:a9260376e612bb8e9e608649c2e2bdd8b inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the emissive factor.  <a href="../../d8/d22/a02044.html#a9260376e612bb8e9e608649c2e2bdd8b">More...</a><br /></td></tr>
-<tr class="separator:a9260376e612bb8e9e608649c2e2bdd8b inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3d937f0261b447dd91d89aa43037c960 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a3d937f0261b447dd91d89aa43037c960">setRefractionRatio</a> (float value)</td></tr>
-<tr class="memdesc:a3d937f0261b447dd91d89aa43037c960 inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the refraction ratio.  <a href="../../d8/d22/a02044.html#a3d937f0261b447dd91d89aa43037c960">More...</a><br /></td></tr>
-<tr class="separator:a3d937f0261b447dd91d89aa43037c960 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adc1feb31afb4b3d69e2bdba7578ecae3 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#adc1feb31afb4b3d69e2bdba7578ecae3">setParallaxOcclusion</a> (bool value)</td></tr>
-<tr class="memdesc:adc1feb31afb4b3d69e2bdba7578ecae3 inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the parallax occlusion mapping usage.  <a href="../../d8/d22/a02044.html#adc1feb31afb4b3d69e2bdba7578ecae3">More...</a><br /></td></tr>
-<tr class="separator:adc1feb31afb4b3d69e2bdba7578ecae3 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af32c96d71f12e20feffd9823299cbfa6 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#af32c96d71f12e20feffd9823299cbfa6">setAlphaBlendMode</a> (<a class="el" href="../../d0/d85/a00976.html#a840ab6fd50c1a08fcc1b6dc3f98d90fa">BlendMode</a> value)</td></tr>
-<tr class="memdesc:af32c96d71f12e20feffd9823299cbfa6 inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the alpha blend mode.  <a href="../../d8/d22/a02044.html#af32c96d71f12e20feffd9823299cbfa6">More...</a><br /></td></tr>
-<tr class="separator:af32c96d71f12e20feffd9823299cbfa6 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b1fe1655d4a0ed0fcec79e095bf503f inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a3b1fe1655d4a0ed0fcec79e095bf503f">setColourBlendMode</a> (<a class="el" href="../../d0/d85/a00976.html#a840ab6fd50c1a08fcc1b6dc3f98d90fa">BlendMode</a> value)</td></tr>
-<tr class="memdesc:a3b1fe1655d4a0ed0fcec79e095bf503f inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the colour blend mode.  <a href="../../d8/d22/a02044.html#a3b1fe1655d4a0ed0fcec79e095bf503f">More...</a><br /></td></tr>
-<tr class="separator:a3b1fe1655d4a0ed0fcec79e095bf503f inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a86e317a5f7466a877fb6690d8049f685 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a86e317a5f7466a877fb6690d8049f685">getTextureUnitsCount</a> () const</td></tr>
-<tr class="separator:a86e317a5f7466a877fb6690d8049f685 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a451987008133c2f58ccbcead2ee7b1df inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a451987008133c2f58ccbcead2ee7b1df">IsTwoSided</a> () const</td></tr>
-<tr class="memdesc:a451987008133c2f58ccbcead2ee7b1df inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tells if the pass is two sided.  <a href="../../d8/d22/a02044.html#a451987008133c2f58ccbcead2ee7b1df">More...</a><br /></td></tr>
-<tr class="separator:a451987008133c2f58ccbcead2ee7b1df inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae656ac3132fb4e95fa30f28381d5e421 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#ae656ac3132fb4e95fa30f28381d5e421">hasEnvironmentMapping</a> () const</td></tr>
-<tr class="separator:ae656ac3132fb4e95fa30f28381d5e421 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a66390e7dc9648f56a538b8b2b14569ed inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a66390e7dc9648f56a538b8b2b14569ed">getOpacity</a> () const</td></tr>
-<tr class="separator:a66390e7dc9648f56a538b8b2b14569ed inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a11d2d9dd2ec12a119e70adcd56ffd76e inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a11d2d9dd2ec12a119e70adcd56ffd76e">getEmissive</a> () const</td></tr>
-<tr class="separator:a11d2d9dd2ec12a119e70adcd56ffd76e inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a46a166f8c07114d7a538f54fc358f555 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a46a166f8c07114d7a538f54fc358f555">getRefractionRatio</a> () const</td></tr>
-<tr class="separator:a46a166f8c07114d7a538f54fc358f555 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abab03a36cc4743c6908c5796aa2cfaf5 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d0/d85/a00976.html#a840ab6fd50c1a08fcc1b6dc3f98d90fa">BlendMode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#abab03a36cc4743c6908c5796aa2cfaf5">getAlphaBlendMode</a> () const</td></tr>
-<tr class="separator:abab03a36cc4743c6908c5796aa2cfaf5 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed61df74f8931cd420104e7f3d468f89 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d0/d85/a00976.html#a840ab6fd50c1a08fcc1b6dc3f98d90fa">BlendMode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#aed61df74f8931cd420104e7f3d468f89">getColourBlendMode</a> () const</td></tr>
-<tr class="separator:aed61df74f8931cd420104e7f3d468f89 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb6026c634eebbfaa26fa25973fafcda inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#adb6026c634eebbfaa26fa25973fafcda">begin</a> () const</td></tr>
-<tr class="separator:adb6026c634eebbfaa26fa25973fafcda inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a609f35aed9e87d4bc64a3158f6b9208f inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a609f35aed9e87d4bc64a3158f6b9208f">begin</a> ()</td></tr>
-<tr class="separator:a609f35aed9e87d4bc64a3158f6b9208f inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a747b9e8172704065f32c2c0b22c12eea inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a747b9e8172704065f32c2c0b22c12eea">end</a> () const</td></tr>
-<tr class="separator:a747b9e8172704065f32c2c0b22c12eea inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a819275bac67ba6e090bbcbd72bb0b86b inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a819275bac67ba6e090bbcbd72bb0b86b">end</a> ()</td></tr>
-<tr class="separator:a819275bac67ba6e090bbcbd72bb0b86b inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa566b42b71903bee65db3b6dae769110 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#aa566b42b71903bee65db3b6dae769110">needsGammaCorrection</a> () const</td></tr>
-<tr class="separator:aa566b42b71903bee65db3b6dae769110 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a791c432d1d906eb14ff32a882c3f9633 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a791c432d1d906eb14ff32a882c3f9633">getId</a> () const</td></tr>
-<tr class="separator:a791c432d1d906eb14ff32a882c3f9633 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1452b05883e625b72284ee291f6b975c inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a1452b05883e625b72284ee291f6b975c">setId</a> (uint32_t value)</td></tr>
-<tr class="memdesc:a1452b05883e625b72284ee291f6b975c inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the pass ID.  <a href="../../d8/d22/a02044.html#a1452b05883e625b72284ee291f6b975c">More...</a><br /></td></tr>
-<tr class="separator:a1452b05883e625b72284ee291f6b975c inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab8528f2cfba7bd032e6100a86898e455 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d0/d85/a00976.html#a5acdeb9c32599fed9a198427565d72b8">castor3d::ComparisonFunc</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#ab8528f2cfba7bd032e6100a86898e455">getAlphaFunc</a> () const</td></tr>
-<tr class="separator:ab8528f2cfba7bd032e6100a86898e455 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a87f2d488f005630f3f8ec06f5e0accb5 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a87f2d488f005630f3f8ec06f5e0accb5">setAlphaFunc</a> (<a class="el" href="../../d0/d85/a00976.html#a5acdeb9c32599fed9a198427565d72b8">castor3d::ComparisonFunc</a> value)</td></tr>
-<tr class="memdesc:a87f2d488f005630f3f8ec06f5e0accb5 inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the alpha function.  <a href="../../d8/d22/a02044.html#a87f2d488f005630f3f8ec06f5e0accb5">More...</a><br /></td></tr>
-<tr class="separator:a87f2d488f005630f3f8ec06f5e0accb5 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ccad1e806e125101e2277999982fcb1 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a7ccad1e806e125101e2277999982fcb1">getAlphaValue</a> () const</td></tr>
-<tr class="separator:a7ccad1e806e125101e2277999982fcb1 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a95c2f58fedf1951fcb9261ac31ed6412 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a95c2f58fedf1951fcb9261ac31ed6412">setAlphaValue</a> (float value)</td></tr>
-<tr class="memdesc:a95c2f58fedf1951fcb9261ac31ed6412 inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the alpha reference value.  <a href="../../d8/d22/a02044.html#a95c2f58fedf1951fcb9261ac31ed6412">More...</a><br /></td></tr>
-<tr class="separator:a95c2f58fedf1951fcb9261ac31ed6412 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae6d7fc739a401207ae97464165cab915 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#ae6d7fc739a401207ae97464165cab915">hasSubsurfaceScattering</a> () const</td></tr>
-<tr class="separator:ae6d7fc739a401207ae97464165cab915 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af46d3754344dcf544ab178901c28e1af inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#af46d3754344dcf544ab178901c28e1af">hasParallaxOcclusion</a> () const</td></tr>
-<tr class="separator:af46d3754344dcf544ab178901c28e1af inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad6e28793e4302f1aeb001e99a8d1d96a inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/d8b/a02060.html">SubsurfaceScattering</a> const  &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#ad6e28793e4302f1aeb001e99a8d1d96a">getSubsurfaceScattering</a> () const</td></tr>
-<tr class="separator:ad6e28793e4302f1aeb001e99a8d1d96a inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pub_attribs_a02044"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_a02044')"><img src="../../closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="../../d8/d22/a02044.html">castor3d::Pass</a></td></tr>
-<tr class="memitem:af9b53724c4861cdbcc9d122c2b9b8908 inherit pub_attribs_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d0/d85/a00976.html#a8f41976f3fab2b68a985555b1b88523e">OnPassChanged</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#af9b53724c4861cdbcc9d122c2b9b8908">onChanged</a></td></tr>
-<tr class="separator:af9b53724c4861cdbcc9d122c2b9b8908 inherit pub_attribs_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_methods_a02044"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_a02044')"><img src="../../closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="../../d8/d22/a02044.html">castor3d::Pass</a></td></tr>
-<tr class="memitem:adbd35d91799171980767abf1e010746d inherit pro_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#adbd35d91799171980767abf1e010746d">Pass</a> (<a class="el" href="../../db/d68/a02028.html">Material</a> &amp;parent)</td></tr>
-<tr class="memdesc:adbd35d91799171980767abf1e010746d inherit pro_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../d8/d22/a02044.html#adbd35d91799171980767abf1e010746d">More...</a><br /></td></tr>
-<tr class="separator:adbd35d91799171980767abf1e010746d inherit pro_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a74eee47aa1790f57013e3b60d19d7ba8 inherit pro_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a74eee47aa1790f57013e3b60d19d7ba8">~Pass</a> ()</td></tr>
-<tr class="memdesc:a74eee47aa1790f57013e3b60d19d7ba8 inherit pro_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="../../d8/d22/a02044.html#a74eee47aa1790f57013e3b60d19d7ba8">More...</a><br /></td></tr>
-<tr class="separator:a74eee47aa1790f57013e3b60d19d7ba8 inherit pro_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa0aa07d7e98e01823f27d1e333492859 inherit pro_methods_a02044"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#aa0aa07d7e98e01823f27d1e333492859">doPrepareTexture</a> (<a class="el" href="../../d0/d85/a00976.html#afac4ec72b798000597676aebd077dca6">TextureChannel</a> channel, uint32_t &amp;index, TextureUnitSPtr &amp;opacitySource, castor::PxBufferBaseSPtr &amp;opacity)</td></tr>
-<tr class="memdesc:aa0aa07d7e98e01823f27d1e333492859 inherit pro_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prepares a texture to be integrated to the pass.  <a href="../../d8/d22/a02044.html#aa0aa07d7e98e01823f27d1e333492859">More...</a><br /></td></tr>
-<tr class="separator:aa0aa07d7e98e01823f27d1e333492859 inherit pro_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a62d306386f0eb7ca5ac78ab21d2c5c0b inherit pro_methods_a02044"><td class="memItemLeft" align="right" valign="top">castor::PxBufferBaseSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a62d306386f0eb7ca5ac78ab21d2c5c0b">doPrepareTexture</a> (<a class="el" href="../../d0/d85/a00976.html#afac4ec72b798000597676aebd077dca6">TextureChannel</a> channel, uint32_t &amp;index)</td></tr>
-<tr class="memdesc:a62d306386f0eb7ca5ac78ab21d2c5c0b inherit pro_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prepares a texture to be integrated to the pass.  <a href="../../d8/d22/a02044.html#a62d306386f0eb7ca5ac78ab21d2c5c0b">More...</a><br /></td></tr>
-<tr class="separator:a62d306386f0eb7ca5ac78ab21d2c5c0b inherit pro_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade99e9a40e6b6433ed6bcbc6e823fad0 inherit pro_methods_a02044"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#ade99e9a40e6b6433ed6bcbc6e823fad0">doPrepareOpacity</a> (TextureUnitSPtr opacitySource, castor::PxBufferBaseSPtr opacityImage, uint32_t &amp;index)</td></tr>
-<tr class="memdesc:ade99e9a40e6b6433ed6bcbc6e823fad0 inherit pro_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prepares the opacity channel.  <a href="../../d8/d22/a02044.html#ade99e9a40e6b6433ed6bcbc6e823fad0">More...</a><br /></td></tr>
-<tr class="separator:ade99e9a40e6b6433ed6bcbc6e823fad0 inherit pro_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8e7d12c886aff346ffe111557e2ca92 inherit pro_methods_a02044"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#ad8e7d12c886aff346ffe111557e2ca92">doUpdateFlags</a> ()</td></tr>
-<tr class="memdesc:ad8e7d12c886aff346ffe111557e2ca92 inherit pro_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the texture flags depending on the texture units.  <a href="../../d8/d22/a02044.html#ad8e7d12c886aff346ffe111557e2ca92">More...</a><br /></td></tr>
-<tr class="separator:ad8e7d12c886aff346ffe111557e2ca92 inherit pro_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7a9c83a1c02f598fea69edab082f8fa3 inherit pro_methods_a02044"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a7a9c83a1c02f598fea69edab082f8fa3">doReduceTexture</a> (<a class="el" href="../../d0/d85/a00976.html#afac4ec72b798000597676aebd077dca6">TextureChannel</a> channel, castor::PixelFormat format)</td></tr>
-<tr class="memdesc:a7a9c83a1c02f598fea69edab082f8fa3 inherit pro_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reduces the texture at given channel to given pixel format.  <a href="../../d8/d22/a02044.html#a7a9c83a1c02f598fea69edab082f8fa3">More...</a><br /></td></tr>
-<tr class="separator:a7a9c83a1c02f598fea69edab082f8fa3 inherit pro_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_a02084"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_a02084')"><img src="../../closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="../../da/dbe/a02084.html">castor3d::BinaryWriterBase&lt; Animation &gt;</a></td></tr>
+<tr class="memitem:a21e7985d2f99ff20a6056d198aac07c5 inherit pub_methods_a02084"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dbe/a02084.html#a21e7985d2f99ff20a6056d198aac07c5">write</a> (<a class="el" href="../../d8/d31/a01407.html#a8b18030cabc04d1bc6651049b78e9874">Animation</a> const &amp;obj, castor::BinaryFile &amp;file)</td></tr>
+<tr class="memdesc:a21e7985d2f99ff20a6056d198aac07c5 inherit pub_methods_a02084"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes an object to a file.  <a href="../../da/dbe/a02084.html#a21e7985d2f99ff20a6056d198aac07c5">More...</a><br /></td></tr>
+<tr class="separator:a21e7985d2f99ff20a6056d198aac07c5 inherit pub_methods_a02084"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b4ae75e6ecd0bdf9f5dc26381633dab inherit pub_methods_a02084"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dbe/a02084.html#a3b4ae75e6ecd0bdf9f5dc26381633dab">write</a> (<a class="el" href="../../d8/d31/a01407.html#a8b18030cabc04d1bc6651049b78e9874">Animation</a> const &amp;obj, <a class="el" href="../../d7/db2/a02036.html">BinaryChunk</a> &amp;chunk)</td></tr>
+<tr class="memdesc:a3b4ae75e6ecd0bdf9f5dc26381633dab inherit pub_methods_a02084"><td class="mdescLeft">&#160;</td><td class="mdescRight">To chunk writer function.  <a href="../../da/dbe/a02084.html#a3b4ae75e6ecd0bdf9f5dc26381633dab">More...</a><br /></td></tr>
+<tr class="separator:a3b4ae75e6ecd0bdf9f5dc26381633dab inherit pub_methods_a02084"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_methods_a02084"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_a02084')"><img src="../../closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="../../da/dbe/a02084.html">castor3d::BinaryWriterBase&lt; Animation &gt;</a></td></tr>
+<tr class="memitem:a8828d359b7a61ea2b657d5aada2dd87b inherit pro_methods_a02084"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dbe/a02084.html#a8828d359b7a61ea2b657d5aada2dd87b">doWriteHeader</a> (<a class="el" href="../../d7/db2/a02036.html">BinaryChunk</a> &amp;chunk) const</td></tr>
+<tr class="memdesc:a8828d359b7a61ea2b657d5aada2dd87b inherit pro_methods_a02084"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes the header chunk.  <a href="../../da/dbe/a02084.html#a8828d359b7a61ea2b657d5aada2dd87b">More...</a><br /></td></tr>
+<tr class="separator:a8828d359b7a61ea2b657d5aada2dd87b inherit pro_methods_a02084"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95685db95521fe46169767620976688c inherit pro_methods_a02084"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dbe/a02084.html#a95685db95521fe46169767620976688c">doWriteChunk</a> (T const *values, size_t count, <a class="el" href="../../d8/d31/a01407.html#a742783d4e4b7354fac3e375ae107414d">ChunkType</a> chunkType, <a class="el" href="../../d7/db2/a02036.html">BinaryChunk</a> &amp;chunk) const</td></tr>
+<tr class="memdesc:a95685db95521fe46169767620976688c inherit pro_methods_a02084"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a subchunk value into a chunk.  <a href="../../da/dbe/a02084.html#a95685db95521fe46169767620976688c">More...</a><br /></td></tr>
+<tr class="separator:a95685db95521fe46169767620976688c inherit pro_methods_a02084"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac978d1019caf2d37ad181911c78dde33 inherit pro_methods_a02084"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dbe/a02084.html#ac978d1019caf2d37ad181911c78dde33">doWriteChunk</a> (T const (&amp;values)[Count], <a class="el" href="../../d8/d31/a01407.html#a742783d4e4b7354fac3e375ae107414d">ChunkType</a> chunkType, <a class="el" href="../../d7/db2/a02036.html">BinaryChunk</a> &amp;chunk) const</td></tr>
+<tr class="memdesc:ac978d1019caf2d37ad181911c78dde33 inherit pro_methods_a02084"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a subchunk value into a chunk.  <a href="../../da/dbe/a02084.html#ac978d1019caf2d37ad181911c78dde33">More...</a><br /></td></tr>
+<tr class="separator:ac978d1019caf2d37ad181911c78dde33 inherit pro_methods_a02084"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5eef4da7e3bbce50e00c878bd7b32516 inherit pro_methods_a02084"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dbe/a02084.html#a5eef4da7e3bbce50e00c878bd7b32516">doWriteChunk</a> (std::array&lt; T, Count &gt; const &amp;values, <a class="el" href="../../d8/d31/a01407.html#a742783d4e4b7354fac3e375ae107414d">ChunkType</a> chunkType, <a class="el" href="../../d7/db2/a02036.html">BinaryChunk</a> &amp;chunk) const</td></tr>
+<tr class="memdesc:a5eef4da7e3bbce50e00c878bd7b32516 inherit pro_methods_a02084"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a subchunk value into a chunk.  <a href="../../da/dbe/a02084.html#a5eef4da7e3bbce50e00c878bd7b32516">More...</a><br /></td></tr>
+<tr class="separator:a5eef4da7e3bbce50e00c878bd7b32516 inherit pro_methods_a02084"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b782961d4526354e5d0e84e78c6bbbb inherit pro_methods_a02084"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dbe/a02084.html#a5b782961d4526354e5d0e84e78c6bbbb">doWriteChunk</a> (std::vector&lt; T &gt; const &amp;values, <a class="el" href="../../d8/d31/a01407.html#a742783d4e4b7354fac3e375ae107414d">ChunkType</a> chunkType, <a class="el" href="../../d7/db2/a02036.html">BinaryChunk</a> &amp;chunk) const</td></tr>
+<tr class="memdesc:a5b782961d4526354e5d0e84e78c6bbbb inherit pro_methods_a02084"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a subchunk value into a chunk.  <a href="../../da/dbe/a02084.html#a5b782961d4526354e5d0e84e78c6bbbb">More...</a><br /></td></tr>
+<tr class="separator:a5b782961d4526354e5d0e84e78c6bbbb inherit pro_methods_a02084"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3bd1cb047e1f2872668a4397496bd7c4 inherit pro_methods_a02084"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dbe/a02084.html#a3bd1cb047e1f2872668a4397496bd7c4">doWriteChunk</a> (T const *begin, T const *end, <a class="el" href="../../d8/d31/a01407.html#a742783d4e4b7354fac3e375ae107414d">ChunkType</a> chunkType, <a class="el" href="../../d7/db2/a02036.html">BinaryChunk</a> &amp;chunk) const</td></tr>
+<tr class="memdesc:a3bd1cb047e1f2872668a4397496bd7c4 inherit pro_methods_a02084"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a subchunk value into a chunk.  <a href="../../da/dbe/a02084.html#a3bd1cb047e1f2872668a4397496bd7c4">More...</a><br /></td></tr>
+<tr class="separator:a3bd1cb047e1f2872668a4397496bd7c4 inherit pro_methods_a02084"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7bdb655caf767fdde8a4267602e06191 inherit pro_methods_a02084"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dbe/a02084.html#a7bdb655caf767fdde8a4267602e06191">doWriteChunk</a> (T const &amp;value, <a class="el" href="../../d8/d31/a01407.html#a742783d4e4b7354fac3e375ae107414d">ChunkType</a> chunkType, <a class="el" href="../../d7/db2/a02036.html">BinaryChunk</a> &amp;chunk) const</td></tr>
+<tr class="memdesc:a7bdb655caf767fdde8a4267602e06191 inherit pro_methods_a02084"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a subchunk value into a chunk.  <a href="../../da/dbe/a02084.html#a7bdb655caf767fdde8a4267602e06191">More...</a><br /></td></tr>
+<tr class="separator:a7bdb655caf767fdde8a4267602e06191 inherit pro_methods_a02084"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_a02084"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_a02084')"><img src="../../closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="../../da/dbe/a02084.html">castor3d::BinaryWriterBase&lt; Animation &gt;</a></td></tr>
+<tr class="memitem:ad6c66bdde51dd57ab2b27f4ddc8db513 inherit pro_attribs_a02084"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/db2/a02036.html">BinaryChunk</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dbe/a02084.html#ad6c66bdde51dd57ab2b27f4ddc8db513">m_chunk</a></td></tr>
+<tr class="separator:ad6c66bdde51dd57ab2b27f4ddc8db513 inherit pro_attribs_a02084"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Definition of a traditional (pre-PBR) pass. </p>
+<div class="textblock"><h3>template&lt;&gt;<br />
+class castor3d::BinaryWriter&lt; Animation &gt;</h3>
+
+<p>Animation binary loader. </p>
 <dl class="section author"><dt>Author</dt><dd>Sylvain DOREMUS </dd></dl>
-<dl class="section version"><dt>Version</dt><dd>0.1 </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>09/02/2010</dd></dl>
-<dl class="section remark"><dt>Remarks</dt><dd>A traditional pass is composed of : base colours (ambient, diffuse, specular, emissive), and shininess. </dd></dl>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a4af6810f4dc3b064255e4b05c3f97a82"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4af6810f4dc3b064255e4b05c3f97a82">&#9670;&nbsp;</a></span>LegacyPass()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::LegacyPass::LegacyPass </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../db/d68/a02028.html">Material</a> &amp;&#160;</td>
-          <td class="paramname"><em>parent</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Constructor. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>Used by <a class="el" href="../../db/d68/a02028.html" title="Definition of a material.">Material</a>, don't use it. </dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">parent</td><td>The parent material. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="aa0c6b2040f0f493d30af3a88526f1ceb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa0c6b2040f0f493d30af3a88526f1ceb">&#9670;&nbsp;</a></span>~LegacyPass()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::LegacyPass::~LegacyPass </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Destructor. </p>
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="ac026201d3970645a70758ce306cd5a95"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac026201d3970645a70758ce306cd5a95">&#9670;&nbsp;</a></span>accept()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::LegacyPass::accept </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../d5/d7f/a03036.html">PassBuffer</a> &amp;&#160;</td>
-          <td class="paramname"><em>buffer</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Fills shader variables of given render node. </p>
-
-<p>Implements <a class="el" href="../../d8/d22/a02044.html#aafe56e511ba96efcc10b1ab0936bb464">castor3d::Pass</a>.</p>
-
-</div>
-</div>
-<a id="a222160303a26c50bcd0380f4674b5c97"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a222160303a26c50bcd0380f4674b5c97">&#9670;&nbsp;</a></span>getAmbient()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float castor3d::LegacyPass::getAmbient </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>The ambient factor. </dd></dl>
-
-</div>
-</div>
-<a id="a3e8c00f773d2dfa30985a2169a71dee1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3e8c00f773d2dfa30985a2169a71dee1">&#9670;&nbsp;</a></span>getDiffuse() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">castor::RgbColour const&amp; castor3d::LegacyPass::getDiffuse </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>The diffuse colour. </dd></dl>
-
-</div>
-</div>
-<a id="aa303dad95959cafbd493aa296bd2d31d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa303dad95959cafbd493aa296bd2d31d">&#9670;&nbsp;</a></span>getDiffuse() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">castor::RgbColour&amp; castor3d::LegacyPass::getDiffuse </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>The diffuse colour. </dd></dl>
-
-</div>
-</div>
-<a id="a69fa151afb2e80091dad4ea9fb9ad153"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a69fa151afb2e80091dad4ea9fb9ad153">&#9670;&nbsp;</a></span>getPassSize()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">uint32_t castor3d::LegacyPass::getPassSize </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="section remark"><dt>Remarks</dt><dd>Passes are aligned on float[4], so the size of a pass is the number of float[4] needed to contain it. </dd></dl>
-
-<p>Implements <a class="el" href="../../d8/d22/a02044.html#a5b88bf15e67ea2dcf4ee9bed758ffdf2">castor3d::Pass</a>.</p>
-
-</div>
-</div>
-<a id="ac9d529b93739d05c023440aea738218d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac9d529b93739d05c023440aea738218d">&#9670;&nbsp;</a></span>getShininess()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float castor3d::LegacyPass::getShininess </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>The shininess value. </dd></dl>
-
-</div>
-</div>
-<a id="ab9ec30e7650edb4ea3edff3376e33931"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab9ec30e7650edb4ea3edff3376e33931">&#9670;&nbsp;</a></span>getSpecular() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">castor::RgbColour const&amp; castor3d::LegacyPass::getSpecular </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>The specular colour. </dd></dl>
-
-</div>
-</div>
-<a id="ad556e92e62792b7f7a78d821041320f6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad556e92e62792b7f7a78d821041320f6">&#9670;&nbsp;</a></span>getSpecular() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">castor::RgbColour&amp; castor3d::LegacyPass::getSpecular </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>The specular colour. </dd></dl>
-
-</div>
-</div>
-<a id="a97716ac8a4ff83e9b790b1d6494c2426"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a97716ac8a4ff83e9b790b1d6494c2426">&#9670;&nbsp;</a></span>setAmbient()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void castor3d::LegacyPass::setAmbient </td>
-          <td>(</td>
-          <td class="paramtype">float const &amp;&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>sets the ambient factor. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>The new value. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="reference">References <a class="el" href="../../d8/d22/a02044.html#af9b53724c4861cdbcc9d122c2b9b8908">castor3d::Pass::onChanged</a>.</p>
-
-</div>
-</div>
-<a id="a2d5f62668ab19db55e70a542468973d0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2d5f62668ab19db55e70a542468973d0">&#9670;&nbsp;</a></span>setDiffuse()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void castor3d::LegacyPass::setDiffuse </td>
-          <td>(</td>
-          <td class="paramtype">castor::RgbColour const &amp;&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>sets the diffuse colour. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>The new value. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="reference">References <a class="el" href="../../d8/d22/a02044.html#af9b53724c4861cdbcc9d122c2b9b8908">castor3d::Pass::onChanged</a>.</p>
-
-</div>
-</div>
-<a id="abbbddc144bc8c93d762c84a05bc0bd02"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abbbddc144bc8c93d762c84a05bc0bd02">&#9670;&nbsp;</a></span>setShininess()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void castor3d::LegacyPass::setShininess </td>
-          <td>(</td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>sets the shininess. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>The new value. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="reference">References <a class="el" href="../../d8/d22/a02044.html#af9b53724c4861cdbcc9d122c2b9b8908">castor3d::Pass::onChanged</a>.</p>
-
-</div>
-</div>
-<a id="a74d794e65f1da8cd71e98f5ee3abc96c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a74d794e65f1da8cd71e98f5ee3abc96c">&#9670;&nbsp;</a></span>setSpecular()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void castor3d::LegacyPass::setSpecular </td>
-          <td>(</td>
-          <td class="paramtype">castor::RgbColour const &amp;&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>sets the specular colour. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>The new value. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="reference">References <a class="el" href="../../d8/d22/a02044.html#af9b53724c4861cdbcc9d122c2b9b8908">castor3d::Pass::onChanged</a>.</p>
-
-</div>
-</div>
-<hr/>The documentation for this class was generated from the following file:<ul>
-<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/Material/<a class="el" href="../../de/d79/a00203.html">LegacyPass.hpp</a></li>
+<dl class="section version"><dt>Version</dt><dd>0.8.0 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>26/01/2016</dd></dl>
+<p>Loader binaire d'Animation. </p>
+</div><hr/>The documentation for this class was generated from the following file:<ul>
+<li>Binary/<a class="el" href="../../d4/d51/a00017.html">BinaryAnimation.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 13:38:29 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 17 2021 16:11:42 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

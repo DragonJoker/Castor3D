@@ -1,4 +1,5 @@
-<map id="castor3d::IblTextures" name="castor3d::IblTextures">
-<area shape="rect" id="node1" title="Holds environment maps used in IBL." alt="" coords="25,80,168,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,188,32"/>
+<map id="castor3d::Cache&lt; Plugin, castor::String &gt;" name="castor3d::Cache&lt; Plugin, castor::String &gt;">
+<area shape="rect" id="node1" title="Plug&#45;ins cache." alt="" coords="11,200,181,241"/>
+<area shape="rect" id="node2" href="$df/d46/a02376.html" title=" " alt="" coords="12,109,180,151"/>
+<area shape="rect" id="node3" href="$df/d46/a02376.html" title="Base class for an element cache." alt="" coords="5,5,187,47"/>
 </map>

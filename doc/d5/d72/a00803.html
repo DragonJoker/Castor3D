@@ -5,11 +5,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/Shader/Ubos/GpInfoUbo.hpp File Reference</title>
+<title>Castor3D: Render/RenderModule.hpp File Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
 <link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+<link href="../../Castor3D.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -17,10 +18,12 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Castor3D
-   &#160;<span id="projectnumber">..</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
+   <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
  </tr>
  </tbody>
@@ -39,137 +42,239 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dir_b2f33c71d4aa5e7af42a1ca61ff5af1b.html">source</a></li><li class="navelem"><a class="el" href="../../dir_1f10682fec53f0772108851bfcef2e4d.html">Core</a></li><li class="navelem"><a class="el" href="../../dir_6ad85ca7a90878938acb35a9fc6dd4fb.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../dir_a9f81fd4b86714dde972610ac984a016.html">Src</a></li><li class="navelem"><a class="el" href="../../dir_8f38ecd49530be5dee5ff66d08407685.html">Shader</a></li><li class="navelem"><a class="el" href="../../dir_5e086914528d559fbc4fb26333eb199b.html">Ubos</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../dir_ee81606feaed1a7650f95054c2670416.html">Render</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
-<a href="#define-members">Macros</a>  </div>
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
-<div class="title">GpInfoUbo.hpp File Reference</div>  </div>
+<div class="title">RenderModule.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-0-trigger" src="../../closed.png" alt="+"/> Include dependency graph for GpInfoUbo.hpp:</div>
-<div id="dynsection-0-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../d1/dd1/a00804.png" border="0" usemap="#Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2Shader_2Ubos_2GpInfoUbo_8hpp" alt=""/></div>
-<map name="Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2Shader_2Ubos_2GpInfoUbo_8hpp" id="Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2Shader_2Ubos_2GpInfoUbo_8hpp">
-<area shape="rect"  title=" " alt="" coords="1493,5,1707,61"/>
-<area shape="rect"  href="../../df/de8/a00839.html" title=" " alt="" coords="1515,109,1685,136"/>
-<area shape="rect"  href="../../df/dc8/a00122.html" title=" " alt="" coords="1565,333,1742,360"/>
-<area shape="rect"  title=" " alt="" coords="5,415,152,442"/>
-<area shape="rect"  href="../../d0/d27/a00239.html" title=" " alt="" coords="1149,259,1326,285"/>
-<area shape="rect"  href="../../d0/d11/a00842.html" title=" " alt="" coords="1350,259,1562,285"/>
-<area shape="rect"  href="../../dc/d6e/a00833.html" title=" " alt="" coords="1637,184,1821,211"/>
-<area shape="rect"  title=" " alt="" coords="1846,184,1978,211"/>
-<area shape="rect"  title=" " alt="" coords="2002,184,2118,211"/>
-<area shape="rect"  title=" " alt="" coords="3457,415,3639,442"/>
-<area shape="rect"  title=" " alt="" coords="3663,415,3811,442"/>
-<area shape="rect"  title=" " alt="" coords="3835,415,4023,442"/>
-<area shape="rect"  title=" " alt="" coords="4047,415,4158,442"/>
-<area shape="rect"  title=" " alt="" coords="177,415,306,442"/>
-<area shape="rect"  title=" " alt="" coords="330,415,473,442"/>
-<area shape="rect"  title=" " alt="" coords="497,415,655,442"/>
-<area shape="rect"  title=" " alt="" coords="679,415,873,442"/>
-<area shape="rect"  href="../../d4/ddf/a00488.html" title=" " alt="" coords="897,408,1129,449"/>
-<area shape="rect"  href="../../d6/d60/a00491.html" title=" " alt="" coords="1153,408,1385,449"/>
-<area shape="rect"  href="../../d4/d1e/a00497.html" title=" " alt="" coords="1409,408,1641,449"/>
-<area shape="rect"  href="../../de/d4e/a00500.html" title=" " alt="" coords="1921,408,2153,449"/>
-<area shape="rect"  href="../../d4/de5/a00503.html" title=" " alt="" coords="1665,408,1897,449"/>
-<area shape="rect"  href="../../d4/d1f/a00506.html" title=" " alt="" coords="2177,408,2409,449"/>
-<area shape="rect"  href="../../d4/dfb/a00512.html" title=" " alt="" coords="2433,408,2665,449"/>
-<area shape="rect"  href="../../dc/d19/a00515.html" title=" " alt="" coords="2689,408,2921,449"/>
-<area shape="rect"  href="../../df/db6/a00509.html" title=" " alt="" coords="2945,408,3177,449"/>
-<area shape="rect"  href="../../d5/d0f/a00494.html" title=" " alt="" coords="3201,408,3433,449"/>
-<area shape="rect"  href="../../d4/def/a00359.html" title=" " alt="" coords="839,497,995,524"/>
-<area shape="rect"  title=" " alt="" coords="1019,497,1199,524"/>
-<area shape="rect"  title=" " alt="" coords="1846,497,1973,524"/>
-<area shape="rect"  title=" " alt="" coords="2994,497,3129,524"/>
-<area shape="rect"  title=" " alt="" coords="3247,497,3387,524"/>
-<area shape="rect"  title=" " alt="" coords="1000,333,1165,360"/>
-<area shape="rect"  title=" " alt="" coords="1240,333,1304,360"/>
-<area shape="rect"  href="../../d3/d13/a00836.html" title=" " alt="" coords="1650,259,1785,285"/>
-<area shape="rect"  title=" " alt="" coords="1809,259,1892,285"/>
-<area shape="rect"  title=" " alt="" coords="1767,333,1828,360"/>
-</map>
-</div>
-</div><div class="textblock"><div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-1-trigger" src="../../closed.png" alt="+"/> This graph shows which files directly or indirectly include this file:</div>
-<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../d7/dff/a00805.png" border="0" usemap="#Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2Shader_2Ubos_2GpInfoUbo_8hppdep" alt=""/></div>
-<map name="Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2Shader_2Ubos_2GpInfoUbo_8hppdep" id="Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2Shader_2Ubos_2GpInfoUbo_8hppdep">
-<area shape="rect"  title=" " alt="" coords="869,5,1084,61"/>
-<area shape="rect"  href="../../da/dd6/a00896.html" title=" " alt="" coords="531,117,777,173"/>
-<area shape="rect"  href="../../d7/d12/a00911.html" title=" " alt="" coords="706,465,925,536"/>
-<area shape="rect"  href="../../df/d39/a00950.html" title=" " alt="" coords="1014,109,1195,180"/>
-<area shape="rect"  href="../../d7/d46/a00890.html" title=" " alt="" coords="5,347,228,417"/>
-<area shape="rect"  href="../../d8/dbb/a00932.html" title=" " alt="" coords="692,354,939,410"/>
-<area shape="rect"  href="../../d8/d19/a00935.html" title=" " alt="" coords="308,235,565,291"/>
-<area shape="rect"  href="../../df/de9/a00923.html" title=" " alt="" coords="742,228,934,299"/>
-<area shape="rect"  href="../../d5/d54/a00938.html" title=" " alt="" coords="499,584,726,655"/>
-<area shape="rect"  href="../../d3/d8a/a00899.html" title=" " alt="" coords="104,584,324,655"/>
-<area shape="rect"  href="../../d7/d92/a00887.html" title=" " alt="" coords="707,703,918,773"/>
-<area shape="rect"  href="../../dc/d2c/a00893.html" title=" " alt="" coords="832,584,1039,655"/>
-<area shape="rect"  href="../../d6/dad/a00941.html" title=" " alt="" coords="825,821,1064,877"/>
-<area shape="rect"  href="../../d5/dd3/a00902.html" title=" " alt="" coords="325,347,548,417"/>
-<area shape="rect"  href="../../d0/d85/a00908.html" title=" " alt="" coords="104,465,324,536"/>
-<area shape="rect"  href="../../d3/dd1/a00914.html" title=" " alt="" coords="348,465,565,536"/>
-<area shape="rect"  href="../../d3/de5/a00956.html" title=" " alt="" coords="978,703,1175,773"/>
-</map>
-</div>
-</div><table class="memberdecls">
+<table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dfb/a03188.html">castor3d::GpInfoUbo</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dad/a04540.html">castor3d::NonTexturedQuad</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d56/a04544.html">castor3d::NonTexturedQuad::Vertex</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d61/a04548.html">castor3d::TexturedQuad</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/df1/a04552.html">castor3d::TexturedQuad::Vertex</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/d81/a04556.html">castor3d::NonTexturedCube</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d39/a04560.html">castor3d::NonTexturedCube::Quad</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/df4/a04564.html">castor3d::NonTexturedCube::Quad::Vertex</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d7a/a04568.html">castor3d::TexturedCube</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d6f/a04572.html">castor3d::TexturedCube::Quad</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d2e/a04576.html">castor3d::TexturedCube::Quad::Vertex</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/db6/a04580.html">castor3d::PipelineFlags</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pipeline flags.  <a href="../../dd/db6/a04580.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d6d/a04584.html">castor3d::IntermediateView</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Holds minimal data for an intermediate view.  <a href="../../d7/d6d/a04584.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d81/a04344.html">castor3d::RenderNodesT&lt; NodeType, MapType &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The render nodes for a specific scene.  <a href="../../dc/d81/a04344.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d0d/a04588.html">castor3d::CpuUpdater</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d34/a04592.html">castor3d::GpuUpdater</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:d0/d85/a00976"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d85/a00976.html">castor3d</a></td></tr>
+<tr class="memitem:da/d1e/a01479"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html">castor3d</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
-Macros</h2></td></tr>
-<tr class="memitem:a1006e15ff19e596d5a28e115fbb65f4b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d72/a00803.html#a1006e15ff19e596d5a28e115fbb65f4b">UBO_GPINFO</a>(p_writer)</td></tr>
-<tr class="separator:a1006e15ff19e596d5a28e115fbb65f4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:ab82570de69a051cec256cfca472b3e04"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d72/a00803.html#ab82570de69a051cec256cfca472b3e04">CU_DeclareExportedOwnedBy</a> (<a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>, <a class="el" href="../../d9/d38/a04624.html">castor3d::RenderSystem</a>, RenderSystem) CU_DeclareExportedOwnedBy(<a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a></td></tr>
+<tr class="separator:ab82570de69a051cec256cfca472b3e04"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="member-group"></a>
+Render</h2></td></tr>
+<tr class="memitem:acc03c9ba988d8a559bc3cdcca5b677a6"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#acc03c9ba988d8a559bc3cdcca5b677a6">castor3d::FrustumCorner</a> { <br />
+&#160;&#160;<a class="el" href="../../da/d1e/a01479.html#acc03c9ba988d8a559bc3cdcca5b677a6a5e404438175056577f38ad2e82d2495d">castor3d::FrustumCorner::eFarLeftBottom</a>, 
+<a class="el" href="../../da/d1e/a01479.html#acc03c9ba988d8a559bc3cdcca5b677a6a35c1bb5688ab5f3fc7c4d68f2ee7ab31">castor3d::FrustumCorner::eFarLeftTop</a>, 
+<a class="el" href="../../da/d1e/a01479.html#acc03c9ba988d8a559bc3cdcca5b677a6aa338ec2827d09794e2945707d6811fac">castor3d::FrustumCorner::eFarRightTop</a>, 
+<a class="el" href="../../da/d1e/a01479.html#acc03c9ba988d8a559bc3cdcca5b677a6a00e5b36cfe4b03a15f9aa3e4451c7c3b">castor3d::FrustumCorner::eFarRightBottom</a>, 
+<br />
+&#160;&#160;<a class="el" href="../../da/d1e/a01479.html#acc03c9ba988d8a559bc3cdcca5b677a6a584c10a848552239d9c731989eb7229f">castor3d::FrustumCorner::eNearLeftBottom</a>, 
+<a class="el" href="../../da/d1e/a01479.html#acc03c9ba988d8a559bc3cdcca5b677a6a296497b09ce477f1f2b7c0393d014d79">castor3d::FrustumCorner::eNearLeftTop</a>, 
+<a class="el" href="../../da/d1e/a01479.html#acc03c9ba988d8a559bc3cdcca5b677a6ab048e10646cc4ea1ff0d57d1be6cf944">castor3d::FrustumCorner::eNearRightTop</a>, 
+<a class="el" href="../../da/d1e/a01479.html#acc03c9ba988d8a559bc3cdcca5b677a6a40931c52548517759b7de4ae1f1f095b">castor3d::FrustumCorner::eNearRightBottom</a>, 
+<br />
+&#160;&#160;<a class="el" href="../../da/d1e/a01479.html#acc03c9ba988d8a559bc3cdcca5b677a6ae558bb69fadec037d9eae46601a4df8e">castor3d::FrustumCorner::eCount</a>, 
+<a class="el" href="../../da/d1e/a01479.html#acc03c9ba988d8a559bc3cdcca5b677a6abd967862789968b1f8571ca888fffc77">castor3d::FrustumCorner::eMin</a> = eFarLeftBottom, 
+<a class="el" href="../../da/d1e/a01479.html#acc03c9ba988d8a559bc3cdcca5b677a6a66119c64f8564b693324347fd2bea820">castor3d::FrustumCorner::eMax</a> =eCount-1
+<br />
+ }</td></tr>
+<tr class="memdesc:acc03c9ba988d8a559bc3cdcca5b677a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frustum corners enumeration.  <a href="../../da/d1e/a01479.html#acc03c9ba988d8a559bc3cdcca5b677a6">More...</a><br /></td></tr>
+<tr class="separator:acc03c9ba988d8a559bc3cdcca5b677a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc8a2e73a4a01c9d2a4575897121259b"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#abc8a2e73a4a01c9d2a4575897121259b">castor3d::FrustumPlane</a> { <br />
+&#160;&#160;<a class="el" href="../../da/d1e/a01479.html#abc8a2e73a4a01c9d2a4575897121259ba266a808a9c1eaa4fbdfa7dbd317769cf">castor3d::FrustumPlane::eNear</a>, 
+<a class="el" href="../../da/d1e/a01479.html#abc8a2e73a4a01c9d2a4575897121259bae20e81305ceea245be2dd35b33c3ca6d">castor3d::FrustumPlane::eFar</a>, 
+<a class="el" href="../../da/d1e/a01479.html#abc8a2e73a4a01c9d2a4575897121259ba97d352658db7b34c35502f9cd535e48b">castor3d::FrustumPlane::eLeft</a>, 
+<a class="el" href="../../da/d1e/a01479.html#abc8a2e73a4a01c9d2a4575897121259baf47864efb86f863a0080026825b1303d">castor3d::FrustumPlane::eRight</a>, 
+<br />
+&#160;&#160;<a class="el" href="../../da/d1e/a01479.html#abc8a2e73a4a01c9d2a4575897121259bae64af3a3ced78854860e9eccf0322873">castor3d::FrustumPlane::eTop</a>, 
+<a class="el" href="../../da/d1e/a01479.html#abc8a2e73a4a01c9d2a4575897121259ba776f50b8d2af1233e8900eb42f93adab">castor3d::FrustumPlane::eBottom</a>, 
+<a class="el" href="../../da/d1e/a01479.html#abc8a2e73a4a01c9d2a4575897121259bae558bb69fadec037d9eae46601a4df8e">castor3d::FrustumPlane::eCount</a>, 
+<a class="el" href="../../da/d1e/a01479.html#abc8a2e73a4a01c9d2a4575897121259babd967862789968b1f8571ca888fffc77">castor3d::FrustumPlane::eMin</a> = eNear, 
+<br />
+&#160;&#160;<a class="el" href="../../da/d1e/a01479.html#abc8a2e73a4a01c9d2a4575897121259ba66119c64f8564b693324347fd2bea820">castor3d::FrustumPlane::eMax</a> =eCount-1
+<br />
+ }</td></tr>
+<tr class="memdesc:abc8a2e73a4a01c9d2a4575897121259b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frustum planes enumeration.  <a href="../../da/d1e/a01479.html#abc8a2e73a4a01c9d2a4575897121259b">More...</a><br /></td></tr>
+<tr class="separator:abc8a2e73a4a01c9d2a4575897121259b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a658b8a9f25669fd516ba89c1af1d52e6"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a658b8a9f25669fd516ba89c1af1d52e6">castor3d::PickNodeType</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="../../da/d1e/a01479.html#a658b8a9f25669fd516ba89c1af1d52e6abe988781e4e1de1c6a36fb698afbbe1f">castor3d::PickNodeType::eNone</a>, 
+<a class="el" href="../../da/d1e/a01479.html#a658b8a9f25669fd516ba89c1af1d52e6ad4a35693e80621cd89d4bf671551d10c">castor3d::PickNodeType::eStatic</a>, 
+<a class="el" href="../../da/d1e/a01479.html#a658b8a9f25669fd516ba89c1af1d52e6abc3eb7d1faa93e9699c898f1e100c35a">castor3d::PickNodeType::eInstantiatedStatic</a>, 
+<a class="el" href="../../da/d1e/a01479.html#a658b8a9f25669fd516ba89c1af1d52e6a8da329f9a01cff2c195563173a86b2ee">castor3d::PickNodeType::eSkinning</a>, 
+<br />
+&#160;&#160;<a class="el" href="../../da/d1e/a01479.html#a658b8a9f25669fd516ba89c1af1d52e6af43e56aeff0d00d90e871c272c528d76">castor3d::PickNodeType::eInstantiatedSkinning</a>, 
+<a class="el" href="../../da/d1e/a01479.html#a658b8a9f25669fd516ba89c1af1d52e6afc8be581627b97523b9662d9eae684b0">castor3d::PickNodeType::eMorphing</a>, 
+<a class="el" href="../../da/d1e/a01479.html#a658b8a9f25669fd516ba89c1af1d52e6af0fbe61d17cc90f35a934671f2b23671">castor3d::PickNodeType::eBillboard</a>
+<br />
+ }</td></tr>
+<tr class="memdesc:a658b8a9f25669fd516ba89c1af1d52e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">The picking node types.  <a href="../../da/d1e/a01479.html#a658b8a9f25669fd516ba89c1af1d52e6">More...</a><br /></td></tr>
+<tr class="separator:a658b8a9f25669fd516ba89c1af1d52e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ad78470d8077ac5aaa5443df9894203"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a4ad78470d8077ac5aaa5443df9894203">castor3d::TargetType</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="../../da/d1e/a01479.html#a4ad78470d8077ac5aaa5443df9894203a12aca55fe985a5da291e392493577cd9">castor3d::TargetType::eWindow</a>, 
+<a class="el" href="../../da/d1e/a01479.html#a4ad78470d8077ac5aaa5443df9894203ac9e394bbf95e981b8642e652f30aa3d6">castor3d::TargetType::eTexture</a>, 
+<a class="el" href="../../da/d1e/a01479.html#a4ad78470d8077ac5aaa5443df9894203ae558bb69fadec037d9eae46601a4df8e">castor3d::TargetType::eCount</a>, 
+<a class="el" href="../../da/d1e/a01479.html#a4ad78470d8077ac5aaa5443df9894203abd967862789968b1f8571ca888fffc77">castor3d::TargetType::eMin</a> = eWindow, 
+<br />
+&#160;&#160;<a class="el" href="../../da/d1e/a01479.html#a4ad78470d8077ac5aaa5443df9894203a66119c64f8564b693324347fd2bea820">castor3d::TargetType::eMax</a> =eCount-1
+<br />
+ }</td></tr>
+<tr class="memdesc:a4ad78470d8077ac5aaa5443df9894203"><td class="mdescLeft">&#160;</td><td class="mdescRight">RenderTarget supported types.  <a href="../../da/d1e/a01479.html#a4ad78470d8077ac5aaa5443df9894203">More...</a><br /></td></tr>
+<tr class="separator:a4ad78470d8077ac5aaa5443df9894203"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4141612e14f3113f10b3872630c29b3d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a4141612e14f3113f10b3872630c29b3d">castor3d::ViewportType</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="../../da/d1e/a01479.html#a4141612e14f3113f10b3872630c29b3dafa422cee00a47837ac8b81a025322242">castor3d::ViewportType::eOrtho</a>, 
+<a class="el" href="../../da/d1e/a01479.html#a4141612e14f3113f10b3872630c29b3da3b5ff0c7a29fc3706c5e2420ad8781f7">castor3d::ViewportType::ePerspective</a>, 
+<a class="el" href="../../da/d1e/a01479.html#a4141612e14f3113f10b3872630c29b3dac5687931bad09b73c0c30e620b120677">castor3d::ViewportType::eFrustum</a>, 
+<a class="el" href="../../da/d1e/a01479.html#a4141612e14f3113f10b3872630c29b3dae558bb69fadec037d9eae46601a4df8e">castor3d::ViewportType::eCount</a>, 
+<br />
+&#160;&#160;<a class="el" href="../../da/d1e/a01479.html#a4141612e14f3113f10b3872630c29b3dabd967862789968b1f8571ca888fffc77">castor3d::ViewportType::eMin</a> = eOrtho, 
+<a class="el" href="../../da/d1e/a01479.html#a4141612e14f3113f10b3872630c29b3da66119c64f8564b693324347fd2bea820">castor3d::ViewportType::eMax</a> =eCount-1
+<br />
+ }</td></tr>
+<tr class="memdesc:a4141612e14f3113f10b3872630c29b3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The viewport projection types enumeration.  <a href="../../da/d1e/a01479.html#a4141612e14f3113f10b3872630c29b3d">More...</a><br /></td></tr>
+<tr class="separator:a4141612e14f3113f10b3872630c29b3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a908786422cb850b8f90f8992963734d5"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a908786422cb850b8f90f8992963734d5">castor3d::RenderMode</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="../../da/d1e/a01479.html#a908786422cb850b8f90f8992963734d5a3e203591ffa3c07902f8adec13ed9df5">castor3d::RenderMode::eOpaqueOnly</a>, 
+<a class="el" href="../../da/d1e/a01479.html#a908786422cb850b8f90f8992963734d5acd61240aa7b85fae32bfb98990c65638">castor3d::RenderMode::eTransparentOnly</a>, 
+<a class="el" href="../../da/d1e/a01479.html#a908786422cb850b8f90f8992963734d5af33a4ae0625b377c9723b84da191b46e">castor3d::RenderMode::eBoth</a>, 
+<a class="el" href="../../da/d1e/a01479.html#a908786422cb850b8f90f8992963734d5ae558bb69fadec037d9eae46601a4df8e">castor3d::RenderMode::eCount</a>, 
+<br />
+&#160;&#160;<a class="el" href="../../da/d1e/a01479.html#a908786422cb850b8f90f8992963734d5abd967862789968b1f8571ca888fffc77">castor3d::RenderMode::eMin</a> = eOpaqueOnly, 
+<a class="el" href="../../da/d1e/a01479.html#a908786422cb850b8f90f8992963734d5a66119c64f8564b693324347fd2bea820">castor3d::RenderMode::eMax</a> =eCount-1
+<br />
+ }</td></tr>
+<tr class="memdesc:a908786422cb850b8f90f8992963734d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">The render pass modes, regarding transparency.  <a href="../../da/d1e/a01479.html#a908786422cb850b8f90f8992963734d5">More...</a><br /></td></tr>
+<tr class="separator:a908786422cb850b8f90f8992963734d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16af0407887759f4b7d74964b4533ec6"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a16af0407887759f4b7d74964b4533ec6">castor3d::RenderQueueArray</a> = std::vector&lt; std::reference_wrapper&lt; RenderQueue &gt; &gt;</td></tr>
+<tr class="separator:a16af0407887759f4b7d74964b4533ec6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af341190530b9aad83bf35da1c5329119"><td class="memItemLeft" align="right" valign="top">castor::String const&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#af341190530b9aad83bf35da1c5329119">castor3d::RenderTypeUndefined</a> = cuT( &quot;Undefined&quot; )</td></tr>
+<tr class="separator:af341190530b9aad83bf35da1c5329119"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8723058dd625dfc41d3007e03dde762c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor::String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a8723058dd625dfc41d3007e03dde762c">castor3d::getName</a> (FrustumCorner value)</td></tr>
+<tr class="separator:a8723058dd625dfc41d3007e03dde762c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a97352e4e217bb6a98111cef73d4cf2ad"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor::String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a97352e4e217bb6a98111cef73d4cf2ad">castor3d::getName</a> (FrustumPlane value)</td></tr>
+<tr class="separator:a97352e4e217bb6a98111cef73d4cf2ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7be5fdf142e3d8f1c0b021e8797954de"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor::String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a7be5fdf142e3d8f1c0b021e8797954de">castor3d::getName</a> (PickNodeType value)</td></tr>
+<tr class="separator:a7be5fdf142e3d8f1c0b021e8797954de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a0f3968772dbac5e407a78f917e1f68"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor::String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a5a0f3968772dbac5e407a78f917e1f68">castor3d::getName</a> (TargetType value)</td></tr>
+<tr class="separator:a5a0f3968772dbac5e407a78f917e1f68"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab81af3c970a88ade434d12d1f8127ab5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor::String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#ab81af3c970a88ade434d12d1f8127ab5">castor3d::getName</a> (ViewportType value)</td></tr>
+<tr class="separator:ab81af3c970a88ade434d12d1f8127ab5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79c17d5a7a7e078c2154e0fedb121ee0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor::String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a79c17d5a7a7e078c2154e0fedb121ee0">castor3d::getName</a> (RenderMode value)</td></tr>
+<tr class="separator:a79c17d5a7a7e078c2154e0fedb121ee0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a106dc87107651cbbb8728623dc1a693f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a106dc87107651cbbb8728623dc1a693f">castor3d::isValidNodeForPass</a> (PassFlags const &amp;passFlags, RenderMode value)</td></tr>
+<tr class="separator:a106dc87107651cbbb8728623dc1a693f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a574a0a0338a204c50c147dc10d867d77"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> TextureFlagsArray::const_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a574a0a0338a204c50c147dc10d867d77">castor3d::checkFlags</a> (TextureFlagsArray const &amp;flags, TextureFlag flag)</td></tr>
+<tr class="separator:a574a0a0338a204c50c147dc10d867d77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f6d4f9ae74fd29ff72b57fc99ea28d3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> TextureFlags&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a8f6d4f9ae74fd29ff72b57fc99ea28d3">castor3d::merge</a> (TextureFlagsArray const &amp;flags)</td></tr>
+<tr class="separator:a8f6d4f9ae74fd29ff72b57fc99ea28d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3066a6da8a349db8ebbef9dcaea06d6c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a3066a6da8a349db8ebbef9dcaea06d6c">castor3d::operator&lt;</a> (PipelineFlags const &amp;lhs, PipelineFlags const &amp;rhs)</td></tr>
+<tr class="separator:a3066a6da8a349db8ebbef9dcaea06d6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6d415d4ea2b672254c03277d40d6c01"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#ad6d415d4ea2b672254c03277d40d6c01">castor3d::CU_DeclareCUSmartPtr</a> (castor3d, PickingPass, <a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>)</td></tr>
+<tr class="separator:ad6d415d4ea2b672254c03277d40d6c01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56382bbdc36dd3e3d81326c4dd51d76b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a56382bbdc36dd3e3d81326c4dd51d76b">castor3d::CU_DeclareCUSmartPtr</a> (castor3d, RenderDevice, <a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>)</td></tr>
+<tr class="separator:a56382bbdc36dd3e3d81326c4dd51d76b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72b539afd5448780af0ed9e8ac0820d1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a72b539afd5448780af0ed9e8ac0820d1">castor3d::CU_DeclareCUSmartPtr</a> (castor3d, RenderLoop, <a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>)</td></tr>
+<tr class="separator:a72b539afd5448780af0ed9e8ac0820d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e5034eb3cce434b69d093a764a8e494"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a4e5034eb3cce434b69d093a764a8e494">castor3d::CU_DeclareCUSmartPtr</a> (castor3d, RenderPassTimer, <a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>)</td></tr>
+<tr class="separator:a4e5034eb3cce434b69d093a764a8e494"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9bed8670f95467e55e91e2c04e1363b7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a9bed8670f95467e55e91e2c04e1363b7">castor3d::CU_DeclareCUSmartPtr</a> (castor3d, RenderPipeline, <a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>)</td></tr>
+<tr class="separator:a9bed8670f95467e55e91e2c04e1363b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c71b9ece141fc26301031b329791884"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a3c71b9ece141fc26301031b329791884">castor3d::CU_DeclareCUSmartPtr</a> (castor3d, RenderSystem, <a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>)</td></tr>
+<tr class="separator:a3c71b9ece141fc26301031b329791884"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad10ce6187213b9a69e2db7203e190216"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#ad10ce6187213b9a69e2db7203e190216">castor3d::CU_DeclareCUSmartPtr</a> (castor3d, RenderTarget, <a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>)</td></tr>
+<tr class="separator:ad10ce6187213b9a69e2db7203e190216"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac9811e7920135aa6a941037f3517dde"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#aac9811e7920135aa6a941037f3517dde">castor3d::CU_DeclareCUSmartPtr</a> (castor3d, RenderWindow, <a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>)</td></tr>
+<tr class="separator:aac9811e7920135aa6a941037f3517dde"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39ef71b367e67e1e4aa22429b13fc6a9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a39ef71b367e67e1e4aa22429b13fc6a9">castor3d::CU_DeclareCUSmartPtr</a> (castor3d, Viewport, <a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>)</td></tr>
+<tr class="separator:a39ef71b367e67e1e4aa22429b13fc6a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7280270e3e0e29669a7167b55c4fe707"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a7280270e3e0e29669a7167b55c4fe707">castor3d::CU_DeclareVector</a> (RenderWindowSPtr, RenderWindowPtr)</td></tr>
+<tr class="separator:a7280270e3e0e29669a7167b55c4fe707"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab298bbb913397a12ff6abbd615fbfa96"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#ab298bbb913397a12ff6abbd615fbfa96">castor3d::CU_DeclareVector</a> (IntermediateView, IntermediateView)</td></tr>
+<tr class="separator:ab298bbb913397a12ff6abbd615fbfa96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a77cb0fac5fe29c9d2dbe3d74919a1d7a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a77cb0fac5fe29c9d2dbe3d74919a1d7a">castor3d::CU_DeclareMap</a> (uint32_t, RenderWindowSPtr, RenderWindow)</td></tr>
+<tr class="separator:a77cb0fac5fe29c9d2dbe3d74919a1d7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73d3c85ea9ae94d30c84851b2d30dc9b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a73d3c85ea9ae94d30c84851b2d30dc9b">castor3d::CU_DeclareMap</a> (castor::String, RenderWindowSPtr, RenderWindowPtrStr)</td></tr>
+<tr class="separator:a73d3c85ea9ae94d30c84851b2d30dc9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="a1006e15ff19e596d5a28e115fbb65f4b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1006e15ff19e596d5a28e115fbb65f4b">&#9670;&nbsp;</a></span>UBO_GPINFO</h2>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="ab82570de69a051cec256cfca472b3e04"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab82570de69a051cec256cfca472b3e04">&#9670;&nbsp;</a></span>CU_DeclareExportedOwnedBy()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define UBO_GPINFO</td>
+          <td class="memname">CU_DeclareExportedOwnedBy </td>
           <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">p_writer</td><td>)</td>
+          <td class="paramtype"><a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="../../d9/d38/a04624.html">castor3d::RenderSystem</a>&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">RenderSystem&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">glsl::Ubo gpInfo{ p_writer, <a class="code" href="../../da/dfb/a03188.html#a70e6d4033544e4e6aba5eeac2e47752c">castor3d::GpInfoUbo::GPInfo</a>, <a class="code" href="../../da/dfb/a03188.html#ad8997fe3b8a216c6bf818196dcf1d909">castor3d::GpInfoUbo::BindingPoint</a> };\</div><div class="line">    auto c3d_mtxInvViewProj = gpInfo.declMember&lt; glsl::Mat4 &gt;( <a class="code" href="../../da/dfb/a03188.html#a05853e8d3fee522949aa0d89e3297fc3">castor3d::GpInfoUbo::InvViewProj</a> );\</div><div class="line">    auto c3d_mtxInvView = gpInfo.declMember&lt; glsl::Mat4 &gt;( <a class="code" href="../../da/dfb/a03188.html#a399bcedc0fa0d99e6d23b6f83094ffbf">castor3d::GpInfoUbo::InvView</a> );\</div><div class="line">    auto c3d_mtxInvProj = gpInfo.declMember&lt; glsl::Mat4 &gt;( <a class="code" href="../../da/dfb/a03188.html#a10e8036b80da9627e69ad9a4e563f303">castor3d::GpInfoUbo::InvProj</a> );\</div><div class="line">    auto c3d_mtxGView = gpInfo.declMember&lt; glsl::Mat4 &gt;( <a class="code" href="../../da/dfb/a03188.html#af7de2f4a6dc43a1b78eff2d50c7d90b1">castor3d::GpInfoUbo::View</a> );\</div><div class="line">    auto c3d_mtxGProj = gpInfo.declMember&lt; glsl::Mat4 &gt;( <a class="code" href="../../da/dfb/a03188.html#a1a2a4ba35dd21128fbe2b5336a532623">castor3d::GpInfoUbo::Proj</a> );\</div><div class="line">    auto c3d_renderSize = gpInfo.declMember&lt; glsl::Vec2 &gt;( <a class="code" href="../../da/dfb/a03188.html#a9606379a7d431a14a7f8fe1e076e2457">castor3d::GpInfoUbo::RenderSize</a> );\</div><div class="line">    gpInfo.end()</div><div class="ttc" id="a03188_html_af7de2f4a6dc43a1b78eff2d50c7d90b1"><div class="ttname"><a href="../../da/dfb/a03188.html#af7de2f4a6dc43a1b78eff2d50c7d90b1">castor3d::GpInfoUbo::View</a></div><div class="ttdeci">static const castor::String View</div><div class="ttdef"><b>Definition:</b> GpInfoUbo.hpp:32</div></div>
-<div class="ttc" id="a03188_html_a399bcedc0fa0d99e6d23b6f83094ffbf"><div class="ttname"><a href="../../da/dfb/a03188.html#a399bcedc0fa0d99e6d23b6f83094ffbf">castor3d::GpInfoUbo::InvView</a></div><div class="ttdeci">static const castor::String InvView</div><div class="ttdef"><b>Definition:</b> GpInfoUbo.hpp:30</div></div>
-<div class="ttc" id="a03188_html_ad8997fe3b8a216c6bf818196dcf1d909"><div class="ttname"><a href="../../da/dfb/a03188.html#ad8997fe3b8a216c6bf818196dcf1d909">castor3d::GpInfoUbo::BindingPoint</a></div><div class="ttdeci">static constexpr uint32_t BindingPoint</div><div class="ttdef"><b>Definition:</b> GpInfoUbo.hpp:35</div></div>
-<div class="ttc" id="a03188_html_a70e6d4033544e4e6aba5eeac2e47752c"><div class="ttname"><a href="../../da/dfb/a03188.html#a70e6d4033544e4e6aba5eeac2e47752c">castor3d::GpInfoUbo::GPInfo</a></div><div class="ttdeci">static const castor::String GPInfo</div><div class="ttdef"><b>Definition:</b> GpInfoUbo.hpp:28</div></div>
-<div class="ttc" id="a03188_html_a10e8036b80da9627e69ad9a4e563f303"><div class="ttname"><a href="../../da/dfb/a03188.html#a10e8036b80da9627e69ad9a4e563f303">castor3d::GpInfoUbo::InvProj</a></div><div class="ttdeci">static const castor::String InvProj</div><div class="ttdef"><b>Definition:</b> GpInfoUbo.hpp:31</div></div>
-<div class="ttc" id="a03188_html_a9606379a7d431a14a7f8fe1e076e2457"><div class="ttname"><a href="../../da/dfb/a03188.html#a9606379a7d431a14a7f8fe1e076e2457">castor3d::GpInfoUbo::RenderSize</a></div><div class="ttdeci">static const castor::String RenderSize</div><div class="ttdef"><b>Definition:</b> GpInfoUbo.hpp:34</div></div>
-<div class="ttc" id="a03188_html_a1a2a4ba35dd21128fbe2b5336a532623"><div class="ttname"><a href="../../da/dfb/a03188.html#a1a2a4ba35dd21128fbe2b5336a532623">castor3d::GpInfoUbo::Proj</a></div><div class="ttdeci">static const castor::String Proj</div><div class="ttdef"><b>Definition:</b> GpInfoUbo.hpp:33</div></div>
-<div class="ttc" id="a03188_html_a05853e8d3fee522949aa0d89e3297fc3"><div class="ttname"><a href="../../da/dfb/a03188.html#a05853e8d3fee522949aa0d89e3297fc3">castor3d::GpInfoUbo::InvViewProj</a></div><div class="ttdeci">static const castor::String InvViewProj</div><div class="ttdef"><b>Definition:</b> GpInfoUbo.hpp:29</div></div>
-</div><!-- fragment -->
+
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 13:38:14 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Feb 18 2021 01:09:06 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

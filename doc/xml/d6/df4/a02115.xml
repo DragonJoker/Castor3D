@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d6/df4/a02115" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ChunkTyper&lt; MeshAnimationKeyFrame &gt;</compoundname>
+    <includes local="no">BinaryMeshAnimationKeyFrame.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d6/df4/a02115_1abb16e5e57366d23aba3ce73926f1d1fc" prot="public" static="yes" mutable="no">
+        <type><ref refid="d7/dd1/a01458_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref> const</type>
+        <definition>ChunkType const castor3d::ChunkTyper&lt; MeshAnimationKeyFrame &gt;::Value</definition>
+        <argsstring></argsstring>
+        <name>Value</name>
+        <initializer>= <ref refid="d7/dd1/a01458_1a742783d4e4b7354fac3e375ae107414dad0e65a7476b424b77bb21459bb8f8541" kindref="member">ChunkType::eMeshAnimationKeyFrame</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryMeshAnimationKeyFrame.hpp" line="28" column="1" bodyfile="Binary/BinaryMeshAnimationKeyFrame.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Helper structure to find ChunkType from a type. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="version"><para>0.10.0 </para>
+</simplesect>
+<simplesect kind="date"><para>07/12/2017</para>
+</simplesect>
+<simplesect kind="remark"><para>Specialisation for <ref refid="d9/d83/a03839" kindref="compound">MeshAnimationKeyFrame</ref>. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="Binary/BinaryMeshAnimationKeyFrame.hpp" line="27" column="1" bodyfile="Binary/BinaryMeshAnimationKeyFrame.hpp" bodystart="26" bodyend="29"/>
+    <listofallmembers>
+      <member refid="d6/df4/a02115_1abb16e5e57366d23aba3ce73926f1d1fc" prot="public" virt="non-virtual"><scope>castor3d::ChunkTyper&lt; MeshAnimationKeyFrame &gt;</scope><name>Value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

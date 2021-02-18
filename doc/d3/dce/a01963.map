@@ -1,4 +1,14 @@
-<map id="castor3d::ColourRenderBuffer" name="castor3d::ColourRenderBuffer">
-<area shape="rect" id="node1" title="Render buffer receiving colour PixelComponents." alt="" coords="5,80,196,107"/>
-<area shape="rect" id="node2" href="$d5/d70/a01980.html" title="Render buffer base class." alt="" coords="23,5,178,32"/>
+<map id="castor3d::AnimableT&lt; AnimableHanlerT &gt;" name="castor3d::AnimableT&lt; AnimableHanlerT &gt;">
+<area shape="rect" id="node1" title="Animable public interface." alt="" coords="243,125,387,166"/>
+<area shape="rect" id="node3" href="$d5/d73/a03836.html" title=" " alt="" coords="504,73,680,100"/>
+<area shape="rect" id="node4" href="$d0/d7d/a05120.html" title=" " alt="" coords="509,125,675,166"/>
+<area shape="rect" id="node10" href="$d6/d90/a01964.html" title=" " alt="" coords="521,251,663,293"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,125,193,166"/>
+<area shape="rect" id="node5" href="$d1/ddd/a05076.html" title=" " alt="" coords="739,5,889,32"/>
+<area shape="rect" id="node6" href="$de/d0b/a05080.html" title=" " alt="" coords="751,56,877,83"/>
+<area shape="rect" id="node7" href="$d3/d82/a05088.html" title=" " alt="" coords="745,107,883,133"/>
+<area shape="rect" id="node8" href="$d6/da5/a05100.html" title=" " alt="" coords="760,157,868,184"/>
+<area shape="rect" id="node9" href="$d7/d13/a05156.html" title=" " alt="" coords="729,208,899,235"/>
+<area shape="rect" id="node11" href="$d2/df2/a03960.html" title=" " alt="" coords="749,259,879,285"/>
+<area shape="rect" id="node12" href="$d1/df5/a02592.html" title=" " alt="" coords="741,309,887,336"/>
 </map>

@@ -10,6 +10,7 @@
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="Castor3D.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -17,10 +18,12 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="castor-small.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Castor3D
-   &#160;<span id="projectnumber">..</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
+   <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
  </tr>
  </tbody>
@@ -42,224 +45,131 @@ $(function() {
 &#160;
 
 <h3><a id="index_m"></a>- m -</h3><ul>
-<li>m_albedo()
-: <a class="el" href="db/d6b/a03128.html#a38dd5028c9d90545a27ad7e8c3fc4013">castor3d::shader::MetallicRoughnessMaterial</a>
-</li>
-<li>m_albRough()
-: <a class="el" href="db/d6b/a03128.html#a4368f2b5439caefc9e5d44a3780167bc">castor3d::shader::MetallicRoughnessMaterial</a>
-</li>
-<li>m_alphaRef()
-: <a class="el" href="d3/d45/a03120.html#a18401b10723b3eab06d111570dcdf53c">castor3d::shader::BaseMaterial</a>
-</li>
-<li>m_ambient()
-: <a class="el" href="d6/d1e/a03124.html#ada65b9b5df253ec29dac3c5969e85efd">castor3d::shader::LegacyMaterial</a>
-</li>
-<li>m_attenuation()
-: <a class="el" href="d5/d3a/a03100.html#a3e08db1229d1f789ab0bdadf240dee85">castor3d::shader::PointLight</a>
-, <a class="el" href="da/dc0/a03104.html#ae72b88699a4c2ad96437cfd90471f9fe">castor3d::shader::SpotLight</a>
-</li>
-<li>m_colour()
-: <a class="el" href="d5/d37/a03092.html#add51059b6407572a3e9e9aa22e0636fb">castor3d::shader::Light</a>
-</li>
-<li>m_common()
-: <a class="el" href="d3/d45/a03120.html#a02bde4fe86cde2a39af907b5b7b7b766">castor3d::shader::BaseMaterial</a>
-</li>
-<li>m_cutOff()
-: <a class="el" href="da/dc0/a03104.html#a69922ace2aca0d6eba2ac244aa8d02ff">castor3d::shader::SpotLight</a>
-</li>
-<li>m_diffAmb()
-: <a class="el" href="d6/d1e/a03124.html#a9e5945c105997f511e46f4303f5e946d">castor3d::shader::LegacyMaterial</a>
-</li>
-<li>m_diffDiv()
-: <a class="el" href="df/dbf/a03132.html#a817144e4f0e850f96dd0fcae5f9092d2">castor3d::shader::SpecularGlossinessMaterial</a>
-</li>
 <li>m_diffuse()
-: <a class="el" href="d3/d45/a03120.html#a000588f84ca2e31f62d0cf4788af0b0e">castor3d::shader::BaseMaterial</a>
-, <a class="el" href="d6/d1e/a03124.html#a0871ef337cd0a6ba765e0fd97ad7622d">castor3d::shader::LegacyMaterial</a>
-, <a class="el" href="db/d6b/a03128.html#a57f90605d6906d7a087bd8209b8feb7b">castor3d::shader::MetallicRoughnessMaterial</a>
-, <a class="el" href="df/dbf/a03132.html#a5c00bc3a2946d08a7e6ef8e944e5295a">castor3d::shader::SpecularGlossinessMaterial</a>
+: <a class="el" href="d3/d06/a05356.html#a53d2125ad2cf89035480642c4b5935a3">castor3d::shader::BaseMaterial</a>
+, <a class="el" href="d1/d68/a05360.html#a43e7f8dbd1591803a4325d850c94adc4">castor3d::shader::LegacyMaterial</a>
+, <a class="el" href="d7/ded/a05364.html#acae03b00e4a5b44e3b173f6548be8596">castor3d::shader::MetallicRoughnessMaterial</a>
+, <a class="el" href="d3/d02/a05368.html#a0340070ed63bfc3fa984814c3e02f81d">castor3d::shader::SpecularGlossinessMaterial</a>
 </li>
-<li>m_direction()
-: <a class="el" href="de/d98/a03096.html#a5e6cdd80e1f5eb51ac03ac20e6b508f8">castor3d::shader::DirectionalLight</a>
-, <a class="el" href="da/dc0/a03104.html#a5f426c3785b1a55f7f4a4aec5c295db3">castor3d::shader::SpotLight</a>
+<li>makeDescriptorWrite()
+: <a class="el" href="dd/d4b/a04432.html#a7c8233a51a4440d414397dca81af95e6">castor3d::RenderGrid</a>
+, <a class="el" href="d4/d45/a04456.html#a43bab20a96e9bea365bc98d8667c977e">castor3d::RenderQuad</a>
 </li>
-<li>m_emissive()
-: <a class="el" href="d3/d45/a03120.html#adff7f4aeb341d75827d2e627391db0c6">castor3d::shader::BaseMaterial</a>
+<li>makeKey()
+: <a class="el" href="d8/dfa/a04756.html#a1a2d417e2520d194d6d714f16974a357">castor3d::LightPass</a>
 </li>
-<li>m_exponent()
-: <a class="el" href="da/dc0/a03104.html#a64af4c0a85495e6b09f050ca1de6063a">castor3d::shader::SpotLight</a>
-</li>
-<li>m_exposure()
-: <a class="el" href="d3/d45/a03120.html#aaf256d12dbec57dcab3b8450e94c608b">castor3d::shader::BaseMaterial</a>
-</li>
-<li>m_farPlane()
-: <a class="el" href="d5/d37/a03092.html#ae0bcd14c58f3f44a112a32e04af61c1e">castor3d::shader::Light</a>
-</li>
-<li>m_gamma()
-: <a class="el" href="d3/d45/a03120.html#a9775b387e3b0afbf7a9a3a4783acbdbf">castor3d::shader::BaseMaterial</a>
-</li>
-<li>m_gaussianWidth()
-: <a class="el" href="d3/d45/a03120.html#ae371af7ed23375e0356032d0f99d3d0b">castor3d::shader::BaseMaterial</a>
-</li>
-<li>m_glossiness()
-: <a class="el" href="df/dbf/a03132.html#ac14f2530d25268af84dc1aa55bbdea1f">castor3d::shader::SpecularGlossinessMaterial</a>
-</li>
-<li>m_hasReflection()
-: <a class="el" href="d3/d45/a03120.html#acffc551e077a4435061f2455bbe2efe1">castor3d::shader::BaseMaterial</a>
-</li>
-<li>m_hasRefraction()
-: <a class="el" href="d3/d45/a03120.html#adaa359727c3963f293cfcaa58340a2c9">castor3d::shader::BaseMaterial</a>
-</li>
-<li>m_index()
-: <a class="el" href="d5/d3a/a03100.html#a22d1740329fcfc5a7fbae0bbd3604ad8">castor3d::shader::PointLight</a>
-, <a class="el" href="da/dc0/a03104.html#abe0fb5e84cad5c2f1057754356ed288f">castor3d::shader::SpotLight</a>
-</li>
-<li>m_intensity()
-: <a class="el" href="d5/d37/a03092.html#af6d5f250e7233dee5ecae4b305c0182a">castor3d::shader::Light</a>
-</li>
-<li>m_lightBase()
-: <a class="el" href="de/d98/a03096.html#a1fee15b4bbd026a5875660bab4a6eed9">castor3d::shader::DirectionalLight</a>
-, <a class="el" href="d5/d3a/a03100.html#a618978651fec2217bc09e9956371649d">castor3d::shader::PointLight</a>
-, <a class="el" href="da/dc0/a03104.html#aea600764d7cde9381d2c13ae4e6d68b1">castor3d::shader::SpotLight</a>
-</li>
-<li>m_metallic()
-: <a class="el" href="db/d6b/a03128.html#a4168aa9e192d86101274d7f7b53e8b28">castor3d::shader::MetallicRoughnessMaterial</a>
-</li>
-<li>m_metDiv()
-: <a class="el" href="db/d6b/a03128.html#a8465358c549ad9197266b45c29adb8ea">castor3d::shader::MetallicRoughnessMaterial</a>
-</li>
-<li>m_opacity()
-: <a class="el" href="d3/d45/a03120.html#aa454a52139dfc3dab31531ba1f66612c">castor3d::shader::BaseMaterial</a>
-</li>
-<li>m_position()
-: <a class="el" href="d5/d3a/a03100.html#a8af868a5135f918747d884457b708f5e">castor3d::shader::PointLight</a>
-, <a class="el" href="da/dc0/a03104.html#a78308369701229beab3cc063d578e71f">castor3d::shader::SpotLight</a>
-</li>
-<li>m_reflRefr()
-: <a class="el" href="d3/d45/a03120.html#a9bd95bee23ba7086892ca3d65d1b17ee">castor3d::shader::BaseMaterial</a>
-</li>
-<li>m_refractionRatio()
-: <a class="el" href="d3/d45/a03120.html#af2d18184ae135a72cb6467edaeaac077">castor3d::shader::BaseMaterial</a>
-</li>
-<li>m_roughness()
-: <a class="el" href="db/d6b/a03128.html#ad8cf49fdac2717b4dcc9c186eceff632">castor3d::shader::MetallicRoughnessMaterial</a>
-</li>
-<li>m_shininess()
-: <a class="el" href="d6/d1e/a03124.html#a4c1e98166305c69b6f73411396129895">castor3d::shader::LegacyMaterial</a>
-</li>
-<li>m_specGloss()
-: <a class="el" href="df/dbf/a03132.html#a9df19ee06024874e863f1b3d53a6e364">castor3d::shader::SpecularGlossinessMaterial</a>
-</li>
-<li>m_specShin()
-: <a class="el" href="d6/d1e/a03124.html#ae44cfffb5e863a3967959986b6285f9b">castor3d::shader::LegacyMaterial</a>
-</li>
-<li>m_specular()
-: <a class="el" href="d6/d1e/a03124.html#a39c0e0660641df29d18e3a5c2ec0a266">castor3d::shader::LegacyMaterial</a>
-, <a class="el" href="df/dbf/a03132.html#a24f750e10fb01bd7424b74801f9208c1">castor3d::shader::SpecularGlossinessMaterial</a>
-</li>
-<li>m_sssInfo()
-: <a class="el" href="d3/d45/a03120.html#a5167fce4e2abfde72980a074b8b7b1be">castor3d::shader::BaseMaterial</a>
-</li>
-<li>m_subsurfaceScatteringEnabled()
-: <a class="el" href="d3/d45/a03120.html#abf59c9c43cc2b54f8cb33828e53177dd">castor3d::shader::BaseMaterial</a>
-</li>
-<li>m_subsurfaceScatteringStrength()
-: <a class="el" href="d3/d45/a03120.html#a89e407de3a41285cd192d5bc84dad857">castor3d::shader::BaseMaterial</a>
-</li>
-<li>m_transform()
-: <a class="el" href="de/d98/a03096.html#afa4edb0956098e41679dea38d681449c">castor3d::shader::DirectionalLight</a>
-, <a class="el" href="da/dc0/a03104.html#a8a2b7e983ce49ffecdf4637855fc6aea">castor3d::shader::SpotLight</a>
-</li>
-<li>m_transmittanceProfile()
-: <a class="el" href="d3/d45/a03120.html#a7489651a73677046d898d8f9809a4538">castor3d::shader::BaseMaterial</a>
-</li>
-<li>m_transmittanceProfileSize()
-: <a class="el" href="d3/d45/a03120.html#aec54c4cd16eb0004b19533ee5f61ccee">castor3d::shader::BaseMaterial</a>
+<li>makeType()
+: <a class="el" href="d0/d8d/a05340.html#adec96305838ae930536c3bfb9b17a5e9">castor3d::shader::DirectionalLight</a>
+, <a class="el" href="da/d7f/a05472.html#aba2f75799f42071255632ef32fd2c532">castor3d::shader::LayeredLpvGridData</a>
+, <a class="el" href="d1/d68/a05360.html#a3799f3832ff5b5bcbe0169e0cd72b999">castor3d::shader::LegacyMaterial</a>
+, <a class="el" href="d4/dcb/a05336.html#a77bb7fbec50c316e9e98e5785c6f2b6e">castor3d::shader::Light</a>
+, <a class="el" href="dd/d34/a05480.html#af10dd3bbdca53faaef9a9ff842dc6a80">castor3d::shader::LpvGridData</a>
+, <a class="el" href="db/da4/a05488.html#a944c4b10ca8605999689c957f62d8a40">castor3d::shader::LpvLightData</a>
+, <a class="el" href="d7/ded/a05364.html#a610a94f776f3d2f0753bfdd3850f0099">castor3d::shader::MetallicRoughnessMaterial</a>
+, <a class="el" href="da/def/a05344.html#a10a31e59cb30e974b1760998b51f1913">castor3d::shader::PointLight</a>
+, <a class="el" href="d3/d02/a05368.html#a3a72fb17a443c66fa9daec14f91c59f7">castor3d::shader::SpecularGlossinessMaterial</a>
+, <a class="el" href="d8/dd6/a05348.html#a05e8ef690c09940278d876552a8bf5b7">castor3d::shader::SpotLight</a>
+, <a class="el" href="df/d39/a05424.html#a5af387d7986bf73f4e9a862550d6916b">castor3d::shader::Surface</a>
+, <a class="el" href="d4/d98/a05428.html#a7591ddee5dc21de8ed5491c4a1ff1346">castor3d::shader::TextureConfigData</a>
+, <a class="el" href="d3/d72/a05440.html#a66f11517be372c4b0830acb30eac51e2">castor3d::shader::Voxel</a>
+, <a class="el" href="d8/d04/a05624.html#a3e1c39adf7e5362fa4c12a2bd705dce2">castor3d::shader::VoxelData</a>
 </li>
 <li>Material()
-: <a class="el" href="db/d68/a02028.html#a2ec8a59f24abf77a0c1a4f036b8e88f2">castor3d::Material</a>
+: <a class="el" href="dc/d28/a02584.html#a2ec8a59f24abf77a0c1a4f036b8e88f2">castor3d::Material</a>
+</li>
+<li>MaterialCache()
+: <a class="el" href="d6/d57/a02488.html#ad7d114b5705b324d1acab294eb53f0e2">castor3d::MaterialCache</a>
 </li>
 <li>Materials()
-: <a class="el" href="dc/d28/a03136.html#a0b4d59b858338733c0a9f4f14979324e">castor3d::shader::Materials</a>
+: <a class="el" href="db/d40/a05372.html#a9e8ec68b6c1099de440e616faa20de8c">castor3d::shader::Materials</a>
 </li>
 <li>MatrixUbo()
-: <a class="el" href="dc/ddd/a03196.html#aad9bc6d9d9f0051dda94314ecc81968b">castor3d::MatrixUbo</a>
-</li>
-<li>memoryBarrier()
-: <a class="el" href="d8/d09/a02624.html#a111823a1ab4c6651028cb1ebccc7491c">castor3d::Context</a>
+: <a class="el" href="d2/d0e/a05496.html#aad9bc6d9d9f0051dda94314ecc81968b">castor3d::MatrixUbo</a>
 </li>
 <li>merge()
-: <a class="el" href="d6/db9/a02980.html#a47d5d7cff14f670776f5dd49df5ec77e">castor3d::Scene</a>
+: <a class="el" href="d5/d76/a05244.html#a47d5d7cff14f670776f5dd49df5ec77e">castor3d::Scene</a>
 </li>
 <li>mergeInto()
-: <a class="el" href="d0/d9d/a01760.html#aeb4864133bd71b20b4446d74ad4562ce">castor3d::CacheBase&lt; ElementType, KeyType &gt;</a>
-, <a class="el" href="d7/d02/a01808.html#a865e2c964c7087f25bed1be0b96b03e2">castor3d::ObjectCacheBase&lt; ElementType, KeyType &gt;</a>
+: <a class="el" href="df/d46/a02376.html#aeb4864133bd71b20b4446d74ad4562ce">castor3d::CacheBase&lt; ElementType, KeyType &gt;</a>
+, <a class="el" href="d5/d04/a02428.html#a90a3f6b831e5328972c33503869194ea">castor3d::ObjectCacheBase&lt; ElementType, KeyType &gt;</a>
 </li>
 <li>Mesh()
-: <a class="el" href="dc/d25/a02160.html#a839e69efee6019235af55745dfa79f15">castor3d::Mesh</a>
+: <a class="el" href="dc/dce/a03908.html#ae6e4019ad2b5e8fc1ba8b3c30d7f4a12">castor3d::Mesh</a>
 </li>
 <li>MeshAnimation()
-: <a class="el" href="da/dd5/a01580.html#adb01cf64a603ba0dfa6e3e117a99e7bb">castor3d::MeshAnimation</a>
+: <a class="el" href="d3/d10/a03856.html#ad1b5d2a1d5e8bce8632ffacbfc4d432f">castor3d::MeshAnimation</a>
 </li>
 <li>MeshAnimationInstance()
-: <a class="el" href="dd/dfa/a02824.html#a50ada71097dfbba1597db4190abe7890">castor3d::MeshAnimationInstance</a>
+: <a class="el" href="d3/d96/a05072.html#a20eb16758bfff388fdb9001644bc5475">castor3d::MeshAnimationInstance</a>
 </li>
 <li>MeshAnimationInstanceSubmesh()
-: <a class="el" href="d2/d4c/a02828.html#a49fa9381c2fb91d1d1851efeeff6819c">castor3d::MeshAnimationInstanceSubmesh</a>
+: <a class="el" href="d1/ddd/a05076.html#a23258a25a95ca2cb425159182d6c0311">castor3d::MeshAnimationInstanceSubmesh</a>
 </li>
 <li>MeshAnimationKeyFrame()
-: <a class="el" href="dd/d70/a01596.html#a8d97b6cbe27902c343781eaa28762cc3">castor3d::MeshAnimationKeyFrame</a>
+: <a class="el" href="db/d62/a03860.html#a0c88cb9edc239d34096152a3ad554613">castor3d::MeshAnimationKeyFrame</a>
 </li>
 <li>MeshAnimationSubmesh()
-: <a class="el" href="d5/d84/a01612.html#ae033a2ac29dc03629bb569c9c7557067">castor3d::MeshAnimationSubmesh</a>
+: <a class="el" href="d5/d6a/a03864.html#a6a9ba4921ce11568a780239a3674cc9e">castor3d::MeshAnimationSubmesh</a>
 </li>
 <li>MeshFactory()
-: <a class="el" href="dd/d09/a02180.html#a8947cb828e67812c02fd49c8f42b14b3">castor3d::MeshFactory</a>
+: <a class="el" href="d5/d11/a03912.html#a8947cb828e67812c02fd49c8f42b14b3">castor3d::MeshFactory</a>
 </li>
 <li>MeshGenerator()
-: <a class="el" href="d5/ddd/a02184.html#aaa2b9aa734acafebf153aed0669ba135">castor3d::MeshGenerator</a>
+: <a class="el" href="d2/d05/a03916.html#a3ccec3fd88667bbca33c6e81afdeff19">castor3d::MeshGenerator</a>
+</li>
+<li>MeshImporter()
+: <a class="el" href="d8/da1/a03900.html#a045aa14041b53b76e24b6302849dcae4">castor3d::MeshImporter</a>
+</li>
+<li>MeshImporterFactory()
+: <a class="el" href="dd/d2e/a03904.html#ab8c66c78e679eb45fbb9b0c1d17e856c">castor3d::MeshImporterFactory</a>
 </li>
 <li>MeshLightPass()
-: <a class="el" href="d8/d3d/a03492.html#a812a070aa6a8dc23fe56d303b6cf68ba">castor3d::MeshLightPass</a>
+: <a class="el" href="d8/dc6/a04796.html#ab12ac93664d3dfe313188bd40d68399c">castor3d::MeshLightPass</a>
+</li>
+<li>MeshSubdivider()
+: <a class="el" href="d7/d01/a03920.html#ab7c7d86c5e9a903347d01764534ef094">castor3d::MeshSubdivider</a>
 </li>
 <li>MetallicBrdfLightingModel()
-: <a class="el" href="d0/d9f/a03152.html#ab79fa30199d3abddb1245bb72c1a8090">castor3d::shader::MetallicBrdfLightingModel</a>
+: <a class="el" href="da/de3/a05388.html#ab2d15b308ebae1b6d560f9ff9c9fb1ce">castor3d::shader::MetallicBrdfLightingModel</a>
+</li>
+<li>MetallicPbrReflectionModel()
+: <a class="el" href="da/dc0/a05392.html#a0e1968f196550654072126cd542a9c7f">castor3d::shader::MetallicPbrReflectionModel</a>
 </li>
 <li>MetallicRoughnessMaterial()
-: <a class="el" href="db/d6b/a03128.html#a646005c295e219f4b034f8cb3c872bcd">castor3d::shader::MetallicRoughnessMaterial</a>
+: <a class="el" href="d7/ded/a05364.html#af7bf466d4c19629fad685f8e5f27b975">castor3d::shader::MetallicRoughnessMaterial</a>
 </li>
 <li>MetallicRoughnessPassBuffer()
-: <a class="el" href="de/dae/a03028.html#a2cfb0116718278fb88cf1d8cb1bc779f">castor3d::MetallicRoughnessPassBuffer</a>
+: <a class="el" href="df/d65/a05264.html#a0c7d52e18c16d2823666da74f626914b">castor3d::MetallicRoughnessPassBuffer</a>
 </li>
 <li>MetallicRoughnessPbrPass()
-: <a class="el" href="d7/db2/a02036.html#a8e0528dfd96b70c81b176155cd9da4ef">castor3d::MetallicRoughnessPbrPass</a>
+: <a class="el" href="d1/df5/a02592.html#a8e0528dfd96b70c81b176155cd9da4ef">castor3d::MetallicRoughnessPbrPass</a>
+</li>
+<li>ModelInstancesUbo()
+: <a class="el" href="da/de2/a05500.html#a0f7fbefb839ad5b18717a628cfa17c6f">castor3d::ModelInstancesUbo</a>
 </li>
 <li>ModelMatrixUbo()
-: <a class="el" href="de/d3a/a03200.html#a2f9ebd196415affcc7f54d09f3d97932">castor3d::ModelMatrixUbo</a>
-</li>
-<li>ModelUbo()
-: <a class="el" href="d6/d75/a03204.html#a62c3585b3413fa7a7dc5a16d9c7d109f">castor3d::ModelUbo</a>
+: <a class="el" href="d2/d81/a05504.html#a3b37db763eca431b5d153e99f2ff6749">castor3d::ModelMatrixUbo</a>
 </li>
 <li>MorphComponent()
-: <a class="el" href="d7/d67/a02308.html#ae476cfff247b13cee204f046ab7801c0">castor3d::MorphComponent</a>
+: <a class="el" href="d1/df0/a03976.html#ae476cfff247b13cee204f046ab7801c0">castor3d::MorphComponent</a>
 </li>
 <li>MorphingRenderNode()
-: <a class="el" href="d2/d7d/a02656.html#aca9aaf9fe5bced4206a576228ac07343">castor3d::MorphingRenderNode</a>
-</li>
-<li>MorphingUbo()
-: <a class="el" href="d6/d1a/a03208.html#a510ca8ce28c37cb2ac9f866a47653ff0">castor3d::MorphingUbo</a>
+: <a class="el" href="de/d38/a04316.html#a60a9e8cded150d9fb0e1021ae4f6e650">castor3d::MorphingRenderNode</a>
 </li>
 <li>MouseEvent()
-: <a class="el" href="d6/db0/a01948.html#a6af709429712b89a83fe6c5727cc8f09">castor3d::MouseEvent</a>
+: <a class="el" href="db/d44/a02564.html#acacd9e08c4a258a29f22e970118e67c1">castor3d::MouseEvent</a>
+</li>
+<li>MouseEventHandler()
+: <a class="el" href="de/d48/a02552.html#a70c194b6cacf99e3674b9cd12c924d7a">castor3d::MouseEventHandler</a>
 </li>
 <li>MovableObject()
-: <a class="el" href="d2/d0c/a02932.html#a134c0e14da9e780830cf5e0fc140fe8c">castor3d::MovableObject</a>
+: <a class="el" href="d9/d4a/a05192.html#acf7517058566afbb2290a7856fc9dfee">castor3d::MovableObject</a>
 </li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 13:39:12 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Feb 18 2021 01:09:24 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

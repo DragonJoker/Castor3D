@@ -1,0 +1,2757 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d0/d71/a07304" kind="page">
+    <compoundname>scenefile</compoundname>
+    <title>CSCN File Format</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>CSCN files are easily editable text files (since the syntax is understood).<linebreak/>
+ The data types used in scene files are these ones :<linebreak/>
+ <itemizedlist>
+<listitem>
+<para><emphasis>boolean</emphasis> : a boolean (<emphasis>true</emphasis> or <emphasis>false</emphasis>). </para>
+</listitem>
+<listitem>
+<para><emphasis>int</emphasis> : a simple integer. </para>
+</listitem>
+<listitem>
+<para><emphasis>mask_1</emphasis> : an hexadecimal integer defining a mask for one component from a colour (0x000000FF, for instance). </para>
+</listitem>
+<listitem>
+<para><emphasis>mask_3</emphasis> : an hexadecimal integer defining a mask for three components from a colour (0x00FFFFFF, for instance). </para>
+</listitem>
+<listitem>
+<para><emphasis>real</emphasis> : a floating point number, using dot ( . ) as the decimals separator. </para>
+</listitem>
+<listitem>
+<para><emphasis>2, 3, 4 ints</emphasis> : 2, 3 or 4 integers, separated by commas ( , ) or spaces ( ). </para>
+</listitem>
+<listitem>
+<para><emphasis>2, 3, 4 reals</emphasis> : 2, 3 or 4 floating point numbers, separated by commas ( , ) or spaces ( ). </para>
+</listitem>
+<listitem>
+<para><emphasis>size</emphasis> : 2 integers greater than or equal to 0. </para>
+</listitem>
+<listitem>
+<para><emphasis>2x2, 3x3, 4x4 reals matrix</emphasis> : 2, 3 or 4 groups separated by semi colons ( ; ) of 2, 3 or 4 floating point numbers separated by commas ( , ) or spaces ( ). </para>
+</listitem>
+<listitem>
+<para><emphasis>rgb_colour</emphasis> : the RGB components of colour, expressed in floating point numbers between 0.0 and 1.0. </para>
+</listitem>
+<listitem>
+<para><emphasis>rgba_colour</emphasis> : the RGBA components of colour, expressed in floating point numbers between 0.0 and 1.0. </para>
+</listitem>
+<listitem>
+<para><emphasis>rgb_hdr_colour</emphasis> : the RGB components of colour, expressed in floating point numbers greater than or equal to 0.0. </para>
+</listitem>
+<listitem>
+<para><emphasis>rgba_hdr_colour</emphasis> : the RGBA components of colour, expressed in floating point numbers greater than or equal to 0.0. </para>
+</listitem>
+<listitem>
+<para><emphasis>value</emphasis> : a string corresponding to a predefined value. </para>
+</listitem>
+<listitem>
+<para><emphasis>name</emphasis> : a string, wrapped into double quotes ( ‘" ). </para>
+</listitem>
+<listitem>
+<para><emphasis>file</emphasis> : a string, wrapped into double quotes ( ‘" ), containing a file name and path. </para>
+</listitem>
+<listitem>
+<para><emphasis>folder</emphasis> : a string, wrapped into double quotes ( ‘" ), containing a folder path. </para>
+</listitem>
+</itemizedlist>
+<linebreak/>
+ <linebreak/>
+ </para>
+<sect1 id="d0/d71/a07304_1description">
+<title>Description</title>
+<para>The file is split into sections, defined as follows :<linebreak/>
+ <preformatted><computeroutput>[section_type] "[section_name]"
+{
+    // Section description
+}</computeroutput></preformatted> Example:<linebreak/>
+ <preformatted><computeroutput>light "Light0"
+{
+    type directional
+    colour 1.0 1.0 1.0
+    intensity 0.8 1.0
+}</computeroutput></preformatted> Some sections can have child subsections :<linebreak/>
+ <preformatted><computeroutput>material "Bronze"
+{
+    pass
+    {
+        ambient 0.2125 0.1275 0.054
+        diffuse 0.714 0.4284 0.12144
+        emissive 0.0
+        specular 0.393548 0.271906 0.166721
+        shininess 25.6
+    }
+}</computeroutput></preformatted> <linebreak/>
+ <linebreak/>
+ </para>
+</sect1>
+<sect1 id="d0/d71/a07304_1section_list">
+<title>Sections list</title>
+<para>The possible sections are the following:<linebreak/>
+ <orderedlist>
+<listitem>
+<para><bold>sampler</bold><linebreak/>
+ Defines a texture sampler object.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para><bold>material</bold><linebreak/>
+ Defines a material.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para><bold>mesh</bold><linebreak/>
+ Defines a mesh.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para><bold>font</bold><linebreak/>
+ Defines a font used in text overlays.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para><bold>window</bold><linebreak/>
+ Defines a render window.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para><bold>panel_overlay</bold><linebreak/>
+ Defines a simple panel overlay.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para><bold>border_panel_overlay</bold><linebreak/>
+ Defines a panel overlay with a border.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para><bold>text_overlay</bold><linebreak/>
+ Defines a panel overlay with a text.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para><bold>scene</bold><linebreak/>
+ Defines a whole scene.<linebreak/>
+ </para>
+</listitem>
+</orderedlist>
+<linebreak/>
+ <linebreak/>
+ </para>
+</sect1>
+<sect1 id="d0/d71/a07304_1section_sampler">
+<title>Section sampler</title>
+<para><orderedlist>
+<listitem>
+<para></para>
+<para><bold>min_filter</bold> : <emphasis>value</emphasis></para>
+<para>Value used for minification function. The possible values are :<linebreak/>
+ <itemizedlist>
+<listitem>
+<para></para>
+<para><emphasis>linear</emphasis> : linear interpolation.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>nearest</emphasis> : no interpolation.</para>
+<para></para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>mag_filter</bold> : <emphasis>value</emphasis></para>
+<para>Value used for magnification function. The possible values are :<linebreak/>
+ <itemizedlist>
+<listitem>
+<para></para>
+<para><emphasis>linear</emphasis> : linear interpolation.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>nearest</emphasis> : no interpolation.</para>
+<para></para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>mip_filter</bold> : <emphasis>value</emphasis></para>
+<para>Value used for mipmapping function. The possible values are :<linebreak/>
+ <itemizedlist>
+<listitem>
+<para></para>
+<para><emphasis>linear</emphasis> : linear interpolation.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>nearest</emphasis> : no interpolation.</para>
+<para></para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>min_lod</bold> : <emphasis>real</emphasis></para>
+<para>Defines minimum level of detail value.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>max_lod</bold> : <emphasis>real</emphasis></para>
+<para>Defines maximum level of detail value.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>lod_bias</bold> : <emphasis>real</emphasis></para>
+<para>Defines the base MIP-Level.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>u_wrap_mode</bold> : <emphasis>value</emphasis></para>
+<para>Defines the wrapping mode of the texture, for the U component. The possible values are :<linebreak/>
+ <itemizedlist>
+<listitem>
+<para></para>
+<para><emphasis>repeat</emphasis> : The texture is repeated.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>mirrored_repeat</emphasis> : The texture is repeated, each instance of 2 being the mirror of the other one.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>clamp_to_border</emphasis> : The texture is stretched, the object edge colour is defined as the texture edge colour.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>clamp_to_edge</emphasis> : The texture is stretched, the object edge colour is defined as the average of the texture edge colour and the border colour.</para>
+<para></para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>v_wrap_mode</bold> : <emphasis>value</emphasis></para>
+<para>Defines the wrapping mode of the texture, for the V component. The possible values are :<linebreak/>
+ <itemizedlist>
+<listitem>
+<para></para>
+<para><emphasis>repeat</emphasis> : The texture is repeated.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>mirrored_repeat</emphasis> : The texture is repeated, each instance of 2 being the mirror of the other one.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>clamp_to_border</emphasis> : The texture is stretched, the object edge colour is defined as the texture edge colour.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>clamp_to_edge</emphasis> : The texture is stretched, the object edge colour is defined as the average of the texture edge colour and the border colour.</para>
+<para></para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>w_wrap_mode</bold> : <emphasis>value</emphasis></para>
+<para>Defines the wrapping mode of the texture, for the W component. The possible values are :<linebreak/>
+ <itemizedlist>
+<listitem>
+<para></para>
+<para><emphasis>repeat</emphasis> : The texture is repeated.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>mirrored_repeat</emphasis> : The texture is repeated, each instance of 2 being the mirror of the other one.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>clamp_to_border</emphasis> : The texture is stretched, the object edge colour is defined as the texture edge colour.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>clamp_to_edge</emphasis> : The texture is stretched, the object edge colour is defined as the average of the texture edge colour and the border colour.</para>
+<para></para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>border_colour</bold> : <emphasis>rgba_colour</emphasis></para>
+<para>Defines the non textured border colour.<linebreak/>
+ <itemizedlist>
+<listitem>
+<para></para>
+<para><emphasis>float_transparent_black</emphasis> : Transparent black.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>int_transparent_black</emphasis> : Transparent black.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>float_opaque_black</emphasis> : Opaque black.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>int_opaque_black</emphasis> : Opaque black.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>float_opaque_white</emphasis> : Opaque white.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>int_opaque_white</emphasis> : Opaque white.</para>
+<para></para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>max_anisotropy</bold> : <emphasis>real</emphasis></para>
+<para>Defines the maximum degree of anisotropy.<linebreak/>
+ </para>
+</listitem>
+</orderedlist>
+<linebreak/>
+ <linebreak/>
+ </para>
+</sect1>
+<sect1 id="d0/d71/a07304_1section_material">
+<title>material section</title>
+<para>Materials can be multi-pass, so you can declare more than one pass subsection.<linebreak/>
+ <orderedlist>
+<listitem>
+<para></para>
+<para><bold>pass</bold> : <emphasis>section</emphasis></para>
+<para>Defines a new section describing a texture.<linebreak/>
+ </para>
+</listitem>
+</orderedlist>
+<linebreak/>
+ </para>
+<sect2 id="d0/d71/a07304_1subsection_pass">
+<title>pass section</title>
+<para><orderedlist>
+<listitem>
+<para></para>
+<para><bold>diffuse</bold> : <emphasis>rgb_colour</emphasis></para>
+<para>Defines diffuse colour of the pass (phong materials only).<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>albedo</bold> : <emphasis>rgb_colour</emphasis></para>
+<para>Defines albedo colour of the pass (not available with phong materials).<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>specular</bold> : <emphasis>rgb_colour</emphasis></para>
+<para>Defines specular colour of the pass (not available with metallic/roughness materials).<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>metallic</bold> : <emphasis>real (between 0 and 1)</emphasis></para>
+<para>Defines the metallness of the pass (metallic/roughness materials only).<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>shininess</bold> : <emphasis>real (between 0 and 128)</emphasis></para>
+<para>Defines the specular exponent of the pass (phong materials only).<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>glossiness</bold> : <emphasis>real (between 0 and 1)</emphasis></para>
+<para>Defines the glossiness of the pass (specular/glossiness materials only).<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>roughness</bold> : <emphasis>real (between 0 and 1)</emphasis></para>
+<para>Defines the roughness of the pass (metallic/roughness materials only).<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>ambient</bold> : <emphasis>real (between 0 and 1)</emphasis></para>
+<para>Defines ambient factor of the pass (phong materials only).<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>emissive</bold> : <emphasis>real (between 0 and 1)</emphasis></para>
+<para>Defines emissive factor of the pass.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>alpha</bold> : <emphasis>real (between 0 and 1)</emphasis></para>
+<para>Defines the global alpha value for the pass.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>two_sided</bold> : <emphasis>boolean</emphasis></para>
+<para>Tells the pass is two sided (true) or not (false).<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>texture_unit</bold> : <emphasis>section</emphasis></para>
+<para>Defines a new section describing a texture unit.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>alpha_blend_mode</bold> : <emphasis>value</emphasis></para>
+<para>Alpha blending mode name, can be one of:<linebreak/>
+ <itemizedlist>
+<listitem>
+<para></para>
+<para><emphasis>none</emphasis> : No alpha blending.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>additive</emphasis> : Source and destination alpha values are added.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>multiplicative</emphasis> : Source and destination alpha values are multiplied.</para>
+<para></para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>colour_blend_mode</bold> : <emphasis>value</emphasis></para>
+<para>Colour blending mode name, can be one of:<linebreak/>
+ <itemizedlist>
+<listitem>
+<para></para>
+<para><emphasis>none</emphasis> : No colour blending.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>additive</emphasis> : Source and destination colour values are added.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>multiplicative</emphasis> : Source and destination colour values are multiplied.</para>
+<para></para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>alpha_func</bold> : func : <emphasis>value</emphasis> ref-val: <emphasis>real</emphasis></para>
+<para>Defines the way alpha rejection is applied to the texture. The second parameter is the reference value used in alpha rejection function. The first parameter values can be :<linebreak/>
+ <itemizedlist>
+<listitem>
+<para></para>
+<para><emphasis>always</emphasis> : The sample colour is always applied.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>less</emphasis> : The sample colour is applied if its alpha component is less than the second parameter.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>less_or_equal</emphasis> : The sample colour is applied if its alpha component is less than or equal to the second parameter.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>equal</emphasis> : The sample colour is applied if its alpha component is equal to the second parameter.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>not_equal</emphasis> : The sample colour is applied if its alpha component is different from the second parameter.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>greater_or_equal</emphasis> : The sample colour is applied if its alpha component is greater than or equal to the second parameter.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>greater</emphasis> : The sample colour is applied if its alpha component is greater than the second parameter.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>never</emphasis> : The sample colour is never applied.</para>
+<para></para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>refraction_ratio</bold> : <emphasis>real</emphasis></para>
+<para>Defines the refraction ratio of the pass. Note that if there is no refraction map, the refraction is still applied, using only the skybox.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>subsurface_scattering</bold> : <emphasis>section</emphasis></para>
+<para>Defines a new section describing subsurface scattering for the pass.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>parallax_occlusion</bold> : <emphasis>boolean</emphasis></para>
+<para>Enables or disables parallax occlusion mapping (needs a normal map and a height map).<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>bw_accumulation</bold> : <emphasis>int between 0 and 5</emphasis></para>
+<para>Defines the accumulation function, for blended weighted rendering.<linebreak/>
+ </para>
+</listitem>
+</orderedlist>
+</para>
+<sect3 id="d0/d71/a07304_1subsubsection_texture_unit">
+<title>texture_unit section</title>
+<para><orderedlist>
+<listitem>
+<para></para>
+<para><bold>image</bold> : <emphasis>file</emphasis></para>
+<para>Defines the image file name.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>render_target</bold> : <emphasis>section</emphasis></para>
+<para>Defines a new section describing a render target.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>channel</bold> : <emphasis>value {| value}</emphasis></para>
+<para>The channels to which the texture is bound. Can be one of the following :<linebreak/>
+ <itemizedlist>
+<listitem>
+<para></para>
+<para><emphasis>diffuse</emphasis> : Diffuse lighting colour (Phong only).</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>albedo</emphasis> : Base colour (PBR only).</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>specular</emphasis> : Specular colour (Phong and PBR Specular/Glossiness).</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>metallic</emphasis> : Metallic factor (PBR Metallic/Roughness only).</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>shininess</emphasis> : Specular exponent (Phong only).</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>glossiness</emphasis> : Glossiness factor (PBR Specular/Glossiness only).</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>roughness</emphasis> : Roughness factor (PBR Metallic/Roughness only).</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>opacity</emphasis> : Opacity factor.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>emissive</emphasis> : Emissive colour.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>transmittance</emphasis> : Transmittance factor (for subsurface scattering).</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>occlusion</emphasis> : Occlusion factor.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>normal</emphasis> : Normals.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>height</emphasis> : Height.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>Reflection</emphasis> : Reflection map.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>Refraction</emphasis> : Refraction map.</para>
+<para></para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>sampler</bold> : <emphasis>name</emphasis></para>
+<para>Defines the sampler object used by the texture.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>diffuse_mask</bold> : <emphasis>mask_3</emphasis></para>
+<para>Defines the components from the texture used for the diffuse colour (Phong only).<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>albedo_mask</bold> : <emphasis>mask_3</emphasis></para>
+<para>Defines the components from the texture used for the base colour (PBR only).<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>specular_mask</bold> : <emphasis>mask_3</emphasis></para>
+<para>Defines the components from the texture used for the specular colour (Phong or PBR Specular/Glossiness).<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>metalness_mask</bold> : <emphasis>mask_1</emphasis></para>
+<para>Defines the component from the texture used for the metallic factor (PBR Metallic/Roughness only).<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>shininess_mask</bold> : <emphasis>mask_1</emphasis></para>
+<para>Defines the component from the texture used for the specular exponent (Phong only).<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>glossiness_mask</bold> : <emphasis>mask_1</emphasis></para>
+<para>Defines the component from the texture used for the glossiness factor (PBR Specular/Glossiness only).<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>roughness_mask</bold> : <emphasis>mask_1</emphasis></para>
+<para>Defines the component from the texture used for the roughness factor (PBR Metallic/Roughness only).<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>opacity</bold> : <emphasis>mask_1</emphasis></para>
+<para>Defines the component from the texture used for the opacity factor.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>emissive</bold> : <emphasis>mask_3</emphasis></para>
+<para>Defines the components from the texture used for the emissive colour.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>transmittance</bold> : <emphasis>mask_1</emphasis></para>
+<para>Defines the component from the texture used for the transmittance factor (for subsurface scattering.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>occlusion</bold> : <emphasis>mask_1</emphasis></para>
+<para>Defines the component from the texture used for the occlusion factor.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>normal</bold> : <emphasis>mask_3</emphasis></para>
+<para>Defines the components from the texture used for the normals.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>height</bold> : <emphasis>mask_1</emphasis></para>
+<para>Defines the component from the texture used for the height.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>height_factor</bold> : <emphasis>real</emphasis></para>
+<para>The height factor multiplier.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>normal_directx</bold> : <emphasis>booléen</emphasis></para>
+<para>Tells if the texture normals are expressed for DirectX (green component will then be inverted).<linebreak/>
+ </para>
+</listitem>
+</orderedlist>
+</para>
+</sect3>
+<sect3 id="d0/d71/a07304_1subsubsection_shader_program">
+<title>shader_program section</title>
+<para><orderedlist>
+<listitem>
+<para></para>
+<para><bold>vertex_program</bold> : <emphasis>section</emphasis></para>
+<para>Defines a new section describing the vertex program.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>pixel_program</bold> : <emphasis>section</emphasis></para>
+<para>Defines a new section describing the pixel program.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>geometry_program</bold> : <emphasis>section</emphasis></para>
+<para>Defines a new section describing the geometry program.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>hull_program</bold> : <emphasis>section</emphasis></para>
+<para>Defines a new section describing the hull (tessellation control) program.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>domain_program</bold> : <emphasis>section</emphasis></para>
+<para>Defines a new section describing the domain (tessellation evaluation) program.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>constants_buffer</bold> : <emphasis>section</emphasis></para>
+<para>Defines a new section dexcribing a constants buffer (uniform buffer).<linebreak/>
+ </para>
+</listitem>
+</orderedlist>
+</para>
+</sect3>
+<sect3 id="d0/d71/a07304_1subsubsection_vertexpixelgeometryhulldomain_program">
+<title>vertex/pixel/geometry/hull/domain_program section</title>
+<para><orderedlist>
+<listitem>
+<para></para>
+<para><bold>file</bold> : <emphasis>file</emphasis></para>
+<para>Shader file name<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>sampler</bold> : <emphasis>name</emphasis></para>
+<para>Creates a new variable of sample (1D, 2D, …) type, for the pixel shader.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>input_type</bold> : <emphasis>value</emphasis></para>
+<para>Defines the input faces data type, for geometry shader. Can be one of the following :<linebreak/>
+ <itemizedlist>
+<listitem>
+<para></para>
+<para><emphasis>points</emphasis> : Points.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>lines</emphasis> : Disjoint lines.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>line_loop</emphasis> : Joint lines loop.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>line_strip</emphasis> : Joint lines.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>triangles</emphasis> : Disjoint triangles.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>triangle_strip</emphasis> : Joint triangles.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>triangle_fan</emphasis> : Triangles joint using the first point.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>quads</emphasis> : Disjoint quads.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>quad_strip</emphasis> : Joint quads.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>polygon</emphasis> : Polygons.</para>
+<para></para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>output_type</bold> : <emphasis>value</emphasis></para>
+<para>Defines the geometry chader output data type. Can be one of the following :<linebreak/>
+ <itemizedlist>
+<listitem>
+<para></para>
+<para><emphasis>points</emphasis> : Points.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>line_strip</emphasis> : Joint lines.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>triangle_strip</emphasis> : Joint triangles.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>quad_strip</emphasis> : Joint quads.</para>
+<para></para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>output_vtx_count</bold> : <emphasis>int</emphasis></para>
+<para>Defines the geometry shader output vertices.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>constants_buffer</bold> : <emphasis>section</emphasis></para>
+<para>Defines a new section describing a constants buffer.<linebreak/>
+ </para>
+</listitem>
+</orderedlist>
+</para>
+</sect3>
+<sect3 id="d0/d71/a07304_1subsubsection_constants_buffer">
+<title>constants_buffer section</title>
+<para><orderedlist>
+<listitem>
+<para></para>
+<para><bold>shaders</bold> : <emphasis>bitwise ORed values</emphasis></para>
+<para>Shader types to which this buffer applies, can be one of:<linebreak/>
+ <itemizedlist>
+<listitem>
+<para></para>
+<para><emphasis>vertex</emphasis></para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>hull</emphasis></para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>domain</emphasis></para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>geometry</emphasis></para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>pixel</emphasis></para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>compute</emphasis></para>
+<para></para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>variable</bold> : <emphasis>name</emphasis>, <emphasis>section</emphasis></para>
+<para>Defines a new section describing a variable for this buffer.<linebreak/>
+ </para>
+</listitem>
+</orderedlist>
+</para>
+</sect3>
+<sect3 id="d0/d71/a07304_1subsubsection_variable">
+<title>variable section</title>
+<para><orderedlist>
+<listitem>
+<para></para>
+<para><bold>type</bold> : <emphasis>value</emphasis></para>
+<para>Variable type name, can be :<linebreak/>
+ <itemizedlist>
+<listitem>
+<para></para>
+<para><emphasis>int</emphasis> : 1 signed integer.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>uint</emphasis> : 1 unsigned integer.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>float</emphasis> : 1 simple precision floating point number.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>double</emphasis> : 1 double precision floating point number.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>vec2i</emphasis> : 2 signed integers.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>vec3i</emphasis> : 3 signed integers.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>vec4i</emphasis> : 4 signed integers.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>vec2f</emphasis> : 2 simple precision floating point numbers.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>vec3f</emphasis> : 3 simple precision floating point numbers.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>vec4f</emphasis> : 4 simple precision floating point numbers.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>vec2d</emphasis> : 2 double precision floating point numbers.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>vec3d</emphasis> : 3 double precision floating point numbers.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>vec4d</emphasis> : 4 double precision floating point numbers.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>mat2x2i</emphasis> : 2x2 signed integers matrix.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>mat2x3i</emphasis> : 2x3 signed integers matrix.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>mat2x4i</emphasis> : 2x4 signed integers matrix.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>mat3x2i</emphasis> : 3x2 signed integers matrix.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>mat3x3i</emphasis> : 3x3 signed integers matrix.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>mat3x4i</emphasis> : 3x4 signed integers matrix.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>mat4x2i</emphasis> : 4x2 signed integers matrix.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>mat4x3i</emphasis> : 4x3 signed integers matrix.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>mat4x4i</emphasis> : 4x4 signed integers matrix.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>mat2x2f</emphasis> : 2x2 simple precision floating point numbers matrix.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>mat2x3f</emphasis> : 2x3 simple precision floating point numbers matrix.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>mat2x4f</emphasis> : 2x4 simple precision floating point numbers matrix.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>mat3x2f</emphasis> : 3x2 simple precision floating point numbers matrix.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>mat3x3f</emphasis> : 3x3 simple precision floating point numbers matrix.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>mat3x4f</emphasis> : 3x4 simple precision floating point numbers matrix.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>mat4x2f</emphasis> : 4x2 simple precision floating point numbers matrix.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>mat4x3f</emphasis> : 4x3 simple precision floating point numbers matrix.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>mat4x4f</emphasis> : 4x4 simple precision floating point numbers matrix.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>mat2x2d</emphasis> : 2x2 double precision floating point numbers matrix.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>mat2x3d</emphasis> : 2x3 double precision floating point numbers matrix.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>mat2x4d</emphasis> : 2x4 double precision floating point numbers matrix.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>mat3x2d</emphasis> : 3x2 double precision floating point numbers matrix.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>mat3x3d</emphasis> : 3x3 double precision floating point numbers matrix.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>mat3x4d</emphasis> : 3x4 double precision floating point numbers matrix.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>mat4x2d</emphasis> : 4x2 double precision floating point numbers matrix.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>mat4x3d</emphasis> : 4x3 double precision floating point numbers matrix.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>mat4x4d</emphasis> : 4x4 double precision floating point numbers matrix.</para>
+<para></para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>count</bold> : <emphasis>int</emphasis></para>
+<para>Variable occurences count (array size).<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para><bold>value</bold> :<linebreak/>
+ Variable value, depends on the chosen type.<linebreak/>
+ </para>
+</listitem>
+</orderedlist>
+</para>
+</sect3>
+<sect3 id="d0/d71/a07304_1subsubsection_subsurface_scattering">
+<title>subsurface_scattering section</title>
+<para><orderedlist>
+<listitem>
+<para></para>
+<para><bold>strength</bold> : <emphasis>real</emphasis></para>
+<para>Defines the strength of the effect.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>gaussian_width</bold> : <emphasis>real</emphasis></para>
+<para>Defines the width of the Gaussian blur.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>transmittance_profile</bold> : <emphasis>section</emphasis></para>
+<para>Defines a new section describing the transmittance profile.<linebreak/>
+ </para>
+</listitem>
+</orderedlist>
+</para>
+</sect3>
+<sect3 id="d0/d71/a07304_1subsubsection_transmittance_profile">
+<title>transmittance_profile section</title>
+<para><orderedlist>
+<listitem>
+<para></para>
+<para><bold>factor</bold> : <emphasis>vec4f</emphasis></para>
+<para>Defines the three RGB components of the colour, and the fourth component is used for the exponent of that colour.<linebreak/>
+ </para>
+</listitem>
+</orderedlist>
+<linebreak/>
+ <linebreak/>
+ </para>
+</sect3>
+</sect2>
+</sect1>
+<sect1 id="d0/d71/a07304_1section_font">
+<title>font section</title>
+<para><orderedlist>
+<listitem>
+<para></para>
+<para><bold>file</bold> : <emphasis>file</emphasis></para>
+<para>Defines the file holding the font.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>height</bold> : <emphasis>int</emphasis></para>
+<para>Defines the height (precision) of the font.<linebreak/>
+ </para>
+</listitem>
+</orderedlist>
+<linebreak/>
+ <linebreak/>
+ </para>
+</sect1>
+<sect1 id="d0/d71/a07304_1section_scene">
+<title>scene section</title>
+<para><orderedlist>
+<listitem>
+<para></para>
+<para><bold>ambient_light</bold> : <emphasis>colour</emphasis></para>
+<para>Defines the ambient lighting colour. For PBR materials, defines the influence of the IBL on the scene.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>background_colour</bold> : <emphasis>colour</emphasis></para>
+<para>Defines the background colour.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>background_image</bold> : <emphasis>file</emphasis></para>
+<para>Defines the background image.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>import</bold> : <emphasis>file</emphasis></para>
+<para>Allows scene import from a CSCN file or another file format supported by Castor3D importer plug-ins.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>scene_node</bold> : <emphasis>section</emphasis></para>
+<para>Defines a new section describing a scene node for objects, lights or billboards.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>camera_node</bold> : <emphasis>section</emphasis></para>
+<para>Defines a new section describing a scene node for cameras.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>light</bold> : <emphasis>section</emphasis></para>
+<para>Defines a new section describing a light source.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>object</bold> : <emphasis>section</emphasis></para>
+<para>Defines a new section describing an object.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>billboard</bold> : <emphasis>section</emphasis></para>
+<para>Defines a new section describing a billboards list.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>camera</bold> : <emphasis>section</emphasis></para>
+<para>Defines a new section describing a camera.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>panel_overlay</bold> : <emphasis>section</emphasis></para>
+<para>Defines a new section describing a simple panel overlay.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>border_panel_overlay</bold> : <emphasis>section</emphasis></para>
+<para>Defines a new section describing a simple panel overlay with a border.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>text_overlay</bold> : <emphasis>section</emphasis></para>
+<para>Defines a new section describing a simple panel overlay with text.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>animated_object_group</bold> : <emphasis>section</emphasis></para>
+<para>Defines a new section describing an animated object group, with common animations.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>mesh</bold> : <emphasis>section</emphasis></para>
+<para>Defines a new section describing a mesh, that can be used with one or more objects.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>particle_system</bold> : <emphasis>section</emphasis></para>
+<para>Defines a new section describing a particle system.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>skybox</bold> : <emphasis>section</emphasis></para>
+<para>Defines a new section describing the skybox.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>include</bold> : <emphasis>file</emphasis></para>
+<para>Includes a scene file, allowing you to split your scene in multiple files.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>sampler</bold> : <emphasis>section</emphasis></para>
+<para>Defines a new section describing a sampler.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>fog_type</bold> : <emphasis>value</emphasis></para>
+<para>Defines the fog type for the scene. Possible values are:<linebreak/>
+ <itemizedlist>
+<listitem>
+<para></para>
+<para><emphasis>linear</emphasis>: Fog intensity increases linearly with distance to camera.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>exponential</emphasis>: Fog intensity increases exponentially with distance to camera.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>squared_exponential</emphasis>: Fog intensity increases even more with distance to camera.</para>
+<para></para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>fog_density</bold> : <emphasis>real</emphasis></para>
+<para>Defines the fog density, which is multiplied by the distance, according to chosen fog type.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>hdr_config</bold> : <emphasis>section</emphasis></para>
+<para>Defines a new section describing the HDR configuration.<linebreak/>
+ </para>
+</listitem>
+</orderedlist>
+<linebreak/>
+ </para>
+<sect2 id="d0/d71/a07304_1subsection_hdr_config">
+<title>hdr_config section</title>
+<para><orderedlist>
+<listitem>
+<para></para>
+<para><bold>exposure</bold> : <emphasis>real</emphasis></para>
+<para>Defines the scene’s exposure.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>gamma</bold> : <emphasis>real</emphasis></para>
+<para>Defines the gamma correction.<linebreak/>
+ </para>
+</listitem>
+</orderedlist>
+<linebreak/>
+ </para>
+</sect2>
+<sect2 id="d0/d71/a07304_1subsection_scene_node">
+<title>scene_node and camera_node sections</title>
+<para><orderedlist>
+<listitem>
+<para></para>
+<para><bold>parent</bold> : <emphasis>name</emphasis></para>
+<para>Defines this node’s parent. The default parent node is the root node.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>position</bold> : <emphasis>3 reals</emphasis></para>
+<para>Node position relative to its parent.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>orientation</bold> : <emphasis>4 reals</emphasis></para>
+<para>A quaternion holding node orientation relative to its parent.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>scale</bold> : <emphasis>3 reals</emphasis></para>
+<para>Node scale relative to its parent.<linebreak/>
+ </para>
+</listitem>
+</orderedlist>
+<linebreak/>
+ </para>
+</sect2>
+<sect2 id="d0/d71/a07304_1subsection_light">
+<title>light section</title>
+<para><orderedlist>
+<listitem>
+<para></para>
+<para><bold>type</bold> : <emphasis>value</emphasis></para>
+<para>Three light source types exist in Castor3D :<linebreak/>
+ <itemizedlist>
+<listitem>
+<para></para>
+<para><emphasis>directional</emphasis> : directional light (like the sun).</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>point_light</emphasis> : a positioned source which emits in all directions.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>spot_light</emphasis> : a positioned source which emits in an oriented cone.</para>
+<para></para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>colour</bold> : <emphasis>rgb_colour</emphasis></para>
+<para>Defines the colour for this source.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>intensity</bold> : <emphasis>2 reals</emphasis></para>
+<para>Defines the diffuse and specular intensities for this source.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>attenuation</bold> : <emphasis>3 reals</emphasis></para>
+<para>Defines the three attenuation components : constant, linear and quadratic. This attenuation is computed from the distance to the light source.<linebreak/>
+ Only for spot_light and point_light.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>cut_off</bold> : <emphasis>real</emphasis></para>
+<para>Defines the angle of the emission cone.<linebreak/>
+ Only for spot_light.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>exponent</bold> : <emphasis>real</emphasis></para>
+<para>Defines the attenuation computed with the distance from the emission cone centre.<linebreak/>
+ Only for spot_light.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>parent</bold> : <emphasis>name</emphasis></para>
+<para>Defines the node which this light source is attached to.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>shadow_producer</bold> : <emphasis>section</emphasis></para>
+<para></para>
+<para>Defines a new section describing the shadows for the light source.</para>
+<para></para>
+</listitem>
+</orderedlist>
+<linebreak/>
+ </para>
+<sect3 id="d0/d71/a07304_1shadows_profile">
+<title>Section shadows</title>
+<para><orderedlist>
+<listitem>
+<para></para>
+<para><bold>producer</bold> : <emphasis>booléen</emphasis></para>
+<para>Tells if the light source produces shadows (<emphasis>true</emphasis>) or not (<emphasis>false</emphasis>).<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>filter</bold> : <emphasis>valeur</emphasis></para>
+<para>Defines the type of shadows to use. Can be one of the following:<linebreak/>
+ <itemizedlist>
+<listitem>
+<para></para>
+<para><emphasis>raw</emphasis> : No filter.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>pcf</emphasis> : PCF filter.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>variance</emphasis> : Variance Shadow Map.</para>
+<para></para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>min_offset</bold> : <emphasis>real</emphasis></para>
+<para>Defines the minimal offset to apply to the shadow value.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>max_slope_offset</bold> : <emphasis>real</emphasis></para>
+<para>Defines the mawimal offset, slope wise, to apply to the shadow value.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>variance_max</bold> : <emphasis>real</emphasis></para>
+<para>Defines the minimal variance factor to apply to the shadow value.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>variance_bias</bold> : <emphasis>real</emphasis></para>
+<para>Defines the variance bias to apply to the shadow value.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>volumetric_steps</bold> : <emphasis>int</emphasis></para>
+<para>Defines the number of steps performed by the ray to compute the volumetric light scattering.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>volumetric_scattering</bold> : <emphasis>real</emphasis></para>
+<para>Defines the volumetric light scattering factor.<linebreak/>
+ </para>
+</listitem>
+</orderedlist>
+<linebreak/>
+ </para>
+</sect3>
+</sect2>
+<sect2 id="d0/d71/a07304_1subsection_object">
+<title>object section</title>
+<para><orderedlist>
+<listitem>
+<para></para>
+<para><bold>parent</bold> : <emphasis>name</emphasis></para>
+<para>Defines the node which this object is attached to.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>mesh</bold> : <emphasis>name</emphasis></para>
+<para>Defines the mesh this object uses.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>mesh</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis></para>
+<para>Defines a new section describing a mesh with the given name.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>material</bold> : <emphasis>name</emphasis></para>
+<para>Name of a material, defined in a .cmtl file or in this file. Applies this material too all the submeshes.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>materials</bold> : <emphasis>section</emphasis></para>
+<para>New section used to specify each submesh’s material.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>cast_shadows</bold> : <emphasis>boolean</emphasis></para>
+<para></para>
+<para>Defines if the object casts shadows (<emphasis>true</emphasis>, default value) or not (<emphasis>false</emphasis>).</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>receive_shadows</bold> : <emphasis>boolean</emphasis></para>
+<para></para>
+<para>Defines if the object receives shadows (<emphasis>true</emphasis>, default value) or not (<emphasis>false</emphasis>).</para>
+<para></para>
+</listitem>
+</orderedlist>
+</para>
+<sect3 id="d0/d71/a07304_1subsubsection_materials">
+<title>materials section</title>
+<para><orderedlist>
+<listitem>
+<para></para>
+<para><bold>material</bold> : <emphasis>int</emphasis>, <emphasis>name</emphasis></para>
+<para>Submesh index, and material name for this submesh.<linebreak/>
+ </para>
+</listitem>
+</orderedlist>
+<linebreak/>
+ </para>
+</sect3>
+</sect2>
+<sect2 id="d0/d71/a07304_1subsection_billboard">
+<title>billboard section</title>
+<para>Allows the definition of billboards that share the same material and dimensions.<linebreak/>
+ <orderedlist>
+<listitem>
+<para></para>
+<para><bold>parent</bold> : <emphasis>name</emphasis></para>
+<para>Defines the parent scene node.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>positions</bold> : <emphasis>section</emphasis></para>
+<para>Defines a new section describing each billboard position.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>material</bold> : <emphasis>name</emphasis></para>
+<para>Defines the material used by every billboard of this list.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>dimensions</bold> : <emphasis>size</emphasis></para>
+<para>Defines billboards dimensions.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>type</bold> : <emphasis>value</emphasis></para>
+<para>Defines the type of billboard. Possible values are:<linebreak/>
+ <itemizedlist>
+<listitem>
+<para></para>
+<para><emphasis>cylindrical</emphasis>: The billboard faces the camera, except for their Y axis, which remains still.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>spherical</emphasis>: The billboard faces the camera on all axes.</para>
+<para></para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>size</bold> : <emphasis>value</emphasis></para>
+<para>Defines the billboards sizing. Possible values are:<linebreak/>
+ <itemizedlist>
+<listitem>
+<para></para>
+<para><emphasis>dynamic</emphasis>: The size varies, depending on the distance to camera.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>fixed</emphasis>: The size is fixed, where the camera is.</para>
+<para></para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+</orderedlist>
+</para>
+<sect3 id="d0/d71/a07304_1subsubsection_positions">
+<title>positions section</title>
+<para><orderedlist>
+<listitem>
+<para></para>
+<para><bold>pos</bold> : <emphasis>3 reals</emphasis></para>
+<para>Defines the relative position of a billboard.<linebreak/>
+ </para>
+</listitem>
+</orderedlist>
+<linebreak/>
+ </para>
+</sect3>
+</sect2>
+<sect2 id="d0/d71/a07304_1subsection_camera">
+<title>camera section</title>
+<para><orderedlist>
+<listitem>
+<para></para>
+<para><bold>parent</bold> : <emphasis>name</emphasis></para>
+<para>Defines the parent CameraNode.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>primitive</bold> : <emphasis>value</emphasis></para>
+<para>Defines the display type. Can be one of :<linebreak/>
+ <itemizedlist>
+<listitem>
+<para></para>
+<para><emphasis>points</emphasis> : Points.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>lines</emphasis> : Disjointed lines.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>line_loop</emphasis> : Jointed lines loop.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>line_strip</emphasis> : Joined lines.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>triangles</emphasis> : Disjointed triangles.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>triangle_strip</emphasis> : Jointed triangles.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>triangle_fan</emphasis> : Triangles jointed using the first point.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>quads</emphasis> : Disjointed quads.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>quad_strip</emphasis> : Jointed quads.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>polygon</emphasis> : Polygons.</para>
+<para></para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>viewport</bold> : <emphasis>section</emphasis></para>
+<para>Defines the camera view port.<linebreak/>
+ </para>
+</listitem>
+</orderedlist>
+</para>
+<sect3 id="d0/d71/a07304_1subsubsection_viewport">
+<title>viewport section</title>
+<para><orderedlist>
+<listitem>
+<para></para>
+<para><bold>type</bold> : <emphasis>value</emphasis></para>
+<para>Window display type, 2d or 3d.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>left</bold> : <emphasis>real</emphasis></para>
+<para>Defines the minimum displayed X coordinate.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>right</bold> : <emphasis>real</emphasis></para>
+<para>Defines the maximum displayed X coordinate.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>top</bold> : <emphasis>real</emphasis></para>
+<para>Defines the minimum displayed Y coordinate.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>bottom</bold> : <emphasis>real</emphasis></para>
+<para>Defines the maximum displayed Y coordinate.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>near</bold> : <emphasis>real</emphasis></para>
+<para>Defines the minimum displayed Z coordinate.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>far</bold> : <emphasis>real</emphasis></para>
+<para>Defines the maximum displayed Z coordinate.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>size</bold> : <emphasis>size</emphasis></para>
+<para>Defines the window display size (in pixels).<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>fov_y</bold> : <emphasis>real</emphasis></para>
+<para>Defines the vertical field of view angle, in radians.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>aspect_ratio</bold> : <emphasis>real</emphasis></para>
+<para>Defines the global window aspect ratio (1.33333 for 4/3, 1.77777 for 16/9 … ).<linebreak/>
+ </para>
+</listitem>
+</orderedlist>
+<linebreak/>
+ </para>
+</sect3>
+</sect2>
+<sect2 id="d0/d71/a07304_1subsection_animated_object_group">
+<title>animated_object_group section</title>
+<para><orderedlist>
+<listitem>
+<para></para>
+<para><bold>animated_object</bold> : <emphasis>name</emphasis></para>
+<para>Adds the object with the given name to the group.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>animation</bold> : <emphasis>name</emphasis></para>
+<para>Adds the animation with the given name to the group’s common animations list.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>start_animation</bold> : <emphasis>name</emphasis></para>
+<para>Starts the given animation.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>pause_animation</bold> : <emphasis>name</emphasis></para>
+<para>Pauses the given animation (which must have been started first).<linebreak/>
+ </para>
+</listitem>
+</orderedlist>
+</para>
+<sect3 id="d0/d71/a07304_1subsubsection_animation">
+<title>animation section</title>
+<para><orderedlist>
+<listitem>
+<para></para>
+<para><bold>looped</bold> : <emphasis>boolean</emphasis></para>
+<para></para>
+<para>Defines if the animation is looped (<emphasis>true</emphasis>) or not (<emphasis>false</emphasis>, default value).</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>scale</bold> : <emphasis>real</emphasis></para>
+<para>Defines the time scale of the animation (can be negative, the animation will then be played backwards).<linebreak/>
+ </para>
+</listitem>
+</orderedlist>
+<linebreak/>
+ <linebreak/>
+ </para>
+</sect3>
+</sect2>
+</sect1>
+<sect1 id="d0/d71/a07304_1section_mesh">
+<title>mesh section</title>
+<para><orderedlist>
+<listitem>
+<para></para>
+<para><bold>type</bold> : <emphasis>name</emphasis></para>
+<para>Mesh type name, one of :<linebreak/>
+ <itemizedlist>
+<listitem>
+<para></para>
+<para><emphasis>custom</emphasis> : manually defined mesh or imported mesh.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>cube</emphasis> : a cube, user must then define its three dimensions.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>cone</emphasis> : a cone, user must then define its radius and height.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>cylinder</emphasis> : a cylinder, user must then define its radius and height.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>sphere</emphasis> : a sphere with quad faces, user must then define the subdivisions count and the radius.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>icosahedron</emphasis> : a sphere with triangular faces, user must then define the subdivisions count and the radius.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>torus</emphasis> : a torus, user must then define the internal and external subdivisions count and the internal and external radius.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>plane</emphasis> : a plane, user must then define the width and depth subdivisions count and the width and depth.</para>
+<para></para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>submesh</bold> : <emphasis>section</emphasis></para>
+<para>Defines a new section describing a submesh. Only if the mesh type is custom.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>import</bold> : <emphasis>file</emphasis> <emphasis>&lt;options&gt;</emphasis></para>
+<para>Allows import of mesh data from a file, in CMSH file format or any format supported by Castor3D import plug-ins. Only if the mesh type is custom. This directive can accept few optional parameters :<linebreak/>
+ <itemizedlist>
+<listitem>
+<para></para>
+<para><emphasis>smooth_normals</emphasis> : Computes normals per vertex during import.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>flat_normals</emphasis> : Computes normals per face during the import.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>tangent_space</emphasis> : Computes tangent space informations (tangent and bi-tangent) during import.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>rescale</emphasis>=<emphasis>real</emphasis> : Rescales the resulting mesh by given factor, on three axes.</para>
+<para></para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>morph_import</bold> : <emphasis>file</emphasis> <emphasis>&lt;options</emphasis>&gt;</para>
+<para>Allows import of mesh data from a file, to add mophing animation.<linebreak/>
+ This directive must happen after a first import directive.<linebreak/>
+ Available only if the mesh type is <emphasis>custom</emphasis>.<linebreak/>
+ This directive can accept few optional parameters :<linebreak/>
+ <itemizedlist>
+<listitem>
+<para></para>
+<para><emphasis>smooth_normals</emphasis> : Computes normals per vertex during import.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>flat_normals</emphasis> : Computes normals per face during the import.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>tangent_space</emphasis> : Computes tangent space informations (tangent and bi-tangent) during import.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>rescale</emphasis>=<emphasis>real</emphasis> : Rescales the resulting mesh by given factor, on three axes.</para>
+<para></para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>division</bold> : <emphasis>name</emphasis> <emphasis>int</emphasis></para>
+<para>Allows the mesh subdivision, using a supported Castor3D divider plug-in algorithm. The second parameter is the application count of the algorithm (its applied recursively).<linebreak/>
+ </para>
+</listitem>
+</orderedlist>
+<linebreak/>
+ </para>
+<sect2 id="d0/d71/a07304_1subsection_submesh">
+<title>submesh section</title>
+<para><orderedlist>
+<listitem>
+<para></para>
+<para><bold>vertex</bold> : <emphasis>3 reals</emphasis></para>
+<para>Defines a vertex position.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>uv</bold> : <emphasis>2 reals</emphasis></para>
+<para>Defines the UV texture coordinates for the previously declared vertex.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>uvw</bold> : <emphasis>3 reals</emphasis></para>
+<para>Defines the UVW texture coordinates for the previously declared vertex.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>normal</bold> : <emphasis>3 reals</emphasis></para>
+<para>Defines the normal coordinates for the previously declared vertex.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>tangent</bold> : <emphasis>3 reals</emphasis></para>
+<para>Defines the tangent coordinates for the previously declared vertex.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>face</bold> : <emphasis>3 or 4 integers</emphasis></para>
+<para>Defines a face using the three or four vertices whose indices are given. If more than three indices are given, creates the appropriate count of triangular faces.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>face_uv</bold> : <emphasis>as much uv as the face indices</emphasis></para>
+<para>Defines the UV coordinates for each vertex of the previously declared face.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>face_uvw</bold> : <emphasis>as much uvw as the face indices</emphasis></para>
+<para>Defines the UVW coordinates for each vertex of the previously declared face.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>face_normals</bold> : <emphasis>as much 3 reals groups as the face indices</emphasis></para>
+<para>Defines the normals coordinates for each vertex of the previously declared face.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>face_tangents</bold> : <emphasis>as much 3 reals groups as the face indices</emphasis></para>
+<para>Defines the tangents coordinates for each vertex of the previously declared face.<linebreak/>
+ </para>
+</listitem>
+</orderedlist>
+<linebreak/>
+ <linebreak/>
+ </para>
+</sect2>
+</sect1>
+<sect1 id="d0/d71/a07304_1section_panel_overlay">
+<title>panel_overlay section</title>
+<para><orderedlist>
+<listitem>
+<para></para>
+<para><bold>material</bold> : <emphasis>name</emphasis></para>
+<para>Defines the material used by the panel.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>position</bold> : <emphasis>2 reals</emphasis></para>
+<para>Defines the overlay position, relative to its parent (or to screen, if no parent).<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>size</bold> : <emphasis>2 reals</emphasis></para>
+<para>Defines the overlay size, relative to its parent (or to screen, if no parent).<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>pxl_position</bold> : <emphasis>2 ints</emphasis></para>
+<para>Defines the absolute position for the overlay, in pixels.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>pxl_size</bold> : <emphasis>2 ints</emphasis></para>
+<para>Defines the absolute size for the overlay, in pixels.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>uv</bold> : <emphasis>4 reals</emphasis></para>
+<para>Defines the UV for the overlay (left, top, right, bottom).<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>panel_overlay</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis></para>
+<para>Defines a new section describing a simple panel children overlay.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>border_panel_overlay</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis></para>
+<para>Defines a new section describing a border panel children overlay.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>text_overlay</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis></para>
+<para>Defines a new section describing a text panel children overlay.<linebreak/>
+ </para>
+</listitem>
+</orderedlist>
+<linebreak/>
+ <linebreak/>
+ </para>
+</sect1>
+<sect1 id="d0/d71/a07304_1section_border_panel_overlay">
+<title>border_panel_overlay section</title>
+<para><orderedlist>
+<listitem>
+<para></para>
+<para><bold>material</bold> : <emphasis>name</emphasis></para>
+<para>Defines the material used by the panel.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>position</bold> : <emphasis>2 reals</emphasis></para>
+<para>Defines the overlay position, relative to its parent (or to screen, if no parent).<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>size</bold> : <emphasis>2 reals</emphasis></para>
+<para>Defines the overlay size, relative to its parent (or to screen, if no parent).<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>pxl_position</bold> : <emphasis>2 ints</emphasis></para>
+<para>Defines the absolute position for the overlay, in pixels.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>pxl_size</bold> : <emphasis>2 ints</emphasis></para>
+<para>Defines the absolute size for the overlay, in pixels.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>center_uv</bold> : <emphasis>4 reals</emphasis></para>
+<para>Defines the UV for the center of the overlay (left, top, right, bottom).<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>border_material</bold> : <emphasis>name</emphasis></para>
+<para>Defines the material used for the panel’s border.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>border_position</bold> : <emphasis>value</emphasis></para>
+<para>Defines the border’s position, can be one of:<linebreak/>
+ <itemizedlist>
+<listitem>
+<para></para>
+<para><emphasis>internal</emphasis> : The border is inside the overlay.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>middle</emphasis> : The border is half inside, half outside the overlay.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>external</emphasis> : The border is outside the overlay.</para>
+<para></para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>border_size</bold> : <emphasis>4 reals</emphasis></para>
+<para>Defines the borders sizes (left right, top, bottom).<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>pxl_border_size</bold> : <emphasis>2 ints</emphasis></para>
+<para>Defines the absolute border size, in pixels.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>border_inner_uv</bold> : <emphasis>4 reals</emphasis></para>
+<para>Defines the UV for the border of the overlay, inner side (left, top, right, bottom).<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>border_outer_uv</bold> : <emphasis>4 reals</emphasis></para>
+<para>Defines the UV for the border of the overlay, outer side (left, top, right, bottom).<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>panel_overlay</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis></para>
+<para>Defines a new section describing a simple panel children overlay.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>border_panel_overlay</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis></para>
+<para>Defines a new section describing a border panel children overlay.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>text_overlay</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis></para>
+<para>Defines a new section describing a text panel children overlay.<linebreak/>
+ </para>
+</listitem>
+</orderedlist>
+<linebreak/>
+ <linebreak/>
+ </para>
+</sect1>
+<sect1 id="d0/d71/a07304_1section_text_overlay">
+<title>text_overlay section</title>
+<para><orderedlist>
+<listitem>
+<para></para>
+<para><bold>material</bold> : <emphasis>name</emphasis></para>
+<para>Defines the material used by the panel.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>position</bold> : <emphasis>2 reals</emphasis></para>
+<para>Defines the overlay position, relative to its parent (or to screen, if no parent).<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>size</bold> : <emphasis>2 reals</emphasis></para>
+<para>Defines the overlay size, relative to its parent (or to screen, if no parent).<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>pxl_position</bold> : <emphasis>2 ints</emphasis></para>
+<para>Defines the absolute position for the overlay, in pixels.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>pxl_size</bold> : <emphasis>2 ints</emphasis></para>
+<para>Defines the absolute size for the overlay, in pixels.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>font</bold> : <emphasis>name</emphasis></para>
+<para>Defines the font used to display the text.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>text</bold> : <emphasis>texte</emphasis></para>
+<para>Defines the displayed text.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>text_wrapping</bold> : <emphasis>value</emphasis></para>
+<para>Defines the way the text is cut when a line overflows the overlay dimensions. Can be one of:<linebreak/>
+ <itemizedlist>
+<listitem>
+<para></para>
+<para><emphasis>none</emphasis> : The text is not cut (the part that overflows won’t be displayed, though).</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>break</emphasis> : The text is cut at the letter (the words will be cut).</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>break_words</emphasis> : The text is cut at the word (the words remain uncut).</para>
+<para></para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>vertical_align</bold> : <emphasis>value</emphasis></para>
+<para>Defines the text vertical alignment:<linebreak/>
+ <itemizedlist>
+<listitem>
+<para></para>
+<para><emphasis>top</emphasis> : Align on top.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>center</emphasis> : Vertically center.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>bottom</emphasis> : Align on bottom.</para>
+<para></para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>horizontal_align</bold> : <emphasis>value</emphasis></para>
+<para>Defines the text horizontal alignment:<linebreak/>
+ <itemizedlist>
+<listitem>
+<para></para>
+<para><emphasis>left</emphasis> : Align on left.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>center</emphasis> : Horizontally center.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>right</emphasis> : Align on right.</para>
+<para></para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>texturing_mode</bold> : <emphasis>value</emphasis></para>
+<para>Defines the way the texture is applied:<linebreak/>
+ <itemizedlist>
+<listitem>
+<para></para>
+<para><emphasis>letter</emphasis> : The texture is applied on each letter.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>text</emphasis> : The texture is applied on the whole text.</para>
+<para></para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>line_spacing_mode</bold> : <emphasis>value</emphasis></para>
+<para>Defines the height of the lines:<linebreak/>
+ <itemizedlist>
+<listitem>
+<para></para>
+<para><emphasis>own_height</emphasis> : Each line has its own height.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>max_lines_height</emphasis> : Each line has the height of the line with the maximum height.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>max_font_height</emphasis> : Each line has the height of the character with the maximum height in the font.</para>
+<para></para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>panel_overlay</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis></para>
+<para>Defines a new section describing a simple panel children overlay.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>border_panel_overlay</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis></para>
+<para>Defines a new section describing a border panel children overlay.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>text_overlay</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis></para>
+<para>Defines a new section describing a text panel children overlay.<linebreak/>
+ </para>
+</listitem>
+</orderedlist>
+<linebreak/>
+ <linebreak/>
+ </para>
+</sect1>
+<sect1 id="d0/d71/a07304_1section_window">
+<title>window section</title>
+<para><orderedlist>
+<listitem>
+<para></para>
+<para><bold>render_target</bold> : <emphasis>section</emphasis></para>
+<para>Defines a new section describing the render target.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>vsync</bold> : <emphasis>boolean</emphasis></para>
+<para>Defines the activation or deactivation of vertical synchronisation.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>fullscreen</bold> : <emphasis>boolean</emphasis></para>
+<para>Defines the activation or deactivation of full-screen display.<linebreak/>
+ </para>
+</listitem>
+</orderedlist>
+<linebreak/>
+ <linebreak/>
+ </para>
+</sect1>
+<sect1 id="d0/d71/a07304_1section_render_target">
+<title>render_target section</title>
+<para><orderedlist>
+<listitem>
+<para></para>
+<para><bold>scene</bold> : <emphasis>nom</emphasis></para>
+<para>Defines the scene rendered in this target.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>camera</bold> : <emphasis>nom</emphasis></para>
+<para>Defines the camera used to render the scene.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>size</bold> : <emphasis>size</emphasis></para>
+<para>Defines the internal buffer dimensions.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>format</bold> : <emphasis>value</emphasis></para>
+<para>Defines the colour buffer pixel format. Can be one of :<linebreak/>
+ <itemizedlist>
+<listitem>
+<para></para>
+<para><emphasis>l8</emphasis> : Luminance 8 bits, one 8 bits integral number.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>l16f</emphasis> : Luminance 16 bits, one 16 bits floating point number (half float).</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>l32f</emphasis> : Luminance 32 bits, one 32 bits floating point number(float).</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>al16</emphasis> : Alpha + Luminance, two 8 bits integral number.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>al16f</emphasis> : Alpha + Luminance, two 16 bits floating point number (half float).</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>al32f</emphasis> : Alpha + Luminance, two 32 bits floating point number (float).</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>argb1555</emphasis> : ARGB 16 bits, 1 bit for alpha and each other component on a 5 bits integer.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>rgb565</emphasis> : RGB 16 bits, R and B on a 5 bits integer, G on a 6 bits integer.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>argb16</emphasis> : ARGB 16 bits, each component on a 4 bits integer.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>rgb24</emphasis> : RGB 24 bits, each component on a 8 bits integer.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>argb32</emphasis> : ARGB 32 bits, each component on a 8 bits integer.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>argb16f</emphasis> : ARGB 64 bits, each component on a 16 bits floating point number (half float).</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>rgb32f</emphasis> : RGB 96 bits, each component on a 32 bits floating point number (half float).</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>argb32f</emphasis> : ARGB 128 bits, each component on a 32 bits floating point number (half float).</para>
+<para></para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>depth</bold> : <emphasis>value</emphasis></para>
+<para>Defines the depth/stencil buffer pixel format. Can be one of :<linebreak/>
+ <itemizedlist>
+<listitem>
+<para></para>
+<para><emphasis>depth16</emphasis> : Depth on a 16 bits integer.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>depth24</emphasis> : Depth on a 24 bits integer.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>depth24s8</emphasis> : Depth on a 24 bits integer, Stencil on a 8 bits integer.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>depth32fs8</emphasis> : Depth on a 32 bits floating point, Stencil on a 8 bits integer.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>depth32</emphasis> : Depth on a 32 bits integer.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>depth32f</emphasis> : Depth on a 32 bits floating point.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>stencil1</emphasis> : Stencil on 1 bit.</para>
+<para></para>
+</listitem>
+<listitem>
+<para></para>
+<para><emphasis>stencil8</emphasis> : Stencil on a 8 bits integer.</para>
+<para></para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>postfx</bold> : <emphasis>value</emphasis></para>
+<para>Defines a post render effect to use. The parameters depend on the chosen effect.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>stereo</bold> : <emphasis>boolean</emphasis></para>
+<para>Tells if we use stereoscopic display mode.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>tone_mapping</bold> : <emphasis>name</emphasis></para>
+<para>Defines the tone mapping operator to use with the render target.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>ssao</bold> : <emphasis>section</emphasis></para>
+<para>Defines a new section describing the Screen Space Ambient Occlusion.<linebreak/>
+ </para>
+</listitem>
+</orderedlist>
+<linebreak/>
+ </para>
+<sect2 id="d0/d71/a07304_1subsection_ssao">
+<title>ssao section</title>
+<para><orderedlist>
+<listitem>
+<para></para>
+<para><bold>enabled</bold> : <emphasis>boolean</emphasis></para>
+<para>Defines the activation status of SSAO.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>high_quality</bold> : <emphasis>boolean</emphasis></para>
+<para>Defines the quality of the effect.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>radius</bold> : <emphasis>real</emphasis></para>
+<para>Defines the radius of the effect (expressesd in meters).<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>bias</bold> : <emphasis>real</emphasis></para>
+<para>Defines the bias of the effect.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>intensity</bold> : <emphasis>real</emphasis></para>
+<para>Defines the intensity of the effect.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>num_samples</bold> : <emphasis>int</emphasis></para>
+<para>Defines the number of samples per pixel.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>edge_sharpness</bold> : <emphasis>real</emphasis></para>
+<para>Defines the edge sharpness, in the blur pass.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>blur_step_size</bold> : <emphasis>int</emphasis></para>
+<para>Defines the size of a step in the blur pass.<linebreak/>
+ </para>
+</listitem>
+<listitem>
+<para></para>
+<para><bold>blur_radius</bold> : <emphasis>int</emphasis></para>
+<para>Defines the blur radius.<linebreak/>
+ </para>
+</listitem>
+</orderedlist>
+</para>
+</sect2>
+</sect1>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

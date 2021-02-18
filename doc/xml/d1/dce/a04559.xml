@@ -1,0 +1,257 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d1/dce/a04559" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::PipelineFlags</compoundname>
+    <includes local="no">RenderModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d1/dce/a04559_1aab051b1ee46ace763681dfea200198d2" prot="public" static="no" mutable="no">
+        <type><ref refid="d7/dd1/a01458_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
+        <definition>BlendMode castor3d::PipelineFlags::colourBlendMode</definition>
+        <argsstring></argsstring>
+        <name>colourBlendMode</name>
+        <initializer>{ <ref refid="d7/dd1/a01458_1a840ab6fd50c1a08fcc1b6dc3f98d90faa12c10e6e0388d587340cfbe98b5045ae" kindref="member">BlendMode::eNoBlend</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="249" column="1" bodyfile="Render/RenderModule.hpp" bodystart="249" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dce/a04559_1a0831b5262611024fcac18f42f7a29f92" prot="public" static="no" mutable="no">
+        <type><ref refid="d7/dd1/a01458_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
+        <definition>BlendMode castor3d::PipelineFlags::alphaBlendMode</definition>
+        <argsstring></argsstring>
+        <name>alphaBlendMode</name>
+        <initializer>{ <ref refid="d7/dd1/a01458_1a840ab6fd50c1a08fcc1b6dc3f98d90faa12c10e6e0388d587340cfbe98b5045ae" kindref="member">BlendMode::eNoBlend</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="250" column="1" bodyfile="Render/RenderModule.hpp" bodystart="250" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dce/a04559_1add12a9fda8077540029ee2482cb3dd31" prot="public" static="no" mutable="no">
+        <type><ref refid="d7/dd1/a01458_1a69e89af11c4c9247dce7ee99a21090fc" kindref="member">PassFlags</ref></type>
+        <definition>PassFlags castor3d::PipelineFlags::passFlags</definition>
+        <argsstring></argsstring>
+        <name>passFlags</name>
+        <initializer>{ <ref refid="d7/dd1/a01458_1ad372dd0cc65f28ad7f558f07c78becb7abe988781e4e1de1c6a36fb698afbbe1f" kindref="member">PassFlag::eNone</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="251" column="1" bodyfile="Render/RenderModule.hpp" bodystart="251" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dce/a04559_1a84af70d15122942aac813f3e8aecddaa" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::PipelineFlags::heightMapIndex</definition>
+        <argsstring></argsstring>
+        <name>heightMapIndex</name>
+        <initializer>{ <ref refid="d7/dd1/a01458_1a2533c48f44e5f343ab52f930f7fec110" kindref="member">InvalidIndex</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="252" column="1" bodyfile="Render/RenderModule.hpp" bodystart="252" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dce/a04559_1aa3db54fd73e1d41fa2e66989fea924c1" prot="public" static="no" mutable="no">
+        <type><ref refid="d7/dd1/a01458_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref></type>
+        <definition>ProgramFlags castor3d::PipelineFlags::programFlags</definition>
+        <argsstring></argsstring>
+        <name>programFlags</name>
+        <initializer>{ <ref refid="d7/dd1/a01458_1ad372dd0cc65f28ad7f558f07c78becb7abe988781e4e1de1c6a36fb698afbbe1f" kindref="member">ProgramFlag::eNone</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="253" column="1" bodyfile="Render/RenderModule.hpp" bodystart="253" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dce/a04559_1a8572e6b81c50a0a8a39d0104ecdad193" prot="public" static="no" mutable="no">
+        <type><ref refid="d7/dd1/a01458_1a525bec5d25db94bcff4168e9e1a826fa" kindref="member">SceneFlags</ref></type>
+        <definition>SceneFlags castor3d::PipelineFlags::sceneFlags</definition>
+        <argsstring></argsstring>
+        <name>sceneFlags</name>
+        <initializer>{ <ref refid="d7/dd1/a01458_1ad372dd0cc65f28ad7f558f07c78becb7abe988781e4e1de1c6a36fb698afbbe1f" kindref="member">SceneFlag::eNone</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="254" column="1" bodyfile="Render/RenderModule.hpp" bodystart="254" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dce/a04559_1a82e267d99f0d0f3103eb76e4ab1a22b2" prot="public" static="no" mutable="no">
+        <type>VkPrimitiveTopology</type>
+        <definition>VkPrimitiveTopology castor3d::PipelineFlags::topology</definition>
+        <argsstring></argsstring>
+        <name>topology</name>
+        <initializer>{ VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="255" column="1" bodyfile="Render/RenderModule.hpp" bodystart="255" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dce/a04559_1a8eaf995825164170240006c2402e4997" prot="public" static="no" mutable="no">
+        <type>VkCompareOp</type>
+        <definition>VkCompareOp castor3d::PipelineFlags::alphaFunc</definition>
+        <argsstring></argsstring>
+        <name>alphaFunc</name>
+        <initializer>{ VK_COMPARE_OP_ALWAYS }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="256" column="1" bodyfile="Render/RenderModule.hpp" bodystart="256" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dce/a04559_1a62246d4d0ff4e40f9c38229b202af418" prot="public" static="no" mutable="no">
+        <type><ref refid="d7/dd1/a01458_1afa51b269ca00eaeff4f95f361bf2208f" kindref="member">TextureFlagsArray</ref></type>
+        <definition>TextureFlagsArray castor3d::PipelineFlags::textures</definition>
+        <argsstring></argsstring>
+        <name>textures</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="257" column="1" bodyfile="Render/RenderModule.hpp" bodystart="257" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dce/a04559_1a6b531356772b3895871068b0b1d292c4" prot="public" static="no" mutable="no">
+        <type><ref refid="d7/dd1/a01458_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref></type>
+        <definition>TextureFlags castor3d::PipelineFlags::texturesFlags</definition>
+        <argsstring></argsstring>
+        <name>texturesFlags</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="258" column="1" bodyfile="Render/RenderModule.hpp" bodystart="258" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/dce/a04559_1a7d17e8872319b5b4fd0f862a545669ba" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::PipelineFlags::PipelineFlags</definition>
+        <argsstring>(BlendMode colourBlendMode=BlendMode::eNoBlend, BlendMode alphaBlendMode=BlendMode::eNoBlend, PassFlags passFlags=PassFlag::eNone, uint32_t heightMapIndex=InvalidIndex, ProgramFlags programFlags=ProgramFlag::eNone, SceneFlags sceneFlags=SceneFlag::eNone, VkPrimitiveTopology topology=VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, VkCompareOp alphaFunc=VK_COMPARE_OP_ALWAYS, TextureFlagsArray textures={})</argsstring>
+        <name>PipelineFlags</name>
+        <param>
+          <type><ref refid="d7/dd1/a01458_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
+          <declname>colourBlendMode</declname>
+          <defval><ref refid="d7/dd1/a01458_1a840ab6fd50c1a08fcc1b6dc3f98d90faa12c10e6e0388d587340cfbe98b5045ae" kindref="member">BlendMode::eNoBlend</ref></defval>
+        </param>
+        <param>
+          <type><ref refid="d7/dd1/a01458_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
+          <declname>alphaBlendMode</declname>
+          <defval><ref refid="d7/dd1/a01458_1a840ab6fd50c1a08fcc1b6dc3f98d90faa12c10e6e0388d587340cfbe98b5045ae" kindref="member">BlendMode::eNoBlend</ref></defval>
+        </param>
+        <param>
+          <type><ref refid="d7/dd1/a01458_1a69e89af11c4c9247dce7ee99a21090fc" kindref="member">PassFlags</ref></type>
+          <declname>passFlags</declname>
+          <defval><ref refid="d7/dd1/a01458_1ad372dd0cc65f28ad7f558f07c78becb7abe988781e4e1de1c6a36fb698afbbe1f" kindref="member">PassFlag::eNone</ref></defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>heightMapIndex</declname>
+          <defval><ref refid="d7/dd1/a01458_1a2533c48f44e5f343ab52f930f7fec110" kindref="member">InvalidIndex</ref></defval>
+        </param>
+        <param>
+          <type><ref refid="d7/dd1/a01458_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref></type>
+          <declname>programFlags</declname>
+          <defval><ref refid="d7/dd1/a01458_1ad372dd0cc65f28ad7f558f07c78becb7abe988781e4e1de1c6a36fb698afbbe1f" kindref="member">ProgramFlag::eNone</ref></defval>
+        </param>
+        <param>
+          <type><ref refid="d7/dd1/a01458_1a525bec5d25db94bcff4168e9e1a826fa" kindref="member">SceneFlags</ref></type>
+          <declname>sceneFlags</declname>
+          <defval><ref refid="d7/dd1/a01458_1ad372dd0cc65f28ad7f558f07c78becb7abe988781e4e1de1c6a36fb698afbbe1f" kindref="member">SceneFlag::eNone</ref></defval>
+        </param>
+        <param>
+          <type>VkPrimitiveTopology</type>
+          <declname>topology</declname>
+          <defval>VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST</defval>
+        </param>
+        <param>
+          <type>VkCompareOp</type>
+          <declname>alphaFunc</declname>
+          <defval>VK_COMPARE_OP_ALWAYS</defval>
+        </param>
+        <param>
+          <type><ref refid="d7/dd1/a01458_1afa51b269ca00eaeff4f95f361bf2208f" kindref="member">TextureFlagsArray</ref></type>
+          <declname>textures</declname>
+          <defval>{}</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="227" column="1" bodyfile="Render/RenderModule.hpp" bodystart="227" bodyend="247"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Pipeline flags. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2691">
+        <label>T</label>
+      </node>
+      <node id="2690">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="2691" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="2689">
+        <label>castor3d::TextureFlagsId</label>
+        <link refid="db/dab/a02567"/>
+      </node>
+      <node id="2687">
+        <label>castor3d::PipelineFlags</label>
+        <link refid="d1/dce/a04559"/>
+        <childnode refid="2688" relation="usage">
+          <edgelabel>textures</edgelabel>
+        </childnode>
+      </node>
+      <node id="2688">
+        <label>std::vector&lt; TextureFlagsId &gt;</label>
+        <childnode refid="2689" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="2690" relation="template-instance">
+          <edgelabel>&lt; TextureFlagsId &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/RenderModule.hpp" line="226" column="1" bodyfile="Render/RenderModule.hpp" bodystart="225" bodyend="259"/>
+    <listofallmembers>
+      <member refid="d1/dce/a04559_1a0831b5262611024fcac18f42f7a29f92" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>alphaBlendMode</name></member>
+      <member refid="d1/dce/a04559_1a8eaf995825164170240006c2402e4997" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>alphaFunc</name></member>
+      <member refid="d1/dce/a04559_1aab051b1ee46ace763681dfea200198d2" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>colourBlendMode</name></member>
+      <member refid="d1/dce/a04559_1a84af70d15122942aac813f3e8aecddaa" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>heightMapIndex</name></member>
+      <member refid="d1/dce/a04559_1add12a9fda8077540029ee2482cb3dd31" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>passFlags</name></member>
+      <member refid="d1/dce/a04559_1a7d17e8872319b5b4fd0f862a545669ba" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>PipelineFlags</name></member>
+      <member refid="d1/dce/a04559_1aa3db54fd73e1d41fa2e66989fea924c1" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>programFlags</name></member>
+      <member refid="d1/dce/a04559_1a8572e6b81c50a0a8a39d0104ecdad193" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>sceneFlags</name></member>
+      <member refid="d1/dce/a04559_1a62246d4d0ff4e40f9c38229b202af418" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>textures</name></member>
+      <member refid="d1/dce/a04559_1a6b531356772b3895871068b0b1d292c4" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>texturesFlags</name></member>
+      <member refid="d1/dce/a04559_1a82e267d99f0d0f3103eb76e4ab1a22b2" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>topology</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

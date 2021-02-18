@@ -1,0 +1,402 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d7/da1/a04231" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::GBufferBase</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">Named</basecompoundref>
+    <derivedcompoundref refid="de/d93/a04235" prot="private" virt="non-virtual">castor3d::GBufferT&lt; TextureEnumT &gt;</derivedcompoundref>
+    <derivedcompoundref refid="de/d93/a04235" prot="private" virt="non-virtual">castor3d::GBufferT&lt; DsTexture &gt;</derivedcompoundref>
+    <derivedcompoundref refid="de/d93/a04235" prot="private" virt="non-virtual">castor3d::GBufferT&lt; LpTexture &gt;</derivedcompoundref>
+    <derivedcompoundref refid="de/d93/a04235" prot="private" virt="non-virtual">castor3d::GBufferT&lt; LpvTexture &gt;</derivedcompoundref>
+    <derivedcompoundref refid="de/d93/a04235" prot="private" virt="non-virtual">castor3d::GBufferT&lt; SmTexture &gt;</derivedcompoundref>
+    <derivedcompoundref refid="de/d93/a04235" prot="private" virt="non-virtual">castor3d::GBufferT&lt; WbTexture &gt;</derivedcompoundref>
+    <includes local="no">GBuffer.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d7/da1/a04231_1aee655ec1e8b8c2a39d6ebad55d3bdc36" prot="public" static="no">
+        <type>std::vector&lt; <ref refid="d8/dd7/a02643" kindref="compound">TextureUnit</ref> const * &gt;</type>
+        <definition>using castor3d::GBufferBase::Textures =  std::vector&lt; TextureUnit const * &gt;</definition>
+        <argsstring></argsstring>
+        <name>Textures</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GBuffer.hpp" line="20" column="1" bodyfile="Render/GBuffer.hpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/da1/a04231_1a10262c93a2ed9fdf9c2bdf5fd5694a6c" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::GBufferBase::GBufferBase</definition>
+        <argsstring>(castor::String name)</argsstring>
+        <name>GBufferBase</name>
+        <param>
+          <type>castor::String</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GBuffer.hpp" line="23" column="1" bodyfile="Render/GBuffer.hpp" bodystart="23" bodyend="26"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-static-func">
+      <memberdef kind="function" id="d7/da1/a04231_1a9cb3db8d8bf89e893199194109220ac1" prot="protected" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d8/dd7/a02643" kindref="compound">TextureUnit</ref></type>
+        <definition>static C3D_API TextureUnit castor3d::GBufferBase::doCreateTexture</definition>
+        <argsstring>(Engine &amp;engine, castor::String const &amp;name, VkImageCreateFlags createFlags, VkExtent3D const &amp;size, uint32_t layerCount, uint32_t mipLevels, VkFormat format, VkImageUsageFlags usageFlags, VkBorderColor const &amp;borderColor)</argsstring>
+        <name>doCreateTexture</name>
+        <param>
+          <type><ref refid="d0/d7c/a02499" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkImageCreateFlags</type>
+          <declname>createFlags</declname>
+        </param>
+        <param>
+          <type>VkExtent3D const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>layerCount</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>mipLevels</declname>
+        </param>
+        <param>
+          <type>VkFormat</type>
+          <declname>format</declname>
+        </param>
+        <param>
+          <type>VkImageUsageFlags</type>
+          <declname>usageFlags</declname>
+        </param>
+        <param>
+          <type>VkBorderColor const &amp;</type>
+          <declname>borderColor</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GBuffer.hpp" line="29" column="1"/>
+        <referencedby refid="d7/da1/a04231_1aeed340f667006bcc6998c5da50b235f5" compoundref="d4/d10/a00635" startline="71" endline="98">doCreateTextures</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a04231_1aeed340f667006bcc6998c5da50b235f5" prot="protected" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename TextureEnumT</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> TextureUnitArray</type>
+        <definition>static C3D_API TextureUnitArray castor3d::GBufferBase::doCreateTextures</definition>
+        <argsstring>(Engine &amp;engine, std::array&lt; TextureUnit const *, size_t(TextureEnumT::eCount) &gt; const &amp;inputs, castor::String const &amp;prefix, VkImageCreateFlags createFlags, castor::Size const &amp;size, uint32_t layerCount=1u)</argsstring>
+        <name>doCreateTextures</name>
+        <param>
+          <type><ref refid="d0/d7c/a02499" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type>std::array&lt; <ref refid="d8/dd7/a02643" kindref="compound">TextureUnit</ref> const *, size_t(<ref refid="d7/dd1/a01458_1a2405dedd7ac8a7be93c2a8c1f8848e04ae558bb69fadec037d9eae46601a4df8e" kindref="member">TextureEnumT::eCount</ref>) &gt; const &amp;</type>
+          <declname>inputs</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>prefix</declname>
+        </param>
+        <param>
+          <type>VkImageCreateFlags</type>
+          <declname>createFlags</declname>
+        </param>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>layerCount</declname>
+          <defval>1u</defval>
+        </param>
+        <briefdescription>
+<para>Initialises 2D or 2D array g-buffer textures. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The engine. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">inputs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The already existing images. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">prefix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer&apos;s textures name&apos;s prefix. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">createFlags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The creation flags for images remaining to create. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The g-buffer&apos;s dimensions. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">layerCount</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The layers count for the g-buffer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GBuffer.hpp" line="71" column="1" bodyfile="Render/GBuffer.hpp" bodystart="71" bodyend="98"/>
+        <references refid="d7/da1/a04231_1a9cb3db8d8bf89e893199194109220ac1">doCreateTexture</references>
+        <references refid="d7/dd1/a01458_1a144e7b1c66bfaf1fdbd86fd168e84f2c">castor3d::getBorderColor</references>
+        <references refid="d7/dd1/a01458_1a36346721f17599e36f459cb5c2a73d90">castor3d::getFormat</references>
+        <references refid="d7/dd1/a01458_1a320c0bae9dcfad25c32cde3aeb74d28a">castor3d::getMipLevels</references>
+        <references refid="d7/dd1/a01458_1a5691da845a89609231c90071fccdfc20">castor3d::getName</references>
+        <references refid="d7/dd1/a01458_1aae48a18fd2e40c4d553c3d8392c379ea">castor3d::getUsageFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a04231_1afb438f7fa797e9302b0e59e4efc852ec" prot="protected" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename TextureEnumT</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> TextureUnitArray</type>
+        <definition>static C3D_API TextureUnitArray castor3d::GBufferBase::doCreateTextures</definition>
+        <argsstring>(Engine &amp;engine, std::array&lt; TextureUnit const *, size_t(TextureEnumT::eCount) &gt; const &amp;inputs, castor::String const &amp;prefix, VkImageCreateFlags createFlags, VkExtent3D const &amp;size)</argsstring>
+        <name>doCreateTextures</name>
+        <param>
+          <type><ref refid="d0/d7c/a02499" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type>std::array&lt; <ref refid="d8/dd7/a02643" kindref="compound">TextureUnit</ref> const *, size_t(<ref refid="d7/dd1/a01458_1a2405dedd7ac8a7be93c2a8c1f8848e04ae558bb69fadec037d9eae46601a4df8e" kindref="member">TextureEnumT::eCount</ref>) &gt; const &amp;</type>
+          <declname>inputs</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>prefix</declname>
+        </param>
+        <param>
+          <type>VkImageCreateFlags</type>
+          <declname>createFlags</declname>
+        </param>
+        <param>
+          <type>VkExtent3D const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>Initialises 3D g-buffer textures. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The engine. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">inputs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The already existing images. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">prefix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer&apos;s textures name&apos;s prefix. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">createFlags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The creation flags for images remaining to create. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The g-buffer&apos;s dimensions. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GBuffer.hpp" line="128" column="1" bodyfile="Render/GBuffer.hpp" bodystart="128" bodyend="154"/>
+        <references refid="d7/da1/a04231_1a9cb3db8d8bf89e893199194109220ac1">doCreateTexture</references>
+        <references refid="d7/dd1/a01458_1a144e7b1c66bfaf1fdbd86fd168e84f2c">castor3d::getBorderColor</references>
+        <references refid="d7/dd1/a01458_1a36346721f17599e36f459cb5c2a73d90">castor3d::getFormat</references>
+        <references refid="d7/dd1/a01458_1a320c0bae9dcfad25c32cde3aeb74d28a">castor3d::getMipLevels</references>
+        <references refid="d7/dd1/a01458_1a5691da845a89609231c90071fccdfc20">castor3d::getName</references>
+        <references refid="d7/dd1/a01458_1aae48a18fd2e40c4d553c3d8392c379ea">castor3d::getUsageFlags</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1275">
+        <label>castor3d::GBufferT&lt; DsTexture &gt;</label>
+        <link refid="de/d93/a04235"/>
+        <childnode refid="1268" relation="template-instance">
+          <edgelabel>&lt; DsTexture &gt;</edgelabel>
+        </childnode>
+        <childnode refid="1266" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="1271">
+        <label>castor3d::GBufferT&lt; LpTexture &gt;</label>
+        <link refid="de/d93/a04235"/>
+        <childnode refid="1268" relation="template-instance">
+          <edgelabel>&lt; LpTexture &gt;</edgelabel>
+        </childnode>
+        <childnode refid="1266" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="1272">
+        <label>castor3d::LightPassResult</label>
+        <link refid="df/d9b/a04755"/>
+        <childnode refid="1271" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1269">
+        <label>castor3d::GBufferT&lt; LpvTexture &gt;</label>
+        <link refid="de/d93/a04235"/>
+        <childnode refid="1268" relation="template-instance">
+          <edgelabel>&lt; LpvTexture &gt;</edgelabel>
+        </childnode>
+        <childnode refid="1266" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="1273">
+        <label>castor3d::GBufferT&lt; WbTexture &gt;</label>
+        <link refid="de/d93/a04235"/>
+        <childnode refid="1268" relation="template-instance">
+          <edgelabel>&lt; WbTexture &gt;</edgelabel>
+        </childnode>
+        <childnode refid="1266" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="1278">
+        <label>castor3d::ShadowMapResult</label>
+        <link refid="db/dc1/a04671"/>
+        <childnode refid="1277" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1267">
+        <label>Named</label>
+      </node>
+      <node id="1270">
+        <label>castor3d::LightVolumePassResult</label>
+        <link refid="dc/d23/a04275"/>
+        <childnode refid="1269" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1268">
+        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
+        <link refid="de/d93/a04235"/>
+        <childnode refid="1266" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="1274">
+        <label>castor3d::TransparentPassResult</label>
+        <link refid="da/dea/a04915"/>
+        <childnode refid="1273" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1266">
+        <label>castor3d::GBufferBase</label>
+        <link refid="d7/da1/a04231"/>
+        <childnode refid="1267" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1277">
+        <label>castor3d::GBufferT&lt; SmTexture &gt;</label>
+        <link refid="de/d93/a04235"/>
+        <childnode refid="1268" relation="template-instance">
+          <edgelabel>&lt; SmTexture &gt;</edgelabel>
+        </childnode>
+        <childnode refid="1266" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="1276">
+        <label>castor3d::OpaquePassResult</label>
+        <link refid="da/d9f/a04859"/>
+        <childnode refid="1275" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1280">
+        <label>Named</label>
+      </node>
+      <node id="1279">
+        <label>castor3d::GBufferBase</label>
+        <link refid="d7/da1/a04231"/>
+        <childnode refid="1280" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/GBuffer.hpp" line="18" column="1" bodyfile="Render/GBuffer.hpp" bodystart="16" bodyend="155"/>
+    <listofallmembers>
+      <member refid="d7/da1/a04231_1a9cb3db8d8bf89e893199194109220ac1" prot="protected" virt="non-virtual"><scope>castor3d::GBufferBase</scope><name>doCreateTexture</name></member>
+      <member refid="d7/da1/a04231_1aeed340f667006bcc6998c5da50b235f5" prot="protected" virt="non-virtual"><scope>castor3d::GBufferBase</scope><name>doCreateTextures</name></member>
+      <member refid="d7/da1/a04231_1afb438f7fa797e9302b0e59e4efc852ec" prot="protected" virt="non-virtual"><scope>castor3d::GBufferBase</scope><name>doCreateTextures</name></member>
+      <member refid="d7/da1/a04231_1a10262c93a2ed9fdf9c2bdf5fd5694a6c" prot="public" virt="non-virtual"><scope>castor3d::GBufferBase</scope><name>GBufferBase</name></member>
+      <member refid="d7/da1/a04231_1aee655ec1e8b8c2a39d6ebad55d3bdc36" prot="public" virt="non-virtual"><scope>castor3d::GBufferBase</scope><name>Textures</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

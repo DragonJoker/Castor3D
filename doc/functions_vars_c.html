@@ -10,6 +10,7 @@
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="Castor3D.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -17,10 +18,12 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="castor-small.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Castor3D
-   &#160;<span id="projectnumber">..</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
+   <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
  </tr>
  </tbody>
@@ -42,87 +45,180 @@ $(function() {
 &#160;
 
 <h3><a id="index_c"></a>- c -</h3><ul>
-<li>CameraFarPlane
-: <a class="el" href="d5/d2f/a03216.html#a741e4a38991556b4eef6daf1ac432b45">castor3d::SceneUbo</a>
-</li>
-<li>CameraNearPlane
-: <a class="el" href="d5/d2f/a03216.html#aac61846936545c4ab0ac88fee2015250">castor3d::SceneUbo</a>
+<li>camera
+: <a class="el" href="dc/d0d/a04588.html#a23ad8239b745b39604bf24da4fb24f13">castor3d::CpuUpdater</a>
+, <a class="el" href="da/d34/a04592.html#a904e259c42f1ef7afa15a8ff7bef0934">castor3d::GpuUpdater</a>
+, <a class="el" href="df/d8e/a05248.html#a4a7fdf9b164f1a220d6a5a3c63d8c7ce">castor3d::SceneFileContext</a>
+, <a class="el" href="d1/d2b/a04652.html#a4336e9fa692ced4edf49a884e521dccb">castor3d::ShadowMap::PassData</a>
 </li>
 <li>CameraPos
-: <a class="el" href="d5/d2f/a03216.html#acde7c33f9b4a0979a1dbb50c53bcc4e3">castor3d::SceneUbo</a>
+: <a class="el" href="df/d63/a05528.html#acde7c33f9b4a0979a1dbb50c53bcc4e3">castor3d::SceneUbo</a>
+</li>
+<li>cameraPos
+: <a class="el" href="d8/d10/a05608.html#ab560df530dc84ab3bffd3fda9531bbad">castor3d::SceneUboConfiguration</a>
 </li>
 <li>CameraRootNode
-: <a class="el" href="d6/db9/a02980.html#a2f47124224d128eeffaeef0e0eaec02e">castor3d::Scene</a>
+: <a class="el" href="d5/d76/a05244.html#a2f47124224d128eeffaeef0e0eaec02e">castor3d::Scene</a>
+</li>
+<li>CascadeCount
+: <a class="el" href="d7/deb/a04264.html#a8f9c86575460447e4b75c702af19d7e8">castor3d::LayeredLightPropagationVolumesBase</a>
+</li>
+<li>cellSize
+: <a class="el" href="dc/d0d/a04588.html#a6b047fa13737aa54a5b3b6431e87f566">castor3d::CpuUpdater</a>
+, <a class="el" href="dd/d34/a05480.html#aac97df521afb75b13487faff89df53a2">castor3d::shader::LpvGridData</a>
+</li>
+<li>changed
+: <a class="el" href="d0/df5/a02576.html#a81e8749da34a72c7489ae8f6652016b5">castor3d::MouseState</a>
+</li>
+<li>chunk
+: <a class="el" href="d4/d8c/a02292.html#ab7426d2a0dd4557021fbc0f71eaa5134">castor3d::GpuBufferOffsetT&lt; DataT &gt;</a>
+</li>
+<li>ClipInfo
+: <a class="el" href="df/d63/a05528.html#a142f9118083441858217d3bd7fa18f6a">castor3d::SceneUbo</a>
+</li>
+<li>clipInfo
+: <a class="el" href="d8/d10/a05608.html#a0fcb772bf8a6a7cb52c7816a8acc3a36">castor3d::SceneUboConfiguration</a>
+</li>
+<li>clipPosition
+: <a class="el" href="df/d39/a05424.html#a461f69acff51c2673a32c368700a4728">castor3d::shader::Surface</a>
+</li>
+<li>clipToGrid
+: <a class="el" href="d8/d04/a05624.html#a72d999d766be6df5cb2a3bc48f9ac3c9">castor3d::shader::VoxelData</a>
 </li>
 <li>Coefficients
-: <a class="el" href="df/d49/a02340.html#ac8ebb7021bacc19bb4fdc943f53670da">castor3d::GaussianBlur</a>
+: <a class="el" href="dd/d8e/a04392.html#a3ea0db3cb529a51262383c2989e1db5b">castor3d::GaussianBlur</a>
 </li>
 <li>CoefficientsCount
-: <a class="el" href="df/d49/a02340.html#acf37ef8a75ec7dee4942c337a9e09680">castor3d::GaussianBlur</a>
+: <a class="el" href="dd/d8e/a04392.html#ad4e5e21985b62833eb4f0dbf94a7626d">castor3d::GaussianBlur</a>
+</li>
+<li>colorMask
+: <a class="el" href="d3/d72/a05440.html#afbb1c24c073783521e2f303b1346233d">castor3d::shader::Voxel</a>
+, <a class="el" href="d4/d79/a05020.html#a500e862acbbc63ac0d82aecf2d8c6070">castor3d::Voxel</a>
 </li>
 <li>Colour
-: <a class="el" href="d1/d7a/a03080.html#a78febc78d330488e7d3bf4b672f27fb1">castor3d::ShaderProgram</a>
+: <a class="el" href="dc/da0/a05304.html#a78febc78d330488e7d3bf4b672f27fb1">castor3d::ShaderProgram</a>
 </li>
 <li>Colour2
-: <a class="el" href="d1/d7a/a03080.html#ae2d6b4b3bc409cf82dec90eab099e8f3">castor3d::ShaderProgram</a>
+: <a class="el" href="dc/da0/a05304.html#ae2d6b4b3bc409cf82dec90eab099e8f3">castor3d::ShaderProgram</a>
 </li>
-<li>cols
-: <a class="el" href="d3/d55/a03256.html#a7e31cfbbf61b4b3e9bd1bd09420eee92">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat2x2b||Type==UniformType::eMat2x2i||Type==UniformType::eMat2x2ui||Type==UniformType::eMat2x2f||Type==UniformType::eMat2x2d &gt;::type &gt;</a>
-, <a class="el" href="d1/dda/a03260.html#a5ad2e0040e9a90fa2d58dceb74aa0f9a">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat2x3b||Type==UniformType::eMat2x3i||Type==UniformType::eMat2x3ui||Type==UniformType::eMat2x3f||Type==UniformType::eMat2x3d &gt;::type &gt;</a>
-, <a class="el" href="d4/d1a/a03264.html#a6601919de99d7328a5dfe4c982133ef6">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat2x4b||Type==UniformType::eMat2x4i||Type==UniformType::eMat2x4ui||Type==UniformType::eMat2x4f||Type==UniformType::eMat2x4d &gt;::type &gt;</a>
-, <a class="el" href="d4/dcb/a03268.html#a10bf655a14e55a311871a88e95942224">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat3x2b||Type==UniformType::eMat3x2i||Type==UniformType::eMat3x2ui||Type==UniformType::eMat3x2f||Type==UniformType::eMat3x2d &gt;::type &gt;</a>
-, <a class="el" href="d4/d1c/a03272.html#a47b19cb5d5a4f97edad6e0b445d8c78a">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat3x3b||Type==UniformType::eMat3x3i||Type==UniformType::eMat3x3ui||Type==UniformType::eMat3x3f||Type==UniformType::eMat3x3d &gt;::type &gt;</a>
-, <a class="el" href="d0/ded/a03276.html#a8bc0d18ce96900c9030145db630c6641">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat3x4b||Type==UniformType::eMat3x4i||Type==UniformType::eMat3x4ui||Type==UniformType::eMat3x4f||Type==UniformType::eMat3x4d &gt;::type &gt;</a>
-, <a class="el" href="de/d7f/a03280.html#a5112a3e02d45a8610d5dcb48dc03f253">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat4x2b||Type==UniformType::eMat4x2i||Type==UniformType::eMat4x2ui||Type==UniformType::eMat4x2f||Type==UniformType::eMat4x2d &gt;::type &gt;</a>
-, <a class="el" href="d6/d25/a03284.html#af9dc8793a044dcccb3a617bfd3e9ec9c">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat4x3b||Type==UniformType::eMat4x3i||Type==UniformType::eMat4x3ui||Type==UniformType::eMat4x3f||Type==UniformType::eMat4x3d &gt;::type &gt;</a>
-, <a class="el" href="db/de4/a03288.html#a7ef68dd54ac778132dac7b5d122423f4">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat4x4b||Type==UniformType::eMat4x4i||Type==UniformType::eMat4x4ui||Type==UniformType::eMat4x4f||Type==UniformType::eMat4x4d &gt;::type &gt;</a>
+<li>colourBlendMode
+: <a class="el" href="dd/db6/a04580.html#aab051b1ee46ace763681dfea200198d2">castor3d::PipelineFlags</a>
+</li>
+<li>colourIndex
+: <a class="el" href="d0/d95/a04772.html#a2041d60b5ed7805c684ed5b447bbc74c">castor3d::LightPass::Config</a>
+</li>
+<li>colourMask
+: <a class="el" href="d4/d98/a05428.html#a0380e440ec2bfa1ae8d6497145358985">castor3d::shader::TextureConfigData</a>
+, <a class="el" href="dd/d32/a02636.html#a05a2089f0200bcc2f8c98dd16996c0f2">castor3d::TextureConfiguration</a>
+</li>
+<li>colourTexture
+: <a class="el" href="de/da6/a04504.html#a8919e470f09c07cc27c3920f1f2b38e9">castor3d::PostEffectSurface</a>
+, <a class="el" href="dc/de6/a04632.html#acbbe79d311f07fc99e6ed120526cba78">castor3d::RenderTarget::TargetFbo</a>
+</li>
+<li>colrSpec
+: <a class="el" href="d4/d98/a05428.html#add30eea8e56879b72482d9e476810ead">castor3d::shader::TextureConfigData</a>
+, <a class="el" href="dd/d67/a05452.html#a4910688755c4e20247560b240227ca5e">castor3d::TextureConfigurationBuffer::Data</a>
+</li>
+<li>combineIndex
+: <a class="el" href="dc/d0d/a04588.html#ae226f28360b34614794d218babdb4c9f">castor3d::CpuUpdater</a>
+</li>
+<li>commandBuffer
+: <a class="el" href="d1/da6/a04380.html#a69f8a98779e7005fc1494f7cef97ebb4">castor3d::CommandsSemaphore</a>
+, <a class="el" href="d8/dab/a04404.html#ab728812496205f228d0e4879244154e7">castor3d::GaussianBlur::BlurPass</a>
+</li>
+<li>commandPools
+: <a class="el" href="d1/def/a04512.html#a4f40cfd937a91529bc302f0b856d10bd">castor3d::RenderDevice</a>
+</li>
+<li>commands
+: <a class="el" href="d2/dd6/a04528.html#a3256790fc4ca73c472ea54741399c8f1">castor3d::RenderLoop::UploadResources</a>
 </li>
 <li>common
-: <a class="el" href="d4/dc8/a03024.html#a2d253a59c174d186109bc6e2550657e9">castor3d::LegacyPassBuffer::PassData</a>
+: <a class="el" href="d9/d33/a05268.html#a019c4daaefc61ca93aa8592445ee50c8">castor3d::MetallicRoughnessPassBuffer::PassData</a>
+, <a class="el" href="dc/d2f/a05292.html#a53f0240cf5d6b5cec9381ccb297848cf">castor3d::PhongPassBuffer::PassData</a>
+, <a class="el" href="d1/d9e/a05300.html#a6c930437d663d92264ca906c68bb45c9">castor3d::SpecularGlossinessPassBuffer::PassData</a>
+</li>
+<li>computeCommandPool
+: <a class="el" href="d1/def/a04512.html#aaf7f2637aebfec7d50f1be4e89902e29">castor3d::RenderDevice</a>
+</li>
+<li>ComputeIdx
+: <a class="el" href="d1/def/a04512.html#a1beb05e924ea8466639f3aa63f0ef08f">castor3d::RenderDevice</a>
+</li>
+<li>computeQueue
+: <a class="el" href="d1/def/a04512.html#a68901524384bcd2156d1d5cf1589e532">castor3d::RenderDevice</a>
 </li>
 <li>Config
-: <a class="el" href="df/d49/a02340.html#ad4decab809ce84468c008bbd6934f35b">castor3d::GaussianBlur</a>
-, <a class="el" href="d5/dda/a03560.html#a901fd327809eb399652e361c56b08941">castor3d::SubsurfaceScatteringPass</a>
+: <a class="el" href="dd/d8e/a04392.html#ad4e5e92fc3459d70640cdc903ecc179b">castor3d::GaussianBlur</a>
+</li>
+<li>config
+: <a class="el" href="d5/d73/a03836.html#a7dd3b92f7aca2b9a09113dd9f3f9e78a">castor3d::PipelineVisitorBase</a>
+</li>
+<li>Config
+: <a class="el" href="df/da2/a04828.html#a901fd327809eb399652e361c56b08941">castor3d::SubsurfaceScatteringPass</a>
 </li>
 <li>coords
-: <a class="el" href="d0/dbb/a02448.html#aa13d9db1b9fbf4ba4ef2419b6b901f47">castor3d::OverlayCategory::Vertex</a>
-, <a class="el" href="de/d4e/a02484.html#a0e494f12fc151ed30531188ecc1f488d">castor3d::TextOverlay::Vertex</a>
+: <a class="el" href="d3/ddf/a04108.html#ae8cb56953aef04c695e0900e49c64727">castor3d::OverlayCategory::Vertex</a>
+, <a class="el" href="dc/d95/a04160.html#a3b8b801aafd5932b736d54c022855c1d">castor3d::TextOverlay::Vertex</a>
 </li>
 <li>Correction
-: <a class="el" href="d5/dda/a03560.html#af7706e05c28e70845346ec7fc53c9993">castor3d::SubsurfaceScatteringPass</a>
-</li>
-<li>Count
-: <a class="el" href="d3/d8b/a02996.html#ae0114da6c0d65908c72928c61cc2c440">castor3d::SceneNode</a>
+: <a class="el" href="df/da2/a04828.html#af7706e05c28e70845346ec7fc53c9993">castor3d::SubsurfaceScatteringPass</a>
 </li>
 <li>count
-: <a class="el" href="d9/de5/a03240.html#aa98e50901b013ee61137484dd05ad467">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eBool||Type==UniformType::eInt||Type==UniformType::eUInt||Type==UniformType::eFloat||Type==UniformType::eDouble||Type==UniformType::eSampler &gt;::type &gt;</a>
-, <a class="el" href="d3/d55/a03256.html#af1694e9ed5f6f72d87e69d48ee39dc92">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat2x2b||Type==UniformType::eMat2x2i||Type==UniformType::eMat2x2ui||Type==UniformType::eMat2x2f||Type==UniformType::eMat2x2d &gt;::type &gt;</a>
-, <a class="el" href="d1/dda/a03260.html#aea68524b69beb2665848033597483034">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat2x3b||Type==UniformType::eMat2x3i||Type==UniformType::eMat2x3ui||Type==UniformType::eMat2x3f||Type==UniformType::eMat2x3d &gt;::type &gt;</a>
-, <a class="el" href="d4/d1a/a03264.html#aeb3d457ed26423826475f7a140121c54">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat2x4b||Type==UniformType::eMat2x4i||Type==UniformType::eMat2x4ui||Type==UniformType::eMat2x4f||Type==UniformType::eMat2x4d &gt;::type &gt;</a>
-, <a class="el" href="d4/dcb/a03268.html#a9c8d783805556cee3fe21477eb4c8655">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat3x2b||Type==UniformType::eMat3x2i||Type==UniformType::eMat3x2ui||Type==UniformType::eMat3x2f||Type==UniformType::eMat3x2d &gt;::type &gt;</a>
-, <a class="el" href="d4/d1c/a03272.html#a0606e3a174f9723f9e70453418019b7a">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat3x3b||Type==UniformType::eMat3x3i||Type==UniformType::eMat3x3ui||Type==UniformType::eMat3x3f||Type==UniformType::eMat3x3d &gt;::type &gt;</a>
-, <a class="el" href="d0/ded/a03276.html#ac64448ab88d2273622bc4b745cced018">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat3x4b||Type==UniformType::eMat3x4i||Type==UniformType::eMat3x4ui||Type==UniformType::eMat3x4f||Type==UniformType::eMat3x4d &gt;::type &gt;</a>
-, <a class="el" href="de/d7f/a03280.html#a54eb98dffc1f277b3762f827ae76d875">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat4x2b||Type==UniformType::eMat4x2i||Type==UniformType::eMat4x2ui||Type==UniformType::eMat4x2f||Type==UniformType::eMat4x2d &gt;::type &gt;</a>
-, <a class="el" href="d6/d25/a03284.html#a15de10127821cd23a954761741c9f7b9">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat4x3b||Type==UniformType::eMat4x3i||Type==UniformType::eMat4x3ui||Type==UniformType::eMat4x3f||Type==UniformType::eMat4x3d &gt;::type &gt;</a>
-, <a class="el" href="db/de4/a03288.html#a3ba8a53f4036617e3e47d369ebf7b090">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat4x4b||Type==UniformType::eMat4x4i||Type==UniformType::eMat4x4ui||Type==UniformType::eMat4x4f||Type==UniformType::eMat4x4d &gt;::type &gt;</a>
-, <a class="el" href="d1/dfa/a03244.html#a07ee53d2b99538e60e5d71b5d6ddb907">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eVec2b||Type==UniformType::eVec2i||Type==UniformType::eVec2ui||Type==UniformType::eVec2f||Type==UniformType::eVec2d &gt;::type &gt;</a>
-, <a class="el" href="d9/d01/a03248.html#a2fedc36c2a1390df8c1434ec3651d1e8">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eVec3b||Type==UniformType::eVec3i||Type==UniformType::eVec3ui||Type==UniformType::eVec3f||Type==UniformType::eVec3d &gt;::type &gt;</a>
-, <a class="el" href="d7/d44/a03252.html#a0930bc49c4eafd9703ba3f3d267d7987">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eVec4b||Type==UniformType::eVec4i||Type==UniformType::eVec4ui||Type==UniformType::eVec4f||Type==UniformType::eVec4d &gt;::type &gt;</a>
+: <a class="el" href="d2/df2/a03960.html#a2283bed474f3f6c91a4d976d55fbb44c">castor3d::InstantiationComponent::Data</a>
+, <a class="el" href="d8/d12/a04236.html#a4406af5bc2d34cc43587ae9252b5930d">castor3d::SceneCuller::CulledInstancesArrayT&lt; CulledT, ArrayT &gt;</a>
 </li>
-<li>CurJitter
-: <a class="el" href="dc/ddd/a03196.html#adde041b39130687427f3ee52f271cf0d">castor3d::MatrixUbo</a>
+<li>Count
+: <a class="el" href="da/d44/a05256.html#ae0114da6c0d65908c72928c61cc2c440">castor3d::SceneNode</a>
+</li>
+<li>createMaterial
+: <a class="el" href="df/d8e/a05248.html#ad4cf8ae93cad9c6a9d5dd1ec03abebce">castor3d::SceneFileContext</a>
+</li>
+<li>createPass
+: <a class="el" href="df/d8e/a05248.html#aec8d91f4c54b2a29fe545ad4178d66d0">castor3d::SceneFileContext</a>
+</li>
+<li>createUnit
+: <a class="el" href="df/d8e/a05248.html#a8f9d325b45a32b289f04a41f048021b7">castor3d::SceneFileContext</a>
+</li>
+<li>ctrl
+: <a class="el" href="d9/de7/a02572.html#ae40eab00317a2b8e1b5c58545eadc894">castor3d::KeyboardState</a>
+</li>
+<li>culler
+: <a class="el" href="d1/d2b/a04652.html#a337ed1e63511a39d4587c17ca0a2ef09">castor3d::ShadowMap::PassData</a>
+</li>
+<li>curModel
+: <a class="el" href="da/d9f/a05584.html#a6346a503e1873ed038c7fdd81b6e8568">castor3d::ModelMatrixUboConfiguration</a>
+</li>
+<li>CurMtxModel
+: <a class="el" href="d2/d81/a05504.html#a8bfb9c20a6a219d49f7f16fc9992d657">castor3d::ModelMatrixUbo</a>
+</li>
+<li>CurMtxNormal
+: <a class="el" href="d2/d81/a05504.html#aa4d974752e409496fae1ee3dcca1e8ca">castor3d::ModelMatrixUbo</a>
+</li>
+<li>curNormal
+: <a class="el" href="da/d9f/a05584.html#a9c75d679f01bebdc89a2f4397e011455">castor3d::ModelMatrixUboConfiguration</a>
+</li>
+<li>CurPositionLocation
+: <a class="el" href="dd/d03/a04604.html#a957a62f86fc08f7a5e90666b33433d10">castor3d::SceneRenderPass::VertexOutputs</a>
+</li>
+<li>currentParticleCount
+: <a class="el" href="d6/d6a/a05200.html#af65a433cb2d05b035ca8bb918c6af932">castor3d::ComputeParticleSystem::Configuration</a>
 </li>
 <li>CurView
-: <a class="el" href="dc/ddd/a03196.html#a5d3ff7c3dc673265c3971fa21be5a46e">castor3d::MatrixUbo</a>
+: <a class="el" href="d2/d0e/a05496.html#a5d3ff7c3dc673265c3971fa21be5a46e">castor3d::MatrixUbo</a>
+</li>
+<li>curView
+: <a class="el" href="d7/d33/a05576.html#a0701e43cde9aea98d6e2881fa17af17f">castor3d::MatrixUboConfiguration</a>
 </li>
 <li>CurViewProj
-: <a class="el" href="dc/ddd/a03196.html#ae3403a8d251e88cd7e9f68aa6c68c0ab">castor3d::MatrixUbo</a>
+: <a class="el" href="d2/d0e/a05496.html#ae3403a8d251e88cd7e9f68aa6c68c0ab">castor3d::MatrixUbo</a>
+</li>
+<li>curViewProj
+: <a class="el" href="d7/d33/a05576.html#a594bac871b9fa0648bf9571e2711ac6e">castor3d::MatrixUboConfiguration</a>
 </li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 13:39:12 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Feb 18 2021 01:09:24 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dc/d09/a02398" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::CacheTraits&lt; Plugin, KeyType &gt;</compoundname>
+    <includes local="no">CacheModule.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename KeyType</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="dc/d09/a02398_1a31cbf77e507a5846034a15a32279c3d3" prot="public" static="no">
+        <type>std::function&lt; std::shared_ptr&lt; <ref refid="dd/d6d/a04186" kindref="compound">Plugin</ref> &gt;(KeyType const &amp;, <ref refid="de/d13/a01473_1aecf8304db7dd49c874ec216f139e5f67" kindref="member">PluginType</ref>, castor::DynamicLibrarySPtr) &gt;</type>
+        <definition>using castor3d::CacheTraits&lt; Plugin, KeyType &gt;::Producer =  std::function&lt; std::shared_ptr&lt; Plugin &gt;( KeyType const &amp;, PluginType, castor::DynamicLibrarySPtr ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>Producer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheModule.hpp" line="202" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="202" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dc/d09/a02398_1a8ec6004b397327c2c35a737f0c367732" prot="public" static="no">
+        <type>std::function&lt; void(<ref refid="dc/dfd/a02370" kindref="compound">CacheBase</ref>&lt; <ref refid="dd/d6d/a04186" kindref="compound">Plugin</ref>, KeyType &gt; const &amp;, castor::Collection&lt; <ref refid="dd/d6d/a04186" kindref="compound">Plugin</ref>, KeyType &gt; &amp;, std::shared_ptr&lt; <ref refid="dd/d6d/a04186" kindref="compound">Plugin</ref> &gt;) &gt;</type>
+        <definition>using castor3d::CacheTraits&lt; Plugin, KeyType &gt;::Merger =  std::function&lt; void( CacheBase&lt; Plugin, KeyType &gt; const &amp; , castor::Collection&lt; Plugin, KeyType &gt; &amp; , std::shared_ptr&lt; Plugin &gt; ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>Merger</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheModule.hpp" line="203" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="205" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="dc/d09/a02398_1a3b87c390fcfadf896405ab8f68143efd" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const castor::String</type>
+        <definition>C3D_API const castor::String castor3d::CacheTraits&lt; Plugin, KeyType &gt;::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheModule.hpp" line="201" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="201" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Helper structure to specialise a cache behaviour. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Specialisation for <ref refid="dd/d6d/a04186" kindref="compound">Plugin</ref>. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="Cache/CacheModule.hpp" line="200" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="199" bodyend="206"/>
+    <listofallmembers>
+      <member refid="dc/d09/a02398_1a8ec6004b397327c2c35a737f0c367732" prot="public" virt="non-virtual"><scope>castor3d::CacheTraits&lt; Plugin, KeyType &gt;</scope><name>Merger</name></member>
+      <member refid="dc/d09/a02398_1a3b87c390fcfadf896405ab8f68143efd" prot="public" virt="non-virtual"><scope>castor3d::CacheTraits&lt; Plugin, KeyType &gt;</scope><name>Name</name></member>
+      <member refid="dc/d09/a02398_1a31cbf77e507a5846034a15a32279c3d3" prot="public" virt="non-virtual"><scope>castor3d::CacheTraits&lt; Plugin, KeyType &gt;</scope><name>Producer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

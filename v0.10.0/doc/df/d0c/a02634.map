@@ -1,0 +1,16 @@
+<map id="castor3d::RenderLoopAsync" name="castor3d::RenderLoopAsync">
+<area shape="rect" id="node1" title="Main System." alt="" coords="1236,71,1423,98"/>
+<area shape="rect" id="node2" href="$dd/dc4/a02632.html" title="Render loop base class." alt="" coords="1037,71,1187,98"/>
+<area shape="rect" id="node3" title=" " alt="" coords="28,71,215,98"/>
+<area shape="rect" id="node4" href="$d7/d73/a02708.html" title="The render system representation." alt="" coords="713,202,879,229"/>
+<area shape="rect" id="node14" href="$d0/da6/a02412.html" title="Debug overlays class." alt="" coords="377,19,544,46"/>
+<area shape="rect" id="node5" href="$d8/d72/a02104.html" title="Buddy allocator implementation." alt="" coords="379,173,542,199"/>
+<area shape="rect" id="node6" title=" " alt="" coords="5,173,237,199"/>
+<area shape="rect" id="node7" title=" " alt="" coords="387,224,534,265"/>
+<area shape="rect" id="node8" title=" " alt="" coords="377,290,544,317"/>
+<area shape="rect" id="node9" href="$da/d6b/a02352.html" title="Holds GPU informations." alt="" coords="373,341,548,367"/>
+<area shape="rect" id="node10" title=" " alt="" coords="25,282,218,309"/>
+<area shape="rect" id="node11" title=" " alt="" coords="36,333,207,375"/>
+<area shape="rect" id="node12" title=" " alt="" coords="27,399,216,426"/>
+<area shape="rect" id="node13" title=" " alt="" coords="711,5,881,47"/>
+</map>

@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d5/d6b/a03428" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::VkTypeTraits&lt; VkDisplayModeProperties2KHR &gt;</compoundname>
+    <includes local="no">makeVkType.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d5/d6b/a03428_1aec9ff21c58039c206703631d6ff652ab" prot="public" static="yes" mutable="no">
+        <type>VkStructureType constexpr</type>
+        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkDisplayModeProperties2KHR &gt;::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <initializer>= VK_STRUCTURE_TYPE_DISPLAY_MODE_PROPERTIES_2_KHR</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/makeVkType.hpp" line="268" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="268" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Miscellaneous/makeVkType.hpp" line="268" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="268" bodyend="268"/>
+    <listofallmembers>
+      <member refid="d5/d6b/a03428_1aec9ff21c58039c206703631d6ff652ab" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkDisplayModeProperties2KHR &gt;</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

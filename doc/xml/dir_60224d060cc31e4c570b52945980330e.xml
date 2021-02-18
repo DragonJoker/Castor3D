@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_60224d060cc31e4c570b52945980330e" kind="dir">
+    <compoundname>Render/Culling</compoundname>
+    <innerfile refid="d6/dfa/a00626">CullingModule.hpp</innerfile>
+    <innerfile refid="da/dd1/a00629">DummyCuller.hpp</innerfile>
+    <innerfile refid="d4/d2a/a00632">FrustumCuller.hpp</innerfile>
+    <innerfile refid="d4/d10/a00635">InstantiatedDummyCuller.hpp</innerfile>
+    <innerfile refid="d1/daa/a00638">InstantiatedFrustumCuller.hpp</innerfile>
+    <innerfile refid="db/d3a/a00641">SceneCuller.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Culling/"/>
+  </compounddef>
+</doxygen>

@@ -1,4 +1,5 @@
-<map id="castor3d::Cube" name="castor3d::Cube">
-<area shape="rect" id="node1" title="The cube representation." alt="" coords="35,80,145,107"/>
-<area shape="rect" id="node2" href="$d5/ddd/a02184.html" title="Mesh category is used to create a mesh&#39;s vertices, it is created by MeshFactory." alt="" coords="5,5,175,32"/>
+<map id="castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;" name="castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;">
+<area shape="rect" id="node1" title="MeshAnimationKeyFrame binary loader." alt="" coords="5,200,201,241"/>
+<area shape="rect" id="node2" href="$d1/d90/a02127.html" title=" " alt="" coords="5,109,201,151"/>
+<area shape="rect" id="node3" href="$d1/d90/a02127.html" title="Binary data chunk reader base class." alt="" coords="11,5,196,47"/>
 </map>

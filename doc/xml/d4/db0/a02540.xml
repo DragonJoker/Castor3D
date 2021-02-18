@@ -1,0 +1,207 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d4/db0/a02540" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::GpuFunctorEvent</compoundname>
+    <basecompoundref refid="d6/d24/a02536" prot="public" virt="non-virtual">castor3d::GpuFrameEvent</basecompoundref>
+    <includes local="no">GpuFunctorEvent.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d4/db0/a02540_1ac7f8085060b2163a8f581fc2c35287db" prot="public" static="no">
+        <type>std::function&lt; void(<ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;device) &gt;</type>
+        <definition>using castor3d::GpuFunctorEvent::Functor =  std::function&lt; void( RenderDevice const &amp; device ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>Functor</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/GpuFunctorEvent.hpp" line="15" column="1" bodyfile="Event/Frame/GpuFunctorEvent.hpp" bodystart="15" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d4/db0/a02540_1ae28188d34901745f44b0c5cb254a281e" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/db0/a02540_1ac7f8085060b2163a8f581fc2c35287db" kindref="member">Functor</ref></type>
+        <definition>Functor castor3d::GpuFunctorEvent::m_functor</definition>
+        <argsstring></argsstring>
+        <name>m_functor</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/GpuFunctorEvent.hpp" line="56" column="1" bodyfile="Event/Frame/GpuFunctorEvent.hpp" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d4/db0/a02540_1a0a62a9968ee9b30c6b7bc4dd5007f118" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::GpuFunctorEvent::GpuFunctorEvent</definition>
+        <argsstring>(GpuFunctorEvent const &amp;copy)=delete</argsstring>
+        <name>GpuFunctorEvent</name>
+        <param>
+          <type><ref refid="d4/db0/a02540" kindref="compound">GpuFunctorEvent</ref> const &amp;</type>
+          <declname>copy</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/GpuFunctorEvent.hpp" line="18" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/db0/a02540_1a17d332778872a3d214361e614637a27d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d4/db0/a02540" kindref="compound">GpuFunctorEvent</ref> &amp;</type>
+        <definition>GpuFunctorEvent&amp; castor3d::GpuFunctorEvent::operator=</definition>
+        <argsstring>(GpuFunctorEvent const &amp;copy)=delete</argsstring>
+        <name>operator=</name>
+        <param>
+          <type><ref refid="d4/db0/a02540" kindref="compound">GpuFunctorEvent</ref> const &amp;</type>
+          <declname>copy</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/GpuFunctorEvent.hpp" line="19" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/db0/a02540_1a94461d0c2c5fc104893a12a4ca1e9707" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::GpuFunctorEvent::GpuFunctorEvent</definition>
+        <argsstring>(EventType type, Functor functor)</argsstring>
+        <name>GpuFunctorEvent</name>
+        <param>
+          <type><ref refid="da/d1e/a01479_1ad442bf3c1ba8a06ac36f710ba30b2870" kindref="member">EventType</ref></type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/db0/a02540_1ac7f8085060b2163a8f581fc2c35287db" kindref="member">Functor</ref></type>
+          <declname>functor</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The event type </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">functor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The functor to execute </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/GpuFunctorEvent.hpp" line="32" column="1" bodyfile="Event/Frame/GpuFunctorEvent.hpp" bodystart="32" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/db0/a02540_1a43a68942938ee1de15583804b0c73d78" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::GpuFunctorEvent::~GpuFunctorEvent</definition>
+        <argsstring>()=default</argsstring>
+        <name>~GpuFunctorEvent</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/GpuFunctorEvent.hpp" line="39" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/db0/a02540_1a0055f296e88bac95a9cc046e41aab28b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::GpuFunctorEvent::apply</definition>
+        <argsstring>(RenderDevice const &amp;device) override</argsstring>
+        <name>apply</name>
+        <reimplements refid="d6/d24/a02536_1a692c2f394bef018125be51f0ebb8ce23">apply</reimplements>
+        <param>
+          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+<para>Applies the event. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Executes the function. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/Frame/GpuFunctorEvent.hpp" line="50" column="1" bodyfile="Event/Frame/GpuFunctorEvent.hpp" bodystart="50" bodyend="53"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1362">
+        <label>castor3d::GpuFrameEvent</label>
+        <link refid="d6/d24/a02536"/>
+      </node>
+      <node id="1361">
+        <label>castor3d::GpuFunctorEvent</label>
+        <link refid="d4/db0/a02540"/>
+        <childnode refid="1362" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1364">
+        <label>castor3d::GpuFrameEvent</label>
+        <link refid="d6/d24/a02536"/>
+      </node>
+      <node id="1363">
+        <label>castor3d::GpuFunctorEvent</label>
+        <link refid="d4/db0/a02540"/>
+        <childnode refid="1364" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Event/Frame/GpuFunctorEvent.hpp" line="13" column="1" bodyfile="Event/Frame/GpuFunctorEvent.hpp" bodystart="11" bodyend="57"/>
+    <listofallmembers>
+      <member refid="d4/db0/a02540_1a0055f296e88bac95a9cc046e41aab28b" prot="public" virt="virtual"><scope>castor3d::GpuFunctorEvent</scope><name>apply</name></member>
+      <member refid="d4/db0/a02540_1ac7f8085060b2163a8f581fc2c35287db" prot="public" virt="non-virtual"><scope>castor3d::GpuFunctorEvent</scope><name>Functor</name></member>
+      <member refid="d6/d24/a02536_1ace9eb8b16e46965278b8b120ffc98c87" prot="public" virt="non-virtual"><scope>castor3d::GpuFunctorEvent</scope><name>getType</name></member>
+      <member refid="d6/d24/a02536_1a52e360dff97b7641b67b560474be4cac" prot="public" virt="non-virtual"><scope>castor3d::GpuFunctorEvent</scope><name>GpuFrameEvent</name></member>
+      <member refid="d6/d24/a02536_1accdd3b3c33b729d96beddf5bdd64674e" prot="public" virt="non-virtual"><scope>castor3d::GpuFunctorEvent</scope><name>GpuFrameEvent</name></member>
+      <member refid="d6/d24/a02536_1a44e18d18ad92f6bd7bb1ed56a6d1d65b" prot="public" virt="non-virtual"><scope>castor3d::GpuFunctorEvent</scope><name>GpuFrameEvent</name></member>
+      <member refid="d4/db0/a02540_1a0a62a9968ee9b30c6b7bc4dd5007f118" prot="private" virt="non-virtual"><scope>castor3d::GpuFunctorEvent</scope><name>GpuFunctorEvent</name></member>
+      <member refid="d4/db0/a02540_1a94461d0c2c5fc104893a12a4ca1e9707" prot="public" virt="non-virtual"><scope>castor3d::GpuFunctorEvent</scope><name>GpuFunctorEvent</name></member>
+      <member refid="d4/db0/a02540_1ae28188d34901745f44b0c5cb254a281e" prot="private" virt="non-virtual"><scope>castor3d::GpuFunctorEvent</scope><name>m_functor</name></member>
+      <member refid="d6/d24/a02536_1a8136c7ee8f7ebfb4fcf4f1c9e5a0a433" prot="protected" virt="non-virtual"><scope>castor3d::GpuFunctorEvent</scope><name>m_stackTrace</name></member>
+      <member refid="d6/d24/a02536_1a607a677b10106be306257a778795ff43" prot="protected" virt="non-virtual"><scope>castor3d::GpuFunctorEvent</scope><name>m_type</name></member>
+      <member refid="d4/db0/a02540_1a17d332778872a3d214361e614637a27d" prot="private" virt="non-virtual"><scope>castor3d::GpuFunctorEvent</scope><name>operator=</name></member>
+      <member refid="d6/d24/a02536_1ae8fd93b2441575b15f705519b4180492" prot="public" virt="non-virtual" ambiguityscope="castor3d::GpuFrameEvent::"><scope>castor3d::GpuFunctorEvent</scope><name>operator=</name></member>
+      <member refid="d6/d24/a02536_1a17a0242735feaf4e870661dc158a4dcd" prot="public" virt="non-virtual" ambiguityscope="castor3d::GpuFrameEvent::"><scope>castor3d::GpuFunctorEvent</scope><name>operator=</name></member>
+      <member refid="d6/d24/a02536_1a139c794fbc28aebd27db9f05a727cfac" prot="public" virt="virtual"><scope>castor3d::GpuFunctorEvent</scope><name>~GpuFrameEvent</name></member>
+      <member refid="d4/db0/a02540_1a43a68942938ee1de15583804b0c73d78" prot="public" virt="non-virtual"><scope>castor3d::GpuFunctorEvent</scope><name>~GpuFunctorEvent</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

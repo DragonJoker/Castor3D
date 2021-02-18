@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="df/dd9/a04702" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::SsaoBlurPass::Configuration</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="df/dd9/a04702_1afe48646a08110b0695548c7456ea8132" prot="public" static="no" mutable="no">
+        <type>castor::Point2i</type>
+        <definition>castor::Point2i castor3d::SsaoBlurPass::Configuration::axis</definition>
+        <argsstring></argsstring>
+        <name>axis</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="134" column="1" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="134" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/dd9/a04702_1a19109c5c04b622edc1a03937f5e5612e" prot="public" static="no" mutable="no">
+        <type>castor::Point2i</type>
+        <definition>castor::Point2i castor3d::SsaoBlurPass::Configuration::dummy</definition>
+        <argsstring></argsstring>
+        <name>dummy</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="135" column="1" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="135" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/dd9/a04702_1a4b85a9fc9e1998aea1c9bc3849ced771" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::SsaoBlurPass::Configuration::gaussian[2]</definition>
+        <argsstring>[2]</argsstring>
+        <name>gaussian</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoBlurPass.hpp" line="136" column="1" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="136" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Ssao/SsaoBlurPass.hpp" line="133" column="1" bodyfile="Render/Ssao/SsaoBlurPass.hpp" bodystart="132" bodyend="137"/>
+    <listofallmembers>
+      <member refid="df/dd9/a04702_1afe48646a08110b0695548c7456ea8132" prot="public" virt="non-virtual"><scope>castor3d::SsaoBlurPass::Configuration</scope><name>axis</name></member>
+      <member refid="df/dd9/a04702_1a19109c5c04b622edc1a03937f5e5612e" prot="public" virt="non-virtual"><scope>castor3d::SsaoBlurPass::Configuration</scope><name>dummy</name></member>
+      <member refid="df/dd9/a04702_1a4b85a9fc9e1998aea1c9bc3849ced771" prot="public" virt="non-virtual"><scope>castor3d::SsaoBlurPass::Configuration</scope><name>gaussian</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d1/dc4/a02042" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::Interpolator</compoundname>
+    <derivedcompoundref refid="df/d03/a02058" prot="public" virt="non-virtual">castor3d::InterpolatorT&lt; DataT, InterpolatorType::eLinear &gt;</derivedcompoundref>
+    <derivedcompoundref refid="d7/d38/a02054" prot="public" virt="non-virtual">castor3d::InterpolatorT&lt; DataT, InterpolatorType::eNearest &gt;</derivedcompoundref>
+    <includes local="no">Interpolator.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class</type>
+        <declname>DataT</declname>
+        <defname>DataT</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/dc4/a02042_1a6e868724abfa1dca7cfc0d2d0637beb0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::Interpolator&lt; DataT &gt;::Interpolator</definition>
+        <argsstring>()</argsstring>
+        <name>Interpolator</name>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Interpolator.hpp" line="21" column="1" bodyfile="Animation/Interpolator.hpp" bodystart="21" bodyend="23"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dc4/a02042_1aa7c508adbeae8c638612f3366db88e79" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::Interpolator&lt; DataT &gt;::~Interpolator</definition>
+        <argsstring>()</argsstring>
+        <name>~Interpolator</name>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Interpolator.hpp" line="30" column="1" bodyfile="Animation/Interpolator.hpp" bodystart="30" bodyend="32"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dc4/a02042_1a38c4c864a411f0fbc92d8af20d4ec52f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> DataT</type>
+        <definition>virtual C3D_API DataT castor3d::Interpolator&lt; DataT &gt;::interpolate</definition>
+        <argsstring>(DataT const &amp;src, DataT const &amp;dst, float percent) const =0</argsstring>
+        <name>interpolate</name>
+        <reimplementedby refid="d7/d38/a02054_1a4a4f31bda83af9363dea99bd79694c63">interpolate</reimplementedby>
+        <reimplementedby refid="df/d03/a02058_1a92a8a65c746a2f9070fcfb0a48d7cff8">interpolate</reimplementedby>
+        <reimplementedby refid="dc/d28/a02062_1a910141885b8ae03c0ab795586cc9f345">interpolate</reimplementedby>
+        <param>
+          <type>DataT const &amp;</type>
+          <declname>src</declname>
+        </param>
+        <param>
+          <type>DataT const &amp;</type>
+          <declname>dst</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>percent</declname>
+        </param>
+        <briefdescription>
+<para>Interpolation function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">src</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The start. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dst</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The end. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">percent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The percentage. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Interpolator.hpp" line="45" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Template class which handles the interpolations, would it be quaternion, point, real, ... interpolations. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1463">
+        <label>castor3d::Interpolator&lt; DataT &gt;</label>
+        <link refid="d1/dc4/a02042"/>
+      </node>
+      <node id="1467">
+        <label>castor3d::InterpolatorT&lt; castor::Quaternion, InterpolatorType::eLinear &gt;</label>
+        <link refid="dc/d28/a02062"/>
+        <childnode refid="1466" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1466">
+        <label>castor3d::Interpolator&lt; castor::Quaternion &gt;</label>
+        <link refid="d1/dc4/a02042"/>
+        <childnode refid="1463" relation="template-instance">
+          <edgelabel>&lt; castor::Quaternion &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1464">
+        <label>castor3d::InterpolatorT&lt; DataT, InterpolatorType::eLinear &gt;</label>
+        <link refid="df/d03/a02058"/>
+        <childnode refid="1463" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1465">
+        <label>castor3d::InterpolatorT&lt; DataT, InterpolatorType::eNearest &gt;</label>
+        <link refid="d7/d38/a02054"/>
+        <childnode refid="1463" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <location file="Animation/AnimationModule.hpp" line="104" column="1" bodyfile="Animation/AnimationModule.hpp" bodystart="104" bodyend="-1"/>
+    <listofallmembers>
+      <member refid="d1/dc4/a02042_1a38c4c864a411f0fbc92d8af20d4ec52f" prot="public" virt="pure-virtual"><scope>castor3d::Interpolator</scope><name>interpolate</name></member>
+      <member refid="d1/dc4/a02042_1a6e868724abfa1dca7cfc0d2d0637beb0" prot="public" virt="non-virtual"><scope>castor3d::Interpolator</scope><name>Interpolator</name></member>
+      <member refid="d1/dc4/a02042_1aa7c508adbeae8c638612f3366db88e79" prot="public" virt="non-virtual"><scope>castor3d::Interpolator</scope><name>~Interpolator</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

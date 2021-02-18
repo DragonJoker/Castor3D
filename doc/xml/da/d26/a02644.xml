@@ -1,0 +1,170 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="da/d26/a02644" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::CubeView</compoundname>
+    <includes local="no">TextureLayout.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="da/d26/a02644_1a80994da423e22c00a0e265a66debd84d" prot="public" static="no" mutable="no">
+        <type><ref refid="dd/d5f/a02640" kindref="compound">MipView</ref></type>
+        <definition>MipView castor3d::CubeView::view</definition>
+        <argsstring></argsstring>
+        <name>view</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="70" column="1" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="70" bodyend="-1"/>
+        <referencedby refid="da/d26/a02644_1a7e60b24dc675dcfe72cc637b0d00b6b9" compoundref="d4/def/a00359" startline="85" endline="88">forEachFirstMipView</referencedby>
+        <referencedby refid="da/d26/a02644_1a8a1b9a6114bd1ced90ab0b403237586e" compoundref="d4/def/a00359" startline="74" endline="82">forEachView</referencedby>
+        <referencedby refid="d2/d7d/a02656_1a8fb683f04ef28ae07e604492bebd92da" compoundref="d4/def/a00359" startline="492" endline="496">castor3d::TextureLayout::getLayerCubeView</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="da/d26/a02644_1a0fe245e7abfe95bd67276e81bcc0c059" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="dd/d5f/a02640" kindref="compound">MipView</ref> &gt;</type>
+        <definition>std::vector&lt; MipView &gt; castor3d::CubeView::faces</definition>
+        <argsstring></argsstring>
+        <name>faces</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="71" column="1" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="71" bodyend="-1"/>
+        <referencedby refid="da/d26/a02644_1a9094e59ad4639ea9b9be66d7288d1432" compoundref="d4/def/a00359" startline="91" endline="97">forEachLeafView</referencedby>
+        <referencedby refid="da/d26/a02644_1a8a1b9a6114bd1ced90ab0b403237586e" compoundref="d4/def/a00359" startline="74" endline="82">forEachView</referencedby>
+        <referencedby refid="d2/d7d/a02656_1a1bc7c519652b89173942b38d632e8b1d" compoundref="d4/def/a00359" startline="508" endline="512">castor3d::TextureLayout::getLayerCubeFace</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/d26/a02644_1a8a1b9a6114bd1ced90ab0b403237586e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename FuncT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::CubeView::forEachView</definition>
+        <argsstring>(FuncT function) const</argsstring>
+        <name>forEachView</name>
+        <param>
+          <type>FuncT</type>
+          <declname>function</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="74" column="1" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="74" bodyend="82"/>
+        <references refid="da/d26/a02644_1a0fe245e7abfe95bd67276e81bcc0c059" compoundref="d4/def/a00359" startline="71">faces</references>
+        <references refid="dd/d5f/a02640_1ac23bed4d978ef4c38473672b09fe4e25" compoundref="d4/def/a00359" startline="48" endline="52">castor3d::MipView::forEachView</references>
+        <references refid="da/d26/a02644_1a80994da423e22c00a0e265a66debd84d" compoundref="d4/def/a00359" startline="70">view</references>
+      </memberdef>
+      <memberdef kind="function" id="da/d26/a02644_1a7e60b24dc675dcfe72cc637b0d00b6b9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename FuncT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::CubeView::forEachFirstMipView</definition>
+        <argsstring>(FuncT function) const</argsstring>
+        <name>forEachFirstMipView</name>
+        <param>
+          <type>FuncT</type>
+          <declname>function</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="85" column="1" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="85" bodyend="88"/>
+        <references refid="dd/d5f/a02640_1a63ac7209185df2c391cab3451317221e" compoundref="d4/def/a00359" startline="55" endline="65">castor3d::MipView::forEachFirstMipView</references>
+        <references refid="da/d26/a02644_1a80994da423e22c00a0e265a66debd84d" compoundref="d4/def/a00359" startline="70">view</references>
+      </memberdef>
+      <memberdef kind="function" id="da/d26/a02644_1a9094e59ad4639ea9b9be66d7288d1432" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename FuncT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::CubeView::forEachLeafView</definition>
+        <argsstring>(FuncT function) const</argsstring>
+        <name>forEachLeafView</name>
+        <param>
+          <type>FuncT</type>
+          <declname>function</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="91" column="1" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="91" bodyend="97"/>
+        <references refid="da/d26/a02644_1a0fe245e7abfe95bd67276e81bcc0c059" compoundref="d4/def/a00359" startline="71">faces</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="854">
+        <label>T</label>
+      </node>
+      <node id="853">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="854" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="852">
+        <label>std::vector&lt; TextureViewUPtr &gt;</label>
+        <childnode refid="853" relation="template-instance">
+          <edgelabel>&lt; TextureViewUPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="851">
+        <label>castor3d::MipView</label>
+        <link refid="dd/d5f/a02640"/>
+        <childnode refid="852" relation="usage">
+          <edgelabel>levels</edgelabel>
+        </childnode>
+      </node>
+      <node id="849">
+        <label>castor3d::CubeView</label>
+        <link refid="da/d26/a02644"/>
+        <childnode refid="850" relation="usage">
+          <edgelabel>faces</edgelabel>
+        </childnode>
+        <childnode refid="851" relation="usage">
+          <edgelabel>view</edgelabel>
+        </childnode>
+      </node>
+      <node id="850">
+        <label>std::vector&lt; castor3d::MipView &gt;</label>
+        <childnode refid="851" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="853" relation="template-instance">
+          <edgelabel>&lt; castor3d::MipView &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Texture/TextureLayout.hpp" line="69" column="1" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="68" bodyend="98"/>
+    <listofallmembers>
+      <member refid="da/d26/a02644_1a0fe245e7abfe95bd67276e81bcc0c059" prot="public" virt="non-virtual"><scope>castor3d::CubeView</scope><name>faces</name></member>
+      <member refid="da/d26/a02644_1a7e60b24dc675dcfe72cc637b0d00b6b9" prot="public" virt="non-virtual"><scope>castor3d::CubeView</scope><name>forEachFirstMipView</name></member>
+      <member refid="da/d26/a02644_1a9094e59ad4639ea9b9be66d7288d1432" prot="public" virt="non-virtual"><scope>castor3d::CubeView</scope><name>forEachLeafView</name></member>
+      <member refid="da/d26/a02644_1a8a1b9a6114bd1ced90ab0b403237586e" prot="public" virt="non-virtual"><scope>castor3d::CubeView</scope><name>forEachView</name></member>
+      <member refid="da/d26/a02644_1a80994da423e22c00a0e265a66debd84d" prot="public" virt="non-virtual"><scope>castor3d::CubeView</scope><name>view</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

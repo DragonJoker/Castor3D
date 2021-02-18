@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d2/dc4/a01483" kind="namespace" language="C++">
+    <compoundname>castor3d::rq</compoundname>
+    <innerclass refid="d1/d13/a04444" prot="public">castor3d::rq::BindingDescription</innerclass>
+    <innerclass refid="d5/d8e/a04448" prot="public">castor3d::rq::ConfigT</innerclass>
+    <innerclass refid="d7/d79/a04452" prot="public">castor3d::rq::RawTyperT</innerclass>
+    <innerclass refid="dc/dc7/a04440" prot="public">castor3d::rq::Texcoord</innerclass>
+      <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="d2/dc4/a01483_1a4a9359de68c83f5e0f2d2cbe8bf5910b" prot="public" static="no">
+        <type>std::vector&lt; <ref refid="d1/d13/a04444" kindref="compound">BindingDescription</ref> &gt;</type>
+        <definition>using castor3d::rq::BindingDescriptionArray = typedef std::vector&lt; BindingDescription &gt;</definition>
+        <argsstring></argsstring>
+        <name>BindingDescriptionArray</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderQuad.hpp" line="72" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/dc4/a01483_1a573d44a1af90c2fa5cd8d023adb34ae8" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>typename TypeT</type>
+          </param>
+        </templateparamlist>
+        <type>typename <ref refid="d7/d79/a04452" kindref="compound">RawTyperT</ref>&lt; TypeT &gt;::Type</type>
+        <definition>using castor3d::rq::RawTypeT = typedef typename RawTyperT&lt; TypeT &gt;::Type</definition>
+        <argsstring></argsstring>
+        <name>RawTypeT</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderQuad.hpp" line="90" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/dc4/a01483_1a1b23eaff31a21f3c72b92ce986bffbf9" prot="public" static="no">
+        <type><ref refid="d5/d8e/a04448" kindref="compound">ConfigT</ref>&lt; ashes::Optional &gt;</type>
+        <definition>using castor3d::rq::Config = typedef ConfigT&lt; ashes::Optional &gt;</definition>
+        <argsstring></argsstring>
+        <name>Config</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderQuad.hpp" line="92" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/dc4/a01483_1aee9cc0e6fe7dd816b74c419d4d7b6f49" prot="public" static="no">
+        <type><ref refid="d5/d8e/a04448" kindref="compound">ConfigT</ref>&lt; <ref refid="d2/dc4/a01483_1a573d44a1af90c2fa5cd8d023adb34ae8" kindref="member">RawTypeT</ref> &gt;</type>
+        <definition>using castor3d::rq::ConfigData = typedef ConfigT&lt; RawTypeT &gt;</definition>
+        <argsstring></argsstring>
+        <name>ConfigData</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderQuad.hpp" line="93" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="93" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Passes/RenderQuad.hpp" line="28" column="1"/>
+  </compounddef>
+</doxygen>

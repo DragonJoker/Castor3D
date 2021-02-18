@@ -1,4 +1,5 @@
-<map id="castor3d::TextOverlay" name="castor3d::TextOverlay">
-<area shape="rect" id="node1" title="An overlay with a text." alt="" coords="19,80,167,107"/>
-<area shape="rect" id="node2" href="$d4/da8/a02444.html" title="Holds specific members for an overlay category." alt="" coords="5,5,180,32"/>
+<map id="castor3d::MouseEventHandler" name="castor3d::MouseEventHandler">
+<area shape="rect" id="node1" title=" " alt="" coords="5,80,200,107"/>
+<area shape="rect" id="node3" href="$d7/df4/a04564.html" title=" " alt="" coords="19,155,186,181"/>
+<area shape="rect" id="node2" href="$d9/ded/a02472.html" title=" " alt="" coords="25,5,181,32"/>
 </map>

@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dd/de0/a05711" kind="class" language="C++" prot="public">
+    <compoundname>castor::TextWriter&lt; castor3d::RenderTarget &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::RenderTarget &gt;</basecompoundref>
+    <includes local="no">TextRenderTarget.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/de0/a05711_1a70f7a81997fa42f9b53b01d0a69be21e" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor::TextWriter&lt; castor3d::RenderTarget &gt;::TextWriter</definition>
+        <argsstring>(String const &amp;tabs)</argsstring>
+        <name>TextWriter</name>
+        <param>
+          <type>String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextRenderTarget.hpp" line="18" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/de0/a05711_1ac5f585aeb7582bf7a849269316d27d1d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::TextWriter&lt; castor3d::RenderTarget &gt;::operator()</definition>
+        <argsstring>(castor3d::RenderTarget const &amp;target, TextFile &amp;file) override</argsstring>
+        <name>operator()</name>
+        <param>
+          <type><ref refid="de/d76/a04607" kindref="compound">castor3d::RenderTarget</ref> const &amp;</type>
+          <declname>target</declname>
+        </param>
+        <param>
+          <type>TextFile &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextRenderTarget.hpp" line="19" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="5394">
+        <label>TextWriterT&lt; castor3d::RenderTarget &gt;</label>
+      </node>
+      <node id="5393">
+        <label>castor::TextWriter&lt; castor3d::RenderTarget &gt;</label>
+        <link refid="dd/de0/a05711"/>
+        <childnode refid="5394" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="5396">
+        <label>TextWriterT&lt; castor3d::RenderTarget &gt;</label>
+      </node>
+      <node id="5395">
+        <label>castor::TextWriter&lt; castor3d::RenderTarget &gt;</label>
+        <link refid="dd/de0/a05711"/>
+        <childnode refid="5396" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Text/TextRenderTarget.hpp" line="16" column="1" bodyfile="Text/TextRenderTarget.hpp" bodystart="14" bodyend="21"/>
+    <listofallmembers>
+      <member refid="dd/de0/a05711_1ac5f585aeb7582bf7a849269316d27d1d" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::RenderTarget &gt;</scope><name>operator()</name></member>
+      <member refid="dd/de0/a05711_1a70f7a81997fa42f9b53b01d0a69be21e" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::RenderTarget &gt;</scope><name>TextWriter</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d7/dc4/a02479" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayInitialiser</compoundname>
+    <includes local="no">OverlayCache.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d7/dc4/a02479_1af9e6fed7fa62f586c21bd7abd37d91fa" prot="private" static="no" mutable="no">
+        <type><ref refid="d7/dd1/a01458_1a6573844f0848fb7a4664ac788b817e88" kindref="member">OverlayCategorySet</ref> &amp;</type>
+        <definition>OverlayCategorySet&amp; castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayInitialiser::m_overlays</definition>
+        <argsstring></argsstring>
+        <name>m_overlays</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/OverlayCache.hpp" line="70" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/dc4/a02479_1a09689d3473873ca4f89ad2fcfb1b2425" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; int &gt; &amp;</type>
+        <definition>std::vector&lt; int &gt;&amp; castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayInitialiser::m_overlayCountPerLevel</definition>
+        <argsstring></argsstring>
+        <name>m_overlayCountPerLevel</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/OverlayCache.hpp" line="71" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/dc4/a02479_1ad06cc612c33615b1c59b9a275fa8b0b0" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayInitialiser::OverlayInitialiser</definition>
+        <argsstring>(Cache&lt; Overlay, castor::String &gt; &amp;cache)</argsstring>
+        <name>OverlayInitialiser</name>
+        <param>
+          <type><ref refid="dd/d1b/a02351" kindref="compound">Cache</ref>&lt; <ref refid="da/d33/a04079" kindref="compound">Overlay</ref>, castor::String &gt; &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/OverlayCache.hpp" line="66" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/dc4/a02479_1a557a74cbad6622f39684a7e2344e9fce" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayInitialiser::operator()</definition>
+        <argsstring>(OverlaySPtr element)</argsstring>
+        <name>operator()</name>
+        <param>
+          <type>OverlaySPtr</type>
+          <declname>element</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/OverlayCache.hpp" line="67" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Cache/OverlayCache.hpp" line="65" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="64" bodyend="72"/>
+    <listofallmembers>
+      <member refid="d7/dc4/a02479_1a09689d3473873ca4f89ad2fcfb1b2425" prot="private" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayInitialiser</scope><name>m_overlayCountPerLevel</name></member>
+      <member refid="d7/dc4/a02479_1af9e6fed7fa62f586c21bd7abd37d91fa" prot="private" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayInitialiser</scope><name>m_overlays</name></member>
+      <member refid="d7/dc4/a02479_1a557a74cbad6622f39684a7e2344e9fce" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayInitialiser</scope><name>operator()</name></member>
+      <member refid="d7/dc4/a02479_1ad06cc612c33615b1c59b9a275fa8b0b0" prot="public" virt="non-virtual"><scope>castor3d::Cache&lt; Overlay, castor::String &gt;::OverlayInitialiser</scope><name>OverlayInitialiser</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

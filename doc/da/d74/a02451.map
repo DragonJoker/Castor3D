@@ -1,7 +1,4 @@
-<map id="castor3d::OverlayCategory::TextWriter" name="castor3d::OverlayCategory::TextWriter">
-<area shape="rect" id="node1" title="OverlayCategory loader." alt="" coords="195,71,369,112"/>
-<area shape="rect" id="node3" href="$d4/d2d/a02408.html" title="BorderPanelOverlay loader." alt="" coords="417,5,612,47"/>
-<area shape="rect" id="node4" href="$d4/d0c/a02476.html" title="PanelOverlay loader." alt="" coords="437,71,593,112"/>
-<area shape="rect" id="node5" href="$d6/d57/a02488.html" title="TextOverlay loader." alt="" coords="441,136,589,177"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,71,147,112"/>
+<map id="castor3d::CpuFrameEvent" name="castor3d::CpuFrameEvent">
+<area shape="rect" id="node1" title=" " alt="" coords="9,5,181,32"/>
+<area shape="rect" id="node2" href="$d5/dcb/a02456.html" title=" " alt="" coords="5,80,184,107"/>
 </map>

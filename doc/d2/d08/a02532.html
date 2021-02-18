@@ -5,11 +5,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: castor3d::ParticlePlugin Class Reference</title>
+<title>Castor3D: castor3d::FrameListener Class Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
 <link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+<link href="../../Castor3D.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -17,10 +18,12 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Castor3D
-   &#160;<span id="projectnumber">..</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
+   <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
  </tr>
  </tbody>
@@ -39,133 +42,183 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../d0/d85/a00976.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d2/d08/a02532.html">ParticlePlugin</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/d1e/a01479.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d2/d08/a02532.html">FrameListener</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#friends">Friends</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="../../dd/dd9/a02529.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">castor3d::ParticlePlugin Class Reference</div>  </div>
+<div class="title">castor3d::FrameListener Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p><a class="el" href="../../d6/d8e/a02952.html" title="Holds one particle data.">Particle</a> plug-in class.  
- <a href="../../d2/d08/a02532.html#details">More...</a></p>
-<div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-0-trigger" src="../../closed.png" alt="+"/> Inheritance diagram for castor3d::ParticlePlugin:</div>
-<div id="dynsection-0-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../d9/dc8/a02531.png" border="0" usemap="#castor3d_1_1ParticlePlugin_inherit__map" alt="Inheritance graph"/></div>
-<map name="castor3d_1_1ParticlePlugin_inherit__map" id="castor3d_1_1ParticlePlugin_inherit__map">
-<area shape="rect"  title="Particle plug&#45;in class." alt="" coords="19,155,179,181"/>
-<area shape="rect"  href="../../d6/d24/a02536.html" title="Plugin Base class." alt="" coords="41,80,157,107"/>
-<area shape="rect"  title=" " alt="" coords="5,5,192,32"/>
+<div class="dynheader">
+Inheritance diagram for castor3d::FrameListener:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d9/dc8/a02531.png" border="0" usemap="#castor3d_1_1FrameListener_inherit__map" alt="Inheritance graph"/></div>
+<map name="castor3d_1_1FrameListener_inherit__map" id="castor3d_1_1FrameListener_inherit__map">
+<area shape="rect"  title=" " alt="" coords="5,80,168,107"/>
+<area shape="rect"  title=" " alt="" coords="55,5,118,32"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
-<div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-1-trigger" src="../../closed.png" alt="+"/> Collaboration diagram for castor3d::ParticlePlugin:</div>
-<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../d3/d41/a02530.png" border="0" usemap="#castor3d_1_1ParticlePlugin_coll__map" alt="Collaboration graph"/></div>
-<map name="castor3d_1_1ParticlePlugin_coll__map" id="castor3d_1_1ParticlePlugin_coll__map">
-<area shape="rect"  title="Particle plug&#45;in class." alt="" coords="19,155,179,181"/>
-<area shape="rect"  href="../../d6/d24/a02536.html" title="Plugin Base class." alt="" coords="41,80,157,107"/>
-<area shape="rect"  title=" " alt="" coords="5,5,192,32"/>
+<div class="dynheader">
+Collaboration diagram for castor3d::FrameListener:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d3/d41/a02530.png" border="0" usemap="#castor3d_1_1FrameListener_coll__map" alt="Collaboration graph"/></div>
+<map name="castor3d_1_1FrameListener_coll__map" id="castor3d_1_1FrameListener_coll__map">
+<area shape="rect"  title=" " alt="" coords="788,71,951,97"/>
+<area shape="rect"  title=" " alt="" coords="535,5,597,32"/>
+<area shape="rect"  title=" " alt="" coords="475,56,657,112"/>
+<area shape="rect"  title="STL class." alt="" coords="149,116,257,143"/>
+<area shape="rect"  title=" " alt="" coords="475,136,657,192"/>
+<area shape="rect"  title=" " alt="" coords="5,116,44,143"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a59557c451a98a6f744074f4e712ab2c6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d08/a02532.html#a59557c451a98a6f744074f4e712ab2c6">ParticlePlugin</a> (castor::DynamicLibrarySPtr p_library, <a class="el" href="../../dc/d31/a01892.html">Engine</a> *engine)</td></tr>
-<tr class="memdesc:a59557c451a98a6f744074f4e712ab2c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#a59557c451a98a6f744074f4e712ab2c6">More...</a><br /></td></tr>
-<tr class="separator:a59557c451a98a6f744074f4e712ab2c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a287c2707eb76c27a903b0f6aec10ab24"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d08/a02532.html#a287c2707eb76c27a903b0f6aec10ab24">~ParticlePlugin</a> ()</td></tr>
-<tr class="memdesc:a287c2707eb76c27a903b0f6aec10ab24"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="#a287c2707eb76c27a903b0f6aec10ab24">More...</a><br /></td></tr>
-<tr class="separator:a287c2707eb76c27a903b0f6aec10ab24"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_a02536"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_a02536')"><img src="../../closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="../../d6/d24/a02536.html">castor3d::Plugin</a></td></tr>
-<tr class="memitem:af7f881d3d5d32c7044c1b93164754c64 inherit pub_methods_a02536"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d24/a02536.html#af7f881d3d5d32c7044c1b93164754c64">~Plugin</a> ()=0</td></tr>
-<tr class="memdesc:af7f881d3d5d32c7044c1b93164754c64 inherit pub_methods_a02536"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="../../d6/d24/a02536.html#af7f881d3d5d32c7044c1b93164754c64">More...</a><br /></td></tr>
-<tr class="separator:af7f881d3d5d32c7044c1b93164754c64 inherit pub_methods_a02536"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a55fe8d26bf45601a3c1011def996846d inherit pub_methods_a02536"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d24/a02536.html#a55fe8d26bf45601a3c1011def996846d">getRequiredVersion</a> (<a class="el" href="../../db/d3b/a02388.html">Version</a> &amp;p_version) const</td></tr>
-<tr class="memdesc:a55fe8d26bf45601a3c1011def996846d inherit pub_methods_a02536"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the required version for the plug-in to work correctly.  <a href="../../d6/d24/a02536.html#a55fe8d26bf45601a3c1011def996846d">More...</a><br /></td></tr>
-<tr class="separator:a55fe8d26bf45601a3c1011def996846d inherit pub_methods_a02536"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a76345cfa813957198ab5a735b3bf2c84 inherit pub_methods_a02536"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor::String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d24/a02536.html#a76345cfa813957198ab5a735b3bf2c84">getName</a> () const</td></tr>
-<tr class="memdesc:a76345cfa813957198ab5a735b3bf2c84 inherit pub_methods_a02536"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the plug-in name.  <a href="../../d6/d24/a02536.html#a76345cfa813957198ab5a735b3bf2c84">More...</a><br /></td></tr>
-<tr class="separator:a76345cfa813957198ab5a735b3bf2c84 inherit pub_methods_a02536"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adfce87274549c3458e705ec6f49f2466 inherit pub_methods_a02536"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d0/d85/a00976.html#aecf8304db7dd49c874ec216f139e5f67">PluginType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d24/a02536.html#adfce87274549c3458e705ec6f49f2466">getType</a> () const</td></tr>
-<tr class="memdesc:adfce87274549c3458e705ec6f49f2466 inherit pub_methods_a02536"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the plug-in type.  <a href="../../d6/d24/a02536.html#adfce87274549c3458e705ec6f49f2466">More...</a><br /></td></tr>
-<tr class="separator:adfce87274549c3458e705ec6f49f2466 inherit pub_methods_a02536"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64b32864fdc87929f37bf48346c227e7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d08/a02532.html#a64b32864fdc87929f37bf48346c227e7">FrameListener</a> (castor::String const &amp;name)</td></tr>
+<tr class="memdesc:a64b32864fdc87929f37bf48346c227e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#a64b32864fdc87929f37bf48346c227e7">More...</a><br /></td></tr>
+<tr class="separator:a64b32864fdc87929f37bf48346c227e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4447d77062c5b6fc46d83aca47406f74"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d08/a02532.html#a4447d77062c5b6fc46d83aca47406f74">~FrameListener</a> ()</td></tr>
+<tr class="memdesc:a4447d77062c5b6fc46d83aca47406f74"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="#a4447d77062c5b6fc46d83aca47406f74">More...</a><br /></td></tr>
+<tr class="separator:a4447d77062c5b6fc46d83aca47406f74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a658666c30883ca63d72257bf78aea02b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d08/a02532.html#a658666c30883ca63d72257bf78aea02b">flush</a> ()</td></tr>
+<tr class="memdesc:a658666c30883ca63d72257bf78aea02b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Empties the event lists.  <a href="#a658666c30883ca63d72257bf78aea02b">More...</a><br /></td></tr>
+<tr class="separator:a658666c30883ca63d72257bf78aea02b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c62573911a7ed3c2149fd37a7de9df0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d08/a02532.html#a2c62573911a7ed3c2149fd37a7de9df0">postEvent</a> (CpuFrameEventUPtr event)</td></tr>
+<tr class="memdesc:a2c62573911a7ed3c2149fd37a7de9df0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Puts an event in the corresponding array.  <a href="#a2c62573911a7ed3c2149fd37a7de9df0">More...</a><br /></td></tr>
+<tr class="separator:a2c62573911a7ed3c2149fd37a7de9df0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab787d573e00427a919f198f7ddab4be2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d08/a02532.html#ab787d573e00427a919f198f7ddab4be2">postEvent</a> (GpuFrameEventUPtr event)</td></tr>
+<tr class="memdesc:ab787d573e00427a919f198f7ddab4be2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Puts an event in the corresponding array.  <a href="#ab787d573e00427a919f198f7ddab4be2">More...</a><br /></td></tr>
+<tr class="separator:ab787d573e00427a919f198f7ddab4be2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acbec6c2f66576af08570d08a57c4b304"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d08/a02532.html#acbec6c2f66576af08570d08a57c4b304">fireEvents</a> (<a class="el" href="../../da/d1e/a01479.html#ad442bf3c1ba8a06ac36f710ba30b2870">EventType</a> type, <a class="el" href="../../d1/def/a04512.html">RenderDevice</a> const &amp;device)</td></tr>
+<tr class="memdesc:acbec6c2f66576af08570d08a57c4b304"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies all events of a given type, then discards them.  <a href="#acbec6c2f66576af08570d08a57c4b304">More...</a><br /></td></tr>
+<tr class="separator:acbec6c2f66576af08570d08a57c4b304"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92434ace05937d07300e2180cb7e997d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d08/a02532.html#a92434ace05937d07300e2180cb7e997d">fireEvents</a> (<a class="el" href="../../da/d1e/a01479.html#ad442bf3c1ba8a06ac36f710ba30b2870">EventType</a> type)</td></tr>
+<tr class="memdesc:a92434ace05937d07300e2180cb7e997d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies all events of a given type, then discards them.  <a href="#a92434ace05937d07300e2180cb7e997d">More...</a><br /></td></tr>
+<tr class="separator:a92434ace05937d07300e2180cb7e997d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a54c785e4fc7043a3045f85e866c09f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d08/a02532.html#a2a54c785e4fc7043a3045f85e866c09f">flushEvents</a> (<a class="el" href="../../da/d1e/a01479.html#ad442bf3c1ba8a06ac36f710ba30b2870">EventType</a> type)</td></tr>
+<tr class="memdesc:a2a54c785e4fc7043a3045f85e866c09f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Discards all events of a given type.  <a href="#a2a54c785e4fc7043a3045f85e866c09f">More...</a><br /></td></tr>
+<tr class="separator:a2a54c785e4fc7043a3045f85e866c09f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:a6a6c1cc25d50ed6f67a2dc0fc546c5a3"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d08/a02532.html#a6a6c1cc25d50ed6f67a2dc0fc546c5a3">Plugin</a></td></tr>
-<tr class="separator:a6a6c1cc25d50ed6f67a2dc0fc546c5a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a89005d31cf015a87d21e0742d742bb7b"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d08/a02532.html#a89005d31cf015a87d21e0742d742bb7b">doFlush</a> ()</td></tr>
+<tr class="memdesc:a89005d31cf015a87d21e0742d742bb7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Empties the event lists.  <a href="#a89005d31cf015a87d21e0742d742bb7b">More...</a><br /></td></tr>
+<tr class="separator:a89005d31cf015a87d21e0742d742bb7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pub_types_a02536"><td colspan="2" onclick="javascript:toggleInherit('pub_types_a02536')"><img src="../../closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="../../d6/d24/a02536.html">castor3d::Plugin</a></td></tr>
-<tr class="memitem:a54268afa0fd4a75c485f0ba59f108e65 inherit pub_types_a02536"><td class="memItemLeft" align="right" valign="top">typedef OnLoadFunction *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d24/a02536.html#a54268afa0fd4a75c485f0ba59f108e65">POnLoadFunction</a></td></tr>
-<tr class="separator:a54268afa0fd4a75c485f0ba59f108e65 inherit pub_types_a02536"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a186ebd8d8fe1eb8b52b7909347ce0fb4 inherit pub_types_a02536"><td class="memItemLeft" align="right" valign="top">typedef OnUnloadFunction *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d24/a02536.html#a186ebd8d8fe1eb8b52b7909347ce0fb4">POnUnloadFunction</a></td></tr>
-<tr class="separator:a186ebd8d8fe1eb8b52b7909347ce0fb4 inherit pub_types_a02536"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa7caed7d5f2bd1d34409227a1e3b09bf inherit pub_types_a02536"><td class="memItemLeft" align="right" valign="top">typedef GetTypeFunction *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d24/a02536.html#aa7caed7d5f2bd1d34409227a1e3b09bf">PGetTypeFunction</a></td></tr>
-<tr class="separator:aa7caed7d5f2bd1d34409227a1e3b09bf inherit pub_types_a02536"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a571d2dbc7a601aca467b1b5d8a62d997 inherit pub_types_a02536"><td class="memItemLeft" align="right" valign="top">typedef GetRequiredVersionFunction *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d24/a02536.html#a571d2dbc7a601aca467b1b5d8a62d997">PGetRequiredVersionFunction</a></td></tr>
-<tr class="separator:a571d2dbc7a601aca467b1b5d8a62d997 inherit pub_types_a02536"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af3f82c3bbc1d49880fda39cdc7ea2015 inherit pub_types_a02536"><td class="memItemLeft" align="right" valign="top">typedef GetNameFunction *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d24/a02536.html#af3f82c3bbc1d49880fda39cdc7ea2015">PGetNameFunction</a></td></tr>
-<tr class="separator:af3f82c3bbc1d49880fda39cdc7ea2015 inherit pub_types_a02536"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_methods_a02536"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_a02536')"><img src="../../closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="../../d6/d24/a02536.html">castor3d::Plugin</a></td></tr>
-<tr class="memitem:ad0caff98c4f58dc6d0faf872ea8ec4ea inherit pro_methods_a02536"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d24/a02536.html#ad0caff98c4f58dc6d0faf872ea8ec4ea">Plugin</a> (<a class="el" href="../../d0/d85/a00976.html#aecf8304db7dd49c874ec216f139e5f67">PluginType</a> p_type, castor::DynamicLibrarySPtr p_library, <a class="el" href="../../dc/d31/a01892.html">Engine</a> &amp;engine)</td></tr>
-<tr class="memdesc:ad0caff98c4f58dc6d0faf872ea8ec4ea inherit pro_methods_a02536"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../d6/d24/a02536.html#ad0caff98c4f58dc6d0faf872ea8ec4ea">More...</a><br /></td></tr>
-<tr class="separator:ad0caff98c4f58dc6d0faf872ea8ec4ea inherit pro_methods_a02536"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6eee27fad0b4dc406af8dac993816e1e inherit pro_methods_a02536"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d24/a02536.html#a6eee27fad0b4dc406af8dac993816e1e">load</a> ()</td></tr>
-<tr class="memdesc:a6eee27fad0b4dc406af8dac993816e1e inherit pro_methods_a02536"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls load function for the plug-in.  <a href="../../d6/d24/a02536.html#a6eee27fad0b4dc406af8dac993816e1e">More...</a><br /></td></tr>
-<tr class="separator:a6eee27fad0b4dc406af8dac993816e1e inherit pro_methods_a02536"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1062d08432032ec7d502e7941b4e0df4 inherit pro_methods_a02536"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d24/a02536.html#a1062d08432032ec7d502e7941b4e0df4">unload</a> ()</td></tr>
-<tr class="memdesc:a1062d08432032ec7d502e7941b4e0df4 inherit pro_methods_a02536"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls unload function for the plug-in.  <a href="../../d6/d24/a02536.html#a1062d08432032ec7d502e7941b4e0df4">More...</a><br /></td></tr>
-<tr class="separator:a1062d08432032ec7d502e7941b4e0df4 inherit pro_methods_a02536"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_attribs_a02536"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_a02536')"><img src="../../closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="../../d6/d24/a02536.html">castor3d::Plugin</a></td></tr>
-<tr class="memitem:a3bbb683c98da8be6cb7eadd5ba677f18 inherit pro_attribs_a02536"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d6/d24/a02536.html#a571d2dbc7a601aca467b1b5d8a62d997">PGetRequiredVersionFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d24/a02536.html#a3bbb683c98da8be6cb7eadd5ba677f18">m_pfnGetRequiredVersion</a></td></tr>
-<tr class="separator:a3bbb683c98da8be6cb7eadd5ba677f18 inherit pro_attribs_a02536"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5b06730be035851689f1f52a9d37a839 inherit pro_attribs_a02536"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d6/d24/a02536.html#af3f82c3bbc1d49880fda39cdc7ea2015">PGetNameFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d24/a02536.html#a5b06730be035851689f1f52a9d37a839">m_pfnGetName</a></td></tr>
-<tr class="separator:a5b06730be035851689f1f52a9d37a839 inherit pro_attribs_a02536"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae4b1c74ae527aef8847250d27eb3acf0 inherit pro_attribs_a02536"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d6/d24/a02536.html#a54268afa0fd4a75c485f0ba59f108e65">POnLoadFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d24/a02536.html#ae4b1c74ae527aef8847250d27eb3acf0">m_pfnOnLoad</a></td></tr>
-<tr class="separator:ae4b1c74ae527aef8847250d27eb3acf0 inherit pro_attribs_a02536"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d94afb97a6d885ed7d2885dafeda0dc inherit pro_attribs_a02536"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d6/d24/a02536.html#a186ebd8d8fe1eb8b52b7909347ce0fb4">POnUnloadFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d24/a02536.html#a5d94afb97a6d885ed7d2885dafeda0dc">m_pfnOnUnload</a></td></tr>
-<tr class="separator:a5d94afb97a6d885ed7d2885dafeda0dc inherit pro_attribs_a02536"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad988a5d361f28b80ba19dd2caac722e1 inherit pro_attribs_a02536"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d0/d85/a00976.html#aecf8304db7dd49c874ec216f139e5f67">PluginType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d24/a02536.html#ad988a5d361f28b80ba19dd2caac722e1">m_type</a></td></tr>
-<tr class="separator:ad988a5d361f28b80ba19dd2caac722e1 inherit pro_attribs_a02536"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac89ef3325c33aebd3c45ff41a3912d25 inherit pro_attribs_a02536"><td class="memItemLeft" align="right" valign="top">castor::DynamicLibraryWPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d24/a02536.html#ac89ef3325c33aebd3c45ff41a3912d25">m_library</a></td></tr>
-<tr class="separator:ac89ef3325c33aebd3c45ff41a3912d25 inherit pro_attribs_a02536"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a9af77d499ee6abb82b349492bc87f759"><td class="memItemLeft" align="right" valign="top">std::array&lt; CpuFrameEventPtrArray, size_t(<a class="el" href="../../da/d1e/a01479.html#ad442bf3c1ba8a06ac36f710ba30b2870ae558bb69fadec037d9eae46601a4df8e">EventType::eCount</a>) &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d08/a02532.html#a9af77d499ee6abb82b349492bc87f759">m_cpuEvents</a></td></tr>
+<tr class="separator:a9af77d499ee6abb82b349492bc87f759"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72f1425020cf11f3bbb31b88926ddd6c"><td class="memItemLeft" align="right" valign="top">std::array&lt; GpuFrameEventPtrArray, size_t(<a class="el" href="../../da/d1e/a01479.html#ad442bf3c1ba8a06ac36f710ba30b2870ae558bb69fadec037d9eae46601a4df8e">EventType::eCount</a>) &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d08/a02532.html#a72f1425020cf11f3bbb31b88926ddd6c">m_gpuEvents</a></td></tr>
+<tr class="separator:a72f1425020cf11f3bbb31b88926ddd6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93e737a2b96c7055ff61d5693760645e"><td class="memItemLeft" align="right" valign="top">std::recursive_mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d08/a02532.html#a93e737a2b96c7055ff61d5693760645e">m_mutex</a></td></tr>
+<tr class="separator:a93e737a2b96c7055ff61d5693760645e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p><a class="el" href="../../d6/d8e/a02952.html" title="Holds one particle data.">Particle</a> plug-in class. </p>
-<dl class="section author"><dt>Author</dt><dd>Sylvain DOREMUS </dd></dl>
-<dl class="section version"><dt>Version</dt><dd>0.7.0.0 </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>19/08/2012 </dd></dl>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a59557c451a98a6f744074f4e712ab2c6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a59557c451a98a6f744074f4e712ab2c6">&#9670;&nbsp;</a></span>ParticlePlugin()</h2>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a64b32864fdc87929f37bf48346c227e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a64b32864fdc87929f37bf48346c227e7">&#9670;&nbsp;</a></span>FrameListener()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::FrameListener::FrameListener </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>The listener's name. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a4447d77062c5b6fc46d83aca47406f74"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4447d77062c5b6fc46d83aca47406f74">&#9670;&nbsp;</a></span>~FrameListener()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::ParticlePlugin::ParticlePlugin </td>
+          <td class="memname"><a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::FrameListener::~FrameListener </td>
           <td>(</td>
-          <td class="paramtype">castor::DynamicLibrarySPtr&#160;</td>
-          <td class="paramname"><em>p_library</em>, </td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destructor. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a89005d31cf015a87d21e0742d742bb7b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89005d31cf015a87d21e0742d742bb7b">&#9670;&nbsp;</a></span>doFlush()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::FrameListener::doFlush </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Empties the event lists. </p>
+
+</div>
+</div>
+<a id="acbec6c2f66576af08570d08a57c4b304"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acbec6c2f66576af08570d08a57c4b304">&#9670;&nbsp;</a></span>fireEvents() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> bool castor3d::FrameListener::fireEvents </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../da/d1e/a01479.html#ad442bf3c1ba8a06ac36f710ba30b2870">EventType</a>&#160;</td>
+          <td class="paramname"><em>type</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="../../dc/d31/a01892.html">Engine</a> *&#160;</td>
-          <td class="paramname"><em>engine</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="../../d1/def/a04512.html">RenderDevice</a> const &amp;&#160;</td>
+          <td class="paramname"><em>device</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -175,47 +228,145 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Constructor. </p>
+<p>Applies all events of a given type, then discards them. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_library</td><td>The shared library holding the plug-in </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">engine</td><td>The engine </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">type</td><td>The type of events to fire. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">device</td><td>The GPU device. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> si tous les évènements se sont exécutés sans erreur. </dd></dl>
+
+</div>
+</div>
+<a id="a92434ace05937d07300e2180cb7e997d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a92434ace05937d07300e2180cb7e997d">&#9670;&nbsp;</a></span>fireEvents() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> bool castor3d::FrameListener::fireEvents </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../da/d1e/a01479.html#ad442bf3c1ba8a06ac36f710ba30b2870">EventType</a>&#160;</td>
+          <td class="paramname"><em>type</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Applies all events of a given type, then discards them. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">type</td><td>The type of events to fire. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> si tous les évènements se sont exécutés sans erreur. </dd></dl>
+
+</div>
+</div>
+<a id="a658666c30883ca63d72257bf78aea02b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a658666c30883ca63d72257bf78aea02b">&#9670;&nbsp;</a></span>flush()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::FrameListener::flush </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Empties the event lists. </p>
+
+</div>
+</div>
+<a id="a2a54c785e4fc7043a3045f85e866c09f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a54c785e4fc7043a3045f85e866c09f">&#9670;&nbsp;</a></span>flushEvents()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::FrameListener::flushEvents </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../da/d1e/a01479.html#ad442bf3c1ba8a06ac36f710ba30b2870">EventType</a>&#160;</td>
+          <td class="paramname"><em>type</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Discards all events of a given type. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">type</td><td>The type of events to fire. </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="a287c2707eb76c27a903b0f6aec10ab24"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a287c2707eb76c27a903b0f6aec10ab24">&#9670;&nbsp;</a></span>~ParticlePlugin()</h2>
+<a id="a2c62573911a7ed3c2149fd37a7de9df0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c62573911a7ed3c2149fd37a7de9df0">&#9670;&nbsp;</a></span>postEvent() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::ParticlePlugin::~ParticlePlugin </td>
+          <td class="memname"><a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::FrameListener::postEvent </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">CpuFrameEventUPtr&#160;</td>
+          <td class="paramname"><em>event</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p>Destructor. </p>
+<p>Puts an event in the corresponding array. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">event</td><td>The event to put. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
-<h2 class="groupheader">Friends And Related Function Documentation</h2>
-<a id="a6a6c1cc25d50ed6f67a2dc0fc546c5a3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6a6c1cc25d50ed6f67a2dc0fc546c5a3">&#9670;&nbsp;</a></span>Plugin</h2>
+<a id="ab787d573e00427a919f198f7ddab4be2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab787d573e00427a919f198f7ddab4be2">&#9670;&nbsp;</a></span>postEvent() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::FrameListener::postEvent </td>
+          <td>(</td>
+          <td class="paramtype">GpuFrameEventUPtr&#160;</td>
+          <td class="paramname"><em>event</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Puts an event in the corresponding array. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">event</td><td>The event to put. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a9af77d499ee6abb82b349492bc87f759"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9af77d499ee6abb82b349492bc87f759">&#9670;&nbsp;</a></span>m_cpuEvents</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -224,25 +375,72 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">friend class <a class="el" href="../../d6/d24/a02536.html">Plugin</a></td>
+          <td class="memname">std::array&lt; CpuFrameEventPtrArray, size_t( <a class="el" href="../../da/d1e/a01479.html#ad442bf3c1ba8a06ac36f710ba30b2870ae558bb69fadec037d9eae46601a4df8e">EventType::eCount</a> ) &gt; castor3d::FrameListener::m_cpuEvents</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>The CPU events arrays. </p>
+
+</div>
+</div>
+<a id="a72f1425020cf11f3bbb31b88926ddd6c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a72f1425020cf11f3bbb31b88926ddd6c">&#9670;&nbsp;</a></span>m_gpuEvents</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::array&lt; GpuFrameEventPtrArray, size_t( <a class="el" href="../../da/d1e/a01479.html#ad442bf3c1ba8a06ac36f710ba30b2870ae558bb69fadec037d9eae46601a4df8e">EventType::eCount</a> ) &gt; castor3d::FrameListener::m_gpuEvents</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The GPU events arrays. </p>
+
+</div>
+</div>
+<a id="a93e737a2b96c7055ff61d5693760645e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a93e737a2b96c7055ff61d5693760645e">&#9670;&nbsp;</a></span>m_mutex</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::recursive_mutex castor3d::FrameListener::m_mutex</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Mutex to make this class thread safe. </p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/Plugin/<a class="el" href="../../d5/d5f/a00461.html">ParticlePlugin.hpp</a></li>
+<li>Event/Frame/<a class="el" href="../../de/d25/a00290.html">FrameListener.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 13:38:36 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Feb 18 2021 01:09:12 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

@@ -1,0 +1,262 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="da/d34/a04592" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::GpuUpdater</compoundname>
+    <includes local="no">RenderModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="da/d34/a04592_1a3263fd874b7e8c82547bf499cf887924" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::GpuUpdater::device</definition>
+        <argsstring></argsstring>
+        <name>device</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="526" column="1" bodyfile="Render/RenderModule.hpp" bodystart="526" bodyend="-1"/>
+        <referencedby refid="da/d34/a04592_1a018abe24cb226596addf68a1a2206360" compoundref="d5/d72/a00803" startline="519" endline="524">GpuUpdater</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="da/d34/a04592_1a7f87aea5fd40839396d6078cff429152" prot="public" static="no" mutable="no">
+        <type><ref refid="d5/d91/a04516" kindref="compound">RenderInfo</ref> &amp;</type>
+        <definition>RenderInfo&amp; castor3d::GpuUpdater::info</definition>
+        <argsstring></argsstring>
+        <name>info</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="527" column="1" bodyfile="Render/RenderModule.hpp" bodystart="527" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d34/a04592_1a8bbfece26cc41f63c91ba3025c515541" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::GpuUpdater::jitter</definition>
+        <argsstring></argsstring>
+        <name>jitter</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="528" column="1" bodyfile="Render/RenderModule.hpp" bodystart="528" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d34/a04592_1a07be9cdb18f9081c09db53cca14a763e" prot="public" static="no" mutable="no">
+        <type>SceneSPtr</type>
+        <definition>SceneSPtr castor3d::GpuUpdater::scene</definition>
+        <argsstring></argsstring>
+        <name>scene</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="529" column="1" bodyfile="Render/RenderModule.hpp" bodystart="529" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d34/a04592_1a904e259c42f1ef7afa15a8ff7bef0934" prot="public" static="no" mutable="no">
+        <type>CameraSPtr</type>
+        <definition>CameraSPtr castor3d::GpuUpdater::camera</definition>
+        <argsstring></argsstring>
+        <name>camera</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="530" column="1" bodyfile="Render/RenderModule.hpp" bodystart="530" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d34/a04592_1aef31b55675b55ba74925d7894bf112e2" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::GpuUpdater::index</definition>
+        <argsstring></argsstring>
+        <name>index</name>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="531" column="1" bodyfile="Render/RenderModule.hpp" bodystart="531" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d34/a04592_1a566ebc4e401f4e1f9df65cf11e5b4481" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::GpuUpdater::voxelConeTracing</definition>
+        <argsstring></argsstring>
+        <name>voxelConeTracing</name>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="532" column="1" bodyfile="Render/RenderModule.hpp" bodystart="532" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d34/a04592_1a5d29b935c0fd7d2a69a96c78015ac74b" prot="public" static="no" mutable="no">
+        <type><ref refid="d7/dc4/a04612" kindref="compound">RenderPassTimer</ref> *</type>
+        <definition>RenderPassTimer* castor3d::GpuUpdater::timer</definition>
+        <argsstring></argsstring>
+        <name>timer</name>
+        <initializer>{ nullptr }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="533" column="1" bodyfile="Render/RenderModule.hpp" bodystart="533" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d34/a04592_1ac89c3558c1199ab9deab6e88d94cbb98" prot="public" static="no" mutable="no">
+        <type>castor::Milliseconds</type>
+        <definition>castor::Milliseconds castor3d::GpuUpdater::time</definition>
+        <argsstring></argsstring>
+        <name>time</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="534" column="1" bodyfile="Render/RenderModule.hpp" bodystart="534" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d34/a04592_1a448328fda1100f2da2efe42729f10a20" prot="public" static="no" mutable="no">
+        <type>castor::Milliseconds</type>
+        <definition>castor::Milliseconds castor3d::GpuUpdater::total</definition>
+        <argsstring></argsstring>
+        <name>total</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="535" column="1" bodyfile="Render/RenderModule.hpp" bodystart="535" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/d34/a04592_1a018abe24cb226596addf68a1a2206360" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::GpuUpdater::GpuUpdater</definition>
+        <argsstring>(RenderDevice const &amp;device, RenderInfo &amp;info)</argsstring>
+        <name>GpuUpdater</name>
+        <param>
+          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d91/a04516" kindref="compound">RenderInfo</ref> &amp;</type>
+          <declname>info</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="519" column="1" bodyfile="Render/RenderModule.hpp" bodystart="519" bodyend="524"/>
+        <references refid="da/d34/a04592_1a3263fd874b7e8c82547bf499cf887924" compoundref="d5/d72/a00803" startline="526">device</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1381">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d9/d38/a04624"/>
+        <childnode refid="1382" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1380">
+        <label>T</label>
+      </node>
+      <node id="1384">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="1380" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="1379">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="1380" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="1383">
+        <label>std::vector&lt; ashes::CommandPoolPtr &gt;</label>
+        <childnode refid="1384" relation="template-instance">
+          <edgelabel>&lt; ashes::CommandPoolPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1378">
+        <label>std::array&lt; uint32_t, 4u &gt;</label>
+        <childnode refid="1379" relation="template-instance">
+          <edgelabel>&lt; uint32_t, 4u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1376">
+        <label>Named</label>
+      </node>
+      <node id="1375">
+        <label>castor3d::RenderPassTimer</label>
+        <link refid="d7/dc4/a04612"/>
+        <childnode refid="1376" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1382">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="1385">
+        <label>castor3d::RenderInfo</label>
+        <link refid="d5/d91/a04516"/>
+      </node>
+      <node id="1377">
+        <label>castor3d::RenderDevice</label>
+        <link refid="d1/def/a04512"/>
+        <childnode refid="1378" relation="usage">
+          <edgelabel>queueFamiliesIndex</edgelabel>
+        </childnode>
+        <childnode refid="1381" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="1383" relation="usage">
+          <edgelabel>commandPools</edgelabel>
+        </childnode>
+      </node>
+      <node id="1374">
+        <label>castor3d::GpuUpdater</label>
+        <link refid="da/d34/a04592"/>
+        <childnode refid="1375" relation="usage">
+          <edgelabel>timer</edgelabel>
+        </childnode>
+        <childnode refid="1377" relation="usage">
+          <edgelabel>device</edgelabel>
+        </childnode>
+        <childnode refid="1385" relation="usage">
+          <edgelabel>info</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/RenderModule.hpp" line="518" column="1" bodyfile="Render/RenderModule.hpp" bodystart="517" bodyend="536"/>
+    <listofallmembers>
+      <member refid="da/d34/a04592_1a904e259c42f1ef7afa15a8ff7bef0934" prot="public" virt="non-virtual"><scope>castor3d::GpuUpdater</scope><name>camera</name></member>
+      <member refid="da/d34/a04592_1a3263fd874b7e8c82547bf499cf887924" prot="public" virt="non-virtual"><scope>castor3d::GpuUpdater</scope><name>device</name></member>
+      <member refid="da/d34/a04592_1a018abe24cb226596addf68a1a2206360" prot="public" virt="non-virtual"><scope>castor3d::GpuUpdater</scope><name>GpuUpdater</name></member>
+      <member refid="da/d34/a04592_1aef31b55675b55ba74925d7894bf112e2" prot="public" virt="non-virtual"><scope>castor3d::GpuUpdater</scope><name>index</name></member>
+      <member refid="da/d34/a04592_1a7f87aea5fd40839396d6078cff429152" prot="public" virt="non-virtual"><scope>castor3d::GpuUpdater</scope><name>info</name></member>
+      <member refid="da/d34/a04592_1a8bbfece26cc41f63c91ba3025c515541" prot="public" virt="non-virtual"><scope>castor3d::GpuUpdater</scope><name>jitter</name></member>
+      <member refid="da/d34/a04592_1a07be9cdb18f9081c09db53cca14a763e" prot="public" virt="non-virtual"><scope>castor3d::GpuUpdater</scope><name>scene</name></member>
+      <member refid="da/d34/a04592_1ac89c3558c1199ab9deab6e88d94cbb98" prot="public" virt="non-virtual"><scope>castor3d::GpuUpdater</scope><name>time</name></member>
+      <member refid="da/d34/a04592_1a5d29b935c0fd7d2a69a96c78015ac74b" prot="public" virt="non-virtual"><scope>castor3d::GpuUpdater</scope><name>timer</name></member>
+      <member refid="da/d34/a04592_1a448328fda1100f2da2efe42729f10a20" prot="public" virt="non-virtual"><scope>castor3d::GpuUpdater</scope><name>total</name></member>
+      <member refid="da/d34/a04592_1a566ebc4e401f4e1f9df65cf11e5b4481" prot="public" virt="non-virtual"><scope>castor3d::GpuUpdater</scope><name>voxelConeTracing</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

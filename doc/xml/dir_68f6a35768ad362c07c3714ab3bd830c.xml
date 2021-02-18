@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_68f6a35768ad362c07c3714ab3bd830c" kind="dir">
+    <compoundname>Render/Technique</compoundname>
+    <innerdir refid="dir_9fd62afc7b0b87e778317906f5d6c697">Render/Technique/Opaque</innerdir>
+    <innerdir refid="dir_7683f144721a8821b32ef3d9f9b2af87">Render/Technique/Transparent</innerdir>
+    <innerfile refid="df/d4c/a00851">ForwardRenderTechniquePass.hpp</innerfile>
+    <innerfile refid="d8/d19/a00935">RenderTechnique.hpp</innerfile>
+    <innerfile refid="d5/d54/a00938">RenderTechniquePass.hpp</innerfile>
+    <innerfile refid="d6/dad/a00941">RenderTechniqueVisitor.hpp</innerfile>
+    <innerfile refid="d9/dce/a00944">TechniqueModule.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Technique/"/>
+  </compounddef>
+</doxygen>

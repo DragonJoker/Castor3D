@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_38dd859efb7b10fad7da669df6759543" kind="dir">
+    <compoundname>Render/PBR</compoundname>
+    <innerfile refid="d6/dc0/a00734">BrdfPrefilter.hpp</innerfile>
+    <innerfile refid="dd/db2/a00737">EnvironmentPrefilter.hpp</innerfile>
+    <innerfile refid="dc/dce/a00740">IblTextures.hpp</innerfile>
+    <innerfile refid="d0/d0a/a00743">PbrModule.hpp</innerfile>
+    <innerfile refid="d4/dfa/a00746">RadianceComputer.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/PBR/"/>
+  </compounddef>
+</doxygen>

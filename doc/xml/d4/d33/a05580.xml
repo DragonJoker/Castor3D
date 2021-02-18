@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d4/d33/a05580" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ModelInstancesUboConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d4/d33/a05580_1ab2942d979cc4e1c92fa7eb293c2a9b36" prot="public" static="no" mutable="no">
+        <type>std::array&lt; castor::Point4ui, 7u &gt;</type>
+        <definition>std::array&lt; castor::Point4ui, 7u &gt; castor3d::ModelInstancesUboConfiguration::instances</definition>
+        <argsstring></argsstring>
+        <name>instances</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="199" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="199" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d33/a05580_1a10097c33313851ad099ed781a13e73b4" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ModelInstancesUboConfiguration::instanceCount</definition>
+        <argsstring></argsstring>
+        <name>instanceCount</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="200" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="200" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Model matrices data. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2078">
+        <label>T</label>
+      </node>
+      <node id="2076">
+        <label>std::array&lt; castor::Point4ui, 7u &gt;</label>
+        <childnode refid="2077" relation="template-instance">
+          <edgelabel>&lt; castor::Point4ui, 7u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2077">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="2078" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="2075">
+        <label>castor3d::ModelInstancesUboConfiguration</label>
+        <link refid="d4/d33/a05580"/>
+        <childnode refid="2076" relation="usage">
+          <edgelabel>instances</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Ubos/UbosModule.hpp" line="198" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="197" bodyend="201"/>
+    <listofallmembers>
+      <member refid="d4/d33/a05580_1a10097c33313851ad099ed781a13e73b4" prot="public" virt="non-virtual"><scope>castor3d::ModelInstancesUboConfiguration</scope><name>instanceCount</name></member>
+      <member refid="d4/d33/a05580_1ab2942d979cc4e1c92fa7eb293c2a9b36" prot="public" virt="non-virtual"><scope>castor3d::ModelInstancesUboConfiguration</scope><name>instances</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

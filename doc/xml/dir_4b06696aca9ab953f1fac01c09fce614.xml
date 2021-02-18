@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_4b06696aca9ab953f1fac01c09fce614" kind="dir">
+    <compoundname>Render/Technique/Transparent</compoundname>
+    <innerfile refid="d7/dd4/a00968">TransparentModule.hpp</innerfile>
+    <innerfile refid="d0/d3c/a00971">TransparentPass.hpp</innerfile>
+    <innerfile refid="df/dce/a00974">TransparentPassResult.hpp</innerfile>
+    <innerfile refid="d5/d6c/a00977">TransparentResolvePass.hpp</innerfile>
+    <innerfile refid="db/d20/a00980">WeightedBlendRendering.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Technique/Transparent/"/>
+  </compounddef>
+</doxygen>

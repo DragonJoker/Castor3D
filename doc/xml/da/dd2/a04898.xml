@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="da/dd2/a04898" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::RsmConfig</compoundname>
+    <includes local="no">RsmConfig.hpp</includes>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="da/dd2/a04898_1a9818a93a8767f1c0315fc16bcd1ceff2" prot="public" static="yes" mutable="no">
+        <type>constexpr uint32_t</type>
+        <definition>constexpr uint32_t castor3d::RsmConfig::MaxRange</definition>
+        <argsstring></argsstring>
+        <name>MaxRange</name>
+        <initializer>= 800u</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmConfig.hpp" line="22" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmConfig.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="da/dd2/a04898_1a508137cf40bcad324c86d581629a273a" prot="public" static="no" mutable="no">
+        <type>castor::ChangeTracked&lt; float &gt;</type>
+        <definition>castor::ChangeTracked&lt; float &gt; castor3d::RsmConfig::intensity</definition>
+        <argsstring></argsstring>
+        <name>intensity</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmConfig.hpp" line="24" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmConfig.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/dd2/a04898_1ad8032cec156015c1ed788b972fdaea54" prot="public" static="no" mutable="no">
+        <type>castor::ChangeTracked&lt; float &gt;</type>
+        <definition>castor::ChangeTracked&lt; float &gt; castor3d::RsmConfig::maxRadius</definition>
+        <argsstring></argsstring>
+        <name>maxRadius</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmConfig.hpp" line="25" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmConfig.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/dd2/a04898_1adf7f2dfd8cbf6704433baab1a3eb4da3" prot="public" static="no" mutable="no">
+        <type>castor::ChangeTracked&lt; castor::RangedValue&lt; uint32_t &gt; &gt;</type>
+        <definition>castor::ChangeTracked&lt; castor::RangedValue&lt; uint32_t &gt; &gt; castor3d::RsmConfig::sampleCount</definition>
+        <argsstring></argsstring>
+        <name>sampleCount</name>
+        <initializer>{ castor::makeRangedValue( 100u, 20u, MaxRange ) }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmConfig.hpp" line="26" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmConfig.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/dd2/a04898_1adabd3e2bd5e3383dc5be814c20b4e5f7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RsmConfig::accept</definition>
+        <argsstring>(castor::String const &amp;name, PipelineVisitorBase &amp;visitor)</argsstring>
+        <name>accept</name>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/de2/a03830" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmConfig.hpp" line="19" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmConfig.hpp" line="18" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/RsmConfig.hpp" bodystart="17" bodyend="27"/>
+    <listofallmembers>
+      <member refid="da/dd2/a04898_1adabd3e2bd5e3383dc5be814c20b4e5f7" prot="public" virt="non-virtual"><scope>castor3d::RsmConfig</scope><name>accept</name></member>
+      <member refid="da/dd2/a04898_1a508137cf40bcad324c86d581629a273a" prot="public" virt="non-virtual"><scope>castor3d::RsmConfig</scope><name>intensity</name></member>
+      <member refid="da/dd2/a04898_1ad8032cec156015c1ed788b972fdaea54" prot="public" virt="non-virtual"><scope>castor3d::RsmConfig</scope><name>maxRadius</name></member>
+      <member refid="da/dd2/a04898_1a9818a93a8767f1c0315fc16bcd1ceff2" prot="public" virt="non-virtual"><scope>castor3d::RsmConfig</scope><name>MaxRange</name></member>
+      <member refid="da/dd2/a04898_1adf7f2dfd8cbf6704433baab1a3eb4da3" prot="public" virt="non-virtual"><scope>castor3d::RsmConfig</scope><name>sampleCount</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,971 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d2/dc7/a05391" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::SpecularBrdfLightingModel</compoundname>
+    <basecompoundref refid="dc/d4e/a05331" prot="public" virt="non-virtual">castor3d::shader::LightingModel</basecompoundref>
+    <includes local="no">GlslSpecularBrdfLighting.hpp</includes>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d2/dc7/a05391_1aee9262a431adabc245e72b49ba9bb75d" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const castor::String</type>
+        <definition>C3D_API const castor::String castor3d::shader::SpecularBrdfLightingModel::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularBrdfLighting.hpp" line="131" column="1" bodyfile="Shader/Shaders/GlslSpecularBrdfLighting.hpp" bodystart="131" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d2/dc7/a05391_1acf1574497be4d069085649778b092356" prot="public" static="no" mutable="no">
+        <type><ref refid="da/d6b/a05303" kindref="compound">CookTorranceBRDF</ref></type>
+        <definition>CookTorranceBRDF castor3d::shader::SpecularBrdfLightingModel::m_cookTorrance</definition>
+        <argsstring></argsstring>
+        <name>m_cookTorrance</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularBrdfLighting.hpp" line="132" column="1" bodyfile="Shader/Shaders/GlslSpecularBrdfLighting.hpp" bodystart="132" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/dc7/a05391_1adfa0c5066f08a673473a24e730018ebb" prot="public" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Void, InDirectionalLight, sdw::InVec3, sdw::InVec3, sdw::InFloat, sdw::InInt, InSurface, <ref refid="d3/d97/a05375" kindref="compound">OutputComponents</ref> &amp; &gt;</type>
+        <definition>sdw::Function&lt; sdw::Void , InDirectionalLight , sdw::InVec3 , sdw::InVec3 , sdw::InFloat , sdw::InInt , InSurface , OutputComponents &amp; &gt; castor3d::shader::SpecularBrdfLightingModel::m_computeDirectional</definition>
+        <argsstring></argsstring>
+        <name>m_computeDirectional</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularBrdfLighting.hpp" line="140" column="1" bodyfile="Shader/Shaders/GlslSpecularBrdfLighting.hpp" bodystart="140" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/dc7/a05391_1ab5d25c8ad6ff69a6a0fb5445200e5a99" prot="public" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Void, InPointLight, sdw::InVec3, sdw::InVec3, sdw::InFloat, sdw::InInt, InSurface, <ref refid="d3/d97/a05375" kindref="compound">OutputComponents</ref> &amp; &gt;</type>
+        <definition>sdw::Function&lt; sdw::Void , InPointLight , sdw::InVec3 , sdw::InVec3 , sdw::InFloat , sdw::InInt , InSurface , OutputComponents &amp; &gt; castor3d::shader::SpecularBrdfLightingModel::m_computePoint</definition>
+        <argsstring></argsstring>
+        <name>m_computePoint</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularBrdfLighting.hpp" line="148" column="1" bodyfile="Shader/Shaders/GlslSpecularBrdfLighting.hpp" bodystart="148" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/dc7/a05391_1a294db512bc49ed9ff6ecaa5440eed2b0" prot="public" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Void, InSpotLight, sdw::InVec3, sdw::InVec3, sdw::InFloat, sdw::InInt, InSurface, <ref refid="d3/d97/a05375" kindref="compound">OutputComponents</ref> &amp; &gt;</type>
+        <definition>sdw::Function&lt; sdw::Void , InSpotLight , sdw::InVec3 , sdw::InVec3 , sdw::InFloat , sdw::InInt , InSurface , OutputComponents &amp; &gt; castor3d::shader::SpecularBrdfLightingModel::m_computeSpot</definition>
+        <argsstring></argsstring>
+        <name>m_computeSpot</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularBrdfLighting.hpp" line="156" column="1" bodyfile="Shader/Shaders/GlslSpecularBrdfLighting.hpp" bodystart="156" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/dc7/a05391_1acce700b9865375a8f62598ae6fdb9a3b" prot="public" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, InDirectionalLight, sdw::InVec3, sdw::InVec3, sdw::InFloat, sdw::InInt, InSurface &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , InDirectionalLight , sdw::InVec3 , sdw::InVec3 , sdw::InFloat , sdw::InInt , InSurface &gt; castor3d::shader::SpecularBrdfLightingModel::m_computeDirectionalDiffuse</definition>
+        <argsstring></argsstring>
+        <name>m_computeDirectionalDiffuse</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularBrdfLighting.hpp" line="163" column="1" bodyfile="Shader/Shaders/GlslSpecularBrdfLighting.hpp" bodystart="163" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/dc7/a05391_1a29b7e3da46193c36c982c7f4bc48f804" prot="public" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, InPointLight, sdw::InVec3, sdw::InVec3, sdw::InFloat, sdw::InInt, InSurface &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , InPointLight , sdw::InVec3 , sdw::InVec3 , sdw::InFloat , sdw::InInt , InSurface &gt; castor3d::shader::SpecularBrdfLightingModel::m_computePointDiffuse</definition>
+        <argsstring></argsstring>
+        <name>m_computePointDiffuse</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularBrdfLighting.hpp" line="170" column="1" bodyfile="Shader/Shaders/GlslSpecularBrdfLighting.hpp" bodystart="170" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/dc7/a05391_1ac236be3d79b37725584793cede05d13a" prot="public" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, InSpotLight, sdw::InVec3, sdw::InVec3, sdw::InFloat, sdw::InInt, InSurface &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , InSpotLight , sdw::InVec3 , sdw::InVec3 , sdw::InFloat , sdw::InInt , InSurface &gt; castor3d::shader::SpecularBrdfLightingModel::m_computeSpotDiffuse</definition>
+        <argsstring></argsstring>
+        <name>m_computeSpotDiffuse</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularBrdfLighting.hpp" line="177" column="1" bodyfile="Shader/Shaders/GlslSpecularBrdfLighting.hpp" bodystart="177" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/dc7/a05391_1ac88f21e57f2a6174afab6d5a2e54f50a" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::SpecularBrdfLightingModel::SpecularBrdfLightingModel</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, Utils &amp;utils, ShadowOptions shadowOptions, bool isOpaqueProgram)</argsstring>
+        <name>SpecularBrdfLightingModel</name>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/ddb/a05415" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d5a/a05423" kindref="compound">ShadowOptions</ref></type>
+          <declname>shadowOptions</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isOpaqueProgram</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularBrdfLighting.hpp" line="19" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dc7/a05391_1a905f9e23d6208c00aca5f908d7dcd46b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::SpecularBrdfLightingModel::computeCombined</definition>
+        <argsstring>(sdw::Vec3 const &amp;worldEye, sdw::Vec3 const &amp;specular, sdw::Float const &amp;glossiness, sdw::Int const &amp;receivesShadows, Surface surface, OutputComponents &amp;output) const</argsstring>
+        <name>computeCombined</name>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldEye</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>specular</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>glossiness</declname>
+        </param>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>receivesShadows</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/d5e/a05403" kindref="compound">Surface</ref></type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d97/a05375" kindref="compound">OutputComponents</ref> &amp;</type>
+          <declname>output</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularBrdfLighting.hpp" line="23" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dc7/a05391_1a05dbb0098035c19c7982a57c1ac8f3b9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::SpecularBrdfLightingModel::compute</definition>
+        <argsstring>(DirectionalLight const &amp;light, sdw::Vec3 const &amp;worldEye, sdw::Vec3 const &amp;specular, sdw::Float const &amp;glossiness, sdw::Int const &amp;receivesShadows, Surface surface, OutputComponents &amp;output) const</argsstring>
+        <name>compute</name>
+        <param>
+          <type><ref refid="da/d97/a05319" kindref="compound">DirectionalLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldEye</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>specular</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>glossiness</declname>
+        </param>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>receivesShadows</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/d5e/a05403" kindref="compound">Surface</ref></type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d97/a05375" kindref="compound">OutputComponents</ref> &amp;</type>
+          <declname>output</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularBrdfLighting.hpp" line="29" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dc7/a05391_1aaa397a45bc31237fe580ecb0fb6bf762" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::SpecularBrdfLightingModel::compute</definition>
+        <argsstring>(PointLight const &amp;light, sdw::Vec3 const &amp;worldEye, sdw::Vec3 const &amp;specular, sdw::Float const &amp;glossiness, sdw::Int const &amp;receivesShadows, Surface surface, OutputComponents &amp;output) const</argsstring>
+        <name>compute</name>
+        <param>
+          <type><ref refid="d6/daf/a05323" kindref="compound">PointLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldEye</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>specular</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>glossiness</declname>
+        </param>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>receivesShadows</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/d5e/a05403" kindref="compound">Surface</ref></type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d97/a05375" kindref="compound">OutputComponents</ref> &amp;</type>
+          <declname>output</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularBrdfLighting.hpp" line="36" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dc7/a05391_1aa19d1791e5497130ed7e00e7cb899de7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::SpecularBrdfLightingModel::compute</definition>
+        <argsstring>(SpotLight const &amp;light, sdw::Vec3 const &amp;worldEye, sdw::Vec3 const &amp;specular, sdw::Float const &amp;glossiness, sdw::Int const &amp;receivesShadows, Surface surface, OutputComponents &amp;output) const</argsstring>
+        <name>compute</name>
+        <param>
+          <type><ref refid="d0/d31/a05327" kindref="compound">SpotLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldEye</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>specular</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>glossiness</declname>
+        </param>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>receivesShadows</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/d5e/a05403" kindref="compound">Surface</ref></type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d97/a05375" kindref="compound">OutputComponents</ref> &amp;</type>
+          <declname>output</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularBrdfLighting.hpp" line="43" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dc7/a05391_1a6e86e1190511f5f5b449d25d9538d132" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::SpecularBrdfLightingModel::computeCombinedDiffuse</definition>
+        <argsstring>(sdw::Vec3 const &amp;worldEye, sdw::Vec3 const &amp;specular, sdw::Float const &amp;glossiness, sdw::Int const &amp;receivesShadows, Surface surface) const</argsstring>
+        <name>computeCombinedDiffuse</name>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldEye</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>specular</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>glossiness</declname>
+        </param>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>receivesShadows</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/d5e/a05403" kindref="compound">Surface</ref></type>
+          <declname>surface</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularBrdfLighting.hpp" line="50" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dc7/a05391_1ac34d8cda0db230356541a1863fc7d2b7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::SpecularBrdfLightingModel::computeDiffuse</definition>
+        <argsstring>(DirectionalLight const &amp;light, sdw::Vec3 const &amp;worldEye, sdw::Vec3 const &amp;specular, sdw::Float const &amp;glossiness, sdw::Int const &amp;receivesShadows, Surface surface) const</argsstring>
+        <name>computeDiffuse</name>
+        <param>
+          <type><ref refid="da/d97/a05319" kindref="compound">DirectionalLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldEye</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>specular</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>glossiness</declname>
+        </param>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>receivesShadows</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/d5e/a05403" kindref="compound">Surface</ref></type>
+          <declname>surface</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularBrdfLighting.hpp" line="55" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dc7/a05391_1a7b3d6f1a7877ae815d26d7358d3de601" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::SpecularBrdfLightingModel::computeDiffuse</definition>
+        <argsstring>(PointLight const &amp;light, sdw::Vec3 const &amp;worldEye, sdw::Vec3 const &amp;specular, sdw::Float const &amp;glossiness, sdw::Int const &amp;receivesShadows, Surface surface) const</argsstring>
+        <name>computeDiffuse</name>
+        <param>
+          <type><ref refid="d6/daf/a05323" kindref="compound">PointLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldEye</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>specular</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>glossiness</declname>
+        </param>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>receivesShadows</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/d5e/a05403" kindref="compound">Surface</ref></type>
+          <declname>surface</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularBrdfLighting.hpp" line="61" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dc7/a05391_1a828bc2d527a7d4eb2a693f36723e0c63" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::SpecularBrdfLightingModel::computeDiffuse</definition>
+        <argsstring>(SpotLight const &amp;light, sdw::Vec3 const &amp;worldEye, sdw::Vec3 const &amp;specular, sdw::Float const &amp;glossiness, sdw::Int const &amp;receivesShadows, Surface surface) const</argsstring>
+        <name>computeDiffuse</name>
+        <param>
+          <type><ref refid="d0/d31/a05327" kindref="compound">SpotLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldEye</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>specular</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>glossiness</declname>
+        </param>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>receivesShadows</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/d5e/a05403" kindref="compound">Surface</ref></type>
+          <declname>surface</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularBrdfLighting.hpp" line="67" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dc7/a05391_1abcadc88d88c64f7de01abd29d940fdac" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::SpecularBrdfLightingModel::computeMapContributions</definition>
+        <argsstring>(PipelineFlags const &amp;flags, sdw::Float const &amp;gamma, TextureConfigurations const &amp;textureConfigs, sdw::Array&lt; sdw::UVec4 &gt; const &amp;textureConfig, sdw::Array&lt; sdw::SampledImage2DRgba32 &gt; const &amp;maps, sdw::Vec3 const &amp;texCoords, sdw::Vec3 &amp;normal, sdw::Vec3 &amp;tangent, sdw::Vec3 &amp;bitangent, sdw::Vec3 &amp;emissive, sdw::Float &amp;opacity, sdw::Float &amp;occlusion, sdw::Float &amp;transmittance, sdw::Vec3 &amp;albedo, sdw::Vec3 &amp;specular, sdw::Float &amp;glossiness, sdw::Vec3 &amp;tangentSpaceViewPosition, sdw::Vec3 &amp;tangentSpaceFragPosition)</argsstring>
+        <name>computeMapContributions</name>
+        <param>
+          <type><ref refid="d1/dce/a04559" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>gamma</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d4f/a05411" kindref="compound">TextureConfigurations</ref> const &amp;</type>
+          <declname>textureConfigs</declname>
+        </param>
+        <param>
+          <type>sdw::Array&lt; sdw::UVec4 &gt; const &amp;</type>
+          <declname>textureConfig</declname>
+        </param>
+        <param>
+          <type>sdw::Array&lt; sdw::SampledImage2DRgba32 &gt; const &amp;</type>
+          <declname>maps</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>texCoords</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>normal</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>tangent</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>bitangent</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>emissive</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>opacity</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>occlusion</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>transmittance</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>albedo</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>specular</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>glossiness</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>tangentSpaceViewPosition</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>tangentSpaceFragPosition</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularBrdfLighting.hpp" line="89" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dc7/a05391_1aec93e2c1aa2d45121d0a199afd3f57f4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::SpecularBrdfLightingModel::computeMapVoxelContributions</definition>
+        <argsstring>(PipelineFlags const &amp;flags, sdw::Float const &amp;gamma, TextureConfigurations const &amp;textureConfigs, sdw::Array&lt; sdw::UVec4 &gt; const &amp;textureConfig, sdw::Array&lt; sdw::SampledImage2DRgba32 &gt; const &amp;maps, sdw::Vec3 const &amp;texCoords, sdw::Vec3 &amp;emissive, sdw::Float &amp;opacity, sdw::Float &amp;occlusion, sdw::Vec3 &amp;albedo, sdw::Vec3 &amp;specular, sdw::Float &amp;glossiness)</argsstring>
+        <name>computeMapVoxelContributions</name>
+        <param>
+          <type><ref refid="d1/dce/a04559" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>gamma</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d4f/a05411" kindref="compound">TextureConfigurations</ref> const &amp;</type>
+          <declname>textureConfigs</declname>
+        </param>
+        <param>
+          <type>sdw::Array&lt; sdw::UVec4 &gt; const &amp;</type>
+          <declname>textureConfig</declname>
+        </param>
+        <param>
+          <type>sdw::Array&lt; sdw::SampledImage2DRgba32 &gt; const &amp;</type>
+          <declname>maps</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>texCoords</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>emissive</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>opacity</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>occlusion</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>albedo</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>specular</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>glossiness</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularBrdfLighting.hpp" line="107" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d2/dc7/a05391_1a7a239c083d9720ca8ff64c65d1fe302f" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::shared_ptr&lt; <ref refid="d2/dc7/a05391" kindref="compound">SpecularBrdfLightingModel</ref> &gt;</type>
+        <definition>static C3D_API std::shared_ptr&lt; SpecularBrdfLightingModel &gt; castor3d::shader::SpecularBrdfLightingModel::createModel</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, Utils &amp;utils, ShadowOptions const &amp;shadows, uint32_t &amp;index, bool isOpaqueProgram)</argsstring>
+        <name>createModel</name>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/ddb/a05415" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d5a/a05423" kindref="compound">ShadowOptions</ref> const &amp;</type>
+          <declname>shadows</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isOpaqueProgram</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularBrdfLighting.hpp" line="73" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dc7/a05391_1a3b42bece1bb45647b3411804705f220c" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::shared_ptr&lt; <ref refid="d2/dc7/a05391" kindref="compound">SpecularBrdfLightingModel</ref> &gt;</type>
+        <definition>static C3D_API std::shared_ptr&lt; SpecularBrdfLightingModel &gt; castor3d::shader::SpecularBrdfLightingModel::createModel</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, Utils &amp;utils, LightType light, bool lightUbo, ShadowOptions const &amp;shadows, uint32_t &amp;index)</argsstring>
+        <name>createModel</name>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/ddb/a05415" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/dd1/a01458_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>lightUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d5a/a05423" kindref="compound">ShadowOptions</ref> const &amp;</type>
+          <declname>shadows</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularBrdfLighting.hpp" line="78" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dc7/a05391_1acb01c2299ce446b8b8b3aa50026c878a" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::shared_ptr&lt; <ref refid="d2/dc7/a05391" kindref="compound">SpecularBrdfLightingModel</ref> &gt;</type>
+        <definition>static C3D_API std::shared_ptr&lt; SpecularBrdfLightingModel &gt; castor3d::shader::SpecularBrdfLightingModel::createDiffuseModel</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, Utils &amp;utils, ShadowOptions const &amp;shadows, uint32_t &amp;index, bool isOpaqueProgram)</argsstring>
+        <name>createDiffuseModel</name>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/ddb/a05415" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d5a/a05423" kindref="compound">ShadowOptions</ref> const &amp;</type>
+          <declname>shadows</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isOpaqueProgram</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularBrdfLighting.hpp" line="84" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="d2/dc7/a05391_1af52253c7e6cd68ec8f38ed518f6c5321" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::SpecularBrdfLightingModel::doDeclareModel</definition>
+        <argsstring>() override</argsstring>
+        <name>doDeclareModel</name>
+        <reimplements refid="dc/d4e/a05331_1ae2a3ded61a442482f06c85c29ea24b04">doDeclareModel</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularBrdfLighting.hpp" line="121" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dc7/a05391_1ac441f440711536aecce60611c4bbc2a0" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::SpecularBrdfLightingModel::doDeclareComputeDirectionalLight</definition>
+        <argsstring>() override</argsstring>
+        <name>doDeclareComputeDirectionalLight</name>
+        <reimplements refid="dc/d4e/a05331_1a9c6a575c7a121556d1fb476bea5d6bf2">doDeclareComputeDirectionalLight</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularBrdfLighting.hpp" line="122" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dc7/a05391_1a47ab4c14e4dfdc83c6a50f79a4397327" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::SpecularBrdfLightingModel::doDeclareComputePointLight</definition>
+        <argsstring>() override</argsstring>
+        <name>doDeclareComputePointLight</name>
+        <reimplements refid="dc/d4e/a05331_1afa3f59926bb5d7666b9243de69d7a9c2">doDeclareComputePointLight</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularBrdfLighting.hpp" line="123" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dc7/a05391_1a0f85355e697b4db498bac194006f162f" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::SpecularBrdfLightingModel::doDeclareComputeSpotLight</definition>
+        <argsstring>() override</argsstring>
+        <name>doDeclareComputeSpotLight</name>
+        <reimplements refid="dc/d4e/a05331_1af34a816a20b6c7d5ec6286f5045f40d2">doDeclareComputeSpotLight</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularBrdfLighting.hpp" line="124" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dc7/a05391_1aa970e9ff2b3debcecf5ac6eb4121caf1" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::SpecularBrdfLightingModel::doDeclareDiffuseModel</definition>
+        <argsstring>() override</argsstring>
+        <name>doDeclareDiffuseModel</name>
+        <reimplements refid="dc/d4e/a05331_1af58895948c91e3f79ff8230e9534a281">doDeclareDiffuseModel</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularBrdfLighting.hpp" line="125" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dc7/a05391_1ae7ce9eaadbb21110f9f7cccfccda746d" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::SpecularBrdfLightingModel::doDeclareComputeDirectionalLightDiffuse</definition>
+        <argsstring>() override</argsstring>
+        <name>doDeclareComputeDirectionalLightDiffuse</name>
+        <reimplements refid="dc/d4e/a05331_1aad2f92a29681d4b0511973af3a31e276">doDeclareComputeDirectionalLightDiffuse</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularBrdfLighting.hpp" line="126" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dc7/a05391_1ab90314db754a5acacd38dfbb8a16b542" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::SpecularBrdfLightingModel::doDeclareComputePointLightDiffuse</definition>
+        <argsstring>() override</argsstring>
+        <name>doDeclareComputePointLightDiffuse</name>
+        <reimplements refid="dc/d4e/a05331_1a7490bf6134ff2b323b10fbaf781a37bc">doDeclareComputePointLightDiffuse</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularBrdfLighting.hpp" line="127" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dc7/a05391_1a3f02e292b01df8eecb73af72eb627e7f" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::SpecularBrdfLightingModel::doDeclareComputeSpotLightDiffuse</definition>
+        <argsstring>() override</argsstring>
+        <name>doDeclareComputeSpotLightDiffuse</name>
+        <reimplements refid="dc/d4e/a05331_1afd78d88ba2a1d93ec50557dc64993977">doDeclareComputeSpotLightDiffuse</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularBrdfLighting.hpp" line="128" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3536">
+        <label>castor3d::shader::SpecularBrdfLightingModel</label>
+        <link refid="d2/dc7/a05391"/>
+        <childnode refid="3537" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3537">
+        <label>castor3d::shader::LightingModel</label>
+        <link refid="dc/d4e/a05331"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3542">
+        <label>T</label>
+      </node>
+      <node id="3545">
+        <label>std::shared_ptr&lt; T &gt;</label>
+        <childnode refid="3542" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="3543">
+        <label>std::shared_ptr&lt; castor3d::shader::Shadow &gt;</label>
+        <childnode refid="3544" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+        <childnode refid="3545" relation="template-instance">
+          <edgelabel>&lt; castor3d::shader::Shadow &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3546">
+        <label>castor3d::shader::Utils</label>
+        <link refid="d8/ddb/a05415"/>
+      </node>
+      <node id="3541">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="3542" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="3538">
+        <label>castor3d::shader::SpecularBrdfLightingModel</label>
+        <link refid="d2/dc7/a05391"/>
+        <childnode refid="3539" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3547" relation="usage">
+          <edgelabel>m_cookTorrance</edgelabel>
+        </childnode>
+      </node>
+      <node id="3539">
+        <label>castor3d::shader::LightingModel</label>
+        <link refid="dc/d4e/a05331"/>
+        <childnode refid="3540" relation="usage">
+          <edgelabel>m_directionalLightType</edgelabel>
+          <edgelabel>m_spotLightType</edgelabel>
+          <edgelabel>m_pointLightType</edgelabel>
+          <edgelabel>m_lightType</edgelabel>
+        </childnode>
+        <childnode refid="3543" relation="usage">
+          <edgelabel>m_shadowModel</edgelabel>
+        </childnode>
+        <childnode refid="3546" relation="usage">
+          <edgelabel>m_utils</edgelabel>
+        </childnode>
+      </node>
+      <node id="3544">
+        <label>castor3d::shader::Shadow</label>
+        <link refid="db/de3/a05387"/>
+      </node>
+      <node id="3540">
+        <label>std::unique_ptr&lt; sdw::Struct &gt;</label>
+        <childnode refid="3541" relation="template-instance">
+          <edgelabel>&lt; sdw::Struct &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3547">
+        <label>castor3d::shader::CookTorranceBRDF</label>
+        <link refid="da/d6b/a05303"/>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslSpecularBrdfLighting.hpp" line="17" column="1" bodyfile="Shader/Shaders/GlslSpecularBrdfLighting.hpp" bodystart="15" bodyend="178"/>
+    <listofallmembers>
+      <member refid="d2/dc7/a05391_1a05dbb0098035c19c7982a57c1ac8f3b9" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>compute</name></member>
+      <member refid="d2/dc7/a05391_1aaa397a45bc31237fe580ecb0fb6bf762" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>compute</name></member>
+      <member refid="d2/dc7/a05391_1aa19d1791e5497130ed7e00e7cb899de7" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>compute</name></member>
+      <member refid="d2/dc7/a05391_1a905f9e23d6208c00aca5f908d7dcd46b" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>computeCombined</name></member>
+      <member refid="d2/dc7/a05391_1a6e86e1190511f5f5b449d25d9538d132" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>computeCombinedDiffuse</name></member>
+      <member refid="d2/dc7/a05391_1ac34d8cda0db230356541a1863fc7d2b7" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>computeDiffuse</name></member>
+      <member refid="d2/dc7/a05391_1a7b3d6f1a7877ae815d26d7358d3de601" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>computeDiffuse</name></member>
+      <member refid="d2/dc7/a05391_1a828bc2d527a7d4eb2a693f36723e0c63" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>computeDiffuse</name></member>
+      <member refid="d2/dc7/a05391_1abcadc88d88c64f7de01abd29d940fdac" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>computeMapContributions</name></member>
+      <member refid="d2/dc7/a05391_1aec93e2c1aa2d45121d0a199afd3f57f4" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>computeMapVoxelContributions</name></member>
+      <member refid="d2/dc7/a05391_1acb01c2299ce446b8b8b3aa50026c878a" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>createDiffuseModel</name></member>
+      <member refid="d2/dc7/a05391_1a7a239c083d9720ca8ff64c65d1fe302f" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>createModel</name></member>
+      <member refid="d2/dc7/a05391_1a3b42bece1bb45647b3411804705f220c" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>createModel</name></member>
+      <member refid="dc/d4e/a05331_1ae6a7960238d8c4c895e761055d25f71e" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>declareDiffuseModel</name></member>
+      <member refid="dc/d4e/a05331_1a59de007eae6f78a97dc6613e20687cfa" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>declareDirectionalModel</name></member>
+      <member refid="dc/d4e/a05331_1a6fa012bb8e25e81c54552f4a0622fd51" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>declareModel</name></member>
+      <member refid="dc/d4e/a05331_1adb3fdba9dbcaa69cb9c047caee5023d3" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>declarePointModel</name></member>
+      <member refid="dc/d4e/a05331_1aaafcbc52cbc035824573a5507f6560fe" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>declareSpotModel</name></member>
+      <member refid="d2/dc7/a05391_1ac441f440711536aecce60611c4bbc2a0" prot="protected" virt="virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>doDeclareComputeDirectionalLight</name></member>
+      <member refid="d2/dc7/a05391_1ae7ce9eaadbb21110f9f7cccfccda746d" prot="protected" virt="virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>doDeclareComputeDirectionalLightDiffuse</name></member>
+      <member refid="d2/dc7/a05391_1a47ab4c14e4dfdc83c6a50f79a4397327" prot="protected" virt="virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>doDeclareComputePointLight</name></member>
+      <member refid="d2/dc7/a05391_1ab90314db754a5acacd38dfbb8a16b542" prot="protected" virt="virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>doDeclareComputePointLightDiffuse</name></member>
+      <member refid="d2/dc7/a05391_1a0f85355e697b4db498bac194006f162f" prot="protected" virt="virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>doDeclareComputeSpotLight</name></member>
+      <member refid="d2/dc7/a05391_1a3f02e292b01df8eecb73af72eb627e7f" prot="protected" virt="virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>doDeclareComputeSpotLightDiffuse</name></member>
+      <member refid="d2/dc7/a05391_1aa970e9ff2b3debcecf5ac6eb4121caf1" prot="protected" virt="virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>doDeclareDiffuseModel</name></member>
+      <member refid="dc/d4e/a05331_1ab75ebaade730fc204cb1c49d5c9b1e79" prot="protected" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>doDeclareDirectionalLight</name></member>
+      <member refid="dc/d4e/a05331_1aad852f3394711dd1ca914dd553051c7a" prot="protected" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>doDeclareDirectionalLightUbo</name></member>
+      <member refid="dc/d4e/a05331_1a601b0d6adbf1d1cfe51140debba408a9" prot="protected" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>doDeclareGetBaseLight</name></member>
+      <member refid="dc/d4e/a05331_1a581d0e6a5c217533e521488ae0309d3c" prot="protected" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>doDeclareGetCascadeFactors</name></member>
+      <member refid="dc/d4e/a05331_1a47f393ce5b750d7a8132df92ede2eaab" prot="protected" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>doDeclareGetDirectionalLight</name></member>
+      <member refid="dc/d4e/a05331_1aa639e3a479f852a8738a962669961f79" prot="protected" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>doDeclareGetPointLight</name></member>
+      <member refid="dc/d4e/a05331_1a14e3657549948e3665c5b7f47bc0e2a2" prot="protected" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>doDeclareGetSpotLight</name></member>
+      <member refid="dc/d4e/a05331_1a3d6d09b7fe9685af9258658d250f23e7" prot="protected" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>doDeclareLight</name></member>
+      <member refid="d2/dc7/a05391_1af52253c7e6cd68ec8f38ed518f6c5321" prot="protected" virt="virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>doDeclareModel</name></member>
+      <member refid="dc/d4e/a05331_1a3c3992c172379ebf21ab50aa9391376e" prot="protected" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>doDeclarePointLight</name></member>
+      <member refid="dc/d4e/a05331_1a83eb154360ce36bf2434156d6d02c335" prot="protected" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>doDeclarePointLightUbo</name></member>
+      <member refid="dc/d4e/a05331_1a0339e3d72944e69ff66aeb0241aaa6b3" prot="protected" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>doDeclareSpotLight</name></member>
+      <member refid="dc/d4e/a05331_1a5695af4e75e3b709f5f517e4fbf5a07c" prot="protected" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>doDeclareSpotLightUbo</name></member>
+      <member refid="dc/d4e/a05331_1a737f308cd9c4f80cabeb2d64ec298d18" prot="protected" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>getBaseLight</name></member>
+      <member refid="dc/d4e/a05331_1a39fb5d9d359a1c94ceb2dc0f8708ef64" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>getDirectionalLight</name></member>
+      <member refid="dc/d4e/a05331_1a026da585989c9d145e8f6c19ca7d89c5" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>getPointLight</name></member>
+      <member refid="dc/d4e/a05331_1a7059cb1128a39d0a2448fe23ae8fbbac" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>getShadowModel</name></member>
+      <member refid="dc/d4e/a05331_1a6d2910a01a8e91b85d9ed6df85ceb151" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>getSpotLight</name></member>
+      <member refid="dc/d4e/a05331_1ae160c6345ef23a0a0b804e11c1cd0f87" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>LightingModel</name></member>
+      <member refid="d2/dc7/a05391_1adfa0c5066f08a673473a24e730018ebb" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>m_computeDirectional</name></member>
+      <member refid="d2/dc7/a05391_1acce700b9865375a8f62598ae6fdb9a3b" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>m_computeDirectionalDiffuse</name></member>
+      <member refid="d2/dc7/a05391_1ab5d25c8ad6ff69a6a0fb5445200e5a99" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>m_computePoint</name></member>
+      <member refid="d2/dc7/a05391_1a29b7e3da46193c36c982c7f4bc48f804" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>m_computePointDiffuse</name></member>
+      <member refid="d2/dc7/a05391_1a294db512bc49ed9ff6ecaa5440eed2b0" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>m_computeSpot</name></member>
+      <member refid="d2/dc7/a05391_1ac236be3d79b37725584793cede05d13a" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>m_computeSpotDiffuse</name></member>
+      <member refid="d2/dc7/a05391_1acf1574497be4d069085649778b092356" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>m_cookTorrance</name></member>
+      <member refid="dc/d4e/a05331_1a4ea653241ca0d3c9bdb57237c555b641" prot="protected" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>m_directionalLightType</name></member>
+      <member refid="dc/d4e/a05331_1a7ef6a49df779cb9c673272418da7e7fa" prot="protected" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>m_getBaseLight</name></member>
+      <member refid="dc/d4e/a05331_1a64689c5bb7ce2682e205cd001b5f6fd8" prot="protected" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>m_getCascadeFactors</name></member>
+      <member refid="dc/d4e/a05331_1a31203146876984766b13922b4d9bd624" prot="protected" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>m_getDirectionalLight</name></member>
+      <member refid="dc/d4e/a05331_1af74c257d8fde9ff920c7aa50f3c94e29" prot="protected" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>m_getPointLight</name></member>
+      <member refid="dc/d4e/a05331_1af23d4d479d255debdd0576dd00616e9d" prot="protected" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>m_getSpotLight</name></member>
+      <member refid="dc/d4e/a05331_1a8bc492d16fd0eddb81da5af6017f6aa4" prot="protected" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>m_isOpaqueProgram</name></member>
+      <member refid="dc/d4e/a05331_1a5b4a48e5d0b71a3023c71005e85c02c3" prot="protected" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>m_lightType</name></member>
+      <member refid="dc/d4e/a05331_1aa4be9073ceba038190a889971091f0c5" prot="protected" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>m_pointLightType</name></member>
+      <member refid="dc/d4e/a05331_1a3e9407685cf7ba55a752a27437c09a74" prot="protected" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>m_shadowModel</name></member>
+      <member refid="dc/d4e/a05331_1a821f9af61e23ca562f5afcd5d394be4d" prot="protected" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>m_spotLightType</name></member>
+      <member refid="dc/d4e/a05331_1a9e5d3c9e33f06597c63d4c64b62bc564" prot="protected" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>m_utils</name></member>
+      <member refid="dc/d4e/a05331_1a129490d8e4f0ea553f16dcaeb2b2c089" prot="protected" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>m_writer</name></member>
+      <member refid="d2/dc7/a05391_1aee9262a431adabc245e72b49ba9bb75d" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>Name</name></member>
+      <member refid="d2/dc7/a05391_1ac88f21e57f2a6174afab6d5a2e54f50a" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>SpecularBrdfLightingModel</name></member>
+      <member refid="dc/d4e/a05331_1af836e764194e1d3119a7778fa34252ae" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularBrdfLightingModel</scope><name>UboBindingPoint</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

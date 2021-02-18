@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="da/dde/a05663" kind="class" language="C++" prot="public">
+    <compoundname>castor::TextWriter&lt; castor3d::LpvConfig &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::LpvConfig &gt;</basecompoundref>
+    <includes local="no">TextLpvConfig.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/dde/a05663_1a58b95d6083bb48cc5d2e242a5cf492ec" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor::TextWriter&lt; castor3d::LpvConfig &gt;::TextWriter</definition>
+        <argsstring>(String const &amp;tabs)</argsstring>
+        <name>TextWriter</name>
+        <param>
+          <type>String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextLpvConfig.hpp" line="18" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dde/a05663_1ac6bd84c165ae1228cb77edddf6e30a9b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::TextWriter&lt; castor3d::LpvConfig &gt;::operator()</definition>
+        <argsstring>(castor3d::LpvConfig const &amp;config, TextFile &amp;file) override</argsstring>
+        <name>operator()</name>
+        <param>
+          <type><ref refid="d9/dd4/a04279" kindref="compound">castor3d::LpvConfig</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type>TextFile &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextLpvConfig.hpp" line="19" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="5349">
+        <label>castor::TextWriter&lt; castor3d::LpvConfig &gt;</label>
+        <link refid="da/dde/a05663"/>
+        <childnode refid="5350" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5350">
+        <label>TextWriterT&lt; castor3d::LpvConfig &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="5351">
+        <label>castor::TextWriter&lt; castor3d::LpvConfig &gt;</label>
+        <link refid="da/dde/a05663"/>
+        <childnode refid="5352" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5352">
+        <label>TextWriterT&lt; castor3d::LpvConfig &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Text/TextLpvConfig.hpp" line="16" column="1" bodyfile="Text/TextLpvConfig.hpp" bodystart="14" bodyend="21"/>
+    <listofallmembers>
+      <member refid="da/dde/a05663_1ac6bd84c165ae1228cb77edddf6e30a9b" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::LpvConfig &gt;</scope><name>operator()</name></member>
+      <member refid="da/dde/a05663_1a58b95d6083bb48cc5d2e242a5cf492ec" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::LpvConfig &gt;</scope><name>TextWriter</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

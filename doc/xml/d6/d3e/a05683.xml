@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d6/d3e/a05683" kind="class" language="C++" prot="public">
+    <compoundname>castor::TextWriter&lt; castor3d::OverlayCategory &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::OverlayCategory &gt;</basecompoundref>
+    <includes local="no">TextOverlayCategory.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/d3e/a05683_1af54f4d5f76741833d1cf253afc7dde87" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor::TextWriter&lt; castor3d::OverlayCategory &gt;::TextWriter</definition>
+        <argsstring>(String const &amp;tabs)</argsstring>
+        <name>TextWriter</name>
+        <param>
+          <type>String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextOverlayCategory.hpp" line="18" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a05683_1a1060efdd68bdb8ca6a952d78f9cdc081" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::TextWriter&lt; castor3d::OverlayCategory &gt;::operator()</definition>
+        <argsstring>(castor3d::OverlayCategory const &amp;overlay, TextFile &amp;file) override</argsstring>
+        <name>operator()</name>
+        <param>
+          <type><ref refid="dd/d3f/a04083" kindref="compound">castor3d::OverlayCategory</ref> const &amp;</type>
+          <declname>overlay</declname>
+        </param>
+        <param>
+          <type>TextFile &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextOverlayCategory.hpp" line="19" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="5369">
+        <label>castor::TextWriter&lt; castor3d::OverlayCategory &gt;</label>
+        <link refid="d6/d3e/a05683"/>
+        <childnode refid="5370" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5370">
+        <label>TextWriterT&lt; castor3d::OverlayCategory &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="5371">
+        <label>castor::TextWriter&lt; castor3d::OverlayCategory &gt;</label>
+        <link refid="d6/d3e/a05683"/>
+        <childnode refid="5372" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5372">
+        <label>TextWriterT&lt; castor3d::OverlayCategory &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Text/TextOverlayCategory.hpp" line="16" column="1" bodyfile="Text/TextOverlayCategory.hpp" bodystart="14" bodyend="21"/>
+    <listofallmembers>
+      <member refid="d6/d3e/a05683_1a1060efdd68bdb8ca6a952d78f9cdc081" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::OverlayCategory &gt;</scope><name>operator()</name></member>
+      <member refid="d6/d3e/a05683_1af54f4d5f76741833d1cf253afc7dde87" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::OverlayCategory &gt;</scope><name>TextWriter</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

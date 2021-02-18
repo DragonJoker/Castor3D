@@ -1,0 +1,123 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="da/d19/a04667" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::ShadowMapPoint::PassData</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="da/d19/a04667_1af52a810b38af6a9cfc62de66c7f56738" prot="public" static="no" mutable="no">
+        <type>ashes::CommandBufferPtr</type>
+        <definition>ashes::CommandBufferPtr castor3d::ShadowMapPoint::PassData::commandBuffer</definition>
+        <argsstring></argsstring>
+        <name>commandBuffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMapPoint.hpp" line="82" column="1" bodyfile="Render/ShadowMap/ShadowMapPoint.hpp" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d19/a04667_1abcdc9d6350df9ba1f4a1d45546ae42d1" prot="public" static="no" mutable="no">
+        <type>std::array&lt; FrameBuffer, 6u &gt;</type>
+        <definition>std::array&lt; FrameBuffer, 6u &gt; castor3d::ShadowMapPoint::PassData::frameBuffers</definition>
+        <argsstring></argsstring>
+        <name>frameBuffers</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMapPoint.hpp" line="83" column="1" bodyfile="Render/ShadowMap/ShadowMapPoint.hpp" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d19/a04667_1a5acb187be3b9baf3776c961557519af7" prot="public" static="no" mutable="no">
+        <type>ashes::SemaphorePtr</type>
+        <definition>ashes::SemaphorePtr castor3d::ShadowMapPoint::PassData::finished</definition>
+        <argsstring></argsstring>
+        <name>finished</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMapPoint.hpp" line="84" column="1" bodyfile="Render/ShadowMap/ShadowMapPoint.hpp" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d19/a04667_1a16e3859dbd8155d9adaedc03d8e16d99" prot="public" static="no" mutable="no">
+        <type><ref refid="d7/dd1/a01458_1a90275671c44e791e9556c4bed9033935" kindref="member">ShadowType</ref></type>
+        <definition>ShadowType castor3d::ShadowMapPoint::PassData::shadowType</definition>
+        <argsstring></argsstring>
+        <name>shadowType</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMapPoint.hpp" line="85" column="1" bodyfile="Render/ShadowMap/ShadowMapPoint.hpp" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d19/a04667_1a6c8f1d4b27971aa36aed4e0eef9a1340" prot="public" static="no" mutable="no">
+        <type>std::array&lt; ashes::ImageView, size_t(<ref refid="d7/dd1/a01458_1afd8c72a6b5ba8d1f784bec682765751cae558bb69fadec037d9eae46601a4df8e" kindref="member">SmTexture::eCount</ref>) &gt;</type>
+        <definition>std::array&lt; ashes::ImageView, size_t( SmTexture::eCount ) &gt; castor3d::ShadowMapPoint::PassData::views</definition>
+        <argsstring></argsstring>
+        <name>views</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMapPoint.hpp" line="86" column="1" bodyfile="Render/ShadowMap/ShadowMapPoint.hpp" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="3875">
+        <label>T</label>
+      </node>
+      <node id="3873">
+        <label>std::array&lt; ashes::ImageView, size_t(SmTexture::eCount) &gt;</label>
+        <childnode refid="3874" relation="template-instance">
+          <edgelabel>&lt; ashes::ImageView, size_t(SmTexture::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3874">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="3875" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="3877">
+        <label>castor3d::TextureProjectionToCube::FrameBuffer</label>
+      </node>
+      <node id="3876">
+        <label>std::array&lt; FrameBuffer, 6u &gt;</label>
+        <childnode refid="3877" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="3874" relation="template-instance">
+          <edgelabel>&lt; FrameBuffer, 6u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3872">
+        <label>castor3d::ShadowMapPoint::PassData</label>
+        <childnode refid="3873" relation="usage">
+          <edgelabel>views</edgelabel>
+        </childnode>
+        <childnode refid="3876" relation="usage">
+          <edgelabel>frameBuffers</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/ShadowMap/ShadowMapPoint.hpp" line="81" column="1" bodyfile="Render/ShadowMap/ShadowMapPoint.hpp" bodystart="80" bodyend="87"/>
+    <listofallmembers>
+      <member refid="da/d19/a04667_1af52a810b38af6a9cfc62de66c7f56738" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPoint::PassData</scope><name>commandBuffer</name></member>
+      <member refid="da/d19/a04667_1a5acb187be3b9baf3776c961557519af7" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPoint::PassData</scope><name>finished</name></member>
+      <member refid="da/d19/a04667_1abcdc9d6350df9ba1f4a1d45546ae42d1" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPoint::PassData</scope><name>frameBuffers</name></member>
+      <member refid="da/d19/a04667_1a16e3859dbd8155d9adaedc03d8e16d99" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPoint::PassData</scope><name>shadowType</name></member>
+      <member refid="da/d19/a04667_1a6c8f1d4b27971aa36aed4e0eef9a1340" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPoint::PassData</scope><name>views</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

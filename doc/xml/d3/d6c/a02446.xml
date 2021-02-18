@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d3/d6c/a02446" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ObjectCacheTraits&lt; Light, KeyType &gt;</compoundname>
+    <includes local="no">CacheModule.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename KeyType</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d3/d6c/a02446_1ac3fd5990409e445780a0ac4becd18250" prot="public" static="no">
+        <type>std::function&lt; std::shared_ptr&lt; <ref refid="d4/d69/a05166" kindref="compound">Light</ref> &gt;(KeyType const &amp;, <ref refid="d8/de7/a05250" kindref="compound">SceneNode</ref> &amp;, <ref refid="de/d13/a01473_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref>) &gt;</type>
+        <definition>using castor3d::ObjectCacheTraits&lt; Light, KeyType &gt;::Producer =  std::function&lt; std::shared_ptr&lt; Light &gt;( KeyType const &amp;, SceneNode &amp;, LightType ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>Producer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheModule.hpp" line="438" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="438" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d3/d6c/a02446_1abd1883e2d09eee024e671aa287021dc5" prot="public" static="no">
+        <type>std::function&lt; void(<ref refid="d4/dde/a02422" kindref="compound">ObjectCacheBase</ref>&lt; <ref refid="d4/d69/a05166" kindref="compound">Light</ref>, KeyType &gt; const &amp;, castor::Collection&lt; <ref refid="d4/d69/a05166" kindref="compound">Light</ref>, KeyType &gt; &amp;, std::shared_ptr&lt; <ref refid="d4/d69/a05166" kindref="compound">Light</ref> &gt;, SceneNodeSPtr, SceneNodeSPtr) &gt;</type>
+        <definition>using castor3d::ObjectCacheTraits&lt; Light, KeyType &gt;::Merger =  std::function&lt; void( ObjectCacheBase&lt; Light, KeyType &gt; const &amp; , castor::Collection&lt; Light, KeyType &gt; &amp; , std::shared_ptr&lt; Light &gt; , SceneNodeSPtr , SceneNodeSPtr ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>Merger</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheModule.hpp" line="439" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="443" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d3/d6c/a02446_1a1ac61ff0aca999f38bbc78b8432e8a89" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const castor::String</type>
+        <definition>C3D_API const castor::String castor3d::ObjectCacheTraits&lt; Light, KeyType &gt;::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/CacheModule.hpp" line="437" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="437" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Helper structure to specialise a scene objects cache behaviour. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Specialisation for <ref refid="d4/d69/a05166" kindref="compound">Light</ref>. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="Cache/CacheModule.hpp" line="436" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="435" bodyend="444"/>
+    <listofallmembers>
+      <member refid="d3/d6c/a02446_1abd1883e2d09eee024e671aa287021dc5" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraits&lt; Light, KeyType &gt;</scope><name>Merger</name></member>
+      <member refid="d3/d6c/a02446_1a1ac61ff0aca999f38bbc78b8432e8a89" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraits&lt; Light, KeyType &gt;</scope><name>Name</name></member>
+      <member refid="d3/d6c/a02446_1ac3fd5990409e445780a0ac4becd18250" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraits&lt; Light, KeyType &gt;</scope><name>Producer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

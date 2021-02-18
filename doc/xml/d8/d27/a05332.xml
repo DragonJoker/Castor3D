@@ -1,0 +1,648 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d8/d27/a05332" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::GlobalIllumination</compoundname>
+    <includes local="no">GlslGlobalIllumination.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d8/d27/a05332_1a4dd064d7fe0b2fc2597af9bba905a7ac" prot="private" static="no" mutable="no">
+        <type>sdw::ShaderWriter &amp;</type>
+        <definition>sdw::ShaderWriter&amp; castor3d::shader::GlobalIllumination::m_writer</definition>
+        <argsstring></argsstring>
+        <name>m_writer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslGlobalIllumination.hpp" line="86" column="1" bodyfile="Shader/Shaders/GlslGlobalIllumination.hpp" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d27/a05332_1ae161682cfcab76ac516de14c26a78b80" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/d54/a05436" kindref="compound">Utils</ref> &amp;</type>
+        <definition>Utils&amp; castor3d::shader::GlobalIllumination::m_utils</definition>
+        <argsstring></argsstring>
+        <name>m_utils</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslGlobalIllumination.hpp" line="87" column="1" bodyfile="Shader/Shaders/GlslGlobalIllumination.hpp" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d27/a05332_1a5a62cd45b271a930a09792bdf0740c9d" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::shader::GlobalIllumination::m_deferred</definition>
+        <argsstring></argsstring>
+        <name>m_deferred</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslGlobalIllumination.hpp" line="88" column="1" bodyfile="Shader/Shaders/GlslGlobalIllumination.hpp" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d27/a05332_1ac7854aeaf979ef7780ba91333a78b6c1" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec4, sdw::InVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec4 , sdw::InVec3 &gt; castor3d::shader::GlobalIllumination::m_evalSH</definition>
+        <argsstring></argsstring>
+        <name>m_evalSH</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslGlobalIllumination.hpp" line="90" column="1" bodyfile="Shader/Shaders/GlslGlobalIllumination.hpp" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d27/a05332_1a5b35febd73ac7cb4231e106f96658d8c" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, InSurface, InLpvGridData &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , InSurface , InLpvGridData &gt; castor3d::shader::GlobalIllumination::m_computeLPVRadiance</definition>
+        <argsstring></argsstring>
+        <name>m_computeLPVRadiance</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslGlobalIllumination.hpp" line="93" column="1" bodyfile="Shader/Shaders/GlslGlobalIllumination.hpp" bodystart="93" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d27/a05332_1aa240a0ec867ee269a0e974fb3b06d910" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, InSurface, InLayeredLpvGridData &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , InSurface , InLayeredLpvGridData &gt; castor3d::shader::GlobalIllumination::m_computeLLPVRadiance</definition>
+        <argsstring></argsstring>
+        <name>m_computeLLPVRadiance</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslGlobalIllumination.hpp" line="96" column="1" bodyfile="Shader/Shaders/GlslGlobalIllumination.hpp" bodystart="96" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d27/a05332_1ae1ef46504851a552a8f55c237edac6c7" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec4, sdw::InSampledImage3DRgba32, InSurface, sdw::InVec3, sdw::InFloat, InVoxelData &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec4 , sdw::InSampledImage3DRgba32 , InSurface , sdw::InVec3 , sdw::InFloat , InVoxelData &gt; castor3d::shader::GlobalIllumination::m_traceCone</definition>
+        <argsstring></argsstring>
+        <name>m_traceCone</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslGlobalIllumination.hpp" line="102" column="1" bodyfile="Shader/Shaders/GlslGlobalIllumination.hpp" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d27/a05332_1a4a0ecdd5d230a762381ff9c40e2197a8" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec4, sdw::InSampledImage3DRgba32, InSurface, InVoxelData &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec4 , sdw::InSampledImage3DRgba32 , InSurface , InVoxelData &gt; castor3d::shader::GlobalIllumination::m_traceConeRadiance</definition>
+        <argsstring></argsstring>
+        <name>m_traceConeRadiance</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslGlobalIllumination.hpp" line="106" column="1" bodyfile="Shader/Shaders/GlslGlobalIllumination.hpp" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d27/a05332_1aac0e268c3a1eacab008d88920d1861b7" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec4, sdw::InSampledImage3DRgba32, InSurface, sdw::InVec3, sdw::InFloat, InVoxelData &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec4 , sdw::InSampledImage3DRgba32 , InSurface , sdw::InVec3 , sdw::InFloat , InVoxelData &gt; castor3d::shader::GlobalIllumination::m_traceConeReflection</definition>
+        <argsstring></argsstring>
+        <name>m_traceConeReflection</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslGlobalIllumination.hpp" line="112" column="1" bodyfile="Shader/Shaders/GlslGlobalIllumination.hpp" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d27/a05332_1a17b3a370568d26b15746b63d3f18c1ee" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Float, sdw::InSampledImage3DRgba32, InSurface, sdw::InVec3, InVoxelData &gt;</type>
+        <definition>sdw::Function&lt; sdw::Float , sdw::InSampledImage3DRgba32 , InSurface , sdw::InVec3 , InVoxelData &gt; castor3d::shader::GlobalIllumination::m_traceConeOcclusion</definition>
+        <argsstring></argsstring>
+        <name>m_traceConeOcclusion</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslGlobalIllumination.hpp" line="117" column="1" bodyfile="Shader/Shaders/GlslGlobalIllumination.hpp" bodystart="117" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d8/d27/a05332_1a994c770eaec5c35dce46d66e9141e2ed" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::GlobalIllumination::GlobalIllumination</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, Utils &amp;utils, bool deferred=false)</argsstring>
+        <name>GlobalIllumination</name>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d54/a05436" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>deferred</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslGlobalIllumination.hpp" line="22" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d27/a05332_1ab04f3d60d5a54655f6aac24e17c2fe34" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::GlobalIllumination::declare</definition>
+        <argsstring>(uint32_t setIndex, uint32_t &amp;bindingIndex, SceneFlags sceneFlags)</argsstring>
+        <name>declare</name>
+        <param>
+          <type>uint32_t</type>
+          <declname>setIndex</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>bindingIndex</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d1e/a01479_1a525bec5d25db94bcff4168e9e1a826fa" kindref="member">SceneFlags</ref></type>
+          <declname>sceneFlags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslGlobalIllumination.hpp" line="25" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d27/a05332_1af2b64f4a963e6a84699e564efc2715b4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::GlobalIllumination::declareTraceConeRadiance</definition>
+        <argsstring>()</argsstring>
+        <name>declareTraceConeRadiance</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslGlobalIllumination.hpp" line="28" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d27/a05332_1ab5433ab0cb11be7b9f120f376337a752" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::GlobalIllumination::declareVct</definition>
+        <argsstring>(uint32_t &amp;bindingIndex, uint32_t setIndex=0u)</argsstring>
+        <name>declareVct</name>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>bindingIndex</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>setIndex</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslGlobalIllumination.hpp" line="29" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d27/a05332_1a23ec521c3bd7d60734f0a662120f126a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::GlobalIllumination::declareLpv</definition>
+        <argsstring>(uint32_t &amp;bindingIndex, uint32_t setIndex=0u, bool declUbo=true)</argsstring>
+        <name>declareLpv</name>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>bindingIndex</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>setIndex</declname>
+          <defval>0u</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>declUbo</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslGlobalIllumination.hpp" line="31" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d27/a05332_1ab6aaeca76326d195a92759cd98f3cee2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::GlobalIllumination::declareLayeredLpv</definition>
+        <argsstring>(uint32_t &amp;bindingIndex, uint32_t setIndex=0u, bool declUbo=true)</argsstring>
+        <name>declareLayeredLpv</name>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>bindingIndex</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>setIndex</declname>
+          <defval>0u</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>declUbo</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslGlobalIllumination.hpp" line="34" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d27/a05332_1a743d624d01e60e025ccc2d43eb9d6e7b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::GlobalIllumination::computeLPVRadiance</definition>
+        <argsstring>(Surface surface, LpvGridData lpvGridData)</argsstring>
+        <name>computeLPVRadiance</name>
+        <param>
+          <type><ref refid="df/d39/a05424" kindref="compound">Surface</ref></type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d34/a05480" kindref="compound">LpvGridData</ref></type>
+          <declname>lpvGridData</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslGlobalIllumination.hpp" line="37" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d27/a05332_1aee8262cdb29ee5c37282e302f50361f3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::GlobalIllumination::computeLLPVRadiance</definition>
+        <argsstring>(Surface surface, LayeredLpvGridData llpvGridData)</argsstring>
+        <name>computeLLPVRadiance</name>
+        <param>
+          <type><ref refid="df/d39/a05424" kindref="compound">Surface</ref></type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d7f/a05472" kindref="compound">LayeredLpvGridData</ref></type>
+          <declname>llpvGridData</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslGlobalIllumination.hpp" line="39" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d27/a05332_1ab2ad76f992811b2319129a8a43b9a364" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Float</type>
+        <definition>C3D_API sdw::Float castor3d::shader::GlobalIllumination::computeOcclusion</definition>
+        <argsstring>(SceneFlags sceneFlags, LightType lightType, Surface surface)</argsstring>
+        <name>computeOcclusion</name>
+        <param>
+          <type><ref refid="da/d1e/a01479_1a525bec5d25db94bcff4168e9e1a826fa" kindref="member">SceneFlags</ref></type>
+          <declname>sceneFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d1e/a01479_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+          <declname>lightType</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d39/a05424" kindref="compound">Surface</ref></type>
+          <declname>surface</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslGlobalIllumination.hpp" line="42" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d27/a05332_1a809dc4475c343f12444153f6afa2f08b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::GlobalIllumination::computeDiffuse</definition>
+        <argsstring>(SceneFlags sceneFlags, Surface surface, sdw::Float occlusion)</argsstring>
+        <name>computeDiffuse</name>
+        <param>
+          <type><ref refid="da/d1e/a01479_1a525bec5d25db94bcff4168e9e1a826fa" kindref="member">SceneFlags</ref></type>
+          <declname>sceneFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d39/a05424" kindref="compound">Surface</ref></type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type>sdw::Float</type>
+          <declname>occlusion</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslGlobalIllumination.hpp" line="45" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d27/a05332_1a35eaaac954de83e911d9a517fd5dd6bf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::GlobalIllumination::computeSpecular</definition>
+        <argsstring>(SceneFlags sceneFlags, sdw::Vec3 wsCamera, Surface surface, sdw::Float roughness, sdw::Float occlusion)</argsstring>
+        <name>computeSpecular</name>
+        <param>
+          <type><ref refid="da/d1e/a01479_1a525bec5d25db94bcff4168e9e1a826fa" kindref="member">SceneFlags</ref></type>
+          <declname>sceneFlags</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>wsCamera</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d39/a05424" kindref="compound">Surface</ref></type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type>sdw::Float</type>
+          <declname>roughness</declname>
+        </param>
+        <param>
+          <type>sdw::Float</type>
+          <declname>occlusion</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslGlobalIllumination.hpp" line="48" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d27/a05332_1a2d6c76fb3f9c2292f95c6d2e1193a0cf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::GlobalIllumination::computeDiffuse</definition>
+        <argsstring>(SceneFlags sceneFlags, Surface surface, sdw::Vec3 diffuse, sdw::Vec3 allButAmbient, sdw::Vec3 ambient, sdw::Float occlusion)</argsstring>
+        <name>computeDiffuse</name>
+        <param>
+          <type><ref refid="da/d1e/a01479_1a525bec5d25db94bcff4168e9e1a826fa" kindref="member">SceneFlags</ref></type>
+          <declname>sceneFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d39/a05424" kindref="compound">Surface</ref></type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>diffuse</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>allButAmbient</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>ambient</declname>
+        </param>
+        <param>
+          <type>sdw::Float</type>
+          <declname>occlusion</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslGlobalIllumination.hpp" line="54" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d27/a05332_1a59fbdd5642cd57928d7bdd5b11cb13e2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::GlobalIllumination::computeSpecular</definition>
+        <argsstring>(SceneFlags sceneFlags, sdw::Vec3 wsCamera, Surface surface, sdw::Float roughness, sdw::Vec3 f0, sdw::Vec3 specular, sdw::Float occlusion)</argsstring>
+        <name>computeSpecular</name>
+        <param>
+          <type><ref refid="da/d1e/a01479_1a525bec5d25db94bcff4168e9e1a826fa" kindref="member">SceneFlags</ref></type>
+          <declname>sceneFlags</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>wsCamera</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d39/a05424" kindref="compound">Surface</ref></type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type>sdw::Float</type>
+          <declname>roughness</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>f0</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>specular</declname>
+        </param>
+        <param>
+          <type>sdw::Float</type>
+          <declname>occlusion</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslGlobalIllumination.hpp" line="60" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d27/a05332_1a9f14ce9e956a6f968902d130e1aa89ad" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::GlobalIllumination::traceConeRadiance</definition>
+        <argsstring>(sdw::SampledImage3DRgba32 const &amp;voxels, Surface surface, VoxelData const &amp;voxelData) const</argsstring>
+        <name>traceConeRadiance</name>
+        <param>
+          <type>sdw::SampledImage3DRgba32 const &amp;</type>
+          <declname>voxels</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d39/a05424" kindref="compound">Surface</ref></type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d04/a05624" kindref="compound">VoxelData</ref> const &amp;</type>
+          <declname>voxelData</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslGlobalIllumination.hpp" line="67" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d8/d27/a05332_1abe380f67bf8f615fe59daa4b084aa183" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::GlobalIllumination::declareTraceCone</definition>
+        <argsstring>()</argsstring>
+        <name>declareTraceCone</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslGlobalIllumination.hpp" line="72" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d27/a05332_1a904cf1a58cfb8701c58c7286b16408a0" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::GlobalIllumination::declareTraceConeReflection</definition>
+        <argsstring>()</argsstring>
+        <name>declareTraceConeReflection</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslGlobalIllumination.hpp" line="73" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d27/a05332_1a6fd23cddd07b3c8619be4534d89e89bf" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::GlobalIllumination::declareTraceConeOcclusion</definition>
+        <argsstring>()</argsstring>
+        <name>declareTraceConeOcclusion</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslGlobalIllumination.hpp" line="74" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d27/a05332_1ae5a3daff431ccc12467f71c5ca6ff411" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::GlobalIllumination::traceConeReflection</definition>
+        <argsstring>(sdw::SampledImage3DRgba32 const &amp;voxels, Surface surface, sdw::Vec3 const &amp;wsViewVector, sdw::Float const &amp;roughness, VoxelData const &amp;voxelData) const</argsstring>
+        <name>traceConeReflection</name>
+        <param>
+          <type>sdw::SampledImage3DRgba32 const &amp;</type>
+          <declname>voxels</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d39/a05424" kindref="compound">Surface</ref></type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsViewVector</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>roughness</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d04/a05624" kindref="compound">VoxelData</ref> const &amp;</type>
+          <declname>voxelData</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslGlobalIllumination.hpp" line="75" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d27/a05332_1ac66189c74000ed99403688828dc6b4a8" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::GlobalIllumination::traceConeOcclusion</definition>
+        <argsstring>(sdw::SampledImage3DRgba32 const &amp;voxels, Surface surface, sdw::Vec3 const &amp;wsConeDirection, VoxelData const &amp;voxelData) const</argsstring>
+        <name>traceConeOcclusion</name>
+        <param>
+          <type>sdw::SampledImage3DRgba32 const &amp;</type>
+          <declname>voxels</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d39/a05424" kindref="compound">Surface</ref></type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsConeDirection</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d04/a05624" kindref="compound">VoxelData</ref> const &amp;</type>
+          <declname>voxelData</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslGlobalIllumination.hpp" line="80" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Shaders/GlslGlobalIllumination.hpp" line="20" column="1" bodyfile="Shader/Shaders/GlslGlobalIllumination.hpp" bodystart="19" bodyend="118"/>
+    <listofallmembers>
+      <member refid="d8/d27/a05332_1a809dc4475c343f12444153f6afa2f08b" prot="public" virt="non-virtual"><scope>castor3d::shader::GlobalIllumination</scope><name>computeDiffuse</name></member>
+      <member refid="d8/d27/a05332_1a2d6c76fb3f9c2292f95c6d2e1193a0cf" prot="public" virt="non-virtual"><scope>castor3d::shader::GlobalIllumination</scope><name>computeDiffuse</name></member>
+      <member refid="d8/d27/a05332_1aee8262cdb29ee5c37282e302f50361f3" prot="public" virt="non-virtual"><scope>castor3d::shader::GlobalIllumination</scope><name>computeLLPVRadiance</name></member>
+      <member refid="d8/d27/a05332_1a743d624d01e60e025ccc2d43eb9d6e7b" prot="public" virt="non-virtual"><scope>castor3d::shader::GlobalIllumination</scope><name>computeLPVRadiance</name></member>
+      <member refid="d8/d27/a05332_1ab2ad76f992811b2319129a8a43b9a364" prot="public" virt="non-virtual"><scope>castor3d::shader::GlobalIllumination</scope><name>computeOcclusion</name></member>
+      <member refid="d8/d27/a05332_1a35eaaac954de83e911d9a517fd5dd6bf" prot="public" virt="non-virtual"><scope>castor3d::shader::GlobalIllumination</scope><name>computeSpecular</name></member>
+      <member refid="d8/d27/a05332_1a59fbdd5642cd57928d7bdd5b11cb13e2" prot="public" virt="non-virtual"><scope>castor3d::shader::GlobalIllumination</scope><name>computeSpecular</name></member>
+      <member refid="d8/d27/a05332_1ab04f3d60d5a54655f6aac24e17c2fe34" prot="public" virt="non-virtual"><scope>castor3d::shader::GlobalIllumination</scope><name>declare</name></member>
+      <member refid="d8/d27/a05332_1ab6aaeca76326d195a92759cd98f3cee2" prot="public" virt="non-virtual"><scope>castor3d::shader::GlobalIllumination</scope><name>declareLayeredLpv</name></member>
+      <member refid="d8/d27/a05332_1a23ec521c3bd7d60734f0a662120f126a" prot="public" virt="non-virtual"><scope>castor3d::shader::GlobalIllumination</scope><name>declareLpv</name></member>
+      <member refid="d8/d27/a05332_1abe380f67bf8f615fe59daa4b084aa183" prot="private" virt="non-virtual"><scope>castor3d::shader::GlobalIllumination</scope><name>declareTraceCone</name></member>
+      <member refid="d8/d27/a05332_1a6fd23cddd07b3c8619be4534d89e89bf" prot="private" virt="non-virtual"><scope>castor3d::shader::GlobalIllumination</scope><name>declareTraceConeOcclusion</name></member>
+      <member refid="d8/d27/a05332_1af2b64f4a963e6a84699e564efc2715b4" prot="public" virt="non-virtual"><scope>castor3d::shader::GlobalIllumination</scope><name>declareTraceConeRadiance</name></member>
+      <member refid="d8/d27/a05332_1a904cf1a58cfb8701c58c7286b16408a0" prot="private" virt="non-virtual"><scope>castor3d::shader::GlobalIllumination</scope><name>declareTraceConeReflection</name></member>
+      <member refid="d8/d27/a05332_1ab5433ab0cb11be7b9f120f376337a752" prot="public" virt="non-virtual"><scope>castor3d::shader::GlobalIllumination</scope><name>declareVct</name></member>
+      <member refid="d8/d27/a05332_1a994c770eaec5c35dce46d66e9141e2ed" prot="public" virt="non-virtual"><scope>castor3d::shader::GlobalIllumination</scope><name>GlobalIllumination</name></member>
+      <member refid="d8/d27/a05332_1aa240a0ec867ee269a0e974fb3b06d910" prot="private" virt="non-virtual"><scope>castor3d::shader::GlobalIllumination</scope><name>m_computeLLPVRadiance</name></member>
+      <member refid="d8/d27/a05332_1a5b35febd73ac7cb4231e106f96658d8c" prot="private" virt="non-virtual"><scope>castor3d::shader::GlobalIllumination</scope><name>m_computeLPVRadiance</name></member>
+      <member refid="d8/d27/a05332_1a5a62cd45b271a930a09792bdf0740c9d" prot="private" virt="non-virtual"><scope>castor3d::shader::GlobalIllumination</scope><name>m_deferred</name></member>
+      <member refid="d8/d27/a05332_1ac7854aeaf979ef7780ba91333a78b6c1" prot="private" virt="non-virtual"><scope>castor3d::shader::GlobalIllumination</scope><name>m_evalSH</name></member>
+      <member refid="d8/d27/a05332_1ae1ef46504851a552a8f55c237edac6c7" prot="private" virt="non-virtual"><scope>castor3d::shader::GlobalIllumination</scope><name>m_traceCone</name></member>
+      <member refid="d8/d27/a05332_1a17b3a370568d26b15746b63d3f18c1ee" prot="private" virt="non-virtual"><scope>castor3d::shader::GlobalIllumination</scope><name>m_traceConeOcclusion</name></member>
+      <member refid="d8/d27/a05332_1a4a0ecdd5d230a762381ff9c40e2197a8" prot="private" virt="non-virtual"><scope>castor3d::shader::GlobalIllumination</scope><name>m_traceConeRadiance</name></member>
+      <member refid="d8/d27/a05332_1aac0e268c3a1eacab008d88920d1861b7" prot="private" virt="non-virtual"><scope>castor3d::shader::GlobalIllumination</scope><name>m_traceConeReflection</name></member>
+      <member refid="d8/d27/a05332_1ae161682cfcab76ac516de14c26a78b80" prot="private" virt="non-virtual"><scope>castor3d::shader::GlobalIllumination</scope><name>m_utils</name></member>
+      <member refid="d8/d27/a05332_1a4dd064d7fe0b2fc2597af9bba905a7ac" prot="private" virt="non-virtual"><scope>castor3d::shader::GlobalIllumination</scope><name>m_writer</name></member>
+      <member refid="d8/d27/a05332_1ac66189c74000ed99403688828dc6b4a8" prot="private" virt="non-virtual"><scope>castor3d::shader::GlobalIllumination</scope><name>traceConeOcclusion</name></member>
+      <member refid="d8/d27/a05332_1a9f14ce9e956a6f968902d130e1aa89ad" prot="public" virt="non-virtual"><scope>castor3d::shader::GlobalIllumination</scope><name>traceConeRadiance</name></member>
+      <member refid="d8/d27/a05332_1ae5a3daff431ccc12467f71c5ca6ff411" prot="private" virt="non-virtual"><scope>castor3d::shader::GlobalIllumination</scope><name>traceConeReflection</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

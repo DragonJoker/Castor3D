@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d8/d23/a05596" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::OverlayUboConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d8/d23/a05596_1a15e78e5ab9964195ec874690b8f1acae" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::OverlayUboConfiguration::positionRatio</definition>
+        <argsstring></argsstring>
+        <name>positionRatio</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="289" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="289" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d23/a05596_1aee40a897839fa252e412af0a452dccf0" prot="public" static="no" mutable="no">
+        <type>castor::Point4i</type>
+        <definition>castor::Point4i castor3d::OverlayUboConfiguration::renderSizeIndex</definition>
+        <argsstring></argsstring>
+        <name>renderSizeIndex</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="290" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="290" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para><ref refid="d1/da3/a04100" kindref="compound">Overlay</ref> data. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Ubos/UbosModule.hpp" line="288" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="287" bodyend="291"/>
+    <listofallmembers>
+      <member refid="d8/d23/a05596_1a15e78e5ab9964195ec874690b8f1acae" prot="public" virt="non-virtual"><scope>castor3d::OverlayUboConfiguration</scope><name>positionRatio</name></member>
+      <member refid="d8/d23/a05596_1aee40a897839fa252e412af0a452dccf0" prot="public" virt="non-virtual"><scope>castor3d::OverlayUboConfiguration</scope><name>renderSizeIndex</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dc/d25/a02160" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::BinaryWriter</compoundname>
+    <includes local="no">BinaryModule.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class TWritten</type>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+<para>Specialisable binary data chunk writer class. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Binary/BinaryModule.hpp" line="62" column="1" bodyfile="Binary/BinaryModule.hpp" bodystart="62" bodyend="-1"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

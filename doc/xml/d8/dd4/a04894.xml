@@ -1,0 +1,284 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d8/dd4/a04894" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ReflectiveShadowMapping</compoundname>
+    <includes local="no">ReflectiveShadowMapping.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d8/dd4/a04894_1a6527ab3aa785201c66341c09ffd5e2cc" prot="private" static="no" mutable="no">
+        <type>sdw::ShaderWriter &amp;</type>
+        <definition>sdw::ShaderWriter&amp; castor3d::ReflectiveShadowMapping::m_writer</definition>
+        <argsstring></argsstring>
+        <name>m_writer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" line="49" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/dd4/a04894_1a43630b8a35c450cf25b6e958bb4290ce" prot="private" static="no" mutable="no">
+        <type>sdw::ArraySsboT&lt; sdw::Vec2 &gt; &amp;</type>
+        <definition>sdw::ArraySsboT&lt; sdw::Vec2 &gt;&amp; castor3d::ReflectiveShadowMapping::m_rsmSamples</definition>
+        <argsstring></argsstring>
+        <name>m_rsmSamples</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" line="50" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/dd4/a04894_1a1e7907cac127d44ad4ec1e4941fd5ceb" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, shader::InDirectionalLight, sdw::InVec3, sdw::InVec3, sdw::InVec3, sdw::InFloat, sdw::InFloat, sdw::InUInt &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , shader::InDirectionalLight , sdw::InVec3 , sdw::InVec3 , sdw::InVec3 , sdw::InFloat , sdw::InFloat , sdw::InUInt &gt; castor3d::ReflectiveShadowMapping::m_directional</definition>
+        <argsstring></argsstring>
+        <name>m_directional</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" line="58" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/dd4/a04894_1aaff68cc0c6112399e5961263d12aef9f" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, shader::InPointLight, sdw::InVec3, sdw::InVec3, sdw::InFloat, sdw::InFloat, sdw::InUInt, sdw::InUInt &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , shader::InPointLight , sdw::InVec3 , sdw::InVec3 , sdw::InFloat , sdw::InFloat , sdw::InUInt , sdw::InUInt &gt; castor3d::ReflectiveShadowMapping::m_point</definition>
+        <argsstring></argsstring>
+        <name>m_point</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" line="66" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/dd4/a04894_1a480564205b0df009e8c93ec758263c5d" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, shader::InSpotLight, sdw::InVec3, sdw::InVec3, sdw::InFloat, sdw::InFloat, sdw::InUInt, sdw::InUInt &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , shader::InSpotLight , sdw::InVec3 , sdw::InVec3 , sdw::InFloat , sdw::InFloat , sdw::InUInt , sdw::InUInt &gt; castor3d::ReflectiveShadowMapping::m_spot</definition>
+        <argsstring></argsstring>
+        <name>m_spot</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" line="74" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d8/dd4/a04894_1a283723ff6049be591d86fef30344354b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ReflectiveShadowMapping::ReflectiveShadowMapping</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, sdw::ArraySsboT&lt; sdw::Vec2 &gt; &amp;rsmSamples, LightType lightType)</argsstring>
+        <name>ReflectiveShadowMapping</name>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>sdw::ArraySsboT&lt; sdw::Vec2 &gt; &amp;</type>
+          <declname>rsmSamples</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d13/a01473_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+          <declname>lightType</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" line="18" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/dd4/a04894_1a387b29ab00623dba580c3cace0c64007" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::ReflectiveShadowMapping::directional</definition>
+        <argsstring>(shader::DirectionalLight const &amp;light, sdw::Vec3 const &amp;viewPosition, sdw::Vec3 const &amp;worldPosition, sdw::Vec3 const &amp;worldNormal, sdw::Float const &amp;rsmRMax, sdw::Float const &amp;rsmIntensity, sdw::UInt const &amp;rsmSampleCount)</argsstring>
+        <name>directional</name>
+        <param>
+          <type><ref refid="dc/dcf/a05334" kindref="compound">shader::DirectionalLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>viewPosition</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldPosition</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldNormal</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>rsmRMax</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>rsmIntensity</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>rsmSampleCount</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" line="21" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/dd4/a04894_1aa8d04436cfb0b19d1c78111fa4e57352" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::ReflectiveShadowMapping::point</definition>
+        <argsstring>(shader::PointLight const &amp;light, sdw::Vec3 const &amp;worldPosition, sdw::Vec3 const &amp;worldNormal, sdw::Float const &amp;rsmRMax, sdw::Float const &amp;rsmIntensity, sdw::UInt const &amp;rsmSampleCount, sdw::UInt const &amp;rsmIndex)</argsstring>
+        <name>point</name>
+        <param>
+          <type><ref refid="da/da3/a05338" kindref="compound">shader::PointLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldPosition</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldNormal</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>rsmRMax</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>rsmIntensity</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>rsmSampleCount</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>rsmIndex</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" line="28" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/dd4/a04894_1a687510f454e5219349a0108d51a534db" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::ReflectiveShadowMapping::spot</definition>
+        <argsstring>(shader::SpotLight const &amp;light, sdw::Vec3 const &amp;worldPosition, sdw::Vec3 const &amp;worldNormal, sdw::Float const &amp;rsmRMax, sdw::Float const &amp;rsmIntensity, sdw::UInt const &amp;rsmSampleCount, sdw::UInt const &amp;rsmIndex)</argsstring>
+        <name>spot</name>
+        <param>
+          <type><ref refid="dc/dbc/a05342" kindref="compound">shader::SpotLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldPosition</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldNormal</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>rsmRMax</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>rsmIntensity</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>rsmSampleCount</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>rsmIndex</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" line="35" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d8/dd4/a04894_1a777172925e492c33805a394eb3f43bc0" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ReflectiveShadowMapping::doDeclareDirectional</definition>
+        <argsstring>()</argsstring>
+        <name>doDeclareDirectional</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" line="44" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/dd4/a04894_1a7c2cf34dc262b68cb8116e972d3d5016" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ReflectiveShadowMapping::doDeclarePoint</definition>
+        <argsstring>()</argsstring>
+        <name>doDeclarePoint</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" line="45" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/dd4/a04894_1a1155ab803fce25bfcee2f02e8360b104" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ReflectiveShadowMapping::doDeclareSpot</definition>
+        <argsstring>()</argsstring>
+        <name>doDeclareSpot</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" line="46" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" line="16" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp" bodystart="15" bodyend="75"/>
+    <listofallmembers>
+      <member refid="d8/dd4/a04894_1a387b29ab00623dba580c3cace0c64007" prot="public" virt="non-virtual"><scope>castor3d::ReflectiveShadowMapping</scope><name>directional</name></member>
+      <member refid="d8/dd4/a04894_1a777172925e492c33805a394eb3f43bc0" prot="private" virt="non-virtual"><scope>castor3d::ReflectiveShadowMapping</scope><name>doDeclareDirectional</name></member>
+      <member refid="d8/dd4/a04894_1a7c2cf34dc262b68cb8116e972d3d5016" prot="private" virt="non-virtual"><scope>castor3d::ReflectiveShadowMapping</scope><name>doDeclarePoint</name></member>
+      <member refid="d8/dd4/a04894_1a1155ab803fce25bfcee2f02e8360b104" prot="private" virt="non-virtual"><scope>castor3d::ReflectiveShadowMapping</scope><name>doDeclareSpot</name></member>
+      <member refid="d8/dd4/a04894_1a1e7907cac127d44ad4ec1e4941fd5ceb" prot="private" virt="non-virtual"><scope>castor3d::ReflectiveShadowMapping</scope><name>m_directional</name></member>
+      <member refid="d8/dd4/a04894_1aaff68cc0c6112399e5961263d12aef9f" prot="private" virt="non-virtual"><scope>castor3d::ReflectiveShadowMapping</scope><name>m_point</name></member>
+      <member refid="d8/dd4/a04894_1a43630b8a35c450cf25b6e958bb4290ce" prot="private" virt="non-virtual"><scope>castor3d::ReflectiveShadowMapping</scope><name>m_rsmSamples</name></member>
+      <member refid="d8/dd4/a04894_1a480564205b0df009e8c93ec758263c5d" prot="private" virt="non-virtual"><scope>castor3d::ReflectiveShadowMapping</scope><name>m_spot</name></member>
+      <member refid="d8/dd4/a04894_1a6527ab3aa785201c66341c09ffd5e2cc" prot="private" virt="non-virtual"><scope>castor3d::ReflectiveShadowMapping</scope><name>m_writer</name></member>
+      <member refid="d8/dd4/a04894_1aa8d04436cfb0b19d1c78111fa4e57352" prot="public" virt="non-virtual"><scope>castor3d::ReflectiveShadowMapping</scope><name>point</name></member>
+      <member refid="d8/dd4/a04894_1a283723ff6049be591d86fef30344354b" prot="public" virt="non-virtual"><scope>castor3d::ReflectiveShadowMapping</scope><name>ReflectiveShadowMapping</name></member>
+      <member refid="d8/dd4/a04894_1a687510f454e5219349a0108d51a534db" prot="public" virt="non-virtual"><scope>castor3d::ReflectiveShadowMapping</scope><name>spot</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

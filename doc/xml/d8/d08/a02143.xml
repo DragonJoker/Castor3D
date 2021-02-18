@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d8/d08/a02143" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ChunkTyper</compoundname>
+    <includes local="no">BinaryModule.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class Type</type>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+<para>Helper structure to find ChunkType from a type. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Binary/BinaryModule.hpp" line="81" column="1" bodyfile="Binary/BinaryModule.hpp" bodystart="81" bodyend="-1"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

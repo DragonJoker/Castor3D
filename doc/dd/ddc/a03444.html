@@ -5,11 +5,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: castor3d::DeferredRendering Class Reference</title>
+<title>Castor3D: castor3d::VkTypeTraits&lt; VkDebugUtilsObjectTagInfoEXT &gt; Struct Template Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
 <link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+<link href="../../Castor3D.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -17,10 +18,12 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Castor3D
-   &#160;<span id="projectnumber">..</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
+   <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
  </tr>
  </tbody>
@@ -39,225 +42,53 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../d0/d85/a00976.html">castor3d</a></li><li class="navelem"><a class="el" href="../../dd/ddc/a03444.html">DeferredRendering</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/d1e/a01479.html">castor3d</a></li><li class="navelem"><a class="el" href="../../dd/ddc/a03444.html">VkTypeTraits&lt; VkDebugUtilsObjectTagInfoEXT &gt;</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="../../de/dc4/a03441.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">castor3d::DeferredRendering Class Reference</div>  </div>
+<div class="title">castor3d::VkTypeTraits&lt; VkDebugUtilsObjectTagInfoEXT &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p>The deferred rendering class.  
- <a href="../../dd/ddc/a03444.html#details">More...</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
-Public Member Functions</h2></td></tr>
-<tr class="memitem:aaf3fbd07a93531771fba1aa7f7cd9f5c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/ddc/a03444.html#aaf3fbd07a93531771fba1aa7f7cd9f5c">DeferredRendering</a> (<a class="el" href="../../dc/d31/a01892.html">Engine</a> &amp;engine, <a class="el" href="../../d8/d63/a03500.html">OpaquePass</a> &amp;opaquePass, <a class="el" href="../../db/d9d/a01972.html">FrameBuffer</a> &amp;frameBuffer, <a class="el" href="../../d5/da1/a01988.html">TextureAttachment</a> &amp;depthAttach, castor::Size const &amp;size, <a class="el" href="../../d6/db9/a02980.html">Scene</a> const &amp;scene, <a class="el" href="../../dd/dd7/a03540.html">SsaoConfig</a> const &amp;config)</td></tr>
-<tr class="memdesc:aaf3fbd07a93531771fba1aa7f7cd9f5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialises deferred rendering related stuff.  <a href="#aaf3fbd07a93531771fba1aa7f7cd9f5c">More...</a><br /></td></tr>
-<tr class="separator:aaf3fbd07a93531771fba1aa7f7cd9f5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acfefc8f62ca8c99b5cbffbcd57e50824"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/ddc/a03444.html#acfefc8f62ca8c99b5cbffbcd57e50824">~DeferredRendering</a> ()</td></tr>
-<tr class="memdesc:acfefc8f62ca8c99b5cbffbcd57e50824"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys deferred rendering related stuff.  <a href="#acfefc8f62ca8c99b5cbffbcd57e50824">More...</a><br /></td></tr>
-<tr class="separator:acfefc8f62ca8c99b5cbffbcd57e50824"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5b9fcfe5bfee39725f6623eae251c466"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/ddc/a03444.html#a5b9fcfe5bfee39725f6623eae251c466">render</a> (<a class="el" href="../../d4/d7d/a02628.html">RenderInfo</a> &amp;info, <a class="el" href="../../d6/db9/a02980.html">Scene</a> const &amp;scene, <a class="el" href="../../da/d47/a02864.html">Camera</a> const &amp;camera, <a class="el" href="../../d0/d85/a00976.html#ad3137fb4b01f8deea8b1e20522ec8e6c">ShadowMapLightTypeArray</a> &amp;shadowMaps, castor::Point2r const &amp;jitter, <a class="el" href="../../d0/da2/a03620.html">TextureUnit</a> const &amp;velocity)</td></tr>
-<tr class="memdesc:a5b9fcfe5bfee39725f6623eae251c466"><td class="mdescLeft">&#160;</td><td class="mdescRight">Renders opaque nodes.  <a href="#a5b9fcfe5bfee39725f6623eae251c466">More...</a><br /></td></tr>
-<tr class="separator:a5b9fcfe5bfee39725f6623eae251c466"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed6167f77d5882b9768ff1fd3ea5df03"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/ddc/a03444.html#aed6167f77d5882b9768ff1fd3ea5df03">debugDisplay</a> () const</td></tr>
-<tr class="memdesc:aed6167f77d5882b9768ff1fd3ea5df03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Displays debug data on screen.  <a href="#aed6167f77d5882b9768ff1fd3ea5df03">More...</a><br /></td></tr>
-<tr class="separator:aed6167f77d5882b9768ff1fd3ea5df03"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:a248ae077bc57e01abd73e9023f92aaaf"><td class="memItemLeft" align="right" valign="top">static VkStructureType constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/ddc/a03444.html#a248ae077bc57e01abd73e9023f92aaaf">value</a> = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_TAG_INFO_EXT</td></tr>
+<tr class="separator:a248ae077bc57e01abd73e9023f92aaaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>The deferred rendering class. </p>
-<dl class="section author"><dt>Author</dt><dd>Sylvain DOREMUS </dd></dl>
-<dl class="section version"><dt>Version</dt><dd>0.10.0 </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>08/06/2017 </dd></dl>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="aaf3fbd07a93531771fba1aa7f7cd9f5c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaf3fbd07a93531771fba1aa7f7cd9f5c">&#9670;&nbsp;</a></span>DeferredRendering()</h2>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a248ae077bc57e01abd73e9023f92aaaf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a248ae077bc57e01abd73e9023f92aaaf">&#9670;&nbsp;</a></span>value</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">castor3d::DeferredRendering::DeferredRendering </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../dc/d31/a01892.html">Engine</a> &amp;&#160;</td>
-          <td class="paramname"><em>engine</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../d8/d63/a03500.html">OpaquePass</a> &amp;&#160;</td>
-          <td class="paramname"><em>opaquePass</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../db/d9d/a01972.html">FrameBuffer</a> &amp;&#160;</td>
-          <td class="paramname"><em>frameBuffer</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../d5/da1/a01988.html">TextureAttachment</a> &amp;&#160;</td>
-          <td class="paramname"><em>depthAttach</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">castor::Size const &amp;&#160;</td>
-          <td class="paramname"><em>size</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../d6/db9/a02980.html">Scene</a> const &amp;&#160;</td>
-          <td class="paramname"><em>scene</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../dd/dd7/a03540.html">SsaoConfig</a> const &amp;&#160;</td>
-          <td class="paramname"><em>config</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="memname">VkStructureType constexpr <a class="el" href="../../d2/dba/a02692.html">castor3d::VkTypeTraits</a>&lt; VkDebugUtilsObjectTagInfoEXT &gt;::value = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_TAG_INFO_EXT</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p>Initialises deferred rendering related stuff. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">engine</td><td>The engine. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">opaquePass</td><td>The opaque nodes render pass. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">frameBuffer</td><td>The target frame buffer. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">depthAttach</td><td>The attach between depth buffer and the frame buffer. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>The render dimensions. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">scene</td><td>The rendered scene. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">config</td><td>The SSAO configuration. </td></tr>
-  </table>
-  </dd>
-</dl>
-
 </div>
 </div>
-<a id="acfefc8f62ca8c99b5cbffbcd57e50824"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acfefc8f62ca8c99b5cbffbcd57e50824">&#9670;&nbsp;</a></span>~DeferredRendering()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">castor3d::DeferredRendering::~DeferredRendering </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Destroys deferred rendering related stuff. </p>
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="aed6167f77d5882b9768ff1fd3ea5df03"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aed6167f77d5882b9768ff1fd3ea5df03">&#9670;&nbsp;</a></span>debugDisplay()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void castor3d::DeferredRendering::debugDisplay </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Displays debug data on screen. </p>
-
-</div>
-</div>
-<a id="a5b9fcfe5bfee39725f6623eae251c466"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5b9fcfe5bfee39725f6623eae251c466">&#9670;&nbsp;</a></span>render()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void castor3d::DeferredRendering::render </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../d4/d7d/a02628.html">RenderInfo</a> &amp;&#160;</td>
-          <td class="paramname"><em>info</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../d6/db9/a02980.html">Scene</a> const &amp;&#160;</td>
-          <td class="paramname"><em>scene</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../da/d47/a02864.html">Camera</a> const &amp;&#160;</td>
-          <td class="paramname"><em>camera</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../d0/d85/a00976.html#ad3137fb4b01f8deea8b1e20522ec8e6c">ShadowMapLightTypeArray</a> &amp;&#160;</td>
-          <td class="paramname"><em>shadowMaps</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">castor::Point2r const &amp;&#160;</td>
-          <td class="paramname"><em>jitter</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../d0/da2/a03620.html">TextureUnit</a> const &amp;&#160;</td>
-          <td class="paramname"><em>velocity</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Renders opaque nodes. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[out]</td><td class="paramname">info</td><td>Receives the render informations. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">scene</td><td>The rendered scene. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">camera</td><td>The viewer camera. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">shadowMaps</td><td>The shadow maps. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">jitter</td><td>The jittering value. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">velocity</td><td>The velocity texture. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<hr/>The documentation for this class was generated from the following file:<ul>
-<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/Technique/Opaque/<a class="el" href="../../d7/d92/a00887.html">DeferredRendering.hpp</a></li>
+<hr/>The documentation for this struct was generated from the following file:<ul>
+<li>Miscellaneous/<a class="el" href="../../dc/dc9/a00389.html">makeVkType.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 13:38:23 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Feb 18 2021 01:09:21 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

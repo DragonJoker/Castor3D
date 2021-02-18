@@ -1,4 +1,9 @@
-<map id="castor3d::MetallicRoughnessPbrPass::TextWriter" name="castor3d::MetallicRoughnessPbrPass::TextWriter">
-<area shape="rect" id="node1" title="Pass loader." alt="" coords="13,95,204,136"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,212,47"/>
+<map id="castor3d::AnimationT&lt; AnimableHanlerT &gt;" name="castor3d::AnimationT&lt; AnimableHanlerT &gt;">
+<area shape="rect" id="node1" title="Animation base class." alt="" coords="222,96,367,137"/>
+<area shape="rect" id="node4" href="$d4/ddd/a02040.html" title=" " alt="" coords="222,200,367,241"/>
+<area shape="rect" id="node2" title=" " alt="" coords="189,13,251,39"/>
+<area shape="rect" id="node3" title=" " alt="" coords="275,5,463,47"/>
+<area shape="rect" id="node5" href="$d3/d10/a03856.html" title=" " alt="" coords="5,291,176,317"/>
+<area shape="rect" id="node6" href="$d0/d36/a04008.html" title=" " alt="" coords="200,291,389,317"/>
+<area shape="rect" id="node7" href="$d4/d7d/a02628.html" title=" " alt="" coords="413,291,595,317"/>
 </map>

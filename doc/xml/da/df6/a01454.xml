@@ -1,0 +1,127 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="da/df6/a01454" kind="file" language="C++">
+    <compoundname>TextSsaoConfig.hpp</compoundname>
+    <includes refid="d7/d49/a00863" local="yes">Castor3D/Render/Ssao/SsaoConfig.hpp</includes>
+    <includes local="no">CastorUtils/Data/TextWriter.hpp</includes>
+    <incdepgraph>
+      <node id="32052">
+        <label>Castor3D/Render/Ssao/SsaoConfig.hpp</label>
+        <link refid="d7/d49/a00863"/>
+        <childnode refid="32053" relation="include">
+        </childnode>
+        <childnode refid="32055" relation="include">
+        </childnode>
+        <childnode refid="32069" relation="include">
+        </childnode>
+        <childnode refid="32070" relation="include">
+        </childnode>
+        <childnode refid="32071" relation="include">
+        </childnode>
+      </node>
+      <node id="32061">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="32070">
+        <label>CastorUtils/Design/ChangeTracked.hpp</label>
+      </node>
+      <node id="32064">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="32069">
+        <label>CastorUtils/Data/TextWriter.hpp</label>
+      </node>
+      <node id="32065">
+        <label>cstdint</label>
+      </node>
+      <node id="32071">
+        <label>CastorUtils/Math/RangedValue.hpp</label>
+      </node>
+      <node id="32063">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="32054">
+        <label>CastorUtils/CastorUtilsPrerequisites.hpp</label>
+      </node>
+      <node id="32056">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d5/d35/a00266"/>
+        <childnode refid="32057" relation="include">
+        </childnode>
+        <childnode refid="32058" relation="include">
+        </childnode>
+        <childnode refid="32059" relation="include">
+        </childnode>
+        <childnode refid="32060" relation="include">
+        </childnode>
+        <childnode refid="32061" relation="include">
+        </childnode>
+        <childnode refid="32062" relation="include">
+        </childnode>
+        <childnode refid="32063" relation="include">
+        </childnode>
+        <childnode refid="32064" relation="include">
+        </childnode>
+        <childnode refid="32065" relation="include">
+        </childnode>
+        <childnode refid="32066" relation="include">
+        </childnode>
+        <childnode refid="32067" relation="include">
+        </childnode>
+        <childnode refid="32068" relation="include">
+        </childnode>
+      </node>
+      <node id="32067">
+        <label>string</label>
+      </node>
+      <node id="32060">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="32057">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="32059">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="32051">
+        <label>Text/TextSsaoConfig.hpp</label>
+        <link refid="da/df6/a01454"/>
+        <childnode refid="32052" relation="include">
+        </childnode>
+        <childnode refid="32069" relation="include">
+        </childnode>
+      </node>
+      <node id="32055">
+        <label>Castor3D/Miscellaneous/MiscellaneousModule.hpp</label>
+        <link refid="d4/d27/a00392"/>
+        <childnode refid="32056" relation="include">
+        </childnode>
+      </node>
+      <node id="32053">
+        <label>SsaoModule.hpp</label>
+        <link refid="dd/db2/a00866"/>
+        <childnode refid="32054" relation="include">
+        </childnode>
+      </node>
+      <node id="32058">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="32068">
+        <label>vector</label>
+      </node>
+      <node id="32062">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="32066">
+        <label>memory</label>
+      </node>
+    </incdepgraph>
+    <innerclass refid="d7/d3c/a05776" prot="public">castor::TextWriter&lt; castor3d::SsaoConfig &gt;</innerclass>
+    <innernamespace refid="da/d36/a01482">castor</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Text/TextSsaoConfig.hpp"/>
+  </compounddef>
+</doxygen>

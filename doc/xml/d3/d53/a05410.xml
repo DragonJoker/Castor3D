@@ -1,0 +1,343 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d3/d53/a05410" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::SpecularPbrReflectionModel</compoundname>
+    <includes local="no">GlslSpecularPbrReflection.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d3/d53/a05410_1adc2965c3676c06b345143a6b9d70a9ac" prot="public" static="no" mutable="no">
+        <type>sdw::ShaderWriter &amp;</type>
+        <definition>sdw::ShaderWriter&amp; castor3d::shader::SpecularPbrReflectionModel::m_writer</definition>
+        <argsstring></argsstring>
+        <name>m_writer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularPbrReflection.hpp" line="49" column="1" bodyfile="Shader/Shaders/GlslSpecularPbrReflection.hpp" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d53/a05410_1ac47708ad02566114549b16815154e11c" prot="public" static="no" mutable="no">
+        <type><ref refid="d4/de8/a05430" kindref="compound">Utils</ref> &amp;</type>
+        <definition>Utils&amp; castor3d::shader::SpecularPbrReflectionModel::m_utils</definition>
+        <argsstring></argsstring>
+        <name>m_utils</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularPbrReflection.hpp" line="50" column="1" bodyfile="Shader/Shaders/GlslSpecularPbrReflection.hpp" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d53/a05410_1a917191989ffc3a50df9a99ff1e342b1a" prot="public" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InVec3, sdw::InVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InVec3 , sdw::InVec3 &gt; castor3d::shader::SpecularPbrReflectionModel::m_computeIncident</definition>
+        <argsstring></argsstring>
+        <name>m_computeIncident</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularPbrReflection.hpp" line="53" column="1" bodyfile="Shader/Shaders/GlslSpecularPbrReflection.hpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d53/a05410_1a7d8084e24ceeeae0a133c9b68c5ea2c4" prot="public" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InVec3, sdw::InVec3, sdw::InSampledImageCubeRgba32, sdw::InVec3, sdw::InFloat &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InVec3 , sdw::InVec3 , sdw::InSampledImageCubeRgba32 , sdw::InVec3 , sdw::InFloat &gt; castor3d::shader::SpecularPbrReflectionModel::m_computeRefl</definition>
+        <argsstring></argsstring>
+        <name>m_computeRefl</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularPbrReflection.hpp" line="59" column="1" bodyfile="Shader/Shaders/GlslSpecularPbrReflection.hpp" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d53/a05410_1a53df682c76db9b858679a54d559d317c" prot="public" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Void, sdw::InVec3, sdw::InVec3, sdw::InSampledImageCubeRgba32, sdw::InFloat, sdw::InVec3, sdw::InFloat, sdw::InOutVec3, sdw::OutVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Void , sdw::InVec3 , sdw::InVec3 , sdw::InSampledImageCubeRgba32 , sdw::InFloat , sdw::InVec3 , sdw::InFloat , sdw::InOutVec3 , sdw::OutVec3 &gt; castor3d::shader::SpecularPbrReflectionModel::m_computeRefrEnvMap</definition>
+        <argsstring></argsstring>
+        <name>m_computeRefrEnvMap</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularPbrReflection.hpp" line="68" column="1" bodyfile="Shader/Shaders/GlslSpecularPbrReflection.hpp" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d53/a05410_1a1fcf5967dead2205fc72a0e8c706abed" prot="public" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Void, sdw::InVec3, sdw::InVec3, sdw::InSampledImageCubeRgba32, sdw::InFloat, sdw::InVec3, sdw::InFloat, sdw::InOutVec3, sdw::OutVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Void , sdw::InVec3 , sdw::InVec3 , sdw::InSampledImageCubeRgba32 , sdw::InFloat , sdw::InVec3 , sdw::InFloat , sdw::InOutVec3 , sdw::OutVec3 &gt; castor3d::shader::SpecularPbrReflectionModel::m_computeRefrSkybox</definition>
+        <argsstring></argsstring>
+        <name>m_computeRefrSkybox</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularPbrReflection.hpp" line="77" column="1" bodyfile="Shader/Shaders/GlslSpecularPbrReflection.hpp" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/d53/a05410_1a679276cca96fc6577098fbf5ad872a6b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::SpecularPbrReflectionModel::SpecularPbrReflectionModel</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, Utils &amp;utils)</argsstring>
+        <name>SpecularPbrReflectionModel</name>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/de8/a05430" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularPbrReflection.hpp" line="16" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d53/a05410_1a6fd5965d57a70d4bafe359432cc0316a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::SpecularPbrReflectionModel::computeIncident</definition>
+        <argsstring>(sdw::Vec3 const &amp;wsPosition, sdw::Vec3 const &amp;wsCamera) const</argsstring>
+        <name>computeIncident</name>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsPosition</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsCamera</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularPbrReflection.hpp" line="18" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d53/a05410_1acfc5d971f397463c1a38e185dd440d20" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::SpecularPbrReflectionModel::computeRefl</definition>
+        <argsstring>(sdw::Vec3 const &amp;wsIncident, sdw::Vec3 const &amp;wsNormal, sdw::SampledImageCubeRgba32 const &amp;envMap, sdw::Vec3 const &amp;specular, sdw::Float const &amp;glossiness) const</argsstring>
+        <name>computeRefl</name>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsIncident</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsNormal</declname>
+        </param>
+        <param>
+          <type>sdw::SampledImageCubeRgba32 const &amp;</type>
+          <declname>envMap</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>specular</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>glossiness</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularPbrReflection.hpp" line="20" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d53/a05410_1af18f1037a2275d80d75e0cee42ee9aa1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Void</type>
+        <definition>C3D_API sdw::Void castor3d::shader::SpecularPbrReflectionModel::computeRefrEnvMap</definition>
+        <argsstring>(sdw::Vec3 const &amp;wsIncident, sdw::Vec3 const &amp;wsNormal, sdw::SampledImageCubeRgba32 const &amp;envMap, sdw::Float const &amp;refractionRatio, sdw::Vec3 const &amp;transmission, sdw::Float const &amp;glossiness, sdw::Vec3 &amp;reflection, sdw::Vec3 &amp;refraction) const</argsstring>
+        <name>computeRefrEnvMap</name>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsIncident</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsNormal</declname>
+        </param>
+        <param>
+          <type>sdw::SampledImageCubeRgba32 const &amp;</type>
+          <declname>envMap</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>transmission</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>glossiness</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>reflection</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>refraction</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularPbrReflection.hpp" line="25" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d53/a05410_1aa9dc7bdc8280ad65f4a8acb441112bfe" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Void</type>
+        <definition>C3D_API sdw::Void castor3d::shader::SpecularPbrReflectionModel::computeRefrSkybox</definition>
+        <argsstring>(sdw::Vec3 const &amp;wsIncident, sdw::Vec3 const &amp;wsNormal, sdw::SampledImageCubeRgba32 const &amp;envMap, sdw::Float const &amp;refractionRatio, sdw::Vec3 const &amp;transmission, sdw::Float const &amp;glossiness, sdw::Vec3 &amp;reflection, sdw::Vec3 &amp;refraction) const</argsstring>
+        <name>computeRefrSkybox</name>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsIncident</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsNormal</declname>
+        </param>
+        <param>
+          <type>sdw::SampledImageCubeRgba32 const &amp;</type>
+          <declname>envMap</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>transmission</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>glossiness</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>reflection</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>refraction</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularPbrReflection.hpp" line="33" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d3/d53/a05410_1a0c484534edb001b2f7dbd1b49736e3fb" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::SpecularPbrReflectionModel::doDeclareComputeIncident</definition>
+        <argsstring>()</argsstring>
+        <name>doDeclareComputeIncident</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularPbrReflection.hpp" line="43" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d53/a05410_1aef0b085a0e517131e0e509cf5ebca227" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::SpecularPbrReflectionModel::doDeclareComputeRefl</definition>
+        <argsstring>()</argsstring>
+        <name>doDeclareComputeRefl</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularPbrReflection.hpp" line="44" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d53/a05410_1a616ad0f6a11225d857af4638cd864f71" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::SpecularPbrReflectionModel::doDeclareComputeRefrEnvMap</definition>
+        <argsstring>()</argsstring>
+        <name>doDeclareComputeRefrEnvMap</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularPbrReflection.hpp" line="45" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d53/a05410_1ac0f75fbab81a2fc70ba660224d62c7a6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::SpecularPbrReflectionModel::doDeclareComputeRefrSkybox</definition>
+        <argsstring>()</argsstring>
+        <name>doDeclareComputeRefrSkybox</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSpecularPbrReflection.hpp" line="46" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="3556">
+        <label>castor3d::shader::Utils</label>
+        <link refid="d4/de8/a05430"/>
+      </node>
+      <node id="3555">
+        <label>castor3d::shader::SpecularPbrReflectionModel</label>
+        <link refid="d3/d53/a05410"/>
+        <childnode refid="3556" relation="usage">
+          <edgelabel>m_utils</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslSpecularPbrReflection.hpp" line="14" column="1" bodyfile="Shader/Shaders/GlslSpecularPbrReflection.hpp" bodystart="13" bodyend="78"/>
+    <listofallmembers>
+      <member refid="d3/d53/a05410_1a6fd5965d57a70d4bafe359432cc0316a" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularPbrReflectionModel</scope><name>computeIncident</name></member>
+      <member refid="d3/d53/a05410_1acfc5d971f397463c1a38e185dd440d20" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularPbrReflectionModel</scope><name>computeRefl</name></member>
+      <member refid="d3/d53/a05410_1af18f1037a2275d80d75e0cee42ee9aa1" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularPbrReflectionModel</scope><name>computeRefrEnvMap</name></member>
+      <member refid="d3/d53/a05410_1aa9dc7bdc8280ad65f4a8acb441112bfe" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularPbrReflectionModel</scope><name>computeRefrSkybox</name></member>
+      <member refid="d3/d53/a05410_1a0c484534edb001b2f7dbd1b49736e3fb" prot="private" virt="non-virtual"><scope>castor3d::shader::SpecularPbrReflectionModel</scope><name>doDeclareComputeIncident</name></member>
+      <member refid="d3/d53/a05410_1aef0b085a0e517131e0e509cf5ebca227" prot="private" virt="non-virtual"><scope>castor3d::shader::SpecularPbrReflectionModel</scope><name>doDeclareComputeRefl</name></member>
+      <member refid="d3/d53/a05410_1a616ad0f6a11225d857af4638cd864f71" prot="private" virt="non-virtual"><scope>castor3d::shader::SpecularPbrReflectionModel</scope><name>doDeclareComputeRefrEnvMap</name></member>
+      <member refid="d3/d53/a05410_1ac0f75fbab81a2fc70ba660224d62c7a6" prot="private" virt="non-virtual"><scope>castor3d::shader::SpecularPbrReflectionModel</scope><name>doDeclareComputeRefrSkybox</name></member>
+      <member refid="d3/d53/a05410_1a917191989ffc3a50df9a99ff1e342b1a" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularPbrReflectionModel</scope><name>m_computeIncident</name></member>
+      <member refid="d3/d53/a05410_1a7d8084e24ceeeae0a133c9b68c5ea2c4" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularPbrReflectionModel</scope><name>m_computeRefl</name></member>
+      <member refid="d3/d53/a05410_1a53df682c76db9b858679a54d559d317c" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularPbrReflectionModel</scope><name>m_computeRefrEnvMap</name></member>
+      <member refid="d3/d53/a05410_1a1fcf5967dead2205fc72a0e8c706abed" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularPbrReflectionModel</scope><name>m_computeRefrSkybox</name></member>
+      <member refid="d3/d53/a05410_1ac47708ad02566114549b16815154e11c" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularPbrReflectionModel</scope><name>m_utils</name></member>
+      <member refid="d3/d53/a05410_1adc2965c3676c06b345143a6b9d70a9ac" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularPbrReflectionModel</scope><name>m_writer</name></member>
+      <member refid="d3/d53/a05410_1a679276cca96fc6577098fbf5ad872a6b" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularPbrReflectionModel</scope><name>SpecularPbrReflectionModel</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

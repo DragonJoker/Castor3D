@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_2888d375753d3f71d27fcc401eca33a3" kind="dir">
+    <compoundname>Render/Ssao</compoundname>
+    <innerfile refid="df/de8/a00839">SsaoBlurPass.hpp</innerfile>
+    <innerfile refid="d0/d11/a00842">SsaoConfig.hpp</innerfile>
+    <innerfile refid="d7/dcf/a00845">SsaoModule.hpp</innerfile>
+    <innerfile refid="d9/d30/a00848">SsaoRawAOPass.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Ssao/"/>
+  </compounddef>
+</doxygen>

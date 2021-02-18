@@ -10,6 +10,7 @@
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="Castor3D.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -17,10 +18,12 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="castor-small.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Castor3D
-   &#160;<span id="projectnumber">..</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
+   <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
  </tr>
  </tbody>
@@ -43,293 +46,277 @@ $(function() {
 
 <h3><a id="index_r"></a>- r -</h3><ul>
 <li>RadianceComputer()
-: <a class="el" href="db/da2/a02512.html#a4dba6bae6f0e81a7da02a6e2e911bfcd">castor3d::RadianceComputer</a>
+: <a class="el" href="de/d37/a04488.html#a48b9093e655a2280d048760a69336eac">castor3d::RadianceComputer</a>
 </li>
-<li>RawSsaoPass()
-: <a class="el" href="d1/dfd/a03536.html#ad4ae6a39648ef7a3baeeeba142aa17fb">castor3d::RawSsaoPass</a>
+<li>range()
+: <a class="el" href="de/dc4/a04428.html#a420f77dfb83539957ebec08cdf8f59a8">castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;</a>
 </li>
 <li>Ray()
-: <a class="el" href="d8/d30/a02380.html#a22eccc4a6c9ef805ee77ea464a272769">castor3d::Ray</a>
+: <a class="el" href="dd/d8c/a04508.html#a2d61a856b9dacab355cdf6157e2d4108">castor3d::Ray</a>
 </li>
 <li>read()
-: <a class="el" href="d4/d26/a01700.html#adce0d005d156705d9ff266e8036ae618">castor3d::BinaryChunk</a>
-, <a class="el" href="d1/d42/a01800.html#ac2ea638a20bc56a250f669cad0974012">castor3d::Cache&lt; Material, castor::String &gt;</a>
+: <a class="el" href="d8/dd8/a02108.html#aef0d7f6fbdd6f0ace675b5c4784b4089">castor3d::BinaryChunk</a>
 </li>
 <li>ref()
-: <a class="el" href="d4/d8c/a02292.html#a946707c39c65b7739d0d9c02f11b9881">castor3d::InstantiationComponent</a>
+: <a class="el" href="d3/d8f/a03956.html#a946707c39c65b7739d0d9c02f11b9881">castor3d::InstantiationComponent</a>
 </li>
-<li>ReflectionPass()
-: <a class="el" href="dd/d25/a03512.html#af9e67eb59253df4fef900b7d085defab">castor3d::ReflectionPass</a>
+<li>ReflectiveShadowMapping()
+: <a class="el" href="d9/d2e/a04900.html#a283723ff6049be591d86fef30344354b">castor3d::ReflectiveShadowMapping</a>
 </li>
 <li>registerClickAction()
-: <a class="el" href="d0/d59/a01956.html#a00c3d05545814d8d7369beb774f90cfe">castor3d::UserInputListener</a>
+: <a class="el" href="d7/d66/a02580.html#adbbdf0b7d4e151079b73152f007416f2">castor3d::UserInputListener</a>
+</li>
+<li>registerElement()
+: <a class="el" href="d1/d8c/a02364.html#a97443b80716555a3ade1866f25639496">castor3d::BillboardUboPools</a>
+</li>
+<li>registerFrame()
+: <a class="el" href="d3/d49/a04972.html#a4b8c2a6e867159e5545c6ae52e6ed246">castor3d::RenderCube</a>
+</li>
+<li>registerLight()
+: <a class="el" href="d7/deb/a04264.html#a736595a74404ad9db1e6f82148cb7eea">castor3d::LayeredLightPropagationVolumesBase</a>
+, <a class="el" href="dd/ddf/a04284.html#a12eb1dde5dea8783563b61924b77df0e">castor3d::LightPropagationVolumesBase</a>
+</li>
+<li>registerMouseMoveAction()
+: <a class="el" href="d7/d66/a02580.html#a3d8e41ec70a24b238be398712012e036">castor3d::UserInputListener</a>
 </li>
 <li>registerParsers()
-: <a class="el" href="dc/d31/a01892.html#a97659755ab9d6c3b8d6c96606e2b8858">castor3d::Engine</a>
+: <a class="el" href="dc/dbb/a02520.html#a9f3ed77037d251b8b4004434dfd8a6fc">castor3d::Engine</a>
+</li>
+<li>registerPass()
+: <a class="el" href="d1/d8c/a02364.html#a0a02530699b8b5b4ebe592f2e4027af2">castor3d::BillboardUboPools</a>
+, <a class="el" href="d3/d35/a02360.html#af796e459edfb72482669db7f6d68c4cf">castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</a>
+, <a class="el" href="d4/d0c/a02476.html#a2680851c7b9c5c7c64c83b215edb694c">castor3d::ObjectCache&lt; Geometry, castor::String &gt;</a>
+, <a class="el" href="dd/d4b/a04432.html#a63569272bc22e0cb849d309edb89e1ad">castor3d::RenderGrid</a>
+, <a class="el" href="d4/d45/a04456.html#ac0cf400425c8050429e895099c971715">castor3d::RenderQuad</a>
+</li>
+<li>registerPassInputs()
+: <a class="el" href="dd/d4b/a04432.html#a0961c0b7463b5bbbd5f6ac863be1d365">castor3d::RenderGrid</a>
+, <a class="el" href="d4/d45/a04456.html#a367adcd9b6cc6ac6b1c68a28b2580eb2">castor3d::RenderQuad</a>
+</li>
+<li>registerPassIO()
+: <a class="el" href="d3/d45/a04280.html#a726978d6a0a16ffd89a3430729e51a5d">castor3d::LightPropagationPass</a>
 </li>
 <li>registerSections()
-: <a class="el" href="dc/d31/a01892.html#a280213fbc50c6819e5d3e63de250693d">castor3d::Engine</a>
+: <a class="el" href="dc/dbb/a02520.html#a0afcf1ecae2903a4e5f979a823684eff">castor3d::Engine</a>
 </li>
 <li>registerSelectAction()
-: <a class="el" href="d0/d59/a01956.html#adff1b570488d0a3552a2efa9eb92f42b">castor3d::UserInputListener</a>
+: <a class="el" href="d7/d66/a02580.html#a7eef9892848ee17099bca6e3da6c22d5">castor3d::UserInputListener</a>
 </li>
 <li>registerTextAction()
-: <a class="el" href="d0/d59/a01956.html#a89a386f43f9bd8761ac3552e714969f8">castor3d::UserInputListener</a>
+: <a class="el" href="d7/d66/a02580.html#a89b3c690479c7ecfd64cbaf0a08af8f0">castor3d::UserInputListener</a>
 </li>
 <li>registerTimer()
-: <a class="el" href="d0/da6/a02412.html#a04b1e1d8f88c56dff15e53e0ab673ded">castor3d::DebugOverlays</a>
-, <a class="el" href="dd/dc4/a02632.html#a13f22ad01163ed4d6714f6455c61d772">castor3d::RenderLoop</a>
+: <a class="el" href="dc/ddd/a04064.html#a4ae85f49a813b4e5cea70ad507adc881">castor3d::DebugOverlays</a>
+, <a class="el" href="d3/d83/a04520.html#a8d80e8cd7f7e9764c3398da5e31e2a0a">castor3d::RenderLoop</a>
 </li>
-<li>Relaunch()
-: <a class="el" href="da/db4/a02348.html#ad46858d647d26cfac89e0baf520744bc">castor3d::Generator::Thread</a>
+<li>registerWindow()
+: <a class="el" href="dc/dbb/a02520.html#ac28328d51d84410eea9caeeec5614521">castor3d::Engine</a>
 </li>
 <li>remove()
-: <a class="el" href="d2/d77/a01824.html#a5ec4f59f8524bb85cb6818de9bd65abd">castor3d::Cache&lt; Overlay, castor::String &gt;</a>
-, <a class="el" href="d0/d9d/a01760.html#af1031cfec660c870ca1b7284e1c88e25">castor3d::CacheBase&lt; ElementType, KeyType &gt;</a>
-, <a class="el" href="de/dda/a01768.html#ad84a71831c3c9a248fbb2577390e4d3a">castor3d::CacheView&lt; ResourceType, CacheType, EventType &gt;</a>
-, <a class="el" href="d4/d77/a01788.html#a27851f77d3093b7cc00de516d5f8c9fe">castor3d::ObjectCache&lt; Light, castor::String &gt;</a>
-, <a class="el" href="d7/d02/a01808.html#a88787fe4cf13161c89b341ecc81d281e">castor3d::ObjectCacheBase&lt; ElementType, KeyType &gt;</a>
-, <a class="el" href="dd/de7/a01868.html#a09fc987011e42b51d3df310bdbc71531">castor3d::RenderTargetCache</a>
-, <a class="el" href="d6/da1/a03180.html#a340cff2cf011c5e204f9cbc9b87dea31">castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;</a>
+: <a class="el" href="da/db4/a02348.html#a83f9a2d445707f395ec89f501021d5e3">castor3d::Cache&lt; AnimatedObjectGroup, castor::String &gt;</a>
+, <a class="el" href="d1/df5/a02496.html#a5ec4f59f8524bb85cb6818de9bd65abd">castor3d::Cache&lt; Overlay, castor::String &gt;</a>
+, <a class="el" href="df/d46/a02376.html#af1031cfec660c870ca1b7284e1c88e25">castor3d::CacheBase&lt; ElementType, KeyType &gt;</a>
+, <a class="el" href="d5/de6/a02424.html#a4303c695f8edbe56c0194ac7c590ad9b">castor3d::CacheView&lt; ResourceType, CacheType, EventType &gt;</a>
+, <a class="el" href="d3/d35/a02360.html#a28bbf4693ecab9ab46a26dc741843f3c">castor3d::ObjectCache&lt; BillboardList, castor::String &gt;</a>
+, <a class="el" href="d4/d0c/a02476.html#a2d0980bc2a51d20303d0a3bb51fcb625">castor3d::ObjectCache&lt; Geometry, castor::String &gt;</a>
+, <a class="el" href="de/d4e/a02484.html#a4cab913a6f233f6d547cfbe73edd0f4b">castor3d::ObjectCache&lt; Light, castor::String &gt;</a>
+, <a class="el" href="d5/d04/a02428.html#ae34ecf5dbaca1411e7adb6b895a99698">castor3d::ObjectCacheBase&lt; ElementType, KeyType &gt;</a>
+, <a class="el" href="d2/dab/a02516.html#a09fc987011e42b51d3df310bdbc71531">castor3d::RenderTargetCache</a>
+, <a class="el" href="dc/d0e/a05320.html#a340cff2cf011c5e204f9cbc9b87dea31">castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;</a>
+</li>
+<li>removeAnimation()
+: <a class="el" href="dc/dce/a03908.html#adb3f3c9760670a63f3cc453d7f2bf6ef">castor3d::Mesh</a>
+, <a class="el" href="db/d13/a04032.html#ac6b06a555c4ee36a28863007aaa4a632">castor3d::Skeleton</a>
+, <a class="el" href="d6/d18/a02664.html#a040e5c26091a31164fcad8f888ea4bda">castor3d::TextureUnit</a>
 </li>
 <li>removeFeature()
-: <a class="el" href="da/d6b/a02352.html#a416506c586f1ccefe703b88a25ef3151">castor3d::GpuInformations</a>
+: <a class="el" href="df/d97/a02676.html#a54e7993e2b67ed913955497e6f0bccd3">castor3d::GpuInformations</a>
+</li>
+<li>removeGamma()
+: <a class="el" href="d9/d54/a05436.html#acbe211502ed8f237a85d819c69481151">castor3d::shader::Utils</a>
 </li>
 <li>removePass()
-: <a class="el" href="db/d68/a02028.html#aa089db54feed1a4434334bf9309e9edb">castor3d::Material</a>
-, <a class="el" href="d5/d7f/a03036.html#a04fd2c6473c7b87ca15163a84afadc77">castor3d::PassBuffer</a>
+: <a class="el" href="dc/d28/a02584.html#aa089db54feed1a4434334bf9309e9edb">castor3d::Material</a>
+, <a class="el" href="d1/d54/a05272.html#a04fd2c6473c7b87ca15163a84afadc77">castor3d::PassBuffer</a>
 </li>
-<li>RemovePoint()
-: <a class="el" href="d6/dbc/a02856.html#a7b865ebfd94425cc7bcb2fa96c031c1e">castor3d::BillboardList</a>
+<li>removePoint()
+: <a class="el" href="d4/dc5/a05148.html#a6357aa771a9b4f94faaba89a224b1559">castor3d::BillboardList</a>
 </li>
-<li>removeUniform()
-: <a class="el" href="d4/dd6/a03364.html#ada56be13e132fa38a018869bf7d524aa">castor3d::UniformBuffer</a>
+<li>removeTextureConfiguration()
+: <a class="el" href="d9/d21/a05448.html#a5c01e510da219fc5e6aa56fb49d7c180">castor3d::TextureConfigurationBuffer</a>
+</li>
+<li>removeTextureUnit()
+: <a class="el" href="df/d5d/a02596.html#ab443dc15b22fda41fa106f151fcebc20">castor3d::Pass</a>
 </li>
 <li>render()
-: <a class="el" href="d4/dad/a02500.html#aa2fc5022b44a5cef72229197565af93f">castor3d::BrdfPrefilter</a>
-, <a class="el" href="d2/d77/a01824.html#a5a992fad047dddcbbb3fe7a2292b2eb6">castor3d::Cache&lt; Overlay, castor::String &gt;</a>
-, <a class="el" href="dd/ddc/a03444.html#a5b9fcfe5bfee39725f6623eae251c466">castor3d::DeferredRendering</a>
-, <a class="el" href="d4/d87/a03436.html#a2ad6d67d4c1f2dcb92790cf8c5279cfd">castor3d::DepthPass</a>
-, <a class="el" href="d2/d5a/a02652.html#a3f4da1718ee7bf49df70a3fb554f1a44">castor3d::DistanceRenderNode&lt; NodeType &gt;</a>
-, <a class="el" href="dc/dcb/a02648.html#afc07902eafe9ea8f5bd6593785e76289">castor3d::DistanceRenderNodeBase</a>
-, <a class="el" href="d9/d63/a01896.html#a961dba4f315f1b722576ba71ee600d9a">castor3d::EnvironmentMap</a>
-, <a class="el" href="d5/dcc/a01900.html#ae1a9b98c48308368a24878c8ed551d4d">castor3d::EnvironmentMapPass</a>
-, <a class="el" href="d3/df4/a02504.html#a18508563ae30790eebe07aa2792bb19f">castor3d::EnvironmentPrefilter</a>
-, <a class="el" href="dc/dca/a03580.html#a8d10b242401342fe8bdbd2ab173604d3">castor3d::FinalCombinePass</a>
-, <a class="el" href="db/d83/a03576.html#a0f00da61dc7fea837d91c1f71bbb8e87">castor3d::FinalCombineProgram</a>
-, <a class="el" href="df/d89/a03440.html#a76dd92362d3ae411793e40a180aaf891">castor3d::ForwardRenderTechniquePass</a>
-, <a class="el" href="d6/d36/a03456.html#adbe9df2ea5505e43199e13672a3efe8d">castor3d::LightingPass</a>
-, <a class="el" href="d4/d4b/a03464.html#a31bbdb5ef359d826284b6773db4dd5d3">castor3d::LightPass::Program</a>
-, <a class="el" href="dc/d18/a03460.html#ad5dc6b24c7b04322c4e91712e1cddf49">castor3d::LightPass</a>
-, <a class="el" href="de/df6/a03484.html#a35e027169058cb4546b9a0b14027e3fb">castor3d::LightPassShadow&lt; LtType &gt;</a>
-, <a class="el" href="d8/d63/a03500.html#ae3931328dfe79386d3b3745acc1aa349">castor3d::OpaquePass</a>
-, <a class="el" href="dd/d0a/a02436.html#aef8cf9a1764a8cfac62de4d7bf0c82e2">castor3d::Overlay</a>
-, <a class="el" href="d4/da8/a02444.html#a36220a9c7d7246cdcdec0c004c19b2dd">castor3d::OverlayCategory</a>
-, <a class="el" href="db/da2/a02512.html#ad34151dc46e9d64c07b26e66a60c4495">castor3d::RadianceComputer</a>
-, <a class="el" href="dd/d25/a03512.html#af5ab1f380e066e110ef06ca354fc9947">castor3d::ReflectionPass</a>
-, <a class="el" href="d0/d1f/a02748.html#a9661af0a7a9af38c7d8c10627e6ef837">castor3d::RenderColourCubeToTexture</a>
-, <a class="el" href="dc/d3d/a02752.html#a56dd5056170f65154773fe1864a31e37">castor3d::RenderColourLayerCubeToTexture</a>
-, <a class="el" href="dc/d80/a02756.html#a882e1b1ae9ec02c278dd038c7007c1de">castor3d::RenderColourLayerToTexture</a>
-, <a class="el" href="d3/d55/a02760.html#af334605d1d15b7d305a9efcbfb355dce">castor3d::RenderColourToCube</a>
-, <a class="el" href="df/d25/a02764.html#aa62be2f8da5ced5e0172356bfc311399">castor3d::RenderColourToTexture</a>
-, <a class="el" href="d3/d7e/a02768.html#aa4881a33cf2a44f3fd98c5a620b8b6c3">castor3d::RenderDepthCubeToTexture</a>
-, <a class="el" href="d9/d4a/a02772.html#ae7bd939ca7bd9d5eca7862eb655bcb1a">castor3d::RenderDepthLayerCubeToTexture</a>
-, <a class="el" href="d5/dba/a02776.html#a31cd2072f82c83906939d29d354a32ba">castor3d::RenderDepthLayerToTexture</a>
-, <a class="el" href="df/de4/a02780.html#a734370b9f4b83be24238c080a8c88ac4">castor3d::RenderDepthToTexture</a>
-, <a class="el" href="db/d1d/a02716.html#a58e21b9de8057ca4933f05e915e71173">castor3d::RenderTarget</a>
-, <a class="el" href="dd/de7/a01868.html#aae90600908424eb3096b3e37665f9651">castor3d::RenderTargetCache</a>
-, <a class="el" href="d9/d79/a03564.html#a415b62b8a91637b183c6d97d22ced194">castor3d::RenderTechnique</a>
-, <a class="el" href="d8/db0/a03572.html#a0c41a354b548c9efd6bbbb6694242bd6">castor3d::RenderTechniquePass</a>
-, <a class="el" href="d0/d5a/a02784.html#ae6762d7bc1611376b7305cb2319d6453">castor3d::RenderVarianceCubeToTexture</a>
-, <a class="el" href="de/db6/a02792.html#a66b171fa4423eec8d98d22f831fc4aec">castor3d::RenderVarianceToTexture</a>
-, <a class="el" href="db/d59/a02728.html#ab8f76873d7cd271ff6ca92108f21dd4c">castor3d::RenderWindow</a>
-, <a class="el" href="d0/d57/a03380.html#ac48acfde5e5de985e363b7427f08ce4d">castor3d::ShadowMap</a>
-, <a class="el" href="d7/d22/a03384.html#aced5a41e7bbaf2cf5331998da35a0dde">castor3d::ShadowMapDirectional</a>
-, <a class="el" href="d6/d8d/a03388.html#a4b7cde6ad1a6d7a0929d86b8b413aa80">castor3d::ShadowMapPass</a>
-, <a class="el" href="d2/d21/a03392.html#a7b053496ae06a86a4a7befa4be9ed09e">castor3d::ShadowMapPassDirectional</a>
-, <a class="el" href="d3/dc2/a03396.html#a5a21d2685df15bb79645862409a64c84">castor3d::ShadowMapPassPoint</a>
-, <a class="el" href="d2/d9b/a03400.html#aaf0886b2bdf4bf94bf63f2c3e954ad8e">castor3d::ShadowMapPassSpot</a>
-, <a class="el" href="dc/da7/a03404.html#af87f02d30dfc954a345a3dd5377dbc2a">castor3d::ShadowMapPoint</a>
-, <a class="el" href="d2/d2e/a03408.html#a6c054540e512ac4ec695faef1b4ed842">castor3d::ShadowMapSpot</a>
-, <a class="el" href="d8/dbd/a03008.html#ac7d4250329ad4597cb959dba60bbe3b9">castor3d::Skybox</a>
-, <a class="el" href="d1/d6e/a03552.html#a075434ecdfae221a140b2e1c30815c45">castor3d::SsaoPass</a>
-, <a class="el" href="d3/df0/a03556.html#af5d044de5c5c283fd49bd8af2f5a4a66">castor3d::StencilPass</a>
-, <a class="el" href="d5/dda/a03560.html#a2ce1b9a3a082250ca0f675b8fa8318ce">castor3d::SubsurfaceScatteringPass</a>
-, <a class="el" href="d3/dac/a02796.html#a58ec49d433b8b90b7fac1601626ec6a0">castor3d::TextureProjection</a>
-, <a class="el" href="dd/dda/a03584.html#af8c4cbf404415196038fd804bc6451bf">castor3d::TransparentPass</a>
-, <a class="el" href="de/d51/a03588.html#a1bc02b86d41a9d312d53f354ee01b068">castor3d::WeightedBlendRendering</a>
+: <a class="el" href="dd/d3b/a04468.html#a60491f338ed5163b491e937fdae8d4f6">castor3d::BrdfPrefilter</a>
+, <a class="el" href="d4/deb/a04728.html#a6dec7de32f0dba7f4230ae4d6c7643bf">castor3d::DeferredRendering</a>
+, <a class="el" href="d2/d7a/a04384.html#a15846a58b1705ef1244776091d40f094">castor3d::DepthPass</a>
+, <a class="el" href="d4/d46/a04312.html#a3f4da1718ee7bf49df70a3fb554f1a44">castor3d::DistanceRenderNode&lt; NodeType &gt;</a>
+, <a class="el" href="de/d12/a04308.html#afc07902eafe9ea8f5bd6593785e76289">castor3d::DistanceRenderNodeBase</a>
+, <a class="el" href="dc/d32/a04240.html#a056ba95d052842dfda04f5961540bfe3">castor3d::EnvironmentMap</a>
+, <a class="el" href="d2/d98/a04244.html#a916ceb355e69a7a995f0c52349bd8ed3">castor3d::EnvironmentMapPass</a>
+, <a class="el" href="df/dfb/a04472.html#ad79e2c4cfca75c0b72580227327450a9">castor3d::EnvironmentPrefilter</a>
+, <a class="el" href="d1/dc6/a04964.html#ab3e1f7fe0996aa18a5a6ea89d41d95df">castor3d::EquirectangularToCube</a>
+, <a class="el" href="d2/dd5/a04724.html#a11b3efd59f1ffd2f6d97166a000d6db1">castor3d::ForwardRenderTechniquePass</a>
+, <a class="el" href="d7/deb/a04264.html#a12b96c8e8359862b83d7972115f1028c">castor3d::LayeredLightPropagationVolumesBase</a>
+, <a class="el" href="db/d08/a04848.html#a8b12abb52b76750d367e8eb715415fa9">castor3d::LightingPass</a>
+, <a class="el" href="da/deb/a04764.html#a8a4da088de05ee41c00ba7cb17bc5178">castor3d::LightPass::Program</a>
+, <a class="el" href="d8/dfa/a04756.html#afbcf07bce0c8d0d7466e19d7d056162a">castor3d::LightPass</a>
+, <a class="el" href="db/dde/a04856.html#aba5d4f8f81d962484f7ef4bcb2c43fe0">castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;</a>
+, <a class="el" href="db/d9e/a04892.html#ae56141c0394a38504d748b5cdb6e0d52">castor3d::LightPassReflectiveShadow&lt; LtType &gt;</a>
+, <a class="el" href="d1/dda/a04860.html#a5fadf6bae75eec058dbb0211ead4866b">castor3d::LightPassVolumePropagationShadowT&lt; LtType &gt;</a>
+, <a class="el" href="dd/ddf/a04284.html#aab46197f99cb6a6ac71b202d6389bd5e">castor3d::LightPropagationVolumesBase</a>
+, <a class="el" href="d8/dc6/a04796.html#a8eb1d1024daebe6cd2e4145bca0400f8">castor3d::MeshLightPass</a>
+, <a class="el" href="d9/d27/a04876.html#a556181797fe48e7eea32d3f7d08ae300">castor3d::OpaquePass</a>
+, <a class="el" href="dc/d32/a04884.html#a9b0d8e0927f35d4833dfde1762df1a11">castor3d::OpaqueResolvePass</a>
+, <a class="el" href="db/da3/a04116.html#ac8279ba1e869e4f639db545ead953760">castor3d::OverlayRenderer</a>
+, <a class="el" href="de/d37/a04488.html#a8ddf49cc04b6d86e0298b5b57a0bd382">castor3d::RadianceComputer</a>
+, <a class="el" href="da/d4c/a04980.html#a916ed7d7e80f9550e04e4ee68b51a390">castor3d::RenderDepthQuad</a>
+, <a class="el" href="d3/d6e/a04628.html#a7aaa867536d9d707f308e94ea810156d">castor3d::RenderTarget</a>
+, <a class="el" href="d2/dab/a02516.html#aeb79530ebb15c1659ff02c212eff6d45">castor3d::RenderTargetCache</a>
+, <a class="el" href="da/d05/a04920.html#a1e67794a8cbd8f748901273c055d623a">castor3d::RenderTechnique</a>
+, <a class="el" href="d4/d6d/a04636.html#ab4c1b52b82cee5157fc77432f2fea33c">castor3d::RenderWindow</a>
+, <a class="el" href="d5/d62/a04648.html#a61c8bd28db3c0419c5f84b79c1c49105">castor3d::ShadowMap</a>
+, <a class="el" href="d1/d58/a04916.html#af99f907832fba28a147c6dfc21d2615b">castor3d::SsaoPass</a>
+, <a class="el" href="df/d25/a04464.html#a46175e0c00dc4af4118e98c63634993c">castor3d::StencilPass</a>
+, <a class="el" href="df/da2/a04828.html#a903b20d8fdb47a3c1c43d6a4630c1f55">castor3d::SubsurfaceScatteringPass</a>
+, <a class="el" href="d5/d6e/a04988.html#aa6ace018daf4eec80ee71018be654299">castor3d::Texture3DTo2D</a>
+, <a class="el" href="de/d7d/a05000.html#acce884e20f1190783d8183cc850adda3">castor3d::TextureProjectionToCube</a>
+, <a class="el" href="d5/df2/a04932.html#a30f7d40a2c608827a8f008b58729c2f9">castor3d::TransparentPass</a>
+, <a class="el" href="d7/d3f/a04944.html#a322992f13d6cdab86838c6300b0a1cd3">castor3d::TransparentResolvePass</a>
+, <a class="el" href="db/dd9/a05012.html#a0170c953ef5bcdf7b5e8af297ddf4077">castor3d::VoxelBufferToTexture</a>
+, <a class="el" href="d7/d17/a05024.html#acda0dc40adb81bf1628d635f426d0010">castor3d::VoxelizePass</a>
+, <a class="el" href="dc/d61/a05028.html#a95db897439353ef2e4e1bb4a329f2250">castor3d::Voxelizer</a>
+, <a class="el" href="d8/d09/a05036.html#a3774bbf8a2c8522153768f07f330e28e">castor3d::VoxelSecondaryBounce</a>
+, <a class="el" href="de/d1b/a04948.html#abf361bcfacaadbae99a910b0ff40f45e">castor3d::WeightedBlendRendering</a>
 </li>
-<li>renderBackground()
-: <a class="el" href="d6/db9/a02980.html#a19e3597360973a0f2c2419a2f9e17561">castor3d::Scene</a>
-</li>
-<li>RenderBuffer()
-: <a class="el" href="d5/d70/a01980.html#a44ad4d0b098ee52431a5915ba4f3c269">castor3d::RenderBuffer</a>
-</li>
-<li>RenderBufferAttachment()
-: <a class="el" href="d0/d38/a01984.html#a19f13bfa208d78aba3e49e1728274efe">castor3d::RenderBufferAttachment</a>
-</li>
-<li>RenderColourCubeToTexture()
-: <a class="el" href="d0/d1f/a02748.html#a38c2ce5796a0a84a64558f5373d37b51">castor3d::RenderColourCubeToTexture</a>
-</li>
-<li>RenderColourLayerCubeToTexture()
-: <a class="el" href="dc/d3d/a02752.html#a3273df5c2c972e1070a8cc92af8c559a">castor3d::RenderColourLayerCubeToTexture</a>
-</li>
-<li>RenderColourLayerToTexture()
-: <a class="el" href="dc/d80/a02756.html#a63882cac918f68b377135bf593a0f522">castor3d::RenderColourLayerToTexture</a>
-</li>
-<li>RenderColourToCube()
-: <a class="el" href="d3/d55/a02760.html#a60a718f4045156320c23217af9f190a9">castor3d::RenderColourToCube</a>
-</li>
-<li>RenderColourToTexture()
-: <a class="el" href="df/d25/a02764.html#a4436bd2ea8b30260d4c848cce68ba649">castor3d::RenderColourToTexture</a>
-</li>
-<li>renderCubeFace()
-: <a class="el" href="d8/d09/a02624.html#ad280a1c1141a0b4f0d6480f46487a070">castor3d::Context</a>
+<li>RenderCube()
+: <a class="el" href="d3/d49/a04972.html#ac600349f4887fe9d7765ecc3224b2992">castor3d::RenderCube</a>
 </li>
 <li>renderDepth()
-: <a class="el" href="d8/d09/a02624.html#aa536fefd42ce1333d4ec223fed014785">castor3d::Context</a>
+: <a class="el" href="dc/dbb/a02520.html#a14f546be7f04a5734f6335db71432ead">castor3d::Engine</a>
 </li>
-<li>renderDepthCube()
-: <a class="el" href="d8/d09/a02624.html#a27fd209d9f2f2cc23722e1bba882ba2f">castor3d::Context</a>
+<li>RenderDepthQuad()
+: <a class="el" href="da/d4c/a04980.html#ab4ea0b84e4138c3a50b882490de23137">castor3d::RenderDepthQuad</a>
 </li>
-<li>RenderDepthCubeToTexture()
-: <a class="el" href="d3/d7e/a02768.html#ae60d3ebb8bc8182ca8d99ecd5ef19ecd">castor3d::RenderDepthCubeToTexture</a>
+<li>RenderDevice()
+: <a class="el" href="d1/def/a04512.html#ae8853cd934b675be0878914e6797fe48">castor3d::RenderDevice</a>
 </li>
-<li>RenderDepthLayerCubeToTexture()
-: <a class="el" href="d9/d4a/a02772.html#a5d80c7da6c2753386d06a8ec41d38bd6">castor3d::RenderDepthLayerCubeToTexture</a>
+<li>RenderGrid()
+: <a class="el" href="dd/d4b/a04432.html#ac116d918c9072dc91a59be170c82b916">castor3d::RenderGrid</a>
 </li>
-<li>RenderDepthLayerToTexture()
-: <a class="el" href="d5/dba/a02776.html#a4b1c9f140ba139e6897005b37e8cb447">castor3d::RenderDepthLayerToTexture</a>
-</li>
-<li>RenderDepthToTexture()
-: <a class="el" href="df/de4/a02780.html#a7218633c6a6baab1ae83ef13a0f58437">castor3d::RenderDepthToTexture</a>
-</li>
-<li>renderEquiToCube()
-: <a class="el" href="d8/d09/a02624.html#a77fc0b5835d71115b4b2696c69afd835">castor3d::Context</a>
-</li>
-<li>RendererPlugin()
-: <a class="el" href="da/dc4/a02548.html#a19c8bb021ef4ad0c708daa7b76870d0f">castor3d::RendererPlugin</a>
-</li>
-<li>renderFace()
-: <a class="el" href="d0/d1f/a02748.html#a28c42e7b92602f4610e2101a05d8bb93">castor3d::RenderColourCubeToTexture</a>
+<li>RenderGridBuilderT()
+: <a class="el" href="dc/d7e/a04424.html#ab53833e3acc8950f02165f629b44f43c">castor3d::RenderGridBuilderT&lt; ConfigT, BuilderT &gt;</a>
 </li>
 <li>RenderLoop()
-: <a class="el" href="dd/dc4/a02632.html#a0d0d39a49b9300acbbe6a1022079d3bd">castor3d::RenderLoop</a>
+: <a class="el" href="d3/d83/a04520.html#a92f9f97a35dd1d47e537f6e6024952b7">castor3d::RenderLoop</a>
 </li>
 <li>RenderLoopAsync()
-: <a class="el" href="dd/d32/a02636.html#a9aa6836508801c21f31cd1641b360ad0">castor3d::RenderLoopAsync</a>
+: <a class="el" href="d1/ddc/a04532.html#a45851e91e2d9cbdc2ee36d175e99bf3f">castor3d::RenderLoopAsync</a>
 </li>
 <li>RenderLoopSync()
-: <a class="el" href="dd/d5f/a02640.html#a0b079c409d14bcd95008aeb61f13c5c2">castor3d::RenderLoopSync</a>
-</li>
-<li>renderNearest()
-: <a class="el" href="df/d25/a02764.html#aa86e145465465bd67fa689cc0669d4a7">castor3d::RenderColourToTexture</a>
+: <a class="el" href="d7/da8/a04536.html#ac020f68f41bd51da5f2b8e4b3a7aabb2">castor3d::RenderLoopSync</a>
 </li>
 <li>RenderPass()
-: <a class="el" href="de/db4/a02684.html#a4fee61ea424ecff055e41665c6b6c45f">castor3d::RenderPass</a>
+: <a class="el" href="db/dc8/a04760.html#ac00fa53d066af78eb7ae961fe6ee2820">castor3d::LightPass::RenderPass</a>
 </li>
 <li>RenderPassTimer()
-: <a class="el" href="d4/dfe/a02688.html#aba5e42c5f9765b441b569b4d0ac4a526">castor3d::RenderPassTimer</a>
+: <a class="el" href="d7/dc4/a04612.html#af1a67f7103e55013f680150154738838">castor3d::RenderPassTimer</a>
+</li>
+<li>RenderPassTimerBlock()
+: <a class="el" href="d3/dba/a04608.html#aefb6a2f82cbbe685c651634c6236bcfe">castor3d::RenderPassTimerBlock</a>
 </li>
 <li>RenderPipeline()
-: <a class="el" href="d2/dba/a02692.html#adf1e250f943b5de3e29669b34f359218">castor3d::RenderPipeline</a>
+: <a class="el" href="de/dfb/a04616.html#acbed37b0ca58e0d396566c026ade392d">castor3d::RenderPipeline</a>
+</li>
+<li>RenderQuad()
+: <a class="el" href="d0/dd0/a04400.html#afa28c70c240f146e7dd4671540a9efd7">castor3d::GaussianBlur::RenderQuad</a>
+, <a class="el" href="d4/d45/a04456.html#aeaeeae8d7065de723f0a710360bab119">castor3d::RenderQuad</a>
+</li>
+<li>RenderQuadBuilderT()
+: <a class="el" href="de/dc4/a04428.html#a13037f2937494dc1ab0f713225aeedd6">castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;</a>
 </li>
 <li>RenderQueue()
-: <a class="el" href="d4/d9d/a02704.html#aa6dccaa7f42848029acdca9d880d301d">castor3d::RenderQueue</a>
+: <a class="el" href="d2/dfe/a04620.html#a8d1da8a178cf552147f781db19f44e62">castor3d::RenderQueue</a>
 </li>
 <li>renderSyncFrame()
-: <a class="el" href="dd/dc4/a02632.html#aaec7d7766daf9b5f9358256c70a16998">castor3d::RenderLoop</a>
-, <a class="el" href="dd/d32/a02636.html#ad4f2b6d2f72da45a4e112b024608b3bf">castor3d::RenderLoopAsync</a>
-, <a class="el" href="dd/d5f/a02640.html#af9e60f58ac8842e6741d9a02841efcf6">castor3d::RenderLoopSync</a>
+: <a class="el" href="d3/d83/a04520.html#aabd4de0429c0e2659058545c6ec1bad2">castor3d::RenderLoop</a>
+, <a class="el" href="d1/ddc/a04532.html#a64cff74d50b270e8dc6fcfac0ff915e0">castor3d::RenderLoopAsync</a>
+, <a class="el" href="d7/da8/a04536.html#ae5926ec23f7697887648816bc68ed00c">castor3d::RenderLoopSync</a>
 </li>
 <li>RenderSystem()
-: <a class="el" href="d7/d73/a02708.html#a43b91acbf274b7f18d412bbf0b6053c8">castor3d::RenderSystem</a>
+: <a class="el" href="d9/d38/a04624.html#a9c1319ff6b3eeda04ae8ca61e3826de9">castor3d::RenderSystem</a>
 </li>
 <li>RenderTarget()
-: <a class="el" href="db/d1d/a02716.html#a123f8a8436c85d7bcc2284026317364d">castor3d::RenderTarget</a>
+: <a class="el" href="d3/d6e/a04628.html#a468733ad8d4bf8d84bec0db0e444671d">castor3d::RenderTarget</a>
 </li>
 <li>RenderTargetCache()
-: <a class="el" href="dd/de7/a01868.html#a612d88dfdd6971cec9342a1b00f2f50b">castor3d::RenderTargetCache</a>
+: <a class="el" href="d2/dab/a02516.html#a612d88dfdd6971cec9342a1b00f2f50b">castor3d::RenderTargetCache</a>
 </li>
 <li>RenderTechnique()
-: <a class="el" href="d9/d79/a03564.html#a55c8d8b4dd7f3c9ad52820158a3e17d8">castor3d::RenderTechnique</a>
-</li>
-<li>RenderTechniqueFbo()
-: <a class="el" href="dc/d29/a03568.html#a6428e19cf2bdd48d20480c6d481c4f13">castor3d::RenderTechniqueFbo</a>
+: <a class="el" href="da/d05/a04920.html#a050bf38d70c1875fb35d4e997b45eb0c">castor3d::RenderTechnique</a>
 </li>
 <li>RenderTechniquePass()
-: <a class="el" href="d8/db0/a03572.html#ad7934ddfe934798715f3d3313ae09f3f">castor3d::RenderTechniquePass</a>
+: <a class="el" href="d1/db7/a04924.html#a18da3e98fa3727c796c4ded91c736a9c">castor3d::RenderTechniquePass</a>
 </li>
-<li>renderTexture()
-: <a class="el" href="d8/d09/a02624.html#a850f8e2166f011eff04a68a6a28c1bfb">castor3d::Context</a>
-</li>
-<li>renderTextureCube()
-: <a class="el" href="d8/d09/a02624.html#aceeae42403dde2243fda858abe950769">castor3d::Context</a>
-</li>
-<li>renderTextureNearest()
-: <a class="el" href="d8/d09/a02624.html#a90ead189eab5a108fab28d0c39081c34">castor3d::Context</a>
-</li>
-<li>renderVariance()
-: <a class="el" href="d8/d09/a02624.html#add5642304eb76ea465ab7cd20c334784">castor3d::Context</a>
-</li>
-<li>renderVarianceCube()
-: <a class="el" href="d8/d09/a02624.html#a558d09a0ed080a3f62174b8fdf551582">castor3d::Context</a>
-</li>
-<li>RenderVarianceCubeToTexture()
-: <a class="el" href="d0/d5a/a02784.html#aa1f6fa9526beb4192010e7eedba2202c">castor3d::RenderVarianceCubeToTexture</a>
-</li>
-<li>RenderVarianceToTexture()
-: <a class="el" href="de/db6/a02792.html#a4a127e36f9f437c5cf0d29f1e6d8c906">castor3d::RenderVarianceToTexture</a>
+<li>RenderTechniqueVisitor()
+: <a class="el" href="db/d15/a04928.html#a1a204e48eff1db072d0167fd681cddc2">castor3d::RenderTechniqueVisitor</a>
 </li>
 <li>RenderWindow()
-: <a class="el" href="db/d59/a02728.html#adea0a77286cfdbe82231b6499d3351b4">castor3d::RenderWindow</a>
+: <a class="el" href="d4/d6d/a04636.html#ae3eeda89ac35ae77e7bda84ad4a99724">castor3d::RenderWindow</a>
 </li>
 <li>reportTracked()
-: <a class="el" href="d6/d3a/a02356.html#a87e5fbb0a7a47b6cd17ba9f03a1ba93b">castor3d::GpuObjectTracker</a>
+: <a class="el" href="d5/d6a/a02680.html#a87e5fbb0a7a47b6cd17ba9f03a1ba93b">castor3d::GpuObjectTracker</a>
 </li>
 <li>reset()
-: <a class="el" href="d4/dfe/a02688.html#ad4229b2c2f8885b5f215aed801867810">castor3d::RenderPassTimer</a>
+: <a class="el" href="d7/dc4/a04612.html#ad4229b2c2f8885b5f215aed801867810">castor3d::RenderPassTimer</a>
 </li>
 <li>resetGpuTime()
-: <a class="el" href="d7/d73/a02708.html#ad903e2bdc2689b85bba48fa71874b673">castor3d::RenderSystem</a>
+: <a class="el" href="d9/d38/a04624.html#ad903e2bdc2689b85bba48fa71874b673">castor3d::RenderSystem</a>
 </li>
 <li>resetParse()
-: <a class="el" href="d4/d26/a01700.html#a7a755e5c70676c80e150d61574442c2c">castor3d::BinaryChunk</a>
-</li>
-<li>resetToCompile()
-: <a class="el" href="d1/d7a/a03080.html#a435a6df49a3a46ca6ae63b949e15c8a4">castor3d::ShaderProgram</a>
+: <a class="el" href="d8/dd8/a02108.html#a7a755e5c70676c80e150d61574442c2c">castor3d::BinaryChunk</a>
 </li>
 <li>resize()
-: <a class="el" href="da/d47/a02864.html#af3db2145a38440b40d033dbdf7114324">castor3d::Camera</a>
-, <a class="el" href="d6/d0c/a02080.html#ad4a29947b52bdf5477475ae4560506b5">castor3d::CpuBuffer&lt; T &gt;</a>
-, <a class="el" href="db/d9d/a01972.html#a724c33a98179af760c79e1182f1ba01b">castor3d::FrameBuffer</a>
-, <a class="el" href="d5/d70/a01980.html#a8a157ed386869520c779f33342660eaa">castor3d::RenderBuffer</a>
-, <a class="el" href="db/d59/a02728.html#a494252ebcc01160bbeb98f828c944e6c">castor3d::RenderWindow</a>
-, <a class="el" href="d9/dbd/a03604.html#ab7a3436d9d77a0f77fb53b5b2e1023a9">castor3d::TextureImage</a>
-, <a class="el" href="d1/d43/a03612.html#a967caa75a95f83a9a7bc86f28e06a5f2">castor3d::TextureLayout</a>
-, <a class="el" href="df/d81/a03600.html#a40793064d1d1ee0aabf12405a03e7706">castor3d::TextureSource</a>
-, <a class="el" href="da/d20/a02740.html#a1f145920b1d42b2a273fa68909747014">castor3d::Viewport</a>
+: <a class="el" href="d5/d9c/a05152.html#aba6e8288a09d2614b0f25a7e8a8ab043">castor3d::Camera</a>
+, <a class="el" href="d4/d6d/a04636.html#acaf3d816bb8997d9b48c5aaca17e44e3">castor3d::RenderWindow</a>
+, <a class="el" href="d6/df3/a05008.html#a6bf22fe2482397222b93c41f6a0464ed">castor3d::Viewport</a>
+</li>
+<li>resultTexture()
+: <a class="el" href="d0/de0/a04376.html#a7630c9174a0efca28e7fe0c56f7af18d">castor3d::CombinePassBuilder</a>
 </li>
 <li>resume()
-: <a class="el" href="dd/dc4/a02632.html#ae909f2e21ba004087428391048d8db86">castor3d::RenderLoop</a>
-, <a class="el" href="dd/d32/a02636.html#a41474a08868fa78570450ff97369f123">castor3d::RenderLoopAsync</a>
-, <a class="el" href="dd/d5f/a02640.html#a59027889dfb53d02becb6189b482fda9">castor3d::RenderLoopSync</a>
+: <a class="el" href="d3/d83/a04520.html#ae909f2e21ba004087428391048d8db86">castor3d::RenderLoop</a>
+, <a class="el" href="d1/ddc/a04532.html#a41474a08868fa78570450ff97369f123">castor3d::RenderLoopAsync</a>
+, <a class="el" href="d7/da8/a04536.html#a59027889dfb53d02becb6189b482fda9">castor3d::RenderLoopSync</a>
+</li>
+<li>retrieveGpuTime()
+: <a class="el" href="d7/dc4/a04612.html#a1bfe48cb8a277f82467f019a8a831f9c">castor3d::RenderPassTimer</a>
+</li>
+<li>rhsViewLayout()
+: <a class="el" href="d0/de0/a04376.html#a6253a280faf87b846fc13f378af33037">castor3d::CombinePassBuilder</a>
 </li>
 <li>roll()
-: <a class="el" href="d3/d8b/a02996.html#acbd3431016ca7497fdc55299d68b70ee">castor3d::SceneNode</a>
+: <a class="el" href="da/d44/a05256.html#a838858f96a34ff436fc34ca16f137875">castor3d::SceneNode</a>
 </li>
 <li>rotate()
-: <a class="el" href="d3/d8b/a02996.html#a0a821073acf90be8042940ee71c851df">castor3d::SceneNode</a>
+: <a class="el" href="da/d44/a05256.html#aba03dfa8151020460e42a6fe7718ebb9">castor3d::SceneNode</a>
 </li>
-<li>run()
-: <a class="el" href="d1/d03/a02332.html#a494020d53d3787a4b612e1c7b42478fb">castor3d::ComputePipeline</a>
-, <a class="el" href="da/db4/a02348.html#ad95c3ce2357f08f3a18b13f04b5c5781">castor3d::Generator::Thread</a>
+<li>RsmConfigUbo()
+: <a class="el" href="d7/d66/a05524.html#ad092bd6fd33a3288c6e01a814b4adae2">castor3d::RsmConfigUbo</a>
+</li>
+<li>RsmGIPass()
+: <a class="el" href="da/db8/a04908.html#a040d654edd84d5bfa60e95f1f3e04a2b">castor3d::RsmGIPass</a>
+</li>
+<li>RsmInterpolatePass()
+: <a class="el" href="dc/d52/a04912.html#ae2e7dd8df7703bdb286b230167383830">castor3d::RsmInterpolatePass</a>
 </li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 13:39:12 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Feb 18 2021 01:09:24 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

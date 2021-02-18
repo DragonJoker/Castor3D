@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d3/def/a00446" kind="file" language="C++">
+    <compoundname>Torus.hpp</compoundname>
+    <includes refid="d5/d5f/a00461" local="yes">Castor3D/Model/Mesh/MeshGenerator.hpp</includes>
+    <incdepgraph>
+      <node id="8370">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="8373">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="8374">
+        <label>cstdint</label>
+      </node>
+      <node id="8361">
+        <label>Model/Mesh/Generator/Torus.hpp</label>
+        <link refid="d3/def/a00446"/>
+        <childnode refid="8362" relation="include">
+        </childnode>
+      </node>
+      <node id="8372">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="8365">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d5/d35/a00266"/>
+        <childnode refid="8366" relation="include">
+        </childnode>
+        <childnode refid="8367" relation="include">
+        </childnode>
+        <childnode refid="8368" relation="include">
+        </childnode>
+        <childnode refid="8369" relation="include">
+        </childnode>
+        <childnode refid="8370" relation="include">
+        </childnode>
+        <childnode refid="8371" relation="include">
+        </childnode>
+        <childnode refid="8372" relation="include">
+        </childnode>
+        <childnode refid="8373" relation="include">
+        </childnode>
+        <childnode refid="8374" relation="include">
+        </childnode>
+        <childnode refid="8375" relation="include">
+        </childnode>
+        <childnode refid="8376" relation="include">
+        </childnode>
+        <childnode refid="8377" relation="include">
+        </childnode>
+      </node>
+      <node id="8362">
+        <label>Castor3D/Model/Mesh/MeshGenerator.hpp</label>
+        <link refid="d5/d5f/a00461"/>
+        <childnode refid="8363" relation="include">
+        </childnode>
+        <childnode refid="8379" relation="include">
+        </childnode>
+      </node>
+      <node id="8376">
+        <label>string</label>
+      </node>
+      <node id="8364">
+        <label>Castor3D/Model/ModelModule.hpp</label>
+        <link refid="d7/def/a00521"/>
+        <childnode refid="8365" relation="include">
+        </childnode>
+      </node>
+      <node id="8369">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="8366">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="8368">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="8379">
+        <label>Castor3D/Miscellaneous/MiscellaneousModule.hpp</label>
+        <link refid="d4/d27/a00392"/>
+        <childnode refid="8365" relation="include">
+        </childnode>
+      </node>
+      <node id="8367">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="8363">
+        <label>MeshModule.hpp</label>
+        <link refid="d2/d9d/a00464"/>
+        <childnode refid="8364" relation="include">
+        </childnode>
+        <childnode refid="8378" relation="include">
+        </childnode>
+      </node>
+      <node id="8377">
+        <label>vector</label>
+      </node>
+      <node id="8371">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="8378">
+        <label>CastorUtils/Design/Factory.hpp</label>
+      </node>
+      <node id="8375">
+        <label>memory</label>
+      </node>
+    </incdepgraph>
+    <innerclass refid="d1/dba/a03896" prot="public">castor3d::Torus</innerclass>
+    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Model/Mesh/Generator/Torus.hpp"/>
+  </compounddef>
+</doxygen>

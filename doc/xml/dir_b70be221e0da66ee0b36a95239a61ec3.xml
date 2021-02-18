@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_b70be221e0da66ee0b36a95239a61ec3" kind="dir">
+    <compoundname>Miscellaneous</compoundname>
+    <innerfile refid="db/ddc/a00353">DebugCallbacks.hpp</innerfile>
+    <innerfile refid="d6/de1/a00356">DebugName.hpp</innerfile>
+    <innerfile refid="d4/def/a00359">GpuInformations.hpp</innerfile>
+    <innerfile refid="de/dd7/a00362">GpuObjectTracker.hpp</innerfile>
+    <innerfile refid="dd/db5/a00365">Logger.hpp</innerfile>
+    <innerfile refid="d8/d21/a00368">makeVkType.hpp</innerfile>
+    <innerfile refid="d6/d80/a00371">MiscellaneousModule.hpp</innerfile>
+    <innerfile refid="d5/db5/a00374">Parameter.hpp</innerfile>
+    <innerfile refid="d4/d13/a00377">Pattern.hpp</innerfile>
+    <innerfile refid="d8/ddd/a00380">PipelineVisitor.hpp</innerfile>
+    <innerfile refid="da/dee/a00383">Version.hpp</innerfile>
+    <innerfile refid="dd/df5/a00386">VersionException.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Miscellaneous/"/>
+  </compounddef>
+</doxygen>

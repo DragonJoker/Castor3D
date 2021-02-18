@@ -1,6 +1,5 @@
-<map id="castor3d::VertexBuffer" name="castor3d::VertexBuffer">
-<area shape="rect" id="node1" title="Vertex buffer representation." alt="" coords="159,185,310,212"/>
-<area shape="rect" id="node2" href="$d6/d0c/a02080.html" title=" " alt="" coords="31,81,167,123"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,192,32"/>
-<area shape="rect" id="node4" href="$df/dfb/a02068.html" title="Description of all elements in a vertex buffer." alt="" coords="191,89,369,115"/>
+<map id="castor3d::BinaryParser&lt; MeshAnimation &gt;" name="castor3d::BinaryParser&lt; MeshAnimation &gt;">
+<area shape="rect" id="node1" title="MeshAnimation binary loader." alt="" coords="21,200,175,241"/>
+<area shape="rect" id="node2" href="$d1/d90/a02127.html" title=" " alt="" coords="5,109,191,151"/>
+<area shape="rect" id="node3" href="$d1/d90/a02127.html" title="Binary data chunk reader base class." alt="" coords="5,5,191,47"/>
 </map>

@@ -1,5 +1,6 @@
-<map id="castor3d::PostFxPlugin" name="castor3d::PostFxPlugin">
-<area shape="rect" id="node1" title="Post effect plug&#45;in class." alt="" coords="19,155,178,181"/>
-<area shape="rect" id="node2" href="$d6/d24/a02536.html" title="Plugin Base class." alt="" coords="41,80,157,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,192,32"/>
+<map id="castor3d::EventHandler" name="castor3d::EventHandler">
+<area shape="rect" id="node1" title=" " alt="" coords="127,5,283,32"/>
+<area shape="rect" id="node2" href="$de/d48/a02552.html" title=" " alt="" coords="5,87,200,114"/>
+<area shape="rect" id="node4" href="$da/dc4/a02548.html" title="Description of an event handler, class that can receive event." alt="" coords="224,80,392,121"/>
+<area shape="rect" id="node3" href="$d4/d6d/a04636.html" title=" " alt="" coords="19,169,186,196"/>
 </map>

@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="da/d64/a05666" kind="class" language="C++" prot="public">
+    <compoundname>castor::TextWriter&lt; castor3d::HdrConfig &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::HdrConfig &gt;</basecompoundref>
+    <includes local="no">TextHdrConfig.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/d64/a05666_1a7e2c0189bb11120ffd1716c351b269b2" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor::TextWriter&lt; castor3d::HdrConfig &gt;::TextWriter</definition>
+        <argsstring>(String const &amp;tabs)</argsstring>
+        <name>TextWriter</name>
+        <param>
+          <type>String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextHdrConfig.hpp" line="18" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d64/a05666_1a1bbaaa5c86a673ef365e88adb9c4cfe5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::TextWriter&lt; castor3d::HdrConfig &gt;::operator()</definition>
+        <argsstring>(castor3d::HdrConfig const &amp;obj, TextFile &amp;file) override</argsstring>
+        <name>operator()</name>
+        <param>
+          <type><ref refid="d5/d41/a04946" kindref="compound">castor3d::HdrConfig</ref> const &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <param>
+          <type>TextFile &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextHdrConfig.hpp" line="19" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="5338">
+        <label>TextWriterT&lt; castor3d::HdrConfig &gt;</label>
+      </node>
+      <node id="5337">
+        <label>castor::TextWriter&lt; castor3d::HdrConfig &gt;</label>
+        <link refid="da/d64/a05666"/>
+        <childnode refid="5338" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="5340">
+        <label>TextWriterT&lt; castor3d::HdrConfig &gt;</label>
+      </node>
+      <node id="5339">
+        <label>castor::TextWriter&lt; castor3d::HdrConfig &gt;</label>
+        <link refid="da/d64/a05666"/>
+        <childnode refid="5340" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Text/TextHdrConfig.hpp" line="16" column="1" bodyfile="Text/TextHdrConfig.hpp" bodystart="14" bodyend="21"/>
+    <listofallmembers>
+      <member refid="da/d64/a05666_1a1bbaaa5c86a673ef365e88adb9c4cfe5" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::HdrConfig &gt;</scope><name>operator()</name></member>
+      <member refid="da/d64/a05666_1a7e2c0189bb11120ffd1716c351b269b2" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::HdrConfig &gt;</scope><name>TextWriter</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

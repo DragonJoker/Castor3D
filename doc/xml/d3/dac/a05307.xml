@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d3/dac/a05307" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::Fog</compoundname>
+    <includes local="no">GlslFog.hpp</includes>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d3/dac/a05307_1a6f5598e99912a0b12249ca8a6579d9e4" prot="protected" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec4, sdw::InVec4, sdw::InVec4, sdw::InFloat, sdw::InFloat, sdw::InVec4, sdw::InVec4 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec4 , sdw::InVec4 , sdw::InVec4 , sdw::InFloat , sdw::InFloat , sdw::InVec4 , sdw::InVec4 &gt; castor3d::shader::Fog::m_fog</definition>
+        <argsstring></argsstring>
+        <name>m_fog</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslFog.hpp" line="35" column="1" bodyfile="Shader/Shaders/GlslFog.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/dac/a05307_1ac96ca761578b5bef1990dc2ce6131f01" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::Fog::Fog</definition>
+        <argsstring>(FogType flags, sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>Fog</name>
+        <param>
+          <type><ref refid="d7/dd1/a01458_1a99a6b51dbe68abcf95c70f03008dd3a3" kindref="member">FogType</ref></type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslFog.hpp" line="19" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dac/a05307_1a40c23e35f593d3d383e0317904b47418" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::Fog::apply</definition>
+        <argsstring>(sdw::Vec4 const &amp;bgColour, sdw::Vec4 const &amp;colour, sdw::Float const &amp;dist, sdw::Float const &amp;y, sdw::Vec4 const &amp;fogInfo, sdw::Vec4 const &amp;cameraPosition)</argsstring>
+        <name>apply</name>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>bgColour</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>dist</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>fogInfo</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>cameraPosition</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslFog.hpp" line="21" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Shaders/GlslFog.hpp" line="17" column="1" bodyfile="Shader/Shaders/GlslFog.hpp" bodystart="16" bodyend="36"/>
+    <listofallmembers>
+      <member refid="d3/dac/a05307_1a40c23e35f593d3d383e0317904b47418" prot="public" virt="non-virtual"><scope>castor3d::shader::Fog</scope><name>apply</name></member>
+      <member refid="d3/dac/a05307_1ac96ca761578b5bef1990dc2ce6131f01" prot="public" virt="non-virtual"><scope>castor3d::shader::Fog</scope><name>Fog</name></member>
+      <member refid="d3/dac/a05307_1a6f5598e99912a0b12249ca8a6579d9e4" prot="protected" virt="non-virtual"><scope>castor3d::shader::Fog</scope><name>m_fog</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d6/d1c/a03692" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::VkTypeTraits&lt; VkPipelineVertexInputDivisorStateCreateInfoEXT &gt;</compoundname>
+    <includes local="no">makeVkType.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d6/d1c/a03692_1a5aced7acf2195a699c70b539266133c7" prot="public" static="yes" mutable="no">
+        <type>VkStructureType constexpr</type>
+        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkPipelineVertexInputDivisorStateCreateInfoEXT &gt;::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <initializer>= VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_DIVISOR_STATE_CREATE_INFO_EXT</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/makeVkType.hpp" line="334" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="334" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Miscellaneous/makeVkType.hpp" line="334" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="334" bodyend="334"/>
+    <listofallmembers>
+      <member refid="d6/d1c/a03692_1a5aced7acf2195a699c70b539266133c7" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkPipelineVertexInputDivisorStateCreateInfoEXT &gt;</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

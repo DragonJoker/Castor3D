@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d2/d72/a05567" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ModelUboConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d2/d72/a05567_1a02f0f73569293715135ebbb43ae164c4" prot="public" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t castor3d::ModelUboConfiguration::shadowReceiver</definition>
+        <argsstring></argsstring>
+        <name>shadowReceiver</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="245" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="245" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d72/a05567_1a24023b83dfb6ef68abd1bcc957009bea" prot="public" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t castor3d::ModelUboConfiguration::materialIndex</definition>
+        <argsstring></argsstring>
+        <name>materialIndex</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="246" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="246" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d72/a05567_1a7cded2cd29c24601a4f1a3d4c8715889" prot="public" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t castor3d::ModelUboConfiguration::environmentIndex</definition>
+        <argsstring></argsstring>
+        <name>environmentIndex</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="247" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="247" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Model data. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Ubos/UbosModule.hpp" line="244" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="243" bodyend="248"/>
+    <listofallmembers>
+      <member refid="d2/d72/a05567_1a7cded2cd29c24601a4f1a3d4c8715889" prot="public" virt="non-virtual"><scope>castor3d::ModelUboConfiguration</scope><name>environmentIndex</name></member>
+      <member refid="d2/d72/a05567_1a24023b83dfb6ef68abd1bcc957009bea" prot="public" virt="non-virtual"><scope>castor3d::ModelUboConfiguration</scope><name>materialIndex</name></member>
+      <member refid="d2/d72/a05567_1a02f0f73569293715135ebbb43ae164c4" prot="public" virt="non-virtual"><scope>castor3d::ModelUboConfiguration</scope><name>shadowReceiver</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

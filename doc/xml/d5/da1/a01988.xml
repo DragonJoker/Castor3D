@@ -1,0 +1,122 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d5/da1/a01988" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::InterpolatorT&lt; DataT, InterpolatorType::eNearest &gt;</compoundname>
+    <basecompoundref refid="d9/da1/a01976" prot="public" virt="non-virtual">castor3d::Interpolator&lt; DataT &gt;</basecompoundref>
+    <includes local="no">Interpolator.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class DataT</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/da1/a01988_1aa8d4a97efb18c301c13ff60b9e568cc1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::InterpolatorT&lt; DataT, InterpolatorType::eNearest &gt;::InterpolatorT</definition>
+        <argsstring>()</argsstring>
+        <name>InterpolatorT</name>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Interpolator.hpp" line="69" column="1" bodyfile="Animation/Interpolator.hpp" bodystart="69" bodyend="71"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/da1/a01988_1a417459b4b7c54117faa3920f48e5a66a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::InterpolatorT&lt; DataT, InterpolatorType::eNearest &gt;::~InterpolatorT</definition>
+        <argsstring>()</argsstring>
+        <name>~InterpolatorT</name>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Interpolator.hpp" line="78" column="1" bodyfile="Animation/Interpolator.hpp" bodystart="78" bodyend="80"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/da1/a01988_1a4a4f31bda83af9363dea99bd79694c63" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>DataT</type>
+        <definition>DataT castor3d::InterpolatorT&lt; DataT, InterpolatorType::eNearest &gt;::interpolate</definition>
+        <argsstring>(DataT const &amp;src, DataT const &amp;, float) const override</argsstring>
+        <name>interpolate</name>
+        <reimplements refid="d9/da1/a01976_1a38c4c864a411f0fbc92d8af20d4ec52f">interpolate</reimplements>
+        <param>
+          <type>DataT const &amp;</type>
+          <declname>src</declname>
+        </param>
+        <param>
+          <type>DataT const &amp;</type>
+        </param>
+        <param>
+          <type>float</type>
+        </param>
+        <briefdescription>
+<para>Interpolation function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">src</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The start. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Interpolator.hpp" line="89" column="1" bodyfile="Animation/Interpolator.hpp" bodystart="89" bodyend="94"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Partial specialisation of <ref refid="d5/d70/a01980" kindref="compound">InterpolatorT</ref>, for <ref refid="d8/d31/a01407_1ad38387ab8e17377a42314bc21c171ab0a6d4cace607e544346702a204c5e524c8" kindref="member">InterpolatorType::eNearest</ref>. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="version"><para>0.8.0 </para>
+</simplesect>
+<simplesect kind="date"><para>24/01/2016 </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1482">
+        <label>castor3d::Interpolator&lt; DataT &gt;</label>
+        <link refid="d9/da1/a01976"/>
+      </node>
+      <node id="1481">
+        <label>castor3d::InterpolatorT&lt; DataT, InterpolatorType::eNearest &gt;</label>
+        <link refid="d5/da1/a01988"/>
+        <childnode refid="1482" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1484">
+        <label>castor3d::Interpolator&lt; DataT &gt;</label>
+        <link refid="d9/da1/a01976"/>
+      </node>
+      <node id="1483">
+        <label>castor3d::InterpolatorT&lt; DataT, InterpolatorType::eNearest &gt;</label>
+        <link refid="d5/da1/a01988"/>
+        <childnode refid="1484" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Animation/Interpolator.hpp" line="61" column="1" bodyfile="Animation/Interpolator.hpp" bodystart="59" bodyend="95"/>
+    <listofallmembers>
+      <member refid="d5/da1/a01988_1a4a4f31bda83af9363dea99bd79694c63" prot="public" virt="virtual"><scope>castor3d::InterpolatorT&lt; DataT, InterpolatorType::eNearest &gt;</scope><name>interpolate</name></member>
+      <member refid="d9/da1/a01976_1a6e868724abfa1dca7cfc0d2d0637beb0" prot="public" virt="non-virtual"><scope>castor3d::InterpolatorT&lt; DataT, InterpolatorType::eNearest &gt;</scope><name>Interpolator</name></member>
+      <member refid="d5/da1/a01988_1aa8d4a97efb18c301c13ff60b9e568cc1" prot="public" virt="non-virtual"><scope>castor3d::InterpolatorT&lt; DataT, InterpolatorType::eNearest &gt;</scope><name>InterpolatorT</name></member>
+      <member refid="d9/da1/a01976_1aa7c508adbeae8c638612f3366db88e79" prot="public" virt="non-virtual"><scope>castor3d::InterpolatorT&lt; DataT, InterpolatorType::eNearest &gt;</scope><name>~Interpolator</name></member>
+      <member refid="d5/da1/a01988_1a417459b4b7c54117faa3920f48e5a66a" prot="public" virt="non-virtual"><scope>castor3d::InterpolatorT&lt; DataT, InterpolatorType::eNearest &gt;</scope><name>~InterpolatorT</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

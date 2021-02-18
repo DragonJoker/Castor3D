@@ -1,5 +1,5 @@
-<map id="castor3d::RendererPlugin" name="castor3d::RendererPlugin">
-<area shape="rect" id="node1" title="Renderer Plugin class." alt="" coords="15,155,183,181"/>
-<area shape="rect" id="node2" href="$d6/d24/a02536.html" title="Plugin Base class." alt="" coords="41,80,157,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,192,32"/>
+<map id="castor3d::NonClientEventHandler&lt; Derived &gt;" name="castor3d::NonClientEventHandler&lt; Derived &gt;">
+<area shape="rect" id="node1" title="Description of an event handler, class that can receive event." alt="" coords="83,95,251,136"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,153,47"/>
+<area shape="rect" id="node3" href="$d1/df6/a02544.html" title=" " alt="" coords="177,13,333,39"/>
 </map>

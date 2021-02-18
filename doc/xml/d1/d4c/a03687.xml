@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d1/d4c/a03687" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::VkTypeTraits&lt; VkPhysicalDeviceDepthStencilResolvePropertiesKHR &gt;</compoundname>
+    <includes local="no">makeVkType.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d1/d4c/a03687_1a35ed48b7cc2182bba71f084ab0af02c7" prot="public" static="yes" mutable="no">
+        <type>VkStructureType constexpr</type>
+        <definition>VkStructureType constexpr castor3d::VkTypeTraits&lt; VkPhysicalDeviceDepthStencilResolvePropertiesKHR &gt;::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <initializer>= VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DEPTH_STENCIL_RESOLVE_PROPERTIES_KHR</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/makeVkType.hpp" line="338" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="338" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Miscellaneous/makeVkType.hpp" line="338" column="1" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="338" bodyend="338"/>
+    <listofallmembers>
+      <member refid="d1/d4c/a03687_1a35ed48b7cc2182bba71f084ab0af02c7" prot="public" virt="non-virtual"><scope>castor3d::VkTypeTraits&lt; VkPhysicalDeviceDepthStencilResolvePropertiesKHR &gt;</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,4 +1,6 @@
-<map id="castor3d::SubmeshAnimationBufferT&lt; T &gt;" name="castor3d::SubmeshAnimationBufferT&lt; T &gt;">
-<area shape="rect" id="node1" title="Class which represents the mesh animation submeshes buffers." alt="" coords="5,124,199,165"/>
-<area shape="rect" id="node2" title=" " alt="" coords="30,5,174,61"/>
+<map id="castor3d::MipView" name="castor3d::MipView">
+<area shape="rect" id="node1" title=" " alt="" coords="23,288,153,315"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,184,171,225"/>
+<area shape="rect" id="node3" title="STL class." alt="" coords="31,95,145,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="69,5,107,32"/>
 </map>

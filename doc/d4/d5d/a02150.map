@@ -1,5 +1,6 @@
-<map id="castor3d::Importer" name="castor3d::Importer">
-<area shape="rect" id="node1" title="Base class for external file import." alt="" coords="130,95,257,121"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,192,32"/>
-<area shape="rect" id="node3" href="$d1/da2/a02368.html" title="Configuration parameters." alt="" coords="216,5,363,32"/>
+<map id="castor3d::BinaryWriter&lt; SkeletonAnimationNode &gt;" name="castor3d::BinaryWriter&lt; SkeletonAnimationNode &gt;">
+<area shape="rect" id="node1" title="MovingBone binary loader." alt="" coords="5,289,191,331"/>
+<area shape="rect" id="node2" href="$da/dbe/a02084.html" title=" " alt="" coords="5,199,191,240"/>
+<area shape="rect" id="node3" href="$d7/db2/a02036.html" title=" " alt="" coords="53,5,207,32"/>
+<area shape="rect" id="node4" href="$da/dbe/a02084.html" title="Binary data chunk writer base class." alt="" coords="159,95,341,136"/>
 </map>

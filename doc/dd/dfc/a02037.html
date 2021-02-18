@@ -10,6 +10,7 @@
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
 <link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+<link href="../../Castor3D.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -17,10 +18,12 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Castor3D
-   &#160;<span id="projectnumber">..</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
+   <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
  </tr>
  </tbody>
@@ -39,23 +42,43 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../d0/d85/a00976.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d7/db2/a02036.html">MetallicRoughnessPbrPass</a></li><li class="navelem"><a class="el" href="../../d4/ddd/a02040.html">TextWriter</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/d1e/a01479.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d4/ddd/a02040.html">AnimationT</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="headertitle">
-<div class="title">castor3d::MetallicRoughnessPbrPass::TextWriter Member List</div>  </div>
+<div class="title">castor3d::AnimationT&lt; AnimableHanlerT &gt; Member List</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>This is the complete list of members for <a class="el" href="../../d4/ddd/a02040.html">castor3d::MetallicRoughnessPbrPass::TextWriter</a>, including all inherited members.</p>
+<p>This is the complete list of members for <a class="el" href="../../d4/ddd/a02040.html">castor3d::AnimationT&lt; AnimableHanlerT &gt;</a>, including all inherited members.</p>
 <table class="directory">
-  <tr class="even"><td class="entry"><a class="el" href="../../d4/ddd/a02040.html#a12b5ab5e63913e924f1e753d1ea5755b">operator()</a>(MetallicRoughnessPbrPass const &amp;pass, castor::TextFile &amp;file) override</td><td class="entry"><a class="el" href="../../d4/ddd/a02040.html">castor3d::MetallicRoughnessPbrPass::TextWriter</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d4/ddd/a02040.html#a8fc0c5766ce459e2e6f14a5e3098e1cc">TextWriter</a>(castor::String const &amp;tabs)</td><td class="entry"><a class="el" href="../../d4/ddd/a02040.html">castor3d::MetallicRoughnessPbrPass::TextWriter</a></td><td class="entry"><span class="mlabel">explicit</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d4/ddd/a02040.html#a8b983f54e732b6ddb51883c6afb7b74d">addKeyFrame</a>(AnimationKeyFrameUPtr keyFrame)</td><td class="entry"><a class="el" href="../../d4/ddd/a02040.html">castor3d::AnimationT&lt; AnimableHanlerT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="../../d4/ddd/a02040.html#afe22ac2e2bd29215faafabffbe96006e">AnimationT</a>(AnimationT &amp;&amp;rhs)=default</td><td class="entry"><a class="el" href="../../d4/ddd/a02040.html">castor3d::AnimationT&lt; AnimableHanlerT &gt;</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d4/ddd/a02040.html#aa3f2119086382d2e0b3dec3300666348">AnimationT</a>(AnimationT const &amp;rhs)=delete</td><td class="entry"><a class="el" href="../../d4/ddd/a02040.html">castor3d::AnimationT&lt; AnimableHanlerT &gt;</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="../../d4/ddd/a02040.html#a42f1f842d2f44280ccd2bc9f75e047ca">AnimationT</a>(AnimationType type, AnimableT&lt; AnimableHanlerT &gt; &amp;animable, castor::String const &amp;name=castor::cuEmptyString)</td><td class="entry"><a class="el" href="../../d4/ddd/a02040.html">castor3d::AnimationT&lt; AnimableHanlerT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d4/ddd/a02040.html#a7a8da5fb6ad1b361409bcc6b6cfc7506">begin</a>() const</td><td class="entry"><a class="el" href="../../d4/ddd/a02040.html">castor3d::AnimationT&lt; AnimableHanlerT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="../../d4/ddd/a02040.html#a16f0adb1f5328cf5438c023384f7a2b2">begin</a>()</td><td class="entry"><a class="el" href="../../d4/ddd/a02040.html">castor3d::AnimationT&lt; AnimableHanlerT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d4/ddd/a02040.html#ad6e2214b2b9e5b501d9521d80d6aa33c">BinaryParser&lt; AnimationT &gt;</a> class</td><td class="entry"><a class="el" href="../../d4/ddd/a02040.html">castor3d::AnimationT&lt; AnimableHanlerT &gt;</a></td><td class="entry"><span class="mlabel">friend</span></td></tr>
+  <tr><td class="entry"><a class="el" href="../../d4/ddd/a02040.html#a7e26f15a7ab5adb5bfd78c8e38a06cbe">BinaryWriter&lt; AnimationT &gt;</a> class</td><td class="entry"><a class="el" href="../../d4/ddd/a02040.html">castor3d::AnimationT&lt; AnimableHanlerT &gt;</a></td><td class="entry"><span class="mlabel">friend</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d4/ddd/a02040.html#afa0954678ef3a2e35929747013e656a5">end</a>() const</td><td class="entry"><a class="el" href="../../d4/ddd/a02040.html">castor3d::AnimationT&lt; AnimableHanlerT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="../../d4/ddd/a02040.html#a75e55d0c6feef67fd169a31abd060e7d">end</a>()</td><td class="entry"><a class="el" href="../../d4/ddd/a02040.html">castor3d::AnimationT&lt; AnimableHanlerT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d4/ddd/a02040.html#a81ba800dd4c829c20ebc7927b0f441a6">find</a>(castor::Milliseconds const &amp;time)</td><td class="entry"><a class="el" href="../../d4/ddd/a02040.html">castor3d::AnimationT&lt; AnimableHanlerT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="../../d4/ddd/a02040.html#a23e5a482945b9977aa68e9581106d8cb">findKeyFrame</a>(castor::Milliseconds const &amp;time, AnimationKeyFrameArray::iterator &amp;prv, AnimationKeyFrameArray::iterator &amp;cur) const</td><td class="entry"><a class="el" href="../../d4/ddd/a02040.html">castor3d::AnimationT&lt; AnimableHanlerT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d4/ddd/a02040.html#adf144d2b848b3dc3ba80aaef91b612f8">getLength</a>() const</td><td class="entry"><a class="el" href="../../d4/ddd/a02040.html">castor3d::AnimationT&lt; AnimableHanlerT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="../../d4/ddd/a02040.html#a71a9f86d812205eab4df5e9f2eb70c47">getType</a>() const</td><td class="entry"><a class="el" href="../../d4/ddd/a02040.html">castor3d::AnimationT&lt; AnimableHanlerT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d4/ddd/a02040.html#a06fb4576770bdac68740667d550637cb">isEmpty</a>() const</td><td class="entry"><a class="el" href="../../d4/ddd/a02040.html">castor3d::AnimationT&lt; AnimableHanlerT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="../../d4/ddd/a02040.html#a4b5a218a7941d711bb940443f1942c62">m_keyframes</a></td><td class="entry"><a class="el" href="../../d4/ddd/a02040.html">castor3d::AnimationT&lt; AnimableHanlerT &gt;</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d4/ddd/a02040.html#a58a4f320f81091bc1ae4cc842a8bac3b">m_length</a></td><td class="entry"><a class="el" href="../../d4/ddd/a02040.html">castor3d::AnimationT&lt; AnimableHanlerT &gt;</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr><td class="entry"><a class="el" href="../../d4/ddd/a02040.html#a8b4274c7dc7b0a73e47adab8278af444">m_type</a></td><td class="entry"><a class="el" href="../../d4/ddd/a02040.html">castor3d::AnimationT&lt; AnimableHanlerT &gt;</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d4/ddd/a02040.html#a34b281bf0aa0f1ff768a015dcb884550">operator=</a>(AnimationT &amp;&amp;rhs)=delete</td><td class="entry"><a class="el" href="../../d4/ddd/a02040.html">castor3d::AnimationT&lt; AnimableHanlerT &gt;</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="../../d4/ddd/a02040.html#ad3f88e807e572471e5c215ef47bdd407">operator=</a>(AnimationT const &amp;rhs)=delete</td><td class="entry"><a class="el" href="../../d4/ddd/a02040.html">castor3d::AnimationT&lt; AnimableHanlerT &gt;</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d4/ddd/a02040.html#a02ed8b05e3af8e18394530bbf9833d44">updateLength</a>()</td><td class="entry"><a class="el" href="../../d4/ddd/a02040.html">castor3d::AnimationT&lt; AnimableHanlerT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="../../d4/ddd/a02040.html#a44db1b1a7ad80923fc5ff79f9218136f">~AnimationT</a>()</td><td class="entry"><a class="el" href="../../d4/ddd/a02040.html">castor3d::AnimationT&lt; AnimableHanlerT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
 </table></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 13:38:33 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Feb 18 2021 01:09:08 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dc/d0f/a03824" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::TextureFactors</compoundname>
+    <includes local="no">MiscellaneousModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dc/d0f/a03824_1ae47d89d7405413d19717281467a6dcb7" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::TextureFactors::multiply</definition>
+        <argsstring></argsstring>
+        <name>multiply</name>
+        <initializer>{ 1.0f, 1.0f, 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/MiscellaneousModule.hpp" line="73" column="1" bodyfile="Miscellaneous/MiscellaneousModule.hpp" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d0f/a03824_1a7b75c2685543e55320f716bbea863d1c" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::TextureFactors::add</definition>
+        <argsstring></argsstring>
+        <name>add</name>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/MiscellaneousModule.hpp" line="74" column="1" bodyfile="Miscellaneous/MiscellaneousModule.hpp" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d0f/a03824_1a97468a3f18526c0f5968f0f84ee49a67" prot="public" static="no" mutable="no">
+        <type>castor::Point4f const  *</type>
+        <definition>castor::Point4f const* castor3d::TextureFactors::grid</definition>
+        <argsstring></argsstring>
+        <name>grid</name>
+        <initializer>{ nullptr }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/MiscellaneousModule.hpp" line="75" column="1" bodyfile="Miscellaneous/MiscellaneousModule.hpp" bodystart="75" bodyend="-1"/>
+        <referencedby refid="dc/d0f/a03824_1a8c8521009541bfab4259af3a20fdab0c" compoundref="d4/d27/a00392" startline="86" endline="91">tex3D</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="dc/d0f/a03824_1a88623c83bfc10333e975c66cad2ac047" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dc/d0f/a03824" kindref="compound">TextureFactors</ref></type>
+        <definition>static TextureFactors castor3d::TextureFactors::tex2D</definition>
+        <argsstring>(castor::Point3f multiply=castor::Point3f{ 1.0f, 1.0f, 1.0f }, castor::Point3f add=castor::Point3f{})</argsstring>
+        <name>tex2D</name>
+        <param>
+          <type>castor::Point3f</type>
+          <declname>multiply</declname>
+          <defval>castor::Point3f{ 1.0f, 1.0f, 1.0f }</defval>
+        </param>
+        <param>
+          <type>castor::Point3f</type>
+          <declname>add</declname>
+          <defval>castor::Point3f{}</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/MiscellaneousModule.hpp" line="77" column="1" bodyfile="Miscellaneous/MiscellaneousModule.hpp" bodystart="77" bodyend="84"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d0f/a03824_1a8c8521009541bfab4259af3a20fdab0c" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dc/d0f/a03824" kindref="compound">TextureFactors</ref></type>
+        <definition>static TextureFactors castor3d::TextureFactors::tex3D</definition>
+        <argsstring>(castor::Point4f const *grid)</argsstring>
+        <name>tex3D</name>
+        <param>
+          <type>castor::Point4f const *</type>
+          <declname>grid</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/MiscellaneousModule.hpp" line="86" column="1" bodyfile="Miscellaneous/MiscellaneousModule.hpp" bodystart="86" bodyend="91"/>
+        <references refid="dc/d0f/a03824_1a97468a3f18526c0f5968f0f84ee49a67" compoundref="d4/d27/a00392" startline="75">grid</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Factors applied when displaying a debug texture. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Miscellaneous/MiscellaneousModule.hpp" line="72" column="1" bodyfile="Miscellaneous/MiscellaneousModule.hpp" bodystart="71" bodyend="92"/>
+    <listofallmembers>
+      <member refid="dc/d0f/a03824_1a7b75c2685543e55320f716bbea863d1c" prot="public" virt="non-virtual"><scope>castor3d::TextureFactors</scope><name>add</name></member>
+      <member refid="dc/d0f/a03824_1a97468a3f18526c0f5968f0f84ee49a67" prot="public" virt="non-virtual"><scope>castor3d::TextureFactors</scope><name>grid</name></member>
+      <member refid="dc/d0f/a03824_1ae47d89d7405413d19717281467a6dcb7" prot="public" virt="non-virtual"><scope>castor3d::TextureFactors</scope><name>multiply</name></member>
+      <member refid="dc/d0f/a03824_1a88623c83bfc10333e975c66cad2ac047" prot="public" virt="non-virtual"><scope>castor3d::TextureFactors</scope><name>tex2D</name></member>
+      <member refid="dc/d0f/a03824_1a8c8521009541bfab4259af3a20fdab0c" prot="public" virt="non-virtual"><scope>castor3d::TextureFactors</scope><name>tex3D</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

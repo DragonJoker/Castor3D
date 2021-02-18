@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_53fcef82ca293bd5afd54ad6a69f2a43" kind="dir">
+    <compoundname>Event</compoundname>
+    <innerdir refid="dir_f3398fffcab3f23c8fb0f2d2ccf3709d">Event/Frame</innerdir>
+    <innerdir refid="dir_9e02038543c82633b5f72d9e110197d3">Event/UserInput</innerdir>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Event/"/>
+  </compounddef>
+</doxygen>

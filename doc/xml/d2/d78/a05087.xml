@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d2/d78/a05087" kind="struct" language="C++" prot="protected">
+    <compoundname>castor3d::SceneBackground::Cube</compoundname>
+    <includes local="no">Background.hpp</includes>
+    <innerclass refid="d9/de1/a05091" prot="public">castor3d::SceneBackground::Cube::Quad</innerclass>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d2/d78/a05087_1a5a2d94bf18cbed6624899423a61c114d" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/de1/a05091" kindref="compound">Quad</ref></type>
+        <definition>Quad castor3d::SceneBackground::Cube::faces[6]</definition>
+        <argsstring>[6]</argsstring>
+        <name>faces</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Background/Background.hpp" line="45" column="1" bodyfile="Scene/Background/Background.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="3276">
+        <label>castor3d::SceneBackground::Cube::Quad</label>
+        <link refid="d9/de1/a05091"/>
+        <childnode refid="3277" relation="usage">
+          <edgelabel>vertex</edgelabel>
+        </childnode>
+      </node>
+      <node id="3277">
+        <label>castor3d::SceneBackground::Cube::Quad::Vertex</label>
+        <link refid="de/d11/a05095"/>
+      </node>
+      <node id="3275">
+        <label>castor3d::SceneBackground::Cube</label>
+        <link refid="d2/d78/a05087"/>
+        <childnode refid="3276" relation="usage">
+          <edgelabel>faces</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Scene/Background/Background.hpp" line="34" column="1" bodyfile="Scene/Background/Background.hpp" bodystart="33" bodyend="46"/>
+    <listofallmembers>
+      <member refid="d2/d78/a05087_1a5a2d94bf18cbed6624899423a61c114d" prot="public" virt="non-virtual"><scope>castor3d::SceneBackground::Cube</scope><name>faces</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

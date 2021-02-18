@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d1/d38/a01480" kind="namespace" language="C++">
+    <compoundname>castor3d::lpv</compoundname>
+      <sectiondef kind="var">
+      <memberdef kind="variable" id="d1/d38/a01480_1af1ce6a3538d8a65d24f2cc4796197d33" prot="public" static="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::lpv::ResolvePassCount</definition>
+        <argsstring></argsstring>
+        <name>ResolvePassCount</name>
+        <initializer>= 2u</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumesModule.hpp" line="139" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumesModule.hpp" bodystart="139" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d38/a01480_1a3037c31cab6ec6b4505e931d6f236c93" prot="public" static="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::lpv::PropagationPassCount</definition>
+        <argsstring></argsstring>
+        <name>PropagationPassCount</name>
+        <initializer>= 2u</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumesModule.hpp" line="141" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumesModule.hpp" bodystart="141" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumesModule.hpp" line="137" column="1"/>
+  </compounddef>
+</doxygen>

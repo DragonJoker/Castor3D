@@ -5,11 +5,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/Scene/Light/DirectionalLight.hpp File Reference</title>
+<title>Castor3D: Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumesModule.hpp File Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
 <link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+<link href="../../Castor3D.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -17,10 +18,12 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Castor3D
-   &#160;<span id="projectnumber">..</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
+   <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
  </tr>
  </tbody>
@@ -39,92 +42,117 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dir_b2f33c71d4aa5e7af42a1ca61ff5af1b.html">source</a></li><li class="navelem"><a class="el" href="../../dir_1f10682fec53f0772108851bfcef2e4d.html">Core</a></li><li class="navelem"><a class="el" href="../../dir_6ad85ca7a90878938acb35a9fc6dd4fb.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../dir_a9f81fd4b86714dde972610ac984a016.html">Src</a></li><li class="navelem"><a class="el" href="../../dir_df22d7ad3b458f90c3b557064ae70ac4.html">Scene</a></li><li class="navelem"><a class="el" href="../../dir_afd25bc61271744477bff1f5a6ebcb95.html">Light</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../dir_ee81606feaed1a7650f95054c2670416.html">Render</a></li><li class="navelem"><a class="el" href="../../dir_f6c92a291074146be370fc7e944c054f.html">GlobalIllumination</a></li><li class="navelem"><a class="el" href="../../dir_7108b733bb1fee5c7687037800af29fb.html">LightPropagationVolumes</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a>  </div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
-<div class="title">DirectionalLight.hpp File Reference</div>  </div>
+<div class="title">LightPropagationVolumesModule.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-0-trigger" src="../../closed.png" alt="+"/> Include dependency graph for DirectionalLight.hpp:</div>
-<div id="dynsection-0-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../da/d31/a00678.png" border="0" usemap="#Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2Scene_2Light_2DirectionalLight_8hpp" alt=""/></div>
-<map name="Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2Scene_2Light_2DirectionalLight_8hpp" id="Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2Scene_2Light_2DirectionalLight_8hpp">
-<area shape="rect"  title=" " alt="" coords="4116,5,4354,61"/>
-<area shape="rect"  href="../../d4/d9b/a00680.html" title=" " alt="" coords="4198,109,4272,136"/>
-<area shape="rect"  href="../../d5/d5b/a00695.html" title=" " alt="" coords="4148,184,4322,211"/>
-<area shape="rect"  title=" " alt="" coords="4136,803,4283,830"/>
-<area shape="rect"  href="../../db/d77/a00683.html" title=" " alt="" coords="4070,639,4197,666"/>
-<area shape="rect"  href="../../df/d3b/a00728.html" title=" " alt="" coords="3931,639,4046,666"/>
-<area shape="rect"  title=" " alt="" coords="4073,721,4205,748"/>
-<area shape="rect"  href="../../d7/d46/a00002.html" title=" " alt="" coords="2800,259,2963,285"/>
-<area shape="rect"  href="../../df/dc8/a00122.html" title=" " alt="" coords="1898,721,2076,748"/>
-<area shape="rect"  title=" " alt="" coords="2012,885,2138,912"/>
-<area shape="rect"  title=" " alt="" coords="2983,803,3164,830"/>
-<area shape="rect"  title=" " alt="" coords="3189,803,3337,830"/>
-<area shape="rect"  title=" " alt="" coords="3361,803,3549,830"/>
-<area shape="rect"  title=" " alt="" coords="581,803,692,830"/>
-<area shape="rect"  title=" " alt="" coords="376,803,505,830"/>
-<area shape="rect"  title=" " alt="" coords="26,803,169,830"/>
-<area shape="rect"  title=" " alt="" coords="194,803,351,830"/>
-<area shape="rect"  title=" " alt="" coords="1228,803,1423,830"/>
-<area shape="rect"  href="../../d4/ddf/a00488.html" title=" " alt="" coords="3574,796,3806,837"/>
-<area shape="rect"  href="../../d6/d60/a00491.html" title=" " alt="" coords="1447,796,1679,837"/>
-<area shape="rect"  href="../../d4/d1e/a00497.html" title=" " alt="" coords="1703,796,1935,837"/>
-<area shape="rect"  href="../../de/d4e/a00500.html" title=" " alt="" coords="972,796,1204,837"/>
-<area shape="rect"  href="../../d4/de5/a00503.html" title=" " alt="" coords="1959,796,2191,837"/>
-<area shape="rect"  href="../../d4/d1f/a00506.html" title=" " alt="" coords="2215,796,2447,837"/>
-<area shape="rect"  href="../../d4/dfb/a00512.html" title=" " alt="" coords="2471,796,2703,837"/>
-<area shape="rect"  href="../../dc/d19/a00515.html" title=" " alt="" coords="2727,796,2959,837"/>
-<area shape="rect"  href="../../df/db6/a00509.html" title=" " alt="" coords="3880,796,4112,837"/>
-<area shape="rect"  href="../../d5/d0f/a00494.html" title=" " alt="" coords="716,796,948,837"/>
-<area shape="rect"  href="../../d4/def/a00359.html" title=" " alt="" coords="790,885,946,912"/>
-<area shape="rect"  title=" " alt="" coords="4158,885,4338,912"/>
-<area shape="rect"  title=" " alt="" coords="3929,885,4064,912"/>
-<area shape="rect"  title=" " alt="" coords="436,885,576,912"/>
-<area shape="rect"  href="../../dd/d32/a00041.html" title=" " alt="" coords="1984,333,2147,360"/>
-<area shape="rect"  href="../../d5/df9/a00044.html" title=" " alt="" coords="1800,333,1960,360"/>
-<area shape="rect"  href="../../d5/de0/a00050.html" title=" " alt="" coords="1720,408,1843,435"/>
-<area shape="rect"  href="../../d7/d00/a00401.html" title=" " alt="" coords="1883,408,2062,435"/>
-<area shape="rect"  href="../../d8/d41/a00038.html" title=" " alt="" coords="1649,483,1770,509"/>
-<area shape="rect"  href="../../d6/d2d/a00047.html" title=" " alt="" coords="757,557,868,584"/>
-<area shape="rect"  title=" " alt="" coords="1747,557,1808,584"/>
-<area shape="rect"  href="../../de/d55/a00323.html" title=" " alt="" coords="1256,632,1435,673"/>
-<area shape="rect"  href="../../d0/d61/a00302.html" title=" " alt="" coords="1480,632,1662,673"/>
-<area shape="rect"  title=" " alt="" coords="580,639,727,666"/>
-<area shape="rect"  title=" " alt="" coords="752,639,873,666"/>
-<area shape="rect"  title=" " alt="" coords="897,639,1013,666"/>
-<area shape="rect"  title=" " alt="" coords="1037,639,1188,666"/>
-<area shape="rect"  title=" " alt="" coords="1806,483,1949,509"/>
-<area shape="rect"  href="../../dc/dee/a00053.html" title=" " alt="" coords="1577,408,1696,435"/>
-</map>
-</div>
-</div><table class="memberdecls">
+<table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/d04/a02888.html">castor3d::DirectionalLight</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class which represents a Directional <a class="el" href="../../de/dd8/a02896.html" title="Light source implementation.">Light</a>.  <a href="../../d4/d04/a02888.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/df5/a04272.html">castor3d::LayeredLightPropagationVolumesT&lt; GeometryVolumesT &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lighting propagation volumes generation pass.  <a href="../../d3/df5/a04272.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d07/a02892.html">castor3d::DirectionalLight::TextWriter</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../d4/d04/a02888.html" title="Class which represents a Directional Light.">DirectionalLight</a> loader.  <a href="../../d7/d07/a02892.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d31/a04292.html">castor3d::LightPropagationVolumesT&lt; GeometryVolumesT &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lighting propagation volumes generation pass.  <a href="../../d3/d31/a04292.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:d0/d85/a00976"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d85/a00976.html">castor3d</a></td></tr>
+<tr class="memitem:da/d1e/a01479"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html">castor3d</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:d1/d38/a01480"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d38/a01480.html">castor3d::lpv</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:af1ce6a3538d8a65d24f2cc4796197d33"><td class="memItemLeft" align="right" valign="top">static uint32_t constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d38/a01480.html#af1ce6a3538d8a65d24f2cc4796197d33">castor3d::lpv::ResolvePassCount</a> = 2u</td></tr>
+<tr class="separator:af1ce6a3538d8a65d24f2cc4796197d33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3037c31cab6ec6b4505e931d6f236c93"><td class="memItemLeft" align="right" valign="top">static uint32_t constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d38/a01480.html#a3037c31cab6ec6b4505e931d6f236c93">castor3d::lpv::PropagationPassCount</a> = 2u</td></tr>
+<tr class="separator:a3037c31cab6ec6b4505e931d6f236c93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="member-group"></a>
+Light Propagation Volumes</h2></td></tr>
+<tr class="memitem:acdc63c63f270914c5061259e5645752b"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#acdc63c63f270914c5061259e5645752b">castor3d::LpvTexture</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="../../da/d1e/a01479.html#acdc63c63f270914c5061259e5645752ba2c8d3af323e82d44b5f7dda62485623f">castor3d::LpvTexture::eR</a>, 
+<a class="el" href="../../da/d1e/a01479.html#acdc63c63f270914c5061259e5645752bacd5532a9977c28cb4bcea23ba3b0dc48">castor3d::LpvTexture::eG</a>, 
+<a class="el" href="../../da/d1e/a01479.html#acdc63c63f270914c5061259e5645752ba76f5a6e4de889068fb1b4c3e3c263666">castor3d::LpvTexture::eB</a>, 
+<a class="el" href="../../da/d1e/a01479.html#acdc63c63f270914c5061259e5645752bae558bb69fadec037d9eae46601a4df8e">castor3d::LpvTexture::eCount</a>, 
+<br />
+&#160;&#160;<a class="el" href="../../da/d1e/a01479.html#acdc63c63f270914c5061259e5645752babd967862789968b1f8571ca888fffc77">castor3d::LpvTexture::eMin</a> = eR, 
+<a class="el" href="../../da/d1e/a01479.html#acdc63c63f270914c5061259e5645752ba66119c64f8564b693324347fd2bea820">castor3d::LpvTexture::eMax</a> =eCount-1
+<br />
+ }</td></tr>
+<tr class="memdesc:acdc63c63f270914c5061259e5645752b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumerator of textures used by the light volume GI passes.  <a href="../../da/d1e/a01479.html#acdc63c63f270914c5061259e5645752b">More...</a><br /></td></tr>
+<tr class="separator:acdc63c63f270914c5061259e5645752b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ab53731654bbc485d46bde47dc9fc55"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a1ab53731654bbc485d46bde47dc9fc55">castor3d::LayeredLightPropagationVolumes</a> = LayeredLightPropagationVolumesT&lt; false &gt;</td></tr>
+<tr class="separator:a1ab53731654bbc485d46bde47dc9fc55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af62aae4e3403383a0c9d5c4d24f157c3"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#af62aae4e3403383a0c9d5c4d24f157c3">castor3d::LayeredLightPropagationVolumesG</a> = LayeredLightPropagationVolumesT&lt; true &gt;</td></tr>
+<tr class="separator:af62aae4e3403383a0c9d5c4d24f157c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef0fcf1dbbc7d96843a1fe980ba1c350"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#aef0fcf1dbbc7d96843a1fe980ba1c350">castor3d::LightPropagationVolumes</a> = LightPropagationVolumesT&lt; false &gt;</td></tr>
+<tr class="separator:aef0fcf1dbbc7d96843a1fe980ba1c350"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2cf0e68dcc13b899481982fc0f4e444d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a2cf0e68dcc13b899481982fc0f4e444d">castor3d::LightPropagationVolumesG</a> = LightPropagationVolumesT&lt; true &gt;</td></tr>
+<tr class="separator:a2cf0e68dcc13b899481982fc0f4e444d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d08094dbc29136cf3b11775987ed4d5"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a0d08094dbc29136cf3b11775987ed4d5">castor3d::LightPropagationVolumesLightType</a> = std::array&lt; LightPropagationVolumesUPtr, size_t(LightType::eCount) &gt;</td></tr>
+<tr class="separator:a0d08094dbc29136cf3b11775987ed4d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45b5676720a8d0a13c78ad5f00c94163"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a45b5676720a8d0a13c78ad5f00c94163">castor3d::LayeredLightPropagationVolumesLightType</a> = std::array&lt; LayeredLightPropagationVolumesUPtr, size_t(LightType::eCount) &gt;</td></tr>
+<tr class="separator:a45b5676720a8d0a13c78ad5f00c94163"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b16382cb984a93c1f022f08963b2493"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a5b16382cb984a93c1f022f08963b2493">castor3d::LightPropagationVolumesGLightType</a> = std::array&lt; LightPropagationVolumesGUPtr, size_t(LightType::eCount) &gt;</td></tr>
+<tr class="separator:a5b16382cb984a93c1f022f08963b2493"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb1a81c01b04833e5175bef5f7857874"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#aeb1a81c01b04833e5175bef5f7857874">castor3d::LayeredLightPropagationVolumesGLightType</a> = std::array&lt; LayeredLightPropagationVolumesGUPtr, size_t(LightType::eCount) &gt;</td></tr>
+<tr class="separator:aeb1a81c01b04833e5175bef5f7857874"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a430d412e54000239d4f9a8488e527a27"><td class="memItemLeft" align="right" valign="top">castor::String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a430d412e54000239d4f9a8488e527a27">castor3d::getTextureName</a> (LpvTexture texture, std::string const &amp;infix)</td></tr>
+<tr class="separator:a430d412e54000239d4f9a8488e527a27"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aace3dca69f1fd89dcc9ed11b3a8655e4"><td class="memItemLeft" align="right" valign="top">castor::String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#aace3dca69f1fd89dcc9ed11b3a8655e4">castor3d::getName</a> (LpvTexture texture)</td></tr>
+<tr class="separator:aace3dca69f1fd89dcc9ed11b3a8655e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36346721f17599e36f459cb5c2a73d90"><td class="memItemLeft" align="right" valign="top">VkFormat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a36346721f17599e36f459cb5c2a73d90">castor3d::getFormat</a> (LpvTexture texture)</td></tr>
+<tr class="separator:a36346721f17599e36f459cb5c2a73d90"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a483aae16335a5055cdd96f51377e9ebf"><td class="memItemLeft" align="right" valign="top">VkClearValue&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a483aae16335a5055cdd96f51377e9ebf">castor3d::getClearValue</a> (LpvTexture texture)</td></tr>
+<tr class="separator:a483aae16335a5055cdd96f51377e9ebf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae48a18fd2e40c4d553c3d8392c379ea"><td class="memItemLeft" align="right" valign="top">VkImageUsageFlags&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#aae48a18fd2e40c4d553c3d8392c379ea">castor3d::getUsageFlags</a> (LpvTexture texture)</td></tr>
+<tr class="separator:aae48a18fd2e40c4d553c3d8392c379ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a144e7b1c66bfaf1fdbd86fd168e84f2c"><td class="memItemLeft" align="right" valign="top">VkBorderColor&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a144e7b1c66bfaf1fdbd86fd168e84f2c">castor3d::getBorderColor</a> (LpvTexture texture)</td></tr>
+<tr class="separator:a144e7b1c66bfaf1fdbd86fd168e84f2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a94a673163556c0e25e566b9ff217d459"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a94a673163556c0e25e566b9ff217d459">castor3d::getMipLevels</a> (LpvTexture texture, castor::Size const &amp;size)</td></tr>
+<tr class="separator:a94a673163556c0e25e566b9ff217d459"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2b4b474cbbf3a57807e60a854e9809b"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#ad2b4b474cbbf3a57807e60a854e9809b">castor3d::getMipLevels</a> (LpvTexture texture, VkExtent3D const &amp;size)</td></tr>
+<tr class="separator:ad2b4b474cbbf3a57807e60a854e9809b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11c99e4d7287246ad57769250536dcf3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a11c99e4d7287246ad57769250536dcf3">castor3d::CU_DeclareCUSmartPtr</a> (castor3d, GeometryInjectionPass, <a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>)</td></tr>
+<tr class="separator:a11c99e4d7287246ad57769250536dcf3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76d5471fdfb6203bc02b774dc8794883"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a76d5471fdfb6203bc02b774dc8794883">castor3d::CU_DeclareCUSmartPtr</a> (castor3d, LayeredLightPropagationVolumes, <a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>)</td></tr>
+<tr class="separator:a76d5471fdfb6203bc02b774dc8794883"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71349b60dab99724d9097c9cbc00e934"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a71349b60dab99724d9097c9cbc00e934">castor3d::CU_DeclareCUSmartPtr</a> (castor3d, LayeredLightPropagationVolumesG, <a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>)</td></tr>
+<tr class="separator:a71349b60dab99724d9097c9cbc00e934"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6d113186e2408738fe6e84fb1272057"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#ac6d113186e2408738fe6e84fb1272057">castor3d::CU_DeclareCUSmartPtr</a> (castor3d, LightInjectionPass, <a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>)</td></tr>
+<tr class="separator:ac6d113186e2408738fe6e84fb1272057"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e5fbb7c43f69f3caca829a047cb898d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a0e5fbb7c43f69f3caca829a047cb898d">castor3d::CU_DeclareCUSmartPtr</a> (castor3d, LightPropagationPass, <a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>)</td></tr>
+<tr class="separator:a0e5fbb7c43f69f3caca829a047cb898d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade43442ef4e867bcb85995755f12ab8a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#ade43442ef4e867bcb85995755f12ab8a">castor3d::CU_DeclareCUSmartPtr</a> (castor3d, LightPropagationVolumes, <a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>)</td></tr>
+<tr class="separator:ade43442ef4e867bcb85995755f12ab8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad08bb2fea34e05e678f0af00d0ac483f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#ad08bb2fea34e05e678f0af00d0ac483f">castor3d::CU_DeclareCUSmartPtr</a> (castor3d, LightPropagationVolumesG, <a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>)</td></tr>
+<tr class="separator:ad08bb2fea34e05e678f0af00d0ac483f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afdbd3e49d87d3464c58d02150ff92047"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#afdbd3e49d87d3464c58d02150ff92047">castor3d::CU_DeclareCUSmartPtr</a> (castor3d, LightVolumePassResult, <a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>)</td></tr>
+<tr class="separator:afdbd3e49d87d3464c58d02150ff92047"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07eaa2137986a61e5d753a410a775833"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a07eaa2137986a61e5d753a410a775833">castor3d::CU_DeclareArray</a> (LightPropagationPassUPtr, lpv::PropagationPassCount, LightPropagationPass)</td></tr>
+<tr class="separator:a07eaa2137986a61e5d753a410a775833"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab762ffafd020a9443a8102eabdcd9d49"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#ab762ffafd020a9443a8102eabdcd9d49">castor3d::CU_DeclareVector</a> (GeometryInjectionPass, GeometryInjectionPass)</td></tr>
+<tr class="separator:ab762ffafd020a9443a8102eabdcd9d49"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0434fff87495d904f574311a8f8475a9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a0434fff87495d904f574311a8f8475a9">castor3d::CU_DeclareVector</a> (LightInjectionPass, LightInjectionPass)</td></tr>
+<tr class="separator:a0434fff87495d904f574311a8f8475a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a474d83b188059e963495ca1509bd01fb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a474d83b188059e963495ca1509bd01fb">castor3d::CU_DeclareVector</a> (LightVolumePassResultUPtr, LightVolumePassResult)</td></tr>
+<tr class="separator:a474d83b188059e963495ca1509bd01fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 13:38:13 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Feb 18 2021 01:09:06 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

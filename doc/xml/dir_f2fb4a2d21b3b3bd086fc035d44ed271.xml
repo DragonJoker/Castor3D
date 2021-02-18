@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_f2fb4a2d21b3b3bd086fc035d44ed271" kind="dir">
+    <compoundname>Model/Mesh/Submesh</compoundname>
+    <innerdir refid="dir_6c03977e160fc4ea710cb963519ecd3f">Model/Mesh/Submesh/Component</innerdir>
+    <innerfile refid="d6/d60/a00491">Submesh.hpp</innerfile>
+    <innerfile refid="d5/d0f/a00494">SubmeshModule.hpp</innerfile>
+    <innerfile refid="d4/d1e/a00497">SubmeshUtils.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Model/Mesh/Submesh/"/>
+  </compounddef>
+</doxygen>

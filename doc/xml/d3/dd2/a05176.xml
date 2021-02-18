@@ -1,0 +1,1391 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d3/dd2/a05176" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::LightCategory</compoundname>
+    <derivedcompoundref refid="df/d18/a05168" prot="public" virt="non-virtual">castor3d::DirectionalLight</derivedcompoundref>
+    <derivedcompoundref refid="dc/ded/a05184" prot="public" virt="non-virtual">castor3d::PointLight</derivedcompoundref>
+    <derivedcompoundref refid="d6/d8c/a05188" prot="public" virt="non-virtual">castor3d::SpotLight</derivedcompoundref>
+    <includes local="no">LightCategory.hpp</includes>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d3/dd2/a05176_1a1fdb3e7afdb8be2e8b3d1f5453cf72fc" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::LightCategory::getVolumetricSteps</definition>
+        <argsstring>() const</argsstring>
+        <name>getVolumetricSteps</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Getters. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="67" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1a4b0881f2bdcfa98c6e36aaeceb8f937a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> float</type>
+        <definition>C3D_API float castor3d::LightCategory::getVolumetricScatteringFactor</definition>
+        <argsstring>() const</argsstring>
+        <name>getVolumetricScatteringFactor</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="68" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1aa3c3ffc526ed94508ca603d3133d9a16" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Point2f const  &amp;</type>
+        <definition>C3D_API castor::Point2f const&amp; castor3d::LightCategory::getShadowRawOffsets</definition>
+        <argsstring>() const</argsstring>
+        <name>getShadowRawOffsets</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="69" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1a86f3afb3e5fab4e9a960b682f95daac1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Point2f const  &amp;</type>
+        <definition>C3D_API castor::Point2f const&amp; castor3d::LightCategory::getShadowPcfOffsets</definition>
+        <argsstring>() const</argsstring>
+        <name>getShadowPcfOffsets</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="70" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1afbedca91807e51a8c8e1da2f0a5a1742" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Point2f const  &amp;</type>
+        <definition>C3D_API castor::Point2f const&amp; castor3d::LightCategory::getShadowVariance</definition>
+        <argsstring>() const</argsstring>
+        <name>getShadowVariance</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="71" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1a18abfa362426c7cc26efffb34f35ffa1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d3/dc5/a05260" kindref="compound">ShadowConfig</ref> const  &amp;</type>
+        <definition>C3D_API ShadowConfig const&amp; castor3d::LightCategory::getShadowConfig</definition>
+        <argsstring>() const</argsstring>
+        <name>getShadowConfig</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="72" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1adc4eb965300a80837f729f1bc95f3160" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="df/d8c/a04904" kindref="compound">RsmConfig</ref> const  &amp;</type>
+        <definition>C3D_API RsmConfig const&amp; castor3d::LightCategory::getRsmConfig</definition>
+        <argsstring>() const</argsstring>
+        <name>getRsmConfig</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="73" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1a334b9c3b5913e20d9d940f0f1ccfe2b1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/d2b/a04300" kindref="compound">LpvConfig</ref> const  &amp;</type>
+        <definition>C3D_API LpvConfig const&amp; castor3d::LightCategory::getLpvConfig</definition>
+        <argsstring>() const</argsstring>
+        <name>getLpvConfig</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="74" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1a64522c60f1f11b59f7ae2e9968140ab4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/d1e/a01479_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+        <definition>LightType castor3d::LightCategory::getLightType</definition>
+        <argsstring>() const</argsstring>
+        <name>getLightType</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="76" column="1" bodyfile="Scene/Light/LightCategory.hpp" bodystart="76" bodyend="79"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1a0e953d6e6965fb1ef782e3bdd6fe469d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor3d::LightCategory::getDiffuseIntensity</definition>
+        <argsstring>() const</argsstring>
+        <name>getDiffuseIntensity</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="81" column="1" bodyfile="Scene/Light/LightCategory.hpp" bodystart="81" bodyend="84"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1a9189a1586f231e8bb99f7bdbaa432284" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor3d::LightCategory::getSpecularIntensity</definition>
+        <argsstring>() const</argsstring>
+        <name>getSpecularIntensity</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="86" column="1" bodyfile="Scene/Light/LightCategory.hpp" bodystart="86" bodyend="89"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1a0000c6055d6f4b54c78a3a885e9f0235" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Point2f const  &amp;</type>
+        <definition>castor::Point2f const&amp; castor3d::LightCategory::getIntensity</definition>
+        <argsstring>() const</argsstring>
+        <name>getIntensity</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="91" column="1" bodyfile="Scene/Light/LightCategory.hpp" bodystart="91" bodyend="94"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1ab6f2d4d170e620f0f84c642b45bcc0fd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor3d::LightCategory::getFarPlane</definition>
+        <argsstring>() const</argsstring>
+        <name>getFarPlane</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="96" column="1" bodyfile="Scene/Light/LightCategory.hpp" bodystart="96" bodyend="99"/>
+        <references refid="d3/dd2/a05176_1a510f474ea2102b2cdb6ea5683f165d66" compoundref="dd/de4/a01121" startline="360">m_farPlane</references>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1a8c4677776ef325840e250e0f4a089ae6" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Point3f const  &amp;</type>
+        <definition>castor::Point3f const&amp; castor3d::LightCategory::getColour</definition>
+        <argsstring>() const</argsstring>
+        <name>getColour</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="101" column="1" bodyfile="Scene/Light/LightCategory.hpp" bodystart="101" bodyend="104"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1ab0793accd1e9be818513083bfaf5e0c3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d8/de4/a05172" kindref="compound">Light</ref> const  &amp;</type>
+        <definition>Light const&amp; castor3d::LightCategory::getLight</definition>
+        <argsstring>() const</argsstring>
+        <name>getLight</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="106" column="1" bodyfile="Scene/Light/LightCategory.hpp" bodystart="106" bodyend="109"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1ac96e315f23199b5e386accc24c132cd0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::BoundingBox const  &amp;</type>
+        <definition>castor::BoundingBox const&amp; castor3d::LightCategory::getBoundingBox</definition>
+        <argsstring>() const</argsstring>
+        <name>getBoundingBox</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="111" column="1" bodyfile="Scene/Light/LightCategory.hpp" bodystart="111" bodyend="114"/>
+        <references refid="d3/dd2/a05176_1a28a4f8b94fa6ff89c9aa57e2dae75672" compoundref="dd/de4/a01121" startline="357">m_cubeBox</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d3/dd2/a05176_1a92e545bfabd12248ac2aa0409d9b1fee" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LightCategory::setVolumetricSteps</definition>
+        <argsstring>(uint32_t value)</argsstring>
+        <name>setVolumetricSteps</name>
+        <param>
+          <type>uint32_t</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Mutators. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="125" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1a540bf2d551c26998f6257cbf3862abe4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LightCategory::setVolumetricScatteringFactor</definition>
+        <argsstring>(float value)</argsstring>
+        <name>setVolumetricScatteringFactor</name>
+        <param>
+          <type>float</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="126" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1a4a20cb9dd9760352ebacffcbd8febaec" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LightCategory::setRawMinOffset</definition>
+        <argsstring>(float value)</argsstring>
+        <name>setRawMinOffset</name>
+        <param>
+          <type>float</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="127" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1a74565f5a3f7bdfdb7ebc0aee97a55960" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LightCategory::setRawMaxSlopeOffset</definition>
+        <argsstring>(float value)</argsstring>
+        <name>setRawMaxSlopeOffset</name>
+        <param>
+          <type>float</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="128" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1abbb7ac4dd057bd9b5c809822d2600959" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LightCategory::setPcfMinOffset</definition>
+        <argsstring>(float value)</argsstring>
+        <name>setPcfMinOffset</name>
+        <param>
+          <type>float</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="129" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1ae0babdad467b1d890595403c7aa02065" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LightCategory::setPcfMaxSlopeOffset</definition>
+        <argsstring>(float value)</argsstring>
+        <name>setPcfMaxSlopeOffset</name>
+        <param>
+          <type>float</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="130" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1a16d5062cf84f27747c4ce162d67c9574" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LightCategory::setVsmMaxVariance</definition>
+        <argsstring>(float value)</argsstring>
+        <name>setVsmMaxVariance</name>
+        <param>
+          <type>float</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="131" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1a4ea67513754e906298182d145da36aa0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LightCategory::setVsmVarianceBias</definition>
+        <argsstring>(float value)</argsstring>
+        <name>setVsmVarianceBias</name>
+        <param>
+          <type>float</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="132" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1a3a1f405f28c2f1fb4e9c9edc0bc50291" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d8/de4/a05172" kindref="compound">Light</ref> &amp;</type>
+        <definition>Light&amp; castor3d::LightCategory::getLight</definition>
+        <argsstring>()</argsstring>
+        <name>getLight</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="134" column="1" bodyfile="Scene/Light/LightCategory.hpp" bodystart="134" bodyend="137"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1a327588265f9d0105d4b453c6037d184b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Point3f &amp;</type>
+        <definition>castor::Point3f&amp; castor3d::LightCategory::getColour</definition>
+        <argsstring>()</argsstring>
+        <name>getColour</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="139" column="1" bodyfile="Scene/Light/LightCategory.hpp" bodystart="139" bodyend="142"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1a479f2bd7b4f9b66c013fcaf763aea476" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Point2f &amp;</type>
+        <definition>castor::Point2f&amp; castor3d::LightCategory::getIntensity</definition>
+        <argsstring>()</argsstring>
+        <name>getIntensity</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="144" column="1" bodyfile="Scene/Light/LightCategory.hpp" bodystart="144" bodyend="147"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1afa4d57bc7ecab18182cef38b6f5a4e67" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::LightCategory::setColour</definition>
+        <argsstring>(castor::Point3f const &amp;value)</argsstring>
+        <name>setColour</name>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="149" column="1" bodyfile="Scene/Light/LightCategory.hpp" bodystart="149" bodyend="152"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1a6ebb956df34cf44907bc031f560014de" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::LightCategory::setIntensity</definition>
+        <argsstring>(castor::Point2f const &amp;value)</argsstring>
+        <name>setIntensity</name>
+        <param>
+          <type>castor::Point2f const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="154" column="1" bodyfile="Scene/Light/LightCategory.hpp" bodystart="154" bodyend="157"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1a1b615465cbad66974ec112921726de07" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::LightCategory::setDiffuseIntensity</definition>
+        <argsstring>(float value)</argsstring>
+        <name>setDiffuseIntensity</name>
+        <param>
+          <type>float</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="159" column="1" bodyfile="Scene/Light/LightCategory.hpp" bodystart="159" bodyend="162"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1a091bc25b7432fda294f07d4b00e2019b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::LightCategory::setSpecularIntensity</definition>
+        <argsstring>(float value)</argsstring>
+        <name>setSpecularIntensity</name>
+        <param>
+          <type>float</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="164" column="1" bodyfile="Scene/Light/LightCategory.hpp" bodystart="164" bodyend="167"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="d3/dd2/a05176_1a27862a9fe512b352f98ec1c054680edd" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>friend class</type>
+        <definition>friend class Light</definition>
+        <argsstring></argsstring>
+        <name>Light</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="19" column="1" bodyfile="Scene/Light/LightCategory.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d3/dd2/a05176_1a28a4f8b94fa6ff89c9aa57e2dae75672" prot="protected" static="no" mutable="no">
+        <type>castor::BoundingBox</type>
+        <definition>castor::BoundingBox castor3d::LightCategory::m_cubeBox</definition>
+        <argsstring></argsstring>
+        <name>m_cubeBox</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The cube box for the light volume of effect. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="357" column="1" bodyfile="Scene/Light/LightCategory.hpp" bodystart="357" bodyend="-1"/>
+        <referencedby refid="d3/dd2/a05176_1ac96e315f23199b5e386accc24c132cd0" compoundref="dd/de4/a01121" startline="111" endline="114">getBoundingBox</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d3/dd2/a05176_1a510f474ea2102b2cdb6ea5683f165d66" prot="protected" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::LightCategory::m_farPlane</definition>
+        <argsstring></argsstring>
+        <name>m_farPlane</name>
+        <initializer>{ 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The far plane&apos;s depth. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="360" column="1" bodyfile="Scene/Light/LightCategory.hpp" bodystart="360" bodyend="-1"/>
+        <referencedby refid="d3/dd2/a05176_1ab6f2d4d170e620f0f84c642b45bcc0fd" compoundref="dd/de4/a01121" startline="96" endline="99">getFarPlane</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d3/dd2/a05176_1a5610c8434110c708f038cea4d565ff1f" prot="protected" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t castor3d::LightCategory::m_shadowMapIndex</definition>
+        <argsstring></argsstring>
+        <name>m_shadowMapIndex</name>
+        <initializer>{ -1 }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The light source shadow map index. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="363" column="1" bodyfile="Scene/Light/LightCategory.hpp" bodystart="363" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d3/dd2/a05176_1a42e688cef4bd84519bf211c023018d62" prot="private" static="no" mutable="no">
+        <type><ref refid="da/d1e/a01479_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+        <definition>LightType castor3d::LightCategory::m_lightType</definition>
+        <argsstring></argsstring>
+        <name>m_lightType</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="366" column="1" bodyfile="Scene/Light/LightCategory.hpp" bodystart="366" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/dd2/a05176_1a3b3f6f3faa9d1760154ad47129eff4c9" prot="private" static="no" mutable="no">
+        <type><ref refid="d8/de4/a05172" kindref="compound">Light</ref> &amp;</type>
+        <definition>Light&amp; castor3d::LightCategory::m_light</definition>
+        <argsstring></argsstring>
+        <name>m_light</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="367" column="1" bodyfile="Scene/Light/LightCategory.hpp" bodystart="367" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/dd2/a05176_1a39cc643d1072dfb5ba0cabf2185cd7cd" prot="private" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::LightCategory::m_colour</definition>
+        <argsstring></argsstring>
+        <name>m_colour</name>
+        <initializer>{ 1.0, 1.0, 1.0 }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="368" column="1" bodyfile="Scene/Light/LightCategory.hpp" bodystart="368" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/dd2/a05176_1aee05883af967c7aaa619b9f3d1098949" prot="private" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::LightCategory::m_intensity</definition>
+        <argsstring></argsstring>
+        <name>m_intensity</name>
+        <initializer>{ 1.0, 1.0 }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="369" column="1" bodyfile="Scene/Light/LightCategory.hpp" bodystart="369" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="d3/dd2/a05176_1ac90799b0033274a99a53394753dc1f35" prot="protected" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::LightCategory::LightCategory</definition>
+        <argsstring>(LightType lightType, Light &amp;light)</argsstring>
+        <name>LightCategory</name>
+        <param>
+          <type><ref refid="da/d1e/a01479_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+          <declname>lightType</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/de4/a05172" kindref="compound">Light</ref> &amp;</type>
+          <declname>light</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lightType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The light category type. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">light</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent <ref refid="d8/de4/a05172" kindref="compound">Light</ref>. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="32" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1a5c6bae82aa8c9c378b075c744ba546ef" prot="protected" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::LightCategory::updateNode</definition>
+        <argsstring>(SceneNode const &amp;node)=0</argsstring>
+        <name>updateNode</name>
+        <reimplementedby refid="dc/ded/a05184_1aca6cbf77413d8b803221cded97139c47">updateNode</reimplementedby>
+        <reimplementedby refid="df/d18/a05168_1ab7d792085b39f49dad8d019ab15fd73b">updateNode</reimplementedby>
+        <reimplementedby refid="d6/d8c/a05188_1a5e6a9cd032057f15eb7a2f1314db25dc">updateNode</reimplementedby>
+        <param>
+          <type><ref refid="da/d44/a05256" kindref="compound">SceneNode</ref> const &amp;</type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+<para>Updates the light source&apos;s informations related to the scene node. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">node</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scene node. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="179" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1a7ee0b1c56ef5702a7edc67f2bd6e995d" prot="protected" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::LightCategory::doCopyComponent</definition>
+        <argsstring>(castor::Point2f const &amp;components, castor::Point4f *&amp;buffer) const</argsstring>
+        <name>doCopyComponent</name>
+        <param>
+          <type>castor::Point2f const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type>castor::Point4f *&amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+<para>Copies the given light PixelComponents values into the buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">components</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The components. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The destination buffer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="192" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1af1f79deed6598d9274f73b4aab6b4da7" prot="protected" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::LightCategory::doCopyComponent</definition>
+        <argsstring>(castor::Point2f const &amp;components1, castor::Point2f const &amp;components2, castor::Point4f *&amp;buffer) const</argsstring>
+        <name>doCopyComponent</name>
+        <param>
+          <type>castor::Point2f const &amp;</type>
+          <declname>components1</declname>
+        </param>
+        <param>
+          <type>castor::Point2f const &amp;</type>
+          <declname>components2</declname>
+        </param>
+        <param>
+          <type>castor::Point4f *&amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+<para>Copies the given light PixelComponents values into the buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">components1</parametername>
+<parametername direction="in">components2</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The components. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The destination buffer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="204" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1a218f59a797a77eb0d88f6edf382f153d" prot="protected" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::LightCategory::doCopyComponent</definition>
+        <argsstring>(castor::Point2f const &amp;components, float component, castor::Point4f *&amp;buffer) const</argsstring>
+        <name>doCopyComponent</name>
+        <param>
+          <type>castor::Point2f const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>component</declname>
+        </param>
+        <param>
+          <type>castor::Point4f *&amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+<para>Copies the given light PixelComponents values into the buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">components</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The components. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">component</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The last component. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The destination buffer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="219" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1a780aaff67040afb908bd9aa966a70f8e" prot="protected" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::LightCategory::doCopyComponent</definition>
+        <argsstring>(castor::Point2f const &amp;components, float component1, float component2, castor::Point4f *&amp;buffer) const</argsstring>
+        <name>doCopyComponent</name>
+        <param>
+          <type>castor::Point2f const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>component1</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>component2</declname>
+        </param>
+        <param>
+          <type>castor::Point4f *&amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+<para>Copies the given light PixelComponents values into the buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">components</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The components. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">component1</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The third component. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">component2</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The fourth component. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The destination buffer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="236" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1a6930d976e137c7b03ce129e910c06e5f" prot="protected" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::LightCategory::doCopyComponent</definition>
+        <argsstring>(float component0, float component1, float component2, float component3, castor::Point4f *&amp;buffer) const</argsstring>
+        <name>doCopyComponent</name>
+        <param>
+          <type>float</type>
+          <declname>component0</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>component1</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>component2</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>component3</declname>
+        </param>
+        <param>
+          <type>castor::Point4f *&amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+<para>Copies the given light PixelComponents values into the buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">component0</parametername>
+<parametername direction="in">component1</parametername>
+<parametername direction="in">component2</parametername>
+<parametername direction="in">component3</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The components. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The destination buffer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="250" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1a0ba175ddd046e055830683a6ad87b8c0" prot="protected" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::LightCategory::doCopyComponent</definition>
+        <argsstring>(castor::Point3f const &amp;components, castor::Point4f *&amp;buffer) const</argsstring>
+        <name>doCopyComponent</name>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type>castor::Point4f *&amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+<para>Copies the given light PixelComponents values into the buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">components</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The components. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The destination buffer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="265" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1a8a6e48653b84e76339dd181a084cf868" prot="protected" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::LightCategory::doCopyComponent</definition>
+        <argsstring>(castor::Point3f const &amp;components, float component, castor::Point4f *&amp;buffer) const</argsstring>
+        <name>doCopyComponent</name>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>component</declname>
+        </param>
+        <param>
+          <type>castor::Point4f *&amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+<para>Copies the given light PixelComponents values into the buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">components</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The components. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">component</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The last component. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The destination buffer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="279" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1a10eb9094693412d559a83e66ad43ef19" prot="protected" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::LightCategory::doCopyComponent</definition>
+        <argsstring>(castor::Point4f const &amp;components, castor::Point4f *&amp;buffer) const</argsstring>
+        <name>doCopyComponent</name>
+        <param>
+          <type>castor::Point4f const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type>castor::Point4f *&amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+<para>Copies the given light PixelComponents values into the buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">components</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The components. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The destination buffer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="292" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1a0ac9034daada216e965f2145b887dfe4" prot="protected" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::LightCategory::doCopyComponent</definition>
+        <argsstring>(castor::ConstCoords4f const &amp;components, castor::Point4f *&amp;buffer) const</argsstring>
+        <name>doCopyComponent</name>
+        <param>
+          <type>castor::ConstCoords4f const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type>castor::Point4f *&amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+<para>Copies the given light PixelComponents values into the buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">components</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The components. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The destination buffer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="304" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1aa538ec4843e1029635605b57087b0312" prot="protected" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::LightCategory::doCopyComponent</definition>
+        <argsstring>(castor::Coords4f const &amp;components, castor::Point4f *&amp;buffer) const</argsstring>
+        <name>doCopyComponent</name>
+        <param>
+          <type>castor::Coords4f const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type>castor::Point4f *&amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+<para>Copies the given light PixelComponents values into the buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">components</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The components. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The destination buffer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="316" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1a859a63bc82aae3d900f0fd97616abf07" prot="protected" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::LightCategory::doCopyComponent</definition>
+        <argsstring>(castor::Matrix4x4f const &amp;components, castor::Point4f *&amp;buffer) const</argsstring>
+        <name>doCopyComponent</name>
+        <param>
+          <type>castor::Matrix4x4f const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type>castor::Point4f *&amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+<para>Copies the given light PixelComponents values into the buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">components</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The components. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The destination buffer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="328" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1a22a7873ca173839a56d54a20bd6f1dfd" prot="protected" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::LightCategory::doCopyComponent</definition>
+        <argsstring>(int32_t const &amp;components, castor::Point4f *&amp;buffer) const</argsstring>
+        <name>doCopyComponent</name>
+        <param>
+          <type>int32_t const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type>castor::Point4f *&amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+<para>Copies the given light PixelComponents values into the buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">components</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The components. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The destination buffer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="340" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/dd2/a05176_1a8bdb5aa1c7e1a105887e14032f12effe" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::LightCategory::~LightCategory</definition>
+        <argsstring>()</argsstring>
+        <name>~LightCategory</name>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="41" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1a34386a8cdce8cddd885daa4e906ad4ba" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::LightCategory::update</definition>
+        <argsstring>()=0</argsstring>
+        <name>update</name>
+        <reimplementedby refid="dc/ded/a05184_1a0cabf7c21bd275943f54e6c7a6c1bf49">update</reimplementedby>
+        <reimplementedby refid="d6/d8c/a05188_1a89ee1f4b1d6931fd838eada16da3e410">update</reimplementedby>
+        <reimplementedby refid="df/d18/a05168_1a4aac08296c8c137f835e418d3276963f">update</reimplementedby>
+        <briefdescription>
+<para>Updates the light. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="48" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dd2/a05176_1acef61778e07afd40c46e2cb09be92098" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LightCategory::bind</definition>
+        <argsstring>(castor::Point4f *buffer) const</argsstring>
+        <name>bind</name>
+        <param>
+          <type>castor::Point4f *</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+<para>Puts the light into the given texture. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer that receives the light&apos;s data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="57" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d3/dd2/a05176_1ab4e1fe0bedc3f57a5848339ea32c9a1e" prot="private" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::LightCategory::doBind</definition>
+        <argsstring>(castor::Point4f *buffer) const =0</argsstring>
+        <name>doBind</name>
+        <reimplementedby refid="dc/ded/a05184_1a8b6a4b8e0efba15f9781090b1ca5272f">doBind</reimplementedby>
+        <reimplementedby refid="df/d18/a05168_1a18efbf2f1c00c8c03e8a0fe97ddc6344">doBind</reimplementedby>
+        <reimplementedby refid="d6/d8c/a05188_1a21bf30cf173ef7926c90089b60c4c356">doBind</reimplementedby>
+        <param>
+          <type>castor::Point4f *</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+<para>Puts the light source&apos;s type specific data into the given texture. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer that receives the light&apos;s data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="352" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1556">
+        <label>castor3d::SpotLight</label>
+        <link refid="d6/d8c/a05188"/>
+        <childnode refid="1553" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1554">
+        <label>castor3d::DirectionalLight</label>
+        <link refid="df/d18/a05168"/>
+        <childnode refid="1553" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1553">
+        <label>castor3d::LightCategory</label>
+        <link refid="d3/dd2/a05176"/>
+      </node>
+      <node id="1555">
+        <label>castor3d::PointLight</label>
+        <link refid="dc/ded/a05184"/>
+        <childnode refid="1553" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <location file="Scene/Light/LightCategory.hpp" line="17" column="1" bodyfile="Scene/Light/LightCategory.hpp" bodystart="16" bodyend="370"/>
+    <listofallmembers>
+      <member refid="d3/dd2/a05176_1acef61778e07afd40c46e2cb09be92098" prot="public" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>bind</name></member>
+      <member refid="d3/dd2/a05176_1ab4e1fe0bedc3f57a5848339ea32c9a1e" prot="private" virt="pure-virtual"><scope>castor3d::LightCategory</scope><name>doBind</name></member>
+      <member refid="d3/dd2/a05176_1a7ee0b1c56ef5702a7edc67f2bd6e995d" prot="protected" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>doCopyComponent</name></member>
+      <member refid="d3/dd2/a05176_1af1f79deed6598d9274f73b4aab6b4da7" prot="protected" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>doCopyComponent</name></member>
+      <member refid="d3/dd2/a05176_1a218f59a797a77eb0d88f6edf382f153d" prot="protected" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>doCopyComponent</name></member>
+      <member refid="d3/dd2/a05176_1a780aaff67040afb908bd9aa966a70f8e" prot="protected" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>doCopyComponent</name></member>
+      <member refid="d3/dd2/a05176_1a6930d976e137c7b03ce129e910c06e5f" prot="protected" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>doCopyComponent</name></member>
+      <member refid="d3/dd2/a05176_1a0ba175ddd046e055830683a6ad87b8c0" prot="protected" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>doCopyComponent</name></member>
+      <member refid="d3/dd2/a05176_1a8a6e48653b84e76339dd181a084cf868" prot="protected" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>doCopyComponent</name></member>
+      <member refid="d3/dd2/a05176_1a10eb9094693412d559a83e66ad43ef19" prot="protected" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>doCopyComponent</name></member>
+      <member refid="d3/dd2/a05176_1a0ac9034daada216e965f2145b887dfe4" prot="protected" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>doCopyComponent</name></member>
+      <member refid="d3/dd2/a05176_1aa538ec4843e1029635605b57087b0312" prot="protected" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>doCopyComponent</name></member>
+      <member refid="d3/dd2/a05176_1a859a63bc82aae3d900f0fd97616abf07" prot="protected" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>doCopyComponent</name></member>
+      <member refid="d3/dd2/a05176_1a22a7873ca173839a56d54a20bd6f1dfd" prot="protected" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>doCopyComponent</name></member>
+      <member refid="d3/dd2/a05176_1ac96e315f23199b5e386accc24c132cd0" prot="public" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>getBoundingBox</name></member>
+      <member refid="d3/dd2/a05176_1a8c4677776ef325840e250e0f4a089ae6" prot="public" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>getColour</name></member>
+      <member refid="d3/dd2/a05176_1a327588265f9d0105d4b453c6037d184b" prot="public" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>getColour</name></member>
+      <member refid="d3/dd2/a05176_1a0e953d6e6965fb1ef782e3bdd6fe469d" prot="public" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>getDiffuseIntensity</name></member>
+      <member refid="d3/dd2/a05176_1ab6f2d4d170e620f0f84c642b45bcc0fd" prot="public" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>getFarPlane</name></member>
+      <member refid="d3/dd2/a05176_1a0000c6055d6f4b54c78a3a885e9f0235" prot="public" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>getIntensity</name></member>
+      <member refid="d3/dd2/a05176_1a479f2bd7b4f9b66c013fcaf763aea476" prot="public" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>getIntensity</name></member>
+      <member refid="d3/dd2/a05176_1ab0793accd1e9be818513083bfaf5e0c3" prot="public" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>getLight</name></member>
+      <member refid="d3/dd2/a05176_1a3a1f405f28c2f1fb4e9c9edc0bc50291" prot="public" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>getLight</name></member>
+      <member refid="d3/dd2/a05176_1a64522c60f1f11b59f7ae2e9968140ab4" prot="public" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>getLightType</name></member>
+      <member refid="d3/dd2/a05176_1a334b9c3b5913e20d9d940f0f1ccfe2b1" prot="public" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>getLpvConfig</name></member>
+      <member refid="d3/dd2/a05176_1adc4eb965300a80837f729f1bc95f3160" prot="public" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>getRsmConfig</name></member>
+      <member refid="d3/dd2/a05176_1a18abfa362426c7cc26efffb34f35ffa1" prot="public" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>getShadowConfig</name></member>
+      <member refid="d3/dd2/a05176_1a86f3afb3e5fab4e9a960b682f95daac1" prot="public" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>getShadowPcfOffsets</name></member>
+      <member refid="d3/dd2/a05176_1aa3c3ffc526ed94508ca603d3133d9a16" prot="public" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>getShadowRawOffsets</name></member>
+      <member refid="d3/dd2/a05176_1afbedca91807e51a8c8e1da2f0a5a1742" prot="public" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>getShadowVariance</name></member>
+      <member refid="d3/dd2/a05176_1a9189a1586f231e8bb99f7bdbaa432284" prot="public" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>getSpecularIntensity</name></member>
+      <member refid="d3/dd2/a05176_1a4b0881f2bdcfa98c6e36aaeceb8f937a" prot="public" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>getVolumetricScatteringFactor</name></member>
+      <member refid="d3/dd2/a05176_1a1fdb3e7afdb8be2e8b3d1f5453cf72fc" prot="public" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>getVolumetricSteps</name></member>
+      <member refid="d3/dd2/a05176_1a27862a9fe512b352f98ec1c054680edd" prot="private" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>Light</name></member>
+      <member refid="d3/dd2/a05176_1ac90799b0033274a99a53394753dc1f35" prot="protected" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>LightCategory</name></member>
+      <member refid="d3/dd2/a05176_1a39cc643d1072dfb5ba0cabf2185cd7cd" prot="private" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>m_colour</name></member>
+      <member refid="d3/dd2/a05176_1a28a4f8b94fa6ff89c9aa57e2dae75672" prot="protected" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>m_cubeBox</name></member>
+      <member refid="d3/dd2/a05176_1a510f474ea2102b2cdb6ea5683f165d66" prot="protected" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>m_farPlane</name></member>
+      <member refid="d3/dd2/a05176_1aee05883af967c7aaa619b9f3d1098949" prot="private" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>m_intensity</name></member>
+      <member refid="d3/dd2/a05176_1a3b3f6f3faa9d1760154ad47129eff4c9" prot="private" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>m_light</name></member>
+      <member refid="d3/dd2/a05176_1a42e688cef4bd84519bf211c023018d62" prot="private" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>m_lightType</name></member>
+      <member refid="d3/dd2/a05176_1a5610c8434110c708f038cea4d565ff1f" prot="protected" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>m_shadowMapIndex</name></member>
+      <member refid="d3/dd2/a05176_1afa4d57bc7ecab18182cef38b6f5a4e67" prot="public" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>setColour</name></member>
+      <member refid="d3/dd2/a05176_1a1b615465cbad66974ec112921726de07" prot="public" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>setDiffuseIntensity</name></member>
+      <member refid="d3/dd2/a05176_1a6ebb956df34cf44907bc031f560014de" prot="public" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>setIntensity</name></member>
+      <member refid="d3/dd2/a05176_1ae0babdad467b1d890595403c7aa02065" prot="public" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>setPcfMaxSlopeOffset</name></member>
+      <member refid="d3/dd2/a05176_1abbb7ac4dd057bd9b5c809822d2600959" prot="public" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>setPcfMinOffset</name></member>
+      <member refid="d3/dd2/a05176_1a74565f5a3f7bdfdb7ebc0aee97a55960" prot="public" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>setRawMaxSlopeOffset</name></member>
+      <member refid="d3/dd2/a05176_1a4a20cb9dd9760352ebacffcbd8febaec" prot="public" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>setRawMinOffset</name></member>
+      <member refid="d3/dd2/a05176_1a091bc25b7432fda294f07d4b00e2019b" prot="public" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>setSpecularIntensity</name></member>
+      <member refid="d3/dd2/a05176_1a540bf2d551c26998f6257cbf3862abe4" prot="public" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>setVolumetricScatteringFactor</name></member>
+      <member refid="d3/dd2/a05176_1a92e545bfabd12248ac2aa0409d9b1fee" prot="public" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>setVolumetricSteps</name></member>
+      <member refid="d3/dd2/a05176_1a16d5062cf84f27747c4ce162d67c9574" prot="public" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>setVsmMaxVariance</name></member>
+      <member refid="d3/dd2/a05176_1a4ea67513754e906298182d145da36aa0" prot="public" virt="non-virtual"><scope>castor3d::LightCategory</scope><name>setVsmVarianceBias</name></member>
+      <member refid="d3/dd2/a05176_1a34386a8cdce8cddd885daa4e906ad4ba" prot="public" virt="pure-virtual"><scope>castor3d::LightCategory</scope><name>update</name></member>
+      <member refid="d3/dd2/a05176_1a5c6bae82aa8c9c378b075c744ba546ef" prot="protected" virt="pure-virtual"><scope>castor3d::LightCategory</scope><name>updateNode</name></member>
+      <member refid="d3/dd2/a05176_1a8bdb5aa1c7e1a105887e14032f12effe" prot="public" virt="virtual"><scope>castor3d::LightCategory</scope><name>~LightCategory</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,1601 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="df/d5d/a02596" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::Pass</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; Material &gt;</basecompoundref>
+    <derivedcompoundref refid="d1/df5/a02592" prot="public" virt="non-virtual">castor3d::MetallicRoughnessPbrPass</derivedcompoundref>
+    <derivedcompoundref refid="d6/dca/a02616" prot="public" virt="non-virtual">castor3d::PhongPass</derivedcompoundref>
+    <derivedcompoundref refid="dc/d64/a02620" prot="public" virt="non-virtual">castor3d::SpecularGlossinessPbrPass</derivedcompoundref>
+    <includes local="no">Pass.hpp</includes>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="df/d5d/a02596_1a5147b49f4f720d5a69fec485f14a9128" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::Pass::needsGammaCorrection</definition>
+        <argsstring>() const</argsstring>
+        <name>needsGammaCorrection</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Getters. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="171" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1a8a35b30ce4e90a506a77d3cbaa9d0439" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> TextureUnitPtrArray</type>
+        <definition>C3D_API TextureUnitPtrArray castor3d::Pass::getTextureUnits</definition>
+        <argsstring>(TextureFlags mask=TextureFlag::eAll) const</argsstring>
+        <name>getTextureUnits</name>
+        <param>
+          <type><ref refid="da/d1e/a01479_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref></type>
+          <declname>mask</declname>
+          <defval><ref refid="da/d1e/a01479_1ae3a32e32f3eaa63d0b9886aa3e942742a205a605c9a22391af5e09fa60fe30678" kindref="member">TextureFlag::eAll</ref></defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="172" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1aef7e358ffc5cec246f4f15484e2925f0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::Pass::getTextureUnitsCount</definition>
+        <argsstring>(TextureFlags mask=TextureFlag::eAll) const</argsstring>
+        <name>getTextureUnitsCount</name>
+        <param>
+          <type><ref refid="da/d1e/a01479_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref></type>
+          <declname>mask</declname>
+          <defval><ref refid="da/d1e/a01479_1ae3a32e32f3eaa63d0b9886aa3e942742a205a605c9a22391af5e09fa60fe30678" kindref="member">TextureFlag::eAll</ref></defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="173" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1af877c181aeafc8f162c8fc8af7fff083" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="da/d1e/a01479_1afa51b269ca00eaeff4f95f361bf2208f" kindref="member">TextureFlagsArray</ref></type>
+        <definition>C3D_API TextureFlagsArray castor3d::Pass::getTextures</definition>
+        <argsstring>(TextureFlags mask) const</argsstring>
+        <name>getTextures</name>
+        <param>
+          <type><ref refid="da/d1e/a01479_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref></type>
+          <declname>mask</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="174" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1a860006fc14f56cd98156c82bd921c960" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/d1e/a01479_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref> const  &amp;</type>
+        <definition>TextureFlags const&amp; castor3d::Pass::getTextures</definition>
+        <argsstring>() const</argsstring>
+        <name>getTextures</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="176" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="176" bodyend="179"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1ac79b5fc42779ef6c26d94d9aa8624d8e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::Pass::hasAutomaticShader</definition>
+        <argsstring>() const</argsstring>
+        <name>hasAutomaticShader</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="181" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="181" bodyend="184"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1a81a6f05668f306b5fc1ac9f9ebdfab1d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::Pass::isTwoSided</definition>
+        <argsstring>() const</argsstring>
+        <name>isTwoSided</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="186" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="186" bodyend="189"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1ae656ac3132fb4e95fa30f28381d5e421" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::Pass::hasEnvironmentMapping</definition>
+        <argsstring>() const</argsstring>
+        <name>hasEnvironmentMapping</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="191" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="191" bodyend="195"/>
+        <references refid="da/d1e/a01479_1a043cb84a97fa62d2b78e9f4ec3238f70a49372576420361b2038ec90fd3f0c8ea">castor3d::eReflection</references>
+        <references refid="da/d1e/a01479_1a043cb84a97fa62d2b78e9f4ec3238f70afbec80e794f5343bd4aa64902f433ede">castor3d::eRefraction</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1a66390e7dc9648f56a538b8b2b14569ed" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor3d::Pass::getOpacity</definition>
+        <argsstring>() const</argsstring>
+        <name>getOpacity</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="197" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="197" bodyend="200"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1a94afee54948f71d056e8aa3d51f50464" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::Pass::getBWAccumulationOperator</definition>
+        <argsstring>() const</argsstring>
+        <name>getBWAccumulationOperator</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="202" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="202" bodyend="205"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1a11d2d9dd2ec12a119e70adcd56ffd76e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor3d::Pass::getEmissive</definition>
+        <argsstring>() const</argsstring>
+        <name>getEmissive</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="207" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="207" bodyend="210"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1a46a166f8c07114d7a538f54fc358f555" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor3d::Pass::getRefractionRatio</definition>
+        <argsstring>() const</argsstring>
+        <name>getRefractionRatio</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="212" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="212" bodyend="215"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1abab03a36cc4743c6908c5796aa2cfaf5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/d1e/a01479_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
+        <definition>BlendMode castor3d::Pass::getAlphaBlendMode</definition>
+        <argsstring>() const</argsstring>
+        <name>getAlphaBlendMode</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="217" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="217" bodyend="220"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1aed61df74f8931cd420104e7f3d468f89" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/d1e/a01479_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
+        <definition>BlendMode castor3d::Pass::getColourBlendMode</definition>
+        <argsstring>() const</argsstring>
+        <name>getColourBlendMode</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="222" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="222" bodyend="225"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1a791c432d1d906eb14ff32a882c3f9633" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::Pass::getId</definition>
+        <argsstring>() const</argsstring>
+        <name>getId</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="227" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="227" bodyend="230"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1a5008debebdf91b98a449bcfe03791f65" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>VkCompareOp</type>
+        <definition>VkCompareOp castor3d::Pass::getAlphaFunc</definition>
+        <argsstring>() const</argsstring>
+        <name>getAlphaFunc</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="232" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="232" bodyend="235"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1a7ccad1e806e125101e2277999982fcb1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor3d::Pass::getAlphaValue</definition>
+        <argsstring>() const</argsstring>
+        <name>getAlphaValue</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="237" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="237" bodyend="240"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1a1e4a27f33f80c5163f1a6d8a3af3c8e8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::Pass::getTransmission</definition>
+        <argsstring>() const</argsstring>
+        <name>getTransmission</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="242" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="242" bodyend="245"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1ae6d7fc739a401207ae97464165cab915" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::Pass::hasSubsurfaceScattering</definition>
+        <argsstring>() const</argsstring>
+        <name>hasSubsurfaceScattering</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="247" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="247" bodyend="251"/>
+        <references refid="da/d1e/a01479_1a043cb84a97fa62d2b78e9f4ec3238f70ae5ecc06beb78c6d10266c1300fc8ca9c">castor3d::eSubsurfaceScattering</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1a537cf487cb3b1633611ad23d67a87d23" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/d1e/a01479_1a808c81c0da4ffd2515292e95b6b4c124" kindref="member">ParallaxOcclusionMode</ref></type>
+        <definition>ParallaxOcclusionMode castor3d::Pass::getParallaxOcclusion</definition>
+        <argsstring>() const</argsstring>
+        <name>getParallaxOcclusion</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="253" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="253" bodyend="256"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1af46d3754344dcf544ab178901c28e1af" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::Pass::hasParallaxOcclusion</definition>
+        <argsstring>() const</argsstring>
+        <name>hasParallaxOcclusion</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="258" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="258" bodyend="261"/>
+        <references refid="da/d1e/a01479_1ad372dd0cc65f28ad7f558f07c78becb7abe988781e4e1de1c6a36fb698afbbe1f">castor3d::eNone</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1ad6e28793e4302f1aeb001e99a8d1d96a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d8/d09/a02624" kindref="compound">SubsurfaceScattering</ref> const  &amp;</type>
+        <definition>SubsurfaceScattering const&amp; castor3d::Pass::getSubsurfaceScattering</definition>
+        <argsstring>() const</argsstring>
+        <name>getSubsurfaceScattering</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="263" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="263" bodyend="267"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1aefef1849fa24ccbdef9905e161b687d2" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::Pass::isImplicit</definition>
+        <argsstring>() const</argsstring>
+        <name>isImplicit</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="269" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="269" bodyend="272"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1aa3955ee04b630768804e3b781f1fe16a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::Pass::hasReflections</definition>
+        <argsstring>() const</argsstring>
+        <name>hasReflections</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="274" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="274" bodyend="277"/>
+        <references refid="da/d1e/a01479_1a043cb84a97fa62d2b78e9f4ec3238f70a49372576420361b2038ec90fd3f0c8ea">castor3d::eReflection</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1ab485b377665e57615dd8e9b208469335" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::Pass::hasRefraction</definition>
+        <argsstring>() const</argsstring>
+        <name>hasRefraction</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="279" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="279" bodyend="282"/>
+        <references refid="da/d1e/a01479_1a043cb84a97fa62d2b78e9f4ec3238f70afbec80e794f5343bd4aa64902f433ede">castor3d::eRefraction</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1aef76e51c5f621a5245cc0bab4342ae68" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::Pass::getHeightTextureIndex</definition>
+        <argsstring>() const</argsstring>
+        <name>getHeightTextureIndex</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="284" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="284" bodyend="287"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="df/d5d/a02596_1adb6026c634eebbfaa26fa25973fafcda" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::Pass::begin</definition>
+        <argsstring>() const</argsstring>
+        <name>begin</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Textures iteration. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="298" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="298" bodyend="301"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1a609f35aed9e87d4bc64a3158f6b9208f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::Pass::begin</definition>
+        <argsstring>()</argsstring>
+        <name>begin</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="303" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="303" bodyend="306"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1a747b9e8172704065f32c2c0b22c12eea" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::Pass::end</definition>
+        <argsstring>() const</argsstring>
+        <name>end</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="308" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="308" bodyend="311"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1a819275bac67ba6e090bbcbd72bb0b86b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::Pass::end</definition>
+        <argsstring>()</argsstring>
+        <name>end</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="313" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="313" bodyend="316"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="df/d5d/a02596_1a21496a3f31507920af9fce21254458ae" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Pass::setTwoSided</definition>
+        <argsstring>(bool value)</argsstring>
+        <name>setTwoSided</name>
+        <param>
+          <type>bool</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Mutators. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="327" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="327" bodyend="331"/>
+        <references refid="df/d5d/a02596_1af9b53724c4861cdbcc9d122c2b9b8908" compoundref="dc/d50/a00332" startline="434">onChanged</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1a9260376e612bb8e9e608649c2e2bdd8b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Pass::setEmissive</definition>
+        <argsstring>(float const &amp;value)</argsstring>
+        <name>setEmissive</name>
+        <param>
+          <type>float const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="333" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="333" bodyend="337"/>
+        <references refid="df/d5d/a02596_1af9b53724c4861cdbcc9d122c2b9b8908" compoundref="dc/d50/a00332" startline="434">onChanged</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1a3d937f0261b447dd91d89aa43037c960" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Pass::setRefractionRatio</definition>
+        <argsstring>(float value)</argsstring>
+        <name>setRefractionRatio</name>
+        <param>
+          <type>float</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="339" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="339" bodyend="343"/>
+        <references refid="df/d5d/a02596_1af9b53724c4861cdbcc9d122c2b9b8908" compoundref="dc/d50/a00332" startline="434">onChanged</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1a4f3b1f8a5b24e9921abeace0407221d3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Pass::setTransmission</definition>
+        <argsstring>(castor::Point3f value)</argsstring>
+        <name>setTransmission</name>
+        <param>
+          <type>castor::Point3f</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="345" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="345" bodyend="349"/>
+        <references refid="df/d5d/a02596_1af9b53724c4861cdbcc9d122c2b9b8908" compoundref="dc/d50/a00332" startline="434">onChanged</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1acb44524ddbe5e27b131a2a79819cfd68" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Pass::setParallaxOcclusion</definition>
+        <argsstring>(ParallaxOcclusionMode value)</argsstring>
+        <name>setParallaxOcclusion</name>
+        <param>
+          <type><ref refid="da/d1e/a01479_1a808c81c0da4ffd2515292e95b6b4c124" kindref="member">ParallaxOcclusionMode</ref></type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="351" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="351" bodyend="358"/>
+        <references refid="da/d1e/a01479_1a808c81c0da4ffd2515292e95b6b4c124a14e829df2f6aded577b1326558cec415">castor3d::eOne</references>
+        <references refid="da/d1e/a01479_1a043cb84a97fa62d2b78e9f4ec3238f70a25a594e1089909d809208217ff1a9a61">castor3d::eParallaxOcclusionMappingOne</references>
+        <references refid="da/d1e/a01479_1a043cb84a97fa62d2b78e9f4ec3238f70a377c872177b0bdcb0293a77685da6f24">castor3d::eParallaxOcclusionMappingRepeat</references>
+        <references refid="da/d1e/a01479_1a808c81c0da4ffd2515292e95b6b4c124a63a63e3fefbb6e5459aa2e951740c277">castor3d::eRepeat</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1af32c96d71f12e20feffd9823299cbfa6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Pass::setAlphaBlendMode</definition>
+        <argsstring>(BlendMode value)</argsstring>
+        <name>setAlphaBlendMode</name>
+        <param>
+          <type><ref refid="da/d1e/a01479_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="360" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="360" bodyend="364"/>
+        <references refid="df/d5d/a02596_1af9b53724c4861cdbcc9d122c2b9b8908" compoundref="dc/d50/a00332" startline="434">onChanged</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1a3b1fe1655d4a0ed0fcec79e095bf503f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Pass::setColourBlendMode</definition>
+        <argsstring>(BlendMode value)</argsstring>
+        <name>setColourBlendMode</name>
+        <param>
+          <type><ref refid="da/d1e/a01479_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="366" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="366" bodyend="370"/>
+        <references refid="df/d5d/a02596_1af9b53724c4861cdbcc9d122c2b9b8908" compoundref="dc/d50/a00332" startline="434">onChanged</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1a1452b05883e625b72284ee291f6b975c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Pass::setId</definition>
+        <argsstring>(uint32_t value)</argsstring>
+        <name>setId</name>
+        <param>
+          <type>uint32_t</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="372" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="372" bodyend="375"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1afd5267eb88bff6d35f87054df9c1ee9a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Pass::setAlphaFunc</definition>
+        <argsstring>(VkCompareOp value)</argsstring>
+        <name>setAlphaFunc</name>
+        <param>
+          <type>VkCompareOp</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="377" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="377" bodyend="382"/>
+        <references refid="da/d1e/a01479_1a043cb84a97fa62d2b78e9f4ec3238f70ae5e77b3edc9ed33970628e4e728f6fd2">castor3d::eAlphaBlending</references>
+        <references refid="da/d1e/a01479_1a043cb84a97fa62d2b78e9f4ec3238f70aea407def15794b188d6f372aa0f68fb5">castor3d::eAlphaTest</references>
+        <references refid="df/d5d/a02596_1ae87ec5c3a8297d7d27f4d28071173629">hasAlphaBlending</references>
+        <references refid="df/d5d/a02596_1abb555c3683dda21b77bace58ae285350">hasAlphaTest</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1a95c2f58fedf1951fcb9261ac31ed6412" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Pass::setAlphaValue</definition>
+        <argsstring>(float value)</argsstring>
+        <name>setAlphaValue</name>
+        <param>
+          <type>float</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="384" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="384" bodyend="388"/>
+        <references refid="df/d5d/a02596_1af9b53724c4861cdbcc9d122c2b9b8908" compoundref="dc/d50/a00332" startline="434">onChanged</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1a28958958c6c7efbfcd76431a4cc02302" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Pass::setBWAccumulationOperator</definition>
+        <argsstring>(uint32_t value)</argsstring>
+        <name>setBWAccumulationOperator</name>
+        <param>
+          <type>uint32_t</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="390" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="390" bodyend="394"/>
+        <references refid="df/d5d/a02596_1af9b53724c4861cdbcc9d122c2b9b8908" compoundref="dc/d50/a00332" startline="434">onChanged</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1aecf9d2ec66d6fbc7819a7e888d3fedc6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Pass::enableReflections</definition>
+        <argsstring>(bool value=true)</argsstring>
+        <name>enableReflections</name>
+        <param>
+          <type>bool</type>
+          <declname>value</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="396" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="396" bodyend="399"/>
+        <references refid="da/d1e/a01479_1a043cb84a97fa62d2b78e9f4ec3238f70a49372576420361b2038ec90fd3f0c8ea">castor3d::eReflection</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1a4a7e36dd120a22b62dbf898654f43ab9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Pass::enableRefractions</definition>
+        <argsstring>(bool value=true)</argsstring>
+        <name>enableRefractions</name>
+        <param>
+          <type>bool</type>
+          <declname>value</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="401" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="401" bodyend="404"/>
+        <references refid="da/d1e/a01479_1a043cb84a97fa62d2b78e9f4ec3238f70afbec80e794f5343bd4aa64902f433ede">castor3d::eRefraction</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1a6bc2b7550799348f5ebc673c5c54144e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Pass::setImplicit</definition>
+        <argsstring>(bool value=true)</argsstring>
+        <name>setImplicit</name>
+        <param>
+          <type>bool</type>
+          <declname>value</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="406" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="406" bodyend="409"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="df/d5d/a02596_1af9b53724c4861cdbcc9d122c2b9b8908" prot="public" static="no" mutable="no">
+        <type><ref refid="da/d1e/a01479_1a8f41976f3fab2b68a985555b1b88523e" kindref="member">OnPassChanged</ref></type>
+        <definition>OnPassChanged castor3d::Pass::onChanged</definition>
+        <argsstring></argsstring>
+        <name>onChanged</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="434" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="434" bodyend="-1"/>
+        <referencedby refid="d1/df5/a02592_1a905f9c0de627bd2d663710821c9069a9" compoundref="dd/d4e/a00329" startline="61" endline="65">castor3d::MetallicRoughnessPbrPass::setAlbedo</referencedby>
+        <referencedby refid="df/d5d/a02596_1af32c96d71f12e20feffd9823299cbfa6" compoundref="dc/d50/a00332" startline="360" endline="364">setAlphaBlendMode</referencedby>
+        <referencedby refid="df/d5d/a02596_1a95c2f58fedf1951fcb9261ac31ed6412" compoundref="dc/d50/a00332" startline="384" endline="388">setAlphaValue</referencedby>
+        <referencedby refid="d6/dca/a02616_1a1974c39d6f5b3020078c70636e3643be" compoundref="dc/d84/a00338" startline="87" endline="91">castor3d::PhongPass::setAmbient</referencedby>
+        <referencedby refid="df/d5d/a02596_1a28958958c6c7efbfcd76431a4cc02302" compoundref="dc/d50/a00332" startline="390" endline="394">setBWAccumulationOperator</referencedby>
+        <referencedby refid="df/d5d/a02596_1a3b1fe1655d4a0ed0fcec79e095bf503f" compoundref="dc/d50/a00332" startline="366" endline="370">setColourBlendMode</referencedby>
+        <referencedby refid="dc/d64/a02620_1a764827291d99e294f6a15ea901e938b3" compoundref="d3/d93/a00341" startline="61" endline="65">castor3d::SpecularGlossinessPbrPass::setDiffuse</referencedby>
+        <referencedby refid="d6/dca/a02616_1ad9bc36888288dbc32a9b6d154a2c5716" compoundref="dc/d84/a00338" startline="61" endline="65">castor3d::PhongPass::setDiffuse</referencedby>
+        <referencedby refid="df/d5d/a02596_1a9260376e612bb8e9e608649c2e2bdd8b" compoundref="dc/d50/a00332" startline="333" endline="337">setEmissive</referencedby>
+        <referencedby refid="dc/d64/a02620_1abe1c32e3e5434558fb56074d1afd68fd" compoundref="d3/d93/a00341" startline="74" endline="78">castor3d::SpecularGlossinessPbrPass::setGlossiness</referencedby>
+        <referencedby refid="d1/df5/a02592_1a06dcbe42056fcac346a272986cf4a5ec" compoundref="dd/d4e/a00329" startline="87" endline="91">castor3d::MetallicRoughnessPbrPass::setMetallic</referencedby>
+        <referencedby refid="df/d5d/a02596_1a3d937f0261b447dd91d89aa43037c960" compoundref="dc/d50/a00332" startline="339" endline="343">setRefractionRatio</referencedby>
+        <referencedby refid="d1/df5/a02592_1a97129799935edb55afd2d62a5663ad86" compoundref="dd/d4e/a00329" startline="74" endline="78">castor3d::MetallicRoughnessPbrPass::setRoughness</referencedby>
+        <referencedby refid="d6/dca/a02616_1a2a6c58df4250faed5a5cbc1792098198" compoundref="dc/d84/a00338" startline="100" endline="104">castor3d::PhongPass::setShininess</referencedby>
+        <referencedby refid="d6/dca/a02616_1a5a433167c2bdb00750b03b8b1f9a8e9a" compoundref="dc/d84/a00338" startline="74" endline="78">castor3d::PhongPass::setSpecular</referencedby>
+        <referencedby refid="dc/d64/a02620_1ad9c08b3d382d662f03098d88a71501be" compoundref="d3/d93/a00341" startline="87" endline="91">castor3d::SpecularGlossinessPbrPass::setSpecular</referencedby>
+        <referencedby refid="df/d5d/a02596_1a4f3b1f8a5b24e9921abeace0407221d3" compoundref="dc/d50/a00332" startline="345" endline="349">setTransmission</referencedby>
+        <referencedby refid="df/d5d/a02596_1a21496a3f31507920af9fce21254458ae" compoundref="dc/d50/a00332" startline="327" endline="331">setTwoSided</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="df/d5d/a02596_1a643279c5e3be5088c6b0cc6c8a96f565" prot="private" static="no" mutable="no">
+        <type>TextureUnitPtrArray</type>
+        <definition>TextureUnitPtrArray castor3d::Pass::m_textureUnits</definition>
+        <argsstring></argsstring>
+        <name>m_textureUnits</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="437" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="437" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5d/a02596_1a88608ec4ffaf67450d115447d01f736d" prot="private" static="no" mutable="no">
+        <type><ref refid="da/d1e/a01479_1a3b9e457486b668463148ebc06850f3ac" kindref="member">TextureFlags</ref></type>
+        <definition>TextureFlags castor3d::Pass::m_textures</definition>
+        <argsstring></argsstring>
+        <name>m_textures</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="438" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="438" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5d/a02596_1a966f7585cdca57d364e55f0701385ff0" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::Pass::m_id</definition>
+        <argsstring></argsstring>
+        <name>m_id</name>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="439" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="439" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5d/a02596_1aa2f8d046c5214706838b6b22ace04df5" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::Pass::m_implicit</definition>
+        <argsstring></argsstring>
+        <name>m_implicit</name>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="440" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="440" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5d/a02596_1a04eb796c732478da32fab6c0268fe11a" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::Pass::m_opacity</definition>
+        <argsstring></argsstring>
+        <name>m_opacity</name>
+        <initializer>{ 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="441" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="441" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5d/a02596_1a9162a5e80f0d73da8c0c171bfac59152" prot="private" static="no" mutable="no">
+        <type>castor::RangedValue&lt; uint32_t &gt;</type>
+        <definition>castor::RangedValue&lt; uint32_t &gt; castor3d::Pass::m_bwAccumulationOperator</definition>
+        <argsstring></argsstring>
+        <name>m_bwAccumulationOperator</name>
+        <initializer>{ castor::makeRangedValue( 1u, 0u, 8u ) }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="442" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="442" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5d/a02596_1a3ca97dd96472363061c2ee01b06b323b" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::Pass::m_emissive</definition>
+        <argsstring></argsstring>
+        <name>m_emissive</name>
+        <initializer>{ 0.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="443" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="443" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5d/a02596_1a028a969f4cf052ef2eef5dda88753781" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::Pass::m_refractionRatio</definition>
+        <argsstring></argsstring>
+        <name>m_refractionRatio</name>
+        <initializer>{ 0.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="444" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="444" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5d/a02596_1aba4eab95fdf4901a4d847285d2137c11" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::Pass::m_twoSided</definition>
+        <argsstring></argsstring>
+        <name>m_twoSided</name>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="445" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="445" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5d/a02596_1a8612e296059219b0a129cea7853a9f0f" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::Pass::m_automaticShader</definition>
+        <argsstring></argsstring>
+        <name>m_automaticShader</name>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="446" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="446" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5d/a02596_1ad97cc7fb366ffa9b3e86f376c061a7e1" prot="private" static="no" mutable="no">
+        <type><ref refid="da/d1e/a01479_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
+        <definition>BlendMode castor3d::Pass::m_alphaBlendMode</definition>
+        <argsstring></argsstring>
+        <name>m_alphaBlendMode</name>
+        <initializer>{ <ref refid="da/d1e/a01479_1a840ab6fd50c1a08fcc1b6dc3f98d90faa12c10e6e0388d587340cfbe98b5045ae" kindref="member">BlendMode::eNoBlend</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="447" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="447" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5d/a02596_1a74e07294f3afddf7d7c26254d8a6d191" prot="private" static="no" mutable="no">
+        <type><ref refid="da/d1e/a01479_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
+        <definition>BlendMode castor3d::Pass::m_colourBlendMode</definition>
+        <argsstring></argsstring>
+        <name>m_colourBlendMode</name>
+        <initializer>{ <ref refid="da/d1e/a01479_1a840ab6fd50c1a08fcc1b6dc3f98d90faa12c10e6e0388d587340cfbe98b5045ae" kindref="member">BlendMode::eNoBlend</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="448" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="448" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5d/a02596_1addf20f0764395d2ba8090745944019dc" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::Pass::m_alphaValue</definition>
+        <argsstring></argsstring>
+        <name>m_alphaValue</name>
+        <initializer>{ 0.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="449" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="449" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5d/a02596_1adb5951e5c9c0e2c164a83ab3ec8b0012" prot="private" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::Pass::m_transmission</definition>
+        <argsstring></argsstring>
+        <name>m_transmission</name>
+        <initializer>{ 1.0f, 1.0f, 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="450" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="450" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5d/a02596_1aebfec527038247096d80d8f8db013158" prot="private" static="no" mutable="no">
+        <type>VkCompareOp</type>
+        <definition>VkCompareOp castor3d::Pass::m_alphaFunc</definition>
+        <argsstring></argsstring>
+        <name>m_alphaFunc</name>
+        <initializer>{ VK_COMPARE_OP_ALWAYS }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="451" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="451" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5d/a02596_1a5f45b2f758a8fffec4c24b2b6d641423" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::Pass::m_texturesReduced</definition>
+        <argsstring></argsstring>
+        <name>m_texturesReduced</name>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="452" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="452" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5d/a02596_1ad383eb8481b57ed00ed9e9bfe8cfa543" prot="private" static="no" mutable="no">
+        <type>SubsurfaceScatteringUPtr</type>
+        <definition>SubsurfaceScatteringUPtr castor3d::Pass::m_subsurfaceScattering</definition>
+        <argsstring></argsstring>
+        <name>m_subsurfaceScattering</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="453" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="453" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5d/a02596_1a51cb4bc8eb9d9248a043d30ea42fa22c" prot="private" static="no" mutable="no">
+        <type><ref refid="d8/d09/a02624_1ad7fd02e96be04ee4d909b96e615c849f" kindref="member">SubsurfaceScattering::OnChangedConnection</ref></type>
+        <definition>SubsurfaceScattering::OnChangedConnection castor3d::Pass::m_sssConnection</definition>
+        <argsstring></argsstring>
+        <name>m_sssConnection</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="454" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="454" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5d/a02596_1a86c37d9496232398797f9b1f4d6e382f" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::Pass::m_heightTextureIndex</definition>
+        <argsstring></argsstring>
+        <name>m_heightTextureIndex</name>
+        <initializer>{ <ref refid="da/d1e/a01479_1a2533c48f44e5f343ab52f930f7fec110" kindref="member">InvalidIndex</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="455" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="455" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5d/a02596_1a8994be58a2618f517c1c4dac83a55fb9" prot="private" static="no" mutable="no">
+        <type><ref refid="da/d1e/a01479_1a69e89af11c4c9247dce7ee99a21090fc" kindref="member">PassFlags</ref></type>
+        <definition>PassFlags castor3d::Pass::m_flags</definition>
+        <argsstring></argsstring>
+        <name>m_flags</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="456" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="456" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5d/a02596_1abdf94163c0ac1f67f9b85d376c8a4921" prot="private" static="no" mutable="no">
+        <type><ref refid="da/d1e/a01479_1a808c81c0da4ffd2515292e95b6b4c124" kindref="member">ParallaxOcclusionMode</ref></type>
+        <definition>ParallaxOcclusionMode castor3d::Pass::m_parallaxOcclusionMode</definition>
+        <argsstring></argsstring>
+        <name>m_parallaxOcclusionMode</name>
+        <initializer>{ <ref refid="da/d1e/a01479_1ad372dd0cc65f28ad7f558f07c78becb7abe988781e4e1de1c6a36fb698afbbe1f" kindref="member">ParallaxOcclusionMode::eNone</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="457" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="457" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="df/d5d/a02596_1adbd35d91799171980767abf1e010746d" prot="protected" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Pass::Pass</definition>
+        <argsstring>(Material &amp;parent)</argsstring>
+        <name>Pass</name>
+        <param>
+          <type><ref refid="dc/d28/a02584" kindref="compound">Material</ref> &amp;</type>
+          <declname>parent</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">parent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent material. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="32" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1a74eee47aa1790f57013e3b60d19d7ba8" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Pass::~Pass</definition>
+        <argsstring>()</argsstring>
+        <name>~Pass</name>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="39" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/d5d/a02596_1a84747efd3092f9ea3c127276b070e099" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Pass::initialise</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>initialise</name>
+        <param>
+          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+<para>Initialises the pass and all it&apos;s dependencies. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="50" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1ad88707e47153d55ec3a87a12a6259787" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Pass::cleanup</definition>
+        <argsstring>()</argsstring>
+        <name>cleanup</name>
+        <briefdescription>
+<para>Cleans up the pass and all it&apos;s dependencies. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="57" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1a7aae597888618591a0db7262cfc2081e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Pass::addTextureUnit</definition>
+        <argsstring>(TextureUnitSPtr unit)</argsstring>
+        <name>addTextureUnit</name>
+        <param>
+          <type>TextureUnitSPtr</type>
+          <declname>unit</declname>
+        </param>
+        <briefdescription>
+<para>adds a texture unit. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">unit</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The texture unit. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="66" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1ab443dc15b22fda41fa106f151fcebc20" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Pass::removeTextureUnit</definition>
+        <argsstring>(uint32_t index)</argsstring>
+        <name>removeTextureUnit</name>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+<para>Removes the <ref refid="d6/d18/a02664" kindref="compound">TextureUnit</ref> at the given index. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the index of the <ref refid="d6/d18/a02664" kindref="compound">TextureUnit</ref> to remove. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="75" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1a97ceb48b79e58532c774f19336671bfc" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> TextureUnitSPtr</type>
+        <definition>C3D_API TextureUnitSPtr castor3d::Pass::getTextureUnit</definition>
+        <argsstring>(uint32_t index) const</argsstring>
+        <name>getTextureUnit</name>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves the <ref refid="d6/d18/a02664" kindref="compound">TextureUnit</ref> at the given index. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The index of the <ref refid="d6/d18/a02664" kindref="compound">TextureUnit</ref> to retrieve. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The retrieved <ref refid="d6/d18/a02664" kindref="compound">TextureUnit</ref>, nullptr if none. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="86" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1ae87ec5c3a8297d7d27f4d28071173629" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::Pass::hasAlphaBlending</definition>
+        <argsstring>() const</argsstring>
+        <name>hasAlphaBlending</name>
+        <briefdescription>
+<para>Tells if the pass needs alpha blending. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if at least one texture unit has an alpha channel. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="95" column="1"/>
+        <referencedby refid="df/d5d/a02596_1afd5267eb88bff6d35f87054df9c1ee9a" compoundref="dc/d50/a00332" startline="377" endline="382">setAlphaFunc</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1abb555c3683dda21b77bace58ae285350" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::Pass::hasAlphaTest</definition>
+        <argsstring>() const</argsstring>
+        <name>hasAlphaTest</name>
+        <briefdescription>
+<para>Tells if the pass needs alpha test. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if the alpha func is not Always. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="104" column="1"/>
+        <referencedby refid="df/d5d/a02596_1afd5267eb88bff6d35f87054df9c1ee9a" compoundref="dc/d50/a00332" startline="377" endline="382">setAlphaFunc</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1a2e62df25714263fa6f73b50e5cd645e3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Pass::prepareTextures</definition>
+        <argsstring>()</argsstring>
+        <name>prepareTextures</name>
+        <briefdescription>
+<para>Reduces the textures. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="111" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1af1056149c9fd47c2406e8406756091d3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="da/d1e/a01479_1a90306964da63b9bbc97f4e205ecc5b7a" kindref="member">MaterialType</ref></type>
+        <definition>C3D_API MaterialType castor3d::Pass::getType</definition>
+        <argsstring>() const</argsstring>
+        <name>getType</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The material type. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="118" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1a4144dbf8c545566e2567e4b685c332c1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Pass::setOpacity</definition>
+        <argsstring>(float value)</argsstring>
+        <name>setOpacity</name>
+        <param>
+          <type>float</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Sets the global alpha value. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="127" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1a362c719ff6af42aa94550a526bd554a8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="da/d1e/a01479_1a69e89af11c4c9247dce7ee99a21090fc" kindref="member">PassFlags</ref></type>
+        <definition>C3D_API PassFlags castor3d::Pass::getPassFlags</definition>
+        <argsstring>() const</argsstring>
+        <name>getPassFlags</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The pass flags combination. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="134" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1aa7ba059a9ca150b6701d1dd533256dee" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Pass::setSubsurfaceScattering</definition>
+        <argsstring>(SubsurfaceScatteringUPtr value)</argsstring>
+        <name>setSubsurfaceScattering</name>
+        <param>
+          <type>SubsurfaceScatteringUPtr</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Sets the subsurface scattering extended informations. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="143" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1a5b88bf15e67ea2dcf4ee9bed758ffdf2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>virtual C3D_API uint32_t castor3d::Pass::getPassSize</definition>
+        <argsstring>() const =0</argsstring>
+        <name>getPassSize</name>
+        <reimplementedby refid="dc/d64/a02620_1a06d1f06e77bf6749609853ed75da24a3">getPassSize</reimplementedby>
+        <reimplementedby refid="d6/dca/a02616_1ae89e3a09110fc438d935364028a2c118">getPassSize</reimplementedby>
+        <reimplementedby refid="d1/df5/a02592_1a3522cbffe3c972a1f3e91aeb5b0ddcf0">getPassSize</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Passes are aligned on float[4], so the size of a pass is the number of float[4] needed to contain it. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="152" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1aafe56e511ba96efcc10b1ab0936bb464" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::Pass::accept</definition>
+        <argsstring>(PassBuffer &amp;buffer) const =0</argsstring>
+        <name>accept</name>
+        <reimplementedby refid="dc/d64/a02620_1a24198c2fabe70cb747c212a9068de3c0">accept</reimplementedby>
+        <reimplementedby refid="d6/dca/a02616_1aebc125008dd723ad19a3c91ee3790901">accept</reimplementedby>
+        <reimplementedby refid="d1/df5/a02592_1a140fa1af13aafb414717061987071ab1">accept</reimplementedby>
+        <param>
+          <type><ref refid="d1/d54/a05272" kindref="compound">PassBuffer</ref> &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+<para>Fills the pass buffer with this pass data. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass buffer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="161" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="df/d5d/a02596_1a8818b699eb5f66fce7617237928cfb6a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Pass::onSssChanged</definition>
+        <argsstring>(SubsurfaceScattering const &amp;sss)</argsstring>
+        <name>onSssChanged</name>
+        <param>
+          <type><ref refid="d8/d09/a02624" kindref="compound">SubsurfaceScattering</ref> const &amp;</type>
+          <declname>sss</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="413" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1a3c1ecb328117637a1b43a2fb2f1f4829" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::Pass::doInitialise</definition>
+        <argsstring>()=0</argsstring>
+        <name>doInitialise</name>
+        <reimplementedby refid="dc/d64/a02620_1ab7604da3e439282476f8456591b03f8f">doInitialise</reimplementedby>
+        <reimplementedby refid="d1/df5/a02592_1a0d4a5705d57dbb6d0409550d81086a84">doInitialise</reimplementedby>
+        <reimplementedby refid="d6/dca/a02616_1af739a1c7b26db765d9ca94f5b5a36f18">doInitialise</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="414" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1a5ab0a5a79cc6f673f551a57557f46bef" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::Pass::doCleanup</definition>
+        <argsstring>()=0</argsstring>
+        <name>doCleanup</name>
+        <reimplementedby refid="dc/d64/a02620_1a096a524c1c2f7525f34c76149e0517ce">doCleanup</reimplementedby>
+        <reimplementedby refid="d1/df5/a02592_1af3ee08691d8659988f45d17f7c0dd5e8">doCleanup</reimplementedby>
+        <reimplementedby refid="d6/dca/a02616_1a767e353d3346ea2dbdb51408cb83044d">doCleanup</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="415" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1aa2062c95952fb3cd54265b944c5af829" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::Pass::doSetOpacity</definition>
+        <argsstring>(float value)=0</argsstring>
+        <name>doSetOpacity</name>
+        <reimplementedby refid="dc/d64/a02620_1ac6e52946514b766c6794d31700b7367b">doSetOpacity</reimplementedby>
+        <reimplementedby refid="d1/df5/a02592_1a9b5953bed76ad12181bca6c84e11b82e">doSetOpacity</reimplementedby>
+        <reimplementedby refid="d6/dca/a02616_1a8857e9471e4f3c9c85d67cf6ba3cc07a">doSetOpacity</reimplementedby>
+        <param>
+          <type>float</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="416" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5d/a02596_1ab3898bbd5e8dec0f9cf8ee7cc37ee5cf" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Pass::updateFlag</definition>
+        <argsstring>(PassFlag flag, bool value)</argsstring>
+        <name>updateFlag</name>
+        <param>
+          <type><ref refid="da/d1e/a01479_1a043cb84a97fa62d2b78e9f4ec3238f70" kindref="member">PassFlag</ref></type>
+          <declname>flag</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Pass.hpp" line="418" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="418" bodyend="431"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2597">
+        <label>castor::OwnedBy&lt; Material &gt;</label>
+      </node>
+      <node id="2598">
+        <label>castor3d::MetallicRoughnessPbrPass</label>
+        <link refid="d1/df5/a02592"/>
+        <childnode refid="2596" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2599">
+        <label>castor3d::PhongPass</label>
+        <link refid="d6/dca/a02616"/>
+        <childnode refid="2596" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2600">
+        <label>castor3d::SpecularGlossinessPbrPass</label>
+        <link refid="dc/d64/a02620"/>
+        <childnode refid="2596" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2596">
+        <label>castor3d::Pass</label>
+        <link refid="df/d5d/a02596"/>
+        <childnode refid="2597" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2602">
+        <label>castor::OwnedBy&lt; Material &gt;</label>
+      </node>
+      <node id="2601">
+        <label>castor3d::Pass</label>
+        <link refid="df/d5d/a02596"/>
+        <childnode refid="2602" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Pass/Pass.hpp" line="22" column="1" bodyfile="Material/Pass/Pass.hpp" bodystart="20" bodyend="458"/>
+    <listofallmembers>
+      <member refid="df/d5d/a02596_1aafe56e511ba96efcc10b1ab0936bb464" prot="public" virt="pure-virtual"><scope>castor3d::Pass</scope><name>accept</name></member>
+      <member refid="df/d5d/a02596_1a7aae597888618591a0db7262cfc2081e" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>addTextureUnit</name></member>
+      <member refid="df/d5d/a02596_1adb6026c634eebbfaa26fa25973fafcda" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>begin</name></member>
+      <member refid="df/d5d/a02596_1a609f35aed9e87d4bc64a3158f6b9208f" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>begin</name></member>
+      <member refid="df/d5d/a02596_1ad88707e47153d55ec3a87a12a6259787" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>cleanup</name></member>
+      <member refid="df/d5d/a02596_1a5ab0a5a79cc6f673f551a57557f46bef" prot="private" virt="pure-virtual"><scope>castor3d::Pass</scope><name>doCleanup</name></member>
+      <member refid="df/d5d/a02596_1a3c1ecb328117637a1b43a2fb2f1f4829" prot="private" virt="pure-virtual"><scope>castor3d::Pass</scope><name>doInitialise</name></member>
+      <member refid="df/d5d/a02596_1aa2062c95952fb3cd54265b944c5af829" prot="private" virt="pure-virtual"><scope>castor3d::Pass</scope><name>doSetOpacity</name></member>
+      <member refid="df/d5d/a02596_1aecf9d2ec66d6fbc7819a7e888d3fedc6" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>enableReflections</name></member>
+      <member refid="df/d5d/a02596_1a4a7e36dd120a22b62dbf898654f43ab9" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>enableRefractions</name></member>
+      <member refid="df/d5d/a02596_1a747b9e8172704065f32c2c0b22c12eea" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>end</name></member>
+      <member refid="df/d5d/a02596_1a819275bac67ba6e090bbcbd72bb0b86b" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>end</name></member>
+      <member refid="df/d5d/a02596_1abab03a36cc4743c6908c5796aa2cfaf5" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>getAlphaBlendMode</name></member>
+      <member refid="df/d5d/a02596_1a5008debebdf91b98a449bcfe03791f65" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>getAlphaFunc</name></member>
+      <member refid="df/d5d/a02596_1a7ccad1e806e125101e2277999982fcb1" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>getAlphaValue</name></member>
+      <member refid="df/d5d/a02596_1a94afee54948f71d056e8aa3d51f50464" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>getBWAccumulationOperator</name></member>
+      <member refid="df/d5d/a02596_1aed61df74f8931cd420104e7f3d468f89" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>getColourBlendMode</name></member>
+      <member refid="df/d5d/a02596_1a11d2d9dd2ec12a119e70adcd56ffd76e" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>getEmissive</name></member>
+      <member refid="df/d5d/a02596_1aef76e51c5f621a5245cc0bab4342ae68" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>getHeightTextureIndex</name></member>
+      <member refid="df/d5d/a02596_1a791c432d1d906eb14ff32a882c3f9633" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>getId</name></member>
+      <member refid="df/d5d/a02596_1a66390e7dc9648f56a538b8b2b14569ed" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>getOpacity</name></member>
+      <member refid="df/d5d/a02596_1a537cf487cb3b1633611ad23d67a87d23" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>getParallaxOcclusion</name></member>
+      <member refid="df/d5d/a02596_1a362c719ff6af42aa94550a526bd554a8" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>getPassFlags</name></member>
+      <member refid="df/d5d/a02596_1a5b88bf15e67ea2dcf4ee9bed758ffdf2" prot="public" virt="pure-virtual"><scope>castor3d::Pass</scope><name>getPassSize</name></member>
+      <member refid="df/d5d/a02596_1a46a166f8c07114d7a538f54fc358f555" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>getRefractionRatio</name></member>
+      <member refid="df/d5d/a02596_1ad6e28793e4302f1aeb001e99a8d1d96a" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>getSubsurfaceScattering</name></member>
+      <member refid="df/d5d/a02596_1af877c181aeafc8f162c8fc8af7fff083" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>getTextures</name></member>
+      <member refid="df/d5d/a02596_1a860006fc14f56cd98156c82bd921c960" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>getTextures</name></member>
+      <member refid="df/d5d/a02596_1a97ceb48b79e58532c774f19336671bfc" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>getTextureUnit</name></member>
+      <member refid="df/d5d/a02596_1a8a35b30ce4e90a506a77d3cbaa9d0439" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>getTextureUnits</name></member>
+      <member refid="df/d5d/a02596_1aef7e358ffc5cec246f4f15484e2925f0" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>getTextureUnitsCount</name></member>
+      <member refid="df/d5d/a02596_1a1e4a27f33f80c5163f1a6d8a3af3c8e8" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>getTransmission</name></member>
+      <member refid="df/d5d/a02596_1af1056149c9fd47c2406e8406756091d3" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>getType</name></member>
+      <member refid="df/d5d/a02596_1ae87ec5c3a8297d7d27f4d28071173629" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>hasAlphaBlending</name></member>
+      <member refid="df/d5d/a02596_1abb555c3683dda21b77bace58ae285350" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>hasAlphaTest</name></member>
+      <member refid="df/d5d/a02596_1ac79b5fc42779ef6c26d94d9aa8624d8e" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>hasAutomaticShader</name></member>
+      <member refid="df/d5d/a02596_1ae656ac3132fb4e95fa30f28381d5e421" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>hasEnvironmentMapping</name></member>
+      <member refid="df/d5d/a02596_1af46d3754344dcf544ab178901c28e1af" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>hasParallaxOcclusion</name></member>
+      <member refid="df/d5d/a02596_1aa3955ee04b630768804e3b781f1fe16a" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>hasReflections</name></member>
+      <member refid="df/d5d/a02596_1ab485b377665e57615dd8e9b208469335" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>hasRefraction</name></member>
+      <member refid="df/d5d/a02596_1ae6d7fc739a401207ae97464165cab915" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>hasSubsurfaceScattering</name></member>
+      <member refid="df/d5d/a02596_1a84747efd3092f9ea3c127276b070e099" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>initialise</name></member>
+      <member refid="df/d5d/a02596_1aefef1849fa24ccbdef9905e161b687d2" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>isImplicit</name></member>
+      <member refid="df/d5d/a02596_1a81a6f05668f306b5fc1ac9f9ebdfab1d" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>isTwoSided</name></member>
+      <member refid="df/d5d/a02596_1ad97cc7fb366ffa9b3e86f376c061a7e1" prot="private" virt="non-virtual"><scope>castor3d::Pass</scope><name>m_alphaBlendMode</name></member>
+      <member refid="df/d5d/a02596_1aebfec527038247096d80d8f8db013158" prot="private" virt="non-virtual"><scope>castor3d::Pass</scope><name>m_alphaFunc</name></member>
+      <member refid="df/d5d/a02596_1addf20f0764395d2ba8090745944019dc" prot="private" virt="non-virtual"><scope>castor3d::Pass</scope><name>m_alphaValue</name></member>
+      <member refid="df/d5d/a02596_1a8612e296059219b0a129cea7853a9f0f" prot="private" virt="non-virtual"><scope>castor3d::Pass</scope><name>m_automaticShader</name></member>
+      <member refid="df/d5d/a02596_1a9162a5e80f0d73da8c0c171bfac59152" prot="private" virt="non-virtual"><scope>castor3d::Pass</scope><name>m_bwAccumulationOperator</name></member>
+      <member refid="df/d5d/a02596_1a74e07294f3afddf7d7c26254d8a6d191" prot="private" virt="non-virtual"><scope>castor3d::Pass</scope><name>m_colourBlendMode</name></member>
+      <member refid="df/d5d/a02596_1a3ca97dd96472363061c2ee01b06b323b" prot="private" virt="non-virtual"><scope>castor3d::Pass</scope><name>m_emissive</name></member>
+      <member refid="df/d5d/a02596_1a8994be58a2618f517c1c4dac83a55fb9" prot="private" virt="non-virtual"><scope>castor3d::Pass</scope><name>m_flags</name></member>
+      <member refid="df/d5d/a02596_1a86c37d9496232398797f9b1f4d6e382f" prot="private" virt="non-virtual"><scope>castor3d::Pass</scope><name>m_heightTextureIndex</name></member>
+      <member refid="df/d5d/a02596_1a966f7585cdca57d364e55f0701385ff0" prot="private" virt="non-virtual"><scope>castor3d::Pass</scope><name>m_id</name></member>
+      <member refid="df/d5d/a02596_1aa2f8d046c5214706838b6b22ace04df5" prot="private" virt="non-virtual"><scope>castor3d::Pass</scope><name>m_implicit</name></member>
+      <member refid="df/d5d/a02596_1a04eb796c732478da32fab6c0268fe11a" prot="private" virt="non-virtual"><scope>castor3d::Pass</scope><name>m_opacity</name></member>
+      <member refid="df/d5d/a02596_1abdf94163c0ac1f67f9b85d376c8a4921" prot="private" virt="non-virtual"><scope>castor3d::Pass</scope><name>m_parallaxOcclusionMode</name></member>
+      <member refid="df/d5d/a02596_1a028a969f4cf052ef2eef5dda88753781" prot="private" virt="non-virtual"><scope>castor3d::Pass</scope><name>m_refractionRatio</name></member>
+      <member refid="df/d5d/a02596_1a51cb4bc8eb9d9248a043d30ea42fa22c" prot="private" virt="non-virtual"><scope>castor3d::Pass</scope><name>m_sssConnection</name></member>
+      <member refid="df/d5d/a02596_1ad383eb8481b57ed00ed9e9bfe8cfa543" prot="private" virt="non-virtual"><scope>castor3d::Pass</scope><name>m_subsurfaceScattering</name></member>
+      <member refid="df/d5d/a02596_1a88608ec4ffaf67450d115447d01f736d" prot="private" virt="non-virtual"><scope>castor3d::Pass</scope><name>m_textures</name></member>
+      <member refid="df/d5d/a02596_1a5f45b2f758a8fffec4c24b2b6d641423" prot="private" virt="non-virtual"><scope>castor3d::Pass</scope><name>m_texturesReduced</name></member>
+      <member refid="df/d5d/a02596_1a643279c5e3be5088c6b0cc6c8a96f565" prot="private" virt="non-virtual"><scope>castor3d::Pass</scope><name>m_textureUnits</name></member>
+      <member refid="df/d5d/a02596_1adb5951e5c9c0e2c164a83ab3ec8b0012" prot="private" virt="non-virtual"><scope>castor3d::Pass</scope><name>m_transmission</name></member>
+      <member refid="df/d5d/a02596_1aba4eab95fdf4901a4d847285d2137c11" prot="private" virt="non-virtual"><scope>castor3d::Pass</scope><name>m_twoSided</name></member>
+      <member refid="df/d5d/a02596_1a5147b49f4f720d5a69fec485f14a9128" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>needsGammaCorrection</name></member>
+      <member refid="df/d5d/a02596_1af9b53724c4861cdbcc9d122c2b9b8908" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>onChanged</name></member>
+      <member refid="df/d5d/a02596_1a8818b699eb5f66fce7617237928cfb6a" prot="private" virt="non-virtual"><scope>castor3d::Pass</scope><name>onSssChanged</name></member>
+      <member refid="df/d5d/a02596_1adbd35d91799171980767abf1e010746d" prot="protected" virt="non-virtual"><scope>castor3d::Pass</scope><name>Pass</name></member>
+      <member refid="df/d5d/a02596_1a2e62df25714263fa6f73b50e5cd645e3" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>prepareTextures</name></member>
+      <member refid="df/d5d/a02596_1ab443dc15b22fda41fa106f151fcebc20" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>removeTextureUnit</name></member>
+      <member refid="df/d5d/a02596_1af32c96d71f12e20feffd9823299cbfa6" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>setAlphaBlendMode</name></member>
+      <member refid="df/d5d/a02596_1afd5267eb88bff6d35f87054df9c1ee9a" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>setAlphaFunc</name></member>
+      <member refid="df/d5d/a02596_1a95c2f58fedf1951fcb9261ac31ed6412" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>setAlphaValue</name></member>
+      <member refid="df/d5d/a02596_1a28958958c6c7efbfcd76431a4cc02302" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>setBWAccumulationOperator</name></member>
+      <member refid="df/d5d/a02596_1a3b1fe1655d4a0ed0fcec79e095bf503f" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>setColourBlendMode</name></member>
+      <member refid="df/d5d/a02596_1a9260376e612bb8e9e608649c2e2bdd8b" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>setEmissive</name></member>
+      <member refid="df/d5d/a02596_1a1452b05883e625b72284ee291f6b975c" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>setId</name></member>
+      <member refid="df/d5d/a02596_1a6bc2b7550799348f5ebc673c5c54144e" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>setImplicit</name></member>
+      <member refid="df/d5d/a02596_1a4144dbf8c545566e2567e4b685c332c1" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>setOpacity</name></member>
+      <member refid="df/d5d/a02596_1acb44524ddbe5e27b131a2a79819cfd68" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>setParallaxOcclusion</name></member>
+      <member refid="df/d5d/a02596_1a3d937f0261b447dd91d89aa43037c960" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>setRefractionRatio</name></member>
+      <member refid="df/d5d/a02596_1aa7ba059a9ca150b6701d1dd533256dee" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>setSubsurfaceScattering</name></member>
+      <member refid="df/d5d/a02596_1a4f3b1f8a5b24e9921abeace0407221d3" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>setTransmission</name></member>
+      <member refid="df/d5d/a02596_1a21496a3f31507920af9fce21254458ae" prot="public" virt="non-virtual"><scope>castor3d::Pass</scope><name>setTwoSided</name></member>
+      <member refid="df/d5d/a02596_1ab3898bbd5e8dec0f9cf8ee7cc37ee5cf" prot="private" virt="non-virtual"><scope>castor3d::Pass</scope><name>updateFlag</name></member>
+      <member refid="df/d5d/a02596_1a74eee47aa1790f57013e3b60d19d7ba8" prot="protected" virt="non-virtual"><scope>castor3d::Pass</scope><name>~Pass</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

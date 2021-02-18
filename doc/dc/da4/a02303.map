@@ -1,6 +1,12 @@
-<map id="castor3d::LinesMapping" name="castor3d::LinesMapping">
-<area shape="rect" id="node1" title="The submesh component for lines." alt="" coords="26,229,186,256"/>
-<area shape="rect" id="node2" href="$dc/d1a/a02288.html" title="A submesh component for faces." alt="" coords="26,155,186,181"/>
-<area shape="rect" id="node3" href="$df/d73/a02312.html" title="Component for a submesh." alt="" coords="5,80,207,107"/>
-<area shape="rect" id="node4" title=" " alt="" coords="5,5,207,32"/>
+<map id="castor3d::CacheBase&lt; ElementType, KeyType &gt;" name="castor3d::CacheBase&lt; ElementType, KeyType &gt;">
+<area shape="rect" id="node1" title="Base class for an element cache." alt="" coords="5,152,187,193"/>
+<area shape="rect" id="node2" href="$d1/d47/a02300.html" title="Base class for an element cache." alt="" coords="385,5,563,47"/>
+<area shape="rect" id="node3" href="$db/d77/a02304.html" title=" " alt="" coords="401,71,547,127"/>
+<area shape="rect" id="node5" href="$db/d77/a02304.html" title=" " alt="" coords="390,152,558,193"/>
+<area shape="rect" id="node7" href="$db/d77/a02304.html" title=" " alt="" coords="391,218,557,274"/>
+<area shape="rect" id="node9" href="$db/d77/a02304.html" title=" " alt="" coords="387,299,561,340"/>
+<area shape="rect" id="node4" href="$d1/da0/a02416.html" title="Material collection, with additional functions." alt="" coords="627,86,790,113"/>
+<area shape="rect" id="node6" href="$dd/d0a/a02436.html" title="Plug&#45;ins cache." alt="" coords="624,152,793,193"/>
+<area shape="rect" id="node8" href="$d2/d81/a02276.html" title="AnimatedObjectGroup cache." alt="" coords="612,225,805,267"/>
+<area shape="rect" id="node10" href="$d5/de6/a02424.html" title="Overlay collection, with additional add and remove functions to manage Z&#45;Index." alt="" coords="621,299,797,340"/>
 </map>

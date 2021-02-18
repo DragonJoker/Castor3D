@@ -1,0 +1,154 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dd/dec/a04786" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::LightPassShadow::Program</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">Program</basecompoundref>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="dd/dec/a04786_1a13f6d3c3600bda7fcf5ace36b1940aa8" prot="public" static="no">
+        <type>typename my_pass_type::Program</type>
+        <definition>using castor3d::LightPassShadow&lt; LtType &gt;::Program::my_program_type =  typename my_pass_type::Program</definition>
+        <argsstring></argsstring>
+        <name>my_program_type</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" line="108" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/dec/a04786_1a94fe2f6e06c4a60c18e7dc92d2a2a636" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::LightPassShadow&lt; LtType &gt;::Program::Program</definition>
+        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, LightPassShadow &amp;lightPass, ShaderModule const &amp;vtx, ShaderModule const &amp;pxl, bool hasVoxels, bool generatesIndirect)</argsstring>
+        <name>Program</name>
+        <param>
+          <type><ref refid="df/d9b/a02514" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/dc9/a04742" kindref="compound">LightPassShadow</ref> &amp;</type>
+          <declname>lightPass</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d63/a05306" kindref="compound">ShaderModule</ref> const &amp;</type>
+          <declname>vtx</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d63/a05306" kindref="compound">ShaderModule</ref> const &amp;</type>
+          <declname>pxl</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>hasVoxels</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>generatesIndirect</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The engine. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lightPass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The light pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">vtx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The vertex shader source. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pxl</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The fragment shader source. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">hasVoxels</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Tells if this program uses voxellisation result. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">generatesIndirect</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Tells if this program generates indirect lighting. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" line="131" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" bodystart="131" bodyend="147"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Base class for all light pass programs with shadow. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1703">
+        <label>my_pass_type::Program</label>
+      </node>
+      <node id="1702">
+        <label>castor3d::LightPassShadow&lt; LtType &gt;::Program</label>
+        <childnode refid="1703" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1705">
+        <label>my_pass_type::Program</label>
+      </node>
+      <node id="1704">
+        <label>castor3d::LightPassShadow&lt; LtType &gt;::Program</label>
+        <childnode refid="1705" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" line="106" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" bodystart="104" bodyend="148"/>
+    <listofallmembers>
+      <member refid="dd/dec/a04786_1a13f6d3c3600bda7fcf5ace36b1940aa8" prot="public" virt="non-virtual"><scope>castor3d::LightPassShadow::Program</scope><name>my_program_type</name></member>
+      <member refid="dd/dec/a04786_1a94fe2f6e06c4a60c18e7dc92d2a2a636" prot="public" virt="non-virtual"><scope>castor3d::LightPassShadow::Program</scope><name>Program</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

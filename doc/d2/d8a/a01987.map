@@ -1,4 +1,4 @@
-<map id="castor3d::TextureAttachment" name="castor3d::TextureAttachment">
-<area shape="rect" id="node1" title="Description of an attachment between a frame buffer and a texture." alt="" coords="19,80,209,107"/>
-<area shape="rect" id="node2" href="$d9/da1/a01976.html" title="Description of an attachment between a frame buffer and a render buffer." alt="" coords="5,5,223,32"/>
+<map id="castor3d::InterpolatorT&lt; DataT, InterpolatorType::eNearest &gt;" name="castor3d::InterpolatorT&lt; DataT, InterpolatorType::eNearest &gt;">
+<area shape="rect" id="node1" title="Partial specialisation of InterpolatorT, for InterpolatorType::eNearest." alt="" coords="5,95,173,151"/>
+<area shape="rect" id="node2" href="$d9/da1/a01976.html" title="Template class which handles the interpolations, would it be quaternion, point, real,..." alt="" coords="17,5,161,47"/>
 </map>

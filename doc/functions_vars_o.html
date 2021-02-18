@@ -10,6 +10,7 @@
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="Castor3D.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -17,10 +18,12 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="castor-small.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Castor3D
-   &#160;<span id="projectnumber">..</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
+   <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
  </tr>
  </tbody>
@@ -43,30 +46,93 @@ $(function() {
 
 <h3><a id="index_o"></a>- o -</h3><ul>
 <li>ObjectRootNode
-: <a class="el" href="d6/db9/a02980.html#af687944bf9302f11c798e56acd3d418c">castor3d::Scene</a>
+: <a class="el" href="d5/d76/a05244.html#af687944bf9302f11c798e56acd3d418c">castor3d::Scene</a>
+</li>
+<li>objects
+: <a class="el" href="d8/d12/a04236.html#a3cd6e1a32cfa599d64147ae39c698d74">castor3d::SceneCuller::CulledInstancesArrayT&lt; CulledT, ArrayT &gt;</a>
+</li>
+<li>objectsFile
+: <a class="el" href="da/d85/a05752.html#a11955cb9af1ef1e969c9d74a6845cb9c">castor::TextWriter&lt; castor3d::Scene &gt;::Options</a>
+</li>
+<li>occlusionMask
+: <a class="el" href="d4/d98/a05428.html#ac2afa0eb1ab284b7f4996a8807b04d8b">castor3d::shader::TextureConfigData</a>
+, <a class="el" href="dd/d32/a02636.html#a3b65e53826ea0fd9bb224e9fc855208c">castor3d::TextureConfiguration</a>
+</li>
+<li>OcclusionTexture
+: <a class="el" href="dd/d32/a02636.html#a02ffd9c3477eba313f1388d35fcb1dfc">castor3d::TextureConfiguration</a>
 </li>
 <li>offset
-: <a class="el" href="de/dd1/a02100.html#ad08ee980e4696cc2c8acdb4b602a46c2">castor3d::GpuBufferOffset</a>
+: <a class="el" href="db/d77/a02304.html#ae4819cf2e478269cde2e24ff1e187765">castor3d::MemChunk</a>
+, <a class="el" href="d1/d47/a02300.html#ab51520c7931ecdafe28653604734fb73">castor3d::UniformBufferOffsetT&lt; DataT &gt;</a>
+</li>
+<li>Offsets
+: <a class="el" href="df/da2/a04828.html#a5d8f7011175203d682fbc5e2af3be0d6">castor3d::SubsurfaceScatteringPass</a>
 </li>
 <li>onChanged
-: <a class="el" href="da/d47/a02864.html#a98ed3a4aecd26d9e0f07664192895ce2">castor3d::Camera</a>
-, <a class="el" href="da/d5c/a02432.html#a4fdfc34ce34311ce12e5914a22452973">castor3d::FontTexture</a>
-, <a class="el" href="de/dd8/a02896.html#a6706a625d22310535338d7b422bc7892">castor3d::Light</a>
-, <a class="el" href="db/d68/a02028.html#a8aaba373cf1a62ef931fa12dc240120d">castor3d::Material</a>
-, <a class="el" href="d7/d02/a01808.html#a2f0b42b4fd8d962bf259ff02a34a0f40">castor3d::ObjectCacheBase&lt; ElementType, KeyType &gt;</a>
-, <a class="el" href="d8/d22/a02044.html#af9b53724c4861cdbcc9d122c2b9b8908">castor3d::Pass</a>
-, <a class="el" href="d6/db9/a02980.html#af3d69163388306b700684838b574cd20">castor3d::Scene</a>
-, <a class="el" href="d3/d8b/a02996.html#aa761ca072bacace09fb45d50db12c289">castor3d::SceneNode</a>
-, <a class="el" href="d5/d8b/a02060.html#aa2e134491ecfd9a008469de7ab27a2b5">castor3d::SubsurfaceScattering</a>
+: <a class="el" href="d5/d9c/a05152.html#a98ed3a4aecd26d9e0f07664192895ce2">castor3d::Camera</a>
+, <a class="el" href="de/df2/a04096.html#a4fdfc34ce34311ce12e5914a22452973">castor3d::FontTexture</a>
+, <a class="el" href="d8/de4/a05172.html#a6706a625d22310535338d7b422bc7892">castor3d::Light</a>
+, <a class="el" href="dc/d28/a02584.html#a8aaba373cf1a62ef931fa12dc240120d">castor3d::Material</a>
+, <a class="el" href="d5/d04/a02428.html#a2f0b42b4fd8d962bf259ff02a34a0f40">castor3d::ObjectCacheBase&lt; ElementType, KeyType &gt;</a>
+, <a class="el" href="df/d5d/a02596.html#af9b53724c4861cdbcc9d122c2b9b8908">castor3d::Pass</a>
+, <a class="el" href="d5/d76/a05244.html#af3d69163388306b700684838b574cd20">castor3d::Scene</a>
+, <a class="el" href="d0/d47/a05104.html#af44b4b2ffcfc43f0e823c1c3fafc7f25">castor3d::SceneBackground</a>
+, <a class="el" href="da/d44/a05256.html#aa761ca072bacace09fb45d50db12c289">castor3d::SceneNode</a>
+, <a class="el" href="d8/d09/a02624.html#aa2e134491ecfd9a008469de7ab27a2b5">castor3d::SubsurfaceScattering</a>
+, <a class="el" href="d6/d18/a02664.html#a30ef5bc823be095069f76b2d01b5c5b0">castor3d::TextureUnit</a>
+</li>
+<li>onCompute
+: <a class="el" href="d4/d4b/a04232.html#a332ff2fc76d0928ad82d675f863c1529">castor3d::SceneCuller</a>
+</li>
+<li>onEmit
+: <a class="el" href="dd/d2d/a05220.html#a837e184338b825ff536d219bbbceca52">castor3d::ParticleEmitter</a>
+</li>
+<li>onMaterialChanged
+: <a class="el" href="d3/dc0/a05140.html#aea0af924efbdc6e29aef75417814c2e0">castor3d::BillboardBase</a>
+, <a class="el" href="df/df0/a05160.html#acaec2f1849bad9f6ae8c91f6e2f72c26">castor3d::Geometry</a>
+</li>
+<li>onMeshAdded
+: <a class="el" href="d1/dc4/a05052.html#a99d002fc5f227630f4937767d436d105">castor3d::AnimatedObjectGroup</a>
+</li>
+<li>onMeshRemoved
+: <a class="el" href="d1/dc4/a05052.html#ae5407924bb2ebe2c6a6501db4dff005a">castor3d::AnimatedObjectGroup</a>
+</li>
+<li>onSkeletonAdded
+: <a class="el" href="d1/dc4/a05052.html#a7b21c2af0de578cd65671bcf6b5ad76a">castor3d::AnimatedObjectGroup</a>
+</li>
+<li>onSkeletonRemoved
+: <a class="el" href="d1/dc4/a05052.html#aa99e279c2a8de7e0657d3618f8fa404f">castor3d::AnimatedObjectGroup</a>
 </li>
 <li>onUpdate
-: <a class="el" href="d6/db9/a02980.html#a905a85d0601e14df411a75d6ca014635">castor3d::Scene</a>
+: <a class="el" href="d5/d76/a05244.html#a905a85d0601e14df411a75d6ca014635">castor3d::Scene</a>
+</li>
+<li>opacity
+: <a class="el" href="d9/d33/a05268.html#af175e4dd14d6bb75879cf40224ec8268">castor3d::MetallicRoughnessPassBuffer::PassData</a>
+, <a class="el" href="dc/d2f/a05292.html#aaca8bc29d1fe47c00e4791e53f2a9cf2">castor3d::PhongPassBuffer::PassData</a>
+, <a class="el" href="d1/d9e/a05300.html#a2b1e631f67085faeb60dcd8b51734d7b">castor3d::SpecularGlossinessPassBuffer::PassData</a>
+</li>
+<li>opacityMask
+: <a class="el" href="d4/d98/a05428.html#af24a4e56e793a9c95b4fa69dfb7934aa">castor3d::shader::TextureConfigData</a>
+, <a class="el" href="dd/d32/a02636.html#a50e1bd878e9de8c305d652a7c483d2b8">castor3d::TextureConfiguration</a>
+</li>
+<li>OpacityTexture
+: <a class="el" href="dd/d32/a02636.html#a012d2bc3ccfc70374032151c7e9e95cd">castor3d::TextureConfiguration</a>
+</li>
+<li>originalWeight
+: <a class="el" href="da/d70/a04836.html#a9f824803d0628b0dd429b3a58f6dfa69">castor3d::SubsurfaceScatteringPass::BlurWeights</a>
+</li>
+<li>other
+: <a class="el" href="d8/d04/a05624.html#ae1c6b8dd855f82069e7ccec438ac5d0d">castor3d::shader::VoxelData</a>
+, <a class="el" href="d3/d0c/a05628.html#a9dcf742f1b8b5b2080173b5385165654">castor3d::VoxelizerUboConfiguration</a>
+</li>
+<li>overlay
+: <a class="el" href="df/d8e/a05248.html#a1eed0cddd4b9708ab0058be680b59b04">castor3d::SceneFileContext</a>
 </li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 13:39:13 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Feb 18 2021 01:09:24 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

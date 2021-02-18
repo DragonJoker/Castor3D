@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dc/d9e/a04148" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::OverlayVisitor</compoundname>
+    <includes local="no">OverlayVisitor.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/d9e/a04148_1ae2d7c4f7df14a0ed05e5cc4f5870e701" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::OverlayVisitor::visit</definition>
+        <argsstring>(PanelOverlay const &amp;overlay)=0</argsstring>
+        <name>visit</name>
+        <param>
+          <type><ref refid="d3/db3/a04152" kindref="compound">PanelOverlay</ref> const &amp;</type>
+          <declname>overlay</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayVisitor.hpp" line="14" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d9e/a04148_1a5d126de418a8ae350b89dfface6aac4c" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::OverlayVisitor::visit</definition>
+        <argsstring>(BorderPanelOverlay const &amp;overlay)=0</argsstring>
+        <name>visit</name>
+        <param>
+          <type><ref refid="d5/dbe/a04060" kindref="compound">BorderPanelOverlay</ref> const &amp;</type>
+          <declname>overlay</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayVisitor.hpp" line="15" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d9e/a04148_1a7adc92b8b93307b1ba2b5a784488e918" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::OverlayVisitor::visit</definition>
+        <argsstring>(TextOverlay const &amp;overlay)=0</argsstring>
+        <name>visit</name>
+        <param>
+          <type><ref refid="d3/db2/a04156" kindref="compound">TextOverlay</ref> const &amp;</type>
+          <declname>overlay</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayVisitor.hpp" line="16" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Overlay/OverlayVisitor.hpp" line="12" column="1" bodyfile="Overlay/OverlayVisitor.hpp" bodystart="11" bodyend="17"/>
+    <listofallmembers>
+      <member refid="dc/d9e/a04148_1ae2d7c4f7df14a0ed05e5cc4f5870e701" prot="public" virt="pure-virtual"><scope>castor3d::OverlayVisitor</scope><name>visit</name></member>
+      <member refid="dc/d9e/a04148_1a5d126de418a8ae350b89dfface6aac4c" prot="public" virt="pure-virtual"><scope>castor3d::OverlayVisitor</scope><name>visit</name></member>
+      <member refid="dc/d9e/a04148_1a7adc92b8b93307b1ba2b5a784488e918" prot="public" virt="pure-virtual"><scope>castor3d::OverlayVisitor</scope><name>visit</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

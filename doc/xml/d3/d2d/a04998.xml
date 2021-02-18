@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d3/d2d/a04998" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::TextureProjectionToCube::FrameBuffer</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d3/d2d/a04998_1a9724e1806b129b53f1152fe30d67fb93" prot="public" static="no" mutable="no">
+        <type>ashes::ImageView</type>
+        <definition>ashes::ImageView castor3d::TextureProjectionToCube::FrameBuffer::view</definition>
+        <argsstring></argsstring>
+        <name>view</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/TextureProjectionToCube.hpp" line="28" column="1" bodyfile="Render/ToTexture/TextureProjectionToCube.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d2d/a04998_1a0542ce1a33fd2adcbc7d8528734b6e71" prot="public" static="no" mutable="no">
+        <type>ashes::FrameBufferPtr</type>
+        <definition>ashes::FrameBufferPtr castor3d::TextureProjectionToCube::FrameBuffer::frameBuffer</definition>
+        <argsstring></argsstring>
+        <name>frameBuffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/TextureProjectionToCube.hpp" line="29" column="1" bodyfile="Render/ToTexture/TextureProjectionToCube.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/ToTexture/TextureProjectionToCube.hpp" line="27" column="1" bodyfile="Render/ToTexture/TextureProjectionToCube.hpp" bodystart="26" bodyend="30"/>
+    <listofallmembers>
+      <member refid="d3/d2d/a04998_1a0542ce1a33fd2adcbc7d8528734b6e71" prot="public" virt="non-virtual"><scope>castor3d::TextureProjectionToCube::FrameBuffer</scope><name>frameBuffer</name></member>
+      <member refid="d3/d2d/a04998_1a9724e1806b129b53f1152fe30d67fb93" prot="public" virt="non-virtual"><scope>castor3d::TextureProjectionToCube::FrameBuffer</scope><name>view</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

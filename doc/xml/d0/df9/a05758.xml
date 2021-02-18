@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d0/df9/a05758" kind="class" language="C++" prot="public">
+    <compoundname>castor::TextWriter&lt; castor3d::SkyboxBackground &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::SkyboxBackground &gt;</basecompoundref>
+    <includes local="no">TextSkyboxBackground.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/df9/a05758_1acbb9a43b0b150c1a80484ab1de320646" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor::TextWriter&lt; castor3d::SkyboxBackground &gt;::TextWriter</definition>
+        <argsstring>(castor::String const &amp;tabs)</argsstring>
+        <name>TextWriter</name>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextSkyboxBackground.hpp" line="18" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/df9/a05758_1afee17006ee0fac0643f535b9af8668b6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::TextWriter&lt; castor3d::SkyboxBackground &gt;::operator()</definition>
+        <argsstring>(castor3d::SkyboxBackground const &amp;overlay, castor::TextFile &amp;file)</argsstring>
+        <name>operator()</name>
+        <param>
+          <type><ref refid="dc/de6/a05126" kindref="compound">castor3d::SkyboxBackground</ref> const &amp;</type>
+          <declname>overlay</declname>
+        </param>
+        <param>
+          <type>castor::TextFile &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextSkyboxBackground.hpp" line="19" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="5432">
+        <label>TextWriterT&lt; castor3d::SkyboxBackground &gt;</label>
+      </node>
+      <node id="5431">
+        <label>castor::TextWriter&lt; castor3d::SkyboxBackground &gt;</label>
+        <link refid="d0/df9/a05758"/>
+        <childnode refid="5432" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="5434">
+        <label>TextWriterT&lt; castor3d::SkyboxBackground &gt;</label>
+      </node>
+      <node id="5433">
+        <label>castor::TextWriter&lt; castor3d::SkyboxBackground &gt;</label>
+        <link refid="d0/df9/a05758"/>
+        <childnode refid="5434" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Text/TextSkyboxBackground.hpp" line="16" column="1" bodyfile="Text/TextSkyboxBackground.hpp" bodystart="14" bodyend="21"/>
+    <listofallmembers>
+      <member refid="d0/df9/a05758_1afee17006ee0fac0643f535b9af8668b6" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::SkyboxBackground &gt;</scope><name>operator()</name></member>
+      <member refid="d0/df9/a05758_1acbb9a43b0b150c1a80484ab1de320646" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::SkyboxBackground &gt;</scope><name>TextWriter</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

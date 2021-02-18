@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d9/d2b/a04300" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::LpvConfig</compoundname>
+    <includes local="no">LpvConfig.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d9/d2b/a04300_1a410a4d84ac4b0b9ccc6163d54e369a5a" prot="public" static="no" mutable="no">
+        <type>castor::ChangeTracked&lt; float &gt;</type>
+        <definition>castor::ChangeTracked&lt; float &gt; castor3d::LpvConfig::indirectAttenuation</definition>
+        <argsstring></argsstring>
+        <name>indirectAttenuation</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LpvConfig.hpp" line="20" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LpvConfig.hpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d2b/a04300_1a88faddd9e5b6b83cae302fcc9a4efcf5" prot="public" static="no" mutable="no">
+        <type>castor::ChangeTracked&lt; float &gt;</type>
+        <definition>castor::ChangeTracked&lt; float &gt; castor3d::LpvConfig::texelAreaModifier</definition>
+        <argsstring></argsstring>
+        <name>texelAreaModifier</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LpvConfig.hpp" line="21" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LpvConfig.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d9/d2b/a04300_1ad16daa72c18a11425a88e1796bc320f3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LpvConfig::accept</definition>
+        <argsstring>(castor::String const &amp;name, PipelineVisitorBase &amp;visitor)</argsstring>
+        <name>accept</name>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d73/a03836" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LpvConfig.hpp" line="17" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/GlobalIllumination/LightPropagationVolumes/LpvConfig.hpp" line="16" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LpvConfig.hpp" bodystart="15" bodyend="22"/>
+    <listofallmembers>
+      <member refid="d9/d2b/a04300_1ad16daa72c18a11425a88e1796bc320f3" prot="public" virt="non-virtual"><scope>castor3d::LpvConfig</scope><name>accept</name></member>
+      <member refid="d9/d2b/a04300_1a410a4d84ac4b0b9ccc6163d54e369a5a" prot="public" virt="non-virtual"><scope>castor3d::LpvConfig</scope><name>indirectAttenuation</name></member>
+      <member refid="d9/d2b/a04300_1a88faddd9e5b6b83cae302fcc9a4efcf5" prot="public" virt="non-virtual"><scope>castor3d::LpvConfig</scope><name>texelAreaModifier</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

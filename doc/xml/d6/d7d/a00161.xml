@@ -1,0 +1,128 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d6/d7d/a00161" kind="file" language="C++">
+    <compoundname>GpuBufferBuddyAllocator.hpp</compoundname>
+    <includes refid="d7/d9a/a00152" local="yes">BufferModule.hpp</includes>
+    <includedby refid="d6/db8/a00158" local="yes">Buffer/GpuBuffer.hpp</includedby>
+    <incdepgraph>
+      <node id="2090">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="2093">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="2094">
+        <label>cstdint</label>
+      </node>
+      <node id="2092">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="2085">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d5/d35/a00266"/>
+        <childnode refid="2086" relation="include">
+        </childnode>
+        <childnode refid="2087" relation="include">
+        </childnode>
+        <childnode refid="2088" relation="include">
+        </childnode>
+        <childnode refid="2089" relation="include">
+        </childnode>
+        <childnode refid="2090" relation="include">
+        </childnode>
+        <childnode refid="2091" relation="include">
+        </childnode>
+        <childnode refid="2092" relation="include">
+        </childnode>
+        <childnode refid="2093" relation="include">
+        </childnode>
+        <childnode refid="2094" relation="include">
+        </childnode>
+        <childnode refid="2095" relation="include">
+        </childnode>
+        <childnode refid="2096" relation="include">
+        </childnode>
+        <childnode refid="2097" relation="include">
+        </childnode>
+      </node>
+      <node id="2096">
+        <label>string</label>
+      </node>
+      <node id="2089">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="2086">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="2084">
+        <label>BufferModule.hpp</label>
+        <link refid="d7/d9a/a00152"/>
+        <childnode refid="2085" relation="include">
+        </childnode>
+        <childnode refid="2098" relation="include">
+        </childnode>
+        <childnode refid="2099" relation="include">
+        </childnode>
+      </node>
+      <node id="2083">
+        <label>Buffer/GpuBufferBuddyAllocator.hpp</label>
+        <link refid="d6/d7d/a00161"/>
+        <childnode refid="2084" relation="include">
+        </childnode>
+      </node>
+      <node id="2088">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="2098">
+        <label>CastorUtils/Pool/BuddyAllocator.hpp</label>
+      </node>
+      <node id="2087">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="2097">
+        <label>vector</label>
+      </node>
+      <node id="2091">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="2099">
+        <label>cstddef</label>
+      </node>
+      <node id="2095">
+        <label>memory</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="2101">
+        <label>Buffer/GpuBuffer.hpp</label>
+        <link refid="d6/db8/a00158"/>
+        <childnode refid="2102" relation="include">
+        </childnode>
+      </node>
+      <node id="2103">
+        <label>Buffer/GpuBufferPool.hpp</label>
+        <link refid="dc/de6/a00167"/>
+      </node>
+      <node id="2100">
+        <label>Buffer/GpuBufferBuddyAllocator.hpp</label>
+        <link refid="d6/d7d/a00161"/>
+        <childnode refid="2101" relation="include">
+        </childnode>
+      </node>
+      <node id="2102">
+        <label>Buffer/GpuBufferOffset.hpp</label>
+        <link refid="db/ddf/a00164"/>
+        <childnode refid="2103" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="d3/d01/a02316" prot="public">castor3d::GpuBufferBuddyAllocatorTraits</innerclass>
+    <innerclass refid="df/d2a/a02320" prot="public">castor3d::GpuBufferBuddyAllocatorTraits::Block</innerclass>
+    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Buffer/GpuBufferBuddyAllocator.hpp"/>
+  </compounddef>
+</doxygen>

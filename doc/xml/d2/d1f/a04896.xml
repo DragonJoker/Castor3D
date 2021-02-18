@@ -1,0 +1,231 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d2/d1f/a04896" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::RsmLightPassConfig</compoundname>
+    <includes local="no">ReflectiveShadowMapGIModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d2/d1f/a04896_1a67b5155db40e54d849f00a25dca050a9" prot="public" static="no" mutable="no">
+        <type><ref refid="da/d0e/a04752" kindref="compound">LightPassConfig</ref></type>
+        <definition>LightPassConfig castor3d::RsmLightPassConfig::base</definition>
+        <argsstring></argsstring>
+        <name>base</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapGIModule.hpp" line="87" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapGIModule.hpp" bodystart="87" bodyend="-1"/>
+        <referencedby refid="db/d9e/a04892_1aec682c16bf1f28ec46627a6a18825c0c" compoundref="d8/d19/a00935" startline="43" endline="53">castor3d::LightPassReflectiveShadow&lt; LtType &gt;::LightPassReflectiveShadow</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d1f/a04896_1a11f7d9d7a7d1f670b6ca95dd8e1fe84a" prot="public" static="no" mutable="no">
+        <type><ref refid="da/d1e/a01479_1a563d137a64a10483b6a4ba4b5174d05d" kindref="member">LightCache</ref> const  &amp;</type>
+        <definition>LightCache const&amp; castor3d::RsmLightPassConfig::lightCache</definition>
+        <argsstring></argsstring>
+        <name>lightCache</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapGIModule.hpp" line="88" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapGIModule.hpp" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d1f/a04896_1aceccd989804b00062417cb5a49230b4e" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/dcd/a04880" kindref="compound">OpaquePassResult</ref> const  &amp;</type>
+        <definition>OpaquePassResult const&amp; castor3d::RsmLightPassConfig::gpResult</definition>
+        <argsstring></argsstring>
+        <name>gpResult</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapGIModule.hpp" line="89" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapGIModule.hpp" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d1f/a04896_1af99f8ae3de57fd69a1917c28aa986075" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dcf/a04692" kindref="compound">ShadowMapResult</ref> const  &amp;</type>
+        <definition>ShadowMapResult const&amp; castor3d::RsmLightPassConfig::smResult</definition>
+        <argsstring></argsstring>
+        <name>smResult</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapGIModule.hpp" line="90" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapGIModule.hpp" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="3237">
+        <label>castor3d::GBufferT&lt; DsTexture &gt;</label>
+        <link refid="d8/dc6/a04256"/>
+        <childnode refid="3234" relation="private-inheritance">
+        </childnode>
+        <childnode refid="3223" relation="usage">
+          <edgelabel>m_engine</edgelabel>
+        </childnode>
+        <childnode refid="3235" relation="template-instance">
+          <edgelabel>&lt; DsTexture &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3222">
+        <label>castor3d::ObjectCacheBase&lt; Light, castor::String &gt;</label>
+        <link refid="d5/d04/a02428"/>
+        <childnode refid="3223" relation="usage">
+          <edgelabel>m_engine</edgelabel>
+        </childnode>
+        <childnode refid="3225" relation="usage">
+          <edgelabel>m_scene</edgelabel>
+        </childnode>
+        <childnode refid="3229" relation="template-instance">
+          <edgelabel>&lt; Light, castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3233">
+        <label>castor3d::GBufferT&lt; LpTexture &gt;</label>
+        <link refid="d8/dc6/a04256"/>
+        <childnode refid="3234" relation="private-inheritance">
+        </childnode>
+        <childnode refid="3223" relation="usage">
+          <edgelabel>m_engine</edgelabel>
+        </childnode>
+        <childnode refid="3235" relation="template-instance">
+          <edgelabel>&lt; LpTexture &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3232">
+        <label>castor3d::LightPassResult</label>
+        <link refid="db/d2a/a04776"/>
+        <childnode refid="3233" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3221">
+        <label>castor3d::ObjectCache&lt; Light, castor::String &gt;</label>
+        <link refid="de/d4e/a02484"/>
+        <childnode refid="3222" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3220">
+        <label>castor3d::RsmLightPassConfig</label>
+        <link refid="d2/d1f/a04896"/>
+        <childnode refid="3221" relation="usage">
+          <edgelabel>lightCache</edgelabel>
+        </childnode>
+        <childnode refid="3230" relation="usage">
+          <edgelabel>base</edgelabel>
+        </childnode>
+        <childnode refid="3236" relation="usage">
+          <edgelabel>gpResult</edgelabel>
+        </childnode>
+        <childnode refid="3238" relation="usage">
+          <edgelabel>smResult</edgelabel>
+        </childnode>
+      </node>
+      <node id="3238">
+        <label>castor3d::ShadowMapResult</label>
+        <link refid="d9/dcf/a04692"/>
+        <childnode refid="3239" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3228">
+        <label>Named</label>
+      </node>
+      <node id="3229">
+        <label>castor3d::ObjectCacheBase&lt; ElementType, KeyType &gt;</label>
+        <link refid="d5/d04/a02428"/>
+        <childnode refid="3223" relation="usage">
+          <edgelabel>m_engine</edgelabel>
+        </childnode>
+        <childnode refid="3225" relation="usage">
+          <edgelabel>m_scene</edgelabel>
+        </childnode>
+      </node>
+      <node id="3224">
+        <label>castor::Unique&lt; Engine &gt;</label>
+      </node>
+      <node id="3226">
+        <label>std::enable_shared_from_this&lt; Scene &gt;</label>
+      </node>
+      <node id="3227">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="3223">
+        <label>castor3d::Engine</label>
+        <link refid="dc/dbb/a02520"/>
+        <childnode refid="3224" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3231">
+        <label>castor3d::GpInfoUbo</label>
+        <link refid="d1/d22/a05464"/>
+      </node>
+      <node id="3235">
+        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
+        <link refid="d8/dc6/a04256"/>
+        <childnode refid="3234" relation="private-inheritance">
+        </childnode>
+        <childnode refid="3223" relation="usage">
+          <edgelabel>m_engine</edgelabel>
+        </childnode>
+      </node>
+      <node id="3230">
+        <label>castor3d::LightPassConfig</label>
+        <link refid="da/d0e/a04752"/>
+        <childnode refid="3231" relation="usage">
+          <edgelabel>gpInfoUbo</edgelabel>
+        </childnode>
+        <childnode refid="3232" relation="usage">
+          <edgelabel>lpResult</edgelabel>
+        </childnode>
+      </node>
+      <node id="3234">
+        <label>castor3d::GBufferBase</label>
+        <link refid="dc/de4/a04252"/>
+        <childnode refid="3228" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3239">
+        <label>castor3d::GBufferT&lt; SmTexture &gt;</label>
+        <link refid="d8/dc6/a04256"/>
+        <childnode refid="3234" relation="private-inheritance">
+        </childnode>
+        <childnode refid="3223" relation="usage">
+          <edgelabel>m_engine</edgelabel>
+        </childnode>
+        <childnode refid="3235" relation="template-instance">
+          <edgelabel>&lt; SmTexture &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3236">
+        <label>castor3d::OpaquePassResult</label>
+        <link refid="d1/dcd/a04880"/>
+        <childnode refid="3237" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3225">
+        <label>castor3d::Scene</label>
+        <link refid="d5/d76/a05244"/>
+        <childnode refid="3226" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3227" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3228" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapGIModule.hpp" line="86" column="1" bodyfile="Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapGIModule.hpp" bodystart="85" bodyend="91"/>
+    <listofallmembers>
+      <member refid="d2/d1f/a04896_1a67b5155db40e54d849f00a25dca050a9" prot="public" virt="non-virtual"><scope>castor3d::RsmLightPassConfig</scope><name>base</name></member>
+      <member refid="d2/d1f/a04896_1aceccd989804b00062417cb5a49230b4e" prot="public" virt="non-virtual"><scope>castor3d::RsmLightPassConfig</scope><name>gpResult</name></member>
+      <member refid="d2/d1f/a04896_1a11f7d9d7a7d1f670b6ca95dd8e1fe84a" prot="public" virt="non-virtual"><scope>castor3d::RsmLightPassConfig</scope><name>lightCache</name></member>
+      <member refid="d2/d1f/a04896_1af99f8ae3de57fd69a1917c28aa986075" prot="public" virt="non-virtual"><scope>castor3d::RsmLightPassConfig</scope><name>smResult</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

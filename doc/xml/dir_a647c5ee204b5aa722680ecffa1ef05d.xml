@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_a647c5ee204b5aa722680ecffa1ef05d" kind="dir">
+    <compoundname>Scene/Animation/Texture</compoundname>
+    <innerfile refid="d5/d4c/a01058">TextureAnimationInstance.hpp</innerfile>
+    <innerfile refid="de/db8/a07289">TextureAnimationModule.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Scene/Animation/Texture/"/>
+  </compounddef>
+</doxygen>

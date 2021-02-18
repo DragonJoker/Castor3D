@@ -1,7 +1,5 @@
-<map id="castor3d::Pass" name="castor3d::Pass">
-<area shape="rect" id="node1" title="Base class of a material pass." alt="" coords="245,64,356,91"/>
-<area shape="rect" id="node3" href="$d3/dbb/a02004.html" title="Definition of a traditional (pre&#45;PBR) pass." alt="" coords="426,5,578,32"/>
-<area shape="rect" id="node4" href="$d7/db2/a02036.html" title="Definition of a PBR Metallic/Roughness pass." alt="" coords="407,57,597,98"/>
-<area shape="rect" id="node5" href="$d3/df9/a02052.html" title="Definition of a PBR Metallic/Roughness pass." alt="" coords="404,122,600,163"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,64,197,91"/>
+<map id="castor3d::AnimationKeyFrame" name="castor3d::AnimationKeyFrame">
+<area shape="rect" id="node1" title=" " alt="" coords="111,5,309,32"/>
+<area shape="rect" id="node2" href="$db/d62/a03860.html" title=" " alt="" coords="5,80,199,121"/>
+<area shape="rect" id="node3" href="$d9/d97/a04016.html" title=" " alt="" coords="223,80,413,121"/>
 </map>

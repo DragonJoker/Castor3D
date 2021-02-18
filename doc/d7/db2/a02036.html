@@ -5,11 +5,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: castor3d::MetallicRoughnessPbrPass Class Reference</title>
+<title>Castor3D: castor3d::AnimableT&lt; AnimableHanlerT &gt; Class Template Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
 <link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+<link href="../../Castor3D.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -17,10 +18,12 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Castor3D
-   &#160;<span id="projectnumber">..</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
+   <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
  </tr>
  </tbody>
@@ -39,432 +42,347 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../d0/d85/a00976.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d7/db2/a02036.html">MetallicRoughnessPbrPass</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/d1e/a01479.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d7/db2/a02036.html">AnimableT</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-types">Protected Types</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="../../d6/d94/a02033.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">castor3d::MetallicRoughnessPbrPass Class Reference</div>  </div>
+<div class="title">castor3d::AnimableT&lt; AnimableHanlerT &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Definition of a PBR Metallic/Roughness pass.  
+<p>Animable public interface.  
  <a href="../../d7/db2/a02036.html#details">More...</a></p>
-<div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-0-trigger" src="../../closed.png" alt="+"/> Inheritance diagram for castor3d::MetallicRoughnessPbrPass:</div>
-<div id="dynsection-0-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../d9/d1f/a02035.png" border="0" usemap="#castor3d_1_1MetallicRoughnessPbrPass_inherit__map" alt="Inheritance graph"/></div>
-<map name="castor3d_1_1MetallicRoughnessPbrPass_inherit__map" id="castor3d_1_1MetallicRoughnessPbrPass_inherit__map">
-<area shape="rect"  title="Definition of a PBR Metallic/Roughness pass." alt="" coords="6,155,197,196"/>
-<area shape="rect"  href="../../d8/d22/a02044.html" title="Base class of a material pass." alt="" coords="46,80,157,107"/>
-<area shape="rect"  title=" " alt="" coords="5,5,197,32"/>
+<div class="dynheader">
+Inheritance diagram for castor3d::AnimableT&lt; AnimableHanlerT &gt;:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d9/d1f/a02035.png" border="0" usemap="#castor3d_1_1AnimableT_3_01AnimableHanlerT_01_4_inherit__map" alt="Inheritance graph"/></div>
+<map name="castor3d_1_1AnimableT_3_01AnimableHanlerT_01_4_inherit__map" id="castor3d_1_1AnimableT_3_01AnimableHanlerT_01_4_inherit__map">
+<area shape="rect"  title="Animable public interface." alt="" coords="243,125,387,166"/>
+<area shape="rect"  href="../../dc/dce/a03908.html" title=" " alt="" coords="504,73,680,100"/>
+<area shape="rect"  href="../../d9/d4a/a05192.html" title=" " alt="" coords="509,125,675,166"/>
+<area shape="rect"  href="../../d7/db2/a02036.html" title=" " alt="" coords="521,251,663,293"/>
+<area shape="rect"  title=" " alt="" coords="5,125,193,166"/>
+<area shape="rect"  href="../../d4/dc5/a05148.html" title=" " alt="" coords="739,5,889,32"/>
+<area shape="rect"  href="../../d5/d9c/a05152.html" title=" " alt="" coords="751,56,877,83"/>
+<area shape="rect"  href="../../df/df0/a05160.html" title=" " alt="" coords="745,107,883,133"/>
+<area shape="rect"  href="../../d8/de4/a05172.html" title=" " alt="" coords="760,157,868,184"/>
+<area shape="rect"  href="../../d6/dd5/a05228.html" title=" " alt="" coords="729,208,899,235"/>
+<area shape="rect"  href="../../db/d13/a04032.html" title=" " alt="" coords="749,259,879,285"/>
+<area shape="rect"  href="../../d6/d18/a02664.html" title=" " alt="" coords="741,309,887,336"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
-<div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-1-trigger" src="../../closed.png" alt="+"/> Collaboration diagram for castor3d::MetallicRoughnessPbrPass:</div>
-<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../dc/ddb/a02034.png" border="0" usemap="#castor3d_1_1MetallicRoughnessPbrPass_coll__map" alt="Collaboration graph"/></div>
-<map name="castor3d_1_1MetallicRoughnessPbrPass_coll__map" id="castor3d_1_1MetallicRoughnessPbrPass_coll__map">
-<area shape="rect"  title="Definition of a PBR Metallic/Roughness pass." alt="" coords="6,155,197,196"/>
-<area shape="rect"  href="../../d8/d22/a02044.html" title="Base class of a material pass." alt="" coords="46,80,157,107"/>
-<area shape="rect"  title=" " alt="" coords="5,5,197,32"/>
+<div class="dynheader">
+Collaboration diagram for castor3d::AnimableT&lt; AnimableHanlerT &gt;:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../dc/ddb/a02034.png" border="0" usemap="#castor3d_1_1AnimableT_3_01AnimableHanlerT_01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="castor3d_1_1AnimableT_3_01AnimableHanlerT_01_4_coll__map" id="castor3d_1_1AnimableT_3_01AnimableHanlerT_01_4_coll__map">
+<area shape="rect"  title="Animable public interface." alt="" coords="89,303,233,344"/>
+<area shape="rect"  title=" " alt="" coords="5,199,193,240"/>
+<area shape="rect"  title=" " alt="" coords="217,199,384,240"/>
+<area shape="rect"  title="STL class." alt="" coords="240,95,361,121"/>
+<area shape="rect"  title=" " alt="" coords="249,5,288,32"/>
+<area shape="rect"  title=" " alt="" coords="313,5,352,32"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/ddd/a02040.html">TextWriter</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../d8/d22/a02044.html" title="Base class of a material pass.">Pass</a> loader.  <a href="../../d4/ddd/a02040.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a8e0528dfd96b70c81b176155cd9da4ef"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/db2/a02036.html#a8e0528dfd96b70c81b176155cd9da4ef">MetallicRoughnessPbrPass</a> (<a class="el" href="../../db/d68/a02028.html">Material</a> &amp;parent)</td></tr>
-<tr class="memdesc:a8e0528dfd96b70c81b176155cd9da4ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#a8e0528dfd96b70c81b176155cd9da4ef">More...</a><br /></td></tr>
-<tr class="separator:a8e0528dfd96b70c81b176155cd9da4ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abcd1dcaad42aed365ce19d28d321123d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/db2/a02036.html#abcd1dcaad42aed365ce19d28d321123d">~MetallicRoughnessPbrPass</a> ()</td></tr>
-<tr class="memdesc:abcd1dcaad42aed365ce19d28d321123d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="#abcd1dcaad42aed365ce19d28d321123d">More...</a><br /></td></tr>
-<tr class="separator:abcd1dcaad42aed365ce19d28d321123d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a140fa1af13aafb414717061987071ab1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/db2/a02036.html#a140fa1af13aafb414717061987071ab1">accept</a> (<a class="el" href="../../d5/d7f/a03036.html">PassBuffer</a> &amp;buffer) const override</td></tr>
-<tr class="memdesc:a140fa1af13aafb414717061987071ab1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fills shader variables of given render node.  <a href="#a140fa1af13aafb414717061987071ab1">More...</a><br /></td></tr>
-<tr class="separator:a140fa1af13aafb414717061987071ab1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3522cbffe3c972a1f3e91aeb5b0ddcf0"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/db2/a02036.html#a3522cbffe3c972a1f3e91aeb5b0ddcf0">getPassSize</a> () const override</td></tr>
-<tr class="separator:a3522cbffe3c972a1f3e91aeb5b0ddcf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a905f9c0de627bd2d663710821c9069a9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/db2/a02036.html#a905f9c0de627bd2d663710821c9069a9">setAlbedo</a> (castor::RgbColour const &amp;value)</td></tr>
-<tr class="memdesc:a905f9c0de627bd2d663710821c9069a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">sets the albedo colour.  <a href="#a905f9c0de627bd2d663710821c9069a9">More...</a><br /></td></tr>
-<tr class="separator:a905f9c0de627bd2d663710821c9069a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a97129799935edb55afd2d62a5663ad86"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/db2/a02036.html#a97129799935edb55afd2d62a5663ad86">setRoughness</a> (float value)</td></tr>
-<tr class="memdesc:a97129799935edb55afd2d62a5663ad86"><td class="mdescLeft">&#160;</td><td class="mdescRight">sets the roughness.  <a href="#a97129799935edb55afd2d62a5663ad86">More...</a><br /></td></tr>
-<tr class="separator:a97129799935edb55afd2d62a5663ad86"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a06dcbe42056fcac346a272986cf4a5ec"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/db2/a02036.html#a06dcbe42056fcac346a272986cf4a5ec">setMetallic</a> (float value)</td></tr>
-<tr class="memdesc:a06dcbe42056fcac346a272986cf4a5ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">sets the reflectance.  <a href="#a06dcbe42056fcac346a272986cf4a5ec">More...</a><br /></td></tr>
-<tr class="separator:a06dcbe42056fcac346a272986cf4a5ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0dcdf414eecb4f1fc7838264817744be"><td class="memItemLeft" align="right" valign="top">castor::RgbColour const  &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/db2/a02036.html#a0dcdf414eecb4f1fc7838264817744be">getAlbedo</a> () const</td></tr>
-<tr class="separator:a0dcdf414eecb4f1fc7838264817744be"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad2da23db622376a2166d3af0112066f5"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/db2/a02036.html#ad2da23db622376a2166d3af0112066f5">getRoughness</a> () const</td></tr>
-<tr class="separator:ad2da23db622376a2166d3af0112066f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8bb28652c30287d90d709a2d10ef5889"><td class="memItemLeft" align="right" valign="top">float const  &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/db2/a02036.html#a8bb28652c30287d90d709a2d10ef5889">getMetallic</a> () const</td></tr>
-<tr class="separator:a8bb28652c30287d90d709a2d10ef5889"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_a02044"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_a02044')"><img src="../../closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="../../d8/d22/a02044.html">castor3d::Pass</a></td></tr>
-<tr class="memitem:aa938a204f40aebe75d5eba4d702ba64a inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#aa938a204f40aebe75d5eba4d702ba64a">initialise</a> ()</td></tr>
-<tr class="memdesc:aa938a204f40aebe75d5eba4d702ba64a inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialises the pass and all it's dependencies.  <a href="../../d8/d22/a02044.html#aa938a204f40aebe75d5eba4d702ba64a">More...</a><br /></td></tr>
-<tr class="separator:aa938a204f40aebe75d5eba4d702ba64a inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad88707e47153d55ec3a87a12a6259787 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#ad88707e47153d55ec3a87a12a6259787">cleanup</a> ()</td></tr>
-<tr class="memdesc:ad88707e47153d55ec3a87a12a6259787 inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cleans up the pass and all it's dependencies.  <a href="../../d8/d22/a02044.html#ad88707e47153d55ec3a87a12a6259787">More...</a><br /></td></tr>
-<tr class="separator:ad88707e47153d55ec3a87a12a6259787 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b4f4973ab774938c3d142efeaade40e inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a1b4f4973ab774938c3d142efeaade40e">bindTextures</a> ()</td></tr>
-<tr class="memdesc:a1b4f4973ab774938c3d142efeaade40e inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Binds the pass' textures.  <a href="../../d8/d22/a02044.html#a1b4f4973ab774938c3d142efeaade40e">More...</a><br /></td></tr>
-<tr class="separator:a1b4f4973ab774938c3d142efeaade40e inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acad680a5076084e2fa50e9df47720297 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#acad680a5076084e2fa50e9df47720297">unbindTextures</a> ()</td></tr>
-<tr class="memdesc:acad680a5076084e2fa50e9df47720297 inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unbinds the pass' textures.  <a href="../../d8/d22/a02044.html#acad680a5076084e2fa50e9df47720297">More...</a><br /></td></tr>
-<tr class="separator:acad680a5076084e2fa50e9df47720297 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a27d6bff35bc573d9c64d36d431b315b6 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a27d6bff35bc573d9c64d36d431b315b6">addTextureUnit</a> (TextureUnitSPtr p_unit)</td></tr>
-<tr class="memdesc:a27d6bff35bc573d9c64d36d431b315b6 inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">adds a texture unit.  <a href="../../d8/d22/a02044.html#a27d6bff35bc573d9c64d36d431b315b6">More...</a><br /></td></tr>
-<tr class="separator:a27d6bff35bc573d9c64d36d431b315b6 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae1770a31fdb4d6126cd0cb8e0f4ac22b inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> TextureUnitSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#ae1770a31fdb4d6126cd0cb8e0f4ac22b">getTextureUnit</a> (<a class="el" href="../../d0/d85/a00976.html#afac4ec72b798000597676aebd077dca6">TextureChannel</a> channel) const</td></tr>
-<tr class="memdesc:ae1770a31fdb4d6126cd0cb8e0f4ac22b inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the <a class="el" href="../../d0/da2/a03620.html" title="Texture unit representation.">TextureUnit</a> at wanted channel.  <a href="../../d8/d22/a02044.html#ae1770a31fdb4d6126cd0cb8e0f4ac22b">More...</a><br /></td></tr>
-<tr class="separator:ae1770a31fdb4d6126cd0cb8e0f4ac22b inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0152e47a1ad83aebd045f6ed6cc16669 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a0152e47a1ad83aebd045f6ed6cc16669">destroyTextureUnit</a> (uint32_t index)</td></tr>
-<tr class="memdesc:a0152e47a1ad83aebd045f6ed6cc16669 inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys a <a class="el" href="../../d0/da2/a03620.html" title="Texture unit representation.">TextureUnit</a> at the given index.  <a href="../../d8/d22/a02044.html#a0152e47a1ad83aebd045f6ed6cc16669">More...</a><br /></td></tr>
-<tr class="separator:a0152e47a1ad83aebd045f6ed6cc16669 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a97ceb48b79e58532c774f19336671bfc inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> TextureUnitSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a97ceb48b79e58532c774f19336671bfc">getTextureUnit</a> (uint32_t index) const</td></tr>
-<tr class="memdesc:a97ceb48b79e58532c774f19336671bfc inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the <a class="el" href="../../d0/da2/a03620.html" title="Texture unit representation.">TextureUnit</a> at the given index.  <a href="../../d8/d22/a02044.html#a97ceb48b79e58532c774f19336671bfc">More...</a><br /></td></tr>
-<tr class="separator:a97ceb48b79e58532c774f19336671bfc inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae87ec5c3a8297d7d27f4d28071173629 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#ae87ec5c3a8297d7d27f4d28071173629">hasAlphaBlending</a> () const</td></tr>
-<tr class="memdesc:ae87ec5c3a8297d7d27f4d28071173629 inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tells if the pass needs alpha blending.  <a href="../../d8/d22/a02044.html#ae87ec5c3a8297d7d27f4d28071173629">More...</a><br /></td></tr>
-<tr class="separator:ae87ec5c3a8297d7d27f4d28071173629 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2e62df25714263fa6f73b50e5cd645e3 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a2e62df25714263fa6f73b50e5cd645e3">prepareTextures</a> ()</td></tr>
-<tr class="memdesc:a2e62df25714263fa6f73b50e5cd645e3 inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reduces the textures.  <a href="../../d8/d22/a02044.html#a2e62df25714263fa6f73b50e5cd645e3">More...</a><br /></td></tr>
-<tr class="separator:a2e62df25714263fa6f73b50e5cd645e3 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af1056149c9fd47c2406e8406756091d3 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../d0/d85/a00976.html#a90306964da63b9bbc97f4e205ecc5b7a">MaterialType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#af1056149c9fd47c2406e8406756091d3">getType</a> () const</td></tr>
-<tr class="separator:af1056149c9fd47c2406e8406756091d3 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4144dbf8c545566e2567e4b685c332c1 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a4144dbf8c545566e2567e4b685c332c1">setOpacity</a> (float value)</td></tr>
-<tr class="memdesc:a4144dbf8c545566e2567e4b685c332c1 inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the global alpha value.  <a href="../../d8/d22/a02044.html#a4144dbf8c545566e2567e4b685c332c1">More...</a><br /></td></tr>
-<tr class="separator:a4144dbf8c545566e2567e4b685c332c1 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a362c719ff6af42aa94550a526bd554a8 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> PassFlags&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a362c719ff6af42aa94550a526bd554a8">getPassFlags</a> () const</td></tr>
-<tr class="separator:a362c719ff6af42aa94550a526bd554a8 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab0c56afa2b134ad3948ec6dfc5b461e3 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#ab0c56afa2b134ad3948ec6dfc5b461e3">setSubsurfaceScattering</a> (SubsurfaceScatteringUPtr &amp;&amp;value)</td></tr>
-<tr class="memdesc:ab0c56afa2b134ad3948ec6dfc5b461e3 inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the subsurface scattering extended informations.  <a href="../../d8/d22/a02044.html#ab0c56afa2b134ad3948ec6dfc5b461e3">More...</a><br /></td></tr>
-<tr class="separator:ab0c56afa2b134ad3948ec6dfc5b461e3 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ce5b0e4d13f38600b9ba9bb122ce973 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">TextureChannels const  &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a7ce5b0e4d13f38600b9ba9bb122ce973">getTextureFlags</a> () const</td></tr>
-<tr class="separator:a7ce5b0e4d13f38600b9ba9bb122ce973 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac79b5fc42779ef6c26d94d9aa8624d8e inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#ac79b5fc42779ef6c26d94d9aa8624d8e">hasAutomaticShader</a> () const</td></tr>
-<tr class="separator:ac79b5fc42779ef6c26d94d9aa8624d8e inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a21496a3f31507920af9fce21254458ae inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a21496a3f31507920af9fce21254458ae">setTwoSided</a> (bool value)</td></tr>
-<tr class="memdesc:a21496a3f31507920af9fce21254458ae inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the two sided status.  <a href="../../d8/d22/a02044.html#a21496a3f31507920af9fce21254458ae">More...</a><br /></td></tr>
-<tr class="separator:a21496a3f31507920af9fce21254458ae inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9260376e612bb8e9e608649c2e2bdd8b inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a9260376e612bb8e9e608649c2e2bdd8b">setEmissive</a> (float const &amp;value)</td></tr>
-<tr class="memdesc:a9260376e612bb8e9e608649c2e2bdd8b inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the emissive factor.  <a href="../../d8/d22/a02044.html#a9260376e612bb8e9e608649c2e2bdd8b">More...</a><br /></td></tr>
-<tr class="separator:a9260376e612bb8e9e608649c2e2bdd8b inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3d937f0261b447dd91d89aa43037c960 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a3d937f0261b447dd91d89aa43037c960">setRefractionRatio</a> (float value)</td></tr>
-<tr class="memdesc:a3d937f0261b447dd91d89aa43037c960 inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the refraction ratio.  <a href="../../d8/d22/a02044.html#a3d937f0261b447dd91d89aa43037c960">More...</a><br /></td></tr>
-<tr class="separator:a3d937f0261b447dd91d89aa43037c960 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adc1feb31afb4b3d69e2bdba7578ecae3 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#adc1feb31afb4b3d69e2bdba7578ecae3">setParallaxOcclusion</a> (bool value)</td></tr>
-<tr class="memdesc:adc1feb31afb4b3d69e2bdba7578ecae3 inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the parallax occlusion mapping usage.  <a href="../../d8/d22/a02044.html#adc1feb31afb4b3d69e2bdba7578ecae3">More...</a><br /></td></tr>
-<tr class="separator:adc1feb31afb4b3d69e2bdba7578ecae3 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af32c96d71f12e20feffd9823299cbfa6 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#af32c96d71f12e20feffd9823299cbfa6">setAlphaBlendMode</a> (<a class="el" href="../../d0/d85/a00976.html#a840ab6fd50c1a08fcc1b6dc3f98d90fa">BlendMode</a> value)</td></tr>
-<tr class="memdesc:af32c96d71f12e20feffd9823299cbfa6 inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the alpha blend mode.  <a href="../../d8/d22/a02044.html#af32c96d71f12e20feffd9823299cbfa6">More...</a><br /></td></tr>
-<tr class="separator:af32c96d71f12e20feffd9823299cbfa6 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b1fe1655d4a0ed0fcec79e095bf503f inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a3b1fe1655d4a0ed0fcec79e095bf503f">setColourBlendMode</a> (<a class="el" href="../../d0/d85/a00976.html#a840ab6fd50c1a08fcc1b6dc3f98d90fa">BlendMode</a> value)</td></tr>
-<tr class="memdesc:a3b1fe1655d4a0ed0fcec79e095bf503f inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the colour blend mode.  <a href="../../d8/d22/a02044.html#a3b1fe1655d4a0ed0fcec79e095bf503f">More...</a><br /></td></tr>
-<tr class="separator:a3b1fe1655d4a0ed0fcec79e095bf503f inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a86e317a5f7466a877fb6690d8049f685 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a86e317a5f7466a877fb6690d8049f685">getTextureUnitsCount</a> () const</td></tr>
-<tr class="separator:a86e317a5f7466a877fb6690d8049f685 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a451987008133c2f58ccbcead2ee7b1df inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a451987008133c2f58ccbcead2ee7b1df">IsTwoSided</a> () const</td></tr>
-<tr class="memdesc:a451987008133c2f58ccbcead2ee7b1df inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tells if the pass is two sided.  <a href="../../d8/d22/a02044.html#a451987008133c2f58ccbcead2ee7b1df">More...</a><br /></td></tr>
-<tr class="separator:a451987008133c2f58ccbcead2ee7b1df inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae656ac3132fb4e95fa30f28381d5e421 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#ae656ac3132fb4e95fa30f28381d5e421">hasEnvironmentMapping</a> () const</td></tr>
-<tr class="separator:ae656ac3132fb4e95fa30f28381d5e421 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a66390e7dc9648f56a538b8b2b14569ed inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a66390e7dc9648f56a538b8b2b14569ed">getOpacity</a> () const</td></tr>
-<tr class="separator:a66390e7dc9648f56a538b8b2b14569ed inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a11d2d9dd2ec12a119e70adcd56ffd76e inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a11d2d9dd2ec12a119e70adcd56ffd76e">getEmissive</a> () const</td></tr>
-<tr class="separator:a11d2d9dd2ec12a119e70adcd56ffd76e inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a46a166f8c07114d7a538f54fc358f555 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a46a166f8c07114d7a538f54fc358f555">getRefractionRatio</a> () const</td></tr>
-<tr class="separator:a46a166f8c07114d7a538f54fc358f555 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abab03a36cc4743c6908c5796aa2cfaf5 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d0/d85/a00976.html#a840ab6fd50c1a08fcc1b6dc3f98d90fa">BlendMode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#abab03a36cc4743c6908c5796aa2cfaf5">getAlphaBlendMode</a> () const</td></tr>
-<tr class="separator:abab03a36cc4743c6908c5796aa2cfaf5 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed61df74f8931cd420104e7f3d468f89 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d0/d85/a00976.html#a840ab6fd50c1a08fcc1b6dc3f98d90fa">BlendMode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#aed61df74f8931cd420104e7f3d468f89">getColourBlendMode</a> () const</td></tr>
-<tr class="separator:aed61df74f8931cd420104e7f3d468f89 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb6026c634eebbfaa26fa25973fafcda inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#adb6026c634eebbfaa26fa25973fafcda">begin</a> () const</td></tr>
-<tr class="separator:adb6026c634eebbfaa26fa25973fafcda inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a609f35aed9e87d4bc64a3158f6b9208f inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a609f35aed9e87d4bc64a3158f6b9208f">begin</a> ()</td></tr>
-<tr class="separator:a609f35aed9e87d4bc64a3158f6b9208f inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a747b9e8172704065f32c2c0b22c12eea inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a747b9e8172704065f32c2c0b22c12eea">end</a> () const</td></tr>
-<tr class="separator:a747b9e8172704065f32c2c0b22c12eea inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a819275bac67ba6e090bbcbd72bb0b86b inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a819275bac67ba6e090bbcbd72bb0b86b">end</a> ()</td></tr>
-<tr class="separator:a819275bac67ba6e090bbcbd72bb0b86b inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa566b42b71903bee65db3b6dae769110 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#aa566b42b71903bee65db3b6dae769110">needsGammaCorrection</a> () const</td></tr>
-<tr class="separator:aa566b42b71903bee65db3b6dae769110 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a791c432d1d906eb14ff32a882c3f9633 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a791c432d1d906eb14ff32a882c3f9633">getId</a> () const</td></tr>
-<tr class="separator:a791c432d1d906eb14ff32a882c3f9633 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1452b05883e625b72284ee291f6b975c inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a1452b05883e625b72284ee291f6b975c">setId</a> (uint32_t value)</td></tr>
-<tr class="memdesc:a1452b05883e625b72284ee291f6b975c inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the pass ID.  <a href="../../d8/d22/a02044.html#a1452b05883e625b72284ee291f6b975c">More...</a><br /></td></tr>
-<tr class="separator:a1452b05883e625b72284ee291f6b975c inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab8528f2cfba7bd032e6100a86898e455 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d0/d85/a00976.html#a5acdeb9c32599fed9a198427565d72b8">castor3d::ComparisonFunc</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#ab8528f2cfba7bd032e6100a86898e455">getAlphaFunc</a> () const</td></tr>
-<tr class="separator:ab8528f2cfba7bd032e6100a86898e455 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a87f2d488f005630f3f8ec06f5e0accb5 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a87f2d488f005630f3f8ec06f5e0accb5">setAlphaFunc</a> (<a class="el" href="../../d0/d85/a00976.html#a5acdeb9c32599fed9a198427565d72b8">castor3d::ComparisonFunc</a> value)</td></tr>
-<tr class="memdesc:a87f2d488f005630f3f8ec06f5e0accb5 inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the alpha function.  <a href="../../d8/d22/a02044.html#a87f2d488f005630f3f8ec06f5e0accb5">More...</a><br /></td></tr>
-<tr class="separator:a87f2d488f005630f3f8ec06f5e0accb5 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ccad1e806e125101e2277999982fcb1 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a7ccad1e806e125101e2277999982fcb1">getAlphaValue</a> () const</td></tr>
-<tr class="separator:a7ccad1e806e125101e2277999982fcb1 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a95c2f58fedf1951fcb9261ac31ed6412 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a95c2f58fedf1951fcb9261ac31ed6412">setAlphaValue</a> (float value)</td></tr>
-<tr class="memdesc:a95c2f58fedf1951fcb9261ac31ed6412 inherit pub_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the alpha reference value.  <a href="../../d8/d22/a02044.html#a95c2f58fedf1951fcb9261ac31ed6412">More...</a><br /></td></tr>
-<tr class="separator:a95c2f58fedf1951fcb9261ac31ed6412 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae6d7fc739a401207ae97464165cab915 inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#ae6d7fc739a401207ae97464165cab915">hasSubsurfaceScattering</a> () const</td></tr>
-<tr class="separator:ae6d7fc739a401207ae97464165cab915 inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af46d3754344dcf544ab178901c28e1af inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#af46d3754344dcf544ab178901c28e1af">hasParallaxOcclusion</a> () const</td></tr>
-<tr class="separator:af46d3754344dcf544ab178901c28e1af inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad6e28793e4302f1aeb001e99a8d1d96a inherit pub_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/d8b/a02060.html">SubsurfaceScattering</a> const  &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#ad6e28793e4302f1aeb001e99a8d1d96a">getSubsurfaceScattering</a> () const</td></tr>
-<tr class="separator:ad6e28793e4302f1aeb001e99a8d1d96a inherit pub_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55e0aa0f614359a89b2c4f8b85c90b96"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/db2/a02036.html#a55e0aa0f614359a89b2c4f8b85c90b96">cleanupAnimations</a> ()</td></tr>
+<tr class="memdesc:a55e0aa0f614359a89b2c4f8b85c90b96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Empties the animations map.  <a href="#a55e0aa0f614359a89b2c4f8b85c90b96">More...</a><br /></td></tr>
+<tr class="separator:a55e0aa0f614359a89b2c4f8b85c90b96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a599c19a3b4de9a4b80ad9a04d9dcdce3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/db2/a02036.html#a599c19a3b4de9a4b80ad9a04d9dcdce3">hasAnimation</a> (castor::String const &amp;name) const</td></tr>
+<tr class="memdesc:a599c19a3b4de9a4b80ad9a04d9dcdce3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves an animation.  <a href="#a599c19a3b4de9a4b80ad9a04d9dcdce3">More...</a><br /></td></tr>
+<tr class="separator:a599c19a3b4de9a4b80ad9a04d9dcdce3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56b5cc702f8369124b1bd0f74d5de9f8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/db2/a02036.html#af166df7163a5b574419988ded46251ec">Animation</a> const  &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/db2/a02036.html#a56b5cc702f8369124b1bd0f74d5de9f8">getAnimation</a> (castor::String const &amp;name) const</td></tr>
+<tr class="memdesc:a56b5cc702f8369124b1bd0f74d5de9f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves an animation.  <a href="#a56b5cc702f8369124b1bd0f74d5de9f8">More...</a><br /></td></tr>
+<tr class="separator:a56b5cc702f8369124b1bd0f74d5de9f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4501da7f825e9b8a41fc8ab4f1aacfb0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/db2/a02036.html#af166df7163a5b574419988ded46251ec">Animation</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/db2/a02036.html#a4501da7f825e9b8a41fc8ab4f1aacfb0">getAnimation</a> (castor::String const &amp;name)</td></tr>
+<tr class="memdesc:a4501da7f825e9b8a41fc8ab4f1aacfb0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves an animation.  <a href="#a4501da7f825e9b8a41fc8ab4f1aacfb0">More...</a><br /></td></tr>
+<tr class="separator:a4501da7f825e9b8a41fc8ab4f1aacfb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7eba8a02433ff32863bebcc5969f09e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/db2/a02036.html#ad7eba8a02433ff32863bebcc5969f09e">addAnimation</a> (<a class="el" href="../../d7/db2/a02036.html#aa3dd4f795f385e026ec4137d1b3d53f7">AnimationPtr</a> animation)</td></tr>
+<tr class="memdesc:ad7eba8a02433ff32863bebcc5969f09e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an animation.  <a href="#ad7eba8a02433ff32863bebcc5969f09e">More...</a><br /></td></tr>
+<tr class="separator:ad7eba8a02433ff32863bebcc5969f09e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f731e4fa9d105d9dda6f409e552a755"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/db2/a02036.html#a20eee9b6a0eff7dc185a62905823ce8c">AnimationPtrStrMap</a> const  &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/db2/a02036.html#a0f731e4fa9d105d9dda6f409e552a755">getAnimations</a> () const</td></tr>
+<tr class="separator:a0f731e4fa9d105d9dda6f409e552a755"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pub_attribs_a02044"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_a02044')"><img src="../../closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="../../d8/d22/a02044.html">castor3d::Pass</a></td></tr>
-<tr class="memitem:af9b53724c4861cdbcc9d122c2b9b8908 inherit pub_attribs_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d0/d85/a00976.html#a8f41976f3fab2b68a985555b1b88523e">OnPassChanged</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#af9b53724c4861cdbcc9d122c2b9b8908">onChanged</a></td></tr>
-<tr class="separator:af9b53724c4861cdbcc9d122c2b9b8908 inherit pub_attribs_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_methods_a02044"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_a02044')"><img src="../../closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="../../d8/d22/a02044.html">castor3d::Pass</a></td></tr>
-<tr class="memitem:adbd35d91799171980767abf1e010746d inherit pro_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#adbd35d91799171980767abf1e010746d">Pass</a> (<a class="el" href="../../db/d68/a02028.html">Material</a> &amp;parent)</td></tr>
-<tr class="memdesc:adbd35d91799171980767abf1e010746d inherit pro_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../d8/d22/a02044.html#adbd35d91799171980767abf1e010746d">More...</a><br /></td></tr>
-<tr class="separator:adbd35d91799171980767abf1e010746d inherit pro_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a74eee47aa1790f57013e3b60d19d7ba8 inherit pro_methods_a02044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a74eee47aa1790f57013e3b60d19d7ba8">~Pass</a> ()</td></tr>
-<tr class="memdesc:a74eee47aa1790f57013e3b60d19d7ba8 inherit pro_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="../../d8/d22/a02044.html#a74eee47aa1790f57013e3b60d19d7ba8">More...</a><br /></td></tr>
-<tr class="separator:a74eee47aa1790f57013e3b60d19d7ba8 inherit pro_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa0aa07d7e98e01823f27d1e333492859 inherit pro_methods_a02044"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#aa0aa07d7e98e01823f27d1e333492859">doPrepareTexture</a> (<a class="el" href="../../d0/d85/a00976.html#afac4ec72b798000597676aebd077dca6">TextureChannel</a> channel, uint32_t &amp;index, TextureUnitSPtr &amp;opacitySource, castor::PxBufferBaseSPtr &amp;opacity)</td></tr>
-<tr class="memdesc:aa0aa07d7e98e01823f27d1e333492859 inherit pro_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prepares a texture to be integrated to the pass.  <a href="../../d8/d22/a02044.html#aa0aa07d7e98e01823f27d1e333492859">More...</a><br /></td></tr>
-<tr class="separator:aa0aa07d7e98e01823f27d1e333492859 inherit pro_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a62d306386f0eb7ca5ac78ab21d2c5c0b inherit pro_methods_a02044"><td class="memItemLeft" align="right" valign="top">castor::PxBufferBaseSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a62d306386f0eb7ca5ac78ab21d2c5c0b">doPrepareTexture</a> (<a class="el" href="../../d0/d85/a00976.html#afac4ec72b798000597676aebd077dca6">TextureChannel</a> channel, uint32_t &amp;index)</td></tr>
-<tr class="memdesc:a62d306386f0eb7ca5ac78ab21d2c5c0b inherit pro_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prepares a texture to be integrated to the pass.  <a href="../../d8/d22/a02044.html#a62d306386f0eb7ca5ac78ab21d2c5c0b">More...</a><br /></td></tr>
-<tr class="separator:a62d306386f0eb7ca5ac78ab21d2c5c0b inherit pro_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade99e9a40e6b6433ed6bcbc6e823fad0 inherit pro_methods_a02044"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#ade99e9a40e6b6433ed6bcbc6e823fad0">doPrepareOpacity</a> (TextureUnitSPtr opacitySource, castor::PxBufferBaseSPtr opacityImage, uint32_t &amp;index)</td></tr>
-<tr class="memdesc:ade99e9a40e6b6433ed6bcbc6e823fad0 inherit pro_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prepares the opacity channel.  <a href="../../d8/d22/a02044.html#ade99e9a40e6b6433ed6bcbc6e823fad0">More...</a><br /></td></tr>
-<tr class="separator:ade99e9a40e6b6433ed6bcbc6e823fad0 inherit pro_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8e7d12c886aff346ffe111557e2ca92 inherit pro_methods_a02044"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#ad8e7d12c886aff346ffe111557e2ca92">doUpdateFlags</a> ()</td></tr>
-<tr class="memdesc:ad8e7d12c886aff346ffe111557e2ca92 inherit pro_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the texture flags depending on the texture units.  <a href="../../d8/d22/a02044.html#ad8e7d12c886aff346ffe111557e2ca92">More...</a><br /></td></tr>
-<tr class="separator:ad8e7d12c886aff346ffe111557e2ca92 inherit pro_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7a9c83a1c02f598fea69edab082f8fa3 inherit pro_methods_a02044"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d22/a02044.html#a7a9c83a1c02f598fea69edab082f8fa3">doReduceTexture</a> (<a class="el" href="../../d0/d85/a00976.html#afac4ec72b798000597676aebd077dca6">TextureChannel</a> channel, castor::PixelFormat format)</td></tr>
-<tr class="memdesc:a7a9c83a1c02f598fea69edab082f8fa3 inherit pro_methods_a02044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reduces the texture at given channel to given pixel format.  <a href="../../d8/d22/a02044.html#a7a9c83a1c02f598fea69edab082f8fa3">More...</a><br /></td></tr>
-<tr class="separator:a7a9c83a1c02f598fea69edab082f8fa3 inherit pro_methods_a02044"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-types"></a>
+Protected Types</h2></td></tr>
+<tr class="memitem:af166df7163a5b574419988ded46251ec"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/db2/a02036.html#af166df7163a5b574419988ded46251ec">Animation</a> = <a class="el" href="../../d4/ddd/a02040.html">AnimationT</a>&lt; AnimableHanlerT &gt;</td></tr>
+<tr class="separator:af166df7163a5b574419988ded46251ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3dd4f795f385e026ec4137d1b3d53f7"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/db2/a02036.html#aa3dd4f795f385e026ec4137d1b3d53f7">AnimationPtr</a> = std::unique_ptr&lt; <a class="el" href="../../d7/db2/a02036.html#af166df7163a5b574419988ded46251ec">Animation</a> &gt;</td></tr>
+<tr class="separator:aa3dd4f795f385e026ec4137d1b3d53f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20eee9b6a0eff7dc185a62905823ce8c"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/db2/a02036.html#a20eee9b6a0eff7dc185a62905823ce8c">AnimationPtrStrMap</a> = std::map&lt; castor::String, <a class="el" href="../../d7/db2/a02036.html#aa3dd4f795f385e026ec4137d1b3d53f7">AnimationPtr</a> &gt;</td></tr>
+<tr class="separator:a20eee9b6a0eff7dc185a62905823ce8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a5cea5dff71a256fd1f56afd64d4ac065"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/db2/a02036.html#a5cea5dff71a256fd1f56afd64d4ac065">doRemoveAnimation</a> (castor::String const &amp;name)</td></tr>
+<tr class="memdesc:a5cea5dff71a256fd1f56afd64d4ac065"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes an animation.  <a href="#a5cea5dff71a256fd1f56afd64d4ac065">More...</a><br /></td></tr>
+<tr class="separator:a5cea5dff71a256fd1f56afd64d4ac065"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af490514e33d457d6ccb9a5f6417b9857"><td class="memTemplParams" colspan="2">template&lt;typename AnimationType &gt; </td></tr>
+<tr class="memitem:af490514e33d457d6ccb9a5f6417b9857"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="../../da/d1e/a01479.html#a62712d9ea9e9184dffafc59c48e8e6e5">AnimationType</a> &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d7/db2/a02036.html#af490514e33d457d6ccb9a5f6417b9857">doGetAnimation</a> (castor::String const &amp;name)</td></tr>
+<tr class="memdesc:af490514e33d457d6ccb9a5f6417b9857"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves an animation.  <a href="#af490514e33d457d6ccb9a5f6417b9857">More...</a><br /></td></tr>
+<tr class="separator:af490514e33d457d6ccb9a5f6417b9857"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Construction / Destruction.</div></td></tr>
+<tr class="memitem:a299fd668f3d9d65aeb7d0dbc259f921b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/db2/a02036.html#a299fd668f3d9d65aeb7d0dbc259f921b">AnimableT</a> (AnimableHanlerT &amp;owner)</td></tr>
+<tr class="separator:a299fd668f3d9d65aeb7d0dbc259f921b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31508c53a42741c828ca42c079631d69"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/db2/a02036.html#a31508c53a42741c828ca42c079631d69">~AnimableT</a> ()=default</td></tr>
+<tr class="separator:a31508c53a42741c828ca42c079631d69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad87437d17aba848283c70537eeeea2f9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/db2/a02036.html#ad87437d17aba848283c70537eeeea2f9">AnimableT</a> (<a class="el" href="../../d7/db2/a02036.html">AnimableT</a> &amp;&amp;rhs)=default</td></tr>
+<tr class="separator:ad87437d17aba848283c70537eeeea2f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac175c65ac8b324cee120925fd7d10773"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../d7/db2/a02036.html">AnimableT</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/db2/a02036.html#ac175c65ac8b324cee120925fd7d10773">operator=</a> (<a class="el" href="../../d7/db2/a02036.html">AnimableT</a> &amp;&amp;rhs)=delete</td></tr>
+<tr class="separator:ac175c65ac8b324cee120925fd7d10773"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09051c18d0af770f8a622b62f707a90e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/db2/a02036.html#a09051c18d0af770f8a622b62f707a90e">AnimableT</a> (<a class="el" href="../../d7/db2/a02036.html">AnimableT</a> const &amp;rhs)=delete</td></tr>
+<tr class="separator:a09051c18d0af770f8a622b62f707a90e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d58963898645284c95c86d7da5c23ee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../d7/db2/a02036.html">AnimableT</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/db2/a02036.html#a6d58963898645284c95c86d7da5c23ee">operator=</a> (<a class="el" href="../../d7/db2/a02036.html">AnimableT</a> const &amp;rhs)=delete</td></tr>
+<tr class="separator:a6d58963898645284c95c86d7da5c23ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:ae1eba45f60f9583c766623aa1165415e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/db2/a02036.html#a20eee9b6a0eff7dc185a62905823ce8c">AnimationPtrStrMap</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/db2/a02036.html#ae1eba45f60f9583c766623aa1165415e">m_animations</a></td></tr>
+<tr class="separator:ae1eba45f60f9583c766623aa1165415e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Definition of a PBR Metallic/Roughness pass. </p>
-<dl class="section author"><dt>Author</dt><dd>Sylvain DOREMUS </dd></dl>
-<dl class="section version"><dt>Version</dt><dd>0.9.0 </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>13/02/2017</dd></dl>
-<dl class="section remark"><dt>Remarks</dt><dd>A PBR pass is composed of : colour, roughness, reflectance. </dd></dl>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a8e0528dfd96b70c81b176155cd9da4ef"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8e0528dfd96b70c81b176155cd9da4ef">&#9670;&nbsp;</a></span>MetallicRoughnessPbrPass()</h2>
+<div class="textblock"><h3>template&lt;typename AnimableHanlerT&gt;<br />
+class castor3d::AnimableT&lt; AnimableHanlerT &gt;</h3>
+
+<p>Animable public interface. </p>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="af166df7163a5b574419988ded46251ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af166df7163a5b574419988ded46251ec">&#9670;&nbsp;</a></span>Animation</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename AnimableHanlerT&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::MetallicRoughnessPbrPass::MetallicRoughnessPbrPass </td>
+          <td class="memname">using <a class="el" href="../../d7/db2/a02036.html">castor3d::AnimableT</a>&lt; AnimableHanlerT &gt;::<a class="el" href="../../d7/db2/a02036.html#af166df7163a5b574419988ded46251ec">Animation</a> =  <a class="el" href="../../d4/ddd/a02040.html">AnimationT</a>&lt; AnimableHanlerT &gt;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa3dd4f795f385e026ec4137d1b3d53f7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa3dd4f795f385e026ec4137d1b3d53f7">&#9670;&nbsp;</a></span>AnimationPtr</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename AnimableHanlerT&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="../../d7/db2/a02036.html">castor3d::AnimableT</a>&lt; AnimableHanlerT &gt;::<a class="el" href="../../d7/db2/a02036.html#aa3dd4f795f385e026ec4137d1b3d53f7">AnimationPtr</a> =  std::unique_ptr&lt; <a class="el" href="../../d7/db2/a02036.html#af166df7163a5b574419988ded46251ec">Animation</a> &gt;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a20eee9b6a0eff7dc185a62905823ce8c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20eee9b6a0eff7dc185a62905823ce8c">&#9670;&nbsp;</a></span>AnimationPtrStrMap</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename AnimableHanlerT&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="../../d7/db2/a02036.html">castor3d::AnimableT</a>&lt; AnimableHanlerT &gt;::<a class="el" href="../../d7/db2/a02036.html#a20eee9b6a0eff7dc185a62905823ce8c">AnimationPtrStrMap</a> =  std::map&lt; castor::String, <a class="el" href="../../d7/db2/a02036.html#aa3dd4f795f385e026ec4137d1b3d53f7">AnimationPtr</a> &gt;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a299fd668f3d9d65aeb7d0dbc259f921b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a299fd668f3d9d65aeb7d0dbc259f921b">&#9670;&nbsp;</a></span>AnimableT() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename AnimableHanlerT&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d7/db2/a02036.html">castor3d::AnimableT</a>&lt; AnimableHanlerT &gt;::<a class="el" href="../../d7/db2/a02036.html">AnimableT</a> </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="../../db/d68/a02028.html">Material</a> &amp;&#160;</td>
-          <td class="paramname"><em>parent</em></td><td>)</td>
+          <td class="paramtype">AnimableHanlerT &amp;&#160;</td>
+          <td class="paramname"><em>owner</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Constructor. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>Used by <a class="el" href="../../db/d68/a02028.html" title="Definition of a material.">Material</a>, don't use it. </dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">parent</td><td>The parent material. </td></tr>
-  </table>
-  </dd>
-</dl>
-
 </div>
 </div>
-<a id="abcd1dcaad42aed365ce19d28d321123d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abcd1dcaad42aed365ce19d28d321123d">&#9670;&nbsp;</a></span>~MetallicRoughnessPbrPass()</h2>
+<a id="a31508c53a42741c828ca42c079631d69"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a31508c53a42741c828ca42c079631d69">&#9670;&nbsp;</a></span>~AnimableT()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename AnimableHanlerT&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor3d::MetallicRoughnessPbrPass::~MetallicRoughnessPbrPass </td>
+          <td class="memname">virtual <a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../d7/db2/a02036.html">castor3d::AnimableT</a>&lt; AnimableHanlerT &gt;::~<a class="el" href="../../d7/db2/a02036.html">AnimableT</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p>Destructor. </p>
+</div>
+</div>
+<a id="ad87437d17aba848283c70537eeeea2f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad87437d17aba848283c70537eeeea2f9">&#9670;&nbsp;</a></span>AnimableT() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename AnimableHanlerT&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../d7/db2/a02036.html">castor3d::AnimableT</a>&lt; AnimableHanlerT &gt;::<a class="el" href="../../d7/db2/a02036.html">AnimableT</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d7/db2/a02036.html">AnimableT</a>&lt; AnimableHanlerT &gt; &amp;&amp;&#160;</td>
+          <td class="paramname"><em>rhs</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a09051c18d0af770f8a622b62f707a90e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a09051c18d0af770f8a622b62f707a90e">&#9670;&nbsp;</a></span>AnimableT() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename AnimableHanlerT&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../d7/db2/a02036.html">castor3d::AnimableT</a>&lt; AnimableHanlerT &gt;::<a class="el" href="../../d7/db2/a02036.html">AnimableT</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d7/db2/a02036.html">AnimableT</a>&lt; AnimableHanlerT &gt; const &amp;&#160;</td>
+          <td class="paramname"><em>rhs</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a140fa1af13aafb414717061987071ab1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a140fa1af13aafb414717061987071ab1">&#9670;&nbsp;</a></span>accept()</h2>
+<a id="ad7eba8a02433ff32863bebcc5969f09e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad7eba8a02433ff32863bebcc5969f09e">&#9670;&nbsp;</a></span>addAnimation()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
+<div class="memtemplate">
+template&lt;typename AnimableHanlerT&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../df/dc8/a00122.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> void castor3d::MetallicRoughnessPbrPass::accept </td>
+          <td class="memname">void <a class="el" href="../../d7/db2/a02036.html">castor3d::AnimableT</a>&lt; AnimableHanlerT &gt;::addAnimation </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="../../d5/d7f/a03036.html">PassBuffer</a> &amp;&#160;</td>
-          <td class="paramname"><em>buffer</em></td><td>)</td>
-          <td> const</td>
+          <td class="paramtype"><a class="el" href="../../d7/db2/a02036.html#aa3dd4f795f385e026ec4137d1b3d53f7">AnimationPtr</a>&#160;</td>
+          <td class="paramname"><em>animation</em></td><td>)</td>
+          <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p>Fills shader variables of given render node. </p>
-
-<p>Implements <a class="el" href="../../d8/d22/a02044.html#aafe56e511ba96efcc10b1ab0936bb464">castor3d::Pass</a>.</p>
+<p>Adds an animation. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">animation</td><td>The animation. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
-<a id="a0dcdf414eecb4f1fc7838264817744be"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0dcdf414eecb4f1fc7838264817744be">&#9670;&nbsp;</a></span>getAlbedo()</h2>
+<a id="a55e0aa0f614359a89b2c4f8b85c90b96"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a55e0aa0f614359a89b2c4f8b85c90b96">&#9670;&nbsp;</a></span>cleanupAnimations()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename AnimableHanlerT&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">castor::RgbColour const&amp; castor3d::MetallicRoughnessPbrPass::getAlbedo </td>
+          <td class="memname">void <a class="el" href="../../d7/db2/a02036.html">castor3d::AnimableT</a>&lt; AnimableHanlerT &gt;::cleanupAnimations </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>The colour. </dd></dl>
-
-</div>
-</div>
-<a id="a8bb28652c30287d90d709a2d10ef5889"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8bb28652c30287d90d709a2d10ef5889">&#9670;&nbsp;</a></span>getMetallic()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float const&amp; castor3d::MetallicRoughnessPbrPass::getMetallic </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>The reflectance. </dd></dl>
-
-</div>
-</div>
-<a id="a3522cbffe3c972a1f3e91aeb5b0ddcf0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3522cbffe3c972a1f3e91aeb5b0ddcf0">&#9670;&nbsp;</a></span>getPassSize()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">uint32_t castor3d::MetallicRoughnessPbrPass::getPassSize </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="section remark"><dt>Remarks</dt><dd>Passes are aligned on float[4], so the size of a pass is the number of float[4] needed to contain it. </dd></dl>
-
-<p>Implements <a class="el" href="../../d8/d22/a02044.html#a5b88bf15e67ea2dcf4ee9bed758ffdf2">castor3d::Pass</a>.</p>
-
-</div>
-</div>
-<a id="ad2da23db622376a2166d3af0112066f5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad2da23db622376a2166d3af0112066f5">&#9670;&nbsp;</a></span>getRoughness()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float castor3d::MetallicRoughnessPbrPass::getRoughness </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>The roughness. </dd></dl>
-
-</div>
-</div>
-<a id="a905f9c0de627bd2d663710821c9069a9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a905f9c0de627bd2d663710821c9069a9">&#9670;&nbsp;</a></span>setAlbedo()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void castor3d::MetallicRoughnessPbrPass::setAlbedo </td>
-          <td>(</td>
-          <td class="paramtype">castor::RgbColour const &amp;&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -475,32 +393,138 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>sets the albedo colour. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>The new value. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="reference">References <a class="el" href="../../d8/d22/a02044.html#af9b53724c4861cdbcc9d122c2b9b8908">castor3d::Pass::onChanged</a>.</p>
+<p>Empties the animations map. </p>
 
 </div>
 </div>
-<a id="a06dcbe42056fcac346a272986cf4a5ec"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a06dcbe42056fcac346a272986cf4a5ec">&#9670;&nbsp;</a></span>setMetallic()</h2>
+<a id="af490514e33d457d6ccb9a5f6417b9857"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af490514e33d457d6ccb9a5f6417b9857">&#9670;&nbsp;</a></span>doGetAnimation()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename AnimableHanlerT&gt; </div>
+<div class="memtemplate">
+template&lt;typename AnimationType &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void castor3d::MetallicRoughnessPbrPass::setMetallic </td>
+          <td class="memname"><a class="el" href="../../da/d1e/a01479.html#a62712d9ea9e9184dffafc59c48e8e6e5">AnimationType</a>&amp; <a class="el" href="../../d7/db2/a02036.html">castor3d::AnimableT</a>&lt; AnimableHanlerT &gt;::doGetAnimation </td>
           <td>(</td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves an animation. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>The animation name </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The animation </dd></dl>
+
+</div>
+</div>
+<a id="a5cea5dff71a256fd1f56afd64d4ac065"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5cea5dff71a256fd1f56afd64d4ac065">&#9670;&nbsp;</a></span>doRemoveAnimation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename AnimableHanlerT&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="../../d7/db2/a02036.html">castor3d::AnimableT</a>&lt; AnimableHanlerT &gt;::doRemoveAnimation </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Removes an animation. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>The animation name </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a56b5cc702f8369124b1bd0f74d5de9f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56b5cc702f8369124b1bd0f74d5de9f8">&#9670;&nbsp;</a></span>getAnimation() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename AnimableHanlerT&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d7/db2/a02036.html#af166df7163a5b574419988ded46251ec">Animation</a> const&amp; <a class="el" href="../../d7/db2/a02036.html">castor3d::AnimableT</a>&lt; AnimableHanlerT &gt;::getAnimation </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves an animation. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>The animation name </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The animation </dd></dl>
+
+</div>
+</div>
+<a id="a4501da7f825e9b8a41fc8ab4f1aacfb0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4501da7f825e9b8a41fc8ab4f1aacfb0">&#9670;&nbsp;</a></span>getAnimation() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename AnimableHanlerT&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d7/db2/a02036.html#af166df7163a5b574419988ded46251ec">Animation</a>&amp; <a class="el" href="../../d7/db2/a02036.html">castor3d::AnimableT</a>&lt; AnimableHanlerT &gt;::getAnimation </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -511,33 +535,62 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>sets the reflectance. </p>
+<p>Retrieves an animation. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>The new value. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>The animation name </td></tr>
   </table>
   </dd>
 </dl>
-
-<p class="reference">References <a class="el" href="../../d8/d22/a02044.html#af9b53724c4861cdbcc9d122c2b9b8908">castor3d::Pass::onChanged</a>.</p>
+<dl class="section return"><dt>Returns</dt><dd>The animation </dd></dl>
 
 </div>
 </div>
-<a id="a97129799935edb55afd2d62a5663ad86"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a97129799935edb55afd2d62a5663ad86">&#9670;&nbsp;</a></span>setRoughness()</h2>
+<a id="a0f731e4fa9d105d9dda6f409e552a755"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f731e4fa9d105d9dda6f409e552a755">&#9670;&nbsp;</a></span>getAnimations()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename AnimableHanlerT&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void castor3d::MetallicRoughnessPbrPass::setRoughness </td>
+          <td class="memname"><a class="el" href="../../d7/db2/a02036.html#a20eee9b6a0eff7dc185a62905823ce8c">AnimationPtrStrMap</a> const&amp; <a class="el" href="../../d7/db2/a02036.html">castor3d::AnimableT</a>&lt; AnimableHanlerT &gt;::getAnimations </td>
           <td>(</td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
-          <td></td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The animations. </dd></dl>
+
+</div>
+</div>
+<a id="a599c19a3b4de9a4b80ad9a04d9dcdce3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a599c19a3b4de9a4b80ad9a04d9dcdce3">&#9670;&nbsp;</a></span>hasAnimation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename AnimableHanlerT&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="../../d7/db2/a02036.html">castor3d::AnimableT</a>&lt; AnimableHanlerT &gt;::hasAnimation </td>
+          <td>(</td>
+          <td class="paramtype">castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
   </td>
@@ -547,25 +600,108 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>sets the roughness. </p>
+<p>Retrieves an animation. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>The new value. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>The animation name </td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>The animation </dd></dl>
 
-<p class="reference">References <a class="el" href="../../d8/d22/a02044.html#af9b53724c4861cdbcc9d122c2b9b8908">castor3d::Pass::onChanged</a>.</p>
+</div>
+</div>
+<a id="ac175c65ac8b324cee120925fd7d10773"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac175c65ac8b324cee120925fd7d10773">&#9670;&nbsp;</a></span>operator=() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename AnimableHanlerT&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../d7/db2/a02036.html">AnimableT</a>&amp; <a class="el" href="../../d7/db2/a02036.html">castor3d::AnimableT</a>&lt; AnimableHanlerT &gt;::operator= </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d7/db2/a02036.html">AnimableT</a>&lt; AnimableHanlerT &gt; &amp;&amp;&#160;</td>
+          <td class="paramname"><em>rhs</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6d58963898645284c95c86d7da5c23ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d58963898645284c95c86d7da5c23ee">&#9670;&nbsp;</a></span>operator=() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename AnimableHanlerT&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d5/d35/a00266.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> <a class="el" href="../../d7/db2/a02036.html">AnimableT</a>&amp; <a class="el" href="../../d7/db2/a02036.html">castor3d::AnimableT</a>&lt; AnimableHanlerT &gt;::operator= </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d7/db2/a02036.html">AnimableT</a>&lt; AnimableHanlerT &gt; const &amp;&#160;</td>
+          <td class="paramname"><em>rhs</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="ae1eba45f60f9583c766623aa1165415e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1eba45f60f9583c766623aa1165415e">&#9670;&nbsp;</a></span>m_animations</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename AnimableHanlerT&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d7/db2/a02036.html#a20eee9b6a0eff7dc185a62905823ce8c">AnimationPtrStrMap</a> <a class="el" href="../../d7/db2/a02036.html">castor3d::AnimableT</a>&lt; AnimableHanlerT &gt;::m_animations</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>All animations. </p>
+
+<p class="reference">Referenced by <a class="el" href="../../d7/db2/a02036.html#a0f731e4fa9d105d9dda6f409e552a755">castor3d::AnimableT&lt; Engine &gt;::getAnimations()</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/Material/<a class="el" href="../../d3/de5/a00209.html">MetallicRoughnessPbrPass.hpp</a></li>
+<li>Animation/<a class="el" href="../../db/db6/a00074.html">Animable.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 13:38:33 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Feb 18 2021 01:09:08 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

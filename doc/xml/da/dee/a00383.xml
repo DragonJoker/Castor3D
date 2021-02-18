@@ -1,0 +1,131 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="da/dee/a00383" kind="file" language="C++">
+    <compoundname>GpuObjectTracker.hpp</compoundname>
+    <includes refid="d4/d27/a00392" local="yes">MiscellaneousModule.hpp</includes>
+    <includes local="no">CastorUtils/Design/Named.hpp</includes>
+    <includes local="no">list</includes>
+    <includedby refid="d3/d60/a00818" local="yes">Render/RenderSystem.hpp</includedby>
+    <incdepgraph>
+      <node id="7448">
+        <label>list</label>
+      </node>
+      <node id="7439">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="7442">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="7443">
+        <label>cstdint</label>
+      </node>
+      <node id="7447">
+        <label>CastorUtils/Design/Named.hpp</label>
+      </node>
+      <node id="7441">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="7434">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d5/d35/a00266"/>
+        <childnode refid="7435" relation="include">
+        </childnode>
+        <childnode refid="7436" relation="include">
+        </childnode>
+        <childnode refid="7437" relation="include">
+        </childnode>
+        <childnode refid="7438" relation="include">
+        </childnode>
+        <childnode refid="7439" relation="include">
+        </childnode>
+        <childnode refid="7440" relation="include">
+        </childnode>
+        <childnode refid="7441" relation="include">
+        </childnode>
+        <childnode refid="7442" relation="include">
+        </childnode>
+        <childnode refid="7443" relation="include">
+        </childnode>
+        <childnode refid="7444" relation="include">
+        </childnode>
+        <childnode refid="7445" relation="include">
+        </childnode>
+        <childnode refid="7446" relation="include">
+        </childnode>
+      </node>
+      <node id="7445">
+        <label>string</label>
+      </node>
+      <node id="7438">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="7435">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="7437">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="7433">
+        <label>MiscellaneousModule.hpp</label>
+        <link refid="d4/d27/a00392"/>
+        <childnode refid="7434" relation="include">
+        </childnode>
+      </node>
+      <node id="7436">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="7446">
+        <label>vector</label>
+      </node>
+      <node id="7440">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="7432">
+        <label>Miscellaneous/GpuObjectTracker.hpp</label>
+        <link refid="da/dee/a00383"/>
+        <childnode refid="7433" relation="include">
+        </childnode>
+        <childnode refid="7447" relation="include">
+        </childnode>
+        <childnode refid="7448" relation="include">
+        </childnode>
+      </node>
+      <node id="7444">
+        <label>memory</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="7450">
+        <label>Render/RenderSystem.hpp</label>
+        <link refid="d3/d60/a00818"/>
+      </node>
+      <node id="7449">
+        <label>Miscellaneous/GpuObjectTracker.hpp</label>
+        <link refid="da/dee/a00383"/>
+        <childnode refid="7450" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="d5/d6a/a02680" prot="public">castor3d::GpuObjectTracker</innerclass>
+    <innerclass refid="de/db4/a02684" prot="public">castor3d::GpuObjectTracker::ObjectDeclaration</innerclass>
+    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+      <sectiondef kind="define">
+      <memberdef kind="define" id="da/dee/a00383_1afb1cc3657645669b17a323dee0e894cb" prot="public" static="no">
+        <name>C3D_TRACE_OBJECTS</name>
+        <initializer>1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/GpuObjectTracker.hpp" line="9" column="11" bodyfile="Miscellaneous/GpuObjectTracker.hpp" bodystart="9" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Miscellaneous/GpuObjectTracker.hpp"/>
+  </compounddef>
+</doxygen>

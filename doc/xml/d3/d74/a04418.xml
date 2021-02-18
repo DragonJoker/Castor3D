@@ -1,0 +1,161 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d3/d74/a04418" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::RenderGridBuilderT</compoundname>
+    <basecompoundref refid="d0/d4c/a04422" prot="public" virt="non-virtual">castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;</basecompoundref>
+    <includes local="no">RenderGrid.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename</type>
+        <declname>ConfigT</declname>
+        <defname>ConfigT</defname>
+      </param>
+      <param>
+        <type>typename</type>
+        <declname>BuilderT</declname>
+        <defname>BuilderT</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/d74/a04418_1ab53833e3acc8950f02165f629b44f43c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::RenderGridBuilderT&lt; ConfigT, BuilderT &gt;::RenderGridBuilderT</definition>
+        <argsstring>()</argsstring>
+        <name>RenderGridBuilderT</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="499" column="1" bodyfile="Render/Passes/RenderGrid.hpp" bodystart="499" bodyend="501"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d74/a04418_1a30474670e562376b1cf521265ad95180" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>RenderGridUPtr</type>
+        <definition>RenderGridUPtr castor3d::RenderGridBuilderT&lt; ConfigT, BuilderT &gt;::build</definition>
+        <argsstring>(RenderDevice const &amp;device, castor::String const &amp;name, VkFilter samplerFilter, uint32_t gridSize)</argsstring>
+        <name>build</name>
+        <param>
+          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkFilter</type>
+          <declname>samplerFilter</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>gridSize</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Creates the <ref refid="df/de5/a04426" kindref="compound">RenderGrid</ref>. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The <ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref>. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">samplerFilter</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The sampler filter for the source texture. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">gridSize</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The grid dimensions. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="524" column="1" bodyfile="Render/Passes/RenderGrid.hpp" bodystart="524" bodyend="534"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Used to create a <ref refid="df/de5/a04426" kindref="compound">RenderGrid</ref> variable. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2918">
+        <label>castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;</label>
+        <link refid="d0/d4c/a04422"/>
+      </node>
+      <node id="2917">
+        <label>castor3d::RenderGridBuilderT&lt; ConfigT, BuilderT &gt;</label>
+        <link refid="d3/d74/a04418"/>
+        <childnode refid="2918" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2919">
+        <label>castor3d::RenderGridBuilderT&lt; rq::Config, RenderGridBuilder &gt;</label>
+        <link refid="d3/d74/a04418"/>
+        <childnode refid="2917" relation="template-instance">
+          <edgelabel>&lt; rq::Config, RenderGridBuilder &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2920">
+        <label>castor3d::RenderGridBuilder</label>
+        <link refid="d9/d36/a04430"/>
+        <childnode refid="2919" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2922">
+        <label>castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;</label>
+        <link refid="d0/d4c/a04422"/>
+        <childnode refid="2923" relation="usage">
+          <edgelabel>m_config</edgelabel>
+        </childnode>
+      </node>
+      <node id="2921">
+        <label>castor3d::RenderGridBuilderT&lt; ConfigT, BuilderT &gt;</label>
+        <link refid="d3/d74/a04418"/>
+        <childnode refid="2922" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2923">
+        <label>ConfigT</label>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Passes/PassesModule.hpp" line="107" column="1" bodyfile="Render/Passes/PassesModule.hpp" bodystart="107" bodyend="-1"/>
+    <listofallmembers>
+      <member refid="d0/d4c/a04422_1a26a1231b102001a6f31e2a03a940a92b" prot="public" virt="non-virtual"><scope>castor3d::RenderGridBuilderT</scope><name>binding</name></member>
+      <member refid="d0/d4c/a04422_1aac898289485433fc71343f13a96abd7d" prot="public" virt="non-virtual"><scope>castor3d::RenderGridBuilderT</scope><name>binding</name></member>
+      <member refid="d0/d4c/a04422_1a26cbd79ac36e4dec53ab50cf9410674e" prot="public" virt="non-virtual"><scope>castor3d::RenderGridBuilderT</scope><name>binding</name></member>
+      <member refid="d0/d4c/a04422_1a7f1e5bea975d79ab849dd0e1032763d2" prot="public" virt="non-virtual"><scope>castor3d::RenderGridBuilderT</scope><name>bindings</name></member>
+      <member refid="d0/d4c/a04422_1ab79d0233219ed09c4ab108a544cbb091" prot="public" virt="non-virtual"><scope>castor3d::RenderGridBuilderT</scope><name>blendMode</name></member>
+      <member refid="d3/d74/a04418_1a30474670e562376b1cf521265ad95180" prot="public" virt="non-virtual"><scope>castor3d::RenderGridBuilderT</scope><name>build</name></member>
+      <member refid="d0/d4c/a04422_1a4a58abd503ed0bff1600be8605477258" prot="public" virt="non-virtual" ambiguityscope="castor3d::RenderQuadBuilderT::"><scope>castor3d::RenderGridBuilderT</scope><name>build</name></member>
+      <member refid="d0/d4c/a04422_1aa7fc146147deb53c51c646122d66eef6" prot="protected" virt="non-virtual"><scope>castor3d::RenderGridBuilderT</scope><name>m_config</name></member>
+      <member refid="d0/d4c/a04422_1a420f77dfb83539957ebec08cdf8f59a8" prot="public" virt="non-virtual"><scope>castor3d::RenderGridBuilderT</scope><name>range</name></member>
+      <member refid="d3/d74/a04418_1ab53833e3acc8950f02165f629b44f43c" prot="public" virt="non-virtual"><scope>castor3d::RenderGridBuilderT</scope><name>RenderGridBuilderT</name></member>
+      <member refid="d0/d4c/a04422_1a13037f2937494dc1ab0f713225aeedd6" prot="public" virt="non-virtual"><scope>castor3d::RenderGridBuilderT</scope><name>RenderQuadBuilderT</name></member>
+      <member refid="d0/d4c/a04422_1a12b262dcd13123f72d7468b5b0f2d4e9" prot="public" virt="non-virtual"><scope>castor3d::RenderGridBuilderT</scope><name>texcoordConfig</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

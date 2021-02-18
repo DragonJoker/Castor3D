@@ -1,0 +1,519 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d9/dad/a04314" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ObjectRenderNode</compoundname>
+    <derivedcompoundref refid="d7/d12/a04298" prot="public" virt="non-virtual">castor3d::BillboardRenderNode</derivedcompoundref>
+    <derivedcompoundref refid="d2/dfc/a04310" prot="public" virt="non-virtual">castor3d::MorphingRenderNode</derivedcompoundref>
+    <derivedcompoundref refid="dd/d0e/a04350" prot="public" virt="non-virtual">castor3d::SkinningRenderNode</derivedcompoundref>
+    <derivedcompoundref refid="d6/db7/a04354" prot="public" virt="non-virtual">castor3d::StaticRenderNode</derivedcompoundref>
+    <includes local="no">RenderNodeModule.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename DataTypeT</type>
+      </param>
+      <param>
+        <type>typename InstanceTypeT</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d9/dad/a04314_1ac978b6ccff4e9775582dcafd1399dc2e" prot="public" static="no">
+        <type>DataTypeT</type>
+        <definition>using castor3d::ObjectRenderNode&lt; DataTypeT, InstanceTypeT &gt;::DataType =  DataTypeT</definition>
+        <argsstring></argsstring>
+        <name>DataType</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/ObjectRenderNode.hpp" line="21" column="1" bodyfile="Render/Node/ObjectRenderNode.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d9/dad/a04314_1aee832b75502f22fbf4b9a886f2b11487" prot="public" static="no">
+        <type>InstanceTypeT</type>
+        <definition>using castor3d::ObjectRenderNode&lt; DataTypeT, InstanceTypeT &gt;::InstanceType =  InstanceTypeT</definition>
+        <argsstring></argsstring>
+        <name>InstanceType</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/ObjectRenderNode.hpp" line="22" column="1" bodyfile="Render/Node/ObjectRenderNode.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d9/dad/a04314_1a5dc38e49cff2eb5cdea2446b978f047f" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/d98/a04610" kindref="compound">RenderPipeline</ref> &amp;</type>
+        <definition>RenderPipeline&amp; castor3d::ObjectRenderNode&lt; DataTypeT, InstanceTypeT &gt;::pipeline</definition>
+        <argsstring></argsstring>
+        <name>pipeline</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/ObjectRenderNode.hpp" line="41" column="1" bodyfile="Render/Node/ObjectRenderNode.hpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dad/a04314_1ac4131c5f2757aa2c624b2fb286bfe316" prot="public" static="no" mutable="no">
+        <type><ref refid="d3/d8c/a04318" kindref="compound">PassRenderNode</ref></type>
+        <definition>PassRenderNode castor3d::ObjectRenderNode&lt; DataTypeT, InstanceTypeT &gt;::passNode</definition>
+        <argsstring></argsstring>
+        <name>passNode</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/ObjectRenderNode.hpp" line="42" column="1" bodyfile="Render/Node/ObjectRenderNode.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dad/a04314_1a6d24c32231b61a32cb31deae21dee74d" prot="public" static="no" mutable="no">
+        <type><ref refid="dd/dae/a02294" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d4/de2/a05578" kindref="compound">ModelMatrixUboConfiguration</ref> &gt;</type>
+        <definition>UniformBufferOffsetT&lt; ModelMatrixUboConfiguration &gt; castor3d::ObjectRenderNode&lt; DataTypeT, InstanceTypeT &gt;::modelMatrixUbo</definition>
+        <argsstring></argsstring>
+        <name>modelMatrixUbo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/ObjectRenderNode.hpp" line="43" column="1" bodyfile="Render/Node/ObjectRenderNode.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dad/a04314_1a9d1dba37b0ef889fb3a8f19ef7d9488e" prot="public" static="no" mutable="no">
+        <type><ref refid="dd/dae/a02294" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="df/da8/a05582" kindref="compound">ModelUboConfiguration</ref> &gt;</type>
+        <definition>UniformBufferOffsetT&lt; ModelUboConfiguration &gt; castor3d::ObjectRenderNode&lt; DataTypeT, InstanceTypeT &gt;::modelUbo</definition>
+        <argsstring></argsstring>
+        <name>modelUbo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/ObjectRenderNode.hpp" line="44" column="1" bodyfile="Render/Node/ObjectRenderNode.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dad/a04314_1a3f68f6599e5724288b23d12793346010" prot="public" static="no" mutable="no">
+        <type><ref refid="dd/dae/a02294" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d3/ddd/a05594" kindref="compound">PickingUboConfiguration</ref> &gt;</type>
+        <definition>UniformBufferOffsetT&lt; PickingUboConfiguration &gt; castor3d::ObjectRenderNode&lt; DataTypeT, InstanceTypeT &gt;::pickingUbo</definition>
+        <argsstring></argsstring>
+        <name>pickingUbo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/ObjectRenderNode.hpp" line="45" column="1" bodyfile="Render/Node/ObjectRenderNode.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dad/a04314_1aa4539c98bce1d3e94e4ad471e3eb8487" prot="public" static="no" mutable="no">
+        <type><ref refid="dd/dae/a02294" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="dc/d69/a05614" kindref="compound">TexturesUboConfiguration</ref> &gt;</type>
+        <definition>UniformBufferOffsetT&lt; TexturesUboConfiguration &gt; castor3d::ObjectRenderNode&lt; DataTypeT, InstanceTypeT &gt;::texturesUbo</definition>
+        <argsstring></argsstring>
+        <name>texturesUbo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/ObjectRenderNode.hpp" line="46" column="1" bodyfile="Render/Node/ObjectRenderNode.hpp" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dad/a04314_1ae95cccedfb7320b95deed2662a0121ab" prot="public" static="no" mutable="no">
+        <type><ref refid="dd/dae/a02294" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d3/d27/a05574" kindref="compound">ModelInstancesUboConfiguration</ref> &gt;</type>
+        <definition>UniformBufferOffsetT&lt; ModelInstancesUboConfiguration &gt; castor3d::ObjectRenderNode&lt; DataTypeT, InstanceTypeT &gt;::modelInstancesUbo</definition>
+        <argsstring></argsstring>
+        <name>modelInstancesUbo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/ObjectRenderNode.hpp" line="47" column="1" bodyfile="Render/Node/ObjectRenderNode.hpp" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dad/a04314_1a255ba78335d0f74d664f226339c29450" prot="public" static="no" mutable="no">
+        <type><ref refid="d3/d58/a02302" kindref="compound">GeometryBuffers</ref> const  &amp;</type>
+        <definition>GeometryBuffers const&amp; castor3d::ObjectRenderNode&lt; DataTypeT, InstanceTypeT &gt;::buffers</definition>
+        <argsstring></argsstring>
+        <name>buffers</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/ObjectRenderNode.hpp" line="48" column="1" bodyfile="Render/Node/ObjectRenderNode.hpp" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dad/a04314_1a79244663521a4e43b1e025764bd59815" prot="public" static="no" mutable="no">
+        <type><ref refid="d8/de7/a05250" kindref="compound">SceneNode</ref> &amp;</type>
+        <definition>SceneNode&amp; castor3d::ObjectRenderNode&lt; DataTypeT, InstanceTypeT &gt;::sceneNode</definition>
+        <argsstring></argsstring>
+        <name>sceneNode</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/ObjectRenderNode.hpp" line="49" column="1" bodyfile="Render/Node/ObjectRenderNode.hpp" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dad/a04314_1ac681909d031a28cfae6906b915b41d28" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dad/a04314_1ac978b6ccff4e9775582dcafd1399dc2e" kindref="member">DataType</ref> &amp;</type>
+        <definition>DataType&amp; castor3d::ObjectRenderNode&lt; DataTypeT, InstanceTypeT &gt;::data</definition>
+        <argsstring></argsstring>
+        <name>data</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/ObjectRenderNode.hpp" line="50" column="1" bodyfile="Render/Node/ObjectRenderNode.hpp" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dad/a04314_1a06e411bd5fd7949c61eecb155ed01faf" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dad/a04314_1aee832b75502f22fbf4b9a886f2b11487" kindref="member">InstanceType</ref> &amp;</type>
+        <definition>InstanceType&amp; castor3d::ObjectRenderNode&lt; DataTypeT, InstanceTypeT &gt;::instance</definition>
+        <argsstring></argsstring>
+        <name>instance</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/ObjectRenderNode.hpp" line="51" column="1" bodyfile="Render/Node/ObjectRenderNode.hpp" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dad/a04314_1a35ac48ae1cc8b7d679465d822a324cdc" prot="public" static="no" mutable="no">
+        <type>ashes::DescriptorSetPtr</type>
+        <definition>ashes::DescriptorSetPtr castor3d::ObjectRenderNode&lt; DataTypeT, InstanceTypeT &gt;::uboDescriptorSet</definition>
+        <argsstring></argsstring>
+        <name>uboDescriptorSet</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/ObjectRenderNode.hpp" line="52" column="1" bodyfile="Render/Node/ObjectRenderNode.hpp" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dad/a04314_1a3465b01cb839a12f604d1e65530a676f" prot="public" static="no" mutable="no">
+        <type>ashes::DescriptorSetPtr</type>
+        <definition>ashes::DescriptorSetPtr castor3d::ObjectRenderNode&lt; DataTypeT, InstanceTypeT &gt;::texDescriptorSet</definition>
+        <argsstring></argsstring>
+        <name>texDescriptorSet</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/ObjectRenderNode.hpp" line="53" column="1" bodyfile="Render/Node/ObjectRenderNode.hpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d9/dad/a04314_1a5a57f8e86f0be7bd7db41380961bb670" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ObjectRenderNode&lt; DataTypeT, InstanceTypeT &gt;::ObjectRenderNode</definition>
+        <argsstring>(ObjectRenderNode const &amp;)=delete</argsstring>
+        <name>ObjectRenderNode</name>
+        <param>
+          <type><ref refid="d9/dad/a04314" kindref="compound">ObjectRenderNode</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/ObjectRenderNode.hpp" line="24" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/dad/a04314_1a336e57376fdc842314baf596b26b9334" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ObjectRenderNode&lt; DataTypeT, InstanceTypeT &gt;::ObjectRenderNode</definition>
+        <argsstring>(ObjectRenderNode &amp;&amp;)=default</argsstring>
+        <name>ObjectRenderNode</name>
+        <param>
+          <type><ref refid="d9/dad/a04314" kindref="compound">ObjectRenderNode</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/ObjectRenderNode.hpp" line="25" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/dad/a04314_1ac20c1daa2684bf81e39d76a40ece6c81" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/dad/a04314" kindref="compound">ObjectRenderNode</ref> &amp;</type>
+        <definition>C3D_API ObjectRenderNode&amp; castor3d::ObjectRenderNode&lt; DataTypeT, InstanceTypeT &gt;::operator=</definition>
+        <argsstring>(ObjectRenderNode const &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <param>
+          <type><ref refid="d9/dad/a04314" kindref="compound">ObjectRenderNode</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/ObjectRenderNode.hpp" line="26" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/dad/a04314_1acc1593a55eb5d814e132c85e14bc72a3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/dad/a04314" kindref="compound">ObjectRenderNode</ref> &amp;</type>
+        <definition>C3D_API ObjectRenderNode&amp; castor3d::ObjectRenderNode&lt; DataTypeT, InstanceTypeT &gt;::operator=</definition>
+        <argsstring>(ObjectRenderNode &amp;&amp;)=default</argsstring>
+        <name>operator=</name>
+        <param>
+          <type><ref refid="d9/dad/a04314" kindref="compound">ObjectRenderNode</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/ObjectRenderNode.hpp" line="27" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/dad/a04314_1aee731fd52a1af46ece31c023b85a2680" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ObjectRenderNode&lt; DataTypeT, InstanceTypeT &gt;::ObjectRenderNode</definition>
+        <argsstring>(RenderPipeline &amp;pipeline, PassRenderNode &amp;&amp;passNode, UniformBufferOffsetT&lt; ModelMatrixUboConfiguration &gt; modelMatrixBuffer, UniformBufferOffsetT&lt; ModelUboConfiguration &gt; modelBuffer, UniformBufferOffsetT&lt; PickingUboConfiguration &gt; pickingBuffer, UniformBufferOffsetT&lt; TexturesUboConfiguration &gt; texturesBuffer, UniformBufferOffsetT&lt; ModelInstancesUboConfiguration &gt; modelInstancesBuffer, GeometryBuffers const &amp;buffers, SceneNode &amp;sceneNode, DataType &amp;data, InstanceType &amp;instance)</argsstring>
+        <name>ObjectRenderNode</name>
+        <param>
+          <type><ref refid="d9/d98/a04610" kindref="compound">RenderPipeline</ref> &amp;</type>
+          <declname>pipeline</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d8c/a04318" kindref="compound">PassRenderNode</ref> &amp;&amp;</type>
+          <declname>passNode</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/dae/a02294" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d4/de2/a05578" kindref="compound">ModelMatrixUboConfiguration</ref> &gt;</type>
+          <declname>modelMatrixBuffer</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/dae/a02294" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="df/da8/a05582" kindref="compound">ModelUboConfiguration</ref> &gt;</type>
+          <declname>modelBuffer</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/dae/a02294" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d3/ddd/a05594" kindref="compound">PickingUboConfiguration</ref> &gt;</type>
+          <declname>pickingBuffer</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/dae/a02294" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="dc/d69/a05614" kindref="compound">TexturesUboConfiguration</ref> &gt;</type>
+          <declname>texturesBuffer</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/dae/a02294" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d3/d27/a05574" kindref="compound">ModelInstancesUboConfiguration</ref> &gt;</type>
+          <declname>modelInstancesBuffer</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d58/a02302" kindref="compound">GeometryBuffers</ref> const &amp;</type>
+          <declname>buffers</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/de7/a05250" kindref="compound">SceneNode</ref> &amp;</type>
+          <declname>sceneNode</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dad/a04314_1ac978b6ccff4e9775582dcafd1399dc2e" kindref="member">DataType</ref> &amp;</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dad/a04314_1aee832b75502f22fbf4b9a886f2b11487" kindref="member">InstanceType</ref> &amp;</type>
+          <declname>instance</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/ObjectRenderNode.hpp" line="29" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Helper structure used to render objects. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2330">
+        <label>castor3d::ObjectRenderNode&lt; DataTypeT, InstanceTypeT &gt;</label>
+        <link refid="d9/dad/a04314"/>
+      </node>
+      <node id="2333">
+        <label>castor3d::SkinningRenderNode&lt; Submesh, Geometry &gt;</label>
+        <link refid="dd/d0e/a04350"/>
+        <childnode refid="2330" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2334">
+        <label>castor3d::StaticRenderNode&lt; Submesh, Geometry &gt;</label>
+        <link refid="d6/db7/a04354"/>
+        <childnode refid="2330" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2332">
+        <label>castor3d::MorphingRenderNode&lt; Submesh, Geometry &gt;</label>
+        <link refid="d2/dfc/a04310"/>
+        <childnode refid="2330" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2331">
+        <label>castor3d::BillboardRenderNode&lt; BillboardBase, BillboardBase &gt;</label>
+        <link refid="d7/d12/a04298"/>
+        <childnode refid="2330" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2341">
+        <label>castor::OwnedBy&lt; Material &gt;</label>
+      </node>
+      <node id="2347">
+        <label>castor3d::SceneNode</label>
+        <link refid="d8/de7/a05250"/>
+        <childnode refid="2348" relation="public-inheritance">
+        </childnode>
+        <childnode refid="2349" relation="public-inheritance">
+        </childnode>
+        <childnode refid="2350" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2346">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::ModelUboConfiguration &gt;</label>
+        <link refid="dd/dae/a02294"/>
+        <childnode refid="2338" relation="template-instance">
+          <edgelabel>&lt; castor3d::ModelUboConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2335">
+        <label>castor3d::ObjectRenderNode&lt; DataTypeT, InstanceTypeT &gt;</label>
+        <link refid="d9/dad/a04314"/>
+        <childnode refid="2336" relation="usage">
+          <edgelabel>buffers</edgelabel>
+        </childnode>
+        <childnode refid="2337" relation="usage">
+          <edgelabel>modelMatrixUbo</edgelabel>
+        </childnode>
+        <childnode refid="2339" relation="usage">
+          <edgelabel>passNode</edgelabel>
+        </childnode>
+        <childnode refid="2342" relation="usage">
+          <edgelabel>pipeline</edgelabel>
+        </childnode>
+        <childnode refid="2344" relation="usage">
+          <edgelabel>pickingUbo</edgelabel>
+        </childnode>
+        <childnode refid="2345" relation="usage">
+          <edgelabel>texturesUbo</edgelabel>
+        </childnode>
+        <childnode refid="2346" relation="usage">
+          <edgelabel>modelUbo</edgelabel>
+        </childnode>
+        <childnode refid="2347" relation="usage">
+          <edgelabel>sceneNode</edgelabel>
+        </childnode>
+        <childnode refid="2351" relation="usage">
+          <edgelabel>modelInstancesUbo</edgelabel>
+        </childnode>
+      </node>
+      <node id="2344">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::PickingUboConfiguration &gt;</label>
+        <link refid="dd/dae/a02294"/>
+        <childnode refid="2338" relation="template-instance">
+          <edgelabel>&lt; castor3d::PickingUboConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2349">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+      </node>
+      <node id="2343">
+        <label>castor::OwnedBy&lt; SceneRenderPass &gt;</label>
+      </node>
+      <node id="2338">
+        <label>castor3d::UniformBufferOffsetT&lt; DataT &gt;</label>
+        <link refid="dd/dae/a02294"/>
+      </node>
+      <node id="2348">
+        <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
+      </node>
+      <node id="2350">
+        <label>Named</label>
+      </node>
+      <node id="2351">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::ModelInstancesUboConfiguration &gt;</label>
+        <link refid="dd/dae/a02294"/>
+        <childnode refid="2338" relation="template-instance">
+          <edgelabel>&lt; castor3d::ModelInstancesUboConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2337">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::ModelMatrixUboConfiguration &gt;</label>
+        <link refid="dd/dae/a02294"/>
+        <childnode refid="2338" relation="template-instance">
+          <edgelabel>&lt; castor3d::ModelMatrixUboConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2336">
+        <label>castor3d::GeometryBuffers</label>
+        <link refid="d3/d58/a02302"/>
+      </node>
+      <node id="2340">
+        <label>castor3d::Pass</label>
+        <link refid="df/d57/a02590"/>
+        <childnode refid="2341" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2342">
+        <label>castor3d::RenderPipeline</label>
+        <link refid="d9/d98/a04610"/>
+        <childnode refid="2343" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2339">
+        <label>castor3d::PassRenderNode</label>
+        <link refid="d3/d8c/a04318"/>
+        <childnode refid="2340" relation="usage">
+          <edgelabel>pass</edgelabel>
+        </childnode>
+      </node>
+      <node id="2345">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::TexturesUboConfiguration &gt;</label>
+        <link refid="dd/dae/a02294"/>
+        <childnode refid="2338" relation="template-instance">
+          <edgelabel>&lt; castor3d::TexturesUboConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Node/ObjectRenderNode.hpp" line="20" column="1" bodyfile="Render/Node/ObjectRenderNode.hpp" bodystart="19" bodyend="54"/>
+    <listofallmembers>
+      <member refid="d9/dad/a04314_1a255ba78335d0f74d664f226339c29450" prot="public" virt="non-virtual"><scope>castor3d::ObjectRenderNode</scope><name>buffers</name></member>
+      <member refid="d9/dad/a04314_1ac681909d031a28cfae6906b915b41d28" prot="public" virt="non-virtual"><scope>castor3d::ObjectRenderNode</scope><name>data</name></member>
+      <member refid="d9/dad/a04314_1ac978b6ccff4e9775582dcafd1399dc2e" prot="public" virt="non-virtual"><scope>castor3d::ObjectRenderNode</scope><name>DataType</name></member>
+      <member refid="d9/dad/a04314_1a06e411bd5fd7949c61eecb155ed01faf" prot="public" virt="non-virtual"><scope>castor3d::ObjectRenderNode</scope><name>instance</name></member>
+      <member refid="d9/dad/a04314_1aee832b75502f22fbf4b9a886f2b11487" prot="public" virt="non-virtual"><scope>castor3d::ObjectRenderNode</scope><name>InstanceType</name></member>
+      <member refid="d9/dad/a04314_1ae95cccedfb7320b95deed2662a0121ab" prot="public" virt="non-virtual"><scope>castor3d::ObjectRenderNode</scope><name>modelInstancesUbo</name></member>
+      <member refid="d9/dad/a04314_1a6d24c32231b61a32cb31deae21dee74d" prot="public" virt="non-virtual"><scope>castor3d::ObjectRenderNode</scope><name>modelMatrixUbo</name></member>
+      <member refid="d9/dad/a04314_1a9d1dba37b0ef889fb3a8f19ef7d9488e" prot="public" virt="non-virtual"><scope>castor3d::ObjectRenderNode</scope><name>modelUbo</name></member>
+      <member refid="d9/dad/a04314_1a5a57f8e86f0be7bd7db41380961bb670" prot="public" virt="non-virtual"><scope>castor3d::ObjectRenderNode</scope><name>ObjectRenderNode</name></member>
+      <member refid="d9/dad/a04314_1a336e57376fdc842314baf596b26b9334" prot="public" virt="non-virtual"><scope>castor3d::ObjectRenderNode</scope><name>ObjectRenderNode</name></member>
+      <member refid="d9/dad/a04314_1aee731fd52a1af46ece31c023b85a2680" prot="public" virt="non-virtual"><scope>castor3d::ObjectRenderNode</scope><name>ObjectRenderNode</name></member>
+      <member refid="d9/dad/a04314_1ac20c1daa2684bf81e39d76a40ece6c81" prot="public" virt="non-virtual"><scope>castor3d::ObjectRenderNode</scope><name>operator=</name></member>
+      <member refid="d9/dad/a04314_1acc1593a55eb5d814e132c85e14bc72a3" prot="public" virt="non-virtual"><scope>castor3d::ObjectRenderNode</scope><name>operator=</name></member>
+      <member refid="d9/dad/a04314_1ac4131c5f2757aa2c624b2fb286bfe316" prot="public" virt="non-virtual"><scope>castor3d::ObjectRenderNode</scope><name>passNode</name></member>
+      <member refid="d9/dad/a04314_1a3f68f6599e5724288b23d12793346010" prot="public" virt="non-virtual"><scope>castor3d::ObjectRenderNode</scope><name>pickingUbo</name></member>
+      <member refid="d9/dad/a04314_1a5dc38e49cff2eb5cdea2446b978f047f" prot="public" virt="non-virtual"><scope>castor3d::ObjectRenderNode</scope><name>pipeline</name></member>
+      <member refid="d9/dad/a04314_1a79244663521a4e43b1e025764bd59815" prot="public" virt="non-virtual"><scope>castor3d::ObjectRenderNode</scope><name>sceneNode</name></member>
+      <member refid="d9/dad/a04314_1a3465b01cb839a12f604d1e65530a676f" prot="public" virt="non-virtual"><scope>castor3d::ObjectRenderNode</scope><name>texDescriptorSet</name></member>
+      <member refid="d9/dad/a04314_1aa4539c98bce1d3e94e4ad471e3eb8487" prot="public" virt="non-virtual"><scope>castor3d::ObjectRenderNode</scope><name>texturesUbo</name></member>
+      <member refid="d9/dad/a04314_1a35ac48ae1cc8b7d679465d822a324cdc" prot="public" virt="non-virtual"><scope>castor3d::ObjectRenderNode</scope><name>uboDescriptorSet</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

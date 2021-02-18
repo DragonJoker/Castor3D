@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_7bf0d4aab34c07453e778eaa2a6f1045" kind="dir">
+    <compoundname>Shader/PassBuffer</compoundname>
+    <innerfile refid="d6/db6/a01172">MetallicRoughnessPassBuffer.hpp</innerfile>
+    <innerfile refid="d6/df2/a01175">PassBuffer.hpp</innerfile>
+    <innerfile refid="d8/d11/a01178">PassBufferModule.hpp</innerfile>
+    <innerfile refid="de/db5/a01181">PhongPassBuffer.hpp</innerfile>
+    <innerfile refid="d1/d35/a01184">SpecularGlossinessPassBuffer.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/PassBuffer/"/>
+  </compounddef>
+</doxygen>

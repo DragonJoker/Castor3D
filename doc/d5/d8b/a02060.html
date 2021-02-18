@@ -5,11 +5,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: castor3d::SubsurfaceScattering Class Reference</title>
+<title>Castor3D: castor3d::InterpolatorT&lt; DataT, InterpolatorType::eNearest &gt; Class Template Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
 <link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+<link href="../../Castor3D.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -17,10 +18,12 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Castor3D
-   &#160;<span id="projectnumber">..</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
+   <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
  </tr>
  </tbody>
@@ -39,433 +42,187 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../d0/d85/a00976.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d5/d8b/a02060.html">SubsurfaceScattering</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/d1e/a01479.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d5/d8b/a02060.html">InterpolatorT&lt; DataT, InterpolatorType::eNearest &gt;</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
-<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="../../d2/dea/a02057.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">castor3d::SubsurfaceScattering Class Reference</div>  </div>
+<div class="title">castor3d::InterpolatorT&lt; DataT, InterpolatorType::eNearest &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Extended pass information, related to subsurface scattering.  
+<p>Partial specialisation of <a class="el" href="../../d3/df9/a02052.html" title="Template class which handles the interpolations, would it be quaternion, point, real,...">InterpolatorT</a>, for <a class="el" href="../../da/d1e/a01479.html#ad38387ab8e17377a42314bc21c171ab0a6d4cace607e544346702a204c5e524c8">InterpolatorType::eNearest</a>.  
  <a href="../../d5/d8b/a02060.html#details">More...</a></p>
+<div class="dynheader">
+Inheritance diagram for castor3d::InterpolatorT&lt; DataT, InterpolatorType::eNearest &gt;:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../da/df3/a02059.png" border="0" usemap="#castor3d_1_1InterpolatorT_3_01DataT_00_01InterpolatorType_1_1eNearest_01_4_inherit__map" alt="Inheritance graph"/></div>
+<map name="castor3d_1_1InterpolatorT_3_01DataT_00_01InterpolatorType_1_1eNearest_01_4_inherit__map" id="castor3d_1_1InterpolatorT_3_01DataT_00_01InterpolatorType_1_1eNearest_01_4_inherit__map">
+<area shape="rect"  title="Partial specialisation of InterpolatorT, for InterpolatorType::eNearest." alt="" coords="5,95,173,151"/>
+<area shape="rect"  href="../../d1/d39/a02048.html" title="Template class which handles the interpolations, would it be quaternion, point, real,..." alt="" coords="17,5,161,47"/>
+</map>
+<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
+<div class="dynheader">
+Collaboration diagram for castor3d::InterpolatorT&lt; DataT, InterpolatorType::eNearest &gt;:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../df/d03/a02058.png" border="0" usemap="#castor3d_1_1InterpolatorT_3_01DataT_00_01InterpolatorType_1_1eNearest_01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="castor3d_1_1InterpolatorT_3_01DataT_00_01InterpolatorType_1_1eNearest_01_4_coll__map" id="castor3d_1_1InterpolatorT_3_01DataT_00_01InterpolatorType_1_1eNearest_01_4_coll__map">
+<area shape="rect"  title="Partial specialisation of InterpolatorT, for InterpolatorType::eNearest." alt="" coords="5,95,173,151"/>
+<area shape="rect"  href="../../d1/d39/a02048.html" title="Template class which handles the interpolations, would it be quaternion, point, real,..." alt="" coords="17,5,161,47"/>
+</map>
+<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/def/a02064.html">TextWriter</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../d8/d22/a02044.html" title="Base class of a material pass.">Pass</a> loader.  <a href="../../de/def/a02064.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
-Public Types</h2></td></tr>
-<tr class="memitem:a937b49557187f05df7d022d22a4e342a"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d8b/a02060.html#a937b49557187f05df7d022d22a4e342a">Changed</a> = std::function&lt; void(<a class="el" href="../../d5/d8b/a02060.html">SubsurfaceScattering</a> const &amp;) &gt;</td></tr>
-<tr class="separator:a937b49557187f05df7d022d22a4e342a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a621c34180322b3c59bd9ada1381177cc"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d8b/a02060.html#a621c34180322b3c59bd9ada1381177cc">OnChanged</a> = castor::Signal&lt; <a class="el" href="../../d5/d8b/a02060.html#a937b49557187f05df7d022d22a4e342a">Changed</a> &gt;</td></tr>
-<tr class="separator:a621c34180322b3c59bd9ada1381177cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad7fd02e96be04ee4d909b96e615c849f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d8b/a02060.html#ad7fd02e96be04ee4d909b96e615c849f">OnChangedConnection</a> = OnChanged::connection</td></tr>
-<tr class="separator:ad7fd02e96be04ee4d909b96e615c849f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a21a4bf5cca2349b2f8969c35a3e1a39a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d8b/a02060.html#a21a4bf5cca2349b2f8969c35a3e1a39a">getGaussianWidth</a> () const</td></tr>
-<tr class="separator:a21a4bf5cca2349b2f8969c35a3e1a39a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a50850455bb68ac1119b84d168da0f6a4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d8b/a02060.html#a50850455bb68ac1119b84d168da0f6a4">setGaussianWidth</a> (float value)</td></tr>
-<tr class="memdesc:a50850455bb68ac1119b84d168da0f6a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the Gaussian filter width.  <a href="#a50850455bb68ac1119b84d168da0f6a4">More...</a><br /></td></tr>
-<tr class="separator:a50850455bb68ac1119b84d168da0f6a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1c4744c056ebefd23e91fb0d2b12f6d7"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d8b/a02060.html#a1c4744c056ebefd23e91fb0d2b12f6d7">getStrength</a> () const</td></tr>
-<tr class="separator:a1c4744c056ebefd23e91fb0d2b12f6d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac5bebe58a25426abbd5491ba224e01be"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d8b/a02060.html#ac5bebe58a25426abbd5491ba224e01be">setStrength</a> (float value)</td></tr>
-<tr class="memdesc:ac5bebe58a25426abbd5491ba224e01be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the scattering strength.  <a href="#ac5bebe58a25426abbd5491ba224e01be">More...</a><br /></td></tr>
-<tr class="separator:ac5bebe58a25426abbd5491ba224e01be"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b4c580a35c4912961aa822a85b25060"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d8b/a02060.html#a7b4c580a35c4912961aa822a85b25060">addProfileFactor</a> (castor::Point4f const &amp;value)</td></tr>
-<tr class="memdesc:a7b4c580a35c4912961aa822a85b25060"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a factor to the transmittance profile.  <a href="#a7b4c580a35c4912961aa822a85b25060">More...</a><br /></td></tr>
-<tr class="separator:a7b4c580a35c4912961aa822a85b25060"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b79cb40060912cb21c386c80d155ea0"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d8b/a02060.html#a3b79cb40060912cb21c386c80d155ea0">getProfileSize</a> () const</td></tr>
-<tr class="separator:a3b79cb40060912cb21c386c80d155ea0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af9c39397e4657e56461b0d7d5f1173cd"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d8b/a02060.html#af9c39397e4657e56461b0d7d5f1173cd">begin</a> ()</td></tr>
-<tr class="separator:af9c39397e4657e56461b0d7d5f1173cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a605894579a490167d89c7d6905c08f2f"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d8b/a02060.html#a605894579a490167d89c7d6905c08f2f">begin</a> () const</td></tr>
-<tr class="separator:a605894579a490167d89c7d6905c08f2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2b0b4b57bc1a88cfb6db8daeef3a3cc1"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d8b/a02060.html#a2b0b4b57bc1a88cfb6db8daeef3a3cc1">end</a> ()</td></tr>
-<tr class="separator:a2b0b4b57bc1a88cfb6db8daeef3a3cc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6c1b8467df393b4faf4b8122b6bd3caf"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d8b/a02060.html#a6c1b8467df393b4faf4b8122b6bd3caf">end</a> () const</td></tr>
-<tr class="separator:a6c1b8467df393b4faf4b8122b6bd3caf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:aa2e134491ecfd9a008469de7ab27a2b5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/d8b/a02060.html#a621c34180322b3c59bd9ada1381177cc">OnChanged</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d8b/a02060.html#aa2e134491ecfd9a008469de7ab27a2b5">onChanged</a></td></tr>
-<tr class="separator:aa2e134491ecfd9a008469de7ab27a2b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8d4a97efb18c301c13ff60b9e568cc1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d8b/a02060.html#aa8d4a97efb18c301c13ff60b9e568cc1">InterpolatorT</a> ()</td></tr>
+<tr class="memdesc:aa8d4a97efb18c301c13ff60b9e568cc1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#aa8d4a97efb18c301c13ff60b9e568cc1">More...</a><br /></td></tr>
+<tr class="separator:aa8d4a97efb18c301c13ff60b9e568cc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a417459b4b7c54117faa3920f48e5a66a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d8b/a02060.html#a417459b4b7c54117faa3920f48e5a66a">~InterpolatorT</a> ()</td></tr>
+<tr class="memdesc:a417459b4b7c54117faa3920f48e5a66a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="#a417459b4b7c54117faa3920f48e5a66a">More...</a><br /></td></tr>
+<tr class="separator:a417459b4b7c54117faa3920f48e5a66a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a4f31bda83af9363dea99bd79694c63"><td class="memItemLeft" align="right" valign="top">DataT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d8b/a02060.html#a4a4f31bda83af9363dea99bd79694c63">interpolate</a> (DataT const &amp;src, DataT const &amp;, float) const override</td></tr>
+<tr class="memdesc:a4a4f31bda83af9363dea99bd79694c63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Interpolation function.  <a href="#a4a4f31bda83af9363dea99bd79694c63">More...</a><br /></td></tr>
+<tr class="separator:a4a4f31bda83af9363dea99bd79694c63"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_a02048"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_a02048')"><img src="../../closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="../../d1/d39/a02048.html">castor3d::Interpolator&lt; DataT &gt;</a></td></tr>
+<tr class="memitem:a6e868724abfa1dca7cfc0d2d0637beb0 inherit pub_methods_a02048"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d39/a02048.html#a6e868724abfa1dca7cfc0d2d0637beb0">Interpolator</a> ()</td></tr>
+<tr class="memdesc:a6e868724abfa1dca7cfc0d2d0637beb0 inherit pub_methods_a02048"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../d1/d39/a02048.html#a6e868724abfa1dca7cfc0d2d0637beb0">More...</a><br /></td></tr>
+<tr class="separator:a6e868724abfa1dca7cfc0d2d0637beb0 inherit pub_methods_a02048"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7c508adbeae8c638612f3366db88e79 inherit pub_methods_a02048"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d39/a02048.html#aa7c508adbeae8c638612f3366db88e79">~Interpolator</a> ()</td></tr>
+<tr class="memdesc:aa7c508adbeae8c638612f3366db88e79 inherit pub_methods_a02048"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="../../d1/d39/a02048.html#aa7c508adbeae8c638612f3366db88e79">More...</a><br /></td></tr>
+<tr class="separator:aa7c508adbeae8c638612f3366db88e79 inherit pub_methods_a02048"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Extended pass information, related to subsurface scattering. </p>
+<div class="textblock"><h3>template&lt;class DataT&gt;<br />
+class castor3d::InterpolatorT&lt; DataT, InterpolatorType::eNearest &gt;</h3>
+
+<p>Partial specialisation of <a class="el" href="../../d3/df9/a02052.html" title="Template class which handles the interpolations, would it be quaternion, point, real,...">InterpolatorT</a>, for <a class="el" href="../../da/d1e/a01479.html#ad38387ab8e17377a42314bc21c171ab0a6d4cace607e544346702a204c5e524c8">InterpolatorType::eNearest</a>. </p>
 <dl class="section author"><dt>Author</dt><dd>Sylvain DOREMUS </dd></dl>
-<dl class="section version"><dt>Version</dt><dd>0.10.0 </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>11/09/2017 </dd></dl>
-</div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="a937b49557187f05df7d022d22a4e342a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a937b49557187f05df7d022d22a4e342a">&#9670;&nbsp;</a></span>Changed</h2>
+<dl class="section version"><dt>Version</dt><dd>0.8.0 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>24/01/2016 </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="aa8d4a97efb18c301c13ff60b9e568cc1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa8d4a97efb18c301c13ff60b9e568cc1">&#9670;&nbsp;</a></span>InterpolatorT()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;class DataT &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="../../d5/d8b/a02060.html#a937b49557187f05df7d022d22a4e342a">castor3d::SubsurfaceScattering::Changed</a> =  std::function&lt; void( <a class="el" href="../../d5/d8b/a02060.html">SubsurfaceScattering</a> const &amp; ) &gt;</td>
+          <td class="memname"><a class="el" href="../../d3/df9/a02052.html">castor3d::InterpolatorT</a>&lt; DataT, <a class="el" href="../../da/d1e/a01479.html#ad38387ab8e17377a42314bc21c171ab0a6d4cace607e544346702a204c5e524c8">InterpolatorType::eNearest</a> &gt;::<a class="el" href="../../d3/df9/a02052.html">InterpolatorT</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
+
+<p>Constructor. </p>
 
 </div>
 </div>
-<a id="a621c34180322b3c59bd9ada1381177cc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a621c34180322b3c59bd9ada1381177cc">&#9670;&nbsp;</a></span>OnChanged</h2>
+<a id="a417459b4b7c54117faa3920f48e5a66a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a417459b4b7c54117faa3920f48e5a66a">&#9670;&nbsp;</a></span>~InterpolatorT()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;class DataT &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="../../d5/d8b/a02060.html#a621c34180322b3c59bd9ada1381177cc">castor3d::SubsurfaceScattering::OnChanged</a> =  castor::Signal&lt; <a class="el" href="../../d5/d8b/a02060.html#a937b49557187f05df7d022d22a4e342a">Changed</a> &gt;</td>
+          <td class="memname"><a class="el" href="../../d3/df9/a02052.html">castor3d::InterpolatorT</a>&lt; DataT, <a class="el" href="../../da/d1e/a01479.html#ad38387ab8e17377a42314bc21c171ab0a6d4cace607e544346702a204c5e524c8">InterpolatorType::eNearest</a> &gt;::~<a class="el" href="../../d3/df9/a02052.html">InterpolatorT</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-</div>
-</div>
-<a id="ad7fd02e96be04ee4d909b96e615c849f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad7fd02e96be04ee4d909b96e615c849f">&#9670;&nbsp;</a></span>OnChangedConnection</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="../../d5/d8b/a02060.html#ad7fd02e96be04ee4d909b96e615c849f">castor3d::SubsurfaceScattering::OnChangedConnection</a> =  OnChanged::connection</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
+<p>Destructor. </p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a7b4c580a35c4912961aa822a85b25060"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7b4c580a35c4912961aa822a85b25060">&#9670;&nbsp;</a></span>addProfileFactor()</h2>
+<a id="a4a4f31bda83af9363dea99bd79694c63"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a4f31bda83af9363dea99bd79694c63">&#9670;&nbsp;</a></span>interpolate()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;class DataT &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void castor3d::SubsurfaceScattering::addProfileFactor </td>
+          <td class="memname">DataT <a class="el" href="../../d3/df9/a02052.html">castor3d::InterpolatorT</a>&lt; DataT, <a class="el" href="../../da/d1e/a01479.html#ad38387ab8e17377a42314bc21c171ab0a6d4cace607e544346702a204c5e524c8">InterpolatorType::eNearest</a> &gt;::interpolate </td>
           <td>(</td>
-          <td class="paramtype">castor::Point4f const &amp;&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
+          <td class="paramtype">DataT const &amp;&#160;</td>
+          <td class="paramname"><em>src</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">DataT const &amp;&#160;</td>
+          <td class="paramname">, </td>
         </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Adds a factor to the transmittance profile. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>The value to add. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="reference">References <a class="el" href="../../d5/d8b/a02060.html#aa2e134491ecfd9a008469de7ab27a2b5">onChanged</a>.</p>
-
-</div>
-</div>
-<a id="af9c39397e4657e56461b0d7d5f1173cd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af9c39397e4657e56461b0d7d5f1173cd">&#9670;&nbsp;</a></span>begin() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
         <tr>
-          <td class="memname">auto castor3d::SubsurfaceScattering::begin </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramkey"></td>
           <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>The iterator to the beginning of the transmittance profile. </dd></dl>
-
-</div>
-</div>
-<a id="a605894579a490167d89c7d6905c08f2f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a605894579a490167d89c7d6905c08f2f">&#9670;&nbsp;</a></span>begin() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">auto castor3d::SubsurfaceScattering::begin </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>The iterator to the beginning of the transmittance profile. </dd></dl>
-
-</div>
-</div>
-<a id="a2b0b4b57bc1a88cfb6db8daeef3a3cc1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2b0b4b57bc1a88cfb6db8daeef3a3cc1">&#9670;&nbsp;</a></span>end() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">auto castor3d::SubsurfaceScattering::end </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>The iterator to the end of the transmittance profile. </dd></dl>
-
-</div>
-</div>
-<a id="a6c1b8467df393b4faf4b8122b6bd3caf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6c1b8467df393b4faf4b8122b6bd3caf">&#9670;&nbsp;</a></span>end() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">auto castor3d::SubsurfaceScattering::end </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>The iterator to the end of the transmittance profile. </dd></dl>
-
-</div>
-</div>
-<a id="a21a4bf5cca2349b2f8969c35a3e1a39a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a21a4bf5cca2349b2f8969c35a3e1a39a">&#9670;&nbsp;</a></span>getGaussianWidth()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float castor3d::SubsurfaceScattering::getGaussianWidth </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>The Gaussian filter width. </dd></dl>
-
-</div>
-</div>
-<a id="a3b79cb40060912cb21c386c80d155ea0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3b79cb40060912cb21c386c80d155ea0">&#9670;&nbsp;</a></span>getProfileSize()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">uint32_t castor3d::SubsurfaceScattering::getProfileSize </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>The transmmittance profile factors count. </dd></dl>
-
-</div>
-</div>
-<a id="a1c4744c056ebefd23e91fb0d2b12f6d7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1c4744c056ebefd23e91fb0d2b12f6d7">&#9670;&nbsp;</a></span>getStrength()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float castor3d::SubsurfaceScattering::getStrength </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>The scattering strength. </dd></dl>
-
-</div>
-</div>
-<a id="a50850455bb68ac1119b84d168da0f6a4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a50850455bb68ac1119b84d168da0f6a4">&#9670;&nbsp;</a></span>setGaussianWidth()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void castor3d::SubsurfaceScattering::setGaussianWidth </td>
-          <td>(</td>
           <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
           <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Sets the Gaussian filter width. </p>
+<p>Interpolation function. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>The new value. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">src</td><td>The start. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="reference">References <a class="el" href="../../d5/d8b/a02060.html#aa2e134491ecfd9a008469de7ab27a2b5">onChanged</a>.</p>
-
-</div>
-</div>
-<a id="ac5bebe58a25426abbd5491ba224e01be"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac5bebe58a25426abbd5491ba224e01be">&#9670;&nbsp;</a></span>setStrength()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void castor3d::SubsurfaceScattering::setStrength </td>
-          <td>(</td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Sets the scattering strength. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>The new value. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="reference">References <a class="el" href="../../d5/d8b/a02060.html#aa2e134491ecfd9a008469de7ab27a2b5">onChanged</a>.</p>
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="aa2e134491ecfd9a008469de7ab27a2b5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa2e134491ecfd9a008469de7ab27a2b5">&#9670;&nbsp;</a></span>onChanged</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../d5/d8b/a02060.html#a621c34180322b3c59bd9ada1381177cc">OnChanged</a> castor3d::SubsurfaceScattering::onChanged</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="reference">Referenced by <a class="el" href="../../d5/d8b/a02060.html#a7b4c580a35c4912961aa822a85b25060">addProfileFactor()</a>, <a class="el" href="../../d5/d8b/a02060.html#a50850455bb68ac1119b84d168da0f6a4">setGaussianWidth()</a>, and <a class="el" href="../../d5/d8b/a02060.html#ac5bebe58a25426abbd5491ba224e01be">setStrength()</a>.</p>
+<p>Implements <a class="el" href="../../d1/d39/a02048.html#a38c4c864a411f0fbc92d8af20d4ec52f">castor3d::Interpolator&lt; DataT &gt;</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/Material/<a class="el" href="../../dc/d9a/a00218.html">SubsurfaceScattering.hpp</a></li>
+<li>Animation/<a class="el" href="../../da/d2a/a00086.html">Interpolator.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 13:38:50 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Feb 18 2021 01:09:13 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

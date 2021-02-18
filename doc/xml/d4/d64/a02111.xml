@@ -1,0 +1,135 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d4/d64/a02111" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::BinaryParser&lt; MeshAnimation &gt;</compoundname>
+    <basecompoundref refid="d1/d90/a02127" prot="public" virt="non-virtual">castor3d::BinaryParserBase&lt; MeshAnimation &gt;</basecompoundref>
+    <includes local="no">BinaryMeshAnimation.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d4/d64/a02111_1ab383b7d77eebdc9c6068cd65f0a7afce" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::BinaryParser&lt; MeshAnimation &gt;::doParse</definition>
+        <argsstring>(MeshAnimation &amp;obj) override</argsstring>
+        <name>doParse</name>
+        <reimplements refid="d1/d90/a02127_1a020a66d5fc1b452dc76c82702d72bbb1">doParse</reimplements>
+        <param>
+          <type><ref refid="d1/da3/a03835" kindref="compound">MeshAnimation</ref> &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <briefdescription>
+<para>Function used to retrieve specific data from the chunk. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to read. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryMeshAnimation.hpp" line="80" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para><ref refid="d1/da3/a03835" kindref="compound">MeshAnimation</ref> binary loader. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="version"><para>0.8.0 </para>
+</simplesect>
+<simplesect kind="date"><para>26/01/2016</para>
+</simplesect>
+Loader binaire de <ref refid="d1/da3/a03835" kindref="compound">MeshAnimation</ref>. </para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="261">
+        <label>castor3d::BinaryParserBase&lt; TParsed &gt;</label>
+        <link refid="d1/d90/a02127"/>
+      </node>
+      <node id="259">
+        <label>castor3d::BinaryParser&lt; MeshAnimation &gt;</label>
+        <link refid="d4/d64/a02111"/>
+        <childnode refid="260" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="260">
+        <label>castor3d::BinaryParserBase&lt; MeshAnimation &gt;</label>
+        <link refid="d1/d90/a02127"/>
+        <childnode refid="261" relation="template-instance">
+          <edgelabel>&lt; MeshAnimation &gt;</edgelabel>
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="266">
+        <label>castor3d::BinaryParserBase&lt; TParsed &gt;</label>
+        <link refid="d1/d90/a02127"/>
+        <childnode refid="264" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
+        </childnode>
+        <childnode refid="265" relation="usage">
+          <edgelabel>m_fileVersion</edgelabel>
+        </childnode>
+      </node>
+      <node id="265">
+        <label>castor3d::Version</label>
+        <link refid="d2/db0/a03827"/>
+      </node>
+      <node id="262">
+        <label>castor3d::BinaryParser&lt; MeshAnimation &gt;</label>
+        <link refid="d4/d64/a02111"/>
+        <childnode refid="263" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="264">
+        <label>castor3d::BinaryChunk</label>
+        <link refid="d2/d31/a02087"/>
+      </node>
+      <node id="263">
+        <label>castor3d::BinaryParserBase&lt; MeshAnimation &gt;</label>
+        <link refid="d1/d90/a02127"/>
+        <childnode refid="264" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
+        </childnode>
+        <childnode refid="265" relation="usage">
+          <edgelabel>m_fileVersion</edgelabel>
+        </childnode>
+        <childnode refid="266" relation="template-instance">
+          <edgelabel>&lt; MeshAnimation &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Binary/BinaryMeshAnimation.hpp" line="68" column="1" bodyfile="Binary/BinaryMeshAnimation.hpp" bodystart="66" bodyend="81"/>
+    <listofallmembers>
+      <member refid="d1/d90/a02127_1ad1fbebf70ad5b1caae1a7eb57c2f82e4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>checkError</name></member>
+      <member refid="d1/d90/a02127_1ae6f4694ede819151fe4e30e33235ff07" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>createBinaryParser</name></member>
+      <member refid="d1/d90/a02127_1ab5f9ba53ad5865f967b41e5a27ed73a9" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>doGetSubChunk</name></member>
+      <member refid="d4/d64/a02111_1ab383b7d77eebdc9c6068cd65f0a7afce" prot="private" virt="virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>doParse</name></member>
+      <member refid="d1/d90/a02127_1a0e1aa917e3bf897fab03a32d20890062" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>doParseChunk</name></member>
+      <member refid="d1/d90/a02127_1a22ca62addb3ab167995e18f49267efcf" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>doParseChunk</name></member>
+      <member refid="d1/d90/a02127_1a5a648553ce168f5bc34adeedc8d169a7" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>doParseChunk</name></member>
+      <member refid="d1/d90/a02127_1a90df4e46072e5ef14aebebd00cbcc1f5" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>doParseChunk</name></member>
+      <member refid="d1/d90/a02127_1a5fac84360102001f5e730be1927c024e" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>doParseChunk</name></member>
+      <member refid="d1/d90/a02127_1a035881aba2b64571b30a5efd3faaf3d9" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>doParseHeader</name></member>
+      <member refid="d1/d90/a02127_1ab3df04f9aa2eb1f7a533ed18631f09c4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>m_chunk</name></member>
+      <member refid="d1/d90/a02127_1a455764ca72b659dab2652baf56ce5885" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>m_fileVersion</name></member>
+      <member refid="d1/d90/a02127_1ae4820a3ab3e4b282240e5f1b969153c1" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>Name</name></member>
+      <member refid="d1/d90/a02127_1a5db83668684ca219f67de3a381898e64" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>parse</name></member>
+      <member refid="d1/d90/a02127_1a6bbbb529f463085c7d259600ae1b3e99" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>parse</name></member>
+      <member refid="d1/d90/a02127_1a61b02dbf69d89569eff5be22facd5f07" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>parse_v1_1</name></member>
+      <member refid="d1/d90/a02127_1a95788692ddd6fae91074c299b674aaab" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>parse_v1_2</name></member>
+      <member refid="d1/d90/a02127_1a6f39b66d980e4a65660016f71115a89c" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>parse_v1_3</name></member>
+      <member refid="d1/d90/a02127_1aabc068daf8d99718497aa35f7a17c346" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; MeshAnimation &gt;</scope><name>parse_v1_4</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

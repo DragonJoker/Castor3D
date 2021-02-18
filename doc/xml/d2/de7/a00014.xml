@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d2/de7/a00014" kind="file" language="C++">
+    <compoundname>Interpolator.hpp</compoundname>
+    <includes refid="dd/d22/a07229" local="yes">AnimationModule.hpp</includes>
+    <includedby refid="df/dbc/a01004" local="yes">Scene/Animation/Skeleton/SkeletonAnimationInstanceObject.hpp</includedby>
+    <incdepgraph>
+      <node id="641">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="644">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="645">
+        <label>cstdint</label>
+      </node>
+      <node id="643">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="636">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="dc/d57/a00194"/>
+        <childnode refid="637" relation="include">
+        </childnode>
+        <childnode refid="638" relation="include">
+        </childnode>
+        <childnode refid="639" relation="include">
+        </childnode>
+        <childnode refid="640" relation="include">
+        </childnode>
+        <childnode refid="641" relation="include">
+        </childnode>
+        <childnode refid="642" relation="include">
+        </childnode>
+        <childnode refid="643" relation="include">
+        </childnode>
+        <childnode refid="644" relation="include">
+        </childnode>
+        <childnode refid="645" relation="include">
+        </childnode>
+        <childnode refid="646" relation="include">
+        </childnode>
+        <childnode refid="647" relation="include">
+        </childnode>
+        <childnode refid="648" relation="include">
+        </childnode>
+      </node>
+      <node id="647">
+        <label>string</label>
+      </node>
+      <node id="640">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="637">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="639">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="649">
+        <label>CastorUtils/Math/Quaternion.hpp</label>
+      </node>
+      <node id="638">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="635">
+        <label>AnimationModule.hpp</label>
+        <link refid="dd/d22/a07229"/>
+        <childnode refid="636" relation="include">
+        </childnode>
+        <childnode refid="649" relation="include">
+        </childnode>
+      </node>
+      <node id="648">
+        <label>vector</label>
+      </node>
+      <node id="642">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="634">
+        <label>Animation/Interpolator.hpp</label>
+        <link refid="d2/de7/a00014"/>
+        <childnode refid="635" relation="include">
+        </childnode>
+      </node>
+      <node id="646">
+        <label>memory</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="651">
+        <label>Scene/Animation/Skeleton/SkeletonAnimationInstanceObject.hpp</label>
+        <link refid="df/dbc/a01004"/>
+        <childnode refid="652" relation="include">
+        </childnode>
+        <childnode refid="653" relation="include">
+        </childnode>
+      </node>
+      <node id="653">
+        <label>Scene/Animation/Skeleton/SkeletonAnimationInstanceNode.hpp</label>
+        <link refid="df/d59/a01001"/>
+      </node>
+      <node id="650">
+        <label>Animation/Interpolator.hpp</label>
+        <link refid="d2/de7/a00014"/>
+        <childnode refid="651" relation="include">
+        </childnode>
+      </node>
+      <node id="652">
+        <label>Scene/Animation/Skeleton/SkeletonAnimationInstanceBone.hpp</label>
+        <link refid="dd/d48/a00995"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="d9/da1/a01976" prot="public">castor3d::Interpolator</innerclass>
+    <innerclass refid="d5/da1/a01988" prot="public">castor3d::InterpolatorT&lt; DataT, InterpolatorType::eNearest &gt;</innerclass>
+    <innerclass refid="d6/d33/a01992" prot="public">castor3d::InterpolatorT&lt; DataT, InterpolatorType::eLinear &gt;</innerclass>
+    <innerclass refid="d3/dcc/a01996" prot="public">castor3d::InterpolatorT&lt; castor::Quaternion, InterpolatorType::eLinear &gt;</innerclass>
+    <innernamespace refid="d8/d31/a01407">castor3d</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Animation/Interpolator.hpp"/>
+  </compounddef>
+</doxygen>

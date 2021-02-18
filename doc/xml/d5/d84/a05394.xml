@@ -1,0 +1,1046 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d5/d84/a05394" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::PhongLightingModel</compoundname>
+    <basecompoundref refid="d5/d30/a05346" prot="public" virt="non-virtual">castor3d::shader::LightingModel</basecompoundref>
+    <includes local="no">GlslPhongLighting.hpp</includes>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d5/d84/a05394_1aad46cf221461dfddc72784a91c75b95d" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const castor::String</type>
+        <definition>C3D_API const castor::String castor3d::shader::PhongLightingModel::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslPhongLighting.hpp" line="137" column="1" bodyfile="Shader/Shaders/GlslPhongLighting.hpp" bodystart="137" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d5/d84/a05394_1a09d2b4ea66679309da4e23926f80efbe" prot="public" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Void, InLight, sdw::InVec3, sdw::InVec3, sdw::InFloat, InSurface, <ref refid="d1/df3/a05390" kindref="compound">OutputComponents</ref> &amp; &gt;</type>
+        <definition>sdw::Function&lt; sdw::Void , InLight , sdw::InVec3 , sdw::InVec3 , sdw::InFloat , InSurface , OutputComponents &amp; &gt; castor3d::shader::PhongLightingModel::m_computeLight</definition>
+        <argsstring></argsstring>
+        <name>m_computeLight</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslPhongLighting.hpp" line="144" column="1" bodyfile="Shader/Shaders/GlslPhongLighting.hpp" bodystart="144" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d84/a05394_1a99dcc9b6f06531ec52f44970e9000807" prot="public" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Void, InDirectionalLight, sdw::InVec3, sdw::InFloat, sdw::InInt, InSurface, <ref refid="d1/df3/a05390" kindref="compound">OutputComponents</ref> &amp; &gt;</type>
+        <definition>sdw::Function&lt; sdw::Void , InDirectionalLight , sdw::InVec3 , sdw::InFloat , sdw::InInt , InSurface , OutputComponents &amp; &gt; castor3d::shader::PhongLightingModel::m_computeDirectional</definition>
+        <argsstring></argsstring>
+        <name>m_computeDirectional</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslPhongLighting.hpp" line="151" column="1" bodyfile="Shader/Shaders/GlslPhongLighting.hpp" bodystart="151" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d84/a05394_1a19fb160dccbd973b75b23cc550699547" prot="public" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Void, InPointLight, sdw::InVec3, sdw::InFloat, sdw::InInt, InSurface, <ref refid="d1/df3/a05390" kindref="compound">OutputComponents</ref> &amp; &gt;</type>
+        <definition>sdw::Function&lt; sdw::Void , InPointLight , sdw::InVec3 , sdw::InFloat , sdw::InInt , InSurface , OutputComponents &amp; &gt; castor3d::shader::PhongLightingModel::m_computePoint</definition>
+        <argsstring></argsstring>
+        <name>m_computePoint</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslPhongLighting.hpp" line="158" column="1" bodyfile="Shader/Shaders/GlslPhongLighting.hpp" bodystart="158" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d84/a05394_1a46bc316356551c34b95c618b737fe3b3" prot="public" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Void, InSpotLight, sdw::InVec3, sdw::InFloat, sdw::InInt, InSurface, <ref refid="d1/df3/a05390" kindref="compound">OutputComponents</ref> &amp; &gt;</type>
+        <definition>sdw::Function&lt; sdw::Void , InSpotLight , sdw::InVec3 , sdw::InFloat , sdw::InInt , InSurface , OutputComponents &amp; &gt; castor3d::shader::PhongLightingModel::m_computeSpot</definition>
+        <argsstring></argsstring>
+        <name>m_computeSpot</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslPhongLighting.hpp" line="165" column="1" bodyfile="Shader/Shaders/GlslPhongLighting.hpp" bodystart="165" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d84/a05394_1a621f2f9901f2a73f927a64ab60620232" prot="public" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, InLight, sdw::InVec3, sdw::InVec3, sdw::InFloat, InSurface &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , InLight , sdw::InVec3 , sdw::InVec3 , sdw::InFloat , InSurface &gt; castor3d::shader::PhongLightingModel::m_computeLightDiffuse</definition>
+        <argsstring></argsstring>
+        <name>m_computeLightDiffuse</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslPhongLighting.hpp" line="171" column="1" bodyfile="Shader/Shaders/GlslPhongLighting.hpp" bodystart="171" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d84/a05394_1a80f6e9fa44019400c75ffc363eefaf59" prot="public" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, InDirectionalLight, sdw::InVec3, sdw::InFloat, sdw::InInt, InSurface &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , InDirectionalLight , sdw::InVec3 , sdw::InFloat , sdw::InInt , InSurface &gt; castor3d::shader::PhongLightingModel::m_computeDirectionalDiffuse</definition>
+        <argsstring></argsstring>
+        <name>m_computeDirectionalDiffuse</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslPhongLighting.hpp" line="177" column="1" bodyfile="Shader/Shaders/GlslPhongLighting.hpp" bodystart="177" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d84/a05394_1a5805ca7c21547ea5f42ce4177698a39b" prot="public" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, InPointLight, sdw::InVec3, sdw::InFloat, sdw::InInt, InSurface &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , InPointLight , sdw::InVec3 , sdw::InFloat , sdw::InInt , InSurface &gt; castor3d::shader::PhongLightingModel::m_computePointDiffuse</definition>
+        <argsstring></argsstring>
+        <name>m_computePointDiffuse</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslPhongLighting.hpp" line="183" column="1" bodyfile="Shader/Shaders/GlslPhongLighting.hpp" bodystart="183" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d84/a05394_1ac5c25d82e4032141e02604e340a1dad3" prot="public" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, InSpotLight, sdw::InVec3, sdw::InFloat, sdw::InInt, InSurface &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , InSpotLight , sdw::InVec3 , sdw::InFloat , sdw::InInt , InSurface &gt; castor3d::shader::PhongLightingModel::m_computeSpotDiffuse</definition>
+        <argsstring></argsstring>
+        <name>m_computeSpotDiffuse</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslPhongLighting.hpp" line="189" column="1" bodyfile="Shader/Shaders/GlslPhongLighting.hpp" bodystart="189" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/d84/a05394_1a9c395e560ecea1d1c9c5219ad300a4e1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::PhongLightingModel::PhongLightingModel</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, Utils &amp;utils, ShadowOptions shadowOptions, bool isOpaqueProgram)</argsstring>
+        <name>PhongLightingModel</name>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/de8/a05430" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d86/a05438" kindref="compound">ShadowOptions</ref></type>
+          <declname>shadowOptions</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isOpaqueProgram</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslPhongLighting.hpp" line="19" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d84/a05394_1a6b63b77aebf69a5a585b746c3702dac0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::PhongLightingModel::computeCombined</definition>
+        <argsstring>(sdw::Vec3 const &amp;worldEye, sdw::Float const &amp;shininess, sdw::Int const &amp;receivesShadows, Surface surface, OutputComponents &amp;output) const</argsstring>
+        <name>computeCombined</name>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldEye</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>shininess</declname>
+        </param>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>receivesShadows</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d54/a05418" kindref="compound">Surface</ref></type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/df3/a05390" kindref="compound">OutputComponents</ref> &amp;</type>
+          <declname>output</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslPhongLighting.hpp" line="23" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d84/a05394_1ab2e92b60278ec546f04945b264cc8be9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::PhongLightingModel::compute</definition>
+        <argsstring>(DirectionalLight const &amp;light, sdw::Vec3 const &amp;worldEye, sdw::Float const &amp;shininess, sdw::Int const &amp;receivesShadows, Surface surface, OutputComponents &amp;output) const</argsstring>
+        <name>compute</name>
+        <param>
+          <type><ref refid="dc/dcf/a05334" kindref="compound">DirectionalLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldEye</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>shininess</declname>
+        </param>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>receivesShadows</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d54/a05418" kindref="compound">Surface</ref></type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/df3/a05390" kindref="compound">OutputComponents</ref> &amp;</type>
+          <declname>output</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslPhongLighting.hpp" line="28" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d84/a05394_1add1ae6d9078ab07f28fe81ca4d4338f6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::PhongLightingModel::compute</definition>
+        <argsstring>(PointLight const &amp;light, sdw::Vec3 const &amp;worldEye, sdw::Float const &amp;shininess, sdw::Int const &amp;receivesShadows, Surface surface, OutputComponents &amp;output) const</argsstring>
+        <name>compute</name>
+        <param>
+          <type><ref refid="da/da3/a05338" kindref="compound">PointLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldEye</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>shininess</declname>
+        </param>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>receivesShadows</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d54/a05418" kindref="compound">Surface</ref></type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/df3/a05390" kindref="compound">OutputComponents</ref> &amp;</type>
+          <declname>output</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslPhongLighting.hpp" line="34" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d84/a05394_1aee82d4ff48f04ad5894dfc1ceb4ee152" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::PhongLightingModel::compute</definition>
+        <argsstring>(SpotLight const &amp;light, sdw::Vec3 const &amp;worldEye, sdw::Float const &amp;shininess, sdw::Int const &amp;receivesShadows, Surface surface, OutputComponents &amp;output) const</argsstring>
+        <name>compute</name>
+        <param>
+          <type><ref refid="dc/dbc/a05342" kindref="compound">SpotLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldEye</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>shininess</declname>
+        </param>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>receivesShadows</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d54/a05418" kindref="compound">Surface</ref></type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/df3/a05390" kindref="compound">OutputComponents</ref> &amp;</type>
+          <declname>output</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslPhongLighting.hpp" line="40" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d84/a05394_1a009722da3c78d5bdcaebc35097ec832c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::PhongLightingModel::computeCombinedDiffuse</definition>
+        <argsstring>(sdw::Vec3 const &amp;worldEye, sdw::Float const &amp;shininess, sdw::Int const &amp;receivesShadows, Surface surface) const</argsstring>
+        <name>computeCombinedDiffuse</name>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldEye</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>shininess</declname>
+        </param>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>receivesShadows</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d54/a05418" kindref="compound">Surface</ref></type>
+          <declname>surface</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslPhongLighting.hpp" line="46" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d84/a05394_1adc7a26ed979a3da91aa35264a7f12ec2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::PhongLightingModel::computeDiffuse</definition>
+        <argsstring>(DirectionalLight const &amp;light, sdw::Vec3 const &amp;worldEye, sdw::Float const &amp;shininess, sdw::Int const &amp;receivesShadows, Surface surface) const</argsstring>
+        <name>computeDiffuse</name>
+        <param>
+          <type><ref refid="dc/dcf/a05334" kindref="compound">DirectionalLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldEye</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>shininess</declname>
+        </param>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>receivesShadows</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d54/a05418" kindref="compound">Surface</ref></type>
+          <declname>surface</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslPhongLighting.hpp" line="50" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d84/a05394_1adcf847ffb51823ecad8ea4be5f014cd3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::PhongLightingModel::computeDiffuse</definition>
+        <argsstring>(PointLight const &amp;light, sdw::Vec3 const &amp;worldEye, sdw::Float const &amp;shininess, sdw::Int const &amp;receivesShadows, Surface surface) const</argsstring>
+        <name>computeDiffuse</name>
+        <param>
+          <type><ref refid="da/da3/a05338" kindref="compound">PointLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldEye</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>shininess</declname>
+        </param>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>receivesShadows</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d54/a05418" kindref="compound">Surface</ref></type>
+          <declname>surface</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslPhongLighting.hpp" line="55" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d84/a05394_1a83df72cbc3ac0cde43f791ba730cc07b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::PhongLightingModel::computeDiffuse</definition>
+        <argsstring>(SpotLight const &amp;light, sdw::Vec3 const &amp;worldEye, sdw::Float const &amp;shininess, sdw::Int const &amp;receivesShadows, Surface surface) const</argsstring>
+        <name>computeDiffuse</name>
+        <param>
+          <type><ref refid="dc/dbc/a05342" kindref="compound">SpotLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldEye</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>shininess</declname>
+        </param>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>receivesShadows</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d54/a05418" kindref="compound">Surface</ref></type>
+          <declname>surface</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslPhongLighting.hpp" line="60" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d84/a05394_1a20a80f9096b675eb84a74161a75d7e7f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::PhongLightingModel::computeMapContributions</definition>
+        <argsstring>(PipelineFlags const &amp;flags, sdw::Float const &amp;gamma, TextureConfigurations const &amp;textureConfigs, sdw::Array&lt; sdw::UVec4 &gt; const &amp;textureConfig, sdw::Array&lt; sdw::SampledImage2DRgba32 &gt; const &amp;maps, sdw::Vec3 const &amp;texCoords, sdw::Vec3 &amp;normal, sdw::Vec3 &amp;tangent, sdw::Vec3 &amp;bitangent, sdw::Vec3 &amp;emissive, sdw::Float &amp;opacity, sdw::Float &amp;occlusion, sdw::Float &amp;transmittance, sdw::Vec3 &amp;diffuse, sdw::Vec3 &amp;specular, sdw::Float &amp;shininess, sdw::Vec3 &amp;tangentSpaceViewPosition, sdw::Vec3 &amp;tangentSpaceFragPosition)</argsstring>
+        <name>computeMapContributions</name>
+        <param>
+          <type><ref refid="d0/d15/a04574" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>gamma</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d7a/a05426" kindref="compound">TextureConfigurations</ref> const &amp;</type>
+          <declname>textureConfigs</declname>
+        </param>
+        <param>
+          <type>sdw::Array&lt; sdw::UVec4 &gt; const &amp;</type>
+          <declname>textureConfig</declname>
+        </param>
+        <param>
+          <type>sdw::Array&lt; sdw::SampledImage2DRgba32 &gt; const &amp;</type>
+          <declname>maps</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>texCoords</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>normal</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>tangent</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>bitangent</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>emissive</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>opacity</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>occlusion</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>transmittance</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>diffuse</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>specular</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>shininess</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>tangentSpaceViewPosition</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>tangentSpaceFragPosition</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslPhongLighting.hpp" line="81" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d84/a05394_1ae13ecfbf9cca80b3fadbb1ac7d29b5b4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::PhongLightingModel::computeMapVoxelContributions</definition>
+        <argsstring>(PipelineFlags const &amp;flags, sdw::Float const &amp;gamma, TextureConfigurations const &amp;textureConfigs, sdw::Array&lt; sdw::UVec4 &gt; const &amp;textureConfig, sdw::Array&lt; sdw::SampledImage2DRgba32 &gt; const &amp;maps, sdw::Vec3 const &amp;texCoords, sdw::Vec3 &amp;emissive, sdw::Float &amp;opacity, sdw::Float &amp;occlusion, sdw::Vec3 &amp;diffuse, sdw::Vec3 &amp;specular, sdw::Float &amp;shininess)</argsstring>
+        <name>computeMapVoxelContributions</name>
+        <param>
+          <type><ref refid="d0/d15/a04574" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>gamma</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d7a/a05426" kindref="compound">TextureConfigurations</ref> const &amp;</type>
+          <declname>textureConfigs</declname>
+        </param>
+        <param>
+          <type>sdw::Array&lt; sdw::UVec4 &gt; const &amp;</type>
+          <declname>textureConfig</declname>
+        </param>
+        <param>
+          <type>sdw::Array&lt; sdw::SampledImage2DRgba32 &gt; const &amp;</type>
+          <declname>maps</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>texCoords</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>emissive</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>opacity</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>occlusion</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>diffuse</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>specular</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>shininess</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslPhongLighting.hpp" line="99" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d5/d84/a05394_1a108ca914ea08ed96244cbcbc2ddaacec" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::shared_ptr&lt; <ref refid="d5/d84/a05394" kindref="compound">PhongLightingModel</ref> &gt;</type>
+        <definition>static C3D_API std::shared_ptr&lt; PhongLightingModel &gt; castor3d::shader::PhongLightingModel::createModel</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, Utils &amp;utils, ShadowOptions const &amp;shadows, uint32_t &amp;index, bool isOpaqueProgram)</argsstring>
+        <name>createModel</name>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/de8/a05430" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d86/a05438" kindref="compound">ShadowOptions</ref> const &amp;</type>
+          <declname>shadows</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isOpaqueProgram</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslPhongLighting.hpp" line="65" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d84/a05394_1a24ae46547d4455ca6844e995f777244c" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::shared_ptr&lt; <ref refid="d5/d84/a05394" kindref="compound">PhongLightingModel</ref> &gt;</type>
+        <definition>static C3D_API std::shared_ptr&lt; PhongLightingModel &gt; castor3d::shader::PhongLightingModel::createModel</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, Utils &amp;utils, LightType light, bool lightUbo, ShadowOptions const &amp;shadows, uint32_t &amp;index)</argsstring>
+        <name>createModel</name>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/de8/a05430" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d13/a01473_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>lightUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d86/a05438" kindref="compound">ShadowOptions</ref> const &amp;</type>
+          <declname>shadows</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslPhongLighting.hpp" line="70" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d84/a05394_1a9d448c7d1614221762fba980a9dd5714" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::shared_ptr&lt; <ref refid="d5/d84/a05394" kindref="compound">PhongLightingModel</ref> &gt;</type>
+        <definition>static C3D_API std::shared_ptr&lt; PhongLightingModel &gt; castor3d::shader::PhongLightingModel::createDiffuseModel</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, Utils &amp;utils, ShadowOptions const &amp;shadows, uint32_t &amp;index, bool isOpaqueProgram)</argsstring>
+        <name>createDiffuseModel</name>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/de8/a05430" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d86/a05438" kindref="compound">ShadowOptions</ref> const &amp;</type>
+          <declname>shadows</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isOpaqueProgram</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslPhongLighting.hpp" line="76" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="d5/d84/a05394_1a96455fc83f0034a8aa7fcb75e3368a24" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::PhongLightingModel::doDeclareModel</definition>
+        <argsstring>() override</argsstring>
+        <name>doDeclareModel</name>
+        <reimplements refid="d5/d30/a05346_1ae2a3ded61a442482f06c85c29ea24b04">doDeclareModel</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslPhongLighting.hpp" line="113" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d84/a05394_1ac1cf971f3a53d3e6ebedae07de62237a" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::PhongLightingModel::doDeclareComputeDirectionalLight</definition>
+        <argsstring>() override</argsstring>
+        <name>doDeclareComputeDirectionalLight</name>
+        <reimplements refid="d5/d30/a05346_1a9c6a575c7a121556d1fb476bea5d6bf2">doDeclareComputeDirectionalLight</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslPhongLighting.hpp" line="114" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d84/a05394_1a3b1d599645117aa5bbe8bcb9e6da5879" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::PhongLightingModel::doDeclareComputePointLight</definition>
+        <argsstring>() override</argsstring>
+        <name>doDeclareComputePointLight</name>
+        <reimplements refid="d5/d30/a05346_1afa3f59926bb5d7666b9243de69d7a9c2">doDeclareComputePointLight</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslPhongLighting.hpp" line="115" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d84/a05394_1af579b4094e247997625a6146724518cf" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::PhongLightingModel::doDeclareComputeSpotLight</definition>
+        <argsstring>() override</argsstring>
+        <name>doDeclareComputeSpotLight</name>
+        <reimplements refid="d5/d30/a05346_1af34a816a20b6c7d5ec6286f5045f40d2">doDeclareComputeSpotLight</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslPhongLighting.hpp" line="116" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d84/a05394_1a0d6397c31bb3cca7922495cf3c522d06" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::PhongLightingModel::doDeclareDiffuseModel</definition>
+        <argsstring>() override</argsstring>
+        <name>doDeclareDiffuseModel</name>
+        <reimplements refid="d5/d30/a05346_1af58895948c91e3f79ff8230e9534a281">doDeclareDiffuseModel</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslPhongLighting.hpp" line="117" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d84/a05394_1ac2bbfa8c2dff689ef85b5fe374f2ba70" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::PhongLightingModel::doDeclareComputeDirectionalLightDiffuse</definition>
+        <argsstring>() override</argsstring>
+        <name>doDeclareComputeDirectionalLightDiffuse</name>
+        <reimplements refid="d5/d30/a05346_1aad2f92a29681d4b0511973af3a31e276">doDeclareComputeDirectionalLightDiffuse</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslPhongLighting.hpp" line="118" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d84/a05394_1a15c81979e1b87755f49a883b28fb7a79" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::PhongLightingModel::doDeclareComputePointLightDiffuse</definition>
+        <argsstring>() override</argsstring>
+        <name>doDeclareComputePointLightDiffuse</name>
+        <reimplements refid="d5/d30/a05346_1a7490bf6134ff2b323b10fbaf781a37bc">doDeclareComputePointLightDiffuse</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslPhongLighting.hpp" line="119" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d84/a05394_1a3746762b4563f1089b896762474aadc3" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::PhongLightingModel::doDeclareComputeSpotLightDiffuse</definition>
+        <argsstring>() override</argsstring>
+        <name>doDeclareComputeSpotLightDiffuse</name>
+        <reimplements refid="d5/d30/a05346_1afd78d88ba2a1d93ec50557dc64993977">doDeclareComputeSpotLightDiffuse</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslPhongLighting.hpp" line="120" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d84/a05394_1a9a928baca91196859d18dc545b7d15ea" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::PhongLightingModel::doComputeLight</definition>
+        <argsstring>(Light const &amp;light, sdw::Vec3 const &amp;worldEye, sdw::Vec3 const &amp;lightDirection, sdw::Float const &amp;shininess, Surface surface, OutputComponents &amp;output)</argsstring>
+        <name>doComputeLight</name>
+        <param>
+          <type><ref refid="db/d4c/a05330" kindref="compound">Light</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldEye</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>lightDirection</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>shininess</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d54/a05418" kindref="compound">Surface</ref></type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/df3/a05390" kindref="compound">OutputComponents</ref> &amp;</type>
+          <declname>output</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslPhongLighting.hpp" line="122" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d84/a05394_1a43ee7b14abe8c270b7b90c82a55f5cd0" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::PhongLightingModel::doDeclareComputeLight</definition>
+        <argsstring>()</argsstring>
+        <name>doDeclareComputeLight</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslPhongLighting.hpp" line="128" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d84/a05394_1aec4dbeeb645ec184823ac671f6ac90e5" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::PhongLightingModel::doComputeLightDiffuse</definition>
+        <argsstring>(Light const &amp;light, sdw::Vec3 const &amp;worldEye, sdw::Vec3 const &amp;lightDirection, sdw::Float const &amp;shininess, Surface surface)</argsstring>
+        <name>doComputeLightDiffuse</name>
+        <param>
+          <type><ref refid="db/d4c/a05330" kindref="compound">Light</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldEye</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>lightDirection</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>shininess</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d54/a05418" kindref="compound">Surface</ref></type>
+          <declname>surface</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslPhongLighting.hpp" line="129" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d84/a05394_1a20941290a199862af68dd723d82c5faf" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::PhongLightingModel::doDeclareComputeLightDiffuse</definition>
+        <argsstring>()</argsstring>
+        <name>doDeclareComputeLightDiffuse</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslPhongLighting.hpp" line="134" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3514">
+        <label>castor3d::shader::LightingModel</label>
+        <link refid="d5/d30/a05346"/>
+      </node>
+      <node id="3513">
+        <label>castor3d::shader::PhongLightingModel</label>
+        <link refid="d5/d84/a05394"/>
+        <childnode refid="3514" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3519">
+        <label>T</label>
+      </node>
+      <node id="3522">
+        <label>std::shared_ptr&lt; T &gt;</label>
+        <childnode refid="3519" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="3520">
+        <label>std::shared_ptr&lt; castor3d::shader::Shadow &gt;</label>
+        <childnode refid="3521" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+        <childnode refid="3522" relation="template-instance">
+          <edgelabel>&lt; castor3d::shader::Shadow &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3523">
+        <label>castor3d::shader::Utils</label>
+        <link refid="d4/de8/a05430"/>
+      </node>
+      <node id="3518">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="3519" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="3516">
+        <label>castor3d::shader::LightingModel</label>
+        <link refid="d5/d30/a05346"/>
+        <childnode refid="3517" relation="usage">
+          <edgelabel>m_directionalLightType</edgelabel>
+          <edgelabel>m_spotLightType</edgelabel>
+          <edgelabel>m_pointLightType</edgelabel>
+          <edgelabel>m_lightType</edgelabel>
+        </childnode>
+        <childnode refid="3520" relation="usage">
+          <edgelabel>m_shadowModel</edgelabel>
+        </childnode>
+        <childnode refid="3523" relation="usage">
+          <edgelabel>m_utils</edgelabel>
+        </childnode>
+      </node>
+      <node id="3521">
+        <label>castor3d::shader::Shadow</label>
+        <link refid="d9/d61/a05402"/>
+      </node>
+      <node id="3517">
+        <label>std::unique_ptr&lt; sdw::Struct &gt;</label>
+        <childnode refid="3518" relation="template-instance">
+          <edgelabel>&lt; sdw::Struct &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3515">
+        <label>castor3d::shader::PhongLightingModel</label>
+        <link refid="d5/d84/a05394"/>
+        <childnode refid="3516" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslPhongLighting.hpp" line="17" column="1" bodyfile="Shader/Shaders/GlslPhongLighting.hpp" bodystart="15" bodyend="190"/>
+    <listofallmembers>
+      <member refid="d5/d84/a05394_1ab2e92b60278ec546f04945b264cc8be9" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>compute</name></member>
+      <member refid="d5/d84/a05394_1add1ae6d9078ab07f28fe81ca4d4338f6" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>compute</name></member>
+      <member refid="d5/d84/a05394_1aee82d4ff48f04ad5894dfc1ceb4ee152" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>compute</name></member>
+      <member refid="d5/d84/a05394_1a6b63b77aebf69a5a585b746c3702dac0" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>computeCombined</name></member>
+      <member refid="d5/d84/a05394_1a009722da3c78d5bdcaebc35097ec832c" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>computeCombinedDiffuse</name></member>
+      <member refid="d5/d84/a05394_1adc7a26ed979a3da91aa35264a7f12ec2" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>computeDiffuse</name></member>
+      <member refid="d5/d84/a05394_1adcf847ffb51823ecad8ea4be5f014cd3" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>computeDiffuse</name></member>
+      <member refid="d5/d84/a05394_1a83df72cbc3ac0cde43f791ba730cc07b" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>computeDiffuse</name></member>
+      <member refid="d5/d84/a05394_1a20a80f9096b675eb84a74161a75d7e7f" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>computeMapContributions</name></member>
+      <member refid="d5/d84/a05394_1ae13ecfbf9cca80b3fadbb1ac7d29b5b4" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>computeMapVoxelContributions</name></member>
+      <member refid="d5/d84/a05394_1a9d448c7d1614221762fba980a9dd5714" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>createDiffuseModel</name></member>
+      <member refid="d5/d84/a05394_1a108ca914ea08ed96244cbcbc2ddaacec" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>createModel</name></member>
+      <member refid="d5/d84/a05394_1a24ae46547d4455ca6844e995f777244c" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>createModel</name></member>
+      <member refid="d5/d30/a05346_1ae6a7960238d8c4c895e761055d25f71e" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>declareDiffuseModel</name></member>
+      <member refid="d5/d30/a05346_1a59de007eae6f78a97dc6613e20687cfa" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>declareDirectionalModel</name></member>
+      <member refid="d5/d30/a05346_1a6fa012bb8e25e81c54552f4a0622fd51" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>declareModel</name></member>
+      <member refid="d5/d30/a05346_1adb3fdba9dbcaa69cb9c047caee5023d3" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>declarePointModel</name></member>
+      <member refid="d5/d30/a05346_1aaafcbc52cbc035824573a5507f6560fe" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>declareSpotModel</name></member>
+      <member refid="d5/d84/a05394_1a9a928baca91196859d18dc545b7d15ea" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>doComputeLight</name></member>
+      <member refid="d5/d84/a05394_1aec4dbeeb645ec184823ac671f6ac90e5" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>doComputeLightDiffuse</name></member>
+      <member refid="d5/d84/a05394_1ac1cf971f3a53d3e6ebedae07de62237a" prot="protected" virt="virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>doDeclareComputeDirectionalLight</name></member>
+      <member refid="d5/d84/a05394_1ac2bbfa8c2dff689ef85b5fe374f2ba70" prot="protected" virt="virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>doDeclareComputeDirectionalLightDiffuse</name></member>
+      <member refid="d5/d84/a05394_1a43ee7b14abe8c270b7b90c82a55f5cd0" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>doDeclareComputeLight</name></member>
+      <member refid="d5/d84/a05394_1a20941290a199862af68dd723d82c5faf" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>doDeclareComputeLightDiffuse</name></member>
+      <member refid="d5/d84/a05394_1a3b1d599645117aa5bbe8bcb9e6da5879" prot="protected" virt="virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>doDeclareComputePointLight</name></member>
+      <member refid="d5/d84/a05394_1a15c81979e1b87755f49a883b28fb7a79" prot="protected" virt="virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>doDeclareComputePointLightDiffuse</name></member>
+      <member refid="d5/d84/a05394_1af579b4094e247997625a6146724518cf" prot="protected" virt="virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>doDeclareComputeSpotLight</name></member>
+      <member refid="d5/d84/a05394_1a3746762b4563f1089b896762474aadc3" prot="protected" virt="virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>doDeclareComputeSpotLightDiffuse</name></member>
+      <member refid="d5/d84/a05394_1a0d6397c31bb3cca7922495cf3c522d06" prot="protected" virt="virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>doDeclareDiffuseModel</name></member>
+      <member refid="d5/d30/a05346_1ab75ebaade730fc204cb1c49d5c9b1e79" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>doDeclareDirectionalLight</name></member>
+      <member refid="d5/d30/a05346_1aad852f3394711dd1ca914dd553051c7a" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>doDeclareDirectionalLightUbo</name></member>
+      <member refid="d5/d30/a05346_1a601b0d6adbf1d1cfe51140debba408a9" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>doDeclareGetBaseLight</name></member>
+      <member refid="d5/d30/a05346_1a581d0e6a5c217533e521488ae0309d3c" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>doDeclareGetCascadeFactors</name></member>
+      <member refid="d5/d30/a05346_1a47f393ce5b750d7a8132df92ede2eaab" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>doDeclareGetDirectionalLight</name></member>
+      <member refid="d5/d30/a05346_1aa639e3a479f852a8738a962669961f79" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>doDeclareGetPointLight</name></member>
+      <member refid="d5/d30/a05346_1a14e3657549948e3665c5b7f47bc0e2a2" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>doDeclareGetSpotLight</name></member>
+      <member refid="d5/d30/a05346_1a3d6d09b7fe9685af9258658d250f23e7" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>doDeclareLight</name></member>
+      <member refid="d5/d84/a05394_1a96455fc83f0034a8aa7fcb75e3368a24" prot="protected" virt="virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>doDeclareModel</name></member>
+      <member refid="d5/d30/a05346_1a3c3992c172379ebf21ab50aa9391376e" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>doDeclarePointLight</name></member>
+      <member refid="d5/d30/a05346_1a83eb154360ce36bf2434156d6d02c335" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>doDeclarePointLightUbo</name></member>
+      <member refid="d5/d30/a05346_1a0339e3d72944e69ff66aeb0241aaa6b3" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>doDeclareSpotLight</name></member>
+      <member refid="d5/d30/a05346_1a5695af4e75e3b709f5f517e4fbf5a07c" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>doDeclareSpotLightUbo</name></member>
+      <member refid="d5/d30/a05346_1a737f308cd9c4f80cabeb2d64ec298d18" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>getBaseLight</name></member>
+      <member refid="d5/d30/a05346_1a39fb5d9d359a1c94ceb2dc0f8708ef64" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>getDirectionalLight</name></member>
+      <member refid="d5/d30/a05346_1a026da585989c9d145e8f6c19ca7d89c5" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>getPointLight</name></member>
+      <member refid="d5/d30/a05346_1a7059cb1128a39d0a2448fe23ae8fbbac" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>getShadowModel</name></member>
+      <member refid="d5/d30/a05346_1a6d2910a01a8e91b85d9ed6df85ceb151" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>getSpotLight</name></member>
+      <member refid="d5/d30/a05346_1ae160c6345ef23a0a0b804e11c1cd0f87" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>LightingModel</name></member>
+      <member refid="d5/d84/a05394_1a99dcc9b6f06531ec52f44970e9000807" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>m_computeDirectional</name></member>
+      <member refid="d5/d84/a05394_1a80f6e9fa44019400c75ffc363eefaf59" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>m_computeDirectionalDiffuse</name></member>
+      <member refid="d5/d84/a05394_1a09d2b4ea66679309da4e23926f80efbe" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>m_computeLight</name></member>
+      <member refid="d5/d84/a05394_1a621f2f9901f2a73f927a64ab60620232" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>m_computeLightDiffuse</name></member>
+      <member refid="d5/d84/a05394_1a19fb160dccbd973b75b23cc550699547" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>m_computePoint</name></member>
+      <member refid="d5/d84/a05394_1a5805ca7c21547ea5f42ce4177698a39b" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>m_computePointDiffuse</name></member>
+      <member refid="d5/d84/a05394_1a46bc316356551c34b95c618b737fe3b3" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>m_computeSpot</name></member>
+      <member refid="d5/d84/a05394_1ac5c25d82e4032141e02604e340a1dad3" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>m_computeSpotDiffuse</name></member>
+      <member refid="d5/d30/a05346_1a4ea653241ca0d3c9bdb57237c555b641" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>m_directionalLightType</name></member>
+      <member refid="d5/d30/a05346_1a7ef6a49df779cb9c673272418da7e7fa" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>m_getBaseLight</name></member>
+      <member refid="d5/d30/a05346_1a64689c5bb7ce2682e205cd001b5f6fd8" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>m_getCascadeFactors</name></member>
+      <member refid="d5/d30/a05346_1a31203146876984766b13922b4d9bd624" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>m_getDirectionalLight</name></member>
+      <member refid="d5/d30/a05346_1af74c257d8fde9ff920c7aa50f3c94e29" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>m_getPointLight</name></member>
+      <member refid="d5/d30/a05346_1af23d4d479d255debdd0576dd00616e9d" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>m_getSpotLight</name></member>
+      <member refid="d5/d30/a05346_1a8bc492d16fd0eddb81da5af6017f6aa4" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>m_isOpaqueProgram</name></member>
+      <member refid="d5/d30/a05346_1a5b4a48e5d0b71a3023c71005e85c02c3" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>m_lightType</name></member>
+      <member refid="d5/d30/a05346_1aa4be9073ceba038190a889971091f0c5" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>m_pointLightType</name></member>
+      <member refid="d5/d30/a05346_1a3e9407685cf7ba55a752a27437c09a74" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>m_shadowModel</name></member>
+      <member refid="d5/d30/a05346_1a821f9af61e23ca562f5afcd5d394be4d" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>m_spotLightType</name></member>
+      <member refid="d5/d30/a05346_1a9e5d3c9e33f06597c63d4c64b62bc564" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>m_utils</name></member>
+      <member refid="d5/d30/a05346_1a129490d8e4f0ea553f16dcaeb2b2c089" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>m_writer</name></member>
+      <member refid="d5/d84/a05394_1aad46cf221461dfddc72784a91c75b95d" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>Name</name></member>
+      <member refid="d5/d84/a05394_1a9c395e560ecea1d1c9c5219ad300a4e1" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>PhongLightingModel</name></member>
+      <member refid="d5/d30/a05346_1af836e764194e1d3119a7778fa34252ae" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongLightingModel</scope><name>UboBindingPoint</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,380 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d7/d04/a04248" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::Frustum</compoundname>
+    <includes local="no">Frustum.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d7/d04/a04248_1af2b7dc6625287a344d5e4594068b0232" prot="public" static="no">
+        <type>std::array&lt; castor::PlaneEquation, size_t(<ref refid="da/d1e/a01479_1abc8a2e73a4a01c9d2a4575897121259bae558bb69fadec037d9eae46601a4df8e" kindref="member">FrustumPlane::eCount</ref>) &gt;</type>
+        <definition>using castor3d::Frustum::Planes =  std::array&lt; castor::PlaneEquation, size_t( FrustumPlane::eCount ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>Planes</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Frustum.hpp" line="18" column="1" bodyfile="Render/Frustum.hpp" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d7/d04/a04248_1a27901409e057d8f8975b95c79bf6e470" prot="private" static="no" mutable="no">
+        <type><ref refid="d6/df3/a05008" kindref="compound">Viewport</ref> &amp;</type>
+        <definition>Viewport&amp; castor3d::Frustum::m_viewport</definition>
+        <argsstring></argsstring>
+        <name>m_viewport</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Frustum.hpp" line="121" column="1" bodyfile="Render/Frustum.hpp" bodystart="121" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d04/a04248_1a4505345d6a8071379ebca335efc70915" prot="private" static="no" mutable="no">
+        <type><ref refid="d7/d04/a04248_1af2b7dc6625287a344d5e4594068b0232" kindref="member">Planes</ref></type>
+        <definition>Planes castor3d::Frustum::m_planes</definition>
+        <argsstring></argsstring>
+        <name>m_planes</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Frustum.hpp" line="122" column="1" bodyfile="Render/Frustum.hpp" bodystart="122" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/d04/a04248_1afa0a8d74d4e457579ab68e7de1ebded6" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Frustum::Frustum</definition>
+        <argsstring>(Viewport &amp;viewport)</argsstring>
+        <name>Frustum</name>
+        <param>
+          <type><ref refid="d6/df3/a05008" kindref="compound">Viewport</ref> &amp;</type>
+          <declname>viewport</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">viewport</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The viewport. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Frustum.hpp" line="29" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d04/a04248_1a271f77a18d41523ed05b66cc09943699" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d7/d04/a04248_1af2b7dc6625287a344d5e4594068b0232" kindref="member">Planes</ref></type>
+        <definition>C3D_API Planes castor3d::Frustum::update</definition>
+        <argsstring>(castor::Matrix4x4f const &amp;projection, castor::Matrix4x4f const &amp;view)</argsstring>
+        <name>update</name>
+        <param>
+          <type>castor::Matrix4x4f const &amp;</type>
+          <declname>projection</declname>
+        </param>
+        <param>
+          <type>castor::Matrix4x4f const &amp;</type>
+          <declname>view</declname>
+        </param>
+        <briefdescription>
+<para>Updates the frustum planes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">projection</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The projection matrix. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">view</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The view matrix. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Frustum.hpp" line="40" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d04/a04248_1aba238f43a2a65d53b67d94e54fc44c73" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d7/d04/a04248_1af2b7dc6625287a344d5e4594068b0232" kindref="member">Planes</ref></type>
+        <definition>C3D_API Planes castor3d::Frustum::update</definition>
+        <argsstring>(castor::Point3f const &amp;position, castor::Point3f const &amp;right, castor::Point3f const &amp;up, castor::Point3f const &amp;front)</argsstring>
+        <name>update</name>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>position</declname>
+        </param>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>right</declname>
+        </param>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>up</declname>
+        </param>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>front</declname>
+        </param>
+        <briefdescription>
+<para>Updates the frustum planes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">position</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The view position. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">right</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The X vector. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">up</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The Y vector. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">front</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The Z vector. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Frustum.hpp" line="56" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d04/a04248_1a6e4569fb4dce16b4d39cc4cc61812e2f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d7/d04/a04248_1af2b7dc6625287a344d5e4594068b0232" kindref="member">Planes</ref></type>
+        <definition>C3D_API Planes castor3d::Frustum::update</definition>
+        <argsstring>(castor::Point3f const &amp;eye, castor::Point3f const &amp;target, castor::Point3f const &amp;up)</argsstring>
+        <name>update</name>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>eye</declname>
+        </param>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>target</declname>
+        </param>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>up</declname>
+        </param>
+        <briefdescription>
+<para>Updates the frustum planes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">eye</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The view position. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">target</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The view target vector. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">up</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The direction of the up vector according to the orientation of the view. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Frustum.hpp" line="72" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d04/a04248_1ae48bac21e01ee4fb795ccbd9c9362def" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::Frustum::isVisible</definition>
+        <argsstring>(castor::BoundingBox const &amp;box, castor::Matrix4x4f const &amp;transformations) const</argsstring>
+        <name>isVisible</name>
+        <param>
+          <type>castor::BoundingBox const &amp;</type>
+          <declname>box</declname>
+        </param>
+        <param>
+          <type>castor::Matrix4x4f const &amp;</type>
+          <declname>transformations</declname>
+        </param>
+        <briefdescription>
+<para>Checks if given BoundingBox is in the view frustum. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">box</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The BoundingBox. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">transformations</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The BoundingBox transformations matrix. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if the BoundingBox is completely out of the view frustum. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Frustum.hpp" line="88" column="1"/>
+        <referencedby refid="d5/d9c/a05152_1a4b024cf5dd96bcf933c8b90a70d2c183" compoundref="da/d4e/a01106" startline="193" endline="198">castor3d::Camera::isVisible</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d7/d04/a04248_1a16f457e7f704ff5997fd560d24c2c837" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::Frustum::isVisible</definition>
+        <argsstring>(castor::BoundingSphere const &amp;sphere, castor::Matrix4x4f const &amp;transformations, castor::Point3f const &amp;scale) const</argsstring>
+        <name>isVisible</name>
+        <param>
+          <type>castor::BoundingSphere const &amp;</type>
+          <declname>sphere</declname>
+        </param>
+        <param>
+          <type>castor::Matrix4x4f const &amp;</type>
+          <declname>transformations</declname>
+        </param>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>scale</declname>
+        </param>
+        <briefdescription>
+<para>Checks if given BoundingSphere is in the view frustum. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">sphere</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The BoundingSphere. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">transformations</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The BoundingSphere transformations matrix. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scale for the BoundingSphere. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if the BoundingSphere is completely out of the view frustum. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Frustum.hpp" line="105" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d04/a04248_1a07a96b441fa9aed4e07afc234de59951" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::Frustum::isVisible</definition>
+        <argsstring>(castor::Point3f const &amp;point) const</argsstring>
+        <name>isVisible</name>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>point</declname>
+        </param>
+        <briefdescription>
+<para>Checks if given point is in the view frustum. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The point. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if the point out of the view frustum. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Frustum.hpp" line="118" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Frustum.hpp" line="16" column="1" bodyfile="Render/Frustum.hpp" bodystart="15" bodyend="123"/>
+    <listofallmembers>
+      <member refid="d7/d04/a04248_1afa0a8d74d4e457579ab68e7de1ebded6" prot="public" virt="non-virtual"><scope>castor3d::Frustum</scope><name>Frustum</name></member>
+      <member refid="d7/d04/a04248_1ae48bac21e01ee4fb795ccbd9c9362def" prot="public" virt="non-virtual"><scope>castor3d::Frustum</scope><name>isVisible</name></member>
+      <member refid="d7/d04/a04248_1a16f457e7f704ff5997fd560d24c2c837" prot="public" virt="non-virtual"><scope>castor3d::Frustum</scope><name>isVisible</name></member>
+      <member refid="d7/d04/a04248_1a07a96b441fa9aed4e07afc234de59951" prot="public" virt="non-virtual"><scope>castor3d::Frustum</scope><name>isVisible</name></member>
+      <member refid="d7/d04/a04248_1a4505345d6a8071379ebca335efc70915" prot="private" virt="non-virtual"><scope>castor3d::Frustum</scope><name>m_planes</name></member>
+      <member refid="d7/d04/a04248_1a27901409e057d8f8975b95c79bf6e470" prot="private" virt="non-virtual"><scope>castor3d::Frustum</scope><name>m_viewport</name></member>
+      <member refid="d7/d04/a04248_1af2b7dc6625287a344d5e4594068b0232" prot="public" virt="non-virtual"><scope>castor3d::Frustum</scope><name>Planes</name></member>
+      <member refid="d7/d04/a04248_1a271f77a18d41523ed05b66cc09943699" prot="public" virt="non-virtual"><scope>castor3d::Frustum</scope><name>update</name></member>
+      <member refid="d7/d04/a04248_1aba238f43a2a65d53b67d94e54fc44c73" prot="public" virt="non-virtual"><scope>castor3d::Frustum</scope><name>update</name></member>
+      <member refid="d7/d04/a04248_1a6e4569fb4dce16b4d39cc4cc61812e2f" prot="public" virt="non-virtual"><scope>castor3d::Frustum</scope><name>update</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_114caa8e7fa17c7bbd4b8ab6f4c17251" kind="dir">
+    <compoundname>Model/Skeleton</compoundname>
+    <innerdir refid="dir_48ce5eaa16e83f4df47a091fef04a89a">Model/Skeleton/Animation</innerdir>
+    <innerfile refid="d7/def/a00521">Bone.hpp</innerfile>
+    <innerfile refid="d9/d24/a00524">BonedVertex.hpp</innerfile>
+    <innerfile refid="d9/d44/a00527">Skeleton.hpp</innerfile>
+    <innerfile refid="da/d7e/a00530">SkeletonModule.hpp</innerfile>
+    <innerfile refid="db/d44/a00533">VertexBoneData.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Model/Skeleton/"/>
+  </compounddef>
+</doxygen>

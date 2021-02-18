@@ -1,0 +1,507 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d8/de6/a04258" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::LayeredLightPropagationVolumesBase</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">Named</basecompoundref>
+    <derivedcompoundref refid="d6/db4/a04266" prot="public" virt="non-virtual">castor3d::LayeredLightPropagationVolumesT&lt; GeometryVolumesT &gt;</derivedcompoundref>
+    <includes local="no">LayeredLightPropagationVolumes.hpp</includes>
+    <innerclass refid="d1/d7a/a04262" prot="private">castor3d::LayeredLightPropagationVolumesBase::LightLpv</innerclass>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d8/de6/a04258_1a25bb99ca25831de118867e1edb162ffc" prot="public" static="yes" mutable="no">
+        <type>constexpr uint32_t</type>
+        <definition>constexpr uint32_t castor3d::LayeredLightPropagationVolumesBase::MaxPropagationSteps</definition>
+        <argsstring></argsstring>
+        <name>MaxPropagationSteps</name>
+        <initializer>= 8u</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="30" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/de6/a04258_1a8f9c86575460447e4b75c702af19d7e8" prot="public" static="yes" mutable="no">
+        <type>constexpr uint32_t</type>
+        <definition>constexpr uint32_t castor3d::LayeredLightPropagationVolumesBase::CascadeCount</definition>
+        <argsstring></argsstring>
+        <name>CascadeCount</name>
+        <initializer>= <ref refid="d8/d7b/a01478_1a51b2822a5ca0ee8b3805ce188ad0589b" kindref="member">shader::LpvMaxCascadesCount</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="31" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d8/de6/a04258_1abe43aeda1ee7aaa821b444cc64282059" prot="private" static="no" mutable="no">
+        <type><ref refid="d6/d66/a05238" kindref="compound">Scene</ref> const  &amp;</type>
+        <definition>Scene const&amp; castor3d::LayeredLightPropagationVolumesBase::m_scene</definition>
+        <argsstring></argsstring>
+        <name>m_scene</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="51" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/de6/a04258_1af6f377d9e420c4da3ca0d1f2e14caed1" prot="private" static="no" mutable="no">
+        <type><ref refid="df/d9b/a02514" kindref="compound">Engine</ref> &amp;</type>
+        <definition>Engine&amp; castor3d::LayeredLightPropagationVolumesBase::m_engine</definition>
+        <argsstring></argsstring>
+        <name>m_engine</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="52" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/de6/a04258_1a0cfd358a64c65409d12842fb3584b9be" prot="private" static="no" mutable="no">
+        <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::LayeredLightPropagationVolumesBase::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="53" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/de6/a04258_1addcd8bb4fafe173df5f321cdaa32b8ac" prot="private" static="no" mutable="no">
+        <type><ref refid="d8/d20/a04686" kindref="compound">ShadowMapResult</ref> const  &amp;</type>
+        <definition>ShadowMapResult const&amp; castor3d::LayeredLightPropagationVolumesBase::m_smResult</definition>
+        <argsstring></argsstring>
+        <name>m_smResult</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="54" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/de6/a04258_1a4d47cc0f4f60837d133d8725be6c5738" prot="private" static="no" mutable="no">
+        <type>LightVolumePassResultArray const  &amp;</type>
+        <definition>LightVolumePassResultArray const&amp; castor3d::LayeredLightPropagationVolumesBase::m_lpvResult</definition>
+        <argsstring></argsstring>
+        <name>m_lpvResult</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="55" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/de6/a04258_1a0c8cde6bd00231b00e1f7aadb201d1fe" prot="private" static="no" mutable="no">
+        <type><ref refid="da/d10/a05470" kindref="compound">LayeredLpvGridConfigUbo</ref> &amp;</type>
+        <definition>LayeredLpvGridConfigUbo&amp; castor3d::LayeredLightPropagationVolumesBase::m_lpvGridConfigUbo</definition>
+        <argsstring></argsstring>
+        <name>m_lpvGridConfigUbo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="56" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/de6/a04258_1af32485b5c63b2aaa9726b3047961475a" prot="private" static="no" mutable="no">
+        <type>LpvGridConfigUboArray</type>
+        <definition>LpvGridConfigUboArray castor3d::LayeredLightPropagationVolumesBase::m_lpvGridConfigUbos</definition>
+        <argsstring></argsstring>
+        <name>m_lpvGridConfigUbos</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="57" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/de6/a04258_1a4e1f8886a539650f2d9a8573402a8820" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::LayeredLightPropagationVolumesBase::m_initialised</definition>
+        <argsstring></argsstring>
+        <name>m_initialised</name>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="58" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/de6/a04258_1a9fa78eed5f83c3ebb2b18ba56ae45396" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::LayeredLightPropagationVolumesBase::m_geometryVolumes</definition>
+        <argsstring></argsstring>
+        <name>m_geometryVolumes</name>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="59" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/de6/a04258_1ae88f2c18e1b8d2292663da38edcd0378" prot="private" static="no" mutable="no">
+        <type><ref refid="de/d13/a01473_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+        <definition>LightType castor3d::LayeredLightPropagationVolumesBase::m_lightType</definition>
+        <argsstring></argsstring>
+        <name>m_lightType</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="60" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/de6/a04258_1a00268197b75edc15048c4f072b0a1a40" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="de/d3f/a04290" kindref="compound">LightVolumePassResult</ref> &gt;</type>
+        <definition>std::vector&lt; LightVolumePassResult &gt; castor3d::LayeredLightPropagationVolumesBase::m_injection</definition>
+        <argsstring></argsstring>
+        <name>m_injection</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="61" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/de6/a04258_1aa734297491bf133d63cc3ead529e0aa1" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="df/d14/a02658" kindref="compound">TextureUnit</ref> &gt;</type>
+        <definition>std::vector&lt; TextureUnit &gt; castor3d::LayeredLightPropagationVolumesBase::m_geometry</definition>
+        <argsstring></argsstring>
+        <name>m_geometry</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="62" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/de6/a04258_1a8beb0168f69226ade24572882f779248" prot="private" static="no" mutable="no">
+        <type>std::array&lt; <ref refid="de/d3f/a04290" kindref="compound">LightVolumePassResult</ref>, 2u &gt;</type>
+        <definition>std::array&lt; LightVolumePassResult, 2u &gt; castor3d::LayeredLightPropagationVolumesBase::m_propagate</definition>
+        <argsstring></argsstring>
+        <name>m_propagate</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="63" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/de6/a04258_1ae2877c1c6ef52a35088e403e0f2a51c6" prot="private" static="no" mutable="no">
+        <type><ref refid="db/da9/a04374" kindref="compound">CommandsSemaphore</ref></type>
+        <definition>CommandsSemaphore castor3d::LayeredLightPropagationVolumesBase::m_clearCommand</definition>
+        <argsstring></argsstring>
+        <name>m_clearCommand</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="64" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/de6/a04258_1afc46e50bd5f980383629d478850afa15" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="db/da9/a04374" kindref="compound">CommandsSemaphore</ref> &gt;</type>
+        <definition>std::vector&lt; CommandsSemaphore &gt; castor3d::LayeredLightPropagationVolumesBase::m_clearCommands</definition>
+        <argsstring></argsstring>
+        <name>m_clearCommands</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="65" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/de6/a04258_1ad7222206f31d7141caec409150f35bb9" prot="private" static="no" mutable="no">
+        <type>std::unordered_map&lt; LightSPtr, LightLpv &gt;</type>
+        <definition>std::unordered_map&lt; LightSPtr, LightLpv &gt; castor3d::LayeredLightPropagationVolumesBase::m_lightLpvs</definition>
+        <argsstring></argsstring>
+        <name>m_lightLpvs</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="83" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/de6/a04258_1a378d57a4d52548ee78119898608b4e7e" prot="private" static="no" mutable="no">
+        <type>LightPropagationPassArray</type>
+        <definition>LightPropagationPassArray castor3d::LayeredLightPropagationVolumesBase::m_lightPropagationPasses</definition>
+        <argsstring></argsstring>
+        <name>m_lightPropagationPasses</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="84" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/de6/a04258_1a3fdefa6838293749b4b18a5bdd4b07c4" prot="private" static="no" mutable="no">
+        <type>castor::BoundingBox</type>
+        <definition>castor::BoundingBox castor3d::LayeredLightPropagationVolumesBase::m_aabb</definition>
+        <argsstring></argsstring>
+        <name>m_aabb</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="86" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/de6/a04258_1a434aa0bfb2fa965d6ba20b78cb9b0457" prot="private" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::LayeredLightPropagationVolumesBase::m_cameraPos</definition>
+        <argsstring></argsstring>
+        <name>m_cameraPos</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="87" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/de6/a04258_1a8d903e39b5469f94823c3d135432adcd" prot="private" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::LayeredLightPropagationVolumesBase::m_cameraDir</definition>
+        <argsstring></argsstring>
+        <name>m_cameraDir</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="88" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="d8/de6/a04258_1aef89dfcdecae4e270987a9c2315f75ee" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::LayeredLightPropagationVolumesBase::LayeredLightPropagationVolumesBase</definition>
+        <argsstring>(Scene const &amp;scene, LightType lightType, RenderDevice const &amp;device, ShadowMapResult const &amp;smResult, LightVolumePassResultArray const &amp;lpvResult, LayeredLpvGridConfigUbo &amp;lpvGridConfigUbo, bool geometryVolumes)</argsstring>
+        <name>LayeredLightPropagationVolumesBase</name>
+        <param>
+          <type><ref refid="d6/d66/a05238" kindref="compound">Scene</ref> const &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d13/a01473_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+          <declname>lightType</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d20/a04686" kindref="compound">ShadowMapResult</ref> const &amp;</type>
+          <declname>smResult</declname>
+        </param>
+        <param>
+          <type>LightVolumePassResultArray const &amp;</type>
+          <declname>lpvResult</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d10/a05470" kindref="compound">LayeredLpvGridConfigUbo</ref> &amp;</type>
+          <declname>lpvGridConfigUbo</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>geometryVolumes</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="34" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d8/de6/a04258_1a7bf255beebc904d215228abae9dbe85b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LayeredLightPropagationVolumesBase::initialise</definition>
+        <argsstring>()</argsstring>
+        <name>initialise</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="43" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/de6/a04258_1a37e180379f2be1c7312a4a31f2d7f4a2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LayeredLightPropagationVolumesBase::cleanup</definition>
+        <argsstring>()</argsstring>
+        <name>cleanup</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="44" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/de6/a04258_1a736595a74404ad9db1e6f82148cb7eea" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LayeredLightPropagationVolumesBase::registerLight</definition>
+        <argsstring>(LightSPtr light)</argsstring>
+        <name>registerLight</name>
+        <param>
+          <type>LightSPtr</type>
+          <declname>light</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="45" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/de6/a04258_1a865d60aba3a9298653d229e54f8d51fb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LayeredLightPropagationVolumesBase::update</definition>
+        <argsstring>(CpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <param>
+          <type><ref refid="d5/d03/a04582" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="46" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/de6/a04258_1a12b96c8e8359862b83d7972115f1028c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::Semaphore const  &amp;</type>
+        <definition>C3D_API ashes::Semaphore const&amp; castor3d::LayeredLightPropagationVolumesBase::render</definition>
+        <argsstring>(ashes::Semaphore const &amp;toWait)</argsstring>
+        <name>render</name>
+        <param>
+          <type>ashes::Semaphore const &amp;</type>
+          <declname>toWait</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="47" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/de6/a04258_1a82e95eb228c7ee06f430e9d796a4d972" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LayeredLightPropagationVolumesBase::accept</definition>
+        <argsstring>(PipelineVisitorBase &amp;visitor)</argsstring>
+        <name>accept</name>
+        <param>
+          <type><ref refid="d5/de2/a03830" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="48" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1491">
+        <label>castor3d::LayeredLightPropagationVolumesBase</label>
+        <link refid="d8/de6/a04258"/>
+        <childnode refid="1492" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1492">
+        <label>Named</label>
+      </node>
+      <node id="1493">
+        <label>castor3d::LayeredLightPropagationVolumesT&lt; GeometryVolumesT &gt;</label>
+        <link refid="d6/db4/a04266"/>
+        <childnode refid="1491" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1494">
+        <label>castor3d::LayeredLightPropagationVolumesBase</label>
+        <link refid="d8/de6/a04258"/>
+        <childnode refid="1495" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1495">
+        <label>Named</label>
+      </node>
+    </collaborationgraph>
+    <location file="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="28" column="1" bodyfile="Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="26" bodyend="89"/>
+    <listofallmembers>
+      <member refid="d8/de6/a04258_1a82e95eb228c7ee06f430e9d796a4d972" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase</scope><name>accept</name></member>
+      <member refid="d8/de6/a04258_1a8f9c86575460447e4b75c702af19d7e8" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase</scope><name>CascadeCount</name></member>
+      <member refid="d8/de6/a04258_1a37e180379f2be1c7312a4a31f2d7f4a2" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase</scope><name>cleanup</name></member>
+      <member refid="d8/de6/a04258_1a7bf255beebc904d215228abae9dbe85b" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase</scope><name>initialise</name></member>
+      <member refid="d8/de6/a04258_1aef89dfcdecae4e270987a9c2315f75ee" prot="protected" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase</scope><name>LayeredLightPropagationVolumesBase</name></member>
+      <member refid="d8/de6/a04258_1a3fdefa6838293749b4b18a5bdd4b07c4" prot="private" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase</scope><name>m_aabb</name></member>
+      <member refid="d8/de6/a04258_1a8d903e39b5469f94823c3d135432adcd" prot="private" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase</scope><name>m_cameraDir</name></member>
+      <member refid="d8/de6/a04258_1a434aa0bfb2fa965d6ba20b78cb9b0457" prot="private" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase</scope><name>m_cameraPos</name></member>
+      <member refid="d8/de6/a04258_1ae2877c1c6ef52a35088e403e0f2a51c6" prot="private" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase</scope><name>m_clearCommand</name></member>
+      <member refid="d8/de6/a04258_1afc46e50bd5f980383629d478850afa15" prot="private" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase</scope><name>m_clearCommands</name></member>
+      <member refid="d8/de6/a04258_1a0cfd358a64c65409d12842fb3584b9be" prot="private" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase</scope><name>m_device</name></member>
+      <member refid="d8/de6/a04258_1af6f377d9e420c4da3ca0d1f2e14caed1" prot="private" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase</scope><name>m_engine</name></member>
+      <member refid="d8/de6/a04258_1aa734297491bf133d63cc3ead529e0aa1" prot="private" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase</scope><name>m_geometry</name></member>
+      <member refid="d8/de6/a04258_1a9fa78eed5f83c3ebb2b18ba56ae45396" prot="private" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase</scope><name>m_geometryVolumes</name></member>
+      <member refid="d8/de6/a04258_1a4e1f8886a539650f2d9a8573402a8820" prot="private" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase</scope><name>m_initialised</name></member>
+      <member refid="d8/de6/a04258_1a00268197b75edc15048c4f072b0a1a40" prot="private" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase</scope><name>m_injection</name></member>
+      <member refid="d8/de6/a04258_1ad7222206f31d7141caec409150f35bb9" prot="private" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase</scope><name>m_lightLpvs</name></member>
+      <member refid="d8/de6/a04258_1a378d57a4d52548ee78119898608b4e7e" prot="private" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase</scope><name>m_lightPropagationPasses</name></member>
+      <member refid="d8/de6/a04258_1ae88f2c18e1b8d2292663da38edcd0378" prot="private" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase</scope><name>m_lightType</name></member>
+      <member refid="d8/de6/a04258_1a0c8cde6bd00231b00e1f7aadb201d1fe" prot="private" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase</scope><name>m_lpvGridConfigUbo</name></member>
+      <member refid="d8/de6/a04258_1af32485b5c63b2aaa9726b3047961475a" prot="private" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase</scope><name>m_lpvGridConfigUbos</name></member>
+      <member refid="d8/de6/a04258_1a4d47cc0f4f60837d133d8725be6c5738" prot="private" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase</scope><name>m_lpvResult</name></member>
+      <member refid="d8/de6/a04258_1a8beb0168f69226ade24572882f779248" prot="private" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase</scope><name>m_propagate</name></member>
+      <member refid="d8/de6/a04258_1abe43aeda1ee7aaa821b444cc64282059" prot="private" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase</scope><name>m_scene</name></member>
+      <member refid="d8/de6/a04258_1addcd8bb4fafe173df5f321cdaa32b8ac" prot="private" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase</scope><name>m_smResult</name></member>
+      <member refid="d8/de6/a04258_1a25bb99ca25831de118867e1edb162ffc" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase</scope><name>MaxPropagationSteps</name></member>
+      <member refid="d8/de6/a04258_1a736595a74404ad9db1e6f82148cb7eea" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase</scope><name>registerLight</name></member>
+      <member refid="d8/de6/a04258_1a12b96c8e8359862b83d7972115f1028c" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase</scope><name>render</name></member>
+      <member refid="d8/de6/a04258_1a865d60aba3a9298653d229e54f8d51fb" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesBase</scope><name>update</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

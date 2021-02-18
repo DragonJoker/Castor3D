@@ -1,4 +1,5 @@
-<map id="castor3d::SpecularGlossinessPbrPass::TextWriter" name="castor3d::SpecularGlossinessPbrPass::TextWriter">
-<area shape="rect" id="node1" title="Pass loader." alt="" coords="13,95,209,136"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,217,47"/>
+<map id="castor3d::BinaryWriter&lt; MeshAnimation &gt;" name="castor3d::BinaryWriter&lt; MeshAnimation &gt;">
+<area shape="rect" id="node1" title="MeshAnimation binary loader." alt="" coords="21,200,173,241"/>
+<area shape="rect" id="node2" href="$da/dbe/a02084.html" title=" " alt="" coords="5,109,188,151"/>
+<area shape="rect" id="node3" href="$da/dbe/a02084.html" title="Binary data chunk writer base class." alt="" coords="5,5,188,47"/>
 </map>

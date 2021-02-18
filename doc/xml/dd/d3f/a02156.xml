@@ -1,0 +1,794 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dd/d3f/a02156" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::BinaryWriterBase</compoundname>
+    <includes local="no">BinaryWriter.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class</type>
+        <declname>TWritten</declname>
+        <defname>TWritten</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="dd/d3f/a02156_1ad6c66bdde51dd57ab2b27f4ddc8db513" prot="protected" static="no" mutable="no">
+        <type><ref refid="d8/dd8/a02108" kindref="compound">BinaryChunk</ref></type>
+        <definition>BinaryChunk castor3d::BinaryWriterBase&lt; TWritten &gt;::m_chunk</definition>
+        <argsstring></argsstring>
+        <name>m_chunk</name>
+        <initializer>{ <ref refid="d7/daf/a02164" kindref="compound">ChunkTyper</ref>&lt; TWritten &gt;::Value }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The writer&apos;s chunk. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryWriter.hpp" line="252" column="1" bodyfile="Binary/BinaryWriter.hpp" bodystart="252" bodyend="-1"/>
+        <referencedby refid="dd/d3f/a02156_1a3b4ae75e6ecd0bdf9f5dc26381633dab" compoundref="d2/df5/a00137" startline="58" endline="70">castor3d::BinaryWriterBase&lt; Skeleton &gt;::write</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/d3f/a02156_1a21e7985d2f99ff20a6056d198aac07c5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::BinaryWriterBase&lt; TWritten &gt;::write</definition>
+        <argsstring>(TWritten const &amp;obj, castor::BinaryFile &amp;file)</argsstring>
+        <name>write</name>
+        <param>
+          <type>TWritten const &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <param>
+          <type>castor::BinaryFile &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+<para>Writes an object to a file. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to write. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The file. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryWriter.hpp" line="28" column="1" bodyfile="Binary/BinaryWriter.hpp" bodystart="28" bodyend="45"/>
+        <referencedby refid="dd/d3f/a02156_1a21e7985d2f99ff20a6056d198aac07c5" compoundref="d2/df5/a00137" startline="28" endline="45">castor3d::BinaryWriterBase&lt; Skeleton &gt;::write</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a02156_1a3b4ae75e6ecd0bdf9f5dc26381633dab" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::BinaryWriterBase&lt; TWritten &gt;::write</definition>
+        <argsstring>(TWritten const &amp;obj, BinaryChunk &amp;chunk)</argsstring>
+        <name>write</name>
+        <param>
+          <type>TWritten const &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/dd8/a02108" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>To chunk writer function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to write. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryWriter.hpp" line="58" column="1" bodyfile="Binary/BinaryWriter.hpp" bodystart="58" bodyend="70"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="dd/d3f/a02156_1a8828d359b7a61ea2b657d5aada2dd87b" prot="protected" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::BinaryWriterBase&lt; TWritten &gt;::doWriteHeader</definition>
+        <argsstring>(BinaryChunk &amp;chunk) const</argsstring>
+        <name>doWriteHeader</name>
+        <param>
+          <type><ref refid="d8/dd8/a02108" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>Writes the header chunk. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent chunk. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryWriter.hpp" line="83" column="1" bodyfile="Binary/BinaryWriter.hpp" bodystart="83" bodyend="102"/>
+        <referencedby refid="dd/d3f/a02156_1a21e7985d2f99ff20a6056d198aac07c5" compoundref="d2/df5/a00137" startline="28" endline="45">castor3d::BinaryWriterBase&lt; Skeleton &gt;::write</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a02156_1a95685db95521fe46169767620976688c" prot="protected" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool castor3d::BinaryWriterBase&lt; TWritten &gt;::doWriteChunk</definition>
+        <argsstring>(T const *values, size_t count, ChunkType chunkType, BinaryChunk &amp;chunk) const</argsstring>
+        <name>doWriteChunk</name>
+        <param>
+          <type>T const *</type>
+          <declname>values</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>count</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d1e/a01479_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref></type>
+          <declname>chunkType</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/dd8/a02108" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>Writes a subchunk value into a chunk. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">values</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The values. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">count</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The values count. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunkType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The subchunk type. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryWriter.hpp" line="120" column="1" bodyfile="Binary/BinaryWriter.hpp" bodystart="120" bodyend="126"/>
+        <referencedby refid="dd/d3f/a02156_1a8828d359b7a61ea2b657d5aada2dd87b" compoundref="d2/df5/a00137" startline="83" endline="102">castor3d::BinaryWriterBase&lt; Skeleton &gt;::doWriteHeader</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a02156_1ac978d1019caf2d37ad181911c78dde33" prot="protected" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>size_t</type>
+            <declname>Count</declname>
+            <defname>Count</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool castor3d::BinaryWriterBase&lt; TWritten &gt;::doWriteChunk</definition>
+        <argsstring>(T const(&amp;values)[Count], ChunkType chunkType, BinaryChunk &amp;chunk) const</argsstring>
+        <name>doWriteChunk</name>
+        <param>
+          <type>T const(&amp;)</type>
+          <declname>values</declname>
+          <array>[Count]</array>
+        </param>
+        <param>
+          <type><ref refid="da/d1e/a01479_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref></type>
+          <declname>chunkType</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/dd8/a02108" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>Writes a subchunk value into a chunk. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">values</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The values. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunkType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The subchunk type. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryWriter.hpp" line="142" column="1" bodyfile="Binary/BinaryWriter.hpp" bodystart="142" bodyend="147"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a02156_1a5eef4da7e3bbce50e00c878bd7b32516" prot="protected" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>size_t</type>
+            <declname>Count</declname>
+            <defname>Count</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool castor3d::BinaryWriterBase&lt; TWritten &gt;::doWriteChunk</definition>
+        <argsstring>(std::array&lt; T, Count &gt; const &amp;values, ChunkType chunkType, BinaryChunk &amp;chunk) const</argsstring>
+        <name>doWriteChunk</name>
+        <param>
+          <type>std::array&lt; T, Count &gt; const &amp;</type>
+          <declname>values</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d1e/a01479_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref></type>
+          <declname>chunkType</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/dd8/a02108" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>Writes a subchunk value into a chunk. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">values</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The values. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunkType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The subchunk type. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryWriter.hpp" line="163" column="1" bodyfile="Binary/BinaryWriter.hpp" bodystart="163" bodyend="168"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a02156_1a5b782961d4526354e5d0e84e78c6bbbb" prot="protected" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool castor3d::BinaryWriterBase&lt; TWritten &gt;::doWriteChunk</definition>
+        <argsstring>(std::vector&lt; T &gt; const &amp;values, ChunkType chunkType, BinaryChunk &amp;chunk) const</argsstring>
+        <name>doWriteChunk</name>
+        <param>
+          <type>std::vector&lt; T &gt; const &amp;</type>
+          <declname>values</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d1e/a01479_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref></type>
+          <declname>chunkType</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/dd8/a02108" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>Writes a subchunk value into a chunk. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">values</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The values. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunkType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The subchunk type. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryWriter.hpp" line="184" column="1" bodyfile="Binary/BinaryWriter.hpp" bodystart="184" bodyend="189"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a02156_1a3bd1cb047e1f2872668a4397496bd7c4" prot="protected" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool castor3d::BinaryWriterBase&lt; TWritten &gt;::doWriteChunk</definition>
+        <argsstring>(T const *begin, T const *end, ChunkType chunkType, BinaryChunk &amp;chunk) const</argsstring>
+        <name>doWriteChunk</name>
+        <param>
+          <type>T const *</type>
+          <declname>begin</declname>
+        </param>
+        <param>
+          <type>T const *</type>
+          <declname>end</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d1e/a01479_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref></type>
+          <declname>chunkType</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/dd8/a02108" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>Writes a subchunk value into a chunk. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">begin</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The values begin. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">end</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The values end. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunkType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The subchunk type. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryWriter.hpp" line="207" column="1" bodyfile="Binary/BinaryWriter.hpp" bodystart="207" bodyend="213"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a02156_1a7bdb655caf767fdde8a4267602e06191" prot="protected" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool castor3d::BinaryWriterBase&lt; TWritten &gt;::doWriteChunk</definition>
+        <argsstring>(T const &amp;value, ChunkType chunkType, BinaryChunk &amp;chunk) const</argsstring>
+        <name>doWriteChunk</name>
+        <param>
+          <type>T const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d1e/a01479_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref></type>
+          <declname>chunkType</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/dd8/a02108" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>Writes a subchunk value into a chunk. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The value. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunkType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The subchunk type. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryWriter.hpp" line="229" column="1" bodyfile="Binary/BinaryWriter.hpp" bodystart="229" bodyend="234"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="dd/d3f/a02156_1a720ab792b3e53c6556c3cb4e5b0e2d06" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>virtual C3D_API bool castor3d::BinaryWriterBase&lt; TWritten &gt;::doWrite</definition>
+        <argsstring>(TWritten const &amp;obj)=0</argsstring>
+        <name>doWrite</name>
+        <reimplementedby refid="de/dd1/a02100_1acbb3503ccd9b5bb0e219168699b99f47">doWrite</reimplementedby>
+        <reimplementedby refid="dc/de2/a02248_1a2e106060645a94fe21d58a6cd5735079">doWrite</reimplementedby>
+        <reimplementedby refid="dc/d29/a02116_1af34cf38176f0875eadac43d1b31d0c43">doWrite</reimplementedby>
+        <reimplementedby refid="de/d1f/a02236_1af3e623de8610408418aee0969210c196">doWrite</reimplementedby>
+        <reimplementedby refid="db/da6/a02224_1ae4cd3b1abadc82ee2c90960acdab1175">doWrite</reimplementedby>
+        <reimplementedby refid="d6/dd1/a02212_1ace650871bb057cf3320fa1234f30b30e">doWrite</reimplementedby>
+        <reimplementedby refid="dd/dce/a02200_1a9c7bcfd9f05bec9febc9a200c1e14792">doWrite</reimplementedby>
+        <reimplementedby refid="dc/d3c/a02188_1a312b94b28345bb2a86e4a07116903f74">doWrite</reimplementedby>
+        <reimplementedby refid="d6/d34/a02176_1a6da6fa4b3e42eb50878abd53c8cec1e0">doWrite</reimplementedby>
+        <reimplementedby refid="de/d81/a02140_1a59746b2e811728c55f13f91034589d27">doWrite</reimplementedby>
+        <reimplementedby refid="d1/d60/a02128_1ad372e4f97c60e8a32a7e05a15121b34c">doWrite</reimplementedby>
+        <reimplementedby refid="d7/db5/a02088_1a79e827b4b6cd1b3bdde77021e05c3b99">doWrite</reimplementedby>
+        <reimplementedby refid="db/d87/a02076_1a5ffce8901dc926cff5e016a9a812fec2">doWrite</reimplementedby>
+        <param>
+          <type>TWritten const &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <briefdescription>
+<para>Writes the object to the writer&apos;s chunk. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to write. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryWriter.hpp" line="247" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Binary data chunk writer base class. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="469">
+        <label>castor3d::BinaryWriterBase&lt; SkeletonAnimation &gt;</label>
+        <link refid="dd/d3f/a02156"/>
+        <childnode refid="454" relation="template-instance">
+          <edgelabel>&lt; SkeletonAnimation &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="459">
+        <label>castor3d::BinaryWriterBase&lt; Bone &gt;</label>
+        <link refid="dd/d3f/a02156"/>
+        <childnode refid="454" relation="template-instance">
+          <edgelabel>&lt; Bone &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="454">
+        <label>castor3d::BinaryWriterBase&lt; TWritten &gt;</label>
+        <link refid="dd/d3f/a02156"/>
+      </node>
+      <node id="473">
+        <label>castor3d::BinaryWriterBase&lt; BonesComponent &gt;</label>
+        <link refid="dd/d3f/a02156"/>
+        <childnode refid="454" relation="template-instance">
+          <edgelabel>&lt; BonesComponent &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="461">
+        <label>castor3d::BinaryWriterBase&lt; SkeletonAnimationBone &gt;</label>
+        <link refid="dd/d3f/a02156"/>
+        <childnode refid="454" relation="template-instance">
+          <edgelabel>&lt; SkeletonAnimationBone &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="478">
+        <label>castor3d::BinaryWriter&lt; Mesh &gt;</label>
+        <link refid="dc/d29/a02116"/>
+        <childnode refid="477" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="476">
+        <label>castor3d::BinaryWriter&lt; SkeletonAnimationObject &gt;</label>
+        <link refid="de/d1f/a02236"/>
+        <childnode refid="475" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="468">
+        <label>castor3d::BinaryWriter&lt; Animation &gt;</label>
+        <link refid="db/d87/a02076"/>
+        <childnode refid="467" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="479">
+        <label>castor3d::BinaryWriterBase&lt; Skeleton &gt;</label>
+        <link refid="dd/d3f/a02156"/>
+        <childnode refid="454" relation="template-instance">
+          <edgelabel>&lt; Skeleton &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="455">
+        <label>castor3d::BinaryWriterBase&lt; SkeletonAnimationKeyFrame &gt;</label>
+        <link refid="dd/d3f/a02156"/>
+        <childnode refid="454" relation="template-instance">
+          <edgelabel>&lt; SkeletonAnimationKeyFrame &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="466">
+        <label>castor3d::BinaryWriter&lt; MeshAnimationKeyFrame &gt;</label>
+        <link refid="de/d81/a02140"/>
+        <childnode refid="465" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="467">
+        <label>castor3d::BinaryWriterBase&lt; Animation &gt;</label>
+        <link refid="dd/d3f/a02156"/>
+        <childnode refid="454" relation="template-instance">
+          <edgelabel>&lt; Animation &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="471">
+        <label>castor3d::BinaryWriterBase&lt; MeshAnimation &gt;</label>
+        <link refid="dd/d3f/a02156"/>
+        <childnode refid="454" relation="template-instance">
+          <edgelabel>&lt; MeshAnimation &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="477">
+        <label>castor3d::BinaryWriterBase&lt; Mesh &gt;</label>
+        <link refid="dd/d3f/a02156"/>
+        <childnode refid="454" relation="template-instance">
+          <edgelabel>&lt; Mesh &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="475">
+        <label>castor3d::BinaryWriterBase&lt; SkeletonAnimationObject &gt;</label>
+        <link refid="dd/d3f/a02156"/>
+        <childnode refid="454" relation="template-instance">
+          <edgelabel>&lt; SkeletonAnimationObject &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="465">
+        <label>castor3d::BinaryWriterBase&lt; MeshAnimationKeyFrame &gt;</label>
+        <link refid="dd/d3f/a02156"/>
+        <childnode refid="454" relation="template-instance">
+          <edgelabel>&lt; MeshAnimationKeyFrame &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="457">
+        <label>castor3d::BinaryWriterBase&lt; SkeletonAnimationNode &gt;</label>
+        <link refid="dd/d3f/a02156"/>
+        <childnode refid="454" relation="template-instance">
+          <edgelabel>&lt; SkeletonAnimationNode &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="460">
+        <label>castor3d::BinaryWriter&lt; Bone &gt;</label>
+        <link refid="d7/db5/a02088"/>
+        <childnode refid="459" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="474">
+        <label>castor3d::BinaryWriter&lt; BonesComponent &gt;</label>
+        <link refid="de/dd1/a02100"/>
+        <childnode refid="473" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="470">
+        <label>castor3d::BinaryWriter&lt; SkeletonAnimation &gt;</label>
+        <link refid="dc/d3c/a02188"/>
+        <childnode refid="469" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="462">
+        <label>castor3d::BinaryWriter&lt; SkeletonAnimationBone &gt;</label>
+        <link refid="dd/dce/a02200"/>
+        <childnode refid="461" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="472">
+        <label>castor3d::BinaryWriter&lt; MeshAnimation &gt;</label>
+        <link refid="d1/d60/a02128"/>
+        <childnode refid="471" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="480">
+        <label>castor3d::BinaryWriter&lt; Skeleton &gt;</label>
+        <link refid="d6/d34/a02176"/>
+        <childnode refid="479" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="464">
+        <label>castor3d::BinaryWriter&lt; Submesh &gt;</label>
+        <link refid="dc/de2/a02248"/>
+        <childnode refid="463" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="458">
+        <label>castor3d::BinaryWriter&lt; SkeletonAnimationNode &gt;</label>
+        <link refid="db/da6/a02224"/>
+        <childnode refid="457" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="463">
+        <label>castor3d::BinaryWriterBase&lt; Submesh &gt;</label>
+        <link refid="dd/d3f/a02156"/>
+        <childnode refid="454" relation="template-instance">
+          <edgelabel>&lt; Submesh &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="456">
+        <label>castor3d::BinaryWriter&lt; SkeletonAnimationKeyFrame &gt;</label>
+        <link refid="d6/dd1/a02212"/>
+        <childnode refid="455" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="481">
+        <label>castor3d::BinaryWriterBase&lt; TWritten &gt;</label>
+        <link refid="dd/d3f/a02156"/>
+        <childnode refid="482" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
+        </childnode>
+      </node>
+      <node id="482">
+        <label>castor3d::BinaryChunk</label>
+        <link refid="d8/dd8/a02108"/>
+      </node>
+    </collaborationgraph>
+    <location file="Binary/BinaryModule.hpp" line="52" column="1" bodyfile="Binary/BinaryModule.hpp" bodystart="52" bodyend="-1"/>
+    <listofallmembers>
+      <member refid="dd/d3f/a02156_1a720ab792b3e53c6556c3cb4e5b0e2d06" prot="private" virt="pure-virtual"><scope>castor3d::BinaryWriterBase</scope><name>doWrite</name></member>
+      <member refid="dd/d3f/a02156_1a95685db95521fe46169767620976688c" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriterBase</scope><name>doWriteChunk</name></member>
+      <member refid="dd/d3f/a02156_1ac978d1019caf2d37ad181911c78dde33" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriterBase</scope><name>doWriteChunk</name></member>
+      <member refid="dd/d3f/a02156_1a5eef4da7e3bbce50e00c878bd7b32516" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriterBase</scope><name>doWriteChunk</name></member>
+      <member refid="dd/d3f/a02156_1a5b782961d4526354e5d0e84e78c6bbbb" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriterBase</scope><name>doWriteChunk</name></member>
+      <member refid="dd/d3f/a02156_1a3bd1cb047e1f2872668a4397496bd7c4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriterBase</scope><name>doWriteChunk</name></member>
+      <member refid="dd/d3f/a02156_1a7bdb655caf767fdde8a4267602e06191" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriterBase</scope><name>doWriteChunk</name></member>
+      <member refid="dd/d3f/a02156_1a8828d359b7a61ea2b657d5aada2dd87b" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriterBase</scope><name>doWriteHeader</name></member>
+      <member refid="dd/d3f/a02156_1ad6c66bdde51dd57ab2b27f4ddc8db513" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriterBase</scope><name>m_chunk</name></member>
+      <member refid="dd/d3f/a02156_1a21e7985d2f99ff20a6056d198aac07c5" prot="public" virt="non-virtual"><scope>castor3d::BinaryWriterBase</scope><name>write</name></member>
+      <member refid="dd/d3f/a02156_1a3b4ae75e6ecd0bdf9f5dc26381633dab" prot="public" virt="non-virtual"><scope>castor3d::BinaryWriterBase</scope><name>write</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

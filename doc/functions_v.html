@@ -10,6 +10,7 @@
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="Castor3D.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -17,10 +18,12 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="castor-small.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Castor3D
-   &#160;<span id="projectnumber">..</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
+   <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
  </tr>
  </tbody>
@@ -43,94 +46,452 @@ $(function() {
 
 <h3><a id="index_v"></a>- v -</h3><ul>
 <li>Value
-: <a class="el" href="d6/d83/a01544.html#a649cf382bfc47818805de4bd2f33e840">castor3d::ChunkTyper&lt; Animation &gt;</a>
-, <a class="el" href="dc/da6/a02192.html#ab1bcf864951f4cc4c28707084e84c924">castor3d::ChunkTyper&lt; Bone &gt;</a>
-, <a class="el" href="de/dc3/a02256.html#aafeb2e028fbf92cbfcf1151a2ead801c">castor3d::ChunkTyper&lt; BonesComponent &gt;</a>
-, <a class="el" href="d1/dce/a02168.html#ac3ccb0805e4dfcca2ebf3f49ede85a1a">castor3d::ChunkTyper&lt; Mesh &gt;</a>
-, <a class="el" href="d8/d22/a01584.html#a24512f3c19e145e647426bbff9389206">castor3d::ChunkTyper&lt; MeshAnimation &gt;</a>
-, <a class="el" href="d4/d3f/a01600.html#abb16e5e57366d23aba3ce73926f1d1fc">castor3d::ChunkTyper&lt; MeshAnimationKeyFrame &gt;</a>
-, <a class="el" href="d6/dd1/a02212.html#abaf6b1c9a6621d7de31b8568cfc8baad">castor3d::ChunkTyper&lt; Skeleton &gt;</a>
-, <a class="el" href="da/df2/a01620.html#ada48e5638f4a43f467393da5a70683cd">castor3d::ChunkTyper&lt; SkeletonAnimation &gt;</a>
-, <a class="el" href="dd/d40/a01636.html#ab13f201892fa623e4b6cfb9a2804af42">castor3d::ChunkTyper&lt; SkeletonAnimationBone &gt;</a>
-, <a class="el" href="d0/dc0/a01652.html#aa7cb40d2fd1a1653ad9171877938a372">castor3d::ChunkTyper&lt; SkeletonAnimationKeyFrame &gt;</a>
-, <a class="el" href="d7/d47/a01668.html#a5713a20264e0ee8c90e7e1d8d4d22fb8">castor3d::ChunkTyper&lt; SkeletonAnimationNode &gt;</a>
-, <a class="el" href="d2/d71/a01684.html#adffd6ff8682371b4f8747e9647114850">castor3d::ChunkTyper&lt; SkeletonAnimationObject &gt;</a>
-, <a class="el" href="dc/d35/a02240.html#a9aa8e9641c55c88cae0e7bb0b59c3e13">castor3d::ChunkTyper&lt; Submesh &gt;</a>
+: <a class="el" href="de/d9d/a02072.html#a649cf382bfc47818805de4bd2f33e840">castor3d::ChunkTyper&lt; Animation &gt;</a>
+, <a class="el" href="da/dbe/a02084.html#ab1bcf864951f4cc4c28707084e84c924">castor3d::ChunkTyper&lt; Bone &gt;</a>
+, <a class="el" href="dd/d77/a02096.html#aafeb2e028fbf92cbfcf1151a2ead801c">castor3d::ChunkTyper&lt; BonesComponent &gt;</a>
+, <a class="el" href="d8/d84/a02112.html#ac3ccb0805e4dfcca2ebf3f49ede85a1a">castor3d::ChunkTyper&lt; Mesh &gt;</a>
+, <a class="el" href="db/d0e/a02124.html#a24512f3c19e145e647426bbff9389206">castor3d::ChunkTyper&lt; MeshAnimation &gt;</a>
+, <a class="el" href="db/ddd/a02136.html#abb16e5e57366d23aba3ce73926f1d1fc">castor3d::ChunkTyper&lt; MeshAnimationKeyFrame &gt;</a>
+, <a class="el" href="d9/d03/a02172.html#abaf6b1c9a6621d7de31b8568cfc8baad">castor3d::ChunkTyper&lt; Skeleton &gt;</a>
+, <a class="el" href="d5/ddd/a02184.html#ada48e5638f4a43f467393da5a70683cd">castor3d::ChunkTyper&lt; SkeletonAnimation &gt;</a>
+, <a class="el" href="d8/db0/a02196.html#ab13f201892fa623e4b6cfb9a2804af42">castor3d::ChunkTyper&lt; SkeletonAnimationBone &gt;</a>
+, <a class="el" href="d8/d1e/a02208.html#aa7cb40d2fd1a1653ad9171877938a372">castor3d::ChunkTyper&lt; SkeletonAnimationKeyFrame &gt;</a>
+, <a class="el" href="d5/de0/a02220.html#a5713a20264e0ee8c90e7e1d8d4d22fb8">castor3d::ChunkTyper&lt; SkeletonAnimationNode &gt;</a>
+, <a class="el" href="db/d14/a02232.html#adffd6ff8682371b4f8747e9647114850">castor3d::ChunkTyper&lt; SkeletonAnimationObject &gt;</a>
+, <a class="el" href="d8/d51/a02244.html#a9aa8e9641c55c88cae0e7bb0b59c3e13">castor3d::ChunkTyper&lt; Submesh &gt;</a>
 </li>
 <li>value
-: <a class="el" href="d9/de5/a03240.html#ac8a088966c90b0fa64fef1d53ce72816">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eBool||Type==UniformType::eInt||Type==UniformType::eUInt||Type==UniformType::eFloat||Type==UniformType::eDouble||Type==UniformType::eSampler &gt;::type &gt;</a>
-, <a class="el" href="d3/d55/a03256.html#aecbc5650f77d2de7bf22ee5d78fa49de">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat2x2b||Type==UniformType::eMat2x2i||Type==UniformType::eMat2x2ui||Type==UniformType::eMat2x2f||Type==UniformType::eMat2x2d &gt;::type &gt;</a>
-, <a class="el" href="d1/dda/a03260.html#a7134bd3d9f70ee37f8f1f6d53038f502">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat2x3b||Type==UniformType::eMat2x3i||Type==UniformType::eMat2x3ui||Type==UniformType::eMat2x3f||Type==UniformType::eMat2x3d &gt;::type &gt;</a>
-, <a class="el" href="d4/d1a/a03264.html#a854b2058e55799f316cc2a0377c10b51">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat2x4b||Type==UniformType::eMat2x4i||Type==UniformType::eMat2x4ui||Type==UniformType::eMat2x4f||Type==UniformType::eMat2x4d &gt;::type &gt;</a>
-, <a class="el" href="d4/dcb/a03268.html#aa070e727f9f0a333cb29f752f0bedb51">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat3x2b||Type==UniformType::eMat3x2i||Type==UniformType::eMat3x2ui||Type==UniformType::eMat3x2f||Type==UniformType::eMat3x2d &gt;::type &gt;</a>
-, <a class="el" href="d4/d1c/a03272.html#af1cdbfa1015c394d4e79c9572d40e1b0">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat3x3b||Type==UniformType::eMat3x3i||Type==UniformType::eMat3x3ui||Type==UniformType::eMat3x3f||Type==UniformType::eMat3x3d &gt;::type &gt;</a>
-, <a class="el" href="d0/ded/a03276.html#a0e70049b82896a38db3ce155e88bb21d">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat3x4b||Type==UniformType::eMat3x4i||Type==UniformType::eMat3x4ui||Type==UniformType::eMat3x4f||Type==UniformType::eMat3x4d &gt;::type &gt;</a>
-, <a class="el" href="de/d7f/a03280.html#a775e2148391d25f78998ea3fe71aca53">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat4x2b||Type==UniformType::eMat4x2i||Type==UniformType::eMat4x2ui||Type==UniformType::eMat4x2f||Type==UniformType::eMat4x2d &gt;::type &gt;</a>
-, <a class="el" href="d6/d25/a03284.html#a73862a05c05880e665ceca0801acafb7">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat4x3b||Type==UniformType::eMat4x3i||Type==UniformType::eMat4x3ui||Type==UniformType::eMat4x3f||Type==UniformType::eMat4x3d &gt;::type &gt;</a>
-, <a class="el" href="db/de4/a03288.html#ab23dc7aabb94cd7bfb329af673a1d74b">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eMat4x4b||Type==UniformType::eMat4x4i||Type==UniformType::eMat4x4ui||Type==UniformType::eMat4x4f||Type==UniformType::eMat4x4d &gt;::type &gt;</a>
-, <a class="el" href="d1/dfa/a03244.html#a9dbbf37224ebcc69b3ca805fdbf40510">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eVec2b||Type==UniformType::eVec2i||Type==UniformType::eVec2ui||Type==UniformType::eVec2f||Type==UniformType::eVec2d &gt;::type &gt;</a>
-, <a class="el" href="d9/d01/a03248.html#a0c19db69c5c4560bf54f053e9e1e13c6">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eVec3b||Type==UniformType::eVec3i||Type==UniformType::eVec3ui||Type==UniformType::eVec3f||Type==UniformType::eVec3d &gt;::type &gt;</a>
-, <a class="el" href="d7/d44/a03252.html#a1187c9bad93e0ccb298c4867574ce344">castor3d::VariableTypeTraits&lt; Type, typename std::enable_if&lt; Type==UniformType::eVec4b||Type==UniformType::eVec4i||Type==UniformType::eVec4ui||Type==UniformType::eVec4f||Type==UniformType::eVec4d &gt;::type &gt;</a>
+: <a class="el" href="d5/d74/a03596.html#abe4c73204501d4f6b44ef3885d394196">castor3d::VkTypeTraits&lt; VkAccelerationStructureCreateInfoNV &gt;</a>
+, <a class="el" href="d3/d50/a03632.html#aa96c570c45dd810020bd6f720f7bd667">castor3d::VkTypeTraits&lt; VkAccelerationStructureInfoNV &gt;</a>
+, <a class="el" href="d0/da2/a03620.html#a1bbb07f1089ca438a7796da5dbc1cfc6">castor3d::VkTypeTraits&lt; VkAccelerationStructureMemoryRequirementsInfoNV &gt;</a>
+, <a class="el" href="d8/dec/a03164.html#acd626ef2e1ce02026c1d252a901b5808">castor3d::VkTypeTraits&lt; VkAcquireNextImageInfoKHR &gt;</a>
+, <a class="el" href="d8/da6/a02696.html#a8bde1f512696ffa4ee8735ecf9b0a83d">castor3d::VkTypeTraits&lt; VkApplicationInfo &gt;</a>
+, <a class="el" href="d0/d06/a03368.html#a635ec4a972c4d69e4a600752f7bd04ae">castor3d::VkTypeTraits&lt; VkAttachmentDescription2KHR &gt;</a>
+, <a class="el" href="d0/db9/a03372.html#adf6f2b331f7c59a3ebc33c13c20101c6">castor3d::VkTypeTraits&lt; VkAttachmentReference2KHR &gt;</a>
+, <a class="el" href="d1/d43/a03612.html#adaac7adc3a6e6cb49993ab5f858b6e94">castor3d::VkTypeTraits&lt; VkBindAccelerationStructureMemoryInfoNV &gt;</a>
+, <a class="el" href="da/dad/a02928.html#a0459c25d4eed2e0a4195f3a7412b1f5c">castor3d::VkTypeTraits&lt; VkBindBufferMemoryDeviceGroupInfo &gt;</a>
+, <a class="el" href="d4/d04/a02888.html#a705b4b5542bf6720a0b7f12a1d31a1bd">castor3d::VkTypeTraits&lt; VkBindBufferMemoryInfo &gt;</a>
+, <a class="el" href="d2/d0c/a02932.html#a4fca66dd80f9caaa2e47e956202a5adb">castor3d::VkTypeTraits&lt; VkBindImageMemoryDeviceGroupInfo &gt;</a>
+, <a class="el" href="d7/d07/a02892.html#a14729d8da899b7c29160585502d545fc">castor3d::VkTypeTraits&lt; VkBindImageMemoryInfo &gt;</a>
+, <a class="el" href="d8/d08/a03160.html#ac852447ca6c7148103b33148ea0dd8a6">castor3d::VkTypeTraits&lt; VkBindImageMemorySwapchainInfoKHR &gt;</a>
+, <a class="el" href="d4/d90/a03056.html#a8c75c26c4d2c82f8d731d9b4474a1160">castor3d::VkTypeTraits&lt; VkBindImagePlaneMemoryInfo &gt;</a>
+, <a class="el" href="d7/deb/a02724.html#a83b576a33499d7d4286e026fb41ca8e9">castor3d::VkTypeTraits&lt; VkBindSparseInfo &gt;</a>
+, <a class="el" href="d5/dc7/a02744.html#a20b82a0b73faa64b0bba50637ee53cce">castor3d::VkTypeTraits&lt; VkBufferCreateInfo &gt;</a>
+, <a class="el" href="dd/dbc/a03800.html#aee5a7efeaf62a37db0e315d1788ebd3a">castor3d::VkTypeTraits&lt; VkBufferDeviceAddressCreateInfoEXT &gt;</a>
+, <a class="el" href="dc/ddb/a03796.html#a6c12b6d266aeb2e35823a471e707d10a">castor3d::VkTypeTraits&lt; VkBufferDeviceAddressInfoEXT &gt;</a>
+, <a class="el" href="d9/dcc/a02872.html#a891b2074d57501c971f920258f691233">castor3d::VkTypeTraits&lt; VkBufferMemoryBarrier &gt;</a>
+, <a class="el" href="d3/d8d/a02944.html#a2322dd74301bca878581f448d906de71">castor3d::VkTypeTraits&lt; VkBufferMemoryRequirementsInfo2 &gt;</a>
+, <a class="el" href="d0/d1f/a02748.html#abd6e5624305f44e925483c4b4b048e71">castor3d::VkTypeTraits&lt; VkBufferViewCreateInfo &gt;</a>
+, <a class="el" href="d9/d94/a03676.html#a50bb0954da39fc3b2670e8c9c640599f">castor3d::VkTypeTraits&lt; VkCalibratedTimestampInfoEXT &gt;</a>
+, <a class="el" href="d3/d6c/a03744.html#a3df7f4cf9c096a698685be82d8aff337">castor3d::VkTypeTraits&lt; VkCheckpointDataNV &gt;</a>
+, <a class="el" href="d6/dbc/a02856.html#aef2e5dfc60325f2436dd09f0f7f34ff7">castor3d::VkTypeTraits&lt; VkCommandBufferAllocateInfo &gt;</a>
+, <a class="el" href="da/d47/a02864.html#ad37e1be5801dbc12fa8b517242237672">castor3d::VkTypeTraits&lt; VkCommandBufferBeginInfo &gt;</a>
+, <a class="el" href="d6/d25/a03284.html#a44ab6dec77cdd4ecfcfb76da9dc02a15">castor3d::VkTypeTraits&lt; VkCommandBufferInheritanceConditionalRenderingInfoEXT &gt;</a>
+, <a class="el" href="dc/dac/a02860.html#a9343afc674c11edb7250481eac4ecd98">castor3d::VkTypeTraits&lt; VkCommandBufferInheritanceInfo &gt;</a>
+, <a class="el" href="da/de8/a02852.html#aee12c3c96f8e7c1c6a45665cf8bd5dba">castor3d::VkTypeTraits&lt; VkCommandPoolCreateInfo &gt;</a>
+, <a class="el" href="d1/d19/a02812.html#aabfaeae5e72094e0a1216a18dc9713af">castor3d::VkTypeTraits&lt; VkComputePipelineCreateInfo &gt;</a>
+, <a class="el" href="d7/d52/a03292.html#a282f4fb6f39be5bd5d66e0f215d928af">castor3d::VkTypeTraits&lt; VkConditionalRenderingBeginInfoEXT &gt;</a>
+, <a class="el" href="d9/d53/a03816.html#a430d4ef66a0d29eef7ef34025fb275a1">castor3d::VkTypeTraits&lt; VkCooperativeMatrixPropertiesNV &gt;</a>
+, <a class="el" href="d9/d4d/a02840.html#a3fa3d0799468aad77bc87f2011b21658">castor3d::VkTypeTraits&lt; VkCopyDescriptorSet &gt;</a>
+, <a class="el" href="d6/d75/a03204.html#ab60f5a92a7e8afff671a1d764f673f7b">castor3d::VkTypeTraits&lt; VkDebugMarkerMarkerInfoEXT &gt;</a>
+, <a class="el" href="dc/ddd/a03196.html#a031e23b2cd185cb2b90279a55061b571">castor3d::VkTypeTraits&lt; VkDebugMarkerObjectNameInfoEXT &gt;</a>
+, <a class="el" href="de/d3a/a03200.html#aa03e4b86dff8bc79389cc527a6cd35b7">castor3d::VkTypeTraits&lt; VkDebugMarkerObjectTagInfoEXT &gt;</a>
+, <a class="el" href="da/dfb/a03188.html#a9c2829e65f1b0682fdc3fac5a132bbc6">castor3d::VkTypeTraits&lt; VkDebugReportCallbackCreateInfoEXT &gt;</a>
+, <a class="el" href="d2/d29/a03448.html#a94b38a8354bd8b19d1425468d297dd72">castor3d::VkTypeTraits&lt; VkDebugUtilsLabelEXT &gt;</a>
+, <a class="el" href="df/d0f/a03452.html#a8cc10c4ca92f48565960ab3c45e841e3">castor3d::VkTypeTraits&lt; VkDebugUtilsMessengerCallbackDataEXT &gt;</a>
+, <a class="el" href="d6/d36/a03456.html#abc74cd65eec4dac827dffa7614a085c2">castor3d::VkTypeTraits&lt; VkDebugUtilsMessengerCreateInfoEXT &gt;</a>
+, <a class="el" href="df/d89/a03440.html#a576f5a8b9b455d4babefa51bb97d8673">castor3d::VkTypeTraits&lt; VkDebugUtilsObjectNameInfoEXT &gt;</a>
+, <a class="el" href="dd/ddc/a03444.html#a248ae077bc57e01abd73e9023f92aaaf">castor3d::VkTypeTraits&lt; VkDebugUtilsObjectTagInfoEXT &gt;</a>
+, <a class="el" href="df/d1e/a03212.html#a7ed0deae7f9d40152e5deacec731d08c">castor3d::VkTypeTraits&lt; VkDedicatedAllocationBufferCreateInfoNV &gt;</a>
+, <a class="el" href="d6/d1a/a03208.html#a501ba504a5ccb65bfc74ba38bed98a4d">castor3d::VkTypeTraits&lt; VkDedicatedAllocationImageCreateInfoNV &gt;</a>
+, <a class="el" href="d5/d2f/a03216.html#a29a32728a909d615f1c502d8f8e36ac8">castor3d::VkTypeTraits&lt; VkDedicatedAllocationMemoryAllocateInfoNV &gt;</a>
+, <a class="el" href="d2/d4c/a02828.html#a377032495beacca3b1d7c97afd408ed5">castor3d::VkTypeTraits&lt; VkDescriptorPoolCreateInfo &gt;</a>
+, <a class="el" href="d8/dbb/a03480.html#a0b8edbbd43962230dd2bd195ec68b9e2">castor3d::VkTypeTraits&lt; VkDescriptorPoolInlineUniformBlockCreateInfoEXT &gt;</a>
+, <a class="el" href="dd/d9b/a02832.html#a8dcf7dde5b62a8b93a45d42ba503ae97">castor3d::VkTypeTraits&lt; VkDescriptorSetAllocateInfo &gt;</a>
+, <a class="el" href="d3/df0/a03556.html#a34eda4f4908edd9fe25da4f9d774b5a7">castor3d::VkTypeTraits&lt; VkDescriptorSetLayoutBindingFlagsCreateInfoEXT &gt;</a>
+, <a class="el" href="dd/dfa/a02824.html#a9954081572876d225dca052f045b6118">castor3d::VkTypeTraits&lt; VkDescriptorSetLayoutCreateInfo &gt;</a>
+, <a class="el" href="dc/d28/a03136.html#afea42925a4941a7c61760fc7c79b9613">castor3d::VkTypeTraits&lt; VkDescriptorSetLayoutSupport &gt;</a>
+, <a class="el" href="dc/d29/a03568.html#a6287f2433959f29903edc5de74d420f7">castor3d::VkTypeTraits&lt; VkDescriptorSetVariableDescriptorCountAllocateInfoEXT &gt;</a>
+, <a class="el" href="d8/db0/a03572.html#a247ffcd987a20d1b936745936f3ed526">castor3d::VkTypeTraits&lt; VkDescriptorSetVariableDescriptorCountLayoutSupportEXT &gt;</a>
+, <a class="el" href="dd/d7c/a03072.html#a11a018270e8811583a5bd68ad045c853">castor3d::VkTypeTraits&lt; VkDescriptorUpdateTemplateCreateInfo &gt;</a>
+, <a class="el" href="d7/d73/a02708.html#a378c1d842833a60e89510c92342b0501">castor3d::VkTypeTraits&lt; VkDeviceCreateInfo &gt;</a>
+, <a class="el" href="df/daa/a03316.html#ae8c094f1ef203267e495d7f66f30b1f4">castor3d::VkTypeTraits&lt; VkDeviceEventInfoEXT &gt;</a>
+, <a class="el" href="d9/dc5/a02924.html#af92c579ac81b8d93e02efe6983c56ed2">castor3d::VkTypeTraits&lt; VkDeviceGroupBindSparseInfo &gt;</a>
+, <a class="el" href="d6/dd2/a02916.html#a0f491b9c2e1f0a9bf11f9f6916278738">castor3d::VkTypeTraits&lt; VkDeviceGroupCommandBufferBeginInfo &gt;</a>
+, <a class="el" href="de/db0/a02940.html#af57a0d63c1d304a6570cc1cd2db87b59">castor3d::VkTypeTraits&lt; VkDeviceGroupDeviceCreateInfo &gt;</a>
+, <a class="el" href="d0/d9f/a03152.html#a4204228324d4742227cd2b1c2babfdc6">castor3d::VkTypeTraits&lt; VkDeviceGroupPresentCapabilitiesKHR &gt;</a>
+, <a class="el" href="d8/d87/a03168.html#ab77ba4fbedb86713d7bf1ee0fc9e3fcc">castor3d::VkTypeTraits&lt; VkDeviceGroupPresentInfoKHR &gt;</a>
+, <a class="el" href="dd/d3f/a02912.html#a72b31b86ec0e7a05df2b64676de9bd5c">castor3d::VkTypeTraits&lt; VkDeviceGroupRenderPassBeginInfo &gt;</a>
+, <a class="el" href="d1/d77/a02920.html#a16f0b5277f98b18e461a722f4dd3daf2">castor3d::VkTypeTraits&lt; VkDeviceGroupSubmitInfo &gt;</a>
+, <a class="el" href="db/dc1/a03172.html#a2a9089f350cb3ce2ce5da2c3f144b292">castor3d::VkTypeTraits&lt; VkDeviceGroupSwapchainCreateInfoKHR &gt;</a>
+, <a class="el" href="d1/d24/a03684.html#a214029c99ce4a267dd5a231db5e1d584">castor3d::VkTypeTraits&lt; VkDeviceMemoryOverallocationCreateInfoAMD &gt;</a>
+, <a class="el" href="d4/d9d/a02704.html#a9d586a7df5be84f8d55663313d8cc625">castor3d::VkTypeTraits&lt; VkDeviceQueueCreateInfo &gt;</a>
+, <a class="el" href="d6/da5/a03652.html#a9479c129534501cd75b7f6ca4e82f701">castor3d::VkTypeTraits&lt; VkDeviceQueueGlobalPriorityCreateInfoEXT &gt;</a>
+, <a class="el" href="d7/d98/a03044.html#a6ea8cdd96ac19aa64e0861bdbab27a93">castor3d::VkTypeTraits&lt; VkDeviceQueueInfo2 &gt;</a>
+, <a class="el" href="db/d69/a03320.html#a14fb6300a10e6e9a0b91875d4c4d8be5">castor3d::VkTypeTraits&lt; VkDisplayEventInfoEXT &gt;</a>
+, <a class="el" href="df/d0d/a03176.html#a0f6f2c5954f376efc77e26e498822874">castor3d::VkTypeTraits&lt; VkDisplayModeCreateInfoKHR &gt;</a>
+, <a class="el" href="d5/d6b/a03428.html#aec9ff21c58039c206703631d6ff652ab">castor3d::VkTypeTraits&lt; VkDisplayModeProperties2KHR &gt;</a>
+, <a class="el" href="d4/d87/a03436.html#a17989e780fba4e2d8c17adb447b4d288">castor3d::VkTypeTraits&lt; VkDisplayPlaneCapabilities2KHR &gt;</a>
+, <a class="el" href="de/df8/a03432.html#a396b24eb51d65e723ccc729daa2f6ee5">castor3d::VkTypeTraits&lt; VkDisplayPlaneInfo2KHR &gt;</a>
+, <a class="el" href="dc/dc7/a03424.html#af010e18609bbc2bf0b6603d114877104">castor3d::VkTypeTraits&lt; VkDisplayPlaneProperties2KHR &gt;</a>
+, <a class="el" href="dc/de8/a03312.html#aede7a336cec861068e4b114d86af4c02">castor3d::VkTypeTraits&lt; VkDisplayPowerInfoEXT &gt;</a>
+, <a class="el" href="d0/d08/a03184.html#a2f11c4335ab89f8ec9424de144d8cf79">castor3d::VkTypeTraits&lt; VkDisplayPresentInfoKHR &gt;</a>
+, <a class="el" href="d1/d8b/a03420.html#a55620194ab3e156f6b4a7067d8ca717c">castor3d::VkTypeTraits&lt; VkDisplayProperties2KHR &gt;</a>
+, <a class="el" href="d6/da1/a03180.html#abb38d26e297fbc936cdd40ae5450bfff">castor3d::VkTypeTraits&lt; VkDisplaySurfaceCreateInfoKHR &gt;</a>
+, <a class="el" href="d0/d61/a03528.html#a760c4084f47e8442a81a2ae1a7d66e83">castor3d::VkTypeTraits&lt; VkDrmFormatModifierPropertiesListEXT &gt;</a>
+, <a class="el" href="da/dd3/a02736.html#a9e67774c415b3a8c7dc4e5808ef5d3d4">castor3d::VkTypeTraits&lt; VkEventCreateInfo &gt;</a>
+, <a class="el" href="d8/d96/a03116.html#a80be1ad60b1a2ec49aa456c1504dac04">castor3d::VkTypeTraits&lt; VkExportFenceCreateInfo &gt;</a>
+, <a class="el" href="da/dc0/a03104.html#a72d349fb815d0fc5a5fdd246acb02827">castor3d::VkTypeTraits&lt; VkExportMemoryAllocateInfo &gt;</a>
+, <a class="el" href="d1/dfa/a03244.html#ad8902d9a60999880f9fec72a64dcfd1f">castor3d::VkTypeTraits&lt; VkExportMemoryAllocateInfoNV &gt;</a>
+, <a class="el" href="d3/d45/a03120.html#abf0291a7c2b650082bc6abc559646fc6">castor3d::VkTypeTraits&lt; VkExportSemaphoreCreateInfo &gt;</a>
+, <a class="el" href="dd/d50/a03088.html#a9186b485ffef8b78d9553070999da0cb">castor3d::VkTypeTraits&lt; VkExternalBufferProperties &gt;</a>
+, <a class="el" href="de/dd1/a03112.html#adc38770379e146ac635640ede6a1ff4c">castor3d::VkTypeTraits&lt; VkExternalFenceProperties &gt;</a>
+, <a class="el" href="d1/d7a/a03080.html#ad38513228023cd812625459e2c15c1d3">castor3d::VkTypeTraits&lt; VkExternalImageFormatProperties &gt;</a>
+, <a class="el" href="de/d98/a03096.html#ae5e77d190810ab38bd130534e46376e2">castor3d::VkTypeTraits&lt; VkExternalMemoryBufferCreateInfo &gt;</a>
+, <a class="el" href="d5/d3a/a03100.html#a307cca0e919a7b01cb050efbe794a035">castor3d::VkTypeTraits&lt; VkExternalMemoryImageCreateInfo &gt;</a>
+, <a class="el" href="d9/de5/a03240.html#ac18347eabb146b3fd797e7ff92f2e933">castor3d::VkTypeTraits&lt; VkExternalMemoryImageCreateInfoNV &gt;</a>
+, <a class="el" href="db/d6b/a03128.html#ac8e0cf5df5c3b75319aeea77a9067ba9">castor3d::VkTypeTraits&lt; VkExternalSemaphoreProperties &gt;</a>
+, <a class="el" href="db/d59/a02728.html#aa600a8d880d7bf725d6fdf3e69ed2767">castor3d::VkTypeTraits&lt; VkFenceCreateInfo &gt;</a>
+, <a class="el" href="dc/da7/a03404.html#a2a5cb06fcb353634adc930594642da8b">castor3d::VkTypeTraits&lt; VkFenceGetFdInfoKHR &gt;</a>
+, <a class="el" href="d6/d62/a03648.html#af3592b08f3e05ced0842eaa28719bde7">castor3d::VkTypeTraits&lt; VkFilterCubicImageViewImageFormatPropertiesEXT &gt;</a>
+, <a class="el" href="d0/daf/a02972.html#a580503064d2370a357b12fe887503fe0">castor3d::VkTypeTraits&lt; VkFormatProperties2 &gt;</a>
+, <a class="el" href="df/de1/a02844.html#a45b94e54c230368a02f919bbe2e860ec">castor3d::VkTypeTraits&lt; VkFramebufferCreateInfo &gt;</a>
+, <a class="el" href="d3/dce/a03608.html#a285c6a2028cfeb0565c8cfaa63df639a">castor3d::VkTypeTraits&lt; VkGeometryAABBNV &gt;</a>
+, <a class="el" href="df/d81/a03600.html#a0555d046b5c5c0e6e273f1aa21276747">castor3d::VkTypeTraits&lt; VkGeometryNV &gt;</a>
+, <a class="el" href="d9/dbd/a03604.html#a55beb01bc8771326a3fe1913c52196c7">castor3d::VkTypeTraits&lt; VkGeometryTrianglesNV &gt;</a>
+, <a class="el" href="d1/dd0/a02808.html#a6fa4ef6b2af38292a5be097b6f0834be">castor3d::VkTypeTraits&lt; VkGraphicsPipelineCreateInfo &gt;</a>
+, <a class="el" href="d4/dd6/a03364.html#a651a0465ff6f3c91120cd599d7e1df53">castor3d::VkTypeTraits&lt; VkHdrMetadataEXT &gt;</a>
+, <a class="el" href="dc/d3d/a02752.html#ab0b1b23d80f7ba8713e03246e0288165">castor3d::VkTypeTraits&lt; VkImageCreateInfo &gt;</a>
+, <a class="el" href="dd/dd7/a03540.html#a991311f4866cbe5a180cdbe9d6134f3d">castor3d::VkTypeTraits&lt; VkImageDrmFormatModifierExplicitCreateInfoEXT &gt;</a>
+, <a class="el" href="d1/dfd/a03536.html#a73ca87e5a635c339dba2a407dee5e241">castor3d::VkTypeTraits&lt; VkImageDrmFormatModifierListCreateInfoEXT &gt;</a>
+, <a class="el" href="d6/d02/a03544.html#a2575bbe2b2597b0f66e3142b08cb2528">castor3d::VkTypeTraits&lt; VkImageDrmFormatModifierPropertiesEXT &gt;</a>
+, <a class="el" href="dd/d5d/a03504.html#a40fff62de42470f229a7b04fcac0abc6">castor3d::VkTypeTraits&lt; VkImageFormatListCreateInfoKHR &gt;</a>
+, <a class="el" href="d3/dff/a02976.html#a2505d06984bea82f6982c6fe005cc7e9">castor3d::VkTypeTraits&lt; VkImageFormatProperties2 &gt;</a>
+, <a class="el" href="d7/d65/a02876.html#aa246cebb99ce99dfd6c6dd5020d4f879">castor3d::VkTypeTraits&lt; VkImageMemoryBarrier &gt;</a>
+, <a class="el" href="d2/d9c/a02948.html#af0d1c66d7171e2951c62a2b8a7f5edb1">castor3d::VkTypeTraits&lt; VkImageMemoryRequirementsInfo2 &gt;</a>
+, <a class="el" href="d7/db8/a03060.html#aa023d1776aa4ade12a39f48f46c8ab65">castor3d::VkTypeTraits&lt; VkImagePlaneMemoryRequirementsInfo &gt;</a>
+, <a class="el" href="d6/d8e/a02952.html#a66511587cbdd619eee5b4aecccc40522">castor3d::VkTypeTraits&lt; VkImageSparseMemoryRequirementsInfo2 &gt;</a>
+, <a class="el" href="d7/d50/a03804.html#ac9dc6a83557a1468a2f68fb104d55854">castor3d::VkTypeTraits&lt; VkImageStencilUsageCreateInfoEXT &gt;</a>
+, <a class="el" href="d7/da0/a03156.html#a35f2601429c113e5ddb2b6b74e0405bc">castor3d::VkTypeTraits&lt; VkImageSwapchainCreateInfoKHR &gt;</a>
+, <a class="el" href="d7/d44/a03252.html#a7e30eab605f2eb134f3f94a8d6d4e9bc">castor3d::VkTypeTraits&lt; VkImageViewASTCDecodeModeEXT &gt;</a>
+, <a class="el" href="dc/d80/a02756.html#ac352cc8a0314815c7976eb3a58a22710">castor3d::VkTypeTraits&lt; VkImageViewCreateInfo &gt;</a>
+, <a class="el" href="d8/dbd/a03008.html#a37ffed61afb2d71b2dddaef9cccbf324">castor3d::VkTypeTraits&lt; VkImageViewUsageCreateInfo &gt;</a>
+, <a class="el" href="d2/d9b/a03400.html#a7ddf98ef6184a48b8a679059524b00b3">castor3d::VkTypeTraits&lt; VkImportFenceFdInfoKHR &gt;</a>
+, <a class="el" href="d1/dda/a03260.html#ac3415c209c1400d38454318feeae682f">castor3d::VkTypeTraits&lt; VkImportMemoryFdInfoKHR &gt;</a>
+, <a class="el" href="d0/d99/a03660.html#a1fa65fbcf5286efd8c6098d8b91ad7ac">castor3d::VkTypeTraits&lt; VkImportMemoryHostPointerInfoEXT &gt;</a>
+, <a class="el" href="d4/d1c/a03272.html#ab9c25f7db8173f3ec7676a79a6fe3a74">castor3d::VkTypeTraits&lt; VkImportSemaphoreFdInfoKHR &gt;</a>
+, <a class="el" href="dd/dee/a02700.html#aa4b79b4b4ac705413cdf276e94401f8e">castor3d::VkTypeTraits&lt; VkInstanceCreateInfo &gt;</a>
+, <a class="el" href="d5/d95/a02720.html#abf0e7b749ad00b79eb4d8c70fcce3ca8">castor3d::VkTypeTraits&lt; VkMappedMemoryRange &gt;</a>
+, <a class="el" href="df/dfc/a02908.html#accda1c9888eff35ef32b77376a53e64a">castor3d::VkTypeTraits&lt; VkMemoryAllocateFlagsInfo &gt;</a>
+, <a class="el" href="db/d1d/a02716.html#a12ae3c95460e5a4fd8d6e051f87b1347">castor3d::VkTypeTraits&lt; VkMemoryAllocateInfo &gt;</a>
+, <a class="el" href="d7/d35/a02880.html#a5ef7afb1da07eb297284bd50d9c4dc8c">castor3d::VkTypeTraits&lt; VkMemoryBarrier &gt;</a>
+, <a class="el" href="d8/d05/a02904.html#a07aead1c8a8e3a746948609aa2aa53d5">castor3d::VkTypeTraits&lt; VkMemoryDedicatedAllocateInfo &gt;</a>
+, <a class="el" href="d3/d5d/a02900.html#a9143efb9b52a0f0b7af2d038fcbd58c9">castor3d::VkTypeTraits&lt; VkMemoryDedicatedRequirements &gt;</a>
+, <a class="el" href="d4/d1a/a03264.html#a01ca971b5f9a5d13bf9190c2b7349caa">castor3d::VkTypeTraits&lt; VkMemoryFdPropertiesKHR &gt;</a>
+, <a class="el" href="d4/dcb/a03268.html#ae84dad0d6e4e4c9f95e57325d41e21b8">castor3d::VkTypeTraits&lt; VkMemoryGetFdInfoKHR &gt;</a>
+, <a class="el" href="dc/d4c/a03664.html#aec2aabc9439f869b9c78668b69b1528b">castor3d::VkTypeTraits&lt; VkMemoryHostPointerPropertiesEXT &gt;</a>
+, <a class="el" href="d4/d6e/a03784.html#af395c4d40b8ee8705a7ad4b7b7d32040">castor3d::VkTypeTraits&lt; VkMemoryPriorityAllocateInfoEXT &gt;</a>
+, <a class="el" href="d5/d6c/a02956.html#aa89ff3e03c3b3fadfde5efbea08249be">castor3d::VkTypeTraits&lt; VkMemoryRequirements2 &gt;</a>
+, <a class="el" href="d8/d63/a03500.html#aa7a9b1e5995f97ebd16cc7d0c69ec0b0">castor3d::VkTypeTraits&lt; VkMultisamplePropertiesEXT &gt;</a>
+, <a class="el" href="de/dd8/a02896.html#a90e36331db32bb52c6522782a067456b">castor3d::VkTypeTraits&lt; VkPhysicalDevice16BitStorageFeatures &gt;</a>
+, <a class="el" href="d7/df2/a03656.html#a91da791e42eaac676070e2ed51d8517d">castor3d::VkTypeTraits&lt; VkPhysicalDevice8BitStorageFeaturesKHR &gt;</a>
+, <a class="el" href="d3/d55/a03256.html#a18385464c5022395037f69e2029df20b">castor3d::VkTypeTraits&lt; VkPhysicalDeviceASTCDecodeFeaturesEXT &gt;</a>
+, <a class="el" href="db/d09/a03508.html#a83727e5aaaa8c455b80b6f2b88594b99">castor3d::VkTypeTraits&lt; VkPhysicalDeviceBlendOperationAdvancedFeaturesEXT &gt;</a>
+, <a class="el" href="dd/d25/a03512.html#aa93807638cf1d84bb0cff9c46c00a252">castor3d::VkTypeTraits&lt; VkPhysicalDeviceBlendOperationAdvancedPropertiesEXT &gt;</a>
+, <a class="el" href="dc/d8b/a03792.html#afe383a5c2085d42f079deedc36f78ffe">castor3d::VkTypeTraits&lt; VkPhysicalDeviceBufferAddressFeaturesEXT &gt;</a>
+, <a class="el" href="d5/d35/a03716.html#ad8e7cde8f1d454be9087d3c372d43aee">castor3d::VkTypeTraits&lt; VkPhysicalDeviceComputeShaderDerivativesFeaturesNV &gt;</a>
+, <a class="el" href="db/de4/a03288.html#ae144f7f116bc79d51b476c4e2cdb981e">castor3d::VkTypeTraits&lt; VkPhysicalDeviceConditionalRenderingFeaturesEXT &gt;</a>
+, <a class="el" href="dd/d68/a03348.html#a23d4cc2f4440ee38ef2919b8cc3c4c3e">castor3d::VkTypeTraits&lt; VkPhysicalDeviceConservativeRasterizationPropertiesEXT &gt;</a>
+, <a class="el" href="d0/dd4/a03812.html#a233ea868f5aff25ac706751f13db0bc5">castor3d::VkTypeTraits&lt; VkPhysicalDeviceCooperativeMatrixFeaturesNV &gt;</a>
+, <a class="el" href="d5/db0/a03820.html#a3ccb5cd1781dcb8ddd050a0f2d95b0c8">castor3d::VkTypeTraits&lt; VkPhysicalDeviceCooperativeMatrixPropertiesNV &gt;</a>
+, <a class="el" href="d5/de9/a03236.html#a2a1961e4a85757820b6fc095980a55c5">castor3d::VkTypeTraits&lt; VkPhysicalDeviceCornerSampledImageFeaturesNV &gt;</a>
+, <a class="el" href="d0/db5/a03788.html#add2d6d7062c10459ddf0bf7dbcc33586">castor3d::VkTypeTraits&lt; VkPhysicalDeviceDedicatedAllocationImageAliasingFeaturesNV &gt;</a>
+, <a class="el" href="d2/deb/a03356.html#a195dedde0be7e7715fad806f3e42a331">castor3d::VkTypeTraits&lt; VkPhysicalDeviceDepthClipEnableFeaturesEXT &gt;</a>
+, <a class="el" href="dc/d0d/a03708.html#a35ed48b7cc2182bba71f084ab0af02c7">castor3d::VkTypeTraits&lt; VkPhysicalDeviceDepthStencilResolvePropertiesKHR &gt;</a>
+, <a class="el" href="d5/dda/a03560.html#aaaad06bad984fd505973c644acb8daff">castor3d::VkTypeTraits&lt; VkPhysicalDeviceDescriptorIndexingFeaturesEXT &gt;</a>
+, <a class="el" href="d9/d79/a03564.html#a7b38fbd8a742a453e6a5b61ad57db6b4">castor3d::VkTypeTraits&lt; VkPhysicalDeviceDescriptorIndexingPropertiesEXT &gt;</a>
+, <a class="el" href="d2/d5b/a03340.html#aa1bbb6133133812ddaadc3aed6018006">castor3d::VkTypeTraits&lt; VkPhysicalDeviceDiscardRectanglePropertiesEXT &gt;</a>
+, <a class="el" href="d4/d43/a03700.html#a93f7647ec2a983c9efc5067a7cfd817a">castor3d::VkTypeTraits&lt; VkPhysicalDeviceDriverPropertiesKHR &gt;</a>
+, <a class="el" href="d3/d4a/a03740.html#a70ef0f67315bd1caf1e39d635fd63788">castor3d::VkTypeTraits&lt; VkPhysicalDeviceExclusiveScissorFeaturesNV &gt;</a>
+, <a class="el" href="dc/de6/a03084.html#a26dae08b5eebab403837098005d360a3">castor3d::VkTypeTraits&lt; VkPhysicalDeviceExternalBufferInfo &gt;</a>
+, <a class="el" href="da/dcd/a03108.html#ab16eab94c8bb85725296f6b4bebc1dcc">castor3d::VkTypeTraits&lt; VkPhysicalDeviceExternalFenceInfo &gt;</a>
+, <a class="el" href="d5/d83/a03076.html#a3dde2b0f584ff6df3a6e1e9db22ea024">castor3d::VkTypeTraits&lt; VkPhysicalDeviceExternalImageFormatInfo &gt;</a>
+, <a class="el" href="d9/d9a/a03668.html#a8512fb38bdd3fae3abfe4ff161686a25">castor3d::VkTypeTraits&lt; VkPhysicalDeviceExternalMemoryHostPropertiesEXT &gt;</a>
+, <a class="el" href="d6/d1e/a03124.html#afdfee308d2810016c650d80cf9361a4e">castor3d::VkTypeTraits&lt; VkPhysicalDeviceExternalSemaphoreInfo &gt;</a>
+, <a class="el" href="db/db9/a02964.html#a9c9769e67247e11853388511519099b6">castor3d::VkTypeTraits&lt; VkPhysicalDeviceFeatures2 &gt;</a>
+, <a class="el" href="d2/d76/a03296.html#adff9014789bf21d1eb55cdd497264df7">castor3d::VkTypeTraits&lt; VkPhysicalDeviceFloat16Int8FeaturesKHR &gt;</a>
+, <a class="el" href="d7/da2/a03704.html#a78e2b1461e790b60b8cf6d8b354f2df8">castor3d::VkTypeTraits&lt; VkPhysicalDeviceFloatControlsPropertiesKHR &gt;</a>
+, <a class="el" href="df/d1a/a03760.html#aeaae275d549ba92d35cfe54a8884781c">castor3d::VkTypeTraits&lt; VkPhysicalDeviceFragmentDensityMapFeaturesEXT &gt;</a>
+, <a class="el" href="d2/d87/a03764.html#abfac8aea27b48b04b3d68db327c4cdb5">castor3d::VkTypeTraits&lt; VkPhysicalDeviceFragmentDensityMapPropertiesEXT &gt;</a>
+, <a class="el" href="d3/d3b/a03728.html#a98c20415e690acb0332ead8845f84c0e">castor3d::VkTypeTraits&lt; VkPhysicalDeviceFragmentShaderBarycentricFeaturesNV &gt;</a>
+, <a class="el" href="d0/d08/a02936.html#a3976eb8cf0e79e44157fa54ed47f4d97">castor3d::VkTypeTraits&lt; VkPhysicalDeviceGroupProperties &gt;</a>
+, <a class="el" href="d5/d37/a03092.html#acfd68708647d9f956387d43ba0428a99">castor3d::VkTypeTraits&lt; VkPhysicalDeviceIDProperties &gt;</a>
+, <a class="el" href="d5/d54/a03532.html#afd8b964bc97df1db02222b2e85fff6c2">castor3d::VkTypeTraits&lt; VkPhysicalDeviceImageDrmFormatModifierInfoEXT &gt;</a>
+, <a class="el" href="d6/db9/a02980.html#a86fd95656a7b5e6518a189bda7d57bb8">castor3d::VkTypeTraits&lt; VkPhysicalDeviceImageFormatInfo2 &gt;</a>
+, <a class="el" href="db/dde/a03644.html#abbe783cd989bffe2a83123554007a2d2">castor3d::VkTypeTraits&lt; VkPhysicalDeviceImageViewImageFormatInfoEXT &gt;</a>
+, <a class="el" href="db/db5/a03468.html#a07c628e7a277c51ead6a7d049e85406d">castor3d::VkTypeTraits&lt; VkPhysicalDeviceInlineUniformBlockFeaturesEXT &gt;</a>
+, <a class="el" href="d6/d49/a03472.html#a2dc47c5bd68ef8a22ef9e60189fe995d">castor3d::VkTypeTraits&lt; VkPhysicalDeviceInlineUniformBlockPropertiesEXT &gt;</a>
+, <a class="el" href="df/dbf/a03132.html#a004a9d911d559a583bcb00af9f5c308b">castor3d::VkTypeTraits&lt; VkPhysicalDeviceMaintenance3Properties &gt;</a>
+, <a class="el" href="df/df7/a03776.html#ad2e401a6a53414dae4be9913137a270e">castor3d::VkTypeTraits&lt; VkPhysicalDeviceMemoryBudgetPropertiesEXT &gt;</a>
+, <a class="el" href="dd/d5a/a03780.html#afaf62b8615dca382c9f677e25b4d0c56">castor3d::VkTypeTraits&lt; VkPhysicalDeviceMemoryPriorityFeaturesEXT &gt;</a>
+, <a class="el" href="d8/d7d/a02988.html#adbfc0cd068c513a04698a1a253b9aaf8">castor3d::VkTypeTraits&lt; VkPhysicalDeviceMemoryProperties2 &gt;</a>
+, <a class="el" href="d8/dcc/a03720.html#ac3d0d0b71a52239cd27d2e990f7f2d34">castor3d::VkTypeTraits&lt; VkPhysicalDeviceMeshShaderFeaturesNV &gt;</a>
+, <a class="el" href="d7/d0c/a03724.html#a939450464bd90a688a3913bb8e229346">castor3d::VkTypeTraits&lt; VkPhysicalDeviceMeshShaderPropertiesNV &gt;</a>
+, <a class="el" href="de/dec/a03020.html#a103d2ebd446594e37d65e2563d1ffcbc">castor3d::VkTypeTraits&lt; VkPhysicalDeviceMultiviewFeatures &gt;</a>
+, <a class="el" href="d6/d83/a03332.html#a099de467626dd278697cc9252b4a6d1c">castor3d::VkTypeTraits&lt; VkPhysicalDeviceMultiviewPerViewAttributesPropertiesNVX &gt;</a>
+, <a class="el" href="d4/dc8/a03024.html#a783409c1b08c37f6c8592538e59a0c42">castor3d::VkTypeTraits&lt; VkPhysicalDeviceMultiviewProperties &gt;</a>
+, <a class="el" href="d1/d5d/a03756.html#ac63cc67186fb5a820f99804bc10fa601">castor3d::VkTypeTraits&lt; VkPhysicalDevicePCIBusInfoPropertiesEXT &gt;</a>
+, <a class="el" href="dd/d6f/a03000.html#a5edb6423ee330d9d60a354e9334081aa">castor3d::VkTypeTraits&lt; VkPhysicalDevicePointClippingProperties &gt;</a>
+, <a class="el" href="d0/d7b/a02968.html#a5e9c0150e0c8819a6679f1ad31b51561">castor3d::VkTypeTraits&lt; VkPhysicalDeviceProperties2 &gt;</a>
+, <a class="el" href="d5/d7f/a03036.html#a34030630f4402212bfd48a9af011c6a9">castor3d::VkTypeTraits&lt; VkPhysicalDeviceProtectedMemoryFeatures &gt;</a>
+, <a class="el" href="de/d0b/a03040.html#af0f48ecc15cb0eb181d47c26dd02f009">castor3d::VkTypeTraits&lt; VkPhysicalDeviceProtectedMemoryProperties &gt;</a>
+, <a class="el" href="de/d7f/a03280.html#a2799b48ec43b3c7e847123bc9bc858f1">castor3d::VkTypeTraits&lt; VkPhysicalDevicePushDescriptorPropertiesKHR &gt;</a>
+, <a class="el" href="d9/d82/a03624.html#a7aceda1331a870c413ca9c26e88eb07a">castor3d::VkTypeTraits&lt; VkPhysicalDeviceRayTracingPropertiesNV &gt;</a>
+, <a class="el" href="da/d9f/a03636.html#a997e0243884852091c06a4e54b472143">castor3d::VkTypeTraits&lt; VkPhysicalDeviceRepresentativeFragmentTestFeaturesNV &gt;</a>
+, <a class="el" href="d4/d5b/a03496.html#a41670de42672296c3eb210098d239db1">castor3d::VkTypeTraits&lt; VkPhysicalDeviceSampleLocationsPropertiesEXT &gt;</a>
+, <a class="el" href="dc/d18/a03460.html#a25b3536eab48a1b93dd8e97a1367bf02">castor3d::VkTypeTraits&lt; VkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT &gt;</a>
+, <a class="el" href="de/d38/a03064.html#a59c2b9e6c5a90badd84386fc12016f51">castor3d::VkTypeTraits&lt; VkPhysicalDeviceSamplerYcbcrConversionFeatures &gt;</a>
+, <a class="el" href="d7/d3a/a03772.html#a50cceb929ad5014a660156d152066e36">castor3d::VkTypeTraits&lt; VkPhysicalDeviceScalarBlockLayoutFeaturesEXT &gt;</a>
+, <a class="el" href="d7/df6/a03672.html#a0f07defc8d92d7e44ccbec47f085bde6">castor3d::VkTypeTraits&lt; VkPhysicalDeviceShaderAtomicInt64FeaturesKHR &gt;</a>
+, <a class="el" href="df/d98/a03680.html#a610cba69cdf99a1d8f070203a6e99f55">castor3d::VkTypeTraits&lt; VkPhysicalDeviceShaderCorePropertiesAMD &gt;</a>
+, <a class="el" href="da/d72/a03140.html#a6d14d8f6f2c9723136c6407bf87a1b62">castor3d::VkTypeTraits&lt; VkPhysicalDeviceShaderDrawParameterFeatures &gt;</a>
+, <a class="el" href="d3/d86/a03732.html#a66ceeed676e51a0caa44cb7304fa7586">castor3d::VkTypeTraits&lt; VkPhysicalDeviceShaderImageFootprintFeaturesNV &gt;</a>
+, <a class="el" href="dc/dca/a03580.html#a28f3f76669b66ee2569ad27dd115bb93">castor3d::VkTypeTraits&lt; VkPhysicalDeviceShadingRateImageFeaturesNV &gt;</a>
+, <a class="el" href="dd/dda/a03584.html#a5a82438dde7d0983df57256bb78a130d">castor3d::VkTypeTraits&lt; VkPhysicalDeviceShadingRateImagePropertiesNV &gt;</a>
+, <a class="el" href="d3/d8b/a02996.html#a39ffb1b244dfe860f9a43a115be853ce">castor3d::VkTypeTraits&lt; VkPhysicalDeviceSparseImageFormatInfo2 &gt;</a>
+, <a class="el" href="d8/d93/a02884.html#ad232639cb4ba9814a03cacb5a10c9175">castor3d::VkTypeTraits&lt; VkPhysicalDeviceSubgroupProperties &gt;</a>
+, <a class="el" href="d2/d2e/a03408.html#af3264d714e6896a86bf090244d840e45">castor3d::VkTypeTraits&lt; VkPhysicalDeviceSurfaceInfo2KHR &gt;</a>
+, <a class="el" href="da/df5/a03220.html#a1fa9973e9b102abf5d2d18df093b3a93">castor3d::VkTypeTraits&lt; VkPhysicalDeviceTransformFeedbackFeaturesEXT &gt;</a>
+, <a class="el" href="d7/de1/a03224.html#a7fadb5e15d7458e84e2711481b2f1e3f">castor3d::VkTypeTraits&lt; VkPhysicalDeviceTransformFeedbackPropertiesEXT &gt;</a>
+, <a class="el" href="de/dae/a03028.html#adfb644d7c87bb54e69ac55c1f56fca38">castor3d::VkTypeTraits&lt; VkPhysicalDeviceVariablePointerFeatures &gt;</a>
+, <a class="el" href="df/d9f/a03696.html#a7b96069ac12b655a62c27877eb7d6e64">castor3d::VkTypeTraits&lt; VkPhysicalDeviceVertexAttributeDivisorFeaturesEXT &gt;</a>
+, <a class="el" href="d3/dfc/a03688.html#a7c649cedfb3d40dfb4c95cc1b78757d0">castor3d::VkTypeTraits&lt; VkPhysicalDeviceVertexAttributeDivisorPropertiesEXT &gt;</a>
+, <a class="el" href="d0/dbc/a03752.html#a848ce487c8d37e74908f4716b6936f1b">castor3d::VkTypeTraits&lt; VkPhysicalDeviceVulkanMemoryModelFeaturesKHR &gt;</a>
+, <a class="el" href="df/d25/a02764.html#a192db5357fafa49dab3a84efe22c0549">castor3d::VkTypeTraits&lt; VkPipelineCacheCreateInfo &gt;</a>
+, <a class="el" href="d1/dc3/a03516.html#aa91a5820d18565d620511e76edd8b248">castor3d::VkTypeTraits&lt; VkPipelineColorBlendAdvancedStateCreateInfoEXT &gt;</a>
+, <a class="el" href="d9/dd1/a02800.html#a78ddb43965476354889d067d24754bcd">castor3d::VkTypeTraits&lt; VkPipelineColorBlendStateCreateInfo &gt;</a>
+, <a class="el" href="dc/d98/a03524.html#afcaac9c2d49ed076a700909928fa27f2">castor3d::VkTypeTraits&lt; VkPipelineCoverageModulationStateCreateInfoNV &gt;</a>
+, <a class="el" href="d4/db4/a03520.html#ab5235302e25dbd87a5767884963e7d07">castor3d::VkTypeTraits&lt; VkPipelineCoverageToColorStateCreateInfoNV &gt;</a>
+, <a class="el" href="d3/dac/a02796.html#adfaabbf8f1f42b42f4d58626f8bb761e">castor3d::VkTypeTraits&lt; VkPipelineDepthStencilStateCreateInfo &gt;</a>
+, <a class="el" href="da/dcf/a03344.html#a98aedde1fa6a0667d2dd653e1bdbb57b">castor3d::VkTypeTraits&lt; VkPipelineDiscardRectangleStateCreateInfoEXT &gt;</a>
+, <a class="el" href="df/dd0/a02804.html#a775c1ffa1d129d4f024abaac94b14e31">castor3d::VkTypeTraits&lt; VkPipelineDynamicStateCreateInfo &gt;</a>
+, <a class="el" href="d5/dba/a02776.html#a846b70bd29f6a6733a3e52105682af1b">castor3d::VkTypeTraits&lt; VkPipelineInputAssemblyStateCreateInfo &gt;</a>
+, <a class="el" href="d4/d97/a02816.html#a9920bffb5780ede24c8d7ad27ec2653d">castor3d::VkTypeTraits&lt; VkPipelineLayoutCreateInfo &gt;</a>
+, <a class="el" href="de/db6/a02792.html#ad69462dceaaaf65d2fac01432b4cb5b6">castor3d::VkTypeTraits&lt; VkPipelineMultisampleStateCreateInfo &gt;</a>
+, <a class="el" href="d2/d66/a03352.html#abe9c7a49da46298d985a43fd2fcc5df6">castor3d::VkTypeTraits&lt; VkPipelineRasterizationConservativeStateCreateInfoEXT &gt;</a>
+, <a class="el" href="d6/da3/a03360.html#a4d4a289f42b4a4ee294ceb1ef2ba6080">castor3d::VkTypeTraits&lt; VkPipelineRasterizationDepthClipStateCreateInfoEXT &gt;</a>
+, <a class="el" href="dd/dbf/a02788.html#acf939f5039cbf2365370149014df9980">castor3d::VkTypeTraits&lt; VkPipelineRasterizationStateCreateInfo &gt;</a>
+, <a class="el" href="d8/d2a/a03192.html#ad57aebaf9c852e55cffaad483bf8f995">castor3d::VkTypeTraits&lt; VkPipelineRasterizationStateRasterizationOrderAMD &gt;</a>
+, <a class="el" href="d6/d63/a03228.html#a2098827785cff9cf6c02c3d699676c06">castor3d::VkTypeTraits&lt; VkPipelineRasterizationStateStreamCreateInfoEXT &gt;</a>
+, <a class="el" href="dc/d8f/a03640.html#a1b69e9790d747fa030834a60b41060a3">castor3d::VkTypeTraits&lt; VkPipelineRepresentativeFragmentTestStateCreateInfoNV &gt;</a>
+, <a class="el" href="d8/d3d/a03492.html#a8770c56be5d9e0f5b9dfa93842bb3447">castor3d::VkTypeTraits&lt; VkPipelineSampleLocationsStateCreateInfoEXT &gt;</a>
+, <a class="el" href="d3/d7e/a02768.html#a33272abf874d1365b678e8bd599501fe">castor3d::VkTypeTraits&lt; VkPipelineShaderStageCreateInfo &gt;</a>
+, <a class="el" href="d5/d99/a03012.html#acf83a0f2b9a05aeec4070e28079655d8">castor3d::VkTypeTraits&lt; VkPipelineTessellationDomainOriginStateCreateInfo &gt;</a>
+, <a class="el" href="df/de4/a02780.html#a07fe0318701cdcfa98803c31acd166e4">castor3d::VkTypeTraits&lt; VkPipelineTessellationStateCreateInfo &gt;</a>
+, <a class="el" href="d6/d1c/a03692.html#a5aced7acf2195a699c70b539266133c7">castor3d::VkTypeTraits&lt; VkPipelineVertexInputDivisorStateCreateInfoEXT &gt;</a>
+, <a class="el" href="d9/d4a/a02772.html#ab8724c708a80e07552540e8207efd1a9">castor3d::VkTypeTraits&lt; VkPipelineVertexInputStateCreateInfo &gt;</a>
+, <a class="el" href="de/d51/a03588.html#a17df05f0a51b40a911a8858f56a12ffe">castor3d::VkTypeTraits&lt; VkPipelineViewportCoarseSampleOrderStateCreateInfoNV &gt;</a>
+, <a class="el" href="d7/d7e/a03736.html#a15b86b33fcd7a069fffb048fc8f58694">castor3d::VkTypeTraits&lt; VkPipelineViewportExclusiveScissorStateCreateInfoNV &gt;</a>
+, <a class="el" href="db/d83/a03576.html#ac90c7eab0ceb9906e4465672cea30e0c">castor3d::VkTypeTraits&lt; VkPipelineViewportShadingRateImageStateCreateInfoNV &gt;</a>
+, <a class="el" href="d0/d5a/a02784.html#aa4b764923f934a2ecac8e43d654524b3">castor3d::VkTypeTraits&lt; VkPipelineViewportStateCreateInfo &gt;</a>
+, <a class="el" href="d1/d24/a03336.html#ac1af3c7d010165b7bef567e257a93d62">castor3d::VkTypeTraits&lt; VkPipelineViewportSwizzleStateCreateInfoNV &gt;</a>
+, <a class="el" href="d2/d14/a03304.html#ae23064f78b54430ba741d3ef8464b620">castor3d::VkTypeTraits&lt; VkPipelineViewportWScalingStateCreateInfoNV &gt;</a>
+, <a class="el" href="d0/dcc/a03148.html#a08c21857f5f1794497bb5efacd6de7a5">castor3d::VkTypeTraits&lt; VkPresentInfoKHR &gt;</a>
+, <a class="el" href="d0/d7c/a03300.html#a0d280acea4b43b2414c650369e6cb0b3">castor3d::VkTypeTraits&lt; VkPresentRegionsKHR &gt;</a>
+, <a class="el" href="d3/d5d/a03328.html#ab1992b79b526dadfe84896f17d44430f">castor3d::VkTypeTraits&lt; VkPresentTimesInfoGOOGLE &gt;</a>
+, <a class="el" href="d1/d60/a03032.html#a414970a0ad8be7e385bacc1f431e3a50">castor3d::VkTypeTraits&lt; VkProtectedSubmitInfo &gt;</a>
+, <a class="el" href="da/d20/a02740.html#ad096050d8da8d5e47375759b9eef8953">castor3d::VkTypeTraits&lt; VkQueryPoolCreateInfo &gt;</a>
+, <a class="el" href="d6/db4/a03748.html#a4442ee63d857dae53053cd1f062a35b7">castor3d::VkTypeTraits&lt; VkQueueFamilyCheckpointPropertiesNV &gt;</a>
+, <a class="el" href="dd/d7e/a02984.html#a258cf4f38940deff6be3fc6d507050db">castor3d::VkTypeTraits&lt; VkQueueFamilyProperties2 &gt;</a>
+, <a class="el" href="d8/d1b/a03592.html#a5de6e6926f0b611942a001af6f079d5c">castor3d::VkTypeTraits&lt; VkRayTracingPipelineCreateInfoNV &gt;</a>
+, <a class="el" href="db/d88/a03628.html#a03dcd395b6861e4e1cf41133b3e9bb29">castor3d::VkTypeTraits&lt; VkRayTracingShaderGroupCreateInfoNV &gt;</a>
+, <a class="el" href="d9/df0/a02868.html#a4c360a3ba77bd4165043c4e707569666">castor3d::VkTypeTraits&lt; VkRenderPassBeginInfo &gt;</a>
+, <a class="el" href="d6/dbe/a02848.html#a1a2e44942f0a7a08e3b234b374f4a24b">castor3d::VkTypeTraits&lt; VkRenderPassCreateInfo &gt;</a>
+, <a class="el" href="d7/d22/a03384.html#ac3b3e6c734ba230925fa5248056446ed">castor3d::VkTypeTraits&lt; VkRenderPassCreateInfo2KHR &gt;</a>
+, <a class="el" href="df/dcb/a03768.html#a3963d565b8c694708456d029f7114222">castor3d::VkTypeTraits&lt; VkRenderPassFragmentDensityMapCreateInfoEXT &gt;</a>
+, <a class="el" href="da/d96/a03004.html#aa51a048c4723c8ed89b6c3b7246ef9d1">castor3d::VkTypeTraits&lt; VkRenderPassInputAttachmentAspectCreateInfo &gt;</a>
+, <a class="el" href="d0/d9d/a03016.html#ae07cfb45b07cb1c5cd387944f0d8c46f">castor3d::VkTypeTraits&lt; VkRenderPassMultiviewCreateInfo &gt;</a>
+, <a class="el" href="d8/db3/a03488.html#a71a399b6db2b2bb5751aecfc5cde8b69">castor3d::VkTypeTraits&lt; VkRenderPassSampleLocationsBeginInfoEXT &gt;</a>
+, <a class="el" href="de/df6/a03484.html#a1d592f969469d894f3349e9f819c81f0">castor3d::VkTypeTraits&lt; VkSampleLocationsInfoEXT &gt;</a>
+, <a class="el" href="d8/deb/a02820.html#a20c4ebb4085e3d30ffec19e8481cf691">castor3d::VkTypeTraits&lt; VkSamplerCreateInfo &gt;</a>
+, <a class="el" href="d4/d4b/a03464.html#a924ff972fe7ff17830380f62fd928647">castor3d::VkTypeTraits&lt; VkSamplerReductionModeCreateInfoEXT &gt;</a>
+, <a class="el" href="dc/d92/a03048.html#ae542587ced568757533c0e4f8c40fdb4">castor3d::VkTypeTraits&lt; VkSamplerYcbcrConversionCreateInfo &gt;</a>
+, <a class="el" href="da/d5d/a03068.html#aee17e6f60c42f5e18a4fae46420b71a6">castor3d::VkTypeTraits&lt; VkSamplerYcbcrConversionImageFormatProperties &gt;</a>
+, <a class="el" href="d4/d15/a03052.html#ae6e3d5408ff82beb02840d61f1f6eec0">castor3d::VkTypeTraits&lt; VkSamplerYcbcrConversionInfo &gt;</a>
+, <a class="el" href="d7/d1c/a02732.html#ac79541047aded1aec25d4036c749bfff">castor3d::VkTypeTraits&lt; VkSemaphoreCreateInfo &gt;</a>
+, <a class="el" href="d0/ded/a03276.html#aa3bc011d15f2981f9da41473e6bc6604">castor3d::VkTypeTraits&lt; VkSemaphoreGetFdInfoKHR &gt;</a>
+, <a class="el" href="d3/d55/a02760.html#a824d0039f480bbe85f0c326e2cb61508">castor3d::VkTypeTraits&lt; VkShaderModuleCreateInfo &gt;</a>
+, <a class="el" href="d1/d6e/a03552.html#aa5544b3f0dacdb6eb279f4ed0c48907b">castor3d::VkTypeTraits&lt; VkShaderModuleValidationCacheCreateInfoEXT &gt;</a>
+, <a class="el" href="d3/dc2/a03396.html#a9bed6c262f77e91b7f8d4528876c8ca7">castor3d::VkTypeTraits&lt; VkSharedPresentSurfaceCapabilitiesKHR &gt;</a>
+, <a class="el" href="d6/d5d/a02992.html#a978104085cc46c08867d8a5a193d7bee">castor3d::VkTypeTraits&lt; VkSparseImageFormatProperties2 &gt;</a>
+, <a class="el" href="db/d1b/a02960.html#adf33fe7876737ed93e099542d9b0a498">castor3d::VkTypeTraits&lt; VkSparseImageMemoryRequirements2 &gt;</a>
+, <a class="el" href="df/dc7/a02712.html#abbe051ec9aaeb65f3b24cd2394278f0a">castor3d::VkTypeTraits&lt; VkSubmitInfo &gt;</a>
+, <a class="el" href="d6/d8d/a03388.html#a30b014ddb17c884529cd5c871088ba33">castor3d::VkTypeTraits&lt; VkSubpassBeginInfoKHR &gt;</a>
+, <a class="el" href="d0/d57/a03380.html#aa93d041e72e663b0eef256fe9e6e46da">castor3d::VkTypeTraits&lt; VkSubpassDependency2KHR &gt;</a>
+, <a class="el" href="d7/d4f/a03376.html#ac55e6c3c1b697d86d896adc904f8e7b9">castor3d::VkTypeTraits&lt; VkSubpassDescription2KHR &gt;</a>
+, <a class="el" href="d8/d23/a03712.html#aa3f9a062788ee5f48c9c8c4296c4e209">castor3d::VkTypeTraits&lt; VkSubpassDescriptionDepthStencilResolveKHR &gt;</a>
+, <a class="el" href="d2/d21/a03392.html#a15497492926135cb2ec2e97fda306836">castor3d::VkTypeTraits&lt; VkSubpassEndInfoKHR &gt;</a>
+, <a class="el" href="d0/de4/a03308.html#a98c6060fdd40769c98af760998dff131">castor3d::VkTypeTraits&lt; VkSurfaceCapabilities2EXT &gt;</a>
+, <a class="el" href="d4/d57/a03412.html#aafda0afa1a604fd9187b56b964ba5927">castor3d::VkTypeTraits&lt; VkSurfaceCapabilities2KHR &gt;</a>
+, <a class="el" href="df/df7/a03416.html#a2651d78159353bad28053afc95529c8d">castor3d::VkTypeTraits&lt; VkSurfaceFormat2KHR &gt;</a>
+, <a class="el" href="df/d3e/a03324.html#aacb18921443da7ef9c15da188d69294e">castor3d::VkTypeTraits&lt; VkSwapchainCounterCreateInfoEXT &gt;</a>
+, <a class="el" href="d2/d19/a03144.html#ac13202048b78358291d55a4ee723ab0a">castor3d::VkTypeTraits&lt; VkSwapchainCreateInfoKHR &gt;</a>
+, <a class="el" href="d0/d77/a03232.html#ae46c4e393f7b425834e027df9f0ad1a4">castor3d::VkTypeTraits&lt; VkTextureLODGatherFormatPropertiesAMD &gt;</a>
+, <a class="el" href="d8/d2e/a03548.html#af78ef520076f4d528026442a09c304a8">castor3d::VkTypeTraits&lt; VkValidationCacheCreateInfoEXT &gt;</a>
+, <a class="el" href="df/d71/a03808.html#adb9508cb448cf4e1fd80acbe21a8bf36">castor3d::VkTypeTraits&lt; VkValidationFeaturesEXT &gt;</a>
+, <a class="el" href="d9/d01/a03248.html#a97d60adf387ea0ca12ccc5d1107a3160">castor3d::VkTypeTraits&lt; VkValidationFlagsEXT &gt;</a>
+, <a class="el" href="d2/ddb/a02836.html#af2b067276aba345a2825c0132749cd11">castor3d::VkTypeTraits&lt; VkWriteDescriptorSet &gt;</a>
+, <a class="el" href="d9/ddd/a03616.html#ac94f6b3cbf33ef9e6de4b96c8bea9285">castor3d::VkTypeTraits&lt; VkWriteDescriptorSetAccelerationStructureNV &gt;</a>
+, <a class="el" href="dd/d74/a03476.html#a21bf91b1819ae2380ded1b0dae41ae1f">castor3d::VkTypeTraits&lt; VkWriteDescriptorSetInlineUniformBlockEXT &gt;</a>
 </li>
-<li>value_sub_type
-: <a class="el" href="d4/d61/a02588.html#a5ceda17c17c400ab2114127653fdff1f">castor3d::TPushUniform&lt; Type &gt;</a>
-, <a class="el" href="dc/d28/a02584.html#a1b3cdc5b13deeef0f0665335abd9ebbf">castor3d::TUniform&lt; Type &gt;</a>
-, <a class="el" href="d2/d66/a03352.html#ac28c5e258163ceebf1557780d767bd2b">castor3d::UniformTypeTraits&lt; Type, typename std::enable_if&lt; IsMatrixType&lt; Type &gt;::value &gt;::type &gt;</a>
-, <a class="el" href="d6/da3/a03360.html#a45493d87d53a55562a478180cfec285f">castor3d::UniformTypeTraits&lt; Type, typename std::enable_if&lt; IsOneType&lt; Type &gt;::value &gt;::type &gt;</a>
-, <a class="el" href="d2/deb/a03356.html#a1f29fc765fa7b87f88cde22ab64a756b">castor3d::UniformTypeTraits&lt; Type, typename std::enable_if&lt; IsPointType&lt; Type &gt;::value &gt;::type &gt;</a>
+<li>variance
+: <a class="el" href="d3/dc5/a05260.html#ad5bd9285af8969ff5a375985a3ede871">castor3d::ShadowConfig</a>
 </li>
-<li>value_type
-: <a class="el" href="d4/d61/a02588.html#a003aa4346e49eb3f5d8e51bd15915a3e">castor3d::TPushUniform&lt; Type &gt;</a>
-, <a class="el" href="dc/d28/a02584.html#ae2ccade9119ff65b1cebeb3c4dab84dc">castor3d::TUniform&lt; Type &gt;</a>
-, <a class="el" href="d9/d5b/a02668.html#a8c1ca3af7abb57b18cc9d5ae94d3790e">castor3d::TypeRenderNodesByPassMap&lt; T &gt;</a>
-, <a class="el" href="d2/d66/a03352.html#a89707f3f1c6fb32c4d3795bfa3213a55">castor3d::UniformTypeTraits&lt; Type, typename std::enable_if&lt; IsMatrixType&lt; Type &gt;::value &gt;::type &gt;</a>
-, <a class="el" href="d6/da3/a03360.html#ad79064bc045c08a48b9d81fa0c27a14c">castor3d::UniformTypeTraits&lt; Type, typename std::enable_if&lt; IsOneType&lt; Type &gt;::value &gt;::type &gt;</a>
-, <a class="el" href="d2/deb/a03356.html#a5d0e3cea7d3d9a33d9d31a44b848581f">castor3d::UniformTypeTraits&lt; Type, typename std::enable_if&lt; IsPointType&lt; Type &gt;::value &gt;::type &gt;</a>
+<li>VarianceFormat
+: <a class="el" href="df/d42/a04656.html#a0d20bc5defcc2d12e5990b1ca7491e49">castor3d::ShadowMapDirectional</a>
+, <a class="el" href="d7/d11/a04696.html#aa73a8c99b00e8828eb70b5590a4a84c2">castor3d::ShadowMapSpot</a>
+</li>
+<li>variation
+: <a class="el" href="db/dcc/a04712.html#ab6c094a6537836b1f6e58497e26bcfd8">castor3d::SsaoConfig</a>
+</li>
+<li>Variation
+: <a class="el" href="df/d64/a05544.html#aad9ac0c7056715baa2e606100ea7966d">castor3d::SsaoConfigUbo</a>
+</li>
+<li>vbo
+: <a class="el" href="d7/d67/a02308.html#a101f2ce64b55fed8578581197368bf71">castor3d::GeometryBuffers</a>
+</li>
+<li>vboOffsets
+: <a class="el" href="d7/d67/a02308.html#a50db7c597c8e3debf711464dda15a9a6">castor3d::GeometryBuffers</a>
 </li>
 <li>Version()
-: <a class="el" href="db/d3b/a02388.html#a093fad2ffb01f23212505b7ed3983213">castor3d::Version</a>
+: <a class="el" href="de/de6/a03848.html#a9a5e5294f62efaea8448db2eb6a06f64">castor3d::Version</a>
 </li>
 <li>VersionException()
-: <a class="el" href="d5/df1/a02392.html#a1b4e6f1c33357be5418866521fbfdf2f">castor3d::VersionException</a>
+: <a class="el" href="d8/d80/a03852.html#afd9c24e163e939cbaf4dd54ff13d1bf9">castor3d::VersionException</a>
 </li>
-<li>Vertex()
-: <a class="el" href="dd/d6e/a02324.html#a0be4b0c69484aac013503f05c46aa9c4">castor3d::Vertex</a>
+<li>vertex
+: <a class="el" href="dd/d39/a04560.html#a17607e11f60ddbee68e73512dfcd8d3f">castor3d::NonTexturedCube::Quad</a>
+, <a class="el" href="d6/dad/a04540.html#a06ed1816a2c121a3c199124c081a1c72">castor3d::NonTexturedQuad</a>
+, <a class="el" href="dc/dcd/a05112.html#a7b6f157dc2cc18aca7cd611ca8bd35da">castor3d::SceneBackground::Cube::Quad</a>
+, <a class="el" href="d5/d6f/a04572.html#ab6642102bef3951fc82eb7d81004795d">castor3d::TexturedCube::Quad</a>
+, <a class="el" href="dd/d61/a04548.html#aff91a561df99650c86eb2d046f4c6919">castor3d::TexturedQuad</a>
 </li>
 <li>VertexBoneData()
-: <a class="el" href="db/da6/a02224.html#a40fdbc15048563fcb19452216882be3a">castor3d::VertexBoneData</a>
-</li>
-<li>VertexBuffer()
-: <a class="el" href="d8/d84/a02112.html#abd9d9f40df652efa163ef302f7af7849">castor3d::VertexBuffer</a>
+: <a class="el" href="dc/d1f/a04036.html#a122796e0267e3c3d5a0d91e840ce9df7">castor3d::VertexBoneData</a>
 </li>
 <li>vertexNml
-: <a class="el" href="d8/d7d/a02988.html#ab6d03cda329c9e55df5e23d163822c56">castor3d::SceneFileContext</a>
+: <a class="el" href="df/d8e/a05248.html#a9437e0a08414f00c7dfbded95645533e">castor3d::SceneFileContext</a>
 </li>
 <li>vertexPos
-: <a class="el" href="d8/d7d/a02988.html#a49336da2f89285c9a1e7a87f9ed26b78">castor3d::SceneFileContext</a>
+: <a class="el" href="df/d8e/a05248.html#af7f539b06f725e25d9466f3e02fa4b2d">castor3d::SceneFileContext</a>
+</li>
+<li>vertexShader
+: <a class="el" href="d8/dab/a04404.html#a26951ffe5908c6bb60f945c8a114f169">castor3d::GaussianBlur::BlurPass</a>
 </li>
 <li>vertexTan
-: <a class="el" href="d8/d7d/a02988.html#a9213c0671d62be42da588a181933b827">castor3d::SceneFileContext</a>
+: <a class="el" href="df/d8e/a05248.html#a4a04d9eec8bb415c39b809d09492108c">castor3d::SceneFileContext</a>
 </li>
 <li>vertexTex
-: <a class="el" href="d8/d7d/a02988.html#a0f52317aa751d57ff431ef3d404386ec">castor3d::SceneFileContext</a>
+: <a class="el" href="df/d8e/a05248.html#a7154004ffcc995888c93e62060df6987">castor3d::SceneFileContext</a>
+</li>
+<li>view
+: <a class="el" href="dc/dcb/a02648.html#affa9ed91064c21995ebe2fe83b06ad5a">castor3d::ArrayView&lt; ViewT &gt;</a>
+, <a class="el" href="da/d26/a02644.html#a80994da423e22c00a0e265a66debd84d">castor3d::CubeView</a>
 </li>
 <li>View
-: <a class="el" href="da/dfb/a03188.html#af7de2f4a6dc43a1b78eff2d50c7d90b1">castor3d::GpInfoUbo</a>
+: <a class="el" href="d1/d22/a05464.html#a8c95be1efec32a674b9f6b6733ec4346">castor3d::GpInfoUbo</a>
+</li>
+<li>view
+: <a class="el" href="d7/d6d/a04584.html#a6a75eadd256df0feb771dd1deb7b8d16">castor3d::IntermediateView</a>
+, <a class="el" href="dd/d5f/a02640.html#ad7934d51067a1952360f589a74f18775">castor3d::MipView</a>
+, <a class="el" href="d2/d5a/a02652.html#a46dfbdafe52d7d0fcbb8236628412edd">castor3d::SliceView&lt; ViewT &gt;</a>
+</li>
+<li>viewMatrix
+: <a class="el" href="d9/dab/a05164.html#a95fa7a197a677e582d2eef1d65d64679">castor3d::DirectionalLightCascade</a>
+</li>
+<li>ViewMatrix
+: <a class="el" href="df/d64/a05544.html#a03cfd5ec3b7764416a54b636b7f71eb0">castor3d::SsaoConfigUbo</a>
+</li>
+<li>viewport
+: <a class="el" href="df/d8e/a05248.html#a55fb754ba994ad5df70e84e9ddaa6ec9">castor3d::SceneFileContext</a>
 </li>
 <li>Viewport()
-: <a class="el" href="da/d20/a02740.html#ae50a26326b277e136b7bea9d85e61b24">castor3d::Viewport</a>
+: <a class="el" href="d6/df3/a05008.html#a6caef8c63e0e749dea77713e67f14d62">castor3d::Viewport</a>
+</li>
+<li>viewPosition
+: <a class="el" href="df/d39/a05424.html#a1141b73bce6ff7ea0ffde77c9cb91d7b">castor3d::shader::Surface</a>
+</li>
+<li>ViewPositionLocation
+: <a class="el" href="dd/d03/a04604.html#a4be35956e53149cd1915970669b55162">castor3d::SceneRenderPass::VertexOutputs</a>
+</li>
+<li>viewProjMatrix
+: <a class="el" href="d9/dab/a05164.html#af32a8d94125b4825be06641d80eda4d2">castor3d::DirectionalLightCascade</a>
+</li>
+<li>views
+: <a class="el" href="d8/dab/a04404.html#ab745f1dac10044fb277d9817eae7ee8e">castor3d::GaussianBlur::BlurPass</a>
+</li>
+<li>viewType
+: <a class="el" href="d1/d13/a04444.html#ab331014d7407b22dfb1ce016809c402b">castor3d::rq::BindingDescription</a>
 </li>
 <li>visit()
-: <a class="el" href="de/dec/a03020.html#a523b2d38fb373f09326493b15624198f">castor3d::LegacyPassBuffer</a>
-, <a class="el" href="de/dae/a03028.html#a080ddfdf76dbe184f3c63cc01a19fb8f">castor3d::MetallicRoughnessPassBuffer</a>
-, <a class="el" href="d5/d7f/a03036.html#a1127e02e0c683a1529151f7daefa1484">castor3d::PassBuffer</a>
-, <a class="el" href="d4/d15/a03052.html#ac06c3644da0144acbc42584a0a104a80">castor3d::SpecularGlossinessPassBuffer</a>
+: <a class="el" href="d0/d7d/a05120.html#a3c7a63e29f8ad50ad597265e458d6c2e">castor3d::BackgroundTextWriter</a>
+, <a class="el" href="db/d5a/a05136.html#ad29638182ddf77a3a1f8652f12dc5d0c">castor3d::BackgroundVisitor</a>
+, <a class="el" href="df/d65/a05264.html#a77141ebb28d78d394450a7ad94675032">castor3d::MetallicRoughnessPassBuffer</a>
+, <a class="el" href="dc/d9e/a04148.html#ae2d7c4f7df14a0ed05e5cc4f5870e701">castor3d::OverlayVisitor</a>
+, <a class="el" href="d1/d54/a05272.html#a345f4cd822ceef18707a7369b6cee0f7">castor3d::PassBuffer</a>
+, <a class="el" href="d0/d11/a05288.html#a89a7d4e1c42d61956f42d862783956dc">castor3d::PhongPassBuffer</a>
+, <a class="el" href="dd/d4d/a03844.html#af440f5e8988a669a4a71a1baf4c29e0d">castor3d::PipelineVisitor</a>
+, <a class="el" href="d5/d73/a03836.html#a67b72a6e11a102b039351c9b73c513fd">castor3d::PipelineVisitorBase</a>
+, <a class="el" href="db/d15/a04928.html#a319650ff5360a139aaa2cb6631f9a976">castor3d::RenderTechniqueVisitor</a>
+, <a class="el" href="d0/d27/a05296.html#ac06c3644da0144acbc42584a0a104a80">castor3d::SpecularGlossinessPassBuffer</a>
+, <a class="el" href="d6/d0f/a04960.html#aada73f9e1eddf81e5bb0445c7eda2a9c">castor3d::ToneMappingVisitor</a>
+</li>
+<li>volumetric
+: <a class="el" href="d0/d95/a04772.html#a3f366ab841f3fad66c02df7b0e9dd7a7">castor3d::LightPass::Config</a>
+</li>
+<li>volumetricScattering
+: <a class="el" href="d3/dc5/a05260.html#a688cb64dfa59feb2e92e00fdc35d9526">castor3d::ShadowConfig</a>
+</li>
+<li>volumetricSteps
+: <a class="el" href="d3/dc5/a05260.html#a35b0dc99817232afc617ac6a7184fa53">castor3d::ShadowConfig</a>
+</li>
+<li>Voxel()
+: <a class="el" href="d3/d72/a05440.html#a32629e8c8683af11ba41a862b5577014">castor3d::shader::Voxel</a>
+</li>
+<li>VoxelBufferToTexture()
+: <a class="el" href="db/dd9/a05012.html#a98ed801aac8d45d0e0b64fd5f131faed">castor3d::VoxelBufferToTexture</a>
+</li>
+<li>voxelConeTracing
+: <a class="el" href="dc/d0d/a04588.html#a4a6eed6cf5bd03abd606388db3cebe98">castor3d::CpuUpdater</a>
+, <a class="el" href="da/d34/a04592.html#a566ebc4e401f4e1f9df65cf11e5b4481">castor3d::GpuUpdater</a>
+</li>
+<li>VoxelData()
+: <a class="el" href="d8/d04/a05624.html#ac1f87494e367538ba2b944a5e798ad67">castor3d::shader::VoxelData</a>
+, <a class="el" href="dd/da7/a05632.html#abb57a342f2795869ffedbdb0b767f16d">castor3d::VoxelizerUbo</a>
+</li>
+<li>VoxelizePass()
+: <a class="el" href="d7/d17/a05024.html#a721587c7ae8b48a4178620aedf24943c">castor3d::VoxelizePass</a>
+</li>
+<li>Voxelizer()
+: <a class="el" href="dc/d61/a05028.html#a5bcaec9e23a7d1506656edb29b98c691">castor3d::Voxelizer</a>
+</li>
+<li>VoxelizerUbo()
+: <a class="el" href="dd/da7/a05632.html#ae0b07d5a4be736720d5cd2ea08cef083">castor3d::VoxelizerUbo</a>
+</li>
+<li>VoxelSecondaryBounce()
+: <a class="el" href="d8/d09/a05036.html#ada7dd903ca7cfca67ce1a9c7bba39a1d">castor3d::VoxelSecondaryBounce</a>
+</li>
+<li>voxelSizeFactor
+: <a class="el" href="de/dff/a05032.html#af16e814d06099f0ba5e02a26558eec0a">castor3d::VoxelSceneData</a>
+</li>
+<li>vtxCount
+: <a class="el" href="d7/d67/a02308.html#ac0e08e1f157dd81a9b3674cfce025b2c">castor3d::GeometryBuffers</a>
 </li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 13:39:12 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Feb 18 2021 01:09:24 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

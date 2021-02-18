@@ -10,6 +10,7 @@
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
 <link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+<link href="../../Castor3D.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -17,10 +18,12 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Castor3D
-   &#160;<span id="projectnumber">..</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
+   <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
  </tr>
  </tbody>
@@ -39,66 +42,22 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../d0/d85/a00976.html">castor3d</a></li><li class="navelem"><a class="el" href="../../da/d47/a02864.html">Camera</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/d1e/a01479.html">castor3d</a></li><li class="navelem"><a class="el" href="../../da/d47/a02864.html">VkTypeTraits&lt; VkCommandBufferBeginInfo &gt;</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="headertitle">
-<div class="title">castor3d::Camera Member List</div>  </div>
+<div class="title">castor3d::VkTypeTraits&lt; VkCommandBufferBeginInfo &gt; Member List</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>This is the complete list of members for <a class="el" href="../../da/d47/a02864.html">castor3d::Camera</a>, including all inherited members.</p>
+<p>This is the complete list of members for <a class="el" href="../../da/d47/a02864.html">castor3d::VkTypeTraits&lt; VkCommandBufferBeginInfo &gt;</a>, including all inherited members.</p>
 <table class="directory">
-  <tr class="even"><td class="entry"><a class="el" href="../../d0/da6/a01536.html#a8e6486dd9bc9917dce490bf74bdfdc16">Animable</a>(Scene &amp;p_scene)</td><td class="entry"><a class="el" href="../../d0/da6/a01536.html">castor3d::Animable</a></td><td class="entry"><span class="mlabel">explicit</span><span class="mlabel">protected</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d0/da6/a01536.html#adbf3cc0a48d27a44c3a02e9016a5c416">Animable</a>(Animable &amp;&amp;p_rhs)=default</td><td class="entry"><a class="el" href="../../d0/da6/a01536.html">castor3d::Animable</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d0/da6/a01536.html#a2034c9e75f28feb55d56d94e37696371">Animable</a>(Animable const &amp;p_rhs)=delete</td><td class="entry"><a class="el" href="../../d0/da6/a01536.html">castor3d::Animable</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../da/d47/a02864.html#a4132ede6271e03ef5da77575052552e2">apply</a>() const</td><td class="entry"><a class="el" href="../../da/d47/a02864.html">castor3d::Camera</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../da/d47/a02864.html#a737898088bd99777a83c3afd252c1b5c">attachTo</a>(SceneNodeSPtr node) override</td><td class="entry"><a class="el" href="../../da/d47/a02864.html">castor3d::Camera</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../da/d47/a02864.html#a674e7c29430a7c1ee86c3e4317a8efc7">Camera</a>(castor::String const &amp;name, Scene &amp;scene, SceneNodeSPtr const node, Viewport &amp;&amp;viewport, bool invertX=false)</td><td class="entry"><a class="el" href="../../da/d47/a02864.html">castor3d::Camera</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../da/d47/a02864.html#afa0861757dff4ca83542939d595098bb">Camera</a>(castor::String const &amp;name, Scene &amp;scene, SceneNodeSPtr const node, bool invertX=false)</td><td class="entry"><a class="el" href="../../da/d47/a02864.html">castor3d::Camera</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d0/da6/a01536.html#a819023fe062bb4ab1a15557c9d1445d8">cleanupAnimations</a>()</td><td class="entry"><a class="el" href="../../d0/da6/a01536.html">castor3d::Animable</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d2/d0c/a02932.html#afbef8194f2a0b9e15c9cc483221a08ee">detach</a>()</td><td class="entry"><a class="el" href="../../d2/d0c/a02932.html">castor3d::MovableObject</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d0/da6/a01536.html#ab56b8568df240f5e0fbe1a2b03d63087">doAddAnimation</a>(AnimationSPtr &amp;&amp;p_animation)</td><td class="entry"><a class="el" href="../../d0/da6/a01536.html">castor3d::Animable</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d0/da6/a01536.html#ab38ee9a85f2f5466b21a694063cb6215">doGetAnimation</a>(castor::String const &amp;p_name)</td><td class="entry"><a class="el" href="../../d0/da6/a01536.html">castor3d::Animable</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">protected</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d0/da6/a01536.html#ad1c31cdebc4c5aa55acffbc0defc441a">getAnimation</a>(castor::String const &amp;p_name) const</td><td class="entry"><a class="el" href="../../d0/da6/a01536.html">castor3d::Animable</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d0/da6/a01536.html#a1422cf061797e036a4d175e9f35d8699">getAnimation</a>(castor::String const &amp;p_name)</td><td class="entry"><a class="el" href="../../d0/da6/a01536.html">castor3d::Animable</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d0/da6/a01536.html#a3a2ba6ee4b9be5ca524a717ee14490d7">getAnimations</a>() const</td><td class="entry"><a class="el" href="../../d0/da6/a01536.html">castor3d::Animable</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../da/d47/a02864.html#adddb590a223986a114e52a24354b25fb">getHeight</a>() const</td><td class="entry"><a class="el" href="../../da/d47/a02864.html">castor3d::Camera</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d2/d0c/a02932.html#a03bc1507fc3c7ca30453e72f6b76b104">getParent</a>() const</td><td class="entry"><a class="el" href="../../d2/d0c/a02932.html">castor3d::MovableObject</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d2/d0c/a02932.html#acf2dafd94427b63121981ac18ac652a7">getType</a>() const</td><td class="entry"><a class="el" href="../../d2/d0c/a02932.html">castor3d::MovableObject</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../da/d47/a02864.html#a624a2ba71aba3cd2bb24b7e5055e31e5">getView</a>() const</td><td class="entry"><a class="el" href="../../da/d47/a02864.html">castor3d::Camera</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../da/d47/a02864.html#a03764fa6a55c8362c2f99fdc24e51881">getViewport</a>() const</td><td class="entry"><a class="el" href="../../da/d47/a02864.html">castor3d::Camera</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../da/d47/a02864.html#a80edfa1d402a85fd7ab5098998dd6b4a">getViewport</a>()</td><td class="entry"><a class="el" href="../../da/d47/a02864.html">castor3d::Camera</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../da/d47/a02864.html#a035e2dc9508ef25f8ecdb58fcf2c830b">getViewportType</a>() const</td><td class="entry"><a class="el" href="../../da/d47/a02864.html">castor3d::Camera</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="../../da/d47/a02864.html#a5fb80dc8db4622c48cb0e270a35c0aee">getWidth</a>() const</td><td class="entry"><a class="el" href="../../da/d47/a02864.html">castor3d::Camera</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d0/da6/a01536.html#a0fda376fb51c135d53fcd5efbac24237">hasAnimation</a>(castor::String const &amp;p_name) const</td><td class="entry"><a class="el" href="../../d0/da6/a01536.html">castor3d::Animable</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="../../da/d47/a02864.html#a6da0f58f9fb8f8cbb815ca084f4d18ee">isVisible</a>(Geometry const &amp;geometry, Submesh const &amp;submesh) const</td><td class="entry"><a class="el" href="../../da/d47/a02864.html">castor3d::Camera</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../da/d47/a02864.html#add161269b420d6cd6e72b19128aa5732">isVisible</a>(castor::BoundingBox const &amp;box, castor::Matrix4x4r const &amp;transformations) const</td><td class="entry"><a class="el" href="../../da/d47/a02864.html">castor3d::Camera</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="../../da/d47/a02864.html#a1aa51cb785581d448ecdfdba15a0ab58">isVisible</a>(castor::BoundingSphere const &amp;sphere, castor::Matrix4x4r const &amp;transformations, castor::Point3r const &amp;scale) const</td><td class="entry"><a class="el" href="../../da/d47/a02864.html">castor3d::Camera</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../da/d47/a02864.html#a7cb5c15a8858df57af71ab10287de28f">isVisible</a>(castor::Point3r const &amp;point) const</td><td class="entry"><a class="el" href="../../da/d47/a02864.html">castor3d::Camera</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d0/da6/a01536.html#a68b662a21df4a33e6b90a6375e8052a1">m_animations</a></td><td class="entry"><a class="el" href="../../d0/da6/a01536.html">castor3d::Animable</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d2/d0c/a02932.html#a8385c7c8fd9aee20a3c6de804cb09514">m_notifyIndex</a></td><td class="entry"><a class="el" href="../../d2/d0c/a02932.html">castor3d::MovableObject</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d2/d0c/a02932.html#ad65f73eee5100517539e05f69123a29f">m_sceneNode</a></td><td class="entry"><a class="el" href="../../d2/d0c/a02932.html">castor3d::MovableObject</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d2/d0c/a02932.html#ab9493ad12e9af9b47db11e76d372a156">m_strNodeName</a></td><td class="entry"><a class="el" href="../../d2/d0c/a02932.html">castor3d::MovableObject</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d2/d0c/a02932.html#acf6726e80bb3098468fe1fcd5a1f720e">m_type</a></td><td class="entry"><a class="el" href="../../d2/d0c/a02932.html">castor3d::MovableObject</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d2/d0c/a02932.html#a134c0e14da9e780830cf5e0fc140fe8c">MovableObject</a>(castor::String const &amp;p_name, Scene &amp;p_scene, MovableType p_type, SceneNodeSPtr p_sn)</td><td class="entry"><a class="el" href="../../d2/d0c/a02932.html">castor3d::MovableObject</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="../../da/d47/a02864.html#a98ed3a4aecd26d9e0f07664192895ce2">onChanged</a></td><td class="entry"><a class="el" href="../../da/d47/a02864.html">castor3d::Camera</a></td><td class="entry"><span class="mlabel">mutable</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d0/da6/a01536.html#aaad6118ffcca2fd9d3a8829d52b7099a">operator=</a>(Animable &amp;&amp;p_rhs)=default</td><td class="entry"><a class="el" href="../../d0/da6/a01536.html">castor3d::Animable</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d0/da6/a01536.html#a5865125a0ec659891153f3f457019a26">operator=</a>(Animable const &amp;p_rhs)=delete</td><td class="entry"><a class="el" href="../../d0/da6/a01536.html">castor3d::Animable</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../da/d47/a02864.html#a9b0c8379d89ff4c60b7022dd93ab3845">resize</a>(uint32_t width, uint32_t height)</td><td class="entry"><a class="el" href="../../da/d47/a02864.html">castor3d::Camera</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="../../da/d47/a02864.html#af3db2145a38440b40d033dbdf7114324">resize</a>(castor::Size const &amp;size)</td><td class="entry"><a class="el" href="../../da/d47/a02864.html">castor3d::Camera</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../da/d47/a02864.html#a032858ae1fe02d2d1170981c2af2d67c">Scene</a> class</td><td class="entry"><a class="el" href="../../da/d47/a02864.html">castor3d::Camera</a></td><td class="entry"><span class="mlabel">friend</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../da/d47/a02864.html#ab141c2d1af433cedcf9d113cb0fdfd8b">setView</a>(castor::Matrix4x4r const &amp;view)</td><td class="entry"><a class="el" href="../../da/d47/a02864.html">castor3d::Camera</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../da/d47/a02864.html#abe69cf1c36d6aee6f497f2e548010af1">setViewportType</a>(ViewportType value)</td><td class="entry"><a class="el" href="../../da/d47/a02864.html">castor3d::Camera</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="../../da/d47/a02864.html#a8c92fa71ede63c925d81b9fe41be3e33">update</a>()</td><td class="entry"><a class="el" href="../../da/d47/a02864.html">castor3d::Camera</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d0/da6/a01536.html#aeec73fddb88d95cad1762fa5d01dd465">~Animable</a>()</td><td class="entry"><a class="el" href="../../d0/da6/a01536.html">castor3d::Animable</a></td><td class="entry"><span class="mlabel">protected</span><span class="mlabel">virtual</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../da/d47/a02864.html#a2e4601b532b330731458260730cb0e84">~Camera</a>()</td><td class="entry"><a class="el" href="../../da/d47/a02864.html">castor3d::Camera</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d2/d0c/a02932.html#a05bd8e8940d26cb4361fccfa67733b03">~MovableObject</a>()</td><td class="entry"><a class="el" href="../../d2/d0c/a02932.html">castor3d::MovableObject</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../da/d47/a02864.html#ad37e1be5801dbc12fa8b517242237672">value</a></td><td class="entry"><a class="el" href="../../da/d47/a02864.html">castor3d::VkTypeTraits&lt; VkCommandBufferBeginInfo &gt;</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
 </table></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 13:38:20 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Feb 18 2021 01:09:21 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

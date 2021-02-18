@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="df/d30/a04115" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::OverlayRenderer::OverlayGeometryBuffers</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="df/d30/a04115_1a57455e19b577c00849cea6668f886c95" prot="public" static="no" mutable="no">
+        <type><ref refid="df/d04/a02287" kindref="compound">GeometryBuffers</ref></type>
+        <definition>GeometryBuffers castor3d::OverlayRenderer::OverlayGeometryBuffers::noTexture</definition>
+        <argsstring></argsstring>
+        <name>noTexture</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="204" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="204" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d30/a04115_1aea3cf9053350e45b9c797d398217406e" prot="public" static="no" mutable="no">
+        <type><ref refid="df/d04/a02287" kindref="compound">GeometryBuffers</ref></type>
+        <definition>GeometryBuffers castor3d::OverlayRenderer::OverlayGeometryBuffers::textured</definition>
+        <argsstring></argsstring>
+        <name>textured</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="205" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="205" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2467">
+        <label>castor3d::GeometryBuffers</label>
+        <link refid="df/d04/a02287"/>
+      </node>
+      <node id="2466">
+        <label>castor3d::OverlayRenderer::OverlayGeometryBuffers</label>
+        <childnode refid="2467" relation="usage">
+          <edgelabel>noTexture</edgelabel>
+          <edgelabel>textured</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Overlay/OverlayRenderer.hpp" line="203" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="202" bodyend="206"/>
+    <listofallmembers>
+      <member refid="df/d30/a04115_1a57455e19b577c00849cea6668f886c95" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::OverlayGeometryBuffers</scope><name>noTexture</name></member>
+      <member refid="df/d30/a04115_1aea3cf9053350e45b9c797d398217406e" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::OverlayGeometryBuffers</scope><name>textured</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

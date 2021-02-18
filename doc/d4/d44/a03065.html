@@ -10,6 +10,7 @@
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
 <link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+<link href="../../Castor3D.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -17,10 +18,12 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Castor3D
-   &#160;<span id="projectnumber">..</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
+   <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
  </tr>
  </tbody>
@@ -39,68 +42,22 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../d0/d85/a00976.html">castor3d</a></li><li class="navelem"><a class="el" href="../../da/d5d/a03068.html">ShaderObject</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/d1e/a01479.html">castor3d</a></li><li class="navelem"><a class="el" href="../../da/d5d/a03068.html">VkTypeTraits&lt; VkSamplerYcbcrConversionImageFormatProperties &gt;</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="headertitle">
-<div class="title">castor3d::ShaderObject Member List</div>  </div>
+<div class="title">castor3d::VkTypeTraits&lt; VkSamplerYcbcrConversionImageFormatProperties &gt; Member List</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>This is the complete list of members for <a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a>, including all inherited members.</p>
+<p>This is the complete list of members for <a class="el" href="../../da/d5d/a03068.html">castor3d::VkTypeTraits&lt; VkSamplerYcbcrConversionImageFormatProperties &gt;</a>, including all inherited members.</p>
 <table class="directory">
-  <tr class="even"><td class="entry"><a class="el" href="../../da/d5d/a03068.html#a97da46bed551518575c740422162327a">attachTo</a>(ShaderProgram &amp;program)=0</td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../da/d5d/a03068.html#aea1f5893ed0d872da9e6bc0955826c94">bind</a>()</td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../da/d5d/a03068.html#a870902c98fbbcb4d9fd060787b4a6c45">compile</a>()</td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../da/d5d/a03068.html#af6429d5805eea4a1ef5ac144cb8c36a5">create</a>()=0</td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../da/d5d/a03068.html#ab92b55136c725e017dc22266d5b742b1">createUniform</a>(UniformType type, castor::String const &amp;name, int nbOcc=1)</td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="../../da/d5d/a03068.html#aac2ae2b22f8f4a6467a25b9902f1a940">createUniform</a>(castor::String const &amp;name, int nbOcc=1)</td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../da/d5d/a03068.html#ab9acab6680a2262dec6d05ef2b63d86f">destroy</a>()=0</td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../da/d5d/a03068.html#ab4437a939c2298b842eff4da8dee543c">detach</a>()=0</td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../da/d5d/a03068.html#ad904ed29968fd52da7578f42e5a49c33">doAddUniform</a>(PushUniformSPtr variable)</td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../da/d5d/a03068.html#aa11f7728fe7633daca9b8cb496fc4d96">doCheckErrors</a>()</td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../da/d5d/a03068.html#acc1bc55dbe5a4f300c08c0f4e6ef01f5">doCreateUniform</a>(UniformType type, int nbOccurences)=0</td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../da/d5d/a03068.html#a46cb75aa86c7ea545f091d9b0477ee04">doRetrieveCompilerLog</a>()=0</td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../da/d5d/a03068.html#a6a21af0aa3fb03b2ff507f495b262163">findUniform</a>(UniformType type, castor::String const &amp;name) const</td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="../../da/d5d/a03068.html#a8dd7984d24c342250bbbc23c3bc1f0e7">findUniform</a>(castor::String const &amp;name) const</td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../da/d5d/a03068.html#aff3ba3bac827b6019375c6d40f6ac32c">flushUniforms</a>()</td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="../../da/d5d/a03068.html#ae856d7c291189076bf6129a8d392a718">getFile</a>() const</td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../da/d5d/a03068.html#a095f748a0d2fe362aab4500f5e3d2c23">getInputType</a>() const</td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../da/d5d/a03068.html#a88e0df5f78a7ea0b35c1082a8c45e205">getOutputType</a>() const</td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../da/d5d/a03068.html#a2ba01019f71cd126a87c84ba4f3263c2">getOutputVtxCount</a>() const</td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../da/d5d/a03068.html#a5624868bba64aca62e26d942d42e56c7">getParent</a>() const</td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../da/d5d/a03068.html#a8444f4e8b0e47158bd28be13033f0e61">getSource</a>() const</td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../da/d5d/a03068.html#a1adba475a58e9f2d26f64e2dcf89fe17">getStatus</a>() const</td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../da/d5d/a03068.html#af9fa2c10666a51c60e8eac5e96ebd684">getStrType</a>() const</td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../da/d5d/a03068.html#a83f230b48fd0ffe953108ae8bd544baf">getType</a>() const</td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../da/d5d/a03068.html#ac25865547d4ee2bd963f2a2e21e49a3d">getUniforms</a>()</td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../da/d5d/a03068.html#a29108f815939b1d21a39cc64c54c32b9">getUniforms</a>() const</td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../da/d5d/a03068.html#a17f4190a7d68b1207d77ee70c371b736">hasFile</a>() const</td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="../../da/d5d/a03068.html#ad130f6d730ece57aebee31d8252f0b93">hasSource</a>() const</td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../da/d5d/a03068.html#a94abbd591e708070a08872bd32b3bc64">m_file</a></td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../da/d5d/a03068.html#aa5c6046abf44b5e4f19c205d34fae7df">m_inputType</a></td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../da/d5d/a03068.html#aac01dcf12f0e46f2fa386434fb89c903">m_listUniforms</a></td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../da/d5d/a03068.html#add60046e9460d4bf8537bb1827cd218a">m_mapUniforms</a></td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../da/d5d/a03068.html#aa72bdd26db8cf5753c6322aa603c3366">m_outputType</a></td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../da/d5d/a03068.html#a59b23fec5dc0f5652caf3046b8a04fe3">m_outputVtxCount</a></td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../da/d5d/a03068.html#ad0d6eac2bdb58145a56282ab01f9c888">m_parent</a></td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../da/d5d/a03068.html#afaa1da29530f2ab6d7ffc8982837b631">m_source</a></td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../da/d5d/a03068.html#af1e9b8735f896bc577b8919fc824ce8b">m_status</a></td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../da/d5d/a03068.html#aeac31b8e4924acb5f2d445fc3f86569d">m_type</a></td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../da/d5d/a03068.html#a2925174c6d51e85c4feb1545eb28f932">setFile</a>(castor::Path const &amp;pathFile)</td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="../../da/d5d/a03068.html#a914146a15abcfa86dfa80692136a5505">setInputType</a>(Topology topology)</td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../da/d5d/a03068.html#ae1e20ecfe6be521507351bee0670a3e4">setOutputType</a>(Topology topology)</td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../da/d5d/a03068.html#a8bc8ba325a18c1466dac36b70f362b40">setOutputVtxCount</a>(uint8_t count)</td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../da/d5d/a03068.html#a5ac5d4d982bd6ed5beca6bc8fdbf6494">setSource</a>(castor::String const &amp;source)</td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="../../da/d5d/a03068.html#a6531a00a4776886f411a2f945d297fa0">setSource</a>(glsl::Shader const &amp;source)</td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../da/d5d/a03068.html#a19822b9cbd3bb5b9e8aa4c4b7b564cd4">ShaderObject</a>(ShaderProgram &amp;parent, ShaderType type)</td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="../../da/d5d/a03068.html#ab56390a645145739326efc7dd3747981">unbind</a>()</td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../da/d5d/a03068.html#ab168d5f7060c6370b5479a632163fba9">~ShaderObject</a>()</td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::ShaderObject</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../da/d5d/a03068.html#aee17e6f60c42f5e18a4fae46420b71a6">value</a></td><td class="entry"><a class="el" href="../../da/d5d/a03068.html">castor3d::VkTypeTraits&lt; VkSamplerYcbcrConversionImageFormatProperties &gt;</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
 </table></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 13:38:45 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Feb 18 2021 01:09:22 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

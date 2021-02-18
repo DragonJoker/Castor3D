@@ -1,0 +1,356 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d5/d35/a05471" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::LpvLightConfigUbo</compoundname>
+    <includes local="no">LpvLightConfigUbo.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d5/d35/a05471_1a5fb8fc110f4ddaccfc55143b1fa1e0d1" prot="public" static="no">
+        <type><ref refid="da/dfb/a05547" kindref="compound">LpvLightConfigUboConfiguration</ref></type>
+        <definition>using castor3d::LpvLightConfigUbo::Configuration =  LpvLightConfigUboConfiguration</definition>
+        <argsstring></argsstring>
+        <name>Configuration</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="50" column="1" bodyfile="Shader/Ubos/LpvLightConfigUbo.hpp" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d5/d35/a05471_1ae936589e2eaf4dd3a1d7445c2cb23759" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const std::string</type>
+        <definition>C3D_API const std::string castor3d::LpvLightConfigUbo::LpvLightConfig</definition>
+        <argsstring></argsstring>
+        <name>LpvLightConfig</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="88" column="1" bodyfile="Shader/Ubos/LpvLightConfigUbo.hpp" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d35/a05471_1ae8236a9ae9df0e8a1a6ebc22a0156766" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const std::string</type>
+        <definition>C3D_API const std::string castor3d::LpvLightConfigUbo::LpvLightData</definition>
+        <argsstring></argsstring>
+        <name>LpvLightData</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="89" column="1" bodyfile="Shader/Ubos/LpvLightConfigUbo.hpp" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d5/d35/a05471_1a84fc20b2a0e0593e270f11718719c3e9" prot="private" static="no" mutable="no">
+        <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const  *</type>
+        <definition>RenderDevice const* castor3d::LpvLightConfigUbo::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="92" column="1" bodyfile="Shader/Ubos/LpvLightConfigUbo.hpp" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d35/a05471_1aa67f1fd9a57ad5c10505896bd53966b7" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d5/d35/a05471_1a5fb8fc110f4ddaccfc55143b1fa1e0d1" kindref="member">Configuration</ref> &gt;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; castor3d::LpvLightConfigUbo::m_ubo</definition>
+        <argsstring></argsstring>
+        <name>m_ubo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="93" column="1" bodyfile="Shader/Ubos/LpvLightConfigUbo.hpp" bodystart="93" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/d35/a05471_1a1f9be98bd14c8b926e7780cc9d70e93a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::LpvLightConfigUbo::LpvLightConfigUbo</definition>
+        <argsstring>(LpvLightConfigUbo const &amp;)=delete</argsstring>
+        <name>LpvLightConfigUbo</name>
+        <param>
+          <type><ref refid="d5/d35/a05471" kindref="compound">LpvLightConfigUbo</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="53" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d35/a05471_1aaba31e8c7abcc47a32700392d9f8a7ed" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d5/d35/a05471" kindref="compound">LpvLightConfigUbo</ref> &amp;</type>
+        <definition>C3D_API LpvLightConfigUbo&amp; castor3d::LpvLightConfigUbo::operator=</definition>
+        <argsstring>(LpvLightConfigUbo const &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <param>
+          <type><ref refid="d5/d35/a05471" kindref="compound">LpvLightConfigUbo</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="54" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d35/a05471_1ae8ebae0e3762d0866b78f25315982d91" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::LpvLightConfigUbo::LpvLightConfigUbo</definition>
+        <argsstring>(LpvLightConfigUbo &amp;&amp;)=default</argsstring>
+        <name>LpvLightConfigUbo</name>
+        <param>
+          <type><ref refid="d5/d35/a05471" kindref="compound">LpvLightConfigUbo</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="55" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d35/a05471_1ae45943bec581f5672d3c9dfe4f8f30fa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d5/d35/a05471" kindref="compound">LpvLightConfigUbo</ref> &amp;</type>
+        <definition>C3D_API LpvLightConfigUbo&amp; castor3d::LpvLightConfigUbo::operator=</definition>
+        <argsstring>(LpvLightConfigUbo &amp;&amp;)=delete</argsstring>
+        <name>operator=</name>
+        <param>
+          <type><ref refid="d5/d35/a05471" kindref="compound">LpvLightConfigUbo</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="56" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d35/a05471_1a56e3301c701e789cc11a5a13b21e0b96" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::LpvLightConfigUbo::LpvLightConfigUbo</definition>
+        <argsstring>()</argsstring>
+        <name>LpvLightConfigUbo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="58" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d35/a05471_1ab19c89d6c1af1df3900097cdcd5d1574" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::LpvLightConfigUbo::LpvLightConfigUbo</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>LpvLightConfigUbo</name>
+        <param>
+          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="59" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d35/a05471_1a441a9a051c2a5d633270d5e9c8ee14a6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::LpvLightConfigUbo::~LpvLightConfigUbo</definition>
+        <argsstring>()</argsstring>
+        <name>~LpvLightConfigUbo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="60" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d35/a05471_1aa17bb37ae293df740a3d7db16bbeab22" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LpvLightConfigUbo::initialise</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>initialise</name>
+        <param>
+          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="62" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d35/a05471_1a70b3d7136fd511b9daed2120ab22c9b7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LpvLightConfigUbo::cleanup</definition>
+        <argsstring>()</argsstring>
+        <name>cleanup</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="63" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d35/a05471_1a99b9cc5fa02bc38657c9ca85e8b0deee" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LpvLightConfigUbo::cpuUpdate</definition>
+        <argsstring>(Light const &amp;light, float lpvCellSize)</argsstring>
+        <name>cpuUpdate</name>
+        <param>
+          <type><ref refid="df/dc5/a05151" kindref="compound">Light</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>lpvCellSize</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="65" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d35/a05471_1af999aba26f88c3c0c366ffcb86b276ad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LpvLightConfigUbo::cpuUpdate</definition>
+        <argsstring>(DirectionalLight const &amp;light, uint32_t cascadeIndex, float lpvCellSize)</argsstring>
+        <name>cpuUpdate</name>
+        <param>
+          <type><ref refid="d2/d38/a05147" kindref="compound">DirectionalLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>cascadeIndex</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>lpvCellSize</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="67" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d35/a05471_1a0c09c5855eed831e02341cdd3e53cc6a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d5/d35/a05471_1a5fb8fc110f4ddaccfc55143b1fa1e0d1" kindref="member">Configuration</ref> &gt; &amp;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt;&amp; castor3d::LpvLightConfigUbo::getUbo</definition>
+        <argsstring>()</argsstring>
+        <name>getUbo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="71" column="1" bodyfile="Shader/Ubos/LpvLightConfigUbo.hpp" bodystart="71" bodyend="74"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d35/a05471_1a90b1594d1c21d2df59646f18047c6c60" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d5/d35/a05471_1a5fb8fc110f4ddaccfc55143b1fa1e0d1" kindref="member">Configuration</ref> &gt; const  &amp;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; const&amp; castor3d::LpvLightConfigUbo::getUbo</definition>
+        <argsstring>() const</argsstring>
+        <name>getUbo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="76" column="1" bodyfile="Shader/Ubos/LpvLightConfigUbo.hpp" bodystart="76" bodyend="79"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d35/a05471_1a55564c6a2a416333c26436076181029c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::LpvLightConfigUbo::createSizedBinding</definition>
+        <argsstring>(ashes::DescriptorSet &amp;descriptorSet, VkDescriptorSetLayoutBinding const &amp;layoutBinding) const</argsstring>
+        <name>createSizedBinding</name>
+        <param>
+          <type>ashes::DescriptorSet &amp;</type>
+          <declname>descriptorSet</declname>
+        </param>
+        <param>
+          <type>VkDescriptorSetLayoutBinding const &amp;</type>
+          <declname>layoutBinding</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="81" column="1" bodyfile="Shader/Ubos/LpvLightConfigUbo.hpp" bodystart="81" bodyend="85"/>
+        <references refid="d2/dd2/a02279_1a2c6ad146d4910651544564c25ca7dccd" compoundref="d6/db8/a00158" startline="70" endline="79">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createSizedBinding</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1810">
+        <label>castor3d::LpvLightConfigUbo</label>
+        <link refid="d5/d35/a05471"/>
+        <childnode refid="1811" relation="usage">
+          <edgelabel>LpvLightConfig</edgelabel>
+          <edgelabel>LpvLightData</edgelabel>
+        </childnode>
+      </node>
+      <node id="1812">
+        <label>std::basic_string&lt; char &gt;</label>
+      </node>
+      <node id="1811">
+        <label>std::string</label>
+        <childnode refid="1812" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="48" column="1" bodyfile="Shader/Ubos/LpvLightConfigUbo.hpp" bodystart="47" bodyend="94"/>
+    <listofallmembers>
+      <member refid="d5/d35/a05471_1a70b3d7136fd511b9daed2120ab22c9b7" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUbo</scope><name>cleanup</name></member>
+      <member refid="d5/d35/a05471_1a5fb8fc110f4ddaccfc55143b1fa1e0d1" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUbo</scope><name>Configuration</name></member>
+      <member refid="d5/d35/a05471_1a99b9cc5fa02bc38657c9ca85e8b0deee" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUbo</scope><name>cpuUpdate</name></member>
+      <member refid="d5/d35/a05471_1af999aba26f88c3c0c366ffcb86b276ad" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUbo</scope><name>cpuUpdate</name></member>
+      <member refid="d5/d35/a05471_1a55564c6a2a416333c26436076181029c" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUbo</scope><name>createSizedBinding</name></member>
+      <member refid="d5/d35/a05471_1a0c09c5855eed831e02341cdd3e53cc6a" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUbo</scope><name>getUbo</name></member>
+      <member refid="d5/d35/a05471_1a90b1594d1c21d2df59646f18047c6c60" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUbo</scope><name>getUbo</name></member>
+      <member refid="d5/d35/a05471_1aa17bb37ae293df740a3d7db16bbeab22" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUbo</scope><name>initialise</name></member>
+      <member refid="d5/d35/a05471_1ae936589e2eaf4dd3a1d7445c2cb23759" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUbo</scope><name>LpvLightConfig</name></member>
+      <member refid="d5/d35/a05471_1a1f9be98bd14c8b926e7780cc9d70e93a" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUbo</scope><name>LpvLightConfigUbo</name></member>
+      <member refid="d5/d35/a05471_1ae8ebae0e3762d0866b78f25315982d91" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUbo</scope><name>LpvLightConfigUbo</name></member>
+      <member refid="d5/d35/a05471_1a56e3301c701e789cc11a5a13b21e0b96" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUbo</scope><name>LpvLightConfigUbo</name></member>
+      <member refid="d5/d35/a05471_1ab19c89d6c1af1df3900097cdcd5d1574" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUbo</scope><name>LpvLightConfigUbo</name></member>
+      <member refid="d5/d35/a05471_1ae8236a9ae9df0e8a1a6ebc22a0156766" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUbo</scope><name>LpvLightData</name></member>
+      <member refid="d5/d35/a05471_1a84fc20b2a0e0593e270f11718719c3e9" prot="private" virt="non-virtual"><scope>castor3d::LpvLightConfigUbo</scope><name>m_device</name></member>
+      <member refid="d5/d35/a05471_1aa67f1fd9a57ad5c10505896bd53966b7" prot="private" virt="non-virtual"><scope>castor3d::LpvLightConfigUbo</scope><name>m_ubo</name></member>
+      <member refid="d5/d35/a05471_1aaba31e8c7abcc47a32700392d9f8a7ed" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUbo</scope><name>operator=</name></member>
+      <member refid="d5/d35/a05471_1ae45943bec581f5672d3c9dfe4f8f30fa" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUbo</scope><name>operator=</name></member>
+      <member refid="d5/d35/a05471_1a441a9a051c2a5d633270d5e9c8ee14a6" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUbo</scope><name>~LpvLightConfigUbo</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

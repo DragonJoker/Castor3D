@@ -1,6 +1,6 @@
-<map id="castor3d::CmshImporter" name="castor3d::CmshImporter">
-<area shape="rect" id="node1" title="Used to import meshes from cmsh files." alt="" coords="113,171,274,197"/>
-<area shape="rect" id="node2" href="$df/d28/a02152.html" title="Base class for external file import." alt="" coords="130,95,257,121"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,192,32"/>
-<area shape="rect" id="node4" href="$d1/da2/a02368.html" title="Configuration parameters." alt="" coords="216,5,363,32"/>
+<map id="castor3d::BinaryWriter&lt; Mesh &gt;" name="castor3d::BinaryWriter&lt; Mesh &gt;">
+<area shape="rect" id="node1" title="MovableObject loader." alt="" coords="21,289,173,331"/>
+<area shape="rect" id="node2" href="$dd/d3f/a02156.html" title=" " alt="" coords="5,199,188,240"/>
+<area shape="rect" id="node3" href="$d8/dd8/a02108.html" title=" " alt="" coords="51,5,206,32"/>
+<area shape="rect" id="node4" href="$dd/d3f/a02156.html" title="Binary data chunk writer base class." alt="" coords="157,95,340,136"/>
 </map>

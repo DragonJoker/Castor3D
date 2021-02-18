@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_eb05c2e81f584c27ccf0b1e73c563a6d" kind="dir">
+    <compoundname>Model/Mesh</compoundname>
+    <innerdir refid="dir_8ec8e5a70d8899ca689964212db092d9">Model/Mesh/Animation</innerdir>
+    <innerdir refid="dir_2c41ff29478658f0cfd430537048a0a3">Model/Mesh/Generator</innerdir>
+    <innerdir refid="dir_19beb1677fd60f69f1adee84ca7ad745">Model/Mesh/Submesh</innerdir>
+    <innerfile refid="d9/d10/a00449">Importer.hpp</innerfile>
+    <innerfile refid="d1/d0b/a00452">ImporterFactory.hpp</innerfile>
+    <innerfile refid="dd/d63/a00455">Mesh.hpp</innerfile>
+    <innerfile refid="da/d65/a00458">MeshFactory.hpp</innerfile>
+    <innerfile refid="d5/d5f/a00461">MeshGenerator.hpp</innerfile>
+    <innerfile refid="d2/d9d/a00464">MeshModule.hpp</innerfile>
+    <innerfile refid="d7/d5e/a00467">Subdivider.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Model/Mesh/"/>
+  </compounddef>
+</doxygen>

@@ -1,4 +1,7 @@
-<map id="castor3d::Cone" name="castor3d::Cone">
-<area shape="rect" id="node1" title="The cone is a basic primitive, with a parametrable number of faces." alt="" coords="35,80,145,107"/>
-<area shape="rect" id="node2" href="$d5/ddd/a02184.html" title="Mesh category is used to create a mesh&#39;s vertices, it is created by MeshFactory." alt="" coords="5,5,175,32"/>
+<map id="castor3d::BinaryParser&lt; Mesh &gt;" name="castor3d::BinaryParser&lt; Mesh &gt;">
+<area shape="rect" id="node1" title="MovableObject loader." alt="" coords="147,289,301,331"/>
+<area shape="rect" id="node2" href="$d2/d08/a02148.html" title=" " alt="" coords="131,199,317,240"/>
+<area shape="rect" id="node3" href="$d8/dd8/a02108.html" title=" " alt="" coords="5,5,160,32"/>
+<area shape="rect" id="node5" href="$d2/d08/a02148.html" title="Binary data chunk reader base class." alt="" coords="131,95,317,136"/>
+<area shape="rect" id="node4" href="$de/de6/a03848.html" title=" " alt="" coords="218,5,342,32"/>
 </map>

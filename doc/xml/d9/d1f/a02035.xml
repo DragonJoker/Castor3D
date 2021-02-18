@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d9/d1f/a02035" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::AnimationInstanceT</compoundname>
+    <includes local="no">AnimationModule.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename OwnerT</type>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+<para>Used to play an Animation on a specific object. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Animation/AnimationModule.hpp" line="138" column="1" bodyfile="Animation/AnimationModule.hpp" bodystart="138" bodyend="-1"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

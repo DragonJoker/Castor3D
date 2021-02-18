@@ -1,5 +1,5 @@
-<map id="castor3d::Overlay" name="castor3d::Overlay">
-<area shape="rect" id="node1" title="The overlay class." alt="" coords="115,95,237,121"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,155,47"/>
-<area shape="rect" id="node3" title=" " alt="" coords="179,13,365,39"/>
+<map id="castor3d::Cache&lt; Plugin, castor::String &gt;" name="castor3d::Cache&lt; Plugin, castor::String &gt;">
+<area shape="rect" id="node1" title="Plug&#45;ins cache." alt="" coords="11,200,181,241"/>
+<area shape="rect" id="node2" href="$db/d77/a02304.html" title=" " alt="" coords="12,109,180,151"/>
+<area shape="rect" id="node3" href="$db/d77/a02304.html" title="Base class for an element cache." alt="" coords="5,5,187,47"/>
 </map>

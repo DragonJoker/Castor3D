@@ -1,0 +1,133 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d1/da6/a04380" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::CommandsSemaphore</compoundname>
+    <includes local="no">CommandsSemaphore.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d1/da6/a04380_1a69f8a98779e7005fc1494f7cef97ebb4" prot="public" static="no" mutable="no">
+        <type>ashes::CommandBufferPtr</type>
+        <definition>ashes::CommandBufferPtr castor3d::CommandsSemaphore::commandBuffer</definition>
+        <argsstring></argsstring>
+        <name>commandBuffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CommandsSemaphore.hpp" line="25" column="1" bodyfile="Render/Passes/CommandsSemaphore.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/da6/a04380_1ab63a3f9fdc8ca326973ddaccb1c5e074" prot="public" static="no" mutable="no">
+        <type>ashes::SemaphorePtr</type>
+        <definition>ashes::SemaphorePtr castor3d::CommandsSemaphore::semaphore</definition>
+        <argsstring></argsstring>
+        <name>semaphore</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CommandsSemaphore.hpp" line="26" column="1" bodyfile="Render/Passes/CommandsSemaphore.hpp" bodystart="26" bodyend="-1"/>
+        <referencedby refid="d7/d17/a05024_1a40adc4973e83d50829daa0c6c37c79f2" compoundref="db/d08/a01028" startline="96" endline="100">castor3d::VoxelizePass::getSemaphore</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/da6/a04380_1a2a84ae509877c923b4a13d559eb1de3a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::CommandsSemaphore::CommandsSemaphore</definition>
+        <argsstring>(RenderDevice const &amp;device, castor::String const &amp;name)</argsstring>
+        <name>CommandsSemaphore</name>
+        <param>
+          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CommandsSemaphore.hpp" line="16" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/da6/a04380_1a45111e76b54c590ed4c25560a30b5dab" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::CommandsSemaphore::CommandsSemaphore</definition>
+        <argsstring>(ashes::CommandBufferPtr commandBuffer=nullptr, ashes::SemaphorePtr semaphore=nullptr)</argsstring>
+        <name>CommandsSemaphore</name>
+        <param>
+          <type>ashes::CommandBufferPtr</type>
+          <declname>commandBuffer</declname>
+          <defval>nullptr</defval>
+        </param>
+        <param>
+          <type>ashes::SemaphorePtr</type>
+          <declname>semaphore</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CommandsSemaphore.hpp" line="18" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/da6/a04380_1a04f1d199d50dd4495c033943c7320352" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::CommandsSemaphore::submit</definition>
+        <argsstring>(ashes::Queue const &amp;queue) const</argsstring>
+        <name>submit</name>
+        <param>
+          <type>ashes::Queue const &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CommandsSemaphore.hpp" line="21" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/da6/a04380_1aad5ed57fbc23c00ab8c57f38f0bb5968" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::Semaphore const  &amp;</type>
+        <definition>C3D_API ashes::Semaphore const&amp; castor3d::CommandsSemaphore::submit</definition>
+        <argsstring>(ashes::Queue const &amp;queue, ashes::Semaphore const &amp;toWait) const</argsstring>
+        <name>submit</name>
+        <param>
+          <type>ashes::Queue const &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>ashes::Semaphore const &amp;</type>
+          <declname>toWait</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CommandsSemaphore.hpp" line="22" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Passes/CommandsSemaphore.hpp" line="15" column="1" bodyfile="Render/Passes/CommandsSemaphore.hpp" bodystart="14" bodyend="27"/>
+    <listofallmembers>
+      <member refid="d1/da6/a04380_1a69f8a98779e7005fc1494f7cef97ebb4" prot="public" virt="non-virtual"><scope>castor3d::CommandsSemaphore</scope><name>commandBuffer</name></member>
+      <member refid="d1/da6/a04380_1a2a84ae509877c923b4a13d559eb1de3a" prot="public" virt="non-virtual"><scope>castor3d::CommandsSemaphore</scope><name>CommandsSemaphore</name></member>
+      <member refid="d1/da6/a04380_1a45111e76b54c590ed4c25560a30b5dab" prot="public" virt="non-virtual"><scope>castor3d::CommandsSemaphore</scope><name>CommandsSemaphore</name></member>
+      <member refid="d1/da6/a04380_1ab63a3f9fdc8ca326973ddaccb1c5e074" prot="public" virt="non-virtual"><scope>castor3d::CommandsSemaphore</scope><name>semaphore</name></member>
+      <member refid="d1/da6/a04380_1a04f1d199d50dd4495c033943c7320352" prot="public" virt="non-virtual"><scope>castor3d::CommandsSemaphore</scope><name>submit</name></member>
+      <member refid="d1/da6/a04380_1aad5ed57fbc23c00ab8c57f38f0bb5968" prot="public" virt="non-virtual"><scope>castor3d::CommandsSemaphore</scope><name>submit</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

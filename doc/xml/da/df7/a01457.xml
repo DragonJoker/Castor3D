@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="da/df7/a01457" kind="file" language="C++">
+    <compoundname>TextSubsurfaceScattering.hpp</compoundname>
+    <includes refid="d8/d8e/a00344" local="yes">Castor3D/Material/Pass/SubsurfaceScattering.hpp</includes>
+    <includes local="no">CastorUtils/Data/TextWriter.hpp</includes>
+    <incdepgraph>
+      <node id="32082">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="32076">
+        <label>Castor3D/Material/MaterialModule.hpp</label>
+        <link refid="d8/d23/a00326"/>
+        <childnode refid="32077" relation="include">
+        </childnode>
+        <childnode refid="32090" relation="include">
+        </childnode>
+      </node>
+      <node id="32074">
+        <label>Castor3D/Material/Pass/SubsurfaceScattering.hpp</label>
+        <link refid="d8/d8e/a00344"/>
+        <childnode refid="32075" relation="include">
+        </childnode>
+        <childnode refid="32091" relation="include">
+        </childnode>
+        <childnode refid="32090" relation="include">
+        </childnode>
+      </node>
+      <node id="32085">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="32091">
+        <label>CastorUtils/Data/TextWriter.hpp</label>
+      </node>
+      <node id="32086">
+        <label>cstdint</label>
+      </node>
+      <node id="32090">
+        <label>CastorUtils/Design/Signal.hpp</label>
+      </node>
+      <node id="32084">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="32077">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d5/d35/a00266"/>
+        <childnode refid="32078" relation="include">
+        </childnode>
+        <childnode refid="32079" relation="include">
+        </childnode>
+        <childnode refid="32080" relation="include">
+        </childnode>
+        <childnode refid="32081" relation="include">
+        </childnode>
+        <childnode refid="32082" relation="include">
+        </childnode>
+        <childnode refid="32083" relation="include">
+        </childnode>
+        <childnode refid="32084" relation="include">
+        </childnode>
+        <childnode refid="32085" relation="include">
+        </childnode>
+        <childnode refid="32086" relation="include">
+        </childnode>
+        <childnode refid="32087" relation="include">
+        </childnode>
+        <childnode refid="32088" relation="include">
+        </childnode>
+        <childnode refid="32089" relation="include">
+        </childnode>
+      </node>
+      <node id="32088">
+        <label>string</label>
+      </node>
+      <node id="32081">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="32078">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="32080">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="32073">
+        <label>Text/TextSubsurfaceScattering.hpp</label>
+        <link refid="da/df7/a01457"/>
+        <childnode refid="32074" relation="include">
+        </childnode>
+        <childnode refid="32091" relation="include">
+        </childnode>
+      </node>
+      <node id="32079">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="32089">
+        <label>vector</label>
+      </node>
+      <node id="32083">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="32075">
+        <label>PassModule.hpp</label>
+        <link refid="df/d91/a00335"/>
+        <childnode refid="32076" relation="include">
+        </childnode>
+        <childnode refid="32090" relation="include">
+        </childnode>
+      </node>
+      <node id="32087">
+        <label>memory</label>
+      </node>
+    </incdepgraph>
+    <innerclass refid="d6/d3b/a05780" prot="public">castor::TextWriter&lt; castor3d::SubsurfaceScattering &gt;</innerclass>
+    <innernamespace refid="da/d36/a01482">castor</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Text/TextSubsurfaceScattering.hpp"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,254 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d6/d5c/a04388" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::DownscalePass</compoundname>
+    <includes local="no">DownscalePass.hpp</includes>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d6/d5c/a04388_1a992b79ec6b55d56b34d3204a81e5d77b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>TextureUnitArray const  &amp;</type>
+        <definition>TextureUnitArray const&amp; castor3d::DownscalePass::getResult</definition>
+        <argsstring>() const</argsstring>
+        <name>getResult</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Getters. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/DownscalePass.hpp" line="64" column="1" bodyfile="Render/Passes/DownscalePass.hpp" bodystart="64" bodyend="67"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d6/d5c/a04388_1ab77703769ebcf09c1997f9b998aa30c9" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/dbb/a02520" kindref="compound">Engine</ref> const  &amp;</type>
+        <definition>Engine const&amp; castor3d::DownscalePass::m_engine</definition>
+        <argsstring></argsstring>
+        <name>m_engine</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/DownscalePass.hpp" line="71" column="1" bodyfile="Render/Passes/DownscalePass.hpp" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d5c/a04388_1ac17d1903b4ff7866915eacc40c990a81" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::DownscalePass::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/DownscalePass.hpp" line="72" column="1" bodyfile="Render/Passes/DownscalePass.hpp" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d5c/a04388_1ada00d5e02e66af521d03ea47198ce837" prot="private" static="no" mutable="no">
+        <type>TextureUnitArray</type>
+        <definition>TextureUnitArray castor3d::DownscalePass::m_result</definition>
+        <argsstring></argsstring>
+        <name>m_result</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/DownscalePass.hpp" line="73" column="1" bodyfile="Render/Passes/DownscalePass.hpp" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d5c/a04388_1af1e3bfa8a679dcf8c92f5afc97f1fdb2" prot="private" static="no" mutable="no">
+        <type>RenderPassTimerSPtr</type>
+        <definition>RenderPassTimerSPtr castor3d::DownscalePass::m_timer</definition>
+        <argsstring></argsstring>
+        <name>m_timer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/DownscalePass.hpp" line="74" column="1" bodyfile="Render/Passes/DownscalePass.hpp" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d5c/a04388_1a0bdf2aba787e6e491d0c36dd4d68dc71" prot="private" static="no" mutable="no">
+        <type>ashes::CommandBufferPtr</type>
+        <definition>ashes::CommandBufferPtr castor3d::DownscalePass::m_commandBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_commandBuffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/DownscalePass.hpp" line="75" column="1" bodyfile="Render/Passes/DownscalePass.hpp" bodystart="75" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d5c/a04388_1a48950e4e54bbccef02604ff43480411d" prot="private" static="no" mutable="no">
+        <type>ashes::SemaphorePtr</type>
+        <definition>ashes::SemaphorePtr castor3d::DownscalePass::m_finished</definition>
+        <argsstring></argsstring>
+        <name>m_finished</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/DownscalePass.hpp" line="76" column="1" bodyfile="Render/Passes/DownscalePass.hpp" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/d5c/a04388_1a1ae635d1585087176eb4f2ed6143bf5b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::DownscalePass::DownscalePass</definition>
+        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, castor::String const &amp;category, ashes::ImageViewArray const &amp;srcViews, VkExtent2D const &amp;dstSize)</argsstring>
+        <name>DownscalePass</name>
+        <param>
+          <type><ref refid="dc/dbb/a02520" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>category</declname>
+        </param>
+        <param>
+          <type>ashes::ImageViewArray const &amp;</type>
+          <declname>srcViews</declname>
+        </param>
+        <param>
+          <type>VkExtent2D const &amp;</type>
+          <declname>dstSize</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The engine. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">category</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The debug category name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">srcViews</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The source views (must be of same dimensions). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dstSize</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The wanted size. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/DownscalePass.hpp" line="37" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d5c/a04388_1a7043a945ed9f65c43cd28b37ffc852b5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::Semaphore const  &amp;</type>
+        <definition>C3D_API ashes::Semaphore const&amp; castor3d::DownscalePass::compute</definition>
+        <argsstring>(ashes::Semaphore const &amp;toWait)</argsstring>
+        <name>compute</name>
+        <param>
+          <type>ashes::Semaphore const &amp;</type>
+          <declname>toWait</declname>
+        </param>
+        <briefdescription>
+<para>Renders the stencil pass. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">toWait</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The semaphore to wait. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/DownscalePass.hpp" line="50" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d5c/a04388_1a7218aedd5fb8a86f28111772a9ce3821" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::DownscalePass::accept</definition>
+        <argsstring>(PipelineVisitorBase &amp;visitor)</argsstring>
+        <name>accept</name>
+        <param>
+          <type><ref refid="d5/d73/a03836" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+<para>Visitor acceptance function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>visitor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ... visitor. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/DownscalePass.hpp" line="54" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Passes/DownscalePass.hpp" line="19" column="1" bodyfile="Render/Passes/DownscalePass.hpp" bodystart="18" bodyend="77"/>
+    <listofallmembers>
+      <member refid="d6/d5c/a04388_1a7218aedd5fb8a86f28111772a9ce3821" prot="public" virt="non-virtual"><scope>castor3d::DownscalePass</scope><name>accept</name></member>
+      <member refid="d6/d5c/a04388_1a7043a945ed9f65c43cd28b37ffc852b5" prot="public" virt="non-virtual"><scope>castor3d::DownscalePass</scope><name>compute</name></member>
+      <member refid="d6/d5c/a04388_1a1ae635d1585087176eb4f2ed6143bf5b" prot="public" virt="non-virtual"><scope>castor3d::DownscalePass</scope><name>DownscalePass</name></member>
+      <member refid="d6/d5c/a04388_1a992b79ec6b55d56b34d3204a81e5d77b" prot="public" virt="non-virtual"><scope>castor3d::DownscalePass</scope><name>getResult</name></member>
+      <member refid="d6/d5c/a04388_1a0bdf2aba787e6e491d0c36dd4d68dc71" prot="private" virt="non-virtual"><scope>castor3d::DownscalePass</scope><name>m_commandBuffer</name></member>
+      <member refid="d6/d5c/a04388_1ac17d1903b4ff7866915eacc40c990a81" prot="private" virt="non-virtual"><scope>castor3d::DownscalePass</scope><name>m_device</name></member>
+      <member refid="d6/d5c/a04388_1ab77703769ebcf09c1997f9b998aa30c9" prot="private" virt="non-virtual"><scope>castor3d::DownscalePass</scope><name>m_engine</name></member>
+      <member refid="d6/d5c/a04388_1a48950e4e54bbccef02604ff43480411d" prot="private" virt="non-virtual"><scope>castor3d::DownscalePass</scope><name>m_finished</name></member>
+      <member refid="d6/d5c/a04388_1ada00d5e02e66af521d03ea47198ce837" prot="private" virt="non-virtual"><scope>castor3d::DownscalePass</scope><name>m_result</name></member>
+      <member refid="d6/d5c/a04388_1af1e3bfa8a679dcf8c92f5afc97f1fdb2" prot="private" virt="non-virtual"><scope>castor3d::DownscalePass</scope><name>m_timer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

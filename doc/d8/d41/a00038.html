@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/Binary/BinaryChunk.hpp File Reference</title>
+<title>Castor3D: Binary/BinaryModule.hpp File Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -17,10 +17,12 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Castor3D
-   &#160;<span id="projectnumber">..</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
+   <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
  </tr>
  </tbody>
@@ -39,386 +41,47 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dir_b2f33c71d4aa5e7af42a1ca61ff5af1b.html">source</a></li><li class="navelem"><a class="el" href="../../dir_1f10682fec53f0772108851bfcef2e4d.html">Core</a></li><li class="navelem"><a class="el" href="../../dir_6ad85ca7a90878938acb35a9fc6dd4fb.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../dir_a9f81fd4b86714dde972610ac984a016.html">Src</a></li><li class="navelem"><a class="el" href="../../dir_6c7e7462679a72c9b193d27c1fb5f525.html">Binary</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../dir_3785288b95ad083bc6e0b212dbe13340.html">Binary</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a> &#124;
-<a href="#define-members">Macros</a> &#124;
-<a href="#enum-members">Enumerations</a> &#124;
-<a href="#func-members">Functions</a> &#124;
-<a href="#var-members">Variables</a>  </div>
+<a href="#namespaces">Namespaces</a>  </div>
   <div class="headertitle">
-<div class="title">BinaryChunk.hpp File Reference</div>  </div>
+<div class="title">BinaryModule.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-0-trigger" src="../../closed.png" alt="+"/> Include dependency graph for BinaryChunk.hpp:</div>
-<div id="dynsection-0-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../d3/de7/a00039.png" border="0" usemap="#Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2Binary_2BinaryChunk_8hpp" alt=""/></div>
-<map name="Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2Binary_2BinaryChunk_8hpp" id="Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2Binary_2BinaryChunk_8hpp">
-<area shape="rect"  title=" " alt="" coords="3393,5,3584,61"/>
-<area shape="rect"  href="../../df/dc8/a00122.html" title=" " alt="" coords="2335,273,2512,300"/>
-<area shape="rect"  href="../../d6/d2d/a00047.html" title=" " alt="" coords="3433,109,3544,136"/>
-<area shape="rect"  title=" " alt="" coords="3569,109,3630,136"/>
-<area shape="rect"  title=" " alt="" coords="2447,355,2629,382"/>
-<area shape="rect"  title=" " alt="" coords="355,355,503,382"/>
-<area shape="rect"  title=" " alt="" coords="1808,355,1996,382"/>
-<area shape="rect"  title=" " alt="" coords="2021,355,2167,382"/>
-<area shape="rect"  title=" " alt="" coords="3947,355,4057,382"/>
-<area shape="rect"  title=" " alt="" coords="4081,355,4211,382"/>
-<area shape="rect"  title=" " alt="" coords="5,355,148,382"/>
-<area shape="rect"  title=" " alt="" coords="173,355,330,382"/>
-<area shape="rect"  title=" " alt="" coords="2909,355,3103,382"/>
-<area shape="rect"  href="../../d4/ddf/a00488.html" title=" " alt="" coords="3690,348,3922,389"/>
-<area shape="rect"  href="../../d6/d60/a00491.html" title=" " alt="" coords="3127,348,3359,389"/>
-<area shape="rect"  href="../../d4/d1e/a00497.html" title=" " alt="" coords="3383,348,3615,389"/>
-<area shape="rect"  href="../../de/d4e/a00500.html" title=" " alt="" coords="527,348,759,389"/>
-<area shape="rect"  href="../../d4/de5/a00503.html" title=" " alt="" coords="783,348,1015,389"/>
-<area shape="rect"  href="../../d4/d1f/a00506.html" title=" " alt="" coords="1039,348,1271,389"/>
-<area shape="rect"  href="../../d4/dfb/a00512.html" title=" " alt="" coords="1295,348,1527,389"/>
-<area shape="rect"  href="../../dc/d19/a00515.html" title=" " alt="" coords="1551,348,1783,389"/>
-<area shape="rect"  href="../../df/db6/a00509.html" title=" " alt="" coords="2191,348,2423,389"/>
-<area shape="rect"  href="../../d5/d0f/a00494.html" title=" " alt="" coords="2653,348,2885,389"/>
-<area shape="rect"  href="../../d4/def/a00359.html" title=" " alt="" coords="4045,437,4201,464"/>
-<area shape="rect"  title=" " alt="" coords="3716,437,3896,464"/>
-<area shape="rect"  title=" " alt="" coords="708,437,835,464"/>
-<area shape="rect"  title=" " alt="" coords="2240,437,2375,464"/>
-<area shape="rect"  title=" " alt="" coords="3125,437,3265,464"/>
-<area shape="rect"  href="../../de/d55/a00323.html" title=" " alt="" coords="2505,184,2683,225"/>
-<area shape="rect"  href="../../d0/d61/a00302.html" title=" " alt="" coords="3049,184,3230,225"/>
-<area shape="rect"  title=" " alt="" coords="3526,191,3673,218"/>
-<area shape="rect"  title=" " alt="" coords="3697,191,3819,218"/>
-<area shape="rect"  title=" " alt="" coords="3843,191,3959,218"/>
-<area shape="rect"  title=" " alt="" coords="3983,191,4133,218"/>
-</map>
-</div>
-</div><div class="textblock"><div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-1-trigger" src="../../closed.png" alt="+"/> This graph shows which files directly or indirectly include this file:</div>
-<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../db/d3a/a00040.png" border="0" usemap="#Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2Binary_2BinaryChunk_8hppdep" alt=""/></div>
-<map name="Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2Binary_2BinaryChunk_8hppdep" id="Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2Binary_2BinaryChunk_8hppdep">
-<area shape="rect"  title=" " alt="" coords="1443,5,1634,61"/>
-<area shape="rect"  href="../../d5/de0/a00050.html" title=" " alt="" coords="1558,109,1749,165"/>
-<area shape="rect"  href="../../dc/dee/a00053.html" title=" " alt="" coords="1330,109,1518,165"/>
-<area shape="rect"  href="../../dd/d32/a00041.html" title=" " alt="" coords="1590,213,1781,269"/>
-<area shape="rect"  href="../../d7/d46/a00002.html" title=" " alt="" coords="2038,325,2229,381"/>
-<area shape="rect"  href="../../db/dc3/a00284.html" title=" " alt="" coords="2252,443,2417,499"/>
-<area shape="rect"  href="../../d4/d51/a00017.html" title=" " alt="" coords="1999,673,2238,744"/>
-<area shape="rect"  href="../../dd/dad/a00005.html" title=" " alt="" coords="895,325,1089,381"/>
-<area shape="rect"  href="../../db/db2/a00020.html" title=" " alt="" coords="581,317,819,388"/>
-<area shape="rect"  href="../../d9/d0f/a00644.html" title=" " alt="" coords="5,436,251,507"/>
-<area shape="rect"  href="../../d4/d8c/a00035.html" title=" " alt="" coords="1313,317,1511,388"/>
-<area shape="rect"  href="../../d5/d16/a00029.html" title=" " alt="" coords="337,317,557,388"/>
-<area shape="rect"  href="../../d6/d82/a00293.html" title=" " alt="" coords="1818,325,2014,381"/>
-<area shape="rect"  href="../../d0/d39/a00314.html" title=" " alt="" coords="1587,317,1794,388"/>
-<area shape="rect"  href="../../dc/d91/a00659.html" title=" " alt="" coords="2603,317,2850,388"/>
-<area shape="rect"  href="../../df/d95/a00299.html" title=" " alt="" coords="2010,443,2227,499"/>
-<area shape="rect"  href="../../d5/d5b/a00695.html" title=" " alt="" coords="2493,443,2694,499"/>
-<area shape="rect"  href="../../d1/d5d/a00311.html" title=" " alt="" coords="2035,562,2202,618"/>
-<area shape="rect"  href="../../db/d7c/a00722.html" title=" " alt="" coords="1763,681,1975,737"/>
-<area shape="rect"  href="../../d8/db9/a00725.html" title=" " alt="" coords="1776,792,1963,863"/>
-<area shape="rect"  href="../../dc/df1/a00662.html" title=" " alt="" coords="2263,681,2449,737"/>
-<area shape="rect"  href="../../d2/d94/a00716.html" title=" " alt="" coords="2598,562,2807,618"/>
-<area shape="rect"  href="../../d8/d73/a00674.html" title=" " alt="" coords="2473,681,2647,737"/>
-<area shape="rect"  href="../../da/d46/a00665.html" title=" " alt="" coords="3811,562,3976,618"/>
-<area shape="rect"  href="../../d4/d9b/a00680.html" title=" " alt="" coords="3043,562,3219,618"/>
-<area shape="rect"  href="../../d1/d56/a00707.html" title=" " alt="" coords="2394,555,2574,625"/>
-<area shape="rect"  href="../../d9/d87/a00551.html" title=" " alt="" coords="777,792,948,863"/>
-<area shape="rect"  href="../../dc/dc9/a00389.html" title=" " alt="" coords="2443,799,2677,855"/>
-<area shape="rect"  href="../../df/d4c/a00851.html" title=" " alt="" coords="3235,799,3485,855"/>
-<area shape="rect"  href="../../d6/d06/a00572.html" title=" " alt="" coords="3931,681,4130,737"/>
-<area shape="rect"  href="../../dc/de4/a00677.html" title=" " alt="" coords="3387,681,3624,737"/>
-<area shape="rect"  href="../../df/d9e/a00686.html" title=" " alt="" coords="3142,681,3362,737"/>
-<area shape="rect"  href="../../d1/d87/a00689.html" title=" " alt="" coords="3649,681,3855,737"/>
-<area shape="rect"  href="../../d0/db6/a00692.html" title=" " alt="" coords="2671,681,2873,737"/>
-<area shape="rect"  href="../../d3/d8a/a00899.html" title=" " alt="" coords="2898,673,3118,744"/>
-<area shape="rect"  href="../../d2/de7/a00014.html" title=" " alt="" coords="569,443,831,499"/>
-<area shape="rect"  href="../../d3/d52/a00023.html" title=" " alt="" coords="1141,436,1307,507"/>
-<area shape="rect"  href="../../d1/daa/a00638.html" title=" " alt="" coords="856,436,1067,507"/>
-<area shape="rect"  href="../../da/dd1/a00629.html" title=" " alt="" coords="811,562,1082,618"/>
-<area shape="rect"  href="../../db/d3a/a00641.html" title=" " alt="" coords="597,555,787,625"/>
-<area shape="rect"  href="../../d3/d8e/a00647.html" title=" " alt="" coords="363,555,573,625"/>
-<area shape="rect"  href="../../d6/dfa/a00626.html" title=" " alt="" coords="730,681,995,737"/>
-<area shape="rect"  href="../../d4/d10/a00635.html" title=" " alt="" coords="1019,681,1303,737"/>
-<area shape="rect"  href="../../d6/d5b/a00026.html" title=" " alt="" coords="1546,436,1737,507"/>
-<area shape="rect"  href="../../dc/d87/a00032.html" title=" " alt="" coords="1331,436,1522,507"/>
-<area shape="rect"  href="../../de/ddd/a00653.html" title=" " alt="" coords="275,436,544,507"/>
-<area shape="rect"  href="../../da/de0/a00317.html" title=" " alt="" coords="1761,436,1985,507"/>
-<area shape="rect"  href="../../da/d36/a00650.html" title=" " alt="" coords="2718,436,2957,507"/>
-<area shape="rect"  href="../../dc/df2/a00656.html" title=" " alt="" coords="2981,436,3219,507"/>
-<area shape="rect"  href="../../d5/df9/a00044.html" title=" " alt="" coords="1322,213,1510,269"/>
-</map>
-</div>
-</div><table class="memberdecls">
+<table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d49/a01696.html">castor3d::ChunkTyper&lt; Type &gt;</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper structure to find ChunkType from a type.  <a href="../../d9/d49/a01696.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d87/a02076.html">castor3d::BinaryParserBase&lt; TParsed &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Binary data chunk reader base class.  <a href="../../db/d87/a02076.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/d26/a01700.html">castor3d::BinaryChunk</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Binary data chunk base class.  <a href="../../d4/d26/a01700.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d0c/a02080.html">castor3d::BinaryParser&lt; TParsed &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specialisable binary data chunk reader class.  <a href="../../d6/d0c/a02080.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dbe/a02084.html">castor3d::BinaryWriterBase&lt; TWritten &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Binary data chunk writer base class.  <a href="../../da/dbe/a02084.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/db5/a02088.html">castor3d::BinaryWriter&lt; TWritten &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specialisable binary data chunk writer class.  <a href="../../d7/db5/a02088.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/de0/a02092.html">castor3d::ChunkTyper&lt; Type &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper structure to find ChunkType from a type.  <a href="../../d4/de0/a02092.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d77/a02096.html">castor3d::OldInterleavedVertexT&lt; T &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:d0/d85/a00976"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d85/a00976.html">castor3d</a></td></tr>
+<tr class="memitem:d8/d31/a01407"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d31/a01407.html">castor3d</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
-Macros</h2></td></tr>
-<tr class="memitem:a9669dea75ff337f25f3ee1d6da5ff75d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d41/a00038.html#a9669dea75ff337f25f3ee1d6da5ff75d">MAKE_CMSH_VERSION</a>(maj,  min,  rev)</td></tr>
-<tr class="separator:a9669dea75ff337f25f3ee1d6da5ff75d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a97fd8b52189cad24944d68532012e286"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d41/a00038.html#a97fd8b52189cad24944d68532012e286">CMSH_VERSION_MAJOR</a>(version)&#160;&#160;&#160;( uint32_t( version ) &gt;&gt; 24 )</td></tr>
-<tr class="separator:a97fd8b52189cad24944d68532012e286"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aee20ae3e2208e91657acca1c5c1bcf42"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d41/a00038.html#aee20ae3e2208e91657acca1c5c1bcf42">CMSH_VERSION_MINOR</a>(version)&#160;&#160;&#160;( ( uint32_t( version ) &gt;&gt; 16 ) &amp; uint32_t( 0xFF ) )</td></tr>
-<tr class="separator:aee20ae3e2208e91657acca1c5c1bcf42"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab8ff6b531dd3657d3bf4b1d177409fac"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d41/a00038.html#ab8ff6b531dd3657d3bf4b1d177409fac">CMSH_VERSION_REVISION</a>(version)&#160;&#160;&#160;( ( uint32_t( version ) &gt;&gt;  0 ) &amp; uint32_t( 0xFF ) )</td></tr>
-<tr class="separator:ab8ff6b531dd3657d3bf4b1d177409fac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a05a29930541180d0cd8e52bb30ad7a10"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d41/a00038.html#a05a29930541180d0cd8e52bb30ad7a10">MAKE_CHUNK_ID</a>(a,  b,  c,  d,  e,  f,  g,  h)</td></tr>
-<tr class="separator:a05a29930541180d0cd8e52bb30ad7a10"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
-Enumerations</h2></td></tr>
-<tr class="memitem:a742783d4e4b7354fac3e375ae107414d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414d">castor3d::ChunkType</a> : uint64_t { <br />
-&#160;&#160;<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414da64c3acc11ffdb1be30ea339290bd1508">castor3d::ChunkType::eUnknown</a> = MAKE_CHUNK_ID( ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' ), 
-<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414da3af707888e537c6e9dde81b11bf02959">castor3d::ChunkType::eCmshFile</a> = MAKE_CHUNK_ID( 'C', 'M', 'S', 'H', 'F', 'I', 'L', 'E' ), 
-<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414da9e33398324cc27f4d18d60ffe7436294">castor3d::ChunkType::eCmshHeader</a> = MAKE_CHUNK_ID( 'C', 'M', 'S', 'H', 'H', 'D', 'E', 'R' ), 
-<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414da52eafb299773df06313321e3eca83362">castor3d::ChunkType::eCmshVersion</a> = MAKE_CHUNK_ID( 'C', 'M', 'S', 'H', 'V', 'R', 'S', 'N' ), 
-<br />
-&#160;&#160;<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414daa866af182acab9fffb643ecb752cd9e5">castor3d::ChunkType::eName</a> = MAKE_CHUNK_ID( 'N', 'A', 'M', 'E', ' ', ' ', ' ', ' ' ), 
-<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414da5be756330a0600dde9db6b9fdb5e16a2">castor3d::ChunkType::eMesh</a> = MAKE_CHUNK_ID( 'M', 'E', 'S', 'H', ' ', ' ', ' ', ' ' ), 
-<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414dadc5e27f91e7e90419aa4f7f8578b69ff">castor3d::ChunkType::eSkeleton</a> = MAKE_CHUNK_ID( 'S', 'K', 'E', 'L', 'E', 'T', 'O', 'N' ), 
-<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414da79001a55061cfd6dde7ba371ca783691">castor3d::ChunkType::eSkeletonGlobalInverse</a> = MAKE_CHUNK_ID( 'S', 'K', 'E', 'L', 'G', 'I', 'M', 'X' ), 
-<br />
-&#160;&#160;<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414da08dc84efbcc938bfd03db6fad9ed9946">castor3d::ChunkType::eSkeletonBone</a> = MAKE_CHUNK_ID( 'S', 'K', 'E', 'L', 'B', 'O', 'N', 'E' ), 
-<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414daa01091c995040b0be7513df6eb86addf">castor3d::ChunkType::eBoneParentName</a> = MAKE_CHUNK_ID( 'B', 'O', 'N', 'E', 'P', 'A', 'R', 'T' ), 
-<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414dafdca66809512c2bebe8eadc71897a529">castor3d::ChunkType::eBoneOffsetMatrix</a> = MAKE_CHUNK_ID( 'B', 'O', 'N', 'E', 'O', 'M', 'T', 'X' ), 
-<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414da1c6e623c4f3ed72ce3d17fb2896ccbfc">castor3d::ChunkType::eSubmesh</a> = MAKE_CHUNK_ID( 'S', 'U', 'B', 'M', 'E', 'S', 'H', ' ' ), 
-<br />
-&#160;&#160;<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414da7c907915cbd27d907521f9f54e4fdd26">castor3d::ChunkType::eSubmeshTopology</a> = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'T', 'O', 'P', 'O' ), 
-<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414da5c9a8a405e3750299d54d22ab22b0796">castor3d::ChunkType::eSubmeshVertexCount</a> = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'V', 'X', 'C', 'T' ), 
-<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414da943fd45d3572fea461610bed3780edea">castor3d::ChunkType::eSubmeshVertex</a> = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'V', 'R', 'T', 'X' ), 
-<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414da9a800a662d9ce8bcfb6e201d992274b2">castor3d::ChunkType::eSubmeshBoneCount</a> = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'B', 'N', 'C', 'T' ), 
-<br />
-&#160;&#160;<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414da934aac93900efc69dc94c1f2dd18fa30">castor3d::ChunkType::eSubmeshBones</a> = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'B', 'O', 'N', 'E' ), 
-<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414da41be9560a0a4017deed7270a0a757912">castor3d::ChunkType::eSubmeshMatrixCount</a> = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'M', 'X', 'C', 'T' ), 
-<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414dab7402ead3f406b9e6672c9298f51c0bf">castor3d::ChunkType::eSubmeshMatrices</a> = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'M', 'T', 'R', 'X' ), 
-<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414da5fd3bdb800992b14cd692dafe08bb08a">castor3d::ChunkType::eSubmeshFaceCount</a> = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'F', 'C', 'C', 'T' ), 
-<br />
-&#160;&#160;<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414dacb7918c57f4aa82423d93c1f1b6ecea0">castor3d::ChunkType::eSubmeshFaces</a> = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'F', 'A', 'C', 'E' ), 
-<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414dab941ce195d8ca01906be3b1281dbf90c">castor3d::ChunkType::eAnimable</a> = MAKE_CHUNK_ID( 'A', 'N', 'I', 'M', 'A', 'B', 'L', 'E' ), 
-<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414daf8b3bcfa9a9160ba9956d2197892e796">castor3d::ChunkType::eAnimation</a> = MAKE_CHUNK_ID( 'A', 'N', 'M', 'A', 'T', 'I', 'O', 'N' ), 
-<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414da450d63b2282158b9ea9a2bd53c774fca">castor3d::ChunkType::eAnimLength</a> = MAKE_CHUNK_ID( 'A', 'N', 'M', 'L', 'E', 'N', 'G', 'T' ), 
-<br />
-&#160;&#160;<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414daf29764535eb62deb6c04b2e38ebce092">castor3d::ChunkType::eSkeletonAnimation</a> = MAKE_CHUNK_ID( 'S', 'K', 'E', 'L', 'A', 'N', 'I', 'M' ), 
-<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414da887d8ff541bbddb669f339dc26fded5b">castor3d::ChunkType::eMeshAnimation</a> = MAKE_CHUNK_ID( 'M', 'E', 'S', 'H', 'A', 'N', 'I', 'M' ), 
-<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414daf7bf6fea39d4457707835983cb8b246c">castor3d::ChunkType::eAnimInterpolator</a> = MAKE_CHUNK_ID( 'A', 'N', 'M', 'I', 'N', 'T', 'E', 'R' ), 
-<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414dae409c43ca989071d9b8518e05bf7a168">castor3d::ChunkType::eAnimationObject</a> = MAKE_CHUNK_ID( 'A', 'N', 'S', 'K', 'O', 'B', 'J', 'T' ), 
-<br />
-&#160;&#160;<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414da0acf24819b388bf13a6881408227607f">castor3d::ChunkType::eSkeletonAnimationNode</a> = MAKE_CHUNK_ID( 'A', 'N', 'S', 'K', 'N', 'O', 'D', 'E' ), 
-<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414da280f1578becaa24b0b6455cb57a9b5d8">castor3d::ChunkType::eSkeletonAnimationBone</a> = MAKE_CHUNK_ID( 'A', 'N', 'S', 'K', 'B', 'O', 'N', 'E' ), 
-<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414dafcc6b7d587a3fabe7a7dcdcddf2aae45">castor3d::ChunkType::eMovingTransform</a> = MAKE_CHUNK_ID( 'M', 'V', 'N', 'G', 'T', 'S', 'F', 'M' ), 
-<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414da7ce97df41e8327f2ea3a82d9dd9a6c62">castor3d::ChunkType::eKeyframeCount</a> = MAKE_CHUNK_ID( 'K', 'F', 'R', 'M', 'C', 'O', 'N', 'T' ), 
-<br />
-&#160;&#160;<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414dafaf4e1a98bc29036f7e929311c518be2">castor3d::ChunkType::eKeyframes</a> = MAKE_CHUNK_ID( 'K', 'E', 'Y', 'F', 'R', 'M', 'E', 'S' ), 
-<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414dafe8ec950199cfa5dc10b05235822becd">castor3d::ChunkType::eBonesComponent</a> = MAKE_CHUNK_ID( 'B', 'O', 'N', 'E', 'C', 'O', 'M', 'P' ), 
-<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414dad0e65a7476b424b77bb21459bb8f8541">castor3d::ChunkType::eMeshAnimationKeyFrame</a> = MAKE_CHUNK_ID( 'M', 'S', 'A', 'N', 'K', 'F', 'R', 'M' ), 
-<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414da83b19e4fa4fa9693f0836e7d7f4f484b">castor3d::ChunkType::eMeshAnimationKeyFrameTime</a> = MAKE_CHUNK_ID( 'M', 'S', 'A', 'N', 'K', 'F', 'T', 'M' ), 
-<br />
-&#160;&#160;<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414da08678ca7c19def59299a9e3ed5b94149">castor3d::ChunkType::eMeshAnimationKeyFrameSubmeshID</a> = MAKE_CHUNK_ID( 'M', 'S', 'A', 'N', 'K', 'F', 'I', 'D' ), 
-<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414da4baef8595f4aadf89c90dfe2303a8e8d">castor3d::ChunkType::eMeshAnimationKeyFrameBufferSize</a> = MAKE_CHUNK_ID( 'M', 'H', 'A', 'N', 'K', 'F', 'S', 'Z' ), 
-<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414daa5910778bbe155ce707b6903caad5c35">castor3d::ChunkType::eMeshAnimationKeyFrameBufferData</a> = MAKE_CHUNK_ID( 'M', 'H', 'A', 'N', 'K', 'F', 'D', 'T' ), 
-<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414dafc2fcad1713bdfa545ca7db604802954">castor3d::ChunkType::eSkeletonAnimationKeyFrame</a> = MAKE_CHUNK_ID( 'S', 'K', 'A', 'N', 'K', 'F', 'R', 'M' ), 
-<br />
-&#160;&#160;<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414dafd83421c233b10ce0887440f5edbbba2">castor3d::ChunkType::eSkeletonAnimationKeyFrameTime</a> = MAKE_CHUNK_ID( 'S', 'K', 'A', 'N', 'K', 'F', 'T', 'M' ), 
-<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414da8dea65c57b1ddfe52d4e003598b924cc">castor3d::ChunkType::eSkeletonAnimationKeyFrameObjectType</a> = MAKE_CHUNK_ID( 'S', 'K', 'A', 'N', 'K', 'F', 'O', 'Y' ), 
-<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414da3d71de439f525c7e6279c0593b368ecc">castor3d::ChunkType::eSkeletonAnimationKeyFrameObjectName</a> = MAKE_CHUNK_ID( 'S', 'K', 'A', 'N', 'K', 'F', 'O', 'N' ), 
-<a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414da35f9240f2d27d4957cfe7e0ac5017f19">castor3d::ChunkType::eSkeletonAnimationKeyFrameObjectTransform</a> = MAKE_CHUNK_ID( 'S', 'K', 'A', 'N', 'K', 'F', 'O', 'T' )
-<br />
- }</td></tr>
-<tr class="memdesc:a742783d4e4b7354fac3e375ae107414d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Binary data chunk types enumeration.  <a href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414d">More...</a><br /></td></tr>
-<tr class="separator:a742783d4e4b7354fac3e375ae107414d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
-Functions</h2></td></tr>
-<tr class="memitem:a064018519157c004c078783527b1c5cc"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d85/a00976.html#a064018519157c004c078783527b1c5cc">castor3d::prepareChunkData</a> (ChunkType &amp;p_value)</td></tr>
-<tr class="memdesc:a064018519157c004c078783527b1c5cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">sets given value to big endian.  <a href="../../d0/d85/a00976.html#a064018519157c004c078783527b1c5cc">More...</a><br /></td></tr>
-<tr class="separator:a064018519157c004c078783527b1c5cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
-Variables</h2></td></tr>
-<tr class="memitem:adcb39f8d20bd250166f8275ffdeb4e65"><td class="memItemLeft" align="right" valign="top">uint32_t const&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d85/a00976.html#adcb39f8d20bd250166f8275ffdeb4e65">castor3d::CMSH_VERSION</a> = <a class="el" href="../../d8/d41/a00038.html#a9669dea75ff337f25f3ee1d6da5ff75d">MAKE_CMSH_VERSION</a>( 0x01, 0x03, 0x0000 )</td></tr>
-<tr class="separator:adcb39f8d20bd250166f8275ffdeb4e65"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="a97fd8b52189cad24944d68532012e286"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a97fd8b52189cad24944d68532012e286">&#9670;&nbsp;</a></span>CMSH_VERSION_MAJOR</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define CMSH_VERSION_MAJOR</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">version</td><td>)</td>
-          <td>&#160;&#160;&#160;( uint32_t( version ) &gt;&gt; 24 )</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Macro to get the major number from a version number. </p>
-
-</div>
-</div>
-<a id="aee20ae3e2208e91657acca1c5c1bcf42"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aee20ae3e2208e91657acca1c5c1bcf42">&#9670;&nbsp;</a></span>CMSH_VERSION_MINOR</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define CMSH_VERSION_MINOR</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">version</td><td>)</td>
-          <td>&#160;&#160;&#160;( ( uint32_t( version ) &gt;&gt; 16 ) &amp; uint32_t( 0xFF ) )</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Macro to get the minor number from a version number. </p>
-
-</div>
-</div>
-<a id="ab8ff6b531dd3657d3bf4b1d177409fac"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab8ff6b531dd3657d3bf4b1d177409fac">&#9670;&nbsp;</a></span>CMSH_VERSION_REVISION</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define CMSH_VERSION_REVISION</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">version</td><td>)</td>
-          <td>&#160;&#160;&#160;( ( uint32_t( version ) &gt;&gt;  0 ) &amp; uint32_t( 0xFF ) )</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Macro to get the revision number from a version number. </p>
-
-</div>
-</div>
-<a id="a05a29930541180d0cd8e52bb30ad7a10"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a05a29930541180d0cd8e52bb30ad7a10">&#9670;&nbsp;</a></span>MAKE_CHUNK_ID</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MAKE_CHUNK_ID</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">a, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">b, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">c, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">d, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">e, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">f, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">g, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">h&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">((uint64_t( a ) &lt;&lt; 56)\</div><div class="line">    | (uint64_t( b ) &lt;&lt; 48)\</div><div class="line">    | (uint64_t( c ) &lt;&lt; 40)\</div><div class="line">    | (uint64_t( d ) &lt;&lt; 32)\</div><div class="line">    | (uint64_t( e ) &lt;&lt; 24)\</div><div class="line">    | (uint64_t( f ) &lt;&lt; 16)\</div><div class="line">    | (uint64_t( g ) &lt;&lt; 8)\</div><div class="line">    | (uint64_t( h ) &lt;&lt; 0))</div></div><!-- fragment --><p>A define to ease the declaration of a chunk id. </p>
-
-</div>
-</div>
-<a id="a9669dea75ff337f25f3ee1d6da5ff75d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9669dea75ff337f25f3ee1d6da5ff75d">&#9670;&nbsp;</a></span>MAKE_CMSH_VERSION</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MAKE_CMSH_VERSION</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">maj, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">min, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">rev&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">( ( uint32_t( maj ) &lt;&lt; 24 ) \</div><div class="line">    | ( uint32_t( min ) &lt;&lt; 16 ) \</div><div class="line">    | ( uint32_t( rev ) &lt;&lt;  0 ) )</div></div><!-- fragment --><p>Macro to make a version number. </p>
-
-</div>
-</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 13:38:06 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 17 2021 16:11:38 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

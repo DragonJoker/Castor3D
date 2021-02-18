@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d4/ddb/a04118" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::OverlayRenderer::Configuration</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d4/ddb/a04118_1aa9c288e52458682de7e463c398d2ab9f" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::OverlayRenderer::Configuration::positionRatio</definition>
+        <argsstring></argsstring>
+        <name>positionRatio</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="182" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="182" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/ddb/a04118_1ad7e2c1f50ae1a7259fc8fda411a0bb62" prot="public" static="no" mutable="no">
+        <type>castor::Point4i</type>
+        <definition>castor::Point4i castor3d::OverlayRenderer::Configuration::renderSizeIndex</definition>
+        <argsstring></argsstring>
+        <name>renderSizeIndex</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="183" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="183" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Overlay/OverlayRenderer.hpp" line="181" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="180" bodyend="184"/>
+    <listofallmembers>
+      <member refid="d4/ddb/a04118_1aa9c288e52458682de7e463c398d2ab9f" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::Configuration</scope><name>positionRatio</name></member>
+      <member refid="d4/ddb/a04118_1ad7e2c1f50ae1a7259fc8fda411a0bb62" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::Configuration</scope><name>renderSizeIndex</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

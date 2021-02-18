@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_578fa06cfc2e71cb62bcb717d5766e34" kind="dir">
+    <compoundname>Render/Technique/Opaque/LightVolumeGI</compoundname>
+    <innerfile refid="d0/d85/a00908">LayeredLightVolumeGIPass.hpp</innerfile>
+    <innerfile refid="d7/d12/a00911">LightPassLayeredVolumePropagationShadow.hpp</innerfile>
+    <innerfile refid="d3/dd1/a00914">LightPassVolumePropagationShadow.hpp</innerfile>
+    <innerfile refid="d4/ddc/a00917">LightVolumeGIModule.hpp</innerfile>
+    <innerfile refid="d6/d82/a00920">LightVolumeGIPass.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Technique/Opaque/LightVolumeGI/"/>
+  </compounddef>
+</doxygen>

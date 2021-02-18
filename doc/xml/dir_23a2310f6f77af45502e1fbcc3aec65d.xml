@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_23a2310f6f77af45502e1fbcc3aec65d" kind="dir">
+    <compoundname>Render/Passes</compoundname>
+    <innerfile refid="d4/d6a/a00704">CombinePass.hpp</innerfile>
+    <innerfile refid="d1/d56/a00707">CommandsSemaphore.hpp</innerfile>
+    <innerfile refid="d4/deb/a00710">DepthPass.hpp</innerfile>
+    <innerfile refid="d1/d04/a00713">DownscalePass.hpp</innerfile>
+    <innerfile refid="d2/d94/a00716">GaussianBlur.hpp</innerfile>
+    <innerfile refid="dd/dd8/a00719">LineariseDepthPass.hpp</innerfile>
+    <innerfile refid="db/d7c/a00722">PassesModule.hpp</innerfile>
+    <innerfile refid="d8/db9/a00725">RenderGrid.hpp</innerfile>
+    <innerfile refid="df/d3b/a00728">RenderQuad.hpp</innerfile>
+    <innerfile refid="df/df7/a00731">StencilPass.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Passes/"/>
+  </compounddef>
+</doxygen>

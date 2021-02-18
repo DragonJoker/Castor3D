@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="db/d0b/a02566" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::KeyboardState</compoundname>
+    <includes local="no">UserInputEventModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="db/d0b/a02566_1ae40eab00317a2b8e1b5c58545eadc894" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::KeyboardState::ctrl</definition>
+        <argsstring></argsstring>
+        <name>ctrl</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The control key state. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/UserInputEventModule.hpp" line="271" column="1" bodyfile="Event/UserInput/UserInputEventModule.hpp" bodystart="271" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d0b/a02566_1a95e453217bc8f3266f3b56e15d0bd8bf" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::KeyboardState::alt</definition>
+        <argsstring></argsstring>
+        <name>alt</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The alt key state. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/UserInputEventModule.hpp" line="274" column="1" bodyfile="Event/UserInput/UserInputEventModule.hpp" bodystart="274" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d0b/a02566_1a16891fdba713c8a65b4fb2bae045b1f3" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::KeyboardState::shift</definition>
+        <argsstring></argsstring>
+        <name>shift</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The shift key state. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Event/UserInput/UserInputEventModule.hpp" line="277" column="1" bodyfile="Event/UserInput/UserInputEventModule.hpp" bodystart="277" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Keyboard state. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Event/UserInput/UserInputEventModule.hpp" line="268" column="1" bodyfile="Event/UserInput/UserInputEventModule.hpp" bodystart="267" bodyend="278"/>
+    <listofallmembers>
+      <member refid="db/d0b/a02566_1a95e453217bc8f3266f3b56e15d0bd8bf" prot="public" virt="non-virtual"><scope>castor3d::KeyboardState</scope><name>alt</name></member>
+      <member refid="db/d0b/a02566_1ae40eab00317a2b8e1b5c58545eadc894" prot="public" virt="non-virtual"><scope>castor3d::KeyboardState</scope><name>ctrl</name></member>
+      <member refid="db/d0b/a02566_1a16891fdba713c8a65b4fb2bae045b1f3" prot="public" virt="non-virtual"><scope>castor3d::KeyboardState</scope><name>shift</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

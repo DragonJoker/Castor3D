@@ -1,0 +1,265 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dd/d08/a01448" kind="file" language="C++">
+    <compoundname>TextSpecularGlossinessPbrPass.hpp</compoundname>
+    <includes refid="d3/d93/a00341" local="yes">Castor3D/Material/Pass/SpecularGlossinessPbrPass.hpp</includes>
+    <includes local="no">CastorUtils/Data/TextWriter.hpp</includes>
+    <incdepgraph>
+      <node id="31951">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="31945">
+        <label>Castor3D/Material/MaterialModule.hpp</label>
+        <link refid="d8/d23/a00326"/>
+        <childnode refid="31946" relation="include">
+        </childnode>
+        <childnode refid="31959" relation="include">
+        </childnode>
+      </node>
+      <node id="31975">
+        <label>Castor3D/Material/Pass/SubsurfaceScattering.hpp</label>
+        <link refid="d8/d8e/a00344"/>
+        <childnode refid="31944" relation="include">
+        </childnode>
+        <childnode refid="31976" relation="include">
+        </childnode>
+        <childnode refid="31959" relation="include">
+        </childnode>
+      </node>
+      <node id="31960">
+        <label>Castor3D/Render/RenderModule.hpp</label>
+        <link refid="d5/d72/a00803"/>
+        <childnode refid="31961" relation="include">
+        </childnode>
+        <childnode refid="31962" relation="include">
+        </childnode>
+        <childnode refid="31969" relation="include">
+        </childnode>
+        <childnode refid="31944" relation="include">
+        </childnode>
+        <childnode refid="31970" relation="include">
+        </childnode>
+        <childnode refid="31971" relation="include">
+        </childnode>
+        <childnode refid="31974" relation="include">
+        </childnode>
+      </node>
+      <node id="31954">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="31968">
+        <label>CastorUtils/Graphics/BoundingSphere.hpp</label>
+      </node>
+      <node id="31976">
+        <label>CastorUtils/Data/TextWriter.hpp</label>
+      </node>
+      <node id="31955">
+        <label>cstdint</label>
+      </node>
+      <node id="31978">
+        <label>CastorUtils/Math/RangedValue.hpp</label>
+      </node>
+      <node id="31959">
+        <label>CastorUtils/Design/Signal.hpp</label>
+      </node>
+      <node id="31953">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="31972">
+        <label>ShaderAST/Shader.hpp</label>
+      </node>
+      <node id="31946">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d5/d35/a00266"/>
+        <childnode refid="31947" relation="include">
+        </childnode>
+        <childnode refid="31948" relation="include">
+        </childnode>
+        <childnode refid="31949" relation="include">
+        </childnode>
+        <childnode refid="31950" relation="include">
+        </childnode>
+        <childnode refid="31951" relation="include">
+        </childnode>
+        <childnode refid="31952" relation="include">
+        </childnode>
+        <childnode refid="31953" relation="include">
+        </childnode>
+        <childnode refid="31954" relation="include">
+        </childnode>
+        <childnode refid="31955" relation="include">
+        </childnode>
+        <childnode refid="31956" relation="include">
+        </childnode>
+        <childnode refid="31957" relation="include">
+        </childnode>
+        <childnode refid="31958" relation="include">
+        </childnode>
+      </node>
+      <node id="31957">
+        <label>string</label>
+      </node>
+      <node id="31965">
+        <label>Castor3D/Model/ModelModule.hpp</label>
+        <link refid="d7/def/a00521"/>
+        <childnode refid="31946" relation="include">
+        </childnode>
+      </node>
+      <node id="31950">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="31947">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="31963">
+        <label>Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp</label>
+        <link refid="dc/d19/a00515"/>
+        <childnode refid="31964" relation="include">
+        </childnode>
+        <childnode refid="31967" relation="include">
+        </childnode>
+        <childnode refid="31968" relation="include">
+        </childnode>
+      </node>
+      <node id="31970">
+        <label>Castor3D/Material/Texture/TextureModule.hpp</label>
+        <link refid="de/dd7/a00362"/>
+        <childnode refid="31945" relation="include">
+        </childnode>
+        <childnode refid="31959" relation="include">
+        </childnode>
+      </node>
+      <node id="31967">
+        <label>CastorUtils/Graphics/BoundingBox.hpp</label>
+      </node>
+      <node id="31949">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="31961">
+        <label>Castor3D/Miscellaneous/MiscellaneousModule.hpp</label>
+        <link refid="d4/d27/a00392"/>
+        <childnode refid="31946" relation="include">
+        </childnode>
+      </node>
+      <node id="31962">
+        <label>Castor3D/Scene/SceneModule.hpp</label>
+        <link refid="de/db5/a01181"/>
+        <childnode refid="31945" relation="include">
+        </childnode>
+        <childnode refid="31963" relation="include">
+        </childnode>
+        <childnode refid="31959" relation="include">
+        </childnode>
+      </node>
+      <node id="31969">
+        <label>Castor3D/Scene/Light/LightModule.hpp</label>
+        <link refid="d9/d5b/a01127"/>
+        <childnode refid="31962" relation="include">
+        </childnode>
+      </node>
+      <node id="31948">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="31964">
+        <label>Castor3D/Model/Mesh/MeshModule.hpp</label>
+        <link refid="d2/d9d/a00464"/>
+        <childnode refid="31965" relation="include">
+        </childnode>
+        <childnode refid="31966" relation="include">
+        </childnode>
+      </node>
+      <node id="31958">
+        <label>vector</label>
+      </node>
+      <node id="31952">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="31944">
+        <label>PassModule.hpp</label>
+        <link refid="df/d91/a00335"/>
+        <childnode refid="31945" relation="include">
+        </childnode>
+        <childnode refid="31959" relation="include">
+        </childnode>
+      </node>
+      <node id="31942">
+        <label>Castor3D/Material/Pass/SpecularGlossinessPbrPass.hpp</label>
+        <link refid="d3/d93/a00341"/>
+        <childnode refid="31943" relation="include">
+        </childnode>
+        <childnode refid="31979" relation="include">
+        </childnode>
+        <childnode refid="31977" relation="include">
+        </childnode>
+      </node>
+      <node id="31941">
+        <label>Text/TextSpecularGlossinessPbrPass.hpp</label>
+        <link refid="dd/d08/a01448"/>
+        <childnode refid="31942" relation="include">
+        </childnode>
+        <childnode refid="31976" relation="include">
+        </childnode>
+      </node>
+      <node id="31974">
+        <label>ashespp/Image/ImageView.hpp</label>
+      </node>
+      <node id="31979">
+        <label>CastorUtils/Graphics/RgbColour.hpp</label>
+      </node>
+      <node id="31943">
+        <label>Castor3D/Material/Pass/Pass.hpp</label>
+        <link refid="dc/d50/a00332"/>
+        <childnode refid="31944" relation="include">
+        </childnode>
+        <childnode refid="31960" relation="include">
+        </childnode>
+        <childnode refid="31975" relation="include">
+        </childnode>
+        <childnode refid="31970" relation="include">
+        </childnode>
+        <childnode refid="31977" relation="include">
+        </childnode>
+        <childnode refid="31948" relation="include">
+        </childnode>
+        <childnode refid="31959" relation="include">
+        </childnode>
+        <childnode refid="31978" relation="include">
+        </childnode>
+      </node>
+      <node id="31973">
+        <label>ShaderWriter/ShaderWriterPrerequisites.hpp</label>
+      </node>
+      <node id="31966">
+        <label>CastorUtils/Design/Factory.hpp</label>
+      </node>
+      <node id="31971">
+        <label>Castor3D/Shader/ShaderModule.hpp</label>
+        <link refid="d5/d32/a01214"/>
+        <childnode refid="31946" relation="include">
+        </childnode>
+        <childnode refid="31972" relation="include">
+        </childnode>
+        <childnode refid="31973" relation="include">
+        </childnode>
+        <childnode refid="31948" relation="include">
+        </childnode>
+      </node>
+      <node id="31977">
+        <label>Castor3D/Shader/PassBuffer/PassBufferModule.hpp</label>
+        <link refid="d0/d5a/a01199"/>
+        <childnode refid="31971" relation="include">
+        </childnode>
+      </node>
+      <node id="31956">
+        <label>memory</label>
+      </node>
+    </incdepgraph>
+    <innerclass refid="d6/d6d/a05768" prot="public">castor::TextWriter&lt; castor3d::SpecularGlossinessPbrPass &gt;</innerclass>
+    <innernamespace refid="da/d36/a01482">castor</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Text/TextSpecularGlossinessPbrPass.hpp"/>
+  </compounddef>
+</doxygen>

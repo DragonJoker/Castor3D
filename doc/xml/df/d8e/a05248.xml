@@ -1,0 +1,1282 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="df/d8e/a05248" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::SceneFileContext</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">FileParserContext</basecompoundref>
+    <includes local="no">SceneFileParser.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="df/d8e/a05248_1ac7207fe6636e39168a07041a171272cf" prot="public" static="no" mutable="no">
+        <type>SceneSPtr</type>
+        <definition>SceneSPtr castor3d::SceneFileContext::scene</definition>
+        <argsstring></argsstring>
+        <name>scene</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="109" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1adfb6ef1dc3e458fc9b5666899507c7fb" prot="public" static="no" mutable="no">
+        <type>RenderWindowSPtr</type>
+        <definition>RenderWindowSPtr castor3d::SceneFileContext::window</definition>
+        <argsstring></argsstring>
+        <name>window</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="110" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1adf50bc1ebc2bab57e15e54c732eeb9a1" prot="public" static="no" mutable="no">
+        <type>SceneNodeSPtr</type>
+        <definition>SceneNodeSPtr castor3d::SceneFileContext::sceneNode</definition>
+        <argsstring></argsstring>
+        <name>sceneNode</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="111" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a9c777dca84b8ff43eded19639694ee92" prot="public" static="no" mutable="no">
+        <type>GeometrySPtr</type>
+        <definition>GeometrySPtr castor3d::SceneFileContext::geometry</definition>
+        <argsstring></argsstring>
+        <name>geometry</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="112" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a55c290bdb75f83645c64bda9b64b98ce" prot="public" static="no" mutable="no">
+        <type>MeshSPtr</type>
+        <definition>MeshSPtr castor3d::SceneFileContext::mesh</definition>
+        <argsstring></argsstring>
+        <name>mesh</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="113" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="113" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1aa73d72e48b01907b266717d9d28f5779" prot="public" static="no" mutable="no">
+        <type>SubmeshSPtr</type>
+        <definition>SubmeshSPtr castor3d::SceneFileContext::submesh</definition>
+        <argsstring></argsstring>
+        <name>submesh</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="114" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="114" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a6697f3422fd70d0970eedc3a685adc85" prot="public" static="no" mutable="no">
+        <type>LightSPtr</type>
+        <definition>LightSPtr castor3d::SceneFileContext::light</definition>
+        <argsstring></argsstring>
+        <name>light</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="115" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a4a7fdf9b164f1a220d6a5a3c63d8c7ce" prot="public" static="no" mutable="no">
+        <type>CameraSPtr</type>
+        <definition>CameraSPtr castor3d::SceneFileContext::camera</definition>
+        <argsstring></argsstring>
+        <name>camera</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="116" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="116" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1ad5f8ef7eae0ddd9003b0e76cc94a95be" prot="public" static="no" mutable="no">
+        <type>MaterialSPtr</type>
+        <definition>MaterialSPtr castor3d::SceneFileContext::material</definition>
+        <argsstring></argsstring>
+        <name>material</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="117" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="117" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1ad4cf8ae93cad9c6a9d5dd1ec03abebce" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SceneFileContext::createMaterial</definition>
+        <argsstring></argsstring>
+        <name>createMaterial</name>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="118" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="118" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a0a24b5b2cb9e44a1ecd651ea652151c5" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::SceneFileContext::passIndex</definition>
+        <argsstring></argsstring>
+        <name>passIndex</name>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="119" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="119" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a00d0a3de10f5cf6fa48f8911d89abdf2" prot="public" static="no" mutable="no">
+        <type>SamplerSPtr</type>
+        <definition>SamplerSPtr castor3d::SceneFileContext::sampler</definition>
+        <argsstring></argsstring>
+        <name>sampler</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="120" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="120" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1af21064ed50d9396edd53e4fe24ca1f08" prot="public" static="no" mutable="no">
+        <type>RenderTargetSPtr</type>
+        <definition>RenderTargetSPtr castor3d::SceneFileContext::renderTarget</definition>
+        <argsstring></argsstring>
+        <name>renderTarget</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="121" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="121" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1ac4ee19b1569c6f7d58be3f14b7f202d0" prot="public" static="no" mutable="no">
+        <type>PhongPassSPtr</type>
+        <definition>PhongPassSPtr castor3d::SceneFileContext::phongPass</definition>
+        <argsstring></argsstring>
+        <name>phongPass</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="122" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="122" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a95df2eeb7f9396b676a5f0b530c4f994" prot="public" static="no" mutable="no">
+        <type>MetallicRoughnessPbrPassSPtr</type>
+        <definition>MetallicRoughnessPbrPassSPtr castor3d::SceneFileContext::pbrMRPass</definition>
+        <argsstring></argsstring>
+        <name>pbrMRPass</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="123" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="123" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a3e02c63c3ab320a17d7e1afb27942a91" prot="public" static="no" mutable="no">
+        <type>SpecularGlossinessPbrPassSPtr</type>
+        <definition>SpecularGlossinessPbrPassSPtr castor3d::SceneFileContext::pbrSGPass</definition>
+        <argsstring></argsstring>
+        <name>pbrSGPass</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="124" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="124" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a0d9353835915775de751854a19a5e656" prot="public" static="no" mutable="no">
+        <type>PassSPtr</type>
+        <definition>PassSPtr castor3d::SceneFileContext::pass</definition>
+        <argsstring></argsstring>
+        <name>pass</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="125" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="125" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1aec8d91f4c54b2a29fe545ad4178d66d0" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SceneFileContext::createPass</definition>
+        <argsstring></argsstring>
+        <name>createPass</name>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="126" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="126" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a5fe9e54178414ac3ceb5058b49164d3b" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::SceneFileContext::unitIndex</definition>
+        <argsstring></argsstring>
+        <name>unitIndex</name>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="127" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="127" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1ac53d94374ff2c071b79dd2de6731fbff" prot="public" static="no" mutable="no">
+        <type>ashes::ImageCreateInfo</type>
+        <definition>ashes::ImageCreateInfo castor3d::SceneFileContext::imageInfo</definition>
+        <argsstring></argsstring>
+        <name>imageInfo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="128" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="128" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a9a9c619e609a735bf249288679c6997c" prot="public" static="no" mutable="no">
+        <type>TextureUnitSPtr</type>
+        <definition>TextureUnitSPtr castor3d::SceneFileContext::textureUnit</definition>
+        <argsstring></argsstring>
+        <name>textureUnit</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="129" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="129" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a8f9d325b45a32b289f04a41f048021b7" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SceneFileContext::createUnit</definition>
+        <argsstring></argsstring>
+        <name>createUnit</name>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="130" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="130" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a33688cfc4472ffd32bbca3b6438a8546" prot="public" static="no" mutable="no">
+        <type>ShaderProgramSPtr</type>
+        <definition>ShaderProgramSPtr castor3d::SceneFileContext::shaderProgram</definition>
+        <argsstring></argsstring>
+        <name>shaderProgram</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="131" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="131" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1aad10c4bcc03e021da75f87a0d86dd2d0" prot="public" static="no" mutable="no">
+        <type>castor::PxBufferBaseSPtr</type>
+        <definition>castor::PxBufferBaseSPtr castor3d::SceneFileContext::buffer</definition>
+        <argsstring></argsstring>
+        <name>buffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="132" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="132" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a43eec7709c7e5786874deb3bc0becfdf" prot="public" static="no" mutable="no">
+        <type>castor::Path</type>
+        <definition>castor::Path castor3d::SceneFileContext::folder</definition>
+        <argsstring></argsstring>
+        <name>folder</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="133" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="133" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1aa940e4511b57c8d8a07eafe34c184101" prot="public" static="no" mutable="no">
+        <type>castor::Path</type>
+        <definition>castor::Path castor3d::SceneFileContext::relative</definition>
+        <argsstring></argsstring>
+        <name>relative</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="134" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="134" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a71c9de0d057c4082a3e0a703f1fc108b" prot="public" static="no" mutable="no">
+        <type>VkShaderStageFlagBits</type>
+        <definition>VkShaderStageFlagBits castor3d::SceneFileContext::shaderStage</definition>
+        <argsstring></argsstring>
+        <name>shaderStage</name>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="135" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="135" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1ac100abf630bac3fb40d3527f92a9fff9" prot="public" static="no" mutable="no">
+        <type>UniformBufferBaseUPtr</type>
+        <definition>UniformBufferBaseUPtr castor3d::SceneFileContext::uniformBuffer</definition>
+        <argsstring></argsstring>
+        <name>uniformBuffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="136" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="136" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a1eed0cddd4b9708ab0058be680b59b04" prot="public" static="no" mutable="no">
+        <type>OverlaySPtr</type>
+        <definition>OverlaySPtr castor3d::SceneFileContext::overlay</definition>
+        <argsstring></argsstring>
+        <name>overlay</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="137" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="137" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a31bb9588e72e2378241d4efb4afea9a7" prot="public" static="no" mutable="no">
+        <type>BillboardListSPtr</type>
+        <definition>BillboardListSPtr castor3d::SceneFileContext::billboards</definition>
+        <argsstring></argsstring>
+        <name>billboards</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="138" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="138" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a61d92c977d4eab09637094bd3cdda107" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int castor3d::SceneFileContext::face1</definition>
+        <argsstring></argsstring>
+        <name>face1</name>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="139" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="139" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1ae866d0710665971cca346aec959959c5" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int castor3d::SceneFileContext::face2</definition>
+        <argsstring></argsstring>
+        <name>face2</name>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="140" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="140" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a7ac341db2d2183ac8ab40ce6ba83195d" prot="public" static="no" mutable="no">
+        <type><ref refid="da/d1e/a01479_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+        <definition>LightType castor3d::SceneFileContext::lightType</definition>
+        <argsstring></argsstring>
+        <name>lightType</name>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="141" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="141" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1aee456bc7a2d0704f7358a31c063dd1f8" prot="public" static="no" mutable="no">
+        <type>VkPrimitiveTopology</type>
+        <definition>VkPrimitiveTopology castor3d::SceneFileContext::primitiveType</definition>
+        <argsstring></argsstring>
+        <name>primitiveType</name>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="142" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="142" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a55fb754ba994ad5df70e84e9ddaa6ec9" prot="public" static="no" mutable="no">
+        <type>ViewportSPtr</type>
+        <definition>ViewportSPtr castor3d::SceneFileContext::viewport</definition>
+        <argsstring></argsstring>
+        <name>viewport</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="143" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="143" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a096a1e0aab26e466fcaaf7d043174e80" prot="public" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::SceneFileContext::strName</definition>
+        <argsstring></argsstring>
+        <name>strName</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="144" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="144" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a48af9e71989711b7e2337880ccf01698" prot="public" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::SceneFileContext::strName2</definition>
+        <argsstring></argsstring>
+        <name>strName2</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="145" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="145" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a790ba63be92335038e8c965149e727b3" prot="public" static="no" mutable="no">
+        <type>castor::Path</type>
+        <definition>castor::Path castor3d::SceneFileContext::path</definition>
+        <argsstring></argsstring>
+        <name>path</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="146" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="146" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1ae96b7ca5b2e69f011eed108c1d6f28ca" prot="public" static="no" mutable="no">
+        <type>castor::Size</type>
+        <definition>castor::Size castor3d::SceneFileContext::size</definition>
+        <argsstring></argsstring>
+        <name>size</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="147" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="147" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a17f9df57b102d6031e28da464f79add3" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::SceneFileContext::point2f</definition>
+        <argsstring></argsstring>
+        <name>point2f</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="148" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="148" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a5447a8bb0a24882a8be851eeacb5ad71" prot="public" static="no" mutable="no">
+        <type>uint8_t</type>
+        <definition>uint8_t castor3d::SceneFileContext::uiUInt8</definition>
+        <argsstring></argsstring>
+        <name>uiUInt8</name>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="149" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="149" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a0448b460cf6a12f2cf56b6d1b3ad8b10" prot="public" static="no" mutable="no">
+        <type>uint16_t</type>
+        <definition>uint16_t castor3d::SceneFileContext::uiUInt16</definition>
+        <argsstring></argsstring>
+        <name>uiUInt16</name>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="150" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="150" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a6b25c9d92b5d921508d01f5f8cb359bf" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::SceneFileContext::uiUInt32</definition>
+        <argsstring></argsstring>
+        <name>uiUInt32</name>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="151" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="151" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a1ae8c2069016959b093eb79f017697f5" prot="public" static="no" mutable="no">
+        <type>uint64_t</type>
+        <definition>uint64_t castor3d::SceneFileContext::uiUInt64</definition>
+        <argsstring></argsstring>
+        <name>uiUInt64</name>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="152" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="152" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a0dcfc85defc6e0ddd93420c284c746a8" prot="public" static="no" mutable="no">
+        <type>int8_t</type>
+        <definition>int8_t castor3d::SceneFileContext::iInt8</definition>
+        <argsstring></argsstring>
+        <name>iInt8</name>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="153" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="153" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1aaa0e3f8290b80fffd8097f2ef999e7e3" prot="public" static="no" mutable="no">
+        <type>int16_t</type>
+        <definition>int16_t castor3d::SceneFileContext::iInt16</definition>
+        <argsstring></argsstring>
+        <name>iInt16</name>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="154" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="154" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a6635adb7fe455f97915ecc4963ba77fd" prot="public" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t castor3d::SceneFileContext::iInt32</definition>
+        <argsstring></argsstring>
+        <name>iInt32</name>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="155" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="155" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a01bd61adf9d8ed12f7f1151b225d10b7" prot="public" static="no" mutable="no">
+        <type>int64_t</type>
+        <definition>int64_t castor3d::SceneFileContext::iInt64</definition>
+        <argsstring></argsstring>
+        <name>iInt64</name>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="156" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="156" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1ae7d24150249d3599bf37ac8a1666e6db" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SceneFileContext::bBool1</definition>
+        <argsstring></argsstring>
+        <name>bBool1</name>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="157" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="157" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a9a9d4964859ca463d4cf723bb8231c5d" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SceneFileContext::bBool2</definition>
+        <argsstring></argsstring>
+        <name>bBool2</name>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="158" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="158" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1aeaf03042e6c805f463a0ac6e65cd509b" prot="public" static="no" mutable="no">
+        <type>SceneNodeSPtr</type>
+        <definition>SceneNodeSPtr castor3d::SceneFileContext::m_pGeneralParentMaterial</definition>
+        <argsstring></argsstring>
+        <name>m_pGeneralParentMaterial</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="159" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="159" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a0614b09ac5eb60adc156a6188b8d39fa" prot="public" static="no" mutable="no">
+        <type>ScenePtrStrMap</type>
+        <definition>ScenePtrStrMap castor3d::SceneFileContext::mapScenes</definition>
+        <argsstring></argsstring>
+        <name>mapScenes</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="160" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="160" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a9f341467dfe7987f95e9ae418171f071" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/df0/a05252" kindref="compound">SceneFileParser</ref> *</type>
+        <definition>SceneFileParser* castor3d::SceneFileContext::m_pParser</definition>
+        <argsstring></argsstring>
+        <name>m_pParser</name>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="161" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="161" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1af7f539b06f725e25d9466f3e02fa4b2d" prot="public" static="no" mutable="no">
+        <type>FloatArray</type>
+        <definition>FloatArray castor3d::SceneFileContext::vertexPos</definition>
+        <argsstring></argsstring>
+        <name>vertexPos</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="162" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="162" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a9437e0a08414f00c7dfbded95645533e" prot="public" static="no" mutable="no">
+        <type>FloatArray</type>
+        <definition>FloatArray castor3d::SceneFileContext::vertexNml</definition>
+        <argsstring></argsstring>
+        <name>vertexNml</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="163" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="163" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a4a04d9eec8bb415c39b809d09492108c" prot="public" static="no" mutable="no">
+        <type>FloatArray</type>
+        <definition>FloatArray castor3d::SceneFileContext::vertexTan</definition>
+        <argsstring></argsstring>
+        <name>vertexTan</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="164" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="164" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a7154004ffcc995888c93e62060df6987" prot="public" static="no" mutable="no">
+        <type>FloatArray</type>
+        <definition>FloatArray castor3d::SceneFileContext::vertexTex</definition>
+        <argsstring></argsstring>
+        <name>vertexTex</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="165" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="165" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a29b5eac09c6683378ccaaf5e57cbd5c0" prot="public" static="no" mutable="no">
+        <type>UInt32Array</type>
+        <definition>UInt32Array castor3d::SceneFileContext::faces</definition>
+        <argsstring></argsstring>
+        <name>faces</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="166" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="166" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a305adb5899d981ced92684f49dc31e7b" prot="public" static="no" mutable="no">
+        <type>AnimatedObjectGroupSPtr</type>
+        <definition>AnimatedObjectGroupSPtr castor3d::SceneFileContext::pAnimGroup</definition>
+        <argsstring></argsstring>
+        <name>pAnimGroup</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="167" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="167" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1ae2b74db4961d94693d06bfca381dac2d" prot="public" static="no" mutable="no">
+        <type>AnimatedObjectSPtr</type>
+        <definition>AnimatedObjectSPtr castor3d::SceneFileContext::pAnimSkeleton</definition>
+        <argsstring></argsstring>
+        <name>pAnimSkeleton</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="168" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="168" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a38ce7150493c033af637322da85aa537" prot="public" static="no" mutable="no">
+        <type>AnimatedObjectSPtr</type>
+        <definition>AnimatedObjectSPtr castor3d::SceneFileContext::pAnimMesh</definition>
+        <argsstring></argsstring>
+        <name>pAnimMesh</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="169" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="169" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a9a2d49b75ae22ebec53a116560fef605" prot="public" static="no" mutable="no">
+        <type>AnimatedObjectSPtr</type>
+        <definition>AnimatedObjectSPtr castor3d::SceneFileContext::pAnimMovable</definition>
+        <argsstring></argsstring>
+        <name>pAnimMovable</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="170" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="170" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a475fc8f0b17ec096d09060e839c37dc3" prot="public" static="no" mutable="no">
+        <type>AnimatedObjectSPtr</type>
+        <definition>AnimatedObjectSPtr castor3d::SceneFileContext::pAnimTexture</definition>
+        <argsstring></argsstring>
+        <name>pAnimTexture</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="171" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="171" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a0d751c1b73c6fa895ae4a8ba7d4a671a" prot="public" static="no" mutable="no">
+        <type><ref refid="d4/d7d/a02628" kindref="compound">TextureAnimation</ref> *</type>
+        <definition>TextureAnimation* castor3d::SceneFileContext::textureAnimation</definition>
+        <argsstring></argsstring>
+        <name>textureAnimation</name>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="172" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="172" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a43431ddc2c94152a25697bba49a157f3" prot="public" static="no" mutable="no">
+        <type>SceneBackgroundSPtr</type>
+        <definition>SceneBackgroundSPtr castor3d::SceneFileContext::pBackground</definition>
+        <argsstring></argsstring>
+        <name>pBackground</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="173" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="173" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a6c567c351658ca183f886a3bd4dd72b1" prot="public" static="no" mutable="no">
+        <type>ParticleSystemSPtr</type>
+        <definition>ParticleSystemSPtr castor3d::SceneFileContext::particleSystem</definition>
+        <argsstring></argsstring>
+        <name>particleSystem</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="174" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="174" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a68a01ab29ed8b0e96fcf5549a7be5c18" prot="public" static="no" mutable="no">
+        <type><ref refid="db/dcc/a04712" kindref="compound">SsaoConfig</ref></type>
+        <definition>SsaoConfig castor3d::SceneFileContext::ssaoConfig</definition>
+        <argsstring></argsstring>
+        <name>ssaoConfig</name>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="175" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="175" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1afdbed2426fa2df77c600bab0c77d5b36" prot="public" static="no" mutable="no">
+        <type>SubsurfaceScatteringUPtr</type>
+        <definition>SubsurfaceScatteringUPtr castor3d::SceneFileContext::subsurfaceScattering</definition>
+        <argsstring></argsstring>
+        <name>subsurfaceScattering</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="176" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="176" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a2c0e6800d04ea38203c471245f9ca1bc" prot="public" static="no" mutable="no">
+        <type>std::shared_ptr&lt; <ref refid="d9/d4c/a05132" kindref="compound">SkyboxBackground</ref> &gt;</type>
+        <definition>std::shared_ptr&lt; SkyboxBackground &gt; castor3d::SceneFileContext::skybox</definition>
+        <argsstring></argsstring>
+        <name>skybox</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="177" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="177" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a05248_1a857c1d0389146bd805777ee508aeb7f7" prot="public" static="no" mutable="no">
+        <type><ref refid="dd/d32/a02636" kindref="compound">TextureConfiguration</ref></type>
+        <definition>TextureConfiguration castor3d::SceneFileContext::textureConfiguration</definition>
+        <argsstring></argsstring>
+        <name>textureConfiguration</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="178" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="178" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/d8e/a05248_1a3d1020ae707685aea3eca2e9218bcbc3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SceneFileContext::SceneFileContext</definition>
+        <argsstring>(castor::Path const &amp;path, SceneFileParser *parser)</argsstring>
+        <name>SceneFileContext</name>
+        <param>
+          <type>castor::Path const &amp;</type>
+          <declname>path</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/df0/a05252" kindref="compound">SceneFileParser</ref> *</type>
+          <declname>parser</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">path</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The file access path. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parser</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parser. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="98" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a05248_1aa5ebdfcf83868bddbb11fd15cb0a3b09" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneFileContext::initialise</definition>
+        <argsstring>()</argsstring>
+        <name>initialise</name>
+        <briefdescription>
+<para>Initialises all variables. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="106" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3310">
+        <label>castor::FileParserContext</label>
+      </node>
+      <node id="3309">
+        <label>castor3d::SceneFileContext</label>
+        <link refid="df/d8e/a05248"/>
+        <childnode refid="3310" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3323">
+        <label>UInt32Array</label>
+      </node>
+      <node id="3334">
+        <label>T</label>
+      </node>
+      <node id="3336">
+        <label>std::shared_ptr&lt; T &gt;</label>
+        <childnode refid="3334" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="3320">
+        <label>castor3d::SceneFileParser</label>
+        <link refid="d9/df0/a05252"/>
+        <childnode refid="3321" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3322" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3337">
+        <label>castor3d::SsaoConfig</label>
+        <link refid="db/dcc/a04712"/>
+      </node>
+      <node id="3332">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+      </node>
+      <node id="3333">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="3334" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="3313">
+        <label>castor3d::TextureAnimation</label>
+        <link refid="d4/d7d/a02628"/>
+        <childnode refid="3314" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3315">
+        <label>castor::Named</label>
+      </node>
+      <node id="3318">
+        <label>Named</label>
+      </node>
+      <node id="3316">
+        <label>castor::OwnedBy&lt; AnimableT&lt; Engine &gt; &gt;</label>
+      </node>
+      <node id="3312">
+        <label>castor::FileParserContext</label>
+      </node>
+      <node id="3329">
+        <label>std::enable_shared_from_this&lt; Scene &gt;</label>
+      </node>
+      <node id="3311">
+        <label>castor3d::SceneFileContext</label>
+        <link refid="df/d8e/a05248"/>
+        <childnode refid="3312" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3313" relation="usage">
+          <edgelabel>textureAnimation</edgelabel>
+        </childnode>
+        <childnode refid="3320" relation="usage">
+          <edgelabel>m_pParser</edgelabel>
+        </childnode>
+        <childnode refid="3323" relation="usage">
+          <edgelabel>faces</edgelabel>
+        </childnode>
+        <childnode refid="3324" relation="usage">
+          <edgelabel>skybox</edgelabel>
+        </childnode>
+        <childnode refid="3337" relation="usage">
+          <edgelabel>ssaoConfig</edgelabel>
+        </childnode>
+        <childnode refid="3338" relation="usage">
+          <edgelabel>textureConfiguration</edgelabel>
+        </childnode>
+      </node>
+      <node id="3322">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="3317">
+        <label>castor3d::AnimationT&lt; AnimableHanlerT &gt;</label>
+        <link refid="d4/ddd/a02040"/>
+        <childnode refid="3318" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3319" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3324">
+        <label>std::shared_ptr&lt; castor3d::SkyboxBackground &gt;</label>
+        <childnode refid="3325" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+        <childnode refid="3336" relation="template-instance">
+          <edgelabel>&lt; castor3d::SkyboxBackground &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3335">
+        <label>castor3d::ModelMatrixUbo</label>
+        <link refid="d2/d81/a05504"/>
+      </node>
+      <node id="3326">
+        <label>castor3d::SceneBackground</label>
+        <link refid="d0/d47/a05104"/>
+        <childnode refid="3322" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3318" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3327" relation="usage">
+          <edgelabel>m_matrixUbo</edgelabel>
+        </childnode>
+        <childnode refid="3328" relation="usage">
+          <edgelabel>m_scene</edgelabel>
+        </childnode>
+        <childnode refid="3330" relation="usage">
+          <edgelabel>m_ibl</edgelabel>
+        </childnode>
+        <childnode refid="3335" relation="usage">
+          <edgelabel>m_modelMatrixUbo</edgelabel>
+        </childnode>
+      </node>
+      <node id="3325">
+        <label>castor3d::SkyboxBackground</label>
+        <link refid="d9/d4c/a05132"/>
+        <childnode refid="3326" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3331">
+        <label>castor3d::IblTextures</label>
+        <link refid="d0/d0c/a04484"/>
+        <childnode refid="3332" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3330">
+        <label>std::unique_ptr&lt; castor3d::IblTextures &gt;</label>
+        <childnode refid="3331" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+        <childnode refid="3333" relation="template-instance">
+          <edgelabel>&lt; castor3d::IblTextures &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3338">
+        <label>castor3d::TextureConfiguration</label>
+        <link refid="dd/d32/a02636"/>
+        <childnode refid="3338" relation="usage">
+          <edgelabel>TransmittanceTexture</edgelabel>
+          <edgelabel>OcclusionTexture</edgelabel>
+          <edgelabel>NormalTexture</edgelabel>
+          <edgelabel>ShininessTexture</edgelabel>
+          <edgelabel>OpacityTexture</edgelabel>
+          <edgelabel>MetalnessTexture</edgelabel>
+          <edgelabel>EmissiveTexture</edgelabel>
+          <edgelabel>HeightTexture</edgelabel>
+          <edgelabel>SpecularTexture</edgelabel>
+          <edgelabel>RoughnessTexture</edgelabel>
+          <edgelabel>...</edgelabel>
+        </childnode>
+      </node>
+      <node id="3319">
+        <label>castor::OwnedBy&lt; AnimableT&lt; AnimableHanlerT &gt; &gt;</label>
+      </node>
+      <node id="3321">
+        <label>castor::FileParser</label>
+      </node>
+      <node id="3328">
+        <label>castor3d::Scene</label>
+        <link refid="d5/d76/a05244"/>
+        <childnode refid="3329" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3322" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3318" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3327">
+        <label>castor3d::MatrixUbo</label>
+        <link refid="d2/d0e/a05496"/>
+      </node>
+      <node id="3314">
+        <label>castor3d::AnimationT&lt; Engine &gt;</label>
+        <link refid="d4/ddd/a02040"/>
+        <childnode refid="3315" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3316" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3317" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Scene/SceneFileParser.hpp" line="86" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="84" bodyend="179"/>
+    <listofallmembers>
+      <member refid="df/d8e/a05248_1ae7d24150249d3599bf37ac8a1666e6db" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>bBool1</name></member>
+      <member refid="df/d8e/a05248_1a9a9d4964859ca463d4cf723bb8231c5d" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>bBool2</name></member>
+      <member refid="df/d8e/a05248_1a31bb9588e72e2378241d4efb4afea9a7" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>billboards</name></member>
+      <member refid="df/d8e/a05248_1aad10c4bcc03e021da75f87a0d86dd2d0" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>buffer</name></member>
+      <member refid="df/d8e/a05248_1a4a7fdf9b164f1a220d6a5a3c63d8c7ce" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>camera</name></member>
+      <member refid="df/d8e/a05248_1ad4cf8ae93cad9c6a9d5dd1ec03abebce" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>createMaterial</name></member>
+      <member refid="df/d8e/a05248_1aec8d91f4c54b2a29fe545ad4178d66d0" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>createPass</name></member>
+      <member refid="df/d8e/a05248_1a8f9d325b45a32b289f04a41f048021b7" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>createUnit</name></member>
+      <member refid="df/d8e/a05248_1a61d92c977d4eab09637094bd3cdda107" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>face1</name></member>
+      <member refid="df/d8e/a05248_1ae866d0710665971cca346aec959959c5" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>face2</name></member>
+      <member refid="df/d8e/a05248_1a29b5eac09c6683378ccaaf5e57cbd5c0" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>faces</name></member>
+      <member refid="df/d8e/a05248_1a43eec7709c7e5786874deb3bc0becfdf" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>folder</name></member>
+      <member refid="df/d8e/a05248_1a9c777dca84b8ff43eded19639694ee92" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>geometry</name></member>
+      <member refid="df/d8e/a05248_1aaa0e3f8290b80fffd8097f2ef999e7e3" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>iInt16</name></member>
+      <member refid="df/d8e/a05248_1a6635adb7fe455f97915ecc4963ba77fd" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>iInt32</name></member>
+      <member refid="df/d8e/a05248_1a01bd61adf9d8ed12f7f1151b225d10b7" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>iInt64</name></member>
+      <member refid="df/d8e/a05248_1a0dcfc85defc6e0ddd93420c284c746a8" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>iInt8</name></member>
+      <member refid="df/d8e/a05248_1ac53d94374ff2c071b79dd2de6731fbff" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>imageInfo</name></member>
+      <member refid="df/d8e/a05248_1aa5ebdfcf83868bddbb11fd15cb0a3b09" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>initialise</name></member>
+      <member refid="df/d8e/a05248_1a6697f3422fd70d0970eedc3a685adc85" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>light</name></member>
+      <member refid="df/d8e/a05248_1a7ac341db2d2183ac8ab40ce6ba83195d" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>lightType</name></member>
+      <member refid="df/d8e/a05248_1aeaf03042e6c805f463a0ac6e65cd509b" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>m_pGeneralParentMaterial</name></member>
+      <member refid="df/d8e/a05248_1a9f341467dfe7987f95e9ae418171f071" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>m_pParser</name></member>
+      <member refid="df/d8e/a05248_1a0614b09ac5eb60adc156a6188b8d39fa" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>mapScenes</name></member>
+      <member refid="df/d8e/a05248_1ad5f8ef7eae0ddd9003b0e76cc94a95be" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>material</name></member>
+      <member refid="df/d8e/a05248_1a55c290bdb75f83645c64bda9b64b98ce" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>mesh</name></member>
+      <member refid="df/d8e/a05248_1a1eed0cddd4b9708ab0058be680b59b04" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>overlay</name></member>
+      <member refid="df/d8e/a05248_1a305adb5899d981ced92684f49dc31e7b" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>pAnimGroup</name></member>
+      <member refid="df/d8e/a05248_1a38ce7150493c033af637322da85aa537" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>pAnimMesh</name></member>
+      <member refid="df/d8e/a05248_1a9a2d49b75ae22ebec53a116560fef605" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>pAnimMovable</name></member>
+      <member refid="df/d8e/a05248_1ae2b74db4961d94693d06bfca381dac2d" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>pAnimSkeleton</name></member>
+      <member refid="df/d8e/a05248_1a475fc8f0b17ec096d09060e839c37dc3" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>pAnimTexture</name></member>
+      <member refid="df/d8e/a05248_1a6c567c351658ca183f886a3bd4dd72b1" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>particleSystem</name></member>
+      <member refid="df/d8e/a05248_1a0d9353835915775de751854a19a5e656" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>pass</name></member>
+      <member refid="df/d8e/a05248_1a0a24b5b2cb9e44a1ecd651ea652151c5" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>passIndex</name></member>
+      <member refid="df/d8e/a05248_1a790ba63be92335038e8c965149e727b3" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>path</name></member>
+      <member refid="df/d8e/a05248_1a43431ddc2c94152a25697bba49a157f3" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>pBackground</name></member>
+      <member refid="df/d8e/a05248_1a95df2eeb7f9396b676a5f0b530c4f994" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>pbrMRPass</name></member>
+      <member refid="df/d8e/a05248_1a3e02c63c3ab320a17d7e1afb27942a91" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>pbrSGPass</name></member>
+      <member refid="df/d8e/a05248_1ac4ee19b1569c6f7d58be3f14b7f202d0" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>phongPass</name></member>
+      <member refid="df/d8e/a05248_1a17f9df57b102d6031e28da464f79add3" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>point2f</name></member>
+      <member refid="df/d8e/a05248_1aee456bc7a2d0704f7358a31c063dd1f8" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>primitiveType</name></member>
+      <member refid="df/d8e/a05248_1aa940e4511b57c8d8a07eafe34c184101" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>relative</name></member>
+      <member refid="df/d8e/a05248_1af21064ed50d9396edd53e4fe24ca1f08" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>renderTarget</name></member>
+      <member refid="df/d8e/a05248_1a00d0a3de10f5cf6fa48f8911d89abdf2" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>sampler</name></member>
+      <member refid="df/d8e/a05248_1ac7207fe6636e39168a07041a171272cf" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>scene</name></member>
+      <member refid="df/d8e/a05248_1a3d1020ae707685aea3eca2e9218bcbc3" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>SceneFileContext</name></member>
+      <member refid="df/d8e/a05248_1adf50bc1ebc2bab57e15e54c732eeb9a1" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>sceneNode</name></member>
+      <member refid="df/d8e/a05248_1a33688cfc4472ffd32bbca3b6438a8546" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>shaderProgram</name></member>
+      <member refid="df/d8e/a05248_1a71c9de0d057c4082a3e0a703f1fc108b" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>shaderStage</name></member>
+      <member refid="df/d8e/a05248_1ae96b7ca5b2e69f011eed108c1d6f28ca" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>size</name></member>
+      <member refid="df/d8e/a05248_1a2c0e6800d04ea38203c471245f9ca1bc" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>skybox</name></member>
+      <member refid="df/d8e/a05248_1a68a01ab29ed8b0e96fcf5549a7be5c18" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>ssaoConfig</name></member>
+      <member refid="df/d8e/a05248_1a096a1e0aab26e466fcaaf7d043174e80" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>strName</name></member>
+      <member refid="df/d8e/a05248_1a48af9e71989711b7e2337880ccf01698" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>strName2</name></member>
+      <member refid="df/d8e/a05248_1aa73d72e48b01907b266717d9d28f5779" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>submesh</name></member>
+      <member refid="df/d8e/a05248_1afdbed2426fa2df77c600bab0c77d5b36" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>subsurfaceScattering</name></member>
+      <member refid="df/d8e/a05248_1a0d751c1b73c6fa895ae4a8ba7d4a671a" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>textureAnimation</name></member>
+      <member refid="df/d8e/a05248_1a857c1d0389146bd805777ee508aeb7f7" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>textureConfiguration</name></member>
+      <member refid="df/d8e/a05248_1a9a9c619e609a735bf249288679c6997c" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>textureUnit</name></member>
+      <member refid="df/d8e/a05248_1a0448b460cf6a12f2cf56b6d1b3ad8b10" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>uiUInt16</name></member>
+      <member refid="df/d8e/a05248_1a6b25c9d92b5d921508d01f5f8cb359bf" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>uiUInt32</name></member>
+      <member refid="df/d8e/a05248_1a1ae8c2069016959b093eb79f017697f5" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>uiUInt64</name></member>
+      <member refid="df/d8e/a05248_1a5447a8bb0a24882a8be851eeacb5ad71" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>uiUInt8</name></member>
+      <member refid="df/d8e/a05248_1ac100abf630bac3fb40d3527f92a9fff9" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>uniformBuffer</name></member>
+      <member refid="df/d8e/a05248_1a5fe9e54178414ac3ceb5058b49164d3b" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>unitIndex</name></member>
+      <member refid="df/d8e/a05248_1a9437e0a08414f00c7dfbded95645533e" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>vertexNml</name></member>
+      <member refid="df/d8e/a05248_1af7f539b06f725e25d9466f3e02fa4b2d" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>vertexPos</name></member>
+      <member refid="df/d8e/a05248_1a4a04d9eec8bb415c39b809d09492108c" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>vertexTan</name></member>
+      <member refid="df/d8e/a05248_1a7154004ffcc995888c93e62060df6987" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>vertexTex</name></member>
+      <member refid="df/d8e/a05248_1a55fb754ba994ad5df70e84e9ddaa6ec9" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>viewport</name></member>
+      <member refid="df/d8e/a05248_1adfb6ef1dc3e458fc9b5666899507c7fb" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext</scope><name>window</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

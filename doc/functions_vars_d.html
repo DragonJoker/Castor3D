@@ -10,6 +10,7 @@
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="Castor3D.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -17,10 +18,12 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="castor-small.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Castor3D
-   &#160;<span id="projectnumber">..</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
+   <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
  </tr>
  </tbody>
@@ -43,28 +46,79 @@ $(function() {
 
 <h3><a id="index_d"></a>- d -</h3><ul>
 <li>data
-: <a class="el" href="d4/de0/a02092.html#a35b84f4c8e3c9cb893d72247a4c17631">castor3d::GpuBufferBuddyAllocatorTraits::Block</a>
+: <a class="el" href="d4/d29/a04228.html#a53104ec474ff12b7f6d74ae108a62199">castor3d::CulledBillboard</a>
+, <a class="el" href="d0/d39/a04224.html#a4b14e97b622a762d06d9d49c065c21bf">castor3d::CulledSubmesh</a>
+, <a class="el" href="df/d2a/a02320.html#a35b84f4c8e3c9cb893d72247a4c17631">castor3d::GpuBufferBuddyAllocatorTraits::Block</a>
+, <a class="el" href="d2/df2/a03960.html#a6fbc5bbf46c17fc6916de11d0b0e20c5">castor3d::InstantiationComponent::Data</a>
+, <a class="el" href="df/da8/a04320.html#ac681909d031a28cfae6906b915b41d28">castor3d::ObjectRenderNode&lt; DataTypeT, InstanceTypeT &gt;</a>
+, <a class="el" href="db/d69/a04040.html#a2bf3acefcc41daac40ff83c31e12592c">castor3d::VertexBoneData::Ids</a>
+, <a class="el" href="d4/db0/a04048.html#a2d3452a7660781bfca0ac8afbcd57671">castor3d::VertexBoneData::Weights</a>
 </li>
-<li>data_type_name
-: <a class="el" href="d2/d14/a03304.html#a6b5974f03e2c34efd248b3a540484eda">castor3d::UniformTypeName&lt; Type &gt;</a>
+<li>DataSize
+: <a class="el" href="d0/d11/a05288.html#a972dd609c5741aac8e620fdd4eedde94">castor3d::PhongPassBuffer</a>
+, <a class="el" href="d3/d72/a05440.html#aa541d4d60817c8edc0d33a049f89a415">castor3d::shader::Voxel</a>
+, <a class="el" href="d9/d21/a05448.html#abc3b4accaf525caee5e6c3702d2142a3">castor3d::TextureConfigurationBuffer</a>
+</li>
+<li>debug
+: <a class="el" href="d4/dfe/a02688.html#a03f1492f319f514a4be4146d255bce73">castor3d::log</a>
+</li>
+<li>debugIndex
+: <a class="el" href="db/d6b/a05460.html#a65f9da86f5db5c8b46be51d7c3ae83c0">castor3d::DebugConfig</a>
 </li>
 <li>DefaultMaterialName
-: <a class="el" href="db/d68/a02028.html#aa36c9553aa9623526b0c475336523e9e">castor3d::Material</a>
+: <a class="el" href="dc/d28/a02584.html#aa36c9553aa9623526b0c475336523e9e">castor3d::Material</a>
 </li>
 <li>DefaultSamplerName
-: <a class="el" href="db/d1d/a02716.html#a7f6afd3a6c5d113aadf68e8042ade599">castor3d::RenderTarget</a>
+: <a class="el" href="d3/d6e/a04628.html#a7f6afd3a6c5d113aadf68e8042ade599">castor3d::RenderTarget</a>
+</li>
+<li>deltaTime
+: <a class="el" href="d6/d6a/a05200.html#a789d82f39c7418e44129446fcd705101">castor3d::ComputeParticleSystem::Configuration</a>
+</li>
+<li>depthTexture
+: <a class="el" href="de/da6/a04504.html#a36640eae4939b1f9dcdd4d9024deea34">castor3d::PostEffectSurface</a>
+</li>
+<li>depthView
+: <a class="el" href="de/da6/a04504.html#aca9d8cb13ca94a94b1300c7e29a5bb64">castor3d::PostEffectSurface</a>
+</li>
+<li>desc
+: <a class="el" href="d1/def/a04512.html#a38f7618d62ba92503afaa091e8106690">castor3d::RenderDevice</a>
+</li>
+<li>descriptorType
+: <a class="el" href="d1/d13/a04444.html#a669b2abbcb1d55eaa4177b9bc8b7b999">castor3d::rq::BindingDescription</a>
+</li>
+<li>device
+: <a class="el" href="da/d34/a04592.html#a3263fd874b7e8c82547bf499cf887924">castor3d::GpuUpdater</a>
+, <a class="el" href="d1/def/a04512.html#a2272f008b9778c429162f54ceb1e2144">castor3d::RenderDevice</a>
 </li>
 <li>diffAmb
-: <a class="el" href="d4/dc8/a03024.html#a937feabb7408685a25571c199531e45c">castor3d::LegacyPassBuffer::PassData</a>
+: <a class="el" href="dc/d2f/a05292.html#ac864679bc10a669b087839295941a6a0">castor3d::PhongPassBuffer::PassData</a>
+</li>
+<li>diffDiv
+: <a class="el" href="d1/d9e/a05300.html#ae144e26efe5022ee09bce0a67ec7c457">castor3d::SpecularGlossinessPassBuffer::PassData</a>
+</li>
+<li>DiffuseTexture
+: <a class="el" href="dd/d32/a02636.html#a94725c2e24e117b1cc70f49c3b5b1a72">castor3d::TextureConfiguration</a>
 </li>
 <li>Dimensions
-: <a class="el" href="d0/d08/a03184.html#a1647dc07474f0e4ac3d2b25105b76e0d">castor3d::BillboardUbo</a>
+: <a class="el" href="d4/dac/a05456.html#a1647dc07474f0e4ac3d2b25105b76e0d">castor3d::BillboardUbo</a>
+</li>
+<li>dimensions
+: <a class="el" href="d5/d8d/a05556.html#a781a63ab6c372487d2f8e4160e5942b1">castor3d::BillboardUboConfiguration</a>
+</li>
+<li>DrawIndex
+: <a class="el" href="db/d2d/a05520.html#ab27965433478840aecf9c4f09d5ff6b4">castor3d::PickingUbo</a>
+</li>
+<li>drawIndex
+: <a class="el" href="d9/dcd/a05600.html#a316d29423969d486fd8586912741d1d6">castor3d::PickingUboConfiguration</a>
+</li>
+<li>dump
+: <a class="el" href="d8/dd5/a04396.html#aa675748b11ce22d505c09ac77a9e0200">castor3d::GaussianBlur::Configuration</a>
 </li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 13:39:12 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Feb 18 2021 01:09:24 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

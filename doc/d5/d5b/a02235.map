@@ -1,5 +1,5 @@
-<map id="castor3d::Submesh" name="castor3d::Submesh">
-<area shape="rect" id="node1" title="The submesh representation." alt="" coords="127,95,261,121"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,13,188,39"/>
-<area shape="rect" id="node3" title=" " alt="" coords="212,5,373,47"/>
+<map id="castor3d::BinaryWriter&lt; SkeletonAnimationObject &gt;" name="castor3d::BinaryWriter&lt; SkeletonAnimationObject &gt;">
+<area shape="rect" id="node1" title="SkeletonAnimationObject binary loader." alt="" coords="5,200,199,241"/>
+<area shape="rect" id="node2" href="$dd/d3f/a02156.html" title=" " alt="" coords="5,109,199,151"/>
+<area shape="rect" id="node3" href="$dd/d3f/a02156.html" title="Binary data chunk writer base class." alt="" coords="11,5,193,47"/>
 </map>

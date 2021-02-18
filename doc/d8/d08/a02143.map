@@ -1,4 +1,5 @@
-<map id="castor3d::Sphere" name="castor3d::Sphere">
-<area shape="rect" id="node1" title="The sphere primitive." alt="" coords="29,80,151,107"/>
-<area shape="rect" id="node2" href="$d5/ddd/a02184.html" title="Mesh category is used to create a mesh&#39;s vertices, it is created by MeshFactory." alt="" coords="5,5,175,32"/>
+<map id="castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;" name="castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;">
+<area shape="rect" id="node1" title="MeshAnimationKeyFrame binary loader." alt="" coords="5,200,201,241"/>
+<area shape="rect" id="node2" href="$d2/d08/a02148.html" title=" " alt="" coords="5,109,201,151"/>
+<area shape="rect" id="node3" href="$d2/d08/a02148.html" title="Binary data chunk reader base class." alt="" coords="11,5,196,47"/>
 </map>

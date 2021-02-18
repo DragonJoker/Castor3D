@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d4/d14/a00608" kind="file" language="C++">
+    <compoundname>ParticlePlugin.hpp</compoundname>
+    <includes refid="dd/dc0/a00611" local="yes">Castor3D/Plugin/Plugin.hpp</includes>
+    <incdepgraph>
+      <node id="11490">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="11483">
+        <label>Castor3D/Plugin/Plugin.hpp</label>
+        <link refid="dd/dc0/a00611"/>
+        <childnode refid="11484" relation="include">
+        </childnode>
+        <childnode refid="11499" relation="include">
+        </childnode>
+      </node>
+      <node id="11482">
+        <label>Plugin/ParticlePlugin.hpp</label>
+        <link refid="d4/d14/a00608"/>
+        <childnode refid="11483" relation="include">
+        </childnode>
+      </node>
+      <node id="11493">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="11494">
+        <label>cstdint</label>
+      </node>
+      <node id="11492">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="11485">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d5/d35/a00266"/>
+        <childnode refid="11486" relation="include">
+        </childnode>
+        <childnode refid="11487" relation="include">
+        </childnode>
+        <childnode refid="11488" relation="include">
+        </childnode>
+        <childnode refid="11489" relation="include">
+        </childnode>
+        <childnode refid="11490" relation="include">
+        </childnode>
+        <childnode refid="11491" relation="include">
+        </childnode>
+        <childnode refid="11492" relation="include">
+        </childnode>
+        <childnode refid="11493" relation="include">
+        </childnode>
+        <childnode refid="11494" relation="include">
+        </childnode>
+        <childnode refid="11495" relation="include">
+        </childnode>
+        <childnode refid="11496" relation="include">
+        </childnode>
+        <childnode refid="11497" relation="include">
+        </childnode>
+      </node>
+      <node id="11496">
+        <label>string</label>
+      </node>
+      <node id="11489">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="11486">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="11488">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="11499">
+        <label>Castor3D/Miscellaneous/MiscellaneousModule.hpp</label>
+        <link refid="d4/d27/a00392"/>
+        <childnode refid="11485" relation="include">
+        </childnode>
+      </node>
+      <node id="11484">
+        <label>PluginModule.hpp</label>
+        <link refid="d4/dc4/a00617"/>
+        <childnode refid="11485" relation="include">
+        </childnode>
+        <childnode refid="11498" relation="include">
+        </childnode>
+      </node>
+      <node id="11487">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="11497">
+        <label>vector</label>
+      </node>
+      <node id="11491">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="11498">
+        <label>CastorUtils/Data/Path.hpp</label>
+      </node>
+      <node id="11495">
+        <label>memory</label>
+      </node>
+    </incdepgraph>
+    <innerclass refid="de/df4/a04188" prot="public">castor3d::ParticlePlugin</innerclass>
+    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Plugin/ParticlePlugin.hpp"/>
+  </compounddef>
+</doxygen>

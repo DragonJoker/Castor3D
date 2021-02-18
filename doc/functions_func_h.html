@@ -10,6 +10,7 @@
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="Castor3D.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -17,10 +18,12 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="castor-small.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Castor3D
-   &#160;<span id="projectnumber">..</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
+   <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
  </tr>
  </tbody>
@@ -43,127 +46,163 @@ $(function() {
 
 <h3><a id="index_h"></a>- h -</h3><ul>
 <li>HandlerEvent()
-: <a class="el" href="d8/d22/a01932.html#aa98c159f07c8caa1a7258dd05acbf5db">castor3d::HandlerEvent</a>
+: <a class="el" href="dc/d32/a02556.html#aaa5b96d9a987be763523e227b0da51f0">castor3d::HandlerEvent</a>
 </li>
 <li>has()
-: <a class="el" href="d0/d9d/a01760.html#a3dfb82ad7180685409d58893c3ac2338">castor3d::CacheBase&lt; ElementType, KeyType &gt;</a>
-, <a class="el" href="de/dda/a01768.html#aa75f60bb0f1d105a99b6ac7d583ca787">castor3d::CacheView&lt; ResourceType, CacheType, EventType &gt;</a>
-, <a class="el" href="d7/d02/a01808.html#a360c41ec754d74b9c9de25aa2d2d4d3f">castor3d::ObjectCacheBase&lt; ElementType, KeyType &gt;</a>
-</li>
-<li>hasAccumulationBuffer()
-: <a class="el" href="da/d6b/a02352.html#aef6290ae6642ff4a5c12c952792b9ea9">castor3d::GpuInformations</a>
+: <a class="el" href="df/d46/a02376.html#a3dfb82ad7180685409d58893c3ac2338">castor3d::CacheBase&lt; ElementType, KeyType &gt;</a>
+, <a class="el" href="d5/de6/a02424.html#a21b7d46cbde907606f5eddc90eab6c31">castor3d::CacheView&lt; ResourceType, CacheType, EventType &gt;</a>
+, <a class="el" href="d5/d04/a02428.html#a3bc5af869c9083396d70b1828d3d209b">castor3d::ObjectCacheBase&lt; ElementType, KeyType &gt;</a>
 </li>
 <li>hasAlphaBlending()
-: <a class="el" href="db/d68/a02028.html#ad7e34981d8e011d2c77659e15b1de4ce">castor3d::Material</a>
-, <a class="el" href="d8/d22/a02044.html#ae87ec5c3a8297d7d27f4d28071173629">castor3d::Pass</a>
+: <a class="el" href="dc/d28/a02584.html#ad7e34981d8e011d2c77659e15b1de4ce">castor3d::Material</a>
+, <a class="el" href="df/d5d/a02596.html#ae87ec5c3a8297d7d27f4d28071173629">castor3d::Pass</a>
+</li>
+<li>hasAlphaTest()
+: <a class="el" href="df/d5d/a02596.html#abb555c3683dda21b77bace58ae285350">castor3d::Pass</a>
 </li>
 <li>hasAnimation()
-: <a class="el" href="d0/da6/a01536.html#a0fda376fb51c135d53fcd5efbac24237">castor3d::Animable</a>
-, <a class="el" href="df/dd0/a02804.html#a42335533309aadc356aff4b0083cd512">castor3d::AnimatedObject</a>
+: <a class="el" href="d7/db2/a02036.html#a599c19a3b4de9a4b80ad9a04d9dcdce3">castor3d::AnimableT&lt; AnimableHanlerT &gt;</a>
+, <a class="el" href="d0/d8b/a05048.html#ab2df0c8e698bcfdb593900ad8c146266">castor3d::AnimatedObject</a>
+, <a class="el" href="d6/d18/a02664.html#a33da41e218b36c5ec39ce775ac003f87">castor3d::TextureUnit</a>
 </li>
 <li>hasAutomaticShader()
-: <a class="el" href="d8/d22/a02044.html#ac79b5fc42779ef6c26d94d9aa8624d8e">castor3d::Pass</a>
+: <a class="el" href="df/d5d/a02596.html#ac79b5fc42779ef6c26d94d9aa8624d8e">castor3d::Pass</a>
 </li>
 <li>hasAvailable()
-: <a class="el" href="dd/d77/a02096.html#afd3f4605280b6ec15633675254396566">castor3d::GpuBuffer</a>
+: <a class="el" href="df/d73/a02312.html#a0cd3b38555027afd2581f5147bc63385">castor3d::GpuBuffer</a>
+, <a class="el" href="db/d83/a02328.html#af825adaf870341eb0810ef0fc70a2811">castor3d::PoolUniformBuffer</a>
+, <a class="el" href="d1/d03/a02332.html#af27b60f527e8b215abedea67baa9f17d">castor3d::UniformBufferBase</a>
 </li>
 <li>hasBoneData()
-: <a class="el" href="d7/d70/a02252.html#afdcb443d39980964dc0a54878807c701">castor3d::BonesComponent</a>
+: <a class="el" href="d8/d9a/a03924.html#afdcb443d39980964dc0a54878807c701">castor3d::BonesComponent</a>
+</li>
+<li>hasBuffer()
+: <a class="el" href="df/d73/a02312.html#a9aec1d0902b5ea13976799458e7d2b8f">castor3d::GpuBuffer</a>
+, <a class="el" href="db/d83/a02328.html#a77619c448a45c14bbfcd61b22b592274">castor3d::PoolUniformBuffer</a>
+, <a class="el" href="de/d7b/a02660.html#a92066b44ec2982894bddbb494c6bdee8">castor3d::TextureSource</a>
+, <a class="el" href="d9/d5b/a02668.html#a598069fdcbc8649e43e2a2eacd1abe7b">castor3d::TextureView</a>
+, <a class="el" href="d1/d03/a02332.html#af7c01beed3624b041935b2d17e8f6c12">castor3d::UniformBufferBase</a>
+</li>
+<li>hasCamera()
+: <a class="el" href="d4/d4b/a04232.html#a602a1b5c0447c9a02eaf7d65cde84e8c">castor3d::SceneCuller</a>
 </li>
 <li>hasChanged()
-: <a class="el" href="d6/db9/a02980.html#a9abef3c3b5a70d93581542c0c1d266eb">castor3d::Scene</a>
+: <a class="el" href="d8/de4/a05172.html#a95b2bdeec7ac533ab45cca25f82286b8">castor3d::Light</a>
+, <a class="el" href="d5/d76/a05244.html#a9abef3c3b5a70d93581542c0c1d266eb">castor3d::Scene</a>
 </li>
 <li>hasChild()
-: <a class="el" href="d3/d8b/a02996.html#a9fc113e57468b18a7f45170bf8e1583c">castor3d::SceneNode</a>
+: <a class="el" href="da/d44/a05256.html#ad1ee1f9b10e1c05a47e3fcecf9989195">castor3d::SceneNode</a>
 </li>
 <li>hasComponent()
-: <a class="el" href="de/d1f/a02236.html#a3a108e0b9b2462b2723120a5d7e6f452">castor3d::Submesh</a>
+: <a class="el" href="d9/d0c/a03992.html#a3a108e0b9b2462b2723120a5d7e6f452">castor3d::Submesh</a>
 </li>
-<li>hasConstantsBuffers()
-: <a class="el" href="da/d6b/a02352.html#af438981a2f6560e0d6583f54b62030a2">castor3d::GpuInformations</a>
+<li>hasCurrentRenderDevice()
+: <a class="el" href="d9/d38/a04624.html#aa528b3a4617cad36e0256aa782083a54">castor3d::RenderSystem</a>
 </li>
 <li>hasDebugOverlays()
-: <a class="el" href="dd/dc4/a02632.html#aa0ad2c2f38b6639519b82d796be6af22">castor3d::RenderLoop</a>
+: <a class="el" href="d3/d83/a04520.html#a60b8176ab5eb5ca6b25663f955780e3e">castor3d::RenderLoop</a>
+</li>
+<li>hasDescriptorPool()
+: <a class="el" href="de/dfb/a04616.html#a6787a720439cbe641cf774e6bfe10428">castor3d::RenderPipeline</a>
+</li>
+<li>hasDevice()
+: <a class="el" href="d6/d18/a02664.html#a8af2cc0d94fd4f4c1f1053662dbf5945">castor3d::TextureUnit</a>
 </li>
 <li>hasEnvironmentMap()
-: <a class="el" href="d6/db9/a02980.html#a9a5a20fe8baa9b0a5c9e9245acadf58b">castor3d::Scene</a>
+: <a class="el" href="d5/d76/a05244.html#a9a5a20fe8baa9b0a5c9e9245acadf58b">castor3d::Scene</a>
 </li>
 <li>hasEnvironmentMapping()
-: <a class="el" href="db/d68/a02028.html#a66f46543912ad98b0c39b8970e0f91de">castor3d::Material</a>
-, <a class="el" href="d8/d22/a02044.html#ae656ac3132fb4e95fa30f28381d5e421">castor3d::Pass</a>
+: <a class="el" href="dc/d28/a02584.html#a66f46543912ad98b0c39b8970e0f91de">castor3d::Material</a>
+, <a class="el" href="df/d5d/a02596.html#ae656ac3132fb4e95fa30f28381d5e421">castor3d::Pass</a>
 </li>
 <li>hasFeature()
-: <a class="el" href="da/d6b/a02352.html#ad63d99d3cb3e6cb6a3b8a849c496e3e4">castor3d::GpuInformations</a>
+: <a class="el" href="df/d97/a02676.html#a77ad12ba88030c8938bf7c5a76d8f733">castor3d::GpuInformations</a>
 </li>
 <li>hasFile()
-: <a class="el" href="da/d5d/a03068.html#a17f4190a7d68b1207d77ee70c371b736">castor3d::ShaderObject</a>
-, <a class="el" href="d1/d7a/a03080.html#a1e3ae011b33f1e7442825ac02f4b86de">castor3d::ShaderProgram</a>
+: <a class="el" href="dc/da0/a05304.html#af2e2da1a34045c41c39f6b9fde54d0d9">castor3d::ShaderProgram</a>
+</li>
+<li>hasIbl()
+: <a class="el" href="d0/d47/a05104.html#a33b01c80a820a9523c7b4a7da69d6f9b">castor3d::SceneBackground</a>
+</li>
+<li>hasIndexBuffer()
+: <a class="el" href="d9/d0c/a03992.html#acb4fe6fb92825699fc310a947ca22067">castor3d::Submesh</a>
 </li>
 <li>hasInstancedBonesBuffer()
-: <a class="el" href="dd/d76/a02268.html#a837c880c0ed93a393c2ecf94f8b06096">castor3d::BonesInstantiationComponent</a>
+: <a class="el" href="dd/df7/a03928.html#a837c880c0ed93a393c2ecf94f8b06096">castor3d::BonesInstantiationComponent</a>
 </li>
-<li>hasInstancing()
-: <a class="el" href="da/d6b/a02352.html#a64934dc3c183ca5a7324b590126ba3bd">castor3d::GpuInformations</a>
+<li>hasMainDevice()
+: <a class="el" href="d9/d38/a04624.html#a94e8d025d221c9d28fd1a246240b199b">castor3d::RenderSystem</a>
 </li>
-<li>hasMatrixBuffer()
-: <a class="el" href="d4/d8c/a02292.html#a6f5ed7f9689497472f7fccaae5df1f32">castor3d::InstantiationComponent</a>
-</li>
-<li>hasNonPowerOfTwoTextures()
-: <a class="el" href="da/d6b/a02352.html#a647388199ba25683e39823eeb2205eeb">castor3d::GpuInformations</a>
+<li>hasNodes()
+: <a class="el" href="d2/dfe/a04620.html#af07889a285e79d73e7a88767d3771906">castor3d::RenderQueue</a>
+, <a class="el" href="da/d16/a04336.html#a9ad8a7253def8e69c037ae31564aa573">castor3d::SceneCulledRenderNodes</a>
+, <a class="el" href="d2/d56/a04348.html#ace4c873a85b167a87eca23469296709d">castor3d::SceneRenderNodes</a>
+, <a class="el" href="d8/d25/a04596.html#afaa168a458700f72a3365a1f4c550c55">castor3d::SceneRenderPass</a>
 </li>
 <li>hasObject()
-: <a class="el" href="d1/d7a/a03080.html#a85e742c9c0fd08ee5c4e7bc42b0987aa">castor3d::ShaderProgram</a>
-, <a class="el" href="db/dad/a01616.html#ad08fb5f8cee5d1fac1eec6e95abf4cc9">castor3d::SkeletonAnimation</a>
-, <a class="el" href="da/ddf/a01648.html#a9108c9a2a39617f386a4bfb658ab75df">castor3d::SkeletonAnimationKeyFrame</a>
+: <a class="el" href="d0/d36/a04008.html#ad08fb5f8cee5d1fac1eec6e95abf4cc9">castor3d::SkeletonAnimation</a>
+, <a class="el" href="d9/d97/a04016.html#a9108c9a2a39617f386a4bfb658ab75df">castor3d::SkeletonAnimationKeyFrame</a>
 </li>
 <li>hasOpaqueObjects()
-: <a class="el" href="d6/db9/a02980.html#a6bd1844d4954fa28f65f6c43d31248ea">castor3d::Scene</a>
+: <a class="el" href="d5/d76/a05244.html#a6bd1844d4954fa28f65f6c43d31248ea">castor3d::Scene</a>
 </li>
 <li>hasParallaxOcclusion()
-: <a class="el" href="d8/d22/a02044.html#af46d3754344dcf544ab178901c28e1af">castor3d::Pass</a>
+: <a class="el" href="df/d5d/a02596.html#af46d3754344dcf544ab178901c28e1af">castor3d::Pass</a>
+</li>
+<li>hasPipeline()
+: <a class="el" href="de/dfb/a04616.html#aa936edd51ea880d50140d64b8294b23c">castor3d::RenderPipeline</a>
+</li>
+<li>hasReflections()
+: <a class="el" href="df/d5d/a02596.html#aa3955ee04b630768804e3b781f1fe16a">castor3d::Pass</a>
+</li>
+<li>hasRefraction()
+: <a class="el" href="df/d5d/a02596.html#ab485b377665e57615dd8e9b208469335">castor3d::Pass</a>
 </li>
 <li>hasRenderLoop()
-: <a class="el" href="dc/d31/a01892.html#a61f86c6eab88cc6a9eadf2829e9f334f">castor3d::Engine</a>
+: <a class="el" href="dc/dbb/a02520.html#a61f86c6eab88cc6a9eadf2829e9f334f">castor3d::Engine</a>
 </li>
 <li>hasShaderStorageBuffers()
-: <a class="el" href="da/d6b/a02352.html#ac1dce053c9680a03f15630687fe8ea21">castor3d::GpuInformations</a>
+: <a class="el" href="df/d97/a02676.html#ac1dce053c9680a03f15630687fe8ea21">castor3d::GpuInformations</a>
 </li>
 <li>hasShaderType()
-: <a class="el" href="da/d6b/a02352.html#a682623ebf61d4cd8858bfecede4ede41">castor3d::GpuInformations</a>
+: <a class="el" href="df/d97/a02676.html#ae1081f130b61e04a81e7b9b5aa875d88">castor3d::GpuInformations</a>
 </li>
 <li>hasShadows()
-: <a class="el" href="d6/db9/a02980.html#acec4af26bba5082be83833338d50c63b">castor3d::Scene</a>
-</li>
-<li>hasSkybox()
-: <a class="el" href="d6/db9/a02980.html#a9ba60c800656b1d34790599ffc05f6c3">castor3d::Scene</a>
+: <a class="el" href="d5/d76/a05244.html#acec4af26bba5082be83833338d50c63b">castor3d::Scene</a>
 </li>
 <li>hasSource()
-: <a class="el" href="da/d5d/a03068.html#ad130f6d730ece57aebee31d8252f0b93">castor3d::ShaderObject</a>
-, <a class="el" href="d1/d7a/a03080.html#ac47612f5476adb5d65113d889257ad94">castor3d::ShaderProgram</a>
-, <a class="el" href="d9/dbd/a03604.html#a17709721b25934b33d0800318dc63936">castor3d::TextureImage</a>
+: <a class="el" href="dc/da0/a05304.html#a05beaef91a3e4a669b98bd3b33000a37">castor3d::ShaderProgram</a>
+</li>
+<li>hasSsbo()
+: <a class="el" href="d9/d38/a04624.html#aba94fa448ef8e9cc019284dfb0ed2f0e">castor3d::RenderSystem</a>
+</li>
+<li>hasStereoRendering()
+: <a class="el" href="df/d97/a02676.html#a27fd0413c1d5302ecb4df383919385b1">castor3d::GpuInformations</a>
 </li>
 <li>hasSubsurfaceScattering()
-: <a class="el" href="db/d68/a02028.html#a0a2623fe84f04fc8706a4982ae8d82f6">castor3d::Material</a>
-, <a class="el" href="d8/d22/a02044.html#ae6d7fc739a401207ae97464165cab915">castor3d::Pass</a>
-</li>
-<li>hasTextureBuffers()
-: <a class="el" href="da/d6b/a02352.html#a12b85073249220f80e2badc5e902d544">castor3d::GpuInformations</a>
+: <a class="el" href="dc/d28/a02584.html#a0a2623fe84f04fc8706a4982ae8d82f6">castor3d::Material</a>
+, <a class="el" href="df/d5d/a02596.html#ae6d7fc739a401207ae97464165cab915">castor3d::Pass</a>
 </li>
 <li>hasTransparentObjects()
-: <a class="el" href="d6/db9/a02980.html#a4308e40c1e311b1d158334642cb78f6a">castor3d::Scene</a>
+: <a class="el" href="d5/d76/a05244.html#a4308e40c1e311b1d158334642cb78f6a">castor3d::Scene</a>
 </li>
 <li>hasUpdateProgram()
-: <a class="el" href="de/db0/a02940.html#a5724153d3a41ee4defb08c020fed38c6">castor3d::ComputeParticleSystem</a>
-, <a class="el" href="d0/d7b/a02968.html#a5add3e9bf649e7091728d075c80d5f1d">castor3d::TransformFeedbackParticleSystem</a>
+: <a class="el" href="d9/dff/a05196.html#a5724153d3a41ee4defb08c020fed38c6">castor3d::ComputeParticleSystem</a>
+</li>
+<li>hasVertexBuffer()
+: <a class="el" href="d9/d0c/a03992.html#a33deb58cb8c1ec6b82b6ca5fed4702e4">castor3d::Submesh</a>
+</li>
+<li>hasVertexLayout()
+: <a class="el" href="d9/d0c/a03992.html#aadaed7a4d0a2643421eaafa6e6951c8e">castor3d::Submesh</a>
 </li>
 <li>HdrConfigUbo()
-: <a class="el" href="d8/d2a/a03192.html#ace718f06e684b1340a2b938682cd33c7">castor3d::HdrConfigUbo</a>
+: <a class="el" href="d1/d06/a05468.html#ab250a9e897db77c2f4773fb4cda3edc6">castor3d::HdrConfigUbo</a>
 </li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 13:39:12 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Feb 18 2021 01:09:24 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

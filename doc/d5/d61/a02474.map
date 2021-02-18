@@ -1,5 +1,11 @@
-<map id="castor3d::PanelOverlay::TextWriter" name="castor3d::PanelOverlay::TextWriter">
-<area shape="rect" id="node1" title="PanelOverlay loader." alt="" coords="15,184,171,225"/>
-<area shape="rect" id="node2" href="$da/d23/a02452.html" title="OverlayCategory loader." alt="" coords="5,95,180,136"/>
-<area shape="rect" id="node3" title=" " alt="" coords="22,5,163,47"/>
+<map id="castor3d::ObjectCache&lt; Geometry, castor::String &gt;" name="castor3d::ObjectCache&lt; Geometry, castor::String &gt;">
+<area shape="rect" id="node1" title="Geometry cache." alt="" coords="1060,125,1249,167"/>
+<area shape="rect" id="node2" href="$d5/d04/a02428.html" title=" " alt="" coords="821,125,1011,167"/>
+<area shape="rect" id="node3" href="$dc/dbb/a02520.html" title=" " alt="" coords="241,186,361,213"/>
+<area shape="rect" id="node9" href="$d5/d04/a02428.html" title="Base class for a scene element cache." alt="" coords="471,125,656,167"/>
+<area shape="rect" id="node4" title=" " alt="" coords="13,186,184,213"/>
+<area shape="rect" id="node5" href="$d5/d76/a05244.html" title=" " alt="" coords="243,71,360,98"/>
+<area shape="rect" id="node6" title=" " alt="" coords="27,5,170,47"/>
+<area shape="rect" id="node7" title=" " alt="" coords="5,71,192,98"/>
+<area shape="rect" id="node8" title=" " alt="" coords="67,122,130,149"/>
 </map>

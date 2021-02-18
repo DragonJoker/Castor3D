@@ -1,0 +1,193 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d0/d5a/a01199" kind="file" language="C++">
+    <compoundname>PassBufferModule.hpp</compoundname>
+    <includes refid="d5/d32/a01214" local="yes">Castor3D/Shader/ShaderModule.hpp</includes>
+    <includedby refid="d5/ddf/a00224" local="yes">Cache/MaterialCache.hpp</includedby>
+    <includedby refid="d9/dd6/a00272" local="yes">Castor3DPrerequisites.hpp</includedby>
+    <includedby refid="dd/d4e/a00329" local="yes">Material/Pass/MetallicRoughnessPbrPass.hpp</includedby>
+    <includedby refid="dc/d50/a00332" local="yes">Material/Pass/Pass.hpp</includedby>
+    <includedby refid="dc/d84/a00338" local="yes">Material/Pass/PhongPass.hpp</includedby>
+    <includedby refid="d3/d93/a00341" local="yes">Material/Pass/SpecularGlossinessPbrPass.hpp</includedby>
+    <incdepgraph>
+      <node id="26832">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="26835">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="26836">
+        <label>cstdint</label>
+      </node>
+      <node id="26834">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="26840">
+        <label>ShaderAST/Shader.hpp</label>
+      </node>
+      <node id="26827">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d5/d35/a00266"/>
+        <childnode refid="26828" relation="include">
+        </childnode>
+        <childnode refid="26829" relation="include">
+        </childnode>
+        <childnode refid="26830" relation="include">
+        </childnode>
+        <childnode refid="26831" relation="include">
+        </childnode>
+        <childnode refid="26832" relation="include">
+        </childnode>
+        <childnode refid="26833" relation="include">
+        </childnode>
+        <childnode refid="26834" relation="include">
+        </childnode>
+        <childnode refid="26835" relation="include">
+        </childnode>
+        <childnode refid="26836" relation="include">
+        </childnode>
+        <childnode refid="26837" relation="include">
+        </childnode>
+        <childnode refid="26838" relation="include">
+        </childnode>
+        <childnode refid="26839" relation="include">
+        </childnode>
+      </node>
+      <node id="26838">
+        <label>string</label>
+      </node>
+      <node id="26831">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="26828">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="26830">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="26829">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="26839">
+        <label>vector</label>
+      </node>
+      <node id="26833">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="26841">
+        <label>ShaderWriter/ShaderWriterPrerequisites.hpp</label>
+      </node>
+      <node id="26826">
+        <label>Castor3D/Shader/ShaderModule.hpp</label>
+        <link refid="d5/d32/a01214"/>
+        <childnode refid="26827" relation="include">
+        </childnode>
+        <childnode refid="26840" relation="include">
+        </childnode>
+        <childnode refid="26841" relation="include">
+        </childnode>
+        <childnode refid="26829" relation="include">
+        </childnode>
+      </node>
+      <node id="26825">
+        <label>Shader/PassBuffer/PassBufferModule.hpp</label>
+        <link refid="d0/d5a/a01199"/>
+        <childnode refid="26826" relation="include">
+        </childnode>
+      </node>
+      <node id="26837">
+        <label>memory</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="26845">
+        <label>Castor3DPch.hpp</label>
+        <link refid="d5/d42/a00269"/>
+      </node>
+      <node id="26843">
+        <label>Cache/MaterialCache.hpp</label>
+        <link refid="d5/ddf/a00224"/>
+      </node>
+      <node id="26849">
+        <label>Material/Pass/PhongPass.hpp</label>
+        <link refid="dc/d84/a00338"/>
+        <childnode refid="26850" relation="include">
+        </childnode>
+      </node>
+      <node id="26854">
+        <label>Text/TextPass.hpp</label>
+        <link refid="d9/d6e/a01409"/>
+      </node>
+      <node id="26850">
+        <label>Text/TextPhongPass.hpp</label>
+        <link refid="dc/d10/a01412"/>
+      </node>
+      <node id="26847">
+        <label>Text/TextMetallicRoughnessPbrPass.hpp</label>
+        <link refid="d7/d1c/a01397"/>
+      </node>
+      <node id="26851">
+        <label>Material/Pass/SpecularGlossinessPbrPass.hpp</label>
+        <link refid="d3/d93/a00341"/>
+        <childnode refid="26852" relation="include">
+        </childnode>
+      </node>
+      <node id="26852">
+        <label>Text/TextSpecularGlossinessPbrPass.hpp</label>
+        <link refid="dd/d08/a01448"/>
+      </node>
+      <node id="26848">
+        <label>Material/Pass/Pass.hpp</label>
+        <link refid="dc/d50/a00332"/>
+        <childnode refid="26846" relation="include">
+        </childnode>
+        <childnode refid="26849" relation="include">
+        </childnode>
+        <childnode refid="26851" relation="include">
+        </childnode>
+        <childnode refid="26853" relation="include">
+        </childnode>
+        <childnode refid="26854" relation="include">
+        </childnode>
+      </node>
+      <node id="26844">
+        <label>Castor3DPrerequisites.hpp</label>
+        <link refid="d9/dd6/a00272"/>
+        <childnode refid="26845" relation="include">
+        </childnode>
+      </node>
+      <node id="26846">
+        <label>Material/Pass/MetallicRoughnessPbrPass.hpp</label>
+        <link refid="dd/d4e/a00329"/>
+        <childnode refid="26847" relation="include">
+        </childnode>
+      </node>
+      <node id="26853">
+        <label>Render/Node/RenderNode_Render.hpp</label>
+        <link refid="d4/d6a/a00704"/>
+      </node>
+      <node id="26842">
+        <label>Shader/PassBuffer/PassBufferModule.hpp</label>
+        <link refid="d0/d5a/a01199"/>
+        <childnode refid="26843" relation="include">
+        </childnode>
+        <childnode refid="26844" relation="include">
+        </childnode>
+        <childnode refid="26846" relation="include">
+        </childnode>
+        <childnode refid="26848" relation="include">
+        </childnode>
+        <childnode refid="26849" relation="include">
+        </childnode>
+        <childnode refid="26851" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/PassBuffer/PassBufferModule.hpp"/>
+  </compounddef>
+</doxygen>

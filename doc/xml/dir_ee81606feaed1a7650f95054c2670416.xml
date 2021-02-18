@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_ee81606feaed1a7650f95054c2670416" kind="dir">
+    <compoundname>Render</compoundname>
+    <innerdir refid="dir_60224d060cc31e4c570b52945980330e">Render/Culling</innerdir>
+    <innerdir refid="dir_31a7e93f4a090e94e6809272d6d3605b">Render/EnvironmentMap</innerdir>
+    <innerdir refid="dir_f6c92a291074146be370fc7e944c054f">Render/GlobalIllumination</innerdir>
+    <innerdir refid="dir_2257bfe1622966562178a53203724160">Render/Node</innerdir>
+    <innerdir refid="dir_df7b4b6a6777e0391235cce118981005">Render/Passes</innerdir>
+    <innerdir refid="dir_fb6986cd8a56efe332f454ca345a3bbe">Render/PBR</innerdir>
+    <innerdir refid="dir_b66ca58a575fd0a9e8ee9909dd1d567d">Render/PostEffect</innerdir>
+    <innerdir refid="dir_4d2af45186488f4957e91f52d0870c5b">Render/ShadowMap</innerdir>
+    <innerdir refid="dir_96f48ddc76a06734e9b1f6b0446df030">Render/Ssao</innerdir>
+    <innerdir refid="dir_76410ba93165758e25a17769a661127f">Render/Technique</innerdir>
+    <innerdir refid="dir_2f420a322fccce9022e969751359b41f">Render/ToneMapping</innerdir>
+    <innerdir refid="dir_8bdc861425a7dc5d5ee070906426a976">Render/ToTexture</innerdir>
+    <innerdir refid="dir_8d8b5ef6fcf58874742e6107801c78e1">Render/Voxelize</innerdir>
+    <innerfile refid="de/ddd/a00653">Frustum.hpp</innerfile>
+    <innerfile refid="dc/df2/a00656">GBuffer.hpp</innerfile>
+    <innerfile refid="d0/d7e/a00770">PickingPass.hpp</innerfile>
+    <innerfile refid="d3/d00/a00785">Ray.hpp</innerfile>
+    <innerfile refid="df/d0c/a00788">RenderDevice.hpp</innerfile>
+    <innerfile refid="d4/d45/a00791">RenderInfo.hpp</innerfile>
+    <innerfile refid="d5/d12/a00794">RenderLoop.hpp</innerfile>
+    <innerfile refid="da/db8/a00797">RenderLoopAsync.hpp</innerfile>
+    <innerfile refid="df/d0e/a00800">RenderLoopSync.hpp</innerfile>
+    <innerfile refid="d5/d72/a00803">RenderModule.hpp</innerfile>
+    <innerfile refid="d0/dad/a00806">RenderPass.hpp</innerfile>
+    <innerfile refid="dd/d7e/a00809">RenderPassTimer.hpp</innerfile>
+    <innerfile refid="d8/db7/a00812">RenderPipeline.hpp</innerfile>
+    <innerfile refid="d8/d2d/a00815">RenderQueue.hpp</innerfile>
+    <innerfile refid="d3/d60/a00818">RenderSystem.hpp</innerfile>
+    <innerfile refid="d6/d8b/a00821">RenderSystemFactory.hpp</innerfile>
+    <innerfile refid="d8/d1c/a00824">RenderTarget.hpp</innerfile>
+    <innerfile refid="dc/d1b/a00827">RenderWindow.hpp</innerfile>
+    <innerfile refid="db/daf/a01019">Viewport.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/"/>
+  </compounddef>
+</doxygen>

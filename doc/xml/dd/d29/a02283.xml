@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dd/d29/a02283" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::MemChunk</compoundname>
+    <includes local="no">BufferModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dd/d29/a02283_1ae4819cf2e478269cde2e24ff1e187765" prot="public" static="no" mutable="no">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::MemChunk::offset</definition>
+        <argsstring></argsstring>
+        <name>offset</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/BufferModule.hpp" line="148" column="1" bodyfile="Buffer/BufferModule.hpp" bodystart="148" bodyend="-1"/>
+        <referencedby refid="d7/dd1/a01458_1a3283783fefa9a54a9caa19451d521bc1" compoundref="d7/d06/a00131" startline="152" endline="156">castor3d::operator&lt;</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d29/a02283_1a3f23e680ab897700f1cd7a3e09d262f1" prot="public" static="no" mutable="no">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::MemChunk::size</definition>
+        <argsstring></argsstring>
+        <name>size</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/BufferModule.hpp" line="149" column="1" bodyfile="Buffer/BufferModule.hpp" bodystart="149" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>A memory range, in bytes. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Buffer/BufferModule.hpp" line="147" column="1" bodyfile="Buffer/BufferModule.hpp" bodystart="146" bodyend="150"/>
+    <listofallmembers>
+      <member refid="dd/d29/a02283_1ae4819cf2e478269cde2e24ff1e187765" prot="public" virt="non-virtual"><scope>castor3d::MemChunk</scope><name>offset</name></member>
+      <member refid="dd/d29/a02283_1a3f23e680ab897700f1cd7a3e09d262f1" prot="public" virt="non-virtual"><scope>castor3d::MemChunk</scope><name>size</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

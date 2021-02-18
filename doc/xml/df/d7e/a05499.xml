@@ -1,0 +1,269 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="df/d7e/a05499" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::PickingUbo</compoundname>
+    <includes local="no">PickingUbo.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="df/d7e/a05499_1a4f6eb396af9641484e571c9b4937d19d" prot="public" static="no">
+        <type><ref refid="de/d98/a05579" kindref="compound">PickingUboConfiguration</ref></type>
+        <definition>using castor3d::PickingUbo::Configuration =  PickingUboConfiguration</definition>
+        <argsstring></argsstring>
+        <name>Configuration</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/PickingUbo.hpp" line="16" column="1" bodyfile="Shader/Ubos/PickingUbo.hpp" bodystart="16" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="df/d7e/a05499_1a7fa0d01e181124c9cb97f80635edf021" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const uint32_t</type>
+        <definition>C3D_API const uint32_t castor3d::PickingUbo::BindingPoint</definition>
+        <argsstring></argsstring>
+        <name>BindingPoint</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/PickingUbo.hpp" line="48" column="1" bodyfile="Shader/Ubos/PickingUbo.hpp" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d7e/a05499_1a85644ba1529edb444c79544926f47ea7" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::PickingUbo::BufferPicking</definition>
+        <argsstring></argsstring>
+        <name>BufferPicking</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Name of the picking information frame variable buffer. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/PickingUbo.hpp" line="51" column="1" bodyfile="Shader/Ubos/PickingUbo.hpp" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d7e/a05499_1ab27965433478840aecf9c4f09d5ff6b4" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::PickingUbo::DrawIndex</definition>
+        <argsstring></argsstring>
+        <name>DrawIndex</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Name of the draw index frame variable. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/PickingUbo.hpp" line="54" column="1" bodyfile="Shader/Ubos/PickingUbo.hpp" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d7e/a05499_1a93efca56520cb2992481d26774a397b1" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::PickingUbo::NodeIndex</definition>
+        <argsstring></argsstring>
+        <name>NodeIndex</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Name of the node index frame variable. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/PickingUbo.hpp" line="57" column="1" bodyfile="Shader/Ubos/PickingUbo.hpp" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="df/d7e/a05499_1accf1d05395cbf5a8197c83d41be7d970" prot="private" static="no" mutable="no">
+        <type><ref refid="d0/d7c/a02499" kindref="compound">Engine</ref> &amp;</type>
+        <definition>Engine&amp; castor3d::PickingUbo::m_engine</definition>
+        <argsstring></argsstring>
+        <name>m_engine</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/PickingUbo.hpp" line="60" column="1" bodyfile="Shader/Ubos/PickingUbo.hpp" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d7e/a05499_1ac7c2c6da382b0581211e71d1ee20ed9c" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="df/d7e/a05499_1a4f6eb396af9641484e571c9b4937d19d" kindref="member">Configuration</ref> &gt;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; castor3d::PickingUbo::m_ubo</definition>
+        <argsstring></argsstring>
+        <name>m_ubo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/PickingUbo.hpp" line="61" column="1" bodyfile="Shader/Ubos/PickingUbo.hpp" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/d7e/a05499_1a545be8ea091a8113971367121e745301" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::PickingUbo::PickingUbo</definition>
+        <argsstring>(Engine &amp;engine)</argsstring>
+        <name>PickingUbo</name>
+        <param>
+          <type><ref refid="d0/d7c/a02499" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/PickingUbo.hpp" line="17" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d7e/a05499_1a9cb660c549290f87ac830637827d1a57" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::PickingUbo::initialise</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>initialise</name>
+        <param>
+          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/PickingUbo.hpp" line="18" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d7e/a05499_1afa8541a57d3629c6245fd1b6ddd2fade" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::PickingUbo::cleanup</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>cleanup</name>
+        <param>
+          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/PickingUbo.hpp" line="19" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d7e/a05499_1a329e3cca96d30cfb46fcfa67c51ca404" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::PickingUbo::createSizedBinding</definition>
+        <argsstring>(ashes::DescriptorSet &amp;descriptorSet, VkDescriptorSetLayoutBinding const &amp;layoutBinding) const</argsstring>
+        <name>createSizedBinding</name>
+        <param>
+          <type>ashes::DescriptorSet &amp;</type>
+          <declname>descriptorSet</declname>
+        </param>
+        <param>
+          <type>VkDescriptorSetLayoutBinding const &amp;</type>
+          <declname>layoutBinding</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/PickingUbo.hpp" line="36" column="1" bodyfile="Shader/Ubos/PickingUbo.hpp" bodystart="36" bodyend="40"/>
+        <references refid="d2/dd2/a02279_1a2c6ad146d4910651544564c25ca7dccd" compoundref="d6/db8/a00158" startline="70" endline="79">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createSizedBinding</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d7e/a05499_1a0a5ea1ca8f822d07696026d8e4867d3a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="df/d7e/a05499_1a4f6eb396af9641484e571c9b4937d19d" kindref="member">Configuration</ref> &gt; const  &amp;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; const&amp; castor3d::PickingUbo::getUbo</definition>
+        <argsstring>() const</argsstring>
+        <name>getUbo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/PickingUbo.hpp" line="42" column="1" bodyfile="Shader/Ubos/PickingUbo.hpp" bodystart="42" bodyend="45"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="df/d7e/a05499_1a0ccf1f4ff12db2d2bbc8c2d5ceecbe61" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>static C3D_API void castor3d::PickingUbo::update</definition>
+        <argsstring>(Configuration &amp;configuration, uint32_t drawIndex, uint32_t nodeIndex)</argsstring>
+        <name>update</name>
+        <param>
+          <type><ref refid="df/d7e/a05499_1a4f6eb396af9641484e571c9b4937d19d" kindref="member">Configuration</ref> &amp;</type>
+          <declname>configuration</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>drawIndex</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>nodeIndex</declname>
+        </param>
+        <briefdescription>
+<para>Updates the UBO from given values. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">configuration</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The configuration </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">drawIndex</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The draw call index. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">nodeIndex</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The node index. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/PickingUbo.hpp" line="32" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Ubos/PickingUbo.hpp" line="14" column="1" bodyfile="Shader/Ubos/PickingUbo.hpp" bodystart="13" bodyend="62"/>
+    <listofallmembers>
+      <member refid="df/d7e/a05499_1a7fa0d01e181124c9cb97f80635edf021" prot="public" virt="non-virtual"><scope>castor3d::PickingUbo</scope><name>BindingPoint</name></member>
+      <member refid="df/d7e/a05499_1a85644ba1529edb444c79544926f47ea7" prot="public" virt="non-virtual"><scope>castor3d::PickingUbo</scope><name>BufferPicking</name></member>
+      <member refid="df/d7e/a05499_1afa8541a57d3629c6245fd1b6ddd2fade" prot="public" virt="non-virtual"><scope>castor3d::PickingUbo</scope><name>cleanup</name></member>
+      <member refid="df/d7e/a05499_1a4f6eb396af9641484e571c9b4937d19d" prot="public" virt="non-virtual"><scope>castor3d::PickingUbo</scope><name>Configuration</name></member>
+      <member refid="df/d7e/a05499_1a329e3cca96d30cfb46fcfa67c51ca404" prot="public" virt="non-virtual"><scope>castor3d::PickingUbo</scope><name>createSizedBinding</name></member>
+      <member refid="df/d7e/a05499_1ab27965433478840aecf9c4f09d5ff6b4" prot="public" virt="non-virtual"><scope>castor3d::PickingUbo</scope><name>DrawIndex</name></member>
+      <member refid="df/d7e/a05499_1a0a5ea1ca8f822d07696026d8e4867d3a" prot="public" virt="non-virtual"><scope>castor3d::PickingUbo</scope><name>getUbo</name></member>
+      <member refid="df/d7e/a05499_1a9cb660c549290f87ac830637827d1a57" prot="public" virt="non-virtual"><scope>castor3d::PickingUbo</scope><name>initialise</name></member>
+      <member refid="df/d7e/a05499_1accf1d05395cbf5a8197c83d41be7d970" prot="private" virt="non-virtual"><scope>castor3d::PickingUbo</scope><name>m_engine</name></member>
+      <member refid="df/d7e/a05499_1ac7c2c6da382b0581211e71d1ee20ed9c" prot="private" virt="non-virtual"><scope>castor3d::PickingUbo</scope><name>m_ubo</name></member>
+      <member refid="df/d7e/a05499_1a93efca56520cb2992481d26774a397b1" prot="public" virt="non-virtual"><scope>castor3d::PickingUbo</scope><name>NodeIndex</name></member>
+      <member refid="df/d7e/a05499_1a545be8ea091a8113971367121e745301" prot="public" virt="non-virtual"><scope>castor3d::PickingUbo</scope><name>PickingUbo</name></member>
+      <member refid="df/d7e/a05499_1a0ccf1f4ff12db2d2bbc8c2d5ceecbe61" prot="public" virt="non-virtual"><scope>castor3d::PickingUbo</scope><name>update</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d6/d14/a05286" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::PhongPassBuffer::PassData</compoundname>
+    <includes local="no">PhongPassBuffer.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d6/d14/a05286_1ac864679bc10a669b087839295941a6a0" prot="public" static="no" mutable="no">
+        <type><ref refid="dd/d95/a05274" kindref="compound">RgbaColour</ref></type>
+        <definition>RgbaColour castor3d::PhongPassBuffer::PassData::diffAmb</definition>
+        <argsstring></argsstring>
+        <name>diffAmb</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/PassBuffer/PhongPassBuffer.hpp" line="62" column="1" bodyfile="Shader/PassBuffer/PhongPassBuffer.hpp" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d14/a05286_1acb6753702780bb4c4c6154ec3e95359a" prot="public" static="no" mutable="no">
+        <type><ref refid="dd/d95/a05274" kindref="compound">RgbaColour</ref></type>
+        <definition>RgbaColour castor3d::PhongPassBuffer::PassData::specShin</definition>
+        <argsstring></argsstring>
+        <name>specShin</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/PassBuffer/PhongPassBuffer.hpp" line="63" column="1" bodyfile="Shader/PassBuffer/PhongPassBuffer.hpp" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d14/a05286_1a53f0240cf5d6b5cec9381ccb297848cf" prot="public" static="no" mutable="no">
+        <type><ref refid="dd/d95/a05274" kindref="compound">RgbaColour</ref></type>
+        <definition>RgbaColour castor3d::PhongPassBuffer::PassData::common</definition>
+        <argsstring></argsstring>
+        <name>common</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/PassBuffer/PhongPassBuffer.hpp" line="64" column="1" bodyfile="Shader/PassBuffer/PhongPassBuffer.hpp" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d14/a05286_1aaca8bc29d1fe47c00e4791e53f2a9cf2" prot="public" static="no" mutable="no">
+        <type><ref refid="dd/d95/a05274" kindref="compound">RgbaColour</ref></type>
+        <definition>RgbaColour castor3d::PhongPassBuffer::PassData::opacity</definition>
+        <argsstring></argsstring>
+        <name>opacity</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/PassBuffer/PhongPassBuffer.hpp" line="65" column="1" bodyfile="Shader/PassBuffer/PhongPassBuffer.hpp" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d14/a05286_1a076dcfcf8ec5afb5a7e006719b4bdf09" prot="public" static="no" mutable="no">
+        <type><ref refid="dd/d95/a05274" kindref="compound">RgbaColour</ref></type>
+        <definition>RgbaColour castor3d::PhongPassBuffer::PassData::reflRefr</definition>
+        <argsstring></argsstring>
+        <name>reflRefr</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/PassBuffer/PhongPassBuffer.hpp" line="66" column="1" bodyfile="Shader/PassBuffer/PhongPassBuffer.hpp" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d14/a05286_1a0bc0b0b5d086a8f3a876b6f876f58116" prot="public" static="no" mutable="no">
+        <type>ExtendedData</type>
+        <definition>ExtendedData castor3d::PhongPassBuffer::PassData::extended</definition>
+        <argsstring></argsstring>
+        <name>extended</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/PassBuffer/PhongPassBuffer.hpp" line="67" column="1" bodyfile="Shader/PassBuffer/PhongPassBuffer.hpp" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/PassBuffer/PhongPassBuffer.hpp" line="61" column="1" bodyfile="Shader/PassBuffer/PhongPassBuffer.hpp" bodystart="60" bodyend="68"/>
+    <listofallmembers>
+      <member refid="d6/d14/a05286_1a53f0240cf5d6b5cec9381ccb297848cf" prot="public" virt="non-virtual"><scope>castor3d::PhongPassBuffer::PassData</scope><name>common</name></member>
+      <member refid="d6/d14/a05286_1ac864679bc10a669b087839295941a6a0" prot="public" virt="non-virtual"><scope>castor3d::PhongPassBuffer::PassData</scope><name>diffAmb</name></member>
+      <member refid="d6/d14/a05286_1a0bc0b0b5d086a8f3a876b6f876f58116" prot="public" virt="non-virtual"><scope>castor3d::PhongPassBuffer::PassData</scope><name>extended</name></member>
+      <member refid="d6/d14/a05286_1aaca8bc29d1fe47c00e4791e53f2a9cf2" prot="public" virt="non-virtual"><scope>castor3d::PhongPassBuffer::PassData</scope><name>opacity</name></member>
+      <member refid="d6/d14/a05286_1a076dcfcf8ec5afb5a7e006719b4bdf09" prot="public" virt="non-virtual"><scope>castor3d::PhongPassBuffer::PassData</scope><name>reflRefr</name></member>
+      <member refid="d6/d14/a05286_1acb6753702780bb4c4c6154ec3e95359a" prot="public" virt="non-virtual"><scope>castor3d::PhongPassBuffer::PassData</scope><name>specShin</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

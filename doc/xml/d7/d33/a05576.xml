@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d7/d33/a05576" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::MatrixUboConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d7/d33/a05576_1a321345917b9c5f69df988eb7cd43b96c" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::MatrixUboConfiguration::projection</definition>
+        <argsstring></argsstring>
+        <name>projection</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="172" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="172" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d33/a05576_1a20affb2e4440a4e6c3de8a693e39920b" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::MatrixUboConfiguration::invProjection</definition>
+        <argsstring></argsstring>
+        <name>invProjection</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="173" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="173" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d33/a05576_1a0701e43cde9aea98d6e2881fa17af17f" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::MatrixUboConfiguration::curView</definition>
+        <argsstring></argsstring>
+        <name>curView</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="174" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="174" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d33/a05576_1a548cdfd82b98dfdd841e7651951f95d7" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::MatrixUboConfiguration::prvView</definition>
+        <argsstring></argsstring>
+        <name>prvView</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="175" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="175" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d33/a05576_1a594bac871b9fa0648bf9571e2711ac6e" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::MatrixUboConfiguration::curViewProj</definition>
+        <argsstring></argsstring>
+        <name>curViewProj</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="176" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="176" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d33/a05576_1a71d8fc6463ad79080a7073b9a9062149" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::MatrixUboConfiguration::prvViewProj</definition>
+        <argsstring></argsstring>
+        <name>prvViewProj</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="177" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="177" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d33/a05576_1ada504699babf8519991ab0f5920c064d" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::MatrixUboConfiguration::jitter</definition>
+        <argsstring></argsstring>
+        <name>jitter</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="178" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="178" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Global matrices data. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Ubos/UbosModule.hpp" line="171" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="170" bodyend="179"/>
+    <listofallmembers>
+      <member refid="d7/d33/a05576_1a0701e43cde9aea98d6e2881fa17af17f" prot="public" virt="non-virtual"><scope>castor3d::MatrixUboConfiguration</scope><name>curView</name></member>
+      <member refid="d7/d33/a05576_1a594bac871b9fa0648bf9571e2711ac6e" prot="public" virt="non-virtual"><scope>castor3d::MatrixUboConfiguration</scope><name>curViewProj</name></member>
+      <member refid="d7/d33/a05576_1a20affb2e4440a4e6c3de8a693e39920b" prot="public" virt="non-virtual"><scope>castor3d::MatrixUboConfiguration</scope><name>invProjection</name></member>
+      <member refid="d7/d33/a05576_1ada504699babf8519991ab0f5920c064d" prot="public" virt="non-virtual"><scope>castor3d::MatrixUboConfiguration</scope><name>jitter</name></member>
+      <member refid="d7/d33/a05576_1a321345917b9c5f69df988eb7cd43b96c" prot="public" virt="non-virtual"><scope>castor3d::MatrixUboConfiguration</scope><name>projection</name></member>
+      <member refid="d7/d33/a05576_1a548cdfd82b98dfdd841e7651951f95d7" prot="public" virt="non-virtual"><scope>castor3d::MatrixUboConfiguration</scope><name>prvView</name></member>
+      <member refid="d7/d33/a05576_1a71d8fc6463ad79080a7073b9a9062149" prot="public" virt="non-virtual"><scope>castor3d::MatrixUboConfiguration</scope><name>prvViewProj</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

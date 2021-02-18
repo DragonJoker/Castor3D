@@ -1,0 +1,132 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dd/d89/a03831" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::VersionException</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">Exception</basecompoundref>
+    <includes local="no">VersionException.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/d89/a03831_1afd9c24e163e939cbaf4dd54ff13d1bf9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::VersionException::VersionException</definition>
+        <argsstring>(Version const &amp;given, Version const &amp;expected, char const *file, char const *function, uint32_t line)</argsstring>
+        <name>VersionException</name>
+        <param>
+          <type><ref refid="d2/db0/a03827" kindref="compound">Version</ref> const &amp;</type>
+          <declname>given</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/db0/a03827" kindref="compound">Version</ref> const &amp;</type>
+          <declname>expected</declname>
+        </param>
+        <param>
+          <type>char const *</type>
+          <declname>file</declname>
+        </param>
+        <param>
+          <type>char const *</type>
+          <declname>function</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>line</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">given</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The given version </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">expected</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The expected version </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The file </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">function</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The function </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">line</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The file line </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/VersionException.hpp" line="33" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d89/a03831_1a7072af920e19cfa2edd3a6986fcd8a7a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::VersionException::~VersionException</definition>
+        <argsstring>()</argsstring>
+        <name>~VersionException</name>
+        <exceptions> throw ()</exceptions>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/VersionException.hpp" line="44" column="1" bodyfile="Miscellaneous/VersionException.hpp" bodystart="44" bodyend="44"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="4650">
+        <label>Exception</label>
+      </node>
+      <node id="4649">
+        <label>castor3d::VersionException</label>
+        <link refid="dd/d89/a03831"/>
+        <childnode refid="4650" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="4652">
+        <label>Exception</label>
+      </node>
+      <node id="4651">
+        <label>castor3d::VersionException</label>
+        <link refid="dd/d89/a03831"/>
+        <childnode refid="4652" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Miscellaneous/VersionException.hpp" line="15" column="1" bodyfile="Miscellaneous/VersionException.hpp" bodystart="13" bodyend="45"/>
+    <listofallmembers>
+      <member refid="dd/d89/a03831_1afd9c24e163e939cbaf4dd54ff13d1bf9" prot="public" virt="non-virtual"><scope>castor3d::VersionException</scope><name>VersionException</name></member>
+      <member refid="dd/d89/a03831_1a7072af920e19cfa2edd3a6986fcd8a7a" prot="public" virt="virtual"><scope>castor3d::VersionException</scope><name>~VersionException</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

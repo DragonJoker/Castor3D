@@ -10,6 +10,7 @@
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
 <link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+<link href="../../Castor3D.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -17,10 +18,12 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Castor3D
-   &#160;<span id="projectnumber">..</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
+   <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
  </tr>
  </tbody>
@@ -39,43 +42,31 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../d0/d85/a00976.html">castor3d</a></li><li class="navelem"><a class="el" href="../../de/dec/a02524.html">GenericPlugin</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/d1e/a01479.html">castor3d</a></li><li class="navelem"><a class="el" href="../../de/dec/a02524.html">CpuFrameEvent</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="headertitle">
-<div class="title">castor3d::GenericPlugin Member List</div>  </div>
+<div class="title">castor3d::CpuFrameEvent Member List</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>This is the complete list of members for <a class="el" href="../../de/dec/a02524.html">castor3d::GenericPlugin</a>, including all inherited members.</p>
+<p>This is the complete list of members for <a class="el" href="../../de/dec/a02524.html">castor3d::CpuFrameEvent</a>, including all inherited members.</p>
 <table class="directory">
-  <tr class="even"><td class="entry"><a class="el" href="../../de/dec/a02524.html#a3e1914489e4bed4f9f23cdeab34a43dc">Engine</a> class</td><td class="entry"><a class="el" href="../../de/dec/a02524.html">castor3d::GenericPlugin</a></td><td class="entry"><span class="mlabel">friend</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../de/dec/a02524.html#afaf10e5a84cca94d0752ce36508d5d1b">GenericPlugin</a>(castor::DynamicLibrarySPtr p_library, Engine *engine)</td><td class="entry"><a class="el" href="../../de/dec/a02524.html">castor3d::GenericPlugin</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d6/d24/a02536.html#a76345cfa813957198ab5a735b3bf2c84">getName</a>() const</td><td class="entry"><a class="el" href="../../d6/d24/a02536.html">castor3d::Plugin</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d6/d24/a02536.html#a55fe8d26bf45601a3c1011def996846d">getRequiredVersion</a>(Version &amp;p_version) const</td><td class="entry"><a class="el" href="../../d6/d24/a02536.html">castor3d::Plugin</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d6/d24/a02536.html#adfce87274549c3458e705ec6f49f2466">getType</a>() const</td><td class="entry"><a class="el" href="../../d6/d24/a02536.html">castor3d::Plugin</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d6/d24/a02536.html#a6eee27fad0b4dc406af8dac993816e1e">load</a>()</td><td class="entry"><a class="el" href="../../d6/d24/a02536.html">castor3d::Plugin</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d6/d24/a02536.html#ac89ef3325c33aebd3c45ff41a3912d25">m_library</a></td><td class="entry"><a class="el" href="../../d6/d24/a02536.html">castor3d::Plugin</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d6/d24/a02536.html#a5b06730be035851689f1f52a9d37a839">m_pfnGetName</a></td><td class="entry"><a class="el" href="../../d6/d24/a02536.html">castor3d::Plugin</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d6/d24/a02536.html#a3bbb683c98da8be6cb7eadd5ba677f18">m_pfnGetRequiredVersion</a></td><td class="entry"><a class="el" href="../../d6/d24/a02536.html">castor3d::Plugin</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d6/d24/a02536.html#ae4b1c74ae527aef8847250d27eb3acf0">m_pfnOnLoad</a></td><td class="entry"><a class="el" href="../../d6/d24/a02536.html">castor3d::Plugin</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d6/d24/a02536.html#a5d94afb97a6d885ed7d2885dafeda0dc">m_pfnOnUnload</a></td><td class="entry"><a class="el" href="../../d6/d24/a02536.html">castor3d::Plugin</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d6/d24/a02536.html#ad988a5d361f28b80ba19dd2caac722e1">m_type</a></td><td class="entry"><a class="el" href="../../d6/d24/a02536.html">castor3d::Plugin</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d6/d24/a02536.html#af3f82c3bbc1d49880fda39cdc7ea2015">PGetNameFunction</a> typedef</td><td class="entry"><a class="el" href="../../d6/d24/a02536.html">castor3d::Plugin</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d6/d24/a02536.html#a571d2dbc7a601aca467b1b5d8a62d997">PGetRequiredVersionFunction</a> typedef</td><td class="entry"><a class="el" href="../../d6/d24/a02536.html">castor3d::Plugin</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d6/d24/a02536.html#aa7caed7d5f2bd1d34409227a1e3b09bf">PGetTypeFunction</a> typedef</td><td class="entry"><a class="el" href="../../d6/d24/a02536.html">castor3d::Plugin</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="../../de/dec/a02524.html#a6a6c1cc25d50ed6f67a2dc0fc546c5a3">Plugin</a> class</td><td class="entry"><a class="el" href="../../de/dec/a02524.html">castor3d::GenericPlugin</a></td><td class="entry"><span class="mlabel">friend</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d6/d24/a02536.html#ad0caff98c4f58dc6d0faf872ea8ec4ea">castor3d::Plugin::Plugin</a>(PluginType p_type, castor::DynamicLibrarySPtr p_library, Engine &amp;engine)</td><td class="entry"><a class="el" href="../../d6/d24/a02536.html">castor3d::Plugin</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d6/d24/a02536.html#a54268afa0fd4a75c485f0ba59f108e65">POnLoadFunction</a> typedef</td><td class="entry"><a class="el" href="../../d6/d24/a02536.html">castor3d::Plugin</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d6/d24/a02536.html#a186ebd8d8fe1eb8b52b7909347ce0fb4">POnUnloadFunction</a> typedef</td><td class="entry"><a class="el" href="../../d6/d24/a02536.html">castor3d::Plugin</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d6/d24/a02536.html#a1062d08432032ec7d502e7941b4e0df4">unload</a>()</td><td class="entry"><a class="el" href="../../d6/d24/a02536.html">castor3d::Plugin</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../de/dec/a02524.html#aa85d31d3b91d7f3ac2195afb12f13a60">~GenericPlugin</a>()</td><td class="entry"><a class="el" href="../../de/dec/a02524.html">castor3d::GenericPlugin</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d6/d24/a02536.html#af7f881d3d5d32c7044c1b93164754c64">~Plugin</a>()=0</td><td class="entry"><a class="el" href="../../d6/d24/a02536.html">castor3d::Plugin</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../de/dec/a02524.html#ae31a541d4c966f978a3174b048a45b2a">apply</a>()=0</td><td class="entry"><a class="el" href="../../de/dec/a02524.html">castor3d::CpuFrameEvent</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="../../de/dec/a02524.html#ae83db3b8b709ecf853a35d683ad8b6e8">CpuFrameEvent</a>(CpuFrameEvent const &amp;object)=default</td><td class="entry"><a class="el" href="../../de/dec/a02524.html">castor3d::CpuFrameEvent</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../de/dec/a02524.html#aa5118537fba83fa70a961831602b01ab">CpuFrameEvent</a>(CpuFrameEvent &amp;&amp;object)=default</td><td class="entry"><a class="el" href="../../de/dec/a02524.html">castor3d::CpuFrameEvent</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="../../de/dec/a02524.html#aaf3cac5e82d244c2c6dbe23debd5d915">CpuFrameEvent</a>(EventType type)</td><td class="entry"><a class="el" href="../../de/dec/a02524.html">castor3d::CpuFrameEvent</a></td><td class="entry"><span class="mlabel">explicit</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../de/dec/a02524.html#a1838923995e8f180a7a627280580566e">getType</a>()</td><td class="entry"><a class="el" href="../../de/dec/a02524.html">castor3d::CpuFrameEvent</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="../../de/dec/a02524.html#a524ea078d871f55861b6bf095da318a0">m_stackTrace</a></td><td class="entry"><a class="el" href="../../de/dec/a02524.html">castor3d::CpuFrameEvent</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../de/dec/a02524.html#a5a5e26283b8543afb6d89443498c3ece">m_type</a></td><td class="entry"><a class="el" href="../../de/dec/a02524.html">castor3d::CpuFrameEvent</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr><td class="entry"><a class="el" href="../../de/dec/a02524.html#a93dc90e257b2baa38767bab42d92713f">operator=</a>(CpuFrameEvent const &amp;object)=default</td><td class="entry"><a class="el" href="../../de/dec/a02524.html">castor3d::CpuFrameEvent</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../de/dec/a02524.html#a175874ffb8e6c175da89443e3ab48d83">operator=</a>(CpuFrameEvent &amp;&amp;object)=default</td><td class="entry"><a class="el" href="../../de/dec/a02524.html">castor3d::CpuFrameEvent</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="../../de/dec/a02524.html#a4e9e9aceb04443692aa5c494293fdae2">~CpuFrameEvent</a>()=default</td><td class="entry"><a class="el" href="../../de/dec/a02524.html">castor3d::CpuFrameEvent</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
 </table></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 13:38:26 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Feb 18 2021 01:09:11 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

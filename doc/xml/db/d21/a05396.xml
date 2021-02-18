@@ -1,0 +1,162 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="db/d21/a05396" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::OutputComponents</compoundname>
+    <includes local="no">GlslOutputComponents.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="db/d21/a05396_1a052a635035966a4aa49e711b7146ebb0" prot="public" static="no" mutable="no">
+        <type>sdw::InOutVec3</type>
+        <definition>sdw::InOutVec3 castor3d::shader::OutputComponents::m_diffuse</definition>
+        <argsstring></argsstring>
+        <name>m_diffuse</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslOutputComponents.hpp" line="30" column="1" bodyfile="Shader/Shaders/GlslOutputComponents.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d21/a05396_1aa4284b72c519ff3cfe28838f95555d32" prot="public" static="no" mutable="no">
+        <type>sdw::InOutVec3</type>
+        <definition>sdw::InOutVec3 castor3d::shader::OutputComponents::m_specular</definition>
+        <argsstring></argsstring>
+        <name>m_specular</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslOutputComponents.hpp" line="31" column="1" bodyfile="Shader/Shaders/GlslOutputComponents.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="db/d21/a05396_1a90742d3c47b9acf0bc2ce854ea53c677" prot="private" static="no" mutable="no">
+        <type>ast::expr::ExprPtr</type>
+        <definition>ast::expr::ExprPtr castor3d::shader::OutputComponents::m_expr</definition>
+        <argsstring></argsstring>
+        <name>m_expr</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslOutputComponents.hpp" line="34" column="1" bodyfile="Shader/Shaders/GlslOutputComponents.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/d21/a05396_1abdc4c22cd0cdf7d5640f1421f700c839" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::OutputComponents::OutputComponents</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>OutputComponents</name>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslOutputComponents.hpp" line="17" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d21/a05396_1a0c677bdf03fdb8c726117ec79cc7c305" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::OutputComponents::OutputComponents</definition>
+        <argsstring>(sdw::InOutVec3 const &amp;diffuse, sdw::InOutVec3 const &amp;specular)</argsstring>
+        <name>OutputComponents</name>
+        <param>
+          <type>sdw::InOutVec3 const &amp;</type>
+          <declname>diffuse</declname>
+        </param>
+        <param>
+          <type>sdw::InOutVec3 const &amp;</type>
+          <declname>specular</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslOutputComponents.hpp" line="18" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d21/a05396_1a4b9de540b3d9ff61c5454c6ce922dc6c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::expr::Expr *</type>
+        <definition>C3D_API ast::expr::Expr* castor3d::shader::OutputComponents::getExpr</definition>
+        <argsstring>() const</argsstring>
+        <name>getExpr</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslOutputComponents.hpp" line="21" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d21/a05396_1a354d58426d5ba1abd27964f5a5aeb560" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::ShaderWriter *</type>
+        <definition>C3D_API sdw::ShaderWriter* castor3d::shader::OutputComponents::getWriter</definition>
+        <argsstring>() const</argsstring>
+        <name>getWriter</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslOutputComponents.hpp" line="22" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d21/a05396_1a34792b7f5a9ece038745e91a09a750a0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::OutputComponents::setVar</definition>
+        <argsstring>(ast::var::VariableList::const_iterator &amp;var)</argsstring>
+        <name>setVar</name>
+        <param>
+          <type>ast::var::VariableList::const_iterator &amp;</type>
+          <declname>var</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslOutputComponents.hpp" line="23" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d21/a05396_1aacc80ec09e21fe588d551e5810b5fed5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::shader::OutputComponents::isEnabled</definition>
+        <argsstring>() const</argsstring>
+        <name>isEnabled</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslOutputComponents.hpp" line="25" column="1" bodyfile="Shader/Shaders/GlslOutputComponents.hpp" bodystart="25" bodyend="28"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Shaders/GlslOutputComponents.hpp" line="16" column="1" bodyfile="Shader/Shaders/GlslOutputComponents.hpp" bodystart="15" bodyend="35"/>
+    <listofallmembers>
+      <member refid="db/d21/a05396_1a4b9de540b3d9ff61c5454c6ce922dc6c" prot="public" virt="non-virtual"><scope>castor3d::shader::OutputComponents</scope><name>getExpr</name></member>
+      <member refid="db/d21/a05396_1a354d58426d5ba1abd27964f5a5aeb560" prot="public" virt="non-virtual"><scope>castor3d::shader::OutputComponents</scope><name>getWriter</name></member>
+      <member refid="db/d21/a05396_1aacc80ec09e21fe588d551e5810b5fed5" prot="public" virt="non-virtual"><scope>castor3d::shader::OutputComponents</scope><name>isEnabled</name></member>
+      <member refid="db/d21/a05396_1a052a635035966a4aa49e711b7146ebb0" prot="public" virt="non-virtual"><scope>castor3d::shader::OutputComponents</scope><name>m_diffuse</name></member>
+      <member refid="db/d21/a05396_1a90742d3c47b9acf0bc2ce854ea53c677" prot="private" virt="non-virtual"><scope>castor3d::shader::OutputComponents</scope><name>m_expr</name></member>
+      <member refid="db/d21/a05396_1aa4284b72c519ff3cfe28838f95555d32" prot="public" virt="non-virtual"><scope>castor3d::shader::OutputComponents</scope><name>m_specular</name></member>
+      <member refid="db/d21/a05396_1abdc4c22cd0cdf7d5640f1421f700c839" prot="public" virt="non-virtual"><scope>castor3d::shader::OutputComponents</scope><name>OutputComponents</name></member>
+      <member refid="db/d21/a05396_1a0c677bdf03fdb8c726117ec79cc7c305" prot="public" virt="non-virtual"><scope>castor3d::shader::OutputComponents</scope><name>OutputComponents</name></member>
+      <member refid="db/d21/a05396_1a34792b7f5a9ece038745e91a09a750a0" prot="public" virt="non-virtual"><scope>castor3d::shader::OutputComponents</scope><name>setVar</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

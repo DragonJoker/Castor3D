@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="db/d37/a05748" kind="class" language="C++" prot="public">
+    <compoundname>castor::TextWriter&lt; castor3d::Scene &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::Scene &gt;</basecompoundref>
+    <includes local="no">TextScene.hpp</includes>
+    <innerclass refid="da/d85/a05752" prot="public">castor::TextWriter&lt; castor3d::Scene &gt;::Options</innerclass>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="db/d37/a05748_1a92eb7491165fe775b12c92637e76b5ec" prot="private" static="no" mutable="no">
+        <type>Options</type>
+        <definition>Options castor::TextWriter&lt; castor3d::Scene &gt;::m_options</definition>
+        <argsstring></argsstring>
+        <name>m_options</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextScene.hpp" line="34" column="1" bodyfile="Text/TextScene.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/d37/a05748_1ada69043e955a3c52667616f6e18dd09a" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor::TextWriter&lt; castor3d::Scene &gt;::TextWriter</definition>
+        <argsstring>(String const &amp;tabs, Options options={})</argsstring>
+        <name>TextWriter</name>
+        <param>
+          <type>String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <param>
+          <type>Options</type>
+          <declname>options</declname>
+          <defval>{}</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextScene.hpp" line="28" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d37/a05748_1ac8010d9349d1bbb14e595c7007fc1181" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::TextWriter&lt; castor3d::Scene &gt;::operator()</definition>
+        <argsstring>(castor3d::Scene const &amp;scene, TextFile &amp;file) override</argsstring>
+        <name>operator()</name>
+        <param>
+          <type><ref refid="d5/d76/a05244" kindref="compound">castor3d::Scene</ref> const &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type>TextFile &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextScene.hpp" line="30" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="5410">
+        <label>TextWriterT&lt; castor3d::Scene &gt;</label>
+      </node>
+      <node id="5409">
+        <label>castor::TextWriter&lt; castor3d::Scene &gt;</label>
+        <link refid="db/d37/a05748"/>
+        <childnode refid="5410" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="5412">
+        <label>TextWriterT&lt; castor3d::Scene &gt;</label>
+      </node>
+      <node id="5411">
+        <label>castor::TextWriter&lt; castor3d::Scene &gt;</label>
+        <link refid="db/d37/a05748"/>
+        <childnode refid="5412" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Text/TextScene.hpp" line="16" column="1" bodyfile="Text/TextScene.hpp" bodystart="14" bodyend="35"/>
+    <listofallmembers>
+      <member refid="db/d37/a05748_1a92eb7491165fe775b12c92637e76b5ec" prot="private" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Scene &gt;</scope><name>m_options</name></member>
+      <member refid="db/d37/a05748_1ac8010d9349d1bbb14e595c7007fc1181" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Scene &gt;</scope><name>operator()</name></member>
+      <member refid="db/d37/a05748_1ada69043e955a3c52667616f6e18dd09a" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Scene &gt;</scope><name>TextWriter</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

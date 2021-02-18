@@ -1,4 +1,5 @@
-<map id="castor3d::Torus" name="castor3d::Torus">
-<area shape="rect" id="node1" title="The torus representation." alt="" coords="34,80,146,107"/>
-<area shape="rect" id="node2" href="$d5/ddd/a02184.html" title="Mesh category is used to create a mesh&#39;s vertices, it is created by MeshFactory." alt="" coords="5,5,175,32"/>
+<map id="castor3d::BinaryParserBase&lt; TParsed &gt;" name="castor3d::BinaryParserBase&lt; TParsed &gt;">
+<area shape="rect" id="node1" title="Binary data chunk reader base class." alt="" coords="71,95,257,136"/>
+<area shape="rect" id="node2" href="$d8/dd8/a02108.html" title=" " alt="" coords="5,5,160,32"/>
+<area shape="rect" id="node3" href="$de/de6/a03848.html" title=" " alt="" coords="185,5,309,32"/>
 </map>

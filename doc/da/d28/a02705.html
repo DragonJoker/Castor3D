@@ -10,6 +10,7 @@
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
 <link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+<link href="../../Castor3D.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -17,10 +18,12 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Castor3D
-   &#160;<span id="projectnumber">..</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
+   <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
  </tr>
  </tbody>
@@ -39,74 +42,22 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../d0/d85/a00976.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d7/d73/a02708.html">RenderSystem</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/d1e/a01479.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d7/d73/a02708.html">VkTypeTraits&lt; VkDeviceCreateInfo &gt;</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="headertitle">
-<div class="title">castor3d::RenderSystem Member List</div>  </div>
+<div class="title">castor3d::VkTypeTraits&lt; VkDeviceCreateInfo &gt; Member List</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>This is the complete list of members for <a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a>, including all inherited members.</p>
+<p>This is the complete list of members for <a class="el" href="../../d7/d73/a02708.html">castor3d::VkTypeTraits&lt; VkDeviceCreateInfo &gt;</a>, including all inherited members.</p>
 <table class="directory">
-  <tr class="even"><td class="entry"><a class="el" href="../../d7/d73/a02708.html#a5b394993713753f31e5a4e5cbcc1d42b">cleanup</a>()</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d7/d73/a02708.html#a594ba8fb805d78f9f0a0b156d8073b47">cleanupPool</a>()</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d7/d73/a02708.html#a30d9714e2383fd64229761e9ecf10b75">createBackBuffers</a>()=0</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d7/d73/a02708.html#a3d5fd8386c94887e5f81e2b7abc1a744">createComputePipeline</a>(ShaderProgram &amp;program)=0</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d7/d73/a02708.html#ac587c21516e721ce90581be8aa9c4a36">createContext</a>()=0</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d7/d73/a02708.html#aef60bcd7373c3b575f3d0b0a895ac4fa">createFrameBuffer</a>()=0</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d7/d73/a02708.html#ae9a7ae6e4530210d8ed13d6aaa39f18c">createGeometryBuffers</a>(Topology topology, ShaderProgram const &amp;program)=0</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d7/d73/a02708.html#a1338dd3baccb336f95fbe19cf604e1b5">createGlslWriter</a>()</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d7/d73/a02708.html#a1c0eef906d15e8c01d02c565b53dc9cb">createQuery</a>(QueryType type)=0</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d7/d73/a02708.html#ac859cefe1bf1250752f0d409795b67eb">createRenderPipeline</a>(DepthStencilState &amp;&amp;dsState, RasteriserState &amp;&amp;rsState, BlendState &amp;&amp;bdState, MultisampleState &amp;&amp;msState, ShaderProgram &amp;program, PipelineFlags const &amp;flags)=0</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d7/d73/a02708.html#a1dc1c69e05b24dbb58d0760e781b82fe">createSampler</a>(castor::String const &amp;name)=0</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d7/d73/a02708.html#a95bd74d56cdf41e86df94f3c3abaf45b">createShaderProgram</a>()=0</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d7/d73/a02708.html#a750bf388938ca5fa7a5f86e3c64549c5">createTexture</a>(TextureType type, AccessTypes const &amp;cpuAccess, AccessTypes const &amp;gpuAccess)=0</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d7/d73/a02708.html#adcd130c78c02777e1b1c1815120fd543">createTexture</a>(TextureType type, AccessTypes const &amp;cpuAccess, AccessTypes const &amp;gpuAccess, uint32_t mipmapCount)=0</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d7/d73/a02708.html#a148da6fa3167ae580fb3ee0c129d228e">createTexture</a>(TextureType type, AccessTypes const &amp;cpuAccess, AccessTypes const &amp;gpuAccess, castor::PixelFormat format, castor::Size const &amp;size)=0</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d7/d73/a02708.html#ae796e98c79109f5e8495eb3478b780e3">createTexture</a>(TextureType type, AccessTypes const &amp;cpuAccess, AccessTypes const &amp;gpuAccess, castor::PixelFormat format, castor::Point3ui const &amp;size)=0</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d7/d73/a02708.html#a91b46c8a53592cc714578eb8797e2d4f">createTextureStorage</a>(TextureStorageType type, TextureLayout &amp;layout, AccessTypes const &amp;cpuAccess, AccessTypes const &amp;gpuAccess)=0</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d7/d73/a02708.html#a929f5dfeb0c5d7eb907a2a8f130828aa">createTransformFeedback</a>(BufferDeclaration const &amp;computed, Topology topology, ShaderProgram &amp;program)=0</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d7/d73/a02708.html#a220f32a079234e755b85b713087a8c29">createUniformBufferBinding</a>(UniformBuffer &amp;ubo, ShaderProgram const &amp;program)=0</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d7/d73/a02708.html#afae66cbbaaca6bbe416fda438cf99be0">createViewport</a>(Viewport &amp;viewport)=0</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d7/d73/a02708.html#a14883eb9a821233df75a2ad38ac0ac94">doCleanup</a>()=0</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d7/d73/a02708.html#ac3f71ad5d01675f139f8687d20cce818">doCreateBuffer</a>(BufferType type)=0</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d7/d73/a02708.html#a70275fa897bdd202d02a5c684b911703">doInitialise</a>()=0</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d7/d73/a02708.html#acab91889078268834d557edb445252aa">getBuffer</a>(BufferType type, uint32_t size, BufferAccessType accessType, BufferAccessNature accessNature)</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d7/d73/a02708.html#a68542a54f5a76d238085e5006c9f2208">getCurrentContext</a>()</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d7/d73/a02708.html#af25791166a2d708611e7703253eb080f">getGpuInformations</a>() const</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d7/d73/a02708.html#a02139b6884a311ab71a960071a338b99">getGpuTime</a>() const</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d7/d73/a02708.html#aece8bc36d11c3eb8069dad50c7483942">getMainContext</a>()</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d7/d73/a02708.html#a523677b826e949296b67f8ac6d5bc126">getOverlayRenderer</a>()</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d7/d73/a02708.html#ad63c56caf1327646659d4d05c55b5979">getRendererType</a>() const</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d7/d73/a02708.html#a0773f491b908315fa1e29229138e9793">getTopScene</a>()</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d7/d73/a02708.html#a01ce6a31562ddfd446c446f4a24ed188">GpuBufferPool</a> class</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">friend</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d7/d73/a02708.html#a736c0bc84d7930f9daa57ab7a0789d70">incGpuTime</a>(std::chrono::duration&lt; Rep, Period &gt; const &amp;time)</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d7/d73/a02708.html#a45eec6893e2734ce8a4298161730067f">initialise</a>(GpuInformations &amp;&amp;informations)</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d7/d73/a02708.html#ae0c4eeb340d0cd081956cf6d88082894">isInitialised</a>() const</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d7/d73/a02708.html#a11b123c595e68d6d4b03d637b5f59e6c">m_currentContexts</a></td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d7/d73/a02708.html#af94d0d86b0f3c2336814ebdbb2c6f209">m_gpuBufferPool</a></td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d7/d73/a02708.html#a969be3eec46c42821f5977eb1955dc6c">m_gpuInformations</a></td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d7/d73/a02708.html#aec22d65cc80d989a7bd1c379de6b7b55">m_gpuTime</a></td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d7/d73/a02708.html#a0a25e11c82368d5890c0253cb9caeaff">m_initialised</a></td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d7/d73/a02708.html#a60aa3a84199669be898e99ebe83e83e3">m_mainContext</a></td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d7/d73/a02708.html#a33d46472f6c6d00fd041d50b1001dd82">m_mutex</a></td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d7/d73/a02708.html#a496de56be436a36b9e67db6510adbdca">m_name</a></td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d7/d73/a02708.html#af760bc64a06d5a592c18e659adfb7f82">m_overlayRenderer</a></td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d7/d73/a02708.html#afc1f854889c1a4f9f5c7664fb5288a5c">m_stackScenes</a></td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d7/d73/a02708.html#af58808bc228c8b9bed5d51ec36b4e5de">popScene</a>()</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d7/d73/a02708.html#a187324ab24b69e5d94ca9dae8f20ab0e">pushScene</a>(Scene *scene)</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d7/d73/a02708.html#a0888feecaa864f4ff76cafff092c67df">putBuffer</a>(BufferType type, BufferAccessType accessType, BufferAccessNature accessNature, GpuBufferOffset const &amp;bufferOffset)</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d7/d73/a02708.html#a43b91acbf274b7f18d412bbf0b6053c8">RenderSystem</a>(Engine &amp;engine, castor::String const &amp;name)</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d7/d73/a02708.html#ad903e2bdc2689b85bba48fa71874b673">resetGpuTime</a>()</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d7/d73/a02708.html#a385da122a006711729ccdc4cd1737048">setCurrentContext</a>(Context *context)</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d7/d73/a02708.html#ac6f7b40af84e3ad701c53d8d68bfdad7">setMainContext</a>(ContextSPtr context)</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d7/d73/a02708.html#a7664300f719e49ca9d8bbcdf6829d718">~RenderSystem</a>()</td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::RenderSystem</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d7/d73/a02708.html#a378c1d842833a60e89510c92342b0501">value</a></td><td class="entry"><a class="el" href="../../d7/d73/a02708.html">castor3d::VkTypeTraits&lt; VkDeviceCreateInfo &gt;</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
 </table></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 13:38:42 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Feb 18 2021 01:09:21 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

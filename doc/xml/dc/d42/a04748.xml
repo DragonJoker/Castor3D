@@ -1,0 +1,273 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dc/d42/a04748" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::LightPassShadow</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">LightPassShadowTraits::light_pass_type&lt; LtType &gt;</basecompoundref>
+    <derivedcompoundref refid="db/d9e/a04892" prot="public" virt="non-virtual">castor3d::LightPassReflectiveShadow&lt; LtType &gt;</derivedcompoundref>
+    <derivedcompoundref refid="d1/dda/a04860" prot="public" virt="non-virtual">castor3d::LightPassVolumePropagationShadowT&lt; LtType &gt;</derivedcompoundref>
+    <includes local="no">LightPassShadow.hpp</includes>
+    <innerclass refid="da/d11/a04792" prot="private">castor3d::LightPassShadow::Program</innerclass>
+    <templateparamlist>
+      <param>
+        <type><ref refid="da/d1e/a01479_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+        <declname>LtType</declname>
+        <defname>LtType</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="dc/d42/a04748_1adf6cba30b42c64766ca276e181e42bac" prot="public" static="no">
+        <type><ref refid="d8/d0e/a04744" kindref="compound">LightPassShadowTraits</ref>&lt; LtType &gt;</type>
+        <definition>using castor3d::LightPassShadow&lt; LtType &gt;::my_traits =  LightPassShadowTraits&lt; LtType &gt;</definition>
+        <argsstring></argsstring>
+        <name>my_traits</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" line="92" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dc/d42/a04748_1a9bd9019f56311b5ffa7701527da559ac" prot="public" static="no">
+        <type>typename my_traits::light_type</type>
+        <definition>using castor3d::LightPassShadow&lt; LtType &gt;::my_light_type =  typename my_traits::light_type</definition>
+        <argsstring></argsstring>
+        <name>my_light_type</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" line="93" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" bodystart="93" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dc/d42/a04748_1a7c5d175cc243c23a78574af57244fba2" prot="public" static="no">
+        <type>typename my_traits::light_pass_type</type>
+        <definition>using castor3d::LightPassShadow&lt; LtType &gt;::my_pass_type =  typename my_traits::light_pass_type</definition>
+        <argsstring></argsstring>
+        <name>my_pass_type</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" line="94" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dc/d42/a04748_1a22ca9dcec229a6fb1bb13fd52a1373cb" prot="public" static="no">
+        <type>typename my_traits::shadow_pass_type</type>
+        <definition>using castor3d::LightPassShadow&lt; LtType &gt;::my_shadow_matype =  typename my_traits::shadow_pass_type</definition>
+        <argsstring></argsstring>
+        <name>my_shadow_matype</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" line="95" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" bodystart="95" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/d42/a04748_1afbf1abefd9c154581a1f308df55dfcdc" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::LightPassShadow&lt; LtType &gt;::LightPassShadow</definition>
+        <argsstring>(RenderDevice const &amp;device, castor::String const &amp;suffix, LightPassConfig const &amp;lpConfig, VoxelizerUbo const *vctConfig=nullptr)</argsstring>
+        <name>LightPassShadow</name>
+        <param>
+          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>suffix</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d0e/a04752" kindref="compound">LightPassConfig</ref> const &amp;</type>
+          <declname>lpConfig</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/da7/a05632" kindref="compound">VoxelizerUbo</ref> const *</type>
+          <declname>vctConfig</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">suffix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass name&apos;s suffix. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lpConfig</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The light pass configuration. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">vctConfig</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The voxelizer UBO. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" line="165" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" bodystart="165" bodyend="178"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d42/a04748_1ae320654976bc3926d02d9ed2b8bb9985" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::LightPassShadow&lt; LtType &gt;::LightPassShadow</definition>
+        <argsstring>(RenderDevice const &amp;device, LightPassConfig const &amp;lpConfig, VoxelizerUbo const *vctConfig=nullptr)</argsstring>
+        <name>LightPassShadow</name>
+        <param>
+          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d0e/a04752" kindref="compound">LightPassConfig</ref> const &amp;</type>
+          <declname>lpConfig</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/da7/a05632" kindref="compound">VoxelizerUbo</ref> const *</type>
+          <declname>vctConfig</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lpConfig</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The light pass configuration. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">vctConfig</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The voxelizer UBO. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" line="191" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" bodystart="191" bodyend="199"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="dc/d42/a04748_1a9e825ffbf45cea4a802bce65b2c49b8d" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d8/dfa/a04756_1a07c410d7f0d4b6b0a2d9f7c73d459d23" kindref="member">LightPass::ProgramPtr</ref></type>
+        <definition>LightPass::ProgramPtr castor3d::LightPassShadow&lt; LtType &gt;::doCreateProgram</definition>
+        <argsstring>() override</argsstring>
+        <name>doCreateProgram</name>
+        <briefdescription>
+<para>Creates a light pass program. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The created program. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" line="205" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" bodystart="205" bodyend="215"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Base class for all light passes with shadow. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1698">
+        <label>castor3d::LightPassShadow&lt; LightType::eDirectional &gt;</label>
+        <link refid="dc/d42/a04748"/>
+        <childnode refid="1694" relation="template-instance">
+          <edgelabel>&lt; LightType::eDirectional &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1696">
+        <label>castor3d::LightPassReflectiveShadow&lt; LtType &gt;</label>
+        <link refid="db/d9e/a04892"/>
+        <childnode refid="1694" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1697">
+        <label>castor3d::LightPassVolumePropagationShadowT&lt; LtType &gt;</label>
+        <link refid="d1/dda/a04860"/>
+        <childnode refid="1694" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1694">
+        <label>castor3d::LightPassShadow&lt; LtType &gt;</label>
+        <link refid="dc/d42/a04748"/>
+        <childnode refid="1695" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1695">
+        <label>LightPassShadowTraits::light_pass_type&lt; LtType &gt;</label>
+      </node>
+      <node id="1699">
+        <label>castor3d::LightPassLayeredVolumePropagationShadowT&lt; LightType::eDirectional &gt;</label>
+        <link refid="db/dde/a04856"/>
+        <childnode refid="1698" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1700">
+        <label>castor3d::LightPassShadow&lt; LtType &gt;</label>
+        <link refid="dc/d42/a04748"/>
+        <childnode refid="1701" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1701">
+        <label>LightPassShadowTraits::light_pass_type&lt; LtType &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Technique/Opaque/Lighting/LightingModule.hpp" line="101" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightingModule.hpp" bodystart="101" bodyend="-1"/>
+    <listofallmembers>
+      <member refid="dc/d42/a04748_1a9e825ffbf45cea4a802bce65b2c49b8d" prot="protected" virt="non-virtual"><scope>castor3d::LightPassShadow</scope><name>doCreateProgram</name></member>
+      <member refid="dc/d42/a04748_1afbf1abefd9c154581a1f308df55dfcdc" prot="public" virt="non-virtual"><scope>castor3d::LightPassShadow</scope><name>LightPassShadow</name></member>
+      <member refid="dc/d42/a04748_1ae320654976bc3926d02d9ed2b8bb9985" prot="public" virt="non-virtual"><scope>castor3d::LightPassShadow</scope><name>LightPassShadow</name></member>
+      <member refid="dc/d42/a04748_1a9bd9019f56311b5ffa7701527da559ac" prot="public" virt="non-virtual"><scope>castor3d::LightPassShadow</scope><name>my_light_type</name></member>
+      <member refid="dc/d42/a04748_1a7c5d175cc243c23a78574af57244fba2" prot="public" virt="non-virtual"><scope>castor3d::LightPassShadow</scope><name>my_pass_type</name></member>
+      <member refid="dc/d42/a04748_1a22ca9dcec229a6fb1bb13fd52a1373cb" prot="public" virt="non-virtual"><scope>castor3d::LightPassShadow</scope><name>my_shadow_matype</name></member>
+      <member refid="dc/d42/a04748_1adf6cba30b42c64766ca276e181e42bac" prot="public" virt="non-virtual"><scope>castor3d::LightPassShadow</scope><name>my_traits</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,332 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="da/d60/a07301" kind="page">
+    <compoundname>build</compoundname>
+    <title>Building Castor3D</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Castor3D uses CMake to build project files.<linebreak/>
+ You just need to launch CMake to build your favorite project file.<linebreak/>
+ Documentation for CastorUtils and Castor3D can be generated using Doxygen.<linebreak/>
+</para>
+<para>Tested compilers are: <itemizedlist>
+<listitem>
+<para>Visual Studio 2019 </para>
+</listitem>
+<listitem>
+<para>gcc 8.0 </para>
+</listitem>
+</itemizedlist>
+<linebreak/>
+ <linebreak/>
+ </para>
+<sect1 id="da/d60/a07301_1projects">
+<title>Projects</title>
+<sect2 id="da/d60/a07301_1projects_main">
+<title>Main Projects</title>
+<para><itemizedlist>
+<listitem>
+<para>CastorUtils: Depends on zlib. </para>
+</listitem>
+<listitem>
+<para>Castor3D: Based on CastorUtils, Ahes and ShaderWriter. </para>
+</listitem>
+<listitem>
+<para>GuiCommon: Depends on Castor3D and wxWidgets (from 2.9.5, currently 3.1). </para>
+</listitem>
+<listitem>
+<para>CastorViewer: Depends on GuiCommon and wxWidgets. </para>
+</listitem>
+</itemizedlist>
+</para>
+</sect2>
+<sect2 id="da/d60/a07301_1projects_plugins">
+<title>Plugins</title>
+<sect3 id="da/d60/a07301_1plugins_importers">
+<title>Importers</title>
+<para><itemizedlist>
+<listitem>
+<para>ASSIMP: Depends on Castor3D and Assimp. </para>
+</listitem>
+<listitem>
+<para>PLY: Depends on Castor3D. </para>
+</listitem>
+<listitem>
+<para>OBJ: Depends on Castor3D. </para>
+</listitem>
+</itemizedlist>
+</para>
+</sect3>
+<sect3 id="da/d60/a07301_1plugins_dividers">
+<title>Dividers</title>
+<para><itemizedlist>
+<listitem>
+<para>Loop: Depends on Castor3D. </para>
+</listitem>
+<listitem>
+<para>Phong: Depends on Castor3D. </para>
+</listitem>
+<listitem>
+<para>PN-Triangles: Depends on Castor3D. </para>
+</listitem>
+</itemizedlist>
+</para>
+</sect3>
+<sect3 id="da/d60/a07301_1plugins_postfx">
+<title>PostEffects</title>
+<para><itemizedlist>
+<listitem>
+<para>Bloom: Depends on Castor3D. </para>
+</listitem>
+<listitem>
+<para>FilmGrain: Depends on Castor3D. </para>
+</listitem>
+<listitem>
+<para>GrayScale: Depends on Castor3D. </para>
+</listitem>
+<listitem>
+<para>LightStreaks: Depends on Castor3D. </para>
+</listitem>
+<listitem>
+<para>FXAA: Depends on Castor3D. </para>
+</listitem>
+<listitem>
+<para>SMAA: Depends on Castor3D. </para>
+</listitem>
+<listitem>
+<para>Linear Motion Blur: Depends on Castor3D. </para>
+</listitem>
+</itemizedlist>
+</para>
+</sect3>
+<sect3 id="da/d60/a07301_1plugins_generators">
+<title>Generators</title>
+<para><itemizedlist>
+<listitem>
+<para>DiamondSquareTerrain: Depends on Castor3D. </para>
+</listitem>
+</itemizedlist>
+</para>
+</sect3>
+<sect3 id="da/d60/a07301_1plugins_generic">
+<title>Generic</title>
+<para><itemizedlist>
+<listitem>
+<para>CastorGUI: Depends on Castor3D. </para>
+</listitem>
+</itemizedlist>
+</para>
+</sect3>
+<sect3 id="da/d60/a07301_1plugins_tonemappings">
+<title>ToneMappings</title>
+<para><itemizedlist>
+<listitem>
+<para>LinearToneMapping: Depends on Castor3D. </para>
+</listitem>
+<listitem>
+<para>HaarmPieterDuikerToneMapping: Depends on Castor3D. </para>
+</listitem>
+<listitem>
+<para>HejlBurgessDawsonToneMapping: Depends on Castor3D. </para>
+</listitem>
+<listitem>
+<para>ReinhardToneMapping: Depends on Castor3D. </para>
+</listitem>
+<listitem>
+<para>Uncharted2ToneMapping: Depends on Castor3D. </para>
+</listitem>
+</itemizedlist>
+</para>
+</sect3>
+</sect2>
+<sect2 id="da/d60/a07301_1projects_test">
+<title>Test projects</title>
+<para><itemizedlist>
+<listitem>
+<para>CastorTest: Base library for testing, depends on CastorUtils. </para>
+</listitem>
+<listitem>
+<para>CastorUtilsTest: Allows you to run unit and performance tests for CastorUtils, depends on CastorUtils and CastorTest. </para>
+</listitem>
+<listitem>
+<para>Castor3DTest: Allows you to run unit tests for Castor3D, depends on Castor3D and CastorTest. </para>
+</listitem>
+</itemizedlist>
+</para>
+</sect2>
+<sect2 id="da/d60/a07301_1projects_tools">
+<title>Tools</title>
+<para><itemizedlist>
+<listitem>
+<para>Aria: Depends on CastorUtils, Boost, sqlite and wxWidgets. </para>
+</listitem>
+<listitem>
+<para>CastorMeshConverter: Depends on Castor3D and wxWidgets. </para>
+</listitem>
+<listitem>
+<para>CastorMeshUpgrader: Depends on Castor3D and wxWidgets. </para>
+</listitem>
+<listitem>
+<para>CastorTestLauncher: Depends on Castor3D. </para>
+</listitem>
+<listitem>
+<para>DiffImage: Depends on CastorUtils. </para>
+</listitem>
+<listitem>
+<para>ImgConverter: Depends on wxWidgets. </para>
+</listitem>
+</itemizedlist>
+</para>
+</sect2>
+</sect1>
+<sect1 id="da/d60/a07301_1options">
+<title>Options</title>
+<para>On GNU/Linux the default install directory is in /usr/local.<linebreak/>
+ You can change this directory by changing the CMAKE_INSTALL_PREFIX value.<linebreak/>
+ The sample, tool and test applications are installed in install_dir/bin/<linebreak/>
+ The main libraries (CastorUtils and Castor3D) are installed in install_dir/lib/ on GNU/Linux, and in install_dir/bin/ on Windows.<linebreak/>
+ The plug-ins are installed in install_dir/lib/Castor3D/<linebreak/>
+ The build is configurable through CMake using the following options: <itemizedlist>
+<listitem>
+<para><bold>PROJECTS_BINARIES_OUTPUT_DIR</bold><linebreak/>
+ Used to specify the root directory for compiled binaries.<linebreak/>
+ Inside this folder, the bin, lib, and share directories will be created, and binaries will be put in the appropriate folders.<linebreak/>
+ Some files will also be copied in share directory, that are used by the projects.<linebreak/>
+ On Windows, the external DLLs will be copied in bin folder, if they are found.<linebreak/>
+  </para>
+</listitem>
+<listitem>
+<para><bold>PROJECTS_USE_PRECOMPILED_HEADERS</bold><linebreak/>
+ Used to enable/disable the use of Precompiled Headers for the compilation.<linebreak/>
+  </para>
+</listitem>
+<listitem>
+<para><bold>PROJECTS_USE_PRETTY_PRINTING</bold><linebreak/>
+ If it is enabled, and if A-Style is found, new test projects will be<linebreak/>
+ created, allowing the run of A-Style over each project&apos;s source file.<linebreak/>
+  </para>
+</listitem>
+<listitem>
+<para><bold>CASTOR_BUILD_CASTOR3D</bold><linebreak/>
+ This special option allows you to disable build of Castor3D, and every<linebreak/>
+ other project depending on it, resulting in the build of CastorUtils and<linebreak/>
+ CastorUtilsTest only.<linebreak/>
+  </para>
+</listitem>
+<listitem>
+<para><bold>CASTOR_BUILD_PLUGINS</bold><linebreak/>
+ Another special option allowing you to disable the build of plug-ins.<linebreak/>
+  </para>
+</listitem>
+<listitem>
+<para><bold>CASTOR_BUILDGRP_DIVIDER</bold><linebreak/>
+ Enables the build of Divider plug-ins.<linebreak/>
+  </para>
+</listitem>
+<listitem>
+<para><bold>CASTOR_BUILDGRP_GENERATOR</bold><linebreak/>
+ Enables the build of Generator plug-ins.<linebreak/>
+  </para>
+</listitem>
+<listitem>
+<para><bold>CASTOR_BUILDGRP_GENERIC</bold><linebreak/>
+ Enables the build of Generic plug-ins.<linebreak/>
+  </para>
+</listitem>
+<listitem>
+<para><bold>CASTOR_BUILDGRP_IMPORTER</bold><linebreak/>
+ Enables the build of Importer plug-ins.<linebreak/>
+  </para>
+</listitem>
+<listitem>
+<para><bold>CASTOR_BUILDGRP_INTEROP</bold><linebreak/>
+ Enables the build of Bindings.<linebreak/>
+  </para>
+</listitem>
+<listitem>
+<para><bold>CASTOR_BUILDGRP_PARTICLES</bold><linebreak/>
+ Enables the build of Particles plug-ins.<linebreak/>
+  </para>
+</listitem>
+<listitem>
+<para><bold>CASTOR_BUILDGRP_POSTFX</bold><linebreak/>
+ Enables the build of PostEffect plug-ins.<linebreak/>
+  </para>
+</listitem>
+<listitem>
+<para><bold>CASTOR_BUILDGRP_SAMPLE</bold><linebreak/>
+ Enables the build of sample applications.<linebreak/>
+  </para>
+</listitem>
+<listitem>
+<para><bold>CASTOR_BUILDGRP_SETUP</bold><linebreak/>
+ Allows you to build setup projects.<linebreak/>
+  </para>
+</listitem>
+<listitem>
+<para><bold>CASTOR_BUILDGRP_TEST</bold><linebreak/>
+ Allows you to build test applications.<linebreak/>
+  </para>
+</listitem>
+<listitem>
+<para><bold>CASTOR_BUILDGRP_TONEMAPS</bold><linebreak/>
+ Allows you to build ToneMapping plug-ins (note that LinearToneMapping is always built).<linebreak/>
+  </para>
+</listitem>
+<listitem>
+<para><bold>CASTOR_BUILDGRP_TOOL</bold><linebreak/>
+ Enables the build of tools (applications and tests).<linebreak/>
+  </para>
+</listitem>
+<listitem>
+<para><bold>CASTOR_BUILD_DIVIDER_(NAME)</bold><linebreak/>
+ Enables the build of (NAME) divider plug-in.<linebreak/>
+  </para>
+</listitem>
+<listitem>
+<para><bold>CASTOR_BUILD_GENERATOR_(NAME)</bold><linebreak/>
+ Enables the build of (NAME) generator plug-in.<linebreak/>
+  </para>
+</listitem>
+<listitem>
+<para><bold>CASTOR_BUILD_GENERIC_(NAME)</bold><linebreak/>
+ Enables the build of (NAME) generic plug-in.<linebreak/>
+  </para>
+</listitem>
+<listitem>
+<para><bold>CASTOR_BUILD_IMPORTER_(NAME)</bold><linebreak/>
+ Enables the build of (NAME) importer plug-in.<linebreak/>
+  </para>
+</listitem>
+<listitem>
+<para><bold>CASTOR_BUILD_INTEROP_(NAME)</bold><linebreak/>
+ Enables the build of (NAME) binding.<linebreak/>
+  </para>
+</listitem>
+<listitem>
+<para><bold>CASTOR_BUILD_POSTFX_(NAME)</bold><linebreak/>
+ Enables the build of (NAME) post-effect plug-in.<linebreak/>
+  </para>
+</listitem>
+<listitem>
+<para><bold>CASTOR_BUILD_SAMPLE_(NAME)</bold><linebreak/>
+ Enables the build of (NAME) technique plug-in.<linebreak/>
+  </para>
+</listitem>
+<listitem>
+<para><bold>CASTOR_BUILD_TONEMAP_(NAME)</bold><linebreak/>
+ Enables the build of (NAME) tone mapping plug-in.<linebreak/>
+  </para>
+</listitem>
+<listitem>
+<para><bold>CASTOR_BUILD_TEST_(NAME)</bold><linebreak/>
+ Enables the build of (NAME) test application.<linebreak/>
+  </para>
+</listitem>
+</itemizedlist>
+</para>
+</sect1>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

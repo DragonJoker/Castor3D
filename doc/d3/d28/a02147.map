@@ -1,4 +1,29 @@
-<map id="castor3d::Torus" name="castor3d::Torus">
-<area shape="rect" id="node1" title="The torus representation." alt="" coords="34,80,146,107"/>
-<area shape="rect" id="node2" href="$d5/ddd/a02184.html" title="Mesh category is used to create a mesh&#39;s vertices, it is created by MeshFactory." alt="" coords="5,5,175,32"/>
+<map id="castor3d::BinaryParserBase&lt; TParsed &gt;" name="castor3d::BinaryParserBase&lt; TParsed &gt;">
+<area shape="rect" id="node1" title="Binary data chunk reader base class." alt="" coords="5,398,191,439"/>
+<area shape="rect" id="node2" href="$d2/d08/a02148.html" title=" " alt="" coords="436,6,651,47"/>
+<area shape="rect" id="node4" href="$d2/d08/a02148.html" title=" " alt="" coords="451,71,636,113"/>
+<area shape="rect" id="node6" href="$d2/d08/a02148.html" title=" " alt="" coords="451,137,636,178"/>
+<area shape="rect" id="node8" href="$d2/d08/a02148.html" title=" " alt="" coords="451,202,636,243"/>
+<area shape="rect" id="node10" href="$d2/d08/a02148.html" title=" " alt="" coords="451,267,636,309"/>
+<area shape="rect" id="node12" href="$d2/d08/a02148.html" title=" " alt="" coords="445,333,641,374"/>
+<area shape="rect" id="node14" href="$d2/d08/a02148.html" title=" " alt="" coords="451,398,636,439"/>
+<area shape="rect" id="node16" href="$d2/d08/a02148.html" title=" " alt="" coords="451,463,636,505"/>
+<area shape="rect" id="node18" href="$d2/d08/a02148.html" title=" " alt="" coords="451,529,636,570"/>
+<area shape="rect" id="node20" href="$d2/d08/a02148.html" title=" " alt="" coords="451,594,636,635"/>
+<area shape="rect" id="node22" href="$d2/d08/a02148.html" title=" " alt="" coords="451,659,636,701"/>
+<area shape="rect" id="node24" href="$d2/d08/a02148.html" title=" " alt="" coords="447,725,640,766"/>
+<area shape="rect" id="node26" href="$d2/d08/a02148.html" title=" " alt="" coords="451,790,636,831"/>
+<area shape="rect" id="node3" href="$d8/d5f/a02216.html" title="SkeletonAnimationKeyFrame binary loader." alt="" coords="700,6,915,47"/>
+<area shape="rect" id="node5" href="$de/dfd/a02228.html" title="MovingBone binary loader." alt="" coords="715,71,900,113"/>
+<area shape="rect" id="node7" href="$d4/de0/a02092.html" title="Animable binary loader." alt="" coords="730,137,885,178"/>
+<area shape="rect" id="node9" href="$df/d4a/a02204.html" title="MovingBone binary loader." alt="" coords="715,202,900,243"/>
+<area shape="rect" id="node11" href="$d7/d70/a02252.html" title="MovableObject loader." alt="" coords="730,267,885,309"/>
+<area shape="rect" id="node13" href="$dc/d29/a02144.html" title="MeshAnimationKeyFrame binary loader." alt="" coords="709,333,905,374"/>
+<area shape="rect" id="node15" href="$d6/d0c/a02080.html" title="Animation binary loader." alt="" coords="730,398,885,439"/>
+<area shape="rect" id="node17" href="$dc/da6/a02192.html" title="SkeletonAnimation binary loader." alt="" coords="730,463,885,505"/>
+<area shape="rect" id="node19" href="$dd/d07/a02132.html" title="MeshAnimation binary loader." alt="" coords="730,529,885,570"/>
+<area shape="rect" id="node21" href="$d8/d72/a02104.html" title="BonesComponent loader." alt="" coords="730,594,885,635"/>
+<area shape="rect" id="node23" href="$d3/d23/a02120.html" title="MovableObject loader." alt="" coords="730,659,885,701"/>
+<area shape="rect" id="node25" href="$dc/d35/a02240.html" title="SkeletonAnimationObject binary loader." alt="" coords="711,725,904,766"/>
+<area shape="rect" id="node27" href="$dd/d09/a02180.html" title="Animable binary loader." alt="" coords="730,790,885,831"/>
 </map>

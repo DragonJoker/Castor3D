@@ -1,0 +1,157 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="da/db7/a01088" kind="file" language="C++">
+    <compoundname>BackgroundTextWriter.hpp</compoundname>
+    <includes refid="d2/df3/a01085" local="yes">BackgroundModule.hpp</includes>
+    <includes refid="d3/dbd/a01100" local="yes">Castor3D/Scene/Background/Visitor.hpp</includes>
+    <incdepgraph>
+      <node id="24026">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="24020">
+        <label>Castor3D/Material/MaterialModule.hpp</label>
+        <link refid="d8/d23/a00326"/>
+        <childnode refid="24021" relation="include">
+        </childnode>
+        <childnode refid="24034" relation="include">
+        </childnode>
+      </node>
+      <node id="24029">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="24040">
+        <label>CastorUtils/Graphics/BoundingSphere.hpp</label>
+      </node>
+      <node id="24030">
+        <label>cstdint</label>
+      </node>
+      <node id="24017">
+        <label>Scene/Background/BackgroundTextWriter.hpp</label>
+        <link refid="da/db7/a01088"/>
+        <childnode refid="24018" relation="include">
+        </childnode>
+        <childnode refid="24041" relation="include">
+        </childnode>
+      </node>
+      <node id="24034">
+        <label>CastorUtils/Design/Signal.hpp</label>
+      </node>
+      <node id="24028">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="24021">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d5/d35/a00266"/>
+        <childnode refid="24022" relation="include">
+        </childnode>
+        <childnode refid="24023" relation="include">
+        </childnode>
+        <childnode refid="24024" relation="include">
+        </childnode>
+        <childnode refid="24025" relation="include">
+        </childnode>
+        <childnode refid="24026" relation="include">
+        </childnode>
+        <childnode refid="24027" relation="include">
+        </childnode>
+        <childnode refid="24028" relation="include">
+        </childnode>
+        <childnode refid="24029" relation="include">
+        </childnode>
+        <childnode refid="24030" relation="include">
+        </childnode>
+        <childnode refid="24031" relation="include">
+        </childnode>
+        <childnode refid="24032" relation="include">
+        </childnode>
+        <childnode refid="24033" relation="include">
+        </childnode>
+      </node>
+      <node id="24032">
+        <label>string</label>
+      </node>
+      <node id="24037">
+        <label>Castor3D/Model/ModelModule.hpp</label>
+        <link refid="d7/def/a00521"/>
+        <childnode refid="24021" relation="include">
+        </childnode>
+      </node>
+      <node id="24025">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="24022">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="24035">
+        <label>Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp</label>
+        <link refid="dc/d19/a00515"/>
+        <childnode refid="24036" relation="include">
+        </childnode>
+        <childnode refid="24039" relation="include">
+        </childnode>
+        <childnode refid="24040" relation="include">
+        </childnode>
+      </node>
+      <node id="24039">
+        <label>CastorUtils/Graphics/BoundingBox.hpp</label>
+      </node>
+      <node id="24024">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="24019">
+        <label>Castor3D/Scene/SceneModule.hpp</label>
+        <link refid="de/db5/a01181"/>
+        <childnode refid="24020" relation="include">
+        </childnode>
+        <childnode refid="24035" relation="include">
+        </childnode>
+        <childnode refid="24034" relation="include">
+        </childnode>
+      </node>
+      <node id="24041">
+        <label>Castor3D/Scene/Background/Visitor.hpp</label>
+        <link refid="d3/dbd/a01100"/>
+        <childnode refid="24018" relation="include">
+        </childnode>
+      </node>
+      <node id="24023">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="24036">
+        <label>Castor3D/Model/Mesh/MeshModule.hpp</label>
+        <link refid="d2/d9d/a00464"/>
+        <childnode refid="24037" relation="include">
+        </childnode>
+        <childnode refid="24038" relation="include">
+        </childnode>
+      </node>
+      <node id="24033">
+        <label>vector</label>
+      </node>
+      <node id="24027">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="24038">
+        <label>CastorUtils/Design/Factory.hpp</label>
+      </node>
+      <node id="24031">
+        <label>memory</label>
+      </node>
+      <node id="24018">
+        <label>BackgroundModule.hpp</label>
+        <link refid="d2/df3/a01085"/>
+        <childnode refid="24019" relation="include">
+        </childnode>
+        <childnode refid="24034" relation="include">
+        </childnode>
+      </node>
+    </incdepgraph>
+    <innerclass refid="d0/d7d/a05120" prot="public">castor3d::BackgroundTextWriter</innerclass>
+    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Scene/Background/BackgroundTextWriter.hpp"/>
+  </compounddef>
+</doxygen>

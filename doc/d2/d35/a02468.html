@@ -5,11 +5,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: castor3d::OverlayRenderer::OverlayGeometryBuffers Struct Reference</title>
+<title>Castor3D: castor3d::ElementProducer&lt; RenderTarget, KeyType &gt; Struct Template Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
 <link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+<link href="../../Castor3D.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -17,10 +18,12 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Castor3D
-   &#160;<span id="projectnumber">..</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
+   <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
  </tr>
  </tbody>
@@ -39,56 +42,34 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../d0/d85/a00976.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d9/d04/a02460.html">OverlayRenderer</a></li><li class="navelem"><a class="el" href="../../d2/d35/a02468.html">OverlayGeometryBuffers</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/d1e/a01479.html">castor3d</a></li><li class="navelem"><a class="el" href="../../d2/d35/a02468.html">ElementProducer&lt; RenderTarget, KeyType &gt;</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#pub-types">Public Types</a> &#124;
 <a href="../../d4/d73/a02465.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">castor3d::OverlayRenderer::OverlayGeometryBuffers Struct Reference</div>  </div>
+<div class="title">castor3d::ElementProducer&lt; RenderTarget, KeyType &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p>Holds the two geometry buffers used to render overlays.  
- <a href="../../d2/d35/a02468.html#details">More...</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:a124a7d2044d4e60cce6d0ca2ba748987"><td class="memItemLeft" align="right" valign="top">GeometryBuffersSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/a02468.html#a124a7d2044d4e60cce6d0ca2ba748987">m_noTexture</a></td></tr>
-<tr class="separator:a124a7d2044d4e60cce6d0ca2ba748987"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a611672d6cbcd4f4deb4c55084c5d1057"><td class="memItemLeft" align="right" valign="top">GeometryBuffersSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/a02468.html#a611672d6cbcd4f4deb4c55084c5d1057">m_textured</a></td></tr>
-<tr class="separator:a611672d6cbcd4f4deb4c55084c5d1057"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a4a1c8f9789fad9753fa1b25e0a9ef4f8"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/a02468.html#a4a1c8f9789fad9753fa1b25e0a9ef4f8">Type</a> = std::function&lt; std::shared_ptr&lt; <a class="el" href="../../d3/d6e/a04628.html">RenderTarget</a> &gt;(KeyType const &amp;, <a class="el" href="../../da/d1e/a01479.html#a4ad78470d8077ac5aaa5443df9894203">TargetType</a>) &gt;</td></tr>
+<tr class="separator:a4a1c8f9789fad9753fa1b25e0a9ef4f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Holds the two geometry buffers used to render overlays. </p>
-<dl class="section author"><dt>Author</dt><dd>Sylvain DOREMUS </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>26/03/2016 </dd></dl>
-<dl class="section version"><dt>Version</dt><dd>0.8.0 </dd></dl>
-</div><h2 class="groupheader">Member Data Documentation</h2>
-<a id="a124a7d2044d4e60cce6d0ca2ba748987"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a124a7d2044d4e60cce6d0ca2ba748987">&#9670;&nbsp;</a></span>m_noTexture</h2>
+<h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a4a1c8f9789fad9753fa1b25e0a9ef4f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a1c8f9789fad9753fa1b25e0a9ef4f8">&#9670;&nbsp;</a></span>Type</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename KeyType &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">GeometryBuffersSPtr castor3d::OverlayRenderer::OverlayGeometryBuffers::m_noTexture</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a611672d6cbcd4f4deb4c55084c5d1057"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a611672d6cbcd4f4deb4c55084c5d1057">&#9670;&nbsp;</a></span>m_textured</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">GeometryBuffersSPtr castor3d::OverlayRenderer::OverlayGeometryBuffers::m_textured</td>
+          <td class="memname">using <a class="el" href="../../d3/d19/a02464.html">castor3d::ElementProducer</a>&lt; <a class="el" href="../../d3/d6e/a04628.html">RenderTarget</a>, KeyType &gt;::<a class="el" href="../../d2/d35/a02468.html#a4a1c8f9789fad9753fa1b25e0a9ef4f8">Type</a> =  std::function&lt; std::shared_ptr&lt; <a class="el" href="../../d3/d6e/a04628.html">RenderTarget</a> &gt;( KeyType const &amp;, <a class="el" href="../../da/d1e/a01479.html#a4ad78470d8077ac5aaa5443df9894203">TargetType</a> ) &gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -96,12 +77,12 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/Overlay/<a class="el" href="../../d4/dd3/a00428.html">OverlayRenderer.hpp</a></li>
+<li>Cache/<a class="el" href="../../dd/dc1/a00212.html">ElementProducer.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 13:38:35 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Feb 18 2021 01:09:12 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

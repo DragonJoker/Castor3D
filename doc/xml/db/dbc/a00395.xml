@@ -1,0 +1,155 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="db/dbc/a00395" kind="file" language="C++">
+    <compoundname>Parameter.hpp</compoundname>
+    <includes refid="d4/d27/a00392" local="yes">MiscellaneousModule.hpp</includes>
+    <includes local="no">CastorUtils/Miscellaneous/StringUtils.hpp</includes>
+    <includes local="no">cstring</includes>
+    <includedby refid="d9/d10/a00449" local="yes">Model/Mesh/Importer.hpp</includedby>
+    <includedby refid="d8/d1c/a00824" local="yes">Render/RenderTarget.hpp</includedby>
+    <includedby refid="d5/d16/a01154" local="yes">Scene/ParticleSystem/ParticleEmitter.hpp</includedby>
+    <incdepgraph>
+      <node id="7882">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="7885">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="7886">
+        <label>cstdint</label>
+      </node>
+      <node id="7884">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="7877">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d5/d35/a00266"/>
+        <childnode refid="7878" relation="include">
+        </childnode>
+        <childnode refid="7879" relation="include">
+        </childnode>
+        <childnode refid="7880" relation="include">
+        </childnode>
+        <childnode refid="7881" relation="include">
+        </childnode>
+        <childnode refid="7882" relation="include">
+        </childnode>
+        <childnode refid="7883" relation="include">
+        </childnode>
+        <childnode refid="7884" relation="include">
+        </childnode>
+        <childnode refid="7885" relation="include">
+        </childnode>
+        <childnode refid="7886" relation="include">
+        </childnode>
+        <childnode refid="7887" relation="include">
+        </childnode>
+        <childnode refid="7888" relation="include">
+        </childnode>
+        <childnode refid="7889" relation="include">
+        </childnode>
+      </node>
+      <node id="7888">
+        <label>string</label>
+      </node>
+      <node id="7881">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="7878">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="7880">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="7876">
+        <label>MiscellaneousModule.hpp</label>
+        <link refid="d4/d27/a00392"/>
+        <childnode refid="7877" relation="include">
+        </childnode>
+      </node>
+      <node id="7879">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="7889">
+        <label>vector</label>
+      </node>
+      <node id="7883">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="7890">
+        <label>CastorUtils/Miscellaneous/StringUtils.hpp</label>
+      </node>
+      <node id="7875">
+        <label>Miscellaneous/Parameter.hpp</label>
+        <link refid="db/dbc/a00395"/>
+        <childnode refid="7876" relation="include">
+        </childnode>
+        <childnode refid="7890" relation="include">
+        </childnode>
+        <childnode refid="7891" relation="include">
+        </childnode>
+      </node>
+      <node id="7891">
+        <label>cstring</label>
+      </node>
+      <node id="7887">
+        <label>memory</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="7896">
+        <label>Render/PostEffect/PostEffect.hpp</label>
+        <link refid="d8/dba/a00773"/>
+      </node>
+      <node id="7895">
+        <label>Render/RenderTarget.hpp</label>
+        <link refid="d8/d1c/a00824"/>
+        <childnode refid="7896" relation="include">
+        </childnode>
+        <childnode refid="7897" relation="include">
+        </childnode>
+      </node>
+      <node id="7897">
+        <label>Text/TextRenderTarget.hpp</label>
+        <link refid="d5/da5/a01424"/>
+      </node>
+      <node id="7899">
+        <label>Scene/ParticleSystem/CpuParticleSystem.hpp</label>
+        <link refid="d3/ddc/a01142"/>
+      </node>
+      <node id="7894">
+        <label>Binary/CmshImporter.hpp</label>
+        <link refid="da/d1e/a00149"/>
+      </node>
+      <node id="7893">
+        <label>Model/Mesh/Importer.hpp</label>
+        <link refid="d9/d10/a00449"/>
+        <childnode refid="7894" relation="include">
+        </childnode>
+      </node>
+      <node id="7898">
+        <label>Scene/ParticleSystem/ParticleEmitter.hpp</label>
+        <link refid="d5/d16/a01154"/>
+        <childnode refid="7899" relation="include">
+        </childnode>
+      </node>
+      <node id="7892">
+        <label>Miscellaneous/Parameter.hpp</label>
+        <link refid="db/dbc/a00395"/>
+        <childnode refid="7893" relation="include">
+        </childnode>
+        <childnode refid="7895" relation="include">
+        </childnode>
+        <childnode refid="7898" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="d0/d8e/a03828" prot="public">castor3d::ParametersT</innerclass>
+    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Miscellaneous/Parameter.hpp"/>
+  </compounddef>
+</doxygen>

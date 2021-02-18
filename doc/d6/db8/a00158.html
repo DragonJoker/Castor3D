@@ -5,11 +5,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/Event/UserInput/KeyboardEvent.hpp File Reference</title>
+<title>Castor3D: Buffer/GpuBuffer.hpp File Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
 <link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+<link href="../../Castor3D.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -17,10 +18,12 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Castor3D
-   &#160;<span id="projectnumber">..</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
+   <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
  </tr>
  </tbody>
@@ -39,84 +42,46 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dir_b2f33c71d4aa5e7af42a1ca61ff5af1b.html">source</a></li><li class="navelem"><a class="el" href="../../dir_1f10682fec53f0772108851bfcef2e4d.html">Core</a></li><li class="navelem"><a class="el" href="../../dir_6ad85ca7a90878938acb35a9fc6dd4fb.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../dir_a9f81fd4b86714dde972610ac984a016.html">Src</a></li><li class="navelem"><a class="el" href="../../dir_8f4ea9208d7d5cbddbe106110b488bee.html">Event</a></li><li class="navelem"><a class="el" href="../../dir_6be6b36813a6651517779d2fe9f4687c.html">UserInput</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../dir_1f951589f8acf476d21b7aaa617ace7f.html">Buffer</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a>  </div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
-<div class="title">KeyboardEvent.hpp File Reference</div>  </div>
+<div class="title">GpuBuffer.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-0-trigger" src="../../closed.png" alt="+"/> Include dependency graph for KeyboardEvent.hpp:</div>
-<div id="dynsection-0-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../de/db9/a00159.png" border="0" usemap="#Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2Event_2UserInput_2KeyboardEvent_8hpp" alt=""/></div>
-<map name="Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2Event_2UserInput_2KeyboardEvent_8hpp" id="Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2Event_2UserInput_2KeyboardEvent_8hpp">
-<area shape="rect"  title=" " alt="" coords="1610,5,1867,61"/>
-<area shape="rect"  href="../../db/ddf/a00164.html" title=" " alt="" coords="1671,109,1806,136"/>
-<area shape="rect"  href="../../df/dc8/a00122.html" title=" " alt="" coords="1650,184,1827,211"/>
-<area shape="rect"  title=" " alt="" coords="5,266,187,293"/>
-<area shape="rect"  title=" " alt="" coords="211,266,359,293"/>
-<area shape="rect"  title=" " alt="" coords="383,266,571,293"/>
-<area shape="rect"  title=" " alt="" coords="596,266,743,293"/>
-<area shape="rect"  title=" " alt="" coords="767,266,878,293"/>
-<area shape="rect"  title=" " alt="" coords="902,266,1031,293"/>
-<area shape="rect"  title=" " alt="" coords="1055,266,1198,293"/>
-<area shape="rect"  title=" " alt="" coords="1223,266,1380,293"/>
-<area shape="rect"  title=" " alt="" coords="1404,266,1599,293"/>
-<area shape="rect"  href="../../d4/ddf/a00488.html" title=" " alt="" coords="1623,259,1855,300"/>
-<area shape="rect"  href="../../d6/d60/a00491.html" title=" " alt="" coords="1879,259,2111,300"/>
-<area shape="rect"  href="../../d4/d1e/a00497.html" title=" " alt="" coords="2135,259,2367,300"/>
-<area shape="rect"  href="../../de/d4e/a00500.html" title=" " alt="" coords="2391,259,2623,300"/>
-<area shape="rect"  href="../../d4/de5/a00503.html" title=" " alt="" coords="2647,259,2879,300"/>
-<area shape="rect"  href="../../d4/d1f/a00506.html" title=" " alt="" coords="2903,259,3135,300"/>
-<area shape="rect"  href="../../d4/dfb/a00512.html" title=" " alt="" coords="3159,259,3391,300"/>
-<area shape="rect"  href="../../dc/d19/a00515.html" title=" " alt="" coords="3415,259,3647,300"/>
-<area shape="rect"  href="../../df/db6/a00509.html" title=" " alt="" coords="3671,259,3903,300"/>
-<area shape="rect"  href="../../d5/d0f/a00494.html" title=" " alt="" coords="3927,259,4159,300"/>
-<area shape="rect"  href="../../d4/def/a00359.html" title=" " alt="" coords="1565,348,1721,375"/>
-<area shape="rect"  title=" " alt="" coords="1745,348,1925,375"/>
-<area shape="rect"  title=" " alt="" coords="2571,348,2698,375"/>
-<area shape="rect"  title=" " alt="" coords="3719,348,3854,375"/>
-<area shape="rect"  title=" " alt="" coords="3973,348,4113,375"/>
-</map>
-</div>
-</div><div class="textblock"><div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-1-trigger" src="../../closed.png" alt="+"/> This graph shows which files directly or indirectly include this file:</div>
-<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../de/d38/a00160.png" border="0" usemap="#Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2Event_2UserInput_2KeyboardEvent_8hppdep" alt=""/></div>
-<map name="Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2Event_2UserInput_2KeyboardEvent_8hppdep" id="Z_1_2Projets_2C_09_09_2Castor3D_2source_2Core_2Castor3D_2Src_2Event_2UserInput_2KeyboardEvent_8hppdep">
-<area shape="rect"  title=" " alt="" coords="5,5,263,61"/>
-<area shape="rect"  href="../../d7/d9a/a00152.html" title=" " alt="" coords="11,109,257,165"/>
-<area shape="rect"  href="../../dc/de6/a00167.html" title=" " alt="" coords="34,213,234,284"/>
-</map>
-</div>
-</div><table class="memberdecls">
+<table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d20/a01936.html">castor3d::KeyboardState</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure holding mouse state.  <a href="../../dd/d20/a01936.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dba/a01940.html">castor3d::KeyboardEvent</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Description of a keyboard event.  <a href="../../d5/dba/a01940.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d73/a02312.html">castor3d::GpuBuffer</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:d0/d85/a00976"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d85/a00976.html">castor3d</a></td></tr>
+<tr class="memitem:da/d1e/a01479"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html">castor3d</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a146ceeb0893c1cec8c766271ffd388c7"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a146ceeb0893c1cec8c766271ffd388c7"><td class="memTemplItemLeft" align="right" valign="top">ashes::BufferPtr&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a146ceeb0893c1cec8c766271ffd388c7">castor3d::makeBuffer</a> (RenderDevice const &amp;device, VkDeviceSize count, VkBufferUsageFlags usage, VkMemoryPropertyFlags flags, std::string const &amp;name, ashes::QueueShare sharingMode={})</td></tr>
+<tr class="separator:a146ceeb0893c1cec8c766271ffd388c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36dcd65edd93bacd4e730790dad37756"><td class="memItemLeft" align="right" valign="top">ashes::BufferBasePtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a36dcd65edd93bacd4e730790dad37756">castor3d::makeBufferBase</a> (RenderDevice const &amp;device, VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags flags, std::string const &amp;name, ashes::QueueShare sharingMode={})</td></tr>
+<tr class="separator:a36dcd65edd93bacd4e730790dad37756"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a735781106066805dd7ad034dd2ccb752"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a735781106066805dd7ad034dd2ccb752"><td class="memTemplItemLeft" align="right" valign="top">ashes::VertexBufferPtr&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a735781106066805dd7ad034dd2ccb752">castor3d::makeVertexBuffer</a> (RenderDevice const &amp;device, VkDeviceSize count, VkBufferUsageFlags usage, VkMemoryPropertyFlags flags, std::string const &amp;name, ashes::QueueShare sharingMode={})</td></tr>
+<tr class="separator:a735781106066805dd7ad034dd2ccb752"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36bed1a26a458bea071006a6bf7eed0e"><td class="memItemLeft" align="right" valign="top">ashes::VertexBufferBasePtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d1e/a01479.html#a36bed1a26a458bea071006a6bf7eed0e">castor3d::makeVertexBufferBase</a> (RenderDevice const &amp;device, VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags flags, std::string const &amp;name, ashes::QueueShare sharingMode={})</td></tr>
+<tr class="separator:a36bed1a26a458bea071006a6bf7eed0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 13:38:07 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Feb 18 2021 01:09:06 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

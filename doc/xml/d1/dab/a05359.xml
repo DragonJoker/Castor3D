@@ -1,0 +1,168 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d1/dab/a05359" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::PbrMRMaterials</compoundname>
+    <basecompoundref refid="df/d5e/a05351" prot="public" virt="non-virtual">castor3d::shader::Materials</basecompoundref>
+    <includes local="no">GlslMaterial.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d1/dab/a05359_1a8ec4e85cb32d9b034b642656498197d9" prot="private" static="no" mutable="no">
+        <type>std::unique_ptr&lt; sdw::ArraySsboT&lt; <ref refid="dd/dd5/a05343" kindref="compound">MetallicRoughnessMaterial</ref> &gt; &gt;</type>
+        <definition>std::unique_ptr&lt; sdw::ArraySsboT&lt; MetallicRoughnessMaterial &gt; &gt; castor3d::shader::PbrMRMaterials::m_ssbo</definition>
+        <argsstring></argsstring>
+        <name>m_ssbo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="176" column="1" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="176" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dab/a05359_1ac1d3a95f5aa9f3eb0009d3d176d5c5ba" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; <ref refid="dd/dd5/a05343" kindref="compound">MetallicRoughnessMaterial</ref>, sdw::InUInt &gt;</type>
+        <definition>sdw::Function&lt; MetallicRoughnessMaterial, sdw::InUInt &gt; castor3d::shader::PbrMRMaterials::m_getMaterial</definition>
+        <argsstring></argsstring>
+        <name>m_getMaterial</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="177" column="1" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="177" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/dab/a05359_1aef1496c2a3cf15a8cde2670d001771ff" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::PbrMRMaterials::PbrMRMaterials</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>PbrMRMaterials</name>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="170" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dab/a05359_1aaff7a04bb45616ba8c3ffce65e9ce81e" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::PbrMRMaterials::declare</definition>
+        <argsstring>(bool hasSsbo) override</argsstring>
+        <name>declare</name>
+        <reimplements refid="df/d5e/a05351_1a0199e2b4d349e6c2d0ec731fc57c14ed">declare</reimplements>
+        <param>
+          <type>bool</type>
+          <declname>hasSsbo</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="171" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dab/a05359_1ada5eae7619f72962cbc3f4d415fd197f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="dd/dd5/a05343" kindref="compound">MetallicRoughnessMaterial</ref></type>
+        <definition>C3D_API MetallicRoughnessMaterial castor3d::shader::PbrMRMaterials::getMaterial</definition>
+        <argsstring>(sdw::UInt const &amp;index) const</argsstring>
+        <name>getMaterial</name>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="172" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dab/a05359_1a8101ab56d803e1e6deb676379f854c31" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> BaseMaterialUPtr</type>
+        <definition>C3D_API BaseMaterialUPtr castor3d::shader::PbrMRMaterials::getBaseMaterial</definition>
+        <argsstring>(sdw::UInt const &amp;index) const override</argsstring>
+        <name>getBaseMaterial</name>
+        <reimplements refid="df/d5e/a05351_1aa60021482a2ddd15a549a49cb51dc2ac">getBaseMaterial</reimplements>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="173" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3500">
+        <label>castor3d::shader::Materials</label>
+        <link refid="df/d5e/a05351"/>
+      </node>
+      <node id="3499">
+        <label>castor3d::shader::PbrMRMaterials</label>
+        <link refid="d1/dab/a05359"/>
+        <childnode refid="3500" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3502">
+        <label>castor3d::shader::Materials</label>
+        <link refid="df/d5e/a05351"/>
+        <childnode refid="3503" relation="usage">
+          <edgelabel>m_type</edgelabel>
+        </childnode>
+      </node>
+      <node id="3501">
+        <label>castor3d::shader::PbrMRMaterials</label>
+        <link refid="d1/dab/a05359"/>
+        <childnode refid="3502" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3505">
+        <label>T</label>
+      </node>
+      <node id="3504">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="3505" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="3503">
+        <label>std::unique_ptr&lt; sdw::Struct &gt;</label>
+        <childnode refid="3504" relation="template-instance">
+          <edgelabel>&lt; sdw::Struct &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslMaterial.hpp" line="168" column="1" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="166" bodyend="178"/>
+    <listofallmembers>
+      <member refid="d1/dab/a05359_1aaff7a04bb45616ba8c3ffce65e9ce81e" prot="public" virt="virtual"><scope>castor3d::shader::PbrMRMaterials</scope><name>declare</name></member>
+      <member refid="df/d5e/a05351_1a531b623375d8dd2feb7cecea357bd5d4" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrMRMaterials</scope><name>doFetch</name></member>
+      <member refid="d1/dab/a05359_1a8101ab56d803e1e6deb676379f854c31" prot="public" virt="virtual"><scope>castor3d::shader::PbrMRMaterials</scope><name>getBaseMaterial</name></member>
+      <member refid="d1/dab/a05359_1ada5eae7619f72962cbc3f4d415fd197f" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrMRMaterials</scope><name>getMaterial</name></member>
+      <member refid="d1/dab/a05359_1ac1d3a95f5aa9f3eb0009d3d176d5c5ba" prot="private" virt="non-virtual"><scope>castor3d::shader::PbrMRMaterials</scope><name>m_getMaterial</name></member>
+      <member refid="d1/dab/a05359_1a8ec4e85cb32d9b034b642656498197d9" prot="private" virt="non-virtual"><scope>castor3d::shader::PbrMRMaterials</scope><name>m_ssbo</name></member>
+      <member refid="df/d5e/a05351_1a6a1f5ba5bd544eb7715f74d39f60b53c" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrMRMaterials</scope><name>m_type</name></member>
+      <member refid="df/d5e/a05351_1a63eb1763b48202eb0e2baca6a77c4a52" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrMRMaterials</scope><name>m_writer</name></member>
+      <member refid="df/d5e/a05351_1a9e8ec68b6c1099de440e616faa20de8c" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrMRMaterials</scope><name>Materials</name></member>
+      <member refid="d1/dab/a05359_1aef1496c2a3cf15a8cde2670d001771ff" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrMRMaterials</scope><name>PbrMRMaterials</name></member>
+      <member refid="df/d5e/a05351_1a10b8291a833be47b779ee3bd85790aa4" prot="public" virt="virtual"><scope>castor3d::shader::PbrMRMaterials</scope><name>~Materials</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

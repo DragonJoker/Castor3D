@@ -1,0 +1,178 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d3/d23/a02646" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SliceView</compoundname>
+    <includes local="no">TextureLayout.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename</type>
+        <declname>ViewT</declname>
+        <defname>ViewT</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d3/d23/a02646_1a46dfbdafe52d7d0fcbb8236628412edd" prot="public" static="no" mutable="no">
+        <type><ref refid="df/d0c/a02634" kindref="compound">MipView</ref> *</type>
+        <definition>MipView* castor3d::SliceView&lt; ViewT &gt;::view</definition>
+        <argsstring></argsstring>
+        <name>view</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="137" column="1" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="137" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d23/a02646_1a779bb0b49e0ec670a96f04aacc468acd" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; ViewT &gt;</type>
+        <definition>std::vector&lt; ViewT &gt; castor3d::SliceView&lt; ViewT &gt;::slices</definition>
+        <argsstring></argsstring>
+        <name>slices</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="138" column="1" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="138" bodyend="-1"/>
+        <referencedby refid="d3/d23/a02646_1aa03b7034a94eb554938dd4f170289ab5" compoundref="db/ddc/a00353" startline="150" endline="156">castor3d::SliceView&lt; castor3d::MipView &gt;::forEachFirstMipView</referencedby>
+        <referencedby refid="d3/d23/a02646_1a0b4ef2623e5d9eefe8ae9f98a1840c13" compoundref="db/ddc/a00353" startline="159" endline="165">castor3d::SliceView&lt; castor3d::MipView &gt;::forEachLeafView</referencedby>
+        <referencedby refid="d3/d23/a02646_1aedce33a1c820beac511c393f7fd7f33d" compoundref="db/ddc/a00353" startline="141" endline="147">castor3d::SliceView&lt; castor3d::MipView &gt;::forEachView</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/d23/a02646_1aedce33a1c820beac511c393f7fd7f33d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename FuncT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::SliceView&lt; ViewT &gt;::forEachView</definition>
+        <argsstring>(FuncT function) const</argsstring>
+        <name>forEachView</name>
+        <param>
+          <type>FuncT</type>
+          <declname>function</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="141" column="1" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="141" bodyend="147"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d23/a02646_1aa03b7034a94eb554938dd4f170289ab5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename FuncT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::SliceView&lt; ViewT &gt;::forEachFirstMipView</definition>
+        <argsstring>(FuncT function) const</argsstring>
+        <name>forEachFirstMipView</name>
+        <param>
+          <type>FuncT</type>
+          <declname>function</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="150" column="1" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="150" bodyend="156"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d23/a02646_1a0b4ef2623e5d9eefe8ae9f98a1840c13" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename FuncT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::SliceView&lt; ViewT &gt;::forEachLeafView</definition>
+        <argsstring>(FuncT function) const</argsstring>
+        <name>forEachLeafView</name>
+        <param>
+          <type>FuncT</type>
+          <declname>function</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureLayout.hpp" line="159" column="1" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="159" bodyend="165"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="4094">
+        <label>castor3d::SliceView&lt; ViewT &gt;</label>
+        <link refid="d3/d23/a02646"/>
+      </node>
+      <node id="4095">
+        <label>castor3d::SliceView&lt; castor3d::MipView &gt;</label>
+        <link refid="d3/d23/a02646"/>
+        <childnode refid="4094" relation="template-instance">
+          <edgelabel>&lt; castor3d::MipView &gt;</edgelabel>
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="4096">
+        <label>castor3d::SliceView&lt; ViewT &gt;</label>
+        <link refid="d3/d23/a02646"/>
+        <childnode refid="4097" relation="usage">
+          <edgelabel>slices</edgelabel>
+        </childnode>
+        <childnode refid="4100" relation="usage">
+          <edgelabel>view</edgelabel>
+        </childnode>
+      </node>
+      <node id="4099">
+        <label>T</label>
+      </node>
+      <node id="4098">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="4099" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="4101">
+        <label>std::vector&lt; TextureViewUPtr &gt;</label>
+        <childnode refid="4098" relation="template-instance">
+          <edgelabel>&lt; TextureViewUPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4097">
+        <label>std::vector&lt; ViewT &gt;</label>
+        <childnode refid="4098" relation="template-instance">
+          <edgelabel>&lt; ViewT &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4100">
+        <label>castor3d::MipView</label>
+        <link refid="df/d0c/a02634"/>
+        <childnode refid="4101" relation="usage">
+          <edgelabel>levels</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Texture/TextureLayout.hpp" line="136" column="1" bodyfile="Material/Texture/TextureLayout.hpp" bodystart="135" bodyend="166"/>
+    <listofallmembers>
+      <member refid="d3/d23/a02646_1aa03b7034a94eb554938dd4f170289ab5" prot="public" virt="non-virtual"><scope>castor3d::SliceView</scope><name>forEachFirstMipView</name></member>
+      <member refid="d3/d23/a02646_1a0b4ef2623e5d9eefe8ae9f98a1840c13" prot="public" virt="non-virtual"><scope>castor3d::SliceView</scope><name>forEachLeafView</name></member>
+      <member refid="d3/d23/a02646_1aedce33a1c820beac511c393f7fd7f33d" prot="public" virt="non-virtual"><scope>castor3d::SliceView</scope><name>forEachView</name></member>
+      <member refid="d3/d23/a02646_1a779bb0b49e0ec670a96f04aacc468acd" prot="public" virt="non-virtual"><scope>castor3d::SliceView</scope><name>slices</name></member>
+      <member refid="d3/d23/a02646_1a46dfbdafe52d7d0fcbb8236628412edd" prot="public" virt="non-virtual"><scope>castor3d::SliceView</scope><name>view</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

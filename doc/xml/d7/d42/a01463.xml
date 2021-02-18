@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d7/d42/a01463" kind="file" language="C++">
+    <compoundname>TextTextureConfiguration.hpp</compoundname>
+    <includes refid="d6/de1/a00356" local="yes">Castor3D/Material/Texture/TextureConfiguration.hpp</includes>
+    <includes local="no">CastorUtils/Data/TextWriter.hpp</includes>
+    <incdepgraph>
+      <node id="32143">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="32137">
+        <label>Castor3D/Material/MaterialModule.hpp</label>
+        <link refid="d8/d23/a00326"/>
+        <childnode refid="32138" relation="include">
+        </childnode>
+        <childnode refid="32151" relation="include">
+        </childnode>
+      </node>
+      <node id="32146">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="32152">
+        <label>CastorUtils/Data/TextWriter.hpp</label>
+      </node>
+      <node id="32147">
+        <label>cstdint</label>
+      </node>
+      <node id="32151">
+        <label>CastorUtils/Design/Signal.hpp</label>
+      </node>
+      <node id="32145">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="32138">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d5/d35/a00266"/>
+        <childnode refid="32139" relation="include">
+        </childnode>
+        <childnode refid="32140" relation="include">
+        </childnode>
+        <childnode refid="32141" relation="include">
+        </childnode>
+        <childnode refid="32142" relation="include">
+        </childnode>
+        <childnode refid="32143" relation="include">
+        </childnode>
+        <childnode refid="32144" relation="include">
+        </childnode>
+        <childnode refid="32145" relation="include">
+        </childnode>
+        <childnode refid="32146" relation="include">
+        </childnode>
+        <childnode refid="32147" relation="include">
+        </childnode>
+        <childnode refid="32148" relation="include">
+        </childnode>
+        <childnode refid="32149" relation="include">
+        </childnode>
+        <childnode refid="32150" relation="include">
+        </childnode>
+      </node>
+      <node id="32134">
+        <label>Text/TextTextureConfiguration.hpp</label>
+        <link refid="d7/d42/a01463"/>
+        <childnode refid="32135" relation="include">
+        </childnode>
+        <childnode refid="32152" relation="include">
+        </childnode>
+      </node>
+      <node id="32149">
+        <label>string</label>
+      </node>
+      <node id="32142">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="32139">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="32136">
+        <label>TextureModule.hpp</label>
+        <link refid="de/dd7/a00362"/>
+        <childnode refid="32137" relation="include">
+        </childnode>
+        <childnode refid="32151" relation="include">
+        </childnode>
+      </node>
+      <node id="32141">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="32140">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="32150">
+        <label>vector</label>
+      </node>
+      <node id="32144">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="32135">
+        <label>Castor3D/Material/Texture/TextureConfiguration.hpp</label>
+        <link refid="d6/de1/a00356"/>
+        <childnode refid="32136" relation="include">
+        </childnode>
+        <childnode refid="32152" relation="include">
+        </childnode>
+        <childnode refid="32153" relation="include">
+        </childnode>
+      </node>
+      <node id="32148">
+        <label>memory</label>
+      </node>
+      <node id="32153">
+        <label>CastorUtils/Math/SquareMatrix.hpp</label>
+      </node>
+    </incdepgraph>
+    <innerclass refid="d0/d9e/a05788" prot="public">castor::TextWriter&lt; castor3d::TextureConfiguration &gt;</innerclass>
+    <innernamespace refid="da/d36/a01482">castor</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Text/TextTextureConfiguration.hpp"/>
+  </compounddef>
+</doxygen>

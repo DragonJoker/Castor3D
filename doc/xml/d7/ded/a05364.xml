@@ -1,0 +1,240 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d7/ded/a05364" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::MetallicRoughnessMaterial</compoundname>
+    <basecompoundref refid="d3/d06/a05356" prot="public" virt="non-virtual">castor3d::shader::BaseMaterial</basecompoundref>
+    <includes local="no">GlslMaterial.hpp</includes>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="d7/ded/a05364_1a02a2a3ef33c60248c335449a975e0c9c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>friend class</type>
+        <definition>friend class PbrMRMaterials</definition>
+        <argsstring></argsstring>
+        <name>PbrMRMaterials</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="88" column="1" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d7/ded/a05364_1abf707cf23fcad51a04198eb818581715" prot="protected" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::MetallicRoughnessMaterial::m_albRough</definition>
+        <argsstring></argsstring>
+        <name>m_albRough</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="100" column="1" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="100" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/ded/a05364_1a80a7841b12145deb327d9131d8279c84" prot="protected" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::MetallicRoughnessMaterial::m_metDiv</definition>
+        <argsstring></argsstring>
+        <name>m_metDiv</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="101" column="1" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="101" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d7/ded/a05364_1ad123b5d5def5609a2e5a44ebdf8a7a09" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::MetallicRoughnessMaterial::m_albedo</definition>
+        <argsstring></argsstring>
+        <name>m_albedo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="104" column="1" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="104" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/ded/a05364_1a40ecfc96a97e957433ac1142f94b6f5c" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::MetallicRoughnessMaterial::m_roughness</definition>
+        <argsstring></argsstring>
+        <name>m_roughness</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="105" column="1" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/ded/a05364_1a386b8ecbded3b0f771af6ea364272601" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::MetallicRoughnessMaterial::m_metallic</definition>
+        <argsstring></argsstring>
+        <name>m_metallic</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="106" column="1" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/ded/a05364_1af7bf466d4c19629fad685f8e5f27b975" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::MetallicRoughnessMaterial::MetallicRoughnessMaterial</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>MetallicRoughnessMaterial</name>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="90" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/ded/a05364_1acae03b00e4a5b44e3b173f6548be8596" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::MetallicRoughnessMaterial::m_diffuse</definition>
+        <argsstring>() const override</argsstring>
+        <name>m_diffuse</name>
+        <reimplements refid="d3/d06/a05356_1a53d2125ad2cf89035480642c4b5935a3">m_diffuse</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="97" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d7/ded/a05364_1a610a94f776f3d2f0753bfdd3850f0099" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::type::StructPtr</type>
+        <definition>static C3D_API ast::type::StructPtr castor3d::shader::MetallicRoughnessMaterial::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="94" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/ded/a05364_1af9df8de118cf0238ce3b2cbb6153f803" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::unique_ptr&lt; sdw::Struct &gt;</type>
+        <definition>static C3D_API std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::MetallicRoughnessMaterial::declare</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>declare</name>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="95" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3491">
+        <label>castor3d::shader::MetallicRoughnessMaterial</label>
+        <link refid="d7/ded/a05364"/>
+        <childnode refid="3492" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3492">
+        <label>castor3d::shader::BaseMaterial</label>
+        <link refid="d3/d06/a05356"/>
+        <childnode refid="3493" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3493">
+        <label>StructInstance</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3494">
+        <label>castor3d::shader::MetallicRoughnessMaterial</label>
+        <link refid="d7/ded/a05364"/>
+        <childnode refid="3495" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3495">
+        <label>castor3d::shader::BaseMaterial</label>
+        <link refid="d3/d06/a05356"/>
+        <childnode refid="3496" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3496">
+        <label>StructInstance</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslMaterial.hpp" line="87" column="1" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="85" bodyend="107"/>
+    <listofallmembers>
+      <member refid="d3/d06/a05356_1aa92c5f97f77d29ff8f0dfece868728f7" prot="protected" virt="non-virtual"><scope>castor3d::shader::MetallicRoughnessMaterial</scope><name>BaseMaterial</name></member>
+      <member refid="d7/ded/a05364_1af9df8de118cf0238ce3b2cbb6153f803" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicRoughnessMaterial</scope><name>declare</name></member>
+      <member refid="d7/ded/a05364_1ad123b5d5def5609a2e5a44ebdf8a7a09" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicRoughnessMaterial</scope><name>m_albedo</name></member>
+      <member refid="d7/ded/a05364_1abf707cf23fcad51a04198eb818581715" prot="protected" virt="non-virtual"><scope>castor3d::shader::MetallicRoughnessMaterial</scope><name>m_albRough</name></member>
+      <member refid="d3/d06/a05356_1a3bf09051e10d4e33258b24c01211f689" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicRoughnessMaterial</scope><name>m_alphaRef</name></member>
+      <member refid="d3/d06/a05356_1a80628310c3c9c349571077fd8cc50777" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicRoughnessMaterial</scope><name>m_bwAccumulationOperator</name></member>
+      <member refid="d3/d06/a05356_1af37e5a55ae00676740dcee102673baf5" prot="protected" virt="non-virtual"><scope>castor3d::shader::MetallicRoughnessMaterial</scope><name>m_common</name></member>
+      <member refid="d7/ded/a05364_1acae03b00e4a5b44e3b173f6548be8596" prot="public" virt="virtual"><scope>castor3d::shader::MetallicRoughnessMaterial</scope><name>m_diffuse</name></member>
+      <member refid="d3/d06/a05356_1a92dbe2c949da45cf814354d6f75f27d3" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicRoughnessMaterial</scope><name>m_emissive</name></member>
+      <member refid="d3/d06/a05356_1a7873a018d579b288529701becf5ccd46" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicRoughnessMaterial</scope><name>m_gamma</name></member>
+      <member refid="d3/d06/a05356_1acfe264c79efa253c5475927be54b031b" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicRoughnessMaterial</scope><name>m_gaussianWidth</name></member>
+      <member refid="d3/d06/a05356_1a04d5d58486d182883228da98df0d961d" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicRoughnessMaterial</scope><name>m_hasReflection</name></member>
+      <member refid="d3/d06/a05356_1a94a2eb1db895a2969442109edd1e7c3a" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicRoughnessMaterial</scope><name>m_hasRefraction</name></member>
+      <member refid="d7/ded/a05364_1a386b8ecbded3b0f771af6ea364272601" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicRoughnessMaterial</scope><name>m_metallic</name></member>
+      <member refid="d7/ded/a05364_1a80a7841b12145deb327d9131d8279c84" prot="protected" virt="non-virtual"><scope>castor3d::shader::MetallicRoughnessMaterial</scope><name>m_metDiv</name></member>
+      <member refid="d3/d06/a05356_1a61b357710c945abd446a2287a1682fdf" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicRoughnessMaterial</scope><name>m_opacity</name></member>
+      <member refid="d3/d06/a05356_1a1c5c02ef3092dd62800a57fb5d210090" prot="protected" virt="non-virtual"><scope>castor3d::shader::MetallicRoughnessMaterial</scope><name>m_opacityTransmission</name></member>
+      <member refid="d3/d06/a05356_1aee61a848046229fc94d8fadf7d6e1fdb" prot="protected" virt="non-virtual"><scope>castor3d::shader::MetallicRoughnessMaterial</scope><name>m_reflRefr</name></member>
+      <member refid="d3/d06/a05356_1ab2b67f4bb4d4019078e38a115ed9cdd9" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicRoughnessMaterial</scope><name>m_refractionRatio</name></member>
+      <member refid="d7/ded/a05364_1a40ecfc96a97e957433ac1142f94b6f5c" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicRoughnessMaterial</scope><name>m_roughness</name></member>
+      <member refid="d3/d06/a05356_1a868ef28d386d3e432f3101b971c984fc" prot="protected" virt="non-virtual"><scope>castor3d::shader::MetallicRoughnessMaterial</scope><name>m_sssInfo</name></member>
+      <member refid="d3/d06/a05356_1a6d1fa7f1eccbd915bc192db9197a0e85" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicRoughnessMaterial</scope><name>m_subsurfaceScatteringEnabled</name></member>
+      <member refid="d3/d06/a05356_1a8788c73cab884e2629dad0c58a042171" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicRoughnessMaterial</scope><name>m_subsurfaceScatteringStrength</name></member>
+      <member refid="d3/d06/a05356_1a419dd5311a61d939db0aa17de9917e18" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicRoughnessMaterial</scope><name>m_transmission</name></member>
+      <member refid="d3/d06/a05356_1a229ae30e10cd8e5fc96ff3235543954a" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicRoughnessMaterial</scope><name>m_transmittanceProfile</name></member>
+      <member refid="d3/d06/a05356_1aba4f901d07e5cd1f65512ea90a0b945c" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicRoughnessMaterial</scope><name>m_transmittanceProfileSize</name></member>
+      <member refid="d7/ded/a05364_1a610a94f776f3d2f0753bfdd3850f0099" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicRoughnessMaterial</scope><name>makeType</name></member>
+      <member refid="d7/ded/a05364_1af7bf466d4c19629fad685f8e5f27b975" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicRoughnessMaterial</scope><name>MetallicRoughnessMaterial</name></member>
+      <member refid="d7/ded/a05364_1a02a2a3ef33c60248c335449a975e0c9c" prot="public" virt="non-virtual"><scope>castor3d::shader::MetallicRoughnessMaterial</scope><name>PbrMRMaterials</name></member>
+      <member refid="d3/d06/a05356_1a8cdd035d9c7a874450446c705d3a7f82" prot="public" virt="virtual"><scope>castor3d::shader::MetallicRoughnessMaterial</scope><name>~BaseMaterial</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,1731 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d5/d73/a03836" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::PipelineVisitorBase</compoundname>
+    <derivedcompoundref refid="dd/d4d/a03844" prot="public" virt="non-virtual">castor3d::PipelineVisitor</derivedcompoundref>
+    <includes local="no">PipelineVisitor.hpp</includes>
+    <innerclass refid="dc/d8b/a03840" prot="public">castor3d::PipelineVisitorBase::Config</innerclass>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d5/d73/a03836_1a4d3af0a4ce5311d8f91dbe31220a036a" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(ShaderModule const &amp;shader)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="db/d15/a04928_1a319650ff5360a139aaa2cb6631f9a976">visit</reimplementedby>
+        <reimplementedby refid="dd/d4d/a03844_1afe9a1708bc7d140388e42b653754e755">visit</reimplementedby>
+        <param>
+          <type><ref refid="d7/d32/a05312" kindref="compound">ShaderModule</ref> const &amp;</type>
+          <declname>shader</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Shader source. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="46" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1ae4d3e3c5f7bb221b2bb13600ab83ba88" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(DebugConfig const &amp;ubo)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1a80f0753cda612f5927e004d01d914bd4">visit</reimplementedby>
+        <param>
+          <type><ref refid="db/d6b/a05460" kindref="compound">DebugConfig</ref> const &amp;</type>
+          <declname>ubo</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="47" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d5/d73/a03836_1afde9f41e44a0d68af45451436569b986" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, ashes::ImageView const &amp;view, VkImageLayout layout, TextureFactors const &amp;factors={})</argsstring>
+        <name>visit</name>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>ashes::ImageView const &amp;</type>
+          <declname>view</declname>
+        </param>
+        <param>
+          <type>VkImageLayout</type>
+          <declname>layout</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d0f/a03824" kindref="compound">TextureFactors</ref> const &amp;</type>
+          <declname>factors</declname>
+          <defval>{}</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Intermediate images. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="58" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="58" bodyend="67"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d5/d73/a03836_1a870328c6e098059679acc314e7ca41ed" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, float &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1ab28aefab04cc75f6d1feda5f704c0b68">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>float &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Global post effect configuration. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="78" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a035862bd36905dd892b2d7bfc33f7aa6" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, int32_t &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1a1dc846623eaab9a8817139a46fe09984">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>int32_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="80" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a0a00df938495d4a5e32ff88cd0099d7c" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, uint32_t &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1ac1a63fa882874b1361024cdbe89091c9">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="82" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a94974b6176716e9a3c90b44b9acf3449" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point2f &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1aab2a07e9c93de77edb257d52b47071f2">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point2f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="84" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a8d03eff443d187853e2fbb86550e50d7" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point2i &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1a1003a094efc9a97645d8b34cc9e3843c">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point2i &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="86" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1ad0a49b9d201880e6d7b6420d6424bbd7" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point2ui &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1a36f118d33f9552d64f0eccfcc632ce2e">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point2ui &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="88" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a37e95ca5d03c5c73a322541382447999" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point3f &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1ad2db4b4b18a1c04e9f91cf1a9c5374c7">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point3f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="90" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a2eb7567c4599c808891bebd7098bf96a" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point3i &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1ad8406668f73dfedf47ecf60ba0701aac">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point3i &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="92" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a8f36a6a1c7ffd6d3ec6673981e95e27f" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point3ui &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1ab2d2d6ad276aefc320b2ec49237b4955">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point3ui &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="94" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a4cde3fdd17f0243682218d1a0298a89d" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point4f &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1a10d60a2063bbadf02ddf07a903483b28">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point4f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="96" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a10d20eac0fb59c3697a2cd09f5f98c1f" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point4i &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1a814078fdfbac2c36608b348f12deb807">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point4i &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="98" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1ac60ff649c82418fa2da848be415ce110" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point4ui &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1af6c51a3a5965426d05f7f872328a1a3e">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point4ui &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="100" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a6c59d416680e51a9ac8c89b0362bd1e7" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Matrix4x4f &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1af096fddf8dfbadc85137eb06212a6769">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Matrix4x4f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="102" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a4054514fa498604e13e6fa8f4378921f" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::RangedValue&lt; float &gt; &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1a6b5d6c4b9ad284c49e73d2f7872637c5">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::RangedValue&lt; float &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="104" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a1e5bf55ec9882547ee352e1035d49a1d" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::RangedValue&lt; int32_t &gt; &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1a002b1afa6d054b6dc5ceaf640ddf35c0">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::RangedValue&lt; int32_t &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="106" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1acd689e7357a1467f050f3714cdf996fc" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::RangedValue&lt; uint32_t &gt; &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1a9a2e2332f3da0ca76d33e197d12daac4">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::RangedValue&lt; uint32_t &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="108" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d5/d73/a03836_1ae4ee69615c3de3669d0a9020a4f55170" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;ubo, castor::String const &amp;uniform, float &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1ae2bee753f99d12dad0a1787a17d42fa4">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>ubo</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>uniform</declname>
+        </param>
+        <param>
+          <type>float &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name UBO configuration. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="120" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1ab4f39ef0b74ddca88261239d0db681f4" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;ubo, castor::String const &amp;uniform, int32_t &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1a01b441f12b75fb91ce9dd99fdfe0aec6">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>ubo</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>uniform</declname>
+        </param>
+        <param>
+          <type>int32_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="125" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a79c358e06b3a2de8a4570765d02b597b" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;ubo, castor::String const &amp;uniform, uint32_t &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1a7e00c5fa2d153f30dcc81c0fe62eb6de">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>ubo</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>uniform</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="130" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1af36262654e0bcd918e5d0eafeaff5996" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;ubo, castor::String const &amp;uniform, castor::Point2f &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1a3d68c326a2910896b8482bce89c87d81">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>ubo</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>uniform</declname>
+        </param>
+        <param>
+          <type>castor::Point2f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="135" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a2db6e8207004d0aba28695ea7b364a65" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;ubo, castor::String const &amp;uniform, castor::Point2i &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1ae73b8ff92280de0594f4865c471314df">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>ubo</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>uniform</declname>
+        </param>
+        <param>
+          <type>castor::Point2i &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="140" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1ab9cbb2fc66d6a27362cf79b2f67410d2" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;ubo, castor::String const &amp;uniform, castor::Point2ui &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1af440f5e8988a669a4a71a1baf4c29e0d">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>ubo</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>uniform</declname>
+        </param>
+        <param>
+          <type>castor::Point2ui &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="145" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a2e6f1d0087a83cb96c8eb330067c8faf" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;ubo, castor::String const &amp;uniform, castor::Point3f &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1aae02a326b76787b182fad0b291510157">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>ubo</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>uniform</declname>
+        </param>
+        <param>
+          <type>castor::Point3f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="150" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a26e38360a03d6fe5d374af65927f10bc" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;ubo, castor::String const &amp;uniform, castor::Point3i &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1abfd8809ae94fdbf6454da2d2a87bc4cb">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>ubo</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>uniform</declname>
+        </param>
+        <param>
+          <type>castor::Point3i &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="155" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a1e9a4fe60d09e3cd054f4df39c8141cf" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;ubo, castor::String const &amp;uniform, castor::Point3ui &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1a9898ba3f3040dbdceb56a45141c9939d">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>ubo</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>uniform</declname>
+        </param>
+        <param>
+          <type>castor::Point3ui &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="160" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a295217b0397275228cd9a9e60874ca59" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;ubo, castor::String const &amp;uniform, castor::Point4f &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1ad2619aef7d9ac309a4f4d4cc076bf7f4">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>ubo</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>uniform</declname>
+        </param>
+        <param>
+          <type>castor::Point4f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="165" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a47bc83289c821f30f71f733e3a58f851" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;ubo, castor::String const &amp;uniform, castor::Point4i &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1aa5d1c7a5cd185978ab7ecfb23487c26f">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>ubo</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>uniform</declname>
+        </param>
+        <param>
+          <type>castor::Point4i &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="170" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a3bd877a54e95551bbedc216f3faeee88" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;ubo, castor::String const &amp;uniform, castor::Point4ui &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1a64732a9c7722288560fc4a01ecc0f680">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>ubo</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>uniform</declname>
+        </param>
+        <param>
+          <type>castor::Point4ui &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="175" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a3b5ad3c4a9d91fc4f6e809b1ce999ccc" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;ubo, castor::String const &amp;uniform, castor::Matrix4x4f &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1a245f85d7b74380a27b82e0e0018c4bf0">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>ubo</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>uniform</declname>
+        </param>
+        <param>
+          <type>castor::Matrix4x4f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="180" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a967b6e264b00726d155db973675d788d" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;ubo, castor::String const &amp;uniform, castor::RangedValue&lt; float &gt; &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1a3a342b9bdefc14d7b3da003618086463">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>ubo</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>uniform</declname>
+        </param>
+        <param>
+          <type>castor::RangedValue&lt; float &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="185" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a8de941a043686ed5274aff74654e3b51" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;ubo, castor::String const &amp;uniform, castor::RangedValue&lt; int32_t &gt; &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1af0ff155b6a8ff944dde29e203815ecdb">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>ubo</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>uniform</declname>
+        </param>
+        <param>
+          <type>castor::RangedValue&lt; int32_t &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="190" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a7034d7145111c71b0a03f4f9c831a9de" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;ubo, castor::String const &amp;uniform, castor::RangedValue&lt; uint32_t &gt; &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1a1b6ad547b71f4da7a71ac828409c043a">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>ubo</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>uniform</declname>
+        </param>
+        <param>
+          <type>castor::RangedValue&lt; uint32_t &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="195" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a1dd5accf19f570fee86c16643dff7ea2" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;ubo, castor::String const &amp;uniform, castor::ChangeTracked&lt; float &gt; &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1a2539368959a64a5580e831eadf9575c0">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>ubo</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>uniform</declname>
+        </param>
+        <param>
+          <type>castor::ChangeTracked&lt; float &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="200" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a430b6c6c381fcb87aacf430ef71af75b" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;ubo, castor::String const &amp;uniform, castor::ChangeTracked&lt; int32_t &gt; &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1a639de9737e85ac871d4ced704d185b7d">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>ubo</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>uniform</declname>
+        </param>
+        <param>
+          <type>castor::ChangeTracked&lt; int32_t &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="205" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a0cd97f0c0eae33175d1c43fbca66490a" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;ubo, castor::String const &amp;uniform, castor::ChangeTracked&lt; uint32_t &gt; &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1ad21cadb68f340065fc00fcd95597f516">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>ubo</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>uniform</declname>
+        </param>
+        <param>
+          <type>castor::ChangeTracked&lt; uint32_t &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="210" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1ae0520069af4059b135159257a481f606" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;ubo, castor::String const &amp;uniform, castor::ChangeTracked&lt; castor::Point2f &gt; &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1a46c32f04dca870bc5246eee8322d6191">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>ubo</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>uniform</declname>
+        </param>
+        <param>
+          <type>castor::ChangeTracked&lt; castor::Point2f &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="215" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1ac1dab577ef96b1b5a1ed48a5a0ea297d" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;ubo, castor::String const &amp;uniform, castor::ChangeTracked&lt; castor::Point2i &gt; &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1a15e556522ea9a19598ae30c4a3def952">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>ubo</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>uniform</declname>
+        </param>
+        <param>
+          <type>castor::ChangeTracked&lt; castor::Point2i &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="220" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a67b72a6e11a102b039351c9b73c513fd" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;ubo, castor::String const &amp;uniform, castor::ChangeTracked&lt; castor::Point2ui &gt; &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1ab7841dbeaa6b0a9e1520383d2eb1589c">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>ubo</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>uniform</declname>
+        </param>
+        <param>
+          <type>castor::ChangeTracked&lt; castor::Point2ui &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="225" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a46cd70095b8bd1a3bf229da1cff5d3c7" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;ubo, castor::String const &amp;uniform, castor::ChangeTracked&lt; castor::Point3f &gt; &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1a4b69e09333b80c7fa2038cd5d5c04b07">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>ubo</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>uniform</declname>
+        </param>
+        <param>
+          <type>castor::ChangeTracked&lt; castor::Point3f &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="230" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a3bd979b55897737a464517a7ca418c36" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;ubo, castor::String const &amp;uniform, castor::ChangeTracked&lt; castor::Point3i &gt; &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1a53952bdd4547bdab69eb61a9745ff438">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>ubo</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>uniform</declname>
+        </param>
+        <param>
+          <type>castor::ChangeTracked&lt; castor::Point3i &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="235" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a48bab0dcb996e6c5f25fd56fe065461b" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;ubo, castor::String const &amp;uniform, castor::ChangeTracked&lt; castor::Point3ui &gt; &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1a9606a0d82de51dac30eaf74ae8517af9">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>ubo</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>uniform</declname>
+        </param>
+        <param>
+          <type>castor::ChangeTracked&lt; castor::Point3ui &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="240" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a16952410f425b82fbb8284cb4c209383" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;ubo, castor::String const &amp;uniform, castor::ChangeTracked&lt; castor::Point4f &gt; &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1ae50aef09a9f60f68f516f42ef16efa97">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>ubo</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>uniform</declname>
+        </param>
+        <param>
+          <type>castor::ChangeTracked&lt; castor::Point4f &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="245" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a55e161a01fc1f072d59e9701c306a3d7" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;ubo, castor::String const &amp;uniform, castor::ChangeTracked&lt; castor::Point4i &gt; &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1a8c27e272ddb8a6f7fc0e128a6f56aac7">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>ubo</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>uniform</declname>
+        </param>
+        <param>
+          <type>castor::ChangeTracked&lt; castor::Point4i &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="250" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a56366d59fd0b94861faa1827542b27c0" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;ubo, castor::String const &amp;uniform, castor::ChangeTracked&lt; castor::Point4ui &gt; &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1afbb832269aab87101d637a85898c239f">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>ubo</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>uniform</declname>
+        </param>
+        <param>
+          <type>castor::ChangeTracked&lt; castor::Point4ui &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="255" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a260e7e62a7b084c8eaa31d25bb4ba9b5" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;ubo, castor::String const &amp;uniform, castor::ChangeTracked&lt; castor::Matrix4x4f &gt; &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1a4cd7bbfc55dc8ecfd7e5b6575fab11c0">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>ubo</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>uniform</declname>
+        </param>
+        <param>
+          <type>castor::ChangeTracked&lt; castor::Matrix4x4f &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="260" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a4ba414385749de1a680d43de568718c5" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;ubo, castor::String const &amp;uniform, castor::ChangeTracked&lt; castor::RangedValue&lt; float &gt; &gt; &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1aceacf540057393266046de81ee2571ef">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>ubo</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>uniform</declname>
+        </param>
+        <param>
+          <type>castor::ChangeTracked&lt; castor::RangedValue&lt; float &gt; &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="265" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a7cfd9d85567aa5300c5fe01bcba964c1" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;ubo, castor::String const &amp;uniform, castor::ChangeTracked&lt; castor::RangedValue&lt; int32_t &gt; &gt; &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1ad3ccfd06ae9b171a4fa81cd8b5c9084d">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>ubo</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>uniform</declname>
+        </param>
+        <param>
+          <type>castor::ChangeTracked&lt; castor::RangedValue&lt; int32_t &gt; &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="270" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1ace37a532c17049e8f96aa44f9f4dacff" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;ubo, castor::String const &amp;uniform, castor::ChangeTracked&lt; castor::RangedValue&lt; uint32_t &gt; &gt; &amp;value)=0</argsstring>
+        <name>visit</name>
+        <reimplementedby refid="dd/d4d/a03844_1ac061899f74cb3cb8e9e1132ddfc133c4">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>ubo</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>uniform</declname>
+        </param>
+        <param>
+          <type>castor::ChangeTracked&lt; castor::RangedValue&lt; uint32_t &gt; &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="275" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d5/d73/a03836_1a7dd3b92f7aca2b9a09113dd9f3f9e78a" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/d8b/a03840" kindref="compound">Config</ref> const</type>
+        <definition>Config const castor3d::PipelineVisitorBase::config</definition>
+        <argsstring></argsstring>
+        <name>config</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="291" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="291" bodyend="-1"/>
+        <referencedby refid="dd/d4d/a03844_1a1ea1ab5c663d40ac1177de0102cfb88e" compoundref="d7/d00/a00401" startline="298" endline="301">castor3d::PipelineVisitor::PipelineVisitor</referencedby>
+        <referencedby refid="d5/d73/a03836_1aed7367fc13c78bae663aed9b68be52c4" compoundref="d7/d00/a00401" startline="28" endline="31">PipelineVisitorBase</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="d5/d73/a03836_1aed7367fc13c78bae663aed9b68be52c4" prot="protected" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::PipelineVisitorBase::PipelineVisitorBase</definition>
+        <argsstring>(Config config)</argsstring>
+        <name>PipelineVisitorBase</name>
+        <param>
+          <type><ref refid="dc/d8b/a03840" kindref="compound">Config</ref></type>
+          <declname>config</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="28" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="28" bodyend="31"/>
+        <references refid="d5/d73/a03836_1a7dd3b92f7aca2b9a09113dd9f3f9e78a" compoundref="d7/d00/a00401" startline="291">config</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/d73/a03836_1a23d2e9b165345ed887e551d2a31ed96e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type></type>
+        <definition>virtual castor3d::PipelineVisitorBase::~PipelineVisitorBase</definition>
+        <argsstring>()</argsstring>
+        <name>~PipelineVisitorBase</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="34" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="34" bodyend="36"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d5/d73/a03836_1ac69d560d87b1eb5beaa53e8a1e8f0988" prot="private" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type>bool</type>
+        <definition>virtual bool castor3d::PipelineVisitorBase::doFilter</definition>
+        <argsstring>(VkImageViewCreateInfo const &amp;info) const =0</argsstring>
+        <name>doFilter</name>
+        <reimplementedby refid="dd/d4d/a03844_1ac7f5b4bd3cb58452569f6edaf266ec50">doFilter</reimplementedby>
+        <param>
+          <type>VkImageViewCreateInfo const &amp;</type>
+          <declname>info</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="283" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d73/a03836_1a202a05592dd509b60468a3d530b4b406" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::PipelineVisitorBase::doVisit</definition>
+        <argsstring>(castor::String const &amp;name, ashes::ImageView const &amp;view, VkImageLayout layout, TextureFactors const &amp;factors={})=0</argsstring>
+        <name>doVisit</name>
+        <reimplementedby refid="dd/d4d/a03844_1a5ab26ad823ace4618c9e78f5c82213ce">doVisit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>ashes::ImageView const &amp;</type>
+          <declname>view</declname>
+        </param>
+        <param>
+          <type>VkImageLayout</type>
+          <declname>layout</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d0f/a03824" kindref="compound">TextureFactors</ref> const &amp;</type>
+          <declname>factors</declname>
+          <defval>{}</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="285" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2701">
+        <label>castor3d::RenderTechniqueVisitor</label>
+        <link refid="db/d15/a04928"/>
+        <childnode refid="2700" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2700">
+        <label>castor3d::PipelineVisitor</label>
+        <link refid="dd/d4d/a03844"/>
+        <childnode refid="2699" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2699">
+        <label>castor3d::PipelineVisitorBase</label>
+        <link refid="d5/d73/a03836"/>
+      </node>
+      <node id="2702">
+        <label>castor3d::ToneMappingVisitor</label>
+        <link refid="d6/d0f/a04960"/>
+        <childnode refid="2700" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2703">
+        <label>castor3d::PipelineVisitorBase</label>
+        <link refid="d5/d73/a03836"/>
+        <childnode refid="2704" relation="usage">
+          <edgelabel>config</edgelabel>
+        </childnode>
+      </node>
+      <node id="2704">
+        <label>castor3d::PipelineVisitorBase::Config</label>
+        <link refid="dc/d8b/a03840"/>
+      </node>
+    </collaborationgraph>
+    <location file="Miscellaneous/PipelineVisitor.hpp" line="19" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="18" bodyend="292"/>
+    <listofallmembers>
+      <member refid="d5/d73/a03836_1a7dd3b92f7aca2b9a09113dd9f3f9e78a" prot="public" virt="non-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>config</name></member>
+      <member refid="d5/d73/a03836_1ac69d560d87b1eb5beaa53e8a1e8f0988" prot="private" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>doFilter</name></member>
+      <member refid="d5/d73/a03836_1a202a05592dd509b60468a3d530b4b406" prot="private" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>doVisit</name></member>
+      <member refid="d5/d73/a03836_1aed7367fc13c78bae663aed9b68be52c4" prot="protected" virt="non-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>PipelineVisitorBase</name></member>
+      <member refid="d5/d73/a03836_1a4d3af0a4ce5311d8f91dbe31220a036a" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1ae4d3e3c5f7bb221b2bb13600ab83ba88" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1afde9f41e44a0d68af45451436569b986" prot="public" virt="non-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a870328c6e098059679acc314e7ca41ed" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a035862bd36905dd892b2d7bfc33f7aa6" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a0a00df938495d4a5e32ff88cd0099d7c" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a94974b6176716e9a3c90b44b9acf3449" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a8d03eff443d187853e2fbb86550e50d7" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1ad0a49b9d201880e6d7b6420d6424bbd7" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a37e95ca5d03c5c73a322541382447999" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a2eb7567c4599c808891bebd7098bf96a" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a8f36a6a1c7ffd6d3ec6673981e95e27f" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a4cde3fdd17f0243682218d1a0298a89d" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a10d20eac0fb59c3697a2cd09f5f98c1f" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1ac60ff649c82418fa2da848be415ce110" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a6c59d416680e51a9ac8c89b0362bd1e7" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a4054514fa498604e13e6fa8f4378921f" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a1e5bf55ec9882547ee352e1035d49a1d" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1acd689e7357a1467f050f3714cdf996fc" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1ae4ee69615c3de3669d0a9020a4f55170" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1ab4f39ef0b74ddca88261239d0db681f4" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a79c358e06b3a2de8a4570765d02b597b" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1af36262654e0bcd918e5d0eafeaff5996" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a2db6e8207004d0aba28695ea7b364a65" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1ab9cbb2fc66d6a27362cf79b2f67410d2" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a2e6f1d0087a83cb96c8eb330067c8faf" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a26e38360a03d6fe5d374af65927f10bc" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a1e9a4fe60d09e3cd054f4df39c8141cf" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a295217b0397275228cd9a9e60874ca59" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a47bc83289c821f30f71f733e3a58f851" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a3bd877a54e95551bbedc216f3faeee88" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a3b5ad3c4a9d91fc4f6e809b1ce999ccc" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a967b6e264b00726d155db973675d788d" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a8de941a043686ed5274aff74654e3b51" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a7034d7145111c71b0a03f4f9c831a9de" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a1dd5accf19f570fee86c16643dff7ea2" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a430b6c6c381fcb87aacf430ef71af75b" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a0cd97f0c0eae33175d1c43fbca66490a" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1ae0520069af4059b135159257a481f606" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1ac1dab577ef96b1b5a1ed48a5a0ea297d" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a67b72a6e11a102b039351c9b73c513fd" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a46cd70095b8bd1a3bf229da1cff5d3c7" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a3bd979b55897737a464517a7ca418c36" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a48bab0dcb996e6c5f25fd56fe065461b" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a16952410f425b82fbb8284cb4c209383" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a55e161a01fc1f072d59e9701c306a3d7" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a56366d59fd0b94861faa1827542b27c0" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a260e7e62a7b084c8eaa31d25bb4ba9b5" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a4ba414385749de1a680d43de568718c5" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a7cfd9d85567aa5300c5fe01bcba964c1" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1ace37a532c17049e8f96aa44f9f4dacff" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="d5/d73/a03836_1a23d2e9b165345ed887e551d2a31ed96e" prot="public" virt="virtual"><scope>castor3d::PipelineVisitorBase</scope><name>~PipelineVisitorBase</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,11 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$d5/ddd/a02184.html" title="Mesh category is used to create a mesh&#39;s vertices, it is created by MeshFactory." alt="" coords="5,183,175,209"/>
+<area shape="rect" id="node2" href="$d3/d23/a02120.html" title="The cone is a basic primitive, with a parametrable number of faces." alt="" coords="243,5,353,32"/>
+<area shape="rect" id="node3" href="$db/d0e/a02124.html" title="The cube representation." alt="" coords="243,56,353,83"/>
+<area shape="rect" id="node4" href="$d1/d60/a02128.html" title="The cylinder representation." alt="" coords="235,107,361,133"/>
+<area shape="rect" id="node5" href="$dd/d07/a02132.html" title="The icosahedron representation." alt="" coords="223,157,373,184"/>
+<area shape="rect" id="node6" href="$db/ddd/a02136.html" title="The plane representation." alt="" coords="241,208,355,235"/>
+<area shape="rect" id="node7" href="$de/d81/a02140.html" title="Projection mesh representation." alt="" coords="229,259,367,285"/>
+<area shape="rect" id="node8" href="$dc/d29/a02144.html" title="The sphere primitive." alt="" coords="237,309,359,336"/>
+<area shape="rect" id="node9" href="$d2/d08/a02148.html" title="The torus representation." alt="" coords="242,360,354,387"/>
+</map>

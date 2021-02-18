@@ -1,11 +1,5 @@
-<map id="castor3d::GeometryBuffers" name="castor3d::GeometryBuffers">
-<area shape="rect" id="node1" title="Geometry buffers holder." alt="" coords="731,211,908,237"/>
-<area shape="rect" id="node2" href="$d1/d7a/a03080.html" title="Base shader program implementation, used to share functions through the supported shader languages." alt="" coords="437,177,608,204"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,237,32"/>
-<area shape="rect" id="node4" title=" " alt="" coords="23,57,219,98"/>
-<area shape="rect" id="node5" title=" " alt="" coords="17,123,226,179"/>
-<area shape="rect" id="node6" title=" " alt="" coords="37,203,205,259"/>
-<area shape="rect" id="node7" href="$df/dfb/a02068.html" title="Description of all elements in a vertex buffer." alt="" coords="32,283,211,309"/>
-<area shape="rect" id="node8" title=" " alt="" coords="35,334,208,375"/>
-<area shape="rect" id="node9" title=" " alt="" coords="432,229,613,270"/>
+<map id="castor3d::BinaryParser&lt; BonesComponent &gt;" name="castor3d::BinaryParser&lt; BonesComponent &gt;">
+<area shape="rect" id="node1" title="BonesComponent loader." alt="" coords="21,200,175,241"/>
+<area shape="rect" id="node2" href="$d1/d90/a02127.html" title=" " alt="" coords="5,109,191,151"/>
+<area shape="rect" id="node3" href="$d1/d90/a02127.html" title="Binary data chunk reader base class." alt="" coords="5,5,191,47"/>
 </map>

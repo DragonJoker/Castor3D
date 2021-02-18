@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="da/d7e/a05558" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::LpvGridConfigUboConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="da/d7e/a05558_1aa09ea15f7d4318b6db6e108b1133b548" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::LpvGridConfigUboConfiguration::minVolumeCorner</definition>
+        <argsstring></argsstring>
+        <name>minVolumeCorner</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="94" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d7e/a05558_1acb7823dce229a794566065009fe54e2a" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::LpvGridConfigUboConfiguration::gridSizeAtt</definition>
+        <argsstring></argsstring>
+        <name>gridSizeAtt</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="95" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="95" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para><ref refid="d4/d69/a05166" kindref="compound">Light</ref> propagation data. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Ubos/UbosModule.hpp" line="93" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="92" bodyend="96"/>
+    <listofallmembers>
+      <member refid="da/d7e/a05558_1acb7823dce229a794566065009fe54e2a" prot="public" virt="non-virtual"><scope>castor3d::LpvGridConfigUboConfiguration</scope><name>gridSizeAtt</name></member>
+      <member refid="da/d7e/a05558_1aa09ea15f7d4318b6db6e108b1133b548" prot="public" virt="non-virtual"><scope>castor3d::LpvGridConfigUboConfiguration</scope><name>minVolumeCorner</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

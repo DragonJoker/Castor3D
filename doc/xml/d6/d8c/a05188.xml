@@ -1,0 +1,580 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d6/d8c/a05188" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::SpotLight</compoundname>
+    <basecompoundref refid="d3/dd2/a05176" prot="public" virt="non-virtual">castor3d::LightCategory</basecompoundref>
+    <includes local="no">SpotLight.hpp</includes>
+      <sectiondef kind="user-defined">
+      <header>Mutators.</header>
+      <memberdef kind="function" id="d6/d8c/a05188_1a68099e764bacaef2aa95357d560ee38f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SpotLight::setAttenuation</definition>
+        <argsstring>(castor::Point3f const &amp;value)</argsstring>
+        <name>setAttenuation</name>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/SpotLight.hpp" line="81" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d8c/a05188_1ac401341b3aeff1ee6c1c7fff7f8bcaff" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SpotLight::setExponent</definition>
+        <argsstring>(float value)</argsstring>
+        <name>setExponent</name>
+        <param>
+          <type>float</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/SpotLight.hpp" line="82" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d8c/a05188_1a617a9f687b03477211cf29b233627668" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SpotLight::setCutOff</definition>
+        <argsstring>(castor::Angle const &amp;value)</argsstring>
+        <name>setCutOff</name>
+        <param>
+          <type>castor::Angle const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/SpotLight.hpp" line="83" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <header>Getters.</header>
+      <memberdef kind="function" id="d6/d8c/a05188_1a757bc20b0c3fb58500cd325fb8a92f2e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Point3f const  &amp;</type>
+        <definition>castor::Point3f const&amp; castor3d::SpotLight::getDirection</definition>
+        <argsstring>() const</argsstring>
+        <name>getDirection</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/SpotLight.hpp" line="92" column="1" bodyfile="Scene/Light/SpotLight.hpp" bodystart="92" bodyend="95"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d8c/a05188_1a2d9e082a1f1af02399d4daec5aaa1c4f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Matrix4x4f const  &amp;</type>
+        <definition>castor::Matrix4x4f const&amp; castor3d::SpotLight::getViewMatrix</definition>
+        <argsstring>() const</argsstring>
+        <name>getViewMatrix</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/SpotLight.hpp" line="97" column="1" bodyfile="Scene/Light/SpotLight.hpp" bodystart="97" bodyend="100"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d8c/a05188_1af998f7ac9753b740b7acf96cf698c5fe" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Matrix4x4f const  &amp;</type>
+        <definition>castor::Matrix4x4f const&amp; castor3d::SpotLight::getProjectionMatrix</definition>
+        <argsstring>() const</argsstring>
+        <name>getProjectionMatrix</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/SpotLight.hpp" line="102" column="1" bodyfile="Scene/Light/SpotLight.hpp" bodystart="102" bodyend="105"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d8c/a05188_1a88d6cf8bc17cfd5baf7dc028ad01513c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Matrix4x4f const  &amp;</type>
+        <definition>castor::Matrix4x4f const&amp; castor3d::SpotLight::getLightSpaceTransform</definition>
+        <argsstring>() const</argsstring>
+        <name>getLightSpaceTransform</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/SpotLight.hpp" line="107" column="1" bodyfile="Scene/Light/SpotLight.hpp" bodystart="107" bodyend="110"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d8c/a05188_1abff79cf7ae71a77b4d0fc840851ac9fd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Point3f const  &amp;</type>
+        <definition>castor::Point3f const&amp; castor3d::SpotLight::getAttenuation</definition>
+        <argsstring>() const</argsstring>
+        <name>getAttenuation</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/SpotLight.hpp" line="112" column="1" bodyfile="Scene/Light/SpotLight.hpp" bodystart="112" bodyend="115"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d8c/a05188_1a1d66db591a8b5f085f75a2efd19a6945" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor3d::SpotLight::getExponent</definition>
+        <argsstring>() const</argsstring>
+        <name>getExponent</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/SpotLight.hpp" line="117" column="1" bodyfile="Scene/Light/SpotLight.hpp" bodystart="117" bodyend="120"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d8c/a05188_1ad7701df3fdf7162a094f3f565d215a3f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Angle const  &amp;</type>
+        <definition>castor::Angle const&amp; castor3d::SpotLight::getCutOff</definition>
+        <argsstring>() const</argsstring>
+        <name>getCutOff</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/SpotLight.hpp" line="122" column="1" bodyfile="Scene/Light/SpotLight.hpp" bodystart="122" bodyend="125"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="d6/d8c/a05188_1a032858ae1fe02d2d1170981c2af2d67c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>friend class</type>
+        <definition>friend class Scene</definition>
+        <argsstring></argsstring>
+        <name>Scene</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/SpotLight.hpp" line="19" column="1" bodyfile="Scene/Light/SpotLight.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d6/d8c/a05188_1aa1c700f535b4acf0e36d22d15825ffec" prot="private" static="no" mutable="no">
+        <type>castor::ChangeTracked&lt; castor::Point3f &gt;</type>
+        <definition>castor::ChangeTracked&lt; castor::Point3f &gt; castor3d::SpotLight::m_attenuation</definition>
+        <argsstring></argsstring>
+        <name>m_attenuation</name>
+        <initializer>{ castor::Point3f{ 1, 0, 0 } }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/SpotLight.hpp" line="133" column="1" bodyfile="Scene/Light/SpotLight.hpp" bodystart="133" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d8c/a05188_1a3b8556d5910f7a0fc17d6f8312904e34" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SpotLight::m_exponent</definition>
+        <argsstring></argsstring>
+        <name>m_exponent</name>
+        <initializer>{ 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/SpotLight.hpp" line="134" column="1" bodyfile="Scene/Light/SpotLight.hpp" bodystart="134" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d8c/a05188_1a41de7d28aa756a2c38d34936aed8ec32" prot="private" static="no" mutable="no">
+        <type>castor::ChangeTracked&lt; castor::Angle &gt;</type>
+        <definition>castor::ChangeTracked&lt; castor::Angle &gt; castor3d::SpotLight::m_cutOff</definition>
+        <argsstring></argsstring>
+        <name>m_cutOff</name>
+        <initializer>{ 45.0_degrees }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/SpotLight.hpp" line="135" column="1" bodyfile="Scene/Light/SpotLight.hpp" bodystart="135" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d8c/a05188_1a9b17e60e14ee1584152a7583560dd2cf" prot="private" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::SpotLight::m_lightView</definition>
+        <argsstring></argsstring>
+        <name>m_lightView</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/SpotLight.hpp" line="136" column="1" bodyfile="Scene/Light/SpotLight.hpp" bodystart="136" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d8c/a05188_1acc40e7b027c31dd8e780eb75a3b96d80" prot="private" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::SpotLight::m_lightProj</definition>
+        <argsstring></argsstring>
+        <name>m_lightProj</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/SpotLight.hpp" line="137" column="1" bodyfile="Scene/Light/SpotLight.hpp" bodystart="137" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d8c/a05188_1ad8b29dc340b5ffc79c8272dc57d97fbc" prot="private" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::SpotLight::m_lightSpace</definition>
+        <argsstring></argsstring>
+        <name>m_lightSpace</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/SpotLight.hpp" line="138" column="1" bodyfile="Scene/Light/SpotLight.hpp" bodystart="138" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d8c/a05188_1a92dcb07ecd77da0491a97661117599bd" prot="private" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::SpotLight::m_direction</definition>
+        <argsstring></argsstring>
+        <name>m_direction</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/SpotLight.hpp" line="139" column="1" bodyfile="Scene/Light/SpotLight.hpp" bodystart="139" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d6/d8c/a05188_1aed6d9b51d1af19d14101a2fca86f6ef8" prot="private" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SpotLight::SpotLight</definition>
+        <argsstring>(Light &amp;light)</argsstring>
+        <name>SpotLight</name>
+        <param>
+          <type><ref refid="d8/de4/a05172" kindref="compound">Light</ref> &amp;</type>
+          <declname>light</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">light</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent <ref refid="d8/de4/a05172" kindref="compound">Light</ref>. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/SpotLight.hpp" line="30" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d8c/a05188_1a5e6a9cd032057f15eb7a2f1314db25dc" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::SpotLight::updateNode</definition>
+        <argsstring>(SceneNode const &amp;node) override</argsstring>
+        <name>updateNode</name>
+        <reimplements refid="d3/dd2/a05176_1a5c6bae82aa8c9c378b075c744ba546ef">updateNode</reimplements>
+        <param>
+          <type><ref refid="da/d44/a05256" kindref="compound">SceneNode</ref> const &amp;</type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+<para>Updates the light source&apos;s informations related to the scene node. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">node</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scene node. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/SpotLight.hpp" line="129" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d8c/a05188_1a21bf30cf173ef7926c90089b60c4c356" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::SpotLight::doBind</definition>
+        <argsstring>(castor::Point4f *buffer) const override</argsstring>
+        <name>doBind</name>
+        <reimplements refid="d3/dd2/a05176_1ab4e1fe0bedc3f57a5848339ea32c9a1e">doBind</reimplements>
+        <param>
+          <type>castor::Point4f *</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+<para>Puts the light source&apos;s type specific data into the given texture. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer that receives the light&apos;s data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/SpotLight.hpp" line="130" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/d8c/a05188_1a4fb5393a3f806060a3cca0e22c824916" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SpotLight::~SpotLight</definition>
+        <argsstring>()</argsstring>
+        <name>~SpotLight</name>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/SpotLight.hpp" line="39" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d8c/a05188_1a89ee1f4b1d6931fd838eada16da3e410" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SpotLight::update</definition>
+        <argsstring>() override</argsstring>
+        <name>update</name>
+        <reimplements refid="d3/dd2/a05176_1a34386a8cdce8cddd885daa4e906ad4ba">update</reimplements>
+        <briefdescription>
+<para>Updates the light. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/SpotLight.hpp" line="61" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d8c/a05188_1a7c256d5c88d3e810c709bcad79c78908" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SpotLight::updateShadow</definition>
+        <argsstring>(Camera &amp;lightCamera, int32_t index)</argsstring>
+        <name>updateShadow</name>
+        <param>
+          <type><ref refid="d5/d9c/a05152" kindref="compound">Camera</ref> &amp;</type>
+          <declname>lightCamera</declname>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+<para>Updates the shadow informations. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">lightCamera</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The camera that receives the light spot data. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The shadow map index. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/SpotLight.hpp" line="72" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d6/d8c/a05188_1a1b804ec8246205ebbca1dacf8f02bef7" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> LightCategoryUPtr</type>
+        <definition>static C3D_API LightCategoryUPtr castor3d::SpotLight::create</definition>
+        <argsstring>(Light &amp;light)</argsstring>
+        <name>create</name>
+        <param>
+          <type><ref refid="d8/de4/a05172" kindref="compound">Light</ref> &amp;</type>
+          <declname>light</declname>
+        </param>
+        <briefdescription>
+<para>Creation function, used by Factory. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">light</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent <ref refid="d8/de4/a05172" kindref="compound">Light</ref>. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>A light source. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/SpotLight.hpp" line="50" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d8c/a05188_1a3665503f244d37a6eb398e7f84233c11" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Point3fArray const  &amp;</type>
+        <definition>static C3D_API castor::Point3fArray const&amp; castor3d::SpotLight::generateVertices</definition>
+        <argsstring>()</argsstring>
+        <name>generateVertices</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The vertices needed to draw the mesh materialising the ligh&apos;s volume of effect. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/SpotLight.hpp" line="57" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="4131">
+        <label>castor3d::SpotLight</label>
+        <link refid="d6/d8c/a05188"/>
+        <childnode refid="4132" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4132">
+        <label>castor3d::LightCategory</label>
+        <link refid="d3/dd2/a05176"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="4133">
+        <label>castor3d::SpotLight</label>
+        <link refid="d6/d8c/a05188"/>
+        <childnode refid="4134" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4134">
+        <label>castor3d::LightCategory</label>
+        <link refid="d3/dd2/a05176"/>
+      </node>
+    </collaborationgraph>
+    <location file="Scene/Light/SpotLight.hpp" line="17" column="1" bodyfile="Scene/Light/SpotLight.hpp" bodystart="15" bodyend="140"/>
+    <listofallmembers>
+      <member refid="d3/dd2/a05176_1acef61778e07afd40c46e2cb09be92098" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>bind</name></member>
+      <member refid="d6/d8c/a05188_1a1b804ec8246205ebbca1dacf8f02bef7" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>create</name></member>
+      <member refid="d6/d8c/a05188_1a21bf30cf173ef7926c90089b60c4c356" prot="private" virt="virtual"><scope>castor3d::SpotLight</scope><name>doBind</name></member>
+      <member refid="d3/dd2/a05176_1a7ee0b1c56ef5702a7edc67f2bd6e995d" prot="protected" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>doCopyComponent</name></member>
+      <member refid="d3/dd2/a05176_1af1f79deed6598d9274f73b4aab6b4da7" prot="protected" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>doCopyComponent</name></member>
+      <member refid="d3/dd2/a05176_1a218f59a797a77eb0d88f6edf382f153d" prot="protected" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>doCopyComponent</name></member>
+      <member refid="d3/dd2/a05176_1a780aaff67040afb908bd9aa966a70f8e" prot="protected" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>doCopyComponent</name></member>
+      <member refid="d3/dd2/a05176_1a6930d976e137c7b03ce129e910c06e5f" prot="protected" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>doCopyComponent</name></member>
+      <member refid="d3/dd2/a05176_1a0ba175ddd046e055830683a6ad87b8c0" prot="protected" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>doCopyComponent</name></member>
+      <member refid="d3/dd2/a05176_1a8a6e48653b84e76339dd181a084cf868" prot="protected" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>doCopyComponent</name></member>
+      <member refid="d3/dd2/a05176_1a10eb9094693412d559a83e66ad43ef19" prot="protected" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>doCopyComponent</name></member>
+      <member refid="d3/dd2/a05176_1a0ac9034daada216e965f2145b887dfe4" prot="protected" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>doCopyComponent</name></member>
+      <member refid="d3/dd2/a05176_1aa538ec4843e1029635605b57087b0312" prot="protected" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>doCopyComponent</name></member>
+      <member refid="d3/dd2/a05176_1a859a63bc82aae3d900f0fd97616abf07" prot="protected" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>doCopyComponent</name></member>
+      <member refid="d3/dd2/a05176_1a22a7873ca173839a56d54a20bd6f1dfd" prot="protected" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>doCopyComponent</name></member>
+      <member refid="d6/d8c/a05188_1a3665503f244d37a6eb398e7f84233c11" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>generateVertices</name></member>
+      <member refid="d6/d8c/a05188_1abff79cf7ae71a77b4d0fc840851ac9fd" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>getAttenuation</name></member>
+      <member refid="d3/dd2/a05176_1ac96e315f23199b5e386accc24c132cd0" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>getBoundingBox</name></member>
+      <member refid="d3/dd2/a05176_1a8c4677776ef325840e250e0f4a089ae6" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>getColour</name></member>
+      <member refid="d3/dd2/a05176_1a327588265f9d0105d4b453c6037d184b" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>getColour</name></member>
+      <member refid="d6/d8c/a05188_1ad7701df3fdf7162a094f3f565d215a3f" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>getCutOff</name></member>
+      <member refid="d3/dd2/a05176_1a0e953d6e6965fb1ef782e3bdd6fe469d" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>getDiffuseIntensity</name></member>
+      <member refid="d6/d8c/a05188_1a757bc20b0c3fb58500cd325fb8a92f2e" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>getDirection</name></member>
+      <member refid="d6/d8c/a05188_1a1d66db591a8b5f085f75a2efd19a6945" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>getExponent</name></member>
+      <member refid="d3/dd2/a05176_1ab6f2d4d170e620f0f84c642b45bcc0fd" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>getFarPlane</name></member>
+      <member refid="d3/dd2/a05176_1a0000c6055d6f4b54c78a3a885e9f0235" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>getIntensity</name></member>
+      <member refid="d3/dd2/a05176_1a479f2bd7b4f9b66c013fcaf763aea476" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>getIntensity</name></member>
+      <member refid="d3/dd2/a05176_1ab0793accd1e9be818513083bfaf5e0c3" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>getLight</name></member>
+      <member refid="d3/dd2/a05176_1a3a1f405f28c2f1fb4e9c9edc0bc50291" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>getLight</name></member>
+      <member refid="d6/d8c/a05188_1a88d6cf8bc17cfd5baf7dc028ad01513c" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>getLightSpaceTransform</name></member>
+      <member refid="d3/dd2/a05176_1a64522c60f1f11b59f7ae2e9968140ab4" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>getLightType</name></member>
+      <member refid="d3/dd2/a05176_1a334b9c3b5913e20d9d940f0f1ccfe2b1" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>getLpvConfig</name></member>
+      <member refid="d6/d8c/a05188_1af998f7ac9753b740b7acf96cf698c5fe" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>getProjectionMatrix</name></member>
+      <member refid="d3/dd2/a05176_1adc4eb965300a80837f729f1bc95f3160" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>getRsmConfig</name></member>
+      <member refid="d3/dd2/a05176_1a18abfa362426c7cc26efffb34f35ffa1" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>getShadowConfig</name></member>
+      <member refid="d3/dd2/a05176_1a86f3afb3e5fab4e9a960b682f95daac1" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>getShadowPcfOffsets</name></member>
+      <member refid="d3/dd2/a05176_1aa3c3ffc526ed94508ca603d3133d9a16" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>getShadowRawOffsets</name></member>
+      <member refid="d3/dd2/a05176_1afbedca91807e51a8c8e1da2f0a5a1742" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>getShadowVariance</name></member>
+      <member refid="d3/dd2/a05176_1a9189a1586f231e8bb99f7bdbaa432284" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>getSpecularIntensity</name></member>
+      <member refid="d6/d8c/a05188_1a2d9e082a1f1af02399d4daec5aaa1c4f" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>getViewMatrix</name></member>
+      <member refid="d3/dd2/a05176_1a4b0881f2bdcfa98c6e36aaeceb8f937a" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>getVolumetricScatteringFactor</name></member>
+      <member refid="d3/dd2/a05176_1a1fdb3e7afdb8be2e8b3d1f5453cf72fc" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>getVolumetricSteps</name></member>
+      <member refid="d3/dd2/a05176_1ac90799b0033274a99a53394753dc1f35" prot="protected" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>LightCategory</name></member>
+      <member refid="d6/d8c/a05188_1aa1c700f535b4acf0e36d22d15825ffec" prot="private" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>m_attenuation</name></member>
+      <member refid="d3/dd2/a05176_1a28a4f8b94fa6ff89c9aa57e2dae75672" prot="protected" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>m_cubeBox</name></member>
+      <member refid="d6/d8c/a05188_1a41de7d28aa756a2c38d34936aed8ec32" prot="private" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>m_cutOff</name></member>
+      <member refid="d6/d8c/a05188_1a92dcb07ecd77da0491a97661117599bd" prot="private" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>m_direction</name></member>
+      <member refid="d6/d8c/a05188_1a3b8556d5910f7a0fc17d6f8312904e34" prot="private" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>m_exponent</name></member>
+      <member refid="d3/dd2/a05176_1a510f474ea2102b2cdb6ea5683f165d66" prot="protected" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>m_farPlane</name></member>
+      <member refid="d6/d8c/a05188_1acc40e7b027c31dd8e780eb75a3b96d80" prot="private" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>m_lightProj</name></member>
+      <member refid="d6/d8c/a05188_1ad8b29dc340b5ffc79c8272dc57d97fbc" prot="private" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>m_lightSpace</name></member>
+      <member refid="d6/d8c/a05188_1a9b17e60e14ee1584152a7583560dd2cf" prot="private" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>m_lightView</name></member>
+      <member refid="d3/dd2/a05176_1a5610c8434110c708f038cea4d565ff1f" prot="protected" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>m_shadowMapIndex</name></member>
+      <member refid="d6/d8c/a05188_1a032858ae1fe02d2d1170981c2af2d67c" prot="private" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>Scene</name></member>
+      <member refid="d6/d8c/a05188_1a68099e764bacaef2aa95357d560ee38f" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>setAttenuation</name></member>
+      <member refid="d3/dd2/a05176_1afa4d57bc7ecab18182cef38b6f5a4e67" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>setColour</name></member>
+      <member refid="d6/d8c/a05188_1a617a9f687b03477211cf29b233627668" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>setCutOff</name></member>
+      <member refid="d3/dd2/a05176_1a1b615465cbad66974ec112921726de07" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>setDiffuseIntensity</name></member>
+      <member refid="d6/d8c/a05188_1ac401341b3aeff1ee6c1c7fff7f8bcaff" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>setExponent</name></member>
+      <member refid="d3/dd2/a05176_1a6ebb956df34cf44907bc031f560014de" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>setIntensity</name></member>
+      <member refid="d3/dd2/a05176_1ae0babdad467b1d890595403c7aa02065" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>setPcfMaxSlopeOffset</name></member>
+      <member refid="d3/dd2/a05176_1abbb7ac4dd057bd9b5c809822d2600959" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>setPcfMinOffset</name></member>
+      <member refid="d3/dd2/a05176_1a74565f5a3f7bdfdb7ebc0aee97a55960" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>setRawMaxSlopeOffset</name></member>
+      <member refid="d3/dd2/a05176_1a4a20cb9dd9760352ebacffcbd8febaec" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>setRawMinOffset</name></member>
+      <member refid="d3/dd2/a05176_1a091bc25b7432fda294f07d4b00e2019b" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>setSpecularIntensity</name></member>
+      <member refid="d3/dd2/a05176_1a540bf2d551c26998f6257cbf3862abe4" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>setVolumetricScatteringFactor</name></member>
+      <member refid="d3/dd2/a05176_1a92e545bfabd12248ac2aa0409d9b1fee" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>setVolumetricSteps</name></member>
+      <member refid="d3/dd2/a05176_1a16d5062cf84f27747c4ce162d67c9574" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>setVsmMaxVariance</name></member>
+      <member refid="d3/dd2/a05176_1a4ea67513754e906298182d145da36aa0" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>setVsmVarianceBias</name></member>
+      <member refid="d6/d8c/a05188_1aed6d9b51d1af19d14101a2fca86f6ef8" prot="private" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>SpotLight</name></member>
+      <member refid="d6/d8c/a05188_1a89ee1f4b1d6931fd838eada16da3e410" prot="public" virt="virtual"><scope>castor3d::SpotLight</scope><name>update</name></member>
+      <member refid="d6/d8c/a05188_1a5e6a9cd032057f15eb7a2f1314db25dc" prot="private" virt="virtual"><scope>castor3d::SpotLight</scope><name>updateNode</name></member>
+      <member refid="d6/d8c/a05188_1a7c256d5c88d3e810c709bcad79c78908" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>updateShadow</name></member>
+      <member refid="d3/dd2/a05176_1a8bdb5aa1c7e1a105887e14032f12effe" prot="public" virt="virtual"><scope>castor3d::SpotLight</scope><name>~LightCategory</name></member>
+      <member refid="d6/d8c/a05188_1a4fb5393a3f806060a3cca0e22c824916" prot="public" virt="non-virtual"><scope>castor3d::SpotLight</scope><name>~SpotLight</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

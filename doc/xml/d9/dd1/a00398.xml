@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d9/dd1/a00398" kind="file" language="C++">
+    <compoundname>Pattern.hpp</compoundname>
+    <includes refid="d4/d27/a00392" local="yes">MiscellaneousModule.hpp</includes>
+    <includes local="no">list</includes>
+    <includedby refid="de/df8/a00440" local="yes">Model/Mesh/Generator/Projection.hpp</includedby>
+    <incdepgraph>
+      <node id="7915">
+        <label>list</label>
+      </node>
+      <node id="7907">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="7900">
+        <label>Miscellaneous/Pattern.hpp</label>
+        <link refid="d9/dd1/a00398"/>
+        <childnode refid="7901" relation="include">
+        </childnode>
+        <childnode refid="7915" relation="include">
+        </childnode>
+      </node>
+      <node id="7910">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="7911">
+        <label>cstdint</label>
+      </node>
+      <node id="7909">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="7902">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d5/d35/a00266"/>
+        <childnode refid="7903" relation="include">
+        </childnode>
+        <childnode refid="7904" relation="include">
+        </childnode>
+        <childnode refid="7905" relation="include">
+        </childnode>
+        <childnode refid="7906" relation="include">
+        </childnode>
+        <childnode refid="7907" relation="include">
+        </childnode>
+        <childnode refid="7908" relation="include">
+        </childnode>
+        <childnode refid="7909" relation="include">
+        </childnode>
+        <childnode refid="7910" relation="include">
+        </childnode>
+        <childnode refid="7911" relation="include">
+        </childnode>
+        <childnode refid="7912" relation="include">
+        </childnode>
+        <childnode refid="7913" relation="include">
+        </childnode>
+        <childnode refid="7914" relation="include">
+        </childnode>
+      </node>
+      <node id="7913">
+        <label>string</label>
+      </node>
+      <node id="7906">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="7903">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="7905">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="7901">
+        <label>MiscellaneousModule.hpp</label>
+        <link refid="d4/d27/a00392"/>
+        <childnode refid="7902" relation="include">
+        </childnode>
+      </node>
+      <node id="7904">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="7914">
+        <label>vector</label>
+      </node>
+      <node id="7908">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="7912">
+        <label>memory</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="7916">
+        <label>Miscellaneous/Pattern.hpp</label>
+        <link refid="d9/dd1/a00398"/>
+        <childnode refid="7917" relation="include">
+        </childnode>
+      </node>
+      <node id="7917">
+        <label>Model/Mesh/Generator/Projection.hpp</label>
+        <link refid="de/df8/a00440"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="d6/d6e/a03832" prot="public">castor3d::Pattern</innerclass>
+    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Miscellaneous/Pattern.hpp"/>
+  </compounddef>
+</doxygen>

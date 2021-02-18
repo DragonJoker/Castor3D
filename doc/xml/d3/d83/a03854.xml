@@ -1,0 +1,230 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d3/d83/a03854" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::MeshAnimationKeyFrame</compoundname>
+    <basecompoundref refid="df/dcf/a02038" prot="public" virt="non-virtual">castor3d::AnimationKeyFrame</basecompoundref>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; MeshAnimation &gt;</basecompoundref>
+    <includes local="no">MeshAnimationKeyFrame.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d3/d83/a03854_1a33f734ab87d8dc21dc5d8dbaf4240ef6" prot="private" static="no" mutable="no">
+        <type>SubmeshAnimationBufferMap</type>
+        <definition>SubmeshAnimationBufferMap castor3d::MeshAnimationKeyFrame::m_submeshesBuffers</definition>
+        <argsstring></argsstring>
+        <name>m_submeshesBuffers</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The buffers, per submesh. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Animation/MeshAnimationKeyFrame.hpp" line="78" column="1" bodyfile="Model/Mesh/Animation/MeshAnimationKeyFrame.hpp" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="d3/d83/a03854_1a9843b391693785d4c42804955418911f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>friend class</type>
+        <definition>friend class BinaryParser&lt; MeshAnimationKeyFrame &gt;</definition>
+        <argsstring></argsstring>
+        <name>BinaryParser&lt; MeshAnimationKeyFrame &gt;</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Animation/MeshAnimationKeyFrame.hpp" line="78" column="1" bodyfile="Model/Mesh/Animation/MeshAnimationKeyFrame.hpp" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/d83/a03854_1a0c88cb9edc239d34096152a3ad554613" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::MeshAnimationKeyFrame::MeshAnimationKeyFrame</definition>
+        <argsstring>(MeshAnimation &amp;parent, castor::Milliseconds const &amp;timeIndex)</argsstring>
+        <name>MeshAnimationKeyFrame</name>
+        <param>
+          <type><ref refid="db/d2a/a03850" kindref="compound">MeshAnimation</ref> &amp;</type>
+          <declname>parent</declname>
+        </param>
+        <param>
+          <type>castor::Milliseconds const &amp;</type>
+          <declname>timeIndex</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">parent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent animation. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">timeIndex</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>When the key frame starts. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Animation/MeshAnimationKeyFrame.hpp" line="31" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d83/a03854_1af9f652447525c96a62ff03000a0ae0df" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::MeshAnimationKeyFrame::addSubmeshBuffer</definition>
+        <argsstring>(Submesh const &amp;submesh, InterleavedVertexArray const &amp;buffer)</argsstring>
+        <name>addSubmeshBuffer</name>
+        <param>
+          <type><ref refid="d7/df2/a03986" kindref="compound">Submesh</ref> const &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d13/a01473_1acc83a5f6efdad2c69d185e0595e52b4d" kindref="member">InterleavedVertexArray</ref> const &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+<para>Adds a submesh buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Animation/MeshAnimationKeyFrame.hpp" line="39" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d83/a03854_1ad6cafab2385370c697ca2b82b89e3bf5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> SubmeshAnimationBufferMap::const_iterator</type>
+        <definition>C3D_API SubmeshAnimationBufferMap::const_iterator castor3d::MeshAnimationKeyFrame::find</definition>
+        <argsstring>(Submesh const &amp;submesh) const</argsstring>
+        <name>find</name>
+        <param>
+          <type><ref refid="d7/df2/a03986" kindref="compound">Submesh</ref> const &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The submesh buffer matching given submesh. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Animation/MeshAnimationKeyFrame.hpp" line="47" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d83/a03854_1a9e47ab2af7254b8c2e9314af001a97e6" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>SubmeshAnimationBufferMap::const_iterator</type>
+        <definition>SubmeshAnimationBufferMap::const_iterator castor3d::MeshAnimationKeyFrame::begin</definition>
+        <argsstring>() const</argsstring>
+        <name>begin</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The beginning of the submeshes buffers. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Animation/MeshAnimationKeyFrame.hpp" line="54" column="1" bodyfile="Model/Mesh/Animation/MeshAnimationKeyFrame.hpp" bodystart="54" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d83/a03854_1adbf44328e01dc3ce309f6579d559a165" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>SubmeshAnimationBufferMap::const_iterator</type>
+        <definition>SubmeshAnimationBufferMap::const_iterator castor3d::MeshAnimationKeyFrame::end</definition>
+        <argsstring>() const</argsstring>
+        <name>end</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The end of the submeshes buffers. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Animation/MeshAnimationKeyFrame.hpp" line="64" column="1" bodyfile="Model/Mesh/Animation/MeshAnimationKeyFrame.hpp" bodystart="64" bodyend="67"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d3/d83/a03854_1a473257f9dedf2ecbf89b5fd55d10af1f" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::MeshAnimationKeyFrame::doSetTimeIndex</definition>
+        <argsstring>(castor::Milliseconds const &amp;time)</argsstring>
+        <name>doSetTimeIndex</name>
+        <param>
+          <type>castor::Milliseconds const &amp;</type>
+          <declname>time</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Animation/MeshAnimationKeyFrame.hpp" line="70" column="1" bodyfile="Model/Mesh/Animation/MeshAnimationKeyFrame.hpp" bodystart="70" bodyend="73"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1930">
+        <label>castor::OwnedBy&lt; MeshAnimation &gt;</label>
+      </node>
+      <node id="1929">
+        <label>castor3d::AnimationKeyFrame</label>
+        <link refid="df/dcf/a02038"/>
+      </node>
+      <node id="1928">
+        <label>castor3d::MeshAnimationKeyFrame</label>
+        <link refid="d3/d83/a03854"/>
+        <childnode refid="1929" relation="public-inheritance">
+        </childnode>
+        <childnode refid="1930" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1933">
+        <label>castor::OwnedBy&lt; MeshAnimation &gt;</label>
+      </node>
+      <node id="1932">
+        <label>castor3d::AnimationKeyFrame</label>
+        <link refid="df/dcf/a02038"/>
+      </node>
+      <node id="1931">
+        <label>castor3d::MeshAnimationKeyFrame</label>
+        <link refid="d3/d83/a03854"/>
+        <childnode refid="1932" relation="public-inheritance">
+        </childnode>
+        <childnode refid="1933" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Model/Mesh/Animation/MeshAnimationKeyFrame.hpp" line="19" column="1" bodyfile="Model/Mesh/Animation/MeshAnimationKeyFrame.hpp" bodystart="16" bodyend="81"/>
+    <listofallmembers>
+      <member refid="d3/d83/a03854_1af9f652447525c96a62ff03000a0ae0df" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationKeyFrame</scope><name>addSubmeshBuffer</name></member>
+      <member refid="df/dcf/a02038_1a4c0d4b7afbe022ee8f9dcb9dc1ea54f0" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationKeyFrame</scope><name>AnimationKeyFrame</name></member>
+      <member refid="d3/d83/a03854_1a9e47ab2af7254b8c2e9314af001a97e6" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationKeyFrame</scope><name>begin</name></member>
+      <member refid="d3/d83/a03854_1a9843b391693785d4c42804955418911f" prot="private" virt="non-virtual"><scope>castor3d::MeshAnimationKeyFrame</scope><name>BinaryParser&lt; MeshAnimationKeyFrame &gt;</name></member>
+      <member refid="d3/d83/a03854_1a473257f9dedf2ecbf89b5fd55d10af1f" prot="private" virt="non-virtual"><scope>castor3d::MeshAnimationKeyFrame</scope><name>doSetTimeIndex</name></member>
+      <member refid="d3/d83/a03854_1adbf44328e01dc3ce309f6579d559a165" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationKeyFrame</scope><name>end</name></member>
+      <member refid="d3/d83/a03854_1ad6cafab2385370c697ca2b82b89e3bf5" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationKeyFrame</scope><name>find</name></member>
+      <member refid="df/dcf/a02038_1af7d64b424ad5d12f2a9970e134365a81" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationKeyFrame</scope><name>getTimeIndex</name></member>
+      <member refid="df/dcf/a02038_1a14d9b59106f5406a66f2b8af33367991" prot="public" virt="virtual"><scope>castor3d::MeshAnimationKeyFrame</scope><name>initialise</name></member>
+      <member refid="df/dcf/a02038_1abc9e4e2a76ef5ec53fe3308add665082" prot="protected" virt="non-virtual"><scope>castor3d::MeshAnimationKeyFrame</scope><name>m_boundingBox</name></member>
+      <member refid="d3/d83/a03854_1a33f734ab87d8dc21dc5d8dbaf4240ef6" prot="private" virt="non-virtual"><scope>castor3d::MeshAnimationKeyFrame</scope><name>m_submeshesBuffers</name></member>
+      <member refid="df/dcf/a02038_1a093b74b56f13b6376ea4a51e28893db5" prot="protected" virt="non-virtual"><scope>castor3d::MeshAnimationKeyFrame</scope><name>m_timeIndex</name></member>
+      <member refid="d3/d83/a03854_1a0c88cb9edc239d34096152a3ad554613" prot="public" virt="non-virtual"><scope>castor3d::MeshAnimationKeyFrame</scope><name>MeshAnimationKeyFrame</name></member>
+      <member refid="df/dcf/a02038_1a0e38208bad19dd09708af045818c2f8d" prot="public" virt="virtual"><scope>castor3d::MeshAnimationKeyFrame</scope><name>~AnimationKeyFrame</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

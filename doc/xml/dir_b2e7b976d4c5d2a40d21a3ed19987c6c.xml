@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_b2e7b976d4c5d2a40d21a3ed19987c6c" kind="dir">
+    <compoundname>Render/Technique/Opaque</compoundname>
+    <innerdir refid="dir_ca24dc67bfcd4bb18537c10e2a574357">Render/Technique/Opaque/Lighting</innerdir>
+    <innerdir refid="dir_578fa06cfc2e71cb62bcb717d5766e34">Render/Technique/Opaque/LightVolumeGI</innerdir>
+    <innerdir refid="dir_b3e7ed05973c6418aa0e1a9ef85dd67c">Render/Technique/Opaque/ReflectiveShadowMapGI</innerdir>
+    <innerfile refid="d1/d93/a00875">DeferredRendering.hpp</innerfile>
+    <innerfile refid="da/d5b/a00905">LightingPass.hpp</innerfile>
+    <innerfile refid="df/de9/a00923">OpaqueModule.hpp</innerfile>
+    <innerfile refid="d8/d38/a00926">OpaquePass.hpp</innerfile>
+    <innerfile refid="dc/d92/a00929">OpaquePassResult.hpp</innerfile>
+    <innerfile refid="d8/dbb/a00932">OpaqueResolvePass.hpp</innerfile>
+    <innerfile refid="d5/da3/a00953">SsaoPass.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Technique/Opaque/"/>
+  </compounddef>
+</doxygen>

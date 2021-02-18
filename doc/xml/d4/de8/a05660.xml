@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d4/de8/a05660" kind="class" language="C++" prot="public">
+    <compoundname>castor::TextWriter&lt; castor3d::DirectionalLight &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::DirectionalLight &gt;</basecompoundref>
+    <includes local="no">TextDirectionalLight.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/de8/a05660_1a46be7c2890ae2a1f1d40f00062b4c0b4" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor::TextWriter&lt; castor3d::DirectionalLight &gt;::TextWriter</definition>
+        <argsstring>(castor::String const &amp;tabs)</argsstring>
+        <name>TextWriter</name>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextDirectionalLight.hpp" line="18" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/de8/a05660_1adb98cfa993b29bdd87fb0d2466ef8102" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::TextWriter&lt; castor3d::DirectionalLight &gt;::operator()</definition>
+        <argsstring>(castor3d::DirectionalLight const &amp;light, castor::TextFile &amp;file)</argsstring>
+        <name>operator()</name>
+        <param>
+          <type><ref refid="df/d18/a05168" kindref="compound">castor3d::DirectionalLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type>castor::TextFile &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextDirectionalLight.hpp" line="19" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="5326">
+        <label>TextWriterT&lt; castor3d::DirectionalLight &gt;</label>
+      </node>
+      <node id="5325">
+        <label>castor::TextWriter&lt; castor3d::DirectionalLight &gt;</label>
+        <link refid="d4/de8/a05660"/>
+        <childnode refid="5326" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="5328">
+        <label>TextWriterT&lt; castor3d::DirectionalLight &gt;</label>
+      </node>
+      <node id="5327">
+        <label>castor::TextWriter&lt; castor3d::DirectionalLight &gt;</label>
+        <link refid="d4/de8/a05660"/>
+        <childnode refid="5328" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Text/TextDirectionalLight.hpp" line="16" column="1" bodyfile="Text/TextDirectionalLight.hpp" bodystart="14" bodyend="21"/>
+    <listofallmembers>
+      <member refid="d4/de8/a05660_1adb98cfa993b29bdd87fb0d2466ef8102" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::DirectionalLight &gt;</scope><name>operator()</name></member>
+      <member refid="d4/de8/a05660_1a46be7c2890ae2a1f1d40f00062b4c0b4" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::DirectionalLight &gt;</scope><name>TextWriter</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

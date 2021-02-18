@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d4/da8/a00437" kind="file" language="C++">
+    <compoundname>Plane.hpp</compoundname>
+    <includes refid="d5/d5f/a00461" local="yes">Castor3D/Model/Mesh/MeshGenerator.hpp</includes>
+    <incdepgraph>
+      <node id="8308">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="8311">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="8312">
+        <label>cstdint</label>
+      </node>
+      <node id="8310">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="8303">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d5/d35/a00266"/>
+        <childnode refid="8304" relation="include">
+        </childnode>
+        <childnode refid="8305" relation="include">
+        </childnode>
+        <childnode refid="8306" relation="include">
+        </childnode>
+        <childnode refid="8307" relation="include">
+        </childnode>
+        <childnode refid="8308" relation="include">
+        </childnode>
+        <childnode refid="8309" relation="include">
+        </childnode>
+        <childnode refid="8310" relation="include">
+        </childnode>
+        <childnode refid="8311" relation="include">
+        </childnode>
+        <childnode refid="8312" relation="include">
+        </childnode>
+        <childnode refid="8313" relation="include">
+        </childnode>
+        <childnode refid="8314" relation="include">
+        </childnode>
+        <childnode refid="8315" relation="include">
+        </childnode>
+      </node>
+      <node id="8300">
+        <label>Castor3D/Model/Mesh/MeshGenerator.hpp</label>
+        <link refid="d5/d5f/a00461"/>
+        <childnode refid="8301" relation="include">
+        </childnode>
+        <childnode refid="8317" relation="include">
+        </childnode>
+      </node>
+      <node id="8314">
+        <label>string</label>
+      </node>
+      <node id="8302">
+        <label>Castor3D/Model/ModelModule.hpp</label>
+        <link refid="d7/def/a00521"/>
+        <childnode refid="8303" relation="include">
+        </childnode>
+      </node>
+      <node id="8307">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="8304">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="8306">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="8317">
+        <label>Castor3D/Miscellaneous/MiscellaneousModule.hpp</label>
+        <link refid="d4/d27/a00392"/>
+        <childnode refid="8303" relation="include">
+        </childnode>
+      </node>
+      <node id="8299">
+        <label>Model/Mesh/Generator/Plane.hpp</label>
+        <link refid="d4/da8/a00437"/>
+        <childnode refid="8300" relation="include">
+        </childnode>
+      </node>
+      <node id="8305">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="8301">
+        <label>MeshModule.hpp</label>
+        <link refid="d2/d9d/a00464"/>
+        <childnode refid="8302" relation="include">
+        </childnode>
+        <childnode refid="8316" relation="include">
+        </childnode>
+      </node>
+      <node id="8315">
+        <label>vector</label>
+      </node>
+      <node id="8309">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="8316">
+        <label>CastorUtils/Design/Factory.hpp</label>
+      </node>
+      <node id="8313">
+        <label>memory</label>
+      </node>
+    </incdepgraph>
+    <innerclass refid="d6/db7/a03884" prot="public">castor3d::Plane</innerclass>
+    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Model/Mesh/Generator/Plane.hpp"/>
+  </compounddef>
+</doxygen>

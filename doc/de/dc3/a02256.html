@@ -5,11 +5,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: castor3d::ChunkTyper&lt; BonesComponent &gt; Struct Template Reference</title>
+<title>Castor3D: castor3d::ChunkParserBase Class Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
 <link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+<link href="../../Castor3D.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -17,10 +18,12 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Castor3D
-   &#160;<span id="projectnumber">..</span>
+   &#160;<span id="projectnumber">0.11.0</span>
    </div>
+   <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
  </tr>
  </tbody>
@@ -39,37 +42,38 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../d0/d85/a00976.html">castor3d</a></li><li class="navelem"><a class="el" href="../../de/dc3/a02256.html">ChunkTyper&lt; BonesComponent &gt;</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../da/d1e/a01479.html">castor3d</a></li><li class="navelem"><a class="el" href="../../de/dc3/a02256.html">ChunkParserBase</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="../../db/d7a/a02253.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">castor3d::ChunkTyper&lt; BonesComponent &gt; Struct Template Reference</div>  </div>
+<div class="title">castor3d::ChunkParserBase Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p>Helper structure to find ChunkType from a type.  
- <a href="../../de/dc3/a02256.html#details">More...</a></p>
+<div class="dynheader">
+Inheritance diagram for castor3d::ChunkParserBase:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../d1/dda/a02255.png" border="0" usemap="#castor3d_1_1ChunkParserBase_inherit__map" alt="Inheritance graph"/></div>
+<map name="castor3d_1_1ChunkParserBase_inherit__map" id="castor3d_1_1ChunkParserBase_inherit__map">
+<area shape="rect"  title=" " alt="" coords="5,64,191,91"/>
+<area shape="rect"  href="../../dc/d18/a02260.html" title="Chunk parser." alt="" coords="239,5,425,32"/>
+<area shape="rect"  href="../../dd/d76/a02268.html" title="ChunkParser specialisation for castor::Path." alt="" coords="255,57,409,98"/>
+<area shape="rect"  href="../../d7/dc8/a02264.html" title="ChunkParser specialisation for castor::String." alt="" coords="255,122,409,163"/>
+</map>
+<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
-Static Public Attributes</h2></td></tr>
-<tr class="memitem:aafeb2e028fbf92cbfcf1151a2ead801c"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414d">ChunkType</a> const&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/dc3/a02256.html#aafeb2e028fbf92cbfcf1151a2ead801c">Value</a> = <a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414dafe8ec950199cfa5dc10b05235822becd">ChunkType::eBonesComponent</a></td></tr>
-<tr class="separator:aafeb2e028fbf92cbfcf1151a2ead801c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a062463121032ba679336be2382c508d0"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/dc3/a02256.html#a062463121032ba679336be2382c508d0">parse</a> (uint8_t *values, size_t size, <a class="el" href="../../d8/dd8/a02108.html">BinaryChunk</a> &amp;chunk)</td></tr>
+<tr class="memdesc:a062463121032ba679336be2382c508d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a value array from a chunk.  <a href="#a062463121032ba679336be2382c508d0">More...</a><br /></td></tr>
+<tr class="separator:a062463121032ba679336be2382c508d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;&gt;<br />
-struct castor3d::ChunkTyper&lt; BonesComponent &gt;</h3>
-
-<p>Helper structure to find ChunkType from a type. </p>
-<dl class="section author"><dt>Author</dt><dd>Sylvain DOREMUS </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>09/11/2017</dd></dl>
-<dl class="section remark"><dt>Remarks</dt><dd>Specialisation for <a class="el" href="../../d7/d70/a02252.html" title="The submesh component used for skinning.">BonesComponent</a>. </dd></dl>
-</div><h2 class="groupheader">Member Data Documentation</h2>
-<a id="aafeb2e028fbf92cbfcf1151a2ead801c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aafeb2e028fbf92cbfcf1151a2ead801c">&#9670;&nbsp;</a></span>Value</h2>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a062463121032ba679336be2382c508d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a062463121032ba679336be2382c508d0">&#9670;&nbsp;</a></span>parse()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -78,25 +82,82 @@ struct castor3d::ChunkTyper&lt; BonesComponent &gt;</h3>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414d">ChunkType</a> const <a class="el" href="../../d9/d49/a01696.html">castor3d::ChunkTyper</a>&lt; <a class="el" href="../../d7/d70/a02252.html">BonesComponent</a> &gt;::Value = <a class="el" href="../../d0/d85/a00976.html#a742783d4e4b7354fac3e375ae107414dafe8ec950199cfa5dc10b05235822becd">ChunkType::eBonesComponent</a></td>
+          <td class="memname">static bool castor3d::ChunkParserBase::parse </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>values</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d8/dd8/a02108.html">BinaryChunk</a> &amp;&#160;</td>
+          <td class="paramname"><em>chunk</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
+<p>Retrieves a value array from a chunk. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">values</td><td>Receives the parsed values </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">size</td><td>The values size </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">chunk</td><td>The chunk containing the values </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>false</code> if any error occured </dd></dl>
+
+<p class="reference">References <a class="el" href="../../d8/dd8/a02108.html#af711032d94753cb2d482fe2bcf3afb17">castor3d::BinaryChunk::checkAvailable()</a>, and <a class="el" href="../../d8/dd8/a02108.html#a7c1bb3cf53d6b4a6856c9964c54fac11">castor3d::BinaryChunk::get()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="../../dc/d18/a02260.html#a51aa9cc211a27e96cdfbdb431808cc8f">castor3d::ChunkParser&lt; T &gt;::parse()</a>, <a class="el" href="../../d7/dc8/a02264.html#acf5c3a4513e23e175339295361d35119">castor3d::ChunkParser&lt; castor::String &gt;::parse()</a>, and <a class="el" href="../../dd/d76/a02268.html#ab3e16eea9051bc679aff2782279aafea">castor3d::ChunkParser&lt; castor::Path &gt;::parse()</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../de/dc3/a02256_a062463121032ba679336be2382c508d0_cgraph.png" border="0" usemap="#de/dc3/a02256_a062463121032ba679336be2382c508d0_cgraph" alt=""/></div>
+<map name="de/dc3/a02256_a062463121032ba679336be2382c508d0_cgraph" id="de/dc3/a02256_a062463121032ba679336be2382c508d0_cgraph">
+<area shape="rect"  title="Retrieves a value array from a chunk." alt="" coords="5,35,191,76"/>
+<area shape="rect"  href="../../d8/dd8/a02108.html#af711032d94753cb2d482fe2bcf3afb17" title="Checks that the remaining place can hold the given size." alt="" coords="251,5,406,47"/>
+<area shape="rect"  href="../../d8/dd8/a02108.html#a7c1bb3cf53d6b4a6856c9964c54fac11" title="Retrieves data from the chunk." alt="" coords="239,71,419,98"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../de/dc3/a02256_a062463121032ba679336be2382c508d0_icgraph.png" border="0" usemap="#de/dc3/a02256_a062463121032ba679336be2382c508d0_icgraph" alt=""/></div>
+<map name="de/dc3/a02256_a062463121032ba679336be2382c508d0_icgraph" id="de/dc3/a02256_a062463121032ba679336be2382c508d0_icgraph">
+<area shape="rect"  title="Retrieves a value array from a chunk." alt="" coords="456,71,641,112"/>
+<area shape="rect"  href="../../dc/d18/a02260.html#a51aa9cc211a27e96cdfbdb431808cc8f" title="Retrieves a value array from a chunk." alt="" coords="249,5,403,47"/>
+<area shape="rect"  href="../../d7/dc8/a02264.html#acf5c3a4513e23e175339295361d35119" title="Retrieves a value from a chunk." alt="" coords="244,71,408,112"/>
+<area shape="rect"  href="../../dd/d76/a02268.html#ab3e16eea9051bc679aff2782279aafea" title="Retrieves a value from a chunk." alt="" coords="247,136,405,177"/>
+<area shape="rect"  href="../../d2/d08/a02148.html#a0e1aa917e3bf897fab03a32d20890062" title="Retrieves a value array from a chunk." alt="" coords="5,5,196,47"/>
+</map>
+</div>
+
 </div>
 </div>
-<hr/>The documentation for this struct was generated from the following file:<ul>
-<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/Mesh/SubmeshComponent/<a class="el" href="../../d0/d39/a00314.html">BonesComponent.hpp</a></li>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>Binary/<a class="el" href="../../d7/dce/a00143.html">ChunkParser.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 13:38:20 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Feb 18 2021 01:09:11 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

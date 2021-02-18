@@ -1,0 +1,7 @@
+<map id="castor3d::ChunkParser::parse" name="castor3d::ChunkParser::parse">
+<area shape="rect" id="node1" title="Retrieves a value array from a chunk." alt="" coords="5,64,160,105"/>
+<area shape="rect" id="node2" href="$de/dc3/a02256.html#a062463121032ba679336be2382c508d0" title="Retrieves a value array from a chunk." alt="" coords="209,35,394,76"/>
+<area shape="rect" id="node5" href="$da/d1e/a01479.html#a430f3de9071e7d03358bb1b39d07c2b8" title="Sets given value to big endian." alt="" coords="208,101,395,127"/>
+<area shape="rect" id="node3" href="$d8/dd8/a02108.html#af711032d94753cb2d482fe2bcf3afb17" title="Checks that the remaining place can hold the given size." alt="" coords="455,5,610,47"/>
+<area shape="rect" id="node4" href="$d8/dd8/a02108.html#a7c1bb3cf53d6b4a6856c9964c54fac11" title="Retrieves data from the chunk." alt="" coords="443,71,623,98"/>
+</map>
