@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="df/d70/a00431" kind="file" language="C++">
+    <compoundname>Icosahedron.hpp</compoundname>
+    <includes refid="d5/d5f/a00461" local="yes">Castor3D/Model/Mesh/MeshGenerator.hpp</includes>
+    <incdepgraph>
+      <node id="8270">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="8273">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="8274">
+        <label>cstdint</label>
+      </node>
+      <node id="8261">
+        <label>Model/Mesh/Generator/Icosahedron.hpp</label>
+        <link refid="df/d70/a00431"/>
+        <childnode refid="8262" relation="include">
+        </childnode>
+      </node>
+      <node id="8272">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="8265">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d5/d35/a00266"/>
+        <childnode refid="8266" relation="include">
+        </childnode>
+        <childnode refid="8267" relation="include">
+        </childnode>
+        <childnode refid="8268" relation="include">
+        </childnode>
+        <childnode refid="8269" relation="include">
+        </childnode>
+        <childnode refid="8270" relation="include">
+        </childnode>
+        <childnode refid="8271" relation="include">
+        </childnode>
+        <childnode refid="8272" relation="include">
+        </childnode>
+        <childnode refid="8273" relation="include">
+        </childnode>
+        <childnode refid="8274" relation="include">
+        </childnode>
+        <childnode refid="8275" relation="include">
+        </childnode>
+        <childnode refid="8276" relation="include">
+        </childnode>
+        <childnode refid="8277" relation="include">
+        </childnode>
+      </node>
+      <node id="8262">
+        <label>Castor3D/Model/Mesh/MeshGenerator.hpp</label>
+        <link refid="d5/d5f/a00461"/>
+        <childnode refid="8263" relation="include">
+        </childnode>
+        <childnode refid="8279" relation="include">
+        </childnode>
+      </node>
+      <node id="8276">
+        <label>string</label>
+      </node>
+      <node id="8264">
+        <label>Castor3D/Model/ModelModule.hpp</label>
+        <link refid="d7/def/a00521"/>
+        <childnode refid="8265" relation="include">
+        </childnode>
+      </node>
+      <node id="8269">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="8266">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="8268">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="8279">
+        <label>Castor3D/Miscellaneous/MiscellaneousModule.hpp</label>
+        <link refid="d4/d27/a00392"/>
+        <childnode refid="8265" relation="include">
+        </childnode>
+      </node>
+      <node id="8267">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="8263">
+        <label>MeshModule.hpp</label>
+        <link refid="d2/d9d/a00464"/>
+        <childnode refid="8264" relation="include">
+        </childnode>
+        <childnode refid="8278" relation="include">
+        </childnode>
+      </node>
+      <node id="8277">
+        <label>vector</label>
+      </node>
+      <node id="8271">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="8278">
+        <label>CastorUtils/Design/Factory.hpp</label>
+      </node>
+      <node id="8275">
+        <label>memory</label>
+      </node>
+    </incdepgraph>
+    <innerclass refid="df/d0d/a03880" prot="public">castor3d::Icosahedron</innerclass>
+    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Model/Mesh/Generator/Icosahedron.hpp"/>
+  </compounddef>
+</doxygen>

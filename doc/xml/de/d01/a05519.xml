@@ -1,0 +1,241 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="de/d01/a05519" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::SkinningUbo</compoundname>
+    <includes local="no">SkinningUbo.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="de/d01/a05519_1a4f257776fdbcd577263361e617acf356" prot="public" static="no">
+        <type><ref refid="d6/d66/a05595" kindref="compound">SkinningUboConfiguration</ref></type>
+        <definition>using castor3d::SkinningUbo::Configuration =  SkinningUboConfiguration</definition>
+        <argsstring></argsstring>
+        <name>Configuration</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SkinningUbo.hpp" line="26" column="1" bodyfile="Shader/Ubos/SkinningUbo.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="de/d01/a05519_1afdd96edb86b204259c30e49fcd4cd937" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t const</type>
+        <definition>C3D_API uint32_t const castor3d::SkinningUbo::BindingPoint</definition>
+        <argsstring></argsstring>
+        <name>BindingPoint</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SkinningUbo.hpp" line="81" column="1" bodyfile="Shader/Ubos/SkinningUbo.hpp" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d01/a05519_1ac79a4280ebe9232da516cc3c7ce3a67e" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::SkinningUbo::BufferSkinning</definition>
+        <argsstring></argsstring>
+        <name>BufferSkinning</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Name of the skinning animation frame variable buffer. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SkinningUbo.hpp" line="84" column="1" bodyfile="Shader/Ubos/SkinningUbo.hpp" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d01/a05519_1a676e025469152f3d89b778faa3802046" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::SkinningUbo::Bones</definition>
+        <argsstring></argsstring>
+        <name>Bones</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Name of the bones matrices attribute. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SkinningUbo.hpp" line="87" column="1" bodyfile="Shader/Ubos/SkinningUbo.hpp" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="de/d01/a05519_1a3a2880d1406503548b9b2abe9da1186a" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/dab/a05515" kindref="compound">SkinningData</ref></type>
+        <definition>static C3D_API SkinningData castor3d::SkinningUbo::declare</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, uint32_t binding, uint32_t set, ProgramFlags const &amp;flags)</argsstring>
+        <name>declare</name>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>set</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/dd1/a01458_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+<para>Declares the variables needed to compute skinning in vertex shader. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">writer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The shader writer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">binding</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The descriptor set binding point. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">set</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The descriptor set index. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The program flags. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The skinning data. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SkinningUbo.hpp" line="45" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d01/a05519_1a9275775ca066f7d5c02839fcd680d8c0" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> VkDescriptorSetLayoutBinding</type>
+        <definition>static C3D_API VkDescriptorSetLayoutBinding castor3d::SkinningUbo::createLayoutBinding</definition>
+        <argsstring>(uint32_t binding, ProgramFlags const &amp;flags)</argsstring>
+        <name>createLayoutBinding</name>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/dd1/a01458_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+<para>Creates the descriptor set layout binding for the skinning UBO/SSBO. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">binding</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The descriptor binding index. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The program flags. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SkinningUbo.hpp" line="59" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d01/a05519_1a270c3567911252999d00338a5460d6c8" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Mat4</type>
+        <definition>static C3D_API sdw::Mat4 castor3d::SkinningUbo::computeTransform</definition>
+        <argsstring>(SkinningData &amp;data, sdw::ShaderWriter &amp;writer, ProgramFlags const &amp;flags)</argsstring>
+        <name>computeTransform</name>
+        <param>
+          <type><ref refid="d1/dab/a05515" kindref="compound">SkinningData</ref> &amp;</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/dd1/a01458_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+<para>Computes skinning transformation in vertex shader. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">data</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The skinning data. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">writer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The shader writer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The program flags. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The resulting matrix. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SkinningUbo.hpp" line="75" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Ubos/SkinningUbo.hpp" line="24" column="1" bodyfile="Shader/Ubos/SkinningUbo.hpp" bodystart="23" bodyend="88"/>
+    <listofallmembers>
+      <member refid="de/d01/a05519_1afdd96edb86b204259c30e49fcd4cd937" prot="public" virt="non-virtual"><scope>castor3d::SkinningUbo</scope><name>BindingPoint</name></member>
+      <member refid="de/d01/a05519_1a676e025469152f3d89b778faa3802046" prot="public" virt="non-virtual"><scope>castor3d::SkinningUbo</scope><name>Bones</name></member>
+      <member refid="de/d01/a05519_1ac79a4280ebe9232da516cc3c7ce3a67e" prot="public" virt="non-virtual"><scope>castor3d::SkinningUbo</scope><name>BufferSkinning</name></member>
+      <member refid="de/d01/a05519_1a270c3567911252999d00338a5460d6c8" prot="public" virt="non-virtual"><scope>castor3d::SkinningUbo</scope><name>computeTransform</name></member>
+      <member refid="de/d01/a05519_1a4f257776fdbcd577263361e617acf356" prot="public" virt="non-virtual"><scope>castor3d::SkinningUbo</scope><name>Configuration</name></member>
+      <member refid="de/d01/a05519_1a9275775ca066f7d5c02839fcd680d8c0" prot="public" virt="non-virtual"><scope>castor3d::SkinningUbo</scope><name>createLayoutBinding</name></member>
+      <member refid="de/d01/a05519_1a3a2880d1406503548b9b2abe9da1186a" prot="public" virt="non-virtual"><scope>castor3d::SkinningUbo</scope><name>declare</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

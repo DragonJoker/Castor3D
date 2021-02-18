@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d7/db7/a05762" kind="class" language="C++" prot="public">
+    <compoundname>castor::TextWriter&lt; castor3d::SpecularGlossinessPbrPass &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::SpecularGlossinessPbrPass &gt;</basecompoundref>
+    <includes local="no">TextSpecularGlossinessPbrPass.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d7/db7/a05762_1ab819b1d25f4288a710a982c2dd2a015d" prot="private" static="no" mutable="no">
+        <type>String</type>
+        <definition>String castor::TextWriter&lt; castor3d::SpecularGlossinessPbrPass &gt;::m_subfolder</definition>
+        <argsstring></argsstring>
+        <name>m_subfolder</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextSpecularGlossinessPbrPass.hpp" line="24" column="1" bodyfile="Text/TextSpecularGlossinessPbrPass.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/db7/a05762_1a2898056afad973fd6612b9f9c6ad3c13" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor::TextWriter&lt; castor3d::SpecularGlossinessPbrPass &gt;::TextWriter</definition>
+        <argsstring>(String const &amp;tabs, String const &amp;subfolder)</argsstring>
+        <name>TextWriter</name>
+        <param>
+          <type>String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <param>
+          <type>String const &amp;</type>
+          <declname>subfolder</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextSpecularGlossinessPbrPass.hpp" line="18" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/db7/a05762_1a55989f284fbdc83abe3577b410cd205b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::TextWriter&lt; castor3d::SpecularGlossinessPbrPass &gt;::operator()</definition>
+        <argsstring>(castor3d::SpecularGlossinessPbrPass const &amp;pass, TextFile &amp;file) override</argsstring>
+        <name>operator()</name>
+        <param>
+          <type><ref refid="dc/dd5/a02614" kindref="compound">castor3d::SpecularGlossinessPbrPass</ref> const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>TextFile &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextSpecularGlossinessPbrPass.hpp" line="20" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="5435">
+        <label>castor::TextWriter&lt; castor3d::SpecularGlossinessPbrPass &gt;</label>
+        <link refid="d7/db7/a05762"/>
+        <childnode refid="5436" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5436">
+        <label>TextWriterT&lt; castor3d::SpecularGlossinessPbrPass &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="5437">
+        <label>castor::TextWriter&lt; castor3d::SpecularGlossinessPbrPass &gt;</label>
+        <link refid="d7/db7/a05762"/>
+        <childnode refid="5438" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5438">
+        <label>TextWriterT&lt; castor3d::SpecularGlossinessPbrPass &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Text/TextSpecularGlossinessPbrPass.hpp" line="16" column="1" bodyfile="Text/TextSpecularGlossinessPbrPass.hpp" bodystart="14" bodyend="25"/>
+    <listofallmembers>
+      <member refid="d7/db7/a05762_1ab819b1d25f4288a710a982c2dd2a015d" prot="private" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::SpecularGlossinessPbrPass &gt;</scope><name>m_subfolder</name></member>
+      <member refid="d7/db7/a05762_1a55989f284fbdc83abe3577b410cd205b" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::SpecularGlossinessPbrPass &gt;</scope><name>operator()</name></member>
+      <member refid="d7/db7/a05762_1a2898056afad973fd6612b9f9c6ad3c13" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::SpecularGlossinessPbrPass &gt;</scope><name>TextWriter</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

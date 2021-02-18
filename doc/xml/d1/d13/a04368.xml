@@ -1,0 +1,464 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d1/d13/a04368" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::CombinePass</compoundname>
+    <includes local="no">CombinePass.hpp</includes>
+    <innerclass refid="de/d79/a04372" prot="private">castor3d::CombinePass::CombineQuad</innerclass>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="d1/d13/a04368_1a613ace3ac5310ad77227ecde5e2f6e1f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>friend class</type>
+        <definition>friend class CombinePassBuilder</definition>
+        <argsstring></argsstring>
+        <name>CombinePassBuilder</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CombinePass.hpp" line="47" column="1" bodyfile="Render/Passes/CombinePass.hpp" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d1/d13/a04368_1a80daeac23035f81488dae7479e91ceef" prot="public" static="yes" mutable="no">
+        <type>castor::String const</type>
+        <definition>castor::String const castor3d::CombinePass::LhsMaps</definition>
+        <argsstring></argsstring>
+        <name>LhsMaps</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CombinePass.hpp" line="75" column="1" bodyfile="Render/Passes/CombinePass.hpp" bodystart="75" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d13/a04368_1ac4a62f28b001510201a76d63bacce25e" prot="public" static="yes" mutable="no">
+        <type>castor::String const</type>
+        <definition>castor::String const castor3d::CombinePass::RhsMap</definition>
+        <argsstring></argsstring>
+        <name>RhsMap</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CombinePass.hpp" line="76" column="1" bodyfile="Render/Passes/CombinePass.hpp" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d1/d13/a04368_1a878d68d6ae366c0cdef1227eb4dc14f9" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/dbb/a02520" kindref="compound">Engine</ref> &amp;</type>
+        <definition>Engine&amp; castor3d::CombinePass::m_engine</definition>
+        <argsstring></argsstring>
+        <name>m_engine</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CombinePass.hpp" line="100" column="1" bodyfile="Render/Passes/CombinePass.hpp" bodystart="100" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d13/a04368_1a54fb5edf3b8bb348a519df32db6c3425" prot="private" static="no" mutable="no">
+        <type><ref refid="d7/d32/a05312" kindref="compound">ShaderModule</ref> const  &amp;</type>
+        <definition>ShaderModule const&amp; castor3d::CombinePass::m_vertexShader</definition>
+        <argsstring></argsstring>
+        <name>m_vertexShader</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CombinePass.hpp" line="101" column="1" bodyfile="Render/Passes/CombinePass.hpp" bodystart="101" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d13/a04368_1a8408dfa1cb7a2938b7c281a829596e66" prot="private" static="no" mutable="no">
+        <type><ref refid="d7/d32/a05312" kindref="compound">ShaderModule</ref> const  &amp;</type>
+        <definition>ShaderModule const&amp; castor3d::CombinePass::m_pixelShader</definition>
+        <argsstring></argsstring>
+        <name>m_pixelShader</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CombinePass.hpp" line="102" column="1" bodyfile="Render/Passes/CombinePass.hpp" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d13/a04368_1afc7791b64c7aec530c02f8da7a0b964c" prot="private" static="no" mutable="no">
+        <type>TextureLayoutSPtr</type>
+        <definition>TextureLayoutSPtr castor3d::CombinePass::m_image</definition>
+        <argsstring></argsstring>
+        <name>m_image</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CombinePass.hpp" line="103" column="1" bodyfile="Render/Passes/CombinePass.hpp" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d13/a04368_1a60b3c83c2856a42dc717d02bab339d55" prot="private" static="no" mutable="no">
+        <type>ashes::ImageView</type>
+        <definition>ashes::ImageView castor3d::CombinePass::m_view</definition>
+        <argsstring></argsstring>
+        <name>m_view</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CombinePass.hpp" line="104" column="1" bodyfile="Render/Passes/CombinePass.hpp" bodystart="104" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d13/a04368_1ac1ccd6fc03c346e2f32faa3de4ff3d70" prot="private" static="no" mutable="no">
+        <type>IntermediateViewArray</type>
+        <definition>IntermediateViewArray castor3d::CombinePass::m_lhsBarrierViews</definition>
+        <argsstring></argsstring>
+        <name>m_lhsBarrierViews</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CombinePass.hpp" line="105" column="1" bodyfile="Render/Passes/CombinePass.hpp" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d13/a04368_1a0eacc685773dfb4a6be9cc106234b2c8" prot="private" static="no" mutable="no">
+        <type>IntermediateViewArray</type>
+        <definition>IntermediateViewArray castor3d::CombinePass::m_lhsViews</definition>
+        <argsstring></argsstring>
+        <name>m_lhsViews</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CombinePass.hpp" line="106" column="1" bodyfile="Render/Passes/CombinePass.hpp" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d13/a04368_1a34793db6a4003c841aa83a5953c66efd" prot="private" static="no" mutable="no">
+        <type><ref refid="d7/d6d/a04584" kindref="compound">IntermediateView</ref></type>
+        <definition>IntermediateView castor3d::CombinePass::m_rhsBarrierView</definition>
+        <argsstring></argsstring>
+        <name>m_rhsBarrierView</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CombinePass.hpp" line="107" column="1" bodyfile="Render/Passes/CombinePass.hpp" bodystart="107" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d13/a04368_1a54e7e1572960a4c3cd6d2c67b5bcab20" prot="private" static="no" mutable="no">
+        <type><ref refid="d7/d6d/a04584" kindref="compound">IntermediateView</ref></type>
+        <definition>IntermediateView castor3d::CombinePass::m_rhsView</definition>
+        <argsstring></argsstring>
+        <name>m_rhsView</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CombinePass.hpp" line="108" column="1" bodyfile="Render/Passes/CombinePass.hpp" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d13/a04368_1ae043a8d5ef08b29ffabd51ef01271c1a" prot="private" static="no" mutable="no">
+        <type><ref refid="da/d1e/a01479_1a3c99cd93ea5717660ffcef59716e8df6" kindref="member">CombinePassConfig</ref></type>
+        <definition>CombinePassConfig castor3d::CombinePass::m_config</definition>
+        <argsstring></argsstring>
+        <name>m_config</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CombinePass.hpp" line="109" column="1" bodyfile="Render/Passes/CombinePass.hpp" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d13/a04368_1a17f069c7db2c3efba47a9658f3529ac6" prot="private" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::CombinePass::m_prefix</definition>
+        <argsstring></argsstring>
+        <name>m_prefix</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CombinePass.hpp" line="110" column="1" bodyfile="Render/Passes/CombinePass.hpp" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d13/a04368_1ab3754ed7567c42330a11db722397349a" prot="private" static="no" mutable="no">
+        <type>RenderPassTimerSPtr</type>
+        <definition>RenderPassTimerSPtr castor3d::CombinePass::m_timer</definition>
+        <argsstring></argsstring>
+        <name>m_timer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CombinePass.hpp" line="111" column="1" bodyfile="Render/Passes/CombinePass.hpp" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d13/a04368_1aac886563beb138afc86e36bf38ee9293" prot="private" static="no" mutable="no">
+        <type>CommandsSemaphoreArray</type>
+        <definition>CommandsSemaphoreArray castor3d::CombinePass::m_commands</definition>
+        <argsstring></argsstring>
+        <name>m_commands</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CombinePass.hpp" line="112" column="1" bodyfile="Render/Passes/CombinePass.hpp" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d13/a04368_1ad36d37c456d1630d1178ca6836fe229c" prot="private" static="no" mutable="no">
+        <type>ashes::RenderPassPtr</type>
+        <definition>ashes::RenderPassPtr castor3d::CombinePass::m_renderPass</definition>
+        <argsstring></argsstring>
+        <name>m_renderPass</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CombinePass.hpp" line="113" column="1" bodyfile="Render/Passes/CombinePass.hpp" bodystart="113" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d13/a04368_1a7e22e9832bcafd2e8a28e12bb04a8541" prot="private" static="no" mutable="no">
+        <type>ashes::FrameBufferPtr</type>
+        <definition>ashes::FrameBufferPtr castor3d::CombinePass::m_frameBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_frameBuffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CombinePass.hpp" line="114" column="1" bodyfile="Render/Passes/CombinePass.hpp" bodystart="114" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d13/a04368_1a9de54ca14555a65208d26b988fa1ca07" prot="private" static="no" mutable="no">
+        <type>CombineQuad</type>
+        <definition>CombineQuad castor3d::CombinePass::m_quad</definition>
+        <argsstring></argsstring>
+        <name>m_quad</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CombinePass.hpp" line="115" column="1" bodyfile="Render/Passes/CombinePass.hpp" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d13/a04368_1ad33df03456d5fbd4dc49298cd9a8bf5f" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::CombinePass::m_index</definition>
+        <argsstring></argsstring>
+        <name>m_index</name>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CombinePass.hpp" line="116" column="1" bodyfile="Render/Passes/CombinePass.hpp" bodystart="116" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="d1/d13/a04368_1a18ecef96945cd671b11a6a836b2567cd" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::CombinePass::CombinePass</definition>
+        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, castor::String const &amp;prefix, VkFormat outputFormat, VkExtent2D const &amp;outputSize, ShaderModule const &amp;vertexShader, ShaderModule const &amp;pixelShader, IntermediateViewArray const &amp;lhsViews, IntermediateView const &amp;rhsView, CombinePassConfig config)</argsstring>
+        <name>CombinePass</name>
+        <param>
+          <type><ref refid="dc/dbb/a02520" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>prefix</declname>
+        </param>
+        <param>
+          <type>VkFormat</type>
+          <declname>outputFormat</declname>
+        </param>
+        <param>
+          <type>VkExtent2D const &amp;</type>
+          <declname>outputSize</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d32/a05312" kindref="compound">ShaderModule</ref> const &amp;</type>
+          <declname>vertexShader</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d32/a05312" kindref="compound">ShaderModule</ref> const &amp;</type>
+          <declname>pixelShader</declname>
+        </param>
+        <param>
+          <type>IntermediateViewArray const &amp;</type>
+          <declname>lhsViews</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d6d/a04584" kindref="compound">IntermediateView</ref> const &amp;</type>
+          <declname>rhsView</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d1e/a01479_1a3c99cd93ea5717660ffcef59716e8df6" kindref="member">CombinePassConfig</ref></type>
+          <declname>config</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CombinePass.hpp" line="50" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/d13/a04368_1a630b00ab459c516b7ecbb2684f0acc83" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::CombinePass::~CombinePass</definition>
+        <argsstring>()</argsstring>
+        <name>~CombinePass</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CombinePass.hpp" line="62" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d13/a04368_1afd55cd5fda38b362e8c5f2162a5364d1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::CombinePass::update</definition>
+        <argsstring>(CpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <param>
+          <type><ref refid="dc/d0d/a04588" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CombinePass.hpp" line="63" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d13/a04368_1a2053be6dd827f407b648f3e49bb8cc25" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::CombinePass::accept</definition>
+        <argsstring>(PipelineVisitorBase &amp;visitor)</argsstring>
+        <name>accept</name>
+        <param>
+          <type><ref refid="d5/d73/a03836" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CombinePass.hpp" line="64" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d13/a04368_1ade8f4085aaad8192ff65df0049a9d008" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::Semaphore const  &amp;</type>
+        <definition>C3D_API ashes::Semaphore const&amp; castor3d::CombinePass::combine</definition>
+        <argsstring>(ashes::Semaphore const &amp;toWait) const</argsstring>
+        <name>combine</name>
+        <param>
+          <type>ashes::Semaphore const &amp;</type>
+          <declname>toWait</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CombinePass.hpp" line="65" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d13/a04368_1a128753eea20b39c16c76dbd608a8e993" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/da6/a04380" kindref="compound">CommandsSemaphore</ref></type>
+        <definition>C3D_API CommandsSemaphore castor3d::CombinePass::getCommands</definition>
+        <argsstring>(RenderPassTimer const &amp;timer, uint32_t index) const</argsstring>
+        <name>getCommands</name>
+        <param>
+          <type><ref refid="d7/dc4/a04612" kindref="compound">RenderPassTimer</ref> const &amp;</type>
+          <declname>timer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CombinePass.hpp" line="66" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d13/a04368_1a445029b2ca2d1b9fc6183b8b2f5f7dad" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/d7d/a02656" kindref="compound">TextureLayout</ref> const  &amp;</type>
+        <definition>TextureLayout const&amp; castor3d::CombinePass::getResult</definition>
+        <argsstring>() const</argsstring>
+        <name>getResult</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/CombinePass.hpp" line="69" column="1" bodyfile="Render/Passes/CombinePass.hpp" bodystart="69" bodyend="72"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Passes/CombinePass.hpp" line="46" column="1" bodyfile="Render/Passes/CombinePass.hpp" bodystart="45" bodyend="117"/>
+    <listofallmembers>
+      <member refid="d1/d13/a04368_1a2053be6dd827f407b648f3e49bb8cc25" prot="public" virt="non-virtual"><scope>castor3d::CombinePass</scope><name>accept</name></member>
+      <member refid="d1/d13/a04368_1ade8f4085aaad8192ff65df0049a9d008" prot="public" virt="non-virtual"><scope>castor3d::CombinePass</scope><name>combine</name></member>
+      <member refid="d1/d13/a04368_1a18ecef96945cd671b11a6a836b2567cd" prot="protected" virt="non-virtual"><scope>castor3d::CombinePass</scope><name>CombinePass</name></member>
+      <member refid="d1/d13/a04368_1a613ace3ac5310ad77227ecde5e2f6e1f" prot="private" virt="non-virtual"><scope>castor3d::CombinePass</scope><name>CombinePassBuilder</name></member>
+      <member refid="d1/d13/a04368_1a128753eea20b39c16c76dbd608a8e993" prot="public" virt="non-virtual"><scope>castor3d::CombinePass</scope><name>getCommands</name></member>
+      <member refid="d1/d13/a04368_1a445029b2ca2d1b9fc6183b8b2f5f7dad" prot="public" virt="non-virtual"><scope>castor3d::CombinePass</scope><name>getResult</name></member>
+      <member refid="d1/d13/a04368_1a80daeac23035f81488dae7479e91ceef" prot="public" virt="non-virtual"><scope>castor3d::CombinePass</scope><name>LhsMaps</name></member>
+      <member refid="d1/d13/a04368_1aac886563beb138afc86e36bf38ee9293" prot="private" virt="non-virtual"><scope>castor3d::CombinePass</scope><name>m_commands</name></member>
+      <member refid="d1/d13/a04368_1ae043a8d5ef08b29ffabd51ef01271c1a" prot="private" virt="non-virtual"><scope>castor3d::CombinePass</scope><name>m_config</name></member>
+      <member refid="d1/d13/a04368_1a878d68d6ae366c0cdef1227eb4dc14f9" prot="private" virt="non-virtual"><scope>castor3d::CombinePass</scope><name>m_engine</name></member>
+      <member refid="d1/d13/a04368_1a7e22e9832bcafd2e8a28e12bb04a8541" prot="private" virt="non-virtual"><scope>castor3d::CombinePass</scope><name>m_frameBuffer</name></member>
+      <member refid="d1/d13/a04368_1afc7791b64c7aec530c02f8da7a0b964c" prot="private" virt="non-virtual"><scope>castor3d::CombinePass</scope><name>m_image</name></member>
+      <member refid="d1/d13/a04368_1ad33df03456d5fbd4dc49298cd9a8bf5f" prot="private" virt="non-virtual"><scope>castor3d::CombinePass</scope><name>m_index</name></member>
+      <member refid="d1/d13/a04368_1ac1ccd6fc03c346e2f32faa3de4ff3d70" prot="private" virt="non-virtual"><scope>castor3d::CombinePass</scope><name>m_lhsBarrierViews</name></member>
+      <member refid="d1/d13/a04368_1a0eacc685773dfb4a6be9cc106234b2c8" prot="private" virt="non-virtual"><scope>castor3d::CombinePass</scope><name>m_lhsViews</name></member>
+      <member refid="d1/d13/a04368_1a8408dfa1cb7a2938b7c281a829596e66" prot="private" virt="non-virtual"><scope>castor3d::CombinePass</scope><name>m_pixelShader</name></member>
+      <member refid="d1/d13/a04368_1a17f069c7db2c3efba47a9658f3529ac6" prot="private" virt="non-virtual"><scope>castor3d::CombinePass</scope><name>m_prefix</name></member>
+      <member refid="d1/d13/a04368_1a9de54ca14555a65208d26b988fa1ca07" prot="private" virt="non-virtual"><scope>castor3d::CombinePass</scope><name>m_quad</name></member>
+      <member refid="d1/d13/a04368_1ad36d37c456d1630d1178ca6836fe229c" prot="private" virt="non-virtual"><scope>castor3d::CombinePass</scope><name>m_renderPass</name></member>
+      <member refid="d1/d13/a04368_1a34793db6a4003c841aa83a5953c66efd" prot="private" virt="non-virtual"><scope>castor3d::CombinePass</scope><name>m_rhsBarrierView</name></member>
+      <member refid="d1/d13/a04368_1a54e7e1572960a4c3cd6d2c67b5bcab20" prot="private" virt="non-virtual"><scope>castor3d::CombinePass</scope><name>m_rhsView</name></member>
+      <member refid="d1/d13/a04368_1ab3754ed7567c42330a11db722397349a" prot="private" virt="non-virtual"><scope>castor3d::CombinePass</scope><name>m_timer</name></member>
+      <member refid="d1/d13/a04368_1a54fb5edf3b8bb348a519df32db6c3425" prot="private" virt="non-virtual"><scope>castor3d::CombinePass</scope><name>m_vertexShader</name></member>
+      <member refid="d1/d13/a04368_1a60b3c83c2856a42dc717d02bab339d55" prot="private" virt="non-virtual"><scope>castor3d::CombinePass</scope><name>m_view</name></member>
+      <member refid="d1/d13/a04368_1ac4a62f28b001510201a76d63bacce25e" prot="public" virt="non-virtual"><scope>castor3d::CombinePass</scope><name>RhsMap</name></member>
+      <member refid="d1/d13/a04368_1afd55cd5fda38b362e8c5f2162a5364d1" prot="public" virt="non-virtual"><scope>castor3d::CombinePass</scope><name>update</name></member>
+      <member refid="d1/d13/a04368_1a630b00ab459c516b7ecbb2684f0acc83" prot="public" virt="non-virtual"><scope>castor3d::CombinePass</scope><name>~CombinePass</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

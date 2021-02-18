@@ -1,0 +1,174 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d5/d5f/a00461" kind="file" language="C++">
+    <compoundname>MeshGenerator.hpp</compoundname>
+    <includes refid="d2/d9d/a00464" local="yes">MeshModule.hpp</includes>
+    <includes refid="d4/d27/a00392" local="yes">Castor3D/Miscellaneous/MiscellaneousModule.hpp</includes>
+    <includedby refid="db/d43/a00422" local="yes">Model/Mesh/Generator/Cone.hpp</includedby>
+    <includedby refid="dc/d2f/a00425" local="yes">Model/Mesh/Generator/Cube.hpp</includedby>
+    <includedby refid="d4/dd3/a00428" local="yes">Model/Mesh/Generator/Cylinder.hpp</includedby>
+    <includedby refid="df/d70/a00431" local="yes">Model/Mesh/Generator/Icosahedron.hpp</includedby>
+    <includedby refid="d4/da8/a00437" local="yes">Model/Mesh/Generator/Plane.hpp</includedby>
+    <includedby refid="de/df8/a00440" local="yes">Model/Mesh/Generator/Projection.hpp</includedby>
+    <includedby refid="d0/dc4/a00443" local="yes">Model/Mesh/Generator/Sphere.hpp</includedby>
+    <includedby refid="d3/def/a00446" local="yes">Model/Mesh/Generator/Torus.hpp</includedby>
+    <incdepgraph>
+      <node id="8496">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="8499">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="8500">
+        <label>cstdint</label>
+      </node>
+      <node id="8498">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="8491">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d5/d35/a00266"/>
+        <childnode refid="8492" relation="include">
+        </childnode>
+        <childnode refid="8493" relation="include">
+        </childnode>
+        <childnode refid="8494" relation="include">
+        </childnode>
+        <childnode refid="8495" relation="include">
+        </childnode>
+        <childnode refid="8496" relation="include">
+        </childnode>
+        <childnode refid="8497" relation="include">
+        </childnode>
+        <childnode refid="8498" relation="include">
+        </childnode>
+        <childnode refid="8499" relation="include">
+        </childnode>
+        <childnode refid="8500" relation="include">
+        </childnode>
+        <childnode refid="8501" relation="include">
+        </childnode>
+        <childnode refid="8502" relation="include">
+        </childnode>
+        <childnode refid="8503" relation="include">
+        </childnode>
+      </node>
+      <node id="8488">
+        <label>Model/Mesh/MeshGenerator.hpp</label>
+        <link refid="d5/d5f/a00461"/>
+        <childnode refid="8489" relation="include">
+        </childnode>
+        <childnode refid="8505" relation="include">
+        </childnode>
+      </node>
+      <node id="8502">
+        <label>string</label>
+      </node>
+      <node id="8490">
+        <label>Castor3D/Model/ModelModule.hpp</label>
+        <link refid="d7/def/a00521"/>
+        <childnode refid="8491" relation="include">
+        </childnode>
+      </node>
+      <node id="8495">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="8492">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="8494">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="8505">
+        <label>Castor3D/Miscellaneous/MiscellaneousModule.hpp</label>
+        <link refid="d4/d27/a00392"/>
+        <childnode refid="8491" relation="include">
+        </childnode>
+      </node>
+      <node id="8493">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="8489">
+        <label>MeshModule.hpp</label>
+        <link refid="d2/d9d/a00464"/>
+        <childnode refid="8490" relation="include">
+        </childnode>
+        <childnode refid="8504" relation="include">
+        </childnode>
+      </node>
+      <node id="8503">
+        <label>vector</label>
+      </node>
+      <node id="8497">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="8504">
+        <label>CastorUtils/Design/Factory.hpp</label>
+      </node>
+      <node id="8501">
+        <label>memory</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="8514">
+        <label>Model/Mesh/Generator/Torus.hpp</label>
+        <link refid="d3/def/a00446"/>
+      </node>
+      <node id="8510">
+        <label>Model/Mesh/Generator/Icosahedron.hpp</label>
+        <link refid="df/d70/a00431"/>
+      </node>
+      <node id="8512">
+        <label>Model/Mesh/Generator/Projection.hpp</label>
+        <link refid="de/df8/a00440"/>
+      </node>
+      <node id="8506">
+        <label>Model/Mesh/MeshGenerator.hpp</label>
+        <link refid="d5/d5f/a00461"/>
+        <childnode refid="8507" relation="include">
+        </childnode>
+        <childnode refid="8508" relation="include">
+        </childnode>
+        <childnode refid="8509" relation="include">
+        </childnode>
+        <childnode refid="8510" relation="include">
+        </childnode>
+        <childnode refid="8511" relation="include">
+        </childnode>
+        <childnode refid="8512" relation="include">
+        </childnode>
+        <childnode refid="8513" relation="include">
+        </childnode>
+        <childnode refid="8514" relation="include">
+        </childnode>
+      </node>
+      <node id="8509">
+        <label>Model/Mesh/Generator/Cylinder.hpp</label>
+        <link refid="d4/dd3/a00428"/>
+      </node>
+      <node id="8511">
+        <label>Model/Mesh/Generator/Plane.hpp</label>
+        <link refid="d4/da8/a00437"/>
+      </node>
+      <node id="8513">
+        <label>Model/Mesh/Generator/Sphere.hpp</label>
+        <link refid="d0/dc4/a00443"/>
+      </node>
+      <node id="8508">
+        <label>Model/Mesh/Generator/Cube.hpp</label>
+        <link refid="dc/d2f/a00425"/>
+      </node>
+      <node id="8507">
+        <label>Model/Mesh/Generator/Cone.hpp</label>
+        <link refid="db/d43/a00422"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="d2/d05/a03916" prot="public">castor3d::MeshGenerator</innerclass>
+    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Model/Mesh/MeshGenerator.hpp"/>
+  </compounddef>
+</doxygen>

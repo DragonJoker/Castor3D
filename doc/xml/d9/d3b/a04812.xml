@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d9/d3b/a04812" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::PointLightPass::Config</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d9/d3b/a04812_1a977e4afea00c01617abe2177db4a441a" prot="public" static="no" mutable="no">
+        <type><ref refid="d0/d95/a04772" kindref="compound">LightPass::Config</ref></type>
+        <definition>LightPass::Config castor3d::PointLightPass::Config::base</definition>
+        <argsstring></argsstring>
+        <name>base</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/PointLightPass.hpp" line="142" column="1" bodyfile="Render/Technique/Opaque/Lighting/PointLightPass.hpp" bodystart="142" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d3b/a04812_1a8bf655f4e7eec0c4c56cc902cb504b82" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::PointLightPass::Config::position</definition>
+        <argsstring></argsstring>
+        <name>position</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The variable containing the light position. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/PointLightPass.hpp" line="145" column="1" bodyfile="Render/Technique/Opaque/Lighting/PointLightPass.hpp" bodystart="145" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d3b/a04812_1a84a53729ad77740d7dee43245be0fd6c" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::PointLightPass::Config::attenuation</definition>
+        <argsstring></argsstring>
+        <name>attenuation</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The variable containing the light attenuation (RGB) and index (A). </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/PointLightPass.hpp" line="148" column="1" bodyfile="Render/Technique/Opaque/Lighting/PointLightPass.hpp" bodystart="148" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2779">
+        <label>castor3d::PointLightPass::Config</label>
+        <childnode refid="2780" relation="usage">
+          <edgelabel>base</edgelabel>
+        </childnode>
+      </node>
+      <node id="2780">
+        <label>castor3d::LightPass::Config</label>
+        <link refid="d0/d95/a04772"/>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Technique/Opaque/Lighting/PointLightPass.hpp" line="141" column="1" bodyfile="Render/Technique/Opaque/Lighting/PointLightPass.hpp" bodystart="140" bodyend="149"/>
+    <listofallmembers>
+      <member refid="d9/d3b/a04812_1a84a53729ad77740d7dee43245be0fd6c" prot="public" virt="non-virtual"><scope>castor3d::PointLightPass::Config</scope><name>attenuation</name></member>
+      <member refid="d9/d3b/a04812_1a977e4afea00c01617abe2177db4a441a" prot="public" virt="non-virtual"><scope>castor3d::PointLightPass::Config</scope><name>base</name></member>
+      <member refid="d9/d3b/a04812_1a8bf655f4e7eec0c4c56cc902cb504b82" prot="public" virt="non-virtual"><scope>castor3d::PointLightPass::Config</scope><name>position</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

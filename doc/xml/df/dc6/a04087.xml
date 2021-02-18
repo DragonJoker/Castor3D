@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="df/dc6/a04087" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::OverlayCategory::Vertex</compoundname>
+    <includes local="no">OverlayCategory.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="df/dc6/a04087_1ae8cb56953aef04c695e0900e49c64727" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::OverlayCategory::Vertex::coords</definition>
+        <argsstring></argsstring>
+        <name>coords</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="30" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/dc6/a04087_1a7721675ac35a3dc95552813297f9705f" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::OverlayCategory::Vertex::texture</definition>
+        <argsstring></argsstring>
+        <name>texture</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="31" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Holds specific vertex data for an <ref refid="da/d33/a04079" kindref="compound">Overlay</ref>. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="date"><para>28/11/2014 </para>
+</simplesect>
+<simplesect kind="version"><para>0.7.0 </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="Overlay/OverlayCategory.hpp" line="29" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="28" bodyend="32"/>
+    <listofallmembers>
+      <member refid="df/dc6/a04087_1ae8cb56953aef04c695e0900e49c64727" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory::Vertex</scope><name>coords</name></member>
+      <member refid="df/dc6/a04087_1a7721675ac35a3dc95552813297f9705f" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory::Vertex</scope><name>texture</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

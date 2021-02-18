@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d9/d52/a05731" kind="struct" language="C++" prot="public">
+    <compoundname>castor::TextWriter&lt; castor3d::Scene &gt;::Options</compoundname>
+    <includes local="no">TextScene.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d9/d52/a05731_1a6db6193e538cc32e34d729f6098d5f9f" prot="public" static="no" mutable="no">
+        <type>Path</type>
+        <definition>Path castor::TextWriter&lt; castor3d::Scene &gt;::Options::materialsFile</definition>
+        <argsstring></argsstring>
+        <name>materialsFile</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextScene.hpp" line="20" column="1" bodyfile="Text/TextScene.hpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d52/a05731_1acabfb1a3546000ce994ca9926e683e2e" prot="public" static="no" mutable="no">
+        <type>Path</type>
+        <definition>Path castor::TextWriter&lt; castor3d::Scene &gt;::Options::meshesFile</definition>
+        <argsstring></argsstring>
+        <name>meshesFile</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextScene.hpp" line="21" column="1" bodyfile="Text/TextScene.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d52/a05731_1a3f2edda51944e5bd726db840da682819" prot="public" static="no" mutable="no">
+        <type>Path</type>
+        <definition>Path castor::TextWriter&lt; castor3d::Scene &gt;::Options::nodesFile</definition>
+        <argsstring></argsstring>
+        <name>nodesFile</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextScene.hpp" line="22" column="1" bodyfile="Text/TextScene.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d52/a05731_1a11955cb9af1ef1e969c9d74a6845cb9c" prot="public" static="no" mutable="no">
+        <type>Path</type>
+        <definition>Path castor::TextWriter&lt; castor3d::Scene &gt;::Options::objectsFile</definition>
+        <argsstring></argsstring>
+        <name>objectsFile</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextScene.hpp" line="23" column="1" bodyfile="Text/TextScene.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d52/a05731_1add17ae01db985bc64f801d977612c7d3" prot="public" static="no" mutable="no">
+        <type>Path</type>
+        <definition>Path castor::TextWriter&lt; castor3d::Scene &gt;::Options::lightsFile</definition>
+        <argsstring></argsstring>
+        <name>lightsFile</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextScene.hpp" line="24" column="1" bodyfile="Text/TextScene.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d52/a05731_1ac1d4dcd4b0af205a1bb9a5083ca43d09" prot="public" static="no" mutable="no">
+        <type>String</type>
+        <definition>String castor::TextWriter&lt; castor3d::Scene &gt;::Options::subfolder</definition>
+        <argsstring></argsstring>
+        <name>subfolder</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextScene.hpp" line="25" column="1" bodyfile="Text/TextScene.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Text/TextScene.hpp" line="19" column="1" bodyfile="Text/TextScene.hpp" bodystart="18" bodyend="26"/>
+    <listofallmembers>
+      <member refid="d9/d52/a05731_1add17ae01db985bc64f801d977612c7d3" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Scene &gt;::Options</scope><name>lightsFile</name></member>
+      <member refid="d9/d52/a05731_1a6db6193e538cc32e34d729f6098d5f9f" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Scene &gt;::Options</scope><name>materialsFile</name></member>
+      <member refid="d9/d52/a05731_1acabfb1a3546000ce994ca9926e683e2e" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Scene &gt;::Options</scope><name>meshesFile</name></member>
+      <member refid="d9/d52/a05731_1a3f2edda51944e5bd726db840da682819" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Scene &gt;::Options</scope><name>nodesFile</name></member>
+      <member refid="d9/d52/a05731_1a11955cb9af1ef1e969c9d74a6845cb9c" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Scene &gt;::Options</scope><name>objectsFile</name></member>
+      <member refid="d9/d52/a05731_1ac1d4dcd4b0af205a1bb9a5083ca43d09" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Scene &gt;::Options</scope><name>subfolder</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

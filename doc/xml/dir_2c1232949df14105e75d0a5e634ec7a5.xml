@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_2c1232949df14105e75d0a5e634ec7a5" kind="dir">
+    <compoundname>Shader/TextureConfigurationBuffer</compoundname>
+    <innerfile refid="d8/d0d/a01280">TextureConfigurationBuffer.hpp</innerfile>
+    <innerfile refid="d5/da7/a01283">TextureConfigurationBufferModule.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/TextureConfigurationBuffer/"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dd/d82/a05598" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::RsmUboConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dd/d82/a05598_1ae1fc06af9ab928828582d30fb26826f0" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::RsmUboConfiguration::intensity</definition>
+        <argsstring></argsstring>
+        <name>intensity</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="333" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="333" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d82/a05598_1af7b40cc7ac2e28819b1172af12de9919" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::RsmUboConfiguration::maxRadius</definition>
+        <argsstring></argsstring>
+        <name>maxRadius</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="334" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="334" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d82/a05598_1a62a2b767edc4777a823fb85f605ad364" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RsmUboConfiguration::sampleCount</definition>
+        <argsstring></argsstring>
+        <name>sampleCount</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="335" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="335" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d82/a05598_1ae9976fb60e81cb8fdd60d87b5c7e8784" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RsmUboConfiguration::index</definition>
+        <argsstring></argsstring>
+        <name>index</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="336" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="336" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Reflective Shadow Maps based GI UBO configuration. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Ubos/UbosModule.hpp" line="332" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="331" bodyend="337"/>
+    <listofallmembers>
+      <member refid="dd/d82/a05598_1ae9976fb60e81cb8fdd60d87b5c7e8784" prot="public" virt="non-virtual"><scope>castor3d::RsmUboConfiguration</scope><name>index</name></member>
+      <member refid="dd/d82/a05598_1ae1fc06af9ab928828582d30fb26826f0" prot="public" virt="non-virtual"><scope>castor3d::RsmUboConfiguration</scope><name>intensity</name></member>
+      <member refid="dd/d82/a05598_1af7b40cc7ac2e28819b1172af12de9919" prot="public" virt="non-virtual"><scope>castor3d::RsmUboConfiguration</scope><name>maxRadius</name></member>
+      <member refid="dd/d82/a05598_1a62a2b767edc4777a823fb85f605ad364" prot="public" virt="non-virtual"><scope>castor3d::RsmUboConfiguration</scope><name>sampleCount</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

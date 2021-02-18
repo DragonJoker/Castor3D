@@ -1,0 +1,266 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dd/d4b/a04068" kind="class" language="C++" prot="private">
+    <compoundname>castor3d::DebugOverlays::DebugPanelT</compoundname>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="dd/d4b/a04068_1a744dc81a51ddb0aa67036ba445411ebd" prot="protected" static="no" mutable="no">
+        <type><ref refid="da/d1e/a01479_1ad78a6a1185b47fc82bf9bfc3c4c18319" kindref="member">OverlayCache</ref> &amp;</type>
+        <definition>OverlayCache&amp; castor3d::DebugOverlays::DebugPanelT&lt; T &gt;::m_cache</definition>
+        <argsstring></argsstring>
+        <name>m_cache</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="146" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="146" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d4b/a04068_1a7064fdddc95691436bbd01cb910b8cbf" prot="protected" static="no" mutable="no">
+        <type>T const  &amp;</type>
+        <definition>T const&amp; castor3d::DebugOverlays::DebugPanelT&lt; T &gt;::m_v</definition>
+        <argsstring></argsstring>
+        <name>m_v</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="147" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="147" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d4b/a04068_1a4ecd461bc39cbff77cf6c91db13838ff" prot="protected" static="no" mutable="no">
+        <type>TextOverlaySPtr</type>
+        <definition>TextOverlaySPtr castor3d::DebugOverlays::DebugPanelT&lt; T &gt;::m_label</definition>
+        <argsstring></argsstring>
+        <name>m_label</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="148" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="148" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d4b/a04068_1ab0975570da6e74ebadbdb4a255244089" prot="protected" static="no" mutable="no">
+        <type>TextOverlaySPtr</type>
+        <definition>TextOverlaySPtr castor3d::DebugOverlays::DebugPanelT&lt; T &gt;::m_value</definition>
+        <argsstring></argsstring>
+        <name>m_value</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="149" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="149" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/d4b/a04068_1a134d05db60ce4d959dfe336303652aa0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::DebugOverlays::DebugPanelT&lt; T &gt;::DebugPanelT</definition>
+        <argsstring>(DebugPanelT const &amp;)=delete</argsstring>
+        <name>DebugPanelT</name>
+        <param>
+          <type>DebugPanelT const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="132" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d4b/a04068_1aaad48711cd4def52c775fc036b2c5af0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>DebugPanelT &amp;</type>
+        <definition>DebugPanelT&amp; castor3d::DebugOverlays::DebugPanelT&lt; T &gt;::operator=</definition>
+        <argsstring>(DebugPanelT const &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <param>
+          <type>DebugPanelT const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="133" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d4b/a04068_1ac11178adf5e27ab7dcb22397078440e5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::DebugOverlays::DebugPanelT&lt; T &gt;::DebugPanelT</definition>
+        <argsstring>(DebugPanelT &amp;&amp;)=default</argsstring>
+        <name>DebugPanelT</name>
+        <param>
+          <type>DebugPanelT &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="134" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d4b/a04068_1ae01f5703870eed98913243c59b673928" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>DebugPanelT &amp;</type>
+        <definition>DebugPanelT&amp; castor3d::DebugOverlays::DebugPanelT&lt; T &gt;::operator=</definition>
+        <argsstring>(DebugPanelT &amp;&amp;)=default</argsstring>
+        <name>operator=</name>
+        <param>
+          <type>DebugPanelT &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="135" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d4b/a04068_1ad48d76e16c9e343ae58696fca5e7392d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::DebugOverlays::DebugPanelT&lt; T &gt;::DebugPanelT</definition>
+        <argsstring>(castor::String const &amp;name, castor::String const &amp;label, PanelOverlaySPtr panel, OverlayCache &amp;cache, T const &amp;value)</argsstring>
+        <name>DebugPanelT</name>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>label</declname>
+        </param>
+        <param>
+          <type>PanelOverlaySPtr</type>
+          <declname>panel</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d1e/a01479_1ad78a6a1185b47fc82bf9bfc3c4c18319" kindref="member">OverlayCache</ref> &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <param>
+          <type>T const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="136" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d4b/a04068_1a18e76068a0415b2095c1124d1c390f32" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::DebugOverlays::DebugPanelT&lt; T &gt;::~DebugPanelT</definition>
+        <argsstring>()</argsstring>
+        <name>~DebugPanelT</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="141" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d4b/a04068_1a04f20327b77ee49f696674daaca24efe" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::DebugOverlays::DebugPanelT&lt; T &gt;::update</definition>
+        <argsstring>()</argsstring>
+        <name>update</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="142" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d4b/a04068_1ab6e74c03eafd19aae6e871c24939f73e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::DebugOverlays::DebugPanelT&lt; T &gt;::updatePosition</definition>
+        <argsstring>(int y)</argsstring>
+        <name>updatePosition</name>
+        <param>
+          <type>int</type>
+          <declname>y</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="143" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="914">
+        <label>castor3d::CacheBase&lt; ElementType, KeyType &gt;</label>
+        <link refid="df/d46/a02376"/>
+        <childnode refid="912" relation="usage">
+          <edgelabel>m_engine</edgelabel>
+        </childnode>
+      </node>
+      <node id="911">
+        <label>castor3d::CacheBase&lt; Overlay, castor::String &gt;</label>
+        <link refid="df/d46/a02376"/>
+        <childnode refid="912" relation="usage">
+          <edgelabel>m_engine</edgelabel>
+        </childnode>
+        <childnode refid="914" relation="template-instance">
+          <edgelabel>&lt; Overlay, castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="913">
+        <label>castor::Unique&lt; Engine &gt;</label>
+      </node>
+      <node id="909">
+        <label>castor3d::DebugOverlays::DebugPanelT&lt; T &gt;</label>
+        <childnode refid="910" relation="usage">
+          <edgelabel>m_cache</edgelabel>
+        </childnode>
+      </node>
+      <node id="912">
+        <label>castor3d::Engine</label>
+        <link refid="dc/dbb/a02520"/>
+        <childnode refid="913" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="910">
+        <label>castor3d::Cache&lt; Overlay, castor::String &gt;</label>
+        <link refid="d1/df5/a02496"/>
+        <childnode refid="911" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Overlay/DebugOverlays.hpp" line="130" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="129" bodyend="150"/>
+    <listofallmembers>
+      <member refid="dd/d4b/a04068_1a134d05db60ce4d959dfe336303652aa0" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::DebugPanelT</scope><name>DebugPanelT</name></member>
+      <member refid="dd/d4b/a04068_1ac11178adf5e27ab7dcb22397078440e5" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::DebugPanelT</scope><name>DebugPanelT</name></member>
+      <member refid="dd/d4b/a04068_1ad48d76e16c9e343ae58696fca5e7392d" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::DebugPanelT</scope><name>DebugPanelT</name></member>
+      <member refid="dd/d4b/a04068_1a744dc81a51ddb0aa67036ba445411ebd" prot="protected" virt="non-virtual"><scope>castor3d::DebugOverlays::DebugPanelT</scope><name>m_cache</name></member>
+      <member refid="dd/d4b/a04068_1a4ecd461bc39cbff77cf6c91db13838ff" prot="protected" virt="non-virtual"><scope>castor3d::DebugOverlays::DebugPanelT</scope><name>m_label</name></member>
+      <member refid="dd/d4b/a04068_1a7064fdddc95691436bbd01cb910b8cbf" prot="protected" virt="non-virtual"><scope>castor3d::DebugOverlays::DebugPanelT</scope><name>m_v</name></member>
+      <member refid="dd/d4b/a04068_1ab0975570da6e74ebadbdb4a255244089" prot="protected" virt="non-virtual"><scope>castor3d::DebugOverlays::DebugPanelT</scope><name>m_value</name></member>
+      <member refid="dd/d4b/a04068_1aaad48711cd4def52c775fc036b2c5af0" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::DebugPanelT</scope><name>operator=</name></member>
+      <member refid="dd/d4b/a04068_1ae01f5703870eed98913243c59b673928" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::DebugPanelT</scope><name>operator=</name></member>
+      <member refid="dd/d4b/a04068_1a04f20327b77ee49f696674daaca24efe" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::DebugPanelT</scope><name>update</name></member>
+      <member refid="dd/d4b/a04068_1ab6e74c03eafd19aae6e871c24939f73e" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::DebugPanelT</scope><name>updatePosition</name></member>
+      <member refid="dd/d4b/a04068_1a18e76068a0415b2095c1124d1c390f32" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::DebugPanelT</scope><name>~DebugPanelT</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

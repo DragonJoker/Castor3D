@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="da/d5c/a05615" kind="class" language="C++" prot="public">
+    <compoundname>castor::TextWriter&lt; castor3d::AnimatedObjectGroup &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::AnimatedObjectGroup &gt;</basecompoundref>
+    <includes local="no">TextAnimatedObjectGroup.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/d5c/a05615_1a60ed0f01c4b213da781b26846b29a993" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor::TextWriter&lt; castor3d::AnimatedObjectGroup &gt;::TextWriter</definition>
+        <argsstring>(String const &amp;tabs)</argsstring>
+        <name>TextWriter</name>
+        <param>
+          <type>String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextAnimatedObjectGroup.hpp" line="18" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d5c/a05615_1a7b188ecfbef3fb7c3fe1bd359732ab11" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>virtual C3D_API bool castor::TextWriter&lt; castor3d::AnimatedObjectGroup &gt;::operator()</definition>
+        <argsstring>(castor3d::AnimatedObjectGroup const &amp;group, TextFile &amp;file) override</argsstring>
+        <name>operator()</name>
+        <param>
+          <type><ref refid="de/ddd/a05031" kindref="compound">castor3d::AnimatedObjectGroup</ref> const &amp;</type>
+          <declname>group</declname>
+        </param>
+        <param>
+          <type>TextFile &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextAnimatedObjectGroup.hpp" line="19" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="5305">
+        <label>castor::TextWriter&lt; castor3d::AnimatedObjectGroup &gt;</label>
+        <link refid="da/d5c/a05615"/>
+        <childnode refid="5306" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5306">
+        <label>TextWriterT&lt; castor3d::AnimatedObjectGroup &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="5307">
+        <label>castor::TextWriter&lt; castor3d::AnimatedObjectGroup &gt;</label>
+        <link refid="da/d5c/a05615"/>
+        <childnode refid="5308" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5308">
+        <label>TextWriterT&lt; castor3d::AnimatedObjectGroup &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Text/TextAnimatedObjectGroup.hpp" line="16" column="1" bodyfile="Text/TextAnimatedObjectGroup.hpp" bodystart="14" bodyend="21"/>
+    <listofallmembers>
+      <member refid="da/d5c/a05615_1a7b188ecfbef3fb7c3fe1bd359732ab11" prot="public" virt="virtual"><scope>castor::TextWriter&lt; castor3d::AnimatedObjectGroup &gt;</scope><name>operator()</name></member>
+      <member refid="da/d5c/a05615_1a60ed0f01c4b213da781b26846b29a993" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::AnimatedObjectGroup &gt;</scope><name>TextWriter</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d6/dda/a05667" kind="class" language="C++" prot="public">
+    <compoundname>castor::TextWriter&lt; castor3d::Material &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::Material &gt;</basecompoundref>
+    <includes local="no">TextMaterial.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d6/dda/a05667_1af06550beb40ecd391fb62867cd3fc20b" prot="private" static="no" mutable="no">
+        <type>String</type>
+        <definition>String castor::TextWriter&lt; castor3d::Material &gt;::m_subfolder</definition>
+        <argsstring></argsstring>
+        <name>m_subfolder</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextMaterial.hpp" line="24" column="1" bodyfile="Text/TextMaterial.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/dda/a05667_1a527a0400a90e7b07e1ce22c0882ea6b9" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor::TextWriter&lt; castor3d::Material &gt;::TextWriter</definition>
+        <argsstring>(String const &amp;tabs, String const &amp;subfolder)</argsstring>
+        <name>TextWriter</name>
+        <param>
+          <type>String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <param>
+          <type>String const &amp;</type>
+          <declname>subfolder</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextMaterial.hpp" line="18" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/dda/a05667_1ab09656abd22767ee6c78afad2db288af" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::TextWriter&lt; castor3d::Material &gt;::operator()</definition>
+        <argsstring>(castor3d::Material const &amp;material, TextFile &amp;file) override</argsstring>
+        <name>operator()</name>
+        <param>
+          <type><ref refid="dd/db2/a02563" kindref="compound">castor3d::Material</ref> const &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type>TextFile &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextMaterial.hpp" line="20" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="5354">
+        <label>TextWriterT&lt; castor3d::Material &gt;</label>
+      </node>
+      <node id="5353">
+        <label>castor::TextWriter&lt; castor3d::Material &gt;</label>
+        <link refid="d6/dda/a05667"/>
+        <childnode refid="5354" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="5356">
+        <label>TextWriterT&lt; castor3d::Material &gt;</label>
+      </node>
+      <node id="5355">
+        <label>castor::TextWriter&lt; castor3d::Material &gt;</label>
+        <link refid="d6/dda/a05667"/>
+        <childnode refid="5356" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Text/TextMaterial.hpp" line="16" column="1" bodyfile="Text/TextMaterial.hpp" bodystart="14" bodyend="25"/>
+    <listofallmembers>
+      <member refid="d6/dda/a05667_1af06550beb40ecd391fb62867cd3fc20b" prot="private" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Material &gt;</scope><name>m_subfolder</name></member>
+      <member refid="d6/dda/a05667_1ab09656abd22767ee6c78afad2db288af" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Material &gt;</scope><name>operator()</name></member>
+      <member refid="d6/dda/a05667_1a527a0400a90e7b07e1ce22c0882ea6b9" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Material &gt;</scope><name>TextWriter</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,169 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="db/dc2/a05011" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::VoxelSceneData</compoundname>
+    <includes local="no">VoxelSceneData.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="db/dc2/a05011_1a0b20d89f2c6b87e7a8057f00825f491f" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::VoxelSceneData::enabled</definition>
+        <argsstring></argsstring>
+        <name>enabled</name>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Voxelize/VoxelSceneData.hpp" line="17" column="1" bodyfile="Render/Voxelize/VoxelSceneData.hpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dc2/a05011_1aff5fc8a4f3f4d697033013c0109cdf3e" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::VoxelSceneData::enableConservativeRasterization</definition>
+        <argsstring></argsstring>
+        <name>enableConservativeRasterization</name>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Voxelize/VoxelSceneData.hpp" line="18" column="1" bodyfile="Render/Voxelize/VoxelSceneData.hpp" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dc2/a05011_1a484c70a12e4eb42d4bec2b6868534efc" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::VoxelSceneData::enableOcclusion</definition>
+        <argsstring></argsstring>
+        <name>enableOcclusion</name>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Voxelize/VoxelSceneData.hpp" line="19" column="1" bodyfile="Render/Voxelize/VoxelSceneData.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dc2/a05011_1a2749869ecde5d0632c39d6c0b0efcbf5" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::VoxelSceneData::enableSecondaryBounce</definition>
+        <argsstring></argsstring>
+        <name>enableSecondaryBounce</name>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Voxelize/VoxelSceneData.hpp" line="20" column="1" bodyfile="Render/Voxelize/VoxelSceneData.hpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dc2/a05011_1aa55c1d6b4eedfb63a13349b771426e3d" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::VoxelSceneData::enableTemporalSmoothing</definition>
+        <argsstring></argsstring>
+        <name>enableTemporalSmoothing</name>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Voxelize/VoxelSceneData.hpp" line="21" column="1" bodyfile="Render/Voxelize/VoxelSceneData.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dc2/a05011_1ac473970ac68ec5d60c16af1624bd82c9" prot="public" static="no" mutable="no">
+        <type>castor::RangedValue&lt; uint32_t &gt;</type>
+        <definition>castor::RangedValue&lt; uint32_t &gt; castor3d::VoxelSceneData::gridSize</definition>
+        <argsstring></argsstring>
+        <name>gridSize</name>
+        <initializer>{ 256u, castor::makeRange( 2u, 512u ) }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Voxelize/VoxelSceneData.hpp" line="22" column="1" bodyfile="Render/Voxelize/VoxelSceneData.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dc2/a05011_1a6eda8f037d7f18bdd3f7786e1d3ca20a" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::VoxelSceneData::maxDistance</definition>
+        <argsstring></argsstring>
+        <name>maxDistance</name>
+        <initializer>{ 20.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The maximum distance for cones. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Voxelize/VoxelSceneData.hpp" line="25" column="1" bodyfile="Render/Voxelize/VoxelSceneData.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dc2/a05011_1aeedf2562d43d77fc07d85f5c5c6ac6ea" prot="public" static="no" mutable="no">
+        <type>castor::RangedValue&lt; uint32_t &gt;</type>
+        <definition>castor::RangedValue&lt; uint32_t &gt; castor3d::VoxelSceneData::numCones</definition>
+        <argsstring></argsstring>
+        <name>numCones</name>
+        <initializer>{ 2u, castor::makeRange( 1u, 16u ) }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The number of radiance cones used in voxel cone tracing. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Voxelize/VoxelSceneData.hpp" line="28" column="1" bodyfile="Render/Voxelize/VoxelSceneData.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dc2/a05011_1affe14e59738063b4a550d0ea55d89b36" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::VoxelSceneData::rayStepSize</definition>
+        <argsstring></argsstring>
+        <name>rayStepSize</name>
+        <initializer>{ 0.75f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The size of a ray step in voxel cone tracint. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Voxelize/VoxelSceneData.hpp" line="31" column="1" bodyfile="Render/Voxelize/VoxelSceneData.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dc2/a05011_1af16e814d06099f0ba5e02a26558eec0a" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::VoxelSceneData::voxelSizeFactor</definition>
+        <argsstring></argsstring>
+        <name>voxelSizeFactor</name>
+        <initializer>{ 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Voxelize/VoxelSceneData.hpp" line="32" column="1" bodyfile="Render/Voxelize/VoxelSceneData.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Voxelize/VoxelSceneData.hpp" line="15" column="1" bodyfile="Render/Voxelize/VoxelSceneData.hpp" bodystart="14" bodyend="33"/>
+    <listofallmembers>
+      <member refid="db/dc2/a05011_1aff5fc8a4f3f4d697033013c0109cdf3e" prot="public" virt="non-virtual"><scope>castor3d::VoxelSceneData</scope><name>enableConservativeRasterization</name></member>
+      <member refid="db/dc2/a05011_1a0b20d89f2c6b87e7a8057f00825f491f" prot="public" virt="non-virtual"><scope>castor3d::VoxelSceneData</scope><name>enabled</name></member>
+      <member refid="db/dc2/a05011_1a484c70a12e4eb42d4bec2b6868534efc" prot="public" virt="non-virtual"><scope>castor3d::VoxelSceneData</scope><name>enableOcclusion</name></member>
+      <member refid="db/dc2/a05011_1a2749869ecde5d0632c39d6c0b0efcbf5" prot="public" virt="non-virtual"><scope>castor3d::VoxelSceneData</scope><name>enableSecondaryBounce</name></member>
+      <member refid="db/dc2/a05011_1aa55c1d6b4eedfb63a13349b771426e3d" prot="public" virt="non-virtual"><scope>castor3d::VoxelSceneData</scope><name>enableTemporalSmoothing</name></member>
+      <member refid="db/dc2/a05011_1ac473970ac68ec5d60c16af1624bd82c9" prot="public" virt="non-virtual"><scope>castor3d::VoxelSceneData</scope><name>gridSize</name></member>
+      <member refid="db/dc2/a05011_1a6eda8f037d7f18bdd3f7786e1d3ca20a" prot="public" virt="non-virtual"><scope>castor3d::VoxelSceneData</scope><name>maxDistance</name></member>
+      <member refid="db/dc2/a05011_1aeedf2562d43d77fc07d85f5c5c6ac6ea" prot="public" virt="non-virtual"><scope>castor3d::VoxelSceneData</scope><name>numCones</name></member>
+      <member refid="db/dc2/a05011_1affe14e59738063b4a550d0ea55d89b36" prot="public" virt="non-virtual"><scope>castor3d::VoxelSceneData</scope><name>rayStepSize</name></member>
+      <member refid="db/dc2/a05011_1af16e814d06099f0ba5e02a26558eec0a" prot="public" virt="non-virtual"><scope>castor3d::VoxelSceneData</scope><name>voxelSizeFactor</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -71,8 +71,8 @@ Implemented Plug-ins
 Links
 -----
 
-- [Building Castor3D](https://dragonjoker.github.com/Castor3D/pages/build)
-- [API Documentation](https://dragonjoker.github.com/Castor3D/doc)
+- [Building Castor3D](https://dragonjoker.github.com/Castor3D/v0.10.0/pages/build)
+- [API Documentation](https://dragonjoker.github.com/Castor3D/v0.10.0/doc)
 - [Playlist on YouTube](https://www.youtube.com/playlist?list=PLKA1SVXuAbMNaFbSJyAN_4yD2bzNlgES3)
 
 Older Versions

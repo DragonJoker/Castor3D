@@ -1,0 +1,297 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="df/d26/a05290" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::SpecularGlossinessPassBuffer</compoundname>
+    <basecompoundref refid="d7/dc7/a05266" prot="public" virt="non-virtual">castor3d::PassBuffer</basecompoundref>
+    <includes local="no">SpecularGlossinessPassBuffer.hpp</includes>
+    <innerclass refid="d6/df3/a05294" prot="public">castor3d::SpecularGlossinessPassBuffer::PassData</innerclass>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="df/d26/a05290_1a8a6049735cd2f56590af539bb9a50cf7" prot="public" static="no">
+        <type>castor::ArrayView&lt; <ref refid="d6/df3/a05294" kindref="compound">PassData</ref> &gt;</type>
+        <definition>using castor3d::SpecularGlossinessPassBuffer::PassesData =  castor::ArrayView&lt; PassData &gt;</definition>
+        <argsstring></argsstring>
+        <name>PassesData</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp" line="73" column="1" bodyfile="Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-static-attrib">
+      <memberdef kind="variable" id="df/d26/a05290_1aa069276a01f90db2d6348acc3b8e66e8" prot="private" static="yes" mutable="no">
+        <type>constexpr uint32_t</type>
+        <definition>constexpr uint32_t castor3d::SpecularGlossinessPassBuffer::DataSize</definition>
+        <argsstring></argsstring>
+        <name>DataSize</name>
+        <initializer>= ( sizeof( <ref refid="dd/d95/a05274" kindref="compound">RgbaColour</ref> ) * 4 )
+			+ ( <ref refid="d7/dc7/a05266_1ab7a622d4da8e1c76ceeb278a5718be86" kindref="member">PassBuffer::ExtendedDataSize</ref> )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp" line="78" column="1" bodyfile="Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="df/d26/a05290_1aa4e8ef980d229efb49a3f10e12a0f993" prot="private" static="no" mutable="no">
+        <type><ref refid="df/d26/a05290_1a8a6049735cd2f56590af539bb9a50cf7" kindref="member">PassesData</ref></type>
+        <definition>PassesData castor3d::SpecularGlossinessPassBuffer::m_data</definition>
+        <argsstring></argsstring>
+        <name>m_data</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp" line="82" column="1" bodyfile="Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/d26/a05290_1a427382f472cfc6aa80a435d5e3601c73" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SpecularGlossinessPassBuffer::SpecularGlossinessPassBuffer</definition>
+        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, uint32_t size)</argsstring>
+        <name>SpecularGlossinessPassBuffer</name>
+        <param>
+          <type><ref refid="df/d9b/a02514" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The engine. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The max passes count. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp" line="30" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d26/a05290_1a1d2b42167a93b75ae15b61aaad2545b9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SpecularGlossinessPassBuffer::~SpecularGlossinessPassBuffer</definition>
+        <argsstring>()</argsstring>
+        <name>~SpecularGlossinessPassBuffer</name>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp" line="39" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d26/a05290_1a5a035934b47c193f3ebc9248ef77472b" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SpecularGlossinessPassBuffer::visit</definition>
+        <argsstring>(PhongPass const &amp;pass) override</argsstring>
+        <name>visit</name>
+        <reimplements refid="d7/dc7/a05266_1a3e5594df164b631793d8518373730344">visit</reimplements>
+        <param>
+          <type><ref refid="de/d3b/a02610" kindref="compound">PhongPass</ref> const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+<para>Puts the pass data into the buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp" line="43" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d26/a05290_1ac06c3644da0144acbc42584a0a104a80" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SpecularGlossinessPassBuffer::visit</definition>
+        <argsstring>(SpecularGlossinessPbrPass const &amp;pass) override</argsstring>
+        <name>visit</name>
+        <reimplements refid="d7/dc7/a05266_1a1127e02e0c683a1529151f7daefa1484">visit</reimplements>
+        <param>
+          <type><ref refid="dc/dd5/a02614" kindref="compound">SpecularGlossinessPbrPass</ref> const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+<para>Puts the pass data into the buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp" line="47" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="4103">
+        <label>castor3d::PassBuffer</label>
+        <link refid="d7/dc7/a05266"/>
+      </node>
+      <node id="4102">
+        <label>castor3d::SpecularGlossinessPassBuffer</label>
+        <link refid="df/d26/a05290"/>
+        <childnode refid="4103" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="4108">
+        <label>castor::OwnedBy&lt; Material &gt;</label>
+      </node>
+      <node id="4112">
+        <label>std::vector&lt; OnPassChangedConnection &gt;</label>
+        <childnode refid="4109" relation="template-instance">
+          <edgelabel>&lt; OnPassChangedConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4110">
+        <label>T</label>
+      </node>
+      <node id="4109">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="4110" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="4113">
+        <label>castor3d::ShaderBuffer</label>
+        <link refid="db/dd7/a05302"/>
+      </node>
+      <node id="4105">
+        <label>castor3d::PassBuffer</label>
+        <link refid="d7/dc7/a05266"/>
+        <childnode refid="4106" relation="usage">
+          <edgelabel>m_passes</edgelabel>
+        </childnode>
+        <childnode refid="4111" relation="usage">
+          <edgelabel>m_dirty</edgelabel>
+        </childnode>
+        <childnode refid="4112" relation="usage">
+          <edgelabel>m_connections</edgelabel>
+        </childnode>
+        <childnode refid="4113" relation="usage">
+          <edgelabel>m_buffer</edgelabel>
+        </childnode>
+      </node>
+      <node id="4104">
+        <label>castor3d::SpecularGlossinessPassBuffer</label>
+        <link refid="df/d26/a05290"/>
+        <childnode refid="4105" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4106">
+        <label>std::vector&lt; castor3d::Pass * &gt;</label>
+        <childnode refid="4107" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="4109" relation="template-instance">
+          <edgelabel>&lt; castor3d::Pass * &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4111">
+        <label>std::vector&lt; castor3d::Pass const * &gt;</label>
+        <childnode refid="4107" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="4109" relation="template-instance">
+          <edgelabel>&lt; castor3d::Pass const * &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4107">
+        <label>castor3d::Pass</label>
+        <link refid="df/d57/a02590"/>
+        <childnode refid="4108" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp" line="16" column="1" bodyfile="Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp" bodystart="14" bodyend="83"/>
+    <listofallmembers>
+      <member refid="d7/dc7/a05266_1a9a44c3cc681d3b4ec0c62084b171f386" prot="public" virt="non-virtual"><scope>castor3d::SpecularGlossinessPassBuffer</scope><name>addPass</name></member>
+      <member refid="d7/dc7/a05266_1a6170481289ab367b47234ae0eb0b67b6" prot="public" virt="non-virtual"><scope>castor3d::SpecularGlossinessPassBuffer</scope><name>createBinding</name></member>
+      <member refid="d7/dc7/a05266_1ae05b64f9cef5b212a31186b835c96beb" prot="public" virt="non-virtual"><scope>castor3d::SpecularGlossinessPassBuffer</scope><name>createLayoutBinding</name></member>
+      <member refid="df/d26/a05290_1aa069276a01f90db2d6348acc3b8e66e8" prot="private" virt="non-virtual"><scope>castor3d::SpecularGlossinessPassBuffer</scope><name>DataSize</name></member>
+      <member refid="d7/dc7/a05266_1a75600ed00feaf24da5e1f590739e4659" prot="protected" virt="non-virtual"><scope>castor3d::SpecularGlossinessPassBuffer</scope><name>doVisit</name></member>
+      <member refid="d7/dc7/a05266_1aa0126ddc3b7a83541797b519a2816d63" prot="protected" virt="non-virtual"><scope>castor3d::SpecularGlossinessPassBuffer</scope><name>doVisitExtended</name></member>
+      <member refid="d7/dc7/a05266_1ab7a622d4da8e1c76ceeb278a5718be86" prot="public" virt="non-virtual"><scope>castor3d::SpecularGlossinessPassBuffer</scope><name>ExtendedDataSize</name></member>
+      <member refid="d7/dc7/a05266_1a77d0146f415e0364e39ce6ac75dfce38" prot="public" virt="non-virtual"><scope>castor3d::SpecularGlossinessPassBuffer</scope><name>getBinding</name></member>
+      <member refid="d7/dc7/a05266_1a60a4ed8638008eb8635f905b51362163" prot="public" virt="non-virtual"><scope>castor3d::SpecularGlossinessPassBuffer</scope><name>getPtr</name></member>
+      <member refid="d7/dc7/a05266_1abbc49bff4fe676720b61b0684e38b0c4" prot="public" virt="non-virtual"><scope>castor3d::SpecularGlossinessPassBuffer</scope><name>getType</name></member>
+      <member refid="d7/dc7/a05266_1a6215a010f4ac16f1127824adbc40bd41" prot="protected" virt="non-virtual"><scope>castor3d::SpecularGlossinessPassBuffer</scope><name>m_buffer</name></member>
+      <member refid="d7/dc7/a05266_1a5cc82dd8af9f574ec2948422b5952092" prot="protected" virt="non-virtual"><scope>castor3d::SpecularGlossinessPassBuffer</scope><name>m_connections</name></member>
+      <member refid="df/d26/a05290_1aa4e8ef980d229efb49a3f10e12a0f993" prot="private" virt="non-virtual"><scope>castor3d::SpecularGlossinessPassBuffer</scope><name>m_data</name></member>
+      <member refid="d7/dc7/a05266_1a3eabab4ec6c2eeea336d861c325f84df" prot="protected" virt="non-virtual"><scope>castor3d::SpecularGlossinessPassBuffer</scope><name>m_dirty</name></member>
+      <member refid="d7/dc7/a05266_1aca02fed11627af2eee07c6b70db4f85e" prot="protected" virt="non-virtual"><scope>castor3d::SpecularGlossinessPassBuffer</scope><name>m_passCount</name></member>
+      <member refid="d7/dc7/a05266_1ac642ab69ba92e0c5c7369d1a5d241d5c" prot="protected" virt="non-virtual"><scope>castor3d::SpecularGlossinessPassBuffer</scope><name>m_passes</name></member>
+      <member refid="d7/dc7/a05266_1af1f6e6865313d7bb7e78e436969029b7" prot="protected" virt="non-virtual"><scope>castor3d::SpecularGlossinessPassBuffer</scope><name>m_passID</name></member>
+      <member refid="d7/dc7/a05266_1ad712016003d4286c76cfa1b0dbb5fca8" prot="public" virt="non-virtual"><scope>castor3d::SpecularGlossinessPassBuffer</scope><name>PassBuffer</name></member>
+      <member refid="df/d26/a05290_1a8a6049735cd2f56590af539bb9a50cf7" prot="public" virt="non-virtual"><scope>castor3d::SpecularGlossinessPassBuffer</scope><name>PassesData</name></member>
+      <member refid="d7/dc7/a05266_1a04fd2c6473c7b87ca15163a84afadc77" prot="public" virt="non-virtual"><scope>castor3d::SpecularGlossinessPassBuffer</scope><name>removePass</name></member>
+      <member refid="df/d26/a05290_1a427382f472cfc6aa80a435d5e3601c73" prot="public" virt="non-virtual"><scope>castor3d::SpecularGlossinessPassBuffer</scope><name>SpecularGlossinessPassBuffer</name></member>
+      <member refid="d7/dc7/a05266_1a1aecf0ff5c7c655cdf01a23ba8ba8a58" prot="public" virt="non-virtual"><scope>castor3d::SpecularGlossinessPassBuffer</scope><name>update</name></member>
+      <member refid="df/d26/a05290_1a5a035934b47c193f3ebc9248ef77472b" prot="public" virt="virtual"><scope>castor3d::SpecularGlossinessPassBuffer</scope><name>visit</name></member>
+      <member refid="df/d26/a05290_1ac06c3644da0144acbc42584a0a104a80" prot="public" virt="virtual"><scope>castor3d::SpecularGlossinessPassBuffer</scope><name>visit</name></member>
+      <member refid="d7/dc7/a05266_1a345f4cd822ceef18707a7369b6cee0f7" prot="public" virt="virtual" ambiguityscope="castor3d::PassBuffer::"><scope>castor3d::SpecularGlossinessPassBuffer</scope><name>visit</name></member>
+      <member refid="df/d26/a05290_1a1d2b42167a93b75ae15b61aaad2545b9" prot="public" virt="non-virtual"><scope>castor3d::SpecularGlossinessPassBuffer</scope><name>~SpecularGlossinessPassBuffer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

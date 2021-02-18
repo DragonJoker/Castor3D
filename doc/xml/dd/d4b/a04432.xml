@@ -1,0 +1,1308 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dd/d4b/a04432" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::RenderGrid</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">Named</basecompoundref>
+    <derivedcompoundref refid="d3/d45/a04280" prot="public" virt="non-virtual">castor3d::LightPropagationPass</derivedcompoundref>
+    <includes local="no">RenderGrid.hpp</includes>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="dd/d4b/a04432_1a8aa3cedac760b97d5ab273ecfb877451" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ConfigT</type>
+          </param>
+          <param>
+            <type>typename BuilderT</type>
+          </param>
+        </templateparamlist>
+        <type>friend class</type>
+        <definition>friend class RenderGridBuilderT</definition>
+        <argsstring></argsstring>
+        <name>RenderGridBuilderT</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="31" column="1" bodyfile="Render/Passes/RenderGrid.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="dd/d4b/a04432_1a10773dd9d6f66ba68eeafdefaaa1fd3d" prot="protected" static="no" mutable="no">
+        <type><ref refid="d9/d38/a04624" kindref="compound">RenderSystem</ref> &amp;</type>
+        <definition>RenderSystem&amp; castor3d::RenderGrid::m_renderSystem</definition>
+        <argsstring></argsstring>
+        <name>m_renderSystem</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="476" column="1" bodyfile="Render/Passes/RenderGrid.hpp" bodystart="476" bodyend="-1"/>
+        <referencedby refid="dd/d4b/a04432_1a136571f01324eeb80bff6bde6cd46f6b" compoundref="d4/dfa/a00746" startline="451" endline="454">getRenderSystem</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d4b/a04432_1ab12a0e48ebec1a6728ddfc2b1c9ec175" prot="protected" static="no" mutable="no">
+        <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::RenderGrid::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="477" column="1" bodyfile="Render/Passes/RenderGrid.hpp" bodystart="477" bodyend="-1"/>
+        <referencedby refid="dd/d4b/a04432_1a76924589e43d6da91a9038cd8dcabb9b" compoundref="d4/dfa/a00746" startline="456" endline="459">getDevice</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d4b/a04432_1adb680cd1dcb963f8f5799ae628a15162" prot="protected" static="no" mutable="no">
+        <type>SamplerSPtr</type>
+        <definition>SamplerSPtr castor3d::RenderGrid::m_sampler</definition>
+        <argsstring></argsstring>
+        <name>m_sampler</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="478" column="1" bodyfile="Render/Passes/RenderGrid.hpp" bodystart="478" bodyend="-1"/>
+        <referencedby refid="dd/d4b/a04432_1a1ab0c61cbce9f1b91df2a1d28cd963a3" compoundref="d4/dfa/a00746" startline="461" endline="464">getSampler</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d4b/a04432_1ac76fdacd01183be2fad696ed26d4be57" prot="protected" static="no" mutable="no">
+        <type><ref refid="d2/dc4/a01483_1aee9cc0e6fe7dd816b74c419d4d7b6f49" kindref="member">rq::ConfigData</ref></type>
+        <definition>rq::ConfigData castor3d::RenderGrid::m_config</definition>
+        <argsstring></argsstring>
+        <name>m_config</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="479" column="1" bodyfile="Render/Passes/RenderGrid.hpp" bodystart="479" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dd/d4b/a04432_1a63bfe1b84f86f640aed0f27aa1118ca4" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::RenderGrid::m_useTexCoord</definition>
+        <argsstring></argsstring>
+        <name>m_useTexCoord</name>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="482" column="1" bodyfile="Render/Passes/RenderGrid.hpp" bodystart="482" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d4b/a04432_1a6fbca9b141a1ea0fbdaafdbd1d8f81d3" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderGrid::m_gridSize</definition>
+        <argsstring></argsstring>
+        <name>m_gridSize</name>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="483" column="1" bodyfile="Render/Passes/RenderGrid.hpp" bodystart="483" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d4b/a04432_1a2a5959ec60a326aabf71ceedebc6179b" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderGrid::m_count</definition>
+        <argsstring></argsstring>
+        <name>m_count</name>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="484" column="1" bodyfile="Render/Passes/RenderGrid.hpp" bodystart="484" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d4b/a04432_1abcb9d7271c714771f1e7c67868f5e6eb" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSetLayoutPtr</type>
+        <definition>ashes::DescriptorSetLayoutPtr castor3d::RenderGrid::m_descriptorSetLayout</definition>
+        <argsstring></argsstring>
+        <name>m_descriptorSetLayout</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="485" column="1" bodyfile="Render/Passes/RenderGrid.hpp" bodystart="485" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d4b/a04432_1a3811e0849d34f3f1418aa5e9822daff0" prot="private" static="no" mutable="no">
+        <type>ashes::PipelineLayoutPtr</type>
+        <definition>ashes::PipelineLayoutPtr castor3d::RenderGrid::m_pipelineLayout</definition>
+        <argsstring></argsstring>
+        <name>m_pipelineLayout</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="486" column="1" bodyfile="Render/Passes/RenderGrid.hpp" bodystart="486" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d4b/a04432_1a7401f270e71b9e89e5f39bf778b7a99a" prot="private" static="no" mutable="no">
+        <type>ashes::GraphicsPipelinePtr</type>
+        <definition>ashes::GraphicsPipelinePtr castor3d::RenderGrid::m_pipeline</definition>
+        <argsstring></argsstring>
+        <name>m_pipeline</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="487" column="1" bodyfile="Render/Passes/RenderGrid.hpp" bodystart="487" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d4b/a04432_1a6b7fa206ed29e1f8f1c8ff34dab2f3dd" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSetPoolPtr</type>
+        <definition>ashes::DescriptorSetPoolPtr castor3d::RenderGrid::m_descriptorSetPool</definition>
+        <argsstring></argsstring>
+        <name>m_descriptorSetPool</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="488" column="1" bodyfile="Render/Passes/RenderGrid.hpp" bodystart="488" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d4b/a04432_1a420d89fd2482d608ffd7fbba909168eb" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; ashes::WriteDescriptorSetArray &gt;</type>
+        <definition>std::vector&lt; ashes::WriteDescriptorSetArray &gt; castor3d::RenderGrid::m_passes</definition>
+        <argsstring></argsstring>
+        <name>m_passes</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="489" column="1" bodyfile="Render/Passes/RenderGrid.hpp" bodystart="489" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d4b/a04432_1ae6cce41395dcd3121f79810fca677f3f" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; ashes::DescriptorSetPtr &gt;</type>
+        <definition>std::vector&lt; ashes::DescriptorSetPtr &gt; castor3d::RenderGrid::m_descriptorSets</definition>
+        <argsstring></argsstring>
+        <name>m_descriptorSets</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="490" column="1" bodyfile="Render/Passes/RenderGrid.hpp" bodystart="490" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d4b/a04432_1af77cd4a5667fa26331a917e139965932" prot="private" static="no" mutable="no">
+        <type>ashes::VertexBufferPtr&lt; castor::Point3f &gt;</type>
+        <definition>ashes::VertexBufferPtr&lt; castor::Point3f &gt; castor3d::RenderGrid::m_vertexBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_vertexBuffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="491" column="1" bodyfile="Render/Passes/RenderGrid.hpp" bodystart="491" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="dd/d4b/a04432_1a6574a0088aab991bd98833b8470f08e8" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::RenderGrid::RenderGrid</definition>
+        <argsstring>(RenderDevice const &amp;device, castor::String const &amp;name, VkFilter samplerFilter, uint32_t gridSize, rq::Config config)</argsstring>
+        <name>RenderGrid</name>
+        <param>
+          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkFilter</type>
+          <declname>samplerFilter</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>gridSize</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dc4/a01483_1a1b23eaff31a21f3c72b92ce986bffbf9" kindref="member">rq::Config</ref></type>
+          <declname>config</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">samplerFilter</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The sampler filter for the source texture. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">gridSize</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The grid dimensions. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">config</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The configuration. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="62" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/d4b/a04432_1aaaf5b6b137997ae81d5d03063cad3c12" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::RenderGrid::~RenderGrid</definition>
+        <argsstring>()</argsstring>
+        <name>~RenderGrid</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="69" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d4b/a04432_1ac116d918c9072dc91a59be170c82b916" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::RenderGrid::RenderGrid</definition>
+        <argsstring>(RenderGrid &amp;&amp;rhs) noexcept</argsstring>
+        <name>RenderGrid</name>
+        <param>
+          <type><ref refid="dd/d4b/a04432" kindref="compound">RenderGrid</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="70" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d4b/a04432_1a182e89b66ccc3b0ecef2e1e2bf2643e1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderGrid::cleanup</definition>
+        <argsstring>()</argsstring>
+        <name>cleanup</name>
+        <briefdescription>
+<para>Cleans up GPU objects. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="79" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d4b/a04432_1a36f5e5c47521947b2b7d1a2b87be1250" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderGrid::createPipeline</definition>
+        <argsstring>(ashes::PipelineShaderStageCreateInfoArray const &amp;program, ashes::RenderPass const &amp;renderPass, ashes::VkPushConstantRangeArray const &amp;pushRanges=ashes::VkPushConstantRangeArray{}, ashes::PipelineDepthStencilStateCreateInfo dsState=ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_FALSE, VK_FALSE })</argsstring>
+        <name>createPipeline</name>
+        <param>
+          <type>ashes::PipelineShaderStageCreateInfoArray const &amp;</type>
+          <declname>program</declname>
+        </param>
+        <param>
+          <type>ashes::RenderPass const &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <param>
+          <type>ashes::VkPushConstantRangeArray const &amp;</type>
+          <declname>pushRanges</declname>
+          <defval>ashes::VkPushConstantRangeArray{}</defval>
+        </param>
+        <param>
+          <type>ashes::PipelineDepthStencilStateCreateInfo</type>
+          <declname>dsState</declname>
+          <defval>ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_FALSE, VK_FALSE }</defval>
+        </param>
+        <briefdescription>
+<para>Creates the rendering pipeline. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">program</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The shader program. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">renderPass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render pass to use. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pushRanges</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The push constant ranges. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dsState</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The depth stencil state to use. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="104" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d4b/a04432_1a0961c0b7463b5bbbd5f6ac863be1d365" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderGrid::registerPassInputs</definition>
+        <argsstring>(ashes::WriteDescriptorSetArray const &amp;writes)</argsstring>
+        <name>registerPassInputs</name>
+        <param>
+          <type>ashes::WriteDescriptorSetArray const &amp;</type>
+          <declname>writes</declname>
+        </param>
+        <briefdescription>
+<para>Creates the entries for one pass. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">writes</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass descriptor writes. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="120" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d4b/a04432_1a6b78ed328256432a71ce75d48e24c63a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderGrid::initialisePasses</definition>
+        <argsstring>()</argsstring>
+        <name>initialisePasses</name>
+        <briefdescription>
+<para>Initialises the descriptor sets for all registered passes. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="129" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d4b/a04432_1aef0947b97b293c7391fd426b102331a9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderGrid::createPipelineAndPass</definition>
+        <argsstring>(ashes::PipelineShaderStageCreateInfoArray const &amp;program, ashes::RenderPass const &amp;renderPass, ashes::WriteDescriptorSetArray const &amp;writes, ashes::VkPushConstantRangeArray const &amp;pushRanges=ashes::VkPushConstantRangeArray{}, ashes::PipelineDepthStencilStateCreateInfo dsState=ashes::PipelineDepthStencilStateCreateInfo{ 0u, false, false })</argsstring>
+        <name>createPipelineAndPass</name>
+        <param>
+          <type>ashes::PipelineShaderStageCreateInfoArray const &amp;</type>
+          <declname>program</declname>
+        </param>
+        <param>
+          <type>ashes::RenderPass const &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <param>
+          <type>ashes::WriteDescriptorSetArray const &amp;</type>
+          <declname>writes</declname>
+        </param>
+        <param>
+          <type>ashes::VkPushConstantRangeArray const &amp;</type>
+          <declname>pushRanges</declname>
+          <defval>ashes::VkPushConstantRangeArray{}</defval>
+        </param>
+        <param>
+          <type>ashes::PipelineDepthStencilStateCreateInfo</type>
+          <declname>dsState</declname>
+          <defval>ashes::PipelineDepthStencilStateCreateInfo{ 0u, false, false }</defval>
+        </param>
+        <briefdescription>
+<para>Creates the rendering pipeline and initialises the quad for one pass. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">program</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">renderPass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render pass to use. The shader program. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">writes</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass&apos; descriptor writes. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pushRanges</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The push constant ranges. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dsState</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The depth stencil state to use. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="158" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d4b/a04432_1a63569272bc22e0cb849d309edb89e1ad" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderGrid::registerPass</definition>
+        <argsstring>(ashes::CommandBuffer &amp;commandBuffer, uint32_t descriptorSetIndex) const</argsstring>
+        <name>registerPass</name>
+        <param>
+          <type>ashes::CommandBuffer &amp;</type>
+          <declname>commandBuffer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>descriptorSetIndex</declname>
+        </param>
+        <briefdescription>
+<para>Prpares the commands to render the quad, inside given command buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">commandBuffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The command buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">descriptorSetIndex</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render descriptor set index. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="179" column="1"/>
+        <referencedby refid="dd/d4b/a04432_1aea5e6c6d9dfbe879f43aba138deaa253" compoundref="d4/dfa/a00746" startline="193" endline="196">registerPass</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/d4b/a04432_1aea5e6c6d9dfbe879f43aba138deaa253" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::RenderGrid::registerPass</definition>
+        <argsstring>(ashes::CommandBuffer &amp;commandBuffer) const</argsstring>
+        <name>registerPass</name>
+        <param>
+          <type>ashes::CommandBuffer &amp;</type>
+          <declname>commandBuffer</declname>
+        </param>
+        <briefdescription>
+<para>Prpares the commands to render the quad, inside given command buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">commandBuffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The command buffer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="193" column="1" bodyfile="Render/Passes/RenderGrid.hpp" bodystart="193" bodyend="196"/>
+        <references refid="dd/d4b/a04432_1a63569272bc22e0cb849d309edb89e1ad">registerPass</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d4b/a04432_1a136571f01324eeb80bff6bde6cd46f6b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d9/d38/a04624" kindref="compound">RenderSystem</ref> *</type>
+        <definition>RenderSystem* castor3d::RenderGrid::getRenderSystem</definition>
+        <argsstring>() const</argsstring>
+        <name>getRenderSystem</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="451" column="1" bodyfile="Render/Passes/RenderGrid.hpp" bodystart="451" bodyend="454"/>
+        <references refid="dd/d4b/a04432_1a10773dd9d6f66ba68eeafdefaaa1fd3d" compoundref="d4/dfa/a00746" startline="476">m_renderSystem</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d4b/a04432_1a76924589e43d6da91a9038cd8dcabb9b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::RenderGrid::getDevice</definition>
+        <argsstring>() const</argsstring>
+        <name>getDevice</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="456" column="1" bodyfile="Render/Passes/RenderGrid.hpp" bodystart="456" bodyend="459"/>
+        <references refid="dd/d4b/a04432_1ab12a0e48ebec1a6728ddfc2b1c9ec175" compoundref="d4/dfa/a00746" startline="477">m_device</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d4b/a04432_1a1ab0c61cbce9f1b91df2a1d28cd963a3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dd/dc4/a02632" kindref="compound">Sampler</ref> const  &amp;</type>
+        <definition>Sampler const&amp; castor3d::RenderGrid::getSampler</definition>
+        <argsstring>() const</argsstring>
+        <name>getSampler</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="461" column="1" bodyfile="Render/Passes/RenderGrid.hpp" bodystart="461" bodyend="464"/>
+        <references refid="dd/d4b/a04432_1adb680cd1dcb963f8f5799ae628a15162" compoundref="d4/dfa/a00746" startline="478">m_sampler</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d4b/a04432_1a594342a5c8a8ad4603b376acdbd755e9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderGrid::getGridSize</definition>
+        <argsstring>() const</argsstring>
+        <name>getGridSize</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="466" column="1" bodyfile="Render/Passes/RenderGrid.hpp" bodystart="466" bodyend="469"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="dd/d4b/a04432_1a1c1c332f1edc86eb58a7f04ccf5daa54" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::WriteDescriptorSet</type>
+        <definition>static ashes::WriteDescriptorSet castor3d::RenderGrid::makeDescriptorWrite</definition>
+        <argsstring>(ashes::ImageView const &amp;view, ashes::Sampler const &amp;sampler, uint32_t dstBinding, uint32_t dstArrayElement=0u)</argsstring>
+        <name>makeDescriptorWrite</name>
+        <param>
+          <type>ashes::ImageView const &amp;</type>
+          <declname>view</declname>
+        </param>
+        <param>
+          <type>ashes::Sampler const &amp;</type>
+          <declname>sampler</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstArrayElement</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+<para>Creates a descriptor write for combined image sampler. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">view</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The image view. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">sampler</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The sampler. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dstBinding</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The binding inside the descriptor set. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dstArrayElement</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The array element index. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="221" column="1" bodyfile="Render/Passes/RenderGrid.hpp" bodystart="221" bodyend="230"/>
+        <references refid="d4/d45/a04456_1aba30b821ed0f043349148de3f91e1e28">castor3d::RenderQuad::makeDescriptorWrite</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d4b/a04432_1ac91d85402426f8107e5e355ca8edc2b0" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::WriteDescriptorSet</type>
+        <definition>static ashes::WriteDescriptorSet castor3d::RenderGrid::makeDescriptorWrite</definition>
+        <argsstring>(ashes::UniformBuffer const &amp;buffer, uint32_t dstBinding, uint32_t elemOffset, uint32_t elemRange, uint32_t dstArrayElement=0u)</argsstring>
+        <name>makeDescriptorWrite</name>
+        <param>
+          <type>ashes::UniformBuffer const &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>elemOffset</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>elemRange</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstArrayElement</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+<para>Creates a descriptor write for uniform buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The uniform buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dstBinding</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The binding inside the descriptor set. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">elemOffset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The offset, expressed in element count. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">elemRange</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The range, expressed in element count. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dstArrayElement</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The array element index. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="259" column="1" bodyfile="Render/Passes/RenderGrid.hpp" bodystart="259" bodyend="270"/>
+        <references refid="d4/d45/a04456_1aba30b821ed0f043349148de3f91e1e28">castor3d::RenderQuad::makeDescriptorWrite</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d4b/a04432_1afbfaf3f00b8af7106a39443fc4f6c4cc" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename DataT</type>
+          </param>
+        </templateparamlist>
+        <type>ashes::WriteDescriptorSet</type>
+        <definition>static ashes::WriteDescriptorSet castor3d::RenderGrid::makeDescriptorWrite</definition>
+        <argsstring>(UniformBufferOffsetT&lt; DataT &gt; const &amp;buffer, uint32_t dstBinding, uint32_t dstArrayElement=0u)</argsstring>
+        <name>makeDescriptorWrite</name>
+        <param>
+          <type><ref refid="d1/d47/a02300" kindref="compound">UniformBufferOffsetT</ref>&lt; DataT &gt; const &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstArrayElement</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+<para>Creates a descriptor write for uniform buffer range. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The uniform buffer range. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dstBinding</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The binding inside the descriptor set. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dstArrayElement</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The array element index. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="292" column="1" bodyfile="Render/Passes/RenderGrid.hpp" bodystart="292" bodyend="299"/>
+        <references refid="d4/d45/a04456_1aba30b821ed0f043349148de3f91e1e28">castor3d::RenderQuad::makeDescriptorWrite</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d4b/a04432_1a7c8233a51a4440d414397dca81af95e6" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::WriteDescriptorSet</type>
+        <definition>static C3D_API ashes::WriteDescriptorSet castor3d::RenderGrid::makeDescriptorWrite</definition>
+        <argsstring>(ashes::BufferBase const &amp;storageBuffer, uint32_t dstBinding, uint32_t byteOffset, uint32_t byteRange, uint32_t dstArrayElement=0u)</argsstring>
+        <name>makeDescriptorWrite</name>
+        <param>
+          <type>ashes::BufferBase const &amp;</type>
+          <declname>storageBuffer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>byteOffset</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>byteRange</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstArrayElement</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+<para>Creates a descriptor write for storage buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">storageBuffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The storage buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dstBinding</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The binding inside the descriptor set. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">byteOffset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The offset, expressed in bytes. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">byteRange</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The range, expressed in bytes. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dstArrayElement</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The array element index. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="328" column="1" bodyfile="Render/Passes/RenderGrid.hpp" bodystart="328" bodyend="339"/>
+        <references refid="d4/d45/a04456_1aba30b821ed0f043349148de3f91e1e28">castor3d::RenderQuad::makeDescriptorWrite</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d4b/a04432_1aba2d593879b116c756bbfbd44b3bea5c" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename DataT</type>
+          </param>
+        </templateparamlist>
+        <type>ashes::WriteDescriptorSet</type>
+        <definition>static ashes::WriteDescriptorSet castor3d::RenderGrid::makeDescriptorWrite</definition>
+        <argsstring>(ashes::Buffer&lt; DataT &gt; const &amp;storageBuffer, uint32_t dstBinding, uint32_t elemOffset, uint32_t elemRange, uint32_t dstArrayElement=0u)</argsstring>
+        <name>makeDescriptorWrite</name>
+        <param>
+          <type>ashes::Buffer&lt; DataT &gt; const &amp;</type>
+          <declname>storageBuffer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>elemOffset</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>elemRange</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstArrayElement</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+<para>Creates a descriptor write for storage buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">storageBuffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The storage buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dstBinding</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The binding inside the descriptor set. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">elemOffset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The offset, expressed in element count. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">elemRange</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The range, expressed in element count. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dstArrayElement</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The array element index. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="369" column="1" bodyfile="Render/Passes/RenderGrid.hpp" bodystart="369" bodyend="380"/>
+        <references refid="d4/d45/a04456_1aba30b821ed0f043349148de3f91e1e28">castor3d::RenderQuad::makeDescriptorWrite</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d4b/a04432_1ab35e343d03f4521a81232d0728d9e5a5" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::WriteDescriptorSet</type>
+        <definition>static C3D_API ashes::WriteDescriptorSet castor3d::RenderGrid::makeDescriptorWrite</definition>
+        <argsstring>(ashes::BufferBase const &amp;buffer, ashes::BufferView const &amp;view, uint32_t dstBinding, uint32_t dstArrayElement=0u)</argsstring>
+        <name>makeDescriptorWrite</name>
+        <param>
+          <type>ashes::BufferBase const &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>ashes::BufferView const &amp;</type>
+          <declname>view</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstArrayElement</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+<para>Creates a descriptor write for buffer texel view. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">view</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The texel view. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dstBinding</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The binding inside the descriptor set. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dstArrayElement</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The array element index. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="405" column="1" bodyfile="Render/Passes/RenderGrid.hpp" bodystart="405" bodyend="414"/>
+        <references refid="d4/d45/a04456_1aba30b821ed0f043349148de3f91e1e28">castor3d::RenderQuad::makeDescriptorWrite</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d4b/a04432_1af83ad894d0576c9a8aa13bea63bfa19d" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename DataT</type>
+          </param>
+        </templateparamlist>
+        <type>ashes::WriteDescriptorSet</type>
+        <definition>static ashes::WriteDescriptorSet castor3d::RenderGrid::makeDescriptorWrite</definition>
+        <argsstring>(ashes::Buffer&lt; DataT &gt; const &amp;buffer, ashes::BufferView const &amp;view, uint32_t dstBinding, uint32_t dstArrayElement=0u)</argsstring>
+        <name>makeDescriptorWrite</name>
+        <param>
+          <type>ashes::Buffer&lt; DataT &gt; const &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>ashes::BufferView const &amp;</type>
+          <declname>view</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstArrayElement</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+<para>Creates a descriptor write for buffer texel view. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">view</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The texel view. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dstBinding</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The binding inside the descriptor set. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dstArrayElement</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The array element index. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="440" column="1" bodyfile="Render/Passes/RenderGrid.hpp" bodystart="440" bodyend="449"/>
+        <references refid="d4/d45/a04456_1aba30b821ed0f043349148de3f91e1e28">castor3d::RenderQuad::makeDescriptorWrite</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="dd/d4b/a04432_1a0092918076f48077d1b02efffb86f053" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::RenderGrid::doRegisterPass</definition>
+        <argsstring>(ashes::CommandBuffer &amp;commandBuffer) const</argsstring>
+        <name>doRegisterPass</name>
+        <param>
+          <type>ashes::CommandBuffer &amp;</type>
+          <declname>commandBuffer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderGrid.hpp" line="473" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2894">
+        <label>castor3d::LightPropagationPass</label>
+        <link refid="d3/d45/a04280"/>
+        <childnode refid="2892" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2893">
+        <label>Named</label>
+      </node>
+      <node id="2892">
+        <label>castor3d::RenderGrid</label>
+        <link refid="dd/d4b/a04432"/>
+        <childnode refid="2893" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2897">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d9/d38/a04624"/>
+        <childnode refid="2898" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2902">
+        <label>T</label>
+      </node>
+      <node id="2904">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="2902" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="2901">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="2902" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="2903">
+        <label>std::vector&lt; ashes::CommandPoolPtr &gt;</label>
+        <childnode refid="2904" relation="template-instance">
+          <edgelabel>&lt; ashes::CommandPoolPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2900">
+        <label>std::array&lt; uint32_t, 4u &gt;</label>
+        <childnode refid="2901" relation="template-instance">
+          <edgelabel>&lt; uint32_t, 4u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2896">
+        <label>Named</label>
+      </node>
+      <node id="2898">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="2895">
+        <label>castor3d::RenderGrid</label>
+        <link refid="dd/d4b/a04432"/>
+        <childnode refid="2896" relation="public-inheritance">
+        </childnode>
+        <childnode refid="2897" relation="usage">
+          <edgelabel>m_renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="2899" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+      </node>
+      <node id="2899">
+        <label>castor3d::RenderDevice</label>
+        <link refid="d1/def/a04512"/>
+        <childnode refid="2900" relation="usage">
+          <edgelabel>queueFamiliesIndex</edgelabel>
+        </childnode>
+        <childnode refid="2897" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="2903" relation="usage">
+          <edgelabel>commandPools</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Passes/RenderGrid.hpp" line="29" column="1" bodyfile="Render/Passes/RenderGrid.hpp" bodystart="27" bodyend="492"/>
+    <listofallmembers>
+      <member refid="dd/d4b/a04432_1a182e89b66ccc3b0ecef2e1e2bf2643e1" prot="public" virt="non-virtual"><scope>castor3d::RenderGrid</scope><name>cleanup</name></member>
+      <member refid="dd/d4b/a04432_1a36f5e5c47521947b2b7d1a2b87be1250" prot="public" virt="non-virtual"><scope>castor3d::RenderGrid</scope><name>createPipeline</name></member>
+      <member refid="dd/d4b/a04432_1aef0947b97b293c7391fd426b102331a9" prot="public" virt="non-virtual"><scope>castor3d::RenderGrid</scope><name>createPipelineAndPass</name></member>
+      <member refid="dd/d4b/a04432_1a0092918076f48077d1b02efffb86f053" prot="private" virt="virtual"><scope>castor3d::RenderGrid</scope><name>doRegisterPass</name></member>
+      <member refid="dd/d4b/a04432_1a76924589e43d6da91a9038cd8dcabb9b" prot="public" virt="non-virtual"><scope>castor3d::RenderGrid</scope><name>getDevice</name></member>
+      <member refid="dd/d4b/a04432_1a594342a5c8a8ad4603b376acdbd755e9" prot="public" virt="non-virtual"><scope>castor3d::RenderGrid</scope><name>getGridSize</name></member>
+      <member refid="dd/d4b/a04432_1a136571f01324eeb80bff6bde6cd46f6b" prot="public" virt="non-virtual"><scope>castor3d::RenderGrid</scope><name>getRenderSystem</name></member>
+      <member refid="dd/d4b/a04432_1a1ab0c61cbce9f1b91df2a1d28cd963a3" prot="public" virt="non-virtual"><scope>castor3d::RenderGrid</scope><name>getSampler</name></member>
+      <member refid="dd/d4b/a04432_1a6b78ed328256432a71ce75d48e24c63a" prot="public" virt="non-virtual"><scope>castor3d::RenderGrid</scope><name>initialisePasses</name></member>
+      <member refid="dd/d4b/a04432_1ac76fdacd01183be2fad696ed26d4be57" prot="protected" virt="non-virtual"><scope>castor3d::RenderGrid</scope><name>m_config</name></member>
+      <member refid="dd/d4b/a04432_1a2a5959ec60a326aabf71ceedebc6179b" prot="private" virt="non-virtual"><scope>castor3d::RenderGrid</scope><name>m_count</name></member>
+      <member refid="dd/d4b/a04432_1abcb9d7271c714771f1e7c67868f5e6eb" prot="private" virt="non-virtual"><scope>castor3d::RenderGrid</scope><name>m_descriptorSetLayout</name></member>
+      <member refid="dd/d4b/a04432_1a6b7fa206ed29e1f8f1c8ff34dab2f3dd" prot="private" virt="non-virtual"><scope>castor3d::RenderGrid</scope><name>m_descriptorSetPool</name></member>
+      <member refid="dd/d4b/a04432_1ae6cce41395dcd3121f79810fca677f3f" prot="private" virt="non-virtual"><scope>castor3d::RenderGrid</scope><name>m_descriptorSets</name></member>
+      <member refid="dd/d4b/a04432_1ab12a0e48ebec1a6728ddfc2b1c9ec175" prot="protected" virt="non-virtual"><scope>castor3d::RenderGrid</scope><name>m_device</name></member>
+      <member refid="dd/d4b/a04432_1a6fbca9b141a1ea0fbdaafdbd1d8f81d3" prot="private" virt="non-virtual"><scope>castor3d::RenderGrid</scope><name>m_gridSize</name></member>
+      <member refid="dd/d4b/a04432_1a420d89fd2482d608ffd7fbba909168eb" prot="private" virt="non-virtual"><scope>castor3d::RenderGrid</scope><name>m_passes</name></member>
+      <member refid="dd/d4b/a04432_1a7401f270e71b9e89e5f39bf778b7a99a" prot="private" virt="non-virtual"><scope>castor3d::RenderGrid</scope><name>m_pipeline</name></member>
+      <member refid="dd/d4b/a04432_1a3811e0849d34f3f1418aa5e9822daff0" prot="private" virt="non-virtual"><scope>castor3d::RenderGrid</scope><name>m_pipelineLayout</name></member>
+      <member refid="dd/d4b/a04432_1a10773dd9d6f66ba68eeafdefaaa1fd3d" prot="protected" virt="non-virtual"><scope>castor3d::RenderGrid</scope><name>m_renderSystem</name></member>
+      <member refid="dd/d4b/a04432_1adb680cd1dcb963f8f5799ae628a15162" prot="protected" virt="non-virtual"><scope>castor3d::RenderGrid</scope><name>m_sampler</name></member>
+      <member refid="dd/d4b/a04432_1a63bfe1b84f86f640aed0f27aa1118ca4" prot="private" virt="non-virtual"><scope>castor3d::RenderGrid</scope><name>m_useTexCoord</name></member>
+      <member refid="dd/d4b/a04432_1af77cd4a5667fa26331a917e139965932" prot="private" virt="non-virtual"><scope>castor3d::RenderGrid</scope><name>m_vertexBuffer</name></member>
+      <member refid="dd/d4b/a04432_1a1c1c332f1edc86eb58a7f04ccf5daa54" prot="public" virt="non-virtual"><scope>castor3d::RenderGrid</scope><name>makeDescriptorWrite</name></member>
+      <member refid="dd/d4b/a04432_1ac91d85402426f8107e5e355ca8edc2b0" prot="public" virt="non-virtual"><scope>castor3d::RenderGrid</scope><name>makeDescriptorWrite</name></member>
+      <member refid="dd/d4b/a04432_1afbfaf3f00b8af7106a39443fc4f6c4cc" prot="public" virt="non-virtual"><scope>castor3d::RenderGrid</scope><name>makeDescriptorWrite</name></member>
+      <member refid="dd/d4b/a04432_1a7c8233a51a4440d414397dca81af95e6" prot="public" virt="non-virtual"><scope>castor3d::RenderGrid</scope><name>makeDescriptorWrite</name></member>
+      <member refid="dd/d4b/a04432_1aba2d593879b116c756bbfbd44b3bea5c" prot="public" virt="non-virtual"><scope>castor3d::RenderGrid</scope><name>makeDescriptorWrite</name></member>
+      <member refid="dd/d4b/a04432_1ab35e343d03f4521a81232d0728d9e5a5" prot="public" virt="non-virtual"><scope>castor3d::RenderGrid</scope><name>makeDescriptorWrite</name></member>
+      <member refid="dd/d4b/a04432_1af83ad894d0576c9a8aa13bea63bfa19d" prot="public" virt="non-virtual"><scope>castor3d::RenderGrid</scope><name>makeDescriptorWrite</name></member>
+      <member refid="dd/d4b/a04432_1a63569272bc22e0cb849d309edb89e1ad" prot="public" virt="non-virtual"><scope>castor3d::RenderGrid</scope><name>registerPass</name></member>
+      <member refid="dd/d4b/a04432_1aea5e6c6d9dfbe879f43aba138deaa253" prot="public" virt="non-virtual"><scope>castor3d::RenderGrid</scope><name>registerPass</name></member>
+      <member refid="dd/d4b/a04432_1a0961c0b7463b5bbbd5f6ac863be1d365" prot="public" virt="non-virtual"><scope>castor3d::RenderGrid</scope><name>registerPassInputs</name></member>
+      <member refid="dd/d4b/a04432_1a6574a0088aab991bd98833b8470f08e8" prot="protected" virt="non-virtual"><scope>castor3d::RenderGrid</scope><name>RenderGrid</name></member>
+      <member refid="dd/d4b/a04432_1ac116d918c9072dc91a59be170c82b916" prot="public" virt="non-virtual"><scope>castor3d::RenderGrid</scope><name>RenderGrid</name></member>
+      <member refid="dd/d4b/a04432_1a8aa3cedac760b97d5ab273ecfb877451" prot="private" virt="non-virtual"><scope>castor3d::RenderGrid</scope><name>RenderGridBuilderT</name></member>
+      <member refid="dd/d4b/a04432_1aaaf5b6b137997ae81d5d03063cad3c12" prot="public" virt="virtual"><scope>castor3d::RenderGrid</scope><name>~RenderGrid</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d1/dc3/a04492" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::RadianceComputer::RenderPass</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d1/dc3/a04492_1aeaff66f32b8bd6ce46871300b215a680" prot="public" static="no" mutable="no">
+        <type>ashes::ImageView</type>
+        <definition>ashes::ImageView castor3d::RadianceComputer::RenderPass::dstView</definition>
+        <argsstring></argsstring>
+        <name>dstView</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/RadianceComputer.hpp" line="78" column="1" bodyfile="Render/PBR/RadianceComputer.hpp" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dc3/a04492_1aed4d3d28b57eeb0bbbe70969869f9a65" prot="public" static="no" mutable="no">
+        <type>ashes::FrameBufferPtr</type>
+        <definition>ashes::FrameBufferPtr castor3d::RadianceComputer::RenderPass::frameBuffer</definition>
+        <argsstring></argsstring>
+        <name>frameBuffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/RadianceComputer.hpp" line="79" column="1" bodyfile="Render/PBR/RadianceComputer.hpp" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/PBR/RadianceComputer.hpp" line="77" column="1" bodyfile="Render/PBR/RadianceComputer.hpp" bodystart="76" bodyend="80"/>
+    <listofallmembers>
+      <member refid="d1/dc3/a04492_1aeaff66f32b8bd6ce46871300b215a680" prot="public" virt="non-virtual"><scope>castor3d::RadianceComputer::RenderPass</scope><name>dstView</name></member>
+      <member refid="d1/dc3/a04492_1aed4d3d28b57eeb0bbbe70969869f9a65" prot="public" virt="non-virtual"><scope>castor3d::RadianceComputer::RenderPass</scope><name>frameBuffer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

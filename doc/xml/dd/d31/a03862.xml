@@ -1,0 +1,210 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dd/d31/a03862" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::Cone</compoundname>
+    <basecompoundref refid="d0/d0b/a03910" prot="public" virt="non-virtual">castor3d::MeshGenerator</basecompoundref>
+    <includes local="no">Cone.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dd/d31/a03862_1aaeb042262d7507d1a6b107e61e0caa53" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::Cone::m_nbFaces</definition>
+        <argsstring></argsstring>
+        <name>m_nbFaces</name>
+        <briefdescription>
+<para>The number of faces. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Cone.hpp" line="40" column="1" bodyfile="Model/Mesh/Generator/Cone.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d31/a03862_1a3b4af41e02ca5f5d640bb8505666105e" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::Cone::m_height</definition>
+        <argsstring></argsstring>
+        <name>m_height</name>
+        <briefdescription>
+<para>The cone height. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Cone.hpp" line="42" column="1" bodyfile="Model/Mesh/Generator/Cone.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d31/a03862_1a2383aec01d37314b2529e7e8e03de707" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::Cone::m_radius</definition>
+        <argsstring></argsstring>
+        <name>m_radius</name>
+        <briefdescription>
+<para>The cone radius. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Cone.hpp" line="44" column="1" bodyfile="Model/Mesh/Generator/Cone.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/d31/a03862_1a506caf237144d5c2b467b1be2b2c95b9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Cone::Cone</definition>
+        <argsstring>()</argsstring>
+        <name>Cone</name>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Cone.hpp" line="21" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d31/a03862_1aaeccec624a77e960699603723bff0505" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Cone::~Cone</definition>
+        <argsstring>()</argsstring>
+        <name>~Cone</name>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Cone.hpp" line="28" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="dd/d31/a03862_1a7d76f802fefb576f67de15041e19129c" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> MeshGeneratorSPtr</type>
+        <definition>static C3D_API MeshGeneratorSPtr castor3d::Cone::create</definition>
+        <argsstring>()</argsstring>
+        <name>create</name>
+        <briefdescription>
+<para>Creation function, used by Factory. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><ref refid="dc/db8/a03870" kindref="compound">Cylinder</ref> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Cone.hpp" line="32" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="dd/d31/a03862_1a819e95620959f57aa10384f533671243" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::Cone::doGenerate</definition>
+        <argsstring>(Mesh &amp;mesh, Parameters const &amp;parameters)</argsstring>
+        <name>doGenerate</name>
+        <reimplements refid="d0/d0b/a03910_1a690745122d7e670b311e317ae86c9b45">doGenerate</reimplements>
+        <param>
+          <type><ref refid="d9/d7a/a03902" kindref="compound">Mesh</ref> &amp;</type>
+          <declname>mesh</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d13/a01473_1acd099f112fdafb8d7d06ba8dc9cf4a47" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <briefdescription>
+<para>Generates the mesh. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">mesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The mesh. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The generator parameters. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Cone.hpp" line="35" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="dd/d31/a03862_1a8242ca060a8c103379c821f73ab2972d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>friend std::ostream &amp;</type>
+        <definition>std::ostream&amp; operator&lt;&lt;</definition>
+        <argsstring>(std::ostream &amp;o, Cone const &amp;c)</argsstring>
+        <name>operator&lt;&lt;</name>
+        <param>
+          <type>std::ostream &amp;</type>
+          <declname>o</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d31/a03862" kindref="compound">Cone</ref> const &amp;</type>
+          <declname>c</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Generator/Cone.hpp" line="45" column="1" bodyfile="Model/Mesh/Generator/Cone.hpp" bodystart="49" bodyend="53"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="806">
+        <label>castor3d::MeshGenerator</label>
+        <link refid="d0/d0b/a03910"/>
+      </node>
+      <node id="805">
+        <label>castor3d::Cone</label>
+        <link refid="dd/d31/a03862"/>
+        <childnode refid="806" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="808">
+        <label>castor3d::MeshGenerator</label>
+        <link refid="d0/d0b/a03910"/>
+      </node>
+      <node id="807">
+        <label>castor3d::Cone</label>
+        <link refid="dd/d31/a03862"/>
+        <childnode refid="808" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Model/Mesh/Generator/Cone.hpp" line="13" column="1" bodyfile="Model/Mesh/Generator/Cone.hpp" bodystart="11" bodyend="47"/>
+    <listofallmembers>
+      <member refid="d0/d0b/a03910_1a3207825be521c851f6fc654751f54cf1" prot="public" virt="virtual"><scope>castor3d::Cone</scope><name>computeNormals</name></member>
+      <member refid="dd/d31/a03862_1a506caf237144d5c2b467b1be2b2c95b9" prot="public" virt="non-virtual"><scope>castor3d::Cone</scope><name>Cone</name></member>
+      <member refid="dd/d31/a03862_1a7d76f802fefb576f67de15041e19129c" prot="public" virt="non-virtual"><scope>castor3d::Cone</scope><name>create</name></member>
+      <member refid="dd/d31/a03862_1a819e95620959f57aa10384f533671243" prot="private" virt="virtual"><scope>castor3d::Cone</scope><name>doGenerate</name></member>
+      <member refid="d0/d0b/a03910_1a9fdc140f2d871ca6cb81029250c346ae" prot="public" virt="virtual"><scope>castor3d::Cone</scope><name>generate</name></member>
+      <member refid="dd/d31/a03862_1a3b4af41e02ca5f5d640bb8505666105e" prot="private" virt="non-virtual"><scope>castor3d::Cone</scope><name>m_height</name></member>
+      <member refid="dd/d31/a03862_1aaeb042262d7507d1a6b107e61e0caa53" prot="private" virt="non-virtual"><scope>castor3d::Cone</scope><name>m_nbFaces</name></member>
+      <member refid="dd/d31/a03862_1a2383aec01d37314b2529e7e8e03de707" prot="private" virt="non-virtual"><scope>castor3d::Cone</scope><name>m_radius</name></member>
+      <member refid="d0/d0b/a03910_1a3ccec3fd88667bbca33c6e81afdeff19" prot="public" virt="non-virtual"><scope>castor3d::Cone</scope><name>MeshGenerator</name></member>
+      <member refid="dd/d31/a03862_1a8242ca060a8c103379c821f73ab2972d" prot="private" virt="non-virtual"><scope>castor3d::Cone</scope><name>operator&lt;&lt;</name></member>
+      <member refid="dd/d31/a03862_1aaeccec624a77e960699603723bff0505" prot="public" virt="non-virtual"><scope>castor3d::Cone</scope><name>~Cone</name></member>
+      <member refid="d0/d0b/a03910_1adee42c7c921b0dff4cbbc99c29faf31f" prot="public" virt="virtual"><scope>castor3d::Cone</scope><name>~MeshGenerator</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

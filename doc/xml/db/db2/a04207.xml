@@ -1,0 +1,148 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="db/db2/a04207" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::CulledBillboard</compoundname>
+    <includes local="no">SceneCuller.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="db/db2/a04207_1af23762d685cbd509029be528f1e2913f" prot="public" static="no" mutable="no">
+        <type><ref refid="d3/d91/a05119" kindref="compound">BillboardBase</ref> &amp;</type>
+        <definition>BillboardBase&amp; castor3d::CulledBillboard::instance</definition>
+        <argsstring></argsstring>
+        <name>instance</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="30" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/db2/a04207_1a53104ec474ff12b7f6d74ae108a62199" prot="public" static="no" mutable="no">
+        <type><ref refid="d3/d91/a05119" kindref="compound">BillboardBase</ref> &amp;</type>
+        <definition>BillboardBase&amp; castor3d::CulledBillboard::data</definition>
+        <argsstring></argsstring>
+        <name>data</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="31" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/db2/a04207_1ae4f8d304c705f419bb7860d1546beeef" prot="public" static="no" mutable="no">
+        <type>PassSPtr</type>
+        <definition>PassSPtr castor3d::CulledBillboard::pass</definition>
+        <argsstring></argsstring>
+        <name>pass</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="32" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/db2/a04207_1aa1b96c823d4ce4607ae776a4462171f6" prot="public" static="no" mutable="no">
+        <type><ref refid="d8/dd0/a05235" kindref="compound">SceneNode</ref> &amp;</type>
+        <definition>SceneNode&amp; castor3d::CulledBillboard::sceneNode</definition>
+        <argsstring></argsstring>
+        <name>sceneNode</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="33" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="856">
+        <label>castor3d::CulledBillboard</label>
+        <link refid="db/db2/a04207"/>
+        <childnode refid="857" relation="usage">
+          <edgelabel>data</edgelabel>
+          <edgelabel>instance</edgelabel>
+        </childnode>
+        <childnode refid="861" relation="usage">
+          <edgelabel>sceneNode</edgelabel>
+        </childnode>
+      </node>
+      <node id="861">
+        <label>castor3d::SceneNode</label>
+        <link refid="d8/dd0/a05235"/>
+        <childnode refid="862" relation="public-inheritance">
+        </childnode>
+        <childnode refid="863" relation="public-inheritance">
+        </childnode>
+        <childnode refid="864" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="863">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+      </node>
+      <node id="862">
+        <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
+      </node>
+      <node id="864">
+        <label>Named</label>
+      </node>
+      <node id="858">
+        <label>castor3d::RenderedObject</label>
+        <link refid="d8/d9b/a05219"/>
+        <childnode refid="859" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="857">
+        <label>castor3d::BillboardBase</label>
+        <link refid="d3/d91/a05119"/>
+        <childnode refid="858" relation="public-inheritance">
+        </childnode>
+        <childnode refid="860" relation="usage">
+          <edgelabel>m_geometryBuffers</edgelabel>
+        </childnode>
+        <childnode refid="861" relation="usage">
+          <edgelabel>m_node</edgelabel>
+        </childnode>
+        <childnode refid="865" relation="usage">
+          <edgelabel>m_scene</edgelabel>
+        </childnode>
+      </node>
+      <node id="866">
+        <label>std::enable_shared_from_this&lt; Scene &gt;</label>
+      </node>
+      <node id="867">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="860">
+        <label>castor3d::GeometryBuffers</label>
+        <link refid="df/d04/a02287"/>
+      </node>
+      <node id="859">
+        <label>std::enable_shared_from_this&lt; RenderedObject &gt;</label>
+      </node>
+      <node id="865">
+        <label>castor3d::Scene</label>
+        <link refid="d7/d00/a05223"/>
+        <childnode refid="866" relation="public-inheritance">
+        </childnode>
+        <childnode refid="867" relation="public-inheritance">
+        </childnode>
+        <childnode refid="864" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Culling/SceneCuller.hpp" line="29" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="28" bodyend="34"/>
+    <listofallmembers>
+      <member refid="db/db2/a04207_1a53104ec474ff12b7f6d74ae108a62199" prot="public" virt="non-virtual"><scope>castor3d::CulledBillboard</scope><name>data</name></member>
+      <member refid="db/db2/a04207_1af23762d685cbd509029be528f1e2913f" prot="public" virt="non-virtual"><scope>castor3d::CulledBillboard</scope><name>instance</name></member>
+      <member refid="db/db2/a04207_1ae4f8d304c705f419bb7860d1546beeef" prot="public" virt="non-virtual"><scope>castor3d::CulledBillboard</scope><name>pass</name></member>
+      <member refid="db/db2/a04207_1aa1b96c823d4ce4607ae776a4462171f6" prot="public" virt="non-virtual"><scope>castor3d::CulledBillboard</scope><name>sceneNode</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

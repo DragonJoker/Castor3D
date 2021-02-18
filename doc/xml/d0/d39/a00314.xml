@@ -1,0 +1,170 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d0/d39/a00314" kind="file" language="C++">
+    <compoundname>UserInputEvent.hpp</compoundname>
+    <includes refid="da/de0/a00317" local="yes">UserInputEventModule.hpp</includes>
+    <includedby refid="d9/dd6/a00272" local="yes">Castor3DPrerequisites.hpp</includedby>
+    <includedby refid="d3/d07/a00305" local="yes">Event/UserInput/HandlerEvent.hpp</includedby>
+    <includedby refid="d5/d0f/a00308" local="yes">Event/UserInput/KeyboardEvent.hpp</includedby>
+    <includedby refid="d1/d5d/a00311" local="yes">Event/UserInput/MouseEvent.hpp</includedby>
+    <incdepgraph>
+      <node id="5473">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="5476">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="5477">
+        <label>cstdint</label>
+      </node>
+      <node id="5475">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="5468">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d5/d35/a00266"/>
+        <childnode refid="5469" relation="include">
+        </childnode>
+        <childnode refid="5470" relation="include">
+        </childnode>
+        <childnode refid="5471" relation="include">
+        </childnode>
+        <childnode refid="5472" relation="include">
+        </childnode>
+        <childnode refid="5473" relation="include">
+        </childnode>
+        <childnode refid="5474" relation="include">
+        </childnode>
+        <childnode refid="5475" relation="include">
+        </childnode>
+        <childnode refid="5476" relation="include">
+        </childnode>
+        <childnode refid="5477" relation="include">
+        </childnode>
+        <childnode refid="5478" relation="include">
+        </childnode>
+        <childnode refid="5479" relation="include">
+        </childnode>
+        <childnode refid="5480" relation="include">
+        </childnode>
+      </node>
+      <node id="5479">
+        <label>string</label>
+      </node>
+      <node id="5472">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="5469">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="5481">
+        <label>CastorUtils/Graphics/Position.hpp</label>
+      </node>
+      <node id="5471">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="5470">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="5480">
+        <label>vector</label>
+      </node>
+      <node id="5474">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="5482">
+        <label>array</label>
+      </node>
+      <node id="5467">
+        <label>UserInputEventModule.hpp</label>
+        <link refid="da/de0/a00317"/>
+        <childnode refid="5468" relation="include">
+        </childnode>
+        <childnode refid="5481" relation="include">
+        </childnode>
+        <childnode refid="5482" relation="include">
+        </childnode>
+      </node>
+      <node id="5466">
+        <label>Event/UserInput/UserInputEvent.hpp</label>
+        <link refid="d0/d39/a00314"/>
+        <childnode refid="5467" relation="include">
+        </childnode>
+      </node>
+      <node id="5478">
+        <label>memory</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="5492">
+        <label>Event/UserInput/MouseEvent.hpp</label>
+        <link refid="d1/d5d/a00311"/>
+        <childnode refid="5487" relation="include">
+        </childnode>
+      </node>
+      <node id="5485">
+        <label>Castor3DPch.hpp</label>
+        <link refid="d5/d42/a00269"/>
+      </node>
+      <node id="5490">
+        <label>Text/TextRenderWindow.hpp</label>
+        <link refid="db/d78/a01427"/>
+      </node>
+      <node id="5491">
+        <label>Event/UserInput/KeyboardEvent.hpp</label>
+        <link refid="d5/d0f/a00308"/>
+        <childnode refid="5487" relation="include">
+        </childnode>
+      </node>
+      <node id="5487">
+        <label>Event/UserInput/EventHandler.hpp</label>
+        <link refid="d0/d61/a00302"/>
+        <childnode refid="5488" relation="include">
+        </childnode>
+      </node>
+      <node id="5489">
+        <label>Render/RenderWindow.hpp</label>
+        <link refid="dc/d1b/a00827"/>
+        <childnode refid="5490" relation="include">
+        </childnode>
+      </node>
+      <node id="5488">
+        <label>Event/UserInput/UserInputListener.hpp</label>
+        <link refid="dd/de2/a00320"/>
+        <childnode refid="5489" relation="include">
+        </childnode>
+      </node>
+      <node id="5486">
+        <label>Event/UserInput/HandlerEvent.hpp</label>
+        <link refid="d3/d07/a00305"/>
+        <childnode refid="5487" relation="include">
+        </childnode>
+      </node>
+      <node id="5484">
+        <label>Castor3DPrerequisites.hpp</label>
+        <link refid="d9/dd6/a00272"/>
+        <childnode refid="5485" relation="include">
+        </childnode>
+      </node>
+      <node id="5483">
+        <label>Event/UserInput/UserInputEvent.hpp</label>
+        <link refid="d0/d39/a00314"/>
+        <childnode refid="5484" relation="include">
+        </childnode>
+        <childnode refid="5486" relation="include">
+        </childnode>
+        <childnode refid="5491" relation="include">
+        </childnode>
+        <childnode refid="5492" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="dc/d81/a02568" prot="public">castor3d::UserInputEvent</innerclass>
+    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Event/UserInput/UserInputEvent.hpp"/>
+  </compounddef>
+</doxygen>

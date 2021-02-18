@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d9/d8d/a04442" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::rq::ConfigT</compoundname>
+    <derivedcompoundref refid="df/d88/a04358" prot="public" virt="non-virtual">castor3d::CombinePassConfigT&lt; WrapperT &gt;</derivedcompoundref>
+    <derivedcompoundref refid="df/d88/a04358" prot="public" virt="non-virtual">castor3d::CombinePassConfigT&lt; ashes::Optional &gt;</derivedcompoundref>
+    <includes local="no">RenderQuad.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>template&lt; typename ValueT &gt; typename</type>
+        <declname>WrapperT</declname>
+        <defname>WrapperT</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d9/d8d/a04442_1ac4d5fa2df58c23f29429178eff899699" prot="public" static="no" mutable="no">
+        <type>WrapperT&lt; <ref refid="d8/d67/a01477_1a4a9359de68c83f5e0f2d2cbe8bf5910b" kindref="member">BindingDescriptionArray</ref> &gt;</type>
+        <definition>WrapperT&lt; BindingDescriptionArray &gt; castor3d::rq::ConfigT&lt; WrapperT &gt;::bindings</definition>
+        <argsstring></argsstring>
+        <name>bindings</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderQuad.hpp" line="77" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d8d/a04442_1a34e232f8e87ff523d0df7cd3f697124f" prot="public" static="no" mutable="no">
+        <type>WrapperT&lt; VkImageSubresourceRange &gt;</type>
+        <definition>WrapperT&lt; VkImageSubresourceRange &gt; castor3d::rq::ConfigT&lt; WrapperT &gt;::range</definition>
+        <argsstring></argsstring>
+        <name>range</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderQuad.hpp" line="78" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d8d/a04442_1a4e4283067ecc109099b08f65723dffae" prot="public" static="no" mutable="no">
+        <type>WrapperT&lt; <ref refid="dd/d10/a04434" kindref="compound">Texcoord</ref> &gt;</type>
+        <definition>WrapperT&lt; Texcoord &gt; castor3d::rq::ConfigT&lt; WrapperT &gt;::texcoordConfig</definition>
+        <argsstring></argsstring>
+        <name>texcoordConfig</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderQuad.hpp" line="79" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d8d/a04442_1aad18baaa7ab25c7cf1f27c9f3719104e" prot="public" static="no" mutable="no">
+        <type>WrapperT&lt; <ref refid="de/d13/a01473_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref> &gt;</type>
+        <definition>WrapperT&lt; BlendMode &gt; castor3d::rq::ConfigT&lt; WrapperT &gt;::blendMode</definition>
+        <argsstring></argsstring>
+        <name>blendMode</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderQuad.hpp" line="80" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3178">
+        <label>castor3d::CombinePassConfigT&lt; ashes::Optional &gt;</label>
+        <link refid="df/d88/a04358"/>
+        <childnode refid="3177" relation="template-instance">
+          <edgelabel>&lt; ashes::Optional &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3177">
+        <label>castor3d::CombinePassConfigT&lt; WrapperT &gt;</label>
+        <link refid="df/d88/a04358"/>
+        <childnode refid="3176" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3176">
+        <label>castor3d::rq::ConfigT&lt; WrapperT &gt;</label>
+        <link refid="d9/d8d/a04442"/>
+      </node>
+      <node id="3179">
+        <label>CombinePassConfigT&lt; ashes::Optional &gt;</label>
+        <link refid="df/d88/a04358"/>
+        <childnode refid="3176" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <location file="Render/Passes/RenderQuad.hpp" line="76" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="75" bodyend="81"/>
+    <listofallmembers>
+      <member refid="d9/d8d/a04442_1ac4d5fa2df58c23f29429178eff899699" prot="public" virt="non-virtual"><scope>castor3d::rq::ConfigT</scope><name>bindings</name></member>
+      <member refid="d9/d8d/a04442_1aad18baaa7ab25c7cf1f27c9f3719104e" prot="public" virt="non-virtual"><scope>castor3d::rq::ConfigT</scope><name>blendMode</name></member>
+      <member refid="d9/d8d/a04442_1a34e232f8e87ff523d0df7cd3f697124f" prot="public" virt="non-virtual"><scope>castor3d::rq::ConfigT</scope><name>range</name></member>
+      <member refid="d9/d8d/a04442_1a4e4283067ecc109099b08f65723dffae" prot="public" virt="non-virtual"><scope>castor3d::rq::ConfigT</scope><name>texcoordConfig</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

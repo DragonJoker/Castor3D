@@ -1,0 +1,231 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="de/de6/a03848" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::Version</compoundname>
+    <includes local="no">Version.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="de/de6/a03848_1a87d4ee3514bd6f8cad7fc9765c5d7ecc" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int castor3d::Version::m_major</definition>
+        <argsstring></argsstring>
+        <name>m_major</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>~english The major version number. ~french Le numéro majeur. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/Version.hpp" line="88" column="1" bodyfile="Miscellaneous/Version.hpp" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/de6/a03848_1aa0704050c51386c301739bfbb5e29e91" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int castor3d::Version::m_minor</definition>
+        <argsstring></argsstring>
+        <name>m_minor</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>~english The minor version number. ~french Le numéro mineur. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/Version.hpp" line="91" column="1" bodyfile="Miscellaneous/Version.hpp" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/de6/a03848_1ad2a3010a79abedced9053b7a5e4c52f0" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int castor3d::Version::m_build</definition>
+        <argsstring></argsstring>
+        <name>m_build</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>~english The build version number. ~french Le numéro de build. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/Version.hpp" line="94" column="1" bodyfile="Miscellaneous/Version.hpp" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/de6/a03848_1a12e99b1f68fc63b7bdeee89380993023" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Version::Version</definition>
+        <argsstring>(int major=C3D_VersionMajor, int minor=C3D_VersionMinor, int build=C3D_VersionBuild)</argsstring>
+        <name>Version</name>
+        <param>
+          <type>int</type>
+          <declname>major</declname>
+          <defval>C3D_VersionMajor</defval>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>minor</declname>
+          <defval>C3D_VersionMinor</defval>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>build</declname>
+          <defval>C3D_VersionBuild</defval>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">major</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The major version number. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">minor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The minor version number. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">build</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The build version number. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/Version.hpp" line="28" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/de6/a03848_1a9a5e5294f62efaea8448db2eb6a06f64" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Version::Version</definition>
+        <argsstring>(uint32_t vk)</argsstring>
+        <name>Version</name>
+        <param>
+          <type>uint32_t</type>
+          <declname>vk</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">vk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The Vulkan compatible version number. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/Version.hpp" line="39" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/de6/a03848_1aaac054e2046a36037ce5f972f663b847" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Version::~Version</definition>
+        <argsstring>()</argsstring>
+        <name>~Version</name>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/Version.hpp" line="46" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/de6/a03848_1ae38ac0881396627899488116b61a029d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::Version::getVkVersion</definition>
+        <argsstring>() const</argsstring>
+        <name>getVkVersion</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The Vulkan compatible version number. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/Version.hpp" line="53" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/de6/a03848_1a0927ba807ba2f1fef1b45a7b50c881ce" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint16_t</type>
+        <definition>uint16_t castor3d::Version::getMajor</definition>
+        <argsstring>() const</argsstring>
+        <name>getMajor</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The major version number. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/Version.hpp" line="60" column="1" bodyfile="Miscellaneous/Version.hpp" bodystart="60" bodyend="63"/>
+      </memberdef>
+      <memberdef kind="function" id="de/de6/a03848_1a9d69f856bedecb98d55b05a95e9a25ef" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint16_t</type>
+        <definition>uint16_t castor3d::Version::getMinor</definition>
+        <argsstring>() const</argsstring>
+        <name>getMinor</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The major version number. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/Version.hpp" line="70" column="1" bodyfile="Miscellaneous/Version.hpp" bodystart="70" bodyend="73"/>
+      </memberdef>
+      <memberdef kind="function" id="de/de6/a03848_1a7fe16a963347745bcb14e7c4a7519b38" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint16_t</type>
+        <definition>uint16_t castor3d::Version::getBuild</definition>
+        <argsstring>() const</argsstring>
+        <name>getBuild</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The build version number. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/Version.hpp" line="80" column="1" bodyfile="Miscellaneous/Version.hpp" bodystart="80" bodyend="83"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Miscellaneous/Version.hpp" line="14" column="1" bodyfile="Miscellaneous/Version.hpp" bodystart="13" bodyend="95"/>
+    <listofallmembers>
+      <member refid="de/de6/a03848_1a7fe16a963347745bcb14e7c4a7519b38" prot="public" virt="non-virtual"><scope>castor3d::Version</scope><name>getBuild</name></member>
+      <member refid="de/de6/a03848_1a0927ba807ba2f1fef1b45a7b50c881ce" prot="public" virt="non-virtual"><scope>castor3d::Version</scope><name>getMajor</name></member>
+      <member refid="de/de6/a03848_1a9d69f856bedecb98d55b05a95e9a25ef" prot="public" virt="non-virtual"><scope>castor3d::Version</scope><name>getMinor</name></member>
+      <member refid="de/de6/a03848_1ae38ac0881396627899488116b61a029d" prot="public" virt="non-virtual"><scope>castor3d::Version</scope><name>getVkVersion</name></member>
+      <member refid="de/de6/a03848_1ad2a3010a79abedced9053b7a5e4c52f0" prot="private" virt="non-virtual"><scope>castor3d::Version</scope><name>m_build</name></member>
+      <member refid="de/de6/a03848_1a87d4ee3514bd6f8cad7fc9765c5d7ecc" prot="private" virt="non-virtual"><scope>castor3d::Version</scope><name>m_major</name></member>
+      <member refid="de/de6/a03848_1aa0704050c51386c301739bfbb5e29e91" prot="private" virt="non-virtual"><scope>castor3d::Version</scope><name>m_minor</name></member>
+      <member refid="de/de6/a03848_1a12e99b1f68fc63b7bdeee89380993023" prot="public" virt="non-virtual"><scope>castor3d::Version</scope><name>Version</name></member>
+      <member refid="de/de6/a03848_1a9a5e5294f62efaea8448db2eb6a06f64" prot="public" virt="non-virtual"><scope>castor3d::Version</scope><name>Version</name></member>
+      <member refid="de/de6/a03848_1aaac054e2046a36037ce5f972f663b847" prot="public" virt="non-virtual"><scope>castor3d::Version</scope><name>~Version</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

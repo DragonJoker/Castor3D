@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_9e02038543c82633b5f72d9e110197d3" kind="dir">
+    <compoundname>Event/UserInput</compoundname>
+    <innerfile refid="d2/d04/a00281">EventHandler.hpp</innerfile>
+    <innerfile refid="db/dc3/a00284">HandlerEvent.hpp</innerfile>
+    <innerfile refid="d6/d7f/a00287">KeyboardEvent.hpp</innerfile>
+    <innerfile refid="de/d25/a00290">MouseEvent.hpp</innerfile>
+    <innerfile refid="d6/d82/a00293">UserInputEvent.hpp</innerfile>
+    <innerfile refid="db/d7b/a00296">UserInputEventModule.hpp</innerfile>
+    <innerfile refid="df/d95/a00299">UserInputListener.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Event/UserInput/"/>
+  </compounddef>
+</doxygen>

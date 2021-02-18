@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dd/d77/a02096" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ChunkTyper&lt; BonesComponent &gt;</compoundname>
+    <includes local="no">BinaryBonesComponent.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="dd/d77/a02096_1aafeb2e028fbf92cbfcf1151a2ead801c" prot="public" static="yes" mutable="no">
+        <type><ref refid="da/d1e/a01479_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref> const</type>
+        <definition>ChunkType const castor3d::ChunkTyper&lt; BonesComponent &gt;::Value</definition>
+        <argsstring></argsstring>
+        <name>Value</name>
+        <initializer>= <ref refid="da/d1e/a01479_1a742783d4e4b7354fac3e375ae107414dafe8ec950199cfa5dc10b05235822becd" kindref="member">ChunkType::eBonesComponent</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryBonesComponent.hpp" line="27" column="1" bodyfile="Binary/BinaryBonesComponent.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Helper structure to find ChunkType from a type. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="date"><para>09/11/2017</para>
+</simplesect>
+<simplesect kind="remark"><para>Specialisation for <ref refid="d8/d9a/a03924" kindref="compound">BonesComponent</ref>. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="Binary/BinaryBonesComponent.hpp" line="26" column="1" bodyfile="Binary/BinaryBonesComponent.hpp" bodystart="25" bodyend="28"/>
+    <listofallmembers>
+      <member refid="dd/d77/a02096_1aafeb2e028fbf92cbfcf1151a2ead801c" prot="public" virt="non-virtual"><scope>castor3d::ChunkTyper&lt; BonesComponent &gt;</scope><name>Value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

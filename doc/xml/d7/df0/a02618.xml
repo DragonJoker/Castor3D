@@ -1,0 +1,417 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d7/df0/a02618" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::SubsurfaceScattering</compoundname>
+    <includes local="no">SubsurfaceScattering.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d7/df0/a02618_1a937b49557187f05df7d022d22a4e342a" prot="public" static="no">
+        <type>std::function&lt; void(<ref refid="d7/df0/a02618" kindref="compound">SubsurfaceScattering</ref> const &amp;) &gt;</type>
+        <definition>using castor3d::SubsurfaceScattering::Changed =  std::function&lt; void( SubsurfaceScattering const &amp; ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>Changed</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/SubsurfaceScattering.hpp" line="17" column="1" bodyfile="Material/Pass/SubsurfaceScattering.hpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d7/df0/a02618_1a621c34180322b3c59bd9ada1381177cc" prot="public" static="no">
+        <type>castor::Signal&lt; <ref refid="d7/df0/a02618_1a937b49557187f05df7d022d22a4e342a" kindref="member">Changed</ref> &gt;</type>
+        <definition>using castor3d::SubsurfaceScattering::OnChanged =  castor::Signal&lt; Changed &gt;</definition>
+        <argsstring></argsstring>
+        <name>OnChanged</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/SubsurfaceScattering.hpp" line="18" column="1" bodyfile="Material/Pass/SubsurfaceScattering.hpp" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d7/df0/a02618_1ad7fd02e96be04ee4d909b96e615c849f" prot="public" static="no">
+        <type>OnChanged::connection</type>
+        <definition>using castor3d::SubsurfaceScattering::OnChangedConnection =  OnChanged::connection</definition>
+        <argsstring></argsstring>
+        <name>OnChangedConnection</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/SubsurfaceScattering.hpp" line="19" column="1" bodyfile="Material/Pass/SubsurfaceScattering.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d7/df0/a02618_1aa2e134491ecfd9a008469de7ab27a2b5" prot="public" static="no" mutable="no">
+        <type><ref refid="d7/df0/a02618_1a621c34180322b3c59bd9ada1381177cc" kindref="member">OnChanged</ref></type>
+        <definition>OnChanged castor3d::SubsurfaceScattering::onChanged</definition>
+        <argsstring></argsstring>
+        <name>onChanged</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/SubsurfaceScattering.hpp" line="133" column="1" bodyfile="Material/Pass/SubsurfaceScattering.hpp" bodystart="133" bodyend="-1"/>
+        <referencedby refid="d7/df0/a02618_1a7b4c580a35c4912961aa822a85b25060" compoundref="dc/d84/a00338" startline="76" endline="80">addProfileFactor</referencedby>
+        <referencedby refid="d7/df0/a02618_1a50850455bb68ac1119b84d168da0f6a4" compoundref="dc/d84/a00338" startline="40" endline="44">setGaussianWidth</referencedby>
+        <referencedby refid="d7/df0/a02618_1ac5bebe58a25426abbd5491ba224e01be" compoundref="dc/d84/a00338" startline="63" endline="67">setStrength</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d7/df0/a02618_1a28d9c3d64ab49e8099d6e005a395aa18" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SubsurfaceScattering::m_gaussianWidth</definition>
+        <argsstring></argsstring>
+        <name>m_gaussianWidth</name>
+        <initializer>{ 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The Gaussian filter width. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/SubsurfaceScattering.hpp" line="138" column="1" bodyfile="Material/Pass/SubsurfaceScattering.hpp" bodystart="138" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/df0/a02618_1a283b0b0c5c6ba88d48c251ed76cb7d0a" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SubsurfaceScattering::m_strength</definition>
+        <argsstring></argsstring>
+        <name>m_strength</name>
+        <initializer>{ 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The scattering strength. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/SubsurfaceScattering.hpp" line="141" column="1" bodyfile="Material/Pass/SubsurfaceScattering.hpp" bodystart="141" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/df0/a02618_1ad9058a1ad57b3384549a40e6d0097577" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SubsurfaceScattering::m_subsurfaceRadius</definition>
+        <argsstring></argsstring>
+        <name>m_subsurfaceRadius</name>
+        <initializer>{ 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The radius of the largest Gaussian. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/SubsurfaceScattering.hpp" line="144" column="1" bodyfile="Material/Pass/SubsurfaceScattering.hpp" bodystart="144" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/df0/a02618_1a6f951b16a49ec6c8b67de53d0d6d2728" prot="private" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::SubsurfaceScattering::m_originalBlendFactors</definition>
+        <argsstring></argsstring>
+        <name>m_originalBlendFactors</name>
+        <initializer>{ 1.0f, 1.0f, 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The radius of the largest Gaussian. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/SubsurfaceScattering.hpp" line="147" column="1" bodyfile="Material/Pass/SubsurfaceScattering.hpp" bodystart="147" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/df0/a02618_1a0949f664c4b0d4020d67b4822d2a0ad8" prot="private" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::SubsurfaceScattering::m_subsurfaceBlends</definition>
+        <argsstring></argsstring>
+        <name>m_subsurfaceBlends</name>
+        <initializer>{ 1.0f, 1.0f, 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The radius of the largest Gaussian. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/SubsurfaceScattering.hpp" line="150" column="1" bodyfile="Material/Pass/SubsurfaceScattering.hpp" bodystart="150" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/df0/a02618_1a56299bccc14514ba337085c54055c529" prot="private" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::SubsurfaceScattering::m_subsurfaceGaussianExponents</definition>
+        <argsstring></argsstring>
+        <name>m_subsurfaceGaussianExponents</name>
+        <initializer>{ 1.0f, 1.0f, 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The radius of the largest Gaussian. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/SubsurfaceScattering.hpp" line="153" column="1" bodyfile="Material/Pass/SubsurfaceScattering.hpp" bodystart="153" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/df0/a02618_1a92aaa8d6ea31cc4fc18a626b3f005e73" prot="private" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::SubsurfaceScattering::m_transmittanceCoefficients</definition>
+        <argsstring></argsstring>
+        <name>m_transmittanceCoefficients</name>
+        <initializer>{ 1.0f, 1.0f, 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The colour used to modulate back-lit transmittance. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/SubsurfaceScattering.hpp" line="156" column="1" bodyfile="Material/Pass/SubsurfaceScattering.hpp" bodystart="156" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/df0/a02618_1a38b3889f9d62e4004fc676e0e1577fbc" prot="private" static="no" mutable="no">
+        <type>castor::Point4fArray</type>
+        <definition>castor::Point4fArray castor3d::SubsurfaceScattering::m_profileFactors</definition>
+        <argsstring></argsstring>
+        <name>m_profileFactors</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The transmittance profile factors. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/SubsurfaceScattering.hpp" line="159" column="1" bodyfile="Material/Pass/SubsurfaceScattering.hpp" bodystart="159" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/df0/a02618_1a21a4bf5cca2349b2f8969c35a3e1a39a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor3d::SubsurfaceScattering::getGaussianWidth</definition>
+        <argsstring>() const</argsstring>
+        <name>getGaussianWidth</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The Gaussian filter width. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/SubsurfaceScattering.hpp" line="28" column="1" bodyfile="Material/Pass/SubsurfaceScattering.hpp" bodystart="28" bodyend="31"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/df0/a02618_1a50850455bb68ac1119b84d168da0f6a4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SubsurfaceScattering::setGaussianWidth</definition>
+        <argsstring>(float value)</argsstring>
+        <name>setGaussianWidth</name>
+        <param>
+          <type>float</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Sets the Gaussian filter width. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/SubsurfaceScattering.hpp" line="40" column="1" bodyfile="Material/Pass/SubsurfaceScattering.hpp" bodystart="40" bodyend="44"/>
+        <references refid="d7/df0/a02618_1aa2e134491ecfd9a008469de7ab27a2b5" compoundref="dc/d84/a00338" startline="133">onChanged</references>
+      </memberdef>
+      <memberdef kind="function" id="d7/df0/a02618_1a1c4744c056ebefd23e91fb0d2b12f6d7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor3d::SubsurfaceScattering::getStrength</definition>
+        <argsstring>() const</argsstring>
+        <name>getStrength</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The scattering strength. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/SubsurfaceScattering.hpp" line="51" column="1" bodyfile="Material/Pass/SubsurfaceScattering.hpp" bodystart="51" bodyend="54"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/df0/a02618_1ac5bebe58a25426abbd5491ba224e01be" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SubsurfaceScattering::setStrength</definition>
+        <argsstring>(float value)</argsstring>
+        <name>setStrength</name>
+        <param>
+          <type>float</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Sets the scattering strength. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/SubsurfaceScattering.hpp" line="63" column="1" bodyfile="Material/Pass/SubsurfaceScattering.hpp" bodystart="63" bodyend="67"/>
+        <references refid="d7/df0/a02618_1aa2e134491ecfd9a008469de7ab27a2b5" compoundref="dc/d84/a00338" startline="133">onChanged</references>
+      </memberdef>
+      <memberdef kind="function" id="d7/df0/a02618_1a7b4c580a35c4912961aa822a85b25060" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SubsurfaceScattering::addProfileFactor</definition>
+        <argsstring>(castor::Point4f const &amp;value)</argsstring>
+        <name>addProfileFactor</name>
+        <param>
+          <type>castor::Point4f const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Adds a factor to the transmittance profile. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The value to add. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/SubsurfaceScattering.hpp" line="76" column="1" bodyfile="Material/Pass/SubsurfaceScattering.hpp" bodystart="76" bodyend="80"/>
+        <references refid="d7/df0/a02618_1aa2e134491ecfd9a008469de7ab27a2b5" compoundref="dc/d84/a00338" startline="133">onChanged</references>
+      </memberdef>
+      <memberdef kind="function" id="d7/df0/a02618_1a3b79cb40060912cb21c386c80d155ea0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::SubsurfaceScattering::getProfileSize</definition>
+        <argsstring>() const</argsstring>
+        <name>getProfileSize</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The transmmittance profile factors count. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/SubsurfaceScattering.hpp" line="87" column="1" bodyfile="Material/Pass/SubsurfaceScattering.hpp" bodystart="87" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/df0/a02618_1af9c39397e4657e56461b0d7d5f1173cd" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::SubsurfaceScattering::begin</definition>
+        <argsstring>()</argsstring>
+        <name>begin</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The iterator to the beginning of the transmittance profile. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/SubsurfaceScattering.hpp" line="97" column="1" bodyfile="Material/Pass/SubsurfaceScattering.hpp" bodystart="97" bodyend="100"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/df0/a02618_1a605894579a490167d89c7d6905c08f2f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::SubsurfaceScattering::begin</definition>
+        <argsstring>() const</argsstring>
+        <name>begin</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The iterator to the beginning of the transmittance profile. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/SubsurfaceScattering.hpp" line="107" column="1" bodyfile="Material/Pass/SubsurfaceScattering.hpp" bodystart="107" bodyend="110"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/df0/a02618_1a2b0b4b57bc1a88cfb6db8daeef3a3cc1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::SubsurfaceScattering::end</definition>
+        <argsstring>()</argsstring>
+        <name>end</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The iterator to the end of the transmittance profile. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/SubsurfaceScattering.hpp" line="117" column="1" bodyfile="Material/Pass/SubsurfaceScattering.hpp" bodystart="117" bodyend="120"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/df0/a02618_1a6c1b8467df393b4faf4b8122b6bd3caf" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::SubsurfaceScattering::end</definition>
+        <argsstring>() const</argsstring>
+        <name>end</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The iterator to the end of the transmittance profile. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/SubsurfaceScattering.hpp" line="127" column="1" bodyfile="Material/Pass/SubsurfaceScattering.hpp" bodystart="127" bodyend="130"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Material/Pass/SubsurfaceScattering.hpp" line="15" column="1" bodyfile="Material/Pass/SubsurfaceScattering.hpp" bodystart="14" bodyend="160"/>
+    <listofallmembers>
+      <member refid="d7/df0/a02618_1a7b4c580a35c4912961aa822a85b25060" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScattering</scope><name>addProfileFactor</name></member>
+      <member refid="d7/df0/a02618_1af9c39397e4657e56461b0d7d5f1173cd" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScattering</scope><name>begin</name></member>
+      <member refid="d7/df0/a02618_1a605894579a490167d89c7d6905c08f2f" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScattering</scope><name>begin</name></member>
+      <member refid="d7/df0/a02618_1a937b49557187f05df7d022d22a4e342a" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScattering</scope><name>Changed</name></member>
+      <member refid="d7/df0/a02618_1a2b0b4b57bc1a88cfb6db8daeef3a3cc1" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScattering</scope><name>end</name></member>
+      <member refid="d7/df0/a02618_1a6c1b8467df393b4faf4b8122b6bd3caf" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScattering</scope><name>end</name></member>
+      <member refid="d7/df0/a02618_1a21a4bf5cca2349b2f8969c35a3e1a39a" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScattering</scope><name>getGaussianWidth</name></member>
+      <member refid="d7/df0/a02618_1a3b79cb40060912cb21c386c80d155ea0" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScattering</scope><name>getProfileSize</name></member>
+      <member refid="d7/df0/a02618_1a1c4744c056ebefd23e91fb0d2b12f6d7" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScattering</scope><name>getStrength</name></member>
+      <member refid="d7/df0/a02618_1a28d9c3d64ab49e8099d6e005a395aa18" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScattering</scope><name>m_gaussianWidth</name></member>
+      <member refid="d7/df0/a02618_1a6f951b16a49ec6c8b67de53d0d6d2728" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScattering</scope><name>m_originalBlendFactors</name></member>
+      <member refid="d7/df0/a02618_1a38b3889f9d62e4004fc676e0e1577fbc" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScattering</scope><name>m_profileFactors</name></member>
+      <member refid="d7/df0/a02618_1a283b0b0c5c6ba88d48c251ed76cb7d0a" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScattering</scope><name>m_strength</name></member>
+      <member refid="d7/df0/a02618_1a0949f664c4b0d4020d67b4822d2a0ad8" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScattering</scope><name>m_subsurfaceBlends</name></member>
+      <member refid="d7/df0/a02618_1a56299bccc14514ba337085c54055c529" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScattering</scope><name>m_subsurfaceGaussianExponents</name></member>
+      <member refid="d7/df0/a02618_1ad9058a1ad57b3384549a40e6d0097577" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScattering</scope><name>m_subsurfaceRadius</name></member>
+      <member refid="d7/df0/a02618_1a92aaa8d6ea31cc4fc18a626b3f005e73" prot="private" virt="non-virtual"><scope>castor3d::SubsurfaceScattering</scope><name>m_transmittanceCoefficients</name></member>
+      <member refid="d7/df0/a02618_1aa2e134491ecfd9a008469de7ab27a2b5" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScattering</scope><name>onChanged</name></member>
+      <member refid="d7/df0/a02618_1a621c34180322b3c59bd9ada1381177cc" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScattering</scope><name>OnChanged</name></member>
+      <member refid="d7/df0/a02618_1ad7fd02e96be04ee4d909b96e615c849f" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScattering</scope><name>OnChangedConnection</name></member>
+      <member refid="d7/df0/a02618_1a50850455bb68ac1119b84d168da0f6a4" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScattering</scope><name>setGaussianWidth</name></member>
+      <member refid="d7/df0/a02618_1ac5bebe58a25426abbd5491ba224e01be" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScattering</scope><name>setStrength</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d0/dac/a05506" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::MorphingUbo</compoundname>
+    <includes local="no">MorphingUbo.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d0/dac/a05506_1ae9712b7914b5ced4cecb70af38133466" prot="public" static="no">
+        <type><ref refid="d4/d20/a05586" kindref="compound">MorphingUboConfiguration</ref></type>
+        <definition>using castor3d::MorphingUbo::Configuration =  MorphingUboConfiguration</definition>
+        <argsstring></argsstring>
+        <name>Configuration</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MorphingUbo.hpp" line="14" column="1" bodyfile="Shader/Ubos/MorphingUbo.hpp" bodystart="14" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d0/dac/a05506_1a9e535c920d37be0859e213fc1c5c938e" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t const</type>
+        <definition>C3D_API uint32_t const castor3d::MorphingUbo::BindingPoint</definition>
+        <argsstring></argsstring>
+        <name>BindingPoint</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MorphingUbo.hpp" line="17" column="1" bodyfile="Shader/Ubos/MorphingUbo.hpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/dac/a05506_1a3f7a2b97987a09150d75da11bbf55d45" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::MorphingUbo::BufferMorphing</definition>
+        <argsstring></argsstring>
+        <name>BufferMorphing</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Name of the morphing animation frame variable buffer. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MorphingUbo.hpp" line="20" column="1" bodyfile="Shader/Ubos/MorphingUbo.hpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/dac/a05506_1a9bc69efb41c22e2c037db1c622071a1e" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::MorphingUbo::Time</definition>
+        <argsstring></argsstring>
+        <name>Time</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Name of the morphing time attribute. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/MorphingUbo.hpp" line="23" column="1" bodyfile="Shader/Ubos/MorphingUbo.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Ubos/MorphingUbo.hpp" line="12" column="1" bodyfile="Shader/Ubos/MorphingUbo.hpp" bodystart="11" bodyend="24"/>
+    <listofallmembers>
+      <member refid="d0/dac/a05506_1a9e535c920d37be0859e213fc1c5c938e" prot="public" virt="non-virtual"><scope>castor3d::MorphingUbo</scope><name>BindingPoint</name></member>
+      <member refid="d0/dac/a05506_1a3f7a2b97987a09150d75da11bbf55d45" prot="public" virt="non-virtual"><scope>castor3d::MorphingUbo</scope><name>BufferMorphing</name></member>
+      <member refid="d0/dac/a05506_1ae9712b7914b5ced4cecb70af38133466" prot="public" virt="non-virtual"><scope>castor3d::MorphingUbo</scope><name>Configuration</name></member>
+      <member refid="d0/dac/a05506_1a9bc69efb41c22e2c037db1c622071a1e" prot="public" virt="non-virtual"><scope>castor3d::MorphingUbo</scope><name>Time</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d0/d9f/a02672" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::DebugCallbacks</compoundname>
+    <includes local="no">DebugCallbacks.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d0/d9f/a02672_1a58a3e9dad96194cae14cc78f564b34df" prot="private" static="no" mutable="no">
+        <type>ashes::Instance const  &amp;</type>
+        <definition>ashes::Instance const&amp; castor3d::DebugCallbacks::m_instance</definition>
+        <argsstring></argsstring>
+        <name>m_instance</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/DebugCallbacks.hpp" line="21" column="1" bodyfile="Miscellaneous/DebugCallbacks.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d9f/a02672_1ac74698414c3759dd1f0dad558bc296ce" prot="private" static="no" mutable="no">
+        <type>void *</type>
+        <definition>void* castor3d::DebugCallbacks::m_userData</definition>
+        <argsstring></argsstring>
+        <name>m_userData</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/DebugCallbacks.hpp" line="22" column="1" bodyfile="Miscellaneous/DebugCallbacks.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/d9f/a02672_1a5928afc1d658eec1707e1bc6b1df7585" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::DebugCallbacks::DebugCallbacks</definition>
+        <argsstring>(ashes::Instance const &amp;instance, void *userData)</argsstring>
+        <name>DebugCallbacks</name>
+        <param>
+          <type>ashes::Instance const &amp;</type>
+          <declname>instance</declname>
+        </param>
+        <param>
+          <type>void *</type>
+          <declname>userData</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/DebugCallbacks.hpp" line="16" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d9f/a02672_1a556ad431d7d3ca57167d77bf6617a1bc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::DebugCallbacks::~DebugCallbacks</definition>
+        <argsstring>()</argsstring>
+        <name>~DebugCallbacks</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/DebugCallbacks.hpp" line="18" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Miscellaneous/DebugCallbacks.hpp" line="14" column="1" bodyfile="Miscellaneous/DebugCallbacks.hpp" bodystart="13" bodyend="29"/>
+    <listofallmembers>
+      <member refid="d0/d9f/a02672_1a5928afc1d658eec1707e1bc6b1df7585" prot="public" virt="non-virtual"><scope>castor3d::DebugCallbacks</scope><name>DebugCallbacks</name></member>
+      <member refid="d0/d9f/a02672_1a58a3e9dad96194cae14cc78f564b34df" prot="private" virt="non-virtual"><scope>castor3d::DebugCallbacks</scope><name>m_instance</name></member>
+      <member refid="d0/d9f/a02672_1ac74698414c3759dd1f0dad558bc296ce" prot="private" virt="non-virtual"><scope>castor3d::DebugCallbacks</scope><name>m_userData</name></member>
+      <member refid="d0/d9f/a02672_1a556ad431d7d3ca57167d77bf6617a1bc" prot="public" virt="non-virtual"><scope>castor3d::DebugCallbacks</scope><name>~DebugCallbacks</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

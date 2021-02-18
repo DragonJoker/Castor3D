@@ -1,0 +1,352 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d0/d9e/a04059" kind="class" language="C++" prot="private">
+    <compoundname>castor3d::DebugOverlays::PassOverlays</compoundname>
+    <innerclass refid="da/d90/a04063" prot="private">castor3d::DebugOverlays::PassOverlays::TimeOverlays</innerclass>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d0/d9e/a04059_1a4ca8506f723bea35cc59a30fd5967116" prot="private" static="no" mutable="no">
+        <type><ref refid="d7/dd1/a01458_1ad78a6a1185b47fc82bf9bfc3c4c18319" kindref="member">OverlayCache</ref> &amp;</type>
+        <definition>OverlayCache&amp; castor3d::DebugOverlays::PassOverlays::m_cache</definition>
+        <argsstring></argsstring>
+        <name>m_cache</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="251" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="251" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d9e/a04059_1a4f31c5fce4a0b558678cbb2dba65d46e" prot="private" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::DebugOverlays::PassOverlays::m_name</definition>
+        <argsstring></argsstring>
+        <name>m_name</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="252" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="252" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d9e/a04059_1a1be0c6c77832d4ee55d7ea82fb7af529" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::DebugOverlays::PassOverlays::m_index</definition>
+        <argsstring></argsstring>
+        <name>m_index</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="253" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="253" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d9e/a04059_1a9207aecaea3cd409bb607161810a005d" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="d7/db9/a04591" kindref="compound">RenderPassTimer</ref> * &gt;</type>
+        <definition>std::vector&lt; RenderPassTimer * &gt; castor3d::DebugOverlays::PassOverlays::m_timers</definition>
+        <argsstring></argsstring>
+        <name>m_timers</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="254" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="254" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d9e/a04059_1af3c86724639defaa1daa417991669706" prot="private" static="no" mutable="no">
+        <type>PanelOverlaySPtr</type>
+        <definition>PanelOverlaySPtr castor3d::DebugOverlays::PassOverlays::m_panel</definition>
+        <argsstring></argsstring>
+        <name>m_panel</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="255" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="255" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d9e/a04059_1a84e3409c0925cb955da0a4101887cd19" prot="private" static="no" mutable="no">
+        <type>TextOverlaySPtr</type>
+        <definition>TextOverlaySPtr castor3d::DebugOverlays::PassOverlays::m_passName</definition>
+        <argsstring></argsstring>
+        <name>m_passName</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="256" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="256" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d9e/a04059_1a0f027220492a42e3587c4d431eadfb17" prot="private" static="no" mutable="no">
+        <type>TimeOverlays</type>
+        <definition>TimeOverlays castor3d::DebugOverlays::PassOverlays::m_cpu</definition>
+        <argsstring></argsstring>
+        <name>m_cpu</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="257" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="257" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d9e/a04059_1a7021e19778ff8a85c8cae705e1aeb4e0" prot="private" static="no" mutable="no">
+        <type>TimeOverlays</type>
+        <definition>TimeOverlays castor3d::DebugOverlays::PassOverlays::m_gpu</definition>
+        <argsstring></argsstring>
+        <name>m_gpu</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="258" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="258" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/d9e/a04059_1a87d660b9b7d33d5e428b5a24ebcec03f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::DebugOverlays::PassOverlays::PassOverlays</definition>
+        <argsstring>(PassOverlays const &amp;)=delete</argsstring>
+        <name>PassOverlays</name>
+        <param>
+          <type>PassOverlays const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="220" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d9e/a04059_1ae04188a7fbe45d81d97e5af190e54112" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>PassOverlays &amp;</type>
+        <definition>PassOverlays&amp; castor3d::DebugOverlays::PassOverlays::operator=</definition>
+        <argsstring>(PassOverlays const &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <param>
+          <type>PassOverlays const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="221" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d9e/a04059_1aae128226fb202df480514a77092159e1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::DebugOverlays::PassOverlays::PassOverlays</definition>
+        <argsstring>(PassOverlays &amp;&amp;)=default</argsstring>
+        <name>PassOverlays</name>
+        <param>
+          <type>PassOverlays &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="222" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d9e/a04059_1a6f009ce3dcb0a6a61aa184dd23698e96" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>PassOverlays &amp;</type>
+        <definition>PassOverlays&amp; castor3d::DebugOverlays::PassOverlays::operator=</definition>
+        <argsstring>(PassOverlays &amp;&amp;)=default</argsstring>
+        <name>operator=</name>
+        <param>
+          <type>PassOverlays &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="223" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d9e/a04059_1a8bd5a64156b81c9135603c1aad444edd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::DebugOverlays::PassOverlays::PassOverlays</definition>
+        <argsstring>(OverlayCache &amp;cache, OverlaySPtr parent, castor::String const &amp;category, castor::String const &amp;name, uint32_t index)</argsstring>
+        <name>PassOverlays</name>
+        <param>
+          <type><ref refid="d7/dd1/a01458_1ad78a6a1185b47fc82bf9bfc3c4c18319" kindref="member">OverlayCache</ref> &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <param>
+          <type>OverlaySPtr</type>
+          <declname>parent</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>category</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="224" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d9e/a04059_1a4582ad6e5266a7d9e04629216b60ee3e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::DebugOverlays::PassOverlays::~PassOverlays</definition>
+        <argsstring>()</argsstring>
+        <name>~PassOverlays</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="229" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d9e/a04059_1a9f635a85b44741c77fd139095afbd7f1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::DebugOverlays::PassOverlays::retrieveGpuTime</definition>
+        <argsstring>()</argsstring>
+        <name>retrieveGpuTime</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="230" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d9e/a04059_1a1786b3aec21b8ff135ab5cca62652a9a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::DebugOverlays::PassOverlays::update</definition>
+        <argsstring>()</argsstring>
+        <name>update</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="231" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d9e/a04059_1ab9b5ed0bb785c7b64aaf3771c94180d1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::DebugOverlays::PassOverlays::addTimer</definition>
+        <argsstring>(RenderPassTimer &amp;timer)</argsstring>
+        <name>addTimer</name>
+        <param>
+          <type><ref refid="d7/db9/a04591" kindref="compound">RenderPassTimer</ref> &amp;</type>
+          <declname>timer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="232" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d9e/a04059_1ac53757f575a5764dc1566f6d4102604a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::DebugOverlays::PassOverlays::removeTimer</definition>
+        <argsstring>(RenderPassTimer &amp;timer)</argsstring>
+        <name>removeTimer</name>
+        <param>
+          <type><ref refid="d7/db9/a04591" kindref="compound">RenderPassTimer</ref> &amp;</type>
+          <declname>timer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="233" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d9e/a04059_1ad44ae103798dcb97424117b3421d7ecc" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Nanoseconds</type>
+        <definition>castor::Nanoseconds castor3d::DebugOverlays::PassOverlays::getGpuTime</definition>
+        <argsstring>()</argsstring>
+        <name>getGpuTime</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="235" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="235" bodyend="238"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d9e/a04059_1aff66065df53f3b76ad1294b3e0e7394d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Nanoseconds</type>
+        <definition>castor::Nanoseconds castor3d::DebugOverlays::PassOverlays::getCpuTime</definition>
+        <argsstring>()</argsstring>
+        <name>getCpuTime</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="240" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="240" bodyend="243"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d9e/a04059_1a4aaaad1f5310f2e609fbdf991f1741ad" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::String const  &amp;</type>
+        <definition>castor::String const&amp; castor3d::DebugOverlays::PassOverlays::getName</definition>
+        <argsstring>()</argsstring>
+        <name>getName</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="245" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="245" bodyend="248"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Overlay/DebugOverlays.hpp" line="210" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="209" bodyend="259"/>
+    <listofallmembers>
+      <member refid="d0/d9e/a04059_1ab9b5ed0bb785c7b64aaf3771c94180d1" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::PassOverlays</scope><name>addTimer</name></member>
+      <member refid="d0/d9e/a04059_1aff66065df53f3b76ad1294b3e0e7394d" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::PassOverlays</scope><name>getCpuTime</name></member>
+      <member refid="d0/d9e/a04059_1ad44ae103798dcb97424117b3421d7ecc" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::PassOverlays</scope><name>getGpuTime</name></member>
+      <member refid="d0/d9e/a04059_1a4aaaad1f5310f2e609fbdf991f1741ad" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::PassOverlays</scope><name>getName</name></member>
+      <member refid="d0/d9e/a04059_1a4ca8506f723bea35cc59a30fd5967116" prot="private" virt="non-virtual"><scope>castor3d::DebugOverlays::PassOverlays</scope><name>m_cache</name></member>
+      <member refid="d0/d9e/a04059_1a0f027220492a42e3587c4d431eadfb17" prot="private" virt="non-virtual"><scope>castor3d::DebugOverlays::PassOverlays</scope><name>m_cpu</name></member>
+      <member refid="d0/d9e/a04059_1a7021e19778ff8a85c8cae705e1aeb4e0" prot="private" virt="non-virtual"><scope>castor3d::DebugOverlays::PassOverlays</scope><name>m_gpu</name></member>
+      <member refid="d0/d9e/a04059_1a1be0c6c77832d4ee55d7ea82fb7af529" prot="private" virt="non-virtual"><scope>castor3d::DebugOverlays::PassOverlays</scope><name>m_index</name></member>
+      <member refid="d0/d9e/a04059_1a4f31c5fce4a0b558678cbb2dba65d46e" prot="private" virt="non-virtual"><scope>castor3d::DebugOverlays::PassOverlays</scope><name>m_name</name></member>
+      <member refid="d0/d9e/a04059_1af3c86724639defaa1daa417991669706" prot="private" virt="non-virtual"><scope>castor3d::DebugOverlays::PassOverlays</scope><name>m_panel</name></member>
+      <member refid="d0/d9e/a04059_1a84e3409c0925cb955da0a4101887cd19" prot="private" virt="non-virtual"><scope>castor3d::DebugOverlays::PassOverlays</scope><name>m_passName</name></member>
+      <member refid="d0/d9e/a04059_1a9207aecaea3cd409bb607161810a005d" prot="private" virt="non-virtual"><scope>castor3d::DebugOverlays::PassOverlays</scope><name>m_timers</name></member>
+      <member refid="d0/d9e/a04059_1ae04188a7fbe45d81d97e5af190e54112" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::PassOverlays</scope><name>operator=</name></member>
+      <member refid="d0/d9e/a04059_1a6f009ce3dcb0a6a61aa184dd23698e96" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::PassOverlays</scope><name>operator=</name></member>
+      <member refid="d0/d9e/a04059_1a87d660b9b7d33d5e428b5a24ebcec03f" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::PassOverlays</scope><name>PassOverlays</name></member>
+      <member refid="d0/d9e/a04059_1aae128226fb202df480514a77092159e1" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::PassOverlays</scope><name>PassOverlays</name></member>
+      <member refid="d0/d9e/a04059_1a8bd5a64156b81c9135603c1aad444edd" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::PassOverlays</scope><name>PassOverlays</name></member>
+      <member refid="d0/d9e/a04059_1ac53757f575a5764dc1566f6d4102604a" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::PassOverlays</scope><name>removeTimer</name></member>
+      <member refid="d0/d9e/a04059_1a9f635a85b44741c77fd139095afbd7f1" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::PassOverlays</scope><name>retrieveGpuTime</name></member>
+      <member refid="d0/d9e/a04059_1a1786b3aec21b8ff135ab5cca62652a9a" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::PassOverlays</scope><name>update</name></member>
+      <member refid="d0/d9e/a04059_1a4582ad6e5266a7d9e04629216b60ee3e" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::PassOverlays</scope><name>~PassOverlays</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

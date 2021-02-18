@@ -1,0 +1,370 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d2/df5/a00137" kind="file" language="C++">
+    <compoundname>BinaryWriter.hpp</compoundname>
+    <includes refid="d9/db6/a00146" local="yes">Castor3D/Binary/ChunkWriter.hpp</includes>
+    <includes refid="d9/de6/a00404" local="yes">Castor3D/Miscellaneous/Version.hpp</includes>
+    <includedby refid="db/dab/a00089" local="yes">Binary/BinaryAnimation.hpp</includedby>
+    <includedby refid="d1/dc1/a00092" local="yes">Binary/BinaryBone.hpp</includedby>
+    <includedby refid="d9/d77/a00095" local="yes">Binary/BinaryBonesComponent.hpp</includedby>
+    <includedby refid="d4/d3a/a00101" local="yes">Binary/BinaryMesh.hpp</includedby>
+    <includedby refid="d0/dc2/a00104" local="yes">Binary/BinaryMeshAnimation.hpp</includedby>
+    <includedby refid="df/d98/a00107" local="yes">Binary/BinaryMeshAnimationKeyFrame.hpp</includedby>
+    <includedby refid="d4/d3e/a00116" local="yes">Binary/BinarySkeleton.hpp</includedby>
+    <includedby refid="df/d6a/a00119" local="yes">Binary/BinarySkeletonAnimation.hpp</includedby>
+    <includedby refid="df/dc8/a00122" local="yes">Binary/BinarySkeletonAnimationBone.hpp</includedby>
+    <includedby refid="dc/dfe/a00125" local="yes">Binary/BinarySkeletonAnimationKeyFrame.hpp</includedby>
+    <includedby refid="d1/d88/a00128" local="yes">Binary/BinarySkeletonAnimationNode.hpp</includedby>
+    <includedby refid="d7/d06/a00131" local="yes">Binary/BinarySkeletonAnimationObject.hpp</includedby>
+    <includedby refid="de/d76/a00134" local="yes">Binary/BinarySubmesh.hpp</includedby>
+    <incdepgraph>
+      <node id="1596">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="1623">
+        <label>CastorUtils/Graphics/Size.hpp</label>
+      </node>
+      <node id="1631">
+        <label>Castor3D/RequiredVersion.hpp</label>
+      </node>
+      <node id="1624">
+        <label>CastorUtils/Math/Matrix.hpp</label>
+      </node>
+      <node id="1599">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="1610">
+        <label>CastorUtils/Graphics/BoundingSphere.hpp</label>
+      </node>
+      <node id="1613">
+        <label>ComponentModule.hpp</label>
+        <link refid="d9/d34/a00476"/>
+        <childnode refid="1605" relation="include">
+        </childnode>
+      </node>
+      <node id="1600">
+        <label>cstdint</label>
+      </node>
+      <node id="1619">
+        <label>CastorUtils/Graphics/Colour.hpp</label>
+      </node>
+      <node id="1598">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="1591">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d5/d35/a00266"/>
+        <childnode refid="1592" relation="include">
+        </childnode>
+        <childnode refid="1593" relation="include">
+        </childnode>
+        <childnode refid="1594" relation="include">
+        </childnode>
+        <childnode refid="1595" relation="include">
+        </childnode>
+        <childnode refid="1596" relation="include">
+        </childnode>
+        <childnode refid="1597" relation="include">
+        </childnode>
+        <childnode refid="1598" relation="include">
+        </childnode>
+        <childnode refid="1599" relation="include">
+        </childnode>
+        <childnode refid="1600" relation="include">
+        </childnode>
+        <childnode refid="1601" relation="include">
+        </childnode>
+        <childnode refid="1602" relation="include">
+        </childnode>
+        <childnode refid="1603" relation="include">
+        </childnode>
+      </node>
+      <node id="1602">
+        <label>string</label>
+      </node>
+      <node id="1611">
+        <label>Castor3D/Model/VertexGroup.hpp</label>
+        <link refid="d9/d19/a00560"/>
+        <childnode refid="1607" relation="include">
+        </childnode>
+      </node>
+      <node id="1607">
+        <label>Castor3D/Model/ModelModule.hpp</label>
+        <link refid="d7/def/a00521"/>
+        <childnode refid="1591" relation="include">
+        </childnode>
+      </node>
+      <node id="1595">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="1592">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="1605">
+        <label>Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp</label>
+        <link refid="dc/d19/a00515"/>
+        <childnode refid="1606" relation="include">
+        </childnode>
+        <childnode refid="1609" relation="include">
+        </childnode>
+        <childnode refid="1610" relation="include">
+        </childnode>
+      </node>
+      <node id="1620">
+        <label>CastorUtils/Graphics/Position.hpp</label>
+      </node>
+      <node id="1609">
+        <label>CastorUtils/Graphics/BoundingBox.hpp</label>
+      </node>
+      <node id="1594">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="1618">
+        <label>CastorUtils/Data/Endianness.hpp</label>
+      </node>
+      <node id="1630">
+        <label>MiscellaneousModule.hpp</label>
+        <link refid="d4/d27/a00392"/>
+        <childnode refid="1591" relation="include">
+        </childnode>
+      </node>
+      <node id="1590">
+        <label>BinaryModule.hpp</label>
+        <link refid="d4/d81/a00110"/>
+        <childnode refid="1591" relation="include">
+        </childnode>
+      </node>
+      <node id="1625">
+        <label>CastorUtils/Math/Quaternion.hpp</label>
+      </node>
+      <node id="1612">
+        <label>Castor3D/Model/Mesh/Submesh/Component/FaceIndices.hpp</label>
+        <link refid="db/d8e/a00482"/>
+        <childnode refid="1613" relation="include">
+        </childnode>
+        <childnode refid="1614" relation="include">
+        </childnode>
+      </node>
+      <node id="1593">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="1621">
+        <label>CastorUtils/Graphics/RgbaColour.hpp</label>
+      </node>
+      <node id="1606">
+        <label>Castor3D/Model/Mesh/MeshModule.hpp</label>
+        <link refid="d2/d9d/a00464"/>
+        <childnode refid="1607" relation="include">
+        </childnode>
+        <childnode refid="1608" relation="include">
+        </childnode>
+      </node>
+      <node id="1603">
+        <label>vector</label>
+      </node>
+      <node id="1597">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="1614">
+        <label>array</label>
+      </node>
+      <node id="1616">
+        <label>Castor3D/Model/Skeleton/VertexBoneData.hpp</label>
+        <link refid="dc/df9/a00554"/>
+        <childnode refid="1617" relation="include">
+        </childnode>
+      </node>
+      <node id="1622">
+        <label>CastorUtils/Graphics/RgbColour.hpp</label>
+      </node>
+      <node id="1604">
+        <label>Castor3D/Binary/ChunkData.hpp</label>
+        <link refid="d5/db1/a00140"/>
+        <childnode refid="1590" relation="include">
+        </childnode>
+        <childnode refid="1605" relation="include">
+        </childnode>
+        <childnode refid="1611" relation="include">
+        </childnode>
+        <childnode refid="1612" relation="include">
+        </childnode>
+        <childnode refid="1615" relation="include">
+        </childnode>
+        <childnode refid="1616" relation="include">
+        </childnode>
+        <childnode refid="1618" relation="include">
+        </childnode>
+        <childnode refid="1619" relation="include">
+        </childnode>
+        <childnode refid="1620" relation="include">
+        </childnode>
+        <childnode refid="1621" relation="include">
+        </childnode>
+        <childnode refid="1622" relation="include">
+        </childnode>
+        <childnode refid="1623" relation="include">
+        </childnode>
+        <childnode refid="1624" relation="include">
+        </childnode>
+        <childnode refid="1625" relation="include">
+        </childnode>
+        <childnode refid="1626" relation="include">
+        </childnode>
+      </node>
+      <node id="1589">
+        <label>Castor3D/Binary/BinaryChunk.hpp</label>
+        <link refid="d1/d44/a00098"/>
+        <childnode refid="1590" relation="include">
+        </childnode>
+        <childnode refid="1604" relation="include">
+        </childnode>
+        <childnode refid="1600" relation="include">
+        </childnode>
+        <childnode refid="1627" relation="include">
+        </childnode>
+      </node>
+      <node id="1628">
+        <label>CastorUtils/Miscellaneous/StringUtils.hpp</label>
+      </node>
+      <node id="1588">
+        <label>Castor3D/Binary/ChunkWriter.hpp</label>
+        <link refid="d9/db6/a00146"/>
+        <childnode refid="1589" relation="include">
+        </childnode>
+        <childnode refid="1628" relation="include">
+        </childnode>
+      </node>
+      <node id="1617">
+        <label>SkeletonModule.hpp</label>
+        <link refid="d9/d87/a00551"/>
+        <childnode refid="1607" relation="include">
+        </childnode>
+      </node>
+      <node id="1587">
+        <label>Binary/BinaryWriter.hpp</label>
+        <link refid="d2/df5/a00137"/>
+        <childnode refid="1588" relation="include">
+        </childnode>
+        <childnode refid="1629" relation="include">
+        </childnode>
+      </node>
+      <node id="1629">
+        <label>Castor3D/Miscellaneous/Version.hpp</label>
+        <link refid="d9/de6/a00404"/>
+        <childnode refid="1630" relation="include">
+        </childnode>
+        <childnode refid="1631" relation="include">
+        </childnode>
+      </node>
+      <node id="1615">
+        <label>Castor3D/Model/Mesh/Submesh/Component/LineIndices.hpp</label>
+        <link refid="d4/d1e/a00497"/>
+        <childnode refid="1613" relation="include">
+        </childnode>
+      </node>
+      <node id="1608">
+        <label>CastorUtils/Design/Factory.hpp</label>
+      </node>
+      <node id="1627">
+        <label>cstring</label>
+      </node>
+      <node id="1601">
+        <label>memory</label>
+      </node>
+      <node id="1626">
+        <label>CastorUtils/Math/SquareMatrix.hpp</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="1645">
+        <label>Binary/BinarySubmesh.hpp</label>
+        <link refid="de/d76/a00134"/>
+      </node>
+      <node id="1643">
+        <label>Binary/BinarySkeletonAnimationNode.hpp</label>
+        <link refid="d1/d88/a00128"/>
+      </node>
+      <node id="1636">
+        <label>Binary/BinaryMesh.hpp</label>
+        <link refid="d4/d3a/a00101"/>
+      </node>
+      <node id="1635">
+        <label>Binary/BinaryBonesComponent.hpp</label>
+        <link refid="d9/d77/a00095"/>
+      </node>
+      <node id="1644">
+        <label>Binary/BinarySkeletonAnimationObject.hpp</label>
+        <link refid="d7/d06/a00131"/>
+      </node>
+      <node id="1637">
+        <label>Binary/BinaryMeshAnimation.hpp</label>
+        <link refid="d0/dc2/a00104"/>
+      </node>
+      <node id="1640">
+        <label>Binary/BinarySkeletonAnimation.hpp</label>
+        <link refid="df/d6a/a00119"/>
+      </node>
+      <node id="1639">
+        <label>Binary/BinarySkeleton.hpp</label>
+        <link refid="d4/d3e/a00116"/>
+      </node>
+      <node id="1638">
+        <label>Binary/BinaryMeshAnimationKeyFrame.hpp</label>
+        <link refid="df/d98/a00107"/>
+      </node>
+      <node id="1641">
+        <label>Binary/BinarySkeletonAnimationBone.hpp</label>
+        <link refid="df/dc8/a00122"/>
+      </node>
+      <node id="1632">
+        <label>Binary/BinaryWriter.hpp</label>
+        <link refid="d2/df5/a00137"/>
+        <childnode refid="1633" relation="include">
+        </childnode>
+        <childnode refid="1634" relation="include">
+        </childnode>
+        <childnode refid="1635" relation="include">
+        </childnode>
+        <childnode refid="1636" relation="include">
+        </childnode>
+        <childnode refid="1637" relation="include">
+        </childnode>
+        <childnode refid="1638" relation="include">
+        </childnode>
+        <childnode refid="1639" relation="include">
+        </childnode>
+        <childnode refid="1640" relation="include">
+        </childnode>
+        <childnode refid="1641" relation="include">
+        </childnode>
+        <childnode refid="1642" relation="include">
+        </childnode>
+        <childnode refid="1643" relation="include">
+        </childnode>
+        <childnode refid="1644" relation="include">
+        </childnode>
+        <childnode refid="1645" relation="include">
+        </childnode>
+      </node>
+      <node id="1633">
+        <label>Binary/BinaryAnimation.hpp</label>
+        <link refid="db/dab/a00089"/>
+      </node>
+      <node id="1634">
+        <label>Binary/BinaryBone.hpp</label>
+        <link refid="d1/dc1/a00092"/>
+      </node>
+      <node id="1642">
+        <label>Binary/BinarySkeletonAnimationKeyFrame.hpp</label>
+        <link refid="dc/dfe/a00125"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="dd/d3f/a02156" prot="public">castor3d::BinaryWriterBase</innerclass>
+    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Binary/BinaryWriter.hpp"/>
+  </compounddef>
+</doxygen>

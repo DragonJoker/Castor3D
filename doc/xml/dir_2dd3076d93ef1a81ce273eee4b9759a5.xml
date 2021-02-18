@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_2dd3076d93ef1a81ce273eee4b9759a5" kind="dir">
+    <compoundname>Material/Pass</compoundname>
+    <innerfile refid="d5/d0f/a00308">MetallicRoughnessPbrPass.hpp</innerfile>
+    <innerfile refid="d1/d5d/a00311">Pass.hpp</innerfile>
+    <innerfile refid="d0/d39/a00314">PassModule.hpp</innerfile>
+    <innerfile refid="da/de0/a00317">PhongPass.hpp</innerfile>
+    <innerfile refid="dd/de2/a00320">SpecularGlossinessPbrPass.hpp</innerfile>
+    <innerfile refid="de/d55/a00323">SubsurfaceScattering.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Material/Pass/"/>
+  </compounddef>
+</doxygen>

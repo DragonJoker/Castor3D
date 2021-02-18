@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d1/d94/a05224" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ElementTyper</compoundname>
+    <includes local="no">ParticleModule.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type><ref refid="da/d1e/a01479_1a4fdd8bd8042f3a3ae81042067e1ac250" kindref="member">ParticleFormat</ref></type>
+        <declname>Type</declname>
+        <defname>Type</defname>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Scene/ParticleSystem/ParticleModule.hpp" line="186" column="1" bodyfile="Scene/ParticleSystem/ParticleModule.hpp" bodystart="186" bodyend="-1"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

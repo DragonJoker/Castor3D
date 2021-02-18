@@ -1,0 +1,489 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dd/d6d/a04186" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::Plugin</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
+    <derivedcompoundref refid="d2/dbb/a04166" prot="public" virt="non-virtual">castor3d::DividerPlugin</derivedcompoundref>
+    <derivedcompoundref refid="da/dea/a04170" prot="public" virt="non-virtual">castor3d::GeneratorPlugin</derivedcompoundref>
+    <derivedcompoundref refid="d8/d93/a04174" prot="public" virt="non-virtual">castor3d::GenericPlugin</derivedcompoundref>
+    <derivedcompoundref refid="de/dd1/a04178" prot="public" virt="non-virtual">castor3d::ImporterPlugin</derivedcompoundref>
+    <derivedcompoundref refid="dd/da0/a04182" prot="public" virt="non-virtual">castor3d::ParticlePlugin</derivedcompoundref>
+    <derivedcompoundref refid="da/d02/a04194" prot="public" virt="non-virtual">castor3d::PostFxPlugin</derivedcompoundref>
+    <derivedcompoundref refid="d1/def/a04198" prot="public" virt="non-virtual">castor3d::ToneMappingPlugin</derivedcompoundref>
+    <includes local="no">Plugin.hpp</includes>
+      <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="dd/d6d/a04186_1a260c910f89d5cbe49782efbcc6d42a04" prot="private" static="no">
+        <type>void</type>
+        <definition>typedef void castor3d::Plugin::OnLoadFunction(Engine *, Plugin *)</definition>
+        <argsstring>(Engine *, Plugin *)</argsstring>
+        <name>OnLoadFunction</name>
+        <briefdescription>
+<para>&lt; Signature for the plug-in&apos;s loading function </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Signature for the plug-in&apos;s unloading function </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Plugin/Plugin.hpp" line="17" column="1" bodyfile="Plugin/Plugin.hpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/d6d/a04186_1a484bd75f26901cf9c43d9a9a7effb87c" prot="private" static="no">
+        <type>void</type>
+        <definition>typedef void castor3d::Plugin::OnUnloadFunction(Engine *)</definition>
+        <argsstring>(Engine *)</argsstring>
+        <name>OnUnloadFunction</name>
+        <briefdescription>
+<para>Signature for the plug-in&apos;s type retrieval function. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Plugin/Plugin.hpp" line="19" column="1" bodyfile="Plugin/Plugin.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/d6d/a04186_1adfb1c6693e96e17ce3050b36981b6967" prot="private" static="no">
+        <type>void</type>
+        <definition>typedef void castor3d::Plugin::GetTypeFunction(PluginType *)</definition>
+        <argsstring>(PluginType *)</argsstring>
+        <name>GetTypeFunction</name>
+        <briefdescription>
+<para>Signature for the plug-in&apos;s version checking function. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Plugin/Plugin.hpp" line="21" column="1" bodyfile="Plugin/Plugin.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/d6d/a04186_1a62c48b3460f8bcca388f9c497c8c3add" prot="private" static="no">
+        <type>void</type>
+        <definition>typedef void castor3d::Plugin::GetRequiredVersionFunction(Version *version)</definition>
+        <argsstring>(Version *version)</argsstring>
+        <name>GetRequiredVersionFunction</name>
+        <briefdescription>
+<para>Signature for the plug-in&apos;s name retrieval function. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Plugin/Plugin.hpp" line="23" column="1" bodyfile="Plugin/Plugin.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/d6d/a04186_1a5481372866001812535aa3e0662d5603" prot="private" static="no">
+        <type>void</type>
+        <definition>typedef void castor3d::Plugin::GetNameFunction(char const **)</definition>
+        <argsstring>(char const **)</argsstring>
+        <name>GetNameFunction</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Plugin/Plugin.hpp" line="25" column="1" bodyfile="Plugin/Plugin.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="dd/d6d/a04186_1a54268afa0fd4a75c485f0ba59f108e65" prot="public" static="no">
+        <type>OnLoadFunction *</type>
+        <definition>typedef OnLoadFunction* castor3d::Plugin::POnLoadFunction</definition>
+        <argsstring></argsstring>
+        <name>POnLoadFunction</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Plugin/Plugin.hpp" line="28" column="1" bodyfile="Plugin/Plugin.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/d6d/a04186_1a186ebd8d8fe1eb8b52b7909347ce0fb4" prot="public" static="no">
+        <type>OnUnloadFunction *</type>
+        <definition>typedef OnUnloadFunction* castor3d::Plugin::POnUnloadFunction</definition>
+        <argsstring></argsstring>
+        <name>POnUnloadFunction</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Plugin/Plugin.hpp" line="29" column="1" bodyfile="Plugin/Plugin.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/d6d/a04186_1aa7caed7d5f2bd1d34409227a1e3b09bf" prot="public" static="no">
+        <type>GetTypeFunction *</type>
+        <definition>typedef GetTypeFunction* castor3d::Plugin::PGetTypeFunction</definition>
+        <argsstring></argsstring>
+        <name>PGetTypeFunction</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Plugin/Plugin.hpp" line="30" column="1" bodyfile="Plugin/Plugin.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/d6d/a04186_1a571d2dbc7a601aca467b1b5d8a62d997" prot="public" static="no">
+        <type>GetRequiredVersionFunction *</type>
+        <definition>typedef GetRequiredVersionFunction* castor3d::Plugin::PGetRequiredVersionFunction</definition>
+        <argsstring></argsstring>
+        <name>PGetRequiredVersionFunction</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Plugin/Plugin.hpp" line="31" column="1" bodyfile="Plugin/Plugin.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/d6d/a04186_1af3f82c3bbc1d49880fda39cdc7ea2015" prot="public" static="no">
+        <type>GetNameFunction *</type>
+        <definition>typedef GetNameFunction* castor3d::Plugin::PGetNameFunction</definition>
+        <argsstring></argsstring>
+        <name>PGetNameFunction</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Plugin/Plugin.hpp" line="32" column="1" bodyfile="Plugin/Plugin.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="dd/d6d/a04186_1a3bbb683c98da8be6cb7eadd5ba677f18" prot="protected" static="no" mutable="no">
+        <type><ref refid="dd/d6d/a04186_1a571d2dbc7a601aca467b1b5d8a62d997" kindref="member">PGetRequiredVersionFunction</ref></type>
+        <definition>PGetRequiredVersionFunction castor3d::Plugin::m_pfnGetRequiredVersion</definition>
+        <argsstring></argsstring>
+        <name>m_pfnGetRequiredVersion</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The plug-in&apos;s version checking function. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Plugin/Plugin.hpp" line="108" column="1" bodyfile="Plugin/Plugin.hpp" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d6d/a04186_1a5b06730be035851689f1f52a9d37a839" prot="protected" static="no" mutable="no">
+        <type><ref refid="dd/d6d/a04186_1af3f82c3bbc1d49880fda39cdc7ea2015" kindref="member">PGetNameFunction</ref></type>
+        <definition>PGetNameFunction castor3d::Plugin::m_pfnGetName</definition>
+        <argsstring></argsstring>
+        <name>m_pfnGetName</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The plug-in&apos;s name retrieval function. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Plugin/Plugin.hpp" line="111" column="1" bodyfile="Plugin/Plugin.hpp" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d6d/a04186_1ae4b1c74ae527aef8847250d27eb3acf0" prot="protected" static="no" mutable="no">
+        <type><ref refid="dd/d6d/a04186_1a54268afa0fd4a75c485f0ba59f108e65" kindref="member">POnLoadFunction</ref></type>
+        <definition>POnLoadFunction castor3d::Plugin::m_pfnOnLoad</definition>
+        <argsstring></argsstring>
+        <name>m_pfnOnLoad</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The plug-in&apos;s loading function. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Plugin/Plugin.hpp" line="114" column="1" bodyfile="Plugin/Plugin.hpp" bodystart="114" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d6d/a04186_1a5d94afb97a6d885ed7d2885dafeda0dc" prot="protected" static="no" mutable="no">
+        <type><ref refid="dd/d6d/a04186_1a186ebd8d8fe1eb8b52b7909347ce0fb4" kindref="member">POnUnloadFunction</ref></type>
+        <definition>POnUnloadFunction castor3d::Plugin::m_pfnOnUnload</definition>
+        <argsstring></argsstring>
+        <name>m_pfnOnUnload</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The plug-in&apos;s unloading function </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Plugin/Plugin.hpp" line="117" column="1" bodyfile="Plugin/Plugin.hpp" bodystart="117" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d6d/a04186_1ad988a5d361f28b80ba19dd2caac722e1" prot="protected" static="no" mutable="no">
+        <type><ref refid="de/d13/a01473_1aecf8304db7dd49c874ec216f139e5f67" kindref="member">PluginType</ref></type>
+        <definition>PluginType castor3d::Plugin::m_type</definition>
+        <argsstring></argsstring>
+        <name>m_type</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The plug-in type. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Plugin/Plugin.hpp" line="120" column="1" bodyfile="Plugin/Plugin.hpp" bodystart="120" bodyend="-1"/>
+        <referencedby refid="dd/d6d/a04186_1adfce87274549c3458e705ec6f49f2466" compoundref="d0/d1c/a00605" startline="84" endline="87">getType</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d6d/a04186_1ac89ef3325c33aebd3c45ff41a3912d25" prot="protected" static="no" mutable="no">
+        <type>castor::DynamicLibraryWPtr</type>
+        <definition>castor::DynamicLibraryWPtr castor3d::Plugin::m_library</definition>
+        <argsstring></argsstring>
+        <name>m_library</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The plug-in library. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Plugin/Plugin.hpp" line="123" column="1" bodyfile="Plugin/Plugin.hpp" bodystart="123" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="dd/d6d/a04186_1ab1d7f300c810facf8bc08fceffff8c2b" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Plugin::Plugin</definition>
+        <argsstring>(PluginType type, castor::DynamicLibrarySPtr library, Engine &amp;engine)</argsstring>
+        <name>Plugin</name>
+        <param>
+          <type><ref refid="de/d13/a01473_1aecf8304db7dd49c874ec216f139e5f67" kindref="member">PluginType</ref></type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type>castor::DynamicLibrarySPtr</type>
+          <declname>library</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d9b/a02514" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The plug-in type </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">library</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The shared library holding the plug-in </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The engine </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Plugin/Plugin.hpp" line="47" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d6d/a04186_1a6eee27fad0b4dc406af8dac993816e1e" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Plugin::load</definition>
+        <argsstring>()</argsstring>
+        <name>load</name>
+        <briefdescription>
+<para>Calls load function for the plug-in. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Plugin/Plugin.hpp" line="96" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d6d/a04186_1a1062d08432032ec7d502e7941b4e0df4" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Plugin::unload</definition>
+        <argsstring>()</argsstring>
+        <name>unload</name>
+        <briefdescription>
+<para>Calls unload function for the plug-in. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Plugin/Plugin.hpp" line="103" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/d6d/a04186_1af7f881d3d5d32c7044c1b93164754c64" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::Plugin::~Plugin</definition>
+        <argsstring>()=0</argsstring>
+        <name>~Plugin</name>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Plugin/Plugin.hpp" line="57" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d6d/a04186_1a21c697a5bb64dc09df8604a595ed4ef1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Plugin::getRequiredVersion</definition>
+        <argsstring>(Version &amp;version) const</argsstring>
+        <name>getRequiredVersion</name>
+        <param>
+          <type><ref refid="dd/d51/a03842" kindref="compound">Version</ref> &amp;</type>
+          <declname>version</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves the required version for the plug-in to work correctly. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The version </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Plugin/Plugin.hpp" line="66" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d6d/a04186_1a76345cfa813957198ab5a735b3bf2c84" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String</type>
+        <definition>C3D_API castor::String castor3d::Plugin::getName</definition>
+        <argsstring>() const</argsstring>
+        <name>getName</name>
+        <briefdescription>
+<para>Retrieves the plug-in name. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The name </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Plugin/Plugin.hpp" line="75" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d6d/a04186_1adfce87274549c3458e705ec6f49f2466" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="de/d13/a01473_1aecf8304db7dd49c874ec216f139e5f67" kindref="member">PluginType</ref></type>
+        <definition>PluginType castor3d::Plugin::getType</definition>
+        <argsstring>() const</argsstring>
+        <name>getType</name>
+        <briefdescription>
+<para>Retrieves the plug-in type. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The type </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Plugin/Plugin.hpp" line="84" column="1" bodyfile="Plugin/Plugin.hpp" bodystart="84" bodyend="87"/>
+        <references refid="dd/d6d/a04186_1ad988a5d361f28b80ba19dd2caac722e1" compoundref="d0/d1c/a00605" startline="120">m_type</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2717">
+        <label>castor3d::ParticlePlugin</label>
+        <link refid="dd/da0/a04182"/>
+        <childnode refid="2711" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2715">
+        <label>castor3d::GenericPlugin</label>
+        <link refid="d8/d93/a04174"/>
+        <childnode refid="2711" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2713">
+        <label>castor3d::DividerPlugin</label>
+        <link refid="d2/dbb/a04166"/>
+        <childnode refid="2711" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2718">
+        <label>castor3d::PostFxPlugin</label>
+        <link refid="da/d02/a04194"/>
+        <childnode refid="2711" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2712">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="2719">
+        <label>castor3d::ToneMappingPlugin</label>
+        <link refid="d1/def/a04198"/>
+        <childnode refid="2711" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2714">
+        <label>castor3d::GeneratorPlugin</label>
+        <link refid="da/dea/a04170"/>
+        <childnode refid="2711" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2711">
+        <label>castor3d::Plugin</label>
+        <link refid="dd/d6d/a04186"/>
+        <childnode refid="2712" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2716">
+        <label>castor3d::ImporterPlugin</label>
+        <link refid="de/dd1/a04178"/>
+        <childnode refid="2711" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2721">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="2720">
+        <label>castor3d::Plugin</label>
+        <link refid="dd/d6d/a04186"/>
+        <childnode refid="2721" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Plugin/Plugin.hpp" line="14" column="1" bodyfile="Plugin/Plugin.hpp" bodystart="12" bodyend="124"/>
+    <listofallmembers>
+      <member refid="dd/d6d/a04186_1a76345cfa813957198ab5a735b3bf2c84" prot="public" virt="non-virtual"><scope>castor3d::Plugin</scope><name>getName</name></member>
+      <member refid="dd/d6d/a04186_1a5481372866001812535aa3e0662d5603" prot="private" virt="non-virtual"><scope>castor3d::Plugin</scope><name>GetNameFunction</name></member>
+      <member refid="dd/d6d/a04186_1a21c697a5bb64dc09df8604a595ed4ef1" prot="public" virt="non-virtual"><scope>castor3d::Plugin</scope><name>getRequiredVersion</name></member>
+      <member refid="dd/d6d/a04186_1a62c48b3460f8bcca388f9c497c8c3add" prot="private" virt="non-virtual"><scope>castor3d::Plugin</scope><name>GetRequiredVersionFunction</name></member>
+      <member refid="dd/d6d/a04186_1adfce87274549c3458e705ec6f49f2466" prot="public" virt="non-virtual"><scope>castor3d::Plugin</scope><name>getType</name></member>
+      <member refid="dd/d6d/a04186_1adfb1c6693e96e17ce3050b36981b6967" prot="private" virt="non-virtual"><scope>castor3d::Plugin</scope><name>GetTypeFunction</name></member>
+      <member refid="dd/d6d/a04186_1a6eee27fad0b4dc406af8dac993816e1e" prot="protected" virt="non-virtual"><scope>castor3d::Plugin</scope><name>load</name></member>
+      <member refid="dd/d6d/a04186_1ac89ef3325c33aebd3c45ff41a3912d25" prot="protected" virt="non-virtual"><scope>castor3d::Plugin</scope><name>m_library</name></member>
+      <member refid="dd/d6d/a04186_1a5b06730be035851689f1f52a9d37a839" prot="protected" virt="non-virtual"><scope>castor3d::Plugin</scope><name>m_pfnGetName</name></member>
+      <member refid="dd/d6d/a04186_1a3bbb683c98da8be6cb7eadd5ba677f18" prot="protected" virt="non-virtual"><scope>castor3d::Plugin</scope><name>m_pfnGetRequiredVersion</name></member>
+      <member refid="dd/d6d/a04186_1ae4b1c74ae527aef8847250d27eb3acf0" prot="protected" virt="non-virtual"><scope>castor3d::Plugin</scope><name>m_pfnOnLoad</name></member>
+      <member refid="dd/d6d/a04186_1a5d94afb97a6d885ed7d2885dafeda0dc" prot="protected" virt="non-virtual"><scope>castor3d::Plugin</scope><name>m_pfnOnUnload</name></member>
+      <member refid="dd/d6d/a04186_1ad988a5d361f28b80ba19dd2caac722e1" prot="protected" virt="non-virtual"><scope>castor3d::Plugin</scope><name>m_type</name></member>
+      <member refid="dd/d6d/a04186_1a260c910f89d5cbe49782efbcc6d42a04" prot="private" virt="non-virtual"><scope>castor3d::Plugin</scope><name>OnLoadFunction</name></member>
+      <member refid="dd/d6d/a04186_1a484bd75f26901cf9c43d9a9a7effb87c" prot="private" virt="non-virtual"><scope>castor3d::Plugin</scope><name>OnUnloadFunction</name></member>
+      <member refid="dd/d6d/a04186_1af3f82c3bbc1d49880fda39cdc7ea2015" prot="public" virt="non-virtual"><scope>castor3d::Plugin</scope><name>PGetNameFunction</name></member>
+      <member refid="dd/d6d/a04186_1a571d2dbc7a601aca467b1b5d8a62d997" prot="public" virt="non-virtual"><scope>castor3d::Plugin</scope><name>PGetRequiredVersionFunction</name></member>
+      <member refid="dd/d6d/a04186_1aa7caed7d5f2bd1d34409227a1e3b09bf" prot="public" virt="non-virtual"><scope>castor3d::Plugin</scope><name>PGetTypeFunction</name></member>
+      <member refid="dd/d6d/a04186_1ab1d7f300c810facf8bc08fceffff8c2b" prot="protected" virt="non-virtual"><scope>castor3d::Plugin</scope><name>Plugin</name></member>
+      <member refid="dd/d6d/a04186_1a54268afa0fd4a75c485f0ba59f108e65" prot="public" virt="non-virtual"><scope>castor3d::Plugin</scope><name>POnLoadFunction</name></member>
+      <member refid="dd/d6d/a04186_1a186ebd8d8fe1eb8b52b7909347ce0fb4" prot="public" virt="non-virtual"><scope>castor3d::Plugin</scope><name>POnUnloadFunction</name></member>
+      <member refid="dd/d6d/a04186_1a1062d08432032ec7d502e7941b4e0df4" prot="protected" virt="non-virtual"><scope>castor3d::Plugin</scope><name>unload</name></member>
+      <member refid="dd/d6d/a04186_1af7f881d3d5d32c7044c1b93164754c64" prot="public" virt="pure-virtual"><scope>castor3d::Plugin</scope><name>~Plugin</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

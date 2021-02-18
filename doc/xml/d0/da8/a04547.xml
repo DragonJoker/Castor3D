@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d0/da8/a04547" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::TexturedCube</compoundname>
+    <includes local="no">RenderModule.hpp</includes>
+    <innerclass refid="de/d9c/a04551" prot="public">castor3d::TexturedCube::Quad</innerclass>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d0/da8/a04547_1ad839ad39525a0280a9adf75688e3086b" prot="public" static="no" mutable="no">
+        <type><ref refid="de/d9c/a04551" kindref="compound">Quad</ref></type>
+        <definition>Quad castor3d::TexturedCube::faces[6]</definition>
+        <argsstring>[6]</argsstring>
+        <name>faces</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="72" column="1" bodyfile="Render/RenderModule.hpp" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="4409">
+        <label>castor3d::TexturedCube::Quad::Vertex</label>
+        <link refid="dc/d65/a04555"/>
+      </node>
+      <node id="4407">
+        <label>castor3d::TexturedCube</label>
+        <link refid="d0/da8/a04547"/>
+        <childnode refid="4408" relation="usage">
+          <edgelabel>faces</edgelabel>
+        </childnode>
+      </node>
+      <node id="4408">
+        <label>castor3d::TexturedCube::Quad</label>
+        <link refid="de/d9c/a04551"/>
+        <childnode refid="4409" relation="usage">
+          <edgelabel>vertex</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/RenderModule.hpp" line="60" column="1" bodyfile="Render/RenderModule.hpp" bodystart="59" bodyend="73"/>
+    <listofallmembers>
+      <member refid="d0/da8/a04547_1ad839ad39525a0280a9adf75688e3086b" prot="public" virt="non-virtual"><scope>castor3d::TexturedCube</scope><name>faces</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

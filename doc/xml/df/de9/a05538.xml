@@ -1,0 +1,665 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="df/de9/a05538" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::SsaoConfigUbo</compoundname>
+    <includes local="no">SsaoConfigUbo.hpp</includes>
+    <innerclass refid="dc/df9/a05542" prot="private">castor3d::SsaoConfigUbo::Configuration</innerclass>
+      <sectiondef kind="user-defined">
+      <header>Copy/Move construction/assignment operation.</header>
+      <memberdef kind="function" id="df/de9/a05538_1a7c6e69e6054fef6f228c5a25305bc085" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SsaoConfigUbo::SsaoConfigUbo</definition>
+        <argsstring>(SsaoConfigUbo const &amp;)=delete</argsstring>
+        <name>SsaoConfigUbo</name>
+        <param>
+          <type><ref refid="df/de9/a05538" kindref="compound">SsaoConfigUbo</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="95" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/de9/a05538_1abfccd67a7cd5ecf4d6573b0b0b7fed77" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="df/de9/a05538" kindref="compound">SsaoConfigUbo</ref> &amp;</type>
+        <definition>C3D_API SsaoConfigUbo&amp; castor3d::SsaoConfigUbo::operator=</definition>
+        <argsstring>(SsaoConfigUbo const &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <param>
+          <type><ref refid="df/de9/a05538" kindref="compound">SsaoConfigUbo</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="96" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/de9/a05538_1a6d1866856a9b3fb2badf752b6e3528df" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SsaoConfigUbo::SsaoConfigUbo</definition>
+        <argsstring>(SsaoConfigUbo &amp;&amp;)=default</argsstring>
+        <name>SsaoConfigUbo</name>
+        <param>
+          <type><ref refid="df/de9/a05538" kindref="compound">SsaoConfigUbo</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="97" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/de9/a05538_1a4af1f3efae92fb9de2227bb04167ec6b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="df/de9/a05538" kindref="compound">SsaoConfigUbo</ref> &amp;</type>
+        <definition>C3D_API SsaoConfigUbo&amp; castor3d::SsaoConfigUbo::operator=</definition>
+        <argsstring>(SsaoConfigUbo &amp;&amp;)=delete</argsstring>
+        <name>operator=</name>
+        <param>
+          <type><ref refid="df/de9/a05538" kindref="compound">SsaoConfigUbo</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="98" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="df/de9/a05538_1a4f34aa3e9e7149431e66f78438c68727" prot="public" static="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::SsaoConfigUbo::BindingPoint</definition>
+        <argsstring></argsstring>
+        <name>BindingPoint</name>
+        <initializer>= 8u</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="159" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="159" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/de9/a05538_1ac1e010f129e6693cfbe0af16f5495fc9" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::SsaoConfigUbo::BufferSsaoConfig</definition>
+        <argsstring></argsstring>
+        <name>BufferSsaoConfig</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="160" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="160" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/de9/a05538_1a25c1c52c10673594c8d48a991f4e1a48" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::SsaoConfigUbo::NumSamples</definition>
+        <argsstring></argsstring>
+        <name>NumSamples</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="161" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="161" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/de9/a05538_1a3e94765f3b1216c1fa381976d4234dda" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::SsaoConfigUbo::NumSpiralTurns</definition>
+        <argsstring></argsstring>
+        <name>NumSpiralTurns</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="162" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="162" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/de9/a05538_1a318a67b757ce8bd6f42252d03bfbafbc" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::SsaoConfigUbo::ProjScale</definition>
+        <argsstring></argsstring>
+        <name>ProjScale</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="163" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="163" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/de9/a05538_1acc951382124f0938b496aa9fae4da04a" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::SsaoConfigUbo::Radius</definition>
+        <argsstring></argsstring>
+        <name>Radius</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="164" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="164" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/de9/a05538_1a02d7cd968503bbf31ab740c5b39d48d4" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::SsaoConfigUbo::InvRadius</definition>
+        <argsstring></argsstring>
+        <name>InvRadius</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="165" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="165" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/de9/a05538_1a9f67dae12e8c53418a1a15818e9be4ac" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::SsaoConfigUbo::Radius2</definition>
+        <argsstring></argsstring>
+        <name>Radius2</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="166" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="166" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/de9/a05538_1a662cf4d95e26f925ff16159ceb3769b1" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::SsaoConfigUbo::InvRadius2</definition>
+        <argsstring></argsstring>
+        <name>InvRadius2</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="167" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="167" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/de9/a05538_1a67c79cb220503a09d2fe9ca905104aed" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::SsaoConfigUbo::Bias</definition>
+        <argsstring></argsstring>
+        <name>Bias</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="168" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="168" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/de9/a05538_1a08cf622358427b10e812d5b0317880dc" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::SsaoConfigUbo::Intensity</definition>
+        <argsstring></argsstring>
+        <name>Intensity</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="169" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="169" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/de9/a05538_1aaa2b16e14485182c52c12b387aa85937" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::SsaoConfigUbo::IntensityDivR6</definition>
+        <argsstring></argsstring>
+        <name>IntensityDivR6</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="170" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="170" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/de9/a05538_1aba0b52b81f9fb0bad6650a4cbfe87a80" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::SsaoConfigUbo::FarPlaneZ</definition>
+        <argsstring></argsstring>
+        <name>FarPlaneZ</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="171" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="171" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/de9/a05538_1afe0c6d41d755b610ad32dbf1f07ef486" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::SsaoConfigUbo::EdgeSharpness</definition>
+        <argsstring></argsstring>
+        <name>EdgeSharpness</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="172" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="172" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/de9/a05538_1a8943ac5654bbeadc4bc3fb30026dc8a0" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::SsaoConfigUbo::BlurStepSize</definition>
+        <argsstring></argsstring>
+        <name>BlurStepSize</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="173" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="173" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/de9/a05538_1a6dd24d1bf8516d98331d84fb0bc9b5d7" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::SsaoConfigUbo::BlurRadius</definition>
+        <argsstring></argsstring>
+        <name>BlurRadius</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="174" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="174" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/de9/a05538_1a57a9204f2349c81aa76213b1aa9ade23" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::SsaoConfigUbo::ProjInfo</definition>
+        <argsstring></argsstring>
+        <name>ProjInfo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="175" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="175" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/de9/a05538_1a03cfd5ec3b7764416a54b636b7f71eb0" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::SsaoConfigUbo::ViewMatrix</definition>
+        <argsstring></argsstring>
+        <name>ViewMatrix</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="176" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="176" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/de9/a05538_1ad9902b942462b54860a2edd5d81d7900" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::SsaoConfigUbo::HighQuality</definition>
+        <argsstring></argsstring>
+        <name>HighQuality</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="177" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="177" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/de9/a05538_1ad43eebbdbaf5adafd1e6e5aa08ef0628" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::SsaoConfigUbo::BlurHighQuality</definition>
+        <argsstring></argsstring>
+        <name>BlurHighQuality</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="178" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="178" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/de9/a05538_1ac4f586f9f2d0e603a1c5aea2d28112c5" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::SsaoConfigUbo::LogMaxOffset</definition>
+        <argsstring></argsstring>
+        <name>LogMaxOffset</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="179" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="179" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/de9/a05538_1ad34523825b9e7a00854ec4c297f6065b" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::SsaoConfigUbo::MaxMipLevel</definition>
+        <argsstring></argsstring>
+        <name>MaxMipLevel</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="180" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="180" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/de9/a05538_1a33ffdbbeffb66e24ec5e7591cf6e6d07" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::SsaoConfigUbo::MinRadius</definition>
+        <argsstring></argsstring>
+        <name>MinRadius</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="181" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="181" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/de9/a05538_1aad9ac0c7056715baa2e606100ea7966d" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::SsaoConfigUbo::Variation</definition>
+        <argsstring></argsstring>
+        <name>Variation</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="182" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="182" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/de9/a05538_1aa33c7f463b37d79cc521280b24fd1c0c" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::SsaoConfigUbo::BendStepCount</definition>
+        <argsstring></argsstring>
+        <name>BendStepCount</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="183" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="183" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/de9/a05538_1ab9d2c407990d86c7387e1e05b77767b2" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::SsaoConfigUbo::BendStepSize</definition>
+        <argsstring></argsstring>
+        <name>BendStepSize</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="184" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="184" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="df/de9/a05538_1aff0fe540e1fa5181d8d931a8dc5dab5d" prot="private" static="no" mutable="no">
+        <type><ref refid="df/d9b/a02514" kindref="compound">Engine</ref> &amp;</type>
+        <definition>Engine&amp; castor3d::SsaoConfigUbo::m_engine</definition>
+        <argsstring></argsstring>
+        <name>m_engine</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="187" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="187" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/de9/a05538_1ae28673ce2e4af49756caf9bc20a5f1ba" prot="private" static="no" mutable="no">
+        <type><ref refid="dd/dae/a02294" kindref="compound">UniformBufferOffsetT</ref>&lt; Configuration &gt;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; castor3d::SsaoConfigUbo::m_ubo</definition>
+        <argsstring></argsstring>
+        <name>m_ubo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="188" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="188" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/de9/a05538_1a310091e441e8bce5a903863a32ddb870" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SsaoConfigUbo::SsaoConfigUbo</definition>
+        <argsstring>(Engine &amp;engine)</argsstring>
+        <name>SsaoConfigUbo</name>
+        <param>
+          <type><ref refid="df/d9b/a02514" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The engine. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="108" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/de9/a05538_1ac128098248b2efcfcdb9740e0e31de01" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SsaoConfigUbo::~SsaoConfigUbo</definition>
+        <argsstring>()</argsstring>
+        <name>~SsaoConfigUbo</name>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="115" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/de9/a05538_1ab7688debaee9db36ad440db40361f8c9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SsaoConfigUbo::initialise</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>initialise</name>
+        <param>
+          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+<para>Initialises the UBO. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="124" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/de9/a05538_1a543c2d0169c5c7b26ba1bcaa65185db1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SsaoConfigUbo::cleanup</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>cleanup</name>
+        <param>
+          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+<para>Cleanup function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="133" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/de9/a05538_1ae29e0218fad72725f30c5f66caa6600a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SsaoConfigUbo::cpuUpdate</definition>
+        <argsstring>(SsaoConfig const &amp;config, Camera const &amp;camera)</argsstring>
+        <name>cpuUpdate</name>
+        <param>
+          <type><ref refid="d4/dc3/a04706" kindref="compound">SsaoConfig</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d3d/a05146" kindref="compound">Camera</ref> const &amp;</type>
+          <declname>camera</declname>
+        </param>
+        <briefdescription>
+<para>Updates the UBO content. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">config</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The SSAO configuration. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">camera</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The viewing camera. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="144" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/de9/a05538_1a073ca04d26a7b693d1bad1049ed59890" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SsaoConfigUbo::createSizedBinding</definition>
+        <argsstring>(ashes::DescriptorSet &amp;descriptorSet, VkDescriptorSetLayoutBinding const &amp;layoutBinding) const</argsstring>
+        <name>createSizedBinding</name>
+        <param>
+          <type>ashes::DescriptorSet &amp;</type>
+          <declname>descriptorSet</declname>
+        </param>
+        <param>
+          <type>VkDescriptorSetLayoutBinding const &amp;</type>
+          <declname>layoutBinding</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="147" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="147" bodyend="151"/>
+        <references refid="dd/dae/a02294_1a2c6ad146d4910651544564c25ca7dccd" compoundref="d7/d3f/a00173" startline="70" endline="79">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createSizedBinding</references>
+      </memberdef>
+      <memberdef kind="function" id="df/de9/a05538_1aa3e4f73112120550a9b15e46a24508ff" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dd/dae/a02294" kindref="compound">UniformBufferOffsetT</ref>&lt; Configuration &gt; const  &amp;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; const&amp; castor3d::SsaoConfigUbo::getUbo</definition>
+        <argsstring>() const</argsstring>
+        <name>getUbo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="153" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="153" bodyend="156"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="17" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="16" bodyend="189"/>
+    <listofallmembers>
+      <member refid="df/de9/a05538_1aa33c7f463b37d79cc521280b24fd1c0c" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>BendStepCount</name></member>
+      <member refid="df/de9/a05538_1ab9d2c407990d86c7387e1e05b77767b2" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>BendStepSize</name></member>
+      <member refid="df/de9/a05538_1a67c79cb220503a09d2fe9ca905104aed" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>Bias</name></member>
+      <member refid="df/de9/a05538_1a4f34aa3e9e7149431e66f78438c68727" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>BindingPoint</name></member>
+      <member refid="df/de9/a05538_1ad43eebbdbaf5adafd1e6e5aa08ef0628" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>BlurHighQuality</name></member>
+      <member refid="df/de9/a05538_1a6dd24d1bf8516d98331d84fb0bc9b5d7" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>BlurRadius</name></member>
+      <member refid="df/de9/a05538_1a8943ac5654bbeadc4bc3fb30026dc8a0" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>BlurStepSize</name></member>
+      <member refid="df/de9/a05538_1ac1e010f129e6693cfbe0af16f5495fc9" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>BufferSsaoConfig</name></member>
+      <member refid="df/de9/a05538_1a543c2d0169c5c7b26ba1bcaa65185db1" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>cleanup</name></member>
+      <member refid="df/de9/a05538_1ae29e0218fad72725f30c5f66caa6600a" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>cpuUpdate</name></member>
+      <member refid="df/de9/a05538_1a073ca04d26a7b693d1bad1049ed59890" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>createSizedBinding</name></member>
+      <member refid="df/de9/a05538_1afe0c6d41d755b610ad32dbf1f07ef486" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>EdgeSharpness</name></member>
+      <member refid="df/de9/a05538_1aba0b52b81f9fb0bad6650a4cbfe87a80" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>FarPlaneZ</name></member>
+      <member refid="df/de9/a05538_1aa3e4f73112120550a9b15e46a24508ff" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>getUbo</name></member>
+      <member refid="df/de9/a05538_1ad9902b942462b54860a2edd5d81d7900" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>HighQuality</name></member>
+      <member refid="df/de9/a05538_1ab7688debaee9db36ad440db40361f8c9" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>initialise</name></member>
+      <member refid="df/de9/a05538_1a08cf622358427b10e812d5b0317880dc" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>Intensity</name></member>
+      <member refid="df/de9/a05538_1aaa2b16e14485182c52c12b387aa85937" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>IntensityDivR6</name></member>
+      <member refid="df/de9/a05538_1a02d7cd968503bbf31ab740c5b39d48d4" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>InvRadius</name></member>
+      <member refid="df/de9/a05538_1a662cf4d95e26f925ff16159ceb3769b1" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>InvRadius2</name></member>
+      <member refid="df/de9/a05538_1ac4f586f9f2d0e603a1c5aea2d28112c5" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>LogMaxOffset</name></member>
+      <member refid="df/de9/a05538_1aff0fe540e1fa5181d8d931a8dc5dab5d" prot="private" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>m_engine</name></member>
+      <member refid="df/de9/a05538_1ae28673ce2e4af49756caf9bc20a5f1ba" prot="private" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>m_ubo</name></member>
+      <member refid="df/de9/a05538_1ad34523825b9e7a00854ec4c297f6065b" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>MaxMipLevel</name></member>
+      <member refid="df/de9/a05538_1a33ffdbbeffb66e24ec5e7591cf6e6d07" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>MinRadius</name></member>
+      <member refid="df/de9/a05538_1a25c1c52c10673594c8d48a991f4e1a48" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>NumSamples</name></member>
+      <member refid="df/de9/a05538_1a3e94765f3b1216c1fa381976d4234dda" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>NumSpiralTurns</name></member>
+      <member refid="df/de9/a05538_1abfccd67a7cd5ecf4d6573b0b0b7fed77" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>operator=</name></member>
+      <member refid="df/de9/a05538_1a4af1f3efae92fb9de2227bb04167ec6b" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>operator=</name></member>
+      <member refid="df/de9/a05538_1a57a9204f2349c81aa76213b1aa9ade23" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>ProjInfo</name></member>
+      <member refid="df/de9/a05538_1a318a67b757ce8bd6f42252d03bfbafbc" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>ProjScale</name></member>
+      <member refid="df/de9/a05538_1acc951382124f0938b496aa9fae4da04a" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>Radius</name></member>
+      <member refid="df/de9/a05538_1a9f67dae12e8c53418a1a15818e9be4ac" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>Radius2</name></member>
+      <member refid="df/de9/a05538_1a7c6e69e6054fef6f228c5a25305bc085" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>SsaoConfigUbo</name></member>
+      <member refid="df/de9/a05538_1a6d1866856a9b3fb2badf752b6e3528df" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>SsaoConfigUbo</name></member>
+      <member refid="df/de9/a05538_1a310091e441e8bce5a903863a32ddb870" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>SsaoConfigUbo</name></member>
+      <member refid="df/de9/a05538_1aad9ac0c7056715baa2e606100ea7966d" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>Variation</name></member>
+      <member refid="df/de9/a05538_1a03cfd5ec3b7764416a54b636b7f71eb0" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>ViewMatrix</name></member>
+      <member refid="df/de9/a05538_1ac128098248b2efcfcdb9740e0e31de01" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo</scope><name>~SsaoConfigUbo</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

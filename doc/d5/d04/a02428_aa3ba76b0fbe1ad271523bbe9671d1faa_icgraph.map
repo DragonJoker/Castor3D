@@ -1,0 +1,8 @@
+<map id="castor3d::ObjectCacheBase::lock" name="castor3d::ObjectCacheBase::lock">
+<area shape="rect" id="node1" title="Locks the collection mutex." alt="" coords="239,173,424,214"/>
+<area shape="rect" id="node2" href="$d5/d04/a02428.html#af9759fea89bf19c68bc66e344d09186d" title="adds an object." alt="" coords="5,5,191,61"/>
+<area shape="rect" id="node3" href="$d5/d04/a02428.html#af2d19098583cd5ea5b54c904d755cd0b" title="Sets all the elements to be cleaned up." alt="" coords="5,85,191,141"/>
+<area shape="rect" id="node4" href="$d5/d04/a02428.html#a85b6e3f4e4c70c809d4d008ac4d98949" title="Applies a function to all the elements of this cache." alt="" coords="5,165,191,221"/>
+<area shape="rect" id="node5" href="$d5/d04/a02428.html#a90a3f6b831e5328972c33503869194ea" title=" " alt="" coords="5,245,191,301"/>
+<area shape="rect" id="node6" href="$d5/d04/a02428.html#ae34ecf5dbaca1411e7adb6b895a99698" title="Removes an object, given a name." alt="" coords="5,325,191,381"/>
+</map>

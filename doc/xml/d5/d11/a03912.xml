@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d5/d11/a03912" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::MeshFactory</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::Factory&lt; MeshGenerator, castor::String &gt;</basecompoundref>
+    <includes local="no">MeshFactory.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/d11/a03912_1a8947cb828e67812c02fd49c8f42b14b3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::MeshFactory::MeshFactory</definition>
+        <argsstring>()</argsstring>
+        <name>MeshFactory</name>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/MeshFactory.hpp" line="23" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d11/a03912_1a465b934c536b3283c4bb7c0d110fdebd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::MeshFactory::~MeshFactory</definition>
+        <argsstring>()</argsstring>
+        <name>~MeshFactory</name>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/MeshFactory.hpp" line="30" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1943">
+        <label>castor3d::MeshFactory</label>
+        <link refid="d5/d11/a03912"/>
+        <childnode refid="1944" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1944">
+        <label>castor::Factory&lt; MeshGenerator, castor::String &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1945">
+        <label>castor3d::MeshFactory</label>
+        <link refid="d5/d11/a03912"/>
+        <childnode refid="1946" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1946">
+        <label>castor::Factory&lt; MeshGenerator, castor::String &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Model/Mesh/MeshFactory.hpp" line="15" column="1" bodyfile="Model/Mesh/MeshFactory.hpp" bodystart="13" bodyend="31"/>
+    <listofallmembers>
+      <member refid="d5/d11/a03912_1a8947cb828e67812c02fd49c8f42b14b3" prot="public" virt="non-virtual"><scope>castor3d::MeshFactory</scope><name>MeshFactory</name></member>
+      <member refid="d5/d11/a03912_1a465b934c536b3283c4bb7c0d110fdebd" prot="public" virt="non-virtual"><scope>castor3d::MeshFactory</scope><name>~MeshFactory</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

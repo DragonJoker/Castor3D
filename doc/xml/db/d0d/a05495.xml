@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="db/d0d/a05495" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::OverlayUbo</compoundname>
+    <includes local="no">OverlayUbo.hpp</includes>
+      <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="db/d0d/a05495_1a4b4ea2a7032bf4d41fe903e1f7ea10f8" prot="private" static="no">
+        <type><ref refid="d5/da0/a05575" kindref="compound">OverlayUboConfiguration</ref></type>
+        <definition>using castor3d::OverlayUbo::Configuration =  OverlayUboConfiguration</definition>
+        <argsstring></argsstring>
+        <name>Configuration</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/OverlayUbo.hpp" line="16" column="1" bodyfile="Shader/Ubos/OverlayUbo.hpp" bodystart="16" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="db/d0d/a05495_1ac77567757d19c90beb910db87cc10825" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t const</type>
+        <definition>C3D_API uint32_t const castor3d::OverlayUbo::BindingPoint</definition>
+        <argsstring></argsstring>
+        <name>BindingPoint</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/OverlayUbo.hpp" line="19" column="1" bodyfile="Shader/Ubos/OverlayUbo.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d0d/a05495_1a1a3063696d52a14a1c8ab06e88268c04" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::OverlayUbo::BufferOverlayName</definition>
+        <argsstring></argsstring>
+        <name>BufferOverlayName</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Name of the overlay information frame variable buffer. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/OverlayUbo.hpp" line="22" column="1" bodyfile="Shader/Ubos/OverlayUbo.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d0d/a05495_1afdd35d45e0e9df5733b83a0f80959468" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::OverlayUbo::BufferOverlayInstance</definition>
+        <argsstring></argsstring>
+        <name>BufferOverlayInstance</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Name of the overlay information frame variable buffer. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/OverlayUbo.hpp" line="25" column="1" bodyfile="Shader/Ubos/OverlayUbo.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d0d/a05495_1ab0399e32698c4fca98ef195e7b59c153" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::OverlayUbo::PositionRatio</definition>
+        <argsstring></argsstring>
+        <name>PositionRatio</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Name of the overlay position (xy) and render ratio (zw) frame variable. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/OverlayUbo.hpp" line="28" column="1" bodyfile="Shader/Ubos/OverlayUbo.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d0d/a05495_1aa85adc76818eedabe399311ae68af62b" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::OverlayUbo::RenderSizeIndex</definition>
+        <argsstring></argsstring>
+        <name>RenderSizeIndex</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Name of the render size (xy) and material index (z) frame variable. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/OverlayUbo.hpp" line="31" column="1" bodyfile="Shader/Ubos/OverlayUbo.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Ubos/OverlayUbo.hpp" line="14" column="1" bodyfile="Shader/Ubos/OverlayUbo.hpp" bodystart="13" bodyend="32"/>
+    <listofallmembers>
+      <member refid="db/d0d/a05495_1ac77567757d19c90beb910db87cc10825" prot="public" virt="non-virtual"><scope>castor3d::OverlayUbo</scope><name>BindingPoint</name></member>
+      <member refid="db/d0d/a05495_1afdd35d45e0e9df5733b83a0f80959468" prot="public" virt="non-virtual"><scope>castor3d::OverlayUbo</scope><name>BufferOverlayInstance</name></member>
+      <member refid="db/d0d/a05495_1a1a3063696d52a14a1c8ab06e88268c04" prot="public" virt="non-virtual"><scope>castor3d::OverlayUbo</scope><name>BufferOverlayName</name></member>
+      <member refid="db/d0d/a05495_1a4b4ea2a7032bf4d41fe903e1f7ea10f8" prot="private" virt="non-virtual"><scope>castor3d::OverlayUbo</scope><name>Configuration</name></member>
+      <member refid="db/d0d/a05495_1ab0399e32698c4fca98ef195e7b59c153" prot="public" virt="non-virtual"><scope>castor3d::OverlayUbo</scope><name>PositionRatio</name></member>
+      <member refid="db/d0d/a05495_1aa85adc76818eedabe399311ae68af62b" prot="public" virt="non-virtual"><scope>castor3d::OverlayUbo</scope><name>RenderSizeIndex</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

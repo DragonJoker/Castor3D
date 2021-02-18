@@ -1,9 +1,8 @@
 [Back to Main page](http://DragonJoker.github.com/Castor3D)
 
-|         Server     | Result |
-|:------------------:|--------|
-|  Travis CI (Linux) | [![Build Status](https://travis-ci.org/DragonJoker/Castor3D.svg?branch=development)](https://travis-ci.org/DragonJoker/Castor3D) |
-| AppVeyor (Windows) | [![Build Status](https://ci.appveyor.com/api/projects/status/github/DragonJoker/castor3d?branch=development&svg=true)](https://ci.appveyor.com/project/DragonJoker/castor3d) |
+<p align="center">
+  <a href="https://github.com/DragonJoker/Castor3D/actions?query=workflow%3ABuild"><img alt="Build status" src="https://github.com/DragonJoker/Castor3D/workflows/Build/badge.svg"></a>
+</p>
 
 
 Building Castor3D
@@ -13,26 +12,20 @@ Castor3D uses CMake to build project files.
 You just need to launch CMake to build your preferential project file.
 
 Tested compilers are:
-- Visual Studio 2017
-- gcc 6.3
+- Visual Studio 2019
+- gcc 8.0
 
 Projects
 --------
 
 **Main projects**
 
-- CastorUtils depends on Zlib.
-- GlslWriter depends on CastorUtils.
-- Castor3D is based on CastorUtils and GlslWriter, and depends on RendererLib's Renderer.
+- CastorUtils depends on Zlib and Freetype.
+- Castor3D is based on CastorUtils, Ashes and ShaderWriter.
 - GuiCommon depends on Castor3D and wxWidgets (from 2.9.5, currently 3.1).
 - CastorViewer depends on GuiCommon and wxWidgets.
 
 **Plug-ins**
-
-- Renderers
-  - VkRenderSystem depends on RendererLib's vk_renderer.
-  - Gl3RenderSystem depends on RendererLib's gl3_renderer.
-  - Gl4RenderSystem depends on RendererLib's gl_renderer.
 
 - Importers
   - ASSIMP: Depends on Castor3D and Assimp.
@@ -70,7 +63,6 @@ Projects
 
 - CastorTest: Base library for testing, depends on CastorUtils.
 - CastorUtilsTest: Allows you to run unit and performance tests for CastorUtils, depends on CastorUtils and CastorTest.
-- TestRenderSystem: A dummy render system plugin, used to run tests on Castor3D without any renderer, depends on Castor3D and RendererLib's TestRenderer.
 - Castor3DTest: Allows you to run unit tests for Castor3D, depends on Castor3D and CastorTest.
 
 **Other**
@@ -78,6 +70,9 @@ Projects
 - CastorMeshConverter: Depends on Castor3D and wxWidgets.
 - CastorMeshUpgrader: Depends on Castor3D and wxWidgets.
 - ImgConverter: Depends on wxWidgets.
+- CastorTestLauncher: Depends on Castor3D.
+- DiffImage: Depends on CastorUtils.
+- Aria: Depends on CastorUtils, Boost, sqlite and wxWidgets.
 
 Documentation for CastorUtils and Castor3D can be generated using Doxygen.
 

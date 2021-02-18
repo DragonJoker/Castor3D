@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_c96224b6b2921e0b598a72ab9240a599" kind="dir">
+    <compoundname>Render/Technique/Opaque/Lighting</compoundname>
+    <innerfile refid="d0/d82/a00857">DirectionalLightPass.hpp</innerfile>
+    <innerfile refid="d2/d5e/a00860">LightingModule.hpp</innerfile>
+    <innerfile refid="d7/d49/a00863">LightPass.hpp</innerfile>
+    <innerfile refid="dd/db2/a00866">LightPassResult.hpp</innerfile>
+    <innerfile refid="d3/db2/a00869">LightPassShadow.hpp</innerfile>
+    <innerfile refid="dc/d17/a00872">MeshLightPass.hpp</innerfile>
+    <innerfile refid="d1/d93/a00875">PointLightPass.hpp</innerfile>
+    <innerfile refid="d5/d69/a00878">SpotLightPass.hpp</innerfile>
+    <innerfile refid="df/d41/a00881">SubsurfaceScatteringPass.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Technique/Opaque/Lighting/"/>
+  </compounddef>
+</doxygen>

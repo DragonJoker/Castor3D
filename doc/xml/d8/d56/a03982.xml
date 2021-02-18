@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d8/d56/a03982" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SubmeshComponentAdder</compoundname>
+    <includes local="no">Submesh.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d8/d56/a03982_1aae25f0c1d88de80ce1ffa434951e14e6" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>static void castor3d::SubmeshComponentAdder&lt; T &gt;::add</definition>
+        <argsstring>(std::shared_ptr&lt; T &gt; component, Submesh &amp;submesh)</argsstring>
+        <name>add</name>
+        <param>
+          <type>std::shared_ptr&lt; T &gt;</type>
+          <declname>component</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/df2/a03986" kindref="compound">Submesh</ref> &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Submesh.hpp" line="29" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Model/Mesh/Submesh/Submesh.hpp" line="28" column="1" bodyfile="Model/Mesh/Submesh/Submesh.hpp" bodystart="27" bodyend="31"/>
+    <listofallmembers>
+      <member refid="d8/d56/a03982_1aae25f0c1d88de80ce1ffa434951e14e6" prot="public" virt="non-virtual"><scope>castor3d::SubmeshComponentAdder</scope><name>add</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

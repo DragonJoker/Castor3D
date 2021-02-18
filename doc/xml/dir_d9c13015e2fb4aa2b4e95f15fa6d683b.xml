@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_d9c13015e2fb4aa2b4e95f15fa6d683b" kind="dir">
+    <compoundname>Scene/ParticleSystem</compoundname>
+    <innerfile refid="dd/d09/a01118">ComputeParticleSystem.hpp</innerfile>
+    <innerfile refid="dd/de4/a01121">CpuParticleSystem.hpp</innerfile>
+    <innerfile refid="d0/dc8/a01124">Particle.hpp</innerfile>
+    <innerfile refid="d9/d5b/a01127">ParticleDeclaration.hpp</innerfile>
+    <innerfile refid="d0/d61/a01130">ParticleElementDeclaration.hpp</innerfile>
+    <innerfile refid="db/d28/a01133">ParticleEmitter.hpp</innerfile>
+    <innerfile refid="d1/dae/a01136">ParticleModule.hpp</innerfile>
+    <innerfile refid="d5/d3e/a01139">ParticleSystem.hpp</innerfile>
+    <innerfile refid="d3/ddc/a01142">ParticleSystemImpl.hpp</innerfile>
+    <innerfile refid="d9/d65/a01145">ParticleUpdater.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Scene/ParticleSystem/"/>
+  </compounddef>
+</doxygen>

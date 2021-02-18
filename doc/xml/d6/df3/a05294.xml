@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d6/df3/a05294" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SpecularGlossinessPassBuffer::PassData</compoundname>
+    <includes local="no">SpecularGlossinessPassBuffer.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d6/df3/a05294_1ae144e26efe5022ee09bce0a67ec7c457" prot="public" static="no" mutable="no">
+        <type>RgbaColour</type>
+        <definition>RgbaColour castor3d::SpecularGlossinessPassBuffer::PassData::diffDiv</definition>
+        <argsstring></argsstring>
+        <name>diffDiv</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp" line="66" column="1" bodyfile="Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/df3/a05294_1a86c5fc3a8ba8e2c893abfee0b1e19385" prot="public" static="no" mutable="no">
+        <type>RgbaColour</type>
+        <definition>RgbaColour castor3d::SpecularGlossinessPassBuffer::PassData::specGloss</definition>
+        <argsstring></argsstring>
+        <name>specGloss</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp" line="67" column="1" bodyfile="Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/df3/a05294_1a6c930437d663d92264ca906c68bb45c9" prot="public" static="no" mutable="no">
+        <type>RgbaColour</type>
+        <definition>RgbaColour castor3d::SpecularGlossinessPassBuffer::PassData::common</definition>
+        <argsstring></argsstring>
+        <name>common</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp" line="68" column="1" bodyfile="Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/df3/a05294_1a2b1e631f67085faeb60dcd8b51734d7b" prot="public" static="no" mutable="no">
+        <type>RgbaColour</type>
+        <definition>RgbaColour castor3d::SpecularGlossinessPassBuffer::PassData::opacity</definition>
+        <argsstring></argsstring>
+        <name>opacity</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp" line="69" column="1" bodyfile="Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp" bodystart="69" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/df3/a05294_1a2c2ae307d41875ff43777786ce7e9f61" prot="public" static="no" mutable="no">
+        <type>RgbaColour</type>
+        <definition>RgbaColour castor3d::SpecularGlossinessPassBuffer::PassData::reflRefr</definition>
+        <argsstring></argsstring>
+        <name>reflRefr</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp" line="70" column="1" bodyfile="Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/df3/a05294_1a0d01a0af0baa8c5309e282cab9dcfe40" prot="public" static="no" mutable="no">
+        <type><ref refid="d6/d9e/a05278" kindref="compound">ExtendedData</ref></type>
+        <definition>ExtendedData castor3d::SpecularGlossinessPassBuffer::PassData::extended</definition>
+        <argsstring></argsstring>
+        <name>extended</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp" line="71" column="1" bodyfile="Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp" line="65" column="1" bodyfile="Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp" bodystart="64" bodyend="72"/>
+    <listofallmembers>
+      <member refid="d6/df3/a05294_1a6c930437d663d92264ca906c68bb45c9" prot="public" virt="non-virtual"><scope>castor3d::SpecularGlossinessPassBuffer::PassData</scope><name>common</name></member>
+      <member refid="d6/df3/a05294_1ae144e26efe5022ee09bce0a67ec7c457" prot="public" virt="non-virtual"><scope>castor3d::SpecularGlossinessPassBuffer::PassData</scope><name>diffDiv</name></member>
+      <member refid="d6/df3/a05294_1a0d01a0af0baa8c5309e282cab9dcfe40" prot="public" virt="non-virtual"><scope>castor3d::SpecularGlossinessPassBuffer::PassData</scope><name>extended</name></member>
+      <member refid="d6/df3/a05294_1a2b1e631f67085faeb60dcd8b51734d7b" prot="public" virt="non-virtual"><scope>castor3d::SpecularGlossinessPassBuffer::PassData</scope><name>opacity</name></member>
+      <member refid="d6/df3/a05294_1a2c2ae307d41875ff43777786ce7e9f61" prot="public" virt="non-virtual"><scope>castor3d::SpecularGlossinessPassBuffer::PassData</scope><name>reflRefr</name></member>
+      <member refid="d6/df3/a05294_1a86c5fc3a8ba8e2c893abfee0b1e19385" prot="public" virt="non-virtual"><scope>castor3d::SpecularGlossinessPassBuffer::PassData</scope><name>specGloss</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

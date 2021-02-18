@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d9/dbb/a04524" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::RenderLoop::TechniqueQueues</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d9/dbb/a04524_1aba78930c232bd55b8b2fa781b55f8dea" prot="public" static="no" mutable="no">
+        <type><ref refid="da/d1e/a01479_1a16af0407887759f4b7d74964b4533ec6" kindref="member">RenderQueueArray</ref></type>
+        <definition>RenderQueueArray castor3d::RenderLoop::TechniqueQueues::queues</definition>
+        <argsstring></argsstring>
+        <name>queues</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="232" column="1" bodyfile="Render/RenderLoop.hpp" bodystart="232" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dbb/a04524_1ab1c67b1e37c5f780ef15f1c4301be286" prot="public" static="no" mutable="no">
+        <type><ref refid="da/d1e/a01479_1ad3137fb4b01f8deea8b1e20522ec8e6c" kindref="member">ShadowMapLightTypeArray</ref></type>
+        <definition>ShadowMapLightTypeArray castor3d::RenderLoop::TechniqueQueues::shadowMaps</definition>
+        <argsstring></argsstring>
+        <name>shadowMaps</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="233" column="1" bodyfile="Render/RenderLoop.hpp" bodystart="233" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2945">
+        <label>T</label>
+      </node>
+      <node id="2943">
+        <label>std::vector&lt; std::reference_wrapper&lt; RenderQueue &gt; &gt;</label>
+        <childnode refid="2944" relation="template-instance">
+          <edgelabel>&lt; std::reference_wrapper&lt; RenderQueue &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2944">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="2945" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="2947">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="2945" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="2946">
+        <label>std::array&lt; ShadowMapRefArray, size_t(LightType::eCount) &gt;</label>
+        <childnode refid="2944" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="2947" relation="template-instance">
+          <edgelabel>&lt; ShadowMapRefArray, size_t(LightType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2942">
+        <label>castor3d::RenderLoop::TechniqueQueues</label>
+        <childnode refid="2943" relation="usage">
+          <edgelabel>queues</edgelabel>
+        </childnode>
+        <childnode refid="2946" relation="usage">
+          <edgelabel>shadowMaps</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/RenderLoop.hpp" line="231" column="1" bodyfile="Render/RenderLoop.hpp" bodystart="230" bodyend="234"/>
+    <listofallmembers>
+      <member refid="d9/dbb/a04524_1aba78930c232bd55b8b2fa781b55f8dea" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop::TechniqueQueues</scope><name>queues</name></member>
+      <member refid="d9/dbb/a04524_1ab1c67b1e37c5f780ef15f1c4301be286" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop::TechniqueQueues</scope><name>shadowMaps</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

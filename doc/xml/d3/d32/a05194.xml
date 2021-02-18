@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d3/d32/a05194" kind="struct" language="C++" prot="protected">
+    <compoundname>castor3d::ComputeParticleSystem::Configuration</compoundname>
+    <includes local="no">ComputeParticleSystem.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d3/d32/a05194_1a789d82f39c7418e44129446fcd705101" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::ComputeParticleSystem::Configuration::deltaTime</definition>
+        <argsstring></argsstring>
+        <name>deltaTime</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="118" column="1" bodyfile="Scene/ParticleSystem/ComputeParticleSystem.hpp" bodystart="118" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d32/a05194_1a76264fbb61acd97731871f69f5992ce8" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::ComputeParticleSystem::Configuration::time</definition>
+        <argsstring></argsstring>
+        <name>time</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="119" column="1" bodyfile="Scene/ParticleSystem/ComputeParticleSystem.hpp" bodystart="119" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d32/a05194_1a38ee4a1a1f9adb75e55c3614bd133ea0" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ComputeParticleSystem::Configuration::maxParticleCount</definition>
+        <argsstring></argsstring>
+        <name>maxParticleCount</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="120" column="1" bodyfile="Scene/ParticleSystem/ComputeParticleSystem.hpp" bodystart="120" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d32/a05194_1af65a433cb2d05b035ca8bb918c6af932" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ComputeParticleSystem::Configuration::currentParticleCount</definition>
+        <argsstring></argsstring>
+        <name>currentParticleCount</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="121" column="1" bodyfile="Scene/ParticleSystem/ComputeParticleSystem.hpp" bodystart="121" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d32/a05194_1a044177ecc33660c4fe6072d3f2ce7cf6" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::ComputeParticleSystem::Configuration::emitterPosition</definition>
+        <argsstring></argsstring>
+        <name>emitterPosition</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="122" column="1" bodyfile="Scene/ParticleSystem/ComputeParticleSystem.hpp" bodystart="122" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Scene/ParticleSystem/ComputeParticleSystem.hpp" line="117" column="1" bodyfile="Scene/ParticleSystem/ComputeParticleSystem.hpp" bodystart="116" bodyend="123"/>
+    <listofallmembers>
+      <member refid="d3/d32/a05194_1af65a433cb2d05b035ca8bb918c6af932" prot="public" virt="non-virtual"><scope>castor3d::ComputeParticleSystem::Configuration</scope><name>currentParticleCount</name></member>
+      <member refid="d3/d32/a05194_1a789d82f39c7418e44129446fcd705101" prot="public" virt="non-virtual"><scope>castor3d::ComputeParticleSystem::Configuration</scope><name>deltaTime</name></member>
+      <member refid="d3/d32/a05194_1a044177ecc33660c4fe6072d3f2ce7cf6" prot="public" virt="non-virtual"><scope>castor3d::ComputeParticleSystem::Configuration</scope><name>emitterPosition</name></member>
+      <member refid="d3/d32/a05194_1a38ee4a1a1f9adb75e55c3614bd133ea0" prot="public" virt="non-virtual"><scope>castor3d::ComputeParticleSystem::Configuration</scope><name>maxParticleCount</name></member>
+      <member refid="d3/d32/a05194_1a76264fbb61acd97731871f69f5992ce8" prot="public" virt="non-virtual"><scope>castor3d::ComputeParticleSystem::Configuration</scope><name>time</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

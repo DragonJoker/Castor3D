@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_5cedc30fef499d6219152e9452b5bd34" kind="dir">
+    <compoundname>Animation</compoundname>
+    <innerfile refid="dc/dee/a00053">Animable.hpp</innerfile>
+    <innerfile refid="d9/d2e/a00056">Animation.hpp</innerfile>
+    <innerfile refid="d3/d8b/a00059">AnimationKeyFrame.hpp</innerfile>
+    <innerfile refid="d3/d91/a07280">AnimationModule.hpp</innerfile>
+    <innerfile refid="de/de1/a00065">Interpolator.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Animation/"/>
+  </compounddef>
+</doxygen>

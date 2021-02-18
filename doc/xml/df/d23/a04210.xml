@@ -1,0 +1,127 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="df/d23/a04210" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::InstantiatedDummyCuller</compoundname>
+    <basecompoundref refid="d2/d73/a04226" prot="public" virt="non-virtual">castor3d::SceneCuller</basecompoundref>
+    <includes local="no">InstantiatedDummyCuller.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/d23/a04210_1aff0c881f643823d7adde766a0a56f3ac" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::InstantiatedDummyCuller::InstantiatedDummyCuller</definition>
+        <argsstring>(Scene &amp;scene, uint32_t instanceCount)</argsstring>
+        <name>InstantiatedDummyCuller</name>
+        <param>
+          <type><ref refid="d6/d66/a05238" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>instanceCount</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/InstantiatedDummyCuller.hpp" line="15" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="df/d23/a04210_1a4d7ada38c88f9dd70968d8b0765363aa" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::InstantiatedDummyCuller::doCullGeometries</definition>
+        <argsstring>() override</argsstring>
+        <name>doCullGeometries</name>
+        <reimplements refid="d2/d73/a04226_1a0d74224399dca0d24b63fdcfb00e4190">doCullGeometries</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/InstantiatedDummyCuller.hpp" line="19" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d23/a04210_1a07aa12c9f249c8a29acd03a55ef54204" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::InstantiatedDummyCuller::doCullBillboards</definition>
+        <argsstring>() override</argsstring>
+        <name>doCullBillboards</name>
+        <reimplements refid="d2/d73/a04226_1a2fb1e62a81ff84a80abe983dce32ac07">doCullBillboards</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/InstantiatedDummyCuller.hpp" line="20" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1436">
+        <label>castor3d::SceneCuller</label>
+        <link refid="d2/d73/a04226"/>
+      </node>
+      <node id="1435">
+        <label>castor3d::InstantiatedDummyCuller</label>
+        <link refid="df/d23/a04210"/>
+        <childnode refid="1436" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1438">
+        <label>castor3d::SceneCuller</label>
+        <link refid="d2/d73/a04226"/>
+      </node>
+      <node id="1437">
+        <label>castor3d::InstantiatedDummyCuller</label>
+        <link refid="df/d23/a04210"/>
+        <childnode refid="1438" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Culling/InstantiatedDummyCuller.hpp" line="13" column="1" bodyfile="Render/Culling/InstantiatedDummyCuller.hpp" bodystart="11" bodyend="21"/>
+    <listofallmembers>
+      <member refid="d2/d73/a04226_1a385eeac18cb22989bb3900f38e453a01" prot="public" virt="non-virtual"><scope>castor3d::InstantiatedDummyCuller</scope><name>areAllChanged</name></member>
+      <member refid="d2/d73/a04226_1a28bd1305c7e968e95dfc30a0b60829da" prot="public" virt="non-virtual"><scope>castor3d::InstantiatedDummyCuller</scope><name>areCulledChanged</name></member>
+      <member refid="d2/d73/a04226_1a7857d0d5c604e95479f3fa25346f5c0f" prot="public" virt="non-virtual"><scope>castor3d::InstantiatedDummyCuller</scope><name>compute</name></member>
+      <member refid="d2/d73/a04226_1ad426a8a02ca5248ca852870d93f29b90" prot="public" virt="non-virtual"><scope>castor3d::InstantiatedDummyCuller</scope><name>CulledInstanceArrayT</name></member>
+      <member refid="d2/d73/a04226_1a0b052cfdf0e054608216e99895bf0fcb" prot="public" virt="non-virtual"><scope>castor3d::InstantiatedDummyCuller</scope><name>CulledInstancePtrArrayT</name></member>
+      <member refid="d2/d73/a04226_1aa19eba8ff864b8bd60cabea05b2a8e82" prot="public" virt="non-virtual"><scope>castor3d::InstantiatedDummyCuller</scope><name>CulledInstancesPtrT</name></member>
+      <member refid="d2/d73/a04226_1a9c15fc0d7699cb7f229301f26254823b" prot="public" virt="non-virtual"><scope>castor3d::InstantiatedDummyCuller</scope><name>CulledInstancesT</name></member>
+      <member refid="df/d23/a04210_1a07aa12c9f249c8a29acd03a55ef54204" prot="private" virt="virtual"><scope>castor3d::InstantiatedDummyCuller</scope><name>doCullBillboards</name></member>
+      <member refid="df/d23/a04210_1a4d7ada38c88f9dd70968d8b0765363aa" prot="private" virt="virtual"><scope>castor3d::InstantiatedDummyCuller</scope><name>doCullGeometries</name></member>
+      <member refid="d2/d73/a04226_1ac412d8e72c7387d38ddafbc7ac4b7a7d" prot="public" virt="non-virtual"><scope>castor3d::InstantiatedDummyCuller</scope><name>getAllBillboards</name></member>
+      <member refid="d2/d73/a04226_1aee63be8adc107e610a558a7b03ac9b4e" prot="public" virt="non-virtual"><scope>castor3d::InstantiatedDummyCuller</scope><name>getAllSubmeshes</name></member>
+      <member refid="d2/d73/a04226_1a077cecd1a46e74a450261a883ddf35b7" prot="public" virt="non-virtual"><scope>castor3d::InstantiatedDummyCuller</scope><name>getCamera</name></member>
+      <member refid="d2/d73/a04226_1a2e5fb1bc4ece5921fd2bdb683071afda" prot="public" virt="non-virtual"><scope>castor3d::InstantiatedDummyCuller</scope><name>getCamera</name></member>
+      <member refid="d2/d73/a04226_1ac5b93c27f1ab0b38b9590df8a208cd09" prot="public" virt="non-virtual"><scope>castor3d::InstantiatedDummyCuller</scope><name>getCulledBillboards</name></member>
+      <member refid="d2/d73/a04226_1a44e20efa2d5a9f3d8e00dbe16399e0cd" prot="public" virt="non-virtual"><scope>castor3d::InstantiatedDummyCuller</scope><name>getCulledSubmeshes</name></member>
+      <member refid="d2/d73/a04226_1a4b4e96df5d91af5e78755bd85efd8d05" prot="protected" virt="non-virtual"><scope>castor3d::InstantiatedDummyCuller</scope><name>getInitialInstances</name></member>
+      <member refid="d2/d73/a04226_1a07511192799a761b32cc0e650bafc3f0" prot="public" virt="non-virtual"><scope>castor3d::InstantiatedDummyCuller</scope><name>getMinCastersZ</name></member>
+      <member refid="d2/d73/a04226_1a6592003d8709c0d012f51a63dae403ae" prot="public" virt="non-virtual"><scope>castor3d::InstantiatedDummyCuller</scope><name>getScene</name></member>
+      <member refid="d2/d73/a04226_1a602a1b5c0447c9a02eaf7d65cde84e8c" prot="public" virt="non-virtual"><scope>castor3d::InstantiatedDummyCuller</scope><name>hasCamera</name></member>
+      <member refid="df/d23/a04210_1aff0c881f643823d7adde766a0a56f3ac" prot="public" virt="non-virtual"><scope>castor3d::InstantiatedDummyCuller</scope><name>InstantiatedDummyCuller</name></member>
+      <member refid="d2/d73/a04226_1a0cefc1f593cb57eaf843597f115e8c19" prot="protected" virt="non-virtual"><scope>castor3d::InstantiatedDummyCuller</scope><name>m_allBillboards</name></member>
+      <member refid="d2/d73/a04226_1abdf1e8aa03f098948ac9753740fda0b8" prot="protected" virt="non-virtual"><scope>castor3d::InstantiatedDummyCuller</scope><name>m_allChanged</name></member>
+      <member refid="d2/d73/a04226_1a9111d51b93a796b7f1d495600d54df06" prot="protected" virt="non-virtual"><scope>castor3d::InstantiatedDummyCuller</scope><name>m_allSubmeshes</name></member>
+      <member refid="d2/d73/a04226_1af1d4537361720c437487c5dc7398ad96" prot="protected" virt="non-virtual"><scope>castor3d::InstantiatedDummyCuller</scope><name>m_cameraChanged</name></member>
+      <member refid="d2/d73/a04226_1aa41b2a37c6c7712c8123c72161276604" prot="protected" virt="non-virtual"><scope>castor3d::InstantiatedDummyCuller</scope><name>m_cameraDirty</name></member>
+      <member refid="d2/d73/a04226_1abbd3eda69f045c90a4a0854757e03fce" prot="protected" virt="non-virtual"><scope>castor3d::InstantiatedDummyCuller</scope><name>m_culledBillboards</name></member>
+      <member refid="d2/d73/a04226_1a92023fa128d7fd1c053bf5fccb4e7693" prot="protected" virt="non-virtual"><scope>castor3d::InstantiatedDummyCuller</scope><name>m_culledChanged</name></member>
+      <member refid="d2/d73/a04226_1a278e4095875f301d31a3c4f6d4bfbeba" prot="protected" virt="non-virtual"><scope>castor3d::InstantiatedDummyCuller</scope><name>m_culledSubmeshes</name></member>
+      <member refid="d2/d73/a04226_1aaa9431957b2d59de8e4d44f38aec32f7" prot="protected" virt="non-virtual"><scope>castor3d::InstantiatedDummyCuller</scope><name>m_instancesCount</name></member>
+      <member refid="d2/d73/a04226_1a2d7f344f44ea50cbd5d58ee626bf700f" prot="protected" virt="non-virtual"><scope>castor3d::InstantiatedDummyCuller</scope><name>m_minCullersZ</name></member>
+      <member refid="d2/d73/a04226_1a6a4720bed06bf39daf66f477cb308e13" prot="protected" virt="non-virtual"><scope>castor3d::InstantiatedDummyCuller</scope><name>m_sceneChanged</name></member>
+      <member refid="d2/d73/a04226_1a4c384c2709f95373c862a17d31a584ec" prot="protected" virt="non-virtual"><scope>castor3d::InstantiatedDummyCuller</scope><name>m_sceneDirty</name></member>
+      <member refid="d2/d73/a04226_1a332ff2fc76d0928ad82d675f863c1529" prot="public" virt="non-virtual"><scope>castor3d::InstantiatedDummyCuller</scope><name>onCompute</name></member>
+      <member refid="d2/d73/a04226_1aede40b860edfad7c29dcca42ba0379d1" prot="public" virt="non-virtual"><scope>castor3d::InstantiatedDummyCuller</scope><name>SceneCuller</name></member>
+      <member refid="d2/d73/a04226_1a7a69f93ed1489daa6f657854b04911bc" prot="public" virt="virtual"><scope>castor3d::InstantiatedDummyCuller</scope><name>~SceneCuller</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

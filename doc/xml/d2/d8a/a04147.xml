@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d2/d8a/a04147" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::TextOverlay::DisplayableLine</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d2/d8a/a04147_1a9f2ac2751fca1115467d7854ace59109" prot="public" static="no" mutable="no">
+        <type>castor::Point2d</type>
+        <definition>castor::Point2d castor3d::TextOverlay::DisplayableLine::m_position</definition>
+        <argsstring></argsstring>
+        <name>m_position</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The line position. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="356" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="356" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d8a/a04147_1a52c971fa4e1dedc9e59f1f5fbc9d7732" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double castor3d::TextOverlay::DisplayableLine::m_width</definition>
+        <argsstring></argsstring>
+        <name>m_width</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The line width. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="359" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="359" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d8a/a04147_1a585cac610b44ac128b9615b98e774e83" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double castor3d::TextOverlay::DisplayableLine::m_height</definition>
+        <argsstring></argsstring>
+        <name>m_height</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The line height. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="362" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="362" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d8a/a04147_1ab266c8d211aa41fabf8e11af0b17f348" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; DisplayableChar &gt;</type>
+        <definition>std::vector&lt; DisplayableChar &gt; castor3d::TextOverlay::DisplayableLine::m_characters</definition>
+        <argsstring></argsstring>
+        <name>m_characters</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The displayable characters. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="365" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="365" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>A text line, along with its size and position. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="date"><para>28/01/2016 </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="4361">
+        <label>T</label>
+      </node>
+      <node id="4360">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="4361" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="4358">
+        <label>std::vector&lt; DisplayableChar &gt;</label>
+        <childnode refid="4359" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="4360" relation="template-instance">
+          <edgelabel>&lt; DisplayableChar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4357">
+        <label>castor3d::TextOverlay::DisplayableLine</label>
+        <childnode refid="4358" relation="usage">
+          <edgelabel>m_characters</edgelabel>
+        </childnode>
+      </node>
+      <node id="4359">
+        <label>castor3d::TextOverlay::DisplayableChar</label>
+      </node>
+    </collaborationgraph>
+    <location file="Overlay/TextOverlay.hpp" line="353" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="352" bodyend="366"/>
+    <listofallmembers>
+      <member refid="d2/d8a/a04147_1ab266c8d211aa41fabf8e11af0b17f348" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableLine</scope><name>m_characters</name></member>
+      <member refid="d2/d8a/a04147_1a585cac610b44ac128b9615b98e774e83" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableLine</scope><name>m_height</name></member>
+      <member refid="d2/d8a/a04147_1a9f2ac2751fca1115467d7854ace59109" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableLine</scope><name>m_position</name></member>
+      <member refid="d2/d8a/a04147_1a52c971fa4e1dedc9e59f1f5fbc9d7732" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableLine</scope><name>m_width</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

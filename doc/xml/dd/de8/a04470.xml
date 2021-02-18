@@ -1,0 +1,251 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dd/de8/a04470" kind="class" language="C++" prot="private">
+    <compoundname>castor3d::EnvironmentPrefilter::MipRenderCube</compoundname>
+    <basecompoundref refid="d6/d5a/a04966" prot="public" virt="non-virtual">castor3d::RenderCube</basecompoundref>
+    <innerclass refid="dc/d50/a04474" prot="private">castor3d::EnvironmentPrefilter::MipRenderCube::FrameBuffer</innerclass>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dd/de8/a04470_1a72d6d400ab15b103925ad3da5af65fe5" prot="private" static="no" mutable="no">
+        <type>ashes::RenderPass const  &amp;</type>
+        <definition>ashes::RenderPass const&amp; castor3d::EnvironmentPrefilter::MipRenderCube::m_renderPass</definition>
+        <argsstring></argsstring>
+        <name>m_renderPass</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="47" column="1" bodyfile="Render/PBR/EnvironmentPrefilter.hpp" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/de8/a04470_1a5ca2088e8c75f2955703459f5a1f506d" prot="private" static="no" mutable="no">
+        <type><ref refid="db/da9/a04374" kindref="compound">CommandsSemaphore</ref></type>
+        <definition>CommandsSemaphore castor3d::EnvironmentPrefilter::MipRenderCube::m_commands</definition>
+        <argsstring></argsstring>
+        <name>m_commands</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="48" column="1" bodyfile="Render/PBR/EnvironmentPrefilter.hpp" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/de8/a04470_1aa456a3a629e56dd545130ee874c84ec4" prot="private" static="no" mutable="no">
+        <type>SamplerSPtr</type>
+        <definition>SamplerSPtr castor3d::EnvironmentPrefilter::MipRenderCube::m_sampler</definition>
+        <argsstring></argsstring>
+        <name>m_sampler</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="49" column="1" bodyfile="Render/PBR/EnvironmentPrefilter.hpp" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/de8/a04470_1acbd9e755f8a9e92f57b03ec9070f2d9c" prot="private" static="no" mutable="no">
+        <type>std::array&lt; FrameBuffer, 6u &gt;</type>
+        <definition>std::array&lt; FrameBuffer, 6u &gt; castor3d::EnvironmentPrefilter::MipRenderCube::m_frameBuffers</definition>
+        <argsstring></argsstring>
+        <name>m_frameBuffers</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="50" column="1" bodyfile="Render/PBR/EnvironmentPrefilter.hpp" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/de8/a04470_1a63154d992c62ed052f63664071c16dac" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::EnvironmentPrefilter::MipRenderCube::MipRenderCube</definition>
+        <argsstring>(RenderDevice const &amp;device, ashes::RenderPass const &amp;renderPass, uint32_t mipLevel, VkExtent2D const &amp;originalSize, VkExtent2D const &amp;size, ashes::ImageView const &amp;srcView, ashes::Image const &amp;dstTexture, SamplerSPtr sampler)</argsstring>
+        <name>MipRenderCube</name>
+        <param>
+          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>ashes::RenderPass const &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>mipLevel</declname>
+        </param>
+        <param>
+          <type>VkExtent2D const &amp;</type>
+          <declname>originalSize</declname>
+        </param>
+        <param>
+          <type>VkExtent2D const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>ashes::ImageView const &amp;</type>
+          <declname>srcView</declname>
+        </param>
+        <param>
+          <type>ashes::Image const &amp;</type>
+          <declname>dstTexture</declname>
+        </param>
+        <param>
+          <type>SamplerSPtr</type>
+          <declname>sampler</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="29" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/de8/a04470_1af304382f5f40f4884ea144a07000846f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EnvironmentPrefilter::MipRenderCube::registerFrames</definition>
+        <argsstring>()</argsstring>
+        <name>registerFrames</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="37" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/de8/a04470_1a0c313d909af1e2d34a68abe19dd7d10a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EnvironmentPrefilter::MipRenderCube::render</definition>
+        <argsstring>()</argsstring>
+        <name>render</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="38" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/de8/a04470_1a6c816a4cdd080a9ed382113d976f1b29" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ashes::Semaphore const  &amp;</type>
+        <definition>ashes::Semaphore const&amp; castor3d::EnvironmentPrefilter::MipRenderCube::render</definition>
+        <argsstring>(ashes::Semaphore const &amp;toWait)</argsstring>
+        <name>render</name>
+        <param>
+          <type>ashes::Semaphore const &amp;</type>
+          <declname>toWait</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="39" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1089">
+        <label>castor3d::RenderCube</label>
+        <link refid="d6/d5a/a04966"/>
+      </node>
+      <node id="1088">
+        <label>castor3d::EnvironmentPrefilter::MipRenderCube</label>
+        <childnode refid="1089" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1096">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d1/d9a/a04618"/>
+        <childnode refid="1097" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1095">
+        <label>T</label>
+      </node>
+      <node id="1091">
+        <label>castor3d::RenderCube</label>
+        <link refid="d6/d5a/a04966"/>
+        <childnode refid="1092" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+      </node>
+      <node id="1099">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="1095" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="1094">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="1095" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="1098">
+        <label>std::vector&lt; ashes::CommandPoolPtr &gt;</label>
+        <childnode refid="1099" relation="template-instance">
+          <edgelabel>&lt; ashes::CommandPoolPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1093">
+        <label>std::array&lt; uint32_t, 4u &gt;</label>
+        <childnode refid="1094" relation="template-instance">
+          <edgelabel>&lt; uint32_t, 4u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1097">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="1090">
+        <label>castor3d::EnvironmentPrefilter::MipRenderCube</label>
+        <childnode refid="1091" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1092">
+        <label>castor3d::RenderDevice</label>
+        <link refid="d8/d4c/a04506"/>
+        <childnode refid="1093" relation="usage">
+          <edgelabel>queueFamiliesIndex</edgelabel>
+        </childnode>
+        <childnode refid="1096" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="1098" relation="usage">
+          <edgelabel>commandPools</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/PBR/EnvironmentPrefilter.hpp" line="27" column="1" bodyfile="Render/PBR/EnvironmentPrefilter.hpp" bodystart="25" bodyend="51"/>
+    <listofallmembers>
+      <member refid="d6/d5a/a04966_1a3f0330fd2cd0b556433e50c505c2cfd0" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>cleanup</name></member>
+      <member refid="d6/d5a/a04966_1ae58f4e4abbd017b821ad1ce07bd1898c" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>createPipelines</name></member>
+      <member refid="d6/d5a/a04966_1a03e099cd27fb31640352a9925effa710" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>createPipelines</name></member>
+      <member refid="d6/d5a/a04966_1aee72d95a1c9e3b4e7bf221867f1a80d5" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>getCommandBuffer</name></member>
+      <member refid="dd/de8/a04470_1a5ca2088e8c75f2955703459f5a1f506d" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>m_commands</name></member>
+      <member refid="d6/d5a/a04966_1af9d5218505481d37eec6dc49f638039a" prot="protected" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>m_device</name></member>
+      <member refid="dd/de8/a04470_1acbd9e755f8a9e92f57b03ec9070f2d9c" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>m_frameBuffers</name></member>
+      <member refid="d6/d5a/a04966_1a84414b79673d6fe5e891f6078bc8b782" prot="protected" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>m_pipelineLayout</name></member>
+      <member refid="dd/de8/a04470_1a72d6d400ab15b103925ad3da5af65fe5" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>m_renderPass</name></member>
+      <member refid="dd/de8/a04470_1aa456a3a629e56dd545130ee874c84ec4" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>m_sampler</name></member>
+      <member refid="dd/de8/a04470_1a63154d992c62ed052f63664071c16dac" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>MipRenderCube</name></member>
+      <member refid="d6/d5a/a04966_1a83fae0b06a6d865e7b3a9a12bf6ee6ff" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>prepareFrame</name></member>
+      <member refid="d6/d5a/a04966_1a4b8c2a6e867159e5545c6ae52e6ed246" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>registerFrame</name></member>
+      <member refid="dd/de8/a04470_1af304382f5f40f4884ea144a07000846f" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>registerFrames</name></member>
+      <member refid="dd/de8/a04470_1a0c313d909af1e2d34a68abe19dd7d10a" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>render</name></member>
+      <member refid="dd/de8/a04470_1a6c816a4cdd080a9ed382113d976f1b29" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>render</name></member>
+      <member refid="d6/d5a/a04966_1ac600349f4887fe9d7765ecc3224b2992" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>RenderCube</name></member>
+      <member refid="d6/d5a/a04966_1a442e2372083596ae51f50d6aa8709e60" prot="public" virt="virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube</scope><name>~RenderCube</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

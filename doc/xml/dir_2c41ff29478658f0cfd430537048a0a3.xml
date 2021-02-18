@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_2c41ff29478658f0cfd430537048a0a3" kind="dir">
+    <compoundname>Model/Mesh/Generator</compoundname>
+    <innerfile refid="db/d43/a00422">Cone.hpp</innerfile>
+    <innerfile refid="dc/d2f/a00425">Cube.hpp</innerfile>
+    <innerfile refid="d4/dd3/a00428">Cylinder.hpp</innerfile>
+    <innerfile refid="df/d70/a00431">Icosahedron.hpp</innerfile>
+    <innerfile refid="d1/d7e/a00434">MeshGeneratorModule.hpp</innerfile>
+    <innerfile refid="d4/da8/a00437">Plane.hpp</innerfile>
+    <innerfile refid="de/df8/a00440">Projection.hpp</innerfile>
+    <innerfile refid="d0/dc4/a00443">Sphere.hpp</innerfile>
+    <innerfile refid="d3/def/a00446">Torus.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Model/Mesh/Generator/"/>
+  </compounddef>
+</doxygen>

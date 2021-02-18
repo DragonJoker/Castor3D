@@ -1,0 +1,207 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d0/d3d/a05482" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::LpvLightData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">StructInstance</basecompoundref>
+    <includes local="no">LpvLightConfigUbo.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d0/d3d/a05482_1a4b0cd2babe496728a665449159e03b2c" prot="public" static="no" mutable="no">
+        <type>sdw::Mat4</type>
+        <definition>sdw::Mat4 castor3d::shader::LpvLightData::lightView</definition>
+        <argsstring></argsstring>
+        <name>lightView</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="33" column="1" bodyfile="Shader/Ubos/LpvLightConfigUbo.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d3d/a05482_1a8c0909b98fe98940d64d9b588d2bc620" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::LpvLightData::lightConfig</definition>
+        <argsstring></argsstring>
+        <name>lightConfig</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="34" column="1" bodyfile="Shader/Ubos/LpvLightConfigUbo.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d3d/a05482_1a850dd3c9954d17be5ee899f529c829fe" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::LpvLightData::texelAreaModifier</definition>
+        <argsstring></argsstring>
+        <name>texelAreaModifier</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="36" column="1" bodyfile="Shader/Ubos/LpvLightConfigUbo.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d3d/a05482_1a299c5edbae6b5bd2467792de0a8a3821" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::LpvLightData::tanFovXHalf</definition>
+        <argsstring></argsstring>
+        <name>tanFovXHalf</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="37" column="1" bodyfile="Shader/Ubos/LpvLightConfigUbo.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d3d/a05482_1a879323ea893751e9dee27e18763db71e" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::LpvLightData::tanFovYHalf</definition>
+        <argsstring></argsstring>
+        <name>tanFovYHalf</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="38" column="1" bodyfile="Shader/Ubos/LpvLightConfigUbo.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d3d/a05482_1aad5d51667307e9d53c14bdd6364bb1fb" prot="public" static="no" mutable="no">
+        <type>sdw::Int</type>
+        <definition>sdw::Int castor3d::shader::LpvLightData::lightIndex</definition>
+        <argsstring></argsstring>
+        <name>lightIndex</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="39" column="1" bodyfile="Shader/Ubos/LpvLightConfigUbo.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/d3d/a05482_1a80df43a972fd4a5767c87d33e38e1cab" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::LpvLightData::LpvLightData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>LpvLightData</name>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="24" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d3d/a05482_1a3cd8472339923b7be7fb34df6c13e669" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d0/d3d/a05482" kindref="compound">LpvLightData</ref> &amp;</type>
+        <definition>C3D_API LpvLightData&amp; castor3d::shader::LpvLightData::operator=</definition>
+        <argsstring>(LpvLightData const &amp;rhs)</argsstring>
+        <name>operator=</name>
+        <param>
+          <type><ref refid="d0/d3d/a05482" kindref="compound">LpvLightData</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="27" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d0/d3d/a05482_1a944c4b10ca8605999689c957f62d8a40" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::type::StructPtr</type>
+        <definition>static C3D_API ast::type::StructPtr castor3d::shader::LpvLightData::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="29" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d3d/a05482_1a9c12a1702b1a62d77cc20ef19240c79c" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::unique_ptr&lt; sdw::Struct &gt;</type>
+        <definition>static C3D_API std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::LpvLightData::declare</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>declare</name>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="30" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3464">
+        <label>castor3d::shader::LpvLightData</label>
+        <link refid="d0/d3d/a05482"/>
+        <childnode refid="3465" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3465">
+        <label>StructInstance</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3466">
+        <label>castor3d::shader::LpvLightData</label>
+        <link refid="d0/d3d/a05482"/>
+        <childnode refid="3467" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3467">
+        <label>StructInstance</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Ubos/LpvLightConfigUbo.hpp" line="23" column="1" bodyfile="Shader/Ubos/LpvLightConfigUbo.hpp" bodystart="21" bodyend="44"/>
+    <listofallmembers>
+      <member refid="d0/d3d/a05482_1a9c12a1702b1a62d77cc20ef19240c79c" prot="public" virt="non-virtual"><scope>castor3d::shader::LpvLightData</scope><name>declare</name></member>
+      <member refid="d0/d3d/a05482_1a8c0909b98fe98940d64d9b588d2bc620" prot="public" virt="non-virtual"><scope>castor3d::shader::LpvLightData</scope><name>lightConfig</name></member>
+      <member refid="d0/d3d/a05482_1aad5d51667307e9d53c14bdd6364bb1fb" prot="public" virt="non-virtual"><scope>castor3d::shader::LpvLightData</scope><name>lightIndex</name></member>
+      <member refid="d0/d3d/a05482_1a4b0cd2babe496728a665449159e03b2c" prot="public" virt="non-virtual"><scope>castor3d::shader::LpvLightData</scope><name>lightView</name></member>
+      <member refid="d0/d3d/a05482_1a80df43a972fd4a5767c87d33e38e1cab" prot="public" virt="non-virtual"><scope>castor3d::shader::LpvLightData</scope><name>LpvLightData</name></member>
+      <member refid="d0/d3d/a05482_1a944c4b10ca8605999689c957f62d8a40" prot="public" virt="non-virtual"><scope>castor3d::shader::LpvLightData</scope><name>makeType</name></member>
+      <member refid="d0/d3d/a05482_1a3cd8472339923b7be7fb34df6c13e669" prot="public" virt="non-virtual"><scope>castor3d::shader::LpvLightData</scope><name>operator=</name></member>
+      <member refid="d0/d3d/a05482_1a299c5edbae6b5bd2467792de0a8a3821" prot="public" virt="non-virtual"><scope>castor3d::shader::LpvLightData</scope><name>tanFovXHalf</name></member>
+      <member refid="d0/d3d/a05482_1a879323ea893751e9dee27e18763db71e" prot="public" virt="non-virtual"><scope>castor3d::shader::LpvLightData</scope><name>tanFovYHalf</name></member>
+      <member refid="d0/d3d/a05482_1a850dd3c9954d17be5ee899f529c829fe" prot="public" virt="non-virtual"><scope>castor3d::shader::LpvLightData</scope><name>texelAreaModifier</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

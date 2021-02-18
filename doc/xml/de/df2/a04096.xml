@@ -1,0 +1,379 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="de/df2/a04096" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::FontTexture</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
+    <includes local="no">FontTexture.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="de/df2/a04096_1a3f1f8a7f2ed092cad316e87659dbfdf3" prot="public" static="no">
+        <type>std::function&lt; void(<ref refid="de/df2/a04096" kindref="compound">FontTexture</ref> const &amp;) &gt;</type>
+        <definition>using castor3d::FontTexture::OnChangedFunction =  std::function&lt; void( FontTexture const &amp; ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>OnChangedFunction</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/FontTexture.hpp" line="21" column="1" bodyfile="Overlay/FontTexture.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/df2/a04096_1a23458d76d96ddfc46ca8d84d8146d872" prot="public" static="no">
+        <type>castor::Signal&lt; <ref refid="de/df2/a04096_1a3f1f8a7f2ed092cad316e87659dbfdf3" kindref="member">OnChangedFunction</ref> &gt;</type>
+        <definition>using castor3d::FontTexture::OnChanged =  castor::Signal&lt; OnChangedFunction &gt;</definition>
+        <argsstring></argsstring>
+        <name>OnChanged</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/FontTexture.hpp" line="22" column="1" bodyfile="Overlay/FontTexture.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="de/df2/a04096_1a4fdfc34ce34311ce12e5914a22452973" prot="public" static="no" mutable="no">
+        <type><ref refid="de/df2/a04096_1a23458d76d96ddfc46ca8d84d8146d872" kindref="member">OnChanged</ref></type>
+        <definition>OnChanged castor3d::FontTexture::onChanged</definition>
+        <argsstring></argsstring>
+        <name>onChanged</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The signal used to notify clients that this texture has changed. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/FontTexture.hpp" line="125" column="1" bodyfile="Overlay/FontTexture.hpp" bodystart="125" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="de/df2/a04096_1a1b100d398e9c853cc41e90c39bd03b79" prot="private" static="no" mutable="no">
+        <type>castor::FontWPtr</type>
+        <definition>castor::FontWPtr castor3d::FontTexture::m_font</definition>
+        <argsstring></argsstring>
+        <name>m_font</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/FontTexture.hpp" line="128" column="1" bodyfile="Overlay/FontTexture.hpp" bodystart="128" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/df2/a04096_1a49a5bbfaccbecef38adb46e41955d2c2" prot="private" static="no" mutable="no">
+        <type>SamplerWPtr</type>
+        <definition>SamplerWPtr castor3d::FontTexture::m_sampler</definition>
+        <argsstring></argsstring>
+        <name>m_sampler</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/FontTexture.hpp" line="129" column="1" bodyfile="Overlay/FontTexture.hpp" bodystart="129" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/df2/a04096_1a1d5d151f6d6d68c8a2c3d290b61c41e5" prot="private" static="no" mutable="no">
+        <type>TextureLayoutSPtr</type>
+        <definition>TextureLayoutSPtr castor3d::FontTexture::m_texture</definition>
+        <argsstring></argsstring>
+        <name>m_texture</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/FontTexture.hpp" line="130" column="1" bodyfile="Overlay/FontTexture.hpp" bodystart="130" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/df2/a04096_1a4433b44fcb95a69218923918b439d969" prot="private" static="no" mutable="no">
+        <type>GlyphPositionMap</type>
+        <definition>GlyphPositionMap castor3d::FontTexture::m_glyphsPositions</definition>
+        <argsstring></argsstring>
+        <name>m_glyphsPositions</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/FontTexture.hpp" line="131" column="1" bodyfile="Overlay/FontTexture.hpp" bodystart="131" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/df2/a04096_1a27fa9962815715a314bf4ab0355be9b8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::FontTexture::CU_DeclareMap</definition>
+        <argsstring>(char32_t, castor::Position, GlyphPosition)</argsstring>
+        <name>CU_DeclareMap</name>
+        <param>
+          <type>char32_t</type>
+        </param>
+        <param>
+          <type>castor::Position</type>
+        </param>
+        <param>
+          <type>GlyphPosition</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/FontTexture.hpp" line="20" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/df2/a04096_1a2dbcd8992028ceb56a93f27413ba45b6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::FontTexture::FontTexture</definition>
+        <argsstring>(Engine &amp;engine, castor::FontSPtr font)</argsstring>
+        <name>FontTexture</name>
+        <param>
+          <type><ref refid="dc/dbb/a02520" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type>castor::FontSPtr</type>
+          <declname>font</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The engine. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">font</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The font. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/FontTexture.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/df2/a04096_1aa059214901ba755977150ad795367aea" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::FontTexture::~FontTexture</definition>
+        <argsstring>()</argsstring>
+        <name>~FontTexture</name>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/FontTexture.hpp" line="43" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/df2/a04096_1a68599e1530c324cdb793e19432079daf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::FontTexture::initialise</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>initialise</name>
+        <param>
+          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+<para>Initialises the texture. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/FontTexture.hpp" line="50" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/df2/a04096_1a69078a7f7213946c3b09d47e769b74d2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::FontTexture::cleanup</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>cleanup</name>
+        <param>
+          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+<para>Flushes the teture. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/FontTexture.hpp" line="57" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/df2/a04096_1a2055966fa85ddff47e3df2c9351f06ce" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::FontTexture::update</definition>
+        <argsstring>()</argsstring>
+        <name>update</name>
+        <briefdescription>
+<para>Updates the glyphs. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/FontTexture.hpp" line="64" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/df2/a04096_1a160008008a15ae261cd176ca10c235be" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const  &amp;</type>
+        <definition>C3D_API castor::String const&amp; castor3d::FontTexture::getFontName</definition>
+        <argsstring>() const</argsstring>
+        <name>getFontName</name>
+        <briefdescription>
+<para>Retrieves the font name. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The value. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/FontTexture.hpp" line="73" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/df2/a04096_1aa19b062d3200e0f09db79acc89c4a874" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Position const  &amp;</type>
+        <definition>C3D_API castor::Position const&amp; castor3d::FontTexture::getGlyphPosition</definition>
+        <argsstring>(char32_t glyphChar) const</argsstring>
+        <name>getGlyphPosition</name>
+        <param>
+          <type>char32_t</type>
+          <declname>glyphChar</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves the wanted glyph position. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">glyphChar</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The glyph index. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The position. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/FontTexture.hpp" line="84" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/df2/a04096_1a51b0b7c6dc5e6c9314dd1ef03f538427" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::FontSPtr</type>
+        <definition>castor::FontSPtr castor3d::FontTexture::getFont</definition>
+        <argsstring>() const</argsstring>
+        <name>getFont</name>
+        <briefdescription>
+<para>Retrieves the font. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The value. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/FontTexture.hpp" line="93" column="1" bodyfile="Overlay/FontTexture.hpp" bodystart="93" bodyend="96"/>
+      </memberdef>
+      <memberdef kind="function" id="de/df2/a04096_1a49378db45013e39c123ca95ca6249387" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>TextureLayoutSPtr</type>
+        <definition>TextureLayoutSPtr castor3d::FontTexture::getTexture</definition>
+        <argsstring>() const</argsstring>
+        <name>getTexture</name>
+        <briefdescription>
+<para>Retrieves the texture. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The texture. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/FontTexture.hpp" line="105" column="1" bodyfile="Overlay/FontTexture.hpp" bodystart="105" bodyend="108"/>
+      </memberdef>
+      <memberdef kind="function" id="de/df2/a04096_1a428eb1fdf0c39731e6e6fc6655194d1c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>SamplerSPtr</type>
+        <definition>SamplerSPtr castor3d::FontTexture::getSampler</definition>
+        <argsstring>() const</argsstring>
+        <name>getSampler</name>
+        <briefdescription>
+<para>Retrieves the texture. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The texture. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/FontTexture.hpp" line="117" column="1" bodyfile="Overlay/FontTexture.hpp" bodystart="117" bodyend="120"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1156">
+        <label>castor3d::FontTexture</label>
+        <link refid="de/df2/a04096"/>
+        <childnode refid="1157" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1157">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1158">
+        <label>castor3d::FontTexture</label>
+        <link refid="de/df2/a04096"/>
+        <childnode refid="1159" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1159">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Overlay/FontTexture.hpp" line="18" column="1" bodyfile="Overlay/FontTexture.hpp" bodystart="16" bodyend="132"/>
+    <listofallmembers>
+      <member refid="de/df2/a04096_1a69078a7f7213946c3b09d47e769b74d2" prot="public" virt="non-virtual"><scope>castor3d::FontTexture</scope><name>cleanup</name></member>
+      <member refid="de/df2/a04096_1a27fa9962815715a314bf4ab0355be9b8" prot="public" virt="non-virtual"><scope>castor3d::FontTexture</scope><name>CU_DeclareMap</name></member>
+      <member refid="de/df2/a04096_1a2dbcd8992028ceb56a93f27413ba45b6" prot="public" virt="non-virtual"><scope>castor3d::FontTexture</scope><name>FontTexture</name></member>
+      <member refid="de/df2/a04096_1a51b0b7c6dc5e6c9314dd1ef03f538427" prot="public" virt="non-virtual"><scope>castor3d::FontTexture</scope><name>getFont</name></member>
+      <member refid="de/df2/a04096_1a160008008a15ae261cd176ca10c235be" prot="public" virt="non-virtual"><scope>castor3d::FontTexture</scope><name>getFontName</name></member>
+      <member refid="de/df2/a04096_1aa19b062d3200e0f09db79acc89c4a874" prot="public" virt="non-virtual"><scope>castor3d::FontTexture</scope><name>getGlyphPosition</name></member>
+      <member refid="de/df2/a04096_1a428eb1fdf0c39731e6e6fc6655194d1c" prot="public" virt="non-virtual"><scope>castor3d::FontTexture</scope><name>getSampler</name></member>
+      <member refid="de/df2/a04096_1a49378db45013e39c123ca95ca6249387" prot="public" virt="non-virtual"><scope>castor3d::FontTexture</scope><name>getTexture</name></member>
+      <member refid="de/df2/a04096_1a68599e1530c324cdb793e19432079daf" prot="public" virt="non-virtual"><scope>castor3d::FontTexture</scope><name>initialise</name></member>
+      <member refid="de/df2/a04096_1a1b100d398e9c853cc41e90c39bd03b79" prot="private" virt="non-virtual"><scope>castor3d::FontTexture</scope><name>m_font</name></member>
+      <member refid="de/df2/a04096_1a4433b44fcb95a69218923918b439d969" prot="private" virt="non-virtual"><scope>castor3d::FontTexture</scope><name>m_glyphsPositions</name></member>
+      <member refid="de/df2/a04096_1a49a5bbfaccbecef38adb46e41955d2c2" prot="private" virt="non-virtual"><scope>castor3d::FontTexture</scope><name>m_sampler</name></member>
+      <member refid="de/df2/a04096_1a1d5d151f6d6d68c8a2c3d290b61c41e5" prot="private" virt="non-virtual"><scope>castor3d::FontTexture</scope><name>m_texture</name></member>
+      <member refid="de/df2/a04096_1a23458d76d96ddfc46ca8d84d8146d872" prot="public" virt="non-virtual"><scope>castor3d::FontTexture</scope><name>OnChanged</name></member>
+      <member refid="de/df2/a04096_1a4fdfc34ce34311ce12e5914a22452973" prot="public" virt="non-virtual"><scope>castor3d::FontTexture</scope><name>onChanged</name></member>
+      <member refid="de/df2/a04096_1a3f1f8a7f2ed092cad316e87659dbfdf3" prot="public" virt="non-virtual"><scope>castor3d::FontTexture</scope><name>OnChangedFunction</name></member>
+      <member refid="de/df2/a04096_1a2055966fa85ddff47e3df2c9351f06ce" prot="public" virt="non-virtual"><scope>castor3d::FontTexture</scope><name>update</name></member>
+      <member refid="de/df2/a04096_1aa059214901ba755977150ad795367aea" prot="public" virt="non-virtual"><scope>castor3d::FontTexture</scope><name>~FontTexture</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

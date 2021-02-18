@@ -1,0 +1,5 @@
+<map id="castor3d::makeGpuFunctorEvent" name="castor3d::makeGpuFunctorEvent">
+<area shape="rect" id="node1" title="Helper function to create a functor event." alt="" coords="236,39,416,80"/>
+<area shape="rect" id="node2" href="$d8/d31/a01407.html#ac7e1239e050fd1300bca47c82bf016b9" title="Helper function to create a cleanup event." alt="" coords="5,5,188,47"/>
+<area shape="rect" id="node3" href="$d8/d31/a01407.html#a24c96fda137c8c1f352e51a8c3fe8e7f" title="Helper function to create an initialise event." alt="" coords="5,71,188,112"/>
+</map>

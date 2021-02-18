@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dc/dc7/a04440" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::rq::Texcoord</compoundname>
+    <includes local="no">RenderQuad.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dc/dc7/a04440_1a56392a8539ef26615dce5c0ef2abe9a3" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::rq::Texcoord::invertU</definition>
+        <argsstring></argsstring>
+        <name>invertU</name>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderQuad.hpp" line="46" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/dc7/a04440_1aa87e93dc94d8c8eecaf81ba11e7e165e" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::rq::Texcoord::invertV</definition>
+        <argsstring></argsstring>
+        <name>invertV</name>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/RenderQuad.hpp" line="54" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Tells how the texture coordinates from the vertex buffer are built. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Passes/RenderQuad.hpp" line="38" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="37" bodyend="55"/>
+    <listofallmembers>
+      <member refid="dc/dc7/a04440_1a56392a8539ef26615dce5c0ef2abe9a3" prot="public" virt="non-virtual"><scope>castor3d::rq::Texcoord</scope><name>invertU</name></member>
+      <member refid="dc/dc7/a04440_1aa87e93dc94d8c8eecaf81ba11e7e165e" prot="public" virt="non-virtual"><scope>castor3d::rq::Texcoord</scope><name>invertV</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

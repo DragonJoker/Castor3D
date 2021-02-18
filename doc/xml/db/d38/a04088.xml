@@ -1,0 +1,377 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="db/d38/a04088" kind="class" language="C++" prot="private">
+    <compoundname>castor3d::DebugOverlays::CategoryOverlays</compoundname>
+    <innerclass refid="d3/dd6/a04092" prot="private">castor3d::DebugOverlays::CategoryOverlays::TimeOverlays</innerclass>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="db/d38/a04088_1adf58e310605d9e0e4ec527bd96ae6761" prot="private" static="no" mutable="no">
+        <type><ref refid="da/d1e/a01479_1ad78a6a1185b47fc82bf9bfc3c4c18319" kindref="member">OverlayCache</ref> &amp;</type>
+        <definition>OverlayCache&amp; castor3d::DebugOverlays::CategoryOverlays::m_cache</definition>
+        <argsstring></argsstring>
+        <name>m_cache</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="304" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="304" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d38/a04088_1ae9e869a371b332bfec3a24853a8e5b18" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int castor3d::DebugOverlays::CategoryOverlays::m_posX</definition>
+        <argsstring></argsstring>
+        <name>m_posX</name>
+        <initializer>{ 0 }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="305" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="305" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d38/a04088_1ae2e62c7d2b7ec12d140c7c4d5234adff" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; PassOverlaysPtr &gt;</type>
+        <definition>std::vector&lt; PassOverlaysPtr &gt; castor3d::DebugOverlays::CategoryOverlays::m_passes</definition>
+        <argsstring></argsstring>
+        <name>m_passes</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="306" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="306" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d38/a04088_1a52162ce5373f006cb76acfdea883953e" prot="private" static="no" mutable="no">
+        <type>PanelOverlaySPtr</type>
+        <definition>PanelOverlaySPtr castor3d::DebugOverlays::CategoryOverlays::m_container</definition>
+        <argsstring></argsstring>
+        <name>m_container</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="307" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="307" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d38/a04088_1a3bc0b17a6e777535ea1c004c95c7f38a" prot="private" static="no" mutable="no">
+        <type>PanelOverlaySPtr</type>
+        <definition>PanelOverlaySPtr castor3d::DebugOverlays::CategoryOverlays::m_firstLinePanel</definition>
+        <argsstring></argsstring>
+        <name>m_firstLinePanel</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="308" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="308" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d38/a04088_1aa7157e19a2bf0cfcc4ab1f28fb35644f" prot="private" static="no" mutable="no">
+        <type>TextOverlaySPtr</type>
+        <definition>TextOverlaySPtr castor3d::DebugOverlays::CategoryOverlays::m_name</definition>
+        <argsstring></argsstring>
+        <name>m_name</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="309" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="309" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d38/a04088_1a7f04deac7c1eed6807eeddfec48b90b9" prot="private" static="no" mutable="no">
+        <type>TimeOverlays</type>
+        <definition>TimeOverlays castor3d::DebugOverlays::CategoryOverlays::m_cpu</definition>
+        <argsstring></argsstring>
+        <name>m_cpu</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="310" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="310" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d38/a04088_1afadf2d4f2a06c6a82645aaf2561c8165" prot="private" static="no" mutable="no">
+        <type>TimeOverlays</type>
+        <definition>TimeOverlays castor3d::DebugOverlays::CategoryOverlays::m_gpu</definition>
+        <argsstring></argsstring>
+        <name>m_gpu</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="311" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="311" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/d38/a04088_1ac9a7b77cee7cbbc980c4e373ddd8ee97" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::DebugOverlays::CategoryOverlays::CategoryOverlays</definition>
+        <argsstring>(CategoryOverlays const &amp;)=delete</argsstring>
+        <name>CategoryOverlays</name>
+        <param>
+          <type>CategoryOverlays const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="274" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d38/a04088_1ac6901c19813144a03913942caaf62dda" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>CategoryOverlays &amp;</type>
+        <definition>CategoryOverlays&amp; castor3d::DebugOverlays::CategoryOverlays::operator=</definition>
+        <argsstring>(CategoryOverlays const &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <param>
+          <type>CategoryOverlays const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="275" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d38/a04088_1ab5fbea255ace5e3d990026fce5c15da0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::DebugOverlays::CategoryOverlays::CategoryOverlays</definition>
+        <argsstring>(CategoryOverlays &amp;&amp;)=default</argsstring>
+        <name>CategoryOverlays</name>
+        <param>
+          <type>CategoryOverlays &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="276" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d38/a04088_1a241e7d65f99d8858bf4688f228cfd241" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>CategoryOverlays &amp;</type>
+        <definition>CategoryOverlays&amp; castor3d::DebugOverlays::CategoryOverlays::operator=</definition>
+        <argsstring>(CategoryOverlays &amp;&amp;)=delete</argsstring>
+        <name>operator=</name>
+        <param>
+          <type>CategoryOverlays &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="277" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d38/a04088_1ad4ce1ebcb7b6f5dee47bb742fa000db8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::DebugOverlays::CategoryOverlays::CategoryOverlays</definition>
+        <argsstring>(castor::String const &amp;category, OverlayCache &amp;cache)</argsstring>
+        <name>CategoryOverlays</name>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>category</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d1e/a01479_1ad78a6a1185b47fc82bf9bfc3c4c18319" kindref="member">OverlayCache</ref> &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="278" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d38/a04088_1ae01aeb9871f2bcb846b8e4dc191c74a4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::DebugOverlays::CategoryOverlays::~CategoryOverlays</definition>
+        <argsstring>()</argsstring>
+        <name>~CategoryOverlays</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="280" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d38/a04088_1a14f5ee03edb63872b9ac4903a5d29996" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::DebugOverlays::CategoryOverlays::initialise</definition>
+        <argsstring>(uint32_t offset)</argsstring>
+        <name>initialise</name>
+        <param>
+          <type>uint32_t</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="281" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d38/a04088_1ae57b5073980e5a3c3f0c9b4831d7379a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::DebugOverlays::CategoryOverlays::addTimer</definition>
+        <argsstring>(RenderPassTimer &amp;timer)</argsstring>
+        <name>addTimer</name>
+        <param>
+          <type><ref refid="d7/dc4/a04612" kindref="compound">RenderPassTimer</ref> &amp;</type>
+          <declname>timer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="282" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d38/a04088_1af0f7b6cc8916edb3aaf113f7d6bf3b77" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::DebugOverlays::CategoryOverlays::removeTimer</definition>
+        <argsstring>(RenderPassTimer &amp;timer)</argsstring>
+        <name>removeTimer</name>
+        <param>
+          <type><ref refid="d7/dc4/a04612" kindref="compound">RenderPassTimer</ref> &amp;</type>
+          <declname>timer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="283" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d38/a04088_1a3283e18d26847cd94f4d9289d2734b46" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::DebugOverlays::CategoryOverlays::retrieveGpuTime</definition>
+        <argsstring>()</argsstring>
+        <name>retrieveGpuTime</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="284" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d38/a04088_1ae6dba170d456db80e3158693028e40fd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::DebugOverlays::CategoryOverlays::update</definition>
+        <argsstring>()</argsstring>
+        <name>update</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="285" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d38/a04088_1a452e9326ab88d61ce97aac9739016e55" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::DebugOverlays::CategoryOverlays::setVisible</definition>
+        <argsstring>(bool visible)</argsstring>
+        <name>setVisible</name>
+        <param>
+          <type>bool</type>
+          <declname>visible</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="286" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d38/a04088_1af89fabb200c98e6e5562787177727233" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::DebugOverlays::CategoryOverlays::getPanelCount</definition>
+        <argsstring>() const</argsstring>
+        <name>getPanelCount</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="288" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="288" bodyend="291"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d38/a04088_1a2738fc523b049961207081038c012a9f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Nanoseconds</type>
+        <definition>castor::Nanoseconds castor3d::DebugOverlays::CategoryOverlays::getGpuTime</definition>
+        <argsstring>()</argsstring>
+        <name>getGpuTime</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="293" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="293" bodyend="296"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d38/a04088_1ae7406ac38ab823a0c3c260a06e61c3fa" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Nanoseconds</type>
+        <definition>castor::Nanoseconds castor3d::DebugOverlays::CategoryOverlays::getCpuTime</definition>
+        <argsstring>()</argsstring>
+        <name>getCpuTime</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="298" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="298" bodyend="301"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Overlay/DebugOverlays.hpp" line="264" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="263" bodyend="312"/>
+    <listofallmembers>
+      <member refid="db/d38/a04088_1ae57b5073980e5a3c3f0c9b4831d7379a" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::CategoryOverlays</scope><name>addTimer</name></member>
+      <member refid="db/d38/a04088_1ac9a7b77cee7cbbc980c4e373ddd8ee97" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::CategoryOverlays</scope><name>CategoryOverlays</name></member>
+      <member refid="db/d38/a04088_1ab5fbea255ace5e3d990026fce5c15da0" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::CategoryOverlays</scope><name>CategoryOverlays</name></member>
+      <member refid="db/d38/a04088_1ad4ce1ebcb7b6f5dee47bb742fa000db8" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::CategoryOverlays</scope><name>CategoryOverlays</name></member>
+      <member refid="db/d38/a04088_1ae7406ac38ab823a0c3c260a06e61c3fa" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::CategoryOverlays</scope><name>getCpuTime</name></member>
+      <member refid="db/d38/a04088_1a2738fc523b049961207081038c012a9f" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::CategoryOverlays</scope><name>getGpuTime</name></member>
+      <member refid="db/d38/a04088_1af89fabb200c98e6e5562787177727233" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::CategoryOverlays</scope><name>getPanelCount</name></member>
+      <member refid="db/d38/a04088_1a14f5ee03edb63872b9ac4903a5d29996" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::CategoryOverlays</scope><name>initialise</name></member>
+      <member refid="db/d38/a04088_1adf58e310605d9e0e4ec527bd96ae6761" prot="private" virt="non-virtual"><scope>castor3d::DebugOverlays::CategoryOverlays</scope><name>m_cache</name></member>
+      <member refid="db/d38/a04088_1a52162ce5373f006cb76acfdea883953e" prot="private" virt="non-virtual"><scope>castor3d::DebugOverlays::CategoryOverlays</scope><name>m_container</name></member>
+      <member refid="db/d38/a04088_1a7f04deac7c1eed6807eeddfec48b90b9" prot="private" virt="non-virtual"><scope>castor3d::DebugOverlays::CategoryOverlays</scope><name>m_cpu</name></member>
+      <member refid="db/d38/a04088_1a3bc0b17a6e777535ea1c004c95c7f38a" prot="private" virt="non-virtual"><scope>castor3d::DebugOverlays::CategoryOverlays</scope><name>m_firstLinePanel</name></member>
+      <member refid="db/d38/a04088_1afadf2d4f2a06c6a82645aaf2561c8165" prot="private" virt="non-virtual"><scope>castor3d::DebugOverlays::CategoryOverlays</scope><name>m_gpu</name></member>
+      <member refid="db/d38/a04088_1aa7157e19a2bf0cfcc4ab1f28fb35644f" prot="private" virt="non-virtual"><scope>castor3d::DebugOverlays::CategoryOverlays</scope><name>m_name</name></member>
+      <member refid="db/d38/a04088_1ae2e62c7d2b7ec12d140c7c4d5234adff" prot="private" virt="non-virtual"><scope>castor3d::DebugOverlays::CategoryOverlays</scope><name>m_passes</name></member>
+      <member refid="db/d38/a04088_1ae9e869a371b332bfec3a24853a8e5b18" prot="private" virt="non-virtual"><scope>castor3d::DebugOverlays::CategoryOverlays</scope><name>m_posX</name></member>
+      <member refid="db/d38/a04088_1ac6901c19813144a03913942caaf62dda" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::CategoryOverlays</scope><name>operator=</name></member>
+      <member refid="db/d38/a04088_1a241e7d65f99d8858bf4688f228cfd241" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::CategoryOverlays</scope><name>operator=</name></member>
+      <member refid="db/d38/a04088_1af0f7b6cc8916edb3aaf113f7d6bf3b77" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::CategoryOverlays</scope><name>removeTimer</name></member>
+      <member refid="db/d38/a04088_1a3283e18d26847cd94f4d9289d2734b46" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::CategoryOverlays</scope><name>retrieveGpuTime</name></member>
+      <member refid="db/d38/a04088_1a452e9326ab88d61ce97aac9739016e55" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::CategoryOverlays</scope><name>setVisible</name></member>
+      <member refid="db/d38/a04088_1ae6dba170d456db80e3158693028e40fd" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::CategoryOverlays</scope><name>update</name></member>
+      <member refid="db/d38/a04088_1ae01aeb9871f2bcb846b8e4dc191c74a4" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::CategoryOverlays</scope><name>~CategoryOverlays</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,168 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d9/da5/a05434" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::Voxel</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">StructInstance</basecompoundref>
+    <includes local="no">GlslVoxel.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d9/da5/a05434_1afbb1c24c073783521e2f303b1346233d" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::Voxel::colorMask</definition>
+        <argsstring></argsstring>
+        <name>colorMask</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslVoxel.hpp" line="28" column="1" bodyfile="Shader/Shaders/GlslVoxel.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/da5/a05434_1af5881700e7eb7593717f13e70729768e" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::Voxel::normalMask</definition>
+        <argsstring></argsstring>
+        <name>normalMask</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslVoxel.hpp" line="29" column="1" bodyfile="Shader/Shaders/GlslVoxel.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d9/da5/a05434_1aa541d4d60817c8edc0d33a049f89a415" prot="public" static="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::shader::Voxel::DataSize</definition>
+        <argsstring></argsstring>
+        <name>DataSize</name>
+        <initializer>= 8u</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslVoxel.hpp" line="31" column="1" bodyfile="Shader/Shaders/GlslVoxel.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d9/da5/a05434_1a32629e8c8683af11ba41a862b5577014" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::Voxel::Voxel</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>Voxel</name>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslVoxel.hpp" line="19" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/da5/a05434_1ad790ff3f34767980a4df42113e9c4859" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/da5/a05434" kindref="compound">Voxel</ref> &amp;</type>
+        <definition>C3D_API Voxel&amp; castor3d::shader::Voxel::operator=</definition>
+        <argsstring>(Voxel const &amp;rhs)</argsstring>
+        <name>operator=</name>
+        <param>
+          <type><ref refid="d9/da5/a05434" kindref="compound">Voxel</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslVoxel.hpp" line="22" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d9/da5/a05434_1a66f11517be372c4b0830acb30eac51e2" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::type::StructPtr</type>
+        <definition>static C3D_API ast::type::StructPtr castor3d::shader::Voxel::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslVoxel.hpp" line="24" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/da5/a05434_1a9e82c82d43f07872e687ab600f73ab20" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::unique_ptr&lt; sdw::Struct &gt;</type>
+        <definition>static C3D_API std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::Voxel::declare</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>declare</name>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslVoxel.hpp" line="25" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3576">
+        <label>castor3d::shader::Voxel</label>
+        <link refid="d9/da5/a05434"/>
+        <childnode refid="3577" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3577">
+        <label>StructInstance</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3578">
+        <label>castor3d::shader::Voxel</label>
+        <link refid="d9/da5/a05434"/>
+        <childnode refid="3579" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3579">
+        <label>StructInstance</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslVoxel.hpp" line="18" column="1" bodyfile="Shader/Shaders/GlslVoxel.hpp" bodystart="16" bodyend="36"/>
+    <listofallmembers>
+      <member refid="d9/da5/a05434_1afbb1c24c073783521e2f303b1346233d" prot="public" virt="non-virtual"><scope>castor3d::shader::Voxel</scope><name>colorMask</name></member>
+      <member refid="d9/da5/a05434_1aa541d4d60817c8edc0d33a049f89a415" prot="public" virt="non-virtual"><scope>castor3d::shader::Voxel</scope><name>DataSize</name></member>
+      <member refid="d9/da5/a05434_1a9e82c82d43f07872e687ab600f73ab20" prot="public" virt="non-virtual"><scope>castor3d::shader::Voxel</scope><name>declare</name></member>
+      <member refid="d9/da5/a05434_1a66f11517be372c4b0830acb30eac51e2" prot="public" virt="non-virtual"><scope>castor3d::shader::Voxel</scope><name>makeType</name></member>
+      <member refid="d9/da5/a05434_1af5881700e7eb7593717f13e70729768e" prot="public" virt="non-virtual"><scope>castor3d::shader::Voxel</scope><name>normalMask</name></member>
+      <member refid="d9/da5/a05434_1ad790ff3f34767980a4df42113e9c4859" prot="public" virt="non-virtual"><scope>castor3d::shader::Voxel</scope><name>operator=</name></member>
+      <member refid="d9/da5/a05434_1a32629e8c8683af11ba41a862b5577014" prot="public" virt="non-virtual"><scope>castor3d::shader::Voxel</scope><name>Voxel</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

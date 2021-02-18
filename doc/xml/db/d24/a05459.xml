@@ -1,0 +1,249 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="db/d24/a05459" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::LpvGridData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">StructInstance</basecompoundref>
+    <includes local="no">LpvGridConfigUbo.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="db/d24/a05459_1a52820ed2aa4adb388db3fef01ee89d8f" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::LpvGridData::minVolumeCornerSize</definition>
+        <argsstring></argsstring>
+        <name>minVolumeCornerSize</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvGridConfigUbo.hpp" line="33" column="1" bodyfile="Shader/Ubos/LpvGridConfigUbo.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d24/a05459_1a408602454e4c3085a9a6ac2808e03d1b" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::LpvGridData::gridSizeAtt</definition>
+        <argsstring></argsstring>
+        <name>gridSizeAtt</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvGridConfigUbo.hpp" line="34" column="1" bodyfile="Shader/Ubos/LpvGridConfigUbo.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d24/a05459_1a31bde68a815bd990ad2a1da12f58583b" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::LpvGridData::minVolumeCorner</definition>
+        <argsstring></argsstring>
+        <name>minVolumeCorner</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvGridConfigUbo.hpp" line="36" column="1" bodyfile="Shader/Ubos/LpvGridConfigUbo.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d24/a05459_1aac97df521afb75b13487faff89df53a2" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::LpvGridData::cellSize</definition>
+        <argsstring></argsstring>
+        <name>cellSize</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvGridConfigUbo.hpp" line="37" column="1" bodyfile="Shader/Ubos/LpvGridConfigUbo.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d24/a05459_1a4e7917996cc37caf5548d4130b7556e7" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::LpvGridData::gridWidth</definition>
+        <argsstring></argsstring>
+        <name>gridWidth</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvGridConfigUbo.hpp" line="38" column="1" bodyfile="Shader/Ubos/LpvGridConfigUbo.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d24/a05459_1ab82bc70a7c3b26b8a9d4c32b5f26a85c" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::LpvGridData::gridHeight</definition>
+        <argsstring></argsstring>
+        <name>gridHeight</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvGridConfigUbo.hpp" line="39" column="1" bodyfile="Shader/Ubos/LpvGridConfigUbo.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d24/a05459_1af2e513c405fce92d41a0ba95fb49f4db" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::LpvGridData::gridDepth</definition>
+        <argsstring></argsstring>
+        <name>gridDepth</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvGridConfigUbo.hpp" line="40" column="1" bodyfile="Shader/Ubos/LpvGridConfigUbo.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d24/a05459_1a3c94dcaaf05f031770ab9b5685fa3b17" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::LpvGridData::gridSize</definition>
+        <argsstring></argsstring>
+        <name>gridSize</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvGridConfigUbo.hpp" line="41" column="1" bodyfile="Shader/Ubos/LpvGridConfigUbo.hpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d24/a05459_1aca62ce4dafdb146638d625975eb04ec0" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::LpvGridData::indirectAttenuation</definition>
+        <argsstring></argsstring>
+        <name>indirectAttenuation</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvGridConfigUbo.hpp" line="42" column="1" bodyfile="Shader/Ubos/LpvGridConfigUbo.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/d24/a05459_1aafa0daa81095ffbf746ca7205397f3ba" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::LpvGridData::LpvGridData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>LpvGridData</name>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvGridConfigUbo.hpp" line="24" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d24/a05459_1aeea563ed1e13ec5e879ed6334c83b322" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="db/d24/a05459" kindref="compound">LpvGridData</ref> &amp;</type>
+        <definition>C3D_API LpvGridData&amp; castor3d::shader::LpvGridData::operator=</definition>
+        <argsstring>(LpvGridData const &amp;rhs)</argsstring>
+        <name>operator=</name>
+        <param>
+          <type><ref refid="db/d24/a05459" kindref="compound">LpvGridData</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvGridConfigUbo.hpp" line="27" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="db/d24/a05459_1af10dd3bbdca53faaef9a9ff842dc6a80" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::type::StructPtr</type>
+        <definition>static C3D_API ast::type::StructPtr castor3d::shader::LpvGridData::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvGridConfigUbo.hpp" line="29" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d24/a05459_1aa3599cfea8f7a7170848b42b744f39db" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::unique_ptr&lt; sdw::Struct &gt;</type>
+        <definition>static C3D_API std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::LpvGridData::declare</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>declare</name>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvGridConfigUbo.hpp" line="30" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3460">
+        <label>castor3d::shader::LpvGridData</label>
+        <link refid="db/d24/a05459"/>
+        <childnode refid="3461" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3461">
+        <label>StructInstance</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3462">
+        <label>castor3d::shader::LpvGridData</label>
+        <link refid="db/d24/a05459"/>
+        <childnode refid="3463" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3463">
+        <label>StructInstance</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Ubos/LpvGridConfigUbo.hpp" line="23" column="1" bodyfile="Shader/Ubos/LpvGridConfigUbo.hpp" bodystart="21" bodyend="47"/>
+    <listofallmembers>
+      <member refid="db/d24/a05459_1aac97df521afb75b13487faff89df53a2" prot="public" virt="non-virtual"><scope>castor3d::shader::LpvGridData</scope><name>cellSize</name></member>
+      <member refid="db/d24/a05459_1aa3599cfea8f7a7170848b42b744f39db" prot="public" virt="non-virtual"><scope>castor3d::shader::LpvGridData</scope><name>declare</name></member>
+      <member refid="db/d24/a05459_1af2e513c405fce92d41a0ba95fb49f4db" prot="public" virt="non-virtual"><scope>castor3d::shader::LpvGridData</scope><name>gridDepth</name></member>
+      <member refid="db/d24/a05459_1ab82bc70a7c3b26b8a9d4c32b5f26a85c" prot="public" virt="non-virtual"><scope>castor3d::shader::LpvGridData</scope><name>gridHeight</name></member>
+      <member refid="db/d24/a05459_1a3c94dcaaf05f031770ab9b5685fa3b17" prot="public" virt="non-virtual"><scope>castor3d::shader::LpvGridData</scope><name>gridSize</name></member>
+      <member refid="db/d24/a05459_1a408602454e4c3085a9a6ac2808e03d1b" prot="public" virt="non-virtual"><scope>castor3d::shader::LpvGridData</scope><name>gridSizeAtt</name></member>
+      <member refid="db/d24/a05459_1a4e7917996cc37caf5548d4130b7556e7" prot="public" virt="non-virtual"><scope>castor3d::shader::LpvGridData</scope><name>gridWidth</name></member>
+      <member refid="db/d24/a05459_1aca62ce4dafdb146638d625975eb04ec0" prot="public" virt="non-virtual"><scope>castor3d::shader::LpvGridData</scope><name>indirectAttenuation</name></member>
+      <member refid="db/d24/a05459_1aafa0daa81095ffbf746ca7205397f3ba" prot="public" virt="non-virtual"><scope>castor3d::shader::LpvGridData</scope><name>LpvGridData</name></member>
+      <member refid="db/d24/a05459_1af10dd3bbdca53faaef9a9ff842dc6a80" prot="public" virt="non-virtual"><scope>castor3d::shader::LpvGridData</scope><name>makeType</name></member>
+      <member refid="db/d24/a05459_1a31bde68a815bd990ad2a1da12f58583b" prot="public" virt="non-virtual"><scope>castor3d::shader::LpvGridData</scope><name>minVolumeCorner</name></member>
+      <member refid="db/d24/a05459_1a52820ed2aa4adb388db3fef01ee89d8f" prot="public" virt="non-virtual"><scope>castor3d::shader::LpvGridData</scope><name>minVolumeCornerSize</name></member>
+      <member refid="db/d24/a05459_1aeea563ed1e13ec5e879ed6334c83b322" prot="public" virt="non-virtual"><scope>castor3d::shader::LpvGridData</scope><name>operator=</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

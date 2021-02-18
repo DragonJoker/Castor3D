@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d4/d5b/a02238" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ChunkTyper&lt; Submesh &gt;</compoundname>
+    <includes local="no">BinarySubmesh.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d4/d5b/a02238_1a9aa8e9641c55c88cae0e7bb0b59c3e13" prot="public" static="yes" mutable="no">
+        <type><ref refid="de/d13/a01473_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref> const</type>
+        <definition>ChunkType const castor3d::ChunkTyper&lt; Submesh &gt;::Value</definition>
+        <argsstring></argsstring>
+        <name>Value</name>
+        <initializer>= <ref refid="de/d13/a01473_1a742783d4e4b7354fac3e375ae107414da1c6e623c4f3ed72ce3d17fb2896ccbfc" kindref="member">ChunkType::eSubmesh</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinarySubmesh.hpp" line="28" column="1" bodyfile="Binary/BinarySubmesh.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Helper structure to find ChunkType from a type. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="version"><para>0.9.0 </para>
+</simplesect>
+<simplesect kind="date"><para>28/05/2016</para>
+</simplesect>
+<simplesect kind="remark"><para>Specialisation for <ref refid="d7/df2/a03986" kindref="compound">Submesh</ref>. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="Binary/BinarySubmesh.hpp" line="27" column="1" bodyfile="Binary/BinarySubmesh.hpp" bodystart="26" bodyend="29"/>
+    <listofallmembers>
+      <member refid="d4/d5b/a02238_1a9aa8e9641c55c88cae0e7bb0b59c3e13" prot="public" virt="non-virtual"><scope>castor3d::ChunkTyper&lt; Submesh &gt;</scope><name>Value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

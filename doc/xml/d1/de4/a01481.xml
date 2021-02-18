@@ -1,0 +1,116 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d1/de4/a01481" kind="namespace" language="C++">
+    <compoundname>castor3d::details</compoundname>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="d1/de4/a01481_1ad4d02dc54d626b243b549331396e9814" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::details::getPrimitiveCount</definition>
+        <argsstring>(Submesh const &amp;submesh)</argsstring>
+        <name>getPrimitiveCount</name>
+        <param>
+          <type><ref refid="d9/d0c/a03992" kindref="compound">Submesh</ref> const &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/DistanceRenderNode.hpp" line="16" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/de4/a01481_1ac63c67fc35dd9c3a62af1af1f82d80ad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::details::getPrimitiveCount</definition>
+        <argsstring>(BillboardBase const &amp;instance)</argsstring>
+        <name>getPrimitiveCount</name>
+        <param>
+          <type><ref refid="d3/dc0/a05140" kindref="compound">BillboardBase</ref> const &amp;</type>
+          <declname>instance</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/DistanceRenderNode.hpp" line="17" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/de4/a01481_1a7970c0be11fcb0175878b59d0b892a41" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::details::getVertexCount</definition>
+        <argsstring>(Submesh const &amp;submesh)</argsstring>
+        <name>getVertexCount</name>
+        <param>
+          <type><ref refid="d9/d0c/a03992" kindref="compound">Submesh</ref> const &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/DistanceRenderNode.hpp" line="18" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/de4/a01481_1a10565b63c4a1fa9dbe3c57c9dfdac6cb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::details::getVertexCount</definition>
+        <argsstring>(BillboardBase const &amp;instance)</argsstring>
+        <name>getVertexCount</name>
+        <param>
+          <type><ref refid="d3/dc0/a05140" kindref="compound">BillboardBase</ref> const &amp;</type>
+          <declname>instance</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/DistanceRenderNode.hpp" line="19" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/de4/a01481_1ac4e84ca4120fcf8084a940eea0be4ae6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="da/d44/a05256" kindref="compound">SceneNode</ref> &amp;</type>
+        <definition>SceneNode&amp; castor3d::details::getParentNode</definition>
+        <argsstring>(Geometry &amp;instance)</argsstring>
+        <name>getParentNode</name>
+        <param>
+          <type><ref refid="df/df0/a05160" kindref="compound">Geometry</ref> &amp;</type>
+          <declname>instance</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/DistanceRenderNode.hpp" line="20" column="1"/>
+        <referencedby refid="d4/d46/a04312_1a0c4a7aeceff6d42bb195aa96a096cd0c" compoundref="d1/d87/a00689" startline="89" endline="92">castor3d::DistanceRenderNode&lt; NodeType &gt;::getSceneNode</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d1/de4/a01481_1ac2b22f272d9df561fadd18226dad3b5a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="da/d44/a05256" kindref="compound">SceneNode</ref> &amp;</type>
+        <definition>SceneNode&amp; castor3d::details::getParentNode</definition>
+        <argsstring>(BillboardBase &amp;instance)</argsstring>
+        <name>getParentNode</name>
+        <param>
+          <type><ref refid="d3/dc0/a05140" kindref="compound">BillboardBase</ref> &amp;</type>
+          <declname>instance</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/DistanceRenderNode.hpp" line="21" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Node/DistanceRenderNode.hpp" line="15" column="1"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_2b9bcdd0222d278da4fc7e6b15295ee7" kind="dir">
+    <compoundname>Render/Voxelize</compoundname>
+    <innerfile refid="df/d59/a01001">VoxelBufferToTexture.hpp</innerfile>
+    <innerfile refid="df/dbc/a01004">VoxelizeModule.hpp</innerfile>
+    <innerfile refid="d6/d8d/a01007">VoxelizePass.hpp</innerfile>
+    <innerfile refid="d0/d2b/a01010">Voxelizer.hpp</innerfile>
+    <innerfile refid="d7/d59/a01013">VoxelSceneData.hpp</innerfile>
+    <innerfile refid="de/def/a01016">VoxelSecondaryBounce.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Voxelize/"/>
+  </compounddef>
+</doxygen>

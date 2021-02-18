@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d1/d00/a05646" kind="class" language="C++" prot="public">
+    <compoundname>castor::TextWriter&lt; castor3d::Camera &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::Camera &gt;</basecompoundref>
+    <includes local="no">TextCamera.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/d00/a05646_1a7b3eb00f6d4f7b6bdfd98e34ef7bbec1" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor::TextWriter&lt; castor3d::Camera &gt;::TextWriter</definition>
+        <argsstring>(String const &amp;tabs)</argsstring>
+        <name>TextWriter</name>
+        <param>
+          <type>String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextCamera.hpp" line="18" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d00/a05646_1a27fa6788d08929316c27d7e3eba4494c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::TextWriter&lt; castor3d::Camera &gt;::operator()</definition>
+        <argsstring>(castor3d::Camera const &amp;camera, TextFile &amp;file) override</argsstring>
+        <name>operator()</name>
+        <param>
+          <type><ref refid="d2/d3d/a05146" kindref="compound">castor3d::Camera</ref> const &amp;</type>
+          <declname>camera</declname>
+        </param>
+        <param>
+          <type>TextFile &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextCamera.hpp" line="19" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="5318">
+        <label>TextWriterT&lt; castor3d::Camera &gt;</label>
+      </node>
+      <node id="5317">
+        <label>castor::TextWriter&lt; castor3d::Camera &gt;</label>
+        <link refid="d1/d00/a05646"/>
+        <childnode refid="5318" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="5320">
+        <label>TextWriterT&lt; castor3d::Camera &gt;</label>
+      </node>
+      <node id="5319">
+        <label>castor::TextWriter&lt; castor3d::Camera &gt;</label>
+        <link refid="d1/d00/a05646"/>
+        <childnode refid="5320" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Text/TextCamera.hpp" line="16" column="1" bodyfile="Text/TextCamera.hpp" bodystart="14" bodyend="21"/>
+    <listofallmembers>
+      <member refid="d1/d00/a05646_1a27fa6788d08929316c27d7e3eba4494c" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Camera &gt;</scope><name>operator()</name></member>
+      <member refid="d1/d00/a05646_1a7b3eb00f6d4f7b6bdfd98e34ef7bbec1" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Camera &gt;</scope><name>TextWriter</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

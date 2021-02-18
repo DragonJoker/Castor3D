@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d3/ddb/a05679" kind="class" language="C++" prot="public">
+    <compoundname>castor::TextWriter&lt; castor3d::Overlay &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::Overlay &gt;</basecompoundref>
+    <includes local="no">TextOverlay.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/ddb/a05679_1a0b4e8c8dd3edee4c84912928fae93f66" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor::TextWriter&lt; castor3d::Overlay &gt;::TextWriter</definition>
+        <argsstring>(castor::String const &amp;tabs)</argsstring>
+        <name>TextWriter</name>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextOverlay.hpp" line="18" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/ddb/a05679_1a4d009671de501c9bf5f9fb41eb2bffe1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::TextWriter&lt; castor3d::Overlay &gt;::operator()</definition>
+        <argsstring>(castor3d::Overlay const &amp;overlay, castor::TextFile &amp;file)</argsstring>
+        <name>operator()</name>
+        <param>
+          <type><ref refid="da/d33/a04079" kindref="compound">castor3d::Overlay</ref> const &amp;</type>
+          <declname>overlay</declname>
+        </param>
+        <param>
+          <type>castor::TextFile &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextOverlay.hpp" line="19" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="5365">
+        <label>castor::TextWriter&lt; castor3d::Overlay &gt;</label>
+        <link refid="d3/ddb/a05679"/>
+        <childnode refid="5366" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5366">
+        <label>TextWriterT&lt; castor3d::Overlay &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="5367">
+        <label>castor::TextWriter&lt; castor3d::Overlay &gt;</label>
+        <link refid="d3/ddb/a05679"/>
+        <childnode refid="5368" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5368">
+        <label>TextWriterT&lt; castor3d::Overlay &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Text/TextOverlay.hpp" line="16" column="1" bodyfile="Text/TextOverlay.hpp" bodystart="14" bodyend="21"/>
+    <listofallmembers>
+      <member refid="d3/ddb/a05679_1a4d009671de501c9bf5f9fb41eb2bffe1" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Overlay &gt;</scope><name>operator()</name></member>
+      <member refid="d3/ddb/a05679_1a0b4e8c8dd3edee4c84912928fae93f66" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::Overlay &gt;</scope><name>TextWriter</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d4/daf/a03819" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::PipelineVisitorBase::Config</compoundname>
+    <includes local="no">PipelineVisitor.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d4/daf/a03819_1a26740e849dcb7faea5d4090540762a49" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::PipelineVisitorBase::Config::forceSubPassesVisit</definition>
+        <argsstring></argsstring>
+        <name>forceSubPassesVisit</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="23" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/daf/a03819_1af3e4f344f815da354dd14a32e162024a" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::PipelineVisitorBase::Config::forceMiplevelsVisit</definition>
+        <argsstring></argsstring>
+        <name>forceMiplevelsVisit</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="24" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Miscellaneous/PipelineVisitor.hpp" line="22" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="21" bodyend="25"/>
+    <listofallmembers>
+      <member refid="d4/daf/a03819_1af3e4f344f815da354dd14a32e162024a" prot="public" virt="non-virtual"><scope>castor3d::PipelineVisitorBase::Config</scope><name>forceMiplevelsVisit</name></member>
+      <member refid="d4/daf/a03819_1a26740e849dcb7faea5d4090540762a49" prot="public" virt="non-virtual"><scope>castor3d::PipelineVisitorBase::Config</scope><name>forceSubPassesVisit</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

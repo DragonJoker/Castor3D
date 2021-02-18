@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_61bc93cb5cac5a07ede123b9ea8007d4" kind="dir">
+    <compoundname>Shader/Shaders</compoundname>
+    <innerfile refid="d2/d22/a01196">GlslCookTorranceBRDF.hpp</innerfile>
+    <innerfile refid="d0/d5a/a01199">GlslFog.hpp</innerfile>
+    <innerfile refid="d4/d5d/a01202">GlslGlobalIllumination.hpp</innerfile>
+    <innerfile refid="de/d61/a01205">GlslLight.hpp</innerfile>
+    <innerfile refid="d9/d31/a01208">GlslLighting.hpp</innerfile>
+    <innerfile refid="d1/d34/a01211">GlslMaterial.hpp</innerfile>
+    <innerfile refid="d5/d32/a01214">GlslMetallicBrdfLighting.hpp</innerfile>
+    <innerfile refid="da/d19/a01217">GlslMetallicPbrReflection.hpp</innerfile>
+    <innerfile refid="db/d42/a01220">GlslOutputComponents.hpp</innerfile>
+    <innerfile refid="d7/ddd/a01223">GlslPhongLighting.hpp</innerfile>
+    <innerfile refid="dd/d9e/a01226">GlslPhongReflection.hpp</innerfile>
+    <innerfile refid="db/d1c/a01229">GlslShadow.hpp</innerfile>
+    <innerfile refid="d0/d67/a01232">GlslSpecularBrdfLighting.hpp</innerfile>
+    <innerfile refid="dd/dad/a01235">GlslSpecularPbrReflection.hpp</innerfile>
+    <innerfile refid="d8/ddf/a01238">GlslSssTransmittance.hpp</innerfile>
+    <innerfile refid="d3/d07/a01241">GlslSurface.hpp</innerfile>
+    <innerfile refid="d4/dd5/a01244">GlslTextureConfiguration.hpp</innerfile>
+    <innerfile refid="dd/d95/a01247">GlslUtils.hpp</innerfile>
+    <innerfile refid="d4/d22/a01250">GlslVoxel.hpp</innerfile>
+    <innerfile refid="d3/d0b/a01253">SdwModule.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Shaders/"/>
+  </compounddef>
+</doxygen>

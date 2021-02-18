@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d7/d56/a05508" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ModelUbo</compoundname>
+    <includes local="no">ModelUbo.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d7/d56/a05508_1a4ceeee9bdbc68e82ce59e903b53832bb" prot="public" static="no">
+        <type><ref refid="d0/d38/a05588" kindref="compound">ModelUboConfiguration</ref></type>
+        <definition>using castor3d::ModelUbo::Configuration =  ModelUboConfiguration</definition>
+        <argsstring></argsstring>
+        <name>Configuration</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelUbo.hpp" line="14" column="1" bodyfile="Shader/Ubos/ModelUbo.hpp" bodystart="14" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d7/d56/a05508_1a63a87a3808b847fd1cb00c836aeb3c6d" prot="public" static="yes" mutable="no">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t const</type>
+        <definition>C3D_API uint32_t const castor3d::ModelUbo::BindingPoint</definition>
+        <argsstring></argsstring>
+        <name>BindingPoint</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelUbo.hpp" line="17" column="1" bodyfile="Shader/Ubos/ModelUbo.hpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d56/a05508_1a3b5d38d9e9cacdea4f63f9abdf9f0288" prot="public" static="yes" mutable="no">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::ModelUbo::BufferModel</definition>
+        <argsstring></argsstring>
+        <name>BufferModel</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Name of the model frame variable buffer. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelUbo.hpp" line="20" column="1" bodyfile="Shader/Ubos/ModelUbo.hpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d56/a05508_1a339894cd726e9c8b5cc505e73e4c5a6c" prot="public" static="yes" mutable="no">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::ModelUbo::ShadowReceiver</definition>
+        <argsstring></argsstring>
+        <name>ShadowReceiver</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Name of the shadow receiver status frame variable. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelUbo.hpp" line="23" column="1" bodyfile="Shader/Ubos/ModelUbo.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d56/a05508_1ad144930e7b496ad372aa2462f016bdeb" prot="public" static="yes" mutable="no">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::ModelUbo::MaterialIndex</definition>
+        <argsstring></argsstring>
+        <name>MaterialIndex</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Name of the material index frame variable. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelUbo.hpp" line="26" column="1" bodyfile="Shader/Ubos/ModelUbo.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d56/a05508_1a564c7ffb22c5ac366ec58f0e3aa1f87c" prot="public" static="yes" mutable="no">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::ModelUbo::EnvironmentIndex</definition>
+        <argsstring></argsstring>
+        <name>EnvironmentIndex</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Name of the material environment index frame variable. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ModelUbo.hpp" line="29" column="1" bodyfile="Shader/Ubos/ModelUbo.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Ubos/ModelUbo.hpp" line="12" column="1" bodyfile="Shader/Ubos/ModelUbo.hpp" bodystart="11" bodyend="30"/>
+    <listofallmembers>
+      <member refid="d7/d56/a05508_1a63a87a3808b847fd1cb00c836aeb3c6d" prot="public" virt="non-virtual"><scope>castor3d::ModelUbo</scope><name>BindingPoint</name></member>
+      <member refid="d7/d56/a05508_1a3b5d38d9e9cacdea4f63f9abdf9f0288" prot="public" virt="non-virtual"><scope>castor3d::ModelUbo</scope><name>BufferModel</name></member>
+      <member refid="d7/d56/a05508_1a4ceeee9bdbc68e82ce59e903b53832bb" prot="public" virt="non-virtual"><scope>castor3d::ModelUbo</scope><name>Configuration</name></member>
+      <member refid="d7/d56/a05508_1a564c7ffb22c5ac366ec58f0e3aa1f87c" prot="public" virt="non-virtual"><scope>castor3d::ModelUbo</scope><name>EnvironmentIndex</name></member>
+      <member refid="d7/d56/a05508_1ad144930e7b496ad372aa2462f016bdeb" prot="public" virt="non-virtual"><scope>castor3d::ModelUbo</scope><name>MaterialIndex</name></member>
+      <member refid="d7/d56/a05508_1a339894cd726e9c8b5cc505e73e4c5a6c" prot="public" virt="non-virtual"><scope>castor3d::ModelUbo</scope><name>ShadowReceiver</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

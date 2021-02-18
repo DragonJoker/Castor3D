@@ -1,0 +1,226 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d3/d02/a05368" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::SpecularGlossinessMaterial</compoundname>
+    <basecompoundref refid="d3/d06/a05356" prot="public" virt="non-virtual">castor3d::shader::BaseMaterial</basecompoundref>
+    <includes local="no">GlslMaterial.hpp</includes>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="d3/d02/a05368_1a987227b1f1df9de865fe73e3c154e84e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>friend class</type>
+        <definition>friend class PbrSGMaterials</definition>
+        <argsstring></argsstring>
+        <name>PbrSGMaterials</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="112" column="1" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d3/d02/a05368_1a65158e72492f98511581d6f159f46fcf" prot="protected" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::SpecularGlossinessMaterial::m_diffDiv</definition>
+        <argsstring></argsstring>
+        <name>m_diffDiv</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="124" column="1" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="124" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d02/a05368_1a359e18a1dd77f4b39cce6283e232de9f" prot="protected" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::SpecularGlossinessMaterial::m_specGloss</definition>
+        <argsstring></argsstring>
+        <name>m_specGloss</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="125" column="1" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="125" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d3/d02/a05368_1a635146525f2c3c43c55fa658088512b8" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::SpecularGlossinessMaterial::m_specular</definition>
+        <argsstring></argsstring>
+        <name>m_specular</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="128" column="1" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="128" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d02/a05368_1aa623201a40db08227f322abdf0dd1e27" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::SpecularGlossinessMaterial::m_glossiness</definition>
+        <argsstring></argsstring>
+        <name>m_glossiness</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="129" column="1" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="129" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/d02/a05368_1a2a72b1bb74b3eabecf250be329cdb95d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::SpecularGlossinessMaterial::SpecularGlossinessMaterial</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>SpecularGlossinessMaterial</name>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="114" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d02/a05368_1a0340070ed63bfc3fa984814c3e02f81d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::SpecularGlossinessMaterial::m_diffuse</definition>
+        <argsstring>() const override</argsstring>
+        <name>m_diffuse</name>
+        <reimplements refid="d3/d06/a05356_1a53d2125ad2cf89035480642c4b5935a3">m_diffuse</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="121" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d3/d02/a05368_1a3a72fb17a443c66fa9daec14f91c59f7" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::type::StructPtr</type>
+        <definition>static C3D_API ast::type::StructPtr castor3d::shader::SpecularGlossinessMaterial::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="118" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d02/a05368_1a584182eb8bb1c7a4d8fe2ace615024c4" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::unique_ptr&lt; sdw::Struct &gt;</type>
+        <definition>static C3D_API std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::SpecularGlossinessMaterial::declare</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>declare</name>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="119" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3548">
+        <label>castor3d::shader::SpecularGlossinessMaterial</label>
+        <link refid="d3/d02/a05368"/>
+        <childnode refid="3549" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3549">
+        <label>castor3d::shader::BaseMaterial</label>
+        <link refid="d3/d06/a05356"/>
+        <childnode refid="3550" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3550">
+        <label>StructInstance</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3551">
+        <label>castor3d::shader::SpecularGlossinessMaterial</label>
+        <link refid="d3/d02/a05368"/>
+        <childnode refid="3552" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3552">
+        <label>castor3d::shader::BaseMaterial</label>
+        <link refid="d3/d06/a05356"/>
+        <childnode refid="3553" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3553">
+        <label>StructInstance</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslMaterial.hpp" line="111" column="1" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="109" bodyend="130"/>
+    <listofallmembers>
+      <member refid="d3/d06/a05356_1aa92c5f97f77d29ff8f0dfece868728f7" prot="protected" virt="non-virtual"><scope>castor3d::shader::SpecularGlossinessMaterial</scope><name>BaseMaterial</name></member>
+      <member refid="d3/d02/a05368_1a584182eb8bb1c7a4d8fe2ace615024c4" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularGlossinessMaterial</scope><name>declare</name></member>
+      <member refid="d3/d06/a05356_1a3bf09051e10d4e33258b24c01211f689" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularGlossinessMaterial</scope><name>m_alphaRef</name></member>
+      <member refid="d3/d06/a05356_1a80628310c3c9c349571077fd8cc50777" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularGlossinessMaterial</scope><name>m_bwAccumulationOperator</name></member>
+      <member refid="d3/d06/a05356_1af37e5a55ae00676740dcee102673baf5" prot="protected" virt="non-virtual"><scope>castor3d::shader::SpecularGlossinessMaterial</scope><name>m_common</name></member>
+      <member refid="d3/d02/a05368_1a65158e72492f98511581d6f159f46fcf" prot="protected" virt="non-virtual"><scope>castor3d::shader::SpecularGlossinessMaterial</scope><name>m_diffDiv</name></member>
+      <member refid="d3/d02/a05368_1a0340070ed63bfc3fa984814c3e02f81d" prot="public" virt="virtual"><scope>castor3d::shader::SpecularGlossinessMaterial</scope><name>m_diffuse</name></member>
+      <member refid="d3/d06/a05356_1a92dbe2c949da45cf814354d6f75f27d3" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularGlossinessMaterial</scope><name>m_emissive</name></member>
+      <member refid="d3/d06/a05356_1a7873a018d579b288529701becf5ccd46" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularGlossinessMaterial</scope><name>m_gamma</name></member>
+      <member refid="d3/d06/a05356_1acfe264c79efa253c5475927be54b031b" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularGlossinessMaterial</scope><name>m_gaussianWidth</name></member>
+      <member refid="d3/d02/a05368_1aa623201a40db08227f322abdf0dd1e27" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularGlossinessMaterial</scope><name>m_glossiness</name></member>
+      <member refid="d3/d06/a05356_1a04d5d58486d182883228da98df0d961d" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularGlossinessMaterial</scope><name>m_hasReflection</name></member>
+      <member refid="d3/d06/a05356_1a94a2eb1db895a2969442109edd1e7c3a" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularGlossinessMaterial</scope><name>m_hasRefraction</name></member>
+      <member refid="d3/d06/a05356_1a61b357710c945abd446a2287a1682fdf" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularGlossinessMaterial</scope><name>m_opacity</name></member>
+      <member refid="d3/d06/a05356_1a1c5c02ef3092dd62800a57fb5d210090" prot="protected" virt="non-virtual"><scope>castor3d::shader::SpecularGlossinessMaterial</scope><name>m_opacityTransmission</name></member>
+      <member refid="d3/d06/a05356_1aee61a848046229fc94d8fadf7d6e1fdb" prot="protected" virt="non-virtual"><scope>castor3d::shader::SpecularGlossinessMaterial</scope><name>m_reflRefr</name></member>
+      <member refid="d3/d06/a05356_1ab2b67f4bb4d4019078e38a115ed9cdd9" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularGlossinessMaterial</scope><name>m_refractionRatio</name></member>
+      <member refid="d3/d02/a05368_1a359e18a1dd77f4b39cce6283e232de9f" prot="protected" virt="non-virtual"><scope>castor3d::shader::SpecularGlossinessMaterial</scope><name>m_specGloss</name></member>
+      <member refid="d3/d02/a05368_1a635146525f2c3c43c55fa658088512b8" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularGlossinessMaterial</scope><name>m_specular</name></member>
+      <member refid="d3/d06/a05356_1a868ef28d386d3e432f3101b971c984fc" prot="protected" virt="non-virtual"><scope>castor3d::shader::SpecularGlossinessMaterial</scope><name>m_sssInfo</name></member>
+      <member refid="d3/d06/a05356_1a6d1fa7f1eccbd915bc192db9197a0e85" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularGlossinessMaterial</scope><name>m_subsurfaceScatteringEnabled</name></member>
+      <member refid="d3/d06/a05356_1a8788c73cab884e2629dad0c58a042171" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularGlossinessMaterial</scope><name>m_subsurfaceScatteringStrength</name></member>
+      <member refid="d3/d06/a05356_1a419dd5311a61d939db0aa17de9917e18" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularGlossinessMaterial</scope><name>m_transmission</name></member>
+      <member refid="d3/d06/a05356_1a229ae30e10cd8e5fc96ff3235543954a" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularGlossinessMaterial</scope><name>m_transmittanceProfile</name></member>
+      <member refid="d3/d06/a05356_1aba4f901d07e5cd1f65512ea90a0b945c" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularGlossinessMaterial</scope><name>m_transmittanceProfileSize</name></member>
+      <member refid="d3/d02/a05368_1a3a72fb17a443c66fa9daec14f91c59f7" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularGlossinessMaterial</scope><name>makeType</name></member>
+      <member refid="d3/d02/a05368_1a987227b1f1df9de865fe73e3c154e84e" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularGlossinessMaterial</scope><name>PbrSGMaterials</name></member>
+      <member refid="d3/d02/a05368_1a2a72b1bb74b3eabecf250be329cdb95d" prot="public" virt="non-virtual"><scope>castor3d::shader::SpecularGlossinessMaterial</scope><name>SpecularGlossinessMaterial</name></member>
+      <member refid="d3/d06/a05356_1a8cdd035d9c7a874450446c705d3a7f82" prot="public" virt="virtual"><scope>castor3d::shader::SpecularGlossinessMaterial</scope><name>~BaseMaterial</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

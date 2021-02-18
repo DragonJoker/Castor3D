@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d8/dcc/a05728" kind="class" language="C++" prot="public">
+    <compoundname>castor::TextWriter&lt; castor3d::ShaderProgram &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::ShaderProgram &gt;</basecompoundref>
+    <includes local="no">TextProgram.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d8/dcc/a05728_1a7082a7ccd824ca24aacfbc7da0778b1b" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor::TextWriter&lt; castor3d::ShaderProgram &gt;::TextWriter</definition>
+        <argsstring>(castor::String const &amp;tabs)</argsstring>
+        <name>TextWriter</name>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextProgram.hpp" line="18" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/dcc/a05728_1af5417b8d6696bb36a6a42ea40e2993dc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::TextWriter&lt; castor3d::ShaderProgram &gt;::operator()</definition>
+        <argsstring>(castor3d::ShaderProgram const &amp;program, castor::TextFile &amp;file) override</argsstring>
+        <name>operator()</name>
+        <param>
+          <type><ref refid="dc/da0/a05304" kindref="compound">castor3d::ShaderProgram</ref> const &amp;</type>
+          <declname>program</declname>
+        </param>
+        <param>
+          <type>castor::TextFile &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextProgram.hpp" line="19" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="5423">
+        <label>castor::TextWriter&lt; castor3d::ShaderProgram &gt;</label>
+        <link refid="d8/dcc/a05728"/>
+        <childnode refid="5424" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5424">
+        <label>TextWriterT&lt; castor3d::ShaderProgram &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="5425">
+        <label>castor::TextWriter&lt; castor3d::ShaderProgram &gt;</label>
+        <link refid="d8/dcc/a05728"/>
+        <childnode refid="5426" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5426">
+        <label>TextWriterT&lt; castor3d::ShaderProgram &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Text/TextProgram.hpp" line="16" column="1" bodyfile="Text/TextProgram.hpp" bodystart="14" bodyend="21"/>
+    <listofallmembers>
+      <member refid="d8/dcc/a05728_1af5417b8d6696bb36a6a42ea40e2993dc" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::ShaderProgram &gt;</scope><name>operator()</name></member>
+      <member refid="d8/dcc/a05728_1a7082a7ccd824ca24aacfbc7da0778b1b" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::ShaderProgram &gt;</scope><name>TextWriter</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

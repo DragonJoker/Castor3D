@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_7c37f15c4f52caabe2725945716123e2" kind="dir">
+    <compoundname>Scene/Background</compoundname>
+    <innerfile refid="dd/df1/a01082">Background.hpp</innerfile>
+    <innerfile refid="d2/df3/a01085">BackgroundModule.hpp</innerfile>
+    <innerfile refid="da/db7/a01088">BackgroundTextWriter.hpp</innerfile>
+    <innerfile refid="d6/d0d/a01091">Colour.hpp</innerfile>
+    <innerfile refid="d6/dea/a01094">Image.hpp</innerfile>
+    <innerfile refid="d1/dfa/a01097">Skybox.hpp</innerfile>
+    <innerfile refid="d3/dbd/a01100">Visitor.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Scene/Background/"/>
+  </compounddef>
+</doxygen>

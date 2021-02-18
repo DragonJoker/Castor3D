@@ -1,0 +1,299 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="de/d91/a01034" kind="file" language="C++">
+    <compoundname>VoxelSceneData.hpp</compoundname>
+    <includes refid="db/d23/a01025" local="yes">VoxelizeModule.hpp</includes>
+    <includes local="no">CastorUtils/Data/TextWriter.hpp</includes>
+    <includes local="no">CastorUtils/Math/RangedValue.hpp</includes>
+    <includedby refid="d6/db6/a01172" local="yes">Scene/Scene.hpp</includedby>
+    <includedby refid="d7/d1d/a01475" local="yes">Text/TextVoxelSceneData.hpp</includedby>
+    <incdepgraph>
+      <node id="23277">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="23286">
+        <label>Castor3D/Material/MaterialModule.hpp</label>
+        <link refid="d8/d23/a00326"/>
+        <childnode refid="23272" relation="include">
+        </childnode>
+        <childnode refid="23287" relation="include">
+        </childnode>
+      </node>
+      <node id="23270">
+        <label>Castor3D/Render/RenderModule.hpp</label>
+        <link refid="d5/d72/a00803"/>
+        <childnode refid="23271" relation="include">
+        </childnode>
+        <childnode refid="23285" relation="include">
+        </childnode>
+        <childnode refid="23294" relation="include">
+        </childnode>
+        <childnode refid="23295" relation="include">
+        </childnode>
+        <childnode refid="23296" relation="include">
+        </childnode>
+        <childnode refid="23297" relation="include">
+        </childnode>
+        <childnode refid="23300" relation="include">
+        </childnode>
+      </node>
+      <node id="23280">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="23293">
+        <label>CastorUtils/Graphics/BoundingSphere.hpp</label>
+      </node>
+      <node id="23304">
+        <label>CastorUtils/Data/TextWriter.hpp</label>
+      </node>
+      <node id="23281">
+        <label>cstdint</label>
+      </node>
+      <node id="23305">
+        <label>CastorUtils/Math/RangedValue.hpp</label>
+      </node>
+      <node id="23287">
+        <label>CastorUtils/Design/Signal.hpp</label>
+      </node>
+      <node id="23279">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="23298">
+        <label>ShaderAST/Shader.hpp</label>
+      </node>
+      <node id="23272">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d5/d35/a00266"/>
+        <childnode refid="23273" relation="include">
+        </childnode>
+        <childnode refid="23274" relation="include">
+        </childnode>
+        <childnode refid="23275" relation="include">
+        </childnode>
+        <childnode refid="23276" relation="include">
+        </childnode>
+        <childnode refid="23277" relation="include">
+        </childnode>
+        <childnode refid="23278" relation="include">
+        </childnode>
+        <childnode refid="23279" relation="include">
+        </childnode>
+        <childnode refid="23280" relation="include">
+        </childnode>
+        <childnode refid="23281" relation="include">
+        </childnode>
+        <childnode refid="23282" relation="include">
+        </childnode>
+        <childnode refid="23283" relation="include">
+        </childnode>
+        <childnode refid="23284" relation="include">
+        </childnode>
+      </node>
+      <node id="23283">
+        <label>string</label>
+      </node>
+      <node id="23290">
+        <label>Castor3D/Model/ModelModule.hpp</label>
+        <link refid="d7/def/a00521"/>
+        <childnode refid="23272" relation="include">
+        </childnode>
+      </node>
+      <node id="23276">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="23273">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="23288">
+        <label>Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp</label>
+        <link refid="dc/d19/a00515"/>
+        <childnode refid="23289" relation="include">
+        </childnode>
+        <childnode refid="23292" relation="include">
+        </childnode>
+        <childnode refid="23293" relation="include">
+        </childnode>
+      </node>
+      <node id="23301">
+        <label>Castor3D/Buffer/BufferModule.hpp</label>
+        <link refid="d7/d9a/a00152"/>
+        <childnode refid="23272" relation="include">
+        </childnode>
+        <childnode refid="23302" relation="include">
+        </childnode>
+        <childnode refid="23303" relation="include">
+        </childnode>
+      </node>
+      <node id="23296">
+        <label>Castor3D/Material/Texture/TextureModule.hpp</label>
+        <link refid="de/dd7/a00362"/>
+        <childnode refid="23286" relation="include">
+        </childnode>
+        <childnode refid="23287" relation="include">
+        </childnode>
+      </node>
+      <node id="23292">
+        <label>CastorUtils/Graphics/BoundingBox.hpp</label>
+      </node>
+      <node id="23275">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="23271">
+        <label>Castor3D/Miscellaneous/MiscellaneousModule.hpp</label>
+        <link refid="d4/d27/a00392"/>
+        <childnode refid="23272" relation="include">
+        </childnode>
+      </node>
+      <node id="23285">
+        <label>Castor3D/Scene/SceneModule.hpp</label>
+        <link refid="de/db5/a01181"/>
+        <childnode refid="23286" relation="include">
+        </childnode>
+        <childnode refid="23288" relation="include">
+        </childnode>
+        <childnode refid="23287" relation="include">
+        </childnode>
+      </node>
+      <node id="23294">
+        <label>Castor3D/Scene/Light/LightModule.hpp</label>
+        <link refid="d9/d5b/a01127"/>
+        <childnode refid="23285" relation="include">
+        </childnode>
+      </node>
+      <node id="23302">
+        <label>CastorUtils/Pool/BuddyAllocator.hpp</label>
+      </node>
+      <node id="23274">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="23268">
+        <label>VoxelizeModule.hpp</label>
+        <link refid="db/d23/a01025"/>
+        <childnode refid="23269" relation="include">
+        </childnode>
+        <childnode refid="23301" relation="include">
+        </childnode>
+      </node>
+      <node id="23289">
+        <label>Castor3D/Model/Mesh/MeshModule.hpp</label>
+        <link refid="d2/d9d/a00464"/>
+        <childnode refid="23290" relation="include">
+        </childnode>
+        <childnode refid="23291" relation="include">
+        </childnode>
+      </node>
+      <node id="23284">
+        <label>vector</label>
+      </node>
+      <node id="23278">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="23295">
+        <label>Castor3D/Material/Pass/PassModule.hpp</label>
+        <link refid="df/d91/a00335"/>
+        <childnode refid="23286" relation="include">
+        </childnode>
+        <childnode refid="23287" relation="include">
+        </childnode>
+      </node>
+      <node id="23269">
+        <label>Castor3D/Render/Technique/TechniqueModule.hpp</label>
+        <link refid="d3/dcd/a00965"/>
+        <childnode refid="23270" relation="include">
+        </childnode>
+      </node>
+      <node id="23267">
+        <label>Render/Voxelize/VoxelSceneData.hpp</label>
+        <link refid="de/d91/a01034"/>
+        <childnode refid="23268" relation="include">
+        </childnode>
+        <childnode refid="23304" relation="include">
+        </childnode>
+        <childnode refid="23305" relation="include">
+        </childnode>
+      </node>
+      <node id="23300">
+        <label>ashespp/Image/ImageView.hpp</label>
+      </node>
+      <node id="23303">
+        <label>cstddef</label>
+      </node>
+      <node id="23299">
+        <label>ShaderWriter/ShaderWriterPrerequisites.hpp</label>
+      </node>
+      <node id="23291">
+        <label>CastorUtils/Design/Factory.hpp</label>
+      </node>
+      <node id="23297">
+        <label>Castor3D/Shader/ShaderModule.hpp</label>
+        <link refid="d5/d32/a01214"/>
+        <childnode refid="23272" relation="include">
+        </childnode>
+        <childnode refid="23298" relation="include">
+        </childnode>
+        <childnode refid="23299" relation="include">
+        </childnode>
+        <childnode refid="23274" relation="include">
+        </childnode>
+      </node>
+      <node id="23282">
+        <label>memory</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="23307">
+        <label>Scene/Scene.hpp</label>
+        <link refid="d6/db6/a01172"/>
+        <childnode refid="23308" relation="include">
+        </childnode>
+        <childnode refid="23309" relation="include">
+        </childnode>
+        <childnode refid="23310" relation="include">
+        </childnode>
+        <childnode refid="23311" relation="include">
+        </childnode>
+        <childnode refid="23312" relation="include">
+        </childnode>
+      </node>
+      <node id="23313">
+        <label>Text/TextVoxelSceneData.hpp</label>
+        <link refid="d7/d1d/a01475"/>
+      </node>
+      <node id="23310">
+        <label>Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp</label>
+        <link refid="d3/dd1/a00914"/>
+      </node>
+      <node id="23306">
+        <label>Render/Voxelize/VoxelSceneData.hpp</label>
+        <link refid="de/d91/a01034"/>
+        <childnode refid="23307" relation="include">
+        </childnode>
+        <childnode refid="23313" relation="include">
+        </childnode>
+      </node>
+      <node id="23309">
+        <label>Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp</label>
+        <link refid="d7/d12/a00911"/>
+      </node>
+      <node id="23308">
+        <label>Cache/SceneCache.hpp</label>
+        <link refid="dd/dd7/a00248"/>
+      </node>
+      <node id="23311">
+        <label>Render/Technique/Opaque/ReflectiveShadowMapGI/LightPassReflectiveShadow.hpp</label>
+        <link refid="d8/d19/a00935"/>
+      </node>
+      <node id="23312">
+        <label>Text/TextScene.hpp</label>
+        <link refid="dc/d85/a01436"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="de/dff/a05032" prot="public">castor3d::VoxelSceneData</innerclass>
+    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Voxelize/VoxelSceneData.hpp"/>
+  </compounddef>
+</doxygen>

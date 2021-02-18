@@ -1,0 +1,1342 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dd/d3f/a04083" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::OverlayCategory</compoundname>
+    <derivedcompoundref refid="d5/ddf/a04039" prot="public" virt="non-virtual">castor3d::BorderPanelOverlay</derivedcompoundref>
+    <derivedcompoundref refid="d8/dea/a04131" prot="public" virt="non-virtual">castor3d::PanelOverlay</derivedcompoundref>
+    <derivedcompoundref refid="da/d76/a04135" prot="public" virt="non-virtual">castor3d::TextOverlay</derivedcompoundref>
+    <includes local="no">OverlayCategory.hpp</includes>
+    <innerclass refid="df/dc6/a04087" prot="public">castor3d::OverlayCategory::Vertex</innerclass>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="dd/d3f/a04083_1a8a0d08cc32db67ab349e5519c6895933" prot="protected" static="no" mutable="no">
+        <type><ref refid="da/d33/a04079" kindref="compound">Overlay</ref> *</type>
+        <definition>Overlay* castor3d::OverlayCategory::m_pOverlay</definition>
+        <argsstring></argsstring>
+        <name>m_pOverlay</name>
+        <initializer>{ nullptr }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The overlay. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="495" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="495" bodyend="-1"/>
+        <referencedby refid="dd/d3f/a04083_1aa5d5fc38dc54a3b6451700b647dc28c5" compoundref="dc/df9/a00554" startline="347" endline="350">getOverlay</referencedby>
+        <referencedby refid="dd/d3f/a04083_1acd4f5cb3624f5875394b9e7d0ba6f5df" compoundref="dc/df9/a00554" startline="371" endline="374">setOverlay</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3f/a04083_1a08bb475094eee27dd84fde7a24a5fd3f" prot="protected" static="no" mutable="no">
+        <type>castor::Point2d</type>
+        <definition>castor::Point2d castor3d::OverlayCategory::m_position</definition>
+        <argsstring></argsstring>
+        <name>m_position</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The relative position (to parent or screen). </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="498" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="498" bodyend="-1"/>
+        <referencedby refid="dd/d3f/a04083_1a7ae7b61f35464f5a2d94ccbe4af15a32" compoundref="dc/df9/a00554" startline="203" endline="206">getPosition</referencedby>
+        <referencedby refid="dd/d3f/a04083_1ac26db7b4f23efb5882a917d2e08db61d" compoundref="dc/df9/a00554" startline="165" endline="169">setPosition</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3f/a04083_1a2223016a130025720269632785ec2b61" prot="protected" static="no" mutable="no">
+        <type>castor::Point2d</type>
+        <definition>castor::Point2d castor3d::OverlayCategory::m_ptSize</definition>
+        <argsstring></argsstring>
+        <name>m_ptSize</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The relative size (to parent or screen). </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="501" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="501" bodyend="-1"/>
+        <referencedby refid="dd/d3f/a04083_1adf9d2e0f43150967e0319a18b9a54ab0" compoundref="dc/df9/a00554" startline="191" endline="194">getSize</referencedby>
+        <referencedby refid="dd/d3f/a04083_1afb4352263ce6a56a31283b5d87c6c94b" compoundref="dc/df9/a00554" startline="178" endline="182">setSize</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3f/a04083_1a0ce34334ebcc12c62dfb0dc7ac5523ff" prot="protected" static="no" mutable="no">
+        <type>castor::Position</type>
+        <definition>castor::Position castor3d::OverlayCategory::m_pxPosition</definition>
+        <argsstring></argsstring>
+        <name>m_pxPosition</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The relative position (to parent or screen), in pixels. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="504" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="504" bodyend="-1"/>
+        <referencedby refid="dd/d3f/a04083_1ac5e250558639b36065abe97c85a6680d" compoundref="dc/df9/a00554" startline="227" endline="230">getPixelPosition</referencedby>
+        <referencedby refid="dd/d3f/a04083_1a3ce663c7cd0d1ca8e2b9a8f2f91866d6" compoundref="dc/df9/a00554" startline="395" endline="399">setPixelPosition</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3f/a04083_1a022dd93e8d5bff1d4f2a8c0b21142f75" prot="protected" static="no" mutable="no">
+        <type>castor::Size</type>
+        <definition>castor::Size castor3d::OverlayCategory::m_size</definition>
+        <argsstring></argsstring>
+        <name>m_size</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The absolute size in pixels. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="507" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="507" bodyend="-1"/>
+        <referencedby refid="dd/d3f/a04083_1a6b9b3e692784c48a86c93b968cd15286" compoundref="dc/df9/a00554" startline="215" endline="218">getPixelSize</referencedby>
+        <referencedby refid="dd/d3f/a04083_1aacea36a0f353d61cfaa3f863f29299a6" compoundref="dc/df9/a00554" startline="408" endline="412">setPixelSize</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3f/a04083_1a3f0ea9ec842763a39d5baa2e78889b8c" prot="protected" static="no" mutable="no">
+        <type>castor::Size</type>
+        <definition>castor::Size castor3d::OverlayCategory::m_computeSize</definition>
+        <argsstring></argsstring>
+        <name>m_computeSize</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The size used to compute relative position from pixel position. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="510" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="510" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3f/a04083_1ab598ebcee12614789e36336d1253e5bb" prot="protected" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::OverlayCategory::m_visible</definition>
+        <argsstring></argsstring>
+        <name>m_visible</name>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The visibility. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="513" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="513" bodyend="-1"/>
+        <referencedby refid="dd/d3f/a04083_1a2e9384538ff62b740d005b6442cfdf71" compoundref="dc/df9/a00554" startline="299" endline="302">isVisible</referencedby>
+        <referencedby refid="dd/d3f/a04083_1a9a6dea3ee2fcbf07bff0f478795ace08" compoundref="dc/df9/a00554" startline="383" endline="386">setVisible</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3f/a04083_1ac2c28e34323d5912107b31ffaa99ea7a" prot="protected" static="no" mutable="no">
+        <type>MaterialWPtr</type>
+        <definition>MaterialWPtr castor3d::OverlayCategory::m_pMaterial</definition>
+        <argsstring></argsstring>
+        <name>m_pMaterial</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The material used by the overlay. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="516" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="516" bodyend="-1"/>
+        <referencedby refid="dd/d3f/a04083_1a4156252aa9572b3a5022cb991d59a6cf" compoundref="dc/df9/a00554" startline="311" endline="314">getMaterial</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3f/a04083_1a35662d515c8e078cfe30e66da64f8821" prot="protected" static="no" mutable="no">
+        <type>int</type>
+        <definition>int castor3d::OverlayCategory::m_index</definition>
+        <argsstring></argsstring>
+        <name>m_index</name>
+        <initializer>{ 0 }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The overlay index. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="519" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="519" bodyend="-1"/>
+        <referencedby refid="dd/d3f/a04083_1ac7d35aa737a683282da3f94362f351bf" compoundref="dc/df9/a00554" startline="323" endline="326">getIndex</referencedby>
+        <referencedby refid="dd/d3f/a04083_1a5849e6f76ba3aa922d017d0188c20e9f" compoundref="dc/df9/a00554" startline="423" endline="427">setOrder</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3f/a04083_1ac02bb1ecfe695b90caa6f2f3b154cbc7" prot="protected" static="no" mutable="no">
+        <type>int</type>
+        <definition>int castor3d::OverlayCategory::m_level</definition>
+        <argsstring></argsstring>
+        <name>m_level</name>
+        <initializer>{ 0 }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The overlay level. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="522" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="522" bodyend="-1"/>
+        <referencedby refid="dd/d3f/a04083_1a46204ee81cd66a0ab948a9f83acc5bae" compoundref="dc/df9/a00554" startline="335" endline="338">getLevel</referencedby>
+        <referencedby refid="dd/d3f/a04083_1a5849e6f76ba3aa922d017d0188c20e9f" compoundref="dc/df9/a00554" startline="423" endline="427">setOrder</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3f/a04083_1ac4624a6d11471700631f394110218994" prot="protected" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::OverlayCategory::m_strMatName</definition>
+        <argsstring></argsstring>
+        <name>m_strMatName</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The material name. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="525" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="525" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3f/a04083_1a4fcedc67c26ae5608270bfd6e0704549" prot="protected" static="no" mutable="no">
+        <type><ref refid="d7/dd1/a01458_1ad72150fb2c652b19d0d79b9ea4289a5c" kindref="member">OverlayType</ref></type>
+        <definition>OverlayType castor3d::OverlayCategory::m_type</definition>
+        <argsstring></argsstring>
+        <name>m_type</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The overlay type. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="528" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="528" bodyend="-1"/>
+        <referencedby refid="dd/d3f/a04083_1a70ba9b4a7ef7bc8e35de3f0af39bcf42" compoundref="dc/df9/a00554" startline="287" endline="290">getType</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3f/a04083_1aada69d0c8319feb51d6f7f91feacceb1" prot="protected" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::OverlayCategory::m_sizeChanged</definition>
+        <argsstring></argsstring>
+        <name>m_sizeChanged</name>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Tells if this overlay&apos;s size has changed.. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="531" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="531" bodyend="-1"/>
+        <referencedby refid="dd/d3f/a04083_1aacea36a0f353d61cfaa3f863f29299a6" compoundref="dc/df9/a00554" startline="408" endline="412">setPixelSize</referencedby>
+        <referencedby refid="dd/d3f/a04083_1afb4352263ce6a56a31283b5d87c6c94b" compoundref="dc/df9/a00554" startline="178" endline="182">setSize</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3f/a04083_1aa9411ea45aa6e5eeeb85943f33f8b6f7" prot="protected" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::OverlayCategory::m_positionChanged</definition>
+        <argsstring></argsstring>
+        <name>m_positionChanged</name>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Tells if this overlay&apos;s position has changed. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="534" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="534" bodyend="-1"/>
+        <referencedby refid="dd/d3f/a04083_1a3ce663c7cd0d1ca8e2b9a8f2f91866d6" compoundref="dc/df9/a00554" startline="395" endline="399">setPixelPosition</referencedby>
+        <referencedby refid="dd/d3f/a04083_1ac26db7b4f23efb5882a917d2e08db61d" compoundref="dc/df9/a00554" startline="165" endline="169">setPosition</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3f/a04083_1a13ff69997c85e2e77149138667bf3766" prot="protected" static="no" mutable="no">
+        <type>castor::Point4d</type>
+        <definition>castor::Point4d castor3d::OverlayCategory::m_uv</definition>
+        <argsstring></argsstring>
+        <name>m_uv</name>
+        <initializer>{ 0.0, 0.0, 1.0, 1.0 }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The UV for the panel. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="537" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="537" bodyend="-1"/>
+        <referencedby refid="dd/d3f/a04083_1a291a772047f59e85b72fd4b410bba902" compoundref="dc/df9/a00554" startline="448" endline="451">getUV</referencedby>
+        <referencedby refid="dd/d3f/a04083_1a01add917e67d90c05ce49b7f22a6832c" compoundref="dc/df9/a00554" startline="436" endline="439">setUV</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/d3f/a04083_1af30a39d84244e6f097d7b245d75e16f4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::OverlayCategory::CU_DeclareVector</definition>
+        <argsstring>(Vertex, Vertex)</argsstring>
+        <name>CU_DeclareVector</name>
+        <param>
+          <type><ref refid="df/dc6/a04087" kindref="compound">Vertex</ref></type>
+        </param>
+        <param>
+          <type><ref refid="df/dc6/a04087" kindref="compound">Vertex</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="33" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1ae996131002acbaaf6d020d250450bd33" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::OverlayCategory::OverlayCategory</definition>
+        <argsstring>(OverlayType type)</argsstring>
+        <name>OverlayCategory</name>
+        <param>
+          <type><ref refid="d7/dd1/a01458_1ad72150fb2c652b19d0d79b9ea4289a5c" kindref="member">OverlayType</ref></type>
+          <declname>type</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The overlay type </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="44" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1aff0ea758ff18dd648a7e1c9aa6cf8689" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::OverlayCategory::~OverlayCategory</definition>
+        <argsstring>()</argsstring>
+        <name>~OverlayCategory</name>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="51" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1aa45f9642c8fd544e189c4427efc43fe8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::OverlayCategory::update</definition>
+        <argsstring>(OverlayRenderer const &amp;renderer)</argsstring>
+        <name>update</name>
+        <param>
+          <type><ref refid="d9/d03/a04095" kindref="compound">OverlayRenderer</ref> const &amp;</type>
+          <declname>renderer</declname>
+        </param>
+        <briefdescription>
+<para>Updates the overlay position, size... </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="58" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1a1cfb21cc1b6e4ac7a46dc7f3e424bbd3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::OverlayCategory::accept</definition>
+        <argsstring>(OverlayVisitor &amp;renderer) const =0</argsstring>
+        <name>accept</name>
+        <reimplementedby refid="d8/dea/a04131_1ad3b2cdc84198e28d980986f20832f531">accept</reimplementedby>
+        <reimplementedby refid="d5/ddf/a04039_1abd3e568924c4059b615c5d7acb7c3d33">accept</reimplementedby>
+        <reimplementedby refid="da/d76/a04135_1a5b6eb642dc688f6b5efafd9907d54c32">accept</reimplementedby>
+        <param>
+          <type><ref refid="dd/d90/a04127" kindref="compound">OverlayVisitor</ref> &amp;</type>
+          <declname>renderer</declname>
+        </param>
+        <briefdescription>
+<para>Draws the overlay. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="65" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1a9ffc9b59f436dbee79902127d7edf347" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::OverlayCategory::setMaterial</definition>
+        <argsstring>(MaterialSPtr material)</argsstring>
+        <name>setMaterial</name>
+        <param>
+          <type>MaterialSPtr</type>
+          <declname>material</declname>
+        </param>
+        <briefdescription>
+<para>Sets the material. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">material</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="74" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1a4c7d4774b122b2f3d7a84892b5cfff78" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const  &amp;</type>
+        <definition>C3D_API castor::String const&amp; castor3d::OverlayCategory::getOverlayName</definition>
+        <argsstring>() const</argsstring>
+        <name>getOverlayName</name>
+        <briefdescription>
+<para>Retrieves the overlay name. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The value </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="83" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1aaf4f2b38dd87a7bcdba59feff70cfe5c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Position</type>
+        <definition>C3D_API castor::Position castor3d::OverlayCategory::getAbsolutePosition</definition>
+        <argsstring>(castor::Size const &amp;size) const</argsstring>
+        <name>getAbsolutePosition</name>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves the absolute overlay position, in pixels. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The screen size </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The position </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="94" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1a096401b552723c3e5527045193451b2a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Size</type>
+        <definition>C3D_API castor::Size castor3d::OverlayCategory::getAbsoluteSize</definition>
+        <argsstring>(castor::Size const &amp;size) const</argsstring>
+        <name>getAbsoluteSize</name>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves the absolute overlay size, in pixels. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The screen size </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The size </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="105" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1ad2268e51289922bdd13cec10ae9084ca" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Point2f</type>
+        <definition>C3D_API castor::Point2f castor3d::OverlayCategory::getRenderRatio</definition>
+        <argsstring>(castor::Size const &amp;size) const</argsstring>
+        <name>getRenderRatio</name>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render size </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The ratio between given dimensions and the dimensions used when computing relative position from pixel position. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="114" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1a0e18c7032ece1f9fabb21621f54f27c7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Point2d</type>
+        <definition>C3D_API castor::Point2d castor3d::OverlayCategory::getAbsolutePosition</definition>
+        <argsstring>() const</argsstring>
+        <name>getAbsolutePosition</name>
+        <briefdescription>
+<para>Retrieves the absolute overlay position. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The position </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="123" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1af5c16e73f89fa5f438bf2df8f9eb56fc" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Point2d</type>
+        <definition>C3D_API castor::Point2d castor3d::OverlayCategory::getAbsoluteSize</definition>
+        <argsstring>() const</argsstring>
+        <name>getAbsoluteSize</name>
+        <briefdescription>
+<para>Retrieves the absolute overlay size. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The size </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="132" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1a5a5577d603b35fc1dae496989669d598" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::OverlayCategory::isSizeChanged</definition>
+        <argsstring>() const</argsstring>
+        <name>isSizeChanged</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if this overlay&apos;s or one of its parents&apos; size has changed. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="139" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1a0836f09c4f8ffbd2b185863e150196b4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::OverlayCategory::isPositionChanged</definition>
+        <argsstring>() const</argsstring>
+        <name>isPositionChanged</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if this overlay&apos;s or one of its parents&apos; position has changed. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="146" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1ac99be9e485c326264a6da3108e554dba" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>virtual C3D_API bool castor3d::OverlayCategory::isChanged</definition>
+        <argsstring>() const</argsstring>
+        <name>isChanged</name>
+        <reimplementedby refid="d5/ddf/a04039_1a127f3ca15224d09c0ce6467f994edf82">isChanged</reimplementedby>
+        <reimplementedby refid="da/d76/a04135_1ae765deac6edb51768183dae9c9bce43a">isChanged</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if this overlay&apos;s has changed. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="153" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="153" bodyend="156"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1ac26db7b4f23efb5882a917d2e08db61d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::OverlayCategory::setPosition</definition>
+        <argsstring>(castor::Point2d const &amp;position)</argsstring>
+        <name>setPosition</name>
+        <param>
+          <type>castor::Point2d const &amp;</type>
+          <declname>position</declname>
+        </param>
+        <briefdescription>
+<para>Sets the overlay position. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">position</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="165" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="165" bodyend="169"/>
+        <references refid="dd/d3f/a04083_1a08bb475094eee27dd84fde7a24a5fd3f" compoundref="dc/df9/a00554" startline="498">m_position</references>
+        <references refid="dd/d3f/a04083_1aa9411ea45aa6e5eeeb85943f33f8b6f7" compoundref="dc/df9/a00554" startline="534">m_positionChanged</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1afb4352263ce6a56a31283b5d87c6c94b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::OverlayCategory::setSize</definition>
+        <argsstring>(castor::Point2d const &amp;size)</argsstring>
+        <name>setSize</name>
+        <param>
+          <type>castor::Point2d const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>Sets the overlay size. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="178" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="178" bodyend="182"/>
+        <references refid="dd/d3f/a04083_1a2223016a130025720269632785ec2b61" compoundref="dc/df9/a00554" startline="501">m_ptSize</references>
+        <references refid="dd/d3f/a04083_1aada69d0c8319feb51d6f7f91feacceb1" compoundref="dc/df9/a00554" startline="531">m_sizeChanged</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1adf9d2e0f43150967e0319a18b9a54ab0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Point2d const  &amp;</type>
+        <definition>castor::Point2d const&amp; castor3d::OverlayCategory::getSize</definition>
+        <argsstring>() const</argsstring>
+        <name>getSize</name>
+        <briefdescription>
+<para>Retrieves the overlay size. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The value </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="191" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="191" bodyend="194"/>
+        <references refid="dd/d3f/a04083_1a2223016a130025720269632785ec2b61" compoundref="dc/df9/a00554" startline="501">m_ptSize</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1a7ae7b61f35464f5a2d94ccbe4af15a32" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Point2d const  &amp;</type>
+        <definition>castor::Point2d const&amp; castor3d::OverlayCategory::getPosition</definition>
+        <argsstring>() const</argsstring>
+        <name>getPosition</name>
+        <briefdescription>
+<para>Retrieves the overlay position. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The value </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="203" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="203" bodyend="206"/>
+        <references refid="dd/d3f/a04083_1a08bb475094eee27dd84fde7a24a5fd3f" compoundref="dc/df9/a00554" startline="498">m_position</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1a6b9b3e692784c48a86c93b968cd15286" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Size const  &amp;</type>
+        <definition>castor::Size const&amp; castor3d::OverlayCategory::getPixelSize</definition>
+        <argsstring>() const</argsstring>
+        <name>getPixelSize</name>
+        <briefdescription>
+<para>Retrieves the overlay size. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The value </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="215" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="215" bodyend="218"/>
+        <references refid="dd/d3f/a04083_1a022dd93e8d5bff1d4f2a8c0b21142f75" compoundref="dc/df9/a00554" startline="507">m_size</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1ac5e250558639b36065abe97c85a6680d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Position const  &amp;</type>
+        <definition>castor::Position const&amp; castor3d::OverlayCategory::getPixelPosition</definition>
+        <argsstring>() const</argsstring>
+        <name>getPixelPosition</name>
+        <briefdescription>
+<para>Retrieves the overlay position. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The value </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="227" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="227" bodyend="230"/>
+        <references refid="dd/d3f/a04083_1a0ce34334ebcc12c62dfb0dc7ac5523ff" compoundref="dc/df9/a00554" startline="504">m_pxPosition</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1a6dde62c1edf8a2e49bbaba1a21b191ae" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Point2d &amp;</type>
+        <definition>castor::Point2d&amp; castor3d::OverlayCategory::getSize</definition>
+        <argsstring>()</argsstring>
+        <name>getSize</name>
+        <briefdescription>
+<para>Retrieves the overlay size. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The value </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="239" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="239" bodyend="242"/>
+        <references refid="dd/d3f/a04083_1a2223016a130025720269632785ec2b61" compoundref="dc/df9/a00554" startline="501">m_ptSize</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1ac4f5539ffa66f608e449d4e52d1c22d0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Point2d &amp;</type>
+        <definition>castor::Point2d&amp; castor3d::OverlayCategory::getPosition</definition>
+        <argsstring>()</argsstring>
+        <name>getPosition</name>
+        <briefdescription>
+<para>Retrieves the overlay position. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The value </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="251" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="251" bodyend="254"/>
+        <references refid="dd/d3f/a04083_1a08bb475094eee27dd84fde7a24a5fd3f" compoundref="dc/df9/a00554" startline="498">m_position</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1a194e9e6eb058d93632327871aa36d931" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Size &amp;</type>
+        <definition>castor::Size&amp; castor3d::OverlayCategory::getPixelSize</definition>
+        <argsstring>()</argsstring>
+        <name>getPixelSize</name>
+        <briefdescription>
+<para>Retrieves the overlay size. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The value </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="263" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="263" bodyend="266"/>
+        <references refid="dd/d3f/a04083_1a022dd93e8d5bff1d4f2a8c0b21142f75" compoundref="dc/df9/a00554" startline="507">m_size</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1ada1998f96e0288810a5f5d0fdd11848a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Position &amp;</type>
+        <definition>castor::Position&amp; castor3d::OverlayCategory::getPixelPosition</definition>
+        <argsstring>()</argsstring>
+        <name>getPixelPosition</name>
+        <briefdescription>
+<para>Retrieves the overlay position. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The value </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="275" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="275" bodyend="278"/>
+        <references refid="dd/d3f/a04083_1a0ce34334ebcc12c62dfb0dc7ac5523ff" compoundref="dc/df9/a00554" startline="504">m_pxPosition</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1a70ba9b4a7ef7bc8e35de3f0af39bcf42" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d7/dd1/a01458_1ad72150fb2c652b19d0d79b9ea4289a5c" kindref="member">OverlayType</ref></type>
+        <definition>OverlayType castor3d::OverlayCategory::getType</definition>
+        <argsstring>() const</argsstring>
+        <name>getType</name>
+        <briefdescription>
+<para>Retrieves the overlay type. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The value </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="287" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="287" bodyend="290"/>
+        <references refid="dd/d3f/a04083_1a4fcedc67c26ae5608270bfd6e0704549" compoundref="dc/df9/a00554" startline="528">m_type</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1a2e9384538ff62b740d005b6442cfdf71" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::OverlayCategory::isVisible</definition>
+        <argsstring>() const</argsstring>
+        <name>isVisible</name>
+        <briefdescription>
+<para>Retrieves the visibility status. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The value </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="299" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="299" bodyend="302"/>
+        <references refid="dd/d3f/a04083_1ab598ebcee12614789e36336d1253e5bb" compoundref="dc/df9/a00554" startline="513">m_visible</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1a4156252aa9572b3a5022cb991d59a6cf" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>MaterialSPtr</type>
+        <definition>MaterialSPtr castor3d::OverlayCategory::getMaterial</definition>
+        <argsstring>() const</argsstring>
+        <name>getMaterial</name>
+        <briefdescription>
+<para>Retrieves the material. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The value </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="311" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="311" bodyend="314"/>
+        <references refid="dd/d3f/a04083_1ac2c28e34323d5912107b31ffaa99ea7a" compoundref="dc/df9/a00554" startline="516">m_pMaterial</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1ac7d35aa737a683282da3f94362f351bf" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>int</type>
+        <definition>int castor3d::OverlayCategory::getIndex</definition>
+        <argsstring>() const</argsstring>
+        <name>getIndex</name>
+        <briefdescription>
+<para>Retrieves the index. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The value </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="323" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="323" bodyend="326"/>
+        <references refid="dd/d3f/a04083_1a35662d515c8e078cfe30e66da64f8821" compoundref="dc/df9/a00554" startline="519">m_index</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1a46204ee81cd66a0ab948a9f83acc5bae" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>int</type>
+        <definition>int castor3d::OverlayCategory::getLevel</definition>
+        <argsstring>() const</argsstring>
+        <name>getLevel</name>
+        <briefdescription>
+<para>Retrieves the level. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The value </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="335" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="335" bodyend="338"/>
+        <references refid="dd/d3f/a04083_1ac02bb1ecfe695b90caa6f2f3b154cbc7" compoundref="dc/df9/a00554" startline="522">m_level</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1aa5d5fc38dc54a3b6451700b647dc28c5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/d33/a04079" kindref="compound">Overlay</ref> const  &amp;</type>
+        <definition>Overlay const&amp; castor3d::OverlayCategory::getOverlay</definition>
+        <argsstring>() const</argsstring>
+        <name>getOverlay</name>
+        <briefdescription>
+<para>Retrieves the overlay. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The value </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="347" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="347" bodyend="350"/>
+        <references refid="dd/d3f/a04083_1a8a0d08cc32db67ab349e5519c6895933" compoundref="dc/df9/a00554" startline="495">m_pOverlay</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1aca3dea9a679056850dcc0ff14fc7cbfc" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/d33/a04079" kindref="compound">Overlay</ref> &amp;</type>
+        <definition>Overlay&amp; castor3d::OverlayCategory::getOverlay</definition>
+        <argsstring>()</argsstring>
+        <name>getOverlay</name>
+        <briefdescription>
+<para>Retrieves the overlay. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The value </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="359" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="359" bodyend="362"/>
+        <references refid="dd/d3f/a04083_1a8a0d08cc32db67ab349e5519c6895933" compoundref="dc/df9/a00554" startline="495">m_pOverlay</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1acd4f5cb3624f5875394b9e7d0ba6f5df" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::OverlayCategory::setOverlay</definition>
+        <argsstring>(Overlay *value)</argsstring>
+        <name>setOverlay</name>
+        <param>
+          <type><ref refid="da/d33/a04079" kindref="compound">Overlay</ref> *</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Sets the overlay. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="371" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="371" bodyend="374"/>
+        <references refid="dd/d3f/a04083_1a8a0d08cc32db67ab349e5519c6895933" compoundref="dc/df9/a00554" startline="495">m_pOverlay</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1a9a6dea3ee2fcbf07bff0f478795ace08" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::OverlayCategory::setVisible</definition>
+        <argsstring>(bool value)</argsstring>
+        <name>setVisible</name>
+        <param>
+          <type>bool</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Sets the visibility status. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="383" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="383" bodyend="386"/>
+        <references refid="dd/d3f/a04083_1ab598ebcee12614789e36336d1253e5bb" compoundref="dc/df9/a00554" startline="513">m_visible</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1a3ce663c7cd0d1ca8e2b9a8f2f91866d6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::OverlayCategory::setPixelPosition</definition>
+        <argsstring>(castor::Position const &amp;value)</argsstring>
+        <name>setPixelPosition</name>
+        <param>
+          <type>castor::Position const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Sets the overlay position. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="395" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="395" bodyend="399"/>
+        <references refid="dd/d3f/a04083_1aa9411ea45aa6e5eeeb85943f33f8b6f7" compoundref="dc/df9/a00554" startline="534">m_positionChanged</references>
+        <references refid="dd/d3f/a04083_1a0ce34334ebcc12c62dfb0dc7ac5523ff" compoundref="dc/df9/a00554" startline="504">m_pxPosition</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1aacea36a0f353d61cfaa3f863f29299a6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::OverlayCategory::setPixelSize</definition>
+        <argsstring>(castor::Size const &amp;value)</argsstring>
+        <name>setPixelSize</name>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Sets the overlay size. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="408" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="408" bodyend="412"/>
+        <references refid="dd/d3f/a04083_1a022dd93e8d5bff1d4f2a8c0b21142f75" compoundref="dc/df9/a00554" startline="507">m_size</references>
+        <references refid="dd/d3f/a04083_1aada69d0c8319feb51d6f7f91feacceb1" compoundref="dc/df9/a00554" startline="531">m_sizeChanged</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1a5849e6f76ba3aa922d017d0188c20e9f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::OverlayCategory::setOrder</definition>
+        <argsstring>(int index, int level)</argsstring>
+        <name>setOrder</name>
+        <param>
+          <type>int</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>level</declname>
+        </param>
+        <briefdescription>
+<para>Sets the overlay order. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new index </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">level</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new level </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="423" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="423" bodyend="427"/>
+        <references refid="dd/d3f/a04083_1a35662d515c8e078cfe30e66da64f8821" compoundref="dc/df9/a00554" startline="519">m_index</references>
+        <references refid="dd/d3f/a04083_1ac02bb1ecfe695b90caa6f2f3b154cbc7" compoundref="dc/df9/a00554" startline="522">m_level</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1a01add917e67d90c05ce49b7f22a6832c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::OverlayCategory::setUV</definition>
+        <argsstring>(castor::Point4d const &amp;value)</argsstring>
+        <name>setUV</name>
+        <param>
+          <type>castor::Point4d const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Sets the overlay UV. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value (left, top, right and bottom) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="436" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="436" bodyend="439"/>
+        <references refid="dd/d3f/a04083_1a13ff69997c85e2e77149138667bf3766" compoundref="dc/df9/a00554" startline="537">m_uv</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1a291a772047f59e85b72fd4b410bba902" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Point4d const  &amp;</type>
+        <definition>castor::Point4d const&amp; castor3d::OverlayCategory::getUV</definition>
+        <argsstring>() const</argsstring>
+        <name>getUV</name>
+        <briefdescription>
+<para>Retrieves the overlay UV. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The value (left, top, right and bottom) </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="448" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="448" bodyend="451"/>
+        <references refid="dd/d3f/a04083_1a13ff69997c85e2e77149138667bf3766" compoundref="dc/df9/a00554" startline="537">m_uv</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="dd/d3f/a04083_1a4914ddaa1aa2755d7a4bf1d1351b0d53" prot="protected" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>castor::Point2d</type>
+        <definition>castor::Point2d castor3d::OverlayCategory::doGetTotalSize</definition>
+        <argsstring>(OverlayRenderer const &amp;renderer) const</argsstring>
+        <name>doGetTotalSize</name>
+        <param>
+          <type><ref refid="d9/d03/a04095" kindref="compound">OverlayRenderer</ref> const &amp;</type>
+          <declname>renderer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The screen or parent&apos;s size. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="460" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1a4f4b67d20428187bed69ce338e5174f5" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::OverlayCategory::doUpdatePosition</definition>
+        <argsstring>(OverlayRenderer const &amp;renderer)</argsstring>
+        <name>doUpdatePosition</name>
+        <param>
+          <type><ref refid="d9/d03/a04095" kindref="compound">OverlayRenderer</ref> const &amp;</type>
+          <declname>renderer</declname>
+        </param>
+        <briefdescription>
+<para>Updates the overlay position, taking care of wanted pixel position. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="467" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1acba79349220c84700bad09bc829ed123" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::OverlayCategory::doUpdateSize</definition>
+        <argsstring>(OverlayRenderer const &amp;renderer)</argsstring>
+        <name>doUpdateSize</name>
+        <reimplementedby refid="d5/ddf/a04039_1ae9c328a8e008db38278c9228b4056e5d">doUpdateSize</reimplementedby>
+        <param>
+          <type><ref refid="d9/d03/a04095" kindref="compound">OverlayRenderer</ref> const &amp;</type>
+          <declname>renderer</declname>
+        </param>
+        <briefdescription>
+<para>Updates the overlay size, taking care of wanted pixel size. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="474" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1a72d64442dc9b48612aa7a0a64b9104d2" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::OverlayCategory::doUpdate</definition>
+        <argsstring>(OverlayRenderer const &amp;renderer)</argsstring>
+        <name>doUpdate</name>
+        <reimplementedby refid="da/d76/a04135_1ad58a1a7c89acc814b2313371cdf56886">doUpdate</reimplementedby>
+        <param>
+          <type><ref refid="d9/d03/a04095" kindref="compound">OverlayRenderer</ref> const &amp;</type>
+          <declname>renderer</declname>
+        </param>
+        <briefdescription>
+<para>Updates the overlay position, size... </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="481" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="481" bodyend="481"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3f/a04083_1af740ba50ac54496f3c2d48161047b89e" prot="protected" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::OverlayCategory::doUpdateBuffer</definition>
+        <argsstring>(castor::Size const &amp;size)=0</argsstring>
+        <name>doUpdateBuffer</name>
+        <reimplementedby refid="d8/dea/a04131_1a74d65c90aafa9b2a4941ff34f8426871">doUpdateBuffer</reimplementedby>
+        <reimplementedby refid="da/d76/a04135_1a6bbb573584195b46e5e92363583e8d5f">doUpdateBuffer</reimplementedby>
+        <reimplementedby refid="d5/ddf/a04039_1a7bc7c3bffa1e93b59ca0b2352ef2ba99">doUpdateBuffer</reimplementedby>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>Updates the vertex buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render target size. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayCategory.hpp" line="490" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2445">
+        <label>castor3d::TextOverlay</label>
+        <link refid="da/d76/a04135"/>
+        <childnode refid="2442" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2442">
+        <label>castor3d::OverlayCategory</label>
+        <link refid="dd/d3f/a04083"/>
+      </node>
+      <node id="2443">
+        <label>castor3d::BorderPanelOverlay</label>
+        <link refid="d5/ddf/a04039"/>
+        <childnode refid="2442" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2444">
+        <label>castor3d::PanelOverlay</label>
+        <link refid="d8/dea/a04131"/>
+        <childnode refid="2442" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2450">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d6/d55/a04603"/>
+        <childnode refid="2449" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2446">
+        <label>castor3d::OverlayCategory</label>
+        <link refid="dd/d3f/a04083"/>
+        <childnode refid="2447" relation="usage">
+          <edgelabel>m_pOverlay</edgelabel>
+        </childnode>
+      </node>
+      <node id="2449">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="2448">
+        <label>std::enable_shared_from_this&lt; Overlay &gt;</label>
+      </node>
+      <node id="2447">
+        <label>castor3d::Overlay</label>
+        <link refid="da/d33/a04079"/>
+        <childnode refid="2448" relation="public-inheritance">
+        </childnode>
+        <childnode refid="2449" relation="public-inheritance">
+        </childnode>
+        <childnode refid="2450" relation="usage">
+          <edgelabel>m_renderSystem</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Overlay/OverlayCategory.hpp" line="17" column="1" bodyfile="Overlay/OverlayCategory.hpp" bodystart="16" bodyend="538"/>
+    <listofallmembers>
+      <member refid="dd/d3f/a04083_1a1cfb21cc1b6e4ac7a46dc7f3e424bbd3" prot="public" virt="pure-virtual"><scope>castor3d::OverlayCategory</scope><name>accept</name></member>
+      <member refid="dd/d3f/a04083_1af30a39d84244e6f097d7b245d75e16f4" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>CU_DeclareVector</name></member>
+      <member refid="dd/d3f/a04083_1a4914ddaa1aa2755d7a4bf1d1351b0d53" prot="protected" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>doGetTotalSize</name></member>
+      <member refid="dd/d3f/a04083_1a72d64442dc9b48612aa7a0a64b9104d2" prot="protected" virt="virtual"><scope>castor3d::OverlayCategory</scope><name>doUpdate</name></member>
+      <member refid="dd/d3f/a04083_1af740ba50ac54496f3c2d48161047b89e" prot="protected" virt="pure-virtual"><scope>castor3d::OverlayCategory</scope><name>doUpdateBuffer</name></member>
+      <member refid="dd/d3f/a04083_1a4f4b67d20428187bed69ce338e5174f5" prot="protected" virt="virtual"><scope>castor3d::OverlayCategory</scope><name>doUpdatePosition</name></member>
+      <member refid="dd/d3f/a04083_1acba79349220c84700bad09bc829ed123" prot="protected" virt="virtual"><scope>castor3d::OverlayCategory</scope><name>doUpdateSize</name></member>
+      <member refid="dd/d3f/a04083_1aaf4f2b38dd87a7bcdba59feff70cfe5c" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>getAbsolutePosition</name></member>
+      <member refid="dd/d3f/a04083_1a0e18c7032ece1f9fabb21621f54f27c7" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>getAbsolutePosition</name></member>
+      <member refid="dd/d3f/a04083_1a096401b552723c3e5527045193451b2a" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>getAbsoluteSize</name></member>
+      <member refid="dd/d3f/a04083_1af5c16e73f89fa5f438bf2df8f9eb56fc" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>getAbsoluteSize</name></member>
+      <member refid="dd/d3f/a04083_1ac7d35aa737a683282da3f94362f351bf" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>getIndex</name></member>
+      <member refid="dd/d3f/a04083_1a46204ee81cd66a0ab948a9f83acc5bae" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>getLevel</name></member>
+      <member refid="dd/d3f/a04083_1a4156252aa9572b3a5022cb991d59a6cf" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>getMaterial</name></member>
+      <member refid="dd/d3f/a04083_1aa5d5fc38dc54a3b6451700b647dc28c5" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>getOverlay</name></member>
+      <member refid="dd/d3f/a04083_1aca3dea9a679056850dcc0ff14fc7cbfc" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>getOverlay</name></member>
+      <member refid="dd/d3f/a04083_1a4c7d4774b122b2f3d7a84892b5cfff78" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>getOverlayName</name></member>
+      <member refid="dd/d3f/a04083_1ac5e250558639b36065abe97c85a6680d" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>getPixelPosition</name></member>
+      <member refid="dd/d3f/a04083_1ada1998f96e0288810a5f5d0fdd11848a" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>getPixelPosition</name></member>
+      <member refid="dd/d3f/a04083_1a6b9b3e692784c48a86c93b968cd15286" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>getPixelSize</name></member>
+      <member refid="dd/d3f/a04083_1a194e9e6eb058d93632327871aa36d931" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>getPixelSize</name></member>
+      <member refid="dd/d3f/a04083_1a7ae7b61f35464f5a2d94ccbe4af15a32" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>getPosition</name></member>
+      <member refid="dd/d3f/a04083_1ac4f5539ffa66f608e449d4e52d1c22d0" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>getPosition</name></member>
+      <member refid="dd/d3f/a04083_1ad2268e51289922bdd13cec10ae9084ca" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>getRenderRatio</name></member>
+      <member refid="dd/d3f/a04083_1adf9d2e0f43150967e0319a18b9a54ab0" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>getSize</name></member>
+      <member refid="dd/d3f/a04083_1a6dde62c1edf8a2e49bbaba1a21b191ae" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>getSize</name></member>
+      <member refid="dd/d3f/a04083_1a70ba9b4a7ef7bc8e35de3f0af39bcf42" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>getType</name></member>
+      <member refid="dd/d3f/a04083_1a291a772047f59e85b72fd4b410bba902" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>getUV</name></member>
+      <member refid="dd/d3f/a04083_1ac99be9e485c326264a6da3108e554dba" prot="public" virt="virtual"><scope>castor3d::OverlayCategory</scope><name>isChanged</name></member>
+      <member refid="dd/d3f/a04083_1a0836f09c4f8ffbd2b185863e150196b4" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>isPositionChanged</name></member>
+      <member refid="dd/d3f/a04083_1a5a5577d603b35fc1dae496989669d598" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>isSizeChanged</name></member>
+      <member refid="dd/d3f/a04083_1a2e9384538ff62b740d005b6442cfdf71" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>isVisible</name></member>
+      <member refid="dd/d3f/a04083_1a3f0ea9ec842763a39d5baa2e78889b8c" prot="protected" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>m_computeSize</name></member>
+      <member refid="dd/d3f/a04083_1a35662d515c8e078cfe30e66da64f8821" prot="protected" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>m_index</name></member>
+      <member refid="dd/d3f/a04083_1ac02bb1ecfe695b90caa6f2f3b154cbc7" prot="protected" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>m_level</name></member>
+      <member refid="dd/d3f/a04083_1ac2c28e34323d5912107b31ffaa99ea7a" prot="protected" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>m_pMaterial</name></member>
+      <member refid="dd/d3f/a04083_1a08bb475094eee27dd84fde7a24a5fd3f" prot="protected" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>m_position</name></member>
+      <member refid="dd/d3f/a04083_1aa9411ea45aa6e5eeeb85943f33f8b6f7" prot="protected" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>m_positionChanged</name></member>
+      <member refid="dd/d3f/a04083_1a8a0d08cc32db67ab349e5519c6895933" prot="protected" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>m_pOverlay</name></member>
+      <member refid="dd/d3f/a04083_1a2223016a130025720269632785ec2b61" prot="protected" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>m_ptSize</name></member>
+      <member refid="dd/d3f/a04083_1a0ce34334ebcc12c62dfb0dc7ac5523ff" prot="protected" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>m_pxPosition</name></member>
+      <member refid="dd/d3f/a04083_1a022dd93e8d5bff1d4f2a8c0b21142f75" prot="protected" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>m_size</name></member>
+      <member refid="dd/d3f/a04083_1aada69d0c8319feb51d6f7f91feacceb1" prot="protected" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>m_sizeChanged</name></member>
+      <member refid="dd/d3f/a04083_1ac4624a6d11471700631f394110218994" prot="protected" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>m_strMatName</name></member>
+      <member refid="dd/d3f/a04083_1a4fcedc67c26ae5608270bfd6e0704549" prot="protected" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>m_type</name></member>
+      <member refid="dd/d3f/a04083_1a13ff69997c85e2e77149138667bf3766" prot="protected" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>m_uv</name></member>
+      <member refid="dd/d3f/a04083_1ab598ebcee12614789e36336d1253e5bb" prot="protected" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>m_visible</name></member>
+      <member refid="dd/d3f/a04083_1ae996131002acbaaf6d020d250450bd33" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>OverlayCategory</name></member>
+      <member refid="dd/d3f/a04083_1a9ffc9b59f436dbee79902127d7edf347" prot="public" virt="virtual"><scope>castor3d::OverlayCategory</scope><name>setMaterial</name></member>
+      <member refid="dd/d3f/a04083_1a5849e6f76ba3aa922d017d0188c20e9f" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>setOrder</name></member>
+      <member refid="dd/d3f/a04083_1acd4f5cb3624f5875394b9e7d0ba6f5df" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>setOverlay</name></member>
+      <member refid="dd/d3f/a04083_1a3ce663c7cd0d1ca8e2b9a8f2f91866d6" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>setPixelPosition</name></member>
+      <member refid="dd/d3f/a04083_1aacea36a0f353d61cfaa3f863f29299a6" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>setPixelSize</name></member>
+      <member refid="dd/d3f/a04083_1ac26db7b4f23efb5882a917d2e08db61d" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>setPosition</name></member>
+      <member refid="dd/d3f/a04083_1afb4352263ce6a56a31283b5d87c6c94b" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>setSize</name></member>
+      <member refid="dd/d3f/a04083_1a01add917e67d90c05ce49b7f22a6832c" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>setUV</name></member>
+      <member refid="dd/d3f/a04083_1a9a6dea3ee2fcbf07bff0f478795ace08" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>setVisible</name></member>
+      <member refid="dd/d3f/a04083_1aa45f9642c8fd544e189c4427efc43fe8" prot="public" virt="non-virtual"><scope>castor3d::OverlayCategory</scope><name>update</name></member>
+      <member refid="dd/d3f/a04083_1aff0ea758ff18dd648a7e1c9aa6cf8689" prot="public" virt="virtual"><scope>castor3d::OverlayCategory</scope><name>~OverlayCategory</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

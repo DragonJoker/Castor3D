@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d4/de2/a05578" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ModelMatrixUboConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d4/de2/a05578_1a068797d5df875150c9d4a0917c5545ce" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::ModelMatrixUboConfiguration::prvModel</definition>
+        <argsstring></argsstring>
+        <name>prvModel</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="221" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="221" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/de2/a05578_1af6426c4c3864eb7c3f6bae1fc6f435e1" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::ModelMatrixUboConfiguration::prvNormal</definition>
+        <argsstring></argsstring>
+        <name>prvNormal</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="222" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="222" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/de2/a05578_1a6346a503e1873ed038c7fdd81b6e8568" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::ModelMatrixUboConfiguration::curModel</definition>
+        <argsstring></argsstring>
+        <name>curModel</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="223" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="223" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/de2/a05578_1a9c75d679f01bebdc89a2f4397e011455" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::ModelMatrixUboConfiguration::curNormal</definition>
+        <argsstring></argsstring>
+        <name>curNormal</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="224" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="224" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Model matrices data. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Ubos/UbosModule.hpp" line="220" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="219" bodyend="225"/>
+    <listofallmembers>
+      <member refid="d4/de2/a05578_1a6346a503e1873ed038c7fdd81b6e8568" prot="public" virt="non-virtual"><scope>castor3d::ModelMatrixUboConfiguration</scope><name>curModel</name></member>
+      <member refid="d4/de2/a05578_1a9c75d679f01bebdc89a2f4397e011455" prot="public" virt="non-virtual"><scope>castor3d::ModelMatrixUboConfiguration</scope><name>curNormal</name></member>
+      <member refid="d4/de2/a05578_1a068797d5df875150c9d4a0917c5545ce" prot="public" virt="non-virtual"><scope>castor3d::ModelMatrixUboConfiguration</scope><name>prvModel</name></member>
+      <member refid="d4/de2/a05578_1af6426c4c3864eb7c3f6bae1fc6f435e1" prot="public" virt="non-virtual"><scope>castor3d::ModelMatrixUboConfiguration</scope><name>prvNormal</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,351 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d3/d68/a05527" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::SsaoConfigUbo::Configuration</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d3/d68/a05527_1ab5956a5657e1727dcbcb6ec394add301" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::SsaoConfigUbo::Configuration::projInfo</definition>
+        <argsstring></argsstring>
+        <name>projInfo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="28" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d68/a05527_1abda82653e6e62627fe4940c46ccd3f38" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::SsaoConfigUbo::Configuration::viewMatrix</definition>
+        <argsstring></argsstring>
+        <name>viewMatrix</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="29" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d68/a05527_1a270b36ea18aaffeed7d6a64ce17afafc" prot="public" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t castor3d::SsaoConfigUbo::Configuration::numSamples</definition>
+        <argsstring></argsstring>
+        <name>numSamples</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="31" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d68/a05527_1afecc8345db26f649ddd68857342e59fd" prot="public" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t castor3d::SsaoConfigUbo::Configuration::numSpiralTurns</definition>
+        <argsstring></argsstring>
+        <name>numSpiralTurns</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="34" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d68/a05527_1a3dd9897e7da464189a70dc4e7e2d363f" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SsaoConfigUbo::Configuration::projScale</definition>
+        <argsstring></argsstring>
+        <name>projScale</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="39" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d68/a05527_1a89939b659f0375a1540fcc43469b559f" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SsaoConfigUbo::Configuration::radius</definition>
+        <argsstring></argsstring>
+        <name>radius</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="41" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d68/a05527_1a365ae9ad9788c36bcaf788841d252052" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SsaoConfigUbo::Configuration::invRadius</definition>
+        <argsstring></argsstring>
+        <name>invRadius</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="43" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d68/a05527_1a13fb062602429e48e0b257b337d3f913" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SsaoConfigUbo::Configuration::radius2</definition>
+        <argsstring></argsstring>
+        <name>radius2</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="45" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d68/a05527_1a42049f903888de38eef0619e434fc40b" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SsaoConfigUbo::Configuration::invRadius2</definition>
+        <argsstring></argsstring>
+        <name>invRadius2</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="47" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d68/a05527_1ac0ece4b6b607491b15eda528266fdd5f" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SsaoConfigUbo::Configuration::bias</definition>
+        <argsstring></argsstring>
+        <name>bias</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="49" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d68/a05527_1aecd75190c67948a0ba097012c14b52b2" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SsaoConfigUbo::Configuration::intensity</definition>
+        <argsstring></argsstring>
+        <name>intensity</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="51" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d68/a05527_1a7cbc4ca4ff5e00694d43a49031bdb3fa" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SsaoConfigUbo::Configuration::intensityDivR6</definition>
+        <argsstring></argsstring>
+        <name>intensityDivR6</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="53" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d68/a05527_1aba3cba15cfa9d23664b51843e83ecbbb" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SsaoConfigUbo::Configuration::farPlaneZ</definition>
+        <argsstring></argsstring>
+        <name>farPlaneZ</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="56" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d68/a05527_1a9ca182372771db170d9f614949fd572b" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SsaoConfigUbo::Configuration::edgeSharpness</definition>
+        <argsstring></argsstring>
+        <name>edgeSharpness</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="58" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d68/a05527_1a3bbc51d5286d6fb8ff39601373c5a871" prot="public" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t castor3d::SsaoConfigUbo::Configuration::blurStepSize</definition>
+        <argsstring></argsstring>
+        <name>blurStepSize</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="66" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d68/a05527_1a502bc84f81ba88af1496a3498744d149" prot="public" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t castor3d::SsaoConfigUbo::Configuration::blurRadius</definition>
+        <argsstring></argsstring>
+        <name>blurRadius</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="68" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d68/a05527_1a37edf583bbcc21dead8b225a1d91df1e" prot="public" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t castor3d::SsaoConfigUbo::Configuration::highQuality</definition>
+        <argsstring></argsstring>
+        <name>highQuality</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="69" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="69" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d68/a05527_1a7348408e207f5317d27ad0b6ece71937" prot="public" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t castor3d::SsaoConfigUbo::Configuration::blurHighQuality</definition>
+        <argsstring></argsstring>
+        <name>blurHighQuality</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="70" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d68/a05527_1a1c7f9d555e7398e0d8ce75dd52dc35fb" prot="public" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t castor3d::SsaoConfigUbo::Configuration::logMaxOffset</definition>
+        <argsstring></argsstring>
+        <name>logMaxOffset</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="75" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="75" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d68/a05527_1aee3c9038cbdbdffbbcb8c65d67045254" prot="public" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t castor3d::SsaoConfigUbo::Configuration::maxMipLevel</definition>
+        <argsstring></argsstring>
+        <name>maxMipLevel</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="77" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d68/a05527_1a90af9002984d593ce0dbb5de2cb07a29" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SsaoConfigUbo::Configuration::minRadius</definition>
+        <argsstring></argsstring>
+        <name>minRadius</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="79" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d68/a05527_1ac8e6c0ea651f5bea6e64c105f756731c" prot="public" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t castor3d::SsaoConfigUbo::Configuration::variation</definition>
+        <argsstring></argsstring>
+        <name>variation</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="80" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d68/a05527_1a70c31451894ca2cca4f19d9db6ec823e" prot="public" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t castor3d::SsaoConfigUbo::Configuration::bendStepCount</definition>
+        <argsstring></argsstring>
+        <name>bendStepCount</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="82" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d68/a05527_1a1ec6fc12f954fa410411277a85729def" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SsaoConfigUbo::Configuration::bendStepSize</definition>
+        <argsstring></argsstring>
+        <name>bendStepSize</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="84" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Ubos/SsaoConfigUbo.hpp" line="20" column="1" bodyfile="Shader/Ubos/SsaoConfigUbo.hpp" bodystart="19" bodyend="85"/>
+    <listofallmembers>
+      <member refid="d3/d68/a05527_1a70c31451894ca2cca4f19d9db6ec823e" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo::Configuration</scope><name>bendStepCount</name></member>
+      <member refid="d3/d68/a05527_1a1ec6fc12f954fa410411277a85729def" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo::Configuration</scope><name>bendStepSize</name></member>
+      <member refid="d3/d68/a05527_1ac0ece4b6b607491b15eda528266fdd5f" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo::Configuration</scope><name>bias</name></member>
+      <member refid="d3/d68/a05527_1a7348408e207f5317d27ad0b6ece71937" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo::Configuration</scope><name>blurHighQuality</name></member>
+      <member refid="d3/d68/a05527_1a502bc84f81ba88af1496a3498744d149" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo::Configuration</scope><name>blurRadius</name></member>
+      <member refid="d3/d68/a05527_1a3bbc51d5286d6fb8ff39601373c5a871" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo::Configuration</scope><name>blurStepSize</name></member>
+      <member refid="d3/d68/a05527_1a9ca182372771db170d9f614949fd572b" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo::Configuration</scope><name>edgeSharpness</name></member>
+      <member refid="d3/d68/a05527_1aba3cba15cfa9d23664b51843e83ecbbb" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo::Configuration</scope><name>farPlaneZ</name></member>
+      <member refid="d3/d68/a05527_1a37edf583bbcc21dead8b225a1d91df1e" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo::Configuration</scope><name>highQuality</name></member>
+      <member refid="d3/d68/a05527_1aecd75190c67948a0ba097012c14b52b2" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo::Configuration</scope><name>intensity</name></member>
+      <member refid="d3/d68/a05527_1a7cbc4ca4ff5e00694d43a49031bdb3fa" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo::Configuration</scope><name>intensityDivR6</name></member>
+      <member refid="d3/d68/a05527_1a365ae9ad9788c36bcaf788841d252052" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo::Configuration</scope><name>invRadius</name></member>
+      <member refid="d3/d68/a05527_1a42049f903888de38eef0619e434fc40b" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo::Configuration</scope><name>invRadius2</name></member>
+      <member refid="d3/d68/a05527_1a1c7f9d555e7398e0d8ce75dd52dc35fb" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo::Configuration</scope><name>logMaxOffset</name></member>
+      <member refid="d3/d68/a05527_1aee3c9038cbdbdffbbcb8c65d67045254" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo::Configuration</scope><name>maxMipLevel</name></member>
+      <member refid="d3/d68/a05527_1a90af9002984d593ce0dbb5de2cb07a29" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo::Configuration</scope><name>minRadius</name></member>
+      <member refid="d3/d68/a05527_1a270b36ea18aaffeed7d6a64ce17afafc" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo::Configuration</scope><name>numSamples</name></member>
+      <member refid="d3/d68/a05527_1afecc8345db26f649ddd68857342e59fd" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo::Configuration</scope><name>numSpiralTurns</name></member>
+      <member refid="d3/d68/a05527_1ab5956a5657e1727dcbcb6ec394add301" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo::Configuration</scope><name>projInfo</name></member>
+      <member refid="d3/d68/a05527_1a3dd9897e7da464189a70dc4e7e2d363f" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo::Configuration</scope><name>projScale</name></member>
+      <member refid="d3/d68/a05527_1a89939b659f0375a1540fcc43469b559f" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo::Configuration</scope><name>radius</name></member>
+      <member refid="d3/d68/a05527_1a13fb062602429e48e0b257b337d3f913" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo::Configuration</scope><name>radius2</name></member>
+      <member refid="d3/d68/a05527_1ac8e6c0ea651f5bea6e64c105f756731c" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo::Configuration</scope><name>variation</name></member>
+      <member refid="d3/d68/a05527_1abda82653e6e62627fe4940c46ccd3f38" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfigUbo::Configuration</scope><name>viewMatrix</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

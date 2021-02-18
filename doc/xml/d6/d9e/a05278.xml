@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d6/d9e/a05278" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::PassBuffer::ExtendedData</compoundname>
+    <includes local="no">PassBuffer.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d6/d9e/a05278_1a52235bf5326f54e46433ae707378e4dc" prot="public" static="no" mutable="no">
+        <type><ref refid="dd/d95/a05274" kindref="compound">RgbaColour</ref></type>
+        <definition>RgbaColour castor3d::PassBuffer::ExtendedData::sssInfo</definition>
+        <argsstring></argsstring>
+        <name>sssInfo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The Subsurface Scattering informations. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/PassBuffer/PassBuffer.hpp" line="195" column="1" bodyfile="Shader/PassBuffer/PassBuffer.hpp" bodystart="195" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d9e/a05278_1aed029da5255b805fc1e576f1814259f9" prot="public" static="no" mutable="no">
+        <type>std::array&lt; <ref refid="dd/d95/a05274" kindref="compound">RgbaColour</ref>, 10u &gt;</type>
+        <definition>std::array&lt; RgbaColour, 10u &gt; castor3d::PassBuffer::ExtendedData::transmittanceProfile</definition>
+        <argsstring></argsstring>
+        <name>transmittanceProfile</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The luminosity transmittance profile data. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/PassBuffer/PassBuffer.hpp" line="198" column="1" bodyfile="Shader/PassBuffer/PassBuffer.hpp" bodystart="198" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Common passes extended data. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2617">
+        <label>castor3d::PassBuffer::ExtendedData</label>
+        <link refid="d6/d9e/a05278"/>
+        <childnode refid="2618" relation="usage">
+          <edgelabel>sssInfo</edgelabel>
+        </childnode>
+        <childnode refid="2619" relation="usage">
+          <edgelabel>transmittanceProfile</edgelabel>
+        </childnode>
+      </node>
+      <node id="2621">
+        <label>T</label>
+      </node>
+      <node id="2620">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="2621" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="2618">
+        <label>castor3d::PassBuffer::RgbaColour</label>
+        <link refid="dd/d95/a05274"/>
+      </node>
+      <node id="2619">
+        <label>std::array&lt; castor3d::PassBuffer::RgbaColour, 10u &gt;</label>
+        <childnode refid="2618" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="2620" relation="template-instance">
+          <edgelabel>&lt; castor3d::PassBuffer::RgbaColour, 10u &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/PassBuffer/PassBuffer.hpp" line="192" column="1" bodyfile="Shader/PassBuffer/PassBuffer.hpp" bodystart="191" bodyend="199"/>
+    <listofallmembers>
+      <member refid="d6/d9e/a05278_1a52235bf5326f54e46433ae707378e4dc" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::ExtendedData</scope><name>sssInfo</name></member>
+      <member refid="d6/d9e/a05278_1aed029da5255b805fc1e576f1814259f9" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::ExtendedData</scope><name>transmittanceProfile</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

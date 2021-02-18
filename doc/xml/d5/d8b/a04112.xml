@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d5/d8b/a04112" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::OverlayFactory</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::Factory&lt; OverlayCategory, OverlayType &gt;</basecompoundref>
+    <includes local="no">OverlayFactory.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/d8b/a04112_1aa44bc6e7bb3bff7b7ea4f7a0477da430" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::OverlayFactory::OverlayFactory</definition>
+        <argsstring>()</argsstring>
+        <name>OverlayFactory</name>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayFactory.hpp" line="23" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d8b/a04112_1a1641b6641ed4763a801163c2d38676b3" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::OverlayFactory::~OverlayFactory</definition>
+        <argsstring>()</argsstring>
+        <name>~OverlayFactory</name>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayFactory.hpp" line="30" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2455">
+        <label>castor3d::OverlayFactory</label>
+        <link refid="d5/d8b/a04112"/>
+        <childnode refid="2456" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2456">
+        <label>castor::Factory&lt; OverlayCategory, OverlayType &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2457">
+        <label>castor3d::OverlayFactory</label>
+        <link refid="d5/d8b/a04112"/>
+        <childnode refid="2458" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2458">
+        <label>castor::Factory&lt; OverlayCategory, OverlayType &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Overlay/OverlayFactory.hpp" line="15" column="1" bodyfile="Overlay/OverlayFactory.hpp" bodystart="13" bodyend="31"/>
+    <listofallmembers>
+      <member refid="d5/d8b/a04112_1aa44bc6e7bb3bff7b7ea4f7a0477da430" prot="public" virt="non-virtual"><scope>castor3d::OverlayFactory</scope><name>OverlayFactory</name></member>
+      <member refid="d5/d8b/a04112_1a1641b6641ed4763a801163c2d38676b3" prot="public" virt="virtual"><scope>castor3d::OverlayFactory</scope><name>~OverlayFactory</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

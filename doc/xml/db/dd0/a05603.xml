@@ -1,0 +1,429 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="db/dd0/a05603" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::VoxelData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">StructInstance</basecompoundref>
+    <includes local="no">VoxelizerUbo.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="db/dd0/a05603_1a4b517948ec73e5630738368b977ac308" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::VoxelData::gridConv</definition>
+        <argsstring></argsstring>
+        <name>gridConv</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="35" column="1" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dd0/a05603_1a76a7623a22cfdf2917eb72155874b793" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::VoxelData::radiance</definition>
+        <argsstring></argsstring>
+        <name>radiance</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="36" column="1" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dd0/a05603_1ae1c6b8dd855f82069e7ccec438ac5d0d" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::VoxelData::other</definition>
+        <argsstring></argsstring>
+        <name>other</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="37" column="1" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dd0/a05603_1a9bba7859b379287bf5ceabc81e28a194" prot="public" static="no" mutable="no">
+        <type>sdw::UVec4</type>
+        <definition>sdw::UVec4 castor3d::shader::VoxelData::status</definition>
+        <argsstring></argsstring>
+        <name>status</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="38" column="1" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dd0/a05603_1a5ddcc24ee3265decf781df770d42c89d" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::VoxelData::worldToGrid</definition>
+        <argsstring></argsstring>
+        <name>worldToGrid</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="40" column="1" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dd0/a05603_1a24c7fb9fc5dea56f10f3d3d4e494555c" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::VoxelData::gridToWorld</definition>
+        <argsstring></argsstring>
+        <name>gridToWorld</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="41" column="1" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dd0/a05603_1a72d999d766be6df5cb2a3bc48f9ac3c9" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::VoxelData::clipToGrid</definition>
+        <argsstring></argsstring>
+        <name>clipToGrid</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="42" column="1" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dd0/a05603_1aa129b983e32ea939ce95d94491c39ca6" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::VoxelData::gridToClip</definition>
+        <argsstring></argsstring>
+        <name>gridToClip</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="43" column="1" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dd0/a05603_1ac8452f42664c1b7cba7cdcd2edbbda52" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::VoxelData::radianceMaxDistance</definition>
+        <argsstring></argsstring>
+        <name>radianceMaxDistance</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="44" column="1" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dd0/a05603_1a523940c657ac7affa6952e417ad66f2f" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::VoxelData::radianceMips</definition>
+        <argsstring></argsstring>
+        <name>radianceMips</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="45" column="1" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dd0/a05603_1a214c02f34fb2d58bd74c57eb9d49f810" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::VoxelData::radianceNumCones</definition>
+        <argsstring></argsstring>
+        <name>radianceNumCones</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="46" column="1" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dd0/a05603_1a65658fe9946d6dd4bd8e66bc37b0cf18" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::VoxelData::radianceNumConesInv</definition>
+        <argsstring></argsstring>
+        <name>radianceNumConesInv</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="47" column="1" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dd0/a05603_1a3ba7b3dc085ba6f2fdab46efba813e0a" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::VoxelData::gridCenter</definition>
+        <argsstring></argsstring>
+        <name>gridCenter</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="48" column="1" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dd0/a05603_1a692caa2804fc10b0eacee9d61474f24d" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::VoxelData::rayStepSize</definition>
+        <argsstring></argsstring>
+        <name>rayStepSize</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="49" column="1" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dd0/a05603_1a6014bf441369f9be890715f99b063488" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::VoxelData::enabled</definition>
+        <argsstring></argsstring>
+        <name>enabled</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="50" column="1" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dd0/a05603_1af098e6b84c04b793830ff6461a2e21f6" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::VoxelData::enableConservativeRasterization</definition>
+        <argsstring></argsstring>
+        <name>enableConservativeRasterization</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="51" column="1" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dd0/a05603_1a2c64dbf3f02ae41c7d90cde43a61c3ac" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::VoxelData::enableOcclusion</definition>
+        <argsstring></argsstring>
+        <name>enableOcclusion</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="52" column="1" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dd0/a05603_1a37c3a383a21fe77db6b2d3995fea5634" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::VoxelData::enableSecondaryBounce</definition>
+        <argsstring></argsstring>
+        <name>enableSecondaryBounce</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="53" column="1" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/dd0/a05603_1ac1f87494e367538ba2b944a5e798ad67" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::VoxelData::VoxelData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>VoxelData</name>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="22" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dd0/a05603_1a001d2bb7f434502eb00bd061096263fe" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="db/dd0/a05603" kindref="compound">VoxelData</ref> &amp;</type>
+        <definition>C3D_API VoxelData&amp; castor3d::shader::VoxelData::operator=</definition>
+        <argsstring>(VoxelData const &amp;rhs)</argsstring>
+        <name>operator=</name>
+        <param>
+          <type><ref refid="db/dd0/a05603" kindref="compound">VoxelData</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="25" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dd0/a05603_1ae143d3937bdc8794c0bd08bf847ce359" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::VoxelData::worldToTex</definition>
+        <argsstring>(sdw::Vec3 const &amp;wsPosition) const</argsstring>
+        <name>worldToTex</name>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsPosition</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="30" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dd0/a05603_1ae9fd67ce6168cee6b2ab0b4964e9f55f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::IVec3</type>
+        <definition>C3D_API sdw::IVec3 castor3d::shader::VoxelData::worldToImg</definition>
+        <argsstring>(sdw::Vec3 const &amp;wsPosition) const</argsstring>
+        <name>worldToImg</name>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsPosition</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="31" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dd0/a05603_1a590eb67897ebce10136dd1d228ecaf22" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::VoxelData::worldToClip</definition>
+        <argsstring>(sdw::Vec3 const &amp;wsPosition) const</argsstring>
+        <name>worldToClip</name>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsPosition</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="32" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="db/dd0/a05603_1a3e1c39adf7e5362fa4c12a2bd705dce2" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::type::StructPtr</type>
+        <definition>static C3D_API ast::type::StructPtr castor3d::shader::VoxelData::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="27" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dd0/a05603_1a79a008edb1563c64bc07a85546f4c473" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::unique_ptr&lt; sdw::Struct &gt;</type>
+        <definition>static C3D_API std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::VoxelData::declare</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>declare</name>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="28" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3580">
+        <label>castor3d::shader::VoxelData</label>
+        <link refid="db/dd0/a05603"/>
+        <childnode refid="3581" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3581">
+        <label>StructInstance</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3582">
+        <label>castor3d::shader::VoxelData</label>
+        <link refid="db/dd0/a05603"/>
+        <childnode refid="3583" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3583">
+        <label>StructInstance</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Ubos/VoxelizerUbo.hpp" line="21" column="1" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="19" bodyend="58"/>
+    <listofallmembers>
+      <member refid="db/dd0/a05603_1a72d999d766be6df5cb2a3bc48f9ac3c9" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>clipToGrid</name></member>
+      <member refid="db/dd0/a05603_1a79a008edb1563c64bc07a85546f4c473" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>declare</name></member>
+      <member refid="db/dd0/a05603_1af098e6b84c04b793830ff6461a2e21f6" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>enableConservativeRasterization</name></member>
+      <member refid="db/dd0/a05603_1a6014bf441369f9be890715f99b063488" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>enabled</name></member>
+      <member refid="db/dd0/a05603_1a2c64dbf3f02ae41c7d90cde43a61c3ac" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>enableOcclusion</name></member>
+      <member refid="db/dd0/a05603_1a37c3a383a21fe77db6b2d3995fea5634" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>enableSecondaryBounce</name></member>
+      <member refid="db/dd0/a05603_1a3ba7b3dc085ba6f2fdab46efba813e0a" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>gridCenter</name></member>
+      <member refid="db/dd0/a05603_1a4b517948ec73e5630738368b977ac308" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>gridConv</name></member>
+      <member refid="db/dd0/a05603_1aa129b983e32ea939ce95d94491c39ca6" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>gridToClip</name></member>
+      <member refid="db/dd0/a05603_1a24c7fb9fc5dea56f10f3d3d4e494555c" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>gridToWorld</name></member>
+      <member refid="db/dd0/a05603_1a3e1c39adf7e5362fa4c12a2bd705dce2" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>makeType</name></member>
+      <member refid="db/dd0/a05603_1a001d2bb7f434502eb00bd061096263fe" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>operator=</name></member>
+      <member refid="db/dd0/a05603_1ae1c6b8dd855f82069e7ccec438ac5d0d" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>other</name></member>
+      <member refid="db/dd0/a05603_1a76a7623a22cfdf2917eb72155874b793" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>radiance</name></member>
+      <member refid="db/dd0/a05603_1ac8452f42664c1b7cba7cdcd2edbbda52" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>radianceMaxDistance</name></member>
+      <member refid="db/dd0/a05603_1a523940c657ac7affa6952e417ad66f2f" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>radianceMips</name></member>
+      <member refid="db/dd0/a05603_1a214c02f34fb2d58bd74c57eb9d49f810" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>radianceNumCones</name></member>
+      <member refid="db/dd0/a05603_1a65658fe9946d6dd4bd8e66bc37b0cf18" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>radianceNumConesInv</name></member>
+      <member refid="db/dd0/a05603_1a692caa2804fc10b0eacee9d61474f24d" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>rayStepSize</name></member>
+      <member refid="db/dd0/a05603_1a9bba7859b379287bf5ceabc81e28a194" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>status</name></member>
+      <member refid="db/dd0/a05603_1ac1f87494e367538ba2b944a5e798ad67" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>VoxelData</name></member>
+      <member refid="db/dd0/a05603_1a590eb67897ebce10136dd1d228ecaf22" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>worldToClip</name></member>
+      <member refid="db/dd0/a05603_1a5ddcc24ee3265decf781df770d42c89d" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>worldToGrid</name></member>
+      <member refid="db/dd0/a05603_1ae9fd67ce6168cee6b2ab0b4964e9f55f" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>worldToImg</name></member>
+      <member refid="db/dd0/a05603_1ae143d3937bdc8794c0bd08bf847ce359" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelData</scope><name>worldToTex</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,446 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="df/d25/a04464" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::StencilPass</compoundname>
+    <includes local="no">StencilPass.hpp</includes>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="df/d25/a04464_1a09fa26b2c0a62af56fd5bd971ded3853" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::Semaphore const  &amp;</type>
+        <definition>ashes::Semaphore const&amp; castor3d::StencilPass::getSemaphore</definition>
+        <argsstring>() const</argsstring>
+        <name>getSemaphore</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Getters. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/StencilPass.hpp" line="89" column="1" bodyfile="Render/Passes/StencilPass.hpp" bodystart="89" bodyend="93"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="df/d25/a04464_1af13d654dbd3668bf8a3010327d1dec6f" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/dbb/a02520" kindref="compound">Engine</ref> const  &amp;</type>
+        <definition>Engine const&amp; castor3d::StencilPass::m_engine</definition>
+        <argsstring></argsstring>
+        <name>m_engine</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/StencilPass.hpp" line="97" column="1" bodyfile="Render/Passes/StencilPass.hpp" bodystart="97" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d25/a04464_1a21345630b30dad001142b496616b80e7" prot="private" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::StencilPass::m_prefix</definition>
+        <argsstring></argsstring>
+        <name>m_prefix</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/StencilPass.hpp" line="98" column="1" bodyfile="Render/Passes/StencilPass.hpp" bodystart="98" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d25/a04464_1a66ee4ae8e648ce0f2c9a233d844abd6b" prot="private" static="no" mutable="no">
+        <type>ashes::ImageView const  &amp;</type>
+        <definition>ashes::ImageView const&amp; castor3d::StencilPass::m_depthView</definition>
+        <argsstring></argsstring>
+        <name>m_depthView</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/StencilPass.hpp" line="99" column="1" bodyfile="Render/Passes/StencilPass.hpp" bodystart="99" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d25/a04464_1a9251291b1e276c8577d3dc5b42799406" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/d0e/a05496" kindref="compound">MatrixUbo</ref> &amp;</type>
+        <definition>MatrixUbo&amp; castor3d::StencilPass::m_matrixUbo</definition>
+        <argsstring></argsstring>
+        <name>m_matrixUbo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/StencilPass.hpp" line="100" column="1" bodyfile="Render/Passes/StencilPass.hpp" bodystart="100" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d25/a04464_1a82d8fe45c8e8adeca64b97804a18c019" prot="private" static="no" mutable="no">
+        <type><ref refid="d8/d9a/a02296" kindref="compound">UniformBufferT</ref>&lt; <ref refid="da/d9f/a05584" kindref="compound">ModelMatrixUboConfiguration</ref> &gt; const  &amp;</type>
+        <definition>UniformBufferT&lt; ModelMatrixUboConfiguration &gt; const&amp; castor3d::StencilPass::m_modelMatrixUbo</definition>
+        <argsstring></argsstring>
+        <name>m_modelMatrixUbo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/StencilPass.hpp" line="101" column="1" bodyfile="Render/Passes/StencilPass.hpp" bodystart="101" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d25/a04464_1ae647962de14ffa56d763497deb1d1e1b" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSetLayoutPtr</type>
+        <definition>ashes::DescriptorSetLayoutPtr castor3d::StencilPass::m_descriptorLayout</definition>
+        <argsstring></argsstring>
+        <name>m_descriptorLayout</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/StencilPass.hpp" line="102" column="1" bodyfile="Render/Passes/StencilPass.hpp" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d25/a04464_1a2442df588fb5c2681fb11a3ccb1091c2" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSetPoolPtr</type>
+        <definition>ashes::DescriptorSetPoolPtr castor3d::StencilPass::m_descriptorPool</definition>
+        <argsstring></argsstring>
+        <name>m_descriptorPool</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/StencilPass.hpp" line="103" column="1" bodyfile="Render/Passes/StencilPass.hpp" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d25/a04464_1ab17983dbbc5c201d6008d33b1cb7fbd3" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSetPtr</type>
+        <definition>ashes::DescriptorSetPtr castor3d::StencilPass::m_descriptorSet</definition>
+        <argsstring></argsstring>
+        <name>m_descriptorSet</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/StencilPass.hpp" line="104" column="1" bodyfile="Render/Passes/StencilPass.hpp" bodystart="104" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d25/a04464_1aa7886f0643c01724637d9854346fd6f8" prot="private" static="no" mutable="no">
+        <type>ashes::RenderPassPtr</type>
+        <definition>ashes::RenderPassPtr castor3d::StencilPass::m_renderPass</definition>
+        <argsstring></argsstring>
+        <name>m_renderPass</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/StencilPass.hpp" line="105" column="1" bodyfile="Render/Passes/StencilPass.hpp" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d25/a04464_1a4ef5a1857c44b9edba8e61f793e05fce" prot="private" static="no" mutable="no">
+        <type>ashes::FrameBufferPtr</type>
+        <definition>ashes::FrameBufferPtr castor3d::StencilPass::m_frameBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_frameBuffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/StencilPass.hpp" line="106" column="1" bodyfile="Render/Passes/StencilPass.hpp" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d25/a04464_1a3bb29a2f6babfee748f0af509ee310ca" prot="private" static="no" mutable="no">
+        <type>ashes::PipelineLayoutPtr</type>
+        <definition>ashes::PipelineLayoutPtr castor3d::StencilPass::m_pipelineLayout</definition>
+        <argsstring></argsstring>
+        <name>m_pipelineLayout</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/StencilPass.hpp" line="107" column="1" bodyfile="Render/Passes/StencilPass.hpp" bodystart="107" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d25/a04464_1a0981ffe7699fe43be4cbf43e6a8f044e" prot="private" static="no" mutable="no">
+        <type>ashes::PipelineShaderStageCreateInfoArray</type>
+        <definition>ashes::PipelineShaderStageCreateInfoArray castor3d::StencilPass::m_program</definition>
+        <argsstring></argsstring>
+        <name>m_program</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/StencilPass.hpp" line="108" column="1" bodyfile="Render/Passes/StencilPass.hpp" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d25/a04464_1a2cd1f74e34f8a18bcb20fca0080d83e7" prot="private" static="no" mutable="no">
+        <type>ashes::GraphicsPipelinePtr</type>
+        <definition>ashes::GraphicsPipelinePtr castor3d::StencilPass::m_pipeline</definition>
+        <argsstring></argsstring>
+        <name>m_pipeline</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/StencilPass.hpp" line="109" column="1" bodyfile="Render/Passes/StencilPass.hpp" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d25/a04464_1a6ccdd5aab82e2d7b7c47c62be9811e0e" prot="private" static="no" mutable="no">
+        <type>ashes::VertexBufferBase const  *</type>
+        <definition>ashes::VertexBufferBase const* castor3d::StencilPass::m_vbo</definition>
+        <argsstring></argsstring>
+        <name>m_vbo</name>
+        <initializer>{ nullptr }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/StencilPass.hpp" line="110" column="1" bodyfile="Render/Passes/StencilPass.hpp" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d25/a04464_1a98e2e842fc80d738f40405e8533fa287" prot="private" static="no" mutable="no">
+        <type>ashes::CommandBufferPtr</type>
+        <definition>ashes::CommandBufferPtr castor3d::StencilPass::m_commandBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_commandBuffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/StencilPass.hpp" line="111" column="1" bodyfile="Render/Passes/StencilPass.hpp" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d25/a04464_1a299a808808cd54b0a5f6df9a5b117981" prot="private" static="no" mutable="no">
+        <type>ashes::SemaphorePtr</type>
+        <definition>ashes::SemaphorePtr castor3d::StencilPass::m_finished</definition>
+        <argsstring></argsstring>
+        <name>m_finished</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/StencilPass.hpp" line="112" column="1" bodyfile="Render/Passes/StencilPass.hpp" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/d25/a04464_1a8b9784c101b82d33b6261f0415438445" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::StencilPass::StencilPass</definition>
+        <argsstring>(Engine const &amp;engine, castor::String const &amp;prefix, ashes::ImageView const &amp;depthView, MatrixUbo &amp;matrixUbo, UniformBufferT&lt; ModelMatrixUboConfiguration &gt; const &amp;modelMatrixUbo)</argsstring>
+        <name>StencilPass</name>
+        <param>
+          <type><ref refid="dc/dbb/a02520" kindref="compound">Engine</ref> const &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>prefix</declname>
+        </param>
+        <param>
+          <type>ashes::ImageView const &amp;</type>
+          <declname>depthView</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d0e/a05496" kindref="compound">MatrixUbo</ref> &amp;</type>
+          <declname>matrixUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d9a/a02296" kindref="compound">UniformBufferT</ref>&lt; <ref refid="da/d9f/a05584" kindref="compound">ModelMatrixUboConfiguration</ref> &gt; const &amp;</type>
+          <declname>modelMatrixUbo</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The engine. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">prefix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass name&apos;s prefix. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">depthView</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The depth buffer view. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">matrixUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The matrix UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">modelMatrixUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The model matrix UBO. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/StencilPass.hpp" line="41" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d25/a04464_1af2402375a3b0510c788fdebe84cfd2ee" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::StencilPass::initialise</definition>
+        <argsstring>(RenderDevice const &amp;device, ashes::PipelineVertexInputStateCreateInfo const &amp;vertexLayout, ashes::VertexBufferBase &amp;vbo)</argsstring>
+        <name>initialise</name>
+        <param>
+          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>ashes::PipelineVertexInputStateCreateInfo const &amp;</type>
+          <declname>vertexLayout</declname>
+        </param>
+        <param>
+          <type>ashes::VertexBufferBase &amp;</type>
+          <declname>vbo</declname>
+        </param>
+        <briefdescription>
+<para>Initialises the program and its pipeline. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">vertexLayout</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The vertex buffer layout. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">vbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The vertex buffer containing the object to render. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/StencilPass.hpp" line="58" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d25/a04464_1a2fa65ad2647bdd3e509d4322cef91565" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::StencilPass::cleanup</definition>
+        <argsstring>()</argsstring>
+        <name>cleanup</name>
+        <briefdescription>
+<para>Cleans up the program and its pipeline. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/StencilPass.hpp" line="67" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d25/a04464_1a46175e0c00dc4af4118e98c63634993c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ashes::Semaphore const  &amp;</type>
+        <definition>ashes::Semaphore const&amp; castor3d::StencilPass::render</definition>
+        <argsstring>(RenderDevice const &amp;device, ashes::Semaphore const &amp;toWait)</argsstring>
+        <name>render</name>
+        <param>
+          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>ashes::Semaphore const &amp;</type>
+          <declname>toWait</declname>
+        </param>
+        <briefdescription>
+<para>Renders the stencil pass. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">toWait</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The semaphore to wait. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/StencilPass.hpp" line="78" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Passes/StencilPass.hpp" line="23" column="1" bodyfile="Render/Passes/StencilPass.hpp" bodystart="22" bodyend="113"/>
+    <listofallmembers>
+      <member refid="df/d25/a04464_1a2fa65ad2647bdd3e509d4322cef91565" prot="public" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>cleanup</name></member>
+      <member refid="df/d25/a04464_1a09fa26b2c0a62af56fd5bd971ded3853" prot="public" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>getSemaphore</name></member>
+      <member refid="df/d25/a04464_1af2402375a3b0510c788fdebe84cfd2ee" prot="public" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>initialise</name></member>
+      <member refid="df/d25/a04464_1a98e2e842fc80d738f40405e8533fa287" prot="private" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>m_commandBuffer</name></member>
+      <member refid="df/d25/a04464_1a66ee4ae8e648ce0f2c9a233d844abd6b" prot="private" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>m_depthView</name></member>
+      <member refid="df/d25/a04464_1ae647962de14ffa56d763497deb1d1e1b" prot="private" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>m_descriptorLayout</name></member>
+      <member refid="df/d25/a04464_1a2442df588fb5c2681fb11a3ccb1091c2" prot="private" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>m_descriptorPool</name></member>
+      <member refid="df/d25/a04464_1ab17983dbbc5c201d6008d33b1cb7fbd3" prot="private" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>m_descriptorSet</name></member>
+      <member refid="df/d25/a04464_1af13d654dbd3668bf8a3010327d1dec6f" prot="private" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>m_engine</name></member>
+      <member refid="df/d25/a04464_1a299a808808cd54b0a5f6df9a5b117981" prot="private" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>m_finished</name></member>
+      <member refid="df/d25/a04464_1a4ef5a1857c44b9edba8e61f793e05fce" prot="private" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>m_frameBuffer</name></member>
+      <member refid="df/d25/a04464_1a9251291b1e276c8577d3dc5b42799406" prot="private" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>m_matrixUbo</name></member>
+      <member refid="df/d25/a04464_1a82d8fe45c8e8adeca64b97804a18c019" prot="private" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>m_modelMatrixUbo</name></member>
+      <member refid="df/d25/a04464_1a2cd1f74e34f8a18bcb20fca0080d83e7" prot="private" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>m_pipeline</name></member>
+      <member refid="df/d25/a04464_1a3bb29a2f6babfee748f0af509ee310ca" prot="private" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>m_pipelineLayout</name></member>
+      <member refid="df/d25/a04464_1a21345630b30dad001142b496616b80e7" prot="private" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>m_prefix</name></member>
+      <member refid="df/d25/a04464_1a0981ffe7699fe43be4cbf43e6a8f044e" prot="private" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>m_program</name></member>
+      <member refid="df/d25/a04464_1aa7886f0643c01724637d9854346fd6f8" prot="private" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>m_renderPass</name></member>
+      <member refid="df/d25/a04464_1a6ccdd5aab82e2d7b7c47c62be9811e0e" prot="private" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>m_vbo</name></member>
+      <member refid="df/d25/a04464_1a46175e0c00dc4af4118e98c63634993c" prot="public" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>render</name></member>
+      <member refid="df/d25/a04464_1a8b9784c101b82d33b6261f0415438445" prot="public" virt="non-virtual"><scope>castor3d::StencilPass</scope><name>StencilPass</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

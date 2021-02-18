@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d5/d8e/a04874" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::OpaquePassResult</compoundname>
+    <basecompoundref refid="d1/dcc/a04250" prot="public" virt="non-virtual">castor3d::GBufferT&lt; DsTexture &gt;</basecompoundref>
+    <includes local="no">OpaquePassResult.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/d8e/a04874_1ae2474c2f848a859f730ff0181cc52e52" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::OpaquePassResult::OpaquePassResult</definition>
+        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, TextureUnit const &amp;depthTexture, TextureUnit const &amp;velocityTexture)</argsstring>
+        <name>OpaquePassResult</name>
+        <param>
+          <type><ref refid="df/d9b/a02514" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d14/a02658" kindref="compound">TextureUnit</ref> const &amp;</type>
+          <declname>depthTexture</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d14/a02658" kindref="compound">TextureUnit</ref> const &amp;</type>
+          <declname>velocityTexture</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/OpaquePassResult.hpp" line="19" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2405">
+        <label>castor3d::GBufferT&lt; DsTexture &gt;</label>
+        <link refid="d1/dcc/a04250"/>
+        <childnode refid="2406" relation="private-inheritance">
+        </childnode>
+        <childnode refid="2408" relation="template-instance">
+          <edgelabel>&lt; DsTexture &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2407">
+        <label>Named</label>
+      </node>
+      <node id="2408">
+        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
+        <link refid="d1/dcc/a04250"/>
+        <childnode refid="2406" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="2406">
+        <label>castor3d::GBufferBase</label>
+        <link refid="d1/d5a/a04246"/>
+        <childnode refid="2407" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2404">
+        <label>castor3d::OpaquePassResult</label>
+        <link refid="d5/d8e/a04874"/>
+        <childnode refid="2405" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2410">
+        <label>castor3d::GBufferT&lt; DsTexture &gt;</label>
+        <link refid="d1/dcc/a04250"/>
+        <childnode refid="2411" relation="private-inheritance">
+        </childnode>
+        <childnode refid="2413" relation="usage">
+          <edgelabel>m_engine</edgelabel>
+        </childnode>
+        <childnode refid="2415" relation="template-instance">
+          <edgelabel>&lt; DsTexture &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2412">
+        <label>Named</label>
+      </node>
+      <node id="2414">
+        <label>castor::Unique&lt; Engine &gt;</label>
+      </node>
+      <node id="2413">
+        <label>castor3d::Engine</label>
+        <link refid="df/d9b/a02514"/>
+        <childnode refid="2414" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2415">
+        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
+        <link refid="d1/dcc/a04250"/>
+        <childnode refid="2411" relation="private-inheritance">
+        </childnode>
+        <childnode refid="2413" relation="usage">
+          <edgelabel>m_engine</edgelabel>
+        </childnode>
+      </node>
+      <node id="2411">
+        <label>castor3d::GBufferBase</label>
+        <link refid="d1/d5a/a04246"/>
+        <childnode refid="2412" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2409">
+        <label>castor3d::OpaquePassResult</label>
+        <link refid="d5/d8e/a04874"/>
+        <childnode refid="2410" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Technique/Opaque/OpaquePassResult.hpp" line="17" column="1" bodyfile="Render/Technique/Opaque/OpaquePassResult.hpp" bodystart="15" bodyend="23"/>
+    <listofallmembers>
+      <member refid="d1/dcc/a04250_1a07ee2a84c48f234617c05d6d5c4b6c33" prot="public" virt="non-virtual"><scope>castor3d::OpaquePassResult</scope><name>begin</name></member>
+      <member refid="d1/dcc/a04250_1aa0de394aee0ba9d95e5c04da314a9cb4" prot="public" virt="non-virtual"><scope>castor3d::OpaquePassResult</scope><name>begin</name></member>
+      <member refid="d1/dcc/a04250_1a77d65937285e0954c33bc1834b099dbf" prot="public" virt="non-virtual"><scope>castor3d::OpaquePassResult</scope><name>cbegin</name></member>
+      <member refid="d1/dcc/a04250_1a0ca55ac3a4cfb4c27acbd6867f420a41" prot="public" virt="non-virtual"><scope>castor3d::OpaquePassResult</scope><name>cend</name></member>
+      <member refid="d1/dcc/a04250_1a2dbf9ef234080f55751db9f2ced2db94" prot="public" virt="non-virtual"><scope>castor3d::OpaquePassResult</scope><name>cleanup</name></member>
+      <member refid="d1/dcc/a04250_1a2ed3e0a1d7b905e8393d6f1e3b67f339" prot="public" virt="non-virtual"><scope>castor3d::OpaquePassResult</scope><name>end</name></member>
+      <member refid="d1/dcc/a04250_1ad9a2382a1c40e83a016a77209bee05fd" prot="public" virt="non-virtual"><scope>castor3d::OpaquePassResult</scope><name>end</name></member>
+      <member refid="d1/dcc/a04250_1afc858ac06674fbee5bcc31d1eb051f21" prot="public" virt="non-virtual"><scope>castor3d::OpaquePassResult</scope><name>GBufferT</name></member>
+      <member refid="d1/dcc/a04250_1a48c1db122e270552414435855b31f23d" prot="public" virt="non-virtual"><scope>castor3d::OpaquePassResult</scope><name>GBufferT</name></member>
+      <member refid="d1/dcc/a04250_1adbb549264af799a0ca09aafab55df3b8" prot="public" virt="non-virtual"><scope>castor3d::OpaquePassResult</scope><name>initialise</name></member>
+      <member refid="d1/dcc/a04250_1abfc84e342baf1448ab71cb739138f89b" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePassResult</scope><name>m_engine</name></member>
+      <member refid="d1/dcc/a04250_1a1cd0629caecd95cfa73fc857e92be07a" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePassResult</scope><name>m_owned</name></member>
+      <member refid="d1/dcc/a04250_1ac693f4659ea2014569d916d03013f68e" prot="protected" virt="non-virtual"><scope>castor3d::OpaquePassResult</scope><name>m_result</name></member>
+      <member refid="d5/d8e/a04874_1ae2474c2f848a859f730ff0181cc52e52" prot="public" virt="non-virtual"><scope>castor3d::OpaquePassResult</scope><name>OpaquePassResult</name></member>
+      <member refid="d1/dcc/a04250_1a55a704f02c3e73ede1b8ed6fb78e79d5" prot="public" virt="non-virtual"><scope>castor3d::OpaquePassResult</scope><name>operator[]</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

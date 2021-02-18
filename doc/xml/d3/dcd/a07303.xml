@@ -1,0 +1,244 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d3/dcd/a07303" kind="page">
+    <compoundname>rendering</compoundname>
+    <title>Render explanations</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<sect1 id="d3/dcd/a07303_1general">
+<title>General</title>
+<para>The rendering in Castor3D is splitted in several passes:<linebreak/>
+ <itemizedlist>
+<listitem>
+<para>Environment passes </para>
+</listitem>
+<listitem>
+<para>Shadow passes </para>
+</listitem>
+<listitem>
+<para>Deferred rendering for opaque objects </para>
+</listitem>
+<listitem>
+<para>Background pass </para>
+</listitem>
+<listitem>
+<para>Weighted Blended rendering for transparent objects </para>
+</listitem>
+</itemizedlist>
+<image type="html" name="render.png"></image>
+ <linebreak/>
+ <linebreak/>
+ </para>
+</sect1>
+<sect1 id="d3/dcd/a07303_1environment">
+<title>Environment pass</title>
+<para>This pass generates the environment map for one node that needs it.<linebreak/>
+ Note that multiple nodes can need a different environment map, thus trigger multiple environment passes.<linebreak/>
+ It is splitted in 3 specific passes: <itemizedlist>
+<listitem>
+<para>Opaque pass (using forward rendering) </para>
+</listitem>
+<listitem>
+<para>Background pass </para>
+</listitem>
+<listitem>
+<para>Transparent pass (using forward rendering) </para>
+</listitem>
+</itemizedlist>
+Its result is stored into a cube map.<linebreak/>
+ <image type="html" name="environment_pass.png"></image>
+ <linebreak/>
+ <linebreak/>
+ </para>
+</sect1>
+<sect1 id="d3/dcd/a07303_1shadow">
+<title>Shadow pass</title>
+<para>This pass generates shadow map for one light source.<linebreak/>
+ The engine currently supports three light source type, with their specific shadow passes: <itemizedlist>
+<listitem>
+<para>Directional: This pass generates cascaded shadow maps (with a maximum of 4 cascades) </para>
+</listitem>
+<listitem>
+<para>Point: This pass renders to a cube map, and is actually splitted in 6 passes (one per cube face) </para>
+</listitem>
+<listitem>
+<para>Spot: This pass renders to a single 2D texture </para>
+</listitem>
+</itemizedlist>
+That being said, it is also important to note that point and spot shadow maps are stored in texture arrays (Cube an 2D, respectively).<linebreak/>
+ The cascades of the directional shadow map are also stored in a 2D texture array.<linebreak/>
+ It allows to limit the number of texture bindings, especially for passes using forward rendering.<linebreak/>
+ Since Castor3D allows the user to choose the shadows type he wants (Raw, PCF or VSM), the results are always stored in textures using the R32G32_SFLOAT pixel format.<linebreak/>
+ <image type="html" name="shadow_pass.png"></image>
+ <linebreak/>
+ <linebreak/>
+ </para>
+</sect1>
+<sect1 id="d3/dcd/a07303_1opaque">
+<title>Deferred rendering</title>
+<para>This pass is the most complex one, it contains multiple subpasses: <itemizedlist>
+<listitem>
+<para>Opaque pass </para>
+</listitem>
+<listitem>
+<para>SSAO pass </para>
+</listitem>
+<listitem>
+<para>Subsurface Scattering pass </para>
+</listitem>
+<listitem>
+<para>Lighting pass </para>
+</listitem>
+<listitem>
+<para>Reflection pass </para>
+</listitem>
+</itemizedlist>
+<linebreak/>
+ <image type="html" name="deferred_rendering.png"></image>
+ <linebreak/>
+ </para>
+<sect2 id="d3/dcd/a07303_1def_opaque">
+<title>Opaque pass</title>
+<para>This pass is the geometry pass, generating the buffers needed for the other subpasses.<linebreak/>
+ Castor3D uses currently 5 (+1) buffers: <itemizedlist>
+<listitem>
+<para><bold>Depth buffer</bold><linebreak/>
+ Uses D24_UNORM_S8_UINT pixel format. </para>
+</listitem>
+<listitem>
+<para><bold>Data 1 buffer</bold><linebreak/>
+ Uses R32G32B32A32_SFLOAT pixel format.<linebreak/>
+ The RGB channels store the world space normal.<linebreak/>
+ The A channel stores object material flags. </para>
+</listitem>
+<listitem>
+<para><bold>Data 2 buffer</bold><linebreak/>
+ Uses R16G16B16A16_SFLOAT pixel format.<linebreak/>
+ The RGB channels store the diffuse/albedo colour.<linebreak/>
+ The A channel is used to store: <itemizedlist>
+<listitem>
+<para>Shininess in Phong </para>
+</listitem>
+<listitem>
+<para>Glossiness in PBR Specular/Glossiness </para>
+</listitem>
+<listitem>
+<para>Unused in PBR Metallic/Roughness </para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+<listitem>
+<para><bold>Data 3 buffer</bold><linebreak/>
+ Uses R16G16B16A16_SFLOAT pixel format<linebreak/>
+ The RGB channels store the specular colour, in pipelines that need it.<linebreak/>
+ For PBR Metallic/Roughness, R stores the Metallic value, G stores the Roughness value, B is unused.<linebreak/>
+ The A channel stores the Ambient Occlusion value. </para>
+</listitem>
+<listitem>
+<para><bold>Data 4 buffer</bold><linebreak/>
+ Uses R16G16B16A16_SFLOAT pixel format<linebreak/>
+ The RGB channels store the emissive colour.<linebreak/>
+ The A channel stores the transmittance value. </para>
+</listitem>
+<listitem>
+<para><bold>Data 5 buffer</bold><linebreak/>
+ Uses R16G16B16A16_SFLOAT pixel format<linebreak/>
+ The RG channels store the velocity value (computed with previous frame).<linebreak/>
+ The B channel stores the material index.<linebreak/>
+ The A channel is unused. </para>
+</listitem>
+</itemizedlist>
+<linebreak/>
+ </para>
+</sect2>
+<sect2 id="d3/dcd/a07303_1def_ssao">
+<title>SSAO pass</title>
+<para>This pass implements the Scalable Ambient Obscurance algorithm described here: <ulink url="https://research.nvidia.com/sites/default/files/pubs/2012-06_Scalable-Ambient-Obscurance/McGuire12SAO.pdf">https://research.nvidia.com/sites/default/files/pubs/2012-06_Scalable-Ambient-Obscurance/McGuire12SAO.pdf</ulink><linebreak/>
+ It is thus splitted in three subpasses: <itemizedlist>
+<listitem>
+<para>Linearise depth pass </para>
+</listitem>
+<listitem>
+<para>Raw SSAO pass </para>
+</listitem>
+<listitem>
+<para>Blur pass </para>
+</listitem>
+</itemizedlist>
+<linebreak/>
+ </para>
+</sect2>
+<sect2 id="d3/dcd/a07303_1def_lighting">
+<title>Lighting pass</title>
+<para>This pass is actually a group of lighting subpasses, one subpass per light source.<linebreak/>
+ If the light source generates shadows, its shadow map will be used, to produce shadows of the type chosen by the user.<linebreak/>
+ The point and spot light passes first run a stencil pass, to reduce their effect area.<linebreak/>
+ <linebreak/>
+ </para>
+</sect2>
+<sect2 id="d3/dcd/a07303_1def_sssss">
+<title>Subsurface Scattering pass</title>
+<para>This pass implements the Screen-Space Subsurface Scattering algorithm described here : <ulink url="http://www.iryoku.com/sssss/">http://www.iryoku.com/sssss/</ulink><linebreak/>
+ It is thus splitted in four passes: <itemizedlist>
+<listitem>
+<para>Three successive blur passes </para>
+</listitem>
+<listitem>
+<para>A combination pass </para>
+</listitem>
+</itemizedlist>
+<linebreak/>
+ </para>
+</sect2>
+<sect2 id="d3/dcd/a07303_1def_refl">
+<title>Reflection pass</title>
+<para>This pass combines the results of all the previous passes:<linebreak/>
+ <itemizedlist>
+<listitem>
+<para>It applies the ambient factor with provided ambient occlusion. </para>
+</listitem>
+<listitem>
+<para>It applies the diffuse and specular results from lighting pass. </para>
+</listitem>
+<listitem>
+<para>It also applies reflection and/or refraction, using the skybox or the provided environment maps. </para>
+</listitem>
+<listitem>
+<para>For PBR pipelines, it also applies the IBL, if no reflection is asked on the processed fragment. </para>
+</listitem>
+<listitem>
+<para>If the scene needs some fog, it is applied here. </para>
+</listitem>
+</itemizedlist>
+<linebreak/>
+ </para>
+</sect2>
+</sect1>
+<sect1 id="d3/dcd/a07303_1background">
+<title>Background pass</title>
+<para>This pass is the most simple one, it just draws the scene&apos;s skybox.<linebreak/>
+ It is performed after the opaque objects pass to have the benefits of a depth test, after the depth buffer is filled by the opaque pass.<linebreak/>
+ <linebreak/>
+ <linebreak/>
+ </para>
+</sect1>
+<sect1 id="d3/dcd/a07303_1transparent">
+<title>Weighted Blended rendering</title>
+<para>This pass implements the blended weighted rendering described here: <ulink url="http://jcgt.org/published/0002/02/09/paper.pdf">http://jcgt.org/published/0002/02/09/paper.pdf</ulink><linebreak/>
+ It is thus splitted in two passes: <itemizedlist>
+<listitem>
+<para>Accumulation pass </para>
+</listitem>
+<listitem>
+<para>Resolve pass </para>
+</listitem>
+</itemizedlist>
+<image type="html" name="weighted_blended_rendering.png"></image>
+ <linebreak/>
+ </para>
+</sect1>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

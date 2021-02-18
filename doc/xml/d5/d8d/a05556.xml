@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d5/d8d/a05556" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::BillboardUboConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d5/d8d/a05556_1a781a63ab6c372487d2f8e4160e5942b1" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::BillboardUboConfiguration::dimensions</definition>
+        <argsstring></argsstring>
+        <name>dimensions</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="38" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Billboards list data. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Ubos/UbosModule.hpp" line="37" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="36" bodyend="39"/>
+    <listofallmembers>
+      <member refid="d5/d8d/a05556_1a781a63ab6c372487d2f8e4160e5942b1" prot="public" virt="non-virtual"><scope>castor3d::BillboardUboConfiguration</scope><name>dimensions</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

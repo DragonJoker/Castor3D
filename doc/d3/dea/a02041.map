@@ -1,0 +1,7 @@
+<map id="castor3d::Interpolator&lt; DataT &gt;" name="castor3d::Interpolator&lt; DataT &gt;">
+<area shape="rect" id="node1" title="Template class which handles the interpolations, would it be quaternion, point, real,..." alt="" coords="5,93,149,134"/>
+<area shape="rect" id="node2" href="$df/d03/a02058.html" title="Partial specialisation of InterpolatorT, for InterpolatorType::eLinear." alt="" coords="333,5,501,61"/>
+<area shape="rect" id="node3" href="$d7/d38/a02054.html" title="Partial specialisation of InterpolatorT, for InterpolatorType::eNearest." alt="" coords="333,85,501,141"/>
+<area shape="rect" id="node4" href="$d1/dc4/a02042.html" title=" " alt="" coords="341,166,494,207"/>
+<area shape="rect" id="node5" href="$dc/d28/a02062.html" title="Handles the Quaternion linear interpolations." alt="" coords="551,159,731,215"/>
+</map>

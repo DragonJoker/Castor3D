@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d4/d98/a05782" kind="class" language="C++" prot="public">
+    <compoundname>castor::TextWriter&lt; castor3d::TextureConfiguration &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::TextureConfiguration &gt;</basecompoundref>
+    <includes local="no">TextTextureConfiguration.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d4/d98/a05782_1ac3cdbabf84b395d6fc72716bccb12d0e" prot="private" static="no" mutable="no">
+        <type><ref refid="de/d13/a01473_1a90306964da63b9bbc97f4e205ecc5b7a" kindref="member">castor3d::MaterialType</ref></type>
+        <definition>castor3d::MaterialType castor::TextWriter&lt; castor3d::TextureConfiguration &gt;::m_type</definition>
+        <argsstring></argsstring>
+        <name>m_type</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextTextureConfiguration.hpp" line="25" column="1" bodyfile="Text/TextTextureConfiguration.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/d98/a05782_1a19244ddee9e5d8d1b5a09130ff87996e" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor::TextWriter&lt; castor3d::TextureConfiguration &gt;::TextWriter</definition>
+        <argsstring>(String const &amp;tabs, castor3d::MaterialType type)</argsstring>
+        <name>TextWriter</name>
+        <param>
+          <type>String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d13/a01473_1a90306964da63b9bbc97f4e205ecc5b7a" kindref="member">castor3d::MaterialType</ref></type>
+          <declname>type</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextTextureConfiguration.hpp" line="19" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d98/a05782_1a6d58372fa799355c5ed199c5d4929fbe" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::TextWriter&lt; castor3d::TextureConfiguration &gt;::operator()</definition>
+        <argsstring>(castor3d::TextureConfiguration const &amp;object, TextFile &amp;file) override</argsstring>
+        <name>operator()</name>
+        <param>
+          <type><ref refid="d0/d3f/a02630" kindref="compound">castor3d::TextureConfiguration</ref> const &amp;</type>
+          <declname>object</declname>
+        </param>
+        <param>
+          <type>TextFile &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextTextureConfiguration.hpp" line="21" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="5455">
+        <label>castor::TextWriter&lt; castor3d::TextureConfiguration &gt;</label>
+        <link refid="d4/d98/a05782"/>
+        <childnode refid="5456" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5456">
+        <label>TextWriterT&lt; castor3d::TextureConfiguration &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="5457">
+        <label>castor::TextWriter&lt; castor3d::TextureConfiguration &gt;</label>
+        <link refid="d4/d98/a05782"/>
+        <childnode refid="5458" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5458">
+        <label>TextWriterT&lt; castor3d::TextureConfiguration &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Text/TextTextureConfiguration.hpp" line="17" column="1" bodyfile="Text/TextTextureConfiguration.hpp" bodystart="15" bodyend="26"/>
+    <listofallmembers>
+      <member refid="d4/d98/a05782_1ac3cdbabf84b395d6fc72716bccb12d0e" prot="private" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::TextureConfiguration &gt;</scope><name>m_type</name></member>
+      <member refid="d4/d98/a05782_1a6d58372fa799355c5ed199c5d4929fbe" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::TextureConfiguration &gt;</scope><name>operator()</name></member>
+      <member refid="d4/d98/a05782_1a19244ddee9e5d8d1b5a09130ff87996e" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::TextureConfiguration &gt;</scope><name>TextWriter</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

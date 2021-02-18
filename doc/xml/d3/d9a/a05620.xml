@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d3/d9a/a05620" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::TexturesUboConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d3/d9a/a05620_1a557b813e0de85cd76c1fa771848ab87c" prot="public" static="no" mutable="no">
+        <type>std::array&lt; castor::Point4ui, 3u &gt;</type>
+        <definition>std::array&lt; castor::Point4ui, 3u &gt; castor3d::TexturesUboConfiguration::indices</definition>
+        <argsstring></argsstring>
+        <name>indices</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="428" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="428" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Texture configuration data. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="4456">
+        <label>T</label>
+      </node>
+      <node id="4455">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="4456" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="4454">
+        <label>std::array&lt; castor::Point4ui, 3u &gt;</label>
+        <childnode refid="4455" relation="template-instance">
+          <edgelabel>&lt; castor::Point4ui, 3u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4453">
+        <label>castor3d::TexturesUboConfiguration</label>
+        <link refid="d3/d9a/a05620"/>
+        <childnode refid="4454" relation="usage">
+          <edgelabel>indices</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Ubos/UbosModule.hpp" line="427" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="426" bodyend="429"/>
+    <listofallmembers>
+      <member refid="d3/d9a/a05620_1a557b813e0de85cd76c1fa771848ab87c" prot="public" virt="non-virtual"><scope>castor3d::TexturesUboConfiguration</scope><name>indices</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

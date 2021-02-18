@@ -1,0 +1,552 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dd/df4/a02510" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::RenderTargetCache</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
+    <includes local="no">TargetCache.hpp</includes>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="dd/df4/a02510_1afe3b1fb6e3d066c8f7df6fbd0b94b983" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="de/d13/a01473_1a88196663ff565a3a06f0c8481043d205" kindref="member">ToneMappingFactory</ref> const  &amp;</type>
+        <definition>ToneMappingFactory const&amp; castor3d::RenderTargetCache::getToneMappingFactory</definition>
+        <argsstring>() const</argsstring>
+        <name>getToneMappingFactory</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Getters. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TargetCache.hpp" line="105" column="1" bodyfile="Cache/TargetCache.hpp" bodystart="105" bodyend="108"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/df4/a02510_1a6124641bc649f9c484c6994c1d66bba6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="de/d13/a01473_1a88196663ff565a3a06f0c8481043d205" kindref="member">ToneMappingFactory</ref> &amp;</type>
+        <definition>ToneMappingFactory&amp; castor3d::RenderTargetCache::getToneMappingFactory</definition>
+        <argsstring>()</argsstring>
+        <name>getToneMappingFactory</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TargetCache.hpp" line="110" column="1" bodyfile="Cache/TargetCache.hpp" bodystart="110" bodyend="113"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/df4/a02510_1aeb6bb7f781660503297bada9c0beec52" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="de/d13/a01473_1a151693e3692aa0feaea11a32fda7a14b" kindref="member">PostEffectFactory</ref> const  &amp;</type>
+        <definition>PostEffectFactory const&amp; castor3d::RenderTargetCache::getPostEffectFactory</definition>
+        <argsstring>() const</argsstring>
+        <name>getPostEffectFactory</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TargetCache.hpp" line="115" column="1" bodyfile="Cache/TargetCache.hpp" bodystart="115" bodyend="118"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/df4/a02510_1a35c586453f2f8781482f11d4f3ab14cf" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="de/d13/a01473_1a151693e3692aa0feaea11a32fda7a14b" kindref="member">PostEffectFactory</ref> &amp;</type>
+        <definition>PostEffectFactory&amp; castor3d::RenderTargetCache::getPostEffectFactory</definition>
+        <argsstring>()</argsstring>
+        <name>getPostEffectFactory</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TargetCache.hpp" line="120" column="1" bodyfile="Cache/TargetCache.hpp" bodystart="120" bodyend="123"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/df4/a02510_1a2f2025792920e01e75dee8fa80b71b59" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>RenderTargetArray const  &amp;</type>
+        <definition>RenderTargetArray const&amp; castor3d::RenderTargetCache::getRenderTargets</definition>
+        <argsstring>(TargetType type)</argsstring>
+        <name>getRenderTargets</name>
+        <param>
+          <type><ref refid="de/d13/a01473_1a4ad78470d8077ac5aaa5443df9894203" kindref="member">TargetType</ref></type>
+          <declname>type</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TargetCache.hpp" line="125" column="1" bodyfile="Cache/TargetCache.hpp" bodystart="125" bodyend="129"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dd/df4/a02510_1a1eafa19b675c6fcd7211a934eefbc79f" prot="private" static="no" mutable="yes">
+        <type>std::atomic_bool</type>
+        <definition>std::atomic_bool castor3d::RenderTargetCache::m_locked</definition>
+        <argsstring></argsstring>
+        <name>m_locked</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TargetCache.hpp" line="197" column="1" bodyfile="Cache/TargetCache.hpp" bodystart="197" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/df4/a02510_1a42a6c0edf47d920cfa0ff027a20c73f2" prot="private" static="no" mutable="no">
+        <type>TargetTypeArray</type>
+        <definition>TargetTypeArray castor3d::RenderTargetCache::m_renderTargets</definition>
+        <argsstring></argsstring>
+        <name>m_renderTargets</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TargetCache.hpp" line="198" column="1" bodyfile="Cache/TargetCache.hpp" bodystart="198" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/df4/a02510_1a42b04b23e4e303ae46374b38a27eb166" prot="private" static="no" mutable="yes">
+        <type>std::mutex</type>
+        <definition>std::mutex castor3d::RenderTargetCache::m_mutex</definition>
+        <argsstring></argsstring>
+        <name>m_mutex</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TargetCache.hpp" line="199" column="1" bodyfile="Cache/TargetCache.hpp" bodystart="199" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/df4/a02510_1a74abea9f69b8a3582da09e594dde274d" prot="private" static="no" mutable="no">
+        <type><ref refid="de/d13/a01473_1a88196663ff565a3a06f0c8481043d205" kindref="member">ToneMappingFactory</ref></type>
+        <definition>ToneMappingFactory castor3d::RenderTargetCache::m_toneMappingFactory</definition>
+        <argsstring></argsstring>
+        <name>m_toneMappingFactory</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TargetCache.hpp" line="200" column="1" bodyfile="Cache/TargetCache.hpp" bodystart="200" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/df4/a02510_1aa4814959331e153801ce8bac5db90971" prot="private" static="no" mutable="no">
+        <type><ref refid="de/d13/a01473_1a151693e3692aa0feaea11a32fda7a14b" kindref="member">PostEffectFactory</ref></type>
+        <definition>PostEffectFactory castor3d::RenderTargetCache::m_postEffectFactory</definition>
+        <argsstring></argsstring>
+        <name>m_postEffectFactory</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TargetCache.hpp" line="201" column="1" bodyfile="Cache/TargetCache.hpp" bodystart="201" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="dd/df4/a02510_1a0550d1123d8abec94e72f3af01dcf607" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::RenderTargetCache::CU_DeclareVector</definition>
+        <argsstring>(RenderTargetSPtr, RenderTarget)</argsstring>
+        <name>CU_DeclareVector</name>
+        <param>
+          <type>RenderTargetSPtr</type>
+        </param>
+        <param>
+          <type><ref refid="d3/d84/a04622" kindref="compound">RenderTarget</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TargetCache.hpp" line="19" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/df4/a02510_1a50e7feed5436b70c582a68a51c28ea2b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::RenderTargetCache::CU_DeclareArray</definition>
+        <argsstring>(RenderTargetArray, TargetType::eCount, TargetType)</argsstring>
+        <name>CU_DeclareArray</name>
+        <param>
+          <type>RenderTargetArray</type>
+        </param>
+        <param>
+          <type><ref refid="de/d13/a01473_1a4ad78470d8077ac5aaa5443df9894203ae558bb69fadec037d9eae46601a4df8e" kindref="member">TargetType::eCount</ref></type>
+        </param>
+        <param>
+          <type><ref refid="de/d13/a01473_1a4ad78470d8077ac5aaa5443df9894203" kindref="member">TargetType</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TargetCache.hpp" line="20" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/df4/a02510_1a612d88dfdd6971cec9342a1b00f2f50b" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::RenderTargetCache::RenderTargetCache</definition>
+        <argsstring>(Engine &amp;engine)</argsstring>
+        <name>RenderTargetCache</name>
+        <param>
+          <type><ref refid="df/d9b/a02514" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The engine. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TargetCache.hpp" line="31" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/df4/a02510_1afe3c9ad73000a76fa1c3ee08e3abd7ba" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::RenderTargetCache::~RenderTargetCache</definition>
+        <argsstring>()</argsstring>
+        <name>~RenderTargetCache</name>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TargetCache.hpp" line="38" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/df4/a02510_1a4830b3e2e256e0af4a574bb9312fddd4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> RenderTargetSPtr</type>
+        <definition>C3D_API RenderTargetSPtr castor3d::RenderTargetCache::add</definition>
+        <argsstring>(TargetType type)</argsstring>
+        <name>add</name>
+        <param>
+          <type><ref refid="de/d13/a01473_1a4ad78470d8077ac5aaa5443df9894203" kindref="member">TargetType</ref></type>
+          <declname>type</declname>
+        </param>
+        <briefdescription>
+<para>Creates a render target of given type. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render target type </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The render target </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TargetCache.hpp" line="49" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/df4/a02510_1a09fc987011e42b51d3df310bdbc71531" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderTargetCache::remove</definition>
+        <argsstring>(RenderTargetSPtr target)</argsstring>
+        <name>remove</name>
+        <param>
+          <type>RenderTargetSPtr</type>
+          <declname>target</declname>
+        </param>
+        <briefdescription>
+<para>Removes a render target from the render loop. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">target</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render target </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TargetCache.hpp" line="58" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/df4/a02510_1af870b82492d880631841173d47734b87" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderTargetCache::update</definition>
+        <argsstring>(CpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <param>
+          <type><ref refid="d5/d03/a04582" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Updates the render pass, CPU wise. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TargetCache.hpp" line="67" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/df4/a02510_1a60429220a41bbc7ff8023f0aead6b8fc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderTargetCache::update</definition>
+        <argsstring>(GpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <param>
+          <type><ref refid="df/dd7/a04586" kindref="compound">GpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Updates the render pass, GPU wise. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TargetCache.hpp" line="76" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/df4/a02510_1aeb79530ebb15c1659ff02c212eff6d45" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderTargetCache::render</definition>
+        <argsstring>(RenderDevice const &amp;device, RenderInfo &amp;info)</argsstring>
+        <name>render</name>
+        <param>
+          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/dba/a04510" kindref="compound">RenderInfo</ref> &amp;</type>
+          <declname>info</declname>
+        </param>
+        <briefdescription>
+<para>Renders into the render targets. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">info</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the render informations. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TargetCache.hpp" line="87" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/df4/a02510_1a629b5668938dacc76df988e3ee49f401" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderTargetCache::clear</definition>
+        <argsstring>()</argsstring>
+        <name>clear</name>
+        <briefdescription>
+<para>Flushes the collection. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TargetCache.hpp" line="95" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/df4/a02510_1ad1bb3888832e0291492bdd54e8569813" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::RenderTargetCache::lock</definition>
+        <argsstring>() const</argsstring>
+        <name>lock</name>
+        <briefdescription>
+<para>Locks the collection mutex. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TargetCache.hpp" line="137" column="1" bodyfile="Cache/TargetCache.hpp" bodystart="137" bodyend="141"/>
+        <referencedby refid="dd/df4/a02510_1acbe95a62d428209f6fba60911ea1ff7d" compoundref="d3/d1a/a00251" startline="162" endline="173">forEach</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/df4/a02510_1aaa58590b23c91c715b5022d613bdae2a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::RenderTargetCache::unlock</definition>
+        <argsstring>() const</argsstring>
+        <name>unlock</name>
+        <briefdescription>
+<para>Unlocks the collection mutex. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TargetCache.hpp" line="148" column="1" bodyfile="Cache/TargetCache.hpp" bodystart="148" bodyend="152"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/df4/a02510_1acbe95a62d428209f6fba60911ea1ff7d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename FuncType</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::RenderTargetCache::forEach</definition>
+        <argsstring>(FuncType func) const</argsstring>
+        <name>forEach</name>
+        <param>
+          <type>FuncType</type>
+          <declname>func</declname>
+        </param>
+        <briefdescription>
+<para>Applies a function to all the elements of this cache. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">func</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The function. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TargetCache.hpp" line="162" column="1" bodyfile="Cache/TargetCache.hpp" bodystart="162" bodyend="173"/>
+        <references refid="dd/df4/a02510_1ad1bb3888832e0291492bdd54e8569813" compoundref="d3/d1a/a00251" startline="137" endline="141">lock</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/df4/a02510_1a118b33007fd6fe5a272f8537788239da" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename FuncType</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::RenderTargetCache::forEach</definition>
+        <argsstring>(FuncType func)</argsstring>
+        <name>forEach</name>
+        <param>
+          <type>FuncType</type>
+          <declname>func</declname>
+        </param>
+        <briefdescription>
+<para>Applies a function to all the elements of this cache. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">func</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The function. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TargetCache.hpp" line="183" column="1" bodyfile="Cache/TargetCache.hpp" bodystart="183" bodyend="194"/>
+        <references refid="dd/df4/a02510_1ad1bb3888832e0291492bdd54e8569813" compoundref="d3/d1a/a00251" startline="137" endline="141">lock</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3070">
+        <label>castor3d::RenderTargetCache</label>
+        <link refid="dd/df4/a02510"/>
+        <childnode refid="3071" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3071">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3072">
+        <label>castor3d::RenderTargetCache</label>
+        <link refid="dd/df4/a02510"/>
+        <childnode refid="3073" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3073">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Cache/TargetCache.hpp" line="18" column="1" bodyfile="Cache/TargetCache.hpp" bodystart="16" bodyend="202"/>
+    <listofallmembers>
+      <member refid="dd/df4/a02510_1a4830b3e2e256e0af4a574bb9312fddd4" prot="public" virt="non-virtual"><scope>castor3d::RenderTargetCache</scope><name>add</name></member>
+      <member refid="dd/df4/a02510_1a629b5668938dacc76df988e3ee49f401" prot="public" virt="non-virtual"><scope>castor3d::RenderTargetCache</scope><name>clear</name></member>
+      <member refid="dd/df4/a02510_1a50e7feed5436b70c582a68a51c28ea2b" prot="private" virt="non-virtual"><scope>castor3d::RenderTargetCache</scope><name>CU_DeclareArray</name></member>
+      <member refid="dd/df4/a02510_1a0550d1123d8abec94e72f3af01dcf607" prot="private" virt="non-virtual"><scope>castor3d::RenderTargetCache</scope><name>CU_DeclareVector</name></member>
+      <member refid="dd/df4/a02510_1acbe95a62d428209f6fba60911ea1ff7d" prot="public" virt="non-virtual"><scope>castor3d::RenderTargetCache</scope><name>forEach</name></member>
+      <member refid="dd/df4/a02510_1a118b33007fd6fe5a272f8537788239da" prot="public" virt="non-virtual"><scope>castor3d::RenderTargetCache</scope><name>forEach</name></member>
+      <member refid="dd/df4/a02510_1aeb6bb7f781660503297bada9c0beec52" prot="public" virt="non-virtual"><scope>castor3d::RenderTargetCache</scope><name>getPostEffectFactory</name></member>
+      <member refid="dd/df4/a02510_1a35c586453f2f8781482f11d4f3ab14cf" prot="public" virt="non-virtual"><scope>castor3d::RenderTargetCache</scope><name>getPostEffectFactory</name></member>
+      <member refid="dd/df4/a02510_1a2f2025792920e01e75dee8fa80b71b59" prot="public" virt="non-virtual"><scope>castor3d::RenderTargetCache</scope><name>getRenderTargets</name></member>
+      <member refid="dd/df4/a02510_1afe3b1fb6e3d066c8f7df6fbd0b94b983" prot="public" virt="non-virtual"><scope>castor3d::RenderTargetCache</scope><name>getToneMappingFactory</name></member>
+      <member refid="dd/df4/a02510_1a6124641bc649f9c484c6994c1d66bba6" prot="public" virt="non-virtual"><scope>castor3d::RenderTargetCache</scope><name>getToneMappingFactory</name></member>
+      <member refid="dd/df4/a02510_1ad1bb3888832e0291492bdd54e8569813" prot="public" virt="non-virtual"><scope>castor3d::RenderTargetCache</scope><name>lock</name></member>
+      <member refid="dd/df4/a02510_1a1eafa19b675c6fcd7211a934eefbc79f" prot="private" virt="non-virtual"><scope>castor3d::RenderTargetCache</scope><name>m_locked</name></member>
+      <member refid="dd/df4/a02510_1a42b04b23e4e303ae46374b38a27eb166" prot="private" virt="non-virtual"><scope>castor3d::RenderTargetCache</scope><name>m_mutex</name></member>
+      <member refid="dd/df4/a02510_1aa4814959331e153801ce8bac5db90971" prot="private" virt="non-virtual"><scope>castor3d::RenderTargetCache</scope><name>m_postEffectFactory</name></member>
+      <member refid="dd/df4/a02510_1a42a6c0edf47d920cfa0ff027a20c73f2" prot="private" virt="non-virtual"><scope>castor3d::RenderTargetCache</scope><name>m_renderTargets</name></member>
+      <member refid="dd/df4/a02510_1a74abea9f69b8a3582da09e594dde274d" prot="private" virt="non-virtual"><scope>castor3d::RenderTargetCache</scope><name>m_toneMappingFactory</name></member>
+      <member refid="dd/df4/a02510_1a09fc987011e42b51d3df310bdbc71531" prot="public" virt="non-virtual"><scope>castor3d::RenderTargetCache</scope><name>remove</name></member>
+      <member refid="dd/df4/a02510_1aeb79530ebb15c1659ff02c212eff6d45" prot="public" virt="non-virtual"><scope>castor3d::RenderTargetCache</scope><name>render</name></member>
+      <member refid="dd/df4/a02510_1a612d88dfdd6971cec9342a1b00f2f50b" prot="public" virt="non-virtual"><scope>castor3d::RenderTargetCache</scope><name>RenderTargetCache</name></member>
+      <member refid="dd/df4/a02510_1aaa58590b23c91c715b5022d613bdae2a" prot="public" virt="non-virtual"><scope>castor3d::RenderTargetCache</scope><name>unlock</name></member>
+      <member refid="dd/df4/a02510_1af870b82492d880631841173d47734b87" prot="public" virt="non-virtual"><scope>castor3d::RenderTargetCache</scope><name>update</name></member>
+      <member refid="dd/df4/a02510_1a60429220a41bbc7ff8023f0aead6b8fc" prot="public" virt="non-virtual"><scope>castor3d::RenderTargetCache</scope><name>update</name></member>
+      <member refid="dd/df4/a02510_1afe3c9ad73000a76fa1c3ee08e3abd7ba" prot="public" virt="non-virtual"><scope>castor3d::RenderTargetCache</scope><name>~RenderTargetCache</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

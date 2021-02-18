@@ -1,0 +1,297 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="da/dc9/a05243" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::MetallicRoughnessPassBuffer</compoundname>
+    <basecompoundref refid="d4/d19/a05251" prot="public" virt="non-virtual">castor3d::PassBuffer</basecompoundref>
+    <includes local="no">MetallicRoughnessPassBuffer.hpp</includes>
+    <innerclass refid="d8/da5/a05247" prot="public">castor3d::MetallicRoughnessPassBuffer::PassData</innerclass>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="da/dc9/a05243_1ab1eb929c7e8701be78114815b47dcc32" prot="public" static="no">
+        <type>castor::ArrayView&lt; <ref refid="d8/da5/a05247" kindref="compound">PassData</ref> &gt;</type>
+        <definition>using castor3d::MetallicRoughnessPassBuffer::PassesData =  castor::ArrayView&lt; PassData &gt;</definition>
+        <argsstring></argsstring>
+        <name>PassesData</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp" line="72" column="1" bodyfile="Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-static-attrib">
+      <memberdef kind="variable" id="da/dc9/a05243_1a2e525b52cac222ea4d6971e2fbf2139c" prot="private" static="yes" mutable="no">
+        <type>constexpr uint32_t</type>
+        <definition>constexpr uint32_t castor3d::MetallicRoughnessPassBuffer::DataSize</definition>
+        <argsstring></argsstring>
+        <name>DataSize</name>
+        <initializer>= ( sizeof( <ref refid="d1/d56/a05259" kindref="compound">RgbaColour</ref> ) * 4 )
+			+ ( <ref refid="d4/d19/a05251_1ab7a622d4da8e1c76ceeb278a5718be86" kindref="member">PassBuffer::ExtendedDataSize</ref> )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp" line="77" column="1" bodyfile="Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="da/dc9/a05243_1a6d38cdae46b014cfd789bfc1a2138714" prot="private" static="no" mutable="no">
+        <type><ref refid="da/dc9/a05243_1ab1eb929c7e8701be78114815b47dcc32" kindref="member">PassesData</ref></type>
+        <definition>PassesData castor3d::MetallicRoughnessPassBuffer::m_data</definition>
+        <argsstring></argsstring>
+        <name>m_data</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp" line="81" column="1" bodyfile="Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/dc9/a05243_1a0c7d52e18c16d2823666da74f626914b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::MetallicRoughnessPassBuffer::MetallicRoughnessPassBuffer</definition>
+        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, uint32_t count)</argsstring>
+        <name>MetallicRoughnessPassBuffer</name>
+        <param>
+          <type><ref refid="d0/d7c/a02499" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>count</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The engine. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">count</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The max passes count. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp" line="29" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dc9/a05243_1afbbc1ebe478a7c76c5db7f7fd7e5c29d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::MetallicRoughnessPassBuffer::~MetallicRoughnessPassBuffer</definition>
+        <argsstring>()</argsstring>
+        <name>~MetallicRoughnessPassBuffer</name>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp" line="38" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dc9/a05243_1a77141ebb28d78d394450a7ad94675032" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::MetallicRoughnessPassBuffer::visit</definition>
+        <argsstring>(PhongPass const &amp;pass) override</argsstring>
+        <name>visit</name>
+        <reimplements refid="d4/d19/a05251_1a3e5594df164b631793d8518373730344">visit</reimplements>
+        <param>
+          <type><ref refid="d8/d4e/a02595" kindref="compound">PhongPass</ref> const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+<para>Puts the pass data into the buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp" line="42" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dc9/a05243_1a9b3d12b3326750ebc98dfb1d14a7989a" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::MetallicRoughnessPassBuffer::visit</definition>
+        <argsstring>(MetallicRoughnessPbrPass const &amp;pass) override</argsstring>
+        <name>visit</name>
+        <reimplements refid="d4/d19/a05251_1a345f4cd822ceef18707a7369b6cee0f7">visit</reimplements>
+        <param>
+          <type><ref refid="d7/d12/a02571" kindref="compound">MetallicRoughnessPbrPass</ref> const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+<para>Puts the pass data into the buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp" line="46" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2047">
+        <label>castor3d::MetallicRoughnessPassBuffer</label>
+        <link refid="da/dc9/a05243"/>
+        <childnode refid="2048" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2048">
+        <label>castor3d::PassBuffer</label>
+        <link refid="d4/d19/a05251"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2053">
+        <label>castor::OwnedBy&lt; Material &gt;</label>
+      </node>
+      <node id="2057">
+        <label>std::vector&lt; OnPassChangedConnection &gt;</label>
+        <childnode refid="2054" relation="template-instance">
+          <edgelabel>&lt; OnPassChangedConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2049">
+        <label>castor3d::MetallicRoughnessPassBuffer</label>
+        <link refid="da/dc9/a05243"/>
+        <childnode refid="2050" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2055">
+        <label>T</label>
+      </node>
+      <node id="2054">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="2055" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="2058">
+        <label>castor3d::ShaderBuffer</label>
+        <link refid="d9/dba/a05287"/>
+      </node>
+      <node id="2050">
+        <label>castor3d::PassBuffer</label>
+        <link refid="d4/d19/a05251"/>
+        <childnode refid="2051" relation="usage">
+          <edgelabel>m_passes</edgelabel>
+        </childnode>
+        <childnode refid="2056" relation="usage">
+          <edgelabel>m_dirty</edgelabel>
+        </childnode>
+        <childnode refid="2057" relation="usage">
+          <edgelabel>m_connections</edgelabel>
+        </childnode>
+        <childnode refid="2058" relation="usage">
+          <edgelabel>m_buffer</edgelabel>
+        </childnode>
+      </node>
+      <node id="2051">
+        <label>std::vector&lt; castor3d::Pass * &gt;</label>
+        <childnode refid="2052" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="2054" relation="template-instance">
+          <edgelabel>&lt; castor3d::Pass * &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2056">
+        <label>std::vector&lt; castor3d::Pass const * &gt;</label>
+        <childnode refid="2052" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="2054" relation="template-instance">
+          <edgelabel>&lt; castor3d::Pass const * &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2052">
+        <label>castor3d::Pass</label>
+        <link refid="db/d39/a02575"/>
+        <childnode refid="2053" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp" line="15" column="1" bodyfile="Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp" bodystart="13" bodyend="82"/>
+    <listofallmembers>
+      <member refid="d4/d19/a05251_1a9a44c3cc681d3b4ec0c62084b171f386" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPassBuffer</scope><name>addPass</name></member>
+      <member refid="d4/d19/a05251_1a6170481289ab367b47234ae0eb0b67b6" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPassBuffer</scope><name>createBinding</name></member>
+      <member refid="d4/d19/a05251_1ae05b64f9cef5b212a31186b835c96beb" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPassBuffer</scope><name>createLayoutBinding</name></member>
+      <member refid="da/dc9/a05243_1a2e525b52cac222ea4d6971e2fbf2139c" prot="private" virt="non-virtual"><scope>castor3d::MetallicRoughnessPassBuffer</scope><name>DataSize</name></member>
+      <member refid="d4/d19/a05251_1a75600ed00feaf24da5e1f590739e4659" prot="protected" virt="non-virtual"><scope>castor3d::MetallicRoughnessPassBuffer</scope><name>doVisit</name></member>
+      <member refid="d4/d19/a05251_1aa0126ddc3b7a83541797b519a2816d63" prot="protected" virt="non-virtual"><scope>castor3d::MetallicRoughnessPassBuffer</scope><name>doVisitExtended</name></member>
+      <member refid="d4/d19/a05251_1ab7a622d4da8e1c76ceeb278a5718be86" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPassBuffer</scope><name>ExtendedDataSize</name></member>
+      <member refid="d4/d19/a05251_1a77d0146f415e0364e39ce6ac75dfce38" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPassBuffer</scope><name>getBinding</name></member>
+      <member refid="d4/d19/a05251_1a60a4ed8638008eb8635f905b51362163" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPassBuffer</scope><name>getPtr</name></member>
+      <member refid="d4/d19/a05251_1abbc49bff4fe676720b61b0684e38b0c4" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPassBuffer</scope><name>getType</name></member>
+      <member refid="d4/d19/a05251_1a6215a010f4ac16f1127824adbc40bd41" prot="protected" virt="non-virtual"><scope>castor3d::MetallicRoughnessPassBuffer</scope><name>m_buffer</name></member>
+      <member refid="d4/d19/a05251_1a5cc82dd8af9f574ec2948422b5952092" prot="protected" virt="non-virtual"><scope>castor3d::MetallicRoughnessPassBuffer</scope><name>m_connections</name></member>
+      <member refid="da/dc9/a05243_1a6d38cdae46b014cfd789bfc1a2138714" prot="private" virt="non-virtual"><scope>castor3d::MetallicRoughnessPassBuffer</scope><name>m_data</name></member>
+      <member refid="d4/d19/a05251_1a3eabab4ec6c2eeea336d861c325f84df" prot="protected" virt="non-virtual"><scope>castor3d::MetallicRoughnessPassBuffer</scope><name>m_dirty</name></member>
+      <member refid="d4/d19/a05251_1aca02fed11627af2eee07c6b70db4f85e" prot="protected" virt="non-virtual"><scope>castor3d::MetallicRoughnessPassBuffer</scope><name>m_passCount</name></member>
+      <member refid="d4/d19/a05251_1ac642ab69ba92e0c5c7369d1a5d241d5c" prot="protected" virt="non-virtual"><scope>castor3d::MetallicRoughnessPassBuffer</scope><name>m_passes</name></member>
+      <member refid="d4/d19/a05251_1af1f6e6865313d7bb7e78e436969029b7" prot="protected" virt="non-virtual"><scope>castor3d::MetallicRoughnessPassBuffer</scope><name>m_passID</name></member>
+      <member refid="da/dc9/a05243_1a0c7d52e18c16d2823666da74f626914b" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPassBuffer</scope><name>MetallicRoughnessPassBuffer</name></member>
+      <member refid="d4/d19/a05251_1ad712016003d4286c76cfa1b0dbb5fca8" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPassBuffer</scope><name>PassBuffer</name></member>
+      <member refid="da/dc9/a05243_1ab1eb929c7e8701be78114815b47dcc32" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPassBuffer</scope><name>PassesData</name></member>
+      <member refid="d4/d19/a05251_1a04fd2c6473c7b87ca15163a84afadc77" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPassBuffer</scope><name>removePass</name></member>
+      <member refid="d4/d19/a05251_1a1aecf0ff5c7c655cdf01a23ba8ba8a58" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPassBuffer</scope><name>update</name></member>
+      <member refid="da/dc9/a05243_1a77141ebb28d78d394450a7ad94675032" prot="public" virt="virtual"><scope>castor3d::MetallicRoughnessPassBuffer</scope><name>visit</name></member>
+      <member refid="da/dc9/a05243_1a9b3d12b3326750ebc98dfb1d14a7989a" prot="public" virt="virtual"><scope>castor3d::MetallicRoughnessPassBuffer</scope><name>visit</name></member>
+      <member refid="d4/d19/a05251_1a1127e02e0c683a1529151f7daefa1484" prot="public" virt="virtual" ambiguityscope="castor3d::PassBuffer::"><scope>castor3d::MetallicRoughnessPassBuffer</scope><name>visit</name></member>
+      <member refid="da/dc9/a05243_1afbbc1ebe478a7c76c5db7f7fd7e5c29d" prot="public" virt="non-virtual"><scope>castor3d::MetallicRoughnessPassBuffer</scope><name>~MetallicRoughnessPassBuffer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

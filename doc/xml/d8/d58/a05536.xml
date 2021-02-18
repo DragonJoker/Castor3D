@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d8/d58/a05536" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SkinningData</compoundname>
+    <includes local="no">SkinningUbo.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d8/d58/a05536_1a5a537aa742af977ffa88cca5632af3cb" prot="public" static="no" mutable="no">
+        <type>std::unique_ptr&lt; sdw::ArraySsboT&lt; sdw::Mat4 &gt; &gt;</type>
+        <definition>std::unique_ptr&lt; sdw::ArraySsboT&lt; sdw::Mat4 &gt; &gt; castor3d::SkinningData::ssbo</definition>
+        <argsstring></argsstring>
+        <name>ssbo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SkinningUbo.hpp" line="18" column="1" bodyfile="Shader/Ubos/SkinningUbo.hpp" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d58/a05536_1a9163b3f5cd9c53c0fd6391f815d73514" prot="public" static="no" mutable="no">
+        <type>std::unique_ptr&lt; sdw::Ubo &gt;</type>
+        <definition>std::unique_ptr&lt; sdw::Ubo &gt; castor3d::SkinningData::ubo</definition>
+        <argsstring></argsstring>
+        <name>ubo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SkinningUbo.hpp" line="19" column="1" bodyfile="Shader/Ubos/SkinningUbo.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d58/a05536_1a85ce3c7df972003190091e175437d604" prot="public" static="no" mutable="no">
+        <type>std::unique_ptr&lt; sdw::SampledImageBufferRgba32 &gt;</type>
+        <definition>std::unique_ptr&lt; sdw::SampledImageBufferRgba32 &gt; castor3d::SkinningData::tbo</definition>
+        <argsstring></argsstring>
+        <name>tbo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SkinningUbo.hpp" line="20" column="1" bodyfile="Shader/Ubos/SkinningUbo.hpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="4029">
+        <label>T</label>
+      </node>
+      <node id="4027">
+        <label>std::unique_ptr&lt; sdw::Ubo &gt;</label>
+        <childnode refid="4028" relation="template-instance">
+          <edgelabel>&lt; sdw::Ubo &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4031">
+        <label>std::unique_ptr&lt; sdw::ArraySsboT&lt; sdw::Mat4 &gt; &gt;</label>
+        <childnode refid="4028" relation="template-instance">
+          <edgelabel>&lt; sdw::ArraySsboT&lt; sdw::Mat4 &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4028">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="4029" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="4030">
+        <label>std::unique_ptr&lt; sdw::SampledImageBufferRgba32 &gt;</label>
+        <childnode refid="4028" relation="template-instance">
+          <edgelabel>&lt; sdw::SampledImageBufferRgba32 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4026">
+        <label>castor3d::SkinningData</label>
+        <link refid="d8/d58/a05536"/>
+        <childnode refid="4027" relation="usage">
+          <edgelabel>ubo</edgelabel>
+        </childnode>
+        <childnode refid="4030" relation="usage">
+          <edgelabel>tbo</edgelabel>
+        </childnode>
+        <childnode refid="4031" relation="usage">
+          <edgelabel>ssbo</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Ubos/SkinningUbo.hpp" line="17" column="1" bodyfile="Shader/Ubos/SkinningUbo.hpp" bodystart="16" bodyend="21"/>
+    <listofallmembers>
+      <member refid="d8/d58/a05536_1a5a537aa742af977ffa88cca5632af3cb" prot="public" virt="non-virtual"><scope>castor3d::SkinningData</scope><name>ssbo</name></member>
+      <member refid="d8/d58/a05536_1a85ce3c7df972003190091e175437d604" prot="public" virt="non-virtual"><scope>castor3d::SkinningData</scope><name>tbo</name></member>
+      <member refid="d8/d58/a05536_1a9163b3f5cd9c53c0fd6391f815d73514" prot="public" virt="non-virtual"><scope>castor3d::SkinningData</scope><name>ubo</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

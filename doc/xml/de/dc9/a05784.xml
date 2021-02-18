@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="de/dc9/a05784" kind="class" language="C++" prot="public">
+    <compoundname>castor::TextWriter&lt; castor3d::TextOverlay &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">TextWriterT&lt; castor3d::TextOverlay &gt;</basecompoundref>
+    <includes local="no">TextTextOverlay.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/dc9/a05784_1a06e0869ea45c6a670d019ffe9cf35102" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor::TextWriter&lt; castor3d::TextOverlay &gt;::TextWriter</definition>
+        <argsstring>(castor::String const &amp;tabs)</argsstring>
+        <name>TextWriter</name>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextTextOverlay.hpp" line="18" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dc9/a05784_1ad986b87bc6890a6e34c1f2cb80bf5e3f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor::TextWriter&lt; castor3d::TextOverlay &gt;::operator()</definition>
+        <argsstring>(castor3d::TextOverlay const &amp;overlay, castor::TextFile &amp;file)</argsstring>
+        <name>operator()</name>
+        <param>
+          <type><ref refid="d3/db2/a04156" kindref="compound">castor3d::TextOverlay</ref> const &amp;</type>
+          <declname>overlay</declname>
+        </param>
+        <param>
+          <type>castor::TextFile &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Text/TextTextOverlay.hpp" line="19" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="5451">
+        <label>castor::TextWriter&lt; castor3d::TextOverlay &gt;</label>
+        <link refid="de/dc9/a05784"/>
+        <childnode refid="5452" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5452">
+        <label>TextWriterT&lt; castor3d::TextOverlay &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="5453">
+        <label>castor::TextWriter&lt; castor3d::TextOverlay &gt;</label>
+        <link refid="de/dc9/a05784"/>
+        <childnode refid="5454" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5454">
+        <label>TextWriterT&lt; castor3d::TextOverlay &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Text/TextTextOverlay.hpp" line="16" column="1" bodyfile="Text/TextTextOverlay.hpp" bodystart="14" bodyend="21"/>
+    <listofallmembers>
+      <member refid="de/dc9/a05784_1ad986b87bc6890a6e34c1f2cb80bf5e3f" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::TextOverlay &gt;</scope><name>operator()</name></member>
+      <member refid="de/dc9/a05784_1a06e0869ea45c6a670d019ffe9cf35102" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; castor3d::TextOverlay &gt;</scope><name>TextWriter</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="de/d88/a03958" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::Line</compoundname>
+    <includes local="no">Line.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="de/d88/a03958_1a83910b5cd4c5a3402a239db261b7e13f" prot="private" static="no" mutable="no">
+        <type><ref refid="d7/db0/a03962" kindref="compound">LineIndices</ref></type>
+        <definition>LineIndices castor3d::Line::m_line</definition>
+        <argsstring></argsstring>
+        <name>m_line</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The face vertex indices. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/Line.hpp" line="42" column="1" bodyfile="Model/Mesh/Submesh/Component/Line.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/d88/a03958_1abd9239a78376d9f7c00c3ecfe40b1a62" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Line::Line</definition>
+        <argsstring>(uint32_t a, uint32_t b)</argsstring>
+        <name>Line</name>
+        <param>
+          <type>uint32_t</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>b</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">a</parametername>
+<parametername direction="in">b</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The two vertices indices </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/Line.hpp" line="22" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d88/a03958_1acd37f954f3a44a3ae092cd5431253fc7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::Line::operator[]</definition>
+        <argsstring>(uint32_t index) const</argsstring>
+        <name>operator[]</name>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves the vertex index. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The index of the concerned vertex </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The vertex index </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/Line.hpp" line="33" column="1" bodyfile="Model/Mesh/Submesh/Component/Line.hpp" bodystart="33" bodyend="37"/>
+        <references refid="d7/db0/a03962_1ac8d2569b7f8e6030b425ffb8e651b617" compoundref="d6/d60/a00491" startline="15">castor3d::LineIndices::m_index</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Model/Mesh/Submesh/Component/Line.hpp" line="12" column="1" bodyfile="Model/Mesh/Submesh/Component/Line.hpp" bodystart="11" bodyend="43"/>
+    <listofallmembers>
+      <member refid="de/d88/a03958_1abd9239a78376d9f7c00c3ecfe40b1a62" prot="public" virt="non-virtual"><scope>castor3d::Line</scope><name>Line</name></member>
+      <member refid="de/d88/a03958_1a83910b5cd4c5a3402a239db261b7e13f" prot="private" virt="non-virtual"><scope>castor3d::Line</scope><name>m_line</name></member>
+      <member refid="de/d88/a03958_1acd37f954f3a44a3ae092cd5431253fc7" prot="public" virt="non-virtual"><scope>castor3d::Line</scope><name>operator[]</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

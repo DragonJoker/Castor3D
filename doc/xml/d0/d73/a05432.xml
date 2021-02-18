@@ -1,0 +1,128 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d0/d73/a05432" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::TextureConfigurations</compoundname>
+    <includes local="no">GlslTextureConfiguration.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d0/d73/a05432_1a91e0a79e1bc4fa92e6fe34046e0b03f4" prot="private" static="no" mutable="no">
+        <type>sdw::ShaderWriter &amp;</type>
+        <definition>sdw::ShaderWriter&amp; castor3d::shader::TextureConfigurations::m_writer</definition>
+        <argsstring></argsstring>
+        <name>m_writer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="134" column="1" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="134" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d73/a05432_1ad2fc602e1e9b0f64af617ce73af4519c" prot="private" static="no" mutable="no">
+        <type>std::unique_ptr&lt; sdw::Struct &gt;</type>
+        <definition>std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::TextureConfigurations::m_type</definition>
+        <argsstring></argsstring>
+        <name>m_type</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="135" column="1" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="135" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d73/a05432_1ab135b60f39133b9055b915a2ea543dde" prot="private" static="no" mutable="no">
+        <type>std::unique_ptr&lt; sdw::ArraySsboT&lt; <ref refid="d4/d98/a05428" kindref="compound">TextureConfigData</ref> &gt; &gt;</type>
+        <definition>std::unique_ptr&lt; sdw::ArraySsboT&lt; TextureConfigData &gt; &gt; castor3d::shader::TextureConfigurations::m_ssbo</definition>
+        <argsstring></argsstring>
+        <name>m_ssbo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="136" column="1" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="136" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d73/a05432_1adddba2ca630fe81c48406fbf7c4910c1" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; <ref refid="d4/d98/a05428" kindref="compound">TextureConfigData</ref>, sdw::InUInt &gt;</type>
+        <definition>sdw::Function&lt; TextureConfigData , sdw::InUInt &gt; castor3d::shader::TextureConfigurations::m_getTextureConfiguration</definition>
+        <argsstring></argsstring>
+        <name>m_getTextureConfiguration</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="138" column="1" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="138" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/d73/a05432_1a44c56a0f4edf2d83146813096172be84" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::TextureConfigurations::TextureConfigurations</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>TextureConfigurations</name>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="129" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d73/a05432_1a7af2966fae135ff7cc3eab31e597cb07" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::TextureConfigurations::declare</definition>
+        <argsstring>(bool hasSsbo)</argsstring>
+        <name>declare</name>
+        <param>
+          <type>bool</type>
+          <declname>hasSsbo</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="130" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d73/a05432_1a042521e9d65e8a17762a04bae82f33fd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/d98/a05428" kindref="compound">TextureConfigData</ref></type>
+        <definition>C3D_API TextureConfigData castor3d::shader::TextureConfigurations::getTextureConfiguration</definition>
+        <argsstring>(sdw::UInt const &amp;index) const</argsstring>
+        <name>getTextureConfiguration</name>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="131" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="127" column="1" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="126" bodyend="139"/>
+    <listofallmembers>
+      <member refid="d0/d73/a05432_1a7af2966fae135ff7cc3eab31e597cb07" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>declare</name></member>
+      <member refid="d0/d73/a05432_1a042521e9d65e8a17762a04bae82f33fd" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>getTextureConfiguration</name></member>
+      <member refid="d0/d73/a05432_1adddba2ca630fe81c48406fbf7c4910c1" prot="private" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>m_getTextureConfiguration</name></member>
+      <member refid="d0/d73/a05432_1ab135b60f39133b9055b915a2ea543dde" prot="private" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>m_ssbo</name></member>
+      <member refid="d0/d73/a05432_1ad2fc602e1e9b0f64af617ce73af4519c" prot="private" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>m_type</name></member>
+      <member refid="d0/d73/a05432_1a91e0a79e1bc4fa92e6fe34046e0b03f4" prot="private" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>m_writer</name></member>
+      <member refid="d0/d73/a05432_1a44c56a0f4edf2d83146813096172be84" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>TextureConfigurations</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

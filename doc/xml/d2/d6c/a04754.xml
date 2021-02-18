@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d2/d6c/a04754" kind="struct" language="C++" prot="protected">
+    <compoundname>castor3d::LightPass::RenderPass</compoundname>
+    <includes local="no">LightPass.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d2/d6c/a04754_1a2b85e860baa157a0b7a51c9d55dd6d16" prot="public" static="no" mutable="no">
+        <type>ashes::RenderPassPtr</type>
+        <definition>ashes::RenderPassPtr castor3d::LightPass::RenderPass::renderPass</definition>
+        <argsstring></argsstring>
+        <name>renderPass</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="39" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d6c/a04754_1acb70804b63ec8651d8edb8e81ef9073c" prot="public" static="no" mutable="no">
+        <type>ashes::FrameBufferPtr</type>
+        <definition>ashes::FrameBufferPtr castor3d::LightPass::RenderPass::frameBuffer</definition>
+        <argsstring></argsstring>
+        <name>frameBuffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="40" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/d6c/a04754_1ac00fa53d066af78eb7ae961fe6ee2820" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::LightPass::RenderPass::RenderPass</definition>
+        <argsstring>(std::string const &amp;name, ashes::RenderPassPtr renderPass, LightPassResult const &amp;lpResult, bool generatesIndirect)</argsstring>
+        <name>RenderPass</name>
+        <param>
+          <type>std::string const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>ashes::RenderPassPtr</type>
+          <declname>renderPass</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/df5/a04770" kindref="compound">LightPassResult</ref> const &amp;</type>
+          <declname>lpResult</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>generatesIndirect</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="35" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Technique/Opaque/Lighting/LightPass.hpp" line="34" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPass.hpp" bodystart="33" bodyend="41"/>
+    <listofallmembers>
+      <member refid="d2/d6c/a04754_1acb70804b63ec8651d8edb8e81ef9073c" prot="public" virt="non-virtual"><scope>castor3d::LightPass::RenderPass</scope><name>frameBuffer</name></member>
+      <member refid="d2/d6c/a04754_1ac00fa53d066af78eb7ae961fe6ee2820" prot="public" virt="non-virtual"><scope>castor3d::LightPass::RenderPass</scope><name>RenderPass</name></member>
+      <member refid="d2/d6c/a04754_1a2b85e860baa157a0b7a51c9d55dd6d16" prot="public" virt="non-virtual"><scope>castor3d::LightPass::RenderPass</scope><name>renderPass</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

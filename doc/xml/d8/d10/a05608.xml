@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d8/d10/a05608" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SceneUboConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d8/d10/a05608_1a4eac3314bee5cc0c1aee06fcecce46ac" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::SceneUboConfiguration::ambientLight</definition>
+        <argsstring></argsstring>
+        <name>ambientLight</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="357" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="357" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d10/a05608_1a2cdd2054a510e769217d5fc985388136" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::SceneUboConfiguration::backgroundColour</definition>
+        <argsstring></argsstring>
+        <name>backgroundColour</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="358" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="358" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d10/a05608_1a371dad5fd69ed93624f8e9f4be758eaf" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::SceneUboConfiguration::lightsCount</definition>
+        <argsstring></argsstring>
+        <name>lightsCount</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="359" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="359" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d10/a05608_1ab560df530dc84ab3bffd3fda9531bbad" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::SceneUboConfiguration::cameraPos</definition>
+        <argsstring></argsstring>
+        <name>cameraPos</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="360" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="360" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d10/a05608_1a0fcb772bf8a6a7cb52c7816a8acc3a36" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::SceneUboConfiguration::clipInfo</definition>
+        <argsstring></argsstring>
+        <name>clipInfo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="361" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="361" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d10/a05608_1aee2e306f2e2142e6de52c0b324c78b98" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::SceneUboConfiguration::fogInfo</definition>
+        <argsstring></argsstring>
+        <name>fogInfo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="362" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="362" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para><ref refid="d5/d76/a05244" kindref="compound">Scene</ref> data. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Ubos/UbosModule.hpp" line="356" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="355" bodyend="363"/>
+    <listofallmembers>
+      <member refid="d8/d10/a05608_1a4eac3314bee5cc0c1aee06fcecce46ac" prot="public" virt="non-virtual"><scope>castor3d::SceneUboConfiguration</scope><name>ambientLight</name></member>
+      <member refid="d8/d10/a05608_1a2cdd2054a510e769217d5fc985388136" prot="public" virt="non-virtual"><scope>castor3d::SceneUboConfiguration</scope><name>backgroundColour</name></member>
+      <member refid="d8/d10/a05608_1ab560df530dc84ab3bffd3fda9531bbad" prot="public" virt="non-virtual"><scope>castor3d::SceneUboConfiguration</scope><name>cameraPos</name></member>
+      <member refid="d8/d10/a05608_1a0fcb772bf8a6a7cb52c7816a8acc3a36" prot="public" virt="non-virtual"><scope>castor3d::SceneUboConfiguration</scope><name>clipInfo</name></member>
+      <member refid="d8/d10/a05608_1aee2e306f2e2142e6de52c0b324c78b98" prot="public" virt="non-virtual"><scope>castor3d::SceneUboConfiguration</scope><name>fogInfo</name></member>
+      <member refid="d8/d10/a05608_1a371dad5fd69ed93624f8e9f4be758eaf" prot="public" virt="non-virtual"><scope>castor3d::SceneUboConfiguration</scope><name>lightsCount</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

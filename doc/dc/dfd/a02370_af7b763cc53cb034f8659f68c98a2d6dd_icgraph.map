@@ -1,0 +1,7 @@
+<map id="castor3d::CacheBase::lock" name="castor3d::CacheBase::lock">
+<area shape="rect" id="node1" title="Locks the collection mutex." alt="" coords="216,133,363,174"/>
+<area shape="rect" id="node2" href="$dc/dfd/a02370.html#a9d8fa89aa1ea33853d74552cc8142343" title="Removes an element, given a name." alt="" coords="5,5,168,61"/>
+<area shape="rect" id="node3" href="$dc/dfd/a02370.html#a5b8853e4191f80d06633e7adc80bfad6" title="Sets all the elements to be cleaned up." alt="" coords="5,85,168,141"/>
+<area shape="rect" id="node4" href="$dc/dfd/a02370.html#a37c3c620a716593723603fe85f7ce177" title="Applies a function to all the elements of this cache." alt="" coords="5,165,168,221"/>
+<area shape="rect" id="node5" href="$dc/dfd/a02370.html#aeb4864133bd71b20b4446d74ad4562ce" title=" " alt="" coords="5,245,168,301"/>
+</map>

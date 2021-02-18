@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_e68e8157741866f444e17edd764ebbae" kind="dir">
+    <compoundname>Z:/Projets/C++/Castor3D/doc</compoundname>
+    <innerdir refid="dir_27599f2825fefc5089049c49b021865c">Z:/Projets/C++/Castor3D/doc/Castor3D</innerdir>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Z:/Projets/C++/Castor3D/doc/"/>
+  </compounddef>
+</doxygen>

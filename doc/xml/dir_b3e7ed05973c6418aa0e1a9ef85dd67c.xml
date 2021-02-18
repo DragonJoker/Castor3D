@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_b3e7ed05973c6418aa0e1a9ef85dd67c" kind="dir">
+    <compoundname>Render/Technique/Opaque/ReflectiveShadowMapGI</compoundname>
+    <innerfile refid="d8/d19/a00935">LightPassReflectiveShadow.hpp</innerfile>
+    <innerfile refid="d5/d54/a00938">ReflectiveShadowMapGIModule.hpp</innerfile>
+    <innerfile refid="d6/dad/a00941">ReflectiveShadowMapping.hpp</innerfile>
+    <innerfile refid="d9/dce/a00944">RsmConfig.hpp</innerfile>
+    <innerfile refid="d3/d29/a00947">RsmGIPass.hpp</innerfile>
+    <innerfile refid="df/d39/a00950">RsmInterpolatePass.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Technique/Opaque/ReflectiveShadowMapGI/"/>
+  </compounddef>
+</doxygen>

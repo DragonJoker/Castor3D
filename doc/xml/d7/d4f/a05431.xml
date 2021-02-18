@@ -1,0 +1,142 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d7/d4f/a05431" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::TextureConfigurationBuffer::Data</compoundname>
+    <includes local="no">TextureConfigurationBuffer.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d7/d4f/a05431_1a4910688755c4e20247560b240227ca5e" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::TextureConfigurationBuffer::Data::colrSpec</definition>
+        <argsstring></argsstring>
+        <name>colrSpec</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp" line="109" column="1" bodyfile="Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4f/a05431_1a89927c6e9ff6f599ad15d21afb4210ed" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::TextureConfigurationBuffer::Data::glossOpa</definition>
+        <argsstring></argsstring>
+        <name>glossOpa</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp" line="110" column="1" bodyfile="Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4f/a05431_1a6510a186c28907a45dc2020d8f9505d7" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::TextureConfigurationBuffer::Data::emisOccl</definition>
+        <argsstring></argsstring>
+        <name>emisOccl</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp" line="111" column="1" bodyfile="Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4f/a05431_1a390b3ae7657acd852bfbb0bfaf9df0d3" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::TextureConfigurationBuffer::Data::trnsDumm</definition>
+        <argsstring></argsstring>
+        <name>trnsDumm</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp" line="112" column="1" bodyfile="Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4f/a05431_1a7461bdb54158fffbfc96fa0a92da2080" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::TextureConfigurationBuffer::Data::normalFc</definition>
+        <argsstring></argsstring>
+        <name>normalFc</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp" line="113" column="1" bodyfile="Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp" bodystart="113" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4f/a05431_1ade80945403f46957c2ac37a254368d54" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::TextureConfigurationBuffer::Data::heightFc</definition>
+        <argsstring></argsstring>
+        <name>heightFc</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp" line="114" column="1" bodyfile="Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp" bodystart="114" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4f/a05431_1a8371b59c2003801ed37cb16ad2782205" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::TextureConfigurationBuffer::Data::miscVals</definition>
+        <argsstring></argsstring>
+        <name>miscVals</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp" line="115" column="1" bodyfile="Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4f/a05431_1a6cda8adca582c4f0c1e2b2b97d6d3308" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::TextureConfigurationBuffer::Data::translate</definition>
+        <argsstring></argsstring>
+        <name>translate</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp" line="116" column="1" bodyfile="Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp" bodystart="116" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4f/a05431_1a45deeedaeb5d45b34ac711f90895f1dc" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::TextureConfigurationBuffer::Data::rotate</definition>
+        <argsstring></argsstring>
+        <name>rotate</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp" line="117" column="1" bodyfile="Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp" bodystart="117" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp" line="108" column="1" bodyfile="Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp" bodystart="107" bodyend="118"/>
+    <listofallmembers>
+      <member refid="d7/d4f/a05431_1a4910688755c4e20247560b240227ca5e" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer::Data</scope><name>colrSpec</name></member>
+      <member refid="d7/d4f/a05431_1a6510a186c28907a45dc2020d8f9505d7" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer::Data</scope><name>emisOccl</name></member>
+      <member refid="d7/d4f/a05431_1a89927c6e9ff6f599ad15d21afb4210ed" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer::Data</scope><name>glossOpa</name></member>
+      <member refid="d7/d4f/a05431_1ade80945403f46957c2ac37a254368d54" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer::Data</scope><name>heightFc</name></member>
+      <member refid="d7/d4f/a05431_1a8371b59c2003801ed37cb16ad2782205" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer::Data</scope><name>miscVals</name></member>
+      <member refid="d7/d4f/a05431_1a7461bdb54158fffbfc96fa0a92da2080" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer::Data</scope><name>normalFc</name></member>
+      <member refid="d7/d4f/a05431_1a45deeedaeb5d45b34ac711f90895f1dc" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer::Data</scope><name>rotate</name></member>
+      <member refid="d7/d4f/a05431_1a6cda8adca582c4f0c1e2b2b97d6d3308" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer::Data</scope><name>translate</name></member>
+      <member refid="d7/d4f/a05431_1a390b3ae7657acd852bfbb0bfaf9df0d3" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer::Data</scope><name>trnsDumm</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,162 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="da/d7e/a00530" kind="file" language="C++">
+    <compoundname>SkeletonAnimationKeyFrame.hpp</compoundname>
+    <includes refid="d4/d81/a00110" local="yes">Castor3D/Binary/BinaryModule.hpp</includes>
+    <includes refid="dd/d18/a07324" local="yes">Castor3D/Model/Skeleton/Animation/SkeletonAnimationModule.hpp</includes>
+    <includes refid="da/dec/a00080" local="yes">Castor3D/Animation/AnimationKeyFrame.hpp</includes>
+    <includedby refid="d5/d67/a01070" local="yes">Scene/Animation/Skeleton/SkeletonAnimationInstanceKeyFrame.hpp</includedby>
+    <incdepgraph>
+      <node id="10475">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="10478">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="10479">
+        <label>cstdint</label>
+      </node>
+      <node id="10477">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="10470">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d5/d35/a00266"/>
+        <childnode refid="10471" relation="include">
+        </childnode>
+        <childnode refid="10472" relation="include">
+        </childnode>
+        <childnode refid="10473" relation="include">
+        </childnode>
+        <childnode refid="10474" relation="include">
+        </childnode>
+        <childnode refid="10475" relation="include">
+        </childnode>
+        <childnode refid="10476" relation="include">
+        </childnode>
+        <childnode refid="10477" relation="include">
+        </childnode>
+        <childnode refid="10478" relation="include">
+        </childnode>
+        <childnode refid="10479" relation="include">
+        </childnode>
+        <childnode refid="10480" relation="include">
+        </childnode>
+        <childnode refid="10481" relation="include">
+        </childnode>
+        <childnode refid="10482" relation="include">
+        </childnode>
+      </node>
+      <node id="10481">
+        <label>string</label>
+      </node>
+      <node id="10485">
+        <label>Castor3D/Model/ModelModule.hpp</label>
+        <link refid="d7/def/a00521"/>
+        <childnode refid="10470" relation="include">
+        </childnode>
+      </node>
+      <node id="10474">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="10471">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="10490">
+        <label>CastorUtils/Graphics/BoundingBox.hpp</label>
+      </node>
+      <node id="10473">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="10468">
+        <label>Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp</label>
+        <link refid="da/d7e/a00530"/>
+        <childnode refid="10469" relation="include">
+        </childnode>
+        <childnode refid="10483" relation="include">
+        </childnode>
+        <childnode refid="10487" relation="include">
+        </childnode>
+      </node>
+      <node id="10469">
+        <label>Castor3D/Binary/BinaryModule.hpp</label>
+        <link refid="d4/d81/a00110"/>
+        <childnode refid="10470" relation="include">
+        </childnode>
+      </node>
+      <node id="10489">
+        <label>CastorUtils/Math/Quaternion.hpp</label>
+      </node>
+      <node id="10483">
+        <label>Castor3D/Model/Skeleton/Animation/SkeletonAnimationModule.hpp</label>
+        <link refid="dd/d18/a07324"/>
+        <childnode refid="10484" relation="include">
+        </childnode>
+        <childnode refid="10486" relation="include">
+        </childnode>
+      </node>
+      <node id="10472">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="10488">
+        <label>AnimationModule.hpp</label>
+        <link refid="d0/d35/a07306"/>
+        <childnode refid="10470" relation="include">
+        </childnode>
+        <childnode refid="10489" relation="include">
+        </childnode>
+      </node>
+      <node id="10482">
+        <label>vector</label>
+      </node>
+      <node id="10476">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="10487">
+        <label>Castor3D/Animation/AnimationKeyFrame.hpp</label>
+        <link refid="da/dec/a00080"/>
+        <childnode refid="10488" relation="include">
+        </childnode>
+        <childnode refid="10490" relation="include">
+        </childnode>
+      </node>
+      <node id="10484">
+        <label>Castor3D/Model/Skeleton/SkeletonModule.hpp</label>
+        <link refid="d9/d87/a00551"/>
+        <childnode refid="10485" relation="include">
+        </childnode>
+      </node>
+      <node id="10480">
+        <label>memory</label>
+      </node>
+      <node id="10486">
+        <label>CastorUtils/Math/SquareMatrix.hpp</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="10491">
+        <label>Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp</label>
+        <link refid="da/d7e/a00530"/>
+        <childnode refid="10492" relation="include">
+        </childnode>
+      </node>
+      <node id="10492">
+        <label>Scene/Animation/Skeleton/SkeletonAnimationInstanceKeyFrame.hpp</label>
+        <link refid="d5/d67/a01070"/>
+        <childnode refid="10493" relation="include">
+        </childnode>
+      </node>
+      <node id="10493">
+        <label>Scene/Animation/Skeleton/SkeletonAnimationInstance.hpp</label>
+        <link refid="d9/db3/a01064"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="d9/d97/a04016" prot="public">castor3d::SkeletonAnimationKeyFrame</innerclass>
+    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp"/>
+  </compounddef>
+</doxygen>

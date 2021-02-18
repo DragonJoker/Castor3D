@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="de/ddf/a05551" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::LayeredLpvGridConfigUboConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="de/ddf/a05551_1a28c17a6c9df30156f670d71af3d1f56c" prot="public" static="no" mutable="no">
+        <type>std::array&lt; castor::Point4f, <ref refid="d7/d42/a01463_1a51b2822a5ca0ee8b3805ce188ad0589b" kindref="member">shader::LpvMaxCascadesCount</ref> &gt;</type>
+        <definition>std::array&lt; castor::Point4f, shader::LpvMaxCascadesCount &gt; castor3d::LayeredLpvGridConfigUboConfiguration::allMinVolumeCorners</definition>
+        <argsstring></argsstring>
+        <name>allMinVolumeCorners</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="141" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="141" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/ddf/a05551_1af1a2cecd07348243eed30b2901f0b520" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::LayeredLpvGridConfigUboConfiguration::allCellSizes</definition>
+        <argsstring></argsstring>
+        <name>allCellSizes</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="142" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="142" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/ddf/a05551_1ad9359afe1ec0aea2a2fec57dd8f68841" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::LayeredLpvGridConfigUboConfiguration::gridSizeAtt</definition>
+        <argsstring></argsstring>
+        <name>gridSizeAtt</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="143" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="143" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para><ref refid="df/dc5/a05151" kindref="compound">Light</ref> propagation data. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1529">
+        <label>T</label>
+      </node>
+      <node id="1528">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="1529" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="1526">
+        <label>castor3d::LayeredLpvGridConfigUboConfiguration</label>
+        <link refid="de/ddf/a05551"/>
+        <childnode refid="1527" relation="usage">
+          <edgelabel>allMinVolumeCorners</edgelabel>
+        </childnode>
+      </node>
+      <node id="1527">
+        <label>std::array&lt; castor::Point4f, shader::LpvMaxCascadesCount &gt;</label>
+        <childnode refid="1528" relation="template-instance">
+          <edgelabel>&lt; castor::Point4f, shader::LpvMaxCascadesCount &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Ubos/UbosModule.hpp" line="140" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="139" bodyend="144"/>
+    <listofallmembers>
+      <member refid="de/ddf/a05551_1af1a2cecd07348243eed30b2901f0b520" prot="public" virt="non-virtual"><scope>castor3d::LayeredLpvGridConfigUboConfiguration</scope><name>allCellSizes</name></member>
+      <member refid="de/ddf/a05551_1a28c17a6c9df30156f670d71af3d1f56c" prot="public" virt="non-virtual"><scope>castor3d::LayeredLpvGridConfigUboConfiguration</scope><name>allMinVolumeCorners</name></member>
+      <member refid="de/ddf/a05551_1ad9359afe1ec0aea2a2fec57dd8f68841" prot="public" virt="non-virtual"><scope>castor3d::LayeredLpvGridConfigUboConfiguration</scope><name>gridSizeAtt</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

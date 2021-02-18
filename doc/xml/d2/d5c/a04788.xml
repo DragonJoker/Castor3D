@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d2/d5c/a04788" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::LightPassShadowTraits&lt; LightType::eSpot &gt;</compoundname>
+    <includes local="no">LightPassShadow.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d2/d5c/a04788_1a289eb04314dbda6a73a2a5c4dbff38aa" prot="public" static="no">
+        <type><ref refid="d6/d8c/a05188" kindref="compound">SpotLight</ref></type>
+        <definition>using castor3d::LightPassShadowTraits&lt; LightType::eSpot &gt;::light_type =  SpotLight</definition>
+        <argsstring></argsstring>
+        <name>light_type</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The light source type. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" line="78" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/d5c/a04788_1aaa522a9d60c427445d96c6ca9d99ef1d" prot="public" static="no">
+        <type><ref refid="d1/daa/a04816" kindref="compound">SpotLightPass</ref></type>
+        <definition>using castor3d::LightPassShadowTraits&lt; LightType::eSpot &gt;::light_pass_type =  SpotLightPass</definition>
+        <argsstring></argsstring>
+        <name>light_pass_type</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The light pass type. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" line="81" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/d5c/a04788_1a43455bff301e35e57ce48f83055f24e4" prot="public" static="no">
+        <type><ref refid="d7/d11/a04696" kindref="compound">ShadowMapSpot</ref></type>
+        <definition>using castor3d::LightPassShadowTraits&lt; LightType::eSpot &gt;::shadow_pass_type =  ShadowMapSpot</definition>
+        <argsstring></argsstring>
+        <name>shadow_pass_type</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The shadow map type. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" line="84" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Traits structure to specialise light passes with shadows. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Specialisation for <ref refid="da/d1e/a01479_1a381718aa9accc88c20afd97d76c30ed8ad6edd06d4607dfe84cff29cdd4f67fed" kindref="member">LightType::eSpot</ref>. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" line="75" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" bodystart="74" bodyend="85"/>
+    <listofallmembers>
+      <member refid="d2/d5c/a04788_1aaa522a9d60c427445d96c6ca9d99ef1d" prot="public" virt="non-virtual"><scope>castor3d::LightPassShadowTraits&lt; LightType::eSpot &gt;</scope><name>light_pass_type</name></member>
+      <member refid="d2/d5c/a04788_1a289eb04314dbda6a73a2a5c4dbff38aa" prot="public" virt="non-virtual"><scope>castor3d::LightPassShadowTraits&lt; LightType::eSpot &gt;</scope><name>light_type</name></member>
+      <member refid="d2/d5c/a04788_1a43455bff301e35e57ce48f83055f24e4" prot="public" virt="non-virtual"><scope>castor3d::LightPassShadowTraits&lt; LightType::eSpot &gt;</scope><name>shadow_pass_type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

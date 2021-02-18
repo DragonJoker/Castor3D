@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_2338558f384d4f98581132b9a0f80374" kind="dir">
+    <compoundname>Text</compoundname>
+    <innerfile refid="dc/d8e/a01331">TextAnimatedObjectGroup.hpp</innerfile>
+    <innerfile refid="d4/dd1/a01334">TextBackground.hpp</innerfile>
+    <innerfile refid="db/dec/a01337">TextBillboardList.hpp</innerfile>
+    <innerfile refid="d7/d51/a01340">TextBorderPanelOverlay.hpp</innerfile>
+    <innerfile refid="d3/da4/a01343">TextCamera.hpp</innerfile>
+    <innerfile refid="d9/de4/a01346">TextColourBackground.hpp</innerfile>
+    <innerfile refid="de/d6c/a01349">TextDirectionalLight.hpp</innerfile>
+    <innerfile refid="d0/d85/a01352">TextFog.hpp</innerfile>
+    <innerfile refid="d8/d4e/a01355">TextGeometry.hpp</innerfile>
+    <innerfile refid="de/d5c/a01358">TextHdrConfig.hpp</innerfile>
+    <innerfile refid="d2/d1f/a01361">TextImageBackground.hpp</innerfile>
+    <innerfile refid="de/d1f/a01364">TextLight.hpp</innerfile>
+    <innerfile refid="dd/d86/a01367">TextLpvConfig.hpp</innerfile>
+    <innerfile refid="d8/dbe/a01370">TextMaterial.hpp</innerfile>
+    <innerfile refid="d7/d38/a01373">TextMesh.hpp</innerfile>
+    <innerfile refid="d2/d29/a01376">TextMetallicRoughnessPbrPass.hpp</innerfile>
+    <innerfile refid="d0/d9c/a07307">TextOverlay.hpp</innerfile>
+    <innerfile refid="d0/d9b/a01379">TextOverlayCategory.hpp</innerfile>
+    <innerfile refid="de/d9d/a01382">TextPanelOverlay.hpp</innerfile>
+    <innerfile refid="df/d68/a01385">TextParticleSystem.hpp</innerfile>
+    <innerfile refid="d0/d36/a01388">TextPass.hpp</innerfile>
+    <innerfile refid="dc/dbc/a01391">TextPhongPass.hpp</innerfile>
+    <innerfile refid="d6/d2f/a01394">TextPointLight.hpp</innerfile>
+    <innerfile refid="d7/d1c/a01397">TextPostEffect.hpp</innerfile>
+    <innerfile refid="dc/d35/a01400">TextProgram.hpp</innerfile>
+    <innerfile refid="da/d06/a01403">TextRenderTarget.hpp</innerfile>
+    <innerfile refid="dc/d25/a01406">TextRenderWindow.hpp</innerfile>
+    <innerfile refid="d9/d6e/a01409">TextRsmConfig.hpp</innerfile>
+    <innerfile refid="dc/d10/a01412">TextSampler.hpp</innerfile>
+    <innerfile refid="de/d70/a01415">TextScene.hpp</innerfile>
+    <innerfile refid="d4/d3c/a01418">TextSceneNode.hpp</innerfile>
+    <innerfile refid="d4/d20/a01421">TextShadow.hpp</innerfile>
+    <innerfile refid="d5/da5/a01424">TextSkyboxBackground.hpp</innerfile>
+    <innerfile refid="db/d78/a01427">TextSpecularGlossinessPbrPass.hpp</innerfile>
+    <innerfile refid="d8/dd0/a01430">TextSpotLight.hpp</innerfile>
+    <innerfile refid="d2/d9b/a01433">TextSsaoConfig.hpp</innerfile>
+    <innerfile refid="dc/d85/a01436">TextSubsurfaceScattering.hpp</innerfile>
+    <innerfile refid="d7/dfd/a01439">TextTextOverlay.hpp</innerfile>
+    <innerfile refid="d0/de2/a01442">TextTextureConfiguration.hpp</innerfile>
+    <innerfile refid="d9/d6f/a01445">TextTextureUnit.hpp</innerfile>
+    <innerfile refid="dd/d08/a01448">TextTextureView.hpp</innerfile>
+    <innerfile refid="d3/dbc/a01451">TextViewport.hpp</innerfile>
+    <innerfile refid="da/df6/a01454">TextVoxelSceneData.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Text/"/>
+  </compounddef>
+</doxygen>

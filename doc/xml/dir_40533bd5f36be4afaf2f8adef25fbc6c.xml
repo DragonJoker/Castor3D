@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_40533bd5f36be4afaf2f8adef25fbc6c" kind="dir">
+    <compoundname>Scene</compoundname>
+    <innerdir refid="dir_cb6750fd0f63fd8f29108a0684eccd46">Scene/Animation</innerdir>
+    <innerdir refid="dir_7c37f15c4f52caabe2725945716123e2">Scene/Background</innerdir>
+    <innerdir refid="dir_515db96c9602d74ba27af13fbc4aff89">Scene/Light</innerdir>
+    <innerdir refid="dir_eddf2ff1f2f73ff4c7ae36625ceded65">Scene/ParticleSystem</innerdir>
+    <innerfile refid="d9/d10/a01103">BillboardList.hpp</innerfile>
+    <innerfile refid="da/d4e/a01106">Camera.hpp</innerfile>
+    <innerfile refid="d8/dbf/a01109">Fog.hpp</innerfile>
+    <innerfile refid="d0/d39/a01112">Geometry.hpp</innerfile>
+    <innerfile refid="d1/dae/a01136">MovableObject.hpp</innerfile>
+    <innerfile refid="d7/daf/a01169">RenderedObject.hpp</innerfile>
+    <innerfile refid="d6/db6/a01172">Scene.hpp</innerfile>
+    <innerfile refid="d6/df2/a01175">SceneFileParser.hpp</innerfile>
+    <innerfile refid="d8/d11/a01178">SceneFileParser_Parsers.hpp</innerfile>
+    <innerfile refid="de/db5/a01181">SceneModule.hpp</innerfile>
+    <innerfile refid="d1/d35/a01184">SceneNode.hpp</innerfile>
+    <innerfile refid="dc/d70/a01187">Shadow.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Scene/"/>
+  </compounddef>
+</doxygen>

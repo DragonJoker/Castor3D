@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d3/df9/a02052" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::InterpolatorT</compoundname>
+    <includes local="no">AnimationModule.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class Type</type>
+      </param>
+      <param>
+        <type><ref refid="da/d1e/a01479_1ad38387ab8e17377a42314bc21c171ab0" kindref="member">InterpolatorType</ref></type>
+        <declname>Mode</declname>
+        <defname>Mode</defname>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+<para>Template class which handles the interpolations, would it be quaternion, point, real, ... interpolations. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Animation/AnimationModule.hpp" line="114" column="1" bodyfile="Animation/AnimationModule.hpp" bodystart="114" bodyend="-1"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

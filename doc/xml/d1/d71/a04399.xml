@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d1/d71/a04399" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::LineariseDepthPass::MinifyPipeline</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d1/d71/a04399_1a361ceb249dcf57d0d356afe8a9f531f2" prot="public" static="no" mutable="no">
+        <type>ashes::ImageView const  *</type>
+        <definition>ashes::ImageView const* castor3d::LineariseDepthPass::MinifyPipeline::sourceView</definition>
+        <argsstring></argsstring>
+        <name>sourceView</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/LineariseDepthPass.hpp" line="199" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="199" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d71/a04399_1a61d87ccf15abcb78d1e75c428f592adb" prot="public" static="no" mutable="no">
+        <type>ashes::ImageView</type>
+        <definition>ashes::ImageView castor3d::LineariseDepthPass::MinifyPipeline::targetView</definition>
+        <argsstring></argsstring>
+        <name>targetView</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/LineariseDepthPass.hpp" line="200" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="200" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d71/a04399_1a3b8257cbc0efa2272796e52db97f34dc" prot="public" static="no" mutable="no">
+        <type>ashes::DescriptorSetPtr</type>
+        <definition>ashes::DescriptorSetPtr castor3d::LineariseDepthPass::MinifyPipeline::descriptor</definition>
+        <argsstring></argsstring>
+        <name>descriptor</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/LineariseDepthPass.hpp" line="201" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="201" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d71/a04399_1a9e03420edc1781373c2cca95bdbafb3c" prot="public" static="no" mutable="no">
+        <type>ashes::FrameBufferPtr</type>
+        <definition>ashes::FrameBufferPtr castor3d::LineariseDepthPass::MinifyPipeline::frameBuffer</definition>
+        <argsstring></argsstring>
+        <name>frameBuffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/LineariseDepthPass.hpp" line="202" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="202" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d71/a04399_1a65f705de6ae65851a3f845c290f805e6" prot="public" static="no" mutable="no">
+        <type>ashes::GraphicsPipelinePtr</type>
+        <definition>ashes::GraphicsPipelinePtr castor3d::LineariseDepthPass::MinifyPipeline::pipeline</definition>
+        <argsstring></argsstring>
+        <name>pipeline</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/LineariseDepthPass.hpp" line="203" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="203" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Passes/LineariseDepthPass.hpp" line="198" column="1" bodyfile="Render/Passes/LineariseDepthPass.hpp" bodystart="197" bodyend="204"/>
+    <listofallmembers>
+      <member refid="d1/d71/a04399_1a3b8257cbc0efa2272796e52db97f34dc" prot="public" virt="non-virtual"><scope>castor3d::LineariseDepthPass::MinifyPipeline</scope><name>descriptor</name></member>
+      <member refid="d1/d71/a04399_1a9e03420edc1781373c2cca95bdbafb3c" prot="public" virt="non-virtual"><scope>castor3d::LineariseDepthPass::MinifyPipeline</scope><name>frameBuffer</name></member>
+      <member refid="d1/d71/a04399_1a65f705de6ae65851a3f845c290f805e6" prot="public" virt="non-virtual"><scope>castor3d::LineariseDepthPass::MinifyPipeline</scope><name>pipeline</name></member>
+      <member refid="d1/d71/a04399_1a361ceb249dcf57d0d356afe8a9f531f2" prot="public" virt="non-virtual"><scope>castor3d::LineariseDepthPass::MinifyPipeline</scope><name>sourceView</name></member>
+      <member refid="d1/d71/a04399_1a61d87ccf15abcb78d1e75c428f592adb" prot="public" virt="non-virtual"><scope>castor3d::LineariseDepthPass::MinifyPipeline</scope><name>targetView</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

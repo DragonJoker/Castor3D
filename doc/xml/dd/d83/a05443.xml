@@ -1,0 +1,408 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dd/d83/a05443" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::GpInfoUbo</compoundname>
+    <includes local="no">GpInfoUbo.hpp</includes>
+      <sectiondef kind="user-defined">
+      <header>Copy/Move construction/assignment operation.</header>
+      <memberdef kind="function" id="dd/d83/a05443_1a5050af8b2e2edd7b8a535eb0241e9f2c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::GpInfoUbo::GpInfoUbo</definition>
+        <argsstring>(GpInfoUbo const &amp;)=delete</argsstring>
+        <name>GpInfoUbo</name>
+        <param>
+          <type><ref refid="dd/d83/a05443" kindref="compound">GpInfoUbo</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="28" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d83/a05443_1a68a2ce6d5f068fa765290282e1bcb8d4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="dd/d83/a05443" kindref="compound">GpInfoUbo</ref> &amp;</type>
+        <definition>C3D_API GpInfoUbo&amp; castor3d::GpInfoUbo::operator=</definition>
+        <argsstring>(GpInfoUbo const &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <param>
+          <type><ref refid="dd/d83/a05443" kindref="compound">GpInfoUbo</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="29" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d83/a05443_1a79b5fe388440b5851991f1bac948879d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::GpInfoUbo::GpInfoUbo</definition>
+        <argsstring>(GpInfoUbo &amp;&amp;)=default</argsstring>
+        <name>GpInfoUbo</name>
+        <param>
+          <type><ref refid="dd/d83/a05443" kindref="compound">GpInfoUbo</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="30" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d83/a05443_1a79ac47ac08a06e66217d13d803abdd6d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="dd/d83/a05443" kindref="compound">GpInfoUbo</ref> &amp;</type>
+        <definition>C3D_API GpInfoUbo&amp; castor3d::GpInfoUbo::operator=</definition>
+        <argsstring>(GpInfoUbo &amp;&amp;)=delete</argsstring>
+        <name>operator=</name>
+        <param>
+          <type><ref refid="dd/d83/a05443" kindref="compound">GpInfoUbo</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="31" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="dd/d83/a05443_1adfd9d07dfced9b1ab9727c898ca457e4" prot="public" static="no">
+        <type><ref refid="d6/d15/a05539" kindref="compound">GpInfoUboConfiguration</ref></type>
+        <definition>using castor3d::GpInfoUbo::Configuration =  GpInfoUboConfiguration</definition>
+        <argsstring></argsstring>
+        <name>Configuration</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="18" column="1" bodyfile="Shader/Ubos/GpInfoUbo.hpp" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="dd/d83/a05443_1a0119849d4e3600a8b6eda8c03b8d2dcb" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const castor::String</type>
+        <definition>C3D_API const castor::String castor3d::GpInfoUbo::GPInfo</definition>
+        <argsstring></argsstring>
+        <name>GPInfo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="82" column="1" bodyfile="Shader/Ubos/GpInfoUbo.hpp" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d83/a05443_1a7b645593deae4a414f729c20add4588e" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const castor::String</type>
+        <definition>C3D_API const castor::String castor3d::GpInfoUbo::InvViewProj</definition>
+        <argsstring></argsstring>
+        <name>InvViewProj</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="83" column="1" bodyfile="Shader/Ubos/GpInfoUbo.hpp" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d83/a05443_1acbde826e15e941fdfcd41e04c90d1082" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const castor::String</type>
+        <definition>C3D_API const castor::String castor3d::GpInfoUbo::InvView</definition>
+        <argsstring></argsstring>
+        <name>InvView</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="84" column="1" bodyfile="Shader/Ubos/GpInfoUbo.hpp" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d83/a05443_1a965eb003e385bbcfbc8b9dcd23575c73" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const castor::String</type>
+        <definition>C3D_API const castor::String castor3d::GpInfoUbo::InvProj</definition>
+        <argsstring></argsstring>
+        <name>InvProj</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="85" column="1" bodyfile="Shader/Ubos/GpInfoUbo.hpp" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d83/a05443_1a8c95be1efec32a674b9f6b6733ec4346" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const castor::String</type>
+        <definition>C3D_API const castor::String castor3d::GpInfoUbo::View</definition>
+        <argsstring></argsstring>
+        <name>View</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="86" column="1" bodyfile="Shader/Ubos/GpInfoUbo.hpp" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d83/a05443_1aa84af5fa24d2e20bd9a9fc428c9ea688" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const castor::String</type>
+        <definition>C3D_API const castor::String castor3d::GpInfoUbo::Proj</definition>
+        <argsstring></argsstring>
+        <name>Proj</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="87" column="1" bodyfile="Shader/Ubos/GpInfoUbo.hpp" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d83/a05443_1afe587a4be3ab8add26795df4150d7bef" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const castor::String</type>
+        <definition>C3D_API const castor::String castor3d::GpInfoUbo::RenderSize</definition>
+        <argsstring></argsstring>
+        <name>RenderSize</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="88" column="1" bodyfile="Shader/Ubos/GpInfoUbo.hpp" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d83/a05443_1a01401bda728d8cd1b646f2f74cf722a8" prot="public" static="yes" mutable="no">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t const</type>
+        <definition>C3D_API uint32_t const castor3d::GpInfoUbo::BindingPoint</definition>
+        <argsstring></argsstring>
+        <name>BindingPoint</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="89" column="1" bodyfile="Shader/Ubos/GpInfoUbo.hpp" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dd/d83/a05443_1ae034018a85cbc95d13938639db33cef9" prot="private" static="no" mutable="no">
+        <type><ref refid="d0/d7c/a02499" kindref="compound">Engine</ref> &amp;</type>
+        <definition>Engine&amp; castor3d::GpInfoUbo::m_engine</definition>
+        <argsstring></argsstring>
+        <name>m_engine</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="92" column="1" bodyfile="Shader/Ubos/GpInfoUbo.hpp" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d83/a05443_1af5100d0f99e459b0866122f055f30f36" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="dd/d83/a05443_1adfd9d07dfced9b1ab9727c898ca457e4" kindref="member">Configuration</ref> &gt;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; castor3d::GpInfoUbo::m_ubo</definition>
+        <argsstring></argsstring>
+        <name>m_ubo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="93" column="1" bodyfile="Shader/Ubos/GpInfoUbo.hpp" bodystart="93" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/d83/a05443_1a0f1e51ceb7e310bc86428e3ef61a8d59" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::GpInfoUbo::GpInfoUbo</definition>
+        <argsstring>(Engine &amp;engine)</argsstring>
+        <name>GpInfoUbo</name>
+        <param>
+          <type><ref refid="d0/d7c/a02499" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The engine. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="41" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d83/a05443_1a578b0d77a380219082cf51548dcc7315" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::GpInfoUbo::~GpInfoUbo</definition>
+        <argsstring>()</argsstring>
+        <name>~GpInfoUbo</name>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="48" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d83/a05443_1ab9346da2b9f812882b4533f64a18d44f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::GpInfoUbo::initialise</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>initialise</name>
+        <param>
+          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+<para>Initialises the UBO. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="57" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d83/a05443_1aa74bfbe74e69f1f903bdb811687aeb9a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::GpInfoUbo::cleanup</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>cleanup</name>
+        <param>
+          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+<para>Cleanup function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="66" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d83/a05443_1aad50a1fefda242429daea5370f2e6be6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::GpInfoUbo::cpuUpdate</definition>
+        <argsstring>(castor::Size const &amp;renderSize, Camera const &amp;camera)</argsstring>
+        <name>cpuUpdate</name>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>renderSize</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/dcf/a05131" kindref="compound">Camera</ref> const &amp;</type>
+          <declname>camera</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="67" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d83/a05443_1a5d2c9c7da7669ef53a90758a44b7619c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::GpInfoUbo::createSizedBinding</definition>
+        <argsstring>(ashes::DescriptorSet &amp;descriptorSet, VkDescriptorSetLayoutBinding const &amp;layoutBinding) const</argsstring>
+        <name>createSizedBinding</name>
+        <param>
+          <type>ashes::DescriptorSet &amp;</type>
+          <declname>descriptorSet</declname>
+        </param>
+        <param>
+          <type>VkDescriptorSetLayoutBinding const &amp;</type>
+          <declname>layoutBinding</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="70" column="1" bodyfile="Shader/Ubos/GpInfoUbo.hpp" bodystart="70" bodyend="74"/>
+        <references refid="d2/dd2/a02279_1a2c6ad146d4910651544564c25ca7dccd" compoundref="d6/db8/a00158" startline="70" endline="79">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createSizedBinding</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d83/a05443_1ae0228fa43664649374a6fa8d4037d4a8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="dd/d83/a05443_1adfd9d07dfced9b1ab9727c898ca457e4" kindref="member">Configuration</ref> &gt; const  &amp;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; const&amp; castor3d::GpInfoUbo::getUbo</definition>
+        <argsstring>() const</argsstring>
+        <name>getUbo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/GpInfoUbo.hpp" line="76" column="1" bodyfile="Shader/Ubos/GpInfoUbo.hpp" bodystart="76" bodyend="79"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Ubos/GpInfoUbo.hpp" line="16" column="1" bodyfile="Shader/Ubos/GpInfoUbo.hpp" bodystart="15" bodyend="94"/>
+    <listofallmembers>
+      <member refid="dd/d83/a05443_1a01401bda728d8cd1b646f2f74cf722a8" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUbo</scope><name>BindingPoint</name></member>
+      <member refid="dd/d83/a05443_1aa74bfbe74e69f1f903bdb811687aeb9a" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUbo</scope><name>cleanup</name></member>
+      <member refid="dd/d83/a05443_1adfd9d07dfced9b1ab9727c898ca457e4" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUbo</scope><name>Configuration</name></member>
+      <member refid="dd/d83/a05443_1aad50a1fefda242429daea5370f2e6be6" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUbo</scope><name>cpuUpdate</name></member>
+      <member refid="dd/d83/a05443_1a5d2c9c7da7669ef53a90758a44b7619c" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUbo</scope><name>createSizedBinding</name></member>
+      <member refid="dd/d83/a05443_1ae0228fa43664649374a6fa8d4037d4a8" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUbo</scope><name>getUbo</name></member>
+      <member refid="dd/d83/a05443_1a0119849d4e3600a8b6eda8c03b8d2dcb" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUbo</scope><name>GPInfo</name></member>
+      <member refid="dd/d83/a05443_1a5050af8b2e2edd7b8a535eb0241e9f2c" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUbo</scope><name>GpInfoUbo</name></member>
+      <member refid="dd/d83/a05443_1a79b5fe388440b5851991f1bac948879d" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUbo</scope><name>GpInfoUbo</name></member>
+      <member refid="dd/d83/a05443_1a0f1e51ceb7e310bc86428e3ef61a8d59" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUbo</scope><name>GpInfoUbo</name></member>
+      <member refid="dd/d83/a05443_1ab9346da2b9f812882b4533f64a18d44f" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUbo</scope><name>initialise</name></member>
+      <member refid="dd/d83/a05443_1a965eb003e385bbcfbc8b9dcd23575c73" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUbo</scope><name>InvProj</name></member>
+      <member refid="dd/d83/a05443_1acbde826e15e941fdfcd41e04c90d1082" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUbo</scope><name>InvView</name></member>
+      <member refid="dd/d83/a05443_1a7b645593deae4a414f729c20add4588e" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUbo</scope><name>InvViewProj</name></member>
+      <member refid="dd/d83/a05443_1ae034018a85cbc95d13938639db33cef9" prot="private" virt="non-virtual"><scope>castor3d::GpInfoUbo</scope><name>m_engine</name></member>
+      <member refid="dd/d83/a05443_1af5100d0f99e459b0866122f055f30f36" prot="private" virt="non-virtual"><scope>castor3d::GpInfoUbo</scope><name>m_ubo</name></member>
+      <member refid="dd/d83/a05443_1a68a2ce6d5f068fa765290282e1bcb8d4" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUbo</scope><name>operator=</name></member>
+      <member refid="dd/d83/a05443_1a79ac47ac08a06e66217d13d803abdd6d" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUbo</scope><name>operator=</name></member>
+      <member refid="dd/d83/a05443_1aa84af5fa24d2e20bd9a9fc428c9ea688" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUbo</scope><name>Proj</name></member>
+      <member refid="dd/d83/a05443_1afe587a4be3ab8add26795df4150d7bef" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUbo</scope><name>RenderSize</name></member>
+      <member refid="dd/d83/a05443_1a8c95be1efec32a674b9f6b6733ec4346" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUbo</scope><name>View</name></member>
+      <member refid="dd/d83/a05443_1a578b0d77a380219082cf51548dcc7315" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUbo</scope><name>~GpInfoUbo</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

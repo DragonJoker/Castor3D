@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_4985de828c7f76b0d9951b7e33d62407" kind="dir">
+    <compoundname>Material/Texture</compoundname>
+    <innerdir refid="dir_fe512e7ca9b0a6c14cbbd17407b8d748">Material/Texture/Animation</innerdir>
+    <innerfile refid="dc/d50/a00332">Sampler.hpp</innerfile>
+    <innerfile refid="df/d91/a00335">TextureConfiguration.hpp</innerfile>
+    <innerfile refid="dc/d84/a00338">TextureLayout.hpp</innerfile>
+    <innerfile refid="d3/d93/a00341">TextureModule.hpp</innerfile>
+    <innerfile refid="d8/d8e/a00344">TextureSource.hpp</innerfile>
+    <innerfile refid="d1/dc6/a00347">TextureUnit.hpp</innerfile>
+    <innerfile refid="db/d10/a00350">TextureView.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Material/Texture/"/>
+  </compounddef>
+</doxygen>

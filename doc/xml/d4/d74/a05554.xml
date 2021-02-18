@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d4/d74/a05554" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::GpInfoUboConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d4/d74/a05554_1a500827de99314429a918fb976dc30a99" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::GpInfoUboConfiguration::invViewProj</definition>
+        <argsstring></argsstring>
+        <name>invViewProj</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="68" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d74/a05554_1af1f5682d829f3e43db112e79180be5f7" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::GpInfoUboConfiguration::invView</definition>
+        <argsstring></argsstring>
+        <name>invView</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="69" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="69" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d74/a05554_1a4e56d471a2e16a85a94d90e30233af13" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::GpInfoUboConfiguration::invProj</definition>
+        <argsstring></argsstring>
+        <name>invProj</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="70" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d74/a05554_1a8385766e6ce0bcefc3ac6ecfadd15f05" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::GpInfoUboConfiguration::gView</definition>
+        <argsstring></argsstring>
+        <name>gView</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="71" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d74/a05554_1a57d2a15d2d68944d3e904949c852aa04" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::GpInfoUboConfiguration::gProj</definition>
+        <argsstring></argsstring>
+        <name>gProj</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="72" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d74/a05554_1ac7d5ddde0519cf1d1a71b333ca3e747d" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::GpInfoUboConfiguration::renderSize</definition>
+        <argsstring></argsstring>
+        <name>renderSize</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="73" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para><ref refid="d9/dcb/a05154" kindref="compound">Geometry</ref> pass data. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Ubos/UbosModule.hpp" line="67" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="66" bodyend="74"/>
+    <listofallmembers>
+      <member refid="d4/d74/a05554_1a57d2a15d2d68944d3e904949c852aa04" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUboConfiguration</scope><name>gProj</name></member>
+      <member refid="d4/d74/a05554_1a8385766e6ce0bcefc3ac6ecfadd15f05" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUboConfiguration</scope><name>gView</name></member>
+      <member refid="d4/d74/a05554_1a4e56d471a2e16a85a94d90e30233af13" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUboConfiguration</scope><name>invProj</name></member>
+      <member refid="d4/d74/a05554_1af1f5682d829f3e43db112e79180be5f7" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUboConfiguration</scope><name>invView</name></member>
+      <member refid="d4/d74/a05554_1a500827de99314429a918fb976dc30a99" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUboConfiguration</scope><name>invViewProj</name></member>
+      <member refid="d4/d74/a05554_1ac7d5ddde0519cf1d1a71b333ca3e747d" prot="public" virt="non-virtual"><scope>castor3d::GpInfoUboConfiguration</scope><name>renderSize</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

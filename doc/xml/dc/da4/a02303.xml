@@ -1,0 +1,396 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dc/da4/a02303" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::GpuBufferPool</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; RenderSystem &gt;</basecompoundref>
+    <includes local="no">GpuBufferPool.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="dc/da4/a02303_1a14012b7fc1fbb9fd1d1b1d8163038c05" prot="public" static="no">
+        <type>std::vector&lt; std::unique_ptr&lt; <ref refid="dd/d3b/a02291" kindref="compound">GpuBuffer</ref> &gt; &gt;</type>
+        <definition>using castor3d::GpuBufferPool::BufferArray =  std::vector&lt; std::unique_ptr&lt; GpuBuffer &gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>BufferArray</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferPool.hpp" line="19" column="1" bodyfile="Buffer/GpuBufferPool.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dc/da4/a02303_1ab3111219bd0863c7cfaed7d6f49d769d" prot="private" static="no" mutable="no">
+        <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::GpuBufferPool::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferPool.hpp" line="95" column="1" bodyfile="Buffer/GpuBufferPool.hpp" bodystart="95" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/da4/a02303_1ad64908468fea400be3a9cadba298675c" prot="private" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::GpuBufferPool::m_debugName</definition>
+        <argsstring></argsstring>
+        <name>m_debugName</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferPool.hpp" line="96" column="1" bodyfile="Buffer/GpuBufferPool.hpp" bodystart="96" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/da4/a02303_1ae5603ab6d27c857941ed1d84d8359572" prot="private" static="no" mutable="no">
+        <type>std::map&lt; uint32_t, <ref refid="dc/da4/a02303_1a14012b7fc1fbb9fd1d1b1d8163038c05" kindref="member">BufferArray</ref> &gt;</type>
+        <definition>std::map&lt; uint32_t, BufferArray &gt; castor3d::GpuBufferPool::m_buffers</definition>
+        <argsstring></argsstring>
+        <name>m_buffers</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferPool.hpp" line="97" column="1" bodyfile="Buffer/GpuBufferPool.hpp" bodystart="97" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/da4/a02303_1a83119e394d2624f2a7b82c0124ec6b01" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/da4/a02303_1a14012b7fc1fbb9fd1d1b1d8163038c05" kindref="member">BufferArray</ref></type>
+        <definition>BufferArray castor3d::GpuBufferPool::m_nonSharedBuffers</definition>
+        <argsstring></argsstring>
+        <name>m_nonSharedBuffers</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferPool.hpp" line="98" column="1" bodyfile="Buffer/GpuBufferPool.hpp" bodystart="98" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/da4/a02303_1aac47faf52c9a398b524ff148e6a23115" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::GpuBufferPool::GpuBufferPool</definition>
+        <argsstring>(RenderSystem &amp;renderSystem, RenderDevice const &amp;device, castor::String debugName)</argsstring>
+        <name>GpuBufferPool</name>
+        <param>
+          <type><ref refid="d6/d55/a04603" kindref="compound">RenderSystem</ref> &amp;</type>
+          <declname>renderSystem</declname>
+        </param>
+        <param>
+          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String</type>
+          <declname>debugName</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">renderSystem</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The <ref refid="d6/d55/a04603" kindref="compound">RenderSystem</ref>. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">debugName</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The debug name. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferPool.hpp" line="34" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/da4/a02303_1a8a7ed840e46909b4f10d0ea8f81ebebf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::GpuBufferPool::~GpuBufferPool</definition>
+        <argsstring>()</argsstring>
+        <name>~GpuBufferPool</name>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferPool.hpp" line="43" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/da4/a02303_1af2df2e4d26a67cb709cb3ae8ae60135b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::GpuBufferPool::cleanup</definition>
+        <argsstring>()</argsstring>
+        <name>cleanup</name>
+        <briefdescription>
+<para>Cleans up all GPU buffers. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferPool.hpp" line="50" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/da4/a02303_1a68874012833a5c348290a69fb3e5ce34" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename DataT</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="df/d39/a02271" kindref="compound">GpuBufferOffsetT</ref>&lt; DataT &gt;</type>
+        <definition>GpuBufferOffsetT&lt; DataT &gt; castor3d::GpuBufferPool::getBuffer</definition>
+        <argsstring>(VkBufferUsageFlagBits target, VkDeviceSize count, VkMemoryPropertyFlags flags)</argsstring>
+        <name>getBuffer</name>
+        <param>
+          <type>VkBufferUsageFlagBits</type>
+          <declname>target</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>count</declname>
+        </param>
+        <param>
+          <type>VkMemoryPropertyFlags</type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves a GPU buffer with the given size. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">target</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer type. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">count</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The wanted buffer element count. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer memory flags. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The GPU buffer. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferPool.hpp" line="66" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/da4/a02303_1a3937211fb1027550521c8302971ee319" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename DataT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::GpuBufferPool::putBuffer</definition>
+        <argsstring>(GpuBufferOffsetT&lt; DataT &gt; const &amp;bufferOffset)</argsstring>
+        <name>putBuffer</name>
+        <param>
+          <type><ref refid="df/d39/a02271" kindref="compound">GpuBufferOffsetT</ref>&lt; DataT &gt; const &amp;</type>
+          <declname>bufferOffset</declname>
+        </param>
+        <briefdescription>
+<para>Releases a GPU buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">bufferOffset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer offset to release. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferPool.hpp" line="78" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="dc/da4/a02303_1add990635da365fe8fc067fa90fe84caa" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> BufferArray::iterator</type>
+        <definition>C3D_API BufferArray::iterator castor3d::GpuBufferPool::doFindBuffer</definition>
+        <argsstring>(VkDeviceSize size, BufferArray &amp;array)</argsstring>
+        <name>doFindBuffer</name>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/da4/a02303_1a14012b7fc1fbb9fd1d1b1d8163038c05" kindref="member">BufferArray</ref> &amp;</type>
+          <declname>array</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferPool.hpp" line="81" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/da4/a02303_1af9d2eb04e91602d63e731dd9348d76a5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::GpuBufferPool::doMakeKey</definition>
+        <argsstring>(VkBufferUsageFlagBits target, VkMemoryPropertyFlags flags)</argsstring>
+        <name>doMakeKey</name>
+        <param>
+          <type>VkBufferUsageFlagBits</type>
+          <declname>target</declname>
+        </param>
+        <param>
+          <type>VkMemoryPropertyFlags</type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferPool.hpp" line="83" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/da4/a02303_1a8d0b7c35b60256f59b9446dc015d9509" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="dd/d3b/a02291" kindref="compound">GpuBuffer</ref> &amp;</type>
+        <definition>C3D_API GpuBuffer&amp; castor3d::GpuBufferPool::doGetBuffer</definition>
+        <argsstring>(VkDeviceSize size, VkBufferUsageFlagBits target, VkMemoryPropertyFlags memory, MemChunk &amp;chunk)</argsstring>
+        <name>doGetBuffer</name>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>VkBufferUsageFlagBits</type>
+          <declname>target</declname>
+        </param>
+        <param>
+          <type>VkMemoryPropertyFlags</type>
+          <declname>memory</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d29/a02283" kindref="compound">MemChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferPool.hpp" line="85" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/da4/a02303_1afb4955f9f51ea8f0019ae266223e588a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::GpuBufferPool::doPutBuffer</definition>
+        <argsstring>(GpuBuffer const &amp;buffer, VkBufferUsageFlagBits target, VkMemoryPropertyFlags memory, MemChunk const &amp;chunk)</argsstring>
+        <name>doPutBuffer</name>
+        <param>
+          <type><ref refid="dd/d3b/a02291" kindref="compound">GpuBuffer</ref> const &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>VkBufferUsageFlagBits</type>
+          <declname>target</declname>
+        </param>
+        <param>
+          <type>VkMemoryPropertyFlags</type>
+          <declname>memory</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d29/a02283" kindref="compound">MemChunk</ref> const &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferPool.hpp" line="89" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1354">
+        <label>castor3d::GpuBufferPool</label>
+        <link refid="dc/da4/a02303"/>
+        <childnode refid="1355" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1355">
+        <label>castor::OwnedBy&lt; RenderSystem &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1356">
+        <label>castor3d::GpuBufferPool</label>
+        <link refid="dc/da4/a02303"/>
+        <childnode refid="1357" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1357">
+        <label>castor::OwnedBy&lt; RenderSystem &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Buffer/GpuBufferPool.hpp" line="17" column="1" bodyfile="Buffer/GpuBufferPool.hpp" bodystart="15" bodyend="99"/>
+    <listofallmembers>
+      <member refid="dc/da4/a02303_1a14012b7fc1fbb9fd1d1b1d8163038c05" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferPool</scope><name>BufferArray</name></member>
+      <member refid="dc/da4/a02303_1af2df2e4d26a67cb709cb3ae8ae60135b" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferPool</scope><name>cleanup</name></member>
+      <member refid="dc/da4/a02303_1add990635da365fe8fc067fa90fe84caa" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferPool</scope><name>doFindBuffer</name></member>
+      <member refid="dc/da4/a02303_1a8d0b7c35b60256f59b9446dc015d9509" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferPool</scope><name>doGetBuffer</name></member>
+      <member refid="dc/da4/a02303_1af9d2eb04e91602d63e731dd9348d76a5" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferPool</scope><name>doMakeKey</name></member>
+      <member refid="dc/da4/a02303_1afb4955f9f51ea8f0019ae266223e588a" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferPool</scope><name>doPutBuffer</name></member>
+      <member refid="dc/da4/a02303_1a68874012833a5c348290a69fb3e5ce34" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferPool</scope><name>getBuffer</name></member>
+      <member refid="dc/da4/a02303_1aac47faf52c9a398b524ff148e6a23115" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferPool</scope><name>GpuBufferPool</name></member>
+      <member refid="dc/da4/a02303_1ae5603ab6d27c857941ed1d84d8359572" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferPool</scope><name>m_buffers</name></member>
+      <member refid="dc/da4/a02303_1ad64908468fea400be3a9cadba298675c" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferPool</scope><name>m_debugName</name></member>
+      <member refid="dc/da4/a02303_1ab3111219bd0863c7cfaed7d6f49d769d" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferPool</scope><name>m_device</name></member>
+      <member refid="dc/da4/a02303_1a83119e394d2624f2a7b82c0124ec6b01" prot="private" virt="non-virtual"><scope>castor3d::GpuBufferPool</scope><name>m_nonSharedBuffers</name></member>
+      <member refid="dc/da4/a02303_1a3937211fb1027550521c8302971ee319" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferPool</scope><name>putBuffer</name></member>
+      <member refid="dc/da4/a02303_1a8a7ed840e46909b4f10d0ea8f81ebebf" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferPool</scope><name>~GpuBufferPool</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

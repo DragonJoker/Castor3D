@@ -1,0 +1,398 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="db/d15/a05484" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::LpvGridConfigUbo</compoundname>
+    <includes local="no">LpvGridConfigUbo.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="db/d15/a05484_1ac6a11f0d4131e5d1fa34a6cafb3c195a" prot="public" static="no">
+        <type><ref refid="d7/d1c/a05564" kindref="compound">LpvGridConfigUboConfiguration</ref></type>
+        <definition>using castor3d::LpvGridConfigUbo::Configuration =  LpvGridConfigUboConfiguration</definition>
+        <argsstring></argsstring>
+        <name>Configuration</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvGridConfigUbo.hpp" line="53" column="1" bodyfile="Shader/Ubos/LpvGridConfigUbo.hpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="db/d15/a05484_1a5b8c4d86a0986fec6a3ad90a1815652a" prot="public" static="yes" mutable="no">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const uint32_t</type>
+        <definition>C3D_API const uint32_t castor3d::LpvGridConfigUbo::BindingPoint</definition>
+        <argsstring></argsstring>
+        <name>BindingPoint</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvGridConfigUbo.hpp" line="98" column="1" bodyfile="Shader/Ubos/LpvGridConfigUbo.hpp" bodystart="98" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d15/a05484_1ac2acb8dec2368146683b43bb1fbb97dd" prot="public" static="yes" mutable="no">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const std::string</type>
+        <definition>C3D_API const std::string castor3d::LpvGridConfigUbo::LpvGridConfig</definition>
+        <argsstring></argsstring>
+        <name>LpvGridConfig</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvGridConfigUbo.hpp" line="99" column="1" bodyfile="Shader/Ubos/LpvGridConfigUbo.hpp" bodystart="99" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d15/a05484_1ae0b19053df2332c49330c59dac9a96bf" prot="public" static="yes" mutable="no">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const std::string</type>
+        <definition>C3D_API const std::string castor3d::LpvGridConfigUbo::LpvGridData</definition>
+        <argsstring></argsstring>
+        <name>LpvGridData</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvGridConfigUbo.hpp" line="100" column="1" bodyfile="Shader/Ubos/LpvGridConfigUbo.hpp" bodystart="100" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="db/d15/a05484_1aab885ef72cec0aba4aff903eb7bdfd76" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const  *</type>
+        <definition>RenderDevice const* castor3d::LpvGridConfigUbo::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvGridConfigUbo.hpp" line="103" column="1" bodyfile="Shader/Ubos/LpvGridConfigUbo.hpp" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d15/a05484_1a8c4d09881f96e76d98d443f44c2e824d" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/d47/a02300" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="db/d15/a05484_1ac6a11f0d4131e5d1fa34a6cafb3c195a" kindref="member">Configuration</ref> &gt;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; castor3d::LpvGridConfigUbo::m_ubo</definition>
+        <argsstring></argsstring>
+        <name>m_ubo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvGridConfigUbo.hpp" line="104" column="1" bodyfile="Shader/Ubos/LpvGridConfigUbo.hpp" bodystart="104" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/d15/a05484_1ac5e5477f3bf2ed60b164a2a5769105f1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::LpvGridConfigUbo::LpvGridConfigUbo</definition>
+        <argsstring>(LpvGridConfigUbo const &amp;)=delete</argsstring>
+        <name>LpvGridConfigUbo</name>
+        <param>
+          <type><ref refid="db/d15/a05484" kindref="compound">LpvGridConfigUbo</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvGridConfigUbo.hpp" line="56" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d15/a05484_1a6d0c7ed1df60f2f818b5d3c6a68ad559" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="db/d15/a05484" kindref="compound">LpvGridConfigUbo</ref> &amp;</type>
+        <definition>C3D_API LpvGridConfigUbo&amp; castor3d::LpvGridConfigUbo::operator=</definition>
+        <argsstring>(LpvGridConfigUbo const &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <param>
+          <type><ref refid="db/d15/a05484" kindref="compound">LpvGridConfigUbo</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvGridConfigUbo.hpp" line="57" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d15/a05484_1a6897cbbd82be3b44a1790c3351f17d15" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::LpvGridConfigUbo::LpvGridConfigUbo</definition>
+        <argsstring>(LpvGridConfigUbo &amp;&amp;)=default</argsstring>
+        <name>LpvGridConfigUbo</name>
+        <param>
+          <type><ref refid="db/d15/a05484" kindref="compound">LpvGridConfigUbo</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvGridConfigUbo.hpp" line="58" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d15/a05484_1aba7938a7ee39affdb285f94a9ea38f5d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="db/d15/a05484" kindref="compound">LpvGridConfigUbo</ref> &amp;</type>
+        <definition>C3D_API LpvGridConfigUbo&amp; castor3d::LpvGridConfigUbo::operator=</definition>
+        <argsstring>(LpvGridConfigUbo &amp;&amp;)=delete</argsstring>
+        <name>operator=</name>
+        <param>
+          <type><ref refid="db/d15/a05484" kindref="compound">LpvGridConfigUbo</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvGridConfigUbo.hpp" line="59" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d15/a05484_1a778dc98e6cdb8b5e02fe7061aa87f1c2" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::LpvGridConfigUbo::LpvGridConfigUbo</definition>
+        <argsstring>()</argsstring>
+        <name>LpvGridConfigUbo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvGridConfigUbo.hpp" line="61" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d15/a05484_1a0582a1762fbc703f09b2e2da2238ab3f" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::LpvGridConfigUbo::LpvGridConfigUbo</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>LpvGridConfigUbo</name>
+        <param>
+          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvGridConfigUbo.hpp" line="62" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d15/a05484_1a06cf7b51a2995304d2bdce15d430ac39" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::LpvGridConfigUbo::~LpvGridConfigUbo</definition>
+        <argsstring>()</argsstring>
+        <name>~LpvGridConfigUbo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvGridConfigUbo.hpp" line="63" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d15/a05484_1aa4d2a1ed10df629145808970172644c9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LpvGridConfigUbo::initialise</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>initialise</name>
+        <param>
+          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvGridConfigUbo.hpp" line="65" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d15/a05484_1a597591f56380875c0e9569dfe998171d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LpvGridConfigUbo::cleanup</definition>
+        <argsstring>()</argsstring>
+        <name>cleanup</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvGridConfigUbo.hpp" line="66" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d15/a05484_1a27fbfdf182f12434ab08cf0cf5de656d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LpvGridConfigUbo::cpuUpdate</definition>
+        <argsstring>(castor::BoundingBox const &amp;aabb, castor::Point3f const &amp;cameraPos, castor::Point3f const &amp;cameraDir, uint32_t gridDim, float indirectAttenuation)</argsstring>
+        <name>cpuUpdate</name>
+        <param>
+          <type>castor::BoundingBox const &amp;</type>
+          <declname>aabb</declname>
+        </param>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>cameraPos</declname>
+        </param>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>cameraDir</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>gridDim</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>indirectAttenuation</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvGridConfigUbo.hpp" line="68" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d15/a05484_1a6738c0672ae99a987bb12740e6dfab49" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d35/a00266_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Grid</type>
+        <definition>C3D_API castor::Grid castor3d::LpvGridConfigUbo::cpuUpdate</definition>
+        <argsstring>(uint32_t gridLevel, float gridLevelScale, castor::Grid const &amp;grid, castor::BoundingBox const &amp;aabb, castor::Point3f const &amp;cameraPos, castor::Point3f const &amp;cameraDir, float indirectAttenuation)</argsstring>
+        <name>cpuUpdate</name>
+        <param>
+          <type>uint32_t</type>
+          <declname>gridLevel</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>gridLevelScale</declname>
+        </param>
+        <param>
+          <type>castor::Grid const &amp;</type>
+          <declname>grid</declname>
+        </param>
+        <param>
+          <type>castor::BoundingBox const &amp;</type>
+          <declname>aabb</declname>
+        </param>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>cameraPos</declname>
+        </param>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>cameraDir</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>indirectAttenuation</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvGridConfigUbo.hpp" line="73" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d15/a05484_1a8ae8760acfc0b095b5ee85b56c1cd54d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d1/d47/a02300" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="db/d15/a05484_1ac6a11f0d4131e5d1fa34a6cafb3c195a" kindref="member">Configuration</ref> &gt; &amp;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt;&amp; castor3d::LpvGridConfigUbo::getUbo</definition>
+        <argsstring>()</argsstring>
+        <name>getUbo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvGridConfigUbo.hpp" line="81" column="1" bodyfile="Shader/Ubos/LpvGridConfigUbo.hpp" bodystart="81" bodyend="84"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d15/a05484_1a377a8d5d0d3b717f6aae00a31e342fa1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d1/d47/a02300" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="db/d15/a05484_1ac6a11f0d4131e5d1fa34a6cafb3c195a" kindref="member">Configuration</ref> &gt; const  &amp;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; const&amp; castor3d::LpvGridConfigUbo::getUbo</definition>
+        <argsstring>() const</argsstring>
+        <name>getUbo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvGridConfigUbo.hpp" line="86" column="1" bodyfile="Shader/Ubos/LpvGridConfigUbo.hpp" bodystart="86" bodyend="89"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d15/a05484_1a25c8501fecd9349223a1b66f7a9393e7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::LpvGridConfigUbo::createSizedBinding</definition>
+        <argsstring>(ashes::DescriptorSet &amp;descriptorSet, VkDescriptorSetLayoutBinding const &amp;layoutBinding) const</argsstring>
+        <name>createSizedBinding</name>
+        <param>
+          <type>ashes::DescriptorSet &amp;</type>
+          <declname>descriptorSet</declname>
+        </param>
+        <param>
+          <type>VkDescriptorSetLayoutBinding const &amp;</type>
+          <declname>layoutBinding</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/LpvGridConfigUbo.hpp" line="91" column="1" bodyfile="Shader/Ubos/LpvGridConfigUbo.hpp" bodystart="91" bodyend="95"/>
+        <references refid="d1/d47/a02300_1a2c6ad146d4910651544564c25ca7dccd" compoundref="db/dd9/a00179" startline="70" endline="79">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createSizedBinding</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1804">
+        <label>castor3d::LpvGridConfigUbo</label>
+        <link refid="db/d15/a05484"/>
+        <childnode refid="1805" relation="usage">
+          <edgelabel>LpvGridConfig</edgelabel>
+          <edgelabel>LpvGridData</edgelabel>
+        </childnode>
+      </node>
+      <node id="1806">
+        <label>std::basic_string&lt; char &gt;</label>
+      </node>
+      <node id="1805">
+        <label>std::string</label>
+        <childnode refid="1806" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Ubos/LpvGridConfigUbo.hpp" line="51" column="1" bodyfile="Shader/Ubos/LpvGridConfigUbo.hpp" bodystart="50" bodyend="105"/>
+    <listofallmembers>
+      <member refid="db/d15/a05484_1a5b8c4d86a0986fec6a3ad90a1815652a" prot="public" virt="non-virtual"><scope>castor3d::LpvGridConfigUbo</scope><name>BindingPoint</name></member>
+      <member refid="db/d15/a05484_1a597591f56380875c0e9569dfe998171d" prot="public" virt="non-virtual"><scope>castor3d::LpvGridConfigUbo</scope><name>cleanup</name></member>
+      <member refid="db/d15/a05484_1ac6a11f0d4131e5d1fa34a6cafb3c195a" prot="public" virt="non-virtual"><scope>castor3d::LpvGridConfigUbo</scope><name>Configuration</name></member>
+      <member refid="db/d15/a05484_1a27fbfdf182f12434ab08cf0cf5de656d" prot="public" virt="non-virtual"><scope>castor3d::LpvGridConfigUbo</scope><name>cpuUpdate</name></member>
+      <member refid="db/d15/a05484_1a6738c0672ae99a987bb12740e6dfab49" prot="public" virt="non-virtual"><scope>castor3d::LpvGridConfigUbo</scope><name>cpuUpdate</name></member>
+      <member refid="db/d15/a05484_1a25c8501fecd9349223a1b66f7a9393e7" prot="public" virt="non-virtual"><scope>castor3d::LpvGridConfigUbo</scope><name>createSizedBinding</name></member>
+      <member refid="db/d15/a05484_1a8ae8760acfc0b095b5ee85b56c1cd54d" prot="public" virt="non-virtual"><scope>castor3d::LpvGridConfigUbo</scope><name>getUbo</name></member>
+      <member refid="db/d15/a05484_1a377a8d5d0d3b717f6aae00a31e342fa1" prot="public" virt="non-virtual"><scope>castor3d::LpvGridConfigUbo</scope><name>getUbo</name></member>
+      <member refid="db/d15/a05484_1aa4d2a1ed10df629145808970172644c9" prot="public" virt="non-virtual"><scope>castor3d::LpvGridConfigUbo</scope><name>initialise</name></member>
+      <member refid="db/d15/a05484_1ac2acb8dec2368146683b43bb1fbb97dd" prot="public" virt="non-virtual"><scope>castor3d::LpvGridConfigUbo</scope><name>LpvGridConfig</name></member>
+      <member refid="db/d15/a05484_1ac5e5477f3bf2ed60b164a2a5769105f1" prot="public" virt="non-virtual"><scope>castor3d::LpvGridConfigUbo</scope><name>LpvGridConfigUbo</name></member>
+      <member refid="db/d15/a05484_1a6897cbbd82be3b44a1790c3351f17d15" prot="public" virt="non-virtual"><scope>castor3d::LpvGridConfigUbo</scope><name>LpvGridConfigUbo</name></member>
+      <member refid="db/d15/a05484_1a778dc98e6cdb8b5e02fe7061aa87f1c2" prot="public" virt="non-virtual"><scope>castor3d::LpvGridConfigUbo</scope><name>LpvGridConfigUbo</name></member>
+      <member refid="db/d15/a05484_1a0582a1762fbc703f09b2e2da2238ab3f" prot="public" virt="non-virtual"><scope>castor3d::LpvGridConfigUbo</scope><name>LpvGridConfigUbo</name></member>
+      <member refid="db/d15/a05484_1ae0b19053df2332c49330c59dac9a96bf" prot="public" virt="non-virtual"><scope>castor3d::LpvGridConfigUbo</scope><name>LpvGridData</name></member>
+      <member refid="db/d15/a05484_1aab885ef72cec0aba4aff903eb7bdfd76" prot="private" virt="non-virtual"><scope>castor3d::LpvGridConfigUbo</scope><name>m_device</name></member>
+      <member refid="db/d15/a05484_1a8c4d09881f96e76d98d443f44c2e824d" prot="private" virt="non-virtual"><scope>castor3d::LpvGridConfigUbo</scope><name>m_ubo</name></member>
+      <member refid="db/d15/a05484_1a6d0c7ed1df60f2f818b5d3c6a68ad559" prot="public" virt="non-virtual"><scope>castor3d::LpvGridConfigUbo</scope><name>operator=</name></member>
+      <member refid="db/d15/a05484_1aba7938a7ee39affdb285f94a9ea38f5d" prot="public" virt="non-virtual"><scope>castor3d::LpvGridConfigUbo</scope><name>operator=</name></member>
+      <member refid="db/d15/a05484_1a06cf7b51a2995304d2bdce15d430ac39" prot="public" virt="non-virtual"><scope>castor3d::LpvGridConfigUbo</scope><name>~LpvGridConfigUbo</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

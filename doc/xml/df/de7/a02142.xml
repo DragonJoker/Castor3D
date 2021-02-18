@@ -1,0 +1,1110 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="df/de7/a02142" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::BinaryParserBase</compoundname>
+    <includes local="no">BinaryParser.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class</type>
+        <declname>TParsed</declname>
+        <defname>TParsed</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="df/de7/a02142_1af07e46a537db6181733f95fa289f1d23" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>friend class</type>
+        <definition>friend class BinaryParserBase</definition>
+        <argsstring></argsstring>
+        <name>BinaryParserBase</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="19" column="1" bodyfile="Binary/BinaryParser.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-static-attrib">
+      <memberdef kind="variable" id="df/de7/a02142_1ae4820a3ab3e4b282240e5f1b969153c1" prot="protected" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String</type>
+        <definition>C3D_API castor::String castor3d::BinaryParserBase&lt; TParsed &gt;::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="571" column="1" bodyfile="Binary/BinaryParser.hpp" bodystart="571" bodyend="-1"/>
+        <referencedby refid="df/de7/a02142_1ad1fbebf70ad5b1caae1a7eb57c2f82e4" compoundref="df/d98/a00107" startline="573" endline="580">castor3d::BinaryParserBase&lt; Skeleton &gt;::checkError</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="df/de7/a02142_1ab3df04f9aa2eb1f7a533ed18631f09c4" prot="protected" static="no" mutable="no">
+        <type><ref refid="d0/dfe/a02102" kindref="compound">BinaryChunk</ref> *</type>
+        <definition>BinaryChunk* castor3d::BinaryParserBase&lt; TParsed &gt;::m_chunk</definition>
+        <argsstring></argsstring>
+        <name>m_chunk</name>
+        <initializer>{ nullptr }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The writer&apos;s chunk. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="585" column="1" bodyfile="Binary/BinaryParser.hpp" bodystart="585" bodyend="-1"/>
+        <referencedby refid="df/de7/a02142_1ab5f9ba53ad5865f967b41e5a27ed73a9" compoundref="df/d98/a00107" startline="488" endline="499">castor3d::BinaryParserBase&lt; Skeleton &gt;::doGetSubChunk</referencedby>
+        <referencedby refid="df/de7/a02142_1a6bbbb529f463085c7d259600ae1b3e99" compoundref="df/d98/a00107" startline="98" endline="148">castor3d::BinaryParserBase&lt; Skeleton &gt;::parse</referencedby>
+        <referencedby refid="df/de7/a02142_1a61b02dbf69d89569eff5be22facd5f07" compoundref="df/d98/a00107" startline="161" endline="188">castor3d::BinaryParserBase&lt; Skeleton &gt;::parse_v1_1</referencedby>
+        <referencedby refid="df/de7/a02142_1a95788692ddd6fae91074c299b674aaab" compoundref="df/d98/a00107" startline="201" endline="228">castor3d::BinaryParserBase&lt; Skeleton &gt;::parse_v1_2</referencedby>
+        <referencedby refid="df/de7/a02142_1a6f39b66d980e4a65660016f71115a89c" compoundref="df/d98/a00107" startline="241" endline="268">castor3d::BinaryParserBase&lt; Skeleton &gt;::parse_v1_3</referencedby>
+        <referencedby refid="df/de7/a02142_1aabc068daf8d99718497aa35f7a17c346" compoundref="df/d98/a00107" startline="281" endline="308">castor3d::BinaryParserBase&lt; Skeleton &gt;::parse_v1_4</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="df/de7/a02142_1a455764ca72b659dab2652baf56ce5885" prot="protected" static="no" mutable="yes">
+        <type><ref refid="dd/d51/a03842" kindref="compound">Version</ref></type>
+        <definition>Version castor3d::BinaryParserBase&lt; TParsed &gt;::m_fileVersion</definition>
+        <argsstring></argsstring>
+        <name>m_fileVersion</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The chunk version from the file. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="588" column="1" bodyfile="Binary/BinaryParser.hpp" bodystart="588" bodyend="-1"/>
+        <referencedby refid="df/de7/a02142_1ae6f4694ede819151fe4e30e33235ff07" compoundref="df/d98/a00107" startline="29" endline="34">castor3d::BinaryParserBase&lt; Skeleton &gt;::createBinaryParser</referencedby>
+        <referencedby refid="df/de7/a02142_1a035881aba2b64571b30a5efd3faaf3d9" compoundref="df/d98/a00107" startline="321" endline="384">castor3d::BinaryParserBase&lt; Skeleton &gt;::doParseHeader</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/de7/a02142_1ae6f4694ede819151fe4e30e33235ff07" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d8/de7/a02146" kindref="compound">BinaryParser</ref>&lt; T &gt;</type>
+        <definition>BinaryParser&lt; T &gt; castor3d::BinaryParserBase&lt; TParsed &gt;::createBinaryParser</definition>
+        <argsstring>()</argsstring>
+        <name>createBinaryParser</name>
+        <briefdescription>
+<para>Creates a binary parser. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="29" column="1" bodyfile="Binary/BinaryParser.hpp" bodystart="29" bodyend="34"/>
+      </memberdef>
+      <memberdef kind="function" id="df/de7/a02142_1a5db83668684ca219f67de3a381898e64" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::BinaryParserBase&lt; TParsed &gt;::parse</definition>
+        <argsstring>(TParsed &amp;obj, castor::BinaryFile &amp;file)</argsstring>
+        <name>parse</name>
+        <param>
+          <type>TParsed &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <param>
+          <type>castor::BinaryFile &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+<para>From file reader function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to read </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The file containing the chunk </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="47" column="1" bodyfile="Binary/BinaryParser.hpp" bodystart="47" bodyend="85"/>
+        <referencedby refid="df/de7/a02142_1a5db83668684ca219f67de3a381898e64" compoundref="df/d98/a00107" startline="47" endline="85">castor3d::BinaryParserBase&lt; Skeleton &gt;::parse</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="df/de7/a02142_1a6bbbb529f463085c7d259600ae1b3e99" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::BinaryParserBase&lt; TParsed &gt;::parse</definition>
+        <argsstring>(TParsed &amp;obj, BinaryChunk &amp;chunk)</argsstring>
+        <name>parse</name>
+        <param>
+          <type>TParsed &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/dfe/a02102" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>From chunk reader function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to read </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="98" column="1" bodyfile="Binary/BinaryParser.hpp" bodystart="98" bodyend="148"/>
+      </memberdef>
+      <memberdef kind="function" id="df/de7/a02142_1a61b02dbf69d89569eff5be22facd5f07" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::BinaryParserBase&lt; TParsed &gt;::parse_v1_1</definition>
+        <argsstring>(TParsed &amp;obj, BinaryChunk &amp;chunk)</argsstring>
+        <name>parse_v1_1</name>
+        <param>
+          <type>TParsed &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/dfe/a02102" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>From chunk reader function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to read </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="161" column="1" bodyfile="Binary/BinaryParser.hpp" bodystart="161" bodyend="188"/>
+      </memberdef>
+      <memberdef kind="function" id="df/de7/a02142_1a95788692ddd6fae91074c299b674aaab" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::BinaryParserBase&lt; TParsed &gt;::parse_v1_2</definition>
+        <argsstring>(TParsed &amp;obj, BinaryChunk &amp;chunk)</argsstring>
+        <name>parse_v1_2</name>
+        <param>
+          <type>TParsed &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/dfe/a02102" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>From chunk reader function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to read </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="201" column="1" bodyfile="Binary/BinaryParser.hpp" bodystart="201" bodyend="228"/>
+      </memberdef>
+      <memberdef kind="function" id="df/de7/a02142_1a6f39b66d980e4a65660016f71115a89c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::BinaryParserBase&lt; TParsed &gt;::parse_v1_3</definition>
+        <argsstring>(TParsed &amp;obj, BinaryChunk &amp;chunk)</argsstring>
+        <name>parse_v1_3</name>
+        <param>
+          <type>TParsed &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/dfe/a02102" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>From chunk reader function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to read </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="241" column="1" bodyfile="Binary/BinaryParser.hpp" bodystart="241" bodyend="268"/>
+      </memberdef>
+      <memberdef kind="function" id="df/de7/a02142_1aabc068daf8d99718497aa35f7a17c346" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::BinaryParserBase&lt; TParsed &gt;::parse_v1_4</definition>
+        <argsstring>(TParsed &amp;obj, BinaryChunk &amp;chunk)</argsstring>
+        <name>parse_v1_4</name>
+        <param>
+          <type>TParsed &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/dfe/a02102" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>From chunk reader function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to read </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="281" column="1" bodyfile="Binary/BinaryParser.hpp" bodystart="281" bodyend="308"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="df/de7/a02142_1a035881aba2b64571b30a5efd3faaf3d9" prot="protected" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::BinaryParserBase&lt; TParsed &gt;::doParseHeader</definition>
+        <argsstring>(BinaryChunk &amp;chunk) const</argsstring>
+        <name>doParseHeader</name>
+        <param>
+          <type><ref refid="d0/dfe/a02102" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>Parses the header chunk. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent chunk. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="321" column="1" bodyfile="Binary/BinaryParser.hpp" bodystart="321" bodyend="384"/>
+        <referencedby refid="df/de7/a02142_1a5db83668684ca219f67de3a381898e64" compoundref="df/d98/a00107" startline="47" endline="85">castor3d::BinaryParserBase&lt; Skeleton &gt;::parse</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="df/de7/a02142_1a0e1aa917e3bf897fab03a32d20890062" prot="protected" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool castor3d::BinaryParserBase&lt; TParsed &gt;::doParseChunk</definition>
+        <argsstring>(T *values, size_t count, BinaryChunk &amp;chunk) const</argsstring>
+        <name>doParseChunk</name>
+        <param>
+          <type>T *</type>
+          <declname>values</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>count</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/dfe/a02102" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves a value array from a chunk. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">values</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the parsed values </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">count</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The values count </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk containing the values </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="400" column="1" bodyfile="Binary/BinaryParser.hpp" bodystart="400" bodyend="405"/>
+        <referencedby refid="df/de7/a02142_1a035881aba2b64571b30a5efd3faaf3d9" compoundref="df/d98/a00107" startline="321" endline="384">castor3d::BinaryParserBase&lt; Skeleton &gt;::doParseHeader</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="df/de7/a02142_1a22ca62addb3ab167995e18f49267efcf" prot="protected" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>size_t</type>
+            <declname>Count</declname>
+            <defname>Count</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool castor3d::BinaryParserBase&lt; TParsed &gt;::doParseChunk</definition>
+        <argsstring>(T(&amp;values)[Count], BinaryChunk &amp;chunk) const</argsstring>
+        <name>doParseChunk</name>
+        <param>
+          <type>T(&amp;)</type>
+          <declname>values</declname>
+          <array>[Count]</array>
+        </param>
+        <param>
+          <type><ref refid="d0/dfe/a02102" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves a value array from a chunk. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">values</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the parsed values </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk containing the values </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="419" column="1" bodyfile="Binary/BinaryParser.hpp" bodystart="419" bodyend="423"/>
+      </memberdef>
+      <memberdef kind="function" id="df/de7/a02142_1a5a648553ce168f5bc34adeedc8d169a7" prot="protected" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>size_t</type>
+            <declname>Count</declname>
+            <defname>Count</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool castor3d::BinaryParserBase&lt; TParsed &gt;::doParseChunk</definition>
+        <argsstring>(std::array&lt; T, Count &gt; &amp;values, BinaryChunk &amp;chunk) const</argsstring>
+        <name>doParseChunk</name>
+        <param>
+          <type>std::array&lt; T, Count &gt; &amp;</type>
+          <declname>values</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/dfe/a02102" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves a value array from a chunk. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">values</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the parsed values </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk containing the values </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="437" column="1" bodyfile="Binary/BinaryParser.hpp" bodystart="437" bodyend="441"/>
+      </memberdef>
+      <memberdef kind="function" id="df/de7/a02142_1a90df4e46072e5ef14aebebd00cbcc1f5" prot="protected" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool castor3d::BinaryParserBase&lt; TParsed &gt;::doParseChunk</definition>
+        <argsstring>(std::vector&lt; T &gt; &amp;values, BinaryChunk &amp;chunk) const</argsstring>
+        <name>doParseChunk</name>
+        <param>
+          <type>std::vector&lt; T &gt; &amp;</type>
+          <declname>values</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/dfe/a02102" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves a value array from a chunk. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">values</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the parsed values </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk containing the values </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="455" column="1" bodyfile="Binary/BinaryParser.hpp" bodystart="455" bodyend="459"/>
+      </memberdef>
+      <memberdef kind="function" id="df/de7/a02142_1a5fac84360102001f5e730be1927c024e" prot="protected" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool castor3d::BinaryParserBase&lt; TParsed &gt;::doParseChunk</definition>
+        <argsstring>(T &amp;value, BinaryChunk &amp;chunk) const</argsstring>
+        <name>doParseChunk</name>
+        <param>
+          <type>T &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/dfe/a02102" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves a value from a chunk. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the parsed value </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chunk containing the value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="473" column="1" bodyfile="Binary/BinaryParser.hpp" bodystart="473" bodyend="477"/>
+      </memberdef>
+      <memberdef kind="function" id="df/de7/a02142_1ab5f9ba53ad5865f967b41e5a27ed73a9" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::BinaryParserBase&lt; TParsed &gt;::doGetSubChunk</definition>
+        <argsstring>(BinaryChunk &amp;chunk)</argsstring>
+        <name>doGetSubChunk</name>
+        <param>
+          <type><ref refid="d0/dfe/a02102" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves a subchunk. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the subchunk. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="488" column="1" bodyfile="Binary/BinaryParser.hpp" bodystart="488" bodyend="499"/>
+      </memberdef>
+      <memberdef kind="function" id="df/de7/a02142_1ad1fbebf70ad5b1caae1a7eb57c2f82e4" prot="protected" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::BinaryParserBase&lt; TParsed &gt;::checkError</definition>
+        <argsstring>(bool result, castor::String const &amp;text) const</argsstring>
+        <name>checkError</name>
+        <param>
+          <type>bool</type>
+          <declname>result</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>text</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="573" column="1" bodyfile="Binary/BinaryParser.hpp" bodystart="573" bodyend="580"/>
+        <referencedby refid="df/de7/a02142_1a035881aba2b64571b30a5efd3faaf3d9" compoundref="df/d98/a00107" startline="321" endline="384">castor3d::BinaryParserBase&lt; Skeleton &gt;::doParseHeader</referencedby>
+        <referencedby refid="df/de7/a02142_1a5db83668684ca219f67de3a381898e64" compoundref="df/d98/a00107" startline="47" endline="85">castor3d::BinaryParserBase&lt; Skeleton &gt;::parse</referencedby>
+        <referencedby refid="df/de7/a02142_1a61b02dbf69d89569eff5be22facd5f07" compoundref="df/d98/a00107" startline="161" endline="188">castor3d::BinaryParserBase&lt; Skeleton &gt;::parse_v1_1</referencedby>
+        <referencedby refid="df/de7/a02142_1a95788692ddd6fae91074c299b674aaab" compoundref="df/d98/a00107" startline="201" endline="228">castor3d::BinaryParserBase&lt; Skeleton &gt;::parse_v1_2</referencedby>
+        <referencedby refid="df/de7/a02142_1a6f39b66d980e4a65660016f71115a89c" compoundref="df/d98/a00107" startline="241" endline="268">castor3d::BinaryParserBase&lt; Skeleton &gt;::parse_v1_3</referencedby>
+        <referencedby refid="df/de7/a02142_1aabc068daf8d99718497aa35f7a17c346" compoundref="df/d98/a00107" startline="281" endline="308">castor3d::BinaryParserBase&lt; Skeleton &gt;::parse_v1_4</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="df/de7/a02142_1a020a66d5fc1b452dc76c82702d72bbb1" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>virtual C3D_API bool castor3d::BinaryParserBase&lt; TParsed &gt;::doParse</definition>
+        <argsstring>(TParsed &amp;obj)=0</argsstring>
+        <name>doParse</name>
+        <reimplementedby refid="d9/d6e/a02098_1aec8a0fc7f6bae890fa9b42e225faf1d6">doParse</reimplementedby>
+        <reimplementedby refid="de/db2/a02246_1ab571767cc83c4f3606bced26db4173d7">doParse</reimplementedby>
+        <reimplementedby refid="da/d4a/a02114_1a587b0836656b9d1efdd6699d92e43a7b">doParse</reimplementedby>
+        <reimplementedby refid="d8/d6f/a02234_1a76cd8550066e3624426e52870f9a4399">doParse</reimplementedby>
+        <reimplementedby refid="d6/d41/a02222_1a44ff83dae67379f5b138bd9d158fbd65">doParse</reimplementedby>
+        <reimplementedby refid="d8/d1e/a02210_1a02fa5d9fd6655f1076985f8cd1fd92bd">doParse</reimplementedby>
+        <reimplementedby refid="d7/db7/a02198_1ae674ccd0f87c445bf7d82f4fbba2f150">doParse</reimplementedby>
+        <reimplementedby refid="d5/d4d/a02186_1ad6ebfdff6b2a5b6762d052ba65ab23fd">doParse</reimplementedby>
+        <reimplementedby refid="d6/d6e/a02174_1a88d99ac05a3ce441413cbb9574d78a16">doParse</reimplementedby>
+        <reimplementedby refid="db/df6/a02138_1ae8788e102fb675cc6beb55fb8249df54">doParse</reimplementedby>
+        <reimplementedby refid="da/da0/a02126_1ab383b7d77eebdc9c6068cd65f0a7afce">doParse</reimplementedby>
+        <reimplementedby refid="df/d4d/a02086_1a55428e2af7eb3e14ee428f427c9c994c">doParse</reimplementedby>
+        <reimplementedby refid="d1/d7d/a02074_1a7b8d23b4c209a00a927c030f1d49ec81">doParse</reimplementedby>
+        <param>
+          <type>TParsed &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <briefdescription>
+<para>From chunk reader function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to read </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="512" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/de7/a02142_1aee71b68a40835a10fafe1e1ea5802650" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>virtual C3D_API bool castor3d::BinaryParserBase&lt; TParsed &gt;::doParse_v1_1</definition>
+        <argsstring>(TParsed &amp;obj)</argsstring>
+        <name>doParse_v1_1</name>
+        <reimplementedby refid="d8/d6f/a02234_1a7ba8a597521230966cbf42b062bb545a">doParse_v1_1</reimplementedby>
+        <param>
+          <type>TParsed &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <briefdescription>
+<para>Chunk reader function from a chunk of version 1.1. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to read </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="523" column="1" bodyfile="Binary/BinaryParser.hpp" bodystart="523" bodyend="526"/>
+      </memberdef>
+      <memberdef kind="function" id="df/de7/a02142_1a2df9eb54490b9522c10067b3dbc41e73" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>virtual C3D_API bool castor3d::BinaryParserBase&lt; TParsed &gt;::doParse_v1_2</definition>
+        <argsstring>(TParsed &amp;obj)</argsstring>
+        <name>doParse_v1_2</name>
+        <reimplementedby refid="da/d4a/a02114_1afccfd73473da146d760298a96208b993">doParse_v1_2</reimplementedby>
+        <param>
+          <type>TParsed &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <briefdescription>
+<para>Chunk reader function from a chunk of version 1.2. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to read </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="537" column="1" bodyfile="Binary/BinaryParser.hpp" bodystart="537" bodyend="540"/>
+      </memberdef>
+      <memberdef kind="function" id="df/de7/a02142_1aab45074c2f8ac65df7fc52ee2530ebc1" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>virtual C3D_API bool castor3d::BinaryParserBase&lt; TParsed &gt;::doParse_v1_3</definition>
+        <argsstring>(TParsed &amp;obj)</argsstring>
+        <name>doParse_v1_3</name>
+        <reimplementedby refid="de/db2/a02246_1a195f458651e1d5872824024368efc4d1">doParse_v1_3</reimplementedby>
+        <reimplementedby refid="d8/d1e/a02210_1ab8901d3152fdcff078ee8574ed673b4b">doParse_v1_3</reimplementedby>
+        <reimplementedby refid="db/df6/a02138_1a1f0c8a30f09a14b4ec1171e63affe2fd">doParse_v1_3</reimplementedby>
+        <param>
+          <type>TParsed &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <briefdescription>
+<para>Chunk reader function from a chunk of version 1.3. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to read </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="551" column="1" bodyfile="Binary/BinaryParser.hpp" bodystart="551" bodyend="554"/>
+      </memberdef>
+      <memberdef kind="function" id="df/de7/a02142_1a518964b604fa8129ace4f8f5795d47bc" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>virtual C3D_API bool castor3d::BinaryParserBase&lt; TParsed &gt;::doParse_v1_4</definition>
+        <argsstring>(TParsed &amp;obj)</argsstring>
+        <name>doParse_v1_4</name>
+        <reimplementedby refid="da/d4a/a02114_1a75054badb15d0ca0511796ddbe003456">doParse_v1_4</reimplementedby>
+        <param>
+          <type>TParsed &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <briefdescription>
+<para>Chunk reader function from a chunk of version 1.4. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to read </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryParser.hpp" line="565" column="1" bodyfile="Binary/BinaryParser.hpp" bodystart="565" bodyend="568"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Binary data chunk reader base class. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="331">
+        <label>castor3d::BinaryParserBase&lt; TParsed &gt;</label>
+        <link refid="df/de7/a02142"/>
+      </node>
+      <node id="337">
+        <label>castor3d::BinaryParser&lt; Bone &gt;</label>
+        <link refid="df/d4d/a02086"/>
+        <childnode refid="336" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="347">
+        <label>castor3d::BinaryParser&lt; SkeletonAnimation &gt;</label>
+        <link refid="d5/d4d/a02186"/>
+        <childnode refid="346" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="351">
+        <label>castor3d::BinaryParser&lt; BonesComponent &gt;</label>
+        <link refid="d9/d6e/a02098"/>
+        <childnode refid="350" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="336">
+        <label>castor3d::BinaryParserBase&lt; Bone &gt;</label>
+        <link refid="df/de7/a02142"/>
+        <childnode refid="331" relation="template-instance">
+          <edgelabel>&lt; Bone &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="350">
+        <label>castor3d::BinaryParserBase&lt; BonesComponent &gt;</label>
+        <link refid="df/de7/a02142"/>
+        <childnode refid="331" relation="template-instance">
+          <edgelabel>&lt; BonesComponent &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="343">
+        <label>castor3d::BinaryParser&lt; MeshAnimationKeyFrame &gt;</label>
+        <link refid="db/df6/a02138"/>
+        <childnode refid="342" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="352">
+        <label>castor3d::BinaryParserBase&lt; Mesh &gt;</label>
+        <link refid="df/de7/a02142"/>
+        <childnode refid="331" relation="template-instance">
+          <edgelabel>&lt; Mesh &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="335">
+        <label>castor3d::BinaryParser&lt; SkeletonAnimationNode &gt;</label>
+        <link refid="d6/d41/a02222"/>
+        <childnode refid="334" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="356">
+        <label>castor3d::BinaryParserBase&lt; Skeleton &gt;</label>
+        <link refid="df/de7/a02142"/>
+        <childnode refid="331" relation="template-instance">
+          <edgelabel>&lt; Skeleton &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="344">
+        <label>castor3d::BinaryParserBase&lt; Animation &gt;</label>
+        <link refid="df/de7/a02142"/>
+        <childnode refid="331" relation="template-instance">
+          <edgelabel>&lt; Animation &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="355">
+        <label>castor3d::BinaryParser&lt; SkeletonAnimationObject &gt;</label>
+        <link refid="d8/d6f/a02234"/>
+        <childnode refid="354" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="339">
+        <label>castor3d::BinaryParser&lt; SkeletonAnimationBone &gt;</label>
+        <link refid="d7/db7/a02198"/>
+        <childnode refid="338" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="357">
+        <label>castor3d::BinaryParser&lt; Skeleton &gt;</label>
+        <link refid="d6/d6e/a02174"/>
+        <childnode refid="356" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="349">
+        <label>castor3d::BinaryParser&lt; MeshAnimation &gt;</label>
+        <link refid="da/da0/a02126"/>
+        <childnode refid="348" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="341">
+        <label>castor3d::BinaryParser&lt; Submesh &gt;</label>
+        <link refid="de/db2/a02246"/>
+        <childnode refid="340" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="342">
+        <label>castor3d::BinaryParserBase&lt; MeshAnimationKeyFrame &gt;</label>
+        <link refid="df/de7/a02142"/>
+        <childnode refid="331" relation="template-instance">
+          <edgelabel>&lt; MeshAnimationKeyFrame &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="346">
+        <label>castor3d::BinaryParserBase&lt; SkeletonAnimation &gt;</label>
+        <link refid="df/de7/a02142"/>
+        <childnode refid="331" relation="template-instance">
+          <edgelabel>&lt; SkeletonAnimation &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="340">
+        <label>castor3d::BinaryParserBase&lt; Submesh &gt;</label>
+        <link refid="df/de7/a02142"/>
+        <childnode refid="331" relation="template-instance">
+          <edgelabel>&lt; Submesh &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="348">
+        <label>castor3d::BinaryParserBase&lt; MeshAnimation &gt;</label>
+        <link refid="df/de7/a02142"/>
+        <childnode refid="331" relation="template-instance">
+          <edgelabel>&lt; MeshAnimation &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="354">
+        <label>castor3d::BinaryParserBase&lt; SkeletonAnimationObject &gt;</label>
+        <link refid="df/de7/a02142"/>
+        <childnode refid="331" relation="template-instance">
+          <edgelabel>&lt; SkeletonAnimationObject &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="332">
+        <label>castor3d::BinaryParserBase&lt; SkeletonAnimationKeyFrame &gt;</label>
+        <link refid="df/de7/a02142"/>
+        <childnode refid="331" relation="template-instance">
+          <edgelabel>&lt; SkeletonAnimationKeyFrame &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="334">
+        <label>castor3d::BinaryParserBase&lt; SkeletonAnimationNode &gt;</label>
+        <link refid="df/de7/a02142"/>
+        <childnode refid="331" relation="template-instance">
+          <edgelabel>&lt; SkeletonAnimationNode &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="345">
+        <label>castor3d::BinaryParser&lt; Animation &gt;</label>
+        <link refid="d1/d7d/a02074"/>
+        <childnode refid="344" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="353">
+        <label>castor3d::BinaryParser&lt; Mesh &gt;</label>
+        <link refid="da/d4a/a02114"/>
+        <childnode refid="352" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="333">
+        <label>castor3d::BinaryParser&lt; SkeletonAnimationKeyFrame &gt;</label>
+        <link refid="d8/d1e/a02210"/>
+        <childnode refid="332" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="338">
+        <label>castor3d::BinaryParserBase&lt; SkeletonAnimationBone &gt;</label>
+        <link refid="df/de7/a02142"/>
+        <childnode refid="331" relation="template-instance">
+          <edgelabel>&lt; SkeletonAnimationBone &gt;</edgelabel>
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="358">
+        <label>castor3d::BinaryParserBase&lt; TParsed &gt;</label>
+        <link refid="df/de7/a02142"/>
+        <childnode refid="359" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
+        </childnode>
+        <childnode refid="360" relation="usage">
+          <edgelabel>m_fileVersion</edgelabel>
+        </childnode>
+      </node>
+      <node id="360">
+        <label>castor3d::Version</label>
+        <link refid="dd/d51/a03842"/>
+      </node>
+      <node id="359">
+        <label>castor3d::BinaryChunk</label>
+        <link refid="d0/dfe/a02102"/>
+      </node>
+    </collaborationgraph>
+    <location file="Binary/BinaryModule.hpp" line="32" column="1" bodyfile="Binary/BinaryModule.hpp" bodystart="32" bodyend="-1"/>
+    <listofallmembers>
+      <member refid="df/de7/a02142_1af07e46a537db6181733f95fa289f1d23" prot="private" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>BinaryParserBase</name></member>
+      <member refid="df/de7/a02142_1ad1fbebf70ad5b1caae1a7eb57c2f82e4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>checkError</name></member>
+      <member refid="df/de7/a02142_1ae6f4694ede819151fe4e30e33235ff07" prot="public" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>createBinaryParser</name></member>
+      <member refid="df/de7/a02142_1ab5f9ba53ad5865f967b41e5a27ed73a9" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>doGetSubChunk</name></member>
+      <member refid="df/de7/a02142_1a020a66d5fc1b452dc76c82702d72bbb1" prot="private" virt="pure-virtual"><scope>castor3d::BinaryParserBase</scope><name>doParse</name></member>
+      <member refid="df/de7/a02142_1aee71b68a40835a10fafe1e1ea5802650" prot="private" virt="virtual"><scope>castor3d::BinaryParserBase</scope><name>doParse_v1_1</name></member>
+      <member refid="df/de7/a02142_1a2df9eb54490b9522c10067b3dbc41e73" prot="private" virt="virtual"><scope>castor3d::BinaryParserBase</scope><name>doParse_v1_2</name></member>
+      <member refid="df/de7/a02142_1aab45074c2f8ac65df7fc52ee2530ebc1" prot="private" virt="virtual"><scope>castor3d::BinaryParserBase</scope><name>doParse_v1_3</name></member>
+      <member refid="df/de7/a02142_1a518964b604fa8129ace4f8f5795d47bc" prot="private" virt="virtual"><scope>castor3d::BinaryParserBase</scope><name>doParse_v1_4</name></member>
+      <member refid="df/de7/a02142_1a0e1aa917e3bf897fab03a32d20890062" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>doParseChunk</name></member>
+      <member refid="df/de7/a02142_1a22ca62addb3ab167995e18f49267efcf" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>doParseChunk</name></member>
+      <member refid="df/de7/a02142_1a5a648553ce168f5bc34adeedc8d169a7" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>doParseChunk</name></member>
+      <member refid="df/de7/a02142_1a90df4e46072e5ef14aebebd00cbcc1f5" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>doParseChunk</name></member>
+      <member refid="df/de7/a02142_1a5fac84360102001f5e730be1927c024e" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>doParseChunk</name></member>
+      <member refid="df/de7/a02142_1a035881aba2b64571b30a5efd3faaf3d9" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>doParseHeader</name></member>
+      <member refid="df/de7/a02142_1ab3df04f9aa2eb1f7a533ed18631f09c4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>m_chunk</name></member>
+      <member refid="df/de7/a02142_1a455764ca72b659dab2652baf56ce5885" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>m_fileVersion</name></member>
+      <member refid="df/de7/a02142_1ae4820a3ab3e4b282240e5f1b969153c1" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>Name</name></member>
+      <member refid="df/de7/a02142_1a5db83668684ca219f67de3a381898e64" prot="public" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>parse</name></member>
+      <member refid="df/de7/a02142_1a6bbbb529f463085c7d259600ae1b3e99" prot="public" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>parse</name></member>
+      <member refid="df/de7/a02142_1a61b02dbf69d89569eff5be22facd5f07" prot="public" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>parse_v1_1</name></member>
+      <member refid="df/de7/a02142_1a95788692ddd6fae91074c299b674aaab" prot="public" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>parse_v1_2</name></member>
+      <member refid="df/de7/a02142_1a6f39b66d980e4a65660016f71115a89c" prot="public" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>parse_v1_3</name></member>
+      <member refid="df/de7/a02142_1aabc068daf8d99718497aa35f7a17c346" prot="public" virt="non-virtual"><scope>castor3d::BinaryParserBase</scope><name>parse_v1_4</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

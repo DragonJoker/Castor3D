@@ -1,0 +1,139 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d6/d1a/a00485" kind="file" language="C++">
+    <compoundname>FaceInfos.hpp</compoundname>
+    <includes refid="d9/d34/a00476" local="yes">ComponentModule.hpp</includes>
+    <includedby refid="df/db6/a00509" local="yes">Model/Mesh/Submesh/Component/TriFaceMapping.hpp</includedby>
+    <incdepgraph>
+      <node id="9185">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="9188">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="9195">
+        <label>CastorUtils/Graphics/BoundingSphere.hpp</label>
+      </node>
+      <node id="9189">
+        <label>cstdint</label>
+      </node>
+      <node id="9176">
+        <label>ComponentModule.hpp</label>
+        <link refid="d9/d34/a00476"/>
+        <childnode refid="9177" relation="include">
+        </childnode>
+      </node>
+      <node id="9187">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="9180">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d5/d35/a00266"/>
+        <childnode refid="9181" relation="include">
+        </childnode>
+        <childnode refid="9182" relation="include">
+        </childnode>
+        <childnode refid="9183" relation="include">
+        </childnode>
+        <childnode refid="9184" relation="include">
+        </childnode>
+        <childnode refid="9185" relation="include">
+        </childnode>
+        <childnode refid="9186" relation="include">
+        </childnode>
+        <childnode refid="9187" relation="include">
+        </childnode>
+        <childnode refid="9188" relation="include">
+        </childnode>
+        <childnode refid="9189" relation="include">
+        </childnode>
+        <childnode refid="9190" relation="include">
+        </childnode>
+        <childnode refid="9191" relation="include">
+        </childnode>
+        <childnode refid="9192" relation="include">
+        </childnode>
+      </node>
+      <node id="9175">
+        <label>Model/Mesh/Submesh/Component/FaceInfos.hpp</label>
+        <link refid="d6/d1a/a00485"/>
+        <childnode refid="9176" relation="include">
+        </childnode>
+      </node>
+      <node id="9191">
+        <label>string</label>
+      </node>
+      <node id="9179">
+        <label>Castor3D/Model/ModelModule.hpp</label>
+        <link refid="d7/def/a00521"/>
+        <childnode refid="9180" relation="include">
+        </childnode>
+      </node>
+      <node id="9184">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="9181">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="9177">
+        <label>Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp</label>
+        <link refid="dc/d19/a00515"/>
+        <childnode refid="9178" relation="include">
+        </childnode>
+        <childnode refid="9194" relation="include">
+        </childnode>
+        <childnode refid="9195" relation="include">
+        </childnode>
+      </node>
+      <node id="9194">
+        <label>CastorUtils/Graphics/BoundingBox.hpp</label>
+      </node>
+      <node id="9183">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="9182">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="9178">
+        <label>Castor3D/Model/Mesh/MeshModule.hpp</label>
+        <link refid="d2/d9d/a00464"/>
+        <childnode refid="9179" relation="include">
+        </childnode>
+        <childnode refid="9193" relation="include">
+        </childnode>
+      </node>
+      <node id="9192">
+        <label>vector</label>
+      </node>
+      <node id="9186">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="9193">
+        <label>CastorUtils/Design/Factory.hpp</label>
+      </node>
+      <node id="9190">
+        <label>memory</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="9196">
+        <label>Model/Mesh/Submesh/Component/FaceInfos.hpp</label>
+        <link refid="d6/d1a/a00485"/>
+        <childnode refid="9197" relation="include">
+        </childnode>
+      </node>
+      <node id="9197">
+        <label>Model/Mesh/Submesh/Component/TriFaceMapping.hpp</label>
+        <link refid="df/db6/a00509"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="de/d26/a03940" prot="public">castor3d::FaceInfos</innerclass>
+    <innerclass refid="dd/dde/a03944" prot="public">castor3d::FaceInfos::Vertex</innerclass>
+    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Model/Mesh/Submesh/Component/FaceInfos.hpp"/>
+  </compounddef>
+</doxygen>

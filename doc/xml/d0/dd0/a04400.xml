@@ -1,0 +1,216 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d0/dd0/a04400" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::GaussianBlur::RenderQuad</compoundname>
+    <basecompoundref refid="d4/d45/a04456" prot="public" virt="non-virtual">castor3d::RenderQuad</basecompoundref>
+    <includes local="no">GaussianBlur.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d0/dd0/a04400_1aead1d90ed18c80590ce46c04835cd290" prot="public" static="no" mutable="no">
+        <type>ashes::ImageView</type>
+        <definition>ashes::ImageView castor3d::GaussianBlur::RenderQuad::srcView</definition>
+        <argsstring></argsstring>
+        <name>srcView</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="206" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="206" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d0/dd0/a04400_1a962ebd18309d532c90d8de8282a2674e" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/d47/a02300" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d8/dd5/a04396" kindref="compound">Configuration</ref> &gt; const  &amp;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; const&amp; castor3d::GaussianBlur::RenderQuad::m_blurUbo</definition>
+        <argsstring></argsstring>
+        <name>m_blurUbo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="209" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="209" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/dd0/a04400_1afa28c70c240f146e7dd4671540a9efd7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::GaussianBlur::RenderQuad::RenderQuad</definition>
+        <argsstring>(RenderSystem &amp;renderSystem, RenderDevice const &amp;device, castor::String const &amp;name, ashes::ImageView const &amp;src, VkImageSubresourceRange const &amp;srcRange, UniformBufferOffsetT&lt; Configuration &gt; const &amp;blurUbo, ShaderModule const &amp;vertexShader, ShaderModule const &amp;pixelShader, ashes::RenderPass const &amp;renderPass, VkExtent2D const &amp;textureSize)</argsstring>
+        <name>RenderQuad</name>
+        <param>
+          <type><ref refid="d9/d38/a04624" kindref="compound">RenderSystem</ref> &amp;</type>
+          <declname>renderSystem</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/def/a04512" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>ashes::ImageView const &amp;</type>
+          <declname>src</declname>
+        </param>
+        <param>
+          <type>VkImageSubresourceRange const &amp;</type>
+          <declname>srcRange</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/d47/a02300" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d8/dd5/a04396" kindref="compound">Configuration</ref> &gt; const &amp;</type>
+          <declname>blurUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d32/a05312" kindref="compound">ShaderModule</ref> const &amp;</type>
+          <declname>vertexShader</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d32/a05312" kindref="compound">ShaderModule</ref> const &amp;</type>
+          <declname>pixelShader</declname>
+        </param>
+        <param>
+          <type>ashes::RenderPass const &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <param>
+          <type>VkExtent2D const &amp;</type>
+          <declname>textureSize</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="194" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1252">
+        <label>castor3d::GaussianBlur::RenderQuad</label>
+        <link refid="d0/dd0/a04400"/>
+        <childnode refid="1253" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1253">
+        <label>castor3d::RenderQuad</label>
+        <link refid="d4/d45/a04456"/>
+        <childnode refid="1254" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1254">
+        <label>Named</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1258">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d9/d38/a04624"/>
+        <childnode refid="1259" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1255">
+        <label>castor3d::GaussianBlur::RenderQuad</label>
+        <link refid="d0/dd0/a04400"/>
+        <childnode refid="1256" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1256">
+        <label>castor3d::RenderQuad</label>
+        <link refid="d4/d45/a04456"/>
+        <childnode refid="1257" relation="public-inheritance">
+        </childnode>
+        <childnode refid="1258" relation="usage">
+          <edgelabel>m_renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="1260" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+      </node>
+      <node id="1263">
+        <label>T</label>
+      </node>
+      <node id="1265">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="1263" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="1262">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="1263" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="1264">
+        <label>std::vector&lt; ashes::CommandPoolPtr &gt;</label>
+        <childnode refid="1265" relation="template-instance">
+          <edgelabel>&lt; ashes::CommandPoolPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1261">
+        <label>std::array&lt; uint32_t, 4u &gt;</label>
+        <childnode refid="1262" relation="template-instance">
+          <edgelabel>&lt; uint32_t, 4u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1257">
+        <label>Named</label>
+      </node>
+      <node id="1259">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="1260">
+        <label>castor3d::RenderDevice</label>
+        <link refid="d1/def/a04512"/>
+        <childnode refid="1261" relation="usage">
+          <edgelabel>queueFamiliesIndex</edgelabel>
+        </childnode>
+        <childnode refid="1258" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="1264" relation="usage">
+          <edgelabel>commandPools</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Passes/GaussianBlur.hpp" line="192" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="190" bodyend="210"/>
+    <listofallmembers>
+      <member refid="d4/d45/a04456_1ab31f1f028639e2280dc81a5207c19361" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>cleanup</name></member>
+      <member refid="d4/d45/a04456_1a2d8f7fe31e95ec7563ab7e49d47f847f" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>createPipeline</name></member>
+      <member refid="d4/d45/a04456_1a9eed2ab1f518d2d215e10f79dd66b980" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>createPipelineAndPass</name></member>
+      <member refid="d4/d45/a04456_1a208ae566cd29dc14e874ec5381a40676" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>getDevice</name></member>
+      <member refid="d4/d45/a04456_1adf3b0cdd23bb9558df6d7f1b87b74ac6" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>getRenderSystem</name></member>
+      <member refid="d4/d45/a04456_1a2b4ea1f81bda3deace1e6f5b159f90db" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>getSampler</name></member>
+      <member refid="d4/d45/a04456_1a434520ea0e0f0a1ae885e7c9e19306a8" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>initialisePasses</name></member>
+      <member refid="d0/dd0/a04400_1a962ebd18309d532c90d8de8282a2674e" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>m_blurUbo</name></member>
+      <member refid="d4/d45/a04456_1ac07074df6fa0bb86ec6e9c76bf23f867" prot="protected" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>m_config</name></member>
+      <member refid="d4/d45/a04456_1a0e0d911b83650f310a1d773e6774788c" prot="protected" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>m_device</name></member>
+      <member refid="d4/d45/a04456_1a67e531e63c3eef4d22c89cd5dcf26d39" prot="protected" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>m_renderSystem</name></member>
+      <member refid="d4/d45/a04456_1ac424bcc12b49f4788b6a78e181e7d8c9" prot="protected" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>m_sampler</name></member>
+      <member refid="d4/d45/a04456_1aba30b821ed0f043349148de3f91e1e28" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>makeDescriptorWrite</name></member>
+      <member refid="d4/d45/a04456_1abb76aa593ad380a88d949bd26fea0202" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>makeDescriptorWrite</name></member>
+      <member refid="d4/d45/a04456_1a612d681d62631e6bb92d9601c660b48e" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>makeDescriptorWrite</name></member>
+      <member refid="d4/d45/a04456_1af64b5bc8b9a9a3013e46accb200156f5" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>makeDescriptorWrite</name></member>
+      <member refid="d4/d45/a04456_1a43bab20a96e9bea365bc98d8667c977e" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>makeDescriptorWrite</name></member>
+      <member refid="d4/d45/a04456_1afacd916c61c3a5b315a0d3e94a8ba84d" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>makeDescriptorWrite</name></member>
+      <member refid="d4/d45/a04456_1a046a2ac1ba39bbd6114dfe87d4aaaf11" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>makeDescriptorWrite</name></member>
+      <member refid="d4/d45/a04456_1ac0cf400425c8050429e895099c971715" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>registerPass</name></member>
+      <member refid="d4/d45/a04456_1a62f21f0ecc9017c47eb029d0bc19e396" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>registerPass</name></member>
+      <member refid="d4/d45/a04456_1a367adcd9b6cc6ac6b1c68a28b2580eb2" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>registerPassInputs</name></member>
+      <member refid="d0/dd0/a04400_1afa28c70c240f146e7dd4671540a9efd7" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>RenderQuad</name></member>
+      <member refid="d4/d45/a04456_1a48a49fffd036c545328e87e1449e141d" prot="protected" virt="non-virtual" ambiguityscope="castor3d::RenderQuad::"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>RenderQuad</name></member>
+      <member refid="d4/d45/a04456_1aeaeeae8d7065de723f0a710360bab119" prot="public" virt="non-virtual" ambiguityscope="castor3d::RenderQuad::"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>RenderQuad</name></member>
+      <member refid="d0/dd0/a04400_1aead1d90ed18c80590ce46c04835cd290" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>srcView</name></member>
+      <member refid="d4/d45/a04456_1a8a01faf0243638f02d6f052ff9e85b4b" prot="public" virt="virtual"><scope>castor3d::GaussianBlur::RenderQuad</scope><name>~RenderQuad</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dc/d60/a01461" kind="namespace" language="C++">
+    <compoundname>castor</compoundname>
+    <innerclass refid="d3/d46/a04311" prot="public">castor::Deleter&lt; castor3d::SceneCulledRenderNodes &gt;</innerclass>
+    <innerclass refid="d9/d4e/a04307" prot="public">castor::Deleter&lt; castor3d::SceneRenderNodes &gt;</innerclass>
+    <innerclass refid="da/d5c/a05615" prot="public">castor::TextWriter&lt; castor3d::AnimatedObjectGroup &gt;</innerclass>
+    <innerclass refid="d3/d4e/a05623" prot="public">castor::TextWriter&lt; castor3d::BillboardList &gt;</innerclass>
+    <innerclass refid="da/da1/a05627" prot="public">castor::TextWriter&lt; castor3d::BorderPanelOverlay &gt;</innerclass>
+    <innerclass refid="dc/d03/a05631" prot="public">castor::TextWriter&lt; castor3d::Camera &gt;</innerclass>
+    <innerclass refid="dd/df1/a05635" prot="public">castor::TextWriter&lt; castor3d::ColourBackground &gt;</innerclass>
+    <innerclass refid="d7/d9a/a05639" prot="public">castor::TextWriter&lt; castor3d::DirectionalLight &gt;</innerclass>
+    <innerclass refid="d7/d3b/a05643" prot="public">castor::TextWriter&lt; castor3d::Fog &gt;</innerclass>
+    <innerclass refid="d2/da1/a05647" prot="public">castor::TextWriter&lt; castor3d::Geometry &gt;</innerclass>
+    <innerclass refid="d1/d19/a05651" prot="public">castor::TextWriter&lt; castor3d::HdrConfig &gt;</innerclass>
+    <innerclass refid="dc/d03/a05655" prot="public">castor::TextWriter&lt; castor3d::ImageBackground &gt;</innerclass>
+    <innerclass refid="d7/d33/a05659" prot="public">castor::TextWriter&lt; castor3d::Light &gt;</innerclass>
+    <innerclass refid="da/dde/a05663" prot="public">castor::TextWriter&lt; castor3d::LpvConfig &gt;</innerclass>
+    <innerclass refid="d6/dda/a05667" prot="public">castor::TextWriter&lt; castor3d::Material &gt;</innerclass>
+    <innerclass refid="d4/d71/a05671" prot="public">castor::TextWriter&lt; castor3d::Mesh &gt;</innerclass>
+    <innerclass refid="d2/d44/a05675" prot="public">castor::TextWriter&lt; castor3d::MetallicRoughnessPbrPass &gt;</innerclass>
+    <innerclass refid="d3/ddb/a05679" prot="public">castor::TextWriter&lt; castor3d::Overlay &gt;</innerclass>
+    <innerclass refid="d6/d3e/a05683" prot="public">castor::TextWriter&lt; castor3d::OverlayCategory &gt;</innerclass>
+    <innerclass refid="d2/de1/a05687" prot="public">castor::TextWriter&lt; castor3d::PanelOverlay &gt;</innerclass>
+    <innerclass refid="d8/d58/a05691" prot="public">castor::TextWriter&lt; castor3d::ParticleSystem &gt;</innerclass>
+    <innerclass refid="d5/dd3/a05695" prot="public">castor::TextWriter&lt; castor3d::Pass &gt;</innerclass>
+    <innerclass refid="d4/da5/a05699" prot="public">castor::TextWriter&lt; castor3d::PhongPass &gt;</innerclass>
+    <innerclass refid="d3/d30/a05703" prot="public">castor::TextWriter&lt; castor3d::PointLight &gt;</innerclass>
+    <innerclass refid="dd/de0/a05711" prot="public">castor::TextWriter&lt; castor3d::RenderTarget &gt;</innerclass>
+    <innerclass refid="df/db7/a05715" prot="public">castor::TextWriter&lt; castor3d::RenderWindow &gt;</innerclass>
+    <innerclass refid="d8/d2e/a05719" prot="public">castor::TextWriter&lt; castor3d::RsmConfig &gt;</innerclass>
+    <innerclass refid="d1/d27/a05723" prot="public">castor::TextWriter&lt; castor3d::Sampler &gt;</innerclass>
+    <innerclass refid="d5/da4/a05727" prot="public">castor::TextWriter&lt; castor3d::Scene &gt;</innerclass>
+    <innerclass refid="de/dba/a05619" prot="public">castor::TextWriter&lt; castor3d::SceneBackground &gt;</innerclass>
+    <innerclass refid="d0/df5/a05735" prot="public">castor::TextWriter&lt; castor3d::SceneNode &gt;</innerclass>
+    <innerclass refid="d3/d39/a05707" prot="public">castor::TextWriter&lt; castor3d::ShaderProgram &gt;</innerclass>
+    <innerclass refid="d1/d64/a05739" prot="public">castor::TextWriter&lt; castor3d::ShadowConfig &gt;</innerclass>
+    <innerclass refid="d2/dac/a05743" prot="public">castor::TextWriter&lt; castor3d::SkyboxBackground &gt;</innerclass>
+    <innerclass refid="d6/df4/a05747" prot="public">castor::TextWriter&lt; castor3d::SpecularGlossinessPbrPass &gt;</innerclass>
+    <innerclass refid="dd/d80/a05751" prot="public">castor::TextWriter&lt; castor3d::SpotLight &gt;</innerclass>
+    <innerclass refid="d9/dd4/a05755" prot="public">castor::TextWriter&lt; castor3d::SsaoConfig &gt;</innerclass>
+    <innerclass refid="d8/dbc/a05759" prot="public">castor::TextWriter&lt; castor3d::SubsurfaceScattering &gt;</innerclass>
+    <innerclass refid="d8/d36/a05763" prot="public">castor::TextWriter&lt; castor3d::TextOverlay &gt;</innerclass>
+    <innerclass refid="d5/d1a/a05767" prot="public">castor::TextWriter&lt; castor3d::TextureConfiguration &gt;</innerclass>
+    <innerclass refid="de/dc1/a05771" prot="public">castor::TextWriter&lt; castor3d::TextureUnit &gt;</innerclass>
+    <innerclass refid="d2/d2d/a05775" prot="public">castor::TextWriter&lt; castor3d::TextureView &gt;</innerclass>
+    <innerclass refid="d6/d64/a05779" prot="public">castor::TextWriter&lt; castor3d::Viewport &gt;</innerclass>
+    <innerclass refid="d6/d37/a05783" prot="public">castor::TextWriter&lt; castor3d::VoxelSceneData &gt;</innerclass>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Node/RenderNodeModule.hpp" line="125" column="1"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,698 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d6/d5a/a04966" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::RenderCube</compoundname>
+    <derivedcompoundref refid="d1/dd4/a04958" prot="private" virt="non-virtual">castor3d::EquirectangularToCube</derivedcompoundref>
+    <derivedcompoundref refid="d7/d2e/a04482" prot="private" virt="non-virtual">castor3d::RadianceComputer</derivedcompoundref>
+    <derivedcompoundref refid="d4/dbc/a04994" prot="private" virt="non-virtual">castor3d::TextureProjectionToCube</derivedcompoundref>
+    <includes local="no">RenderCube.hpp</includes>
+    <innerclass refid="db/db8/a04970" prot="private">castor3d::RenderCube::FacePipeline</innerclass>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d6/d5a/a04966_1af9d5218505481d37eec6dc49f638039a" prot="protected" static="no" mutable="no">
+        <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::RenderCube::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/RenderCube.hpp" line="205" column="1" bodyfile="Render/ToTexture/RenderCube.hpp" bodystart="205" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d5a/a04966_1a09a2fc9d7fe9809ad64836ab33c3f2a8" prot="protected" static="no" mutable="no">
+        <type>SamplerSPtr</type>
+        <definition>SamplerSPtr castor3d::RenderCube::m_sampler</definition>
+        <argsstring></argsstring>
+        <name>m_sampler</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/RenderCube.hpp" line="206" column="1" bodyfile="Render/ToTexture/RenderCube.hpp" bodystart="206" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d5a/a04966_1a84414b79673d6fe5e891f6078bc8b782" prot="protected" static="no" mutable="no">
+        <type>ashes::PipelineLayoutPtr</type>
+        <definition>ashes::PipelineLayoutPtr castor3d::RenderCube::m_pipelineLayout</definition>
+        <argsstring></argsstring>
+        <name>m_pipelineLayout</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/RenderCube.hpp" line="207" column="1" bodyfile="Render/ToTexture/RenderCube.hpp" bodystart="207" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d6/d5a/a04966_1ac0230e7ade3a7dc4108eac4b8f250f8c" prot="private" static="no" mutable="no">
+        <type>ashes::CommandBufferPtr</type>
+        <definition>ashes::CommandBufferPtr castor3d::RenderCube::m_commandBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_commandBuffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/RenderCube.hpp" line="216" column="1" bodyfile="Render/ToTexture/RenderCube.hpp" bodystart="216" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d5a/a04966_1abaa28d5a015f7592ad09e9bd4878d1e0" prot="private" static="no" mutable="no">
+        <type>UniformBufferUPtrT&lt; castor::Matrix4x4f &gt;</type>
+        <definition>UniformBufferUPtrT&lt; castor::Matrix4x4f &gt; castor3d::RenderCube::m_matrixUbo</definition>
+        <argsstring></argsstring>
+        <name>m_matrixUbo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/RenderCube.hpp" line="217" column="1" bodyfile="Render/ToTexture/RenderCube.hpp" bodystart="217" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d5a/a04966_1a2ad3b1abde77e72c051f77144499154c" prot="private" static="no" mutable="no">
+        <type>ashes::VertexBufferPtr&lt; castor::Point4f &gt;</type>
+        <definition>ashes::VertexBufferPtr&lt; castor::Point4f &gt; castor3d::RenderCube::m_vertexBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_vertexBuffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/RenderCube.hpp" line="218" column="1" bodyfile="Render/ToTexture/RenderCube.hpp" bodystart="218" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d5a/a04966_1ac62bd3fdbc4a02e0c015bd267f5f90c3" prot="private" static="no" mutable="no">
+        <type>ashes::PipelineVertexInputStateCreateInfoPtr</type>
+        <definition>ashes::PipelineVertexInputStateCreateInfoPtr castor3d::RenderCube::m_vertexLayout</definition>
+        <argsstring></argsstring>
+        <name>m_vertexLayout</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/RenderCube.hpp" line="219" column="1" bodyfile="Render/ToTexture/RenderCube.hpp" bodystart="219" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d5a/a04966_1a0140fce87dab1a6ce53cece996d37752" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSetLayoutPtr</type>
+        <definition>ashes::DescriptorSetLayoutPtr castor3d::RenderCube::m_descriptorLayout</definition>
+        <argsstring></argsstring>
+        <name>m_descriptorLayout</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/RenderCube.hpp" line="220" column="1" bodyfile="Render/ToTexture/RenderCube.hpp" bodystart="220" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d5a/a04966_1ae82fb076eb4d1e030388516be626230d" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSetPoolPtr</type>
+        <definition>ashes::DescriptorSetPoolPtr castor3d::RenderCube::m_descriptorPool</definition>
+        <argsstring></argsstring>
+        <name>m_descriptorPool</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/RenderCube.hpp" line="221" column="1" bodyfile="Render/ToTexture/RenderCube.hpp" bodystart="221" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d5a/a04966_1a0ad322f90558682850d230821f7e6802" prot="private" static="no" mutable="no">
+        <type>std::array&lt; FacePipeline, 6u &gt;</type>
+        <definition>std::array&lt; FacePipeline, 6u &gt; castor3d::RenderCube::m_faces</definition>
+        <argsstring></argsstring>
+        <name>m_faces</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/RenderCube.hpp" line="222" column="1" bodyfile="Render/ToTexture/RenderCube.hpp" bodystart="222" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/d5a/a04966_1a442e2372083596ae51f50d6aa8709e60" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::RenderCube::~RenderCube</definition>
+        <argsstring>()</argsstring>
+        <name>~RenderCube</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/RenderCube.hpp" line="27" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d5a/a04966_1ac600349f4887fe9d7765ecc3224b2992" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::RenderCube::RenderCube</definition>
+        <argsstring>(RenderDevice const &amp;device, bool nearest, SamplerSPtr sampler=nullptr)</argsstring>
+        <name>RenderCube</name>
+        <param>
+          <type><ref refid="d8/d4c/a04506" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>nearest</declname>
+        </param>
+        <param>
+          <type>SamplerSPtr</type>
+          <declname>sampler</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">nearest</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Tells if the sampler needs a Nearest filter or not, if <computeroutput>sampler</computeroutput> is nullptr. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">sampler</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The sampler to use. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/RenderCube.hpp" line="48" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d5a/a04966_1ae58f4e4abbd017b821ad1ce07bd1898c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderCube::createPipelines</definition>
+        <argsstring>(VkExtent2D const &amp;size, castor::Position const &amp;position, ashes::PipelineShaderStageCreateInfoArray const &amp;program, ashes::ImageView const &amp;view, ashes::RenderPass const &amp;renderPass, ashes::VkPushConstantRangeArray const &amp;pushRanges)</argsstring>
+        <name>createPipelines</name>
+        <param>
+          <type>VkExtent2D const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>castor::Position const &amp;</type>
+          <declname>position</declname>
+        </param>
+        <param>
+          <type>ashes::PipelineShaderStageCreateInfoArray const &amp;</type>
+          <declname>program</declname>
+        </param>
+        <param>
+          <type>ashes::ImageView const &amp;</type>
+          <declname>view</declname>
+        </param>
+        <param>
+          <type>ashes::RenderPass const &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <param>
+          <type>ashes::VkPushConstantRangeArray const &amp;</type>
+          <declname>pushRanges</declname>
+        </param>
+        <briefdescription>
+<para>Creates the rendering pipelines. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render size. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">position</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render position. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">program</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The shader program. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">view</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The source view. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">renderPass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render pass to use. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pushRanges</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The push constant ranges. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/RenderCube.hpp" line="83" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d5a/a04966_1a03e099cd27fb31640352a9925effa710" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderCube::createPipelines</definition>
+        <argsstring>(VkExtent2D const &amp;size, castor::Position const &amp;position, ashes::PipelineShaderStageCreateInfoArray const &amp;program, ashes::ImageView const &amp;view, ashes::RenderPass const &amp;renderPass, ashes::VkPushConstantRangeArray const &amp;pushRanges, ashes::PipelineDepthStencilStateCreateInfo const &amp;dsState)</argsstring>
+        <name>createPipelines</name>
+        <param>
+          <type>VkExtent2D const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>castor::Position const &amp;</type>
+          <declname>position</declname>
+        </param>
+        <param>
+          <type>ashes::PipelineShaderStageCreateInfoArray const &amp;</type>
+          <declname>program</declname>
+        </param>
+        <param>
+          <type>ashes::ImageView const &amp;</type>
+          <declname>view</declname>
+        </param>
+        <param>
+          <type>ashes::RenderPass const &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <param>
+          <type>ashes::VkPushConstantRangeArray const &amp;</type>
+          <declname>pushRanges</declname>
+        </param>
+        <param>
+          <type>ashes::PipelineDepthStencilStateCreateInfo const &amp;</type>
+          <declname>dsState</declname>
+        </param>
+        <briefdescription>
+<para>Creates the rendering pipelines. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render size. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">position</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render position. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">program</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The shader program. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">view</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The source view. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">renderPass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render pass to use. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pushRanges</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The push constant ranges. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dsState</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The depth stencil state to use. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/RenderCube.hpp" line="125" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d5a/a04966_1a3f0330fd2cd0b556433e50c505c2cfd0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderCube::cleanup</definition>
+        <argsstring>()</argsstring>
+        <name>cleanup</name>
+        <briefdescription>
+<para>Cleans up GPU objects. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/RenderCube.hpp" line="140" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d5a/a04966_1a83fae0b06a6d865e7b3a9a12bf6ee6ff" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderCube::prepareFrame</definition>
+        <argsstring>(ashes::RenderPass const &amp;renderPass, uint32_t subpassIndex, uint32_t face)</argsstring>
+        <name>prepareFrame</name>
+        <param>
+          <type>ashes::RenderPass const &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>subpassIndex</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>face</declname>
+        </param>
+        <briefdescription>
+<para>Prepares the commands to render one face from the cube. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">renderPass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render pass to use. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">subpassIndex</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render subpass index. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">face</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The face index. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/RenderCube.hpp" line="161" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d5a/a04966_1a4b8c2a6e867159e5545c6ae52e6ed246" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderCube::registerFrame</definition>
+        <argsstring>(ashes::CommandBuffer &amp;commandBuffer, uint32_t face) const</argsstring>
+        <name>registerFrame</name>
+        <param>
+          <type>ashes::CommandBuffer &amp;</type>
+          <declname>commandBuffer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>face</declname>
+        </param>
+        <briefdescription>
+<para>Prepares the commands to render one face from the cube, inside given command buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">commandBuffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The command buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">face</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The face index. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/RenderCube.hpp" line="180" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d5a/a04966_1aee72d95a1c9e3b4e7bf221867f1a80d5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::CommandBuffer const  &amp;</type>
+        <definition>ashes::CommandBuffer const&amp; castor3d::RenderCube::getCommandBuffer</definition>
+        <argsstring>() const</argsstring>
+        <name>getCommandBuffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The command buffer to render the quad. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/RenderCube.hpp" line="190" column="1" bodyfile="Render/ToTexture/RenderCube.hpp" bodystart="190" bodyend="194"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d6/d5a/a04966_1ad4e0afbe9a46484f314ab81cebf27f56" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::RenderCube::doFillDescriptorLayoutBindings</definition>
+        <argsstring>(ashes::VkDescriptorSetLayoutBindingArray &amp;bindings)</argsstring>
+        <name>doFillDescriptorLayoutBindings</name>
+        <param>
+          <type>ashes::VkDescriptorSetLayoutBindingArray &amp;</type>
+          <declname>bindings</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/RenderCube.hpp" line="197" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d5a/a04966_1a1b26bf5ad6bf2341929fdb80f82bfee7" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::RenderCube::doFillDescriptorSet</definition>
+        <argsstring>(ashes::DescriptorSetLayout &amp;descriptorSetLayout, ashes::DescriptorSet &amp;descriptorSet, uint32_t face)</argsstring>
+        <name>doFillDescriptorSet</name>
+        <param>
+          <type>ashes::DescriptorSetLayout &amp;</type>
+          <declname>descriptorSetLayout</declname>
+        </param>
+        <param>
+          <type>ashes::DescriptorSet &amp;</type>
+          <declname>descriptorSet</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>face</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/RenderCube.hpp" line="198" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d5a/a04966_1a76c0cb3a9bbd308e8155f41d4bc50a26" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::RenderCube::doRegisterFrame</definition>
+        <argsstring>(ashes::CommandBuffer &amp;commandBuffer, uint32_t face) const</argsstring>
+        <name>doRegisterFrame</name>
+        <param>
+          <type>ashes::CommandBuffer &amp;</type>
+          <declname>commandBuffer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>face</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToTexture/RenderCube.hpp" line="201" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2847">
+        <label>castor3d::RenderCube</label>
+        <link refid="d6/d5a/a04966"/>
+      </node>
+      <node id="2850">
+        <label>castor3d::TextureProjectionToCube</label>
+        <link refid="d4/dbc/a04994"/>
+        <childnode refid="2847" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="2848">
+        <label>castor3d::EquirectangularToCube</label>
+        <link refid="d1/dd4/a04958"/>
+        <childnode refid="2847" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="2849">
+        <label>castor3d::RadianceComputer</label>
+        <link refid="d7/d2e/a04482"/>
+        <childnode refid="2847" relation="private-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2856">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d1/d9a/a04618"/>
+        <childnode refid="2857" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2855">
+        <label>T</label>
+      </node>
+      <node id="2851">
+        <label>castor3d::RenderCube</label>
+        <link refid="d6/d5a/a04966"/>
+        <childnode refid="2852" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+      </node>
+      <node id="2859">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="2855" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="2854">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="2855" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="2858">
+        <label>std::vector&lt; ashes::CommandPoolPtr &gt;</label>
+        <childnode refid="2859" relation="template-instance">
+          <edgelabel>&lt; ashes::CommandPoolPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2853">
+        <label>std::array&lt; uint32_t, 4u &gt;</label>
+        <childnode refid="2854" relation="template-instance">
+          <edgelabel>&lt; uint32_t, 4u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2857">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="2852">
+        <label>castor3d::RenderDevice</label>
+        <link refid="d8/d4c/a04506"/>
+        <childnode refid="2853" relation="usage">
+          <edgelabel>queueFamiliesIndex</edgelabel>
+        </childnode>
+        <childnode refid="2856" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="2858" relation="usage">
+          <edgelabel>commandPools</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/ToTexture/RenderCube.hpp" line="25" column="1" bodyfile="Render/ToTexture/RenderCube.hpp" bodystart="24" bodyend="223"/>
+    <listofallmembers>
+      <member refid="d6/d5a/a04966_1a3f0330fd2cd0b556433e50c505c2cfd0" prot="public" virt="non-virtual"><scope>castor3d::RenderCube</scope><name>cleanup</name></member>
+      <member refid="d6/d5a/a04966_1ae58f4e4abbd017b821ad1ce07bd1898c" prot="public" virt="non-virtual"><scope>castor3d::RenderCube</scope><name>createPipelines</name></member>
+      <member refid="d6/d5a/a04966_1a03e099cd27fb31640352a9925effa710" prot="public" virt="non-virtual"><scope>castor3d::RenderCube</scope><name>createPipelines</name></member>
+      <member refid="d6/d5a/a04966_1ad4e0afbe9a46484f314ab81cebf27f56" prot="private" virt="virtual"><scope>castor3d::RenderCube</scope><name>doFillDescriptorLayoutBindings</name></member>
+      <member refid="d6/d5a/a04966_1a1b26bf5ad6bf2341929fdb80f82bfee7" prot="private" virt="virtual"><scope>castor3d::RenderCube</scope><name>doFillDescriptorSet</name></member>
+      <member refid="d6/d5a/a04966_1a76c0cb3a9bbd308e8155f41d4bc50a26" prot="private" virt="virtual"><scope>castor3d::RenderCube</scope><name>doRegisterFrame</name></member>
+      <member refid="d6/d5a/a04966_1aee72d95a1c9e3b4e7bf221867f1a80d5" prot="public" virt="non-virtual"><scope>castor3d::RenderCube</scope><name>getCommandBuffer</name></member>
+      <member refid="d6/d5a/a04966_1ac0230e7ade3a7dc4108eac4b8f250f8c" prot="private" virt="non-virtual"><scope>castor3d::RenderCube</scope><name>m_commandBuffer</name></member>
+      <member refid="d6/d5a/a04966_1a0140fce87dab1a6ce53cece996d37752" prot="private" virt="non-virtual"><scope>castor3d::RenderCube</scope><name>m_descriptorLayout</name></member>
+      <member refid="d6/d5a/a04966_1ae82fb076eb4d1e030388516be626230d" prot="private" virt="non-virtual"><scope>castor3d::RenderCube</scope><name>m_descriptorPool</name></member>
+      <member refid="d6/d5a/a04966_1af9d5218505481d37eec6dc49f638039a" prot="protected" virt="non-virtual"><scope>castor3d::RenderCube</scope><name>m_device</name></member>
+      <member refid="d6/d5a/a04966_1a0ad322f90558682850d230821f7e6802" prot="private" virt="non-virtual"><scope>castor3d::RenderCube</scope><name>m_faces</name></member>
+      <member refid="d6/d5a/a04966_1abaa28d5a015f7592ad09e9bd4878d1e0" prot="private" virt="non-virtual"><scope>castor3d::RenderCube</scope><name>m_matrixUbo</name></member>
+      <member refid="d6/d5a/a04966_1a84414b79673d6fe5e891f6078bc8b782" prot="protected" virt="non-virtual"><scope>castor3d::RenderCube</scope><name>m_pipelineLayout</name></member>
+      <member refid="d6/d5a/a04966_1a09a2fc9d7fe9809ad64836ab33c3f2a8" prot="protected" virt="non-virtual"><scope>castor3d::RenderCube</scope><name>m_sampler</name></member>
+      <member refid="d6/d5a/a04966_1a2ad3b1abde77e72c051f77144499154c" prot="private" virt="non-virtual"><scope>castor3d::RenderCube</scope><name>m_vertexBuffer</name></member>
+      <member refid="d6/d5a/a04966_1ac62bd3fdbc4a02e0c015bd267f5f90c3" prot="private" virt="non-virtual"><scope>castor3d::RenderCube</scope><name>m_vertexLayout</name></member>
+      <member refid="d6/d5a/a04966_1a83fae0b06a6d865e7b3a9a12bf6ee6ff" prot="public" virt="non-virtual"><scope>castor3d::RenderCube</scope><name>prepareFrame</name></member>
+      <member refid="d6/d5a/a04966_1a4b8c2a6e867159e5545c6ae52e6ed246" prot="public" virt="non-virtual"><scope>castor3d::RenderCube</scope><name>registerFrame</name></member>
+      <member refid="d6/d5a/a04966_1ac600349f4887fe9d7765ecc3224b2992" prot="public" virt="non-virtual"><scope>castor3d::RenderCube</scope><name>RenderCube</name></member>
+      <member refid="d6/d5a/a04966_1a442e2372083596ae51f50d6aa8709e60" prot="public" virt="virtual"><scope>castor3d::RenderCube</scope><name>~RenderCube</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

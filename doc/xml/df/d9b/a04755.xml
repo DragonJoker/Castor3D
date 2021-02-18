@@ -1,0 +1,132 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="df/d9b/a04755" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::LightPassResult</compoundname>
+    <basecompoundref refid="de/d93/a04235" prot="public" virt="non-virtual">castor3d::GBufferT&lt; LpTexture &gt;</basecompoundref>
+    <includes local="no">LightPassResult.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/d9b/a04755_1a013a79c440261c8a366bd3c2c2c59f89" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d22/a00245_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::LightPassResult::LightPassResult</definition>
+        <argsstring>(Engine &amp;engine, castor::Size const &amp;size)</argsstring>
+        <name>LightPassResult</name>
+        <param>
+          <type><ref refid="d0/d7c/a02499" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/LightPassResult.hpp" line="17" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1683">
+        <label>castor3d::GBufferT&lt; LpTexture &gt;</label>
+        <link refid="de/d93/a04235"/>
+        <childnode refid="1684" relation="private-inheritance">
+        </childnode>
+        <childnode refid="1686" relation="template-instance">
+          <edgelabel>&lt; LpTexture &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1682">
+        <label>castor3d::LightPassResult</label>
+        <link refid="df/d9b/a04755"/>
+        <childnode refid="1683" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1685">
+        <label>Named</label>
+      </node>
+      <node id="1686">
+        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
+        <link refid="de/d93/a04235"/>
+        <childnode refid="1684" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="1684">
+        <label>castor3d::GBufferBase</label>
+        <link refid="d7/da1/a04231"/>
+        <childnode refid="1685" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1688">
+        <label>castor3d::GBufferT&lt; LpTexture &gt;</label>
+        <link refid="de/d93/a04235"/>
+        <childnode refid="1689" relation="private-inheritance">
+        </childnode>
+        <childnode refid="1691" relation="usage">
+          <edgelabel>m_engine</edgelabel>
+        </childnode>
+        <childnode refid="1693" relation="template-instance">
+          <edgelabel>&lt; LpTexture &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1687">
+        <label>castor3d::LightPassResult</label>
+        <link refid="df/d9b/a04755"/>
+        <childnode refid="1688" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1690">
+        <label>Named</label>
+      </node>
+      <node id="1692">
+        <label>castor::Unique&lt; Engine &gt;</label>
+      </node>
+      <node id="1691">
+        <label>castor3d::Engine</label>
+        <link refid="d0/d7c/a02499"/>
+        <childnode refid="1692" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1693">
+        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
+        <link refid="de/d93/a04235"/>
+        <childnode refid="1689" relation="private-inheritance">
+        </childnode>
+        <childnode refid="1691" relation="usage">
+          <edgelabel>m_engine</edgelabel>
+        </childnode>
+      </node>
+      <node id="1689">
+        <label>castor3d::GBufferBase</label>
+        <link refid="d7/da1/a04231"/>
+        <childnode refid="1690" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Technique/Opaque/Lighting/LightPassResult.hpp" line="15" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPassResult.hpp" bodystart="13" bodyend="19"/>
+    <listofallmembers>
+      <member refid="de/d93/a04235_1a07ee2a84c48f234617c05d6d5c4b6c33" prot="public" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>begin</name></member>
+      <member refid="de/d93/a04235_1aa0de394aee0ba9d95e5c04da314a9cb4" prot="public" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>begin</name></member>
+      <member refid="de/d93/a04235_1a77d65937285e0954c33bc1834b099dbf" prot="public" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>cbegin</name></member>
+      <member refid="de/d93/a04235_1a0ca55ac3a4cfb4c27acbd6867f420a41" prot="public" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>cend</name></member>
+      <member refid="de/d93/a04235_1a2dbf9ef234080f55751db9f2ced2db94" prot="public" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>cleanup</name></member>
+      <member refid="de/d93/a04235_1a2ed3e0a1d7b905e8393d6f1e3b67f339" prot="public" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>end</name></member>
+      <member refid="de/d93/a04235_1ad9a2382a1c40e83a016a77209bee05fd" prot="public" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>end</name></member>
+      <member refid="de/d93/a04235_1afc858ac06674fbee5bcc31d1eb051f21" prot="public" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>GBufferT</name></member>
+      <member refid="de/d93/a04235_1a48c1db122e270552414435855b31f23d" prot="public" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>GBufferT</name></member>
+      <member refid="de/d93/a04235_1adbb549264af799a0ca09aafab55df3b8" prot="public" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>initialise</name></member>
+      <member refid="df/d9b/a04755_1a013a79c440261c8a366bd3c2c2c59f89" prot="public" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>LightPassResult</name></member>
+      <member refid="de/d93/a04235_1abfc84e342baf1448ab71cb739138f89b" prot="protected" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>m_engine</name></member>
+      <member refid="de/d93/a04235_1a1cd0629caecd95cfa73fc857e92be07a" prot="protected" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>m_owned</name></member>
+      <member refid="de/d93/a04235_1ac693f4659ea2014569d916d03013f68e" prot="protected" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>m_result</name></member>
+      <member refid="de/d93/a04235_1a55a704f02c3e73ede1b8ed6fb78e79d5" prot="public" virt="non-virtual"><scope>castor3d::LightPassResult</scope><name>operator[]</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

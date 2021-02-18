@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d3/d14/a04046" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::VertexBoneData::Weights::weights</compoundname>
+    <includes local="no">VertexBoneData.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d3/d14/a04046_1acf40628e9abc3101fae5e16ea9ab945e" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::VertexBoneData::Weights::weights::weight0</definition>
+        <argsstring></argsstring>
+        <name>weight0</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/VertexBoneData.hpp" line="107" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="107" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d14/a04046_1adc631aa4a11633f4bea00eddec0a4a2c" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::VertexBoneData::Weights::weights::weight1</definition>
+        <argsstring></argsstring>
+        <name>weight1</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/VertexBoneData.hpp" line="108" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Model/Skeleton/VertexBoneData.hpp" line="106" column="1" bodyfile="Model/Skeleton/VertexBoneData.hpp" bodystart="105" bodyend="109"/>
+    <listofallmembers>
+      <member refid="d3/d14/a04046_1acf40628e9abc3101fae5e16ea9ab945e" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Weights::weights</scope><name>weight0</name></member>
+      <member refid="d3/d14/a04046_1adc631aa4a11633f4bea00eddec0a4a2c" prot="public" virt="non-virtual"><scope>castor3d::VertexBoneData::Weights::weights</scope><name>weight1</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="de/d9c/a04551" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::TexturedCube::Quad</compoundname>
+    <includes local="no">RenderModule.hpp</includes>
+    <innerclass refid="dc/d65/a04555" prot="public">castor3d::TexturedCube::Quad::Vertex</innerclass>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="de/d9c/a04551_1ab6642102bef3951fc82eb7d81004795d" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/d65/a04555" kindref="compound">Vertex</ref></type>
+        <definition>Vertex castor3d::TexturedCube::Quad::vertex[6]</definition>
+        <argsstring>[6]</argsstring>
+        <name>vertex</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="69" column="1" bodyfile="Render/RenderModule.hpp" bodystart="69" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="4412">
+        <label>castor3d::TexturedCube::Quad::Vertex</label>
+        <link refid="dc/d65/a04555"/>
+      </node>
+      <node id="4411">
+        <label>castor3d::TexturedCube::Quad</label>
+        <link refid="de/d9c/a04551"/>
+        <childnode refid="4412" relation="usage">
+          <edgelabel>vertex</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/RenderModule.hpp" line="62" column="1" bodyfile="Render/RenderModule.hpp" bodystart="61" bodyend="70"/>
+    <listofallmembers>
+      <member refid="de/d9c/a04551_1ab6642102bef3951fc82eb7d81004795d" prot="public" virt="non-virtual"><scope>castor3d::TexturedCube::Quad</scope><name>vertex</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dc/d8b/a04578" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::IntermediateView</compoundname>
+    <includes local="no">RenderModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dc/d8b/a04578_1a1141a95460931ea697dc733f6928c6fe" prot="public" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::IntermediateView::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="271" column="1" bodyfile="Render/RenderModule.hpp" bodystart="271" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d8b/a04578_1a6a75eadd256df0feb771dd1deb7b8d16" prot="public" static="no" mutable="no">
+        <type>ashes::ImageView</type>
+        <definition>ashes::ImageView castor3d::IntermediateView::view</definition>
+        <argsstring></argsstring>
+        <name>view</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="272" column="1" bodyfile="Render/RenderModule.hpp" bodystart="272" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d8b/a04578_1a712670fad3512b89d8e3b405e0efa185" prot="public" static="no" mutable="no">
+        <type>VkImageLayout</type>
+        <definition>VkImageLayout castor3d::IntermediateView::layout</definition>
+        <argsstring></argsstring>
+        <name>layout</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="273" column="1" bodyfile="Render/RenderModule.hpp" bodystart="273" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d8b/a04578_1add453463fc060b27897b33a3545bc006" prot="public" static="no" mutable="no">
+        <type><ref refid="d4/d5e/a03818" kindref="compound">TextureFactors</ref></type>
+        <definition>TextureFactors castor3d::IntermediateView::factors</definition>
+        <argsstring></argsstring>
+        <name>factors</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="274" column="1" bodyfile="Render/RenderModule.hpp" bodystart="274" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Holds minimal data for an intermediate view. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1461">
+        <label>castor3d::IntermediateView</label>
+        <link refid="dc/d8b/a04578"/>
+        <childnode refid="1462" relation="usage">
+          <edgelabel>factors</edgelabel>
+        </childnode>
+      </node>
+      <node id="1462">
+        <label>castor3d::TextureFactors</label>
+        <link refid="d4/d5e/a03818"/>
+      </node>
+    </collaborationgraph>
+    <location file="Render/RenderModule.hpp" line="270" column="1" bodyfile="Render/RenderModule.hpp" bodystart="269" bodyend="275"/>
+    <listofallmembers>
+      <member refid="dc/d8b/a04578_1add453463fc060b27897b33a3545bc006" prot="public" virt="non-virtual"><scope>castor3d::IntermediateView</scope><name>factors</name></member>
+      <member refid="dc/d8b/a04578_1a712670fad3512b89d8e3b405e0efa185" prot="public" virt="non-virtual"><scope>castor3d::IntermediateView</scope><name>layout</name></member>
+      <member refid="dc/d8b/a04578_1a1141a95460931ea697dc733f6928c6fe" prot="public" virt="non-virtual"><scope>castor3d::IntermediateView</scope><name>name</name></member>
+      <member refid="dc/d8b/a04578_1a6a75eadd256df0feb771dd1deb7b8d16" prot="public" virt="non-virtual"><scope>castor3d::IntermediateView</scope><name>view</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

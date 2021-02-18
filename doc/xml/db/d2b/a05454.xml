@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="db/d2b/a05454" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::DebugConfig</compoundname>
+    <includes local="no">DebugConfig.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="db/d2b/a05454_1a65f9da86f5db5c8b46be51d7c3ae83c0" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::DebugConfig::debugIndex</definition>
+        <argsstring></argsstring>
+        <name>debugIndex</name>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/DebugConfig.hpp" line="16" column="1" bodyfile="Shader/Ubos/DebugConfig.hpp" bodystart="16" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Ubos/DebugConfig.hpp" line="15" column="1" bodyfile="Shader/Ubos/DebugConfig.hpp" bodystart="14" bodyend="17"/>
+    <listofallmembers>
+      <member refid="db/d2b/a05454_1a65f9da86f5db5c8b46be51d7c3ae83c0" prot="public" virt="non-virtual"><scope>castor3d::DebugConfig</scope><name>debugIndex</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

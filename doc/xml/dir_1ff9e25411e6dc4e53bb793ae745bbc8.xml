@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_1ff9e25411e6dc4e53bb793ae745bbc8" kind="dir">
+    <compoundname>Scene/Animation</compoundname>
+    <innerdir refid="dir_af5bb5d7e695e269b331fe0867e720bc">Scene/Animation/Mesh</innerdir>
+    <innerdir refid="dir_7379c5ab06002996207bd64dc29ccdb5">Scene/Animation/Skeleton</innerdir>
+    <innerdir refid="dir_a647c5ee204b5aa722680ecffa1ef05d">Scene/Animation/Texture</innerdir>
+    <innerfile refid="db/daf/a01019">AnimatedMesh.hpp</innerfile>
+    <innerfile refid="d1/dd8/a01022">AnimatedObject.hpp</innerfile>
+    <innerfile refid="db/d23/a01025">AnimatedObjectGroup.hpp</innerfile>
+    <innerfile refid="db/d08/a01028">AnimatedSkeleton.hpp</innerfile>
+    <innerfile refid="d6/dcf/a01031">AnimatedTexture.hpp</innerfile>
+    <innerfile refid="de/d91/a01034">AnimationInstance.hpp</innerfile>
+    <innerfile refid="d7/dba/a07283">AnimationModule.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Scene/Animation/"/>
+  </compounddef>
+</doxygen>

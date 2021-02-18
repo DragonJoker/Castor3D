@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d4/dd3/a00428" kind="file" language="C++">
+    <compoundname>Cylinder.hpp</compoundname>
+    <includes refid="d5/d5f/a00461" local="yes">Castor3D/Model/Mesh/MeshGenerator.hpp</includes>
+    <incdepgraph>
+      <node id="8250">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="8253">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="8254">
+        <label>cstdint</label>
+      </node>
+      <node id="8252">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="8245">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="d5/d35/a00266"/>
+        <childnode refid="8246" relation="include">
+        </childnode>
+        <childnode refid="8247" relation="include">
+        </childnode>
+        <childnode refid="8248" relation="include">
+        </childnode>
+        <childnode refid="8249" relation="include">
+        </childnode>
+        <childnode refid="8250" relation="include">
+        </childnode>
+        <childnode refid="8251" relation="include">
+        </childnode>
+        <childnode refid="8252" relation="include">
+        </childnode>
+        <childnode refid="8253" relation="include">
+        </childnode>
+        <childnode refid="8254" relation="include">
+        </childnode>
+        <childnode refid="8255" relation="include">
+        </childnode>
+        <childnode refid="8256" relation="include">
+        </childnode>
+        <childnode refid="8257" relation="include">
+        </childnode>
+      </node>
+      <node id="8242">
+        <label>Castor3D/Model/Mesh/MeshGenerator.hpp</label>
+        <link refid="d5/d5f/a00461"/>
+        <childnode refid="8243" relation="include">
+        </childnode>
+        <childnode refid="8259" relation="include">
+        </childnode>
+      </node>
+      <node id="8256">
+        <label>string</label>
+      </node>
+      <node id="8244">
+        <label>Castor3D/Model/ModelModule.hpp</label>
+        <link refid="d7/def/a00521"/>
+        <childnode refid="8245" relation="include">
+        </childnode>
+      </node>
+      <node id="8249">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="8246">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="8241">
+        <label>Model/Mesh/Generator/Cylinder.hpp</label>
+        <link refid="d4/dd3/a00428"/>
+        <childnode refid="8242" relation="include">
+        </childnode>
+      </node>
+      <node id="8248">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="8259">
+        <label>Castor3D/Miscellaneous/MiscellaneousModule.hpp</label>
+        <link refid="d4/d27/a00392"/>
+        <childnode refid="8245" relation="include">
+        </childnode>
+      </node>
+      <node id="8247">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="8243">
+        <label>MeshModule.hpp</label>
+        <link refid="d2/d9d/a00464"/>
+        <childnode refid="8244" relation="include">
+        </childnode>
+        <childnode refid="8258" relation="include">
+        </childnode>
+      </node>
+      <node id="8257">
+        <label>vector</label>
+      </node>
+      <node id="8251">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="8258">
+        <label>CastorUtils/Design/Factory.hpp</label>
+      </node>
+      <node id="8255">
+        <label>memory</label>
+      </node>
+    </incdepgraph>
+    <innerclass refid="d4/dfc/a03876" prot="public">castor3d::Cylinder</innerclass>
+    <innernamespace refid="da/d1e/a01479">castor3d</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Model/Mesh/Generator/Cylinder.hpp"/>
+  </compounddef>
+</doxygen>

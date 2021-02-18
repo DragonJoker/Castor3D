@@ -1,0 +1,226 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d0/d7e/a04594" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SceneRenderPass::VertexInputs</compoundname>
+    <includes local="no">RenderPass.hpp</includes>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d0/d7e/a04594_1a3eb836143e25baba0264d5ed9fa5361d" prot="public" static="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::SceneRenderPass::VertexInputs::PositionLocation</definition>
+        <argsstring></argsstring>
+        <name>PositionLocation</name>
+        <initializer>= 0u</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPass.hpp" line="1258" column="1" bodyfile="Render/RenderPass.hpp" bodystart="1258" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d7e/a04594_1af4de18d78d37a1ce9ce9861a67b877bd" prot="public" static="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::SceneRenderPass::VertexInputs::NormalLocation</definition>
+        <argsstring></argsstring>
+        <name>NormalLocation</name>
+        <initializer>= 1u</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPass.hpp" line="1259" column="1" bodyfile="Render/RenderPass.hpp" bodystart="1259" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d7e/a04594_1a84ff7d72f5f6cbe621f7ae3007d6765f" prot="public" static="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::SceneRenderPass::VertexInputs::TangentLocation</definition>
+        <argsstring></argsstring>
+        <name>TangentLocation</name>
+        <initializer>= 2u</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPass.hpp" line="1260" column="1" bodyfile="Render/RenderPass.hpp" bodystart="1260" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d7e/a04594_1a1ab5d96bb66dbca4b9d0c8ca71356fdb" prot="public" static="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::SceneRenderPass::VertexInputs::TextureLocation</definition>
+        <argsstring></argsstring>
+        <name>TextureLocation</name>
+        <initializer>= 3u</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPass.hpp" line="1261" column="1" bodyfile="Render/RenderPass.hpp" bodystart="1261" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d7e/a04594_1a412ebd9de376fb4a73571d071c13cf73" prot="public" static="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::SceneRenderPass::VertexInputs::BoneIds0Location</definition>
+        <argsstring></argsstring>
+        <name>BoneIds0Location</name>
+        <initializer>= 4u</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPass.hpp" line="1263" column="1" bodyfile="Render/RenderPass.hpp" bodystart="1263" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d7e/a04594_1ac813bcc7c015e8b6b419aea88349e791" prot="public" static="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::SceneRenderPass::VertexInputs::BoneIds1Location</definition>
+        <argsstring></argsstring>
+        <name>BoneIds1Location</name>
+        <initializer>= 5u</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPass.hpp" line="1264" column="1" bodyfile="Render/RenderPass.hpp" bodystart="1264" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d7e/a04594_1abf3ccc5fd61e964caa6d569338f5b5bf" prot="public" static="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::SceneRenderPass::VertexInputs::Weights0Location</definition>
+        <argsstring></argsstring>
+        <name>Weights0Location</name>
+        <initializer>= 6u</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPass.hpp" line="1265" column="1" bodyfile="Render/RenderPass.hpp" bodystart="1265" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d7e/a04594_1a3bbdaf3da3826e385d784c209426fb0f" prot="public" static="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::SceneRenderPass::VertexInputs::Weights1Location</definition>
+        <argsstring></argsstring>
+        <name>Weights1Location</name>
+        <initializer>= 7u</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPass.hpp" line="1266" column="1" bodyfile="Render/RenderPass.hpp" bodystart="1266" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d7e/a04594_1a474be99b221b44e82d8aa17d122f65d5" prot="public" static="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::SceneRenderPass::VertexInputs::Position2Location</definition>
+        <argsstring></argsstring>
+        <name>Position2Location</name>
+        <initializer>= 8u</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPass.hpp" line="1268" column="1" bodyfile="Render/RenderPass.hpp" bodystart="1268" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d7e/a04594_1ae7ed2aff91c9064644ac0fbea49cb24c" prot="public" static="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::SceneRenderPass::VertexInputs::Normal2Location</definition>
+        <argsstring></argsstring>
+        <name>Normal2Location</name>
+        <initializer>= 9u</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPass.hpp" line="1269" column="1" bodyfile="Render/RenderPass.hpp" bodystart="1269" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d7e/a04594_1a384710ee0b9dc137a3194cc978f7002d" prot="public" static="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::SceneRenderPass::VertexInputs::Tangent2Location</definition>
+        <argsstring></argsstring>
+        <name>Tangent2Location</name>
+        <initializer>= 10u</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPass.hpp" line="1270" column="1" bodyfile="Render/RenderPass.hpp" bodystart="1270" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d7e/a04594_1a2543cba449ff9de465a51f904c868bd8" prot="public" static="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::SceneRenderPass::VertexInputs::Texture2Location</definition>
+        <argsstring></argsstring>
+        <name>Texture2Location</name>
+        <initializer>= 11u</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPass.hpp" line="1271" column="1" bodyfile="Render/RenderPass.hpp" bodystart="1271" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d7e/a04594_1a64553bd618a193a3f037e524d58560d6" prot="public" static="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::SceneRenderPass::VertexInputs::TransformLocation</definition>
+        <argsstring></argsstring>
+        <name>TransformLocation</name>
+        <initializer>= 8u</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPass.hpp" line="1273" column="1" bodyfile="Render/RenderPass.hpp" bodystart="1273" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d7e/a04594_1aad29e6e66a38e43cf16a306db7955fe4" prot="public" static="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::SceneRenderPass::VertexInputs::MaterialLocation</definition>
+        <argsstring></argsstring>
+        <name>MaterialLocation</name>
+        <initializer>= 12u</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPass.hpp" line="1274" column="1" bodyfile="Render/RenderPass.hpp" bodystart="1274" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/RenderPass.hpp" line="1256" column="1" bodyfile="Render/RenderPass.hpp" bodystart="1255" bodyend="1275"/>
+    <listofallmembers>
+      <member refid="d0/d7e/a04594_1a412ebd9de376fb4a73571d071c13cf73" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderPass::VertexInputs</scope><name>BoneIds0Location</name></member>
+      <member refid="d0/d7e/a04594_1ac813bcc7c015e8b6b419aea88349e791" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderPass::VertexInputs</scope><name>BoneIds1Location</name></member>
+      <member refid="d0/d7e/a04594_1aad29e6e66a38e43cf16a306db7955fe4" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderPass::VertexInputs</scope><name>MaterialLocation</name></member>
+      <member refid="d0/d7e/a04594_1ae7ed2aff91c9064644ac0fbea49cb24c" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderPass::VertexInputs</scope><name>Normal2Location</name></member>
+      <member refid="d0/d7e/a04594_1af4de18d78d37a1ce9ce9861a67b877bd" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderPass::VertexInputs</scope><name>NormalLocation</name></member>
+      <member refid="d0/d7e/a04594_1a474be99b221b44e82d8aa17d122f65d5" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderPass::VertexInputs</scope><name>Position2Location</name></member>
+      <member refid="d0/d7e/a04594_1a3eb836143e25baba0264d5ed9fa5361d" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderPass::VertexInputs</scope><name>PositionLocation</name></member>
+      <member refid="d0/d7e/a04594_1a384710ee0b9dc137a3194cc978f7002d" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderPass::VertexInputs</scope><name>Tangent2Location</name></member>
+      <member refid="d0/d7e/a04594_1a84ff7d72f5f6cbe621f7ae3007d6765f" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderPass::VertexInputs</scope><name>TangentLocation</name></member>
+      <member refid="d0/d7e/a04594_1a2543cba449ff9de465a51f904c868bd8" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderPass::VertexInputs</scope><name>Texture2Location</name></member>
+      <member refid="d0/d7e/a04594_1a1ab5d96bb66dbca4b9d0c8ca71356fdb" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderPass::VertexInputs</scope><name>TextureLocation</name></member>
+      <member refid="d0/d7e/a04594_1a64553bd618a193a3f037e524d58560d6" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderPass::VertexInputs</scope><name>TransformLocation</name></member>
+      <member refid="d0/d7e/a04594_1abf3ccc5fd61e964caa6d569338f5b5bf" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderPass::VertexInputs</scope><name>Weights0Location</name></member>
+      <member refid="d0/d7e/a04594_1a3bbdaf3da3826e385d784c209426fb0f" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderPass::VertexInputs</scope><name>Weights1Location</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

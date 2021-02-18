@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_59c77661a24f001ff48a9e13150b541f" kind="dir">
+    <compoundname>Render/Node</compoundname>
+    <innerfile refid="da/d46/a00665">BillboardRenderNode.hpp</innerfile>
+    <innerfile refid="d0/d5c/a00668">DistanceRenderNode.hpp</innerfile>
+    <innerfile refid="d8/d13/a00671">MorphingRenderNode.hpp</innerfile>
+    <innerfile refid="d8/d73/a00674">ObjectRenderNode.hpp</innerfile>
+    <innerfile refid="dc/de4/a00677">PassRenderNode.hpp</innerfile>
+    <innerfile refid="d4/d9b/a00680">RenderNode.hpp</innerfile>
+    <innerfile refid="db/d77/a00683">RenderNode_Render.hpp</innerfile>
+    <innerfile refid="df/d9e/a00686">RenderNodeModule.hpp</innerfile>
+    <innerfile refid="d1/d87/a00689">SceneCulledRenderNodes.hpp</innerfile>
+    <innerfile refid="d0/db6/a00692">SceneRenderNode.hpp</innerfile>
+    <innerfile refid="d5/d5b/a00695">SceneRenderNodes.hpp</innerfile>
+    <innerfile refid="df/dbb/a00698">SkinningRenderNode.hpp</innerfile>
+    <innerfile refid="dd/d57/a00701">StaticRenderNode.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Node/"/>
+  </compounddef>
+</doxygen>

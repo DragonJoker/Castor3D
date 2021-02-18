@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dc/dcd/a05112" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SceneBackground::Cube::Quad</compoundname>
+    <includes local="no">Background.hpp</includes>
+    <innerclass refid="db/dbc/a05116" prot="public">castor3d::SceneBackground::Cube::Quad::Vertex</innerclass>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dc/dcd/a05112_1a7b6f157dc2cc18aca7cd611ca8bd35da" prot="public" static="no" mutable="no">
+        <type><ref refid="db/dbc/a05116" kindref="compound">Vertex</ref></type>
+        <definition>Vertex castor3d::SceneBackground::Cube::Quad::vertex[4]</definition>
+        <argsstring>[4]</argsstring>
+        <name>vertex</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Background/Background.hpp" line="42" column="1" bodyfile="Scene/Background/Background.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="3279">
+        <label>castor3d::SceneBackground::Cube::Quad</label>
+        <link refid="dc/dcd/a05112"/>
+        <childnode refid="3280" relation="usage">
+          <edgelabel>vertex</edgelabel>
+        </childnode>
+      </node>
+      <node id="3280">
+        <label>castor3d::SceneBackground::Cube::Quad::Vertex</label>
+        <link refid="db/dbc/a05116"/>
+      </node>
+    </collaborationgraph>
+    <location file="Scene/Background/Background.hpp" line="36" column="1" bodyfile="Scene/Background/Background.hpp" bodystart="35" bodyend="43"/>
+    <listofallmembers>
+      <member refid="dc/dcd/a05112_1a7b6f157dc2cc18aca7cd611ca8bd35da" prot="public" virt="non-virtual"><scope>castor3d::SceneBackground::Cube::Quad</scope><name>vertex</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

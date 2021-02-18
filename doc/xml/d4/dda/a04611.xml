@@ -1,0 +1,195 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d4/dda/a04611" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::RenderTarget::TargetFbo</compoundname>
+    <includes local="no">RenderTarget.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d4/dda/a04611_1acbbe79d311f07fc99e6ed120526cba78" prot="public" static="no" mutable="no">
+        <type><ref refid="d8/dd7/a02643" kindref="compound">TextureUnit</ref></type>
+        <definition>TextureUnit castor3d::RenderTarget::TargetFbo::colourTexture</definition>
+        <argsstring></argsstring>
+        <name>colourTexture</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The texture receiving the color render. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderTarget.hpp" line="53" column="1" bodyfile="Render/RenderTarget.hpp" bodystart="53" bodyend="-1"/>
+        <referencedby refid="de/d76/a04607_1acc953463148788d4c2974015ac714b57" compoundref="d5/d72/a00803" startline="249" endline="252">castor3d::RenderTarget::getTexture</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d4/dda/a04611_1a8165899be10c47ffad65494fec4ed785" prot="public" static="no" mutable="no">
+        <type>ashes::FrameBufferPtr</type>
+        <definition>ashes::FrameBufferPtr castor3d::RenderTarget::TargetFbo::frameBuffer</definition>
+        <argsstring></argsstring>
+        <name>frameBuffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The frame buffer. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderTarget.hpp" line="56" column="1" bodyfile="Render/RenderTarget.hpp" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d4/dda/a04611_1a338ac51c6ae85651de92cf935f518f4a" prot="private" static="no" mutable="no">
+        <type><ref refid="de/d76/a04607" kindref="compound">RenderTarget</ref> &amp;</type>
+        <definition>RenderTarget&amp; castor3d::RenderTarget::TargetFbo::renderTarget</definition>
+        <argsstring></argsstring>
+        <name>renderTarget</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderTarget.hpp" line="59" column="1" bodyfile="Render/RenderTarget.hpp" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/dda/a04611_1a1840228b788cc28c25a9376e6f830271" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::RenderTarget::TargetFbo::TargetFbo</definition>
+        <argsstring>(RenderTarget &amp;renderTarget)</argsstring>
+        <name>TargetFbo</name>
+        <param>
+          <type><ref refid="de/d76/a04607" kindref="compound">RenderTarget</ref> &amp;</type>
+          <declname>renderTarget</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderTarget.hpp" line="44" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dda/a04611_1a30bc80dec6b53128204c534e061f8e35" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::RenderTarget::TargetFbo::initialise</definition>
+        <argsstring>(RenderDevice const &amp;device, ashes::RenderPass &amp;renderPass, VkFormat format, castor::Size const &amp;size)</argsstring>
+        <name>initialise</name>
+        <param>
+          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>ashes::RenderPass &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <param>
+          <type>VkFormat</type>
+          <declname>format</declname>
+        </param>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderTarget.hpp" line="45" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dda/a04611_1a7a7d2a2598187fb8d17a10f89752519f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::RenderTarget::TargetFbo::cleanup</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>cleanup</name>
+        <param>
+          <type><ref refid="de/ddb/a04491" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderTarget.hpp" line="49" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Internal struct holding a complete frame buffer. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="3061">
+        <label>castor3d::TextureUnit</label>
+        <link refid="d8/dd7/a02643"/>
+        <childnode refid="3062" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3064">
+        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
+        <childnode refid="3065" relation="template-instance">
+          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3066">
+        <label>K</label>
+      </node>
+      <node id="3067">
+        <label>T</label>
+      </node>
+      <node id="3065">
+        <label>std::map&lt; K, T &gt;</label>
+        <childnode refid="3066" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="3067" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="3060">
+        <label>castor3d::RenderTarget::TargetFbo</label>
+        <link refid="d4/dda/a04611"/>
+        <childnode refid="3061" relation="usage">
+          <edgelabel>colourTexture</edgelabel>
+        </childnode>
+      </node>
+      <node id="3062">
+        <label>castor3d::AnimableT&lt; Engine &gt;</label>
+        <link refid="de/d0a/a02015"/>
+        <childnode refid="3063" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3064" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+        <childnode refid="3068" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3063">
+        <label>castor::OwnedBy&lt; Engine  &gt;</label>
+      </node>
+      <node id="3068">
+        <label>castor3d::AnimableT&lt; AnimableHanlerT &gt;</label>
+        <link refid="de/d0a/a02015"/>
+        <childnode refid="3069" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3064" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+      </node>
+      <node id="3069">
+        <label>castor::OwnedBy&lt; AnimableHanlerT &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Render/RenderTarget.hpp" line="42" column="1" bodyfile="Render/RenderTarget.hpp" bodystart="41" bodyend="60"/>
+    <listofallmembers>
+      <member refid="d4/dda/a04611_1a7a7d2a2598187fb8d17a10f89752519f" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget::TargetFbo</scope><name>cleanup</name></member>
+      <member refid="d4/dda/a04611_1acbbe79d311f07fc99e6ed120526cba78" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget::TargetFbo</scope><name>colourTexture</name></member>
+      <member refid="d4/dda/a04611_1a8165899be10c47ffad65494fec4ed785" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget::TargetFbo</scope><name>frameBuffer</name></member>
+      <member refid="d4/dda/a04611_1a30bc80dec6b53128204c534e061f8e35" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget::TargetFbo</scope><name>initialise</name></member>
+      <member refid="d4/dda/a04611_1a338ac51c6ae85651de92cf935f518f4a" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget::TargetFbo</scope><name>renderTarget</name></member>
+      <member refid="d4/dda/a04611_1a1840228b788cc28c25a9376e6f830271" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget::TargetFbo</scope><name>TargetFbo</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="de/d04/a04774" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::LightPassShadowTraits&lt; LightType::eDirectional &gt;</compoundname>
+    <includes local="no">LightPassShadow.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="de/d04/a04774_1a7f9d9558a63b272cadf67971800878ca" prot="public" static="no">
+        <type><ref refid="d1/dab/a05162" kindref="compound">DirectionalLight</ref></type>
+        <definition>using castor3d::LightPassShadowTraits&lt; LightType::eDirectional &gt;::light_type =  DirectionalLight</definition>
+        <argsstring></argsstring>
+        <name>light_type</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The light source type. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" line="36" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d04/a04774_1a0d244934d4b78bbaeda354845ff51c0b" prot="public" static="no">
+        <type><ref refid="d4/dea/a04726" kindref="compound">DirectionalLightPass</ref></type>
+        <definition>using castor3d::LightPassShadowTraits&lt; LightType::eDirectional &gt;::light_pass_type =  DirectionalLightPass</definition>
+        <argsstring></argsstring>
+        <name>light_pass_type</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The light pass type. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" line="39" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d04/a04774_1a866c07c0c54aa479160db99fc725edde" prot="public" static="no">
+        <type><ref refid="db/de2/a04650" kindref="compound">ShadowMapDirectional</ref></type>
+        <definition>using castor3d::LightPassShadowTraits&lt; LightType::eDirectional &gt;::shadow_pass_type =  ShadowMapDirectional</definition>
+        <argsstring></argsstring>
+        <name>shadow_pass_type</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The shadow map type. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" line="42" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Traits structure to specialise light passes with shadows. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Specialisation for <ref refid="de/d13/a01473_1a381718aa9accc88c20afd97d76c30ed8a0ddd5baafa15f79528b19dd012e1dce3" kindref="member">LightType::eDirectional</ref>. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" line="33" column="1" bodyfile="Render/Technique/Opaque/Lighting/LightPassShadow.hpp" bodystart="32" bodyend="43"/>
+    <listofallmembers>
+      <member refid="de/d04/a04774_1a0d244934d4b78bbaeda354845ff51c0b" prot="public" virt="non-virtual"><scope>castor3d::LightPassShadowTraits&lt; LightType::eDirectional &gt;</scope><name>light_pass_type</name></member>
+      <member refid="de/d04/a04774_1a7f9d9558a63b272cadf67971800878ca" prot="public" virt="non-virtual"><scope>castor3d::LightPassShadowTraits&lt; LightType::eDirectional &gt;</scope><name>light_type</name></member>
+      <member refid="de/d04/a04774_1a866c07c0c54aa479160db99fc725edde" prot="public" virt="non-virtual"><scope>castor3d::LightPassShadowTraits&lt; LightType::eDirectional &gt;</scope><name>shadow_pass_type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d4/d70/a04684" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::ShadowMapPoint::FrameBuffer</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d4/d70/a04684_1ad6e84448af2325515773b403c1925ea7" prot="public" static="no" mutable="no">
+        <type>std::array&lt; ashes::ImageView, size_t(<ref refid="da/d1e/a01479_1afd8c72a6b5ba8d1f784bec682765751cae558bb69fadec037d9eae46601a4df8e" kindref="member">SmTexture::eCount</ref>) &gt;</type>
+        <definition>std::array&lt; ashes::ImageView, size_t( SmTexture::eCount ) &gt; castor3d::ShadowMapPoint::FrameBuffer::views</definition>
+        <argsstring></argsstring>
+        <name>views</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMapPoint.hpp" line="75" column="1" bodyfile="Render/ShadowMap/ShadowMapPoint.hpp" bodystart="75" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d70/a04684_1ab3977d258f033d6a4bbebdce337ea1ae" prot="public" static="no" mutable="no">
+        <type>ashes::ImageView</type>
+        <definition>ashes::ImageView castor3d::ShadowMapPoint::FrameBuffer::varianceView</definition>
+        <argsstring></argsstring>
+        <name>varianceView</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMapPoint.hpp" line="76" column="1" bodyfile="Render/ShadowMap/ShadowMapPoint.hpp" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d70/a04684_1a51403f93a48329a990585832a352c8ca" prot="public" static="no" mutable="no">
+        <type>ashes::FrameBufferPtr</type>
+        <definition>ashes::FrameBufferPtr castor3d::ShadowMapPoint::FrameBuffer::frameBuffer</definition>
+        <argsstring></argsstring>
+        <name>frameBuffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMapPoint.hpp" line="77" column="1" bodyfile="Render/ShadowMap/ShadowMapPoint.hpp" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d70/a04684_1a2ecc8f7a4cae558225358bbb718d3aec" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/da6/a04380" kindref="compound">CommandsSemaphore</ref></type>
+        <definition>CommandsSemaphore castor3d::ShadowMapPoint::FrameBuffer::blurCommands</definition>
+        <argsstring></argsstring>
+        <name>blurCommands</name>
+        <initializer>{ nullptr, nullptr }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMapPoint.hpp" line="78" column="1" bodyfile="Render/ShadowMap/ShadowMapPoint.hpp" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="3870">
+        <label>T</label>
+      </node>
+      <node id="3868">
+        <label>std::array&lt; ashes::ImageView, size_t(SmTexture::eCount) &gt;</label>
+        <childnode refid="3869" relation="template-instance">
+          <edgelabel>&lt; ashes::ImageView, size_t(SmTexture::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3869">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="3870" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="3866">
+        <label>castor3d::ShadowMapPoint::FrameBuffer</label>
+        <childnode refid="3867" relation="usage">
+          <edgelabel>blurCommands</edgelabel>
+        </childnode>
+        <childnode refid="3868" relation="usage">
+          <edgelabel>views</edgelabel>
+        </childnode>
+      </node>
+      <node id="3867">
+        <label>castor3d::CommandsSemaphore</label>
+        <link refid="d1/da6/a04380"/>
+      </node>
+    </collaborationgraph>
+    <location file="Render/ShadowMap/ShadowMapPoint.hpp" line="74" column="1" bodyfile="Render/ShadowMap/ShadowMapPoint.hpp" bodystart="73" bodyend="79"/>
+    <listofallmembers>
+      <member refid="d4/d70/a04684_1a2ecc8f7a4cae558225358bbb718d3aec" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPoint::FrameBuffer</scope><name>blurCommands</name></member>
+      <member refid="d4/d70/a04684_1a51403f93a48329a990585832a352c8ca" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPoint::FrameBuffer</scope><name>frameBuffer</name></member>
+      <member refid="d4/d70/a04684_1ab3977d258f033d6a4bbebdce337ea1ae" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPoint::FrameBuffer</scope><name>varianceView</name></member>
+      <member refid="d4/d70/a04684_1ad6e84448af2325515773b403c1925ea7" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapPoint::FrameBuffer</scope><name>views</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

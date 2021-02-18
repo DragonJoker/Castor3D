@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="d7/ddc/a04523" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::NonTexturedQuad::Vertex</compoundname>
+    <includes local="no">RenderModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d7/ddc/a04523_1a60ac6a72b6359ecdc53f6d2328ccfaf1" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::NonTexturedQuad::Vertex::position</definition>
+        <argsstring></argsstring>
+        <name>position</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="27" column="1" bodyfile="Render/RenderModule.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/RenderModule.hpp" line="26" column="1" bodyfile="Render/RenderModule.hpp" bodystart="25" bodyend="28"/>
+    <listofallmembers>
+      <member refid="d7/ddc/a04523_1a60ac6a72b6359ecdc53f6d2328ccfaf1" prot="public" virt="non-virtual"><scope>castor3d::NonTexturedQuad::Vertex</scope><name>position</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>
