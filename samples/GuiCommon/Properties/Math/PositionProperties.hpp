@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Graphics/Position.hpp>
 
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Position );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Position )
 
 namespace GuiCommon
 {

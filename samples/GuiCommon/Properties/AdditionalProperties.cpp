@@ -91,7 +91,9 @@ namespace GuiCommon
 	{
 		prop->SetEditor( wxPGEditor_SpinCtrl );
 		prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
+#if wxCHECK_VERSION( 3, 1, 0 )
 		prop->SetAttribute( wxPG_ATTR_SPINCTRL_MOTION, WXVARIANT( true ) );
+#endif
 		return prop;
 	}
 

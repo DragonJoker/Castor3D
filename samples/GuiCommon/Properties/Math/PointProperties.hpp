@@ -8,21 +8,21 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Math/Point.hpp>
 
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point2b );
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point3b );
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point4b );
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point2i );
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point3i );
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point4i );
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point2ui );
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point3ui );
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point4ui );
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point2f );
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point3f );
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point4f );
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point2d );
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point3d );
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point4d );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point2b )
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point3b )
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point4b )
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point2i )
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point3i )
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point4i )
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point2ui )
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point3ui )
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point4ui )
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point2f )
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point3f )
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point4f )
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point2d )
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point3d )
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point4d )
 
 namespace GuiCommon
 {

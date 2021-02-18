@@ -47,16 +47,11 @@ endfunction( ParticlesSummary )
 
 function( ParticlesSetup )
 	if ( ${CASTOR_BUILDGRP_PARTICLES} )
-		cpack_add_component_group( Particles
-			DISPLAY_NAME "Particles"
-			DESCRIPTION "Particle plug-ins usable in Castor3D."
-			PARENT_GROUP Plugins
-		)
 		if( ${CASTOR_BUILD_PARTICLE_FIREWORKS} )
 			cpack_add_component( FireworksParticle
 				DISPLAY_NAME "FireworksParticle"
 				DESCRIPTION "Allows HDR Fireworks particles."
-				GROUP Particles
+				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Developer Full
 			)

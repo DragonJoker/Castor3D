@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Math/Quaternion.hpp>
 
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Quaternion );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Quaternion )
 
 namespace GuiCommon
 {

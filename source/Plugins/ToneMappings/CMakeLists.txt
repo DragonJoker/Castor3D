@@ -86,15 +86,10 @@ function( ToneMappingsSummary msg )
 endfunction( ToneMappingsSummary )
 
 function( ToneMappingsSetup )
-	cpack_add_component_group( ToneMappings
-		DISPLAY_NAME "ToneMappings"
-		DESCRIPTION "Tone mappings plugins usable in Castor3D."
-		PARENT_GROUP Plugins
-	)
 	cpack_add_component( LinearToneMapping
 		DISPLAY_NAME "Linear ToneMapping"
 		DESCRIPTION "Allows Linear Tone mapping."
-		GROUP ToneMappings
+		GROUP Core
 		DEPENDS Castor3D
 		INSTALL_TYPES Minimal Developer Full
 	)
@@ -103,7 +98,7 @@ function( ToneMappingsSetup )
 			cpack_add_component( HaarmPieterDuikerToneMapping
 				DISPLAY_NAME "Haarm Pieter Duiker ToneMapping"
 				DESCRIPTION "Allows Haarm Pieter Duiker Tone mapping."
-				GROUP ToneMappings
+				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Developer Full
 			)
@@ -112,7 +107,7 @@ function( ToneMappingsSetup )
 			cpack_add_component( HejlBurgessDawsonToneMapping
 				DISPLAY_NAME "Hejl Burgess Dawson ToneMapping"
 				DESCRIPTION "Allows Haarm Peter Duiker Tone mapping."
-				GROUP ToneMappings
+				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Developer Full
 			)
@@ -121,7 +116,7 @@ function( ToneMappingsSetup )
 			cpack_add_component( ReinhardToneMapping
 				DISPLAY_NAME "Reinhard ToneMapping"
 				DESCRIPTION "Allows Reinhard Tone mapping."
-				GROUP ToneMappings
+				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Developer Full
 			)
@@ -130,7 +125,7 @@ function( ToneMappingsSetup )
 			cpack_add_component( Uncharted2ToneMapping
 				DISPLAY_NAME "Uncharted 2 ToneMapping"
 				DESCRIPTION "Allows Uncharted 2 Tone mapping."
-				GROUP ToneMappings
+				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Developer Full
 			)

@@ -47,16 +47,11 @@ endfunction( GeneratorSummary )
 
 function( GeneratorSetup )
 	if ( ${CASTOR_BUILDGRP_GENERATOR} )
-		cpack_add_component_group( Generators
-			DISPLAY_NAME "Generators"
-			DESCRIPTION "Generator plugins usable in Castor3D."
-			PARENT_GROUP Plugins
-		)
 		if( ${CASTOR_BUILD_GENERATOR_DIAMOND_SQUARE_TERRAIN} )
 			cpack_add_component( DiamondSquareTerrain
 				DISPLAY_NAME "DiamondSquareTerrain"
 				DESCRIPTION "Allows terrain generation using diamond-square algorithm in Castor3D."
-				GROUP Generators
+				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Developer Full
 			)

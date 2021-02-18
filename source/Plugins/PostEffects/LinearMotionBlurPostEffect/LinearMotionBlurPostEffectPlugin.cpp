@@ -14,7 +14,7 @@
 #ifndef CU_PlatformWindows
 #	define C3D_LinearMotionBlur_API
 #else
-#	ifdef castor3dLinearMotionBlurPostEffect_EXPORTS
+#	ifdef LinearMotionBlurPostEffect_EXPORTS
 #		define C3D_LinearMotionBlur_API __declspec( dllexport )
 #	else
 #		define C3D_LinearMotionBlur_API __declspec( dllimport )

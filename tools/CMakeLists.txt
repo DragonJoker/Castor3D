@@ -169,6 +169,9 @@ function( ToolsSummary )
 		if( CASTOR_BUILD_TOOL_DIFF_IMAGE )
 			set( msg_tmp "${msg_tmp}\n    DiffImage            ${DiffImg}" )
 		endif ()
+		if( CASTOR_BUILD_TOOL_ARIA )
+			set( msg_tmp "${msg_tmp}\n    Aria                 ${Aria}" )
+		endif ()
 		if( CASTOR_BUILD_CASTOR3D )
 			if( CASTOR_BUILD_TOOL_MESH_UPGRADER )
 				set( msg_tmp "${msg_tmp}\n    CastorMeshUpgrader   ${MshUpgd}" )
@@ -179,9 +182,6 @@ function( ToolsSummary )
 			if( CASTOR_BUILD_TOOL_CASTOR_TEST_LAUNCHER )
 				set( msg_tmp "${msg_tmp}\n    CastorTestLauncher   ${TestLcr}" )
 			endif ()
-		endif ()
-		if( CASTOR_BUILD_TOOL_ARIA )
-			set( msg_tmp "${msg_tmp}\n    Aria                 ${Aria}" )
 		endif ()
 		set( msg "${msg}${msg_tmp}" )
 		message( STATUS "${msg}\n" )
@@ -195,7 +195,16 @@ function( ToolsSetup )
 				DISPLAY_NAME "ImgConverter application"
 				DESCRIPTION "A small image converter, to convert from any image format to ICO or XPM."
 				GROUP Tools
-				INSTALL_TYPES Full
+				INSTALL_TYPES Full Developer
+			)
+		endif()
+
+		if( CASTOR_BUILD_TOOL_DIFF_IMAGE )
+			cpack_add_component( DiffImage
+				DISPLAY_NAME "DiffImage application"
+				DESCRIPTION "An application used to compare images."
+				GROUP Tools
+				INSTALL_TYPES Full Developer
 			)
 		endif()
 
@@ -214,7 +223,7 @@ function( ToolsSetup )
 					DISPLAY_NAME "CastorMeshUpgrader application"
 					DESCRIPTION "A mesh upgrader, to convert Castor3D mesh to the latest version."
 					GROUP Tools
-					INSTALL_TYPES Full
+					INSTALL_TYPES Minimal Full Developer
 				)
 			endif()
 
@@ -223,7 +232,7 @@ function( ToolsSetup )
 					DISPLAY_NAME "CastorMeshConverter application"
 					DESCRIPTION "A mesh converter, to convert from any mesh format to Castor3D mesh."
 					GROUP Tools
-					INSTALL_TYPES Full
+					INSTALL_TYPES Minimal Full Developer
 				)
 			endif()
 

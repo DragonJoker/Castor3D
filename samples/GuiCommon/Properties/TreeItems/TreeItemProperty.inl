@@ -1,3 +1,6 @@
+#include "GuiCommon/Properties/Math/CubeBoxProperties.hpp"
+#include "GuiCommon/Properties/Math/SphereBoxProperties.hpp"
+
 namespace GuiCommon
 {
 	inline wxPGProperty * appendProp( wxPropertyGrid * parent
@@ -31,65 +34,79 @@ namespace GuiCommon
 		{
 			wxPGProperty * prop = appendProp( parent, new wxUIntProperty( name, name, value ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
+			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
+#if wxCHECK_VERSION( 3, 1, 0 )
+			prop->SetAttribute( wxPG_ATTR_SPINCTRL_MOTION, WXVARIANT( true ) );
+#endif
 			prop->SetAttribute( wxPG_ATTR_MIN, getVariant< uint8_t >( std::numeric_limits< uint8_t >::lowest() ) );
 			prop->SetAttribute( wxPG_ATTR_MAX, getVariant< uint8_t >( std::numeric_limits< uint8_t >::max() ) );
-			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
-			prop->SetAttribute( wxPG_ATTR_SPINCTRL_MOTION, WXVARIANT( true ) );
 			return prop;
 		}
 		else if constexpr ( std::is_same_v< ValueT, int16_t > )
 		{
 			wxPGProperty * prop = appendProp( parent, new wxIntProperty( name, name, value ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
+			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
+#if wxCHECK_VERSION( 3, 1, 0 )
+			prop->SetAttribute( wxPG_ATTR_SPINCTRL_MOTION, WXVARIANT( true ) );
+#endif
 			prop->SetAttribute( wxPG_ATTR_MIN, getVariant< int16_t >( std::numeric_limits< int16_t >::lowest() ) );
 			prop->SetAttribute( wxPG_ATTR_MAX, getVariant< int16_t >( std::numeric_limits< int16_t >::max() ) );
-			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
-			prop->SetAttribute( wxPG_ATTR_SPINCTRL_MOTION, WXVARIANT( true ) );
 			return prop;
 		}
 		else if constexpr ( std::is_same_v< ValueT, uint16_t > )
 		{
 			wxPGProperty * prop = appendProp( parent, new wxUIntProperty( name, name, value ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
+			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
+#if wxCHECK_VERSION( 3, 1, 0 )
+			prop->SetAttribute( wxPG_ATTR_SPINCTRL_MOTION, WXVARIANT( true ) );
+#endif
 			prop->SetAttribute( wxPG_ATTR_MIN, getVariant< uint16_t >( std::numeric_limits< uint16_t >::lowest() ) );
 			prop->SetAttribute( wxPG_ATTR_MAX, getVariant< uint16_t >( std::numeric_limits< uint16_t >::max() ) );
-			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
-			prop->SetAttribute( wxPG_ATTR_SPINCTRL_MOTION, WXVARIANT( true ) );
 			return prop;
 		}
 		else if constexpr ( std::is_same_v< ValueT, int32_t > )
 		{
 			wxPGProperty * prop = appendProp( parent, new wxIntProperty( name, name, value ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
+			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
+#if wxCHECK_VERSION( 3, 1, 0 )
+			prop->SetAttribute( wxPG_ATTR_SPINCTRL_MOTION, WXVARIANT( true ) );
+#endif
 			prop->SetAttribute( wxPG_ATTR_MIN, getVariant< int32_t >( std::numeric_limits< int32_t >::lowest() ) );
 			prop->SetAttribute( wxPG_ATTR_MAX, getVariant< int32_t >( std::numeric_limits< int32_t >::max() ) );
-			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
-			prop->SetAttribute( wxPG_ATTR_SPINCTRL_MOTION, WXVARIANT( true ) );
 			return prop;
 		}
 		else if constexpr ( std::is_same_v< ValueT, uint32_t > )
 		{
 			wxPGProperty * prop = appendProp( parent, new wxUIntProperty( name, name, value ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
-			prop->SetAttribute( wxPG_ATTR_MIN, 0 );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
+#if wxCHECK_VERSION( 3, 1, 0 )
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_MOTION, WXVARIANT( true ) );
+#endif
+			prop->SetAttribute( wxPG_ATTR_MIN, 0 );
 			return prop;
 		}
 		else if constexpr ( std::is_same_v< ValueT, int64_t > )
 		{
 			wxPGProperty * prop = appendProp( parent, new wxIntProperty( name, name, value ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
+#if wxCHECK_VERSION( 3, 1, 0 )
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_MOTION, WXVARIANT( true ) );
+#endif
 			return prop;
 		}
 		else if constexpr ( std::is_same_v< ValueT, uint64_t > )
 		{
 			wxPGProperty * prop = appendProp( parent, new wxUIntProperty( name, name, value ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
-			prop->SetAttribute( wxPG_ATTR_MIN, 0 );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
+#if wxCHECK_VERSION( 3, 1, 0 )
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_MOTION, WXVARIANT( true ) );
+#endif
+			prop->SetAttribute( wxPG_ATTR_MIN, 0 );
 			return prop;
 		}
 		else if constexpr ( std::is_same_v< ValueT, float > )
@@ -97,7 +114,9 @@ namespace GuiCommon
 			wxPGProperty * prop = appendProp( parent, new wxFloatProperty( name, name, value ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
+#if wxCHECK_VERSION( 3, 1, 0 )
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_MOTION, WXVARIANT( true ) );
+#endif
 			return prop;
 		}
 		else if constexpr ( std::is_same_v< ValueT, double > )
@@ -105,7 +124,9 @@ namespace GuiCommon
 			wxPGProperty * prop = appendProp( parent, new wxFloatProperty( name, name, value ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
+#if wxCHECK_VERSION( 3, 1, 0 )
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_MOTION, WXVARIANT( true ) );
+#endif
 			return prop;
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::RgbColour > )
@@ -192,10 +213,12 @@ namespace GuiCommon
 		{
 			wxPGProperty * prop = appendProp( parent, new wxFloatProperty( name, name, value.count() / 1000.0 ) );
 			prop->SetEditor( wxPGEditor_SpinCtrl );
-			prop->SetAttribute( wxPG_ATTR_UNITS, ValueTraitsT< ValueT >::getUnit() );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_STEP, WXVARIANT( 0.1 ) );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
+#if wxCHECK_VERSION( 3, 1, 0 )
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_MOTION, WXVARIANT( true ) );
+#endif
+			prop->SetAttribute( wxPG_ATTR_UNITS, ValueTraitsT< ValueT >::getUnit() );
 			return prop;
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::BoundingSphere > )
@@ -219,8 +242,8 @@ namespace GuiCommon
 		else if constexpr ( std::is_same_v< ValueT, castor::Angle > )
 		{
 			wxPGProperty * prop = createProperty( parent, name, value.degrees(), handler );
-			prop->SetAttribute( wxPG_ATTR_UNITS, ValueTraitsT< ValueT >::getUnit() );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_STEP, WXVARIANT( 1.0 ) );
+			prop->SetAttribute( wxPG_ATTR_UNITS, ValueTraitsT< ValueT >::getUnit() );
 			prop->SetAttribute( wxPG_ATTR_MIN, WXVARIANT( 0.0 ) );
 			prop->SetAttribute( wxPG_ATTR_MAX, WXVARIANT( 359.0 ) );
 			return prop;
@@ -241,7 +264,9 @@ namespace GuiCommon
 			prop->SetAttribute( wxPG_ATTR_MIN, getVariant< castor::UnRangedValueT< ValueT > >( value.range().getMin() ) );
 			prop->SetAttribute( wxPG_ATTR_MAX, getVariant< castor::UnRangedValueT< ValueT > >( value.range().getMax() ) );
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
+#if wxCHECK_VERSION( 3, 1, 0 )
 			prop->SetAttribute( wxPG_ATTR_SPINCTRL_MOTION, WXVARIANT( true ) );
+#endif
 			return prop;
 		}
 		else if constexpr ( std::is_same_v< ValueT, wxString > )
@@ -254,7 +279,7 @@ namespace GuiCommon
 		}
 		else
 		{
-			static_assert( false, "Unsupported ValueT" );
+			assert( false && "Unsupported ValueT" );
 		}
 	}
 

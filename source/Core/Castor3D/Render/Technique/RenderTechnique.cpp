@@ -356,7 +356,6 @@ namespace castor3d
 				, device
 				, *m_renderTarget.getScene()
 				, *m_renderTarget.getCamera()
-				, m_colourTexture.getTexture()->getDefaultView().getTargetView()
 				, m_matrixUbo
 				, m_vctConfigUbo
 				, m_renderTarget.getScene()->getVoxelConeTracingConfig() );

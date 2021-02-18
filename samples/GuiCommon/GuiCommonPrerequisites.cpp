@@ -126,8 +126,10 @@ namespace GuiCommon
 			// Exclude debug plug-in in release builds, and release plug-ins in debug builds
 			for ( auto file : files )
 			{
-				if ( file.find( CU_SharedLibExt ) != castor::String::npos
-					&& file.getFileName().find( castor3DLibPrefix ) == 0u )
+				auto fileName = file.getFileName( true );
+
+				if ( fileName.find( CU_SharedLibExt ) != castor::String::npos
+					&& fileName.find( castor3DLibPrefix ) == 0u )
 				{
 					result.push_back( file );
 				}

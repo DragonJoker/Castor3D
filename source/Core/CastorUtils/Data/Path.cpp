@@ -256,7 +256,8 @@ namespace castor
 
 			for ( auto folder : list )
 			{
-				if ( !tmp.empty() )
+				if ( !tmp.empty()
+					&& ( tmp.size() > 1 || tmp != "/" ) )
 				{
 					tmp += NativeSeparator;
 				}

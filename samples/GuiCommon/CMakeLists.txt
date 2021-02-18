@@ -317,19 +317,14 @@ if ( CASTOR_C3D_NEEDS_GLSL )
 			sdw::CompilerGlsl
 	)
 endif ()
-install_target( ${PROJECT_NAME}
+install_target_ex( ${PROJECT_NAME}
+	${PROJECT_NAME}
 	lib
 	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}
 )
 set_property( TARGET ${PROJECT_NAME}
 	PROPERTY
 		FOLDER "Samples"
-)
-
-# Copying language files for GLSL and HLSL coloration in ShaderDialog
-file(
-	GLOB_RECURSE
-		Parser_languages tools/resource/${PROJECT_NAME}/languages/*.lang
 )
 
 add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )

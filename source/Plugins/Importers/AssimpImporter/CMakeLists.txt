@@ -1,5 +1,5 @@
 set( FOLDER_NAME AssimpImporter )
-project( castor3d${FOLDER_NAME} )
+project( ${FOLDER_NAME} )
 
 if ( VCPKG_TOOLCHAIN )
 	option( CASTOR_USE_SYSTEM_ASSIMP "Use system Assimp instead of vcpkg's" OFF )
@@ -27,7 +27,7 @@ if ( VCPKG_TOOLCHAIN AND NOT CASTOR_USE_SYSTEM_ASSIMP )
 		set( assimp_FOUND ON )
 	endif ()
 else ()
-	find_package( assimp )
+	find_package( assimp 5.0 )
 endif ()
 
 if( assimp_FOUND )
@@ -41,6 +41,9 @@ if( assimp_FOUND )
 	set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
 	set( ${PROJECT_NAME}_VERSION_MINOR 5 )
 	set( ${PROJECT_NAME}_VERSION_BUILD 0 )
+
+	set( PROJECT_VERSION "${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}" )
+	set( PROJECT_SOVERSION "${${PROJECT_NAME}_VERSION_BUILD}" )
 
 	set( ${PROJECT_NAME}_HDR_FILES
 		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/AssimpImporter.hpp
@@ -78,12 +81,17 @@ if( assimp_FOUND )
 		PRIVATE
 			${assimp_LIBRARIES}
 	)
-	install_target( ${PROJECT_NAME}
+	install_target_ex( ${PROJECT_NAME}
+		Plugins
 		plugin
 		${CASTOR_SOURCE_DIR}/source/Plugins/Dividers/${FOLDER_NAME}
 	)
-	set_property( TARGET ${PROJECT_NAME}
-		PROPERTY
+	set_target_properties( ${PROJECT_NAME}
+		PROPERTIES
+			VERSION ${PROJECT_VERSION}
+			SOVERSION ${PROJECT_SOVERSION}
+			CXX_STANDARD 17
+			PREFIX ${C3D_LIB_PREFIX}
 			FOLDER "Plugins/Importers"
 	)
 	set( CASTOR_INSTEXP_LIST
@@ -95,10 +103,12 @@ if( assimp_FOUND )
 	add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
 
 	if ( WIN32 )
-		if ( NOT VCPKG_TOOLCHAIN )
-			# Preparing ASSIMP dll installation
-			copy_dll( ${PROJECT_NAME} "${assimp_LIBRARY_DEBUG}" "${assimp_LIBRARY_RELEASE}" )
-		endif ()
+		get_property( LibPathRel TARGET assimp::assimp PROPERTY IMPORTED_LOCATION_RELEASE )
+		set( ADDITIONAL_DEPS_REL
+			${ADDITIONAL_DEPS_REL}
+			${LibPathRel}
+			PARENT_SCOPE
+		)
 	elseif ( {${CASTOR_PACKAGE_DEB} )
 		set( CPACK_DEBIAN_PACKAGE_DEPENDS "libassimp3-dev, ${CPACK_DEBIAN_PACKAGE_DEPENDS}" )
 	endif ()

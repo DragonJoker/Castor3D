@@ -10,7 +10,7 @@ using namespace castor;
 #ifndef CU_PlatformWindows
 #	define C3D_Ply_API
 #else
-#	ifdef castor3dPlyImporter_EXPORTS
+#	ifdef PlyImporter_EXPORTS
 #		define C3D_Ply_API __declspec(dllexport)
 #	else
 #		define C3D_Ply_API __declspec(dllimport)

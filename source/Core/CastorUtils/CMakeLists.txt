@@ -677,14 +677,23 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 	install(
 		FILES ${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}/config.hpp
 		DESTINATION include/${PROJECT_NAME}
-		COMPONENT ${PROJECT_NAME}_dev
+		COMPONENT Castor3D_dev
 	)
 
 	if ( WIN32 )
 		set( CMAKE_INSTALL_DEBUG_LIBRARIES TRUE )
 		set( CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION bin/$<$<CONFIG:Debug>:Debug/> )
 		include( InstallRequiredSystemLibraries )
-		if ( CASTOR_USE_SYSTEM_LIBS )
+		if ( VCPKG_TOOLCHAIN )
+			find_dll_config( zlibLibPathRel ${ZLIB_LIBRARY_RELEASE} "1.dll" )
+			get_property( freetypeLibPathRel TARGET freetype PROPERTY IMPORTED_LOCATION_RELEASE )
+			set( ADDITIONAL_DEPS_REL
+				${ADDITIONAL_DEPS_REL}
+				${zlibLibPathRel}
+				${freetypeLibPathRel}
+				PARENT_SCOPE
+			)
+		elseif ( CASTOR_USE_SYSTEM_LIBS AND NOT VCPKG_TOOLCHAIN )
 			if ( ${PROJECTS_PLATFORM} STREQUAL "x86" )
 				get_filename_component( ZLibLibPath ${ZLIB_LIBRARY} PATH )
 				set( ZLibLibPath ${ZLibLibPath}/zlib1.dll )
@@ -703,7 +712,11 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		endif ()
 	endif ()
 
-	install_target( ${PROJECT_NAME} api_dll ${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME} )
+	install_target_ex( ${PROJECT_NAME}
+		Castor3D
+		api_dll
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}
+	)
 	set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Core" )
 	add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
 	target_add_doc_ex( ${PROJECT_NAME} "French" "*.h *.hpp" ${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME} )
