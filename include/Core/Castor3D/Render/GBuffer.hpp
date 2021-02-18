@@ -68,7 +68,7 @@ namespace castor3d
 		*	Le nombre de layers du g-buffer.
 		*/
 		template< typename TextureEnumT >
-		C3D_API static TextureUnitArray doCreateTextures( Engine & engine
+		static TextureUnitArray doCreateTextures( Engine & engine
 			, std::array< TextureUnit const *, size_t( TextureEnumT::eCount ) > const & inputs
 			, castor::String const & prefix
 			, VkImageCreateFlags createFlags
@@ -125,7 +125,7 @@ namespace castor3d
 		*	Les dimensions du g-buffer.
 		*/
 		template< typename TextureEnumT >
-		C3D_API static TextureUnitArray doCreateTextures( Engine & engine
+		static TextureUnitArray doCreateTextures( Engine & engine
 			, std::array< TextureUnit const *, size_t( TextureEnumT::eCount ) > const & inputs
 			, castor::String const & prefix
 			, VkImageCreateFlags createFlags
