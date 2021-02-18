@@ -81,7 +81,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le nombre d'objets.
 		 */
-		inline auto getObjectsCount()const
+		auto getObjectsCount()const
 		{
 			return m_toMove.size();
 		}
@@ -91,7 +91,7 @@ namespace castor3d
 		 *\~french
 		 *\return		L'itérateur sur le début des objets racines.
 		 */
-		inline auto begin()
+		auto begin()
 		{
 			return m_toMove.begin();
 		}
@@ -101,7 +101,7 @@ namespace castor3d
 		 *\~french
 		 *\return		L'itérateur sur le début des objets racines.
 		 */
-		inline auto begin()const
+		auto begin()const
 		{
 			return m_toMove.begin();
 		}
@@ -111,7 +111,7 @@ namespace castor3d
 		 *\~french
 		 *\return		L'itérateur sur la fin des objets racines.
 		 */
-		inline auto end()
+		auto end()
 		{
 			return m_toMove.end();
 		}
@@ -121,15 +121,12 @@ namespace castor3d
 		 *\~french
 		 *\return		L'itérateur sur la fin des objets racines.
 		 */
-		inline auto end()const
+		auto end()const
 		{
 			return m_toMove.end();
 		}
 
 	private:
-		/**
-		 *\copydoc		Casto3D::AnimationInstance::doUpdate
-		 */
 		void doUpdate()override;
 
 	protected:

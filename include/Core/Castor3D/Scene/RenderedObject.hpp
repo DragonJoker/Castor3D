@@ -20,7 +20,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le statut de visibilité.
 		 */
-		inline bool isVisible()const
+		bool isVisible()const
 		{
 			return m_visible;
 		}
@@ -32,7 +32,7 @@ namespace castor3d
 		 *\brief		Définit le statut de visibilité.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setVisible( bool value )
+		void setVisible( bool value )
 		{
 			m_visible = value;
 		}
@@ -42,7 +42,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le statut de projection d'ombres.
 		 */
-		inline bool isShadowCaster()const
+		bool isShadowCaster()const
 		{
 			return m_castsShadows;
 		}
@@ -54,7 +54,7 @@ namespace castor3d
 		 *\brief		Définit le statut de projection d'ombres.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setShadowCaster( bool value )
+		void setShadowCaster( bool value )
 		{
 			m_castsShadows = value;
 		}
@@ -64,7 +64,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le statut de réception d'ombres.
 		 */
-		inline bool isShadowReceiver()const
+		bool isShadowReceiver()const
 		{
 			return m_receivesShadows;
 		}
@@ -76,7 +76,7 @@ namespace castor3d
 		 *\brief		Définit le statut de réception d'ombres.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setShadowReceiver( bool value )
+		void setShadowReceiver( bool value )
 		{
 			m_receivesShadows = value;
 		}

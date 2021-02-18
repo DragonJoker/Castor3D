@@ -24,20 +24,6 @@ namespace castor3d
 		: public RenderQuad
 	{
 	public:
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	engine	The engine.
-		 *\param[in]	src		The source RSM GI view.
-		 *\param[in]	src		The source Normals view.
-		 *\param[in]	dst		The destination view.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
-		 *\param[in]	src		La vue RSM GI source.
-		 *\param[in]	src		La vue Normales source.
-		 *\param[in]	dst		La vue destination.
-		 */
 		C3D_API RsmInterpolatePass( Engine & engine
 			, RenderDevice const & device
 			, LightCache const & lightCache
@@ -51,20 +37,9 @@ namespace castor3d
 			, TextureUnit const & gi
 			, TextureUnit const & nml
 			, TextureUnit const & dst );
-		/**
-		 *\~english
-		 *\brief		Renders the SSGI pass.
-		 *\param[in]	toWait	The semaphore from the previous render pass.
-		 *\~french
-		 *\brief		Dessine la passe SSGI.
-		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
-		 */
 		C3D_API ashes::Semaphore const & compute( ashes::Semaphore const & toWait )const;
 		C3D_API CommandsSemaphore getCommands( RenderPassTimer const & timer
 			, uint32_t index )const;
-		/**
-		 *\copydoc		castor3d::RenderTechniquePass::accept
-		 */
 		C3D_API void accept( PipelineVisitorBase & visitor );
 
 	private:

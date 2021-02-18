@@ -58,9 +58,11 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Creation function, used by Factory.
+		 *\param[in]	light	The parent Light.
 		 *\return		A light source.
 		 *\~french
 		 *\brief		Fonction de création utilisée par Factory.
+		 *\param[in]	light	La Light parente.
 		 *\return		Une source lumineuse.
 		 */
 		C3D_API static LightCategoryUPtr create( Light & light );
@@ -88,46 +90,40 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline castor::Point3f const & getDirection()const
+		castor::Point3f const & getDirection()const
 		{
 			return m_direction;
 		}
 
-		inline float getSplitDepth( uint32_t cascadeIndex )const
+		float getSplitDepth( uint32_t cascadeIndex )const
 		{
 			return m_cascades[cascadeIndex].splitDepthScale->x;
 		}
 
-		inline float getSplitScale( uint32_t cascadeIndex )const
+		float getSplitScale( uint32_t cascadeIndex )const
 		{
 			return m_cascades[cascadeIndex].splitDepthScale->y;
 		}
 
-		inline castor::Matrix4x4f const & getProjMatrix( uint32_t cascadeIndex )const
+		castor::Matrix4x4f const & getProjMatrix( uint32_t cascadeIndex )const
 		{
 			return m_cascades[cascadeIndex].projMatrix;
 		}
 
-		inline castor::Matrix4x4f const & getViewMatrix( uint32_t cascadeIndex )const
+		castor::Matrix4x4f const & getViewMatrix( uint32_t cascadeIndex )const
 		{
 			return m_cascades[cascadeIndex].viewMatrix;
 		}
 
-		inline castor::Matrix4x4f const & getLightSpaceTransform( uint32_t cascadeIndex )const
+		castor::Matrix4x4f const & getLightSpaceTransform( uint32_t cascadeIndex )const
 		{
 			return m_cascades[cascadeIndex].viewProjMatrix;
 		}
 		/**@}*/
 
 	private:
-		/**
-		 *\copydoc		castor3d::LightCategory::updateNode
-		 */
-		C3D_API void updateNode( SceneNode const & node )override;
-		/**
-		 *\copydoc		castor::LightCategory::doBind
-		 */
-		C3D_API void doBind( castor::Point4f * buffer )const override;
+		void updateNode( SceneNode const & node )override;
+		void doBind( castor::Point4f * buffer )const override;
 
 	private:
 		castor::Point3f m_direction;

@@ -31,12 +31,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the surface.
+		 *\param[in]	device			The GPU device.
 		 *\param[in]	renderPass		The render pass from which the frame buffer is created.
 		 *\param[in]	size			The surface's size.
 		 *\param[in]	format			The surface's colour pixel format.
 		 *\param[in]	mipLevels		The surface's colour texture mipmap level.
 		 *\~french
 		 *\brief		Initialise la surface.
+		 *\param[in]	device			Le device GPU.
 		 *\param[in]	renderPass		La passe de rendu depuis laquelle le frame buffer est créé.
 		 *\param[in]	size			Les dimensions de la surface.
 		 *\param[in]	format			Le format des pixels couleur de la surface.
@@ -50,12 +52,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the surface.
+		 *\param[in]	device			The GPU device.
 		 *\param[in]	renderPass		The render pass from which the frame buffer is created.
 		 *\param[in]	size			The surface's size.
 		 *\param[in]	colourFormat	The surface's colour pixel format.
 		 *\param[in]	depthFormat		The surface's depth pixel format.
 		 *\~french
 		 *\brief		Initialise la surface.
+		 *\param[in]	device			Le device GPU.
 		 *\param[in]	renderPass		La passe de rendu depuis laquelle le frame buffer est créé.
 		 *\param[in]	size			Les dimensions de la surface.
 		 *\param[in]	colourFormat	Le format des pixels couleur de la surface.
@@ -69,11 +73,13 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the surface.
+		 *\param[in]	device			The GPU device.
 		 *\param[in]	renderPass		The render pass from which the frame buffer is created.
 		 *\param[in]	size			The surface's size.
 		 *\param[in]	colourTexture	The surface's colour texture.
 		 *\~french
 		 *\brief		Initialise la surface.
+		 *\param[in]	device			Le device GPU.
 		 *\param[in]	renderPass		La passe de rendu depuis laquelle le frame buffer est créé.
 		 *\param[in]	size			Les dimensions de la surface.
 		 *\param[in]	colourTexture	La texture couleur de la surface.
@@ -85,12 +91,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the surface.
+		 *\param[in]	device			The GPU device.
 		 *\param[in]	renderPass		The render pass from which the frame buffer is created.
 		 *\param[in]	size			The surface's size.
 		 *\param[in]	colourTexture	The surface's colour texture.
 		 *\param[in]	depthFormat		The surface's depth pixel format.
 		 *\~french
 		 *\brief		Initialise la surface.
+		 *\param[in]	device			Le device GPU.
 		 *\param[in]	renderPass		La passe de rendu depuis laquelle le frame buffer est créé.
 		 *\param[in]	size			Les dimensions de la surface.
 		 *\param[in]	colourTexture	La texture couleur de la surface.
@@ -104,12 +112,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the surface.
+		 *\param[in]	device			The GPU device.
 		 *\param[in]	renderPass		The render pass from which the frame buffer is created.
 		 *\param[in]	size			The surface's size.
 		 *\param[in]	colourFormat	The surface's colour pixel format.
 		 *\param[in]	depthTexture	The surface's depth texture.
 		 *\~french
 		 *\brief		Initialise la surface.
+		 *\param[in]	device			Le device GPU.
 		 *\param[in]	renderPass		La passe de rendu depuis laquelle le frame buffer est créé.
 		 *\param[in]	size			Les dimensions de la surface.
 		 *\param[in]	colourFormat	Le format des pixels couleur de la surface.
@@ -123,12 +133,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the surface.
+		 *\param[in]	device			The GPU device.
 		 *\param[in]	renderPass		The render pass from which the frame buffer is created.
 		 *\param[in]	size			The surface's size.
 		 *\param[in]	colourTexture	The surface's colour texture.
 		 *\param[in]	depthTexture	The surface's depth texture.
 		 *\~french
 		 *\brief		Initialise la surface.
+		 *\param[in]	device			Le device GPU.
 		 *\param[in]	renderPass		La passe de rendu depuis laquelle le frame buffer est créé.
 		 *\param[in]	size			Les dimensions de la surface.
 		 *\param[in]	colourTexture	La texture couleur de la surface.
@@ -142,8 +154,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Cleans up the surface.
+		 *\param[in]	device	The GPU device.
 		 *\~french
 		 *\brief		Nettoie la surface.
+		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API void cleanup( RenderDevice const & device );
 

@@ -15,9 +15,6 @@ namespace castor3d
 	{
 	protected:
 		/**
-		\author		Sylvain DOREMUS
-		\version	0.10.0
-		\date		08/06/2017
 		\~english
 		\brief		Spot light pass program.
 		\~french
@@ -30,18 +27,24 @@ namespace castor3d
 			/**
 			 *\~english
 			 *\brief		Constructor.
-			 *\param[in]	engine		The engine.
-			 *\param[in]	lightPass	The light pass.
-			 *\param[in]	vtx			The vertex shader source.
-			 *\param[in]	pxl			The fragment shader source.
-			 *\param[in]	hasShadows	Tells if this program uses shadow map.
+			 *\param[in]	engine				The engine.
+			 *\param[in]	device				The GPU device.
+			 *\param[in]	lightPass			The light pass.
+			 *\param[in]	vtx					The vertex shader source.
+			 *\param[in]	pxl					The fragment shader source.
+			 *\param[in]	hasShadows			Tells if this program uses shadow map.
+			 *\param[in]	hasVoxels			Tells if this program uses voxellisation result.
+			 *\param[in]	generatesIndirect	Tells if this program generates indirect lighting.
 			 *\~french
 			 *\brief		Constructeur.
-			 *\param[in]	engine		Le moteur.
-			 *\param[in]	lightPass	La passe d'éclairage.
-			 *\param[in]	vtx			Le source du vertex shader.
-			 *\param[in]	pxl			Le source du fagment shader.
-			 *\param[in]	hasShadows	Dit si ce programme utilise une shadow map.
+			 *\param[in]	engine				Le moteur.
+			 *\param[in]	device				Le device GPU.
+			 *\param[in]	lightPass			La passe d'éclairage.
+			 *\param[in]	vtx					Le source du vertex shader.
+			 *\param[in]	pxl					Le source du fagment shader.
+			 *\param[in]	hasShadows			Dit si ce programme utilise une shadow map.
+			 *\param[in]	hasVoxels			Dit si ce programme utilise le résultat de la voxellisation.
+			 *\param[in]	generatesIndirect	Dit si ce programme genère de l'éclairage indirect.
 			 */
 			Program( Engine & engine
 				, RenderDevice const & device
@@ -60,9 +63,6 @@ namespace castor3d
 			virtual ~Program();
 
 		private:
-			/**
-			 *\copydoc		castor3d::LightPass::Program::doBind
-			 */
 			void doBind( Light const & light )override;
 
 		private:
@@ -73,21 +73,33 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine		The engine.
-		 *\param[in]	lpResult	The light pass result.
-		 *\param[in]	gpInfoUbo	The geometry pass UBO.
-		 *\param[in]	hasShadows	Tells if shadows are enabled for this light pass.
+		 *\param[in]	device		The GPU device.
+		 *\param[in]	suffix		The pass name's suffix.
+		 *\param[in]	lpConfig	The light pass configuration.
+		 *\param[in]	vctConfig	The voxelizer UBO.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine		Le moteur.
-		 *\param[in]	lpResult	Le résultat de la passe d'éclairage.
-		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
-		 *\param[in]	hasShadows	Dit si les ombres sont activées pour cette passe d'éclairage.
+		 *\param[in]	device		Le device GPU.
+		 *\param[in]	suffix		Le suffixe du nom de la passe.
+		 *\param[in]	lpConfig	La configuration de la passe d'éclairage.
+		 *\param[in]	vctConfig	L'UBO du voxelizer.
 		 */
 		SpotLightPass( RenderDevice const & device
 			, castor::String const & suffix
 			, LightPassConfig const & lpConfig
 			, VoxelizerUbo const * vctConfig = nullptr );
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	device		The GPU device.
+		 *\param[in]	lpConfig	The light pass configuration.
+		 *\param[in]	vctConfig	The voxelizer UBO.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	device		Le device GPU.
+		 *\param[in]	lpConfig	La configuration de la passe d'éclairage.
+		 *\param[in]	vctConfig	L'UBO du voxelizer.
+		 */
 		SpotLightPass( RenderDevice const & device
 			, LightPassConfig const & lpConfig
 			, VoxelizerUbo const * vctConfig = nullptr )
@@ -105,7 +117,7 @@ namespace castor3d
 		 */
 		~SpotLightPass();
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 *\copydoc		castor3d::LightPass::accept
 		 */
 		void accept( PipelineVisitorBase & visitor )override;
 

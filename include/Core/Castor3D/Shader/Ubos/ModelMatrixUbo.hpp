@@ -42,10 +42,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine	The engine.
+		 *\param[in]	device	The GPU device.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
+		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API explicit ModelMatrixUbo( RenderDevice const & device );
 		/**
@@ -58,8 +58,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the UBO.
+		 *\param[in]	device	The GPU device.
 		 *\~french
 		 *\brief		Initialise l'UBO.
+		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API void initialise( RenderDevice const & device );
 		/**

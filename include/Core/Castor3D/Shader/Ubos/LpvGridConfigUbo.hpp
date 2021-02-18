@@ -64,23 +64,12 @@ namespace castor3d
 
 		C3D_API void initialise( RenderDevice const & device );
 		C3D_API void cleanup();
-		/**
-		 *\~english
-		 *\brief		Updates the UBO from given values.
-		 *\~french
-		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 */
+
 		C3D_API void cpuUpdate( castor::BoundingBox const & aabb
 			, castor::Point3f const & cameraPos
 			, castor::Point3f const & cameraDir
 			, uint32_t gridDim
 			, float indirectAttenuation );
-		/**
-		 *\~english
-		 *\brief		Updates the UBO from given values.
-		 *\~french
-		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 */
 		C3D_API castor::Grid cpuUpdate( uint32_t gridLevel
 			, float gridLevelScale
 			, castor::Grid const & grid

@@ -18,9 +18,6 @@ namespace castor3d
 	{
 	protected:
 		/**
-		\author		Sylvain DOREMUS
-		\version	0.10.0
-		\date		08/06/2017
 		\~english
 		\brief		Base class for light passe programs that need a mesh instead of a quad.
 		\~french
@@ -33,16 +30,24 @@ namespace castor3d
 			/**
 			 *\~english
 			 *\brief		Constructor.
-			 *\param[in]	engine		The engine.
-			 *\param[in]	vtx			The vertex shader source.
-			 *\param[in]	pxl			The fragment shader source.
-			 *\param[in]	hasShadows	Tells if this program uses shadow map.
+			 *\param[in]	engine				The engine.
+			 *\param[in]	device				The GPU device.
+			 *\param[in]	name				The program name.
+			 *\param[in]	vtx					The vertex shader source.
+			 *\param[in]	pxl					The fragment shader source.
+			 *\param[in]	hasShadows			Tells if this program uses shadow map.
+			 *\param[in]	hasVoxels			Tells if this program uses voxellisation result.
+			 *\param[in]	generatesIndirect	Tells if this program generates indirect lighting.
 			 *\~french
 			 *\brief		Constructeur.
-			 *\param[in]	engine		Le moteur.
-			 *\param[in]	vtx			Le source du vertex shader.
-			 *\param[in]	pxl			Le source du fagment shader.
-			 *\param[in]	hasShadows	Dit si ce programme utilise une shadow map.
+			 *\param[in]	engine				Le moteur.
+			 *\param[in]	device				Le device GPU.
+			 *\param[in]	name				Le nom du programme.
+			 *\param[in]	vtx					Le source du vertex shader.
+			 *\param[in]	pxl					Le source du fagment shader.
+			 *\param[in]	hasShadows			Dit si ce programme utilise une shadow map.
+			 *\param[in]	hasVoxels			Dit si ce programme utilise le résultat de la voxellisation.
+			 *\param[in]	generatesIndirect	Dit si ce programme genère de l'éclairage indirect.
 			 */
 			Program( Engine & engine
 				, RenderDevice const & device
@@ -61,9 +66,6 @@ namespace castor3d
 			virtual ~Program();
 
 		private:
-			/**
-			 *\copydoc		castor3d::LightPass::Program::doCreatePipeline
-			 */
 			ashes::GraphicsPipelinePtr doCreatePipeline( ashes::PipelineVertexInputStateCreateInfo const & vertexLayout
 				, ashes::RenderPass const & renderPass
 				, bool blend )override;
@@ -73,18 +75,18 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine		The engine.
-		 *\param[in]	lpResult	The light pass result.
-		 *\param[in]	gpInfoUbo	The geometry pass UBO.
-		 *\param[in]	type		The light source type.
-		 *\param[in]	hasShadows	Tells if shadows are enabled for this light pass.
+		 *\param[in]	device			The GPU device.
+		 *\param[in]	suffix			The pass name's suffix.
+		 *\param[in]	lpConfig		The light pass configuration.
+		 *\param[in]	vctConfig		The voxelizer UBO.
+		 *\param[in]	type			The light source type.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine		Le moteur.
-		 *\param[in]	lpResult	Le résultat de la passe d'éclairage.
-		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
-		 *\param[in]	type		Le type de source lumineuse.
-		 *\param[in]	hasShadows	Dit si les ombres sont activées pour cette passe d'éclairage.
+		 *\param[in]	device			Le device GPU.
+		 *\param[in]	suffix			Le suffixe du nom de la passe.
+		 *\param[in]	lpConfig		La configuration de la passe d'éclairage.
+		 *\param[in]	vctConfig		L'UBO du voxelizer.
+		 *\param[in]	type			Le type de source lumineuse.
 		 */
 		MeshLightPass( RenderDevice const & device
 			, castor::String const & suffix
@@ -99,39 +101,18 @@ namespace castor3d
 		 */
 		~MeshLightPass();
 		/**
-		 *\~english
-		 *\brief		Initialises the light pass.
-		 *\param[in]	scene		The scene.
-		 *\param[in]	gp			The geometry pass buffers.
-		 *\param[in]	sceneUbo	The scene UBO.
-		 *\param[in]	timer		The render pass timer.
-		 *\~french
-		 *\brief		Initialise la passe d'éclairage.
-		 *\param[in]	scene		La scène.
-		 *\param[in]	gp			Les tampons de la geometry pass.
-		 *\param[in]	sceneUbo	L'UBO de scène.
-		 *\param[in]	timer		Le timer de la passe de rendu.
+		 *\copydoc		castor3d::LightPass::initialise
 		 */
 		void initialise( Scene const & scene
 			, OpaquePassResult const & gp
 			, SceneUbo & sceneUbo
 			, RenderPassTimer & timer )override;
 		/**
-		 *\~english
-		 *\brief		Cleans up the light pass.
-		 *\~french
-		 *\brief		Nettoie la passe d'éclairage.
+		 *\copydoc		castor3d::LightPass::cleanup
 		 */
 		void cleanup()override;
 		/**
-		 *\~english
-		 *\brief		Renders the light pass.
-		 *\param[in]	index	The lighting pass index.
-		 *\param[in]	toWait	The semaphore from the previous render pass.
-		 *\~french
-		 *\brief		Dessine la passe de rendu.
-		 *\param[in]	index	L'indice de la passe d'éclairage.
-		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente
+		 *\copydoc		castor3d::LightPass::render
 		 */
 		ashes::Semaphore const & render( uint32_t index
 			, ashes::Semaphore const & toWait )override;

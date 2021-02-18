@@ -80,16 +80,20 @@ namespace castor3d
 		C3D_API ~Cache();
 		/**
 		 *\~english
-		 *\brief		Updates the UBO pools data.
+		 *\brief			Updates the render pass, CPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour le contenu des pools d'UBO.
+		 *\brief			Met à jour la passe de rendu, au niveau CPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Updates the UBO pools in VRAM.
+		 *\param[in]	commandBuffer	The command buffer on which transfer commands are recorded.
 		 *\~french
 		 *\brief		Met à jour les pools d'UBO en VRAM.
+		 *\param[in]	commandBuffer	Le command buffer sur lequel les commandes de transfert sont enregistrées.
 		 */
 		C3D_API void uploadUbos( ashes::CommandBuffer const & commandBuffer );
 		/**
@@ -102,22 +106,28 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\return		The entry related to given AnimatedMesh.
+		 *\param[in]	mesh	The mexh.
 		 *\~french
 		 *\brief		L'entrée relative à l'AnimatedMesh donné.
+		 *\param[in]	mesh	Le mesh.
 		 */
 		C3D_API MeshPoolsEntry getUbos( AnimatedMesh const & mesh )const;
 		/**
 		 *\~english
 		 *\return		The entry related to given AnimatedSkeleton.
+		 *\param[in]	skeleton	The skeleton.
 		 *\~french
 		 *\brief		L'entrée relative à l'AnimatedSkeleton donné.
+		 *\param[in]	skeleton	Le squelette.
 		 */
 		C3D_API SkeletonPoolsEntry getUbos( AnimatedSkeleton const & skeleton )const;
 		/**
 		 *\~english
 		 *\brief		Flushes the collection.
+		 *\param[in]	device	The GPU device.
 		 *\~french
 		 *\brief		Vide la collection.
+		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API void clear( RenderDevice const & device );
 		/**

@@ -23,18 +23,20 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Specified constructor.
-		 *\param[in]	name		The tone mapping name.
-		 *\param[in]	fullName	The tone mapping full (fancy) name.
-		 *\param[in]	engine		The engine.
-		 *\param[in]	config		The configuration data.
-		 *\param[in]	parameters	The implementation specific parameters.
+		 *\param[in]	name			The tone mapping name.
+		 *\param[in]	fullName		The tone mapping full (fancy) name.
+		 *\param[in]	engine			The engine.
+		 *\param[in]	device			The GPU device.
+		 *\param[in]	hdrConfigUbo	The configuration data.
+		 *\param[in]	parameters		The implementation specific parameters.
 		 *\~french
 		 *\brief		Constructeur spécifié.
-		 *\param[in]	name		Le nom du mappage de tons.
-		 *\param[in]	fullName	Le nom complet (et joli) du mappage de tons.
-		 *\param[in]	engine		Le moteur.
-		 *\param[in]	config		Les données de confiuration.
-		 *\param[in]	parameters	Les paramètres spécifiques à l'implémentation.
+		 *\param[in]	name			Le nom du mappage de tons.
+		 *\param[in]	fullName		Le nom complet (et joli) du mappage de tons.
+		 *\param[in]	engine			Le moteur.
+		 *\param[in]	device			Le device GPU.
+		 *\param[in]	hdrConfigUbo	Les données de confiuration.
+		 *\param[in]	parameters		Les paramètres spécifiques à l'implémentation.
 		 */
 		C3D_API ToneMapping( castor::String const & name
 			, castor::String const & fullName
@@ -73,23 +75,29 @@ namespace castor3d
 		C3D_API void cleanup();
 		/**
 		 *\~english
-		 *\brief		Updates the tone mapping.
-		 *\~english
-		 *\brief		Met à jour le tone mapping.
+		 *\brief			Updates the render pass, CPU wise.
+		 *\param[in, out]	updater	The update data.
+		 *\~french
+		 *\brief			Met à jour la passe de rendu, au niveau CPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
-		 *\brief		Updates the tone mapping.
-		 *\~english
-		 *\brief		Met à jour le tone mapping.
+		 *\brief			Updates the render pass, GPU wise.
+		 *\param[in, out]	updater	The update data.
+		 *\~french
+		 *\brief			Met à jour la passe de rendu, au niveau GPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english
-		 *\brief		Visitor acceptance function.
+		 *\brief			Visitor acceptance function.
+		 *\param[in, out]	visitor	The visitor.
 		 *\~french
-		 *\brief		Fonction d'acceptation de visiteur.
+		 *\brief			Fonction d'acceptation de visiteur.
+		 *\param[in, out]	visitor	Le visiteur.
 		 */
 		C3D_API virtual void accept( ToneMappingVisitor & visitor );
 		/**
@@ -101,13 +109,13 @@ namespace castor3d
 		*	Accesseurs.
 		**/
 		/**@{*/
-		inline ashes::Semaphore const & getSemaphore()const
+		ashes::Semaphore const & getSemaphore()const
 		{
 			CU_Require( m_signalFinished );
 			return *m_signalFinished;
 		}
 
-		inline castor::String const & getFullName()const
+		castor::String const & getFullName()const
 		{
 			return m_fullName;
 		}
@@ -118,21 +126,7 @@ namespace castor3d
 		using RenderQuad::getName;
 
 	private:
-		/**
-		 *\~english
-		 *\brief			Creates tone mapping shader, and the shader variables.
-		 *\return			The pixel shader source.
-		 *\~french
-		 *\brief			Crée le shader de mappage de tons, ainsi que les variables shader.
-		 *\return			Le source du pixel shader.
-		 */
 		C3D_API virtual ShaderPtr doCreate() = 0;
-		/**
-		 *\~english
-		 *\brief		Cleans up the tone mapping shader variables.
-		 *\~french
-		 *\brief		Nettoie les variables shader de mappage de tons.
-		 */
 		C3D_API virtual void doDestroy() = 0;
 		/**
 		 *\~english

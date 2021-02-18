@@ -46,7 +46,7 @@ namespace castor3d
 		 *\remarks	Les passes sont alignées sur 4 flottants, donc la taille d'une passe
 		 *			correspond aux nombres de float[4] qu'il faut pour la contenir.
 		 */
-		inline uint32_t getPassSize()const override
+		uint32_t getPassSize()const override
 		{
 			return 4u;
 		}
@@ -58,7 +58,7 @@ namespace castor3d
 		 *\brief		Définit la couleur d'albédo.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setDiffuse( castor::RgbColour const & value )
+		void setDiffuse( castor::RgbColour const & value )
 		{
 			m_diffuse = value;
 			onChanged( *this );
@@ -71,7 +71,7 @@ namespace castor3d
 		 *\brief		Définit la brillance.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setGlossiness( float value )
+		void setGlossiness( float value )
 		{
 			m_glossiness = value;
 			onChanged( *this );
@@ -84,7 +84,7 @@ namespace castor3d
 		 *\brief		Définit la spécularité.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setSpecular( castor::RgbColour const & value )
+		void setSpecular( castor::RgbColour const & value )
 		{
 			m_specular = value;
 			onChanged( *this );
@@ -95,7 +95,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La couleur.
 		 */
-		inline castor::RgbColour const & getDiffuse()const
+		castor::RgbColour const & getDiffuse()const
 		{
 			return m_diffuse;
 		}
@@ -105,7 +105,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La brillance.
 		 */
-		inline float getGlossiness()const
+		float getGlossiness()const
 		{
 			return m_glossiness;
 		}
@@ -115,23 +115,14 @@ namespace castor3d
 		 *\~french
 		 *\return		La spécularité.
 		 */
-		inline castor::RgbColour const & getSpecular()const
+		castor::RgbColour const & getSpecular()const
 		{
 			return m_specular;
 		}
 
 	private:
-		/**
-		 *\copydoc		castor3d::Pass::doInitialise
-		 */
 		void doInitialise()override;
-		/**
-		 *\copydoc		castor3d::Pass::doCleanup
-		 */
 		void doCleanup()override;
-		/**
-		 *\copydoc		castor3d::Pass::doSetOpacity
-		 */
 		void doSetOpacity( float value )override;
 
 	private:

@@ -55,12 +55,14 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine		The engine.
+		 *\param[in]	device		The GPU device.
 		 *\param[in]	size		The render size.
 		 *\param[in]	srcTexture	The cube texture source.
 		 *\param[in]	sampler		The sampler used for the source texture.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
+		 *\param[in]	device		Le device GPU.
 		 *\param[in]	size		La taille du rendu.
 		 *\param[in]	srcTexture	La texture cube source.
 		 *\param[in]	sampler		Le sampler utilisé pour la texture source.
@@ -80,8 +82,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Generates the mipmap levels.
+		 *\param[in]	toWait	The semaphore from the previous render pass.
 		 *\~french
 		 *\brief		Génère les niveaux de mipmap.
+		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
 		 */
 		C3D_API ashes::Semaphore const & render( ashes::Semaphore const & toWait );
 		/**

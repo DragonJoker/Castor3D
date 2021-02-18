@@ -22,16 +22,24 @@ namespace castor3d
 	public:
 		/**
 		 *\~english
-		 *\param[in]	engine			The engine.
-		 *\param[in]	size			The render dimensions.
-		 *\param[in]	scene			The rendered scene.
+		 *\brief		Constructor.
+		 *\param[in]	device			The GPU device.
+		 *\param[in]	voxelConfig		The voxelizer configuration.
+		 *\param[in]	voxels			The voxels buffer.
+		 *\param[in]	voxelUbo		The voxelizer configuration UBO.
+		 *\param[in]	firstBounce		The first bounce result.
+		 *\param[in]	result			The resulting texture.
 		 *\~french
-		 *\param[in]	engine			Le moteur.
-		 *\param[in]	size			Les dimensions du rendu.
-		 *\param[in]	scene			La scène rendue.
+		 *\brief		Constructeur.
+		 *\param[in]	device			Le device GPU.
+		 *\param[in]	voxelConfig		La configuration du voxelizer.
+		 *\param[in]	voxels			Le tampon de voxels.
+		 *\param[in]	voxelUbo		L'UBO de configuration du voxelizer.
+		 *\param[in]	firstBounce		Le résultat du premier rebond.
+		 *\param[in]	result			La texture résultante.
 		 */
 		C3D_API VoxelSecondaryBounce( RenderDevice const & device
-			, VoxelSceneData const & vctConfig
+			, VoxelSceneData const & voxelConfig
 			, ashes::Buffer< Voxel > const & voxels
 			, VoxelizerUbo const & voxelUbo
 			, TextureUnit const & firstBounce
@@ -39,9 +47,11 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Renders nodes.
+		 *\param[in]	device	The GPU device.
 		 *\param[in]	toWait	The semaphore from the previous render pass.
 		 *\~french
 		 *\brief		Dessine les noeuds.
+		 *\param[in]	device	Le device GPU.
 		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
 		 */
 		C3D_API ashes::Semaphore const & render( RenderDevice const & device

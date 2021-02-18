@@ -20,12 +20,14 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine		The engine.
-		 *\param[in]	size		The render size.
+		 *\param		device		The current device.
+		 *\param[in]	size		The render dimensions.
 		 *\param[in]	dstTexture	The cube texture destination.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
-		 *\param[in]	size		La taille du rendu.
+		 *\param		device		Le device actuel.
+		 *\param[in]	size		Les dimensions du rendu.
 		 *\param[in]	dstTexture	La texture cube destination.
 		 */
 		C3D_API explicit BrdfPrefilter( Engine & engine
@@ -41,12 +43,6 @@ namespace castor3d
 		C3D_API void render();
 
 	private:
-		/**
-		 *\~english
-		 *\brief		Creates the render convolution shader program.
-		 *\~french
-		 *\brief		Crée le programme shader de convolution.
-		 */
 		ashes::PipelineShaderStageCreateInfoArray doCreateProgram();
 
 	private:

@@ -60,12 +60,7 @@ namespace castor3d
 
 		C3D_API void initialise( RenderDevice const & device );
 		C3D_API void cleanup();
-		/**
-		 *\~english
-		 *\brief		Updates UBO data.
-		 *\~french
-		 *\brief		Met à jour les données de l'UBO.
-		 */
+
 		C3D_API void cpuUpdate( std::array< castor::Grid, shader::LpvMaxCascadesCount > const & grids
 			, float indirectAttenuation );
 

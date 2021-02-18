@@ -26,12 +26,14 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine			The engine.
+		 *\param[in]	prefix			The pass name's prefix.
 		 *\param[in]	depthView		The depth buffer view.
 		 *\param[in]	matrixUbo		The matrix UBO.
 		 *\param[in]	modelMatrixUbo	The model matrix UBO.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine			Le moteur.
+		 *\param[in]	prefix			Le préfixe du nom de la passe.
 		 *\param[in]	depthView		L'attache du tampon de profondeur.
 		 *\param[in]	matrixUbo		L'UBO des matrices.
 		 *\param[in]	modelMatrixUbo	L'UBO des matrices modèle.
@@ -44,10 +46,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the program and its pipeline.
+		 *\param[in]	device			The GPU device.
 		 *\param[in]	vertexLayout	The vertex buffer layout.
 		 *\param[in]	vbo				The vertex buffer containing the object to render.
 		 *\~french
 		 *\brief		Initialise le programme et son pipeline.
+		 *\param[in]	device			Le device GPU.
 		 *\param[in]	vertexLayout	Le layout du tampon de sommets.
 		 *\param[in]	vbo				Le tampon de sommets contenant l'objet à dessiner.
 		 */
@@ -64,9 +68,11 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Renders the stencil pass.
+		 *\param[in]	device	The GPU device.
 		 *\param[in]	toWait	The semaphore to wait.
 		 *\~french
 		 *\brief		Dessine la passe de stencil.
+		 *\param[in]	device	Le device GPU.
 		 *\param[in]	toWait	Le sémaphore à attendre.
 		 */
 		ashes::Semaphore const & render( RenderDevice const & device
@@ -80,7 +86,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline ashes::Semaphore const & getSemaphore()const
+		ashes::Semaphore const & getSemaphore()const
 		{
 			CU_Require( m_finished );
 			return *m_finished;

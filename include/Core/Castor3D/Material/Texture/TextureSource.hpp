@@ -20,10 +20,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\return		The texture buffer.
-		 *\param[in]	engine	The engine.
+		 *\param[in]	image	The CPU image.
+		 *\param[in]	name	The source name.
+		 *\param[in]	layout	The CPU image layout.
 		 *\~french
 		 *\return		Le tampon de la texture.
-		 *\param[in]	engine	Le moteur.
+		 *\param[in]	image	L'image CPU.
+		 *\param[in]	name	Le nom de la source.
+		 *\param[in]	layout	Le layout CPU de l'image.
 		 */
 		explicit TextureSource( castor::Image & image
 			, castor::String name
@@ -53,47 +57,47 @@ namespace castor3d
 		 *\name		Accesseurs.
 		 */
 		//@{
-		inline castor::String const & toString()const
+		castor::String const & toString()const
 		{
 			return getName();
 		}
 
-		inline uint32_t getBaseLayer()const
+		uint32_t getBaseLayer()const
 		{
 			return m_layout.baseLayer;
 		}
 
-		inline uint32_t getLayerCount()const
+		uint32_t getLayerCount()const
 		{
 			return m_layout.layers;
 		}
 
-		inline uint32_t getBaseLevel()const
+		uint32_t getBaseLevel()const
 		{
 			return m_layout.baseLevel;
 		}
 
-		inline uint32_t getLevelCount()const
+		uint32_t getLevelCount()const
 		{
 			return m_layout.levels;
 		}
 
-		inline uint32_t getDepth()const
+		uint32_t getDepth()const
 		{
 			return m_layout.extent->z;
 		}
 
-		inline bool hasBuffer()const
+		bool hasBuffer()const
 		{
 			return m_layout.hasBuffer( m_image->getPxBuffer() );
 		}
 
-		inline castor::ImageLayout::ConstBuffer getBuffer()const
+		castor::ImageLayout::ConstBuffer getBuffer()const
 		{
 			return m_layout.buffer( const_cast< castor::Image const & >( *m_image ).getPxBuffer() );
 		}
 
-		inline castor::ImageLayout::Buffer getBuffer()
+		castor::ImageLayout::Buffer getBuffer()
 		{
 			return m_layout.buffer( m_image->getPxBuffer() );
 		}

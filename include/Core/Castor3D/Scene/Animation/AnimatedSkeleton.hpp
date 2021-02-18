@@ -87,7 +87,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le squelette.
 		 */
-		inline Skeleton const & getSkeleton()const
+		Skeleton const & getSkeleton()const
 		{
 			return m_skeleton;
 		}
@@ -97,7 +97,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le maillage.
 		 */
-		inline Mesh const & getMesh()const
+		Mesh const & getMesh()const
 		{
 			return m_mesh;
 		}
@@ -107,7 +107,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le maillage.
 		 */
-		inline Mesh & getMesh()
+		Mesh & getMesh()
 		{
 			return m_mesh;
 		}
@@ -117,7 +117,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La géométrie instanciant le maillage.
 		 */
-		inline Geometry const & getGeometry()const
+		Geometry const & getGeometry()const
 		{
 			return m_geometry;
 		}
@@ -127,27 +127,15 @@ namespace castor3d
 		 *\~french
 		 *\return		La géométrie instanciant le maillage.
 		 */
-		inline Geometry & getGeometry()
+		Geometry & getGeometry()
 		{
 			return m_geometry;
 		}
 
 	private:
-		/**
-		 *\copydoc		castor3d::AnimatedObject::doAddAnimation
-		 */
 		void doAddAnimation( castor::String const & name )override;
-		/**
-		 *\copydoc		castor3d::AnimatedObject::doAddAnimation
-		 */
 		void doStartAnimation( AnimationInstance & animation )override;
-		/**
-		 *\copydoc		castor3d::AnimatedObject::doAddAnimation
-		 */
 		void doStopAnimation( AnimationInstance & animation )override;
-		/**
-		 *\copydoc		castor3d::AnimatedObject::doAddAnimation
-		 */
 		void doClearAnimations()override;
 
 	protected:

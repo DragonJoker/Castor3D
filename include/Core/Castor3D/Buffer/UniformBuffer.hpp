@@ -23,6 +23,7 @@ namespace castor3d
 		 *\param[in]	usage			The buffer usage flags.
 		 *\param[in]	flags			The buffer memory flags.
 		 *\param[in]	debugName		The buffer debug name.
+		 *\param[in]	sharingMode		The buffer sharing mode.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	renderSystem	Le RenderSystem.
@@ -30,6 +31,7 @@ namespace castor3d
 		 *\param[in]	usage			Les indicateurs d'utilisation du tampon.
 		 *\param[in]	flags			Les indicateurs de mémoire du tampon.
 		 *\param[in]	debugName		Le nom debug du tampon.
+		 *\param[in]	sharingMode		Le mode de partage du tampon.
 		 */
 		inline UniformBufferT( RenderSystem const & renderSystem
 			, VkDeviceSize count
@@ -42,14 +44,16 @@ namespace castor3d
 		 *\brief		Transfers data to the GPU buffer from RAM.
 		 *\remarks		Transfers data from buffer[offset*sizeof( T )] to buffer[(offset+count-1)*sizeof( T )].
 		 *\param[in]	stagingBuffer	The staging buffer used to transfer the data.
-		 *\param[in]	commandBuffer	The command buffer on which the transfer commands are recorded.
+		 *\param[in]	queue			The queue used to execute the transfer.
+		 *\param[in]	commandPool		The command pool on which the command buffer will be created.
 		 *\param[in]	offset			The start offset.
 		 *\param[in]	flags			The pipeline stage flags for the out memory barrier.
 		 *\~french
 		 *\brief		Transfère des données au tampon GPU à partir de la RAM.
 		 *\remarks		Transfère les données de tampon[offset*sizeof( T )] à tampon[(offset+count-1) * sizeof( T )].
 		 *\param[in]	stagingBuffer	Le staging buffer utilisé pour effectuer le transfer.
-		 *\param[in]	commandBuffer	Le command buffer sur lequel les commandes de transfert sont enregistrées.
+		 *\param[in]	queue			La file sur laquelle le transfert sera effectué.
+		 *\param[in]	commandPool		Le command pool depuis lequel le command buffer sera créé.
 		 *\param[in]	offset			L'offset de départ.
 		 *\param[in]	flags			Les indicateurs de pipeline stage pour la barrière mémoire de sortie.
 		 */
@@ -83,7 +87,8 @@ namespace castor3d
 		 *\brief		Transfers data to the GPU buffer from RAM.
 		 *\remarks		Transfers data from buffer[offset*sizeof( T )] to buffer[(offset+count-1)*sizeof( T )].
 		 *\param[in]	stagingBuffer	The staging buffer used to transfer the data.
-		 *\param[in]	commandBuffer	The command buffer on which the transfer commands are recorded.
+		 *\param[in]	queue			The queue used to execute the transfer.
+		 *\param[in]	commandPool		The command pool on which the command buffer will be created.
 		 *\param[in]	offset			The start offset.
 		 *\param[in]	flags			The pipeline stage flags for the out memory barrier.
 		 *\param[in]	timer			The render pass timer.
@@ -92,7 +97,8 @@ namespace castor3d
 		 *\brief		Transfère des données au tampon GPU à partir de la RAM.
 		 *\remarks		Transfère les données de tampon[offset*sizeof( T )] à tampon[(offset+count-1) * sizeof( T )].
 		 *\param[in]	stagingBuffer	Le staging buffer utilisé pour effectuer le transfer.
-		 *\param[in]	commandBuffer	Le command buffer sur lequel les commandes de transfert sont enregistrées.
+		 *\param[in]	queue			La file sur laquelle le transfert sera effectué.
+		 *\param[in]	commandPool		Le command pool depuis lequel le command buffer sera créé.
 		 *\param[in]	offset			L'offset de départ.
 		 *\param[in]	flags			Les indicateurs de pipeline stage pour la barrière mémoire de sortie.
 		 *\param[in]	timer			Le timer de passe de rendu.
@@ -154,16 +160,22 @@ namespace castor3d
 		 *\brief		Transfers data from the GPU buffer to RAM.
 		 *\remarks		Transfers data from buffer[offset*sizeof( T )] to buffer[(offset+count-1)*sizeof( T )].
 		 *\param[in]	stagingBuffer	The staging buffer used to transfer the data.
-		 *\param[in]	commandBuffer	The command buffer on which the transfer commands are recorded.
+		 *\param[in]	queue			The queue used to execute the transfer.
+		 *\param[in]	commandPool		The command pool on which the command buffer will be created.
 		 *\param[in]	offset			The start offset.
 		 *\param[in]	flags			The pipeline stage flags for the out memory barrier.
+		 *\param[in]	timer			The render pass timer.
+		 *\param[in]	index			The render pass index.
 		 *\~french
 		 *\brief		Transfère des données du tampon GPU vers la RAM.
 		 *\remarks		Transfère les données de tampon[offset*sizeof( T )] à tampon[(offset+count-1) * sizeof( T )].
 		 *\param[in]	stagingBuffer	Le staging buffer utilisé pour effectuer le transfer.
-		 *\param[in]	commandBuffer	Le command buffer sur lequel les commandes de transfert sont enregistrées.
+		 *\param[in]	queue			La file sur laquelle le transfert sera effectué.
+		 *\param[in]	commandPool		Le command pool depuis lequel le command buffer sera créé.
 		 *\param[in]	offset			L'offset de départ.
 		 *\param[in]	flags			Les indicateurs de pipeline stage pour la barrière mémoire de sortie.
+		 *\param[in]	timer			Le timer de passe de rendu.
+		 *\param[in]	index			L'indice de passe de rendu.
 		 */
 		inline void download( ashes::BufferBase const & stagingBuffer
 			, ashes::Queue const & queue
@@ -176,11 +188,15 @@ namespace castor3d
 		*\~english
 		*\return
 		*	The N-th instance of the data.
+		*\param[in] index
+		*	The instance index.
 		*\~french
 		*\return
 		*	La n-ème instance des données.
+		*\param[in] index
+		*	L'indice de l'instance.
 		*/
-		inline DataT const & getData( VkDeviceSize index = 0 )const
+		DataT const & getData( VkDeviceSize index = 0 )const
 		{
 			return m_data[index];
 		}
@@ -188,11 +204,15 @@ namespace castor3d
 		*\~english
 		*\return
 		*	The N-th instance of the data.
+		*\param[in] index
+		*	The instance index.
 		*\~french
 		*\return
 		*	La n-ème instance des données.
+		*\param[in] index
+		*	L'indice de l'instance.
 		*/
-		inline DataT & getData( VkDeviceSize index = 0 )
+		DataT & getData( VkDeviceSize index = 0 )
 		{
 			return m_data[index];
 		}
@@ -204,7 +224,7 @@ namespace castor3d
 		*\return
 		*	Les données.
 		*/
-		inline std::vector< DataT > const & getDatas()const
+		std::vector< DataT > const & getDatas()const
 		{
 			return m_data;
 		}
@@ -216,7 +236,7 @@ namespace castor3d
 		*\return
 		*	Les données.
 		*/
-		inline std::vector< DataT > & getDatas()
+		std::vector< DataT > & getDatas()
 		{
 			return m_data;
 		}

@@ -6,6 +6,11 @@
  *<br />
  *\section version_0_11_0 Version 0.11.0
  *\subsection feat_0_11_0 Features
+ *\subsubsection feat_0_11_0_gen General
+ *<ul>
+ *<li>Added support of vcpkg for external dependencies.</li>
+ *</ul>
+ *<br />
  *\subsubsection feat_0_11_0_cu CastorUtils
  *<ul>
  *<li>Reworked castor::Matrix and castor::Point to make them hold static data, and reduce memory footprint of Matrix.</li>
@@ -13,11 +18,12 @@
  *<br />
  *\subsubsection feat_0_11_0_c3d Castor3D
  *<ul>
- *<li>Castor3D now relies on Ashes, allowing support for OpenGL, Direct3D11 and Vulkan renderers.</li>
+ *<li>Castor3D now relies on <a href="https://github.com/DragonJoker/Ashes">Ashes</a>, allowing support for OpenGL, Direct3D11 and Vulkan renderers.</li>
  *<li>GlslWriter has been completely removed and replaced by <a href="https://github.com/DragonJoker/ShaderWriter">ShaderWriter</a>, allowing the generation of shaders in the appropriate rendering API shader language.</li>
+ *<li>Textures now have a TextureConfiguration instead of a TextureChannel.</li>
  *<li>Added support for cross skyboxes.</li>
  *<li>Enabled anisotropic filtering control from scene file.</li>
- *<li>Added Raw and PCF shadow maps.</li>
+ *<li>Added Raw and PCF shadow maps choices.</li>
  *<li>Added sendEvent function to Engine, to be able to execute an event directly if there is an enabled device.</li>
  *<li>Extracted binary write/parse classes to new files, to reduce includes dependencies.</li>
  *<li>Reworked mip level management for textures loaded from files.</li>
@@ -28,6 +34,9 @@
  *<li>Cascaded shadow maps are implemented and functional.</li>
  *<li>Overlays are now rendered them in their own framebuffer, and then combined with the 3D rendering.</li>
  *<li>Shadow maps now use texture arrays (2D or Cube).</li>
+ *<li>Added Light Propagation Volumes global illumination implementation.</li>
+ *<li>Added Voxel Cone Tracing global illumination implementation.</li>
+ *<li>Implemented texture animations (UV rotate and translate).</li>
  *</ul>
  *<br />
  *\subsubsection feat_0_11_0_rend RenderSystems
@@ -42,7 +51,6 @@
  *<br />
  *\subsubsection feat_0_11_0_samp Samples
  *<ul>
- *<li>Added CastorTestLauncher, which allows to run rendering tests through the wanted rendering API.</li>
  *<li>Rehabilitated ShaderDialog, it now can be used to display tone mapping and post effect shaders.</li>
  *<li>ShaderDialog now displays all the shaders for the pipeline used to display a pass.</li>
  *<li>Selected submesh's bounding box now appears in yellow.</li>
@@ -50,6 +58,8 @@
  *<br />
  *\subsubsection feat_0_11_0_tool Tools
  *<ul>
+ *<li>Added CastorTestLauncher, which allows to run rendering tests through the wanted rendering API.</li>
+ *<li>Added Aria, which monitors rendering tests.</li>
  *<li>CastorMeshUpgrader tool has been added, allowing to update cmsh files with a cl tool.</li>
  *<li>CastorMeshConverter tool has been added, allowing to convert "any" mesh file to cmsh mesh with a cl tool.</li>
  *<li>Added DiffImage, which allows image comparison between a reference image and another one (generated through CastorTestLauncher), to automatise rendering tests.</li>
@@ -60,11 +70,11 @@
  *<ul>
  *<li>Fixed matrix initialisation from another different size matrix.</li>
  *<li>Fixed pixel buffer flip.</li>
+ *</ul>
  *<br />
  *\subsubsection bugs_0_11_0_obj OBJImporter
  *<ul>
  *<li>Few fixes in face group management.</li>
- *</ul>
  *</ul>
  *<br />
  *<br />
@@ -637,6 +647,10 @@
  *<br />
  *\section version_0_11_0 Version 0.11.0
  *\subsection feat_0_11_0 Fonctionnalités
+ *\subsubsection feat_0_11_0_gen Général
+ *<ul>
+ *<li>Ajout du support de vcpkg pour les dépdendances externes.</li>
+ *</ul>
  *\subsubsection feat_0_11_0_cu CastorUtils
  *<ul>
  *<li>castor::Matrix et castor::Point ont maintenant leurs données en statique, et l'empreinte mémoire de castor::Matrix a été réduite.</li>
@@ -659,6 +673,9 @@
  *<li>Les Cascaded shadow maps sont implémentées pour les sources lumineuses directionnelles.</li>
  *<li>Les incrustations sont maintenant dessinées dans leur propre framebuffer, puis celui-ci est combiné avec le rendu 3D.</li>
  *<li>Les Shadow maps utilisent maintenant des texture arrays (2D ou Cube).</li>
+ *<li>Implémentation de global illumination via les Light Propagation Volumes.</li>
+ *<li>Implémentation de global illumination via le Voxel Cone Tracing.</li>
+ *<li>Implémentation des animations de texture (rotation et translation des UV).</li>
  *</ul>
  *<br />
  *\subsubsection feat_0_11_0_imp Importers

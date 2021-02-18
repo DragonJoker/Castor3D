@@ -25,11 +25,13 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine		The engine.
+		 *\param[in]	device		The GPU device.
 		 *\param[in]	size		The render size.
 		 *\param[in]	srcTexture	The cube texture source.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
+		 *\param[in]	device		Le device GPU.
 		 *\param[in]	size		La taille du rendu.
 		 *\param[in]	srcTexture	La texture cube source.
 		 */
@@ -47,8 +49,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Computes the radiance map.
+		 *\param[in]	toWait	The semaphore from the previous render pass.
 		 *\~french
 		 *\brief		Calcule la texture de radiance.
+		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
 		 */
 		C3D_API ashes::Semaphore const & render( ashes::Semaphore const & toWait );
 		/**

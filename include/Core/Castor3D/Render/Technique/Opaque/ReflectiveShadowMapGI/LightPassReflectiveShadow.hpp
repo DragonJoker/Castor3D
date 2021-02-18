@@ -33,14 +33,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine		The engine.
-		 *\param[in]	lpResult	The light pass result.
-		 *\param[in]	gpInfoUbo	The geometry pass UBO.
+		 *\param[in]	device		The GPU device.
+		 *\param[in]	lpConfig	The light pass configuration.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine		Le moteur.
-		 *\param[in]	lpResult	Le résultat de la passe d'éclairage.
-		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
+		 *\param[in]	device		Le device GPU.
+		 *\param[in]	lpConfig	La configuration de la passe d'éclairage.
 		 */
 		LightPassReflectiveShadow( RenderDevice const & device
 			, RsmLightPassConfig const & lpConfig )
@@ -53,7 +51,9 @@ namespace castor3d
 			, m_gpInfoUbo{ lpConfig.base.gpInfoUbo }
 		{
 		}
-
+		/**
+		 *\copydoc		castor3d::LightPass::initialise
+		 */
 		void initialise( Scene const & scene
 			, OpaquePassResult const & gp
 			, SceneUbo & sceneUbo
@@ -102,7 +102,9 @@ namespace castor3d
 				, m_lpResult[LpTexture::eIndirectDiffuse] );
 			LightPassShadow< LtType >::initialise( scene, gp, sceneUbo, timer );
 		}
-
+		/**
+		 *\copydoc		castor3d::LightPass::cleanup
+		 */
 		void cleanup()override
 		{
 			LightPassShadow< LtType >::cleanup();
@@ -110,7 +112,9 @@ namespace castor3d
 			m_rsmGiPass.reset();
 			m_downscalePass.reset();
 		}
-
+		/**
+		 *\copydoc		castor3d::LightPass::render
+		 */
 		ashes::Semaphore const & render( uint32_t index
 			, ashes::Semaphore const & toWait )override
 		{
@@ -122,7 +126,9 @@ namespace castor3d
 
 			return *result;
 		}
-
+		/**
+		 *\copydoc		castor3d::LightPass::accept
+		 */
 		void accept( PipelineVisitorBase & visitor )override
 		{
 			LightPassShadow< LtType >::accept( visitor );
@@ -139,6 +145,9 @@ namespace castor3d
 		}
 
 	protected:
+		/**
+		 *\copydoc		castor3d::LightPass::doUpdate
+		 */
 		void doUpdate( bool first
 			, castor::Size const & size
 			, Light const & light

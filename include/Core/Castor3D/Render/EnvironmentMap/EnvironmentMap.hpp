@@ -51,54 +51,51 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the frame buffer.
+		 *\param[in]	device	The GPU device.
 		 *\~french
 		 *\brief		Initialise le frame buffer.
+		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API bool initialise( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Cleans up the frame buffer.
+		 *\param[in]	device	The GPU device.
 		 *\~french
 		 *\brief		Nettoie le frame buffer.
+		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API void cleanup( RenderDevice const & device );
 		/**
 		 *\~english
-		 *\brief		Updates the passes.
-		 *\remarks		Gather the render queues, for further update.
-		 *\param[out]	queues	Receives the render queues needed for the rendering of the frame.
+		 *\brief			Updates the render pass, CPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour les passes.
-		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
-		 *\param[out]	queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
+		 *\brief			Met à jour la passe de rendu, au niveau CPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
-		 *\brief		Updates the GPU data.
+		 *\brief			Updates the render pass, GPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour les données GPU.
+		 *\brief			Met à jour la passe de rendu, au niveau GPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Renders the environment map.
+		 *\param[in]	device	The GPU device.
+		 *\param[in]	toWait	The semaphore to wait.
 		 *\~french
 		 *\brief		Dessine la texture d'environnement.
+		 *\param[in]	device	Le device GPU.
+		 *\param[in]	toWait	Le sémaphore à attendre.
 		 */
 		C3D_API ashes::Semaphore const & render( RenderDevice const & device
 			, ashes::Semaphore const & toWait );
-		/**
-		 *\~english
-		 *\brief		Dumps the environment map on screen.
-		 *\param[in]	size	The dump dimensions.
-		 *\param[in]	index	The environment map index (to compute its position).
-		 *\~french
-		 *\brief		Dumpe la texture d'environnement sur l'écran.
-		 *\param[in]	size	Les dimensions d'affichage.
-		 *\param[in]	index	L'indice de la texture d'environnement (pour calculer sa position).
-		 */
-		C3D_API void debugDisplay( castor::Size const & size, uint32_t index );
 		/**
 		*\~english
 		*name

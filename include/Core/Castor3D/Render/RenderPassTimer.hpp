@@ -21,7 +21,7 @@ namespace castor3d
 		C3D_API RenderPassTimerBlock & operator=( RenderPassTimerBlock const & ) = delete;
 		C3D_API ~RenderPassTimerBlock();
 
-		inline RenderPassTimer * operator->()const
+		RenderPassTimer * operator->()const
 		{
 			return m_timer;
 		}
@@ -39,13 +39,13 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine		The engine.
+		 *\param[in]	device		The GPU device.
 		 *\param[in]	category	The render pass category.
 		 *\param[in]	name		The timer name.
 		 *\param[in]	passesCount	The number of render passes.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine		Le moteur.
+		 *\param[in]	device		Le device GPU.
 		 *\param[in]	category	La catégorie de la passe de rendu.
 		 *\param[in]	name		Le nom du timer.
 		 *\param[in]	passesCount	Le nombre de passes de rendu.
@@ -71,8 +71,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Notifies the given pass render.
+		 *\param[in]	passIndex			The pass index.
+		 *\param[in]	subtractGpuFromCpu	Tells if the GPU time should be subtracted from CPU time (in case of fence wait).
 		 *\~french
 		 *\brief		Notifie le rendu de la passe donnée.
+		 *\param[in]	passIndex			L'indice de la passe.
+		 *\param[in]	subtractGpuFromCpu	Dit si le temps GPU doit être soustrait du temps CPU (dans le cas de l'attente d'une fence).
 		 */
 		C3D_API void notifyPassRender( uint32_t passIndex = 0u
 			, bool subtractGpuFromCpu = false );
@@ -86,16 +90,24 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Writes the timestamp for the beginning of the pass.
+		 *\param[in]	cmd			The command buffer used to record the begin timestamp.
+		 *\param[in]	passIndex	The pass index.
 		 *\~french
 		 *\brief		Ecrit le timestamp pour le début de la passe.
+		 *\param[in]	cmd			Le command buffer utilisé pour enregistrer le timestamp de début.
+		 *\param[in]	passIndex	L'indice de la passe.
 		 */
 		C3D_API void beginPass( ashes::CommandBuffer const & cmd
 			, uint32_t passIndex = 0u )const;
 		/**
 		 *\~english
 		 *\brief		Writes the timestamp for the end of the pass.
+		 *\param[in]	cmd			The command buffer used to record the end timestamp.
+		 *\param[in]	passIndex	The pass index.
 		 *\~french
 		 *\brief		Ecrit le timestamp pour la fin de la passe.
+		 *\param[in]	cmd			Le command buffer utilisé pour enregistrer le timestamp de fin.
+		 *\param[in]	passIndex	L'indice de la passe.
 		 */
 		C3D_API void endPass( ashes::CommandBuffer const & cmd
 			, uint32_t passIndex = 0u )const;
@@ -109,8 +121,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the passes count to the given value.
+		 *\param[in]	count	The number of render passes.
 		 *\~french
 		 *\brief		Met à jour le nombre de passes à la valeur donnée.
+		 *\param[in]	count	Le nombre de passes de rendu.
 		 */
 		C3D_API void updateCount( uint32_t count );
 		/**
@@ -122,34 +136,28 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline castor::Nanoseconds getCpuTime()const
+		castor::Nanoseconds getCpuTime()const
 		{
 			return m_cpuTime;
 		}
 
-		inline castor::Nanoseconds getGpuTime()const
+		castor::Nanoseconds getGpuTime()const
 		{
 			return m_gpuTime;
 		}
 
-		inline uint32_t getCount()const
+		uint32_t getCount()const
 		{
 			return m_passesCount;
 		}
 
-		inline castor::String const & getCategory()const
+		castor::String const & getCategory()const
 		{
 			return m_category;
 		}
 		/**@}*/
 
 	private:
-		/**
-		 *\~english
-		 *\brief		Stops the CPU timer.
-		 *\~french
-		 *\brief		Arrête le timer CPU.
-		 */
 		void stop();
 
 	private:

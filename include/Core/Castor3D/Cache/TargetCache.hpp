@@ -58,24 +58,30 @@ namespace castor3d
 		C3D_API void remove( RenderTargetSPtr target );
 		/**
 		 *\~english
-		 *\brief		Updates the render targets.
+		 *\brief			Updates the render pass, CPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour les cibles de rendu.
+		 *\brief			Met à jour la passe de rendu, au niveau CPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
-		 *\brief		Updates the render targets.
+		 *\brief			Updates the render pass, GPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour les cibles de rendu.
+		 *\brief			Met à jour la passe de rendu, au niveau GPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief			Renders into the render targets.
+		 *\param[in]		device	The GPU device.
 		 *\param[in,out]	info	Receives the render informations.
 		 *\~french
 		 *\brief			Dessine dans les cibles de rendu.
+		 *\param[in]		device	Le device GPU.
 		 *\param[in,out]	info	Reçoit les informations de rendu.
 		 */
 		C3D_API void render( RenderDevice const & device
@@ -96,27 +102,27 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline ToneMappingFactory const & getToneMappingFactory()const
+		ToneMappingFactory const & getToneMappingFactory()const
 		{
 			return m_toneMappingFactory;
 		}
 
-		inline ToneMappingFactory & getToneMappingFactory()
+		ToneMappingFactory & getToneMappingFactory()
 		{
 			return m_toneMappingFactory;
 		}
 
-		inline PostEffectFactory const & getPostEffectFactory()const
+		PostEffectFactory const & getPostEffectFactory()const
 		{
 			return m_postEffectFactory;
 		}
 
-		inline PostEffectFactory & getPostEffectFactory()
+		PostEffectFactory & getPostEffectFactory()
 		{
 			return m_postEffectFactory;
 		}
 
-		inline RenderTargetArray const & getRenderTargets( TargetType type )
+		RenderTargetArray const & getRenderTargets( TargetType type )
 		{
 			CU_Require( m_locked );
 			return m_renderTargets[size_t( type )];
@@ -128,7 +134,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Locke le mutex de la collection
 		 */
-		inline void lock()const
+		void lock()const
 		{
 			m_locked = true;
 			m_mutex.lock();
@@ -139,7 +145,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Délocke le mutex de la collection
 		 */
-		inline void unlock()const
+		void unlock()const
 		{
 			m_mutex.unlock();
 			m_locked = false;
@@ -153,7 +159,7 @@ namespace castor3d
 		 *\param[in]	func	La fonction.
 		 */
 		template< typename FuncType >
-		inline void forEach( FuncType func )const
+		void forEach( FuncType func )const
 		{
 			auto lock( castor::makeUniqueLock( *this ) );
 
@@ -174,7 +180,7 @@ namespace castor3d
 		 *\param[in]	func	La fonction.
 		 */
 		template< typename FuncType >
-		inline void forEach( FuncType func )
+		void forEach( FuncType func )
 		{
 			auto lock( castor::makeUniqueLock( *this ) );
 

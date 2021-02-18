@@ -34,33 +34,21 @@ namespace castor3d
 		 */
 		C3D_API ~ShadowMapDirectional();
 		/**
-		 *\copydoc		castor3d::ShadowMap::cpuUpdate
+		 *\copydoc		castor3d::ShadowMap::update
 		 */
 		C3D_API void update( CpuUpdater & updater )override;
 		/**
-		 *\copydoc		castor3d::ShadowMap::gpuUpdate
+		 *\copydoc		castor3d::ShadowMap::update
 		 */
 		C3D_API void update( GpuUpdater & updater )override;
 
 	private:
 		void doInitialiseFramebuffers( RenderDevice const & device );
-		/**
-		 *\copydoc		castor3d::ShadowMap::doInitialise
-		 */
 		void doInitialise( RenderDevice const & device )override;
-		/**
-		 *\copydoc		castor3d::ShadowMap::doCleanup
-		 */
 		void doCleanup( RenderDevice const & device )override;
-		/**
-		 *\copydoc		castor3d::ShadowMap::doRender
-		 */
 		ashes::Semaphore const & doRender( RenderDevice const & device
 			, ashes::Semaphore const & toWait
 			, uint32_t index )override;
-		/**
-		 *\copydoc		castor3d::ShadowMap::isUpToDate
-		 */
 		bool isUpToDate( uint32_t index )const override;
 
 	public:

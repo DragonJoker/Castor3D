@@ -37,7 +37,8 @@ namespace castor3d
 		 *\param[in]	renderTarget	The render target to which is attached this effect.
 		 *\param[in]	renderSystem	The render system.
 		 *\param[in]	parameters		The optional parameters.
-		 *\param[in]	postToneMapping	Tells if the effect applies after tone mapping.
+		 *\param[in]	passesCount		The number of passes for this post effect.
+		 *\param[in]	kind			The post effect kind.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	name			Le nom de l'effet.
@@ -45,7 +46,8 @@ namespace castor3d
 		 *\param[in]	renderTarget	La cible de rendu sur laquelle cet effet s'applique.
 		 *\param[in]	renderSystem	Le render system.
 		 *\param[in]	parameters		Les paramètres optionnels.
-		 *\param[in]	postToneMapping	Dit si l'effet s'applique après le mappage de tons.
+		 *\param[in]	passesCount		Le nombre de passes pour cet effet.
+		 *\param[in]	kind			Le type d'effet.
 		 */
 		C3D_API PostEffect( castor::String const & name
 			, castor::String const & fullName
@@ -78,10 +80,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialisation function.
+		 *\param[in]	device	The GPU device.
 		 *\param[in]	texture	The target texture.
 		 *\return		\p true if ok.
 		 *\~french
 		 *\brief		Fonction d'initialisation.
+		 *\param[in]	device	Le device GPU.
 		 *\param[in]	texture	La texture cible.
 		 *\return		\p true if ok.
 		 */
@@ -90,8 +94,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
+		 *\param[in]	device	The GPU device.
 		 *\~french
 		 *\brief		Fonction de nettoyage.
+		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API void cleanup( castor3d::RenderDevice const & device );
 		/**
@@ -103,27 +109,29 @@ namespace castor3d
 		C3D_API RenderPassTimerBlock start();
 		/**
 		 *\~english
-		 *\brief		Updated needed data.
-		 *\param[in]	elapsedTime	The time elapsed since last frame.
+		 *\brief			Updates the render pass, CPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour les données en ayant besoin.
-		 *\param[in]	elapsedTime	Le temps écoulé depuis la dernière frame.
+		 *\brief			Met à jour la passe de rendu, au niveau CPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API virtual void update( CpuUpdater & updater );
 		/**
 		 *\~english
-		 *\brief		Updated needed data.
-		 *\param[in]	elapsedTime	The time elapsed since last frame.
+		 *\brief			Updates the render pass, GPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour les données en ayant besoin.
-		 *\param[in]	elapsedTime	Le temps écoulé depuis la dernière frame.
+		 *\brief			Met à jour la passe de rendu, au niveau GPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API virtual void update( GpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Visitor acceptance function.
+		 *\param		visitor	The ... visitor.
 		 *\~french
 		 *\brief		Fonction d'acceptation de visiteur.
+		 *\param		visitor	Le ... visiteur.
 		 */
 		C3D_API virtual void accept( PipelineVisitorBase & visitor ) = 0;
 		/**
@@ -135,23 +143,23 @@ namespace castor3d
 		*	Accesseurs.
 		**/
 		/**@{*/
-		inline CommandsSemaphoreArray const & getCommands()const
+		CommandsSemaphoreArray const & getCommands()const
 		{
 			return m_commands;
 		}
 
-		inline bool isAfterToneMapping()const
+		bool isAfterToneMapping()const
 		{
 			return m_kind == Kind::eSRGB;
 		}
 
-		inline TextureLayout const & getResult()const
+		TextureLayout const & getResult()const
 		{
 			CU_Require( m_result );
 			return *m_result;
 		}
 
-		inline castor::String const & getFullName()const
+		castor::String const & getFullName()const
 		{
 			return m_fullName;
 		}
@@ -165,10 +173,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialisation function.
+		 *\param[in]	device	The GPU device.
 		 *\param[in]	timer	The render pass timer.
 		 *\return		\p true if ok.
 		 *\~french
 		 *\brief		Fonction d'initialisation.
+		 *\param[in]	device	Le device GPU.
 		 *\param[in]	timer	Le timer de la passe de rendu.
 		 *\return		\p true if ok.
 		 */
@@ -177,8 +187,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
+		 *\param[in]	device	The GPU device.
 		 *\~french
 		 *\brief		Fonction de nettoyage.
+		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API virtual void doCleanup( castor3d::RenderDevice const & device ) = 0;
 		/**

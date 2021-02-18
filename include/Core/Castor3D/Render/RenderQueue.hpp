@@ -27,12 +27,12 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	renderPass	The parent render pass.
-		 *\param[in]	opaque		Tells if this render queue is for opaque nodes.
+		 *\param[in]	mode		The render mode for this render queue.
 		 *\param[in]	ignored		The geometries attached to this node will be ignored in the render.
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	renderPass	La passe de rendu parente.
-		 *\param[in]	opaque		Dit si cette file de rendu est pour les noeuds opaques.
+		 *\param[in]	mode		Le mode de rendu de cette file de rendu.
 		 *\param[in]	ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 */
 		C3D_API RenderQueue( SceneRenderPass & renderPass
@@ -47,25 +47,37 @@ namespace castor3d
 		C3D_API void cleanup();
 		/**
 		 *\~english
-		 *\brief		Updates the render nodes.
+		 *\brief			Updates the render nodes.
+		 *\param[in,out]	shadowMaps	Receives the shadow maps used in the render pass.
 		 *\~french
-		 *\brief		Met à jour les noeuds de rendu.
+		 *\brief			Met à jour les noeuds de rendu.
+		 *\param[in,out]	shadowMaps	Reçoit les shadow maps utilisées par la passe de rendu.
 		 */
 		C3D_API void update( ShadowMapLightTypeArray & shadowMaps );
 		/**
 		 *\~english
-		 *\brief		Updates the render nodes.
+		 *\brief			Updates the render nodes.
+		 *\param[in,out]	shadowMaps	Receives the shadow maps used in the render pass.
+		 *\param[in]		viewport	The viewport restraining the render pass.
+		 *\param[in]		scissor		The scissors restraining the render pass.
 		 *\~french
-		 *\brief		Met à jour les noeuds de rendu.
+		 *\brief			Met à jour les noeuds de rendu.
+		 *\param[in,out]	shadowMaps	Reçoit les shadow maps utilisées par la passe de rendu.
+		 *\param[in]		viewport	Le viewport restreignant par la passe de rendu.
+		 *\param[in]		scissor		Le scissor restreignant par la passe de rendu.
 		 */
 		C3D_API void update( ShadowMapLightTypeArray & shadowMaps
 			, VkViewport const & viewport
 			, VkRect2D const & scissor );
 		/**
 		 *\~english
-		 *\brief		Updates the render nodes.
+		 *\brief			Updates the render nodes.
+		 *\param[in,out]	shadowMaps	Receives the shadow maps used in the render pass.
+		 *\param[in]		scissor		The scissors restraining the render pass.
 		 *\~french
-		 *\brief		Met à jour les noeuds de rendu.
+		 *\brief			Met à jour les noeuds de rendu.
+		 *\param[in,out]	shadowMaps	Reçoit les shadow maps utilisées par la passe de rendu.
+		 *\param[in]		scissor		Le scissor restreignant par la passe de rendu.
 		 */
 		C3D_API void update( ShadowMapLightTypeArray & shadowMaps
 			, VkRect2D const & scissor );
@@ -80,29 +92,30 @@ namespace castor3d
 		*/
 		/**@{*/
 		C3D_API bool hasNodes()const;
-		inline SceneRenderNodes & getAllRenderNodes()const
+
+		SceneRenderNodes & getAllRenderNodes()const
 		{
 			CU_Require( m_renderNodes );
 			return *m_renderNodes;
 		}
 
-		inline SceneCulledRenderNodes & getCulledRenderNodes()const
+		SceneCulledRenderNodes & getCulledRenderNodes()const
 		{
 			CU_Require( m_culledRenderNodes );
 			return *m_culledRenderNodes;
 		}
 
-		inline ashes::CommandBuffer const & getCommandBuffer()const
+		ashes::CommandBuffer const & getCommandBuffer()const
 		{
 			return *m_commandBuffer;
 		}
 
-		inline RenderMode getMode()const
+		RenderMode getMode()const
 		{
 			return m_mode;
 		}
 
-		inline SceneNode const * getIgnoredNode()const
+		SceneNode const * getIgnoredNode()const
 		{
 			return m_ignoredNode;
 		}

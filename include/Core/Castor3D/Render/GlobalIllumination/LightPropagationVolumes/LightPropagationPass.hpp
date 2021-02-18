@@ -41,16 +41,20 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	device		The render device.
-		 *\param[in]	name		The pass name.
-		 *\param[in]	occlusion	Tells if the pass uses occlusion map.
-		 *\param[in]	gridSize	The grid size.
+		 *\param[in]	device		The GPU device.
+		 *\param[in]	prefix		The pass name's prefix.
+		 *\param[in]	suffix		The pass name's suffix.
+		 *\param[in]	occlusion	Enable occlusion or not.
+		 *\param[in]	gridSize	The grid dimensions.
+		 *\param[in]	blendMode	The blend mode.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	device		Le render device.
-		 *\param[in]	name		Le nom de la passe.
-		 *\param[in]	occlusion	Dit si la passe utilise une map d'occlusion.
+		 *\param[in]	device		Le device GPU.
+		 *\param[in]	prefix		Le préfixe du nom de la passe.
+		 *\param[in]	suffix		Le suffixe du nom de la passe.
+		 *\param[in]	occlusion	Active l'occlusion ou pas.
 		 *\param[in]	gridSize	Les dimensions de la grille.
+		 *\param[in]	blendMode	Le mode de mélange.
 		 */
 		C3D_API LightPropagationPass( RenderDevice const & device
 			, castor::String const & prefix
@@ -58,18 +62,6 @@ namespace castor3d
 			, bool occlusion
 			, uint32_t gridSize
 			, BlendMode blendMode );
-		/**
-		*\~english
-		*\brief
-		*	Creates the entries for one pass.
-		*\param[in] writes
-		*	The pass descriptor writes.
-		*\~french
-		*\brief
-		*	Crée les entrées pour une passe.
-		*\param[in] writes
-		*	Les descriptor writes de la passe.
-		*/
 		C3D_API void registerPassIO( TextureUnit const * occlusion
 			, LightVolumePassResult const & injection
 			, LpvGridConfigUbo const & lpvConfigUbo
@@ -86,11 +78,13 @@ namespace castor3d
 		C3D_API void initialisePasses();
 		/**
 		 *\~english
-		 *\brief		Renders the SSGI pass.
+		 *\brief		Renders the pass.
 		 *\param[in]	toWait	The semaphore from the previous render pass.
+		 *\param[in]	index	The pass index.
 		 *\~french
-		 *\brief		Dessine la passe SSGI.
+		 *\brief		Dessine la passe.
 		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
+		 *\param[in]	index	L'indice de la passe.
 		 */
 		C3D_API ashes::Semaphore const & compute( ashes::Semaphore const & toWait
 			, uint32_t index )const;

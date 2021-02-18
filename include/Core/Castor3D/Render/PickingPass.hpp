@@ -55,11 +55,13 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Picks a geometry at given mouse position.
+		 *\param[in]	device		The GPU device.
 		 *\param[in]	position	The position in the pass.
 		 *\param[in]	camera		The viewing camera.
 		 *\return		PickingPass::PickNodeType::eNone if nothing was picked.
 		 *\~french
 		 *\brief		Sélectionne la géométrie à la position de souris donnée.
+		 *\param[in]	device		Le device GPU.
 		 *\param[in]	position	La position dans la passe.
 		 *\param[in]	camera		La caméra regardant la scène.
 		 *\return		PickingPass::PickNodeType si rien n'a été pické.
@@ -78,37 +80,37 @@ namespace castor3d
 		/**@{*/
 		C3D_API TextureFlags getTexturesMask()const override;
 
-		inline GeometrySPtr getPickedGeometry()const
+		GeometrySPtr getPickedGeometry()const
 		{
 			return m_geometry.lock();
 		}
 
-		inline BillboardBaseSPtr getPickedBillboard()const
+		BillboardBaseSPtr getPickedBillboard()const
 		{
 			return m_billboard.lock();
 		}
 
-		inline SubmeshSPtr getPickedSubmesh()const
+		SubmeshSPtr getPickedSubmesh()const
 		{
 			return m_submesh.lock();
 		}
 
-		inline uint32_t getPickedFace()const
+		uint32_t getPickedFace()const
 		{
 			return m_face;
 		}
 
-		inline ashes::ImageView const & getResult()const
+		ashes::ImageView const & getResult()const
 		{
 			return m_colourView;
 		}
 
-		inline PickNodeType getPickedNodeType()const
+		PickNodeType getPickedNodeType()const
 		{
 			return m_pickNodeType;
 		}
 
-		inline bool isPicking()const
+		bool isPicking()const
 		{
 			return m_picking;
 		}
@@ -122,110 +124,38 @@ namespace castor3d
 			, ashes::CommandBuffer const & commandBuffer );
 		PickNodeType doPick( castor::Point4f const & pixel
 			, SceneCulledRenderNodes & nodes );
-		/**
-		 *\copydoc		castor3d::RenderPass::doRender
-		 */
 		void doUpdate( SubmeshStaticRenderNodesPtrByPipelineMap & nodes );
-		/**
-		 *\copydoc		castor3d::RenderPass::doRender
-		 */
 		void doUpdate( StaticRenderNodesPtrByPipelineMap & nodes );
-		/**
-		 *\copydoc		castor3d::RenderPass::doRenderAnimatedSubmeshes
-		 */
 		void doUpdate( SkinningRenderNodesPtrByPipelineMap & nodes );
-		/**
-		 *\copydoc		castor3d::RenderPass::doRender
-		 */
 		void doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes );
-		/**
-		 *\copydoc		castor3d::RenderPass::doRenderAnimatedSubmeshes
-		 */
 		void doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes );
-		/**
-		 *\copydoc		castor3d::RenderPass::doRender
-		 */
 		void doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes );
-		/**
-		 *\copydoc		castor3d::RenderPass::doInitialise
-		 */
 		bool doInitialise( RenderDevice const & device
 			, castor::Size const & size )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doCleanup
-		 */
 		void doCleanup( RenderDevice const & device )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doFillUboDescriptor
-		 */
 		void doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 			, BillboardListRenderNode & node )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doFillUboDescriptor
-		 */
 		void doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 			, SubmeshRenderNode & node )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
-		 */
 		void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, BillboardListRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
-		 */
 		void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, SubmeshRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doUpdate
-		 */
 		void doUpdate( RenderQueueArray & queues )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
-		 */
 		virtual ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetGeometryShaderSource
-		 */
 		ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetPhongPixelShaderSource
-		 */
 		ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
-		 */
 		ShaderPtr doGetPbrMRPixelShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
-		 */
 		ShaderPtr doGetPbrSGPixelShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetPixelShaderSource
-		 */
 		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const;
-		/**
-		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
-		 */
 		void doUpdatePipeline( RenderPipeline & pipeline )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
-		 */
 		ashes::VkDescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doCreateDepthStencilState
-		 */
 		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doCreateBlendState
-		 */
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doUpdateFlags
-		 */
 		void doUpdateFlags( PipelineFlags & flags )const override;
 
 	public:

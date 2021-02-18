@@ -232,15 +232,15 @@ namespace castor3d
 		C3D_API bool parseFile( castor::Path const & path
 			, SceneFileContextSPtr context );
 
-		inline ScenePtrStrMap::iterator scenesBegin()
+		ScenePtrStrMap::iterator scenesBegin()
 		{
 			return m_mapScenes.begin();
 		}
-		inline ScenePtrStrMap::const_iterator scenesBegin()const
+		ScenePtrStrMap::const_iterator scenesBegin()const
 		{
 			return m_mapScenes.begin();
 		}
-		inline ScenePtrStrMap::const_iterator scenesEnd()const
+		ScenePtrStrMap::const_iterator scenesEnd()const
 		{
 			return m_mapScenes.end();
 		}

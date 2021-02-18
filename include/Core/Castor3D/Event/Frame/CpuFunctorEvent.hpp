@@ -38,10 +38,8 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Applies the event
-		 *\remarks		Executes the function
 		 *\~french
 		 *\brief		Traite l'évènement
-		 *\remarks		Exécute la fonction
 		 */
 		void apply()override
 		{

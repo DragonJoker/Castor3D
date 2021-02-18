@@ -36,14 +36,16 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine			The engine.
-		 *\param[in]	size			The render area dimensions.
-		 *\param[in]	depthBuffer		The non linearised depth buffer.
+		 *\param[in]	engine		The engine.
+		 *\param[in]	prefix		The pass name's prefix.
+		 *\param[in]	size		The render area dimensions.
+		 *\param[in]	depthBuffer	The non linearised depth buffer.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine			Le moteur.
-		 *\param[in]	size			Les dimensions de la zone de rendu.
-		 *\param[in]	depthBuffer		Le tampon de profondeur non linéarisé.
+		 *\param[in]	engine		Le moteur.
+		 *\param[in]	prefix		Le préfixe du nom de la passe.
+		 *\param[in]	size		Les dimensions de la zone de rendu.
+		 *\param[in]	depthBuffer	Le tampon de profondeur non linéarisé.
 		 */
 		C3D_API LineariseDepthPass( Engine & engine
 			, castor::String const & prefix
@@ -60,34 +62,44 @@ namespace castor3d
 		C3D_API void cleanup( RenderDevice const & device );
 		/**
 		 *\~english
-		 *\brief		Updates clipping info.
-		 *\param[in]	viewport	The viewport containing the clipping data.
+		 *\brief			Updates the render pass, CPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour les informations de clipping.
-		 *\param[in]	viewport	Le viewport contenant les données de clipping.
+		 *\brief			Met à jour la passe de rendu, au niveau CPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
-		 *\brief		Updates clipping info.
+		 *\brief			Updates the render pass, GPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour les informations de clipping.
+		 *\brief			Met à jour la passe de rendu, au niveau GPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Linearises depth buffer.
+		 *\param[in]	device	The GPU device.
+		 *\param[in]	toWait	The semaphore to wait for.
 		 *\~french
 		 *\brief		Linéarise le tampon de profondeur.
+		 *\param[in]	device	Le device GPU.
+		 *\param[in]	toWait	Le sémaphore à attendre.
 		 */
 		C3D_API ashes::Semaphore const & linearise( RenderDevice const & device
 			, ashes::Semaphore const & toWait )const;
 		/**
 		 *\~english
+		 *\param[in]	device	The GPU device.
 		 *\param[in]	timer	The render timer.
+		 *\param[in]	index	The render index
 		 *\return		The commands used to render the pass.
 		 *\~french
+		 *\param[in]	device	Le device GPU.
 		 *\param[in]	timer	Le timer de rendu.
+		 *\param[in]	index	L'index de la passe.
 		 *\return		Les commandes utilisées pour rendre la passe.
 		 */
 		C3D_API CommandsSemaphore getCommands( RenderDevice const & device
@@ -106,12 +118,12 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline TextureUnit const & getResult()const
+		TextureUnit const & getResult()const
 		{
 			return m_result;
 		}
 
-		inline ashes::CommandBuffer const & getCommands()const
+		ashes::CommandBuffer const & getCommands()const
 		{
 			return *m_commandBuffer;
 		}

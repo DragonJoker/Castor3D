@@ -33,18 +33,18 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	scene	The scene.
-		 *\param[in]	name	The shadow map name.
-		 *\param[in]	result	The shadow map pass result.
-		 *\param[in]	passes	The passes used to render map.
-		 *\param[in]	count	The passes count.
+		 *\param[in]	scene		The scene.
+		 *\param[in]	lightType	The light source type.
+		 *\param[in]	result		The shadow map pass result.
+		 *\param[in]	passes		The passes used to render map.
+		 *\param[in]	count		The passes count.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	scene	La scène.
-		 *\param[in]	name	Le nom de la shadow map.
-		 *\param[in]	result	Le résultat de la passe de shadow map.
-		 *\param[in]	passes	Les passes utilisées pour rendre cette texture.
-		 *\param[in]	count	Le nombre de passes.
+		 *\param[in]	scene		La scène.
+		 *\param[in]	lightType	Le type de source lumineuse.
+		 *\param[in]	result		Le résultat de la passe de shadow map.
+		 *\param[in]	passes		Les passes utilisées pour rendre cette texture.
+		 *\param[in]	count		Le nombre de passes.
 		 */
 		C3D_API ShadowMap( Scene & scene
 			, LightType lightType
@@ -61,59 +61,61 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the frame buffer and light type specific data.
+		 *\param[in]	device	The GPU device.
 		 *\~french
 		 *\brief		Initialise le frame buffer et les données spécifiques au type de source lumineuse.
+		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API bool initialise( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Cleans up the frame buffer and light type specific data.
+		 *\param[in]	device	The GPU device.
 		 *\~french
 		 *\brief		Nettoie le frame buffer et les données spécifiques au type de source lumineuse.
+		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API void cleanup( RenderDevice const & device );
 		/**
 		*\~english
 		*\brief
 		*	Visitor acceptance function.
+		*\param visitor
+		*	The visitor.
 		*\~french
 		*\brief
 		*	Fonction d'acceptation de visiteur.
+		*\param visitor
+		*	Le visiteur.
 		*/
 		C3D_API void accept( PipelineVisitorBase & visitor );
 		/**
 		 *\~english
-		 *\brief		Updates the passes, selecting the lights that will project shadows.
-		 *\remarks		Gather the render queues, for further update.
-		 *\param[in]	camera	The viewer camera.
-		 *\param[out]	queues	Receives the render queues needed for the rendering of the frame.
-		 *\param[out]	light	The light source.
-		 *\param[out]	index	The map index.
+		 *\brief			Updates the render pass, CPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour les passes, en sélectionnant les lumières qui projetteront une ombre.
-		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
-		 *\param[in]	camera	La caméra de l'observateur.
-		 *\param[out]	queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
-		 *\param[out]	light	La source lumineuse.
-		 *\param[out]	index	L'indice de la texture.
+		 *\brief			Met à jour la passe de rendu, au niveau CPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API virtual void update( CpuUpdater & updater ) = 0;
 		/**
 		 *\~english
-		 *\brief		Updates VRAM data.
-		 *\param[out]	index	The map index.
+		 *\brief			Updates the render pass, GPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour les données VRAM.
-		 *\param[out]	index	L'indice de la texture.
+		 *\brief			Met à jour la passe de rendu, au niveau GPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API virtual void update( GpuUpdater & updater ) = 0;
 		/**
 		 *\~english
 		 *\brief		Renders the light's shadow map.
+		 *\param[in]	device	The GPU device.
 		 *\param[out]	toWait	The semaphore from previous render pass.
 		 *\param[out]	index	The map index.
 		 *\~french
 		 *\brief		Dessine la shadow map de la lumière.
+		 *\param[in]	device	Le device GPU.
 		 *\param[out]	toWait	Le sémaphore de la précédente passe de rendu.
 		 *\param[out]	index	L'indice de la texture.
 		 */
@@ -135,22 +137,22 @@ namespace castor3d
 		C3D_API virtual ashes::ImageView const & getView( SmTexture texture
 			, uint32_t index = 0u )const;
 
-		inline ShadowMapResult const & getShadowPassResult()const
+		ShadowMapResult const & getShadowPassResult()const
 		{
 			return m_result;
 		}
 		
-		inline ShadowMapResult & getShadowPassResult()
+		ShadowMapResult & getShadowPassResult()
 		{
 			return m_result;
 		}
 
-		inline uint32_t getCount()const
+		uint32_t getCount()const
 		{
 			return m_count;
 		}
 
-		inline bool isInitialised()const
+		bool isInitialised()const
 		{
 			return m_initialised;
 		}

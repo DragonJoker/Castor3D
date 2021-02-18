@@ -11,15 +11,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/**
-	\author 	Sylvain DOREMUS
-	\version	0.11.0
-	\date		16/05/2018
-	\~english
-	\brief		Render technique effect visitor base class.
-	\~french
-	\brief		Classe de base d'un visiteur de technique de rendu.
-	*/
 	class RenderTechniqueVisitor
 		: public PipelineVisitor
 	{

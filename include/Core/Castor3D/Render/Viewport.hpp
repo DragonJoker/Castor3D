@@ -52,12 +52,10 @@ namespace castor3d
 		C3D_API ~Viewport();
 		/**
 		 *\~english
-		 *\brief		Renders the viewport specifics
-		 *\remarks		Applies the perspective
+		 *\brief		Applies the perspective
 		 *\return		\p true if the frustum view has been modified
 		 *\~french
-		 *\brief		Rend le viewport
-		 *\remarks		Applique la perspective
+		 *\brief		Applique la perspective
 		 *\return		\p true si le frustum de vue a été modifié
 		 */
 		C3D_API bool update();
@@ -66,14 +64,14 @@ namespace castor3d
 		 *\brief		Builds a centered perspective viewport.
 		 *\param[in]	fovy	Y Field of View.
 		 *\param[in]	aspect	Width / Height ratio.
-		 *\param[in]	near	Near clipping plane value.
-		 *\param[in]	far		Far clipping plane value.
+		 *\param[in]	nearZ	Near clipping plane value.
+		 *\param[in]	farZ	Far clipping plane value.
 		 *\~french
 		 *\brief		Construit vioewport en perspective centrée.
 		 *\param[in]	fovy	Angle de vision Y.
 		 *\param[in]	aspect	Ratio Largeur / Hauteur.
-		 *\param[in]	near	Position du plan proche.
-		 *\param[in]	far		Position du plan éloigné.
+		 *\param[in]	nearZ	Position du plan proche.
+		 *\param[in]	farZ	Position du plan éloigné.
 		 */
 		C3D_API void setPerspective( castor::Angle const & fovy
 			, float aspect
@@ -86,16 +84,16 @@ namespace castor3d
 		 *\param[in]	right	Right clipping plane value.
 		 *\param[in]	bottom	Bottom clipping plane value.
 		 *\param[in]	top		Top clipping plane value.
-		 *\param[in]	near	Near clipping plane value.
-		 *\param[in]	far		Far clipping plane value.
+		 *\param[in]	nearZ	Near clipping plane value.
+		 *\param[in]	farZ	Far clipping plane value.
 		 *\~french
 		 *\brief		Construit une matrice de projection en perspective non centrée.
 		 *\param[in]	left	Position du plan gauche.
 		 *\param[in]	right	Position du plan droit.
 		 *\param[in]	bottom	Position du plan bas.
 		 *\param[in]	top		Position du plan haut.
-		 *\param[in]	near	Position du plan proche.
-		 *\param[in]	far		Position du plan éloigné.
+		 *\param[in]	nearZ	Position du plan proche.
+		 *\param[in]	farZ	Position du plan éloigné.
 		 */
 		C3D_API void setFrustum( float left
 			, float right
@@ -110,16 +108,16 @@ namespace castor3d
 		 *\param[in]	right	Right clipping plane value.
 		 *\param[in]	bottom	Bottom clipping plane value.
 		 *\param[in]	top		Top clipping plane value.
-		 *\param[in]	near	Near clipping plane value.
-		 *\param[in]	far		Far clipping plane value.
+		 *\param[in]	nearZ	Near clipping plane value.
+		 *\param[in]	farZ	Far clipping plane value.
 		 *\~french
 		 *\brief		Construit une matrice de projection orthographique.
 		 *\param[in]	left	Position du plan gauche.
 		 *\param[in]	right	Position du plan droit.
 		 *\param[in]	bottom	Position du plan bas.
 		 *\param[in]	top		Position du plan haut.
-		 *\param[in]	near	Position du plan proche.
-		 *\param[in]	far		Position du plan éloigné.
+		 *\param[in]	nearZ	Position du plan proche.
+		 *\param[in]	farZ	Position du plan éloigné.
 		 */
 		C3D_API void setOrtho( float left
 			, float right
@@ -152,92 +150,92 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline const castor::Size & getSize()const
+		const castor::Size & getSize()const
 		{
 			return m_size;
 		}
 
-		inline const castor::Position & getPosition()const
+		const castor::Position & getPosition()const
 		{
 			return m_position;
 		}
 
-		inline ViewportType getType()const
+		ViewportType getType()const
 		{
 			return m_type;
 		}
 
-		inline float getRatio()const
+		float getRatio()const
 		{
 			return m_ratio;
 		}
 
-		inline float getNear()const
+		float getNear()const
 		{
 			return m_near.value();
 		}
 
-		inline float getFar()const
+		float getFar()const
 		{
 			return m_far.value();
 		}
 
-		inline castor::Angle const & getFovY()const
+		castor::Angle const & getFovY()const
 		{
 			return m_fovY.value();
 		}
 
-		inline float getLeft()const
+		float getLeft()const
 		{
 			return m_left.value();
 		}
 
-		inline float getRight()const
+		float getRight()const
 		{
 			return m_right.value();
 		}
 
-		inline float getTop()const
+		float getTop()const
 		{
 			return m_top.value();
 		}
 
-		inline float getBottom()const
+		float getBottom()const
 		{
 			return m_bottom.value();
 		}
 
-		inline uint32_t getWidth()const
+		uint32_t getWidth()const
 		{
 			return m_size.getWidth();
 		}
 
-		inline uint32_t getHeight()const
+		uint32_t getHeight()const
 		{
 			return m_size.getHeight();
 		}
 
-		inline bool isModified()const
+		bool isModified()const
 		{
 			return m_modified;
 		}
 
-		inline castor::Matrix4x4f const & getProjection()const
+		castor::Matrix4x4f const & getProjection()const
 		{
 			return m_projection;
 		}
 
-		inline VkViewport const & getViewport()const
+		VkViewport const & getViewport()const
 		{
 			return m_viewport;
 		}
 
-		inline VkRect2D const & getScissor()const
+		VkRect2D const & getScissor()const
 		{
 			return m_scissor;
 		}
 
-		inline Engine const & getEngine()const
+		Engine const & getEngine()const
 		{
 			return m_engine;
 		}
@@ -251,52 +249,52 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		inline void setPosition( const castor::Position & value )
+		void setPosition( const castor::Position & value )
 		{
 			m_position = value;
 		}
 
-		inline void updateType( ViewportType value )
+		void updateType( ViewportType value )
 		{
 			m_type = value;
 		}
 
-		inline void updateRatio( float value )
+		void updateRatio( float value )
 		{
 			m_ratio = value;
 		}
 
-		inline void updateNear( float value )
+		void updateNear( float value )
 		{
 			m_near = value;
 		}
 
-		inline void updateFar( float value )
+		void updateFar( float value )
 		{
 			m_far = value;
 		}
 
-		inline void updateFovY( castor::Angle const & value )
+		void updateFovY( castor::Angle const & value )
 		{
 			m_fovY = value;
 		}
 
-		inline void updateLeft( float value )
+		void updateLeft( float value )
 		{
 			m_left = value;
 		}
 
-		inline void updateRight( float value )
+		void updateRight( float value )
 		{
 			m_right = value;
 		}
 
-		inline void updateTop( float value )
+		void updateTop( float value )
 		{
 			m_top = value;
 		}
 
-		inline void updateBottom( float value )
+		void updateBottom( float value )
 		{
 			m_bottom = value;
 		}

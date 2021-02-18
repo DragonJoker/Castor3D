@@ -17,14 +17,16 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor for opaque nodes.
-		 *\param[in]	name		This pass name.
+		 *\param[in]	prefix		This pass name's prefix.
+		 *\param		device		The GPU device.
 		 *\param[in]	matrixUbo	The scene matrix UBO.
 		 *\param[in]	culler		The render pass culler.
 		 *\param[in]	ssaoConfig	The SSAO configuration.
 		 *\param[in]	depthBuffer	The target depth buffer.
 		 *\~french
 		 *\brief		Constructeur pour les noeuds opaques.
-		 *\param[in]	name		Le nom de cette passe.
+		 *\param[in]	prefix		Le préfixe du nom de cette passe.
+		 *\param[in]	device		Le device GPU.
 		 *\param[in]	matrixUbo	L'UBO de matrices de la scène.
 		 *\param[in]	culler		Le culler pour cette passe.
 		 *\param[in]	ssaoConfig	La configuration du SSAO.
@@ -46,10 +48,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Renders nodes.
-		 *\param[out]	toWait	The semaphore to wait for.
+		 *\param		device		The GPU device.
+		 *\param[out]	semaphores	The semaphores to wait for.
 		 *\~french
 		 *\brief		Dessine les noeuds.
-		 *\param[out]	toWait	Le sémaphore à attendre.
+		 *\param[in]	device		Le device GPU.
+		 *\param[out]	semaphores	Les sémaphores à attendre.
 		 */
 		C3D_API ashes::Semaphore const & render( RenderDevice const & device
 			, ashes::SemaphoreCRefArray const & semaphores );
@@ -66,64 +70,25 @@ namespace castor3d
 		C3D_API void doCleanup( RenderDevice const & device )override;
 
 	private:
-		/**
-		 *\copydoc		castor3d::RenderPass::doUpdateFlags
-		 */
 		void doUpdateFlags( PipelineFlags & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
-		 */
 		void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, BillboardListRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
-		 */
 		void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, SubmeshRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
-		 */
 		ashes::VkDescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
-		 */
-		C3D_API void doUpdatePipeline( RenderPipeline & pipeline)override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doCreateDepthStencilState
-		 */
+		void doUpdatePipeline( RenderPipeline & pipeline)override;
 		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doCreateBlendState
-		 */
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
-		 */
-		C3D_API ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetGeometryShaderSource
-		 */
-		C3D_API ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetPhongPixelShaderSource
-		 */
-		C3D_API ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
-		 */
-		C3D_API ShaderPtr doGetPbrMRPixelShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
-		 */
+		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
+		ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
+		ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;
+		ShaderPtr doGetPbrMRPixelShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetPbrSGPixelShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetPixelShaderSource
-		 */
-		C3D_API ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const;
+		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const;
 
 	private:
 		ashes::FrameBufferPtr m_frameBuffer;

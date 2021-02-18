@@ -33,9 +33,6 @@ namespace castor3d
 	{
 	public:
 		/**
-		\author		Sylvain DOREMUS
-		\version	0.7.0.0
-		\date		19/12/2012
 		\~english
 		\brief		Internal struct holding a complete frame buffer
 		\~french
@@ -84,24 +81,30 @@ namespace castor3d
 		C3D_API ~RenderTarget();
 		/**
 		 *\~english
-		 *\brief		Updates culling.
+		 *\brief			Updates the render pass, CPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour le culling.
+		 *\brief			Met à jour la passe de rendu, au niveau CPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
-		 *\brief		Updates GPU data.
+		 *\brief			Updates the render pass, GPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour les données GPU.
+		 *\brief			Met à jour la passe de rendu, au niveau GPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Renders one frame.
+		 *\param[in]	device	The GPU device.
 		 *\param[out]	info	Receives the render informations.
 		 *\~french
 		 *\brief		Dessine une frame.
+		 *\param[in]	device	Le device GPU.
 		 *\param[out]	info	Reçoit les informations de rendu.
 		 */
 		C3D_API void render( RenderDevice const & device
@@ -109,15 +112,19 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialisation function.
+		 *\param[in]	device	The GPU device.
 		 *\~french
 		 *\brief		Fonction d'initialisation.
+		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API void initialise( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
+		 *\param[in]	device	The GPU device.
 		 *\~french
 		 *\brief		Fonction de nettoyage.
+		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API void cleanup( RenderDevice const & device );
 		/**

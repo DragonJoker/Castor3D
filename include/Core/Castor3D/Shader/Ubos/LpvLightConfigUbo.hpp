@@ -61,20 +61,9 @@ namespace castor3d
 
 		C3D_API void initialise( RenderDevice const & device );
 		C3D_API void cleanup();
-		/**
-		 *\~english
-		 *\brief		Updates the UBO from given values.
-		 *\~french
-		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 */
+
 		C3D_API void cpuUpdate( Light const & light
 			, float lpvCellSize );
-		/**
-		 *\~english
-		 *\brief		Updates the UBO from given values.
-		 *\~french
-		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 */
 		C3D_API void cpuUpdate( DirectionalLight const & light
 			, uint32_t cascadeIndex
 			, float lpvCellSize );

@@ -78,7 +78,6 @@ namespace castor3d
 		, RenderDevice const & device
 		, Scene & scene
 		, Camera & camera
-		, ashes::ImageView colourView
 		, MatrixUbo & matrixUbo
 		, VoxelizerUbo & voxelizerUbo
 		, VoxelSceneData const & voxelConfig )

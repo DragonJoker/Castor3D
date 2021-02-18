@@ -54,7 +54,7 @@ namespace castor3d
 		C3D_API virtual ~SkeletonAnimationInstanceObject();
 		/**
 		 *\~english
-		 *\brief		adds a child to this object.
+		 *\brief		Adds a child to this object.
 		 *\remarks		The child's transformations are affected by this object's ones.
 		 *\param[in]	object	The child.
 		 *\~french
@@ -78,7 +78,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		La transfomation finale des animations du de cet objet.
 		 */
-		inline castor::Matrix4x4f const & getFinalTransform()const
+		castor::Matrix4x4f const & getFinalTransform()const
 		{
 			return m_finalTransform;
 		}
@@ -88,7 +88,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le tableau d'enfants.
 		 */
-		inline SkeletonAnimationInstanceObjectPtrArray const & getChildren()const
+		SkeletonAnimationInstanceObjectPtrArray const & getChildren()const
 		{
 			return m_children;
 		}
@@ -98,7 +98,7 @@ namespace castor3d
 		 *\~french
 		 *\return		L'objet d'animation.
 		 */
-		inline SkeletonAnimationObject const & getObject()const
+		SkeletonAnimationObject const & getObject()const
 		{
 			return m_animationObject;
 		}

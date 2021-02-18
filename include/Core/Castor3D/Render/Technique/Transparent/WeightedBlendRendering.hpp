@@ -19,6 +19,7 @@ namespace castor3d
 		 *\~english
 		 *\brief		Initialises deferred rendering related stuff.
 		 *\param[in]	engine			The engine.
+		 *\param[in]	device			The GPU device.
 		 *\param[in]	transparentPass	The transparent nodes render pass.
 		 *\param[in]	depthView		The target depth buffer.
 		 *\param[in]	colourView		The target colour buffer.
@@ -26,9 +27,12 @@ namespace castor3d
 		 *\param[in]	size			The render dimensions.
 		 *\param[in]	scene			The rendered scene.
 		 *\param[in]	hdrConfigUbo	The HDR configuration UBO.
+		 *\param[in]	gpInfoUbo		The geometry pass UBO.
+		 *\param[in]	lpvResult		The LPV result.
 		 *\~french
 		 *\brief		Initialise les données liées au deferred rendering.
 		 *\param[in]	engine			Le moteur.
+		 *\param[in]	device			Le device GPU.
 		 *\param[in]	transparentPass	La passe de rendu des noeuds transparents.
 		 *\param[in]	depthView		Le tampon de profondeur cible.
 		 *\param[in]	colourView		Le tampon de couleurs cible.
@@ -36,6 +40,8 @@ namespace castor3d
 		 *\param[in]	size			Les dimensions du rendu.
 		 *\param[in]	scene			La scène rendue.
 		 *\param[in]	hdrConfigUbo	L'UBO de configuration HDR.
+		 *\param[in]	gpInfoUbo		L'UBO de la passe géométrique.
+		 *\param[in]	lpvResult		Le résultat du LPV.
 		 */
 		WeightedBlendRendering( Engine & engine
 			, RenderDevice const & device
@@ -50,41 +56,31 @@ namespace castor3d
 			, LightVolumePassResult const & lpvResult );
 		/**
 		 *\~english
-		 *\brief		Renders opaque nodes.
-		 *\param[out]	info		Receives the render informations.
-		 *\param[in]	scene		The rendered scene.
-		 *\param[in]	camera		The viewer camera.
-		 *\param[in]	jitter		The jittering value.
+		 *\brief			Updates the render pass, CPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Dessine les noeuds opaques.
-		 *\param[out]	info		Reçoit les informations de rendu.
-		 *\param[in]	scene		La scène rendue.
-		 *\param[in]	camera		La caméra par laquelle la scène est rendue.
-		 *\param[in]	jitter		La valeur de jittering.
+		 *\brief			Met à jour la passe de rendu, au niveau CPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		void update( CpuUpdater & updater );
 		/**
 		 *\~english
-		 *\brief		Renders opaque nodes.
-		 *\param[out]	info		Receives the render informations.
-		 *\param[in]	scene		The rendered scene.
-		 *\param[in]	camera		The viewer camera.
-		 *\param[in]	jitter		The jittering value.
+		 *\brief			Updates the render pass, GPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Dessine les noeuds opaques.
-		 *\param[out]	info		Reçoit les informations de rendu.
-		 *\param[in]	scene		La scène rendue.
-		 *\param[in]	camera		La caméra par laquelle la scène est rendue.
-		 *\param[in]	jitter		La valeur de jittering.
+		 *\brief			Met à jour la passe de rendu, au niveau GPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		void update( GpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Renders opaque nodes.
+		 *\param[in]	device	The GPU device.
 		 *\param[in]	scene	The rendered scene.
 		 *\param[in]	toWait	The semaphore to wait for.
 		 *\~french
 		 *\brief		Dessine les noeuds opaques.
+		 *\param[in]	device	Le device GPU.
 		 *\param[in]	scene	La scène rendue.
 		 *\param[in]	toWait	Le sémaphore à attendre.
 		 */

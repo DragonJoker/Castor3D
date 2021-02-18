@@ -53,9 +53,11 @@ namespace castor3d
 		C3D_API ~Light();
 		/**
 		 *\~english
-		 *\brief		Updates the light.
+		 *\brief			CPU Update.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met la source à jour.
+		 *\brief			Mise à jour CPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( CpuUpdater & updater );
 		/**

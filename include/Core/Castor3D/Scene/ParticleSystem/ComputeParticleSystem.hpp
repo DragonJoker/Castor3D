@@ -81,7 +81,7 @@ namespace castor3d
 		 *\brief		Définit les dimensions des groupes de travail, tels que définis dans le compute shader.
 		 *\param[in]	sizes	Les dimensions.
 		 */
-		inline void setGroupSizes( castor::Point3i sizes )
+		void setGroupSizes( castor::Point3i sizes )
 		{
 			m_worgGroupSizes = sizes;
 		}
@@ -91,7 +91,7 @@ namespace castor3d
 		 *\~french
 		 *\return		\p false si le programme de mise à jour n'a pas été défini.
 		 */
-		inline bool hasUpdateProgram()const
+		bool hasUpdateProgram()const
 		{
 			return m_program != nullptr;
 		}
@@ -101,7 +101,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le programme de mise à jour.
 		 */
-		inline ShaderProgram const & getUpdateProgram()const
+		ShaderProgram const & getUpdateProgram()const
 		{
 			return *m_program;
 		}

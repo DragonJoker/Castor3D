@@ -141,18 +141,20 @@ namespace castor3d
 		C3D_API void remove( Key const & name );
 		/**
 		 *\~english
-		 *\brief		Updates the dirty lights.
+		 *\brief			Updates the render pass, CPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour les sources lumineuses modifiées.
+		 *\brief			Met à jour la passe de rendu, au niveau CPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
-		 *\brief		Updates the lights texture.
-		 *\param[in]	camera	The camera used to tell if a light is applicable or not.
+		 *\brief			Updates the render pass, GPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour la texture de sources lumineuses.
-		 *\param[in]	camera	La caméra utilisée pour déterminer si une source lumineuse est applicable ou pas.
+		 *\brief			Met à jour la passe de rendu, au niveau GPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( GpuUpdater & updater );
 		/**
@@ -185,7 +187,7 @@ namespace castor3d
 		 *\param[in]	type	Le type de lumière.
 		 *\return		Le compte.
 		 */
-		inline uint32_t getLightsCount( LightType type )const
+		uint32_t getLightsCount( LightType type )const
 		{
 			return uint32_t( getLights( type ).size() );
 		}
@@ -199,7 +201,7 @@ namespace castor3d
 		 *\param[in]	type	Le type de lumière.
 		 *\return		Les lumières.
 		 */
-		inline LightsArray getLights( LightType type )const
+		LightsArray getLights( LightType type )const
 		{
 			return m_typeSortedLights[size_t( type )];
 		}

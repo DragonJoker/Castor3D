@@ -54,7 +54,7 @@ namespace castor3d
 		 *\param[in]	clean		Le nettoyeur d'objet.
 		 *\param[in]	merge		Le fusionneur de collection d'objets.
 		 */
-		inline MaterialCache( Engine & engine
+		MaterialCache( Engine & engine
 			, Producer && produce
 			, Initialiser && initialise
 			, Cleaner && clean
@@ -72,14 +72,18 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		inline ~MaterialCache()
+		~MaterialCache()
 		{
 		}
 		/**
 		 *\~english
 		 *\brief		Intialises the default material.
+		 *\param[in]	device	The GPU device.
+		 *\param[in]	type	The materials type.
 		 *\~french
 		 *\brief		Initialise le matériau par défaut.
+		 *\param[in]	device	Le device GPU.
+		 *\param[in]	type	Le type des matériaux.
 		 */
 		C3D_API void initialise( RenderDevice const & device
 			, MaterialType type );
@@ -99,16 +103,20 @@ namespace castor3d
 		C3D_API void clear();
 		/**
 		 *\~english
-		 *\brief		Updates the pass buffer.
+		 *\brief			Updates the render pass, CPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour le tampon de passes.
+		 *\brief			Met à jour la passe de rendu, au niveau CPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
-		 *\brief		Updates the pass buffer.
+		 *\brief			Updates the render pass, GPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour le tampon de passes.
+		 *\brief			Met à jour la passe de rendu, au niveau GPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( GpuUpdater & updater );
 		/**
@@ -150,7 +158,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Récupère le matériau par défaut
 		 */
-		inline MaterialSPtr getDefaultMaterial()const
+		MaterialSPtr getDefaultMaterial()const
 		{
 			return m_defaultMaterial;
 		}
@@ -160,7 +168,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le tampon de passes.
 		 */
-		inline PassBuffer const & getPassBuffer()const
+		PassBuffer const & getPassBuffer()const
 		{
 			CU_Require( m_passBuffer );
 			return *m_passBuffer;
@@ -171,7 +179,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le tampon de configurations de textures.
 		 */
-		inline TextureConfigurationBuffer const & getTextureBuffer()const
+		TextureConfigurationBuffer const & getTextureBuffer()const
 		{
 			CU_Require( m_textureBuffer );
 			return *m_textureBuffer;

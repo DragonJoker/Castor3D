@@ -34,30 +34,36 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine			The engine.
-		 *\param[in]	scene			The rendered scene.
-		 *\param[in]	gp				The geometry pass result.
-		 *\param[in]	ssao			The SSAO image.
-		 *\param[in]	lightDiffuse	The diffuse result of the lighting pass.
-		 *\param[in]	lightSpecular	The specular result of the lighting pass.
-		 *\param[in]	lightIndirect	The indirect result of the lighting pass.
-		 *\param[in]	result			The texture receiving the result.
-		 *\param[in]	sceneUbo		The scene UBO.
-		 *\param[in]	gpInfoUbo		The geometry pass UBO.
-		 *\param[in]	hdrConfigUbo	The HDR UBO.
+		 *\param[in]	engine					The engine.
+		 *\param[in]	device					The GPU device.
+		 *\param[in]	scene					The rendered scene.
+		 *\param[in]	gp						The geometry pass result.
+		 *\param[in]	ssao					The SSAO image.
+		 *\param[in]	subsurfaceScattering	The subsurface scattering result.
+		 *\param[in]	lightDiffuse			The diffuse result of the lighting pass.
+		 *\param[in]	lightSpecular			The specular result of the lighting pass.
+		 *\param[in]	lightIndirectDiffuse	The indirect diffuse result of the lighting pass.
+		 *\param[in]	lightIndirectSpecular	The indirect specular result of the lighting pass.
+		 *\param[in]	result					The texture receiving the result.
+		 *\param[in]	sceneUbo				The scene UBO.
+		 *\param[in]	gpInfoUbo				The geometry pass UBO.
+		 *\param[in]	hdrConfigUbo			The HDR UBO.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine			Le moteur.
-		 *\param[in]	scene			La scène rendue.
-		 *\param[in]	gp				Le résultat de la passe géométrique.
-		 *\param[in]	ssao			L'image SSAO.
-		 *\param[in]	lightDiffuse	Le résultat diffus de la passe d'éclairage.
-		 *\param[in]	lightSpecular	Le résultat spéculaire de la passe d'éclairage.
-		 *\param[in]	lightIndirect	Le résultat indirect de la passe d'éclairage.
-		 *\param[in]	result			La texture recevant le résultat.
-		 *\param[in]	sceneUbo		L'UBO de la scène.
-		 *\param[in]	gpInfoUbo		L'UBO de la passe géométrique.
-		 *\param[in]	hdrConfigUbo	L'UBO HDR.
+		 *\param[in]	engine					Le moteur.
+		 *\param[in]	device					Le device GPU.
+		 *\param[in]	scene					La scène rendue.
+		 *\param[in]	gp						Le résultat de la passe géométrique.
+		 *\param[in]	ssao					L'image SSAO.
+		 *\param[in]	subsurfaceScattering	Le résultat du subsurface scattering.
+		 *\param[in]	lightDiffuse			Le résultat diffus de la passe d'éclairage.
+		 *\param[in]	lightSpecular			Le résultat spéculaire de la passe d'éclairage.
+		 *\param[in]	lightIndirectDiffuse	Le résultat indirect diffus de la passe d'éclairage.
+		 *\param[in]	lightIndirectSpecular	Le résultat indirect spéculaire de la passe d'éclairage.
+		 *\param[in]	result					La texture recevant le résultat.
+		 *\param[in]	sceneUbo				L'UBO de la scène.
+		 *\param[in]	gpInfoUbo				L'UBO de la passe géométrique.
+		 *\param[in]	hdrConfigUbo			L'UBO HDR.
 		 */
 		C3D_API OpaqueResolvePass( Engine & engine
 			, RenderDevice const & device
@@ -78,9 +84,11 @@ namespace castor3d
 		C3D_API void cleanup();
 		/**
 		 *\~english
-		 *\brief		Updates the configuration UBO.
+		 *\brief			Updates the render pass, GPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour l'UBO de configuration.
+		 *\brief			Met à jour la passe de rendu, au niveau GPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( GpuUpdater & updater );
 		/**

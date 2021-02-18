@@ -37,14 +37,31 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	renderSystem	The RenderSystem.
+		 *\param		device	The current device.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	renderSystem	Le RenderSystem.
+		 *\param		device	Le device actuel.
 		 */
 		C3D_API explicit BillboardUboPools( RenderDevice const & device );
-
+		/**
+		 *\~english
+		 *\brief		Registers a render pass for nodes registration.
+		 *\param		renderPass	The render pass.
+		 *\~french
+		 *\brief		Enregistre une render pass, pour l'enregistrement des nodes.
+		 *\param		renderPass	La render pass.
+		 */
 		C3D_API void registerPass( SceneRenderPass const & renderPass );
+		/**
+		 *\~english
+		 *\brief		Unregisters a render pass.
+		 *\param		renderPass		The render pass.
+		 *\param		instanceMult	The instance multiplier, to know where the nodes are registered.
+		 *\~french
+		 *\brief		Désenregistre une render pass.
+		 *\param		renderPass		La render pass.
+		 *\param		instanceMult	Le multiplicateur d'instances, pour savoir où sont enregistrés les nodes.
+		 */
 		C3D_API void unregisterPass( SceneRenderPass const * renderPass
 			, uint32_t instanceMult );
 		/**
@@ -57,24 +74,34 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Register the entries for given billboard.
+		 *\param		billboard	The instance.
 		 *\~french
 		 *\brief		Enregistre les entrées pour le billboard donné.
+		 *\param		billboard	L'instance.
 		 */
 		void registerElement( BillboardBase & billboard );
 		/**
 		 *\~english
 		 *\brief		Removes the entries for given billboard.
+		 *\param		billboard	The instance.
 		 *\~french
 		 *\brief		Supprime les entrées pour le billboard donné.
+		 *\param		billboard	L'instance.
 		 */
 		void unregisterElement( BillboardBase & billboard );
 		/**
 		 *\~english
 		 *\brief		Cleans up the UBO pools.
 		 *\remarks		Assumes the entry has been previously created.
+		 *\param		billboard		The instance.
+		 *\param		pass			The instance material pass.
+		 *\param		instanceMult	The instance multiplier, to know where to register the nodes.
 		 *\~french
 		 *\brief		Nettoie les pools d'UBO.
 		 *\remarks		Considère que l'entrée a été préalablement créée.
+		 *\param		billboard		L'instance.
+		 *\param		pass			La passe de matériau de l'instance.
+		 *\param		instanceMult	Le multiplicateur d'instances, pour savoir où enregistrer les nodes.
 		 */
 		C3D_API PoolsEntry getUbos( BillboardBase const & billboard
 			, Pass const & pass
@@ -85,7 +112,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Vide les pools.
 		 */
-		C3D_API void clear( RenderDevice const & device );
+		C3D_API void clear();
 
 	private:
 		void doCreateEntry( BillboardBase const & billboard

@@ -48,10 +48,12 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	name		The node's name.
+		 *\param[in]	parent		The parent node.
 		 *\param[in]	scene		The parent scene.
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	name		Le nom du noeud.
+		 *\param[in]	parent		Le noeud parent.
 		 *\param[in]	scene		La scène parente.
 		 */
 		C3D_API SceneNode( castor::String const & name
@@ -300,7 +302,7 @@ namespace castor3d
 		 *\brief		Récupère la position relative
 		 *\return		La valeur
 		 */
-		inline castor::Point3f const & getPosition()const
+		castor::Point3f const & getPosition()const
 		{
 			return m_position;
 		}
@@ -312,7 +314,7 @@ namespace castor3d
 		 *\brief		Récupère l'orientation relative
 		 *\return		La valeur
 		 */
-		inline castor::Quaternion const & getOrientation()const
+		castor::Quaternion const & getOrientation()const
 		{
 			return m_orientation;
 		}
@@ -324,7 +326,7 @@ namespace castor3d
 		 *\brief		Récupère l'échelle relative
 		 *\return		La valeur
 		 */
-		inline castor::Point3f const & getScale()const
+		castor::Point3f const & getScale()const
 		{
 			return m_scale;
 		}
@@ -338,7 +340,7 @@ namespace castor3d
 		 *\param[out]	axis	Reçoit l'axe
 		 *\param[out]	angle	Reçoit l'angle
 		 */
-		inline void getAxisAngle( castor::Point3f & axis, castor::Angle & angle )const
+		void getAxisAngle( castor::Point3f & axis, castor::Angle & angle )const
 		{
 			m_orientation.toAxisAngle( axis, angle );
 		}
@@ -350,7 +352,7 @@ namespace castor3d
 		 *\brief		Récupère le statut d'affichabilité
 		 *\return		La valeur
 		 */
-		inline bool isDisplayable()const
+		bool isDisplayable()const
 		{
 			return m_displayable;
 		}
@@ -362,7 +364,7 @@ namespace castor3d
 		 *\brief		Récupère le noeud parent
 		 *\return		La valeur
 		 */
-		inline SceneNode * getParent()const
+		SceneNode * getParent()const
 		{
 			return m_parent;
 		}
@@ -374,7 +376,7 @@ namespace castor3d
 		 *\brief		Récupère la map des enfants
 		 *\return		La valeur
 		 */
-		inline SceneNodePtrStrMap const & getChildren()const
+		SceneNodePtrStrMap const & getChildren()const
 		{
 			return m_children;
 		}
@@ -386,7 +388,7 @@ namespace castor3d
 		 *\brief		Récupère un itérateur sur le premier enfant
 		 *\return		La valeur
 		 */
-		inline node_iterator childrenBegin()
+		node_iterator childrenBegin()
 		{
 			return m_children.begin();
 		}
@@ -398,7 +400,7 @@ namespace castor3d
 		 *\brief		Récupère un itérateur sur le premier enfant
 		 *\return		La valeur
 		 */
-		inline node_const_iterator childrenBegin()const
+		node_const_iterator childrenBegin()const
 		{
 			return m_children.begin();
 		}
@@ -410,7 +412,7 @@ namespace castor3d
 		 *\brief		Récupère un itérateur sur apèrs le dernier enfant
 		 *\return		La valeur
 		 */
-		inline node_iterator childrenEnd()
+		node_iterator childrenEnd()
 		{
 			return m_children.end();
 		}
@@ -422,7 +424,7 @@ namespace castor3d
 		 *\brief		Récupère un itérateur sur apèrs le dernier enfant
 		 *\return		La valeur
 		 */
-		inline node_const_iterator childrenEnd()const
+		node_const_iterator childrenEnd()const
 		{
 			return m_children.end();
 		}
@@ -434,7 +436,7 @@ namespace castor3d
 		 *\brief		Récupère la map des objets
 		 *\return		La valeur
 		 */
-		inline MovableObjectArray const & getObjects()const
+		MovableObjectArray const & getObjects()const
 		{
 			return m_objects;
 		}
@@ -446,7 +448,7 @@ namespace castor3d
 		 *\brief		Récupère un itérateur sur le premier objet attaché
 		 *\return		La valeur
 		 */
-		inline object_iterator objectsBegin()
+		object_iterator objectsBegin()
 		{
 			return m_objects.begin();
 		}
@@ -458,7 +460,7 @@ namespace castor3d
 		 *\brief		Récupère un itérateur sur le premier objet attaché
 		 *\return		La valeur
 		 */
-		inline object_const_iterator objectsBegin()const
+		object_const_iterator objectsBegin()const
 		{
 			return m_objects.begin();
 		}
@@ -470,7 +472,7 @@ namespace castor3d
 		 *\brief		Récupère un itérateur sur après le dernier objet attaché
 		 *\return		La valeur
 		 */
-		inline object_iterator objectsEnd()
+		object_iterator objectsEnd()
 		{
 			return m_objects.end();
 		}
@@ -482,7 +484,7 @@ namespace castor3d
 		 *\brief		Récupère un itérateur sur après le dernier objet attaché
 		 *\return		La valeur
 		 */
-		inline object_const_iterator objectsEnd()const
+		object_const_iterator objectsEnd()const
 		{
 			return m_objects.end();
 		}
@@ -496,7 +498,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom de l'enfant
 		 *\return		La valeur, nullptr si non trouvé
 		 */
-		inline SceneNodeSPtr getChild( castor::String const & name )const
+		SceneNodeSPtr getChild( castor::String const & name )const
 		{
 			return ( m_children.find( name ) != m_children.end() ? m_children.find( name )->second.lock() : nullptr );
 		}
@@ -508,7 +510,7 @@ namespace castor3d
 		 *\brief		Récupère le statut de modification des matrices de transformation
 		 *\return		La valeur
 		 */
-		inline bool isModified()const
+		bool isModified()const
 		{
 			return m_mtxChanged || m_derivedMtxChanged;
 		}
@@ -518,7 +520,7 @@ namespace castor3d
 		 *\~french
 		 *\return		L'ID du noeud.
 		 */
-		inline uint64_t getId()const
+		uint64_t getId()const
 		{
 			return m_id;
 		}

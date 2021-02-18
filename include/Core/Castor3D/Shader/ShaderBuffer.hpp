@@ -19,12 +19,14 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine		The engine.
+		 *\param[in]	device		The GPU device.
 		 *\param[in]	size		The buffer size.
 		 *\param[in]	name		The shader buffer name.
 		 *\param[in]	tboFormat	The format wanted for the TBO.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
+		 *\param[in]	device		Le device GPU.
 		 *\param[in]	size		La taille du tampon.
 		 *\param[in]	name		Le nom du tampon shader.
 		 *\param[in]	tboFormat	Le format voulu pour le TBO.
@@ -96,7 +98,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Le pointeur sur le tampon.
 		 */
-		inline uint8_t * getPtr()
+		uint8_t * getPtr()
 		{
 			return m_data.data();
 		}
@@ -106,7 +108,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		La taille du tampon.
 		 */
-		inline VkDeviceSize getSize()
+		VkDeviceSize getSize()
 		{
 			return m_size;
 		}
@@ -116,7 +118,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Le type de descripteur du tampon.
 		 */
-		inline VkDescriptorType getType()const
+		VkDescriptorType getType()const
 		{
 			return m_type;
 		}

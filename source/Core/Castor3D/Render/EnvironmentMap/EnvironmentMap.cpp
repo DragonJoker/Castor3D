@@ -354,15 +354,6 @@ namespace castor3d
 		return *result;
 	}
 
-	void EnvironmentMap::debugDisplay( castor::Size const & size, uint32_t index )
-	{
-		//Size displaySize{ 128u, 128u };
-		//Position position{ int32_t( displaySize.getWidth() * 4 * index ), int32_t( displaySize.getHeight() * 4 ) };
-		//getEngine()->getRenderSystem()->getCurrentContext()->renderTextureCube( position
-		//	, displaySize
-		//	, *m_environmentMap.getTexture() );
-	}
-
 	VkExtent3D const & EnvironmentMap::getSize()const
 	{
 		return m_environmentMap->getTexture()->getDimensions();

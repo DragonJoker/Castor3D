@@ -24,12 +24,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Specified constructor
-		 *\param[in]	name	The group name
 		 *\param[in]	scene	The scene
+		 *\param[in]	name	The group name
 		 *\~french
 		 *\brief		Constructeur spécifié
-		 *\param[in]	name	Le nom du groupe
 		 *\param[in]	scene	La scène
+		 *\param[in]	name	Le nom du groupe
 		 */
 		C3D_API AnimatedObjectGroup( castor::String const & name
 			, Scene & scene );
@@ -167,9 +167,11 @@ namespace castor3d
 			, castor::Milliseconds value );
 		/**
 		 *\~english
-		 *\brief		Updates all animated objects
+		 *\brief			CPU Update.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour toutes les animations
+		 *\brief			Mise à jour CPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( CpuUpdater & updater );
 		/**
@@ -226,7 +228,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La map d'animations.
 		 */
-		inline GroupAnimationMap const & getAnimations()const
+		GroupAnimationMap const & getAnimations()const
 		{
 			return m_animations;
 		}
@@ -236,7 +238,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les objets animés.
 		 */
-		inline AnimatedObjectPtrStrMap const & getObjects()const
+		AnimatedObjectPtrStrMap const & getObjects()const
 		{
 			return m_objects;
 		}

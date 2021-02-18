@@ -28,15 +28,25 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine			The engine.
+		 *\param[in]	device			The GPU device.
+		 *\param[in]	lightCache		The lights cache.
+		 *\param[in]	lightType		The light source type.
 		 *\param[in]	size			The render area dimensions.
-		 *\param[in]	linearisedDepth	The linearised depth buffer.
-		 *\param[in]	scene			The scene buffer.
+		 *\param[in]	gpInfo			The GBuffer configuration UBO.
+		 *\param[in]	gpResult		The GBuffer.
+		 *\param[in]	smResult		The shadow map.
+		 *\param[in]	downscaleResult	The downscaled result.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine			Le moteur.
+		 *\param[in]	device			Le device GPU.
+		 *\param[in]	lightCache		Le cache de sources lumineuses.
+		 *\param[in]	lightType		Le type de source lumineuse.
 		 *\param[in]	size			Les dimensions de la zone de rendu.
-		 *\param[in]	linearisedDepth	Le tampon de profondeur linéarisé.
-		 *\param[in]	scene			Le tampon de scène.
+		 *\param[in]	gpInfo			L'UBO de configuration du GBuffer.
+		 *\param[in]	gpResult		Le GBuffer.
+		 *\param[in]	smResult		La shadow map.
+		 *\param[in]	downscaleResult	Le résultat downscaled.
 		 */
 		C3D_API RsmGIPass( Engine & engine
 			, RenderDevice const & device
@@ -49,10 +59,10 @@ namespace castor3d
 			, TextureUnitArray const & downscaleResult );
 		/**
 		 *\~english
-		 *\brief		Renders the SSGI pass.
+		 *\brief		Renders the pass.
 		 *\param[in]	toWait	The semaphore from the previous render pass.
 		 *\~french
-		 *\brief		Dessine la passe SSGI.
+		 *\brief		Dessine la passe.
 		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
 		 */
 		C3D_API ashes::Semaphore const & compute( ashes::Semaphore const & toWait )const;

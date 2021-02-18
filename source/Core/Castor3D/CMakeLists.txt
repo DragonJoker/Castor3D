@@ -1788,8 +1788,8 @@ endif ()
 install_target( ${PROJECT_NAME} api_dll ${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME} )
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Core" )
 add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
-target_add_doc( ${PROJECT_NAME} "French" "*.h *.hpp *.dox" )
-target_add_doc( ${PROJECT_NAME} "English" "*.h *.hpp *.dox" )
+target_add_doc_ex( ${PROJECT_NAME} "French" "*.h *.hpp" ${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME} )
+target_add_doc_ex( ${PROJECT_NAME} "English" "*.h *.hpp" ${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME} )
 
 # Copying core zip data files
 file(

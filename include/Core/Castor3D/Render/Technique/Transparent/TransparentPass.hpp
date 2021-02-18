@@ -20,18 +20,24 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	matrixUbo	The scene matrices UBO.
-		 *\param[in]	culler		The culler for this pass.
-		 *\param[in]	config		The SSAO configuration.
+		 *\param[in]	matrixUbo		The scene matrices UBO.
+		 *\param[in]	culler			The culler for this pass.
+		 *\param[in]	ssaoConfig		The SSAO configuration.
+		 *\param[in]	lpvConfigUbo	The LPV configuration UBO.
+		 *\param[in]	llpvConfigUbo	The Layered LPV configuration UBO.
+		 *\param[in]	vctConfigUbo	The VCT configuration UBO.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	matrixUbo	L'UBO de matrices de la scène.
-		 *\param[in]	culler		Le culler pour cette passe.
-		 *\param[in]	config		La configuration du SSAO.
+		 *\param[in]	matrixUbo		L'UBO de matrices de la scène.
+		 *\param[in]	culler			Le culler pour cette passe.
+		 *\param[in]	ssaoConfig		La configuration du SSAO.
+		 *\param[in]	lpvConfigUbo	L'UBO de configuration des LPV.
+		 *\param[in]	llpvConfigUbo	L'UBO de configuration des Layered LPV.
+		 *\param[in]	vctConfigUbo	L'UBO de configuration du VCT.
 		 */
 		C3D_API TransparentPass( MatrixUbo & matrixUbo
 			, SceneCuller & culler
-			, SsaoConfig const & config
+			, SsaoConfig const & ssaoConfig
 			, LpvGridConfigUbo const & lpvConfigUbo
 			, LayeredLpvGridConfigUbo const & llpvConfigUbo
 			, VoxelizerUbo const & vctConfigUbo );
@@ -45,9 +51,11 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the render pass.
+		 *\param[in]	device		The GPU device.
 		 *\param[in]	wbpResult	The accumulation pass buffers.
 		 *\~french
 		 *\brief		Initialise la passe de rendu.
+		 *\param[in]	device		Le device GPU.
 		 *\param[in]	wbpResult	Les tampons de la passe d'accumulation.
 		 */
 		C3D_API void initialiseRenderPass( RenderDevice const & device
@@ -59,9 +67,11 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Renders transparent nodes.
+		 *\param[in]	device	The GPU device.
 		 *\param[in]	toWait	The semaphore to wait for.
 		 *\~french
 		 *\brief		Dessine les noeuds transparents.
+		 *\param[in]	device	Le device GPU.
 		 *\param[in]	toWait	Le sémaphore à attendre.
 		 */
 		C3D_API ashes::Semaphore const & render( RenderDevice const & device
@@ -77,41 +87,20 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline void setDepthFormat( VkFormat value )
+		void setDepthFormat( VkFormat value )
 		{
 			m_depthFormat = value;
 		}
 		/**@}*/
 
 	private:
-		/**
-		 *\copydoc		castor3d::RenderPass::doInitialise
-		 */
 		bool doInitialise( RenderDevice const & device
 			, castor::Size const & size )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doCreateDepthStencilState
-		 */
 		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doCreateBlendState
-		 */
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetPhongPixelShaderSource
-		 */
 		ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
-		 */
 		ShaderPtr doGetPbrMRPixelShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
-		 */
 		ShaderPtr doGetPbrSGPixelShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
-		 */
 		void doUpdatePipeline( RenderPipeline & pipeline )override;
 
 	private:

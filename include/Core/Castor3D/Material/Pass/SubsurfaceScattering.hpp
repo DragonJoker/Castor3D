@@ -25,7 +25,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La largeur du filtre Gaussien.
 		 */
-		inline float getGaussianWidth()const
+		float getGaussianWidth()const
 		{
 			return m_gaussianWidth;
 		}
@@ -37,7 +37,7 @@ namespace castor3d
 		 *\brief		Définit la largeur du filtre Gaussien.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setGaussianWidth( float value )
+		void setGaussianWidth( float value )
 		{
 			m_gaussianWidth = value;
 			onChanged( *this );
@@ -48,7 +48,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La force du scattering.
 		 */
-		inline float getStrength()const
+		float getStrength()const
 		{
 			return m_strength;
 		}
@@ -60,7 +60,7 @@ namespace castor3d
 		 *\brief		Définit la force du scattering.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setStrength( float value )
+		void setStrength( float value )
 		{
 			m_strength = value;
 			onChanged( *this );
@@ -73,7 +73,7 @@ namespace castor3d
 		 *\brief		Ajoute un facteur au profil de transmission.
 		 *\param[in]	value	La valeur à ajouter.
 		 */
-		inline void addProfileFactor( castor::Point4f const & value )
+		void addProfileFactor( castor::Point4f const & value )
 		{
 			m_profileFactors.push_back( value );
 			onChanged( *this );
@@ -84,7 +84,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le nombre de facteurs du profil de transmission.
 		 */
-		inline uint32_t getProfileSize()const
+		uint32_t getProfileSize()const
 		{
 			return uint32_t( m_profileFactors.size() );
 		}
@@ -94,7 +94,7 @@ namespace castor3d
 		 *\~french
 		 *\return		L'itérateur sur le début du profil de transmission.
 		 */
-		inline auto begin()
+		auto begin()
 		{
 			return m_profileFactors.begin();
 		}
@@ -104,7 +104,7 @@ namespace castor3d
 		 *\~french
 		 *\return		L'itérateur sur le début du profil de transmission.
 		 */
-		inline auto begin()const
+		auto begin()const
 		{
 			return m_profileFactors.begin();
 		}
@@ -114,7 +114,7 @@ namespace castor3d
 		 *\~french
 		 *\return		L'itérateur sur la fin du profil de transmission.
 		 */
-		inline auto end()
+		auto end()
 		{
 			return m_profileFactors.end();
 		}
@@ -124,7 +124,7 @@ namespace castor3d
 		 *\~french
 		 *\return		L'itérateur sur la fin du profil de transmission.
 		 */
-		inline auto end()const
+		auto end()const
 		{
 			return m_profileFactors.end();
 		}

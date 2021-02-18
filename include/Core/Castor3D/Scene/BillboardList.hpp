@@ -28,12 +28,14 @@ namespace castor3d
 		 *\param[in]	scene			The parent scene.
 		 *\param[in]	node			The parent scene node.
 		 *\param[in]	vertexLayout	The layout for the vertex buffer.
+		 *\param[in]	vertexStride	The vertex stride.
 		 *\param[in]	vertexBuffer	The vertex buffer.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	scene			La scène parente.
 		 *\param[in]	node			Le noeud de scène parent.
 		 *\param[in]	vertexLayout	Le layout du tampon de sommets.
+		 *\param[in]	vertexStride	Le stride du tampon de sommets.
 		 *\param[in]	vertexBuffer	Le tampon de sommets.
 		 */
 		C3D_API BillboardBase( Scene & scene
@@ -51,10 +53,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises GPU side elements.
+		 *\param		device	The current device.
 		 *\param[in]	count	The elements count.
 		 *\return		\p true if all is OK.
 		 *\~french
 		 *\brief		Initialise les éléments GPU.
+		 *\param		device	Le device actuel.
 		 *\param[in]	count	Le nombre d'éléments.
 		 *\return		\p true si tout s'est bien passé.
 		 */
@@ -63,8 +67,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Cleans GPU side elements up
+		 *\param		device	The current device.
 		 *\~french
 		 *\brief		Nettoie les elements GPU
+		 *\param		device	Le device actuel.
 		 */
 		C3D_API void cleanup( RenderDevice const & device );
 		/**
@@ -78,9 +84,11 @@ namespace castor3d
 		C3D_API void sortByDistance( castor::Point3f const & cameraPosition );
 		/**
 		 *\~english
-		 *\brief		Updates the vertex buffer.
+		 *\brief			Updates the render pass, GPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour le tampon de sommets.
+		 *\brief			Met à jour la passe de rendu, au niveau GPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( GpuUpdater & updater );
 		/**
@@ -235,13 +243,13 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	name		The name.
-		 *\param[in]	scene		The parent scene.
+		 *\param[in]	name	The name.
+		 *\param[in]	scene	The parent scene.
 		 *\param[in]	parent	The parent scene node.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	name		Le nom.
-		 *\param[in]	scene		La scene parente.
+		 *\param[in]	name	Le nom.
+		 *\param[in]	scene	La scene parente.
 		 *\param[in]	parent	Le noeud de scène parent.
 		 */
 		C3D_API BillboardList( castor::String const & name
@@ -250,23 +258,23 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	name		The name.
-		 *\param[in]	scene		The parent scene.
-		 *\param[in]	parent	The parent scene node.
+		 *\param[in]	name	The name.
+		 *\param[in]	scene	The parent scene.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	name		Le nom.
-		 *\param[in]	scene		La scene parente.
-		 *\param[in]	parent	Le noeud de scène parent.
+		 *\param[in]	name	Le nom.
+		 *\param[in]	scene	La scene parente.
 		 */
 		C3D_API BillboardList( castor::String const & name
 			, Scene & scene );
 		/**
 		 *\~english
 		 *\brief		Initialises GPU side elements
+		 *\param		device	The current device.
 		 *\return		\p true if all is OK
 		 *\~french
 		 *\brief		Initialise les elements GPU
+		 *\param		device	Le device actuel.
 		 *\return		\p true si tout s'est bien passe
 		 */
 		C3D_API bool initialise( RenderDevice const & device );
@@ -300,8 +308,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Attaches the movable object to a node
+		 *\param[in]	node	The parent scene node.
 		 *\~french
 		 *\brief		Attache l'object à un noeud
+		 *\param[in]	node	Le noeud de scène parent.
 		 */
 		C3D_API void attachTo( SceneNode & node )override;
 		/**

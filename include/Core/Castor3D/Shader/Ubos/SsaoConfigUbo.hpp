@@ -116,15 +116,19 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the UBO.
+		 *\param[in]	device	The GPU device.
 		 *\~french
 		 *\brief		Initialise l'UBO.
+		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API void initialise( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
+		 *\param[in]	device	The GPU device.
 		 *\~french
 		 *\brief		Fonction de nettoyage.
+		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API void cleanup( RenderDevice const & device );
 		/**

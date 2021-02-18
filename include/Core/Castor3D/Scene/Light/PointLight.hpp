@@ -37,9 +37,11 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Creation function, used by Factory.
+		 *\param[in]	light	The parent Light.
 		 *\return		A light source.
 		 *\~french
 		 *\brief		Fonction de création utilisée par Factory.
+		 *\param[in]	light	La Light parente.
 		 *\return		Une source lumineuse.
 		 */
 		C3D_API static LightCategoryUPtr create( Light & light );
@@ -78,20 +80,14 @@ namespace castor3d
 		 *\~french
 		 *\return		Les composantes d'attenuation.
 		 */
-		inline castor::Point3f const & getAttenuation()const
+		castor::Point3f const & getAttenuation()const
 		{
 			return m_attenuation.value();
 		}
 
 	private:
-		/**
-		 *\copydoc		castor3d::LightCategory::updateNode
-		 */
-		C3D_API void updateNode( SceneNode const & node )override;
-		/**
-		 *\copydoc		castor::LightCategory::doBind
-		 */
-		C3D_API void doBind( castor::Point4f * buffer )const override;
+		void updateNode( SceneNode const & node )override;
+		void doBind( castor::Point4f * buffer )const override;
 
 	private:
 		friend class Scene;

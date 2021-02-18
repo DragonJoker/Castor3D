@@ -26,14 +26,14 @@ namespace castor3d
 {
 	namespace rq
 	{
-	/**
-	*\~english
-	*\brief
-	*	Tells how the texture coordinates from the vertex buffer are built.
-	*\~french
-	*\brief
-	*	Définit comment sont construites les coordonnées de texture du vertex buffer.
-	*/
+		/**
+		*\~english
+		*\brief
+		*	Tells how the texture coordinates from the vertex buffer are built.
+		*\~french
+		*\brief
+		*	Définit comment sont construites les coordonnées de texture du vertex buffer.
+		*/
 		struct Texcoord
 		{
 			/*
@@ -153,10 +153,10 @@ namespace castor3d
 		*	The shader program.
 		*\param[in] renderPass
 		*	The render pass to use.
-		*\param[in] bindings
-		*	The already existing bindings.
 		*\param[in] pushRanges
 		*	The push constant ranges.
+		*\param[in] dsState
+		*	The depth and stencil state.
 		*\~french
 		*\brief
 		*	Crée le pipeline de rendu.
@@ -168,10 +168,10 @@ namespace castor3d
 		*	Le programme shader.
 		*\param[in] renderPass
 		*	La passe de rendu à utiliser.
-		*\param[in] bindings
-		*	Les attaches déjà existantes.
 		*\param[in] pushRanges
 		*	Les intervalles de push constants.
+		*\param[in] dsState
+		*	L'état de profondeur et stencil.
 		*/
 		C3D_API void createPipeline( VkExtent2D const & size
 			, castor::Position const & position
@@ -211,12 +211,10 @@ namespace castor3d
 		*	The render position.
 		*\param[in] program
 		*	The shader program.
-		*\param[in] writes
-		*	The pass descriptor writes.
 		*\param[in] renderPass
 		*	The render pass to use.
-		*\param[in] bindings
-		*	The already existing bindings.
+		*\param[in] writes
+		*	The pass descriptor writes.
 		*\param[in] pushRanges
 		*	The push constant ranges.
 		*\param[in] dsState
@@ -230,12 +228,10 @@ namespace castor3d
 		*	La position du rendu.
 		*\param[in] program
 		*	Le programme shader.
-		*\param[in] writes
-		*	Les descriptor writes de la passe.
 		*\param[in] renderPass
 		*	La passe de rendu à utiliser.
-		*\param[in] bindings
-		*	Les attaches déjà existantes.
+		*\param[in] writes
+		*	Les descriptor writes de la passe.
 		*\param[in] pushRanges
 		*	Les intervalles de push constants.
 		*\param[in] dsState
@@ -272,17 +268,13 @@ namespace castor3d
 		*	Prpares the commands to render the quad, inside given command buffer.
 		*\param[in,out] commandBuffer
 		*	The command buffer.
-		*\param[in] descriptorSetIndex
-		*	The render descriptor set index.
 		*\~french
 		*\brief
 		*	Prépare les commandes de dessin du quad, dans le tampon de commandes donné.
 		*\param[in,out] commandBuffer
 		*	Le tampon de commandes.
-		*\param[in] descriptorSetIndex
-		*	L'indice du descriptor set.
 		*/
-		inline void registerPass( ashes::CommandBuffer & commandBuffer )const
+		void registerPass( ashes::CommandBuffer & commandBuffer )const
 		{
 			registerPass( commandBuffer, 0u );
 		}
@@ -320,12 +312,12 @@ namespace castor3d
 		*	Creates a descriptor write for uniform buffer.
 		*\param[in] buffer
 		*	The uniform buffer.
+		*\param[in] dstBinding
+		*	The binding inside the descriptor set.
 		*\param[in] elemOffset
 		*	The offset, expressed in element count.
 		*\param[in] elemRange
 		*	The range, expressed in element count.
-		*\param[in] dstBinding
-		*	The binding inside the descriptor set.
 		*\param[in] dstArrayElement
 		*	The array element index.
 		*\~french
@@ -333,12 +325,12 @@ namespace castor3d
 		*	Crée un descriptor write pour un uniform buffer.
 		*\param[in] buffer
 		*	L'uniform buffer.
+		*\param[in] dstBinding
+		*	Le binding dans le descriptor set.
 		*\param[in] elemOffset
 		*	L'offset, exprimé en nombre d'éléments.
 		*\param[in] elemRange
 		*	L'intervalle, exprimé en nombre d'éléments.
-		*\param[in] dstBinding
-		*	Le binding dans le descriptor set.
 		*\param[in] dstArrayElement
 		*	L'indice dans le tableau d'éléments.
 		*/
@@ -381,12 +373,12 @@ namespace castor3d
 		*	Creates a descriptor write for storage buffer.
 		*\param[in] storageBuffer
 		*	The storage buffer.
-		*\param[in] elemOffset
-		*	The offset, expressed in element count.
-		*\param[in] elemRange
-		*	The range, expressed in element count.
 		*\param[in] dstBinding
 		*	The binding inside the descriptor set.
+		*\param[in] byteOffset
+		*	The offset, expressed in bytes.
+		*\param[in] byteRange
+		*	The range, expressed in bytes.
 		*\param[in] dstArrayElement
 		*	The array element index.
 		*\~french
@@ -394,12 +386,12 @@ namespace castor3d
 		*	Crée un descriptor write pour un storage buffer.
 		*\param[in] storageBuffer
 		*	Le storage buffer.
-		*\param[in] elemOffset
-		*	L'offset, exprimé en nombre d'éléments.
-		*\param[in] elemRange
-		*	L'intervalle, exprimé en nombre d'éléments.
 		*\param[in] dstBinding
 		*	Le binding dans le descriptor set.
+		*\param[in] byteOffset
+		*	L'offset, exprimé en octets.
+		*\param[in] byteRange
+		*	L'intervalle, exprimé en octets.
 		*\param[in] dstArrayElement
 		*	L'indice dans le tableau d'éléments.
 		*/
@@ -414,12 +406,12 @@ namespace castor3d
 		*	Creates a descriptor write for storage buffer.
 		*\param[in] storageBuffer
 		*	The storage buffer.
+		*\param[in] dstBinding
+		*	The binding inside the descriptor set.
 		*\param[in] elemOffset
 		*	The offset, expressed in element count.
 		*\param[in] elemRange
 		*	The range, expressed in element count.
-		*\param[in] dstBinding
-		*	The binding inside the descriptor set.
 		*\param[in] dstArrayElement
 		*	The array element index.
 		*\~french
@@ -427,12 +419,12 @@ namespace castor3d
 		*	Crée un descriptor write pour un storage buffer.
 		*\param[in] storageBuffer
 		*	Le storage buffer.
+		*\param[in] dstBinding
+		*	Le binding dans le descriptor set.
 		*\param[in] elemOffset
 		*	L'offset, exprimé en nombre d'éléments.
 		*\param[in] elemRange
 		*	L'intervalle, exprimé en nombre d'éléments.
-		*\param[in] dstBinding
-		*	Le binding dans le descriptor set.
 		*\param[in] dstArrayElement
 		*	L'indice dans le tableau d'éléments.
 		*/
@@ -513,17 +505,17 @@ namespace castor3d
 				, dstArrayElement );
 		}
 
-		inline RenderSystem * getRenderSystem()const
+		RenderSystem * getRenderSystem()const
 		{
 			return &m_renderSystem;
 		}
 
-		inline RenderDevice const & getDevice()const
+		RenderDevice const & getDevice()const
 		{
 			return m_device;
 		}
 
-		inline Sampler const & getSampler()const
+		Sampler const & getSampler()const
 		{
 			return *m_sampler;
 		}
@@ -557,7 +549,7 @@ namespace castor3d
 			, "RenderQuadBuilderT::ConfigT must derive from castor3d::rq::Config" );
 
 	public:
-		inline RenderQuadBuilderT()
+		RenderQuadBuilderT()
 		{
 		}
 		/**
@@ -568,7 +560,7 @@ namespace castor3d
 		*\param[in] config
 		*	La configuration des coordonnées de texture.
 		*/
-		inline BuilderT & texcoordConfig( rq::Texcoord const & config )
+		BuilderT & texcoordConfig( rq::Texcoord const & config )
 		{
 			m_config.texcoordConfig = config;
 			return static_cast< BuilderT & >( *this );
@@ -581,33 +573,33 @@ namespace castor3d
 		*\param[in] range
 		*	Contient les mip levels, pour l'échantillonneur.
 		*/
-		inline BuilderT & range( VkImageSubresourceRange const & range )
+		BuilderT & range( VkImageSubresourceRange const & range )
 		{
 			m_config.range = range;
 			return static_cast< BuilderT & >( *this );
 		}
 		/**
 		*\~english
-		*\param[in] blend
-		*	Contains blend to destination status.
+		*\param[in] blendMode
+		*	Contains blendMode to destination status.
 		*\~french
-		*\param[in] blend
+		*\param[in] blendMode
 		*	Contient le statut de mélange à la destination.
 		*/
-		inline BuilderT & blendMode( BlendMode blendMode )
+		BuilderT & blendMode( BlendMode blendMode )
 		{
 			m_config.blendMode = blendMode;
 			return static_cast< BuilderT & >( *this );
 		}
 		/**
 		*\~english
-		*\param[in] count
+		*\param[in] bindings
 		*	Contains the inputs bindings.
 		*\~french
-		*\param[in] blend
+		*\param[in] bindings
 		*	Contient les bindings en entrée.
 		*/
-		inline BuilderT & bindings( rq::BindingDescriptionArray const & bindings )
+		BuilderT & bindings( rq::BindingDescriptionArray const & bindings )
 		{
 			m_config.bindings = bindings;
 			return static_cast< BuilderT & >( *this );
@@ -622,7 +614,7 @@ namespace castor3d
 		*\param[in] binding
 		*	Contient le binding à ajouter.
 		*/
-		inline BuilderT & binding( rq::BindingDescription const & binding )
+		BuilderT & binding( rq::BindingDescription const & binding )
 		{
 			if ( !m_config.bindings )
 			{
@@ -635,14 +627,18 @@ namespace castor3d
 		/**
 		*\~english
 		*	Adds an image.
-		*\param[in] binding
-		*	Contains the binding to add.
+		*\param[in] descriptor
+		*	The descriptor type.
+		*\param[in] stageFlags
+		*	The descriptor stage flags.
 		*\~french
 		*	Ajoute un binding.
-		*\param[in] binding
-		*	Contient le binding à ajouter.
+		*\param[in] descriptor
+		*	Le type de descripteur.
+		*\param[in] stageFlags
+		*	Les flags de shader du descripteur.
 		*/
-		inline BuilderT & binding( VkDescriptorType descriptor
+		BuilderT & binding( VkDescriptorType descriptor
 			, VkShaderStageFlags stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT )
 		{
 			return binding( rq::BindingDescription{ descriptor, ashes::nullopt, stageFlags } );
@@ -650,14 +646,22 @@ namespace castor3d
 		/**
 		*\~english
 		*	Adds an image binding.
-		*\param[in] binding
-		*	Contains the binding to add.
+		*\param[in] descriptor
+		*	The descriptor type.
+		*\param[in] view
+		*	The image view.
+		*\param[in] stageFlags
+		*	The descriptor stage flags.
 		*\~french
 		*	Ajoute un binding d'image.
-		*\param[in] binding
-		*	Contient le binding à ajouter.
+		*\param[in] descriptor
+		*	Le type de descripteur.
+		*\param[in] view
+		*	L'image view.
+		*\param[in] stageFlags
+		*	Les flags de shader du descripteur.
 		*/
-		inline BuilderT & binding( VkDescriptorType descriptor
+		BuilderT & binding( VkDescriptorType descriptor
 			, VkImageViewType view
 			, VkShaderStageFlags stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT )
 		{
@@ -681,7 +685,7 @@ namespace castor3d
 		*\param[in] samplerFilter
 		*	Le filtre d'échantillonnage pour la texture source.
 		*/
-		inline RenderQuadUPtr build( RenderDevice const & device
+		RenderQuadUPtr build( RenderDevice const & device
 			, castor::String const & name
 			, VkFilter samplerFilter )
 		{

@@ -30,17 +30,17 @@ namespace castor3d
 		 *\param[in]	engine		The engine.
 		 *\param[in]	produce		The element producer.
 		 *\param[in]	initialise	The element initialiser.
-		 *\param[in]	clean			The element cleaner.
-		 *\param[in]	merge			The element collection merger.
+		 *\param[in]	clean		The element cleaner.
+		 *\param[in]	merge		The element collection merger.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
 		 *\param[in]	produce		Le créateur d'objet.
 		 *\param[in]	initialise	L'initialiseur d'objet.
-		 *\param[in]	clean			Le nettoyeur d'objet.
-		 *\param[in]	merge			Le fusionneur de collection d'objets.
+		 *\param[in]	clean		Le nettoyeur d'objet.
+		 *\param[in]	merge		Le fusionneur de collection d'objets.
 		 */
-		inline Cache( Engine & engine
+		Cache( Engine & engine
 			, Producer && produce
 			, Initialiser && initialise = Initialiser{}
 			, Cleaner && clean = Cleaner{}
@@ -58,7 +58,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		inline ~Cache()
+		~Cache()
 		{
 		}
 	};
@@ -68,15 +68,15 @@ namespace castor3d
 	 *\param[in]	engine		The engine.
 	 *\param[in]	produce		The element producer.
 	 *\param[in]	initialise	The element initialiser.
-	 *\param[in]	clean			The element cleaner.
-	 *\param[in]	merge			The element collection merger.
+	 *\param[in]	clean		The element cleaner.
+	 *\param[in]	merge		The element collection merger.
 	 *\~french
 	 *\brief		Crée un cache.
 	 *\param[in]	engine		Le moteur.
 	 *\param[in]	produce		Le créateur d'objet.
 	 *\param[in]	initialise	L'initialiseur d'objet.
-	 *\param[in]	clean			Le nettoyeur d'objet.
-	 *\param[in]	merge			Le fusionneur de collection d'objets.
+	 *\param[in]	clean		Le nettoyeur d'objet.
+	 *\param[in]	merge		Le fusionneur de collection d'objets.
 	 */
 	template< typename ElementType, typename KeyType >
 	inline std::unique_ptr< Cache< ElementType, KeyType > >

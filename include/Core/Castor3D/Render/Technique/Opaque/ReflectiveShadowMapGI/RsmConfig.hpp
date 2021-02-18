@@ -16,9 +16,6 @@ namespace castor3d
 {
 	struct RsmConfig
 	{
-		/**
-		 *\copydoc		castor3d::RenderTechniquePass::accept
-		 */
 		C3D_API void accept( castor::String const & name
 			, PipelineVisitorBase & visitor );
 
