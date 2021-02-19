@@ -1,13 +1,11 @@
-Castor3D
-========
+# Castor3D
 
 Castor3D is a 3D engine written in C++ 17.
 It works on Windows and GNU/Linux.
 It relies on Ashes as a rendering API, allowing Vulkan, Direct3D 11, and OpenGL.
 The project itself is compilable on supported platforms using CMake (\ref build).
 
-Features
---------
+## Features
 
 - Deferred rendering for opaque objects.
 - Blended Weighted rendering for transparent objects.
@@ -30,20 +28,19 @@ Features
 - Scenes are described using a text format easily comprehensible and extensible.
 - Asynchronous (timers) or synchronour (thread) rendering.
 
-Implemented Plug-ins
---------------------
+## Implemented Plug-ins
 
-**Importers**
+### Importers
 - ASSIMP: Multiple format mesh importer.
 - PLY: Stanford Polygon library mesh importer.
 - OBJ: Wavefront OBJ mesh importer.
 
-**Dividers**
+### Dividers
 - Loop subdivision surfaces.
 - Phong tessellation.
 - PN-Triangles surfaces.
 
-**PostEffects**
+### PostEffects
 - Bloom: HDR Bloom implementation.
 - FilmGrain: To display some grain on the render.
 - GrayScale.
@@ -52,13 +49,13 @@ Implemented Plug-ins
 - SMAA Antialiasing (1X and T2X so far).
 - Linear Motion Blur.
 
-**Generators**
+### Generators
 - DiamondSquareTerrain: to generate terrains inside Castor3D scenes, using diamond-quare algorithm.
 
-**Generic**
+### Generic
 - CastorGUI: to build GUIs inside Castor3D scenes.
 
-**ToneMappings**
+### ToneMappings
 - LinearToneMapping: Default tone mapping.
 - HaarmPieterDuikerToneMapping: Haarm Pieter Duiker tone mapping.
 - HejlBurgessDawsonToneMapping: Hejl Burgess Dawson tone mapping.
@@ -75,15 +72,13 @@ Implemented Plug-ins
 <a href="./img/SanMiguel-PBR-SG.png"><img alt="SanMiguel, PBR" src="./img/SanMiguel-PBR-SG-Small.png"></a>
 <a href="./img/SanMiguel-PBR-SG-LPV.png"><img alt="SanMiguel, PBR" src="./img/SanMiguel-PBR-SG-LPV-Small.png"></a>
 
-Links
------
+## Links
 
 - [Building Castor3D](https://dragonjoker.github.com/Castor3D/pages/build)
 - [API Documentation](https://dragonjoker.github.com/Castor3D/doc)
 - [Playlist on YouTube](https://www.youtube.com/playlist?list=PLKA1SVXuAbMNaFbSJyAN_4yD2bzNlgES3)
 
-Older Versions
---------------
+## Older Versions
 
 - [v0.10.0](https://dragonjoker.github.com/Castor3D/v0.10.0/)
 - [v0.9.0](https://dragonjoker.github.com/Castor3D/v0.9.0/)
