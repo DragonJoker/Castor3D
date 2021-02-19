@@ -67,15 +67,16 @@ The project itself is compilable on supported platforms using CMake (\ref build)
 - ReinhardToneMapping: Reinhard tone mapping.
 - Uncharted2ToneMapping: Uncharted 2 tone mapping.
 
+## Screenshots
 
-<a href="./img/Sponza-PBR-Bloom.png"><img alt="Sponza" src="./img/Sponza-PBR-Bloom-Small.png"></a>
-<a href="./img/Sponza-PBR-VCT.png"><img alt="Sponza" src="./img/Sponza-PBR-VCT-Small.png"></a>
-<a href="./img/Cerberus-PBR.png"><img alt="Cerberus" src="./img/Cerberus-PBR-Small.png"></a>
-<a href="./img/Park-Legacy.png"><img alt="Park, Legacy" src="./img/Park-Legacy-Small.png"></a>
-<a href="./img/Park-PBR.png"><img alt="Park, PBR" src="./img/Park-PBR-Small.png"></a>
-<a href="./img/Nyra-PBR-MR.png"><img alt="Nyra, PBR" src="./img/Nyra-PBR-MR-Small.png"></a>
-<a href="./img/SanMiguel-PBR-SG.png"><img alt="SanMiguel, PBR" src="./img/SanMiguel-PBR-SG-Small.png"></a>
-<a href="./img/SanMiguel-PBR-SG-LPV.png"><img alt="SanMiguel, PBR" src="./img/SanMiguel-PBR-SG-LPV-Small.png"></a>
+![Sponza, PBR](http://dragonjoker.github.com/Castor3D/img/Sponza-PBR-Bloom-Small.png)
+![Sponza, VCT](http://dragonjoker.github.com/Castor3D/img/Sponza-PBR-VCT-Small.png)
+![Cerberus](http://dragonjoker.github.com/Castor3D/img/Cerberus-PBR-Small.png)
+![Park, Legacy](http://dragonjoker.github.com/Castor3D/img/Park-Legacy-Small.png)
+![Park, PBR](http://dragonjoker.github.com/Castor3D/img/Park-PBR-Small.png)
+![Nyra, PBR](http://dragonjoker.github.com/Castor3D/img/Nyra-PBR-MR-Small.png)
+![SanMiguel, PBR](http://dragonjoker.github.com/Castor3D/img/SanMiguel-PBR-SG-Small.png)
+![SanMiguel, PBR, LPV](http://dragonjoker.github.com/Castor3D/img/SanMiguel-PBR-SG-LPV-Small.png)
 
 ## Links
 
