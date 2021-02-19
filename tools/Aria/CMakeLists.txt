@@ -10,6 +10,8 @@ if ( SQLite3_FOUND AND Boost_FOUND )
 	set( ${PROJECT_NAME}_VERSION_MINOR 1 )
 	set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
+	set( PROJECT_VERSION "${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}" )
+	
 	set( ${PROJECT_NAME}_HDR_FILES
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/Aria.hpp
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/CategoryPanel.hpp
@@ -183,7 +185,8 @@ if ( SQLite3_FOUND AND Boost_FOUND )
 		PROPERTY
 			FOLDER "Tools"
 	)
-	install_target( ${PROJECT_NAME}
+	install_target_ex( ${PROJECT_NAME}
+		${PROJECT_NAME}
 		bin
 		${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}
 	)

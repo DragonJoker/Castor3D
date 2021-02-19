@@ -46,7 +46,7 @@ namespace castor3d
 		 *\remarks	Les passes sont alignées sur 4 flottants, donc la taille d'une passe
 		 *			correspond aux nombres de float[4] qu'il faut pour la contenir.
 		 */
-		inline uint32_t getPassSize()const override
+		uint32_t getPassSize()const override
 		{
 			return 4u;
 		}
@@ -58,7 +58,7 @@ namespace castor3d
 		 *\brief		Définit la couleur d'albédo.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setAlbedo( castor::RgbColour const & value )
+		void setAlbedo( castor::RgbColour const & value )
 		{
 			m_albedo = value;
 			onChanged( *this );
@@ -71,7 +71,7 @@ namespace castor3d
 		 *\brief		Définit la rugosité.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setRoughness( float value )
+		void setRoughness( float value )
 		{
 			m_roughness = value;
 			onChanged( *this );
@@ -84,7 +84,7 @@ namespace castor3d
 		 *\brief		Définit la réflectivité.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setMetallic( float value )
+		void setMetallic( float value )
 		{
 			m_metallic = value;
 			onChanged( *this );
@@ -95,7 +95,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La couleur.
 		 */
-		inline castor::RgbColour const & getAlbedo()const
+		castor::RgbColour const & getAlbedo()const
 		{
 			return m_albedo;
 		}
@@ -105,7 +105,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La rugosité.
 		 */
-		inline float getRoughness()const
+		float getRoughness()const
 		{
 			return m_roughness;
 		}
@@ -115,23 +115,14 @@ namespace castor3d
 		 *\~french
 		 *\return		La réflectivité.
 		 */
-		inline float const & getMetallic()const
+		float const & getMetallic()const
 		{
 			return m_metallic;
 		}
 
 	private:
-		/**
-		 *\copydoc		castor3d::Pass::doInitialise
-		 */
 		void doInitialise()override;
-		/**
-		 *\copydoc		castor3d::Pass::doCleanup
-		 */
 		void doCleanup()override;
-		/**
-		 *\copydoc		castor3d::Pass::doSetOpacity
-		 */
 		void doSetOpacity( float value )override;
 
 	private:

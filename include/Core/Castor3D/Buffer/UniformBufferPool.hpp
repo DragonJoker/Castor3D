@@ -30,10 +30,12 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	renderSystem	The RenderSystem.
+		 *\param[in]	device			The GPU device.
 		 *\param[in]	debugName		The buffer debug name.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	renderSystem	Le RenderSystem.
+		 *\param[in]	device			Le device GPU.
 		 *\param[in]	debugName		Le nom debug du tampon.
 		 */
 		C3D_API UniformBufferPool( RenderSystem & renderSystem
@@ -56,8 +58,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Uploads all GPU buffers to VRAM.
+		 *\param[in]	cb	The command buffer on which transfer commands are recorded.
 		 *\~french
 		 *\brief		Met à jour tous les tampons GPU en VRAM.
+		 *\param[in]	cb	Le command buffer sur lequel les commandes de transfert sont enregistrées.
 		 */
 		C3D_API void upload( ashes::CommandBuffer const & cb )const;
 		/**

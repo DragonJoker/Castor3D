@@ -138,17 +138,17 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline bool hasAnimation( castor::String const & name )
+		bool hasAnimation( castor::String const & name )
 		{
 			return m_animations.find( name ) != m_animations.end();
 		}
 
-		inline AnimationInstancePtrStrMap const & getAnimations()const
+		AnimationInstancePtrStrMap const & getAnimations()const
 		{
 			return m_animations;
 		}
 
-		inline AnimationType getKind()const
+		AnimationType getKind()const
 		{
 			return m_kind;
 		}
@@ -159,7 +159,7 @@ namespace castor3d
 		 *\~english
 		 *\brief		adds the animation to the list
 		 *\param[in]	name	The animation to add
-		 *\~english
+		 *\~french
 		 *\brief		Ajoute une animation à la liste
 		 *\param[in]	name	L'animation à ajouter
 		 */

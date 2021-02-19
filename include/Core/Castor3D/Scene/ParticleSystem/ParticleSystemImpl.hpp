@@ -13,9 +13,6 @@ namespace castor3d
 	{
 	public:
 		/**
-		\author 	Sylvain DOREMUS
-		\version	0.9.0
-		\date		16/11/2016
 		\~english
 		\brief		Particle system implementation types enumeration.
 		\~french
@@ -39,11 +36,11 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	type		The implementation type.
+		 *\param[in]	type	The implementation type.
 		 *\param[in]	parent	The parent particle system.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	type		Le type d'implémentation.
+		 *\param[in]	type	Le type d'implémentation.
 		 *\param[in]	parent	Le système de particules parent.
 		 */
 		C3D_API ParticleSystemImpl( Type type, ParticleSystem & parent );
@@ -57,17 +54,21 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the implementation.
+		 *\param		device	The current device.
 		 *\return		\p true if all is OK.
 		 *\~french
 		 *\brief		Initialise l'implémentation.
+		 *\param		device	Le device actuel.
 		 *\return		\p true si tout s'est bien passé.
 		 */
 		C3D_API virtual bool initialise( RenderDevice const & device ) = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans the implementation.
+		 *\param		device	The current device.
 		 *\~french
 		 *\brief		Nettoie l'implémentation.
+		 *\param		device	Le device actuel.
 		 */
 		C3D_API virtual void cleanup( RenderDevice const & device ) = 0;
 		/**
@@ -87,36 +88,20 @@ namespace castor3d
 			, castor::String const & defaultValue ) = 0;
 		/**
 		 *\~english
-		 *\brief		Updates the particles.
-		 *\param[in]	timer	The render pass timer used for GPU timing.
-		 *\param[in]	time	The time elapsed since last update.
-		 *\param[in]	total	The total elapsed time.
-		 *\param[in]	index	The render pass index.
-		 *\return		The particles count.
+		 *\brief			Updates the render pass, CPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour les particules.
-		 *\param[in]	timer	Le timer de passe de rendu utilisé pour le timing GPU.
-		 *\param[in]	time	Le temps écoulé depuis la dernière mise à jour.
-		 *\param[in]	total	Le temps total écoulé.
-		 *\param[in]	index	L'indice de la passe de rendu.
-		 *\return		Le nombre de particules.
+		 *\brief			Met à jour la passe de rendu, au niveau CPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API virtual void update( CpuUpdater & updater ) = 0;
 		/**
 		 *\~english
-		 *\brief		Updates the particles.
-		 *\param[in]	timer	The render pass timer used for GPU timing.
-		 *\param[in]	time	The time elapsed since last update.
-		 *\param[in]	total	The total elapsed time.
-		 *\param[in]	index	The render pass index.
-		 *\return		The particles count.
+		 *\brief			Updates the render pass, GPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour les particules.
-		 *\param[in]	timer	Le timer de passe de rendu utilisé pour le timing GPU.
-		 *\param[in]	time	Le temps écoulé depuis la dernière mise à jour.
-		 *\param[in]	total	Le temps total écoulé.
-		 *\param[in]	index	L'indice de la passe de rendu.
-		 *\return		Le nombre de particules.
+		 *\brief			Met à jour la passe de rendu, au niveau GPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API virtual uint32_t update( GpuUpdater & updater ) = 0;
 		/**

@@ -80,7 +80,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Locke le mutex de la collection
 		 */
-		inline void lock()const
+		void lock()const
 		{
 			m_mutex.lock();
 		}
@@ -90,7 +90,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Délocke le mutex de la collection
 		 */
-		inline void unlock()const
+		void unlock()const
 		{
 			m_mutex.unlock();
 		}
@@ -100,9 +100,9 @@ namespace castor3d
 		 *\return		The iterator
 		 *\~french
 		 *\brief		Récupère un itérateur sur le début de la liste de shaders.
-		 *\return		L4itérateur
+		 *\return		L'itérateur
 		 */
-		inline ShaderProgramPtrArray::iterator begin()
+		ShaderProgramPtrArray::iterator begin()
 		{
 			return m_programs.begin();
 		}
@@ -112,9 +112,9 @@ namespace castor3d
 		 *\return		The iterator
 		 *\~french
 		 *\brief		Récupère un itérateur sur le début de la liste de shaders.
-		 *\return		L4itérateur
+		 *\return		L'itérateur
 		 */
-		inline ShaderProgramPtrArray::const_iterator begin()const
+		ShaderProgramPtrArray::const_iterator begin()const
 		{
 			return m_programs.begin();
 		}
@@ -124,9 +124,9 @@ namespace castor3d
 		 *\return		The iterator
 		 *\~french
 		 *\brief		Récupère un itérateur sur la fin de la liste de shaders.
-		 *\return		L4itérateur
+		 *\return		L'itérateur
 		 */
-		inline ShaderProgramPtrArray::iterator end()
+		ShaderProgramPtrArray::iterator end()
 		{
 			return m_programs.end();
 		}
@@ -136,9 +136,9 @@ namespace castor3d
 		 *\return		The iterator
 		 *\~french
 		 *\brief		Récupère un itérateur sur la fin de la liste de shaders.
-		 *\return		L4itérateur
+		 *\return		L'itérateur
 		 */
-		inline ShaderProgramPtrArray::const_iterator end()const
+		ShaderProgramPtrArray::const_iterator end()const
 		{
 			return m_programs.end();
 		}

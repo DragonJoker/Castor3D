@@ -1,5 +1,5 @@
 set( FOLDER_NAME ReinhardToneMapping )
-project( castor3d${FOLDER_NAME} )
+project( ${FOLDER_NAME} )
 
 set( Castor3DBinsDependencies 
 	${Castor3DBinsDependencies}
@@ -11,6 +11,9 @@ set( ${PROJECT_NAME}_DESCRIPTION "Reinhard Tone Mapping" )
 set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
 set( ${PROJECT_NAME}_VERSION_MINOR 3 )
 set( ${PROJECT_NAME}_VERSION_BUILD 0 )
+
+set( PROJECT_VERSION "${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}" )
+set( PROJECT_SOVERSION "${${PROJECT_NAME}_VERSION_BUILD}" )
 
 set( ${PROJECT_NAME}_HDR_FILES
 	${CASTOR_SOURCE_DIR}/source/Plugins/ToneMappings/${FOLDER_NAME}/ReinhardToneMapping.hpp
@@ -45,11 +48,16 @@ target_link_libraries( ${PROJECT_NAME}
 	PUBLIC
 		castor::Castor3D
 )
-set_property( TARGET ${PROJECT_NAME}
-	PROPERTY
+set_target_properties( ${PROJECT_NAME}
+	PROPERTIES
+		VERSION ${PROJECT_VERSION}
+		SOVERSION ${PROJECT_SOVERSION}
+		CXX_STANDARD 17
+		PREFIX ${C3D_LIB_PREFIX}
 		FOLDER "Plugins/ToneMappings"
 )
-install_target( ${PROJECT_NAME}
+install_target_ex( ${PROJECT_NAME}
+	Plugins
 	plugin
 	${CASTOR_SOURCE_DIR}/source/Plugins/ToneMappings/${FOLDER_NAME}
 )

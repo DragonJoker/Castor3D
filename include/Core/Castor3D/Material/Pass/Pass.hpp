@@ -42,8 +42,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the pass and all it's dependencies.
+		 *\param[in]	device	The GPU device.
 		 *\~french
 		 *\brief		Initialise la passe et toutes ses dépendances.
+		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API void initialise( RenderDevice const & device );
 		/**
@@ -171,115 +173,115 @@ namespace castor3d
 		C3D_API uint32_t getTextureUnitsCount( TextureFlags mask = TextureFlag::eAll )const;
 		C3D_API TextureFlagsArray getTextures( TextureFlags mask )const;
 
-		inline TextureFlags const & getTextures()const
+		TextureFlags const & getTextures()const
 		{
 			return m_textures;
 		}
 
-		inline bool hasAutomaticShader()const
+		bool hasAutomaticShader()const
 		{
 			return m_automaticShader;
 		}
 
-		inline bool isTwoSided()const
+		bool isTwoSided()const
 		{
 			return m_twoSided;
 		}
 
-		inline bool hasEnvironmentMapping()const
+		bool hasEnvironmentMapping()const
 		{
 			return checkFlag( m_flags, PassFlag::eReflection )
 				|| checkFlag( m_flags, PassFlag::eRefraction );
 		}
 
-		inline float getOpacity()const
+		float getOpacity()const
 		{
 			return m_opacity;
 		}
 
-		inline uint32_t getBWAccumulationOperator()const
+		uint32_t getBWAccumulationOperator()const
 		{
 			return m_bwAccumulationOperator.value();
 		}
 
-		inline float getEmissive()const
+		float getEmissive()const
 		{
 			return m_emissive;
 		}
 
-		inline float getRefractionRatio()const
+		float getRefractionRatio()const
 		{
 			return m_refractionRatio;
 		}
 
-		inline BlendMode getAlphaBlendMode()const
+		BlendMode getAlphaBlendMode()const
 		{
 			return m_alphaBlendMode;
 		}
 
-		inline BlendMode getColourBlendMode()const
+		BlendMode getColourBlendMode()const
 		{
 			return m_colourBlendMode;
 		}
 
-		inline uint32_t getId()const
+		uint32_t getId()const
 		{
 			return m_id;
 		}
 
-		inline VkCompareOp getAlphaFunc()const
+		VkCompareOp getAlphaFunc()const
 		{
 			return m_alphaFunc;
 		}
 
-		inline float getAlphaValue()const
+		float getAlphaValue()const
 		{
 			return m_alphaValue;
 		}
 
-		inline castor::Point3f getTransmission()const
+		castor::Point3f getTransmission()const
 		{
 			return m_transmission;
 		}
 
-		inline bool hasSubsurfaceScattering()const
+		bool hasSubsurfaceScattering()const
 		{
 			return checkFlag( m_flags, PassFlag::eSubsurfaceScattering )
 				&& m_subsurfaceScattering != nullptr;
 		}
 
-		inline ParallaxOcclusionMode getParallaxOcclusion()const
+		ParallaxOcclusionMode getParallaxOcclusion()const
 		{
 			return m_parallaxOcclusionMode;
 		}
 
-		inline bool hasParallaxOcclusion()const
+		bool hasParallaxOcclusion()const
 		{
 			return m_parallaxOcclusionMode != ParallaxOcclusionMode::eNone;
 		}
 
-		inline SubsurfaceScattering const & getSubsurfaceScattering()const
+		SubsurfaceScattering const & getSubsurfaceScattering()const
 		{
 			CU_Require( m_subsurfaceScattering );
 			return *m_subsurfaceScattering;
 		}
 
-		inline bool isImplicit()const
+		bool isImplicit()const
 		{
 			return m_implicit;
 		}
 
-		inline bool hasReflections()const
+		bool hasReflections()const
 		{
 			return checkFlag( m_flags, PassFlag::eReflection );
 		}
 
-		inline bool hasRefraction()const
+		bool hasRefraction()const
 		{
 			return checkFlag( m_flags, PassFlag::eRefraction );
 		}
 
-		inline uint32_t getHeightTextureIndex()const
+		uint32_t getHeightTextureIndex()const
 		{
 			return m_heightTextureIndex;
 		}
@@ -293,22 +295,22 @@ namespace castor3d
 		*	Itération sur les textures.
 		*/
 		/**@{*/
-		inline auto begin()const
+		auto begin()const
 		{
 			return m_textureUnits.begin();
 		}
 
-		inline auto begin()
+		auto begin()
 		{
 			return m_textureUnits.begin();
 		}
 
-		inline auto end()const
+		auto end()const
 		{
 			return m_textureUnits.end();
 		}
 
-		inline auto end()
+		auto end()
 		{
 			return m_textureUnits.end();
 		}
@@ -322,31 +324,31 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		inline void setTwoSided( bool value )
+		void setTwoSided( bool value )
 		{
 			m_twoSided = value;
 			onChanged( *this );
 		}
 
-		inline void setEmissive( float const & value )
+		void setEmissive( float const & value )
 		{
 			m_emissive = value;
 			onChanged( *this );
 		}
 
-		inline void setRefractionRatio( float value )
+		void setRefractionRatio( float value )
 		{
 			m_refractionRatio = value;
 			onChanged( *this );
 		}
 
-		inline void setTransmission( castor::Point3f value )
+		void setTransmission( castor::Point3f value )
 		{
 			m_transmission = std::move( value );
 			onChanged( *this );
 		}
 
-		inline void setParallaxOcclusion( ParallaxOcclusionMode value )
+		void setParallaxOcclusion( ParallaxOcclusionMode value )
 		{
 			m_parallaxOcclusionMode = value;
 			updateFlag( PassFlag::eParallaxOcclusionMappingOne
@@ -355,53 +357,53 @@ namespace castor3d
 				, m_parallaxOcclusionMode == ParallaxOcclusionMode::eRepeat );
 		}
 
-		inline void setAlphaBlendMode( BlendMode value )
+		void setAlphaBlendMode( BlendMode value )
 		{
 			m_alphaBlendMode = value;
 			onChanged( *this );
 		}
 
-		inline void setColourBlendMode( BlendMode value )
+		void setColourBlendMode( BlendMode value )
 		{
 			m_colourBlendMode = value;
 			onChanged( *this );
 		}
 
-		inline void setId( uint32_t value )
+		void setId( uint32_t value )
 		{
 			m_id = value;
 		}
 
-		inline void setAlphaFunc( VkCompareOp value )
+		void setAlphaFunc( VkCompareOp value )
 		{
 			m_alphaFunc = value;
 			updateFlag( PassFlag::eAlphaTest, hasAlphaTest() );
 			updateFlag( PassFlag::eAlphaBlending, hasAlphaBlending() );
 		}
 
-		inline void setAlphaValue( float value )
+		void setAlphaValue( float value )
 		{
 			m_alphaValue = value;
 			onChanged( *this );
 		}
 
-		inline void setBWAccumulationOperator( uint32_t value )
+		void setBWAccumulationOperator( uint32_t value )
 		{
 			m_bwAccumulationOperator = value;
 			onChanged( *this );
 		}
 
-		inline void enableReflections( bool value = true )
+		void enableReflections( bool value = true )
 		{
 			updateFlag( PassFlag::eReflection, value );
 		}
 
-		inline void enableRefractions( bool value = true )
+		void enableRefractions( bool value = true )
 		{
 			updateFlag( PassFlag::eRefraction, value );
 		}
 
-		inline void setImplicit( bool value = true )
+		void setImplicit( bool value = true )
 		{
 			m_implicit = value;
 		}
@@ -413,7 +415,7 @@ namespace castor3d
 		virtual void doCleanup() = 0;
 		virtual void doSetOpacity( float value ) = 0;
 
-		inline void updateFlag( PassFlag flag
+		void updateFlag( PassFlag flag
 			, bool value )
 		{
 			if ( value )

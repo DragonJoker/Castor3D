@@ -90,15 +90,19 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the UBO pools.
+		 *\param[in]	device	The GPU device.
 		 *\~french
 		 *\brief		Initialise les pools d'UBO.
+		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API void initialise( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Cleans up the UBO pools.
+		 *\param[in]	device	The GPU device.
 		 *\~french
 		 *\brief		Nettoie les pools d'UBO.
+		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API void cleanup( RenderDevice const & device );
 		/**
@@ -110,9 +114,11 @@ namespace castor3d
 		C3D_API void clear();
 		/**
 		 *\~english
-		 *\brief		Updates the collection.
+		 *\brief			Updates the render pass, CPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met ç jour la collection.
+		 *\brief			Met à jour la passe de rendu, au niveau CPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( CpuUpdater & updater );
 		/**
@@ -148,7 +154,7 @@ namespace castor3d
 		 */
 		C3D_API void remove( Key const & name );
 
-		inline BillboardUboPools & getUboPools()const
+		BillboardUboPools & getUboPools()const
 		{
 			return *m_pools;
 		}

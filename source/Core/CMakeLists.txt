@@ -27,6 +27,10 @@ function( CoreBuild )
 		set( C3D ${Build} PARENT_SCOPE )
 	endif ()
 
+	set( ADDITIONAL_DEPS_REL
+		${ADDITIONAL_DEPS_REL}
+		PARENT_SCOPE
+	)
 	set( CastorBinsDependencies
 		${CastorBinsDependencies}
 		PARENT_SCOPE
@@ -41,6 +45,23 @@ function( CoreSummary msg )
 endfunction( CoreSummary )
 
 function( CoreSetup )
+	if ( WIN32 )
+		set( CMAKE_INSTALL_DEBUG_LIBRARIES TRUE )
+		set( CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION bin/$<$<CONFIG:Debug>:Debug/> )
+		include( InstallRequiredSystemLibraries )
+		file( GET_RUNTIME_DEPENDENCIES
+			LIBRARIES ${ADDITIONAL_DEPS_REL}
+			RESOLVED_DEPENDENCIES_VAR r_deps
+			UNRESOLVED_DEPENDENCIES_VAR u_deps
+		)
+		install(
+			FILES ${r_deps} ${ADDITIONAL_DEPS_REL}
+			DESTINATION bin
+			COMPONENT Castor3D
+			CONFIGURATIONS Release
+		)
+	endif ()
+
 	cpack_add_component( CastorUtils
 		DISPLAY_NAME "CastorUtils"
 		DESCRIPTION "Base utilities library used in Castor3D."
@@ -112,6 +133,13 @@ function( CoreSetup )
 			GROUP Core
 			INSTALL_TYPES Minimal Developer Full
 		)
+		cpack_add_component( SdwCompilers
+			DISPLAY_NAME "ShaderWriter Compilers"
+			DESCRIPTION "Compilers for ShaderWriter."
+			REQUIRED
+			GROUP Core
+			INSTALL_TYPES Minimal Developer Full
+		)
 		cpack_add_component( ShaderWriter_dev
 			DISPLAY_NAME "ShaderWriter SDK"
 			DESCRIPTION "Development files for ShaderWriter."
@@ -119,30 +147,52 @@ function( CoreSetup )
 			DEPENDS ShaderWriter
 			INSTALL_TYPES Developer Full
 		)
+		cpack_add_component( SdwCompilers_dev
+			DISPLAY_NAME "ShaderWriter Compilers SDK"
+			DESCRIPTION "Development files for ShaderWriter Compilers."
+			GROUP Development
+			DEPENDS ShaderWriter
+			INSTALL_TYPES Developer Full
+		)
 
 		cpack_add_component( Ashes
 			DISPLAY_NAME "Ashes"
-			DESCRIPTION "Base renderer API."
+			DESCRIPTION "Ashes libraries."
 			REQUIRED
 			GROUP Core
 			INSTALL_TYPES Minimal Developer Full
 		)
-		cpack_add_component( Ashes_dev
-			DISPLAY_NAME "Ashes SDK"
-			DESCRIPTION "Development files for Ashes."
+		cpack_add_component( AshesRenderers
+			DISPLAY_NAME "AshesRenderers"
+			DESCRIPTION "Ashes renderer plugins."
+			REQUIRED
+			GROUP Core
+			INSTALL_TYPES Minimal Developer Full
+		)
+		cpack_add_component( ashes_common_dev
+			DISPLAY_NAME "AshesCommon SDK"
+			DESCRIPTION "Development files for AshesCommon."
 			GROUP Development
 			DEPENDS Ashes
 			INSTALL_TYPES Developer Full
 		)
-		cpack_add_component( Ashes_French_Doc
-			DISPLAY_NAME "Ashes French help"
-			DESCRIPTION "Ashes French HTML documentation."
-			GROUP Documentation
+		cpack_add_component( ashes_dev
+			DISPLAY_NAME "Ashes SDK"
+			DESCRIPTION "Development files for Ashes."
+			GROUP Development
+			DEPENDS ashes_common_dev
 			INSTALL_TYPES Developer Full
 		)
-		cpack_add_component( Ashes_English_Doc
-			DISPLAY_NAME "Ashes English help"
-			DESCRIPTION "Ashes English HTML documentation."
+		cpack_add_component( ashespp_dev
+			DISPLAY_NAME "AshesPP SDK"
+			DESCRIPTION "Development files for AshesPP."
+			GROUP Development
+			DEPENDS ashes_dev
+			INSTALL_TYPES Developer Full
+		)
+		cpack_add_component( Ashes_Doc
+			DISPLAY_NAME "Ashes help"
+			DESCRIPTION "Ashes HTML documentation."
 			GROUP Documentation
 			INSTALL_TYPES Developer Full
 		)
@@ -159,7 +209,7 @@ function( CoreSetup )
 			DISPLAY_NAME "Castor3D SDK"
 			DESCRIPTION "Development files for Castor3D."
 			GROUP Development
-			DEPENDS CastorUtils CastorUtils_dev Castor3D
+			DEPENDS CastorUtils_dev Castor3D
 			INSTALL_TYPES Developer Full
 		)
 		cpack_add_component( Castor3D_French_Doc

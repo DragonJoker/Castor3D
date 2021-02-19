@@ -113,16 +113,11 @@ endfunction( PostEffectsSummary )
 
 function( PostEffectsSetup )
 	if ( ${CASTOR_BUILDGRP_POSTFX} )
-		cpack_add_component_group( PostEffects
-			DISPLAY_NAME "PostEffects"
-			DESCRIPTION "Post effect plugins usable in Castor3D."
-			PARENT_GROUP Plugins
-		)
 		if( ${CASTOR_BUILD_POSTFX_BLOOM} )
 			cpack_add_component( BloomPostEffect
 				DISPLAY_NAME "BloomPostEffect"
 				DESCRIPTION "Allows HDR Bloom post effect."
-				GROUP PostEffects
+				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Developer Full
 			)
@@ -131,7 +126,7 @@ function( PostEffectsSetup )
 			cpack_add_component( GrayScalePostEffect
 				DISPLAY_NAME "GrayScalePostEffect"
 				DESCRIPTION "Allows GrayScale post effect."
-				GROUP PostEffects
+				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Developer Full
 			)
@@ -140,7 +135,7 @@ function( PostEffectsSetup )
 			cpack_add_component( FxaaPostEffect
 				DISPLAY_NAME "FxaaPostEffect"
 				DESCRIPTION "Allows FXAA post effect."
-				GROUP PostEffects
+				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Developer Full
 			)
@@ -149,7 +144,7 @@ function( PostEffectsSetup )
 			cpack_add_component( SmaaPostEffect
 				DISPLAY_NAME "SmaaPostEffect"
 				DESCRIPTION "Allows SMAA post effect."
-				GROUP PostEffects
+				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Developer Full
 			)
@@ -158,7 +153,7 @@ function( PostEffectsSetup )
 			cpack_add_component( FilmGrainPostEffect
 				DISPLAY_NAME "FilmGrainPostEffect"
 				DESCRIPTION "Allows FilmGrain post effect."
-				GROUP PostEffects
+				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Developer Full
 			)
@@ -167,7 +162,7 @@ function( PostEffectsSetup )
 			cpack_add_component( LightStreaksPostEffect
 				DISPLAY_NAME "LightStreaksPostEffect"
 				DESCRIPTION "Allows Light Streaks post effect."
-				GROUP PostEffects
+				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Developer Full
 			)
@@ -176,7 +171,7 @@ function( PostEffectsSetup )
 			cpack_add_component( LinearMotionBlurPostEffect
 				DISPLAY_NAME "LinearMotionBlurPostEffect"
 				DESCRIPTION "Allows Linear Motion Blur post effect."
-				GROUP PostEffects
+				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Developer Full
 			)

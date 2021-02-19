@@ -42,16 +42,30 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine			The engine.
-		 *\param[in]	size			The render area dimensions.
-		 *\param[in]	linearisedDepth	The linearised depth buffer.
-		 *\param[in]	scene			The scene buffer.
+		 *\param[in]	engine				The engine.
+		 *\param[in]	device				The GPU device.
+		 *\param[in]	prefix				The pass name's prefix.
+		 *\param[in]	lightCache			The lights cache.
+		 *\param[in]	lightType			The light source type.
+		 *\param[in]	smResult			The shadow map.
+		 *\param[in]	lpvGridConfigUbo	The LPV grid configuration UBO.
+		 *\param[in]	lpvLightConfigUbo	The LPV light configuration UBO.
+		 *\param[in]	result				The result.
+		 *\param[in]	gridSize			The grid dimensions.
+		 *\param[in]	layerIndex			The layer index.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine			Le moteur.
-		 *\param[in]	size			Les dimensions de la zone de rendu.
-		 *\param[in]	linearisedDepth	Le tampon de profondeur linéarisé.
-		 *\param[in]	scene			Le tampon de scène.
+		 *\param[in]	engine				Le moteur.
+		 *\param[in]	device				Le device GPU.
+		 *\param[in]	prefix				Le préfixe du nom de la passe.
+		 *\param[in]	lightCache			Le cache de sources lumineuses.
+		 *\param[in]	lightType			Le type de source lumineuse.
+		 *\param[in]	smResult			La shadow map.
+		 *\param[in]	lpvGridConfigUbo	L'UBO de configuration de la grille de LPV.
+		 *\param[in]	lpvLightConfigUbo	L'UBO de configuration de la source lumineuse LPV.
+		 *\param[in]	result				Le résultat.
+		 *\param[in]	gridSize			Les dimensions de la grille.
+		 *\param[in]	layerIndex			L'indice de la layer.
 		 */
 		C3D_API LightInjectionPass( Engine & engine
 			, RenderDevice const & device
@@ -62,14 +76,14 @@ namespace castor3d
 			, LpvGridConfigUbo const & lpvGridConfigUbo
 			, LpvLightConfigUbo const & lpvLightConfigUbo
 			, LightVolumePassResult const & result
-			, uint32_t size
+			, uint32_t gridSize
 			, uint32_t layerIndex );
 		/**
 		 *\~english
-		 *\brief		Renders the SSGI pass.
+		 *\brief		Renders the pass.
 		 *\param[in]	toWait	The semaphore from the previous render pass.
 		 *\~french
-		 *\brief		Dessine la passe SSGI.
+		 *\brief		Dessine la passe.
 		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
 		 */
 		C3D_API ashes::Semaphore const & compute( ashes::Semaphore const & toWait )const;

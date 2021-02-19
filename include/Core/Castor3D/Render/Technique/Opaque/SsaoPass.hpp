@@ -26,6 +26,7 @@ namespace castor3d
 		 *\param[in]	ssaoConfig		The SSAO configuration.
 		 *\param[in]	linearisedDepth	The linearised depth buffer.
 		 *\param[in]	gpResult		The geometry pass result.
+		 *\param[in]	gpInfoUbo		The GBuffer configuration UBO.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine			Le moteur.
@@ -33,6 +34,7 @@ namespace castor3d
 		 *\param[in]	ssaoConfig		La configuration du SSAO.
 		 *\param[in]	linearisedDepth	Le depth buffer linéarisé.
 		 *\param[in]	gpResult		Le résultat de la geometry pass.
+		 *\param[in]	gpInfoUbo		L'UBO de configuration du GBuffer
 		 */
 		C3D_API SsaoPass( Engine & engine
 			, castor::Size const & size
@@ -51,16 +53,20 @@ namespace castor3d
 		C3D_API void cleanup( RenderDevice const & device );
 		/**
 		 *\~english
-		 *\brief		Updates the configuration UBO.
+		 *\brief			Updates the render pass, CPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour l'UBO de configuration.
+		 *\brief			Met à jour la passe de rendu, au niveau CPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Renders the SSAO pass.
+		 *\param[in]	toWait	The semaphore to wait.
 		 *\~french
 		 *\brief		Dessine la passe SSAO.
+		 *\param[in]	toWait	Le sémaphore à attendre.
 		 */
 		C3D_API ashes::Semaphore const & render( ashes::Semaphore const & toWait )const;
 		/**

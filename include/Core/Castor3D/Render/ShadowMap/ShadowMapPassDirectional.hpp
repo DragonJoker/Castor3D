@@ -47,65 +47,26 @@ namespace castor3d
 		 */
 		C3D_API bool update( CpuUpdater & updater )override;
 		/**
-		 *\copydoc		castor3d::ShadowMapPass::updateDeviceDependent
+		 *\copydoc		castor3d::ShadowMapPass::update
 		 */
 		C3D_API void update( GpuUpdater & updater )override;
 
 	private:
-		/**
-		 *\copydoc		castor3d::RenderPass::doInitialise
-		 */
 		bool doInitialise( RenderDevice const & device
 			, castor::Size const & size )override;
-		/**
-		 *\copydoc		castor3d::ShadowMapPass::doCleanup
-		 */
 		void doCleanup( RenderDevice const & device )override;
-		/**
-		 *\copydoc		castor3d::ShadowMapPass::doUpdateUbos
-		 */
 		void doUpdateUbos( CpuUpdater & updater )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doFillUboDescriptor
-		 */
 		void doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 			, BillboardListRenderNode & node )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doFillUboDescriptor
-		 */
 		void doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 			, SubmeshRenderNode & node )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doCreateUboBindings
-		 */
 		ashes::VkDescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doCreateDepthStencilState
-		 */
 		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doCreateBlendState
-		 */
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::ShadowMap::doUpdateFlags
-		 */
 		void doUpdateFlags( PipelineFlags & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
-		 */
 		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetPhongPixelShaderSource
-		 */
 		ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
-		 */
 		ShaderPtr doGetPbrMRPixelShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
-		 */
 		ShaderPtr doGetPbrSGPixelShaderSource( PipelineFlags const & flags )const override;
 
 	public:

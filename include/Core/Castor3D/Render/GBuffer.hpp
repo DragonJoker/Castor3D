@@ -26,7 +26,7 @@ namespace castor3d
 		}
 
 	protected:
-		static C3D_API TextureUnit doCreateTexture( Engine & engine
+		C3D_API static TextureUnit doCreateTexture( Engine & engine
 			, castor::String const & name
 			, VkImageCreateFlags createFlags
 			, VkExtent3D const & size
@@ -36,7 +36,36 @@ namespace castor3d
 			, VkImageUsageFlags usageFlags
 			, VkBorderColor const & borderColor );
 		/**
-		*	2D or 2D array textures
+		*\~english
+		*\brief
+		*	Initialises 2D or 2D array g-buffer textures.
+		*\param[in] engine
+		*	The engine.
+		*\param[in] inputs
+		*	The already existing images.
+		*\param[in] prefix
+		*	The buffer's textures name's prefix.
+		*\param[in] createFlags
+		*	The creation flags for images remaining to create.
+		*\param[in] size
+		*	The g-buffer's dimensions.
+		*\param[in] layerCount
+		*	The layers count for the g-buffer.
+		*\~french
+		*\brief
+		*	Initialise les textures du g-buffer 2D ou 2D array.
+		*\param[in] engine
+		*	Le moteur.
+		*\param[in] inputs
+		*	Les images déjà existantes.
+		*\param[in] prefix
+		*	Le préfixe du nom des textures du g-buffer.
+		*\param[in] createFlags
+		*	Les flags de création pour les images restant à créer.
+		*\param[in] size
+		*	Les dimensions du g-buffer.
+		*\param[in] layerCount
+		*	Le nombre de layers du g-buffer.
 		*/
 		template< typename TextureEnumT >
 		static TextureUnitArray doCreateTextures( Engine & engine
@@ -68,7 +97,32 @@ namespace castor3d
 			return result;
 		}
 		/**
-		*	3D textures
+		*\~english
+		*\brief
+		*	Initialises 3D g-buffer textures.
+		*\param[in] engine
+		*	The engine.
+		*\param[in] inputs
+		*	The already existing images.
+		*\param[in] prefix
+		*	The buffer's textures name's prefix.
+		*\param[in] createFlags
+		*	The creation flags for images remaining to create.
+		*\param[in] size
+		*	The g-buffer's dimensions.
+		*\~french
+		*\brief
+		*	Initialise les textures du g-buffer 3D.
+		*\param[in] engine
+		*	Le moteur.
+		*\param[in] inputs
+		*	Les images déjà existantes.
+		*\param[in] prefix
+		*	Le préfixe du nom des textures du g-buffer.
+		*\param[in] createFlags
+		*	Les flags de création pour les images restant à créer.
+		*\param[in] size
+		*	Les dimensions du g-buffer.
 		*/
 		template< typename TextureEnumT >
 		static TextureUnitArray doCreateTextures( Engine & engine
@@ -108,18 +162,34 @@ namespace castor3d
 		/**
 		*\~english
 		*\brief
-		*	Initialises 2D g-buffer related stuff.
+		*	Initialises 2D or 2D-Array g-buffer related stuff.
 		*\param[in] engine
 		*	The engine.
-		*\param[in] textures
-		*	The gbuffer's images.
+		*\param[in] name
+		*	The buffer name.
+		*\param[in] inputs
+		*	The already existing images.
+		*\param[in] createFlags
+		*	The creation flags for images remaining to create.
+		*\param[in] size
+		*	The g-buffer's dimensions.
+		*\param[in] layerCount
+		*	The layers count for the g-buffer.
 		*\~french
 		*\brief
-		*	Initialise les données liées au g-buffer 2D.
+		*	Initialise les données liées au g-buffer 2D ou 2D-Array.
 		*\param[in] engine
 		*	Le moteur.
-		*\param[in] textures
-		*	Les images du gbuffer.
+		*\param[in] name
+		*	Le nom du buffer.
+		*\param[in] inputs
+		*	Les images déjà existantes.
+		*\param[in] createFlags
+		*	Les flags de création pour les images restant à créer.
+		*\param[in] size
+		*	Les dimensions du g-buffer.
+		*\param[in] layerCount
+		*	Le nombre de layers du g-buffer.
 		*/
 		GBufferT( Engine & engine
 			, castor::String name
@@ -157,15 +227,27 @@ namespace castor3d
 		*	Initialises 3D g-buffer related stuff.
 		*\param[in] engine
 		*	The engine.
-		*\param[in] textures
-		*	The gbuffer's images.
+		*\param[in] name
+		*	The buffer name.
+		*\param[in] inputs
+		*	The already existing images.
+		*\param[in] createFlags
+		*	The creation flags for images remaining to create.
+		*\param[in] size
+		*	The g-buffer's dimensions.
 		*\~french
 		*\brief
 		*	Initialise les données liées au g-buffer 3D.
 		*\param[in] engine
 		*	Le moteur.
-		*\param[in] textures
-		*	Les images du gbuffer.
+		*\param[in] name
+		*	Le nom du buffer.
+		*\param[in] inputs
+		*	Les images déjà existantes.
+		*\param[in] createFlags
+		*	Les flags de création pour les images restant à créer.
+		*\param[in] size
+		*	Les dimensions du g-buffer.
 		*/
 		GBufferT( Engine & engine
 			, castor::String name
@@ -220,37 +302,37 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline TextureUnit const & operator[]( TextureEnumT texture )const
+		TextureUnit const & operator[]( TextureEnumT texture )const
 		{
 			return *m_result[size_t( texture )];
 		}
 
-		inline Textures::const_iterator cbegin()const
+		Textures::const_iterator cbegin()const
 		{
 			return m_result.begin();
 		}
 
-		inline Textures::const_iterator cend()const
+		Textures::const_iterator cend()const
 		{
 			return m_result.end();
 		}
 
-		inline Textures::const_iterator begin()const
+		Textures::const_iterator begin()const
 		{
 			return m_result.begin();
 		}
 
-		inline Textures::const_iterator end()const
+		Textures::const_iterator end()const
 		{
 			return m_result.end();
 		}
 
-		inline Textures::iterator begin()
+		Textures::iterator begin()
 		{
 			return m_result.begin();
 		}
 
-		inline Textures::iterator end()
+		Textures::iterator end()
 		{
 			return m_result.end();
 		}

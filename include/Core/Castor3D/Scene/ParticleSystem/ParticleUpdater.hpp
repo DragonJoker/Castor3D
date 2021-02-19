@@ -15,6 +15,16 @@ namespace castor3d
 			, ParticleDeclaration const & inputs
 			, ParticleEmitterArray & emitters );
 		C3D_API virtual ~ParticleUpdater() = default;
+		/**
+		 *\~english
+		 *\brief		Updates a particle.
+		 *\param[in]	time		The time elapsed since last update.
+		 *\param[in]	particle	The particle.
+		 *\~french
+		 *\brief		Met à jour une particle.
+		 *\param[in]	time		Le temps écoulé depuis la denière mise à jour.
+		 *\param[in]	particle	La particule.
+		 */
 		C3D_API virtual void update( castor::Milliseconds const & time
 			, Particle & particle );
 

@@ -26,14 +26,14 @@ namespace castor3d
 		 *\brief		Constructor.
 		 *\param[in]	name	The geometry name.
 		 *\param[in]	scene	The parent scene.
-		 *\param[in]	mesh	The mesh, default is nullptr.
 		 *\param[in]	node	The scene node to which the geometry is attached.
+		 *\param[in]	mesh	The mesh.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	name	Nom de la géométrie.
 		 *\param[in]	scene	La scène parente.
-		 *\param[in]	mesh	Le maillage, par défaut nullptr.
 		 *\param[in]	node	Le scene node auquel la géométrie est attachée.
+		 *\param[in]	mesh	Le maillage.
 		 */
 		C3D_API Geometry( castor::String const & name
 			, Scene & scene
@@ -44,14 +44,12 @@ namespace castor3d
 		 *\brief		Constructor.
 		 *\param[in]	name	The geometry name.
 		 *\param[in]	scene	The parent scene.
-		 *\param[in]	mesh	The mesh, default is nullptr.
-		 *\param[in]	node	The scene node to which the geometry is attached.
+		 *\param[in]	mesh	The mesh.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	name	Nom de la géométrie.
 		 *\param[in]	scene	La scène parente.
-		 *\param[in]	mesh	Le maillage, par défaut nullptr.
-		 *\param[in]	node	Le scene node auquel la géométrie est attachée.
+		 *\param[in]	mesh	Le maillage.
 		 */
 		C3D_API Geometry( castor::String const & name
 			, Scene & scene
@@ -147,7 +145,7 @@ namespace castor3d
 		 *\brief		Récupère le maillage
 		 *\return		Le maillage
 		 */
-		inline MeshSPtr getMesh()const
+		MeshSPtr getMesh()const
 		{
 			return m_mesh.lock();
 		}
@@ -159,7 +157,7 @@ namespace castor3d
 		 *\brief		Récupère la boîte de collision
 		 *\return		La valeur
 		 */
-		inline castor::BoundingBox const & getBoundingBox()const
+		castor::BoundingBox const & getBoundingBox()const
 		{
 			return m_box;
 		}
@@ -171,7 +169,7 @@ namespace castor3d
 		 *\brief		Récupère la sphère de collision
 		 *\return		La valeur
 		 */
-		inline castor::BoundingSphere const & getBoundingSphere()const
+		castor::BoundingSphere const & getBoundingSphere()const
 		{
 			return m_sphere;
 		}

@@ -20,13 +20,23 @@ namespace castor
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	size		Buffer dimensions.
-		 *\param[in]	pixelFormat	Pixels format.
+		 *\brief		Creates a buffer from a source buffer, uninitialised data if no source is given.
+		 *\param[in]	size			Buffer dimensions.
+		 *\param[in]	pixelFormat		Pixels format.
+		 *\param[in]	layers			The number of layers stored in the buffer.
+		 *\param[in]	levels			The number of miplevels stored in the buffer.
+		 *\param[in]	buffer			The source buffer.
+		 *\param[in]	bufferFormat	The pixels format of the source buffer.
+		 *\param[in]	bufferAlign		The alignment of the source buffer.
 		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	size		Dimensions du buffer.
-		 *\param[in]	pixelFormat	Format des pixels du buffer.
+		 *\brief		Crée un buffer depuis une source, données initialisées si aucune source n'est donnée. 
+		 *\param[in]	size			Dimensions du buffer.
+		 *\param[in]	pixelFormat		Format des pixels du buffer.
+		 *\param[in]	layers			Le nombre de layers du buffer.
+		 *\param[in]	levels			Le nombre de miplevels du buffer.
+		 *\param[in]	buffer			Le buffer source.
+		 *\param[in]	bufferFormat	Le format des pixels du buffer source.
+		 *\param[in]	bufferAlign		L'alignement mémoire du buffer source.
 		 */
 		CU_API PxBufferBase( Size const & size
 			, PixelFormat pixelFormat
@@ -112,16 +122,24 @@ namespace castor
 		 *\param[in]	pixelBuffer	Le buffer à échanger
 		 */
 		CU_API void swap( PxBufferBase & pixelBuffer );
+		/**
+		 *\~english
+		 *\brief		Updates the buffer container, with given layers and miplevels counts.
+		 *\param[in]	layers	The number of layers stored in the buffer.
+		 *\param[in]	levels	The number of miplevels stored in the buffer.
+		 *\~french
+		 *\brief		Met ç jour le conteneur du buffer, avec les nombres de layers et de miplevels donnés.
+		 *\param[in]	layers	Le nombre de layers du buffer.
+		 *\param[in]	levels	Le nombre de miplevels du buffer.
+		 */
 		CU_API void update( uint32_t layers, uint32_t levels );
 		/**
 		 *\~english
-		 *\brief		Creates a new buffer with same values as this one
-		 *\return		The created buffer
+		 *\return		A clone of this buffer.
 		 *\~french
-		 *\brief		Crée un nouveau buffer avec les mêmes valeurs
-		 *\return		Le buffer créé
+		 *\return		Un clone de ce buffer.
 		 */
-		inline std::shared_ptr< PxBufferBase > clone()const
+		std::shared_ptr< PxBufferBase > clone()const
 		{
 			return std::make_shared< PxBufferBase >( *this );
 		}
@@ -148,90 +166,92 @@ namespace castor
 		 *\~french
 		 *\return		count() * (size of a pixel)
 		 */
-		inline uint64_t getSize()const
+		uint64_t getSize()const
 		{
 			return m_buffer.size();
 		}
 
-		inline uint8_t const * getConstPtr()const
+		uint8_t const * getConstPtr()const
 		{
 			return m_buffer.data();
 		}
 
-		inline uint8_t * getPtr()
+		uint8_t * getPtr()
 		{
 			return m_buffer.data();
 		}
 
-		inline bool isFlipped()const
+		bool isFlipped()const
 		{
 			return m_flipped;
 		}
 		
-		inline PixelFormat getFormat()const
+		PixelFormat getFormat()const
 		{
 			return m_format;
 		}
 
-		inline uint32_t getWidth()const
+		uint32_t getWidth()const
 		{
 			return m_size.getWidth();
 		}
 
-		inline uint32_t getHeight()const
+		uint32_t getHeight()const
 		{
 			return m_size.getHeight();
 		}
 
-		inline uint32_t getLayers()const
+		uint32_t getLayers()const
 		{
 			return m_layers;
 		}
 
-		inline uint32_t getLevels()const
+		uint32_t getLevels()const
 		{
 			return m_levels;
 		}
 
-		inline Size const & getDimensions()const
+		Size const & getDimensions()const
 		{
 			return m_size;
 		}
 
-		inline uint32_t getCount()const
+		uint32_t getCount()const
 		{
 			return getWidth() * getHeight();
 		}
 
-		inline PixelData getAt( Position const & position )
+		PixelData getAt( Position const & position )
 		{
 			return getAt( position.x(), position.y() );
 		}
 
-		inline ConstPixelData getAt( Position const & position )const
+		ConstPixelData getAt( Position const & position )const
 		{
 			return getAt( position.x(), position.y() );
 		}
 		/**@}*/
 		/**
 		 *\~english
-		 *\brief		Creates a buffer with the given data
-		 *\param[in]	size			Buffer dimensions
-		 *\param[in]	layers			Buffer layers (or slices)
-		 *\param[in]	levels			Buffer mip levels
-		 *\param[in]	wantedFormat	Pixels format
-		 *\param[in]	buffer			Data buffer
-		 *\param[in]	bufferFormat	Data buffer's pixels format
-		 *\return		The created buffer
+		 *\brief		Creates a buffer with the given data.
+		 *\param[in]	size			Buffer dimensions.
+		 *\param[in]	layers			Buffer layers (or slices).
+		 *\param[in]	levels			Buffer mip levels.
+		 *\param[in]	wantedFormat	Pixels format.
+		 *\param[in]	buffer			Data buffer.
+		 *\param[in]	bufferFormat	Data buffer's pixels format.
+		 *\param[in]	bufferAlign		The alignment of the source buffer.
+		 *\return		The created buffer.
 		 *\~french
-		 *\brief		Crée un buffer avec les données voulues
-		 *\param[in]	size			Dimensions du buffer
-		 *\param[in]	layers			Couches du buffer (layers ou slices)
-		 *\param[in]	levels			Niveaux de mip du buffer
-		 *\param[in]	wantedFormat	Format des pixels du buffer
-		 *\param[in]	buffer			Buffer de données
-		 *\param[in]	bufferFormat	Format des pixels du buffer de données
-		 *\return		Le buffer créé
+		 *\brief		Crée un buffer avec les données voulues.
+		 *\param[in]	size			Dimensions du buffer.
+		 *\param[in]	layers			Couches du buffer (layers ou slices).
+		 *\param[in]	levels			Niveaux de mip du buffer.
+		 *\param[in]	wantedFormat	Format des pixels du buffer.
+		 *\param[in]	buffer			Buffer de données.
+		 *\param[in]	bufferFormat	Format des pixels du buffer de données.
+		 *\param[in]	bufferAlign		L'alignement mémoire du buffer source.
+		 *\return		Le buffer créé.
 		 */
 		CU_API static PxBufferBaseSPtr create( Size const & size
 			, uint32_t layers
@@ -242,21 +262,23 @@ namespace castor
 			, uint32_t bufferAlign = 0u );
 		/**
 		 *\~english
-		 *\brief		Creates a buffer with the given data
-		 *\param[in]	size			Buffer dimensions
-		 *\param[in]	wantedFormat	Pixels format
-		 *\param[in]	buffer			Data buffer
-		 *\param[in]	bufferFormat	Data buffer's pixels format
-		 *\return		The created buffer
+		 *\brief		Creates a buffer with the given data.
+		 *\param[in]	size			Buffer dimensions.
+		 *\param[in]	wantedFormat	Pixels format.
+		 *\param[in]	buffer			Data buffer.
+		 *\param[in]	bufferFormat	Data buffer's pixels format.
+		 *\param[in]	bufferAlign		The alignment of the source buffer.
+		 *\return		The created buffer.
 		 *\~french
-		 *\brief		Crée un buffer avec les données voulues
-		 *\param[in]	size			Dimensions du buffer
-		 *\param[in]	wantedFormat	Format des pixels du buffer
-		 *\param[in]	buffer			Buffer de données
-		 *\param[in]	bufferFormat	Format des pixels du buffer de données
-		 *\return		Le buffer créé
+		 *\brief		Crée un buffer avec les données voulues.
+		 *\param[in]	size			Dimensions du buffer.
+		 *\param[in]	wantedFormat	Format des pixels du buffer.
+		 *\param[in]	buffer			Buffer de données.
+		 *\param[in]	bufferFormat	Format des pixels du buffer de données.
+		 *\param[in]	bufferAlign		L'alignement mémoire du buffer source.
+		 *\return		Le buffer créé.
 		 */
-		inline static PxBufferBaseSPtr create( Size const & size
+		static PxBufferBaseSPtr create( Size const & size
 			, PixelFormat wantedFormat
 			, uint8_t const * buffer = nullptr
 			, PixelFormat bufferFormat = PixelFormat::eR8G8B8A8_UNORM
@@ -272,7 +294,7 @@ namespace castor
 		}
 
 	protected:
-		inline uint32_t doConvert( uint32_t x, uint32_t y )const
+		uint32_t doConvert( uint32_t x, uint32_t y )const
 		{
 			return y * getWidth() + x;
 		}

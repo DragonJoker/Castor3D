@@ -29,6 +29,8 @@ namespace castor3d
 		*	The engine.
 		*\param[in] scene
 		*	The parent scene.
+		*\param name
+		*	The background name.
 		*\~french
 		*\brief
 		*	Constructeur.
@@ -36,6 +38,8 @@ namespace castor3d
 		*	Le moteur.
 		*\param[in] scene
 		*	La scène parente.
+		*\param name
+		*	Le nom du fond.
 		*/
 		C3D_API explicit SkyboxBackground( Engine & engine
 			, Scene & scene
@@ -165,6 +169,8 @@ namespace castor3d
 		*	The image folder.
 		*\param[in] relative
 		*	The image file path, relative to \p folder.
+		*\param[in] face
+		*	The face into which the image will be loaded.
 		*\~french
 		*\brief
 		*	Définit la texture d'une face de la skybox.
@@ -172,6 +178,8 @@ namespace castor3d
 		*	Le dossier de l'image.
 		*\param[in] relative
 		*	Le chemin d'accès à l'image, relatif à \p folder.
+		*\param[in] face
+		*	La face dans laquelle l'image sera chargée.
 		*/
 		C3D_API void loadFaceImage( castor::Path const & folder
 			, castor::Path const & relative
@@ -274,17 +282,17 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline castor::Path const & getEquiTexturePath()const
+		castor::Path const & getEquiTexturePath()const
 		{
 			return m_equiTexturePath;
 		}
 
-		inline castor::Size const & getEquiSize()const
+		castor::Size const & getEquiSize()const
 		{
 			return m_equiSize;
 		}
 
-		inline castor::Path const & getCrossTexturePath()const
+		castor::Path const & getCrossTexturePath()const
 		{
 			return m_crossTexturePath;
 		}
@@ -298,32 +306,18 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		inline void setTexture( TextureLayoutSPtr texture )
+		void setTexture( TextureLayoutSPtr texture )
 		{
 			m_texture = std::move( texture );
 		}
 		/**@}*/
 
 	private:
-		/**
-		*\copydoc	castor3d::SceneBackground::doInitialise
-		*/
 		bool doInitialise( RenderDevice const & device
 			, ashes::RenderPass const & renderPass )override;
-		/**
-		*\copydoc	castor3d::SceneBackground::doCleanup
-		*/
 		void doCleanup()override;
-		/**
-		*\copydoc	castor3d::SceneBackground::doCpuUpdate
-		*/
 		void doCpuUpdate( CpuUpdater & updater )override;
-		/**
-		*\copydoc	castor3d::SceneBackground::doGpuUpdate
-		*/
 		void doGpuUpdate( GpuUpdater & updater )override;
-
-	private:
 		bool doInitialiseTexture( RenderDevice const & device );
 		void doInitialiseEquiTexture( RenderDevice const & device );
 		void doInitialiseCrossTexture( RenderDevice const & device );

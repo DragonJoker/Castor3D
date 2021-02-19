@@ -3,7 +3,7 @@
  *\page build Building Castor3D
  *
  *Castor3D uses CMake to build project files.<br />
- *You just need to launch CMake to build your preferential project file.<br />
+ *You just need to launch CMake to build your favorite project file.<br />
  *Documentation for CastorUtils and Castor3D can be generated using Doxygen.<br />
  *
  *Tested compilers are:
@@ -16,8 +16,8 @@
  *\section projects Projects
  *\subsection projects_main Main Projects
  *<ul>
- *<li>CastorUtils: Depends on zlib.</li>
- *<li>Castor3D: Based on CastorUtils, Ahes and ShaderWriter.</li>
+ *<li>CastorUtils: Depends on zlib and Freetype.</li>
+ *<li>Castor3D: Based on CastorUtils, Ashes and ShaderWriter.</li>
  *<li>GuiCommon: Depends on Castor3D and wxWidgets (from 2.9.5, currently 3.1).</li>
  *<li>CastorViewer: Depends on GuiCommon and wxWidgets.</li>
  *</ul>
@@ -38,7 +38,7 @@
  *<li>PN-Triangles: Depends on Castor3D.</li>
  *</ul>
  *
- *\subsubsection plugins_dividers PostEffects
+ *\subsubsection plugins_postfx PostEffects
  *<ul>
  *<li>Bloom: Depends on Castor3D.</li>
  *<li>FilmGrain: Depends on Castor3D.</li>
@@ -74,15 +74,16 @@
  *<li>CastorTest: Base library for testing, depends on CastorUtils.</li>
  *<li>CastorUtilsTest: Allows you to run unit and performance tests for CastorUtils, depends on CastorUtils and CastorTest.</li>
  *<li>Castor3DTest: Allows you to run unit tests for Castor3D, depends on Castor3D and CastorTest.</li>
- *<li>CastorTestLauncher: Depends on Castor3D.</li>
- *<li>DiffImage: Depends on CastorUtils.</li>
  *</ul>
  *
  *
- *\subsection projects_other Other
+ *\subsection projects_tools Tools
  *<ul>
+ *<li>Aria: Depends on CastorUtils, Boost, sqlite and wxWidgets.</li>
  *<li>CastorMeshConverter: Depends on Castor3D and wxWidgets.</li>
  *<li>CastorMeshUpgrader: Depends on Castor3D and wxWidgets.</li>
+ *<li>CastorTestLauncher: Depends on Castor3D.</li>
+ *<li>DiffImage: Depends on CastorUtils.</li>
  *<li>ImgConverter: Depends on wxWidgets.</li>
  *</ul>
  *
@@ -198,8 +199,8 @@
  *\section projects Projets
  *\subsection projects_main Projets Principaux
  *<ul>
- *<li>CastorUtils: Dépend de zlib.</li>
- *<li>Castor3D: Dépend de CastorUtils, Ahes et ShaderWriter.</li>
+ *<li>CastorUtils: Dépend de zlib et de freetype.</li>
+ *<li>Castor3D: Dépend de CastorUtils, Ashes et ShaderWriter.</li>
  *<li>GuiCommon: Dépend de Castor3D et wxWidgets (depuis la version 2.9.5, actuellement la version 3.1).</li>
  *<li>CastorViewer: Dépend de GuiCommon et wxWidgets.</li>
  *</ul>
@@ -220,7 +221,7 @@
  *<li>PN-Triangles: Dépend de Castor3D.</li>
  *</ul>
  *
- *\subsubsection plugins_dividers PostEffects
+ *\subsubsection plugins_postfx PostEffects
  *<ul>
  *<li>Bloom: Dépend de Castor3D.</li>
  *<li>FilmGrain: Dépend de Castor3D.</li>
@@ -251,21 +252,22 @@
  *</ul>
  *
  *
- *\subsection projects_test Test projects
+ *\subsection projects_test Projets de test
  *<ul>
  *<li>CastorTest: Bibliothèque de base pour les tests, dépend de CastorUtils.</li>
  *<li>CastorUtilsTest: Vous permet de lancer des tests unitaires et de performances pour CastorUtils, dépend de CastorUtils et CastorTest.</li>
  *<li>Castor3DTest: Vous permet de lancer les tests unitaires de Castor3D, dépend de Castor3D et CastorTest.</li>
- *<li>CastorTestLauncher: Dépend de Castor3D.</li>
- *<li>DiffImage: Dépend de CastorUtils.</li>
  *</ul>
  *
  *
- *\subsection projects_other Other
+ *\subsection projects_tools Outils
  *<ul>
+ *<li>Aria: Dépend de CastorUtils, Boost, sqlite et wxWidgets.</li>
  *<li>CastorMeshConverter: Dépend de Castor3D et wxWidgets.</li>
  *<li>CastorMeshUpgrader: Dépend de Castor3D et wxWidgets.</li>
  *<li>ImgConverter: Dépend de wxWidgets.</li>
+ *<li>CastorTestLauncher: Dépend de Castor3D.</li>
+ *<li>DiffImage: Dépend de CastorUtils.</li>
  *</ul>
  *
  *

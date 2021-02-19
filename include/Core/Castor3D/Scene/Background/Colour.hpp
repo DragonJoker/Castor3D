@@ -26,6 +26,8 @@ namespace castor3d
 		*	The engine.
 		*\param[in] scene
 		*	The scene.
+		*\param name
+		*	The background name.
 		*\~french
 		*\brief
 		*	Constructeur.
@@ -33,6 +35,8 @@ namespace castor3d
 		*	Le moteur.
 		*\param[in] scene
 		*	La scène.
+		*\param name
+		*	Le nom du fond.
 		*/
 		C3D_API ColourBackground( Engine & engine
 			, Scene & scene
@@ -90,25 +94,11 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		/**
-		*\copydoc	castor3d::SceneBackground::doInitialise
-		*/
 		bool doInitialise( RenderDevice const & device
 			, ashes::RenderPass const & renderPass )override;
-		/**
-		*\copydoc	castor3d::SceneBackground::doCleanup
-		*/
 		void doCleanup()override;
-		/**
-		*\copydoc	castor3d::SceneBackground::doCpuUpdate
-		*/
 		void doCpuUpdate( CpuUpdater & updater )override;
-		/**
-		*\copydoc	castor3d::SceneBackground::doGpuUpdate
-		*/
 		void doGpuUpdate( GpuUpdater & updater )override;
-
-	private:
 		void doUpdateColour( RenderDevice const & device );
 
 	private:

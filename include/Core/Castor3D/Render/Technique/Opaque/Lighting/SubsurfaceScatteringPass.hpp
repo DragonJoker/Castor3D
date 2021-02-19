@@ -27,20 +27,22 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine			The engine.
-		 *\param[in]	gpInfoUbo		The geometry pass UBO.
-		 *\param[in]	sceneUbo		The scene UBO.
-		 *\param[in]	textureSize		The render area dimensions.
-		 *\param[in]	gpResult		The geometry pass result.
-		 *\param[in]	lpResult		The light pass result.
+		 *\param[in]	engine		The engine.
+		 *\param[in]	device		The GPU device.
+		 *\param[in]	gpInfoUbo	The geometry pass UBO.
+		 *\param[in]	sceneUbo	The scene UBO.
+		 *\param[in]	textureSize	The render area dimensions.
+		 *\param[in]	gpResult	The geometry pass result.
+		 *\param[in]	lpResult	The light pass result.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine			Le moteur.
-		 *\param[in]	gpInfoUbo		L'UBO de la passe géométrique.
-		 *\param[in]	sceneUbo		L'UBO de la scène.
-		 *\param[in]	textureSize		Les dimensions de la zone de rendu.
-		 *\param[in]	gpResult		Le résultat de la geometry pass.
-		 *\param[in]	lpResult		Le résultat de la light pass.
+		 *\param[in]	engine		Le moteur.
+		 *\param[in]	device		Le device GPU.
+		 *\param[in]	gpInfoUbo	L'UBO de la passe géométrique.
+		 *\param[in]	sceneUbo	L'UBO de la scène.
+		 *\param[in]	textureSize	Les dimensions de la zone de rendu.
+		 *\param[in]	gpResult	Le résultat de la geometry pass.
+		 *\param[in]	lpResult	Le résultat de la light pass.
 		 */
 		C3D_API SubsurfaceScatteringPass( Engine & engine
 			, RenderDevice const & device
@@ -56,14 +58,32 @@ namespace castor3d
 		 *\brief		Destructeur.
 		 */
 		C3D_API ~SubsurfaceScatteringPass() = default;
+		/**
+		 *\~english
+		 *\brief		Initialises the GPU elements.
+		 *\param[in]	device	The GPU device.
+		 *\~french
+		 *\brief		Initialise les éléments GPU.
+		 *\param[in]	device	Le device GPU.
+		 */
 		C3D_API void initialise( RenderDevice const & device );
+		/**
+		 *\~english
+		 *\brief		Cleans up the GPU elements.
+		 *\param[in]	device	The GPU device.
+		 *\~french
+		 *\brief		Nettoie les éléments GPU.
+		 *\param[in]	device	Le device GPU.
+		 */
 		C3D_API void cleanup( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Renders the subsurfaces scattering.
+		 *\param[in]	device	The GPU device.
 		 *\param[in]	toWait	The semaphore to wait.
 		 *\~french
 		 *\brief		Dessine le subsurfaces scattering.
+		 *\param[in]	device	Le device GPU.
 		 *\param[in]	toWait	Le sémaphore à attendre.
 		 */
 		C3D_API ashes::Semaphore const & render( RenderDevice const & device

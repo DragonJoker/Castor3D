@@ -10,6 +10,12 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 	add_subdirectory( Interop )
 endif ()
 
+if ( WIN32 )
+	set( C3D_LIB_PREFIX castor3d )
+else ()
+	set( C3D_LIB_PREFIX libcastor3d )
+endif ()
+
 # Ashes external library
 set( ASHES_BUILD_RENDERER_PLUGINS ${CASTOR_BUILD_PLUGINS} )
 set( ASHES_BUILD_RENDERER_VKN ON )
@@ -108,21 +114,28 @@ endif ()
 message( STATUS "${msg}\n" )
 
 if ( TARGET Castor3D )
-	set( CASTOR_INSTEXP_LIST
-		Castor3D
-		${CASTOR_INSTEXP_LIST}
+	install(
+		TARGETS CastorUtils Castor3D
+		COMPONENT Castor3D
+		EXPORT Castor3D
+		RUNTIME DESTINATION bin
+		LIBRARY DESTINATION lib
+		ARCHIVE DESTINATION lib
+	)
+else ()
+	install(
+		TARGETS CastorUtils
+		COMPONENT Castor3D
+		EXPORT Castor3D
+		RUNTIME DESTINATION bin
+		LIBRARY DESTINATION lib
+		ARCHIVE DESTINATION lib
 	)
 endif ()
 
-install(
-	TARGETS CastorUtils ${CASTOR_INSTEXP_LIST}
-	EXPORT Castor3D
-	RUNTIME DESTINATION bin
-	LIBRARY DESTINATION lib
-	ARCHIVE DESTINATION lib
-)
 install( EXPORT Castor3D
 	FILE Castor3DConfig.cmake
+	COMPONENT Castor3D
 	NAMESPACE castor::
 	DESTINATION lib/cmake/castor3d
 )

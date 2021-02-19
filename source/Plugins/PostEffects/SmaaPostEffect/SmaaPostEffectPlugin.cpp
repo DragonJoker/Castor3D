@@ -15,7 +15,7 @@
 #ifndef CU_PlatformWindows
 #	define C3D_Smaa_API
 #else
-#	ifdef castor3dSmaaPostEffect_EXPORTS
+#	ifdef SmaaPostEffect_EXPORTS
 #		define C3D_Smaa_API __declspec( dllexport )
 #	else
 #		define C3D_Smaa_API __declspec( dllimport )

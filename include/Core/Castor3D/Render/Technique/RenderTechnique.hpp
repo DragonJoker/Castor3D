@@ -43,14 +43,14 @@ namespace castor3d
 		 *\param[in]	renderTarget	The render target for this technique.
 		 *\param[in]	renderSystem	The render system.
 		 *\param[in]	parameters		The technique parameters.
-		 *\param[in]	config			The SSAO configuration.
+		 *\param[in]	ssaoConfig		The SSAO configuration.
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	name			Le nom de la technique.
 		 *\param[in]	renderTarget	La render target pour cette technique.
 		 *\param[in]	renderSystem	Le render system.
 		 *\param[in]	parameters		Les paramètres de la technique.
-		 *\param[in]	config			La configuration du SSAO.
+		 *\param[in]	ssaoConfig		La configuration du SSAO.
 		 */
 		C3D_API RenderTechnique( castor::String const & name
 			, RenderTarget & renderTarget
@@ -67,9 +67,13 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialisation function.
+		 *\param[in]	device			The GPU device.
+		 *\param[out]	intermediates	Receives the intermediate views used by the whole technique.
 		 *\return		\p true if ok.
 		 *\~french
 		 *\brief		Fonction d'initialisation.
+		 *\param[in]	device			Le device GPU.
+		 *\param[out]	intermediates	Reçoit les vues intermédiaires utilisées par toute la technique.
 		 *\return		\p true if ok.
 		 */
 		C3D_API bool initialise( RenderDevice const & device
@@ -77,39 +81,39 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Cleanup function
+		 *\param[in]	device	The GPU device.
 		 *\~french
 		 *\brief		Fonction de nettoyage
+		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API void cleanup( RenderDevice const & device );
 		/**
 		 *\~english
-		 *\brief		Update function.
-		 *\remarks		Gather the render queues, for further update.
-		 *\param[out]	queues	Receives the render queues needed for the rendering of the frame.
+		 *\brief			Updates the render pass, CPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Fonction de mise à jour.
-		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
-		 *\param[out]	queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
+		 *\brief			Met à jour la passe de rendu, au niveau CPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
-		 *\brief		Updates GPU data.
-		 *\param[in]	jitter	The jittering value.
-		 *\param[out]	info	Receives the render informations.
+		 *\brief			Updates the render pass, GPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour les données GPU.
-		 *\param[in]	jitter	La valeur de jittering.
-		 *\param[out]	info	Reçoit les informations de rendu.
+		 *\brief			Met à jour la passe de rendu, au niveau GPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Render function
+		 *\param[in]	device			The GPU device.
 		 *\param[in]	waitSemaphores	The semaphores to wait for.
 		 *\param[out]	info			Receives the render informations.
 		 *\~french
 		 *\brief		Fonction de rendu.
+		 *\param[in]	device			Le device GPU.
 		 *\param[in]	waitSemaphores	Les sémaphores à attendre.
 		 *\param[out]	info			Reçoit les informations de rendu.
 		 */
@@ -129,9 +133,13 @@ namespace castor3d
 		*\~english
 		*\brief
 		*	Visitor acceptance function.
+		*\param visitor
+		*	The ... visitor.
 		*\~french
 		*\brief
 		*	Fonction d'acceptation de visiteur.
+		*\param visitor
+		*	Le ... visiteur.
 		*/
 		C3D_API void accept( RenderTechniqueVisitor & visitor );
 		/**
@@ -143,86 +151,86 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline castor::Size const & getSize()const
+		castor::Size const & getSize()const
 		{
 			return m_size;
 		}
 
-		inline TextureLayout const & getResult()const
+		TextureLayout const & getResult()const
 		{
 			CU_Require( m_colourTexture.isTextured() );
 			return *m_colourTexture.getTexture();
 		}
 
-		inline TextureLayout const & getDepth()const
+		TextureLayout const & getDepth()const
 		{
 			return *m_depthBuffer.getTexture();
 		}
 
-		inline TextureLayoutSPtr getDepthPtr()const
+		TextureLayoutSPtr getDepthPtr()const
 		{
 			return m_depthBuffer.getTexture();
 		}
 
-		inline MatrixUbo const & getMatrixUbo()const
+		MatrixUbo const & getMatrixUbo()const
 		{
 			return m_matrixUbo;
 		}
 
-		inline MatrixUbo & getMatrixUbo()
+		MatrixUbo & getMatrixUbo()
 		{
 			return m_matrixUbo;
 		}
 
-		inline RenderTechniquePass const & getOpaquePass()const
+		RenderTechniquePass const & getOpaquePass()const
 		{
 			CU_Require( m_opaquePass );
 			return *m_opaquePass;
 		}
 
-		inline RenderTechniquePass const & getTransparentPass()const
+		RenderTechniquePass const & getTransparentPass()const
 		{
 			CU_Require( m_transparentPass );
 			return *m_transparentPass;
 		}
 
-		inline ShadowMapLightTypeArray const & getShadowMaps()const
+		ShadowMapLightTypeArray const & getShadowMaps()const
 		{
 			return m_allShadowMaps;
 		}
 
-		inline ashes::Semaphore const & getSemaphore()const
+		ashes::Semaphore const & getSemaphore()const
 		{
 			CU_Require( m_signalFinished );
 			return *m_signalFinished;
 		}
 
-		inline RenderTarget const & getRenderTarget()const
+		RenderTarget const & getRenderTarget()const
 		{
 			return m_renderTarget;
 		}
 
-		inline bool isMultisampling()const
+		bool isMultisampling()const
 		{
 			return false;
 		}
 
-		inline SsaoConfig const & getSsaoConfig()const
+		SsaoConfig const & getSsaoConfig()const
 		{
 			return m_ssaoConfig;
 		}
 
-		inline SsaoConfig & getSsaoConfig()
+		SsaoConfig & getSsaoConfig()
 		{
 			return m_ssaoConfig;
 		}
 
-		inline DebugConfig const & getDebugConfig()const
+		DebugConfig const & getDebugConfig()const
 		{
 			return m_debugConfig;
 		}
 
-		inline DebugConfig & getDebugConfig()
+		DebugConfig & getDebugConfig()
 		{
 			return m_debugConfig;
 		}

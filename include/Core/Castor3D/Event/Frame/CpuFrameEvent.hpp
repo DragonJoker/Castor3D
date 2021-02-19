@@ -42,13 +42,11 @@ namespace castor3d
 		C3D_API virtual void apply() = 0;
 		/**
 		 *\~english
-		 *\brief		Retrieves the event type.
 		 *\return		The event type.
 		 *\~french
-		 *\brief		Récupère le type de l'évènement.
 		 *\return		Le type de l'évènement.
 		 */
-		inline EventType getType()
+		EventType getType()
 		{
 			return m_type;
 		}

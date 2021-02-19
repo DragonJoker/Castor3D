@@ -37,17 +37,17 @@ namespace castor3d
 		 *\param[in]	engine		The engine.
 		 *\param[in]	produce		The element producer.
 		 *\param[in]	initialise	The element initialiser.
-		 *\param[in]	clean			The element cleaner.
-		 *\param[in]	merge			The element collection merger.
+		 *\param[in]	clean		The element cleaner.
+		 *\param[in]	merge		The element collection merger.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
 		 *\param[in]	produce		Le créateur d'objet.
 		 *\param[in]	initialise	L'initialiseur d'objet.
-		 *\param[in]	clean			Le nettoyeur d'objet.
-		 *\param[in]	merge			Le fusionneur de collection d'objets.
+		 *\param[in]	clean		Le nettoyeur d'objet.
+		 *\param[in]	merge		Le fusionneur de collection d'objets.
 		 */
-		inline CacheBase( Engine & engine
+		CacheBase( Engine & engine
 			, Producer && produce
 			, Initialiser && initialise
 			, Cleaner && clean
@@ -66,7 +66,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		inline ~CacheBase()
+		~CacheBase()
 		{
 		}
 		/**
@@ -75,7 +75,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met tous les éléments à nettoyer.
 		 */
-		inline void cleanup()
+		void cleanup()
 		{
 			LockType lock{ castor::makeUniqueLock( m_elements ) };
 
@@ -90,7 +90,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Vide la collection.
 		 */
-		inline void clear()
+		void clear()
 		{
 			m_elements.clear();
 		}
@@ -100,7 +100,7 @@ namespace castor3d
 		 *\~french
 		 *\return		\p true si le cache est vide.
 		 */
-		inline bool isEmpty()const
+		bool isEmpty()const
 		{
 			return m_elements.empty();
 		}
@@ -117,7 +117,7 @@ namespace castor3d
 		 *\return		L'élément créé.
 		 */
 		template< typename ... Parameters >
-		inline ElementPtr create( Key const & name
+		ElementPtr create( Key const & name
 			, Parameters && ... parameters )
 		{
 			this->doReportCreation( name );
@@ -134,7 +134,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom d'élément.
 		 *\param[in]	element	L'élément.
 		 */
-		inline ElementPtr add( Key const & name, ElementPtr element )
+		ElementPtr add( Key const & name, ElementPtr element )
 		{
 			ElementPtr result{ element };
 
@@ -172,7 +172,7 @@ namespace castor3d
 		 *\return		L'élément créé.
 		 */
 		template< typename ... Parameters >
-		inline ElementPtr add( Key const & name, Parameters && ... parameters )
+		ElementPtr add( Key const & name, Parameters && ... parameters )
 		{
 			ElementPtr result;
 			LockType lock{ castor::makeUniqueLock( m_elements ) };
@@ -196,12 +196,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Removes an element, given a name.
-		 *\param[in]	name		The element name.
+		 *\param[in]	name	The element name.
 		 *\~french
 		 *\brief		Retire un élément à partir d'un nom.
-		 *\param[in]	name		Le nom d'élément.
+		 *\param[in]	name	Le nom d'élément.
 		 */
-		inline void remove( Key const & name )
+		void remove( Key const & name )
 		{
 			m_elements.erase( name );
 		}
@@ -213,7 +213,7 @@ namespace castor3d
 		 *\return		Met les éléments de ce cache dans ceux de celui donné.
 		 *\param[out]	destination		Le cache de destination.
 		 */
-		inline void mergeInto( MyCacheType & destination )
+		void mergeInto( MyCacheType & destination )
 		{
 			LockType lock{ castor::makeUniqueLock( m_elements ) };
 			LockType lockOther{ castor::makeUniqueLock( destination.m_elements ) };
@@ -234,7 +234,7 @@ namespace castor3d
 		 *\param[in]	func	La fonction.
 		 */
 		template< typename FuncType >
-		inline void forEach( FuncType func )const
+		void forEach( FuncType func )const
 		{
 			LockType lock{ castor::makeUniqueLock( m_elements ) };
 
@@ -252,7 +252,7 @@ namespace castor3d
 		 *\param[in]	func	La fonction.
 		 */
 		template< typename FuncType >
-		inline void forEach( FuncType func )
+		void forEach( FuncType func )
 		{
 			LockType lock{ castor::makeUniqueLock( m_elements ) };
 
@@ -267,7 +267,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le nombre d'éléments.
 		 */
-		inline uint32_t getObjectCount()const
+		uint32_t getObjectCount()const
 		{
 			return uint32_t( m_elements.size() );
 		}
@@ -277,7 +277,7 @@ namespace castor3d
 		*\~french
 		*\return		L'Engine.
 		*/
-		inline Engine * getEngine()const
+		Engine * getEngine()const
 		{
 			return &m_engine;
 		}
@@ -287,33 +287,33 @@ namespace castor3d
 		*\~french
 		*\return		L'Engine.
 		*/
-		inline castor::String const & getObjectTypeName()const
+		castor::String const & getObjectTypeName()const
 		{
 			return MyCacheTraits::Name;
 		}
 		/**
 		 *\~english
-		 *\param[in]	name		The element name.
+		 *\param[in]	name	The element name.
 		 *\return		\p true if an element with given name exists.
 		 *\~french
-		 *\param[in]	name		Le nom d'élément.
+		 *\param[in]	name	Le nom d'élément.
 		 *\return		\p true Si un élément avec le nom donné existe.
 		 */
-		inline bool has( Key const & name )const
+		bool has( Key const & name )const
 		{
 			return m_elements.has( name );
 		}
 		/**
 		 *\~english
 		 *\brief		Looks for an element with given name.
-		 *\param[in]	name		The object name.
+		 *\param[in]	name	The object name.
 		 *\return		The found element, nullptr if not found.
 		 *\~french
 		 *\brief		Cherche un élément par son nom.
-		 *\param[in]	name		Le nom d'élément.
+		 *\param[in]	name	Le nom d'élément.
 		 *\return		L'élément trouvé, nullptr si non trouvé.
 		 */
-		inline ElementPtr find( Key const & name )const
+		ElementPtr find( Key const & name )const
 		{
 			return m_elements.find( name );
 		}
@@ -323,7 +323,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Locke le mutex de la collection
 		 */
-		inline void lock()const
+		void lock()const
 		{
 			m_elements.lock();
 		}
@@ -333,7 +333,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Délocke le mutex de la collection
 		 */
-		inline void unlock()const
+		void unlock()const
 		{
 			m_elements.unlock();
 		}
@@ -343,7 +343,7 @@ namespace castor3d
 		 *\~french
 		 *\return		L'itérateur sur le début de la collection.
 		 */
-		inline auto begin()
+		auto begin()
 		{
 			return m_elements.begin();
 		}
@@ -353,7 +353,7 @@ namespace castor3d
 		 *\~french
 		 *\return		L'itérateur sur le début de la collection.
 		 */
-		inline auto begin()const
+		auto begin()const
 		{
 			return m_elements.begin();
 		}
@@ -363,7 +363,7 @@ namespace castor3d
 		 *\~french
 		 *\return		L'itérateur sur la fin de la collection.
 		 */
-		inline auto end()
+		auto end()
 		{
 			return m_elements.end();
 		}
@@ -373,13 +373,13 @@ namespace castor3d
 		 *\~french
 		 *\return		L'itérateur sur la fin de la collection.
 		 */
-		inline auto end()const
+		auto end()const
 		{
 			return m_elements.end();
 		}
 
 	protected:
-		inline void doReportCreation( castor::String const & name )
+		void doReportCreation( castor::String const & name )
 		{
 			log::trace << InfoCacheCreatedObject
 				<< getObjectTypeName()
@@ -387,7 +387,7 @@ namespace castor3d
 				<< name << std::endl;
 		}
 
-		inline void doReportDuplicate( castor::String const & name )
+		void doReportDuplicate( castor::String const & name )
 		{
 			log::warn << WarningCacheDuplicateObject
 				<< getObjectTypeName()
@@ -395,7 +395,7 @@ namespace castor3d
 				<< name << std::endl;
 		}
 
-		inline void doReportNull()
+		void doReportNull()
 		{
 			log::warn << WarningCacheNullObject
 				<< getObjectTypeName() << std::endl;

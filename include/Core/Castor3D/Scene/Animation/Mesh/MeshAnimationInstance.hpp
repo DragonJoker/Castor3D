@@ -58,7 +58,7 @@ namespace castor3d
 		 *\~french
 		 *\return		L'animation.
 		 */
-		inline MeshAnimation const & getMeshAnimation()const
+		MeshAnimation const & getMeshAnimation()const
 		{
 			return m_meshAnimation;
 		}
@@ -68,7 +68,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le maillage animé.
 		 */
-		inline AnimatedMesh & getAnimatedMesh()
+		AnimatedMesh & getAnimatedMesh()
 		{
 			return m_animatedMesh;
 		}
@@ -78,15 +78,12 @@ namespace castor3d
 		 *\~french
 		 *\return		Le ratio actuel dans la keyframe courante.
 		 */
-		inline float getRatio()const
+		float getRatio()const
 		{
 			return m_ratio;
 		}
 
 	private:
-		/**
-		 *\copydoc		castor3d::AnimationInstance::doUpdate
-		 */
 		void doUpdate()override;
 
 	protected:

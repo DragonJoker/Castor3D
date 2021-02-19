@@ -1,6 +1,8 @@
 ﻿#include <CastorUtils/Data/Path.hpp>
 #include <CastorUtils/Design/ChangeTracked.hpp>
 #include <CastorUtils/Graphics/Font.hpp>
+#include <CastorUtils/Graphics/RgbColour.hpp>
+#include <CastorUtils/Graphics/RgbaColour.hpp>
 #include <CastorUtils/Math/Angle.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
 #include <CastorUtils/Math/Speed.hpp>

@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Graphics/Rectangle.hpp>
 
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Rectangle );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Rectangle )
 
 namespace GuiCommon
 {

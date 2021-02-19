@@ -49,23 +49,45 @@ namespace castor3d
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	engine		The engine.
-		 *\param[in]	size		The render area dimensions.
-		 *\param[in]	scene		The scene.
-		 *\param[in]	gpResult	The geometry pass buffers.
-		 *\param[in]	depthView	The depth buffer attach.
-		 *\param[in]	sceneUbo	The scene UBO.
-		 *\param[in]	gpInfoUbo	The geometry pass UBO.
+		 *\brief		Initialises deferred rendering related stuff.
+		 *\param[in]	engine				The engine.
+		 *\param[in]	device				The GPU device.
+		 *\param[in]	size				The render area dimensions.
+		 *\param[in]	scene				The scene.
+		 *\param[in]	gpResult			The geometry pass buffers.
+		 *\param[in]	smDirectionalResult	The directional lights shadow map.
+		 *\param[in]	smPointResult		The point lights shadow map.
+		 *\param[in]	smSpotResult		The spot lights shadow map.
+		 *\param[in]	lpvResult			The LPV result.
+		 *\param[in]	llpvResult			The Layered LPV result.
+		 *\param[in]	vctFirstBounce		The VCT first bounce result.
+		 *\param[in]	vctSecondaryBounce	The VCT secondary bounce result.
+		 *\param[in]	depthView			The depth buffer attach.
+		 *\param[in]	sceneUbo			The scene UBO.
+		 *\param[in]	gpInfoUbo			The GBuffer configuration UBO.
+		 *\param[in]	lpvConfigUbo		The LPV configuration UBO.
+		 *\param[in]	llpvConfigUbo		The Layered LPV configuration UBO.
+		 *\param[in]	vctConfigUbo		The VCT configuration UBO.
 		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	engine		Le moteur.
-		 *\param[in]	size		Les dimensions de la zone de rendu.
-		 *\param[in]	scene		La scène.
-		 *\param[in]	gpResult	Les tampons de la geometry pass.
-		 *\param[in]	depthView	L'attache du tampon de profondeur.
-		 *\param[in]	sceneUbo	L'UBO de scène.
-		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
+		 *\brief		Initialise les données liées au deferred rendering.
+		 *\param[in]	engine				Le moteur.
+		 *\param[in]	device				Le device GPU.
+		 *\param[in]	size				Les dimensions de la zone de rendu.
+		 *\param[in]	scene				La scène.
+		 *\param[in]	gpResult			Les textures de la passe de géométries.
+		 *\param[in]	smDirectionalResult	La shadow map des source lumineuses directionnelles.
+		 *\param[in]	smPointResult		La shadow map des source lumineuses omnidirectionnelles.
+		 *\param[in]	smSpotResult		La shadow map des source lumineuses projecteurs.
+		 *\param[in]	lpvResult			Le résultat du LPV.
+		 *\param[in]	llpvResult			Le résultat du Layered LPV.
+		 *\param[in]	vctFirstBounce		Le résultat du premier rebond de VCT.
+		 *\param[in]	vctSecondaryBounce	Le résultat du second rebond de VCT.
+		 *\param[in]	depthView			L'attache du tampon de profondeur.
+		 *\param[in]	sceneUbo			L'UBO de scène.
+		 *\param[in]	gpInfoUbo			L'UBO de configuration du GBuffer.
+		 *\param[in]	lpvConfigUbo		L'UBO de configuration des LPV.
+		 *\param[in]	llpvConfigUbo		L'UBO de configuration des Layered LPV.
+		 *\param[in]	vctConfigUbo		L'UBO de configuration du VCT.
 		 */
 		LightingPass( Engine & engine
 			, RenderDevice const & device
@@ -94,16 +116,20 @@ namespace castor3d
 		~LightingPass();
 		/**
 		 *\~english
-		 *\brief		Updates the lighting pass, CPU wise.
+		 *\brief			Updates the render pass, CPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour la passe d'éclairage, a niveau CPU.
+		 *\brief			Met à jour la passe de rendu, au niveau CPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		void update( CpuUpdater & updater );
 		/**
 		 *\~english
-		 *\brief		Updates the lighting pass, GPU wise.
+		 *\brief			Updates the render pass, GPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour la passe d'éclairage, a niveau GPU.
+		 *\brief			Met à jour la passe de rendu, au niveau GPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		void update( GpuUpdater & updater );
 		/**

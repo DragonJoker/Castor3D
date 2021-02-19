@@ -27,24 +27,26 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor
+		 *\param[in]	engine	The engine
 		 *\param[in]	name	The sampler name
-		 *\param[in]	engine	The core engine
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	name	Le nom du sampler
 		 *\param[in]	engine	Le moteur
+		 *\param[in]	name	Le nom du sampler
 		 */
 		C3D_API Sampler( Engine & engine
 			, castor::String const & name );
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	name	The sampler name
-		 *\param[in]	engine	The core engine
+		 *\brief		Constructor.
+		 *\param[in]	engine		The engine.
+		 *\param[in]	name		The sampler name.
+		 *\param[in]	createInfo	The creation infos.
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	name	Le nom du sampler
-		 *\param[in]	engine	Le moteur
+		 *\brief		Constructeur.
+		 *\param[in]	engine		Le moteur.
+		 *\param[in]	name		Le nom du sampler.
+		 *\param[in]	createInfo	Les informations de création.
 		 */
 		C3D_API Sampler( Engine & engine
 			, castor::String const & name
@@ -59,9 +61,11 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the GPU sampler.
+		 *\param[in]	device	The GPU device.
 		 *\return		\p true if ok.
 		 *\~french
 		 *\brief		Initialise le sampler GPU.
+		 *\param[in]	device	Le device GPU.
 		 *\return		\p true si tout s'est bien passé.
 		 */
 		C3D_API bool initialise( RenderDevice const & device );
@@ -81,67 +85,67 @@ namespace castor3d
 		*	Accesseurs.
 		**/
 		/**@{*/
-		inline VkSamplerAddressMode getWrapS()const
+		VkSamplerAddressMode getWrapS()const
 		{
 			return m_info->addressModeU;
 		}
 
-		inline VkSamplerAddressMode getWrapT()const
+		VkSamplerAddressMode getWrapT()const
 		{
 			return m_info->addressModeV;
 		}
 
-		inline VkSamplerAddressMode getWrapR()const
+		VkSamplerAddressMode getWrapR()const
 		{
 			return m_info->addressModeW;
 		}
 
-		inline VkFilter getMinFilter()const
+		VkFilter getMinFilter()const
 		{
 			return m_info->minFilter;
 		}
 
-		inline VkFilter getMagFilter()const
+		VkFilter getMagFilter()const
 		{
 			return m_info->magFilter;
 		}
 
-		inline VkSamplerMipmapMode getMipFilter()const
+		VkSamplerMipmapMode getMipFilter()const
 		{
 			return m_info->mipmapMode;
 		}
 
-		inline float getMinLod()const
+		float getMinLod()const
 		{
 			return m_info->minLod;
 		}
 
-		inline float getMaxLod()const
+		float getMaxLod()const
 		{
 			return m_info->maxLod;
 		}
 
-		inline float getLodBias()const
+		float getLodBias()const
 		{
 			return m_info->mipLodBias;
 		}
 
-		inline VkBorderColor getBorderColour()const
+		VkBorderColor getBorderColour()const
 		{
 			return m_info->borderColor;
 		}
 
-		inline float getMaxAnisotropy()const
+		float getMaxAnisotropy()const
 		{
 			return m_info->maxAnisotropy;
 		}
 
-		inline VkCompareOp getCompareOp()const
+		VkCompareOp getCompareOp()const
 		{
 			return m_info->compareOp;
 		}
 
-		inline ashes::Sampler const & getSampler()const
+		ashes::Sampler const & getSampler()const
 		{
 			CU_Require( m_sampler );
 			return *m_sampler;
@@ -160,73 +164,73 @@ namespace castor3d
 		*	ils ont un effet jusqu'à ce que initialise() soit appelée.
 		**/
 		/**@{*/
-		inline void setWrapS( VkSamplerAddressMode value )
+		void setWrapS( VkSamplerAddressMode value )
 		{
 			m_info->addressModeU = value;
 		}
 
-		inline void setWrapT( VkSamplerAddressMode value )
+		void setWrapT( VkSamplerAddressMode value )
 		{
 			m_info->addressModeV = value;
 		}
 
-		inline void setWrapR( VkSamplerAddressMode value )
+		void setWrapR( VkSamplerAddressMode value )
 		{
 			m_info->addressModeW = value;
 		}
 
-		inline void setMinFilter( VkFilter value )
+		void setMinFilter( VkFilter value )
 		{
 			m_info->minFilter = value;
 		}
 
-		inline void setMagFilter( VkFilter value )
+		void setMagFilter( VkFilter value )
 		{
 			m_info->magFilter = value;
 		}
 
-		inline void setMipFilter( VkSamplerMipmapMode value )
+		void setMipFilter( VkSamplerMipmapMode value )
 		{
 			m_mipmapIsSet = true;
 			m_info->mipmapMode = value;
 		}
 
-		inline void setMinLod( float value )
+		void setMinLod( float value )
 		{
 			m_info->minLod = value;
 		}
 
-		inline void setMaxLod( float value )
+		void setMaxLod( float value )
 		{
 			m_info->maxLod = value;
 		}
 
-		inline void setLodBias( float value )
+		void setLodBias( float value )
 		{
 			m_info->mipLodBias = value;
 		}
 
-		inline void setBorderColour( VkBorderColor value )
+		void setBorderColour( VkBorderColor value )
 		{
 			m_info->borderColor = value;
 		}
 
-		inline void enableAnisotropicFiltering( bool value )
+		void enableAnisotropicFiltering( bool value )
 		{
 			m_info->anisotropyEnable = value;
 		}
 
-		inline void setMaxAnisotropy( float value )
+		void setMaxAnisotropy( float value )
 		{
 			m_info->maxAnisotropy = value;
 		}
 
-		inline void setCompareOp( VkCompareOp value )
+		void setCompareOp( VkCompareOp value )
 		{
 			m_info->compareOp = value;
 		}
 
-		inline void enableCompare( bool value )
+		void enableCompare( bool value )
 		{
 			m_info->compareEnable = value;
 		}

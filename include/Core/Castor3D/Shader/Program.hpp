@@ -20,15 +20,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/**
-	\author 	Sylvain DOREMUS
-	\version	0.6.1.2
-	\date		24/01/2011
-	\~english
-	\brief		Base shader program implementation, used to share functions through the supported shader languages.
-	\~french
-	\brief		Implémentation de base d'un programme de shader, utilisé afin d'exposer les fonctions communes aux langages de shader.
-	*/
 	class ShaderProgram
 		: public castor::Named
 		, public castor::OwnedBy< RenderSystem >
@@ -40,10 +31,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	renderSystem	The RenderSystem instance.
+		 *\param[in]	name			The program name.
+		 *\param[in]	renderSystem	The RenderSystem.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	renderSystem	L'instance du RenderSystem.
+		 *\param[in]	name			Le nom du programme.
+		 *\param[in]	renderSystem	Le RenderSystem.
 		 */
 		C3D_API explicit ShaderProgram( castor::String const & name
 			, RenderSystem & renderSystem );
@@ -57,15 +50,19 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the program.
+		 *\param[in]	device	The GPU device.
 		 *\~french
 		 *\brief		Initialise le programme.
+		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API bool initialise( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Cleans the program up.
+		 *\param[in]	device	The GPU device.
 		 *\~french
 		 *\brief		Nettoie le programme.
+		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API void cleanup( RenderDevice const & device );
 		/**

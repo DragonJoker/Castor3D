@@ -21,6 +21,7 @@
  *<li>Screen Space Subsurface Scattering (without backlit transmittance yet).</li>
  *<li>Volumetric Light Scattering for the directional light source, if it projects shadows.</li>
  *<li>Cascaded Shadow Maps for the directional light source.</li>
+ *<li>Global Illumination, through Light Propagation Volumes or Voxel Cone Tracing.</li>
  *<li>Frustum culling.</li>
  *<li>Scene graph.</li>
  *<li>Modular architecture through plug-ins.</li>
@@ -97,9 +98,11 @@
  *\image html Cerberus-PBRMR.png
  *\image html Nyra-PBRMR.png
  *\image html Sponza-PBRMR.png
- *\image html SanMiguel-PBRSG.png
- *\image html Park-PBRMR.png
+ *\image html Sponza-PBRMR-VCT.png
  *\image html Park-Phong.png
+ *\image html Park-PBRMR.png
+ *\image html SanMiguel-PBRSG.png
+ *\image html SanMiguel-PBRSG-LPV.png
  *<br />
  *<br />
  *Full changelog: \ref changelog<br />
@@ -126,6 +129,7 @@
  *<li>Screen Space Subsurface Scattering (sans la backlit transmittance pour l'instant).</li>
  *<li>Volumetric Light Scattering pour la source directionnelle, si elle projette des ombres.</li>
  *<li>Cascaded Shadow Maps pour la source lumineuse directionelle.</li>
+ *<li>Global Illumination, via les Light Propagation Volumes ou le Voxel Cone Tracing.</li>
  *<li>Frustum culling.</li>
  *<li>Graphe de scène.</li>
  *<li>Architecture modulaire, à base de plug-ins.</li>
@@ -156,8 +160,8 @@
  *\subsection plugin_divider Dividers
  *<ul>
  *<li>PN-Triangles ;</li>
- *<li>Phong ; </li>
- *<li>Loop.</li>
+ *<li>Phong ;</li>
+ *<li>Loop ;</li>
  *</ul>
  *<br />
  *\subsection plugin_postfx PostEffect
@@ -168,6 +172,7 @@
  *<li>KawaseLightStreaks ;</li>
  *<li>SMAA, un antialiasing temporel de bonne qualité ;</li>
  *<li>FilmGrain.</li>
+ *<li>Linear Motion Blur.</li>
  *</ul>
  *<br />
  *\subsection plugin_generator Generators
@@ -201,9 +206,11 @@
  *\image html Cerberus-PBRMR.png
  *\image html Nyra-PBRMR.png
  *\image html Sponza-PBRMR.png
- *\image html Park-PBRMR.png
+ *\image html Sponza-PBRMR-VCT.png
  *\image html Park-Phong.png
+ *\image html Park-PBRMR.png
  *\image html SanMiguel-PBRSG.png
+ *\image html SanMiguel-PBRSG-LPV.png
  *<br />
  *<br />
  *Changelog complet: \ref changelog<br />

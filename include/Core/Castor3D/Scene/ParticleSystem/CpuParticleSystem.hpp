@@ -39,11 +39,11 @@ namespace castor3d
 		 */
 		C3D_API void cleanup( RenderDevice const & device )override;
 		/**
-		 *\copydoc		castor3d::ParticleSystemImpl::override
+		 *\copydoc		castor3d::ParticleSystemImpl::update
 		 */
 		C3D_API void update( castor3d::CpuUpdater & updater )override;
 		/**
-		 *\copydoc		castor3d::ParticleSystemImpl::override
+		 *\copydoc		castor3d::ParticleSystemImpl::update
 		 */
 		C3D_API uint32_t update( castor3d::GpuUpdater & updater )override;
 		/**

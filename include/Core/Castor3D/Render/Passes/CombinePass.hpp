@@ -120,29 +120,29 @@ namespace castor3d
 		: public RenderQuadBuilderT< CombinePassConfig, CombinePassBuilder >
 	{
 	public:
-		inline CombinePassBuilder()
+		CombinePassBuilder()
 		{
 		}
 
-		inline CombinePassBuilder & resultTexture( TextureLayoutSPtr resultTexture )
+		CombinePassBuilder & resultTexture( TextureLayoutSPtr resultTexture )
 		{
 			m_config.resultTexture = std::move( resultTexture );
 			return *this;
 		}
 
-		inline CombinePassBuilder & lhsViewLayout( VkImageLayout layout )
+		CombinePassBuilder & lhsViewLayout( VkImageLayout layout )
 		{
 			m_config.lhsLayout = layout;
 			return *this;
 		}
 
-		inline CombinePassBuilder & rhsViewLayout( VkImageLayout layout )
+		CombinePassBuilder & rhsViewLayout( VkImageLayout layout )
 		{
 			m_config.rhsLayout = layout;
 			return *this;
 		}
 
-		inline CombinePassBuilder & tex3DResult( ashes::ImageView result )
+		CombinePassBuilder & tex3DResult( ashes::ImageView result )
 		{
 			m_config.tex3DResult = { "Texture3DTo2DResult"
 				, result
@@ -150,7 +150,7 @@ namespace castor3d
 			return *this;
 		}
 
-		inline CombinePassUPtr build( Engine & engine
+		CombinePassUPtr build( Engine & engine
 			, RenderDevice const & device
 			, castor::String const & prefix
 			, VkFormat outputFormat

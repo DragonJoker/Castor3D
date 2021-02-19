@@ -21,13 +21,15 @@ namespace castor3d
 	public:
 		/**
 		 *\~english
-		 *\param[in]	engine			The engine.
-		 *\param[in]	size			The render dimensions.
-		 *\param[in]	scene			The rendered scene.
+		 *\param[in]	device		The GPU device.
+		 *\param[in]	vctConfig	The voxelizer configuration.
+		 *\param[in]	voxels		The voxels buffer.
+		 *\param[in]	result		The resulting texture.
 		 *\~french
-		 *\param[in]	engine			Le moteur.
-		 *\param[in]	size			Les dimensions du rendu.
-		 *\param[in]	scene			La scène rendue.
+		 *\param[in]	device		Le device GPU.
+		 *\param[in]	vctConfig	La configuration du voxelizer.
+		 *\param[in]	voxels		Le tampon de voxels.
+		 *\param[in]	result		La texture résultante.
 		 */
 		C3D_API VoxelBufferToTexture( RenderDevice const & device
 			, VoxelSceneData const & vctConfig
@@ -36,10 +38,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Renders nodes.
+		 *\param[in]	device	The GPU device.
 		 *\param[in]	toWait	The semaphore from the previous render pass.
 		 *\~french
 		 *\brief		Dessine les noeuds.
 		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
+		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API ashes::Semaphore const & render( RenderDevice const & device
 			, ashes::Semaphore const & toWait );

@@ -1785,11 +1785,15 @@ if ( CASTOR_C3D_NEEDS_GLSL )
 	)
 endif ()
 
-install_target( ${PROJECT_NAME} api_dll ${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME} )
+install_target_ex( ${PROJECT_NAME}
+	Castor3D
+	api_dll
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}
+)
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Core" )
 add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
-target_add_doc( ${PROJECT_NAME} "French" "*.h *.hpp *.dox" )
-target_add_doc( ${PROJECT_NAME} "English" "*.h *.hpp *.dox" )
+target_add_doc_ex( ${PROJECT_NAME} "French" "*.h *.hpp" ${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME} )
+target_add_doc_ex( ${PROJECT_NAME} "English" "*.h *.hpp" ${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME} )
 
 # Copying core zip data files
 file(
@@ -1797,7 +1801,11 @@ file(
 		CoreZipFiles
 		${CASTOR_SOURCE_DIR}/data/${PROJECT_NAME}/*.zip
 )
-copy_target_files( ${PROJECT_NAME} "" ${CoreZipFiles} )
+copy_target_files_ex( ${PROJECT_NAME}
+	Castor3D
+	""
+	${CoreZipFiles}
+)
 
 # Copying shader languages files
 file(
@@ -1805,7 +1813,11 @@ file(
 		ShaderLanguagesFiles
 		${CASTOR_SOURCE_DIR}/languages/${PROJECT_NAME}/*.lang
 )
-copy_target_files( ${PROJECT_NAME} "" ${ShaderLanguagesFiles} )
+copy_target_files_ex( ${PROJECT_NAME}
+	Castor3D
+	""
+	${ShaderLanguagesFiles}
+)
 
 set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )
 

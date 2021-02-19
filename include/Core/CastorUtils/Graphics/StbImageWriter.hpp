@@ -23,7 +23,7 @@ namespace castor
 		CU_API static void registerWriter( ImageWriter & reg );
 		CU_API static void unregisterWriter( ImageWriter & reg );
 		/**
-		 *\copydoc castor::ImageWriterImpl::save
+		 *\copydoc castor::ImageWriterImpl::write
 		 */
 		CU_API bool write( Path const & path
 			, PxBufferBase const & buffer )const override;

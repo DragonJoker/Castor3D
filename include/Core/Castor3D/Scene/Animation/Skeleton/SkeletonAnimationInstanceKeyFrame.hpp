@@ -45,7 +45,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le temps de départ.
 		 */
-		inline castor::Milliseconds const & getTimeIndex()const
+		castor::Milliseconds const & getTimeIndex()const
 		{
 			return m_keyFrame.getTimeIndex();
 		}

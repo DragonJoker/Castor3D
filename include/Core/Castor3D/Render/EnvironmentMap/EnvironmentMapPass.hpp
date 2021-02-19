@@ -35,11 +35,13 @@ namespace castor3d
 		 *\param[in]	reflectionMap	The parent reflection map.
 		 *\param[in]	node			The node from which the camera is created.
 		 *\param[in]	objectNode		The node to which the object is attached.
+		 *\param[in]	face			The cube face this pass renders to.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	reflectionMap	Le reflection map parente.
 		 *\param[in]	node			Le noeud depuis lequel on crée la caméra.
 		 *\param[in]	objectNode		Le noeud auquel l'objet est attaché.
+		 *\param[in]	face			La face de cube que cette passe dessine.
 		 */
 		C3D_API EnvironmentMapPass( EnvironmentMap & reflectionMap
 			, SceneNodeSPtr node
@@ -55,19 +57,25 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the pass.
+		 *\param		device		The GPU device.
 		 *\param		size		The pass needed dimensions.
 		 *\param		face		The target face.
 		 *\param		renderPass	The render pass to use.
 		 *\param		background	The scene background.
-		 *\param		pool		The descriptor pool used to bind the scene background.
+		 *\param		uboPool		The UBO descriptor pool used to bind the scene background.
+		 *\param		texPool		The textures descriptor pool used to bind the scene background.
+		 *\param		timer		The render pass timer to use.
 		 *\return		\p true on ok.
 		 *\~french
 		 *\brief		Initialise la passe.
+		 *\param		device		Le device GPU.
 		 *\param		size		Les dimensions voulues pour la passe.
 		 *\param		face		La face cible.
 		 *\param		renderPass	La passe de rendu à utiliser.
 		 *\param		background	Le fond de la scène.
-		 *\param		pool		Le pool de descripteurs utilisé pour binder le fond de la scène.
+		 *\param		uboPool		Le pool de descripteurs d'UBO utilisé pour binder le fond de la scène.
+		 *\param		texPool		Le pool de descripteurs de textures utilisé pour binder le fond de la scène.
+		 *\param		timer		Le timer de passe de rendu à utiliser.
 		 *\return		\p true si tout s'est bien passé.
 		 */
 		bool initialise( RenderDevice const & device
@@ -81,36 +89,38 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Cleans up the pass.
+		 *\param		device	The GPU device.
 		 *\~french
 		 *\brief		Nettoie la passe.
+		 *\param		device	Le device GPU.
 		 */
 		void cleanup( RenderDevice const & device );
 		/**
 		 *\~english
-		 *\brief		Updates the render pass.
-		 *\remarks		Gather the render queues, for further update.
-		 *\param[in]	node	The base node.
-		 *\param[out]	queues	Receives the render queues needed for the rendering of the frame.
+		 *\brief			Updates the render pass, CPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour la passe de rendu.
-		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
-		 *\param[in]	node	Le noeud de base.
-		 *\param[out]	queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
+		 *\brief			Met à jour la passe de rendu, au niveau CPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
-		 *\brief		Updates the GPU data.
+		 *\brief			Updates the render pass, GPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour les données GPU.
+		 *\brief			Met à jour la passe de rendu, au niveau GPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Render function.
+		 *\param		device	The GPU device.
 		 *\param[in]	toWait	The semaphore from the previous render pass.
 		 *\~french
 		 *\brief		Fonction de rendu.
+		 *\param		device	Le device GPU.
 		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
 		 */
 		C3D_API ashes::Semaphore const & render( RenderDevice const & device

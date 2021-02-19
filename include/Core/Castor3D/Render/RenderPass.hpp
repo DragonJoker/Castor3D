@@ -160,10 +160,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the pass.
+		 *\param		device	The current device.
 		 *\param		size	The pass needed dimensions.
 		 *\return		\p true on ok.
 		 *\~french
 		 *\brief		Initialise la passe.
+		 *\param		device	Le device actuel.
 		 *\param		size	Les dimensions voulues pour la passe.
 		 *\return		\p true si tout s'est bien passé.
 		 */
@@ -172,11 +174,17 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the pass.
+		 *\param		device	The current device.
 		 *\param		size	The pass needed dimensions.
+		 *\param		timer	The parent timer.
+		 *\param		index	The pass timer index, in its parent.
 		 *\return		\p true on ok.
 		 *\~french
 		 *\brief		Initialise la passe.
+		 *\param		device	Le device actuel.
 		 *\param		size	Les dimensions voulues pour la passe.
+		 *\param		timer	Le timer parent.
+		 *\param		index	L'indice de la passe, dans le parent.
 		 *\return		\p true si tout s'est bien passé.
 		 */
 		C3D_API bool initialise( RenderDevice const & device
@@ -186,19 +194,19 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Cleans up the pass.
+		 *\param		device	The current device.
 		 *\~french
 		 *\brief		Nettoie la passe.
+		 *\param		device	Le device actuel.
 		 */
 		C3D_API void cleanup( RenderDevice const & device );
 		/**
 		 *\~english
-		 *\brief		Updates the render pass.
-		 *\remarks		Gather the render queues, for further update.
-		 *\param[out]	queues	Receives the render queues needed for the rendering of the frame.
+		 *\brief			Updates the render pass, CPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour la passe de rendu.
-		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
-		 *\param[out]	queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
+		 *\brief			Met à jour la passe de rendu, au niveau CPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( CpuUpdater & updater );
 		/**
@@ -978,13 +986,11 @@ namespace castor3d
 		C3D_API virtual void doUpdate( RenderQueueArray & queues );
 		/**
 		 *\~english
-		 *\brief		Uploads UBO pools to VRAM.
-		 *\param[in]	camera	The camera.
-		 *\param[in]	jitter	The jitteering data.
+		 *\brief			Updates the render pass, CPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour les pools d'UBO en VRAM.
-		 *\param[in]	camera	La caméra.
-		 *\param[in]	jitter	Les données de jittering.
+		 *\brief			Met à jour la passe de rendu, au niveau CPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API virtual void doUpdateUbos( CpuUpdater & updater );
 		/**
@@ -1099,10 +1105,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the pass.
+		 *\param[in]	device	The GPU device.
 		 *\param		size	The pass needed dimensions.
 		 *\return		\p true on ok.
 		 *\~french
 		 *\brief		Initialise la passe.
+		 *\param[in]	device	Le device GPU.
 		 *\param		size	Les dimensions voulues pour la passe.
 		 *\return		\p true si tout s'est bien passé.
 		 */

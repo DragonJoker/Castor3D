@@ -129,8 +129,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Renders one frame, only if not in render loop.
+		 *\param[in]	tslf	The time elapsed since last frame.
 		 *\~french
 		 *\brief		Rend une image, uniquement hors de la boucle de rendu.
+		 *\param[in]	tslf	Le temps écoulé depuis la dernière frame.
 		 */
 		C3D_API virtual void renderSyncFrame( castor::Milliseconds tslf = 0_ms ) = 0;
 		/**
@@ -162,7 +164,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le temps voulu pour une frame, en millisecondes.
 		 */
-		inline castor::Milliseconds getFrameTime()
+		castor::Milliseconds getFrameTime()
 		{
 			return m_frameTime;
 		}
@@ -172,7 +174,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La vitesse de rafraichissement.
 		 */
-		inline uint32_t getWantedFps()
+		uint32_t getWantedFps()
 		{
 			return m_wantedFPS;
 		}
@@ -182,7 +184,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le temps écoulé pour la dernière frame, en millisecondes.
 		 */
-		inline castor::Microseconds getLastFrameTime()
+		castor::Microseconds getLastFrameTime()
 		{
 			return m_lastFrameTime;
 		}
@@ -205,8 +207,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Starts threaded render loop.
+		 *\param[in]	tslf	The time elapsed since last frame.
 		 *\~french
 		 *\brief		Commence le rendu threadé.
+		 *\param[in]	tslf	Le temps écoulé depuis la dernière frame.
 		 */
 		C3D_API void doRenderFrame( castor::Milliseconds tslf = 0_ms );
 		/**

@@ -92,8 +92,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the texture, id est : fills the image buffer, creates the texture in the render system.
+		 *\param[in]	device	The GPU device.
 		 *\~french
 		 *\brief		Initialise la texture, id est : remplit le buffer d'image, cree la texture au niveau du renderer.
+		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API bool initialise( RenderDevice const & device );
 		/**
@@ -159,47 +161,47 @@ namespace castor3d
 		C3D_API TextureFlags getFlags()const;
 		C3D_API bool isInitialised()const;
 		
-		inline TextureLayoutSPtr getTexture()const
+		TextureLayoutSPtr getTexture()const
 		{
 			return m_texture;
 		}
 
-		inline TextureConfiguration const & getConfiguration()const
+		TextureConfiguration const & getConfiguration()const
 		{
 			return m_configuration;
 		}
 
-		inline SamplerSPtr getSampler()const
+		SamplerSPtr getSampler()const
 		{
 			return m_sampler.lock();
 		}
 
-		inline bool isTextured()const
+		bool isTextured()const
 		{
 			return m_texture != nullptr;
 		}
 
-		inline RenderTargetSPtr getRenderTarget()const
+		RenderTargetSPtr getRenderTarget()const
 		{
 			return m_renderTarget.lock();
 		}
 
-		inline VkWriteDescriptorSet getDescriptor()const
+		VkWriteDescriptorSet getDescriptor()const
 		{
 			return m_descriptor;
 		}
 
-		inline uint32_t getId()const
+		uint32_t getId()const
 		{
 			return m_id;
 		}
 
-		inline bool hasDevice()const
+		bool hasDevice()const
 		{
 			return m_device != nullptr;
 		}
 
-		inline RenderDevice const & getDevice()const
+		RenderDevice const & getDevice()const
 		{
 			CU_Require( hasDevice() );
 			return *m_device;
@@ -223,17 +225,17 @@ namespace castor3d
 		C3D_API void setTransform( castor::Point3f const & translate
 			, castor::Angle const & rotate );
 
-		inline void setRenderTarget( RenderTargetSPtr value )
+		void setRenderTarget( RenderTargetSPtr value )
 		{
 			m_renderTarget = value;
 		}
 
-		inline void setSampler( SamplerSPtr value )
+		void setSampler( SamplerSPtr value )
 		{
 			m_sampler = value;
 		}
 
-		inline void setId( uint32_t value )
+		void setId( uint32_t value )
 		{
 			m_id = value;
 		}

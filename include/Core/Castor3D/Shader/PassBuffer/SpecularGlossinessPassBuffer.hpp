@@ -19,10 +19,12 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine	The engine.
+		 *\param[in]	device	The GPU device.
 		 *\param[in]	size	The max passes count.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
+		 *\param[in]	device	Le device GPU.
 		 *\param[in]	size	Le nombre maximal de passes.
 		 */
 		C3D_API SpecularGlossinessPassBuffer( Engine & engine
@@ -77,8 +79,6 @@ namespace castor3d
 			+ ( PassBuffer::ExtendedDataSize );
 
 	private:
-		//!\~english	The specular/glossiness PBR passes data.
-		//!\~french		Les données des passes PBR specular/glossiness.
 		PassesData m_data;
 	};
 }

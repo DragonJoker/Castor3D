@@ -66,7 +66,7 @@ namespace castor3d
 		 *\~french
 		 *\return		L'état de l'animation.
 		 */
-		inline AnimationState getState()const
+		AnimationState getState()const
 		{
 			return m_state;
 		}
@@ -76,7 +76,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le multiplicateur de temps de l'animation.
 		 */
-		inline float getScale()const
+		float getScale()const
 		{
 			return m_scale;
 		}
@@ -88,7 +88,7 @@ namespace castor3d
 		 *\brief		Définit le multiplicateur de temps de l'animation
 		 *\param[in]	value	La nouvelle valeur
 		 */
-		inline void setScale( float value )
+		void setScale( float value )
 		{
 			m_scale = value;
 		}
@@ -98,7 +98,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le point de départ de l'animation.
 		 */
-		inline castor::Milliseconds getStartingPoint()const
+		castor::Milliseconds getStartingPoint()const
 		{
 			return m_startingPoint;
 		}
@@ -110,7 +110,7 @@ namespace castor3d
 		 *\brief		Définit le point de départ de l'animation.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setStartingPoint( castor::Milliseconds value )
+		void setStartingPoint( castor::Milliseconds value )
 		{
 			m_startingPoint = value;
 
@@ -125,7 +125,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le point d'arrêt de l'animation.
 		 */
-		inline castor::Milliseconds getStoppingPoint()const
+		castor::Milliseconds getStoppingPoint()const
 		{
 			return m_stoppingPoint;
 		}
@@ -137,7 +137,7 @@ namespace castor3d
 		 *\brief		Définit le point d'arrêt de l'animation.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setStoppingPoint( castor::Milliseconds value )
+		void setStoppingPoint( castor::Milliseconds value )
 		{
 			m_stoppingPoint = value;
 
@@ -152,7 +152,7 @@ namespace castor3d
 		 *\~french
 		 *\return		L'état de boucle de l'animation.
 		 */
-		inline bool isLooped()const
+		bool isLooped()const
 		{
 			return m_looped;
 		}
@@ -164,7 +164,7 @@ namespace castor3d
 		 *\brief		Définit l'état de boucle de l'animation
 		 *\param[in]	value	La nouvelle valeur
 		 */
-		inline void setLooped( bool value )
+		void setLooped( bool value )
 		{
 			m_looped = value;
 		}
@@ -174,7 +174,7 @@ namespace castor3d
 		 *\~french
 		 *\return		L'animation.
 		 */
-		inline Animation const & getAnimation()const
+		Animation const & getAnimation()const
 		{
 			return m_animation;
 		}

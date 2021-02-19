@@ -23,15 +23,19 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	renderSystem	The RenderSystem.
+		 *\param[in]	data			The mapped data.
 		 *\param[in]	usage			The buffer usage flags.
 		 *\param[in]	flags			The buffer memory flags.
 		 *\param[in]	debugName		The buffer debug name.
+		 *\param[in]	sharingMode		The sharing mode.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	renderSystem	Le RenderSystem.
+		 *\param[in]	data			Les données mappées
 		 *\param[in]	usage			Les indicateurs d'utilisation du tampon.
 		 *\param[in]	flags			Les indicateurs de mémoire du tampon.
 		 *\param[in]	debugName		Le nom debug du tampon.
+		 *\param[in]	sharingMode		Le mode de partage.
 		 */
 		C3D_API PoolUniformBuffer( RenderSystem const & renderSystem
 			, castor::ArrayView< uint8_t > data
@@ -42,30 +46,38 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the GPU buffer.
+		 *\param[in]	device	The GPU device.
 		 *\~french
 		 *\brief		Initialise le tampon GPU.
+		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API uint32_t initialise( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Cleans up the GPU buffer.
+		 *\param[in]	device	The GPU device.
 		 *\~french
 		 *\brief		Nettoie le tampon GPU.
+		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API void cleanup( RenderDevice const & device );
 		/**
 		 *\~english
+		 *\param		size	The size wanted.
 		 *\return		\p true if there is enough remaining memory for a new element.
 		 *\~french
+		 *\param		size	La taille voulue.
 		 *\return		\p true s'il y a assez de mémoire restante pour un nouvel élément.
 		 */
 		C3D_API bool hasAvailable( VkDeviceSize size )const;
 		/**
 		 *\~english
 		 *\brief		Allocates a memory chunk for a CPU buffer.
+		 *\param		size	The size wanted.
 		 *\return		The memory chunk offset.
 		 *\~french
 		 *\brief		Alloue une zone mémoire pour un CPU buffer.
+		 *\param		size	La taille voulue.
 		 *\return		L'offset de la zone mémoire.
 		 */
 		C3D_API MemChunk allocate( VkDeviceSize size );
@@ -82,12 +94,16 @@ namespace castor3d
 		*\~english
 		*\return
 		*	The N-th instance of the data.
+		 *\param[in] offset
+		 *	The memory chunk offset.
 		*\~french
 		*\return
 		*	La n-ème instance des données.
+		 *\param[in] offset
+		*	L'offset de la zone mémoire.
 		*/
 		template< typename DataT >
-		inline DataT const & getData( VkDeviceSize offset )const
+		DataT const & getData( VkDeviceSize offset )const
 		{
 			return *reinterpret_cast< DataT const * >( m_data.data() + offset );
 		}
@@ -95,12 +111,16 @@ namespace castor3d
 		*\~english
 		*\return
 		*	The N-th instance of the data.
+		 *\param[in] offset
+		 *	The memory chunk offset.
 		*\~french
 		*\return
 		*	La n-ème instance des données.
+		 *\param[in] offset
+		*	L'offset de la zone mémoire.
 		*/
 		template< typename DataT >
-		inline DataT & getData( VkDeviceSize offset )
+		DataT & getData( VkDeviceSize offset )
 		{
 			return *reinterpret_cast< DataT * >( m_data.data() + offset );
 		}
@@ -112,7 +132,7 @@ namespace castor3d
 		*\return
 		*	Les données.
 		*/
-		inline castor::ArrayView< uint8_t > const & getDatas()const
+		castor::ArrayView< uint8_t > const & getDatas()const
 		{
 			return m_data;
 		}
@@ -124,7 +144,7 @@ namespace castor3d
 		*\return
 		*	Les données.
 		*/
-		inline castor::ArrayView< uint8_t > & getDatas()
+		castor::ArrayView< uint8_t > & getDatas()
 		{
 			return m_data;
 		}
@@ -136,7 +156,7 @@ namespace castor3d
 		*\return
 		*	\p false si le tampon interne n'existe pas.
 		*/
-		inline bool hasBuffer()const
+		bool hasBuffer()const
 		{
 			return m_buffer != nullptr;
 		}
@@ -148,11 +168,11 @@ namespace castor3d
 		*\return
 		*	Le tampon interne.
 		*/
-		inline ashes::UniformBuffer const & getBuffer()const
+		ashes::UniformBuffer const & getBuffer()const
 		{
 			return *m_buffer;
 		}
-		inline operator ashes::UniformBuffer const & ()const
+		operator ashes::UniformBuffer const & ()const
 		{
 			return *m_buffer;
 		}
@@ -164,11 +184,11 @@ namespace castor3d
 		*\return
 		*	Le tampon interne.
 		*/
-		inline ashes::UniformBuffer & getBuffer()
+		ashes::UniformBuffer & getBuffer()
 		{
 			return *m_buffer;
 		}
-		inline operator ashes::UniformBuffer & ()
+		operator ashes::UniformBuffer & ()
 		{
 			return *m_buffer;
 		}
@@ -180,7 +200,7 @@ namespace castor3d
 		*\return
 		*	La taille d'un élément du tampon.
 		*/
-		inline uint32_t getElementSize()const
+		uint32_t getElementSize()const
 		{
 			return uint32_t( getBuffer().getElementSize() );
 		}
@@ -200,7 +220,7 @@ namespace castor3d
 		*\return
 		*	La taille alignée.
 		*/
-		inline uint32_t getAlignedSize( uint32_t size )const
+		uint32_t getAlignedSize( uint32_t size )const
 		{
 			return uint32_t( getBuffer().getAlignedSize( size ) );
 		}
@@ -212,7 +232,7 @@ namespace castor3d
 		*\return
 		*	La taille alignée d'un élément.
 		*/
-		inline uint32_t getAlignedSize()const
+		uint32_t getAlignedSize()const
 		{
 			return getAlignedSize( getElementSize() );
 		}

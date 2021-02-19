@@ -80,7 +80,7 @@ namespace castor3d
 		 *\brief		Récupère le noeud parent
 		 *\return		La valeur
 		 */
-		inline SceneNode *  getParent()const
+		SceneNode *  getParent()const
 		{
 			return m_sceneNode;
 		}
@@ -92,7 +92,7 @@ namespace castor3d
 		 *\brief		Récupère le type d'objet
 		 *\return		La valeur
 		 */
-		inline MovableType getType()const
+		MovableType getType()const
 		{
 			return m_type;
 		}

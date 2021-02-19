@@ -48,9 +48,6 @@ namespace castor3d
 		C3D_API ~SkeletonAnimationInstanceBone();
 
 	private:
-		/**
-		 *\copydoc		castor3d::SkeletonAnimatedObject::doApply
-		 */
 		void doApply()override;
 
 	private:

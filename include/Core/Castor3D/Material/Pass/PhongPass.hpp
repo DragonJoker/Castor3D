@@ -46,7 +46,7 @@ namespace castor3d
 		 *\remarks	Les passes sont alignées sur 4 flottants, donc la taille d'une passe
 		 *			correspond aux nombres de float[4] qu'il faut pour la contenir.
 		 */
-		inline uint32_t getPassSize()const override
+		uint32_t getPassSize()const override
 		{
 			return 4u;
 		}
@@ -58,7 +58,7 @@ namespace castor3d
 		 *\brief		Définit la couleur diffuse.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setDiffuse( castor::RgbColour const & value )
+		void setDiffuse( castor::RgbColour const & value )
 		{
 			m_diffuse = value;
 			onChanged( *this );
@@ -71,7 +71,7 @@ namespace castor3d
 		 *\brief		Définit la couleur spéculaire.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setSpecular( castor::RgbColour const & value )
+		void setSpecular( castor::RgbColour const & value )
 		{
 			m_specular = value;
 			onChanged( *this );
@@ -84,7 +84,7 @@ namespace castor3d
 		 *\brief		Définit le facteur d'ambiante.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setAmbient( float const & value )
+		void setAmbient( float const & value )
 		{
 			m_ambient = value;
 			onChanged( *this );
@@ -97,7 +97,7 @@ namespace castor3d
 		 *\brief		Définit l'exposant.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setShininess( float value )
+		void setShininess( float value )
 		{
 			m_shininess = value;
 			onChanged( *this );
@@ -108,7 +108,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La valeur d'exposant.
 		 */
-		inline castor::RangedValue< float > const & getShininess()const
+		castor::RangedValue< float > const & getShininess()const
 		{
 			return m_shininess;
 		}
@@ -118,7 +118,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La couleur diffuse.
 		 */
-		inline castor::RgbColour const & getDiffuse()const
+		castor::RgbColour const & getDiffuse()const
 		{
 			return m_diffuse;
 		}
@@ -128,7 +128,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La couleur spéculaire.
 		 */
-		inline castor::RgbColour const & getSpecular()const
+		castor::RgbColour const & getSpecular()const
 		{
 			return m_specular;
 		}
@@ -138,7 +138,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le facteur d'ambiante.
 		 */
-		inline float getAmbient()const
+		float getAmbient()const
 		{
 			return m_ambient;
 		}
@@ -148,7 +148,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La couleur diffuse.
 		 */
-		inline castor::RgbColour & getDiffuse()
+		castor::RgbColour & getDiffuse()
 		{
 			return m_diffuse;
 		}
@@ -158,23 +158,14 @@ namespace castor3d
 		 *\~french
 		 *\return		La couleur spéculaire.
 		 */
-		inline castor::RgbColour & getSpecular()
+		castor::RgbColour & getSpecular()
 		{
 			return m_specular;
 		}
 
 	private:
-		/**
-		 *\copydoc		castor3d::Pass::doInitialise
-		 */
 		void doInitialise()override;
-		/**
-		 *\copydoc		castor3d::Pass::doCleanup
-		 */
 		void doCleanup()override;
-		/**
-		 *\copydoc		castor3d::Pass::doSetOpacity
-		 */
 		void doSetOpacity( float value )override;
 
 	public:

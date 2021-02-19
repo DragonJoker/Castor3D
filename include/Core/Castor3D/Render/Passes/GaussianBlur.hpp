@@ -29,16 +29,16 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine		The engine.
-		 *\param[in]	texture		The texture.
-		 *\param[in]	textureSize	The render area dimensions.
-		 *\param[in]	format		The pixel format for the textures to blur.
+		 *\param[in]	device		The GPU device.
+		 *\param[in]	prefix		The pass name's prefix.
+		 *\param[in]	view		The texture.
 		 *\param[in]	kernelSize	The kernel coefficients count.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
-		 *\param[in]	texture		La texture.
-		 *\param[in]	textureSize	Les dimensions de la zone de rendu.
-		 *\param[in]	format		Le format de pixel des textures à flouter.
+		 *\param[in]	device		Le device GPU.
+		 *\param[in]	prefix		Le préfixe du nom de la passe.
+		 *\param[in]	view		La texture.
 		 *\param[in]	kernelSize	Le nombre de coefficients du kernel.
 		 */
 		C3D_API GaussianBlur( Engine & engine
@@ -49,26 +49,34 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Blurs given texture.
+		 *\param[in]	toWait	The semaphore to wait for.
 		 *\~french
 		 *\brief		Applique le flou sur la texture.
+		 *\param[in]	toWait	Le sémaphore à attendre.
 		 */
 		C3D_API ashes::Semaphore const & blur( ashes::Semaphore const & toWait );
 		/**
 		 *\~english
-		 *\param[in]	timer	The render timer.
+		 *\param[in]	generateMipmaps	Tells if mipmaps generation is to be executed after blur.
+		 *\param[in]	layer			The layer to blur.
 		 *\return		The commands used to render the pass.
 		 *\~french
-		 *\param[in]	timer	Le timer de rendu.
+		 *\param[in]	generateMipmaps	Dit si la génération de mipmaps doit être effectuée après le flou.
+		 *\param[in]	layer			La layer à flouter
 		 *\return		Les commandes utilisées pour rendre la passe.
 		 */
 		C3D_API CommandsSemaphore getCommands( bool generateMipmaps = false
 			, uint32_t layer = 0u )const;
 		/**
 		 *\~english
-		 *\param[in]	timer	The render timer.
+		 *\param[in]	timer			The render timer.
+		 *\param[in]	layer			The layer to blur.
+		 *\param[in]	generateMipmaps	Tells if mipmaps generation is to be executed after blur.
 		 *\return		The commands used to render the pass.
 		 *\~french
-		 *\param[in]	timer	Le timer de rendu.
+		 *\param[in]	timer			Le timer de rendu.
+		 *\param[in]	layer			La layer à flouter
+		 *\param[in]	generateMipmaps	Dit si la génération de mipmaps doit être effectuée après le flou.
 		 *\return		Les commandes utilisées pour rendre la passe.
 		 */
 		C3D_API CommandsSemaphore getCommands( RenderPassTimer const & timer
@@ -87,13 +95,13 @@ namespace castor3d
 		*	Accesseurs.
 		**/
 		/**@{*/
-		inline ashes::RenderPass const & getRenderPass()const
+		ashes::RenderPass const & getRenderPass()const
 		{
 			CU_Require( m_renderPass );
 			return *m_renderPass;
 		}
 
-		inline ashes::FrameBuffer const & getBlurXFrameBuffer( uint32_t level )const
+		ashes::FrameBuffer const & getBlurXFrameBuffer( uint32_t level )const
 		{
 			CU_Require( ( !m_blurX.fbos.empty() )
 				&& m_blurX.fbos[0u].size() > level
@@ -101,7 +109,7 @@ namespace castor3d
 			return *m_blurX.fbos[0u][level];
 		}
 
-		inline ashes::FrameBuffer const & getBlurYFrameBuffer( uint32_t layer, uint32_t level )const
+		ashes::FrameBuffer const & getBlurYFrameBuffer( uint32_t layer, uint32_t level )const
 		{
 			CU_Require( m_blurY.fbos.size() > layer
 				&& m_blurY.fbos[layer].size() > level
@@ -109,55 +117,55 @@ namespace castor3d
 			return *m_blurY.fbos[layer][level];
 		}
 
-		inline ashes::CommandBuffer const & getBlurXCommandBuffer()const
+		ashes::CommandBuffer const & getBlurXCommandBuffer()const
 		{
 			return *m_blurX.commandBuffer;
 		}
 
-		inline ashes::CommandBuffer const & getBlurYCommandBuffer()const
+		ashes::CommandBuffer const & getBlurYCommandBuffer()const
 		{
 			return *m_blurY.commandBuffer;
 		}
 
-		inline ShaderModule const & getBlurXVertexModule()const
+		ShaderModule const & getBlurXVertexModule()const
 		{
 			return m_blurX.vertexShader;
 		}
 
-		inline ShaderModule const & getBlurXPixelModule()const
+		ShaderModule const & getBlurXPixelModule()const
 		{
 			return m_blurX.pixelShader;
 		}
 
-		inline ShaderModule const & getBlurYVertexModule()const
+		ShaderModule const & getBlurYVertexModule()const
 		{
 			return m_blurY.vertexShader;
 		}
 
-		inline ShaderModule const & getBlurYPixelModule()const
+		ShaderModule const & getBlurYPixelModule()const
 		{
 			return m_blurY.pixelShader;
 		}
 
-		inline ast::Shader const & getBlurXVertexShader()const
+		ast::Shader const & getBlurXVertexShader()const
 		{
 			CU_Require( m_blurX.vertexShader.shader );
 			return *m_blurX.vertexShader.shader;
 		}
 
-		inline ast::Shader const & getBlurXPixelShader()const
+		ast::Shader const & getBlurXPixelShader()const
 		{
 			CU_Require( m_blurX.pixelShader.shader );
 			return *m_blurX.pixelShader.shader;
 		}
 
-		inline ast::Shader const & getBlurYVertexShader()const
+		ast::Shader const & getBlurYVertexShader()const
 		{
 			CU_Require( m_blurY.vertexShader.shader );
 			return *m_blurY.vertexShader.shader;
 		}
 
-		inline ast::Shader const & getBlurYPixelShader()const
+		ast::Shader const & getBlurYPixelShader()const
 		{
 			CU_Require( m_blurY.pixelShader.shader );
 			return *m_blurY.pixelShader.shader;

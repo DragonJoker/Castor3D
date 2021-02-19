@@ -177,9 +177,9 @@ namespace castor3d
 		return m_entries.at( hash( billboard, pass, instanceMult ) );
 	}
 
-	void BillboardUboPools::clear( RenderDevice const & device )
+	void BillboardUboPools::clear()
 	{
-		auto & uboPools = *device.uboPools;
+		auto & uboPools = *m_device.uboPools;
 
 		for ( auto & entry : m_entries )
 		{

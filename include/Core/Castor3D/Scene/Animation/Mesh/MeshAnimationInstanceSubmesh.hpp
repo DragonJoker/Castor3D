@@ -73,7 +73,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Le facteur courant.
 		 */
-		inline float getCurrentFactor()const
+		float getCurrentFactor()const
 		{
 			return m_currentFactor;
 		}

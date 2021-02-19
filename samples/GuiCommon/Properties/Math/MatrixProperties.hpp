@@ -8,9 +8,9 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Matrix2x2f );
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Matrix3x3f );
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Matrix4x4f );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Matrix2x2f )
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Matrix3x3f )
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Matrix4x4f )
 
 namespace GuiCommon
 {

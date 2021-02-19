@@ -40,9 +40,6 @@ namespace castor3d
 			ashes::FrameBufferPtr frameBuffer;
 		};
 		/**
-		\author		Sylvain DOREMUS
-		\version	0.10.0
-		\date		08/06/2017
 		\~english
 		\brief		Base class for all light pass programs.
 		\~french
@@ -55,16 +52,24 @@ namespace castor3d
 			/**
 			 *\~english
 			 *\brief		Constructor.
-			 *\param[in]	engine		The engine.
-			 *\param[in]	vtx			The vertex shader source.
-			 *\param[in]	pxl			The fragment shader source.
-			 *\param[in]	hasShadows	Tells if this program uses shadow map.
+			 *\param[in]	engine				The engine.
+			 *\param[in]	device				The GPU device.
+			 *\param[in]	name				The pass name.
+			 *\param[in]	vtx					The vertex shader source.
+			 *\param[in]	pxl					The fragment shader source.
+			 *\param[in]	hasShadows			Tells if this program uses shadow map.
+			 *\param[in]	hasVoxels			Tells if this program uses voxellisation result.
+			 *\param[in]	generatesIndirect	Tells if this program generates indirect lighting.
 			 *\~french
 			 *\brief		Constructeur.
-			 *\param[in]	engine		Le moteur.
-			 *\param[in]	vtx			Le source du vertex shader.
-			 *\param[in]	pxl			Le source du fagment shader.
-			 *\param[in]	hasShadows	Dit si ce programme utilise une shadow map.
+			 *\param[in]	engine				Le moteur.
+			 *\param[in]	device				Le device GPU.
+			 *\param[in]	name				Le nom de la passe.
+			 *\param[in]	vtx					Le source du vertex shader.
+			 *\param[in]	pxl					Le source du fagment shader.
+			 *\param[in]	hasShadows			Dit si ce programme utilise une shadow map.
+			 *\param[in]	hasVoxels			Dit si ce programme utilise le résultat de la voxellisation.
+			 *\param[in]	generatesIndirect	Dit si ce programme genère de l'éclairage indirect.
 			 */
 			Program( Engine & engine
 				, RenderDevice const & device
@@ -92,6 +97,7 @@ namespace castor3d
 			 *\param[in]	sceneUbo		The scene UBO.
 			 *\param[in]	gpInfoUbo		The geometry pass UBO.
 			 *\param[in]	modelMatrixUbo	The optional model matrix UBO.
+			 *\param[in]	voxelUbo		The optional voxelizer UBO.
 			 *\~french
 			 *\brief		Initialise le programme et son pipeline.
 			 *\param[in]	vbo				Le tampon de sommets contenant l'objet à dessiner.
@@ -102,6 +108,7 @@ namespace castor3d
 			 *\param[in]	sceneUbo		L'UBO de la scène.
 			 *\param[in]	gpInfoUbo		L'UBO de la geometry pass.
 			 *\param[in]	modelMatrixUbo	L'UBO optionnel de matrices modèle.
+			 *\param[in]	voxelUbo		L'UBO optionnel du voxelizer.
 			 */
 			void initialise( ashes::VertexBufferBase & vbo
 				, ashes::PipelineVertexInputStateCreateInfo const & vertexLayout
@@ -207,31 +214,9 @@ namespace castor3d
 				, uint32_t offset )const;
 
 		private:
-			/**
-			 *\~english
-			 *\brief		Creates a pipeline.
-			 *\param[in]	vertexLayout	The vertex buffer layout.
-			 *\param[in]	renderPass		The render pass to use.
-			 *\param[in]	blend			Tells if the pipeline must enable blending.
-			 *\return		The created pipeline.
-			 *\~french
-			 *\brief		Crée un pipeline.
-			 *\param[in]	vertexLayout	Le layout du tampon de sommets.
-			 *\param[in]	renderPass		La passe de rendu à utiliser.
-			 *\param[in]	blend			Dit si le pipeline doit activer le blending.
-			 *\return		Le pipeline créé.
-			 */
 			virtual ashes::GraphicsPipelinePtr doCreatePipeline( ashes::PipelineVertexInputStateCreateInfo const & vertexLayout
 				, ashes::RenderPass const & renderPass
 				, bool blend ) = 0;
-			/**
-			 *\~english
-			 *\brief		Binds a light.
-			 *\param[in]	light	The light.
-			 *\~french
-			 *\brief		Active une source lumineuse.
-			 *\param[in]	light	La lumière.
-			 */
 			virtual void doBind( Light const & light ) = 0;
 
 		public:
@@ -287,20 +272,22 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the light pass.
-		 *\param[in]	first			Tells if this is the first pass.
-		 *\param[in]	size			The render area dimensions.
-		 *\param[in]	light			The light.
-		 *\param[in]	camera			The viewing camera.
-		 *\param[in]	shadowMap		The optional shadow map.
-		 *\param[in]	shadowMapIndex	The shadow map index.
+		 *\param[in]	first				Tells if this is the first pass.
+		 *\param[in]	size				The render area dimensions.
+		 *\param[in]	light				The light.
+		 *\param[in]	camera				The viewing camera.
+		 *\param[in]	shadowMap			The optional shadow map.
+		 *\param[in]	vctFirstBounce		The VCT first bounce result.
+		 *\param[in]	vctSecondaryBounce	The VCT secondary bounce result.
 		 *\~french
 		 *\brief		Met à jour la passe d'éclairage.
-		 *\param[in]	first			Dit s'il s'agit de la première passe.
-		 *\param[in]	size			Les dimensions de la zone de rendu.
-		 *\param[in]	light			La source lumineuse.
-		 *\param[in]	camera			La caméra.
-		 *\param[in]	shadowMap		La texture d'ombres, optionnelle.
-		 *\param[in]	shadowMapIndex	L'index de la texture d'ombres.
+		 *\param[in]	first				Dit s'il s'agit de la première passe.
+		 *\param[in]	size				Les dimensions de la zone de rendu.
+		 *\param[in]	light				La source lumineuse.
+		 *\param[in]	camera				La caméra.
+		 *\param[in]	shadowMap			La texture d'ombres, optionnelle.
+		 *\param[in]	vctFirstBounce		Le résultat du premier rebond de VCT.
+		 *\param[in]	vctSecondaryBounce	Le résultat du second rebond de VCT.
 		 */
 		void update( bool first
 			, castor::Size const & size
@@ -395,20 +382,20 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine			The engine.
+		 *\param[in]	device			The GPU device.
+		 *\param[in]	suffix			The pass name's suffix.
 		 *\param[in]	firstRenderPass	The render pass for a first light source.
 		 *\param[in]	blendRenderPass	The render pass for other light sources.
-		 *\param[in]	lpResult		The light pass result.
-		 *\param[in]	gpInfoUbo		The geometry pass UBO.
-		 *\param[in]	hasShadows		Tells if shadows are enabled for this light pass.
+		 *\param[in]	lpConfig		The light pass configuration.
+		 *\param[in]	vctConfig		The voxelizer UBO.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine			Le moteur.
+		 *\param[in]	device			Le device GPU.
+		 *\param[in]	suffix			Le suffixe du nom de la passe.
 		 *\param[in]	firstRenderPass	La passe de rendu pour la première source lumineuse.
 		 *\param[in]	blendRenderPass	La passe de rendu pour les autres sources lumineuses.
-		 *\param[in]	lpResult		Le résultat de la passe d'éclairage.
-		 *\param[in]	gpInfoUbo		L'UBO de la geometry pass.
-		 *\param[in]	hasShadows		Dit si les ombres sont activées pour cette passe d'éclairage.
+		 *\param[in]	lpConfig		La configuration de la passe d'éclairage.
+		 *\param[in]	vctConfig		L'UBO du voxelizer.
 		 */
 		LightPass( RenderDevice const & device
 			, castor::String const & suffix
@@ -456,20 +443,16 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the light pass.
-		 *\param[in]	first			Tells if this is the first pass.
-		 *\param[in]	size			The render area dimensions.
-		 *\param[in]	light			The light.
-		 *\param[in]	camera			The viewing camera.
-		 *\param[in]	shadowMap		The optional shadow map.
-		 *\param[in]	shadowMapIndex	The shadow map index.
+		 *\param[in]	first	Tells if this is the first pass.
+		 *\param[in]	size	The render area dimensions.
+		 *\param[in]	light	The light.
+		 *\param[in]	camera	The viewing camera.
 		 *\~french
 		 *\brief		Met à jour la passe d'éclairage.
-		 *\param[in]	first			Dit s'il s'agit de la première passe.
-		 *\param[in]	size			Les dimensions de la zone de rendu.
-		 *\param[in]	light			La source lumineuse.
-		 *\param[in]	camera			La caméra.
-		 *\param[in]	shadowMap		La texture d'ombres, optionnelle.
-		 *\param[in]	shadowMapIndex	L'index de la texture d'ombres.
+		 *\param[in]	first	Dit s'il s'agit de la première passe.
+		 *\param[in]	size	Les dimensions de la zone de rendu.
+		 *\param[in]	light	La source lumineuse.
+		 *\param[in]	camera	La caméra.
 		 */
 		virtual void doUpdate( bool first
 			, castor::Size const & size
@@ -478,14 +461,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Prepares the command buffer for given pipeline.
-		 *\param[in]	pipeline		The light pass pipeline.
-		 *\param[in]	shadowMap		The optional shadow map.
-		 *\param[in]	first			Tells if this is the first pass (\p true) or the blend pass (\p false).
+		 *\param[in]	pipeline	The light pass pipeline.
+		 *\param[in]	first		Tells if this is the first pass (\p true) or the blend pass (\p false).
 		 *\~french
 		 *\brief		Prépare le tampon de commandes du pipeline donné.
-		 *\param[in]	pipeline		Le pipeline de la passe d'éclairage.
-		 *\param[in]	shadowMap		La texture d'ombres, optionnelle.
-		 *\param[in]	first			Dit s'il s'agit de la première passe (\p true) ou la passe de mélange (\p false).
+		 *\param[in]	pipeline	Le pipeline de la passe d'éclairage.
+		 *\param[in]	first		Dit s'il s'agit de la première passe (\p true) ou la passe de mélange (\p false).
 		 */
 		void doPrepareCommandBuffer( Pipeline & pipeline
 			, bool first );
@@ -495,14 +476,14 @@ namespace castor3d
 		 *\param[in]	sceneFlags	The scene flags.
 		 *\param[in]	lightType	The light source type.
 		 *\param[in]	shadowType	The shadow type.
-		 *\param[in]	volumetric	Tells if volumetric light scattering is to be enabled.
+		 *\param[in]	rsm			Tells if RSM are to be generated.
 		 *\return		The source.
 		 *\~french
 		 *\brief		Récupère le source du pixel shader pour cette passe lumineuse.
 		 *\param[in]	sceneFlags	Les indicateurs de scène.
 		 *\param[in]	lightType	Le type de source lumineuse.
 		 *\param[in]	shadowType	Le type d'ombres.
-		 *\param[in]	volumetric	Dit si le volumetric light scattering doit être activé.
+		 *\param[in]	rsm			Dit si les RSM doivent être générées.
 		 *\return		Le source.
 		 */
 		virtual ShaderPtr doGetPhongPixelShaderSource( SceneFlags const & sceneFlags
@@ -515,14 +496,14 @@ namespace castor3d
 		 *\param[in]	sceneFlags	The scene flags.
 		 *\param[in]	lightType	The light source type.
 		 *\param[in]	shadowType	The shadow type.
-		 *\param[in]	volumetric	Tells if volumetric light scattering is to be enabled.
+		 *\param[in]	rsm			Tells if RSM are to be generated.
 		 *\return		The source.
 		 *\~french
 		 *\brief		Récupère le source du pixel shader pour cette passe lumineuse.
 		 *\param[in]	sceneFlags	Les indicateurs de scène.
 		 *\param[in]	lightType	Le type de source lumineuse.
 		 *\param[in]	shadowType	Le type d'ombres.
-		 *\param[in]	volumetric	Dit si le volumetric light scattering doit être activé.
+		 *\param[in]	rsm			Dit si les RSM doivent être générées.
 		 *\return		Le source.
 		 */
 		virtual ShaderPtr doGetPbrMRPixelShaderSource( SceneFlags const & sceneFlags
@@ -535,14 +516,14 @@ namespace castor3d
 		 *\param[in]	sceneFlags	The scene flags.
 		 *\param[in]	lightType	The light source type.
 		 *\param[in]	shadowType	The shadow type.
-		 *\param[in]	volumetric	Tells if volumetric light scattering is to be enabled.
+		 *\param[in]	rsm			Tells if RSM are to be generated.
 		 *\return		The source.
 		 *\~french
 		 *\brief		Récupère le source du pixel shader pour cette passe lumineuse.
 		 *\param[in]	sceneFlags	Les indicateurs de scène.
 		 *\param[in]	lightType	Le type de source lumineuse.
 		 *\param[in]	shadowType	Le type d'ombres.
-		 *\param[in]	volumetric	Dit si le volumetric light scattering doit être activé.
+		 *\param[in]	rsm			Dit si les RSM doivent être générées.
 		 *\return		Le source.
 		 */
 		virtual ShaderPtr doGetPbrSGPixelShaderSource( SceneFlags const & sceneFlags

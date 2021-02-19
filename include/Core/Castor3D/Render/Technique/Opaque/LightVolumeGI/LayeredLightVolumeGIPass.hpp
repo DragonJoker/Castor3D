@@ -27,15 +27,25 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine			The engine.
-		 *\param[in]	size			The render area dimensions.
-		 *\param[in]	linearisedDepth	The linearised depth buffer.
-		 *\param[in]	scene			The scene buffer.
+		 *\param[in]	device			The GPU device.
+		 *\param[in]	prefix			The pass name's prefix.
+		 *\param[in]	gpInfo			The GBuffer configuration UBO.
+		 *\param[in]	lpvConfigUbo	The LPV configuration UBO.
+		 *\param[in]	gpResult		The GBuffer.
+		 *\param[in]	lpvResult		The LPV result.
+		 *\param[in]	dst				The GI result.
+		 *\param[in]	blendMode		The blend mode.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine			Le moteur.
-		 *\param[in]	size			Les dimensions de la zone de rendu.
-		 *\param[in]	linearisedDepth	Le tampon de profondeur linéarisé.
-		 *\param[in]	scene			Le tampon de scène.
+		 *\param[in]	device			Le device GPU.
+		 *\param[in]	prefix			Le préfixe du nom de la passe.
+		 *\param[in]	gpInfo			L'UBO de configuration du GBuffer.
+		 *\param[in]	lpvConfigUbo	L'UBO de configuration des LPV.
+		 *\param[in]	gpResult		Le GBuffer.
+		 *\param[in]	lpvResult		Le résultat du LPV.
+		 *\param[in]	dst				Le résultat de GI.
+		 *\param[in]	blendMode		Le mode de mélange.
 		 */
 		C3D_API LayeredLightVolumeGIPass( Engine & engine
 			, RenderDevice const & device
@@ -48,10 +58,10 @@ namespace castor3d
 			, BlendMode blendMode );
 		/**
 		 *\~english
-		 *\brief		Renders the SSGI pass.
+		 *\brief		Renders the pass.
 		 *\param[in]	toWait	The semaphore from the previous render pass.
 		 *\~french
-		 *\brief		Dessine la passe SSGI.
+		 *\brief		Dessine la passe.
 		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
 		 */
 		C3D_API ashes::Semaphore const & compute( ashes::Semaphore const & toWait )const;

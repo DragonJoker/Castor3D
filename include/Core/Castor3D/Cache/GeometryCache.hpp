@@ -22,9 +22,6 @@ namespace castor3d
 		, Pass const & pass
 		, uint32_t instanceMult );
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		29/01/2016
-	\version	0.8.0
 	\~english
 	\brief		Geometry cache.
 	\~french
@@ -110,25 +107,30 @@ namespace castor3d
 		C3D_API void registerPass( SceneRenderPass const & renderPass );
 		C3D_API void unregisterPass( SceneRenderPass const * renderPass
 			, uint32_t instanceMult );
-		/**
-		 *\~english
-		 *\return		The objects count.
-		 *\~french
-		 *\return		Le nombre d'objets
-		 */
+
 		C3D_API void fillInfo( RenderInfo & info )const;
 		/**
 		 *\~english
-		 *\brief		Updates the UBO pools data.
+		 *\brief			Updates the render pass, CPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour le contenu des pools d'UBO.
+		 *\brief			Met à jour la passe de rendu, au niveau CPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
 		 *\return		The UBOs for given geometry, submesh and pass.
+		 *\param[in]	geometry		The geometry.
+		 *\param[in]	submesh			The submesh.
+		 *\param[in]	pass			The material pass.
+		 *\param[in]	instanceMult	The instance multiplier.
 		 *\~french
 		 *\brief		Les UBOs pour la géométrie, le sous-maillage et la passe donnés.
+		 *\param[in]	geometry		La géometrie.
+		 *\param[in]	submesh			Le submesh.
+		 *\param[in]	pass			La passe du matériau.
+		 *\param[in]	instanceMult	Le multiplicateur d'instance.
 		 */
 		C3D_API PoolsEntry getUbos( Geometry const & geometry
 			, Submesh const & submesh
@@ -137,8 +139,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Flushes the collection.
+		 *\param[in]	device	The GPU device.
 		 *\~french
 		 *\brief		Vide la collection.
+		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API void clear( RenderDevice const & device );
 		/**

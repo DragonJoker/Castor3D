@@ -69,16 +69,11 @@ endfunction( DividersSummary )
 
 function( DividersSetup )
 	if ( ${CASTOR_BUILDGRP_DIVIDER} )
-		cpack_add_component_group( Dividers
-			DISPLAY_NAME "Dividers"
-			DESCRIPTION "Divider plugins usable in Castor3D."
-			PARENT_GROUP Plugins
-		)
 		if( ${CASTOR_BUILD_DIVIDER_LOOP} )
 			cpack_add_component( LoopDivider
 				DISPLAY_NAME "LoopDivider"
 				DESCRIPTION "Allows the mesh subdivision using Loop subdivision surfaces."
-				GROUP Dividers
+				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Full
 			)
@@ -87,7 +82,7 @@ function( DividersSetup )
 			cpack_add_component( PnTrianglesDivider
 				DISPLAY_NAME "PnTrianglesDivider"
 				DESCRIPTION "Allows the mesh subdivision using PN triangles algorithm."
-				GROUP Dividers
+				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Full
 			)
@@ -96,7 +91,7 @@ function( DividersSetup )
 			cpack_add_component( PhongDivider
 				DISPLAY_NAME "PhongDivider"
 				DESCRIPTION "Allows the mesh subdivision using Phong tessellation."
-				GROUP Dividers
+				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Full
 			)

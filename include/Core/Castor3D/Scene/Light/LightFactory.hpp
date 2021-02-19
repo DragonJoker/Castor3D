@@ -17,7 +17,7 @@ namespace castor3d
 		/**
 		*\~english
 		*\brief
-		*	Register default light types.
+		*	Registers default light types.
 		*\~french
 		*\brief
 		*	Enregistre les types par défaut.

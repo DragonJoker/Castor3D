@@ -22,6 +22,7 @@ function( ImportersBuild )
 			set( Build ${Assimp} )
 			add_subdirectory( Plugins/Importers/AssimpImporter )
 			set( Assimp ${Build} PARENT_SCOPE )
+			set( ADDITIONAL_DEPS_REL ${ADDITIONAL_DEPS_REL} PARENT_SCOPE )
 		endif()
 
 		if( ${CASTOR_BUILD_IMPORTER_OBJ} )
@@ -69,16 +70,11 @@ endfunction( ImportersSummary )
 
 function( ImportersSetup )
 	if ( ${CASTOR_BUILDGRP_IMPORTER} )
-		cpack_add_component_group( Importers
-			DISPLAY_NAME "Importers"
-			DESCRIPTION "Importer plugins usable in Castor3D."
-			PARENT_GROUP Plugins
-		)
 		if( ${CASTOR_BUILD_IMPORTER_ASSIMP} )
 			cpack_add_component( AssimpImporter
 				DISPLAY_NAME "AssimpImporter"
 				DESCRIPTION "Allows the mesh import using Assimp library in Castor3D."
-				GROUP Importers
+				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Full
 			)
@@ -88,7 +84,7 @@ function( ImportersSetup )
 			cpack_add_component( ObjImporter
 				DISPLAY_NAME "ObjImporter"
 				DESCRIPTION "Allows the OBJ objects import in Castor3D."
-				GROUP Importers
+				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Full
 			)
@@ -98,7 +94,7 @@ function( ImportersSetup )
 			cpack_add_component( PlyImporter
 				DISPLAY_NAME "PlyImporter"
 				DESCRIPTION "Allows the Stanford PLY objects import in Castor3D."
-				GROUP Importers
+				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Minimal Full
 			)

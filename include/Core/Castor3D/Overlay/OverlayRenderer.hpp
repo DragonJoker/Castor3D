@@ -62,10 +62,12 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	renderSystem	The RenderSystem.
+		 *\param[in]	uboPools		The UBO pools.
 		 *\param[in]	target			The target texture view.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	renderSystem	Le RenderSystem.
+		 *\param[in]	uboPools		Les pools d'UBO.
 		 *\param[in]	target			La vue de texture cible.
 		 */
 		C3D_API OverlayRenderer( RenderSystem & renderSystem
@@ -81,24 +83,28 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the buffers.
+		 *\param[in]	device	The GPU device.
 		 *\~french
 		 *\brief		Initialise les tampons.
+		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API void initialise( RenderDevice const & device );
 		/**
 		*\~english
 		*\brief		Flushes the renderer.
+		 *\param[in]	device	The GPU device.
 		*\~french
 		*\brief		Nettoie le renderer.
+		 *\param[in]	device	Le device GPU.
 		*/
 		C3D_API void cleanup( RenderDevice const & device );
 		/**
 		 *\~english
-		 *\brief		Updates the GPU data.
-		 *\param[in]	camera	The render window camera.
+		 *\brief			Updates the render pass, GPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour les données GPU.
-		 *\param[in]	camera	La caméra de la fenêtre de rendu.
+		 *\brief			Met à jour la passe de rendu, au niveau GPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( GpuUpdater & updater );
 		/**
@@ -125,9 +131,11 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Ends the overlays preparation.
+		 *\param[in]	device	The GPU device.
 		 *\param[in]	timer	The render pass timer.
 		 *\~french
 		 *\brief		Termine la préparation des incrustations.
+		 *\param[in]	device	Le device GPU.
 		 *\param[in]	timer	Le timer de la passe de rendu.
 		 */
 		C3D_API void render( RenderDevice const & device
@@ -141,7 +149,7 @@ namespace castor3d
 		*	Accesseurs.
 		**/
 		/**@{*/
-		inline ashes::CommandBuffer const & getCommands()const
+		ashes::CommandBuffer const & getCommands()const
 		{
 			CU_Require( m_commandBuffer );
 			return *m_commandBuffer;

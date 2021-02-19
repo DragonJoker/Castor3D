@@ -33,34 +33,34 @@ namespace castor
 		 *\~french
 		 *\brief		Constructor.
 		 */
-		inline ParserParameter()
+		ParserParameter()
 		{
 		}
 		/**
 		 *\copydoc		castor::ParserParameterBase::getType
 		 */
-		inline ParameterType getType()const override
+		ParameterType getType()const override
 		{
 			return ParserParameterHelper< Type >::ParamType;
 		}
 		/**
 		 *\copydoc		castor::ParserParameterBase::getStrType
 		 */
-		inline xchar const * const getStrType()const override
+		xchar const * const getStrType()const override
 		{
 			return ParserParameterHelper< Type >::StringType;
 		}
 		/**
 		 *\copydoc		castor::ParserParameterBase::clone
 		 */
-		inline ParserParameterBaseSPtr clone()const override
+		ParserParameterBaseSPtr clone()const override
 		{
 			return std::make_shared< ParserParameter< Type > >( *this );
 		}
 		/**
 		 *\copydoc		castor::ParserParameterBase::parse
 		 */
-		inline bool parse( LoggerInstance & logger
+		bool parse( LoggerInstance & logger
 			, String & params )override
 		{
 			return ValueParser< Type >::parse( logger, params, m_value );
@@ -96,45 +96,47 @@ namespace castor
 		 *\~french
 		 *\brief		Constructor.
 		 */
-		inline ParserParameter()
+		ParserParameter()
 			: m_range{ makeRange( std::numeric_limits< ValueType >::lowest(), std::numeric_limits< ValueType >::max() ) }
 		{
 		}
 		/**
 		 *\~english
 		 *\brief		Constructor.
+		 *\param[in]	range	The range to parse.
 		 *\~french
 		 *\brief		Constructor.
+		 *\param[in]	range	L'intervalle à parser.
 		 */
-		inline explicit ParserParameter( Range< ValueType > const & range )
+		explicit ParserParameter( Range< ValueType > const & range )
 			: m_range{ range }
 		{
 		}
 		/**
 		 *\copydoc		castor::ParserParameterBase::getType
 		 */
-		inline ParameterType getType()const override
+		ParameterType getType()const override
 		{
 			return ParserParameterHelper< Type >::ParamType;
 		}
 		/**
 		 *\copydoc		castor::ParserParameterBase::getStrType
 		 */
-		inline xchar const * const getStrType()const override
+		xchar const * const getStrType()const override
 		{
 			return ParserParameterHelper< Type >::StringType;
 		}
 		/**
 		 *\copydoc		castor::ParserParameterBase::clone
 		 */
-		inline ParserParameterBaseSPtr clone()const override
+		ParserParameterBaseSPtr clone()const override
 		{
 			return std::make_shared< ParserParameter< Type > >( *this );
 		}
 		/**
 		 *\copydoc		castor::ParserParameterBase::parse
 		 */
-		inline bool parse( LoggerInstance & logger
+		bool parse( LoggerInstance & logger
 			, String & params )override
 		{
 			return ValueParser< Type >::parse( logger, params, m_value, m_range );
@@ -166,27 +168,27 @@ namespace castor
 		 *\~french
 		 *\brief		Constructor.
 		 */
-		inline ParserParameter();
+		ParserParameter();
 		/**
 		 *\copydoc		castor::ParserParameterBase::getType
 		 */
-		inline ParameterType getType()const override;
+		ParameterType getType()const override;
 		/**
 		 *\copydoc		castor::ParserParameterBase::getBaseType
 		 */
-		inline ParameterType getBaseType()const override;
+		ParameterType getBaseType()const override;
 		/**
 		 *\copydoc		castor::ParserParameterBase::getStrType
 		 */
-		inline xchar const * const getStrType()const override;
+		xchar const * const getStrType()const override;
 		/**
 		 *\copydoc		castor::ParserParameterBase::clone
 		 */
-		inline ParserParameterBaseSPtr clone()const override;
+		ParserParameterBaseSPtr clone()const override;
 		/**
 		 *\copydoc		castor::ParserParameterBase::parse
 		 */
-		inline bool parse( LoggerInstance & logger
+		bool parse( LoggerInstance & logger
 			, String & params )override;
 	};
 	/**
@@ -208,27 +210,27 @@ namespace castor
 		 *\brief		Constructor.
 		 *\param[in]	values	Les valeurs utilisées pour valider la valeur récupérée.
 		 */
-		inline explicit ParserParameter( UInt32StrMap const & values );
+		explicit ParserParameter( UInt32StrMap const & values );
 		/**
 		 *\copydoc		castor::ParserParameterBase::getType
 		 */
-		inline ParameterType getType()const override;
+		ParameterType getType()const override;
 		/**
 		 *\copydoc		castor::ParserParameterBase::getBaseType
 		 */
-		inline ParameterType getBaseType()const override;
+		ParameterType getBaseType()const override;
 		/**
 		 *\copydoc		castor::ParserParameterBase::getStrType
 		 */
-		inline xchar const * const getStrType()const override;
+		xchar const * const getStrType()const override;
 		/**
 		 *\copydoc		castor::ParserParameterBase::clone
 		 */
-		inline ParserParameterBaseSPtr clone()const override;
+		ParserParameterBaseSPtr clone()const override;
 		/**
 		 *\copydoc		castor::ParserParameterBase::parse
 		 */
-		inline bool parse( LoggerInstance & logger
+		bool parse( LoggerInstance & logger
 			, String & params )override;
 
 	public:
@@ -253,27 +255,27 @@ namespace castor
 		 *\brief		Constructor.
 		 *\param[in]	values	Les valeurs utilisées pour valider la valeur récupérée.
 		 */
-		inline explicit ParserParameter( UInt32StrMap const & values );
+		explicit ParserParameter( UInt32StrMap const & values );
 		/**
 		 *\copydoc		castor::ParserParameterBase::getType
 		 */
-		inline ParameterType getType()const override;
+		ParameterType getType()const override;
 		/**
 		 *\copydoc		castor::ParserParameterBase::getBaseType
 		 */
-		inline ParameterType getBaseType()const override;
+		ParameterType getBaseType()const override;
 		/**
 		 *\copydoc		castor::ParserParameterBase::getStrType
 		 */
-		inline xchar const * const getStrType()const override;
+		xchar const * const getStrType()const override;
 		/**
 		 *\copydoc		castor::ParserParameterBase::clone
 		 */
-		inline ParserParameterBaseSPtr clone()const override;
+		ParserParameterBaseSPtr clone()const override;
 		/**
 		 *\copydoc		castor::ParserParameterBase::parse
 		 */
-		inline bool parse( LoggerInstance & logger
+		bool parse( LoggerInstance & logger
 			, String & params )override;
 
 	public:
@@ -298,27 +300,27 @@ namespace castor
 		 *\brief		Constructor.
 		 *\param[in]	values	Les valeurs utilisées pour valider la valeur récupérée.
 		 */
-		inline explicit ParserParameter( UInt64StrMap const & values );
+		explicit ParserParameter( UInt64StrMap const & values );
 		/**
 		 *\copydoc		castor::ParserParameterBase::getType
 		 */
-		inline ParameterType getType()const override;
+		ParameterType getType()const override;
 		/**
 		 *\copydoc		castor::ParserParameterBase::getBaseType
 		 */
-		inline ParameterType getBaseType()const override;
+		ParameterType getBaseType()const override;
 		/**
 		 *\copydoc		castor::ParserParameterBase::getStrType
 		 */
-		inline xchar const * const getStrType()const override;
+		xchar const * const getStrType()const override;
 		/**
 		 *\copydoc		castor::ParserParameterBase::clone
 		 */
-		inline ParserParameterBaseSPtr clone()const override;
+		ParserParameterBaseSPtr clone()const override;
 		/**
 		 *\copydoc		castor::ParserParameterBase::parse
 		 */
-		inline bool parse( LoggerInstance & logger
+		bool parse( LoggerInstance & logger
 			, String & params )override;
 
 	public:

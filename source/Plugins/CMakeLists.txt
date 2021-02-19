@@ -35,6 +35,10 @@ macro( PluginsBuild )
 			${CASTOR_INSTEXP_LIST}
 			PARENT_SCOPE
 		)
+		set( ADDITIONAL_DEPS_REL
+			${ADDITIONAL_DEPS_REL}
+			PARENT_SCOPE
+		)
 	endif ()
 endmacro()
 

@@ -18,9 +18,6 @@ namespace castor3d
 	//@{
 
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.10.0
-	\date		08/06/2017
 	\~english
 	\brief		Enumerator of textures used in weighted blend OIT.
 	\~french

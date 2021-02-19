@@ -48,9 +48,6 @@ namespace castor3d
 			, bool closed );
 
 	private:
-		/**
-		*\copydoc		castor3d::MeshGenerator::doGenerate
-		*/
 		C3D_API void doGenerate( Mesh & mesh
 			, Parameters const & parameters )override;
 
@@ -62,12 +59,7 @@ namespace castor3d
 		uint32_t m_nbFaces;
 		friend std::ostream & operator <<( std::ostream & o, Projection const & c );
 	};
-	/**
-	 *\~english
-	 *\brief		Stream operator
-	 *\~french
-	 *\brief		Operateur de flux
-	 */
+
 	inline std::ostream & operator <<( std::ostream & o, Projection const & c )
 	{
 		return o << "Projection( (" << c.m_axis[0] << "," << c.m_axis[1] << "," << c.m_axis[2] << ")," << c.m_depth << "," << c.m_closed << "," << c.m_nbFaces << ")";

@@ -22,11 +22,13 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	scene	The scene.
+		 *\param[in]	device	The GPU device.
 		 *\param[in]	source	The source environment map.
 		 *\param[in]	sampler	The sampler used for the environment map.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	scene	La scène.
+		 *\param[in]	device	Le device GPU.
 		 *\param[in]	source	La texture d'environnement source.
 		 *\param[in]	sampler	Le sampler utilisé pour la texture d'environnement.
 		 */
@@ -51,8 +53,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the environment maps.
+		 *\param[in]	toWait	The semaphore from the previous render pass.
 		 *\~french
 		 *\brief		Met à jour les textures d'environnement.
+		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
 		 */
 		C3D_API ashes::Semaphore const & update( ashes::Semaphore const & toWait );
 		/**

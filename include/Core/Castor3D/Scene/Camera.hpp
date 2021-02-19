@@ -123,69 +123,69 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline Viewport const & getViewport()const
+		Viewport const & getViewport()const
 		{
 			return m_viewport;
 		}
 
-		inline Viewport & getViewport()
+		Viewport & getViewport()
 		{
 			return m_viewport;
 		}
 
-		inline castor::Matrix4x4f const & getView()const
+		castor::Matrix4x4f const & getView()const
 		{
 			return m_view;
 		}
 
-		inline castor::Matrix4x4f const & getProjection()const
+		castor::Matrix4x4f const & getProjection()const
 		{
 			return m_ownProjection
 				? m_projection
 				: m_viewport.getProjection();
 		}
 
-		inline ViewportType getViewportType()const
+		ViewportType getViewportType()const
 		{
 			return m_viewport.getType();
 		}
 
-		inline castor::Size const & getSize()const
+		castor::Size const & getSize()const
 		{
 			return m_viewport.getSize();
 		}
 
-		inline uint32_t getWidth()const
+		uint32_t getWidth()const
 		{
 			return m_viewport.getWidth();
 		}
 
-		inline uint32_t getHeight()const
+		uint32_t getHeight()const
 		{
 			return m_viewport.getHeight();
 		}
 
-		inline float getNear()const
+		float getNear()const
 		{
 			return m_viewport.getNear();
 		}
 
-		inline float getFar()const
+		float getFar()const
 		{
 			return m_viewport.getFar();
 		}
 
-		inline float getRatio()const
+		float getRatio()const
 		{
 			return m_viewport.getRatio();
 		}
 
-		inline castor::Angle const & getFovY()const
+		castor::Angle const & getFovY()const
 		{
 			return m_viewport.getFovY();
 		}
 
-		inline float getProjectionScale()const
+		float getProjectionScale()const
 		{
 			return m_viewport.getProjectionScale();
 		}
@@ -211,17 +211,17 @@ namespace castor3d
 			return m_frustum.isVisible( point );
 		}
 
-		inline Frustum const & getFrustum()const
+		Frustum const & getFrustum()const
 		{
 			return m_frustum;
 		}
 
-		inline HdrConfig const & getHdrConfig()const
+		HdrConfig const & getHdrConfig()const
 		{
 			return m_hdrConfig;
 		}
 
-		inline HdrConfig & getHdrConfig()
+		HdrConfig & getHdrConfig()
 		{
 			return m_hdrConfig;
 		}
@@ -235,7 +235,7 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		inline void setView( castor::Matrix4x4f const & view )
+		void setView( castor::Matrix4x4f const & view )
 		{
 			m_view = view;
 			onChanged( *this );
@@ -246,7 +246,7 @@ namespace castor3d
 			resize( castor::Size( width, height ) );
 		}
 
-		inline void resize( castor::Size const & size )
+		void resize( castor::Size const & size )
 		{
 			if ( m_viewport.getSize() != size )
 			{
@@ -255,19 +255,19 @@ namespace castor3d
 			}
 		}
 
-		inline void setViewportType( ViewportType value )
+		void setViewportType( ViewportType value )
 		{
 			m_viewport.updateType( value );
 			onChanged( *this );
 		}
 
-		inline void setExposure( float value )
+		void setExposure( float value )
 		{
 			m_hdrConfig.exposure = value;
 			onChanged( *this );
 		}
 
-		inline void setGamma( float value )
+		void setGamma( float value )
 		{
 			m_hdrConfig.gamma = value;
 			onChanged( *this );

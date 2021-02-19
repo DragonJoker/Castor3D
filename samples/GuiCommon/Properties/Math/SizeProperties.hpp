@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Graphics/Size.hpp>
 
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, Size );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, Size )
 
 namespace GuiCommon
 {

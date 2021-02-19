@@ -13,7 +13,7 @@ using namespace Uncharted2;
 #ifndef CU_PlatformWindows
 #	define C3D_Uncharted2ToneMapping_API
 #else
-#	ifdef castor3dUncharted2ToneMapping_EXPORTS
+#	ifdef Uncharted2ToneMapping_EXPORTS
 #		define C3D_Uncharted2ToneMapping_API __declspec( dllexport )
 #	else
 #		define C3D_Uncharted2ToneMapping_API __declspec( dllimport )

@@ -20,10 +20,12 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine	The engine.
+		 *\param[in]	device	The GPU device.
 		 *\param[in]	count	The max configurations count.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
+		 *\param[in]	device	Le device GPU.
 		 *\param[in]	count	Le nombre maximal de configurations.
 		 */
 		C3D_API TextureConfigurationBuffer( Engine & engine

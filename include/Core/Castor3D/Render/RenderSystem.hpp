@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_RenderSystem_H___
@@ -25,12 +25,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine			The engine.
-		 *\param[in]	desc			The Ashes plugin description.
+		 *\param[in]	engine	The engine.
+		 *\param[in]	desc	The Ashes plugin description.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine			Le moteur.
-		 *\param[in]	desc			The Ashes plugin description.
+		 *\param[in]	engine	Le moteur.
+		 *\param[in]	desc	The Ashes plugin description.
 		 */
 		C3D_API RenderSystem( Engine & engine
 			, AshPluginDescription desc );
@@ -47,7 +47,7 @@ namespace castor3d
 		 *\param[in]	informations	The GPU informations.
 		 *\~french
 		 *\brief		Initialise le render system
-		 *\param[in]	informations	Les informations deu GPU.
+		 *\param[in]	informations	Les informations du GPU.
 		 */
 		C3D_API void initialise( GpuInformations informations );
 		/**
@@ -94,13 +94,13 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Creates a logical device bound to a physical GPU.
-		 *\param[in]	handle	The native window handle.
-		 *\param[in]	gpu		The GPU index.
+		 *\param[in]	handle		The native window handle.
+		 *\param[in]	gpuIndex	The GPU index.
 		 *\return		The created device.
 		 *\~french
 		 *\brief		Crée un périphérique logique lié à un GPU physique.
-		 *\param[in]	handle	Le handle de la fenêtre native.
-		 *\param[in]	gpu		L'indice du GPU.
+		 *\param[in]	handle		Le handle de la fenêtre native.
+		 *\param[in]	gpuIndex	L'indice du GPU.
 		 *\return		Le périphérique logique créé.
 		 */
 		C3D_API RenderDeviceSPtr createDevice( ashes::WindowHandle handle
@@ -208,16 +208,16 @@ namespace castor3d
 			, float aspect
 			, float zNear )const;
 		/**
-		*\~french
-		*\brief
-		*	Ajoute les couches de l'instance aux noms d�j� pr�sents dans la liste donn�e.
-		*\param[in,out] names
-		*	La liste � compl�ter.
 		*\~english
 		*\brief
 		*	Adds the instance layers names to the given names.
 		*\param[in,out] names
 		*	The liste to fill.
+		*\~french
+		*\brief
+		*	Ajoute les couches de l'instance aux noms déjà présents dans la liste donnée.
+		*\param[in,out] names
+		*	La liste à compléter.
 		*/
 		void completeLayerNames( ashes::StringArray & names )const;
 		/**
@@ -229,89 +229,89 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline RenderDevice const & getCurrentRenderDevice()const
+		RenderDevice const & getCurrentRenderDevice()const
 		{
 			CU_Require( m_currentDevice );
 			return *m_currentDevice;
 		}
 
-		inline bool hasCurrentRenderDevice()const
+		bool hasCurrentRenderDevice()const
 		{
 			return m_currentDevice != nullptr;
 		}
 
-		inline GpuInformations const & getGpuInformations()const
+		GpuInformations const & getGpuInformations()const
 		{
 			return m_gpuInformations;
 		}
 
-		inline bool isInitialised()const
+		bool isInitialised()const
 		{
 			return m_initialised;
 		}
 
-		inline castor::String getRendererType()const
+		castor::String getRendererType()const
 		{
 			return m_desc.name;
 		}
 
-		inline bool hasMainDevice()const
+		bool hasMainDevice()const
 		{
 			return m_mainDevice != nullptr;
 		}
 
-		inline RenderDeviceSPtr getMainRenderDevice()const
+		RenderDeviceSPtr getMainRenderDevice()const
 		{
 			CU_Require( hasMainDevice() );
 			return m_mainDevice;
 		}
 
-		inline OverlayRendererSPtr getOverlayRenderer()const
+		OverlayRendererSPtr getOverlayRenderer()const
 		{
 			return m_overlayRenderer;
 		}
 
-		inline castor::Nanoseconds const & getGpuTime()const
+		castor::Nanoseconds const & getGpuTime()const
 		{
 			return m_gpuTime;
 		}
 
-		inline bool hasSsbo()const
+		bool hasSsbo()const
 		{
 			return m_desc.features.hasStorageBuffers;
 		}
 
-		inline ashes::Instance const & getInstance()const
+		ashes::Instance const & getInstance()const
 		{
 			return *m_instance;
 		}
 
-		inline ashes::StringArray const & getLayerNames()const
+		ashes::StringArray const & getLayerNames()const
 		{
 			return m_layerNames;
 		}
 
-		inline ashes::StringArray const & getExtensionNames()const
+		ashes::StringArray const & getExtensionNames()const
 		{
 			return m_extensionNames;
 		}
 
-		inline VkPhysicalDeviceProperties const & getProperties()const
+		VkPhysicalDeviceProperties const & getProperties()const
 		{
 			return m_properties;
 		}
 
-		inline VkPhysicalDeviceMemoryProperties const & getMemoryProperties()const
+		VkPhysicalDeviceMemoryProperties const & getMemoryProperties()const
 		{
 			return m_memoryProperties;
 		}
 
-		inline VkPhysicalDeviceFeatures const & getFeatures()const
+		VkPhysicalDeviceFeatures const & getFeatures()const
 		{
 			return m_features;
 		}
 
-		inline AshPluginDescription const & getDescription()const
+		AshPluginDescription const & getDescription()const
 		{
 			return m_desc;
 		}
@@ -325,23 +325,23 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		inline void setMainDevice( RenderDeviceSPtr device )
+		void setMainDevice( RenderDeviceSPtr device )
 		{
 			m_mainDevice = device;
 		}
 
-		inline void setCurrentRenderDevice( RenderDevice const * device )
+		void setCurrentRenderDevice( RenderDevice const * device )
 		{
 			m_currentDevice = device;
 		}
 
 		template< class Rep, class Period >
-		inline void incGpuTime( std::chrono::duration< Rep, Period > const & time )
+		void incGpuTime( std::chrono::duration< Rep, Period > const & time )
 		{
 			m_gpuTime += std::chrono::duration_cast< castor::Nanoseconds >( time );
 		}
 
-		inline void resetGpuTime()
+		void resetGpuTime()
 		{
 			m_gpuTime = castor::Nanoseconds( 0 );
 		}

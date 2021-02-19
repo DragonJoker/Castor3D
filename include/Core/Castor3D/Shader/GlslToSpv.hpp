@@ -10,30 +10,42 @@ See LICENSE file in root folder.
 namespace castor3d
 {
 	/**
-	*\~french
-	*\brief
-	*	Initialise les globales de glslang.
 	*\~english
 	*\brief
 	*	Initialises glslang globals.
+	*\~french
+	*\brief
+	*	Initialise les globales de glslang.
 	*/
 	C3D_API void initialiseGlslang();
 	/**
-	*\~french
-	*\brief
-	*	Nettoie les globales de glslang.
 	*\~english
 	*\brief
 	*	Cleans up glslang globals.
+	*\~french
+	*\brief
+	*	Nettoie les globales de glslang.
 	*/
 	C3D_API void cleanupGlslang();
 	/**
-	*\~french
-	*\brief
-	*	Transpile un shader GLSL en SPIR-V.
 	*\~english
 	*\brief
 	*	Transpiles a GLSL shader to SPIR-V.
+	*\param device
+	*	The GPU device.
+	*\param stage
+	*	The shader stage.
+	*\param shader
+	*	The GLSL shader.
+	*\~french
+	*\brief
+	*	Transpile un shader GLSL en SPIR-V.
+	*\param device
+	*	Le device GPU.
+	*\param stage
+	*	Le shader stage.
+	*\param shader
+	*	Le shader GLSL.
 	*/
 	C3D_API UInt32Array compileGlslToSpv( RenderDevice const & device
 		, VkShaderStageFlagBits stage

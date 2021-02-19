@@ -24,11 +24,13 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine	The engine.
+		 *\param[in]	device	The GPU device.
 		 *\param[in]	count	The max passes count.
 		 *\param[in]	size	The size of a pass.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
+		 *\param[in]	device	Le device GPU.
 		 *\param[in]	count	Le nombre maximal de passes.
 		 *\param[in]	size	La taille d'une passe.
 		 */
@@ -120,7 +122,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Le pointeur sur le tampon.
 		 */
-		inline uint8_t * getPtr()
+		uint8_t * getPtr()
 		{
 			return m_buffer.getPtr();
 		}
@@ -130,7 +132,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Le type de descripteur du tampon.
 		 */
-		inline VkDescriptorType getType()const
+		VkDescriptorType getType()const
 		{
 			return m_buffer.getType();
 		}

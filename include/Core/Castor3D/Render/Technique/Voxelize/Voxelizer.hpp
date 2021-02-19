@@ -17,47 +17,58 @@ namespace castor3d
 	public:
 		/**
 		 *\~english
+		 *\brief		Constructor.
 		 *\param[in]	engine			The engine.
-		 *\param[in]	size			The render dimensions.
+		 *\param[in]	device			The GPU device.
 		 *\param[in]	scene			The rendered scene.
+		 *\param[in]	camera			The camera viewing the scene.
+		 *\param[in]	matrixUbo		The scene matrices UBO.
+		 *\param[in]	voxelizerUbo	The voxelizer configuration UBO.
+		 *\param[in]	voxelConfig		The voxelizer configuration.
 		 *\~french
+		 *\brief		Constructeur.
 		 *\param[in]	engine			Le moteur.
-		 *\param[in]	size			Les dimensions du rendu.
+		 *\param[in]	device			Le device GPU.
 		 *\param[in]	scene			La scène rendue.
+		 *\param[in]	camera			La caméra regardant la scène.
+		 *\param[in]	matrixUbo		L'UBO de matrices de la scène.
+		 *\param[in]	voxelizerUbo	L'UBO de configuration du voxelizer.
+		 *\param[in]	voxelConfig		La configuration du voxelizer.
 		 */
 		C3D_API Voxelizer( Engine & engine
 			, RenderDevice const & device
 			, Scene & scene
 			, Camera & camera
-			, ashes::ImageView colourView
 			, MatrixUbo & matrixUbo
 			, VoxelizerUbo & voxelizerUbo
 			, VoxelSceneData const & voxelConfig );
 		C3D_API ~Voxelizer();
 		/**
 		 *\~english
-		 *\brief		Updates pass.
-		 *\param[out]	info	Receives the render informations.
+		 *\brief			Updates the render pass, CPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour la passe.
-		 *\param[out]	info	Reçoit les informations de rendu.
+		 *\brief			Met à jour la passe de rendu, au niveau CPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
-		 *\brief		Updates pass.
-		 *\param[out]	info	Receives the render informations.
+		 *\brief			Updates the render pass, GPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour la passe.
-		 *\param[out]	info	Reçoit les informations de rendu.
+		 *\brief			Met à jour la passe de rendu, au niveau GPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Renders nodes.
+		 *\param[in]	device	The GPU device.
 		 *\param[in]	toWait	The semaphore from the previous render pass.
 		 *\~french
 		 *\brief		Dessine les noeuds.
+		 *\param[in]	device	Le device GPU.
 		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
 		 */
 		C3D_API ashes::Semaphore const & render( RenderDevice const & device

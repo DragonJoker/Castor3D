@@ -32,9 +32,6 @@ namespace castor3d
 		C3D_API static MeshGeneratorSPtr create();
 
 	private:
-		/**
-		*\copydoc		castor3d::MeshGenerator::doGenerate
-		*/
 		C3D_API virtual void doGenerate( Mesh & mesh
 			, Parameters const & parameters );
 
@@ -45,12 +42,7 @@ namespace castor3d
 		friend std::ostream & operator <<( std::ostream & o
 			, Cube const & c );
 	};
-	/**
-	 *\~english
-	 *\brief		Stream operator
-	 *\~french
-	 *\brief		Opérateur de flux
-	 */
+
 	inline std::ostream & operator <<( std::ostream & o, Cube const & c )
 	{
 		return o << "Cube(" << c.m_height << "," << c.m_width << "," << c.m_depth << ")";

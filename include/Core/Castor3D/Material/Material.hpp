@@ -44,8 +44,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the material and all it's passes.
+		 *\param[in]	device	The GPU device.
 		 *\~french
 		 *\brief		Initialise le matériau et toutes ses passes.
+		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API void initialise( RenderDevice const & device );
 		/**
@@ -117,8 +119,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\return		Tells if the material is textured.
+		 *\param[in]	mask	A texture mask to filter out textures.
 		 *\~french
 		 *\return		Dit si le matériau a des textures.
+		 *\param[in]	mask	Un masque de textures pour les filtrer.
 		 */
 		C3D_API bool isTextured( TextureFlags mask = TextureFlag::eAll )const;
 		/**
@@ -127,7 +131,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le nombre de passes.
 		 */
-		inline uint32_t getPassCount()const
+		uint32_t getPassCount()const
 		{
 			return uint32_t( m_passes.size() );
 		}
@@ -137,7 +141,7 @@ namespace castor3d
 		 *\~french
 		 *\return		L'itérateur constant sur le début du tableau de passes.
 		 */
-		inline PassPtrArrayConstIt begin()const
+		PassPtrArrayConstIt begin()const
 		{
 			return m_passes.begin();
 		}
@@ -147,7 +151,7 @@ namespace castor3d
 		 *\~french
 		 *\return		L'itérateur sur le début du tableau de passes.
 		 */
-		inline PassPtrArrayIt begin()
+		PassPtrArrayIt begin()
 		{
 			return m_passes.begin();
 		}
@@ -157,7 +161,7 @@ namespace castor3d
 		 *\~french
 		 *\return		L'itérateur constant sur la fin du tableau de passes.
 		 */
-		inline PassPtrArrayConstIt end()const
+		PassPtrArrayConstIt end()const
 		{
 			return m_passes.end();
 		}
@@ -167,7 +171,7 @@ namespace castor3d
 		 *\~french
 		 *\return		L'itérateur sur la fin du tableau de passes.
 		 */
-		inline PassPtrArrayIt end()
+		PassPtrArrayIt end()
 		{
 			return m_passes.end();
 		}
@@ -177,7 +181,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le type de matériau.
 		 */
-		inline MaterialType getType()const
+		MaterialType getType()const
 		{
 			return m_type;
 		}
@@ -192,7 +196,7 @@ namespace castor3d
 		 *\return		La passe récupére ou nullptr si non trouvés.
 		 */
 		template< MaterialType Type >
-		inline std::shared_ptr< typename PassTyper< Type >::Type > getTypedPass( uint32_t index )const
+		std::shared_ptr< typename PassTyper< Type >::Type > getTypedPass( uint32_t index )const
 		{
 			auto pass = getPass( index );
 			CU_Require( m_type == Type );

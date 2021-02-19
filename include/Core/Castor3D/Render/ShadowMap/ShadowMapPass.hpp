@@ -45,42 +45,34 @@ namespace castor3d
 			, ShadowMap const & shadowMap );
 		/**
 		 *\~english
-		 *\brief		Updates the render pass.
-		 *\remarks		Gather the render queues, for further update.
-		 *\param[out]	queues	Receives the render queues needed for the rendering of the frame.
-		 *\param[out]	light	The light source.
-		 *\param[out]	index	The pass index.
-		 *\return		\p true if the pass has changed.
+		 *\brief			Updates the render pass, CPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour la passe de rendu.
-		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
-		 *\param[out]	queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
-		 *\param[out]	light	La source lumineuse.
-		 *\param[out]	index	L'indice de la passe.
-		 *\return		\p true si la passe a changé.
+		 *\brief			Met à jour la passe de rendu, au niveau CPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API virtual bool update( CpuUpdater & updater ) = 0;
 		/**
 		 *\~english
-		 *\brief		Updates device dependent data.
-		 *\param[in]	index	The render index.
+		 *\brief			Updates the render pass, GPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour les données dépendantes du device.
-		 *\param[in]	index	L'indice du rendu.
+		 *\brief			Met à jour la passe de rendu, au niveau GPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API virtual void update( GpuUpdater & updater ) = 0;
 
-		inline RenderPassTimer & getTimer()
+		RenderPassTimer & getTimer()
 		{
 			return *m_timer;
 		}
 
-		inline bool isUpToDate()const
+		bool isUpToDate()const
 		{
 			return !m_outOfDate;
 		}
 
-		inline void setUpToDate()
+		void setUpToDate()
 		{
 			m_outOfDate = false;
 		}
@@ -101,32 +93,20 @@ namespace castor3d
 		 */
 		void doUpdateNodes( SceneCulledRenderNodes & nodes );
 		/**
-		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
+		 *\copydoc		castor3d::SceneRenderPass::doCreateTextureBindings
 		 */
 		ashes::VkDescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
 
 	private:
-		/**
-		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
-		 */
 		void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, BillboardListRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
-		 */
 		void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, SubmeshRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::getGeometryShaderSource
-		 */
 		ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::getGeometryShaderSource
-		 */
 		void doUpdatePipeline( RenderPipeline & pipeline )override;
 
 	protected:

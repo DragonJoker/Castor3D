@@ -45,9 +45,6 @@ namespace castor3d
 	*/
 	class RenderTechnique;
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		08/12/2016
 	\~english
 	\brief		Render technique pass base class.
 	\~french

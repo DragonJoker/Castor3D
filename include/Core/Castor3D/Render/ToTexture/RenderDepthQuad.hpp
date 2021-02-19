@@ -14,17 +14,21 @@ namespace castor3d
 	{
 	public:
 		/**
-		 *\~english
-		 *\brief
-		 *	Constructor.
-		 *\param[in] renderSystem
-		 *	The RenderSystem.
-		 *\~french
-		 *\brief
-		 *	Constructeur.
-		 *\param[in] renderSystem
-		 *	Le RenderSystem.
-		 */
+		*\~english
+		*\brief
+		*	Constructor.
+		*\param[in] renderSystem
+		*	The RenderSystem.
+		*\param[in] device
+		*	The GPU device.
+		*\~french
+		*\brief
+		*	Constructeur.
+		*\param[in] renderSystem
+		*	Le RenderSystem.
+		*\param[in] device
+		*	Le device GPU.
+		*/
 		C3D_API explicit RenderDepthQuad( RenderSystem & renderSystem
 			, RenderDevice const & device );
 		/**

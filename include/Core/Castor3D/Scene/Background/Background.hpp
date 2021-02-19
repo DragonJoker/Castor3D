@@ -54,6 +54,8 @@ namespace castor3d
 		*	The engine.
 		*\param scene
 		*	The parent scene.
+		*\param name
+		*	The background name.
 		*\param type
 		*	The background type.
 		*\~french
@@ -63,6 +65,8 @@ namespace castor3d
 		*	Le moteur.
 		*\param scene
 		*	La scène parente.
+		*\param name
+		*	Le nom du fond.
 		*\param type
 		*	Le type de fond.
 		*/
@@ -83,6 +87,8 @@ namespace castor3d
 		*\~english
 		*\brief
 		*	Initialisation function.
+		*\param[in] device
+		*	The current device.
 		*\param[in] renderPass
 		*	The render pass into which the background is drawn.
 		*\param[in] hdrConfigUbo
@@ -92,6 +98,8 @@ namespace castor3d
 		*\~french
 		*\brief
 		*	Fonction d'initialisation.
+		*\param[in] device
+		*	Le device actuel.
 		*\param[in] renderPass
 		*	La passe de rendu dans laquelle le fond est dessiné.
 		*\param[in] hdrConfigUbo
@@ -106,35 +114,39 @@ namespace castor3d
 		*\~english
 		*\brief
 		*	Cleanup function.
+		*\param[in] device
+		*	The current device.
 		*\~french
 		*\brief
 		*	Fonction de nettoyage.
+		*\param[in] device
+		*	Le device actuel.
 		*/
 		C3D_API void cleanup( RenderDevice const & device );
 		/**
 		*\~english
 		*\brief
 		*	Updates the background, CPU side.
-		*\param[in] camera
-		*	The scene's camera.
+		*\param[in] updater
+		*	The update data.
 		*\~french
 		*\brief
 		*	Met à jour le fond, niveau CPU.
-		*\param[in] camera
-		*	La caméra de la scène.
+		*\param[in] updater
+		*	Les données d'update.
 		*/
 		C3D_API void update( CpuUpdater & updater );
 		/**
 		*\~english
 		*\brief
 		*	Updates the background, GPU side.
-		*\param[in] camera
-		*	The scene's camera.
+		*\param[in] updater
+		*	The update data.
 		*\~french
 		*\brief
 		*	Met à jour le fond, niveau GPU.
-		*\param[in] camera
-		*	La caméra de la scène.
+		*\param[in] updater
+		*	Les données d'update.
 		*/
 		C3D_API void update( GpuUpdater & updater );
 		/**
@@ -198,8 +210,10 @@ namespace castor3d
 		*	The rendering size.
 		*\param[in] renderPass
 		*	The render pass into which the background is drawn.
-		*\param[in] descriptorSet
-		*	The descriptors set.
+		*\param[in] uboDescriptorSet
+		*	The descriptors set used for UBO.
+		*\param[in] texDescriptorSet
+		*	The descriptors set used for textures.
 		*\~french
 		*\brief
 		*	Enregistre les commandes utilisées pour dessiner le fond.
@@ -209,8 +223,10 @@ namespace castor3d
 		*	Les dimensions de rendu.
 		*\param[in] renderPass
 		*	La passe de rendu dans laquelle le fond est dessiné.
-		*\param[in] descriptorSet
-		*	L'ensemble de descripteurs.
+		*\param[in] uboDescriptorSet
+		*	L'ensemble de descripteurs pour les UBO.
+		*\param[in] texDescriptorSet
+		*	L'ensemble de descripteurs pour les textures.
 		*/
 		C3D_API bool prepareFrame( ashes::CommandBuffer & commandBuffer
 			, castor::Size const & size
@@ -227,8 +243,10 @@ namespace castor3d
 		*	The model matrices UBO.
 		*\param[in] hdrConfigUbo
 		*	The HDR configuration UBO.
-		*\param[out] descriptorSet
-		*	Receives the descriptors.
+		*\param[in] uboDescriptorSet
+		*	The descriptors set used for UBO.
+		*\param[in] texDescriptorSet
+		*	The descriptors set used for textures.
 		*\~french
 		*\brief
 		*	Initialise l'ensemble de descripteurs.
@@ -238,8 +256,10 @@ namespace castor3d
 		*	L'UBO des matrices de modèle.
 		*\param[in] hdrConfigUbo
 		*	L'UBO de configuration HDR.
-		*\param[out] descriptorSet
-		*	Reçoit les descripteurs.
+		*\param[in] uboDescriptorSet
+		*	L'ensemble de descripteurs pour les UBO.
+		*\param[in] texDescriptorSet
+		*	L'ensemble de descripteurs pour les textures.
 		*/
 		C3D_API virtual void initialiseDescriptorSets( MatrixUbo & matrixUbo
 			, ModelMatrixUbo const & modelMatrixUbo
@@ -378,105 +398,18 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		/**
-		*\~english
-		*\brief
-		*	Records the commands used to draw the background.
-		*\param[out] commandBuffer
-		*	Receives the commands.
-		*\param[in] size
-		*	The rendering size.
-		*\param[in] renderPass
-		*	The render pass into which the background is drawn.
-		*\param[in] descriptorSet
-		*	The descriptors set.
-		*\~french
-		*\brief
-		*	Enregistre les commandes utilisées pour dessiner le fond.
-		*\param[out] commandBuffer
-		*	Reçoit les commandes.
-		*\param[in] size
-		*	Les dimensions de rendu.
-		*\param[in] renderPass
-		*	La passe de rendu dans laquelle le fond est dessiné.
-		*\param[in] descriptorSet
-		*	L'ensemble de descripteurs.
-		*/
 		void doPrepareFrame( ashes::CommandBuffer & commandBuffer
 			, castor::Size const & size
 			, ashes::RenderPass const & renderPass
 			, ashes::DescriptorSet const & uboDescriptorSet
 			, ashes::DescriptorSet const & texDescriptorSet )const;
-		/**
-		*\~english
-		*\return
-		*	The shader program used to render the background.
-		*\~french
-		*\brief
-		*	Le programme shader utilisé pour dessiner le fond.
-		*/
 		virtual ashes::PipelineShaderStageCreateInfoArray doInitialiseShader( RenderDevice const & device );
-		/**
-		*\~english
-		*\return
-		*	Initialises the descriptor layout.
-		*\~french
-		*\brief
-		*	Initialise le layout de descripteurs.
-		*/
 		virtual void doInitialiseDescriptorLayouts( RenderDevice const & device );
-		/**
-		*\~english
-		*\brief
-		*	Initialisation function.
-		*\param[in] renderPass
-		*	The render pass into which the background is drawn.
-		*\return
-		*	\p true if ok.
-		*\~french
-		*\brief
-		*	Fonction d'initialisation.
-		*\param[in] renderPass
-		*	La passe de rendu dans laquelle le fond est dessiné.
-		*\return
-		*	\p true if ok.
-		*/
-		C3D_API virtual bool doInitialise( RenderDevice const & device
+		virtual bool doInitialise( RenderDevice const & device
 			, ashes::RenderPass const & renderPass ) = 0;
-		/**
-		*\~english
-		*\brief
-		*	Cleanup function.
-		*\~french
-		*\brief
-		*	Fonction de nettoyage.
-		*/
-		C3D_API virtual void doCleanup() = 0;
-		/**
-		*\~english
-		*\brief
-		*	Updates the background, CPU side.
-		*\param[in] camera
-		*	The scene's camera.
-		*\~french
-		*\brief
-		*	Met à jour le fond, niveau CPU.
-		*\param[in] camera
-		*	La caméra de la scène.
-		*/
-		C3D_API virtual void doCpuUpdate( CpuUpdater & updater ) = 0;
-		/**
-		*\~english
-		*\brief
-		*	Updates the background, GPU side.
-		*\~french
-		*\brief
-		*	Met à jour le fond, niveau GPU.
-		*/
-		C3D_API virtual void doGpuUpdate( GpuUpdater & updater ) = 0;
-
-	public:
-		OnBackgroundChanged onChanged;
+		virtual void doCleanup() = 0;
+		virtual void doCpuUpdate( CpuUpdater & updater ) = 0;
+		virtual void doGpuUpdate( GpuUpdater & updater ) = 0;
 
 	private:
 		bool doInitialiseVertexBuffer( RenderDevice const & device );
@@ -484,6 +417,9 @@ namespace castor3d
 			, ashes::PipelineShaderStageCreateInfoArray program
 			, ashes::RenderPass const & renderPass
 			, HdrConfigUbo const & hdrConfigUbo );
+
+	public:
+		OnBackgroundChanged onChanged;
 
 	protected:
 		Scene & m_scene;

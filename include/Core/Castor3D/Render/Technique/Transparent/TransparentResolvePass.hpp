@@ -55,15 +55,7 @@ namespace castor3d
 	//!\~english	An array of TransparentResolveProgram, one per fog type.
 	//!\~french		Un tableau de TransparentResolveProgram, un par type de brouillard.
 	using FinalCombineProgramMap = std::map< FogType, FinalCombineProgramPtr >;
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.10.0
-	\date		08/06/2017
-	\~english
-	\brief		Pass used to combine the transparent and opaque passes.
-	\~french
-	\brief		Passe utilisée pour combiner les passes opaque et transparente.
-	*/
+
 	class TransparentResolvePass
 	{
 	public:
@@ -71,17 +63,21 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine			The engine.
+		 *\param[in]	device			The GPU device.
 		 *\param[in]	size			The render size.
 		 *\param[in]	sceneUbo		The scene UBO.
 		 *\param[in]	hdrConfigUbo	The HDR UBO.
+		 *\param[in]	gpInfoUbo		The geometry pass UBO.
 		 *\param[in]	wbResult		The accumulation pass buffers.
 		 *\param[in]	colourView		The target colour view.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine			Le moteur.
+		 *\param[in]	device			Le device GPU.
 		 *\param[in]	size			La taille du rendu.
 		 *\param[in]	sceneUbo		L'UBO de la scène.
 		 *\param[in]	hdrConfigUbo	L'UBO HDR.
+		 *\param[in]	gpInfoUbo		L'UBO de la passe géométrique.
 		 *\param[in]	wbResult		Les tampons de la passe d'accumulation.
 		 *\param[in]	colourView		La vue couleur cible.
 		 */
@@ -103,10 +99,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Renders the combine pass.
+		 *\param[in]	device	The GPU device.
 		 *\param[in]	fogType	The fog type.
 		 *\param[in]	toWait	The semaphore from the previous render pass.
 		 *\~french
 		 *\brief		Dessine la passe de combinaison.
+		 *\param[in]	device	Le device GPU.
 		 *\param[in]	fogType	Le type de brouillard.
 		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
 		 */

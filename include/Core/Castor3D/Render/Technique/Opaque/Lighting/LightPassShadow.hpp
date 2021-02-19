@@ -96,9 +96,6 @@ namespace castor3d
 
 	private:
 		/**
-		\author		Sylvain DOREMUS
-		\version	0.10.0
-		\date		08/06/2017
 		\~english
 		\brief		Base class for all light pass programs with shadow.
 		\~french
@@ -114,16 +111,22 @@ namespace castor3d
 			/**
 			 *\~english
 			 *\brief		Constructor.
-			 *\param[in]	engine		The engine.
-			 *\param[in]	lightPass	The light pass.
-			 *\param[in]	vtx			The vertex shader source.
-			 *\param[in]	pxl			The fragment shader source.
+			 *\param[in]	engine				The engine.
+			 *\param[in]	device				The GPU device.
+			 *\param[in]	lightPass			The light pass.
+			 *\param[in]	vtx					The vertex shader source.
+			 *\param[in]	pxl					The fragment shader source.
+			 *\param[in]	hasVoxels			Tells if this program uses voxellisation result.
+			 *\param[in]	generatesIndirect	Tells if this program generates indirect lighting.
 			 *\~french
 			 *\brief		Constructeur.
-			 *\param[in]	engine		Le moteur.
-			 *\param[in]	lightPass	La passe d'éclairage.
-			 *\param[in]	vtx			Le source du vertex shader.
-			 *\param[in]	pxl			Le source du fagment shader.
+			 *\param[in]	engine				Le moteur.
+			 *\param[in]	device				Le device GPU.
+			 *\param[in]	lightPass			La passe d'éclairage.
+			 *\param[in]	vtx					Le source du vertex shader.
+			 *\param[in]	pxl					Le source du fagment shader.
+			 *\param[in]	hasVoxels			Dit si ce programme utilise le résultat de la voxellisation.
+			 *\param[in]	generatesIndirect	Dit si ce programme genère de l'éclairage indirect.
 			 */
 			Program( Engine & engine
 				, RenderDevice const & device
@@ -148,14 +151,16 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine		The engine.
-		 *\param[in]	lpResult	The light pass result.
-		 *\param[in]	gpInfoUbo	The geometry pass UBO.
+		 *\param[in]	device		The GPU device.
+		 *\param[in]	suffix		The pass name's suffix.
+		 *\param[in]	lpConfig	The light pass configuration.
+		 *\param[in]	vctConfig	The voxelizer UBO.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine		Le moteur.
-		 *\param[in]	lpResult	Le résultat de la passe d'éclairage.
-		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
+		 *\param[in]	device		Le device GPU.
+		 *\param[in]	suffix		Le suffixe du nom de la passe.
+		 *\param[in]	lpConfig	La configuration de la passe d'éclairage.
+		 *\param[in]	vctConfig	L'UBO du voxelizer.
 		 */
 		LightPassShadow( RenderDevice const & device
 			, castor::String const & suffix
@@ -171,6 +176,18 @@ namespace castor3d
 				, vctConfig }
 		{
 		}
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	device		The GPU device.
+		 *\param[in]	lpConfig	The light pass configuration.
+		 *\param[in]	vctConfig	The voxelizer UBO.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	device		Le device GPU.
+		 *\param[in]	lpConfig	La configuration de la passe d'éclairage.
+		 *\param[in]	vctConfig	L'UBO du voxelizer.
+		 */
 		LightPassShadow( RenderDevice const & device
 			, LightPassConfig const & lpConfig
 			, VoxelizerUbo const * vctConfig = nullptr )

@@ -21,9 +21,11 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Constructor.
+		 *\param[in]	logger	The logger instance.
 		 *\param[in]	path	The file access path.
 		 *\~french
 		 *\brief		Constructeur.
+		 *\param[in]	logger	L'instance de logger.
 		 *\param[in]	path	Le chemin d'accès au fichier.
 		 */
 		CU_API explicit FileParserContext( LoggerInstance & logger

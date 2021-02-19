@@ -87,7 +87,7 @@ namespace castor3d
 	{
 		if ( m_pools )
 		{
-			m_pools->clear( device );
+			m_pools->clear();
 		}
 	}
 

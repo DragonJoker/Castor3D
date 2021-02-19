@@ -26,7 +26,7 @@ namespace castor3d
 		 *\param[in]	culler		Le culler pour cette passe.
 		 *\param[in]	config		La configuration du SSAO.
 		 */
-		OpaquePass( MatrixUbo & matrixUbo
+		C3D_API OpaquePass( MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, SsaoConfig const & config );
 		/**
@@ -35,80 +35,54 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~OpaquePass();
+		C3D_API ~OpaquePass();
 		/**
 		 *\~english
 		 *\brief		Initialises the render pass.
+		 *\param[in]	device		The GPU device.
 		 *\param[in]	gpResult	The geometry pass buffers.
 		 *\~french
 		 *\brief		Initialise la passe de rendu.
+		 *\param[in]	device		Le device GPU.
 		 *\param[in]	gpResult	Les tampons de la geometry pass.
 		 */
-		void initialiseRenderPass( RenderDevice const & device
+		C3D_API void initialiseRenderPass( RenderDevice const & device
 			, OpaquePassResult const & gpResult );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
-		void accept( RenderTechniqueVisitor & visitor )override;
+		C3D_API void accept( RenderTechniqueVisitor & visitor )override;
 		/**
 		 *\~english
 		 *\brief		Renders transparent nodes.
+		 *\param[in]	device	The GPU device.
 		 *\param[in]	toWait	The semaphore from the previous render pass.
 		 *\~french
 		 *\brief		Dessine les noeuds transparents.
+		 *\param[in]	device	Le device GPU.
 		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
 		 */
-		ashes::Semaphore const & render( RenderDevice const & device
+		C3D_API ashes::Semaphore const & render( RenderDevice const & device
 			, ashes::Semaphore const & toWait );
 
 		C3D_API TextureFlags getTexturesMask()const override;
 
 	private:
-		/**
-		 *\copydoc		castor3d::RenderPass::doUpdateFlags
-		 */
 		void doUpdateFlags( PipelineFlags & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
-		 */
 		void doUpdatePipeline( RenderPipeline & pipeline )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doCreateBlendState
-		 */
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
-		 */
 		void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, BillboardListRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
-		 */
 		void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, SubmeshRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
-		 */
 		ashes::VkDescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetGeometryShaderSource
-		 */
 		ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetPhongPixelShaderSource
-		 */
 		ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
-		 */
 		ShaderPtr doGetPbrMRPixelShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
-		 */
 		ShaderPtr doGetPbrSGPixelShaderSource( PipelineFlags const & flags )const override;
 
 	private:

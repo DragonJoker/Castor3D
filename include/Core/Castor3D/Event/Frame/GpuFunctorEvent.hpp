@@ -41,9 +41,11 @@ namespace castor3d
 		 *\~english
 		 *\brief		Applies the event.
 		 *\remarks		Executes the function.
+		 *\param[in]	device	The GPU device.
 		 *\~french
 		 *\brief		Traite l'évènement.
 		 *\remarks		Exécute la fonction.
+		 *\param[in]	device	Le device GPU.
 		 */
 		void apply( RenderDevice const & device )override
 		{

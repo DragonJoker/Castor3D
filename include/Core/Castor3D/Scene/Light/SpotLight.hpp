@@ -40,9 +40,11 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Creation function, used by Factory.
+		 *\param[in]	light	The parent Light.
 		 *\return		A light source.
 		 *\~french
 		 *\brief		Fonction de création utilisée par Factory.
+		 *\param[in]	light	La Light parente.
 		 *\return		Une source lumineuse.
 		 */
 		C3D_API static LightCategoryUPtr create( Light & light );
@@ -87,51 +89,45 @@ namespace castor3d
 		 *\name Accesseurs.
 		 **/
 		/**@{*/
-		inline castor::Point3f const & getDirection()const
+		castor::Point3f const & getDirection()const
 		{
 			return m_direction;
 		}
 
-		inline castor::Matrix4x4f const & getViewMatrix()const
+		castor::Matrix4x4f const & getViewMatrix()const
 		{
 			return m_lightView;
 		}
 
-		inline castor::Matrix4x4f const & getProjectionMatrix()const
+		castor::Matrix4x4f const & getProjectionMatrix()const
 		{
 			return m_lightProj;
 		}
 
-		inline castor::Matrix4x4f const & getLightSpaceTransform()const
+		castor::Matrix4x4f const & getLightSpaceTransform()const
 		{
 			return m_lightSpace;
 		}
 
-		inline castor::Point3f const & getAttenuation()const
+		castor::Point3f const & getAttenuation()const
 		{
 			return m_attenuation.value();
 		}
 
-		inline float getExponent()const
+		float getExponent()const
 		{
 			return m_exponent;
 		}
 
-		inline castor::Angle const & getCutOff()const
+		castor::Angle const & getCutOff()const
 		{
 			return m_cutOff.value();
 		}
 		/**@}*/
 
 	private:
-		/**
-		 *\copydoc		castor3d::LightCategory::updateNode
-		 */
-		C3D_API void updateNode( SceneNode const & node )override;
-		/**
-		 *\copydoc		castor::LightCategory::doBind
-		 */
-		C3D_API void doBind( castor::Point4f * buffer )const override;
+		void updateNode( SceneNode const & node )override;
+		void doBind( castor::Point4f * buffer )const override;
 
 	private:
 		castor::ChangeTracked< castor::Point3f > m_attenuation{ castor::Point3f{ 1, 0, 0 } };

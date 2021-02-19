@@ -300,7 +300,7 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 			if ( "${PROJECTS_PACKAGE_WIX}" STREQUAL "ON" )
 				set( CPACK_GENERATOR "WIX" )
 				set( CPACK_PACKAGE_INSTALL_DIRECTORY "Castor3D" )
-				set( CPACK_WIX_UPGRADE_GUID "42BDC578-D000-4995-A2F7-3C94B618CBF3" )
+				set( CPACK_WIX_UPGRADE_GUID "6138748D-A6CE-4BB9-BE4B-A2E67C405336" )
 				set( CPACK_WIX_PRODUCT_GUID "02ACFE05-CFCE-4E1D-85DA-59A068DDCF70" )
 				set( CPACK_WIX_PRODUCT_ICON "${CMAKE_CURRENT_SOURCE_DIR}/install/castor.ico" )
 				set( CPACK_WIX_UI_DIALOG "${CMAKE_CURRENT_SOURCE_DIR}/install/dialog.bmp" )
@@ -337,34 +337,24 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 		cpack_add_install_type( Developer )
 		cpack_add_install_type( Full )
 
-		cpack_add_component_group( Main
-			EXPANDED
-			DISPLAY_NAME "Main"
-			DESCRIPTION "Main components to run Castor3D."
-		)
-
 		cpack_add_component_group( Core
 			DISPLAY_NAME "Core libraries"
 			DESCRIPTION "Base libraries needed to use Castor3D."
-			PARENT_GROUP Main
 		)
 
 		cpack_add_component_group( Plugins
 			DISPLAY_NAME "Plugins"
 			DESCRIPTION "Plugins usable in Castor3D."
-			PARENT_GROUP Main
 		)
 
 		cpack_add_component_group( Tools
 			DISPLAY_NAME "Tools"
 			DESCRIPTION "Some tools"
-			PARENT_GROUP Main
 		)
 
 		cpack_add_component_group( Samples
 			DISPLAY_NAME "Samples"
 			DESCRIPTION "Sample applications and scenes using Castor3D."
-			PARENT_GROUP Main
 		)
 
 		cpack_add_component_group( Development

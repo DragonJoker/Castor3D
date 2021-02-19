@@ -21,16 +21,16 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	name		The name.
-		 *\param[in]	scene		The parent scene.
+		 *\param[in]	name	The name.
+		 *\param[in]	scene	The parent scene.
 		 *\param[in]	parent	The parent scene node.
-		 *\param[in]	count		The particles count.
+		 *\param[in]	count	The particles count.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	name		Le nom.
-		 *\param[in]	scene		La scene parente.
+		 *\param[in]	name	Le nom.
+		 *\param[in]	scene	La scene parente.
 		 *\param[in]	parent	Le noeud de scène parent.
-		 *\param[in]	count		Le nombre de particules.
+		 *\param[in]	count	Le nombre de particules.
 		 */
 		C3D_API ParticleSystem( castor::String const & name
 			, Scene & scene
@@ -45,32 +45,40 @@ namespace castor3d
 		C3D_API ~ParticleSystem();
 		/**
 		 *\~english
-		 *\brief		Initialises GPU side elements
-		 *\return		\p true if all is OK
+		 *\brief		Initialises GPU side elements.
+		 *\param[in]	device	The GPU device.
+		 *\return		\p true if all is OK.
 		 *\~french
-		 *\brief		Initialise les elements GPU
-		 *\return		\p true si tout s'est bien passe
+		 *\brief		Initialise les elements GPU.
+		 *\param[in]	device	Le device GPU.
+		 *\return		\p true si tout s'est bien passe.
 		 */
 		C3D_API bool initialise( RenderDevice const & device );
 		/**
 		 *\~english
-		 *\brief		Cleans GPU side elements up
+		 *\brief		Cleans GPU side elements up.
+		 *\param[in]	device	The GPU device.
 		 *\~french
-		 *\brief		Nettoie les elements GPU
+		 *\brief		Nettoie les elements GPU.
+		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API void cleanup( RenderDevice const & device );
 		/**
 		 *\~english
-		 *\brief		Updates the particles.
+		 *\brief			CPU Update.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour les particules.
+		 *\brief			Mise à jour CPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
-		 *\brief		Updates the particles.
+		 *\brief			GPU Update.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Met à jour les particules.
+		 *\brief			Mise à jour GPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( GpuUpdater & updater );
 		/**

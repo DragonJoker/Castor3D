@@ -63,9 +63,6 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		/**
-		 *\copydoc		castor3d::AnimationInstance::doUpdate
-		 */
 		void doUpdate()override;
 
 	protected:

@@ -151,10 +151,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Renders one frame.
-		 *\param[in]	waitOnly	\p true to only wait for the semaphores.
+		 *\param[in]	signalOnly	\p true to only signal the semaphores.
 		 *\~french
 		 *\brief		Renders one frame.
-		 *\param[in]	waitOnly	\p true pour ne faire qu'attendre les semaphores.
+		 *\param[in]	signalOnly	\p true pour ne faire que signaler les semaphores.
 		 */
 		C3D_API void render( bool signalOnly );
 		/**
@@ -318,53 +318,53 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline uint32_t getIndex()const
+		uint32_t getIndex()const
 		{
 			return m_index;
 		}
 
-		inline bool isInitialised()const
+		bool isInitialised()const
 		{
 			return m_initialised;
 		}
 
-		inline FrameListenerSPtr getListener()const
+		FrameListenerSPtr getListener()const
 		{
 			return m_listener.lock();
 		}
 
-		inline RenderDevice const & getDevice()const
+		RenderDevice const & getDevice()const
 		{
 			CU_Require( m_device );
 			return *m_device;
 		}
 
-		inline RenderTargetSPtr getRenderTarget()const
+		RenderTargetSPtr getRenderTarget()const
 		{
 			return m_renderTarget.lock();
 		}
 
-		inline bool isVSyncEnabled()const
+		bool isVSyncEnabled()const
 		{
 			return m_vsync;
 		}
 
-		inline bool isFullscreen()const
+		bool isFullscreen()const
 		{
 			return m_fullscreen;
 		}
 
-		inline castor::PxBufferBaseSPtr getSavedFrame()const
+		castor::PxBufferBaseSPtr getSavedFrame()const
 		{
 			return m_saveBuffer;
 		}
 
-		inline bool isPickingDebugEnabled()const
+		bool isPickingDebugEnabled()const
 		{
 			return m_enablePickingDebug;
 		}
 
-		inline void enablePickingDebug( bool v )
+		void enablePickingDebug( bool v )
 		{
 			m_enablePickingDebug = v;
 		}
@@ -383,27 +383,27 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		inline void setRenderTarget( RenderTargetSPtr value )
+		void setRenderTarget( RenderTargetSPtr value )
 		{
 			m_renderTarget = value;
 		}
 
-		inline void setDevice( RenderDeviceSPtr value )
+		void setDevice( RenderDeviceSPtr value )
 		{
 			m_device = std::move( value );
 		}
 
-		inline void enableVSync( bool value )
+		void enableVSync( bool value )
 		{
 			m_vsync = value;
 		}
 
-		inline void setFullscreen( bool value )
+		void setFullscreen( bool value )
 		{
 			m_fullscreen = value;
 		}
 
-		inline void enableSaveFrame()
+		void enableSaveFrame()
 		{
 			m_toSave = true;
 		}

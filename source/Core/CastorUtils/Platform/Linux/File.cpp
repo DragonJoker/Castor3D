@@ -114,7 +114,7 @@ namespace castor
 					{
 						result = directoryFunction( folderPath / name );
 					}
-					else if ( !isLink( folderPath / name ) )
+					else
 					{
 						fileFunction( folderPath, name );
 					}

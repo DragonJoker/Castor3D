@@ -260,7 +260,7 @@ namespace castor3d
 		 *\~brief		Fonction de traitement d'un évènement souris.
 		 *\param[in]	event	L'évènement.
 		 */
-		inline void processMouseEvent( MouseEventSPtr event )
+		void processMouseEvent( MouseEventSPtr event )
 		{
 			m_mouseSlots[size_t( event->getMouseEventType() )]( *event );
 			doProcessMouseEvent( event );
@@ -273,7 +273,7 @@ namespace castor3d
 		 *\~brief		Fonction de traitement d'un évènement clavier.
 		 *\param[in]	event	L'évènement.
 		 */
-		inline void processKeyboardEvent( KeyboardEventSPtr event )
+		void processKeyboardEvent( KeyboardEventSPtr event )
 		{
 			m_keyboardSlots[size_t( event->getKeyboardEventType() )]( *event );
 			doProcessKeyboardEvent( event );
@@ -286,7 +286,7 @@ namespace castor3d
 		 *\~brief		Fonction de traitement d'un évènement de gestionnaire.
 		 *\param[in]	event	L'évènement.
 		 */
-		inline void processHandlerEvent( HandlerEventSPtr event )
+		void processHandlerEvent( HandlerEventSPtr event )
 		{
 			m_handlerSlots[size_t( event->getHandlerEventType() )]( *event );
 			doProcessHandlerEvent( event );
@@ -301,7 +301,7 @@ namespace castor3d
 		*\~brief		Echange le contenu de la file de ce gestionnaire avec une file vide.
 		*\return		Le contenu de la file de ce gestionnaire.
 		*/
-		inline EventQueue doSwapQueue()
+		EventQueue doSwapQueue()
 		{
 			EventQueue queue;
 			m_mutex.lock();
@@ -511,24 +511,17 @@ namespace castor3d
 		//@}
 
 	private:
-		/**
-		 *\copydoc		castor3d::EventHandler::doProcessMouseEvent
-		 */
-		inline void doProcessMouseEvent( MouseEventSPtr event )
+		void doProcessMouseEvent( MouseEventSPtr event )
 		{
 			m_ncMouseSlots[size_t( event->getMouseEventType() )]( this->shared_from_this(), *event );
 		}
-		/**
-		 *\copydoc		castor3d::EventHandler::doProcessKeyboardEvent
-		 */
-		inline void doProcessKeyboardEvent( KeyboardEventSPtr event )
+
+		void doProcessKeyboardEvent( KeyboardEventSPtr event )
 		{
 			m_ncKeyboardSlots[size_t( event->getKeyboardEventType() )]( this->shared_from_this(), *event );
 		}
-		/**
-		 *\copydoc		castor3d::EventHandler::doProcessHandlerEvent
-		 */
-		inline void doProcessHandlerEvent( HandlerEventSPtr event )
+
+		void doProcessHandlerEvent( HandlerEventSPtr event )
 		{
 			m_ncHandlerSlots[size_t( event->getHandlerEventType() )]( this->shared_from_this(), *event );
 		}

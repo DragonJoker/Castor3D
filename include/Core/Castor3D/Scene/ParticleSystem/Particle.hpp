@@ -103,7 +103,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les données de la particule.
 		 */
-		inline uint8_t const * getData()const
+		uint8_t const * getData()const
 		{
 			return m_data.data();
 		}
@@ -113,17 +113,13 @@ namespace castor3d
 		 *\~french
 		 *\return		Les données de la particule.
 		 */
-		inline uint8_t * getData()
+		uint8_t * getData()
 		{
 			return m_data.data();
 		}
 
 	private:
-		//!\~english	The particle's elemets description.
-		//!\~french		La description des éléments de la particule.
 		ParticleDeclaration const & m_description;
-		//!\~english	The particle's data.
-		//!\~french		Les données de la particule.
 		std::vector< uint8_t > m_data;
 	};
 }

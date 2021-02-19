@@ -187,12 +187,14 @@ namespace castor3d
 		 *\param[in]	info				The image informations.
 		 *\param[in]	memoryProperties	The required memory properties.
 		 *\param[in]	debugName			The debug name for this layout.
+		 *\param[in]	isStatic			Tells if this layout is static.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	renderSystem		Le render system.
 		 *\param[in]	info				Les informations de l'image.
 		 *\param[in]	memoryProperties	Les propriétés requise pour la mémoire.
 		 *\param[in]	debugName			Le nom de debug pour ce layout.
+		 *\param[in]	isStatic			Dit si ce layout est statique.
 		 */
 		C3D_API TextureLayout( RenderSystem & renderSystem
 			, ashes::ImageCreateInfo info
@@ -209,9 +211,11 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the texture and all its views.
+		 *\param[in]	device	The GPU device.
 		 *\return		\p true if OK.
 		 *\~french
 		 *\brief		Initialise la texture et toutes ses vues.
+		 *\param[in]	device	Le device GPU.
 		 *\return		\p true si tout s'est bien passé.
 		 */
 		C3D_API bool initialise( RenderDevice const & device );
@@ -225,15 +229,19 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Generate texture mipmaps
+		 *\param[in]	device	The GPU device.
 		 *\~french
 		 *\brief		Génère les mipmaps de la texture
+		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API void generateMipmaps( RenderDevice const & device )const;
 		/**
 		 *\~english
 		 *\brief		Generate texture mipmaps
+		 *\param[in]	cmd	The command buffer recording the commands.
 		 *\~french
 		 *\brief		Génère les mipmaps de la texture
+		 *\param[in]	cmd	Le command buffer recevant les commandes.
 		 */
 		C3D_API void generateMipmaps( ashes::CommandBuffer & cmd )const;
 		/**
@@ -255,7 +263,7 @@ namespace castor3d
 			, castor::Path const & relative );
 		C3D_API void setSource( VkExtent3D const & extent
 			, VkFormat format );
-		inline void setSource( VkExtent2D const & extent
+		void setSource( VkExtent2D const & extent
 			, VkFormat format )
 		{
 			return setSource( { extent.width, extent.height, 1u }
@@ -265,19 +273,19 @@ namespace castor3d
 		 *\name Getters.
 		 **/
 		/**@{*/
-		inline TextureView const & getDefaultView()const
+		TextureView const & getDefaultView()const
 		{
 			CU_Require( m_defaultView.view );
 			return *m_defaultView.view;
 		}
 
-		inline TextureView & getDefaultView()
+		TextureView & getDefaultView()
 		{
 			CU_Require( m_defaultView.view );
 			return *m_defaultView.view;
 		}
 
-		inline MipView const & getDefault()const
+		MipView const & getDefault()const
 		{
 			return m_defaultView;
 		}
@@ -288,13 +296,13 @@ namespace castor3d
 		*	2D texture's mip level access.
 		**/
 		/**@{*/
-		inline TextureView const & getMipView( size_t level )const
+		TextureView const & getMipView( size_t level )const
 		{
 			CU_Require( getDefault().levels.size() > level );
 			return *getDefault().levels[level];
 		}
 
-		inline TextureView & getMipView( size_t level )
+		TextureView & getMipView( size_t level )
 		{
 			CU_Require( getDefault().levels.size() > level );
 			return *getDefault().levels[level];
@@ -321,7 +329,7 @@ namespace castor3d
 		C3D_API void setLayerSource( uint32_t index
 			, VkExtent3D const & extent
 			, VkFormat format );
-		inline void setLayerSource( uint32_t index
+		void setLayerSource( uint32_t index
 			, VkExtent2D const & extent
 			, VkFormat format )
 		{
@@ -333,17 +341,17 @@ namespace castor3d
 		 *\name Getters.
 		 **/
 		/**@{*/
-		inline uint32_t getLayersCount()const
+		uint32_t getLayersCount()const
 		{
 			return m_info->arrayLayers;
 		}
 
-		inline ArrayView< MipView > const & getArray2D()const
+		ArrayView< MipView > const & getArray2D()const
 		{
 			return m_arrayView;
 		}
 
-		inline MipView const & getLayer2D( size_t layer )const
+		MipView const & getLayer2D( size_t layer )const
 		{
 			CU_Require( m_cubeView.layers.empty() );
 			CU_Require( m_sliceView.slices.empty() );
@@ -352,7 +360,7 @@ namespace castor3d
 			return m_arrayView.layers[layer];
 		}
 
-		inline MipView & getLayer2D( size_t layer )
+		MipView & getLayer2D( size_t layer )
 		{
 			CU_Require( m_cubeView.layers.empty() );
 			CU_Require( m_sliceView.slices.empty() );
@@ -361,13 +369,13 @@ namespace castor3d
 			return m_arrayView.layers[layer];
 		}
 
-		inline TextureView const & getLayer2DView( size_t layer )const
+		TextureView const & getLayer2DView( size_t layer )const
 		{
 			CU_Require( getLayer2D( layer ).view );
 			return *getLayer2D( layer ).view;
 		}
 
-		inline TextureView & getLayer2DView( size_t layer )
+		TextureView & getLayer2DView( size_t layer )
 		{
 			CU_Require( getLayer2D( layer ).view );
 			return *getLayer2D( layer ).view;
@@ -394,7 +402,7 @@ namespace castor3d
 			, uint32_t level
 			, VkExtent3D const & extent
 			, VkFormat format );
-		inline void setLayerMipSource( uint32_t index
+		void setLayerMipSource( uint32_t index
 			, uint32_t level
 			, VkExtent2D const & extent
 			, VkFormat format )
@@ -409,12 +417,12 @@ namespace castor3d
 		 *\name 3D texture's slice access.
 		 **/
 		/**@{*/
-		inline SliceView< MipView > const & getSlices3D()const
+		SliceView< MipView > const & getSlices3D()const
 		{
 			return m_sliceView;
 		}
 
-		inline MipView const & getSlice( size_t slice )const
+		MipView const & getSlice( size_t slice )const
 		{
 			CU_Require( m_cubeView.layers.empty() );
 			CU_Require( m_arrayView.layers.empty() );
@@ -423,7 +431,7 @@ namespace castor3d
 			return m_sliceView.slices[slice];
 		}
 
-		inline MipView & getSlice( size_t slice )
+		MipView & getSlice( size_t slice )
 		{
 			CU_Require( m_cubeView.layers.empty() );
 			CU_Require( m_arrayView.layers.empty() );
@@ -432,13 +440,13 @@ namespace castor3d
 			return m_sliceView.slices[slice];
 		}
 
-		inline TextureView const & getSliceView( size_t slice )const
+		TextureView const & getSliceView( size_t slice )const
 		{
 			CU_Require( getSlice( slice ).view );
 			return *getSlice( slice ).view;
 		}
 
-		inline TextureView & getSliceView( size_t slice )
+		TextureView & getSliceView( size_t slice )
 		{
 			CU_Require( getSlice( slice ).view );
 			return *getSlice( slice ).view;
@@ -451,19 +459,19 @@ namespace castor3d
 		*	A simple cube texture is a cube array of size 1.
 		**/
 		/**@{*/
-		inline uint32_t isCube()const
+		uint32_t isCube()const
 		{
 			return getLayersCount() >= 6u
 				&& ( getLayersCount() % 6u ) == 0u
 				&& ashes::checkFlag( m_info->flags, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT );
 		}
 
-		inline ArrayView< CubeView > const & getArrayCube()const
+		ArrayView< CubeView > const & getArrayCube()const
 		{
 			return m_cubeView;
 		}
 
-		inline CubeView const & getLayerCube( size_t layer )const
+		CubeView const & getLayerCube( size_t layer )const
 		{
 			CU_Require( m_arrayView.layers.empty() );
 			CU_Require( m_sliceView.slices.empty() );
@@ -472,7 +480,7 @@ namespace castor3d
 			return m_cubeView.layers[layer];
 		}
 
-		inline CubeView & getLayerCube( size_t layer )
+		CubeView & getLayerCube( size_t layer )
 		{
 			CU_Require( m_arrayView.layers.empty() );
 			CU_Require( m_sliceView.slices.empty() );
@@ -481,13 +489,13 @@ namespace castor3d
 			return m_cubeView.layers[layer];
 		}
 
-		inline TextureView const & getLayerCubeView( size_t layer )const
+		TextureView const & getLayerCubeView( size_t layer )const
 		{
 			CU_Require( getLayerCube( layer ).view.view );
 			return *getLayerCube( layer ).view.view;
 		}
 
-		inline TextureView & getLayerCubeView( size_t layer )
+		TextureView & getLayerCubeView( size_t layer )
 		{
 			CU_Require( getLayerCube( layer ).view.view );
 			return *getLayerCube( layer ).view.view;
@@ -497,26 +505,26 @@ namespace castor3d
 		 *\name Cube array texture layer's face access.
 		 **/
 		/**@{*/
-		inline MipView const & getLayerCubeFace( size_t layer
+		MipView const & getLayerCubeFace( size_t layer
 			, CubeMapFace face )const
 		{
 			return getLayerCube( layer ).faces[size_t( face )];
 		}
 
-		inline MipView & getLayerCubeFace( size_t layer
+		MipView & getLayerCubeFace( size_t layer
 			, CubeMapFace face )
 		{
 			return getLayerCube( layer ).faces[size_t( face )];
 		}
 
-		inline TextureView const & getLayerCubeFaceView( size_t layer
+		TextureView const & getLayerCubeFaceView( size_t layer
 			, CubeMapFace face )const
 		{
 			CU_Require( getLayerCubeFace( layer, face ).view );
 			return *getLayerCubeFace( layer, face ).view;
 		}
 
-		inline TextureView & getLayerCubeFaceView( size_t layer
+		TextureView & getLayerCubeFaceView( size_t layer
 			, CubeMapFace face )
 		{
 			CU_Require( getLayerCubeFace( layer, face ).view );
@@ -536,7 +544,7 @@ namespace castor3d
 			, CubeMapFace face
 			, castor::Path const & folder
 			, castor::Path const & relative );
-		inline void setLayerCubeFaceSource( uint32_t layer
+		void setLayerCubeFaceSource( uint32_t layer
 			, CubeMapFace face
 			, VkExtent2D const & extent
 			, VkFormat format );
@@ -546,7 +554,7 @@ namespace castor3d
 		 *\name Cube array texture layer face's mip level access.
 		 **/
 		/**@{*/
-		inline TextureView const & getLayerCubeFaceMipView( size_t layer
+		TextureView const & getLayerCubeFaceMipView( size_t layer
 			, CubeMapFace face
 			, uint32_t level )const
 		{
@@ -555,7 +563,7 @@ namespace castor3d
 			return *getLayerCubeFace( layer, face ).levels[level];
 		}
 
-		inline TextureView & getLayerCubeFaceMipView( size_t layer
+		TextureView & getLayerCubeFaceMipView( size_t layer
 			, CubeMapFace face
 			, uint32_t level )
 		{
@@ -579,7 +587,7 @@ namespace castor3d
 			, uint32_t level
 			, castor::Path const & folder
 			, castor::Path const & relative );
-		inline void setLayerCubeFaceMipSource( uint32_t layer
+		void setLayerCubeFaceMipSource( uint32_t layer
 			, CubeMapFace face
 			, uint32_t level
 			, VkExtent2D const & extent
@@ -595,63 +603,63 @@ namespace castor3d
 		C3D_API castor::Path getPath()const;
 		C3D_API bool needsYInversion()const;
 
-		inline bool isInitialised()const
+		bool isInitialised()const
 		{
 			return m_initialised;
 		}
 
-		inline bool isStatic()const
+		bool isStatic()const
 		{
 			return m_static;
 		}
 
-		inline VkImageType getType()const
+		VkImageType getType()const
 		{
 			return m_info->imageType;
 		}
 
-		inline castor::Image const & getImage()const
+		castor::Image const & getImage()const
 		{
 			return m_image;
 		}
 
-		inline castor::Image & getImage()
+		castor::Image & getImage()
 		{
 			return m_image;
 		}
 
-		inline ashes::Image const & getTexture()const
+		ashes::Image const & getTexture()const
 		{
 			CU_Require( m_texture );
 			return *m_texture;
 		}
 
-		inline uint32_t getWidth()const
+		uint32_t getWidth()const
 		{
 			return m_info->extent.width;
 		}
 
-		inline uint32_t getHeight()const
+		uint32_t getHeight()const
 		{
 			return m_info->extent.height;
 		}
 
-		inline uint32_t getDepth()const
+		uint32_t getDepth()const
 		{
 			return m_info->extent.depth;
 		}
 
-		inline uint32_t getMipmapCount()const
+		uint32_t getMipmapCount()const
 		{
 			return m_info->mipLevels;
 		}
 
-		inline VkExtent3D const & getDimensions()const
+		VkExtent3D const & getDimensions()const
 		{
 			return m_info->extent;
 		}
 
-		inline VkFormat getPixelFormat()const
+		VkFormat getPixelFormat()const
 		{
 			return m_info->format;
 		}

@@ -18,6 +18,14 @@ namespace castor3d
 	public:
 		C3D_API explicit ParticleEmitter( castor3d::ParticleDeclaration const & decl );
 		C3D_API virtual ~ParticleEmitter() = default;
+		/**
+		 *\~english
+		 *\brief		Emits a particle with given values.
+		 *\param[in]	value	The particle values.
+		 *\~french
+		 *\brief		Emet une particle ayant les valeurs données.
+		 *\param[in]	value	Les valeurs de la particule.
+		 */
 		C3D_API castor3d::Particle emit( ParticleValues const & value );
 
 		using OnEmitFunction = std::function< void( Particle const & particle ) >;

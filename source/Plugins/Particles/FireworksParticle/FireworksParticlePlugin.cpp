@@ -10,7 +10,7 @@
 #ifndef CU_PlatformWindows
 #	define C3D_Fireworks_API
 #else
-#	ifdef castor3dFireworksParticle_EXPORTS
+#	ifdef FireworksParticle_EXPORTS
 #		define C3D_Fireworks_API __declspec( dllexport )
 #	else
 #		define C3D_Fireworks_API __declspec( dllimport )

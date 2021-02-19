@@ -3,6 +3,7 @@
 #include "GuiCommon/Shader/ShaderDialog.hpp"
 #include "GuiCommon/Properties/AdditionalProperties.hpp"
 
+#include <Castor3D/Engine.hpp>
 #include <Castor3D/Cache/TargetCache.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/ToneMapping/ToneMapping.hpp>

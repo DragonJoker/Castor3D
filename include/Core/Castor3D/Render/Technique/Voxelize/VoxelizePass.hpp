@@ -18,13 +18,23 @@ namespace castor3d
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor for opaque nodes.
-		 *\param[in]	matrixUbo	The scene matrices UBO.
-		 *\param[in]	culler		The culler for this pass.
+		 *\brief		Constructor.
+		 *\param[in]	engine			The engine.
+		 *\param[in]	device			The GPU device.
+		 *\param[in]	matrixUbo		The scene matrices UBO.
+		 *\param[in]	culler			The culler for this pass.
+		 *\param[in]	voxelizerUbo	The voxelizer configuration UBO.
+		 *\param[in]	voxels			The voxels buffer.
+		 *\param[in]	voxelConfig		The voxelizer configuration.
 		 *\~french
-		 *\brief		Constructeur pour les noeuds opaques.
-		 *\param[in]	matrixUbo	L'UBO de matrices de la scène.
-		 *\param[in]	culler		Le culler pour cette passe.
+		 *\brief		Constructeur.
+		 *\param[in]	engine			Le moteur.
+		 *\param[in]	device			Le device GPU.
+		 *\param[in]	matrixUbo		L'UBO de matrices de la scène.
+		 *\param[in]	culler			Le culler pour cette passe.
+		 *\param[in]	voxelizerUbo	L'UBO de configuration du voxelizer.
+		 *\param[in]	voxels			Le tampon de voxels.
+		 *\param[in]	voxelConfig		La configuration du voxelizer.
 		 */
 		C3D_API VoxelizePass( Engine & engine
 			, RenderDevice const & device
@@ -45,19 +55,31 @@ namespace castor3d
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor );
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::update
+		 *\~english
+		 *\brief			Updates the render pass, CPU wise.
+		 *\param[in, out]	updater	The update data.
+		 *\~french
+		 *\brief			Met à jour la passe de rendu, au niveau CPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( CpuUpdater & updater );
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::update
+		 *\~english
+		 *\brief			Updates the render pass, GPU wise.
+		 *\param[in, out]	updater	The update data.
+		 *\~french
+		 *\brief			Met à jour la passe de rendu, au niveau GPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Renders nodes.
+		 *\param[in]	device	The GPU device.
 		 *\param[out]	toWait	The semaphore to wait for.
 		 *\~french
 		 *\brief		Dessine les noeuds.
+		 *\param[in]	device	Le device GPU.
 		 *\param[out]	toWait	Le sémaphore à attendre.
 		 */
 		ashes::Semaphore const & render( RenderDevice const & device
@@ -71,7 +93,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline ashes::Semaphore const & getSemaphore()const
+		ashes::Semaphore const & getSemaphore()const
 		{
 			CU_Require( m_commands.semaphore );
 			return *m_commands.semaphore;
@@ -81,86 +103,32 @@ namespace castor3d
 		using SceneRenderPass::update;
 
 	private:
-		/**
-		 *\copydoc		castor3d::RenderPass::doCreateUboBindings
-		 */
 		C3D_API ashes::VkDescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
-		 */
 		C3D_API ashes::VkDescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doCreateDepthStencilState
-		 */
 		C3D_API ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doCreateBlendState
-		 */
 		C3D_API ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderTechniquePass::doCleanup
-		 */
 		C3D_API void doCleanup( RenderDevice const & device )override;
-		/**
-		 *\copydoc		castor3d::RenderTechniquePass::doInitialise
-		 */
 		C3D_API bool doInitialise( RenderDevice const & device
 			, castor::Size const & size )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doFillUboDescriptor
-		 */
 		C3D_API void doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 			, BillboardListRenderNode & node )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doFillUboDescriptor
-		 */
 		C3D_API void doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 			, SubmeshRenderNode & node )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
-		 */
 		C3D_API void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, BillboardListRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
-		 */
 		C3D_API void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, SubmeshRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doUpdateFlags
-		 */
 		C3D_API void doUpdateFlags( PipelineFlags & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
-		 */
 		C3D_API void doUpdatePipeline( RenderPipeline & pipeline )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
-		 */
 		C3D_API ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetBillboardShaderSource
-		 */
 		C3D_API ShaderPtr doGetBillboardShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetGeometryShaderSource
-		 */
 		C3D_API ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetPhongPixelShaderSource
-		 */
 		C3D_API ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
-		 */
 		C3D_API ShaderPtr doGetPbrMRPixelShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
-		 */
 		C3D_API ShaderPtr doGetPbrSGPixelShaderSource( PipelineFlags const & flags )const override;
 
 	private:

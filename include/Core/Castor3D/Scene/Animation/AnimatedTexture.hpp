@@ -89,21 +89,9 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		/**
-		 *\copydoc		castor3d::AnimatedObject::doAddAnimation
-		 */
 		void doAddAnimation( castor::String const & name )override;
-		/**
-		 *\copydoc		castor3d::AnimatedObject::doStartAnimation
-		 */
 		void doStartAnimation( AnimationInstance & animation )override;
-		/**
-		 *\copydoc		castor3d::AnimatedObject::doStopAnimation
-		 */
 		void doStopAnimation( AnimationInstance & animation )override;
-		/**
-		 *\copydoc		castor3d::AnimatedObject::doClearAnimations
-		 */
 		void doClearAnimations()override;
 
 	private:

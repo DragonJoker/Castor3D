@@ -17,7 +17,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La densité du brouillard.
 		 */
-		inline float getDensity()const
+		float getDensity()const
 		{
 			return m_density;
 		}
@@ -29,7 +29,7 @@ namespace castor3d
 		 *\brief		Définit la densité du brouillard.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setDensity( float value )
+		void setDensity( float value )
 		{
 			m_density = value;
 		}
@@ -39,7 +39,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le type de brouillard.
 		 */
-		inline FogType getType()const
+		FogType getType()const
 		{
 			return m_type;
 		}
@@ -51,7 +51,7 @@ namespace castor3d
 		 *\brief		Définit le type de brouillard.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setType( FogType value )
+		void setType( FogType value )
 		{
 			m_type = value;
 		}

@@ -25,14 +25,16 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	layout	The parent layout.
-		 *\param[in]	info	The creation info.
-		 *\param[in]	index	The image index in its layout.
+		 *\param[in]	layout		The parent layout.
+		 *\param[in]	info		The creation info.
+		 *\param[in]	index		The image index in its layout.
+		 *\param[in]	debugName	The debug name for this layout.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	layout	Le layout parent.
-		 *\param[in]	info	Les informations de création.
-		 *\param[in]	index	L'index de l'image dans son layout.
+		 *\param[in]	layout		Le layout parent.
+		 *\param[in]	info		Les informations de création.
+		 *\param[in]	index		L'index de l'image dans son layout.
+		 *\param[in]	debugName	Le nom de debug pour ce layout.
 		 */
 		C3D_API TextureView( TextureLayout & layout
 			, ashes::ImageViewCreateInfo info
@@ -50,14 +52,38 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the view range.
+		 *\param[in]	image			The GPU image.
+		 *\param[in]	baseArrayLayer	The starting layer.
+		 *\param[in]	layerCount		The layer count.
+		 *\param[in]	baseMipLevel	The starting miplevel.
+		 *\param[in]	levelCount		The miplevel count.
 		 *\~french
 		 *\brief		Met à jour l'étendue de la vue.
+		 *\param[in]	image			L'image GPU.
+		 *\param[in]	baseArrayLayer	La layer de départ.
+		 *\param[in]	layerCount		Le nombre de layers.
+		 *\param[in]	baseMipLevel	Le miplevel de départ.
+		 *\param[in]	levelCount		Le nombre de miplevels.
 		 */
 		C3D_API void update( VkImage image
 			, uint32_t baseArrayLayer
 			, uint32_t layerCount
 			, uint32_t baseMipLevel
 			, uint32_t levelCount );
+		/**
+		 *\~english
+		 *\brief		Updates the view range.
+		 *\param[in]	extent			The extent.
+		 *\param[in]	format			The pixel format.
+		 *\param[in]	mipLevels		The miplevel count.
+		 *\param[in]	arrayLayers		The layer count.
+		 *\~french
+		 *\brief		Met à jour l'étendue de la vue.
+		 *\param[in]	extent			Les dimensions.
+		 *\param[in]	format			Le format des pixels.
+		 *\param[in]	mipLevels		Le nombre de miplevels.
+		 *\param[in]	arrayLayers		Le nombre de layers.
+		 */
 		C3D_API void update( VkExtent3D const & extent
 			, VkFormat format
 			, uint32_t mipLevels

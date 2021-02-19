@@ -36,22 +36,26 @@ namespace castor3d
 		*\brief
 		*	Constructor.
 		*\param[in] device
-		*	The RenderDevice.
+		*	The GPU device.
 		*\param[in] name
 		*	The pass name.
 		*\param[in] samplerFilter
 		*	The sampler filter for the source texture.
+		*\param[in] gridSize
+		*	The grid dimensions.
 		*\param[in] config
 		*	The configuration.
 		*\~french
 		*\brief
 		*	Constructeur.
 		*\param[in] device
-		*	Le RenderDevice.
+		*	Le device GPU.
 		*\param[in] name
 		*	Le nom de la passe.
 		*\param[in] samplerFilter
 		*	Le filtre d'échantillonnage pour la texture source.
+		*\param[in] gridSize
+		*	Les dimensions de la grille.
 		*\param[in] config
 		*	La configuration.
 		*/
@@ -128,11 +132,9 @@ namespace castor3d
 		*\brief
 		*	Creates the rendering pipeline and initialises the quad for one pass.
 		*\param[in] program
-		*	The shader program.
-		*\param[in] writes
-		*	The pass descriptor writes.
 		*\param[in] renderPass
 		*	The render pass to use.
+		*	The shader program.
 		*\param[in] writes
 		*	The pass' descriptor writes.
 		*\param[in] pushRanges
@@ -144,8 +146,6 @@ namespace castor3d
 		*	Crée le pipeline de rendu et initialise le quad pour une passe.
 		*\param[in] program
 		*	Le programme shader.
-		*\param[in] writes
-		*	Les descriptor writes de la passe.
 		*\param[in] renderPass
 		*	La passe de rendu à utiliser.
 		*\param[in] writes
@@ -184,17 +184,13 @@ namespace castor3d
 		*	Prpares the commands to render the quad, inside given command buffer.
 		*\param[in,out] commandBuffer
 		*	The command buffer.
-		*\param[in] descriptorSetIndex
-		*	The render descriptor set index.
 		*\~french
 		*\brief
 		*	Prépare les commandes de dessin du quad, dans le tampon de commandes donné.
 		*\param[in,out] commandBuffer
 		*	Le tampon de commandes.
-		*\param[in] descriptorSetIndex
-		*	L'indice du descriptor set.
 		*/
-		inline void registerPass( ashes::CommandBuffer & commandBuffer )const
+		void registerPass( ashes::CommandBuffer & commandBuffer )const
 		{
 			registerPass( commandBuffer, 0u );
 		}
@@ -238,12 +234,12 @@ namespace castor3d
 		*	Creates a descriptor write for uniform buffer.
 		*\param[in] buffer
 		*	The uniform buffer.
+		*\param[in] dstBinding
+		*	The binding inside the descriptor set.
 		*\param[in] elemOffset
 		*	The offset, expressed in element count.
 		*\param[in] elemRange
 		*	The range, expressed in element count.
-		*\param[in] dstBinding
-		*	The binding inside the descriptor set.
 		*\param[in] dstArrayElement
 		*	The array element index.
 		*\~french
@@ -251,12 +247,12 @@ namespace castor3d
 		*	Crée un descriptor write pour un uniform buffer.
 		*\param[in] buffer
 		*	L'uniform buffer.
+		*\param[in] dstBinding
+		*	Le binding dans le descriptor set.
 		*\param[in] elemOffset
 		*	L'offset, exprimé en nombre d'éléments.
 		*\param[in] elemRange
 		*	L'intervalle, exprimé en nombre d'éléments.
-		*\param[in] dstBinding
-		*	Le binding dans le descriptor set.
 		*\param[in] dstArrayElement
 		*	L'indice dans le tableau d'éléments.
 		*/
@@ -307,12 +303,12 @@ namespace castor3d
 		*	Creates a descriptor write for storage buffer.
 		*\param[in] storageBuffer
 		*	The storage buffer.
-		*\param[in] elemOffset
-		*	The offset, expressed in element count.
-		*\param[in] elemRange
-		*	The range, expressed in element count.
 		*\param[in] dstBinding
 		*	The binding inside the descriptor set.
+		*\param[in] byteOffset
+		*	The offset, expressed in bytes.
+		*\param[in] byteRange
+		*	The range, expressed in bytes.
 		*\param[in] dstArrayElement
 		*	The array element index.
 		*\~french
@@ -320,12 +316,12 @@ namespace castor3d
 		*	Crée un descriptor write pour un storage buffer.
 		*\param[in] storageBuffer
 		*	Le storage buffer.
-		*\param[in] elemOffset
-		*	L'offset, exprimé en nombre d'éléments.
-		*\param[in] elemRange
-		*	L'intervalle, exprimé en nombre d'éléments.
 		*\param[in] dstBinding
 		*	Le binding dans le descriptor set.
+		*\param[in] byteOffset
+		*	L'offset, exprimé en octets.
+		*\param[in] byteRange
+		*	L'intervalle, exprimé en octets.
 		*\param[in] dstArrayElement
 		*	L'indice dans le tableau d'éléments.
 		*/
@@ -347,12 +343,12 @@ namespace castor3d
 		*	Creates a descriptor write for storage buffer.
 		*\param[in] storageBuffer
 		*	The storage buffer.
+		*\param[in] dstBinding
+		*	The binding inside the descriptor set.
 		*\param[in] elemOffset
 		*	The offset, expressed in element count.
 		*\param[in] elemRange
 		*	The range, expressed in element count.
-		*\param[in] dstBinding
-		*	The binding inside the descriptor set.
 		*\param[in] dstArrayElement
 		*	The array element index.
 		*\~french
@@ -360,12 +356,12 @@ namespace castor3d
 		*	Crée un descriptor write pour un storage buffer.
 		*\param[in] storageBuffer
 		*	Le storage buffer.
+		*\param[in] dstBinding
+		*	Le binding dans le descriptor set.
 		*\param[in] elemOffset
 		*	L'offset, exprimé en nombre d'éléments.
 		*\param[in] elemRange
 		*	L'intervalle, exprimé en nombre d'éléments.
-		*\param[in] dstBinding
-		*	Le binding dans le descriptor set.
 		*\param[in] dstArrayElement
 		*	L'indice dans le tableau d'éléments.
 		*/
@@ -452,22 +448,22 @@ namespace castor3d
 				, dstArrayElement );
 		}
 
-		inline RenderSystem * getRenderSystem()const
+		RenderSystem * getRenderSystem()const
 		{
 			return &m_renderSystem;
 		}
 
-		inline RenderDevice const & getDevice()const
+		RenderDevice const & getDevice()const
 		{
 			return m_device;
 		}
 
-		inline Sampler const & getSampler()const
+		Sampler const & getSampler()const
 		{
 			return *m_sampler;
 		}
 
-		inline uint32_t getGridSize()const
+		uint32_t getGridSize()const
 		{
 			return m_gridSize;
 		}
@@ -500,7 +496,7 @@ namespace castor3d
 		: public RenderQuadBuilderT< ConfigT, BuilderT >
 	{
 	public:
-		inline RenderGridBuilderT()
+		RenderGridBuilderT()
 		{
 		}
 		/**
@@ -512,6 +508,8 @@ namespace castor3d
 		*	The pass name.
 		*\param[in] samplerFilter
 		*	The sampler filter for the source texture.
+		*\param[in] gridSize
+		*	The grid dimensions.
 		*\~french
 		*	Crée le RenderGrid.
 		*\param[in] device
@@ -520,8 +518,10 @@ namespace castor3d
 		*	Le nom de la passe.
 		*\param[in] samplerFilter
 		*	Le filtre d'échantillonnage pour la texture source.
+		*\param[in] gridSize
+		*	Les dimensions de la grille.
 		*/
-		inline RenderGridUPtr build( RenderDevice const & device
+		RenderGridUPtr build( RenderDevice const & device
 			, castor::String const & name
 			, VkFilter samplerFilter
 			, uint32_t gridSize )

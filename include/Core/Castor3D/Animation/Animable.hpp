@@ -18,48 +18,18 @@ namespace castor3d
 		using AnimationPtrStrMap = std::map< castor::String, AnimationPtr >;
 		/**
 		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	owner	The owner.
+		 *\name Construction / Destruction.
 		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	owner	Le parent.
-		 */
+		 *\name Construction / Destruction.
+		 **/
+		/**@{*/
 		inline explicit AnimableT( AnimableHanlerT & owner );
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
 		C3D_API virtual ~AnimableT() = default;
-		/**
-		 *\~english
-		 *\brief		Move constructor.
-		 *\~french
-		 *\brief		Constructeur par déplacement.
-		 */
 		C3D_API AnimableT( AnimableT && rhs ) = default;
-		/**
-		 *\~english
-		 *\brief		Move assignment operator.
-		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement.
-		 */
 		C3D_API AnimableT & operator=( AnimableT && rhs ) = delete;
-		/**
-		 *\~english
-		 *\brief		Copy constructor.
-		 *\~french
-		 *\brief		Constructeur par copie.
-		 */
 		C3D_API AnimableT( AnimableT const & rhs ) = delete;
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator.
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie.
-		 */
 		C3D_API AnimableT & operator=( AnimableT const & rhs ) = delete;
+		/**@}*/
 
 	public:
 		/**
@@ -126,10 +96,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Removes an animation.
-		 *\param[in]	animation	The animation.
+		 *\param[in]	name	The animation name
 		 *\~french
 		 *\brief		Enlève une animation.
-		 *\param[in]	animation	L'animation.
+		 *\param[in]	name	Le nom de l'animation
 		 */
 		inline void doRemoveAnimation( castor::String const & name );
 		/**

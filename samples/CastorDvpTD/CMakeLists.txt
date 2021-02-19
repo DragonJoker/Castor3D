@@ -64,7 +64,8 @@ set_property( TARGET ${PROJECT_NAME}
 	PROPERTY
 		FOLDER "Samples"
 )
-install_target( ${PROJECT_NAME}
+install_target_ex( ${PROJECT_NAME}
+	${PROJECT_NAME}
 	bin
 	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}
 )
@@ -76,5 +77,8 @@ file(
 		DataFiles
 		${CASTOR_SOURCE_DIR}/data/${PROJECT_NAME}/*.*
 )
-
-copy_target_files( ${PROJECT_NAME} "" ${DataFiles} )
+copy_target_files_ex( ${PROJECT_NAME}
+	${PROJECT_NAME}
+	""
+	${DataFiles}
+)

@@ -6,7 +6,7 @@
 #ifndef CU_PlatformWindows
 #	define C3D_DiamondSquareTerrain_API
 #else
-#	ifdef castor3dDiamondSquareTerrain_EXPORTS
+#	ifdef DiamondSquareTerrain_EXPORTS
 #		define C3D_DiamondSquareTerrain_API __declspec( dllexport )
 #	else
 #		define C3D_DiamondSquareTerrain_API __declspec( dllimport )

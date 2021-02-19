@@ -22,13 +22,13 @@ namespace castor
 		CU_API ~LoggerInstance();
 		/**
 		 *\~english
-		 *\brief		sets the log file address
-		 *\param[in]	logFilePath	The log file path
-		 *\param[in]	logType		The log type
+		 *\brief		sets the log file address.
+		 *\param[in]	console	The console where messages will output.
+		 *\param[in]	logType	The log type.
 		 *\~french
-		 *\brief		Définit le chemin du fichier de log
-		 *\param[in]	logFilePath	Le chemin du fichier
-		 *\param[in]	logType		Le type de log concerné
+		 *\brief		Définit le chemin du fichier de log.
+		 *\param[in]	console	La console vers laquelle les messages sortiront.
+		 *\param[in]	logType	Le type de log concerné.
 		 */
 		CU_API LoggerInstance( ProgramConsole & console
 			, LogType logType );

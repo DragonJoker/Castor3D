@@ -22,6 +22,8 @@ namespace castor3d
 		*	The engine.
 		*\param[in] scene
 		*	The parent scene.
+		*\param name
+		*	The background name.
 		*\~french
 		*\brief
 		*	Constructeur.
@@ -29,6 +31,8 @@ namespace castor3d
 		*	Le moteur.
 		*\param[in] scene
 		*	La scène parente.
+		*\param name
+		*	Le nom du fond.
 		*/
 		C3D_API explicit ImageBackground( Engine & engine
 			, Scene & scene
@@ -66,29 +70,12 @@ namespace castor3d
 		C3D_API void accept( BackgroundVisitor & visitor )override;
 
 	private:
-		/**
-		*\copydoc	castor3d::SceneBackground::doInitialiseShader
-		*/
 		ashes::PipelineShaderStageCreateInfoArray doInitialiseShader( RenderDevice const & device )override;
-		/**
-		*\copydoc	castor3d::SceneBackground::doInitialise
-		*/
 		bool doInitialise( RenderDevice const & device
 			, ashes::RenderPass const & renderPass )override;
-		/**
-		*\copydoc	castor3d::SceneBackground::doCleanup
-		*/
 		void doCleanup()override;
-		/**
-		*\copydoc	castor3d::SceneBackground::doCpuUpdate
-		*/
 		void doCpuUpdate( CpuUpdater & updater )override;
-		/**
-		*\copydoc	castor3d::SceneBackground::doGpuUpdate
-		*/
 		void doGpuUpdate( GpuUpdater & updater )override;
-
-	private:
 		void doInitialise2DTexture( RenderDevice const & device );
 
 	private:

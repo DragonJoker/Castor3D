@@ -11,7 +11,7 @@
 #ifndef CU_PlatformWindows
 #	define C3D_GrayScale_API
 #else
-#	ifdef castor3dGrayScalePostEffect_EXPORTS
+#	ifdef GrayScalePostEffect_EXPORTS
 #		define C3D_GrayScale_API __declspec( dllexport )
 #	else
 #		define C3D_GrayScale_API __declspec( dllimport )

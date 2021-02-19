@@ -167,20 +167,10 @@ namespace castor3d
 		}
 
 	private:
-		//!\~english	The viewed cache.
-		//!\~french		Le cache vu.
 		CacheType & m_cache;
-		//!\~english	The created elements names.
-		//!\~french		Les noms des éléments créés.
 		std::set< castor::String > m_createdElements;
-		//!\~english	The element initialiser.
-		//!\~french		L'initaliseur d'éléments.
 		Initialiser m_initialise;
-		//!\~english	The element cleaner.
-		//!\~french		Le nettoyeur d'éléments.
 		Cleaner m_clean;
-		//!\~english	The elements that are being cleaned.
-		//!\~french		Les éléments en cours de nettoyage.
 		std::vector< ResourcePtr > m_cleaning;
 	};
 }

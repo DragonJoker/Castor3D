@@ -22,22 +22,28 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor for opaque nodes.
-		 *\param[in]	category	The pass category.
-		 *\param[in]	name		The pass name.
-		 *\param[in]	matrixUbo	The scene matrices UBO.
-		 *\param[in]	culler		The culler for this pass.
-		 *\param[in]	environment	Pass used for an environment map rendering.
-		 *\param[in]	ignored		The geometries attached to this node will be ignored in the render.
-		 *\param[in]	config		The SSAO configuration.
+		 *\param[in]	category		The pass category.
+		 *\param[in]	name			The pass name.
+		 *\param[in]	matrixUbo		The scene matrices UBO.
+		 *\param[in]	culler			The culler for this pass.
+		 *\param[in]	environment		Pass used for an environment map rendering.
+		 *\param[in]	ignored			The geometries attached to this node will be ignored in the render.
+		 *\param[in]	ssaoConfig		The SSAO configuration.
+		 *\param[in]	lpvConfigUbo	The LPV configuration, if needed.
+		 *\param[in]	llpvConfigUbo	The Layered LPV configuration, if needed.
+		 *\param[in]	vctConfigUbo	The VCT configuration, if needed.
 		 *\~french
 		 *\brief		Constructeur pour les noeuds opaques.
-		 *\param[in]	category	La catégorie de la passe.
-		 *\param[in]	name		Le nom de la passe.
-		 *\param[in]	matrixUbo	L'UBO de matrices de la scène.
-		 *\param[in]	culler		Le culler pour cette passe.
-		 *\param[in]	environment	Passe utilisée pour le rendu d'une texture d'environnement.
-		 *\param[in]	ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
-		 *\param[in]	config		La configuration du SSAO.
+		 *\param[in]	category		La catégorie de la passe.
+		 *\param[in]	name			Le nom de la passe.
+		 *\param[in]	matrixUbo		L'UBO de matrices de la scène.
+		 *\param[in]	culler			Le culler pour cette passe.
+		 *\param[in]	environment		Passe utilisée pour le rendu d'une texture d'environnement.
+		 *\param[in]	ignored			Les géométries attachées à ce noeud seront ignorées lors du rendu.
+		 *\param[in]	ssaoConfig		La configuration du SSAO.
+		 *\param[in]	lpvConfigUbo	La configuration des LPV, si nécessaire.
+		 *\param[in]	llpvConfigUbo	La configuration des Layered LPV, si nécessaire.
+		 *\param[in]	vctConfigUbo	La configuration du VCT, si nécessaire.
 		 */
 		C3D_API RenderTechniquePass( castor::String const & category
 			, castor::String const & name
@@ -45,31 +51,37 @@ namespace castor3d
 			, SceneCuller & culler
 			, bool environment
 			, SceneNode const * ignored
-			, SsaoConfig const & config
+			, SsaoConfig const & ssaoConfig
 			, LpvGridConfigUbo const * lpvConfigUbo = nullptr
 			, LayeredLpvGridConfigUbo const * llpvConfigUbo = nullptr
 			, VoxelizerUbo const * vctConfigUbo = nullptr );
 		/**
 		 *\~english
 		 *\brief		Constructor for transparent nodes.
-		 *\param[in]	category	The pass category.
-		 *\param[in]	name		The technique name.
-		 *\param[in]	matrixUbo	The scene matrices UBO.
-		 *\param[in]	culler		The culler for this pass.
-		 *\param[in]	oit			The OIT status.
-		 *\param[in]	environment	Pass used for an environment map rendering.
-		 *\param[in]	ignored		The geometries attached to this node will be ignored in the render.
-		 *\param[in]	config		The SSAO configuration.
+		 *\param[in]	category		The pass category.
+		 *\param[in]	name			The technique name.
+		 *\param[in]	matrixUbo		The scene matrices UBO.
+		 *\param[in]	culler			The culler for this pass.
+		 *\param[in]	oit				The OIT status.
+		 *\param[in]	environment		Pass used for an environment map rendering.
+		 *\param[in]	ignored			The geometries attached to this node will be ignored in the render.
+		 *\param[in]	ssaoConfig		The SSAO configuration.
+		 *\param[in]	lpvConfigUbo	The LPV configuration, if needed.
+		 *\param[in]	llpvConfigUbo	The Layered LPV configuration, if needed.
+		 *\param[in]	vctConfigUbo	The VCT configuration, if needed.
 		 *\~french
 		 *\brief		Constructeur pour les noeuds transparents.
-		 *\param[in]	category	La catégorie de la passe.
-		 *\param[in]	name		Le nom de la technique.
-		 *\param[in]	matrixUbo	L'UBO de matrices de la scène.
-		 *\param[in]	culler		Le culler pour cette passe.
-		 *\param[in]	oit			Le statut d'OIT.
-		 *\param[in]	environment	Passe utilisée pour le rendu d'une texture d'environnement.
-		 *\param[in]	ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
-		 *\param[in]	config		La configuration du SSAO.
+		 *\param[in]	category		La catégorie de la passe.
+		 *\param[in]	name			Le nom de la technique.
+		 *\param[in]	matrixUbo		L'UBO de matrices de la scène.
+		 *\param[in]	culler			Le culler pour cette passe.
+		 *\param[in]	oit				Le statut d'OIT.
+		 *\param[in]	environment		Passe utilisée pour le rendu d'une texture d'environnement.
+		 *\param[in]	ignored			Les géométries attachées à ce noeud seront ignorées lors du rendu.
+		 *\param[in]	ssaoConfig		La configuration du SSAO.
+		 *\param[in]	lpvConfigUbo	La configuration des LPV, si nécessaire.
+		 *\param[in]	llpvConfigUbo	La configuration des Layered LPV, si nécessaire.
+		 *\param[in]	vctConfigUbo	La configuration du VCT, si nécessaire.
 		 */
 		C3D_API RenderTechniquePass( castor::String const & category
 			, castor::String const & name
@@ -78,14 +90,29 @@ namespace castor3d
 			, bool oit
 			, bool environment
 			, SceneNode const * ignored
-			, SsaoConfig const & config
+			, SsaoConfig const & ssaoConfig
 			, LpvGridConfigUbo const * lpvConfigUbo = nullptr
 			, LayeredLpvGridConfigUbo const * llpvConfigUbo = nullptr
 			, VoxelizerUbo const * vctConfigUbo = nullptr );
 
 	public:
 		/**
-		 *\copydoc		castor3d::RenderPass::initialise
+		 *\~english
+		 *\brief		Initialises the pass.
+		 *\param[in]	device				The current device.
+		 *\param[in]	size				The pass needed dimensions.
+		 *\param[in]	lpvResult			The LPV result, if needed.
+		 *\param[in]	vctFirstBounce		The VCT first bounce result, if needed.
+		 *\param[in]	vctSecondaryBounce	The VCT secondary bounce result, if needed.
+		 *\return		\p true on ok.
+		 *\~french
+		 *\brief		Initialise la passe.
+		 *\param[in]	device				Le device actuel.
+		 *\param[in]	size				Les dimensions voulues pour la passe.
+		 *\param[in]	lpvResult			Le résultat du LPV, si nécessaire.
+		 *\param[in]	vctFirstBounce		Le résultat du premier rebond de VCT, si nécessaire.
+		 *\param[in]	vctSecondaryBounce	Le résultat du second rebond de VCT, si nécessaire.
+		 *\return		\p true si tout s'est bien passé.
 		 */
 		C3D_API bool initialise( RenderDevice const & device
 			, castor::Size const & size
@@ -93,31 +120,50 @@ namespace castor3d
 			, TextureUnit const * vctFirstBounce = nullptr
 			, TextureUnit const * vctSecondaryBounce = nullptr );
 		/**
-		 *\copydoc		castor3d::RenderPass::initialise
+		 *\~english
+		 *\brief		Initialises the pass.
+		 *\param[in]	device				The GPU device.
+		 *\param[in]	size				The pass needed dimensions.
+		 *\param[in]	timer				The parent timer.
+		 *\param[in]	index				The pass timer index, in its parent.
+		 *\param[in]	lpvResult			The LPV result, if needed.
+		 *\param[in]	vctFirstBounce		The VCT first bounce result, if needed.
+		 *\param[in]	vctSecondaryBounce	The VCT secondary bounce result, if needed.
+		 *\return		\p true on ok.
+		 *\~french
+		 *\brief		Initialise la passe.
+		 *\param[in]	device				Le device GPU.
+		 *\param[in]	size				Les dimensions voulues pour la passe.
+		 *\param[in]	timer				Le timer parent.
+		 *\param[in]	index				L'indice de la passe, dans le parent.
+		 *\param[in]	lpvResult			Le résultat du LPV, si nécessaire.
+		 *\param[in]	vctFirstBounce		Le résultat du premier rebond de VCT, si nécessaire.
+		 *\param[in]	vctSecondaryBounce	Le résultat du second rebond de VCT, si nécessaire.
+		 *\return		\p true si tout s'est bien passé.
 		 */
 		C3D_API bool initialise( RenderDevice const & device
 			, castor::Size const & size
 			, RenderPassTimer & timer
 			, uint32_t index
 			, LightVolumePassResult const * lpvResult = nullptr
-			, TextureUnit const * vctResult = nullptr
+			, TextureUnit const * vctFirstBounce = nullptr
 			, TextureUnit const * vctSecondaryBounce = nullptr );
 		/**
 		 *\~english
 		 *\brief		Visitor acceptance function.
+		 *\param		visitor	The ... visitor.
 		 *\~french
 		 *\brief		Fonction d'acceptation de visiteur.
+		 *\param		visitor	Le ... visiteur.
 		 */
 		C3D_API virtual void accept( RenderTechniqueVisitor & visitor );
 		/**
 		 *\~english
-		 *\brief		Render function.
-		 *\param[out]	info		Receives the render informations.
-		 *\param[in]	jitter		The jittering value.
+		 *\brief			Updates the render pass, GPU wise.
+		 *\param[in, out]	updater	The update data.
 		 *\~french
-		 *\brief		Fonction de rendu.
-		 *\param[out]	info		Reçoit les informations de rendu.
-		 *\param[in]	jitter		La valeur de jittering.
+		 *\brief			Met à jour la passe de rendu, au niveau GPU.
+		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( GpuUpdater & updater );
 		/**
@@ -139,93 +185,54 @@ namespace castor3d
 	public:
 		using SceneRenderPass::update;
 
-	protected:
-		/**
-		 *\copydoc		castor3d::RenderPass::doCleanup
-		 */
-		C3D_API virtual void doCleanup( RenderDevice const & device )override;
-
 	private:
-		/**
-		 *\~english
-		 *\brief			Renders render nodes.
-		 *\param[in]		nodes		The scene render nodes.
-		 *\param			camera		The viewing camera.
-		 *\param[in,out]	count		Receives the rendered nodes count.
-		 *\~french
-		 *\brief			Dessine les noeuds de rendu.
-		 *\param[in]		nodes		Les noeuds de rendu de la scène.
-		 *\param			camera		La caméra regardant la scène.
-		 *\param[in,out]	count		Reçouit le nombre de noeuds dessinés.
-		 */
 		C3D_API virtual void doUpdateNodes( SceneCulledRenderNodes & nodes
 			, castor::Point2f const & jitter
 			, RenderInfo & info );
-		/**
-		 *\copydoc		castor3d::RenderPass::doUpdateUbos
-		 */
 		C3D_API void doUpdateUbos( CpuUpdater & updater )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doInitialise
-		 */
 		C3D_API bool doInitialise( RenderDevice const & device
 			, castor::Size const & size )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doUpdateFlags
-		 */
 		C3D_API void doUpdateFlags( PipelineFlags & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetGeometryShaderSource
-		 */
 		C3D_API ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doFillUboDescriptor
-		 */
 		C3D_API void doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 			, BillboardListRenderNode & nodes )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doFillUboDescriptor
-		 */
 		C3D_API void doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 			, SubmeshRenderNode & nodes )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
-		 */
 		C3D_API void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, BillboardListRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
-		 */
 		C3D_API void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, SubmeshRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
-		 */
 		C3D_API void doUpdatePipeline( RenderPipeline & pipeline )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doCreateDepthStencilState
-		 */
 		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doCreateBlendState
-		 */
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
 
 	protected:
 		/**
-		 *\copydoc		castor3d::RenderPass::doCreateUboBindings
+		 *\~english
+		 *\brief		Cleans up the pass.
+		 *\~french
+		 *\brief		Nettoie la passe.
+		 */
+		C3D_API virtual void doCleanup( RenderDevice const & device )override;
+		/**
+		 *\copydoc		castor3d::SceneRenderPass::doCreateUboBindings
 		 */
 		ashes::VkDescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;
 		/**
-		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
+		 *\copydoc		castor3d::SceneRenderPass::doCreateTextureBindings
 		 */
 		ashes::VkDescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
 		/**
-		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
+		 *\~english
+		 *\brief		Retrieves the vertex shader source matching the given flags.
+		 *\param[in]	flags	The pipeline flags.
+		 *\~french
+		 *\brief		Récupère le source du vertex shader qui correspond aux indicateurs donnés.
+		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
 		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
 

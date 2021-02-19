@@ -29,8 +29,8 @@ namespace castor3d
 		*\~english
 		*\brief
 		*	Constructor.
-		*\param[in] renderSystem
-		*	The RenderSystem.
+		*\param[in] device
+		*	The GPU device.
 		*\param[in] nearest
 		*	Tells if the sampler needs a Nearest filter or not, if \p sampler is nullptr.
 		*\param[in] sampler
@@ -38,8 +38,8 @@ namespace castor3d
 		*\~french
 		*\brief
 		*	Constructeur.
-		*\param[in] renderSystem
-		*	Le RenderSystem.
+		*\param[in] device
+		*	Le device GPU.
 		*\param[in] nearest
 		*	Dit si le sampler doit filtrer en Nearest ou pas, si \p sampler est nullptr.
 		*\param[in] sampler

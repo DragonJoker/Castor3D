@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Graphics/BoundingSphere.hpp>
 
-GC_PG_NS_DECLARE_VARIANT_DATA( castor, BoundingSphere );
+GC_PG_NS_DECLARE_VARIANT_DATA( castor, BoundingSphere )
 
 namespace GuiCommon
 {
