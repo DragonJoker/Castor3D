@@ -44,7 +44,7 @@ using namespace castor;
 
 namespace castor3d
 {
-	uint32_t const ShadowMapPassDirectional::TextureSize = 1024u;
+	uint32_t const ShadowMapPassDirectional::TextureSize = 2048u;
 
 	ShadowMapPassDirectional::ShadowMapPassDirectional( Engine & engine
 		, MatrixUbo & matrixUbo
