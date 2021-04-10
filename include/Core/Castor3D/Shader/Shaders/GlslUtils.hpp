@@ -214,6 +214,7 @@ namespace castor3d::shader
 		C3D_API void encodeMaterial( sdw::Int const & receiver
 			, sdw::Int const & reflection
 			, sdw::Int const & refraction
+			, sdw::Int const & lighting
 			, sdw::Int const & envMapIndex
 			, sdw::Float const & encoded )const;
 		/**
@@ -236,6 +237,7 @@ namespace castor3d::shader
 			, sdw::Int const & receiver
 			, sdw::Int const & reflection
 			, sdw::Int const & refraction
+			, sdw::Int const & lighting
 			, sdw::Int const & envMapIndex )const;
 		/**
 		 *\~english
@@ -248,7 +250,8 @@ namespace castor3d::shader
 		 *\param[in]	receiver	La variable qui recevra le statut de receveur d'ombres.
 		 */
 		C3D_API void decodeReceiver( sdw::Int & encoded
-			, sdw::Int const & receiver )const;
+			, sdw::Int const & receiver
+			, sdw::Int const & lighting )const;
 		/**
 		 *\~english
 		 *\brief		Writes the alpha function in GLSL.
@@ -370,15 +373,18 @@ namespace castor3d::shader
 			, sdw::InInt
 			, sdw::InInt
 			, sdw::InInt
+			, sdw::InInt
 			, sdw::OutFloat > m_encodeMaterial;
 		sdw::Function< sdw::Void
 			, sdw::InFloat
 			, sdw::OutInt
 			, sdw::OutInt
 			, sdw::OutInt
+			, sdw::OutInt
 			, sdw::OutInt > m_decodeMaterial;
 		sdw::Function< sdw::Void
 			, sdw::InInt
+			, sdw::OutInt
 			, sdw::OutInt > m_decodeReceiver;
 		sdw::Function< sdw::Vec2
 			, sdw::InVec2
