@@ -53,6 +53,7 @@ namespace GuiCommon
 						scene.getFlags(),
 						VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST,
 						pass.getAlphaFunc(),
+						pass.getBlendAlphaFunc(),
 						pass.getTextures( castor3d::TextureFlag::eAll ),
 					}
 					, scene
@@ -491,6 +492,9 @@ namespace GuiCommon
 		static wxString PROPERTY_PASS_EXPONENT = _( "Exponent" );
 		static wxString PROPERTY_PASS_TWO_SIDED = _( "Two sided" );
 		static wxString PROPERTY_PASS_OPACITY = _( "Opacity" );
+		static wxString PROPERTY_PASS_ALPHA_REF_VALUE = _( "Alpha Ref. Value" );
+		static wxString PROPERTY_PASS_ALPHA_FUNC = _( "Alpha Func" );
+		static wxString PROPERTY_PASS_BLEND_ALPHA_FUNC = _( "Blend Alpha Func" );
 		static wxString PROPERTY_PASS_ALBEDO = _( "Albedo" );
 		static wxString PROPERTY_PASS_ROUGHNESS = _( "Roughness" );
 		static wxString PROPERTY_PASS_METALLIC = _( "Metallic" );
@@ -541,9 +545,22 @@ namespace GuiCommon
 				break;
 			}
 
+			wxArrayString alphaFuncs;
+			alphaFuncs.push_back( _( "Never" ) );
+			alphaFuncs.push_back( _( "Less" ) );
+			alphaFuncs.push_back( _( "Equal" ) );
+			alphaFuncs.push_back( _( "Less Equal" ) );
+			alphaFuncs.push_back( _( "Greater" ) );
+			alphaFuncs.push_back( _( "Not Equal" ) );
+			alphaFuncs.push_back( _( "Greater Equal" ) );
+			alphaFuncs.push_back( _( "Always" ) );
+
 			addPropertyT( grid, PROPERTY_PASS_TWO_SIDED, pass->isTwoSided(), pass.get(), &Pass::setTwoSided );
 			addPropertyT( grid, PROPERTY_PASS_EMISSIVE, pass->getEmissive(), pass.get(), &Pass::setEmissive );
 			addPropertyT( grid, PROPERTY_PASS_OPACITY, pass->getOpacity(), pass.get(), &Pass::setOpacity );
+			addPropertyT( grid, PROPERTY_PASS_ALPHA_REF_VALUE, pass->getAlphaValue(), pass.get(), &Pass::setAlphaValue );
+			addPropertyET( grid, PROPERTY_PASS_ALPHA_FUNC, alphaFuncs, pass->getAlphaFunc(), pass.get(), &Pass::setAlphaFunc );
+			addPropertyET( grid, PROPERTY_PASS_BLEND_ALPHA_FUNC, alphaFuncs, pass->getBlendAlphaFunc(), pass.get(), &Pass::setBlendAlphaFunc );
 			addPropertyT( grid, PROPERTY_PASS_TRANSMISSION, pass->getTransmission(), pass.get(), &Pass::setTransmission );
 			addPropertyT( grid, PROPERTY_PASS_BWACCUM, pass->getBWAccumulationOperator(), pass.get(), &Pass::setBWAccumulationOperator );
 
