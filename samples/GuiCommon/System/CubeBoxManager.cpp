@@ -77,6 +77,7 @@ namespace GuiCommon
 			{
 				material = scene.getEngine()->getMaterialCache().add( matName, scene.getMaterialsType() );
 				auto pass = material->createPass();
+				pass->enableLighting( false );
 
 				switch ( scene.getMaterialsType() )
 				{
@@ -84,9 +85,6 @@ namespace GuiCommon
 					{
 						auto & phong = *std::static_pointer_cast< PhongPass >( pass );
 						phong.setDiffuse( colour );
-						phong.setSpecular( colour );
-						phong.setAmbient( 1.0f );
-						phong.setEmissive( 1.0f );
 					}
 					break;
 
@@ -94,9 +92,6 @@ namespace GuiCommon
 					{
 						auto & pbrmr = *std::static_pointer_cast< MetallicRoughnessPbrPass >( pass );
 						pbrmr.setAlbedo( colour );
-						pbrmr.setRoughness( 1.0f );
-						pbrmr.setMetallic( 0.0f );
-						pbrmr.setEmissive( 1.0f );
 					}
 					break;
 
@@ -104,9 +99,6 @@ namespace GuiCommon
 					{
 						auto & pbrsg = *std::static_pointer_cast< SpecularGlossinessPbrPass >( pass );
 						pbrsg.setDiffuse( colour );
-						pbrsg.setSpecular( colour );
-						pbrsg.setGlossiness( 0.0f );
-						pbrsg.setEmissive( 1.0f );
 					}
 					break;
 
