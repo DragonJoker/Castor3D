@@ -206,6 +206,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserPassAlphaBlendMode )
 	CU_DeclareAttributeParser( parserPassColourBlendMode )
 	CU_DeclareAttributeParser( parserPassAlphaFunc )
+	CU_DeclareAttributeParser( parserPassBlendAlphaFunc )
 	CU_DeclareAttributeParser( parserPassRefractionRatio )
 	CU_DeclareAttributeParser( parserPassSubsurfaceScattering )
 	CU_DeclareAttributeParser( parserPassParallaxOcclusion )
