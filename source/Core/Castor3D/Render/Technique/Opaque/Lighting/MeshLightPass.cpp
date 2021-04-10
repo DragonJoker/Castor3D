@@ -199,7 +199,9 @@ namespace castor3d
 				VK_STENCIL_OP_KEEP,
 				VK_STENCIL_OP_KEEP,
 				VK_STENCIL_OP_KEEP,
-				VK_COMPARE_OP_NOT_EQUAL,
+				( m_voxels
+					? VK_COMPARE_OP_ALWAYS
+					: VK_COMPARE_OP_NOT_EQUAL ),
 				0xFFFFFFFFu,
 				0xFFFFFFFFu,
 				0x0u,
@@ -366,7 +368,7 @@ namespace castor3d
 		, ashes::Semaphore const & toWait )
 	{
 		auto * result = &toWait;
-		result = &m_stencilPass.render( m_device , *result );
+		result = &m_stencilPass.render( m_device, *result );
 		result = &LightPass::render( index, *result );
 		return *result;
 	}
