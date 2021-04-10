@@ -34,6 +34,7 @@
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Graphics/Image.hpp>
 #include <CastorUtils/Graphics/ExrImageLoader.hpp>
+#include <CastorUtils/Graphics/FreeImageLoader.hpp>
 #include <CastorUtils/Graphics/GliImageLoader.hpp>
 #include <CastorUtils/Graphics/StbImageLoader.hpp>
 #include <CastorUtils/Graphics/StbImageWriter.hpp>
@@ -118,6 +119,7 @@ namespace castor3d
 		StbImageLoader::registerLoader( m_imageLoader );
 		ExrImageLoader::registerLoader( m_imageLoader );
 		XpmImageLoader::registerLoader( m_imageLoader );
+		FreeImageLoader::registerLoader( m_imageLoader );
 		StbImageWriter::registerWriter( m_imageWriter );
 
 		// m_listenerCache *MUST* be the first created.

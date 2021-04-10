@@ -321,6 +321,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/ExrImageLoader.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/Font.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/FontCache.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/FreeImageLoader.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/GliImageLoader.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/Glyph.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/Grid.cpp
@@ -349,6 +350,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/ExrImageLoader.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/Font.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/FontCache.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/FreeImageLoader.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/GliImageLoader.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/Glyph.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/GraphicsModule.hpp
@@ -671,6 +673,19 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		target_link_libraries( ${PROJECT_NAME}
 			PUBLIC
 				${CMAKE_DL_LIBRARY}
+		)
+	endif ()
+
+	find_package( freeimage CONFIG QUIET REQUIRED )
+
+	if ( freeimage_FOUND )
+		target_compile_definitions( ${PROJECT_NAME}
+			PRIVATE
+				C3D_UseFreeImage
+		)
+		target_link_libraries( ${PROJECT_NAME}
+			PRIVATE
+				freeimage::FreeImage
 		)
 	endif ()
 
