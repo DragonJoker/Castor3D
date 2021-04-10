@@ -36,6 +36,9 @@ jobs:
       shell: bash
       run: sudo apt-get install -y --no-install-recommends ccache gcc-8 g++-8
 
+    - name: Create Build Environment
+      run: cmake -E make_directory ${{runner.workspace}}/build-${{ matrix.buildType }}
+
     - name: Configure GCC version (Linux)
       if: runner.os == 'Linux'
       shell: bash
