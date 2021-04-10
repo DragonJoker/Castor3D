@@ -62,6 +62,7 @@ namespace castor3d
 			sampler = engine.getSamplerCache().add( name );
 			sampler->setMinFilter( VK_FILTER_LINEAR );
 			sampler->setMagFilter( VK_FILTER_LINEAR );
+			sampler->setMipFilter( VK_SAMPLER_MIPMAP_MODE_LINEAR );
 			sampler->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 			sampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 			sampler->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
