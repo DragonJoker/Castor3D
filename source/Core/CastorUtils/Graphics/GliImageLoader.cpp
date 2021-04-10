@@ -103,7 +103,7 @@ namespace castor
 		buffer = PxBufferBase::create( result.dimensions()
 			, result.layers
 			, result.levels
-			, result.format
+			, PF::getCompressed( result.format )
 			, static_cast< uint8_t const * >( texture.data() )
 			, result.format
 			, result.alignment );
