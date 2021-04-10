@@ -676,7 +676,14 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		)
 	endif ()
 
-	find_package( freeimage CONFIG QUIET REQUIRED )
+	if ( VCPKG_TOOLCHAIN )
+		find_package( freeimage CONFIG QUIET )
+	else ()
+		find_package( FreeImage QUIET )
+		if ( FreeImage_FOUND )
+			set( freeimage_FOUND FreeImage_FOUND )
+		endif ()
+	endif ()
 
 	if ( freeimage_FOUND )
 		target_compile_definitions( ${PROJECT_NAME}
