@@ -47,8 +47,11 @@ namespace castor3d
 					{
 						auto bone = *( skeleton.begin() + boneData.m_ids[0] );
 						auto it = keyFrame.find( *bone );
-						CU_Require( it != keyFrame.end() );
-						transform = castor::Matrix4x4f{ it->second * bone->getOffsetMatrix() * boneData.m_weights[0] };
+
+						if ( it != keyFrame.end() )
+						{
+							transform = castor::Matrix4x4f{ it->second * bone->getOffsetMatrix() * boneData.m_weights[0] };
+						}
 					}
 
 					for ( uint32_t i = 1; i < boneData.m_ids.size(); ++i )
@@ -57,8 +60,11 @@ namespace castor3d
 						{
 							auto bone = *( skeleton.begin() + boneData.m_ids[i] );
 							auto it = keyFrame.find( *bone );
-							CU_Require( it != keyFrame.end() );
-							transform += castor::Matrix4x4f{ it->second * bone->getOffsetMatrix() * boneData.m_weights[i] };
+
+							if ( it != keyFrame.end() )
+							{
+								transform += castor::Matrix4x4f{ it->second * bone->getOffsetMatrix() * boneData.m_weights[i] };
+							}
 						}
 					}
 
