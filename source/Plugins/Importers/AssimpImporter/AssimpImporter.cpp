@@ -439,8 +439,18 @@ namespace C3dAssimp
 
 			doLoadTexture( difTexName, pass, TextureConfiguration::DiffuseTexture, importer );
 			doLoadTexture( emiTexName, pass, TextureConfiguration::EmissiveTexture, importer );
-			doLoadTexture( opaTexName, pass, TextureConfiguration::OpacityTexture, importer );
 			doLoadTexture( occTexName, pass, TextureConfiguration::OcclusionTexture, importer );
+
+			if ( opaTexName.length > 0 )
+			{
+				doLoadTexture( opaTexName, pass, TextureConfiguration::OpacityTexture, importer );
+
+				// force non 0.0 opacity when an opacity map is set
+				if ( pass.getOpacity() == 0.0f )
+				{
+					pass.setOpacity( 1.0f );
+				}
+			}
 
 			if ( nmlTexName.length > 0 )
 			{
@@ -513,6 +523,12 @@ namespace C3dAssimp
 
 			doProcessPassBaseComponents( pass, aiMaterial );
 			doProcessPassTextures( pass, aiMaterial, importer );
+
+			if ( !pass.getTextureUnits( TextureFlag::eOpacity ).empty()
+				&& pass.getAlphaFunc() == VkCompareOp::VK_COMPARE_OP_ALWAYS )
+			{
+				pass.getOwner()->addAlphaRejectionPass( pass );
+			}
 		}
 
 		std::map< castor::Milliseconds, castor::Point3f > doProcessVec3Keys( aiVectorKey const * const keys
