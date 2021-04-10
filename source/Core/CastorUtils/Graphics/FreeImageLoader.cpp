@@ -173,17 +173,11 @@ namespace castor
 
 		PixelFormat sourceFmt = PixelFormat::eR8G8B8_UNORM;
 		auto fiMemory = FreeImage_OpenMemory( const_cast< uint8_t * >( data ), size );
-		int flags = BMP_DEFAULT;
 		FREE_IMAGE_FORMAT fiFormat = FreeImage_GetFileTypeFromMemory( fiMemory, 0 );
-
-		if ( fiFormat == FIF_TIFF )
-		{
-			flags = TIFF_DEFAULT;
-		}
 
 		if ( fiFormat == FIF_UNKNOWN || !FreeImage_FIFSupportsReading( fiFormat ) )
 		{
-			CU_LoaderError( "Can't load image : unsupported image format" );
+			CU_LoaderError( "Can't load image: unsupported image format" );
 		}
 
 		auto fiImage = FreeImage_LoadFromMemory( fiFormat, fiMemory, 0 );
