@@ -240,14 +240,14 @@ namespace castor3d
 	C3D_API SpirVShader compileShader( RenderSystem const & renderSystem
 		, ShaderModule const & module );
 
-	inline ashes::PipelineShaderStageCreateInfo makeShaderState( RenderDevice const & device
+	inline ashes::PipelineShaderStageCreateInfo makeShaderState( ashes::Device const & device
 		, VkShaderStageFlagBits stage
 		, SpirVShader code
 		, std::string const & name
 		, std::string mainFuncName = "main"
 		, ashes::Optional< ashes::SpecializationInfo > specialization = ashes::nullopt )
 	{
-		auto module = device->createShaderModule( name + "ShdMod" + "_" + ashes::getName( stage )
+		auto module = device.createShaderModule( name + "ShdMod" + "_" + ashes::getName( stage )
 			, code.spirv );
 		return ashes::PipelineShaderStageCreateInfo
 		{
@@ -264,7 +264,7 @@ namespace castor3d
 		, std::string mainFuncName = "main"
 		, ashes::Optional< ashes::SpecializationInfo > specialization = ashes::nullopt )
 	{
-		return makeShaderState( device
+		return makeShaderState( *device
 			, shaderModule.stage
 			, compileShader( device, shaderModule )
 			, shaderModule.name
