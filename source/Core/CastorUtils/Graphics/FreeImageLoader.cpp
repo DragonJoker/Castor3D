@@ -236,13 +236,29 @@ namespace castor
 		{
 			auto bpp = FreeImage_GetBPP( fiImage ) / 8;
 
-			if ( bpp == PixelDefinitions< PixelFormat::eR16G16B16_SFLOAT >::Size )
+			if ( bpp == PixelDefinitions< PixelFormat::eR16G16_SFLOAT >::Size )
+			{
+				sourceFmt = PixelFormat::eR16G16_SFLOAT;
+			}
+			else if ( bpp == PixelDefinitions< PixelFormat::eR16G16B16_SFLOAT >::Size )
 			{
 				sourceFmt = PixelFormat::eR16G16B16_SFLOAT;
+			}
+			else if ( bpp == PixelDefinitions< PixelFormat::eR16G16B16A16_SFLOAT >::Size )
+			{
+				sourceFmt = PixelFormat::eR16G16B16A16_SFLOAT;
+			}
+			else if ( bpp == PixelDefinitions< PixelFormat::eR32G32_SFLOAT >::Size )
+			{
+				sourceFmt = PixelFormat::eR32G32B32_SFLOAT;
 			}
 			else if ( bpp == PixelDefinitions< PixelFormat::eR32G32B32_SFLOAT >::Size )
 			{
 				sourceFmt = PixelFormat::eR32G32B32_SFLOAT;
+			}
+			else if ( bpp == PixelDefinitions< PixelFormat::eR32G32B32A32_SFLOAT >::Size )
+			{
+				sourceFmt = PixelFormat::eR32G32B32A32_SFLOAT;
 			}
 			else
 			{
