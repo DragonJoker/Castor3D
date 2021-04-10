@@ -30,6 +30,11 @@ namespace castor3d
 		{
 			if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) )
 			{
+				if ( checkFlag( passFlags, PassFlag::eAlphaTest ) )
+				{
+					nodes[size_t( RenderMode::eOpaqueOnly )].push_back( node, instances );
+				}
+
 				nodes[size_t( RenderMode::eTransparentOnly )].push_back( node, instances );
 			}
 			else

@@ -83,33 +83,36 @@ namespace castor3d
 		//!\~english	Shader using alpha test.
 		//\~french		Shader utilisant un test alpha.
 		eAlphaTest = 0x0002,
+		//!\~english	Shader using alpha test.
+		//\~french		Shader utilisant un test alpha.
+		eBlendAlphaTest = 0x0004,
 		//!\~english	Shader for Metallic/Roughness PBR material (if not set, will use phong material code).
 		//\~french		Shader pour un matériau PBR Metallic/Roughness (si non défini, utilisera le code de matériau phong).
-		eMetallicRoughness = 0x0004,
+		eMetallicRoughness = 0x0008,
 		//!\~english	Shader for Specular/Glossiness PBR material (if not set, will use phong material code).
 		//\~french		Shader pour un matériau PBR Specular/Glossiness (si non défini, utilisera le code de matériau phong).
-		eSpecularGlossiness = 0x0008,
+		eSpecularGlossiness = 0x0010,
 		//!\~english	Shader for Subsurface Scattering.
 		//\~french		Shader pour le subsurface scattering.
-		eSubsurfaceScattering = 0x0010,
+		eSubsurfaceScattering = 0x0020,
 		//!\~english	Shader using distance based transmittance when computing Subsurface Scattering.
 		//\~french		Shader utilisant la transmission basée sur la distance, lors du calcul du Subsurface Scattering.
-		eDistanceBasedTransmittance = 0x0020,
+		eDistanceBasedTransmittance = 0x0040,
 		//!\~english	Shader using parallax occlusion mapping.
 		//\~french		Shader utilisant le parallax occlusion mapping.
-		eParallaxOcclusionMappingOne = 0x0040,
+		eParallaxOcclusionMappingOne = 0x0080,
 		//!\~english	Shader using parallax occlusion mapping.
 		//\~french		Shader utilisant le parallax occlusion mapping.
-		eParallaxOcclusionMappingRepeat = 0x0080,
+		eParallaxOcclusionMappingRepeat = 0x0100,
 		//!\~english	Reflection map.
 		//!\~french		Map de réflexion.
-		eReflection = 0x0100,
+		eReflection = 0x0200,
 		//!\~english	Refraction map.
 		//!\~french		Map de réfraction.
-		eRefraction = 0x0200,
+		eRefraction = 0x0400,
 		//!\~english	All flags.
 		//\~french		Tous les indicateurs.
-		eAll = 0x03FF,
+		eAll = 0x07FF,
 	};
 	CU_ImplementFlags( PassFlag )
 	C3D_API castor::String getName( PassFlag value );

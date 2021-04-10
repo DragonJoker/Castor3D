@@ -277,6 +277,7 @@ namespace castor3d
 		remFlag( flags.passFlags, PassFlag::eSubsurfaceScattering );
 		remFlag( flags.passFlags, PassFlag::eAlphaBlending );
 		remFlag( flags.passFlags, PassFlag::eAlphaTest );
+		remFlag( flags.passFlags, PassFlag::eBlendAlphaTest );
 	}
 
 	void VoxelizePass::doUpdatePipeline( RenderPipeline & pipeline )

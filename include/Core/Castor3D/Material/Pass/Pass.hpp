@@ -86,24 +86,6 @@ namespace castor3d
 		C3D_API TextureUnitSPtr getTextureUnit( uint32_t index )const;
 		/**
 		 *\~english
-		 *\brief		Tells if the pass needs alpha blending.
-		 *\return		\p true if at least one texture unit has an alpha channel.
-		 *\~french
-		 *\brief		Dit si la passe a besoin de mélange d'alpha.
-		 *\return		\p true si au moins une unité de texture a un canal alpha.
-		 */
-		C3D_API bool hasAlphaBlending()const;
-		/**
-		 *\~english
-		 *\brief		Tells if the pass needs alpha test.
-		 *\return		\p true if the alpha func is not Always.
-		 *\~french
-		 *\brief		Dit si la passe a besoin de test d'alpha.
-		 *\return		\p true si la fonction alpha ne vaut pas Always.
-		 */
-		C3D_API bool hasAlphaTest()const;
-		/**
-		 *\~english
 		 *\brief		Reduces the textures.
 		 *\~french
 		 *\brief		Réduit les textures.
@@ -168,6 +150,11 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
+		C3D_API bool needsAlphaProcessing()const;
+		C3D_API bool hasAlphaBlending()const;
+		C3D_API bool hasOnlyAlphaBlending()const;
+		C3D_API bool hasAlphaTest()const;
+		C3D_API bool hasBlendAlphaTest()const;
 		C3D_API bool needsGammaCorrection()const;
 		C3D_API TextureUnitPtrArray getTextureUnits( TextureFlags mask = TextureFlag::eAll )const;
 		C3D_API uint32_t getTextureUnitsCount( TextureFlags mask = TextureFlag::eAll )const;
@@ -237,6 +224,11 @@ namespace castor3d
 		float getAlphaValue()const
 		{
 			return m_alphaValue;
+		}
+
+		VkCompareOp getBlendAlphaFunc()const
+		{
+			return m_blendAlphaFunc;
 		}
 
 		castor::Point3f getTransmission()const
@@ -355,11 +347,13 @@ namespace castor3d
 				, m_parallaxOcclusionMode == ParallaxOcclusionMode::eOne );
 			updateFlag( PassFlag::eParallaxOcclusionMappingRepeat
 				, m_parallaxOcclusionMode == ParallaxOcclusionMode::eRepeat );
+			onChanged( *this );
 		}
 
 		void setAlphaBlendMode( BlendMode value )
 		{
 			m_alphaBlendMode = value;
+			updateFlag( PassFlag::eAlphaBlending, hasAlphaBlending() );
 			onChanged( *this );
 		}
 
@@ -378,13 +372,18 @@ namespace castor3d
 		{
 			m_alphaFunc = value;
 			updateFlag( PassFlag::eAlphaTest, hasAlphaTest() );
-			updateFlag( PassFlag::eAlphaBlending, hasAlphaBlending() );
 		}
 
 		void setAlphaValue( float value )
 		{
 			m_alphaValue = value;
 			onChanged( *this );
+		}
+
+		void setBlendAlphaFunc( VkCompareOp value )
+		{
+			m_blendAlphaFunc = value;
+			updateFlag( PassFlag::eBlendAlphaTest, hasBlendAlphaTest() );
 		}
 
 		void setBWAccumulationOperator( uint32_t value )
@@ -449,6 +448,7 @@ namespace castor3d
 		float m_alphaValue{ 0.0f };
 		castor::Point3f m_transmission{ 1.0f, 1.0f, 1.0f };
 		VkCompareOp m_alphaFunc{ VK_COMPARE_OP_ALWAYS };
+		VkCompareOp m_blendAlphaFunc{ VK_COMPARE_OP_ALWAYS };
 		bool m_texturesReduced{ false };
 		SubsurfaceScatteringUPtr m_subsurfaceScattering;
 		SubsurfaceScattering::OnChangedConnection m_sssConnection;

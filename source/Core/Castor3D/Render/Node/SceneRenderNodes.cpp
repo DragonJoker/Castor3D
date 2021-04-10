@@ -308,7 +308,7 @@ namespace castor3d
 			}
 
 			if ( checkFlag( submeshFlags, ProgramFlag::eInstantiation )
-				&& ( !pass.hasAlphaBlending() || renderPass.isOrderIndependent() )
+				&& ( !pass.hasOnlyAlphaBlending() || renderPass.isOrderIndependent() )
 				&& !pass.hasEnvironmentMapping() )
 			{
 				if ( checkFlag( programFlags, ProgramFlag::eSkinning )
@@ -368,6 +368,7 @@ namespace castor3d
 						auto flags = renderPass.prepareBackPipeline( pass->getColourBlendMode()
 							, pass->getAlphaBlendMode()
 							, pass->getAlphaFunc()
+							, pass->getBlendAlphaFunc()
 							, passFlags
 							, textures
 							, pass->getHeightTextureIndex()
@@ -393,6 +394,7 @@ namespace castor3d
 							auto flags = renderPass.prepareFrontPipeline( pass->getColourBlendMode()
 								, pass->getAlphaBlendMode()
 								, pass->getAlphaFunc()
+								, pass->getBlendAlphaFunc()
 								, passFlags
 								, textures
 								, pass->getHeightTextureIndex()
@@ -426,6 +428,7 @@ namespace castor3d
 				auto flags = renderPass.prepareBackPipeline( pass->getColourBlendMode()
 					, pass->getAlphaBlendMode()
 					, pass->getAlphaFunc()
+					, pass->getBlendAlphaFunc()
 					, passFlags
 					, textures
 					, pass->getHeightTextureIndex()
