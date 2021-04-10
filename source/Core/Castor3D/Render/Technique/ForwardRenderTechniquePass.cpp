@@ -408,95 +408,103 @@ namespace castor3d
 				utils.applyAlphaFunc( flags.alphaFunc
 					, opacity
 					, material.m_alphaRef );
-				emissive *= diffuse;
-				auto worldEye = writer.declLocale( "worldEye"
-					, c3d_cameraPosition.xyz() );
-				auto lightDiffuse = writer.declLocale( "lightDiffuse"
-					, vec3( 0.0_f ) );
-				auto lightSpecular = writer.declLocale( "lightSpecular"
-					, vec3( 0.0_f ) );
-				shader::OutputComponents output{ lightDiffuse, lightSpecular };
-				auto surface = writer.declLocale< shader::Surface >( "surface" );
-				surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
-				lighting->computeCombined( worldEye
-					, shininess
-					, c3d_shadowReceiver
-					, surface
-					, output );
-				lightSpecular *= specular;
 
-				auto ambient = writer.declLocale( "ambient"
-					, clamp( c3d_ambientLight.xyz() * material.m_ambient * diffuse
-						, vec3( 0.0_f )
-						, vec3( 1.0_f ) ) );
-				auto reflected = writer.declLocale( "reflected"
-					, vec3( 0.0_f ) );
-				auto refracted = writer.declLocale( "refracted"
-					, vec3( 0.0_f ) );
-				
-				if ( checkFlag( flags.passFlags, PassFlag::eReflection )
-					|| checkFlag( flags.passFlags, PassFlag::eRefraction ) )
+				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 				{
-					auto incident = writer.declLocale( "incident"
-						, reflections.computeIncident( inWorldPosition, c3d_cameraPosition.xyz() ) );
-					ambient = vec3( 0.0_f );
+					emissive *= diffuse;
+					auto worldEye = writer.declLocale( "worldEye"
+						, c3d_cameraPosition.xyz() );
+					auto lightDiffuse = writer.declLocale( "lightDiffuse"
+						, vec3( 0.0_f ) );
+					auto lightSpecular = writer.declLocale( "lightSpecular"
+						, vec3( 0.0_f ) );
+					shader::OutputComponents output{ lightDiffuse, lightSpecular };
+					auto surface = writer.declLocale< shader::Surface >( "surface" );
+					surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
+					lighting->computeCombined( worldEye
+						, shininess
+						, c3d_shadowReceiver
+						, surface
+						, output );
+					lightSpecular *= specular;
 
+					auto ambient = writer.declLocale( "ambient"
+						, clamp( c3d_ambientLight.xyz() * material.m_ambient * diffuse
+							, vec3( 0.0_f )
+							, vec3( 1.0_f ) ) );
+					auto reflected = writer.declLocale( "reflected"
+						, vec3( 0.0_f ) );
+					auto refracted = writer.declLocale( "refracted"
+						, vec3( 0.0_f ) );
+				
 					if ( checkFlag( flags.passFlags, PassFlag::eReflection )
-						&& checkFlag( flags.passFlags, PassFlag::eRefraction ) )
+						|| checkFlag( flags.passFlags, PassFlag::eRefraction ) )
 					{
-						reflections.computeReflRefr( incident
-							, normal
-							, c3d_mapEnvironment
-							, material.m_refractionRatio
-							, specular
-							, material.m_transmission * diffuse
-							, shininess
-							, reflected
-							, refracted );
-					}
-					else if ( checkFlag( flags.passFlags, PassFlag::eReflection ) )
-					{
-						reflected = reflections.computeRefl( incident
-							, normal
-							, c3d_mapEnvironment
-							, shininess
-							, specular );
+						auto incident = writer.declLocale( "incident"
+							, reflections.computeIncident( inWorldPosition, c3d_cameraPosition.xyz() ) );
+						ambient = vec3( 0.0_f );
+
+						if ( checkFlag( flags.passFlags, PassFlag::eReflection )
+							&& checkFlag( flags.passFlags, PassFlag::eRefraction ) )
+						{
+							reflections.computeReflRefr( incident
+								, normal
+								, c3d_mapEnvironment
+								, material.m_refractionRatio
+								, specular
+								, material.m_transmission * diffuse
+								, shininess
+								, reflected
+								, refracted );
+						}
+						else if ( checkFlag( flags.passFlags, PassFlag::eReflection ) )
+						{
+							reflected = reflections.computeRefl( incident
+								, normal
+								, c3d_mapEnvironment
+								, shininess
+								, specular );
+						}
+						else
+						{
+							reflections.computeRefr( incident
+								, normal
+								, c3d_mapEnvironment
+								, material.m_refractionRatio
+								, material.m_transmission * diffuse
+								, shininess
+								, reflected
+								, refracted );
+						}
+
+						diffuse = vec3( 0.0_f );
 					}
 					else
 					{
-						reflections.computeRefr( incident
-							, normal
-							, c3d_mapEnvironment
-							, material.m_refractionRatio
-							, material.m_transmission * diffuse
-							, shininess
-							, reflected
-							, refracted );
+						diffuse *= lightDiffuse;
 					}
 
-					diffuse = vec3( 0.0_f );
+					ambient *= occlusion;
+					auto colour = writer.declLocale( "colour"
+						, indirect.computeDiffuse( flags.sceneFlags
+							, surface
+							, diffuse
+							, diffuse + reflected + refracted + emissive
+							, ambient
+							, occlusion ) );
+					colour += indirect.computeSpecular( flags.sceneFlags
+						, worldEye
+						, surface
+						, ( 256.0_f - shininess ) / 256.0_f
+						, specular
+						, lightSpecular
+						, occlusion );
+					pxl_fragColor = vec4( colour, opacity );
 				}
 				else
 				{
-					diffuse *= lightDiffuse;
+					pxl_fragColor = vec4( diffuse, opacity );
 				}
-
-				ambient *= occlusion;
-				auto colour = writer.declLocale( "colour"
-					, indirect.computeDiffuse( flags.sceneFlags
-						, surface
-						, diffuse
-						, diffuse + reflected + refracted + emissive
-						, ambient
-						, occlusion ) );
-				colour += indirect.computeSpecular( flags.sceneFlags
-					, worldEye
-					, surface
-					, ( 256.0_f - shininess ) / 256.0_f
-					, specular
-					, lightSpecular
-					, occlusion );
-				pxl_fragColor = vec4( colour, opacity );
 
 				if ( getFogType( flags.sceneFlags ) != FogType::eDisabled )
 				{
@@ -677,72 +685,117 @@ namespace castor3d
 				utils.applyAlphaFunc( flags.alphaFunc
 					, opacity
 					, material.m_alphaRef );
-				emissive *= albedo;
-				auto lightDiffuse = writer.declLocale( "lightDiffuse"
-					, vec3( 0.0_f ) );
-				auto lightSpecular = writer.declLocale( "lightSpecular"
-					, vec3( 0.0_f ) );
-				shader::OutputComponents output{ lightDiffuse, lightSpecular };
-				auto surface = writer.declLocale< shader::Surface >( "surface" );
-				surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
-				lighting->computeCombined( worldEye
-					, albedo
-					, metalness
-					, roughness
-					, c3d_shadowReceiver
-					, surface
-					, output );
-				auto reflected = writer.declLocale( "reflected"
-					, vec3( 0.0_f ) );
-				auto refracted = writer.declLocale( "refracted"
-					, vec3( 0.0_f ) );
 
-				if ( checkFlag( flags.passFlags, PassFlag::eReflection )
-					|| checkFlag( flags.passFlags, PassFlag::eRefraction ) )
+				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 				{
-					auto incident = writer.declLocale( "incident"
-						, reflections.computeIncident( inWorldPosition, worldEye ) );
-					auto ratio = writer.declLocale( "ratio"
-						, material.m_refractionRatio );
+					emissive *= albedo;
+					auto lightDiffuse = writer.declLocale( "lightDiffuse"
+						, vec3( 0.0_f ) );
+					auto lightSpecular = writer.declLocale( "lightSpecular"
+						, vec3( 0.0_f ) );
+					shader::OutputComponents output{ lightDiffuse, lightSpecular };
+					auto surface = writer.declLocale< shader::Surface >( "surface" );
+					surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
+					lighting->computeCombined( worldEye
+						, albedo
+						, metalness
+						, roughness
+						, c3d_shadowReceiver
+						, surface
+						, output );
+					auto reflected = writer.declLocale( "reflected"
+						, vec3( 0.0_f ) );
+					auto refracted = writer.declLocale( "refracted"
+						, vec3( 0.0_f ) );
 
-					if ( checkFlag( flags.passFlags, PassFlag::eReflection ) )
+					if ( checkFlag( flags.passFlags, PassFlag::eReflection )
+						|| checkFlag( flags.passFlags, PassFlag::eRefraction ) )
 					{
-						// Reflection from environment map.
-						ambient = vec3( 0.0_f );
-						reflected = reflections.computeRefl( incident
-							, normal
-							, c3d_mapEnvironment
-							, albedo
-							, metalness
-							, roughness );
+						auto incident = writer.declLocale( "incident"
+							, reflections.computeIncident( inWorldPosition, worldEye ) );
+						auto ratio = writer.declLocale( "ratio"
+							, material.m_refractionRatio );
 
-						if ( checkFlag( flags.passFlags, PassFlag::eRefraction ) )
+						if ( checkFlag( flags.passFlags, PassFlag::eReflection ) )
 						{
-							// Refraction from environment map.
-							reflections.computeRefrEnvMap( incident
+							// Reflection from environment map.
+							ambient = vec3( 0.0_f );
+							reflected = reflections.computeRefl( incident
 								, normal
 								, c3d_mapEnvironment
-								, ratio
-								, material.m_transmission * albedo
-								, roughness
-								, reflected
-								, refracted );
-						}
-						else
-						{
-							IF( writer, ratio != 0.0_f )
+								, albedo
+								, metalness
+								, roughness );
+
+							if ( checkFlag( flags.passFlags, PassFlag::eRefraction ) )
 							{
-								// Refraction from background skybox.
-								reflections.computeRefrSkybox( incident
+								// Refraction from environment map.
+								reflections.computeRefrEnvMap( incident
 									, normal
-									, c3d_mapPrefiltered
-									, material.m_refractionRatio
+									, c3d_mapEnvironment
+									, ratio
 									, material.m_transmission * albedo
 									, roughness
 									, reflected
 									, refracted );
 							}
-							FI;
+							else
+							{
+								IF( writer, ratio != 0.0_f )
+								{
+									// Refraction from background skybox.
+									reflections.computeRefrSkybox( incident
+										, normal
+										, c3d_mapPrefiltered
+										, material.m_refractionRatio
+										, material.m_transmission * albedo
+										, roughness
+										, reflected
+										, refracted );
+								}
+								FI;
+							}
+						}
+						else
+						{
+							// Reflection from background skybox.
+							ambient *= utils.computeMetallicIBL( surface
+								, albedo
+								, metalness
+								, roughness
+								, c3d_cameraPosition.xyz()
+								, c3d_mapIrradiance
+								, c3d_mapPrefiltered
+								, c3d_mapBrdf );
+
+							if ( checkFlag( flags.passFlags, PassFlag::eRefraction ) )
+							{
+								// Refraction from environment map.
+								reflections.computeRefrEnvMap( incident
+									, normal
+									, c3d_mapEnvironment
+									, ratio
+									, material.m_transmission * albedo
+									, roughness
+									, ambient
+									, refracted );
+							}
+							else
+							{
+								IF( writer, ratio != 0.0_f )
+								{
+									// Refraction from background skybox.
+									reflections.computeRefrSkybox( incident
+										, normal
+										, c3d_mapPrefiltered
+										, material.m_refractionRatio
+										, material.m_transmission * albedo
+										, roughness
+										, ambient
+										, refracted );
+								}
+								FI;
+							}
 						}
 					}
 					else
@@ -756,84 +809,47 @@ namespace castor3d
 							, c3d_mapIrradiance
 							, c3d_mapPrefiltered
 							, c3d_mapBrdf );
+						auto ratio = writer.declLocale( "ratio"
+							, material.m_refractionRatio );
 
-						if ( checkFlag( flags.passFlags, PassFlag::eRefraction ) )
+						IF( writer, ratio != 0.0_f )
 						{
-							// Refraction from environment map.
-							reflections.computeRefrEnvMap( incident
+							// Refraction from background skybox.
+							auto incident = writer.declLocale( "incident"
+								, reflections.computeIncident( inWorldPosition, worldEye ) );
+							reflections.computeRefrSkybox( incident
 								, normal
-								, c3d_mapEnvironment
-								, ratio
+								, c3d_mapPrefiltered
+								, material.m_refractionRatio
 								, material.m_transmission * albedo
 								, roughness
 								, ambient
 								, refracted );
 						}
-						else
-						{
-							IF( writer, ratio != 0.0_f )
-							{
-								// Refraction from background skybox.
-								reflections.computeRefrSkybox( incident
-									, normal
-									, c3d_mapPrefiltered
-									, material.m_refractionRatio
-									, material.m_transmission * albedo
-									, roughness
-									, ambient
-									, refracted );
-							}
-							FI;
-						}
+						FI;
 					}
+
+					ambient *= occlusion;
+					auto colour = writer.declLocale( "colour"
+						, indirect.computeDiffuse( flags.sceneFlags
+							, surface
+							, lightDiffuse * albedo
+							, lightDiffuse * albedo + reflected + refracted + emissive
+							, ambient
+							, occlusion ) );
+					colour += indirect.computeSpecular( flags.sceneFlags
+						, worldEye
+						, surface
+						, roughness
+						, mix( vec3( 0.04_f ), albedo, vec3( metalness ) )
+						, lightSpecular
+						, occlusion );
+					pxl_fragColor = vec4( colour, opacity );
 				}
 				else
 				{
-					// Reflection from background skybox.
-					ambient *= utils.computeMetallicIBL( surface
-						, albedo
-						, metalness
-						, roughness
-						, c3d_cameraPosition.xyz()
-						, c3d_mapIrradiance
-						, c3d_mapPrefiltered
-						, c3d_mapBrdf );
-					auto ratio = writer.declLocale( "ratio"
-						, material.m_refractionRatio );
-
-					IF( writer, ratio != 0.0_f )
-					{
-						// Refraction from background skybox.
-						auto incident = writer.declLocale( "incident"
-							, reflections.computeIncident( inWorldPosition, worldEye ) );
-						reflections.computeRefrSkybox( incident
-							, normal
-							, c3d_mapPrefiltered
-							, material.m_refractionRatio
-							, material.m_transmission * albedo
-							, roughness
-							, ambient
-							, refracted );
-					}
-					FI;
+				pxl_fragColor = vec4( albedo, opacity );
 				}
-
-				ambient *= occlusion;
-				auto colour = writer.declLocale( "colour"
-					, indirect.computeDiffuse( flags.sceneFlags
-						, surface
-						, lightDiffuse * albedo
-						, lightDiffuse * albedo + reflected + refracted + emissive
-						, ambient
-						, occlusion ) );
-				colour += indirect.computeSpecular( flags.sceneFlags
-					, worldEye
-					, surface
-					, roughness
-					, mix( vec3( 0.04_f ), albedo, vec3( metalness ) )
-					, lightSpecular
-					, occlusion );
-				pxl_fragColor = vec4( colour, opacity );
 
 				if ( getFogType( flags.sceneFlags ) != FogType::eDisabled )
 				{
@@ -1013,70 +1029,115 @@ namespace castor3d
 				utils.applyAlphaFunc( flags.alphaFunc
 					, opacity
 					, material.m_alphaRef );
-				emissive *= albedo;
-				auto lightDiffuse = writer.declLocale( "lightDiffuse"
-					, vec3( 0.0_f ) );
-				auto lightSpecular = writer.declLocale( "lightSpecular"
-					, vec3( 0.0_f ) );
-				shader::OutputComponents output{ lightDiffuse, lightSpecular };
-				auto surface = writer.declLocale< shader::Surface >( "surface" );
-				surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
-				lighting->computeCombined( worldEye
-					, specular
-					, glossiness
-					, c3d_shadowReceiver
-					, surface
-					, output );
-				auto reflected = writer.declLocale( "reflected"
-					, vec3( 0.0_f ) );
-				auto refracted = writer.declLocale( "refracted"
-					, vec3( 0.0_f ) );
 
-				if ( checkFlag( flags.passFlags, PassFlag::eReflection )
-					|| checkFlag( flags.passFlags, PassFlag::eRefraction ) )
+				if ( checkFlag( flags.passFlags, PassFlag::eLighting ) )
 				{
-					auto incident = writer.declLocale( "incident"
-						, reflections.computeIncident( inWorldPosition, worldEye ) );
-					auto ratio = writer.declLocale( "ratio"
-						, material.m_refractionRatio );
+					emissive *= albedo;
+					auto lightDiffuse = writer.declLocale( "lightDiffuse"
+						, vec3( 0.0_f ) );
+					auto lightSpecular = writer.declLocale( "lightSpecular"
+						, vec3( 0.0_f ) );
+					shader::OutputComponents output{ lightDiffuse, lightSpecular };
+					auto surface = writer.declLocale< shader::Surface >( "surface" );
+					surface.create( in.fragCoord.xy(), inViewPosition, inWorldPosition, normal );
+					lighting->computeCombined( worldEye
+						, specular
+						, glossiness
+						, c3d_shadowReceiver
+						, surface
+						, output );
+					auto reflected = writer.declLocale( "reflected"
+						, vec3( 0.0_f ) );
+					auto refracted = writer.declLocale( "refracted"
+						, vec3( 0.0_f ) );
 
-					if ( checkFlag( flags.passFlags, PassFlag::eReflection ) )
+					if ( checkFlag( flags.passFlags, PassFlag::eReflection )
+						|| checkFlag( flags.passFlags, PassFlag::eRefraction ) )
 					{
-						// Reflection from environment map.
-						ambient = vec3( 0.0_f );
-						reflected = reflections.computeRefl( incident
-							, normal
-							, c3d_mapEnvironment
-							, specular
-							, glossiness );
+						auto incident = writer.declLocale( "incident"
+							, reflections.computeIncident( inWorldPosition, worldEye ) );
+						auto ratio = writer.declLocale( "ratio"
+							, material.m_refractionRatio );
 
-						if ( checkFlag( flags.passFlags, PassFlag::eRefraction ) )
+						if ( checkFlag( flags.passFlags, PassFlag::eReflection ) )
 						{
-							// Refraction from environment map.
-							reflections.computeRefrEnvMap( incident
+							// Reflection from environment map.
+							ambient = vec3( 0.0_f );
+							reflected = reflections.computeRefl( incident
 								, normal
 								, c3d_mapEnvironment
-								, ratio
-								, material.m_transmission * albedo
-								, glossiness
-								, reflected
-								, refracted );
-						}
-						else
-						{
-							IF( writer, ratio != 0.0_f )
+								, specular
+								, glossiness );
+
+							if ( checkFlag( flags.passFlags, PassFlag::eRefraction ) )
 							{
-								// Refraction from background skybox.
-								reflections.computeRefrSkybox( incident
+								// Refraction from environment map.
+								reflections.computeRefrEnvMap( incident
 									, normal
-									, c3d_mapPrefiltered
-									, material.m_refractionRatio
+									, c3d_mapEnvironment
+									, ratio
 									, material.m_transmission * albedo
 									, glossiness
 									, reflected
 									, refracted );
 							}
-							FI;
+							else
+							{
+								IF( writer, ratio != 0.0_f )
+								{
+									// Refraction from background skybox.
+									reflections.computeRefrSkybox( incident
+										, normal
+										, c3d_mapPrefiltered
+										, material.m_refractionRatio
+										, material.m_transmission * albedo
+										, glossiness
+										, reflected
+										, refracted );
+								}
+								FI;
+							}
+						}
+						else
+						{
+							// Reflection from background skybox.
+							ambient *= utils.computeSpecularIBL( surface
+								, albedo
+								, specular
+								, glossiness
+								, c3d_cameraPosition.xyz()
+								, c3d_mapIrradiance
+								, c3d_mapPrefiltered
+								, c3d_mapBrdf );
+
+							if ( checkFlag( flags.passFlags, PassFlag::eRefraction ) )
+							{
+								// Refraction from environment map.
+								reflections.computeRefrEnvMap( incident
+									, normal
+									, c3d_mapEnvironment
+									, ratio
+									, material.m_transmission * albedo
+									, glossiness
+									, ambient
+									, refracted );
+							}
+							else
+							{
+								IF( writer, ratio != 0.0_f )
+								{
+									// Refraction from background skybox.
+									reflections.computeRefrSkybox( incident
+										, normal
+										, c3d_mapPrefiltered
+										, material.m_refractionRatio
+										, material.m_transmission * albedo
+										, glossiness
+										, ambient
+										, refracted );
+								}
+								FI;
+							}
 						}
 					}
 					else
@@ -1090,84 +1151,47 @@ namespace castor3d
 							, c3d_mapIrradiance
 							, c3d_mapPrefiltered
 							, c3d_mapBrdf );
+						auto ratio = writer.declLocale( "ratio"
+							, material.m_refractionRatio );
 
-						if ( checkFlag( flags.passFlags, PassFlag::eRefraction ) )
+						IF( writer, ratio != 0.0_f )
 						{
-							// Refraction from environment map.
-							reflections.computeRefrEnvMap( incident
+							// Refraction from background skybox.
+							auto incident = writer.declLocale( "incident"
+								, reflections.computeIncident( inWorldPosition, worldEye ) );
+							reflections.computeRefrSkybox( incident
 								, normal
-								, c3d_mapEnvironment
-								, ratio
+								, c3d_mapPrefiltered
+								, material.m_refractionRatio
 								, material.m_transmission * albedo
 								, glossiness
 								, ambient
 								, refracted );
 						}
-						else
-						{
-							IF( writer, ratio != 0.0_f )
-							{
-								// Refraction from background skybox.
-								reflections.computeRefrSkybox( incident
-									, normal
-									, c3d_mapPrefiltered
-									, material.m_refractionRatio
-									, material.m_transmission * albedo
-									, glossiness
-									, ambient
-									, refracted );
-							}
-							FI;
-						}
+						FI;
 					}
+
+					ambient *= occlusion;
+					auto colour = writer.declLocale( "colour"
+						, indirect.computeDiffuse( flags.sceneFlags
+							, surface
+							, lightDiffuse * albedo
+							, lightDiffuse * albedo + reflected + refracted + emissive
+							, ambient
+							, occlusion ) );
+					colour += indirect.computeSpecular( flags.sceneFlags
+						, worldEye
+						, surface
+						, ( 1.0_f - glossiness )
+						, specular
+						, lightSpecular
+						, occlusion );
+					pxl_fragColor = vec4( colour, opacity );
 				}
 				else
 				{
-					// Reflection from background skybox.
-					ambient *= utils.computeSpecularIBL( surface
-						, albedo
-						, specular
-						, glossiness
-						, c3d_cameraPosition.xyz()
-						, c3d_mapIrradiance
-						, c3d_mapPrefiltered
-						, c3d_mapBrdf );
-					auto ratio = writer.declLocale( "ratio"
-						, material.m_refractionRatio );
-
-					IF( writer, ratio != 0.0_f )
-					{
-						// Refraction from background skybox.
-						auto incident = writer.declLocale( "incident"
-							, reflections.computeIncident( inWorldPosition, worldEye ) );
-						reflections.computeRefrSkybox( incident
-							, normal
-							, c3d_mapPrefiltered
-							, material.m_refractionRatio
-							, material.m_transmission * albedo
-							, glossiness
-							, ambient
-							, refracted );
-					}
-					FI;
+					pxl_fragColor = vec4( albedo, opacity );
 				}
-
-				ambient *= occlusion;
-				auto colour = writer.declLocale( "colour"
-					, indirect.computeDiffuse( flags.sceneFlags
-						, surface
-						, lightDiffuse * albedo
-						, lightDiffuse * albedo + reflected + refracted + emissive
-						, ambient
-						, occlusion ) );
-				colour += indirect.computeSpecular( flags.sceneFlags
-					, worldEye
-					, surface
-					, ( 1.0_f - glossiness )
-					, specular
-					, lightSpecular
-					, occlusion );
-				pxl_fragColor = vec4( colour, opacity );
 
 				if ( getFogType( flags.sceneFlags ) != FogType::eDisabled )
 				{

@@ -277,6 +277,11 @@ namespace castor3d
 		{
 			return m_heightTextureIndex;
 		}
+
+		bool hasLighting()const
+		{
+			return checkFlag( m_flags, PassFlag::eLighting );
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -405,6 +410,11 @@ namespace castor3d
 		void setImplicit( bool value = true )
 		{
 			m_implicit = value;
+		}
+
+		void enableLighting( bool value )
+		{
+			updateFlag( PassFlag::eLighting, value );
 		}
 		/**@}*/
 

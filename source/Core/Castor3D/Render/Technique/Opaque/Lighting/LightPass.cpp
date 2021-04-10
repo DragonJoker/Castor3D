@@ -749,28 +749,13 @@ namespace castor3d
 					, c3d_mapData1.lod( texCoord, 0.0_f ) );
 				auto data2 = writer.declLocale( "data2"
 					, c3d_mapData2.lod( texCoord, 0.0_f ) );
-				auto data3 = writer.declLocale( "data3"
-					, c3d_mapData3.lod( texCoord, 0.0_f ) );
-				auto data4 = writer.declLocale( "data4"
-					, c3d_mapData4.lod( texCoord, 0.0_f ) );
-				auto data5 = writer.declLocale( "data5"
-					, c3d_mapData5.lod( texCoord, 0.0_f ) );
 				auto flags = writer.declLocale( "flags"
 					, writer.cast< Int >( data1.w() ) );
 				auto shadowReceiver = writer.declLocale( "shadowReceiver"
 					, 0_i );
-				utils.decodeReceiver( flags, shadowReceiver );
-				auto materialId = writer.declLocale( "materialId"
-					, writer.cast< UInt >( data5.z() )
-					, C3D_DisableSSSTransmittance == 0 );
-				auto shininess = writer.declLocale( "shininess"
-					, data2.w() );
-				auto lightDiffuse = writer.declLocale( "lightDiffuse"
-					, vec3( 0.0_f ) );
-				auto lightSpecular = writer.declLocale( "lightSpecular"
-					, vec3( 0.0_f ) );
-				auto eye = writer.declLocale( "eye"
-					, c3d_cameraPosition.xyz() );
+				auto lightingReceiver = writer.declLocale( "lightingReceiver"
+					, 0_i );
+				utils.decodeReceiver( flags, shadowReceiver, lightingReceiver );
 				auto depth = writer.declLocale( "depth"
 					, c3d_mapDepth.lod( texCoord, 0.0_f ).x() );
 				auto vsPosition = writer.declLocale( "vsPosition"
@@ -779,109 +764,137 @@ namespace castor3d
 					, utils.calcWSPosition( texCoord, depth, c3d_mtxInvViewProj ) );
 				auto wsNormal = writer.declLocale( "wsNormal"
 					, data1.xyz() );
-				auto translucency = writer.declLocale( "translucency"
-					, data4.w() );
-				auto material = writer.declLocale( "material"
-					, materials.getMaterial( materialId )
-					, C3D_DisableSSSTransmittance == 0 );
 
-				shader::OutputComponents output{ lightDiffuse, lightSpecular };
 				auto surface = writer.declLocale< shader::Surface >( "surface" );
 				surface.create( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal );
 
-				switch ( lightType )
+				IF( writer, lightingReceiver )
 				{
-				case LightType::eDirectional:
-				{
-					auto c3d_light = writer.getVariable< shader::DirectionalLight >( "c3d_light" );
-					auto light = writer.declLocale( "light", c3d_light );
-					lighting->compute( light
-						, eye
-						, shininess
-						, shadowReceiver
-						, surface
-						, output );
+					auto data3 = writer.declLocale( "data3"
+						, c3d_mapData3.lod( texCoord, 0.0_f ) );
+					auto data4 = writer.declLocale( "data4"
+						, c3d_mapData4.lod( texCoord, 0.0_f ) );
+					auto data5 = writer.declLocale( "data5"
+						, c3d_mapData5.lod( texCoord, 0.0_f ) );
+					auto materialId = writer.declLocale( "materialId"
+						, writer.cast< UInt >( data5.z() )
+						, C3D_DisableSSSTransmittance == 0 );
+					auto material = writer.declLocale( "material"
+						, materials.getMaterial( materialId )
+						, C3D_DisableSSSTransmittance == 0 );
+					auto eye = writer.declLocale( "eye"
+						, c3d_cameraPosition.xyz() );
+					auto shininess = writer.declLocale( "shininess"
+						, data2.w() );
+					auto lightDiffuse = writer.declLocale( "lightDiffuse"
+						, vec3( 0.0_f ) );
+					auto lightSpecular = writer.declLocale( "lightSpecular"
+						, vec3( 0.0_f ) );
+					auto translucency = writer.declLocale( "translucency"
+						, data4.w() );
+					shader::OutputComponents output{ lightDiffuse, lightSpecular };
+
+					switch ( lightType )
+					{
+					case LightType::eDirectional:
+					{
+						auto c3d_light = writer.getVariable< shader::DirectionalLight >( "c3d_light" );
+						auto light = writer.declLocale( "light", c3d_light );
+						lighting->compute( light
+							, eye
+							, shininess
+							, shadowReceiver
+							, surface
+							, output );
 #if !C3D_DisableSSSTransmittance
-					lightDiffuse += sss.compute( material
-						, light
-						, texCoord
-						, wsPosition
-						, wsNormal
-						, translucency );
+						lightDiffuse += sss.compute( material
+							, light
+							, texCoord
+							, wsPosition
+							, wsNormal
+							, translucency );
 #endif
-					break;
-				}
+						break;
+					}
 
-				case LightType::ePoint:
-				{
-					auto c3d_light = writer.getVariable< shader::PointLight >( "c3d_light" );
-					auto light = writer.declLocale( "light", c3d_light );
-					lighting->compute( light
-						, eye
-						, shininess
-						, shadowReceiver
-						, surface
-						, output );
+					case LightType::ePoint:
+					{
+						auto c3d_light = writer.getVariable< shader::PointLight >( "c3d_light" );
+						auto light = writer.declLocale( "light", c3d_light );
+						lighting->compute( light
+							, eye
+							, shininess
+							, shadowReceiver
+							, surface
+							, output );
 #if !C3D_DisableSSSTransmittance
-					lightDiffuse += sss.compute( material
-						, light
-						, texCoord
-						, wsPosition
-						, wsNormal
-						, translucency );
+						lightDiffuse += sss.compute( material
+							, light
+							, texCoord
+							, wsPosition
+							, wsNormal
+							, translucency );
 #endif
-					break;
-				}
+						break;
+					}
 
-				case LightType::eSpot:
+					case LightType::eSpot:
+					{
+						auto c3d_light = writer.getVariable< shader::SpotLight >( "c3d_light" );
+						auto light = writer.declLocale( "light", c3d_light );
+						lighting->compute( light
+							, eye
+							, shininess
+							, shadowReceiver
+							, surface
+							, output );
+	#if !C3D_DisableSSSTransmittance
+						lightDiffuse += sss.compute( material
+							, light
+							, texCoord
+							, wsPosition
+							, wsNormal
+							, translucency );
+	#endif
+						break;
+					}
+
+					default:
+						break;
+					}
+
+					pxl_diffuse = lightDiffuse;
+					pxl_specular = lightSpecular;
+
+					if ( m_voxels )
+					{
+						auto occlusion = indirect.computeOcclusion( sceneFlags
+							, lightType
+							, surface );
+						auto indirectDiffuse = indirect.computeDiffuse( sceneFlags
+							, surface
+							, occlusion );
+						auto indirectSpecular = indirect.computeSpecular( sceneFlags
+							, eye
+							, surface
+							, ( 256.0_f - shininess ) / 256.0_f
+							, occlusion );
+						pxl_indirectDiffuse = indirectDiffuse;
+						pxl_indirectSpecular = indirectSpecular;
+					}
+					else
+					{
+						pxl_indirectDiffuse = vec3( 1.0_f, 1.0_f, 1.0_f );
+						pxl_indirectSpecular = vec3( 0.0_f, 0.0_f, 0.0_f );
+					}
+				}
+				ELSE
 				{
-					auto c3d_light = writer.getVariable< shader::SpotLight >( "c3d_light" );
-					auto light = writer.declLocale( "light", c3d_light );
-					lighting->compute( light
-						, eye
-						, shininess
-						, shadowReceiver
-						, surface
-						, output );
-#if !C3D_DisableSSSTransmittance
-					lightDiffuse += sss.compute( material
-						, light
-						, texCoord
-						, wsPosition
-						, wsNormal
-						, translucency );
-#endif
-					break;
+					auto diffuse = writer.declLocale( "diffuse"
+						, data2.xyz() );
+					pxl_diffuse = diffuse;
 				}
-
-				default:
-					break;
-				}
-
-				pxl_diffuse = lightDiffuse;
-				pxl_specular = lightSpecular;
-
-				if ( m_voxels )
-				{
-					auto occlusion = indirect.computeOcclusion( sceneFlags
-						, lightType
-						, surface );
-					auto indirectDiffuse = indirect.computeDiffuse( sceneFlags
-						, surface
-						, occlusion );
-					auto indirectSpecular = indirect.computeSpecular( sceneFlags
-						, eye
-						, surface
-						, ( 256.0_f - shininess ) / 256.0_f
-						, occlusion );
-					pxl_indirectDiffuse = indirectDiffuse;
-					pxl_indirectSpecular = indirectSpecular;
-				}
-				else
-				{
-					pxl_indirectDiffuse = vec3( 1.0_f, 1.0_f, 1.0_f );
-					pxl_indirectSpecular = vec3( 0.0_f, 0.0_f, 0.0_f );
-				}
+				FI;
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -959,59 +972,90 @@ namespace castor3d
 					, c3d_mapData1.lod( texCoord, 0.0_f ) );
 				auto data2 = writer.declLocale( "data2"
 					, c3d_mapData2.lod( texCoord, 0.0_f ) );
-				auto data3 = writer.declLocale( "data3"
-					, c3d_mapData3.lod( texCoord, 0.0_f ) );
-				auto data4 = writer.declLocale( "data4"
-					, c3d_mapData4.lod( texCoord, 0.0_f ) );
-				auto data5 = writer.declLocale( "data5"
-					, c3d_mapData5.lod( texCoord, 0.0_f ) );
-				auto metallic = writer.declLocale( "metallic"
-					, data3.r() );
-				auto roughness = writer.declLocale( "roughness"
-					, data2.w() );
 				auto flags = writer.declLocale( "flags"
 					, writer.cast< Int >( data1.w() ) );
 				auto shadowReceiver = writer.declLocale( "shadowReceiver"
 					, 0_i );
-				utils.decodeReceiver( flags, shadowReceiver );
-				auto materialId = writer.declLocale( "materialId"
-					, writer.cast< UInt >( data5.z() )
-					, C3D_DisableSSSTransmittance == 0 );
+				auto lightingReceiver = writer.declLocale( "lightingReceiver"
+					, 0_i );
+				utils.decodeReceiver( flags, shadowReceiver, lightingReceiver );
 				auto albedo = writer.declLocale( "albedo"
 					, data2.xyz() );
-				auto lightDiffuse = writer.declLocale( "lightDiffuse"
-					, vec3( 0.0_f ) );
-				auto lightSpecular = writer.declLocale( "lightSpecular"
-					, vec3( 0.0_f ) );
-				auto eye = writer.declLocale( "eye"
-					, c3d_cameraPosition.xyz() );
-				auto depth = writer.declLocale( "depth"
-					, c3d_mapDepth.lod( texCoord, 0.0_f ).x() );
-				auto vsPosition = writer.declLocale( "vsPosition"
-					, utils.calcVSPosition( texCoord, depth, c3d_mtxInvProj ) );
-				auto wsPosition = writer.declLocale( "wsPosition"
-					, utils.calcWSPosition( texCoord, depth, c3d_mtxInvViewProj ) );
-				auto wsNormal = writer.declLocale( "wsNormal"
-					, data1.xyz() );
-				auto transmittance = writer.declLocale( "transmittance"
-					, data4.w() );
-				auto material = writer.declLocale( "material"
-					, materials.getMaterial( materialId )
-					, C3D_DisableSSSTransmittance == 0 );
 
-				shader::OutputComponents output{ lightDiffuse, lightSpecular };
-				auto surface = writer.declLocale< shader::Surface >( "surface" );
-				surface.create( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal );
+				IF( writer, lightingReceiver )
+				{
+					auto data3 = writer.declLocale( "data3"
+						, c3d_mapData3.lod( texCoord, 0.0_f ) );
+					auto data4 = writer.declLocale( "data4"
+						, c3d_mapData4.lod( texCoord, 0.0_f ) );
+					auto data5 = writer.declLocale( "data5"
+						, c3d_mapData5.lod( texCoord, 0.0_f ) );
+					auto metallic = writer.declLocale( "metallic"
+						, data3.r() );
+					auto roughness = writer.declLocale( "roughness"
+						, data2.w() );
+					auto materialId = writer.declLocale( "materialId"
+						, writer.cast< UInt >( data5.z() )
+						, C3D_DisableSSSTransmittance == 0 );
+					auto lightDiffuse = writer.declLocale( "lightDiffuse"
+						, vec3( 0.0_f ) );
+					auto lightSpecular = writer.declLocale( "lightSpecular"
+						, vec3( 0.0_f ) );
+					auto eye = writer.declLocale( "eye"
+						, c3d_cameraPosition.xyz() );
+					auto depth = writer.declLocale( "depth"
+						, c3d_mapDepth.lod( texCoord, 0.0_f ).x() );
+					auto vsPosition = writer.declLocale( "vsPosition"
+						, utils.calcVSPosition( texCoord, depth, c3d_mtxInvProj ) );
+					auto wsPosition = writer.declLocale( "wsPosition"
+						, utils.calcWSPosition( texCoord, depth, c3d_mtxInvViewProj ) );
+					auto wsNormal = writer.declLocale( "wsNormal"
+						, data1.xyz() );
+					auto transmittance = writer.declLocale( "transmittance"
+						, data4.w() );
+					auto material = writer.declLocale( "material"
+						, materials.getMaterial( materialId )
+						, C3D_DisableSSSTransmittance == 0 );
 
-				switch ( lightType )
-				{
-				case LightType::eDirectional:
-				{
-					auto c3d_light = writer.getVariable< shader::DirectionalLight >( "c3d_light" );
-					auto light = writer.declLocale( "light", c3d_light );
-#if !C3D_DisableSSSTransmittance
-					IF( writer, !c3d_debugDeferredSSSTransmittance )
+					shader::OutputComponents output{ lightDiffuse, lightSpecular };
+					auto surface = writer.declLocale< shader::Surface >( "surface" );
+					surface.create( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal );
+
+					switch ( lightType )
 					{
+					case LightType::eDirectional:
+					{
+						auto c3d_light = writer.getVariable< shader::DirectionalLight >( "c3d_light" );
+						auto light = writer.declLocale( "light", c3d_light );
+#if !C3D_DisableSSSTransmittance
+						IF( writer, !c3d_debugDeferredSSSTransmittance )
+						{
+							lighting->compute( light
+								, eye
+								, albedo
+								, metallic
+								, roughness
+								, shadowReceiver
+								, surface
+								, output );
+							lightDiffuse += sss.compute( material
+								, light
+								, texCoord
+								, wsPosition
+								, wsNormal
+								, transmittance );
+						}
+						ELSE
+						{
+							lightDiffuse = sss.compute( material
+							, light
+								, texCoord
+								, wsPosition
+								, wsNormal
+								, transmittance );
+						}
+						FI;
+#else
 						lighting->compute( light
 							, eye
 							, albedo
@@ -1020,43 +1064,43 @@ namespace castor3d
 							, shadowReceiver
 							, surface
 							, output );
-						lightDiffuse += sss.compute( material
-							, light
-							, texCoord
-							, wsPosition
-							, wsNormal
-							, transmittance );
-					}
-					ELSE
-					{
-						lightDiffuse = sss.compute( material
-						, light
-							, texCoord
-							, wsPosition
-							, wsNormal
-							, transmittance );
-					}
-					FI;
-#else
-					lighting->compute( light
-						, eye
-						, albedo
-						, metallic
-						, roughness
-						, shadowReceiver
-						, surface
-						, output );
 #endif
-					break;
-				}
+						break;
+					}
 
-				case LightType::ePoint:
-				{
-					auto c3d_light = writer.getVariable< shader::PointLight >( "c3d_light" );
-					auto light = writer.declLocale( "light", c3d_light );
-#if !C3D_DisableSSSTransmittance
-					IF( writer, !c3d_debugDeferredSSSTransmittance )
+					case LightType::ePoint:
 					{
+						auto c3d_light = writer.getVariable< shader::PointLight >( "c3d_light" );
+						auto light = writer.declLocale( "light", c3d_light );
+#if !C3D_DisableSSSTransmittance
+						IF( writer, !c3d_debugDeferredSSSTransmittance )
+						{
+							lighting->compute( light
+								, eye
+								, albedo
+								, metallic
+								, roughness
+								, shadowReceiver
+								, surface
+								, output );
+							lightDiffuse += sss.compute( material
+								, light
+								, texCoord
+								, wsPosition
+								, wsNormal
+								, transmittance );
+						}
+						ELSE
+						{
+							lightDiffuse = sss.compute( material
+								, light
+								, texCoord
+								, wsPosition
+								, wsNormal
+								, transmittance );
+						}
+						FI;
+#else
 						lighting->compute( light
 							, eye
 							, albedo
@@ -1065,43 +1109,43 @@ namespace castor3d
 							, shadowReceiver
 							, surface
 							, output );
-						lightDiffuse += sss.compute( material
-							, light
-							, texCoord
-							, wsPosition
-							, wsNormal
-							, transmittance );
-					}
-					ELSE
-					{
-						lightDiffuse = sss.compute( material
-							, light
-							, texCoord
-							, wsPosition
-							, wsNormal
-							, transmittance );
-					}
-					FI;
-#else
-					lighting->compute( light
-						, eye
-						, albedo
-						, metallic
-						, roughness
-						, shadowReceiver
-						, surface
-						, output );
 #endif
-					break;
-				}
+						break;
+					}
 
-				case LightType::eSpot:
-				{
-					auto c3d_light = writer.getVariable< shader::SpotLight >( "c3d_light" );
-					auto light = writer.declLocale( "light", c3d_light );
-#if !C3D_DisableSSSTransmittance
-					IF( writer, !c3d_debugDeferredSSSTransmittance )
+					case LightType::eSpot:
 					{
+						auto c3d_light = writer.getVariable< shader::SpotLight >( "c3d_light" );
+						auto light = writer.declLocale( "light", c3d_light );
+#if !C3D_DisableSSSTransmittance
+						IF( writer, !c3d_debugDeferredSSSTransmittance )
+						{
+							lighting->compute( light
+								, eye
+								, albedo
+								, metallic
+								, roughness
+								, shadowReceiver
+								, surface
+								, output );
+							lightDiffuse += sss.compute( material
+								, light
+								, texCoord
+								, wsPosition
+								, wsNormal
+								, transmittance );
+						}
+						ELSE
+						{
+							lightDiffuse = sss.compute( material
+								, light
+								, texCoord
+								, wsPosition
+								, wsNormal
+								, transmittance );
+						}
+						FI;
+#else
 						lighting->compute( light
 							, eye
 							, albedo
@@ -1110,64 +1154,44 @@ namespace castor3d
 							, shadowReceiver
 							, surface
 							, output );
-						lightDiffuse += sss.compute( material
-							, light
-							, texCoord
-							, wsPosition
-							, wsNormal
-							, transmittance );
-					}
-					ELSE
-					{
-						lightDiffuse = sss.compute( material
-							, light
-							, texCoord
-							, wsPosition
-							, wsNormal
-							, transmittance );
-					}
-					FI;
-#else
-					lighting->compute( light
-						, eye
-						, albedo
-						, metallic
-						, roughness
-						, shadowReceiver
-						, surface
-						, output );
 #endif
-					break;
+						break;
+					}
+
+					default:
+						break;
+					}
+
+					pxl_diffuse = lightDiffuse;
+					pxl_specular = lightSpecular;
+
+					if ( m_voxels )
+					{
+						auto occlusion = indirect.computeOcclusion( sceneFlags
+							, lightType
+							, surface );
+						auto indirectDiffuse = indirect.computeDiffuse( sceneFlags
+							, surface
+							, occlusion );
+						auto indirectSpecular = indirect.computeSpecular( sceneFlags
+							, eye
+							, surface
+							, roughness
+							, occlusion );
+						pxl_indirectDiffuse = indirectDiffuse;
+						pxl_indirectSpecular = indirectSpecular;
+					}
+					else
+					{
+						pxl_indirectDiffuse = vec3( 1.0_f, 1.0_f, 1.0_f );
+						pxl_indirectSpecular = vec3( 0.0_f, 0.0_f, 0.0_f );
+					}
 				}
-
-				default:
-					break;
-				}
-
-				pxl_diffuse = lightDiffuse;
-				pxl_specular = lightSpecular;
-
-				if ( m_voxels )
+				ELSE
 				{
-					auto occlusion = indirect.computeOcclusion( sceneFlags
-						, lightType
-						, surface );
-					auto indirectDiffuse = indirect.computeDiffuse( sceneFlags
-						, surface
-						, occlusion );
-					auto indirectSpecular = indirect.computeSpecular( sceneFlags
-						, eye
-						, surface
-						, roughness
-						, occlusion );
-					pxl_indirectDiffuse = indirectDiffuse;
-					pxl_indirectSpecular = indirectSpecular;
+					pxl_diffuse = albedo;
 				}
-				else
-				{
-					pxl_indirectDiffuse = vec3( 1.0_f, 1.0_f, 1.0_f );
-					pxl_indirectSpecular = vec3( 0.0_f, 0.0_f, 0.0_f );
-				}
+				FI;
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -1259,132 +1283,143 @@ namespace castor3d
 					, writer.cast< Int >( data1.w() ) );
 				auto shadowReceiver = writer.declLocale( "shadowReceiver"
 					, 0_i );
-				utils.decodeReceiver( flags, shadowReceiver );
-				auto materialId = writer.declLocale( "materialId"
-					, writer.cast< UInt >( data5.z() )
-					, C3D_DisableSSSTransmittance == 0 );
+				auto lightingReceiver = writer.declLocale( "lightingReceiver"
+					, 0_i );
+				utils.decodeReceiver( flags, shadowReceiver, lightingReceiver );
 				auto diffuse = writer.declLocale( "diffuse"
 					, data2.xyz() );
-				auto lightDiffuse = writer.declLocale( "lightDiffuse"
-					, vec3( 0.0_f ) );
-				auto lightSpecular = writer.declLocale( "lightSpecular"
-					, vec3( 0.0_f ) );
-				auto eye = writer.declLocale( "eye"
-					, c3d_cameraPosition.xyz() );
-				auto depth = writer.declLocale( "depth"
-					, c3d_mapDepth.lod( texCoord, 0.0_f ).x() );
-				auto vsPosition = writer.declLocale( "vsPosition"
-					, utils.calcVSPosition( texCoord, depth, c3d_mtxInvProj ) );
-				auto wsPosition = writer.declLocale( "wsPosition"
-					, utils.calcWSPosition( texCoord, depth, c3d_mtxInvViewProj ) );
-				auto wsNormal = writer.declLocale( "wsNormal"
-					, data1.xyz() );
-				auto translucency = writer.declLocale( "translucency"
-					, data4.w() );
-				auto material = writer.declLocale( "material"
-					, materials.getMaterial( materialId )
-					, C3D_DisableSSSTransmittance == 0 );
 
-				shader::OutputComponents output{ lightDiffuse, lightSpecular };
-				auto surface = writer.declLocale< shader::Surface >( "surface" );
-				surface.create( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal );
+				IF( writer, lightingReceiver )
+				{
+					auto materialId = writer.declLocale( "materialId"
+						, writer.cast< UInt >( data5.z() )
+						, C3D_DisableSSSTransmittance == 0 );
+					auto lightDiffuse = writer.declLocale( "lightDiffuse"
+						, vec3( 0.0_f ) );
+					auto lightSpecular = writer.declLocale( "lightSpecular"
+						, vec3( 0.0_f ) );
+					auto eye = writer.declLocale( "eye"
+						, c3d_cameraPosition.xyz() );
+					auto depth = writer.declLocale( "depth"
+						, c3d_mapDepth.lod( texCoord, 0.0_f ).x() );
+					auto vsPosition = writer.declLocale( "vsPosition"
+						, utils.calcVSPosition( texCoord, depth, c3d_mtxInvProj ) );
+					auto wsPosition = writer.declLocale( "wsPosition"
+						, utils.calcWSPosition( texCoord, depth, c3d_mtxInvViewProj ) );
+					auto wsNormal = writer.declLocale( "wsNormal"
+						, data1.xyz() );
+					auto translucency = writer.declLocale( "translucency"
+						, data4.w() );
+					auto material = writer.declLocale( "material"
+						, materials.getMaterial( materialId )
+						, C3D_DisableSSSTransmittance == 0 );
 
-				switch ( lightType )
-				{
-				case LightType::eDirectional:
-				{
-					auto c3d_light = writer.getVariable< shader::DirectionalLight >( "c3d_light" );
-					auto light = writer.declLocale( "light", c3d_light );
-					lighting->compute( light
-						, eye
-						, specular
-						, glossiness
-						, shadowReceiver
-						, surface
-						, output );
+					shader::OutputComponents output{ lightDiffuse, lightSpecular };
+					auto surface = writer.declLocale< shader::Surface >( "surface" );
+					surface.create( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal );
+
+					switch ( lightType )
+					{
+					case LightType::eDirectional:
+					{
+						auto c3d_light = writer.getVariable< shader::DirectionalLight >( "c3d_light" );
+						auto light = writer.declLocale( "light", c3d_light );
+						lighting->compute( light
+							, eye
+							, specular
+							, glossiness
+							, shadowReceiver
+							, surface
+							, output );
 #if !C3D_DisableSSSTransmittance
-					lightDiffuse += sss.compute( material
-						, light
-						, texCoord
-						, wsPosition
-						, wsNormal
-						, translucency );
+						lightDiffuse += sss.compute( material
+							, light
+							, texCoord
+							, wsPosition
+							, wsNormal
+							, translucency );
 #endif
-					break;
-				}
+						break;
+					}
 
-				case LightType::ePoint:
-				{
-					auto c3d_light = writer.getVariable< shader::PointLight >( "c3d_light" );
-					auto light = writer.declLocale( "light", c3d_light );
-					lighting->compute( light
-						, eye
-						, specular
-						, glossiness
-						, shadowReceiver
-						, surface
-						, output );
+					case LightType::ePoint:
+					{
+						auto c3d_light = writer.getVariable< shader::PointLight >( "c3d_light" );
+						auto light = writer.declLocale( "light", c3d_light );
+						lighting->compute( light
+							, eye
+							, specular
+							, glossiness
+							, shadowReceiver
+							, surface
+							, output );
 #if !C3D_DisableSSSTransmittance
-					lightDiffuse += sss.compute( material
-						, light
-						, texCoord
-						, wsPosition
-						, wsNormal
-						, translucency );
+						lightDiffuse += sss.compute( material
+							, light
+							, texCoord
+							, wsPosition
+							, wsNormal
+							, translucency );
 #endif
-					break;
-				}
+						break;
+					}
 
-				case LightType::eSpot:
-				{
-					auto c3d_light = writer.getVariable< shader::SpotLight >( "c3d_light" );
-					auto light = writer.declLocale( "light", c3d_light );
-					lighting->compute( light
-						, eye
-						, specular
-						, glossiness
-						, shadowReceiver
-						, surface
-						, output );
+					case LightType::eSpot:
+					{
+						auto c3d_light = writer.getVariable< shader::SpotLight >( "c3d_light" );
+						auto light = writer.declLocale( "light", c3d_light );
+						lighting->compute( light
+							, eye
+							, specular
+							, glossiness
+							, shadowReceiver
+							, surface
+							, output );
 #if !C3D_DisableSSSTransmittance
-					lightDiffuse += sss.compute( material
-						, light
-						, texCoord
-						, wsPosition
-						, wsNormal
-						, translucency );
+						lightDiffuse += sss.compute( material
+							, light
+							, texCoord
+							, wsPosition
+							, wsNormal
+							, translucency );
 #endif
-					break;
+						break;
+					}
+
+					default:
+						break;
+					}
+
+					pxl_diffuse = lightDiffuse;
+					pxl_specular = lightSpecular;
+
+					if ( m_voxels )
+					{
+						auto occlusion = indirect.computeOcclusion( sceneFlags
+							, lightType
+							, surface );
+						auto indirectDiffuse = indirect.computeDiffuse( sceneFlags
+							, surface
+							, occlusion );
+						auto indirectSpecular = indirect.computeSpecular( sceneFlags
+							, eye
+							, surface
+							, 1.0_f - glossiness
+							, occlusion );
+						pxl_indirectDiffuse = indirectDiffuse;
+						pxl_indirectSpecular = indirectSpecular;
+					}
+					else
+					{
+						pxl_indirectDiffuse = vec3( 1.0_f, 1.0_f, 1.0_f );
+						pxl_indirectSpecular = vec3( 0.0_f, 0.0_f, 0.0_f );
+					}
 				}
-
-				default:
-					break;
-				}
-
-				pxl_diffuse = lightDiffuse;
-				pxl_specular = lightSpecular;
-
-				if ( m_voxels )
+				ELSE
 				{
-					auto occlusion = indirect.computeOcclusion( sceneFlags
-						, lightType
-						, surface );
-					auto indirectDiffuse = indirect.computeDiffuse( sceneFlags
-						, surface
-						, occlusion );
-					auto indirectSpecular = indirect.computeSpecular( sceneFlags
-						, eye
-						, surface
-						, 1.0_f - glossiness
-						, occlusion );
-					pxl_indirectDiffuse = indirectDiffuse;
-					pxl_indirectSpecular = indirectSpecular;
+					pxl_diffuse = diffuse;
 				}
-				else
-				{
-					pxl_indirectDiffuse = vec3( 1.0_f, 1.0_f, 1.0_f );
-					pxl_indirectSpecular = vec3( 0.0_f, 0.0_f, 0.0_f );
-				}
+				FI;
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
