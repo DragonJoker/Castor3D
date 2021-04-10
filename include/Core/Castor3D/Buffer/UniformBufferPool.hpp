@@ -105,7 +105,7 @@ namespace castor3d
 		RenderDevice const & m_device;
 		uint32_t m_maxUboElemCount{ 0u };
 		uint32_t m_maxUboSize{ 0u };
-		uint32_t m_maxPoolUboCount{ 10u };
+		uint32_t m_maxPoolUboCount{ 100u };
 		uint32_t m_currentUboIndex{ 0u };
 		ashes::StagingBufferPtr m_stagingBuffer;
 		uint8_t * m_stagingData;
