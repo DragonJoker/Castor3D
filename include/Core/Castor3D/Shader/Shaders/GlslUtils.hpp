@@ -263,7 +263,8 @@ namespace castor3d::shader
 		 */
 		C3D_API void applyAlphaFunc( VkCompareOp alphaFunc
 			, sdw::Float & alpha
-			, sdw::Float const & alphaRef )const;
+			, sdw::Float const & alphaRef
+			, bool opaque = true )const;
 
 		C3D_API sdw::Boolean isSaturated( sdw::Vec3 const & p )const;
 		C3D_API sdw::Boolean isSaturated( sdw::IVec3 const & p

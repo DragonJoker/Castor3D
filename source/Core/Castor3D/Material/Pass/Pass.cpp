@@ -132,6 +132,8 @@ namespace castor3d
 		}
 
 		updateFlag( PassFlag::eAlphaBlending, hasAlphaBlending() );
+		updateFlag( PassFlag::eAlphaTest, hasAlphaTest() );
+		updateFlag( PassFlag::eBlendAlphaTest, hasBlendAlphaTest() );
 		m_texturesReduced = false;
 	}
 
@@ -144,6 +146,8 @@ namespace castor3d
 		m_textureUnits.erase( it );
 		remFlag( m_textures, TextureFlag( uint16_t( getFlags( config ) ) ) );
 		updateFlag( PassFlag::eAlphaBlending, hasAlphaBlending() );
+		updateFlag( PassFlag::eAlphaTest, hasAlphaTest() );
+		updateFlag( PassFlag::eBlendAlphaTest, hasBlendAlphaTest() );
 		m_texturesReduced = false;
 	}
 
@@ -153,15 +157,34 @@ namespace castor3d
 		return m_textureUnits[index];
 	}
 
+	bool Pass::needsAlphaProcessing()const
+	{
+		return checkFlag( m_textures, TextureFlag::eOpacity ) || m_opacity < 1.0f;
+	}
+
 	bool Pass::hasAlphaBlending()const
 	{
-		return ( checkFlag( m_textures, TextureFlag::eOpacity ) || m_opacity < 1.0f )
-			&& !hasAlphaTest();
+		return needsAlphaProcessing()
+			&& getAlphaBlendMode() != BlendMode::eNoBlend;
+	}
+
+	bool Pass::hasOnlyAlphaBlending()const
+	{
+		return needsAlphaProcessing()
+			&& getAlphaBlendMode() != BlendMode::eNoBlend
+			&& getAlphaFunc() == VK_COMPARE_OP_ALWAYS;
 	}
 
 	bool Pass::hasAlphaTest()const
 	{
-		return getAlphaFunc() != VK_COMPARE_OP_ALWAYS;
+		return needsAlphaProcessing()
+			&& getAlphaFunc() != VK_COMPARE_OP_ALWAYS;
+	}
+
+	bool Pass::hasBlendAlphaTest()const
+	{
+		return needsAlphaProcessing()
+			&& getBlendAlphaFunc() != VK_COMPARE_OP_ALWAYS;
 	}
 
 	void Pass::prepareTextures()
@@ -205,14 +228,22 @@ namespace castor3d
 	void Pass::setOpacity( float value )
 	{
 		m_opacity = value;
-		updateFlag( PassFlag::eAlphaBlending, hasAlphaBlending() );
 
-		if ( hasAlphaBlending()
-			&& m_alphaBlendMode == BlendMode::eNoBlend )
+		if ( needsAlphaProcessing() )
 		{
-			m_alphaBlendMode = BlendMode::eInterpolative;
+			if ( m_alphaBlendMode == BlendMode::eNoBlend )
+			{
+				m_alphaBlendMode = BlendMode::eInterpolative;
+			}
+		}
+		else
+		{
+			m_alphaBlendMode = BlendMode::eNoBlend;
 		}
 
+		updateFlag( PassFlag::eAlphaBlending, hasAlphaBlending() );
+		updateFlag( PassFlag::eAlphaTest, hasAlphaTest() );
+		updateFlag( PassFlag::eBlendAlphaTest, hasBlendAlphaTest() );
 		doSetOpacity( value );
 		onChanged( *this );
 	}

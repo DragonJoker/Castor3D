@@ -451,9 +451,10 @@ namespace castor3d
 					, shininess
 					, tangentSpaceViewPosition
 					, tangentSpaceFragPosition );
-				utils.applyAlphaFunc( flags.alphaFunc
+				utils.applyAlphaFunc( flags.blendAlphaFunc
 					, opacity
-					, material.m_alphaRef );
+					, material.m_alphaRef
+					, false );
 				emissive *= diffuse;
 				auto lightDiffuse = writer.declLocale( "lightDiffuse"
 					, vec3( 0.0_f ) );
@@ -712,9 +713,10 @@ namespace castor3d
 					, roughness
 					, tangentSpaceViewPosition
 					, tangentSpaceFragPosition );
-				utils.applyAlphaFunc( flags.alphaFunc
+				utils.applyAlphaFunc( flags.blendAlphaFunc
 					, opacity
-					, material.m_alphaRef );
+					, material.m_alphaRef
+					, false );
 				emissive *= albedo;
 				auto lightDiffuse = writer.declLocale( "lightDiffuse"
 					, vec3( 0.0_f ) );
@@ -1042,9 +1044,10 @@ namespace castor3d
 					, glossiness
 					, tangentSpaceViewPosition
 					, tangentSpaceFragPosition );
-				utils.applyAlphaFunc( flags.alphaFunc
+				utils.applyAlphaFunc( flags.blendAlphaFunc
 					, opacity
-					, material.m_alphaRef );
+					, material.m_alphaRef
+					, false );
 				emissive *= albedo;
 				auto lightDiffuse = writer.declLocale( "lightDiffuse"
 					, vec3( 0.0_f ) );

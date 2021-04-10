@@ -113,7 +113,6 @@ if ( CASTOR_USE_DEPS_WXWIDGETS AND WIN32 )
 endif ()
 
 #--------------------------------------------------------------------------------------------------
-#--------------------------------------------------------------------------------------------------
 if ( CMAKE_COMPILER_IS_GNUCXX )
 	DumpCompilerVersion( Castor_COMPILER_VERSION )
 	msg_debug( "GCC version : ${Castor_COMPILER_VERSION}" )
