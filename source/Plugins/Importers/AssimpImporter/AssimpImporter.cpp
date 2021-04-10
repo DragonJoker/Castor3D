@@ -492,6 +492,12 @@ namespace C3dAssimp
 		{
 			switch ( shadingMode )
 			{
+			case aiShadingMode_NoShading:
+			case aiShadingMode_Minnaert:
+			case aiShadingMode_OrenNayar:
+			case aiShadingMode_Toon:
+				return MaterialType::ePhong;
+
 			case aiShadingMode_Flat:
 			case aiShadingMode_Gouraud:
 			case aiShadingMode_Blinn:
@@ -503,7 +509,7 @@ namespace C3dAssimp
 				return MaterialType::eMetallicRoughness;
 
 			default:
-				return MaterialType::eCount;
+				return MaterialType::ePhong;
 			}
 		}
 
