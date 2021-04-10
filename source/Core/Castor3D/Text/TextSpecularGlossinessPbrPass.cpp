@@ -25,8 +25,8 @@ namespace castor
 		if ( auto block{ beginBlock( file, "pass" ) } )
 		{
 			result = writeNamedSub( file, "albedo", pass.getDiffuse() )
-				&& writeNamedSub( file, "roughness", pass.getSpecular() )
-				&& write( file, "metallic", pass.getGlossiness() )
+				&& writeNamedSub( file, "specular", pass.getSpecular() )
+				&& write( file, "glossiness", pass.getGlossiness() )
 				&& writeSub< Pass >( file, pass, m_subfolder );
 		}
 
